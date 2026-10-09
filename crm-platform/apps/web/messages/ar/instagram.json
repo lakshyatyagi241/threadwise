@@ -1,0 +1,91 @@
+{
+  "instagram": {
+    "nav": {
+      "hub": "Instagram",
+      "broadcast": "بث Instagram"
+    },
+    "common": {
+      "dismiss": "تجاهل"
+    },
+    "hub": {
+      "kicker": "القناة · Instagram",
+      "title": "Instagram",
+      "titleAccent": "حسابات",
+      "intro": "اربط حساب Instagram التجاري أو حساب المبدع مرة واحدة. ستصل رسائله بعدها إلى صندوق وارد الفريق، ومن هنا ترد وتشغّل التدفقات وترسل إلى من راسلوك سابقًا.",
+      "teamInbox": "صندوق وارد الفريق",
+      "broadcasts": "بث للرد فقط",
+      "loadError": "تعذّر تحميل حسابات Instagram المرتبطة. حاول مرة أخرى.",
+      "loadErrorDetail": "تعذّر تحميل حسابات Instagram المرتبطة (الخطأ {status}{code}). حاول مرة أخرى.",
+      "engineOff": "{engine} غير متصل. يجب على المسؤول توصيله من المسؤول ← الإضافات قبل ربط حساب Instagram.",
+      "connectedCount": "{count, plural, zero {لا توجد حسابات مرتبطة} one {تم ربط حساب واحد} two {تم ربط حسابين} few {تم ربط # حسابات} many {تم ربط # حسابًا} other {تم ربط # حساب}}",
+      "notConnected": "غير متصل",
+      "cardTitle": "إضافة حساب Instagram",
+      "cardBody": "اربط حسابًا تجاريًا أو حساب مبدع. يتصل حساب Instagram مرة واحدة ويظهر هنا، وتعمل المحادثات والتدفقات والردود التلقائية كلها من مساحة العمل هذه.",
+      "add": "إضافة حساب Instagram",
+      "linkedAccounts": "الحسابات المرتبطة",
+      "linked": "تم ربط حساب Instagram.",
+      "linkFailed": "تعذّر ربط هذا الحساب."
+    },
+    "dialog": {
+      "close": "إغلاق",
+      "kicker": "Instagram",
+      "title": "إضافة حساب Instagram",
+      "note": "يتصل حساب Instagram مرة واحدة عبر {engine} (الذي يحتفظ بتسجيل الدخول وwebhook). ترتبط مساحة العمل هذه به وتعرض صندوق الوارد والتدفقات والإعلانات هنا، فهو حساب واحد دائمًا وليس حسابين.",
+      "connect": "ربط Instagram",
+      "checking": "جارٍ التحقق…",
+      "hint": "يُربط فورًا إذا كنت قد وصلته مسبقًا على {engine}، وإلا تُفتح نافذة تسجيل دخول سريعة.",
+      "pick": "اختر حسابًا لربطه",
+      "link": "ربط",
+      "connectDifferent": "ربط حساب آخر",
+      "linkFailed": "تعذّر ربط هذا الحساب.",
+      "startFailed": "تعذّر بدء ربط Instagram."
+    },
+    "row": {
+      "channel": "Instagram",
+      "connected": "متصل",
+      "needsReauth": "يحتاج إلى إعادة مصادقة",
+      "live": "نشط",
+      "manage": "الإدارة على {engine}",
+      "refresh": "تحديث الملف الشخصي من {engine}",
+      "unlink": "إلغاء الربط",
+      "unlinkConfirm": "فصل حساب Instagram هذا؟ ستُزال محادثاته وبيانات صندوق الوارد الخاصة به، وسيختفي Instagram من لوحة التحكم وصندوق الوارد والتدفقات والقوالب والردود التلقائية حتى تربط حسابًا مرة أخرى. يبقى الحساب نفسه على {engine} ويمكنك إعادة ربطه لاحقًا.",
+      "cancel": "إلغاء",
+      "updated": "تم تحديث حساب Instagram ‏{handle}.",
+      "unlinked": "تم فصل حساب Instagram وإزالة بياناته.",
+      "failed": "لم تنجح العملية. حاول مرة أخرى."
+    },
+    "broadcast": {
+      "kicker": "Instagram · للرد فقط",
+      "title": "Instagram",
+      "titleAccent": "بث",
+      "intro": "يتيح Instagram مراسلة من راسلوك سابقًا فقط، لذا اختر من محادثاتك الحالية. يطبّق Instagram نافذة الـ24 ساعة عند إرسال كل رسالة.",
+      "accounts": "حسابات Instagram",
+      "loadError": "تعذّر تحميل المحادثات. حاول مرة أخرى.",
+      "failed": "لم تنجح العملية. حاول مرة أخرى.",
+      "noAccounts": "لا يوجد حساب Instagram مرتبط ومتصل بعد.",
+      "name": "اسم البث",
+      "namePlaceholder": "عرض الخريف",
+      "account": "حساب Instagram",
+      "template": "القالب",
+      "templateHint": "اختياري. يملأ الرسالة عندما تكون فارغة.",
+      "templateNone": "بلا قالب",
+      "message": "الرسالة",
+      "messageHint": "استخدم {token} لاسم الشخص. حتى {max} حرف.",
+      "messagePlaceholder": "مرحبًا {token}، …",
+      "send": "{count, plural, =0 {إرسال} one {إرسال إلى محادثة واحدة} two {إرسال إلى محادثتين} few {إرسال إلى # محادثات} many {إرسال إلى # محادثة} other {إرسال إلى # محادثة}}",
+      "sending": "جارٍ الإرسال…",
+      "recipients": "المستلمون",
+      "windowOpenCount": "{open} من {total} ضمن نافذة الـ24 ساعة",
+      "search": "البحث في المحادثات",
+      "selectAll": "تحديد الكل",
+      "clear": "مسح",
+      "capNote": "يصل الإرسال الواحد إلى {max} محادثة كحد أقصى؛ يحدد «تحديد الكل» أول {max}.",
+      "empty": "لا توجد محادثات بعد. يظهر الأشخاص هنا بعد مراسلتهم حسابك.",
+      "inWindow": "ضمن النافذة",
+      "outsideWindow": "خارج الـ24 ساعة",
+      "selected": "{count, plural, zero {لا شيء محدد} one {تم تحديد واحد} two {تم تحديد اثنين} few {تم تحديد #} many {تم تحديد #} other {تم تحديد #}}",
+      "sent": "تم إرسال بث Instagram — تم تسليم {sent}{failed, plural, =0 {} other {، وفشل #}}.",
+      "sentNone": "تعذّر الإرسال إلى أي مستلم. تحقق من اتصال Instagram."
+    }
+  }
+}

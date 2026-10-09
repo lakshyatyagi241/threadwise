@@ -1,0 +1,268 @@
+{
+  "invoicing": {
+    "method": {
+      "bank": "银行转账",
+      "manual": "手动",
+      "wa_pay": "WhatsApp Pay",
+      "storefront": "线上店铺"
+    },
+    "toolbar": {
+      "currency": "货币",
+      "currencyPlaceholder": "USD",
+      "issued": "已开具",
+      "issuedWindow": "开具日期范围",
+      "due": "到期",
+      "dueWindow": "到期日范围",
+      "dueFrom": "到期起",
+      "dueTo": "到期止",
+      "docType": "单据类型",
+      "anyDocType": "所有类型",
+      "mine": "我的发票",
+      "docTypes": {
+        "tax_invoice": "税务发票",
+        "proforma": "形式发票",
+        "receipt": "收据"
+      }
+    },
+    "strip": {
+      "label": "仍需支付的金额",
+      "outstanding": "未付金额（{currency}）",
+      "overdue": "其中逾期"
+    },
+    "row": {
+      "creditNote": "创建贷项通知单",
+      "downloadPdf": "下载 PDF"
+    },
+    "bulk": {
+      "sendLink": "将链接标记为已发送",
+      "someSkipped": "{count, plural, other {# 张所选发票因不支持此操作而被跳过。}}",
+      "done": {
+        "send": "{count, plural, other {# 张发票已标记为已发送。}}"
+      },
+      "confirm": {
+        "delete": {
+          "message": "{count, plural, other {# 份草稿将被永久删除。非草稿发票不受影响。}}"
+        }
+      },
+      "voidDialog": {
+        "title": "作废所选发票",
+        "close": "关闭",
+        "keep": "保留发票",
+        "confirm": "{count, plural, other {作废 # 张发票}}",
+        "warning": "{count, plural, other {# 张发票将被作废。发票编号保留，但无法再付款或编辑。}}",
+        "skipped": "{count, plural, other {# 张所选发票将被跳过：只有无付款且无贷项通知单的已开具发票可以作废。}}",
+        "reason": "原因（将保存在每张发票上）",
+        "reasonRequired": "请说明作废这些发票的原因。"
+      }
+    },
+    "actions": {
+      "sentVia": {
+        "link": "已连同链接记录为已发送。",
+        "email": "发票已通过电子邮件发送。",
+        "whatsapp": "发票已通过 WhatsApp 发送。"
+      },
+      "markedPaid": "已标记为已付款。",
+      "linkRegenerated": "已生成新链接。旧链接将失效。",
+      "linkRevoked": "链接已关闭。",
+      "linkUnavailable": "此发票没有有效链接。请打开发票并创建新链接。"
+    },
+    "voidDialog": {
+      "reasonHint": "必填。将保留在发票的时间线中。",
+      "reasonRequired": "请说明作废此发票的原因。",
+      "refundFirst": "此发票已收到付款。请先退款（在发票的付款列表中操作），然后再作废。",
+      "creditsFirst": "此发票存在贷项通知单。请先作废这些贷项通知单，然后再作废此发票。"
+    },
+    "sendDialog": {
+      "loading": "正在加载发票",
+      "channel": "如何发送？",
+      "channels": {
+        "link": "我自行分享链接",
+        "email": "电子邮件",
+        "whatsapp": "WhatsApp"
+      },
+      "action": {
+        "link": "标记为已发送",
+        "email": "发送电子邮件",
+        "whatsapp": "通过 WhatsApp 发送"
+      },
+      "linkOff": "此发票没有有效链接。请在发票的链接卡片中创建新链接，然后分享。",
+      "linkRecords": "自行分享链接只会记录为已发送。",
+      "noEmail": "此发票没有买方电子邮件地址",
+      "noPhone": "此发票没有买方电话号码",
+      "noEmailHelp": "此发票没有买方邮箱。请关闭此窗口，使用“编辑详情”添加后重试。",
+      "noPhoneHelp": "此发票没有买方电话号码。请关闭此窗口，使用“编辑详情”添加后重试。",
+      "message": "消息",
+      "messageHint": "可选。将附加在随发票发送的消息中。",
+      "deliveryNote": "发票已加入发送队列。时间线将显示发送时间。"
+    },
+    "editDialog": {
+      "title": "编辑详情",
+      "close": "关闭",
+      "cancel": "取消",
+      "save": "保存更改",
+      "saved": "发票详情已保存。",
+      "reload": "重新加载发票",
+      "conflict": "您编辑时，此发票已被他人修改。请重新加载以查看最新版本，然后再次修改。",
+      "intro": "已开具的发票将保留其明细、金额和编号。这些详情仍可修改。",
+      "email": "买方邮箱",
+      "phone": "买方电话",
+      "phoneHint": "包含国家代码，例如 +14155550123",
+      "contact": "联系人",
+      "owner": "负责人",
+      "dueDate": "到期日",
+      "dueHint": "延长或缩短付款条款。",
+      "reference": "参考号",
+      "notes": "备注",
+      "terms": "条款"
+    },
+    "payDialog": {
+      "overpayNote": "这比应付余额多出 {extra}。确认后将作为贷方余额记录。",
+      "overpayConfirm": "比应付余额多出的 {extra} 将记录并显示为发票上的贷方余额。再次点击按钮即可确认。",
+      "problems": {
+        "tooMuch": "这超过了发票的剩余应付金额。"
+      }
+    },
+    "markPaidDialog": {
+      "title": "标记为已付款",
+      "close": "关闭",
+      "cancel": "取消",
+      "confirm": "记录付款",
+      "message": "是否将全部余额 {amount} 记录为今日已收款？",
+      "method": "收款人"
+    },
+    "refundDialog": {
+      "problems": {
+        "dateFuture": "退款日期不能是未来日期。"
+      }
+    },
+    "paymentsSection": {
+      "refundChip": "退款",
+      "receipt": "收据",
+      "refundOf": "退还 {receipt}",
+      "refundedSoFar": "目前已退款 {amount}"
+    },
+    "activity": {
+      "none": "尚未发生任何操作。",
+      "actors": {
+        "buyer": "买方",
+        "gateway": "支付网关",
+        "system": "系统"
+      },
+      "events": {
+        "sent": "已发送给买方",
+        "overdue": "已逾期",
+        "partially_paid": "部分付款",
+        "link_regenerated": "公开链接已替换",
+        "link_revoked": "公开链接已关闭",
+        "pay_attempt": "尝试在线付款",
+        "credit_note_issued": "贷项通知单"
+      }
+    },
+    "linked": {
+      "invoiced": "已开票",
+      "paid": "已付",
+      "outstanding": "应付",
+      "overdue": "逾期",
+      "latest": "{count, plural, other {显示最新的 # 张发票。}}"
+    },
+    "detail": {
+      "editDetails": "编辑详情",
+      "downloadPdf": "PDF",
+      "createCreditNote": "创建贷项通知单",
+      "linkOffBanner": "买方的链接已关闭，买方无法打开此发票。请在链接卡片中创建新链接。",
+      "refunded": "已退款",
+      "credited": "已贷记",
+      "credit": "贷记",
+      "detailsLabel": "发票详情",
+      "contact": "联系人",
+      "company": "公司",
+      "quote": "报价单",
+      "salesOrder": "销售订单",
+      "recurring": "定期计划",
+      "makeRecurring": "设为定期",
+      "reference": "参考号",
+      "owner": "负责人",
+      "createdBy": "创建人",
+      "overpaid": "已收到或已贷记的金额超过本发票应付金额，超出部分显示为贷方余额。",
+      "voidNeedsRefund": "作废此发票前，请先退还其付款。同时必须没有贷项通知单。",
+      "sources": {
+        "manual": "手动创建",
+        "quote": "来自报价单",
+        "order": "来自订单",
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "own": "线上店铺",
+        "api": "API",
+        "ai": "AI 助手",
+        "recurring": "定期发票",
+        "sales_order": "销售订单"
+      },
+      "creditNotes": {
+        "title": "贷项通知单",
+        "create": "创建贷项通知单",
+        "loading": "正在加载贷项通知单",
+        "none": "此发票没有贷项通知单。",
+        "draft": "草稿",
+        "status": {
+          "draft": "草稿",
+          "issued": "已开具",
+          "void": "已作废"
+        }
+      }
+    },
+    "linkCard": {
+      "title": "公开链接",
+      "address": "链接地址",
+      "state": {
+        "active": "有效",
+        "revoked": "已关闭",
+        "expired": "已过期"
+      },
+      "off": {
+        "revoked": "链接已关闭。买方会看到一个页面，提示该发票不可用。",
+        "expired": "链接已过期。买方会看到一个页面，提示该发票不可用。"
+      },
+      "copy": "复制",
+      "copied": "已复制",
+      "expires": "到期时间",
+      "revokedAt": "已关闭",
+      "views": "打开次数",
+      "firstViewed": "首次打开",
+      "lastViewed": "最近打开",
+      "open": "打开买方页面",
+      "regenerate": "新链接",
+      "revoke": "关闭",
+      "close": "关闭",
+      "cancel": "取消",
+      "regenerateTitle": "创建新链接",
+      "regenerateWarning": "当前链接将立即失效。持有该链接的人会看到发票不可用。",
+      "regenerateConfirm": "创建新链接",
+      "expiry": "新链接有效期为",
+      "expiryNever": "永久有效",
+      "expiryDays": "{count, plural, other {# 天}}",
+      "revokeTitle": "关闭此链接？",
+      "revokeMessage": "买方将无法再通过此链接打开或支付该发票。您之后可以再创建新链接。",
+      "revokeConfirm": "关闭链接"
+    },
+    "errors": {
+      "codes": {
+        "INV_NOT_DRAFT": "该发票已开具，其明细和金额不能再更改。",
+        "INV_NOT_ISSUED": "只有已开具的发票才能执行此操作。请先开具草稿。",
+        "INV_ALREADY_VOID": "该发票已作废。",
+        "INV_HAS_PAYMENTS": "该发票仍有收款记录。请先退款，再作废发票。",
+        "INV_HAS_CREDITS": "该发票已有关联的贷项通知单。请先作废贷项通知单，再作废发票。",
+        "INV_NOT_DELETABLE": "只能删除草稿。请改为作废此发票。",
+        "INV_NO_RECIPIENT": "该发票在此渠道下没有邮箱或电话号码。请通过“编辑详情”添加后重试。",
+        "INV_LINK_UNAVAILABLE": "该发票没有有效链接。请在链接卡片中创建新链接。",
+        "INV_OWNER_INVALID": "该人员不是此工作区的有效成员。请选择其他负责人。",
+        "PAY_OVERPAYMENT": "金额超过发票剩余应付款。请降低金额，或确认您要记录为贷项。",
+        "PAY_FUTURE_DATE": "付款日期不能晚于今天。",
+        "PAY_CURRENCY_MISMATCH": "付款币种必须与发票币种一致。",
+        "PAY_REFUND_EXCEEDS": "超过此笔付款仍可退款的金额。",
+        "PAY_NOT_REFUNDABLE": "此记录无法退款。只有仍有余额的付款才能退款。",
+        "PAY_NOTHING_TO_PAY": "该发票已无待付金额。",
+        "ROW_VERSION_CONFLICT": "其他人刚刚修改了此发票。请重新加载以查看最新版本，然后再试一次。"
+      }
+    }
+  }
+}

@@ -1,0 +1,484 @@
+{
+  "auth-registration-security": {
+    "guest": {
+      "shell": {
+        "appNameFallback": "CRM",
+        "header": {
+          "login": {
+            "eyebrow": "ログイン",
+            "title": "おかえり",
+            "accent": "なさい",
+            "subtitle": "詳細を入力して、ワークスペースに戻りましょう。"
+          },
+          "register": {
+            "eyebrow": "ステップ1/3：アカウント作成",
+            "title": "アカウントを",
+            "accent": "作成",
+            "subtitle": "いくつかの情報を入力するだけで、ワークスペースの準備が整います。"
+          },
+          "forgot": {
+            "eyebrow": "パスワードを忘れた場合",
+            "title": "パスワードを",
+            "accent": "リセット",
+            "subtitle": "ログインに使用している情報を入力してください。1回限り有効なリンクを送信します。"
+          }
+        },
+        "defaults": {
+          "login": {
+            "hero_title": "すべてを一か所に",
+            "hero_desc": "チャット、キャンペーン、連絡先をまとめて管理でき、状況を探し回る必要がありません。",
+            "stat1_num": "24時間365日",
+            "stat1_label": "共有チーム受信トレイ",
+            "stat2_num": "5分",
+            "stat2_label": "標準的な設定時間",
+            "stat3_num": "1か所",
+            "stat3_label": "チャットと連絡先を管理",
+            "feat1_title": "共有受信トレイ",
+            "feat1_desc": "やり取りの流れを途切れさせずに、チャットの割り当て、返信、引き継ぎができます。",
+            "feat2_title": "ブロードキャスト",
+            "feat2_desc": "送信ペースの調整と配信追跡で、多くの連絡先に一度に届けられます。",
+            "feat3_title": "自動化",
+            "feat3_desc": "自分で設計したフローで、振り分け、返信、フォローアップを行えます。",
+            "feat4_title": "チーム管理",
+            "feat4_desc": "ロール、権限、監査ログで、すべてのワークスペースを適切に管理できます。",
+            "inside_heading": "ワークスペースの中身",
+            "chip1": "受信トレイ",
+            "chip2": "ブロードキャスト",
+            "chip3": "フロー",
+            "chip4": "連絡先",
+            "chip5": "レポート",
+            "chip6": "テンプレート"
+          },
+          "register": {
+            "hero_title": "無料で始める",
+            "hero_desc": "まずワークスペースを設定し、準備ができたらプランを選択してください。",
+            "stat1_num": "3ステップ",
+            "stat1_label": "でワークスペースが完成",
+            "stat2_num": "5分",
+            "stat2_label": "標準的な設定時間",
+            "stat3_num": "初日",
+            "stat3_label": "チームを招待",
+            "feat1_title": "かんたん設定",
+            "feat1_desc": "ワークスペース名とタイムゾーンを設定すれば、すぐに始められます。",
+            "feat2_title": "チームを招待",
+            "feat2_desc": "同僚を招待して、それぞれに必要なアクセス権だけを付与できます。",
+            "feat3_title": "チャネルを接続",
+            "feat3_desc": "メッセージ用の番号を連携して、お客様とのやり取りを始めましょう。",
+            "feat4_title": "しっかり管理",
+            "feat4_desc": "2要素ログインとセッション管理で、すべてのアカウントを保護します。",
+            "inside_heading": "利用できる機能",
+            "chip1": "共有受信トレイ",
+            "chip2": "ブロードキャスト",
+            "chip3": "フロー",
+            "chip4": "連絡先",
+            "chip5": "レポート",
+            "chip6": "チームロール"
+          },
+          "forgot": {
+            "hero_title": "新しいリンク（1回限り）",
+            "hero_desc": "1回だけ使える安全なリンクをメールでお送りします。有効期限は短めです。"
+          }
+        },
+        "contentDefaults": {
+          "login": {
+            "eyebrow": "WhatsApp向けチーム受信トレイ",
+            "heading": "お客様とのチャットを、",
+            "headingAccent": "ひとつの落ち着いた場所に",
+            "subheading": "素早く対応するチームのための、ブロードキャスト、自動化、共有受信トレイ。"
+          },
+          "register": {
+            "eyebrow": "数分で開始",
+            "heading": "ワークスペースを",
+            "headingAccent": "設定",
+            "subheading": "ワークスペースを作成し、チームと最初のチャネルを追加しましょう。"
+          },
+          "forgot": {
+            "eyebrow": "アカウントの復旧",
+            "heading": "すぐに",
+            "headingAccent": "復旧",
+            "subheading": "メールアドレスを入力してください。新しいパスワードを設定するための安全なリンクを送信します。"
+          }
+        }
+      },
+      "toolbar": {
+        "language": "言語",
+        "theme": "テーマを切り替え",
+        "themeToLight": "ライト",
+        "themeToDark": "ダーク"
+      },
+      "pages": {
+        "login": {
+          "title": "ログイン"
+        },
+        "signup": {
+          "title": "アカウントを作成"
+        },
+        "verifyOtp": {
+          "title": "番号を確認",
+          "eyebrow": "番号を確認",
+          "accent": "WhatsAppを確認",
+          "subtitle": "送信したワンタイムコードを入力して、ワークスペースの作成を完了してください。",
+          "heading": "あなたの"
+        },
+        "forgot": {
+          "title": "パスワードをリセット"
+        },
+        "reset": {
+          "title": "新しいパスワードを設定",
+          "eyebrow": "パスワードをリセット",
+          "heading": "新しい",
+          "accent": "パスワードを設定",
+          "subtitle": "強力なパスワードを設定してください。設定後すぐにそのパスワードでログインします。",
+          "panel": {
+            "heroTitle": "新しいパスワード",
+            "heroDesc": "忘れにくいものを選んでください。ワークスペースによっては最低文字数が指定されます。",
+            "eyebrow": "アカウントの復旧",
+            "heading": "新たな",
+            "accent": "スタート",
+            "subheading": "新しいパスワードを保存すると、すぐにそのパスワードでログインできます。"
+          }
+        },
+        "verifyEmail": {
+          "title": "メールを確認",
+          "eyebrow": "メールの確認",
+          "heading": "メールを",
+          "accent": "確認",
+          "subtitle": "このページは、受信トレイから開いたリンクを確認します。",
+          "panel": {
+            "heroTitle": "アドレスを確認",
+            "heroDesc": "ワンクリックで、この受信トレイがあなたのものであることを確認できます。",
+            "eyebrow": "メールの確認",
+            "heading": "リンクを",
+            "accent": "確認中",
+            "subheading": "開いたメールのアドレスを確認しています。"
+          }
+        },
+        "findWorkspace": {
+          "title": "ワークスペースを探す",
+          "eyebrow": "ワークスペースを探す",
+          "heading": "ワークスペースを",
+          "accent": "探す",
+          "subtitle": "メールアドレスを入力してください。ログインできるワークスペースのアドレスをメールでお送りします。"
+        },
+        "confirmEmailChange": {
+          "title": "新しいメールを確認",
+          "eyebrow": "メールの変更",
+          "heading": "新しいメールを",
+          "accent": "確認",
+          "subtitle": "このページは、受信トレイから開いたリンクを確認します。",
+          "panel": {
+            "heroTitle": "新しいログイン用メール",
+            "heroDesc": "確認するとすぐにアドレスが変更されます。",
+            "eyebrow": "メールの変更",
+            "heading": "新しいメールを",
+            "accent": "確認中",
+            "subheading": "開いたメッセージのリンクを確認しています。"
+          }
+        },
+        "socialCallback": {
+          "title": "ログイン中",
+          "eyebrow": "ソーシャルログイン",
+          "heading": "ログイン",
+          "accent": "中",
+          "subtitle": "ログインを完了しています。"
+        }
+      },
+      "errors": {
+        "invalidCredentials": "入力内容が一致しません。ワークスペース、メール、パスワードを確認してください。",
+        "locked": "失敗回数が多すぎます。{minutes, plural, other {#分}}後にもう一度お試しください。",
+        "rateLimited": "試行回数が多すぎます。しばらくしてからもう一度お試しください。",
+        "rateLimitedWait": "試行回数が多すぎます。{seconds, plural, other {#秒}}後にもう一度お試しください。",
+        "suspended": "このアカウントは停止されています。ワークスペース管理者にお問い合わせください。",
+        "captcha": "CAPTCHAを完了してから、もう一度お試しください。",
+        "signupClosed": "登録は受け付けていません。管理者に招待を依頼してください。",
+        "slugTaken": "そのワークスペースアドレスはすでに使用されています。",
+        "emailTaken": "そのメールアドレスはこのワークスペースですでに使用されています。",
+        "passwordPolicy": "そのパスワードはセキュリティポリシーを満たしていません：",
+        "tokenInvalid": "このリンクは無効か、有効期限が切れています。",
+        "emailUnverified": "先にメールアドレスを確認してください。",
+        "mfaInvalid": "コードが無効です。コードを確認してもう一度お試しください。",
+        "mfaExpired": "認証の有効期限が切れました。もう一度ログインしてください。",
+        "otpInvalid": "コードが正しくありません。もう一度お試しください。",
+        "otpExpired": "コードの有効期限が切れています。新しいコードをリクエストしてください。",
+        "otpTooMany": "試行回数が多すぎます。新しいコードをリクエストしてください。",
+        "otpCooldown": "別のコードをリクエストする前に、しばらくお待ちください。",
+        "otpSendFailed": "認証コードを送信できませんでした。番号を確認してもう一度お試しください。",
+        "socialUnavailable": "そのログイン方法は利用できません。",
+        "socialExpired": "ログインの有効期限が切れました。もう一度お試しください。",
+        "socialFailed": "{provider}でのログインを完了できませんでした。もう一度お試しください。",
+        "socialNoEmail": "そのアカウントではメールアドレスが共有されませんでした。メールとパスワードをご利用ください。",
+        "ipBlocked": "このネットワークからのログインは許可されていません。",
+        "workspaceUnavailable": "そのワークスペースは利用できません。",
+        "workspaceRequired": "このメールアドレスは複数のワークスペースで使用されています。続行するにはワークスペースを入力してください。",
+        "validation": "強調表示された項目を確認してください。",
+        "sessionExpired": "セキュリティのためセッションの有効期限が切れました。もう一度お試しください。",
+        "network": "サーバーに接続できませんでした。接続を確認してもう一度お試しください。",
+        "unexpected": "サーバー側で問題が発生しました。もう一度お試しください。",
+        "requestId": "リクエストID",
+        "signupExpired": "最初から登録をやり直してください。",
+        "policyRules": {
+          "min_length": "{min, plural, other {#文字}}以上で入力してください。",
+          "upper_lower": "大文字と小文字を混在させてください。",
+          "number": "数字を1つ以上含めてください。",
+          "symbol": "記号を1つ以上含めてください。",
+          "common": "このパスワードは推測されやすすぎます。"
+        },
+        "socialNoAccount": "その{provider}ログインに一致するアカウントがありません。メールとパスワードでログインするか、アカウントを作成してください。",
+        "forbidden": "リクエストが拒否されました。ページを再読み込みして、もう一度お試しください。"
+      },
+      "validation": {
+        "orgSlug": "ワークスペースアドレス（英数字、ハイフン、アンダースコア）を入力してください。",
+        "orgSlugForSocial": "ログイン先を特定するため、先にワークスペースアドレスを入力してください。",
+        "email": "有効なメールアドレスを入力してください。",
+        "password": "表示されている要件を満たすパスワードを入力してください。",
+        "passwordRequired": "パスワードを入力してください。",
+        "fullName": "氏名を入力してください。",
+        "orgName": "ワークスペース名を入力してください（2文字以上）。",
+        "orgNameForSocial": "先にワークスペース名を入力してから、GoogleまたはFacebookで続行してください。",
+        "phoneRequired": "携帯電話番号を入力してください。",
+        "phone": "選択した国に対応する有効な携帯電話番号を入力してください。",
+        "newPassword": "{min, plural, other {#文字}}以上で入力してください。",
+        "confirmPassword": "2つのパスワードが一致しません。",
+        "acceptTerms": "続行するには利用規約への同意が必要です。",
+        "referralCode": "紹介コードには英数字のみ使用できます。",
+        "code": "{length}桁のコードを入力してください。"
+      },
+      "legal": {
+        "login": "ログインすると、<terms>利用規約</terms>および<privacy>プライバシーポリシー</privacy>に同意したものとみなされます。",
+        "signup": "<terms>利用規約</terms>および<privacy>プライバシーポリシー</privacy>に同意します。",
+        "cookies": "<cookies>Cookieポリシー</cookies>"
+      },
+      "captcha": {
+        "protected": "このサイトはreCAPTCHAで保護されており、Googleの<privacy>プライバシーポリシー</privacy>と<terms>利用規約</terms>が適用されます。"
+      },
+      "social": {
+        "divider": "またはメールで",
+        "redirecting": "プロバイダーを開いています",
+        "login": {
+          "google": "Googleで続行",
+          "facebook": "Facebookで続行"
+        },
+        "signup": {
+          "google": "Googleで登録",
+          "facebook": "Facebookで登録"
+        },
+        "google": "Google",
+        "facebook": "Facebook"
+      },
+      "login": {
+        "workspace": "ワークスペース",
+        "workspaceHint": "チームが使用するアドレスです（例：acme）。",
+        "chooseTitle": "ワークスペースを選択",
+        "chooseSubtitle": "このメールアドレスは複数のワークスペースに登録されています。開きたいものを選択してください。",
+        "chooseMembers": "{count, plural, other {#人のメンバー}}",
+        "chooseOpen": "開く",
+        "chooseBack": "別のアカウントを使用",
+        "chooseExpired": "時間がかかりすぎました。もう一度ログインしてください。",
+        "workspacePlaceholder": "your-workspace",
+        "email": "メール",
+        "emailPlaceholder": "you@company.com",
+        "password": "パスワード",
+        "forgot": "パスワードをお忘れですか？",
+        "showPassword": "パスワードを表示",
+        "hidePassword": "パスワードを非表示",
+        "remember": "30日間ログインを維持する",
+        "submit": "ログイン",
+        "submitting": "ログイン中",
+        "newHere": "初めてですか？",
+        "createAccount": "アカウントを作成",
+        "lostWorkspace": "ワークスペースアドレスがわかりませんか？",
+        "findWorkspace": "ワークスペースを探す",
+        "loggedOut": "ログアウトしました。",
+        "flashReset": "パスワードをリセットしました。新しいパスワードでログインしてください。",
+        "flashExpired": "セッションの有効期限が切れました。もう一度ログインしてください。",
+        "flashIdle": "{minutes, plural, other {#分}}間操作がなかったためログアウトされました。続行するには再度ログインしてください。",
+        "mfaExpired": "認証に時間がかかりすぎました。もう一度ログインしてください。",
+        "flashDeleted": "アカウントが削除されました。"
+      },
+      "mfa": {
+        "title": "2段階認証",
+        "descriptionCode": "認証アプリに表示される6桁のコードを入力してください。",
+        "descriptionRecovery": "使い捨てのリカバリーコードのいずれかを入力してください。",
+        "codeLabel": "認証アプリのコード",
+        "recoveryLabel": "リカバリーコード",
+        "recoveryHint": "各リカバリーコードは1回のみ使用できます。",
+        "invalidCode": "6桁のコードを入力してください。",
+        "invalidRecovery": "リカバリーコードを入力してください（8～32文字）。",
+        "verify": "確認",
+        "verifying": "確認中",
+        "useRecovery": "リカバリーコードを使用する",
+        "useApp": "認証アプリのコードを使用する",
+        "back": "ログインに戻る",
+        "expiresIn": "認証の有効期限まで{time}"
+      },
+      "signup": {
+        "steps": {
+          "label": "登録の進行状況",
+          "account": "アカウント",
+          "workspace": "ワークスペース",
+          "plan": "プラン"
+        },
+        "fullName": "氏名",
+        "fullNamePlaceholder": "あなたの名前",
+        "email": "勤務先メール",
+        "orgName": "ワークスペース名",
+        "orgNamePlaceholder": "Acme Inc.",
+        "orgNameHint": "チームは{slug}のアドレスでログインします。",
+        "orgNameHintEmpty": "チームに表示される名前です。",
+        "customiseSlug": "ワークスペースアドレスをカスタマイズ",
+        "orgSlug": "ワークスペースアドレス",
+        "orgSlugHint": "英数字、ハイフン、アンダースコア。チームはログイン時にこれを入力します。",
+        "orgSlugPlaceholder": "your-workspace",
+        "phone": "携帯電話番号",
+        "phoneHint": "アカウントの確認と重要なお知らせに使用します。",
+        "phonePlaceholder": "国番号を除いた番号",
+        "country": "国",
+        "referral": "紹介コード",
+        "optional": "任意",
+        "referralPlaceholder": "お友達のコードをお持ちですか？",
+        "password": "パスワード",
+        "confirmPassword": "パスワード（確認）",
+        "submit": "続行",
+        "submitting": "アカウントを作成中",
+        "haveAccount": "すでにアカウントをお持ちですか？",
+        "signIn": "ログイン",
+        "closedBody": "登録は受け付けていません。管理者に招待を依頼してください。",
+        "closedBack": "ログインに戻る",
+        "restart": "最初から登録をやり直してください。",
+        "countryButton": "国番号 +{dial}",
+        "countrySearch": "国を検索",
+        "countryEmpty": "一致する国がありません"
+      },
+      "otp": {
+        "sentTo": "コードを送信しました：",
+        "code": "認証コード",
+        "expiresIn": "コードの有効期限まで{time}。",
+        "expired": "このコードは有効期限が切れています。新しいコードをリクエストしてください。",
+        "verify": "確認して続行",
+        "verifying": "確認中",
+        "resend": "コードを再送信",
+        "resendIn": "{time}後にコードを再送信",
+        "resending": "送信中",
+        "resent": "新しいコードをWhatsAppに送信しました。",
+        "wrongNumber": "番号が違いますか？",
+        "goBack": "戻る",
+        "addressTakenHint": "確認中にそのワークスペースアドレスが使用されました。別のアドレスを選択してください。新しいコードを送信します。",
+        "chooseAnotherAddress": "別のアドレスを選択"
+      },
+      "forgot": {
+        "submit": "リセットリンクをメールで送る",
+        "submitting": "送信中",
+        "remembered": "思い出しましたか？",
+        "back": "ログインに戻る",
+        "doneTitle": "受信トレイを確認してください",
+        "doneBody": "そのメールアドレスがそのワークスペースのアカウントに登録されている場合、リセットリンクを送信しました。リンクは1回のみ有効で、まもなく期限切れになります。",
+        "doneHint": "届きませんか？迷惑メールフォルダを確認するか、1分後にもう一度お試しください。",
+        "tryAnother": "別のメールを使用"
+      },
+      "reset": {
+        "password": "新しいパスワード",
+        "confirmPassword": "新しいパスワード（確認）",
+        "submit": "新しいパスワードを保存",
+        "submitting": "保存中",
+        "back": "ログインに戻る",
+        "invalidTitle": "このリンクは使用できなくなりました",
+        "invalidBody": "リセットリンクは1回のみ有効で、短時間で期限切れになります。続行するには新しいリンクをリクエストしてください。",
+        "requestNew": "新しいリンクをリクエスト"
+      },
+      "verifyEmail": {
+        "working": "メールを確認中",
+        "doneTitle": "メールを確認しました",
+        "doneBody": "ありがとうございます。アドレスが確認されました。続行するにはログインしてください。",
+        "failedTitle": "メールを確認できませんでした",
+        "failedHint": "ログインして、アプリ上部のバナーから確認メールの再送信をリクエストしてください。",
+        "signIn": "ログインへ移動"
+      },
+      "confirmEmailChange": {
+        "working": "新しいメールを確認中",
+        "doneTitle": "メールアドレスを更新しました",
+        "doneBody": "次回のログインからは新しいアドレスを使用してください。",
+        "failedTitle": "変更を確認できませんでした",
+        "failedHint": "ログインして、アカウントページからメールの変更をやり直してください。",
+        "signIn": "ログインへ移動"
+      },
+      "findWorkspace": {
+        "submit": "ワークスペースをメールで送る",
+        "submitting": "送信中",
+        "back": "ログインに戻る",
+        "doneTitle": "受信トレイを確認してください",
+        "doneBody": "そのアドレスが確認済みアカウントに登録されている場合、ログインできるワークスペースのアドレスをメールで送信しました。",
+        "doneHint": "届きませんか？迷惑メールフォルダを確認するか、別のメールアドレスをお試しください。",
+        "tryAnother": "別のメールを使用"
+      },
+      "callback": {
+        "working": "ログインを完了しています",
+        "failedTitle": "ログインが完了しませんでした",
+        "cancelled": "ログインがキャンセルされました。",
+        "backToSignIn": "ログインに戻る",
+        "createAccount": "代わりにアカウントを作成"
+      },
+      "layout": {
+        "noscript": "このブラウザーでJavaScriptがオフになっています。ログインまたはアカウント作成にはオンにしてください。"
+      },
+      "consent": {
+        "label": "Cookieに関するお知らせ",
+        "title": "Cookieを使用しています",
+        "message": "当サイトでは、ログイン状態の維持とサイトの利用状況の把握のためにCookieを使用します。すべて同意するか、任意のものを拒否するか、許可する内容を選択できます。",
+        "learnMore": "詳細を見る",
+        "decline": "拒否",
+        "customize": "カスタマイズ",
+        "acceptAll": "すべて同意",
+        "prefsTitle": "プライバシー設定",
+        "necessary": "必須",
+        "necessaryHint": "ログインとセキュリティに必要です。常にオンです。",
+        "analytics": "分析",
+        "analyticsHint": "どのページが役立っているかを把握するために使用します。",
+        "marketing": "マーケティング",
+        "marketingHint": "他のウェブサイトで関連性の高いオファーを表示するために使用します。",
+        "rejectAll": "すべて拒否",
+        "save": "選択を保存"
+      },
+      "policy": {
+        "minLength": "{min, plural, other {#文字}}以上。",
+        "mixedCase": "大文字と小文字を混在させてください。",
+        "number": "数字を含めてください。",
+        "symbol": "記号を含めてください。",
+        "placeholder": "{min, plural, other {#文字}}以上"
+      }
+    },
+    "gate": {
+      "suspended": {
+        "titleLead": "アカウントは",
+        "titleAccent": "停止されています"
+      },
+      "verify": {
+        "titleAccent": "メールアドレスを確認してください",
+        "titleLead": "まずは"
+      },
+      "onboarding": {
+        "header": {
+          "step2": {
+            "eyebrow": "ステップ2/3：ワークスペース",
+            "title": "ワークスペースを",
+            "accent": "作成"
+          },
+          "step3": {
+            "eyebrow": "ステップ3/3：プラン",
+            "title": "プランを",
+            "accent": "選択",
+            "subtitle": "すべてのプランに月間メッセージ枠が含まれます。無料プランで始めるか、より余裕のあるプランを選択してください。"
+          }
+        },
+        "timezonePlaceholder": "タイムゾーンを検索...",
+        "timezoneEmpty": "検索に一致するタイムゾーンがありません。",
+        "timezoneLabel": "タイムゾーン",
+        "phonePlaceholder": "国番号を除いた番号",
+        "plan": {
+          "credits": "ご利用のプランには毎月一定数のメッセージが含まれます。プランが有効な間に枠を使い切った場合、追加の送信にはウォレットクレジットが<rate>1メッセージあたり{credits, plural, other {#クレジット}}</rate>で使用されます。プランが終了すると、更新するまで送信は停止されます。",
+          "topUpPrompt": "枠を超えそうですか？",
+          "topUp": "メッセージクレジットを追加"
+        }
+      }
+    }
+  }
+}

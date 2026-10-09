@@ -1,0 +1,571 @@
+{
+  "auth-registration-security": {
+    "account": {
+      "nav": {
+        "title": "Akun"
+      },
+      "common": {
+        "cancel": "Batal",
+        "loading": "Memuat",
+        "reset": "Reset",
+        "retry": "Coba lagi",
+        "save": "Simpan perubahan",
+        "saving": "Menyimpan",
+        "showPassword": "Tampilkan kata sandi",
+        "hidePassword": "Sembunyikan kata sandi",
+        "signOut": "Keluar"
+      },
+      "errors": {
+        "unexpected": "Terjadi masalah di sisi kami. Silakan coba lagi.",
+        "network": "Kami tidak dapat menjangkau server. Periksa koneksi Anda lalu coba lagi.",
+        "forbidden": "Anda tidak memiliki izin untuk melakukannya.",
+        "signedOut": "Sesi Anda telah berakhir. Silakan masuk lagi.",
+        "rateLimited": "Terlalu banyak percobaan. Harap tunggu sebentar lalu coba lagi.",
+        "rateLimitedWait": "Terlalu banyak percobaan. Coba lagi dalam {seconds, plural, other {# detik}}.",
+        "requestId": "ID permintaan",
+        "locked": "Terlalu banyak percobaan gagal. Tunggu beberapa saat sebelum mencoba lagi.",
+        "lockedWait": "Terlalu banyak percobaan gagal. Coba lagi dalam {minutes, plural, other {# menit}}."
+      },
+      "hub": {
+        "railLabel": "Akun",
+        "menuLabel": "Bagian akun",
+        "groups": {
+          "account": "Akun",
+          "security": "Keamanan"
+        },
+        "tabs": {
+          "profile": "Profil",
+          "security": "Kata sandi & keamanan",
+          "delete": "Hapus akun",
+          "plan": "Paket"
+        },
+        "pages": {
+          "profile": {
+            "title": "Profil",
+            "description": "Perbarui foto, nama, dan detail kontak Anda."
+          },
+          "security": {
+            "title": "Kata sandi & keamanan",
+            "description": "Ubah kata sandi, aktifkan autentikasi dua faktor, dan tinjau tempat Anda masuk."
+          },
+          "delete": {
+            "title": "Hapus akun",
+            "description": "Hapus akun Anda dari ruang kerja ini secara permanen."
+          }
+        },
+        "breadcrumbLabel": "Breadcrumb",
+        "breadcrumbRoot": "Akun",
+        "planBadge": "Paket {plan}",
+        "planFree": "Gratis",
+        "upgrade": {
+          "title": "Butuh lebih banyak kapasitas?",
+          "body": "Dapatkan lebih banyak kampanye, perangkat, dan bantuan AI dengan paket yang lebih tinggi.",
+          "cta": "Lihat paket"
+        },
+        "lockedHint": "Selesaikan langkah keamanan pada akun ini terlebih dahulu."
+      },
+      "avatar": {
+        "alt": "Foto {name}",
+        "change": "Ubah foto",
+        "remove": "Hapus foto",
+        "uploading": "Mengunggah foto",
+        "removing": "Menghapus foto",
+        "updated": "Foto diperbarui.",
+        "removed": "Foto dihapus.",
+        "errors": {
+          "type": "Pilih gambar JPG, PNG, WebP, atau GIF.",
+          "too-large": "Gambar itu masih melebihi batas {size} setelah dikecilkan. Coba gambar yang lebih kecil.",
+          "decode": "Kami tidak dapat membaca gambar itu. Coba file lain.",
+          "encode": "Kami tidak dapat menyiapkan gambar itu. Coba file lain.",
+          "rejected": "File itu tidak diterima. Gunakan gambar JPG, PNG, WebP, atau GIF.",
+          "source-too-large": "Gambar itu terlalu besar untuk dibuka. Pilih yang di bawah 20 MB.",
+          "forbidden": "Anda tidak diizinkan mengubah foto pada akun ini.",
+          "expired": "Sesi Anda telah berakhir. Muat ulang halaman, masuk lagi, lalu coba lagi."
+        },
+        "hint": "JPG, PNG, WebP, atau GIF. Kami kecilkan agar muat dalam {size}."
+      },
+      "timezone": {
+        "label": "Zona waktu",
+        "placeholder": "Cari zona waktu, misalnya Kolkata atau UTC+05:30",
+        "empty": "Tidak ada zona waktu yang cocok dengan pencarian Anda."
+      },
+      "phone": {
+        "country": "Negara",
+        "countryPlaceholder": "Cari negara",
+        "countryEmpty": "Tidak ada negara yang cocok dengan pencarian Anda.",
+        "number": "Nomor telepon",
+        "numberPlaceholder": "Nomor telepon"
+      },
+      "profile": {
+        "personalInfo": "Info pribadi",
+        "fullName": "Nama lengkap",
+        "displayName": "Nama tampilan",
+        "displayNameHint": "Cara nama Anda tampil bagi rekan tim. Kami mulai dengan nama depan Anda.",
+        "email": "Email",
+        "changeEmail": "Ubah email",
+        "verified": "Terverifikasi",
+        "unverified": "Belum diverifikasi",
+        "pendingEmail": "Kami mengirim tautan konfirmasi ke {email}. Email masuk Anda berubah setelah Anda membukanya.",
+        "phone": "Telepon",
+        "phoneHint": "Opsional. Pilih negara, lalu masukkan nomornya.",
+        "language": "Bahasa",
+        "languageHint": "Bahasa aplikasi untuk Anda.",
+        "languageDefault": "Gunakan default",
+        "theme": "Tema",
+        "themes": {
+          "paper": "Kertas",
+          "bright": "Terang",
+          "dark": "Gelap"
+        },
+        "workspaceTimezone": "Zona waktu",
+        "workspaceTimezoneHint": "Berlaku untuk {workspace}. Hanya pemilik dan administrator yang dapat mengubahnya.",
+        "saved": "Profil disimpan.",
+        "errors": {
+          "fullNameRequired": "Masukkan nama lengkap Anda.",
+          "phoneInvalid": "Masukkan nomor telepon yang valid untuk negara yang dipilih.",
+          "invalid": "Nilai ini tidak valid.",
+          "timezoneInvalid": "Pilih zona waktu dari daftar.",
+          "timezoneForbidden": "Hanya pemilik dan administrator yang dapat mengubah zona waktu ruang kerja."
+        },
+        "workspaceTag": "(ruang kerja)"
+      },
+      "emailChange": {
+        "title": "Ubah email Anda",
+        "intro": "Masukkan alamat baru dan kata sandi Anda saat ini. Kami akan mengirim tautan konfirmasi ke alamat baru; email masuk Anda berubah hanya setelah Anda membukanya.",
+        "newEmail": "Alamat email baru",
+        "password": "Kata sandi saat ini",
+        "passwordHint": "Alamat baru menjadi ID masuk Anda, jadi kami meminta kata sandi Anda.",
+        "showPassword": "Tampilkan kata sandi",
+        "hidePassword": "Sembunyikan kata sandi",
+        "cancel": "Batal",
+        "submit": "Kirim tautan konfirmasi",
+        "sending": "Mengirim",
+        "errors": {
+          "invalidEmail": "Masukkan alamat email yang valid.",
+          "same": "Itu sudah menjadi alamat email Anda.",
+          "taken": "Alamat email itu sudah digunakan di ruang kerja ini.",
+          "passwordRequired": "Masukkan kata sandi Anda saat ini.",
+          "passwordWrong": "Kata sandi itu salah."
+        }
+      },
+      "messageFooterPage": {
+        "title": "Footer pesan",
+        "titleLead": "Pesan",
+        "titleAccent": "footer",
+        "description": "Baris yang menutup pesan yang dikirim ruang kerja Anda dari otomatisasi, pengiriman terjadwal, dan balasan kotak masuk tim."
+      },
+      "branding": {
+        "title": "Footer pesan",
+        "description": "Baris yang ditambahkan di bagian bawah pesan teks biasa dan interaktif yang dikirim dari otomatisasi, pengiriman terjadwal, dan balasan kotak masuk tim. Templat yang disetujui membawa teksnya sendiri dan tidak memakai footer ini.",
+        "label": "Footer kustom (maksimal {max} karakter)",
+        "hint": "Kosongkan untuk mengirim pesan tanpa footer sama sekali.",
+        "preview": "Pratinjau",
+        "sampleMessage": "Halo! Berikut informasi yang Anda minta.",
+        "noFooter": "(tanpa footer)",
+        "save": "Simpan footer",
+        "saving": "Menyimpan",
+        "saved": "Footer diperbarui. Berlaku mulai pesan berikutnya yang Anda kirim.",
+        "tooLong": "Footer maksimal {max} karakter.",
+        "forbidden": "Anda tidak diizinkan mengubah footer.",
+        "current": "Footer saat ini",
+        "currentDefault": "Footer saat ini (default platform)",
+        "planLocked": "Paket Anda memakai footer default platform pada pesan keluar. Paket yang lebih tinggi membuka footer kustom, atau tanpa footer sama sekali.",
+        "permissionLocked": "Hanya administrator ruang kerja yang dapat mengubah footer. Anda dapat melihatnya di sini, tetapi tidak mengeditnya.",
+        "upgrade": "Lihat paket",
+        "upgradeTitle": "Tingkatkan paket untuk menghapus footer platform.",
+        "placeholder": "Dikirim via {name}",
+        "remove": "Hapus footer saya",
+        "removed": "Footer dihapus. Pesan Anda keluar tanpa footer mulai pengiriman berikutnya."
+      },
+      "password": {
+        "title": "Ubah kata sandi",
+        "subtitle": "Pilih kata sandi yang kuat dan tidak Anda gunakan di tempat lain.",
+        "current": "Kata sandi saat ini",
+        "new": "Kata sandi baru",
+        "newHint": "Minimal {count} karakter.",
+        "confirm": "Konfirmasi kata sandi baru",
+        "submit": "Perbarui kata sandi",
+        "updating": "Memperbarui",
+        "forcedBanner": "Anda perlu mengatur kata sandi baru sebelum dapat melanjutkan. Pilih satu di bawah.",
+        "forcedDone": "Kata sandi diperbarui. Selamat datang kembali.",
+        "success": "Kata sandi diperbarui. {count, plural, =0 {Anda tetap masuk di perangkat ini.} other {# perangkat lain dikeluarkan.}}",
+        "errors": {
+          "currentRequired": "Masukkan kata sandi Anda saat ini.",
+          "currentWrong": "Kata sandi itu salah.",
+          "tooShort": "Gunakan minimal {count} karakter.",
+          "tooLong": "Gunakan maksimal 256 karakter.",
+          "sameAsCurrent": "Pilih kata sandi yang berbeda dari yang sekarang.",
+          "mismatch": "Kedua kata sandi tidak cocok.",
+          "policy": "Kata sandi itu tidak memenuhi aturan ruang kerja Anda:"
+        },
+        "rules": {
+          "min_length": "Gunakan minimal {count} karakter.",
+          "upper_lower": "Campurkan huruf besar dan kecil.",
+          "number": "Sertakan minimal satu angka.",
+          "symbol": "Sertakan minimal satu simbol.",
+          "common": "Kata sandi itu terlalu mudah ditebak."
+        },
+        "currentPlaceholder": "Masukkan kata sandi Anda saat ini",
+        "newPlaceholder": "Minimal {count} karakter",
+        "confirmPlaceholder": "Ketik ulang",
+        "tips": {
+          "title": "Tips kata sandi",
+          "mix": "Campurkan huruf besar dan kecil, angka, dan simbol.",
+          "reuse": "Jangan pakai ulang kata sandi dari situs lain.",
+          "manager": "Pertimbangkan memakai pengelola kata sandi."
+        },
+        "newHintRequires": "Harus menyertakan {rules}.",
+        "requirement": {
+          "mixedCase": "huruf besar dan kecil",
+          "number": "angka",
+          "symbol": "simbol"
+        },
+        "resetLink": {
+          "title": "Tidak ada kata sandi saat ini untuk diketik?",
+          "body": "Jika Anda masuk dengan Google atau Facebook, atau lupa kata sandi, kami dapat mengirim tautan ke {email} agar Anda dapat memilih yang baru tanpa kata sandi lama.",
+          "send": "Kirim tautan reset ke email saya",
+          "sending": "Mengirim",
+          "sent": "Jika {email} dapat menerima email, tautan reset sedang dikirim. Buka tautan itu untuk memilih kata sandi baru. Anda akan dikeluarkan di mana-mana dan dapat masuk lagi dengan yang baru.",
+          "captchaFailed": "Selesaikan pemeriksaan captcha lalu coba lagi."
+        }
+      },
+      "passwordConfirm": {
+        "password": "Kata sandi saat ini",
+        "required": "Masukkan kata sandi Anda saat ini.",
+        "wrong": "Kata sandi itu salah.",
+        "show": "Tampilkan kata sandi",
+        "hide": "Sembunyikan kata sandi",
+        "cancel": "Batal",
+        "working": "Memproses"
+      },
+      "mfa": {
+        "title": "Autentikasi dua faktor",
+        "subtitle": "Minta kode dari aplikasi autentikator setiap kali Anda masuk.",
+        "forcedBanner": "Organisasi Anda mewajibkan autentikasi dua faktor. Siapkan untuk tetap memakai aplikasi.",
+        "forcedDone": "Autentikasi dua faktor aktif. Selamat datang kembali.",
+        "offDescription": "Autentikasi dua faktor nonaktif. Aktifkan untuk melindungi akun Anda meskipun kata sandi bocor.",
+        "starting": "Menyiapkan pengaturan Anda",
+        "step1": "Buka aplikasi autentikator di ponsel Anda (Google Authenticator, Microsoft Authenticator, 1Password, dan sejenisnya).",
+        "step2": "Pindai kode QR, atau ketik kunci penyiapan secara manual.",
+        "step3": "Masukkan kode enam digit yang ditampilkan aplikasi untuk menyelesaikan.",
+        "qrLabel": "Kode QR untuk aplikasi autentikator Anda",
+        "manualKey": "Kunci penyiapan",
+        "manualKeyHint": "Gunakan ini jika Anda tidak dapat memindai kode. Jaga kerahasiaannya.",
+        "copy": "Salin",
+        "copied": "Tersalin",
+        "codeLabel": "Kode enam digit",
+        "codeHint": "Kode berubah setiap 30 detik.",
+        "codeInvalid": "Masukkan enam digit dari aplikasi Anda.",
+        "codeWrong": "Kode itu salah atau sudah kedaluwarsa. Tunggu kode baru lalu coba lagi.",
+        "enable": "Aktifkan",
+        "enabling": "Mengaktifkan",
+        "expired": "Penyiapan ini kedaluwarsa. Mulai lagi untuk mendapatkan kode baru.",
+        "restart": "Mulai lagi",
+        "on": "Aktif",
+        "since": "Sejak {date}",
+        "onDescription": "Anda akan diminta kode dari aplikasi autentikator setiap kali masuk.",
+        "remaining": "{count, plural, =0 {Anda tidak punya kode pemulihan tersisa.} other {# kode pemulihan tersisa.}}",
+        "remainingLow": "Buat yang baru segera.",
+        "regenerate": "Ganti kode pemulihan",
+        "regenerateTitle": "Ganti kode pemulihan",
+        "regenerateDescription": "Ini membuat sepuluh kode baru dan membuat kode lama tidak berlaku lagi. Masukkan kata sandi Anda untuk melanjutkan.",
+        "regenerateConfirm": "Ganti kode",
+        "disable": "Nonaktifkan",
+        "disableTitle": "Nonaktifkan autentikasi dua faktor",
+        "disableDescription": "Akun Anda hanya akan dilindungi oleh kata sandi. Masukkan kata sandi Anda untuk mengonfirmasi.",
+        "disableConfirm": "Nonaktifkan",
+        "disabledDone": "Autentikasi dua faktor nonaktif.",
+        "codesTitleEnabled": "Autentikasi dua faktor aktif. Simpan kode pemulihan Anda.",
+        "codesTitleRegenerated": "Kode pemulihan baru Anda",
+        "scanTitle": "Pindai kode QR ini"
+      },
+      "recovery": {
+        "intro": "Jika ponsel Anda hilang, setiap kode ini memungkinkan Anda masuk satu kali.",
+        "onlyOnce": "Kode ini hanya ditampilkan sekali. Simpan di tempat aman, seperti pengelola kata sandi.",
+        "listLabel": "Kode pemulihan",
+        "copy": "Salin kode",
+        "copied": "Tersalin",
+        "copyFailed": "Browser Anda tidak mengizinkan penyalinan. Pilih kodenya dan salin secara manual, atau unduh.",
+        "download": "Unduh",
+        "fileHeader": "Kode pemulihan. Masing-masing hanya berlaku sekali.",
+        "confirmSaved": "Saya sudah menyimpan kode ini di tempat aman.",
+        "done": "Sudah saya simpan"
+      },
+      "sessions": {
+        "title": "Tempat Anda masuk",
+        "subtitle": "Perangkat yang masuk ke akun Anda. Cabut akses yang tidak Anda kenali.",
+        "thisDevice": "Perangkat ini",
+        "remembered": "Tetap masuk",
+        "ipUnknown": "Alamat tidak diketahui",
+        "signOutOthers": "Keluarkan dari semua yang lain",
+        "signingOut": "Mengeluarkan",
+        "empty": "Tidak ada sesi aktif.",
+        "confirmOneTitle": "Keluar dari perangkat ini?",
+        "confirmOneBody": "{device} akan dikeluarkan dan memerlukan kata sandi Anda untuk masuk lagi.",
+        "confirmOthersTitle": "Keluar dari semua perangkat lain?",
+        "confirmOthersBody": "{count, plural, other {# perangkat lain}} akan dikeluarkan. Perangkat ini tetap masuk.",
+        "revoked": "{device} telah dikeluarkan.",
+        "revokedOthers": "{count, plural, =0 {Tidak ada perangkat lain yang masuk.} other {# perangkat dikeluarkan.}}",
+        "columns": {
+          "device": "Perangkat",
+          "ip": "Alamat IP",
+          "lastActive": "Terakhir aktif",
+          "actions": "Tindakan"
+        },
+        "revoke": "Cabut",
+        "showing": "Menampilkan {from}–{to} dari {total}",
+        "prev": "Sebelumnya",
+        "next": "Berikutnya",
+        "lifetimes": "Sesi masuk berakhir dengan sendirinya setelah {session}, atau setelah {remembered} jika tetap masuk dipilih.",
+        "idle": "Tanpa pilihan itu, sesi juga berakhir setelah {idle} tanpa aktivitas."
+      },
+      "delete": {
+        "title": "Hapus akun Anda",
+        "warning": "Ini menghapus akun Anda secara permanen: data masuk, profil, foto, dan perangkat Anda.",
+        "irreversible": "Tindakan ini tidak dapat dibatalkan.",
+        "consequencesTitle": "Yang akan terjadi",
+        "consequence1": "Anda dikeluarkan di mana-mana dan tidak dapat masuk lagi dengan akun ini.",
+        "consequence2": "Ruang kerja dan anggota lainnya tetap ada. Pekerjaan yang Anda lakukan tetap berada di ruang kerja.",
+        "consequence3": "Catatan bahwa akun telah dihapus disimpan untuk audit.",
+        "blocked": {
+          "sole_member": {
+            "title": "Anda satu-satunya anggota ruang kerja ini.",
+            "body": "Akun tidak dapat dihapus sendiri. Minta tim platform untuk menutup ruang kerja."
+          },
+          "sole_admin": {
+            "title": "Anda satu-satunya administrator.",
+            "body": "Jadikan anggota lain sebagai administrator terlebih dahulu, lalu kembali untuk menghapus akun Anda."
+          }
+        },
+        "phraseLabel": "Ketik {phrase} untuk mengonfirmasi",
+        "phraseHint": "Persis seperti yang ditampilkan, termasuk huruf kapital.",
+        "password": "Kata sandi saat ini",
+        "showPassword": "Tampilkan kata sandi",
+        "hidePassword": "Sembunyikan kata sandi",
+        "cancel": "Batal",
+        "submit": "Hapus akun secara permanen",
+        "deleting": "Menghapus",
+        "errors": {
+          "phrase": "Ketik frasa persis seperti yang ditampilkan.",
+          "passwordRequired": "Masukkan kata sandi Anda saat ini.",
+          "passwordWrong": "Kata sandi itu salah."
+        },
+        "considerTitle": "Sebelum menghapus, pertimbangkan",
+        "considerPlanLink": "Turun ke paket gratis",
+        "considerPlanRest": "daripada menghapus.",
+        "considerSupportLink": "Menghubungi dukungan",
+        "considerSupportRest": "jika ada masalah yang membuat Anda pergi. Kami mungkin bisa memperbaikinya.",
+        "reasonLabel": "Mengapa Anda pergi? (opsional)",
+        "reasonHint": "Ini hanya tersimpan di formulir ini. Tidak dikirim ke mana pun.",
+        "reasonPlaceholder": "Beri tahu kami apa yang bisa kami perbaiki"
+      },
+      "switcher": {
+        "heading": "Ruang kerja",
+        "label": "Ruang kerja: {name}. Ganti ruang kerja",
+        "switching": "Mengganti ruang kerja",
+        "switched": "Beralih ke {name}",
+        "failed": "Kami tidak dapat mengganti ruang kerja. Silakan coba lagi.",
+        "notAvailable": "Anda tidak dapat beralih ke ruang kerja itu.",
+        "rateLimited": "Terlalu banyak percobaan. Harap tunggu sebentar lalu coba lagi.",
+        "rateLimitedWait": "Terlalu banyak percobaan. Coba lagi dalam {seconds, plural, other {# detik}}."
+      },
+      "mfaChallenge": {
+        "title": "Konfirmasi bahwa ini Anda",
+        "intro": "{name} menggunakan autentikasi dua faktor. Masukkan kode dari aplikasi autentikator Anda untuk beralih.",
+        "codeLabel": "Kode enam digit",
+        "codeHint": "Kode berubah setiap 30 detik.",
+        "codeInvalid": "Masukkan enam digit dari aplikasi Anda.",
+        "codeWrong": "Kode itu salah atau sudah kedaluwarsa. Coba kode berikutnya.",
+        "recoveryLabel": "Kode pemulihan",
+        "recoveryHint": "Setiap kode pemulihan hanya berlaku sekali.",
+        "recoveryInvalid": "Masukkan kode pemulihan.",
+        "recoveryWrong": "Kode pemulihan itu tidak valid.",
+        "expired": "Langkah masuk ini kedaluwarsa. Tutup jendela ini dan pilih ruang kerja lagi.",
+        "useRecovery": "Gunakan kode pemulihan",
+        "useCode": "Gunakan kode autentikator",
+        "cancel": "Batal",
+        "confirm": "Konfirmasi",
+        "verifying": "Memverifikasi"
+      },
+      "banners": {
+        "dismiss": "Tutup",
+        "verifyMessage": "Harap verifikasi alamat email Anda ({email}). Kami mengirim tautan saat Anda mendaftar.",
+        "resend": "Kirim ulang email",
+        "resendIn": "Kirim ulang dalam {seconds} dtk",
+        "resendWait": "Anda dapat meminta email lagi sebentar lagi.",
+        "sending": "Mengirim",
+        "sent": "Email terkirim.",
+        "notSent": "Kami tidak dapat mengirim email saat ini.",
+        "throttled": "Harap tunggu sebelum meminta lagi.",
+        "alreadyVerified": "Email Anda sudah terverifikasi."
+      },
+      "suspended": {
+        "title": "Akun Anda ditangguhkan",
+        "greeting": "Hai {name}, administrator telah menangguhkan akun ini. Anda masih bisa masuk, tetapi bagian aplikasi lainnya terkunci sampai diaktifkan kembali.",
+        "support": "Jika menurut Anda ini keliru, minta pemilik atau administrator ruang kerja Anda untuk mengaktifkan kembali akun Anda.",
+        "signOut": "Keluar",
+        "checking": "Memeriksa"
+      },
+      "verifyRequired": {
+        "title": "Harap verifikasi email Anda",
+        "body": "Kami mengirim tautan verifikasi ke alamat di bawah. Buka untuk membuka ruang kerja Anda.",
+        "resend": "Kirim ulang email verifikasi",
+        "resendIn": "Kirim ulang dalam {seconds} dtk",
+        "sending": "Mengirim",
+        "sent": "Kami mengirim tautan baru ke {email}.",
+        "notSent": "Kami tidak dapat mengirim email saat ini.",
+        "throttled": "Tautan baru saja dikirim. Harap tunggu sebelum meminta lagi.",
+        "alreadyVerified": "Email Anda sudah terverifikasi. Mengarahkan Anda masuk.",
+        "signOut": "Keluar",
+        "help": "Belum menerimanya? Periksa folder spam. Jika Anda membuka tautan di perangkat lain, kembali ke tab ini dan kami akan melanjutkannya."
+      },
+      "onboarding": {
+        "metaTitle": "Siapkan ruang kerja Anda",
+        "notAllowed": {
+          "title": "Penyiapan belum selesai",
+          "body": "Ruang kerja Anda masih disiapkan. Administrator perlu menyelesaikannya sebelum Anda dapat melanjutkan."
+        },
+        "stepper": {
+          "label": "Langkah {current} dari {total} / {name}",
+          "progress": "Progres penyiapan",
+          "account": "Akun",
+          "workspace": "Ruang kerja",
+          "plan": "Paket"
+        },
+        "workspace": {
+          "title": "Siapkan ruang kerja Anda",
+          "subtitle": "Beberapa detail agar aplikasi sesuai dengan tim Anda.",
+          "name": "Nama ruang kerja",
+          "nameHint": "Label yang ramah yang dilihat tim Anda di bagian atas aplikasi.",
+          "namePlaceholder": "Contoh: Bloomly Marketing",
+          "industry": "Industri",
+          "industryPlaceholder": "Pilih industri",
+          "industries": {
+            "ecommerce": "E-commerce",
+            "saas": "SaaS",
+            "agency": "Agensi",
+            "education": "Pendidikan",
+            "healthcare": "Kesehatan",
+            "finance": "Keuangan",
+            "travel": "Perjalanan",
+            "hospitality": "Perhotelan",
+            "other": "Lainnya"
+          },
+          "size": "Ukuran tim",
+          "sizePlaceholder": "Pilih ukuran tim",
+          "timezone": "Zona waktu",
+          "timezoneHint": "Ketik untuk mencari zona waktu apa pun. Jadwal dan laporan memakainya.",
+          "currency": "Mata uang",
+          "currencyHint": "Mata uang penagihan dompet pesan Anda. India default ke INR, negara lain ke USD. Tidak dapat diubah setelah dompet digunakan.",
+          "currencyNone": "Belum diatur",
+          "currencyPlaceholder": "Cari mata uang",
+          "currencyEmpty": "Tidak ada mata uang yang cocok dengan pencarian Anda.",
+          "phone": "Nomor ponsel",
+          "phoneHint": "Kami menggunakannya untuk menghubungi Anda terkait akun dan pembaruan penting.",
+          "continue": "Lanjutkan",
+          "saving": "Menyimpan",
+          "errors": {
+            "nameInvalid": "Masukkan nama ruang kerja sepanjang 2 sampai 120 karakter.",
+            "timezoneRequired": "Pilih zona waktu.",
+            "timezoneInvalid": "Pilih zona waktu dari daftar.",
+            "phoneRequired": "Masukkan nomor ponsel Anda.",
+            "phoneInvalid": "Masukkan nomor telepon yang valid untuk negara yang dipilih.",
+            "invalid": "Nilai ini tidak valid.",
+            "forbidden": "Hanya administrator ruang kerja yang dapat menyiapkan ruang kerja.",
+            "countryRequired": "Pilih negara.",
+            "countryInvalid": "Pilih negara dari daftar.",
+            "currencyInvalid": "Mata uang ini tidak tersedia, atau mata uang penagihan sudah digunakan. Hubungi dukungan untuk mengubahnya."
+          },
+          "country": "Negara",
+          "countryHint": "Tempat bisnis Anda berbasis.",
+          "countryPlaceholder": "Cari negara",
+          "countryEmpty": "Tidak ada negara yang cocok dengan pencarian Anda."
+        },
+        "plan": {
+          "title": "Pilih paket",
+          "intro": "Setiap paket menyertakan kuota pesan bulanan. Mulai gratis, atau pilih paket untuk membuka lebih banyak. Anda dapat mengubahnya nanti.",
+          "empty": "Belum ada paket yang disiapkan. Anda dapat mulai gratis sekarang dan memilih paket nanti.",
+          "listLabel": "Paket tersedia",
+          "free": "Gratis",
+          "back": "Kembali",
+          "startFree": "Mulai gratis / lewati dulu",
+          "finishing": "Menyelesaikan",
+          "welcome": "Semua sudah siap. Selamat datang!"
+        }
+      },
+      "plans": {
+        "title": "Paket",
+        "description": "Pilih seberapa banyak yang dapat dilakukan ruang kerja Anda.",
+        "currentPlan": "Paket Anda",
+        "noPlan": "Tanpa paket",
+        "trialEnds": "Uji coba gratis berakhir {date}",
+        "comingSoon": "Memilih dan membayar paket hadir bersama penagihan, yang belum menjadi bagian dari rilis ini. Sementara itu, hubungi dukungan dan kami akan memindahkan ruang kerja Anda ke paket yang Anda butuhkan.",
+        "contactSupport": "Hubungi dukungan",
+        "back": "Kembali ke akun",
+        "card": {
+          "popular": "Paling populer",
+          "current": "Paket saat ini",
+          "free": "Gratis",
+          "custom": "Kustom",
+          "lifetime": "sekali bayar",
+          "messagesUnlimited": "Pesan tanpa batas",
+          "messagesLimited": "{count, number} pesan / bulan",
+          "chipsLabel": "Fitur yang disertakan",
+          "period": {
+            "days": "{count, plural, other {/ # hari}}",
+            "weeks": "{count, plural, other {/ # minggu}}",
+            "months": "{count, plural, other {/ # bulan}}",
+            "years": "{count, plural, other {/ # tahun}}"
+          },
+          "chips": {
+            "analytics": "Analitik",
+            "automation": "Otomatisasi",
+            "ai_assistants": "Asisten AI",
+            "woocommerce": "WooCommerce",
+            "shopify": "Shopify",
+            "calling": "Panggilan WhatsApp",
+            "remove_branding": "White-label",
+            "sales_pipeline": "Pipeline penjualan",
+            "appointment_booking": "Janji temu",
+            "chatbot_widgets": "Widget chatbot",
+            "wa_storefront": "Katalog WhatsApp",
+            "inbox_sla": "SLA kotak masuk",
+            "inbox_routing": "Perutean kotak masuk",
+            "waba_calling": "Panggilan WhatsApp",
+            "inbox_kanban": "Kanban kotak masuk",
+            "team_performance": "Performa tim",
+            "scheduled_messages": "Pesan terjadwal",
+            "whatsapp_warmer": "Pemanas WhatsApp",
+            "marketplace": "Marketplace",
+            "lead_sources": "Sumber lead",
+            "team_chat": "Obrolan tim",
+            "public_api": "API publik",
+            "outbound_webhooks": "Webhook keluar",
+            "storefront_builder": "Pembuat etalase",
+            "invoicing": "Faktur",
+            "forms_and_links": "Formulir dan tautan",
+            "extra_channels": "Telegram, Facebook, dan Instagram",
+            "form_builder": "Formulir",
+            "waba_groups": "Grup WhatsApp"
+          },
+          "cta": {
+            "continueFree": "Lanjut gratis",
+            "talkToSales": "Hubungi tim penjualan",
+            "upgrade": "Tingkatkan ke {name}",
+            "downgradeUnavailable": "Penurunan paket tidak tersedia",
+            "downgradeHint": "Penurunan paket tidak tersedia secara online. Hubungi dukungan untuk pindah ke paket yang lebih rendah.",
+            "working": "Memproses"
+          }
+        }
+      },
+      "mailFailure": {
+        "not_configured": "Pengiriman email belum disiapkan di platform ini. Tanyakan kepada administrator Anda.",
+        "auth_failed": "Server email menolak proses masuk kami. Minta administrator Anda memeriksa pengaturan email.",
+        "connection_refused": "Server email tidak menerima koneksi. Coba lagi nanti, atau tanyakan kepada administrator Anda.",
+        "timeout": "Server email terlalu lama menjawab. Anda dapat mencoba lagi sekarang.",
+        "transport_error": "Email tidak dapat diserahkan ke server email. Anda dapat mencoba lagi sekarang.",
+        "unknown": "Email tidak dapat dikirim karena alasan yang tidak kami ketahui. Anda dapat mencoba lagi sekarang."
+      }
+    }
+  }
+}

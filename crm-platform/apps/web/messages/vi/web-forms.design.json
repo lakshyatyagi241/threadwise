@@ -1,0 +1,113 @@
+{
+  "web-forms": {
+    "design": {
+      "presets": {
+        "title": "Giao diện",
+        "custom": "Tùy chỉnh: bạn đã thay đổi màu, góc hoặc phông chữ của giao diện gốc.",
+        "classic": "Cổ điển",
+        "ocean": "Đại dương",
+        "forest": "Rừng",
+        "sunset": "Hoàng hôn",
+        "berry": "Quả mọng",
+        "slate": "Đá phiến",
+        "noir": "Đen",
+        "paper": "Giấy"
+      },
+      "colours": {
+        "title": "Màu sắc",
+        "hint": "Dùng mã màu hex 6 chữ số, ví dụ #2563eb. Giá trị chưa đầy đủ sẽ không được áp dụng.",
+        "swatch": "{name} (bảng chọn màu)",
+        "primary": "Chính (nút và điểm nhấn)",
+        "background": "Nền trang",
+        "surface": "Nền biểu mẫu",
+        "text": "Văn bản",
+        "mutedText": "Văn bản phụ",
+        "border": "Viền",
+        "error": "Lỗi"
+      },
+      "contrast": {
+        "title": "Một số màu khó đọc. Hãy đặt độ tương phản ít nhất 4,5:1.",
+        "item": "{pair}: {ratio}:1",
+        "ok": "Tất cả các cặp màu đã kiểm tra đều dễ đọc.",
+        "text": "Văn bản trên nền biểu mẫu",
+        "muted": "Văn bản phụ trên nền biểu mẫu",
+        "button": "Nhãn nút trên nút"
+      },
+      "shape": {
+        "title": "Hình dạng và khoảng cách",
+        "radius": "Góc bo",
+        "none": "Không có",
+        "sm": "Nhỏ",
+        "md": "Vừa",
+        "lg": "Lớn",
+        "pill": "Tròn",
+        "density": "Khoảng cách",
+        "compact": "Gọn",
+        "comfortable": "Thoải mái",
+        "spacious": "Rộng rãi",
+        "shadow": "Bóng đổ",
+        "shadowNone": "Không có"
+      },
+      "type": {
+        "title": "Kiểu chữ",
+        "font": "Phông chữ",
+        "fontHint": "Phông chữ web chỉ được tải khi bạn chọn.",
+        "sample": "Ví dụ phông chữ: Con cáo nâu nhanh nhẹn nhảy qua con chó lười.",
+        "scale": "Cỡ chữ"
+      },
+      "fonts": {
+        "system": "Mặc định của hệ thống",
+        "serif": "Có chân",
+        "mono": "Đơn cách"
+      },
+      "layout": {
+        "title": "Bố cục và nút",
+        "preset": "Bố cục",
+        "classic": "Thẻ cổ điển",
+        "fullWidth": "Toàn chiều rộng",
+        "split": "Chia đôi có ảnh bìa",
+        "minimal": "Tối giản",
+        "labelPosition": "Vị trí nhãn",
+        "labelTop": "Phía trên trường",
+        "labelLeft": "Bên cạnh trường",
+        "buttonStyle": "Kiểu nút",
+        "filled": "Tô đầy",
+        "outline": "Viền",
+        "buttonWidth": "Chiều rộng nút",
+        "widthAuto": "Vừa với nhãn",
+        "widthFull": "Toàn chiều rộng",
+        "maxWidth": "Chiều rộng tối đa",
+        "maxWidthHint": "Từ 320 đến 960 pixel.",
+        "maxWidthInvalid": "Nhập số nguyên từ 320 đến 960.",
+        "maxWidthSlider": "Thanh trượt chiều rộng tối đa",
+        "mode": "Chế độ màu",
+        "light": "Sáng",
+        "dark": "Tối",
+        "auto": "Theo thiết bị của khách truy cập"
+      },
+      "images": {
+        "title": "Hình ảnh",
+        "logo": "Logo",
+        "logoHint": "Địa chỉ https. Để trống nếu không có logo.",
+        "cover": "Ảnh bìa",
+        "coverHint": "Hiển thị bên cạnh biểu mẫu trong bố cục chia đôi.",
+        "background": "Ảnh nền",
+        "backgroundHint": "Địa chỉ https. Để trống để dùng nền trơn.",
+        "invalid": "Nhập địa chỉ https, hoặc để trống."
+      },
+      "reset": "Đặt lại mặc định",
+      "readOnly": "Bạn chỉ có thể xem thiết kế, không thể thay đổi.",
+      "preview": {
+        "title": "Xem trước",
+        "device": "Kích thước xem trước",
+        "desktop": "Máy tính",
+        "mobile": "Di động",
+        "scheme": "Chế độ màu khi xem trước",
+        "light": "Sáng",
+        "dark": "Tối",
+        "schemeHint": "Chế độ màu đang là Sáng nên không có phiên bản tối để xem trước.",
+        "frameTitle": "Xem trước trực tiếp biểu mẫu"
+      }
+    }
+  }
+}

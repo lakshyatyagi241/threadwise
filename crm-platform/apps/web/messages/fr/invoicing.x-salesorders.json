@@ -1,0 +1,353 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "SO_NOT_DRAFT": "Seule une commande en brouillon peut être modifiée. Une commande confirmée est figée : annulez-la et créez-en une nouvelle pour modifier ses lignes ou ses prix.",
+        "SO_NOT_CONFIRMED": "Confirmez d’abord la commande. Seule une commande confirmée peut être facturée ou faire l’objet d’une livraison enregistrée.",
+        "SO_CANCELLED": "Cette commande est annulée : aucune autre action n’est possible.",
+        "SO_QUOTE_NOT_ACCEPTED": "Seule une proposition ou un devis accepté peut devenir une commande client. Marquez-le d’abord comme accepté.",
+        "SO_QUOTE_TAKEN": "Cette proposition ou ce devis a déjà une commande client.",
+        "SO_QUANTITY_EXCEEDS": "Une quantité dépasse le reste disponible sur cette ligne. Réduisez-la et réessayez.",
+        "SO_NOTHING_TO_INVOICE": "Il n’y a plus rien à faire ici : tout est déjà facturé ou livré.",
+        "SO_HAS_INVOICES": "Une facture créée à partir de cette commande est toujours active. Invalidez ou supprimez-la d’abord, puis annulez la commande."
+      }
+    },
+    "salesOrders": {
+      "list": {
+        "title": "Commandes clients",
+        "subtitle": "Offres acceptées transformées en commandes, facturées en une fois ou en plusieurs fois, et livrées.",
+        "newOrder": "Nouvelle commande client",
+        "search": "Rechercher par numéro, acheteur ou référence",
+        "reset": "Réinitialiser",
+        "refresh": "Actualiser",
+        "tableLabel": "Commandes clients",
+        "noAccessTitle": "Accès refusé",
+        "noAccess": "Vous n’êtes pas autorisé à voir les commandes clients.",
+        "emptyFilteredTitle": "Aucune commande ne correspond",
+        "emptyFiltered": "Aucun résultat pour ces filtres. Modifiez-les ou réinitialisez-les.",
+        "resetFilters": "Réinitialiser les filtres",
+        "loading": "Chargement des commandes clients",
+        "showing": "{count} affichées",
+        "loadMore": "Charger plus",
+        "allLoaded": "Tout est chargé",
+        "contactLoading": "Chargement…",
+        "empty": {
+          "all": {
+            "title": "Aucune commande client pour l’instant",
+            "message": "Transformez une proposition ou un devis accepté en commande, ou créez-en une de zéro."
+          },
+          "draft": {
+            "title": "Aucune commande en brouillon",
+            "message": "Les commandes en préparation apparaissent ici."
+          },
+          "confirmed": {
+            "title": "Aucune commande confirmée",
+            "message": "Les commandes confirmées en attente de facturation ou de livraison apparaissent ici."
+          },
+          "cancelled": {
+            "title": "Aucune commande annulée",
+            "message": "Les commandes annulées apparaissent ici avec leur motif."
+          },
+          "closed": {
+            "title": "Aucune commande clôturée",
+            "message": "Une commande est clôturée lorsque tout est facturé et livré."
+          }
+        }
+      },
+      "strip": {
+        "label": "Valeur des commandes ouvertes",
+        "openValue": "Commandes ouvertes ({currency})"
+      },
+      "tabs": {
+        "label": "Statut de la commande",
+        "all": "Toutes",
+        "draft": "Brouillon",
+        "confirmed": "Confirmée",
+        "cancelled": "Annulée",
+        "closed": "Clôturée",
+        "count": "{count} commandes"
+      },
+      "quick": {
+        "label": "Filtres rapides",
+        "toInvoice": "À facturer",
+        "toFulfil": "À livrer"
+      },
+      "table": {
+        "scrollArea": "Tableau des commandes clients",
+        "columns": {
+          "number": "Commande",
+          "buyer": "Acheteur",
+          "quote": "Devis",
+          "deal": "Opportunité",
+          "expected": "Prévue le",
+          "status": "Statut",
+          "invoicing": "Facturation",
+          "fulfilment": "Livraison",
+          "total": "Total",
+          "invoices": "Factures"
+        }
+      },
+      "row": {
+        "moreFor": "Actions pour {name}",
+        "open": "Ouvrir",
+        "edit": "Modifier",
+        "confirm": "Confirmer la commande",
+        "invoiceAll": "Facturer le reste",
+        "fulfilAll": "Marquer tout comme livré",
+        "cancel": "Annuler la commande",
+        "delete": "Supprimer le brouillon"
+      },
+      "status": {
+        "draft": "Brouillon",
+        "confirmed": "Confirmée",
+        "cancelled": "Annulée",
+        "closed": "Clôturée"
+      },
+      "invoicingStatus": {
+        "not_invoiced": "Non facturée",
+        "partially_invoiced": "Partiellement facturée",
+        "invoiced": "Facturée"
+      },
+      "fulfilmentStatus": {
+        "unfulfilled": "Non livrée",
+        "partially_fulfilled": "Partiellement livrée",
+        "fulfilled": "Livrée"
+      },
+      "actions": {
+        "failed": "Échec de l’opération.",
+        "confirmed": "Commande {number} confirmée.",
+        "invoicedDraft": "Facture en brouillon créée à partir de la commande.",
+        "invoicedIssued": "Facture {number} émise.",
+        "fulfilled": "Livraison enregistrée.",
+        "cancelled": "Commande {number} annulée.",
+        "deleted": "Commande en brouillon supprimée."
+      },
+      "dialog": {
+        "close": "Fermer",
+        "cancel": "Annuler",
+        "how": "Quelles quantités",
+        "mode": {
+          "all": "Tout ce qui reste",
+          "lines": "Choisir les quantités"
+        },
+        "left": "{qty} restantes",
+        "qtyExceeds": "{max} au maximum reste sur cette ligne.",
+        "qtyInvalid": "Saisissez une quantité avec 4 décimales au maximum, ou 0 pour ignorer cette ligne.",
+        "nothingHint": "Tout est déjà facturé sur cette commande."
+      },
+      "confirmDialog": {
+        "title": "Confirmer cette commande ?",
+        "message": "La confirmation fige les lignes et les prix. Ensuite, vous pouvez facturer la commande, en une fois ou en plusieurs fois, et enregistrer les livraisons. Vous pouvez encore l’annuler tant qu’aucune facture n’est active.",
+        "confirm": "Confirmer la commande"
+      },
+      "cancelDialog": {
+        "title": "Annuler cette commande ?",
+        "warning": "Une commande annulée ne peut plus être facturée ni livrée, et elle ne peut pas être rouverte.",
+        "reason": "Motif",
+        "reasonHint": "Conservé sur la commande pour votre équipe.",
+        "reasonRequired": "Indiquez le motif de l’annulation.",
+        "reasonTooLong": "Limitez le motif à {max} caractères.",
+        "cancelOrder": "Annuler la commande",
+        "hasInvoices": "Cette commande comporte encore une facture. Invalidez ou supprimez-la d’abord (une facture invalidée restitue ses quantités), puis annulez la commande.",
+        "seeInvoices": "Voir les factures"
+      },
+      "deleteDialog": {
+        "title": "Supprimer ce brouillon ?",
+        "message": "Le brouillon de commande sera supprimé définitivement. Une commande confirmée ne peut pas être supprimée, seulement annulée.",
+        "delete": "Supprimer le brouillon"
+      },
+      "invoiceDialog": {
+        "title": "Facturer cette commande",
+        "intro": "Facturez la commande aux prix figés. Vous pouvez la facturer en plusieurs fois : ce qui n’est pas facturé maintenant reste sur la commande.",
+        "invoiceAndIssue": "Créer et émettre la facture",
+        "createDraft": "Créer la facture en brouillon",
+        "issueDate": "Date d’émission",
+        "issueDateHint": "Laissez vide pour aujourd’hui ({today}).",
+        "dueDate": "Date d’échéance",
+        "terms": "Conditions de paiement",
+        "termsDefault": "Valeur par défaut de l’espace de travail",
+        "termsOnIssue": "À l’émission",
+        "termsDays": "{count} jours",
+        "issueNow": "Émettre la facture maintenant",
+        "issueNowHint": "La facture reçoit son numéro et peut être envoyée immédiatement.",
+        "draftHint": "Laissez-la en brouillon pour la vérifier avant émission.",
+        "includeShipping": "Facturer les frais de port avec cette facture",
+        "problems": {
+          "nothing": "Choisissez une quantité supérieure à zéro sur au moins une ligne.",
+          "issueDateInvalid": "Saisissez une date d’émission valide.",
+          "dueDateInvalid": "Saisissez une date d’échéance valide.",
+          "dueBeforeIssue": "La date d’échéance ne peut pas précéder la date d’émission."
+        }
+      },
+      "fulfilDialog": {
+        "title": "Enregistrer la livraison",
+        "intro": "Enregistrez ce qui a été livré à l’acheteur. La livraison est suivie séparément de la facturation : l’une ou l’autre peut venir en premier.",
+        "record": "Enregistrer la livraison",
+        "note": "Note",
+        "noteHint": "Facultatif, par exemple un numéro de bon de livraison.",
+        "problems": {
+          "nothing": "Choisissez une quantité supérieure à zéro sur au moins une ligne.",
+          "noteTooLong": "Limitez la note à {max} caractères."
+        }
+      },
+      "detail": {
+        "noAccessTitle": "Accès refusé",
+        "noAccess": "Vous n’êtes pas autorisé à voir les commandes clients.",
+        "loading": "Chargement de la commande",
+        "back": "Retour aux commandes clients",
+        "noBuyer": "Aucun acheteur",
+        "edit": "Modifier",
+        "confirm": "Confirmer la commande",
+        "recordDelivery": "Enregistrer la livraison",
+        "invoice": "Facturer…",
+        "more": "Autres actions",
+        "cancel": "Annuler la commande",
+        "delete": "Supprimer le brouillon",
+        "cancelledOn": "Annulée le {date}",
+        "draftHint": "Cette commande est un brouillon. Confirmez-la pour figer ses prix et lancer la facturation et la livraison.",
+        "notes": "Notes",
+        "terms": "Conditions",
+        "progress": "Avancement",
+        "invoiced": "Facturé",
+        "fulfilled": "Livré"
+      },
+      "lines": {
+        "title": "Lignes",
+        "scrollArea": "Lignes de commande",
+        "item": "Article",
+        "ordered": "Commandé",
+        "invoiced": "Facturé",
+        "fulfilled": "Livré",
+        "toInvoice": "À facturer",
+        "unitPrice": "Prix unitaire",
+        "amount": "Montant",
+        "taxLine": "{name} {rate} %",
+        "taxRate": "Taxe {rate} %",
+        "invoicedBar": "Part facturée de {name}",
+        "fulfilledBar": "Part livrée de {name}"
+      },
+      "totals": {
+        "title": "Totaux",
+        "subtotal": "Sous-total",
+        "discount": "Remise",
+        "shipping": "Frais de port",
+        "shippingBilled": "Facturé",
+        "shippingPending": "Facturés avec la première facture",
+        "tax": "Taxe",
+        "total": "Total"
+      },
+      "info": {
+        "title": "Détails",
+        "buyer": "Acheteur",
+        "email": "E-mail",
+        "phone": "Téléphone",
+        "quote": "Devis",
+        "deal": "Opportunité",
+        "owner": "Responsable",
+        "reference": "Référence",
+        "expected": "Prévue le",
+        "created": "Créée le",
+        "confirmed": "Confirmée le"
+      },
+      "invoices": {
+        "title": "Factures de cette commande",
+        "none": "Aucune facture n’a encore été créée à partir de cette commande.",
+        "noneDraft": "Les factures peuvent être créées une fois la commande confirmée.",
+        "draft": "Brouillon",
+        "voidNote": "Une facture invalidée restitue ses quantités à la commande."
+      },
+      "builder": {
+        "noAccessTitle": "Accès refusé",
+        "noAccess": "Vous n’êtes pas autorisé à modifier les commandes clients.",
+        "loading": "Chargement",
+        "frozen": "Cette commande est confirmée : ses lignes et ses prix sont figés. Annulez-la et créez-en une nouvelle pour les modifier.",
+        "openOrder": "Ouvrir la commande",
+        "back": "Retour",
+        "editTitle": "Modifier {number}",
+        "newTitle": "Nouvelle commande client",
+        "unsaved": "Modifications non enregistrées",
+        "cancel": "Annuler",
+        "saveChanges": "Enregistrer les modifications",
+        "createDraft": "Créer le brouillon",
+        "conflict": "Quelqu’un d’autre a modifié ce brouillon pendant votre édition. Rechargez pour voir sa version ; vos modifications seront perdues.",
+        "reload": "Recharger",
+        "saved": "Brouillon enregistré.",
+        "created": "Commande {number} créée en brouillon.",
+        "fixProblems": "Corrigez d’abord les champs signalés.",
+        "serverRejected": "Le serveur n’a pas accepté certaines valeurs. Vérifiez les champs et réessayez.",
+        "startFrom": "Partir de",
+        "source": {
+          "scratch": "Une commande vierge",
+          "quote": "Une proposition ou un devis accepté"
+        },
+        "loadingQuote": "Chargement de l’offre…",
+        "buyer": "Acheteur",
+        "contact": "Contact",
+        "contactHint": "Choisissez un contact pour lier la commande à lui, ou saisissez l’acheteur ci-dessous.",
+        "buyerName": "Nom de l’acheteur",
+        "fromQuoteHint": "Laissé vide, c’est l’acheteur de l’offre qui est utilisé.",
+        "buyerEmail": "E-mail",
+        "buyerPhone": "Téléphone",
+        "details": "Détails de la commande",
+        "currency": "Devise",
+        "currencyHint": "Trois lettres, par exemple USD ou KWD.",
+        "currencyLocked": "Figée une fois la commande créée.",
+        "expectedDate": "Date prévue",
+        "expectedHint": "Date à laquelle l’acheteur attend la livraison.",
+        "reference": "Référence",
+        "referenceHint": "Le numéro de bon de commande de l’acheteur, par exemple.",
+        "linesFromQuote": "Lignes",
+        "linesFromQuoteHint": "La commande reprend les lignes, prix et taxes de l’offre acceptée, avec sa remise globale répartie dans les lignes. Vous pouvez encore modifier les lignes du brouillon après sa création.",
+        "lineItems": "Lignes",
+        "shippingNotes": "Frais de port, notes et conditions",
+        "shipping": "Frais de port ({currency})",
+        "shippingHint": "Facturés avec la première facture.",
+        "notes": "Notes",
+        "notesHint": "Affichées sur la commande.",
+        "terms": "Conditions",
+        "termsHint": "Reportées sur les factures créées à partir de cette commande.",
+        "draftNote": "La commande reste un brouillon jusqu’à sa confirmation. La confirmation fige ses prix.",
+        "quoteTotals": "Totaux de l’offre",
+        "quoteTotalsNote": "Comme sur l’offre acceptée. Les montants propres à la commande s’affichent une fois créée.",
+        "subtotal": "Sous-total",
+        "discount": "Remise",
+        "tax": "Taxe",
+        "total": "Total",
+        "openExisting": "Ouvrir la commande {number}",
+        "viewOrders": "Voir toutes les commandes",
+        "pickAnother": "Choisir une autre offre",
+        "problems": {
+          "buyerRequired": "Choisissez un contact ou saisissez le nom de l’acheteur.",
+          "emailInvalid": "Saisissez une adresse e-mail valide.",
+          "currencyInvalid": "Saisissez un code de devise à trois lettres.",
+          "expectedDateInvalid": "Saisissez une date valide.",
+          "shippingInvalid": "Saisissez un montant valide.",
+          "noLines": "Ajoutez au moins une ligne.",
+          "referenceTooLong": "Limitez la référence à 191 caractères."
+        },
+        "lineProblems": {
+          "descriptionRequired": "Décrivez cette ligne.",
+          "qtyInvalid": "Saisissez une quantité supérieure à zéro.",
+          "priceInvalid": "Saisissez un prix valide.",
+          "lineDiscountInvalid": "Saisissez une remise valide.",
+          "hsnRequired": "Saisissez le code HSN/SAC.",
+          "hsnInvalid": "Saisissez un code HSN/SAC valide.",
+          "taxRateRemoved": "Le taux de taxe de cette ligne n’existe plus. Choisissez-en un actuel."
+        }
+      },
+      "quotePicker": {
+        "search": "Rechercher des offres acceptées",
+        "results": "Propositions et devis acceptés",
+        "loading": "Chargement des offres",
+        "noMatch": "Aucune offre acceptée ne correspond.",
+        "none": "Aucune proposition ni aucun devis accepté pour l’instant.",
+        "kind": {
+          "proposal": "Proposition",
+          "estimate": "Devis"
+        },
+        "untitled": "Sans titre",
+        "accepted": "Acceptée le {date}"
+      }
+    }
+  }
+}

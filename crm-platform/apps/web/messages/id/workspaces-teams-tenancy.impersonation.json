@@ -1,0 +1,23 @@
+{
+  "workspaces-teams-tenancy": {
+    "impersonation": {
+      "label": "Peniruan",
+      "viewing": "Melihat {workspace} sebagai {owner}",
+      "reason": "Alasan: {reason}",
+      "readOnly": "Hanya-baca",
+      "timeLeft": "{minutes, plural, other {# menit tersisa}}",
+      "endsSoon": "Kurang dari satu menit tersisa",
+      "stop": "Hentikan peniruan",
+      "stopping": "Menghentikan",
+      "stopFailed": "Sesi tidak dapat dihentikan. Coba lagi.",
+      "readOnlyRefused": "Sesi ini hanya-baca, sehingga perubahan tidak diizinkan.",
+      "forbiddenRefused": "Ini tidak tersedia saat Anda melihat workspace sebagai pemiliknya.",
+      "ended": {
+        "title": "Sesi peniruan ini telah berakhir",
+        "expired": "Tautan sudah digunakan atau kedaluwarsa. Mulai lagi dari konsol.",
+        "body": "Tidak ada lagi yang dapat dilakukan di workspace dari sini. Kembali ke konsol untuk memulai sesi baru.",
+        "back": "Kembali ke konsol"
+      }
+    }
+  }
+}

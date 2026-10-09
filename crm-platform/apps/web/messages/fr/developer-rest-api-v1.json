@@ -1,0 +1,93 @@
+{
+  "developer-rest-api-v1": {
+    "common": {
+      "dismiss": "Ignorer",
+      "copy": "Copier",
+      "copied": "Copié",
+      "copyFailed": "Impossible de copier. Sélectionnez le texte et copiez-le manuellement."
+    },
+    "rail": {
+      "name": "API développeur",
+      "tagline": "REST · /api/v1",
+      "keyActive": "Clé active",
+      "noKey": "Pas encore de clé",
+      "baseUrl": "URL de base",
+      "authHeader": "En-tête d’authentification",
+      "help": {
+        "title": "Besoin d’aide ?",
+        "body": "Référence complète des requêtes et réponses, avec des exemples copiables pour chaque endpoint.",
+        "link": "Lire la documentation"
+      }
+    },
+    "page": {
+      "crumbLabel": "Fil d’Ariane",
+      "crumbSettings": "Paramètres",
+      "crumbHere": "Développeurs",
+      "title": "Développeur",
+      "titleAccent": "Clés API",
+      "lead": "Générez une clé pour appeler l’API REST depuis vos propres applications, votre CRM ou votre automatisation : envoyer des messages, gérer les contacts, les modèles, les diffusions et plus encore. Une clé par espace de travail.",
+      "back": "Retour",
+      "openDocs": "Ouvrir la documentation",
+      "loading": "Chargement de votre clé API",
+      "forbidden": {
+        "title": "Vous ne pouvez pas voir les clés API",
+        "body": "Votre rôle n’inclut pas l’accès aux clés API. Demandez à un administrateur de l’espace de travail de vous accorder l’autorisation sur les clés API."
+      }
+    },
+    "banner": {
+      "title": "Votre nouvelle clé API",
+      "warning": "Copiez-la maintenant et conservez-la en lieu sûr. Pour votre sécurité, nous ne gardons qu’un hachage : elle ne sera plus jamais affichée."
+    },
+    "key": {
+      "title": "Votre clé API",
+      "active": "Active",
+      "untitled": "Clé sans nom",
+      "created": "Créée le {date}",
+      "lastUsed": "Dernière utilisation {when}",
+      "never": "jamais",
+      "revoke": "Révoquer",
+      "noRevoke": "Votre rôle ne permet pas de révoquer les clés API.",
+      "revoked": "Clé API révoquée. Toute application qui l’utilise cessera immédiatement de fonctionner.",
+      "footer": "Une seule clé est autorisée par espace de travail. Révoquez celle-ci pour en émettre une nouvelle.",
+      "confirm": {
+        "title": "Révoquer cette clé ?",
+        "message": "Toute application ou intégration qui utilise cette clé cessera immédiatement de fonctionner. Cette action est irréversible. Vous pourrez créer une nouvelle clé ensuite.",
+        "accept": "Révoquer",
+        "cancel": "Annuler"
+      }
+    },
+    "create": {
+      "title": "Créer votre clé",
+      "help": "Donnez un nom à la clé pour vous souvenir de son usage. La clé n’est affichée qu’une fois, à la création.",
+      "name": "Nom de la clé",
+      "placeholder": "p. ex. Backend de production",
+      "submit": "Créer la clé",
+      "submitting": "Création de la clé…",
+      "created": "Clé API créée. Copiez-la maintenant : elle ne sera plus affichée.",
+      "noCreate": "Votre rôle ne permet pas de créer des clés API. Demandez à un administrateur de l’espace de travail.",
+      "planLocked": "Votre forfait n’inclut pas l’API REST.",
+      "errors": {
+        "required": "Saisissez un nom pour la clé.",
+        "tooLong": "Le nom peut contenir 120 caractères au maximum."
+      }
+    },
+    "quickstart": {
+      "title": "Démarrage rapide",
+      "reference": "Référence complète",
+      "intro": "Envoyez votre premier message. Remplacez la clé et le destinataire :"
+    },
+    "errors": {
+      "planLimit": "Vous avez déjà une clé API active. Révoquez-la avant d’en créer une nouvelle : une seule clé par espace de travail est autorisée.",
+      "planLocked": "Votre forfait n’inclut pas l’API REST. Passez à un forfait supérieur pour créer des clés API.",
+      "forbidden": "Vous n’avez pas l’autorisation d’effectuer cette action.",
+      "validation": "Le nom de la clé n’est pas valide. Vérifiez-le et réessayez.",
+      "notFound": "Cette clé n’existe plus. La liste a été actualisée.",
+      "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+      "unexpected": "Un problème est survenu de notre côté. Réessayez dans un instant.",
+      "loadFailed": "Impossible de charger votre clé API.",
+      "retry": "Réessayer",
+      "upgrade": "Voir les forfaits",
+      "requestId": "ID de requête : {id}"
+    }
+  }
+}

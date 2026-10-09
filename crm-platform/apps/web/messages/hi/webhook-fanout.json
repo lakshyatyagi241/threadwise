@@ -1,0 +1,140 @@
+{
+  "webhook-fanout": {
+    "nav": {
+      "group": "वेबहुक",
+      "forwarding": "वेबहुक फ़ॉरवर्डिंग"
+    },
+    "common": {
+      "loading": "लोड हो रहा है",
+      "retry": "फिर से कोशिश करें",
+      "requestId": "अनुरोध ID",
+      "dash": "-",
+      "errors": {
+        "forbidden": "आपके पास यह करने की अनुमति नहीं है।",
+        "request": "वह अनुरोध पूरा नहीं हो सका।",
+        "unexpected": "हमारी तरफ़ कुछ गड़बड़ हो गई। थोड़ी देर बाद फिर कोशिश करें।",
+        "network": "सर्वर तक नहीं पहुँच सके। अपना कनेक्शन जाँचें और फिर कोशिश करें।",
+        "conflict": "यह लक्ष्य किसी और ने बदल दिया है। सूची रीलोड की गई: अपना बदलाव फिर लागू करें।",
+        "validation": "कुछ मान मान्य नहीं हैं। चिह्नित फ़ील्ड जाँचें।",
+        "notFound": "यह आइटम अब मौजूद नहीं है।",
+        "urlRejected": "यह URL अनुमत नहीं है। इंटरनेट से पहुँचे जा सकने वाला https पता इस्तेमाल करें।"
+      }
+    },
+    "page": {
+      "eyebrow": "एडमिन / सिस्टम / वेबहुक",
+      "title": "वेबहुक फ़ॉरवर्डिंग",
+      "description": "प्लेटफ़ॉर्म ऑपरेटर की सेवाओं की सूची जो हर Meta वेबहुक की एक प्रति पाती हैं।",
+      "banner": "Meta एक कॉलबैक URL अनुमत करता है। हम उसे एक बार पाते हैं, सत्यापित करते हैं, और कच्चा बॉडी बिना बदले (मूल हस्ताक्षर के साथ) हर सक्रिय लक्ष्य को भेजते हैं।",
+      "superOnly": "केवल सुपर एडमिन वेबहुक फ़ॉरवर्डिंग प्रबंधित कर सकते हैं।",
+      "add": "लक्ष्य जोड़ें",
+      "tabs": {
+        "targets": "लक्ष्य",
+        "failures": "विफल डिलीवरी"
+      }
+    },
+    "targets": {
+      "empty": "अभी तक कोई फ़ॉरवर्ड लक्ष्य नहीं",
+      "emptyBody": "Meta वेबहुक को किसी और सेवा तक भेजना शुरू करने के लिए एक लक्ष्य जोड़ें।",
+      "columns": {
+        "target": "लक्ष्य",
+        "active": "सक्रिय",
+        "fields": "फ़ील्ड",
+        "deliveries": "डिलीवरी",
+        "last": "अंतिम डिलीवरी",
+        "actions": "कार्रवाइयाँ"
+      },
+      "allFields": "सभी फ़ील्ड",
+      "success": "{count, number} ठीक",
+      "failure": "{count, number} विफल",
+      "pending": "{count, number} लंबित",
+      "pendingLabel": "{count, number} विफल डिलीवरी दोबारा भेजे जाने की प्रतीक्षा में",
+      "neverDelivered": "अभी तक कुछ डिलीवर नहीं हुआ",
+      "lastStatus": "स्थिति {status}",
+      "lastError": "त्रुटि: {error}",
+      "lastAt": "{time} पर",
+      "activeSwitch": "{name} को फ़ॉरवर्ड करें",
+      "on": "लक्ष्य चालू",
+      "off": "लक्ष्य बंद",
+      "edit": "संपादित करें",
+      "test": "परीक्षण",
+      "testing": "परीक्षण हो रहा है",
+      "testOk": "परीक्षण सफल: स्थिति {status}, {ms, number} ms में",
+      "testFailed": "परीक्षण विफल: {reason} ({ms, number} ms)",
+      "testNoStatus": "कोई जवाब नहीं",
+      "testStatus": "स्थिति {status}",
+      "delete": "हटाएँ",
+      "deleteTitle": "{name} हटाएँ?",
+      "deleteBody": "लक्ष्य वेबहुक पाना बंद कर देगा और उसकी रखी गई विफल डिलीवरी मिटा दी जाएँगी। इसे पलटा नहीं जा सकता।",
+      "deleteConfirm": "लक्ष्य हटाएँ",
+      "cancel": "रद्द करें",
+      "toasts": {
+        "created": "{name} जोड़ा गया",
+        "saved": "{name} सहेजा गया",
+        "on": "{name} चालू है",
+        "off": "{name} बंद है",
+        "deleted": "{name} हटाया गया"
+      }
+    },
+    "dialog": {
+      "createTitle": "फ़ॉरवर्ड लक्ष्य जोड़ें",
+      "editTitle": "{name} संपादित करें",
+      "close": "बंद करें",
+      "name": "नाम",
+      "namePlaceholder": "एनालिटिक्स सेवा",
+      "url": "URL",
+      "urlHint": "केवल https। निजी नेटवर्क के पते अस्वीकार होते हैं।",
+      "headerName": "हेडर का नाम (वैकल्पिक)",
+      "headerNameHint": "हर डिलीवरी के साथ भेजा जाता है, जैसे Authorization।",
+      "headerValue": "हेडर का मान",
+      "headerValueSaved": "सहेजा गया, ••••{last4} पर खत्म होता है। रखने के लिए खाली छोड़ें।",
+      "headerValueSavedNoLast4": "सहेजा गया। रखने के लिए खाली छोड़ें।",
+      "headerValueHint": "केवल लिखने के लिए: सहेजने के बाद यह फिर कभी नहीं दिखता।",
+      "removeHeader": "सहेजा हुआ हेडर हटाएँ",
+      "fieldFilter": "फ़ील्ड फ़िल्टर",
+      "fieldFilterHint": "हर फ़ील्ड फ़ॉरवर्ड करने के लिए खाली छोड़ें। कोई फ़ील्ड टाइप करें और Enter दबाएँ, जैसे messages या message_template_status_update।",
+      "fieldFilterPlaceholder": "फ़ील्ड जोड़ें",
+      "fieldRemove": "{field} हटाएँ",
+      "timeout": "टाइमआउट (सेकंड)",
+      "timeoutHint": "1 से 30",
+      "maxAttempts": "अधिकतम प्रयास",
+      "maxAttemptsHint": "1 से 10",
+      "active": "इस लक्ष्य को फ़ॉरवर्ड करें",
+      "save": "सहेजें",
+      "saving": "सहेजा जा रहा है",
+      "cancel": "रद्द करें",
+      "errors": {
+        "nameRequired": "नाम दर्ज करें।",
+        "urlRequired": "URL दर्ज करें।",
+        "urlHttps": "URL https:// से शुरू होना चाहिए।",
+        "headerNameInvalid": "केवल अक्षर, अंक और डैश इस्तेमाल करें।",
+        "headerValueRequired": "हेडर को नाम और मान दोनों चाहिए।",
+        "headerNameRequired": "हेडर का नाम भी दर्ज करें।",
+        "timeout": "1 से 30 के बीच पूरी संख्या दर्ज करें।",
+        "maxAttempts": "1 से 10 के बीच पूरी संख्या दर्ज करें।"
+      }
+    },
+    "failures": {
+      "empty": "कोई विफल डिलीवरी नहीं",
+      "emptyBody": "जो डिलीवरी दोबारा कोशिशों से बाहर हो जाती हैं, वे 14 दिन तक यहाँ रखी जाती हैं ताकि आप उन्हें फिर भेज सकें।",
+      "filterAll": "सभी लक्ष्य",
+      "filterLabel": "लक्ष्य",
+      "columns": {
+        "target": "लक्ष्य",
+        "when": "विफल हुई",
+        "attempts": "प्रयास",
+        "reason": "कारण",
+        "size": "आकार",
+        "actions": "कार्रवाई"
+      },
+      "attempts": "{count, number}",
+      "bytes": "{count, number} बाइट",
+      "replay": "फिर भेजें",
+      "replaying": "फिर भेजा जा रहा है",
+      "replayed": "{time} पर फिर भेजा गया",
+      "replayOk": "डिलीवर हुआ: स्थिति {status}, {ms, number} ms में",
+      "replayFailed": "डिलीवर नहीं हुआ: {reason} ({ms, number} ms)",
+      "reasonStatus": "स्थिति {status}",
+      "reasonNone": "कोई जवाब नहीं"
+    }
+  }
+}

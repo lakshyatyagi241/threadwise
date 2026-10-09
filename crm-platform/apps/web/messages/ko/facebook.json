@@ -1,0 +1,491 @@
+{
+  "facebook": {
+    "nav": {
+      "hub": "Facebook",
+      "posts": "Facebook 게시물",
+      "setup": "Messenger 설정",
+      "broadcasts": "Messenger 브로드캐스트"
+    },
+    "common": {
+      "dismiss": "닫기",
+      "cancel": "취소"
+    },
+    "hub": {
+      "kicker": "채널 · Facebook",
+      "title": "Facebook",
+      "titleAccent": "페이지",
+      "intro": "Facebook으로 한 번만 로그인하면 계정이 관리하는 모든 페이지가 추가됩니다. 이후 수신함에서 게시물 게시, 댓글 답변, Messenger 운영을 할 수 있습니다.",
+      "teamInbox": "팀 수신함",
+      "posts": "게시물",
+      "setup": "Messenger 설정",
+      "broadcasts": "Messenger 브로드캐스트",
+      "loadError": "연결된 페이지를 불러올 수 없습니다. 다시 시도하세요.",
+      "notConfigured": "이 설치에서는 아직 Facebook이 구성되지 않았습니다. 페이지를 연결하려면 관리자가 Meta 앱을 추가해야 합니다.",
+      "connectedCount": "{count, plural, other {페이지 #개 연결됨}}",
+      "notConnected": "연결 안 됨",
+      "cardTitle": "Facebook 계정 연결",
+      "cardBody": "Facebook으로 한 번만 로그인하면 계정이 관리하는 모든 페이지가 각각의 권한과 함께 자동으로 추가됩니다. 또는 액세스 토큰으로 페이지 하나만 추가할 수도 있습니다.",
+      "connect": "페이지 연결",
+      "connectAnother": "다른 계정 연결",
+      "connectedPages": "연결된 페이지",
+      "webhookTitle": "웹훅 주소",
+      "webhookBody": "이 주소를 Meta 앱의 웹훅 설정(콜백 URL)에 붙여넣으면 Messenger 메시지와 댓글이 수신함으로 전달됩니다. Facebook 전용 인증 토큰을 설정하지 않으면 WhatsApp과 같은 인증 토큰을 사용합니다."
+    },
+    "connect": {
+      "close": "닫기",
+      "kicker": "Facebook",
+      "title": "Facebook 계정 연결",
+      "intro": "Facebook으로 한 번만 로그인하면 계정이 관리하는 모든 페이지가 자동으로 추가됩니다. 이후 수신함에서 게시물 게시, 댓글 답변, Messenger 운영을 할 수 있습니다.",
+      "continue": "Facebook으로 계속",
+      "or": "또는",
+      "manualToggle": "액세스 토큰으로 페이지 수동 추가",
+      "tokenLabel": "페이지 액세스 토큰",
+      "tokenHint": "Meta → 비즈니스 설정 → 시스템 사용자 또는 Graph API Explorer에서 가져옵니다. 토큰으로 페이지를 확인합니다.",
+      "connectPage": "페이지 연결",
+      "tokenShape": "페이지 액세스 토큰이 아닌 것 같습니다.",
+      "failed": "연결할 수 없습니다. 다시 시도하세요.",
+      "footerLeft": "수신함으로 즉시 전달",
+      "footerRight": "암호화됨"
+    },
+    "page": {
+      "facebookPage": "Facebook 페이지",
+      "failed": "작동하지 않았습니다. 다시 시도하세요.",
+      "live": "실시간",
+      "reconnect": "다시 연결",
+      "followers": "팔로워 {count}명",
+      "liveNoCount": "실시간",
+      "dataAccess": "Meta의 데이터 접근이 {when}에 종료됩니다",
+      "refresh": "프로필 새로고침",
+      "refreshed": "Facebook 페이지를 새로고침했습니다.",
+      "inboundFixed": "이 페이지의 Facebook 웹훅을 다시 구독했습니다.",
+      "fixInbound": "수신 복구",
+      "remove": "연결 해제",
+      "removeConfirm": "이 Facebook 페이지 연결을 해제할까요? 수신함 스레드는 유지되지만 다시 연결할 때까지 발송이 중단됩니다.",
+      "cancel": "취소",
+      "removed": "Facebook 페이지 연결이 해제되었습니다."
+    },
+    "broadcasts": {
+      "kicker": "Facebook · 브로드캐스트",
+      "title": "Messenger",
+      "titleAccent": "브로드캐스트",
+      "intro": "최근 페이지와 대화한 사람들에게 메시지를 보냅니다. Meta는 마지막 메시지 후 24시간 이내에만 페이지가 메시지를 보낼 수 있도록 허용하며, 아래 목록이 현재 도달 가능한 대상입니다.",
+      "inbox": "수신함",
+      "loadError": "브로드캐스트를 불러올 수 없습니다. 다시 시도하세요.",
+      "connectFirst": "먼저 Facebook 페이지를 연결하세요.",
+      "connectPage": "페이지 연결",
+      "none": "아직 브로드캐스트가 없습니다. 오른쪽에서 작성하세요.",
+      "recipients": "{count, plural, other {수신자 #명}}",
+      "status": {
+        "sending": "발송 중",
+        "done": "완료",
+        "failed": "실패",
+        "draft": "초안"
+      },
+      "counts": "발송 {sent} · 실패 {failed} · 차단 {blocked}",
+      "start": "발송 시작",
+      "started": "발송을 시작했습니다. 이 페이지를 떠나도 계속됩니다.",
+      "pause": "일시 중지",
+      "paused": "일시 중지되었습니다. 남은 수신자는 대기열에 그대로 있습니다.",
+      "retry": "실패 건 재시도",
+      "retried": "{count, plural, other {수신자 #명}}을 다시 대기열에 추가했습니다. 발송 시작을 누르세요.",
+      "delete": "삭제",
+      "deleted": "브로드캐스트가 삭제되었습니다.",
+      "deleteConfirm": "이 브로드캐스트를 삭제할까요?",
+      "cancel": "취소",
+      "newBroadcast": "새 브로드캐스트",
+      "name": "이름",
+      "namePlaceholder": "예: 주말 세일",
+      "page": "페이지",
+      "template": "템플릿(선택)",
+      "templateHint": "메시지를 미리 채우고 템플릿의 버튼을 함께 보냅니다.",
+      "templateNone": "— 없음(직접 작성) —",
+      "buttons": "{count, plural, other {버튼 #개}}",
+      "message": "메시지",
+      "messageHint": "개인화하려면 '{name}'을 사용하세요.",
+      "messagePlaceholder": "안녕하세요 '{name}'님! …",
+      "recipientsLabel": "수신자",
+      "within24": "(24시간 이내)",
+      "selectAll": "전체 선택",
+      "noAudience": "현재 24시간 창 안에 있는 사람이 없습니다. 먼저 누군가 이 페이지에 메시지를 보내야 합니다.",
+      "messengerUser": "Messenger 사용자",
+      "selected": "{count}명 선택됨",
+      "create": "브로드캐스트 만들기",
+      "created": "{count, plural, other {수신자 #명}}으로 브로드캐스트를 만들었습니다. 준비되면 발송 시작을 누르세요.",
+      "failed": "작동하지 않았습니다. 다시 시도하세요."
+    },
+    "setup": {
+      "kicker": "Facebook · Messenger",
+      "title": "Messenger",
+      "titleAccent": "설정",
+      "intro": "Messenger 채팅이 고객을 맞이하고 안내하는 방식을 설정하세요. 시작하기 버튼, 환영 인사말, 항상 표시되는 메뉴, 탭 가능한 FAQ를 설정할 수 있습니다. 기능을 선택해 설명을 읽고 내용을 입력하세요. 변경 사항은 Facebook에 바로 저장됩니다.",
+      "pagePicker": "페이지",
+      "composer": "작성기",
+      "loadError": "Messenger 프로필을 불러올 수 없습니다. 다시 시도하세요.",
+      "noPage": "연결된 Facebook 페이지가 아직 없습니다.",
+      "connect": "Facebook 계정 연결",
+      "profile": "Messenger 프로필",
+      "tabs": {
+        "getstarted": "시작하기 버튼",
+        "greeting": "인사말",
+        "menu": "고정 메뉴",
+        "icebreakers": "아이스브레이커"
+      },
+      "isSet": "설정됨",
+      "notSet": "설정 안 됨",
+      "failed": "작동하지 않았습니다. 다시 시도하세요.",
+      "footnote": "이 설정은 Graph API를 통해 Facebook Messenger 프로필에 기록되며 새 대화에 적용됩니다. Meta에서 변경 사항이 반영되기까지 시간이 걸릴 수 있습니다.",
+      "frame": {
+        "preview": "미리보기",
+        "yourPage": "내 페이지",
+        "activeNow": "지금 활동 중"
+      },
+      "explainer": {
+        "what": "기능 설명",
+        "customer": "고객 사용 방식",
+        "how": "설정 방법"
+      },
+      "getstarted": {
+        "title": "시작하기 버튼",
+        "subtitle": "처음 방문한 고객이 채팅을 시작하기 위해 누르는 버튼입니다.",
+        "what": "Messenger를 열었을 때 가장 먼저 보이는 것으로, 환영 화면의 \"시작하기\" 버튼 하나입니다.",
+        "customer": "한 번 누르면 대화가 시작됩니다. 첫 메시지 전에만 표시됩니다.",
+        "how": "페이로드(예: GET_STARTED 같은 키워드)를 지정하세요. 그런 다음 플로우에서 해당 페이로드를 수신하는 트리거를 추가하면 버튼을 누르는 즉시 환영 플로우가 실행됩니다.",
+        "payload": "페이로드",
+        "payloadHint": "버튼을 누르면 이 단어가 전송됩니다. 플로우 트리거에서 일치시켜 자동화를 시작하세요.",
+        "remove": "제거",
+        "removeConfirm": "시작하기 버튼을 제거할까요?",
+        "save": "저장",
+        "yourPage": "내 페이지",
+        "typically": "보통 즉시 답변합니다",
+        "button": "시작하기"
+      },
+      "greeting": {
+        "title": "인사말",
+        "subtitle": "누군가 입력하기 전에 표시되는 친근한 환영 문구입니다.",
+        "what": "채팅의 첫 화면, 페이지 이름 바로 아래에 표시되는 짧은 환영 메시지입니다.",
+        "customer": "Messenger를 여는 순간 읽게 되며, 분위기를 전하고 도울 수 있는 내용을 알려 줍니다.",
+        "how": "따뜻한 한 줄로 작성하세요(최대 160자). 팁: 이름 태그를 추가하면 Messenger가 고객을 이름으로 부릅니다.",
+        "welcomeText": "환영 문구",
+        "placeholder": "안녕하세요! 무엇을 도와드릴까요?",
+        "remove": "제거",
+        "removeConfirm": "인사말을 제거할까요?",
+        "save": "저장",
+        "yourPage": "내 페이지",
+        "sample": "안녕하세요! 무엇을 도와드릴까요?"
+      },
+      "menu": {
+        "title": "고정 메뉴",
+        "subtitle": "메시지 입력줄 안에 항상 표시되는 바로가기 메뉴입니다.",
+        "what": "텍스트 상자 옆의 ☰ 아이콘 메뉴로, 채팅 내내 사용할 수 있습니다. 바로가기는 최대 3개입니다.",
+        "customer": "언제든 ☰를 눌러 \"상담원 연결\", \"주문 조회\", \"쇼핑몰 방문\" 등 필요한 곳으로 바로 이동합니다.",
+        "how": "항목을 최대 3개까지 추가하세요. 각 항목은 플로우를 실행(페이로드 전송)하거나 링크(URL)를 엽니다. 원하면 텍스트 상자를 숨겨 메뉴만 사용하게 할 수 있습니다.",
+        "sample1": "문의하기",
+        "sample2": "주문 조회",
+        "sample3": "쇼핑몰 방문",
+        "menuLabel": "메뉴",
+        "menuItem": "메뉴 항목",
+        "titleLabel": "제목",
+        "titlePlaceholder": "문의하기",
+        "action": "동작",
+        "actionFlow": "플로우 실행(페이로드 전송)",
+        "actionLink": "링크 열기(URL)",
+        "url": "URL",
+        "payload": "페이로드",
+        "removeItem": "항목 제거",
+        "add": "메뉴 항목 추가",
+        "hideComposer": "텍스트 상자 숨기기(메뉴만 사용)",
+        "remove": "메뉴 제거",
+        "removeConfirm": "고정 메뉴를 제거할까요?",
+        "save": "메뉴 저장"
+      },
+      "ice": {
+        "title": "아이스브레이커",
+        "subtitle": "첫 메시지 전에 표시되는 추천 질문입니다.",
+        "what": "환영 화면에 탭할 수 있는 질문을 최대 4개까지 표시합니다. 자주 묻는 내용을 입력하는 대신 탭으로 보낼 수 있습니다.",
+        "customer": "무엇을 쓸지 고민하지 않고 \"영업 시간이 어떻게 되나요?\" 같은 질문을 탭하면 즉시 답변을 받습니다.",
+        "how": "자주 묻는 질문을 추가하세요. 탭할 때마다 해당 페이로드가 전송되며, 플로우 트리거에서 그 페이로드를 일치시키면 자동으로 답변할 수 있습니다.",
+        "sample1": "영업 시간이 어떻게 되나요?",
+        "sample2": "어디로 배송하나요?",
+        "sample3": "상담원 연결",
+        "yourPage": "내 페이지",
+        "question": "질문",
+        "questionLabel": "질문",
+        "questionPlaceholder": "영업 시간이 어떻게 되나요?",
+        "payload": "페이로드",
+        "removeItem": "아이스브레이커 제거",
+        "add": "아이스브레이커 추가",
+        "remove": "모두 제거",
+        "removeConfirm": "모든 아이스브레이커를 제거할까요?",
+        "save": "아이스브레이커 저장"
+      }
+    },
+    "posts": {
+      "kicker": "Facebook · 게시물",
+      "title": "Facebook",
+      "titleAccent": "게시물",
+      "intro": "여기에서 만들고 예약하고 게시한 모든 항목입니다. 상태를 추적하고, 실패한 항목을 재시도하며, 대기열을 관리하세요.",
+      "allPages": "모든 페이지",
+      "pagePicker": "페이지",
+      "myPosts": "내 게시물",
+      "insights": "인사이트",
+      "create": "게시물 만들기",
+      "loadError": "게시물을 불러올 수 없습니다. 다시 시도하세요.",
+      "noPage": "연결된 Facebook 페이지가 아직 없습니다",
+      "noPageHint": "페이지 게시물을 게시하고 예약하려면 Facebook 계정을 연결하세요.",
+      "connect": "Facebook 계정 연결",
+      "kpi": {
+        "total": "전체 게시물",
+        "scheduled": "예약됨",
+        "published": "게시됨",
+        "failed": "실패"
+      },
+      "tabs": {
+        "all": "전체",
+        "scheduled": "예약됨",
+        "published": "게시됨",
+        "failed": "실패"
+      },
+      "ranges": {
+        "all": "전체 기간",
+        "7d": "7일",
+        "30d": "30일",
+        "90d": "90일"
+      },
+      "search": "게시물 검색…",
+      "cols": {
+        "post": "게시물",
+        "page": "페이지",
+        "type": "유형",
+        "status": "상태",
+        "when": "시간",
+        "actions": "작업"
+      },
+      "status": {
+        "scheduled": "예약됨",
+        "published": "게시됨",
+        "failed": "실패",
+        "draft": "초안"
+      },
+      "publishNow": "지금 게시",
+      "delete": "삭제",
+      "noMatch": "이 필터와 일치하는 게시물이 없습니다",
+      "none": "아직 게시물이 없습니다",
+      "noneHint": "첫 게시물을 작성하세요. 바로 게시하거나 예약할 수 있습니다.",
+      "pageOf": "{page} / {last} 페이지",
+      "prev": "이전",
+      "next": "다음",
+      "deleteTitle": "게시물 삭제",
+      "deleteLive": "Facebook에서도 게시물이 삭제되며 되돌릴 수 없습니다.",
+      "deleteLocal": "이 게시물을 삭제할까요?",
+      "deleteYes": "예, 삭제",
+      "cancel": "취소",
+      "rejected": "Facebook에서 게시물을 거부했습니다: {error}",
+      "published": "게시물이 Facebook에 게시되었습니다.",
+      "removed": "게시물이 삭제되었습니다.",
+      "failed": "작동하지 않았습니다. 다시 시도하세요."
+    },
+    "compose": {
+      "kicker": "Facebook · 만들기",
+      "title": "새",
+      "titleAccent": "게시물",
+      "intro": "사진, 앨범, 링크, 동영상, 릴스를 작성해 연결된 페이지에 바로 게시하거나 예약하세요. 실시간 미리보기로 완성되는 모습을 확인할 수 있습니다.",
+      "posts": "게시물",
+      "myPosts": "내 게시물",
+      "insights": "인사이트",
+      "loadError": "페이지를 불러올 수 없습니다. 다시 시도하세요.",
+      "noPage": "연결된 Facebook 페이지가 아직 없습니다",
+      "noPageHint": "페이지 게시물을 게시하고 예약하려면 Facebook 계정을 연결하세요.",
+      "noAccess": "게시물을 만들 수 없습니다",
+      "noAccessHint": "Facebook 게시물을 작성하려면 관리자에게 권한을 요청하세요.",
+      "connect": "Facebook 계정 연결",
+      "required": "필수",
+      "steps": {
+        "page": "페이지",
+        "type": "게시물 유형",
+        "media": "미디어",
+        "message": "메시지",
+        "when": "게시 시점"
+      },
+      "types": {
+        "photo": {
+          "label": "사진",
+          "hint": "사진 한 장짜리 게시물입니다."
+        },
+        "multi_photo": {
+          "label": "앨범",
+          "hint": "한 게시물에 사진 2~10장입니다."
+        },
+        "link": {
+          "label": "링크",
+          "hint": "미리보기와 함께 링크를 공유합니다."
+        },
+        "video": {
+          "label": "동영상",
+          "hint": "피드 동영상입니다(MP4 / MOV)."
+        },
+        "reel": {
+          "label": "릴스",
+          "hint": "세로형 짧은 동영상 릴스입니다."
+        }
+      },
+      "photoUrls": "공개 이미지 URL 붙여넣기",
+      "photoHint": "한 줄에 하나씩, 최대 10개까지 입력합니다. 파일 업로드에는 아직 연결되지 않은 스토리지 서비스가 필요하므로 공개 이미지 주소를 사용하세요.",
+      "linkUrl": "링크 URL",
+      "linkHint": "Facebook이 링크로 미리보기 카드를 만듭니다. 게시물에는 링크 또는 사진 중 하나만 넣을 수 있습니다.",
+      "videoUrl": "공개 HTTPS 동영상 URL 붙여넣기",
+      "reelNote": "릴스는 세로형 짧은 동영상입니다. 아래 메시지가 릴스 설명으로 사용됩니다.",
+      "videoNote": "Meta가 공개 HTTPS로 파일을 가져옵니다. 아래 메시지가 동영상 설명으로 사용됩니다.",
+      "messagePlaceholder": "게시물을 작성하세요…",
+      "ai": {
+        "title": "AI 작성 도구",
+        "caption": "캡션",
+        "repurpose": "재가공",
+        "review": "검토",
+        "bestTime": "최적 시간",
+        "image": "이미지",
+        "unavailable": "AI 도구는 아직 사용할 수 없습니다. AI 제공업체 설정이 필요합니다."
+      },
+      "when": {
+        "now": "지금 게시",
+        "later": "나중에 예약",
+        "label": "발송 날짜 및 시간",
+        "hint": "지금부터 10분 이후 75일 이내로, 사용자의 시간대({tz}) 기준입니다. Facebook이 대기열에 넣고 시간이 되면 게시합니다."
+      },
+      "submit": {
+        "publish": "게시",
+        "schedule": "예약"
+      },
+      "preview": {
+        "live": "실시간 미리보기",
+        "facebook": "Facebook",
+        "yourPage": "내 페이지",
+        "justNow": "방금",
+        "empty": "게시물 텍스트가 여기에 표시됩니다…",
+        "reel": "릴스",
+        "video": "동영상",
+        "like": "좋아요",
+        "comment": "댓글",
+        "share": "공유",
+        "note": "실시간 미리보기입니다. 실제 게시물은 Facebook에서 약간 다르게 보일 수 있습니다."
+      },
+      "help": {
+        "label": "도움말 - {n}",
+        "help1": {
+          "title": "무엇을 게시할 수 있나요?",
+          "body": "사진, 앨범, 링크, 피드 동영상, 릴스를 Graph API를 통해 연결된 페이지에 바로 게시합니다."
+        },
+        "help2": {
+          "title": "예약은 어떻게 작동하나요?",
+          "body": "지금부터 10분 이후 75일 이내의 시간을 선택하면 Facebook이 대기열에 넣고 시간이 되면 자동으로 게시합니다. 또는 지금 게시하세요."
+        },
+        "help3": {
+          "title": "게시물이 실패했습니다. 이유는 무엇인가요?",
+          "body": "대개 미디어 URL이 공개 HTTPS가 아니거나 페이지가 다시 연결된 경우입니다. 해당 행의 오류를 확인한 뒤 지금 게시로 다시 시도하세요."
+        }
+      },
+      "problem": {
+        "noPage": "연결된 Facebook 페이지를 선택하세요.",
+        "scheduleMissing": "게시물을 예약할 날짜와 시간을 선택하세요.",
+        "scheduleInvalid": "해당 날짜와 시간을 읽을 수 없습니다."
+      },
+      "rejected": "Facebook에서 게시물을 거부했습니다: {error}",
+      "scheduled": "게시물이 예약되었습니다.",
+      "published": "게시물이 Facebook에 게시되었습니다.",
+      "failed": "작동하지 않았습니다. 다시 시도하세요."
+    },
+    "grid": {
+      "kicker": "Facebook · 내 게시물",
+      "title": "내",
+      "titleAccent": "그리드",
+      "intro": "최근 게시한 페이지 게시물을 Facebook에서 실시간으로 가져왔습니다. 게시물을 탭하면 미리 볼 수 있습니다.",
+      "posts": "게시물",
+      "newPost": "새 게시물",
+      "pagePicker": "페이지",
+      "loadError": "게시물을 불러올 수 없습니다. 다시 시도하세요.",
+      "noPage": "연결된 Facebook 페이지가 없습니다",
+      "noPageHint": "연결하면 여기에서 그리드를 볼 수 있습니다.",
+      "goHub": "Facebook으로 이동",
+      "empty": "아직 아무것도 없습니다",
+      "emptyHint": "게시한 게시물이 여기에 표시됩니다.",
+      "firstPost": "첫 게시물 만들기",
+      "noCaption": "(캡션 없음)",
+      "view": "게시물 보기",
+      "close": "닫기",
+      "postTitle": "게시물",
+      "noImage": "이미지 없음",
+      "viewOnFacebook": "Facebook에서 보기"
+    },
+    "insights": {
+      "kicker": "Facebook · 분석",
+      "title": "페이지",
+      "titleAccent": "인사이트",
+      "intro": "도달 및 참여(28일, Facebook 실시간)에 Messenger 활동과 여기에서 게시한 게시물을 합쳐 보여 줍니다.",
+      "create": "게시물 만들기",
+      "myPosts": "내 게시물",
+      "loadError": "인사이트를 불러올 수 없습니다. 다시 시도하세요.",
+      "noPage": "연결된 Facebook 페이지가 아직 없습니다.",
+      "connect": "Facebook 계정 연결",
+      "connected": "연결됨",
+      "viewing": "보고 있는 계정",
+      "cards": {
+        "followers": "팔로워",
+        "followersSub": "전체 오디언스",
+        "reach": "도달 · 28일",
+        "reachSub": "도달한 사람 수",
+        "impressions": "노출 · 28일",
+        "impressionsSub": "표시 횟수",
+        "engagements": "참여 · 28일",
+        "engagementsSub": "상호작용",
+        "convos": "대화",
+        "convosSub": "진행 중 {n}건",
+        "messagesIn": "수신 메시지 · 28일",
+        "messagesInSub": "답장 {n}건",
+        "published": "게시된 게시물",
+        "publishedSub": "예약 {n}건",
+        "rate": "참여율",
+        "rateSub": "참여 ÷ 도달"
+      },
+      "liveFromFacebook": "Facebook 실시간",
+      "fromHere": "이 워크스페이스",
+      "activity": "Messenger 활동 · 최근 14일",
+      "received": "수신",
+      "sent": "발신",
+      "mix": {
+        "title": "콘텐츠 구성",
+        "posts": "게시물 {n}개",
+        "none": "여기에서 게시한 게시물이 아직 없습니다.",
+        "first": "첫 게시물 만들기"
+      },
+      "types": {
+        "photo": "사진",
+        "multi_photo": "앨범",
+        "link": "링크",
+        "video": "동영상",
+        "reel": "릴스"
+      },
+      "convos": {
+        "title": "대화",
+        "total": "총 {n}건",
+        "open": "팀 수신함 열기",
+        "none": "아직 Facebook 대화가 없습니다. 사람들이 페이지에 메시지를 보내면 여기에 표시됩니다."
+      },
+      "status": {
+        "open": "진행 중",
+        "pending": "대기 중",
+        "resolved": "해결됨",
+        "closed": "종료됨",
+        "snoozed": "보류됨"
+      },
+      "recent": {
+        "title": "최근 게시물",
+        "none": "아직 게시물이 없거나 인사이트를 준비 중입니다.",
+        "noCaption": "(캡션 없음)",
+        "impressions": "노출",
+        "engaged": "참여",
+        "view": "보기"
+      },
+      "legendLive": "Facebook 실시간 데이터이며, 지원 중단된 지표는 —로 표시될 수 있습니다.",
+      "legendHere": "이 워크스페이스 기준: Messenger와 게시된 게시물."
+    }
+  }
+}

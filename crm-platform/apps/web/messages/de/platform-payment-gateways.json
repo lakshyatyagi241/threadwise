@@ -1,0 +1,716 @@
+{
+  "platform-payment-gateways": {
+    "nav": {
+      "gateways": "Zahlungsanbieter",
+      "group": "Abrechnung",
+      "orders": "Bestellverlauf",
+      "billingHistory": "Abrechnungsverlauf",
+      "invoices": "Rechnungen",
+      "billingSettings": "Abrechnungseinstellungen"
+    },
+    "admin": {
+      "title": "Zahlungsanbieter",
+      "description": "{count} Zahlungsanbieter. Zugangsdaten werden verschlüsselt gespeichert und nach dem Speichern nie wieder angezeigt.",
+      "kpi": {
+        "total": "Zahlungsanbieter",
+        "active": "Aktiv",
+        "india": "Indien",
+        "crypto": "Krypto",
+        "totalHint": "verfügbare Treiber",
+        "activeHint": "nimmt Zahlungen an",
+        "indiaHint": "Razorpay, Paytm, Cashfree…",
+        "cryptoHint": "Abwicklung on-chain"
+      },
+      "tabsLabel": "Nach Region filtern",
+      "all": "Alle",
+      "search": "Nach Name oder Slug filtern",
+      "emptyTitle": "Hier gibt es keine Zahlungsanbieter",
+      "emptyMessage": "Nichts passt zu dieser Region und Suche. Wechseln Sie den Reiter oder leeren Sie die Suche.",
+      "regions": {
+        "popular": "Beliebt",
+        "india": "Indien",
+        "asia": "Asien",
+        "mena": "MENA",
+        "europe": "Europa",
+        "us": "USA und Kanada",
+        "africa": "Afrika",
+        "latam": "Lateinamerika",
+        "crypto": "Krypto",
+        "offline": "Offline",
+        "other": "Sonstige"
+      },
+      "card": {
+        "active": "Aktiv",
+        "disabled": "Deaktiviert",
+        "mode": {
+          "sandbox": "Sandbox",
+          "live": "Live"
+        },
+        "keysSaved": "Schlüssel gespeichert",
+        "noDriverBadge": "Treiber noch nicht verfügbar",
+        "activate": "Aktivieren",
+        "disable": "Deaktivieren",
+        "savedPlaceholder": "Gespeichert. Leer lassen, um ihn zu behalten.",
+        "clear": "Gespeicherten Wert entfernen",
+        "undoClear": "Gespeicherten Wert behalten",
+        "modeLabel": "Modus",
+        "sortOrder": "Sortierreihenfolge",
+        "currencies": "Unterstützte Währungen",
+        "currenciesAll": "Keine ausgewählt: jede Währung wird akzeptiert",
+        "currenciesSelected": "{count, plural, one {# ausgewählt} other {# ausgewählt}}",
+        "currenciesHint": "Käufer sehen diesen Zahlungsanbieter nur in den Währungen, die Sie anhaken. Lassen Sie alle leer, um jede Währung zu akzeptieren.",
+        "webhookUrl": "Webhook-URL",
+        "webhookHint": "Fügen Sie dies im Dashboard des Anbieters ein, damit er uns über Zahlungen informieren kann.",
+        "saving": "Wird gespeichert",
+        "readOnly": "Nur ein Super-Administrator kann Zahlungsanbieter ändern.",
+        "saved": "Einstellungen für {name} gespeichert.",
+        "activated": "{name} aktiviert.",
+        "deactivated": "{name} deaktiviert.",
+        "noCredentials": "Keine Zugangsdaten erforderlich — das Gateway nutzt eine manuelle bzw. externe Bestätigung.",
+        "save": "{name} speichern"
+      },
+      "errors": {
+        "conflict": "Jemand anderes hat diesen Zahlungsanbieter geändert. Er wurde neu geladen; prüfen Sie ihn und speichern Sie erneut.",
+        "notConfigured": "Konfigurieren Sie zuerst die Pflichtfelder: {fields}",
+        "noDriver": "Für diesen Zahlungsanbieter gibt es in dieser Version noch keinen Treiber. Er kann konfiguriert, aber nicht aktiviert werden.",
+        "forbidden": "Nur ein Super-Administrator kann Zahlungsanbieter ändern.",
+        "generic": "Etwas ist schiefgegangen. Versuchen Sie es erneut."
+      },
+      "eyebrow": "Admin · Abrechnung · Gateways",
+      "titleFirst": "Zahlung",
+      "titleSecond": "Gateways"
+    },
+    "checkout": {
+      "title": "Schließen Sie Ihre Bestellung ab",
+      "walletTitle": "Geld zu Ihrem Guthaben hinzufügen",
+      "subtitle": "Prüfen Sie den Preis, geben Sie an, wer zahlt, und wählen Sie die Zahlungsart.",
+      "loading": "Kasse wird geladen",
+      "account": "Konto",
+      "name": "Vollständiger Name",
+      "email": "E-Mail",
+      "billingAddress": "Rechnungsadresse",
+      "company": "Unternehmen",
+      "taxId": "Steuer-ID",
+      "taxIdHint": "GSTIN, MwSt.-Nr. oder EIN, falls vorhanden.",
+      "address": "Adresse",
+      "city": "Ort",
+      "postal": "Postleitzahl",
+      "country": "Land",
+      "currency": "Währung",
+      "period": "Abrechnungszeitraum",
+      "periods": {
+        "monthly": "Monatlich",
+        "yearly": "Jährlich"
+      },
+      "paymentMethod": "Zahlungsmethode",
+      "noGateway": "Für {currency} ist noch kein Zahlungsanbieter eingerichtet. Bitten Sie Ihren Administrator, einen zu aktivieren.",
+      "noGatewayButton": "Kein Zahlungsanbieter eingerichtet",
+      "sandbox": "Sandbox",
+      "pay": "{amount} bezahlen",
+      "processing": "Zahlung wird gestartet",
+      "summary": "Bestellübersicht",
+      "billed": {
+        "monthly": "Abrechnung für einen Zeitraum",
+        "yearly": "Abrechnung für 12 Monate"
+      },
+      "subtotal": "Zwischensumme",
+      "tax": "{label} ({rate} %)",
+      "total": "Gesamt heute",
+      "updating": "Preis wird aktualisiert",
+      "errors": {
+        "gatewayUnavailable": "Dieser Zahlungsanbieter ist derzeit nicht verfügbar.",
+        "currencyUnsupported": "Dieser Zahlungsanbieter akzeptiert diese Währung nicht. Wählen Sie einen anderen Anbieter oder eine andere Währung.",
+        "providerError": "Fehler beim Zahlungsanbieter. Versuchen Sie es erneut oder wählen Sie einen anderen Anbieter.",
+        "notPurchasable": "Dieser Tarif kann nicht online gekauft werden.",
+        "downgrade": "Downgrades sind online nicht verfügbar. Wenden Sie sich an den Support, um zu einem niedrigeren Tarif zu wechseln.",
+        "amountTooLow": "Geben Sie einen größeren Betrag ein, um Ihr Guthaben aufzuladen.",
+        "couponUnavailable": "Gutscheine sind noch nicht verfügbar.",
+        "forbidden": "Sie haben keine Berechtigung zum Kauf.",
+        "notFound": "Dieser Tarif wurde nicht gefunden.",
+        "widgetBlocked": "Das Zahlungsfenster konnte nicht geöffnet werden. Prüfen Sie, ob Ihr Browser es zulässt, und versuchen Sie es erneut.",
+        "generic": "Etwas ist schiefgegangen. Versuchen Sie es erneut.",
+        "couponRejected": "Dieser Gutschein kann nicht verwendet werden."
+      },
+      "coupon": "Gutscheincode",
+      "couponApply": "Anwenden",
+      "couponApplied": "Gutschein {code} angewendet: {amount} Rabatt.",
+      "couponRemove": "Entfernen",
+      "couponDiscount": "Rabatt ({code})",
+      "refundGuarantee": "{days} Tage Geld-zurück-Garantie",
+      "countryPlaceholder": "Land wählen",
+      "autoRenew": "Verlängert sich in jedem Zeitraum automatisch. Sie können jederzeit kündigen.",
+      "addonRenews": "Dieses Add-on verlängert sich in jedem Zeitraum automatisch. Sie können es jederzeit kündigen und bis zum Ende der bezahlten Laufzeit behalten.",
+      "cardTitle": "Mit Karte bezahlen",
+      "payNow": "Jetzt bezahlen",
+      "titleFirst": "Schließen Sie Ihre",
+      "titleSecond": "Bestellung ab",
+      "subtitleRefund": "{days}-tägige Geld-zurück-Garantie. Jederzeit kündbar. Karten, UPI, Netbanking und Wallets werden akzeptiert.",
+      "steps": {
+        "plan": "Tarif wählen",
+        "checkout": "Kasse",
+        "confirmation": "Bestätigung"
+      },
+      "step": "Schritt {n}",
+      "taxIdPlaceholder": "GSTIN / USt-IdNr. / EIN",
+      "addressPlaceholder": "Straße + Hausnummer",
+      "cityPlaceholder": "Mumbai",
+      "currencyTitle": "In Ihrer Währung bezahlen",
+      "currencyHint": "Preise werden sofort umgerechnet. Angezeigt werden nur Währungen, die Ihre verfügbaren Zahlungsmethoden akzeptieren.",
+      "couponPlaceholder": "Haben Sie einen Gutscheincode?",
+      "live": "live",
+      "tlsNote": "Zahlungen werden über eine 256-Bit-TLS-Verbindung verarbeitet. Wir sehen Ihre Kartendaten nie.",
+      "change": "Ändern",
+      "terms": "Mit der Zahlung stimmen Sie unseren <terms>Nutzungsbedingungen</terms> und unserer <privacy>Datenschutzerklärung</privacy> zu.",
+      "refundNote": "Nicht zufrieden? Schreiben Sie uns innerhalb der ersten {days} Tage, und wir erstatten den vollen Betrag — ohne Fragen und ohne Formulare.",
+      "autoRenewTitle": "Diesen Tarif automatisch verlängern"
+    },
+    "orders": {
+      "title": "Bestellverlauf",
+      "lifetime": "Gesamtausgaben: {total}",
+      "loading": "Bestellungen werden geladen",
+      "loadFailed": "Ihre Bestellungen konnten nicht geladen werden. Laden Sie die Seite neu, um es erneut zu versuchen.",
+      "emptyTitle": "Noch keine Bestellungen",
+      "emptyMessage": "Ihre Käufe erscheinen hier.",
+      "browsePlans": "Tarife ansehen",
+      "loadMore": "Mehr laden",
+      "outcome": {
+        "success": "Zahlung eingegangen. Vielen Dank.",
+        "failed": "Die Zahlung wurde nicht abgeschlossen. Versuchen Sie es erneut oder wählen Sie einen anderen Anbieter.",
+        "cancelled": "Sie haben die Zahlung abgebrochen.",
+        "pending": "Wir warten auf die Bestätigung Ihrer Zahlung durch den Zahlungsanbieter. Diese Seite wird danach aktualisiert.",
+        "notfound": "Diese Bestellung wurde nicht gefunden.",
+        "proof": "Zahlungsnachweis eingereicht. Wir prüfen ihn und aktivieren Ihren Tarif in Kürze."
+      },
+      "col": {
+        "order": "Bestellung",
+        "item": "Artikel",
+        "date": "Datum",
+        "amount": "Betrag",
+        "status": "Status",
+        "actions": "Aktionen"
+      },
+      "status": {
+        "pending": "Ausstehend",
+        "awaiting_approval": "Wartet auf Freigabe",
+        "paid": "Bezahlt",
+        "failed": "Fehlgeschlagen",
+        "cancelled": "Storniert",
+        "refunded": "Erstattet"
+      },
+      "uploadProof": "Zahlungsnachweis",
+      "invoice": "Rechnung"
+    },
+    "billing": {
+      "common": {
+        "admin": "Admin",
+        "breadcrumb": "Navigationspfad",
+        "billingHistory": "Abrechnungsverlauf",
+        "analytics": "Analysen",
+        "exportCsv": "CSV exportieren",
+        "exportTruncated": "Der Export wurde bei {rows} Zeilen beendet. Schränken Sie die Filter ein, um den Rest zu exportieren.",
+        "exportFailed": "Der Export konnte nicht erstellt werden. Versuchen Sie es erneut.",
+        "actionFailed": "Das hat nicht funktioniert. Laden Sie die Seite neu und versuchen Sie es erneut.",
+        "cancel": "Abbrechen",
+        "back": "Behalten",
+        "close": "Schließen",
+        "openWorkspace": "Workspace öffnen",
+        "showing": "Angezeigt {from}–{to} von {total} {noun}",
+        "pager": "Seiten",
+        "previous": "Zurück",
+        "next": "Weiter",
+        "chartEmpty": "Keine Daten in diesem Zeitraum.",
+        "periods": {
+          "monthly": "monatlich",
+          "yearly": "jährlich"
+        },
+        "status": {
+          "pending": "ausstehend",
+          "awaiting_approval": "wartet auf Freigabe",
+          "paid": "bezahlt",
+          "failed": "fehlgeschlagen",
+          "cancelled": "storniert",
+          "refunded": "erstattet"
+        },
+        "windows": {
+          "7d": "Letzte 7 Tage",
+          "30d": "Letzte 30 Tage",
+          "90d": "Letzte 90 Tage",
+          "1y": "Letztes Jahr",
+          "all": "Gesamte Zeit"
+        }
+      },
+      "orders": {
+        "title": "Bestellverlauf",
+        "eyebrow": "Admin · Abrechnung & Tarife · Bestellverlauf",
+        "titleFirst": "Bestellung",
+        "titleSecond": "Verlauf",
+        "description": "Abonnement-Bestellungen, Tarif-Upgrades und Downgrades, Add-on-Käufe und einmalige Aufladungen: jede kaufmännische Entscheidung, die ein Workspace getroffen hat.",
+        "window": "Zeitraum",
+        "windows": {
+          "90d": "Letzte 90 Tage",
+          "this_year": "Dieses Jahr",
+          "all": "Gesamte Zeit"
+        },
+        "kpi": {
+          "total": "Bestellungen gesamt",
+          "vsPrevious": "gegenüber dem Vorzeitraum",
+          "upgrades": "Upgrades",
+          "mrrAdded": "+{amount} MRR hinzugefügt",
+          "downgrades": "Downgrades",
+          "mrrLowered": "{amount} in niedrigeren Tarifen",
+          "addons": "Add-on-Pakete",
+          "attached": "{amount} zugewiesen",
+          "cancellations": "Kündigungen",
+          "mrrLost": "-{amount} MRR verloren"
+        },
+        "typeFilter": "Nach Bestelltyp filtern",
+        "types": {
+          "all": "Alle",
+          "new": "Neues Abonnement",
+          "upgrade": "Upgrade",
+          "downgrade": "Downgrade",
+          "addon": "Add-on",
+          "cancel": "Kündigung"
+        },
+        "rowTypes": {
+          "new": "Neu",
+          "renewal": "Verlängerung",
+          "upgrade": "Upgrade",
+          "downgrade": "Downgrade",
+          "addon": "Add-on",
+          "wallet_topup": "Guthaben-Aufladung",
+          "manual": "Manuell"
+        },
+        "search": "Nach Bestellnr., Workspace, Tarif suchen…",
+        "noun": "Bestellungen",
+        "col": {
+          "order": "Bestellnr.",
+          "date": "Datum",
+          "workspace": "Workspace",
+          "type": "Typ",
+          "item": "Tarif / Artikel",
+          "mrr": "MRR Δ",
+          "total": "Gesamt",
+          "status": "Status"
+        },
+        "empty": "Keine Bestellungen in diesem Zeitraum.",
+        "awaitingApproval": "wartet auf Freigabe",
+        "actions": {
+          "markPaid": "Als bezahlt markieren",
+          "cancelOrder": "Stornieren",
+          "approve": "Freigeben",
+          "reject": "Ablehnen"
+        },
+        "confirm": {
+          "approveTitle": "Diese Bestellung als bezahlt markieren?",
+          "approve": "Diese Bestellung als bezahlt markieren und den Tarif aktivieren?",
+          "cancelTitle": "Diese Bestellung stornieren?",
+          "cancel": "Diese ausstehende Bestellung stornieren? Sie wird als storniert markiert und aus den offenen Beträgen entfernt."
+        },
+        "reject": {
+          "title": "{order} ablehnen",
+          "reason": "Grund (optional)"
+        },
+        "awaiting": {
+          "title": "Wartet auf Freigabe",
+          "ref": "Ref.:",
+          "proofAttached": "Zahlungsnachweis angehängt"
+        }
+      },
+      "orderAnalytics": {
+        "title": "Bestellanalysen",
+        "eyebrow": "Admin · Abrechnung & Tarife · Bestellanalysen",
+        "titleFirst": "Bestellung",
+        "titleSecond": "Analysen",
+        "description": "Abonnements, Upgrades, Downgrades, Add-ons und Kündigungen: was die Nettoumsatzbewegung auf der Plattform antreibt.",
+        "window": "Zeitraum",
+        "viewLedger": "Journal anzeigen",
+        "kpi": {
+          "total": "Bestellungen gesamt",
+          "newMrr": "Netto neuer MRR",
+          "paid": "{count} bezahlt",
+          "lostMrr": "Verlorener MRR",
+          "cancels": "{count} Kündigungen",
+          "aov": "Durchschnittlicher Bestellwert",
+          "paidOrders": "bezahlte Bestellungen",
+          "attach": "Add-on-Anteil",
+          "attachLabel": "{addons} Add-ons / {total}",
+          "conversion": "Konversionsrate",
+          "conversionHint": "bezahlte Bestellungen bei {signups} Anmeldungen"
+        },
+        "motion": {
+          "kicker": "Bestellbewegung",
+          "title": "Bezahlte Bestellungen und Kündigungen",
+          "paid": "Bezahlt",
+          "cancelled": "Storniert oder fehlgeschlagen"
+        },
+        "typeMix": {
+          "kicker": "Verteilung der Bestelltypen",
+          "title": "Nach Typ"
+        },
+        "addons": {
+          "kicker": "Verkaufte Add-ons",
+          "title": "Top-Performer",
+          "empty": "In diesem Zeitraum gibt es keine Add-on-Bestellungen."
+        },
+        "funnel": {
+          "kicker": "Konversionstrichter",
+          "title": "Anmeldung bis zahlend",
+          "note": "Es werden nur gezählte Phasen angezeigt."
+        },
+        "countries": {
+          "kicker": "Nach Land",
+          "title": "Top-Märkte",
+          "empty": "Es wurde noch kein Rechnungsland angegeben."
+        },
+        "cohorts": {
+          "kicker": "Kohorten-Retention",
+          "title": "% der Workspaces, die N Monate später noch aktiv sind",
+          "last": "letzte 6 Kohorten",
+          "emptyTitle": "Noch keine Workspace-Anmeldungen",
+          "empty": "Kohorten erscheinen, sobald sich Workspaces angemeldet haben."
+        }
+      },
+      "history": {
+        "title": "Abrechnungsverlauf",
+        "eyebrow": "Admin · Abrechnung & Tarife · Abrechnungsverlauf",
+        "titleFirst": "Abrechnung",
+        "titleSecond": "Verlauf",
+        "description": "Jedes Zahlungsereignis, das die Plattform verarbeitet hat: Belastungen, Erstattungen und Wiederholungen in allen Workspaces.",
+        "window": "Zeitraum",
+        "kpi": {
+          "gross": "Bruttoumsatz",
+          "vsPrev": "gegenüber Vorzeitraum",
+          "charges": "Erfolgreiche Belastungen",
+          "successRate": "{pct} % Erfolgsquote",
+          "failed": "Fehlgeschlagen",
+          "dunning": "zur Wiederholung / Mahnung",
+          "refunds": "Ausgestellte Erstattungen",
+          "refundsTotal": "{amount} insgesamt",
+          "chargebacks": "Rückbuchungen",
+          "disputed": "{amount} strittig"
+        },
+        "trend": {
+          "kicker": "Trend",
+          "title": "Tägliche Belastungen und Erstattungen",
+          "charges": "Belastungen",
+          "refunds": "Erstattungen"
+        },
+        "statusFilter": "Nach Zahlungsstatus filtern",
+        "statuses": {
+          "all": "Alle",
+          "paid": "Erfolgreich",
+          "failed": "Fehlgeschlagen",
+          "refunded": "Erstattet",
+          "pending": "Ausstehend"
+        },
+        "gateway": "Zahlungsanbieter",
+        "allGateways": "Alle Zahlungsanbieter",
+        "search": "Nach Bestellnr., Workspace, Kunde suchen…",
+        "noun": "Ereignisse",
+        "col": {
+          "date": "Datum",
+          "order": "Bestellnr.",
+          "workspace": "Workspace",
+          "gateway": "Zahlungsanbieter",
+          "plan": "Tarif",
+          "amount": "Betrag",
+          "status": "Status",
+          "actions": "Aktionen"
+        },
+        "empty": "Keine passenden Zahlungsereignisse."
+      },
+      "billingAnalytics": {
+        "title": "Abrechnungsanalysen",
+        "eyebrow": "Admin · Abrechnung & Tarife · Abrechnungsanalysen",
+        "titleFirst": "Abrechnung",
+        "titleSecond": "Analysen",
+        "description": "Cashflow, Zahlungserfolg, Verteilung auf Zahlungsanbieter und Erstattungstrends auf der Plattform.",
+        "window": "Zeitraum",
+        "viewLedger": "Journal anzeigen",
+        "kpi": {
+          "gross": "Bruttoumsatz",
+          "net": "Nettoumsatz",
+          "netPct": "{pct} % netto",
+          "success": "Autorisierungserfolg",
+          "failed": "Fehlgeschlagen",
+          "events": "{count, plural, one {# Ereignis} other {# Ereignisse}}",
+          "refunds": "Erstattungen",
+          "chargebacks": "Rückbuchungen",
+          "disputes": "{count, plural, one {# Streitfall} other {# Streitfälle}}"
+        },
+        "cashFlow": {
+          "kicker": "Cashflow",
+          "title": "Belastungen, Erstattungen und Fehler",
+          "charges": "Belastungen",
+          "refunds": "Erstattungen",
+          "failed": "Fehlgeschlagen"
+        },
+        "gatewayShare": {
+          "title": "Anteil der Zahlungsanbieter",
+          "hint": "Bezahlter Umsatz nach Anbieter aufgeteilt"
+        },
+        "topPayers": {
+          "title": "Umsatzstärkste Workspaces",
+          "hint": "Höchste Ausgaben im Zeitraum",
+          "all": "Alle Workspaces",
+          "workspace": "Workspace",
+          "orders": "Bestellungen",
+          "total": "Gesamt",
+          "empty": "In diesem Zeitraum gibt es noch keine bezahlten Bestellungen.",
+          "unknown": "Gelöschter Workspace"
+        },
+        "statusMix": {
+          "title": "Verteilung der Bestellstatus",
+          "hint": "Anzahl nach Lebenszyklusstatus"
+        }
+      },
+      "invoices": {
+        "title": "Rechnungen",
+        "eyebrow": "Admin · Abrechnung & Tarife · Rechnungen",
+        "titleFirst": "Alle",
+        "titleSecond": "Rechnungen",
+        "description": "Jede Bestellung als Abrechnungsdokument. Nach Status filtern, eine Rechnung öffnen und drucken, eine als bezahlt markieren, stornieren oder eine manuelle ausstellen.",
+        "window": "Zeitraum",
+        "windows": {
+          "all": "Gesamte Zeit",
+          "this_month": "Dieser Monat",
+          "last_month": "Letzter Monat",
+          "this_quarter": "Dieses Quartal",
+          "this_year": "Dieses Jahr"
+        },
+        "kpi": {
+          "total": "Rechnungen gesamt",
+          "allTime": "gesamt",
+          "paid": "Bezahlt",
+          "outstanding": "Offen",
+          "due": "{amount} fällig",
+          "overdue": "Überfällig",
+          "overdueHint": ">15 Tage verspätet",
+          "thisMonth": "Dieser Monat",
+          "mom": "MoM"
+        },
+        "statusFilter": "Nach Rechnungsstatus filtern",
+        "statuses": {
+          "all": "Alle",
+          "paid": "Bezahlt",
+          "outstanding": "Offen",
+          "overdue": "Überfällig",
+          "refunded": "Erstattet",
+          "void": "Storniert"
+        },
+        "badges": {
+          "paid": "bezahlt",
+          "outstanding": "offen",
+          "overdue": "überfällig",
+          "refunded": "erstattet",
+          "void": "storniert"
+        },
+        "search": "Nach Rechnungsnr., Workspace, Inhaber suchen…",
+        "noun": "Rechnungen",
+        "col": {
+          "number": "Rechnungsnr.",
+          "issued": "Ausstellungsdatum",
+          "due": "Fälligkeitsdatum",
+          "workspace": "Workspace",
+          "item": "Artikel",
+          "amount": "Betrag",
+          "status": "Status",
+          "view": "Ansehen",
+          "actions": "Aktionen"
+        },
+        "daysLate": "{days} T. verspätet",
+        "refunded": "erstattet",
+        "viewInvoice": "Rechnung ansehen",
+        "rowMenu": "Aktionen für {number}",
+        "empty": "Keine Rechnungen in diesem Zeitraum.",
+        "actions": {
+          "view": "Ansehen",
+          "markPaid": "Als bezahlt markieren",
+          "void": "Stornieren",
+          "delete": "Löschen"
+        },
+        "confirm": {
+          "markPaidTitle": "Diese Rechnung als bezahlt markieren?",
+          "markPaid": "Diese Rechnung als bezahlt markieren? Der Tarif, das Add-on oder das Guthaben, für das sie gekauft wurde, wird ebenfalls angewendet.",
+          "markPaidManual": "Diese manuelle Rechnung als bezahlt markieren? Nur die Zahlung wird erfasst.",
+          "voidTitle": "Diese Rechnung stornieren?",
+          "void": "Diese Rechnung stornieren? Sie bleibt im Verlauf erhalten, wird aber storniert.",
+          "deleteTitle": "Diese Rechnung löschen?",
+          "delete": "Diese Rechnung endgültig löschen? Dies kann nicht rückgängig gemacht werden."
+        },
+        "manual": {
+          "tag": "manuell",
+          "open": "Manuelle Rechnung",
+          "eyebrow": "Rechnungen",
+          "title": "Manuelle Rechnung",
+          "workspace": "Workspace",
+          "chooseWorkspace": "Workspace wählen",
+          "customerName": "Kundenname",
+          "customerNameHint": "Standardmäßig der Name des Workspace.",
+          "customerEmail": "Kunden-E-Mail",
+          "description": "Beschreibung",
+          "amount": "Betrag",
+          "currency": "Währung",
+          "status": "Status",
+          "statuses": {
+            "pending": "Ausstehend",
+            "paid": "Bezahlt"
+          },
+          "issuedAt": "Ausstellungsdatum",
+          "issuedAtHint": "Leer lassen für heute. Ein früheres Datum datiert die Rechnung zurück.",
+          "submit": "Rechnung erstellen",
+          "created": "Manuelle Rechnung {number} erstellt."
+        }
+      },
+      "invoice": {
+        "title": "Rechnung",
+        "print": "Drucken",
+        "downloadPdf": "PDF herunterladen",
+        "banner": {
+          "invoice": "Rechnungsnr. {number}",
+          "issued": "Ausgestellt am {date}",
+          "settled": "beglichen am {date}",
+          "paidInFull": "vollständig bezahlt"
+        },
+        "taxInvoice": "Steuerrechnung",
+        "invoiceWord": "RECHNUNG",
+        "taxIdLabel": "GSTIN/MwSt.-Nr.",
+        "number": "Rechnungsnr.",
+        "issueDate": "Ausstellungsdatum",
+        "paidDate": "Zahlungsdatum",
+        "status": "Status",
+        "billTo": "Rechnungsempfänger",
+        "payment": "Zahlung",
+        "method": "Methode",
+        "txn": "Transaktions-ID",
+        "captured": "Erfasst am",
+        "currency": "Währung",
+        "coupon": "Gutschein",
+        "description": "Beschreibung",
+        "qty": "Menge",
+        "unit": "Einheit",
+        "total": "Gesamt",
+        "discount": "Rabatt",
+        "code": "Code",
+        "subtotal": "Zwischensumme",
+        "amountPaid": "Bezahlter Betrag",
+        "balanceDue": "Offener Betrag",
+        "notes": "Hinweise",
+        "notesText": "Vielen Dank für Ihren Auftrag. Diese Rechnung deckt die oben genannte Bestellung ab. Geben Sie bei Rückfragen zur Abrechnung bitte die Rechnungsnummer an.",
+        "help": "Brauchen Sie Hilfe?",
+        "helpFallback": "Wenden Sie sich an den Plattform-Administrator.",
+        "refundNote": "Für Support oder Erstattungen schreiben Sie uns innerhalb von {days} Tagen nach der Zahlung.",
+        "regNo": "Reg.-Nr.",
+        "computerGenerated": "Dies ist eine maschinell erstellte Rechnung, keine Unterschrift erforderlich."
+      },
+      "settings": {
+        "title": "Abrechnungseinstellungen",
+        "eyebrow": "Admin · Abrechnung & Tarife · Einstellungen",
+        "titleFirst": "Abrechnung",
+        "titleSecond": "Einstellungen",
+        "description": "Alles, was die Preis- und Kassenseiten auslesen: Steuer, Erstattungsfrist, Jahresrabatt, automatische Verlängerung, Ihre Rechnungsidentität und die Länderliste. Änderungen gelten ab dem nächsten Seitenaufruf.",
+        "previewPlans": "Tarifseite als Vorschau anzeigen",
+        "readOnly": "Nur ein Super-Administrator kann die Abrechnungseinstellungen ändern.",
+        "conflict": "Jemand anderes hat diese Einstellungen geändert. Sie wurden neu geladen; prüfen Sie sie und speichern Sie erneut.",
+        "saved": "Abrechnungseinstellungen gespeichert.",
+        "save": "Einstellungen speichern",
+        "tax": {
+          "title": "Steuer",
+          "hint": "Wird auf jede Zwischensumme der Kasse angewendet. Deaktivieren Sie dies, wenn Ihre angezeigten Preise bereits Steuern enthalten.",
+          "rate": "Satz (%)",
+          "label": "Bezeichnung",
+          "labelPlaceholder": "GST / MwSt. / Umsatzsteuer"
+        },
+        "company": {
+          "title": "Unternehmen und Abrechnungsidentität",
+          "hint": "Ihre Angaben zur juristischen Person. Sie werden auf jeder Rechnung gedruckt: der Absenderblock „Rechnung von“, die Steuernummer und die Fußzeile.",
+          "name": "Rechtlicher Firmenname",
+          "taxId": "Steuernummer (GSTIN / MwSt.-Nr.)",
+          "address": "Eingetragene Adresse",
+          "regNo": "Registrierungs- / CIN-Nr.",
+          "email": "Abrechnungs-E-Mail",
+          "phone": "Support-Telefon"
+        },
+        "logo": {
+          "title": "Rechnungslogo",
+          "hint": "Wird oben auf jeder Rechnung und Quittung angezeigt. PNG, JPG, SVG oder WebP, bis zu {kb} KB. Leer lassen, um das Logo Ihrer Website zu verwenden.",
+          "none": "Kein Logo",
+          "choose": "Logo-Datei wählen",
+          "remove": "Aktuelles Logo entfernen (Website-Logo verwenden)",
+          "fallback": "Derzeit wird als Ersatz das Marken-Logo der Website verwendet.",
+          "tooBig": "Das Logo darf höchstens {kb} KB groß sein."
+        },
+        "refund": {
+          "title": "Geld-zurück-Garantie",
+          "hint": "Wenn aktiviert, zeigt die Kasse den Garantiezeitraum unter der Bestellübersicht an. Deaktivieren Sie dies, um ihn überall auszublenden.",
+          "days": "Zeitraum (Tage)"
+        },
+        "yearly": {
+          "title": "Umschalter für jährliche Abrechnung",
+          "hint": "Zeigt den Umschalter Monatlich / Jährlich auf der Preisseite an. Blenden Sie ihn vollständig aus, wenn jeder Tarif nur monatlich verfügbar ist.",
+          "discount": "Jahresrabatt (%)",
+          "formula": "Jahrespreis = monatlich × 12 × (1 − Rabatt %)."
+        },
+        "recurring": {
+          "title": "Automatisch verlängernde Abonnements",
+          "hint": "Wenn aktiviert, verlängern sich zeitlich begrenzte kostenpflichtige Tarife (monatlich oder jährlich) automatisch: Der Zahlungsanbieter belastet die Karte in jedem Zyklus, und die Gültigkeit des Tarifs verlängert sich selbstständig. Kostenlose, unbefristete und individuell angebotene Tarife wiederholen sich nie, und jeder Zahlungsanbieter ohne Unterstützung für wiederkehrende Zahlungen bleibt bei einer einmaligen Belastung. Deaktivieren Sie dies, damit jeder Kauf einmalig abgerechnet wird.",
+          "graceDays": "Karenzzeit (Tage)",
+          "graceHint": "Wenn eine automatische Verlängerungszahlung fehlschlägt, bleibt der Tarif oder das Add-on so viele Tage nach Ende seines Zeitraums aktiv, während der Zahlungsanbieter es erneut versucht. 0 deaktiviert die Karenzzeit.",
+          "gateways": "Zahlungsanbieter mit automatischer Verlängerung",
+          "note": "Braintree verlängert nur automatisch, wenn Sie in seinen Zugangsdaten eine Tarif-ID festlegen. Square rechnet jeden Zyklus ab, indem es dem Kunden eine Rechnung per E-Mail sendet (keine stille Kartenbelastung). Jede Verlängerung erfordert, dass die Webhook-URL des Zahlungsanbieters im Dashboard des Anbieters hinterlegt ist."
+        },
+        "countries": {
+          "title": "Länderliste der Kasse",
+          "hint": "Die Optionen im Länderauswahlfeld des Abrechnungsformulars der Kasse, die für die Rechnungsadresse verwendet werden. Ein Land pro Zeile; die Reihenfolge bleibt erhalten."
+        },
+        "links": {
+          "coupons": "Gutscheine",
+          "couponsTitle": "Rabattcodes verwalten",
+          "couponsHint": "Gutscheine hinzufügen, bearbeiten oder deaktivieren.",
+          "faqs": "FAQs",
+          "faqsTitle": "Preisseiten-FAQs bearbeiten",
+          "faqsHint": "Akkordeon-Einträge, die unter den Tarifen angezeigt werden.",
+          "configured": "{count} konfiguriert."
+        }
+      }
+    },
+    "offline": {
+      "eyebrow": {
+        "bank_transfer": "Kasse / Banküberweisung",
+        "offline": "Kasse / Offline"
+      },
+      "title": {
+        "bank_transfer": "Überweisung tätigen",
+        "offline": "Kontaktieren Sie uns, um diese Bestellung abzuschließen"
+      },
+      "intro": {
+        "bank_transfer": "Überweisen Sie <strong>{amount}</strong> auf das unten stehende Konto. Verwenden Sie <mono>{ref}</mono> als Verwendungszweck, damit wir die Zahlung Ihrer Bestellung zuordnen können.",
+        "offline": "Bestellung <mono>{ref}</mono> · <strong>{amount}</strong> · abgerechnet in {currency}"
+      },
+      "instructions": "Anleitung",
+      "referenceNote": "<strong>Verwendungszweck:</strong> Geben Sie <mono>{ref}</mono> bei der Überweisung an und reichen Sie danach unten Ihren Zahlungsnachweis ein. Ihr Tarif wird aktiviert, sobald unser Team die Zahlung geprüft hat.",
+      "proofTitle": "Zahlungsnachweis einreichen",
+      "proofHelp": "Bereits bezahlt? Laden Sie Ihren Beleg und die Referenz hoch, damit wir die Zahlung prüfen und Ihren Tarif aktivieren können.",
+      "later": {
+        "bank_transfer": "Zahlung gesendet – Nachweis später einreichen",
+        "offline": "Verstanden – Nachweis später einreichen"
+      }
+    },
+    "proof": {
+      "file": "Zahlungsscreenshot / Beleg",
+      "fileHint": "JPG, PNG, WEBP oder PDF · bis zu 4 MB",
+      "reference": "Referenz- / UTR-Nummer",
+      "referencePlaceholder": "z. B. UTR / Transaktionsnummer",
+      "note": "Notiz (optional)",
+      "notePlaceholder": "Alles, was wir zu dieser Zahlung wissen sollten",
+      "submit": "Zahlungsnachweis einreichen",
+      "sending": "Wird hochgeladen",
+      "chooseFile": "Wählen Sie einen Beleg zum Hochladen aus.",
+      "tooLarge": "Diese Datei ist größer als 4 MB.",
+      "rejected": "Dieser Dateityp ist nicht erlaubt. Verwenden Sie JPG, PNG, WEBP oder PDF.",
+      "closed": "Für diese Bestellung kann kein Zahlungsnachweis mehr eingereicht werden.",
+      "failed": "Datei konnte nicht hochgeladen werden. Versuchen Sie es erneut."
+    }
+  }
+}

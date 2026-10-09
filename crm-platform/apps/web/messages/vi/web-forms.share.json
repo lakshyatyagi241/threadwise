@@ -1,0 +1,278 @@
+{
+  "web-forms": {
+    "share": {
+      "readOnly": "Bạn có thể xem các cài đặt này nhưng không thể thay đổi.",
+      "clipboardBlocked": "Trình duyệt đã chặn sao chép. Hãy chọn văn bản và tự sao chép.",
+      "copied": "Đã sao chép",
+      "status": {
+        "archived": {
+          "title": "Biểu mẫu đã được lưu trữ",
+          "body": "Liên kết công khai và mọi nhúng đều đã đóng. Khôi phục biểu mẫu để dùng lại."
+        },
+        "draft": {
+          "title": "Xuất bản biểu mẫu để liên kết này hoạt động",
+          "body": "Chưa ai có thể mở liên kết hoặc mã nhúng cho đến khi biểu mẫu được xuất bản ít nhất một lần."
+        },
+        "paused": {
+          "title": "Biểu mẫu đã đóng",
+          "body": "Liên kết và mã nhúng sẽ hiển thị thông báo đã đóng và không nhận câu trả lời. Tiếp tục biểu mẫu để mở lại."
+        },
+        "live": {
+          "title": "Biểu mẫu đang hoạt động",
+          "body": "Người truy cập thấy phiên bản {version}. Thay đổi trong trình chỉnh sửa chỉ đến họ khi bạn xuất bản."
+        }
+      },
+      "hosted": {
+        "title": "Liên kết công khai",
+        "description": "Chia sẻ địa chỉ này ở bất kỳ đâu: tin nhắn, email, tiểu sử mạng xã hội. Liên kết sẽ mở biểu mẫu trên trang riêng.",
+        "label": "Địa chỉ biểu mẫu",
+        "copy": "Sao chép liên kết",
+        "copiedToast": "Đã sao chép liên kết.",
+        "open": "Mở",
+        "newTab": "(mở trong tab mới)"
+      },
+      "qr": {
+        "title": "Mã QR",
+        "description": "Dùng cho in ấn, áp phích và bao bì. Quét mã sẽ mở liên kết công khai.",
+        "alt": "Mã QR mở biểu mẫu",
+        "tracking": "Mã thêm utm_source=qr vào địa chỉ, nên các bài gửi từ đây sẽ hiển thị là QR trong phần ghi nhận nguồn.",
+        "downloadPng": "Tải PNG",
+        "downloadSvg": "Tải SVG",
+        "downloadFailed": "Không thể tải mã QR. Hãy thử lại."
+      },
+      "embed": {
+        "title": "Đặt biểu mẫu lên trang web của bạn",
+        "description": "Dán một trong các đoạn mã này vào vị trí bạn muốn biểu mẫu xuất hiện. Nhúng chỉ hoạt động trên các trang web được liệt kê trong Trang web được phép bên dưới.",
+        "copy": "Sao chép mã",
+        "copiedToast": "Đã sao chép {name}.",
+        "script": {
+          "title": "Nhúng bằng script",
+          "description": "Khuyên dùng. Biểu mẫu tự điều chỉnh kích thước để vừa trang và có thể chuyển hướng sau khi gửi."
+        },
+        "iframe": {
+          "title": "Nhúng bằng iframe",
+          "description": "Khung đơn giản cho các trình xây dựng không cho phép script. Bạn tự đặt chiều cao."
+        }
+      },
+      "domains": {
+        "title": "Trang web được phép",
+        "description": "Chỉ các trang web được liệt kê ở đây mới được nhúng biểu mẫu và gửi câu trả lời từ trình duyệt.",
+        "none": "Chưa có trang web nào được phép, nên biểu mẫu chỉ hoạt động qua liên kết công khai và không thể nhúng.",
+        "label": "Thêm trang web",
+        "hint": "Dùng đúng địa chỉ, ví dụ https://www.example.com. Được phép một cấp ký tự đại diện, ví dụ https://*.example.com. Http thường chỉ dùng cho localhost.",
+        "count": "{count} trên {max}",
+        "add": "Thêm",
+        "remove": "Xóa {value}",
+        "empty": "Chưa thêm trang web nào.",
+        "issues": {
+          "empty": "Hãy nhập địa chỉ trang web trước.",
+          "invalid": "Địa chỉ không hợp lệ. Dùng dạng https://example.com hoặc https://*.example.com, không có đường dẫn.",
+          "duplicate": "Trang web này đã có trong danh sách.",
+          "max": "Bạn chỉ có thể cho phép tối đa {max} trang web."
+        }
+      },
+      "rotate": {
+        "title": "Đổi khóa công khai",
+        "description": "Tạo khóa mới cho biểu mẫu này. Dùng khi liên kết hoặc mã nhúng bị lộ hoặc bạn muốn ngừng dùng chúng.",
+        "button": "Đổi khóa",
+        "readOnly": "Bạn không thể thay đổi biểu mẫu này",
+        "confirmTitle": "Đổi khóa công khai?",
+        "confirmMessage": "Liên kết cũ, mã QR và mã nhúng sẽ ngừng hoạt động ngay lập tức. Bạn sẽ phải chia sẻ liên kết mới và thay mã trên mọi trang web đang nhúng biểu mẫu.",
+        "confirmButton": "Đổi khóa",
+        "cancel": "Hủy",
+        "success": "Đã đổi khóa. Hãy sao chép liên kết và mã mới.",
+        "failed": "Không thể đổi khóa. Không có gì thay đổi. Hãy thử lại.",
+        "conflict": "Có người khác vừa thay đổi biểu mẫu này. Tải lại trang để xem phiên bản mới nhất, rồi thử lại."
+      }
+    },
+    "settings": {
+      "readOnly": "Bạn có thể xem các cài đặt này nhưng không thể thay đổi.",
+      "usersFailed": "Không tải được danh sách thành viên, nên hiện chưa thể chọn người phụ trách.",
+      "form": {
+        "title": "Biểu mẫu",
+        "description": "Tên hiển thị trong danh sách và thông tin cơ bản người truy cập thấy trên biểu mẫu.",
+        "name": "Tên biểu mẫu",
+        "nameHint": "Chỉ nhóm của bạn thấy tên này.",
+        "issues": {
+          "nameRequired": "Hãy đặt tên cho biểu mẫu.",
+          "submit_empty": "Nút cần có nhãn.",
+          "submit_too_long": "Giữ nhãn nút ở {max} ký tự trở xuống."
+        },
+        "language": "Ngôn ngữ biểu mẫu",
+        "languageHint": "Đặt ngôn ngữ của các văn bản có sẵn và chiều đọc (tiếng Ả Rập đọc từ phải sang trái).",
+        "languages": {
+          "en": "Tiếng Anh",
+          "ar": "Tiếng Ả Rập"
+        },
+        "submitLabel": "Nhãn nút gửi",
+        "submitLabelHint": "Từ 1 đến {max} ký tự."
+      },
+      "after": {
+        "title": "Sau khi gửi",
+        "description": "Điều người truy cập thấy sau khi câu trả lời được gửi.",
+        "mode": "Điều sẽ xảy ra",
+        "modes": {
+          "message": "Hiển thị thông báo",
+          "redirect": "Chuyển đến trang khác"
+        },
+        "modeHints": {
+          "message": "Biểu mẫu sẽ được thay bằng thông báo cảm ơn của bạn.",
+          "redirect": "Người truy cập được chuyển đến một trang của bạn, chẳng hạn trang cảm ơn hoặc trang đặt lịch."
+        },
+        "message": "Thông báo cảm ơn",
+        "messageHint": "Văn bản thuần. Cho phép các thẻ đơn giản: b, i, u, br, ul, ol, li và a. Tối đa {max} ký tự.",
+        "messageTooLong": "Thông báo dài hơn {max} ký tự.",
+        "redirect": "Địa chỉ chuyển hướng",
+        "redirectHint": "Phải bắt đầu bằng https://. Trang không dùng https sẽ không bao giờ được mở.",
+        "redirectIssues": {
+          "required": "Nhập địa chỉ để chuyển người truy cập đến.",
+          "https": "Dùng địa chỉ bắt đầu bằng https://."
+        },
+        "redirectKeepsMessage": "Thông báo cảm ơn được giữ trong biểu mẫu và sẽ không hiển thị khi đã đặt chuyển hướng."
+      },
+      "consent": {
+        "title": "Đồng ý",
+        "description": "Ô đánh dấu ghi lại nội dung người truy cập đã đồng ý, kèm nguyên văn, phiên bản và thời gian.",
+        "enabled": "Yêu cầu đồng ý",
+        "enabledHint": "Hiển thị dòng đồng ý phía trên nút gửi.",
+        "text": "Nội dung đồng ý",
+        "textHint": "Tối đa {max} ký tự. Người truy cập sẽ thấy đúng nội dung này.",
+        "textRequired": "Hãy viết nội dung đồng ý, hoặc tắt phần đồng ý.",
+        "textTooLong": "Nội dung dài hơn {max} ký tự.",
+        "version": "Phiên bản nội dung {version}",
+        "versionHintPublished": "Sau khi xuất bản biểu mẫu, thay đổi nội dung sẽ tự động tạo phiên bản mới. Các bài gửi trước đó giữ phiên bản mà người gửi đã đồng ý.",
+        "versionHintDraft": "Phiên bản giữ ở mức 1 cho đến khi biểu mẫu được xuất bản. Sau đó, thay đổi nội dung sẽ tạo phiên bản mới.",
+        "privacyUrl": "Liên kết chính sách quyền riêng tư",
+        "privacyUrlHint": "Không bắt buộc. Hiển thị cạnh nội dung đồng ý. Phải bắt đầu bằng https://.",
+        "privacyUrlHttps": "Dùng địa chỉ bắt đầu bằng https://.",
+        "required": "Phải đánh dấu để gửi",
+        "requiredHint": "Tắt tùy chọn này nếu việc đồng ý là không bắt buộc.",
+        "marketing": "Đăng ký nhận tiếp thị",
+        "marketingHint": "Đánh dấu ô sẽ ghi nhận sự đồng ý nhận tiếp thị cho liên hệ. Ô không đánh dấu sẽ không đăng ký ai cả."
+      },
+      "crm": {
+        "title": "Trong CRM",
+        "description": "Mỗi bài gửi sẽ làm gì với liên hệ được tạo hoặc cập nhật.",
+        "company": "Khớp công ty",
+        "companyOptions": {
+          "none": "Không khớp",
+          "email_domain": "Theo miền email",
+          "name_or_domain": "Theo tên hoặc miền"
+        },
+        "companyHints": {
+          "none": "Câu trả lời về công ty không được dùng để liên kết công ty.",
+          "email_domain": "Liên kết liên hệ với công ty sở hữu miền của địa chỉ email của họ.",
+          "name_or_domain": "Liên kết công ty theo tên hoặc miền website, và tạo mới nếu không khớp."
+        },
+        "lifecycle": "Giai đoạn vòng đời",
+        "lifecycleHint": "Được đặt cho liên hệ khi biểu mẫu được gửi.",
+        "lifecycleNone": "Không đặt",
+        "stages": {
+          "new": "Mới",
+          "contacted": "Đã liên hệ",
+          "qualified": "Đủ điều kiện",
+          "application_started": "Đã bắt đầu đăng ký",
+          "application_submitted": "Đã gửi đăng ký",
+          "interview_scheduled": "Đã lên lịch phỏng vấn",
+          "offer_received": "Đã nhận đề nghị",
+          "admission_confirmed": "Đã xác nhận nhập học",
+          "enrolled": "Đã ghi danh",
+          "lost": "Đã mất"
+        },
+        "tags": "Thẻ cần thêm",
+        "tagsHint": "Được thêm vào mọi liên hệ gửi biểu mẫu này. Tối đa {max} thẻ, mỗi thẻ từ 1 đến 60 ký tự.",
+        "tagsPlaceholder": "Ví dụ: hội thảo",
+        "tagsCount": "{count} trên {max}",
+        "tagAdd": "Thêm thẻ",
+        "tagRemove": "Xóa thẻ {value}",
+        "tagsNone": "Chưa có thẻ.",
+        "tagIssues": {
+          "empty": "Hãy nhập thẻ trước.",
+          "too_long": "Một thẻ có tối đa 60 ký tự.",
+          "duplicate": "Thẻ này đã có trong danh sách.",
+          "max": "Bạn chỉ có thể thêm tối đa {max} thẻ."
+        },
+        "owner": "Người phụ trách liên hệ mới",
+        "ownerHint": "Ai chịu trách nhiệm với liên hệ mà biểu mẫu này tạo ra.",
+        "ownerMode": "Quy tắc phụ trách",
+        "ownerModes": {
+          "unassigned": "Không có người phụ trách",
+          "fixed": "Một người",
+          "round_robin": "Luân phiên"
+        },
+        "ownerModeHints": {
+          "unassigned": "Liên hệ sẽ không có người phụ trách cho đến khi có người nhận.",
+          "fixed": "Mọi liên hệ đều chuyển đến cùng một người.",
+          "round_robin": "Liên hệ được chia lần lượt cho những người đã chọn. Những người không còn hoạt động sẽ bị bỏ qua."
+        },
+        "ownerFixed": "Người phụ trách",
+        "ownerRoundRobin": "Những người luân phiên",
+        "ownerRoundRobinHint": "Chọn ít nhất hai người.",
+        "chooseUser": "Chọn một người",
+        "unknownUser": "Người không còn sẵn sàng",
+        "pickUsers": "Chọn người",
+        "noUsers": "Không có người phù hợp",
+        "removeUser": "Xóa {name}",
+        "ownerIssues": {
+          "fixed_one": "Chỉ chọn đúng một người.",
+          "round_robin_two": "Luân phiên cần ít nhất hai người.",
+          "unassigned_none": "Quy tắc không phân công không thể có người. Hãy chọn quy tắc khác hoặc xóa danh sách.",
+          "too_many": "Bạn chỉ có thể chọn tối đa 50 người."
+        }
+      },
+      "notify": {
+        "title": "Thông báo",
+        "description": "Ai sẽ được báo khi có bài gửi mới.",
+        "owner": "Thông báo cho người phụ trách liên hệ",
+        "ownerHint": "Người phụ trách nhận thông báo cho mỗi bài gửi.",
+        "users": "Cũng thông báo cho những người này",
+        "usersHint": "Tối đa {max} thành viên nhóm cũng nhận thông báo.",
+        "emails": "Cũng gửi email đến các địa chỉ này",
+        "emailsHint": "Tối đa {max} địa chỉ nhận email cho mỗi bài gửi. Có thể thuộc về người ngoài nhóm của bạn.",
+        "emailPlaceholder": "ten@example.com",
+        "emailsCount": "{count} trên {max}",
+        "emailAdd": "Thêm email",
+        "emailRemove": "Xóa {value}",
+        "emailsNone": "Không có địa chỉ bổ sung.",
+        "emailIssues": {
+          "empty": "Hãy nhập địa chỉ email trước.",
+          "invalid": "Địa chỉ email này không hợp lệ.",
+          "duplicate": "Địa chỉ này đã có trong danh sách.",
+          "max": "Bạn chỉ có thể thêm tối đa {max} địa chỉ."
+        }
+      },
+      "protection": {
+        "title": "Bảo vệ",
+        "description": "Ngăn thư rác và quyết định thời gian lưu giữ câu trả lời.",
+        "honeypot": "Trường bẫy ẩn",
+        "honeypotHint": "Thêm một trường mà người dùng không bao giờ thấy. Bot sẽ điền vào đó và bài gửi của chúng sẽ bị đánh dấu là thư rác.",
+        "captcha": "CAPTCHA",
+        "captchaOptions": {
+          "inherit": "Theo cài đặt nền tảng",
+          "on": "Luôn bật",
+          "off": "Tắt"
+        },
+        "captchaHints": {
+          "inherit": "Dùng cài đặt mà không gian làm việc của bạn đã đặt cho biểu mẫu công khai.",
+          "on": "Người truy cập phải vượt qua kiểm tra trước khi có thể gửi.",
+          "off": "Không kiểm tra. Dựa vào trường bẫy ẩn và giới hạn tần suất."
+        },
+        "retention": "Giữ câu trả lời trong (ngày)",
+        "retentionHint": "Sau số ngày này, câu trả lời sẽ bị xóa. Điều này hỗ trợ các quy định bảo vệ dữ liệu như GDPR. Từ 30 đến 3650.",
+        "range": "Nhập một số nguyên từ {min} đến {max}.",
+        "keepForever": "Giữ cho đến khi tôi xóa",
+        "keepForeverHint": "Câu trả lời được giữ cho đến khi có người xóa. Chỉ chọn tùy chọn này nếu bạn có lý do pháp lý để giữ chúng.",
+        "advanced": "Nâng cao: giới hạn tần suất",
+        "advancedHint": "Giới hạn làm chậm các đợt gửi dồn dập. Mặc định phù hợp với hầu hết biểu mẫu.",
+        "rate": {
+          "perIpPerMinute": "Theo địa chỉ, mỗi phút",
+          "perIpPerMinuteHint": "Bài gửi từ một địa chỉ internet.",
+          "perFormPerMinute": "Theo biểu mẫu, mỗi phút",
+          "perFormPerMinuteHint": "Bài gửi đến biểu mẫu này từ bất kỳ đâu.",
+          "perContactPerHour": "Theo liên hệ, mỗi giờ",
+          "perContactPerHourHint": "Bài gửi có cùng email hoặc số điện thoại."
+        }
+      }
+    }
+  }
+}

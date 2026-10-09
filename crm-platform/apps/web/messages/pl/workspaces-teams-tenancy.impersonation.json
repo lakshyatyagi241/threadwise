@@ -1,0 +1,23 @@
+{
+  "workspaces-teams-tenancy": {
+    "impersonation": {
+      "label": "Podszywanie się",
+      "viewing": "Przeglądasz {workspace} jako {owner}",
+      "reason": "Powód: {reason}",
+      "readOnly": "Tylko do odczytu",
+      "timeLeft": "{minutes, plural, one {Pozostała # minuta} few {Pozostały # minuty} many {Pozostało # minut} other {Pozostało # minuty}}",
+      "endsSoon": "Została mniej niż minuta",
+      "stop": "Zakończ podszywanie się",
+      "stopping": "Zatrzymywanie",
+      "stopFailed": "Nie udało się zatrzymać sesji. Spróbuj ponownie.",
+      "readOnlyRefused": "Ta sesja jest tylko do odczytu, więc zmiany są niedozwolone.",
+      "forbiddenRefused": "Nie jest to dostępne podczas przeglądania przestrzeni roboczej jako jej właściciel.",
+      "ended": {
+        "title": "Ta sesja podszywania się się zakończyła",
+        "expired": "Link został już użyty lub wygasł. Zacznij ponownie z konsoli.",
+        "body": "Nic więcej nie można zrobić w przestrzeni roboczej stąd. Wróć do konsoli, aby rozpocząć nową sesję.",
+        "back": "Wróć do konsoli"
+      }
+    }
+  }
+}

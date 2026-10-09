@@ -1,0 +1,157 @@
+{
+  "whatsapp-cloud-api-waba": {
+    "nav": {
+      "groups": "Meta Grupları"
+    },
+    "errors": {
+      "WABA_GROUPS_NOT_ELIGIBLE": "Bu numara Gruplar için uygun değil. WhatsApp Gruplar'ı yalnızca Resmi İşletme Hesaplarına açar.",
+      "WABA_GROUPS_PROVIDER_UNSUPPORTED": "Gruplar yalnızca doğrudan Meta'ya bağlı numaralarda kullanılabilir. Bu numaraya başka bir sağlayıcı üzerinden ulaşılıyor.",
+      "WABA_GROUP_NOT_FOUND": "Grup bulunamadı.",
+      "WABA_GROUP_SUSPENDED": "WhatsApp bu grubu politika ihlali nedeniyle askıya aldı.",
+      "WABA_GROUP_LIMIT_REACHED": "Gruplar için bir WhatsApp sınırına ulaşıldı. Bir grubu kaldırın veya WhatsApp'tan daha fazlasını isteyin.",
+      "WABA_GROUP_RATE_LIMITED": "Bu numaradan çok fazla grup işlemi yapıldı. Bir süre bekleyip yeniden deneyin.",
+      "PLAN_FEATURE_LOCKED": "Planınız WhatsApp gruplarını içermiyor. Kilidini açmak için planınızı yükseltin.",
+      "VALIDATION_FAILED": "Alanları kontrol edip yeniden deneyin."
+    },
+    "groups": {
+      "pageTitle": "WhatsApp Grupları",
+      "eyebrow": "WhatsApp / Gruplar",
+      "headingA": "Grup",
+      "headingB": "mesajlaşma",
+      "intro": "İşletme numaranızdan WhatsApp grupları oluşturun, davet bağlantısını paylaşın ve katılma isteklerini yönetin. Konuşmalar diğer sohbetler gibi gelen kutunuzda görünür.",
+      "loading": "Gruplar yükleniyor…",
+      "loadFailed": "Gruplar yüklenemedi.",
+      "retry": "Yeniden dene",
+      "numbersDenied": "Grupları görebiliyorsunuz ama bu grupların ait olduğu WhatsApp numaralarının listesini göremiyorsunuz. WhatsApp numaralarına erişim için bir yöneticiden izin isteyin.",
+      "rail": {
+        "title": "Gruplar",
+        "noNumber": "WhatsApp İşletme numarası yok",
+        "eligible": "Uygun",
+        "notEligible": "Uygun değil",
+        "numberLabel": "Numara",
+        "howTitle": "Gruplar nasıl çalışır",
+        "howInvite": "Gruplar yalnızca davetle katılınabilir. Grubu siz oluşturursunuz, WhatsApp size bir davet bağlantısı verir ve bunu paylaşırsınız; insanlar katılmayı kendileri seçer. Birini doğrudan ekleyemezsiniz.",
+        "howCost": "Gönderdiğiniz her mesaj, mesajı alan kişi başına bir kez ücretlendirilir. 100 üyeye gönderilen bir mesaj 100 gönderim maliyeti doğurur."
+      },
+      "state": {
+        "noNumber": {
+          "title": "Bağlı bir WhatsApp İşletme numarası yok",
+          "message": "Gruplar, resmi WhatsApp İşletme Platformu üzerinden bağlanmış bir WhatsApp numarası gerektirir.",
+          "hint": "Ayarlar, Kanallar, WhatsApp altından birini bağlayın.",
+          "connect": "WhatsApp numaralarını aç"
+        },
+        "notEligible": {
+          "title": "Bu numara henüz grup kullanamıyor",
+          "message": "WhatsApp, Gruplar özelliğini yalnızca Resmi İşletme Hesaplarına açar: yeşil rozetli doğrulanmış kademe. Numaranız bağlı ve normal sohbetler için çalışıyor; yalnızca grup erişimi verilmedi.",
+          "hint": "WhatsApp Manager'da Resmi İşletme Hesabı durumu için başvurun, ardından bu sayfayı yenileyin.",
+          "reload": "Yeniden kontrol et",
+          "checking": "Kontrol ediliyor…"
+        },
+        "providerUnsupported": {
+          "title": "Gruplar bu rotada kullanılamıyor",
+          "message": "Bu numaraya başka bir sağlayıcı üzerinden ulaşılıyor, doğrudan Meta üzerinden değil. Gruplar yalnızca doğrudan Meta'ya bağlı numaralar için ayarlandı.",
+          "hint": "Numarayı doğrudan Meta ile bağlayın veya sağlayıcıya Grupları destekleyip desteklemediğini sorun."
+        },
+        "missingCredentials": {
+          "title": "Bu numaranın yeniden bağlanması gerekiyor",
+          "message": "Bu numara için kayıtlı bir erişim belirteci yok, bu yüzden WhatsApp'a gruplar hakkında sorulamıyor.",
+          "hint": "Numaranın sağlık sayfasındaki belirteci değiştirin."
+        },
+        "checkFailed": "WhatsApp'a bu numaranın şu anda grupları kullanıp kullanamayacağı sorulamadı. Aşağıdakilerin tümü kullanılabiliyorsa çalışır; bir işlem başarısız olursa birazdan yeniden deneyin."
+      },
+      "kpi": {
+        "groups": "Gruplar",
+        "groupsSub": "bu numarada",
+        "members": "Üyeler",
+        "membersSub": "tüm gruplarda",
+        "joinRequests": "Katılma istekleri",
+        "joinRequestsSub": "sizi bekliyor",
+        "suspended": "Askıya alındı",
+        "suspendedSub": "WhatsApp tarafından engellendi"
+      },
+      "create": {
+        "title": "Grup oluştur",
+        "name": "Grup adı",
+        "nameHint": "Üyelerin sohbetin üstünde gördüğü ad. En fazla 128 karakter.",
+        "who": "Kimler katılabilir",
+        "whoAuto": "Bağlantıya sahip herkes hemen katılır",
+        "whoApproval": "Her kişiyi önce siz onaylarsınız",
+        "whoHint": "Onay, kimse içeri alınmadan önce incelemeniz için bir kuyruk sağlar.",
+        "description": "Açıklama",
+        "descriptionHint": "İsteğe bağlı. Grup bilgi ekranında gösterilir.",
+        "submit": "Grubu oluştur",
+        "submitting": "Oluşturuluyor…"
+      },
+      "list": {
+        "title": "Gruplarınız",
+        "empty": "Henüz grup yok. Başlamak için yukarıda bir tane oluşturun.",
+        "untitled": "Adsız grup",
+        "members": "{count, plural, =0 {Üye yok} other {# üye}}",
+        "approvalRequired": "onay gerekli",
+        "suspended": "WhatsApp bu grubu askıya aldı. Geri yüklemedikçe bu gruba mesaj gönderemezsiniz.",
+        "creationFailed": "WhatsApp bu grubu oluşturamadı: {message}",
+        "refresh": "Yenile",
+        "refreshing": "Yenileniyor…",
+        "delete": "Sil",
+        "edit": "Düzenle",
+        "membersButton": "Üyeler",
+        "loadMore": "Daha fazla grup göster",
+        "loadingMore": "Yükleniyor…"
+      },
+      "link": {
+        "awaiting": "Davet bağlantısı WhatsApp tarafından oluşturuluyor…",
+        "label": "Davet bağlantısı",
+        "copy": "Kopyala",
+        "copied": "Kopyalandı",
+        "newLink": "Yeni bağlantı"
+      },
+      "joinRequests": {
+        "title": "Katılmak için bekliyor",
+        "approve": "Onayla",
+        "reject": "Reddet",
+        "working": "…",
+        "hidden": "{count, plural, other {# kişi katılmak için bekliyor.}} Kimlerin beklediğini görmek için grupları yönetme iznine ihtiyacınız var."
+      },
+      "confirm": {
+        "deleteTitle": "Bu grup silinsin mi?",
+        "deleteMessage": "Bu grup silinsin ve herkes gruptan çıkarılsın mı? Silinen bir grup geri getirilemez. Sohbet geçmişi gelen kutunuzda kalır.",
+        "deleteConfirm": "Grubu sil",
+        "linkTitle": "Yeni bir bağlantı oluşturulsun mu?",
+        "linkMessage": "Yeni bir bağlantı oluşturulsun mu? Eski bağlantıyı daha önce gönderdiğiniz herkes onu kullanamayacak.",
+        "linkConfirm": "Yeni bağlantı oluştur",
+        "cancel": "Vazgeç"
+      },
+      "edit": {
+        "title": "Grubu düzenle",
+        "subject": "Grup adı",
+        "description": "Açıklama",
+        "hint": "WhatsApp'a gönderildi. Meta onaylayınca grup burada yenilenir.",
+        "save": "WhatsApp'a gönder",
+        "saving": "Gönderiliyor…"
+      },
+      "members": {
+        "title": "{name} üyeleri",
+        "hint": "Bu pencereyi açtığınızda WhatsApp'tan okunur; burada hiçbir şey saklanmaz. Seferde en fazla {max} kişiyi çıkarabilirsiniz.",
+        "loading": "Üyeler WhatsApp'tan okunuyor…",
+        "empty": "Henüz üye yok.",
+        "selected": "{count} seçildi",
+        "remove": "Seçilenleri kaldır",
+        "removing": "Kaldırılıyor…",
+        "limit": "Seferde en fazla {max} kişiyi kaldırabilirsiniz.",
+        "removeConfirm": "{count, plural, other {# kişi}} gruptan çıkarılsın mı? Eski bağlantıyla yeniden katılamayacaklar."
+      },
+      "notice": {
+        "created": "Grup oluşturuldu. Meta verdiği anda davet bağlantısı burada görünür.",
+        "refreshed": "Grup yenilendi.",
+        "linkReset": "Yeni davet bağlantısı oluşturuldu. Şimdiye kadar paylaşılan tüm bağlantılar çalışmayı durdurdu.",
+        "updateSent": "WhatsApp'a güncelleme gönderildi. Meta onaylayınca grup burada yenilenir.",
+        "deleted": "Grup silindi ve tüm katılımcılar çıkarıldı.",
+        "removed": "{count, plural, other {# kişi gruptan çıkarıldı.}}",
+        "approved": "{count, plural, other {# kişi onaylandı.}}",
+        "rejected": "{count, plural, other {# istek reddedildi.}}",
+        "copyFailed": "Bağlantı kopyalanamadı. Seçip elle kopyalayın."
+      },
+      "removeNumberWarning": "Bu numaranın burada {count, plural, other {# grup kaydı}} var. Numarayı kaldırmak bunları bu çalışma alanından siler. Gruplar WhatsApp'ta kalır ve sohbetleri gelen kutunuzda kalır."
+    }
+  }
+}

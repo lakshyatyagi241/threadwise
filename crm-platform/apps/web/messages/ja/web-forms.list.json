@@ -1,0 +1,132 @@
+{
+  "web-forms": {
+    "list": {
+      "title": "フォーム",
+      "subtitle": "フォームを作成してサイトに掲載するか、リンクで共有すると、すべての回答が連絡先として CRM に登録されます。",
+      "templates": "テンプレート",
+      "newForm": "新しいフォーム",
+      "statsLabel": "表示中のフォームの合計",
+      "stats": {
+        "forms": "フォーム",
+        "published": "公開済み",
+        "submissions": "送信",
+        "needsReview": "要確認"
+      },
+      "views": {
+        "label": "表示",
+        "all": "すべて",
+        "published": "公開済み",
+        "draft": "下書き",
+        "paused": "一時停止中",
+        "archived": "アーカイブ済み"
+      },
+      "search": "フォームを検索",
+      "loading": "フォームを読み込んでいます",
+      "loadFailed": "フォームを読み込めませんでした。",
+      "retry": "再試行",
+      "empty": {
+        "title": "フォームはまだありません",
+        "message": "テンプレートまたは空のフォームから始めて公開し、リンクを共有するか、埋め込みコードをサイトに貼り付けてください。",
+        "fromTemplate": "テンプレートから始める",
+        "blank": "空のフォーム"
+      },
+      "noMatch": {
+        "title": "一致するフォームはありません",
+        "message": "別の検索語または表示を試してください。",
+        "clear": "フィルターを解除"
+      },
+      "col": {
+        "name": "フォーム",
+        "status": "ステータス",
+        "submissions": "送信",
+        "views": "表示回数",
+        "conversion": "コンバージョン",
+        "last": "最後の送信"
+      },
+      "unpublished": "未公開の変更",
+      "version": "バージョン {n}",
+      "needsReview": "{count, plural, other {# 件が要確認}}",
+      "status": {
+        "draft": "下書き",
+        "published": "公開済み",
+        "paused": "一時停止中",
+        "archived": "アーカイブ済み"
+      },
+      "noRate": "-",
+      "never": "なし",
+      "actionsFor": "{name} の操作",
+      "action": {
+        "edit": "編集",
+        "submissions": "送信",
+        "copyLink": "リンクをコピー",
+        "embed": "サイトに埋め込む",
+        "duplicate": "複製",
+        "pause": "一時停止",
+        "resume": "再開",
+        "archive": "アーカイブ",
+        "delete": "削除",
+        "restore": "復元"
+      },
+      "loadMore": "さらに読み込む",
+      "copied": "リンクをコピーしました",
+      "copyBlocked": "このブラウザではコピーがブロックされています。リンクは {url} です",
+      "paused": "フォームを一時停止しました。訪問者には受付終了と表示されます。",
+      "resumed": "フォームを再開しました",
+      "archived": "フォームをアーカイブしました",
+      "deleted": "フォームを削除しました",
+      "cancel": "キャンセル",
+      "archive": {
+        "title": "このフォームをアーカイブしますか?",
+        "message": "「{name}」の公開リンクと埋め込みは使えなくなります。送信内容は保持され、引き続き閲覧できます。",
+        "confirm": "アーカイブ"
+      },
+      "delete": {
+        "title": "このフォームを削除しますか?",
+        "message": "「{name}」は完全に削除されます。このフォームで作成された連絡先は CRM に残ります。",
+        "confirm": "削除"
+      },
+      "restored": "フォームを復元しました"
+    },
+    "newForm": {
+      "eyebrow": "フォーム",
+      "title": "新しいフォーム",
+      "close": "閉じる",
+      "cancel": "キャンセル",
+      "create": "フォームを作成",
+      "startFrom": "開始方法",
+      "mode": {
+        "template": "テンプレート",
+        "blank": "空白"
+      },
+      "loadingTemplates": "テンプレートを読み込んでいます",
+      "templatesFailed": "テンプレートを読み込めませんでした。空のフォームからは引き続き開始できます。",
+      "templates": "テンプレート",
+      "fieldCount": "{count, plural, other {# 個のフィールド}}",
+      "pickTemplate": "続けるにはテンプレートを選択してください。",
+      "name": "フォーム名",
+      "nameHint": "この名前はチームのメンバーだけが見られます。",
+      "nameRequired": "フォームの名前を入力してください。"
+    },
+    "templates": {
+      "breadcrumb": "パンくずリスト",
+      "back": "フォーム一覧に戻る",
+      "title": "フォームのテンプレート",
+      "subtitle": "既製のフォームから始めて、自由に変更できます。",
+      "blank": "空のフォーム",
+      "loading": "テンプレートを読み込んでいます",
+      "loadFailed": "テンプレートを読み込めませんでした。",
+      "retry": "再試行",
+      "empty": "利用できるテンプレートはありません。",
+      "category": {
+        "lead": "リード獲得",
+        "contact": "連絡先",
+        "event": "イベント",
+        "order": "注文",
+        "survey": "アンケート"
+      },
+      "fields": "このテンプレートのフィールド",
+      "more": "他 {count} 件",
+      "use": "このテンプレートを使用"
+    }
+  }
+}

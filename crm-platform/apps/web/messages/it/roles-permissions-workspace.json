@@ -1,0 +1,246 @@
+{
+  "roles-permissions-workspace": {
+    "nav": {
+      "team": "Membri del team",
+      "roles": "Ruoli"
+    },
+    "common": {
+      "settings": "Impostazioni",
+      "breadcrumb": "Percorso di navigazione",
+      "loading": "Caricamento…",
+      "retry": "Riprova",
+      "requestId": "ID richiesta",
+      "cancel": "Annulla",
+      "close": "Chiudi",
+      "dismiss": "Ignora",
+      "required": "Questo campo è obbligatorio.",
+      "showPassword": "Mostra password",
+      "hidePassword": "Nascondi password",
+      "noAccess": {
+        "title": "Non hai accesso",
+        "body": "I tuoi ruoli non includono il permesso necessario per questa schermata. Chiedi a un Owner o a un Admin del workspace di concederlo.",
+        "bodyWithKey": "Questa schermata richiede il permesso {permission}. Chiedi a un Owner o a un Admin del workspace di aggiungerlo a uno dei tuoi ruoli.",
+        "back": "Torna al workspace"
+      }
+    },
+    "blurb": {
+      "owner": "Owner: accesso completo, inclusa la fatturazione.",
+      "admin": "Admin: accesso completo al workspace, senza fatturazione.",
+      "manager": "Manager: vede tutto, può assegnare e risolvere.",
+      "agent": "Agente: gestisce le conversazioni assegnate.",
+      "viewer": "Viewer: sola lettura."
+    },
+    "errors": {
+      "unexpected": "Si è verificato un errore lato nostro. Riprova; se succede ancora, indica l’ID richiesta.",
+      "request": "Impossibile completare la richiesta.",
+      "validation": "Controlla il modulo e riprova.",
+      "passwordPolicy": "Questa password non rispetta la policy delle password del workspace:",
+      "validationField": "Controlla questo campo e riprova.",
+      "forbidden": "Non hai i permessi per eseguire questa operazione.",
+      "conflict": "Qualcun altro ha modificato questo elemento mentre lavoravi. Ricarica per vedere la sua versione, poi riapplica le tue modifiche.",
+      "grantRole": "Non puoi farlo: quel ruolo (o il ruolo attuale del membro) è superiore al tuo. Solo un Owner può assegnare, modificare o disattivare Owner e Admin.",
+      "grantPermission": "Non puoi concedere {permission}: non lo possiedi tu stesso.",
+      "selfRoleChange": "Non puoi cambiare il tuo ruolo.",
+      "lastOwner": "Il workspace deve avere almeno un Owner. Nomina prima un altro Owner.",
+      "selfDeactivate": "Non puoi disattivare il tuo account.",
+      "presetRole": "Owner, Admin, Manager, Agent e Viewer sono ruoli predefiniti: non possono essere rinominati né eliminati.",
+      "roleInUse": "Alcuni membri hanno ancora questo ruolo. Spostali in un altro ruolo, poi eliminalo.",
+      "nameTaken": "Esiste già un ruolo con questo nome.",
+      "nameRequired": "Il nome del ruolo è obbligatorio.",
+      "nameTooLong": "Il nome del ruolo può contenere al massimo {max} caratteri.",
+      "notFound": "Questo elemento non esiste più. Potrebbe essere stato eliminato."
+    },
+    "team": {
+      "crumb": "Membri del team",
+      "eyebrow": "Impostazioni · Team",
+      "titleLead": "Team",
+      "titleAccent": "membri",
+      "description": "Aggiungi persone a questo workspace, scegli cosa può fare ciascuna e disattiva l’accesso quando qualcuno se ne va.",
+      "addMember": "Aggiungi membro",
+      "reload": "Ricarica",
+      "you": "Tu",
+      "noRole": "Nessun ruolo",
+      "changeRoleAction": "Cambia ruolo",
+      "reactivate": "Riattiva",
+      "selfRoleHint": "Non puoi cambiare il tuo ruolo.",
+      "roleLockedHint": "Non puoi cambiare il ruolo di questo membro: è superiore al tuo oppure non puoi assegnare ruoli.",
+      "selfDeactivateHint": "Non puoi disattivare il tuo account.",
+      "rolesUnavailable": "Non è stato possibile caricare i ruoli, quindi aggiungere membri e cambiare ruoli non è disponibile. I chip dei ruoli sono costruiti dai membri mostrati.",
+      "footer": "Mostrati {shown} di {total}",
+      "status": {
+        "active": "Attivo",
+        "inactive": "Inattivo"
+      },
+      "filter": {
+        "label": "Filtra i membri per ruolo",
+        "all": "Tutti",
+        "preset": {
+          "owner": "Owner",
+          "admin": "Admin",
+          "manager": "Manager",
+          "agent": "Agenti",
+          "viewer": "Viewer"
+        }
+      },
+      "search": {
+        "label": "Cerca membri",
+        "placeholder": "Cerca nome o email…"
+      },
+      "table": {
+        "caption": "Membri del workspace",
+        "member": "Membro",
+        "roles": "Ruoli",
+        "status": "Stato",
+        "actions": "Azioni"
+      },
+      "empty": {
+        "none": "Non ci sono ancora membri.",
+        "noMatch": "Nessun membro corrisponde a questo filtro.",
+        "clear": "Azzera filtri"
+      },
+      "toasts": {
+        "added": "{name} è stato aggiunto al workspace.",
+        "rolesUpdated": "Ruoli aggiornati per {name}.",
+        "deactivated": "{name} è stato disattivato.",
+        "reactivated": "{name} è stato riattivato."
+      },
+      "deactivate": {
+        "action": "Disattiva",
+        "title": "Disattiva membro",
+        "message": "{name} non potrà più accedere. Puoi riattivarlo in qualsiasi momento.",
+        "confirm": "Disattiva",
+        "cancel": "Annulla"
+      },
+      "add": {
+        "eyebrow": "Team",
+        "title": "Aggiungi membro",
+        "fullName": "Nome completo",
+        "email": "Email",
+        "emailInvalid": "Inserisci un indirizzo email valido.",
+        "password": "Password",
+        "passwordHint": "Almeno 8 caratteri. Condividila con la persona: potrà cambiarla dopo l’accesso.",
+        "passwordGenerated": "Password generata: mostrala con il pulsante occhio e copiala prima di salvare.",
+        "passwordShort": "La password deve contenere almeno 8 caratteri.",
+        "generate": "Genera",
+        "role": "Ruolo",
+        "submit": "Aggiungi membro"
+      },
+      "changeRole": {
+        "title": "Cambia ruoli di {name}",
+        "legend": "Ruoli",
+        "keptRole": "{name} resta: non puoi assegnarlo né rimuoverlo.",
+        "atLeastOne": "Scegli almeno un ruolo.",
+        "save": "Salva ruoli",
+        "reload": "Ricarica"
+      }
+    },
+    "list": {
+      "crumb": "Ruoli",
+      "eyebrow": "Impostazioni · Team · Ruoli",
+      "titleLead": "Ruoli e",
+      "titleAccent": "permessi",
+      "description": "I ruoli decidono cosa possono fare i membri. Scegli un ruolo predefinito o crea un ruolo personalizzato dalla matrice dei permessi.",
+      "teamLink": "Membri del team",
+      "addRole": "Aggiungi ruolo",
+      "empty": "Non ci sono ancora ruoli.",
+      "preset": "Predefinito",
+      "custom": "Personalizzato",
+      "locked": "Bloccato",
+      "footer": "{count} ruoli",
+      "membersLink": "{count} membri hanno {name}",
+      "table": {
+        "caption": "Ruoli del workspace",
+        "name": "Ruolo",
+        "type": "Tipo",
+        "members": "Membri",
+        "permissions": "Permessi",
+        "lastEdited": "Ultima modifica",
+        "actions": "Azioni"
+      },
+      "row": {
+        "menu": "Azioni per {name}",
+        "edit": "Modifica ruolo",
+        "view": "Visualizza ruolo",
+        "delete": "Elimina ruolo"
+      },
+      "toasts": {
+        "deleted": "Ruolo «{name}» eliminato."
+      }
+    },
+    "editor": {
+      "crumbRoles": "Ruoli",
+      "crumbNew": "Nuovo ruolo",
+      "eyebrowNew": "Impostazioni · Ruoli · Nuovo",
+      "eyebrowEdit": "Impostazioni · Ruoli · Modifica",
+      "titleLead": "Crea",
+      "titleAccent": "ruolo",
+      "description": "Dai un nome al ruolo e scegli cosa può fare.",
+      "summary": "{count, plural, =0 {Nessun membro ha questo ruolo.} one {1 membro ha questo ruolo.} other {# membri hanno questo ruolo.}}",
+      "notFoundTitle": "Ruolo non trovato",
+      "notFoundBody": "Questo ruolo non esiste più. Potrebbe essere stato eliminato.",
+      "backToRoles": "Torna ai ruoli",
+      "back": "Indietro",
+      "save": "Salva modifiche",
+      "create": "Crea ruolo",
+      "saving": "Salvataggio…",
+      "reload": "Ricarica",
+      "discard": "Ci sono modifiche non salvate. Uscire senza salvare?",
+      "lockedNotice": "Il ruolo Owner ha tutti i permessi e non può essere modificato né eliminato",
+      "adminNotice": "Solo un Owner può modificare i permessi del ruolo Admin.",
+      "readOnlyNotice": "Non puoi modificare i permessi di questo ruolo.",
+      "details": "Dettagli del ruolo",
+      "name": "Nome del ruolo",
+      "namePlaceholder": "es. Responsabile supporto",
+      "presetNameHint": "I ruoli predefiniti mantengono il loro nome.",
+      "template": "Parti da un ruolo",
+      "templateHint": "Copia i permessi di un altro ruolo nella matrice qui sotto.",
+      "templateBlank": "Vuoto (nessun permesso)",
+      "templateOption": "{name} ({count} permessi)",
+      "danger": {
+        "title": "Elimina questo ruolo",
+        "hint": "Nessuno ha questo ruolo, quindi può essere eliminato.",
+        "inUse": "{count, plural, one {1 membro ha ancora questo ruolo.} other {# membri hanno ancora questo ruolo.}} Spostali prima in un altro ruolo.",
+        "action": "Elimina ruolo"
+      },
+      "toasts": {
+        "created": "Ruolo «{name}» creato.",
+        "updated": "Ruolo «{name}» aggiornato.",
+        "deleted": "Ruolo «{name}» eliminato."
+      }
+    },
+    "matrix": {
+      "title": "Permessi",
+      "counter": "{count} / {total} selezionati",
+      "deniedCount": "{count} negati",
+      "selectAll": "Seleziona tutto",
+      "selectAllCategory": "Seleziona tutto",
+      "selectAllOf": "Seleziona tutto in {category}",
+      "search": "Cerca permessi…",
+      "searchLabel": "Cerca permessi",
+      "denyHint": "Il diniego prevale sull’autorizzazione: un permesso negato viene rifiutato anche se un altro ruolo del membro lo consente.",
+      "emptyCatalogue": "Nessun permesso disponibile.",
+      "noMatch": "Nessun permesso corrisponde a «{query}».",
+      "allow": "Consenti",
+      "deny": "Nega",
+      "effectLabel": "Consenti o nega: {label}",
+      "scopeLabel": "Ambito dei record: {label}",
+      "needsPlan": "Richiede il piano {feature}",
+      "needsApp": "Richiede l’app {app} installata",
+      "lockedHint": "Questo permesso non è ancora disponibile per questo workspace. Si sblocca quando la funzione del piano è attiva o l’app è installata.",
+      "scope": {
+        "all": "Tutti i record",
+        "team": "Record del team",
+        "own": "Record propri"
+      }
+    },
+    "delete": {
+      "title": "Elimina ruolo",
+      "message": "Eliminare il ruolo «{name}»? L’operazione non può essere annullata.",
+      "confirm": "Elimina ruolo",
+      "cancel": "Annulla",
+      "inUseTitle": "«{name}» è ancora in uso",
+      "inUse": "{count, plural, =0 {Alcuni membri hanno ancora questo ruolo.} one {1 membro ha ancora questo ruolo.} other {# membri hanno ancora questo ruolo.}} Spostali prima in un altro ruolo, poi eliminalo.",
+      "viewMembers": "Visualizza i membri con questo ruolo"
+    }
+  }
+}

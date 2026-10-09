@@ -1,0 +1,353 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "SO_NOT_DRAFT": "只能更改草稿订单。已确认的订单已锁定：如需更改其明细或价格，请取消后重新创建。",
+        "SO_NOT_CONFIRMED": "请先确认订单。只有已确认的订单才能开票或记录交付。",
+        "SO_CANCELLED": "此订单已取消，无法再进行任何操作。",
+        "SO_QUOTE_NOT_ACCEPTED": "只有已接受的报价或估价才能转为销售订单。请先将其标记为已接受。",
+        "SO_QUOTE_TAKEN": "此报价或估价已有销售订单。",
+        "SO_QUANTITY_EXCEEDS": "某行的数量超过剩余可用数量。请降低数量后重试。",
+        "SO_NOTHING_TO_INVOICE": "此处已无待办事项：所有内容均已开票或交付。",
+        "SO_HAS_INVOICES": "由此订单生成的发票仍然有效。请先作废或删除该发票，再取消订单。"
+      }
+    },
+    "salesOrders": {
+      "list": {
+        "title": "销售订单",
+        "subtitle": "已接受的报价转为订单，可一次性或分批开票并交付。",
+        "newOrder": "新建销售订单",
+        "search": "按编号、买方或参考号搜索",
+        "reset": "重置",
+        "refresh": "刷新",
+        "tableLabel": "销售订单",
+        "noAccessTitle": "无权访问",
+        "noAccess": "您没有查看销售订单的权限。",
+        "emptyFilteredTitle": "没有匹配的订单",
+        "emptyFiltered": "没有符合这些筛选条件的内容。请更改或重置筛选。",
+        "resetFilters": "重置筛选",
+        "loading": "正在加载销售订单",
+        "showing": "显示 {count} 条",
+        "loadMore": "加载更多",
+        "allLoaded": "已全部加载",
+        "contactLoading": "加载中...",
+        "empty": {
+          "all": {
+            "title": "暂无销售订单",
+            "message": "将已接受的报价或估价转为订单，或从头新建。"
+          },
+          "draft": {
+            "title": "没有草稿订单",
+            "message": "您仍在准备中的订单会显示在这里。"
+          },
+          "confirmed": {
+            "title": "没有已确认的订单",
+            "message": "等待开票或交付的已确认订单会显示在这里。"
+          },
+          "cancelled": {
+            "title": "没有已取消的订单",
+            "message": "您取消的订单会连同原因显示在这里。"
+          },
+          "closed": {
+            "title": "没有已关闭的订单",
+            "message": "订单内所有项目均已开票并交付后，订单即关闭。"
+          }
+        }
+      },
+      "strip": {
+        "label": "未关闭订单金额",
+        "openValue": "未关闭订单（{currency}）"
+      },
+      "tabs": {
+        "label": "订单状态",
+        "all": "全部",
+        "draft": "草稿",
+        "confirmed": "已确认",
+        "cancelled": "已取消",
+        "closed": "已关闭",
+        "count": "{count} 个订单"
+      },
+      "quick": {
+        "label": "快速筛选",
+        "toInvoice": "待开票",
+        "toFulfil": "待履约"
+      },
+      "table": {
+        "scrollArea": "销售订单表格",
+        "columns": {
+          "number": "订单",
+          "buyer": "买方",
+          "quote": "报价",
+          "deal": "交易",
+          "expected": "预计日期",
+          "status": "状态",
+          "invoicing": "开票",
+          "fulfilment": "交付",
+          "total": "总计",
+          "invoices": "发票"
+        }
+      },
+      "row": {
+        "moreFor": "{name} 的操作",
+        "open": "打开",
+        "edit": "编辑",
+        "confirm": "确认订单",
+        "invoiceAll": "为剩余全部开票",
+        "fulfilAll": "全部标记为已交付",
+        "cancel": "取消订单",
+        "delete": "删除草稿"
+      },
+      "status": {
+        "draft": "草稿",
+        "confirmed": "已确认",
+        "cancelled": "已取消",
+        "closed": "已关闭"
+      },
+      "invoicingStatus": {
+        "not_invoiced": "未开票",
+        "partially_invoiced": "部分开票",
+        "invoiced": "已开票"
+      },
+      "fulfilmentStatus": {
+        "unfulfilled": "未交付",
+        "partially_fulfilled": "部分交付",
+        "fulfilled": "已交付"
+      },
+      "actions": {
+        "failed": "操作未成功。",
+        "confirmed": "订单 {number} 已确认。",
+        "invoicedDraft": "已根据订单创建发票草稿。",
+        "invoicedIssued": "发票 {number} 已开具。",
+        "fulfilled": "交付已记录。",
+        "cancelled": "订单 {number} 已取消。",
+        "deleted": "草稿订单已删除。"
+      },
+      "dialog": {
+        "close": "关闭",
+        "cancel": "取消",
+        "how": "选择数量",
+        "mode": {
+          "all": "剩余全部",
+          "lines": "选择数量"
+        },
+        "left": "剩余 {qty}",
+        "qtyExceeds": "此行最多剩余 {max}。",
+        "qtyInvalid": "请输入最多 4 位小数的数量，或输入 0 跳过此行。",
+        "nothingHint": "此订单的所有内容均已开票。"
+      },
+      "confirmDialog": {
+        "title": "确认此订单？",
+        "message": "确认后将锁定明细和价格。之后您可以一次性或分批为订单开票，并记录交付。只要没有有效发票，仍可取消订单。",
+        "confirm": "确认订单"
+      },
+      "cancelDialog": {
+        "title": "取消此订单？",
+        "warning": "已取消的订单无法再开票或交付，也无法重新打开。",
+        "reason": "原因",
+        "reasonHint": "将保留在订单上供团队查看。",
+        "reasonRequired": "请说明取消订单的原因。",
+        "reasonTooLong": "原因请控制在 {max} 个字符以内。",
+        "cancelOrder": "取消订单",
+        "hasInvoices": "此订单仍有发票。请先作废或删除发票（作废后数量会退回订单），再取消订单。",
+        "seeInvoices": "查看发票"
+      },
+      "deleteDialog": {
+        "title": "删除此草稿？",
+        "message": "草稿订单将被永久删除。已确认的订单不能删除，只能取消。",
+        "delete": "删除草稿"
+      },
+      "invoiceDialog": {
+        "title": "为此订单开票",
+        "intro": "按锁定的价格为订单开票。您可以分批开票：未开票的部分将保留在订单上。",
+        "invoiceAndIssue": "创建并开具发票",
+        "createDraft": "创建发票草稿",
+        "issueDate": "开具日期",
+        "issueDateHint": "留空则为今天（{today}）。",
+        "dueDate": "到期日",
+        "terms": "付款条件",
+        "termsDefault": "工作区默认",
+        "termsOnIssue": "开具时到期",
+        "termsDays": "{count} 天",
+        "issueNow": "立即开具发票",
+        "issueNowHint": "发票将获得编号，并可立即发送。",
+        "draftHint": "保留为草稿，开具前可先检查。",
+        "includeShipping": "随此发票收取运费",
+        "problems": {
+          "nothing": "请至少在一行中选择大于零的数量。",
+          "issueDateInvalid": "请输入有效的开具日期。",
+          "dueDateInvalid": "请输入有效的到期日。",
+          "dueBeforeIssue": "到期日不能早于开具日期。"
+        }
+      },
+      "fulfilDialog": {
+        "title": "记录交付",
+        "intro": "记录已交付给买方的内容。交付与开票分开跟踪，两者的先后顺序不限。",
+        "record": "记录交付",
+        "note": "备注",
+        "noteHint": "可选，例如送货单编号。",
+        "problems": {
+          "nothing": "请至少在一行中选择大于零的数量。",
+          "noteTooLong": "备注请控制在 {max} 个字符以内。"
+        }
+      },
+      "detail": {
+        "noAccessTitle": "无权访问",
+        "noAccess": "您没有查看销售订单的权限。",
+        "loading": "正在加载订单",
+        "back": "返回销售订单",
+        "noBuyer": "无买方",
+        "edit": "编辑",
+        "confirm": "确认订单",
+        "recordDelivery": "记录交付",
+        "invoice": "开票...",
+        "more": "更多操作",
+        "cancel": "取消订单",
+        "delete": "删除草稿",
+        "cancelledOn": "于 {date} 取消",
+        "draftHint": "此订单为草稿。确认后将锁定价格，并可开始开票和交付。",
+        "notes": "备注",
+        "terms": "条款",
+        "progress": "进度",
+        "invoiced": "已开票",
+        "fulfilled": "已交付"
+      },
+      "lines": {
+        "title": "明细",
+        "scrollArea": "订单明细",
+        "item": "项目",
+        "ordered": "订购数量",
+        "invoiced": "已开票",
+        "fulfilled": "已交付",
+        "toInvoice": "待开票",
+        "unitPrice": "单价",
+        "amount": "金额",
+        "taxLine": "{name} {rate}%",
+        "taxRate": "税费 {rate}%",
+        "invoicedBar": "{name} 的已开票占比",
+        "fulfilledBar": "{name} 的已交付占比"
+      },
+      "totals": {
+        "title": "合计",
+        "subtotal": "小计",
+        "discount": "折扣",
+        "shipping": "运费",
+        "shippingBilled": "已计费",
+        "shippingPending": "随首张发票计费",
+        "tax": "税费",
+        "total": "总计"
+      },
+      "info": {
+        "title": "详情",
+        "buyer": "买方",
+        "email": "邮箱",
+        "phone": "电话",
+        "quote": "报价",
+        "deal": "交易",
+        "owner": "负责人",
+        "reference": "参考号",
+        "expected": "预计日期",
+        "created": "创建时间",
+        "confirmed": "确认时间"
+      },
+      "invoices": {
+        "title": "此订单的发票",
+        "none": "尚未根据此订单生成发票。",
+        "noneDraft": "订单确认后即可开具发票。",
+        "draft": "草稿",
+        "voidNote": "作废的发票会将其数量退回订单。"
+      },
+      "builder": {
+        "noAccessTitle": "无权访问",
+        "noAccess": "您没有修改销售订单的权限。",
+        "loading": "加载中",
+        "frozen": "此订单已确认，明细和价格已锁定。如需更改，请取消后重新创建。",
+        "openOrder": "打开订单",
+        "back": "返回",
+        "editTitle": "编辑 {number}",
+        "newTitle": "新建销售订单",
+        "unsaved": "未保存的更改",
+        "cancel": "取消",
+        "saveChanges": "保存更改",
+        "createDraft": "创建草稿",
+        "conflict": "您编辑时，其他人修改了此草稿。请重新加载查看其版本；您在此处的编辑将会丢失。",
+        "reload": "重新加载",
+        "saved": "草稿已保存。",
+        "created": "订单 {number} 已创建为草稿。",
+        "fixProblems": "请先修正高亮显示的字段。",
+        "serverRejected": "服务器未接受部分数值。请检查字段后重试。",
+        "startFrom": "开始方式",
+        "source": {
+          "scratch": "空白订单",
+          "quote": "已接受的报价或估价"
+        },
+        "loadingQuote": "正在加载报价...",
+        "buyer": "买方",
+        "contact": "联系人",
+        "contactHint": "选择联系人以将订单关联到该联系人，或在下方直接输入买方信息。",
+        "buyerName": "买方名称",
+        "fromQuoteHint": "留空则使用报价中的买方。",
+        "buyerEmail": "邮箱",
+        "buyerPhone": "电话",
+        "details": "订单详情",
+        "currency": "币种",
+        "currencyHint": "三位字母，例如 USD 或 KWD。",
+        "currencyLocked": "订单创建后不可更改。",
+        "expectedDate": "预计日期",
+        "expectedHint": "买方预计交付的日期。",
+        "reference": "参考号",
+        "referenceHint": "例如买方的采购订单号。",
+        "linesFromQuote": "明细",
+        "linesFromQuoteHint": "订单将沿用已接受报价的明细、价格和税费，并将整单折扣计入各明细。创建后仍可编辑草稿的明细。",
+        "lineItems": "明细项目",
+        "shippingNotes": "运费、备注和条款",
+        "shipping": "运费（{currency}）",
+        "shippingHint": "随首张发票计费。",
+        "notes": "备注",
+        "notesHint": "显示在订单上。",
+        "terms": "条款",
+        "termsHint": "将带入根据此订单生成的发票。",
+        "draftNote": "在您确认之前，订单将保持为草稿。确认后将锁定价格。",
+        "quoteTotals": "报价合计",
+        "quoteTotalsNote": "与已接受的报价一致。订单创建后将显示订单本身的金额。",
+        "subtotal": "小计",
+        "discount": "折扣",
+        "tax": "税费",
+        "total": "总计",
+        "openExisting": "打开订单 {number}",
+        "viewOrders": "查看全部订单",
+        "pickAnother": "选择其他报价",
+        "problems": {
+          "buyerRequired": "请选择联系人或输入买方名称。",
+          "emailInvalid": "请输入有效的邮箱地址。",
+          "currencyInvalid": "请输入三位字母的币种代码。",
+          "expectedDateInvalid": "请输入有效日期。",
+          "shippingInvalid": "请输入有效金额。",
+          "noLines": "请至少添加一行明细。",
+          "referenceTooLong": "参考号请控制在 191 个字符以内。"
+        },
+        "lineProblems": {
+          "descriptionRequired": "请描述此明细项目。",
+          "qtyInvalid": "请输入大于零的数量。",
+          "priceInvalid": "请输入有效的价格。",
+          "lineDiscountInvalid": "请输入有效的折扣。",
+          "hsnRequired": "请输入 HSN/SAC 代码。",
+          "hsnInvalid": "请输入有效的 HSN/SAC 代码。",
+          "taxRateRemoved": "此行的税率已不存在。请选择当前有效的税率。"
+        }
+      },
+      "quotePicker": {
+        "search": "搜索已接受的报价",
+        "results": "已接受的报价和估价",
+        "loading": "正在加载报价",
+        "noMatch": "没有匹配的已接受报价。",
+        "none": "尚无已接受的报价或估价。",
+        "kind": {
+          "proposal": "提案",
+          "estimate": "估价"
+        },
+        "untitled": "未命名",
+        "accepted": "于 {date} 接受"
+      }
+    }
+  }
+}

@@ -15,8 +15,35 @@ import {
   storeLabel,
   toProductItem,
   withSavedOption,
+  type HelperT,
   type ProductItem,
 } from './helpers';
+
+/** Stands in for the `flb.builder.formsChannels.helpers` translator, with the English wording of those messages. */
+const t = ((key: string, v: Record<string, string | number> = {}) => {
+  switch (key) {
+    case 'storeWithCurrency':
+      return `${v.name} · ${v.currency}`;
+    case 'flowLive':
+      return `${v.name} · live`;
+    case 'flowDraft':
+      return `${v.name} · draft`;
+    case 'flowFallback':
+      return 'Flow';
+    case 'service':
+      return `${v.name}${v.active === 'yes' ? '' : ' (inactive)'}${v.minutes ? ` · ${v.minutes} min` : ''}`;
+    case 'form':
+      return `${v.title}${v.published === 'yes' ? '' : ' (draft)'}`;
+    case 'stageInPipeline':
+      return `${v.pipeline} · ${v.name}`;
+    case 'agentFallback':
+      return `Agent ${v.id}`;
+    case 'agentWithModel':
+      return `${v.name} · ${v.provider}/${v.model}`;
+    default:
+      return key;
+  }
+}) as unknown as HelperT;
 
 const item = (id: string): ProductItem => ({
   id: '',
@@ -130,32 +157,35 @@ describe('withSavedOption', () => {
 
 describe('option labels', () => {
   it('store: name, with the currency when it has one', () => {
-    expect(storeLabel('Shop', 'USD')).toBe('Shop · USD');
-    expect(storeLabel('Catalog 9', null)).toBe('Catalog 9');
+    expect(storeLabel('Shop', 'USD', t)).toBe('Shop · USD');
+    expect(storeLabel('Catalog 9', null, t)).toBe('Catalog 9');
   });
   it('flow: live or draft suffix', () => {
-    expect(flowOptionLabel('Welcome', true)).toBe('Welcome · live');
-    expect(flowOptionLabel('Welcome', false)).toBe('Welcome · draft');
-    expect(flowOptionLabel('', false)).toBe('Flow · draft');
+    expect(flowOptionLabel('Welcome', true, t)).toBe('Welcome · live');
+    expect(flowOptionLabel('Welcome', false, t)).toBe('Welcome · draft');
+    expect(flowOptionLabel('', false, t)).toBe('Flow · draft');
   });
   it('service: inactive and duration parts only when they apply', () => {
-    expect(serviceLabel('Consult', true, 30)).toBe('Consult · 30 min');
-    expect(serviceLabel('Consult', false, 45)).toBe('Consult (inactive) · 45 min');
-    expect(serviceLabel('Consult', true, null)).toBe('Consult');
+    expect(serviceLabel('Consult', true, 30, t)).toBe('Consult · 30 min');
+    expect(serviceLabel('Consult', false, 45, t)).toBe('Consult (inactive) · 45 min');
+    expect(serviceLabel('Consult', true, null, t)).toBe('Consult');
   });
   it('form: a draft says so', () => {
-    expect(formLabel('Lead', true)).toBe('Lead');
-    expect(formLabel('Lead', false)).toBe('Lead (draft)');
+    expect(formLabel('Lead', true, t)).toBe('Lead');
+    expect(formLabel('Lead', false, t)).toBe('Lead (draft)');
   });
 });
 
 describe('stageOptions', () => {
   it('shows the bare stage name with one pipeline', () => {
     expect(
-      stageOptions([
-        { id: 'a', name: 'New Lead', pipeline: 'Sales' },
-        { id: 'b', name: 'Won', pipeline: 'Sales' },
-      ]),
+      stageOptions(
+        [
+          { id: 'a', name: 'New Lead', pipeline: 'Sales' },
+          { id: 'b', name: 'Won', pipeline: 'Sales' },
+        ],
+        t,
+      ),
     ).toEqual([
       { v: 'a', l: 'New Lead' },
       { v: 'b', l: 'Won' },
@@ -163,10 +193,13 @@ describe('stageOptions', () => {
   });
   it('prefixes the pipeline when there are several', () => {
     expect(
-      stageOptions([
-        { id: 'a', name: 'Won', pipeline: 'Sales' },
-        { id: 'b', name: 'Won', pipeline: 'Renewals' },
-      ]).map((o) => o.l),
+      stageOptions(
+        [
+          { id: 'a', name: 'Won', pipeline: 'Sales' },
+          { id: 'b', name: 'Won', pipeline: 'Renewals' },
+        ],
+        t,
+      ).map((o) => o.l),
     ).toEqual(['Sales · Won', 'Renewals · Won']);
   });
 });
@@ -203,11 +236,11 @@ describe('handoffFlows', () => {
 
 describe('agentOptionLabel', () => {
   it('shows provider/model when the agent has both', () => {
-    expect(agentOptionLabel('Triage', 'openai', 'gpt-4o-mini', 'abcdef1234')).toBe(
+    expect(agentOptionLabel('Triage', 'openai', 'gpt-4o-mini', 'abcdef1234', t)).toBe(
       'Triage · openai/gpt-4o-mini',
     );
-    expect(agentOptionLabel('Triage', null, 'gpt-4o-mini', 'abcdef1234')).toBe('Triage');
-    expect(agentOptionLabel('', 'openai', 'm', 'abcdef1234')).toBe('Agent abcdef12 · openai/m');
+    expect(agentOptionLabel('Triage', null, 'gpt-4o-mini', 'abcdef1234', t)).toBe('Triage');
+    expect(agentOptionLabel('', 'openai', 'm', 'abcdef1234', t)).toBe('Agent abcdef12 · openai/m');
   });
 });
 

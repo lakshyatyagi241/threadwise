@@ -1,0 +1,113 @@
+{
+  "calling-voice": {
+    "nav": {
+      "title": "Gọi điện",
+      "description": "Bật hoặc tắt gọi điện WhatsApp cho từng số.",
+      "keywords": "gọi, cuộc gọi, thoại, điện thoại, gọi điện whatsapp, nút gọi"
+    },
+    "common": {
+      "dismiss": "Đóng"
+    },
+    "button": {
+      "label": "Gọi",
+      "tooltip": "Bắt đầu cuộc gọi WhatsApp",
+      "working": "Đang xử lý..."
+    },
+    "confirm": {
+      "title": "Chưa có quyền gọi được xác nhận",
+      "body": "Chúng tôi chưa có quyền gọi đã được xác nhận cho liên hệ này.",
+      "callAnyway": "Vẫn gọi",
+      "callAnywayHint": "Hoạt động nếu họ đã nhấn \"Cho phép\" trong WhatsApp.",
+      "askPermission": "Xin quyền",
+      "askPermissionHint": "Gửi cho họ yêu cầu cấp quyền thay vì gọi. Không có cuộc gọi nào được thực hiện.",
+      "close": "Đóng"
+    },
+    "toast": {
+      "noPhone": "Liên hệ này không có số điện thoại.",
+      "noNumber": "Gọi điện chưa được bật trên bất kỳ số WABA nào.",
+      "alreadyPermitted": "Liên hệ này đã cho phép gọi - đang bắt đầu cuộc gọi...",
+      "permissionSent": "Đã gửi yêu cầu cấp quyền. Họ sẽ thấy Chấp nhận/Từ chối trong WhatsApp - hãy thử Gọi lại sau khi họ phản hồi.",
+      "permissionFailed": "Không thể gửi yêu cầu cấp quyền: {message}",
+      "startFailed": "Không thể bắt đầu cuộc gọi: {message}",
+      "acceptInvalid": "Không thể nhận cuộc gọi: dữ liệu cuộc gọi từ WhatsApp không hợp lệ. Hãy thử lại.",
+      "acceptFailed": "Không thể nhận cuộc gọi: {message}",
+      "alreadyAccepted": "Cuộc gọi đã được đồng nghiệp khác nhận.",
+      "recordingStarted": "Đã bắt đầu ghi âm - bản ghi sẽ được lưu vào Nhật ký cuộc gọi khi cúp máy.",
+      "recordingSaved": "Bản ghi cuộc gọi đã được lưu vào Nhật ký cuộc gọi.",
+      "recordUnsupported": "Trình duyệt này không hỗ trợ ghi âm.",
+      "noActiveCall": "Không có cuộc gọi nào đang diễn ra để ghi âm."
+    },
+    "incoming": {
+      "title": "Cuộc gọi WhatsApp đến",
+      "caller": "Người gọi +{digits}",
+      "accept": "Chấp nhận",
+      "decline": "Từ chối",
+      "aiHandling": "AI đang xử lý cuộc gọi này..."
+    },
+    "panel": {
+      "label": "Cuộc gọi đang diễn ra",
+      "title": "Đang gọi",
+      "ringing": "đang đổ chuông...",
+      "connected": "đã kết nối",
+      "timer": "Thời lượng cuộc gọi",
+      "mute": "Tắt tiếng",
+      "muted": "Đã tắt tiếng",
+      "end": "Kết thúc",
+      "record": "Ghi âm",
+      "recording": "Đang ghi âm",
+      "recordTooltip": "Ghi âm cuộc gọi này",
+      "recordingTooltip": "Đang ghi âm cuộc gọi này",
+      "recordingNotice": "Cuộc gọi này đang được ghi âm"
+    },
+    "failures": {
+      "REJECTED": "Khách hàng đã từ chối cuộc gọi.",
+      "BUSY": "Khách hàng đang bận cuộc gọi khác.",
+      "NO_ANSWER": "Không trả lời - khách hàng không nhấc máy.",
+      "MISSED": "Khách hàng đã bỏ lỡ cuộc gọi.",
+      "CANCELLED": "Cuộc gọi đã bị hủy.",
+      "MIC_BLOCKED": "Quyền truy cập micrô bị chặn - người gọi sẽ không nghe thấy bạn. Hãy cấp quyền micrô trong trình duyệt và thử lại.",
+      "BUSY_SLOT": "Một cuộc gọi khác đang hoạt động trong tab này.",
+      "INVALID_SDP": "SDP offer không hợp lệ - thiếu v=0 hoặc dòng media",
+      "LOCAL_SDP_EMPTY": "SDP cục bộ trống - thu thập ICE thất bại",
+      "ENDED_EARLY": "Cuộc gọi kết thúc trước khi kết nối.",
+      "ANSWER_FAILED": "Không thể áp dụng phản hồi của WhatsApp"
+    },
+    "errors": {
+      "CALL_NUMBER_NOT_FOUND": "Số này không còn thuộc không gian làm việc của bạn. Hãy làm mới trang và thử lại.",
+      "CALL_NOT_FOUND": "Không tìm thấy cuộc gọi này. Có thể nó đã kết thúc.",
+      "CALL_NOT_WABA": "Gọi điện chỉ hoạt động với các số WhatsApp Cloud API. Số này được kết nối theo cách khác.",
+      "CALL_NUMBER_NOT_CONNECTED": "Số này hiện chưa kết nối với WhatsApp Cloud API. Hãy kết nối lại trong Kênh, rồi thử lại.",
+      "CALL_COEXISTENCE_UNSUPPORTED": "Số đang được dùng đồng thời trong ứng dụng WhatsApp Business không thể nhận cuộc gọi.",
+      "CALL_NOT_ENABLED": "Gọi điện đang tắt cho số này. Hãy bật trong Gọi điện trước.",
+      "CALL_META_REFUSED": "WhatsApp đã từ chối yêu cầu. Hãy thử lại sau giây lát.",
+      "CALL_PERMISSION_REQUESTED": "Đã gửi yêu cầu cấp quyền. Họ sẽ thấy Chấp nhận/Từ chối trong WhatsApp - hãy thử Gọi lại sau khi họ phản hồi.",
+      "CALL_STATE_CONFLICT": "Cuộc gọi đã được đồng nghiệp khác nhận.",
+      "CALL_RECORDING_FAILED": "Không thể lưu bản ghi âm.",
+      "FORBIDDEN": "Bạn không có quyền sử dụng gọi điện.",
+      "PLAN_FEATURE_LOCKED": "Gói của bạn không bao gồm gọi điện WhatsApp.",
+      "NETWORK": "Lỗi mạng - vui lòng thử lại.",
+      "UNEXPECTED": "Đã xảy ra lỗi. Vui lòng thử lại."
+    },
+    "settings": {
+      "title": "Gọi điện",
+      "intro": "Bật gọi điện WhatsApp cho một số để hiển thị nút Gọi màu xanh trên các cuộc trò chuyện của số đó trong hộp thư.",
+      "cardTitle": "Gọi điện WhatsApp",
+      "numberFallback": "Số WhatsApp",
+      "connection": "Kết nối: {status}",
+      "enabledStatus": "Đã bật - nút Gọi màu xanh hiện hiển thị trên các cuộc trò chuyện của số này trong hộp thư.",
+      "enabledSince": "Đã bật {date}",
+      "offStatus": "Tắt - hãy bật để nút Gọi xuất hiện trên các cuộc trò chuyện với số này.",
+      "enable": "Bật gọi điện",
+      "disable": "Tắt gọi điện",
+      "asking": "Đang hỏi WhatsApp...",
+      "enabledDone": "Gọi điện hiện đã bật cho số này.",
+      "disabledDone": "Gọi điện hiện đã tắt cho số này.",
+      "loading": "Đang tải các số",
+      "loadFailed": "Không thể tải các số của bạn.",
+      "retry": "Thử lại",
+      "emptyTitle": "Chưa có số WhatsApp nào",
+      "emptyMessage": "Kết nối một số WhatsApp Cloud API trong Kênh, rồi quay lại để bật gọi điện.",
+      "viewOnly": "Bạn có thể xem trạng thái gọi điện của từng số. Bật hoặc tắt cần quyền quản lý gọi điện."
+    }
+  }
+}

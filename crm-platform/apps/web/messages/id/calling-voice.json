@@ -1,0 +1,113 @@
+{
+  "calling-voice": {
+    "nav": {
+      "title": "Panggilan",
+      "description": "Aktifkan atau nonaktifkan panggilan WhatsApp untuk setiap nomor.",
+      "keywords": "panggilan, telepon, suara, whatsapp calling, tombol panggil"
+    },
+    "common": {
+      "dismiss": "Tutup"
+    },
+    "button": {
+      "label": "Panggil",
+      "tooltip": "Mulai panggilan WhatsApp",
+      "working": "Memproses..."
+    },
+    "confirm": {
+      "title": "Belum ada izin panggilan yang dikonfirmasi",
+      "body": "Kami belum memiliki izin panggilan yang dikonfirmasi untuk kontak ini.",
+      "callAnyway": "Tetap panggil",
+      "callAnywayHint": "Berhasil jika mereka sudah mengetuk \"Izinkan\" di WhatsApp.",
+      "askPermission": "Minta izin",
+      "askPermissionHint": "Mengirim permintaan izin kepada mereka, bukan melakukan panggilan.",
+      "close": "Tutup"
+    },
+    "toast": {
+      "noPhone": "Kontak ini tidak memiliki nomor telepon.",
+      "noNumber": "Panggilan tidak diaktifkan pada nomor WABA mana pun.",
+      "alreadyPermitted": "Kontak ini sudah mengizinkan panggilan - memulai panggilan...",
+      "permissionSent": "Permintaan izin terkirim. Mereka akan melihat Terima/Tolak di WhatsApp - coba Panggil lagi setelah mereka merespons.",
+      "permissionFailed": "Tidak dapat mengirim permintaan izin: {message}",
+      "startFailed": "Tidak dapat memulai panggilan: {message}",
+      "acceptInvalid": "Tidak dapat menerima panggilan: payload panggilan dari WhatsApp tidak valid. Coba lagi.",
+      "acceptFailed": "Tidak dapat menerima panggilan: {message}",
+      "alreadyAccepted": "Panggilan sudah diterima oleh rekan tim lain.",
+      "recordingStarted": "Perekaman dimulai - akan disimpan ke Log panggilan saat panggilan ditutup.",
+      "recordingSaved": "Rekaman panggilan disimpan ke Log panggilan.",
+      "recordUnsupported": "Perekaman tidak didukung di browser ini.",
+      "noActiveCall": "Tidak ada panggilan aktif untuk direkam."
+    },
+    "incoming": {
+      "title": "Panggilan WhatsApp masuk",
+      "caller": "Penelepon +{digits}",
+      "accept": "Terima",
+      "decline": "Tolak",
+      "aiHandling": "AI sedang menangani panggilan ini..."
+    },
+    "panel": {
+      "label": "Panggilan berlangsung",
+      "title": "Sedang menelepon",
+      "ringing": "berdering...",
+      "connected": "terhubung",
+      "timer": "Durasi panggilan",
+      "mute": "Bisukan",
+      "muted": "Dibisukan",
+      "end": "Akhiri",
+      "record": "Rekam",
+      "recording": "Merekam",
+      "recordTooltip": "Rekam panggilan ini",
+      "recordingTooltip": "Merekam panggilan ini",
+      "recordingNotice": "Panggilan ini sedang direkam"
+    },
+    "failures": {
+      "REJECTED": "Pelanggan menolak panggilan.",
+      "BUSY": "Pelanggan sedang dalam panggilan lain.",
+      "NO_ANSWER": "Tidak dijawab - pelanggan tidak mengangkat.",
+      "MISSED": "Pelanggan tidak menjawab panggilan.",
+      "CANCELLED": "Panggilan dibatalkan.",
+      "MIC_BLOCKED": "Akses mikrofon diblokir - penelepon tidak akan mendengar Anda. Berikan izin mikrofon di browser Anda lalu coba lagi.",
+      "BUSY_SLOT": "Panggilan lain sudah aktif di tab ini.",
+      "INVALID_SDP": "SDP offer tidak valid - baris v=0 atau media tidak ada",
+      "LOCAL_SDP_EMPTY": "SDP lokal kosong - pengumpulan ICE gagal",
+      "ENDED_EARLY": "Panggilan berakhir sebelum terhubung.",
+      "ANSWER_FAILED": "Gagal menerapkan jawaban WhatsApp"
+    },
+    "errors": {
+      "CALL_NUMBER_NOT_FOUND": "Nomor ini tidak lagi ada di workspace Anda. Muat ulang halaman dan coba lagi.",
+      "CALL_NOT_FOUND": "Panggilan ini tidak ditemukan. Mungkin sudah berakhir.",
+      "CALL_NOT_WABA": "Panggilan hanya berfungsi pada nomor WhatsApp Cloud API. Nomor ini terhubung dengan cara lain.",
+      "CALL_NUMBER_NOT_CONNECTED": "Nomor ini saat ini tidak terhubung ke WhatsApp Cloud API. Hubungkan kembali di Saluran, lalu coba lagi.",
+      "CALL_COEXISTENCE_UNSUPPORTED": "Nomor yang juga digunakan di aplikasi WhatsApp Business tidak dapat menerima panggilan.",
+      "CALL_NOT_ENABLED": "Panggilan dinonaktifkan untuk nomor ini. Aktifkan terlebih dahulu di Panggilan.",
+      "CALL_META_REFUSED": "WhatsApp menolak permintaan. Coba lagi sebentar lagi.",
+      "CALL_PERMISSION_REQUESTED": "Permintaan izin terkirim. Mereka akan melihat Terima/Tolak di WhatsApp - coba Panggil lagi setelah mereka merespons.",
+      "CALL_STATE_CONFLICT": "Panggilan sudah diterima oleh rekan tim lain.",
+      "CALL_RECORDING_FAILED": "Rekaman tidak dapat disimpan.",
+      "FORBIDDEN": "Anda tidak memiliki izin untuk menggunakan panggilan.",
+      "PLAN_FEATURE_LOCKED": "Paket Anda tidak mencakup panggilan WhatsApp.",
+      "NETWORK": "Kesalahan jaringan - silakan coba lagi.",
+      "UNEXPECTED": "Terjadi kesalahan. Silakan coba lagi."
+    },
+    "settings": {
+      "title": "Panggilan",
+      "intro": "Aktifkan panggilan WhatsApp untuk sebuah nomor agar tombol Panggil hijau muncul pada obrolannya di kotak masuk.",
+      "cardTitle": "Panggilan WhatsApp",
+      "numberFallback": "Nomor WhatsApp",
+      "connection": "Koneksi: {status}",
+      "enabledStatus": "Aktif - tombol Panggil hijau kini muncul pada obrolan nomor ini di kotak masuk.",
+      "enabledSince": "Diaktifkan {date}",
+      "offStatus": "Nonaktif - aktifkan agar tombol Panggil muncul pada obrolan dengan nomor ini.",
+      "enable": "Aktifkan panggilan",
+      "disable": "Nonaktifkan panggilan",
+      "asking": "Meminta ke WhatsApp...",
+      "enabledDone": "Panggilan kini aktif untuk nomor ini.",
+      "disabledDone": "Panggilan kini nonaktif untuk nomor ini.",
+      "loading": "Memuat nomor",
+      "loadFailed": "Tidak dapat memuat nomor Anda.",
+      "retry": "Coba lagi",
+      "emptyTitle": "Belum ada nomor WhatsApp",
+      "emptyMessage": "Hubungkan nomor WhatsApp Cloud API di Saluran, lalu kembali untuk mengaktifkan panggilan.",
+      "viewOnly": "Anda dapat melihat status panggilan setiap nomor. Mengaktifkan atau menonaktifkannya memerlukan izin pengelolaan panggilan."
+    }
+  }
+}

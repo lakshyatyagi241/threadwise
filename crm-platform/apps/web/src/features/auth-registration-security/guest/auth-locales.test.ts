@@ -47,9 +47,7 @@ describe('the real message files', () => {
     };
     const english = keysOf('en')!;
     const offered = completeLocales(LOCALES, english, keysOf);
-    expect(offered).toEqual(['en', 'ar']);
-    // The other 19 fall back to English and are therefore not offered.
-    expect(offered).not.toContain('de');
-    expect(offered).not.toContain('hi');
+    // Every shipped language now has the full auth message set, so the picker offers all of them.
+    expect(offered).toEqual([...LOCALES]);
   });
 });

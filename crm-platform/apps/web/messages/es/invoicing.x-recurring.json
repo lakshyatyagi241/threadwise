@@ -1,0 +1,370 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "REC_ENDED": "Esta programación ha terminado, así que no queda nada que cambiar ni ejecutar.",
+        "REC_NOT_ACTIVE": "Esta programación no está activa. Reanúdala primero.",
+        "REC_START_TOO_OLD": "La fecha de inicio es demasiado antigua. Se crean como máximo 12 periodos pasados, así que empieza desde una fecha más reciente.",
+        "INV_RECURRING_INVALID": "No se pudo usar la plantilla para crear una factura. Revisa el comprador, las líneas y el impuesto, y guarda de nuevo."
+      }
+    },
+    "recurring": {
+      "title": "Facturas recurrentes",
+      "subtitle": "Programaciones que crean facturas por sí solas, en las fechas que indiques.",
+      "new": "Nueva programación",
+      "invoices": "Facturas",
+      "tabsLabel": "Estado de la programación",
+      "tabs": {
+        "all": "Todas",
+        "active": "Activas",
+        "paused": "Pausadas",
+        "ended": "Finalizadas"
+      },
+      "search": "Buscar en las programaciones cargadas",
+      "refresh": "Actualizar",
+      "tableLabel": "Programaciones de facturas recurrentes",
+      "scrollArea": "Tabla de programaciones, se desplaza horizontalmente",
+      "loading": "Cargando programaciones",
+      "empty": {
+        "all": {
+          "title": "Todavía no hay facturas recurrentes",
+          "message": "Configura una programación una vez y la factura se creará por ti cada semana, mes o año."
+        },
+        "active": {
+          "title": "No hay nada en marcha",
+          "message": "Aquí aparecen las programaciones activas, las que crearán su próxima factura a tiempo."
+        },
+        "paused": {
+          "title": "No hay programaciones pausadas",
+          "message": "Una programación pausada deja de crear facturas hasta que la reanudes."
+        },
+        "ended": {
+          "title": "No hay programaciones finalizadas",
+          "message": "Una programación finaliza después de su última ejecución o en su fecha de fin."
+        }
+      },
+      "emptySearchTitle": "Ninguna programación coincide",
+      "emptySearch": "Nada de las filas cargadas coincide. Borra la búsqueda o carga más.",
+      "clearSearch": "Borrar búsqueda",
+      "showing": "{count, plural, one {Mostrando 1 programación} other {Mostrando # programaciones}}",
+      "showingMatches": "{count} de {loaded} programaciones cargadas coinciden",
+      "loadMore": "Cargar más",
+      "allLoaded": "Todas las programaciones cargadas",
+      "searchLoadedOnly": "La búsqueda solo revisa las programaciones ya cargadas. Carga más para buscar en el resto.",
+      "columns": {
+        "name": "Programación",
+        "buyer": "Comprador",
+        "every": "Se repite",
+        "next": "Próxima ejecución",
+        "last": "Última ejecución",
+        "runs": "Ejecuciones",
+        "failures": "Fallos",
+        "amount": "Por factura",
+        "mode": "Cada factura es de",
+        "status": "Estado",
+        "actions": "Acciones"
+      },
+      "lineCount": "{count, plural, one {1 línea} other {# líneas}}",
+      "onHold": "En espera",
+      "runsOf": "{done} de {max}",
+      "failuresTitle": "{count, plural, one {1 periodo ha fallado. Abre el historial.} other {# periodos han fallado. Abre el historial.}}",
+      "channel": {
+        "link": "Enlace",
+        "email": "Correo",
+        "whatsapp": "WhatsApp"
+      },
+      "moreFor": "Más acciones para {name}",
+      "open": "Abrir",
+      "edit": "Editar",
+      "pause": "Pausar",
+      "resume": "Reanudar",
+      "cancel": "Cancelar",
+      "runNow": {
+        "action": "Ejecutar ahora",
+        "title": "¿Ejecutar {name} ahora?",
+        "confirm": "Ejecutar ahora",
+        "message": {
+          "draft": "Esto crea ahora la factura de {date} como borrador que puedes revisar, y la programación pasa al siguiente periodo.",
+          "issue": "Esto crea ahora la factura de {date} y la emite (recibe su número de inmediato). La programación pasa al siguiente periodo.",
+          "issue_send": "Esto crea ahora la factura de {date}, la emite y la envía al comprador. La programación pasa al siguiente periodo."
+        }
+      },
+      "delete": {
+        "action": "Eliminar",
+        "title": "¿Eliminar {name}?",
+        "message": "{name} dejará de crear facturas. Las facturas que ya creó seguirán en tu lista.",
+        "confirm": "Eliminar programación",
+        "keep": "Conservarla"
+      },
+      "toast": {
+        "paused": "{name} está pausada.",
+        "resumed": "{name} vuelve a estar en marcha. Próxima factura: {date}.",
+        "resumedEnded": "{name} no tenía más periodos, así que ha finalizado.",
+        "ran": "Se creó una factura a partir de {name}.",
+        "runFailed": "La ejecución de {name} falló y quedó registrada. Abre el historial para ver el motivo.",
+        "deleted": "{name} se eliminó."
+      },
+      "every": {
+        "day": "{interval, plural, one {Todos los días} other {Cada # días}}",
+        "week": "{interval, plural, one {Todas las semanas} other {Cada # semanas}}",
+        "month": "{interval, plural, one {Todos los meses} other {Cada # meses}}",
+        "year": "{interval, plural, one {Todos los años} other {Cada # años}}"
+      },
+      "status": {
+        "active": "Activa",
+        "paused": "Pausada",
+        "ended": "Finalizada"
+      },
+      "runStatus": {
+        "created": "Creada",
+        "failed": "Fallida"
+      },
+      "modeShort": {
+        "draft": "Un borrador",
+        "issue": "Emitida",
+        "issue_send": "Emitida y enviada"
+      },
+      "modeSent": {
+        "email": "Emitida y enviada por correo",
+        "link": "Emitida, compartida por enlace",
+        "whatsapp": "Emitida y enviada por WhatsApp"
+      },
+      "frequency": {
+        "day": "Días",
+        "week": "Semanas",
+        "month": "Meses",
+        "year": "Años"
+      },
+      "modeCards": {
+        "draft": {
+          "title": "Dejar como borrador",
+          "hint": "Cada factura espera tu revisión antes de emitirse."
+        },
+        "issue": {
+          "title": "Emitir",
+          "hint": "Cada factura lleva número y está lista el día de vencimiento."
+        },
+        "issue_send": {
+          "title": "Emitir y enviar",
+          "hint": "Cada factura se emite y se envía al comprador por sí sola."
+        }
+      },
+      "warnings": {
+        "noBuyerEmail": "La plantilla no tiene correo del comprador, así que el envío por correo fallará. Añade un correo o envía por enlace."
+      },
+      "preview": {
+        "title": "Próximas ejecuciones",
+        "incomplete": "Completa la programación para ver cuándo se crearán las facturas.",
+        "sentence": "{every} desde {start}{limit}. {outcome}",
+        "sentenceLimit": "{kind, select, runs {, {count, plural, one {1 factura} other {# facturas}}} end {, hasta {end}} both {, {count, plural, one {1 factura} other {# facturas}}, hasta {end}} other {}}",
+        "outcome": {
+          "draft": "Cada factura se deja como borrador para que la revises.",
+          "issue": "Cada factura se emite automáticamente.",
+          "issue_email": "Cada factura se emite y se envía por correo al comprador.",
+          "issue_link": "Cada factura se emite y se registra como compartida por enlace.",
+          "issue_whatsapp": "Cada factura se emite y se envía por WhatsApp."
+        },
+        "eachInvoice": "Cada factura sale por unos",
+        "lastDay": "Último día del mes",
+        "noRuns": "Ninguna ejecución cae dentro de esta programación.",
+        "endsMaxRuns": "{count, plural, one {Se detiene después de 1 factura.} other {Se detiene después de # facturas.}}",
+        "endsEndDate": "{count, plural, one {Nada se ejecuta después de {date}: 1 factura en total.} other {Nada se ejecuta después de {date}: # facturas en total.}}",
+        "moreBounded": "{count, plural, one {1 factura en total.} other {# facturas en total, el resto sigue el mismo ritmo.}}",
+        "moreForever": "Sigue hasta que la pausas o la eliminas.",
+        "clampNote": "Esta programación empieza el día {day}. Un mes sin día {day} se ejecuta el último día, y el mes siguiente vuelve al día {day}.",
+        "catchUp": "{count, plural, one {1 periodo ya pasó: su factura se crea de inmediato.} other {# periodos ya pasaron: sus facturas se crean de inmediato, una por cada uno.}}",
+        "catchUpTooOld": "{count} periodos ya pasaron, y como máximo se crean {max}. Empieza desde una fecha más reciente."
+      },
+      "builder": {
+        "loading": "Cargando",
+        "endedNoEdit": "Esta programación ha finalizado, así que ya no se puede editar.",
+        "openSchedule": "Abrir la programación",
+        "back": "Atrás",
+        "newTitle": "Nueva factura recurrente",
+        "editTitle": "Editar {name}",
+        "newSubtitle": "Define el ritmo y la factura que crea. Las próximas ejecuciones se muestran a un lado.",
+        "editSubtitle": "Cambia el ritmo o la factura de los periodos que quedan por venir.",
+        "cancel": "Cancelar",
+        "save": "Guardar cambios",
+        "create": "Crear programación",
+        "conflict": "Otra persona cambió esta programación mientras editabas. Recarga para ver su versión. Tus cambios aquí se perderán.",
+        "reload": "Recargar",
+        "fixProblems": "Corrige primero los campos marcados.",
+        "nothingToSave": "No se cambió nada.",
+        "saved": "Programación guardada.",
+        "created": "{name} ahora creará facturas según la programación.",
+        "schedule": "Programación",
+        "name": "Nombre",
+        "nameHint": "Solo lo ves tú, por ejemplo Iguala mensual.",
+        "every": "Repetir cada",
+        "frequency": "Unidad",
+        "startDate": "Primera factura el",
+        "startFixed": "La fecha de inicio no se puede cambiar. Crea una programación nueva para empezar en otra fecha.",
+        "startHint": "Una fecha pasada hace que los periodos ya vencidos se creen de inmediato, hasta 12.",
+        "endDate": "Terminar después de (opcional)",
+        "endHint": "No se crea ninguna factura después de esta fecha.",
+        "maxRuns": "Número de facturas (opcional)",
+        "maxRunsHint": "La programación termina después de este número de facturas.",
+        "noLimit": "Sin límite",
+        "scheduleEditNote": "Un ritmo modificado continúa desde hoy y nunca repite un periodo que ya se ejecutó.",
+        "mode": "Qué pasa con cada factura",
+        "sendChannel": "Enviar por",
+        "sendChannelHint": "Enlace registra que tú compartes el enlace. Correo y WhatsApp lo envían por ti.",
+        "templateTitle": "Plantilla de factura",
+        "templateFuture": "Una plantilla nueva se aplica a las facturas que quedan por venir. Las facturas ya creadas no cambian.",
+        "replaceTemplate": "Reemplazar la plantilla",
+        "keepTemplate": "Mantener la plantilla actual"
+      },
+      "template": {
+        "title": "Plantilla de factura",
+        "hint": "Cada periodo recibe una factura nueva creada a partir de esta, con la fecha de ese periodo.",
+        "hintEdit": "Crea aquí la plantilla nueva. Reemplaza a la actual para las facturas futuras.",
+        "sourceLabel": "De dónde viene la plantilla",
+        "source": {
+          "invoice": {
+            "title": "Copiar una factura",
+            "hint": "Usa el comprador y las líneas de una factura que ya creaste."
+          },
+          "build": {
+            "title": "Crear una plantilla",
+            "hint": "Completa aquí el comprador y las líneas."
+          }
+        },
+        "draftInvoice": "Factura en borrador",
+        "copyOf": "Una copia de esta factura, con un total de",
+        "change": "Cambiar",
+        "choose": "Elige una factura",
+        "copyNote": "El comprador, las líneas, los impuestos y las notas se copian al guardar. Los cambios posteriores en el original no llegan a la programación.",
+        "startFromInvoice": "Partir de una factura",
+        "startFromInvoiceHint": "Carga aquí su comprador y sus líneas para que los ajustes.",
+        "billTo": "Facturar a",
+        "contact": "Contacto",
+        "contactHint": "Elige un contacto para vincular cada factura, o escribe el comprador abajo.",
+        "buyerName": "Nombre en la factura",
+        "buyerEmail": "Correo",
+        "buyerPhone": "Teléfono",
+        "buyerCountry": "País",
+        "buyerCountryHint": "Dos letras, como IN o DE.",
+        "buyerTaxId": "ID fiscal",
+        "buyerAddress": "Dirección de facturación",
+        "details": "Moneda e impuestos",
+        "currency": "Moneda",
+        "docType": "Documento",
+        "docTypes": {
+          "tax_invoice": "Factura fiscal",
+          "proforma": "Factura proforma"
+        },
+        "taxMode": "Impuesto",
+        "taxModes": {
+          "rates": "Por tipo de impuesto",
+          "auto": "Automático"
+        },
+        "taxModeAutoHint": "El motor de impuestos decide los impuestos según los países del vendedor y del comprador.",
+        "supplyType": "Suministro",
+        "supply": {
+          "goods": "Bienes",
+          "services": "Servicios",
+          "digital": "Servicios digitales"
+        },
+        "paymentTerms": "Condiciones de pago",
+        "paymentTermsHint": "Se cuentan desde el día en que se emite cada factura.",
+        "termsDefault": "Predeterminado del espacio de trabajo",
+        "termsOnReceipt": "Al recibirla",
+        "termsNet": "Neto {days}",
+        "lines": "Líneas de artículo",
+        "adjustments": "Descuento y envío",
+        "discountKind": "Descuento sobre toda la factura",
+        "discountNone": "Sin descuento",
+        "discountPercent": "Porcentaje",
+        "discountAmount": "Importe fijo ({currency})",
+        "discountValue": "Valor del descuento",
+        "shipping": "Envío ({currency})",
+        "notes": "Nota para el cliente",
+        "notesHint": "Se imprime en cada factura.",
+        "termsText": "Términos y condiciones",
+        "termsTextHint": "Se imprime al pie de cada factura.",
+        "kept": "{count, plural, one {La plantilla tiene 1 línea, facturada a} other {La plantilla tiene # líneas, facturadas a}}"
+      },
+      "problems": {
+        "generic": "Revisa este campo.",
+        "nameRequired": "Dale un nombre a la programación.",
+        "nameTooLong": "Usa como máximo 120 caracteres.",
+        "intervalInvalid": "Introduce un número entero de 1 a 365.",
+        "startInvalid": "Introduce una fecha de inicio válida.",
+        "startTooOld": "Esa fecha de inicio está {count} periodos atrás, y como máximo se crean {max} periodos pasados. Elige una fecha más reciente.",
+        "endInvalid": "Introduce una fecha de fin válida.",
+        "endBeforeStart": "La fecha de fin es anterior a la fecha de inicio.",
+        "maxRunsInvalid": "Introduce un número entero de 1 a 1000, o déjalo vacío.",
+        "invoiceRequired": "Elige la factura que quieres copiar.",
+        "termsInvalid": "Introduce de 0 a 365 días.",
+        "descriptionRequired": "Describe esta línea.",
+        "qtyInvalid": "Introduce una cantidad mayor que cero.",
+        "priceInvalid": "Introduce un precio válido.",
+        "lineDiscountInvalid": "Introduce un porcentaje de 0 a 100.",
+        "hsnRequired": "Introduce el código HSN o SAC.",
+        "hsnInvalid": "Un código HSN o SAC tiene de 2 a 12 letras o dígitos.",
+        "taxRateRemoved": "Este tipo de impuesto ya no existe. Elige otro.",
+        "currencyInvalid": "Introduce un código de moneda de tres letras.",
+        "noLines": "Añade al menos una línea.",
+        "discountInvalid": "Introduce un descuento válido.",
+        "shippingInvalid": "Introduce un importe válido.",
+        "emailInvalid": "Introduce una dirección de correo válida.",
+        "amountZero": "El total de la factura debe ser mayor que cero.",
+        "amountInvalid": "Este importe no es válido.",
+        "contactRequired": "Elige un contacto o escribe el nombre del comprador. Las facturas que se emiten por sí solas necesitan un comprador.",
+        "countryInvalid": "Usa un código de país de dos letras.",
+        "regionInvalid": "Introduce un código de estado o región válido.",
+        "autoNeedsSellerCountry": "El impuesto automático necesita tu país en la configuración de facturación."
+      },
+      "detail": {
+        "loading": "Cargando la programación",
+        "backToList": "Volver a facturas recurrentes",
+        "back": "Volver a facturas recurrentes",
+        "failures": "{count, plural, one {1 periodo no pudo crear su factura.} other {# periodos no pudieron crear su factura.}}",
+        "seeHistory": "Ver el motivo",
+        "pausedNote": "Esta programación está pausada. Los periodos que caen mientras está pausada se omiten: al reanudarla, la próxima factura será de hoy o de una fecha posterior.",
+        "endedNote": "Esta programación ha finalizado. No se creará nada más y ya no se puede editar.",
+        "nextRun": "Próxima ejecución",
+        "lastRun": "Última ejecución",
+        "runs": "Facturas creadas",
+        "failedCount": "{count, plural, one {1 fallo} other {# fallos}}",
+        "amount": "Por factura",
+        "amountNote": "Cuánto suma la plantilla hoy",
+        "upcoming": "Fechas próximas",
+        "noUpcoming": "No quedan más ejecuciones pendientes.",
+        "template": "Plantilla",
+        "buyer": "Comprador",
+        "lines": "Líneas",
+        "currency": "Moneda",
+        "mode": "Cada factura es de",
+        "starts": "Inicio",
+        "ends": "Fin",
+        "never": "Sin fecha de fin",
+        "limit": "Límite",
+        "noLimit": "Sin límite",
+        "invoicesCount": "{count, plural, one {1 factura} other {# facturas}}",
+        "templateNote": "Editar la plantilla cambia las facturas que quedan por venir, nunca las que ya se crearon."
+      },
+      "runs": {
+        "title": "Historial de ejecuciones",
+        "subtitle": "Una fila por cada periodo, la más reciente primero.",
+        "loading": "Cargando el historial",
+        "scrollArea": "Tabla del historial de ejecuciones, se desplaza horizontalmente",
+        "emptyTitle": "Todavía no hay ejecuciones",
+        "emptyMessage": "La primera factura se crea en la próxima fecha de ejecución.",
+        "period": "Periodo {n}",
+        "draftInvoice": "Borrador",
+        "showing": "{count, plural, one {Mostrando 1 ejecución} other {Mostrando # ejecuciones}}",
+        "loadMore": "Cargar más",
+        "allLoaded": "Se muestra el historial completo",
+        "columns": {
+          "period": "Fecha del periodo",
+          "status": "Resultado",
+          "invoice": "Factura",
+          "error": "Por qué falló",
+          "at": "Creada a las"
+        }
+      }
+    }
+  }
+}

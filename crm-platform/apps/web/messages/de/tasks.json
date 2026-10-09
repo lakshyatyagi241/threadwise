@@ -1,0 +1,330 @@
+{
+  "tasks": {
+    "nav": {
+      "tasks": "Aufgaben"
+    },
+    "common": {
+      "dismiss": "Ausblenden"
+    },
+    "hub": {
+      "title": "Aufgaben",
+      "subtitle": "Nachfassaktionen und To-dos. Weisen Sie sie zu, legen Sie eine Priorität und ein Fälligkeitsdatum fest und haken Sie sie ab.",
+      "newTask": "Neue Aufgabe",
+      "tableLabel": "Aufgaben",
+      "loading": "Aufgaben werden geladen",
+      "useSampleData": "Beispieldaten verwenden (Entwicklung)",
+      "emptyFilteredTitle": "Keine passenden Aufgaben",
+      "emptyFiltered": "Versuchen Sie eine andere Suche oder löschen Sie die Filter.",
+      "resetFilters": "Filter löschen",
+      "empty": {
+        "mine": {
+          "title": "Ihnen ist nichts zugewiesen",
+          "message": "Ihnen zugewiesene Aufgaben werden hier angezeigt. Fügen Sie oben eine hinzu oder sehen Sie sich Alle Aufgaben an."
+        },
+        "all": {
+          "title": "Noch keine Aufgaben",
+          "message": "Fügen Sie mit dem Feld oben eine Nachfassaktion oder ein To-do hinzu, dann wird es hier angezeigt."
+        },
+        "overdue": {
+          "title": "Nichts überfällig",
+          "message": "Alle offenen Aufgaben sind termingerecht."
+        },
+        "today": {
+          "title": "Heute nichts fällig",
+          "message": "Für den restlichen Tag ist keine offene Aufgabe fällig."
+        },
+        "upcoming": {
+          "title": "Nichts Anstehendes",
+          "message": "Offene Aufgaben mit späterem Fälligkeitsdatum werden hier angezeigt."
+        },
+        "completed": {
+          "title": "Noch keine erledigten Aufgaben",
+          "message": "Abgehakte Aufgaben werden hier angezeigt, die neuesten zuerst."
+        }
+      },
+      "showing": "{count, plural, one {# Aufgabe geladen} other {# Aufgaben geladen}}",
+      "loadMore": "Mehr laden",
+      "allLoaded": "Alle Aufgaben geladen",
+      "deleteTitle": "Diese Aufgabe löschen?",
+      "deleteMessage": "„{title}“ wird für alle gelöscht. Dies kann nicht rückgängig gemacht werden.",
+      "delete": "Löschen",
+      "keep": "Behalten"
+    },
+    "tabs": {
+      "label": "Aufgabenlisten",
+      "mine": "Meine Aufgaben",
+      "all": "Alle Aufgaben",
+      "overdue": "Überfällig",
+      "today": "Heute",
+      "upcoming": "Demnächst",
+      "completed": "Erledigt",
+      "count": "{count, plural, one {# Aufgabe} other {# Aufgaben}}"
+    },
+    "toolbar": {
+      "label": "Aufgabenfilter",
+      "search": "Aufgaben suchen",
+      "status": "Status",
+      "statusOpen": "Offen",
+      "statusDone": "Erledigt",
+      "statusAll": "Offen und erledigt",
+      "priority": "Priorität",
+      "allPriorities": "Alle Prioritäten",
+      "priorities": {
+        "high": "Hoch",
+        "medium": "Mittel",
+        "low": "Niedrig"
+      },
+      "assignee": "Zugewiesen an",
+      "allAssignees": "Alle Zugewiesenen",
+      "unassigned": "Nicht zugewiesen",
+      "linked": "Verknüpft mit",
+      "anyLink": "Beliebiger Datensatz",
+      "linkContact": "Ein Kontakt",
+      "linkDeal": "Ein Deal",
+      "clear": "Leeren",
+      "modifyColumns": "Spalten ändern",
+      "resetColumns": "Spalten zurücksetzen",
+      "columns": {
+        "title": "Aufgabe",
+        "priority": "Priorität",
+        "due": "Fällig",
+        "assignee": "Zugewiesen an",
+        "contact": "Kontakt",
+        "deal": "Deal",
+        "created": "Erstellt",
+        "completed": "Erledigt am"
+      },
+      "refresh": "Aktualisieren",
+      "shortcuts": "Tastenkürzel",
+      "view": "Ansicht",
+      "views": {
+        "list": "Liste",
+        "board": "Board nach Fälligkeitsdatum"
+      }
+    },
+    "table": {
+      "scrollArea": "Aufgabentabelle",
+      "selectAll": "Alle geladenen Aufgaben auswählen",
+      "selectRow": "{title} auswählen",
+      "columns": {
+        "title": "Aufgabe",
+        "priority": "Priorität",
+        "due": "Fällig",
+        "assignee": "Zugewiesen an",
+        "contact": "Kontakt",
+        "deal": "Deal",
+        "created": "Erstellt",
+        "completed": "Erledigt am"
+      }
+    },
+    "row": {
+      "complete": "Als erledigt markieren",
+      "reopen": "Wieder öffnen",
+      "completeNamed": "„{title}“ als erledigt markieren",
+      "reopenNamed": "„{title}“ wieder öffnen",
+      "moreFor": "Weitere Aktionen für {title}",
+      "open": "Öffnen",
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "unassigned": "Nicht zugewiesen"
+    },
+    "bulk": {
+      "label": "Aktionen für die ausgewählten Aufgaben",
+      "selected": "{count, plural, one {# Aufgabe ausgewählt} other {# Aufgaben ausgewählt}}",
+      "working": "Wird bearbeitet",
+      "complete": "Erledigen",
+      "assign": "Zuweisen",
+      "assignTo": "Zuweisen an",
+      "me": "{name} (ich)",
+      "unassign": "Zuweisung aufheben",
+      "delete": "Löschen",
+      "clear": "Auswahl aufheben",
+      "failed": "Das hat nicht funktioniert.",
+      "someFailed": "{count, plural, one {# Aufgabe konnte nicht geändert werden.} other {# Aufgaben konnten nicht geändert werden.}}",
+      "completed": "{count, plural, one {# Aufgabe erledigt.} other {# Aufgaben erledigt.}}",
+      "assigned": "{count, plural, one {# Aufgabe an {name} zugewiesen.} other {# Aufgaben an {name} zugewiesen.}}",
+      "unassigned": "{count, plural, one {# Aufgabe ohne Zuweisung.} other {# Aufgaben ohne Zuweisung.}}",
+      "deleted": "{count, plural, one {# Aufgabe gelöscht.} other {# Aufgaben gelöscht.}}",
+      "deleteTitle": "Die ausgewählten Aufgaben löschen?",
+      "deleteMessage": "{count, plural, one {# Aufgabe wird für alle gelöscht. Dies kann nicht rückgängig gemacht werden.} other {# Aufgaben werden für alle gelöscht. Dies kann nicht rückgängig gemacht werden.}}",
+      "keep": "Behalten"
+    },
+    "quick": {
+      "label": "Aufgabe hinzufügen",
+      "placeholder": "Aufgabe hinzufügen und Enter drücken",
+      "priority": "Priorität",
+      "priorities": {
+        "high": "Hoch",
+        "medium": "Mittel",
+        "low": "Niedrig"
+      },
+      "due": "Fälligkeitsdatum und -uhrzeit",
+      "add": "Hinzufügen",
+      "dueRequired": "Wählen Sie ein Fälligkeitsdatum und eine Uhrzeit.",
+      "titleRequired": "Geben Sie ein, was zu tun ist.",
+      "options": "Weitere Optionen (Priorität und Fälligkeitsdatum)"
+    },
+    "form": {
+      "eyebrow": "Aufgabe",
+      "newTitle": "Neue Aufgabe",
+      "editTitle": "Aufgabe bearbeiten",
+      "close": "Schließen",
+      "cancel": "Abbrechen",
+      "create": "Aufgabe erstellen",
+      "save": "Änderungen speichern",
+      "title": "Aufgabe",
+      "titlePlaceholder": "z. B. Acme wegen der Verlängerung anrufen",
+      "priority": "Priorität",
+      "priorities": {
+        "high": "Hoch",
+        "medium": "Mittel",
+        "low": "Niedrig"
+      },
+      "assignee": "Zuweisen an",
+      "unassigned": "Niemand",
+      "me": "{name} (ich)",
+      "due": "Fällig",
+      "presets": {
+        "today": "Heute",
+        "tomorrow": "Morgen",
+        "nextWeek": "Nächste Woche"
+      },
+      "clearDue": "Datum entfernen",
+      "contact": "Kontakt",
+      "deal": "Deal",
+      "notes": "Notizen",
+      "reminderHint": "Die zugewiesene Person erhält eine Erinnerung, wenn die Aufgabe fällig wird.",
+      "assigneePick": "Wählen Sie, wer für diese Aufgabe verantwortlich ist.",
+      "problems": {
+        "dueRequired": "Wählen Sie ein Fälligkeitsdatum und eine Uhrzeit.",
+        "priorityRequired": "Wählen Sie eine Priorität.",
+        "assigneeRequired": "Wählen Sie, für wen diese Aufgabe ist.",
+        "titleRequired": "Geben Sie ein, was zu tun ist.",
+        "titleTooLong": "Die Aufgabe ist zu lang (höchstens 255 Zeichen).",
+        "notesTooLong": "Die Notizen sind zu lang (höchstens 5000 Zeichen).",
+        "dueInvalid": "Dieses Datum ist ungültig.",
+        "assigneeInvalid": "Diese Person ist kein aktives Mitglied dieses Workspace."
+      }
+    },
+    "drawer": {
+      "loading": "Aufgabe wird geladen",
+      "close": "Schließen",
+      "eyebrow": "Aufgabe",
+      "name": "Aufgabenname",
+      "titleRequired": "Eine Aufgabe braucht einen Namen.",
+      "statusOpen": "Offen",
+      "statusDone": "Abgeschlossen",
+      "complete": "Als erledigt markieren",
+      "reopen": "Wieder öffnen",
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "details": "Details",
+      "notes": "Notizen",
+      "notesPlaceholder": "Kontext für die Person hinterlegen, die das übernimmt",
+      "linked": "Verknüpfte Datensätze",
+      "company": "Unternehmen",
+      "noLinks": "Nicht mit einem Kontakt oder einem Deal verknüpft.",
+      "activity": "Aktivität",
+      "events": {
+        "created": "Aufgabe erstellt",
+        "createdBy": "Erstellt von {name}",
+        "reminded": "Fälligkeitserinnerung gesendet",
+        "completed": "Als erledigt markiert"
+      },
+      "deleteTitle": "Diese Aufgabe löschen?",
+      "deleteMessage": "„{title}“ wird für alle gelöscht. Dies kann nicht rückgängig gemacht werden.",
+      "cancel": "Behalten"
+    },
+    "board": {
+      "buckets": {
+        "overdue": "Überfällig",
+        "today": "Heute",
+        "upcoming": "Demnächst",
+        "no_date": "Kein Datum"
+      },
+      "empty": "Hier ist nichts."
+    },
+    "due": {
+      "none": "Kein Datum",
+      "overdue": "Überfällig",
+      "today": "Heute, {time}",
+      "tomorrow": "Morgen, {time}",
+      "yesterday": "Gestern, {time}",
+      "date": "{date}, {time}"
+    },
+    "priority": {
+      "high": "Hoch",
+      "medium": "Mittel",
+      "low": "Niedrig"
+    },
+    "link": {
+      "unnamedContact": "Unbenannter Kontakt",
+      "unnamedDeal": "Deal"
+    },
+    "picker": {
+      "searchContact": "Kontakte durchsuchen",
+      "searchDeal": "Deals durchsuchen",
+      "results": "Suchergebnisse",
+      "searching": "Suche läuft",
+      "unavailable": "Die Suche ist derzeit nicht verfügbar.",
+      "none": "Keine Treffer.",
+      "unlink": "Verknüpfung entfernen"
+    },
+    "errors": {
+      "network": "Der Server konnte nicht erreicht werden. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+      "forbidden": "Sie sind nicht berechtigt, diese Aktion auszuführen.",
+      "signedOut": "Ihre Sitzung ist beendet. Melden Sie sich erneut an, um fortzufahren.",
+      "conflict": "Diese Aufgabe wurde von jemand anderem geändert. Laden Sie die Seite neu und versuchen Sie es erneut.",
+      "validation": "Einige Angaben sind ungültig.",
+      "unavailable": "Der Aufgabendienst ist auf diesem Server noch nicht verfügbar.",
+      "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
+      "notFound": "Diese Aufgabe wurde nicht gefunden. Sie wurde möglicherweise gelöscht.",
+      "planDisabled": "Ihr Tarif umfasst keine Aufgaben. Upgraden Sie, um sie freizuschalten.",
+      "assigneeInvalid": "Diese Person ist kein aktives Mitglied dieses Workspace.",
+      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es gleich noch einmal.",
+      "requestId": "Anfrage-ID",
+      "retry": "Erneut versuchen"
+    },
+    "toast": {
+      "completed": "Aufgabe abgeschlossen.",
+      "reopened": "Aufgabe wieder geöffnet.",
+      "created": "Aufgabe erstellt.",
+      "saved": "Aufgabe gespeichert.",
+      "deleted": "Aufgabe gelöscht.",
+      "conflict": "Diese Aufgabe wurde von jemand anderem geändert. Die Liste wurde neu geladen; versuchen Sie es erneut.",
+      "failed": "Die Aufgabe konnte nicht aktualisiert werden.",
+      "saveFailed": "Die Aufgabe konnte nicht gespeichert werden.",
+      "deleteFailed": "Die Aufgabe konnte nicht gelöscht werden.",
+      "createFailed": "Die Aufgabe konnte nicht erstellt werden."
+    },
+    "shortcuts": {
+      "title": "Tastenkürzel",
+      "close": "Schließen",
+      "intro": "Arbeiten Sie die Liste ohne Maus ab. Tastenkürzel pausieren, während Sie in einem Feld tippen.",
+      "actions": {
+        "next": "Nächste Aufgabe",
+        "prev": "Vorherige Aufgabe",
+        "open": "Aufgabe öffnen",
+        "toggleComplete": "Abschließen oder wieder öffnen",
+        "toggleSelect": "Auswählen oder Auswahl aufheben",
+        "newTask": "Neue Aufgabe",
+        "focusSearch": "Suchen",
+        "clearSelection": "Auswahl aufheben",
+        "help": "Diese Liste anzeigen"
+      }
+    },
+    "linked": {
+      "title": "Aufgaben",
+      "addPlaceholder": "Geben Sie einen Aufgabentitel ein und klicken Sie auf Hinzufügen, um die Details zu ergänzen",
+      "viewAll": "Alle anzeigen",
+      "loading": "Aufgaben werden geladen",
+      "unavailableTitle": "Aufgaben sind noch nicht verfügbar",
+      "unavailable": "Der Aufgabendienst ist auf diesem Server noch nicht verfügbar.",
+      "empty": "Keine offenen Aufgaben.",
+      "loadMore": "Mehr laden",
+      "loadMoreDone": "Weitere abgeschlossene laden",
+      "showDone": "Abgeschlossene anzeigen",
+      "hideDone": "Abgeschlossene ausblenden"
+    }
+  }
+}

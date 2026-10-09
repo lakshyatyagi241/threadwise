@@ -1,0 +1,112 @@
+{
+  "checkout-orders-merchant-payments": {
+    "gateways": {
+      "eyebrow": "Toko / Gateway pembayaran",
+      "title": "Gateway pembayaran",
+      "subtitle": "Tambahkan kunci gateway Anda sendiri agar pembayaran masuk ke akun Anda. Tempel kunci yang disebutkan gateway di dasbornya.",
+      "banner": "Satu pengaturan gateway digunakan oleh checkout toko dan faktur Penjualan Anda.",
+      "viewOnly": "Anda dapat melihat pengaturan gateway tetapi tidak dapat mengubahnya. Minta izin mengelola gateway kepada admin workspace.",
+      "scope": {
+        "label": "Cakupan pengaturan ini",
+        "workspace": "Workspace (semua toko)",
+        "workspaceHint": "Digunakan oleh setiap toko dan faktur Penjualan, kecuali toko memiliki penggantian sendiri.",
+        "store": "Toko ini saja (penggantian)",
+        "storeHint": "Hanya digunakan oleh checkout {shop}. Mengalahkan pengaturan workspace.",
+        "storeNamed": "Toko: {shop}",
+        "noShop": "Buat toko terlebih dahulu untuk mengatur penggantian.",
+        "shop": "Toko"
+      },
+      "resolved": {
+        "used": "Sedang digunakan: {name} (sumber: {source})",
+        "none": "Belum ada gateway yang diatur",
+        "noneHint": "Atur gateway di bawah dan aktifkan. Sampai saat itu pembeli tidak dapat membayar online dan faktur tidak memiliki tombol bayar.",
+        "source": {
+          "store_override": "penggantian toko",
+          "workspace_default": "default workspace",
+          "legacy_storefront": "kunci toko"
+        }
+      },
+      "mode": {
+        "live": "Live",
+        "test": "Uji"
+      },
+      "catalogue": {
+        "title": "Gateway",
+        "count": "{count, plural, other {# gateway}}",
+        "search": "Cari gateway",
+        "searchPlaceholder": "Cari berdasarkan nama, negara, atau mata uang",
+        "loading": "Memuat gateway",
+        "noDriversTitle": "Tidak ada gateway tersedia",
+        "noDriversMessage": "Server ini belum memiliki gateway pembayaran untuk diatur.",
+        "noMatchTitle": "Tidak ada gateway yang cocok",
+        "noMatchMessage": "Coba nama, negara, atau kode mata uang lain.",
+        "clearSearch": "Hapus pencarian"
+      },
+      "card": {
+        "available": "Tersedia",
+        "unavailable": "Belum tersedia",
+        "paymentLinks": "Tautan pembayaran",
+        "unavailableNote": "Gateway ini terdaftar tetapi belum dapat menerima pembayaran di versi ini.",
+        "active": "Aktif",
+        "off": "Nonaktif",
+        "incomplete": "Kunci belum lengkap",
+        "default": "Default",
+        "migrated": "Dimigrasikan dari kunci storefront Anda. Simpan sekali di sini untuk mempertahankannya di pengaturan baru.",
+        "webhookMissing": "Webhook secret hilang: notifikasi pembayaran dari gateway ini ditolak sampai Anda menambahkannya.",
+        "notSetUp": "Belum diatur untuk cakupan ini.",
+        "configure": "Konfigurasi",
+        "edit": "Edit",
+        "test": "Uji koneksi",
+        "testing": "Menguji",
+        "setDefault": "Jadikan default",
+        "activeSwitch": "{name} diaktifkan",
+        "remove": "Hapus",
+        "removeTitle": "Hapus {name}?",
+        "removeMessage": "Kunci tersimpannya dihapus untuk cakupan ini ({scope}). Pembeli tidak dapat lagi membayar melaluinya dan pembayaran yang sedang berlangsung mungkin tidak terkonfirmasi.",
+        "removeConfirm": "Hapus gateway"
+      },
+      "toast": {
+        "saved": "Gateway disimpan",
+        "switchedOn": "{name} diaktifkan",
+        "switchedOff": "{name} dinonaktifkan",
+        "defaultSet": "{name} sekarang menjadi default",
+        "removed": "{name} dihapus"
+      },
+      "test": {
+        "verified": "Penyedia menerima kunci tersebut.",
+        "fieldsTitle": "Kolom wajib sudah terisi",
+        "fieldsOnly": "Hanya kolom wajib yang diperiksa: gateway ini tidak punya panggilan pemeriksaan ringan, jadi pembayaran adalah ujian sebenarnya.",
+        "missingTitle": "Kunci belum lengkap",
+        "missing": "Kolom wajib berikut kosong: {fields}.",
+        "rejected": "Penyedia tidak menerima kunci tersebut.",
+        "providerSaid": "Penyedia menyatakan: {message}"
+      },
+      "drawer": {
+        "eyebrow": "Konfigurasi gateway",
+        "save": "Simpan gateway",
+        "appliesTo": "Berlaku untuk: {scope}",
+        "credentials": "Kredensial",
+        "noFields": "Gateway ini tidak memerlukan kunci.",
+        "secretsNote": "Kunci tersimpan tidak pernah ditampilkan lagi. Hanya bagian akhir setiap kunci yang ditampilkan sebagai pengingat.",
+        "requiredField": "{field} wajib diisi.",
+        "invalidOption": "Pilih salah satu opsi yang tersedia untuk {field}.",
+        "mode": "Mode",
+        "modeHint": "Gunakan Uji saat Anda mencoba gateway dengan kunci ujinya, dan Live untuk menerima pembayaran sungguhan.",
+        "active": "Aktif",
+        "activeHint": "Gateway yang nonaktif tidak pernah digunakan oleh checkout atau faktur.",
+        "webhookTitle": "Alamat webhook",
+        "webhookHint": "Tempel ini ke dasbor {name} Anda agar pembayaran terkonfirmasi otomatis.",
+        "webhookAfterSave": "Alamat webhook muncul di sini setelah penyimpanan pertama.",
+        "willClear": "Nilai tersimpan akan dihapus saat Anda menyimpan.",
+        "keepBlank": "Kosongkan untuk mempertahankan nilai tersimpan.",
+        "requiredMark": "(wajib)",
+        "stored": "Tersimpan: {mask}",
+        "keepOption": "Pertahankan nilai tersimpan",
+        "chooseOption": "Pilih opsi",
+        "clear": "Hapus nilai tersimpan",
+        "show": "Tampilkan nilai",
+        "hide": "Sembunyikan nilai"
+      }
+    }
+  }
+}

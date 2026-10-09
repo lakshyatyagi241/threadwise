@@ -1,0 +1,361 @@
+{
+  "message-templates": {
+    "nav": {
+      "title": "テンプレート"
+    },
+    "common": {
+      "dismiss": "閉じる",
+      "requestId": "リクエストID"
+    },
+    "status": {
+      "draft": "下書き",
+      "pending": "審査中",
+      "approved": "承認済み",
+      "rejected": "却下",
+      "paused": "一時停止",
+      "disabled": "無効",
+      "deleted": "Metaに存在しません"
+    },
+    "category": {
+      "MARKETING": "マーケティング",
+      "UTILITY": "ユーティリティ",
+      "AUTHENTICATION": "認証"
+    },
+    "quality": {
+      "GREEN": "高品質",
+      "YELLOW": "中品質",
+      "RED": "低品質",
+      "UNKNOWN": "品質評価中"
+    },
+    "errors": {
+      "generic": "エラーが発生しました。もう一度お試しください。繰り返し発生する場合は、リクエストIDをお知らせください。",
+      "TPL_NOT_FOUND": "このテンプレートは存在しません。",
+      "TPL_NAME_TAKEN": "この番号には、同じ名前と言語のテンプレートがすでに存在します。別の名前または言語を選択してください。",
+      "TPL_LINT_FAILED": "確認でMetaが拒否する問題が見つかりました。送信はされていません。右に表示されたエラーを修正してください。",
+      "TPL_META_REJECTED": "Metaがテンプレートを拒否しました。理由は下に表示されています。テンプレートは下書きとして保存されているため、修正して再度お試しください。",
+      "TPL_NO_CONNECTION": "このテンプレートを申請できる連携済みのWhatsApp番号がありません。先に番号を連携してください。",
+      "TPL_IN_USE": "このテンプレートは実行中または予約済みの一斉送信で使用されているため、削除できません。",
+      "TPL_NOT_EDITABLE": "編集できるのは、Metaが未承認のテンプレートまたは却下されたテンプレートのみです。",
+      "ROW_VERSION_CONFLICT": "編集中に、別のユーザーがこのテンプレートを変更しました。再読み込みして最新版を確認し、変更を再度適用してください。",
+      "VALIDATION_FAILED": "一部の項目が正しくありません。下の項目を確認してください。",
+      "INTERNAL": "サーバーでリクエストを処理できませんでした。しばらくしてから再度お試しください。"
+    },
+    "preview": {
+      "title": "プレビュー",
+      "headerImageAlt": "ヘッダー画像のサンプル",
+      "header": {
+        "image": "画像",
+        "video": "動画",
+        "document": "ドキュメント",
+        "location": "位置情報"
+      },
+      "authBody": "は認証コードです。",
+      "authExpiry": "{count, plural, other {このコードは # 分後に期限切れになります。}}",
+      "bodyEmpty": "ここにメッセージ本文が表示されます。",
+      "time": "10:30",
+      "copyCode": "コードをコピー",
+      "buttonUnnamed": "ボタン",
+      "moreButtons": "{count, plural, other {+#個のボタン}}"
+    },
+    "card": {
+      "rejected": "却下：{reason}",
+      "view": "表示",
+      "edit": "編集",
+      "delete": "削除"
+    },
+    "library": {
+      "title": "テンプレートライブラリ",
+      "intro": "WhatsAppメッセージテンプレート：作成し、Metaに審査を申請して、ここでステータスを確認できます。",
+      "sync": "Metaから同期",
+      "syncing": "同期中...",
+      "syncHint": "Metaからテンプレートを取得",
+      "syncDone": "Metaから同期しました：新規 {created} 件、更新 {updated} 件、Metaに存在しなくなった {missing} 件。",
+      "syncNone": "このWhatsApp Businessアカウントにはまだテンプレートがありません。",
+      "syncFailed": "Metaからの同期に失敗しました。番号の連携状態を確認して、再度お試しください。",
+      "syncPartial": "{count, plural, other {# 件の番号を同期できませんでした。}}",
+      "new": "新しいテンプレート",
+      "filters": "テンプレートを絞り込む",
+      "search": "検索",
+      "searchPlaceholder": "テンプレート名",
+      "status": "ステータス",
+      "allStatuses": "すべてのステータス",
+      "category": "カテゴリー",
+      "allCategories": "すべてのカテゴリー",
+      "connection": "WhatsApp番号",
+      "allConnections": "すべての番号",
+      "loading": "テンプレートを読み込み中",
+      "retry": "再試行",
+      "emptyTitle": "テンプレートはまだありません",
+      "emptyBody": "テンプレートを作成してMetaに申請するか、Meta Business Managerにある既存のテンプレートを同期してください。",
+      "emptyFilteredTitle": "一致するテンプレートはありません",
+      "emptyFilteredBody": "フィルターを変更またはクリアすると、より多くのテンプレートが表示されます。",
+      "clearFilters": "フィルターをクリア",
+      "loadMore": "もっと読み込む"
+    },
+    "delete": {
+      "title": "テンプレートを削除",
+      "message": "「{name}」を削除しますか？こことMetaの両方から削除され、送信できなくなります。",
+      "confirm": "テンプレートを削除",
+      "cancel": "キャンセル",
+      "done": "「{name}」を削除しました。",
+      "inUseHelp": "このテンプレートを使用している一斉送信を開き、キャンセルするか別のテンプレートを選んでから、このテンプレートを削除してください。"
+    },
+    "lint": {
+      "title": "申請前の確認",
+      "checking": "確認中",
+      "unavailable": "現在、確認を実行できませんでした。Metaの審査は引き続き行われ、申請時にサーバーで再度確認されます。",
+      "clean": "問題は見つかりませんでした。",
+      "summary": "{errors, plural, other {エラー # 件}}、{warnings, plural, other {警告 # 件}}",
+      "severity": {
+        "error": "エラー",
+        "warning": "警告"
+      },
+      "field": {
+        "name": "名前",
+        "language": "言語",
+        "header": "ヘッダー",
+        "body": "本文",
+        "footer": "フッター",
+        "buttons": "ボタン",
+        "template": "テンプレート"
+      }
+    },
+    "form": {
+      "loading": "読み込み中",
+      "retry": "再試行",
+      "backToLibrary": "ライブラリに戻る",
+      "noPermission": "テンプレートを作成または編集する権限がありません。",
+      "notEditableTitle": "このテンプレートはもう編集できません",
+      "notEditableBody": "編集できるのは、Metaが未承認のテンプレートまたは却下されたテンプレートのみです。承認済みのテンプレートを変更するには、新しいテンプレートを作成してください。",
+      "viewTemplate": "テンプレートを表示",
+      "breadcrumb": "パンくずリスト",
+      "breadcrumbLibrary": "テンプレート",
+      "breadcrumbNew": "新規",
+      "breadcrumbEdit": "編集",
+      "titleNew": "新しいテンプレート",
+      "titleEdit": "{name}を編集",
+      "saveDraft": "下書きを保存",
+      "submit": "Metaに申請",
+      "reload": "テンプレートを再読み込み",
+      "aside": "プレビューと確認",
+      "why": {
+        "connection": "申請に使うWhatsApp番号を選択してください。",
+        "name": "テンプレート名を入力してください。",
+        "fields": "一部の項目が正しくありません。",
+        "errors": "申請する前にエラーを修正してください。",
+        "checking": "テンプレートを確認中です。"
+      },
+      "toast": {
+        "submitted": "テンプレートをMetaに審査のため申請しました。",
+        "saved": "テンプレートを下書きとして保存しました。"
+      },
+      "errors": {
+        "name": "テンプレート名を入力してください。",
+        "header": "ヘッダーは60文字以内で入力してください。",
+        "body": "本文は{max}文字以内で入力してください。",
+        "footer": "フッターは60文字以内で入力してください。"
+      },
+      "identity": {
+        "title": "識別情報",
+        "connection": "WhatsApp番号",
+        "connectionHint": "メディアと申請には同じ番号を使用してください。異なる場合、Metaはテンプレートを拒否します。",
+        "connectionUnknown": "この番号は利用できません",
+        "noConnection": "申請に使える連携済みのWhatsApp番号がありません。",
+        "connectNumber": "番号を連携",
+        "category": "カテゴリー",
+        "categoryHint": "Metaはカテゴリーに基づいてテンプレートを審査し、料金を設定します。",
+        "categories": {
+          "MARKETING": "マーケティング",
+          "UTILITY": "ユーティリティ",
+          "AUTHENTICATION": "認証"
+        },
+        "name": "テンプレート名",
+        "nameHint": "使用可能なのは a-z、0-9、_ のみで、60文字以内です。",
+        "nameTaken": "この名前は、この番号でこの言語にすでに使用されています。",
+        "language": "言語"
+      },
+      "auth": {
+        "title": "ワンタイムパスコード",
+        "hint": "認証テンプレートのメッセージとコピーボタンは、Metaが作成します。",
+        "expiry": "コードの有効期限（分）",
+        "expiryHint": "任意。{min}分から{max}分まで。",
+        "expiryInvalid": "{min}から{max}までの整数を入力してください。",
+        "fixedBody": "メッセージは次の内容です：コードに続けて「は認証コードです」とセキュリティに関する注意が表示されます。変更することはできません。"
+      },
+      "header": {
+        "title": "ヘッダー",
+        "hint": "任意。テキスト、または画像、動画、ドキュメント、位置情報のいずれか1つ。",
+        "type": "ヘッダーの種類",
+        "kind": {
+          "none": "なし",
+          "text": "テキスト",
+          "image": "画像",
+          "video": "動画",
+          "document": "ドキュメント",
+          "location": "位置情報"
+        },
+        "text": "ヘッダーのテキスト",
+        "textHint": "{used}/{max}。変数は1つまでです。",
+        "sample": "サンプルファイル",
+        "uploading": "アップロード中",
+        "keptSample": "保存済みのサンプルは残ります。置き換えるにはファイルを選択してください。",
+        "noFile": "ファイルが選択されていません",
+        "limits": "画像は5 MBまで、動画は16 MBまで、PDFは100 MBまでです。",
+        "replace": "ファイルを置き換え",
+        "choose": "サンプルファイルを選択",
+        "tooBig": "この{kind}は {size} MB です。WhatsAppは {max} MB までのファイルを受け付けます。より小さいファイルを選択してください。",
+        "wrongType": "このヘッダーではこのファイル形式は使用できません。",
+        "emptyFile": "このファイルは空です。",
+        "locationHelp": "位置情報は送信時に入力されます。Metaには、ヘッダーが位置情報であることだけを伝えれば十分です。"
+      },
+      "body": {
+        "title": "本文",
+        "hint": "メッセージ本文です。'{{name}}' 形式の変数を使用してください。保存時にMeta向けに番号が付けられます。",
+        "toolbar": "テキストの書式",
+        "format": {
+          "bold": "太字",
+          "italic": "斜体",
+          "strike": "取り消し線",
+          "code": "コード"
+        },
+        "variable": "変数を追加",
+        "label": "本文のテキスト",
+        "counter": "{used}/{max}",
+        "wrapSample": "テキスト"
+      },
+      "variables": {
+        "title": "変数の割り当て",
+        "empty": "変数はまだありません。本文に '{{name}}' のようなプレースホルダーを入力するか、「変数を追加」を使用してください。",
+        "help": "各変数について、送信時に値を入れる連絡先の属性を指定し、Metaの審査用にサンプル値を入力してください。",
+        "attribute": "連絡先の属性",
+        "sample": "サンプル値",
+        "header": "ヘッダー",
+        "body": "本文"
+      },
+      "footer": {
+        "title": "フッター",
+        "label": "フッターのテキスト",
+        "hint": "任意。{used}/{max}。変数は使用できません。"
+      },
+      "buttons": {
+        "title": "ボタン",
+        "hint": "任意。クイック返信は先頭または末尾にまとめて配置してください。",
+        "add": {
+          "quick_reply": "クイック返信",
+          "url": "ウェブサイトを開く",
+          "phone": "電話をかける",
+          "copy_code": "コードをコピー"
+        },
+        "kind": {
+          "quick_reply": "クイック返信",
+          "url": "ウェブサイトを開く",
+          "phone": "電話をかける",
+          "copy_code": "コードをコピー",
+          "other": "その他"
+        },
+        "count": "{used}/{max} 個のボタン",
+        "limitReached": "この種類は最大{max}個までです。",
+        "empty": "ボタンはありません。上のボタンから追加してください。",
+        "moveUp": "ボタン {n} を上に移動",
+        "moveDown": "ボタン {n} を下に移動",
+        "remove": "ボタン {n} を削除",
+        "keptAsIs": "「{text}」はそのまま保持されます。このエディターでは変更されません。",
+        "text": "ボタンのテキスト",
+        "textHint": "{used}/25",
+        "url": "ウェブサイトのURL",
+        "urlHint": "動的な部分には末尾に '{{1}}' を追加してください。",
+        "urlExample": "変数のサンプル",
+        "phone": "電話番号",
+        "phoneHint": "国番号を含めて入力してください。",
+        "code": "サンプルコード",
+        "codeHint": "例：PROMO50",
+        "limits": "Metaで利用できるのは、クイック返信 {quick} 個まで、ウェブサイトボタン {url} 個まで、電話ボタン {phone} 個まで、コードのコピーボタン {copy} 個までです。",
+        "allUsed": "すべての種類のボタンが上限に達しています。",
+        "issue": {
+          "textRequired": "ボタンのテキストを入力してください。",
+          "textTooLong": "{max}文字以内で入力してください。",
+          "urlRequired": "URLを入力してください。",
+          "urlInvalid": "URLは http:// または https:// で始めてください。",
+          "phoneRequired": "電話番号を入力してください。",
+          "codeRequired": "サンプルコードを入力してください。",
+          "quickReplyVariable": "クイック返信に変数を含めることはできません。",
+          "urlExampleRequired": "URLの変数のサンプル値を入力してください。",
+          "quickReplyPosition": "クイック返信は、ボタンの先頭または末尾にまとめて配置してください。"
+        }
+      },
+      "result": {
+        "metaRefused": "保存しましたが、Metaがテンプレートを拒否しました。",
+        "metaRefusedHelp": "テンプレートは下書きとして保持されています。Metaが指摘した箇所を修正して、再度申請してください。入力内容は変更されていません。",
+        "submitted": "Metaに審査のため申請しました。",
+        "saved": "下書きとして保存しました。",
+        "warnings": "Metaの審査前に確認をおすすめします：",
+        "open": "テンプレートを開く"
+      }
+    },
+    "detail": {
+      "loading": "テンプレートを読み込み中",
+      "retry": "再試行",
+      "back": "ライブラリに戻る",
+      "breadcrumb": "パンくずリスト",
+      "refresh": "ステータスを更新",
+      "retrySubmit": "Metaに申請",
+      "edit": "編集",
+      "delete": "削除",
+      "refreshed": "Metaからステータスを更新しました。",
+      "submittedToast": "テンプレートをMetaに審査のため申請しました。",
+      "never": "なし",
+      "none": "なし",
+      "banner": {
+        "metaFailed": "Metaがテンプレートを拒否しました",
+        "draft": "このテンプレートはまだMetaに申請されていません。申請して審査を開始してください。",
+        "pending": "Metaの審査に申請済みです。このページは15秒ごとに結果を確認します。",
+        "pendingMeta": "申請日時 {submitted}。最終確認日時 {checked}。",
+        "polling": "このページは開いたままにするか、後で戻ってきてください。",
+        "rejected": "Metaにより却下",
+        "rejectedHelp": "理由に対応するようテンプレートを編集し、再度申請してください。",
+        "paused": "Metaにより一時停止されています。Metaが停止を解除するまで送信できません。",
+        "pausedUntil": "Metaにより {when} まで一時停止されています。",
+        "disabled": "Metaにより無効化されています。送信できません。",
+        "deleted": "Metaにこのテンプレートが表示されなくなりました。ここには残っています。再度同期するか、削除してください。"
+      },
+      "facts": {
+        "title": "Meta同期",
+        "status": "Metaのステータス",
+        "quality": "品質",
+        "category": "Metaのカテゴリー",
+        "metaId": "テンプレートID",
+        "number": "WhatsApp番号",
+        "numberUnknown": "この番号は利用できません",
+        "submitted": "申請日時",
+        "approved": "承認日時",
+        "synced": "最終同期"
+      },
+      "components": {
+        "title": "構成要素",
+        "header": "ヘッダー",
+        "media": "ヘッダーのメディア",
+        "body": "本文",
+        "footer": "フッター",
+        "buttons": "ボタン",
+        "expiry": "コードの有効期限",
+        "expiryValue": "{count, plural, other {# 分}}"
+      },
+      "attachment": {
+        "none": "なし",
+        "image": "画像",
+        "video": "動画",
+        "document": "ドキュメント",
+        "location": "位置情報"
+      },
+      "lint": {
+        "title": "確認",
+        "clean": "問題は見つかりませんでした。"
+      },
+      "payload": {
+        "title": "Metaに送信するデータ",
+        "hint": "Metaの審査に送信される内容です（作成された通りに表示）。",
+        "empty": "まだ作成されていません。"
+      }
+    }
+  }
+}

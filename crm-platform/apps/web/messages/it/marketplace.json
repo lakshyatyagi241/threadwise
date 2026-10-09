@@ -1,0 +1,870 @@
+{
+  "marketplace": {
+    "nav": {
+      "marketplace": "Marketplace"
+    },
+    "meta": {
+      "apps": "Mini app · Marketplace",
+      "integrations": "Integrazioni · Marketplace",
+      "app": "App · Marketplace",
+      "install": "Installa · Marketplace",
+      "installed": "Installata · Marketplace",
+      "manage": "Gestisci app · Marketplace",
+      "requests": "Richieste · Marketplace"
+    },
+    "common": {
+      "dismiss": "Ignora",
+      "loading": "Caricamento",
+      "errorTitle": "Impossibile caricare questo",
+      "requestId": "ID richiesta",
+      "retry": "Riprova",
+      "upgrade": "Vedi i piani e passa a un piano superiore",
+      "opensNewTab": "(si apre in una nuova scheda)",
+      "copy": "Copia",
+      "copied": "Copiato",
+      "copyFailed": "Impossibile copiare. Seleziona il testo e copialo manualmente.",
+      "needsPermission": "Per farlo ti serve il permesso {permission}. Chiedi a un admin del workspace."
+    },
+    "errors": {
+      "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
+      "forbidden": "Non hai il permesso per farlo.",
+      "signedOut": "La tua sessione è terminata. Accedi di nuovo.",
+      "conflict": "Qualcun altro ha modificato questo per primo. Ricarica per vedere l’ultima versione.",
+      "validation": "Alcuni valori non sono validi. Controlla i campi e riprova.",
+      "rateLimited": "Troppe richieste. Attendi un momento e riprova.",
+      "rateLimitedWait": "Troppe richieste. Riprova tra {seconds, plural, one {# secondo} other {# secondi}}.",
+      "unavailable": "Il Marketplace non è ancora disponibile su questo server.",
+      "notFound": "Questo elemento non esiste più.",
+      "appNotFound": "Questa app non esiste o non è disponibile per il tuo workspace.",
+      "notInstalled": "Questa app non è installata nel tuo workspace.",
+      "alreadyInstalled": "Questa app è già installata nel tuo workspace.",
+      "appUnavailable": "Questa app non è offerta al momento.",
+      "appLockedPlan": "Il tuo piano non include questa app. Passa a un piano superiore per sbloccarla.",
+      "appLockedModule": "Questa app non è disponibile su questa installazione del prodotto.",
+      "planLocked": "Il Marketplace non fa parte del tuo piano. Passa a un piano superiore per usarlo.",
+      "planLimitInstalled": "Hai raggiunto il limite del tuo piano per le app installate, quindi non è stato installato nulla. Disinstallane una o passa a un piano superiore.",
+      "planLimitInstalledCounts": "Hai installato {used} delle {cap} app consentite dal tuo piano, quindi non è stato installato nulla. Disinstalla un’app o passa a un piano superiore.",
+      "planLimitLeadSources": "Hai raggiunto il limite del tuo piano per le fonti lead, quindi non è stato installato nulla. Rimuovi una fonte lead o passa a un piano superiore.",
+      "planLimitLeadSourcesCounts": "Hai {used} delle {cap} fonti lead consentite dal tuo piano, quindi non è stato installato nulla. Rimuovine una o passa a un piano superiore.",
+      "planLimit": "Hai raggiunto un limite del tuo piano, quindi non è stato installato nulla. Passa a un piano superiore per continuare.",
+      "planLimitCounts": "Hai usato {used} di {cap} consentiti dal tuo piano, quindi non è stato installato nulla. Passa a un piano superiore per continuare.",
+      "consentRequired": "I permessi sono cambiati. Rivedili prima di installare.",
+      "reconsentRequired": "La nuova versione richiede più permessi. Rivedili e accettali prima.",
+      "scopeExceeds": "Non puoi concedere permessi che tu stesso non hai. Mancanti: {permissions}.",
+      "installationKilled": "La piattaforma ha sospeso questa app. Può solo essere disinstallata.",
+      "installationDisabled": "Questa app è in pausa. Riprendila prima.",
+      "credentialMissing": "Compila i campi obbligatori.",
+      "noConnection": "Questa installazione non ha una connessione in grado di farlo.",
+      "leadPipeline": "Il servizio lead non è disponibile al momento. Non è stato salvato nulla. Riprova tra poco.",
+      "unexpected": "Qualcosa è andato storto. Riprova.",
+      "subscriptionRequired": "È un’app a pagamento. Abbonati per installarla.",
+      "notForSale": "Questa app non è al momento venduta a nuovi abbonati.",
+      "trialUnavailable": "La prova gratuita non è disponibile per questa app nel tuo workspace.",
+      "subscriptionNotFound": "Il tuo workspace non ha un abbonamento a questa app.",
+      "subscriptionState": "Non corrisponde allo stato attuale dell’abbonamento. Ricarica per vedere lo stato più recente."
+    },
+    "chips": {
+      "installed": "Installata",
+      "paused": "In pausa",
+      "killed": "Fermata dalla piattaforma",
+      "healthy": "Operativo",
+      "degraded": "Degradato",
+      "error": "Errore",
+      "needs_reauth": "Accesso da rinnovare",
+      "unknown": "Non ancora verificato",
+      "needsConsent": "Nuove autorizzazioni da verificare",
+      "subscribed": "Abbonata",
+      "trialing": "Prova gratuita",
+      "comped": "Omaggio",
+      "canceling": "Non rinnovato",
+      "subscriptionEnded": "Abbonamento terminato"
+    },
+    "lock": {
+      "planFeature": {
+        "chip": "Non incluso nel tuo piano",
+        "message": "Il tuo piano non include questa app. Puoi leggerne la descrizione qui, ma per installarla serve un piano superiore."
+      },
+      "moduleDisabled": {
+        "chip": "Non disponibile",
+        "message": "Questa app dipende da un modulo disattivato in questa installazione del prodotto."
+      },
+      "limitReached": {
+        "chip": "Limite del piano raggiunto",
+        "message": "Hai installato tutte le app consentite dal tuo piano. Disinstallane una oppure passa a un piano superiore."
+      }
+    },
+    "scopes": {
+      "risk": {
+        "low": "Rischio basso",
+        "medium": "Rischio medio",
+        "high": "Rischio alto"
+      },
+      "none": "Questa app non richiede alcuna autorizzazione.",
+      "new": "Nuova",
+      "overall": {
+        "low": {
+          "title": "Rischio complessivo basso",
+          "message": "Questa app chiede solo di leggere dati."
+        },
+        "medium": {
+          "title": "Rischio complessivo medio",
+          "message": "Questa app può leggere e modificare i dati del tuo workspace."
+        },
+        "high": {
+          "title": "Rischio complessivo alto",
+          "message": "Questa app può agire per tuo conto, ad esempio inviare messaggi o gestire integrazioni. Installala solo se ti fidi dello sviluppatore."
+        }
+      },
+      "counts": "{high} alto, {medium} medio, {low} basso"
+    },
+    "header": {
+      "title": "Marketplace",
+      "subtitle": "Aggiungi mini app e collega servizi esterni al tuo workspace.",
+      "tabsLabel": "Sezioni del Marketplace",
+      "moreLabel": "Installate e richieste",
+      "tabs": {
+        "mini_app": "Mini app",
+        "integration": "Integrazioni"
+      },
+      "installed": "Installate",
+      "installedLimit": "Installate ({installed} di {limit})",
+      "installedUnlimited": "Installate ({installed})",
+      "request": "Richiedi un’integrazione"
+    },
+    "card": {
+      "firstParty": "Creata da noi",
+      "pricing": {
+        "free": "Gratuita",
+        "included": "Incluso nel tuo piano",
+        "monthly": "{price} / mese",
+        "subscribed": "Abbonata",
+        "notForSale": "Non in vendita",
+        "paid": "App a pagamento",
+        "addOn": "Componente aggiuntivo",
+        "trial": "Prova gratuita di {days} giorni"
+      },
+      "installs": "{count, plural, one {# installazione} other {# installazioni}}",
+      "version": "Versione {version}",
+      "cta": {
+        "install": "Installa",
+        "manage": "Gestisci",
+        "review": "Verifica autorizzazioni",
+        "killed": "Gestisci",
+        "locked": "Visualizza dettagli",
+        "view": "Visualizza dettagli",
+        "subscribe": "Abbonati"
+      }
+    },
+    "browse": {
+      "categoriesLabel": "Categorie",
+      "all": "Tutte",
+      "shelves": {
+        "featured": "In evidenza",
+        "popular": "Popolari",
+        "new": "Nuove"
+      },
+      "searchLabel": "Cerca nel Marketplace",
+      "searchPlaceholder": {
+        "mini_app": "Cerca mini app",
+        "integration": "Cerca integrazioni"
+      },
+      "availability": {
+        "label": "Mostra",
+        "all": "Tutte",
+        "addons": "Componenti aggiuntivi disponibili",
+        "installed": "Installate"
+      },
+      "sortLabel": "Ordina per",
+      "sort": {
+        "featured": "In evidenza",
+        "popular": "Più installate",
+        "new": "Più recenti",
+        "name": "Nome"
+      },
+      "unknownCategory": "Questa categoria non esiste in questa scheda.",
+      "showAll": "Mostra tutto",
+      "resultsAll": "Tutte le app",
+      "resultsFiltered": "Risultati",
+      "loadedCount": "{count, plural, one {# app mostrata} other {# app mostrate}}",
+      "loadMore": "Carica altro",
+      "clearFilters": "Cancella filtri",
+      "empty": {
+        "search": {
+          "title": "Nessun risultato per la ricerca",
+          "message": "Prova con un nome più breve oppure cancella i filtri. Se non è in elenco, puoi richiederla qui sotto."
+        },
+        "addons": {
+          "title": "Nessun componente aggiuntivo da acquistare qui",
+          "message": "I componenti aggiuntivi inclusi nel tuo piano che non hai acquistato compaiono qui. Scegli Tutte per vederli tutti."
+        },
+        "installed": {
+          "title": "Nessuna app installata qui",
+          "message": "Le app che installi compaiono qui. Scegli Tutte per sfogliarle tutte."
+        },
+        "category": {
+          "title": "Nessun elemento in questa categoria",
+          "message": "Scegli un’altra categoria oppure richiedi qui sotto ciò che ti serve."
+        },
+        "none": {
+          "title": "Non c’è ancora nulla da mostrare",
+          "message": "Le nuove app compaiono qui quando vengono pubblicate. Puoi richiederne una qui sotto."
+        }
+      }
+    },
+    "requestBox": {
+      "title": {
+        "mini_app": "Manca una mini app?",
+        "integration": "Manca un’integrazione?"
+      },
+      "message": "Dicci di cosa hai bisogno. Le richieste vengono conteggiate e le più richieste vengono sviluppate per prime.",
+      "action": {
+        "mini_app": "Richiedi una mini app",
+        "integration": "Richiedi un’integrazione"
+      }
+    },
+    "detail": {
+      "backToMarketplace": "Torna al Marketplace",
+      "backToApps": "Torna alle mini app",
+      "backToIntegrations": "Torna alle integrazioni",
+      "notFound": {
+        "title": "App non trovata",
+        "message": "Questa app non esiste oppure non è disponibile per il tuo workspace.",
+        "integrations": "Sfoglia le integrazioni",
+        "apps": "Sfoglia le mini app"
+      },
+      "kind": {
+        "mini_app": "Mini app",
+        "integration": "Integrazione"
+      },
+      "firstParty": "Creata da noi",
+      "install": "Installa",
+      "manage": "Gestisci",
+      "killed": "La piattaforma ha interrotto questa app. Può solo essere disinstallata.",
+      "about": "Informazioni su questa app",
+      "screenshots": "Screenshot",
+      "screenshotAlt": "Screenshot {n} di {name}",
+      "permissions": {
+        "title": "Cosa può accedere",
+        "intro": "Le vedrai di nuovo e dovrai confermarle prima di installare qualsiasi cosa."
+      },
+      "setup": {
+        "title": "Cosa dovrai configurare",
+        "intro": {
+          "oauth": "Accedi al servizio per collegarlo.",
+          "push": "Il servizio invia dati al tuo workspace usando una chiave che inserisci qui.",
+          "pull": "Recuperiamo i dati dal servizio usando una chiave che inserisci qui.",
+          "email_parse": "Leggiamo le email di avviso inviate dal servizio.",
+          "webhook_relay": "Ottieni un indirizzo web e un segreto da incollare nello strumento che invia i dati.",
+          "client": "Installala dove lavori e accedi con il tuo account."
+        },
+        "required": "Obbligatorio",
+        "optional": "Facoltativo",
+        "kind": {
+          "secret": "tenuto segreto",
+          "text": "testo",
+          "select": "scelta"
+        },
+        "noFields": "Non c’è nulla da compilare. I dettagli di connessione compaiono dopo l’installazione.",
+        "hasSample": "Dopo l’installazione puoi inviare un lead di prova per verificare la connessione."
+      },
+      "data": {
+        "title": "I tuoi dati",
+        "intro": "Cosa memorizza questa app, dove e come viene eliminata.",
+        "summary": "Cosa memorizza",
+        "regions": "Dove",
+        "deletion": "Come viene eliminata"
+      },
+      "changelog": {
+        "title": "Cosa è cambiato",
+        "version": "Versione {version}"
+      },
+      "facts": {
+        "title": "Dettagli",
+        "version": "Versione",
+        "connector": "Come si collega",
+        "connectors": {
+          "oauth": "Accesso",
+          "push": "Invia dati a te",
+          "pull": "Recuperiamo i suoi dati",
+          "email_parse": "Email di avviso",
+          "webhook_relay": "Indirizzo web e segreto",
+          "client": "Installata da ciascun membro"
+        },
+        "installs": "Installazioni",
+        "developer": "Sviluppatore"
+      },
+      "support": {
+        "title": "Supporto e note legali",
+        "website": "Sito web",
+        "docs": "Documentazione",
+        "privacy": "Informativa sulla privacy",
+        "terms": "Termini",
+        "status": "Pagina dello stato",
+        "email": "Supporto via email"
+      }
+    },
+    "install": {
+      "backToMarketplace": "Torna al Marketplace",
+      "backToApp": "Torna a {name}",
+      "notFound": {
+        "title": "App non trovata",
+        "message": "Questa app non esiste oppure non è disponibile per il tuo workspace."
+      },
+      "alreadyTitle": "Già installata",
+      "alreadyMessage": "{name} è già installata nel tuo workspace.",
+      "openManage": "Aprila",
+      "lockedTitle": "{name} è bloccata",
+      "noPermissionTitle": "Non puoi installare app",
+      "noPermissionMessage": "Per installare app serve un’autorizzazione che il tuo ruolo non ha.",
+      "title": "Installa {name}",
+      "stepsLabel": "Passaggi di installazione",
+      "steps": {
+        "permissions": "Autorizzazioni",
+        "setup": "Configura",
+        "done": "Fatto"
+      },
+      "permissions": {
+        "title": "Verifica autorizzazioni",
+        "intro": "{name} richiede le autorizzazioni indicate di seguito. Installandola le ottiene esattamente così, finché non la disinstalli.",
+        "diffSummary": "{missing, plural, one {# autorizzazione omessa} other {# autorizzazioni omesse}} e {unexpected, plural, one {# non mostrata} other {# non mostrate}}.",
+        "consent": "Ho capito e autorizzo questa app a usare queste autorizzazioni nel mio workspace.",
+        "consentNone": "So che {name} non richiede alcuna autorizzazione e voglio installarla.",
+        "continue": "Continua"
+      },
+      "cancel": "Annulla",
+      "install": "Installa",
+      "back": "Indietro",
+      "setup": {
+        "title": "Configura",
+        "intro": "Compila i dati che questa app richiede per connettersi. Le chiavi sono conservate in modo protetto e non possono essere lette di nuovo."
+      },
+      "installing": "Installazione in corso",
+      "missingPermissions": "Ti mancano queste autorizzazioni:",
+      "seeInstalled": "Vedi cosa è installato",
+      "changed": {
+        "title": "Le autorizzazioni sono cambiate mentre le guardavi",
+        "message": "Ricontrolla l’elenco qui sotto. Non è stato installato nulla.",
+        "added": "Ora richiede anche:",
+        "removed": "Non richiede più:",
+        "edited": "La descrizione o il livello di rischio di alcune autorizzazioni è cambiato."
+      },
+      "gaps": {
+        "title": "Potresti non poter concedere tutte queste autorizzazioni",
+        "message": "Installare non concede mai più accesso di quello che ha chi installa. Sembra che ti manchi:"
+      },
+      "done": {
+        "title": "{name} è installata",
+        "message": "La versione {version} è ora attiva nel tuo workspace.",
+        "saved": "L’ho salvata, continua",
+        "manage": "Apri impostazioni",
+        "browse": "Torna al Marketplace"
+      },
+      "subscribeTitle": "{name} è un’app a pagamento",
+      "subscribeIntro": "Abbonati per installarla. Passi al checkout per pagare il primo mese; quando è prevista una prova, puoi provarla gratuitamente prima. Verifichi e confermi le autorizzazioni prima che venga installato qualsiasi cosa.",
+      "notForSaleTitle": "{name} non è in vendita",
+      "goToCheckout": "Vai al checkout"
+    },
+    "setup": {
+      "optionalLabel": "{label} (facoltativo)",
+      "stored": {
+        "notSet": "Non impostato",
+        "endsIn": "Salvato, termina con {last}",
+        "value": "Un valore è salvato",
+        "set": "Salvato"
+      },
+      "keepBlank": "Lascia vuoto per mantenere il valore salvato. Scrivi per sostituirlo.",
+      "show": "Mostra valore",
+      "hide": "Nascondi valore",
+      "choose": "Scegli",
+      "clear": "Cancella {label}",
+      "problems": {
+        "required": "{label} è obbligatorio.",
+        "pattern": "{label} non sembra corretto.",
+        "option": "Scegli una delle opzioni per {label}.",
+        "server": "{label} non è stato accettato. Controlla il valore."
+      }
+    },
+    "reveal": {
+      "title": "Salva il segreto della connessione",
+      "warning": "Non vedrai più questo segreto. Copialo ora e conservalo in un posto sicuro. Se lo perdi, rigeneralo per ottenerne uno nuovo.",
+      "address": "Indirizzo web di destinazione",
+      "secret": "Segreto",
+      "copyAddress": "Copia l’indirizzo web",
+      "copySecret": "Copia il segreto",
+      "saved": "Ho salvato il segreto e l’indirizzo.",
+      "doneHint": "Seleziona la casella per continuare.",
+      "send": {
+        "title": "Come inviare",
+        "post": "Invia una richiesta POST con corpo JSON all’indirizzo.",
+        "token": "Inserisci il segreto nell’intestazione {header}.",
+        "signature": "Oppure firma il corpo con HMAC-SHA256 usando il segreto e invia sha256= seguito dal digest esadecimale nell’intestazione {header}."
+      },
+      "leaveConfirm": "Non hai confermato di aver salvato il segreto. Se esci ora, non lo vedrai più. Vuoi uscire comunque?"
+    },
+    "portals": {
+      "maturity": {
+        "beta": "Beta",
+        "needsPortalSetup": "Richiede configurazione del portale",
+        "betaHint": "Creata a partire dalla documentazione parziale del portale. Funziona, ma potrebbe richiedere un ritocco dopo il primo lead reale.",
+        "needsPortalSetupHint": "Non arriva nulla finché il team del portale non la attiva per te."
+      },
+      "reveal": {
+        "title": "Salva il tuo indirizzo privato",
+        "warning": "Non vedrai più questo indirizzo. È anche la password della connessione: chiunque lo abbia può inviare lead nel tuo workspace. Copialo ora e conservalo in un posto sicuro. Se lo perdi, crea un nuovo indirizzo; quello vecchio smetterà di funzionare.",
+        "address": "Il tuo indirizzo privato",
+        "copyAddress": "Copia l’indirizzo privato",
+        "saved": "Ho salvato l’indirizzo.",
+        "sendTitle": "Cosa serve al mittente",
+        "method": "Metodo: {methods}",
+        "formats": "Formati accettati: {formats}",
+        "noHeader": "Non serve altro: né intestazioni né firma. L’ultima parte dell’indirizzo è la password.",
+        "managerTitle": "Invialo al referente account del portale",
+        "copyMessage": "Copia un messaggio per il referente account del portale",
+        "messageCopied": "Messaggio copiato",
+        "portalFallback": "il portale",
+        "managerIntro": "La attiva il team di {portal}, non tu. Copia un messaggio già pronto e inviaglielo al referente account."
+      },
+      "formats": {
+        "json": "JSON",
+        "form": "campi del modulo",
+        "xml": "XML",
+        "query": "parametri della query string"
+      },
+      "message": {
+        "subjectLine": "Oggetto: indirizzo di consegna dei lead per il nostro account {portal}",
+        "body": "Buongiorno,\n\nVi chiediamo di iniziare a inviare i lead del nostro account {portal} a questo indirizzo privato:\n\n{address}\n\nInviate ogni lead con {methods}. Accettiamo i dati in formato {formats}. L’indirizzo identifica già il nostro account, quindi non servono intestazioni, password o firme. Vi chiediamo di mantenerlo riservato.\n\nAppena l’invio sarà attivo, inviateci un lead di prova così verifichiamo che arrivi.\n\nGrazie."
+      },
+      "connection": {
+        "nextPoll": "Prossimo controllo",
+        "notScheduled": "Non pianificato",
+        "syncedThrough": "Lead recuperati fino a",
+        "syncedNever": "Nessun recupero ancora",
+        "errorHint": "Inserisci di nuovo la chiave in Credenziali oppure premi Sincronizza ora.",
+        "errorHintNoSync": "Inserisci di nuovo la chiave in Credenziali.",
+        "rotatePath": "Crea un nuovo indirizzo",
+        "rotatePathConfirm": {
+          "title": "Creare un nuovo indirizzo?",
+          "message": "Verrà creato un nuovo indirizzo privato e quello vecchio smetterà subito di funzionare. Ciò che continua a inviare al vecchio indirizzo verrà rifiutato finché il team del portale non riceve il nuovo. Il nuovo indirizzo ti verrà mostrato una sola volta.",
+          "confirm": "Crea nuovo indirizzo"
+        },
+        "waiting": {
+          "title": "In attesa del primo lead da {portal}",
+          "message": "Il team di {portal} deve attivarlo. Non arriva nulla finché non inizia a inviare all’indirizzo della tua connessione. Assicurati che il referente account abbia l’indirizzo e chiedigli un lead di prova."
+        },
+        "path": {
+          "address": "Indirizzo privato",
+          "maskedNote": "L’ultima parte dell’indirizzo è la sua password. Viene mostrata una sola volta, all’installazione o alla creazione di un nuovo indirizzo, quindi qui se ne vede solo la fine.",
+          "method": "Metodo: {methods}",
+          "formats": "Formati accettati: {formats}",
+          "noHeader": "Non servono intestazioni né firma. L’indirizzo è la password: tienilo riservato.",
+          "newAddressHint": "Hai perso l’indirizzo o vuoi impedire a qualcuno di usarlo? Crea un nuovo indirizzo qui sotto. Quello vecchio smette subito di funzionare e il team del portale deve ricevere quello nuovo."
+        }
+      },
+      "sync": {
+        "button": "Sincronizza ora",
+        "needsActive": "Riprendi l’app per sincronizzare ora.",
+        "scheduledNow": "Sincronizzazione pianificata. Parte subito.",
+        "scheduled": "Sincronizzazione pianificata per {time}.",
+        "waits": "Il portale consente una richiesta ogni {interval}, quindi questa sincronizzazione deve attendere.",
+        "duration": {
+          "seconds": "{count, plural, one {# secondo} other {# secondi}}",
+          "minutes": "{count, plural, one {# minuto} other {# minuti}}",
+          "hours": "{count, plural, one {# ora} other {# ore}}"
+        }
+      }
+    },
+    "installed": {
+      "title": "Installata",
+      "filters": {
+        "kind": "Tipo",
+        "status": "Stato",
+        "all": "Tutti"
+      },
+      "kind": {
+        "mini_app": "Mini app",
+        "integration": "Integrazione"
+      },
+      "status": {
+        "active": "Installate",
+        "disabled": "In pausa",
+        "killed": "Interrotta dalla piattaforma"
+      },
+      "listLabel": "App installate",
+      "emptyFiltered": {
+        "title": "Nessun risultato per questi filtri",
+        "message": "Modifica i filtri per vedere le altre app installate."
+      },
+      "empty": {
+        "title": "Nessuna app installata",
+        "message": "Sfoglia il Marketplace per aggiungere una mini app o collegare un servizio.",
+        "integrations": "Sfoglia le integrazioni",
+        "apps": "Sfoglia le mini app"
+      },
+      "usage": {
+        "unlimited": "{installed} installate. Il tuo piano non ha limiti.",
+        "of": "{installed} di {limit} installate",
+        "remaining": "{count, plural, one {# posto libero} other {# posti liberi}}",
+        "atCap": "Hai raggiunto il limite del tuo piano. Disinstalla un’app oppure passa a un piano superiore per installarne un’altra.",
+        "upgrade": "Vedi i piani e passa a un piano superiore",
+        "nearCap": "Sei vicino al limite del tuo piano."
+      },
+      "version": "Versione {version}",
+      "killReason": "Motivo: {reason}",
+      "lastError": "Ultimo errore: {error}",
+      "pending": "La versione {version} attende che tu accetti le sue nuove autorizzazioni.",
+      "installedOn": "Installata il {date}",
+      "review": "Verifica",
+      "manage": "Gestisci",
+      "subscriptions": {
+        "title": "Abbonamenti",
+        "intro": "Le tue app a pagamento e le prove, incluse le app disinstallate il cui periodo a pagamento è ancora in corso.",
+        "listLabel": "Abbonamenti",
+        "manage": "Gestisci",
+        "viewApp": "Visualizza app"
+      }
+    },
+    "manage": {
+      "backToInstalled": "Torna alle installate",
+      "notFound": {
+        "title": "Installazione non trovata",
+        "message": "Questa app non è installata nel tuo workspace oppure è stata disinstallata."
+      },
+      "version": "Versione {version}",
+      "checkedAt": "Ultima verifica {date}",
+      "notChecked": "Non ancora verificata. Usa Prova connessione per controllarla.",
+      "lastError": "Ultimo errore: {error}",
+      "viewListing": "Vedi scheda",
+      "resume": "Riprendi",
+      "pause": "Pausa",
+      "toast": {
+        "resumed": "App ripresa.",
+        "paused": "App in pausa.",
+        "consented": "Nuove autorizzazioni accettate. Ora sulla versione {version}.",
+        "uninstalled": "{name} è stata disinstallata."
+      },
+      "killed": {
+        "title": "Interrotta dalla piattaforma",
+        "message": "Questa app è stata disattivata per tutti. Puoi solo disinstallarla.",
+        "reason": "Motivo: {reason}"
+      },
+      "paused": {
+        "title": "In pausa",
+        "message": "Un’app in pausa non fa nulla e il suo indirizzo web rifiuta le consegne finché non la riprendi."
+      },
+      "permissions": {
+        "title": "Autorizzazioni concesse",
+        "intro": "Cosa può fare ora questa app nel tuo workspace."
+      },
+      "reconsent": {
+        "title": "La versione {version} richiede nuove autorizzazioni",
+        "message": "Questa app continua a funzionare con la versione {current} finché non accetti le autorizzazioni della versione {version}.",
+        "newScopes": "Nuove autorizzazioni",
+        "fullList": "L’elenco completo della nuova versione",
+        "accept": "Accetta nuove autorizzazioni"
+      },
+      "problem": {
+        "conflictTitle": "Modificata nel frattempo",
+        "conflictMessage": "Qualcun altro ha modificato questa app. Ricarica per vedere lo stato più recente, poi ripeti la modifica.",
+        "reload": "Ricarica",
+        "consentTitle": "Le autorizzazioni sono cambiate",
+        "consentMessage": "L’elenco delle autorizzazioni è cambiato da quando hai aperto questa pagina. Ricarica per vedere l’elenco attuale."
+      },
+      "credentials": {
+        "title": "Credenziali e impostazioni",
+        "intro": "Scrivere sostituisce un valore salvato. Lascia vuoto un campo per mantenere quello salvato. Le chiavi salvate non vengono più mostrate.",
+        "readOnly": "Ciò che è salvato per questa app. Le chiavi non vengono mostrate.",
+        "saved": "Impostazioni salvate.",
+        "nothingToSave": "Nulla da salvare ancora.",
+        "save": "Salva modifiche",
+        "missing": "Compila i campi obbligatori.",
+        "invalid": "Alcuni valori non sono stati accettati."
+      },
+      "connection": {
+        "title": "Connessione",
+        "intro": "Come questa app comunica con il tuo workspace e il suo stato.",
+        "type": "Tipo",
+        "types": {
+          "oauth": "Accesso",
+          "push": "Invia dati a te",
+          "pull": "Recuperiamo i suoi dati",
+          "email_parse": "Email di avviso",
+          "webhook_relay": "Indirizzo web e segreto",
+          "client": "Installata da ciascun membro"
+        },
+        "status": "Stato della connessione",
+        "statuses": {
+          "active": "Attiva",
+          "paused": "In pausa",
+          "error": "Errore",
+          "disabled": "Disattivata"
+        },
+        "pollEvery": "Controlla ogni",
+        "seconds": "{count, plural, one {# secondo} other {# secondi}}",
+        "lastEvent": "Ultima consegna",
+        "lastSuccess": "Ultimo successo",
+        "lastError": "Ultimo errore",
+        "never": "Mai",
+        "counters": {
+          "received": "Ricevute",
+          "accepted": "Accettate",
+          "duplicates": "Duplicate",
+          "failed": "Non riuscite"
+        },
+        "inbound": {
+          "address": "Indirizzo web di destinazione",
+          "copyAddress": "Copia l’indirizzo web",
+          "method": "Invia una richiesta POST con corpo JSON.",
+          "token": "Inserisci il segreto nell’intestazione {header}.",
+          "signature": "Oppure firma il corpo con HMAC-SHA256 e invia sha256= seguito dal digest esadecimale nell’intestazione {header}.",
+          "secretEndsIn": "Il segreto termina con {last}. Non può essere mostrato di nuovo.",
+          "secretSet": "È impostato un segreto. Non può essere mostrato di nuovo."
+        },
+        "actions": {
+          "test": "Prova connessione",
+          "sample": "Invia lead di prova",
+          "rotate": "Rigenera segreto",
+          "sampleNeedsActive": "Riprendi l’app per inviare un lead di prova.",
+          "testOk": "La connessione funziona.",
+          "testFailed": "Il test della connessione non è riuscito.",
+          "latency": "{ms} ms",
+          "sampleAccepted": "Lead di prova accettato. Ora esiste come lead reale.",
+          "sampleDuplicate": "Quel lead di prova era già stato ricevuto.",
+          "rotatedDone": "L’ho salvato, continua",
+          "rotateNotApplicable": "Il segreto di questa connessione è una chiave dell’altro servizio. Modificalo invece in Credenziali e impostazioni.",
+          "rotateConfirm": {
+            "title": "Rigenerare il segreto della connessione?",
+            "message": "Viene creato un nuovo segreto e quello vecchio smette subito di funzionare. Ciò che continua a inviare con il vecchio segreto verrà rifiutato finché non gli darai quello nuovo. Il nuovo segreto ti verrà mostrato una sola volta.",
+            "confirm": "Rigenera segreto",
+            "cancel": "Annulla"
+          }
+        }
+      },
+      "events": {
+        "title": "Consegne recenti",
+        "intro": "Le ultime cose ricevute da questa connessione, dalla più recente.",
+        "refresh": "Aggiorna",
+        "empty": {
+          "title": "Nessuna consegna ancora",
+          "message": "Quando l’altro servizio invia qualcosa, o quando invii un lead di prova, compare qui."
+        },
+        "columns": {
+          "received": "Ricevuta",
+          "status": "Esito",
+          "externalId": "ID consegna",
+          "error": "Motivo"
+        },
+        "status": {
+          "accepted": "Accettata",
+          "duplicate": "Duplicata",
+          "rejected": "Rifiutata",
+          "failed": "Non riuscita"
+        },
+        "loadMore": "Carica altro"
+      },
+      "pauseConfirm": {
+        "title": "Mettere in pausa {name}?",
+        "message": "Smette di funzionare finché non la riprendi. Nel frattempo il suo indirizzo web rifiuta le consegne.",
+        "confirm": "Metti in pausa",
+        "cancel": "Annulla"
+      },
+      "uninstall": {
+        "section": "Disinstalla",
+        "sectionIntro": "Rimuovi questa app dal tuo workspace.",
+        "open": "Disinstalla",
+        "title": "Disinstallare {name}?",
+        "confirm": "Disinstalla",
+        "cancel": "Annulla",
+        "effect": "Il suo accesso termina subito.",
+        "effectConnection": "Il suo accesso termina subito e il suo indirizzo web smette di rispondere.",
+        "dataLegend": "Cosa deve succedere ai dati che ha creato?",
+        "choices": {
+          "keep": {
+            "label": "Conserva i dati creati",
+            "help": "I contatti e i record aggiunti restano nel tuo workspace."
+          },
+          "delete": {
+            "label": "Elimina i dati creati",
+            "help": "Registriamo la tua richiesta e la comunichiamo alle parti del prodotto che gestiscono quei dati."
+          }
+        },
+        "honestNote": "Oggi, i contatti già creati da questa app restano nel tuo workspace in ogni caso. La tua scelta viene registrata per le aree che eliminano i dati.",
+        "irreversible": "L’operazione non può essere annullata. Per usare di nuovo l’app, reinstallala.",
+        "renewal": {
+          "title": "Questa app ha un abbonamento a pagamento",
+          "message": "Disinstallando, l’abbonamento non viene rinnovato, quindi non viene addebitato altro. Il periodo già pagato resta tuo: puoi reinstallarla prima che finisca, senza costi.",
+          "messageUntil": "Disinstallando, l’abbonamento non viene rinnovato, quindi non viene addebitato altro. Il periodo già pagato resta tuo fino al {date}: puoi reinstallarla prima di quella data, senza costi."
+        }
+      },
+      "subscription": {
+        "title": "Abbonamento",
+        "subscribeTitle": "Abbonati per continuare a usare {name}",
+        "subscribeIntro": "È un’app a pagamento e il tuo workspace non ha ancora un abbonamento.",
+        "included": "Il tuo piano include questa app, quindi non c’è nulla da pagare."
+      },
+      "subscriptionEnded": {
+        "title": "Abbonamento terminato",
+        "message": {
+          "resubscribe": "{name} è in pausa perché l’abbonamento è terminato. I tuoi dati e le impostazioni sono conservati. Abbonati di nuovo per riattivarla.",
+          "notForSale": "{name} è in pausa perché l’abbonamento è terminato e non è più in vendita, quindi non può essere riattivata. I tuoi dati e le impostazioni sono conservati.",
+          "resumable": "{name} è in pausa perché l’abbonamento è terminato, ma il tuo workspace vi ha di nuovo accesso. Riprendila per riattivarla."
+        },
+        "resubscribe": "Riabbonati",
+        "resume": "Riprendi",
+        "noCheckout": "Il checkout non è disponibile al momento. Riprova tra poco."
+      }
+    },
+    "requests": {
+      "title": "Richieste",
+      "form": {
+        "title": "Richiedi qualcosa",
+        "intro": "Non c’è in elenco? Dicci cosa ti serve. Se qualcuno l’ha già richiesta, la tua richiesta conta come voto.",
+        "name": "Nome",
+        "namePlaceholder": "Ad esempio, il nome di un servizio",
+        "kind": "Tipo",
+        "kinds": {
+          "mini_app": "Mini app",
+          "integration": "Integrazione"
+        },
+        "category": "Categoria",
+        "categoryHint": "Facoltativo.",
+        "anyCategory": "Non sei sicuro",
+        "website": "Sito web",
+        "websiteHint": "Facoltativo. Un indirizzo https:// completo.",
+        "note": "A cosa ti serve?",
+        "noteHint": "Visibile solo al team della piattaforma",
+        "problems": {
+          "nameShort": "Inserisci almeno 2 caratteri.",
+          "nameLong": "Usa al massimo 80 caratteri.",
+          "websiteInvalid": "Inserisci un indirizzo https:// completo.",
+          "noteLong": "Usa al massimo 500 caratteri.",
+          "server": "Non accettato. Controlla il valore."
+        },
+        "result": {
+          "created": {
+            "title": "Richiesta aggiunta: {name}",
+            "message": "Grazie. Ora anche gli altri workspace possono votarla."
+          },
+          "counted": {
+            "title": "Qualcuno ha già richiesto {name}",
+            "message": "La tua richiesta è stata conteggiata come voto."
+          }
+        },
+        "submit": "Invia richiesta"
+      },
+      "list": {
+        "title": "Cosa chiedono gli altri",
+        "intro": "Vota ciò che vuoi. Le richieste più votate vengono sviluppate per prime.",
+        "searchLabel": "Cerca richieste",
+        "searchPlaceholder": "Cerca richieste",
+        "kind": "Tipo",
+        "allKinds": "Tutti i tipi",
+        "kinds": {
+          "mini_app": "Mini app",
+          "integration": "Integrazione"
+        },
+        "status": "Stato",
+        "allStatuses": "Tutti gli stati",
+        "statuses": {
+          "open": "Aperta",
+          "planned": "Pianificata",
+          "building": "In sviluppo",
+          "shipped": "Rilasciata",
+          "declined": "Rifiutata"
+        },
+        "sort": "Ordina per",
+        "sorts": {
+          "votes": "Più votate",
+          "new": "Più recenti"
+        },
+        "emptyFiltered": {
+          "title": "Nessuna richiesta corrisponde",
+          "message": "Modifica i filtri oppure richiedila tu."
+        },
+        "empty": {
+          "title": "Nessuna richiesta ancora",
+          "message": "Sii il primo a chiedere qualcosa."
+        },
+        "loadMore": "Carica altro",
+        "votes": "{count, plural, one {# voto} other {# voti}}",
+        "voted": "Votata",
+        "vote": "Vota"
+      }
+    },
+    "pricing": {
+      "title": "Prezzi",
+      "freeNote": "Nessun costo per installare o usare.",
+      "included": {
+        "planFeature": "Il tuo piano include questa app, quindi non c’è nulla da pagare.",
+        "minPlan": "Il tuo piano o uno superiore include questa app, quindi non c’è nulla da pagare.",
+        "plan": "Il tuo piano include questa app, quindi non c’è nulla da pagare."
+      },
+      "needsPurchase": "Inclusa nel catalogo del tuo piano; acquistala per usarla.",
+      "subscribedNote": "Il tuo workspace ha un abbonamento a questa app.",
+      "trialOffer": "Prova gratis per {days, plural, one {# giorno} other {# giorni}}. Non viene addebitato nulla finché non scegli di abbonarti.",
+      "prepaidNote": "Fatturata mensilmente tramite la fatturazione del tuo workspace. Ogni pagamento copre un mese e non viene addebitato automaticamente: paga di nuovo prima della data indicata per mantenere attiva l’app.",
+      "notForSale": {
+        "title": "Non in vendita",
+        "message": "Al momento questa app non è in vendita ai nuovi abbonati."
+      }
+    },
+    "subscribe": {
+      "subscribe": "Abbonati",
+      "startTrial": "Avvia prova gratuita di {days} giorni",
+      "hintPrice": "{price} al mese, pagati al checkout. Ogni pagamento copre un mese.",
+      "hint": "Paghi un mese alla volta al checkout.",
+      "working": "In corso",
+      "noCheckout": "Il checkout non è disponibile per questa app al momento. Riprova tra poco.",
+      "toast": {
+        "trial_started": "Prova gratuita di {name} avviata.",
+        "included": "{name} è incluso nel tuo piano.",
+        "already_entitled": "Il tuo workspace ha già accesso a {name}.",
+        "free": "{name} è gratuita."
+      }
+    },
+    "subscription": {
+      "title": "Abbonamento",
+      "status": {
+        "active": "Attivo",
+        "trialing": "Prova gratuita",
+        "comped": "Omaggio",
+        "canceling": "Non rinnovato",
+        "ended": "Terminato"
+      },
+      "date": {
+        "paidUntil": "Pagato fino al {date}",
+        "trialEnds": "La prova gratuita termina il {date}",
+        "compUntil": "Accesso omaggio fino al {date}",
+        "compOpen": "Accesso omaggio, senza data di fine",
+        "cancelingUntil": "Non rinnovato. Attivo fino al {date}",
+        "endedOn": "Abbonamento terminato il {date}",
+        "endedNoDate": "Abbonamento terminato"
+      },
+      "lastPayment": "Ultimo pagamento: {price} al mese",
+      "nextPayment": "Il prezzo di questa app è cambiato. Il tuo prossimo pagamento sarà di {price} al mese.",
+      "compNote": "Il team della piattaforma ti ha concesso questo accesso. Qui non può essere annullato.",
+      "renewHint": "Un mese a pagamento non si rinnova automaticamente. Rinnova prima della data indicata per mantenere l’app attiva senza interruzioni.",
+      "actions": {
+        "renew": "Rinnova ora",
+        "resubscribe": "Riabbonati",
+        "subscribe": "Abbonati ora",
+        "resume": "Riprendi abbonamento",
+        "cancel": "Annulla abbonamento"
+      },
+      "cancelConfirm": {
+        "title": "Annullare l’abbonamento a {name}?",
+        "message": "{name} resta attiva fino al {date}, poi viene messa in pausa. I tuoi dati e le impostazioni sono conservati.",
+        "messageNoDate": "{name} resta attiva fino alla fine del periodo pagato, poi viene messa in pausa. I tuoi dati e le impostazioni sono conservati.",
+        "afterwards": "Non verrà addebitato altro e puoi riabbonarti in qualsiasi momento.",
+        "confirm": "Annulla abbonamento",
+        "keep": "Mantieni abbonamento"
+      },
+      "toast": {
+        "canceled": "Abbonamento annullato. Resta attivo fino al {date}.",
+        "canceledNoDate": "Abbonamento annullato. Resta attivo fino alla fine del periodo pagato.",
+        "resumed": "Abbonamento ripreso."
+      },
+      "working": "In corso",
+      "noCheckout": "Il checkout non è disponibile per questa app al momento. Riprova tra poco."
+    }
+  }
+}

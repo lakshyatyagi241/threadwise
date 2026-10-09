@@ -1,0 +1,48 @@
+{
+  "checkout-orders-merchant-payments": {
+    "invoices": {
+      "eyebrow": "Sklep / Faktury",
+      "title": "Faktury",
+      "subtitle": "Faktury utworzone z zamówień sklepu. Zarządzaj nimi w Sprzedaży.",
+      "allInvoices": "Wszystkie faktury",
+      "loading": "Wczytywanie faktur",
+      "searching": "Szukanie kolejnych faktur sklepu...",
+      "search": {
+        "label": "Szukaj faktur",
+        "placeholder": "Szukaj po numerze, kupującym lub numerze referencyjnym..."
+      },
+      "status": {
+        "label": "Status",
+        "all": "Wszystkie statusy"
+      },
+      "columns": {
+        "number": "Faktura",
+        "buyer": "Kupujący",
+        "status": "Status",
+        "total": "Suma",
+        "issued": "Wystawiono",
+        "due": "Termin",
+        "actions": "Działania"
+      },
+      "row": {
+        "draft": "Wersja robocza",
+        "openInSales": "Otwórz w Sprzedaży",
+        "openAria": "Otwórz fakturę {number} w Sprzedaży"
+      },
+      "empty": {
+        "title": "Brak jeszcze faktur z zamówień sklepu",
+        "message": "Otwórz zamówienie i wybierz Utwórz fakturę.",
+        "action": "Przejdź do zamówień"
+      },
+      "noMatch": {
+        "title": "Brak pasujących faktur sklepu",
+        "message": "Zmień wyszukiwanie lub status, aby zobaczyć więcej."
+      },
+      "capped": {
+        "title": "Nic nie znaleziono w najnowszych fakturach",
+        "message": "Sprawdzono najnowsze faktury w Sprzedaży i żadna nie pochodzi z zamówienia sklepu. Wczytaj więcej, aby sięgnąć dalej wstecz.",
+        "note": "Sprawdzono tylko najnowsze faktury. Wczytaj więcej, aby sięgnąć dalej wstecz."
+      }
+    }
+  }
+}

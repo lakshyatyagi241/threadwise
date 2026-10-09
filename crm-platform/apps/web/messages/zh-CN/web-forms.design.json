@@ -1,0 +1,113 @@
+{
+  "web-forms": {
+    "design": {
+      "presets": {
+        "title": "主题",
+        "custom": "自定义：您已更改所选主题的颜色、圆角或字体。",
+        "classic": "经典",
+        "ocean": "海洋",
+        "forest": "森林",
+        "sunset": "日落",
+        "berry": "浆果",
+        "slate": "石板",
+        "noir": "暗黑",
+        "paper": "纸张"
+      },
+      "colours": {
+        "title": "颜色",
+        "hint": "请使用六位十六进制颜色值，例如 #2563eb。不完整的值不会生效。",
+        "swatch": "{name}（颜色选择器）",
+        "primary": "主色（按钮和强调色）",
+        "background": "页面背景",
+        "surface": "表单背景",
+        "text": "文本",
+        "mutedText": "次要文本",
+        "border": "边框",
+        "error": "错误"
+      },
+      "contrast": {
+        "title": "部分颜色不易阅读。请确保对比度至少为 4.5:1。",
+        "item": "{pair}：{ratio}:1",
+        "ok": "所有已检查的颜色组合均易于阅读。",
+        "text": "表单背景上的文本",
+        "muted": "表单背景上的次要文本",
+        "button": "按钮上的标签"
+      },
+      "shape": {
+        "title": "形状与间距",
+        "radius": "圆角",
+        "none": "无",
+        "sm": "小",
+        "md": "中",
+        "lg": "大",
+        "pill": "圆形",
+        "density": "间距",
+        "compact": "紧凑",
+        "comfortable": "舒适",
+        "spacious": "宽松",
+        "shadow": "阴影",
+        "shadowNone": "无"
+      },
+      "type": {
+        "title": "排版",
+        "font": "字体",
+        "fontHint": "仅在您选择时才加载网络字体。",
+        "sample": "敏捷的棕色狐狸跳过了懒狗",
+        "scale": "文字大小"
+      },
+      "fonts": {
+        "system": "系统默认",
+        "serif": "衬线体",
+        "mono": "等宽字体"
+      },
+      "layout": {
+        "title": "布局与按钮",
+        "preset": "布局",
+        "classic": "经典卡片",
+        "fullWidth": "全宽",
+        "split": "分栏带封面图",
+        "minimal": "极简",
+        "labelPosition": "标签位置",
+        "labelTop": "字段上方",
+        "labelLeft": "字段旁侧",
+        "buttonStyle": "按钮样式",
+        "filled": "填充",
+        "outline": "描边",
+        "buttonWidth": "按钮宽度",
+        "widthAuto": "适应标签",
+        "widthFull": "全宽",
+        "maxWidth": "最大宽度",
+        "maxWidthHint": "介于 320 到 960 像素之间。",
+        "maxWidthInvalid": "请输入 320 到 960 之间的整数。",
+        "maxWidthSlider": "最大宽度滑块",
+        "mode": "颜色模式",
+        "light": "浅色",
+        "dark": "深色",
+        "auto": "跟随访客设备"
+      },
+      "images": {
+        "title": "图片",
+        "logo": "徽标",
+        "logoHint": "https 地址。留空则不显示徽标。",
+        "cover": "封面图",
+        "coverHint": "在分栏布局中显示在表单旁侧。",
+        "background": "背景图片",
+        "backgroundHint": "https 地址。留空则使用纯色背景。",
+        "invalid": "请输入 https 地址，或留空。"
+      },
+      "reset": "恢复默认值",
+      "readOnly": "您可以查看此设计，但无法更改。",
+      "preview": {
+        "title": "预览",
+        "device": "预览尺寸",
+        "desktop": "桌面",
+        "mobile": "移动端",
+        "scheme": "预览颜色模式",
+        "light": "浅色",
+        "dark": "深色",
+        "schemeHint": "颜色模式设为浅色，因此没有可预览的深色版本。",
+        "frameTitle": "表单实时预览"
+      }
+    }
+  }
+}

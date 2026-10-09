@@ -1,0 +1,278 @@
+{
+  "web-forms": {
+    "share": {
+      "readOnly": "Bu ayarları görüntüleyebilirsiniz ancak değiştiremezsiniz.",
+      "clipboardBlocked": "Tarayıcınız kopyalamayı engelledi. Metni seçip elle kopyalayın.",
+      "copied": "Kopyalandı",
+      "status": {
+        "archived": {
+          "title": "Bu form arşivlendi",
+          "body": "Herkese açık bağlantı ve tüm gömülü kodlar kapalı. Bunları yeniden kullanmak için formu geri yükleyin."
+        },
+        "draft": {
+          "title": "Bu bağlantının çalışması için formu yayınlayın",
+          "body": "Form en az bir kez yayınlanana kadar kimse bağlantıyı veya gömülü kodu açamaz."
+        },
+        "paused": {
+          "title": "Bu form kapalı",
+          "body": "Bağlantı ve gömülü kodlar kapalı bir mesaj gösterir ve yanıt kabul etmez. Formu yeniden açmak için devam ettirin."
+        },
+        "live": {
+          "title": "Bu form yayında",
+          "body": "Ziyaretçiler {version} sürümünü görür. Oluşturucuda yaptığınız değişiklikler yalnızca yayınladığınızda ziyaretçilere ulaşır."
+        }
+      },
+      "hosted": {
+        "title": "Herkese açık bağlantı",
+        "description": "Bu adresi istediğiniz yerde paylaşın: bir mesajda, e-postada veya sosyal medya profilinde. Form kendi sayfasında açılır.",
+        "label": "Form adresi",
+        "copy": "Bağlantıyı kopyala",
+        "copiedToast": "Bağlantı kopyalandı.",
+        "open": "Aç",
+        "newTab": "(yeni sekmede açılır)"
+      },
+      "qr": {
+        "title": "QR kodu",
+        "description": "Baskı, afiş ve ambalaj için. Taratıldığında herkese açık bağlantı açılır.",
+        "alt": "Formu açan QR kodu",
+        "tracking": "Kod adrese utm_source=qr ekler; bu koddan gelen gönderimler atfetmede QR olarak görünür.",
+        "downloadPng": "PNG indir",
+        "downloadSvg": "SVG indir",
+        "downloadFailed": "QR kodu indirilemedi. Yeniden deneyin."
+      },
+      "embed": {
+        "title": "Formu web sitenize ekleyin",
+        "description": "Formun görünmesini istediğiniz yere bunlardan birini yapıştırın. Gömme yalnızca aşağıdaki İzin verilen web siteleri bölümünde listelenen sitelerde çalışır.",
+        "copy": "Kodu kopyala",
+        "copiedToast": "{name} kopyalandı.",
+        "script": {
+          "title": "Script ile gömme",
+          "description": "Önerilen. Form, sayfaya sığacak şekilde kendini yeniden boyutlandırır ve gönderimden sonra yönlendirebilir."
+        },
+        "iframe": {
+          "title": "iframe ile gömme",
+          "description": "Betik çalıştırmayan oluşturucular için sade bir çerçeve. Yüksekliği siz belirlersiniz."
+        }
+      },
+      "domains": {
+        "title": "İzin verilen web siteleri",
+        "description": "Yalnızca burada listelenen web siteleri bu formu gömebilir ve tarayıcıdan yanıt gönderebilir.",
+        "none": "Henüz izin verilen web sitesi yok; form yalnızca herkese açık bağlantısıyla çalışır ve gömülemez.",
+        "label": "Web sitesi ekleyin",
+        "hint": "Tam adresi kullanın, örneğin https://www.example.com. Bir joker seviyesine izin verilir, örneğin https://*.example.com. Düz http yalnızca localhost için çalışır.",
+        "count": "{count} / {max}",
+        "add": "Ekle",
+        "remove": "{value} öğesini kaldır",
+        "empty": "Web sitesi eklenmedi.",
+        "issues": {
+          "empty": "Önce bir web sitesi adresi girin.",
+          "invalid": "Bu geçerli bir adres değil. Yol içermeden https://example.com veya https://*.example.com biçimini kullanın.",
+          "duplicate": "Bu web sitesi zaten listede.",
+          "max": "En fazla {max} web sitesine izin verebilirsiniz."
+        }
+      },
+      "rotate": {
+        "title": "Herkese açık anahtarı yenile",
+        "description": "Bu form için yeni bir anahtar oluşturur. Bağlantı veya gömme kodu sızdıysa ya da bunu kullanımdan kaldırmak istiyorsanız kullanın.",
+        "button": "Anahtarı yenile",
+        "readOnly": "Bu formu değiştiremezsiniz",
+        "confirmTitle": "Herkese açık anahtar yenilensin mi?",
+        "confirmMessage": "Eski bağlantı, QR kodları ve gömme kodu hemen çalışmayı durdurur. Yeni bağlantıyı paylaşmanız ve formu gömdüğünüz her sitede kodu değiştirmeniz gerekir.",
+        "confirmButton": "Anahtarı yenile",
+        "cancel": "Vazgeç",
+        "success": "Anahtar yenilendi. Yeni bağlantıyı ve kodu kopyalayın.",
+        "failed": "Anahtar yenilenemedi. Hiçbir şey değişmedi. Yeniden deneyin.",
+        "conflict": "Bu formu başka biri değiştirdi. En son sürümü görmek için sayfayı yenileyin, ardından yeniden deneyin."
+      }
+    },
+    "settings": {
+      "readOnly": "Bu ayarları görüntüleyebilirsiniz ancak değiştiremezsiniz.",
+      "usersFailed": "Ekip üyelerinin listesi yüklenemedi, bu yüzden şu anda sahip seçilemiyor.",
+      "form": {
+        "title": "Form",
+        "description": "Listede gördüğünüz ad ve ziyaretçilerin formda gördüğü temel bilgiler.",
+        "name": "Form adı",
+        "nameHint": "Bu adı yalnızca ekibiniz görür.",
+        "issues": {
+          "nameRequired": "Forma bir ad verin.",
+          "submit_empty": "Düğme için bir etiket gerekli.",
+          "submit_too_long": "Düğme etiketini {max} karakter veya daha az tutun."
+        },
+        "language": "Form dili",
+        "languageHint": "Yerleşik metinlerin dilini ve okuma yönünü belirler (Arapça sağdan sola okunur).",
+        "languages": {
+          "en": "İngilizce",
+          "ar": "Arapça"
+        },
+        "submitLabel": "Gönder düğmesi etiketi",
+        "submitLabelHint": "1 ile {max} karakter arası."
+      },
+      "after": {
+        "title": "Gönderimden sonra",
+        "description": "Yanıtlar gönderildikten sonra ziyaretçinin gördüğü içerik.",
+        "mode": "Ne olacak",
+        "modes": {
+          "message": "Bir mesaj göster",
+          "redirect": "Başka bir sayfaya git"
+        },
+        "modeHints": {
+          "message": "Form, teşekkür mesajınızla değiştirilir.",
+          "redirect": "Ziyaretçi, teşekkür veya rezervasyon sayfası gibi kendi sayfanızdan birine yönlendirilir."
+        },
+        "message": "Teşekkür mesajı",
+        "messageHint": "Düz metin. Şu basit etiketlere izin verilir: b, i, u, br, ul, ol, li ve a. En fazla {max} karakter.",
+        "messageTooLong": "Mesaj {max} karakterden uzun.",
+        "redirect": "Yönlendirme adresi",
+        "redirectHint": "https:// ile başlamalıdır. https olmayan bir sayfa asla açılmaz.",
+        "redirectIssues": {
+          "required": "Ziyaretçilerin gönderileceği adresi girin.",
+          "https": "https:// ile başlayan bir adres kullanın."
+        },
+        "redirectKeepsMessage": "Teşekkür mesajı formda saklanır ve yönlendirme ayarlıyken gösterilmez."
+      },
+      "consent": {
+        "title": "Onay",
+        "description": "Ziyaretçinin neyi kabul ettiğini tam ifadesi, sürümü ve saatiyle kaydeden bir onay kutusu.",
+        "enabled": "Onay iste",
+        "enabledHint": "Gönder düğmesinin üstünde onay metnini gösterir.",
+        "text": "Onay metni",
+        "textHint": "En fazla {max} karakter. Ziyaretçiler tam olarak bu ifadeyi görür.",
+        "textRequired": "Onay metnini yazın veya onayı kapatın.",
+        "textTooLong": "Metin {max} karakterden uzun.",
+        "version": "İfade sürümü {version}",
+        "versionHintPublished": "Form yayınlandıktan sonra ifadeyi değiştirmek otomatik olarak yeni bir sürüm başlatır. Önceki gönderimler, onayladıkları sürümü korur.",
+        "versionHintDraft": "Form yayınlanana kadar sürüm 1 olarak kalır. Bundan sonra ifadedeki bir değişiklik yeni bir sürüm başlatır.",
+        "privacyUrl": "Gizlilik politikası bağlantısı",
+        "privacyUrlHint": "İsteğe bağlı. Onay metninin yanında gösterilir. https:// ile başlamalıdır.",
+        "privacyUrlHttps": "https:// ile başlayan bir adres kullanın.",
+        "required": "Gönderebilmek için işaretlenmelidir",
+        "requiredHint": "Onay isteğe bağlıysa bunu kapatın.",
+        "marketing": "Pazarlama onayı",
+        "marketingHint": "Kutuyu işaretlemek kişiye pazarlama onayı kaydeder. İşaretlenmemiş kutu hiç kimseyi abone yapmaz."
+      },
+      "crm": {
+        "title": "CRM'de",
+        "description": "Her gönderimin oluşturduğu veya güncellediği kişi üzerindeki etkisi.",
+        "company": "Şirketi eşleştir",
+        "companyOptions": {
+          "none": "Eşleştirme",
+          "email_domain": "E-posta alan adına göre",
+          "name_or_domain": "Ada veya alan adına göre"
+        },
+        "companyHints": {
+          "none": "Şirket yanıtları bir şirketi bağlamak için kullanılmaz.",
+          "email_domain": "Kişiyi, e-posta adresinin alan adını elinde bulunduran şirkete bağlar.",
+          "name_or_domain": "Şirketi ada veya web sitesi alan adına göre bağlar; eşleşen yoksa şirketi oluşturur."
+        },
+        "lifecycle": "Yaşam döngüsü aşaması",
+        "lifecycleHint": "Form gönderildiğinde kişide ayarlanır.",
+        "lifecycleNone": "Ayarlama",
+        "stages": {
+          "new": "Yeni",
+          "contacted": "İletişime geçildi",
+          "qualified": "Nitelikli",
+          "application_started": "Başvuru başlatıldı",
+          "application_submitted": "Başvuru gönderildi",
+          "interview_scheduled": "Görüşme planlandı",
+          "offer_received": "Teklif alındı",
+          "admission_confirmed": "Kabul onaylandı",
+          "enrolled": "Kaydoldu",
+          "lost": "Kaybedildi"
+        },
+        "tags": "Eklenecek etiketler",
+        "tagsHint": "Bu formu gönderen her kişiye eklenir. 1 ile 60 karakter arasında en fazla {max} etiket.",
+        "tagsPlaceholder": "Örneğin: webinar",
+        "tagsCount": "{count} / {max}",
+        "tagAdd": "Etiket ekle",
+        "tagRemove": "{value} etiketini kaldır",
+        "tagsNone": "Etiket yok.",
+        "tagIssues": {
+          "empty": "Önce bir etiket girin.",
+          "too_long": "Bir etiket en fazla 60 karakter olabilir.",
+          "duplicate": "Bu etiket zaten listede.",
+          "max": "En fazla {max} etiket ekleyebilirsiniz."
+        },
+        "owner": "Yeni kişilerin sahibi",
+        "ownerHint": "Bu formun oluşturduğu kişiye kimin bakacağı.",
+        "ownerMode": "Sahip kuralı",
+        "ownerModes": {
+          "unassigned": "Sahip yok",
+          "fixed": "Bir kişi",
+          "round_robin": "Sırayla"
+        },
+        "ownerModeHints": {
+          "unassigned": "Kişi birisi tarafından sahiplenilene kadar sahibi olmaz.",
+          "fixed": "Her kişi aynı kişiye gider.",
+          "round_robin": "Kişiler seçilen kişilere sırayla atanır. Artık aktif olmayan kişiler atlanır."
+        },
+        "ownerFixed": "Sahip",
+        "ownerRoundRobin": "Sırayla atanacak kişiler",
+        "ownerRoundRobinHint": "En az iki kişi seçin.",
+        "chooseUser": "Bir kişi seçin",
+        "unknownUser": "Artık müsait olmayan bir kişi",
+        "pickUsers": "Kişi seçin",
+        "noUsers": "Eşleşen kişi yok",
+        "removeUser": "{name} kişisini kaldır",
+        "ownerIssues": {
+          "fixed_one": "Tam olarak bir kişi seçin.",
+          "round_robin_two": "Sırayla atama için en az iki kişi gerekir.",
+          "unassigned_none": "Atanmamış bir kuralda kişi olamaz. Başka bir kural seçin veya listeyi temizleyin.",
+          "too_many": "En fazla 50 kişi seçebilirsiniz."
+        }
+      },
+      "notify": {
+        "title": "Bildirimler",
+        "description": "Bir gönderim geldiğinde kimin haberdar edileceği.",
+        "owner": "Kişinin sahibini bilgilendir",
+        "ownerHint": "Sahip her gönderim için bir bildirim alır.",
+        "users": "Ayrıca şu kişilere bildir",
+        "usersHint": "En fazla {max} ekip üyesi de bildirim alır.",
+        "emails": "Ayrıca şu adreslere e-posta gönder",
+        "emailsHint": "En fazla {max} adres her gönderim için e-posta alır. Ekibiniz dışındaki kişilerin adresleri de olabilir.",
+        "emailPlaceholder": "ad@ornek.com",
+        "emailsCount": "{count} / {max}",
+        "emailAdd": "E-posta ekle",
+        "emailRemove": "{value} öğesini kaldır",
+        "emailsNone": "Ek adres yok.",
+        "emailIssues": {
+          "empty": "Önce bir e-posta adresi girin.",
+          "invalid": "Bu geçerli bir e-posta adresi değil.",
+          "duplicate": "Bu adres zaten listede.",
+          "max": "En fazla {max} adres ekleyebilirsiniz."
+        }
+      },
+      "protection": {
+        "title": "Koruma",
+        "description": "Spam'i engeller ve yanıtların ne kadar süre saklanacağına karar verir.",
+        "honeypot": "Gizli tuzak alanı",
+        "honeypotHint": "İnsanların görmediği bir alan ekler. Botlar bu alanı doldurur ve gönderimleri spam olarak işaretlenir.",
+        "captcha": "CAPTCHA",
+        "captchaOptions": {
+          "inherit": "Platform ayarını izle",
+          "on": "Her zaman açık",
+          "off": "Kapalı"
+        },
+        "captchaHints": {
+          "inherit": "Çalışma alanınızın herkese açık formlar için belirlediği ayarı kullanır.",
+          "on": "Ziyaretçiler göndermeden önce doğrulamayı geçmek zorundadır.",
+          "off": "Doğrulama yok. Gizli tuzak alanına ve istek sınırlarına güvenir."
+        },
+        "retention": "Yanıtları sakla (gün)",
+        "retentionHint": "Bu kadar gün sonra yanıtlar silinir. GDPR gibi veri koruma kurallarına uyumda yardımcı olur. 30 ile 3650 arasında.",
+        "range": "{min} ile {max} arasında bir tam sayı girin.",
+        "keepForever": "Ben silene kadar sakla",
+        "keepForeverHint": "Yanıtlar bir kişi silene kadar kalır. Yalnızca yasal bir nedenle saklamanız gerekiyorsa bunu seçin.",
+        "advanced": "Gelişmiş: istek sınırları",
+        "advancedHint": "Gönderim sellerini yavaşlatan sınırlar. Varsayılanlar çoğu form için uygundur.",
+        "rate": {
+          "perIpPerMinute": "Adres başına, dakika başına",
+          "perIpPerMinuteHint": "Tek bir internet adresinden gelen gönderimler.",
+          "perFormPerMinute": "Form başına, dakika başına",
+          "perFormPerMinuteHint": "Bu forma her yerden gelen gönderimler.",
+          "perContactPerHour": "Kişi başına, saat başına",
+          "perContactPerHourHint": "Aynı e-posta veya telefon numarasına sahip gönderimler."
+        }
+      }
+    }
+  }
+}

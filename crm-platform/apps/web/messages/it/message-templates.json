@@ -1,0 +1,361 @@
+{
+  "message-templates": {
+    "nav": {
+      "title": "Template"
+    },
+    "common": {
+      "dismiss": "Ignora",
+      "requestId": "ID richiesta"
+    },
+    "status": {
+      "draft": "Bozza",
+      "pending": "In revisione",
+      "approved": "Approvato",
+      "rejected": "Rifiutato",
+      "paused": "In pausa",
+      "disabled": "Disattivato",
+      "deleted": "Mancante su Meta"
+    },
+    "category": {
+      "MARKETING": "Marketing",
+      "UTILITY": "Utility",
+      "AUTHENTICATION": "Autenticazione"
+    },
+    "quality": {
+      "GREEN": "Qualità alta",
+      "YELLOW": "Qualità media",
+      "RED": "Qualità bassa",
+      "UNKNOWN": "Qualità in attesa"
+    },
+    "errors": {
+      "generic": "Si è verificato un errore. Riprova e indica l’ID richiesta se il problema persiste.",
+      "TPL_NOT_FOUND": "Questo template non esiste più.",
+      "TPL_NAME_TAKEN": "Esiste già un template con questo nome e questa lingua su questo numero. Scegli un altro nome o un’altra lingua.",
+      "TPL_LINT_FAILED": "I controlli hanno trovato problemi che Meta rifiuterebbe. Non è stato inviato nulla. Correggi gli errori elencati a destra.",
+      "TPL_META_REJECTED": "Meta ha rifiutato il template. Il motivo è qui sotto; il template è conservato come bozza così puoi correggerlo e riprovare.",
+      "TPL_NO_CONNECTION": "Questo template non ha un numero WhatsApp collegato con cui inviarlo. Collega prima un numero.",
+      "TPL_IN_USE": "Questo template non può essere eliminato perché lo usa un broadcast in corso o programmato.",
+      "TPL_NOT_EDITABLE": "Si può modificare solo un template che Meta non ha ancora approvato, o uno che ha rifiutato.",
+      "ROW_VERSION_CONFLICT": "Qualcuno ha modificato questo template mentre lo stavi modificando. Ricarica la pagina per vedere la versione più recente, poi applica di nuovo la modifica.",
+      "VALIDATION_FAILED": "Alcuni campi non sono validi. Controlla i campi qui sotto.",
+      "INTERNAL": "Il server non è riuscito a gestire questa richiesta. Riprova tra poco."
+    },
+    "preview": {
+      "title": "Anteprima",
+      "headerImageAlt": "Esempio di immagine di intestazione",
+      "header": {
+        "image": "Immagine",
+        "video": "Video",
+        "document": "Documento",
+        "location": "Posizione"
+      },
+      "authBody": "è il tuo codice di verifica.",
+      "authExpiry": "{count, plural, one {Questo codice scade tra # minuto.} other {Questo codice scade tra # minuti.}}",
+      "bodyEmpty": "Il testo del messaggio appare qui.",
+      "time": "10:30",
+      "copyCode": "Copia codice",
+      "buttonUnnamed": "Pulsante",
+      "moreButtons": "{count, plural, one {+# altro pulsante} other {+# altri pulsanti}}"
+    },
+    "card": {
+      "rejected": "Rifiutato: {reason}",
+      "view": "Visualizza",
+      "edit": "Modifica",
+      "delete": "Elimina"
+    },
+    "library": {
+      "title": "Libreria dei template",
+      "intro": "Template di messaggi WhatsApp: scrivili, inviali a Meta per la revisione e tieni qui sotto controllo il loro stato.",
+      "sync": "Sincronizza da Meta",
+      "syncing": "Sincronizzazione...",
+      "syncHint": "Recupera i tuoi template da Meta",
+      "syncDone": "Sincronizzati da Meta: {created} nuovi, {updated} aggiornati, {missing} non più presenti su Meta.",
+      "syncNone": "Nessun template trovato su questo account WhatsApp Business.",
+      "syncFailed": "Sincronizzazione da Meta non riuscita. Controlla il collegamento del numero e riprova.",
+      "syncPartial": "{count, plural, one {# numero non è stato sincronizzato.} other {# numeri non sono stati sincronizzati.}}",
+      "new": "Nuovo template",
+      "filters": "Filtra template",
+      "search": "Cerca",
+      "searchPlaceholder": "Nome del template",
+      "status": "Stato",
+      "allStatuses": "Tutti gli stati",
+      "category": "Categoria",
+      "allCategories": "Tutte le categorie",
+      "connection": "Numero WhatsApp",
+      "allConnections": "Tutti i numeri",
+      "loading": "Caricamento dei template",
+      "retry": "Riprova",
+      "emptyTitle": "Nessun template ancora",
+      "emptyBody": "Crea un template e inviallo a Meta, oppure sincronizza quelli che hai già in Meta Business Manager.",
+      "emptyFilteredTitle": "Nessun template corrisponde",
+      "emptyFilteredBody": "Modifica o cancella i filtri per vedere altri template.",
+      "clearFilters": "Cancella filtri",
+      "loadMore": "Carica altri"
+    },
+    "delete": {
+      "title": "Elimina template",
+      "message": "Eliminare «{name}»? Viene rimosso qui e su Meta, e non potrà più essere inviato.",
+      "confirm": "Elimina template",
+      "cancel": "Annulla",
+      "done": "«{name}» eliminato.",
+      "inUseHelp": "Apri il broadcast che usa questo template e annullalo oppure scegli un altro template, poi elimina questo."
+    },
+    "lint": {
+      "title": "Controlli prima dell’invio",
+      "checking": "Controllo in corso",
+      "unavailable": "I controlli non sono riusciti a girare in questo momento. La revisione di Meta si applica comunque, e il server ricontrolla all’invio.",
+      "clean": "Nessun problema trovato.",
+      "summary": "{errors, plural, one {# errore} other {# errori}}, {warnings, plural, one {# avviso} other {# avvisi}}",
+      "severity": {
+        "error": "Errore",
+        "warning": "Avviso"
+      },
+      "field": {
+        "name": "Nome",
+        "language": "Lingua",
+        "header": "Intestazione",
+        "body": "Corpo",
+        "footer": "Piè di pagina",
+        "buttons": "Pulsanti",
+        "template": "Template"
+      }
+    },
+    "form": {
+      "loading": "Caricamento",
+      "retry": "Riprova",
+      "backToLibrary": "Torna alla libreria",
+      "noPermission": "Non hai l’autorizzazione per creare o modificare i template.",
+      "notEditableTitle": "Questo template non può più essere modificato",
+      "notEditableBody": "Si può modificare solo un template che Meta non ha ancora approvato, o uno che ha rifiutato. Crea un nuovo template per modificarne uno approvato.",
+      "viewTemplate": "Visualizza template",
+      "breadcrumb": "Percorso di navigazione",
+      "breadcrumbLibrary": "Template",
+      "breadcrumbNew": "Nuovo",
+      "breadcrumbEdit": "Modifica",
+      "titleNew": "Nuovo template",
+      "titleEdit": "Modifica {name}",
+      "saveDraft": "Salva bozza",
+      "submit": "Invia a Meta",
+      "reload": "Ricarica il template",
+      "aside": "Anteprima e controlli",
+      "why": {
+        "connection": "Scegli un numero WhatsApp con cui inviare.",
+        "name": "Inserisci un nome per il template.",
+        "fields": "Alcuni campi non sono validi.",
+        "errors": "Correggi gli errori prima di inviare.",
+        "checking": "Controllo del template in corso."
+      },
+      "toast": {
+        "submitted": "Template inviato a Meta per la revisione.",
+        "saved": "Template salvato come bozza."
+      },
+      "errors": {
+        "name": "Inserisci un nome per il template.",
+        "header": "L’intestazione può avere al massimo 60 caratteri.",
+        "body": "Il corpo può avere al massimo {max} caratteri.",
+        "footer": "Il piè di pagina può avere al massimo 60 caratteri."
+      },
+      "identity": {
+        "title": "Identità",
+        "connection": "Numero WhatsApp",
+        "connectionHint": "Il file multimediale e l’invio devono usare lo stesso numero, altrimenti Meta rifiuta il template.",
+        "connectionUnknown": "Numero non più disponibile",
+        "noConnection": "Nessun numero WhatsApp collegato con cui inviare.",
+        "connectNumber": "Collega un numero",
+        "category": "Categoria",
+        "categoryHint": "Meta controlla e tariffa il template in base alla sua categoria.",
+        "categories": {
+          "MARKETING": "Marketing",
+          "UTILITY": "Utility",
+          "AUTHENTICATION": "Autenticazione"
+        },
+        "name": "Nome del template",
+        "nameHint": "Solo a-z, 0-9 e _, fino a 60 caratteri.",
+        "nameTaken": "Questo nome è già usato per questa lingua su questo numero.",
+        "language": "Lingua"
+      },
+      "auth": {
+        "title": "Password monouso",
+        "hint": "Meta scrive il messaggio e il pulsante Copia codice di un template di autenticazione.",
+        "expiry": "Il codice scade dopo (minuti)",
+        "expiryHint": "Facoltativo. Da {min} a {max} minuti.",
+        "expiryInvalid": "Inserisci un numero intero da {min} a {max}.",
+        "fixedBody": "Il messaggio dice: un codice, seguito da «è il tuo codice di verifica» e da un avviso di sicurezza. Non può essere modificato."
+      },
+      "header": {
+        "title": "Intestazione",
+        "hint": "Facoltativo. Testo, oppure una immagine, un video, un documento o una posizione.",
+        "type": "Tipo di intestazione",
+        "kind": {
+          "none": "Nessuna",
+          "text": "Testo",
+          "image": "Immagine",
+          "video": "Video",
+          "document": "Documento",
+          "location": "Posizione"
+        },
+        "text": "Testo dell’intestazione",
+        "textHint": "{used}/{max}. Al massimo una variabile.",
+        "sample": "File di esempio",
+        "uploading": "Caricamento",
+        "keptSample": "Il campione salvato viene mantenuto. Scegli un file per sostituirlo.",
+        "noFile": "Nessun file scelto",
+        "limits": "Immagine fino a 5 MB, video fino a 16 MB, PDF fino a 100 MB.",
+        "replace": "Sostituisci file",
+        "choose": "Scegli file di esempio",
+        "tooBig": "Questo {kind} pesa {size} MB. WhatsApp accetta fino a {max} MB. Scegli un file più piccolo.",
+        "wrongType": "Questo tipo di file non è accettato per questa intestazione.",
+        "emptyFile": "Questo file è vuoto.",
+        "locationHelp": "La posizione viene compilata quando il messaggio viene inviato. Meta deve solo sapere che l’intestazione è una posizione."
+      },
+      "body": {
+        "title": "Corpo",
+        "hint": "Il testo del messaggio. Usa variabili in stile '{{name}}'; vengono numerate per Meta quando salvi.",
+        "toolbar": "Formattazione del testo",
+        "format": {
+          "bold": "Grassetto",
+          "italic": "Corsivo",
+          "strike": "Barrato",
+          "code": "Codice"
+        },
+        "variable": "Aggiungi variabile",
+        "label": "Testo del corpo",
+        "counter": "{used}/{max}",
+        "wrapSample": "testo"
+      },
+      "variables": {
+        "title": "Associazione delle variabili",
+        "empty": "Nessuna variabile ancora. Scrivi un segnaposto come '{{name}}' nel corpo, oppure usa Aggiungi variabile.",
+        "help": "Per ogni variabile, indica l’attributo del contatto che la compila all’invio e fornisci un valore di esempio per la revisione di Meta.",
+        "attribute": "Attributo del contatto",
+        "sample": "Valore di esempio",
+        "header": "intestazione",
+        "body": "corpo"
+      },
+      "footer": {
+        "title": "Piè di pagina",
+        "label": "Testo del piè di pagina",
+        "hint": "Facoltativo. {used}/{max}. Nessuna variabile."
+      },
+      "buttons": {
+        "title": "Pulsanti",
+        "hint": "Facoltativo. Le risposte rapide devono stare insieme all’inizio o alla fine.",
+        "add": {
+          "quick_reply": "Risposta rapida",
+          "url": "Visita il sito",
+          "phone": "Chiama",
+          "copy_code": "Copia codice"
+        },
+        "kind": {
+          "quick_reply": "Risposta rapida",
+          "url": "Visita il sito",
+          "phone": "Chiama",
+          "copy_code": "Copia codice",
+          "other": "Altro"
+        },
+        "count": "{used}/{max} pulsanti",
+        "limitReached": "Al massimo {max} di questo tipo.",
+        "empty": "Nessun pulsante. Aggiungine uno con i pulsanti qui sopra.",
+        "moveUp": "Sposta il pulsante {n} in alto",
+        "moveDown": "Sposta il pulsante {n} in basso",
+        "remove": "Rimuovi il pulsante {n}",
+        "keptAsIs": "«{text}» viene mantenuto così com’è. Questo editor non lo modifica.",
+        "text": "Testo del pulsante",
+        "textHint": "{used}/25",
+        "url": "URL del sito",
+        "urlHint": "Aggiungi '{{1}}' alla fine per una parte dinamica.",
+        "urlExample": "Esempio per la variabile",
+        "phone": "Numero di telefono",
+        "phoneHint": "Con il prefisso internazionale.",
+        "code": "Codice di esempio",
+        "codeHint": "Per esempio PROMO50.",
+        "limits": "Meta consente fino a {quick} risposte rapide, {url} pulsanti sito, {phone} pulsante telefono e {copy} pulsante copia codice.",
+        "allUsed": "Ogni tipo di pulsante ha raggiunto il suo limite.",
+        "issue": {
+          "textRequired": "Inserisci il testo del pulsante.",
+          "textTooLong": "Al massimo {max} caratteri.",
+          "urlRequired": "Inserisci l’URL.",
+          "urlInvalid": "L’URL deve iniziare con http:// o https://.",
+          "phoneRequired": "Inserisci il numero di telefono.",
+          "codeRequired": "Inserisci un codice di esempio.",
+          "quickReplyVariable": "Una risposta rapida non può contenere una variabile.",
+          "urlExampleRequired": "Inserisci un valore di esempio per la variabile dell’URL.",
+          "quickReplyPosition": "Le risposte rapide devono stare insieme, all’inizio o alla fine dei pulsanti."
+        }
+      },
+      "result": {
+        "metaRefused": "Salvato, ma Meta ha rifiutato il template.",
+        "metaRefusedHelp": "Il template è conservato come bozza. Correggi ciò che Meta indica, poi invia di nuovo. Il tuo modulo non è cambiato.",
+        "submitted": "Inviato a Meta per la revisione.",
+        "saved": "Salvato come bozza.",
+        "warnings": "Da controllare prima che Meta lo esamini:",
+        "open": "Apri il template"
+      }
+    },
+    "detail": {
+      "loading": "Caricamento del template",
+      "retry": "Riprova",
+      "back": "Torna alla libreria",
+      "breadcrumb": "Percorso di navigazione",
+      "refresh": "Aggiorna stato",
+      "retrySubmit": "Invia a Meta",
+      "edit": "Modifica",
+      "delete": "Elimina",
+      "refreshed": "Stato aggiornato da Meta.",
+      "submittedToast": "Template inviato a Meta per la revisione.",
+      "never": "Mai",
+      "none": "Nessuno",
+      "banner": {
+        "metaFailed": "Meta ha rifiutato il template",
+        "draft": "Questo template non è ancora stato inviato a Meta. Invialo per avviare la revisione.",
+        "pending": "Inviato per la revisione di Meta. Questa pagina controlla una risposta ogni 15 secondi.",
+        "pendingMeta": "Inviato {submitted}. Ultimo controllo {checked}.",
+        "polling": "Puoi lasciare aperta questa pagina o tornare più tardi.",
+        "rejected": "Rifiutato da Meta",
+        "rejectedHelp": "Modifica il template per risolvere il motivo, poi invialo di nuovo.",
+        "paused": "Messo in pausa da Meta. Non può essere inviato finché Meta non revoca la pausa.",
+        "pausedUntil": "Messo in pausa da Meta fino al {when}.",
+        "disabled": "Disattivato da Meta. Non può essere inviato.",
+        "deleted": "Meta non elenca più questo template. Resta qui; sincronizza di nuovo o eliminalo."
+      },
+      "facts": {
+        "title": "Sincronizzazione con Meta",
+        "status": "Stato su Meta",
+        "quality": "Qualità",
+        "category": "Categoria Meta",
+        "metaId": "ID template",
+        "number": "Numero WhatsApp",
+        "numberUnknown": "Numero non più disponibile",
+        "submitted": "Inviato",
+        "approved": "Approvato",
+        "synced": "Ultima sincronizzazione"
+      },
+      "components": {
+        "title": "Componenti",
+        "header": "Intestazione",
+        "media": "Media dell’intestazione",
+        "body": "Corpo",
+        "footer": "Piè di pagina",
+        "buttons": "Pulsanti",
+        "expiry": "Scadenza del codice",
+        "expiryValue": "{count, plural, one {# minuto} other {# minuti}}"
+      },
+      "attachment": {
+        "none": "Nessuna",
+        "image": "Immagine",
+        "video": "Video",
+        "document": "Documento",
+        "location": "Posizione"
+      },
+      "lint": {
+        "title": "Controlli",
+        "clean": "Nessun problema trovato."
+      },
+      "payload": {
+        "title": "Payload per Meta",
+        "hint": "Ciò che viene inviato a Meta per la revisione, esattamente come è costruito.",
+        "empty": "Nulla ancora costruito."
+      }
+    }
+  }
+}

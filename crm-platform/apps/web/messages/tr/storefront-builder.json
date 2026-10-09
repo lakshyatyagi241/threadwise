@@ -1,0 +1,439 @@
+{
+  "storefront-builder": {
+    "nav": {
+      "store": "Mağaza"
+    },
+    "admin": {
+      "common": {
+        "dismiss": "Kapat"
+      },
+      "errors": {
+        "requestId": "İstek kimliği",
+        "retry": "Yeniden dene",
+        "network": {
+          "title": "Sunucuya ulaşılamıyor",
+          "message": "Bağlantınızı kontrol edip yeniden deneyin."
+        },
+        "forbidden": {
+          "title": "Erişim yok",
+          "message": "Rolünüz buna izin vermiyor."
+        },
+        "signedOut": {
+          "title": "Oturumunuz kapatıldı",
+          "message": "Devam etmek için yeniden oturum açın."
+        },
+        "conflict": {
+          "title": "Başka yerde değiştirildi",
+          "message": "Siz düzenlerken bir başkası bunu değiştirdi. En son hâlini görmek için sayfayı yenileyin."
+        },
+        "validation": {
+          "title": "Formu kontrol edin",
+          "message": "Bazı alanların dikkatinize ihtiyacı var."
+        },
+        "unavailable": {
+          "title": "Henüz kullanılamıyor",
+          "message": "Mağaza hizmeti bu sunucuda kullanılamıyor."
+        },
+        "rateLimited": {
+          "title": "Çok fazla istek",
+          "message": "Biraz bekleyip yeniden deneyin."
+        },
+        "notFound": {
+          "title": "Bulunamadı",
+          "message": "Bu mağaza bu çalışma alanında mevcut değil."
+        },
+        "noShop": {
+          "title": "Henüz mağaza yok",
+          "message": "Önce mağazanızı kurun."
+        },
+        "slugTaken": {
+          "title": "Adres kullanımda",
+          "message": "Bu mağaza adresi zaten kullanımda."
+        },
+        "deviceInvalid": {
+          "title": "Bağlı bir cihaz seçin",
+          "message": "Bağlı cihazlarınızdan birini seçin."
+        },
+        "noSender": {
+          "title": "Önce WhatsApp'ı bağlayın",
+          "message": "Bir mağazanın bağlı bir WhatsApp numarasına ihtiyacı var. Bir numara bağlayın, ardından yeniden deneyin."
+        },
+        "resetNotConfirmed": {
+          "title": "Onaylanmadı",
+          "message": "Sıfırlama onaylanmadı."
+        },
+        "domainNotSet": {
+          "title": "Özel alan adı yok",
+          "message": "Özel alan adı ayarlanmadı."
+        },
+        "unexpected": {
+          "title": "Bir sorun oluştu",
+          "message": "Bir sorun oluştu. Biraz sonra yeniden deneyin."
+        }
+      },
+      "sidebar": {
+        "label": "Mağaza",
+        "navLabel": "Mağaza bölümleri",
+        "section": "Mağaza",
+        "settings": "Ayarlar",
+        "items": {
+          "overview": "Genel bakış",
+          "orders": "Siparişler",
+          "products": "Ürünler",
+          "groups": "Gruplar",
+          "storefront": "Vitrin",
+          "coupons": "Kuponlar",
+          "reviews": "Yorumlar",
+          "payments": "Ödemeler",
+          "gateways": "Ödeme geçitleri",
+          "customers": "Müşteriler",
+          "invoices": "Faturalar",
+          "connection": "Bağlantı"
+        },
+        "comingSoon": "Yakında geliyor",
+        "comingSoonHint": "Yakında geliyor",
+        "noShopTitle": "Henüz mağaza yok",
+        "noShopMessage": "Mağaza araçlarını kullanmak için ilk mağazanızı oluşturun.",
+        "noShopAction": "Mağazanızı kurun",
+        "live": "Canlı",
+        "setup": "Kurulum",
+        "yourStore": "Mağazanız",
+        "notConnected": "Bağlı değil",
+        "unofficialApi": "Resmi olmayan API",
+        "deviceConnected": "Cihaz bağlı · /channels",
+        "switchShop": "Mağaza değiştir",
+        "shopFallback": "Mağaza",
+        "manageShops": "Tüm mağazaları yönet →",
+        "publicUrl": "Herkese açık URL",
+        "open": "Aç",
+        "copy": "Kopyala",
+        "copied": "Kopyalandı!",
+        "providerLive": "Sağlayıcı canlı",
+        "sendingFrom": "Gönderim kaynağı",
+        "noDevice": "Bağlı cihaz yok.",
+        "connectOne": "Bir tane bağlayın",
+        "thenBind": "ardından bunu bu mağazaya şuradan bağlayın:",
+        "connectWizard": "bağlantı sihirbazı"
+      },
+      "dashboard": {
+        "eyebrow": "Mağaza / Genel bakış",
+        "title": "Satış özeti",
+        "subtitle": "Son 30 gün. Siparişler her kanaldan birleştirilir — WABA, vitrin, Twilio.",
+        "addProduct": "Ürün ekle",
+        "loading": "Mağaza özeti yükleniyor",
+        "kpi": {
+          "revenue": "Gelir (30 gün)",
+          "orders": "Siparişler (30 gün)",
+          "aov": "Ort. sipariş",
+          "products": "Ürünler",
+          "visits": "Ziyaretler (30 gün)"
+        },
+        "trend": {
+          "eyebrow": "Satış trendi",
+          "title": "Zamana göre gelir"
+        },
+        "legendRevenue": "Gelir ({symbol})",
+        "legendOrders": "Siparişler",
+        "dayReadout": "{day}: {revenue}, {orders, plural, other {# sipariş}}",
+        "chartLabel": "Son 30 gün için günlük gelir ve siparişler",
+        "tableDay": "Gün",
+        "tableRevenue": "Gelir ({symbol})",
+        "tableOrders": "Siparişler",
+        "top": {
+          "eyebrow": "En çok satan ürünler (30 gün)",
+          "title": "Çok satanlar",
+          "empty": "Henüz satış yok — mağaza bağlantınızı paylaşın."
+        },
+        "recent": {
+          "title": "Son siparişler",
+          "viewAll": "Tümünü gör",
+          "open": "Aç",
+          "columns": {
+            "when": "Ne zaman",
+            "customer": "Müşteri",
+            "source": "Kaynak",
+            "items": "Ürünler",
+            "total": "Toplam",
+            "status": "Durum",
+            "open": "Açık"
+          },
+          "itemsCount": "{count, plural, other {# ürün}}",
+          "emptyTitle": "Henüz sipariş yok",
+          "emptyMessage": "Müşteriler vitrininizden veya WhatsApp'tan sipariş verdiğinde burada görünecekler."
+        }
+      },
+      "settings": {
+        "eyebrow": "Mağaza / Vitrin",
+        "title": "Vitrin tasarımı",
+        "viewLive": "Canlı görüntüle",
+        "noAccess": "Rolünüzün vitrin ayarlarına erişimi yok.",
+        "loading": "Vitrin ayarları yükleniyor",
+        "saved": "Vitrin güncellendi.",
+        "conflict": "Siz düzenlerken bu vitrin başka yerde değiştirildi. En son ayarları almak için sayfayı yenileyin, ardından değişikliklerinizi yeniden yapın.",
+        "reload": "Yenile",
+        "fixErrors": "Vurgulanan alanları düzeltin ve yeniden kaydedin.",
+        "optional": "(isteğe bağlı)",
+        "save": "Kaydet",
+        "readOnly": "Bu ayarları görüntüleyebilirsiniz ancak değiştiremezsiniz.",
+        "live": "Vitrin canlı (işareti kaldırmak çevrimdışı yapar)",
+        "theme": {
+          "title": "Tema"
+        },
+        "slug": {
+          "label": "Vitrin kısa adı",
+          "hint": "Mağazanız şu adreste olacak:"
+        },
+        "domain": {
+          "label": "Özel alan adı",
+          "placeholder": "shop.yourbiz.com",
+          "verifiedLive": "Doğrulandı — alan adınız yayında",
+          "addCname": "DNS sağlayıcınızda bu CNAME kaydını ekleyin:",
+          "cname": "CNAME",
+          "verify": "Şimdi doğrula",
+          "verified": "Alan adı doğrulandı ✓",
+          "notPointing": "CNAME {expected} adresine yönlendirilmiyor",
+          "notSet": "Özel alan adı ayarlanmadı.",
+          "verifyFailed": "Alan adı kontrol edilemedi. Yeniden deneyin."
+        },
+        "brand": {
+          "logoUrl": "Logo URL'si",
+          "color": "Marka rengi (hex)",
+          "colorPicker": "Marka rengini seçin",
+          "heroText": "Ana başlık metni",
+          "heroPlaceholder": "Mağazamıza hoş geldiniz",
+          "footerText": "Alt bilgi metni",
+          "footerPlaceholder": "© 2026 Mağazanız"
+        },
+        "currency": {
+          "title": "Para birimi",
+          "label": "Para birimi",
+          "hint": "Yeni ürünler için varsayılan ve sepet çekmecesinde gösterilen sembol."
+        },
+        "shipping": {
+          "title": "Kargo",
+          "flat": "Sabit kargo ücreti",
+          "flatHint": "Her siparişe eklenir. Boş veya 0 = ücretsiz.",
+          "freeAbove": "Ücretsiz kargo üstü",
+          "freeAboveHint": "Bu tutarın üzerindeki sepetlerde kargo ücretsizdir.",
+          "note": "Kargo notu",
+          "noteHint": "Sepette ve ürün sayfasında gösterilir.",
+          "notePlaceholder": "2–5 iş günü · Takipli"
+        },
+        "payment": {
+          "title": "Ödeme bağlantısı",
+          "intro": "Bir ödeme sağlayıcısı seçin; her WhatsApp sipariş mesajına ödeme bağlantısı eklenir. Alıcı bağlantı üzerinden öder, siz sohbetten onaylarsınız. Vitrinde yerleşik bir ödeme akışı yoktur.",
+          "provider": "Sağlayıcı",
+          "providers": {
+            "none": "Yok · kapıda ödeme",
+            "upi": "UPI (Hindistan) — VPA + ad",
+            "razorpay_link": "Razorpay Ödeme Bağlantısı (sabit bağlantıyı yapıştırın)",
+            "razorpay_api": "Razorpay (bağlantıları otomatik oluştur + otomatik onayla)",
+            "stripe_link": "Stripe Ödeme Bağlantısı",
+            "paypal_me": "PayPal.me kullanıcı adı",
+            "bank_transfer": "Banka havalesi talimatları"
+          },
+          "handle": "Ödeme ayrıntısı",
+          "handleHint": "UPI VPA, ödeme bağlantısı URL'si, PayPal.me kullanıcı adı veya banka hesabı.",
+          "handlePlaceholder": "örn. shop@upi · https://rzp.io/l/xxx",
+          "razorpay": {
+            "title": "Razorpay API (otomatik bağlantılar)",
+            "keyId": "Anahtar kimliği",
+            "keyIdPlaceholder": "rzp_live_… / rzp_test_…",
+            "keySecret": "Anahtar sırrı",
+            "webhookSecret": "Webhook sırrı",
+            "stored": "kaydedildi — mevcut değeri korumak için boş bırakın",
+            "show": "Sırrı göster",
+            "hide": "Sırrı gizle",
+            "webhookHelp": "Razorpay panelinde webhook URL'sini şuna ayarlayın:",
+            "webhookEvent": "payment_link.paid olayı için."
+          }
+        },
+        "recovery": {
+          "title": "Terk edilmiş sepeti kurtarma",
+          "enable": "Ödemeyi başlatıp tamamlamayan müşterilere WhatsApp hatırlatması gönderin",
+          "enableHint": "Telefonu ödeme sırasında alır; müşteri sipariş verirse hatırlatma otomatik iptal edilir. Bağlı bir cihaz gerekir.",
+          "delay": "Gecikme (dakika)",
+          "message": "Mesaj",
+          "messageHint": "(boş = varsayılan; '{name}' '{shop}' '{url}' '{total}')",
+          "messagePlaceholder": "Merhaba '{name}'! '{shop}' mağazasındaki sepetinizde ürünler bıraktınız. Buradan tamamlayın: '{url}'"
+        },
+        "problems": {
+          "required": "Bu alan zorunludur.",
+          "tooLong": "En fazla {max} karakter.",
+          "slugPattern": "Yalnızca küçük harf, rakam ve tire kullanın.",
+          "domainInvalid": "Bu geçerli bir alan adına benzemiyor (örn. shop.yourbiz.com).",
+          "urlInvalid": "http:// veya https:// ile başlayan tam bir adres girin.",
+          "colorInvalid": "#075E54 gibi bir hex renk kullanın.",
+          "amountInvalid": "Sıfır veya daha büyük bir sayı girin.",
+          "amountTooBig": "En fazla {max}.",
+          "delayRange": "{min} ile {max} arasında bir tam sayı girin.",
+          "themeInvalid": "Temalardan birini seçin.",
+          "currencyInvalid": "Listedeki para birimlerinden birini seçin.",
+          "providerInvalid": "Listedeki sağlayıcılardan birini seçin.",
+          "slugTaken": "Bu kısa ad zaten alınmış. Başka bir ad seçin."
+        }
+      },
+      "share": {
+        "message": "Mağazama göz atın: {name}",
+        "subject": "Mağazama göz atın · {name}",
+        "eyebrow": "Mağazanızı paylaşın",
+        "fallbackName": "Mağazam",
+        "close": "Kapat",
+        "link": "Mağaza bağlantısı",
+        "copy": "Kopyala",
+        "copied": "Kopyalandı ✓",
+        "copiedShort": "Kopyalandı",
+        "whatsapp": "WhatsApp",
+        "whatsappHint": "Bir sohbete gönder",
+        "email": "E-posta",
+        "emailHint": "Posta uygulamasını aç",
+        "telegram": "Telegram",
+        "telegramHint": "Kanalda paylaş",
+        "more": "Daha fazla…",
+        "moreHint": "Telefon paylaşım menüsü",
+        "nativeUnsupported": "Bu tarayıcıda desteklenmiyor",
+        "showQr": "QR kodunu göster",
+        "qrAlt": "QR kodu",
+        "qrCaption": "Mağazayı açmak için tarayın"
+      },
+      "wizard": {
+        "loading": "Mağazalarınız yükleniyor",
+        "back": "Geri",
+        "breadcrumb": "Bağlantı / WhatsApp Mağaza",
+        "manageConnections": "Tüm bağlantıları yönet →",
+        "titles": {
+          "list": "Mağazalarınız",
+          "add": "Mağazanızı kurun",
+          "edit": "{name} düzenle",
+          "shopFallback": "mağaza"
+        },
+        "gate": {
+          "step": "3 adımdan 1. adım",
+          "title": "Önce WhatsApp'ı bağlayın",
+          "message": "Mağazanızın sipariş onaylarını göndermesi ve müşterilerin sohbet edebilmesi için bağlı bir WhatsApp numarasına ihtiyacı var. Kanallarınıza gidip bir numara eşleştirin — 30 saniye sürer.",
+          "action": "Cihazlara git"
+        },
+        "list": {
+          "headline": "{count, plural, other {# mağaza}} — {workspace} içinde",
+          "intro": "Her mağazanın kendi herkese açık URL'si, teması ve gönderim cihazı vardır. İhtiyacınız kadar ekleyin — farklı markalar, diller veya bölgeler için.",
+          "add": "Mağaza ekle",
+          "addAnother": "Başka bir mağaza ekle",
+          "addAnotherHint": "Kendi URL'si, teması ve WhatsApp numarasıyla ayrı bir vitrin çalıştırın."
+        },
+        "share": {
+          "fallbackName": "Mağazam"
+        },
+        "noAccess": {
+          "title": "Mağazaları değiştiremezsiniz",
+          "message": "Rolünüz mağazaları görüntüleyebilir ancak oluşturamaz veya düzenleyemez.",
+          "action": "Mağazalara dön"
+        },
+        "delete": {
+          "title": "{name} silinsin mi?",
+          "message": "Vitrini ve siparişlerini kalıcı olarak siler. Çalışma alanınızdaki ürünler etkilenmez. Bu işlem geri alınamaz.",
+          "confirm": "Evet, sil",
+          "cancel": "İptal",
+          "done": "Mağaza silindi.",
+          "thisShop": "bu mağaza"
+        },
+        "reset": {
+          "open": "Tüm mağaza verilerini temizle",
+          "title": "Tüm mağaza verileri temizlensin mi?",
+          "message": "Bu çalışma alanındaki tüm mağazaları, siparişleri ve ürünleri kalıcı olarak siler. Bu işlem geri alınamaz.",
+          "confirm": "Evet, her şeyi temizle",
+          "done": "Bu çalışma alanının tüm mağaza verileri temizlendi.",
+          "notConfirmed": "Sıfırlama onaylanmadı."
+        },
+        "card": {
+          "live": "Canlı",
+          "disabled": "Devre dışı",
+          "theme": "{theme} teması",
+          "untitled": "Adsız mağaza",
+          "sendingFrom": "Gönderen",
+          "noDevice": "Cihaz yok",
+          "domain": "Alan adı",
+          "pending": "beklemede",
+          "builtIn": "Yerleşik URL",
+          "manage": "Yönet",
+          "manageTitle": "Yönetici panelini aç",
+          "preview": "Önizle",
+          "previewTitle": "Herkese açık vitrini yeni sekmede aç",
+          "edit": "Düzenle",
+          "editTitle": "Mağaza ayarlarını düzenle",
+          "share": "Paylaş",
+          "shareAria": "{name} paylaş",
+          "delete": "Mağazayı sil",
+          "deleteAria": "{name} sil"
+        },
+        "form": {
+          "backToShops": "Mağazalara dön",
+          "creatingShop": "#{n} numaralı mağaza oluşturuluyor",
+          "progress": "Adımlar",
+          "steps": {
+            "details": "Mağaza ayrıntıları",
+            "url": "Herkese açık URL",
+            "device": "Gönderim cihazı"
+          },
+          "optional": "(isteğe bağlı)",
+          "details": {
+            "title": "Mağaza ayrıntıları",
+            "hint": "Müşterilere görünen ad ve ürünlerin yer alacağı URL kısa adı.",
+            "name": "Mağaza adı",
+            "nameHint": "Vitrin üstbilgisinde ve sipariş onaylarında gösterilir.",
+            "namePlaceholder": "Media City Threads",
+            "namePlaceholderAnother": "örn. {workspace} · Mumbai",
+            "slug": "Vitrin kısa adı",
+            "auto": "(otomatik)",
+            "slugLocked": "Paylaşılan bağlantılar çalışmaya devam etsin diye mağaza canlıya alındıktan sonra kilitlenir.",
+            "slugAuto": "Mağaza adınızdan oluşturulur — kaydettiğinizde kesinleşir."
+          },
+          "url": {
+            "title": "Herkese açık URL",
+            "hint": "Alıcıların mağazanıza nasıl ulaşacağını seçin — yerleşik URL ücretsizdir, özel alan adı daha profesyonel görünür.",
+            "builtIn": "Yerleşik URL · ücretsiz",
+            "pathMode": "Kaydettiğiniz anda çalışır. Herkese açık vitrin sunucusu yapılandırılmadığı için yol tabanlı URL kullanılır.",
+            "subdomainMode": "Kaydettiğiniz anda çalışır. Platformun vitrin alan adında barındırılır.",
+            "domain": "Özel alan adı",
+            "domainHint": "DNS sağlayıcınızda bir CNAME ekleyeceksiniz ve kaydettikten sonra vitrin ayarları sayfasından doğrulayacaksınız. Yerleşik URL'yi kullanmak için boş bırakın.",
+            "domainPlaceholder": "shop.yourbiz.com",
+            "verified": "{domain} doğrulandı.",
+            "pending": "{domain} DNS doğrulaması bekliyor."
+          },
+          "device": {
+            "title": "Gönderim cihazı",
+            "hint": "Sipariş onaylarını ve alıcılara yanıtları hangi WhatsApp numarasının göndereceği.",
+            "none": "Bu hesapta bağlı cihaz yok.",
+            "pair": "Kanallarınızda bir cihaz eşleştirin →",
+            "official": "Resmi API · Meta (WABA)",
+            "officialDetail": "Çalışma alanı WhatsApp Business numarası",
+            "fallback": "Cihaz",
+            "noNumber": "Numara yok",
+            "connected": "bağlı"
+          },
+          "cancel": "İptal",
+          "deleteThis": "Bu mağazayı sil",
+          "saveChanges": "Değişiklikleri kaydet",
+          "create": "Mağaza oluştur →",
+          "created": "\"{name}\" mağazası oluşturuldu.",
+          "updated": "\"{name}\" mağazası güncellendi.",
+          "problems": {
+            "nameRequired": "Bir mağaza adı girin.",
+            "nameTooLong": "En fazla 191 karakter.",
+            "domainInvalid": "Bu geçerli bir alan adına benzemiyor (örn. shop.yourbiz.com).",
+            "domainTooLong": "En fazla 191 karakter.",
+            "deviceInvalid": "Bağlı cihazlarınızdan birini seçin.",
+            "slugTaken": "Bu mağaza adı, zaten alınmış bir adres oluşturuyor. Adı biraz değiştirin."
+          },
+          "live": {
+            "eyebrow": "Bu mağaza canlı",
+            "fallbackName": "Mağazanız",
+            "hint": "Ürün ekleyin, bir tema seçin, siparişleri görüntüleyin ve bağlantınızı paylaşın.",
+            "view": "Mağazayı görüntüle",
+            "share": "Mağazayı paylaş",
+            "dashboard": "Paneli aç"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "checkout-orders-merchant-payments": {
+    "groups": {
+      "eyebrow": "Mağaza / Gruplar",
+      "title": "WhatsApp grupları",
+      "subtitle": "Bağlı numaranızın üyesi olduğu gruplar. Bir sipariş onaylandığında müşterinin grubuna gönderilir ve müşteri @etiketlenir. Müşterilerin gruptan sipariş verebilmesi için gruba bir sipariş kodu verin.",
+      "loading": "Gruplar yükleniyor",
+      "summary": {
+        "groups": "Senkronize edilen gruplar",
+        "coded": "Sipariş kodlu",
+        "bot": "Bot numarası",
+        "noBot": "Bağlı WhatsApp numarası yok.",
+        "connect": "Kanallar'da bir numara bağlayın",
+        "copyNumber": "Numarayı kopyala"
+      },
+      "search": {
+        "label": "Gruplarda ara",
+        "placeholder": "Grup adı ara..."
+      },
+      "columns": {
+        "group": "Grup",
+        "members": "Üyeler",
+        "device": "Bot cihazı",
+        "synced": "Senkronize edildi",
+        "code": "Sipariş kodu"
+      },
+      "row": {
+        "unnamed": "(adsız grup)",
+        "noCode": "Kod yok",
+        "placeholder": "ör. ACME",
+        "label": "{name} için sipariş kodu",
+        "copyLink": "Sipariş bağlantısını kopyala",
+        "saved": "Sipariş kodu kaydedildi.",
+        "cleared": "Sipariş kodu temizlendi.",
+        "tooLong": "En fazla {max} karakter kullanın.",
+        "badChars": "Yalnızca harf, rakam, nokta, tire ve alt çizgi kullanın.",
+        "taken": "Başka bir grup bu kodu zaten kullanıyor."
+      },
+      "empty": {
+        "title": "Henüz grup yok",
+        "message": "Grup listesi bağlı WhatsApp oturumunuzdan kopyalanır. Gruplar, oturum onları senkronize ettikten sonra burada görünür; bunun için henüz bir süre garantisi yok.",
+        "action": "Kanalları aç"
+      },
+      "noMatch": {
+        "title": "Aramanızla eşleşen grup yok",
+        "message": "Grup adının başka bir bölümünü deneyin veya aramayı temizleyin."
+      },
+      "how": {
+        "title": "Sipariş kodları nasıl çalışır",
+        "body": "Bir gruba kısa bir kod verin (örneğin ACME), ardından sipariş bağlantısını paylaşın. Müşteri bağlantıya dokunup bir siparişi onayladığında sipariş doğrudan o gruba gönderilir ve müşteri, birden fazla gruba üye olsa bile @etiketlenir."
+      }
+    }
+  }
+}

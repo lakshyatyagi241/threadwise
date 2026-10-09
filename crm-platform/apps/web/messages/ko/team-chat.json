@@ -1,0 +1,208 @@
+{
+  "team-chat": {
+    "nav": {
+      "teamChat": "팀 채팅"
+    },
+    "common": {
+      "dismiss": "닫기"
+    },
+    "screen": {
+      "title": "팀 채팅",
+      "back": "채널 목록으로 돌아가기",
+      "search": "이 채널 검색",
+      "pinned": "고정된 메시지",
+      "members": "채널 멤버",
+      "deleteChannel": "이 채널 삭제",
+      "type": {
+        "public": "채널",
+        "private": "비공개",
+        "dm": "1:1 메시지"
+      },
+      "olderMessage": "해당 메시지는 더 이전에 있습니다. 이전 메시지를 불러와 확인하세요.",
+      "loading": "팀 채팅을 불러오는 중",
+      "loadFailed": "팀 채팅을 불러올 수 없습니다.",
+      "retry": "다시 시도",
+      "deleteTitle": "이 채널을 삭제하시겠습니까?",
+      "deleteMessage": "#{name} 채널과 모든 메시지가 모든 사용자에게서 삭제됩니다. 이 작업은 되돌릴 수 없습니다.",
+      "deleteConfirm": "채널 삭제",
+      "cancel": "취소",
+      "defaultDescription": "내부 워크스페이스 채팅",
+      "customerChats": "고객 채팅"
+    },
+    "sidebar": {
+      "label": "채널 및 사용자",
+      "channels": "채널",
+      "createChannel": "채널 만들기",
+      "loading": "채널을 불러오는 중",
+      "loadFailed": "채널을 불러올 수 없습니다.",
+      "noChannels": "아직 채널이 없습니다",
+      "direct": "1:1 메시지",
+      "people": "사용자",
+      "invite": "팀원 초대",
+      "pending": "대기 중인 요청",
+      "pendingCount": "{count, plural, other {대기 중인 요청 #개}}",
+      "unread": "{count, plural, other {읽지 않은 메시지 #개}}",
+      "workspace": "워크스페이스",
+      "mode": "모드",
+      "customerChats": "고객 채팅",
+      "teamChat": "팀 채팅",
+      "membersLink": "멤버"
+    },
+    "members": {
+      "label": "멤버",
+      "title": "팀 채팅",
+      "count": "{count, plural, other {멤버 #명}}",
+      "countUnknown": "멤버",
+      "search": "멤버 검색",
+      "loading": "멤버를 불러오는 중",
+      "none": "일치하는 멤버가 없습니다",
+      "online": "온라인",
+      "offline": "오프라인",
+      "you": "(나)",
+      "message": "{name} 님에게 메시지 보내기",
+      "titleAccent": "채팅"
+    },
+    "panel": {
+      "searchTitle": "메시지 검색",
+      "pinnedTitle": "고정된 메시지",
+      "searchPlaceholder": "이 채널 검색",
+      "searchHint": "두 글자 이상 입력하세요.",
+      "close": "닫기",
+      "failed": "불러올 수 없습니다.",
+      "noResults": "일치하는 메시지가 없습니다.",
+      "noPinned": "이 채널에 고정된 메시지가 없습니다."
+    },
+    "stream": {
+      "loading": "메시지를 불러오는 중",
+      "loadFailed": "메시지를 불러올 수 없습니다.",
+      "loadOlder": "이전 메시지 더 보기",
+      "emptyTitle": "#{name} 채널에 아직 메시지가 없습니다",
+      "emptyMessage": "인사를 건네고 대화를 시작하세요."
+    },
+    "message": {
+      "edited": "(수정됨)",
+      "pinned": "고정됨",
+      "editLabel": "메시지 수정",
+      "cancel": "취소",
+      "save": "저장",
+      "editConflict": "편집하는 동안 이 메시지가 변경되었습니다. 새로고침한 후 다시 시도하세요.",
+      "reactions": "반응",
+      "reactionChip": "{emoji}, {count, plural, other {#명}}",
+      "reactionTray": "반응 선택",
+      "reply": "답장",
+      "react": "반응",
+      "edit": "편집",
+      "pin": "고정",
+      "unpin": "고정 해제",
+      "delete": "삭제",
+      "deleteTitle": "이 메시지를 삭제하시겠습니까?",
+      "deleteMessage": "채널의 모든 사용자에게서 삭제됩니다.",
+      "uploading": "업로드 중",
+      "retry": "재시도",
+      "discard": "버리기"
+    },
+    "composer": {
+      "placeholder": "#{name} 채널에 메시지",
+      "attach": "파일 첨부",
+      "send": "보내기",
+      "hint": "Enter로 보내기, Shift+Enter로 줄 바꿈, @로 팀원 언급",
+      "replyingTo": "{name} 님에게 답장 중",
+      "cancelReply": "답장 취소",
+      "removeFile": "첨부 파일 제거",
+      "fileTooLarge": "파일 크기가 20MB를 초과합니다.",
+      "mentionList": "언급할 팀원",
+      "typingOne": "{name} 님이 입력 중입니다",
+      "typingMany": "{count}명이 입력 중입니다",
+      "hintSend": "전송",
+      "hintNewLine": "줄바꿈",
+      "hintMention": "멘션",
+      "hintShift": "Shift+↵"
+    },
+    "createChannel": {
+      "title": "채널 만들기",
+      "close": "닫기",
+      "name": "이름",
+      "nameHint": "소문자, 숫자, 하이픈(-), 밑줄(_)만 사용할 수 있으며 공백은 쓸 수 없습니다.",
+      "description": "설명 (선택)",
+      "privacy": "공개 설정",
+      "public": {
+        "label": "공개",
+        "hint": "워크스페이스의 모든 사용자가 읽고 쓸 수 있습니다."
+      },
+      "private": {
+        "label": "비공개",
+        "hint": "초대된 사용자만 참여할 수 있습니다. 멤버에게만 표시됩니다."
+      },
+      "cancel": "취소",
+      "create": "채널 만들기",
+      "namePlaceholder": "예: 지원",
+      "descriptionPlaceholder": "이 채널의 용도는 무엇인가요?"
+    },
+    "invite": {
+      "title": "팀원 초대",
+      "close": "닫기",
+      "email": "이메일",
+      "name": "이름 (선택)",
+      "note": "관리자에게 전달할 메모 (선택)",
+      "noteHint": "이 사용자가 참여해야 하는 이유를 적어 주세요.",
+      "addToChannel": "#{name} 채널에도 추가",
+      "approved": "완료되었습니다. 요청이 승인되었습니다.",
+      "pending": "초대가 제출되었으며 관리자 승인을 기다리는 중입니다.",
+      "cancel": "취소",
+      "submit": "초대 제출",
+      "emailPlaceholder": "teammate@company.com",
+      "namePlaceholder": "이름",
+      "notePlaceholder": "가입하려는 이유는 무엇인가요?"
+    },
+    "invitations": {
+      "title": "대기 중인 초대",
+      "close": "닫기",
+      "loading": "불러오는 중",
+      "loadFailed": "초대 목록을 불러올 수 없습니다.",
+      "empty": "아직 초대가 없습니다",
+      "status": {
+        "pending": "대기 중",
+        "approved": "승인됨",
+        "declined": "거절됨",
+        "expired": "만료됨"
+      },
+      "requestedBy": "{name} 님이 요청 · {time}",
+      "decidedBy": "{status} · {name} 님 · {time}",
+      "needsAccount": "이 사용자는 아직 워크스페이스 계정이 없어 아무도 추가되지 않았습니다.",
+      "approve": "승인",
+      "decline": "거절"
+    },
+    "channelMembers": {
+      "title": "#{name} 채널 멤버",
+      "close": "닫기",
+      "admin": "관리자",
+      "leave": "나가기",
+      "remove": "제거",
+      "addLabel": "팀원 추가",
+      "choose": "팀원 선택",
+      "add": "추가"
+    },
+    "errors": {
+      "network": "네트워크 오류입니다. 연결을 확인한 후 다시 시도하세요.",
+      "forbidden": "이 작업을 수행할 권한이 없습니다.",
+      "signedOut": "로그아웃되었습니다. 다시 로그인하세요.",
+      "notFound": "더 이상 존재하지 않습니다.",
+      "validation": "입력한 내용을 확인한 후 다시 시도하세요.",
+      "conflict": "그사이 내용이 변경되었습니다. 새로고침한 후 다시 시도하세요.",
+      "tooLarge": "파일 크기가 20MB를 초과합니다.",
+      "rateLimited": "요청이 너무 많습니다. 잠시 후 다시 시도하세요.",
+      "emptyMessage": "메시지를 입력하거나 파일을 첨부하세요.",
+      "replyOtherChannel": "같은 채널의 메시지에만 답장할 수 있습니다.",
+      "attachmentRejected": "이 파일은 첨부할 수 없습니다. 20MB 이하의 이미지, PDF, Word, Excel, 텍스트, CSV 파일만 첨부할 수 있습니다.",
+      "editExpired": "메시지는 작성 후 15분 이내에만 수정할 수 있습니다.",
+      "nameTaken": "같은 이름의 채널이 이미 있습니다.",
+      "channelProtected": "#general 채널은 삭제할 수 없습니다.",
+      "alreadyMember": "이미 워크스페이스 멤버입니다.",
+      "alreadyDecided": "이미 처리되었습니다.",
+      "notMember": "이 채널의 멤버가 아닙니다.",
+      "notAuthor": "본인이 작성한 메시지만 변경할 수 있습니다.",
+      "kindInvalid": "이 유형의 채널에서는 사용할 수 없는 작업입니다.",
+      "unexpected": "문제가 발생했습니다. 다시 시도하세요."
+    }
+  }
+}

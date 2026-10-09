@@ -1,0 +1,212 @@
+{
+  "telegram": {
+    "nav": {
+      "title": "Telegram"
+    },
+    "common": {
+      "dismiss": "Bỏ qua"
+    },
+    "connect": {
+      "title": "Kết nối bot Telegram",
+      "close": "Đóng",
+      "cancel": "Hủy",
+      "submit": "Kết nối bot",
+      "intro": "Nhập token bot HTTP API để cấu hình webhook và bắt đầu xử lý các cuộc trò chuyện Telegram.",
+      "tokenLabel": "Token bot *",
+      "tokenPlaceholder": "Ví dụ: 123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ",
+      "tokenShape": "Chuỗi này không giống token của BotFather.",
+      "connected": "Đã kết nối bot Telegram.",
+      "savedNeedsAttention": "Đã lưu bot, nhưng Telegram không chấp nhận webhook.",
+      "failed": "Không thể kết nối bot. Thử lại.",
+      "howTitle": "Lấy token bot ở đâu?",
+      "how1a": "Mở Telegram và tìm tài khoản",
+      "how1b": "đã xác minh.",
+      "how2a": "Gửi",
+      "how2b": "và chọn tên hiển thị cùng tên người dùng.",
+      "how3": "Sao chép token HTTP API được tạo ra và dán vào ô phía trên."
+    },
+    "bot": {
+      "failed": "Không thành công. Thử lại.",
+      "webhookFixed": "Đầu vào đã hoạt động trở lại.",
+      "live": "Đang hoạt động",
+      "paused": "Tạm dừng",
+      "needsAttention": "Cần xử lý",
+      "lastMessage": "Tin nhắn cuối {when}",
+      "payments": "Thanh toán",
+      "on": "bật",
+      "paymentsSaved": "Đã lưu cài đặt thanh toán.",
+      "paymentsHint": "Dán token nhà cung cấp thanh toán từ @BotFather (/mybots → Payments) để bật nút luồng Thanh toán — hóa đơn ngay trong cuộc trò chuyện.",
+      "paymentsSavedPlaceholder": "•••••••• (đã lưu — để trống để giữ nguyên)",
+      "paymentsToken": "Token nhà cung cấp thanh toán",
+      "removeToken": "Xóa token",
+      "save": "Lưu",
+      "webhook": "Webhook",
+      "fixInbound": "Sửa đầu vào (đăng ký lại webhook)",
+      "pause": "Tạm dừng",
+      "resume": "Tiếp tục",
+      "pausedDone": "Đã tạm dừng bot.",
+      "resumedDone": "Đã tiếp tục bot.",
+      "disconnect": "Ngắt kết nối",
+      "disconnectConfirm": "Ngắt kết nối bot Telegram này? Các cuộc trò chuyện trong hộp thư vẫn được giữ, nhưng bot sẽ ngừng gửi và nhận tin.",
+      "cancel": "Hủy",
+      "disconnected": "Đã ngắt kết nối bot."
+    },
+    "hub": {
+      "kicker": "Kênh · Telegram",
+      "title": "Telegram",
+      "titleAccent": "Kết nối",
+      "intro": "Triển khai bot Telegram để tự động hóa quy trình nhắn tin, hỗ trợ khách hàng và gửi thông báo đến người đăng ký trên toàn thế giới.",
+      "teamInbox": "Hộp thư nhóm",
+      "flows": "Luồng",
+      "broadcasts": "Gửi hàng loạt",
+      "telegramBroadcasts": "Gửi hàng loạt Telegram",
+      "loadError": "Không thể tải các bot Telegram của bạn.",
+      "connectedCount": "{count} đã kết nối",
+      "notConnected": "Chưa kết nối",
+      "botCardTitle": "Kết nối bot Telegram",
+      "botCardBody": "Dán token bot từ @BotFather để tự động hóa tin nhắn, hỗ trợ khách hàng và gửi hàng loạt đến người đăng ký.",
+      "connectAnother": "Kết nối bot khác",
+      "connectBot": "Kết nối bot",
+      "accountCardTitle": "Kết nối tài khoản Telegram",
+      "accountCardBody": "Liên kết tài khoản Telegram để tạo bot ngay tại đây — quét mã QR hoặc dùng số điện thoại, giống như WhatsApp.",
+      "connectAccount": "Kết nối tài khoản",
+      "accountUnavailable": "Chưa khả dụng: cần dịch vụ tài khoản Telegram, nhưng dịch vụ này chưa được thiết lập trong không gian làm việc này.",
+      "connectedBots": "Bot đã kết nối",
+      "guideTitle": "Hướng dẫn thiết lập bot Telegram",
+      "guideBody": "Hoàn thành các bước sau để liên kết kênh Telegram và bật quy trình tự động.",
+      "prerequisites": "Yêu cầu trước",
+      "pre": {
+        "account": "Một tài khoản Telegram đang hoạt động",
+        "name": "Một tên duy nhất cho bot",
+        "app": "Truy cập Telegram Web/App"
+      },
+      "stepsTitle": "Các bước kết nối",
+      "step": "Bước {n}",
+      "steps": {
+        "locate": {
+          "title": "Tìm BotFather",
+          "body": "Mở Telegram và tìm tài khoản @BotFather chính thức (có dấu xác minh)."
+        },
+        "create": {
+          "title": "Tạo bot mới",
+          "body": "Gửi /newbot tới @BotFather và làm theo hướng dẫn để đặt tên bot và chọn tên người dùng."
+        },
+        "token": {
+          "title": "Lấy token API",
+          "body": "BotFather sẽ tạo token HTTP API (ví dụ 123456789:ABC…). Hãy sao chép và giữ an toàn."
+        },
+        "connect": {
+          "title": "Kết nối bot tại đây",
+          "body": "Nhấn “Kết nối bot”, dán token vào ô và gửi để hoàn tất liên kết."
+        }
+      },
+      "unlockedTitle": "Bạn sẽ mở khóa được gì?",
+      "unlocked": {
+        "support": {
+          "title": "Tự động hóa hỗ trợ",
+          "body": "Để bot AI trả lời các câu hỏi thường gặp và điều hướng cuộc trò chuyện 24/7."
+        },
+        "broadcast": {
+          "title": "Chiến dịch gửi hàng loạt",
+          "body": "Gửi khuyến mãi, thông báo và bản tin đến tất cả người đăng ký cùng lúc."
+        },
+        "media": {
+          "title": "Nội dung đa phương tiện tương tác",
+          "body": "Tăng tương tác với người dùng bằng nút bấm, menu, hóa đơn và hình ảnh."
+        }
+      },
+      "tipTitle": "Mẹo cấu hình",
+      "tipBody": "Không bao giờ chia sẻ token API của bot công khai. Nếu bị lộ, hãy nhắn @BotFather và chạy /revoke để tạo token mới ngay. Trên localhost, địa chỉ tunnel thay đổi mỗi lần khởi động lại — nhấn “Sửa đầu vào” để đăng ký lại."
+    },
+    "broadcasts": {
+      "kicker": "Telegram · Gửi hàng loạt",
+      "title": "Telegram",
+      "titleAccent": "lần gửi hàng loạt",
+      "intro": "Nhắn tin cho tất cả người đã trò chuyện với bot của bạn, rồi theo dõi số tin đã gửi, thất bại và bị chặn trong từng đợt.",
+      "bots": "Bot",
+      "newBroadcast": "Gửi hàng loạt mới",
+      "connectFirst": "Hãy kết nối bot Telegram trước.",
+      "connectBot": "Kết nối bot",
+      "tile": {
+        "sent": "Đã gửi",
+        "audience": "Đối tượng",
+        "failed": "Thất bại",
+        "blocked": "Bị chặn",
+        "sending": "Đang gửi",
+        "broadcasts": "{count} lần gửi hàng loạt",
+        "audienceHint": "tổng số người nhận",
+        "failedHint": "lỗi gửi",
+        "blockedHint": "bot bị người dùng chặn",
+        "sendingHint": "đang gửi dở"
+      },
+      "listKicker": "Danh sách gửi hàng loạt",
+      "listTitle": "Gửi hàng loạt gần đây",
+      "col": {
+        "broadcast": "Gửi hàng loạt",
+        "bot": "Bot",
+        "recipients": "Người nhận",
+        "progress": "Tiến độ",
+        "status": "Trạng thái",
+        "actions": "Thao tác"
+      },
+      "counts": "{sent} đã gửi · {failed} thất bại · {blocked} bị chặn",
+      "status": {
+        "draft": "Bản nháp",
+        "sending": "Đang gửi",
+        "done": "Hoàn tất",
+        "failed": "Thất bại"
+      },
+      "start": "Bắt đầu",
+      "pause": "Tạm dừng",
+      "retry": "Thử lại",
+      "delete": "Xóa",
+      "deleteConfirm": "Xóa đợt gửi hàng loạt này?",
+      "cancel": "Hủy",
+      "empty": "Chưa có đợt gửi hàng loạt nào.",
+      "createFirst": "Tạo đợt đầu tiên",
+      "failed": "Thao tác không thành công. Thử lại.",
+      "started": "Đã bắt đầu gửi.",
+      "paused": "Đã tạm dừng. Các cuộc trò chuyện chưa gửi vẫn ở trạng thái chờ.",
+      "retried": "{count} cuộc trò chuyện gửi lỗi đã sẵn sàng gửi lại. Nhấn Bắt đầu.",
+      "deleted": "Đã xóa gửi hàng loạt."
+    },
+    "compose": {
+      "kicker": "Telegram · Gửi hàng loạt mới",
+      "title": "Soạn một",
+      "titleAccent": "đợt gửi hàng loạt",
+      "back": "Quay lại",
+      "loadError": "Không thể tải danh sách bot và mẫu.",
+      "noPermission": "Bạn có thể xem trang này, nhưng không có quyền tạo gửi hàng loạt.",
+      "setup": "Thiết lập gửi hàng loạt",
+      "name": "Tên gửi hàng loạt",
+      "namePlaceholder": "Ví dụ: Khuyến mãi cuối tuần",
+      "bot": "Bot",
+      "template": "Mẫu (không bắt buộc)",
+      "templateHint": "Điền sẵn nội dung tin nhắn và gửi kèm các nút của mẫu.",
+      "templateNone": "— không chọn (tự viết) —",
+      "buttonCount": "{count} nút",
+      "message": "Tin nhắn",
+      "messageHint": "Dùng '{name}' để cá nhân hóa.",
+      "messagePlaceholder": "Chào '{name}'! …",
+      "attachment": "Tệp đính kèm (không bắt buộc)",
+      "attachmentHint": "Địa chỉ công khai của hình ảnh, video, tệp âm thanh hoặc tài liệu. Tải tệp lên cần dịch vụ lưu trữ.",
+      "attachmentInvalid": "Nhập địa chỉ đầy đủ bắt đầu bằng http:// hoặc https://.",
+      "recipients": "Người nhận",
+      "selectAll": "Chọn tất cả",
+      "clearAll": "Bỏ chọn tất cả",
+      "noChats": "Chưa có ai trò chuyện với bot này.",
+      "type": {
+        "private": "riêng tư",
+        "group": "nhóm",
+        "channel": "kênh"
+      },
+      "selected": "Đã chọn {count}",
+      "submit": "Tạo gửi hàng loạt",
+      "preview": "Xem trước trực tiếp",
+      "previewEmpty": "Xem trước tin nhắn của bạn…",
+      "previewNote": "Đây là cách gửi hàng loạt của bạn sẽ hiển thị trong cuộc trò chuyện của từng người nhận.",
+      "created": "Đã tạo gửi hàng loạt cho {count} người nhận. Nhấn Bắt đầu gửi khi sẵn sàng.",
+      "failed": "Không thể tạo gửi hàng loạt. Thử lại."
+    }
+  }
+}

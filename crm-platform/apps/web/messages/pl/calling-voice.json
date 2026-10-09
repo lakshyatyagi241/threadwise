@@ -1,0 +1,113 @@
+{
+  "calling-voice": {
+    "nav": {
+      "title": "Połączenia",
+      "description": "Włącz lub wyłącz połączenia WhatsApp dla każdego numeru.",
+      "keywords": "połączenie, połączenia, głos, telefon, połączenia whatsapp, przycisk połączenia"
+    },
+    "common": {
+      "dismiss": "Zamknij"
+    },
+    "button": {
+      "label": "Zadzwoń",
+      "tooltip": "Rozpocznij połączenie WhatsApp",
+      "working": "Trwa przetwarzanie..."
+    },
+    "confirm": {
+      "title": "Brak potwierdzonej zgody na połączenia",
+      "body": "Nie mamy zapisanej potwierdzonej zgody na połączenia dla tego kontaktu.",
+      "callAnyway": "Zadzwoń mimo to",
+      "callAnywayHint": "Działa, jeśli kontakt już stuknął „Zezwól” w WhatsApp.",
+      "askPermission": "Poproś o zgodę",
+      "askPermissionHint": "Zamiast tego wysyła prośbę o zgodę. Połączenie nie jest nawiązywane.",
+      "close": "Zamknij"
+    },
+    "toast": {
+      "noPhone": "Ten kontakt nie ma numeru telefonu.",
+      "noNumber": "Połączenia nie są włączone dla żadnego numeru WABA.",
+      "alreadyPermitted": "Ten kontakt już zezwala na połączenia - rozpoczynanie połączenia...",
+      "permissionSent": "Wysłano prośbę o zgodę. W WhatsApp zobaczy opcje Akceptuj/Odrzuć - spróbuj zadzwonić ponownie po jego odpowiedzi.",
+      "permissionFailed": "Nie udało się wysłać prośby o zgodę: {message}",
+      "startFailed": "Nie udało się rozpocząć połączenia: {message}",
+      "acceptInvalid": "Nie udało się odebrać połączenia: nieprawidłowe dane połączenia z WhatsApp. Spróbuj ponownie.",
+      "acceptFailed": "Nie udało się odebrać połączenia: {message}",
+      "alreadyAccepted": "Połączenie zostało już odebrane przez innego członka zespołu.",
+      "recordingStarted": "Rozpoczęto nagrywanie - zostanie zapisane w Dzienniku połączeń po rozłączeniu.",
+      "recordingSaved": "Nagranie połączenia zapisano w Dzienniku połączeń.",
+      "recordUnsupported": "Nagrywanie nie jest obsługiwane w tej przeglądarce.",
+      "noActiveCall": "Brak aktywnego połączenia do nagrania."
+    },
+    "incoming": {
+      "title": "Przychodzące połączenie WhatsApp",
+      "caller": "Dzwoni +{digits}",
+      "accept": "Odbierz",
+      "decline": "Odrzuć",
+      "aiHandling": "AI obsługuje to połączenie..."
+    },
+    "panel": {
+      "label": "Połączenie w toku",
+      "title": "W trakcie rozmowy",
+      "ringing": "dzwoni...",
+      "connected": "połączono",
+      "timer": "Czas połączenia",
+      "mute": "Wycisz",
+      "muted": "Wyciszono",
+      "end": "Zakończ",
+      "record": "Nagraj",
+      "recording": "Nagrywanie",
+      "recordTooltip": "Nagraj to połączenie",
+      "recordingTooltip": "Nagrywanie tego połączenia",
+      "recordingNotice": "To połączenie jest nagrywane"
+    },
+    "failures": {
+      "REJECTED": "Klient odrzucił połączenie.",
+      "BUSY": "Klient prowadzi inną rozmowę.",
+      "NO_ANSWER": "Brak odpowiedzi - klient nie odebrał.",
+      "MISSED": "Klient nie odebrał połączenia.",
+      "CANCELLED": "Połączenie zostało anulowane.",
+      "MIC_BLOCKED": "Dostęp do mikrofonu jest zablokowany - rozmówca Cię nie usłyszy. Przyznaj uprawnienie do mikrofonu w przeglądarce i spróbuj ponownie.",
+      "BUSY_SLOT": "W tej karcie jest już aktywne inne połączenie.",
+      "INVALID_SDP": "Nieprawidłowa oferta SDP - brak v=0 lub wiersza media",
+      "LOCAL_SDP_EMPTY": "Lokalne SDP jest puste - zbieranie ICE nie powiodło się",
+      "ENDED_EARLY": "Połączenie zakończyło się przed nawiązaniem.",
+      "ANSWER_FAILED": "Nie udało się zastosować odpowiedzi WhatsApp"
+    },
+    "errors": {
+      "CALL_NUMBER_NOT_FOUND": "Tego numeru nie ma już w Twojej przestrzeni roboczej. Odśwież stronę i spróbuj ponownie.",
+      "CALL_NOT_FOUND": "Nie znaleziono tego połączenia. Mogło już się zakończyć.",
+      "CALL_NOT_WABA": "Połączenia działają tylko na numerach WhatsApp Cloud API. Ten numer jest połączony w inny sposób.",
+      "CALL_NUMBER_NOT_CONNECTED": "Ten numer nie jest teraz połączony z WhatsApp Cloud API. Połącz go ponownie w sekcji Kanały i spróbuj jeszcze raz.",
+      "CALL_COEXISTENCE_UNSUPPORTED": "Numer używany także w aplikacji WhatsApp Business nie może odbierać połączeń.",
+      "CALL_NOT_ENABLED": "Połączenia są wyłączone dla tego numeru. Najpierw włącz je w sekcji Połączenia.",
+      "CALL_META_REFUSED": "WhatsApp odrzucił żądanie. Spróbuj ponownie za chwilę.",
+      "CALL_PERMISSION_REQUESTED": "Wysłano prośbę o zgodę. W WhatsApp zobaczy opcje Akceptuj/Odrzuć - spróbuj zadzwonić ponownie po jego odpowiedzi.",
+      "CALL_STATE_CONFLICT": "Połączenie zostało już odebrane przez innego członka zespołu.",
+      "CALL_RECORDING_FAILED": "Nie udało się zapisać nagrania.",
+      "FORBIDDEN": "Nie masz uprawnień do korzystania z połączeń.",
+      "PLAN_FEATURE_LOCKED": "Twój plan nie obejmuje połączeń WhatsApp.",
+      "NETWORK": "Błąd sieci - spróbuj ponownie.",
+      "UNEXPECTED": "Coś poszło nie tak. Spróbuj ponownie."
+    },
+    "settings": {
+      "title": "Połączenia",
+      "intro": "Włącz połączenia WhatsApp dla numeru, aby wyświetlać zielony przycisk Zadzwoń w jego czatach w skrzynce odbiorczej.",
+      "cardTitle": "Połączenia WhatsApp",
+      "numberFallback": "Numer WhatsApp",
+      "connection": "Połączenie: {status}",
+      "enabledStatus": "Włączone - zielony przycisk Zadzwoń jest teraz widoczny w czatach tego numeru w skrzynce odbiorczej.",
+      "enabledSince": "Włączono {date}",
+      "offStatus": "Wyłączone - włącz, aby przycisk Zadzwoń pojawił się w czatach z tym numerem.",
+      "enable": "Włącz połączenia",
+      "disable": "Wyłącz połączenia",
+      "asking": "Pytanie WhatsApp...",
+      "enabledDone": "Połączenia są teraz włączone dla tego numeru.",
+      "disabledDone": "Połączenia są teraz wyłączone dla tego numeru.",
+      "loading": "Ładowanie numerów",
+      "loadFailed": "Nie udało się załadować Twoich numerów.",
+      "retry": "Spróbuj ponownie",
+      "emptyTitle": "Brak numerów WhatsApp",
+      "emptyMessage": "Połącz numer WhatsApp Cloud API w sekcji Kanały, a następnie wróć tutaj, aby włączyć połączenia.",
+      "viewOnly": "Możesz zobaczyć stan połączeń każdego numeru. Włączanie i wyłączanie wymaga uprawnienia do zarządzania połączeniami."
+    }
+  }
+}

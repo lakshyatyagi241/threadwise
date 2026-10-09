@@ -1,0 +1,218 @@
+{
+  "companies": {
+    "nav": {
+      "companies": "회사"
+    },
+    "common": {
+      "dismiss": "닫기"
+    },
+    "errors": {
+      "network": "서버에 연결할 수 없습니다. 연결 상태를 확인하고 다시 시도하세요.",
+      "forbidden": "이 작업을 수행할 권한이 없습니다.",
+      "signedOut": "세션이 종료되었습니다. 계속하려면 다시 로그인하세요.",
+      "conflict": "수정하는 동안 다른 사용자가 이 회사를 변경했습니다. 해당 변경 사항을 불러왔고 내 수정 내용은 유지되었으니 확인한 후 다시 저장하세요.",
+      "validation": "입력한 내용 중 유효하지 않은 항목이 있습니다. 필드를 확인하고 다시 시도하세요.",
+      "unavailable": "이 서버에서는 회사 기능을 아직 사용할 수 없습니다.",
+      "rateLimited": "요청이 너무 많습니다. 잠시 기다린 후 다시 시도하세요.",
+      "notFound": "해당 회사가 더 이상 존재하지 않습니다.",
+      "planDisabled": "현재 요금제에는 회사 기능이 포함되어 있지 않습니다. 사용하려면 업그레이드하세요.",
+      "ownerInvalid": "담당자는 이 워크스페이스의 활성 멤버여야 합니다.",
+      "unexpected": "문제가 발생했습니다. 잠시 후 다시 시도하세요.",
+      "requestId": "요청 ID",
+      "retry": "다시 시도"
+    },
+    "list": {
+      "eyebrow": "CRM · 조직",
+      "title": "회사",
+      "subtitle": "연락처와 거래를 조직별로 묶어 모든 연락처, 진행 중인 거래, 성사 매출을 한곳에서 확인하세요.",
+      "newCompany": "새 회사",
+      "tiles": {
+        "companies": "회사",
+        "withDeals": "진행 중인 거래 있음",
+        "wonRevenue": "성사 매출"
+      },
+      "bulk": {
+        "label": "일괄 작업",
+        "selected": "{count, plural, other {회사 #개 선택됨}}",
+        "delete": "삭제",
+        "clear": "선택 해제"
+      },
+      "loading": "회사를 불러오는 중",
+      "unavailableTitle": "회사 기능을 사용할 수 없습니다",
+      "unavailable": "회사 서비스가 이 서버에 아직 배포되지 않았습니다.",
+      "emptyFilteredTitle": "일치하는 회사가 없습니다",
+      "emptyFiltered": "다른 검색어를 시도하거나 필터를 지우세요.",
+      "clearFilters": "필터 지우기",
+      "emptyTitle": "아직 회사가 없습니다",
+      "empty": "아직 회사가 없습니다. 첫 회사를 만드세요.",
+      "showing": "{count, plural, other {회사 #개 불러옴}}",
+      "loadMore": "더 보기",
+      "allLoaded": "모든 회사를 불러왔습니다",
+      "deleteTitle": "회사 삭제",
+      "deleteMessage": "이 회사를 삭제할까요? 연락처와 거래는 유지되며 연결만 해제됩니다.",
+      "deleteManyTitle": "회사 삭제",
+      "deleteManyMessage": "{count, plural, one {이 회사를 삭제할까요? 연락처와 거래는 유지되며 연결만 해제됩니다.} other {이 회사 #개를 삭제할까요? 연락처와 거래는 유지되며 연결만 해제됩니다.}}",
+      "delete": "삭제",
+      "keep": "유지"
+    },
+    "toolbar": {
+      "label": "회사 필터",
+      "search": "회사 검색…",
+      "industry": "업종",
+      "allIndustries": "모든 업종",
+      "owner": "담당자",
+      "allOwners": "모든 담당자",
+      "noOwner": "담당자 없음",
+      "withOpenDeals": "진행 중인 거래 있음",
+      "sort": "정렬",
+      "sorts": {
+        "created": "최신순",
+        "name": "이름 가나다순"
+      },
+      "clear": "지우기",
+      "refresh": "새로 고침"
+    },
+    "table": {
+      "label": "회사",
+      "selectAll": "불러온 모든 회사 선택",
+      "select": "{name} 선택",
+      "company": "회사",
+      "industry": "업종",
+      "contacts": "연락처",
+      "openDeals": "진행 중인 거래",
+      "wonValue": "성사 금액",
+      "actions": "작업",
+      "delete": "회사 삭제",
+      "deleteNamed": "회사 {name} 삭제"
+    },
+    "form": {
+      "eyebrow": "회사",
+      "newTitle": "새 회사",
+      "editTitle": "회사 수정",
+      "close": "닫기",
+      "cancel": "취소",
+      "create": "만들기",
+      "save": "변경 사항 저장",
+      "name": "회사 이름 *",
+      "namePlaceholder": "Acme Ltd",
+      "industry": "업종",
+      "website": "웹사이트",
+      "email": "이메일",
+      "phone": "전화번호",
+      "notes": "메모",
+      "moreDetails": "추가 정보",
+      "sizeRange": "규모",
+      "sizeHint": "예: 1-10 또는 11-50.",
+      "owner": "담당자",
+      "noOwner": "담당자 없음",
+      "me": "{name}(나)",
+      "address": "주소",
+      "problems": {
+        "required": "회사 이름을 입력하세요.",
+        "tooLong": "너무 깁니다. 최대 {limit}자까지 가능합니다.",
+        "email": "유효한 이메일 주소를 입력하세요.",
+        "invalid": "입력한 내용 중 유효하지 않은 항목이 있습니다.",
+        "ownerInvalid": "담당자는 이 워크스페이스의 활성 멤버여야 합니다."
+      }
+    },
+    "toast": {
+      "created": "회사가 생성되었습니다.",
+      "updated": "회사가 업데이트되었습니다.",
+      "deleted": "{count, plural, one {회사가 삭제되었습니다.} other {회사 #개가 삭제되었습니다.}}",
+      "deletedSome": "회사 {count, plural, other {#개}} 삭제됨, {failed, plural, other {#개}} 삭제 실패.",
+      "deleteFailed": "삭제할 수 없습니다. 다시 시도하세요.",
+      "contactUnlinked": "연락처가 회사에서 제거되었습니다.",
+      "contactAlreadyOut": "해당 연락처는 더 이상 이 회사에 속해 있지 않습니다.",
+      "contactUnlinkFailed": "연락처를 제거할 수 없습니다. 다시 시도하세요.",
+      "contactsLinked": "{count, plural, other {연락처 #개가 회사에 추가되었습니다.}}",
+      "contactsLinkedSome": "연락처 {count, plural, other {#개}} 추가됨, {failed, plural, other {#개}} 추가 실패.",
+      "contactsLinkFailed": "연락처를 추가할 수 없습니다. 다시 시도하세요."
+    },
+    "detail": {
+      "back": "모든 회사",
+      "loading": "회사를 불러오는 중",
+      "notFoundTitle": "회사를 찾을 수 없습니다",
+      "notFound": "이 회사는 존재하지 않거나 삭제되었습니다.",
+      "edit": "수정",
+      "delete": "삭제",
+      "keep": "유지",
+      "tiles": {
+        "contacts": "연락처",
+        "openDeals": "진행 중인 거래",
+        "wonRevenue": "성사 매출"
+      },
+      "notes": "메모",
+      "deleteTitle": "회사 삭제",
+      "deleteMessage": "이 회사를 삭제할까요? 연락처와 거래는 유지되며 연결만 해제됩니다.",
+      "details": "상세 정보",
+      "owner": "담당자",
+      "sizeRange": "규모",
+      "address": "주소",
+      "createdBy": "생성자",
+      "created": "생성일",
+      "updated": "마지막 변경"
+    },
+    "contacts": {
+      "title": "연락처",
+      "add": "연락처 추가",
+      "loading": "연락처를 불러오는 중",
+      "empty": "이 회사에 연결된 연락처가 없습니다.",
+      "unnamed": "(이름 없음)",
+      "unlink": "회사에서 제거",
+      "unlinkNamed": "{name}을(를) 회사에서 제거",
+      "loadMore": "더 보기",
+      "addModal": {
+        "title": "회사에 연락처 추가",
+        "close": "닫기",
+        "cancel": "취소",
+        "add": "{count, plural, other {연락처 #개 추가}}",
+        "search": "이름, 이메일 또는 번호로 연락처 검색",
+        "loading": "연락처 검색 중",
+        "noneTitle": "연락처를 찾을 수 없습니다",
+        "none": "일치하는 연락처가 없습니다. 다른 이름, 이메일 또는 번호를 시도해 보세요.",
+        "unnamed": "(이름 없음)",
+        "already": "이미 추가됨",
+        "willMove": "다른 회사 소속",
+        "hint": "연락처는 하나의 회사에만 속할 수 있습니다. 다른 회사에 속한 연락처를 추가하면 이 회사로 이동합니다."
+      }
+    },
+    "deals": {
+      "title": "거래",
+      "loading": "거래를 불러오는 중",
+      "empty": "이 회사의 거래가 없습니다.",
+      "loadMore": "더 보기",
+      "status": {
+        "open": "진행 중",
+        "won": "성사",
+        "lost": "실패"
+      }
+    },
+    "activity": {
+      "title": "활동",
+      "loading": "활동을 불러오는 중",
+      "none": "이 회사에는 아직 아무 일도 없었습니다.",
+      "loadMore": "더 보기",
+      "empty": "비어 있음",
+      "system": "시스템",
+      "actions": {
+        "insert": "회사를 생성함",
+        "update": "회사를 변경함",
+        "delete": "회사를 삭제함"
+      },
+      "contactLinked": "연락처 추가됨",
+      "contactUnlinked": "연락처 제거됨",
+      "deletedContact": "삭제된 연락처",
+      "fields": {
+        "name": "이름",
+        "website": "웹사이트",
+        "email": "이메일",
+        "phone": "전화번호",
+        "industry": "업종",
+        "sizeRange": "규모",
+        "address": "주소",
+        "notes": "메모",
+        "owner": "담당자"
+      }
+    }
+  }
+}

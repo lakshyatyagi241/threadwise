@@ -1,0 +1,223 @@
+{
+  "ai-keys-usage-admin": {
+    "nav": {
+      "usage": "AI-gebruik",
+      "keys": "AI-providersleutels"
+    },
+    "admin": {
+      "nav": {
+        "group": "AI",
+        "keys": "AI-providersleutels",
+        "dashboard": "AI-gebruik"
+      }
+    },
+    "common": {
+      "loading": "Laden",
+      "retry": "Opnieuw proberen",
+      "requestId": "Verzoek-ID",
+      "dismiss": "Negeren",
+      "tokens": "{count, number} tokens",
+      "dash": "-",
+      "errors": {
+        "forbidden": "Je hebt geen toestemming om dit te zien.",
+        "request": "Dat verzoek kon niet worden voltooid.",
+        "unexpected": "Er is iets misgegaan aan onze kant. Probeer het zo meteen opnieuw.",
+        "network": "De server kon niet worden bereikt. Controleer je verbinding en probeer het opnieuw.",
+        "conflict": "Iemand anders heeft dit gewijzigd. De pagina is opnieuw geladen: pas je wijziging opnieuw toe.",
+        "keyRequired": "Voeg een API-sleutel toe voordat je deze provider inschakelt.",
+        "validation": "Sommige waarden zijn ongeldig. Controleer de gemarkeerde velden.",
+        "notFound": "Dat item bestaat niet meer."
+      }
+    },
+    "windows": {
+      "label": "Tijdvenster",
+      "7d": "7 dagen",
+      "30d": "30 dagen",
+      "90d": "90 dagen",
+      "1y": "1 jaar",
+      "custom": "Aangepast",
+      "from": "Van",
+      "to": "Tot",
+      "pick": "Kies een begin- en einddatum.",
+      "invalid": "De einddatum ligt vóór de begindatum.",
+      "tooLong": "Kies een bereik van maximaal {days} dagen."
+    },
+    "keys": {
+      "eyebrow": "Beheer · Systeem · AI-providers",
+      "title": "AI-API-sleutels",
+      "description": "Globale sleutels voor elke ondersteunde AI-provider. Workspaces met abonnementen zonder „Eigen sleutel meenemen” gebruiken deze als terugval. Versleuteld opgeslagen.",
+      "superOnly": "Alleen een superbeheerder kan de AI-sleutels van het platform beheren.",
+      "summary": {
+        "providers": "Providers",
+        "providersHint": "voorgevuld",
+        "active": "Actief",
+        "activeHint": "ingeschakeld als terugval",
+        "ready": "Gereed",
+        "readyHint": "actief + heeft sleutel",
+        "noKey": "Geen sleutel ingesteld",
+        "noKeyHint": "plak een sleutel om gereed te zijn"
+      },
+      "groups": {
+        "llm": "Taalmodellen",
+        "voice": "Spraak"
+      },
+      "card": {
+        "active": "Actief",
+        "off": "Uitgeschakeld",
+        "keySaved": "Sleutel opgeslagen",
+        "keySavedLast4": "Sleutel opgeslagen, eindigt op {last4}",
+        "noKey": "Geen sleutel",
+        "unreadable": "Opgeslagen sleutel kan niet worden gelezen, plak hem opnieuw",
+        "apiKey": "API-sleutel",
+        "apiKeyHint": "Laat leeg om de opgeslagen sleutel te behouden.",
+        "apiKeyPlaceholder": "Plak de sleutel hier",
+        "apiKeySavedPlaceholder": "•••••••••• (opgeslagen — leeg laten om te behouden)",
+        "defaultModel": "Standaardmodel",
+        "pickModel": "— Kies een standaardmodel —",
+        "customModel": "{model} (aangepast)",
+        "sortOrder": "Sorteervolgorde",
+        "maxTokens": "Max. tokens per verzoek",
+        "maxTokensHint": "Optionele bovengrens voor de lengte van een antwoord voor elke workspace. Leeg betekent geen bovengrens.",
+        "extraModels": "Extra modellen",
+        "extraModelsHint": "Optioneel. Model-id's om naast het standaardmodel aan te bieden, gescheiden door komma's.",
+        "save": "{name} opslaan",
+        "saving": "Opslaan",
+        "turnOn": "Activeren",
+        "turnOff": "Uitschakelen",
+        "removeKey": "Sleutel verwijderen",
+        "removeTitle": "De sleutel van {name} verwijderen?",
+        "removeBody": "Workspaces stoppen met het gebruik van {name} totdat je opnieuw een sleutel toevoegt. De provider wordt uitgeschakeld.",
+        "removeConfirm": "Sleutel verwijderen",
+        "cancel": "Annuleren",
+        "slug": "provider: {provider} · standaardmodel: {model}",
+        "maxTokensPlaceholder": "bijv. 4096"
+      },
+      "toasts": {
+        "saved": "{name} opgeslagen.",
+        "savedOn": "{name} opgeslagen en ingeschakeld.",
+        "on": "{name} ingeschakeld.",
+        "off": "{name} uitgeschakeld.",
+        "removed": "Sleutel van {name} verwijderd."
+      },
+      "help": {
+        "title": "Hoe deze sleutels worden gebruikt",
+        "body": "De eigen sleutel van een workspace gaat alleen voor als het abonnement dat toestaat. Anders wordt de bijbehorende actieve provider hier gebruikt. Als je een provider uitschakelt, kunnen workspaces zonder eigen sleutel hem niet gebruiken.",
+        "eyebrow": "Hoe deze sleutels worden gebruikt"
+      }
+    },
+    "dashboard": {
+      "eyebrow": "Beheer / AI-dashboard",
+      "title": "AI-gebruik en tokenverbruik",
+      "description": "Elke AI-aanroep op het platform — welke provider, welk model, welke workspace, met platformsleutels of hun eigen sleutels (BYOK), met een geschatte uitgave.",
+      "kpis": {
+        "tokens": "Verbruikte tokens",
+        "tokensHint": "dit venster",
+        "cost": "Geschatte kosten",
+        "costHint": "gemengde schatting",
+        "calls": "AI-aanroepen",
+        "callsHint": "geregistreerde verzoeken",
+        "workspaces": "Workspaces die AI gebruiken",
+        "workspacesHint": "actief"
+      },
+      "daily": "Dagelijks tokenverbruik",
+      "byProvider": "Tokens per provider",
+      "split": "Wie betaalt — platform vs. BYOK",
+      "splitPlatform": "Platformsleutels",
+      "splitOwn": "Eigen sleutels (BYOK)",
+      "topWorkspaces": "Workspaces met het hoogste tokenverbruik",
+      "topModels": "Topmodellen",
+      "keyHealth": "Status van AI-sleutels",
+      "live": "Live",
+      "notLive": "Uit",
+      "peak": "piek {value}/dag",
+      "dailyEmpty": "In dit venster zijn nog geen AI-aanroepen geregistreerd.",
+      "providerCalls": "{count, number} aanroepen",
+      "providerEmpty": "Nog geen gebruik.",
+      "splitNote": "Alleen tokens van platformsleutels tellen mee voor het maandelijkse AI-plafond van een abonnement. BYOK-workspaces besteden aan hun eigen provideraccount.",
+      "workspaceEmpty": "Nog geen AI-gebruik door workspaces.",
+      "workspaceMeta": "{count, number} aanroepen",
+      "workspaceByok": "{tokens} BYOK",
+      "modelEmpty": "Nog geen modelgebruik.",
+      "modelMeta": "{provider} · {count, number} aanroepen",
+      "manageKeys": "Sleutels beheren",
+      "noDefaultModel": "geen standaardmodel",
+      "noPlatformKeys": "Geen AI-platformsleutels geconfigureerd.",
+      "byokKeys": "BYOK-sleutels actief",
+      "byokWorkspaces": "Workspaces met BYOK"
+    },
+    "usage": {
+      "title": "AI-gebruik",
+      "description": "Elke AI-aanroep van je workspace — verbruikte tokens, per model en provider, abonnementssleutels vs. je eigen sleutels, en een geschatte prijs.",
+      "kpis": {
+        "tokens": "Gebruikte tokens",
+        "calls": "{count, plural, one {# AI-aanroep} other {# AI-aanroepen}}",
+        "platform": "Abonnementssleutels",
+        "ownKeys": "Je sleutels (BYOK)",
+        "cost": "Geschatte kosten",
+        "costHint": "gemengd providertarief",
+        "providers": "Providers",
+        "models": "Modellen"
+      },
+      "cap": {
+        "title": "Deze maand · AI-plafond van abonnement",
+        "used": "{used, number} van {limit, number} tokens deze maand gebruikt",
+        "unlimited": "{used, number} tokens deze maand gebruikt: onbeperkt in je abonnement",
+        "reached": "Je zit bijna aan je maandelijkse plafond. Upgrade je abonnement of voeg je eigen sleutels (BYOK) toe om AI te blijven gebruiken.",
+        "note": "BYOK-tokens lopen via je eigen provideraccount en tellen nooit mee voor het plafond van je abonnement."
+      },
+      "daily": "Dagelijks tokenverbruik",
+      "byProvider": "Per provider",
+      "split": "Abonnementssleutels vs. je sleutels",
+      "splitPlatform": "Abonnementssleutels",
+      "splitOwn": "Je sleutels (BYOK)",
+      "models": "Per model",
+      "columns": {
+        "model": "Model",
+        "provider": "Provider",
+        "tokens": "Tokens",
+        "calls": "Aanroepen",
+        "prompt": "Prompt",
+        "completion": "Completion"
+      },
+      "empty": "In dit venster is nog geen AI-gebruik.",
+      "costNote": "De kosten zijn een schatting op basis van gepubliceerde gemengde tokentarieven per provider en kunnen afwijken van je providerfactuur. Het aantal tokens is exact."
+    },
+    "own": {
+      "title": "Je AI-providersleutels",
+      "description": "Voeg je eigen sleutel voor een leverancier toe, zodat je AI-functies jouw account gebruiken in plaats van het gedeelde account. Sleutels worden versleuteld en nooit meer getoond.",
+      "allowed": "Met je abonnement gaan je eigen sleutels voor.",
+      "notAllowed": "Je abonnement bevat nog geen eigen sleutels. Je kunt ze nu opslaan, maar aanroepen blijven de gedeelde sleutel gebruiken totdat je upgradet.",
+      "add": "Een sleutel toevoegen",
+      "provider": "Provider",
+      "apiKey": "API-sleutel",
+      "apiKeyHint": "Minstens 8 tekens.",
+      "save": "Sleutel opslaan",
+      "replace": "Sleutel vervangen",
+      "saving": "Opslaan",
+      "on": "Aan",
+      "off": "Uitgeschakeld",
+      "ends": "Eindigt op {last4}",
+      "using": "Aanroepen gebruiken",
+      "usingOwn": "jouw sleutel",
+      "usingShared": "de gedeelde sleutel",
+      "usingNone": "geen sleutel (niets beschikbaar)",
+      "turnOn": "Inschakelen",
+      "turnOff": "Uitschakelen",
+      "remove": "Verwijderen",
+      "removeTitle": "Je sleutel voor {name} verwijderen?",
+      "removeBody": "Aanroepen vallen terug op de gedeelde sleutel als die beschikbaar is.",
+      "removeConfirm": "Sleutel verwijderen",
+      "cancel": "Annuleren",
+      "empty": "Je hebt nog geen sleutels toegevoegd.",
+      "toasts": {
+        "saved": "Sleutel voor {name} opgeslagen.",
+        "on": "Sleutel voor {name} ingeschakeld.",
+        "off": "Sleutel voor {name} uitgeschakeld.",
+        "removed": "Sleutel voor {name} verwijderd."
+      },
+      "errors": {
+        "tooShort": "Een sleutel bestaat uit minstens 8 tekens."
+      }
+    }
+  }
+}

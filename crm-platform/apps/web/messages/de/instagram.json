@@ -1,0 +1,91 @@
+{
+  "instagram": {
+    "nav": {
+      "hub": "Instagram",
+      "broadcast": "Instagram-Broadcast"
+    },
+    "common": {
+      "dismiss": "Schließen"
+    },
+    "hub": {
+      "kicker": "Kanal · Instagram",
+      "title": "Instagram",
+      "titleAccent": "Konten",
+      "intro": "Verknüpfen Sie Ihr Instagram-Business- oder Creator-Konto einmalig. Dessen Nachrichten landen dann in Ihrer Team-Inbox, und von hier aus antworten Sie, starten Flows und senden an Personen, die Ihnen bereits geschrieben haben.",
+      "teamInbox": "Team-Inbox",
+      "broadcasts": "Broadcast nur mit Antworten",
+      "loadError": "Die verknüpften Instagram-Konten konnten nicht geladen werden. Versuchen Sie es erneut.",
+      "loadErrorDetail": "Die verknüpften Instagram-Konten konnten nicht geladen werden (Fehler {status}{code}). Versuchen Sie es erneut.",
+      "engineOff": "{engine} ist nicht verbunden. Ein Administrator muss es unter Admin → Add-ons verbinden, bevor ein Instagram-Konto verknüpft werden kann.",
+      "connectedCount": "{count, plural, one {# Konto verknüpft} other {# Konten verknüpft}}",
+      "notConnected": "Nicht verbunden",
+      "cardTitle": "Instagram-Konto hinzufügen",
+      "cardBody": "Verbinden Sie ein Business- oder Creator-Konto. Ihr Instagram wird einmal verbunden und erscheint hier. Unterhaltungen, Flows und automatische Antworten funktionieren alle aus diesem Workspace.",
+      "add": "Instagram-Konto hinzufügen",
+      "linkedAccounts": "Verknüpfte Konten",
+      "linked": "Instagram-Konto verknüpft.",
+      "linkFailed": "Das Konto konnte nicht verknüpft werden."
+    },
+    "dialog": {
+      "close": "Schließen",
+      "kicker": "Instagram",
+      "title": "Instagram-Konto hinzufügen",
+      "note": "Ihr Instagram wird einmalig über {engine} verbunden (dort liegen Anmeldung und Webhook). Dieser Workspace verknüpft sich damit und zeigt hier Inbox, Flows und Anzeigen. Es ist immer ein Konto, nicht zwei.",
+      "connect": "Instagram verbinden",
+      "checking": "Wird geprüft…",
+      "hint": "Wird sofort verknüpft, wenn Sie es bereits auf {engine} verbunden haben. Andernfalls öffnet sich ein kurzes Anmeldefenster.",
+      "pick": "Konto zum Verknüpfen auswählen",
+      "link": "Verknüpfen",
+      "connectDifferent": "Ein anderes Konto verbinden",
+      "linkFailed": "Das Konto konnte nicht verknüpft werden.",
+      "startFailed": "Die Instagram-Verbindung konnte nicht gestartet werden."
+    },
+    "row": {
+      "channel": "Instagram",
+      "connected": "Verbunden",
+      "needsReauth": "Erneute Anmeldung erforderlich",
+      "live": "live",
+      "manage": "Auf {engine} verwalten",
+      "refresh": "Profil von {engine} aktualisieren",
+      "unlink": "Verknüpfung aufheben",
+      "unlinkConfirm": "Dieses Instagram-Konto trennen? Seine Unterhaltungen und Inbox-Daten werden entfernt, und Instagram verschwindet aus Ihrem Dashboard, Ihrer Inbox, Flows, Vorlagen und automatischen Antworten, bis Sie wieder ein Konto verbinden. Das Konto selbst bleibt auf {engine} bestehen. Sie können es später erneut verknüpfen.",
+      "cancel": "Abbrechen",
+      "updated": "Instagram-Konto {handle} aktualisiert.",
+      "unlinked": "Instagram-Konto getrennt. Seine Daten wurden entfernt.",
+      "failed": "Das hat nicht funktioniert. Versuchen Sie es erneut."
+    },
+    "broadcast": {
+      "kicker": "Instagram · Nur Antworten",
+      "title": "Instagram",
+      "titleAccent": "Broadcast",
+      "intro": "Instagram erlaubt nur Nachrichten an Personen, die Ihnen bereits geschrieben haben. Wählen Sie daher aus Ihren bestehenden Unterhaltungen. Instagram wendet beim Senden jeder Nachricht sein 24-Stunden-Fenster an.",
+      "accounts": "Instagram-Konten",
+      "loadError": "Die Unterhaltungen konnten nicht geladen werden. Versuchen Sie es erneut.",
+      "failed": "Das hat nicht funktioniert. Versuchen Sie es erneut.",
+      "noAccounts": "Es ist noch kein Instagram-Konto verknüpft und verbunden.",
+      "name": "Broadcast-Name",
+      "namePlaceholder": "Herbstangebot",
+      "account": "Instagram-Konto",
+      "template": "Vorlage",
+      "templateHint": "Optional. Füllt die Nachricht aus, wenn sie leer ist.",
+      "templateNone": "Keine Vorlage",
+      "message": "Nachricht",
+      "messageHint": "Verwenden Sie {token} für den Namen der Person. Bis zu {max} Zeichen.",
+      "messagePlaceholder": "Hallo {token}, …",
+      "send": "{count, plural, =0 {Senden} one {An # Unterhaltung senden} other {An # Unterhaltungen senden}}",
+      "sending": "Wird gesendet…",
+      "recipients": "Empfänger",
+      "windowOpenCount": "{open} von {total} im 24-Stunden-Fenster",
+      "search": "Unterhaltungen suchen",
+      "selectAll": "Alle auswählen",
+      "clear": "Leeren",
+      "capNote": "Ein Versand erreicht höchstens {max} Unterhaltungen. „Alle auswählen“ wählt die ersten {max} aus.",
+      "empty": "Noch keine Unterhaltungen. Personen erscheinen hier, nachdem sie Ihrem Konto geschrieben haben.",
+      "inWindow": "Im Fenster",
+      "outsideWindow": "Außerhalb 24 Std.",
+      "selected": "{count, plural, one {# ausgewählt} other {# ausgewählt}}",
+      "sent": "Instagram-Broadcast gesendet, {sent} zugestellt{failed, plural, =0 {} other {, # fehlgeschlagen}}.",
+      "sentNone": "Es konnte an keinen Empfänger gesendet werden. Prüfen Sie die Instagram-Verbindung."
+    }
+  }
+}

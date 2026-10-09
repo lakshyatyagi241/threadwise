@@ -1,0 +1,326 @@
+{
+  "invoicing": {
+    "nav": {
+      "creditNotes": "Notas de crédito"
+    },
+    "errors": {
+      "codes": {
+        "CN_EXCEEDS_INVOICE": "Las notas de crédito no pueden sumar más que la factura. Reduce los importes o abona solo lo que queda.",
+        "CN_NOT_DRAFT": "Solo se puede editar o eliminar una nota de crédito en borrador. Recarga para ver su estado actual.",
+        "CN_ALREADY_VOID": "Esta nota de crédito ya está anulada.",
+        "CN_HAS_REFUND": "Se devolvió efectivo por esta nota de crédito, así que no se puede anular. El reembolso se mantiene en el libro de pagos.",
+        "CN_NOTHING_TO_CREDIT": "No queda nada que abonar aquí. Elige una línea con algo pendiente, o añade un importe.",
+        "CN_LINE_INVALID": "Una línea abonada no es válida: la cantidad es mayor de lo que queda o un importe es incorrecto. Revisa las líneas marcadas.",
+        "INV_NOT_ISSUED": "Una nota de crédito solo se puede hacer sobre una factura emitida."
+      }
+    },
+    "creditNotes": {
+      "status": {
+        "draft": "Borrador",
+        "issued": "Emitida",
+        "void": "Anulada"
+      },
+      "reasons": {
+        "return": "Devolución de mercancía",
+        "price_adjustment": "Ajuste de precio",
+        "billing_error": "Error de facturación",
+        "cancellation": "Cancelación",
+        "goodwill": "Cortesía",
+        "other": "Otro"
+      },
+      "settlements": {
+        "balance": "Aplicada al saldo",
+        "refund": "Reembolso en efectivo"
+      },
+      "tabs": {
+        "label": "Estado de la nota de crédito",
+        "all": "Todas",
+        "draft": "Borrador",
+        "issued": "Emitida",
+        "void": "Anulada"
+      },
+      "list": {
+        "title": "Notas de crédito",
+        "subtitle": "Documentos que reducen lo que un comprador debe por una factura emitida.",
+        "invoices": "Facturas",
+        "newCreditNote": "Nueva nota de crédito",
+        "search": "Buscar por número o comprador",
+        "reset": "Quitar filtros",
+        "refresh": "Actualizar",
+        "tableLabel": "Notas de crédito",
+        "noAccessTitle": "Sin acceso",
+        "noAccess": "No tienes permiso para ver las notas de crédito.",
+        "emptyFilteredTitle": "Ninguna nota de crédito coincide",
+        "emptyFiltered": "Prueba con otra búsqueda o quita los filtros.",
+        "resetFilters": "Quitar filtros",
+        "empty": {
+          "all": {
+            "title": "Todavía no hay notas de crédito",
+            "message": "Abona una factura emitida cuando vuelvan mercancías, un precio fuera de lugar o quieras devolver algo."
+          },
+          "draft": {
+            "title": "Sin borradores",
+            "message": "Aquí aparecen las notas de crédito que todavía estás preparando."
+          },
+          "issued": {
+            "title": "Nada emitido",
+            "message": "Las notas de crédito emitidas tienen número y ya modificaron su factura."
+          },
+          "void": {
+            "title": "Nada anulado",
+            "message": "Aquí se guardan las notas de crédito anuladas."
+          }
+        },
+        "showing": "{count, plural, one {# nota de crédito cargada} other {# notas de crédito cargadas}}",
+        "loadMore": "Cargar más",
+        "allLoaded": "Todo cargado",
+        "loading": "Cargando notas de crédito",
+        "contactLoading": "...",
+        "invoiceChip": "Factura {number}",
+        "clearInvoice": "Mostrar las notas de crédito de todas las facturas"
+      },
+      "table": {
+        "draft": "Borrador",
+        "scrollArea": "Tabla de notas de crédito, se desplaza horizontalmente",
+        "columns": {
+          "number": "Nota de crédito",
+          "invoice": "Factura",
+          "buyer": "Comprador",
+          "reason": "Motivo",
+          "settlement": "Liquidación",
+          "total": "Total",
+          "applied": "Aplicada al saldo",
+          "refunded": "Reembolsada en efectivo",
+          "issued": "Fecha de emisión",
+          "status": "Estado"
+        }
+      },
+      "row": {
+        "moreFor": "Más acciones para {name}",
+        "draft": "borrador",
+        "open": "Abrir",
+        "edit": "Editar borrador",
+        "issue": "Emitir",
+        "pdf": "Descargar PDF",
+        "print": "Imprimir",
+        "void": "Anular",
+        "delete": "Eliminar borrador"
+      },
+      "dialogs": {
+        "draftName": "este borrador",
+        "close": "Cerrar",
+        "keep": "Conservarlo",
+        "done": {
+          "issue": "Nota de crédito {name} emitida.",
+          "void": "Nota de crédito {name} anulada.",
+          "delete": "Borrador eliminado."
+        },
+        "issue": {
+          "title": "¿Emitir esta nota de crédito?",
+          "message": "Recibe su número y reduce lo que el comprador debe en la factura. Con reembolso en efectivo, el dinero se devuelve a través del libro de pagos. Después ya no se podrá editar.",
+          "confirm": "Emitir nota de crédito"
+        },
+        "void": {
+          "title": "¿Anular esta nota de crédito?",
+          "warning": "El abono deja de contar: la factura vuelve a lo que era antes de esta nota de crédito.",
+          "reason": "¿Por qué se anula?",
+          "reasonHint": "Obligatorio. Se guarda en la nota de crédito.",
+          "confirm": "Anular nota de crédito"
+        },
+        "delete": {
+          "title": "¿Eliminar este borrador?",
+          "message": "El borrador se elimina para siempre. No se emitió nada, así que la factura no cambia.",
+          "confirm": "Eliminar borrador"
+        }
+      },
+      "picker": {
+        "total": "Total de la factura",
+        "paid": "Pagado",
+        "credited": "Abonado hasta ahora",
+        "balance": "Saldo pendiente",
+        "loading": "Cargando la factura",
+        "change": "Cambiar factura",
+        "search": "Buscar facturas emitidas por número o comprador",
+        "results": "Facturas que se pueden abonar",
+        "searching": "Buscando...",
+        "none": "No se encontró ninguna factura emitida.",
+        "more": "Mostrar más",
+        "totalShort": "Total",
+        "notCreditable": "Una nota de crédito solo se puede hacer sobre una factura emitida (emitida, pagada parcialmente, vencida o pagada). Elige otra factura."
+      },
+      "lines": {
+        "invoiceLines": "Líneas de la factura",
+        "creditLine": "Abonar {name}",
+        "lineFacts": "Facturado {qty} por {amount} sin impuesto",
+        "tax": "Impuesto",
+        "taxIncluded": "{name} {rate}% incluido en el precio",
+        "taxAdded": "{name} {rate}% añadido encima",
+        "alreadyCredited": "{qty} ya abonados, quedan {left}",
+        "fullyCredited": "Ya abonada por completo",
+        "qtyToCredit": "Cantidad a abonar",
+        "freeTitle": "Líneas libres",
+        "freeHint": "Un importe de cortesía o un ajuste que no está ligado a una línea. El importe va sin impuesto.",
+        "description": "Descripción",
+        "amount": "Importe sin impuesto",
+        "taxRate": "Tipo de impuesto",
+        "noTax": "Sin impuesto",
+        "inclusive": "incluido",
+        "removeFree": "Quitar esta línea",
+        "addFree": "Añadir una línea libre"
+      },
+      "problems": {
+        "noInvoice": "Elige la factura que vas a abonar.",
+        "nothing": "Elige algo que abonar: una línea o un importe libre.",
+        "qtyInvalid": "Introduce una cantidad mayor que 0, con cuatro decimales como máximo.",
+        "qtyExceeds": "Todavía se pueden abonar como máximo {max} en esta línea.",
+        "descriptionRequired": "Describe lo que se abona.",
+        "amountInvalid": "Introduce un importe mayor que 0.",
+        "noteTooLong": "La nota tiene más de 2000 caracteres."
+      },
+      "estimate": {
+        "title": "Abono estimado",
+        "disclaimer": "Estimación calculada aquí con los precios y el impuesto de la factura. Las cifras que guarda el servidor son las definitivas.",
+        "empty": "Todavía no hay nada que abonar. Elige la factura completa o marca líneas.",
+        "lineQty": "Cantidad {qty}",
+        "taxSummary": "Resumen de impuestos",
+        "included": "incluido",
+        "taxOn": "{tax} sobre {base}",
+        "subtotal": "Sin impuesto",
+        "tax": "Impuesto",
+        "total": "Total del abono",
+        "exceeds": "Es más de lo que la factura todavía permite abonar ({max}). El servidor lo rechazará.",
+        "money": "Qué pasa con el dinero",
+        "balanceBefore": "Saldo pendiente ahora",
+        "balanceAfter": "Saldo pendiente después",
+        "applied": "Aplicado a la factura",
+        "refunded": "Devuelto en efectivo",
+        "refundNote": "Reembolso en efectivo: el dinero que el comprador haya pagado de más sobre lo que aún debe se devuelve a través del libro de pagos al emitir.",
+        "balanceNote": "Aplicado al saldo: no sale dinero. El abono solo reduce lo que el comprador debe."
+      },
+      "builder": {
+        "noAccess": "No tienes permiso para crear notas de crédito.",
+        "backToList": "Volver a notas de crédito",
+        "loading": "Cargando la nota de crédito",
+        "notDraft": "Solo se puede editar una nota de crédito en borrador.",
+        "openIt": "Abrir la nota de crédito",
+        "back": "Atrás",
+        "newTitle": "Nueva nota de crédito",
+        "editTitle": "Editar borrador de nota de crédito",
+        "conflict": "Otra persona cambió esta nota de crédito mientras la editabas. Recarga para ver la versión más reciente; los cambios que hiciste aquí se perderán.",
+        "reload": "Recargar",
+        "invoice": {
+          "title": "Factura a abonar",
+          "hint": "Una nota de crédito pertenece a una sola factura emitida."
+        },
+        "details": {
+          "title": "Detalles",
+          "reason": "Motivo",
+          "issueDate": "Fecha de emisión",
+          "issueDateHint": "Déjalo vacío para usar el día en que la emitas (hoy es {today}).",
+          "note": "Nota",
+          "noteHint": "Se imprime en la nota de crédito. Opcional."
+        },
+        "settlement": {
+          "title": "Qué pasa con el dinero",
+          "hint": "Se elige ahora y se aplica cuando se emite la nota de crédito.",
+          "balance": {
+            "title": "Aplicar al saldo de la factura",
+            "body": "La factura debe menos. No se mueve dinero. Úsalo cuando el comprador aún no ha pagado o va a conservar el crédito."
+          },
+          "refund": {
+            "title": "Reembolsar en efectivo",
+            "body": "Lo que el comprador ya haya pagado de más sobre lo que ahora se debe se devuelve a través del libro de pagos como reembolso."
+          }
+        },
+        "what": {
+          "title": "Qué abonar",
+          "pickFirst": "Elige primero la factura.",
+          "loadingCredits": "Revisando notas de crédito anteriores de esta factura",
+          "full": {
+            "title": "Toda la factura pendiente",
+            "body": "Abona todas las líneas, y el envío con la primera nota de crédito. Aún abonable:"
+          },
+          "lines": {
+            "title": "Algunas líneas o importes",
+            "body": "Marca las líneas y cantidades a abonar, o añade un importe libre."
+          }
+        },
+        "saveDraft": "Guardar borrador",
+        "saveAndIssue": "Guardar y emitir",
+        "cancel": "Cancelar",
+        "estimateWaiting": "Elige una factura para ver el abono estimado.",
+        "savedToast": "Nota de crédito guardada como borrador.",
+        "issuedToast": "Nota de crédito {number} emitida.",
+        "savedNotIssued": "Guardada como borrador, pero no se pudo emitir: {reason}"
+      },
+      "detail": {
+        "noAccess": "No tienes permiso para ver las notas de crédito.",
+        "loading": "Cargando la nota de crédito",
+        "back": "Volver a notas de crédito",
+        "backToList": "Volver a notas de crédito",
+        "draft": "Borrador",
+        "againstInvoice": "Contra la factura",
+        "edit": "Editar",
+        "issue": "Emitir",
+        "pdf": "PDF",
+        "print": "Imprimir",
+        "void": "Anular",
+        "delete": "Eliminar",
+        "cannotVoidRefunded": "Se devolvió efectivo por esta nota de crédito, así que no se puede anular. El reembolso se mantiene en el libro de pagos.",
+        "voidedOn": "Anulada el {date}",
+        "voided": "Esta nota de crédito fue anulada.",
+        "voidReason": "Motivo"
+      },
+      "money": {
+        "title": "Qué pasó con el dinero",
+        "titleDraft": "Qué pasará con el dinero",
+        "total": "Total del abono",
+        "applied": "Aplicado a la factura",
+        "refunded": "Devuelto en efectivo",
+        "voidNote": "Esta nota de crédito fue anulada, así que ya no reduce la factura.",
+        "draftNote": "Si la emites tal como está ahora:",
+        "estimate": "Una estimación hasta que se emita.",
+        "balanceBody": "Liquidación: aplicada al saldo. No sale dinero.",
+        "refundBody": "Liquidación: reembolso en efectivo. El dinero pagado de más sobre lo que aún se debe vuelve al comprador a través del libro de pagos."
+      },
+      "after": {
+        "title": "La factura después de esta nota de crédito",
+        "titleNow": "La factura ahora",
+        "total": "Total de la factura",
+        "paid": "Pagado",
+        "credited": "Abonado",
+        "balance": "Saldo pendiente",
+        "credit": "Saldo a favor del comprador"
+      },
+      "paper": {
+        "label": "Nota de crédito {number}",
+        "labelDraft": "Nota de crédito en borrador",
+        "void": "Anulada",
+        "sellerFallback": "Tu negocio",
+        "title": "Nota de crédito",
+        "draftNumber": "Borrador",
+        "creditedTo": "Abonado a",
+        "buyerFallback": "Comprador",
+        "issued": "Emitida",
+        "invoice": "Factura",
+        "item": "Artículo",
+        "qty": "Cant.",
+        "unit": "Precio unitario",
+        "tax": "Impuesto",
+        "net": "Neto",
+        "taxAmount": "Importe del impuesto",
+        "total": "Total",
+        "taxFallback": "Impuesto",
+        "taxSummary": "Resumen de impuestos",
+        "taxRate": "Porcentaje",
+        "taxBase": "Base imponible",
+        "included": "incluido",
+        "subtotal": "Sin impuesto",
+        "taxTotal": "Impuesto",
+        "totalCredit": "Total del abono",
+        "reason": "Motivo",
+        "note": "Nota"
+      }
+    }
+  }
+}

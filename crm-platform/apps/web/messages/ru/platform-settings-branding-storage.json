@@ -1,0 +1,1742 @@
+{
+  "platform-settings-branding-storage": {
+    "nav": {
+      "groupHeading": "Настройки платформы",
+      "hub": "Центр настроек",
+      "general": "Общие",
+      "appearance": "Оформление и цвета",
+      "siteInfo": "Информация о сайте",
+      "footer": "Подвал",
+      "mail": "Почта",
+      "seo": "SEO",
+      "privacy": "Конфиденциальность, GDPR и ADA",
+      "analytics": "Аналитика",
+      "custom": "Пользовательский код",
+      "pwa": "PWA",
+      "storage": "Облачное хранилище",
+      "whatsapp": "WhatsApp (WABA)",
+      "campaigns": "Кампании",
+      "googleCalendar": "Google Календарь",
+      "flowBuilder": "Конструктор сценариев"
+    },
+    "hub": {
+      "kicker": "Админ — настройки проекта",
+      "title": "Настройки проекта",
+      "description": "Настройте идентичность приложения, провайдеров сообщений, почту, интеграции с e-commerce, метаданные витрины, содержимое подвала, PWA, SEO и пользовательский код.",
+      "export": "Экспорт конфигурации",
+      "exporting": "Экспорт",
+      "exportHint": "Скачивает все сохранённые настройки. Секреты и идентификаторы аккаунтов заменяются.",
+      "tiles": {
+        "saved": "Сохранённые настройки",
+        "savedHint": "групп из {total} сохранено",
+        "healthy": "В норме",
+        "healthyHint": "с заполненным значением",
+        "needsTest": "Требует проверки",
+        "needsTestNone": "все проверены",
+        "secrets": "Секретные поля",
+        "secretsHint": "зашифровано / скрыто",
+        "lastUpdated": "Последнее обновление",
+        "lastUpdatedNone": "изменений пока нет",
+        "lastUpdatedHint": "последнее сохранение"
+      },
+      "card": {
+        "saved": "Сохранено",
+        "defaults": "По умолчанию",
+        "needsTest": "Требует проверки",
+        "updated": "Обновлено {when}",
+        "open": "Открыть"
+      },
+      "others": "Настройки валют, каталога, Shopify, WooCommerce, HubSpot, Google, Slack, мобильных push-уведомлений и Trello появляются здесь после установки соответствующих модулей.",
+      "actions": {
+        "addons": "Дополнения",
+        "updater": "Обновления",
+        "legal": "Юридические страницы",
+        "general": "Открыть общие"
+      }
+    },
+    "common": {
+      "save": "Сохранить изменения",
+      "saving": "Сохранение",
+      "saved": "{count, plural, one {Сохранено # изменение.} few {Сохранено # изменения.} many {Сохранено # изменений.} other {Сохранено # изменения.}}",
+      "rejected": "{count, plural, one {# поле требует внимания} few {# поля требуют внимания} many {# полей требуют внимания} other {# поля требуют внимания}}",
+      "conflict": "Кто-то другой сохранил эти настройки после того, как вы их открыли. Перезагрузите страницу, чтобы увидеть его изменения, и затем примените свои снова.",
+      "reload": "Перезагрузить настройки",
+      "unexpected": "Что-то пошло не так, ничего не сохранено.",
+      "requestId": "ID запроса",
+      "readOnly": "Вы можете просматривать эти настройки, но изменять их может только суперадминистратор.",
+      "secretSet": "Сохранено. Оставьте поле пустым, чтобы не менять.",
+      "secretUnset": "Не задано.",
+      "secretClear": "Удалить сохранённое значение",
+      "secretShow": "Показать",
+      "secretHide": "Скрыть",
+      "numberRequired": "Введите целое число.",
+      "numberInteger": "Используйте целое число.",
+      "updated": "Последнее сохранение: {when}",
+      "neverSaved": "Никогда не сохранялось: показаны значения по умолчанию.",
+      "back": "Все настройки",
+      "invalidGroup": "Такой страницы настроек не существует.",
+      "eyebrow": "Админ — настройки проекта",
+      "guide": "Краткое руководство",
+      "resetDraft": "Сбросить черновик",
+      "cancel": "Отмена",
+      "applyAfterSave": "Изменения применяются только после сохранения.",
+      "saveAndTest": "Сохранить и проверить подключение",
+      "custom": "пользовательский",
+      "manageLanguages": "Управление языками"
+    },
+    "test": {
+      "title": "Отправить тестовое письмо",
+      "saveFirst": "Сначала сохраните изменения: проверка использует сохранённые настройки.",
+      "mailTo": "Отправить тестовое письмо на",
+      "mailRun": "Отправить тестовое письмо",
+      "run": "Проверить подключение",
+      "running": "Проверка",
+      "ok": "Пройдено",
+      "failed": "Ошибка",
+      "lastOk": "Последняя успешная проверка: {when}",
+      "neverTested": "Ещё не проверялось."
+    },
+    "groups": {
+      "general": {
+        "title": "Общие настройки",
+        "description": "Идентичность приложения, значения платформы по умолчанию и переключатель технического обслуживания.",
+        "sections": {
+          "identity": {
+            "title": "Идентичность приложения"
+          },
+          "defaults": {
+            "title": "Значения платформы по умолчанию"
+          },
+          "platform": {
+            "title": "Переключатели платформы"
+          }
+        },
+        "fields": {
+          "appName": {
+            "label": "Название приложения",
+            "hint": "Отображается в заголовках страниц, письмах и вкладке браузера."
+          },
+          "appUrl": {
+            "label": "URL приложения"
+          },
+          "supportEmail": {
+            "label": "Email поддержки",
+            "placeholder": "support@…"
+          },
+          "fromEmail": {
+            "label": "Email отправителя",
+            "placeholder": "hello@…"
+          },
+          "contactNumber": {
+            "label": "Контактный номер",
+            "placeholder": "+91 …"
+          },
+          "address": {
+            "label": "Адрес"
+          },
+          "mapIframeUrl": {
+            "label": "URL iframe карты",
+            "placeholder": "https://www.google.com/maps/embed?pb=..."
+          },
+          "platformFooter": {
+            "label": "Подвал платформы",
+            "hint": "Добавляется к исходящим сообщениям платформы. Оставьте пустым, если не нужно."
+          },
+          "defaultTimezone": {
+            "label": "Часовой пояс по умолчанию",
+            "hint": "Используется, если рабочее пространство или пользователь не выбрал свой."
+          },
+          "defaultLanguage": {
+            "label": "Язык по умолчанию"
+          },
+          "defaultCurrency": {
+            "label": "Валюта по умолчанию"
+          },
+          "defaultCountryCode": {
+            "label": "Код страны по умолчанию",
+            "hint": "Код набора с плюсом, например +91."
+          },
+          "defaultCountryIso": {
+            "label": "Страна по умолчанию (выбор телефона)",
+            "hint": "Применяется ко всем полям выбора телефона на платформе."
+          },
+          "fontFamily": {
+            "label": "Семейство шрифтов"
+          },
+          "maintenanceMode": {
+            "label": "Режим обслуживания",
+            "hint": "Переводит клиентское приложение в офлайн с кодом 503. Операторы, вход и машинные обратные вызовы продолжают работать."
+          }
+        },
+        "options": {
+          "fontFamily": {
+            "none": "Тема по умолчанию"
+          }
+        }
+      },
+      "branding": {
+        "title": "Брендинг и оформление",
+        "description": "Фавикон, логотипы для каждой темы, цветовые токены и размер интерфейса.",
+        "sections": {
+          "assets": {
+            "title": "Файлы бренда"
+          },
+          "colors": {
+            "title": "Цветовые токены"
+          },
+          "interface": {
+            "title": "Интерфейс"
+          }
+        },
+        "fields": {
+          "faviconUrl": {
+            "label": "URL фавикона"
+          },
+          "logos": {
+            "paper": {
+              "label": "Paper"
+            },
+            "bright": {
+              "label": "Яркая"
+            },
+            "dark": {
+              "label": "Тёмная"
+            },
+            "doodle": {
+              "label": "Doodle"
+            }
+          },
+          "colors": {
+            "wa-deep": {
+              "label": "Основной",
+              "hint": "Изменение основного цвета также перекрашивает оттенки бирюзового, зелёного, мятного и пузыря, если вы не задали их отдельно."
+            },
+            "wa-teal": {
+              "label": "Основной (при наведении)"
+            },
+            "wa-green": {
+              "label": "Акцент / успех"
+            },
+            "wa-mint": {
+              "label": "Мягкая заливка акцента"
+            },
+            "wa-bubble": {
+              "label": "Пузырь чата"
+            },
+            "paper-0": {
+              "label": "Фон страницы"
+            },
+            "paper-50": {
+              "label": "Фон карточки / приглушённый фон"
+            },
+            "paper-100": {
+              "label": "Фон при наведении"
+            },
+            "paper-200": {
+              "label": "Границы"
+            },
+            "ink-500": {
+              "label": "Приглушённый текст"
+            },
+            "ink-700": {
+              "label": "Основной текст"
+            },
+            "ink-900": {
+              "label": "Заголовки"
+            },
+            "accent-coral": {
+              "label": "Акцент — коралловый"
+            },
+            "accent-amber": {
+              "label": "Акцент — янтарный"
+            },
+            "accent-plum": {
+              "label": "Акцент — сливовый"
+            },
+            "accent-sky": {
+              "label": "Акцент — небесный"
+            }
+          },
+          "fontScale": {
+            "label": "Размер шрифта",
+            "hint": "Размер текста всего интерфейса в процентах, от 80 до 130."
+          },
+          "uiOpacity": {
+            "label": "Прозрачность",
+            "hint": "Прозрачность всего интерфейса в процентах, от 55 до 100."
+          },
+          "dashboardLayout": {
+            "label": "Расположение навигации"
+          },
+          "sidebarColor": {
+            "label": "Фон"
+          },
+          "sidebarTextColor": {
+            "label": "Цвет текста"
+          },
+          "sidebarAccentColor": {
+            "label": "Цвет акцента"
+          }
+        },
+        "options": {
+          "dashboardLayout": {
+            "topbar": "Верхняя панель",
+            "sidebar": "Боковая панель"
+          }
+        },
+        "optionNotes": {
+          "dashboardLayout": {
+            "topbar": "Текущий: меню сверху и страница «Ещё» для остальных пунктов.",
+            "sidebar": "Левая панель в стиле админки со всеми функциями, сгруппированными. Без верхнего меню."
+          }
+        }
+      },
+      "site": {
+        "title": "Информация о сайте",
+        "description": "Реквизиты компании, контактные адреса, профили в соцсетях и публичный подвал.",
+        "sections": {
+          "company": {
+            "title": "Компания"
+          },
+          "contact": {
+            "title": "Контактные адреса"
+          },
+          "social": {
+            "title": "Профили в соцсетях"
+          },
+          "footer": {
+            "title": "Публичный подвал"
+          }
+        },
+        "fields": {
+          "companyName": {
+            "label": "Название компании"
+          },
+          "tagline": {
+            "label": "Слоган"
+          },
+          "foundedYear": {
+            "label": "Год основания"
+          },
+          "address": {
+            "label": "Адрес"
+          },
+          "cityCountry": {
+            "label": "Город, страна"
+          },
+          "emailGeneral": {
+            "label": "Email (общий)"
+          },
+          "emailSupport": {
+            "label": "Email поддержки"
+          },
+          "emailSales": {
+            "label": "Email отдела продаж"
+          },
+          "emailSecurity": {
+            "label": "Email службы безопасности"
+          },
+          "emailCareers": {
+            "label": "Email (вакансии)"
+          },
+          "phone": {
+            "label": "Телефон"
+          },
+          "whatsapp": {
+            "label": "WhatsApp"
+          },
+          "socialX": {
+            "label": "X"
+          },
+          "socialLinkedin": {
+            "label": "LinkedIn"
+          },
+          "socialInstagram": {
+            "label": "Instagram"
+          },
+          "socialYoutube": {
+            "label": "YouTube"
+          },
+          "socialFacebook": {
+            "label": "Facebook"
+          },
+          "socialGithub": {
+            "label": "GitHub"
+          },
+          "footerTitle": {
+            "label": "Заголовок подвала"
+          },
+          "footerDescription": {
+            "label": "Описание подвала"
+          },
+          "footerCopyright": {
+            "label": "Копирайт в подвале"
+          }
+        }
+      },
+      "mail": {
+        "title": "Настройки почты",
+        "description": "Исходящая почта. Сохранённые значения переопределяют серверные по умолчанию при каждой отправке.",
+        "sections": {
+          "sender": {
+            "title": "Отправитель"
+          },
+          "smtp": {
+            "title": "Почтовый сервер"
+          }
+        },
+        "fields": {
+          "fromName": {
+            "label": "Имя отправителя",
+            "placeholder": "Acme Inc.",
+            "hint": "Показывается получателям как имя отправителя."
+          },
+          "fromAddress": {
+            "label": "Адрес отправителя",
+            "placeholder": "hello@yourdomain.com",
+            "hint": "У домена должны быть корректные SPF и DKIM, иначе письма попадают в спам."
+          },
+          "mailer": {
+            "label": "Почтовый драйвер",
+            "hint": "Сегодня работают SMTP и журнальный драйвер; почтовые драйверы на основе API пока не подключены."
+          },
+          "host": {
+            "label": "Хост",
+            "placeholder": "smtp.mailgun.org",
+            "hint": "Оставьте пустым, чтобы использовать серверное значение по умолчанию."
+          },
+          "port": {
+            "label": "Порт",
+            "hint": "587 для TLS, 465 для SSL, 25 (не рекомендуется)."
+          },
+          "encryption": {
+            "label": "Шифрование",
+            "hint": "ssl означает неявный TLS (обычно порт 465); tls и starttls переходят на шифрование на порту 587."
+          },
+          "username": {
+            "label": "Имя пользователя",
+            "placeholder": "postmaster@mg.example.com"
+          },
+          "password": {
+            "label": "Пароль",
+            "placeholder": "Введите пароль SMTP",
+            "hint": "Хранится в зашифрованном виде и больше не отображается."
+          }
+        },
+        "options": {
+          "encryption": {
+            "tls": "tls (порт 587)",
+            "ssl": "ssl (порт 465)",
+            "starttls": "starttls",
+            "none": "нет"
+          }
+        }
+      },
+      "seo": {
+        "title": "Настройки SEO",
+        "description": "Теги для поиска и публикаций в соцсетях для публичного сайта.",
+        "sections": {
+          "search": {
+            "title": "Результаты поиска"
+          },
+          "social": {
+            "title": "Публикации в соцсетях"
+          },
+          "verification": {
+            "title": "Подтверждение сайта"
+          }
+        },
+        "fields": {
+          "metaTitle": {
+            "label": "Meta-заголовок",
+            "hint": "Начните с названия бренда."
+          },
+          "metaDescription": {
+            "label": "Meta-описание",
+            "hint": "Показывается под заголовком в Google.",
+            "placeholder": "Краткое описание в 1–2 предложения под заголовком в Google."
+          },
+          "metaKeywords": {
+            "label": "Meta-ключевые слова",
+            "placeholder": "whatsapp marketing, whatsapp crm, campaigns, automation, inbox"
+          },
+          "robots": {
+            "label": "Директива robots",
+            "hint": "Сообщает поисковым роботам, индексировать ли страницу и переходить ли по ссылкам."
+          },
+          "canonical": {
+            "label": "Canonical",
+            "placeholder": "https://app.example.com"
+          },
+          "author": {
+            "label": "Автор"
+          },
+          "ogTitle": {
+            "label": "Заголовок Open Graph",
+            "placeholder": "По умолчанию — Meta-заголовок"
+          },
+          "ogDescription": {
+            "label": "Описание Open Graph",
+            "placeholder": "По умолчанию — Meta-описание"
+          },
+          "ogType": {
+            "label": "Тип Open Graph"
+          },
+          "ogUrl": {
+            "label": "URL Open Graph",
+            "placeholder": "https://app.example.com"
+          },
+          "ogImage": {
+            "label": "Изображение Open Graph",
+            "hint": "Рекомендуется 1200x630. Используется в Slack, X, WhatsApp, Discord.",
+            "placeholder": "https://app.example.com/og.png"
+          },
+          "twitterCard": {
+            "label": "Карточка Twitter"
+          },
+          "twitterSite": {
+            "label": "Аккаунт сайта в Twitter",
+            "placeholder": "@yourbrand"
+          },
+          "twitterCreator": {
+            "label": "Автор в Twitter",
+            "placeholder": "@author"
+          },
+          "googleVerification": {
+            "label": "Подтверждение Google",
+            "placeholder": "google-site-verification=…"
+          },
+          "bingVerification": {
+            "label": "Подтверждение Bing",
+            "placeholder": "msvalidate.01=…"
+          }
+        },
+        "options": {
+          "robots": {
+            "index, follow": "Index, follow — публичный сайт",
+            "index, nofollow": "Index, nofollow",
+            "noindex, follow": "Noindex, follow",
+            "noindex, nofollow": "Noindex, nofollow — скрыть из поиска"
+          }
+        }
+      },
+      "privacy": {
+        "title": "Конфиденциальность и cookie",
+        "description": "Баннер согласия на cookie, юридические ссылки и флаги соответствия.",
+        "sections": {
+          "banner": {
+            "title": "Баннер cookie"
+          },
+          "links": {
+            "title": "Юридические ссылки"
+          },
+          "compliance": {
+            "title": "Флаги соответствия"
+          }
+        },
+        "fields": {
+          "cookieBannerEnabled": {
+            "label": "Баннер включён"
+          },
+          "cookieBannerStyle": {
+            "label": "Стиль баннера"
+          },
+          "cookieMessage": {
+            "label": "Текст согласия"
+          },
+          "respectDoNotTrack": {
+            "label": "Учитывать Do-Not-Track",
+            "hint": "Браузер отправляет DNT=1 → отклонить всё"
+          },
+          "policyUrl": {
+            "label": "URL политики конфиденциальности",
+            "placeholder": "https://example.com/privacy"
+          },
+          "termsUrl": {
+            "label": "URL условий использования",
+            "placeholder": "https://example.com/terms"
+          },
+          "cookiesPolicyUrl": {
+            "label": "URL политики cookie (подробнее)",
+            "placeholder": "https://example.com/cookies"
+          },
+          "gdprCompliance": {
+            "label": "Соответствие GDPR (ЕС)",
+            "hint": "Сохраняется для учёта. Пока не меняет поведение."
+          },
+          "ccpaCompliance": {
+            "label": "Соответствие CCPA (Калифорния)",
+            "hint": "Сохраняется для учёта. Пока не меняет поведение."
+          },
+          "adaSkipLink": {
+            "label": "Ссылка «Перейти к содержимому»",
+            "hint": "Сохраняется для учёта. Пока не меняет поведение."
+          },
+          "adaHighContrast": {
+            "label": "Предлагать режим высокой контрастности",
+            "hint": "Сохраняется для учёта. Пока не меняет поведение."
+          },
+          "adaLargeText": {
+            "label": "Предлагать режим крупного текста",
+            "hint": "Сохраняется для учёта. Пока не меняет поведение."
+          },
+          "adaReducedMotion": {
+            "label": "Учитывать prefers-reduced-motion",
+            "hint": "Сохраняется для учёта. Пока не меняет поведение."
+          }
+        },
+        "options": {
+          "cookieBannerStyle": {
+            "bottom-bar": "Закреплённая нижняя панель — рекомендуется",
+            "top-bar": "Закреплённая верхняя панель",
+            "modal": "Модальное окно по центру"
+          }
+        }
+      },
+      "analytics": {
+        "title": "Аналитика",
+        "description": "ID трекеров. Трекеры загружаются только после согласия посетителя.",
+        "sections": {
+          "trackers": {
+            "title": "ID трекеров"
+          }
+        },
+        "fields": {
+          "googleGa4": {
+            "label": "Google GA4"
+          },
+          "googleGtm": {
+            "label": "Google GTM"
+          },
+          "metaPixel": {
+            "label": "Пиксель Meta"
+          },
+          "microsoftClarity": {
+            "label": "Microsoft Clarity"
+          },
+          "tiktokPixel": {
+            "label": "Пиксель TikTok"
+          },
+          "linkedinPartner": {
+            "label": "Партнёрский ID LinkedIn"
+          },
+          "twitterPixel": {
+            "label": "Пиксель Twitter"
+          },
+          "plausibleDomain": {
+            "label": "Домен Plausible"
+          },
+          "posthogKey": {
+            "label": "Ключ PostHog"
+          },
+          "mixpanelToken": {
+            "label": "Токен Mixpanel"
+          },
+          "hotjarSiteId": {
+            "label": "ID сайта Hotjar"
+          },
+          "posthogHost": {
+            "label": "Хост PostHog"
+          }
+        }
+      },
+      "customCode": {
+        "title": "Пользовательский код",
+        "description": "CSS и JavaScript, внедряемые на публичный сайт.",
+        "sections": {
+          "code": {
+            "title": "Пользовательский код"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Внедрять в продакшене",
+            "hint": "Ничто ниже не работает на публичном сайте, пока это не включено."
+          },
+          "css": {
+            "label": "Пользовательский CSS"
+          },
+          "js": {
+            "label": "Пользовательский JS",
+            "hint": "Выполняется для каждого посетителя. Вставляйте только проверенный код."
+          }
+        }
+      },
+      "pwa": {
+        "title": "Устанавливаемое приложение",
+        "description": "Манифест веб-приложения и поведение при установке.",
+        "sections": {
+          "app": {
+            "title": "Устанавливаемое приложение"
+          },
+          "look": {
+            "title": "Внешний вид и поведение"
+          },
+          "install": {
+            "title": "Установка и офлайн-режим"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Включено"
+          },
+          "appName": {
+            "label": "Название приложения"
+          },
+          "shortName": {
+            "label": "Краткое название"
+          },
+          "description": {
+            "label": "Описание"
+          },
+          "startUrl": {
+            "label": "Стартовый URL"
+          },
+          "scope": {
+            "label": "Область (scope)"
+          },
+          "display": {
+            "label": "Режим отображения"
+          },
+          "orientation": {
+            "label": "Ориентация"
+          },
+          "themeColor": {
+            "label": "Цвет темы"
+          },
+          "backgroundColor": {
+            "label": "Цвет фона"
+          },
+          "icon192": {
+            "label": "Иконка 192"
+          },
+          "icon512": {
+            "label": "Иконка 512"
+          },
+          "installPrompt": {
+            "label": "Запрос установки"
+          },
+          "offlineEnabled": {
+            "label": "Офлайн-режим включён"
+          }
+        }
+      },
+      "storage": {
+        "title": "Облачное хранилище",
+        "description": "Бакет S3 для медиа. Проверьте подключение перед включением.",
+        "sections": {
+          "provider": {
+            "title": "Провайдер"
+          },
+          "credentials": {
+            "title": "Учётные данные бакета"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Включено"
+          },
+          "provider": {
+            "label": "Провайдер"
+          },
+          "visibility": {
+            "label": "Видимость файлов",
+            "hint": "Закрытым объектам нужны подписанные ссылки; для медиа, которые открываются напрямую, используйте публичный URL или URL CDN."
+          },
+          "basePath": {
+            "label": "Путь к базовой папке (необязательно)",
+            "hint": "Префикс для тестового объекта. Загрузки будут использовать его после появления модуля файлов."
+          },
+          "accessKeyId": {
+            "label": "ID ключа доступа *"
+          },
+          "secret": {
+            "label": "Секретный ключ доступа *",
+            "hint": "Хранится в зашифрованном виде и больше не отображается.",
+            "placeholder": "вставьте секрет"
+          },
+          "region": {
+            "label": "Регион",
+            "placeholder": "us-east-1"
+          },
+          "bucket": {
+            "label": "Бакет *"
+          },
+          "endpoint": {
+            "label": "Эндпоинт",
+            "hint": "Обязателен для Spaces, R2 и MinIO. Завершающий /bucket удаляется.",
+            "placeholder": "https://… (обязателен для Spaces / R2 / MinIO; автоматически для Wasabi и Bunny)"
+          },
+          "cdnUrl": {
+            "label": "Публичный URL / URL CDN (необязательно)",
+            "placeholder": "https://cdn.example.com"
+          },
+          "pathStyle": {
+            "label": "Использовать path-style эндпоинт (MinIO / некоторые S3-совместимые хранилища)"
+          },
+          "storageZone": {
+            "label": "Зона хранения",
+            "hint": "Только для Bunny."
+          },
+          "storagePassword": {
+            "label": "Пароль хранилища (ключ доступа)",
+            "hint": "Только для Bunny: пароль зоны хранения. Хранится в зашифрованном виде.",
+            "placeholder": "вставьте пароль"
+          }
+        },
+        "options": {
+          "provider": {
+            "s3": "Amazon S3",
+            "wasabi": "Wasabi",
+            "bunny": "Bunny.net Storage",
+            "spaces": "DigitalOcean Spaces",
+            "r2": "Cloudflare R2",
+            "minio": "MinIO / S3-compatible"
+          },
+          "visibility": {
+            "private": "Закрытый (подписанные URL)",
+            "public": "Публичный"
+          }
+        }
+      },
+      "whatsapp": {
+        "title": "Настройки WhatsApp",
+        "description": "Приложение Meta и партнёр Interakt, которые используются для подключения номеров WhatsApp.",
+        "sections": {
+          "metaApp": {
+            "title": "Business API (WABA)"
+          },
+          "interakt": {
+            "title": "Маршрут Interakt"
+          },
+          "inbound": {
+            "title": "Webhook"
+          }
+        },
+        "fields": {
+          "appId": {
+            "label": "Meta App ID",
+            "hint": "Если пусто, используется значение окружения сервера."
+          },
+          "appSecret": {
+            "label": "App Secret",
+            "hint": "Хранится в зашифрованном виде и больше не отображается. Оставьте пустым, чтобы сохранить текущий секрет."
+          },
+          "configId": {
+            "label": "Embedded Signup Config ID",
+            "hint": "Если пусто, рабочие пространства вставляют токен вручную."
+          },
+          "graphVersion": {
+            "label": "Версия Graph API",
+            "hint": "Например, v25.0. Если пусто, используется значение сервера по умолчанию."
+          },
+          "coexistence": {
+            "label": "Совместное использование",
+            "hint": "Предлагать «Подключить мой номер Business App» в Embedded Signup."
+          },
+          "defaultProvider": {
+            "label": "Маршрут по умолчанию",
+            "hint": "Какой API используют новые подключённые номера."
+          },
+          "solutionId": {
+            "label": "ID решения Interakt",
+            "hint": "Передаётся в Meta как extras.setup.solutionID и в Interakt при регистрации."
+          },
+          "partnerAuthKey": {
+            "label": "Партнёрский ключ Interakt",
+            "hint": "Общий ключ технического партнёра. Хранится в зашифрованном виде."
+          },
+          "systemUserId": {
+            "label": "ID системного пользователя",
+            "hint": "Назначается каждому подключённому WABA с задачей MANAGE."
+          },
+          "systemUserToken": {
+            "label": "Токен системного пользователя",
+            "hint": "Используется для проверки токенов и назначения системного пользователя. Хранится в зашифрованном виде."
+          },
+          "businessId": {
+            "label": "Business ID",
+            "hint": "Резервный вариант для поиска WABA, если токен не возвращает его."
+          },
+          "verifyToken": {
+            "label": "Токен проверки webhook",
+            "hint": "Любая произвольная строка. Оставьте пустым, чтобы использовать сгенерированную выше."
+          },
+          "requireSignature": {
+            "label": "Требовать подпись для каждого webhook",
+            "hint": "Отклоняет события, переданные Interakt, без корректной подписи Meta. Включайте, только если Interakt подписывает их."
+          }
+        },
+        "options": {
+          "defaultProvider": {
+            "interakt": "Interakt (прокси Meta)",
+            "meta": "Meta (напрямую)"
+          }
+        }
+      },
+      "campaigns": {
+        "title": "Кампании",
+        "description": "Как кампания повторяет неудачное сообщение и когда завершается незавершённая.",
+        "sections": {
+          "retry": {
+            "title": "Повторы"
+          },
+          "expiry": {
+            "title": "Автозавершение"
+          }
+        },
+        "fields": {
+          "retryAttempts": {
+            "label": "Количество повторов",
+            "hint": "Попытки на получателя до пометки как ошибочной (от 0 до 10)."
+          },
+          "retryBackoffSec": {
+            "label": "Пауза перед повтором (секунды)",
+            "hint": "Пауза перед следующей попыткой; она увеличивается с каждой."
+          },
+          "autoExpiryEnabled": {
+            "label": "Завершать незавершённые кампании",
+            "hint": "Завершает кампанию, которая всё ещё выполняется по истечении указанного ниже времени."
+          },
+          "defaultExpiryHours": {
+            "label": "Завершить через (часов)"
+          }
+        }
+      },
+      "googleCalendar": {
+        "title": "Google Календарь",
+        "description": "Клиент Google OAuth, через который каждое рабочее пространство подключает календарь.",
+        "sections": {
+          "oauth": {
+            "title": "Клиент Google OAuth"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Разрешить рабочим пространствам подключать Google Календарь",
+            "hint": "Выключено: ни одно рабочее пространство не может подключиться, и в календарь ничего не записывается и не читается."
+          },
+          "clientId": {
+            "label": "Client ID",
+            "hint": "Из Google Cloud: Credentials, OAuth 2.0 Client ID (Web application). Если пусто, используется GOOGLE_CALENDAR_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Секрет клиента",
+            "hint": "Хранится в зашифрованном виде и больше не отображается. Если пусто, сохраняется текущий; запасной вариант — GOOGLE_CALENDAR_CLIENT_SECRET."
+          },
+          "redirectUri": {
+            "label": "Переопределение Redirect URI",
+            "hint": "Оставьте пустым, чтобы использовать адрес выше. Он должен точно совпадать с Authorised redirect URI в клиенте."
+          }
+        }
+      },
+      "flowBuilder": {
+        "title": "Конструктор сценариев",
+        "description": "Какие конструкторы сценариев предлагаются рабочим пространствам.",
+        "sections": {
+          "mode": {
+            "title": "Конструктор"
+          }
+        },
+        "fields": {
+          "mode": {
+            "label": "Конструктор по умолчанию для рабочих пространств",
+            "hint": "Простой — пошаговый конструктор в виде списка, Расширенный — конструктор на холсте. Рабочее пространство может переопределить это на своей странице сценариев."
+          }
+        },
+        "options": {
+          "mode": {
+            "simple": "Только простой",
+            "advanced": "Только расширенный"
+          }
+        }
+      }
+    },
+    "cards": {
+      "appearance": {
+        "title": "Оформление и цвета",
+        "description": "Перекрасить все страницы панелей пользователя и администратора: бренд, поверхности, текст и акценты. Применяется сразу.",
+        "tags": "theme.color.*"
+      },
+      "general": {
+        "title": "Общие настройки",
+        "description": "Название приложения, контактные данные, логотипы, URL, адрес и глобальные переключатели сервисов.",
+        "tags": "APP_NAME / APP_URL / логотипы"
+      },
+      "paymentGateways": {
+        "title": "Платёжные шлюзы",
+        "description": "Stripe, Razorpay, PayPal, Paystack, Flutterwave и другие: ключи, валюты и переключатели боевого режима.",
+        "tags": "Боевой / песочница — ключи для каждого шлюза"
+      },
+      "aiKeys": {
+        "title": "AI / API-ключи",
+        "description": "Учётные данные провайдеров OpenAI, Anthropic, Google и других. Управляют всеми функциями ИИ на платформе.",
+        "tags": "BYOK / модели по умолчанию"
+      },
+      "mail": {
+        "title": "Настройки почты",
+        "description": "Драйвер SMTP, хост, порт, имя отправителя, шифрование и тестовая отправка.",
+        "tags": "SMTP / подтверждение / приветствие"
+      },
+      "auditLog": {
+        "title": "Журнал аудита",
+        "description": "Поиск по истории всех действий администратора: изменения рабочих пространств, пользователей, события биллинга, инциденты безопасности, обновления настроек.",
+        "tags": "Фильтр / подробности / экспорт CSV"
+      },
+      "privacy": {
+        "title": "Конфиденциальность, GDPR и ADA",
+        "description": "Баннер согласия на cookie, соответствие GDPR / CCPA, переключатели доступности ADA / WCAG и URL политик.",
+        "tags": "Согласие / политики / доступность"
+      },
+      "menuOrder": {
+        "title": "Порядок меню",
+        "description": "Задайте порядок пунктов верхней навигации, которые показываются в каждом рабочем пространстве пользователя.",
+        "tags": "Изменить порядок"
+      },
+      "authPages": {
+        "title": "Страницы входа",
+        "description": "Редактирование страниц входа, регистрации и восстановления пароля: заголовок, подзаголовок, цвет акцента и боковое изображение или видео. Предпросмотр в реальном времени.",
+        "tags": "Вход / регистрация / восстановление"
+      },
+      "analytics": {
+        "title": "Интеграции аналитики",
+        "description": "Google Analytics, GTM, Meta Pixel, Clarity, Plausible, PostHog, Hotjar, TikTok, LinkedIn, X: вставьте ID, скрипт сформируем мы.",
+        "tags": "GA4 / Pixel / Clarity / GTM"
+      },
+      "seo": {
+        "title": "Настройки SEO",
+        "description": "Meta-заголовок, описание, OpenGraph, карточки Twitter, robots, canonical и подтверждение сайта для Google и Bing.",
+        "tags": "Meta / OG / Twitter"
+      },
+      "languages": {
+        "title": "Языки",
+        "description": "Доступные локали, язык по умолчанию, флаг RTL и переключатель включения для каждого языка. Управляет выбором языка.",
+        "tags": "en / es / fr / ar / RTL"
+      },
+      "pwa": {
+        "title": "Настройки PWA",
+        "description": "Название приложения, иконки установки, цвет темы, цвет фона, режим отображения и переключатель PWA.",
+        "tags": "Иконки / цвета / установка"
+      },
+      "footer": {
+        "title": "Настройки подвала",
+        "description": "Заголовок подвала, ссылки на соцсети, текст копирайта и описание публичного подвала.",
+        "tags": "Логотип / соцсети / копирайт"
+      },
+      "siteInfo": {
+        "title": "Информация о сайте",
+        "description": "Контактные email, телефон, WhatsApp, адрес и ссылки на соцсети, общие для публичного подвала, страниц «Контакты» и «О нас».",
+        "tags": "email / телефон / соцсети"
+      },
+      "socialLogin": {
+        "title": "Вход через соцсети и captcha",
+        "description": "Включение входа через Google и Facebook на страницах входа и регистрации, вставка ключей OAuth и включение reCAPTCHA.",
+        "tags": "не настроено"
+      },
+      "registration": {
+        "title": "Регистрация",
+        "description": "Публичная регистрация, подтверждение email, тариф по умолчанию и длительность пробного периода для новых рабочих пространств.",
+        "tags": "Регистрация / пробный период / тариф"
+      },
+      "custom": {
+        "title": "Пользовательский код",
+        "description": "CSS и JavaScript для продакшена, внедряемые на публичные страницы при включённом переключателе.",
+        "tags": "CSS / JS"
+      },
+      "storage": {
+        "title": "Облачное хранилище",
+        "description": "Отправляйте медиа клиентов в собственный бакет: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 или MinIO.",
+        "tags": "S3 / Wasabi / Bunny / R2"
+      },
+      "whatsapp": {
+        "title": "WhatsApp (WABA)",
+        "description": "Приложение Meta, через которое каждое рабочее пространство подключает свои номера WhatsApp: ID и секрет приложения, Embedded Signup, webhook и маршрут Interakt.",
+        "tags": "Meta / Embedded Signup / Interakt"
+      },
+      "campaigns": {
+        "title": "Кампании",
+        "description": "Повторы и автоматическое завершение кампании, которая так и не была завершена.",
+        "tags": "Повторы / срок действия"
+      },
+      "googleCalendar": {
+        "title": "Google Календарь",
+        "description": "Клиент Google OAuth, который рабочие пространства используют для подключения календаря к записям и занятым слотам.",
+        "tags": "Google / OAuth / Календарь"
+      },
+      "flowBuilder": {
+        "title": "Конструктор сценариев",
+        "description": "Конструктор сценариев по умолчанию для всех рабочих пространств: пошаговый Простой или Расширенный на холсте. Рабочее пространство может переопределить это.",
+        "tags": "Простой / Расширенный / Автоматизация"
+      }
+    },
+    "signup": {
+      "body": "Публичная регистрация, автоподтверждение email, тариф по умолчанию для новых регистраций и длительность бесплатного пробного периода редактируются на странице «Регистрация».",
+      "link": "Открыть настройки регистрации"
+    },
+    "brandAssets": {
+      "intro": "Фавикон общий для всех тем. Логотип задаётся для каждой темы: загрузите инвертированный или светлый вариант для тёмной темы и вариант, подходящий для темы Doodle.",
+      "favicon": {
+        "title": "Фавикон",
+        "note": "Показывается во вкладках браузера и в закладках. Рекомендуется 35x35 px. PNG, ICO, JPG, SVG или WebP, до 512 КБ. Загрузка заменяет текущий."
+      },
+      "logos": {
+        "title": "Логотип для каждой темы",
+        "note": "Каждая тема использует свой логотип. Если логотип для темы не загружен, используется Paper."
+      },
+      "themes": {
+        "paper": {
+          "label": "Paper (по умолчанию)",
+          "note": "Светлая, почти белая. Стандартный вид."
+        },
+        "bright": {
+          "label": "Ярко-белая",
+          "note": "Белый фон с повышенной контрастностью."
+        },
+        "dark": {
+          "label": "Тёмная (бета)",
+          "note": "Используйте светлую или инвертированную версию логотипа."
+        },
+        "doodle": {
+          "label": "Doodle (декоративная)",
+          "note": "Пастельный мятный фон."
+        }
+      },
+      "noFile": "Нет файла",
+      "upload": "Загрузить",
+      "uploading": "Загрузка",
+      "remove": "Удалить",
+      "loading": "Загрузка",
+      "loadFailed": "Не удалось загрузить файлы бренда.",
+      "failed": "Загрузка не удалась.",
+      "tooLarge": "Этот файл больше {kb} КБ.",
+      "wrongType": "Этот тип файла здесь не поддерживается."
+    },
+    "teamInbox": {
+      "intro": "Отдельное устанавливаемое приложение для командного инбокса. Агенты открывают ссылку, добавляют её на главный экран и получают push-уведомления о новых сообщениях даже при закрытом приложении.",
+      "enabled": {
+        "label": "Включить приложение «Командный инбокс»",
+        "hint": "Включает отдельный манифест, запрос установки и уведомления на /team-inbox."
+      },
+      "name": {
+        "label": "Название приложения"
+      },
+      "shortName": {
+        "label": "Краткое название",
+        "hint": "До 12 символов."
+      },
+      "icon192": {
+        "label": "Иконка приложения (PNG 192x192)",
+        "note": "Если пусто, используется иконка приложения. Иконка инбокса на главном экране."
+      },
+      "icon512": {
+        "label": "Большая иконка / заставка (PNG 512x512)",
+        "note": "Если пусто, используется иконка приложения. Заставка при установке и экраны высокой плотности."
+      },
+      "push": {
+        "ready": {
+          "title": "Push-уведомления: готово",
+          "body": "Ключи сгенерированы. Агенты могут включить уведомления в инбоксе."
+        },
+        "todo": {
+          "title": "Push-уведомления: остался один шаг",
+          "body": "Нажмите «Сгенерировать ключи», чтобы настроить push. Доступ к серверу не нужен."
+        },
+        "generate": "Сгенерировать ключи",
+        "generating": "Генерация",
+        "generated": "Push-ключи сгенерированы."
+      },
+      "manifestLink": "Манифест командного инбокса",
+      "save": "Сохранить приложение командного инбокса",
+      "saving": "Сохранение",
+      "saved": "Приложение командного инбокса сохранено.",
+      "conflict": "Кто-то другой сохранил это после того, как вы открыли страницу. Перезагрузите страницу и попробуйте снова.",
+      "failed": "Что-то пошло не так, ничего не сохранено.",
+      "loading": "Загрузка",
+      "loadFailed": "Не удалось загрузить настройки приложения командного инбокса."
+    },
+    "seoPreview": {
+      "google": "Результат в Google",
+      "noDescription": "Meta-описание пока не задано.",
+      "noImage": "Нет изображения OG",
+      "sitemapKicker": "Карта сайта и robots",
+      "sitemapTitle": "Файлы для роботов",
+      "sitemapFile": "Создаётся автоматически из публичных страниц и опубликованных записей блога. Отправьте /sitemap.xml в Google Search Console.",
+      "download": "Скачать sitemap.xml"
+    },
+    "pages": {
+      "general": {
+        "title": "Общие настройки",
+        "description": "Основная идентичность приложения, контактные данные, локаль и валюта по умолчанию и переключатели сервисов платформы.",
+        "sections": {
+          "identity": {
+            "title": "Идентичность приложения"
+          },
+          "brandAssets": {
+            "title": "Файлы бренда"
+          },
+          "platform": {
+            "title": "Переключатели платформы"
+          },
+          "signup": {
+            "title": "Регистрации и пробный период"
+          }
+        },
+        "guide": {
+          "title": "Куда что попадает",
+          "items": {
+            "appName": {
+              "title": "Название приложения",
+              "body": "Используется в заголовках страниц, письмах и брендинге в приложении. Делайте коротким: лучше одно-два слова."
+            },
+            "appUrl": {
+              "title": "URL приложения",
+              "body": "Основной адрес. От него формируются все обратные вызовы, письма и перенаправления OAuth."
+            },
+            "language": {
+              "title": "Язык по умолчанию",
+              "body": "Применяется к новым аккаунтам. Существующие пользователи сохраняют свой выбор."
+            },
+            "currency": {
+              "title": "Валюта по умолчанию",
+              "body": "Используется для счетов и кошельков без явного переопределения."
+            },
+            "maintenance": {
+              "title": "Режим обслуживания",
+              "body": "Когда включено, все страницы, кроме админских, показывают заглушку. Администратор по-прежнему может открыть консоль."
+            }
+          }
+        },
+        "tip": {
+          "title": "Правило для продакшена",
+          "body": "Сохраняйте только после проверки затронутого сценария пользователя. Изменения идентичности распространяются на счета и исходящие письма."
+        }
+      },
+      "appearance": {
+        "title": "Цвета панели",
+        "description": "Перекрасьте всё приложение, все страницы панели пользователя и админ-панели, изменив эти цвета темы. Сохранение применяется сразу для всех; оставьте цвет по умолчанию, чтобы сохранить стандартный вид.",
+        "sections": {
+          "layout": {
+            "title": "Расположение навигации",
+            "description": "Выберите расположение панели пользователя. «Боковая панель» переносит все меню в левую колонку (без верхнего заголовка и страницы «Ещё»)."
+          },
+          "sidebar": {
+            "title": "Цвет боковой панели",
+            "description": "Фон тёмной левой панели (только для расположения «Боковая панель»). Оставьте значение по умолчанию для стандартного почти чёрного."
+          },
+          "interface": {
+            "title": "Интерфейс"
+          },
+          "brand": {
+            "title": "Бренд"
+          },
+          "surfaces": {
+            "title": "Поверхности"
+          },
+          "text": {
+            "title": "Текст"
+          },
+          "accents": {
+            "title": "Акценты"
+          }
+        },
+        "guide": {
+          "title": "Как работают цвета",
+          "items": {
+            "how": {
+              "title": "Применяется сразу",
+              "body": "Сохранение перезаписывает действующие токены темы для всех."
+            },
+            "tokens": {
+              "title": "Один токен — одна задача",
+              "body": "Каждый образец соответствует одной CSS-переменной, которая используется в панели пользователя и админ-панели."
+            },
+            "primary": {
+              "title": "Измените основной — остальное подстроится",
+              "body": "Основной (при наведении), акцент, мягкая заливка и пузырь чата вычисляются из основного цвета, если вы не задали их сами."
+            },
+            "defaults": {
+              "title": "Не трогайте значения по умолчанию",
+              "body": "Любой цвет, оставленный в стандартном значении, сохраняет исходный вид; переопределяются только изменённые токены."
+            }
+          }
+        },
+        "tip": {
+          "title": "Совет",
+          "body": "Проверяйте контраст после крупных изменений. Цвета текста и фона берутся из этих токенов."
+        },
+        "eyebrow": "Админ — оформление"
+      },
+      "siteInfo": {
+        "title": "Информация о сайте",
+        "description": "Контактные данные и ссылки на соцсети, общие для подвала, страниц «Контакты» и «О нас». Измените один раз — обновится везде.",
+        "sections": {
+          "company": {
+            "title": "Компания"
+          },
+          "contact": {
+            "title": "Контактные email"
+          },
+          "phone": {
+            "title": "Телефон и WhatsApp"
+          },
+          "social": {
+            "title": "Ссылки на соцсети"
+          }
+        },
+        "guide": {
+          "title": "Что куда попадает",
+          "items": {
+            "shared": {
+              "title": "Общее везде",
+              "body": "Эти значения используются в публичном подвале, на странице контактов и в юридических страницах."
+            },
+            "frontend": {
+              "title": "Текст и цвета страниц",
+              "body": "Редактируется в редакторе фронтенда, а не здесь."
+            }
+          }
+        }
+      },
+      "footer": {
+        "title": "Настройки подвала",
+        "description": "Заголовок подвала, ссылки на соцсети, текст копирайта и описание публичного подвала.",
+        "sections": {
+          "footer": {
+            "title": "Публичный подвал"
+          }
+        },
+        "guide": {
+          "title": "Что куда попадает",
+          "items": {
+            "what": {
+              "title": "Заголовок подвала и копирайт",
+              "body": "Если заголовок пуст, используется название платформы. Если текст копирайта пуст, он формируется из года и бренда."
+            },
+            "social": {
+              "title": "URL соцсетей",
+              "body": "Пустые поля скрывают иконку. Они совпадают со ссылками на соцсети из раздела «Информация о сайте»: изменение здесь обновляет их везде."
+            }
+          }
+        }
+      },
+      "mail": {
+        "title": "Настройки почты",
+        "description": "SMTP-хост, порт, шифрование и учётные данные. Сохранённые значения применяются при каждой отправке, поэтому письма приветствия, подтверждения, чеки и письма поддержки используют их без перезапуска.",
+        "sections": {
+          "smtp": {
+            "title": "Учётные данные SMTP"
+          }
+        },
+        "guide": {
+          "title": "Распространённые хосты провайдеров",
+          "items": {
+            "hosts": {
+              "title": "Типичные настройки",
+              "body": "Mailgun smtp.mailgun.org 587 / tls. SendGrid smtp.sendgrid.net 587 / tls. Amazon SES email-smtp.REGION.amazonaws.com 587 / tls. Postmark smtp.postmarkapp.com 587 / tls. Resend smtp.resend.com 587 / tls. Gmail smtp.gmail.com 587 / tls с паролем приложения."
+            },
+            "used": {
+              "title": "Письма, отправляемые системой",
+              "body": "Письма приветствия и подтверждения, сброс пароля, счета и чеки, ответы поддержки, оповещения о безопасности и приглашения в рабочие пространства."
+            }
+          }
+        },
+        "tip": {
+          "title": "Совет",
+          "body": "Всегда отправляйте тестовое письмо после изменений. Одна опечатка в хосте или порте незаметно ломает все транзакционные письма на платформе."
+        }
+      },
+      "seo": {
+        "title": "Настройки SEO",
+        "description": "Общие для сайта meta-теги по умолчанию: заголовок, описание, OpenGraph, карточки Twitter, robots, canonical и подтверждение для поисковых систем.",
+        "sections": {
+          "search": {
+            "title": "Meta-теги"
+          },
+          "social": {
+            "title": "OpenGraph"
+          },
+          "twitter": {
+            "title": "Карточки Twitter"
+          },
+          "verification": {
+            "title": "Подтверждение сайта"
+          },
+          "preview": {
+            "title": "Предпросмотр"
+          }
+        },
+        "guide": {
+          "title": "Основы SEO",
+          "items": {
+            "basics": {
+              "title": "Заголовки и описания",
+              "body": "Meta-заголовок: начните с бренда и одного ёмкого описания, 50–60 символов. Meta-описание: краткое описание в 1–2 предложения, 140–160 символов."
+            },
+            "where": {
+              "title": "Где это отображается",
+              "body": "Страницы админки, страницы для вошедших пользователей, публичные страницы и превью ссылок (WhatsApp, Slack, Discord, X). Robots: используйте noindex для тестовых или закрытых развёртываний."
+            },
+            "sitemap": {
+              "title": "Проверить",
+              "body": "opengraph.xyz, Google Rich Results Test и валидатор Twitter Card."
+            }
+          }
+        }
+      },
+      "privacy": {
+        "title": "Конфиденциальность, GDPR и ADA",
+        "eyebrow": "Админ — соответствие требованиям",
+        "description": "Баннер согласия на cookie, URL политик, соответствие GDPR/CCPA и переключатели доступности WCAG. Одна и та же настройка управляет интерфейсом согласия и доступом каждой интеграции аналитики.",
+        "sections": {
+          "banner": {
+            "title": "Баннер и политики"
+          },
+          "compliance": {
+            "title": "GDPR & CCPA"
+          },
+          "accessibility": {
+            "title": "ADA / WCAG",
+            "description": "Американский ADA (Americans with Disabilities Act) и возможности уровня WCAG 2.1 AA, которые посетители могут включать."
+          }
+        },
+        "guide": {
+          "title": "Как работает согласие",
+          "items": {
+            "order": {
+              "title": "Порядок действий",
+              "body": "1. Посетитель попадает на сайт, и открывается баннер cookie (пропускается, если учитывается Do-Not-Track). 2. Выбор сохраняется в cookie crm_cookie_consent на один год. 3. Загружаются только разрешённые трекеры. 4. Посетитель может снова открыть выбор с любого элемента с data-cookie-prefs-open."
+            },
+            "linked": {
+              "title": "Связанные настройки",
+              "body": "Интеграции аналитики (GA4, GTM, Pixel, Clarity и др.) и настройки PWA."
+            }
+          }
+        }
+      },
+      "analytics": {
+        "title": "Интеграции аналитики",
+        "eyebrow": "Админ — отслеживание",
+        "description": "Вставьте ID каждого провайдера один раз. Официальный фрагмент провайдера выводится на каждой публичной странице, но только после согласия посетителя на соответствующую категорию cookie.",
+        "sections": {
+          "site": {
+            "title": "Аналитика сайта"
+          },
+          "marketing": {
+            "title": "Рекламные пиксели"
+          }
+        },
+        "guide": {
+          "title": "Трекер → категория",
+          "items": {
+            "categories": {
+              "title": "Когда срабатывает",
+              "body": "Аналитика: GA4, GTM, Clarity, Plausible, PostHog, Hotjar, Mixpanel. Маркетинг: Meta Pixel, TikTok, LinkedIn, X Pixel. Скрипты контейнера GTM могут включать другие трекеры; приостанавливайте их с помощью триггеров по категориям внутри GTM."
+            },
+            "where": {
+              "title": "Где загружается",
+              "body": "Публичные страницы и страницы входа. Административные страницы намеренно отключены."
+            }
+          }
+        }
+      },
+      "custom": {
+        "title": "Пользовательский код",
+        "description": "Пользовательские стили и скрипты для продакшена для расширенного брендинга и поведения. Внедряются на публичные страницы при включении.",
+        "sections": {
+          "code": {
+            "title": "Пользовательский код"
+          }
+        },
+        "guide": {
+          "title": "Общие правила",
+          "items": {
+            "scope": {
+              "title": "Ограничивайте область действия CSS",
+              "body": "Оборачивайте правила классом бренда. Не трогайте body, *, или утилитарные классы фреймворка."
+            },
+            "block": {
+              "title": "Не блокируйте",
+              "body": "Оборачивайте JS в DOMContentLoaded. Без синхронных сетевых запросов."
+            },
+            "dark": {
+              "title": "Проверьте тёмную тему",
+              "body": "Переключите тему и проверьте селекторы html[data-theme=\"dark\"] перед сохранением."
+            },
+            "sensitive": {
+              "title": "Чувствительно к продакшену",
+              "body": "Неудачное сохранение сразу попадает на все публичные страницы. Пусть коллега проверит крупные изменения."
+            }
+          }
+        },
+        "tip": {
+          "title": "Осторожно",
+          "body": "Пользовательский код выполняется на каждой публичной странице и не может быть изолирован. Изменить его может только суперадминистратор."
+        }
+      },
+      "pwa": {
+        "title": "Настройки PWA",
+        "description": "Манифест устанавливаемого приложения: название, иконки, цвета и режим отображения. Управляет манифестом и запросом установки.",
+        "sections": {
+          "app": {
+            "title": "Манифест PWA"
+          },
+          "teamInbox": {
+            "title": "PWA командного инбокса"
+          }
+        },
+        "guide": {
+          "title": "Устанавливаемое приложение",
+          "items": {
+            "manifest": {
+              "title": "Действующий манифест",
+              "body": "Манифест отдаётся по адресу /api/v2/public/manifest.webmanifest и существует только при включённом переключателе."
+            },
+            "install": {
+              "title": "Иконки",
+              "body": "Загрузите квадратные PNG-иконки на странице «Оформление» или вставьте URL-адреса размещённых файлов. 192 px для главного экрана, 512 px для заставки."
+            }
+          }
+        }
+      },
+      "storage": {
+        "title": "Облачное хранилище",
+        "eyebrow": "Админ — хранилище медиа",
+        "description": "Отправляйте все медиавложения клиентов в собственный бакет — Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 или любое S3-совместимое хранилище — вместо сервера приложения. Когда выключено, медиа остаются на локальном диске, поэтому ничего не ломается до включения.",
+        "status": {
+          "active": "Активно: {provider}. Новые загрузки идут в ваш бакет.",
+          "configured": "Настроено, но выключено. Медиа по-прежнему на локальном диске. Проверьте и включите.",
+          "local": "Локальный диск (облачный провайдер ещё не настроен).",
+          "enabled": "Включено",
+          "disabled": "Отключено"
+        },
+        "sections": {
+          "provider": {
+            "title": "Маршрутизация облачных медиа"
+          },
+          "credentials": {
+            "title": "Подключение к бакету"
+          }
+        },
+        "guide": {
+          "title": "Настроить",
+          "items": {
+            "s3": {
+              "title": "S3 / Wasabi",
+              "body": "Ключ доступа + секрет + регион + бакет. Эндпоинт Wasabi формируется из региона."
+            },
+            "bunny": {
+              "title": "Bunny.net",
+              "body": "Используйте поля Bunny: зона хранения и пароль. Регион — регион зоны (de, ny, la...)."
+            },
+            "spaces": {
+              "title": "Spaces / R2 / MinIO",
+              "body": "Заполните поля S3 и вставьте URL эндпоинта. Для MinIO отметьте path-style."
+            },
+            "test": {
+              "title": "Сначала всегда проверяйте",
+              "body": "«Сохранить и проверить подключение» записывает и удаляет тестовый файл, прежде чем вы включите переключатель «Включено»."
+            }
+          }
+        },
+        "tip": {
+          "title": "Безопасно по умолчанию",
+          "body": "Существующие файлы остаются на месте. В бакет попадают только новые загрузки; ничего не переносится и не удаляется."
+        }
+      },
+      "whatsapp": {
+        "title": "Настройки WhatsApp",
+        "eyebrow": "Админ — настройки — каналы — WhatsApp",
+        "description": "Единое приложение Meta (и партнёр Interakt), через которое подключаются номера WhatsApp всех рабочих пространств. Без ID и секрета приложения Embedded Signup и обновление токенов не работают; без ID конфигурации рабочие пространства вставляют токен вручную. Сохранённые значения переопределяют серверные значения по умолчанию в течение нескольких секунд во всех процессах.",
+        "sections": {
+          "metaApp": {
+            "title": "Business API (WABA)",
+            "description": "Официальный Cloud API от Meta. Нужен для большого объёма трафика, шаблонных сообщений и подтверждённого профиля бизнеса. Поддерживает как ручную вставку токена, так и Embedded Signup (вход через WhatsApp)."
+          },
+          "interakt": {
+            "title": "Маршрут Interakt",
+            "description": "Номера, подключённые через Embedded Signup, по умолчанию отправляются и принимаются через прокси Meta от Interakt. Переключитесь на Meta (напрямую), чтобы обойти Interakt. Существующие номера сохраняют маршрут, с которым были подключены."
+          },
+          "inbound": {
+            "title": "Webhook"
+          }
+        },
+        "guide": {
+          "title": "Business API (WABA)",
+          "items": {
+            "api": {
+              "title": "Meta Cloud API",
+              "body": "Официальный Cloud API от Meta. Нужен для большого объёма трафика, шаблонных сообщений и подтверждённого профиля бизнеса. Поддерживает как ручную вставку токена, так и Embedded Signup (вход через WhatsApp)."
+            },
+            "app": {
+              "title": "ID и секрет приложения Facebook",
+              "body": "developers.facebook.com/apps, раздел «Основные настройки». Смена приложения делает недействительными токены, выданные старым, поэтому рабочим пространствам нужно подключиться заново."
+            },
+            "webhook": {
+              "title": "Webhook",
+              "body": "App Dashboard, WhatsApp, Configuration: вставьте Callback URL и Verify token с этой страницы, затем подпишитесь на messages и message_template_status_update."
+            },
+            "perWorkspace": {
+              "title": "Для каждого рабочего пространства",
+              "body": "Каждое рабочее пространство подключает свой номер в разделе «Каналы», «Номера WhatsApp». Там собираются ID номера телефона и постоянный токен."
+            },
+            "login": {
+              "title": "Вход через WABA (необязательно)",
+              "body": "Заполните Embedded Signup Config ID, чтобы включить вход через Meta в один клик. Требуется роль Tech Provider в приложении. Оставьте пустым, чтобы использовать только ручную вставку."
+            }
+          }
+        },
+        "tip": {
+          "title": "Совет",
+          "body": "Смена маршрута по умолчанию или приложения во время трафика влияет только на номера, подключённые позже. Приостановите кампании перед сменой приложения Meta."
+        }
+      },
+      "campaigns": {
+        "title": "Доставка кампаний",
+        "eyebrow": "Админ — кампании",
+        "description": "Общие для платформы правила кампаний всех рабочих пространств: как часто повторяется неудачное сообщение и когда завершается незавершённая кампания.",
+        "sections": {
+          "retry": {
+            "title": "Повторы"
+          },
+          "expiry": {
+            "title": "Автозавершение"
+          }
+        },
+        "guide": {
+          "title": "Как это работает",
+          "items": {
+            "retry": {
+              "title": "Повторы",
+              "body": "Получатель, которому отправка не удалась, получает повторную попытку после паузы, до количества попыток, указанного здесь."
+            },
+            "expiry": {
+              "title": "Автозавершение",
+              "body": "Кампания, которая всё ещё выполняется дольше указанного здесь количества часов, завершается, чтобы не занимать отправителя навсегда."
+            }
+          }
+        }
+      },
+      "googleCalendar": {
+        "title": "Google Календарь",
+        "eyebrow": "Админ — записи",
+        "description": "Один клиент Google Cloud OAuth для всей платформы. Каждое рабочее пространство затем подключает свой аккаунт Google в разделе «Записи», «Настройки»; рабочее пространство никогда не видит ID клиента или секрет.",
+        "sections": {
+          "oauth": {
+            "title": "Клиент Google OAuth",
+            "description": "Без ID клиента и секрета рабочие пространства видят Google Календарь как недоступный, а записи продолжают работать без календаря."
+          }
+        },
+        "guide": {
+          "title": "Настройте в Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. Проект и API",
+              "body": "В Google Cloud Console создайте проект и включите Google Calendar API."
+            },
+            "redirect": {
+              "title": "2. Клиент OAuth",
+              "body": "Создайте OAuth 2.0 Client ID типа Web application и добавьте redirect URI с этой страницы в Authorised redirect URIs."
+            },
+            "consent": {
+              "title": "3. Экран согласия",
+              "body": "Добавьте области calendar.events, calendar.freebusy и calendar.calendarlist.readonly, затем опубликуйте приложение: в режиме Testing Google завершает каждое разрешение через 7 дней, и рабочим пространствам придётся подключиться заново."
+            },
+            "workspaces": {
+              "title": "4. Подключение рабочих пространств",
+              "body": "Вставьте ID клиента и секрет здесь и сохраните. Затем администраторы подключаются в разделе «Записи», «Настройки», «Google Календарь»."
+            }
+          }
+        }
+      },
+      "flowBuilder": {
+        "title": "Конструктор сценариев",
+        "eyebrow": "Админ — автоматизация",
+        "description": "Выберите конструктор сценариев по умолчанию для всех рабочих пространств: пошаговый Простой или Расширенный на холсте. Рабочее пространство может переопределить его на своей странице сценариев.",
+        "sections": {
+          "mode": {
+            "title": "Конструктор"
+          }
+        },
+        "guide": {
+          "title": "Как это работает",
+          "items": {
+            "modes": {
+              "title": "Два конструктора",
+              "body": "Простой выводит сценарий как список шагов один под другим, с плюсом между шагами. Расширенный — холст с узлами и связями. Оба сохраняют один и тот же сценарий, поэтому он работает одинаково."
+            },
+            "existing": {
+              "title": "Существующие сценарии",
+              "body": "Изменение этой настройки никогда не меняет и не удаляет сценарий. Сценарий продолжает работать; он просто открывается в включённом конструкторе. Рабочее пространство, которое выбрало свой конструктор, сохраняет его, пока снова не выберет значение платформы по умолчанию."
+            }
+          }
+        }
+      }
+    },
+    "cookie": {
+      "title": "Мы используем cookie",
+      "learnMore": "Подробнее",
+      "decline": "Отклонить",
+      "customize": "Настроить",
+      "acceptAll": "Принять все",
+      "rejectAll": "Отклонить все",
+      "save": "Сохранить настройки",
+      "preferences": "Настройки cookie",
+      "categories": {
+        "necessary": {
+          "title": "Строго необходимые",
+          "body": "Нужны для работы сайта: вход, безопасность и ваш выбор. Всегда включены."
+        },
+        "analytics": {
+          "title": "Аналитические cookie",
+          "body": "Помогают нам понять, как используется сайт, чтобы мы могли его улучшать."
+        },
+        "marketing": {
+          "title": "Маркетинговые cookie",
+          "body": "Используются для измерения рекламы и показа релевантных кампаний на других сайтах."
+        }
+      }
+    },
+    "appearance": {
+      "previewKicker": "Предпросмотр",
+      "previewTitle": "Перед сохранением",
+      "previewNote": "Цвета, размер и прозрачность обновляются при перетаскивании. Ничто не применяется ни к кому, пока вы не сохраните.",
+      "resetTitle": "Сбросить по умолчанию",
+      "resetBody": "Очищает все переопределения и восстанавливает исходную палитру.",
+      "reset": "Сбросить все цвета",
+      "tokens": "{count, plural, one {# токен} few {# токена} many {# токенов} other {# токена}}",
+      "controls": "{count, plural, one {# элемент управления} few {# элемента управления} many {# элементов управления} other {# элемента управления}}",
+      "primary": "Основной",
+      "cancel": "Отмена",
+      "active": "Активно"
+    },
+    "wabaCallback": {
+      "loading": "Загрузка данных webhook…",
+      "unavailable": "Данные webhook показываются только суперадминистраторам.",
+      "webhookUrl": "Webhook URL",
+      "noUrl": "Задайте APP_URL или WABA_WEBHOOK_PUBLIC_URL",
+      "webhookHint": "Вставьте в приложение Meta (WhatsApp, Configuration, Callback URL). Подпишитесь на: {fields}.",
+      "verifyToken": "Verify token",
+      "verifyHint": "Вставьте на том же экране, что и Verify token.",
+      "copy": "Копировать",
+      "copied": "Скопировано",
+      "connected": "Подключённые WABA (все рабочие пространства)",
+      "fieldsTitle": "Поля webhook (совместное использование и группы)",
+      "fieldsHint": "Для совместного использования приложению Meta нужна подписка на messages, smb_message_echoes, smb_app_state_sync и history. Для групп WhatsApp нужны group_lifecycle_update, group_participants_update, group_settings_update и group_status_update.",
+      "fieldsCheck": "Проверить поля webhook",
+      "fieldsChecking": "Запрос к Meta…",
+      "fieldsOk": "Все поля подписаны: ответы, набранные на телефоне, синхронизируются, и придут события групп WhatsApp.",
+      "fieldsMissing": "Некоторые поля ещё не подписаны.",
+      "fieldsSubscribed": "Подписка оформлена. Ответы, набранные на телефоне, теперь синхронизируются, и придут события групп WhatsApp.",
+      "fieldsMissingTag": "НЕ ПОДПИСАНО",
+      "fieldsGroupTag": "Группы",
+      "fieldsSubscribe": "Подписать недостающие поля",
+      "fieldsSubscribing": "Подписка…"
+    },
+    "googleCallback": {
+      "redirectTitle": "Redirect URI",
+      "redirectHint": "Добавьте этот точный адрес как Authorised redirect URI в клиенте OAuth. Сюда Google перенаправляет браузер после того, как администратор рабочего пространства даёт согласие.",
+      "copy": "Копировать",
+      "copied": "Скопировано"
+    }
+  }
+}

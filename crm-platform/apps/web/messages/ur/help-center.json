@@ -1,0 +1,54 @@
+{
+  "help": {
+    "title": "مدد مرکز",
+    "searchLabel": "مدد تلاش کریں",
+    "searchPlaceholder": "گائیڈز تلاش کریں",
+    "resultsStatus": "{count, plural, =0 {کوئی گائیڈ نہیں ملی} one {# گائیڈ} other {# گائیڈز}}",
+    "none": {
+      "title": "ابھی تک کوئی گائیڈ نہیں",
+      "message": "آپ کے پلان کی خصوصیات کے لیے گائیڈز یہاں ظاہر ہوں گی۔"
+    },
+    "noResults": {
+      "title": "آپ کی تلاش سے کوئی گائیڈ میل نہیں کھاتی",
+      "message": "مختلف الفاظ آزمائیں، یا تمام گائیڈز دیکھنے کے لیے تلاش صاف کریں۔"
+    },
+    "areas": {
+      "overview": "پلیٹ فارم",
+      "inbox": "ان باکس اور چیٹ",
+      "audience": "CRM",
+      "sales": "سیلز",
+      "campaigns": "مہمات",
+      "automation": "آٹومیشن",
+      "store": "اسٹور",
+      "apps": "مارکیٹ پلیس",
+      "settings": "سیٹنگز",
+      "account": "اکاؤنٹ",
+      "getting-started": "شروعات",
+      "troubleshooting": "خرابیوں کا حل"
+    },
+    "allHelp": "مدد پر واپس جائیں",
+    "onThisPage": "اس صفحے پر",
+    "openScreen": "یہ اسکرین کھولیں",
+    "shownInEnglish": "یہ گائیڈ ابھی آپ کی زبان میں ترجمہ نہیں ہوئی، اس لیے انگریزی میں دکھائی جا رہی ہے۔",
+    "tip": {
+      "label": "مدد: {title}",
+      "readMore": "گائیڈ پڑھیں"
+    },
+    "guideCount": "{count, plural, =0 {کوئی گائیڈ نہیں} one {# گائیڈ} other {# گائیڈز}}",
+    "crumb": "مزید / مدد",
+    "heading": "مدد",
+    "headingRest": "اور گائیڈز",
+    "back": "واپس",
+    "askSupport": "نہیں مل رہا؟ سپورٹ سے پوچھیں",
+    "askSupportShort": "سپورٹ",
+    "categories": "زمرے",
+    "allGuides": "تمام گائیڈز",
+    "needHuman": "کسی انسان سے بات کرنی ہے؟",
+    "contactSupport": "سپورٹ سے رابطہ کریں",
+    "popular": "مقبول",
+    "searchResults": "تلاش کے نتائج",
+    "read": "گائیڈ پڑھیں",
+    "readMinutes": "{count, plural, one {# منٹ کا مطالعہ} other {# منٹ کا مطالعہ}}",
+    "moreInArea": "{area} میں مزید"
+  }
+}

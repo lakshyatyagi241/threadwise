@@ -1,8 +1,11 @@
 'use client';
 
 import { useEffect, useMemo, useRef } from 'react';
+import { useTranslations } from 'next-intl';
 import { FLB_NODE_TYPES, type FlowEdge, type FlowNode, type FlbNodeData } from '@crm/contracts';
+import { groupLabel, nodeLabel } from '../lib/contract-text';
 import { NODE_W } from '../lib/graph-ops';
+import { useFlb } from '../lib/msg';
 import { lookOf } from '../lib/node-ui';
 import { Icon } from './node-card';
 import { NODE_FORMS } from './inspector/registry';
@@ -26,6 +29,7 @@ export function NodeActionBar({
   onPin: () => void;
   onDuplicate: () => void;
 }) {
+  const t = useTranslations('flb.builder.shell.overlays');
   const left = pan.x + (node.x + NODE_W / 2) * zoom;
   const top = pan.y + (node.y - 14) * zoom;
   const pinned = !!node.isStart;
@@ -38,8 +42,8 @@ export function NodeActionBar({
       <button
         type="button"
         onClick={onPin}
-        title={pinned ? 'This is the start point (click to unpin)' : 'Make this the start point'}
-        aria-label="Start point"
+        title={pinned ? t('startPinned') : t('startMake')}
+        aria-label={t('startPoint')}
         aria-pressed={pinned}
         style={pinned ? { background: 'var(--flb-mint)', color: 'var(--brand)' } : undefined}
       >
@@ -55,18 +59,23 @@ export function NodeActionBar({
           <path d="M8 1.5l1.9 4 4.1.5-3 2.9.8 4-3.8-2-3.8 2 .8-4-3-2.9 4.1-.5z" />
         </svg>
       </button>
-      <button type="button" onClick={onEdit} title="Edit (open inspector)" aria-label="Edit">
+      <button type="button" onClick={onEdit} title={t('editTitle')} aria-label={t('edit')}>
         <Icon d="M11 2.5l2.5 2.5L5 13.5H2.5V11zM9.5 4l2.5 2.5" />
       </button>
-      <button type="button" onClick={onDuplicate} title="Duplicate (Ctrl+D)" aria-label="Duplicate">
+      <button
+        type="button"
+        onClick={onDuplicate}
+        title={t('duplicateTitle')}
+        aria-label={t('duplicate')}
+      >
         <Icon d="M5 5h8v8H5zM3 10.5H2.5A.5.5 0 0 1 2 10V2.5A.5.5 0 0 1 2.5 2H10a.5.5 0 0 1 .5.5V3" />
       </button>
       <button
         type="button"
         className="danger"
         onClick={onDelete}
-        title="Delete (⌫)"
-        aria-label="Delete node"
+        title={t('deleteTitle')}
+        aria-label={t('deleteNode')}
       >
         <Icon d="M3 4h10M6 4V2.5h4V4M5 4l1 9h4l1-9" />
       </button>
@@ -173,6 +182,8 @@ export function Minimap({
 
 /** The red popup that lists why Save or Publish was blocked (WD-FLB-018). */
 export function ValidationPopup({ items, onClose }: { items: string[]; onClose: () => void }) {
+  const t = useTranslations('flb.builder.shell.overlays');
+  const tc = useTranslations('flb.common');
   return (
     <div
       className="pointer-events-none fixed inset-x-0 top-4 z-[90] flex justify-center px-4"
@@ -185,8 +196,7 @@ export function ValidationPopup({ items, onClose }: { items: string[]; onClose: 
           </span>
           <div className="min-w-0 flex-1">
             <div className="text-[13.5px] font-semibold">
-              Can&apos;t save — {items.length} {items.length === 1 ? 'node needs' : 'nodes need'}{' '}
-              fixing
+              {t('cantSave', { count: items.length })}
             </div>
             <ul className="mt-1 list-disc space-y-0.5 pl-4 text-[12px] text-[var(--flb-ink-600)]">
               {items.slice(0, 6).map((m, i) => (
@@ -195,18 +205,16 @@ export function ValidationPopup({ items, onClose }: { items: string[]; onClose: 
             </ul>
             {items.length > 6 ? (
               <div className="mt-1 text-[11px] text-muted-foreground">
-                …and {items.length - 6} more.
+                {t('andMore', { count: items.length - 6 })}
               </div>
             ) : null}
-            <div className="mt-1.5 text-[11px] text-muted-foreground">
-              The affected nodes are outlined in red. Connect them, then save again.
-            </div>
+            <div className="mt-1.5 text-[11px] text-muted-foreground">{t('outlined')}</div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            title="Dismiss"
-            aria-label="Dismiss"
+            title={tc('dismiss')}
+            aria-label={tc('dismiss')}
             className="grid h-7 w-7 shrink-0 place-items-center rounded-full text-muted-foreground hover:bg-[var(--flb-coral)]/10"
           >
             <Icon d="M4 4l8 8M12 4l-8 8" className="h-3.5 w-3.5" />
@@ -239,12 +247,14 @@ export function InspectorPanel({
   onAddOption: () => void;
   onRemoveOption: (i: number) => void;
 }) {
+  const t = useTranslations('flb.builder.shell.overlays');
+  const tf = useFlb();
   if (!open) return null;
   if (!node) {
     return (
       <aside
         className="ins-panel z-20 flex w-[360px] shrink-0 flex-col border-l border-border bg-background"
-        aria-label="Inspector"
+        aria-label={t('inspector')}
       >
         <div className="flex items-center justify-between gap-2 border-b border-border px-4 py-3">
           <div className="flex min-w-0 items-center gap-2.5">
@@ -256,17 +266,17 @@ export function InspectorPanel({
             </span>
             <div>
               <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-                Inspector
+                {t('inspector')}
               </div>
-              <div className="font-serif text-[16px] leading-tight">Select a node</div>
+              <div className="font-serif text-[16px] leading-tight">{t('selectNode')}</div>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
             className="grid h-8 w-8 place-items-center rounded-full hover:bg-muted"
-            title="Hide panel"
-            aria-label="Hide panel"
+            title={t('hidePanel')}
+            aria-label={t('hidePanel')}
           >
             <Icon d="M4 4l8 8M12 4l-8 8" className="h-3.5 w-3.5" />
           </button>
@@ -284,11 +294,11 @@ export function InspectorPanel({
             <circle cx="12.5" cy="12.5" r="1.8" />
             <path d="M5 7l6-3M5 9l6 3" />
           </svg>
-          <div className="mt-3 font-serif text-[16px] text-foreground/80">Nothing selected</div>
+          <div className="mt-3 font-serif text-[16px] text-foreground/80">
+            {t('nothingSelected')}
+          </div>
           <div className="mt-1.5 text-[12px] leading-snug">
-            Click a node on the canvas to edit its properties,
-            <br />
-            or drag a card from the left to add a new node.
+            {t.rich('nothingHint', { br: () => <br /> })}
           </div>
         </div>
       </aside>
@@ -301,7 +311,7 @@ export function InspectorPanel({
   return (
     <aside
       className="ins-panel z-20 flex w-[360px] shrink-0 flex-col border-l border-border bg-background"
-      aria-label="Inspector"
+      aria-label={t('inspector')}
       data-testid="inspector"
     >
       <div className="flex items-center justify-between gap-2 border-b border-border px-4 py-3">
@@ -311,10 +321,10 @@ export function InspectorPanel({
           </span>
           <div className="min-w-0">
             <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-              {def?.group ?? 'Node'}
+              {def ? groupLabel(tf, def.group) : t('nodeFallback')}
             </div>
             <div className="truncate font-serif text-[16px] leading-tight">
-              {def?.label ?? node.type}
+              {def ? nodeLabel(tf, node.type) : node.type}
             </div>
           </div>
         </div>
@@ -323,8 +333,8 @@ export function InspectorPanel({
             type="button"
             onClick={onDelete}
             className="grid h-8 w-8 place-items-center rounded-full text-[var(--flb-coral)] hover:bg-[var(--flb-coral)]/15"
-            title="Delete (⌫)"
-            aria-label="Delete node"
+            title={t('deleteTitle')}
+            aria-label={t('deleteNode')}
           >
             <Icon d="M3 4h10M6 4V2.5h4V4M5 4l1 9h4l1-9" className="h-3.5 w-3.5" />
           </button>
@@ -332,8 +342,8 @@ export function InspectorPanel({
             type="button"
             onClick={onClose}
             className="grid h-8 w-8 place-items-center rounded-full hover:bg-muted"
-            title="Hide panel"
-            aria-label="Hide panel"
+            title={t('hidePanel')}
+            aria-label={t('hidePanel')}
           >
             <Icon d="M4 4l8 8M12 4l-8 8" className="h-3.5 w-3.5" />
           </button>
@@ -341,7 +351,7 @@ export function InspectorPanel({
       </div>
       <div className="flex-1 overflow-y-auto p-4 text-[12.5px] text-muted-foreground">
         <div className="mb-3 flex items-center gap-2 font-mono text-[10.5px] text-muted-foreground">
-          <span>id</span>
+          <span>{t('id')}</span>
           <span className="text-foreground/80">{node.id}</span>
         </div>
         {Form ? (
@@ -355,9 +365,7 @@ export function InspectorPanel({
             removeOption={onRemoveOption}
           />
         ) : (
-          <div className="text-[12.5px] leading-relaxed text-foreground/80">
-            This node has no settings.
-          </div>
+          <div className="text-[12.5px] leading-relaxed text-foreground/80">{t('noSettings')}</div>
         )}
       </div>
     </aside>

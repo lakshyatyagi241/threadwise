@@ -1,0 +1,315 @@
+{
+  "settings": {
+    "title": "設定",
+    "breadcrumb": "パンくずリスト",
+    "backToSettings": "設定に戻る",
+    "sectionsLabel": "設定のセクション",
+    "searchLabel": "設定を検索",
+    "searchPlaceholder": "設定を検索",
+    "searchHint": "名前またはキーワードで全設定を絞り込めます。Escでクリア、下矢印キーで検索結果に移動します。",
+    "clearSearch": "検索をクリア",
+    "results": {
+      "title": "{count, plural, other {「{query}」に一致する設定が # 件あります}}",
+      "status": "{count, plural, =0 {結果はありません} other {# 件の結果}}"
+    },
+    "noResults": {
+      "title": "「{query}」に一致する設定はありません",
+      "message": "スペルを確認するか、「税」「チーム」「WhatsApp」のような、より広い語句をお試しください。"
+    },
+    "emptySection": {
+      "title": "設定する項目はありません",
+      "message": "このセクションの設定は、お客様のロールでは利用できません。"
+    },
+    "inSection": "{section}内",
+    "soon": "近日公開",
+    "upgrade": "アップグレード",
+    "comingSoon": "近日公開",
+    "sections": {
+      "channels": {
+        "title": "チャネル",
+        "description": "お客様からメッセージを受け取る接続先を追加します。"
+      },
+      "data": {
+        "title": "データとカスタマイズ",
+        "description": "連絡先、案件、会話の項目や表示内容を設定します。"
+      },
+      "business": {
+        "title": "ビジネスと請求",
+        "description": "会社情報、税金、プラン、支払いを管理します。"
+      },
+      "people": {
+        "title": "チームと権限",
+        "description": "ワークスペース内で誰が何をできるかを設定します。"
+      },
+      "automation": {
+        "title": "自動化とAI",
+        "description": "自動返信、予約、ウェブサイトのチャットウィジェット、AIを設定します。"
+      },
+      "integrations": {
+        "title": "連携と開発者向け",
+        "description": "他のツールと連携し、製品を拡張します。"
+      },
+      "security": {
+        "title": "データとセキュリティ",
+        "description": "サインイン、プライバシー、エクスポート、監査ログを管理します。"
+      }
+    },
+    "tiles": {
+      "channels": {
+        "label": "すべてのチャネル",
+        "description": "接続済みのすべてのチャネルを確認し、新しいチャネルを追加します。",
+        "keywords": "接続、受信箱、番号、アカウント"
+      },
+      "whatsapp": {
+        "label": "WhatsApp",
+        "description": "WhatsApp Business の番号を接続して、お客様とチャットします。",
+        "keywords": "wa、whatsapp business、cloud api、番号、qr"
+      },
+      "unofficial-whatsapp": {
+        "label": "非公式 WhatsApp API",
+        "description": "個人の WhatsApp 番号を QR コードで連携し、安全な送信のためにウォームアップします。",
+        "keywords": "個人 whatsapp、qr、ペアリングコード、デバイス、baileys、warmer、warm up、非公式"
+      },
+      "warmer": {
+        "label": "ウォーマー",
+        "description": "予約メッセージが安全なペースで送信されるよう、WhatsApp 番号をウォームアップします。",
+        "keywords": "warm up、ウォームアップ、番号、評価、送信上限、キュー、ペース、予約"
+      },
+      "facebook": {
+        "label": "Facebook Messenger",
+        "description": "Facebook ページに届いたメッセージに返信します。",
+        "keywords": "meta、messenger、ページ、fb"
+      },
+      "instagram": {
+        "label": "Instagram",
+        "description": "Instagram アカウントに届いたダイレクトメッセージに返信します。",
+        "keywords": "meta、dm、insta、ダイレクトメッセージ"
+      },
+      "telegram": {
+        "label": "Telegram",
+        "description": "Telegram ボットを接続して、お客様とチャットします。",
+        "keywords": "ボット、botfather、tg"
+      },
+      "tiktok": {
+        "label": "TikTok",
+        "description": "TikTok ビジネスアカウントに届いたメッセージに返信します。",
+        "keywords": "tik tok、dm、動画"
+      },
+      "sms": {
+        "label": "SMS",
+        "description": "自社の送信者IDを使って SMS を送受信します。",
+        "keywords": "テキストメッセージ、送信者ID、dlt、twilio、携帯"
+      },
+      "email": {
+        "label": "メール",
+        "description": "メールボックスを接続して、受信箱でメールを送受信します。",
+        "keywords": "メールボックス、smtp、imap、gmail、outlook、送信者"
+      },
+      "line": {
+        "label": "LINE",
+        "description": "LINE 公式アカウントを接続します。",
+        "keywords": "line 公式アカウント、メッセージ"
+      },
+      "viber": {
+        "label": "Viber",
+        "description": "Viber ビジネスアカウントを接続します。",
+        "keywords": "viber ボット、メッセージ"
+      },
+      "wechat": {
+        "label": "WeChat",
+        "description": "WeChat 公式アカウントを接続します。",
+        "keywords": "weixin、公式アカウント"
+      },
+      "wa-links": {
+        "label": "WhatsApp リンク",
+        "description": "クリックでチャットを開くリンクと、WhatsApp チャットを開く QR コードを作成します。",
+        "keywords": "クリックでチャット、qr コード、短縮リンク、wa.me"
+      },
+      "contact-stages": {
+        "label": "連絡先のステージ",
+        "description": "連絡先が進むステージとステータスを設定します。",
+        "keywords": "ライフサイクル、ステータス、リード、顧客、成約、失注、ファネル"
+      },
+      "contact-properties": {
+        "label": "連絡先のプロパティ",
+        "description": "すべての連絡先に保存する項目を追加します。",
+        "keywords": "カスタム項目、項目、必須、ドロップダウン、列、属性、変数、差し込み項目"
+      },
+      "attributes": {
+        "label": "属性",
+        "description": "連絡先に付けるタグやその他のラベルです。",
+        "keywords": "タグ、ラベル、ソース、カスタム属性"
+      },
+      "deal-pipelines": {
+        "label": "パイプラインとステージ",
+        "description": "案件のパイプライン、ステージ、失注理由を編集します。",
+        "keywords": "案件、営業ステージ、ボード、失注理由、ファネル"
+      },
+      "tags": {
+        "label": "タグ",
+        "description": "連絡先とチャットで使うタグを作成し、整理します。",
+        "keywords": "ラベル、色、カラー"
+      },
+      "saved-replies": {
+        "label": "定型返信",
+        "description": "チームがワンクリックで送信できる定型の返信を作成します。",
+        "keywords": "定型文、ショートカット、スニペット、テンプレート"
+      },
+      "business-profile": {
+        "label": "ビジネスプロフィール",
+        "description": "書類に使う会社名、住所、税番号、ロゴです。",
+        "keywords": "会社、住所、gst、vat、税ID、ロゴ、請求書ヘッダー"
+      },
+      "tax-rates": {
+        "label": "税率",
+        "description": "請求書と見積書に追加する税金を設定します。",
+        "keywords": "vat、gst、消費税、パーセント、税率、国"
+      },
+      "plans": {
+        "label": "プラン",
+        "description": "現在のプランと利用状況、含まれる内容を確認し、アップグレードします。",
+        "keywords": "サブスクリプション、アップグレード、上限、料金、トライアル、利用量、プランと利用状況、メーター"
+      },
+      "wallet": {
+        "label": "ウォレット",
+        "description": "メッセージの料金に充てる残高をチャージします。",
+        "keywords": "クレジット、残高、チャージ、入金、資金"
+      },
+      "billing-orders": {
+        "label": "注文履歴",
+        "description": "プランとウォレットの購入履歴を領収書とともに確認します。",
+        "keywords": "支払い、領収書、請求書、購入、注文"
+      },
+      "account": {
+        "label": "アカウント",
+        "description": "お名前、メールアドレス、パスワード、言語です。",
+        "keywords": "プロフィール、自分、アバター、メール、パスワード、環境設定"
+      },
+      "branding": {
+        "label": "メッセージのフッター",
+        "description": "自動化、予約送信、チーム受信箱からの返信の末尾に追加される行です。",
+        "keywords": "ブランディング、フッター、署名、ホワイトラベル、ブランディングを削除、送信元"
+      },
+      "team-members": {
+        "label": "チームメンバー",
+        "description": "メンバーを招待し、ワークスペースの参加者を管理します。",
+        "keywords": "ユーザー、スタッフ、招待、エージェント、従業員、シート"
+      },
+      "roles": {
+        "label": "ロールと権限",
+        "description": "各ロールが閲覧・操作できる内容を設定します。",
+        "keywords": "アクセス、管理者、マネージャー、エージェント、rbac、権限"
+      },
+      "teams": {
+        "label": "チーム",
+        "description": "振り分けとレポートのために、メンバーをチームにまとめます。",
+        "keywords": "グループ、部門、担当割り当て、振り分け"
+      },
+      "ai-keys": {
+        "label": "AI プロバイダーのキー",
+        "description": "AI 機能を使うために、ご自身の AI プロバイダーのキーを追加します。",
+        "keywords": "openai、gemini、claude、api キー、モデル、トークン"
+      },
+      "ai-training": {
+        "label": "AI のトレーニング",
+        "description": "フローやウェブサイトのチャットで使うチャットアシスタントを、ご自身のコンテンツで学習させます。",
+        "keywords": "ナレッジベース、アシスタント、スマートエージェント、faq、学習、ソース、meta business agent、応答"
+      },
+      "booking-types": {
+        "label": "予約の種類",
+        "description": "お客様が予約できるサービスを、時間帯やルールとともに設定します。",
+        "keywords": "アポイント、サービス、空き状況、枠、スケジュール、カレンダー"
+      },
+      "appointment-settings": {
+        "label": "予約の設定",
+        "description": "予約ルール、リマインダー、公開予約ページを設定します。",
+        "keywords": "予約ページ、リマインダー、バッファ、事前通知、キャンセル"
+      },
+      "google-calendar": {
+        "label": "Google カレンダー",
+        "description": "カレンダーを接続し、予約と予定の空き状況を同期します。",
+        "keywords": "google、カレンダー、meet、同期、予定あり、予約"
+      },
+      "chat-widget": {
+        "label": "チャットウィジェット",
+        "description": "ウェブサイトにチャットバブルを追加します（ウェブチャットとも呼ばれます）。",
+        "keywords": "ウェブチャット、サイトチャット、ライブチャット、ウィジェット、埋め込み、バブル"
+      },
+      "auto-reply": {
+        "label": "自動返信",
+        "description": "お客様に挨拶し、不在時に自動で応答します。",
+        "keywords": "不在メッセージ、ウェルカム、あいさつ、不在通知、キーワード"
+      },
+      "lead-sources": {
+        "label": "ソーシャルリード",
+        "description": "Webhook を通じて、広告やランディングページからリードを取り込みます。",
+        "keywords": "リード広告、facebook リード、meta、linkedin、tiktok、google 広告、webhook、zapier、取得、フォーム"
+      },
+      "rest-api": {
+        "label": "REST API",
+        "description": "製品を基盤に開発するためのキーとドキュメントです。",
+        "keywords": "api キー、開発者、トークン、ドキュメント、openapi"
+      },
+      "webhooks": {
+        "label": "Webhook",
+        "description": "イベントが発生するたびに、ご自身のシステムへ送信します。",
+        "keywords": "コールバック、イベント、http、エンドポイント、通知"
+      },
+      "addons": {
+        "label": "アドオン",
+        "description": "ワークスペースで任意の機能をオンまたはオフに切り替えます。",
+        "keywords": "拡張機能、モジュール、プラグイン、マーケットプレイス"
+      },
+      "shopify": {
+        "label": "Shopify",
+        "description": "Shopify ストアを接続し、商品と注文を同期して、お客様にメッセージを送信します。",
+        "keywords": "shop、store、ec、商品、注文、同期、カゴ落ち"
+      },
+      "woocommerce": {
+        "label": "WooCommerce",
+        "description": "WooCommerce ストアを接続し、商品と注文を同期して、お客様にメッセージを送信します。",
+        "keywords": "woo、wordpress、shop、store、ec、商品、注文、同期"
+      },
+      "i18n-translation": {
+        "label": "翻訳",
+        "description": "言語と、メッセージの自動翻訳です。",
+        "keywords": "言語、ロケール、翻訳、自動翻訳"
+      },
+      "account-security": {
+        "label": "パスワードと二段階認証",
+        "description": "パスワードを変更し、二段階認証でサインインを保護します。",
+        "keywords": "mfa、2fa、認証アプリ、セッション、デバイス、サインイン、ログイン"
+      },
+      "import-export": {
+        "label": "インポートとエクスポート",
+        "description": "ファイルからデータを取り込み、または書き出します。",
+        "keywords": "csv、excel、ダウンロード、バックアップ、アップロード、移行"
+      },
+      "activity-log": {
+        "label": "監査ログ",
+        "description": "誰が、いつ、何を変更したかの記録です。",
+        "keywords": "アクティビティ、履歴、変更、監査証跡、セキュリティログ"
+      },
+      "privacy": {
+        "label": "プライバシーとデータ",
+        "description": "同意、保存期間、データ削除のリクエストを管理します。",
+        "keywords": "gdpr、同意、保存期間、データ削除、dpa、個人データ"
+      },
+      "whatsapp-customers": {
+        "label": "保存済みのお客様",
+        "description": "WhatsApp での注文用に、お客様のお名前と配送先を事前に設定します。",
+        "keywords": "お客様、住所、配送、注文、ストア"
+      },
+      "geta-publishing": {
+        "label": "Geta への公開",
+        "description": "公開したフローを Geta コンソールに反映して、稼働させます。",
+        "keywords": "geta、公開、ボット、コンソール、稼働開始、チャットボット"
+      },
+      "auto-assignment": {
+        "label": "自動割り当て",
+        "description": "新しい会話を、順番またはルールに従って適切なエージェントに自動で割り当てます。",
+        "keywords": "振り分け、ラウンドロビン、割り当て、エージェント、受信箱ルール、配分、担当者"
+      }
+    }
+  }
+}

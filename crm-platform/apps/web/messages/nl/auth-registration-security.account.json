@@ -1,0 +1,571 @@
+{
+  "auth-registration-security": {
+    "account": {
+      "nav": {
+        "title": "Account"
+      },
+      "common": {
+        "cancel": "Annuleren",
+        "loading": "Laden",
+        "reset": "Resetten",
+        "retry": "Opnieuw proberen",
+        "save": "Wijzigingen opslaan",
+        "saving": "Opslaan",
+        "showPassword": "Wachtwoord tonen",
+        "hidePassword": "Wachtwoord verbergen",
+        "signOut": "Afmelden"
+      },
+      "errors": {
+        "unexpected": "Er is iets misgegaan aan onze kant. Probeer het opnieuw.",
+        "network": "We konden de server niet bereiken. Controleer je verbinding en probeer het opnieuw.",
+        "forbidden": "Je hebt geen toestemming om dat te doen.",
+        "signedOut": "Je sessie is beëindigd. Meld je opnieuw aan.",
+        "rateLimited": "Te veel pogingen. Wacht even en probeer het opnieuw.",
+        "rateLimitedWait": "Te veel pogingen. Probeer het over {seconds, plural, one {# seconde} other {# seconden}} opnieuw.",
+        "requestId": "Verzoek-ID",
+        "locked": "Te veel mislukte pogingen. Wacht een tijdje voordat je het opnieuw probeert.",
+        "lockedWait": "Te veel mislukte pogingen. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw."
+      },
+      "hub": {
+        "railLabel": "Account",
+        "menuLabel": "Accountsecties",
+        "groups": {
+          "account": "Account",
+          "security": "Beveiliging"
+        },
+        "tabs": {
+          "profile": "Profiel",
+          "security": "Wachtwoord en beveiliging",
+          "delete": "Account verwijderen",
+          "plan": "Plannen"
+        },
+        "pages": {
+          "profile": {
+            "title": "Profiel",
+            "description": "Werk je foto, naam en contactgegevens bij."
+          },
+          "security": {
+            "title": "Wachtwoord en beveiliging",
+            "description": "Wijzig je wachtwoord, schakel tweestapsverificatie in en bekijk waar je bent ingelogd."
+          },
+          "delete": {
+            "title": "Account verwijderen",
+            "description": "Verwijder je account definitief uit deze workspace."
+          }
+        },
+        "breadcrumbLabel": "Broodkruimelpad",
+        "breadcrumbRoot": "Account",
+        "planBadge": "Plan {plan}",
+        "planFree": "Gratis",
+        "upgrade": {
+          "title": "Meer ruimte nodig?",
+          "body": "Ontgrendel meer campagnes, apparaten en AI-hulp met een hoger plan.",
+          "cta": "Plannen bekijken"
+        },
+        "lockedHint": "Voltooi eerst de beveiligingsstap voor dit account."
+      },
+      "avatar": {
+        "alt": "Foto van {name}",
+        "change": "Foto wijzigen",
+        "remove": "Foto verwijderen",
+        "uploading": "Foto uploaden",
+        "removing": "Foto verwijderen",
+        "updated": "Foto bijgewerkt.",
+        "removed": "Foto verwijderd.",
+        "errors": {
+          "type": "Kies een JPG-, PNG-, WebP- of GIF-afbeelding.",
+          "too-large": "Die afbeelding is na het verkleinen nog steeds groter dan de limiet van {size}. Probeer een kleinere afbeelding.",
+          "decode": "We kunnen die afbeelding niet lezen. Probeer een ander bestand.",
+          "encode": "We kunnen die afbeelding niet voorbereiden. Probeer een ander bestand.",
+          "rejected": "Dat bestand is niet geaccepteerd. Gebruik een JPG-, PNG-, WebP- of GIF-afbeelding.",
+          "source-too-large": "Die afbeelding is te groot om te openen. Kies een afbeelding van minder dan 20 MB.",
+          "forbidden": "Je mag de foto van dit account niet wijzigen.",
+          "expired": "Je sessie is beëindigd. Laad de pagina opnieuw, log opnieuw in en probeer het nog eens."
+        },
+        "hint": "JPG, PNG, WebP of GIF. We verkleinen de afbeelding tot maximaal {size}."
+      },
+      "timezone": {
+        "label": "Tijdzone",
+        "placeholder": "Zoek tijdzones, bijvoorbeeld Kolkata of UTC+05:30",
+        "empty": "Geen tijdzone gevonden voor je zoekopdracht."
+      },
+      "phone": {
+        "country": "Land",
+        "countryPlaceholder": "Zoek landen",
+        "countryEmpty": "Geen land gevonden voor je zoekopdracht.",
+        "number": "Telefoonnummer",
+        "numberPlaceholder": "Telefoonnummer"
+      },
+      "profile": {
+        "personalInfo": "Persoonlijke gegevens",
+        "fullName": "Volledige naam",
+        "displayName": "Weergavenaam",
+        "displayNameHint": "Hoe je naam aan teamgenoten wordt getoond. We beginnen met je voornaam.",
+        "email": "E-mail",
+        "changeEmail": "E-mailadres wijzigen",
+        "verified": "Geverifieerd",
+        "unverified": "Niet geverifieerd",
+        "pendingEmail": "We hebben een bevestigingslink naar {email} gestuurd. Je inlogadres wordt gewijzigd zodra je de link opent.",
+        "phone": "Telefoon",
+        "phoneHint": "Optioneel. Kies een land en voer daarna het nummer in.",
+        "language": "Taal",
+        "languageHint": "De taal van de app voor jou.",
+        "languageDefault": "Standaard gebruiken",
+        "theme": "Thema",
+        "themes": {
+          "paper": "Papier",
+          "bright": "Licht",
+          "dark": "Donker"
+        },
+        "workspaceTimezone": "Tijdzone",
+        "workspaceTimezoneHint": "Geldt voor {workspace}. Alleen eigenaren en beheerders kunnen dit wijzigen.",
+        "saved": "Profiel opgeslagen.",
+        "errors": {
+          "fullNameRequired": "Voer je volledige naam in.",
+          "phoneInvalid": "Voer een geldig telefoonnummer in voor het gekozen land.",
+          "invalid": "Deze waarde is ongeldig.",
+          "timezoneInvalid": "Kies een tijdzone uit de lijst.",
+          "timezoneForbidden": "Alleen eigenaren en beheerders kunnen de tijdzone van de workspace wijzigen."
+        },
+        "workspaceTag": "(workspace)"
+      },
+      "emailChange": {
+        "title": "Je e-mailadres wijzigen",
+        "intro": "Voer het nieuwe adres en je huidige wachtwoord in. We sturen een bevestigingslink naar het nieuwe adres; je inlogadres wordt pas gewijzigd nadat je de link hebt geopend.",
+        "newEmail": "Nieuw e-mailadres",
+        "password": "Huidig wachtwoord",
+        "passwordHint": "Het nieuwe adres wordt je inlognaam, daarom vragen we om je wachtwoord.",
+        "showPassword": "Wachtwoord tonen",
+        "hidePassword": "Wachtwoord verbergen",
+        "cancel": "Annuleren",
+        "submit": "Bevestigingslink sturen",
+        "sending": "Versturen",
+        "errors": {
+          "invalidEmail": "Voer een geldig e-mailadres in.",
+          "same": "Dat is al je e-mailadres.",
+          "taken": "Dat e-mailadres wordt al gebruikt in deze workspace.",
+          "passwordRequired": "Voer je huidige wachtwoord in.",
+          "passwordWrong": "Dat wachtwoord is onjuist."
+        }
+      },
+      "messageFooterPage": {
+        "title": "Berichtvoettekst",
+        "titleLead": "Bericht",
+        "titleAccent": "voettekst",
+        "description": "De regel waarmee de berichten eindigen die je workspace verstuurt vanuit automatiseringen, geplande verzendingen en antwoorden in de teaminbox."
+      },
+      "branding": {
+        "title": "Berichtvoettekst",
+        "description": "De regel onderaan gewone tekstberichten en interactieve berichten die worden verstuurd vanuit automatiseringen, geplande verzendingen en antwoorden in de teaminbox. Goedgekeurde sjablonen hebben hun eigen tekst en slaan deze over.",
+        "label": "Eigen voettekst (maximaal {max} tekens)",
+        "hint": "Laat leeg om berichten helemaal zonder voettekst te versturen.",
+        "preview": "Voorbeeld",
+        "sampleMessage": "Hallo! Hier is de informatie waar je om vroeg.",
+        "noFooter": "(geen voettekst)",
+        "save": "Voettekst opslaan",
+        "saving": "Opslaan",
+        "saved": "Voettekst bijgewerkt. Deze geldt vanaf het volgende bericht dat je verstuurt.",
+        "tooLong": "De voettekst mag maximaal {max} tekens bevatten.",
+        "forbidden": "Je mag de voettekst niet wijzigen.",
+        "current": "Huidige voettekst",
+        "currentDefault": "Huidige voettekst (standaard van het platform)",
+        "planLocked": "Je plan gebruikt de standaardvoettekst van het platform voor uitgaande berichten. Hogere plannen ontgrendelen een eigen voettekst of helemaal geen voettekst.",
+        "permissionLocked": "Alleen workspacebeheerders kunnen de voettekst wijzigen. Je kunt hem hier bekijken, maar niet bewerken.",
+        "upgrade": "Plannen bekijken",
+        "upgradeTitle": "Upgrade om de voettekst van het platform te verwijderen.",
+        "placeholder": "Verzonden via {name}",
+        "remove": "Mijn voettekst verwijderen",
+        "removed": "Voettekst verwijderd. Je berichten worden vanaf de volgende verzending zonder voettekst verstuurd."
+      },
+      "password": {
+        "title": "Wachtwoord wijzigen",
+        "subtitle": "Kies een sterk wachtwoord dat je nergens anders gebruikt.",
+        "current": "Huidig wachtwoord",
+        "new": "Nieuw wachtwoord",
+        "newHint": "Minimaal {count} tekens.",
+        "confirm": "Nieuw wachtwoord bevestigen",
+        "submit": "Wachtwoord bijwerken",
+        "updating": "Bijwerken",
+        "forcedBanner": "Je moet een nieuw wachtwoord instellen voordat je verder kunt. Kies hieronder een wachtwoord.",
+        "forcedDone": "Wachtwoord bijgewerkt. Welkom terug.",
+        "success": "Wachtwoord bijgewerkt. {count, plural, =0 {Je blijft ingelogd op dit apparaat.} one {1 ander apparaat is uitgelogd.} other {# andere apparaten zijn uitgelogd.}}",
+        "errors": {
+          "currentRequired": "Voer je huidige wachtwoord in.",
+          "currentWrong": "Dat wachtwoord is onjuist.",
+          "tooShort": "Gebruik minimaal {count} tekens.",
+          "tooLong": "Gebruik maximaal 256 tekens.",
+          "sameAsCurrent": "Kies een ander wachtwoord dan je huidige.",
+          "mismatch": "De twee wachtwoorden komen niet overeen.",
+          "policy": "Dat wachtwoord voldoet niet aan de regels van je workspace:"
+        },
+        "rules": {
+          "min_length": "Gebruik minimaal {count} tekens.",
+          "upper_lower": "Combineer hoofdletters en kleine letters.",
+          "number": "Voeg minstens één cijfer toe.",
+          "symbol": "Voeg minstens één symbool toe.",
+          "common": "Dat wachtwoord is te makkelijk te raden."
+        },
+        "currentPlaceholder": "Voer je huidige wachtwoord in",
+        "newPlaceholder": "Minimaal {count} tekens",
+        "confirmPlaceholder": "Typ het opnieuw",
+        "tips": {
+          "title": "Wachtwoordtips",
+          "mix": "Combineer hoofdletters en kleine letters, cijfers en symbolen.",
+          "reuse": "Gebruik geen wachtwoorden van andere sites opnieuw.",
+          "manager": "Overweeg een wachtwoordmanager."
+        },
+        "newHintRequires": "Het moet {rules} bevatten.",
+        "requirement": {
+          "mixedCase": "hoofdletters en kleine letters",
+          "number": "een cijfer",
+          "symbol": "een symbool"
+        },
+        "resetLink": {
+          "title": "Geen huidig wachtwoord om in te voeren?",
+          "body": "Als je bent ingelogd met Google of Facebook, of je wachtwoord niet meer weet, kunnen we een link naar {email} mailen zodat je zonder het huidige wachtwoord een nieuw wachtwoord kunt kiezen.",
+          "send": "Stuur me een resetlink",
+          "sending": "Versturen",
+          "sent": "Als {email} e-mail kan ontvangen, is er een resetlink onderweg. Open de link om een nieuw wachtwoord te kiezen. Je wordt overal uitgelogd en kunt daarna opnieuw inloggen met het nieuwe wachtwoord.",
+          "captchaFailed": "Voltooi de captchacontrole en probeer het opnieuw."
+        }
+      },
+      "passwordConfirm": {
+        "password": "Huidig wachtwoord",
+        "required": "Voer je huidige wachtwoord in.",
+        "wrong": "Dat wachtwoord is onjuist.",
+        "show": "Wachtwoord tonen",
+        "hide": "Wachtwoord verbergen",
+        "cancel": "Annuleren",
+        "working": "Bezig"
+      },
+      "mfa": {
+        "title": "Tweestapsverificatie",
+        "subtitle": "Vraag bij elke login om een code uit een authenticator-app.",
+        "forcedBanner": "Je organisatie vereist tweestapsverificatie. Stel deze in om de app te blijven gebruiken.",
+        "forcedDone": "Tweestapsverificatie is ingeschakeld. Welkom terug.",
+        "offDescription": "Tweestapsverificatie is uitgeschakeld. Schakel deze in om je account te beschermen, ook als je wachtwoord uitlekt.",
+        "starting": "Je installatie wordt voorbereid",
+        "step1": "Open een authenticator-app op je telefoon (Google Authenticator, Microsoft Authenticator, 1Password en dergelijke).",
+        "step2": "Scan de QR-code of typ de installatiesleutel handmatig in.",
+        "step3": "Voer de zescijferige code in die de app toont om af te ronden.",
+        "qrLabel": "QR-code voor je authenticator-app",
+        "manualKey": "Installatiesleutel",
+        "manualKeyHint": "Gebruik dit als je de code niet kunt scannen. Houd het privé.",
+        "copy": "Kopiëren",
+        "copied": "Gekopieerd",
+        "codeLabel": "Zescijferige code",
+        "codeHint": "De code verandert elke 30 seconden.",
+        "codeInvalid": "Voer de zes cijfers uit je app in.",
+        "codeWrong": "Die code is onjuist of verlopen. Wacht op een nieuwe code en probeer het opnieuw.",
+        "enable": "Inschakelen",
+        "enabling": "Inschakelen",
+        "expired": "Deze installatie is verlopen. Begin opnieuw om een nieuwe code te krijgen.",
+        "restart": "Opnieuw beginnen",
+        "on": "Aan",
+        "since": "Sinds {date}",
+        "onDescription": "Bij elke login word je om een code uit je authenticator-app gevraagd.",
+        "remaining": "{count, plural, =0 {Je hebt geen herstelcodes meer.} one {1 herstelcode over.} other {# herstelcodes over.}}",
+        "remainingLow": "Genereer binnenkort nieuwe codes.",
+        "regenerate": "Herstelcodes vervangen",
+        "regenerateTitle": "Herstelcodes vervangen",
+        "regenerateDescription": "Hiermee maak je tien nieuwe codes aan en werken de oude niet meer. Voer je wachtwoord in om door te gaan.",
+        "regenerateConfirm": "Codes vervangen",
+        "disable": "Uitschakelen",
+        "disableTitle": "Tweestapsverificatie uitschakelen",
+        "disableDescription": "Je account wordt dan alleen beschermd door je wachtwoord. Voer je wachtwoord in om te bevestigen.",
+        "disableConfirm": "Uitschakelen",
+        "disabledDone": "Tweestapsverificatie is uitgeschakeld.",
+        "codesTitleEnabled": "Tweestapsverificatie is ingeschakeld. Bewaar je herstelcodes.",
+        "codesTitleRegenerated": "Je nieuwe herstelcodes",
+        "scanTitle": "Scan deze QR-code"
+      },
+      "recovery": {
+        "intro": "Als je je telefoon kwijtraakt, kun je met elk van deze codes één keer inloggen.",
+        "onlyOnce": "Deze codes worden maar één keer getoond. Bewaar ze op een veilige plek, zoals een wachtwoordmanager.",
+        "listLabel": "Herstelcodes",
+        "copy": "Codes kopiëren",
+        "copied": "Gekopieerd",
+        "copyFailed": "Je browser staat kopiëren niet toe. Selecteer de codes en kopieer ze handmatig, of download ze.",
+        "download": "Downloaden",
+        "fileHeader": "Herstelcodes. Elke code werkt één keer.",
+        "confirmSaved": "Ik heb deze codes op een veilige plek bewaard.",
+        "done": "Ik heb ze bewaard"
+      },
+      "sessions": {
+        "title": "Waar je bent ingelogd",
+        "subtitle": "Apparaten die bij je account zijn ingelogd. Trek de toegang in van apparaten die je niet herkent.",
+        "thisDevice": "Dit apparaat",
+        "remembered": "Blijft ingelogd",
+        "ipUnknown": "Adres onbekend",
+        "signOutOthers": "Overal elders uitloggen",
+        "signingOut": "Uitloggen",
+        "empty": "Geen actieve sessies.",
+        "confirmOneTitle": "Dit apparaat uitloggen?",
+        "confirmOneBody": "{device} wordt uitgelogd en heeft je wachtwoord nodig om opnieuw in te loggen.",
+        "confirmOthersTitle": "Op alle andere apparaten uitloggen?",
+        "confirmOthersBody": "{count, plural, one {1 ander apparaat wordt} other {# andere apparaten worden}} uitgelogd. Dit apparaat blijft ingelogd.",
+        "revoked": "{device} is uitgelogd.",
+        "revokedOthers": "{count, plural, =0 {Er waren geen andere apparaten ingelogd.} one {1 apparaat is uitgelogd.} other {# apparaten zijn uitgelogd.}}",
+        "columns": {
+          "device": "Apparaat",
+          "ip": "IP-adres",
+          "lastActive": "Laatst actief",
+          "actions": "Acties"
+        },
+        "revoke": "Intrekken",
+        "showing": "{from}–{to} van {total} weergegeven",
+        "prev": "Vorige",
+        "next": "Volgende",
+        "lifetimes": "Een login eindigt automatisch na {session}, of na {remembered} als je hebt gekozen om ingelogd te blijven.",
+        "idle": "Zonder die keuze eindigt hij ook na {idle} zonder activiteit."
+      },
+      "delete": {
+        "title": "Je account verwijderen",
+        "warning": "Hiermee verwijder je je account definitief: je login, profiel, foto en apparaten.",
+        "irreversible": "Dit kan niet ongedaan worden gemaakt.",
+        "consequencesTitle": "Wat er gebeurt",
+        "consequence1": "Je wordt overal uitgelogd en kunt niet meer inloggen met dit account.",
+        "consequence2": "De workspace en de andere leden blijven bestaan. Werk dat je hebt gedaan blijft bij de workspace.",
+        "consequence3": "Een registratie dat het account is verwijderd wordt bewaard voor audit.",
+        "blocked": {
+          "sole_member": {
+            "title": "Je bent het enige lid van deze workspace.",
+            "body": "Het account kan niet los worden verwijderd. Vraag het platformteam om de workspace te sluiten."
+          },
+          "sole_admin": {
+            "title": "Je bent de enige beheerder.",
+            "body": "Maak eerst een ander lid beheerder en kom dan terug om je account te verwijderen."
+          }
+        },
+        "phraseLabel": "Typ {phrase} om te bevestigen",
+        "phraseHint": "Precies zoals getoond, inclusief hoofdletters.",
+        "password": "Huidig wachtwoord",
+        "showPassword": "Wachtwoord tonen",
+        "hidePassword": "Wachtwoord verbergen",
+        "cancel": "Annuleren",
+        "submit": "Account definitief verwijderen",
+        "deleting": "Verwijderen",
+        "errors": {
+          "phrase": "Typ de zin precies zoals getoond.",
+          "passwordRequired": "Voer je huidige wachtwoord in.",
+          "passwordWrong": "Dat wachtwoord is onjuist."
+        },
+        "considerTitle": "Overweeg dit voordat je verwijdert",
+        "considerPlanLink": "Overstappen naar het gratis plan",
+        "considerPlanRest": "in plaats van te verwijderen.",
+        "considerSupportLink": "Contact opnemen met support",
+        "considerSupportRest": "als een probleem je doet vertrekken. Misschien kunnen we het oplossen.",
+        "reasonLabel": "Waarom ga je weg? (optioneel)",
+        "reasonHint": "Dit blijft in dit formulier. Het wordt nergens naartoe verstuurd.",
+        "reasonPlaceholder": "Vertel ons wat we beter kunnen doen"
+      },
+      "switcher": {
+        "heading": "Workspaces",
+        "label": "Workspace: {name}. Van workspace wisselen",
+        "switching": "Van workspace wisselen",
+        "switched": "Gewisseld naar {name}",
+        "failed": "We kunnen niet van workspace wisselen. Probeer het opnieuw.",
+        "notAvailable": "Je kunt niet naar die workspace wisselen.",
+        "rateLimited": "Te veel pogingen. Wacht even en probeer het opnieuw.",
+        "rateLimitedWait": "Te veel pogingen. Probeer het over {seconds, plural, one {# seconde} other {# seconden}} opnieuw."
+      },
+      "mfaChallenge": {
+        "title": "Bevestig dat jij het bent",
+        "intro": "{name} gebruikt tweestapsverificatie. Voer de code uit je authenticator-app in om te wisselen.",
+        "codeLabel": "Zescijferige code",
+        "codeHint": "De code verandert elke 30 seconden.",
+        "codeInvalid": "Voer de zes cijfers uit je app in.",
+        "codeWrong": "Die code is onjuist of verlopen. Probeer de volgende.",
+        "recoveryLabel": "Herstelcode",
+        "recoveryHint": "Elke herstelcode werkt één keer.",
+        "recoveryInvalid": "Voer een herstelcode in.",
+        "recoveryWrong": "Die herstelcode is ongeldig.",
+        "expired": "Deze inlogstap is verlopen. Sluit dit venster en kies de workspace opnieuw.",
+        "useRecovery": "Gebruik in plaats daarvan een herstelcode",
+        "useCode": "Gebruik in plaats daarvan een authenticatorcode",
+        "cancel": "Annuleren",
+        "confirm": "Bevestigen",
+        "verifying": "Verifiëren"
+      },
+      "banners": {
+        "dismiss": "Sluiten",
+        "verifyMessage": "Verifieer je e-mailadres ({email}). We hebben je bij het aanmelden een link gestuurd.",
+        "resend": "E-mail opnieuw versturen",
+        "resendIn": "Opnieuw versturen over {seconds}s",
+        "resendWait": "Je kunt zo meteen opnieuw een e-mail aanvragen.",
+        "sending": "Versturen",
+        "sent": "E-mail verzonden.",
+        "notSent": "We kunnen de e-mail nu niet versturen.",
+        "throttled": "Wacht even voordat je het opnieuw probeert.",
+        "alreadyVerified": "Je e-mailadres is al geverifieerd."
+      },
+      "suspended": {
+        "title": "Je account is geblokkeerd",
+        "greeting": "Hallo {name}, een beheerder heeft dit account geblokkeerd. Je kunt nog inloggen, maar de rest van de app is vergrendeld totdat het account weer is geactiveerd.",
+        "support": "Denk je dat dit een vergissing is? Vraag de eigenaar of een beheerder van je workspace om je account opnieuw te activeren.",
+        "signOut": "Uitloggen",
+        "checking": "Controleren"
+      },
+      "verifyRequired": {
+        "title": "Verifieer je e-mailadres",
+        "body": "We hebben een verificatielink naar het onderstaande adres gestuurd. Open de link om je workspace te ontgrendelen.",
+        "resend": "Verificatie-e-mail opnieuw versturen",
+        "resendIn": "Opnieuw versturen over {seconds}s",
+        "sending": "Versturen",
+        "sent": "We hebben een nieuwe link naar {email} gestuurd.",
+        "notSent": "We kunnen de e-mail nu niet versturen.",
+        "throttled": "Er is zojuist een link verstuurd. Wacht even voordat je het opnieuw probeert.",
+        "alreadyVerified": "Je e-mailadres is al geverifieerd. Je wordt doorgestuurd.",
+        "signOut": "Uitloggen",
+        "help": "Niets ontvangen? Controleer je spammap. Als je de link op een ander apparaat hebt geopend, kom dan terug naar dit tabblad, dan pakken we het op."
+      },
+      "onboarding": {
+        "metaTitle": "Je workspace instellen",
+        "notAllowed": {
+          "title": "De installatie is niet voltooid",
+          "body": "Je workspace wordt nog ingesteld. Een beheerder moet dit afronden voordat je verder kunt."
+        },
+        "stepper": {
+          "label": "Stap {current} van {total} / {name}",
+          "progress": "Voortgang van de installatie",
+          "account": "Account",
+          "workspace": "Workspace",
+          "plan": "Plan"
+        },
+        "workspace": {
+          "title": "Je workspace instellen",
+          "subtitle": "Een paar gegevens zodat de app bij je team past.",
+          "name": "Naam van de workspace",
+          "nameHint": "Een herkenbare naam die je team bovenaan de app ziet.",
+          "namePlaceholder": "Bijvoorbeeld Bloomly Marketing",
+          "industry": "Branche",
+          "industryPlaceholder": "Selecteer een branche",
+          "industries": {
+            "ecommerce": "E-commerce",
+            "saas": "SaaS",
+            "agency": "Bureau",
+            "education": "Onderwijs",
+            "healthcare": "Gezondheidszorg",
+            "finance": "Financiën",
+            "travel": "Reizen",
+            "hospitality": "Horeca",
+            "other": "Overig"
+          },
+          "size": "Teamgrootte",
+          "sizePlaceholder": "Selecteer een teamgrootte",
+          "timezone": "Tijdzone",
+          "timezoneHint": "Typ om een tijdzone te zoeken. Planningen en rapporten gebruiken deze.",
+          "currency": "Valuta",
+          "currencyHint": "De valuta waarin je berichtenwallet wordt gefactureerd. India gebruikt standaard INR, elk ander land USD. Dit kan niet meer worden gewijzigd zodra de wallet is gebruikt.",
+          "currencyNone": "Niet ingesteld",
+          "currencyPlaceholder": "Zoek valuta's",
+          "currencyEmpty": "Geen valuta gevonden voor je zoekopdracht.",
+          "phone": "Mobiel nummer",
+          "phoneHint": "We gebruiken het om contact met je op te nemen over je account en belangrijke updates.",
+          "continue": "Doorgaan",
+          "saving": "Opslaan",
+          "errors": {
+            "nameInvalid": "Voer een workspacenaam van 2 tot 120 tekens in.",
+            "timezoneRequired": "Kies een tijdzone.",
+            "timezoneInvalid": "Kies een tijdzone uit de lijst.",
+            "phoneRequired": "Voer je mobiele nummer in.",
+            "phoneInvalid": "Voer een geldig telefoonnummer in voor het gekozen land.",
+            "invalid": "Deze waarde is ongeldig.",
+            "forbidden": "Alleen een workspacebeheerder kan de workspace instellen.",
+            "countryRequired": "Kies een land.",
+            "countryInvalid": "Kies een land uit de lijst.",
+            "currencyInvalid": "Deze valuta is niet beschikbaar, of de factuurvaluta is al in gebruik. Neem contact op met support om deze te wijzigen."
+          },
+          "country": "Land",
+          "countryHint": "Waar je bedrijf is gevestigd.",
+          "countryPlaceholder": "Zoek landen",
+          "countryEmpty": "Geen land gevonden voor je zoekopdracht."
+        },
+        "plan": {
+          "title": "Kies een plan",
+          "intro": "Elk plan bevat een maandelijks berichtenbudget. Begin gratis of kies een plan om meer te ontgrendelen. Je kunt dit later wijzigen.",
+          "empty": "Er zijn nog geen plannen ingesteld. Je kunt nu gratis beginnen en later een plan kiezen.",
+          "listLabel": "Beschikbare plannen",
+          "free": "Gratis",
+          "back": "Terug",
+          "startFree": "Gratis beginnen / nu overslaan",
+          "finishing": "Afronden",
+          "welcome": "Alles is klaar. Welkom!"
+        }
+      },
+      "plans": {
+        "title": "Plannen",
+        "description": "Kies wat je workspace allemaal kan.",
+        "currentPlan": "Je plan",
+        "noPlan": "Geen plan",
+        "trialEnds": "Gratis proefperiode eindigt op {date}",
+        "comingSoon": "Een plan kiezen en betalen komt met facturering, dat nog geen onderdeel is van deze release. Neem tot die tijd contact op met support, dan zetten we je workspace over op het plan dat je nodig hebt.",
+        "contactSupport": "Contact opnemen met support",
+        "back": "Terug naar het account",
+        "card": {
+          "popular": "Meest populair",
+          "current": "Huidig plan",
+          "free": "Gratis",
+          "custom": "Aangepast",
+          "lifetime": "eenmalig",
+          "messagesUnlimited": "Onbeperkt aantal berichten",
+          "messagesLimited": "{count, number} berichten / maand",
+          "chipsLabel": "Inbegrepen functies",
+          "period": {
+            "days": "{count, plural, one {/ dag} other {/ # dagen}}",
+            "weeks": "{count, plural, one {/ week} other {/ # weken}}",
+            "months": "{count, plural, one {/ maand} other {/ # maanden}}",
+            "years": "{count, plural, one {/ jaar} other {/ # jaar}}"
+          },
+          "chips": {
+            "analytics": "Analyses",
+            "automation": "Automatisering",
+            "ai_assistants": "AI-assistenten",
+            "woocommerce": "WooCommerce",
+            "shopify": "Shopify",
+            "calling": "Bellen via WhatsApp",
+            "remove_branding": "White-label",
+            "sales_pipeline": "Verkooppijplijn",
+            "appointment_booking": "Afspraken",
+            "chatbot_widgets": "Chatbotwidgets",
+            "wa_storefront": "WhatsApp-catalogus",
+            "inbox_sla": "Inbox-SLA",
+            "inbox_routing": "Inbox-routering",
+            "waba_calling": "Bellen via WhatsApp",
+            "inbox_kanban": "Inbox-kanban",
+            "team_performance": "Teamprestaties",
+            "scheduled_messages": "Geplande berichten",
+            "whatsapp_warmer": "WhatsApp-warmer",
+            "marketplace": "Marktplaats",
+            "lead_sources": "Leadbronnen",
+            "team_chat": "Teamchat",
+            "public_api": "Openbare API",
+            "outbound_webhooks": "Uitgaande webhooks",
+            "storefront_builder": "Winkelbouwer",
+            "invoicing": "Facturatie",
+            "forms_and_links": "Formulieren en links",
+            "extra_channels": "Telegram, Facebook en Instagram",
+            "form_builder": "Formulieren",
+            "waba_groups": "WhatsApp-groepen"
+          },
+          "cta": {
+            "continueFree": "Gratis doorgaan",
+            "talkToSales": "Praat met sales",
+            "upgrade": "Upgraden naar {name}",
+            "downgradeUnavailable": "Downgraden niet beschikbaar",
+            "downgradeHint": "Downgraden is online niet mogelijk. Neem contact op met support om naar een lager plan over te stappen.",
+            "working": "Bezig"
+          }
+        }
+      },
+      "mailFailure": {
+        "not_configured": "E-mailverzending is op dit platform nog niet ingesteld. Vraag het je beheerder.",
+        "auth_failed": "De mailserver heeft onze aanmelding geweigerd. Vraag je beheerder om de mailinstellingen te controleren.",
+        "connection_refused": "De mailserver heeft de verbinding niet geaccepteerd. Probeer het later opnieuw of vraag het je beheerder.",
+        "timeout": "De mailserver deed er te lang over om te antwoorden. Je kunt het meteen opnieuw proberen.",
+        "transport_error": "De e-mail kon niet aan de mailserver worden overgedragen. Je kunt het meteen opnieuw proberen.",
+        "unknown": "De e-mail kon om een onbekende reden niet worden verzonden. Je kunt het meteen opnieuw proberen."
+      }
+    }
+  }
+}

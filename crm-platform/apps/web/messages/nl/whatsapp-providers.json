@@ -1,0 +1,663 @@
+{
+  "whatsapp-providers": {
+    "nav": {
+      "group": "WhatsApp-providers",
+      "providers": "Providers",
+      "assignments": "Toewijzingen per workspace",
+      "switch": "Provider wisselen"
+    },
+    "common": {
+      "loading": "Laden...",
+      "retry": "Opnieuw proberen",
+      "requestId": "Verzoek-id"
+    },
+    "errors": {
+      "conflict": "Iemand anders heeft deze provider gewijzigd terwijl jij hem bewerkte. De laatste versie is geladen; controleer hem en pas je wijziging opnieuw toe.",
+      "noAccess": "Je mist het platformrecht dat hiervoor nodig is ({permission}). Vraag een superbeheerder dit toe te kennen via Rollen.",
+      "keyTaken": "Er bestaat al een provider met deze sleutel. Kies een andere sleutel.",
+      "baseUrlRefused": "Dit adres wordt geweigerd: {detail}.",
+      "baseUrlRefusedPlain": "Dit adres wordt geweigerd. Gebruik een https-adres op een publieke hostnaam.",
+      "inUse": "Er gebruiken nog nummers of workspaces deze provider. Zet ze eerst naar een andere provider (de credentialmodus kan niet worden gewijzigd zolang er nummers via deze provider zijn gekoppeld).",
+      "disabled": "De provider moet hiervoor actief zijn. Activeer hem eerst.",
+      "credentialsMissing": "De provider heeft nog geen opgeslagen token. Voeg het providertoken toe, sla op en activeer hem daarna.",
+      "isDefault": "Dit is de standaardprovider. Maak eerst een andere provider de standaard, of wis de standaard.",
+      "builtin": "Dit is een ingebouwde provider. Het adres, de versie en de geheimen worden bewerkt via Platforminstellingen, WhatsApp.",
+      "nothingToDo": "Niets om te wisselen: alle gekoppelde nummers van deze workspace staan al bij die provider.",
+      "partnerNotConfigured": "Er ontbreekt iets dat het partnerprogramma van deze provider nodig heeft: de partnersleutel (providertoken), het oplossings-ID of de configuratie van embedded signup. Controleer de provider en sla op.",
+      "partnerRefused": "De partner heeft dit verzoek geweigerd: {message}",
+      "partnerRefusedPlain": "De partner heeft dit verzoek geweigerd. Probeer het opnieuw of controleer de providerinstellingen.",
+      "unavailable": "Deze provider is niet beschikbaar. Mogelijk is hij gearchiveerd of ontbreekt een credential.",
+      "notFound": "Deze provider of workspace bestaat niet meer. Ga terug en laad de lijst opnieuw.",
+      "tooManyNumbers": "Er zouden meer dan 50 nummers tegelijk verhuizen. Kies een bronprovider om het te beperken en voer de wissel daarna opnieuw uit voor de rest.",
+      "validationField": "{message}",
+      "validation": "Sommige waarden zijn niet geaccepteerd. Controleer het formulier en probeer het opnieuw.",
+      "request": "Het verzoek is geweigerd. Controleer de waarden en probeer het opnieuw.",
+      "unexpected": "Er ging iets mis aan onze kant. Probeer het zo meteen opnieuw."
+    },
+    "status": {
+      "active": "Actief",
+      "disabled": "Uitgeschakeld",
+      "archived": "Gearchiveerd",
+      "default": "Standaard",
+      "builtin": "Ingebouwd"
+    },
+    "secret": {
+      "show": "De waarde die je typte tonen",
+      "hide": "De waarde die je typte verbergen",
+      "placeholderKeep": "Laat leeg om de opgeslagen waarde te behouden",
+      "placeholderNew": "Plak de waarde",
+      "undoClear": "Behouden",
+      "clear": "De opgeslagen waarde verwijderen",
+      "setWithHint": "Ingesteld, eindigt op {last4}",
+      "set": "Ingesteld",
+      "notSet": "Niet ingesteld",
+      "willClear": "Wordt verwijderd wanneer je opslaat",
+      "willReplace": "Vervangt de opgeslagen waarde wanneer je opslaat"
+    },
+    "enums": {
+      "authScheme": {
+        "bearer": {
+          "label": "Bearer-token",
+          "help": "Stuurt Authorization: Bearer met het token van de credentialmodus."
+        },
+        "custom_headers": {
+          "label": "Aangepaste headers",
+          "help": "Stuurt de headers die je definieert, met per aanroep het token, de WABA-id en het telefoonnummer-id ingevuld."
+        }
+      },
+      "credentialMode": {
+        "platform_token": {
+          "label": "Platformtoken",
+          "help": "Eén token van het platform bij de provider (een partnertoken). Klanten hebben er geen."
+        },
+        "channel_token": {
+          "label": "Nummertoken",
+          "help": "Elk gekoppeld nummer heeft zijn eigen toegangstoken."
+        }
+      },
+      "webhookMode": {
+        "meta_app_level": {
+          "label": "Callback op app-niveau",
+          "help": "Het platform abonneert alleen de WABA. De callback wordt één keer ingesteld in de Meta-app."
+        },
+        "number_level_override": {
+          "label": "Callback per nummer",
+          "help": "Na het abonneren stelt het platform de callback per nummer in via de provider."
+        }
+      },
+      "signatureScheme": {
+        "meta_app_secret_sha256": {
+          "label": "Handtekening van Meta (app secret)",
+          "help": "Leveringen bevatten X-Hub-Signature-256, gecontroleerd met het app secret van de provider."
+        },
+        "shared_secret_header": {
+          "label": "Gedeeld geheim in een header",
+          "help": "Een header die je benoemt bevat het webhookgeheim van de provider zelf."
+        },
+        "none": {
+          "label": "Geen handtekening",
+          "help": "De provider ondertekent niets. Alleen het geheim in de callback-URL authenticeert leveringen."
+        }
+      },
+      "billingMode": {
+        "provider_credit_line": {
+          "label": "Kredietlijn van de provider",
+          "help": "De provider factureert het platform via zijn eigen kredietlijn."
+        },
+        "customer_direct": {
+          "label": "Klant betaalt Meta rechtstreeks",
+          "help": "De betaalmethode van de klant staat bij Meta (modus reseller-engine meta_direct)."
+        },
+        "meta_reseller": {
+          "label": "Kredietlijn van Meta-reseller",
+          "help": "De kredietlijn van het platform bij Meta wordt gedeeld met de WABA van de klant (modus reseller-engine reseller)."
+        }
+      },
+      "onboarding": {
+        "manual": {
+          "label": "Handmatig",
+          "help": "Workspaces plakken hun WABA- en telefoonnummer-id's."
+        },
+        "embedded_signup": {
+          "label": "Embedded signup",
+          "help": "Workspaces koppelen via de embedded signup van de Meta-app van het platform."
+        }
+      },
+      "partnerProgram": {
+        "none": {
+          "label": "Geen"
+        },
+        "pinnacle": {
+          "label": "Pinnacle"
+        }
+      }
+    },
+    "gaps": {
+      "providerToken": "Het providertoken is niet opgeslagen. Het activeren van deze provider heeft het nodig.",
+      "appSecret": "Het app secret is niet opgeslagen. Elke webhooklevering van deze provider wordt geweigerd totdat het is opgeslagen.",
+      "webhookSecret": "Het webhookgeheim is niet opgeslagen. Elke webhooklevering van deze provider wordt geweigerd totdat het is opgeslagen."
+    },
+    "headers": {
+      "intro": "Headers die bij elke aanroep naar deze provider worden meegestuurd. Een header waarvan de waarde bij een aanroep niet bekend is, wordt weggelaten en nooit als letterlijke plaatshouder verstuurd.",
+      "listLabel": "Header-sjablonen",
+      "name": "Headernaam",
+      "value": "Waarde",
+      "insertFor": "Een plaatshouder invoegen in header {n}",
+      "insert": "Plaatshouder invoegen",
+      "removeFor": "Header {n} verwijderen",
+      "remove": "Verwijderen",
+      "add": "Een header toevoegen",
+      "placeholdersTitle": "Plaatshouders en regels",
+      "leftOut": "Een header met een plaatshouder zonder waarde bij die aanroep wordt weggelaten. Hop-by-hop- en framingheaders (host, content-length, transfer-encoding en dergelijke) kunnen niet worden ingesteld.",
+      "channelTokenNeverKnown": "Deze provider gebruikt het platformtoken, dus klanten hebben geen nummertoken: een header met de plaatshouder voor het nummertoken wordt altijd weggelaten.",
+      "problems": {
+        "tooMany": "Er zijn maximaal {max} headers toegestaan.",
+        "nameInvalid": "Headernamen gebruiken alleen letters, cijfers en koppeltekens.",
+        "nameDenied": "De header {name} wordt beheerd door de verbinding en kan niet worden ingesteld.",
+        "nameDuplicate": "De header {name} komt twee keer voor.",
+        "valueEmpty": "De header {name} heeft een waarde nodig.",
+        "valueTooLong": "De waarde van {name} is langer dan {max} tekens.",
+        "valueCharacters": "De waarde van {name} bevat een besturingsteken of een niet-ASCII-teken.",
+        "placeholderUnknown": "De header {name} gebruikt een onbekende plaatshouder: {names}.",
+        "strayBrace": "De header {name} heeft een losse accolade. Plaatshouders worden geschreven met dubbele accolades rond de naam.",
+        "credentialNotCarried": "Eén header moet de plaatshouder {placeholder} bevatten; zo bereikt het credential de provider."
+      },
+      "placeholders": {
+        "providerToken": "Het token van het platform bij de provider.",
+        "channelToken": "Het toegangstoken van het nummer waarvoor de aanroep is.",
+        "wabaId": "Het WhatsApp Business Account-id van het nummer.",
+        "phoneNumberId": "Het telefoonnummer-id van het nummer."
+      },
+      "preview": {
+        "title": "Voorbeeld van een aanroep",
+        "urlPending": "(voer een geldig adres in)",
+        "note": "Er worden voorbeeldwaarden getoond. Echte tokens en id's worden per aanroep ingevuld en worden hier nooit getoond."
+      }
+    },
+    "form": {
+      "wizardLabel": "Een WhatsApp-provider toevoegen",
+      "editLabel": "De WhatsApp-provider wijzigen",
+      "stepsLabel": "Stappen",
+      "steps": {
+        "basics": "Basis",
+        "connection": "Verbinding",
+        "credentials": "Credentials",
+        "webhooks": "Webhooks",
+        "billing": "Facturatie en onboarding",
+        "review": "Controle"
+      },
+      "stepHelp": {
+        "basics": "Een stabiele sleutel, een naam die beheerders herkennen en optionele notities.",
+        "connection": "Waar de provider antwoordt en hoe het platform zich er bij authenticeert.",
+        "credentials": "Wiens credential het werk doet, en het providertoken.",
+        "webhooks": "Hoe de provider inkomende berichten levert en bewijst dat ze echt zijn.",
+        "billing": "Wie Meta betaalt, of bestanden kunnen worden geüpload en hoe workspaces worden onboard.",
+        "review": "Controleer alles. Er wordt niets verzonden voordat je de provider aanmaakt."
+      },
+      "fields": {
+        "key": "Sleutel",
+        "label": "Naam",
+        "notes": "Notities",
+        "baseUrl": "Basis-URL",
+        "apiVersion": "API-versie",
+        "authScheme": "Authenticatie",
+        "credentialMode": "Credentialmodus",
+        "providerToken": "Providertoken",
+        "webhookMode": "Webhookmodus",
+        "signatureScheme": "Webhookhandtekening",
+        "appSecret": "App secret",
+        "webhookSecret": "Webhookgeheim",
+        "verifyToken": "Verify-token",
+        "signatureHeaderName": "Naam van de handtekeningheader",
+        "billingMode": "Facturatiemodus",
+        "mediaUpload": "Uploaden van media ondersteund",
+        "onboarding": "Onboarding",
+        "onboardingAppId": "Meta-app-id",
+        "onboardingConfigId": "Config-id van embedded signup",
+        "partnerProgram": "Partnerprogramma",
+        "partnerSolutionId": "Oplossings-ID"
+      },
+      "hints": {
+        "key": "Kleine letters, cijfers, underscore en koppelteken, 2 tot 40 tekens, beginnend met een letter. Dit kan later niet meer worden gewijzigd.",
+        "keyFixed": "De sleutel kan niet worden gewijzigd.",
+        "notes": "Alleen beheerders zien dit.",
+        "baseUrl": "https://host of https://host/prefix. Het platform roept alleen publieke https-hosts aan.",
+        "credentialModeLocked": "{count, plural, one {# nummer is} other {# nummers zijn}} via deze provider gekoppeld, dus de credentialmodus kan niet wijzigen. Zet ze eerst weg.",
+        "providerTokenNeeded": "Vereist voordat deze provider kan worden geactiveerd.",
+        "providerTokenOptional": "Hier optioneel: elk nummer brengt zijn eigen token mee.",
+        "appSecret": "Controleert de X-Hub-Signature-256 van elke levering. Zonder dit wordt elke levering van deze provider geweigerd.",
+        "webhookSecret": "De waarde die de provider in de handtekeningheader zet. Zonder dit wordt elke levering geweigerd.",
+        "signatureHeaderName": "Letters, cijfers en koppeltekens, bijvoorbeeld x-bsp-secret.",
+        "verifyToken": "Beantwoordt de abonnementscontrole van de provider. Optioneel.",
+        "billingMode": "Een label dat naar de facturatie-engine van de reseller verwijst. Het verandert geen factureringsgedrag.",
+        "mediaUpload": "Wanneer uit, gaan bestanden via een publieke link in plaats van een upload.",
+        "onboardingIds": "Alleen cijfers. Dit zijn publieke id's van de Meta-app van het platform.",
+        "partnerPinnacle": "Pinnacle geeft elk nummer een eigen sleutel. Sla de partnersleutel op als providertoken en het Meta app secret als app secret (inkomende webhooks worden ermee geverifieerd).",
+        "partnerSolutionId": "Alleen cijfers, 5 tot 32. Het partner-oplossings-id uit het Pinnacle-dashboard."
+      },
+      "devLoopback": "Gewoon http op een loopback-adres wordt alleen in ontwikkeling geaccepteerd, achter een serverflag. In productie wordt dit adres geweigerd.",
+      "ssrfNote": "Het adres wordt opnieuw door de server gecontroleerd: alleen https, een publieke hostnaam, de standaardpoort, en elk adres waarnaar het verwijst moet publiek zijn.",
+      "secretsNote": "Geheimen zijn alleen schrijfbaar. Na opslaan worden ze alleen als ingesteld getoond, met de laatste vier tekens.",
+      "signatureNoneNote": "Zonder handtekening authenticeert alleen het geheim in de callback-URL leveringen. Gebruik dit alleen als de provider niet kan ondertekenen.",
+      "builtinNotice": "Dit is een ingebouwde provider. Het adres, de versie en de geheimen staan in Platforminstellingen, WhatsApp. Hier kunnen alleen de naam, notities en facturatiemodus worden gewijzigd.",
+      "openConsoleSettings": "Platforminstellingen, WhatsApp openen",
+      "conflictHint": "Je wijzigingen zijn niet opgeslagen. Het formulier toont de laatste waarden.",
+      "fixProblems": "{count, plural, one {# waarde heeft aandacht nodig.} other {# waarden hebben aandacht nodig.}} Los de gemarkeerde velden op.",
+      "save": "Wijzigingen opslaan",
+      "nothingToSave": "Nog geen wijzigingen",
+      "back": "Terug",
+      "next": "Volgende",
+      "cancel": "Annuleren",
+      "create": "Provider aanmaken",
+      "saved": "{name} opgeslagen.",
+      "created": "{name} aangemaakt. Hij begint uitgeschakeld: test hem en activeer hem daarna.",
+      "review": {
+        "headers": "Headers",
+        "yes": "Ja",
+        "no": "Nee",
+        "secrets": "Op te slaan geheimen",
+        "noSecrets": "Geen",
+        "gapsTitle": "Nog ontbrekend voordat deze provider werkt",
+        "startsDisabled": "Een nieuwe provider begint uitgeschakeld. Voer na het aanmaken Verbinding testen uit en activeer hem."
+      },
+      "problems": {
+        "labelRequired": "Voer een naam in.",
+        "labelLength": "De naam mag maximaal {max} tekens bevatten.",
+        "notesLength": "Notities mogen maximaal {max} tekens bevatten.",
+        "keyRequired": "Voer een sleutel in.",
+        "keyBuiltin": "meta en interakt zijn ingebouwde providers. Kies een andere sleutel.",
+        "keyFormat": "Begin met een letter, daarna letters, cijfers, underscore of koppeltekens, in totaal 2 tot 40 tekens.",
+        "baseUrl": {
+          "empty": "Voer de basis-URL van de provider in.",
+          "length": "Het adres moet tussen 1 en 200 tekens lang zijn.",
+          "characters": "Het adres mag geen spaties of besturingstekens bevatten.",
+          "invalid": "Dit is geen geldige URL.",
+          "credentials": "Het adres mag geen gebruikersnaam of wachtwoord bevatten.",
+          "queryOrFragment": "Het adres mag geen query of fragment bevatten.",
+          "notHttps": "Het adres moet beginnen met https://.",
+          "port": "Alleen de standaard https-poort is toegestaan.",
+          "host": "Gebruik een publieke hostnaam, geen IP-adres en geen naam van één label.",
+          "internal": "Gebruik een publieke hostnaam, geen interne."
+        },
+        "apiVersion": "Gebruik een versie zoals v25.0.",
+        "headers": "{count, plural, one {# headerprobleem.} other {# headerproblemen.}} Zie de lijst hierboven.",
+        "signatureHeaderRequired": "Noem de header die het geheim bevat.",
+        "signatureHeaderFormat": "Alleen letters, cijfers en koppeltekens.",
+        "digits": "Alleen cijfers, 5 tot 32.",
+        "partnerSolutionIdRequired": "Voer het oplossings-ID in.",
+        "partnerCredentialMode": "Een partnerprogramma geeft elk nummer een eigen token: gebruik de kanaal-tokenmodus.",
+        "secretCharacters": "Geen spaties of besturingstekens.",
+        "secretLength": "Tussen {min} en {max} tekens."
+      }
+    },
+    "actions": {
+      "activate": "Activeren",
+      "makeDefault": "Als standaard instellen",
+      "clearDefault": "Standaard wissen",
+      "disable": "Uitschakelen",
+      "archive": "Archiveren",
+      "cancel": "Annuleren",
+      "menu": "Acties",
+      "menuLabel": "Acties voor {name}",
+      "manage": "Beheren",
+      "open": "Openen",
+      "switchTo": "Nummers hier wisselen",
+      "blocked": {
+        "default": "het is de standaard",
+        "builtin": "ingebouwd",
+        "inUse": "in gebruik"
+      },
+      "done": {
+        "activate": "{name} is actief.",
+        "disable": "{name} is uitgeschakeld. Nummers die er al op staan blijven verzenden.",
+        "archive": "{name} is gearchiveerd.",
+        "default": "{name} is nu de standaard voor nieuwe nummers.",
+        "clearDefault": "De standaard is gewist. Nieuwe nummers volgen weer de WhatsApp-instelling van de console."
+      },
+      "confirm": {
+        "disable": {
+          "title": "{name} uitschakelen?",
+          "body": "Hij wordt niet langer aangeboden voor nieuwe nummers of toewijzingen. Nummers die er al op staan blijven verzenden, dus dit is geen storing.",
+          "inUse": "{count, plural, one {# nummer staat} other {# nummers staan}} nog op deze provider. Zet ze weg wanneer je er klaar voor bent.",
+          "action": "Uitschakelen"
+        },
+        "archive": {
+          "title": "{name} archiveren?",
+          "body": "Een gearchiveerde provider wordt buiten gebruik gesteld. Dit wordt geweigerd zolang een nummer of een workspace-uitzondering hem gebruikt. Je kunt hem later weer activeren.",
+          "action": "Archiveren"
+        },
+        "default": {
+          "title": "{name} tot standaard maken?",
+          "body": "Workspaces zonder uitzondering koppelen NIEUWE nummers via deze provider. Nummers die al gekoppeld zijn, verhuizen niet.",
+          "action": "Als standaard instellen"
+        },
+        "clearDefault": {
+          "title": "De standaard wissen?",
+          "body": "Nieuwe nummers volgen weer de WhatsApp-instelling van de console. Nummers die al gekoppeld zijn, verhuizen niet.",
+          "action": "Standaard wissen"
+        }
+      }
+    },
+    "test": {
+      "title": "Verbinding testen",
+      "description": "Doet één geauthenticeerde leesactie bij de provider met het opgeslagen credential. Er wordt niets bij de provider gewijzigd.",
+      "path": "Te lezen pad",
+      "pathHint": "Begint met een schuine streep. De standaard is /me.",
+      "willCall": "Roept {url} aan",
+      "pathInvalid": "Begin met / en gebruik alleen letters, cijfers en . _ / -.",
+      "wabaId": "WABA-id (optioneel)",
+      "idsHint": "Vult alleen plaatshouders van headers voor deze aanroep in. Het wordt niet opgeslagen.",
+      "idInvalid": "Alleen letters, cijfers en . _ : -.",
+      "phoneNumberId": "Telefoonnummer-id (optioneel)",
+      "channelToken": "Testnummertoken (optioneel)",
+      "channelTokenHint": "Voor providers waarbij elk nummer een eigen token heeft. Alleen voor deze aanroep gebruikt en daarna uit dit formulier gewist.",
+      "tokenInvalid": "Minimaal 8 afdrukbare tekens, zonder spaties.",
+      "show": "De waarde die je typte tonen",
+      "hide": "De waarde die je typte verbergen",
+      "run": "Test uitvoeren",
+      "running": "Testen...",
+      "forgotten": "Ingevoerde id's en tokens worden voor één aanroep gebruikt en daarna vergeten.",
+      "needManage": "Je kunt het laatste resultaat zien. Een test uitvoeren vereist het beheerrecht.",
+      "ok": "Verbonden",
+      "failed": "Mislukt",
+      "justNow": "Zojuist",
+      "lastTest": "Laatste test",
+      "httpStatus": "HTTP-status",
+      "noResponse": "Geen antwoord",
+      "latency": "Latentie",
+      "ms": "{ms} ms",
+      "errorCode": "Foutcode",
+      "message": "Wat de provider zei",
+      "redactedNote": "De server vervangt elk geheim door [redacted] voordat hij antwoordt.",
+      "never": "Deze provider is nog niet getest.",
+      "hints": {
+        "ok": "De provider heeft een geauthenticeerde leesactie beantwoord. Activeren is veilig.",
+        "addressRefused": "Het adres is geweigerd (geen https, geen publieke naam, of het verwijst naar een privéadres). Corrigeer de basis-URL.",
+        "credentialsMissing": "De provider heeft geen opgeslagen token. Voeg het providertoken toe en sla op.",
+        "unauthorized": "De provider heeft het credential afgewezen. Controleer het token en de namen en waarden van de headers.",
+        "notFound": "Het pad is niet gevonden. Probeer een lees-aanvraag die de provider ondersteunt, of controleer de basis-URL en API-versie.",
+        "rateLimited": "De provider beperkt het aantal verzoeken. Wacht even en test opnieuw.",
+        "providerError": "De provider antwoordde met een serverfout. Probeer het later opnieuw.",
+        "unreachable": "Geen antwoord: de host reageerde niet of de verbinding is mislukt. Controleer het adres.",
+        "other": "De provider antwoordde met een onverwachte status. Zie hierboven wat hij zei."
+      }
+    },
+    "list": {
+      "title": "WhatsApp-providers",
+      "description": "Kies via welke WhatsApp Business Solution Provider het platform verzendt, voeg providers toe en verplaats workspaces ertussen.",
+      "consoleSettings": "Meta-app- en Interakt-credentials",
+      "switchWorkspace": "Een workspace wisselen",
+      "add": "Provider toevoegen",
+      "kpi": {
+        "providers": "Providers",
+        "active": "Actief",
+        "numbers": "Gekoppelde nummers",
+        "overrides": "Uitzonderingen per workspace"
+      },
+      "defaultIs": "Nieuwe nummers koppelen via {name}, tenzij een workspace een eigen uitzondering heeft.",
+      "noDefault": "Er is geen standaard in het register ingesteld. Nieuwe nummers volgen de WhatsApp-instelling van de console.",
+      "defaultHelp": "Het wijzigen van de standaard of een uitzondering verplaatst nooit een nummer dat al gekoppeld is. Gebruik daarvoor Wisselen.",
+      "filterLabel": "Filteren op status",
+      "filters": {
+        "all": "Alle",
+        "active": "Actief",
+        "disabled": "Uitgeschakeld",
+        "archived": "Gearchiveerd"
+      },
+      "search": "Filteren op naam of sleutel",
+      "emptyTitle": "Nog geen providers",
+      "emptyMessage": "Voeg een provider toe om WhatsApp via een andere BSP te routeren. De ingebouwde Meta- en Interakt-routes werken altijd.",
+      "noMatchTitle": "Geen providers gevonden",
+      "noMatchMessage": "Niets past bij deze status en zoekopdracht. Probeer een ander filter of wis de zoekopdracht.",
+      "tableCaption": "WhatsApp-providers",
+      "cols": {
+        "provider": "Provider",
+        "status": "Status",
+        "billing": "Facturatiemodus",
+        "credentials": "Credentialmodus",
+        "usage": "In gebruik",
+        "lastTest": "Laatste test",
+        "actions": "Acties"
+      },
+      "usage": {
+        "numbers": "{count, plural, one {# nummer} other {# nummers}}",
+        "workspaces": "{count, plural, one {# workspace} other {# workspaces}}"
+      },
+      "test": {
+        "ok": "Verbonden",
+        "failed": "Mislukt",
+        "never": "Niet getest"
+      },
+      "officialLabel": "Officiële WhatsApp (ondersteund)"
+    },
+    "detail": {
+      "title": "WhatsApp-provider",
+      "back": "Terug naar providers",
+      "gapsTitle": "Nog ontbrekend voordat deze provider werkt",
+      "lifecycle": {
+        "title": "Status en standaard",
+        "description": "Activeren maakt de provider kiesbaar voor nieuwe nummers en toewijzingen. Uitschakelen stopt nooit nummers die er al op staan."
+      },
+      "edit": {
+        "title": "Bewerken",
+        "readOnly": "Je kunt deze provider bekijken. Wijzigen vereist het beheerrecht."
+      },
+      "overview": {
+        "title": "Overzicht",
+        "headers": "Headernamen",
+        "none": "geen",
+        "engineMode": "Modus reseller-engine: {mode}",
+        "yes": "Ja",
+        "no": "Nee",
+        "usage": "In gebruik",
+        "numbers": "{count, plural, one {# nummer} other {# nummers}}",
+        "workspaces": "{count, plural, one {# workspace-uitzondering} other {# workspace-uitzonderingen}}",
+        "updated": "Laatst gewijzigd",
+        "builtinNote": "Dit is een ingebouwde provider. Het adres, de versie en de geheimen worden live gelezen uit Platforminstellingen, WhatsApp.",
+        "openConsoleSettings": "Platforminstellingen, WhatsApp openen",
+        "credentialsTitle": "Opgeslagen geheimen",
+        "credentialsNote": "Geheimen zijn alleen schrijfbaar. Na opslaan worden ze nooit meer getoond, alleen of ze zijn ingesteld en hun laatste vier tekens.",
+        "webhookTitle": "Webhook",
+        "webhookNote": "Registreer je publieke API-adres plus dit pad bij de provider. Eén URL dient elke provider en elke workspace."
+      }
+    },
+    "new": {
+      "title": "Een WhatsApp-provider toevoegen",
+      "back": "Terug naar providers",
+      "description": "Registreer een Graph-compatibele BSP. Hij begint uitgeschakeld; test hem en activeer hem daarna."
+    },
+    "assignments": {
+      "title": "Toewijzingen per workspace",
+      "description": "De provider waarlangs elke workspace NIEUWE nummers koppelt. Een workspace zonder uitzondering volgt de standaard.",
+      "defaultIs": "Standaard in het register: {name}.",
+      "noDefault": "Geen standaard in het register. Workspaces zonder uitzondering volgen de WhatsApp-instelling van de console.",
+      "existingNote": "Bestaande nummers verhuizen niet wanneer je een uitzondering wijzigt. Gebruik Wisselen om ze te verplaatsen.",
+      "search": "Workspaces zoeken",
+      "overrideOnly": "Alleen workspaces met een uitzondering",
+      "noMatchTitle": "Geen workspaces gevonden",
+      "noMatchMessage": "Probeer een andere zoekopdracht of wis het filter.",
+      "emptyTitle": "Nog geen workspaces",
+      "emptyMessage": "Workspaces verschijnen hier zodra ze bestaan.",
+      "loadMore": "Meer laden",
+      "tableCaption": "Providertoewijzingen per workspace",
+      "cols": {
+        "workspace": "Workspace",
+        "override": "Uitzondering",
+        "effective": "Nieuwe nummers gaan via",
+        "numbers": "Nummers",
+        "actions": "Acties"
+      },
+      "followsDefault": "Volgt de standaard",
+      "source": {
+        "override": "Uitzondering van workspace",
+        "default": "Standaard in het register",
+        "platform_setting": "WhatsApp-instelling van de console"
+      },
+      "numberCount": "{count, plural, one {# nummer} other {# nummers}}",
+      "onOther": "{count} bij een andere provider",
+      "change": "Wijzigen",
+      "setOverride": "Uitzondering instellen",
+      "clear": "Uitzondering wissen",
+      "switch": "Nummers wisselen",
+      "common": {
+        "close": "Sluiten",
+        "cancel": "Annuleren"
+      },
+      "set": {
+        "title": "Uitzondering voor {name}",
+        "help": "Nieuwe nummers van deze workspace koppelen via de provider die je kiest. Nummers die al gekoppeld zijn, blijven waar ze zijn.",
+        "noActive": "Geen provider is actief. Activeer er eerst een.",
+        "provider": "Provider",
+        "note": "Notitie (optioneel)",
+        "noteHint": "Waarom deze workspace een eigen provider heeft. Tot 500 tekens.",
+        "save": "Uitzondering opslaan",
+        "done": "{workspace} koppelt nieuwe nummers nu via {provider}."
+      },
+      "clearDialog": {
+        "title": "De uitzondering voor {name} wissen?",
+        "body": "{name} volgt weer de standaard. Nummers die al via {provider} gekoppeld zijn, verhuizen niet.",
+        "action": "Uitzondering wissen",
+        "done": "{workspace} volgt weer de standaard."
+      }
+    },
+    "switch": {
+      "title": "Provider wisselen",
+      "description": "Verplaats de gekoppelde WhatsApp-nummers van een workspace naar een andere provider. Doe eerst een proefrun: die wijzigt en roept niets aan.",
+      "choose": {
+        "title": "Workspace en doel",
+        "description": "Kies de workspace en de provider waarnaar de nummers moeten verhuizen.",
+        "target": "Verplaatsen naar",
+        "targetHint": "Alleen actieve providers kunnen het doel zijn.",
+        "pick": "Kies een provider",
+        "from": "Alleen nummers op",
+        "fromHint": "Optioneel. Laat op elke provider staan om elk nummer te verplaatsen dat nog niet bij het doel staat.",
+        "anyProvider": "Elke provider",
+        "setOverride": "Maak hem ook de uitzondering van deze workspace",
+        "setOverrideHint": "Nummers die de workspace later koppelt, volgen. Wordt alleen toegepast wanneer je de wissel uitvoert, niet bij de proefrun.",
+        "reason": "Reden (optioneel)",
+        "reasonHint": "Komt in het auditspoor. Tot 500 tekens.",
+        "targetNotActive": "Deze provider is niet actief. De wissel wordt geweigerd totdat hij is geactiveerd.",
+        "dryRun": "Controleer wat er zou veranderen",
+        "dryRunNote": "Proefrun: er wordt niets gewijzigd en geen provider aangeroepen."
+      },
+      "workspace": {
+        "selected": "Workspace",
+        "unnamed": "Gekozen workspace",
+        "change": "Workspace wijzigen",
+        "label": "Workspace",
+        "search": "Workspaces zoeken",
+        "none": "Geen workspaces gevonden.",
+        "numbers": "{count, plural, one {# nummer} other {# nummers}}",
+        "onOther": "{count} bij een andere provider",
+        "narrow": "Er zijn meer workspaces. Maak de zoekopdracht specifieker."
+      },
+      "plan": {
+        "stale": "Je hebt de keuzes gewijzigd na de proefrun. Voer de controle opnieuw uit voordat je toepast.",
+        "title": "Wat er zou veranderen",
+        "description": "Vink de nummers aan die je wilt verplaatsen. Een geblokkeerd nummer wordt niet aangeraakt.",
+        "nothingReady": "Nog geen enkel nummer kan verhuizen. Los op wat hier staat en voer daarna de controle opnieuw uit.",
+        "headline": "{total, plural, one {# nummer} other {# nummers}} beoordeeld, {ready} kan naar {provider}.",
+        "ready": "{count} klaar",
+        "blocked": "{count} geblokkeerd",
+        "failed": "{count} konden niet worden beoordeeld",
+        "reconnect": "{count} losgekoppeld"
+      },
+      "requirements": {
+        "title": "Wat een persoon moet doen",
+        "blocks": "Blokkeert de verhuizing",
+        "advice": "Vereist een vervolgactie",
+        "numberToken": {
+          "label": "Toegangstoken van het nummer nodig",
+          "help": "Het doel gebruikt een eigen token per nummer en dit nummer heeft er geen. Laat de workspace er een plakken op de gezondheidspagina van het nummer, of koppel het opnieuw, en voer daarna de controle opnieuw uit."
+        },
+        "providerToken": {
+          "label": "Providertoken nodig",
+          "help": "Bij de doelprovider is geen partnertoken opgeslagen. Voeg het eerst toe op de providerpagina."
+        },
+        "idsMissing": {
+          "label": "WABA- of telefoonnummer-id ontbreekt",
+          "help": "De koppeling heeft geen WABA-id of telefoonnummer-id in het systeem. Koppel opnieuw."
+        },
+        "reconnect": {
+          "label": "Nummer is losgekoppeld",
+          "help": "Het wordt alleen opnieuw gericht, niet weer actief gemaakt. De workspace moet het opnieuw koppelen voordat het kan verzenden."
+        }
+      },
+      "numbers": {
+        "captionPlan": "Nummers die de proefrun heeft beoordeeld",
+        "captionResult": "Resultaat per nummer van de wissel",
+        "cols": {
+          "move": "Verplaatsen",
+          "number": "Nummer",
+          "from": "Nu op",
+          "state": "Status",
+          "details": "Details"
+        },
+        "moveNumber": "{name} verplaatsen",
+        "unknownProvider": "Onbekend",
+        "state": {
+          "ready": "Klaar",
+          "blocked": "Geblokkeerd",
+          "switched": "Gewisseld",
+          "repointed": "Opnieuw gericht",
+          "failed": "Mislukt"
+        },
+        "willResubscribe": "De webhook wordt eerst opnieuw geabonneerd via de nieuwe provider.",
+        "willRepoint": "Wordt alleen opnieuw gericht.",
+        "inboundNotWired": "De provider heeft geen callback per nummer geaccepteerd. Stel de callback bij de provider of in de Meta-app in op de webhook van het platform.",
+        "inboundWired": "Inkomende callback ingesteld."
+      },
+      "apply": {
+        "title": "De wissel toepassen",
+        "summary": "{count, plural, one {# nummer verhuist} other {# nummers verhuizen}} naar {provider}.",
+        "understood": "Ik begrijp dat dit de live nummers van de workspace opnieuw richt en hun webhooks opnieuw abonneert.",
+        "action": "Wissel toepassen",
+        "tickOne": "Vink minstens één nummer aan."
+      },
+      "confirm": {
+        "title": "De nummers verplaatsen?",
+        "body": "{count, plural, one {# nummer van} other {# nummers van}} {workspace} verhuist naar {provider}. Elk nummer wordt eerst opnieuw geabonneerd en alleen opnieuw gericht als dat lukt.",
+        "rollback": "Om terug te draaien, wissel ze terug. Berichtgeschiedenis, bericht-id's en ontvangstbevestigingen worden niet beïnvloed.",
+        "action": "Nummers verplaatsen",
+        "cancel": "Annuleren"
+      },
+      "errorHints": {
+        "nothingToDo": "Kies een ander doel of een andere bronprovider.",
+        "tooMany": "Kies een bronprovider om de set te beperken.",
+        "disabled": "Activeer de doelprovider op de pagina ervan en probeer het opnieuw."
+      },
+      "result": {
+        "title": "Resultaat",
+        "allMoved": "Alle {count, plural, one {# nummer staat} other {# nummers staan}} nu op {provider}.",
+        "noneMoved": "Er is geen nummer verplaatst. Zie de details hieronder.",
+        "partial": "{moved} van {total} nummers verplaatst. Zie de details hieronder.",
+        "switched": "{count} gewisseld",
+        "repointed": "{count} opnieuw gericht",
+        "failed": "{count} mislukt",
+        "blocked": "{count} geblokkeerd",
+        "overrideSet": "{provider} is nu de uitzondering van deze workspace.",
+        "repointedNote": "Losgekoppelde nummers zijn alleen opnieuw gericht. De workspace moet ze opnieuw koppelen voordat ze kunnen verzenden.",
+        "inboundNote": "{count, plural, one {# nummer is verplaatst maar de} other {# nummers zijn verplaatst maar hun}} callback per nummer is niet geaccepteerd. Stel de callback bij de provider of in de Meta-app in op de webhook van het platform.",
+        "rollback": {
+          "title": "Terugdraaien",
+          "description": "Terugdraaien is terugwisselen. Nummers houden alle credentials die ze hadden, dus een route met een nummertoken heeft niets nieuws nodig; een route met een platformtoken moet zijn token opgeslagen hebben.",
+          "action": "Een wissel terug naar {provider} voorbereiden",
+          "unknown": "De vorige provider van deze nummers is niet bekend, dus een terugdraaien kan vanaf hier niet worden voorbereid."
+        },
+        "another": "Een andere workspace wisselen",
+        "toAssignments": "Terug naar toewijzingen"
+      }
+    },
+    "workspaceNote": {
+      "title": "Jouw WhatsApp-provider",
+      "newNumbers": "Nieuwe nummers koppelen via {provider}.",
+      "ownToken": "Elk nummer gebruikt zijn eigen toegangstoken.",
+      "platformToken": "Het platform houdt het credential bij; jij koppelt alleen met id's.",
+      "mediaYes": "Bestanden uploaden wordt ondersteund.",
+      "mediaNo": "Bestanden uploaden wordt niet ondersteund: bestanden worden via een publieke link verzonden.",
+      "none": "Er is nu geen provider beschikbaar om een nieuw nummer te koppelen. Neem contact op met je platformbeheerder.",
+      "numberOn": "{name} staat bij {provider}.",
+      "numberNoMedia": "Bestanden uploaden wordt niet ondersteund."
+    }
+  }
+}

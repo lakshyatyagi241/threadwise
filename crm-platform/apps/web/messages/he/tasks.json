@@ -1,0 +1,330 @@
+{
+  "tasks": {
+    "nav": {
+      "tasks": "משימות"
+    },
+    "common": {
+      "dismiss": "סגור"
+    },
+    "hub": {
+      "title": "משימות",
+      "subtitle": "מעקבים ומשימות לביצוע. הקצה אותן, קבע עדיפות ותאריך יעד, וסמן כבוצעו.",
+      "newTask": "משימה חדשה",
+      "tableLabel": "משימות",
+      "loading": "טוען משימות",
+      "useSampleData": "השתמש בנתוני דוגמה (פיתוח)",
+      "emptyFilteredTitle": "אין משימות תואמות",
+      "emptyFiltered": "נסה חיפוש אחר או נקה את הסינונים.",
+      "resetFilters": "נקה סינונים",
+      "empty": {
+        "mine": {
+          "title": "לא הוקצה לך כלום",
+          "message": "משימות שהוקצו לך יופיעו כאן. הוסף משימה למעלה, או עיין בכל המשימות."
+        },
+        "all": {
+          "title": "עדיין אין משימות",
+          "message": "הוסף מעקב או משימה בתיבה שלמעלה והיא תופיע כאן."
+        },
+        "overdue": {
+          "title": "אין משימות שפג מועדן",
+          "message": "כל המשימות הפתוחות בזמן."
+        },
+        "today": {
+          "title": "אין משימות להיום",
+          "message": "אין משימה פתוחה שמועד ביצועה נותר להיום."
+        },
+        "upcoming": {
+          "title": "אין משימות קרובות",
+          "message": "משימות פתוחות שמועד ביצוען ביום מאוחר יותר יופיעו כאן."
+        },
+        "completed": {
+          "title": "עדיין אין משימות שהושלמו",
+          "message": "משימות שסימנת כבוצעו יופיעו כאן, מהחדשה לישנה."
+        }
+      },
+      "showing": "{count, plural, one {משימה אחת נטענה} two {שתי משימות נטענו} other {# משימות נטענו}}",
+      "loadMore": "טען עוד",
+      "allLoaded": "כל המשימות נטענו",
+      "deleteTitle": "למחוק את המשימה הזו?",
+      "deleteMessage": "“{title}” יימחק עבור כולם. אי אפשר לבטל פעולה זו.",
+      "delete": "מחק",
+      "keep": "שמור"
+    },
+    "tabs": {
+      "label": "רשימות משימות",
+      "mine": "המשימות שלי",
+      "all": "כל המשימות",
+      "overdue": "שפג מועדן",
+      "today": "היום",
+      "upcoming": "קרובות",
+      "completed": "הושלמו",
+      "count": "{count, plural, one {משימה אחת} two {שתי משימות} other {# משימות}}"
+    },
+    "toolbar": {
+      "label": "סינוני משימות",
+      "search": "חפש משימות",
+      "status": "סטטוס",
+      "statusOpen": "פתוחה",
+      "statusDone": "הושלמה",
+      "statusAll": "פתוחות והושלמו",
+      "priority": "עדיפות",
+      "allPriorities": "כל העדיפויות",
+      "priorities": {
+        "high": "גבוהה",
+        "medium": "בינונית",
+        "low": "נמוכה"
+      },
+      "assignee": "אחראי",
+      "allAssignees": "כל האחראים",
+      "unassigned": "לא הוקצתה",
+      "linked": "מקושר ל־",
+      "anyLink": "כל רשומה",
+      "linkContact": "איש קשר",
+      "linkDeal": "עסקה",
+      "clear": "נקה",
+      "modifyColumns": "שנה עמודות",
+      "resetColumns": "אפס עמודות",
+      "columns": {
+        "title": "משימה",
+        "priority": "עדיפות",
+        "due": "מועד",
+        "assignee": "אחראי",
+        "contact": "איש קשר",
+        "deal": "עסקה",
+        "created": "נוצרה",
+        "completed": "הושלמה ב־"
+      },
+      "refresh": "רענן",
+      "shortcuts": "קיצורי מקלדת",
+      "view": "תצוגה",
+      "views": {
+        "list": "רשימה",
+        "board": "לוח לפי מועד יעד"
+      }
+    },
+    "table": {
+      "scrollArea": "טבלת משימות",
+      "selectAll": "בחר את כל המשימות שנטענו",
+      "selectRow": "בחר את {title}",
+      "columns": {
+        "title": "משימה",
+        "priority": "עדיפות",
+        "due": "מועד",
+        "assignee": "אחראי",
+        "contact": "איש קשר",
+        "deal": "עסקה",
+        "created": "נוצרה",
+        "completed": "הושלמה ב־"
+      }
+    },
+    "row": {
+      "complete": "סמן כהושלמה",
+      "reopen": "פתח מחדש",
+      "completeNamed": "סמן את “{title}” כהושלמה",
+      "reopenNamed": "פתח מחדש את “{title}”",
+      "moreFor": "פעולות נוספות עבור {title}",
+      "open": "פתח",
+      "edit": "ערוך",
+      "delete": "מחק",
+      "unassigned": "לא הוקצתה"
+    },
+    "bulk": {
+      "label": "פעולות עבור המשימות שנבחרו",
+      "selected": "{count, plural, one {משימה אחת נבחרה} two {שתי משימות נבחרו} other {# משימות נבחרו}}",
+      "working": "בעבודה",
+      "complete": "השלם",
+      "assign": "הקצה",
+      "assignTo": "הקצה ל־",
+      "me": "{name} (אני)",
+      "unassign": "בטל הקצאה",
+      "delete": "מחק",
+      "clear": "נקה בחירה",
+      "failed": "זה לא עבד.",
+      "someFailed": "{count, plural, one {לא ניתן היה לשנות משימה אחת.} two {לא ניתן היה לשנות שתי משימות.} other {לא ניתן היה לשנות # משימות.}}",
+      "completed": "{count, plural, one {משימה אחת הושלמה.} two {שתי משימות הושלמו.} other {# משימות הושלמו.}}",
+      "assigned": "{count, plural, one {משימה אחת הוקצתה ל־{name}.} two {שתי משימות הוקצו ל־{name}.} other {# משימות הוקצו ל־{name}.}}",
+      "unassigned": "{count, plural, one {משימה אחת שוחררה מהקצאה.} two {שתי משימות שוחררו מהקצאה.} other {# משימות שוחררו מהקצאה.}}",
+      "deleted": "{count, plural, one {משימה אחת נמחקה.} two {שתי משימות נמחקו.} other {# משימות נמחקו.}}",
+      "deleteTitle": "למחוק את המשימות שנבחרו?",
+      "deleteMessage": "{count, plural, one {משימה אחת תימחק עבור כולם. אי אפשר לבטל פעולה זו.} two {שתי משימות יימחקו עבור כולם. אי אפשר לבטל פעולה זו.} other {# משימות יימחקו עבור כולם. אי אפשר לבטל פעולה זו.}}",
+      "keep": "שמור"
+    },
+    "quick": {
+      "label": "הוסף משימה",
+      "placeholder": "הוסף משימה ולחץ על Enter",
+      "priority": "עדיפות",
+      "priorities": {
+        "high": "גבוהה",
+        "medium": "בינונית",
+        "low": "נמוכה"
+      },
+      "due": "תאריך ושעת יעד",
+      "add": "הוסף",
+      "dueRequired": "בחר תאריך ושעת יעד.",
+      "titleRequired": "הקלד מה צריך לעשות.",
+      "options": "אפשרויות נוספות (עדיפות ותאריך יעד)"
+    },
+    "form": {
+      "eyebrow": "משימה",
+      "newTitle": "משימה חדשה",
+      "editTitle": "ערוך משימה",
+      "close": "סגור",
+      "cancel": "ביטול",
+      "create": "צור משימה",
+      "save": "שמור שינויים",
+      "title": "משימה",
+      "titlePlaceholder": "למשל התקשר ל־Acme בנוגע לחידוש",
+      "priority": "עדיפות",
+      "priorities": {
+        "high": "גבוהה",
+        "medium": "בינונית",
+        "low": "נמוכה"
+      },
+      "assignee": "הקצה ל־",
+      "unassigned": "אף אחד",
+      "me": "{name} (אני)",
+      "due": "מועד",
+      "presets": {
+        "today": "היום",
+        "tomorrow": "מחר",
+        "nextWeek": "שבוע הבא"
+      },
+      "clearDue": "נקה תאריך",
+      "contact": "איש קשר",
+      "deal": "עסקה",
+      "notes": "הערות",
+      "reminderHint": "האחראי מקבל תזכורת כשהמשימה מגיעה למועד.",
+      "assigneePick": "בחר מי אחראי על המשימה הזו.",
+      "problems": {
+        "dueRequired": "בחר תאריך ושעת יעד.",
+        "priorityRequired": "בחר עדיפות.",
+        "assigneeRequired": "בחר למי המשימה מיועדת.",
+        "titleRequired": "הקלד מה צריך לעשות.",
+        "titleTooLong": "המשימה ארוכה מדי (עד 255 תווים).",
+        "notesTooLong": "ההערות ארוכות מדי (עד 5000 תווים).",
+        "dueInvalid": "התאריך הזה אינו תקין.",
+        "assigneeInvalid": "האדם הזה אינו חבר פעיל בסביבת העבודה הזו."
+      }
+    },
+    "drawer": {
+      "loading": "טוען משימה",
+      "close": "סגור",
+      "eyebrow": "משימה",
+      "name": "שם המשימה",
+      "titleRequired": "למשימה נדרש שם.",
+      "statusOpen": "פתוחה",
+      "statusDone": "הושלמה",
+      "complete": "סמן כהושלמה",
+      "reopen": "פתח מחדש",
+      "edit": "ערוך",
+      "delete": "מחק",
+      "details": "פרטים",
+      "notes": "הערות",
+      "notesPlaceholder": "הוסף הקשר למי שיטפל בזה",
+      "linked": "רשומות מקושרות",
+      "company": "חברה",
+      "noLinks": "לא מקושר לאיש קשר או לעסקה.",
+      "activity": "פעילות",
+      "events": {
+        "created": "המשימה נוצרה",
+        "createdBy": "נוצרה על ידי {name}",
+        "reminded": "נשלחה תזכורת על תאריך היעד",
+        "completed": "סומנה כהושלמה"
+      },
+      "deleteTitle": "למחוק את המשימה?",
+      "deleteMessage": "המשימה \"{title}\" תימחק עבור כולם. לא ניתן לבטל פעולה זו.",
+      "cancel": "השאר"
+    },
+    "board": {
+      "buckets": {
+        "overdue": "באיחור",
+        "today": "היום",
+        "upcoming": "קרובות",
+        "no_date": "ללא תאריך"
+      },
+      "empty": "אין כאן כלום."
+    },
+    "due": {
+      "none": "ללא תאריך",
+      "overdue": "באיחור",
+      "today": "היום, {time}",
+      "tomorrow": "מחר, {time}",
+      "yesterday": "אתמול, {time}",
+      "date": "{date}, {time}"
+    },
+    "priority": {
+      "high": "גבוהה",
+      "medium": "בינונית",
+      "low": "נמוכה"
+    },
+    "link": {
+      "unnamedContact": "איש קשר ללא שם",
+      "unnamedDeal": "עסקה"
+    },
+    "picker": {
+      "searchContact": "חיפוש אנשי קשר",
+      "searchDeal": "חיפוש עסקאות",
+      "results": "תוצאות חיפוש",
+      "searching": "מחפש",
+      "unavailable": "החיפוש אינו זמין כרגע.",
+      "none": "אין התאמות.",
+      "unlink": "הסר את הקישור"
+    },
+    "errors": {
+      "network": "לא הצלחנו להתחבר לשרת. בדוק את החיבור ונסה שוב.",
+      "forbidden": "אין לך הרשאה לבצע פעולה זו.",
+      "signedOut": "פג תוקף החיבור שלך. התחבר מחדש כדי להמשיך.",
+      "conflict": "משתמש אחר שינה משימה זו. טען מחדש ונסה שוב.",
+      "validation": "חלק מהפרטים אינם תקינים.",
+      "unavailable": "שירות המשימות עדיין אינו זמין בשרת זה.",
+      "rateLimited": "יותר מדי בקשות. המתן רגע ונסה שוב.",
+      "notFound": "לא נמצאה משימה זו. ייתכן שנמחקה.",
+      "planDisabled": "התוכנית שלך אינה כוללת משימות. שדרג כדי לפתוח אותן.",
+      "assigneeInvalid": "אדם זה אינו חבר פעיל בסביבת העבודה.",
+      "unexpected": "משהו השתבש. נסה שוב בעוד רגע.",
+      "requestId": "מזהה בקשה",
+      "retry": "נסה שוב"
+    },
+    "toast": {
+      "completed": "המשימה הושלמה.",
+      "reopened": "המשימה נפתחה מחדש.",
+      "created": "המשימה נוצרה.",
+      "saved": "המשימה נשמרה.",
+      "deleted": "המשימה נמחקה.",
+      "conflict": "משתמש אחר שינה משימה זו. הרשימה נטענה מחדש; נסה שוב.",
+      "failed": "לא ניתן לעדכן את המשימה.",
+      "saveFailed": "לא ניתן לשמור את המשימה.",
+      "deleteFailed": "לא ניתן למחוק את המשימה.",
+      "createFailed": "לא ניתן ליצור את המשימה."
+    },
+    "shortcuts": {
+      "title": "קיצורי מקלדת",
+      "close": "סגור",
+      "intro": "עבור על הרשימה ללא עכבר. הקיצורים מושהים בזמן הקלדה בשדה.",
+      "actions": {
+        "next": "המשימה הבאה",
+        "prev": "המשימה הקודמת",
+        "open": "פתח את המשימה",
+        "toggleComplete": "השלם או פתח מחדש",
+        "toggleSelect": "בחר או בטל בחירה",
+        "newTask": "משימה חדשה",
+        "focusSearch": "חיפוש",
+        "clearSelection": "נקה את הבחירה",
+        "help": "הצג רשימה זו"
+      }
+    },
+    "linked": {
+      "title": "משימות",
+      "addPlaceholder": "הקלד כותרת משימה, ואז לחץ על הוסף כדי למלא את הפרטים",
+      "viewAll": "הצג הכול",
+      "loading": "טוען משימות",
+      "unavailableTitle": "המשימות אינן זמינות עדיין",
+      "unavailable": "שירות המשימות עדיין אינו זמין בשרת זה.",
+      "empty": "אין משימות פתוחות.",
+      "loadMore": "טען עוד",
+      "loadMoreDone": "טען עוד משימות שהושלמו",
+      "showDone": "הצג שהושלמו",
+      "hideDone": "הסתר שהושלמו"
+    }
+  }
+}

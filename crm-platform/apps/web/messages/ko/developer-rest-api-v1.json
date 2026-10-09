@@ -1,0 +1,93 @@
+{
+  "developer-rest-api-v1": {
+    "common": {
+      "dismiss": "닫기",
+      "copy": "복사",
+      "copied": "복사됨",
+      "copyFailed": "복사하지 못했습니다. 텍스트를 선택하여 직접 복사하세요."
+    },
+    "rail": {
+      "name": "개발자 API",
+      "tagline": "REST · /api/v1",
+      "keyActive": "키 활성",
+      "noKey": "키 없음",
+      "baseUrl": "기본 URL",
+      "authHeader": "인증 헤더",
+      "help": {
+        "title": "도움이 필요하세요?",
+        "body": "모든 엔드포인트의 요청 및 응답 전체 레퍼런스와 복사 가능한 예시를 확인하세요.",
+        "link": "문서 읽기"
+      }
+    },
+    "page": {
+      "crumbLabel": "탐색 경로",
+      "crumbSettings": "설정",
+      "crumbHere": "개발자",
+      "title": "개발자",
+      "titleAccent": "API 키",
+      "lead": "키를 생성하여 자체 앱, CRM 또는 자동화에서 REST API를 호출하세요. 메시지 발송, 연락처, 템플릿, 브로드캐스트 관리 등이 가능합니다. 워크스페이스당 키 하나입니다.",
+      "back": "뒤로",
+      "openDocs": "문서 열기",
+      "loading": "API 키 불러오는 중",
+      "forbidden": {
+        "title": "API 키를 볼 수 없습니다",
+        "body": "현재 역할에는 API 키 접근 권한이 없습니다. 워크스페이스 관리자에게 API 키 권한을 요청하세요."
+      }
+    },
+    "banner": {
+      "title": "새 API 키",
+      "warning": "지금 복사하여 안전하게 보관하세요. 보안을 위해 해시만 저장하므로 다시 표시되지 않습니다."
+    },
+    "key": {
+      "title": "내 API 키",
+      "active": "활성",
+      "untitled": "이름 없는 키",
+      "created": "{date} 생성",
+      "lastUsed": "마지막 사용 {when}",
+      "never": "사용 안 함",
+      "revoke": "폐기",
+      "noRevoke": "현재 역할로는 API 키를 폐기할 수 없습니다.",
+      "revoked": "API 키가 폐기되었습니다. 이 키를 사용하는 앱은 즉시 작동이 중지됩니다.",
+      "footer": "워크스페이스당 키는 하나만 허용됩니다. 새 키를 발급하려면 이 키를 폐기하세요.",
+      "confirm": {
+        "title": "이 키를 폐기할까요?",
+        "message": "이 키를 사용하는 모든 앱 또는 연동이 즉시 작동을 멈춥니다. 이 작업은 되돌릴 수 없습니다. 이후에 새 키를 만들 수 있습니다.",
+        "accept": "폐기",
+        "cancel": "취소"
+      }
+    },
+    "create": {
+      "title": "키 만들기",
+      "help": "사용처를 기억할 수 있도록 키에 이름을 지정하세요. 키는 생성 시 한 번만 표시됩니다.",
+      "name": "키 이름",
+      "placeholder": "예: 프로덕션 백엔드",
+      "submit": "키 만들기",
+      "submitting": "키 생성 중…",
+      "created": "API 키가 생성되었습니다. 지금 복사하세요. 다시 표시되지 않습니다.",
+      "noCreate": "현재 역할로는 API 키를 만들 수 없습니다. 워크스페이스 관리자에게 문의하세요.",
+      "planLocked": "요금제에 REST API가 포함되어 있지 않습니다.",
+      "errors": {
+        "required": "키 이름을 입력하세요.",
+        "tooLong": "이름은 최대 120자까지 가능합니다."
+      }
+    },
+    "quickstart": {
+      "title": "빠른 시작",
+      "reference": "전체 레퍼런스",
+      "intro": "첫 메시지를 보내 보세요. 키와 수신자를 바꿔 입력하세요:"
+    },
+    "errors": {
+      "planLimit": "이미 활성 API 키가 있습니다. 새로 만들기 전에 폐기하세요. 워크스페이스당 키 하나만 허용됩니다.",
+      "planLocked": "요금제에 REST API가 포함되어 있지 않습니다. API 키를 만들려면 업그레이드하세요.",
+      "forbidden": "이 작업을 수행할 권한이 없습니다.",
+      "validation": "키 이름이 올바르지 않습니다. 확인하고 다시 시도하세요.",
+      "notFound": "해당 키가 더 이상 없습니다. 목록을 새로 고쳤습니다.",
+      "network": "서버에 연결할 수 없습니다. 연결 상태를 확인하고 다시 시도하세요.",
+      "unexpected": "서버에서 문제가 발생했습니다. 잠시 후 다시 시도하세요.",
+      "loadFailed": "API 키를 불러오지 못했습니다.",
+      "retry": "다시 시도",
+      "upgrade": "요금제 보기",
+      "requestId": "요청 ID: {id}"
+    }
+  }
+}

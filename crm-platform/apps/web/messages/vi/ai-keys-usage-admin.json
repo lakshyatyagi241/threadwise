@@ -1,0 +1,223 @@
+{
+  "ai-keys-usage-admin": {
+    "nav": {
+      "usage": "Mức dùng AI",
+      "keys": "Khóa nhà cung cấp AI"
+    },
+    "admin": {
+      "nav": {
+        "group": "AI",
+        "keys": "Khóa nhà cung cấp AI",
+        "dashboard": "Mức dùng AI"
+      }
+    },
+    "common": {
+      "loading": "Đang tải",
+      "retry": "Thử lại",
+      "requestId": "ID yêu cầu",
+      "dismiss": "Bỏ qua",
+      "tokens": "{count, number} token",
+      "dash": "-",
+      "errors": {
+        "forbidden": "Bạn không có quyền xem nội dung này.",
+        "request": "Không thể hoàn tất yêu cầu đó.",
+        "unexpected": "Đã xảy ra lỗi ở phía chúng tôi. Vui lòng thử lại sau giây lát.",
+        "network": "Không thể kết nối máy chủ. Hãy kiểm tra kết nối và thử lại.",
+        "conflict": "Có người khác đã thay đổi nội dung này. Trang đã được tải lại: hãy áp dụng lại thay đổi của bạn.",
+        "keyRequired": "Hãy thêm khóa API trước khi bật nhà cung cấp này.",
+        "validation": "Một số giá trị không hợp lệ. Hãy kiểm tra các trường được đánh dấu.",
+        "notFound": "Mục đó không còn tồn tại."
+      }
+    },
+    "windows": {
+      "label": "Khoảng thời gian",
+      "7d": "7 ngày",
+      "30d": "30 ngày",
+      "90d": "90 ngày",
+      "1y": "1 năm",
+      "custom": "Tùy chỉnh",
+      "from": "Từ",
+      "to": "Đến",
+      "pick": "Chọn ngày bắt đầu và kết thúc.",
+      "invalid": "Ngày kết thúc trước ngày bắt đầu.",
+      "tooLong": "Chọn khoảng từ {days} ngày trở xuống."
+    },
+    "keys": {
+      "eyebrow": "Quản trị · Hệ thống · Nhà cung cấp AI",
+      "title": "Khóa API AI",
+      "description": "Khóa toàn cục cho mọi nhà cung cấp AI được hỗ trợ. Các không gian làm việc thuộc gói không có \"Dùng khóa riêng\" sẽ dùng các khóa này làm dự phòng. Được mã hóa khi lưu trữ.",
+      "superOnly": "Chỉ quản trị viên cấp cao mới có thể quản lý khóa AI của nền tảng.",
+      "summary": {
+        "providers": "Nhà cung cấp",
+        "providersHint": "có sẵn",
+        "active": "Hoạt động",
+        "activeHint": "được bật làm dự phòng",
+        "ready": "Sẵn sàng",
+        "readyHint": "hoạt động + có khóa",
+        "noKey": "Chưa đặt khóa",
+        "noKeyHint": "dán khóa để sẵn sàng"
+      },
+      "groups": {
+        "llm": "Mô hình ngôn ngữ",
+        "voice": "Giọng nói"
+      },
+      "card": {
+        "active": "Hoạt động",
+        "off": "Đã tắt",
+        "keySaved": "Đã lưu khóa",
+        "keySavedLast4": "Đã lưu khóa, kết thúc bằng {last4}",
+        "noKey": "Chưa có khóa",
+        "unreadable": "Không thể đọc khóa đã lưu, hãy dán lại",
+        "apiKey": "Khóa API",
+        "apiKeyHint": "Để trống để giữ khóa đã lưu.",
+        "apiKeyPlaceholder": "Dán khóa vào đây",
+        "apiKeySavedPlaceholder": "•••••••••• (đã lưu — để trống để giữ nguyên)",
+        "defaultModel": "Mô hình mặc định",
+        "pickModel": "— Chọn mô hình mặc định —",
+        "customModel": "{model} (tùy chỉnh)",
+        "sortOrder": "Thứ tự sắp xếp",
+        "maxTokens": "Số token tối đa mỗi yêu cầu",
+        "maxTokensHint": "Giới hạn trên tùy chọn cho độ dài phản hồi ở mọi không gian làm việc. Để trống nghĩa là không giới hạn.",
+        "extraModels": "Mô hình bổ sung",
+        "extraModelsHint": "Tùy chọn. ID mô hình cung cấp bên cạnh mô hình mặc định, cách nhau bằng dấu phẩy.",
+        "save": "Lưu {name}",
+        "saving": "Đang lưu",
+        "turnOn": "Kích hoạt",
+        "turnOff": "Tắt",
+        "removeKey": "Gỡ khóa",
+        "removeTitle": "Gỡ khóa {name}?",
+        "removeBody": "Các không gian làm việc sẽ ngừng dùng {name} cho đến khi bạn thêm khóa lại. Nhà cung cấp sẽ bị tắt.",
+        "removeConfirm": "Gỡ khóa",
+        "cancel": "Hủy",
+        "slug": "nhà cung cấp: {provider} · mô hình mặc định: {model}",
+        "maxTokensPlaceholder": "ví dụ: 4096"
+      },
+      "toasts": {
+        "saved": "Đã lưu {name}.",
+        "savedOn": "Đã lưu và bật {name}.",
+        "on": "Đã bật {name}.",
+        "off": "Đã tắt {name}.",
+        "removed": "Đã gỡ khóa {name}."
+      },
+      "help": {
+        "title": "Cách dùng các khóa này",
+        "body": "Khóa riêng của không gian làm việc chỉ được ưu tiên khi gói cho phép. Nếu không, nhà cung cấp đang hoạt động tương ứng ở đây sẽ được dùng. Tắt một nhà cung cấp nghĩa là các không gian làm việc không có khóa riêng không thể dùng nó.",
+        "eyebrow": "Cách sử dụng các khóa này"
+      }
+    },
+    "dashboard": {
+      "eyebrow": "Quản trị / Bảng điều khiển AI",
+      "title": "Mức dùng AI & token tiêu thụ",
+      "description": "Mọi lệnh gọi AI trên nền tảng — nhà cung cấp nào, mô hình nào, không gian làm việc nào, dùng khóa nền tảng hay khóa riêng (BYOK), kèm chi phí ước tính.",
+      "kpis": {
+        "tokens": "Token đã tiêu thụ",
+        "tokensHint": "trong khoảng này",
+        "cost": "Chi phí ước tính",
+        "costHint": "ước tính trung bình",
+        "calls": "Lệnh gọi AI",
+        "callsHint": "yêu cầu đã ghi",
+        "workspaces": "Không gian làm việc dùng AI",
+        "workspacesHint": "đang hoạt động"
+      },
+      "daily": "Token tiêu thụ mỗi ngày",
+      "byProvider": "Token theo nhà cung cấp",
+      "split": "Ai trả tiền — nền tảng hay BYOK",
+      "splitPlatform": "Khóa nền tảng",
+      "splitOwn": "Khóa riêng (BYOK)",
+      "topWorkspaces": "Không gian làm việc tiêu thụ nhiều token nhất",
+      "topModels": "Mô hình hàng đầu",
+      "keyHealth": "Tình trạng khóa AI",
+      "live": "Đang bật",
+      "notLive": "Tắt",
+      "peak": "đỉnh {value}/ngày",
+      "dailyEmpty": "Chưa ghi nhận lệnh gọi AI nào trong khoảng này.",
+      "providerCalls": "{count, number} lệnh gọi",
+      "providerEmpty": "Chưa có mức dùng.",
+      "splitNote": "Chỉ token từ khóa nền tảng được tính vào hạn mức AI hằng tháng của gói. Các không gian làm việc BYOK chi tiêu trên tài khoản nhà cung cấp của riêng họ.",
+      "workspaceEmpty": "Chưa có mức dùng AI của không gian làm việc.",
+      "workspaceMeta": "{count, number} lệnh gọi",
+      "workspaceByok": "{tokens} BYOK",
+      "modelEmpty": "Chưa có mức dùng mô hình.",
+      "modelMeta": "{provider} · {count, number} lệnh gọi",
+      "manageKeys": "Quản lý khóa",
+      "noDefaultModel": "không có mô hình mặc định",
+      "noPlatformKeys": "Chưa cấu hình khóa AI nền tảng nào.",
+      "byokKeys": "Khóa BYOK đang hoạt động",
+      "byokWorkspaces": "Không gian làm việc dùng BYOK"
+    },
+    "usage": {
+      "title": "Mức dùng AI",
+      "description": "Mọi lệnh gọi AI mà không gian làm việc của bạn đã thực hiện — token tiêu thụ, theo mô hình và nhà cung cấp, khóa của gói so với khóa riêng, và chi phí ước tính.",
+      "kpis": {
+        "tokens": "Token đã dùng",
+        "calls": "{count, plural, other {# lệnh gọi AI}}",
+        "platform": "Khóa của gói",
+        "ownKeys": "Khóa của bạn (BYOK)",
+        "cost": "Chi phí ước tính",
+        "costHint": "giá trung bình của nhà cung cấp",
+        "providers": "Nhà cung cấp",
+        "models": "Mô hình"
+      },
+      "cap": {
+        "title": "Tháng này · hạn mức AI của gói",
+        "used": "Đã dùng {used, number} trên {limit, number} token trong tháng này",
+        "unlimited": "Đã dùng {used, number} token trong tháng này: không giới hạn theo gói của bạn",
+        "reached": "Sắp chạm hạn mức hằng tháng. Hãy nâng cấp gói hoặc thêm khóa riêng (BYOK) để tiếp tục dùng AI.",
+        "note": "Token BYOK chạy trên tài khoản nhà cung cấp của riêng bạn và không bao giờ tính vào hạn mức gói."
+      },
+      "daily": "Token tiêu thụ mỗi ngày",
+      "byProvider": "Theo nhà cung cấp",
+      "split": "Khóa của gói so với khóa của bạn",
+      "splitPlatform": "Khóa của gói",
+      "splitOwn": "Khóa của bạn (BYOK)",
+      "models": "Theo mô hình",
+      "columns": {
+        "model": "Mô hình",
+        "provider": "Nhà cung cấp",
+        "tokens": "Token",
+        "calls": "Lệnh gọi",
+        "prompt": "Prompt",
+        "completion": "Phản hồi"
+      },
+      "empty": "Chưa có mức dùng AI trong khoảng này.",
+      "costNote": "Chi phí là ước tính dựa trên giá token trung bình đã công bố của từng nhà cung cấp và có thể khác hóa đơn của nhà cung cấp. Số lượng token là chính xác."
+    },
+    "own": {
+      "title": "Khóa nhà cung cấp AI của bạn",
+      "description": "Thêm khóa riêng cho một nhà cung cấp để các tính năng AI dùng tài khoản của bạn thay vì tài khoản dùng chung. Khóa được mã hóa và không bao giờ hiển thị lại.",
+      "allowed": "Gói của bạn cho phép khóa riêng được ưu tiên.",
+      "notAllowed": "Gói của bạn chưa bao gồm khóa riêng. Bạn có thể lưu ngay, nhưng các lệnh gọi sẽ tiếp tục dùng khóa dùng chung cho đến khi bạn nâng cấp.",
+      "add": "Thêm khóa",
+      "provider": "Nhà cung cấp",
+      "apiKey": "Khóa API",
+      "apiKeyHint": "Tối thiểu 8 ký tự.",
+      "save": "Lưu khóa",
+      "replace": "Thay khóa",
+      "saving": "Đang lưu",
+      "on": "Bật",
+      "off": "Đã tắt",
+      "ends": "Kết thúc bằng {last4}",
+      "using": "Lệnh gọi dùng",
+      "usingOwn": "khóa của bạn",
+      "usingShared": "khóa dùng chung",
+      "usingNone": "không có khóa (không có gì khả dụng)",
+      "turnOn": "Bật",
+      "turnOff": "Tắt",
+      "remove": "Gỡ bỏ",
+      "removeTitle": "Gỡ khóa {name} của bạn?",
+      "removeBody": "Các lệnh gọi sẽ chuyển sang khóa dùng chung nếu có.",
+      "removeConfirm": "Gỡ khóa",
+      "cancel": "Hủy",
+      "empty": "Bạn chưa thêm khóa nào.",
+      "toasts": {
+        "saved": "Đã lưu khóa {name}.",
+        "on": "Đã bật khóa {name}.",
+        "off": "Đã tắt khóa {name}.",
+        "removed": "Đã gỡ khóa {name}."
+      },
+      "errors": {
+        "tooShort": "Khóa có ít nhất 8 ký tự."
+      }
+    }
+  }
+}

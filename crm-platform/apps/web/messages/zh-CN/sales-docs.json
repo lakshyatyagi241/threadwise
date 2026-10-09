@@ -1,0 +1,647 @@
+{
+  "sales-docs": {
+    "common": {
+      "dismiss": "忽略"
+    },
+    "nav": {
+      "proposals": "提案",
+      "estimates": "报价单"
+    },
+    "kind": {
+      "proposal": {
+        "singular": "提案",
+        "plural": "份提案"
+      },
+      "estimate": {
+        "singular": "报价单",
+        "plural": "份报价单"
+      }
+    },
+    "status": {
+      "draft": "草稿",
+      "sent": "已发送",
+      "viewed": "已查看",
+      "accepted": "已接受",
+      "declined": "已拒绝",
+      "expired": "已过期",
+      "converted": "已转换"
+    },
+    "tabs": {
+      "label": "状态",
+      "all": "全部",
+      "draft": "草稿",
+      "sent": "已发送",
+      "viewed": "已查看",
+      "accepted": "已接受",
+      "declined": "已拒绝",
+      "expired": "已过期",
+      "converted": "已转换",
+      "count": "{count, plural, other {# 份文档}}"
+    },
+    "list": {
+      "proposal": {
+        "title": "提案",
+        "subtitle": "整理范围与价格，跟踪买方的操作，并将成交的提案转换为发票。",
+        "new": "新建提案",
+        "emptyTitle": "暂无提案",
+        "emptyMessage": "创建您的第一份提案，将链接发送给买方，并跟踪其从已发送到已接受的状态变化。"
+      },
+      "estimate": {
+        "title": "报价单",
+        "subtitle": "开具发票前先报价。发送报价单，待对方接受后一键转换。",
+        "new": "新建报价单",
+        "emptyTitle": "暂无报价单",
+        "emptyMessage": "创建您的第一份报价单，将链接发送给买方，待对方接受后将其转换为发票。"
+      },
+      "openValue": "未结金额",
+      "tableLabel": "文档",
+      "loading": "加载中",
+      "showing": "{count, plural, other {显示 # 份文档}}",
+      "loadMore": "加载更多",
+      "allLoaded": "已全部加载",
+      "useSampleData": "使用示例数据",
+      "emptyFilteredTitle": "没有匹配项",
+      "emptyFiltered": "没有符合搜索和筛选条件的文档。请减少筛选条件或更换关键词。",
+      "resetFilters": "清除筛选",
+      "emptyTabTitle": "暂无{status}文档",
+      "emptyTab": "当您的{kind}达到此状态时，将显示在此处。",
+      "statusWord": {
+        "all": "全部",
+        "draft": "草稿",
+        "sent": "已发送",
+        "viewed": "已查看",
+        "accepted": "已接受",
+        "declined": "已拒绝",
+        "expired": "已过期",
+        "converted": "已转换"
+      }
+    },
+    "toolbar": {
+      "label": "筛选",
+      "search": "搜索编号、标题或买方",
+      "owner": "负责人",
+      "allOwners": "全部负责人",
+      "validity": "有效期至",
+      "anyValidity": "任意日期",
+      "validWeek": "7 天内到期",
+      "validLapsed": "已过期日期",
+      "clear": "清除",
+      "refresh": "刷新",
+      "shortcuts": "键盘快捷键",
+      "contactFilter": "联系人",
+      "dealFilter": "交易",
+      "removeFilter": "移除此筛选条件",
+      "mine": "我的"
+    },
+    "table": {
+      "scrollArea": "文档表格",
+      "selectAll": "选择所有已加载的文档",
+      "selectRow": "选择 {number}",
+      "columns": {
+        "number": "编号",
+        "title": "标题 / 买方",
+        "contact": "联系人",
+        "amount": "金额",
+        "status": "状态",
+        "validUntil": "有效期至",
+        "owner": "负责人",
+        "created": "创建时间"
+      }
+    },
+    "row": {
+      "moreFor": "{number} 的操作",
+      "untitled": "无标题",
+      "noBuyer": "暂无买方",
+      "unowned": "无负责人"
+    },
+    "bulk": {
+      "label": "批量操作",
+      "selected": "{count, plural, other {已选择 # 项}}",
+      "working": "处理中",
+      "delete": "删除",
+      "clear": "清除选择",
+      "deleteTitle": "删除所选文档？",
+      "deleteMessage": "{count, plural, other {# 份文档将被永久删除，其公开链接将失效。}} 已转换的文档将被保留。",
+      "deleteConfirm": "删除",
+      "keep": "保留",
+      "deleted": "{count, plural, other {已删除 # 份文档}}",
+      "someFailed": "{count, plural, other {# 份文档无法删除}}",
+      "failed": "删除失败。"
+    },
+    "shortcuts": {
+      "title": "键盘快捷键",
+      "close": "关闭",
+      "list": "在列表中",
+      "builder": "在编辑器中",
+      "actions": {
+        "next": "下一行",
+        "prev": "上一行",
+        "open": "打开该行",
+        "toggleSelect": "选择或取消选择该行",
+        "newDoc": "新建文档",
+        "focusSearch": "搜索",
+        "clearSelection": "清除选择",
+        "help": "显示此列表",
+        "save": "保存草稿",
+        "send": "发送",
+        "addRow": "添加明细项"
+      }
+    },
+    "actions": {
+      "open": "打开",
+      "edit": "编辑",
+      "send": "发送",
+      "copyLink": "复制公开链接",
+      "markSent": "标记为已发送",
+      "convertInvoice": "转换为发票",
+      "createSalesOrder": "创建销售订单",
+      "convertDeal": "创建交易",
+      "duplicate": "复制",
+      "print": "打印 / PDF",
+      "activity": "动态",
+      "delete": "删除",
+      "accept": "记录为已接受",
+      "decline": "记录为已拒绝",
+      "revise": "修订（退回草稿）",
+      "extend": "延长有效期"
+    },
+    "confirm": {
+      "cancel": "取消",
+      "linkCopied": "链接已复制",
+      "copyFailed": "无法复制链接。请选中后手动复制。",
+      "markSent": {
+        "title": "将 {number} 标记为已发送？",
+        "message": "此操作仅记录该{kind}已被手动分享给买方（链接已复制），不会发送任何内容；如需发送，请使用“发送”。",
+        "confirm": "标记为已发送"
+      },
+      "convertInvoice": {
+        "title": "将 {number} 转换为发票？",
+        "message": "将创建一份具有相同明细和合计的发票草稿，此{kind}将被锁定为已转换。此操作无法撤销。",
+        "confirm": "转换为发票"
+      },
+      "convertDeal": {
+        "title": "基于 {number} 创建交易？",
+        "message": "将以此{kind}的合计金额和联系人创建交易，并与其关联。",
+        "confirm": "创建交易"
+      },
+      "delete": {
+        "title": "删除 {number}？",
+        "message": "该{kind}将被永久删除，其公开链接将失效。其编号不会被重复使用。",
+        "confirm": "删除"
+      },
+      "close": "关闭",
+      "theBuyer": "买方",
+      "linkCopiedInactive": "链接已复制。在文档发送之前，买方无法打开。",
+      "accept": {
+        "title": "将 {number} 记录为已接受？",
+        "message": "当 {name} 通过链接以外的方式（如电话或签署的副本）表示同意时使用。动态中会记录为由您录入，而非买方本人的签名。",
+        "confirm": "记录为已接受"
+      },
+      "decline": {
+        "title": "将 {number} 记录为已拒绝？",
+        "message": "当 {name} 通过链接以外的方式表示拒绝时使用。该{kind}将以已拒绝状态关闭；之后您可将其修订为新草稿。",
+        "confirm": "记录为已拒绝"
+      },
+      "extend": {
+        "title": "延长 {number} 的有效期",
+        "message": "为此{kind}设置新的有效期截止日期。已过期的文档将重新对 {name} 开放。",
+        "confirm": "延长",
+        "date": "新的有效期截止日期",
+        "past": "日期不能早于今天。"
+      },
+      "revise": {
+        "title": "修订 {number}？",
+        "message": "此{kind}将退回草稿以便您进行修改（修订号递增，旧内容会保留）。修改后，买方将无法接受旧版本。",
+        "confirm": "修订"
+      },
+      "note": "备注（可选）",
+      "noteHint": "将与此决定一同保存在动态中。"
+    },
+    "toast": {
+      "created": "已创建 {number}",
+      "saved": "已保存 {number}",
+      "duplicated": "已创建草稿 {number}",
+      "convertedInvoice": "{number} 已转换为发票",
+      "convertedDeal": "已基于 {number} 创建交易 {deal}",
+      "deleted": "已删除 {number}",
+      "accepted": "{number} 已记录为已接受",
+      "declined": "{number} 已记录为已拒绝",
+      "revised": "{number} 已退回草稿（修订 {revision}）",
+      "extended": "{number} 的有效期已延长",
+      "delivery": {
+        "sent": "{number} 已通过邮件发送给买方",
+        "queued": "{number} 已加入 WhatsApp 发送队列",
+        "shared": "{number} 已标记为已发送"
+      }
+    },
+    "errors": {
+      "network": "无法连接服务器。请检查网络连接后重试。",
+      "forbidden": "您没有执行此操作的权限。",
+      "signedOut": "您的会话已结束，请重新登录。",
+      "conflict": "其他人修改了此文档。页面已重新加载，请检查后重试。",
+      "validation": "部分值未被接受。请检查高亮显示的字段。",
+      "unavailable": "此服务器暂不支持提案和报价单。",
+      "rateLimited": "请求过于频繁。请稍候再试。",
+      "notFound": "未找到此文档，可能已被删除。",
+      "planDisabled": "您的套餐不包含提案和报价单。",
+      "invalidTransition": "当前文档状态下不允许此更改。页面已重新加载。",
+      "notEditable": "只能编辑草稿。请先修订文档以退回草稿。",
+      "notDeletable": "已接受和已转换的文档将作为记录保留，无法删除。",
+      "alreadyDecided": "此文档已做出决定。页面已重新加载。",
+      "alreadyConverted": "此文档已转换为发票。",
+      "alreadyLinkedDeal": "此文档已关联交易。",
+      "linkUnavailable": "公开链接已撤销或已过期。请先创建新链接。",
+      "noRecipient": "请先添加买方的邮箱或电话，然后再发送。",
+      "sendFailed": "消息未能送达，因此未将文档标记为已发送。请重试。",
+      "expired": "此文档已超过有效期截止日期。请先延长有效期。",
+      "ownerInvalid": "负责人必须是工作区的活跃成员。",
+      "invoicingUnavailable": "发票功能暂不可用，因此无法转换此文档。",
+      "unexpected": "出现问题，请重试。",
+      "requestId": "请求 ID",
+      "retry": "重试"
+    },
+    "link": {
+      "unnamedContact": "未命名联系人"
+    },
+    "picker": {
+      "unnamed": "未命名",
+      "unlinkContact": "取消关联联系人",
+      "unlinkDeal": "取消关联交易",
+      "searchContact": "按姓名、邮箱或电话搜索联系人",
+      "searchDeal": "搜索交易",
+      "results": "结果",
+      "searching": "搜索中",
+      "unavailable": "无法加载列表。",
+      "none": "无匹配项。",
+      "create": "创建联系人",
+      "createNamed": "创建联系人“{name}”",
+      "createTitle": "创建联系人",
+      "createEyebrow": "新建联系人",
+      "close": "关闭",
+      "cancel": "取消",
+      "createConfirm": "创建并关联",
+      "nameLabel": "姓名",
+      "emailLabel": "邮箱",
+      "phoneLabel": "电话",
+      "phoneHint": "请包含国家代码，例如 +971 50 123 4567。",
+      "nameInvalid": "请输入姓名。",
+      "emailInvalid": "请输入有效的邮箱。",
+      "phoneInvalid": "请输入有效的电话号码。",
+      "forbidden": "您没有创建联系人的权限。",
+      "createFailed": "无法创建联系人，请重试。",
+      "contactCreated": "已创建联系人 {name}"
+    },
+    "send": {
+      "eyebrow": "发送给买方",
+      "title": "发送 {number}",
+      "close": "关闭",
+      "done": "完成",
+      "channels": "发送方式",
+      "tabs": {
+        "link": "链接",
+        "email": "邮件",
+        "whatsapp": "WhatsApp"
+      },
+      "linkLabel": "公开链接",
+      "linkHint": "任何拥有此链接的人都可以查看文档并接受或拒绝。请仅与买方分享。",
+      "copy": "复制",
+      "copied": "已复制",
+      "copiedToast": "链接已复制",
+      "copyFailed": "无法复制链接。请选中后手动复制。",
+      "to": "收件人",
+      "emailInvalid": "请输入有效的邮箱地址。",
+      "noEmail": "此文档没有买方邮箱。请在此处输入。",
+      "message": "消息",
+      "messageDefault": "{name} 您好，这是我们的文档。文档中包含服务范围和价格，您可在线接受。",
+      "messageHint": "文档链接将添加在您的消息下方。",
+      "sendEmail": "发送邮件",
+      "waTo": "发送至",
+      "noPhone": "此文档没有买方电话号码。请先在买方详情中添加。",
+      "waPreview": "消息",
+      "waTotal": "合计",
+      "waView": "查看并接受",
+      "sendWhatsapp": "通过 WhatsApp 发送",
+      "openWhatsapp": "在 WhatsApp 中打开",
+      "markSent": "我已分享：标记为已发送",
+      "linkLoading": "正在加载链接",
+      "linkUnavailable": "此服务器暂不支持该链接。",
+      "stateDraft": "文档发送后链接才会打开。在此之前，买方无法看到任何内容。",
+      "stateRevoked": "此链接已撤销，买方无法打开。请创建新链接后再分享。",
+      "stateActive": "{views, plural, =0 {尚未打开。} other {已打开 # 次。}}",
+      "stateInactive": "此链接已过期，买方无法打开。请创建新链接。",
+      "regenerate": "创建新链接",
+      "revoke": "撤销链接",
+      "regenerateWarning": "旧链接将立即失效。拥有该链接的人将看到其已不可用。",
+      "keepLink": "保留当前链接",
+      "regenerateConfirm": "创建新链接",
+      "regenerated": "已创建新链接",
+      "revoked": "链接已撤销",
+      "waHint": "“发送”会将消息加入已连接的 WhatsApp 发送队列，并将文档标记为已发送。“在 WhatsApp 中打开”可让您自行发送；随后请使用“链接”标签页将其标记为已发送。"
+    },
+    "activity": {
+      "title": "{number} 的动态",
+      "subtitle": "此文档的所有动态，按最新排序。",
+      "close": "关闭",
+      "loading": "加载中",
+      "unavailable": "此服务器暂不支持动态历史记录。",
+      "empty": "此文档尚无任何动态。",
+      "buyer": "买方",
+      "system": "系统",
+      "someone": "某人",
+      "via": "通过{channel}发送",
+      "signedBy": "由 {name} 签署",
+      "reason": "原因：{reason}",
+      "channels": {
+        "link": "链接",
+        "email": "邮件",
+        "whatsapp": "WhatsApp"
+      },
+      "events": {
+        "created": "由 {who} 创建",
+        "edited": "由 {who} 编辑",
+        "sent": "由 {who} 发送",
+        "viewed": "由 {who} 查看",
+        "accepted": "由 {who} 接受",
+        "declined": "由 {who} 拒绝",
+        "expired": "已过期",
+        "duplicated": "由 {who} 复制",
+        "revised": "由 {who} 修订",
+        "extended": "由 {who} 延长了有效期",
+        "converted_invoice": "由 {who} 转换为发票",
+        "converted_deal": "由 {who} 创建交易",
+        "link_regenerated": "由 {who} 创建了新链接",
+        "link_revoked": "由 {who} 撤销了链接"
+      },
+      "withSignature": "已记录手写签名",
+      "recordedByStaff": "由团队成员代买方记录",
+      "note": "备注：{note}",
+      "revision": "修订 {revision}",
+      "fromAddress": "来自网络地址 {ip}"
+    },
+    "paper": {
+      "label": "{kind} {number}",
+      "sellerFallback": "贵公司",
+      "numberPending": "保存时分配编号",
+      "untitled": "未命名{kind}",
+      "preparedFor": "编制对象",
+      "noBuyer": "尚未选择买家",
+      "issued": "开具日期",
+      "validUntil": "有效期至",
+      "description": "描述",
+      "qty": "数量",
+      "unit": "单价",
+      "discount": "折扣",
+      "tax": "税费",
+      "amount": "金额",
+      "noItems": "暂无项目。",
+      "subtotal": "小计",
+      "discountPercent": "折扣（{percent}%）",
+      "discountRow": "折扣",
+      "taxRow": "税费（{percent}%）",
+      "total": "总计",
+      "notes": "备注",
+      "terms": "条款"
+    },
+    "builder": {
+      "loading": "加载中",
+      "notFoundTitle": "未找到文档",
+      "notFound": "该文档不存在或已被删除。",
+      "back": {
+        "proposal": "全部提案",
+        "estimate": "全部估价单"
+      },
+      "formLabel": "文档详情",
+      "newTitle": {
+        "proposal": "新建提案",
+        "estimate": "新建估价单"
+      },
+      "newSubtitle": "请填写买家和明细项目。保存此{kind}时将分配编号。",
+      "untitledSub": "未命名",
+      "unsaved": "有未保存的更改",
+      "leaveTitle": "不保存直接离开？",
+      "leaveMessage": "此页面有未保存的更改，现在离开将会丢失。",
+      "leave": "不保存离开",
+      "keepEditing": "继续编辑",
+      "save": "保存草稿",
+      "send": "发送",
+      "more": "更多操作",
+      "fixErrors": "部分字段需要检查后才能保存。",
+      "panes": "表单或预览",
+      "pane": {
+        "edit": "编辑",
+        "preview": "预览"
+      },
+      "locked": {
+        "sent": "此文档已发送给买家，无法编辑。请修订以退回草稿，或复制为新文档。",
+        "accepted": "此文档已被接受并作为记录保存。可转换为发票，或复制为新文档。",
+        "converted": "此文档已转换为发票并被锁定。",
+        "openInvoice": "打开发票",
+        "revise": "修订",
+        "duplicate": "复制为草稿"
+      },
+      "buyer": {
+        "title": "买家",
+        "hint": "选择联系人或输入买家信息。发送时将使用其邮箱和电话。",
+        "contact": "联系人",
+        "name": "买家姓名",
+        "email": "买家邮箱",
+        "phone": "买家电话",
+        "phoneHint": "需包含国家区号，通过 WhatsApp 发送时必填。"
+      },
+      "details": {
+        "title": "详情",
+        "docTitle": "标题",
+        "titlePlaceholder": {
+          "proposal": "例如：网站改版，第一阶段",
+          "estimate": "例如：厨房装修快速报价"
+        },
+        "deal": "交易",
+        "currency": "货币",
+        "validUntil": "有效期至",
+        "plusDays": "+{days} 天",
+        "noExpiry": "无有效期"
+      },
+      "items": {
+        "title": "明细项目",
+        "hint": "数量可以是小数。折扣可以是百分比或金额（点击输入框中的符号切换）；税费留空则使用文档的税率。",
+        "description": "描述",
+        "qty": "数量",
+        "unit": "单价",
+        "discount": "折扣 %",
+        "tax": "税费 %",
+        "amount": "金额",
+        "drag": "拖动以调整顺序",
+        "row": "第 {n} 行",
+        "descriptionPlaceholder": "收费内容",
+        "descriptionFor": "第 {n} 行的描述",
+        "qtyFor": "第 {n} 行的数量",
+        "unitFor": "第 {n} 行的单价",
+        "discountFor": "第 {n} 行的折扣百分比",
+        "taxFor": "第 {n} 行的税费百分比",
+        "amountFor": "第 {n} 行的金额",
+        "moveUp": "将第 {n} 行上移",
+        "moveDown": "将第 {n} 行下移",
+        "duplicate": "复制第 {n} 行",
+        "remove": "删除第 {n} 行",
+        "add": "添加行",
+        "discountToAmount": "第 {n} 行：折扣为百分比；切换为金额",
+        "discountToPercent": "第 {n} 行：折扣为金额；切换为百分比"
+      },
+      "problems": {
+        "noItems": "请至少添加一条带描述和价格的明细。",
+        "descriptionRequired": "请输入描述。",
+        "descriptionTooLong": "描述过长（最多 500 个字符）。",
+        "qtyInvalid": "数量必须为不小于 0 的数字，最多 4 位小数。",
+        "priceInvalid": "请输入不小于 0 的单价数字。",
+        "discountInvalid": "折扣必须为 0 至 100 的百分比。",
+        "taxInvalid": "税费必须为 0 至 100 的百分比。",
+        "docDiscountInvalid": "请输入不小于 0 的折扣数字。",
+        "docTaxInvalid": "税费必须为 0 至 100 的百分比。",
+        "emailInvalid": "请输入有效的邮箱地址。",
+        "phoneInvalid": "请输入包含国家区号的电话，例如 +971 50 123 4567。",
+        "titleTooLong": "标题过长（最多 255 个字符）。",
+        "notesTooLong": "备注过长（最多 5,000 个字符）。",
+        "termsTooLong": "条款过长（最多 10,000 个字符）。",
+        "dateInvalid": "请输入有效日期。",
+        "tooLarge": "金额过大，请减少数量或单价。"
+      },
+      "totals": {
+        "defaultTax": "税率",
+        "defaultTaxHint": "应用于未单独设置税费的每一行。",
+        "discount": "整份文档折扣",
+        "discountKind": "折扣类型",
+        "subtotal": "小计",
+        "discountRow": "折扣",
+        "taxRow": "税费（{percent}%）",
+        "total": "总计"
+      },
+      "notes": {
+        "title": "备注与条款",
+        "notes": "给买家的备注",
+        "terms": "条款",
+        "insertTemplate": "使用模板",
+        "count": "{count} / {max}"
+      },
+      "preview": {
+        "title": "预览",
+        "print": "打印 / PDF",
+        "hint": "这是买家看到的内容，也是打印的内容。合计与已保存文档使用相同的取整规则。"
+      }
+    },
+    "templates": {
+      "notes": {
+        "thanks": {
+          "label": "感谢您",
+          "text": "感谢您给予我们合作的机会，期待尽快开始。"
+        },
+        "scope": {
+          "label": "范围说明",
+          "text": "本文档仅涵盖上述项目。超出此范围的内容将另行报价。"
+        },
+        "followUp": {
+          "label": "后续步骤",
+          "text": "如需推进，请在线接受本文档。我们将在一个工作日内确认开始日期。"
+        }
+      },
+      "terms": {
+        "net14": {
+          "label": "14 天内付款",
+          "text": "款项应于发票日期起 14 天内支付。"
+        },
+        "net30": {
+          "label": "30 天内付款",
+          "text": "款项应于发票日期起 30 天内支付。"
+        },
+        "deposit50": {
+          "label": "50% 定金",
+          "text": "接受后需支付 50% 定金，余款在完工时支付。"
+        },
+        "warranty": {
+          "label": "质保",
+          "text": "工程自交付之日起 90 天内对工艺缺陷提供质保。"
+        }
+      }
+    },
+    "linked": {
+      "title": "提案与估价单",
+      "newProposal": "提案",
+      "newEstimate": "估价单",
+      "loading": "加载中",
+      "unavailableTitle": "暂不可用",
+      "unavailable": "此服务器暂不支持提案与估价单。",
+      "empty": "暂无提案或估价单。",
+      "kind": {
+        "proposal": "提案",
+        "estimate": "估价单"
+      },
+      "viewProposals": "全部提案",
+      "viewEstimates": "全部估价单"
+    },
+    "signature": {
+      "area": "签名框：请用手指、笔或鼠标签名",
+      "placeholder": "在此签名",
+      "clear": "清除签名"
+    },
+    "public": {
+      "loading": "正在加载文档",
+      "brandFallback": "您的供应商",
+      "language": "语言",
+      "print": "打印 / PDF",
+      "invalid": {
+        "title": "此链接无效",
+        "message": "文档可能已被移除，或链接不完整。请向发送方索取新链接。"
+      },
+      "error": {
+        "title": "无法加载文档",
+        "message": "请检查网络连接后重试。如果问题持续，请联系发送方。",
+        "retry": "重试"
+      },
+      "banner": {
+        "accepted": "您已接受此{kind}。{seller} 已收到通知，将与您跟进。",
+        "signedBy": "签署人：{name}",
+        "declined": "此{kind}已被拒绝。",
+        "declinedHint": "如果这是误操作，请联系 {seller}。",
+        "converted": "已接受。已为此{kind}开具发票。",
+        "expired": "此{kind}已于 {date} 过期。",
+        "expiredHint": "此文档已无法接受。请联系 {seller} 索取新的。"
+      },
+      "footer": "此{kind}由 {seller} 生成。",
+      "decision": {
+        "title": "您的决定",
+        "intro": "接受此{kind}（金额 {total}）即表示您确认上述范围与价格与 {seller} 达成一致。",
+        "name": "您的全名",
+        "nameHint": "将作为记录中的签名姓名（至少 2 个字符）。",
+        "nameRequired": "请输入您的全名。",
+        "signature": "签名",
+        "typedPlaceholder": "您的姓名将显示在此处",
+        "useTyped": "使用输入的姓名签名，而非手写签名",
+        "signatureRequired": "请手写签名，或选择使用输入的姓名签名。",
+        "agree": "我已阅读此{kind}，并接受其范围、价格和条款。",
+        "agreeRequired": "请勾选确认。",
+        "accept": "接受此{kind}",
+        "decline": "拒绝",
+        "note": "您的决定将连同姓名、签名、时间及网络地址一并记录。",
+        "declineTitle": "拒绝此{kind}？",
+        "declineMessage": "将通知 {seller} 您已拒绝。之后将无法更改。",
+        "reason": "原因（可选）",
+        "reasonHint": "简要说明有助于 {seller} 了解需要调整的内容。",
+        "keep": "返回",
+        "declineConfirm": "拒绝",
+        "close": "关闭",
+        "problem": {
+          "expired": "此文档已过期，无法再接受。",
+          "closed": "此文档已作出决定，页面已刷新。",
+          "rateLimited": "尝试次数过多，请稍等片刻后重试。",
+          "validation": "部分信息未通过验证，请检查姓名后重试。",
+          "generic": "无法记录您的决定，请检查网络连接后重试。",
+          "gone": "此链接已失效。"
+        }
+      },
+      "gone": {
+        "title": "此链接已失效",
+        "message": "发送方已关闭此链接或链接已过期。请向对方索取新链接。"
+      },
+      "metaTitle": "报价"
+    }
+  }
+}

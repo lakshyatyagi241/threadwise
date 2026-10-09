@@ -1,0 +1,140 @@
+{
+  "webhook-fanout": {
+    "nav": {
+      "group": "Webhook",
+      "forwarding": "Inoltro webhook"
+    },
+    "common": {
+      "loading": "Caricamento",
+      "retry": "Riprova",
+      "requestId": "ID richiesta",
+      "dash": "-",
+      "errors": {
+        "forbidden": "Non hai l’autorizzazione per eseguire questa operazione.",
+        "request": "Impossibile completare la richiesta.",
+        "unexpected": "Si è verificato un errore lato nostro. Riprova tra poco.",
+        "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
+        "conflict": "Qualcun altro ha modificato questa destinazione. L’elenco è stato ricaricato: applica di nuovo la modifica.",
+        "validation": "Alcuni valori non sono validi. Controlla i campi evidenziati.",
+        "notFound": "Questo elemento non esiste più.",
+        "urlRejected": "Questo URL non è consentito. Usa un indirizzo https raggiungibile da internet."
+      }
+    },
+    "page": {
+      "eyebrow": "Admin / Sistema / Webhook",
+      "title": "Inoltro webhook",
+      "description": "L’elenco dei servizi dell’operatore della piattaforma che ricevono una copia di ogni webhook Meta.",
+      "banner": "Meta consente un solo URL di callback. Lo riceviamo una volta, lo verifichiamo e inoltriamo il corpo grezzo invariato (con la firma originale) a ogni destinazione attiva.",
+      "superOnly": "Solo un super admin può gestire l’inoltro dei webhook.",
+      "add": "Aggiungi destinazione",
+      "tabs": {
+        "targets": "Destinazioni",
+        "failures": "Consegne non riuscite"
+      }
+    },
+    "targets": {
+      "empty": "Nessuna destinazione di inoltro ancora",
+      "emptyBody": "Aggiungi una destinazione per iniziare a inoltrare i webhook Meta a un altro servizio.",
+      "columns": {
+        "target": "Destinazione",
+        "active": "Attiva",
+        "fields": "Campi",
+        "deliveries": "Consegne",
+        "last": "Ultima consegna",
+        "actions": "Azioni"
+      },
+      "allFields": "Tutti i campi",
+      "success": "{count, number} ok",
+      "failure": "{count, number} non riuscite",
+      "pending": "{count, number} in attesa",
+      "pendingLabel": "{count, number} consegne non riuscite in attesa di nuovo invio",
+      "neverDelivered": "Nessuna consegna ancora",
+      "lastStatus": "Stato {status}",
+      "lastError": "Errore: {error}",
+      "lastAt": "alle {time}",
+      "activeSwitch": "Inoltra a {name}",
+      "on": "Destinazione attiva",
+      "off": "Destinazione disattivata",
+      "edit": "Modifica",
+      "test": "Test",
+      "testing": "Test in corso",
+      "testOk": "Test superato: stato {status} in {ms, number} ms",
+      "testFailed": "Test non riuscito: {reason} ({ms, number} ms)",
+      "testNoStatus": "nessuna risposta",
+      "testStatus": "stato {status}",
+      "delete": "Elimina",
+      "deleteTitle": "Eliminare {name}?",
+      "deleteBody": "La destinazione smette di ricevere webhook e le consegne non riuscite conservate vengono eliminate. Non è reversibile.",
+      "deleteConfirm": "Elimina destinazione",
+      "cancel": "Annulla",
+      "toasts": {
+        "created": "{name} aggiunto",
+        "saved": "{name} salvato",
+        "on": "{name} è attivo",
+        "off": "{name} è disattivato",
+        "deleted": "{name} eliminato"
+      }
+    },
+    "dialog": {
+      "createTitle": "Aggiungi destinazione di inoltro",
+      "editTitle": "Modifica {name}",
+      "close": "Chiudi",
+      "name": "Nome",
+      "namePlaceholder": "Servizio di analytics",
+      "url": "URL",
+      "urlHint": "Solo https. Gli indirizzi su reti private vengono rifiutati.",
+      "headerName": "Nome intestazione (facoltativo)",
+      "headerNameHint": "Inviata con ogni consegna, ad esempio Authorization.",
+      "headerValue": "Valore intestazione",
+      "headerValueSaved": "Salvato, termina con ••••{last4}. Lascia vuoto per mantenerlo.",
+      "headerValueSavedNoLast4": "Salvato. Lascia vuoto per mantenerlo.",
+      "headerValueHint": "Solo scrittura: dopo il salvataggio non viene più mostrato.",
+      "removeHeader": "Rimuovi l’intestazione salvata",
+      "fieldFilter": "Filtro dei campi",
+      "fieldFilterHint": "Lascia vuoto per inoltrare tutti i campi. Digita un campo e premi Invio, ad esempio messages o message_template_status_update.",
+      "fieldFilterPlaceholder": "Aggiungi un campo",
+      "fieldRemove": "Rimuovi {field}",
+      "timeout": "Timeout (secondi)",
+      "timeoutHint": "Da 1 a 30",
+      "maxAttempts": "Tentativi massimi",
+      "maxAttemptsHint": "Da 1 a 10",
+      "active": "Inoltra a questa destinazione",
+      "save": "Salva",
+      "saving": "Salvataggio in corso",
+      "cancel": "Annulla",
+      "errors": {
+        "nameRequired": "Inserisci un nome.",
+        "urlRequired": "Inserisci l’URL.",
+        "urlHttps": "L’URL deve iniziare con https://.",
+        "headerNameInvalid": "Usa solo lettere, cifre e trattini.",
+        "headerValueRequired": "Un’intestazione richiede sia un nome sia un valore.",
+        "headerNameRequired": "Inserisci anche il nome dell’intestazione.",
+        "timeout": "Inserisci un numero intero da 1 a 30.",
+        "maxAttempts": "Inserisci un numero intero da 1 a 10."
+      }
+    },
+    "failures": {
+      "empty": "Nessuna consegna non riuscita",
+      "emptyBody": "Le consegne che esauriscono i tentativi vengono conservate qui per 14 giorni, così puoi inviarle di nuovo.",
+      "filterAll": "Tutte le destinazioni",
+      "filterLabel": "Destinazione",
+      "columns": {
+        "target": "Destinazione",
+        "when": "Non riuscita alle",
+        "attempts": "Tentativi",
+        "reason": "Motivo",
+        "size": "Dimensione",
+        "actions": "Azione"
+      },
+      "attempts": "{count, number}",
+      "bytes": "{count, number} byte",
+      "replay": "Riprova invio",
+      "replaying": "Invio in corso",
+      "replayed": "Reinviato alle {time}",
+      "replayOk": "Consegnato: stato {status} in {ms, number} ms",
+      "replayFailed": "Non consegnato: {reason} ({ms, number} ms)",
+      "reasonStatus": "stato {status}",
+      "reasonNone": "nessuna risposta"
+    }
+  }
+}

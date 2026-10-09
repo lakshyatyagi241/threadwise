@@ -1,0 +1,326 @@
+{
+  "invoicing": {
+    "nav": {
+      "creditNotes": "Creditnota's"
+    },
+    "errors": {
+      "codes": {
+        "CN_EXCEEDS_INVOICE": "Creditnota's kunnen samen niet hoger zijn dan de factuur. Verlaag de bedragen, of crediteer wat nog over is.",
+        "CN_NOT_DRAFT": "Alleen een conceptcreditnota kan worden bewerkt of verwijderd. Laad opnieuw om de huidige status te zien.",
+        "CN_ALREADY_VOID": "Deze creditnota is al ongeldig.",
+        "CN_HAS_REFUND": "Voor deze creditnota is contant geld teruggegeven, dus die kan niet ongeldig worden gemaakt. De terugbetaling blijft in het betalingsjournaal.",
+        "CN_NOTHING_TO_CREDIT": "Hier is niets meer te crediteren. Kies een regel met iets over, of voeg een bedrag toe.",
+        "CN_LINE_INVALID": "Een gecrediteerde regel is niet geldig: het aantal is groter dan wat nog over is, of een bedrag klopt niet. Controleer de gemarkeerde regels.",
+        "INV_NOT_ISSUED": "Een creditnota kan alleen worden gemaakt voor een uitgegeven factuur."
+      }
+    },
+    "creditNotes": {
+      "status": {
+        "draft": "Concept",
+        "issued": "Uitgegeven",
+        "void": "Ongeldig"
+      },
+      "reasons": {
+        "return": "Goederen geretourneerd",
+        "price_adjustment": "Prijsaanpassing",
+        "billing_error": "Factureringsfout",
+        "cancellation": "Annulering",
+        "goodwill": "Coulance",
+        "other": "Overig"
+      },
+      "settlements": {
+        "balance": "Verrekend met saldo",
+        "refund": "Contante terugbetaling"
+      },
+      "tabs": {
+        "label": "Status creditnota",
+        "all": "Alle",
+        "draft": "Concept",
+        "issued": "Uitgegeven",
+        "void": "Ongeldig"
+      },
+      "list": {
+        "title": "Creditnota's",
+        "subtitle": "Documenten die het bedrag verlagen dat een koper verschuldigd is op een uitgegeven factuur.",
+        "invoices": "Facturen",
+        "newCreditNote": "Nieuwe creditnota",
+        "search": "Zoeken op nummer of koper",
+        "reset": "Filters wissen",
+        "refresh": "Vernieuwen",
+        "tableLabel": "Creditnota's",
+        "noAccessTitle": "Geen toegang",
+        "noAccess": "Je hebt geen rechten om creditnota's te bekijken.",
+        "emptyFilteredTitle": "Geen creditnota's gevonden",
+        "emptyFiltered": "Probeer een andere zoekopdracht of wis de filters.",
+        "resetFilters": "Filters wissen",
+        "empty": {
+          "all": {
+            "title": "Nog geen creditnota's",
+            "message": "Crediteer een uitgegeven factuur wanneer goederen worden geretourneerd, een prijs fout was of je iets wilt teruggeven."
+          },
+          "draft": {
+            "title": "Geen concepten",
+            "message": "Creditnota's waar je nog aan werkt, verschijnen hier."
+          },
+          "issued": {
+            "title": "Niets uitgegeven",
+            "message": "Uitgegeven creditnota's hebben een nummer en hebben de factuur al aangepast."
+          },
+          "void": {
+            "title": "Niets ongeldig gemaakt",
+            "message": "Creditnota's die ongeldig zijn gemaakt, worden hier bewaard."
+          }
+        },
+        "showing": "{count, plural, one {# creditnota} other {# creditnota's}} geladen",
+        "loadMore": "Meer laden",
+        "allLoaded": "Alles geladen",
+        "loading": "Creditnota's laden",
+        "contactLoading": "...",
+        "invoiceChip": "Factuur {number}",
+        "clearInvoice": "Creditnota's van alle facturen tonen"
+      },
+      "table": {
+        "draft": "Concept",
+        "scrollArea": "Tabel met creditnota's, scrolt zijwaarts",
+        "columns": {
+          "number": "Creditnota",
+          "invoice": "Factuur",
+          "buyer": "Koper",
+          "reason": "Reden",
+          "settlement": "Verrekening",
+          "total": "Totaal",
+          "applied": "Verrekend met saldo",
+          "refunded": "Contant terugbetaald",
+          "issued": "Uitgiftedatum",
+          "status": "Status"
+        }
+      },
+      "row": {
+        "moreFor": "Meer acties voor {name}",
+        "draft": "concept",
+        "open": "Openen",
+        "edit": "Concept bewerken",
+        "issue": "Uitgeven",
+        "pdf": "PDF downloaden",
+        "print": "Afdrukken",
+        "void": "Ongeldig maken",
+        "delete": "Concept verwijderen"
+      },
+      "dialogs": {
+        "draftName": "dit concept",
+        "close": "Sluiten",
+        "keep": "Behouden",
+        "done": {
+          "issue": "Creditnota {name} uitgegeven.",
+          "void": "Creditnota {name} ongeldig gemaakt.",
+          "delete": "Concept verwijderd."
+        },
+        "issue": {
+          "title": "Deze creditnota uitgeven?",
+          "message": "Hij krijgt een nummer en verlaagt wat de koper op de factuur verschuldigd is. Bij een contante terugbetaling wordt het geld teruggestort via het betalingsjournaal. Daarna kan hij niet meer worden bewerkt.",
+          "confirm": "Creditnota uitgeven"
+        },
+        "void": {
+          "title": "Deze creditnota ongeldig maken?",
+          "warning": "De credit telt niet meer mee: de factuur gaat terug naar wat die was vóór deze creditnota.",
+          "reason": "Waarom is hij ongeldig?",
+          "reasonHint": "Verplicht. Wordt bij de creditnota bewaard.",
+          "confirm": "Creditnota ongeldig maken"
+        },
+        "delete": {
+          "title": "Dit concept verwijderen?",
+          "message": "Het concept wordt definitief verwijderd. Er is niets uitgegeven, dus de factuur verandert niet.",
+          "confirm": "Concept verwijderen"
+        }
+      },
+      "picker": {
+        "total": "Factuurtotaal",
+        "paid": "Betaald",
+        "credited": "Tot nu toe gecrediteerd",
+        "balance": "Verschuldigd saldo",
+        "loading": "Factuur laden",
+        "change": "Factuur wijzigen",
+        "search": "Zoek uitgegeven facturen op nummer of koper",
+        "results": "Facturen die gecrediteerd kunnen worden",
+        "searching": "Zoeken...",
+        "none": "Geen uitgegeven factuur gevonden.",
+        "more": "Meer tonen",
+        "totalShort": "Totaal",
+        "notCreditable": "Een creditnota kan alleen worden gemaakt voor een uitgegeven factuur (uitgegeven, deels betaald, achterstallig of betaald). Kies een andere factuur."
+      },
+      "lines": {
+        "invoiceLines": "Regels van de factuur",
+        "creditLine": "Crediteer {name}",
+        "lineFacts": "{qty} gefactureerd voor {amount} exclusief belasting",
+        "tax": "Belasting",
+        "taxIncluded": "{name} {rate}% inbegrepen in de prijs",
+        "taxAdded": "{name} {rate}% bovenop opgeteld",
+        "alreadyCredited": "{qty} al gecrediteerd, {left} over",
+        "fullyCredited": "Al volledig gecrediteerd",
+        "qtyToCredit": "Aantal te crediteren",
+        "freeTitle": "Vrije regels",
+        "freeHint": "Een coulancebedrag of een aanpassing die niet aan een regel hangt. Het bedrag is exclusief belasting.",
+        "description": "Omschrijving",
+        "amount": "Bedrag exclusief belasting",
+        "taxRate": "Belastingtarief",
+        "noTax": "Geen belasting",
+        "inclusive": "inclusief",
+        "removeFree": "Verwijder deze regel",
+        "addFree": "Een vrije regel toevoegen"
+      },
+      "problems": {
+        "noInvoice": "Kies de factuur om te crediteren.",
+        "nothing": "Kies iets om te crediteren: een regel of een vrij bedrag.",
+        "qtyInvalid": "Vul een aantal boven 0 in, met maximaal 4 decimalen.",
+        "qtyExceeds": "Er kan op deze regel nog maximaal {max} worden gecrediteerd.",
+        "descriptionRequired": "Beschrijf wat wordt gecrediteerd.",
+        "amountInvalid": "Vul een bedrag boven 0 in.",
+        "noteTooLong": "De notitie is langer dan 2000 tekens."
+      },
+      "estimate": {
+        "title": "Geschatte credit",
+        "disclaimer": "Een schatting op basis van de factuurprijzen en belasting. De bedragen die de server opslaat, zijn de definitieve.",
+        "empty": "Nog niets om te crediteren. Kies de hele factuur of vink regels aan.",
+        "lineQty": "Aantal {qty}",
+        "taxSummary": "Belastingoverzicht",
+        "included": "inbegrepen",
+        "taxOn": "{tax} over {base}",
+        "subtotal": "Exclusief belasting",
+        "tax": "Belasting",
+        "total": "Totale credit",
+        "exceeds": "Dit is meer dan de factuur nog toestaat te crediteren ({max}). De server weigert het.",
+        "money": "Wat er met het geld gebeurt",
+        "balanceBefore": "Verschuldigd saldo nu",
+        "balanceAfter": "Verschuldigd saldo daarna",
+        "applied": "Verrekend met de factuur",
+        "refunded": "Contant terugbetaald",
+        "refundNote": "Contante terugbetaling: geld dat de koper boven het nog verschuldigde bedrag heeft betaald, wordt bij uitgifte via het betalingsjournaal teruggestort.",
+        "balanceNote": "Verrekend met saldo: er wordt geen geld uitbetaald. De credit verlaagt alleen wat de koper verschuldigd is."
+      },
+      "builder": {
+        "noAccess": "Je hebt geen rechten om creditnota's te maken.",
+        "backToList": "Terug naar creditnota's",
+        "loading": "Creditnota laden",
+        "notDraft": "Alleen een conceptcreditnota kan worden bewerkt.",
+        "openIt": "Creditnota openen",
+        "back": "Terug",
+        "newTitle": "Nieuwe creditnota",
+        "editTitle": "Conceptcreditnota bewerken",
+        "conflict": "Iemand anders heeft deze creditnota gewijzigd terwijl je hem bewerkte. Laad opnieuw om de nieuwste versie te zien; je wijzigingen hier gaan verloren.",
+        "reload": "Opnieuw laden",
+        "invoice": {
+          "title": "Te crediteren factuur",
+          "hint": "Een creditnota hoort bij één uitgegeven factuur."
+        },
+        "details": {
+          "title": "Details",
+          "reason": "Reden",
+          "issueDate": "Uitgiftedatum",
+          "issueDateHint": "Laat leeg om de dag van uitgifte te gebruiken (vandaag is {today}).",
+          "note": "Notitie",
+          "noteHint": "Wordt op de creditnota afgedrukt. Optioneel."
+        },
+        "settlement": {
+          "title": "Wat er met het geld gebeurt",
+          "hint": "Nu kiezen, wordt toegepast wanneer de creditnota wordt uitgegeven.",
+          "balance": {
+            "title": "Verrekenen met het factuursaldo",
+            "body": "De factuur is minder verschuldigd. Er wordt geen geld verplaatst. Gebruik dit als de koper nog niet heeft betaald, of de credit wil houden."
+          },
+          "refund": {
+            "title": "Contant terugbetalen",
+            "body": "Wat de koper al heeft betaald boven het nu verschuldigde bedrag, wordt via het betalingsjournaal als terugbetaling teruggestort."
+          }
+        },
+        "what": {
+          "title": "Wat te crediteren",
+          "pickFirst": "Kies eerst de factuur.",
+          "loadingCredits": "Eerdere creditnota's van deze factuur worden gecontroleerd",
+          "full": {
+            "title": "De hele resterende factuur",
+            "body": "Crediteert elke regel, en de verzendkosten met de eerste creditnota. Nog te crediteren:"
+          },
+          "lines": {
+            "title": "Sommige regels of bedragen",
+            "body": "Vink de regels en aantallen aan om te crediteren, of voeg een vrij bedrag toe."
+          }
+        },
+        "saveDraft": "Concept opslaan",
+        "saveAndIssue": "Opslaan en uitgeven",
+        "cancel": "Annuleren",
+        "estimateWaiting": "Kies een factuur om de geschatte credit te zien.",
+        "savedToast": "Creditnota als concept opgeslagen.",
+        "issuedToast": "Creditnota {number} uitgegeven.",
+        "savedNotIssued": "Opgeslagen als concept, maar kon niet worden uitgegeven: {reason}"
+      },
+      "detail": {
+        "noAccess": "Je hebt geen rechten om creditnota's te bekijken.",
+        "loading": "Creditnota laden",
+        "back": "Terug naar creditnota's",
+        "backToList": "Terug naar creditnota's",
+        "draft": "Concept",
+        "againstInvoice": "Voor factuur",
+        "edit": "Bewerken",
+        "issue": "Uitgeven",
+        "pdf": "PDF",
+        "print": "Afdrukken",
+        "void": "Ongeldig maken",
+        "delete": "Verwijderen",
+        "cannotVoidRefunded": "Voor deze creditnota is contant geld teruggegeven, dus die kan niet ongeldig worden gemaakt. De terugbetaling blijft in het betalingsjournaal.",
+        "voidedOn": "Ongeldig gemaakt op {date}",
+        "voided": "Deze creditnota is ongeldig gemaakt.",
+        "voidReason": "Reden"
+      },
+      "money": {
+        "title": "Wat er met het geld is gebeurd",
+        "titleDraft": "Wat er met het geld gaat gebeuren",
+        "total": "Totaal credit",
+        "applied": "Verrekend met de factuur",
+        "refunded": "Contant terugbetaald",
+        "voidNote": "Deze creditnota is ongeldig gemaakt, dus die verlaagt de factuur niet meer.",
+        "draftNote": "Als je hem nu zo uitgeeft:",
+        "estimate": "Een schatting tot hij is uitgegeven.",
+        "balanceBody": "Verrekening: verrekend met het saldo. Er wordt geen geld uitbetaald.",
+        "refundBody": "Verrekening: contante terugbetaling. Geld dat boven het nog verschuldigde bedrag is betaald, gaat via het betalingsjournaal terug naar de koper."
+      },
+      "after": {
+        "title": "De factuur na deze creditnota",
+        "titleNow": "De factuur nu",
+        "total": "Factuurtotaal",
+        "paid": "Betaald",
+        "credited": "Gecrediteerd",
+        "balance": "Verschuldigd saldo",
+        "credit": "Credit ten gunste van de koper"
+      },
+      "paper": {
+        "label": "Creditnota {number}",
+        "labelDraft": "Conceptcreditnota",
+        "void": "Ongeldig",
+        "sellerFallback": "Jouw bedrijf",
+        "title": "Creditnota",
+        "draftNumber": "Concept",
+        "creditedTo": "Gecrediteerd aan",
+        "buyerFallback": "Koper",
+        "issued": "Uitgegeven",
+        "invoice": "Factuur",
+        "item": "Artikel",
+        "qty": "Aantal",
+        "unit": "Eenheidsprijs",
+        "tax": "Belasting",
+        "net": "Netto",
+        "taxAmount": "Belastingbedrag",
+        "total": "Totaal",
+        "taxFallback": "Belasting",
+        "taxSummary": "Belastingoverzicht",
+        "taxRate": "Tarief",
+        "taxBase": "Belastbaar bedrag",
+        "included": "inbegrepen",
+        "subtotal": "Exclusief belasting",
+        "taxTotal": "Belasting",
+        "totalCredit": "Totale credit",
+        "reason": "Reden",
+        "note": "Notitie"
+      }
+    }
+  }
+}

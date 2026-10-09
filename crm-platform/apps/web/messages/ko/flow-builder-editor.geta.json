@@ -1,0 +1,82 @@
+{
+  "flb": {
+    "geta": {
+      "status": {
+        "pending": "게시 중…",
+        "live": "라이브",
+        "liveTitle": "Geta에서 라이브",
+        "push": "라이브로 전환",
+        "pushHint": "여기에 게시됨. 지금 Geta에 라이브로 전송",
+        "failed": "실패",
+        "failedConfiguration": "구성 업데이트 단계에서 실패",
+        "failedPublish": "게시 단계에서 실패",
+        "retry": "재시도",
+        "retrying": "재시도 중…",
+        "reasonLabel": "사유",
+        "failedNote": "플로우는 여기에서 여전히 게시된 상태입니다. 재시도하면 실패한 단계부터 이어서 진행합니다.",
+        "notConfigured": "여기에 게시됨. 설정에서 Geta 게시를 구성하면 라이브로 전송할 수 있습니다.",
+        "openSettings": "설정 열기",
+        "dismiss": "닫기"
+      },
+      "settings": {
+        "title": "Geta 게시",
+        "intro": "플로우 빌더에서 게시를 누르면 봇도 Geta 콘솔에 라이브로 전송됩니다. 이 워크스페이스의 연결 정보를 한 번만 입력하세요. 시크릿은 암호화되어 저장되며 다시 표시되지 않습니다.",
+        "viewOnly": "이 설정의 상태는 볼 수 있지만 변경할 수는 없습니다.",
+        "loading": "불러오는 중…",
+        "loadFailed": "설정을 불러올 수 없습니다.",
+        "retry": "다시 시도",
+        "fixtureNotice": "이 서버는 픽스처 모드입니다. 게시는 시뮬레이션되며 Geta로는 아무것도 전송되지 않습니다.",
+        "ready": "준비됨",
+        "incomplete": "미완료",
+        "readyNote": "플로우를 게시하면 봇도 Geta에 라이브로 전송됩니다.",
+        "incompleteNote": "게시된 플로우를 Geta에 라이브로 전송하려면 아래 모든 필드를 입력하세요.",
+        "baseUrl": {
+          "label": "기본 URL",
+          "hint": "Geta API 주소입니다. 예: https://api-core-sandbox.geta.ai"
+        },
+        "origin": {
+          "label": "콘솔 출처(선택)",
+          "hint": "각 요청의 origin 및 referer로 전송됩니다. 비워 두면 둘 다 보내지 않습니다."
+        },
+        "authorization": {
+          "label": "인증 토큰",
+          "hint": "입력한 그대로 전송되며 “Bearer ”는 추가되지 않습니다."
+        },
+        "getaHost": {
+          "label": "geta-host 토큰",
+          "hint": "geta-host 헤더로 전송됩니다."
+        },
+        "secretKept": "저장되었습니다. 유지하려면 비워 두고, 교체하려면 새 값을 입력하세요.",
+        "secretPlaceholder": "저장됨(숨김)",
+        "show": "표시",
+        "hide": "숨기기",
+        "remove": "제거",
+        "record": {
+          "label": "Geta 챗봇 레코드",
+          "paste": "챗봇 레코드(JSON) 붙여넣기",
+          "replace": "챗봇 레코드(JSON) 교체",
+          "hint": "Geta로 전송할 형태 그대로의 챗봇 객체이거나, chatbot 키가 있는 전체 요청 본문입니다. 최소한 id와 bot_id가 필요합니다. 전송 시 modified_time만 갱신됩니다.",
+          "keepPlaceholder": "저장된 레코드를 유지하려면 비워 두세요",
+          "id": "챗봇 ID",
+          "name": "이름",
+          "botId": "봇 ID",
+          "remove": "저장된 레코드 제거"
+        },
+        "saved": "저장됨",
+        "notSet": "설정 안 됨",
+        "save": "저장",
+        "saving": "저장 중…",
+        "saveFailed": "저장할 수 없습니다.",
+        "removed": "제거되었습니다.",
+        "clear": "모두 지우기",
+        "cleared": "Geta 게시 설정이 지워졌습니다.",
+        "clearConfirm": {
+          "title": "Geta 게시 설정을 지울까요?",
+          "message": "기본 URL, 두 토큰, 챗봇 레코드가 제거됩니다. 게시된 플로우는 여기에서 계속 게시된 상태로 남지만 더 이상 Geta로 전송되지 않습니다.",
+          "confirm": "모두 지우기",
+          "cancel": "취소"
+        }
+      }
+    }
+  }
+}

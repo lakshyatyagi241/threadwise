@@ -1,0 +1,306 @@
+{
+  "roles-permissions": {
+    "nav": {
+      "group": "ロールと権限",
+      "roles": "ロール",
+      "permissions": "権限",
+      "staff": "スタッフのロール"
+    },
+    "common": {
+      "admin": "管理",
+      "breadcrumb": "パンくず",
+      "loading": "読み込み中…",
+      "retry": "再試行",
+      "requestId": "リクエストID",
+      "cancel": "キャンセル",
+      "noAccess": {
+        "title": "この画面へのアクセス権がありません",
+        "body": "お使いのロールには、この画面に必要なプラットフォーム権限が含まれていません。スーパー管理者に付与を依頼してください。",
+        "bodyWithKey": "この画面にはプラットフォーム権限「{permission}」が必要です。スーパー管理者に、いずれかのロールへの追加を依頼してください。",
+        "back": "コンソールに戻る"
+      },
+      "errors": {
+        "unexpected": "システム側で問題が発生しました。もう一度お試しください。解決しない場合は、リクエストIDをお伝えください。",
+        "request": "リクエストを完了できませんでした。",
+        "validation": "フォームを確認して、もう一度お試しください。",
+        "validationField": "{message}",
+        "conflict": "編集中に他のユーザーがこのロールを変更しました。再読み込みして最新版を確認し、変更を再度適用してください。",
+        "noAccess": "この操作にはプラットフォーム権限「{permission}」が必要です。",
+        "nameTaken": "この名前は既に使用されています。",
+        "nameRequired": "ロール名は必須です。",
+        "permissionNameRequired": "権限名は必須です。",
+        "permissionNameFormat": "小文字の英字、数字、アンダースコアを使用し、区切りにはドットを使ってください。",
+        "locked": "スーパー管理者はシステムでロックされています。名前の変更、権限の削除、削除はできません。",
+        "lockedDelete": "スーパー管理者ロールはシステムでロックされており、削除できません。",
+        "permissionSystem": "この権限はプラットフォームでチェックされるため、削除できません。",
+        "permissionUnknown": "次の権限は一覧にありません：{names}。",
+        "reassignSame": "ユーザーを移動する別のロールを選択してください。",
+        "lastSuperAdmin": "有効なスーパー管理者が少なくとも1人必要です。",
+        "privilegedRole": "スーパー管理者ロールを付与または取り消せるのはスーパー管理者のみです。",
+        "notFound": "この項目はもう存在しません。削除された可能性があります。"
+      }
+    },
+    "list": {
+      "crumb": "ロール",
+      "eyebrow": "管理 · ユーザーとアクセス · ロール",
+      "titleLead": "ロールと",
+      "titleAccent": "権限",
+      "description": "各ロールがプラットフォーム全体でできることを定義します。ユーザーにはロールが1つ割り当てられ、権限はロールごとにまとめられます。",
+      "managePermissions": "権限を管理",
+      "addRole": "ロールを追加",
+      "kpi": {
+        "label": "ロールの合計",
+        "total": "ロール総数",
+        "totalHint": "システム{system}件 · カスタム{custom}件",
+        "permissions": "権限総数",
+        "permissionsHint": "モジュール全体",
+        "users": "ロールを持つユーザー",
+        "usersHint": "すべてのロール",
+        "noUsers": "ユーザーのいないロール",
+        "noUsersHint": "アーカイブを検討してください"
+      },
+      "filter": {
+        "label": "種類でロールを絞り込む",
+        "all": "すべて",
+        "system": "システム",
+        "custom": "カスタム",
+        "search": "ロールを検索…",
+        "searchLabel": "ロールを検索"
+      },
+      "table": {
+        "caption": "プラットフォームのロール",
+        "index": "#",
+        "name": "ロール名",
+        "type": "種類",
+        "users": "ユーザー",
+        "permissions": "権限",
+        "lastEdited": "最終更新",
+        "actions": "操作"
+      },
+      "systemRole": "システムロール",
+      "customRole": "カスタムロール",
+      "systemBadge": "システム",
+      "customBadge": "カスタム",
+      "row": {
+        "menu": "{name}の操作",
+        "edit": "ロールを編集",
+        "delete": "削除"
+      },
+      "footer": {
+        "showing": "ロール{total}件中{shown}件を表示",
+        "add": "+ ロールを追加"
+      },
+      "empty": {
+        "none": "ロールはまだ定義されていません。<link>最初のロールを作成</link>してください。",
+        "noMatch": "フィルターに一致するロールはありません。",
+        "clear": "フィルターをクリア"
+      },
+      "delete": {
+        "title": "ロールを削除",
+        "message": "ロール{name}を削除しますか？ このロールが割り当てられたユーザーは、すべての権限を失います。この操作は元に戻せません。",
+        "confirm": "はい、削除します",
+        "cancel": "キャンセル"
+      },
+      "toasts": {
+        "deleted": "ロール「{name}」を削除しました。"
+      }
+    },
+    "editor": {
+      "crumbRoles": "ロール",
+      "crumbNew": "新規",
+      "eyebrowNew": "管理 · ロール · 新規",
+      "eyebrowEdit": "管理 · ロールを編集中",
+      "titleLead": "新しい",
+      "titleAccent": "ロールを作成",
+      "description": "名前を入力し、このロールに付与する特定のモジュールへのアクセスにチェックを入れてください。いつでも編集できます。",
+      "summary": "{count} / {total}件の権限 · 最終更新 {date}。",
+      "userChip": "{count, plural, other {ユーザー#人}}",
+      "save": "変更を保存",
+      "create": "ロールを作成",
+      "saving": "保存中…",
+      "reload": "ロールを再読み込み",
+      "discard": "保存されていない変更があります。保存せずに離れますか？",
+      "duplicatedBanner": "ロールを「{name}」として複製しました。下でコピーを編集してください。",
+      "lockedNotice": "{name}はシステムでロックされています。名前の変更、権限の削除、削除はできません。",
+      "details": "ロールの詳細",
+      "name": "ロール名",
+      "namePlaceholder": "例：営業リーダー",
+      "template": "テンプレートから開始",
+      "templateBlank": "空 · 権限なし",
+      "templateOption": "{name} · {count, plural, other {権限#件}}",
+      "templateBusy": "テンプレートを読み込み中…",
+      "descriptionLabel": "説明",
+      "descriptionPlaceholder": "このロールの役割は何ですか？ 管理者に表示されます。",
+      "toasts": {
+        "created": "ロール「{name}」を作成しました。",
+        "updated": "ロール「{name}」を更新しました。"
+      }
+    },
+    "matrix": {
+      "title": "権限を割り当て",
+      "counter": "{count, number} / {total, number}件を選択中",
+      "selectAll": "すべての権限を選択",
+      "module": "モジュール",
+      "selectAllColumn": "すべて選択",
+      "available": "利用可能な権限",
+      "selectAllModule": "すべて選択",
+      "selectAllOf": "{module}の権限をすべて選択",
+      "empty": "権限はまだ定義されていません。<link>作成</link>してください。",
+      "emptyPlain": "権限はまだ定義されていません。"
+    },
+    "dangerZone": {
+      "title": "危険な操作",
+      "irreversible": "取り消し不可",
+      "duplicate": {
+        "title": "ロールを複製",
+        "hint": "同じ権限を持つコピーを作成します",
+        "action": "複製",
+        "busy": "複製中…"
+      },
+      "reassign": {
+        "title": "すべてのユーザーを再割り当て",
+        "hint": "{count, plural, other {ユーザー#人}}を別のロールに移動",
+        "targetLabel": "ユーザーの移動先",
+        "placeholder": "移動先…",
+        "action": "移動",
+        "busy": "移動中…"
+      },
+      "moved": "{count}人のユーザーを「{from}」から「{to}」に移動しました。",
+      "delete": {
+        "title": "ロールを削除",
+        "hint": "ロールを削除し、すべてのユーザーから外します。",
+        "action": "削除",
+        "dialogTitle": "ロールを削除",
+        "dialogMessage": "ロール{name}を削除しますか？ このロールが割り当てられたユーザーは、すべての権限を失います。この操作は元に戻せません。",
+        "confirm": "はい、削除します",
+        "cancel": "キャンセル"
+      },
+      "deleted": "ロール「{name}」を削除しました。"
+    },
+    "permissions": {
+      "crumb": "権限",
+      "eyebrow": "管理 · ユーザーとアクセス · 権限",
+      "titleLead": "すべて",
+      "titleAccent": "権限",
+      "description": "プラットフォームが認識するすべての権限フラグをモジュールごとにまとめています。ここで新しいフラグを追加し、ロール編集画面でロールに割り当ててください。",
+      "backToRoles": "ロールに戻る",
+      "add": "権限を追加",
+      "kpi": {
+        "label": "権限の合計",
+        "total": "権限総数",
+        "totalHint": "{modules, plural, other {モジュール#件}}にわたる",
+        "used": "ロールで使用中",
+        "usedHint": "1つ以上のロールに割り当て済み",
+        "orphans": "未使用の権限",
+        "orphansHint": "ロールに割り当てられていません",
+        "last": "最後に追加"
+      },
+      "filter": {
+        "search": "権限名を検索…",
+        "searchLabel": "権限名を検索",
+        "moduleLabel": "モジュール",
+        "allModules": "すべてのモジュール",
+        "count": "{modules, plural, other {モジュール#件}}内の{count, plural, other {権限#件}}"
+      },
+      "groupsLabel": "モジュール別の権限",
+      "groupCount": "{count, plural, other {権限#件}}",
+      "orphan": "未使用",
+      "system": "システム",
+      "systemHint": "プラットフォームでチェックされるため、削除できません。",
+      "inRoles": "{count, plural, other {ロール#件}}に含まれます",
+      "deleteName": "権限{name}を削除",
+      "empty": {
+        "none": "権限はまだ定義されていません。<link>最初の権限を作成</link>してください。",
+        "noMatch": "検索に一致する権限はありません。"
+      },
+      "delete": {
+        "action": "削除",
+        "title": "権限を削除",
+        "message": "権限{name}を削除しますか？ この権限を使用しているロールは、直ちにその機能を失います。",
+        "confirm": "はい、削除します",
+        "cancel": "キャンセル"
+      },
+      "toasts": {
+        "deleted": "権限「{name}」を削除しました。"
+      }
+    },
+    "permissionNew": {
+      "crumbPermissions": "権限",
+      "crumbNew": "新規",
+      "eyebrow": "管理 · 権限 · 新規",
+      "titleLead": "新しい",
+      "titleAccent": "権限を作成",
+      "description": "細かい機能フラグを追加します。作成後、ロール編集画面で1つ以上のロールに割り当ててください。",
+      "create": "権限を作成",
+      "creating": "作成中…",
+      "details": "権限の詳細",
+      "module": "モジュール",
+      "modulePlaceholder": "モジュールを選択",
+      "moduleHint": "権限はロール編集画面でモジュールごとにまとめられます。",
+      "action": "アクション",
+      "actionHint": "小文字で、スペースは使わないでください。次の形式で結合されます",
+      "actionPlaceholder": "例：export · refund · approve",
+      "name": "権限名",
+      "namePlaceholder": "module.action — 上の入力から自動入力",
+      "nameHint": "モジュールとアクションから自動入力されます。カスタムの文字列が必要な場合のみ編集してください。",
+      "tip": "<b>命名規則：</b>小文字で <code>module.action</code> の形式を使用します。例：<code>campaigns.send</code>、<code>billing.refund</code>、<code>audit.export</code>。",
+      "preview": {
+        "title": "権限のプレビュー",
+        "appearsUnder": "ロール編集画面の<b>{module}</b>の下に表示されます。",
+        "selectedModule": "選択したモジュール"
+      },
+      "code": {
+        "title": "コードでの参照",
+        "hint": "この権限を必須にするには、プラットフォームのルートに <code>@PlatformPermission()</code> を使用します。"
+      },
+      "tipCard": "<b>ヒント：</b><code>module.action</code> の形式で名付けた権限は、ロール編集画面で自動的にまとめられます。",
+      "toasts": {
+        "created": "権限「{name}」を作成しました。"
+      }
+    },
+    "staff": {
+      "crumbRoles": "ロール",
+      "crumb": "スタッフのロール",
+      "eyebrow": "管理 · ユーザーとアクセス · スタッフのロール",
+      "titleLead": "スタッフ",
+      "titleAccent": "ロール",
+      "description": "このコンソールの各オペレーターに、できることを決めるプラットフォームのロールを割り当ててください。保存すると、オペレーターのロールはチェックしたものだけに置き換わります。",
+      "backToRoles": "ロールに戻る",
+      "caption": "オペレーターとプラットフォームのロール",
+      "table": {
+        "operator": "オペレーター",
+        "tier": "コンソールへのアクセス",
+        "status": "ステータス",
+        "roles": "プラットフォームのロール",
+        "actions": "操作"
+      },
+      "tier": {
+        "super_admin": "スーパー管理者",
+        "support": "サポート",
+        "auditor": "監査担当"
+      },
+      "status": {
+        "active": "有効",
+        "suspended": "停止中"
+      },
+      "noRoles": "ロールなし",
+      "rolesOf": "{name}のロール",
+      "assign": "ロールを割り当て",
+      "assignFor": "{name}にロールを割り当て",
+      "empty": "オペレーターはまだいません。",
+      "dialog": {
+        "title": "{name}にロールを割り当て",
+        "close": "閉じる",
+        "cancel": "キャンセル",
+        "save": "ロールを保存",
+        "saving": "保存中…",
+        "hint": "このオペレーターに割り当てるロールすべてにチェックを入れてください。",
+        "superOnly": "このロールを付与または取り消せるのはスーパー管理者のみです。",
+        "count": "{count, plural, =0 {ロールが選択されていません} other {ロールを#件選択中}}"
+      },
+      "toasts": {
+        "saved": "「{name}」のロールを更新しました。"
+      }
+    }
+  }
+}

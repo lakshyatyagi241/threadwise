@@ -1,0 +1,312 @@
+{
+  "whatsapp-devices-baileys": {
+    "nav": {
+      "devices": "WhatsApp pribadi"
+    },
+    "area": {
+      "title": "API WhatsApp tidak resmi",
+      "numbers": "Nomor",
+      "warmer": "Pemanasan"
+    },
+    "common": {
+      "dismiss": "Tutup",
+      "requestId": "Permintaan {id}",
+      "unofficial": "Tidak resmi",
+      "reminder": "Koneksi tidak resmi. WhatsApp dapat membatasi nomor ini.",
+      "readGuide": "Baca panduannya",
+      "close": "Tutup",
+      "cancel": "Batal",
+      "back": "Kembali"
+    },
+    "list": {
+      "title": "Nomor WhatsApp pribadi",
+      "subtitle": "Tautkan nomor WhatsApp dengan kode QR atau kode pemasangan. Chat di nomor ini muncul di kotak masuk bersama.",
+      "connect": "Hubungkan nomor",
+      "capCount": "{used} dari {limit} nomor",
+      "capUnlimited": "{used, plural, other {# nomor}}",
+      "capFull": "Workspace Anda dapat memiliki {limit, plural, other {# nomor}} di mesin ini. Hapus satu untuk menghubungkan yang lain.",
+      "capLabel": "Nomor yang digunakan",
+      "loading": "Memuat nomor Anda...",
+      "retry": "Coba lagi",
+      "searchLabel": "Cari berdasarkan nama atau nomor",
+      "searchPlaceholder": "Cari nama atau nomor",
+      "tabs": {
+        "all": "Semua",
+        "connected": "Terhubung",
+        "disconnected": "Terputus"
+      },
+      "noMatch": "Tidak ada nomor yang cocok. Hapus pencarian atau pilih tab lain.",
+      "empty": {
+        "title": "Belum ada nomor pribadi yang ditautkan",
+        "message": "Tautkan nomor WhatsApp yang sudah Anda gunakan. Cara kerjanya seperti WhatsApp Web, sehingga bukan cara resmi untuk mengotomatisasi WhatsApp dan WhatsApp dapat membatasi nomor tersebut. Untuk penggunaan serius atau jangka panjang, jalur WhatsApp Business resmi lebih rendah risikonya.",
+        "action": "Hubungkan nomor",
+        "noPermission": "Minta admin workspace untuk menghubungkan nomor."
+      },
+      "columns": {
+        "name": "Nama",
+        "lastSeen": "Terakhir terlihat"
+      },
+      "lastSeenNever": "Tidak pernah",
+      "assignedTo": "Ditangani oleh {name}",
+      "noticeChanged": {
+        "title": "Pemberitahuan kami berubah",
+        "body": "Pemberitahuan risiko untuk nomor pribadi telah diperbarui. Nomor yang terhubung tetap berfungsi. Anda akan diminta membacanya lagi saat menghubungkan nomor berikutnya.",
+        "action": "Baca pemberitahuan"
+      },
+      "action": {
+        "link": "Hubungkan",
+        "reconnect": "Hubungkan ulang",
+        "relink": "Tautkan lagi",
+        "retry": "Coba lagi",
+        "details": "Detail",
+        "disconnect": "Putuskan",
+        "rename": "Ganti nama",
+        "delete": "Hapus"
+      },
+      "sendingToggle": "Gunakan {name} untuk mengirim",
+      "sendingOn": "Digunakan untuk mengirim",
+      "sendingOff": "Tidak digunakan untuk mengirim",
+      "done": {
+        "disconnected": "{name} telah diputus.",
+        "disconnectedNotUnlinked": "{name} telah diputus di sini. Hapus juga perangkat ini di WhatsApp, pada Perangkat tertaut.",
+        "deleted": "{name} telah dihapus. Chat-nya tetap ada di kotak masuk.",
+        "renamed": "Diganti namanya menjadi {name}.",
+        "sendingSaved": "Disimpan."
+      },
+      "workerDown": "Layanan koneksi tidak berjalan. Nomor tidak dapat terhubung sampai layanan kembali."
+    },
+    "state": {
+      "created": "Belum ditautkan",
+      "awaiting_qr": "Menunggu pemindaian",
+      "awaiting_pairing_code": "Menunggu kode",
+      "connecting": "Menghubungkan",
+      "connected": "Terhubung",
+      "disconnected": "Terputus",
+      "logged_out": "Tautan diakhiri oleh WhatsApp",
+      "error": "Tidak dapat terhubung",
+      "unknown": "Tidak diketahui"
+    },
+    "reason": {
+      "unlinked_on_phone": "WhatsApp mengakhiri tautan ke nomor ini. Ini terjadi saat perangkat dihapus di WhatsApp, pada Perangkat tertaut, dan juga saat WhatsApp membatasi nomor. Chat Anda di sini tetap disimpan. Anda dapat menautkannya lagi.",
+      "forbidden": "WhatsApp menolak koneksi. Ini dapat berarti nomor telah dibatasi. Chat Anda di sini tetap disimpan.",
+      "qr_timeout": "Kode tidak dipindai tepat waktu.",
+      "pair_failed": "WhatsApp tidak dapat menyelesaikan penautan nomor ini.",
+      "code_failed": "Kode pemasangan tidak diterima.",
+      "mismatch": "Telepon yang memindai bukan nomor yang Anda masukkan. Periksa nomornya dan coba lagi.",
+      "proxy_unreachable": "Proxy tidak merespons. Nomor tetap offline sampai proxy berfungsi.",
+      "session_conflict": "Nomor yang sama ditautkan di tempat lain dan keduanya saling menggantikan. Hapus tautan lainnya, lalu hubungkan lagi.",
+      "device_limit_reached": "WhatsApp mengizinkan 4 perangkat tertaut. Hapus satu di WhatsApp, pada Perangkat tertaut, lalu coba lagi.",
+      "worker_unavailable": "Layanan koneksi tidak tersedia. Coba lagi dalam beberapa menit.",
+      "worker_silent": "Layanan koneksi berhenti merespons untuk nomor ini. Koneksi akan tersambung kembali otomatis saat layanan kembali.",
+      "user": "Diputus dari workspace ini.",
+      "session_incomplete": "Sesi yang tersimpan belum selesai. Tautkan nomor lagi."
+    },
+    "notice": {
+      "title": "Sebelum Anda menghubungkan",
+      "intro": "Baca ini. Singkat dan benar adanya.",
+      "listLabel": "Konfirmasi setiap poin",
+      "notesTitle": "Perlu diketahui",
+      "version": "Versi pemberitahuan {version}",
+      "accept": "Saya setuju dan lanjutkan",
+      "accepting": "Menyimpan...",
+      "mustTick": "Centang ketiga kotak untuk melanjutkan.",
+      "pageTitle": "Pemberitahuan risiko untuk nomor pribadi",
+      "pageIntro": "Ini adalah pemberitahuan yang Anda setujui sebelum menghubungkan nomor WhatsApp pribadi.",
+      "acceptedOn": "Anda menyetujui versi {version} pada {date}.",
+      "notAccepted": "Anda belum menyetujui versi terbaru. Anda akan diminta saat menghubungkan nomor.",
+      "backToList": "Kembali ke daftar nomor",
+      "texts": {
+        "v2026_10_07_1": {
+          "items": {
+            "not_approved_ban_risk": "Saya memahami bahwa ini menghubungkan WhatsApp saya seperti WhatsApp Web. Ini bukan cara resmi untuk mengotomatisasi WhatsApp dan melanggar ketentuan WhatsApp. WhatsApp dapat membatasi atau memblokir permanen nomor ini kapan saja, termasuk untuk penggunaan normal, dan kami tidak dapat mencegahnya atau mengembalikan nomor tersebut.",
+            "own_number_expected_contacts": "Saya hanya akan menghubungkan nomor yang saya miliki atau yang mendapat izin dari pemiliknya, dan saya mampu menanggung kehilangannya. Saya hanya akan mengirim pesan kepada orang yang memang mengharapkan pesan dari saya.",
+            "shared_inbox_disclosure": "Saya memahami bahwa sejak nomor ini ditautkan, setiap chat pribadi di nomor ini (bukan hanya chat bisnis) akan muncul di kotak masuk bersama workspace ini bagi anggota yang dapat membaca kotak masuk, dan pesan yang saya ketik di ponsel juga akan disalin ke sana."
+          },
+          "notes": {
+            "official_route_lower_risk": "Jalur WhatsApp Business resmi lebih rendah risikonya untuk penggunaan serius atau jangka panjang.",
+            "warm_up": "Panaskan nomor secara perlahan dan jaga volume tetap rendah.",
+            "no_ban_support": "Nomor yang dibatasi atau diblokir tidak tercakup dukungan: kami tidak menyelidiki, memulihkan, atau mengembalikan dananya.",
+            "shared_addresses": "Dalam uji coba ini, nomor terhubung dari alamat bersama server kami (tanpa proxy), sehingga pembatasan pada satu nomor dapat ditautkan ke nomor lain.",
+            "disconnect_keeps_chats": "Memutus koneksi di sini menghapus tautan dan sesi yang tersimpan, tetapi tidak menghapus chat dari kotak masuk."
+          }
+        }
+      }
+    },
+    "wizard": {
+      "title": "Hubungkan nomor",
+      "relinkTitle": "Tautkan {name}",
+      "stepOf": "Langkah {step} dari {total}",
+      "continue": "Lanjutkan",
+      "creating": "Menyimpan...",
+      "number": {
+        "title": "Nomor yang mana?",
+        "name": "Nama",
+        "namePlaceholder": "Misalnya Lini Penjualan",
+        "nameHelp": "Hanya tim Anda yang melihat nama ini.",
+        "phone": "Nomor WhatsApp",
+        "phoneHelp": "Ketik nomor yang akan Anda tautkan, beserta kode negaranya. Ini harus nomor dari telepon yang akan memindai atau memasukkan kode.",
+        "activate": "Gunakan untuk mengirim setelah ditautkan",
+        "activateHelp": "Kampanye, pesan terjadwal, dan alur dapat menggunakan nomor ini setelah ditautkan.",
+        "nameError": {
+          "required": "Masukkan nama.",
+          "short": "Nama harus terdiri dari minimal 2 karakter.",
+          "long": "Nama terlalu panjang (maksimal 191 karakter)."
+        },
+        "phoneError": {
+          "empty": "Masukkan nomor.",
+          "invalid": "Nomor ini tidak valid untuk negara yang dipilih."
+        },
+        "openExisting": "Buka nomor yang sudah ada"
+      },
+      "link": {
+        "title": "Tautkan telepon",
+        "choose": "Bagaimana Anda ingin menautkannya?",
+        "methodLabel": "Metode penautan",
+        "qr": "Pindai kode QR",
+        "qrHelp": "Pindai dengan telepon yang memiliki nomor ini.",
+        "code": "Gunakan kode pemasangan",
+        "codeHelp": "Ketik kode 8 karakter di telepon. Cocok jika Anda tidak bisa memindai.",
+        "numberLine": "Nomor: {phone}",
+        "startQr": "Tampilkan kode QR",
+        "startCode": "Dapatkan kode pemasangan",
+        "starting": "Memulai...",
+        "needCountryCode": "Tambahkan kode negara untuk menggunakan kode pemasangan.",
+        "someoneElse": "Masukkan kode ini hanya di telepon dari nomor yang sedang Anda hubungkan. Jangan pernah membagikannya kepada siapa pun. Kode pemasangan yang dimasukkan di telepon orang lain akan menautkan seluruh akun WhatsApp orang tersebut ke workspace ini.",
+        "qrSteps": {
+          "one": "Buka WhatsApp di telepon.",
+          "two": "Buka Perangkat tertaut, lalu Tautkan perangkat.",
+          "three": "Arahkan kamera ke kode ini."
+        },
+        "codeSteps": {
+          "one": "Buka WhatsApp di telepon.",
+          "two": "Buka Perangkat tertaut, lalu Tautkan perangkat, lalu Tautkan dengan nomor telepon.",
+          "three": "Ketik kode ini."
+        },
+        "qrAlt": "Kode QR untuk menautkan nomor",
+        "qrRefresh": "Kode baru dalam {seconds} dtk",
+        "qrExpires": "Berakhir dalam {time}",
+        "codeValid": "Kode berlaku sekitar 3 menit.",
+        "codeExpires": "Berlaku selama {time}",
+        "codeLabel": "Kode pemasangan",
+        "copy": "Salin kode",
+        "copied": "Disalin",
+        "copyFailed": "Tidak dapat menyalin. Pilih kodenya lalu salin.",
+        "strip": {
+          "shown": "Kode ditampilkan",
+          "scanned": "Dipindai",
+          "ready": "Siap"
+        },
+        "stripLabel": "Progres",
+        "linking": "Menautkan. WhatsApp sedang menyinkronkan, ini mungkin memerlukan waktu.",
+        "cancelAttempt": "Berhenti dan pilih cara lain",
+        "reading": "Menunggu kode pertama...",
+        "relinkAction": "Lupakan sesi tersimpan dan tautkan lagi"
+      },
+      "result": {
+        "connectedTitle": "Terhubung",
+        "connectedBody": "{phone} sudah ditautkan. Chat di nomor ini sekarang muncul di kotak masuk bersama.",
+        "warmer": "Atur pemanasan",
+        "inbox": "Buka kotak masuk",
+        "list": "Kembali ke daftar nomor",
+        "timedOutTitle": "Kode tidak dipindai tepat waktu",
+        "timedOutBody": "Tidak ada yang ditautkan. Jika ponsel offline atau terkunci, aktifkan kembali lalu mulai lagi.",
+        "phoneOfflineTitle": "Ponsel tidak dapat dihubungi",
+        "phoneOfflineBody": "Pastikan ponsel online, lalu mulai lagi.",
+        "loggedOutTitle": "WhatsApp mengakhiri tautan",
+        "loggedOutBody": "Ini terjadi saat perangkat dihapus di WhatsApp, di bawah Perangkat tertaut, dan juga saat WhatsApp membatasi nomor. Chat Anda di sini tetap disimpan. Anda dapat menautkannya lagi.",
+        "replacedTitle": "Sesi lain menggantikan sesi ini",
+        "replacedBody": "Nomor yang sama ditautkan di tempat lain. Hapus tautan lainnya, lalu hubungkan lagi.",
+        "mismatchTitle": "Itu bukan nomor yang Anda masukkan",
+        "mismatchBody": "Ponsel yang memindai bukan nomor yang Anda masukkan. Periksa nomornya dan coba lagi.",
+        "limitTitle": "Ponsel memiliki terlalu banyak perangkat tertaut",
+        "limitBody": "WhatsApp mengizinkan 4 perangkat tertaut. Hapus satu di WhatsApp, di bawah Perangkat tertaut, lalu coba lagi.",
+        "proxyTitle": "Proksi tidak merespons",
+        "proxyBody": "Nomor tetap offline sampai proksi berfungsi.",
+        "serviceTitle": "Layanan koneksi tidak tersedia",
+        "serviceBody": "Coba lagi dalam beberapa menit.",
+        "failedTitle": "Nomor tidak dapat ditautkan",
+        "failedBody": "WhatsApp belum menyelesaikan penautan. Tidak ada yang ditautkan. Coba lagi.",
+        "tryAgain": "Coba lagi"
+      },
+      "discard": {
+        "title": "Hentikan koneksi?",
+        "message": "Anda belum selesai. Jika keluar sekarang, yang sudah Anda ketik akan hilang dan tautan yang sedang berjalan akan dibatalkan.",
+        "stay": "Lanjutkan",
+        "leave": "Keluar"
+      }
+    },
+    "detail": {
+      "back": "Semua nomor",
+      "loading": "Memuat nomor...",
+      "notFound": "Nomor ini tidak ada atau sudah dihapus.",
+      "status": "Status",
+      "lastSeen": "Terakhir dilihat",
+      "linkedSince": "Dalam status ini sejak",
+      "number": "Nomor",
+      "numberLocked": "Nomor tidak dapat diubah selama tautan ada. Putuskan tautan terlebih dahulu.",
+      "assignedTo": "Ditangani oleh",
+      "createdBy": "Ditambahkan oleh",
+      "sending": "Gunakan untuk mengirim",
+      "editTitle": "Edit",
+      "name": "Nama",
+      "save": "Simpan",
+      "saving": "Menyimpan...",
+      "saved": "Tersimpan.",
+      "dangerTitle": "Putuskan atau hapus",
+      "disconnectHelp": "Menghapus tautan nomor dan sesi tersimpannya. Anda dapat menautkannya lagi nanti.",
+      "deleteHelp": "Menghapus nomor dari workspace ini. Chat tetap ada di kotak masuk.",
+      "warmerLink": "Atur pemanasan untuk nomor ini"
+    },
+    "dialog": {
+      "disconnect": {
+        "title": "Putuskan {name}?",
+        "message": "Ini akan menghapus tautan nomor dan sesi tersimpannya. Percakapan tetap dapat dibaca tetapi tidak dapat dibalas dari nomor ini sampai Anda menautkannya lagi.",
+        "confirm": "Putuskan"
+      },
+      "delete": {
+        "title": "Hapus {name}?",
+        "message": "Ini akan menghapus tautan nomor dan sesi tersimpannya. Percakapan tetap dapat dibaca di kotak masuk tetapi tidak dapat dibalas dari nomor ini. Tindakan ini tidak dapat dibatalkan.",
+        "confirm": "Hapus nomor"
+      },
+      "rename": {
+        "title": "Ganti nama nomor",
+        "label": "Nama",
+        "confirm": "Simpan"
+      },
+      "cancel": "Batal"
+    },
+    "errors": {
+      "generic": "Terjadi kesalahan. Coba lagi.",
+      "FORBIDDEN": "Anda tidak memiliki izin untuk melakukan ini.",
+      "UNAUTHENTICATED": "Sesi Anda berakhir. Masuk lagi.",
+      "NOT_FOUND": "Nomor ini tidak ada atau sudah dihapus.",
+      "VALIDATION_FAILED": "Ada beberapa kolom yang perlu diperiksa.",
+      "ROW_VERSION_CONFLICT": "Seseorang mengubah nomor ini. Muat ulang dan coba lagi.",
+      "WA_UNOFFICIAL_DISABLED": "Fitur ini tidak lagi diaktifkan untuk workspace Anda.",
+      "PLAN_FEATURE_LOCKED": "Paket Anda tidak mencakup fitur ini.",
+      "PLAN_LIMIT_REACHED": "Paket Anda mengizinkan {limit, plural, other {# nomor WhatsApp}} di sini. Hapus satu atau tingkatkan paket untuk menambah lagi.",
+      "PLAN_LIMIT_REACHED_GENERIC": "Paket Anda tidak mengizinkan nomor tambahan di sini. Hapus satu atau tingkatkan paket untuk menambah lagi.",
+      "DEVICE_ALREADY_EXISTS": "Perangkat dengan nomor telepon tersebut sudah ada di workspace ini.",
+      "DEVICE_PHONE_INVALID": "Tambahkan kode negara untuk menggunakan kode pairing.",
+      "PERSONAL_WA_NOTICE_REQUIRED": "Baca dan setujui pemberitahuan terlebih dahulu.",
+      "DEVICE_PAIRING_RATE_LIMITED": "Terlalu banyak percobaan untuk nomor ini. Coba lagi nanti.",
+      "DEVICE_PAIRING_RATE_LIMITED_WAIT": "Terlalu banyak percobaan untuk nomor ini. Coba lagi dalam {minutes, plural, other {# menit}}.",
+      "DEVICE_PAIRING_IN_PROGRESS": "Seseorang memulai koneksi beberapa saat lalu. Tunggu hingga selesai atau dihentikan.",
+      "DEVICE_NOT_PAIRABLE": "Nomor ini tidak dapat ditautkan saat ini. Putuskan terlebih dahulu.",
+      "WA_WORKER_UNAVAILABLE": "Layanan koneksi tidak tersedia. Coba lagi dalam beberapa menit.",
+      "RATE_LIMITED": "Terlalu banyak permintaan. Tunggu sebentar.",
+      "upgrade": "Lihat paket dan tingkatkan",
+      "requestId": "Permintaan {id}",
+      "DEVICE_PILOT_CAP_REACHED": "Workspace Anda telah mencapai jumlah nomor WhatsApp pribadi yang diizinkan selama pilot. Hapus satu untuk menghubungkan yang lain.",
+      "DEVICE_CREATE_RATE_LIMITED": "Terlalu banyak nomor ditambahkan dalam satu jam terakhir. Coba lagi nanti.",
+      "DEVICE_CREATE_RATE_LIMITED_WAIT": "Terlalu banyak nomor ditambahkan dalam satu jam terakhir. Coba lagi dalam {minutes, plural, other {# menit}}.",
+      "DEVICE_PAIRING_IN_PROGRESS_BY": "{name} memulai koneksi beberapa saat lalu. Tunggu hingga selesai.",
+      "DEVICE_NO_PAIRING": "Percobaan koneksi ini berakhir. Mulai lagi.",
+      "DEVICE_NUMBER_LOCKED": "Nomor tidak dapat diubah selama tautan ada. Putuskan terlebih dahulu.",
+      "DEVICE_PAIRING_TIMEOUT": "WhatsApp tidak merespons tepat waktu. Coba lagi.",
+      "DEVICE_NOT_PAIRABLE_CONNECTED": "Nomor ini sudah ditautkan. Putuskan terlebih dahulu, lalu hubungkan lagi.",
+      "DEVICE_NOT_PAIRABLE_SESSION": "Nomor ini masih memiliki sesi WhatsApp tersimpan. Tautkan ulang dari awal untuk melupakan sesi tersimpan dan mulai ulang.",
+      "DEVICE_NOT_PAIRABLE_LIVE": "Koneksi sedang berjalan untuk nomor ini. Tautkan ulang dari awal untuk memulai ulang."
+    }
+  }
+}

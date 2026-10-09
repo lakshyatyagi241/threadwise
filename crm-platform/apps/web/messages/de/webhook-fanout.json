@@ -1,0 +1,140 @@
+{
+  "webhook-fanout": {
+    "nav": {
+      "group": "Webhooks",
+      "forwarding": "Webhook-Weiterleitung"
+    },
+    "common": {
+      "loading": "Wird geladen",
+      "retry": "Erneut versuchen",
+      "requestId": "Anfrage-ID",
+      "dash": "-",
+      "errors": {
+        "forbidden": "Sie haben keine Berechtigung, dies zu tun.",
+        "request": "Diese Anfrage konnte nicht abgeschlossen werden.",
+        "unexpected": "Auf unserer Seite ist ein Fehler aufgetreten. Versuchen Sie es in einem Moment erneut.",
+        "network": "Der Server konnte nicht erreicht werden. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+        "conflict": "Jemand anderes hat dieses Ziel geändert. Die Liste wurde neu geladen: Wenden Sie Ihre Änderung erneut an.",
+        "validation": "Einige Werte sind ungültig. Prüfen Sie die markierten Felder.",
+        "notFound": "Dieser Eintrag existiert nicht mehr.",
+        "urlRejected": "Diese URL ist nicht zulässig. Verwenden Sie eine https-Adresse, die aus dem Internet erreichbar ist."
+      }
+    },
+    "page": {
+      "eyebrow": "Admin / System / Webhooks",
+      "title": "Webhook-Weiterleitung",
+      "description": "Die Liste der Dienste des Plattformbetreibers, die eine Kopie jedes Meta-Webhooks erhalten.",
+      "banner": "Meta erlaubt nur eine Callback-URL. Wir empfangen sie einmal, prüfen sie und leiten den unveränderten Rohinhalt (mit der ursprünglichen Signatur) an jedes aktive Ziel weiter.",
+      "superOnly": "Nur ein Super-Admin kann die Webhook-Weiterleitung verwalten.",
+      "add": "Ziel hinzufügen",
+      "tabs": {
+        "targets": "Ziele",
+        "failures": "Fehlgeschlagene Zustellungen"
+      }
+    },
+    "targets": {
+      "empty": "Noch keine Weiterleitungsziele",
+      "emptyBody": "Fügen Sie ein Ziel hinzu, um Meta-Webhooks an einen anderen Dienst weiterzuleiten.",
+      "columns": {
+        "target": "Ziel",
+        "active": "Aktiv",
+        "fields": "Felder",
+        "deliveries": "Zustellungen",
+        "last": "Letzte Zustellung",
+        "actions": "Aktionen"
+      },
+      "allFields": "Alle Felder",
+      "success": "{count, number} erfolgreich",
+      "failure": "{count, number} fehlgeschlagen",
+      "pending": "{count, number} ausstehend",
+      "pendingLabel": "{count, number} fehlgeschlagene Zustellungen warten auf erneutes Senden",
+      "neverDelivered": "Noch nichts zugestellt",
+      "lastStatus": "Status {status}",
+      "lastError": "Fehler: {error}",
+      "lastAt": "um {time}",
+      "activeSwitch": "Weiterleiten an {name}",
+      "on": "Ziel an",
+      "off": "Ziel aus",
+      "edit": "Bearbeiten",
+      "test": "Testen",
+      "testing": "Wird getestet",
+      "testOk": "Test bestanden: Status {status} in {ms, number} ms",
+      "testFailed": "Test fehlgeschlagen: {reason} ({ms, number} ms)",
+      "testNoStatus": "keine Antwort",
+      "testStatus": "Status {status}",
+      "delete": "Löschen",
+      "deleteTitle": "{name} löschen?",
+      "deleteBody": "Das Ziel empfängt keine Webhooks mehr und seine gespeicherten fehlgeschlagenen Zustellungen werden gelöscht. Dies kann nicht rückgängig gemacht werden.",
+      "deleteConfirm": "Ziel löschen",
+      "cancel": "Abbrechen",
+      "toasts": {
+        "created": "{name} hinzugefügt",
+        "saved": "{name} gespeichert",
+        "on": "{name} ist an",
+        "off": "{name} ist aus",
+        "deleted": "{name} gelöscht"
+      }
+    },
+    "dialog": {
+      "createTitle": "Weiterleitungsziel hinzufügen",
+      "editTitle": "{name} bearbeiten",
+      "close": "Schließen",
+      "name": "Name",
+      "namePlaceholder": "Analysedienst",
+      "url": "URL",
+      "urlHint": "Nur https. Adressen in privaten Netzwerken werden abgelehnt.",
+      "headerName": "Headername (optional)",
+      "headerNameHint": "Wird mit jeder Zustellung gesendet, zum Beispiel Authorization.",
+      "headerValue": "Header-Wert",
+      "headerValueSaved": "Gespeichert, endet auf ••••{last4}. Leer lassen, um ihn zu behalten.",
+      "headerValueSavedNoLast4": "Gespeichert. Leer lassen, um ihn zu behalten.",
+      "headerValueHint": "Nur schreibbar: Nach dem Speichern wird er nie wieder angezeigt.",
+      "removeHeader": "Den gespeicherten Header entfernen",
+      "fieldFilter": "Feldfilter",
+      "fieldFilterHint": "Leer lassen, um alle Felder weiterzuleiten. Geben Sie ein Feld ein und drücken Sie die Eingabetaste, zum Beispiel messages oder message_template_status_update.",
+      "fieldFilterPlaceholder": "Feld hinzufügen",
+      "fieldRemove": "{field} entfernen",
+      "timeout": "Zeitlimit (Sekunden)",
+      "timeoutHint": "1 bis 30",
+      "maxAttempts": "Maximale Versuche",
+      "maxAttemptsHint": "1 bis 10",
+      "active": "An dieses Ziel weiterleiten",
+      "save": "Speichern",
+      "saving": "Wird gespeichert",
+      "cancel": "Abbrechen",
+      "errors": {
+        "nameRequired": "Geben Sie einen Namen ein.",
+        "urlRequired": "Geben Sie die URL ein.",
+        "urlHttps": "Die URL muss mit https:// beginnen.",
+        "headerNameInvalid": "Verwenden Sie nur Buchstaben, Ziffern und Bindestriche.",
+        "headerValueRequired": "Ein Header benötigt sowohl einen Namen als auch einen Wert.",
+        "headerNameRequired": "Geben Sie auch den Headernamen ein.",
+        "timeout": "Geben Sie eine ganze Zahl von 1 bis 30 ein.",
+        "maxAttempts": "Geben Sie eine ganze Zahl von 1 bis 10 ein."
+      }
+    },
+    "failures": {
+      "empty": "Keine fehlgeschlagenen Zustellungen",
+      "emptyBody": "Zustellungen, für die alle Wiederholungen aufgebraucht sind, werden hier 14 Tage lang aufbewahrt, damit Sie sie erneut senden können.",
+      "filterAll": "Alle Ziele",
+      "filterLabel": "Ziel",
+      "columns": {
+        "target": "Ziel",
+        "when": "Fehlgeschlagen am",
+        "attempts": "Versuche",
+        "reason": "Grund",
+        "size": "Größe",
+        "actions": "Aktion"
+      },
+      "attempts": "{count, number}",
+      "bytes": "{count, number} Byte",
+      "replay": "Erneut senden",
+      "replaying": "Wird erneut gesendet",
+      "replayed": "Erneut gesendet {time}",
+      "replayOk": "Zugestellt: Status {status} in {ms, number} ms",
+      "replayFailed": "Nicht zugestellt: {reason} ({ms, number} ms)",
+      "reasonStatus": "Status {status}",
+      "reasonNone": "keine Antwort"
+    }
+  }
+}

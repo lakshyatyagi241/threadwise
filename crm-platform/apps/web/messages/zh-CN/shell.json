@@ -1,0 +1,83 @@
+{
+  "shell": {
+    "groups": {
+      "overview": "平台",
+      "inbox": "收件箱与聊天",
+      "audience": "CRM",
+      "sales": "销售",
+      "campaigns": "营销活动",
+      "automation": "自动化",
+      "store": "店铺",
+      "apps": "应用市场",
+      "help": "支持与帮助",
+      "settings": "设置"
+    },
+    "locked": "升级",
+    "language": "语言",
+    "theme": "主题",
+    "themeLight": "浅色",
+    "themeDark": "深色",
+    "logout": "退出登录",
+    "openMenu": "打开菜单",
+    "admin": {
+      "title": "平台控制台",
+      "note": "超级管理员角色创建后，平台管理页面将显示在此处。"
+    },
+    "soon": "即将推出",
+    "new": "新",
+    "comingSoon": "即将推出",
+    "appGate": {
+      "title": "{app} 不在您的工作区中",
+      "body": "{app} 是可选应用。请从应用市场添加，它将出现在您的菜单中。",
+      "bodyNoMarketplace": "此工作区尚未安装可选应用 {app}。请联系工作区管理员从应用市场添加。",
+      "browse": "浏览应用市场",
+      "back": "返回仪表板",
+      "unofficialTitle": "{app} 不可用",
+      "unofficialBody": "{app} 仅用于通过二维码配对的个人 WhatsApp 号码，您的工作区未启用此功能。WhatsApp 通过官方 WhatsApp Business API 连接。"
+    },
+    "closeMenu": "关闭菜单",
+    "mainMenu": "主菜单",
+    "userMenu": "账户菜单",
+    "account": "账户",
+    "balance": "余额",
+    "pageSettings": {
+      "label": "本页设置",
+      "hint": "显示这些设置是因为您的角色允许更改。"
+    },
+    "notifications": "通知",
+    "settings": "设置",
+    "pinned": "帮助与设置",
+    "nav": {
+      "analytics": "数据分析",
+      "notifications": "通知",
+      "inbox": "收件箱",
+      "quickChat": "快速聊天",
+      "callLogs": "通话记录",
+      "teamChat": "团队聊天",
+      "leadFinder": "线索查找",
+      "campaigns": "营销活动",
+      "broadcasts": "群发",
+      "scheduled": "定时",
+      "templates": "模板",
+      "history": "历史记录",
+      "flows": "流程",
+      "aiAssistants": "AI 助手",
+      "appointments": "预约",
+      "crmDashboard": "CRM 仪表板",
+      "store": "店铺",
+      "catalog": "商品目录",
+      "support": "支持",
+      "guidebook": "使用指南",
+      "pipelines": "销售管道",
+      "tasks": "任务",
+      "companies": "公司",
+      "emailTemplates": "邮件模板",
+      "proposals": "提案",
+      "estimates": "报价单",
+      "invoices": "发票",
+      "payments": "付款"
+    },
+    "help": "帮助",
+    "unreadCount": "{count, plural, other {# 条未读}}"
+  }
+}

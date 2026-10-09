@@ -1,0 +1,484 @@
+{
+  "auth-registration-security": {
+    "guest": {
+      "shell": {
+        "appNameFallback": "CRM",
+        "header": {
+          "login": {
+            "eyebrow": "Đăng nhập",
+            "title": "Chào mừng",
+            "accent": "trở lại",
+            "subtitle": "Nhập thông tin của bạn để quay lại không gian làm việc."
+          },
+          "register": {
+            "eyebrow": "Bước 1 trên 3 / Tạo tài khoản",
+            "title": "Tạo",
+            "accent": "tài khoản",
+            "subtitle": "Vài thông tin là không gian làm việc của bạn đã sẵn sàng."
+          },
+          "forgot": {
+            "eyebrow": "Quên mật khẩu",
+            "title": "Đặt lại",
+            "accent": "mật khẩu",
+            "subtitle": "Cho chúng tôi biết bạn đăng nhập ở đâu và chúng tôi sẽ gửi liên kết dùng một lần."
+          }
+        },
+        "defaults": {
+          "login": {
+            "hero_title": "Mọi thứ ở một nơi",
+            "hero_desc": "Trò chuyện, chiến dịch và liên hệ ở cùng nhau, nên không ai phải đi tìm ngữ cảnh.",
+            "stat1_num": "24/7",
+            "stat1_label": "hộp thư nhóm dùng chung",
+            "stat2_num": "5 phút",
+            "stat2_label": "thiết lập thông thường",
+            "stat3_num": "1 nơi",
+            "stat3_label": "cho trò chuyện và liên hệ",
+            "feat1_title": "Hộp thư dùng chung",
+            "feat1_desc": "Phân công, trả lời và bàn giao cuộc trò chuyện mà không đứt mạch.",
+            "feat2_title": "Phát tin",
+            "feat2_desc": "Tiếp cận nhiều liên hệ cùng lúc với tốc độ gửi và theo dõi phân phát.",
+            "feat3_title": "Tự động hóa",
+            "feat3_desc": "Định tuyến, trả lời và theo dõi bằng các luồng do chính bạn thiết kế.",
+            "feat4_title": "Kiểm soát nhóm",
+            "feat4_desc": "Vai trò, quyền và nhật ký kiểm toán giúp mọi không gian làm việc luôn trong tầm kiểm soát.",
+            "inside_heading": "Bên trong không gian làm việc của bạn",
+            "chip1": "Hộp thư",
+            "chip2": "Phát tin",
+            "chip3": "Luồng",
+            "chip4": "Liên hệ",
+            "chip5": "Báo cáo",
+            "chip6": "Mẫu"
+          },
+          "register": {
+            "hero_title": "Bắt đầu miễn phí",
+            "hero_desc": "Hãy thiết lập không gian làm việc trước và chọn gói khi bạn sẵn sàng.",
+            "stat1_num": "3 bước",
+            "stat1_label": "để có một không gian làm việc hoạt động",
+            "stat2_num": "5 phút",
+            "stat2_label": "thiết lập thông thường",
+            "stat3_num": "Ngày 1",
+            "stat3_label": "mời nhóm của bạn",
+            "feat1_title": "Thiết lập nhanh",
+            "feat1_desc": "Đặt tên không gian làm việc, chọn múi giờ là bạn vào được.",
+            "feat2_title": "Đưa nhóm của bạn vào",
+            "feat2_desc": "Mời đồng nghiệp và cấp cho mỗi người đúng quyền họ cần.",
+            "feat3_title": "Kết nối kênh",
+            "feat3_desc": "Liên kết số nhắn tin của bạn và bắt đầu trò chuyện với khách hàng.",
+            "feat4_title": "Luôn kiểm soát",
+            "feat4_desc": "Đăng nhập hai yếu tố và kiểm soát phiên bảo vệ mọi tài khoản.",
+            "inside_heading": "Bạn nhận được gì",
+            "chip1": "Hộp thư dùng chung",
+            "chip2": "Phát tin",
+            "chip3": "Luồng",
+            "chip4": "Liên hệ",
+            "chip5": "Báo cáo",
+            "chip6": "Vai trò nhóm"
+          },
+          "forgot": {
+            "hero_title": "Liên kết mới, chỉ dùng một lần",
+            "hero_desc": "Chúng tôi gửi email liên kết bảo mật chỉ hoạt động một lần và sớm hết hạn."
+          }
+        },
+        "contentDefaults": {
+          "login": {
+            "eyebrow": "Hộp thư nhóm cho WhatsApp",
+            "heading": "Mọi cuộc trò chuyện với khách hàng,",
+            "headingAccent": "một không gian làm việc yên bình",
+            "subheading": "Phát tin, tự động hóa và hộp thư dùng chung cho các nhóm trả lời nhanh."
+          },
+          "register": {
+            "eyebrow": "Bắt đầu trong vài phút",
+            "heading": "Thiết lập",
+            "headingAccent": "không gian làm việc",
+            "subheading": "Tạo không gian làm việc, sau đó đưa nhóm và kênh đầu tiên của bạn vào."
+          },
+          "forgot": {
+            "eyebrow": "Khôi phục tài khoản",
+            "heading": "Trở lại sau",
+            "headingAccent": "một phút",
+            "subheading": "Nhập email và chúng tôi sẽ gửi liên kết bảo mật để bạn chọn mật khẩu mới."
+          }
+        }
+      },
+      "toolbar": {
+        "language": "Ngôn ngữ",
+        "theme": "Đổi giao diện",
+        "themeToLight": "Sáng",
+        "themeToDark": "Tối"
+      },
+      "pages": {
+        "login": {
+          "title": "Đăng nhập"
+        },
+        "signup": {
+          "title": "Tạo tài khoản của bạn"
+        },
+        "verifyOtp": {
+          "title": "Xác minh số của bạn",
+          "eyebrow": "Xác minh số của bạn",
+          "heading": "Kiểm tra",
+          "accent": "WhatsApp",
+          "subtitle": "Nhập mã dùng một lần chúng tôi đã gửi để hoàn tất việc tạo không gian làm việc."
+        },
+        "forgot": {
+          "title": "Đặt lại mật khẩu"
+        },
+        "reset": {
+          "title": "Chọn mật khẩu mới",
+          "eyebrow": "Đặt lại mật khẩu",
+          "heading": "Chọn",
+          "accent": "mật khẩu mới",
+          "subtitle": "Hãy chọn mật khẩu mạnh. Bạn sẽ dùng nó để đăng nhập ngay sau đó.",
+          "panel": {
+            "heroTitle": "Mật khẩu mới",
+            "heroDesc": "Chọn mật khẩu bạn sẽ nhớ. Không gian làm việc có thể yêu cầu độ dài tối thiểu.",
+            "eyebrow": "Khôi phục tài khoản",
+            "heading": "Một khởi đầu",
+            "accent": "mới",
+            "subheading": "Sau khi lưu mật khẩu mới, bạn có thể đăng nhập ngay."
+          }
+        },
+        "verifyEmail": {
+          "title": "Xác nhận email của bạn",
+          "eyebrow": "Xác nhận email",
+          "heading": "Xác nhận",
+          "accent": "email của bạn",
+          "subtitle": "Trang này kiểm tra liên kết bạn đã mở từ hộp thư.",
+          "panel": {
+            "heroTitle": "Xác nhận địa chỉ của bạn",
+            "heroDesc": "Một cú nhấp là chứng minh hộp thư này là của bạn.",
+            "eyebrow": "Xác nhận email",
+            "heading": "Đang kiểm tra",
+            "accent": "liên kết của bạn",
+            "subheading": "Chúng tôi đang xác nhận địa chỉ từ email bạn đã mở."
+          }
+        },
+        "findWorkspace": {
+          "title": "Tìm không gian làm việc của tôi",
+          "eyebrow": "Tìm không gian làm việc của tôi",
+          "heading": "Tìm",
+          "accent": "không gian làm việc của bạn",
+          "subtitle": "Nhập email và chúng tôi sẽ gửi cho bạn các địa chỉ không gian làm việc mà bạn có thể đăng nhập."
+        },
+        "confirmEmailChange": {
+          "title": "Xác nhận email mới của bạn",
+          "eyebrow": "Đổi email",
+          "heading": "Xác nhận",
+          "accent": "email mới của bạn",
+          "subtitle": "Trang này kiểm tra liên kết bạn đã mở từ hộp thư.",
+          "panel": {
+            "heroTitle": "Email đăng nhập mới",
+            "heroDesc": "Địa chỉ của bạn thay đổi ngay khi bạn xác nhận.",
+            "eyebrow": "Đổi email",
+            "heading": "Đang xác nhận",
+            "accent": "email mới của bạn",
+            "subheading": "Chúng tôi đang kiểm tra liên kết từ thư bạn đã mở."
+          }
+        },
+        "socialCallback": {
+          "title": "Đang đăng nhập cho bạn",
+          "eyebrow": "Đăng nhập mạng xã hội",
+          "heading": "Đang đăng nhập",
+          "accent": "cho bạn",
+          "subtitle": "Đang hoàn tất đăng nhập."
+        }
+      },
+      "errors": {
+        "invalidCredentials": "Thông tin không khớp. Hãy kiểm tra không gian làm việc, email và mật khẩu.",
+        "locked": "Quá nhiều lần thất bại. Hãy thử lại sau {minutes, plural, other {# phút}}.",
+        "rateLimited": "Quá nhiều lần thử. Vui lòng đợi một lát rồi thử lại.",
+        "rateLimitedWait": "Quá nhiều lần thử. Hãy thử lại sau {seconds, plural, other {# giây}}.",
+        "suspended": "Tài khoản này đã bị tạm ngưng. Hãy liên hệ quản trị viên không gian làm việc.",
+        "captcha": "Vui lòng hoàn tất captcha rồi thử lại.",
+        "signupClosed": "Đăng ký đã đóng. Hãy nhờ quản trị viên gửi lời mời.",
+        "slugTaken": "Địa chỉ không gian làm việc này đã được dùng.",
+        "emailTaken": "Email này đã được dùng trong không gian làm việc này.",
+        "passwordPolicy": "Mật khẩu này không đáp ứng chính sách bảo mật:",
+        "tokenInvalid": "Liên kết này không hợp lệ hoặc đã hết hạn.",
+        "emailUnverified": "Hãy xác nhận địa chỉ email của bạn trước.",
+        "mfaInvalid": "Mã không hợp lệ. Hãy kiểm tra mã rồi thử lại.",
+        "mfaExpired": "Phiên xác minh của bạn đã hết hạn. Hãy đăng nhập lại.",
+        "otpInvalid": "Mã không đúng. Hãy thử lại.",
+        "otpExpired": "Mã đã hết hạn. Hãy yêu cầu mã mới.",
+        "otpTooMany": "Quá nhiều lần thử. Hãy yêu cầu mã mới.",
+        "otpCooldown": "Vui lòng đợi một lát trước khi yêu cầu mã khác.",
+        "otpSendFailed": "Không thể gửi mã xác minh. Hãy kiểm tra số rồi thử lại.",
+        "socialUnavailable": "Phương thức đăng nhập này không khả dụng.",
+        "socialExpired": "Phiên đăng nhập đã hết hạn. Vui lòng thử lại.",
+        "socialFailed": "Không thể hoàn tất đăng nhập bằng {provider}. Vui lòng thử lại.",
+        "socialNoEmail": "Tài khoản đó không chia sẻ địa chỉ email. Hãy dùng email và mật khẩu.",
+        "ipBlocked": "Không cho phép đăng nhập từ mạng này.",
+        "workspaceUnavailable": "Không gian làm việc đó không khả dụng.",
+        "workspaceRequired": "Email này được dùng ở nhiều không gian làm việc. Hãy nhập không gian làm việc của bạn để tiếp tục.",
+        "validation": "Vui lòng kiểm tra các trường được đánh dấu.",
+        "sessionExpired": "Phiên của bạn đã hết hạn vì lý do bảo mật. Vui lòng thử lại.",
+        "network": "Không thể kết nối máy chủ. Hãy kiểm tra kết nối rồi thử lại.",
+        "unexpected": "Đã xảy ra lỗi ở phía chúng tôi. Vui lòng thử lại.",
+        "requestId": "Mã yêu cầu",
+        "signupExpired": "Vui lòng bắt đầu đăng ký lại.",
+        "policyRules": {
+          "min_length": "Dùng tối thiểu {min, plural, other {# ký tự}}.",
+          "upper_lower": "Kết hợp chữ hoa và chữ thường.",
+          "number": "Bao gồm ít nhất một chữ số.",
+          "symbol": "Bao gồm ít nhất một ký hiệu.",
+          "common": "Mật khẩu này quá dễ đoán."
+        },
+        "socialNoAccount": "Không có tài khoản nào khớp với đăng nhập {provider} này. Hãy đăng nhập bằng email và mật khẩu, hoặc tạo tài khoản.",
+        "forbidden": "Yêu cầu bị từ chối. Hãy tải lại trang và thử lại."
+      },
+      "validation": {
+        "orgSlug": "Nhập địa chỉ không gian làm việc (chữ cái, chữ số, dấu gạch ngang hoặc gạch dưới).",
+        "orgSlugForSocial": "Hãy nhập địa chỉ không gian làm việc trước để chúng tôi biết nơi đăng nhập cho bạn.",
+        "email": "Nhập địa chỉ email hợp lệ.",
+        "password": "Nhập mật khẩu đáp ứng các yêu cầu hiển thị.",
+        "passwordRequired": "Nhập mật khẩu của bạn.",
+        "fullName": "Nhập họ và tên của bạn.",
+        "orgName": "Đặt tên cho không gian làm việc (tối thiểu 2 ký tự).",
+        "orgNameForSocial": "Hãy đặt tên cho không gian làm việc trước, rồi tiếp tục với Google hoặc Facebook.",
+        "phoneRequired": "Nhập số di động của bạn.",
+        "phone": "Nhập số di động hợp lệ cho quốc gia đã chọn.",
+        "newPassword": "Dùng tối thiểu {min, plural, other {# ký tự}}.",
+        "confirmPassword": "Hai mật khẩu không khớp.",
+        "acceptTerms": "Bạn phải chấp nhận các điều khoản để tiếp tục.",
+        "referralCode": "Mã giới thiệu chỉ gồm chữ cái và chữ số.",
+        "code": "Nhập mã gồm {length} chữ số."
+      },
+      "legal": {
+        "login": "Khi đăng nhập, bạn đồng ý với <terms>Điều khoản</terms> và <privacy>Chính sách quyền riêng tư</privacy> của chúng tôi.",
+        "signup": "Tôi đồng ý với <terms>Điều khoản</terms> và <privacy>Chính sách quyền riêng tư</privacy>.",
+        "cookies": "<cookies>Chính sách cookie</cookies>"
+      },
+      "captcha": {
+        "protected": "Trang này được bảo vệ bởi reCAPTCHA. <privacy>Chính sách quyền riêng tư</privacy> và <terms>Điều khoản dịch vụ</terms> của Google được áp dụng."
+      },
+      "social": {
+        "divider": "hoặc bằng email",
+        "redirecting": "Đang mở nhà cung cấp",
+        "login": {
+          "google": "Tiếp tục với Google",
+          "facebook": "Tiếp tục với Facebook"
+        },
+        "signup": {
+          "google": "Đăng ký bằng Google",
+          "facebook": "Đăng ký bằng Facebook"
+        },
+        "google": "Google",
+        "facebook": "Facebook"
+      },
+      "login": {
+        "workspace": "Không gian làm việc",
+        "workspaceHint": "Địa chỉ nhóm của bạn dùng, ví dụ acme.",
+        "chooseTitle": "Chọn không gian làm việc",
+        "chooseSubtitle": "Email của bạn có trong nhiều không gian làm việc. Hãy chọn không gian bạn muốn mở.",
+        "chooseMembers": "{count, plural, other {# thành viên}}",
+        "chooseOpen": "Mở",
+        "chooseBack": "Dùng tài khoản khác",
+        "chooseExpired": "Quá lâu. Hãy đăng nhập lại.",
+        "workspacePlaceholder": "khong-gian-lam-viec",
+        "email": "Email",
+        "emailPlaceholder": "you@company.com",
+        "password": "Mật khẩu",
+        "forgot": "Quên mật khẩu?",
+        "showPassword": "Hiện mật khẩu",
+        "hidePassword": "Ẩn mật khẩu",
+        "remember": "Giữ tôi đăng nhập trong 30 ngày",
+        "submit": "Đăng nhập",
+        "submitting": "Đang đăng nhập",
+        "newHere": "Bạn mới đến?",
+        "createAccount": "Tạo tài khoản",
+        "lostWorkspace": "Không chắc về địa chỉ không gian làm việc?",
+        "findWorkspace": "Tìm không gian làm việc của tôi",
+        "loggedOut": "Bạn đã đăng xuất.",
+        "flashReset": "Đã đặt lại mật khẩu. Hãy đăng nhập bằng mật khẩu mới.",
+        "flashExpired": "Phiên của bạn đã hết hạn. Vui lòng đăng nhập lại.",
+        "flashIdle": "Bạn đã bị đăng xuất sau {minutes, plural, other {# phút}} không hoạt động. Hãy đăng nhập lại để tiếp tục.",
+        "mfaExpired": "Quá trình xác minh mất quá lâu. Hãy đăng nhập lại.",
+        "flashDeleted": "Tài khoản của bạn đã bị xóa."
+      },
+      "mfa": {
+        "title": "Xác minh hai bước",
+        "descriptionCode": "Nhập mã 6 chữ số từ ứng dụng xác thực của bạn.",
+        "descriptionRecovery": "Nhập một trong các mã khôi phục dùng một lần của bạn.",
+        "codeLabel": "Mã xác thực",
+        "recoveryLabel": "Mã khôi phục",
+        "recoveryHint": "Mỗi mã khôi phục chỉ dùng một lần.",
+        "invalidCode": "Nhập mã 6 chữ số.",
+        "invalidRecovery": "Nhập mã khôi phục (8 đến 32 ký tự).",
+        "verify": "Xác minh",
+        "verifying": "Đang xác minh",
+        "useRecovery": "Dùng mã khôi phục",
+        "useApp": "Dùng mã xác thực",
+        "back": "Quay lại đăng nhập",
+        "expiresIn": "Xác minh hết hạn sau {time}"
+      },
+      "signup": {
+        "steps": {
+          "label": "Tiến trình đăng ký",
+          "account": "Tài khoản",
+          "workspace": "Không gian làm việc",
+          "plan": "Gói"
+        },
+        "fullName": "Họ và tên",
+        "fullNamePlaceholder": "Tên của bạn",
+        "email": "Email công việc",
+        "orgName": "Tên không gian làm việc",
+        "orgNamePlaceholder": "Acme Inc.",
+        "orgNameHint": "Nhóm của bạn đăng nhập bằng địa chỉ {slug}.",
+        "orgNameHintEmpty": "Đây là tên nhóm của bạn nhìn thấy.",
+        "customiseSlug": "Chọn địa chỉ không gian làm việc tùy chỉnh",
+        "orgSlug": "Địa chỉ không gian làm việc",
+        "orgSlugHint": "Chữ cái, chữ số, dấu gạch ngang hoặc gạch dưới. Nhóm của bạn nhập địa chỉ này khi đăng nhập.",
+        "orgSlugPlaceholder": "khong-gian-lam-viec",
+        "phone": "Số di động",
+        "phoneHint": "Chúng tôi dùng số này để xác minh tài khoản và gửi các cập nhật quan trọng.",
+        "phonePlaceholder": "Số không có mã quốc gia",
+        "country": "Quốc gia",
+        "referral": "Mã giới thiệu",
+        "optional": "không bắt buộc",
+        "referralPlaceholder": "Có mã của bạn bè?",
+        "password": "Mật khẩu",
+        "confirmPassword": "Xác nhận mật khẩu",
+        "submit": "Tiếp tục",
+        "submitting": "Đang tạo tài khoản của bạn",
+        "haveAccount": "Đã có tài khoản?",
+        "signIn": "Đăng nhập",
+        "closedBody": "Đăng ký đã đóng. Hãy nhờ quản trị viên gửi lời mời.",
+        "closedBack": "Quay lại đăng nhập",
+        "restart": "Vui lòng bắt đầu đăng ký lại.",
+        "countryButton": "Mã quốc gia +{dial}",
+        "countrySearch": "Tìm quốc gia",
+        "countryEmpty": "Không có quốc gia nào khớp"
+      },
+      "otp": {
+        "sentTo": "Chúng tôi đã gửi mã tới",
+        "code": "Mã xác minh",
+        "expiresIn": "Mã hết hạn sau {time}.",
+        "expired": "Mã này đã hết hạn. Hãy yêu cầu mã mới.",
+        "verify": "Xác minh và tiếp tục",
+        "verifying": "Đang xác minh",
+        "resend": "Gửi lại mã",
+        "resendIn": "Gửi lại mã sau {time}",
+        "resending": "Đang gửi",
+        "resent": "Mã mới đang được gửi tới WhatsApp của bạn.",
+        "wrongNumber": "Sai số?",
+        "goBack": "Quay lại",
+        "addressTakenHint": "Địa chỉ không gian làm việc này đã bị dùng trong lúc bạn xác minh. Hãy chọn địa chỉ khác và chúng tôi sẽ gửi mã mới.",
+        "chooseAnotherAddress": "Chọn địa chỉ khác"
+      },
+      "forgot": {
+        "submit": "Gửi liên kết đặt lại qua email",
+        "submitting": "Đang gửi",
+        "remembered": "Nhớ ra rồi?",
+        "back": "Quay lại đăng nhập",
+        "doneTitle": "Kiểm tra hộp thư của bạn",
+        "doneBody": "Nếu email đó thuộc về một tài khoản trong không gian làm việc này, liên kết đặt lại đang được gửi đi. Liên kết chỉ dùng một lần và sớm hết hạn.",
+        "doneHint": "Chưa thấy? Hãy kiểm tra thư rác, hoặc thử lại sau một phút.",
+        "tryAnother": "Dùng email khác"
+      },
+      "reset": {
+        "password": "Mật khẩu mới",
+        "confirmPassword": "Xác nhận mật khẩu mới",
+        "submit": "Lưu mật khẩu mới",
+        "submitting": "Đang lưu",
+        "back": "Quay lại đăng nhập",
+        "invalidTitle": "Liên kết này không còn hiệu lực",
+        "invalidBody": "Liên kết đặt lại chỉ dùng một lần và hết hạn sau thời gian ngắn. Hãy yêu cầu liên kết mới để tiếp tục.",
+        "requestNew": "Yêu cầu liên kết mới"
+      },
+      "verifyEmail": {
+        "working": "Đang xác nhận email của bạn",
+        "doneTitle": "Đã xác nhận email",
+        "doneBody": "Cảm ơn, địa chỉ của bạn đã được xác minh. Hãy đăng nhập để tiếp tục.",
+        "failedTitle": "Không thể xác nhận email của bạn",
+        "failedHint": "Hãy đăng nhập và yêu cầu email xác minh mới từ biểu ngữ ở đầu ứng dụng.",
+        "signIn": "Đến trang đăng nhập"
+      },
+      "confirmEmailChange": {
+        "working": "Đang xác nhận email mới của bạn",
+        "doneTitle": "Đã cập nhật địa chỉ email",
+        "doneBody": "Hãy dùng địa chỉ mới vào lần đăng nhập tới.",
+        "failedTitle": "Không thể xác nhận thay đổi",
+        "failedHint": "Hãy đăng nhập và bắt đầu lại việc đổi email từ trang tài khoản của bạn.",
+        "signIn": "Đến trang đăng nhập"
+      },
+      "findWorkspace": {
+        "submit": "Gửi email các không gian làm việc của tôi",
+        "submitting": "Đang gửi",
+        "back": "Quay lại đăng nhập",
+        "doneTitle": "Kiểm tra hộp thư của bạn",
+        "doneBody": "Nếu địa chỉ đó thuộc về một tài khoản đã xác minh, chúng tôi đã gửi email các địa chỉ không gian làm việc mà bạn có thể đăng nhập.",
+        "doneHint": "Chưa thấy? Hãy kiểm tra thư rác, hoặc thử email khác.",
+        "tryAnother": "Dùng email khác"
+      },
+      "callback": {
+        "working": "Đang hoàn tất đăng nhập",
+        "failedTitle": "Đăng nhập chưa hoàn tất",
+        "cancelled": "Đã hủy đăng nhập.",
+        "backToSignIn": "Quay lại đăng nhập",
+        "createAccount": "Tạo tài khoản thay thế"
+      },
+      "layout": {
+        "noscript": "JavaScript đang tắt trong trình duyệt này. Hãy bật để đăng nhập hoặc tạo tài khoản."
+      },
+      "consent": {
+        "label": "Thông báo cookie",
+        "title": "Chúng tôi dùng cookie",
+        "message": "Chúng tôi dùng cookie để giữ bạn đăng nhập và hiểu cách trang này được sử dụng. Hãy chấp nhận tất cả, từ chối các cookie tùy chọn, hoặc chọn những gì bạn cho phép.",
+        "learnMore": "Tìm hiểu thêm",
+        "decline": "Từ chối",
+        "customize": "Tùy chỉnh",
+        "acceptAll": "Chấp nhận tất cả",
+        "prefsTitle": "Lựa chọn quyền riêng tư của bạn",
+        "necessary": "Thiết yếu",
+        "necessaryHint": "Cần cho đăng nhập và bảo mật. Luôn bật.",
+        "analytics": "Phân tích",
+        "analyticsHint": "Giúp chúng tôi biết trang nào hiệu quả và trang nào không.",
+        "marketing": "Tiếp thị",
+        "marketingHint": "Dùng để hiển thị ưu đãi phù hợp trên các trang web khác.",
+        "rejectAll": "Từ chối tất cả",
+        "save": "Lưu lựa chọn"
+      },
+      "policy": {
+        "minLength": "Tối thiểu {min, plural, other {# ký tự}}.",
+        "mixedCase": "Kết hợp chữ hoa và chữ thường.",
+        "number": "Bao gồm một chữ số.",
+        "symbol": "Bao gồm một ký hiệu.",
+        "placeholder": "Tối thiểu {min, plural, other {# ký tự}}"
+      }
+    },
+    "gate": {
+      "suspended": {
+        "titleLead": "Tài khoản của bạn đã",
+        "titleAccent": "bị tạm ngưng"
+      },
+      "verify": {
+        "titleLead": "Vui lòng",
+        "titleAccent": "xác minh email của bạn"
+      },
+      "onboarding": {
+        "header": {
+          "step2": {
+            "eyebrow": "Bước 2 trên 3 / Không gian làm việc",
+            "title": "Tạo",
+            "accent": "không gian làm việc của bạn"
+          },
+          "step3": {
+            "eyebrow": "Bước 3 trên 3 / Gói",
+            "title": "Chọn",
+            "accent": "gói",
+            "subtitle": "Mỗi gói đều có hạn mức tin nhắn hằng tháng. Hãy bắt đầu với gói miễn phí, hoặc chọn gói có nhiều hạn mức hơn."
+          }
+        },
+        "timezonePlaceholder": "Tìm múi giờ...",
+        "timezoneEmpty": "Không có múi giờ nào khớp với tìm kiếm.",
+        "timezoneLabel": "Múi giờ",
+        "phonePlaceholder": "Số không có mã quốc gia",
+        "plan": {
+          "credits": "Gói của bạn bao gồm số tin nhắn cố định mỗi tháng. Nếu hết hạn mức khi gói còn hiệu lực, các tin gửi thêm sẽ dùng tín dụng ví với mức <rate>{credits, plural, other {# tín dụng}} mỗi tin nhắn</rate>. Khi gói kết thúc, việc gửi sẽ tạm dừng cho đến khi bạn gia hạn.",
+          "topUpPrompt": "Vượt quá hạn mức?",
+          "topUp": "Thêm tín dụng tin nhắn"
+        }
+      }
+    }
+  }
+}

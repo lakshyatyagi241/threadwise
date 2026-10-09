@@ -1,0 +1,208 @@
+{
+  "team-chat": {
+    "nav": {
+      "teamChat": "צ׳אט צוות"
+    },
+    "common": {
+      "dismiss": "סגור"
+    },
+    "screen": {
+      "title": "צ׳אט צוות",
+      "back": "חזרה לערוצים",
+      "search": "חיפוש בערוץ זה",
+      "pinned": "הודעות מוצמדות",
+      "members": "חברי ערוץ",
+      "deleteChannel": "מחק ערוץ זה",
+      "type": {
+        "public": "ערוץ",
+        "private": "פרטי",
+        "dm": "הודעה ישירה"
+      },
+      "olderMessage": "ההודעה נמצאת רחוק יותר אחורה. טען הודעות ישנות יותר כדי לראות אותה.",
+      "loading": "טוען צ׳אט צוות",
+      "loadFailed": "לא ניתן לטעון את צ׳אט הצוות.",
+      "retry": "נסה שוב",
+      "deleteTitle": "למחוק את הערוץ?",
+      "deleteMessage": "הערוץ #{name} וכל ההודעות שבו יימחקו עבור כולם. לא ניתן לבטל פעולה זו.",
+      "deleteConfirm": "מחק ערוץ",
+      "cancel": "ביטול",
+      "defaultDescription": "צ'אט פנימי של סביבת העבודה",
+      "customerChats": "צ'אטים עם לקוחות"
+    },
+    "sidebar": {
+      "label": "ערוצים ואנשים",
+      "channels": "ערוצים",
+      "createChannel": "צור ערוץ",
+      "loading": "טוען ערוצים",
+      "loadFailed": "לא ניתן לטעון את הערוצים.",
+      "noChannels": "אין ערוצים עדיין",
+      "direct": "הודעות ישירות",
+      "people": "אנשים",
+      "invite": "הזמן חבר צוות",
+      "pending": "בקשות ממתינות",
+      "pendingCount": "{count, plural, one {בקשה ממתינה אחת} two {# בקשות ממתינות} other {# בקשות ממתינות}}",
+      "unread": "{count, plural, one {הודעה אחת שלא נקראה} two {# הודעות שלא נקראו} other {# הודעות שלא נקראו}}",
+      "workspace": "סביבת עבודה",
+      "mode": "מצב",
+      "customerChats": "צ'אטים עם לקוחות",
+      "teamChat": "צ'אט צוות",
+      "membersLink": "חברים"
+    },
+    "members": {
+      "label": "חברים",
+      "title": "צ׳אט צוות",
+      "count": "{count, plural, one {חבר אחד} two {# חברים} other {# חברים}}",
+      "countUnknown": "חברים",
+      "search": "חיפוש חברים",
+      "loading": "טוען חברים",
+      "none": "אין חברים תואמים",
+      "online": "מחובר",
+      "offline": "לא מחובר",
+      "you": "(אתה)",
+      "message": "שלח הודעה ל-{name}",
+      "titleAccent": "צ'אט"
+    },
+    "panel": {
+      "searchTitle": "חיפוש הודעות",
+      "pinnedTitle": "הודעות מוצמדות",
+      "searchPlaceholder": "חיפוש בערוץ זה",
+      "searchHint": "הקלד לפחות שני תווים.",
+      "close": "סגור",
+      "failed": "לא ניתן לטעון פריט זה.",
+      "noResults": "אין הודעות תואמות.",
+      "noPinned": "אין הודעות מוצמדות בערוץ זה."
+    },
+    "stream": {
+      "loading": "טוען הודעות",
+      "loadFailed": "לא ניתן לטעון את ההודעות.",
+      "loadOlder": "טען הודעות ישנות יותר",
+      "emptyTitle": "אין הודעות ב-#{name} עדיין",
+      "emptyMessage": "אמור שלום והתחל את השיחה."
+    },
+    "message": {
+      "edited": "(נערך)",
+      "pinned": "מוצמד",
+      "editLabel": "ערוך את ההודעה שלך",
+      "cancel": "ביטול",
+      "save": "שמור",
+      "editConflict": "ההודעה השתנתה בזמן העריכה. טען מחדש ונסה שוב.",
+      "reactions": "תגובות",
+      "reactionChip": "{emoji}, {count, plural, one {אדם אחד} two {# אנשים} other {# אנשים}}",
+      "reactionTray": "בחר תגובה",
+      "reply": "השב",
+      "react": "הגב",
+      "edit": "ערוך",
+      "pin": "הצמד",
+      "unpin": "בטל הצמדה",
+      "delete": "מחק",
+      "deleteTitle": "למחוק הודעה זו?",
+      "deleteMessage": "היא תוסר עבור כל החברים בערוץ.",
+      "uploading": "מעלה",
+      "retry": "נסה שוב",
+      "discard": "בטל"
+    },
+    "composer": {
+      "placeholder": "הודעה ל-#{name}",
+      "attach": "צרף קובץ",
+      "send": "שלח",
+      "hint": "Enter לשליחה, Shift+Enter לשורה חדשה, @ לאזכור חבר צוות.",
+      "replyingTo": "משיב ל-{name}",
+      "cancelReply": "בטל תשובה",
+      "removeFile": "הסר את הקובץ המצורף",
+      "fileTooLarge": "הקובץ גדול מ-20 MB.",
+      "mentionList": "חברי צוות לאזכור",
+      "typingOne": "{name} מקליד/ה",
+      "typingMany": "{count} אנשים מקלידים",
+      "hintSend": "שליחה",
+      "hintNewLine": "שורה חדשה",
+      "hintMention": "אזכור",
+      "hintShift": "Shift+↵"
+    },
+    "createChannel": {
+      "title": "צור ערוץ",
+      "close": "סגור",
+      "name": "שם",
+      "nameHint": "אותיות קטנות באנגלית, ספרות, מקפים וקווים תחתונים, ללא רווחים.",
+      "description": "תיאור (לא חובה)",
+      "privacy": "פרטיות",
+      "public": {
+        "label": "ציבורי",
+        "hint": "כל החברים בסביבת העבודה יכולים לקרוא ולכתוב."
+      },
+      "private": {
+        "label": "פרטי",
+        "hint": "בהזמנה בלבד. רק חבריו רואים אותו."
+      },
+      "cancel": "ביטול",
+      "create": "צור ערוץ",
+      "namePlaceholder": "לדוגמה: תמיכה",
+      "descriptionPlaceholder": "למה הערוץ הזה מיועד?"
+    },
+    "invite": {
+      "title": "הזמן חבר צוות",
+      "close": "סגור",
+      "email": "דוא״ל",
+      "name": "שם (לא חובה)",
+      "note": "הערה למנהל (לא חובה)",
+      "noteHint": "מדוע כדאי שאדם זה יצטרף.",
+      "addToChannel": "הוסף אותם גם ל-#{name}",
+      "approved": "בוצע. הבקשה אושרה.",
+      "pending": "ההזמנה נשלחה וממתינה לאישור מנהל.",
+      "cancel": "ביטול",
+      "submit": "שלח הזמנה",
+      "emailPlaceholder": "teammate@company.com",
+      "namePlaceholder": "השם שלהם",
+      "notePlaceholder": "מדוע כדאי להם להצטרף?"
+    },
+    "invitations": {
+      "title": "הזמנות ממתינות",
+      "close": "סגור",
+      "loading": "טוען",
+      "loadFailed": "לא ניתן לטעון את ההזמנות.",
+      "empty": "אין הזמנות עדיין",
+      "status": {
+        "pending": "ממתין",
+        "approved": "אושר",
+        "declined": "נדחה",
+        "expired": "פג תוקף"
+      },
+      "requestedBy": "התבקש על ידי {name} · {time}",
+      "decidedBy": "{status} על ידי {name} · {time}",
+      "needsAccount": "לאדם זה אין עדיין חשבון בסביבת העבודה, ולכן לא נוסף איש.",
+      "approve": "אשר",
+      "decline": "דחה"
+    },
+    "channelMembers": {
+      "title": "חברי #{name}",
+      "close": "סגור",
+      "admin": "מנהל",
+      "leave": "עזוב",
+      "remove": "הסר",
+      "addLabel": "הוסף חבר צוות",
+      "choose": "בחר חבר צוות",
+      "add": "הוסף"
+    },
+    "errors": {
+      "network": "שגיאת רשת. בדוק את החיבור ונסה שוב.",
+      "forbidden": "אין לך הרשאה לבצע פעולה זו.",
+      "signedOut": "התנתקת. התחבר שוב.",
+      "notFound": "פריט זה כבר אינו קיים.",
+      "validation": "בדוק את מה שהזנת ונסה שוב.",
+      "conflict": "בינתיים השתנה דבר זה. טען מחדש ונסה שוב.",
+      "tooLarge": "הקובץ גדול מ-20 MB.",
+      "rateLimited": "יותר מדי בקשות. המתן רגע ונסה שוב.",
+      "emptyMessage": "כתוב הודעה או צרף קובץ.",
+      "replyOtherChannel": "אפשר להשיב רק להודעה באותו ערוץ.",
+      "attachmentRejected": "לא ניתן לצרף קובץ זה. מותרים רק תמונות, קובצי PDF, Word, Excel, טקסט ו-CSV עד 20 MB.",
+      "editExpired": "אפשר לערוך הודעות רק במשך 15 דקות.",
+      "nameTaken": "כבר קיים ערוץ בשם זה.",
+      "channelProtected": "לא ניתן למחוק את #general.",
+      "alreadyMember": "כבר חבר בסביבת העבודה.",
+      "alreadyDecided": "כבר הוחלט.",
+      "notMember": "אינך חבר בערוץ זה.",
+      "notAuthor": "אפשר לשנות רק את ההודעות שלך.",
+      "kindInvalid": "פעולה זו אינה חלה על סוג ערוץ זה.",
+      "unexpected": "משהו השתבש. נסה שוב."
+    }
+  }
+}

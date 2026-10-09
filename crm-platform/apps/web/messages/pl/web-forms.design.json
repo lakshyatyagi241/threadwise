@@ -1,0 +1,113 @@
+{
+  "web-forms": {
+    "design": {
+      "presets": {
+        "title": "Motyw",
+        "custom": "Niestandardowy: zmieniono kolor, zaokrąglenie lub czcionkę motywu, od którego zacząłeś.",
+        "classic": "Klasyczny",
+        "ocean": "Ocean",
+        "forest": "Las",
+        "sunset": "Zachód słońca",
+        "berry": "Jagoda",
+        "slate": "Łupek",
+        "noir": "Noir",
+        "paper": "Papier"
+      },
+      "colours": {
+        "title": "Kolory",
+        "hint": "Używaj sześciocyfrowych kolorów hex, np. #2563eb. Niepełna wartość nie zostanie zastosowana.",
+        "swatch": "{name} (wybór koloru)",
+        "primary": "Główny (przyciski i akcenty)",
+        "background": "Tło strony",
+        "surface": "Tło formularza",
+        "text": "Tekst",
+        "mutedText": "Tekst pomocniczy",
+        "border": "Obramowania",
+        "error": "Błąd"
+      },
+      "contrast": {
+        "title": "Niektóre kolory są trudne do odczytania. Dąż do kontrastu co najmniej 4,5:1.",
+        "item": "{pair}: {ratio}:1",
+        "ok": "Wszystkie sprawdzone pary kolorów są łatwe do odczytania.",
+        "text": "Tekst na tle formularza",
+        "muted": "Tekst pomocniczy na tle formularza",
+        "button": "Etykieta przycisku na przycisku"
+      },
+      "shape": {
+        "title": "Kształt i odstępy",
+        "radius": "Zaokrąglenie rogów",
+        "none": "Brak",
+        "sm": "Mały",
+        "md": "Średni",
+        "lg": "Duży",
+        "pill": "Okrągły",
+        "density": "Odstępy",
+        "compact": "Kompaktowe",
+        "comfortable": "Wygodne",
+        "spacious": "Przestronne",
+        "shadow": "Cień",
+        "shadowNone": "Brak"
+      },
+      "type": {
+        "title": "Typografia",
+        "font": "Czcionka",
+        "fontHint": "Czcionki internetowe wczytują się tylko po wybraniu jednej.",
+        "sample": "Pchnąć w tę łódź jeża lub osiem skrzyń fig.",
+        "scale": "Rozmiar tekstu"
+      },
+      "fonts": {
+        "system": "Domyślna systemowa",
+        "serif": "Szeryfowa",
+        "mono": "Stałoszerokościowa"
+      },
+      "layout": {
+        "title": "Układ i przyciski",
+        "preset": "Układ",
+        "classic": "Klasyczna karta",
+        "fullWidth": "Pełna szerokość",
+        "split": "Podzielony z obrazem",
+        "minimal": "Minimalny",
+        "labelPosition": "Położenie etykiety",
+        "labelTop": "Nad polem",
+        "labelLeft": "Obok pola",
+        "buttonStyle": "Styl przycisku",
+        "filled": "Wypełniony",
+        "outline": "Obramowany",
+        "buttonWidth": "Szerokość przycisku",
+        "widthAuto": "Dopasuj do etykiety",
+        "widthFull": "Pełna szerokość",
+        "maxWidth": "Maksymalna szerokość",
+        "maxWidthHint": "Od 320 do 960 pikseli.",
+        "maxWidthInvalid": "Wpisz liczbę całkowitą od 320 do 960.",
+        "maxWidthSlider": "Suwak maksymalnej szerokości",
+        "mode": "Tryb kolorów",
+        "light": "Jasny",
+        "dark": "Ciemny",
+        "auto": "Zgodnie z urządzeniem odwiedzającego"
+      },
+      "images": {
+        "title": "Obrazy",
+        "logo": "Logo",
+        "logoHint": "Adres https. Zostaw puste, jeśli nie ma logo.",
+        "cover": "Obraz okładki",
+        "coverHint": "Wyświetlany obok formularza w układzie podzielonym.",
+        "background": "Obraz tła",
+        "backgroundHint": "Adres https. Zostaw puste dla zwykłego tła.",
+        "invalid": "Wpisz adres https lub zostaw puste."
+      },
+      "reset": "Przywróć domyślne",
+      "readOnly": "Możesz obejrzeć projekt, ale nie możesz go zmienić.",
+      "preview": {
+        "title": "Podgląd",
+        "device": "Rozmiar podglądu",
+        "desktop": "Komputer",
+        "mobile": "Telefon",
+        "scheme": "Tryb kolorów podglądu",
+        "light": "Jasny",
+        "dark": "Ciemny",
+        "schemeHint": "Tryb kolorów to Jasny, więc nie ma wersji ciemnej do podglądu.",
+        "frameTitle": "Podgląd formularza na żywo"
+      }
+    }
+  }
+}

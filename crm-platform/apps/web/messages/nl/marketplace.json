@@ -1,0 +1,870 @@
+{
+  "marketplace": {
+    "nav": {
+      "marketplace": "Marketplace"
+    },
+    "meta": {
+      "apps": "Mini-apps · Marketplace",
+      "integrations": "Integraties · Marketplace",
+      "app": "App · Marketplace",
+      "install": "Installeren · Marketplace",
+      "installed": "Geïnstalleerd · Marketplace",
+      "manage": "App beheren · Marketplace",
+      "requests": "Verzoeken · Marketplace"
+    },
+    "common": {
+      "dismiss": "Sluiten",
+      "loading": "Laden",
+      "errorTitle": "Dit kon niet worden geladen",
+      "requestId": "Verzoek-ID",
+      "retry": "Opnieuw proberen",
+      "upgrade": "Bekijk abonnementen en upgrade",
+      "opensNewTab": "(opent in een nieuw tabblad)",
+      "copy": "Kopiëren",
+      "copied": "Gekopieerd",
+      "copyFailed": "Kon niet kopiëren. Selecteer de tekst en kopieer hem handmatig.",
+      "needsPermission": "Je hebt de rechten {permission} nodig om dit te doen. Vraag een workspacebeheerder."
+    },
+    "errors": {
+      "network": "De server is niet bereikbaar. Controleer je verbinding en probeer het opnieuw.",
+      "forbidden": "Je hebt geen rechten om dit te doen.",
+      "signedOut": "Je sessie is beëindigd. Log opnieuw in.",
+      "conflict": "Iemand anders heeft dit eerder gewijzigd. Laad opnieuw om de nieuwste versie te zien.",
+      "validation": "Sommige waarden zijn ongeldig. Controleer de velden en probeer het opnieuw.",
+      "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
+      "rateLimitedWait": "Te veel verzoeken. Probeer het over {seconds, plural, one {# seconde} other {# seconden}} opnieuw.",
+      "unavailable": "De Marketplace is op deze server nog niet beschikbaar.",
+      "notFound": "Dat item bestaat niet meer.",
+      "appNotFound": "Deze app bestaat niet of is niet beschikbaar voor je workspace.",
+      "notInstalled": "Deze app is niet geïnstalleerd in je workspace.",
+      "alreadyInstalled": "Deze app is al geïnstalleerd in je workspace.",
+      "appUnavailable": "Deze app wordt op dit moment niet aangeboden.",
+      "appLockedPlan": "Je abonnement bevat deze app niet. Upgrade om hem te ontgrendelen.",
+      "appLockedModule": "Deze app is niet beschikbaar op deze installatie van het product.",
+      "planLocked": "De Marketplace valt niet onder je abonnement. Upgrade om hem te gebruiken.",
+      "planLimitInstalled": "Je hebt de limiet van geïnstalleerde apps van je abonnement bereikt, dus er is niets geïnstalleerd. Verwijder er een of upgrade je abonnement.",
+      "planLimitInstalledCounts": "Je hebt {used} van de {cap} apps geïnstalleerd die je abonnement toestaat, dus er is niets geïnstalleerd. Verwijder er een of upgrade je abonnement.",
+      "planLimitLeadSources": "Je hebt de limiet van leadbronnen van je abonnement bereikt, dus er is niets geïnstalleerd. Verwijder een leadbron of upgrade je abonnement.",
+      "planLimitLeadSourcesCounts": "Je hebt {used} van de {cap} leadbronnen die je abonnement toestaat, dus er is niets geïnstalleerd. Verwijder er een of upgrade je abonnement.",
+      "planLimit": "Je hebt een limiet van je abonnement bereikt, dus er is niets geïnstalleerd. Upgrade je abonnement om door te gaan.",
+      "planLimitCounts": "Je hebt {used} van de {cap} gebruikt die je abonnement toestaat, dus er is niets geïnstalleerd. Upgrade je abonnement om door te gaan.",
+      "consentRequired": "De rechten zijn gewijzigd. Bekijk ze opnieuw voordat je installeert.",
+      "reconsentRequired": "De nieuwe versie vraagt om meer rechten. Bekijk ze eerst en accepteer ze.",
+      "scopeExceeds": "Je kunt geen rechten toekennen die je zelf niet hebt. Ontbreekt: {permissions}.",
+      "installationKilled": "Het platform heeft deze app gestopt. Hij kan alleen worden verwijderd.",
+      "installationDisabled": "Deze app is gepauzeerd. Hervat hem eerst.",
+      "credentialMissing": "Vul de verplichte velden in.",
+      "noConnection": "Deze installatie heeft geen verbinding die dat kan.",
+      "leadPipeline": "De leadservice is nu niet beschikbaar. Er is niets opgeslagen. Probeer het zo meteen opnieuw.",
+      "unexpected": "Er ging iets mis. Probeer het opnieuw.",
+      "subscriptionRequired": "Dit is een betaalde app. Abonneer je om hem te installeren.",
+      "notForSale": "Deze app wordt nu niet aan nieuwe abonnees verkocht.",
+      "trialUnavailable": "De gratis proefperiode is niet beschikbaar voor deze app in je workspace.",
+      "subscriptionNotFound": "Je workspace heeft geen abonnement op deze app.",
+      "subscriptionState": "Dat past niet bij de huidige status van het abonnement. Laad opnieuw om de nieuwste status te zien."
+    },
+    "chips": {
+      "installed": "Geïnstalleerd",
+      "paused": "Gepauzeerd",
+      "killed": "Gestopt door het platform",
+      "healthy": "Gezond",
+      "degraded": "Verslechterd",
+      "error": "Fout",
+      "needs_reauth": "Opnieuw aanmelden nodig",
+      "unknown": "Nog niet gecontroleerd",
+      "needsConsent": "Nieuwe rechten om te beoordelen",
+      "subscribed": "Geabonneerd",
+      "trialing": "Gratis proefperiode",
+      "comped": "Gratis toegekend",
+      "canceling": "Wordt niet verlengd",
+      "subscriptionEnded": "Abonnement beëindigd"
+    },
+    "lock": {
+      "planFeature": {
+        "chip": "Niet in je abonnement",
+        "message": "Je abonnement omvat deze app niet. Je kunt hier meer over lezen, maar installeren vereist een upgrade."
+      },
+      "moduleDisabled": {
+        "chip": "Niet beschikbaar",
+        "message": "Deze app is afhankelijk van een module die op deze installatie van het product is uitgeschakeld."
+      },
+      "limitReached": {
+        "chip": "Abonnementslimiet bereikt",
+        "message": "Je hebt zoveel apps geïnstalleerd als je abonnement toestaat. Verwijder er een of upgrade je abonnement."
+      }
+    },
+    "scopes": {
+      "risk": {
+        "low": "Laag risico",
+        "medium": "Gemiddeld risico",
+        "high": "Hoog risico"
+      },
+      "none": "Deze app vraagt geen rechten.",
+      "new": "Nieuw",
+      "overall": {
+        "low": {
+          "title": "Over het algemeen laag risico",
+          "message": "Deze app vraagt alleen om dingen te lezen."
+        },
+        "medium": {
+          "title": "Over het algemeen gemiddeld risico",
+          "message": "Deze app kan gegevens in je workspace lezen en wijzigen."
+        },
+        "high": {
+          "title": "Over het algemeen hoog risico",
+          "message": "Deze app kan namens jou handelen, bijvoorbeeld berichten versturen of integraties beheren. Installeer hem alleen als je de ontwikkelaar vertrouwt."
+        }
+      },
+      "counts": "{high} hoog, {medium} gemiddeld, {low} laag"
+    },
+    "header": {
+      "title": "Marketplace",
+      "subtitle": "Voeg mini apps toe en koppel externe diensten aan je workspace.",
+      "tabsLabel": "Marketplace-secties",
+      "moreLabel": "Geïnstalleerd en verzoeken",
+      "tabs": {
+        "mini_app": "Mini apps",
+        "integration": "Integraties"
+      },
+      "installed": "Geïnstalleerd",
+      "installedLimit": "Geïnstalleerd ({installed} van {limit})",
+      "installedUnlimited": "Geïnstalleerd ({installed})",
+      "request": "Vraag een integratie aan"
+    },
+    "card": {
+      "firstParty": "Door ons gemaakt",
+      "pricing": {
+        "free": "Gratis",
+        "included": "Inbegrepen in je abonnement",
+        "monthly": "{price} / maand",
+        "subscribed": "Geabonneerd",
+        "notForSale": "Niet te koop",
+        "paid": "Betaalde app",
+        "addOn": "Add-on",
+        "trial": "Gratis proefperiode van {days} dagen"
+      },
+      "installs": "{count, plural, one {# installatie} other {# installaties}}",
+      "version": "Versie {version}",
+      "cta": {
+        "install": "Installeren",
+        "manage": "Beheren",
+        "review": "Rechten bekijken",
+        "killed": "Beheren",
+        "locked": "Details bekijken",
+        "view": "Details bekijken",
+        "subscribe": "Abonneren"
+      }
+    },
+    "browse": {
+      "categoriesLabel": "Categorieën",
+      "all": "Alles",
+      "shelves": {
+        "featured": "Uitgelicht",
+        "popular": "Populair",
+        "new": "Nieuw"
+      },
+      "searchLabel": "Zoek in de Marketplace",
+      "searchPlaceholder": {
+        "mini_app": "Zoek mini apps",
+        "integration": "Zoek integraties"
+      },
+      "availability": {
+        "label": "Toon",
+        "all": "Alle",
+        "addons": "Beschikbare add-ons",
+        "installed": "Geïnstalleerd"
+      },
+      "sortLabel": "Sorteer op",
+      "sort": {
+        "featured": "Uitgelicht",
+        "popular": "Meest geïnstalleerd",
+        "new": "Nieuwste",
+        "name": "Naam"
+      },
+      "unknownCategory": "Die categorie bestaat niet in dit tabblad.",
+      "showAll": "Alles tonen",
+      "resultsAll": "Alle apps",
+      "resultsFiltered": "Resultaten",
+      "loadedCount": "{count, plural, one {# app getoond} other {# apps getoond}}",
+      "loadMore": "Meer laden",
+      "clearFilters": "Filters wissen",
+      "empty": {
+        "search": {
+          "title": "Niets komt overeen met je zoekopdracht",
+          "message": "Probeer een kortere naam of wis de filters. Staat hij er niet tussen, dan kun je hieronder om hem vragen."
+        },
+        "addons": {
+          "title": "Hier zijn geen add-ons te koop",
+          "message": "Add-ons die je abonnement bevat maar die je nog niet hebt gekocht, staan hier. Kies Alle om alles te zien."
+        },
+        "installed": {
+          "title": "Hier is nog niets geïnstalleerd",
+          "message": "Apps die je installeert, verschijnen hier. Kies Alle om alles te bekijken."
+        },
+        "category": {
+          "title": "Nog niets in deze categorie",
+          "message": "Kies een andere categorie of vraag hieronder naar wat je nodig hebt."
+        },
+        "none": {
+          "title": "Hier staat nog niets",
+          "message": "Nieuwe apps verschijnen hier zodra ze gepubliceerd zijn. Je kunt hieronder om er een vragen."
+        }
+      }
+    },
+    "requestBox": {
+      "title": {
+        "mini_app": "Een mini app ontbreekt?",
+        "integration": "Een integratie ontbreekt?"
+      },
+      "message": "Vertel ons wat je nodig hebt. Verzoeken worden geteld en de meest gevraagde worden eerst gebouwd.",
+      "action": {
+        "mini_app": "Vraag een mini app aan",
+        "integration": "Vraag een integratie aan"
+      }
+    },
+    "detail": {
+      "backToMarketplace": "Terug naar de Marketplace",
+      "backToApps": "Terug naar Mini apps",
+      "backToIntegrations": "Terug naar Integraties",
+      "notFound": {
+        "title": "App niet gevonden",
+        "message": "Deze app bestaat niet of is niet beschikbaar voor je workspace.",
+        "integrations": "Integraties bekijken",
+        "apps": "Mini apps bekijken"
+      },
+      "kind": {
+        "mini_app": "Mini app",
+        "integration": "Integratie"
+      },
+      "firstParty": "Door ons gemaakt",
+      "install": "Installeren",
+      "manage": "Beheren",
+      "killed": "Het platform heeft deze app gestopt. Hij kan alleen worden verwijderd.",
+      "about": "Over deze app",
+      "screenshots": "Schermafbeeldingen",
+      "screenshotAlt": "Schermafbeelding {n} van {name}",
+      "permissions": {
+        "title": "Waar het toegang toe heeft",
+        "intro": "Je ziet deze opnieuw en bevestigt ze voordat er iets wordt geïnstalleerd."
+      },
+      "setup": {
+        "title": "Wat je moet instellen",
+        "intro": {
+          "oauth": "Je meldt je aan bij de dienst om hem te koppelen.",
+          "push": "De dienst stuurt gegevens naar je workspace met een sleutel die je hier invoert.",
+          "pull": "Wij halen gegevens op bij de dienst met een sleutel die je hier invoert.",
+          "email_parse": "Wij lezen waarschuwingsmails die door de dienst worden verstuurd.",
+          "webhook_relay": "Je krijgt een webadres en een geheim om te plakken in de tool die de gegevens verstuurt.",
+          "client": "Je installeert hem waar je werkt en meldt je aan met je eigen account."
+        },
+        "required": "Verplicht",
+        "optional": "Optioneel",
+        "kind": {
+          "secret": "geheim gehouden",
+          "text": "tekst",
+          "select": "keuze"
+        },
+        "noFields": "Niets in te vullen. Je krijgt de verbindingsgegevens na het installeren.",
+        "hasSample": "Na het installeren kun je een voorbeeldlead versturen om de verbinding te controleren."
+      },
+      "data": {
+        "title": "Je gegevens",
+        "intro": "Wat deze app opslaat, waar, en hoe het wordt verwijderd.",
+        "summary": "Wat er wordt opgeslagen",
+        "regions": "Waar",
+        "deletion": "Hoe het wordt verwijderd"
+      },
+      "changelog": {
+        "title": "Wat er is veranderd",
+        "version": "Versie {version}"
+      },
+      "facts": {
+        "title": "Details",
+        "version": "Versie",
+        "connector": "Hoe het verbindt",
+        "connectors": {
+          "oauth": "Aanmelden",
+          "push": "Het stuurt gegevens naar jou",
+          "pull": "Wij halen de gegevens op",
+          "email_parse": "Waarschuwingsmails",
+          "webhook_relay": "Webadres en geheim",
+          "client": "Door elk lid geïnstalleerd"
+        },
+        "installs": "Installaties",
+        "developer": "Ontwikkelaar"
+      },
+      "support": {
+        "title": "Ondersteuning en juridisch",
+        "website": "Website",
+        "docs": "Documentatie",
+        "privacy": "Privacybeleid",
+        "terms": "Voorwaarden",
+        "status": "Statuspagina",
+        "email": "E-mailondersteuning"
+      }
+    },
+    "install": {
+      "backToMarketplace": "Terug naar de Marketplace",
+      "backToApp": "Terug naar {name}",
+      "notFound": {
+        "title": "App niet gevonden",
+        "message": "Deze app bestaat niet of is niet beschikbaar voor je workspace."
+      },
+      "alreadyTitle": "Al geïnstalleerd",
+      "alreadyMessage": "{name} is al geïnstalleerd in je workspace.",
+      "openManage": "Openen",
+      "lockedTitle": "{name} is vergrendeld",
+      "noPermissionTitle": "Je kunt geen apps installeren",
+      "noPermissionMessage": "Het installeren van apps vereist een recht dat je rol niet heeft.",
+      "title": "Installeer {name}",
+      "stepsLabel": "Installatiestappen",
+      "steps": {
+        "permissions": "Rechten",
+        "setup": "Instellen",
+        "done": "Klaar"
+      },
+      "permissions": {
+        "title": "Rechten bekijken",
+        "intro": "{name} vraagt om de onderstaande rechten. Bij installatie krijgt hij precies deze, totdat je hem verwijdert.",
+        "diffSummary": "{missing, plural, one {# recht} other {# rechten}} weggelaten en {unexpected, plural, one {# recht} other {# rechten}} niet getoond.",
+        "consent": "Ik begrijp het en sta toe dat deze app deze rechten gebruikt in mijn workspace.",
+        "consentNone": "Ik begrijp dat {name} geen rechten vraagt en wil hem installeren.",
+        "continue": "Doorgaan"
+      },
+      "cancel": "Annuleren",
+      "install": "Installeren",
+      "back": "Terug",
+      "setup": {
+        "title": "Instellen",
+        "intro": "Vul in wat deze app nodig heeft om te verbinden. Sleutels worden versleuteld opgeslagen en kunnen niet meer worden teruggelezen."
+      },
+      "installing": "Installeren",
+      "missingPermissions": "Je mist deze rechten:",
+      "seeInstalled": "Bekijk wat er is geïnstalleerd",
+      "changed": {
+        "title": "De rechten zijn veranderd terwijl je keek",
+        "message": "Bekijk de lijst hieronder opnieuw. Er is niets geïnstalleerd.",
+        "added": "Vraagt nu ook om:",
+        "removed": "Vraagt niet langer om:",
+        "edited": "De formulering of het risico van sommige rechten is veranderd."
+      },
+      "gaps": {
+        "title": "Je kunt misschien niet al deze rechten verlenen",
+        "message": "Met installeren krijgt niemand meer toegang dan de persoon die installeert. Je lijkt te missen:"
+      },
+      "done": {
+        "title": "{name} is geïnstalleerd",
+        "message": "Versie {version} is nu actief in je workspace.",
+        "saved": "Ik heb het opgeslagen, doorgaan",
+        "manage": "Instellingen openen",
+        "browse": "Terug naar de Marketplace"
+      },
+      "subscribeTitle": "{name} is een betaalde app",
+      "subscribeIntro": "Abonneer je om hem te installeren. Je gaat naar de betaalpagina om de eerste maand te betalen, of je kunt hem eerst gratis proberen als er een proefperiode wordt aangeboden. Je bekijkt en bevestigt de rechten voordat er iets wordt geïnstalleerd.",
+      "notForSaleTitle": "{name} is niet te koop",
+      "goToCheckout": "Naar de betaalpagina"
+    },
+    "setup": {
+      "optionalLabel": "{label} (optioneel)",
+      "stored": {
+        "notSet": "Niet ingesteld",
+        "endsIn": "Opgeslagen, eindigt op {last}",
+        "value": "Er is een waarde opgeslagen",
+        "set": "Opgeslagen"
+      },
+      "keepBlank": "Laat leeg om de opgeslagen waarde te behouden. Typ om te vervangen.",
+      "show": "Waarde tonen",
+      "hide": "Waarde verbergen",
+      "choose": "Kies",
+      "clear": "{label} wissen",
+      "problems": {
+        "required": "{label} is verplicht.",
+        "pattern": "{label} ziet er niet goed uit.",
+        "option": "Kies een van de opties voor {label}.",
+        "server": "{label} is niet geaccepteerd. Controleer de waarde."
+      }
+    },
+    "reveal": {
+      "title": "Sla je verbindingsgeheim op",
+      "warning": "Je ziet dit geheim niet meer. Kopieer het nu en bewaar het op een veilige plek. Als je het kwijtraakt, roteer het geheim dan om een nieuw te krijgen.",
+      "address": "Webadres om naar te versturen",
+      "secret": "Geheim",
+      "copyAddress": "Kopieer het webadres",
+      "copySecret": "Kopieer het geheim",
+      "saved": "Ik heb het geheim en het adres opgeslagen.",
+      "doneHint": "Vink het vakje aan om door te gaan.",
+      "send": {
+        "title": "Hoe te versturen",
+        "post": "Stuur een POST-verzoek met een JSON-body naar het adres.",
+        "token": "Zet het geheim in de header {header}.",
+        "signature": "Of onderteken de body met HMAC-SHA256 met het geheim en stuur sha256= gevolgd door de hex-digest in de header {header}."
+      },
+      "leaveConfirm": "Je hebt niet bevestigd dat je het geheim hebt opgeslagen. Als je nu weggaat, zie je het niet meer. Toch verlaten?"
+    },
+    "portals": {
+      "maturity": {
+        "beta": "Beta",
+        "needsPortalSetup": "Portaalinstelling nodig",
+        "betaHint": "Gebouwd op basis van de gedeeltelijke documentatie van het portaal. Het werkt, maar kan na de eerste echte lead een aanpassing nodig hebben.",
+        "needsPortalSetupHint": "Er komt niets binnen totdat het eigen team van het portaal het voor je inschakelt."
+      },
+      "reveal": {
+        "title": "Sla je privéadres op",
+        "warning": "Dit adres zie je niet meer. Het is ook het wachtwoord van de verbinding: wie het heeft, kan leads in je workspace sturen. Kopieer het nu en bewaar het op een veilige plek. Als je het kwijtraakt, maak dan een nieuw adres; het oude werkt dan niet meer.",
+        "address": "Je privéadres",
+        "copyAddress": "Kopieer het privéadres",
+        "saved": "Ik heb het adres opgeslagen.",
+        "sendTitle": "Wat de verzender nodig heeft",
+        "method": "Methode: {methods}",
+        "formats": "Geaccepteerde formaten: {formats}",
+        "noHeader": "Verder is niets nodig: geen header en geen handtekening. Het laatste deel van het adres is het wachtwoord.",
+        "managerTitle": "Stuur het naar de accountmanager van het portaal",
+        "managerIntro": "Het eigen team van {portal} schakelt dit in, niet jij. Kopieer een kant-en-klaar bericht en stuur het naar je accountmanager daar.",
+        "copyMessage": "Kopieer een bericht voor de accountmanager van je portaal",
+        "messageCopied": "Bericht gekopieerd",
+        "portalFallback": "het portaal"
+      },
+      "formats": {
+        "json": "JSON",
+        "form": "formuliervelden",
+        "xml": "XML",
+        "query": "queryparameters"
+      },
+      "message": {
+        "subjectLine": "Onderwerp: Leveradres voor leads voor ons {portal}-account",
+        "body": "Hoi,\n\nStart alsjeblieft met het sturen van de leads van ons {portal}-account naar dit privéadres:\n\n{address}\n\nStuur elke lead met {methods}. We accepteren de gegevens als {formats}. Het adres identificeert ons account al, dus er is geen header, wachtwoord of handtekening nodig. Houd het alsjeblieft privé.\n\nStuur ons één testlead zodra dit is ingeschakeld, zodat we kunnen bevestigen dat hij aankomt.\n\nBedankt."
+      },
+      "connection": {
+        "nextPoll": "Volgende controle",
+        "notScheduled": "Niet gepland",
+        "syncedThrough": "Leads opgehaald tot",
+        "syncedNever": "Nog niets opgehaald",
+        "errorHint": "Voer de sleutel opnieuw in bij Inloggegevens of druk op Nu synchroniseren.",
+        "errorHintNoSync": "Voer de sleutel opnieuw in bij Inloggegevens.",
+        "rotatePath": "Maak een nieuw adres",
+        "rotatePathConfirm": {
+          "title": "Een nieuw adres maken?",
+          "message": "Er wordt een nieuw privéadres gemaakt en het oude werkt direct niet meer. Alles wat nog naar het oude adres stuurt, wordt geweigerd totdat het team van het portaal het nieuwe heeft gekregen. Je ziet het nieuwe adres één keer.",
+          "confirm": "Nieuw adres maken"
+        },
+        "waiting": {
+          "title": "Wachten op de eerste lead van {portal}",
+          "message": "Het eigen team van {portal} moet dit inschakelen. Er komt niets binnen totdat het naar het adres van je verbinding begint te sturen. Zorg dat je accountmanager daar het adres heeft en vraag om een testlead."
+        },
+        "path": {
+          "address": "Privéadres",
+          "maskedNote": "Het laatste deel van het adres is het wachtwoord. Het wordt één keer getoond, bij installatie of bij het maken van een nieuw adres, dus hier wordt alleen het einde getoond.",
+          "method": "Methode: {methods}",
+          "formats": "Geaccepteerde formaten: {formats}",
+          "noHeader": "Er is geen header of handtekening nodig. Het adres is het wachtwoord: houd het privé.",
+          "newAddressHint": "Adres kwijt, of wil je voorkomen dat iemand het gebruikt? Maak hieronder een nieuw adres. Het oude werkt meteen niet meer en het team van het portaal moet het nieuwe krijgen."
+        }
+      },
+      "sync": {
+        "button": "Nu synchroniseren",
+        "needsActive": "Hervat de app om nu te synchroniseren.",
+        "scheduledNow": "Synchronisatie gepland. Die start meteen.",
+        "scheduled": "Synchronisatie gepland voor {time}.",
+        "waits": "Het portaal staat één verzoek per {interval} toe, dus deze synchronisatie moet tot dan wachten.",
+        "duration": {
+          "seconds": "{count, plural, one {# seconde} other {# seconden}}",
+          "minutes": "{count, plural, one {# minuut} other {# minuten}}",
+          "hours": "{count, plural, one {# uur} other {# uur}}"
+        }
+      }
+    },
+    "installed": {
+      "title": "Geïnstalleerd",
+      "filters": {
+        "kind": "Type",
+        "status": "Status",
+        "all": "Alle"
+      },
+      "kind": {
+        "mini_app": "Mini app",
+        "integration": "Integratie"
+      },
+      "status": {
+        "active": "Geïnstalleerd",
+        "disabled": "Gepauzeerd",
+        "killed": "Gestopt door platform"
+      },
+      "listLabel": "Geïnstalleerde apps",
+      "emptyFiltered": {
+        "title": "Niets komt overeen met deze filters",
+        "message": "Wijzig de filters om je andere geïnstalleerde apps te zien."
+      },
+      "empty": {
+        "title": "Nog niets geïnstalleerd",
+        "message": "Blader door de Marketplace om een mini app toe te voegen of een dienst te koppelen.",
+        "integrations": "Integraties bekijken",
+        "apps": "Mini apps bekijken"
+      },
+      "usage": {
+        "unlimited": "{installed} geïnstalleerd. Je abonnement heeft geen limiet.",
+        "of": "{installed} van {limit} geïnstalleerd",
+        "remaining": "{count, plural, one {# plek vrij} other {# plekken vrij}}",
+        "atCap": "Je hebt de limiet van je abonnement bereikt. Verwijder een app of upgrade je abonnement om een andere te installeren.",
+        "upgrade": "Abonnementen bekijken en upgraden",
+        "nearCap": "Je zit dicht bij de limiet van je abonnement."
+      },
+      "version": "Versie {version}",
+      "killReason": "Reden: {reason}",
+      "lastError": "Laatste fout: {error}",
+      "pending": "Versie {version} wacht tot je de nieuwe rechten accepteert.",
+      "installedOn": "Geïnstalleerd op {date}",
+      "review": "Beoordelen",
+      "manage": "Beheren",
+      "subscriptions": {
+        "title": "Abonnementen",
+        "intro": "Je betaalde apps en proefperiodes, inclusief verwijderde apps waarvan de betaalde periode nog loopt.",
+        "listLabel": "Abonnementen",
+        "manage": "Beheren",
+        "viewApp": "App bekijken"
+      }
+    },
+    "manage": {
+      "backToInstalled": "Terug naar Geïnstalleerd",
+      "notFound": {
+        "title": "Installatie niet gevonden",
+        "message": "Deze app is niet geïnstalleerd in je workspace, of hij is verwijderd."
+      },
+      "version": "Versie {version}",
+      "checkedAt": "Laatst gecontroleerd op {date}",
+      "notChecked": "Nog niet gecontroleerd. Gebruik Verbinding testen om te controleren.",
+      "lastError": "Laatste fout: {error}",
+      "viewListing": "Vermelding bekijken",
+      "resume": "Hervatten",
+      "pause": "Pauzeren",
+      "toast": {
+        "resumed": "App hervat.",
+        "paused": "App gepauzeerd.",
+        "consented": "Nieuwe rechten geaccepteerd. Nu op versie {version}.",
+        "uninstalled": "{name} is verwijderd."
+      },
+      "killed": {
+        "title": "Gestopt door het platform",
+        "message": "Deze app is voor iedereen uitgeschakeld. Je kunt hem alleen verwijderen.",
+        "reason": "Reden: {reason}"
+      },
+      "paused": {
+        "title": "Gepauzeerd",
+        "message": "Een gepauzeerde app doet niets, en het webadres weigert leveringen totdat je hem hervat."
+      },
+      "permissions": {
+        "title": "Verleende rechten",
+        "intro": "Wat deze app nu in je workspace kan doen."
+      },
+      "reconsent": {
+        "title": "Versie {version} vraagt om nieuwe rechten",
+        "message": "Deze app blijft draaien op versie {current} totdat je de rechten van versie {version} accepteert.",
+        "newScopes": "Nieuwe rechten",
+        "fullList": "De volledige lijst voor de nieuwe versie",
+        "accept": "Nieuwe rechten accepteren"
+      },
+      "problem": {
+        "conflictTitle": "Ondertussen veranderd",
+        "conflictMessage": "Iemand anders heeft deze app gewijzigd. Laad opnieuw om de laatste status te zien en doe daarna je wijziging opnieuw.",
+        "reload": "Opnieuw laden",
+        "consentTitle": "De rechten zijn veranderd",
+        "consentMessage": "De lijst met rechten is veranderd sinds je deze pagina opende. Laad opnieuw om de huidige lijst te zien."
+      },
+      "credentials": {
+        "title": "Inloggegevens en instellingen",
+        "intro": "Typen vervangt een opgeslagen waarde. Laat een veld leeg om wat is opgeslagen te behouden. Opgeslagen sleutels worden nooit meer getoond.",
+        "readOnly": "Wat voor deze app is opgeslagen. Sleutels worden nooit getoond.",
+        "saved": "Instellingen opgeslagen.",
+        "nothingToSave": "Nog niets om op te slaan.",
+        "save": "Wijzigingen opslaan",
+        "missing": "Vul de verplichte velden in.",
+        "invalid": "Sommige waarden zijn niet geaccepteerd."
+      },
+      "connection": {
+        "title": "Verbinding",
+        "intro": "Hoe deze app met je workspace praat, en hoe het gaat.",
+        "type": "Type",
+        "types": {
+          "oauth": "Aanmelden",
+          "push": "Stuurt gegevens naar jou",
+          "pull": "Wij halen de gegevens op",
+          "email_parse": "Waarschuwingsmails",
+          "webhook_relay": "Webadres en geheim",
+          "client": "Door elk lid geïnstalleerd"
+        },
+        "status": "Verbindingsstatus",
+        "statuses": {
+          "active": "Actief",
+          "paused": "Gepauzeerd",
+          "error": "Fout",
+          "disabled": "Uitgeschakeld"
+        },
+        "pollEvery": "Controleert elke",
+        "seconds": "{count, plural, one {# seconde} other {# seconden}}",
+        "lastEvent": "Laatste levering",
+        "lastSuccess": "Laatste succes",
+        "lastError": "Laatste fout",
+        "never": "Nooit",
+        "counters": {
+          "received": "Ontvangen",
+          "accepted": "Geaccepteerd",
+          "duplicates": "Duplicaten",
+          "failed": "Mislukt"
+        },
+        "inbound": {
+          "address": "Webadres om naar te versturen",
+          "copyAddress": "Kopieer het webadres",
+          "method": "Stuur een POST-verzoek met een JSON-body.",
+          "token": "Zet het geheim in de header {header}.",
+          "signature": "Of onderteken de body met HMAC-SHA256 en stuur sha256= gevolgd door de hex-digest in de header {header}.",
+          "secretEndsIn": "Het geheim eindigt op {last}. Het kan niet opnieuw worden getoond.",
+          "secretSet": "Er is een geheim ingesteld. Het kan niet opnieuw worden getoond."
+        },
+        "actions": {
+          "test": "Verbinding testen",
+          "sample": "Voorbeeldlead versturen",
+          "rotate": "Geheim roteren",
+          "sampleNeedsActive": "Hervat de app om een voorbeeldlead te versturen.",
+          "testOk": "De verbinding werkt.",
+          "testFailed": "De verbindingstest is mislukt.",
+          "latency": "{ms} ms",
+          "sampleAccepted": "Voorbeeldlead geaccepteerd. Hij bestaat nu als echte lead.",
+          "sampleDuplicate": "Die voorbeeldlead was al ontvangen.",
+          "rotatedDone": "Ik heb het opgeslagen, doorgaan",
+          "rotateNotApplicable": "Het geheim van deze verbinding is een sleutel van de andere dienst. Wijzig het in plaats daarvan bij Inloggegevens en instellingen.",
+          "rotateConfirm": {
+            "title": "Het verbindingsgeheim roteren?",
+            "message": "Er wordt een nieuw geheim gemaakt en het oude werkt direct niet meer. Alles wat nog met het oude geheim verstuurt, wordt geweigerd totdat je het nieuwe geeft. Je ziet het nieuwe geheim één keer.",
+            "confirm": "Geheim roteren",
+            "cancel": "Annuleren"
+          }
+        }
+      },
+      "events": {
+        "title": "Recente leveringen",
+        "intro": "De laatste dingen die deze verbinding ontving, nieuwste eerst.",
+        "refresh": "Vernieuwen",
+        "empty": {
+          "title": "Nog geen leveringen",
+          "message": "Zodra de andere dienst iets stuurt, of jij een voorbeeldlead verstuurt, verschijnt het hier."
+        },
+        "columns": {
+          "received": "Ontvangen",
+          "status": "Resultaat",
+          "externalId": "Leverings-ID",
+          "error": "Reden"
+        },
+        "status": {
+          "accepted": "Geaccepteerd",
+          "duplicate": "Duplicaat",
+          "rejected": "Afgewezen",
+          "failed": "Mislukt"
+        },
+        "loadMore": "Meer laden"
+      },
+      "pauseConfirm": {
+        "title": "{name} pauzeren?",
+        "message": "Hij werkt niet meer totdat je hem hervat. Het webadres weigert ondertussen leveringen.",
+        "confirm": "Pauzeren",
+        "cancel": "Annuleren"
+      },
+      "uninstall": {
+        "section": "Verwijderen",
+        "sectionIntro": "Verwijder deze app uit je workspace.",
+        "open": "Verwijderen",
+        "title": "{name} verwijderen?",
+        "confirm": "Verwijderen",
+        "cancel": "Annuleren",
+        "effect": "De toegang eindigt meteen.",
+        "effectConnection": "De toegang eindigt meteen, en het webadres reageert niet meer.",
+        "dataLegend": "Wat moet er gebeuren met de gegevens die het heeft gemaakt?",
+        "choices": {
+          "keep": {
+            "label": "De gegevens die het heeft gemaakt bewaren",
+            "help": "Contacten en records die het heeft toegevoegd, blijven in je workspace."
+          },
+          "delete": {
+            "label": "De gegevens die het heeft gemaakt verwijderen",
+            "help": "We registreren je verzoek en laten de onderdelen van het product weten die die gegevens beheren."
+          }
+        },
+        "honestNote": "Vandaag blijven contacten die deze app al heeft gemaakt in je workspace, wat je ook kiest. Je keuze wordt vastgelegd voor de onderdelen die gegevens gaan verwijderen.",
+        "irreversible": "Dit kan niet ongedaan worden gemaakt. Om de app weer te gebruiken, installeer je hem opnieuw.",
+        "renewal": {
+          "title": "Deze app heeft een betaald abonnement",
+          "message": "Door te verwijderen wordt hij niet meer verlengd, dus er wordt niets meer in rekening gebracht. De periode die je al hebt betaald blijft van jou, zodat je hem vóór het einde gratis opnieuw kunt installeren.",
+          "messageUntil": "Door te verwijderen wordt hij niet meer verlengd, dus er wordt niets meer in rekening gebracht. De periode die je al hebt betaald blijft van jou tot {date}, zodat je hem tot dan gratis opnieuw kunt installeren."
+        }
+      },
+      "subscription": {
+        "title": "Abonnement",
+        "subscribeTitle": "Abonneer je om {name} te blijven gebruiken",
+        "subscribeIntro": "Dit is een betaalde app en je workspace heeft er nog geen abonnement op.",
+        "included": "Je abonnement omvat deze app, dus je hoeft niets te betalen."
+      },
+      "subscriptionEnded": {
+        "title": "Abonnement beëindigd",
+        "message": {
+          "resubscribe": "{name} is gepauzeerd omdat het abonnement is beëindigd. Je gegevens en instellingen blijven bewaard. Abonneer je opnieuw om hem weer aan te zetten.",
+          "notForSale": "{name} is gepauzeerd omdat het abonnement is beëindigd, en hij wordt niet meer verkocht, dus hij kan niet meer worden aangezet. Je gegevens en instellingen blijven bewaard.",
+          "resumable": "{name} is gepauzeerd omdat het abonnement is beëindigd, maar je workspace heeft er weer toegang toe. Hervat hem om hem weer aan te zetten."
+        },
+        "resubscribe": "Opnieuw abonneren",
+        "resume": "Hervatten",
+        "noCheckout": "Betalen is nu niet beschikbaar. Probeer het zo meteen opnieuw."
+      }
+    },
+    "requests": {
+      "title": "Verzoeken",
+      "form": {
+        "title": "Vraag om iets",
+        "intro": "Niet vermeld? Vertel ons wat je nodig hebt. Als iemand er al om heeft gevraagd, telt je verzoek als stem.",
+        "name": "Naam",
+        "namePlaceholder": "Bijvoorbeeld de naam van een dienst",
+        "kind": "Type",
+        "kinds": {
+          "mini_app": "Mini app",
+          "integration": "Integratie"
+        },
+        "category": "Categorie",
+        "categoryHint": "Optioneel.",
+        "anyCategory": "Weet ik niet zeker",
+        "website": "Website",
+        "websiteHint": "Optioneel. Een volledig https://-adres.",
+        "note": "Waarvoor heb je het nodig?",
+        "noteHint": "Alleen zichtbaar voor het platformteam",
+        "problems": {
+          "nameShort": "Voer minstens 2 tekens in.",
+          "nameLong": "Gebruik maximaal 80 tekens.",
+          "websiteInvalid": "Voer een volledig https://-adres in.",
+          "noteLong": "Gebruik maximaal 500 tekens.",
+          "server": "Dit is niet geaccepteerd. Controleer de waarde."
+        },
+        "result": {
+          "created": {
+            "title": "Verzoek toegevoegd: {name}",
+            "message": "Bedankt. Andere workspaces kunnen er nu op stemmen."
+          },
+          "counted": {
+            "title": "Iemand heeft al om {name} gevraagd",
+            "message": "Je verzoek is als stem ervoor geteld."
+          }
+        },
+        "submit": "Verzoek versturen"
+      },
+      "list": {
+        "title": "Wat anderen hebben gevraagd",
+        "intro": "Stem op wat je wilt. De meest gevraagde worden eerst gebouwd.",
+        "searchLabel": "Verzoeken zoeken",
+        "searchPlaceholder": "Verzoeken zoeken",
+        "kind": "Type",
+        "allKinds": "Alle typen",
+        "kinds": {
+          "mini_app": "Mini app",
+          "integration": "Integratie"
+        },
+        "status": "Status",
+        "allStatuses": "Alle statussen",
+        "statuses": {
+          "open": "Open",
+          "planned": "Gepland",
+          "building": "In aanbouw",
+          "shipped": "Uitgebracht",
+          "declined": "Afgewezen"
+        },
+        "sort": "Sorteer op",
+        "sorts": {
+          "votes": "Meeste stemmen",
+          "new": "Nieuwste"
+        },
+        "emptyFiltered": {
+          "title": "Geen verzoeken gevonden",
+          "message": "Wijzig de filters, of vraag er zelf om."
+        },
+        "empty": {
+          "title": "Nog geen verzoeken",
+          "message": "Wees de eerste die om iets vraagt."
+        },
+        "loadMore": "Meer laden",
+        "votes": "{count, plural, one {# stem} other {# stemmen}}",
+        "voted": "Gestemd",
+        "vote": "Stemmen"
+      }
+    },
+    "pricing": {
+      "title": "Prijzen",
+      "freeNote": "Geen kosten voor installeren of gebruiken.",
+      "included": {
+        "planFeature": "Je abonnement omvat deze app, dus je hoeft niets te betalen.",
+        "minPlan": "Je abonnement, of een hoger abonnement, omvat deze app, dus je hoeft niets te betalen.",
+        "plan": "Je abonnement omvat deze app, dus je hoeft niets te betalen."
+      },
+      "needsPurchase": "Inbegrepen in de catalogus van je abonnement, koop hem om hem te gebruiken.",
+      "subscribedNote": "Je workspace heeft een abonnement op deze app.",
+      "trialOffer": "Probeer hem gratis {days, plural, one {# dag} other {# dagen}}. Er wordt niets in rekening gebracht totdat je kiest om je te abonneren.",
+      "prepaidNote": "Maandelijks gefactureerd via de facturatie van je workspace. Elke betaling dekt één maand en wordt niet automatisch afgeschreven: betaal opnieuw vóór de getoonde datum om de app te laten doorlopen.",
+      "notForSale": {
+        "title": "Niet te koop",
+        "message": "Deze app wordt op dit moment niet verkocht aan nieuwe abonnees."
+      }
+    },
+    "subscribe": {
+      "subscribe": "Abonneren",
+      "startTrial": "Start gratis proefperiode van {days} dagen",
+      "hintPrice": "{price} per maand, betaald bij het afrekenen. Elke betaling dekt één maand.",
+      "hint": "Je betaalt bij het afrekenen per maand.",
+      "working": "Bezig",
+      "noCheckout": "Betalen is voor deze app nu niet beschikbaar. Probeer het zo meteen opnieuw.",
+      "toast": {
+        "trial_started": "Gratis proefperiode van {name} gestart.",
+        "included": "{name} is inbegrepen in je abonnement.",
+        "already_entitled": "Je workspace heeft al toegang tot {name}.",
+        "free": "{name} is gratis."
+      }
+    },
+    "subscription": {
+      "title": "Abonnement",
+      "status": {
+        "active": "Actief",
+        "trialing": "Gratis proefperiode",
+        "comped": "Gratis toegekend",
+        "canceling": "Wordt niet verlengd",
+        "ended": "Beëindigd"
+      },
+      "date": {
+        "paidUntil": "Betaald tot {date}",
+        "trialEnds": "Gratis proefperiode eindigt {date}",
+        "compUntil": "Gratis toegang tot {date}",
+        "compOpen": "Gratis toegang, zonder einddatum",
+        "cancelingUntil": "Wordt niet verlengd. Actief tot {date}",
+        "endedOn": "Abonnement beëindigd op {date}",
+        "endedNoDate": "Abonnement beëindigd"
+      },
+      "lastPayment": "Laatste betaling: {price} per maand",
+      "nextPayment": "De prijs van deze app is veranderd. Je volgende betaling wordt {price} per maand.",
+      "compNote": "Het platformteam heeft je deze toegang gegeven. Hij kan hier niet worden opgezegd.",
+      "renewHint": "Een betaalde maand wordt niet automatisch verlengd. Verleng vóór de getoonde datum om de app zonder pauze te laten draaien.",
+      "actions": {
+        "renew": "Nu verlengen",
+        "resubscribe": "Opnieuw abonneren",
+        "subscribe": "Nu abonneren",
+        "resume": "Abonnement hervatten",
+        "cancel": "Abonnement opzeggen"
+      },
+      "cancelConfirm": {
+        "title": "Het abonnement op {name} opzeggen?",
+        "message": "{name} blijft actief tot {date}, daarna wordt hij gepauzeerd. Je gegevens en instellingen blijven bewaard.",
+        "messageNoDate": "{name} blijft actief tot de periode die je hebt betaald eindigt, daarna wordt hij gepauzeerd. Je gegevens en instellingen blijven bewaard.",
+        "afterwards": "Er wordt niets meer in rekening gebracht, en je kunt je altijd weer abonneren.",
+        "confirm": "Abonnement opzeggen",
+        "keep": "Abonnement behouden"
+      },
+      "toast": {
+        "canceled": "Abonnement opgezegd. Het blijft actief tot {date}.",
+        "canceledNoDate": "Abonnement opgezegd. Het blijft actief tot het einde van de betaalde periode.",
+        "resumed": "Abonnement hervat."
+      },
+      "working": "Bezig",
+      "noCheckout": "Betalen is voor deze app nu niet beschikbaar. Probeer het zo meteen opnieuw."
+    }
+  }
+}

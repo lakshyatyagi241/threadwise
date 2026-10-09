@@ -1,0 +1,113 @@
+{
+  "web-forms": {
+    "design": {
+      "presets": {
+        "title": "Tema",
+        "custom": "Kustom: Anda mengubah warna, sudut, atau font dari tema awal.",
+        "classic": "Klasik",
+        "ocean": "Laut",
+        "forest": "Hutan",
+        "sunset": "Senja",
+        "berry": "Beri",
+        "slate": "Batu tulis",
+        "noir": "Noir",
+        "paper": "Kertas"
+      },
+      "colours": {
+        "title": "Warna",
+        "hint": "Gunakan warna heks enam digit seperti #2563eb. Nilai yang belum lengkap tidak diterapkan.",
+        "swatch": "{name} (pemilih warna)",
+        "primary": "Utama (tombol dan aksen)",
+        "background": "Latar halaman",
+        "surface": "Latar formulir",
+        "text": "Teks",
+        "mutedText": "Teks sekunder",
+        "border": "Batas",
+        "error": "Error"
+      },
+      "contrast": {
+        "title": "Beberapa warna sulit dibaca. Usahakan kontras minimal 4.5:1.",
+        "item": "{pair}: {ratio}:1",
+        "ok": "Semua pasangan warna yang diperiksa mudah dibaca.",
+        "text": "Teks di latar formulir",
+        "muted": "Teks sekunder di latar formulir",
+        "button": "Label tombol di atas tombol"
+      },
+      "shape": {
+        "title": "Bentuk dan jarak",
+        "radius": "Sudut",
+        "none": "Tidak ada",
+        "sm": "Kecil",
+        "md": "Sedang",
+        "lg": "Besar",
+        "pill": "Bulat",
+        "density": "Jarak",
+        "compact": "Padat",
+        "comfortable": "Nyaman",
+        "spacious": "Lega",
+        "shadow": "Bayangan",
+        "shadowNone": "Tidak ada"
+      },
+      "type": {
+        "title": "Tipografi",
+        "font": "Font",
+        "fontHint": "Font web hanya dimuat saat Anda memilih salah satu.",
+        "sample": "The quick brown fox jumps over the lazy dog",
+        "scale": "Ukuran teks"
+      },
+      "fonts": {
+        "system": "Default sistem",
+        "serif": "Serif",
+        "mono": "Monospace"
+      },
+      "layout": {
+        "title": "Tata letak dan tombol",
+        "preset": "Tata letak",
+        "classic": "Kartu klasik",
+        "fullWidth": "Lebar penuh",
+        "split": "Terbagi dengan gambar sampul",
+        "minimal": "Minimal",
+        "labelPosition": "Posisi label",
+        "labelTop": "Di atas kolom",
+        "labelLeft": "Di samping kolom",
+        "buttonStyle": "Gaya tombol",
+        "filled": "Terisi",
+        "outline": "Garis tepi",
+        "buttonWidth": "Lebar tombol",
+        "widthAuto": "Sesuai label",
+        "widthFull": "Lebar penuh",
+        "maxWidth": "Lebar maksimum",
+        "maxWidthHint": "Antara 320 dan 960 piksel.",
+        "maxWidthInvalid": "Masukkan bilangan bulat dari 320 sampai 960.",
+        "maxWidthSlider": "Penggeser lebar maksimum",
+        "mode": "Mode warna",
+        "light": "Terang",
+        "dark": "Gelap",
+        "auto": "Ikuti perangkat pengunjung"
+      },
+      "images": {
+        "title": "Gambar",
+        "logo": "Logo",
+        "logoHint": "Alamat https. Kosongkan jika tanpa logo.",
+        "cover": "Gambar sampul",
+        "coverHint": "Ditampilkan di samping formulir pada tata letak terbagi.",
+        "background": "Gambar latar",
+        "backgroundHint": "Alamat https. Kosongkan untuk latar polos.",
+        "invalid": "Masukkan alamat https, atau kosongkan."
+      },
+      "reset": "Atur ulang ke default",
+      "readOnly": "Anda dapat melihat desainnya tetapi tidak dapat mengubahnya.",
+      "preview": {
+        "title": "Pratinjau",
+        "device": "Ukuran pratinjau",
+        "desktop": "Desktop",
+        "mobile": "Mobile",
+        "scheme": "Mode warna pratinjau",
+        "light": "Terang",
+        "dark": "Gelap",
+        "schemeHint": "Mode warna diatur ke Terang, jadi tidak ada versi gelap untuk dipratinjau.",
+        "frameTitle": "Pratinjau langsung formulir"
+      }
+    }
+  }
+}

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { cn } from '@crm/ui';
 import { useCommerceProducts } from '../../../api/hooks';
 import { Field, KnowledgeBaseActions, controlClass } from '../kit';
@@ -22,13 +23,19 @@ import {
 } from './shared';
 import { formatPrice } from './helpers';
 
-export const IgSendDmForm: FormComponent = (p) => (
-  <Field label="Message" hint="The DM text. {{variables}} from earlier nodes are substituted.">
-    {Ta(p, 'text', 'Hi! Thanks for your message.', 3)}
-  </Field>
-);
+const NS = 'flb.builder.formsChannels.instagram';
+
+export const IgSendDmForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
+  return (
+    <Field label={t('message')} hint={t('sendDmHint')}>
+      {Ta(p, 'text', t('sendDmPlaceholder'), 3)}
+    </Field>
+  );
+};
 
 export const IgQuickForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
   const opts = readRows(p.data.options);
   const setOpt = (i: number, k: string, val: string) =>
     p.set(
@@ -37,17 +44,14 @@ export const IgQuickForm: FormComponent = (p) => {
     );
   return (
     <>
-      <Field label="Message">{Ta(p, 'text', 'What can I help you with?', 2)}</Field>
-      <Field
-        label="Quick replies"
-        hint="Each becomes an output port — wire the next node off the one they tap."
-      >
+      <Field label={t('message')}>{Ta(p, 'text', t('quickPlaceholder'), 2)}</Field>
+      <Field label={t('quickReplies')} hint={t('quickRepliesHint')}>
         {opts.map((o, i) => (
           <div key={i} className="mb-1.5 flex items-center gap-2">
             <RowInput
               value={o.title}
               onChange={(v) => setOpt(i, 'title', v)}
-              placeholder="Button label"
+              placeholder={t('buttonLabel')}
               className="flex-1"
             />
             <RowInput
@@ -68,7 +72,7 @@ export const IgQuickForm: FormComponent = (p) => {
           </div>
         ))}
         <AddLink onClick={() => p.set('options', opts.concat([{ title: '', payload: '' }]))}>
-          Add quick reply
+          {t('addQuickReply')}
         </AddLink>
       </Field>
     </>
@@ -76,6 +80,7 @@ export const IgQuickForm: FormComponent = (p) => {
 };
 
 export const IgButtonsForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
   const btns = readRows(p.data.buttons);
   const setB = (i: number, k: string, val: string) =>
     p.set(
@@ -84,8 +89,8 @@ export const IgButtonsForm: FormComponent = (p) => {
     );
   return (
     <>
-      <Field label="Message">{Ta(p, 'text', 'Tap a button below:', 2)}</Field>
-      <Field label="Buttons (max 3)" hint="Instagram allows up to 3 buttons per message.">
+      <Field label={t('message')}>{Ta(p, 'text', t('buttonsPlaceholder'), 2)}</Field>
+      <Field label={t('buttons')} hint={t('buttonsHint')}>
         {btns.map((b, i) => {
           const type = b.type === 'postback' ? 'postback' : 'web_url';
           return (
@@ -96,13 +101,13 @@ export const IgButtonsForm: FormComponent = (p) => {
                   onChange={(e) => setB(i, 'type', e.target.value)}
                   className={cn(controlClass, 'w-auto px-2 py-1 text-[12px]')}
                 >
-                  <option value="web_url">Open URL</option>
-                  <option value="postback">Postback</option>
+                  <option value="web_url">{t('openUrl')}</option>
+                  <option value="postback">{t('postback')}</option>
                 </select>
                 <RowInput
                   value={b.title}
                   onChange={(v) => setB(i, 'title', v)}
-                  placeholder="Button label"
+                  placeholder={t('buttonLabel')}
                   className="flex-1"
                 />
                 <RemoveButton
@@ -135,7 +140,7 @@ export const IgButtonsForm: FormComponent = (p) => {
           <AddLink
             onClick={() => p.set('buttons', btns.concat([{ type: 'web_url', title: '', url: '' }]))}
           >
-            Add button
+            {t('addButton')}
           </AddLink>
         ) : null}
       </Field>
@@ -143,31 +148,30 @@ export const IgButtonsForm: FormComponent = (p) => {
   );
 };
 
-export const IgReplyCommentForm: FormComponent = (p) => (
-  <Field
-    label="Public reply"
-    hint="Posted as a public reply under the comment that triggered the flow."
-  >
-    {Ta(p, 'message', 'Thanks! Just sent you a DM.', 2)}
-  </Field>
-);
+export const IgReplyCommentForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
+  return (
+    <Field label={t('publicReply')} hint={t('publicReplyHint')}>
+      {Ta(p, 'message', t('replyPlaceholder'), 2)}
+    </Field>
+  );
+};
 
-export const IgAiForm: FormComponent = (p) => (
-  <>
-    <Field label="Model">{Sel(p, 'model', aiModelOptions(p))}</Field>
-    <Field label="Instructions (system prompt)">
-      {Ta(p, 'prompt', 'You are our friendly Instagram assistant. Answer briefly.', 4)}
-    </Field>
-    <Field
-      label="Knowledge base (optional)"
-      hint="Attach a trained assistant from AI Training to answer from your content."
-    >
-      {Sel(p, 'assistant', knowledgeBaseOptions(p))}
-      <KnowledgeBaseActions refresh={() => p.env.refresh()} />
-    </Field>
-    <Field label="Save reply to">{Txt(p, 'save', 'ai_reply')}</Field>
-  </>
-);
+export const IgAiForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
+  const ts = useTranslations('flb.builder.formsChannels.shared');
+  return (
+    <>
+      <Field label={t('model')}>{Sel(p, 'model', aiModelOptions(p, ts))}</Field>
+      <Field label={t('instructions')}>{Ta(p, 'prompt', t('aiPromptPlaceholder'), 4)}</Field>
+      <Field label={t('knowledgeBase')} hint={t('knowledgeBaseHint')}>
+        {Sel(p, 'assistant', knowledgeBaseOptions(p, ts))}
+        <KnowledgeBaseActions refresh={() => p.env.refresh()} />
+      </Field>
+      <Field label={t('saveReply')}>{Txt(p, 'save', 'ai_reply')}</Field>
+    </>
+  );
+};
 
 /**
  * Inline picker for the Instagram "Send products" node: a searchable multi-select over the synced catalog. The selection
@@ -180,6 +184,7 @@ function IgProductPicker({
   value: string[];
   onChange: (ids: string[]) => void;
 }) {
+  const t = useTranslations(NS);
   const [q, setQ] = useState('');
   const products = useCommerceProducts({ provider: 'instagram', limit: 100 });
   const list = products.data?.data ?? [];
@@ -193,24 +198,24 @@ function IgProductPicker({
         type="search"
         value={q}
         onChange={(e) => setQ(e.target.value)}
-        placeholder="Search products…"
+        placeholder={t('searchProducts')}
         className={cn(controlClass, 'mb-2 px-2.5 py-1.5 text-[12px]')}
       />
       {products.isPending ? (
         <div className="py-3 text-center text-[12px] italic text-muted-foreground">
-          Loading synced products…
+          {t('loadingSynced')}
         </div>
       ) : null}
       {products.isError ? (
         <div className="py-2 text-[12px] text-red-600">
-          Couldn&apos;t load: {products.error.message}
+          {t('loadFailed', { message: products.error.message })}
         </div>
       ) : null}
       {products.isSuccess && list.length === 0 ? (
         <div className="py-3 text-center text-[12px] italic leading-snug text-muted-foreground">
-          No products synced yet.
+          {t('noSyncedTitle')}
           <br />
-          Sync your catalog on the Instagram Commerce page first.
+          {t('noSyncedHint')}
         </div>
       ) : null}
       <div className="grid max-h-[220px] grid-cols-2 gap-1.5 overflow-y-auto">
@@ -247,7 +252,7 @@ function IgProductPicker({
         })}
       </div>
       <div className="mt-1.5 text-[10.5px] text-muted-foreground">
-        {value.length} selected · sent in this order
+        {t('selectedInOrder', { count: value.length })}
       </div>
     </div>
   );
@@ -271,60 +276,52 @@ function Seg({ on, onClick, children }: { on: boolean; onClick: () => void; chil
 }
 
 export const IgProductsForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
   const sel = p.data.selection === 'all' ? 'all' : 'pick';
   const ids = Array.isArray(p.data.productIds) ? p.data.productIds.map(String) : [];
   return (
     <>
-      <Field label="Which products">
+      <Field label={t('whichProducts')}>
         <div className="flex gap-2">
           <Seg on={sel === 'pick'} onClick={() => p.set('selection', 'pick')}>
-            Pick specific
+            {t('pickSpecific')}
           </Seg>
           <Seg on={sel === 'all'} onClick={() => p.set('selection', 'all')}>
-            First N synced
+            {t('firstN')}
           </Seg>
         </div>
       </Field>
       {sel === 'all' ? (
-        <Field label="How many" hint="Sends your most recently-synced products (max 10).">
+        <Field label={t('howMany')} hint={t('howManyHint')}>
           {Txt(p, 'limit', '5')}
         </Field>
       ) : (
-        <Field label="Products" hint="Tap to add / remove. They send in the order shown.">
+        <Field label={t('products')} hint={t('productsHint')}>
           <IgProductPicker value={ids} onChange={(next) => p.set('productIds', next)} />
         </Field>
       )}
-      <Field
-        label="Intro message (optional)"
-        hint="Sent as a DM just before the carousel. Leave blank to send only the cards."
-      >
-        {Ta(p, 'intro', 'Here are some products you might like:', 2)}
+      <Field label={t('intro')} hint={t('introHint')}>
+        {Ta(p, 'intro', t('introPlaceholder'), 2)}
       </Field>
-      <OrderDetailsFields
-        p={p}
-        detailsHint="Only appears on products that have a link in your catalog."
-      />
+      <OrderDetailsFields p={p} detailsHint={t('detailsHint')} />
     </>
   );
 };
 
 export const IgAskForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
   const save = String(p.data.save || 'lead_name');
   return (
     <>
-      <Field
-        label="Question"
-        hint="Sent as a DM. The next reply the customer sends is captured as the answer."
-      >
-        {Ta(p, 'question', 'What is your name?', 2)}
+      <Field label={t('question')} hint={t('questionHint')}>
+        {Ta(p, 'question', t('questionPlaceholder'), 2)}
       </Field>
       <Field
-        label="Save answer to variable"
-        hint={
-          <>
-            Reuse it later as <Mono>{`{{${save}}}`}</Mono> — e.g. in the Capture lead node.
-          </>
-        }
+        label={t('saveAnswer')}
+        hint={t.rich('saveAnswerHint', {
+          token: `{{${save}}}`,
+          mono: (c) => <Mono>{c}</Mono>,
+        })}
       >
         {Txt(p, 'save', 'lead_name')}
       </Field>
@@ -332,15 +329,21 @@ export const IgAskForm: FormComponent = (p) => {
   );
 };
 
-export const IgLeadForm: FormComponent = (p) => <LeadForm p={p} askName="Ask a question" />;
+export const IgLeadForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
+  return <LeadForm p={p} askName={t('leadAskName')} />;
+};
 
-export const IgToWhatsappForm: FormComponent = (p) => (
-  <WhatsappHandoffForm
-    p={p}
-    platform="Instagram"
-    surface="Instagram conversation"
-    dmName="IG"
-    excludeChannels={['instagram']}
-    prefillDefault="Hi! I came from Instagram"
-  />
-);
+export const IgToWhatsappForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
+  return (
+    <WhatsappHandoffForm
+      p={p}
+      platform="Instagram"
+      surface={t('surface')}
+      dmName={t('dmName')}
+      excludeChannels={['instagram']}
+      prefillDefault={t('prefillDefault')}
+    />
+  );
+};

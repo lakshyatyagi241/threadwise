@@ -1,0 +1,439 @@
+{
+  "storefront-builder": {
+    "nav": {
+      "store": "Toko"
+    },
+    "admin": {
+      "common": {
+        "dismiss": "Tutup"
+      },
+      "errors": {
+        "requestId": "ID permintaan",
+        "retry": "Coba lagi",
+        "network": {
+          "title": "Tidak dapat terhubung ke server",
+          "message": "Periksa koneksi Anda lalu coba lagi."
+        },
+        "forbidden": {
+          "title": "Tidak ada akses",
+          "message": "Peran Anda tidak mengizinkan ini."
+        },
+        "signedOut": {
+          "title": "Anda telah keluar",
+          "message": "Masuk lagi untuk melanjutkan."
+        },
+        "conflict": {
+          "title": "Diubah di tempat lain",
+          "message": "Orang lain mengubah ini saat Anda sedang mengedit. Muat ulang untuk melihat yang terbaru."
+        },
+        "validation": {
+          "title": "Periksa formulir",
+          "message": "Beberapa kolom perlu diperiksa."
+        },
+        "unavailable": {
+          "title": "Belum tersedia",
+          "message": "Layanan toko tidak tersedia di server ini."
+        },
+        "rateLimited": {
+          "title": "Terlalu banyak permintaan",
+          "message": "Tunggu sebentar lalu coba lagi."
+        },
+        "notFound": {
+          "title": "Tidak ditemukan",
+          "message": "Toko tersebut tidak ada di workspace ini."
+        },
+        "noShop": {
+          "title": "Belum ada toko",
+          "message": "Siapkan toko Anda terlebih dahulu."
+        },
+        "slugTaken": {
+          "title": "Alamat sudah dipakai",
+          "message": "Alamat toko tersebut sudah digunakan."
+        },
+        "deviceInvalid": {
+          "title": "Pilih perangkat yang terhubung",
+          "message": "Pilih salah satu perangkat yang terhubung."
+        },
+        "noSender": {
+          "title": "Hubungkan WhatsApp terlebih dahulu",
+          "message": "Toko memerlukan nomor WhatsApp yang terhubung. Hubungkan satu, lalu coba lagi."
+        },
+        "resetNotConfirmed": {
+          "title": "Belum dikonfirmasi",
+          "message": "Reset belum dikonfirmasi."
+        },
+        "domainNotSet": {
+          "title": "Tidak ada domain kustom",
+          "message": "Tidak ada domain kustom yang diatur."
+        },
+        "unexpected": {
+          "title": "Terjadi kesalahan",
+          "message": "Terjadi kesalahan. Coba lagi sebentar lagi."
+        }
+      },
+      "sidebar": {
+        "label": "Toko",
+        "navLabel": "Bagian toko",
+        "section": "Toko",
+        "settings": "Pengaturan",
+        "items": {
+          "overview": "Ringkasan",
+          "orders": "Pesanan",
+          "products": "Produk",
+          "groups": "Grup",
+          "storefront": "Etalase",
+          "coupons": "Kupon",
+          "reviews": "Ulasan",
+          "payments": "Pembayaran",
+          "gateways": "Gerbang checkout",
+          "customers": "Pelanggan",
+          "invoices": "Faktur",
+          "connection": "Koneksi"
+        },
+        "comingSoon": "Segera hadir",
+        "comingSoonHint": "Segera hadir",
+        "noShopTitle": "Belum ada toko",
+        "noShopMessage": "Buat toko pertama Anda untuk menggunakan alat toko.",
+        "noShopAction": "Siapkan toko Anda",
+        "live": "Live",
+        "setup": "Pengaturan",
+        "yourStore": "Toko Anda",
+        "notConnected": "Tidak terhubung",
+        "unofficialApi": "API tidak resmi",
+        "deviceConnected": "Perangkat terhubung · /channels",
+        "switchShop": "Ganti toko",
+        "shopFallback": "Toko",
+        "manageShops": "Kelola semua toko →",
+        "publicUrl": "URL publik",
+        "open": "Buka",
+        "copy": "Salin",
+        "copied": "Disalin!",
+        "providerLive": "Penyedia aktif",
+        "sendingFrom": "Mengirim dari",
+        "noDevice": "Tidak ada perangkat yang terhubung.",
+        "connectOne": "Hubungkan satu",
+        "thenBind": "lalu kaitkan ke toko ini dari",
+        "connectWizard": "wizard koneksi"
+      },
+      "dashboard": {
+        "eyebrow": "Toko / Ringkasan",
+        "title": "Ringkasan penjualan",
+        "subtitle": "30 hari terakhir. Pesanan digabung dari semua saluran — WABA, etalase, Twilio.",
+        "addProduct": "Tambah produk",
+        "loading": "Memuat ringkasan toko",
+        "kpi": {
+          "revenue": "Pendapatan (30 hari)",
+          "orders": "Pesanan (30 hari)",
+          "aov": "Rata-rata pesanan",
+          "products": "Produk",
+          "visits": "Kunjungan (30 hari)"
+        },
+        "trend": {
+          "eyebrow": "Tren penjualan",
+          "title": "Pendapatan dari waktu ke waktu"
+        },
+        "legendRevenue": "Pendapatan ({symbol})",
+        "legendOrders": "Pesanan",
+        "dayReadout": "{day}: {revenue}, {orders, plural, other {# pesanan}}",
+        "chartLabel": "Pendapatan dan pesanan per hari, 30 hari terakhir",
+        "tableDay": "Hari",
+        "tableRevenue": "Pendapatan ({symbol})",
+        "tableOrders": "Pesanan",
+        "top": {
+          "eyebrow": "Produk teratas (30 hari)",
+          "title": "Terlaris",
+          "empty": "Belum ada penjualan — bagikan tautan toko Anda."
+        },
+        "recent": {
+          "title": "Pesanan terbaru",
+          "viewAll": "Lihat semua",
+          "open": "Buka",
+          "columns": {
+            "when": "Kapan",
+            "customer": "Pelanggan",
+            "source": "Sumber",
+            "items": "Item",
+            "total": "Total",
+            "status": "Status",
+            "open": "Buka"
+          },
+          "itemsCount": "{count, plural, other {# item}}",
+          "emptyTitle": "Belum ada pesanan",
+          "emptyMessage": "Saat pelanggan memesan dari etalase atau WhatsApp Anda, pesanan akan muncul di sini."
+        }
+      },
+      "settings": {
+        "eyebrow": "Toko / Etalase",
+        "title": "Desain etalase",
+        "viewLive": "Lihat langsung",
+        "noAccess": "Peran Anda tidak memiliki akses ke pengaturan etalase.",
+        "loading": "Memuat pengaturan etalase",
+        "saved": "Etalase diperbarui.",
+        "conflict": "Etalase ini diubah di tempat lain saat Anda sedang mengedit. Muat ulang untuk mendapatkan pengaturan terbaru, lalu buat perubahan lagi.",
+        "reload": "Muat ulang",
+        "fixErrors": "Perbaiki kolom yang disorot lalu simpan lagi.",
+        "optional": "(opsional)",
+        "save": "Simpan",
+        "readOnly": "Anda dapat melihat pengaturan ini tetapi tidak dapat mengubahnya.",
+        "live": "Etalase aktif (menghapus centang akan menonaktifkannya)",
+        "theme": {
+          "title": "Tema"
+        },
+        "slug": {
+          "label": "Slug etalase",
+          "hint": "Toko Anda akan berada di"
+        },
+        "domain": {
+          "label": "Domain kustom",
+          "placeholder": "shop.yourbiz.com",
+          "verifiedLive": "Terverifikasi — domain Anda sudah aktif",
+          "addCname": "Tambahkan CNAME ini di penyedia DNS Anda:",
+          "cname": "CNAME",
+          "verify": "Verifikasi sekarang",
+          "verified": "Domain terverifikasi ✓",
+          "notPointing": "CNAME tidak mengarah ke {expected}",
+          "notSet": "Tidak ada domain kustom yang diatur.",
+          "verifyFailed": "Tidak dapat memeriksa domain. Coba lagi."
+        },
+        "brand": {
+          "logoUrl": "URL logo",
+          "color": "Warna merek (hex)",
+          "colorPicker": "Pilih warna merek",
+          "heroText": "Teks utama",
+          "heroPlaceholder": "Selamat datang di toko kami",
+          "footerText": "Teks footer",
+          "footerPlaceholder": "© 2026 Toko Anda"
+        },
+        "currency": {
+          "title": "Mata uang",
+          "label": "Mata uang",
+          "hint": "Default untuk produk baru + simbol yang ditampilkan di keranjang."
+        },
+        "shipping": {
+          "title": "Pengiriman",
+          "flat": "Biaya pengiriman tetap",
+          "flatHint": "Ditambahkan ke setiap pesanan. Kosong atau 0 = gratis.",
+          "freeAbove": "Gratis ongkir di atas",
+          "freeAboveHint": "Keranjang di atas jumlah ini dikirim gratis.",
+          "note": "Catatan pengiriman",
+          "noteHint": "Ditampilkan di keranjang dan halaman produk.",
+          "notePlaceholder": "2–5 hari kerja · Dilacak"
+        },
+        "payment": {
+          "title": "Tautan pembayaran",
+          "intro": "Pilih penyedia pembayaran dan kami akan menambahkan tautan pembayaran ke setiap pesan pesanan WhatsApp. Pembeli membayar lewat tautan, dan Anda mengonfirmasi di chat. Tidak ada alur checkout bawaan di etalase.",
+          "provider": "Penyedia",
+          "providers": {
+            "none": "Tidak ada · bayar di tempat",
+            "upi": "UPI (India) — VPA + nama",
+            "razorpay_link": "Tautan Pembayaran Razorpay (tempel tautan statis)",
+            "razorpay_api": "Razorpay (buat tautan otomatis + konfirmasi otomatis)",
+            "stripe_link": "Tautan Pembayaran Stripe",
+            "paypal_me": "Handle PayPal.me",
+            "bank_transfer": "Instruksi transfer bank"
+          },
+          "handle": "Detail pembayaran",
+          "handleHint": "VPA UPI, URL tautan pembayaran, handle PayPal.me, atau rekening bank.",
+          "handlePlaceholder": "mis. shop@upi · https://rzp.io/l/xxx",
+          "razorpay": {
+            "title": "API Razorpay (tautan otomatis)",
+            "keyId": "ID kunci",
+            "keyIdPlaceholder": "rzp_live_… / rzp_test_…",
+            "keySecret": "Rahasia kunci",
+            "webhookSecret": "Rahasia webhook",
+            "stored": "tersimpan — kosongkan untuk mempertahankan",
+            "show": "Tampilkan rahasia",
+            "hide": "Sembunyikan rahasia",
+            "webhookHelp": "Di dasbor Razorpay, atur URL webhook ke",
+            "webhookEvent": "untuk event payment_link.paid."
+          }
+        },
+        "recovery": {
+          "title": "Pemulihan keranjang terbengkalai",
+          "enable": "Kirim pengingat WhatsApp kepada pelanggan yang memulai checkout tetapi tidak menyelesaikannya",
+          "enableHint": "Menyimpan nomor telepon saat checkout; pengingat dibatalkan otomatis jika mereka memesan. Memerlukan perangkat yang terhubung.",
+          "delay": "Jeda (menit)",
+          "message": "Pesan",
+          "messageHint": "(kosong = default; '{name}' '{shop}' '{url}' '{total}')",
+          "messagePlaceholder": "Halo '{name}'! Anda meninggalkan item di keranjang di '{shop}'. Selesaikan di sini: '{url}'"
+        },
+        "problems": {
+          "required": "Kolom ini wajib diisi.",
+          "tooLong": "Maksimal {max} karakter.",
+          "slugPattern": "Gunakan huruf kecil, angka, dan tanda hubung saja.",
+          "domainInvalid": "Itu bukan domain yang valid (mis. shop.yourbiz.com).",
+          "urlInvalid": "Masukkan alamat lengkap yang diawali dengan http:// atau https://.",
+          "colorInvalid": "Gunakan warna hex seperti #075E54.",
+          "amountInvalid": "Masukkan angka, nol atau lebih.",
+          "amountTooBig": "Maksimal {max}.",
+          "delayRange": "Masukkan bilangan bulat dari {min} sampai {max}.",
+          "themeInvalid": "Pilih salah satu tema.",
+          "currencyInvalid": "Pilih salah satu mata uang dalam daftar.",
+          "providerInvalid": "Pilih salah satu penyedia dalam daftar.",
+          "slugTaken": "Slug tersebut sudah dipakai. Pilih yang lain."
+        }
+      },
+      "share": {
+        "message": "Lihat toko saya: {name}",
+        "subject": "Lihat toko saya · {name}",
+        "eyebrow": "Bagikan toko Anda",
+        "fallbackName": "Toko saya",
+        "close": "Tutup",
+        "link": "Tautan toko",
+        "copy": "Salin",
+        "copied": "Disalin ✓",
+        "copiedShort": "Disalin",
+        "whatsapp": "WhatsApp",
+        "whatsappHint": "Kirim ke chat",
+        "email": "Email",
+        "emailHint": "Buka aplikasi email",
+        "telegram": "Telegram",
+        "telegramHint": "Bagikan ke saluran",
+        "more": "Lainnya…",
+        "moreHint": "Menu berbagi ponsel",
+        "nativeUnsupported": "Tidak didukung di browser ini",
+        "showQr": "Tampilkan kode QR",
+        "qrAlt": "Kode QR",
+        "qrCaption": "Pindai untuk membuka toko"
+      },
+      "wizard": {
+        "loading": "Memuat toko Anda",
+        "back": "Kembali",
+        "breadcrumb": "Hubungkan / Toko WhatsApp",
+        "manageConnections": "Kelola semua koneksi →",
+        "titles": {
+          "list": "Toko Anda",
+          "add": "Siapkan toko Anda",
+          "edit": "Edit {name}",
+          "shopFallback": "toko"
+        },
+        "gate": {
+          "step": "Langkah 1 dari 3",
+          "title": "Hubungkan WhatsApp terlebih dahulu",
+          "message": "Toko Anda memerlukan nomor WhatsApp yang terhubung untuk mengirim konfirmasi pesanan dan memungkinkan pelanggan chat. Buka saluran Anda untuk memasangkan satu — hanya butuh 30 detik.",
+          "action": "Buka perangkat"
+        },
+        "list": {
+          "headline": "{count, plural, other {# toko}} di {workspace}",
+          "intro": "Setiap toko memiliki URL publik, tema, dan perangkat pengirim sendiri. Tambahkan sebanyak yang Anda butuhkan — merek, bahasa, atau wilayah yang berbeda.",
+          "add": "Tambah toko",
+          "addAnother": "Tambah toko lain",
+          "addAnotherHint": "Jalankan etalase terpisah dengan URL, tema, dan nomor WhatsApp sendiri."
+        },
+        "share": {
+          "fallbackName": "Toko saya"
+        },
+        "noAccess": {
+          "title": "Anda tidak dapat mengubah toko",
+          "message": "Peran Anda dapat melihat toko tetapi tidak dapat membuat atau mengeditnya.",
+          "action": "Kembali ke daftar toko"
+        },
+        "delete": {
+          "title": "Hapus {name}?",
+          "message": "Menghapus etalase dan pesanannya secara permanen. Produk di workspace Anda tidak terpengaruh. Tidak dapat dibatalkan.",
+          "confirm": "Ya, hapus",
+          "cancel": "Batal",
+          "done": "Toko dihapus.",
+          "thisShop": "toko ini"
+        },
+        "reset": {
+          "open": "Hapus semua data toko",
+          "title": "Hapus semua data toko?",
+          "message": "Menghapus secara permanen setiap toko, pesanan, dan produk di workspace ini. Tidak dapat dibatalkan.",
+          "confirm": "Ya, hapus semuanya",
+          "done": "Semua data toko di workspace ini telah dihapus.",
+          "notConfirmed": "Reset belum dikonfirmasi."
+        },
+        "card": {
+          "live": "Live",
+          "disabled": "Nonaktif",
+          "theme": "Tema {theme}",
+          "untitled": "Toko tanpa judul",
+          "sendingFrom": "Mengirim dari",
+          "noDevice": "Tidak ada perangkat",
+          "domain": "Domain",
+          "pending": "menunggu",
+          "builtIn": "URL bawaan",
+          "manage": "Kelola",
+          "manageTitle": "Buka dasbor admin",
+          "preview": "Pratinjau",
+          "previewTitle": "Buka etalase publik di tab baru",
+          "edit": "Edit",
+          "editTitle": "Edit pengaturan toko",
+          "share": "Bagikan",
+          "shareAria": "Bagikan {name}",
+          "delete": "Hapus toko",
+          "deleteAria": "Hapus {name}"
+        },
+        "form": {
+          "backToShops": "Kembali ke daftar toko",
+          "creatingShop": "Membuat toko #{n}",
+          "progress": "Langkah",
+          "steps": {
+            "details": "Detail toko",
+            "url": "URL publik",
+            "device": "Perangkat pengirim"
+          },
+          "optional": "(opsional)",
+          "details": {
+            "title": "Detail toko",
+            "hint": "Nama yang terlihat pelanggan + slug URL tempat produk akan berada.",
+            "name": "Nama toko",
+            "nameHint": "Ditampilkan di header etalase dan konfirmasi pesanan.",
+            "namePlaceholder": "Media City Threads",
+            "namePlaceholderAnother": "mis. {workspace} · Mumbai",
+            "slug": "Slug etalase",
+            "auto": "(otomatis)",
+            "slugLocked": "Dikunci setelah toko aktif agar tautan yang dibagikan tetap berfungsi.",
+            "slugAuto": "Dibuat dari nama toko Anda — difinalkan saat Anda menyimpan."
+          },
+          "url": {
+            "title": "URL publik",
+            "hint": "Pilih cara pembeli mencapai toko Anda — URL bawaan gratis, domain kustom terlihat lebih profesional.",
+            "builtIn": "URL bawaan · gratis",
+            "pathMode": "Langsung berfungsi setelah Anda menyimpan. URL berbasis path karena tidak ada host etalase publik yang diatur.",
+            "subdomainMode": "Langsung berfungsi setelah Anda menyimpan. Di-host pada domain etalase platform.",
+            "domain": "Domain kustom",
+            "domainHint": "Anda akan menambahkan CNAME di penyedia DNS dan memverifikasinya dari halaman pengaturan etalase setelah menyimpan. Kosongkan untuk menggunakan URL bawaan.",
+            "domainPlaceholder": "shop.yourbiz.com",
+            "verified": "{domain} sudah terverifikasi.",
+            "pending": "{domain} menunggu verifikasi DNS."
+          },
+          "device": {
+            "title": "Perangkat pengirim",
+            "hint": "Nomor WhatsApp mana yang mengirim konfirmasi pesanan dan balasan kepada pembeli.",
+            "none": "Tidak ada perangkat yang terhubung di akun ini.",
+            "pair": "Pasangkan satu di saluran Anda →",
+            "official": "API resmi · Meta (WABA)",
+            "officialDetail": "Nomor WhatsApp Business workspace",
+            "fallback": "Perangkat",
+            "noNumber": "Tidak ada nomor",
+            "connected": "terhubung"
+          },
+          "cancel": "Batal",
+          "deleteThis": "Hapus toko ini",
+          "saveChanges": "Simpan perubahan",
+          "create": "Buat toko →",
+          "created": "Toko \"{name}\" dibuat.",
+          "updated": "Toko \"{name}\" diperbarui.",
+          "problems": {
+            "nameRequired": "Masukkan nama toko.",
+            "nameTooLong": "Maksimal 191 karakter.",
+            "domainInvalid": "Itu bukan domain yang valid (mis. shop.yourbiz.com).",
+            "domainTooLong": "Maksimal 191 karakter.",
+            "deviceInvalid": "Pilih salah satu perangkat yang terhubung.",
+            "slugTaken": "Nama toko tersebut menghasilkan alamat yang sudah dipakai. Ubah sedikit namanya."
+          },
+          "live": {
+            "eyebrow": "Toko ini sudah aktif",
+            "fallbackName": "Toko Anda",
+            "hint": "Tambahkan produk, pilih tema, lihat pesanan, dan bagikan tautan Anda.",
+            "view": "Lihat toko",
+            "share": "Bagikan toko",
+            "dashboard": "Buka dasbor"
+          }
+        }
+      }
+    }
+  }
+}

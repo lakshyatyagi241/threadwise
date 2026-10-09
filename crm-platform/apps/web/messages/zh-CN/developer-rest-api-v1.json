@@ -1,0 +1,93 @@
+{
+  "developer-rest-api-v1": {
+    "common": {
+      "dismiss": "忽略",
+      "copy": "复制",
+      "copied": "已复制",
+      "copyFailed": "无法复制。请选中文本后手动复制。"
+    },
+    "rail": {
+      "name": "开发者 API",
+      "tagline": "REST · /api/v1",
+      "keyActive": "密钥已启用",
+      "noKey": "暂无密钥",
+      "baseUrl": "基础 URL",
+      "authHeader": "身份验证请求头",
+      "help": {
+        "title": "需要帮助？",
+        "body": "完整的请求和响应参考，每个端点都提供可复制的示例。",
+        "link": "阅读文档"
+      }
+    },
+    "page": {
+      "crumbLabel": "面包屑导航",
+      "crumbSettings": "设置",
+      "crumbHere": "开发者",
+      "title": "开发者",
+      "titleAccent": "API 密钥",
+      "lead": "生成密钥，即可从您自己的应用、CRM 或自动化中调用 REST API：发送消息、管理联系人、模板、群发等。每个工作区一个密钥。",
+      "back": "返回",
+      "openDocs": "打开文档",
+      "loading": "正在加载您的 API 密钥",
+      "forbidden": {
+        "title": "您无法查看 API 密钥",
+        "body": "您的角色不包含 API 密钥的访问权限。请联系工作区管理员授予您 API 密钥权限。"
+      }
+    },
+    "banner": {
+      "title": "您的新 API 密钥",
+      "warning": "请立即复制并妥善保存。出于安全考虑，我们只保留哈希值，因此它将不会再次显示。"
+    },
+    "key": {
+      "title": "您的 API 密钥",
+      "active": "启用",
+      "untitled": "未命名密钥",
+      "created": "创建于 {date}",
+      "lastUsed": "最近使用 {when}",
+      "never": "从未",
+      "revoke": "撤销",
+      "noRevoke": "您的角色无法撤销 API 密钥。",
+      "revoked": "API 密钥已撤销。使用它的任何应用将立即失效。",
+      "footer": "每个工作区只允许一个密钥。请撤销此密钥后再签发新密钥。",
+      "confirm": {
+        "title": "撤销此密钥？",
+        "message": "使用此密钥的任何应用或集成将立即停止工作。此操作无法撤销。之后您可以创建新密钥。",
+        "accept": "撤销",
+        "cancel": "取消"
+      }
+    },
+    "create": {
+      "title": "创建您的密钥",
+      "help": "为密钥命名，以便记住它的用途。密钥仅在创建时显示一次。",
+      "name": "密钥名称",
+      "placeholder": "例如：生产环境后端",
+      "submit": "创建密钥",
+      "submitting": "正在创建密钥…",
+      "created": "API 密钥已创建。请立即复制 - 它不会再次显示。",
+      "noCreate": "您的角色无法创建 API 密钥。请联系工作区管理员。",
+      "planLocked": "您的套餐不包含 REST API。",
+      "errors": {
+        "required": "请输入密钥名称。",
+        "tooLong": "名称最多 120 个字符。"
+      }
+    },
+    "quickstart": {
+      "title": "快速入门",
+      "reference": "完整参考",
+      "intro": "发送您的第一条消息。请替换密钥和收件人："
+    },
+    "errors": {
+      "planLimit": "您已有一个启用的 API 密钥。创建新密钥前请先撤销它 - 每个工作区只允许一个密钥。",
+      "planLocked": "您的套餐不包含 REST API。升级后即可创建 API 密钥。",
+      "forbidden": "您无权执行此操作。",
+      "validation": "密钥名称无效。请检查后重试。",
+      "notFound": "该密钥已不存在。列表已刷新。",
+      "network": "无法连接服务器。请检查网络连接后重试。",
+      "unexpected": "我们这边出了点问题。请稍后重试。",
+      "loadFailed": "无法加载您的 API 密钥。",
+      "retry": "重试",
+      "upgrade": "查看套餐",
+      "requestId": "请求 ID：{id}"
+    }
+  }
+}

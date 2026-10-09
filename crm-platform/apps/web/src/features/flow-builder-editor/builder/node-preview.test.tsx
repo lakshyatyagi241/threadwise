@@ -1,6 +1,6 @@
-import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import type { FlbBuilderContext, FlowNode } from '@crm/contracts';
+import { renderIntl } from '../test-utils/intl';
 import { COND_CARD_MAX, condCardText, NodePreview } from './node-preview';
 
 const rule = (variable: string, operator = 'equals', value = 'x') => ({
@@ -9,11 +9,11 @@ const rule = (variable: string, operator = 'equals', value = 'x') => ({
   value,
 });
 const card = (data: Record<string, unknown>) =>
-  renderToStaticMarkup(
-    NodePreview({
-      node: { id: 'n', type: 'condition', x: 0, y: 0, data } as FlowNode,
-      ctx: {} as FlbBuilderContext,
-    }) as never,
+  renderIntl(
+    <NodePreview
+      node={{ id: 'n', type: 'condition', x: 0, y: 0, data } as FlowNode}
+      ctx={{} as FlbBuilderContext}
+    />,
   );
 
 describe('Condition card', () => {

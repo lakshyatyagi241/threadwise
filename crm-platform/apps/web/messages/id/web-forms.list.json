@@ -1,0 +1,132 @@
+{
+  "web-forms": {
+    "list": {
+      "title": "Formulir",
+      "subtitle": "Buat formulir, pasang di situs Anda atau bagikan tautan, dan setiap jawaban masuk ke CRM Anda sebagai kontak.",
+      "templates": "Templat",
+      "newForm": "Formulir baru",
+      "statsLabel": "Total untuk formulir yang ditampilkan",
+      "stats": {
+        "forms": "Formulir",
+        "published": "Diterbitkan",
+        "submissions": "Pengiriman",
+        "needsReview": "Perlu perhatian"
+      },
+      "views": {
+        "label": "Tampilkan",
+        "all": "Semua",
+        "published": "Diterbitkan",
+        "draft": "Draf",
+        "paused": "Dijeda",
+        "archived": "Diarsipkan"
+      },
+      "search": "Cari formulir",
+      "loading": "Memuat formulir",
+      "loadFailed": "Formulir tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "empty": {
+        "title": "Belum ada formulir",
+        "message": "Mulai dari templat atau formulir kosong, terbitkan, lalu bagikan tautannya atau tempel kode embed di situs Anda.",
+        "fromTemplate": "Mulai dari templat",
+        "blank": "Formulir kosong"
+      },
+      "noMatch": {
+        "title": "Tidak ada formulir yang cocok",
+        "message": "Coba pencarian atau tampilan lain.",
+        "clear": "Hapus filter"
+      },
+      "col": {
+        "name": "Formulir",
+        "status": "Status",
+        "submissions": "Pengiriman",
+        "views": "Tayangan",
+        "conversion": "Konversi",
+        "last": "Pengiriman terakhir"
+      },
+      "unpublished": "Perubahan belum diterbitkan",
+      "version": "Versi {n}",
+      "needsReview": "{count, plural, other {# perlu perhatian}}",
+      "status": {
+        "draft": "Draf",
+        "published": "Diterbitkan",
+        "paused": "Dijeda",
+        "archived": "Diarsipkan"
+      },
+      "noRate": "-",
+      "never": "Tidak pernah",
+      "actionsFor": "Tindakan untuk {name}",
+      "action": {
+        "edit": "Ubah",
+        "submissions": "Pengiriman",
+        "copyLink": "Salin tautan",
+        "embed": "Embed di situs",
+        "duplicate": "Duplikasi",
+        "pause": "Jeda",
+        "resume": "Lanjutkan",
+        "archive": "Arsipkan",
+        "delete": "Hapus",
+        "restore": "Pulihkan"
+      },
+      "loadMore": "Muat lebih banyak",
+      "copied": "Tautan disalin",
+      "copyBlocked": "Penyalinan diblokir di browser ini. Tautannya adalah {url}",
+      "paused": "Formulir dijeda. Pengunjung melihat bahwa formulir ditutup.",
+      "resumed": "Formulir dilanjutkan",
+      "archived": "Formulir diarsipkan",
+      "deleted": "Formulir dihapus",
+      "cancel": "Batal",
+      "archive": {
+        "title": "Arsipkan formulir ini?",
+        "message": "Tautan publik dan semua embed dari “{name}” akan berhenti berfungsi. Pengirimannya tetap disimpan dan masih dapat Anda baca.",
+        "confirm": "Arsipkan"
+      },
+      "delete": {
+        "title": "Hapus formulir ini?",
+        "message": "“{name}” akan dihapus permanen. Kontak yang dibuatnya tetap ada di CRM Anda.",
+        "confirm": "Hapus"
+      },
+      "restored": "Formulir dipulihkan"
+    },
+    "newForm": {
+      "eyebrow": "Formulir",
+      "title": "Formulir baru",
+      "close": "Tutup",
+      "cancel": "Batal",
+      "create": "Buat formulir",
+      "startFrom": "Mulai dari",
+      "mode": {
+        "template": "Templat",
+        "blank": "Kosong"
+      },
+      "loadingTemplates": "Memuat templat",
+      "templatesFailed": "Templat tidak dapat dimuat. Anda tetap dapat mulai dari formulir kosong.",
+      "templates": "Templat",
+      "fieldCount": "{count, plural, other {# kolom}}",
+      "pickTemplate": "Pilih templat untuk melanjutkan.",
+      "name": "Nama formulir",
+      "nameHint": "Hanya tim Anda yang melihat nama ini.",
+      "nameRequired": "Masukkan nama untuk formulir."
+    },
+    "templates": {
+      "breadcrumb": "Breadcrumb",
+      "back": "Kembali ke formulir",
+      "title": "Templat formulir",
+      "subtitle": "Mulai dari formulir siap pakai dan ubah apa pun yang Anda inginkan.",
+      "blank": "Formulir kosong",
+      "loading": "Memuat templat",
+      "loadFailed": "Templat tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "empty": "Tidak ada templat yang tersedia.",
+      "category": {
+        "lead": "Pengumpulan prospek",
+        "contact": "Kontak",
+        "event": "Acara",
+        "order": "Pesanan",
+        "survey": "Survei"
+      },
+      "fields": "Kolom dalam templat ini",
+      "more": "+{count} lainnya",
+      "use": "Gunakan templat ini"
+    }
+  }
+}

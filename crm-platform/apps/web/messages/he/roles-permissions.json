@@ -1,0 +1,306 @@
+{
+  "roles-permissions": {
+    "nav": {
+      "group": "תפקידים והרשאות",
+      "roles": "תפקידים",
+      "permissions": "הרשאות",
+      "staff": "תפקידי צוות"
+    },
+    "common": {
+      "admin": "ניהול",
+      "breadcrumb": "נתיב ניווט",
+      "loading": "טוען…",
+      "retry": "נסה שוב",
+      "requestId": "מזהה בקשה",
+      "cancel": "ביטול",
+      "noAccess": {
+        "title": "אין לך גישה למסך הזה",
+        "body": "לתפקידים שלך אין את הרשאת הפלטפורמה שהמסך הזה דורש. בקש ממנהל־על להעניק אותה.",
+        "bodyWithKey": "המסך הזה דורש את הרשאת הפלטפורמה {permission}. בקש ממנהל־על להוסיף אותה לאחד התפקידים שלך.",
+        "back": "חזרה לקונסולה"
+      },
+      "errors": {
+        "unexpected": "משהו השתבש מצדנו. נסה שוב; אם זה חוזר, צטט את מזהה הבקשה.",
+        "request": "לא ניתן היה להשלים את הבקשה.",
+        "validation": "בדוק את הטופס ונסה שוב.",
+        "validationField": "{message}",
+        "conflict": "מישהו אחר שינה את התפקיד הזה בזמן שערכת. טען מחדש כדי לראות את הגרסה שלו, ואז החל שוב את השינויים שלך.",
+        "noAccess": "לביצוע זה דרושה הרשאת הפלטפורמה {permission}.",
+        "nameTaken": "השם הזה כבר תפוס.",
+        "nameRequired": "שם התפקיד הכרחי.",
+        "permissionNameRequired": "שם ההרשאה הכרחי.",
+        "permissionNameFormat": "השתמש באותיות קטנות באנגלית, ספרות וקווים תחתונים, עם נקודות בין חלקים.",
+        "locked": "מנהל־על נעול במערכת: אי אפשר לשנות לו שם, לשלול ממנו הרשאות או למחוק אותו.",
+        "lockedDelete": "תפקיד מנהל־על נעול במערכת ואי אפשר למחוק אותו.",
+        "permissionSystem": "הרשאה זו נבדקת על ידי הפלטפורמה ואי אפשר למחוק אותה.",
+        "permissionUnknown": "ההרשאות הבאות אינן בקטלוג: {names}.",
+        "reassignSame": "בחר תפקיד אחר שאליו יועברו המשתמשים.",
+        "lastSuperAdmin": "חייב להישאר לפחות מנהל־על פעיל אחד.",
+        "privilegedRole": "רק מנהל־על יכול להעניק או לשלול את תפקיד מנהל־על.",
+        "notFound": "הפריט הזה כבר לא קיים. ייתכן שנמחק."
+      }
+    },
+    "list": {
+      "crumb": "תפקידים",
+      "eyebrow": "ניהול · משתמשים וגישה · תפקידים",
+      "titleLead": "תפקידים &",
+      "titleAccent": "הרשאות",
+      "description": "הגדר מה כל תפקיד יכול לעשות בכל הפלטפורמה. לכל משתמש מוקצה תפקיד אחד; ההרשאות מקובצות לפי תפקיד.",
+      "managePermissions": "נהל הרשאות",
+      "addRole": "הוסף תפקיד",
+      "kpi": {
+        "label": "סיכום תפקידים",
+        "total": "סך התפקידים",
+        "totalHint": "{system} מערכת · {custom} מותאמים",
+        "permissions": "סך ההרשאות",
+        "permissionsHint": "בכל המודולים",
+        "users": "משתמשים עם תפקיד",
+        "usersHint": "בכל התפקידים",
+        "noUsers": "תפקידים ללא משתמשים",
+        "noUsersHint": "שקול ארכוב"
+      },
+      "filter": {
+        "label": "סנן תפקידים לפי סוג",
+        "all": "הכול",
+        "system": "מערכת",
+        "custom": "מותאם",
+        "search": "חפש תפקידים…",
+        "searchLabel": "חיפוש תפקידים"
+      },
+      "table": {
+        "caption": "תפקידי פלטפורמה",
+        "index": "#",
+        "name": "שם התפקיד",
+        "type": "סוג",
+        "users": "משתמשים",
+        "permissions": "הרשאות",
+        "lastEdited": "נערך לאחרונה",
+        "actions": "פעולות"
+      },
+      "systemRole": "תפקיד מערכת",
+      "customRole": "תפקיד מותאם",
+      "systemBadge": "מערכת",
+      "customBadge": "מותאם",
+      "row": {
+        "menu": "פעולות עבור {name}",
+        "edit": "ערוך תפקיד",
+        "delete": "מחק"
+      },
+      "footer": {
+        "showing": "מוצגים {shown} מתוך {total} תפקידים",
+        "add": "+ הוסף תפקיד"
+      },
+      "empty": {
+        "none": "עדיין לא הוגדרו תפקידים. <link>צור את התפקיד הראשון</link>.",
+        "noMatch": "אין תפקידים שתואמים לסינונים שלך.",
+        "clear": "נקה סינונים"
+      },
+      "delete": {
+        "title": "מחק תפקיד",
+        "message": "למחוק את התפקיד {name}? משתמשים שהוקצה להם התפקיד יאבדו את כל ההרשאות שלו. אי אפשר לבטל פעולה זו.",
+        "confirm": "כן, מחק",
+        "cancel": "ביטול"
+      },
+      "toasts": {
+        "deleted": "התפקיד “{name}” נמחק."
+      }
+    },
+    "editor": {
+      "crumbRoles": "תפקידים",
+      "crumbNew": "חדש",
+      "eyebrowNew": "ניהול · תפקידים · חדש",
+      "eyebrowEdit": "ניהול · עריכת תפקיד",
+      "titleLead": "צור",
+      "titleAccent": "תפקיד חדש",
+      "description": "בחר שם, ואז סמן את התיבות כדי לתת לתפקיד הזה גישה למודולים מסוימים. אפשר לערוך את זה בכל עת.",
+      "summary": "{count} / {total} הרשאות · נערך לאחרונה {date}.",
+      "userChip": "{count, plural, one {משתמש אחד} two {שני משתמשים} other {# משתמשים}}",
+      "save": "שמור שינויים",
+      "create": "צור תפקיד",
+      "saving": "שומר…",
+      "reload": "טען מחדש את התפקיד",
+      "discard": "יש לך שינויים שלא נשמרו. לצאת בלי לשמור?",
+      "duplicatedBanner": "התפקיד שוכפל בשם “{name}”. ערוך את העותק למטה.",
+      "lockedNotice": "{name} נעול במערכת: אי אפשר לשנות לו שם, לשלול ממנו הרשאות או למחוק אותו.",
+      "details": "פרטי התפקיד",
+      "name": "שם התפקיד",
+      "namePlaceholder": "למשל: ראש צוות מכירות",
+      "template": "התחל מתבנית",
+      "templateBlank": "ריק · ללא הרשאות",
+      "templateOption": "{name} · {count, plural, one {הרשאה אחת} two {שתי הרשאות} other {# הרשאות}}",
+      "templateBusy": "טוען את התבנית…",
+      "descriptionLabel": "תיאור",
+      "descriptionPlaceholder": "מה התפקיד הזה עושה? גלוי למנהלים.",
+      "toasts": {
+        "created": "התפקיד “{name}” נוצר.",
+        "updated": "התפקיד “{name}” עודכן."
+      }
+    },
+    "matrix": {
+      "title": "הקצה הרשאות",
+      "counter": "{count, number} / {total, number} נבחרו",
+      "selectAll": "בחר את כל ההרשאות",
+      "module": "מודול",
+      "selectAllColumn": "בחר הכול",
+      "available": "הרשאות זמינות",
+      "selectAllModule": "בחר הכול",
+      "selectAllOf": "בחר את כל הרשאות {module}",
+      "empty": "עדיין לא הוגדרו הרשאות. <link>צור הרשאה</link>.",
+      "emptyPlain": "עדיין לא הוגדרו הרשאות."
+    },
+    "dangerZone": {
+      "title": "אזור סכנה",
+      "irreversible": "בלתי הפיך",
+      "duplicate": {
+        "title": "שכפל תפקיד",
+        "hint": "צור עותק עם אותן הרשאות",
+        "action": "שכפל",
+        "busy": "משכפל…"
+      },
+      "reassign": {
+        "title": "העבר את כל המשתמשים",
+        "hint": "העבר {count, plural, one {משתמש אחד} two {שני משתמשים} other {# משתמשים}} לתפקיד אחר",
+        "targetLabel": "העבר משתמשים אל",
+        "placeholder": "אל…",
+        "action": "העבר",
+        "busy": "מעביר…"
+      },
+      "moved": "{count} משתמש(ים) הועברו מ-“{from}” אל “{to}”.",
+      "delete": {
+        "title": "מחק תפקיד",
+        "hint": "מסיר את התפקיד ומנתק ממנו את כל המשתמשים.",
+        "action": "מחק",
+        "dialogTitle": "מחק תפקיד",
+        "dialogMessage": "למחוק את התפקיד {name}? משתמשים שהוקצה להם התפקיד יאבדו את כל ההרשאות שלו. אי אפשר לבטל פעולה זו.",
+        "confirm": "כן, מחק",
+        "cancel": "ביטול"
+      },
+      "deleted": "התפקיד “{name}” נמחק."
+    },
+    "permissions": {
+      "crumb": "הרשאות",
+      "eyebrow": "ניהול · משתמשים וגישה · הרשאות",
+      "titleLead": "הכול",
+      "titleAccent": "הרשאות",
+      "description": "כל דגל הרשאה שהפלטפורמה מכירה, מקובץ לפי מודול. הוסף דגל חדש כאן, ואז שייך אותו לתפקידים בעורך התפקידים.",
+      "backToRoles": "חזרה לתפקידים",
+      "add": "הוסף הרשאה",
+      "kpi": {
+        "label": "סיכום הרשאות",
+        "total": "סך ההרשאות",
+        "totalHint": "בכל {modules, plural, one {מודול אחד} two {שני מודולים} other {# מודולים}}",
+        "used": "בשימוש בתפקידים",
+        "usedHint": "משויכות לתפקיד אחד לפחות",
+        "orphans": "הרשאות יתומות",
+        "orphansHint": "לא משויכות לאף תפקיד",
+        "last": "נוספה לאחרונה"
+      },
+      "filter": {
+        "search": "חפש שם הרשאה…",
+        "searchLabel": "חיפוש שם הרשאה",
+        "moduleLabel": "מודול",
+        "allModules": "כל המודולים",
+        "count": "{count, plural, one {הרשאה אחת} two {שתי הרשאות} other {# הרשאות}} ב-{modules, plural, one {מודול אחד} two {שני מודולים} other {# מודולים}}"
+      },
+      "groupsLabel": "הרשאות לפי מודול",
+      "groupCount": "{count, plural, one {הרשאה אחת} two {שתי הרשאות} other {# הרשאות}}",
+      "orphan": "יתום",
+      "system": "מערכת",
+      "systemHint": "נבדקת על ידי הפלטפורמה, לכן אי אפשר למחוק אותה.",
+      "inRoles": "ב-{count, plural, one {תפקיד אחד} two {שני תפקידים} other {# תפקידים}}",
+      "deleteName": "מחק הרשאה {name}",
+      "empty": {
+        "none": "עדיין לא הוגדרו הרשאות. <link>צור את הראשונה</link>.",
+        "noMatch": "אין הרשאות שתואמות לחיפוש שלך."
+      },
+      "delete": {
+        "action": "מחק",
+        "title": "מחק הרשאה",
+        "message": "למחוק את ההרשאה {name}? כל תפקיד שמשתמש בה יאבד את היכולת הזו מיד.",
+        "confirm": "כן, מחק",
+        "cancel": "ביטול"
+      },
+      "toasts": {
+        "deleted": "ההרשאה “{name}” נמחקה."
+      }
+    },
+    "permissionNew": {
+      "crumbPermissions": "הרשאות",
+      "crumbNew": "חדש",
+      "eyebrow": "ניהול · הרשאות · חדש",
+      "titleLead": "צור",
+      "titleAccent": "הרשאה חדשה",
+      "description": "הוסף דגל יכולת מפורט. לאחר היצירה, שייך אותו לתפקיד אחד או יותר בעורך התפקידים.",
+      "create": "צור הרשאה",
+      "creating": "יוצר…",
+      "details": "פרטי ההרשאה",
+      "module": "מודול",
+      "modulePlaceholder": "בחר מודול",
+      "moduleHint": "הרשאות מקובצות לפי מודול בעורך התפקידים.",
+      "action": "פעולה",
+      "actionHint": "אותיות קטנות, בלי רווחים. ישולב כ־",
+      "actionPlaceholder": "למשל: export · refund · approve",
+      "name": "שם ההרשאה",
+      "namePlaceholder": "module.action — מתמלא אוטומטית מלמעלה",
+      "nameHint": "מתמלא אוטומטית ממודול ופעולה. ערוך רק אם אתה צריך מחרוזת מותאמת.",
+      "tip": "<b>מוסכמת שמות:</b> השתמש ב-<code>module.action</code> באותיות קטנות. דוגמאות: <code>campaigns.send</code>, <code>billing.refund</code>, <code>audit.export</code>.",
+      "preview": {
+        "title": "תצוגה מקדימה של ההרשאה",
+        "appearsUnder": "תופיע תחת <b>{module}</b> בעורך התפקידים.",
+        "selectedModule": "המודול שנבחר"
+      },
+      "code": {
+        "title": "הפניה בקוד",
+        "hint": "השתמש ב-<code>@PlatformPermission()</code> בנתיב פלטפורמה כדי לדרוש הרשאה זו."
+      },
+      "tipCard": "<b>טיפ:</b> הרשאות בשם כמו <code>module.action</code> מתקבצות אוטומטית בעורך התפקידים.",
+      "toasts": {
+        "created": "ההרשאה “{name}” נוצרה."
+      }
+    },
+    "staff": {
+      "crumbRoles": "תפקידים",
+      "crumb": "תפקידי צוות",
+      "eyebrow": "ניהול · משתמשים וגישה · תפקידי צוות",
+      "titleLead": "צוות",
+      "titleAccent": "תפקידים",
+      "description": "תן לכל מפעיל בקונסולה הזו את תפקידי הפלטפורמה שקובעים מה מותר לו. שמירה מחליפה את התפקידים של המפעיל בדיוק באלה שסומנו.",
+      "backToRoles": "חזרה לתפקידים",
+      "caption": "מפעילים ותפקידי הפלטפורמה שלהם",
+      "table": {
+        "operator": "מפעיל",
+        "tier": "גישה לקונסולה",
+        "status": "סטטוס",
+        "roles": "תפקידי פלטפורמה",
+        "actions": "פעולות"
+      },
+      "tier": {
+        "super_admin": "מנהל־על",
+        "support": "תמיכה",
+        "auditor": "מבקר"
+      },
+      "status": {
+        "active": "פעיל",
+        "suspended": "מושעה"
+      },
+      "noRoles": "ללא תפקידים",
+      "rolesOf": "התפקידים של {name}",
+      "assign": "הקצה תפקידים",
+      "assignFor": "הקצה תפקידים ל-{name}",
+      "empty": "עדיין אין מפעילים.",
+      "dialog": {
+        "title": "הקצה תפקידים ל-{name}",
+        "close": "סגור",
+        "cancel": "ביטול",
+        "save": "שמור תפקידים",
+        "saving": "שומר…",
+        "hint": "סמן כל תפקיד שהמפעיל הזה צריך להחזיק.",
+        "superOnly": "רק מנהל־על יכול להעניק או לשלול את התפקיד הזה.",
+        "count": "{count, plural, =0 {לא נבחרו תפקידים} one {תפקיד אחד נבחר} two {שני תפקידים נבחרו} other {# תפקידים נבחרו}}"
+      },
+      "toasts": {
+        "saved": "התפקידים של “{name}” עודכנו."
+      }
+    }
+  }
+}

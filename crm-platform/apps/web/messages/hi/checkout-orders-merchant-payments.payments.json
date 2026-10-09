@@ -1,0 +1,105 @@
+{
+  "checkout-orders-merchant-payments": {
+    "payments": {
+      "eyebrow": "स्टोर / भुगतान",
+      "title": "भुगतान",
+      "subtitle": "आपके स्टोर ऑर्डर का पैसों वाला पक्ष: क्या चुकाया गया, क्या प्रतीक्षा में है और क्या कैश ऑन डिलीवरी है।",
+      "listTitle": "भुगतान सूची",
+      "loading": "भुगतान लोड हो रहे हैं",
+      "emptyFilteredTitle": "कोई भुगतान मेल नहीं खाता",
+      "emptyFilteredMessage": "फ़िल्टर बदलें या हर भुगतान देखने के लिए उन्हें रीसेट करें।",
+      "resetFilters": "फ़िल्टर रीसेट करें",
+      "emptyTitle": "अभी कोई भुगतान नहीं",
+      "emptyMessage": "स्टोर ऑर्डर आते ही भुगतान यहां दिखता है। अपने ऑर्डर देखने या हाथ से जोड़ने के लिए ऑर्डर खोलें।",
+      "goToOrders": "ऑर्डर पर जाएं",
+      "summary": {
+        "loading": "भुगतान का कुल लोड हो रहा है",
+        "orders": "ऑर्डर",
+        "collected": "वसूला गया",
+        "collectedNone": "अभी कुछ वसूला नहीं गया।"
+      },
+      "filters": {
+        "search": "खोजें",
+        "searchPlaceholder": "ऑर्डर नंबर, ग्राहक या संदर्भ",
+        "status": "स्थिति",
+        "allStatuses": "सभी स्थितियां",
+        "method": "तरीका",
+        "allMethods": "सभी तरीके",
+        "prepaid": "प्रीपेड",
+        "cod": "कैश ऑन डिलीवरी",
+        "gatewayOption": "कोई गेटवे...",
+        "gatewayCode": "गेटवे कोड",
+        "gatewayCodePlaceholder": "जैसे razorpay",
+        "from": "से",
+        "to": "तक",
+        "rangeInverted": "शुरुआती तारीख अंतिम तारीख के बाद की है, इसलिए तारीख सीमा अनदेखी की गई।",
+        "reset": "फ़िल्टर रीसेट करें"
+      },
+      "table": {
+        "caption": "स्टोर ऑर्डर के भुगतान, नवीनतम पहले",
+        "order": "ऑर्डर",
+        "customer": "ग्राहक",
+        "status": "स्थिति",
+        "method": "तरीका",
+        "paidVia": "भुगतान माध्यम",
+        "reference": "संदर्भ",
+        "amount": "राशि",
+        "shop": "दुकान",
+        "date": "तारीख",
+        "methodPrepaid": "प्रीपेड",
+        "methodCod": "कैश ऑन डिलीवरी",
+        "via": {
+          "razorpay_link": "Razorpay लिंक",
+          "whatsapp_pay": "WhatsApp Pay"
+        }
+      },
+      "wa": {
+        "title": "चैट में WhatsApp Pay",
+        "intro": "खरीदारों को WhatsApp छोड़े बिना ऑर्डर का भुगतान करने दें (UPI, कार्ड, नेटबैंकिंग, वॉलेट) और पैसा अपने Razorpay, PayU, BillDesk या Zaakpay अकाउंट में पाएं।",
+        "indiaOnly": "फ़िलहाल केवल भारत समर्थित बाज़ार है: देश और मुद्रा भारत और INR पर तय हैं।",
+        "viewOnly": "आप WhatsApp Pay कॉन्फ़िगरेशन देख सकते हैं लेकिन बदल नहीं सकते। भुगतान मैनेज करने की अनुमति के लिए वर्कस्पेस एडमिन से पूछें।",
+        "howTitle": "इसे कैसे सेट करें",
+        "how1": "WhatsApp Manager में, भारत के भुगतान के अंतर्गत, एक Direct Pay Method बनाएं और अपना गेटवे अकाउंट लिंक करें।",
+        "how2": "उसे एक नाम दें और वही नाम यहां कॉपी करें। इसे इस ऐप से नहीं बनाया जा सकता, यह Meta की ओर का एक चरण है।",
+        "how3": "कॉन्फ़िगरेशन सहेजें, फिर ऑर्डर खोलें और किसी भी ऑर्डर पर WhatsApp पर भुगतान मांगें।",
+        "how4": "खरीदार Review and Pay पर टैप करता है, चैट में भुगतान करता है और Meta की पुष्टि के बाद ऑर्डर भुगतान किया हुआ चिह्नित हो जाता है।",
+        "listTitle": "आपके कॉन्फ़िगरेशन",
+        "loading": "कॉन्फ़िगरेशन लोड हो रहे हैं",
+        "emptyTitle": "अभी कोई पेमेंट कॉन्फ़िगरेशन नहीं है",
+        "emptyMessage": "चैट में भुगतान लेना शुरू करने के लिए इस पेज पर एक जोड़ें।",
+        "emptyMessageReadOnly": "अभी किसी ने एक भी नहीं जोड़ा है।",
+        "market": "भारत · INR",
+        "autoChargeOn": "ऑटो-चार्ज चालू",
+        "active": "सक्रिय",
+        "off": "बंद",
+        "types": {
+          "razorpay": "Razorpay",
+          "payu": "PayU",
+          "billdesk": "BillDesk",
+          "zaakpay": "Zaakpay"
+        },
+        "toast": {
+          "saved": "कॉन्फ़िगरेशन सहेजा गया",
+          "removed": "कॉन्फ़िगरेशन हटा दिया गया"
+        },
+        "addTitle": "पेमेंट कॉन्फ़िगरेशन जोड़ें",
+        "editTitle": "{name} संपादित करें",
+        "name": "कॉन्फ़िगरेशन का नाम",
+        "nameLocked": "नाम कॉन्फ़िगरेशन की पहचान है। इसका नाम बदलने के लिए इसे हटाकर दोबारा जोड़ें।",
+        "updatesExisting": "इस नाम का कॉन्फ़िगरेशन मौजूद है: सहेजने पर वही अपडेट होगा।",
+        "nameHint": "यह WhatsApp Manager (Payments, India) के Direct Pay Method के नाम से बिल्कुल मेल खाना चाहिए।",
+        "nameInvalid": "1 से {max} अक्षरों का नाम दर्ज करें।",
+        "namePlaceholder": "जैसे my-razorpay-pay",
+        "gateway": "गेटवे",
+        "activeLabel": "सक्रिय",
+        "autoCharge": "नए ऑर्डर अपने आप चार्ज करें",
+        "autoChargeHint": "ऑर्डर दिए जाते ही चैट में पे रिक्वेस्ट अपने आप भेजें।",
+        "save": "कॉन्फ़िगरेशन सहेजें",
+        "cancelEdit": "संपादन रद्द करें",
+        "removeTitle": "{name} हटाएं?",
+        "removeMessage": "इस कॉन्फ़िगरेशन से ऑर्डर अब चैट में चार्ज नहीं किए जा सकेंगे। WhatsApp Manager में Direct Pay Method को छुआ नहीं जाता।",
+        "removeConfirm": "कॉन्फ़िगरेशन हटाएं"
+      }
+    }
+  }
+}

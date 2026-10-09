@@ -1,0 +1,870 @@
+{
+  "marketplace": {
+    "nav": {
+      "marketplace": "Marketplace"
+    },
+    "meta": {
+      "apps": "Mini-applications · Marketplace",
+      "integrations": "Intégrations · Marketplace",
+      "app": "Application · Marketplace",
+      "install": "Installer · Marketplace",
+      "installed": "Installée · Marketplace",
+      "manage": "Gérer l’application · Marketplace",
+      "requests": "Demandes · Marketplace"
+    },
+    "common": {
+      "dismiss": "Fermer",
+      "loading": "Chargement",
+      "errorTitle": "Impossible de charger ceci",
+      "requestId": "Identifiant de la demande",
+      "retry": "Réessayer",
+      "upgrade": "Voir les forfaits et passer à un forfait supérieur",
+      "opensNewTab": "(s’ouvre dans un nouvel onglet)",
+      "copy": "Copier",
+      "copied": "Copié",
+      "copyFailed": "Copie impossible. Sélectionnez le texte et copiez-le manuellement.",
+      "needsPermission": "Vous avez besoin de l’autorisation {permission} pour faire cela. Demandez à un administrateur de l’espace de travail."
+    },
+    "errors": {
+      "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+      "forbidden": "Vous n’avez pas l’autorisation de faire cela.",
+      "signedOut": "Votre session a pris fin. Reconnectez-vous.",
+      "conflict": "Quelqu’un d’autre a modifié ceci avant vous. Rechargez pour voir la dernière version.",
+      "validation": "Certaines valeurs ne sont pas valides. Vérifiez les champs et réessayez.",
+      "rateLimited": "Trop de requêtes. Patientez un instant et réessayez.",
+      "rateLimitedWait": "Trop de requêtes. Réessayez dans {seconds, plural, one {# seconde} other {# secondes}}.",
+      "unavailable": "La Marketplace n’est pas encore disponible sur ce serveur.",
+      "notFound": "Cet élément n’existe plus.",
+      "appNotFound": "Cette application n’existe pas ou n’est pas disponible pour votre espace de travail.",
+      "notInstalled": "Cette application n’est pas installée dans votre espace de travail.",
+      "alreadyInstalled": "Cette application est déjà installée dans votre espace de travail.",
+      "appUnavailable": "Cette application n’est pas proposée pour le moment.",
+      "appLockedPlan": "Votre forfait ne comprend pas cette application. Passez à un forfait supérieur pour la débloquer.",
+      "appLockedModule": "Cette application n’est pas disponible sur cette installation du produit.",
+      "planLocked": "La Marketplace ne fait pas partie de votre forfait. Passez à un forfait supérieur pour l’utiliser.",
+      "planLimitInstalled": "Vous avez atteint la limite d’applications installées de votre forfait : rien n’a été installé. Désinstallez une application ou passez à un forfait supérieur.",
+      "planLimitInstalledCounts": "Vous avez installé {used} applications sur les {cap} autorisées par votre forfait : rien n’a été installé. Désinstallez une application ou passez à un forfait supérieur.",
+      "planLimitLeadSources": "Vous avez atteint la limite de sources de leads de votre forfait : rien n’a été installé. Supprimez une source de leads ou passez à un forfait supérieur.",
+      "planLimitLeadSourcesCounts": "Vous avez {used} sources de leads sur les {cap} autorisées par votre forfait : rien n’a été installé. Supprimez-en une ou passez à un forfait supérieur.",
+      "planLimit": "Vous avez atteint une limite de votre forfait : rien n’a été installé. Passez à un forfait supérieur pour continuer.",
+      "planLimitCounts": "Vous avez utilisé {used} sur les {cap} autorisés par votre forfait : rien n’a été installé. Passez à un forfait supérieur pour continuer.",
+      "consentRequired": "Les autorisations ont changé. Relisez-les avant d’installer.",
+      "reconsentRequired": "La nouvelle version demande davantage d’autorisations. Relisez-les et acceptez-les d’abord.",
+      "scopeExceeds": "Vous ne pouvez pas accorder des autorisations que vous ne détenez pas vous-même. Manquantes : {permissions}.",
+      "installationKilled": "La plateforme a arrêté cette application. Elle ne peut être que désinstallée.",
+      "installationDisabled": "Cette application est suspendue. Reprenez-la d’abord.",
+      "credentialMissing": "Renseignez les champs obligatoires.",
+      "noConnection": "Cette installation n’a aucune connexion capable de faire cela.",
+      "leadPipeline": "Le service de leads n’est pas disponible pour le moment. Rien n’a été enregistré. Réessayez dans un instant.",
+      "unexpected": "Une erreur s’est produite. Réessayez.",
+      "subscriptionRequired": "Cette application est payante. Souscrivez-y pour l’installer.",
+      "notForSale": "Cette application n’est pas proposée aux nouveaux abonnés pour le moment.",
+      "trialUnavailable": "L’essai gratuit n’est pas disponible pour cette application dans votre espace de travail.",
+      "subscriptionNotFound": "Votre espace de travail n’a pas d’abonnement à cette application.",
+      "subscriptionState": "Cela ne correspond pas à l’état actuel de l’abonnement. Rechargez pour voir le dernier état."
+    },
+    "chips": {
+      "installed": "Installée",
+      "paused": "Suspendue",
+      "killed": "Arrêtée par la plateforme",
+      "healthy": "Opérationnel",
+      "degraded": "Dégradé",
+      "error": "Erreur",
+      "needs_reauth": "Reconnexion requise",
+      "unknown": "Pas encore vérifié",
+      "needsConsent": "Nouvelles autorisations à examiner",
+      "subscribed": "Abonné",
+      "trialing": "Essai gratuit",
+      "comped": "Offert",
+      "canceling": "Non renouvelé",
+      "subscriptionEnded": "Abonnement terminé"
+    },
+    "lock": {
+      "planFeature": {
+        "chip": "Absent de votre forfait",
+        "message": "Votre forfait ne comprend pas cette application. Vous pouvez en lire la description ici, mais l’installation nécessite une mise à niveau."
+      },
+      "moduleDisabled": {
+        "chip": "Non disponible",
+        "message": "Cette application dépend d’un module désactivé sur cette installation du produit."
+      },
+      "limitReached": {
+        "chip": "Limite du forfait atteinte",
+        "message": "Vous avez installé autant d’applications que votre forfait le permet. Désinstallez-en une ou passez à un forfait supérieur."
+      }
+    },
+    "scopes": {
+      "risk": {
+        "low": "Risque faible",
+        "medium": "Risque moyen",
+        "high": "Risque élevé"
+      },
+      "none": "Cette application ne demande aucune autorisation.",
+      "new": "Nouveau",
+      "overall": {
+        "low": {
+          "title": "Risque global faible",
+          "message": "Cette application demande seulement la lecture des données."
+        },
+        "medium": {
+          "title": "Risque global moyen",
+          "message": "Cette application peut lire et modifier les données de votre espace de travail."
+        },
+        "high": {
+          "title": "Risque global élevé",
+          "message": "Cette application peut agir en votre nom, par exemple envoyer des messages ou gérer des intégrations. Ne l’installez que si vous faites confiance à son éditeur."
+        }
+      },
+      "counts": "{high} élevé, {medium} moyen, {low} faible"
+    },
+    "header": {
+      "title": "Marketplace",
+      "subtitle": "Ajoutez des mini-applications et connectez des services externes à votre espace de travail.",
+      "tabsLabel": "Sections du Marketplace",
+      "moreLabel": "Installées et demandes",
+      "tabs": {
+        "mini_app": "Mini-applications",
+        "integration": "Intégrations"
+      },
+      "installed": "Installées",
+      "installedLimit": "Installées ({installed} sur {limit})",
+      "installedUnlimited": "Installées ({installed})",
+      "request": "Demander une intégration"
+    },
+    "card": {
+      "firstParty": "Conçu par nous",
+      "pricing": {
+        "free": "Gratuit",
+        "included": "Inclus dans votre forfait",
+        "monthly": "{price} / mois",
+        "subscribed": "Abonné",
+        "notForSale": "Non vendu",
+        "paid": "Application payante",
+        "addOn": "Module complémentaire",
+        "trial": "Essai gratuit de {days} jours"
+      },
+      "installs": "{count, plural, one {# installation} other {# installations}}",
+      "version": "Version {version}",
+      "cta": {
+        "install": "Installer",
+        "manage": "Gérer",
+        "review": "Examiner les autorisations",
+        "killed": "Gérer",
+        "locked": "Voir les détails",
+        "view": "Voir les détails",
+        "subscribe": "S’abonner"
+      }
+    },
+    "browse": {
+      "categoriesLabel": "Catégories",
+      "all": "Toutes",
+      "shelves": {
+        "featured": "Mises en avant",
+        "popular": "Populaires",
+        "new": "Nouveautés"
+      },
+      "searchLabel": "Rechercher dans le Marketplace",
+      "searchPlaceholder": {
+        "mini_app": "Rechercher des mini-applications",
+        "integration": "Rechercher des intégrations"
+      },
+      "availability": {
+        "label": "Afficher",
+        "all": "Toutes",
+        "addons": "Modules complémentaires disponibles",
+        "installed": "Installées"
+      },
+      "sortLabel": "Trier par",
+      "sort": {
+        "featured": "Mises en avant",
+        "popular": "Les plus installées",
+        "new": "Les plus récentes",
+        "name": "Nom"
+      },
+      "unknownCategory": "Cette catégorie n’existe pas dans cet onglet.",
+      "showAll": "Tout afficher",
+      "resultsAll": "Toutes les applications",
+      "resultsFiltered": "Résultats",
+      "loadedCount": "{count, plural, one {# application affichée} other {# applications affichées}}",
+      "loadMore": "Charger plus",
+      "clearFilters": "Effacer les filtres",
+      "empty": {
+        "search": {
+          "title": "Aucun résultat pour votre recherche",
+          "message": "Essayez un nom plus court ou effacez les filtres. Si elle ne figure pas dans la liste, vous pouvez la demander ci-dessous."
+        },
+        "addons": {
+          "title": "Aucun module complémentaire à acheter ici",
+          "message": "Les modules complémentaires inclus dans votre forfait mais non achetés apparaissent ici. Choisissez Toutes pour tout voir."
+        },
+        "installed": {
+          "title": "Aucune installation pour le moment",
+          "message": "Les applications que vous installez apparaissent ici. Choisissez Toutes pour tout parcourir."
+        },
+        "category": {
+          "title": "Rien dans cette catégorie pour le moment",
+          "message": "Choisissez une autre catégorie ou demandez ce dont vous avez besoin ci-dessous."
+        },
+        "none": {
+          "title": "Rien n’est encore répertorié ici",
+          "message": "Les nouvelles applications apparaissent ici une fois publiées. Vous pouvez en demander une ci-dessous."
+        }
+      }
+    },
+    "requestBox": {
+      "title": {
+        "mini_app": "Il vous manque une mini-application ?",
+        "integration": "Il vous manque une intégration ?"
+      },
+      "message": "Dites-nous ce dont vous avez besoin. Les demandes sont comptées, et les plus demandées sont développées en premier.",
+      "action": {
+        "mini_app": "Demander une mini-application",
+        "integration": "Demander une intégration"
+      }
+    },
+    "detail": {
+      "backToMarketplace": "Retour au Marketplace",
+      "backToApps": "Retour aux mini-applications",
+      "backToIntegrations": "Retour aux intégrations",
+      "notFound": {
+        "title": "Application introuvable",
+        "message": "Cette application n’existe pas, ou elle n’est pas disponible dans votre espace de travail.",
+        "integrations": "Parcourir les intégrations",
+        "apps": "Parcourir les mini-applications"
+      },
+      "kind": {
+        "mini_app": "Mini-application",
+        "integration": "Intégration"
+      },
+      "firstParty": "Conçu par nous",
+      "install": "Installer",
+      "manage": "Gérer",
+      "killed": "La plateforme a arrêté cette application. Elle ne peut plus qu’être désinstallée.",
+      "about": "À propos de cette application",
+      "screenshots": "Captures d’écran",
+      "screenshotAlt": "Capture d’écran {n} de {name}",
+      "permissions": {
+        "title": "Ce à quoi elle peut accéder",
+        "intro": "Vous les reverrez et les confirmerez avant toute installation."
+      },
+      "setup": {
+        "title": "Ce que vous devrez configurer",
+        "intro": {
+          "oauth": "Vous vous connectez au service pour le relier.",
+          "push": "Le service envoie des données à votre espace de travail à l’aide d’une clé que vous saisissez ici.",
+          "pull": "Nous récupérons les données du service à l’aide d’une clé que vous saisissez ici.",
+          "email_parse": "Nous lisons les e-mails d’alerte envoyés par le service.",
+          "webhook_relay": "Vous recevez une adresse web et un secret à coller dans l’outil qui envoie les données.",
+          "client": "Vous l’installez là où vous travaillez et vous vous connectez avec votre propre compte."
+        },
+        "required": "Obligatoire",
+        "optional": "Facultatif",
+        "kind": {
+          "secret": "secret conservé",
+          "text": "texte",
+          "select": "choix"
+        },
+        "noFields": "Rien à renseigner. Vous obtenez les détails de connexion après l’installation.",
+        "hasSample": "Après l’installation, vous pouvez envoyer un prospect test pour vérifier la connexion."
+      },
+      "data": {
+        "title": "Vos données",
+        "intro": "Ce que cette application stocke, où, et comment les données sont supprimées.",
+        "summary": "Données stockées",
+        "regions": "Emplacement",
+        "deletion": "Suppression"
+      },
+      "changelog": {
+        "title": "Modifications",
+        "version": "Version {version}"
+      },
+      "facts": {
+        "title": "Détails",
+        "version": "Version",
+        "connector": "Mode de connexion",
+        "connectors": {
+          "oauth": "Connexion",
+          "push": "Elle vous envoie des données",
+          "pull": "Nous récupérons ses données",
+          "email_parse": "E-mails d’alerte",
+          "webhook_relay": "Adresse web et secret",
+          "client": "Installée par chaque membre"
+        },
+        "installs": "Installations",
+        "developer": "Éditeur"
+      },
+      "support": {
+        "title": "Assistance et mentions légales",
+        "website": "Site web",
+        "docs": "Documentation",
+        "privacy": "Politique de confidentialité",
+        "terms": "Conditions",
+        "status": "Page d’état",
+        "email": "Assistance par e-mail"
+      }
+    },
+    "install": {
+      "backToMarketplace": "Retour au Marketplace",
+      "backToApp": "Retour à {name}",
+      "notFound": {
+        "title": "Application introuvable",
+        "message": "Cette application n’existe pas, ou elle n’est pas disponible dans votre espace de travail."
+      },
+      "alreadyTitle": "Déjà installée",
+      "alreadyMessage": "{name} est déjà installée dans votre espace de travail.",
+      "openManage": "Ouvrir",
+      "lockedTitle": "{name} est verrouillée",
+      "noPermissionTitle": "Vous ne pouvez pas installer d’applications",
+      "noPermissionMessage": "L’installation d’applications nécessite une autorisation que votre rôle ne possède pas.",
+      "title": "Installer {name}",
+      "stepsLabel": "Étapes d’installation",
+      "steps": {
+        "permissions": "Autorisations",
+        "setup": "Configurer",
+        "done": "Terminé"
+      },
+      "permissions": {
+        "title": "Examiner les autorisations",
+        "intro": "{name} demande les autorisations ci-dessous. L’installation lui accorde exactement celles-ci, jusqu’à sa désinstallation.",
+        "diffSummary": "{missing, plural, one {# autorisation omise} other {# autorisations omises}} et {unexpected, plural, one {# autorisation non affichée} other {# autorisations non affichées}}.",
+        "consent": "Je comprends et j’autorise cette application à utiliser ces autorisations dans mon espace de travail.",
+        "consentNone": "Je comprends que {name} ne demande aucune autorisation et je souhaite l’installer.",
+        "continue": "Continuer"
+      },
+      "cancel": "Annuler",
+      "install": "Installer",
+      "back": "Retour",
+      "setup": {
+        "title": "Configurer",
+        "intro": "Renseignez ce dont cette application a besoin pour se connecter. Les clés sont stockées de façon chiffrée et ne peuvent plus être relues."
+      },
+      "installing": "Installation en cours",
+      "missingPermissions": "Il vous manque ces autorisations :",
+      "seeInstalled": "Voir ce qui est installé",
+      "changed": {
+        "title": "Les autorisations ont changé pendant votre consultation",
+        "message": "Examinez de nouveau la liste ci-dessous. Rien n’a été installé.",
+        "added": "Demande désormais aussi :",
+        "removed": "Ne demande plus :",
+        "edited": "La formulation ou le niveau de risque de certaines autorisations a changé."
+      },
+      "gaps": {
+        "title": "Vous ne pourrez peut-être pas accorder toutes ces autorisations",
+        "message": "L’installation n’accorde jamais plus d’accès que n’en possède la personne qui installe. Il semble qu’il vous manque :"
+      },
+      "done": {
+        "title": "{name} est installée",
+        "message": "La version {version} est désormais active dans votre espace de travail.",
+        "saved": "Je l’ai enregistré, continuer",
+        "manage": "Ouvrir les paramètres",
+        "browse": "Retour au Marketplace"
+      },
+      "subscribeTitle": "{name} est une application payante",
+      "subscribeIntro": "Abonnez-vous pour l’installer. Vous passez à la caisse pour payer le premier mois, ou vous pouvez l’essayer gratuitement si un essai est proposé. Vous examinez et confirmez ses autorisations avant toute installation.",
+      "notForSaleTitle": "{name} n’est pas à vendre",
+      "goToCheckout": "Aller au paiement"
+    },
+    "setup": {
+      "optionalLabel": "{label} (facultatif)",
+      "stored": {
+        "notSet": "Non défini",
+        "endsIn": "Enregistrée, se termine par {last}",
+        "value": "Une valeur est enregistrée",
+        "set": "Enregistrée"
+      },
+      "keepBlank": "Laissez vide pour conserver la valeur enregistrée. Saisissez une valeur pour la remplacer.",
+      "show": "Afficher la valeur",
+      "hide": "Masquer la valeur",
+      "choose": "Choisir",
+      "clear": "Effacer {label}",
+      "problems": {
+        "required": "{label} est obligatoire.",
+        "pattern": "{label} semble incorrect.",
+        "option": "Choisissez une option pour {label}.",
+        "server": "{label} n’a pas été accepté. Vérifiez la valeur."
+      }
+    },
+    "reveal": {
+      "title": "Enregistrez votre secret de connexion",
+      "warning": "Vous ne reverrez plus ce secret. Copiez-le maintenant et conservez-le en lieu sûr. Si vous le perdez, renouvelez-le pour en obtenir un nouveau.",
+      "address": "Adresse web de destination",
+      "secret": "Secret",
+      "copyAddress": "Copier l’adresse web",
+      "copySecret": "Copier le secret",
+      "saved": "J’ai enregistré le secret et l’adresse.",
+      "doneHint": "Cochez la case pour continuer.",
+      "send": {
+        "title": "Comment envoyer",
+        "post": "Envoyez une requête POST avec un corps JSON à cette adresse.",
+        "token": "Placez le secret dans l’en-tête {header}.",
+        "signature": "Ou signez le corps avec HMAC-SHA256 à l’aide du secret, puis envoyez sha256= suivi de l’empreinte hexadécimale dans l’en-tête {header}."
+      },
+      "leaveConfirm": "Vous n’avez pas confirmé avoir enregistré le secret. Si vous quittez maintenant, vous ne le reverrez plus. Quitter quand même ?"
+    },
+    "portals": {
+      "maturity": {
+        "beta": "Bêta",
+        "needsPortalSetup": "Configuration côté portail requise",
+        "betaHint": "Conçue à partir de la documentation partielle du portail. Elle fonctionne, mais un ajustement peut être nécessaire après le premier prospect réel.",
+        "needsPortalSetupHint": "Rien n’arrive tant que l’équipe du portail ne l’a pas activée pour vous."
+      },
+      "reveal": {
+        "title": "Enregistrez votre adresse privée",
+        "warning": "Vous ne reverrez plus cette adresse. Elle sert aussi de mot de passe à la connexion : quiconque la possède peut envoyer des prospects dans votre espace de travail. Copiez-la maintenant et conservez-la en lieu sûr. Si vous la perdez, créez une nouvelle adresse ; l’ancienne cessera alors de fonctionner.",
+        "address": "Votre adresse privée",
+        "copyAddress": "Copier l’adresse privée",
+        "saved": "J’ai enregistré l’adresse.",
+        "sendTitle": "Ce dont l’expéditeur a besoin",
+        "method": "Méthode : {methods}",
+        "formats": "Formats acceptés : {formats}",
+        "noHeader": "Rien d’autre n’est nécessaire : ni en-tête ni signature. La dernière partie de l’adresse fait office de mot de passe.",
+        "managerTitle": "Envoyez-la au responsable de compte du portail",
+        "managerIntro": "C’est l’équipe de {portal} qui active cette option, et non vous. Copiez un message prêt à l’emploi et envoyez-le à votre responsable de compte chez eux.",
+        "copyMessage": "Copier un message pour le responsable de compte du portail",
+        "messageCopied": "Message copié",
+        "portalFallback": "le portail"
+      },
+      "formats": {
+        "json": "JSON",
+        "form": "champs de formulaire",
+        "xml": "XML",
+        "query": "paramètres de requête"
+      },
+      "message": {
+        "subjectLine": "Objet : Adresse de réception des prospects pour notre compte {portal}",
+        "body": "Bonjour,\n\nMerci de commencer à envoyer les prospects de notre compte {portal} à cette adresse privée :\n\n{address}\n\nMerci d’envoyer chaque prospect avec {methods}. Nous acceptons les données au format {formats}. L’adresse identifie déjà notre compte : aucun en-tête, mot de passe ni signature n’est nécessaire. Merci de la garder confidentielle.\n\nMerci de nous envoyer un prospect test dès l’activation, afin que nous puissions confirmer sa bonne réception.\n\nMerci beaucoup."
+      },
+      "connection": {
+        "nextPoll": "Prochaine vérification",
+        "notScheduled": "Non planifiée",
+        "syncedThrough": "Prospects récupérés jusqu’à",
+        "syncedNever": "Rien de récupéré pour le moment",
+        "errorHint": "Saisissez de nouveau la clé dans Identifiants ou cliquez sur Synchroniser maintenant.",
+        "errorHintNoSync": "Saisissez de nouveau la clé dans Identifiants.",
+        "rotatePath": "Créer une nouvelle adresse",
+        "rotatePathConfirm": {
+          "title": "Créer une nouvelle adresse ?",
+          "message": "Une nouvelle adresse privée est créée et l’ancienne cesse immédiatement de fonctionner. Tout envoi vers l’ancienne adresse sera refusé tant que l’équipe du portail ne disposera pas de la nouvelle. Vous ne verrez la nouvelle adresse qu’une seule fois.",
+          "confirm": "Créer une nouvelle adresse"
+        },
+        "waiting": {
+          "title": "En attente du premier prospect de {portal}",
+          "message": "C’est à l’équipe de {portal} d’activer cette option. Rien n’arrive tant qu’elle n’envoie pas vers l’adresse de votre connexion. Vérifiez que votre responsable de compte dispose de l’adresse, et demandez un prospect test."
+        },
+        "path": {
+          "address": "Adresse privée",
+          "maskedNote": "La dernière partie de l’adresse fait office de mot de passe. Elle n’est affichée qu’une fois, lors de l’installation ou de la création d’une nouvelle adresse ; seule sa fin est affichée ici.",
+          "method": "Méthode : {methods}",
+          "formats": "Formats acceptés : {formats}",
+          "noHeader": "Aucun en-tête ni aucune signature n’est nécessaire. L’adresse fait office de mot de passe : gardez-la confidentielle.",
+          "newAddressHint": "Adresse perdue, ou envie d’empêcher quelqu’un de l’utiliser ? Créez une nouvelle adresse ci-dessous. L’ancienne cesse aussitôt de fonctionner, et l’équipe du portail doit recevoir la nouvelle."
+        }
+      },
+      "sync": {
+        "button": "Synchroniser maintenant",
+        "needsActive": "Reprenez l’application pour synchroniser maintenant.",
+        "scheduledNow": "Synchronisation planifiée. Elle démarre immédiatement.",
+        "scheduled": "Synchronisation planifiée pour {time}.",
+        "waits": "Le portail n’autorise qu’une requête toutes les {interval} ; cette synchronisation doit donc attendre jusque-là.",
+        "duration": {
+          "seconds": "{count, plural, one {# seconde} other {# secondes}}",
+          "minutes": "{count, plural, one {# minute} other {# minutes}}",
+          "hours": "{count, plural, one {# heure} other {# heures}}"
+        }
+      }
+    },
+    "installed": {
+      "title": "Installées",
+      "filters": {
+        "kind": "Type",
+        "status": "Statut",
+        "all": "Toutes"
+      },
+      "kind": {
+        "mini_app": "Mini-application",
+        "integration": "Intégration"
+      },
+      "status": {
+        "active": "Installée",
+        "disabled": "En pause",
+        "killed": "Arrêtée par la plateforme"
+      },
+      "listLabel": "Applications installées",
+      "emptyFiltered": {
+        "title": "Aucun résultat pour ces filtres",
+        "message": "Modifiez les filtres pour voir vos autres applications installées."
+      },
+      "empty": {
+        "title": "Aucune application installée pour le moment",
+        "message": "Parcourez le Marketplace pour ajouter une mini-application ou connecter un service.",
+        "integrations": "Parcourir les intégrations",
+        "apps": "Parcourir les mini-applications"
+      },
+      "usage": {
+        "unlimited": "{installed} installées. Votre forfait n’a aucune limite.",
+        "of": "{installed} installées sur {limit}",
+        "remaining": "{count, plural, one {# place restante} other {# places restantes}}",
+        "atCap": "Vous avez atteint la limite de votre forfait. Désinstallez une application ou passez à un forfait supérieur pour en installer une autre.",
+        "upgrade": "Voir les forfaits et passer à un forfait supérieur",
+        "nearCap": "Vous approchez de la limite de votre forfait."
+      },
+      "version": "Version {version}",
+      "killReason": "Motif : {reason}",
+      "lastError": "Dernière erreur : {error}",
+      "pending": "La version {version} attend que vous acceptiez ses nouvelles autorisations.",
+      "installedOn": "Installée le {date}",
+      "review": "Examiner",
+      "manage": "Gérer",
+      "subscriptions": {
+        "title": "Abonnements",
+        "intro": "Vos applications payantes et essais, y compris les applications désinstallées dont la période payée est encore en cours.",
+        "listLabel": "Abonnements",
+        "manage": "Gérer",
+        "viewApp": "Voir l’application"
+      }
+    },
+    "manage": {
+      "backToInstalled": "Retour aux applications installées",
+      "notFound": {
+        "title": "Installation introuvable",
+        "message": "Cette application n’est pas installée dans votre espace de travail, ou elle a été désinstallée."
+      },
+      "version": "Version {version}",
+      "checkedAt": "Dernière vérification le {date}",
+      "notChecked": "Pas encore vérifiée. Utilisez Tester la connexion pour la vérifier.",
+      "lastError": "Dernière erreur : {error}",
+      "viewListing": "Voir la fiche",
+      "resume": "Reprendre",
+      "pause": "Mettre en pause",
+      "toast": {
+        "resumed": "Application reprise.",
+        "paused": "Application mise en pause.",
+        "consented": "Nouvelles autorisations acceptées. Version {version} désormais active.",
+        "uninstalled": "{name} a été désinstallée."
+      },
+      "killed": {
+        "title": "Arrêtée par la plateforme",
+        "message": "Cette application a été désactivée pour tous. Vous ne pouvez que la désinstaller.",
+        "reason": "Motif : {reason}"
+      },
+      "paused": {
+        "title": "En pause",
+        "message": "Une application en pause ne fait rien, et son adresse web refuse les envois tant que vous ne la reprenez pas."
+      },
+      "permissions": {
+        "title": "Autorisations accordées",
+        "intro": "Ce que cette application peut faire dans votre espace de travail actuellement."
+      },
+      "reconsent": {
+        "title": "La version {version} demande de nouvelles autorisations",
+        "message": "Cette application continue de fonctionner en version {current} jusqu’à ce que vous acceptiez les autorisations de la version {version}.",
+        "newScopes": "Nouvelles autorisations",
+        "fullList": "La liste complète de la nouvelle version",
+        "accept": "Accepter les nouvelles autorisations"
+      },
+      "problem": {
+        "conflictTitle": "Modifié entre-temps",
+        "conflictMessage": "Quelqu’un d’autre a modifié cette application. Rechargez la page pour voir l’état actuel, puis refaites votre modification.",
+        "reload": "Recharger",
+        "consentTitle": "Les autorisations ont évolué",
+        "consentMessage": "La liste des autorisations a changé depuis l’ouverture de cette page. Rechargez-la pour voir la liste actuelle."
+      },
+      "credentials": {
+        "title": "Identifiants et paramètres",
+        "intro": "La saisie remplace une valeur enregistrée. Laissez un champ vide pour conserver la valeur enregistrée. Les clés enregistrées ne sont plus jamais affichées.",
+        "readOnly": "Ce qui est enregistré pour cette application. Les clés ne sont jamais affichées.",
+        "saved": "Paramètres enregistrés.",
+        "nothingToSave": "Rien à enregistrer pour le moment.",
+        "save": "Enregistrer les modifications",
+        "missing": "Renseignez les champs obligatoires.",
+        "invalid": "Certaines valeurs n’ont pas été acceptées."
+      },
+      "connection": {
+        "title": "Connexion",
+        "intro": "Comment cette application communique avec votre espace de travail, et son état.",
+        "type": "Type",
+        "types": {
+          "oauth": "Connexion",
+          "push": "Vous envoie des données",
+          "pull": "Nous récupérons ses données",
+          "email_parse": "E-mails d’alerte",
+          "webhook_relay": "Adresse web et secret",
+          "client": "Installée par chaque membre"
+        },
+        "status": "État de la connexion",
+        "statuses": {
+          "active": "Active",
+          "paused": "En pause",
+          "error": "Erreur",
+          "disabled": "Désactivée"
+        },
+        "pollEvery": "Vérifie toutes les",
+        "seconds": "{count, plural, one {# seconde} other {# secondes}}",
+        "lastEvent": "Dernier envoi",
+        "lastSuccess": "Dernier succès",
+        "lastError": "Dernière erreur",
+        "never": "Jamais",
+        "counters": {
+          "received": "Reçus",
+          "accepted": "Acceptés",
+          "duplicates": "Doublons",
+          "failed": "Échoués"
+        },
+        "inbound": {
+          "address": "Adresse web de destination",
+          "copyAddress": "Copier l’adresse web",
+          "method": "Envoyez une requête POST avec un corps JSON.",
+          "token": "Placez le secret dans l’en-tête {header}.",
+          "signature": "Ou signez le corps avec HMAC-SHA256 et envoyez sha256= suivi de l’empreinte hexadécimale dans l’en-tête {header}.",
+          "secretEndsIn": "Le secret se termine par {last}. Il ne peut plus être affiché.",
+          "secretSet": "Un secret est défini. Il ne peut plus être affiché."
+        },
+        "actions": {
+          "test": "Tester la connexion",
+          "sample": "Envoyer un prospect test",
+          "rotate": "Renouveler le secret",
+          "sampleNeedsActive": "Reprenez l’application pour envoyer un prospect test.",
+          "testOk": "La connexion fonctionne.",
+          "testFailed": "Le test de connexion a échoué.",
+          "latency": "{ms} ms",
+          "sampleAccepted": "Prospect test accepté. Il existe désormais comme un prospect réel.",
+          "sampleDuplicate": "Ce prospect test a déjà été reçu.",
+          "rotatedDone": "Je l’ai enregistré, continuer",
+          "rotateNotApplicable": "Le secret de cette connexion est une clé du service tiers. Modifiez-le plutôt dans Identifiants et paramètres.",
+          "rotateConfirm": {
+            "title": "Renouveler le secret de connexion ?",
+            "message": "Un nouveau secret est créé et l’ancien cesse immédiatement de fonctionner. Tout envoi utilisant l’ancien secret sera refusé tant que vous ne lui aurez pas communiqué le nouveau. Vous ne verrez le nouveau secret qu’une seule fois.",
+            "confirm": "Renouveler le secret",
+            "cancel": "Annuler"
+          }
+        }
+      },
+      "events": {
+        "title": "Envois récents",
+        "intro": "Les derniers éléments reçus par cette connexion, du plus récent au plus ancien.",
+        "refresh": "Actualiser",
+        "empty": {
+          "title": "Aucun envoi pour le moment",
+          "message": "Lorsque le service tiers envoie quelque chose, ou que vous envoyez un prospect test, cela apparaît ici."
+        },
+        "columns": {
+          "received": "Reçu",
+          "status": "Résultat",
+          "externalId": "ID d’envoi",
+          "error": "Motif"
+        },
+        "status": {
+          "accepted": "Accepté",
+          "duplicate": "Doublon",
+          "rejected": "Rejeté",
+          "failed": "Échoué"
+        },
+        "loadMore": "Charger plus"
+      },
+      "pauseConfirm": {
+        "title": "Mettre {name} en pause ?",
+        "message": "Elle ne fonctionnera plus tant que vous ne la reprendrez pas. Son adresse web refuse les envois entre-temps.",
+        "confirm": "Mettre en pause",
+        "cancel": "Annuler"
+      },
+      "uninstall": {
+        "section": "Désinstaller",
+        "sectionIntro": "Retirer cette application de votre espace de travail.",
+        "open": "Désinstaller",
+        "title": "Désinstaller {name} ?",
+        "confirm": "Désinstaller",
+        "cancel": "Annuler",
+        "effect": "Son accès prend fin immédiatement.",
+        "effectConnection": "Son accès prend fin immédiatement, et son adresse web ne répond plus.",
+        "dataLegend": "Que faire des données qu’elle a créées ?",
+        "choices": {
+          "keep": {
+            "label": "Conserver les données créées",
+            "help": "Les contacts et enregistrements ajoutés restent dans votre espace de travail."
+          },
+          "delete": {
+            "label": "Supprimer les données créées",
+            "help": "Nous enregistrons votre demande et la transmettons aux parties du produit qui gèrent ces données."
+          }
+        },
+        "honestNote": "Aujourd’hui, les contacts déjà créés par cette application restent dans votre espace de travail quel que soit votre choix. Votre choix est enregistré pour les domaines qui supprimeront les données.",
+        "irreversible": "Cette action est irréversible. Pour utiliser de nouveau l’application, réinstallez-la.",
+        "renewal": {
+          "title": "Cette application dispose d’un abonnement payant",
+          "message": "La désinstallation empêche son renouvellement, donc plus aucun montant ne sera facturé. La période déjà payée vous reste acquise : vous pouvez la réinstaller avant son terme, sans frais.",
+          "messageUntil": "La désinstallation empêche son renouvellement, donc plus aucun montant ne sera facturé. La période déjà payée vous reste acquise jusqu’au {date} : vous pouvez la réinstaller d’ici là, sans frais."
+        }
+      },
+      "subscription": {
+        "title": "Abonnement",
+        "subscribeTitle": "Abonnez-vous pour continuer à utiliser {name}",
+        "subscribeIntro": "Il s’agit d’une application payante, et votre espace de travail n’y est pas encore abonné.",
+        "included": "Votre forfait comprend cette application : aucun paiement n’est requis."
+      },
+      "subscriptionEnded": {
+        "title": "Abonnement terminé",
+        "message": {
+          "resubscribe": "{name} est en pause, son abonnement ayant pris fin. Vos données et paramètres sont conservés. Abonnez-vous de nouveau pour la réactiver.",
+          "notForSale": "{name} est en pause, son abonnement ayant pris fin, et elle n’est plus vendue : elle ne peut donc pas être réactivée. Vos données et paramètres sont conservés.",
+          "resumable": "{name} est en pause, son abonnement ayant pris fin, mais votre espace de travail y a de nouveau accès. Reprenez-la pour la réactiver."
+        },
+        "resubscribe": "Se réabonner",
+        "resume": "Reprendre",
+        "noCheckout": "Le paiement n’est pas disponible pour le moment. Réessayez dans un instant."
+      }
+    },
+    "requests": {
+      "title": "Demandes",
+      "form": {
+        "title": "Faire une demande",
+        "intro": "Vous ne trouvez pas votre besoin ? Dites-nous ce dont vous avez besoin. Si quelqu’un l’a déjà demandé, votre demande compte comme un vote.",
+        "name": "Nom",
+        "namePlaceholder": "Par exemple, le nom d’un service",
+        "kind": "Type",
+        "kinds": {
+          "mini_app": "Mini-application",
+          "integration": "Intégration"
+        },
+        "category": "Catégorie",
+        "categoryHint": "Facultatif.",
+        "anyCategory": "Je ne sais pas",
+        "website": "Site web",
+        "websiteHint": "Facultatif. Adresse complète en https://.",
+        "note": "À quoi cela vous servira-t-il ?",
+        "noteHint": "Visible uniquement par l’équipe de la plateforme",
+        "problems": {
+          "nameShort": "Saisissez au moins 2 caractères.",
+          "nameLong": "80 caractères maximum.",
+          "websiteInvalid": "Saisissez une adresse complète en https://.",
+          "noteLong": "500 caractères maximum.",
+          "server": "Valeur non acceptée. Vérifiez-la."
+        },
+        "result": {
+          "created": {
+            "title": "Demande ajoutée : {name}",
+            "message": "Merci. D’autres espaces de travail peuvent désormais voter pour elle."
+          },
+          "counted": {
+            "title": "{name} a déjà été demandée",
+            "message": "Votre demande a été comptée comme un vote pour elle."
+          }
+        },
+        "submit": "Envoyer la demande"
+      },
+      "list": {
+        "title": "Ce que d’autres ont demandé",
+        "intro": "Votez pour ce qui vous intéresse. Les plus demandées sont développées en premier.",
+        "searchLabel": "Rechercher des demandes",
+        "searchPlaceholder": "Rechercher des demandes",
+        "kind": "Type",
+        "allKinds": "Tous les types",
+        "kinds": {
+          "mini_app": "Mini-application",
+          "integration": "Intégration"
+        },
+        "status": "Statut",
+        "allStatuses": "Tous les statuts",
+        "statuses": {
+          "open": "Ouverte",
+          "planned": "Planifiée",
+          "building": "En développement",
+          "shipped": "Livrée",
+          "declined": "Refusée"
+        },
+        "sort": "Trier par",
+        "sorts": {
+          "votes": "Le plus de votes",
+          "new": "Les plus récentes"
+        },
+        "emptyFiltered": {
+          "title": "Aucune demande ne correspond",
+          "message": "Modifiez les filtres, ou demandez-la vous-même."
+        },
+        "empty": {
+          "title": "Aucune demande pour le moment",
+          "message": "Soyez le premier à faire une demande."
+        },
+        "loadMore": "Charger plus",
+        "votes": "{count, plural, one {# vote} other {# votes}}",
+        "voted": "Voté",
+        "vote": "Voter"
+      }
+    },
+    "pricing": {
+      "title": "Tarifs",
+      "freeNote": "Installation et utilisation gratuites.",
+      "included": {
+        "planFeature": "Votre forfait comprend cette application : aucun paiement n’est requis.",
+        "minPlan": "Votre forfait, ou un forfait supérieur, comprend cette application : aucun paiement n’est requis.",
+        "plan": "Votre forfait comprend cette application : aucun paiement n’est requis."
+      },
+      "needsPurchase": "Incluse dans le catalogue de votre forfait ; achetez-la pour l’utiliser.",
+      "subscribedNote": "Votre espace de travail est abonné à cette application.",
+      "trialOffer": "Essayez-la gratuitement pendant {days, plural, one {# jour} other {# jours}}. Aucun montant n’est facturé tant que vous ne choisissez pas de vous abonner.",
+      "prepaidNote": "Facturation mensuelle via la facturation de votre espace de travail. Chaque paiement couvre un mois et n’est pas prélevé automatiquement : payez de nouveau avant la date indiquée pour que l’application continue de fonctionner.",
+      "notForSale": {
+        "title": "Non vendu",
+        "message": "Cette application n’est actuellement pas proposée aux nouveaux abonnés."
+      }
+    },
+    "subscribe": {
+      "subscribe": "S’abonner",
+      "startTrial": "Commencer l’essai gratuit de {days} jours",
+      "hintPrice": "{price} par mois, payés au moment du paiement. Chaque paiement couvre un mois.",
+      "hint": "Vous payez un mois à la fois, lors du paiement.",
+      "working": "En cours",
+      "noCheckout": "Le paiement n’est pas disponible pour cette application pour le moment. Réessayez dans un instant.",
+      "toast": {
+        "trial_started": "L’essai gratuit de {name} a commencé.",
+        "included": "{name} est incluse dans votre forfait.",
+        "already_entitled": "Votre espace de travail a déjà accès à {name}.",
+        "free": "{name} est gratuite."
+      }
+    },
+    "subscription": {
+      "title": "Abonnement",
+      "status": {
+        "active": "Active",
+        "trialing": "Essai gratuit",
+        "comped": "Offert",
+        "canceling": "Non renouvelé",
+        "ended": "Terminé"
+      },
+      "date": {
+        "paidUntil": "Payé jusqu’au {date}",
+        "trialEnds": "Essai gratuit jusqu’au {date}",
+        "compUntil": "Accès offert jusqu’au {date}",
+        "compOpen": "Accès offert, sans date de fin",
+        "cancelingUntil": "Non renouvelé. Active jusqu’au {date}",
+        "endedOn": "Abonnement terminé le {date}",
+        "endedNoDate": "Abonnement terminé"
+      },
+      "lastPayment": "Dernier paiement : {price} par mois",
+      "nextPayment": "Le prix de cette application a changé. Votre prochain paiement sera de {price} par mois.",
+      "compNote": "L’équipe de la plateforme vous a accordé cet accès. Il ne peut pas être annulé ici.",
+      "renewHint": "Un mois payé n’est pas renouvelé automatiquement. Renouvelez avant la date indiquée pour que l’application continue de fonctionner sans interruption.",
+      "actions": {
+        "renew": "Renouveler maintenant",
+        "resubscribe": "Se réabonner",
+        "subscribe": "S’abonner maintenant",
+        "resume": "Reprendre l’abonnement",
+        "cancel": "Résilier l’abonnement"
+      },
+      "cancelConfirm": {
+        "title": "Résilier l’abonnement à {name} ?",
+        "message": "{name} reste active jusqu’au {date}, puis sera mise en pause. Vos données et paramètres sont conservés.",
+        "messageNoDate": "{name} reste active jusqu’à la fin de la période payée, puis sera mise en pause. Vos données et paramètres sont conservés.",
+        "afterwards": "Plus aucun montant ne sera facturé, et vous pouvez vous réabonner à tout moment.",
+        "confirm": "Résilier l’abonnement",
+        "keep": "Conserver l’abonnement"
+      },
+      "toast": {
+        "canceled": "Abonnement résilié. Il reste actif jusqu’au {date}.",
+        "canceledNoDate": "Abonnement résilié. Il reste actif jusqu’à la fin de la période payée.",
+        "resumed": "Abonnement repris."
+      },
+      "working": "En cours",
+      "noCheckout": "Le paiement n’est pas disponible pour cette application pour le moment. Réessayez dans un instant."
+    }
+  }
+}

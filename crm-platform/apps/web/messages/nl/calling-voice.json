@@ -1,0 +1,113 @@
+{
+  "calling-voice": {
+    "nav": {
+      "title": "Bellen",
+      "description": "Schakel WhatsApp-bellen per nummer in of uit.",
+      "keywords": "bellen, gesprekken, spraak, telefoon, whatsapp bellen, belknop"
+    },
+    "common": {
+      "dismiss": "Sluiten"
+    },
+    "button": {
+      "label": "Bellen",
+      "tooltip": "Een WhatsApp-gesprek starten",
+      "working": "Bezig..."
+    },
+    "confirm": {
+      "title": "Geen bevestigde belmachtiging",
+      "body": "We hebben geen bevestigde belmachtiging voor dit contact.",
+      "callAnyway": "Toch bellen",
+      "callAnywayHint": "Werkt als ze al op \"Toestaan\" hebben getikt in WhatsApp.",
+      "askPermission": "Toestemming vragen",
+      "askPermissionHint": "Stuurt in plaats daarvan een toestemmingsverzoek. Er wordt niet gebeld.",
+      "close": "Sluiten"
+    },
+    "toast": {
+      "noPhone": "Geen telefoonnummer bij dit contact.",
+      "noNumber": "Bellen is op geen enkel WABA-nummer ingeschakeld.",
+      "alreadyPermitted": "Dit contact staat gesprekken al toe - het gesprek wordt gestart...",
+      "permissionSent": "Toestemmingsverzoek verzonden. Ze zien Accepteren/Weigeren in WhatsApp - probeer Bellen opnieuw nadat ze hebben gereageerd.",
+      "permissionFailed": "Het toestemmingsverzoek kon niet worden verzonden: {message}",
+      "startFailed": "Het gesprek kon niet worden gestart: {message}",
+      "acceptInvalid": "Het gesprek kon niet worden aangenomen: ongeldige gespreksgegevens van WhatsApp. Probeer het opnieuw.",
+      "acceptFailed": "Het gesprek kon niet worden aangenomen: {message}",
+      "alreadyAccepted": "Gesprek is al aangenomen door een ander teamlid.",
+      "recordingStarted": "Opname gestart - wordt bij ophangen opgeslagen in de gesprekslogs.",
+      "recordingSaved": "Gespreksopname opgeslagen in de gesprekslogs.",
+      "recordUnsupported": "Opnemen wordt in deze browser niet ondersteund.",
+      "noActiveCall": "Geen actief gesprek om op te nemen."
+    },
+    "incoming": {
+      "title": "Inkomend WhatsApp-gesprek",
+      "caller": "Beller +{digits}",
+      "accept": "Accepteren",
+      "decline": "Weigeren",
+      "aiHandling": "AI handelt dit gesprek af..."
+    },
+    "panel": {
+      "label": "Gesprek bezig",
+      "title": "In gesprek",
+      "ringing": "belt...",
+      "connected": "verbonden",
+      "timer": "Gespreksduur",
+      "mute": "Dempen",
+      "muted": "Gedempt",
+      "end": "Beëindigen",
+      "record": "Opnemen",
+      "recording": "Opname bezig",
+      "recordTooltip": "Dit gesprek opnemen",
+      "recordingTooltip": "Dit gesprek wordt opgenomen",
+      "recordingNotice": "Dit gesprek wordt opgenomen"
+    },
+    "failures": {
+      "REJECTED": "De klant heeft het gesprek geweigerd.",
+      "BUSY": "De klant is in gesprek.",
+      "NO_ANSWER": "Geen antwoord - de klant nam niet op.",
+      "MISSED": "De klant heeft het gesprek gemist.",
+      "CANCELLED": "Het gesprek is geannuleerd.",
+      "MIC_BLOCKED": "Toegang tot de microfoon is geblokkeerd - de beller hoort je niet. Geef microfoontoegang in je browser en probeer opnieuw.",
+      "BUSY_SLOT": "Er is al een ander gesprek actief in dit tabblad.",
+      "INVALID_SDP": "Ongeldig SDP-aanbod - v=0 of medialijn ontbreekt",
+      "LOCAL_SDP_EMPTY": "Lokale SDP is leeg - ICE-verzameling mislukt",
+      "ENDED_EARLY": "Het gesprek werd beëindigd voordat het verbonden was.",
+      "ANSWER_FAILED": "Het WhatsApp-antwoord kon niet worden toegepast"
+    },
+    "errors": {
+      "CALL_NUMBER_NOT_FOUND": "Dit nummer staat niet meer in je workspace. Vernieuw de pagina en probeer het opnieuw.",
+      "CALL_NOT_FOUND": "Dit gesprek is niet gevonden. Mogelijk is het al beëindigd.",
+      "CALL_NOT_WABA": "Bellen werkt alleen met WhatsApp Cloud API-nummers. Dit nummer is op een andere manier verbonden.",
+      "CALL_NUMBER_NOT_CONNECTED": "Dit nummer is nu niet verbonden met WhatsApp Cloud API. Verbind het opnieuw onder Kanalen en probeer het dan opnieuw.",
+      "CALL_COEXISTENCE_UNSUPPORTED": "Een nummer dat ook in de WhatsApp Business-app wordt gebruikt, kan geen gesprekken ontvangen.",
+      "CALL_NOT_ENABLED": "Bellen is uitgeschakeld voor dit nummer. Schakel het eerst in onder Bellen.",
+      "CALL_META_REFUSED": "WhatsApp weigerde het verzoek. Probeer het zo meteen opnieuw.",
+      "CALL_PERMISSION_REQUESTED": "Toestemmingsverzoek verzonden. Ze zien Accepteren/Weigeren in WhatsApp - probeer Bellen opnieuw nadat ze hebben gereageerd.",
+      "CALL_STATE_CONFLICT": "Gesprek is al aangenomen door een ander teamlid.",
+      "CALL_RECORDING_FAILED": "De opname kon niet worden opgeslagen.",
+      "FORBIDDEN": "Je hebt geen toestemming om bellen te gebruiken.",
+      "PLAN_FEATURE_LOCKED": "Je abonnement bevat geen WhatsApp-bellen.",
+      "NETWORK": "Netwerkfout - probeer het opnieuw.",
+      "UNEXPECTED": "Er is iets misgegaan. Probeer het opnieuw."
+    },
+    "settings": {
+      "title": "Bellen",
+      "intro": "Schakel WhatsApp-bellen in voor een nummer om de groene Bel-knop op de chats ervan in de inbox te tonen.",
+      "cardTitle": "WhatsApp-bellen",
+      "numberFallback": "WhatsApp-nummer",
+      "connection": "Verbinding: {status}",
+      "enabledStatus": "Ingeschakeld - de groene Bel-knop verschijnt nu op de chats van dit nummer in de inbox.",
+      "enabledSince": "Ingeschakeld op {date}",
+      "offStatus": "Uit - schakel in zodat de Bel-knop op chats met dit nummer verschijnt.",
+      "enable": "Bellen inschakelen",
+      "disable": "Bellen uitschakelen",
+      "asking": "WhatsApp wordt gevraagd...",
+      "enabledDone": "Bellen is nu ingeschakeld voor dit nummer.",
+      "disabledDone": "Bellen is nu uitgeschakeld voor dit nummer.",
+      "loading": "Nummers laden",
+      "loadFailed": "Je nummers konden niet worden geladen.",
+      "retry": "Opnieuw proberen",
+      "emptyTitle": "Nog geen WhatsApp-nummers",
+      "emptyMessage": "Verbind een WhatsApp Cloud API-nummer onder Kanalen en kom terug om bellen in te schakelen.",
+      "viewOnly": "Je kunt de belstatus van elk nummer zien. In- of uitschakelen vereist de machtiging voor belbeheer."
+    }
+  }
+}

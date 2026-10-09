@@ -1,0 +1,113 @@
+{
+  "web-forms": {
+    "design": {
+      "presets": {
+        "title": "Tema",
+        "custom": "Personalizado: você alterou uma cor, um canto ou uma fonte do tema inicial.",
+        "classic": "Clássico",
+        "ocean": "Oceano",
+        "forest": "Floresta",
+        "sunset": "Pôr do sol",
+        "berry": "Amora",
+        "slate": "Ardósia",
+        "noir": "Noir",
+        "paper": "Papel"
+      },
+      "colours": {
+        "title": "Cores",
+        "hint": "Use cores hexadecimais de seis dígitos, como #2563eb. Um valor incompleto não é aplicado.",
+        "swatch": "{name} (seletor de cor)",
+        "primary": "Primária (botões e destaques)",
+        "background": "Fundo da página",
+        "surface": "Fundo do formulário",
+        "text": "Texto",
+        "mutedText": "Texto secundário",
+        "border": "Bordas",
+        "error": "Erro"
+      },
+      "contrast": {
+        "title": "Algumas cores são difíceis de ler. Busque um contraste de pelo menos 4,5:1.",
+        "item": "{pair}: {ratio}:1",
+        "ok": "Todos os pares de cores verificados são fáceis de ler.",
+        "text": "Texto sobre o fundo do formulário",
+        "muted": "Texto secundário sobre o fundo do formulário",
+        "button": "Rótulo do botão sobre o botão"
+      },
+      "shape": {
+        "title": "Forma e espaçamento",
+        "radius": "Cantos",
+        "none": "Nenhum",
+        "sm": "Pequeno",
+        "md": "Médio",
+        "lg": "Grande",
+        "pill": "Arredondado",
+        "density": "Espaçamento",
+        "compact": "Compacto",
+        "comfortable": "Confortável",
+        "spacious": "Espaçoso",
+        "shadow": "Sombra",
+        "shadowNone": "Nenhuma"
+      },
+      "type": {
+        "title": "Tipografia",
+        "font": "Fonte",
+        "fontHint": "Fontes da web são carregadas somente quando você escolhe uma.",
+        "sample": "Veja como fica a fonte com este texto de exemplo",
+        "scale": "Tamanho do texto"
+      },
+      "fonts": {
+        "system": "Padrão do sistema",
+        "serif": "Serifada",
+        "mono": "Monoespaçada"
+      },
+      "layout": {
+        "title": "Layout e botões",
+        "preset": "Layout",
+        "classic": "Cartão clássico",
+        "fullWidth": "Largura total",
+        "split": "Dividido com imagem de capa",
+        "minimal": "Minimalista",
+        "labelPosition": "Posição do rótulo",
+        "labelTop": "Acima do campo",
+        "labelLeft": "Ao lado do campo",
+        "buttonStyle": "Estilo do botão",
+        "filled": "Preenchido",
+        "outline": "Contorno",
+        "buttonWidth": "Largura do botão",
+        "widthAuto": "Ajustar ao rótulo",
+        "widthFull": "Largura total",
+        "maxWidth": "Largura máxima",
+        "maxWidthHint": "Entre 320 e 960 pixels.",
+        "maxWidthInvalid": "Informe um número inteiro de 320 a 960.",
+        "maxWidthSlider": "Controle deslizante de largura máxima",
+        "mode": "Modo de cor",
+        "light": "Claro",
+        "dark": "Escuro",
+        "auto": "Seguir o dispositivo do visitante"
+      },
+      "images": {
+        "title": "Imagens",
+        "logo": "Logo",
+        "logoHint": "Um endereço https. Deixe vazio para não ter logo.",
+        "cover": "Imagem de capa",
+        "coverHint": "Exibida ao lado do formulário no layout dividido.",
+        "background": "Imagem de fundo",
+        "backgroundHint": "Um endereço https. Deixe vazio para um fundo simples.",
+        "invalid": "Informe um endereço https ou deixe vazio."
+      },
+      "reset": "Restaurar padrões",
+      "readOnly": "Você pode ver o design, mas não alterá-lo.",
+      "preview": {
+        "title": "Visualizar",
+        "device": "Tamanho da visualização",
+        "desktop": "Desktop",
+        "mobile": "Celular",
+        "scheme": "Modo de cor da visualização",
+        "light": "Claro",
+        "dark": "Escuro",
+        "schemeHint": "O modo de cor está definido como Claro, então não há versão escura para visualizar.",
+        "frameTitle": "Visualização em tempo real do formulário"
+      }
+    }
+  }
+}

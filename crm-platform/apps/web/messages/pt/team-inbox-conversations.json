@@ -1,0 +1,446 @@
+{
+  "team-inbox-conversations": {
+    "nav": {
+      "inbox": "Caixa de entrada"
+    },
+    "common": {
+      "dismiss": "Dispensar"
+    },
+    "screen": {
+      "listRegion": "Conversas",
+      "panelRegion": "Contato e notas",
+      "close": "Fechar",
+      "cancel": "Cancelar",
+      "conflict": "Outra pessoa alterou esta conversa antes. Ela foi recarregada; tente novamente.",
+      "assigned": "Conversa atribuída.",
+      "assignedToYou": "Atribuída a você.",
+      "unassigned": "Atribuição da conversa removida.",
+      "resolved": "Conversa resolvida.",
+      "reopened": "Conversa reaberta.",
+      "deleteNoteTitle": "Excluir esta nota?",
+      "deleteNoteMessage": "A nota será removida para todos da sua equipe. Esta ação não pode ser desfeita.",
+      "deleteNoteConfirm": "Excluir nota",
+      "pickTitle": "Escolha uma conversa",
+      "pickMessage": "Escolha uma conversa na lista para lê-la e responder. Novas mensagens aparecem aqui automaticamente.",
+      "shortcuts": "Atalhos: j e k navegam pela lista, e resolve, / pesquisa.",
+      "teamChanged": "Equipe atualizada."
+    },
+    "list": {
+      "title": "Caixa de entrada",
+      "refresh": "Atualizar a lista",
+      "openSimulator": "Abrir o simulador de cliente",
+      "search": "Pesquisar conversas",
+      "searchPlaceholder": "Pesquisar nome ou número",
+      "tabsLabel": "Visualizações de conversa",
+      "tabs": {
+        "all": "Todas",
+        "mine": "Minhas",
+        "unassigned": "Sem atribuição",
+        "unread": "Não lidas"
+      },
+      "statusFilter": "Status",
+      "statusOpen": "Aberta",
+      "statusAll": "Todos os status",
+      "status": {
+        "open": "Aberta",
+        "pending": "Pendente",
+        "snoozed": "Adiada",
+        "resolved": "Resolvida",
+        "closed": "Resolvidas",
+        "spam": "Spam"
+      },
+      "priority": {
+        "low": "Baixa",
+        "normal": "Normal",
+        "high": "Alta",
+        "urgent": "Urgente"
+      },
+      "channelFilter": "Canal",
+      "allChannels": "Todos os canais",
+      "archived": "Arquivadas",
+      "backToInbox": "Voltar para a caixa de entrada",
+      "loading": "Carregando conversas",
+      "retry": "Tentar novamente",
+      "listLabel": "Conversas",
+      "loadMore": "Carregar mais",
+      "moreFailed": "Não foi possível carregar mais conversas.",
+      "unreadCount": "{count, plural, one {# mensagem não lida} other {# mensagens não lidas}}",
+      "you": "Você:",
+      "noMessages": "Nenhuma mensagem ainda",
+      "windowClosed": "Janela fechada",
+      "windowLeftHours": "Faltam {hours}h {minutes}m",
+      "windowLeftMinutes": "Faltam {minutes}m",
+      "unassigned": "Sem atribuição",
+      "needsContact": "Nenhum registro de contato",
+      "gettingStarted": {
+        "title": "Conecte um canal para começar",
+        "message": "Sua caixa de entrada se enche quando clientes escrevem para um canal conectado. Conecte um e cada conversa aparecerá aqui.",
+        "connect": "Conectar um canal"
+      },
+      "emptyFiltered": {
+        "title": "Nenhuma conversa encontrada",
+        "message": "Nada corresponde a estes filtros. Limpe-os para ver todas as conversas novamente.",
+        "clear": "Limpar filtros"
+      },
+      "empty": {
+        "all": {
+          "title": "Nenhuma conversa ainda",
+          "message": "Quando um cliente escrever para um dos seus canais, a conversa aparecerá aqui."
+        },
+        "mine": {
+          "title": "Nada atribuído a você",
+          "message": "As conversas atribuídas a você aparecem aqui. Abra uma em Todas e atribua a si mesmo."
+        },
+        "unassigned": {
+          "title": "Toda conversa tem um responsável",
+          "message": "Aqui aparecem as novas conversas que ainda ninguém assumiu."
+        },
+        "unread": {
+          "title": "Você está em dia",
+          "message": "Aqui aparecem as conversas com novas mensagens de clientes."
+        }
+      }
+    },
+    "status": {
+      "received": "Recebida",
+      "queued": "Enviando",
+      "sent": "Enviada",
+      "delivered": "Entregue",
+      "read": "Lida",
+      "failed": "Não enviada"
+    },
+    "errors": {
+      "conflict": "Outra pessoa alterou isto antes. Foi recarregado; tente novamente.",
+      "windowClosed": "A janela de resposta de 24 horas foi encerrada, por isso não é possível enviar uma mensagem livre.",
+      "planLimit": "O limite mensal de mensagens do seu plano foi atingido.",
+      "channelDisconnected": "Este canal está desconectado. Reconecte-o para enviar mensagens.",
+      "sendHalted": "O envio está pausado para toda a plataforma no momento. Tente novamente mais tarde.",
+      "notFound": "Esta conversa não existe mais ou você não pode vê-la.",
+      "notRetryable": "Só é possível reenviar uma mensagem que falhou.",
+      "mediaNotFound": "O anexo expirou ou foi removido. Anexe-o novamente.",
+      "statusInvalid": "Essa alteração não é permitida no status atual da conversa.",
+      "assigneeInvalid": "Esta pessoa não pode receber esta conversa.",
+      "forbidden": "Você não tem permissão para fazer isso.",
+      "rateLimited": "Muitas solicitações. Aguarde um momento e tente novamente.",
+      "simulatorDisabled": "O simulador de canal está desativado neste servidor.",
+      "channelInUse": "Este canal ainda tem conversas. Desconecte-o em vez de removê-lo.",
+      "validation": "Algumas informações inseridas não são válidas.",
+      "tooLarge": "Este arquivo é grande demais.",
+      "unsupported": "Este canal não pode enviar esse tipo de mensagem ou arquivo.",
+      "network": "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.",
+      "generic": "Algo deu errado. Tente novamente.",
+      "genericWithId": "Algo deu errado. Tente novamente. Referência: {id}",
+      "templateNotSendable": "Este modelo não pode ser enviado nesta conversa. Escolha outro.",
+      "groupSendUnavailable": "O envio para grupos do WhatsApp ainda não está disponível. Responda pelo aplicativo WhatsApp Business."
+    },
+    "bubble": {
+      "kind": {
+        "image": "Foto",
+        "text": "Mensagem",
+        "attachment": "Anexo"
+      },
+      "template": "Mensagem de modelo: {name}",
+      "unavailable": "Mensagem indisponível",
+      "sentIn": "Enviada em {lang}. Mostrar o texto que você escreveu",
+      "translatedFrom": "Traduzida de {lang}. Mostrar o original",
+      "bot": "Bot",
+      "broadcast": "Transmissão",
+      "reacted": "Reação {emoji}",
+      "edited": "Editada",
+      "failed": "Esta mensagem não foi entregue.",
+      "retry": "Tentar novamente",
+      "sending": "Enviando",
+      "dismiss": "Dispensar",
+      "noteLabel": "Nota interna",
+      "unknownAuthor": "Um membro da equipe",
+      "deleteNote": "Excluir esta nota",
+      "templateHeader": {
+        "image": "Imagem",
+        "video": "Vídeo",
+        "document": "Documento",
+        "location": "Localização"
+      },
+      "templateCopyCode": "Copiar código",
+      "templateButtonUnnamed": "Botão",
+      "templateButtonPrefix": "Botão: "
+    },
+    "media": {
+      "openImage": "Abrir imagem {name}",
+      "video": "Vídeo",
+      "voice": "Mensagem de voz",
+      "audio": "Áudio",
+      "document": "Documento",
+      "download": "Baixar {name}",
+      "location": "Localização compartilhada",
+      "openMap": "Abrir no OpenStreetMap"
+    },
+    "thread": {
+      "title": "Conversa",
+      "back": "Voltar para a lista de conversas",
+      "loading": "Carregando a conversa",
+      "retry": "Tentar novamente",
+      "notFound": {
+        "title": "Conversa não encontrada",
+        "message": "Ela foi removida ou você não pode vê-la. Escolha outra na lista."
+      },
+      "status": {
+        "resolved": "Resolvida",
+        "closed": "Fechada",
+        "spam": "Spam",
+        "snoozed": "Adiada"
+      },
+      "assignToMe": "Atribuir a mim",
+      "resolve": "Resolver",
+      "reopen": "Reabrir",
+      "resolveShortcut": "Resolver ou reabrir (e)",
+      "showPanel": "Mostrar contato e notas",
+      "hidePanel": "Ocultar contato e notas",
+      "window": {
+        "closed": "Janela fechada",
+        "closesInHours": "Fecha em {hours}h {minutes}m",
+        "closesInMinutes": "Fecha em {minutes}m"
+      },
+      "windowBanner": {
+        "title": "A janela de resposta de 24 horas foi encerrada.",
+        "message": "Este canal só permite uma mensagem de modelo aprovada mais de 24 horas após a última mensagem do cliente. Você ainda pode adicionar notas internas. Uma nova mensagem do cliente reabre a janela.",
+        "sendTemplate": "Enviar um modelo"
+      },
+      "readOnly": "Você pode ler esta conversa, mas não tem permissão para responder.",
+      "typing": "{count, plural, one {Um membro da equipe está digitando} other {# membros da equipe estão digitando}}",
+      "messagesLabel": "Mensagens",
+      "loadOlder": "Carregar mensagens anteriores",
+      "empty": "Ainda não há mensagens nesta conversa.",
+      "newMessageAnnounce": "Nova mensagem: {text}",
+      "attachment": "um anexo",
+      "jumpLatest": "Ir para a mais recente",
+      "jumpLatestNew": "{count, plural, one {# nova mensagem} other {# novas mensagens}}"
+    },
+    "composer": {
+      "modeLabel": "Tipo de mensagem",
+      "mode": {
+        "reply": "Resposta",
+        "note": "Nota interna"
+      },
+      "attach": "Anexar um arquivo",
+      "removeAttachment": "Remover o anexo",
+      "replyLabel": "Responder ao cliente",
+      "noteLabel": "Nota interna",
+      "replyPlaceholder": "Digite uma mensagem",
+      "notePlaceholder": "Escreva uma nota que só sua equipe pode ver",
+      "replyDisabledPlaceholder": "As respostas estão desativadas para esta conversa",
+      "send": "Enviar",
+      "addNote": "Adicionar nota",
+      "hint": "Enter envia. Shift+Enter adiciona uma nova linha.",
+      "template": "Enviar um modelo",
+      "groupSendUnavailable": "O envio para grupos do WhatsApp ainda não está disponível. Responda pelo aplicativo WhatsApp Business."
+    },
+    "panel": {
+      "tabsLabel": "Notas e linha do tempo",
+      "contact": "Contato",
+      "openContact": "Abrir contato",
+      "needsContact": "Este número não tem registro de contato porque o limite de contatos foi atingido.",
+      "noContact": "Esta conversa não está vinculada a um contato.",
+      "email": "E-mail",
+      "stage": "Etapa",
+      "status": "Status",
+      "source": "Origem",
+      "since": "Contato desde",
+      "optedOut": "Cancelou o recebimento de marketing",
+      "resolve": "Resolver",
+      "reopen": "Reabrir",
+      "assignee": {
+        "title": "Atribuída a",
+        "unknown": "Membro da equipe desconhecido",
+        "none": "Ninguém está com esta conversa",
+        "team": "Equipe: {name}",
+        "pick": "Escolha quem fica com esta conversa",
+        "unassigned": "Sem atribuição",
+        "you": "você",
+        "loadFailed": "Não foi possível carregar a lista de membros da equipe.",
+        "assignToMe": "Atribuir a mim",
+        "unassign": "Remover atribuição",
+        "open": "{count} em aberto",
+        "pickTeam": "Escolha uma equipe para esta conversa",
+        "noTeam": "Sem equipe"
+      },
+      "presence": {
+        "online": "Online",
+        "away": "Ausente",
+        "busy": "Ocupado",
+        "offline": "Offline"
+      },
+      "notes": {
+        "tab": "Notas",
+        "label": "Nova nota interna",
+        "placeholder": "Escreva uma nota que só sua equipe pode ver",
+        "hint": "Ctrl+Enter adiciona a nota.",
+        "add": "Adicionar nota",
+        "addFailed": "Não foi possível salvar a nota.",
+        "loading": "Carregando notas",
+        "empty": "Nenhuma nota ainda.",
+        "unknownAuthor": "Um membro da equipe",
+        "delete": "Excluir esta nota"
+      },
+      "timeline": {
+        "tab": "Linha do tempo",
+        "loading": "Carregando a linha do tempo",
+        "failed": "Não foi possível carregar a linha do tempo.",
+        "retry": "Tentar novamente",
+        "empty": "Nada aconteceu nesta conversa ainda.",
+        "events": {
+          "created": "Conversa iniciada",
+          "assigned": "Atribuída por {actor}",
+          "reassigned": "Reatribuída por {actor}",
+          "unassigned": "Atribuição removida por {actor}",
+          "ai_handoff": "Transferida para uma pessoa por {actor}",
+          "resolved": "Resolvida por {actor}",
+          "closed": "Fechada por {actor}",
+          "reopened": "Reaberta por {actor}",
+          "status_changed": "Status alterado por {actor}",
+          "note_added": "Nota adicionada por {actor}",
+          "snoozed": "Adiada por {actor}",
+          "auto_unsnoozed": "Adiamento encerrado",
+          "priority_changed": "Prioridade alterada por {actor}",
+          "tag_added": "Marcador adicionado por {actor}",
+          "tag_removed": "Marcador removido por {actor}",
+          "first_response": "Primeira resposta enviada",
+          "sla_breach": "Prazo de resposta perdido",
+          "unknown": "{what} por {actor}"
+        },
+        "actors": {
+          "user": "Um membro da equipe",
+          "system": "O sistema",
+          "bot": "Um bot",
+          "flow": "Uma automação",
+          "ai": "O assistente de IA"
+        }
+      },
+      "owner": "Responsável",
+      "past": {
+        "title": "Conversas anteriores",
+        "noMessages": "Nenhuma mensagem",
+        "status": {
+          "open": "Aberta",
+          "pending": "Pendente",
+          "snoozed": "Adiada",
+          "resolved": "Resolvida",
+          "closed": "Fechada",
+          "spam": "Spam"
+        }
+      }
+    },
+    "simulator": {
+      "title": "Simulador de cliente",
+      "close": "Fechar o simulador",
+      "devOnly": "Somente para desenvolvimento. Simula um cliente em um canal simulado; nada chega a um telefone real.",
+      "noChannel": "Ainda não há um canal simulador.",
+      "createChannel": "Criar o canal simulador",
+      "disabled": "O simulador está desativado neste servidor.",
+      "channel": "Canal simulador",
+      "customer": "O cliente",
+      "name": "Nome",
+      "number": "Número",
+      "numberHint": "Somente números, de 5 a 15 dígitos.",
+      "kind": "Tipo de mensagem",
+      "kinds": {
+        "text": "Texto",
+        "image": "Imagem",
+        "document": "Documento",
+        "audio": "Áudio",
+        "video": "Vídeo",
+        "location": "Localização"
+      },
+      "file": "Arquivo",
+      "fileHint": "Opcional. Seu nome e tipo são usados; caso contrário, um arquivo de exemplo é enviado.",
+      "message": "Mensagem",
+      "caption": "Legenda",
+      "placeName": "Nome do local",
+      "send": "Enviar como cliente",
+      "sent": "{count, plural, one {Enviada uma vez.} other {Entregue # vezes, armazenada uma única vez.}}",
+      "duplicate": "Entrega duplicada",
+      "duplicateHint": "Entrega a mesma mensagem três vezes, para comprovar que ela é armazenada uma única vez.",
+      "nextSend": "Sua próxima resposta",
+      "nextSendHint": "Aplica-se à próxima mensagem que você enviar pelo compositor e depois volta ao normal.",
+      "faults": {
+        "none": "Normal",
+        "fail": "Falha",
+        "flaky": "Falha duas vezes e depois funciona",
+        "slow": "Lenta (10 s)",
+        "ooo": "Confirmações fora de ordem"
+      },
+      "window": "Janela de 24 horas",
+      "windows": {
+        "auto": "Automática",
+        "open": "Forçar aberta",
+        "closed": "Forçar fechada"
+      },
+      "windowHint": "Fechada mostra como o compositor se comporta quando só um modelo pode ser enviado."
+    },
+    "channels": {
+      "title": "Canais",
+      "intro": "As contas pelas quais os clientes entram em contato com você. Cada uma alimenta a caixa de entrada.",
+      "backToInbox": "Voltar para a caixa de entrada",
+      "simulatorNote": "Desenvolvimento: adicione um canal simulado para testar a caixa de entrada sem uma conta real.",
+      "addSimulator": "Adicionar canal simulador",
+      "simulatorAdded": "Canal simulador adicionado.",
+      "simulatorDisabled": "O simulador está desativado neste servidor.",
+      "loading": "Carregando canais",
+      "loadFailed": "Não foi possível carregar os canais.",
+      "retry": "Tentar novamente",
+      "empty": {
+        "title": "Nenhum canal conectado",
+        "message": "Conecte um canal e as mensagens dos clientes começarão a chegar na caixa de entrada."
+      },
+      "listLabel": "Canais conectados",
+      "status": {
+        "connected": "Conectado",
+        "disconnected": "Desconectado",
+        "error": "Erro"
+      },
+      "capWindow": "Janela de resposta de {hours} horas",
+      "capTemplates": "Modelos",
+      "capMedia": "Mídia",
+      "capReceipts": "Confirmações de entrega",
+      "lastEvent": "Última atividade {when}",
+      "noEvents": "Nenhuma atividade ainda",
+      "remove": "Remover",
+      "removeTitle": "Remover este canal?",
+      "removeMessage": "{name} será removido. Um canal que ainda tem conversas não pode ser removido; desconecte-o.",
+      "removeConfirm": "Remover canal",
+      "cancel": "Cancelar"
+    },
+    "templates": {
+      "eyebrow": "WhatsApp",
+      "title": "Enviar um modelo",
+      "close": "Fechar",
+      "cancel": "Cancelar",
+      "back": "Voltar para os modelos",
+      "search": "Pesquisar por nome ou texto",
+      "searchLabel": "Pesquisar modelos",
+      "loading": "Carregando modelos",
+      "loadError": "Não foi possível carregar os modelos.",
+      "retry": "Tentar novamente",
+      "empty": "Ainda não há modelos aprovados para este número do WhatsApp. Crie um em Modelos e aguarde a aprovação da Meta.",
+      "noResults": "Nenhum modelo corresponde à sua pesquisa.",
+      "windowHint": "Um modelo funciona mesmo quando a janela de resposta de 24 horas já foi encerrada.",
+      "variables": "Preencha as variáveis",
+      "preview": "O que o cliente vai ler",
+      "send": "Enviar modelo",
+      "sending": "Enviando",
+      "sent": "Modelo enviado",
+      "problem": {
+        "required": "{label} é obrigatório.",
+        "format": "{label} não pode conter quebra de linha, tabulação ou quatro espaços seguidos."
+      },
+      "reason": {
+        "paused": "Pausado pelo WhatsApp. Poderá ser enviado novamente quando a pausa terminar.",
+        "media_header": "Tem um cabeçalho de imagem, vídeo ou documento, que ainda não pode ser enviado pela caixa de entrada.",
+        "header_variable": "Tem uma variável no cabeçalho, que ainda não pode ser preenchida pela caixa de entrada.",
+        "dynamic_button": "Tem um link de botão com variável, que ainda não pode ser preenchida pela caixa de entrada.",
+        "authentication": "Modelos de senha de uso único são enviados pelo sistema, não pela caixa de entrada.",
+        "named_variables": "Usa variáveis nomeadas, que a caixa de entrada ainda não suporta."
+      },
+      "hasMore": "Mostrando os primeiros {count} modelos. Pesquise por nome ou texto para encontrar os demais."
+    }
+  }
+}

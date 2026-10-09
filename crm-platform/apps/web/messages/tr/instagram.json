@@ -1,0 +1,91 @@
+{
+  "instagram": {
+    "nav": {
+      "hub": "Instagram",
+      "broadcast": "Instagram toplu gönderimi"
+    },
+    "common": {
+      "dismiss": "Kapat"
+    },
+    "hub": {
+      "kicker": "Kanal · Instagram",
+      "title": "Instagram",
+      "titleAccent": "hesap",
+      "intro": "Instagram İşletme veya İçerik Üretici hesabınızı bir kez bağlayın. Mesajları ekip gelen kutunuza düşer; buradan yanıt verir, akışları çalıştırır ve daha önce size yazmış kişilere mesaj gönderirsiniz.",
+      "teamInbox": "Ekip gelen kutusu",
+      "broadcasts": "Yalnızca yanıtlanabilir toplu gönderim",
+      "loadError": "Bağlı Instagram hesapları yüklenemedi. Yeniden deneyin.",
+      "loadErrorDetail": "Bağlı Instagram hesapları yüklenemedi (hata {status}{code}). Yeniden deneyin.",
+      "engineOff": "{engine} bağlı değil. Instagram hesabı bağlanmadan önce bir yönetici bunu Yönetici → Eklentiler bölümünde bağlamalıdır.",
+      "connectedCount": "{count, plural, other {# hesap bağlandı}}",
+      "notConnected": "Bağlı değil",
+      "cardTitle": "Instagram hesabı ekleyin",
+      "cardBody": "İşletme/İçerik Üretici hesabını bağlayın. Instagram'ınız bir kez bağlanır ve burada görünür — sohbetler, akışlar ve otomatik yanıtlar bu çalışma alanından çalışır.",
+      "add": "Instagram hesabı ekleyin",
+      "linkedAccounts": "Bağlı hesaplar",
+      "linked": "Instagram hesabı bağlandı.",
+      "linkFailed": "Bu hesap bağlanamadı."
+    },
+    "dialog": {
+      "close": "Kapat",
+      "kicker": "Instagram",
+      "title": "Instagram hesabı ekleyin",
+      "note": "Instagram'ınız {engine} üzerinden bir kez bağlanır (oturum bilgisini ve webhook'u o tutar). Bu çalışma alanı ona bağlanır ve gelen kutusunu, akışlarını ve reklamlarını burada gösterir — her zaman tek bir hesaptır, iki değil.",
+      "connect": "Instagram'ı bağla",
+      "checking": "Kontrol ediliyor…",
+      "hint": "{engine} üzerinde zaten bağladıysanız anında bağlanır; aksi halde kısa bir oturum açma penceresi açılır.",
+      "pick": "Bağlanacak bir hesap seçin",
+      "link": "Bağla",
+      "connectDifferent": "Farklı bir hesap bağlayın",
+      "linkFailed": "Bu hesap bağlanamadı.",
+      "startFailed": "Instagram bağlantısı başlatılamadı."
+    },
+    "row": {
+      "channel": "Instagram",
+      "connected": "Bağlı",
+      "needsReauth": "Yeniden yetkilendirme gerekli",
+      "live": "etkin",
+      "manage": "{engine} üzerinde yönet",
+      "refresh": "Profili {engine} üzerinden yenile",
+      "unlink": "Bağlantıyı kaldır",
+      "unlinkConfirm": "Bu Instagram hesabının bağlantısı kesilsin mi? Sohbetleri ve gelen kutusu verileri silinir; yeniden bir hesap bağlayana kadar Instagram panonuzdan, gelen kutunuzdan, akışlarınızdan, şablonlarınızdan ve otomatik yanıtlarınızdan kaldırılır. Hesabın kendisi {engine} üzerinde kalır; daha sonra yeniden bağlayabilirsiniz.",
+      "cancel": "İptal",
+      "updated": "Instagram hesabı {handle} güncellendi.",
+      "unlinked": "Instagram hesabının bağlantısı kesildi; verileri silindi.",
+      "failed": "İşlem başarısız oldu. Yeniden deneyin."
+    },
+    "broadcast": {
+      "kicker": "Instagram · Yalnızca yanıtlanabilir",
+      "title": "Instagram",
+      "titleAccent": "toplu gönderim",
+      "intro": "Instagram yalnızca size daha önce yazmış kişilere mesaj göndermenize izin verir; bu yüzden mevcut sohbetlerinizden seçin. Instagram, her mesaj gönderildiğinde 24 saatlik pencere kuralını uygular.",
+      "accounts": "Instagram hesapları",
+      "loadError": "Sohbetler yüklenemedi. Yeniden deneyin.",
+      "failed": "İşlem başarısız oldu. Yeniden deneyin.",
+      "noAccounts": "Henüz bağlı ve bağlanmış bir Instagram hesabı yok.",
+      "name": "Toplu gönderim adı",
+      "namePlaceholder": "Sonbahar teklifi",
+      "account": "Instagram hesabı",
+      "template": "Şablon",
+      "templateHint": "İsteğe bağlı. Mesaj boşken mesajı doldurur.",
+      "templateNone": "Şablon yok",
+      "message": "Mesaj",
+      "messageHint": "Kişinin adı için {token} kullanın. En fazla {max} karakter.",
+      "messagePlaceholder": "Merhaba {token}, …",
+      "send": "{count, plural, =0 {Gönder} other {# sohbete gönder}}",
+      "sending": "Gönderiliyor…",
+      "recipients": "Alıcılar",
+      "windowOpenCount": "24 saatlik pencerede {total} sohbetten {open} tanesi",
+      "search": "Sohbetlerde ara",
+      "selectAll": "Tümünü seç",
+      "clear": "Temizle",
+      "capNote": "Tek bir gönderim en fazla {max} sohbete ulaşır; tümünü seç ilk {max} sohbeti seçer.",
+      "empty": "Henüz sohbet yok. Kişiler hesabınıza mesaj gönderdiğinde burada görünür.",
+      "inWindow": "Pencerede",
+      "outsideWindow": "24 saat dışında",
+      "selected": "{count, plural, other {# seçildi}}",
+      "sent": "Instagram toplu gönderimi gönderildi — {sent} iletildi{failed, plural, =0 {} other {, # başarısız}}.",
+      "sentNone": "Hiçbir alıcıya gönderilemedi. Instagram bağlantısını kontrol edin."
+    }
+  }
+}

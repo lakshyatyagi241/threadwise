@@ -1,0 +1,93 @@
+{
+  "developer-rest-api-v1": {
+    "common": {
+      "dismiss": "Kapat",
+      "copy": "Kopyala",
+      "copied": "Kopyalandı",
+      "copyFailed": "Kopyalanamadı. Metni seçip elle kopyalayın."
+    },
+    "rail": {
+      "name": "Geliştirici API'si",
+      "tagline": "REST · /api/v1",
+      "keyActive": "Anahtar etkin",
+      "noKey": "Henüz anahtar yok",
+      "baseUrl": "Temel URL",
+      "authHeader": "Kimlik doğrulama başlığı",
+      "help": {
+        "title": "Yardım mı gerekiyor?",
+        "body": "Her uç nokta için kopyalanabilir örneklerle tam istek ve yanıt başvurusu.",
+        "link": "Belgeleri oku"
+      }
+    },
+    "page": {
+      "crumbLabel": "İçerik yolu",
+      "crumbSettings": "Ayarlar",
+      "crumbHere": "Geliştiriciler",
+      "title": "Geliştirici",
+      "titleAccent": "API anahtarları",
+      "lead": "Kendi uygulamalarınızdan, CRM'inizden veya otomasyonunuzdan REST API'yi çağırmak için bir anahtar oluşturun: mesaj gönderin, kişileri, şablonları, toplu gönderimleri ve daha fazlasını yönetin. Çalışma alanı başına bir anahtar.",
+      "back": "Geri",
+      "openDocs": "Belgeleri aç",
+      "loading": "API anahtarınız yükleniyor",
+      "forbidden": {
+        "title": "API anahtarlarını görüntüleyemezsiniz",
+        "body": "Rolünüz API anahtarlarına erişimi içermiyor. Bir çalışma alanı yöneticisinden size API anahtarları iznini vermesini isteyin."
+      }
+    },
+    "banner": {
+      "title": "Yeni API anahtarınız",
+      "warning": "Şimdi kopyalayıp güvenli bir yerde saklayın. Güvenliğiniz için yalnızca özetini tutuyoruz, bu yüzden bir daha gösterilmeyecek."
+    },
+    "key": {
+      "title": "API anahtarınız",
+      "active": "Etkin",
+      "untitled": "Adsız anahtar",
+      "created": "Oluşturulma: {date}",
+      "lastUsed": "Son kullanım: {when}",
+      "never": "hiç",
+      "revoke": "İptal et",
+      "noRevoke": "Rolünüz API anahtarlarını iptal edemez.",
+      "revoked": "API anahtarı iptal edildi. Onu kullanan her uygulama hemen çalışmayı durdurur.",
+      "footer": "Çalışma alanı başına yalnızca bir anahtara izin verilir. Yeni anahtar vermek için bunu iptal edin.",
+      "confirm": {
+        "title": "Bu anahtar iptal edilsin mi?",
+        "message": "Bu anahtarı kullanan her uygulama veya entegrasyon hemen çalışmayı durdurur. Bu işlem geri alınamaz. Sonrasında yeni bir anahtar oluşturabilirsiniz.",
+        "accept": "İptal et",
+        "cancel": "İptal"
+      }
+    },
+    "create": {
+      "title": "Anahtarınızı oluşturun",
+      "help": "Nerede kullanıldığını hatırlamak için anahtara bir ad verin. Anahtar oluşturulurken yalnızca bir kez gösterilir.",
+      "name": "Anahtar adı",
+      "placeholder": "örn. Üretim arka ucu",
+      "submit": "Anahtar oluştur",
+      "submitting": "Anahtar oluşturuluyor…",
+      "created": "API anahtarı oluşturuldu. Şimdi kopyalayın - bir daha gösterilmeyecek.",
+      "noCreate": "Rolünüz API anahtarı oluşturamaz. Bir çalışma alanı yöneticisine danışın.",
+      "planLocked": "Planınız REST API'yi içermiyor.",
+      "errors": {
+        "required": "Anahtar için bir ad girin.",
+        "tooLong": "Ad en fazla 120 karakter olabilir."
+      }
+    },
+    "quickstart": {
+      "title": "Hızlı başlangıç",
+      "reference": "Tam başvuru",
+      "intro": "İlk mesajınızı gönderin. Anahtarı ve alıcıyı değiştirin:"
+    },
+    "errors": {
+      "planLimit": "Zaten etkin bir API anahtarınız var. Yenisini oluşturmadan önce iptal edin - çalışma alanı başına yalnızca bir anahtara izin verilir.",
+      "planLocked": "Planınız REST API'yi içermiyor. API anahtarı oluşturmak için yükseltin.",
+      "forbidden": "Bunu yapma izniniz yok.",
+      "validation": "Anahtar adı geçerli değil. Kontrol edip tekrar deneyin.",
+      "notFound": "Bu anahtar artık mevcut değil. Liste yenilendi.",
+      "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+      "unexpected": "Bizim tarafımızda bir sorun oluştu. Birazdan tekrar deneyin.",
+      "loadFailed": "API anahtarınız yüklenemedi.",
+      "retry": "Yeniden dene",
+      "upgrade": "Planları gör",
+      "requestId": "İstek kimliği: {id}"
+    }
+  }
+}

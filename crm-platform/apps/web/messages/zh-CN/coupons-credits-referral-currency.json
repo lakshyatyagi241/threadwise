@@ -1,0 +1,412 @@
+{
+  "coupons-credits-referral-currency": {
+    "nav": {
+      "group": "账单与套餐",
+      "coupons": "优惠券",
+      "currencies": "货币",
+      "currenciesGroup": "本地化",
+      "affiliate": "联盟推广"
+    },
+    "common": {
+      "loading": "加载中",
+      "retry": "重试",
+      "cancel": "取消",
+      "dismiss": "忽略",
+      "admin": "管理员",
+      "readOnly": "您可以查看此页面，但只有超级管理员可以更改。",
+      "requestId": "请求 ID",
+      "errors": {
+        "forbidden": "您无权访问此页面。",
+        "request": "无法完成该请求。",
+        "unexpected": "出了点问题。请稍后重试。"
+      },
+      "pager": {
+        "label": "分页",
+        "previous": "上一页",
+        "next": "下一页",
+        "page": "第 {n} 页"
+      }
+    },
+    "errors": {
+      "generic": "出了点问题。请稍后重试。",
+      "forbidden": "只有超级管理员可以更改此项。",
+      "notFound": "此项已不存在，可能已被删除。",
+      "conflict": "刚刚有其他人更改了此项。请刷新页面后重试。",
+      "validation": "部分值无效。请检查表单后重试。",
+      "codeTaken": "已有其他优惠券使用此代码。",
+      "planUnknown": "所选套餐中有一个或多个已不存在。",
+      "currencyUnknown": "请选择一种启用的货币。",
+      "currencyTaken": "已存在相同代码的货币。",
+      "defaultProtected": "这是系统默认货币。请先选择其他默认货币。",
+      "inUse": "此货币仍被 {used} 使用。请改为停用它。",
+      "ratesFailed": "无法连接汇率提供方或未返回汇率。未更改任何汇率。"
+    },
+    "coupons": {
+      "title": "折扣优惠券",
+      "titleLead": "折扣",
+      "titleAccent": "优惠券",
+      "crumbHere": "优惠券",
+      "eyebrow": "管理员 · 账单 · 优惠码",
+      "description": "买家在结账时输入的促销码。可选择百分比或固定金额，设置有效期，限定特定套餐，并限制总兑换次数。",
+      "new": "新建优惠券",
+      "kpi": {
+        "total": "优惠券总数",
+        "totalHint": "目录中",
+        "active": "启用",
+        "activeHint": "可兑换",
+        "expired": "已过期",
+        "expiredHint": "已过有效期",
+        "redeemed": "总兑换次数",
+        "redeemedHint": "历史累计使用"
+      },
+      "filters": {
+        "label": "筛选优惠券",
+        "all": "全部",
+        "active": "启用",
+        "disabled": "已禁用",
+        "expired": "已过期",
+        "search": "按代码或描述查找…",
+        "searchLabel": "搜索优惠券"
+      },
+      "table": {
+        "label": "优惠券",
+        "code": "代码",
+        "discount": "折扣",
+        "uses": "使用次数",
+        "validity": "有效期",
+        "status": "状态",
+        "actions": "操作"
+      },
+      "validity": {
+        "forever": "永久",
+        "now": "现在",
+        "range": "{from} → {to}"
+      },
+      "empty": {
+        "title": "没有匹配的优惠券。",
+        "hint": "请调整或重置筛选条件，或",
+        "create": "创建第一张"
+      },
+      "footer": "显示第 {from}–{to} 项，共 {total} 张优惠券",
+      "pager": {
+        "label": "分页",
+        "previous": "上一页",
+        "next": "下一页",
+        "page": "第 {n} 页"
+      },
+      "actions": {
+        "edit": "编辑",
+        "delete": "删除",
+        "menu": "操作",
+        "toggle": "开启或关闭 {code}"
+      },
+      "toasts": {
+        "created": "优惠券已创建。",
+        "updated": "优惠券已更新。",
+        "activated": "已启用。",
+        "deactivated": "已停用。",
+        "deleted": "优惠券已移除。"
+      },
+      "delete": {
+        "title": "删除优惠券",
+        "body": "删除优惠券 {code}？已兑换过它的工作区仍保留其折扣。",
+        "confirm": "是，删除"
+      },
+      "editor": {
+        "notFoundTitle": "未找到优惠券",
+        "notFoundBody": "此地址对应的优惠券不存在。它可能已被删除，或链接有误。",
+        "backToList": "返回优惠券",
+        "crumbNew": "新建",
+        "eyebrowNew": "管理员 · 账单 · 优惠码 · 创建",
+        "eyebrowEdit": "管理员 · 账单 · 优惠码 · 修改",
+        "titleLead": "新建",
+        "titleAccent": "优惠券",
+        "descriptionNew": "在 /checkout 期间兑换的促销码。可选择百分比或固定金额，绑定到某个套餐或所有套餐，并可选设置有效期。",
+        "redeemed": "已兑换 {used}{max} 次",
+        "redeemedMax": " / {max}",
+        "expires": "{when}到期",
+        "active": "启用",
+        "disabled": "已禁用",
+        "create": "创建优惠券",
+        "saveChanges": "保存更改",
+        "saving": "保存中",
+        "cancel": "取消",
+        "problemsTitle": "部分字段需要处理：",
+        "problems": {
+          "code": "代码：请输入不超过 64 个字符的代码。",
+          "description": "描述：最多 255 个字符。",
+          "adminNote": "管理员备注：最多 1000 个字符。",
+          "type": "类型：请选择百分比或固定金额。",
+          "amount": "金额：请输入数字，如 10 或 12.5。",
+          "maxDiscountAmount": "最高折扣上限：请输入数字或留空。",
+          "currencyCode": "货币锁定：最多 8 个字符。",
+          "minOrderAmount": "最低订单金额：请输入数字或留空。",
+          "applicablePlans": "适用套餐：请从列表中选择套餐。",
+          "startsAt": "开始时间：请输入有效的日期和时间。",
+          "expiresAt": "到期时间：请输入有效的日期和时间，且不早于开始时间。",
+          "maxUses": "总兑换次数上限：1 或以上的整数，或留空。",
+          "perUserLimit": "每位用户限用次数：1 或以上的整数，或留空。"
+        },
+        "sections": {
+          "identity": "标识",
+          "discount": "折扣",
+          "eligibility": "适用条件",
+          "limits": "限制与行为"
+        },
+        "fields": {
+          "code": "代码",
+          "codeHint": "以大写保存。客户付款时需输入此确切代码。",
+          "codePlaceholder": "WELCOME10",
+          "description": "描述",
+          "descriptionNote": "（向客户显示）",
+          "descriptionPlaceholder": "新人优惠：首月 9 折",
+          "adminNote": "管理员备注",
+          "adminNoteNote": "（内部使用，不显示）",
+          "adminNotePlaceholder": "假日促销批次 · Slack #marketing · 随活动结束",
+          "activeTitle": "启用",
+          "activeHint": "买家可在结账时使用",
+          "type": "类型",
+          "typePercent": "百分比 (%)",
+          "typeFixed": "固定金额",
+          "amount": "金额",
+          "amountHint": "百分比优惠券中，10 表示 10%。固定金额优惠券中，10 表示 10 个货币单位。",
+          "maxDiscount": "最高折扣上限",
+          "maxDiscountNote": "（仅限百分比类型）",
+          "maxDiscountPlaceholder": "留空 = 无上限",
+          "maxDiscountHint": "例如，8 折，最高减免 $50。",
+          "currency": "货币锁定",
+          "currencyAny": "任意货币",
+          "currencyHint": "将兑换限定为单一货币（适用于固定金额优惠券）。",
+          "minOrder": "最低订单金额",
+          "minOrderPlaceholder": "0 = 无最低限额",
+          "plans": "适用套餐",
+          "plansNote": "（留空 = 任意套餐）",
+          "plansPlaceholder": "选择一个或多个套餐（留空 = 任意套餐）...",
+          "plansHint": "输入以缩小列表范围，选择即可添加，点击标签上的 × 可移除。",
+          "plansEmpty": "没有更多可选的套餐。",
+          "plansRemove": "移除 {name}",
+          "plansClear": "移除所有套餐",
+          "startsAt": "开始时间",
+          "startsAtHint": "留空 = 立即可用。",
+          "expiresAt": "到期时间",
+          "expiresAtHint": "留空 = 永不过期。",
+          "maxUses": "总兑换次数上限",
+          "unlimitedPlaceholder": "留空 = 不限",
+          "maxUsesHint": "所有客户合计。",
+          "perUser": "每位用户限用次数",
+          "perUserHint": "每位客户允许的兑换次数。",
+          "firstPurchaseTitle": "仅限首次购买",
+          "firstPurchaseHint": "仅限尚未下过付费订单的工作区",
+          "stackableTitle": "可与其他优惠券叠加",
+          "stackableHint": "允许买家在结账时与另一个有效代码同时使用"
+        }
+      }
+    },
+    "currencies": {
+      "title": "平台货币",
+      "titleLead": "平台",
+      "titleAccent": "货币",
+      "crumbGroup": "系统",
+      "crumbGroup2": "本地化",
+      "crumbHere": "货币",
+      "eyebrow": "管理员 · 平台 · 本地化",
+      "description": "管理工作区可选的货币。汇率以美元为基准存储。更改默认货币会同步到所有用户的仪表盘、发票和钱包显示。",
+      "fetchRates": "获取实时汇率",
+      "fetching": "获取中",
+      "add": "添加货币",
+      "kpi": {
+        "total": "总计",
+        "totalHint": "种已配置货币",
+        "active": "启用",
+        "activeHint": "对工作区可见",
+        "default": "系统默认",
+        "defaultHint": "用于新创建的工作区",
+        "inactive": "未启用",
+        "inactiveHint": "不在工作区设置中提供"
+      },
+      "defaultCard": {
+        "eyebrow": "系统默认",
+        "title": "整个平台的备用货币",
+        "body": "尚未选择货币的工作区将使用此货币。保存后会立即清除缓存，因此更改将在应用内下一次页面加载时生效。",
+        "select": "默认货币",
+        "set": "设为默认",
+        "setting": "保存中"
+      },
+      "search": "代码、名称或符号…",
+      "searchLabel": "搜索货币",
+      "searchButton": "搜索",
+      "table": {
+        "label": "货币",
+        "code": "代码",
+        "name": "名称",
+        "symbol": "符号",
+        "rate": "汇率（1 USD →）",
+        "decimals": "小数位数",
+        "active": "启用",
+        "actions": "操作"
+      },
+      "defaultBadge": "默认",
+      "rate": "1 USD → {rate}",
+      "on": "开",
+      "off": "关",
+      "empty": {
+        "none": "暂无货币。",
+        "noMatch": "没有与“{q}”匹配的结果。"
+      },
+      "footer": "显示第 {from}–{to} 项，共 {total} 种货币",
+      "actions": {
+        "edit": "编辑",
+        "delete": "删除",
+        "toggle": "开启或关闭 {code}"
+      },
+      "toasts": {
+        "added": "货币已添加。",
+        "updated": "货币已更新。",
+        "activated": "已启用。",
+        "deactivated": "已停用。",
+        "deleted": "货币已移除。",
+        "defaultSet": "默认货币已设为 {code}。",
+        "ratesUpdated": "已从 {provider} 更新 {count} 种货币。"
+      },
+      "delete": {
+        "title": "删除货币",
+        "body": "删除 {code}？以该货币保存的所有价格将成为孤立数据。",
+        "confirm": "是，删除"
+      },
+      "form": {
+        "addTitle": "添加货币",
+        "editTitle": "编辑 {code}",
+        "name": "名称 *",
+        "namePlaceholder": "瑞士法郎",
+        "code": "ISO 代码 *",
+        "codePlaceholder": "CHF",
+        "codeLocked": "货币创建后，其代码不会更改。",
+        "symbol": "符号",
+        "symbolPlaceholder": "Fr",
+        "precision": "小数位数 *",
+        "rate": "换算汇率（1 USD = ?）*",
+        "active": "立即启用",
+        "save": "添加货币",
+        "saveChanges": "保存更改",
+        "cancel": "取消",
+        "problemsTitle": "部分字段需要处理：",
+        "problems": {
+          "name": "名称：请输入不超过 120 个字符的名称。",
+          "code": "ISO 代码：三个字母，如 CHF。",
+          "symbol": "符号：最多 20 个字符。",
+          "precision": "小数位数：0 到 6 之间的整数。",
+          "exchangeRate": "汇率：不小于 0.000001 的数字。"
+        },
+        "eyebrow": "新条目",
+        "rateHint": "使用上方的“获取实时汇率”可从 open.er-api.com 预填数值。",
+        "editEyebrow": "编辑条目"
+      },
+      "catalog": {
+        "eyebrow": "目录",
+        "title": "所有货币"
+      }
+    },
+    "affiliate": {
+      "title": "联盟推广",
+      "subtitle": "分享您的链接，并跟踪您带来的工作区。",
+      "common": {
+        "dismiss": "忽略"
+      },
+      "states": {
+        "loading": "正在加载您的联盟推广数据"
+      },
+      "header": {
+        "codeLabel": "您的推荐码",
+        "noCode": "暂无推荐码",
+        "linkLabel": "您的推荐链接",
+        "copyLink": "复制链接",
+        "copied": "链接已复制。",
+        "copyFailed": "无法复制链接。请选中后手动复制。",
+        "reward": "每个被推荐的工作区首次付款后，您将获得 {amount}。",
+        "rewardMessages": "相当于 {count, plural, other {# 条消息}}。",
+        "rewardNone": "该计划目前对新推荐不提供奖励。您的推荐码和历史记录仍保留在此。"
+      },
+      "filters": {
+        "label": "范围与导出",
+        "range": "范围",
+        "ranges": {
+          "7d": "最近 7 天",
+          "30d": "最近 30 天",
+          "90d": "最近 90 天",
+          "all": "全部时间"
+        },
+        "search": "搜索推荐记录",
+        "searchPlaceholder": "姓名、邮箱或推荐码",
+        "reset": "重置",
+        "export": "导出 CSV",
+        "exporting": "正在准备文件",
+        "exported": "已下载 {fileName}。"
+      },
+      "kpi": {
+        "inRange": "范围内的推荐数",
+        "vsPrevious": "较上一时段 {delta}",
+        "earned": "累计收益",
+        "last30": "近 30 天推荐数",
+        "last30Earned": "近 30 天赚取 {amount}",
+        "average": "平均每次推荐"
+      },
+      "chart": {
+        "title": "推荐趋势",
+        "label": "按时段以柱状显示推荐数，折线显示赚取的额度",
+        "buckets": {
+          "daily": "按日",
+          "weekly": "按周",
+          "monthly": "按月"
+        },
+        "signups": "推荐数",
+        "credits": "赚取额度",
+        "bucket": "时段",
+        "empty": "此范围内暂无推荐。"
+      },
+      "topCodes": {
+        "title": "热门推荐码",
+        "referrals": "{count, plural, other {# 次推荐}}",
+        "empty": "此范围内未使用任何推荐码。"
+      },
+      "payouts": {
+        "title": "近期奖励",
+        "balanceAfter": "{amount} 后的余额",
+        "empty": "暂无奖励。被推荐的工作区首次付款后，奖励会发放到您的钱包。"
+      },
+      "table": {
+        "title": "推荐记录",
+        "label": "所选范围内的推荐记录",
+        "when": "时间",
+        "referee": "被推荐人",
+        "code": "所用推荐码",
+        "credits": "赚取额度",
+        "status": "状态",
+        "transaction": "钱包交易",
+        "noName": "未命名用户",
+        "paid": "已支付",
+        "pending": "待处理",
+        "noTransaction": "无钱包交易",
+        "pagination": "推荐分页",
+        "previous": "上一页",
+        "next": "下一页",
+        "showing": "显示第 {from}-{to} 项，共 {total} 项"
+      },
+      "empty": {
+        "noneTitle": "暂无推荐",
+        "noneBody": "分享您的链接。通过它注册的人会显示在此处。",
+        "filteredTitle": "没有匹配的推荐",
+        "filteredBody": "请尝试其他范围或清除搜索。"
+      },
+      "errors": {
+        "unauthenticated": "您的会话已结束。请重新登录以查看联盟推广数据。",
+        "forbidden": "您无权访问此页面。",
+        "rateLimited": "请求过多。请稍等片刻后重试。",
+        "validation": "无法应用这些筛选条件。请重置后重试。",
+        "network": "无法连接服务器。请检查网络连接后重试。",
+        "generic": "出了点问题。请稍后重试。",
+        "requestId": "请求 ID",
+        "retry": "重试"
+      }
+    }
+  }
+}

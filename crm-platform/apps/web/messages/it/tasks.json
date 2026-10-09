@@ -1,0 +1,330 @@
+{
+  "tasks": {
+    "nav": {
+      "tasks": "Task"
+    },
+    "common": {
+      "dismiss": "Ignora"
+    },
+    "hub": {
+      "title": "Task",
+      "subtitle": "Promemoria e cose da fare. Assegnale, imposta una priorità e una scadenza, e spuntale quando sono completate.",
+      "newTask": "Nuovo task",
+      "tableLabel": "Task",
+      "loading": "Caricamento dei task",
+      "useSampleData": "Usa dati di esempio (sviluppo)",
+      "emptyFilteredTitle": "Nessun task corrisponde",
+      "emptyFiltered": "Prova una ricerca diversa o cancella i filtri.",
+      "resetFilters": "Cancella filtri",
+      "empty": {
+        "mine": {
+          "title": "Nessun task assegnato a te",
+          "message": "I task assegnati a te compariranno qui. Aggiungine uno sopra o guarda «Tutti i task»."
+        },
+        "all": {
+          "title": "Nessun task ancora",
+          "message": "Aggiungi un promemoria o una cosa da fare con il campo sopra e comparirà qui."
+        },
+        "overdue": {
+          "title": "Nessuna scadenza superata",
+          "message": "Ogni task aperto è in orario."
+        },
+        "today": {
+          "title": "Nessuna scadenza oggi",
+          "message": "Nessun task aperto scade per il resto della giornata."
+        },
+        "upcoming": {
+          "title": "Niente in arrivo",
+          "message": "I task aperti con scadenza in un giorno successivo compariranno qui."
+        },
+        "completed": {
+          "title": "Nessun task completato ancora",
+          "message": "I task che spunti compariranno qui, dal più recente."
+        }
+      },
+      "showing": "{count, plural, one {# task caricato} other {# task caricati}}",
+      "loadMore": "Carica altri",
+      "allLoaded": "Tutti i task caricati",
+      "deleteTitle": "Eliminare questo task?",
+      "deleteMessage": "«{title}» verrà eliminato per tutti. Non è possibile annullare.",
+      "delete": "Elimina",
+      "keep": "Mantieni"
+    },
+    "tabs": {
+      "label": "Elenchi di task",
+      "mine": "I miei task",
+      "all": "Tutti i task",
+      "overdue": "In ritardo",
+      "today": "Oggi",
+      "upcoming": "In arrivo",
+      "completed": "Completati",
+      "count": "{count, plural, one {# task} other {# task}}"
+    },
+    "toolbar": {
+      "label": "Filtri task",
+      "search": "Cerca task",
+      "status": "Stato",
+      "statusOpen": "Aperti",
+      "statusDone": "Completati",
+      "statusAll": "Aperti e completati",
+      "priority": "Priorità",
+      "allPriorities": "Tutte le priorità",
+      "priorities": {
+        "high": "Alta",
+        "medium": "Media",
+        "low": "Bassa"
+      },
+      "assignee": "Assegnatario",
+      "allAssignees": "Tutti gli assegnatari",
+      "unassigned": "Non assegnato",
+      "linked": "Collegato a",
+      "anyLink": "Qualsiasi record",
+      "linkContact": "Un contatto",
+      "linkDeal": "Una trattativa",
+      "clear": "Cancella",
+      "modifyColumns": "Modifica colonne",
+      "resetColumns": "Reimposta colonne",
+      "columns": {
+        "title": "Task",
+        "priority": "Priorità",
+        "due": "Scadenza",
+        "assignee": "Assegnatario",
+        "contact": "Contatto",
+        "deal": "Trattativa",
+        "created": "Creato",
+        "completed": "Completato il"
+      },
+      "refresh": "Aggiorna",
+      "shortcuts": "Scorciatoie da tastiera",
+      "view": "Layout",
+      "views": {
+        "list": "Elenco",
+        "board": "Board per scadenza"
+      }
+    },
+    "table": {
+      "scrollArea": "Tabella dei task",
+      "selectAll": "Seleziona tutti i task caricati",
+      "selectRow": "Seleziona {title}",
+      "columns": {
+        "title": "Task",
+        "priority": "Priorità",
+        "due": "Scadenza",
+        "assignee": "Assegnatario",
+        "contact": "Contatto",
+        "deal": "Trattativa",
+        "created": "Creato",
+        "completed": "Completato il"
+      }
+    },
+    "row": {
+      "complete": "Segna come completato",
+      "reopen": "Riapri",
+      "completeNamed": "Segna «{title}» come completato",
+      "reopenNamed": "Riapri «{title}»",
+      "moreFor": "Altre azioni per {title}",
+      "open": "Apri",
+      "edit": "Modifica",
+      "delete": "Elimina",
+      "unassigned": "Non assegnato"
+    },
+    "bulk": {
+      "label": "Azioni per i task selezionati",
+      "selected": "{count, plural, one {# task selezionato} other {# task selezionati}}",
+      "working": "In corso",
+      "complete": "Completa",
+      "assign": "Assegna",
+      "assignTo": "Assegna a",
+      "me": "{name} (io)",
+      "unassign": "Rimuovi assegnazione",
+      "delete": "Elimina",
+      "clear": "Deseleziona",
+      "failed": "Operazione non riuscita.",
+      "someFailed": "{count, plural, one {# task non modificato.} other {# task non modificati.}}",
+      "completed": "{count, plural, one {# task completato.} other {# task completati.}}",
+      "assigned": "{count, plural, one {# task assegnato a {name}.} other {# task assegnati a {name}.}}",
+      "unassigned": "{count, plural, one {# task senza assegnatario.} other {# task senza assegnatario.}}",
+      "deleted": "{count, plural, one {# task eliminato.} other {# task eliminati.}}",
+      "deleteTitle": "Eliminare i task selezionati?",
+      "deleteMessage": "{count, plural, one {# task verrà eliminato per tutti. Non è possibile annullare.} other {# task verranno eliminati per tutti. Non è possibile annullare.}}",
+      "keep": "Mantieni"
+    },
+    "quick": {
+      "label": "Aggiungi un task",
+      "placeholder": "Aggiungi un task e premi Invio",
+      "priority": "Priorità",
+      "priorities": {
+        "high": "Alta",
+        "medium": "Media",
+        "low": "Bassa"
+      },
+      "due": "Data e ora di scadenza",
+      "add": "Aggiungi",
+      "dueRequired": "Scegli una data e un’ora di scadenza.",
+      "titleRequired": "Scrivi cosa va fatto.",
+      "options": "Altre opzioni (priorità e scadenza)"
+    },
+    "form": {
+      "eyebrow": "Task",
+      "newTitle": "Nuovo task",
+      "editTitle": "Modifica task",
+      "close": "Chiudi",
+      "cancel": "Annulla",
+      "create": "Crea task",
+      "save": "Salva modifiche",
+      "title": "Task",
+      "titlePlaceholder": "es. Chiama Acme per il rinnovo",
+      "priority": "Priorità",
+      "priorities": {
+        "high": "Alta",
+        "medium": "Media",
+        "low": "Bassa"
+      },
+      "assignee": "Assegna a",
+      "unassigned": "Nessuno",
+      "me": "{name} (io)",
+      "due": "Scadenza",
+      "presets": {
+        "today": "Oggi",
+        "tomorrow": "Domani",
+        "nextWeek": "Settimana prossima"
+      },
+      "clearDue": "Cancella data",
+      "contact": "Contatto",
+      "deal": "Trattativa",
+      "notes": "Note",
+      "reminderHint": "L’assegnatario riceve un promemoria quando il task scade.",
+      "assigneePick": "Scegli chi è responsabile di questo task.",
+      "problems": {
+        "dueRequired": "Scegli una data e un’ora di scadenza.",
+        "priorityRequired": "Scegli una priorità.",
+        "assigneeRequired": "Scegli per chi è questo task.",
+        "titleRequired": "Scrivi cosa va fatto.",
+        "titleTooLong": "Il task è troppo lungo (massimo 255 caratteri).",
+        "notesTooLong": "Le note sono troppo lunghe (massimo 5000 caratteri).",
+        "dueInvalid": "Questa data non è valida.",
+        "assigneeInvalid": "Questa persona non è un membro attivo del Workspace."
+      }
+    },
+    "drawer": {
+      "loading": "Caricamento del task",
+      "close": "Chiudi",
+      "eyebrow": "Task",
+      "name": "Nome del task",
+      "titleRequired": "Un task richiede un nome.",
+      "statusOpen": "Apri",
+      "statusDone": "Completata",
+      "complete": "Segna come completata",
+      "reopen": "Riapri",
+      "edit": "Modifica",
+      "delete": "Elimina",
+      "details": "Dettagli",
+      "notes": "Note",
+      "notesPlaceholder": "Aggiungi contesto per chi la prenderà in carico",
+      "linked": "Record collegati",
+      "company": "Azienda",
+      "noLinks": "Non collegata a un contatto o a una trattativa.",
+      "activity": "Cronologia",
+      "events": {
+        "created": "Attività creata",
+        "createdBy": "Creata da {name}",
+        "reminded": "Promemoria di scadenza inviato",
+        "completed": "Segnata come completata"
+      },
+      "deleteTitle": "Eliminare questa attività?",
+      "deleteMessage": "«{title}» verrà eliminata per tutti. L’operazione non è reversibile.",
+      "cancel": "Conserva"
+    },
+    "board": {
+      "buckets": {
+        "overdue": "Scadute",
+        "today": "Oggi",
+        "upcoming": "Prossime",
+        "no_date": "Senza data"
+      },
+      "empty": "Niente da mostrare."
+    },
+    "due": {
+      "none": "Nessuna data",
+      "overdue": "Scaduta",
+      "today": "Oggi, {time}",
+      "tomorrow": "Domani, {time}",
+      "yesterday": "Ieri, {time}",
+      "date": "{date}, {time}"
+    },
+    "priority": {
+      "high": "Alta",
+      "medium": "Media",
+      "low": "Bassa"
+    },
+    "link": {
+      "unnamedContact": "Contatto senza nome",
+      "unnamedDeal": "Trattativa"
+    },
+    "picker": {
+      "searchContact": "Cerca contatti",
+      "searchDeal": "Cerca trattative",
+      "results": "Risultati della ricerca",
+      "searching": "Ricerca in corso",
+      "unavailable": "La ricerca non è disponibile al momento.",
+      "none": "Nessun risultato.",
+      "unlink": "Rimuovi il collegamento"
+    },
+    "errors": {
+      "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
+      "forbidden": "Non hai l’autorizzazione per eseguire questa operazione.",
+      "signedOut": "La sessione è scaduta. Accedi di nuovo per continuare.",
+      "conflict": "Un’altra persona ha modificato questa attività. Ricarica la pagina e riprova.",
+      "validation": "Alcuni dettagli non sono validi.",
+      "unavailable": "Il servizio attività non è ancora disponibile su questo server.",
+      "rateLimited": "Troppe richieste. Attendi un momento e riprova.",
+      "notFound": "Attività non trovata. Potrebbe essere stata eliminata.",
+      "planDisabled": "Il tuo piano non include le attività. Passa a un piano superiore per sbloccarle.",
+      "assigneeInvalid": "Questa persona non è un membro attivo di questo Workspace.",
+      "unexpected": "Si è verificato un errore. Riprova tra poco.",
+      "requestId": "ID richiesta",
+      "retry": "Riprova"
+    },
+    "toast": {
+      "completed": "Attività completata.",
+      "reopened": "Attività riaperta.",
+      "created": "Attività creata.",
+      "saved": "Attività salvata.",
+      "deleted": "Attività eliminata.",
+      "conflict": "Un’altra persona ha modificato questa attività. L’elenco è stato ricaricato; riprova.",
+      "failed": "Impossibile aggiornare l’attività.",
+      "saveFailed": "Impossibile salvare l’attività.",
+      "deleteFailed": "Impossibile eliminare l’attività.",
+      "createFailed": "Impossibile creare l’attività."
+    },
+    "shortcuts": {
+      "title": "Scorciatoie da tastiera",
+      "close": "Chiudi",
+      "intro": "Scorri l’elenco senza il mouse. Le scorciatoie vengono sospese mentre scrivi in un campo.",
+      "actions": {
+        "next": "Attività successiva",
+        "prev": "Attività precedente",
+        "open": "Apri l’attività",
+        "toggleComplete": "Completa o riapri",
+        "toggleSelect": "Seleziona o deseleziona",
+        "newTask": "Nuova attività",
+        "focusSearch": "Cerca",
+        "clearSelection": "Cancella la selezione",
+        "help": "Mostra questo elenco"
+      }
+    },
+    "linked": {
+      "title": "Attività",
+      "addPlaceholder": "Scrivi il titolo dell’attività, poi premi Aggiungi per completare i dettagli",
+      "viewAll": "Vedi tutte",
+      "loading": "Caricamento attività in corso",
+      "unavailableTitle": "Le attività non sono ancora disponibili",
+      "unavailable": "Il servizio attività non è ancora disponibile su questo server.",
+      "empty": "Nessuna attività aperta.",
+      "loadMore": "Carica altre",
+      "loadMoreDone": "Carica altre completate",
+      "showDone": "Mostra completate",
+      "hideDone": "Nascondi completate"
+    }
+  }
+}

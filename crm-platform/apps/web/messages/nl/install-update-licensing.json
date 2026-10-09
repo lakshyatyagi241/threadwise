@@ -1,0 +1,365 @@
+{
+  "install-update-licensing": {
+    "setup": {
+      "title": "Installatiewizard",
+      "brand": "CRM",
+      "railEyebrow": "Installatiewizard",
+      "railTitle": "Je <i>WhatsApp-suite</i>, in een paar minuten klaar.",
+      "railFooter": "Platforminstaller · v{version}",
+      "stepsLabel": "Installatiestappen",
+      "stepOf": "Stap {n} van {total}",
+      "mobileStep": "Stap {n}/{total} · {name}",
+      "steps": {
+        "welcome": "Welkom",
+        "requirements": "Vereisten",
+        "database": "Database",
+        "application": "Applicatie",
+        "admin": "Beheerdersaccount",
+        "node": "Node-bridge",
+        "install": "Installeren"
+      },
+      "screens": {
+        "licence": "Licentie"
+      },
+      "disabled": "De installatie staat uit omdat er op de server geen setup-token is ingesteld. Stel SETUP_TOKEN in, of maak de eerste operator aan via de opdrachtregel.",
+      "unavailable": "De installatiestatus kon niet worden gelezen. Controleer of de API draait en laad deze pagina opnieuw.",
+      "welcome": {
+        "eyebrow": "Welkom",
+        "title": "Laten we <i>{app}</i> aan de gang krijgen.",
+        "intro": "Zeven eenvoudige stappen, in totaal ongeveer drie minuten. We controleren je server, testen je database, bevestigen elke standaardinstelling die de beheerconsole nodig heeft, koppelen de Node-bridge en maken je eerste superbeheerderslogin aan.",
+        "tiles": {
+          "database": "Database",
+          "security": "Beveiliging",
+          "translations": "Vertalingen",
+          "admin": "Beheer"
+        },
+        "beforeTitle": "Voordat je begint",
+        "before": {
+          "database": "Een PostgreSQL 16-database die deze installatie kan bereiken, met de migraties toegepast.",
+          "runtime": "Node.js 22 of nieuwer en Redis die naast de API draait.",
+          "token": "Het setup-token uit je deploy-configuratie (SETUP_TOKEN)."
+        },
+        "tokenLabel": "Setup-token",
+        "tokenHint": "Bewijst dat jij deze installatie beheert. Wordt bij elke stap opnieuw gecontroleerd.",
+        "begin": "Installatie starten"
+      },
+      "licence": {
+        "eyebrow": "Licentie",
+        "title": "Controleer je <i>aankoop</i>.",
+        "intro": "Vul je CodeCanyon-aankoopcode in. We valideren deze bij Envato voordat we installeren — zonder geldige code kan de installatie niet doorgaan.",
+        "label": "Aankoopcode",
+        "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+        "help": "Vind hem in je CodeCanyon-account → <b>Downloads</b> → het <b>Licentiecertificaat en aankoopcode</b>.",
+        "verified": "Aankoop al geverifieerd — je kunt doorgaan.",
+        "submit": "Verifiëren en doorgaan"
+      },
+      "requirements": {
+        "eyebrow": "Stap {n} van {total}",
+        "intro": "We controleren of de host aan het minimum voldoet voordat we installeren.",
+        "runtimeOk": "Node.js {version}",
+        "runtimeOkDetail": "— voldoet aan de eis van {required}+",
+        "runtimeBad": "Node.js {version}",
+        "runtimeBadDetail": "— {app} vereist Node.js {required} of nieuwer.",
+        "modules": "Runtime-modules",
+        "services": "Services",
+        "directories": "Mappen",
+        "database": "Database",
+        "noDatabase": "Geen database gevonden.",
+        "databaseRequired": "PostgreSQL is vereist.",
+        "extensionMissing": "Ontbrekende databaseextensie: {name}.",
+        "tiles": {
+          "database": "database",
+          "redis": "redis",
+          "migrations": "migraties",
+          "permissions": "rechten",
+          "temp": "tijdelijke bestanden",
+          "migrationsDir": "migraties"
+        },
+        "fixNotice": "Los de items die koraal gemarkeerd zijn op voordat je doorgaat. De knop Doorgaan blijft uitgeschakeld tot alles slaagt.",
+        "recheck": "Opnieuw controleren",
+        "checking": "Controleren…",
+        "loadFailed": "De vereistencontrole kon niet worden uitgevoerd.",
+        "title": "<i>Serververeisten</i>."
+      },
+      "database": {
+        "eyebrow": "Stap {n} van {total}",
+        "title": "Database-<i>verbinding</i>.",
+        "intro": "Controleer de PostgreSQL-database waarop dit platform draait. We verifiëren de verbinding voordat we verder gaan.",
+        "driver": "Databasedriver",
+        "driverName": "PostgreSQL",
+        "host": "Host",
+        "port": "Poort",
+        "name": "Databasenaam",
+        "namePlaceholder": "crm",
+        "user": "Gebruikersnaam",
+        "userPlaceholder": "postgres",
+        "password": "Wachtwoord",
+        "passwordHint": "Laat leeg om het eigen wachtwoord van deze installatie te gebruiken. De verbinding zelf is ingesteld in de omgeving van de server; deze stap test alleen.",
+        "test": "Verbinding testen",
+        "testing": "Testen…",
+        "ok": "Verbinding geslaagd.",
+        "unreachable": "PostgreSQL is via geen enkele route bereikt. Gebruik de exacte host die je hostingpaneel toont, controleer de poort, bevestig dat de database en gebruiker bestaan en dat de server verbindingen vanaf deze machine accepteert, en probeer het dan opnieuw.",
+        "networkError": "Netwerkfout: {detail}"
+      },
+      "application": {
+        "eyebrow": "Stap {n} van {total}",
+        "title": "Applicatie-<i>basis</i>.",
+        "intro": "Geef je installatie een naam, stel de publieke URL in en kies een tijdzone en standaardtaal.",
+        "name": "Naam van de applicatie",
+        "url": "Applicatie-URL",
+        "urlPlaceholder": "https://app.example.com",
+        "timezone": "Tijdzone",
+        "timezonePlaceholder": "Zoek tijdzones…",
+        "timezoneEmpty": "Geen tijdzones gevonden.",
+        "locale": "Standaardtaal"
+      },
+      "admin": {
+        "eyebrow": "Stap {n} van {total}",
+        "title": "Beheerders-<i>account</i>.",
+        "intro": "Je eerste superbeheerderslogin en privéworkspace. Voeg later teamleden toe vanuit de console.",
+        "fullName": "Volledige naam",
+        "fullNamePlaceholder": "Vetrick R.",
+        "email": "E-mail",
+        "emailPlaceholder": "jij@jouwdomein.nl",
+        "password": "Wachtwoord",
+        "confirm": "Bevestig wachtwoord",
+        "workspace": "Naam workspace",
+        "workspacePlaceholder": "Mijn team",
+        "note": "Min. 12 tekens met hoofdletter, kleine letter, cijfer en symbool · argon2id-gehasht. Dit platform is multi-tenant — één privéworkspace is vooraf ingericht; hernoem die later bij Workspaces. Je wachtwoord wordt nooit in platte tekst opgeslagen en moet bij de eerste login gecombineerd worden met tweestapsverificatie."
+      },
+      "node": {
+        "eyebrow": "Stap {n} van {total}",
+        "title": "Node-<i>bridge</i>.",
+        "intro": "WhatsApp wordt verzonden via een kleine Node-service. Wijs het platform daarnaar en stel het gedeelde token in — de installer slaat het voor beide kanten op.",
+        "url": "URL Node-server",
+        "urlHint": "Waar je Node-bridge luistert. De API roept dit aan om berichten te verzenden.",
+        "port": "Node-poort",
+        "portHint": "De poort waar de Node-bridge aan gekoppeld is.",
+        "token": "Gedeeld Node-token",
+        "tokenHint": "Automatisch ingevuld. Moet gelijk zijn in de API en de Node-bridge — de installer slaat het één keer versleuteld op.",
+        "generate": "Genereren",
+        "info": "Deze worden opgeslagen in de platforminstellingen, niet in .env-bestanden. Het token wordt als NODE_WEBHOOK_TOKEN met de Node-bridge gedeeld.",
+        "submit": "Doorgaan en installeren"
+      },
+      "install": {
+        "eyebrow": "Stap {n} van {total}",
+        "title": "<i>{app}</i> wordt geïnstalleerd.",
+        "intro": "Even geduld — we configureren alles. Dit duurt meestal enkele seconden.",
+        "preparing": "Voorbereiden…",
+        "complete": "Voltooid",
+        "failed": "Mislukt — zie hieronder",
+        "paused": "Installatie gepauzeerd",
+        "retry": "Opnieuw proberen vanaf mislukte stap",
+        "success": "Installatie voltooid — doorsturen…",
+        "rows": {
+          "configuration": {
+            "done": "Configuratie opgeslagen",
+            "active": "De configuratie van de applicatie en Node-bridge wordt opgeslagen…"
+          },
+          "migrations": {
+            "done": "Databasemigraties geverifieerd",
+            "active": "Databasemigraties controleren…"
+          },
+          "defaults": {
+            "done": "Essentiële gegevens geverifieerd",
+            "active": "Rollen, rechten en standaardwaarden controleren…"
+          },
+          "account": {
+            "done": "Beheerder + workspace klaar",
+            "active": "Beheerdersaccount en privéworkspace aanmaken…"
+          },
+          "storage": {
+            "done": "Opslag klaar",
+            "active": "Opslag en tijdelijke mappen controleren…"
+          },
+          "finalize": {
+            "done": "Installatie afgerond",
+            "active": "Setup vergrendelen en de installatie vastleggen…"
+          }
+        }
+      },
+      "completed": {
+        "body": "De setup is op deze installatie al afgerond.",
+        "login": "Naar inloggen"
+      },
+      "back": "Terug",
+      "continue": "Doorgaan",
+      "show": "Tonen",
+      "hide": "Verbergen",
+      "working": "Bezig",
+      "problems": {
+        "token": "Dat setup-token is niet correct.",
+        "disabled": "De setup is uitgeschakeld op deze server.",
+        "outOfOrder": "Een stap liep niet in de juiste volgorde. Laad de pagina opnieuw en begin opnieuw.",
+        "step": "Een installatiestap is mislukt. Controleer je gegevens en de serverlogs en probeer het opnieuw.",
+        "unknown": "Er ging iets mis. Probeer het opnieuw.",
+        "requestId": "Verzoek-ID {id}",
+        "prerequisites": "De server is nog niet klaar voor de installatie: {items}.",
+        "licence": {
+          "empty": "Vul je CodeCanyon-aankoopcode in.",
+          "not_configured": "De licentiecontrole is niet ingesteld (Envato-token ontbreekt).",
+          "unreachable": "Envato kon niet worden bereikt om de code te verifiëren. Controleer de internetverbinding van de server.",
+          "not_found": "Ongeldige aankoopcode — Envato heeft er geen verkoop voor.",
+          "http_error": "Verificatie bij Envato is mislukt.",
+          "other_product": "Deze aankoopcode hoort bij een ander product.",
+          "unknown": "De aankoopcode kon niet worden geverifieerd."
+        },
+        "keys": {
+          "runtime": "Node.js-versie",
+          "database": "database",
+          "redis": "Redis",
+          "migrations": "databasemigraties",
+          "permissions": "rechtendefinities",
+          "temp": "tijdelijke map",
+          "storage": "opslag",
+          "default": "{key}"
+        }
+      },
+      "errors": {
+        "tokenLength": "Het setup-token is minimaal {min} tekens.",
+        "dbHost": "Vul de databasehost in.",
+        "dbPort": "Vul een poort in tussen 1 en 65535.",
+        "dbName": "Vul de databasenaam in.",
+        "dbUser": "Vul de gebruikersnaam voor de database in.",
+        "appNameRequired": "Vul de naam van de applicatie in.",
+        "appNameLong": "De naam van de applicatie mag maximaal {max} tekens zijn.",
+        "appUrl": "Vul een volledige URL in die begint met http:// of https://.",
+        "timezone": "Kies een tijdzone uit de lijst.",
+        "locale": "Kies een taal uit de lijst.",
+        "fullNameRequired": "Vul je volledige naam in.",
+        "fullNameLong": "De volledige naam mag maximaal {max} tekens zijn.",
+        "email": "Vul een geldig e-mailadres in.",
+        "passwordMismatch": "De wachtwoordbevestiging komt niet overeen.",
+        "workspaceRequired": "Vul een workspacenaam in van minimaal 2 tekens.",
+        "workspaceLong": "De workspacenaam mag maximaal {max} tekens zijn.",
+        "nodeUrl": "Vul de URL van de Node-server in, die begint met http:// of https://.",
+        "nodePort": "Vul een poort in tussen 1 en 65535.",
+        "nodeToken": "Het gedeelde token is minimaal {min} tekens.",
+        "password": {
+          "length": "Het wachtwoord heeft minimaal 12 tekens nodig.",
+          "upper": "Het wachtwoord heeft een hoofdletter nodig.",
+          "lower": "Het wachtwoord heeft een kleine letter nodig.",
+          "number": "Het wachtwoord heeft een cijfer nodig.",
+          "symbol": "Het wachtwoord heeft een symbool nodig.",
+          "personal": "Het wachtwoord mag je naam of e-mailadres niet bevatten."
+        }
+      }
+    },
+    "system": {
+      "nav": {
+        "group": "Systeem",
+        "item": "Updater"
+      },
+      "title": "Applicatie-updater",
+      "titleRich": "Applicatie-<i>updater</i>.",
+      "titleAccent": "updater",
+      "kicker": "Beheer · Onderhoud",
+      "description": "Controleer je aankoop en zie precies wat deze installatie draait. Updates worden als nieuwe image geleverd en migraties draaien voordat die start — je database, opslag en uploads worden vanaf deze pagina nooit aangeraakt.",
+      "crumbAdmin": "Beheer",
+      "crumbSettings": "Instellingen",
+      "crumbUpdater": "Updater",
+      "version": "v{version} · build {build}",
+      "buildNone": "n.v.t.",
+      "allSettings": "Alle instellingen",
+      "refresh": "Vernieuwen",
+      "loading": "Laden",
+      "errorForbidden": "Je kunt deze pagina niet bekijken.",
+      "errorUnexpected": "De updater kon niet worden geladen.",
+      "requestId": "Verzoek-ID",
+      "retry": "Opnieuw proberen",
+      "licence": {
+        "kicker": "stap 1 · licentie",
+        "title": "Controleer je aankoop",
+        "intro": "Vul je CodeCanyon-aankoopcode in. Die wordt bij Envato gevalideerd voordat een update kan draaien.",
+        "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+        "mask": "••••••••-••••-••••-••••-••••••••••••",
+        "verify": "Verifiëren",
+        "verifying": "Verifiëren…",
+        "verified": "Aankoop geverifieerd — je kunt doorgaan.",
+        "verifiedAt": "Geverifieerd op {date}.",
+        "notVerified": "Nog niet geverifieerd.",
+        "notEnabled": "Deze installatie dwingt geen aankoopcode af, dus hier valt niets te verifiëren.",
+        "superAdminOnly": "Alleen een superbeheerder kan de aankoopcode verifiëren.",
+        "reasons": {
+          "empty": "Vul je CodeCanyon-aankoopcode in.",
+          "not_configured": "De licentiecontrole is niet ingesteld (Envato-token ontbreekt).",
+          "unreachable": "Envato kon niet worden bereikt om de code te verifiëren. Controleer de internetverbinding van de server.",
+          "not_found": "Ongeldige aankoopcode — Envato heeft er geen verkoop voor.",
+          "http_error": "Verificatie bij Envato is mislukt.",
+          "other_product": "Deze aankoopcode hoort bij een ander product.",
+          "unknown": "De aankoopcode kon niet worden geverifieerd."
+        }
+      },
+      "process": {
+        "kicker": "updateproces",
+        "title": "Updates worden als image geleverd",
+        "step2": {
+          "title": "Maak een back-up van de database",
+          "body": "Maak een databaseback-up (pg_dump of point-in-time recovery) voordat je uitrolt. Back-ups zijn hier een taak van de infrastructuur, geen knop."
+        },
+        "step3": {
+          "title": "Rol de nieuwe image uit",
+          "body": "Rol de nieuwe containerimage uit. De draaiende versie en build staan hieronder."
+        },
+        "step4": {
+          "title": "Migraties uitvoeren",
+          "body": "pnpm db:migrate past nieuwe tabellen en kolommen toe en verwijdert nooit gegevens. Het overzicht hieronder toont elke migratie en de status ervan."
+        },
+        "step5": {
+          "title": "Gezondheidscontrole",
+          "body": "Afhankelijkheden worden hieronder live gecontroleerd. Vernieuw deze pagina na de uitrol om te bevestigen dat alles draait."
+        }
+      },
+      "release": {
+        "kicker": "deze installatie",
+        "title": "Release",
+        "version": "Versie",
+        "gitSha": "Build-commit",
+        "buildNumber": "Buildnummer",
+        "builtAt": "Gebouwd op",
+        "environment": "Omgeving",
+        "uptime": "Uptime",
+        "none": "Niet vastgelegd",
+        "demo": "Demomodus staat aan: schrijven wordt geweigerd tenzij toegestaan."
+      },
+      "setup": {
+        "title": "Eerste installatie",
+        "open": "Open",
+        "completed": "Voltooid",
+        "completedAt": "Voltooid op {date} bij versie {version}"
+      },
+      "checks": {
+        "kicker": "gezondheid",
+        "title": "Gezondheidscontrole",
+        "database": "Database",
+        "redis": "Redis",
+        "migrations": "Migraties",
+        "up": "Omhoog",
+        "down": "Omlaag",
+        "degraded": "Verslechterd",
+        "latency": "{ms} ms"
+      },
+      "migrations": {
+        "kicker": "overzicht",
+        "title": "Migraties",
+        "summary": "{count} toegepast",
+        "status": {
+          "current": "Up-to-date",
+          "pending": "Openstaande migraties",
+          "drift": "Een migratiebestand is gewijzigd nadat het was toegepast",
+          "unknown": "Migratiebestanden zitten niet in deze build"
+        },
+        "state": {
+          "applied": "Toegepast",
+          "pending": "Openstaand",
+          "modified": "Gewijzigd",
+          "missing-file": "Bestand ontbreekt"
+        },
+        "id": "Migratie",
+        "stateLabel": "Status",
+        "appliedAt": "Toegepast op"
+      },
+      "breadcrumb": "Kruimelpad"
+    }
+  }
+}

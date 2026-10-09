@@ -1,0 +1,326 @@
+{
+  "invoicing": {
+    "nav": {
+      "creditNotes": "クレジットノート"
+    },
+    "errors": {
+      "codes": {
+        "CN_EXCEEDS_INVOICE": "クレジットノートの合計は請求書の金額を超えられません。金額を減らすか、残りの範囲で貸方計上してください。",
+        "CN_NOT_DRAFT": "編集または削除できるのは下書きのクレジットノートのみです。再読み込みして現在の状態を確認してください。",
+        "CN_ALREADY_VOID": "このクレジットノートはすでに無効です。",
+        "CN_HAS_REFUND": "このクレジットノートは現金で返金済みのため、無効にできません。返金記録は入金台帳に残ります。",
+        "CN_NOTHING_TO_CREDIT": "これ以上貸方計上できるものはありません。残りのある明細を選ぶか、金額を追加してください。",
+        "CN_LINE_INVALID": "貸方計上の明細が無効です。数量が残りを超えているか、金額が誤っています。ハイライトされた明細を確認してください。",
+        "INV_NOT_ISSUED": "クレジットノートは発行済みの請求書に対してのみ作成できます。"
+      }
+    },
+    "creditNotes": {
+      "status": {
+        "draft": "下書き",
+        "issued": "発行済み",
+        "void": "無効"
+      },
+      "reasons": {
+        "return": "商品返品",
+        "price_adjustment": "価格調整",
+        "billing_error": "請求誤り",
+        "cancellation": "キャンセル",
+        "goodwill": "適用済み（残高）",
+        "other": "その他"
+      },
+      "settlements": {
+        "balance": "残高に適用",
+        "refund": "現金返金"
+      },
+      "tabs": {
+        "label": "クレジットノートのステータス",
+        "all": "すべて",
+        "draft": "下書き",
+        "issued": "発行済み",
+        "void": "無効"
+      },
+      "list": {
+        "title": "クレジットノート",
+        "subtitle": "発行済みの請求書について、購入者の支払額を減らす書類です。",
+        "invoices": "請求書",
+        "newCreditNote": "クレジットノートを作成",
+        "search": "番号または購入者で検索",
+        "reset": "フィルターを解除",
+        "refresh": "更新",
+        "tableLabel": "クレジットノート",
+        "noAccessTitle": "アクセス権なし",
+        "noAccess": "クレジットノートを表示する権限がありません。",
+        "emptyFilteredTitle": "該当するクレジットノートはありません",
+        "emptyFiltered": "別の検索語を試すか、フィルターを解除してください。",
+        "resetFilters": "フィルターを解除",
+        "empty": {
+          "all": {
+            "title": "まだクレジットノートはありません",
+            "message": "商品の返品、価格の誤り、または返金が必要な場合に、発行済みの請求書を貸方計上してください。"
+          },
+          "draft": {
+            "title": "下書きはありません",
+            "message": "作成中のクレジットノートはここに表示されます。"
+          },
+          "issued": {
+            "title": "発行済みはありません",
+            "message": "発行済みのクレジットノートには番号が付与され、請求書にすでに反映されています。"
+          },
+          "void": {
+            "title": "無効なものはありません",
+            "message": "無効にしたクレジットノートはここに保存されます。"
+          }
+        },
+        "showing": "{count, plural, other {#件のクレジットノートを読み込みました}}",
+        "loadMore": "さらに読み込む",
+        "allLoaded": "すべて読み込み済み",
+        "loading": "クレジットノートを読み込み中",
+        "contactLoading": "...",
+        "invoiceChip": "請求書 {number}",
+        "clearInvoice": "すべての請求書のクレジットノートを表示"
+      },
+      "table": {
+        "draft": "下書き",
+        "scrollArea": "クレジットノートの表（横にスクロール可能）",
+        "columns": {
+          "number": "クレジットノート",
+          "invoice": "請求書",
+          "buyer": "購入者",
+          "reason": "理由",
+          "settlement": "精算",
+          "total": "合計",
+          "applied": "残高に適用済み",
+          "refunded": "現金で返金済み",
+          "issued": "発行日",
+          "status": "ステータス"
+        }
+      },
+      "row": {
+        "moreFor": "{name}のその他の操作",
+        "draft": "下書き",
+        "open": "開く",
+        "edit": "下書きを編集",
+        "issue": "発行",
+        "pdf": "PDFをダウンロード",
+        "print": "印刷",
+        "void": "無効化",
+        "delete": "下書きを削除"
+      },
+      "dialogs": {
+        "draftName": "この下書き",
+        "close": "閉じる",
+        "keep": "残す",
+        "done": {
+          "issue": "クレジットノート {name} を発行しました。",
+          "void": "クレジットノート {name} を無効にしました。",
+          "delete": "下書きを削除しました。"
+        },
+        "issue": {
+          "title": "このクレジットノートを発行しますか？",
+          "message": "番号が付与され、請求書で購入者の未払額が減ります。現金返金の場合は、入金台帳を通じて返金されます。発行後は編集できなくなります。",
+          "confirm": "クレジットノートを発行"
+        },
+        "void": {
+          "title": "このクレジットノートを無効にしますか？",
+          "warning": "この貸方計上は無効になり、請求書はこのクレジットノートを作成する前の状態に戻ります。",
+          "reason": "無効にする理由は？",
+          "reasonHint": "必須。クレジットノートに記録されます。",
+          "confirm": "クレジットノートを無効化"
+        },
+        "delete": {
+          "title": "この下書きを削除しますか？",
+          "message": "下書きは完全に削除されます。発行されていないため、請求書は変わりません。",
+          "confirm": "下書きを削除"
+        }
+      },
+      "picker": {
+        "total": "請求書の合計",
+        "paid": "入金済み",
+        "credited": "これまでの貸方計上",
+        "balance": "未払残高",
+        "loading": "請求書を読み込み中",
+        "change": "請求書を変更",
+        "search": "番号または購入者で発行済みの請求書を検索",
+        "results": "貸方計上できる請求書",
+        "searching": "検索中...",
+        "none": "発行済みの請求書が見つかりません。",
+        "more": "さらに表示",
+        "totalShort": "合計",
+        "notCreditable": "クレジットノートは発行済みの請求書（発行済み、一部入金、期限超過、入金済み）に対してのみ作成できます。別の請求書を選択してください。"
+      },
+      "lines": {
+        "invoiceLines": "請求書の明細",
+        "creditLine": "{name}を貸方計上",
+        "lineFacts": "税抜 {amount} で {qty} を請求",
+        "tax": "税",
+        "taxIncluded": "{name} {rate}%（価格に含む）",
+        "taxAdded": "{name} {rate}%（別途加算）",
+        "alreadyCredited": "貸方計上済み {qty}、残り {left}",
+        "fullyCredited": "すでに全額貸方計上済み",
+        "qtyToCredit": "貸方計上する数量",
+        "freeTitle": "自由入力の明細",
+        "freeHint": "明細に紐づかない値引きや調整の金額。金額は税抜きです。",
+        "description": "説明",
+        "amount": "税抜金額",
+        "taxRate": "税率",
+        "noTax": "税なし",
+        "inclusive": "税込",
+        "removeFree": "この明細を削除",
+        "addFree": "自由入力の明細を追加"
+      },
+      "problems": {
+        "noInvoice": "貸方計上する請求書を選択してください。",
+        "nothing": "貸方計上する項目を選択してください（明細、または自由入力の金額）。",
+        "qtyInvalid": "0より大きい数量を入力してください（小数点以下4桁まで）。",
+        "qtyExceeds": "この明細で貸方計上できるのは最大 {max} です。",
+        "descriptionRequired": "貸方計上する内容を入力してください。",
+        "amountInvalid": "0より大きい金額を入力してください。",
+        "noteTooLong": "備考は2000文字を超えています。"
+      },
+      "estimate": {
+        "title": "見積貸方額",
+        "disclaimer": "請求書の金額と税額に基づく概算です。サーバーが保存する金額が最終的な値になります。",
+        "empty": "まだ貸方計上する項目がありません。請求書全体を選択するか、明細にチェックを入れてください。",
+        "lineQty": "数量 {qty}",
+        "taxSummary": "税額の概要",
+        "included": "税込",
+        "taxOn": "{base}に対する {tax}",
+        "subtotal": "税抜",
+        "tax": "税",
+        "total": "貸方計上の合計",
+        "exceeds": "この金額は、請求書で貸方計上できる残りの上限（{max}）を超えています。サーバーで拒否されます。",
+        "money": "金額の扱い",
+        "balanceBefore": "現在の未払残高",
+        "balanceAfter": "処理後の未払残高",
+        "applied": "請求書に適用",
+        "refunded": "現金で返金",
+        "refundNote": "現金返金: 発行時に、請求書の未払額を超えて購入者が支払った金額が入金台帳を通じて返金されます。",
+        "balanceNote": "残高に適用: 金銭の支払いはありません。貸方計上は購入者の未払額を減らすだけです。"
+      },
+      "builder": {
+        "noAccess": "クレジットノートを作成する権限がありません。",
+        "backToList": "クレジットノートに戻る",
+        "loading": "クレジットノートを読み込み中",
+        "notDraft": "編集できるのは下書きのクレジットノートのみです。",
+        "openIt": "クレジットノートを開く",
+        "back": "戻る",
+        "newTitle": "クレジットノートを作成",
+        "editTitle": "下書きのクレジットノートを編集",
+        "conflict": "編集中に他のユーザーがこのクレジットノートを変更しました。最新版を表示するには再読み込みしてください。ここでの変更は失われます。",
+        "reload": "再読み込み",
+        "invoice": {
+          "title": "貸方計上する請求書",
+          "hint": "クレジットノートは1つの発行済み請求書に紐づきます。"
+        },
+        "details": {
+          "title": "詳細",
+          "reason": "理由",
+          "issueDate": "発行日",
+          "issueDateHint": "空欄の場合は発行日の日付が使われます（本日は {today}）。",
+          "note": "備考",
+          "noteHint": "クレジットノートに印字されます。任意。"
+        },
+        "settlement": {
+          "title": "金額の扱い",
+          "hint": "今すぐ選択し、クレジットノートの発行時に適用されます。",
+          "balance": {
+            "title": "請求書の残高に適用",
+            "body": "請求書の未払額が減ります。金銭の移動はありません。購入者がまだ支払っていない場合や、貸方を保持する場合に使用します。"
+          },
+          "refund": {
+            "title": "現金で返金",
+            "body": "購入者が現在の未払額を超えて支払った金額は、返金として入金台帳を通じて返金されます。"
+          }
+        },
+        "what": {
+          "title": "貸方計上する内容",
+          "pickFirst": "先に請求書を選択してください。",
+          "loadingCredits": "この請求書の過去のクレジットノートを確認しています",
+          "full": {
+            "title": "請求書の残り全体",
+            "body": "すべての明細と、最初のクレジットノートの送料を貸方計上します。貸方計上可能額:"
+          },
+          "lines": {
+            "title": "一部の明細または金額",
+            "body": "貸方計上する明細と数量にチェックを入れるか、自由入力の金額を追加してください。"
+          }
+        },
+        "saveDraft": "下書きを保存",
+        "saveAndIssue": "保存して発行",
+        "cancel": "キャンセル",
+        "estimateWaiting": "見積貸方額を表示するには請求書を選択してください。",
+        "savedToast": "クレジットノートを下書きとして保存しました。",
+        "issuedToast": "クレジットノート {number} を発行しました。",
+        "savedNotIssued": "下書きとして保存しましたが、発行できませんでした: {reason}"
+      },
+      "detail": {
+        "noAccess": "クレジットノートを表示する権限がありません。",
+        "loading": "クレジットノートを読み込み中",
+        "back": "クレジットノートに戻る",
+        "backToList": "クレジットノートに戻る",
+        "draft": "下書き",
+        "againstInvoice": "対象の請求書",
+        "edit": "編集",
+        "issue": "発行",
+        "pdf": "PDF",
+        "print": "印刷",
+        "void": "無効化",
+        "delete": "削除",
+        "cannotVoidRefunded": "このクレジットノートは現金で返金済みのため、無効にできません。返金記録は入金台帳に残ります。",
+        "voidedOn": "{date}に無効化",
+        "voided": "このクレジットノートは無効になりました。",
+        "voidReason": "理由"
+      },
+      "money": {
+        "title": "金銭の処理結果",
+        "titleDraft": "金銭の処理予定",
+        "total": "貸方計上の合計",
+        "applied": "請求書に適用",
+        "refunded": "現金で返金",
+        "voidNote": "このクレジットノートは無効になったため、請求書の金額は減りません。",
+        "draftNote": "現在の内容で発行した場合:",
+        "estimate": "発行されるまでは概算です。",
+        "balanceBody": "精算: 残高に適用されます。金銭の支払いはありません。",
+        "refundBody": "精算: 現金返金。現在の未払額を超えて支払われた金額は、入金台帳を通じて購入者に返金されます。"
+      },
+      "after": {
+        "title": "このクレジットノート後の請求書",
+        "titleNow": "現在の請求書",
+        "total": "請求書の合計",
+        "paid": "入金済み",
+        "credited": "貸方計上済み",
+        "balance": "未払残高",
+        "credit": "購入者の貸方残高"
+      },
+      "paper": {
+        "label": "クレジットノート {number}",
+        "labelDraft": "下書きのクレジットノート",
+        "void": "無効",
+        "sellerFallback": "貴社",
+        "title": "クレジットノート",
+        "draftNumber": "下書き",
+        "creditedTo": "貸方計上先",
+        "buyerFallback": "購入者",
+        "issued": "発行済み",
+        "invoice": "請求書",
+        "item": "品目",
+        "qty": "数量",
+        "unit": "単価",
+        "tax": "税",
+        "net": "税抜",
+        "taxAmount": "税額",
+        "total": "合計",
+        "taxFallback": "税",
+        "taxSummary": "税額の概要",
+        "taxRate": "税率",
+        "taxBase": "課税対象額",
+        "included": "税込",
+        "subtotal": "税抜",
+        "taxTotal": "税",
+        "totalCredit": "貸方計上の合計",
+        "reason": "理由",
+        "note": "備考"
+      }
+    }
+  }
+}

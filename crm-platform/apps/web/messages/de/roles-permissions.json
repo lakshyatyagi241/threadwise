@@ -1,0 +1,306 @@
+{
+  "roles-permissions": {
+    "nav": {
+      "group": "Rollen & Berechtigungen",
+      "roles": "Rollen",
+      "permissions": "Berechtigungen",
+      "staff": "Mitarbeiterrollen"
+    },
+    "common": {
+      "admin": "Admin",
+      "breadcrumb": "Navigationspfad",
+      "loading": "Wird geladen…",
+      "retry": "Erneut versuchen",
+      "requestId": "Anfrage-ID",
+      "cancel": "Abbrechen",
+      "noAccess": {
+        "title": "Sie haben keinen Zugriff auf diese Ansicht",
+        "body": "Ihren Rollen fehlt die Plattformberechtigung für diese Ansicht. Bitten Sie einen Super-Admin, sie zu erteilen.",
+        "bodyWithKey": "Für diese Ansicht wird die Plattformberechtigung {permission} benötigt. Bitten Sie einen Super-Admin, sie einer Ihrer Rollen hinzuzufügen.",
+        "back": "Zurück zur Konsole"
+      },
+      "errors": {
+        "unexpected": "Auf unserer Seite ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut. Falls das weiterhin passiert, geben Sie die Anfrage-ID an.",
+        "request": "Die Anfrage konnte nicht abgeschlossen werden.",
+        "validation": "Prüfen Sie das Formular und versuchen Sie es erneut.",
+        "validationField": "{message}",
+        "conflict": "Während Sie bearbeitet haben, hat jemand anderes diese Rolle geändert. Laden Sie neu, um dessen Version zu sehen, und wenden Sie Ihre Änderungen erneut an.",
+        "noAccess": "Dafür benötigen Sie die Plattformberechtigung {permission}.",
+        "nameTaken": "Dieser Name ist bereits vergeben.",
+        "nameRequired": "Der Rollenname ist erforderlich.",
+        "permissionNameRequired": "Der Name der Berechtigung ist erforderlich.",
+        "permissionNameFormat": "Verwenden Sie Kleinbuchstaben, Ziffern und Unterstriche, mit Punkten zwischen den Teilen.",
+        "locked": "Super-Admin ist systemseitig gesperrt: Die Rolle kann nicht umbenannt, ihrer Berechtigungen beraubt oder gelöscht werden.",
+        "lockedDelete": "Die Rolle Super-Admin ist systemseitig gesperrt und kann nicht gelöscht werden.",
+        "permissionSystem": "Diese Berechtigung wird von der Plattform geprüft und kann nicht gelöscht werden.",
+        "permissionUnknown": "Diese Berechtigungen sind nicht im Katalog enthalten: {names}.",
+        "reassignSame": "Wählen Sie eine andere Rolle, in die Benutzer verschoben werden sollen.",
+        "lastSuperAdmin": "Es muss mindestens einen aktiven Super-Admin geben.",
+        "privilegedRole": "Nur ein Super-Admin kann die Rolle Super-Admin vergeben oder entziehen.",
+        "notFound": "Dieses Element existiert nicht mehr. Es wurde möglicherweise gelöscht."
+      }
+    },
+    "list": {
+      "crumb": "Rollen",
+      "eyebrow": "Admin · Benutzer & Zugriff · Rollen",
+      "titleLead": "Rollen &",
+      "titleAccent": "Berechtigungen",
+      "description": "Legen Sie fest, was jede Rolle plattformweit darf. Jedem Benutzer wird eine Rolle zugewiesen. Berechtigungen werden pro Rolle gebündelt.",
+      "managePermissions": "Berechtigungen verwalten",
+      "addRole": "Rolle hinzufügen",
+      "kpi": {
+        "label": "Rollen gesamt",
+        "total": "Rollen gesamt",
+        "totalHint": "{system} System · {custom} benutzerdefiniert",
+        "permissions": "Berechtigungen gesamt",
+        "permissionsHint": "über alle Module",
+        "users": "Benutzer mit Rolle",
+        "usersHint": "über alle Rollen",
+        "noUsers": "Rollen ohne Benutzer",
+        "noUsersHint": "Archivierung prüfen"
+      },
+      "filter": {
+        "label": "Rollen nach Typ filtern",
+        "all": "Alle",
+        "system": "System",
+        "custom": "Benutzerdefiniert",
+        "search": "Rollen suchen…",
+        "searchLabel": "Rollen suchen"
+      },
+      "table": {
+        "caption": "Plattformrollen",
+        "index": "#",
+        "name": "Rollenname",
+        "type": "Typ",
+        "users": "Benutzer",
+        "permissions": "Berechtigungen",
+        "lastEdited": "Zuletzt bearbeitet",
+        "actions": "Aktionen"
+      },
+      "systemRole": "Systemrolle",
+      "customRole": "Benutzerdefinierte Rolle",
+      "systemBadge": "System",
+      "customBadge": "Benutzerdefiniert",
+      "row": {
+        "menu": "Aktionen für {name}",
+        "edit": "Rolle bearbeiten",
+        "delete": "Löschen"
+      },
+      "footer": {
+        "showing": "{shown} von {total} Rollen werden angezeigt",
+        "add": "+ Rolle hinzufügen"
+      },
+      "empty": {
+        "none": "Noch keine Rollen definiert. <link>Erste Rolle erstellen</link>.",
+        "noMatch": "Keine Rollen entsprechen Ihren Filtern.",
+        "clear": "Filter zurücksetzen"
+      },
+      "delete": {
+        "title": "Rolle löschen",
+        "message": "Rolle {name} löschen? Benutzer mit dieser Rolle verlieren alle zugehörigen Berechtigungen. Dies kann nicht rückgängig gemacht werden.",
+        "confirm": "Ja, löschen",
+        "cancel": "Abbrechen"
+      },
+      "toasts": {
+        "deleted": "Rolle „{name}“ gelöscht."
+      }
+    },
+    "editor": {
+      "crumbRoles": "Rollen",
+      "crumbNew": "Neu",
+      "eyebrowNew": "Admin · Rollen · Neu",
+      "eyebrowEdit": "Admin · Rolle bearbeiten",
+      "titleLead": "Neue",
+      "titleAccent": "Rolle",
+      "description": "Wählen Sie einen Namen und markieren Sie dann die Module, auf die diese Rolle Zugriff erhalten soll. Dies können Sie jederzeit ändern.",
+      "summary": "{count} / {total} Berechtigungen · zuletzt bearbeitet am {date}.",
+      "userChip": "{count, plural, one {# Benutzer} other {# Benutzer}}",
+      "save": "Änderungen speichern",
+      "create": "Rolle erstellen",
+      "saving": "Wird gespeichert…",
+      "reload": "Rolle neu laden",
+      "discard": "Sie haben nicht gespeicherte Änderungen. Ohne Speichern verlassen?",
+      "duplicatedBanner": "Rolle als „{name}“ dupliziert. Bearbeiten Sie die Kopie unten.",
+      "lockedNotice": "{name} ist systemseitig gesperrt: Die Rolle kann nicht umbenannt, ihrer Berechtigungen beraubt oder gelöscht werden.",
+      "details": "Rollendetails",
+      "name": "Rollenname",
+      "namePlaceholder": "z. B. Vertriebsleitung",
+      "template": "Von Vorlage ausgehen",
+      "templateBlank": "Leer · keine Berechtigungen",
+      "templateOption": "{name} · {count, plural, one {# Berechtigung} other {# Berechtigungen}}",
+      "templateBusy": "Vorlage wird geladen…",
+      "descriptionLabel": "Beschreibung",
+      "descriptionPlaceholder": "Was macht diese Rolle? Für Admins sichtbar.",
+      "toasts": {
+        "created": "Rolle „{name}“ erstellt.",
+        "updated": "Rolle „{name}“ aktualisiert."
+      }
+    },
+    "matrix": {
+      "title": "Berechtigungen zuweisen",
+      "counter": "{count, number} / {total, number} ausgewählt",
+      "selectAll": "Alle Berechtigungen auswählen",
+      "module": "Modul",
+      "selectAllColumn": "Alle auswählen",
+      "available": "Verfügbare Berechtigungen",
+      "selectAllModule": "Alle auswählen",
+      "selectAllOf": "Alle Berechtigungen von {module} auswählen",
+      "empty": "Noch keine Berechtigungen definiert. <link>Eine erstellen</link>.",
+      "emptyPlain": "Noch keine Berechtigungen definiert."
+    },
+    "dangerZone": {
+      "title": "Gefahrenbereich",
+      "irreversible": "nicht umkehrbar",
+      "duplicate": {
+        "title": "Rolle duplizieren",
+        "hint": "Kopie mit denselben Berechtigungen erstellen",
+        "action": "Duplizieren",
+        "busy": "Wird dupliziert…"
+      },
+      "reassign": {
+        "title": "Alle Benutzer neu zuweisen",
+        "hint": "{count, plural, one {# Benutzer} other {# Benutzer}} zu einer anderen Rolle verschieben",
+        "targetLabel": "Benutzer verschieben nach",
+        "placeholder": "Zu…",
+        "action": "Verschieben",
+        "busy": "Wird verschoben…"
+      },
+      "moved": "{count} Benutzer von „{from}“ nach „{to}“ verschoben.",
+      "delete": {
+        "title": "Rolle löschen",
+        "hint": "Entfernt die Rolle und löst alle Benutzer davon.",
+        "action": "Löschen",
+        "dialogTitle": "Rolle löschen",
+        "dialogMessage": "Rolle {name} löschen? Benutzer mit dieser Rolle verlieren alle zugehörigen Berechtigungen. Dies kann nicht rückgängig gemacht werden.",
+        "confirm": "Ja, löschen",
+        "cancel": "Abbrechen"
+      },
+      "deleted": "Rolle „{name}“ gelöscht."
+    },
+    "permissions": {
+      "crumb": "Berechtigungen",
+      "eyebrow": "Admin · Benutzer & Zugriff · Berechtigungen",
+      "titleLead": "Alle",
+      "titleAccent": "Berechtigungen",
+      "description": "Alle Berechtigungsmerkmale, die die Plattform erkennt, nach Modul gruppiert. Fügen Sie hier ein neues Merkmal hinzu und weisen Sie es dann im Rollen-Editor Rollen zu.",
+      "backToRoles": "Zurück zu den Rollen",
+      "add": "Berechtigung hinzufügen",
+      "kpi": {
+        "label": "Berechtigungen gesamt",
+        "total": "Berechtigungen gesamt",
+        "totalHint": "über {modules, plural, one {# Modul} other {# Module}}",
+        "used": "In Rollen verwendet",
+        "usedHint": "mindestens einer Rolle zugewiesen",
+        "orphans": "Verwaiste Berechtigungen",
+        "orphansHint": "keiner Rolle zugewiesen",
+        "last": "Zuletzt hinzugefügt"
+      },
+      "filter": {
+        "search": "Berechtigungsnamen suchen…",
+        "searchLabel": "Berechtigungsnamen suchen",
+        "moduleLabel": "Modul",
+        "allModules": "Alle Module",
+        "count": "{count, plural, one {# Berechtigung} other {# Berechtigungen}} in {modules, plural, one {# Modul} other {# Module}}"
+      },
+      "groupsLabel": "Berechtigungen nach Modul",
+      "groupCount": "{count, plural, one {# Berechtigung} other {# Berechtigungen}}",
+      "orphan": "verwaist",
+      "system": "System",
+      "systemHint": "Wird von der Plattform geprüft und kann daher nicht gelöscht werden.",
+      "inRoles": "in {count, plural, one {# Rolle} other {# Rollen}}",
+      "deleteName": "Berechtigung {name} löschen",
+      "empty": {
+        "none": "Noch keine Berechtigungen definiert. <link>Erste erstellen</link>.",
+        "noMatch": "Keine Berechtigungen entsprechen Ihrer Suche."
+      },
+      "delete": {
+        "action": "Löschen",
+        "title": "Berechtigung löschen",
+        "message": "Berechtigung {name} löschen? Jede Rolle, die sie verwendet, verliert diese Fähigkeit sofort.",
+        "confirm": "Ja, löschen",
+        "cancel": "Abbrechen"
+      },
+      "toasts": {
+        "deleted": "Berechtigung „{name}“ gelöscht."
+      }
+    },
+    "permissionNew": {
+      "crumbPermissions": "Berechtigungen",
+      "crumbNew": "Neu",
+      "eyebrow": "Admin · Berechtigungen · Neu",
+      "titleLead": "Neue",
+      "titleAccent": "Berechtigung",
+      "description": "Fügen Sie ein fein abgestuftes Berechtigungsmerkmal hinzu. Nach dem Erstellen weisen Sie es im Rollen-Editor einer oder mehreren Rollen zu.",
+      "create": "Berechtigung erstellen",
+      "creating": "Wird erstellt…",
+      "details": "Berechtigungsdetails",
+      "module": "Modul",
+      "modulePlaceholder": "Modul auswählen",
+      "moduleHint": "Im Rollen-Editor werden Berechtigungen nach Modul gruppiert.",
+      "action": "Aktion",
+      "actionHint": "Kleinbuchstaben, keine Leerzeichen. Wird kombiniert als",
+      "actionPlaceholder": "z. B. exportieren · erstatten · genehmigen",
+      "name": "Berechtigungsname",
+      "namePlaceholder": "modul.aktion – wird oben automatisch ausgefüllt",
+      "nameHint": "Wird aus Modul und Aktion automatisch ausgefüllt. Nur bearbeiten, wenn Sie eine eigene Zeichenfolge benötigen.",
+      "tip": "<b>Namenskonvention:</b> Verwenden Sie <code>modul.aktion</code> in Kleinbuchstaben. Beispiele: <code>campaigns.send</code>, <code>billing.refund</code>, <code>audit.export</code>.",
+      "preview": {
+        "title": "Vorschau der Berechtigung",
+        "appearsUnder": "Erscheint im Rollen-Editor unter <b>{module}</b>.",
+        "selectedModule": "ausgewähltes Modul"
+      },
+      "code": {
+        "title": "Code-Referenz",
+        "hint": "Verwenden Sie <code>@PlatformPermission()</code> an einer Plattformroute, um diese Berechtigung vorauszusetzen."
+      },
+      "tipCard": "<b>Tipp:</b> Berechtigungen mit Namen wie <code>modul.aktion</code> werden im Rollen-Editor automatisch gruppiert.",
+      "toasts": {
+        "created": "Berechtigung „{name}“ erstellt."
+      }
+    },
+    "staff": {
+      "crumbRoles": "Rollen",
+      "crumb": "Mitarbeiterrollen",
+      "eyebrow": "Admin · Benutzer & Zugriff · Mitarbeiterrollen",
+      "titleLead": "Mitarbeiter",
+      "titleAccent": "Rollen",
+      "description": "Weisen Sie jedem Operator dieser Konsole die Plattformrollen zu, die festlegen, was er tun darf. Beim Speichern werden die Rollen des Operators genau durch die markierten ersetzt.",
+      "backToRoles": "Zurück zu den Rollen",
+      "caption": "Operatoren und ihre Plattformrollen",
+      "table": {
+        "operator": "Operator",
+        "tier": "Konsolenzugriff",
+        "status": "Status",
+        "roles": "Plattformrollen",
+        "actions": "Aktionen"
+      },
+      "tier": {
+        "super_admin": "Super-Admin",
+        "support": "Support",
+        "auditor": "Auditor"
+      },
+      "status": {
+        "active": "Aktiv",
+        "suspended": "Gesperrt"
+      },
+      "noRoles": "Keine Rollen",
+      "rolesOf": "Rollen von {name}",
+      "assign": "Rollen zuweisen",
+      "assignFor": "Rollen an {name} zuweisen",
+      "empty": "Noch keine Operatoren.",
+      "dialog": {
+        "title": "Rollen an {name} zuweisen",
+        "close": "Schließen",
+        "cancel": "Abbrechen",
+        "save": "Rollen speichern",
+        "saving": "Wird gespeichert…",
+        "hint": "Markieren Sie jede Rolle, die dieser Operator haben soll.",
+        "superOnly": "Nur ein Super-Admin kann diese Rolle vergeben oder entziehen.",
+        "count": "{count, plural, =0 {Keine Rollen ausgewählt} one {# Rolle ausgewählt} other {# Rollen ausgewählt}}"
+      },
+      "toasts": {
+        "saved": "Rollen für „{name}“ aktualisiert."
+      }
+    }
+  }
+}

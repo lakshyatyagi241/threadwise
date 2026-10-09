@@ -1,0 +1,1742 @@
+{
+  "platform-settings-branding-storage": {
+    "nav": {
+      "groupHeading": "הגדרות פלטפורמה",
+      "hub": "מרכז ההגדרות",
+      "general": "כללי",
+      "appearance": "מראה וצבעים",
+      "siteInfo": "פרטי האתר",
+      "footer": "תחתית העמוד",
+      "mail": "דואר",
+      "seo": "SEO",
+      "privacy": "פרטיות, GDPR ו-ADA",
+      "analytics": "אנליטיקה",
+      "custom": "קוד מותאם אישית",
+      "pwa": "PWA",
+      "storage": "אחסון בענן",
+      "whatsapp": "WhatsApp (WABA)",
+      "campaigns": "קמפיינים",
+      "googleCalendar": "Google Calendar",
+      "flowBuilder": "עורך תהליכים"
+    },
+    "hub": {
+      "kicker": "מנהל - הגדרות פרויקט",
+      "title": "הגדרות פרויקט",
+      "description": "הגדירו את זהות היישום, ספקי ההודעות, דואר, אינטגרציות מסחר אלקטרוני, מטא-נתונים של החנות, תוכן תחתית העמוד, PWA, SEO וקוד מותאם אישית.",
+      "export": "ייצוא הגדרות",
+      "exporting": "מייצא",
+      "exportHint": "מוריד כל הגדרה שמורה. סודות ומזהי חשבון מוחלפים.",
+      "tiles": {
+        "saved": "הגדרות שמורות",
+        "savedHint": "קבוצות שמורות מתוך {total}",
+        "healthy": "תקין",
+        "healthyHint": "עם ערך לא ריק",
+        "needsTest": "דורש בדיקה",
+        "needsTestNone": "כולם אומתו",
+        "secrets": "שדות סודיים",
+        "secretsHint": "מוצפנים / מוסתרים",
+        "lastUpdated": "עודכן לאחרונה",
+        "lastUpdatedNone": "אין עריכות עדיין",
+        "lastUpdatedHint": "השמירה האחרונה"
+      },
+      "card": {
+        "saved": "נשמר",
+        "defaults": "ברירות מחדל",
+        "needsTest": "דורש בדיקה",
+        "updated": "עודכן {when}",
+        "open": "פתיחה"
+      },
+      "others": "מטבעות, קטלוג, Shopify, WooCommerce, HubSpot, Google, Slack, דחיפות לנייד ו-Trello מופיעים כאן כאשר המודולים שלהם מותקנים.",
+      "actions": {
+        "addons": "תוספים",
+        "updater": "מעדכן",
+        "legal": "דפים משפטיים",
+        "general": "פתיחת כללי"
+      }
+    },
+    "common": {
+      "save": "שמירת שינויים",
+      "saving": "שומר",
+      "saved": "{count, plural, one {נשמר שינוי אחד.} two {נשמרו שני שינויים.} other {נשמרו # שינויים.}}",
+      "rejected": "{count, plural, one {שדה אחד דורש תשומת לב} two {שני שדות דורשים תשומת לב} other {# שדות דורשים תשומת לב}}",
+      "conflict": "מישהו אחר שמר את ההגדרות האלה אחרי שפתחתם אותן. טענו מחדש כדי לראות את השינויים שלו, ואז החילו שוב את השינויים שלכם.",
+      "reload": "טעינה מחדש של ההגדרות",
+      "unexpected": "משהו השתבש ולא נשמר דבר.",
+      "requestId": "מזהה בקשה",
+      "readOnly": "אפשר לקרוא את ההגדרות האלה, אך רק מנהל־על יכול לשנות אותן.",
+      "secretSet": "נשמר. השאירו ריק כדי לשמור את הערך הקיים.",
+      "secretUnset": "לא הוגדר.",
+      "secretClear": "הסרת הערך השמור",
+      "secretShow": "הצגה",
+      "secretHide": "הסתרה",
+      "numberRequired": "הזינו מספר שלם.",
+      "numberInteger": "השתמשו במספר שלם.",
+      "updated": "נשמר לאחרונה {when}",
+      "neverSaved": "מעולם לא נשמר: מוצגות ברירות המחדל.",
+      "back": "כל ההגדרות",
+      "invalidGroup": "דף ההגדרות הזה אינו קיים.",
+      "eyebrow": "מנהל - הגדרות פרויקט",
+      "guide": "מדריך מהיר",
+      "resetDraft": "איפוס טיוטה",
+      "cancel": "ביטול",
+      "applyAfterSave": "השינויים נכנסים לתוקף רק לאחר השמירה.",
+      "saveAndTest": "שמירה ובדיקת חיבור",
+      "custom": "מותאם אישית",
+      "manageLanguages": "ניהול שפות"
+    },
+    "test": {
+      "title": "שליחת אימייל לבדיקה",
+      "saveFirst": "שמרו קודם את השינויים: הבדיקה משתמשת בהגדרות השמורות.",
+      "mailTo": "שליחת האימייל לבדיקה אל",
+      "mailRun": "שליחת אימייל לבדיקה",
+      "run": "בדיקת חיבור",
+      "running": "בודק",
+      "ok": "עבר",
+      "failed": "נכשל",
+      "lastOk": "הבדיקה המוצלחת האחרונה: {when}",
+      "neverTested": "עדיין לא נבדק."
+    },
+    "groups": {
+      "general": {
+        "title": "הגדרות כלליות",
+        "description": "זהות היישום, ברירות המחדל של הפלטפורמה ומתג התחזוקה.",
+        "sections": {
+          "identity": {
+            "title": "זהות היישום"
+          },
+          "defaults": {
+            "title": "ברירות מחדל של הפלטפורמה"
+          },
+          "platform": {
+            "title": "מתגי פלטפורמה"
+          }
+        },
+        "fields": {
+          "appName": {
+            "label": "שם היישום",
+            "hint": "מוצג בכותרות העמודים, באימיילים ובלשונית הדפדפן."
+          },
+          "appUrl": {
+            "label": "כתובת היישום"
+          },
+          "supportEmail": {
+            "label": "אימייל תמיכה",
+            "placeholder": "support@…"
+          },
+          "fromEmail": {
+            "label": "כתובת שולח",
+            "placeholder": "hello@…"
+          },
+          "contactNumber": {
+            "label": "מספר טלפון ליצירת קשר",
+            "placeholder": "+91 …"
+          },
+          "address": {
+            "label": "כתובת"
+          },
+          "mapIframeUrl": {
+            "label": "כתובת iframe של המפה",
+            "placeholder": "https://www.google.com/maps/embed?pb=..."
+          },
+          "platformFooter": {
+            "label": "תחתית הפלטפורמה",
+            "hint": "מתווסף להודעות היוצאות של הפלטפורמה. השאירו ריק אם אין."
+          },
+          "defaultTimezone": {
+            "label": "אזור זמן ברירת מחדל",
+            "hint": "בשימוש כאשר סביבת עבודה או אדם לא בחרו אזור זמן."
+          },
+          "defaultLanguage": {
+            "label": "שפת ברירת מחדל"
+          },
+          "defaultCurrency": {
+            "label": "מטבע ברירת מחדל"
+          },
+          "defaultCountryCode": {
+            "label": "קידומת מדינה ברירת מחדל",
+            "hint": "קידומת חיוג עם סימן פלוס, לדוגמה +91."
+          },
+          "defaultCountryIso": {
+            "label": "מדינת ברירת מחדל (בוחרי טלפון)",
+            "hint": "חל על כל בוחר שדה טלפון בפלטפורמה."
+          },
+          "fontFamily": {
+            "label": "משפחת גופנים"
+          },
+          "maintenanceMode": {
+            "label": "מצב תחזוקה",
+            "hint": "מוציא את אפליקציית הלקוחות מקוונת עם 503. מפעילים, כניסה וקריאות חזרה של מכונות ממשיכים לפעול."
+          }
+        },
+        "options": {
+          "fontFamily": {
+            "none": "ברירת מחדל של ערכת הנושא"
+          }
+        }
+      },
+      "branding": {
+        "title": "מיתוג ומראה",
+        "description": "Favicon, לוגואים לפי ערכת נושא, אסימוני צבע וגודל ממשק.",
+        "sections": {
+          "assets": {
+            "title": "נכסי מותג"
+          },
+          "colors": {
+            "title": "אסימוני צבע"
+          },
+          "interface": {
+            "title": "ממשק"
+          }
+        },
+        "fields": {
+          "faviconUrl": {
+            "label": "כתובת Favicon"
+          },
+          "logos": {
+            "paper": {
+              "label": "נייר"
+            },
+            "bright": {
+              "label": "בהיר"
+            },
+            "dark": {
+              "label": "כהה"
+            },
+            "doodle": {
+              "label": "דודל"
+            }
+          },
+          "colors": {
+            "wa-deep": {
+              "label": "ראשי",
+              "hint": "שינוי הצבע הראשי משנה גם את גווני הטורקיז, הירוק, המנטה והבועות, אלא אם תגדירו גם אותם."
+            },
+            "wa-teal": {
+              "label": "ראשי (ריחוף)"
+            },
+            "wa-green": {
+              "label": "הדגשה / הצלחה"
+            },
+            "wa-mint": {
+              "label": "מילוי הדגשה רך"
+            },
+            "wa-bubble": {
+              "label": "בועת צ׳אט"
+            },
+            "paper-0": {
+              "label": "רקע העמוד"
+            },
+            "paper-50": {
+              "label": "רקע כרטיס / מעומעם"
+            },
+            "paper-100": {
+              "label": "רקע בריחוף"
+            },
+            "paper-200": {
+              "label": "מסגרות"
+            },
+            "ink-500": {
+              "label": "טקסט מעומעם"
+            },
+            "ink-700": {
+              "label": "טקסט גוף"
+            },
+            "ink-900": {
+              "label": "כותרות"
+            },
+            "accent-coral": {
+              "label": "הדגשה - אלמוג"
+            },
+            "accent-amber": {
+              "label": "הדגשה - ענבר"
+            },
+            "accent-plum": {
+              "label": "הדגשה - שזיף"
+            },
+            "accent-sky": {
+              "label": "הדגשה - שמיים"
+            }
+          },
+          "fontScale": {
+            "label": "גודל גופן",
+            "hint": "גודל הטקסט בכל הממשק באחוזים, 80 עד 130."
+          },
+          "uiOpacity": {
+            "label": "שקיפות",
+            "hint": "שקיפות הממשק כולו באחוזים, 55 עד 100."
+          },
+          "dashboardLayout": {
+            "label": "פריסת ניווט"
+          },
+          "sidebarColor": {
+            "label": "רקע"
+          },
+          "sidebarTextColor": {
+            "label": "צבע טקסט"
+          },
+          "sidebarAccentColor": {
+            "label": "צבע הדגשה"
+          }
+        },
+        "options": {
+          "dashboardLayout": {
+            "topbar": "סרגל עליון",
+            "sidebar": "סרגל צד"
+          }
+        },
+        "optionNotes": {
+          "dashboardLayout": {
+            "topbar": "נוכחי: תפריט לאורך החלק העליון וגם עמוד 'עוד' לפריטים נוספים.",
+            "sidebar": "סרגל שמאלי בסגנון מנהל עם כל התכונות מקובצות. ללא תפריט עליון."
+          }
+        }
+      },
+      "site": {
+        "title": "פרטי האתר",
+        "description": "פרטי החברה, כתובות ליצירת קשר, פרופילים חברתיים ותחתית העמוד הציבורית.",
+        "sections": {
+          "company": {
+            "title": "חברה"
+          },
+          "contact": {
+            "title": "כתובות ליצירת קשר"
+          },
+          "social": {
+            "title": "פרופילים חברתיים"
+          },
+          "footer": {
+            "title": "תחתית עמוד ציבורית"
+          }
+        },
+        "fields": {
+          "companyName": {
+            "label": "שם החברה"
+          },
+          "tagline": {
+            "label": "סלוגן"
+          },
+          "foundedYear": {
+            "label": "שנת הקמה"
+          },
+          "address": {
+            "label": "כתובת"
+          },
+          "cityCountry": {
+            "label": "עיר ומדינה"
+          },
+          "emailGeneral": {
+            "label": "אימייל כללי"
+          },
+          "emailSupport": {
+            "label": "אימייל תמיכה"
+          },
+          "emailSales": {
+            "label": "אימייל מכירות"
+          },
+          "emailSecurity": {
+            "label": "אימייל אבטחה"
+          },
+          "emailCareers": {
+            "label": "אימייל דרושים"
+          },
+          "phone": {
+            "label": "טלפון"
+          },
+          "whatsapp": {
+            "label": "WhatsApp"
+          },
+          "socialX": {
+            "label": "X"
+          },
+          "socialLinkedin": {
+            "label": "LinkedIn"
+          },
+          "socialInstagram": {
+            "label": "Instagram"
+          },
+          "socialYoutube": {
+            "label": "YouTube"
+          },
+          "socialFacebook": {
+            "label": "Facebook"
+          },
+          "socialGithub": {
+            "label": "GitHub"
+          },
+          "footerTitle": {
+            "label": "כותרת תחתית העמוד"
+          },
+          "footerDescription": {
+            "label": "תיאור תחתית העמוד"
+          },
+          "footerCopyright": {
+            "label": "זכויות יוצרים בתחתית העמוד"
+          }
+        }
+      },
+      "mail": {
+        "title": "הגדרות דואר",
+        "description": "דואר יוצא. ערכים שמורים גוברים על ברירות המחדל של השרת בכל שליחה.",
+        "sections": {
+          "sender": {
+            "title": "שולח"
+          },
+          "smtp": {
+            "title": "שרת דואר"
+          }
+        },
+        "fields": {
+          "fromName": {
+            "label": "שם השולח",
+            "placeholder": "Acme Inc.",
+            "hint": "מוצג לנמענים כשם השולח “From”."
+          },
+          "fromAddress": {
+            "label": "כתובת השולח",
+            "placeholder": "hello@yourdomain.com",
+            "hint": "לדומיין חייבות להיות רשומות SPF + DKIM תקינות, אחרת הדואר יגיע לספאם."
+          },
+          "mailer": {
+            "label": "שירות שליחה",
+            "hint": "SMTP ושירות הלוג פועלים כיום; שירותי שליחה מבוססי API עדיין לא מחוברים."
+          },
+          "host": {
+            "label": "שרת",
+            "placeholder": "smtp.mailgun.org",
+            "hint": "השאירו ריק כדי לשמור על ברירת המחדל של השרת."
+          },
+          "port": {
+            "label": "פורט",
+            "hint": "587 ל-TLS, 465 ל-SSL, 25 (להימנע)."
+          },
+          "encryption": {
+            "label": "הצפנה",
+            "hint": "ssl פירושו TLS מובלע (בדרך כלל פורט 465); tls ו-starttls משדרגים בפורט 587."
+          },
+          "username": {
+            "label": "שם משתמש",
+            "placeholder": "postmaster@mg.example.com"
+          },
+          "password": {
+            "label": "סיסמה",
+            "placeholder": "הזינו סיסמת SMTP",
+            "hint": "נשמר מוצפן ולא יוצג שוב."
+          }
+        },
+        "options": {
+          "encryption": {
+            "tls": "tls (פורט 587)",
+            "ssl": "ssl (פורט 465)",
+            "starttls": "starttls",
+            "none": "ללא"
+          }
+        }
+      },
+      "seo": {
+        "title": "הגדרות SEO",
+        "description": "תגיות חיפוש ושיתוף ברשתות חברתיות לאתר הציבורי.",
+        "sections": {
+          "search": {
+            "title": "תוצאות חיפוש"
+          },
+          "social": {
+            "title": "שיתוף ברשתות חברתיות"
+          },
+          "verification": {
+            "title": "אימות אתר"
+          }
+        },
+        "fields": {
+          "metaTitle": {
+            "label": "כותרת Meta",
+            "hint": "פתחו במותג."
+          },
+          "metaDescription": {
+            "label": "תיאור Meta",
+            "hint": "מוצג מתחת לכותרת בגוגל.",
+            "placeholder": "הצגה קצרה של משפט עד שניים, שמוצגת מתחת לכותרת בגוגל."
+          },
+          "metaKeywords": {
+            "label": "מילות מפתח ל-Meta",
+            "placeholder": "whatsapp marketing, whatsapp crm, קמפיינים, אוטומציה, inbox"
+          },
+          "robots": {
+            "label": "הנחיית Robots",
+            "hint": "מורה לסורקי חיפוש אם להציג ולעקוב אחר קישורים."
+          },
+          "canonical": {
+            "label": "Canonical",
+            "placeholder": "https://app.example.com"
+          },
+          "author": {
+            "label": "מחבר"
+          },
+          "ogTitle": {
+            "label": "כותרת Open Graph",
+            "placeholder": "ברירת מחדל: כותרת Meta"
+          },
+          "ogDescription": {
+            "label": "תיאור Open Graph",
+            "placeholder": "ברירת מחדל: תיאור Meta"
+          },
+          "ogType": {
+            "label": "סוג Open Graph"
+          },
+          "ogUrl": {
+            "label": "כתובת Open Graph",
+            "placeholder": "https://app.example.com"
+          },
+          "ogImage": {
+            "label": "תמונת Open Graph",
+            "hint": "מומלץ 1200x630. בשימוש על ידי Slack, X, WhatsApp, Discord.",
+            "placeholder": "https://app.example.com/og.png"
+          },
+          "twitterCard": {
+            "label": "כרטיס Twitter"
+          },
+          "twitterSite": {
+            "label": "אתר Twitter",
+            "placeholder": "@yourbrand"
+          },
+          "twitterCreator": {
+            "label": "יוצר Twitter",
+            "placeholder": "@author"
+          },
+          "googleVerification": {
+            "label": "אימות Google",
+            "placeholder": "google-site-verification=…"
+          },
+          "bingVerification": {
+            "label": "אימות Bing",
+            "placeholder": "msvalidate.01=…"
+          }
+        },
+        "options": {
+          "robots": {
+            "index, follow": "אינדוקס, מעקב — אתר ציבורי",
+            "index, nofollow": "אינדוקס, ללא מעקב",
+            "noindex, follow": "ללא אינדוקס, מעקב",
+            "noindex, nofollow": "ללא אינדוקס, ללא מעקב — הסתרה מחיפוש"
+          }
+        }
+      },
+      "privacy": {
+        "title": "פרטיות ועוגיות",
+        "description": "באנר הסכמה לעוגיות, קישורים משפטיים ודגלי ציות.",
+        "sections": {
+          "banner": {
+            "title": "באנר עוגיות"
+          },
+          "links": {
+            "title": "קישורים משפטיים"
+          },
+          "compliance": {
+            "title": "דגלי ציות"
+          }
+        },
+        "fields": {
+          "cookieBannerEnabled": {
+            "label": "באנר פעיל"
+          },
+          "cookieBannerStyle": {
+            "label": "סגנון באנר"
+          },
+          "cookieMessage": {
+            "label": "הודעת הסכמה"
+          },
+          "respectDoNotTrack": {
+            "label": "כבד Do-Not-Track",
+            "hint": "הדפדפן שולח DNT=1 → דחיית הכול"
+          },
+          "policyUrl": {
+            "label": "כתובת מדיניות פרטיות",
+            "placeholder": "https://example.com/privacy"
+          },
+          "termsUrl": {
+            "label": "כתובת תנאי שירות",
+            "placeholder": "https://example.com/terms"
+          },
+          "cookiesPolicyUrl": {
+            "label": "כתובת מדיניות עוגיות (למידע נוסף)",
+            "placeholder": "https://example.com/cookies"
+          },
+          "gdprCompliance": {
+            "label": "ציות ל-GDPR (האיחוד האירופי)",
+            "hint": "נשמר לתיעוד שלכם. עדיין לא משנה התנהגות."
+          },
+          "ccpaCompliance": {
+            "label": "ציות ל-CCPA (קליפורניה)",
+            "hint": "נשמר לתיעוד שלכם. עדיין לא משנה התנהגות."
+          },
+          "adaSkipLink": {
+            "label": "קישור דילוג לתוכן",
+            "hint": "נשמר לתיעוד שלכם. עדיין לא משנה התנהגות."
+          },
+          "adaHighContrast": {
+            "label": "הצעת מצב ניגודיות גבוהה",
+            "hint": "נשמר לתיעוד שלכם. עדיין לא משנה התנהגות."
+          },
+          "adaLargeText": {
+            "label": "הצעת מצב טקסט גדול",
+            "hint": "נשמר לתיעוד שלכם. עדיין לא משנה התנהגות."
+          },
+          "adaReducedMotion": {
+            "label": "כבד prefers-reduced-motion",
+            "hint": "נשמר לתיעוד שלכם. עדיין לא משנה התנהגות."
+          }
+        },
+        "options": {
+          "cookieBannerStyle": {
+            "bottom-bar": "סרגל דביק בתחתית — מומלץ",
+            "top-bar": "סרגל דביק בחלק העליון",
+            "modal": "חלון מרכזי"
+          }
+        }
+      },
+      "analytics": {
+        "title": "אנליטיקה",
+        "description": "מזהי מעקב. מעקבים נטענים רק לאחר הסכמת מבקר.",
+        "sections": {
+          "trackers": {
+            "title": "מזהי מעקב"
+          }
+        },
+        "fields": {
+          "googleGa4": {
+            "label": "Google GA4"
+          },
+          "googleGtm": {
+            "label": "Google GTM"
+          },
+          "metaPixel": {
+            "label": "Pixel של Meta"
+          },
+          "microsoftClarity": {
+            "label": "Microsoft Clarity"
+          },
+          "tiktokPixel": {
+            "label": "Pixel של TikTok"
+          },
+          "linkedinPartner": {
+            "label": "שותף LinkedIn"
+          },
+          "twitterPixel": {
+            "label": "Pixel של Twitter"
+          },
+          "plausibleDomain": {
+            "label": "דומיין Plausible"
+          },
+          "posthogKey": {
+            "label": "מפתח PostHog"
+          },
+          "mixpanelToken": {
+            "label": "טוקן Mixpanel"
+          },
+          "hotjarSiteId": {
+            "label": "מזהה אתר Hotjar"
+          },
+          "posthogHost": {
+            "label": "שרת PostHog"
+          }
+        }
+      },
+      "customCode": {
+        "title": "קוד מותאם אישית",
+        "description": "CSS ו-JavaScript המוזרקים לאתר הציבורי.",
+        "sections": {
+          "code": {
+            "title": "קוד מותאם אישית"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "הזרקה בייצור",
+            "hint": "שום דבר למטה לא פועל באתר הציבורי עד שזה מופעל."
+          },
+          "css": {
+            "label": "CSS מותאם אישית"
+          },
+          "js": {
+            "label": "JS מותאם אישית",
+            "hint": "פועל לכל מבקר. הדביקו רק קוד שאתם בוטחים בו."
+          }
+        }
+      },
+      "pwa": {
+        "title": "אפליקציה הניתנת להתקנה",
+        "description": "מניפסט אפליקציית ווב והתנהגות ההתקנה.",
+        "sections": {
+          "app": {
+            "title": "אפליקציה הניתנת להתקנה"
+          },
+          "look": {
+            "title": "מראה והתנהגות"
+          },
+          "install": {
+            "title": "התקנה ומצב לא מקוון"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "מופעל"
+          },
+          "appName": {
+            "label": "שם היישום"
+          },
+          "shortName": {
+            "label": "שם קצר"
+          },
+          "description": {
+            "label": "תיאור"
+          },
+          "startUrl": {
+            "label": "כתובת התחלה"
+          },
+          "scope": {
+            "label": "היקף"
+          },
+          "display": {
+            "label": "תצוגה"
+          },
+          "orientation": {
+            "label": "כיוון"
+          },
+          "themeColor": {
+            "label": "צבע ערכת נושא"
+          },
+          "backgroundColor": {
+            "label": "צבע רקע"
+          },
+          "icon192": {
+            "label": "Icon192"
+          },
+          "icon512": {
+            "label": "Icon512"
+          },
+          "installPrompt": {
+            "label": "בקשת התקנה"
+          },
+          "offlineEnabled": {
+            "label": "מצב לא מקוון מופעל"
+          }
+        }
+      },
+      "storage": {
+        "title": "אחסון בענן",
+        "description": "דלי תואם S3 למדיה. בדקו את החיבור לפני ההפעלה.",
+        "sections": {
+          "provider": {
+            "title": "ספק"
+          },
+          "credentials": {
+            "title": "פרטי גישה לדלי"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "מופעל"
+          },
+          "provider": {
+            "label": "ספק"
+          },
+          "visibility": {
+            "label": "נראות קבצים",
+            "hint": "אובייקטים פרטיים דורשים קישורים חתומים; השתמשו בכתובת ציבורית או CDN למדיה שאנשים פותחים ישירות."
+          },
+          "basePath": {
+            "label": "נתיב תיקיית בסיס (אופציונלי)",
+            "hint": "קידומת לאובייקט הבדיקה. העלאות ישתמשו בה לאחר שמודול הקבצים יעלה."
+          },
+          "accessKeyId": {
+            "label": "מזהה מפתח גישה *"
+          },
+          "secret": {
+            "label": "מפתח גישה סודי *",
+            "hint": "נשמר מוצפן ולא יוצג שוב.",
+            "placeholder": "הדביקו סוד"
+          },
+          "region": {
+            "label": "אזור",
+            "placeholder": "us-east-1"
+          },
+          "bucket": {
+            "label": "דלי *"
+          },
+          "endpoint": {
+            "label": "נקודת קצה",
+            "hint": "נדרש עבור Spaces, R2 ו-MinIO. הסיומת /bucket מוסרת.",
+            "placeholder": "https://… (נדרש עבור Spaces / R2 / MinIO; אוטומטי עבור Wasabi ו-Bunny)"
+          },
+          "cdnUrl": {
+            "label": "כתובת ציבורית / CDN (אופציונלי)",
+            "placeholder": "https://cdn.example.com"
+          },
+          "pathStyle": {
+            "label": "שימוש בנקודת קצה בסגנון נתיב (MinIO / חלק מאחסוני S3 תואמים)"
+          },
+          "storageZone": {
+            "label": "אזור אחסון",
+            "hint": "Bunny בלבד."
+          },
+          "storagePassword": {
+            "label": "סיסמת אחסון (מפתח גישה)",
+            "hint": "Bunny בלבד: סיסמת אזור האחסון. נשמרת מוצפנת.",
+            "placeholder": "הדביקו סיסמה"
+          }
+        },
+        "options": {
+          "provider": {
+            "s3": "Amazon S3",
+            "wasabi": "Wasabi",
+            "bunny": "Bunny.net Storage",
+            "spaces": "DigitalOcean Spaces",
+            "r2": "Cloudflare R2",
+            "minio": "MinIO / S3-compatible"
+          },
+          "visibility": {
+            "private": "פרטי (כתובות חתומות)",
+            "public": "ציבורי"
+          }
+        }
+      },
+      "whatsapp": {
+        "title": "הגדרות WhatsApp",
+        "description": "אפליקציית Meta ושותף Interakt המשמשים לרישום מספרי WhatsApp.",
+        "sections": {
+          "metaApp": {
+            "title": "Business API (WABA)"
+          },
+          "interakt": {
+            "title": "ניתוב Interakt"
+          },
+          "inbound": {
+            "title": "Webhook"
+          }
+        },
+        "fields": {
+          "appId": {
+            "label": "Meta App ID",
+            "hint": "ריק חוזר לסביבת השרת."
+          },
+          "appSecret": {
+            "label": "App Secret",
+            "hint": "נשמר מוצפן ולא יוצג שוב. השאירו ריק כדי לשמור את הסוד השמור."
+          },
+          "configId": {
+            "label": "מזהה תצורת Embedded Signup",
+            "hint": "ריק פירושו שסביבות העבודה מדביקות טוקן ידנית."
+          },
+          "graphVersion": {
+            "label": "גרסת Graph API",
+            "hint": "נראה כמו v25.0. ריק שומר על ברירת המחדל של השרת."
+          },
+          "coexistence": {
+            "label": "דו־קיום",
+            "hint": "הצעת “חיבור מספר Business App קיים שלי” ב-Embedded Signup."
+          },
+          "defaultProvider": {
+            "label": "ניתוב ברירת מחדל",
+            "hint": "באיזה API משתמשים מספרים שחוברו לאחרונה."
+          },
+          "solutionId": {
+            "label": "מזהה פתרון Interakt",
+            "hint": "נשלח ל-Meta כ-extras.setup.solutionID ול-Interakt בעת הרישום."
+          },
+          "partnerAuthKey": {
+            "label": "מפתח שותף Interakt",
+            "hint": "מפתח שותף הטכנולוגיה המשותף. נשמר מוצפן."
+          },
+          "systemUserId": {
+            "label": "מזהה משתמש מערכת",
+            "hint": "מוקצה לכל WABA מחובר עם המשימה MANAGE."
+          },
+          "systemUserToken": {
+            "label": "טוקן משתמש מערכת",
+            "hint": "משמש לבדיקת טוקנים והקצאת משתמש המערכת. נשמר מוצפן."
+          },
+          "businessId": {
+            "label": "מזהה עסק",
+            "hint": "גיבוי לאיתור WABA כאשר הטוקן אינו מציג אחד."
+          },
+          "verifyToken": {
+            "label": "טוקן אימות Webhook",
+            "hint": "כל מחרוזת אקראית. השאירו ריק כדי להשתמש בזו שנוצרה והוצגה למעלה."
+          },
+          "requireSignature": {
+            "label": "דרישת חתימה בכל Webhook",
+            "hint": "דוחה אירועים שהועברו על ידי Interakt ואינם נושאים חתימת Meta תקפה. הפעילו רק אם Interakt חותם עליהם."
+          }
+        },
+        "options": {
+          "defaultProvider": {
+            "interakt": "Interakt (פרוקסי Meta)",
+            "meta": "Meta (ישיר)"
+          }
+        }
+      },
+      "campaigns": {
+        "title": "קמפיינים",
+        "description": "כיצד קמפיין מנסה שוב הודעה שנכשלה, ומתי קמפיין שלא הסתיים מסתיים.",
+        "sections": {
+          "retry": {
+            "title": "ניסיונות חוזרים"
+          },
+          "expiry": {
+            "title": "סיום אוטומטי"
+          }
+        },
+        "fields": {
+          "retryAttempts": {
+            "label": "מספר ניסיונות חוזרים",
+            "hint": "מספר ניסיונות לכל נמען לפני שמסומן ככושל (0 עד 10)."
+          },
+          "retryBackoffSec": {
+            "label": "המתנה לפני ניסיון חוזר (שניות)",
+            "hint": "ההפסקה לפני הניסיון הבא; היא גדלה עם כל ניסיון."
+          },
+          "autoExpiryEnabled": {
+            "label": "סיום קמפיינים שלא הסתיימו",
+            "hint": "מסיים קמפיין שעדיין פועל אחרי השעות שלהלן."
+          },
+          "defaultExpiryHours": {
+            "label": "סיום לאחר (שעות)"
+          }
+        }
+      },
+      "googleCalendar": {
+        "title": "Google Calendar",
+        "description": "לקוח OAuth של Google שדרכו כל סביבת עבודה מחברת את היומן שלה.",
+        "sections": {
+          "oauth": {
+            "title": "לקוח OAuth של Google"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "אפשרו לסביבות עבודה לחבר את Google Calendar",
+            "hint": "כבוי: אף סביבת עבודה לא יכולה לחבר, ואין כתיבה או קריאה מיומן."
+          },
+          "clientId": {
+            "label": "Client ID",
+            "hint": "מ-Google Cloud, Credentials, OAuth 2.0 Client ID (Web application). ריק משתמש ב-GOOGLE_CALENDAR_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "סוד הלקוח",
+            "hint": "נשמר מוצפן ולא יוצג שוב. ריק שומר על השמור; GOOGLE_CALENDAR_CLIENT_SECRET הוא הגיבוי."
+          },
+          "redirectUri": {
+            "label": "עקיפת Redirect URI",
+            "hint": "השאירו ריק כדי להשתמש בכתובת שלמעלה. היא חייבת להתאים בדיוק ל-Authorised redirect URI בלקוח."
+          }
+        }
+      },
+      "flowBuilder": {
+        "title": "עורך תהליכים",
+        "description": "אילו עורכי תהליכים מוצעים לסביבות העבודה.",
+        "sections": {
+          "mode": {
+            "title": "עורך"
+          }
+        },
+        "fields": {
+          "mode": {
+            "label": "עורך ברירת מחדל לסביבות עבודה",
+            "hint": "פשוט הוא עורך רשימה שלב אחר שלב, מתקדם הוא עורך קנבס. סביבת עבודה יכולה לעקוף זאת בעמוד התהליכים שלה."
+          }
+        },
+        "options": {
+          "mode": {
+            "simple": "פשוט בלבד",
+            "advanced": "מתקדם בלבד"
+          }
+        }
+      }
+    },
+    "cards": {
+      "appearance": {
+        "title": "מראה וצבעים",
+        "description": "שינוי צבעי כל העמודים בלוח הבקרה של המשתמש ושל המנהל: מותג, משטחים, טקסט והדגשות. חל מיד.",
+        "tags": "theme.color.*"
+      },
+      "general": {
+        "title": "הגדרות כלליות",
+        "description": "שם היישום, פרטי קשר, לוגואים, כתובת URL, כתובת פיזית ומתגי שירות גלובליים.",
+        "tags": "APP_NAME / APP_URL / לוגואים"
+      },
+      "paymentGateways": {
+        "title": "שערי תשלום",
+        "description": "Stripe, Razorpay, PayPal, Paystack, Flutterwave ועוד: מפתחות, מטבעות ומתגי פעיל.",
+        "tags": "Live / sandbox - מפתחות לכל שער"
+      },
+      "aiKeys": {
+        "title": "מפתחות AI / API",
+        "description": "פרטי גישה של ספקים כמו OpenAI, Anthropic, Google ואחרים. מפעילים כל תכונת AI בפלטפורמה.",
+        "tags": "BYOK / מודלי ברירת מחדל"
+      },
+      "mail": {
+        "title": "הגדרות דואר",
+        "description": "מנהל SMTP, שרת, פורט, שם שולח, הצפנה ושליחת בדיקה.",
+        "tags": "SMTP / אימות / ברוכים הבאים"
+      },
+      "auditLog": {
+        "title": "יומן ביקורת",
+        "description": "היסטוריה ניתנת לחיפוש של כל פעולת מנהל: עריכות סביבות עבודה, שינויי משתמשים, אירועי חיוב, אירועי אבטחה ועדכוני הגדרות.",
+        "tags": "סינון / פירוט / ייצוא CSV"
+      },
+      "privacy": {
+        "title": "פרטיות, GDPR ו-ADA",
+        "description": "באנר הסכמה לעוגיות, ציות ל-GDPR / CCPA, מתגי נגישות ADA / WCAG וקישורי מדיניות.",
+        "tags": "הסכמה / מדיניות / נגישות"
+      },
+      "menuOrder": {
+        "title": "סדר תפריט",
+        "description": "קבעו את הסדר של פריטי הניווט העליון המוצגים בכל סביבת עבודה של משתמש.",
+        "tags": "שינוי סדר"
+      },
+      "authPages": {
+        "title": "עמודי אימות",
+        "description": "עריכת עמודי הכניסה, ההרשמה ושכחתי סיסמה: כותרת, טקסט משנה, צבע הדגשה, ותמונה או וידאו בצד. תצוגה מקדימה חיה.",
+        "tags": "כניסה / הרשמה / שכחתי"
+      },
+      "analytics": {
+        "title": "אינטגרציות אנליטיקה",
+        "description": "Google Analytics, GTM, Meta Pixel, Clarity, Plausible, PostHog, Hotjar, TikTok, LinkedIn, X: הדביקו את המזהה והסקריפט ייווצר אוטומטית.",
+        "tags": "GA4 / Pixel / Clarity / GTM"
+      },
+      "seo": {
+        "title": "הגדרות SEO",
+        "description": "כותרת Meta, תיאור, OpenGraph, כרטיסי Twitter, robots, canonical, ואימות Google ו-Bing.",
+        "tags": "Meta / OG / Twitter"
+      },
+      "languages": {
+        "title": "שפות",
+        "description": "לוקאלים זמינים, שפת ברירת מחדל, דגל RTL ומתג הפעלה לכל שפה. מניע את בורר השפה.",
+        "tags": "en / es / fr / ar / RTL"
+      },
+      "pwa": {
+        "title": "הגדרות PWA",
+        "description": "שם היישום, אייקוני התקנה, צבע ערכת נושא, צבע רקע, מצב תצוגה ומתג הפעלת PWA.",
+        "tags": "אייקונים / צבעים / התקנה"
+      },
+      "footer": {
+        "title": "הגדרות תחתית העמוד",
+        "description": "כותרת תחתית העמוד, קישורים חברתיים, טקסט זכויות יוצרים ותיאור התחתית הציבורית.",
+        "tags": "לוגו / רשתות חברתיות / זכויות יוצרים"
+      },
+      "siteInfo": {
+        "title": "פרטי האתר",
+        "description": "אימיילים ליצירת קשר, טלפון, WhatsApp, כתובת וקישורים חברתיים המשותפים לתחתית הציבורית, לעמודי יצירת קשר ולעמודי אודות.",
+        "tags": "אימיילים / טלפון / רשתות חברתיות"
+      },
+      "socialLogin": {
+        "title": "כניסה חברתית ו-CAPTCHA",
+        "description": "הפעלה והשבתה של כניסה עם Google ו-Facebook בעמודי הכניסה וההרשמה, הדבקת מפתחות OAuth והפעלת reCAPTCHA.",
+        "tags": "לא הוגדר"
+      },
+      "registration": {
+        "title": "הרשמה",
+        "description": "הרשמה ציבורית, אימות אימייל, תוכנית ברירת מחדל ואורך ניסיון חינם לסביבות עבודה חדשות.",
+        "tags": "הרשמה / ניסיון / תוכנית"
+      },
+      "custom": {
+        "title": "קוד מותאם אישית",
+        "description": "CSS ו-JavaScript לייצור המוזרקים לעמודים הציבוריים כאשר המתג מופעל.",
+        "tags": "CSS / JS"
+      },
+      "storage": {
+        "title": "אחסון בענן",
+        "description": "שליחת מדיה של לקוחות לדלי שלכם: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 או MinIO.",
+        "tags": "S3 / Wasabi / Bunny / R2"
+      },
+      "whatsapp": {
+        "title": "WhatsApp (WABA)",
+        "description": "אפליקציית Meta שדרכה כל סביבת עבודה מחברת את מספרי WhatsApp שלה: מזהה וסוד של האפליקציה, Embedded Signup, Webhook ונתיב Interakt.",
+        "tags": "Meta / Embedded Signup / Interakt"
+      },
+      "campaigns": {
+        "title": "קמפיינים",
+        "description": "ניסיונות חוזרים וסיום אוטומטי של קמפיין שמעולם לא הושלם.",
+        "tags": "ניסיון חוזר / תפוגה"
+      },
+      "googleCalendar": {
+        "title": "Google Calendar",
+        "description": "לקוח OAuth של Google שסביבות העבודה משתמשות בו לחיבור היומן לצורך הזמנות ושעות תפוסות.",
+        "tags": "Google / OAuth / Calendar"
+      },
+      "flowBuilder": {
+        "title": "עורך תהליכים",
+        "description": "עורך התהליכים שברירת המחדל לכל סביבת עבודה: פשוט שלב אחר שלב או קנבס מתקדם. סביבת עבודה יכולה לעקוף זאת.",
+        "tags": "פשוט / מתקדם / אוטומציה"
+      }
+    },
+    "signup": {
+      "body": "הרשמה ציבורית, אימות אימייל אוטומטי, תוכנית ברירת המחדל להרשמות חדשות ואורך ניסיון החינם נערכים בעמוד ההרשמה.",
+      "link": "פתיחת הגדרות הרשמה"
+    },
+    "brandAssets": {
+      "intro": "ה-Favicon משותף לכל ערכות הנושא. הלוגו נקבע לפי ערכה: העלו גרסה הפוכה או בהירה למצב כהה, וגרסה מותאמת לערכת הדודל.",
+      "favicon": {
+        "title": "Favicon",
+        "note": "מוצג בלשוניות הדפדפן ובסימניות. מומלץ 35x35 פיקסלים. PNG, ICO, JPG, SVG או WebP, עד 512 KB. העלאה מחליפה אותו."
+      },
+      "logos": {
+        "title": "לוגו לפי ערכת נושא",
+        "note": "לכל ערכת נושא יש לוגו משלה. אם לא הועלה לוגו ייעודי, חוזרים ל'נייר'."
+      },
+      "themes": {
+        "paper": {
+          "label": "נייר (ברירת מחדל)",
+          "note": "בהיר, לבן שבור. המראה ברירת המחדל."
+        },
+        "bright": {
+          "label": "לבן בהיר",
+          "note": "רקע לבן עם ניגודיות גבוהה יותר."
+        },
+        "dark": {
+          "label": "כהה (בטא)",
+          "note": "השתמשו בגרסה בהירה או הפוכה של הלוגו."
+        },
+        "doodle": {
+          "label": "דודל (מעוצב)",
+          "note": "רקע מנטה פסטלי."
+        }
+      },
+      "noFile": "אין קובץ",
+      "upload": "העלאה",
+      "uploading": "מעלה",
+      "remove": "הסרה",
+      "loading": "טוען",
+      "loadFailed": "לא ניתן לטעון את קבצי המותג.",
+      "failed": "ההעלאה נכשלה.",
+      "tooLarge": "הקובץ גדול מ-{kb} KB.",
+      "wrongType": "סוג הקובץ הזה אינו מותר כאן."
+    },
+    "teamInbox": {
+      "intro": "אפליקציה נפרדת הניתנת להתקנה, מוגבלת לתיבת הצוות. נציגים פותחים את הקישור, מוסיפים אותו למסך הבית ומקבלים התראות דחיפה על הודעות חדשות גם כשהאפליקציה סגורה.",
+      "enabled": {
+        "label": "הפעלת אפליקציית תיבת הצוות",
+        "hint": "מפעיל את המניפסט הנפרד, בקשת ההתקנה וההתראות ב-/team-inbox."
+      },
+      "name": {
+        "label": "שם היישום"
+      },
+      "shortName": {
+        "label": "שם קצר",
+        "hint": "עד 12 תווים."
+      },
+      "icon192": {
+        "label": "אייקון היישום (PNG 192x192)",
+        "note": "משתמש באייקון היישום אם ריק. אייקון מסך הבית לאפליקציית התיבה."
+      },
+      "icon512": {
+        "label": "אייקון גדול / מסך פתיחה (PNG 512x512)",
+        "note": "משתמש באייקון היישום אם ריק. למסך הפתיחה בהתקנה ולמסכים בצפיפות גבוהה."
+      },
+      "push": {
+        "ready": {
+          "title": "התראות דחיפה: מוכן",
+          "body": "המפתחות נוצרו. נציגים יכולים להפעיל התראות מהתיבה."
+        },
+        "todo": {
+          "title": "התראות דחיפה: נותר שלב אחד",
+          "body": "לחצו על 'יצירת מפתחות' כדי להגדיר דחיפה. אין צורך בגישה לשרת."
+        },
+        "generate": "יצירת מפתחות",
+        "generating": "יוצר",
+        "generated": "מפתחות הדחיפה נוצרו."
+      },
+      "manifestLink": "מניפסט תיבת הצוות",
+      "save": "שמירת אפליקציית תיבת הצוות",
+      "saving": "שומר",
+      "saved": "אפליקציית תיבת הצוות נשמרה.",
+      "conflict": "מישהו אחר שמר את זה אחרי שפתחתם. טענו מחדש את העמוד ונסו שוב.",
+      "failed": "משהו השתבש ולא נשמר דבר.",
+      "loading": "טוען",
+      "loadFailed": "לא ניתן לטעון את הגדרות אפליקציית תיבת הצוות."
+    },
+    "seoPreview": {
+      "google": "תוצאת Google",
+      "noDescription": "עדיין אין תיאור Meta.",
+      "noImage": "אין תמונת OG",
+      "sitemapKicker": "מפת אתר ו-robots",
+      "sitemapTitle": "קובצי סורקים",
+      "sitemapFile": "נוצר אוטומטית מעמודים ציבוריים ומפוסטים מפורסמים בבלוג. שלחו את /sitemap.xml ל-Google Search Console.",
+      "download": "הורדת sitemap.xml"
+    },
+    "pages": {
+      "general": {
+        "title": "הגדרות כלליות",
+        "description": "זהות היישום הבסיסית, פרטי קשר, מטבע ושפת ברירת מחדל, ומתגי שירות ברמת הפלטפורמה.",
+        "sections": {
+          "identity": {
+            "title": "זהות היישום"
+          },
+          "brandAssets": {
+            "title": "נכסי מותג"
+          },
+          "platform": {
+            "title": "מתגי פלטפורמה"
+          },
+          "signup": {
+            "title": "הרשמות וניסיון חינם"
+          }
+        },
+        "guide": {
+          "title": "לאן הדברים הולכים",
+          "items": {
+            "appName": {
+              "title": "שם היישום",
+              "body": "משמש בכותרות עמודים, באימיילים ובמיתוג באפליקציה. שמרו קצר: מילה או שתיים."
+            },
+            "appUrl": {
+              "title": "כתובת היישום",
+              "body": "הכתובת הקנונית. כל הקריאות החוזרות, האימיילים והפניות OAuth נגזרות ממנה."
+            },
+            "language": {
+              "title": "שפת ברירת מחדל",
+              "body": "חל על חשבונות חדשים. משתמשים קיימים שומרים על מה שבחרו."
+            },
+            "currency": {
+              "title": "מטבע ברירת מחדל",
+              "body": "משמש לחשבוניות ולארנקים ללא עקיפה מפורשת."
+            },
+            "maintenance": {
+              "title": "מצב תחזוקה",
+              "body": "כאשר פעיל, כל מסלול שאינו מנהל מציג תוכן זמני. מנהל יכול עדיין להגיע לקונסולה."
+            }
+          }
+        },
+        "tip": {
+          "title": "כלל ייצור",
+          "body": "שמרו רק לאחר בדיקת תהליך המשתמש המושפע. שינויי זהות מתפשטים לחשבוניות ולאימיילים יוצאים."
+        }
+      },
+      "appearance": {
+        "title": "צבעי לוח הבקרה",
+        "description": "שינוי צבע של כל האפליקציה, כל עמודי לוח הבקרה של המשתמש ופאנל הניהול, על ידי שינוי צבעי ערכת הנושא האלה. השמירה חלה מיד על כולם; השאירו צבע בברירת המחדל כדי לשמור על המראה המקורי.",
+        "sections": {
+          "layout": {
+            "title": "פריסת ניווט",
+            "description": "בחרו את פריסת לוח הבקרה של המשתמש. סרגל צד מעביר כל תפריט לסרגל שמאלי (ללא כותרת עליונה וללא עמוד 'עוד')."
+          },
+          "sidebar": {
+            "title": "צבע סרגל צד",
+            "description": "רקע הסרגל השמאלי הכהה (רק בפריסת סרגל צד). השאירו את ברירת המחדל לשחור כמעט מוחלט."
+          },
+          "interface": {
+            "title": "ממשק"
+          },
+          "brand": {
+            "title": "מותג"
+          },
+          "surfaces": {
+            "title": "משטחים"
+          },
+          "text": {
+            "title": "טקסט"
+          },
+          "accents": {
+            "title": "הדגשות"
+          }
+        },
+        "guide": {
+          "title": "כיצד פועלים הצבעים",
+          "items": {
+            "how": {
+              "title": "חל מיד",
+              "body": "השמירה כותבת מחדש את אסימוני ערכת הנושא החיים עבור כולם."
+            },
+            "tokens": {
+              "title": "אסימון אחד, תפקיד אחד",
+              "body": "כל דגימה ממופה למשתנה CSS יחיד בשימוש בלוח הבקרה של המשתמש ובפאנל הניהול."
+            },
+            "primary": {
+              "title": "שינוי הראשי, השאר מתעדכנים",
+              "body": "ראשי (ריחוף), הדגשה, מילוי רך ובועת צ׳אט נגזרים מהראשי, אלא אם תגדירו אותם בעצמכם."
+            },
+            "defaults": {
+              "title": "השאירו את ברירות המחדל",
+              "body": "כל צבע שנשאר בערכו המקורי שומר על המראה המקורי; רק אסימונים ששונו נדרסים."
+            }
+          }
+        },
+        "tip": {
+          "title": "טיפ",
+          "body": "בדקו ניגודיות לאחר שינויים גדולים. צבעי הטקסט והרקע מגיעים משני האסימונים האלה."
+        },
+        "eyebrow": "מנהל - מראה"
+      },
+      "siteInfo": {
+        "title": "פרטי האתר",
+        "description": "פרטי קשר וקישורים חברתיים המשותפים לתחתית, לעמוד יצירת קשר ולעמוד אודות. ערכו פעם אחת והם יתעדכנו בכל מקום.",
+        "sections": {
+          "company": {
+            "title": "חברה"
+          },
+          "contact": {
+            "title": "אימיילים ליצירת קשר"
+          },
+          "phone": {
+            "title": "טלפון ו-WhatsApp"
+          },
+          "social": {
+            "title": "קישורים חברתיים"
+          }
+        },
+        "guide": {
+          "title": "מה הולך לאן",
+          "items": {
+            "shared": {
+              "title": "משותף בכל מקום",
+              "body": "הערכים האלה מזינים את התחתית הציבורית, עמוד יצירת הקשר והעמודים המשפטיים."
+            },
+            "frontend": {
+              "title": "טקסט וצבעי עמוד",
+              "body": "נערך בעורך ה-Frontend, לא כאן."
+            }
+          }
+        }
+      },
+      "footer": {
+        "title": "הגדרות תחתית העמוד",
+        "description": "כותרת תחתית העמוד, קישורים חברתיים, טקסט זכויות יוצרים ותיאור התחתית הציבורית.",
+        "sections": {
+          "footer": {
+            "title": "תחתית ציבורית"
+          }
+        },
+        "guide": {
+          "title": "מה הולך לאן",
+          "items": {
+            "what": {
+              "title": "כותרת תחתית וזכויות יוצרים",
+              "body": "כותרת ריקה משתמשת בשם הפלטפורמה. טקסט זכויות יוצרים ריק נוצר משנה ומהמותג."
+            },
+            "social": {
+              "title": "כתובות רשתות חברתיות",
+              "body": "שדות ריקים מסתירים את האייקון. אלה משותפים עם קישורי הרשתות של פרטי האתר: עריכה כאן מעדכנת הכול."
+            }
+          }
+        }
+      },
+      "mail": {
+        "title": "הגדרות דואר",
+        "description": "שרת SMTP, פורט, הצפנה ופרטי גישה. הערכים השמורים מוחלים בכל שליחה, כך שהודעות ברוכים הבאים, אימות, קבלה ותמיכה משתמשות בהם ללא הפעלה מחדש.",
+        "sections": {
+          "smtp": {
+            "title": "פרטי גישה ל-SMTP"
+          }
+        },
+        "guide": {
+          "title": "שרתי ספקים נפוצים",
+          "items": {
+            "hosts": {
+              "title": "הגדרות טיפוסיות",
+              "body": "Mailgun smtp.mailgun.org 587 / tls. SendGrid smtp.sendgrid.net 587 / tls. Amazon SES email-smtp.REGION.amazonaws.com 587 / tls. Postmark smtp.postmarkapp.com 587 / tls. Resend smtp.resend.com 587 / tls. Gmail smtp.gmail.com 587 / tls עם סיסמת אפליקציה."
+            },
+            "used": {
+              "title": "הודעות דואר במערכת",
+              "body": "אימיילים של ברוכים הבאים ואימות, איפוס סיסמה, חשבוניות וקבלות, תגובות תמיכה, התראות אבטחה והזמנות לסביבת עבודה."
+            }
+          }
+        },
+        "tip": {
+          "title": "טיפ",
+          "body": "שלחו תמיד הודעת בדיקה לאחר עריכה. שגיאת הקלדה אחת בשרת או בפורט תשבית בשקט את כל האימיילים הטרנזקציוניים בפלטפורמה."
+        }
+      },
+      "seo": {
+        "title": "הגדרות SEO",
+        "description": "תגיות Meta ברירת מחדל לכל האתר: כותרת, תיאור, OpenGraph, כרטיסי Twitter, robots, canonical ואימות במנועי חיפוש.",
+        "sections": {
+          "search": {
+            "title": "תגיות Meta"
+          },
+          "social": {
+            "title": "OpenGraph"
+          },
+          "twitter": {
+            "title": "כרטיסי Twitter"
+          },
+          "verification": {
+            "title": "אימות אתר"
+          },
+          "preview": {
+            "title": "תצוגה מקדימה חיה"
+          }
+        },
+        "guide": {
+          "title": "יסודות SEO",
+          "items": {
+            "basics": {
+              "title": "כותרות ותיאורים",
+              "body": "כותרת Meta: פתחו במותג ותיאור חזק אחד, 50-60 תווים. תיאור Meta: הצגה של משפט עד שניים, 140-160 תווים."
+            },
+            "where": {
+              "title": "איפה זה מוצג",
+              "body": "עמודי מנהל, עמודים למשתמשים מחוברים, עמודים ציבוריים ותצוגות מקדימות של קישורים (WhatsApp, Slack, Discord, X). Robots: השתמשו ב-noindex לסביבות בדיקה או לפריסות פרטיות."
+            },
+            "sitemap": {
+              "title": "אימות",
+              "body": "opengraph.xyz, בדיקת Google Rich Results ומאמת כרטיסי Twitter."
+            }
+          }
+        }
+      },
+      "privacy": {
+        "title": "פרטיות, GDPR ו-ADA",
+        "eyebrow": "מנהל - ציות",
+        "description": "באנר הסכמה לעוגיות, קישורי מדיניות, ציות ל-GDPR/CCPA ומתגי נגישות WCAG. אותה הגדרה מזינה את ממשק ההסכמה ושולטת בכל אינטגרציית אנליטיקה.",
+        "sections": {
+          "banner": {
+            "title": "באנר ומדיניות"
+          },
+          "compliance": {
+            "title": "GDPR & CCPA"
+          },
+          "accessibility": {
+            "title": "ADA / WCAG",
+            "description": "מאפייני נגישות ברמת US Americans-with-Disabilities-Act + WCAG 2.1 AA שמבקרים יכולים להפעיל."
+          }
+        },
+        "guide": {
+          "title": "איך פועלת ההסכמה",
+          "items": {
+            "order": {
+              "title": "סדר פעולות",
+              "body": "1. המבקר נכנס והבאנר של העוגיות נפתח (מדולג כאשר Do-Not-Track מכובד). 2. הבחירה נשמרת בעוגיית crm_cookie_consent לשנה. 3. נטענים רק המעקבים המותרים. 4. המבקר יכול לפתוח שוב את הבוחר מכל אלמנט עם data-cookie-prefs-open."
+            },
+            "linked": {
+              "title": "הגדרות מקושרות",
+              "body": "אינטגרציות אנליטיקה (GA4, GTM, Pixel, Clarity ועוד) והגדרות PWA."
+            }
+          }
+        }
+      },
+      "analytics": {
+        "title": "אינטגרציות אנליטיקה",
+        "eyebrow": "מנהל - מעקב",
+        "description": "הדביקו כל מזהה ספק פעם אחת. הסקריפט הרשמי של הספק מוצג בכל עמוד ציבורי, אך רק לאחר שהמבקר מסכים לקטגוריית העוגיות המתאימה.",
+        "sections": {
+          "site": {
+            "title": "אנליטיקה של האתר"
+          },
+          "marketing": {
+            "title": "Pixels פרסומיים"
+          }
+        },
+        "guide": {
+          "title": "מעקב -> קטגוריה",
+          "items": {
+            "categories": {
+              "title": "מתי כל אחד נורה",
+              "body": "אנליטיקה: GA4, GTM, Clarity, Plausible, PostHog, Hotjar, Mixpanel. שיווק: Meta Pixel, TikTok, LinkedIn, X Pixel. סקריפטים של מכולת GTM עשויים לכלול מעקבים נוספים; השהו אותם עם טריגרים לפי קטגוריה ב-GTM."
+            },
+            "where": {
+              "title": "היכן נטען",
+              "body": "עמודים ציבוריים ועמודי כניסה. עמודי מנהל כבויים בכוונה."
+            }
+          }
+        }
+      },
+      "custom": {
+        "title": "קוד מותאם אישית",
+        "description": "סגנונות וסקריפטים מותאמים לייצור למיתוג והתנהגות מתקדמים. מוזרקים לעמודים הציבוריים כאשר מופעל.",
+        "sections": {
+          "code": {
+            "title": "קוד מותאם אישית"
+          }
+        },
+        "guide": {
+          "title": "כללי אצבע",
+          "items": {
+            "scope": {
+              "title": "הגדירו את היקף ה-CSS",
+              "body": "עטפו כללים במחלקת מותג. הימנעו משינוי body, *, או מחלקות עזר של המסגרת."
+            },
+            "block": {
+              "title": "אל תחסמו",
+              "body": "עטפו JS ב-DOMContentLoaded. ללא קריאות רשת סינכרוניות."
+            },
+            "dark": {
+              "title": "בדקו מצב כהה",
+              "body": "החליפו ערכת נושא ובדקו את הסלקטורים html[data-theme=\"dark\"] לפני השמירה."
+            },
+            "sensitive": {
+              "title": "רגיש לייצור",
+              "body": "שמירה שגויה מגיעה לכל עמוד ציבורי מיד. בקשו מעמית לבדוק שינויים גדולים."
+            }
+          }
+        },
+        "tip": {
+          "title": "זהירות",
+          "body": "קוד מותאם אישית רץ בכל עמוד ציבורי ואי אפשר לבודד אותו. רק מנהל־על יכול לשנות אותו."
+        }
+      },
+      "pwa": {
+        "title": "הגדרות PWA",
+        "description": "מניפסט אפליקציה הניתנת להתקנה: שם, אייקונים, צבעים ומצב תצוגה. מניע את המניפסט ואת בקשת ההתקנה.",
+        "sections": {
+          "app": {
+            "title": "מניפסט PWA"
+          },
+          "teamInbox": {
+            "title": "PWA של תיבת הצוות"
+          }
+        },
+        "guide": {
+          "title": "אפליקציה הניתנת להתקנה",
+          "items": {
+            "manifest": {
+              "title": "מניפסט חי",
+              "body": "המניפסט מוגש ב-/api/v2/public/manifest.webmanifest וקיים רק כל עוד המתג פעיל."
+            },
+            "install": {
+              "title": "אייקונים",
+              "body": "העלו אייקוני PNG מרובעים בעמוד המראה, או הדביקו כתובות מאוחסנות. 192 פיקסלים למסך הבית, 512 פיקסלים למסך הפתיחה."
+            }
+          }
+        }
+      },
+      "storage": {
+        "title": "אחסון בענן",
+        "eyebrow": "מנהל - אחסון מדיה",
+        "description": "שליחת כל קבצי המדיה המצורפים של הלקוחות לדלי שלכם — Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 או כל אחסון תואם S3 — במקום שרת האפליקציה. כאשר כבוי, המדיה נשארת בדיסק המקומי, כך שדבר לא נשבר עד שתפעילו.",
+        "status": {
+          "active": "פעיל: {provider}. העלאות חדשות הולכות לדלי שלכם.",
+          "configured": "הוגדר אך כבוי. המדיה עדיין בדיסק המקומי. בדקו, ואז הפעילו.",
+          "local": "דיסק מקומי (עדיין לא הוגדר ספק ענן).",
+          "enabled": "מופעל",
+          "disabled": "מושבת"
+        },
+        "sections": {
+          "provider": {
+            "title": "ניתוב מדיה בענן"
+          },
+          "credentials": {
+            "title": "חיבור לדלי"
+          }
+        },
+        "guide": {
+          "title": "הגדרה",
+          "items": {
+            "s3": {
+              "title": "S3 / Wasabi",
+              "body": "מפתח גישה + סוד + אזור + דלי. נקודת הקצה של Wasabi נגזרת מהאזור."
+            },
+            "bunny": {
+              "title": "Bunny.net",
+              "body": "השתמשו בשדות Bunny: אזור אחסון וסיסמה. האזור הוא אזור ה-zone (de, ny, la...)."
+            },
+            "spaces": {
+              "title": "Spaces / R2 / MinIO",
+              "body": "מלאו את שדות S3 והדביקו את כתובת נקודת הקצה. סמנו path-style עבור MinIO."
+            },
+            "test": {
+              "title": "בדקו תמיד קודם",
+              "body": "'שמירה ובדיקת חיבור' כותב ומוחק קובץ בדיקה לפני שמפעילים 'מופעל'."
+            }
+          }
+        },
+        "tip": {
+          "title": "בטוח כברירת מחדל",
+          "body": "קבצים קיימים נשארים במקומם. רק העלאות חדשות הולכות לדלי; דבר לא מועבר או נמחק."
+        }
+      },
+      "whatsapp": {
+        "title": "הגדרות WhatsApp",
+        "eyebrow": "מנהל - הגדרות - ערוצים - WhatsApp",
+        "description": "אפליקציית Meta אחת (ושותף Interakt) שדרכה מרשמים את מספרי WhatsApp של כל סביבת עבודה. בלי מזהה אפליקציה וסוד, Embedded Signup וחידוש טוקנים לא פועלים; בלי מזהה תצורה, סביבות העבודה מדביקות טוקן ידנית. ערכים שמורים גוברים על ברירות המחדל של השרת תוך שניות, בכל תהליך.",
+        "sections": {
+          "metaApp": {
+            "title": "Business API (WABA)",
+            "description": "ה-Cloud API הרשמי של Meta. נדרש לתעבורה גבוהה, לתבניות הודעה ולפרופיל עסקי מאומת. תומך גם בהדבקת טוקן ידנית וגם ב-Embedded Signup (כניסה ל-WhatsApp)."
+          },
+          "interakt": {
+            "title": "ניתוב Interakt",
+            "description": "מספרים שמחוברים דרך Embedded Signup נשלחים ומתקבלים דרך הפרוקסי של Meta של Interakt כברירת מחדל. עברו ל-Meta (ישיר) כדי לדלג על Interakt. מספרים קיימים שומרים על הניתוב שבו חוברו."
+          },
+          "inbound": {
+            "title": "Webhook"
+          }
+        },
+        "guide": {
+          "title": "Business API (WABA)",
+          "items": {
+            "api": {
+              "title": "Meta Cloud API",
+              "body": "ה-Cloud API הרשמי של Meta. נדרש לתעבורה גבוהה, לתבניות הודעה ולפרופיל עסקי מאומת. תומך גם בהדבקת טוקן ידנית וגם ב-Embedded Signup (כניסה ל-WhatsApp)."
+            },
+            "app": {
+              "title": "מזהה אפליקציית Facebook + סוד",
+              "body": "developers.facebook.com/apps, Basic settings. שינוי האפליקציה מבטל טוקנים שהונפקו על ידי הישנה, ולכן סביבות העבודה חייבות להתחבר מחדש."
+            },
+            "webhook": {
+              "title": "Webhook",
+              "body": "לוח האפליקציה, WhatsApp, Configuration: הדביקו את Callback URL ואת Verify token מעמוד זה, ואז הירשמו ל-messages ול-message_template_status_update."
+            },
+            "perWorkspace": {
+              "title": "לכל סביבת עבודה",
+              "body": "כל סביבת עבודה מחברת את המספר שלה מ-Channels, מספרי WhatsApp. מזהה מספר טלפון וטוקן קבוע נאספים שם."
+            },
+            "login": {
+              "title": "כניסה ל-WABA (אופציונלי)",
+              "body": "מלאו את מזהה תצורת Embedded Signup כדי לאפשר 'התחברות עם Meta' בלחיצה אחת. דורש תפקיד Tech Provider באפליקציה. השאירו ריק לשימוש בהדבקה ידנית בלבד."
+            }
+          }
+        },
+        "tip": {
+          "title": "טיפ",
+          "body": "החלפת ניתוב ברירת המחדל או האפליקציה באמצע תעבורה משפיעה רק על מספרים שיחוברו לאחר מכן. השהו קמפיינים לפני שינוי אפליקציית Meta."
+        }
+      },
+      "campaigns": {
+        "title": "מסירת קמפיינים",
+        "eyebrow": "מנהל - קמפיינים",
+        "description": "כללים ברמת הפלטפורמה לכל הקמפיינים של סביבות העבודה: כמה פעמים מנסים שוב הודעה שנכשלה, ומתי קמפיין שלא הסתיים מסתיים.",
+        "sections": {
+          "retry": {
+            "title": "ניסיונות חוזרים"
+          },
+          "expiry": {
+            "title": "סיום אוטומטי"
+          }
+        },
+        "guide": {
+          "title": "איך זה עובד",
+          "items": {
+            "retry": {
+              "title": "ניסיונות חוזרים",
+              "body": "נמען ששליחתו נכשלה ינוסה שוב לאחר ההמתנה, עד למספר הניסיונות שהוגדר כאן."
+            },
+            "expiry": {
+              "title": "סיום אוטומטי",
+              "body": "קמפיין שעדיין פועל אחרי השעות שהוגדרו כאן מסתיים, כך שלא יחזיק שולח לנצח."
+            }
+          }
+        }
+      },
+      "googleCalendar": {
+        "title": "Google Calendar",
+        "eyebrow": "מנהל - פגישות",
+        "description": "לקוח OAuth אחד של Google Cloud לכל הפלטפורמה. כל סביבת עבודה מחברת אחר כך את חשבון Google שלה מ-Appointments, Settings; סביבת עבודה לעולם לא רואה את מזהה הלקוח או את הסוד.",
+        "sections": {
+          "oauth": {
+            "title": "לקוח OAuth של Google",
+            "description": "בלי מזהה לקוח וסוד, סביבות העבודה רואות את Google Calendar כלא זמין, וההזמנות ממשיכות בלי יומן."
+          }
+        },
+        "guide": {
+          "title": "הגדירו ב-Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. פרויקט ו-API",
+              "body": "ב-Google Cloud Console צרו פרויקט והפעילו את Google Calendar API."
+            },
+            "redirect": {
+              "title": "2. לקוח OAuth",
+              "body": "צרו OAuth 2.0 Client ID מסוג Web application והוסיפו את ה-redirect URI המוצג בעמוד זה תחת Authorised redirect URIs."
+            },
+            "consent": {
+              "title": "3. מסך הסכמה",
+              "body": "הוסיפו את ההרשאות calendar.events, calendar.freebusy ו-calendar.calendarlist.readonly, ואז פרסמו את האפליקציה: במצב Testing, Google מבטלת כל הרשאה לאחר 7 ימים וסביבות העבודה יצטרכו להתחבר מחדש."
+            },
+            "workspaces": {
+              "title": "4. סביבות העבודה מתחברות",
+              "body": "הדביקו כאן את מזהה הלקוח והסוד ושמרו. מנהלים מתחברים לאחר מכן מ-Appointments, Settings, Google Calendar."
+            }
+          }
+        }
+      },
+      "flowBuilder": {
+        "title": "עורך תהליכים",
+        "eyebrow": "מנהל - אוטומציה",
+        "description": "בחרו את עורך התהליכים ברירת המחדל לכל סביבת עבודה: עורך פשוט שלב אחר שלב או עורך קנבס מתקדם. סביבת עבודה יכולה לעקוף זאת בעמוד התהליכים שלה.",
+        "sections": {
+          "mode": {
+            "title": "עורך"
+          }
+        },
+        "guide": {
+          "title": "איך זה עובד",
+          "items": {
+            "modes": {
+              "title": "שני העורכים",
+              "body": "פשוט מציג תהליך כרשימת שלבים זה מתחת לזה, עם פלוס בין השלבים. מתקדם הוא הקנבס עם צמתים וחוטים. שניהם שומרים את אותו תהליך, כך שהתהליך פועל באותו אופן."
+            },
+            "existing": {
+              "title": "תהליכים קיימים",
+              "body": "שינוי ההגדרה הזו לעולם לא משנה או מוחק תהליך. תהליך ממשיך לפעול; הוא רק נפתח בעורך שפעיל. סביבת עבודה שבחרה עורך משלה שומרת עליו עד שתבחר שוב את ברירת המחדל של הפלטפורמה."
+            }
+          }
+        }
+      }
+    },
+    "cookie": {
+      "title": "אנו משתמשים בעוגיות",
+      "learnMore": "למידע נוסף",
+      "decline": "דחייה",
+      "customize": "התאמה אישית",
+      "acceptAll": "קבלת הכול",
+      "rejectAll": "דחיית הכול",
+      "save": "שמירת העדפות",
+      "preferences": "העדפות עוגיות",
+      "categories": {
+        "necessary": {
+          "title": "הכרחיות בלבד",
+          "body": "נדרשות כדי שהאתר יפעל: כניסה, אבטחה והבחירות שלכם. תמיד פעיל."
+        },
+        "analytics": {
+          "title": "עוגיות אנליטיקה",
+          "body": "עזרו לנו להבין כיצד משתמשים באתר, כדי שנוכל לשפר אותו."
+        },
+        "marketing": {
+          "title": "עוגיות שיווק",
+          "body": "משמשות למדידת מודעות ולהצגת קמפיינים רלוונטיים במקומות אחרים."
+        }
+      }
+    },
+    "appearance": {
+      "previewKicker": "תצוגה מקדימה חיה",
+      "previewTitle": "לפני השמירה",
+      "previewNote": "צבעים, גודל ושקיפות מתעדכנים בזמן הגרירה. דבר לא חל על אף אחד עד שתשמרו.",
+      "resetTitle": "איפוס לברירות מחדל",
+      "resetBody": "מנקה את כל העקיפות ומשחזר את הפלטה המקורית.",
+      "reset": "איפוס כל הצבעים",
+      "tokens": "{count} אסימונים",
+      "controls": "{count} פקדים",
+      "primary": "ראשי",
+      "cancel": "ביטול",
+      "active": "פעיל"
+    },
+    "wabaCallback": {
+      "loading": "טוען פרטי Webhook…",
+      "unavailable": "פרטי Webhook מוצגים למנהלי־על בלבד.",
+      "webhookUrl": "כתובת Webhook",
+      "noUrl": "הגדירו APP_URL או WABA_WEBHOOK_PUBLIC_URL",
+      "webhookHint": "הדביקו באפליקציית Meta (WhatsApp, Configuration, Callback URL). הירשמו ל: {fields}.",
+      "verifyToken": "Verify token",
+      "verifyHint": "הדביקו באותו מסך כמו ה-Verify token.",
+      "copy": "העתקה",
+      "copied": "הועתק",
+      "connected": "WABA מחוברים (כל סביבות העבודה)",
+      "fieldsTitle": "שדות Webhook (דו־קיום וקבוצות)",
+      "fieldsHint": "דו־קיום דורש שהאפליקציה של Meta תהיה רשומה ל-messages, smb_message_echoes, smb_app_state_sync ו-history. קבוצות WhatsApp דורשות group_lifecycle_update, group_participants_update, group_settings_update ו-group_status_update.",
+      "fieldsCheck": "בדיקת שדות Webhook",
+      "fieldsChecking": "שואל את Meta…",
+      "fieldsOk": "כל השדות רשומים: תשובות שנכתבות בטלפון יסונכרנו ואירועי קבוצות WhatsApp יגיעו.",
+      "fieldsMissing": "חלק מהשדות עדיין לא רשומים.",
+      "fieldsSubscribed": "נרשם. תשובות שנכתבות בטלפון יסונכרנו כעת, ואירועי קבוצות WhatsApp יגיעו.",
+      "fieldsMissingTag": "חסר",
+      "fieldsGroupTag": "קבוצות",
+      "fieldsSubscribe": "רישום השדות החסרים",
+      "fieldsSubscribing": "נרשם…"
+    },
+    "googleCallback": {
+      "redirectTitle": "Redirect URI",
+      "redirectHint": "רשמו את הכתובת הזו בדיוק כ-Authorised redirect URI בלקוח ה-OAuth. לכאן Google שולחת את הדפדפן לאחר שמנהל סביבת העבודה מאשר.",
+      "copy": "העתקה",
+      "copied": "הועתק"
+    }
+  }
+}

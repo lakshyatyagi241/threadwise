@@ -1,0 +1,446 @@
+{
+  "team-inbox-conversations": {
+    "nav": {
+      "inbox": "Inbox"
+    },
+    "common": {
+      "dismiss": "Tutup"
+    },
+    "screen": {
+      "listRegion": "Percakapan",
+      "panelRegion": "Kontak dan catatan",
+      "close": "Tutup",
+      "cancel": "Batal",
+      "conflict": "Orang lain lebih dulu mengubah percakapan ini. Percakapan telah dimuat ulang; coba lagi.",
+      "assigned": "Percakapan ditugaskan.",
+      "assignedToYou": "Ditugaskan kepada Anda.",
+      "unassigned": "Penugasan percakapan dihapus.",
+      "resolved": "Percakapan diselesaikan.",
+      "reopened": "Percakapan dibuka kembali.",
+      "deleteNoteTitle": "Hapus catatan ini?",
+      "deleteNoteMessage": "Catatan akan dihapus untuk semua orang di tim Anda. Tindakan ini tidak dapat dibatalkan.",
+      "deleteNoteConfirm": "Hapus catatan",
+      "pickTitle": "Pilih percakapan",
+      "pickMessage": "Pilih percakapan dari daftar untuk membacanya dan membalas. Pesan baru akan muncul di sini dengan sendirinya.",
+      "shortcuts": "Pintasan: j dan k untuk bergerak dalam daftar, e untuk menyelesaikan, / untuk mencari.",
+      "teamChanged": "Tim diperbarui."
+    },
+    "list": {
+      "title": "Inbox",
+      "refresh": "Segarkan daftar",
+      "openSimulator": "Buka simulator pelanggan",
+      "search": "Cari percakapan",
+      "searchPlaceholder": "Cari nama atau nomor",
+      "tabsLabel": "Tampilan percakapan",
+      "tabs": {
+        "all": "Semua",
+        "mine": "Milik saya",
+        "unassigned": "Belum ditugaskan",
+        "unread": "Belum dibaca"
+      },
+      "statusFilter": "Status",
+      "statusOpen": "Terbuka",
+      "statusAll": "Semua status",
+      "status": {
+        "open": "Terbuka",
+        "pending": "Tertunda",
+        "snoozed": "Ditunda",
+        "resolved": "Selesai",
+        "closed": "Selesai",
+        "spam": "Spam"
+      },
+      "priority": {
+        "low": "Rendah",
+        "normal": "Normal",
+        "high": "Tinggi",
+        "urgent": "Mendesak"
+      },
+      "channelFilter": "Channel",
+      "allChannels": "Semua channel",
+      "archived": "Diarsipkan",
+      "backToInbox": "Kembali ke inbox",
+      "loading": "Memuat percakapan",
+      "retry": "Coba lagi",
+      "listLabel": "Percakapan",
+      "loadMore": "Muat lainnya",
+      "moreFailed": "Percakapan tambahan tidak dapat dimuat.",
+      "unreadCount": "{count, plural, other {# pesan belum dibaca}}",
+      "you": "Anda:",
+      "noMessages": "Belum ada pesan",
+      "windowClosed": "Jendela ditutup",
+      "windowLeftHours": "Sisa {hours} j {minutes} m",
+      "windowLeftMinutes": "Sisa {minutes} m",
+      "unassigned": "Belum ditugaskan",
+      "needsContact": "Tidak ada data kontak",
+      "gettingStarted": {
+        "title": "Hubungkan channel untuk memulai",
+        "message": "Inbox Anda terisi saat pelanggan menulis ke channel yang terhubung. Hubungkan satu channel dan setiap percakapan akan masuk ke sini.",
+        "connect": "Hubungkan channel"
+      },
+      "emptyFiltered": {
+        "title": "Tidak ada percakapan yang cocok",
+        "message": "Tidak ada yang cocok dengan filter ini. Hapus filter untuk melihat semua percakapan lagi.",
+        "clear": "Hapus filter"
+      },
+      "empty": {
+        "all": {
+          "title": "Belum ada percakapan",
+          "message": "Saat pelanggan menulis ke salah satu channel Anda, percakapannya akan muncul di sini."
+        },
+        "mine": {
+          "title": "Tidak ada yang ditugaskan kepada Anda",
+          "message": "Percakapan yang ditugaskan kepada Anda muncul di sini. Buka salah satu dari Semua dan tugaskan kepada diri Anda."
+        },
+        "unassigned": {
+          "title": "Setiap percakapan memiliki penanggung jawab",
+          "message": "Percakapan baru yang belum diambil siapa pun tercantum di sini."
+        },
+        "unread": {
+          "title": "Semua sudah beres",
+          "message": "Percakapan dengan pesan baru dari pelanggan tercantum di sini."
+        }
+      }
+    },
+    "status": {
+      "received": "Diterima",
+      "queued": "Mengirim",
+      "sent": "Terkirim",
+      "delivered": "Tersampaikan",
+      "read": "Dibaca",
+      "failed": "Tidak terkirim"
+    },
+    "errors": {
+      "conflict": "Orang lain lebih dulu mengubah ini. Sudah dimuat ulang; coba lagi.",
+      "windowClosed": "Jendela balasan 24 jam sudah ditutup, sehingga pesan bebas tidak dapat dikirim.",
+      "planLimit": "Batas pesan bulanan paket Anda telah tercapai.",
+      "channelDisconnected": "Channel ini terputus. Hubungkan kembali untuk mengirim pesan.",
+      "sendHalted": "Pengiriman sedang dijeda untuk seluruh platform. Coba lagi nanti.",
+      "notFound": "Percakapan ini sudah tidak ada atau Anda tidak dapat melihatnya.",
+      "notRetryable": "Hanya pesan yang gagal yang dapat dikirim ulang.",
+      "mediaNotFound": "Lampiran sudah kedaluwarsa atau dihapus. Lampirkan lagi.",
+      "statusInvalid": "Perubahan itu tidak diizinkan dari status percakapan saat ini.",
+      "assigneeInvalid": "Orang tersebut tidak dapat ditugaskan ke percakapan ini.",
+      "forbidden": "Anda tidak memiliki izin untuk melakukan itu.",
+      "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
+      "simulatorDisabled": "Simulator channel dinonaktifkan di server ini.",
+      "channelInUse": "Channel ini masih memiliki percakapan. Putuskan koneksinya alih-alih menghapusnya.",
+      "validation": "Sebagian yang Anda masukkan tidak valid.",
+      "tooLarge": "File tersebut terlalu besar.",
+      "unsupported": "Channel ini tidak dapat mengirim jenis pesan atau file tersebut.",
+      "network": "Server tidak dapat dihubungi. Periksa koneksi Anda lalu coba lagi.",
+      "generic": "Terjadi kesalahan. Coba lagi.",
+      "genericWithId": "Terjadi kesalahan. Coba lagi. Referensi: {id}",
+      "templateNotSendable": "Templat itu tidak dapat dikirim ke percakapan ini. Pilih yang lain.",
+      "groupSendUnavailable": "Pengiriman ke grup WhatsApp belum tersedia. Balas dari aplikasi WhatsApp Business."
+    },
+    "bubble": {
+      "kind": {
+        "image": "Foto",
+        "text": "Pesan",
+        "attachment": "Lampiran"
+      },
+      "template": "Pesan templat: {name}",
+      "unavailable": "Pesan tidak tersedia",
+      "sentIn": "Dikirim dalam {lang}. Tampilkan teks yang Anda tulis",
+      "translatedFrom": "Diterjemahkan dari {lang}. Tampilkan yang asli",
+      "bot": "Bot",
+      "broadcast": "Broadcast",
+      "reacted": "Reaksi {emoji}",
+      "edited": "Diedit",
+      "failed": "Pesan ini tidak terkirim.",
+      "retry": "Coba lagi",
+      "sending": "Mengirim",
+      "dismiss": "Tutup",
+      "noteLabel": "Catatan internal",
+      "unknownAuthor": "Seorang anggota tim",
+      "deleteNote": "Hapus catatan ini",
+      "templateHeader": {
+        "image": "Gambar",
+        "video": "Video",
+        "document": "Dokumen",
+        "location": "Lokasi"
+      },
+      "templateCopyCode": "Salin kode",
+      "templateButtonUnnamed": "Tombol",
+      "templateButtonPrefix": "Tombol: "
+    },
+    "media": {
+      "openImage": "Buka gambar {name}",
+      "video": "Video",
+      "voice": "Pesan suara",
+      "audio": "Audio",
+      "document": "Dokumen",
+      "download": "Unduh {name}",
+      "location": "Lokasi dibagikan",
+      "openMap": "Buka di OpenStreetMap"
+    },
+    "thread": {
+      "title": "Percakapan",
+      "back": "Kembali ke daftar percakapan",
+      "loading": "Memuat percakapan",
+      "retry": "Coba lagi",
+      "notFound": {
+        "title": "Percakapan tidak ditemukan",
+        "message": "Percakapan ini dihapus, atau Anda tidak dapat melihatnya. Pilih yang lain dari daftar."
+      },
+      "status": {
+        "resolved": "Selesai",
+        "closed": "Ditutup",
+        "spam": "Spam",
+        "snoozed": "Ditunda"
+      },
+      "assignToMe": "Tugaskan ke saya",
+      "resolve": "Selesaikan",
+      "reopen": "Buka kembali",
+      "resolveShortcut": "Selesaikan atau buka kembali (e)",
+      "showPanel": "Tampilkan kontak dan catatan",
+      "hidePanel": "Sembunyikan kontak dan catatan",
+      "window": {
+        "closed": "Jendela ditutup",
+        "closesInHours": "Ditutup dalam {hours} j {minutes} m",
+        "closesInMinutes": "Ditutup dalam {minutes} m"
+      },
+      "windowBanner": {
+        "title": "Jendela balasan 24 jam telah ditutup.",
+        "message": "Channel ini hanya mengizinkan pesan templat yang disetujui lebih dari 24 jam setelah pesan terakhir pelanggan. Anda tetap dapat menambahkan catatan internal. Pesan baru dari pelanggan akan membuka kembali jendela.",
+        "sendTemplate": "Kirim templat"
+      },
+      "readOnly": "Anda dapat membaca percakapan ini tetapi tidak memiliki izin untuk membalas.",
+      "typing": "{count, plural, other {# anggota tim sedang mengetik}}",
+      "messagesLabel": "Pesan",
+      "loadOlder": "Muat pesan sebelumnya",
+      "empty": "Belum ada pesan dalam percakapan ini.",
+      "newMessageAnnounce": "Pesan baru: {text}",
+      "attachment": "sebuah lampiran",
+      "jumpLatest": "Ke yang terbaru",
+      "jumpLatestNew": "{count, plural, other {# pesan baru}}"
+    },
+    "composer": {
+      "modeLabel": "Jenis pesan",
+      "mode": {
+        "reply": "Balas",
+        "note": "Catatan internal"
+      },
+      "attach": "Lampirkan file",
+      "removeAttachment": "Hapus lampiran",
+      "replyLabel": "Balas pelanggan",
+      "noteLabel": "Catatan internal",
+      "replyPlaceholder": "Ketik pesan",
+      "notePlaceholder": "Tulis catatan yang hanya dapat dilihat tim Anda",
+      "replyDisabledPlaceholder": "Balasan dinonaktifkan untuk percakapan ini",
+      "send": "Kirim",
+      "addNote": "Tambahkan catatan",
+      "hint": "Enter untuk mengirim. Shift+Enter untuk baris baru.",
+      "template": "Kirim templat",
+      "groupSendUnavailable": "Pengiriman ke grup WhatsApp belum tersedia. Balas dari aplikasi WhatsApp Business."
+    },
+    "panel": {
+      "tabsLabel": "Catatan dan linimasa",
+      "contact": "Kontak",
+      "openContact": "Buka kontak",
+      "needsContact": "Nomor ini tidak memiliki data kontak karena batas kontak Anda telah tercapai.",
+      "noContact": "Percakapan ini tidak ditautkan ke kontak.",
+      "email": "Email",
+      "stage": "Tahap",
+      "status": "Status",
+      "source": "Sumber",
+      "since": "Kontak sejak",
+      "optedOut": "Berhenti berlangganan pemasaran",
+      "resolve": "Selesaikan",
+      "reopen": "Buka kembali",
+      "assignee": {
+        "title": "Ditugaskan kepada",
+        "unknown": "Anggota tim tidak dikenal",
+        "none": "Tidak ada yang menangani percakapan ini",
+        "team": "Tim: {name}",
+        "pick": "Pilih siapa yang menangani percakapan ini",
+        "unassigned": "Belum ditugaskan",
+        "you": "Anda",
+        "loadFailed": "Daftar anggota tim tidak dapat dimuat.",
+        "assignToMe": "Tugaskan ke saya",
+        "unassign": "Batalkan penugasan",
+        "open": "{count} terbuka",
+        "pickTeam": "Pilih tim untuk percakapan ini",
+        "noTeam": "Tanpa tim"
+      },
+      "presence": {
+        "online": "Daring",
+        "away": "Tidak di tempat",
+        "busy": "Sibuk",
+        "offline": "Luring"
+      },
+      "notes": {
+        "tab": "Catatan",
+        "label": "Catatan internal baru",
+        "placeholder": "Tulis catatan yang hanya dapat dilihat tim Anda",
+        "hint": "Ctrl+Enter untuk menambahkan catatan.",
+        "add": "Tambahkan catatan",
+        "addFailed": "Catatan tidak dapat disimpan.",
+        "loading": "Memuat catatan",
+        "empty": "Belum ada catatan.",
+        "unknownAuthor": "Seorang anggota tim",
+        "delete": "Hapus catatan ini"
+      },
+      "timeline": {
+        "tab": "Linimasa",
+        "loading": "Memuat linimasa",
+        "failed": "Linimasa tidak dapat dimuat.",
+        "retry": "Coba lagi",
+        "empty": "Belum ada aktivitas dalam percakapan ini.",
+        "events": {
+          "created": "Percakapan dimulai",
+          "assigned": "Ditugaskan oleh {actor}",
+          "reassigned": "Ditugaskan ulang oleh {actor}",
+          "unassigned": "Penugasan dihapus oleh {actor}",
+          "ai_handoff": "Diserahkan ke orang oleh {actor}",
+          "resolved": "Diselesaikan oleh {actor}",
+          "closed": "Ditutup oleh {actor}",
+          "reopened": "Dibuka kembali oleh {actor}",
+          "status_changed": "Status diubah oleh {actor}",
+          "note_added": "Catatan ditambahkan oleh {actor}",
+          "snoozed": "Ditunda oleh {actor}",
+          "auto_unsnoozed": "Penundaan berakhir",
+          "priority_changed": "Prioritas diubah oleh {actor}",
+          "tag_added": "Label ditambahkan oleh {actor}",
+          "tag_removed": "Label dihapus oleh {actor}",
+          "first_response": "Balasan pertama terkirim",
+          "sla_breach": "Tenggat respons terlewat",
+          "unknown": "{what} oleh {actor}"
+        },
+        "actors": {
+          "user": "Seorang anggota tim",
+          "system": "Sistem",
+          "bot": "Sebuah bot",
+          "flow": "Otomatisasi",
+          "ai": "Asisten AI"
+        }
+      },
+      "owner": "Pemilik",
+      "past": {
+        "title": "Percakapan sebelumnya",
+        "noMessages": "Tidak ada pesan",
+        "status": {
+          "open": "Terbuka",
+          "pending": "Tertunda",
+          "snoozed": "Ditunda",
+          "resolved": "Selesai",
+          "closed": "Ditutup",
+          "spam": "Spam"
+        }
+      }
+    },
+    "simulator": {
+      "title": "Simulator pelanggan",
+      "close": "Tutup simulator",
+      "devOnly": "Hanya untuk pengembangan. Ini berpura-pura menjadi pelanggan di channel simulasi; tidak ada yang sampai ke ponsel sungguhan.",
+      "noChannel": "Belum ada channel simulator.",
+      "createChannel": "Buat channel simulator",
+      "disabled": "Simulator dinonaktifkan di server ini.",
+      "channel": "Channel simulator",
+      "customer": "Pelanggan",
+      "name": "Nama",
+      "number": "Nomor",
+      "numberHint": "Hanya angka, 5 sampai 15.",
+      "kind": "Jenis pesan",
+      "kinds": {
+        "text": "Teks",
+        "image": "Gambar",
+        "document": "Dokumen",
+        "audio": "Audio",
+        "video": "Video",
+        "location": "Lokasi"
+      },
+      "file": "File",
+      "fileHint": "Opsional. Nama dan jenisnya akan digunakan; jika tidak, file contoh akan dikirim.",
+      "message": "Pesan",
+      "caption": "Keterangan",
+      "placeName": "Nama tempat",
+      "send": "Kirim sebagai pelanggan",
+      "sent": "{count, plural, other {Terkirim # kali, disimpan sekali.}}",
+      "duplicate": "Pengiriman ganda",
+      "duplicateHint": "Mengirim pesan yang sama tiga kali, untuk membuktikan pesan hanya disimpan sekali.",
+      "nextSend": "Balasan Anda berikutnya",
+      "nextSendHint": "Berlaku untuk pesan berikutnya yang Anda kirim dari kotak tulis, lalu kembali normal.",
+      "faults": {
+        "none": "Normal",
+        "fail": "Gagal",
+        "flaky": "Gagal dua kali, lalu berhasil",
+        "slow": "Lambat (10 dtk)",
+        "ooo": "Tanda terima tidak berurutan"
+      },
+      "window": "Jendela 24 jam",
+      "windows": {
+        "auto": "Otomatis",
+        "open": "Paksa buka",
+        "closed": "Paksa tutup"
+      },
+      "windowHint": "Tutup menunjukkan perilaku kotak tulis saat hanya templat yang boleh dikirim."
+    },
+    "channels": {
+      "title": "Channel",
+      "intro": "Akun tempat pelanggan menghubungi Anda. Setiap akun mengalirkan pesan ke inbox.",
+      "backToInbox": "Kembali ke inbox",
+      "simulatorNote": "Pengembangan: tambahkan channel simulasi untuk mencoba inbox tanpa akun sungguhan.",
+      "addSimulator": "Tambahkan channel simulator",
+      "simulatorAdded": "Channel simulator ditambahkan.",
+      "simulatorDisabled": "Simulator dinonaktifkan di server ini.",
+      "loading": "Memuat channel",
+      "loadFailed": "Channel tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "empty": {
+        "title": "Belum ada channel terhubung",
+        "message": "Hubungkan channel dan pesan pelanggan akan mulai masuk ke inbox."
+      },
+      "listLabel": "Channel terhubung",
+      "status": {
+        "connected": "Terhubung",
+        "disconnected": "Terputus",
+        "error": "Error"
+      },
+      "capWindow": "Jendela balasan {hours} jam",
+      "capTemplates": "Templat",
+      "capMedia": "Media",
+      "capReceipts": "Tanda terima pengiriman",
+      "lastEvent": "Aktivitas terakhir {when}",
+      "noEvents": "Belum ada aktivitas",
+      "remove": "Hapus",
+      "removeTitle": "Hapus channel ini?",
+      "removeMessage": "{name} akan dihapus. Channel yang masih memiliki percakapan tidak dapat dihapus; putuskan koneksinya saja.",
+      "removeConfirm": "Hapus channel",
+      "cancel": "Batal"
+    },
+    "templates": {
+      "eyebrow": "WhatsApp",
+      "title": "Kirim templat",
+      "close": "Tutup",
+      "cancel": "Batal",
+      "back": "Kembali ke templat",
+      "search": "Cari berdasarkan nama atau teks",
+      "searchLabel": "Cari templat",
+      "loading": "Memuat templat",
+      "loadError": "Templat tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "empty": "Belum ada templat yang disetujui untuk nomor WhatsApp ini. Buat satu di Templat dan tunggu Meta menyetujuinya.",
+      "noResults": "Tidak ada templat yang cocok dengan pencarian Anda.",
+      "windowHint": "Templat tetap dapat dikirim meskipun jendela balasan 24 jam sudah ditutup.",
+      "variables": "Isi variabel",
+      "preview": "Yang akan dibaca pelanggan",
+      "send": "Kirim templat",
+      "sending": "Mengirim",
+      "sent": "Templat terkirim",
+      "problem": {
+        "required": "{label} wajib diisi.",
+        "format": "{label} tidak boleh berisi ganti baris, tab, atau empat spasi berturut-turut."
+      },
+      "reason": {
+        "paused": "Dijeda oleh WhatsApp. Dapat dikirim lagi setelah jeda berakhir.",
+        "media_header": "Memiliki header gambar, video, atau dokumen, yang belum dapat dikirim dari inbox.",
+        "header_variable": "Memiliki variabel di header, yang belum dapat diisi dari inbox.",
+        "dynamic_button": "Memiliki tautan tombol dengan variabel, yang belum dapat diisi dari inbox.",
+        "authentication": "Templat kata sandi sekali pakai dikirim oleh sistem, bukan dari inbox.",
+        "named_variables": "Menggunakan variabel bernama, yang belum didukung inbox."
+      },
+      "hasMore": "Menampilkan {count} templat pertama. Cari berdasarkan nama atau teks untuk menemukan lainnya."
+    }
+  }
+}

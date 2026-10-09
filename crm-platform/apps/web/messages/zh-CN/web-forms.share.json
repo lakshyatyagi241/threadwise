@@ -1,0 +1,278 @@
+{
+  "web-forms": {
+    "share": {
+      "readOnly": "您可以查看这些设置，但无法更改。",
+      "clipboardBlocked": "浏览器阻止了复制。请选中文本后手动复制。",
+      "copied": "已复制",
+      "status": {
+        "archived": {
+          "title": "表单已归档",
+          "body": "公开链接和所有嵌入内容均已关闭。恢复表单后即可再次使用。"
+        },
+        "draft": {
+          "title": "发布表单后此链接才会生效",
+          "body": "表单至少发布一次之前，任何人都无法打开链接或嵌入内容。"
+        },
+        "paused": {
+          "title": "表单已关闭",
+          "body": "链接和嵌入内容将显示已关闭的提示，且不再接收回答。恢复表单即可重新开放。"
+        },
+        "live": {
+          "title": "表单已上线",
+          "body": "访客看到的是版本 {version}。您在编辑器中所做的更改只有在发布后才会生效。"
+        }
+      },
+      "hosted": {
+        "title": "公开链接",
+        "description": "可将此地址分享到任何地方：消息、电子邮件、社交简介。它会在独立页面中打开表单。",
+        "label": "表单地址",
+        "copy": "复制链接",
+        "copiedToast": "链接已复制。",
+        "open": "打开",
+        "newTab": "（在新标签页中打开）"
+      },
+      "qr": {
+        "title": "二维码",
+        "description": "适用于印刷品、海报和包装。扫描后将打开公开链接。",
+        "alt": "可打开表单的二维码",
+        "tracking": "二维码会在地址后添加 utm_source=qr，因此通过它提交的记录在归因中会显示为 QR。",
+        "downloadPng": "下载 PNG",
+        "downloadSvg": "下载 SVG",
+        "downloadFailed": "二维码下载失败，请重试。"
+      },
+      "embed": {
+        "title": "将表单放到您的网站上",
+        "description": "将以下代码之一粘贴到希望显示表单的位置。嵌入仅适用于下方“允许的网站”中列出的网站。",
+        "copy": "复制代码",
+        "copiedToast": "{name} 已复制。",
+        "script": {
+          "title": "脚本嵌入",
+          "description": "推荐。表单会自动调整大小以适应页面，并可在提交后跳转。"
+        },
+        "iframe": {
+          "title": "iframe 嵌入",
+          "description": "普通框架，适用于不允许脚本的建站工具。高度需自行设置。"
+        }
+      },
+      "domains": {
+        "title": "允许的网站",
+        "description": "只有此处列出的网站可以在浏览器中嵌入此表单并提交回答。",
+        "none": "目前尚未允许任何网站，因此表单仅可通过公开链接使用，无法嵌入。",
+        "label": "添加网站",
+        "hint": "请使用完整地址，例如 https://www.example.com。允许使用一级通配符，例如 https://*.example.com。纯 http 仅适用于 localhost。",
+        "count": "{count} / {max}",
+        "add": "添加",
+        "remove": "移除 {value}",
+        "empty": "尚未添加网站。",
+        "issues": {
+          "empty": "请先输入网站地址。",
+          "invalid": "地址无效。请使用 https://example.com 或 https://*.example.com 格式，不要包含路径。",
+          "duplicate": "此网站已在列表中。",
+          "max": "最多只能允许 {max} 个网站。"
+        }
+      },
+      "rotate": {
+        "title": "轮换公钥",
+        "description": "为此表单生成新密钥。如果链接或嵌入代码已泄露，或您想停用旧代码，请使用此功能。",
+        "button": "轮换密钥",
+        "readOnly": "您无法更改此表单",
+        "confirmTitle": "要轮换公钥吗？",
+        "confirmMessage": "旧链接、二维码和嵌入代码将立即失效。您需要分享新链接，并在每个嵌入此表单的网站上替换代码。",
+        "confirmButton": "轮换密钥",
+        "cancel": "取消",
+        "success": "密钥已轮换。请复制新的链接和代码。",
+        "failed": "密钥轮换失败，未做任何更改。请重试。",
+        "conflict": "其他人已更改此表单。请重新加载页面查看最新版本，然后重试。"
+      }
+    },
+    "settings": {
+      "readOnly": "您可以查看这些设置，但无法更改。",
+      "usersFailed": "无法加载团队成员列表，目前无法选择负责人。",
+      "form": {
+        "title": "表单",
+        "description": "列表中显示的名称，以及访客在表单上看到的基本信息。",
+        "name": "表单名称",
+        "nameHint": "只有您的团队能看到此名称。",
+        "issues": {
+          "nameRequired": "请为表单命名。",
+          "submit_empty": "按钮需要标签文字。",
+          "submit_too_long": "按钮标签最多 {max} 个字符。"
+        },
+        "language": "表单语言",
+        "languageHint": "设置内置文字的语言和阅读方向（阿拉伯语为从右到左）。",
+        "languages": {
+          "en": "英语",
+          "ar": "阿拉伯语"
+        },
+        "submitLabel": "提交按钮标签",
+        "submitLabelHint": "1 到 {max} 个字符。"
+      },
+      "after": {
+        "title": "提交后",
+        "description": "访客在提交回答后看到的内容。",
+        "mode": "执行操作",
+        "modes": {
+          "message": "显示消息",
+          "redirect": "跳转到其他页面"
+        },
+        "modeHints": {
+          "message": "表单将被您的感谢消息取代。",
+          "redirect": "访客将被带到您的某个页面，例如感谢页或预约页。"
+        },
+        "message": "感谢消息",
+        "messageHint": "纯文本。允许使用以下简单标签：b、i、u、br、ul、ol、li 和 a。最多 {max} 个字符。",
+        "messageTooLong": "消息超过 {max} 个字符。",
+        "redirect": "跳转地址",
+        "redirectHint": "必须以 https:// 开头。非 https 的页面永远不会被打开。",
+        "redirectIssues": {
+          "required": "请输入访客将被带到的地址。",
+          "https": "请使用以 https:// 开头的地址。"
+        },
+        "redirectKeepsMessage": "感谢消息会保存在表单中，设置跳转后不会显示。"
+      },
+      "consent": {
+        "title": "同意",
+        "description": "一个复选框，记录访客同意的内容，包括确切措辞、版本和时间。",
+        "enabled": "请求同意",
+        "enabledHint": "在提交按钮上方显示同意声明。",
+        "text": "同意文本",
+        "textHint": "最多 {max} 个字符。访客将看到此确切措辞。",
+        "textRequired": "请填写同意文本，或关闭同意功能。",
+        "textTooLong": "文本超过 {max} 个字符。",
+        "version": "措辞版本 {version}",
+        "versionHintPublished": "表单发布后，修改措辞会自动开始新版本。之前的提交记录保留其同意时的版本。",
+        "versionHintDraft": "在表单发布前，版本号保持为 1。发布后，修改措辞将开始新版本。",
+        "privacyUrl": "隐私政策链接",
+        "privacyUrlHint": "可选。显示在同意文本旁边。必须以 https:// 开头。",
+        "privacyUrlHttps": "请使用以 https:// 开头的地址。",
+        "required": "必须勾选才能提交",
+        "requiredHint": "如果同意是可选的，请关闭此项。",
+        "marketing": "营销订阅",
+        "marketingHint": "勾选此框会在联系人上记录营销同意。未勾选则不会订阅任何人。"
+      },
+      "crm": {
+        "title": "在 CRM 中",
+        "description": "每次提交对其创建或更新的联系人所执行的操作。",
+        "company": "匹配公司",
+        "companyOptions": {
+          "none": "不匹配",
+          "email_domain": "按电子邮件域名",
+          "name_or_domain": "按名称或域名"
+        },
+        "companyHints": {
+          "none": "公司类回答不用于关联公司。",
+          "email_domain": "将联系人关联到其电子邮件地址域名所属的公司。",
+          "name_or_domain": "按名称或网站域名关联公司；若无匹配则创建公司。"
+        },
+        "lifecycle": "生命周期阶段",
+        "lifecycleHint": "表单提交时在联系人上设置。",
+        "lifecycleNone": "不设置",
+        "stages": {
+          "new": "新建",
+          "contacted": "已联系",
+          "qualified": "合格",
+          "application_started": "已开始申请",
+          "application_submitted": "已提交申请",
+          "interview_scheduled": "已安排面试",
+          "offer_received": "已收到录用通知",
+          "admission_confirmed": "已确认录取",
+          "enrolled": "已注册",
+          "lost": "丢失"
+        },
+        "tags": "要添加的标签",
+        "tagsHint": "将添加到每位提交此表单的联系人。最多 {max} 个标签，每个 1 到 60 个字符。",
+        "tagsPlaceholder": "例如：webinar",
+        "tagsCount": "{count} / {max}",
+        "tagAdd": "添加标签",
+        "tagRemove": "移除标签 {value}",
+        "tagsNone": "没有标签。",
+        "tagIssues": {
+          "empty": "请先输入标签。",
+          "too_long": "标签最多 60 个字符。",
+          "duplicate": "此标签已在列表中。",
+          "max": "最多只能添加 {max} 个标签。"
+        },
+        "owner": "新联系人的负责人",
+        "ownerHint": "负责跟进此表单所创建联系人的人。",
+        "ownerMode": "负责人规则",
+        "ownerModes": {
+          "unassigned": "无负责人",
+          "fixed": "指定一人",
+          "round_robin": "轮流分配"
+        },
+        "ownerModeHints": {
+          "unassigned": "在有人认领之前，该联系人没有负责人。",
+          "fixed": "所有联系人都分配给同一人。",
+          "round_robin": "联系人依次分配给所选人员。已停用的人员将被跳过。"
+        },
+        "ownerFixed": "负责人",
+        "ownerRoundRobin": "轮流分配的人员",
+        "ownerRoundRobinHint": "请至少选择两人。",
+        "chooseUser": "选择一人",
+        "unknownUser": "已不可用的人员",
+        "pickUsers": "选择人员",
+        "noUsers": "没有匹配的人员",
+        "removeUser": "移除 {name}",
+        "ownerIssues": {
+          "fixed_one": "请只选择一人。",
+          "round_robin_two": "轮流分配至少需要两人。",
+          "unassigned_none": "“无负责人”规则不能包含人员。请选择其他规则或清空列表。",
+          "too_many": "最多只能选择 50 人。"
+        }
+      },
+      "notify": {
+        "title": "通知",
+        "description": "提交到达时通知谁。",
+        "owner": "通知联系人的负责人",
+        "ownerHint": "负责人会收到每次提交的通知。",
+        "users": "同时通知这些人",
+        "usersHint": "最多 {max} 名团队成员也会收到通知。",
+        "emails": "同时发送邮件到这些地址",
+        "emailsHint": "最多 {max} 个地址会在每次提交时收到邮件。这些地址可以不属于您的团队。",
+        "emailPlaceholder": "name@example.com",
+        "emailsCount": "{count} / {max}",
+        "emailAdd": "添加邮箱",
+        "emailRemove": "移除 {value}",
+        "emailsNone": "没有其他地址。",
+        "emailIssues": {
+          "empty": "请先输入电子邮件地址。",
+          "invalid": "电子邮件地址无效。",
+          "duplicate": "此地址已在列表中。",
+          "max": "最多只能添加 {max} 个地址。"
+        }
+      },
+      "protection": {
+        "title": "防护",
+        "description": "防止垃圾内容，并决定回答的保留时长。",
+        "honeypot": "隐藏陷阱字段",
+        "honeypotHint": "添加一个访客看不到的字段。机器人会填写它，其提交将被标记为垃圾内容。",
+        "captcha": "验证码",
+        "captchaOptions": {
+          "inherit": "遵循平台设置",
+          "on": "始终开启",
+          "off": "关闭"
+        },
+        "captchaHints": {
+          "inherit": "使用您的工作区为公开表单设置的内容。",
+          "on": "访客必须通过验证后才能提交。",
+          "off": "不进行验证。依赖隐藏陷阱字段和速率限制。"
+        },
+        "retention": "保留回答（天）",
+        "retentionHint": "超过此天数后，回答将被删除。这有助于满足 GDPR 等数据保护规定。可设置 30 至 3650 天。",
+        "range": "请输入 {min} 到 {max} 之间的整数。",
+        "keepForever": "保留直到我手动删除",
+        "keepForeverHint": "回答将保留，直到有人手动删除。只有在有法律依据需要保留时才选择此项。",
+        "advanced": "高级：速率限制",
+        "advancedHint": "限制大量提交的速度。默认值适用于大多数表单。",
+        "rate": {
+          "perIpPerMinute": "每个地址、每分钟",
+          "perIpPerMinuteHint": "来自同一互联网地址的提交。",
+          "perFormPerMinute": "每个表单、每分钟",
+          "perFormPerMinuteHint": "来自任何来源、提交到此表单的数量。",
+          "perContactPerHour": "每个联系人、每小时",
+          "perContactPerHourHint": "使用相同电子邮件或电话号码的提交。"
+        }
+      }
+    }
+  }
+}

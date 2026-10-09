@@ -1,0 +1,1809 @@
+{
+  "auth-registration-security": {
+    "platform": {
+      "shell": {
+        "brand": "CRM",
+        "title": "プラットフォームコンソール",
+        "skipToContent": "コンテンツへスキップ",
+        "navLabel": "コンソールナビゲーション",
+        "openMenu": "メニューを開く",
+        "closeMenu": "メニューを閉じる",
+        "language": "言語",
+        "themeToLight": "ライトテーマに切り替え",
+        "themeToDark": "ダークテーマに切り替え",
+        "accountLink": "アカウントとセキュリティ（{email}）",
+        "signOut": "ログアウト",
+        "signingOut": "ログアウト中",
+        "redirecting": "2要素認証の設定を開いています",
+        "roles": {
+          "super_admin": "スーパー管理者",
+          "support": "サポート",
+          "auditor": "監査担当"
+        },
+        "mfaRequired": {
+          "title": "2要素認証が必要です",
+          "body": "スーパー管理者は、コンソールを使用する前に認証アプリを有効にする必要があります。以下の設定を完了すると、すべてのページが利用可能になります。"
+        }
+      },
+      "nav": {
+        "securityCenter": "セキュリティセンター",
+        "securityEvents": "セキュリティイベント",
+        "registration": "登録ポリシー",
+        "socialLogin": "ソーシャルログインとCAPTCHA",
+        "authPages": "認証ページ",
+        "plans": "プラン",
+        "account": "アカウントと2要素認証",
+        "groups": {
+          "security": "セキュリティ",
+          "guestPages": "ログインと登録",
+          "plans": "プラン",
+          "account": "あなたのアカウント"
+        }
+      },
+      "common": {
+        "copy": "コピー",
+        "copied": "コピーしました",
+        "copyFailed": "コピーできませんでした",
+        "loading": "読み込み中",
+        "retry": "再試行",
+        "requestId": "リクエストID",
+        "errors": {
+          "forbidden": "あなたのロールではこの操作は許可されていません。",
+          "request": "リクエストが拒否されました。ページを再読み込みして、もう一度お試しください。",
+          "unexpected": "サーバー側で問題が発生しました。しばらくしてからもう一度お試しください。"
+        },
+        "readOnly": {
+          "superAdmin": "これらの設定を変更できるのはスーパー管理者のみです。あなたのロール（{role}）では閲覧のみ可能です。",
+          "superAdminSupport": "これらの設定を変更できるのはスーパー管理者とサポートのみです。あなたのロール（{role}）では閲覧のみ可能です。"
+        },
+        "copyWhat": "{what}をコピー"
+      },
+      "login": {
+        "title": "オペレーターログイン",
+        "intro": "このコンソールはプラットフォームの運用担当者向けです。ワークスペースのユーザーはメインのログインページからログインしてください。",
+        "requestId": "リクエストID",
+        "submit": "ログイン",
+        "submitting": "ログイン中",
+        "fields": {
+          "email": "メール",
+          "emailPlaceholder": "you@company.com",
+          "password": "パスワード",
+          "showPassword": "パスワードを表示",
+          "hidePassword": "パスワードを非表示"
+        },
+        "errors": {
+          "email": "有効なメールアドレスを入力してください。",
+          "passwordRequired": "パスワードを入力してください。",
+          "captchaRequired": "ロボットではないことを示すため、チェックボックスをオンにしてください。",
+          "codeFormat": "認証アプリに表示された6桁を入力してください。",
+          "recoveryFormat": "リカバリーコードは、英字・数字・ハイフンで8～32文字です。"
+        },
+        "notices": {
+          "expired": "セッションが終了しました。続行するには再度ログインしてください。",
+          "idle": "{minutes, plural, other {#分}}間操作がなかったためログアウトされました。続行するには再度ログインしてください。"
+        },
+        "problems": {
+          "invalid": "認証情報が一致しません。",
+          "invalidCode": "コードが無効です。コードを確認してもう一度お試しください。",
+          "locked": "失敗回数が多すぎます。しばらくの間ログインが一時停止されます。",
+          "tryAgainIn": "{time}後にもう一度お試しください",
+          "ipBlocked": "{ip}からのアクセスは許可されていません。",
+          "ipBlockedUnknown": "このアドレスからのアクセスは許可されていません。",
+          "ipBlockedHelp": "オペレーターの許可リストにこのアドレスが含まれていません。スーパー管理者に追加を依頼してください。",
+          "captcha": "CAPTCHA認証に失敗しました。完了してからもう一度お試しください。",
+          "challengeExpired": "そのログインの有効期限が切れました。パスワードをもう一度入力してください。",
+          "rateLimited": "リクエストが多すぎます。しばらくしてからもう一度お試しください。",
+          "unexpected": "ログインできませんでした。しばらくしてからもう一度お試しください。",
+          "lockedWait": "失敗回数が多すぎます。{minutes, plural, other {#分}}後にもう一度お試しください。"
+        },
+        "captcha": {
+          "loadFailed": "CAPTCHAを読み込めませんでした。接続またはコンテンツブロッカーを確認してから再試行してください。",
+          "retry": "CAPTCHAを再試行",
+          "v3Notice": "このページは非表示のCAPTCHA認証で保護されています。"
+        },
+        "mfa": {
+          "title": "2要素認証の確認",
+          "intro": "認証アプリに表示される6桁のコードを入力してください。",
+          "recoveryIntro": "リカバリーコードのいずれかを入力してください。各コードは1回のみ使用できます。",
+          "codeLabel": "認証コード",
+          "codeHint": "コードは30秒ごとに変わります。",
+          "recoveryLabel": "リカバリーコード",
+          "recoveryHint": "英字、数字、ハイフン。保存したとおりに入力してください。",
+          "windowLeft": "このログインは{time}の間有効です。",
+          "windowClosed": "このログインの有効時間が終了しました。戻って、パスワードをもう一度入力してください。",
+          "verify": "確認してログイン",
+          "verifying": "確認中",
+          "useRecovery": "リカバリーコードを使用",
+          "useAuthenticator": "認証アプリを使用",
+          "back": "ログインに戻る"
+        }
+      },
+      "mfa": {
+        "eyebrow": "あなたのアカウント",
+        "title": "2要素認証",
+        "description": "認証アプリで{email}を保護します。オペレーターアカウントは、プラットフォームで最も信頼性の高いアカウントです。",
+        "requestId": "リクエストID",
+        "status": {
+          "title": "認証アプリ",
+          "on": "オン",
+          "body": "このアカウントでは2要素認証がオンです。ログインのたびにコードの入力が求められます。リカバリーコードは、オンにしたときに一度だけ表示されました。"
+        },
+        "intro": {
+          "title": "認証アプリを設定",
+          "step1": "Google Authenticator、Microsoft Authenticator、1Passwordなどの認証アプリをインストールします。",
+          "step2": "表示されるQRコードをスキャンするか、セットアップキーを手入力してください。",
+          "step3": "アプリに表示される6桁のコードを入力して確認します。その後、リカバリーコードが発行されます。",
+          "begin": "設定を開始",
+          "starting": "準備中"
+        },
+        "setup": {
+          "qrLabel": "認証アプリ用のQRコード",
+          "title": "スキャンして確認",
+          "scan": "認証アプリを開き、アカウントを追加してこのコードをスキャンしてください。コードはブラウザー内で描画され、他のサイトには送信されません。",
+          "manualTitle": "スキャンできませんか？",
+          "manualHint": "代わりにこのセットアップキーをアプリに入力してください。時間ベース、6桁。",
+          "codeLabel": "6桁のコード",
+          "codeHint": "アプリに現在表示されているコードを入力してください。",
+          "enable": "2要素認証をオンにする",
+          "enabling": "オンにしています",
+          "cancel": "設定をキャンセル"
+        },
+        "codes": {
+          "enabled": "2要素認証がオンになりました。",
+          "title": "リカバリーコードを保存",
+          "body": "スマートフォンを紛失した場合、これらのコードはそれぞれ1回ずつログインに使用できます。表示されるのは今回のみです。パスワードとは別の安全な場所に保管してください。",
+          "copyAll": "すべてコピー",
+          "download": "テキストファイルとしてダウンロード",
+          "saved": "これらのリカバリーコードを安全に保管しました。",
+          "continue": "コンソールへ進む",
+          "fileHeader": "{email}のプラットフォームコンソール用リカバリーコード。各コードは1回のみ使用できます。"
+        },
+        "errors": {
+          "unexpected": "この手順を完了できませんでした。しばらくしてからもう一度お試しください。",
+          "codeFormat": "アプリに表示された6桁を入力してください。",
+          "codeInvalid": "コードが無効です。スマートフォンの時計を確認し、次のコードをお試しください。",
+          "setupExpired": "設定の有効期限が切れました。最初からやり直してください。",
+          "locked": "失敗回数が多すぎます。しばらく待ってからもう一度お試しください。",
+          "lockedWait": "失敗回数が多すぎます。{minutes, plural, other {#分}}後にもう一度お試しください。"
+        }
+      },
+      "security": {
+        "kicker": "セキュリティセンター",
+        "title": "セキュリティとコンプライアンス",
+        "description": "オペレーターのアクセス、WhatsAppの送信、デバイス、Webhookを保護します。変更はすべて1回の更新として保存され、セキュリティイベントログに記録されます。",
+        "viewEvents": "セキュリティイベントを表示",
+        "save": "設定を保存",
+        "saving": "保存中",
+        "saved": "{count, plural, other {#件の設定を保存しました}}",
+        "rejected": "何も保存されませんでした。{count, plural, other {#件の項目}}が拒否されました。",
+        "requestId": "リクエストID",
+        "unsaved": "{count, plural, other {#件の未保存の変更}}",
+        "discard": "変更を破棄",
+        "errors": {
+          "forbidden": "あなたのロールではこれらの設定を変更できません。",
+          "unexpected": "設定を保存できませんでした。しばらくしてからもう一度お試しください。"
+        },
+        "tabs": {
+          "summary": "概要",
+          "login": "ログインとMFA",
+          "whatsapp": "WhatsAppガードレール",
+          "abuse": "不正利用フィルター",
+          "api": "APIとWebhook",
+          "devices": "デバイス",
+          "danger": "危険な操作"
+        },
+        "common": {
+          "range": "設定可能な範囲：{min}～{max}。",
+          "rangeWithZero": "設定可能な範囲：0（オフ）、または{min}～{max}。",
+          "blankKeeps": "空欄の場合は保存済みの値が維持されます。"
+        },
+        "problems": {
+          "range": "{min}～{max}の整数を入力してください。",
+          "rangeWithZero": "0、または{min}～{max}の整数を入力してください。",
+          "tooMany": "最大{max}件までです。",
+          "tooLong": "各項目は最大{max}文字までです。",
+          "invalidEntry": "{entry}は有効なアドレスまたは範囲ではありません。",
+          "totalTooLong": "リスト全体で{max}文字以内にしてください。"
+        },
+        "kpis": {
+          "score": {
+            "label": "セキュリティスコア",
+            "strong": "強力な対策が有効です",
+            "attention": "要対応"
+          },
+          "openRisks": {
+            "label": "未対応のリスク",
+            "note": "優先度高：{count}件"
+          },
+          "blocked": {
+            "label": "ブロックされた試行"
+          },
+          "last24h": "過去24時間",
+          "warnings": {
+            "label": "警告"
+          },
+          "mfa": {
+            "label": "オペレーターのMFA適用状況",
+            "note": "{total}人中{enrolled}人が登録済み"
+          },
+          "webhooks": {
+            "label": "Webhookの失敗",
+            "normal": "正常",
+            "review": "要確認"
+          }
+        },
+        "risks": {
+          "kicker": "優先キュー",
+          "title": "確認が必要なリスク項目",
+          "seeAll": "すべての失敗を表示",
+          "empty": "問題ありません。過去7日間に失敗や警告はありません。",
+          "columns": {
+            "severity": "重大度",
+            "signal": "シグナル",
+            "workspace": "ワークスペース",
+            "owner": "オーナー",
+            "action": "操作"
+          },
+          "severity": {
+            "high": "高",
+            "medium": "中",
+            "watch": "注視"
+          },
+          "platform": "プラットフォーム",
+          "inspect": "調査",
+          "platformOf": "{app}プラットフォーム",
+          "owner": {
+            "system": "システム",
+            "types": {
+              "user": "ユーザー",
+              "platform_operator": "プラットフォームオペレーター"
+            }
+          },
+          "noWorkspace": "ワークスペースなし"
+        },
+        "coverage": {
+          "kicker": "適用範囲",
+          "title": "有効な対策",
+          "buckets": {
+            "admin_access": "管理者アクセス",
+            "send_abuse": "WhatsApp不正利用の防止",
+            "api_hardening": "APIの強化",
+            "incident_readiness": "インシデント対応の備え"
+          }
+        },
+        "quickActions": {
+          "kicker": "クイックアクション",
+          "rotate": "Webhookシークレットをローテーション",
+          "forceReset": "パスワードのリセットを強制",
+          "resume": "送信を再開",
+          "halt": "送信を緊急停止",
+          "scopeAll": "すべて",
+          "scopeUsers": "全ユーザー",
+          "scopeGlobal": "全体",
+          "halted": "現在停止中",
+          "superAdminOnly": "これらの操作を実行できるのはスーパー管理者のみです。"
+        },
+        "enforcement": {
+          "kicker": "正確なコントロール",
+          "title": "各コントロールの現在の動作",
+          "description": "設定を保存しても、プラットフォームがそれに従って動作するとは限りません。「適用中」は現在チェックされていること、「一部適用」は一部の経路のみチェックされること、「予約済み」は将来のために保存されていることを意味します。",
+          "show": "表示",
+          "hide": "非表示",
+          "columns": {
+            "control": "コントロール",
+            "consumer": "使用箇所",
+            "status": "ステータス"
+          },
+          "enforced": "適用中",
+          "partial": "一部適用",
+          "reserved": "予約済み"
+        },
+        "controls": {
+          "requireMfaForAll": {
+            "label": "全ユーザーに2FAを必須にする",
+            "hint": "すべてのワークスペースユーザーは、続行する前に認証アプリを設定する必要があります。"
+          },
+          "requireMfaForAdmins": {
+            "label": "管理者に2FAを必須にする",
+            "hint": "いずれかのワークスペースで管理者ロールを持つユーザーは、認証アプリを設定する必要があります。"
+          },
+          "requireMfaForSuperAdmins": {
+            "label": "スーパー管理者に2FAを必須にする",
+            "hint": "これがオフの間、プラットフォームのスーパー管理者はパスワードのみでログインします。オンにすると、認証アプリの登録と使用が必須になります。"
+          },
+          "requireMfaForOwners": {
+            "label": "ワークスペースオーナーに2FAを必須にする",
+            "hint": "各ワークスペースのオーナーは、認証アプリを設定する必要があります。"
+          },
+          "allowedMfaMethods": {
+            "label": "許可する2FA方式",
+            "hint": "少なくとも1つを選択したままにしてください。すべて外すと保存済みのリストが維持されます。現在、認証アプリのみ利用できます。",
+            "methods": {
+              "totp": "認証アプリ",
+              "email": "メールコード",
+              "telegram": "Telegramボット"
+            }
+          },
+          "sessionTimeoutMinutes": {
+            "label": "セッションタイムアウト（分）",
+            "hint": "ブラウザーセッションのログインが終了するまでの無操作時間です。30日間維持されるセッションは対象外です。"
+          },
+          "maxConcurrentSessions": {
+            "label": "ユーザーあたりの同時セッション上限",
+            "hint": "上限を超えると、最も古いセッションがログアウトされます。"
+          },
+          "rememberMeEnabled": {
+            "label": "「ログインを維持」を許可",
+            "hint": "オフの場合、ブラウザーを閉じるとすべてのセッションが終了します。"
+          },
+          "lockoutAfterFailures": {
+            "label": "最大ログイン試行回数",
+            "hint": "アカウントが一時停止されるまでの、一定期間内のログイン失敗回数です。"
+          },
+          "lockoutWindowMinutes": {
+            "label": "ロックアウト期間（分）",
+            "hint": "失敗を数える期間と、一時停止が続く期間です。"
+          },
+          "passwordMinLength": {
+            "label": "最小文字数"
+          },
+          "passwordRequireUpper": {
+            "label": "大文字を必須にする",
+            "short": "大文字"
+          },
+          "passwordRequireNumber": {
+            "label": "数字を必須にする",
+            "short": "数字"
+          },
+          "passwordRequireSymbol": {
+            "label": "記号を必須にする",
+            "short": "記号"
+          },
+          "passwordMaxAgeDays": {
+            "label": "パスワードの有効期間（日）",
+            "hint": "0の場合、パスワードは期限切れになりません。"
+          },
+          "waGuardrailsMode": {
+            "label": "モード",
+            "options": {
+              "off": "オフ（チェックなし）",
+              "monitor": "モニター（記録のみ）",
+              "enforce": "強制（ブロック）"
+            },
+            "explain": {
+              "off": "チェックは実行されません。これらのタブの上限とフィルターは無効です。",
+              "monitor": "チェックが実行され、一致した内容はイベントログに記録されますが、メッセージは停止されません。強制する前にルールを確認する際に使用します。",
+              "enforce": "一致したメッセージは送信前にブロックされます。"
+            }
+          },
+          "waMaxSendsPerMinute": {
+            "label": "1分あたりの最大送信数",
+            "hint": "ワークスペースごと。0は無制限です。"
+          },
+          "waMaxSendsPerDay": {
+            "label": "1日あたりの最大送信数",
+            "hint": "ワークスペースごと。0は無制限です。"
+          },
+          "waHoldOnLinksCount": {
+            "label": "リンク数が次を超えたら保留",
+            "hint": "リンク数がこの値を超えるメッセージは保留されます。0は制限なしです。"
+          },
+          "waHoldOnScamPattern": {
+            "label": "詐欺パターンに一致する送信を保留",
+            "hint": "景品、緊急のアカウント通知、認証を装った罠のような表現。"
+          },
+          "waRequireTemplateReview": {
+            "label": "送信前にテンプレートの審査を必須にする",
+            "hint": "セキュリティスコアにのみ反映されます。現時点ではチェックされません。"
+          },
+          "abuseBlockFinanceTerms": {
+            "label": "金融・一攫千金の用語をブロック",
+            "hint": "偽の投資、元本保証、支払い先の誘導といったパターン。"
+          },
+          "abuseBlockShortLinks": {
+            "label": "短縮リンクや不審なリンクをブロック",
+            "hint": "メッセージの飛び先を隠すリンク短縮サービス。"
+          },
+          "abuseBlockKeywordList": {
+            "label": "カスタムキーワードのブロックリスト",
+            "hint": "1行に1つ、またはカンマ区切り。合計で最大5,000文字。大文字・小文字は区別されません。一致したメッセージは、ガードレールのモードに応じてフラグが付けられるかブロックされます。",
+            "placeholder": "FX\n簡単に稼げる\n元本保証"
+          },
+          "apiRateLimitPerMinute": {
+            "label": "1分あたりのAPIリクエスト数",
+            "hint": "ワークスペースのAPIキー1つあたりの、1分間の最大リクエスト数です。キー個別にこれより低い上限は設定できますが、高い上限は設定できません。"
+          },
+          "webhookSignatureRequired": {
+            "label": "HMAC署名を必須にする",
+            "hint": "署名シークレットがないとWebhookエンドポイントを作成できません。"
+          },
+          "webhookReplayWindowSec": {
+            "label": "Webhookのリプレイ許容時間（秒）",
+            "hint": "将来のために保存されます。受信するプロバイダーのWebhookはすでに署名が検証されています。"
+          },
+          "deviceTrustRequired": {
+            "label": "信頼済みブラウザーを必須にする",
+            "hint": "将来のために保存されます。現在、デバイス信頼のフローはありません。"
+          },
+          "deviceLogoutOnInactiveDays": {
+            "label": "無操作時の自動ログアウト（日）",
+            "hint": "この期間確認されなかった連携済みWhatsAppデバイスは切断済みとして扱われます。0は無期限です。"
+          },
+          "ipAllowlistEnabled": {
+            "label": "許可リストを有効にする",
+            "hint": "以下のアドレスのみがこのコンソールにアクセスできます。"
+          },
+          "ipAllowlistCidrs": {
+            "label": "許可するアドレス"
+          },
+          "alertOnNewDevice": {
+            "label": "新しいデバイスのアラート",
+            "hint": "未確認のデバイスからログインがあった場合、ユーザーにメールで通知します。"
+          },
+          "alertOnNewCountry": {
+            "label": "ネットワーク変更のアラート",
+            "hint": "通常と異なるネットワークからログインがあった場合、ユーザーにメールで通知します。"
+          },
+          "alertChannel": {
+            "label": "ログインアラートの送信先",
+            "hint": "現在送信されるのはメールのみです。WhatsAppチャネルは将来のために記録されます。",
+            "options": {
+              "email": "メール",
+              "whatsapp": "WhatsApp",
+              "both": "メールとWhatsApp"
+            }
+          },
+          "auditLogRetentionDays": {
+            "label": "セキュリティイベントの保持期間（日）",
+            "hint": "0の場合は永久に保持されます。"
+          }
+        },
+        "panels": {
+          "login": {
+            "lockout": {
+              "kicker": "ログイン保護",
+              "title": "アカウントロックアウトのルール"
+            },
+            "password": {
+              "title": "新しいパスワードのルール",
+              "note": "パスワードの作成または変更時に適用され、既存のログインには適用されないため、厳しくしても誰もロックアウトされません。"
+            },
+            "mfa": {
+              "kicker": "多要素認証",
+              "title": "2FAの適用",
+              "description": "ワークスペースユーザーに適用されます。スーパー管理者のプラットフォームオペレーターは常に2FAが必要です。"
+            }
+          },
+          "whatsapp": {
+            "master": {
+              "kicker": "マスタースイッチ",
+              "title": "ガードレールの適用",
+              "description": "これらのタブの上限とフィルターは、このモードに従ってのみ動作します。モードを選択し、その内容をご確認ください。"
+            },
+            "caps": {
+              "kicker": "送信レート",
+              "title": "ハード上限"
+            },
+            "spam": {
+              "kicker": "コンテンツルール",
+              "title": "スパム対策"
+            },
+            "health": {
+              "kicker": "信頼品質",
+              "title": "ワークスペースの状態",
+              "body": "ワークスペースごとのブロック数とフラグ数は、送信パイプラインから報告されるとここに表示されます。それまでは、ガードレールが検知した内容をセキュリティイベントログで確認してください。",
+              "link": "ワークスペースを表示"
+            }
+          },
+          "abuse": {
+            "kicker": "不正利用フィルター",
+            "title": "違法利用の防止",
+            "aside": {
+              "title": "このポリシーは厳格に維持してください",
+              "body": "これらのフィルターは、お客様が利用するチャネルから詐欺、フィッシング、嫌がらせを排除します。WhatsAppガードレールタブで設定したガードレールのモードに従います。"
+            }
+          },
+          "api": {
+            "traffic": {
+              "kicker": "トラフィック制御",
+              "title": "レート制限"
+            },
+            "integrity": {
+              "kicker": "Webhookの防御",
+              "title": "整合性"
+            },
+            "allowlist": {
+              "kicker": "IP許可リスト",
+              "title": "コンソールへのアクセス",
+              "description": "このオペレーターコンソールのみを制限します。ワークスペースユーザー、公開API、Webhookには影響しません。リストが空の場合は誰でもアクセスできるため、全オペレーターがロックアウトされることはありません。",
+              "cidrs": "許可するアドレス",
+              "cidrsHint": "1行に1つのアドレスまたは範囲を入力します（例：203.0.113.9、203.0.113.0/24）。カンマ区切りも使用できます。",
+              "placeholder": "203.0.113.0/24\n2001:db8::/32",
+              "yourIp": "APIから見たあなたのアドレス：",
+              "yourIpUnknown": "アドレスを検出できなかったため、自分自身のロックアウトについて警告できません。",
+              "addMine": "自分のIPを追加",
+              "alreadyListed": "追加済み",
+              "lockoutWarning": "あなたのアドレス{ip}はこのリストにありません。保存するとロックアウトされるため、サーバーが拒否します。先にあなたのアドレスを追加してください。"
+            }
+          },
+          "devices": {
+            "trust": {
+              "kicker": "デバイスの整合性",
+              "title": "信頼とセッションのポリシー"
+            },
+            "alerts": {
+              "kicker": "ログインアラートのチャネル",
+              "title": "アラートの送信先"
+            },
+            "audit": {
+              "kicker": "監査証跡",
+              "title": "保持期間",
+              "description": "これより古いセキュリティイベントは、削除ジョブが用意され次第、削除されます。",
+              "link": "セキュリティイベントログを開く"
+            }
+          }
+        },
+        "danger": {
+          "kicker": "危険な操作",
+          "title": "元に戻せないプラットフォーム全体の操作",
+          "description": "各操作は、実行前にその名前の入力が求められ、セキュリティイベントログに記録されます。",
+          "superAdminOnly": "これらの操作はスーパー管理者専用です。あなたのロールは{role}です。",
+          "haltState": "送信メッセージ：",
+          "haltOn": "停止中",
+          "haltOff": "稼働中",
+          "revoke": {
+            "title": "すべてのセッションを取り消す",
+            "detail": "全員をログアウトします"
+          },
+          "forceReset": {
+            "title": "全ユーザーにパスワードのリセットを強制",
+            "detail": "すべてのユーザーにフラグを付けます"
+          },
+          "rotate": {
+            "title": "すべてのWebhookシークレットをローテーション",
+            "detail": "既存の連携が動作しなくなります",
+            "note": "Webhookの署名シークレットは連携機能の領域に属しますが、まだ存在しないため、現時点ではローテーション数は0と報告されます。"
+          },
+          "halt": {
+            "title": "すべての送信を緊急停止",
+            "detail": "プラットフォーム全体の緊急停止スイッチ"
+          },
+          "resume": {
+            "title": "送信を再開",
+            "detail": "現在停止中"
+          },
+          "logged": {
+            "kicker": "記録される内容",
+            "title": "すべての操作がイベントとして記録されます",
+            "events": {
+              "revoke": "platform.security.sessions_revoked",
+              "forceReset": "platform.security.force_password_reset_all",
+              "rotate": "platform.security.webhook_secrets_rotated",
+              "halt": "platform.security.emergency_halt_engaged",
+              "policy": "platform.security.policy_updated"
+            },
+            "notes": {
+              "revoke": "あなたを含むすべてのセッションが終了されたとき。",
+              "forceReset": "全ユーザーに新しいパスワードの設定が求められたとき。",
+              "rotate": "シークレットがローテーションされたとき（件数付き）。",
+              "halt": "停止が開始されたとき、および送信が再開されたとき。",
+              "policy": "上記の設定を変更したとき（変更前後の値付き）。"
+            },
+            "trail": "セキュリティ監査証跡を表示"
+          },
+          "halted": {
+            "title": "緊急停止がオンです",
+            "body": "送信が再開されるまで、プラットフォーム全体ですべての送信メッセージがブロックされます。",
+            "resume": "送信を再開"
+          },
+          "dialog": {
+            "revoke_sessions": {
+              "title": "すべてのセッションを取り消す",
+              "body": "ワークスペースまたはこのコンソールにログインしているすべての人が、あなたを含めてログアウトされます。",
+              "effect1": "全員が再度ログインする必要があります。2要素認証がオンの場合はそれも必要です。",
+              "effect2": "ブラウザーで保存していない作業内容は失われる可能性があります。",
+              "confirm": "すべてのセッションを取り消す",
+              "done": "{count, plural, =0 {有効なセッションはありませんでした。} other {#件のセッションを取り消しました。}}",
+              "signedOut": "あなたもログアウトされました。続行するには再度ログインしてください。"
+            },
+            "force_password_reset": {
+              "title": "全ユーザーにパスワードのリセットを強制",
+              "body": "すべてのワークスペースユーザーは、次回アプリを使用する際に新しいパスワードの設定を求められます。",
+              "effect1": "現在ログアウトされる人はいません。プロンプトは次回のリクエスト時に表示されます。",
+              "effect2": "プロンプトに従わない場合、パスワードを変更するまでアプリを使用できません。",
+              "confirm": "リセットを強制",
+              "done": "{count, plural, =0 {フラグが付けられたユーザーはいません。} other {#人のユーザーが新しいパスワードを設定する必要があります。}}"
+            },
+            "rotate_webhook_secrets": {
+              "title": "すべてのWebhookシークレットをローテーション",
+              "body": "すべてのWebhook署名シークレットが新しいものに置き換えられます。",
+              "effect1": "署名を検証している連携は、新しいシークレットを使用するまで動作しなくなります。",
+              "effect2": "古いシークレットを元に戻す方法はありません。",
+              "confirm": "シークレットをローテーション",
+              "done": "{count, plural, =0 {0件のシークレットをローテーションしました。} other {#件のシークレットをローテーションしました。}}",
+              "noneRotated": "連携機能がまだWebhookシークレットを保存していないため、何もローテーションされませんでした。"
+            },
+            "halt_sends": {
+              "title": "すべての送信を緊急停止",
+              "body": "送信を再開するまで、すべてのワークスペースの送信メッセージが拒否されます。",
+              "effect1": "返信、キャンペーン、自動化を含め、お客様には何も届きません。",
+              "effect2": "メッセージ送信を再びオンにするには、送信を再開を使用してください。",
+              "confirm": "すべての送信を停止",
+              "done": "緊急停止がオンです。すべての送信がブロックされています。"
+            },
+            "resume_sends": {
+              "title": "送信を再開",
+              "body": "すべてのワークスペースで送信メッセージが再びオンになります。",
+              "effect1": "停止中に拒否されたメッセージは自動的には送信されません。",
+              "effect2": "インシデントのために送信を停止した場合は、先にイベントログを確認してください。",
+              "confirm": "送信を再開",
+              "done": "送信を再開しました。"
+            },
+            "typeToConfirm": "確認のため<code>{phrase}</code>と入力してください",
+            "phraseHint": "大文字・小文字や余分なスペースは無視されます。",
+            "cancel": "キャンセル",
+            "working": "処理中",
+            "close": "閉じる",
+            "signInAgain": "再度ログイン",
+            "requestId": "リクエストID",
+            "errors": {
+              "forbidden": "この操作を実行できるのはスーパー管理者のみです。",
+              "unexpected": "操作が完了しませんでした。再試行する前にイベントログを確認してください。"
+            }
+          }
+        },
+        "tabsLabel": "セキュリティセンターのセクション",
+        "search": {
+          "label": "セキュリティルール、IP、実行者を検索",
+          "placeholder": "セキュリティルール、IP、実行者を検索…",
+          "shortcut": "Cmd K"
+        }
+      },
+      "events": {
+        "kicker": "セキュリティセンター",
+        "title": "セキュリティイベント",
+        "description": "ログイン、ロックアウト、ポリシー変更、危険な操作を新しい順に表示します。",
+        "refresh": "更新",
+        "refreshing": "更新中",
+        "filters": {
+          "label": "イベントを絞り込む",
+          "event": "イベント名",
+          "eventHint": "正確な名前（例：auth.failed）。候補を選択するか、直接入力してください。",
+          "status": "ステータス",
+          "anyStatus": "すべてのステータス",
+          "apply": "適用",
+          "clear": "絞り込みを解除",
+          "q": "検索テキスト",
+          "qHint": "名前にこのテキストを含むイベントを、大文字・小文字を問わず検索します。"
+        },
+        "status": {
+          "success": "成功",
+          "failure": "失敗",
+          "warning": "警告",
+          "info": "情報"
+        },
+        "empty": "セキュリティイベントはまだ記録されていません。",
+        "emptyFiltered": "これらの条件に一致するイベントはありません。",
+        "listLabel": "セキュリティイベント",
+        "ip": "IP",
+        "showPayload": "詳細を表示",
+        "hidePayload": "詳細を非表示",
+        "noPayload": "このイベントに追加の詳細はありません。",
+        "payloadLabel": "{event}の詳細",
+        "loadMore": "さらに読み込む",
+        "loading": "読み込み中",
+        "end": "{count, plural, other {#件のイベントをすべて表示しています。}}",
+        "export": "CSVをエクスポート",
+        "exported": "{count, plural, other {読み込み済みの#件のイベントをCSVファイルに保存しました。}}",
+        "actorLabel": "実行者",
+        "actorTypes": {
+          "user": "ユーザー",
+          "platform_operator": "プラットフォームオペレーター",
+          "system": "システム"
+        },
+        "workspaceLabel": "ワークスペース",
+        "requestIdLabel": "リクエストID",
+        "userAgentLabel": "ブラウザー",
+        "copyNames": {
+          "actorId": "実行者ID",
+          "orgId": "ワークスペースID",
+          "requestId": "リクエストID"
+        }
+      },
+      "registration": {
+        "kicker": "ゲスト向けページ",
+        "title": "登録ポリシー",
+        "description": "誰が登録できるか、メールの確認方法、新しいワークスペースの開始プラン、登録コードの動作を設定します。",
+        "save": "設定を保存",
+        "saving": "保存中",
+        "saved": "{count, plural, other {#件の設定を保存しました}}",
+        "rejected": "何も保存されませんでした。{count, plural, other {#件の項目}}が拒否されました。",
+        "requestId": "リクエストID",
+        "unsaved": "{count, plural, other {#件の未保存の変更}}",
+        "discard": "変更を破棄",
+        "errors": {
+          "unexpected": "設定を保存できませんでした。しばらくしてからもう一度お試しください。"
+        },
+        "problems": {
+          "range": "{min}～{max}の整数を入力してください。",
+          "tooLong": "最大{max}文字までです。",
+          "required": "この項目は必須です。",
+          "link": "/legal/termsのようなサイト内パス、または完全なhttpまたはhttpsのアドレスを使用してください。",
+          "senderFormat": "一覧から送信元を選択してください。",
+          "countryFormat": "2文字の国コードを使用してください。",
+          "senderRequired": "テンプレートを作成する前に、送信元チャネルを選択してください。"
+        },
+        "policy": {
+          "kicker": "登録",
+          "title": "登録できる人",
+          "description": "これらの設定は、ソーシャルログインによる登録を含め、新規登録に適用されます。"
+        },
+        "fields": {
+          "publicRegistration": {
+            "label": "一般登録",
+            "hintOn": "登録ページから誰でもワークスペースを作成できます。",
+            "hintOff": "登録ページには登録受付終了のメッセージが表示されます。既存のユーザーには影響しません。"
+          },
+          "emailVerification": {
+            "label": "メールの確認",
+            "options": {
+              "off": "オフ：アカウントを自動的に確認済みにする",
+              "banner": "バナー：リマインダー付きで許可",
+              "block": "ブロック：確認してから続行"
+            },
+            "explain": {
+              "off": "新しいアカウントはすぐに確認済みとして扱われます。確認メールは不要です。",
+              "banner": "すぐにアプリを使用でき、確認するまでリマインダーが表示されます。",
+              "block": "メールを確認するまで、他の機能は一切使用できません。"
+            }
+          },
+          "defaultPlanId": {
+            "label": "デフォルトプラン",
+            "hint": "新しいワークスペースの開始プランです。「自動」は、登録時のデフォルトに設定されたプラン、なければ最初の有効な無料プランを使用します。",
+            "placeholder": "プランのスラッグ",
+            "auto": "自動",
+            "unavailable": "{slug}（有効なプランではありません）",
+            "loadFailed": "プラン一覧を読み込めませんでした。",
+            "kinds": {
+              "free": "無料",
+              "paid": "有料",
+              "custom_quote": "個別見積もり"
+            }
+          },
+          "trialDays": {
+            "label": "無料トライアル（日数）",
+            "hint": "{min}～{max}の整数。0はトライアルなしです。空欄の場合は保存済みの値が維持されます。"
+          },
+          "defaultTimezone": {
+            "label": "デフォルトのタイムゾーン",
+            "hint": "ワークスペースが独自に選択するまで、新しいワークスペースで使用されます。"
+          },
+          "defaultCountryIso": {
+            "label": "デフォルトの国",
+            "hint": "登録時に電話番号の国をあらかじめ選択します。",
+            "none": "デフォルトなし"
+          },
+          "termsUrl": {
+            "label": "利用規約のリンク",
+            "hint": "サイト内パスまたは完全なアドレス。登録ページとログインページに表示されます。"
+          },
+          "privacyUrl": {
+            "label": "プライバシーポリシーのリンク"
+          },
+          "cookiesUrl": {
+            "label": "Cookieのリンク",
+            "hint": "任意です。空欄にすると非表示になります。"
+          },
+          "otpEnabled": {
+            "label": "WhatsAppによる登録コード",
+            "hint": "新しいアカウントは、ワークスペースが作成される前に、ワンタイムコードで電話番号を確認する必要があります。"
+          },
+          "otpSender": {
+            "label": "送信元",
+            "hint": "コードを送信する接続済みの番号です。「送信元を管理」から追加できます。"
+          },
+          "ttlMinutes": {
+            "label": "コードの有効時間（分）"
+          },
+          "length": {
+            "label": "コードの桁数"
+          },
+          "resendCooldownSec": {
+            "label": "再送信のクールダウン（秒）"
+          },
+          "maxAttempts": {
+            "label": "最大試行回数"
+          }
+        },
+        "otp": {
+          "kicker": "確認",
+          "title": "登録コード",
+          "description": "登録時に送信されるワンタイムコードの設定です。",
+          "knobHint": "{min}～{max}。空欄の場合は{default}が使用されます。",
+          "status": {
+            "on": "稼働中",
+            "off": "停止中",
+            "unsavedNote": "保存済みの設定を表示しています。変更を保存すると反映状況を確認できます。",
+            "reason": {
+              "active": "新規登録では、コードによる電話番号の確認が必要です。",
+              "disabled": "スイッチがオフのため、登録時にコードは要求されません。",
+              "no_sender": "送信元が選択されていないため、登録時にコードの手順はスキップされます。",
+              "sender_missing": "選択した送信元が存在しないため、登録時にコードの手順はスキップされます。",
+              "sender_incomplete": "選択した送信元に認証情報がないため、登録時にコードの手順はスキップされます。",
+              "dev_in_production": "ログ送信元は本番環境では動作しないため、登録時にコードの手順はスキップされます。",
+              "template_missing": "WhatsApp Business送信元には承認済みのテンプレートが必要です。以下で作成して送信してください。それまでは登録時にコードの手順はスキップされます。",
+              "template_pending": "Metaがテンプレートを審査中のため、承認されるまで登録時にコードの手順はスキップされます。",
+              "template_rejected": "Metaがテンプレートを却下したため、登録時にコードの手順はスキップされます。修正して再送信してください。"
+            }
+          },
+          "sender": {
+            "none": "送信元なし",
+            "option": "{label}（{kind}）",
+            "unknown": "不明な送信元（{ref}）",
+            "manage": "送信元を管理",
+            "empty": "送信元はまだありません。「送信元を管理」から追加してください。",
+            "kinds": {
+              "waba": "WhatsApp Business",
+              "twilio": "Twilio",
+              "device": "非公式セッション",
+              "dev": "ログのみ"
+            },
+            "noneConnected": "接続済みの送信元がまだありません。「送信元を管理」で設定を完了してください。選択できるのは接続済みの送信元のみです。",
+            "unfinished": "{label}（{kind}、未完了）"
+          },
+          "template": {
+            "title": "メッセージテンプレート",
+            "states": {
+              "none": "未作成",
+              "pending": "Meta審査待ち",
+              "approved": "承認済み",
+              "rejected": "却下",
+              "local": "準備完了"
+            },
+            "explain": {
+              "none": "上記の送信元とコードの設定が正しいことを確認してから、メッセージを作成してください。WhatsApp BusinessはMetaの承認が必要で、他のチャネルはメッセージがすぐに使用されます。",
+              "waba": "認証テンプレートとしてMetaに送信しました。Metaが承認すると、コードの手順は自動的にオンになります（通常は数分以内）。",
+              "local": "このチャネル用にプレーンテキストとして保存しました。審査は不要で、すぐに使用されます。"
+            },
+            "name": "名前",
+            "metaId": "MetaテンプレートID",
+            "validFor": "コードの有効時間",
+            "minutes": "{count, plural, other {#分}}",
+            "submitted": "作成日時",
+            "checked": "最終確認",
+            "never": "未実施",
+            "reason": "理由",
+            "stale": "このテンプレートは、有効時間が{count, plural, other {#分}}のコード用に作成されました。上記の有効時間に合わせるには、再作成して送信してください。",
+            "create": "OTPテンプレートを作成して送信",
+            "creating": "処理中",
+            "refresh": "ステータスを更新",
+            "refreshing": "確認中",
+            "outcome": {
+              "submitted": "テンプレートを審査のためMetaに送信しました。Metaが承認すると、コードの手順は自動的にオンになります。",
+              "resubmitted": "テンプレートを審査のため再度Metaに送信しました。承認されるまでコードの手順はオフのままです。",
+              "local_ready": "メッセージを保存し、すぐに使用されます。このチャネルでは審査は不要です。",
+              "already_pending": "テンプレートはすでにMetaで審査中です。「ステータスを更新」で状況を確認してください。",
+              "already_approved": "テンプレートはすでに承認済みです。送信は不要でした。",
+              "refreshed": "ステータスを確認しました。",
+              "approvedNow": "Metaがテンプレートをすぐに承認しました。コードの手順の準備が整いました。",
+              "rejectedNow": "Metaがテンプレートを却下しました。理由は以下に表示されます。修正して再送信してください。"
+            },
+            "refreshed": {
+              "pending": "Metaがテンプレートを審査中です。",
+              "approved": "Metaがテンプレートを承認しました。コードの手順の準備が整いました。",
+              "rejected": "Metaがテンプレートを却下しました。",
+              "local": "このテンプレートは審査不要です。"
+            },
+            "errors": {
+              "submit": "Metaがテンプレートを受け付けませんでした。その他のコード設定は保存されました。",
+              "check": "Metaからステータスを取得できませんでした。",
+              "rejected": "テンプレートを作成できませんでした。",
+              "unexpected": "問題が発生しました。しばらくしてからもう一度お試しください。"
+            },
+            "createHint": "選択した送信元用の登録メッセージを作成します。WhatsApp BusinessはMetaの審査に送信され、他のチャネルはすぐに使用できます。",
+            "picker": {
+              "label": "WhatsApp Businessテンプレート",
+              "hint": "登録時には、下のボタンで作成したテンプレートが送信されます。この送信元の他の承認済み認証テンプレートも確認用に一覧表示されますが、現時点ではここで選択できません。",
+              "none": "まだありません（以下で作成）",
+              "loading": "テンプレートを読み込み中",
+              "option": "{name}（{language}）、{status}",
+              "otherSender": "送信元を保存すると、そのテンプレートが表示されます。",
+              "failed": "テンプレート一覧を読み込めませんでした。",
+              "unavailable": "Metaのテンプレート一覧を読み取れませんでした：{reason}"
+            }
+          },
+          "test": {
+            "about": "登録が依存する前に、実際のコードを電話に送信して、送信元が動作するか確認します。",
+            "button": "テストコードを送信",
+            "title": "テストコードを送信",
+            "intro": "入力した番号に、以下の送信元から実際のコードが送信されます。保存済みのコード設定とテンプレートが使用されます。1時間に5回まで送信できます。",
+            "to": "電話番号",
+            "toHint": "国番号付きで入力してください（例：+91 98765 43221）。",
+            "sender": "送信元",
+            "senderHint": "保存済みの送信元のままにするか、一覧から別のものを選択してください。",
+            "savedSender": "保存済みの送信元",
+            "send": "コードを送信",
+            "sending": "送信中",
+            "close": "閉じる",
+            "sent": "{to}にテストコードを送信しました。",
+            "remaining": "{count, plural, other {この1時間で残り#回テストできます。}}",
+            "notShown": "コードはここには表示されません。電話で確認してください。",
+            "requestId": "リクエストID",
+            "errors": {
+              "invalidNumber": "国番号付きで番号を入力してください（例：+91 98765 43221）。",
+              "rateLimited": "この1時間のテストコードの送信回数が多すぎます。{minutes, plural, other {#分}}後にもう一度お試しください。",
+              "failed": "コードを送信できませんでした。",
+              "rejected": "テストは送信されませんでした。",
+              "unexpected": "問題が発生しました。しばらくしてからもう一度お試しください。"
+            },
+            "reasons": {
+              "not_configured": "送信元が見つからないか、設定が不完全です。",
+              "template_not_approved": "テンプレートはまだ承認されていません。",
+              "invalid_number": "その番号は無効です。",
+              "auth_failed": "プロバイダーが認証情報を拒否しました。「送信元を管理」でシークレットを確認してください。",
+              "rejected": "プロバイダーがメッセージを拒否しました。",
+              "provider_error": "プロバイダー側で問題が発生しました。しばらくしてからもう一度お試しください。",
+              "connection_refused": "プロバイダーのアドレスが接続を拒否しました。",
+              "timeout": "プロバイダーが時間内に応答しませんでした。",
+              "transport_error": "プロバイダーに接続できませんでした。"
+            }
+          }
+        },
+        "senders": {
+          "title": "送信元を管理",
+          "intro": "登録コードを送信できる接続です。シークレットは暗号化して保存され、再表示されません。",
+          "loading": "読み込み中",
+          "working": "処理中",
+          "empty": "送信元はまだありません。",
+          "add": "送信元を追加",
+          "edit": "編集",
+          "remove": "削除",
+          "close": "閉じる",
+          "cancel": "キャンセル",
+          "save": "送信元を保存",
+          "keep": "維持",
+          "addTitle": "新しい送信元",
+          "editTitle": "{label}を編集",
+          "kind": "種類",
+          "kinds": {
+            "waba": "WhatsApp Business（Meta Cloud API）",
+            "twilio": "Twilio WhatsApp",
+            "device": "非公式セッション（Nodeブリッジ）",
+            "dev": "ログのみ（開発用）"
+          },
+          "kindHint": {
+            "waba": "Meta経由で承認済みの認証テンプレートを送信します。テンプレートの審査が必要です。",
+            "twilio": "Twilio経由でWhatsAppメッセージを送信します。テンプレートの審査は不要です。",
+            "device": "Nodeブリッジ上のQRペアリング済みセッション経由で送信します。テンプレートの審査は不要です。",
+            "dev": "コードを送信せず、サーバーログに書き込みます。本番環境では利用できません。"
+          },
+          "fields": {
+            "label": "名前",
+            "phoneNumberId": "電話番号ID",
+            "wabaId": "WhatsApp BusinessアカウントID",
+            "graphBaseUrl": "Graph APIアドレス",
+            "accountSid": "アカウントSID",
+            "fromNumber": "WhatsApp番号（送信元）",
+            "apiBaseUrl": "Twilio APIアドレス",
+            "bridgeUrl": "ブリッジのアドレス",
+            "senderNumber": "セッション番号"
+          },
+          "hints": {
+            "waba": {
+              "phoneNumberId": "WhatsApp番号のAPI設定にあるMetaの値です。",
+              "wabaId": "Metaにテンプレートを送信するために必要です。",
+              "graphBaseUrl": "空欄の場合はMeta標準のアドレスを使用します。"
+            },
+            "twilio": {
+              "accountSid": "Twilioコンソールの値です。",
+              "fromNumber": "WhatsAppが有効な番号を、国番号付きで入力してください。",
+              "apiBaseUrl": "空欄の場合はTwilio標準のアドレスを使用します。"
+            },
+            "device": {
+              "bridgeUrl": "Nodeブリッジが待ち受けているアドレスです（例：http://127.0.0.1:3003）。",
+              "senderNumber": "ブリッジが送信に使用するペアリング済みの番号を、国番号付きで入力してください。"
+            }
+          },
+          "defaults": {
+            "graphBaseUrl": "https://graph.facebook.com/v23.0",
+            "apiBaseUrl": "https://api.twilio.com"
+          },
+          "secretLabel": {
+            "waba": "アクセストークン",
+            "twilio": "認証トークン",
+            "device": "ブリッジトークン",
+            "dev": "シークレット"
+          },
+          "secretHint": "暗号化して保存され、再表示されません。",
+          "secretHintSaved": "暗号化して保存されます。空欄の場合は保存済みのものが維持されます。",
+          "secretSaved": "保存済み。維持するには空欄のままにしてください",
+          "showSecret": "シークレットを表示",
+          "hideSecret": "シークレットを非表示",
+          "removeSecret": "保存済みのシークレットを削除",
+          "removeSecretBody": "新しいシークレットを保存するまで、この送信元は動作しません。",
+          "removeSecretConfirm": "シークレットを削除",
+          "hasSecret": "シークレット保存済み",
+          "noSecret": "シークレットなし",
+          "inUse": "登録で使用中",
+          "removeBody": "{label}を削除しますか？保存済みのシークレットも削除されます。",
+          "removeBodyInUse": "{label}を削除しますか？登録で使用されているため、コードの手順がオフになります。保存済みのシークレットも削除されます。",
+          "removeConfirm": "送信元を削除",
+          "added": "送信元を追加しました",
+          "saved": "送信元を保存しました",
+          "removed": "送信元を削除しました",
+          "secretRemoved": "保存済みのシークレットを削除しました",
+          "requestId": "リクエストID",
+          "problems": {
+            "required": "この項目は必須です。",
+            "tooLong": "最大{max}文字までです。",
+            "digits": "数字のみ、5～24桁。",
+            "url": "ユーザー名とパスワードを含まない、完全なhttpまたはhttpsのアドレスを使用してください。",
+            "accountSid": "アカウントSIDはACで始まり、34文字です。",
+            "phone": "国番号付きで番号を入力してください（7～15桁）。"
+          },
+          "errors": {
+            "unexpected": "送信元を保存できませんでした。しばらくしてからもう一度お試しください。"
+          }
+        },
+        "footer": {
+          "kicker": "送信メッセージ",
+          "title": "プラットフォームのメッセージフッター",
+          "description": "ブランド表示を削除できないプランのワークスペースから送信されるテキストおよびインタラクティブメッセージの末尾に追加されます。テンプレートには独自のテキストがあるため適用されません。ブランド表示を削除できるプランのワークスペースは、アカウント内で独自のフッターを設定するか、フッターなしにできます。",
+          "builtIn": "組み込みテキスト",
+          "label": "フッターテキスト",
+          "hint": "最大{max}文字。空欄にすると、フッターなしで送信されます。",
+          "count": "{used}/{max}",
+          "preview": "プレビュー",
+          "noFooter": "（フッターなし）",
+          "save": "フッターを保存",
+          "saving": "保存中",
+          "clear": "クリア",
+          "saved": "プラットフォームのフッターを保存しました。次のメッセージから適用されます。",
+          "savedNone": "プラットフォームのフッターを削除しました。メッセージはフッターなしで送信されます。",
+          "errors": {
+            "invalid": "そのフッターは受け付けられませんでした。",
+            "unexpected": "フッターを保存できませんでした。しばらくしてからもう一度お試しください。"
+          },
+          "requestId": "リクエストID"
+        }
+      },
+      "social": {
+        "kicker": "ゲスト向けページ",
+        "title": "ソーシャルログインとCAPTCHA",
+        "description": "GoogleまたはFacebookでのログインを許可し、ログインページと登録ページをreCAPTCHAで保護します。それぞれ、有効にしてキーを保存すると表示されます。",
+        "save": "変更を保存",
+        "saving": "保存中",
+        "saved": "{count, plural, other {#件の設定を保存しました}}",
+        "rejected": "何も保存されませんでした。{count, plural, other {#件の項目}}が拒否されました。",
+        "requestId": "リクエストID",
+        "unsaved": "{count, plural, other {#件の未保存の変更}}",
+        "discard": "変更を破棄",
+        "errors": {
+          "unexpected": "設定を保存できませんでした。しばらくしてからもう一度お試しください。"
+        },
+        "problems": {
+          "tooLong": "最大{max}文字までです。",
+          "threshold": "0～1の数値を入力してください。"
+        },
+        "labels": {
+          "google": {
+            "clientId": "GoogleクライアントID",
+            "clientSecret": "Googleクライアントシークレット",
+            "enabled": "Googleログイン"
+          },
+          "facebook": {
+            "clientId": "FacebookアプリID",
+            "clientSecret": "Facebookアプリシークレット",
+            "enabled": "Facebookログイン"
+          },
+          "recaptcha": {
+            "siteKey": "reCAPTCHAサイトキー",
+            "secret": "reCAPTCHAシークレットキー",
+            "v3Threshold": "reCAPTCHAスコアしきい値",
+            "version": "reCAPTCHAバージョン",
+            "enabled": "reCAPTCHA"
+          }
+        },
+        "enable": "有効にする",
+        "secretSaved": "保存済み。維持するには空欄のままにしてください",
+        "secretHint": "暗号化して保存され、再表示されません。空欄の場合は保存済みのものが維持されます。",
+        "showSecret": "シークレットを表示",
+        "hideSecret": "シークレットを非表示",
+        "google": {
+          "kicker": "Google CloudによるOAuth 2.0",
+          "title": "Googleログイン",
+          "idLabel": "クライアントID",
+          "idHint": "Google Cloudの認証情報にある、ウェブアプリケーションタイプのOAuthクライアントの値です。",
+          "idPlaceholder": "000000000000-xxxx.apps.googleusercontent.com",
+          "secretLabel": "クライアントシークレット",
+          "secretPlaceholder": "クライアントシークレット",
+          "redirectLabel": "承認済みのリダイレクトURI",
+          "redirectHint": "OAuthクライアントにそのまま貼り付けてください。一致しない場合、Googleはリダイレクトの不一致でログインを拒否します。"
+        },
+        "facebook": {
+          "kicker": "Meta for DevelopersのFacebookログイン",
+          "title": "Facebookログイン",
+          "idLabel": "アプリID",
+          "idHint": "アプリ設定の基本情報にあるアプリIDです。",
+          "idPlaceholder": "0000000000000000",
+          "secretLabel": "アプリシークレット",
+          "secretPlaceholder": "32文字のアプリシークレット",
+          "redirectLabel": "有効なOAuthリダイレクトURI",
+          "redirectHint": "FacebookログインのSettingsに追加してください。アプリにはメールと公開プロフィールの権限が必要です。"
+        },
+        "recaptcha": {
+          "kicker": "Google reCAPTCHAによるボット対策",
+          "title": "reCAPTCHA",
+          "versionLabel": "バージョン",
+          "versionHint": "v2はチェックボックスを表示します。v3は非表示で、リクエストごとにスコアを付けます。",
+          "versions": {
+            "v2": "v2：「私はロボットではありません」チェックボックス",
+            "v3": "v3：非表示のスコア"
+          },
+          "thresholdLabel": "v3スコアしきい値",
+          "thresholdHint": "v3のみ。0はボットの可能性が最も高く、1は人間の可能性が最も高いことを示します。空欄の場合は0.5です。",
+          "siteKeyLabel": "サイトキー",
+          "siteKeyHint": "ブラウザーに送信される公開キーで、reCAPTCHAコンソールの値です。",
+          "secretLabel": "シークレットキー"
+        },
+        "live": {
+          "kicker": "ステータス",
+          "title": "現在有効なもの",
+          "google": "Google有効",
+          "facebook": "Facebook有効",
+          "recaptcha": "reCAPTCHA有効",
+          "yes": "有効",
+          "no": "無効",
+          "note": "プロバイダーが有効になるのは、有効化されており、両方のキーが保存されている場合のみです。ここには、未保存の編集ではなく保存済みの内容が表示されます。"
+        },
+        "guide": {
+          "kicker": "クイックセットアップ",
+          "google": {
+            "title": "Googleの4ステップ",
+            "step1": "Google Cloudコンソールを開き、プロジェクトを選択または作成します。",
+            "step2": "サポート用メールアドレスを設定し、OAuth同意画面を外部アプリとして設定します。",
+            "step3": "認証情報を作成し、OAuthクライアントID、次にウェブアプリケーションを選択します。",
+            "step4": "フォームに表示されているリダイレクトURIを追加し、クライアントIDとシークレットをここに貼り付けます。",
+            "link": "Google Cloudの認証情報を開く"
+          },
+          "facebook": {
+            "title": "Facebookの4ステップ",
+            "step1": "Meta for Developersを開き、ユーザー認証用のアプリを作成します。",
+            "step2": "アプリにFacebookログイン製品を追加します。",
+            "step3": "その設定に、フォームに表示されているリダイレクトURIを追加します。",
+            "step4": "基本設定からアプリIDとシークレットをコピーしてここに貼り付け、アプリを公開状態にします。",
+            "link": "Meta for Developersを開く"
+          },
+          "recaptcha": {
+            "title": "reCAPTCHAキー",
+            "body": "reCAPTCHAコンソールでサイトを登録し、v2またはv3を選択して、サイトキーとシークレットキーをここに貼り付けます。",
+            "link": "reCAPTCHAコンソールを開く"
+          },
+          "noSdk": {
+            "badge": "ご参考",
+            "body": "ログインは標準のOAuthアドレスを直接使用するため、インストールするものはありません。キーを貼り付けてオンにするだけです。"
+          }
+        },
+        "removeSecret": {
+          "action": "保存済みのシークレットを削除",
+          "title": "保存済みの{name}シークレットを削除",
+          "body": "{name}の保存済みシークレットはサーバーから削除され、表示も復元もできません。{name}を再度使用するには、新しいシークレットを保存する必要があります。",
+          "liveWarning": "{name}は現在動作中です。シークレットを削除すると、新しいものを保存するまでオフになります。",
+          "confirm": "シークレットを削除",
+          "cancel": "キャンセル",
+          "working": "削除中",
+          "error": "シークレットを削除できませんでした。しばらくしてからもう一度お試しください。",
+          "requestId": "リクエストID",
+          "done": "保存済みの{name}シークレットを削除しました。",
+          "names": {
+            "google": "Google",
+            "facebook": "Facebook",
+            "recaptcha": "reCAPTCHA"
+          }
+        },
+        "docs": {
+          "kicker": "リファレンス",
+          "title": "公式ドキュメント",
+          "opensNewTab": "（新しいタブで開きます）",
+          "links": {
+            "google": "Google OAuthの設定",
+            "facebook": "Facebookログインの設定",
+            "recaptchaAdmin": "reCAPTCHA管理コンソール",
+            "recaptchaDocs": "reCAPTCHAドキュメント"
+          }
+        }
+      },
+      "plans": {
+        "eyebrow": "プラン",
+        "title": "プラン",
+        "description": "ワークスペースが選択できるカタログです。新規登録はデフォルトプランに割り当てられます。プランの支払いは請求機能で提供予定です。",
+        "new": "新しいプラン",
+        "kpi": {
+          "label": "カタログの概要",
+          "total": "プラン総数",
+          "active": "有効",
+          "free": "無料",
+          "paid": "有料"
+        },
+        "empty": {
+          "title": "プランはまだありません",
+          "body": "最初のプランを作成してください。作成されるまでは、新しいワークスペースは何も制限しない「starter」というプランで開始されます。",
+          "action": "最初のプランを作成"
+        },
+        "table": {
+          "label": "プラン",
+          "plan": "プラン",
+          "price": "価格",
+          "messages": "メッセージ",
+          "workspaces": "ワークスペース",
+          "entitlements": "含まれる内容",
+          "features": "機能",
+          "limits": "上限",
+          "addons": "アドオン",
+          "status": "ステータス",
+          "actions": "操作"
+        },
+        "counts": {
+          "ratio": "{count}/{total}",
+          "features": "{total}件中{count}件の機能がオン",
+          "limits": "{total}件中{count}件の上限を設定済み",
+          "addons": "{count, plural, other {#件のアドオンを表示}}"
+        },
+        "badges": {
+          "popular": "人気",
+          "signupDefault": "登録時のデフォルト"
+        },
+        "price": {
+          "free": "無料",
+          "custom": "個別見積もり",
+          "lifetime": "一回限り"
+        },
+        "period": {
+          "days": "{count, plural, other {/ #日}}",
+          "weeks": "{count, plural, other {/ #週間}}",
+          "months": "{count, plural, other {/ #か月}}",
+          "years": "{count, plural, other {/ #年}}"
+        },
+        "messages": {
+          "unlimited": "無制限",
+          "limited": "{count, number}／月"
+        },
+        "active": {
+          "on": "有効",
+          "off": "無効",
+          "toggle": "有効：{name}"
+        },
+        "actions": {
+          "edit": "編集",
+          "delete": "削除",
+          "editName": "{name}を編集",
+          "deleteName": "{name}を削除"
+        },
+        "toasts": {
+          "created": "プラン{name}を作成しました。",
+          "updated": "プラン{name}を保存しました。",
+          "activated": "{name}を有効にしました。",
+          "deactivated": "{name}を無効にしました。",
+          "deleted": "プラン{name}を削除しました。"
+        },
+        "delete": {
+          "title": "{name}を削除しますか？",
+          "body": "この操作は元に戻せません。代わりにプランを無効にすると、購入者には表示されなくなりますが、そのプランを利用中のワークスペースは維持されます。",
+          "inUseHint": "{count, plural, other {#件のワークスペースがこのプランを利用しています。}}移行されるまで削除はできません。",
+          "confirm": "プランを削除",
+          "cancel": "キャンセル",
+          "deleting": "削除中"
+        },
+        "errors": {
+          "inUse": "{count, plural, other {削除できません：#件のワークスペースが現在このプランを使用しています。}}他のプランへ移行するか、代わりにこのプランを無効にしてください。",
+          "defaultProtected": "このプランは登録時のデフォルトのため、無効化も削除もできません。先に別のデフォルトプランを選択してください。",
+          "notFound": "このプランは存在しません。一覧を再読み込みしてください。",
+          "forbidden": "プランを変更できるのはスーパー管理者のみです。",
+          "generic": "問題が発生しました。もう一度お試しください。"
+        },
+        "editor": {
+          "createTitle": "新しいプラン",
+          "editTitle": "{name}を編集",
+          "slugLabel": "スラッグ：",
+          "slugNote": "プランの作成時に設定され、以後変更されません。",
+          "save": "変更を保存",
+          "create": "プランを作成",
+          "saving": "保存中",
+          "cancel": "キャンセル",
+          "discard": "変更を破棄しますか？",
+          "failed": "プランを保存できませんでした。もう一度お試しください。",
+          "unlimited": "無制限",
+          "errorsBanner": "確認が必要な項目があります。ドットが付いたタブにエラーがあります。",
+          "tabs": {
+            "label": "プランのセクション",
+            "details": "詳細と価格",
+            "features": "機能",
+            "limits": "上限",
+            "addons": "アドオン"
+          },
+          "tabSummary": {
+            "features": "{total}件中{count}件の機能がオン",
+            "limits": "{total}件中{count}件の上限を設定済み",
+            "addons": "{count}件のアドオンを選択中",
+            "error": "修正が必要なエラーがあります"
+          },
+          "featuresUi": {
+            "intro": "このプランに含まれないものはオフにしてください。機能がオフの領域は、そのプランのワークスペースでは開けません。",
+            "search": "機能を検索",
+            "searchPlaceholder": "機能を検索",
+            "enableAll": "すべて有効にする",
+            "disableAll": "すべて無効にする",
+            "noMatch": "検索に一致する機能がありません。",
+            "groupCount": "{total}件中{count}件がオン"
+          },
+          "limitsUi": {
+            "intro": "上限に達すると、ワークスペースはその操作を実行できなくなります。上限を解除するには「無制限」にチェックを入れてください。",
+            "search": "上限を検索",
+            "searchPlaceholder": "上限を検索",
+            "noMatch": "検索に一致する上限がありません。",
+            "unlimited": "無制限",
+            "platformDefault": "プラットフォームのデフォルト",
+            "groupCount": "{total}件中{count}件に上限あり",
+            "valueFor": "{name}の上限",
+            "unofficialOff": "プラットフォームで非公式WhatsAppが有効な場合にのみ適用されます（現在は無効）。"
+          },
+          "limitUnits": {
+            "perMonth": "月あたり",
+            "perBroadcast": "ブロードキャストあたり",
+            "perMinute": "1分あたり",
+            "perPlanPeriod": "プラン期間あたり",
+            "total": "合計"
+          },
+          "addons": {
+            "intro": "有効にしたアドオンは、このプランのワークスペースのマーケットプレイスに表示されます。使用できるのは、ワークスペースが購入した後のみです。",
+            "search": "アドオンを検索",
+            "searchPlaceholder": "アドオンまたはアプリを検索",
+            "selectAll": "すべて選択",
+            "clear": "クリア",
+            "selected": "{total}件中{count}件を選択",
+            "loading": "アドオンを読み込み中",
+            "empty": "有料アドオンはまだありません",
+            "emptyHint": "アドオンはオペレーターコンソールのマーケットプレイスカタログで作成します。アプリに有料パックが追加されると、ここに表示されます。",
+            "loadFailed": "アドオンを読み込めませんでした。",
+            "loadFailedKept": "アドオンを読み込めなかったため、ここで変更しない限り現在の選択が維持されます。",
+            "retry": "再試行",
+            "noMatch": "検索に一致するアドオンがありません。",
+            "unknown": "不明なアドオン",
+            "unknownHint": "このアドオンは存在しません。プランから外すには、チェックを外してください。",
+            "notOnSale": "販売停止中",
+            "packInactive": "アドオンパックがオフになっているため、購入できません。",
+            "appUnpublished": "アプリが公開されていないため、ワークスペースにはまだ表示されません。",
+            "appLabel": "アプリ：{name}",
+            "price": "{price} {period}"
+          },
+          "featureHints": {
+            "automation": "会話に返信したり操作したりするフロービルダーと自動化。",
+            "ai_assistants": "AIアシスタント（ウェブサイトのチャットボットウィジェットのAIモードを含む）。",
+            "calling": "通話セクション：音声通話と通話設定。",
+            "woocommerce": "WooCommerceストアを接続し、注文メッセージ、カート復旧、ストアのブロードキャストに利用します。",
+            "shopify": "Shopifyストアを接続し、注文メッセージ、カート復旧、ストアのブロードキャストに利用します。",
+            "analytics": "分析ダッシュボードとレポート。",
+            "remove_branding": "ホワイトラベル：ワークスペースがフッターのプラットフォームブランド表示を非表示にできます。",
+            "sales_pipeline": "取引、タスク、パイプライン、およびダッシュボードのパイプライン指標。",
+            "appointment_booking": "予約タイプ、予約、公開予約ページ。このスイッチは有料の予約アプリが管理します。",
+            "chatbot_widgets": "ウェブサイトのチャットボットウィジェットビルダー。",
+            "wa_storefront": "WhatsAppカタログとストアフロント領域。",
+            "inbox_sla": "チーム受信トレイのSLAポリシーと期限。",
+            "inbox_routing": "受信トレイの会話を自動的に割り当てるルーティングルール。",
+            "waba_calling": "受信トレイからのWhatsApp通話：通話用番号、通話権限、発信と応答。",
+            "inbox_kanban": "チーム受信トレイのカンバンボード表示。",
+            "team_performance": "チームのパフォーマンスレポート。",
+            "scheduled_messages": "メッセージを後で送信するための予約。",
+            "whatsapp_warmer": "WhatsApp番号のウォーマー。",
+            "marketplace": "ミニアプリと連携のマーケットプレイス。",
+            "lead_sources": "リードソース：広告やポータルのリードを連絡先や取引に変換するWebhookとコネクターの入口。",
+            "team_chat": "社内のチームチャットチャネルとダイレクトメッセージ。",
+            "public_api": "公開REST APIとAPIキー。",
+            "outbound_webhooks": "イベントを他のシステムに通知する送信Webhookエンドポイント。",
+            "storefront_builder": "オンラインストアフロントビルダー。",
+            "invoicing": "請求書、貸方票、支払い、受注、税率。",
+            "forms_and_links": "リード獲得フォームと共有可能なリンク。",
+            "extra_channels": "Telegram、Facebook、Instagramのチャネル。",
+            "form_builder": "CRMに連絡先を作成する、ホスト型および埋め込み型のウェブフォーム。このスイッチは有料のフォームアプリが管理します。",
+            "waba_groups": "Cloud API番号からWhatsAppグループを作成・管理します：招待リンク、参加リクエスト、メンバー。番号は公式ビジネスアカウントである必要があります。"
+          },
+          "units": {
+            "days": "日",
+            "weeks": "週間",
+            "months": "か月",
+            "years": "年"
+          },
+          "sections": {
+            "identity": {
+              "title": "基本情報",
+              "description": "プランの名称と表示方法。"
+            },
+            "pricing": {
+              "title": "価格",
+              "description": "料金と請求頻度。"
+            },
+            "limits": {
+              "title": "上限",
+              "description": "上限を空欄にすると無制限になります。"
+            },
+            "features": {
+              "title": "機能",
+              "description": "プランに含まれないものはオフにします。"
+            }
+          },
+          "fields": {
+            "name": {
+              "label": "プラン名"
+            },
+            "subtitle": {
+              "label": "サブタイトル",
+              "hint": "名前の下に表示する短い一文（最大{max}文字）。"
+            },
+            "detail": {
+              "label": "説明",
+              "hint": "料金ページに表示されます（最大{max}文字）。"
+            },
+            "ctaLabel": {
+              "label": "ボタンのラベル",
+              "hint": "最大{max}文字。"
+            },
+            "sortOrder": {
+              "label": "並び順",
+              "hint": "小さい値ほど先に表示されます。"
+            },
+            "currency": {
+              "label": "通貨",
+              "placeholder": "通貨を検索",
+              "empty": "検索に一致する通貨がありません。"
+            },
+            "amount": {
+              "label": "価格",
+              "hint": "例：19 または 19.99。",
+              "locked": "無料プランと個別見積もりプランには価格がありません。",
+              "none": "なし"
+            },
+            "offerAmount": {
+              "label": "特別価格",
+              "hint": "任意です。価格より低くする必要があります。"
+            },
+            "billingDuration": {
+              "label": "請求期間",
+              "hint": "{min}～{max}。"
+            },
+            "billingUnit": {
+              "label": "単位"
+            },
+            "dataRetentionDays": {
+              "label": "データ保持期間（期限後の日数）",
+              "hint": "有料プランの失効後、ワークスペースのデータが削除されるまでの日数です。0は削除しません。削除は元に戻せません。"
+            }
+          },
+          "flags": {
+            "isActive": {
+              "label": "有効",
+              "hint": "無効なプランは購入者には表示されません。すでにそのプランを利用中のワークスペースは維持されます。"
+            },
+            "isDefault": {
+              "label": "登録時のデフォルト",
+              "hint": "登録ポリシーで別のプランが指定されていない限り、新しいワークスペースはここから始まります。デフォルトにできるのは1つのプランのみです。"
+            },
+            "isHighlighted": {
+              "label": "人気として強調表示",
+              "hint": "「一番人気」バッジを表示します。"
+            },
+            "isFree": {
+              "label": "無料プラン",
+              "hint": "価格なし。無料プランの新しいワークスペースには無料トライアルが適用されます。"
+            },
+            "isCustomQuote": {
+              "label": "個別見積もり",
+              "hint": "価格は表示されません。購入者は営業への問い合わせに誘導されます。"
+            },
+            "isLifetime": {
+              "label": "一回限りの価格",
+              "hint": "請求期間ごとではなく、一度だけ請求されます。"
+            }
+          },
+          "limitGroups": {
+            "messaging": "メッセージ",
+            "workspace": "ワークスペース",
+            "content": "コンテンツ",
+            "sales": "営業と請求",
+            "integrations": "連携",
+            "ai": "AI"
+          },
+          "limitKeys": {
+            "monthly_messages": "月間メッセージ数",
+            "broadcasts": "ブロードキャスト",
+            "devices": "接続済みの番号",
+            "users": "チームの席数",
+            "contacts": "連絡先",
+            "tags": "タグ",
+            "pipelines": "営業パイプライン",
+            "appointments": "月間予約数",
+            "saved_replies": "定型返信",
+            "routing_rules": "ルーティングルール",
+            "templates": "メッセージテンプレート",
+            "flows": "フロー",
+            "autoreplies": "キーワード自動返信",
+            "total_campaigns": "作成したキャンペーン（削除しても枠は戻りません）",
+            "api_rate_limit_per_minute": "1分あたりのAPIリクエスト数（0＝プラットフォームのデフォルト）",
+            "installed_apps": "インストール済みのマーケットプレイスアプリと連携",
+            "scheduled_messages": "保持している予約メッセージ",
+            "lead_sources": "リードソース",
+            "broadcast_recipients": "1回のブロードキャストの受信者数",
+            "segments": "保存済みセグメント",
+            "custom_fields": "カスタムフィールド",
+            "team_chat_channels": "チームチャットチャネル",
+            "sla_policies": "受信トレイSLAポリシー",
+            "booking_types": "予約タイプ",
+            "chatbot_widgets": "ウェブサイトのチャットボットウィジェット",
+            "catalog_products": "カタログ商品",
+            "invoices_monthly": "月間請求書数",
+            "recurring_invoices": "定期請求書",
+            "api_keys": "APIキー",
+            "webhooks": "送信Webhook",
+            "ai_token_limit_monthly": "月間AIトークン数（プラットフォームのキー）",
+            "forms": "ウェブフォーム",
+            "form_submissions_monthly": "月間フォーム送信数",
+            "ai_form_generations_monthly": "月間AIフォームビルダー生成回数"
+          },
+          "featureGroups": {
+            "messaging": "メッセージ",
+            "aiCalling": "AIと通話",
+            "integrations": "連携",
+            "advanced": "詳細"
+          },
+          "featureKeys": {
+            "automation": "自動化",
+            "ai_assistants": "AIアシスタント",
+            "calling": "WhatsApp通話",
+            "woocommerce": "WooCommerce",
+            "shopify": "Shopify",
+            "analytics": "分析",
+            "remove_branding": "ホワイトラベル（プラットフォームのブランド表示を削除）",
+            "sales_pipeline": "営業パイプライン（取引とタスク）",
+            "appointment_booking": "予約と予約ページ",
+            "chatbot_widgets": "ウェブサイトのチャットボットウィジェット",
+            "wa_storefront": "WhatsAppストアフロントとカタログ",
+            "inbox_sla": "受信トレイSLAポリシー",
+            "inbox_routing": "受信トレイのルーティングルールと営業時間",
+            "waba_calling": "受信トレイからWhatsApp通話を発信・応答",
+            "inbox_kanban": "受信トレイのカンバンボード",
+            "team_performance": "チームのパフォーマンスレポート",
+            "scheduled_messages": "予約メッセージ",
+            "whatsapp_warmer": "WhatsApp番号ウォーマー",
+            "marketplace": "マーケットプレイス（ミニアプリと連携）",
+            "lead_sources": "リードソース（連絡先を作成するWebhookとコネクターの入口）",
+            "team_chat": "チームチャット（社内チャネルとダイレクトメッセージ）",
+            "public_api": "公開REST APIとAPIキー",
+            "outbound_webhooks": "送信Webhook",
+            "storefront_builder": "ストアフロントとウェブサイトビルダー",
+            "invoicing": "請求書発行（請求書、貸方票、定期請求書）",
+            "forms_and_links": "フォーム、クリックしてチャットのリンク、グループ",
+            "extra_channels": "Telegram、Facebook、Instagramチャネル",
+            "form_builder": "フォーム（ウェブフォームビルダー）",
+            "waba_groups": "WhatsAppグループ（Cloud API）"
+          },
+          "problems": {
+            "required": "この項目は必須です。",
+            "tooLong": "最大{max}文字までです。",
+            "money": "19や19.99のような金額を入力してください。",
+            "range": "{min}～{max}の整数を入力してください。",
+            "whole": "整数を入力するか、無制限にする場合は空欄にしてください。",
+            "server": "サーバーがこの値を拒否しました。",
+            "unknownAddon": "存在しなくなった選択済みのアドオンが{count}件あります。チェックを外して、もう一度保存してください。",
+            "free_needs_zero_price": "無料プランの価格は0にする必要があります。",
+            "free_no_offer": "無料プランには特別価格を設定できません。",
+            "custom_no_price": "個別見積もりプランには価格が表示されません。価格と特別価格は空欄にしてください。",
+            "custom_not_free": "プランを無料と個別見積もりの両方にすることはできません。",
+            "paid_needs_price": "0より大きい価格を設定するか、プランを無料にしてください。",
+            "offer_not_lower": "特別価格はプラン価格より低くする必要があります。",
+            "default_needs_active": "登録時のデフォルトプランは有効である必要があります。"
+          },
+          "limitHints": {
+            "monthly_messages": "暦月内に送信された送信メッセージ数です。枠を超えるとウォレットから課金されます。",
+            "broadcasts": "アーカイブされていないブロードキャスト。",
+            "scheduled_messages": "ワークスペースが保持している予約メッセージ（ステータスを問わない）。削除すると枠が空きます。",
+            "total_campaigns": "プラン期間内に作成されたキャンペーン。キャンペーンを削除しても枠は戻りません。",
+            "devices": "接続済みのWhatsApp番号。削除すると枠が空きます。",
+            "users": "無効化されていないチームメンバー。",
+            "contacts": "ワークスペース内の連絡先。",
+            "tags": "連絡先のタグ。",
+            "pipelines": "営業パイプライン。",
+            "appointments": "暦月内に予約された予約数（保留中、確定、完了）で、開始時刻で数えます。",
+            "saved_replies": "チーム受信トレイの定型返信（クイック返信）。",
+            "routing_rules": "チーム受信トレイのルーティングルール。",
+            "templates": "WhatsAppメッセージテンプレート。",
+            "flows": "ビルダー内のフロー。",
+            "autoreplies": "キーワード自動返信。",
+            "api_rate_limit_per_minute": "APIキーごとの1分あたりのリクエスト数。0は無制限ではなく、プラットフォームのデフォルトを使用します。",
+            "installed_apps": "現在インストールされているマーケットプレイスのアプリと連携。アンインストールすると枠が空きます。",
+            "lead_sources": "リードソース（Webhookとコネクターの入口）。削除すると枠が空きます。",
+            "broadcast_recipients": "1回のブロードキャストの送信先として許可される最大のオーディエンス数で、ブロードキャストの作成時または編集時に確認されます。",
+            "segments": "保存済みの連絡先セグメント。削除すると枠が空きます。",
+            "custom_fields": "任意のモジュールに追加されたカスタムフィールド。組み込みのシステムフィールドは数えません。",
+            "team_chat_channels": "公開・非公開を含むチームチャットチャネル。削除すると枠が空きます。",
+            "sla_policies": "チーム受信トレイのSLAポリシー。",
+            "booking_types": "公開予約ページの元になる予約タイプ。",
+            "chatbot_widgets": "ウェブサイトのチャットボットウィジェット。",
+            "catalog_products": "WhatsAppカタログの商品。削除すると枠が空きます。",
+            "invoices_monthly": "暦月内に作成された請求書（ステータスを問わない）。無効化または削除しても、その月の枠は戻りません。",
+            "recurring_invoices": "定期請求書のスケジュール（ステータスを問わない）。",
+            "api_keys": "有効なAPIキー。キーを取り消すと枠が空きます。",
+            "webhooks": "送信Webhookエンドポイント（受信トレイWebhookとAPI Webhookの合計）。",
+            "ai_token_limit_monthly": "AIアシスタントが暦月内にプラットフォームのキーで使用するトークン数です。独自のキーを使用するワークスペースには上限がありません。",
+            "forms": "有効なウェブフォーム（フォームアプリ）。フォームをアーカイブすると枠が空きます。0＝無制限。",
+            "form_submissions_monthly": "暦月内に受け付けたフォーム送信数（スパムを除く）。上限を超えた送信も、破棄されず確認用に保存されます。0＝無制限。",
+            "ai_form_generations_monthly": "暦月内のAIフォームビルダーの生成回数（修復の再試行を含む）。0＝無制限。"
+          }
+        }
+      },
+      "authPages": {
+        "kicker": "ゲスト向けページ",
+        "title": "認証ページ",
+        "description": "ログイン、登録、パスワード再設定ページのデザインを選択し、それぞれの文言と色を編集します。プレビューには、未保存の変更が訪問者に表示される状態で反映されます。これらのページの利用規約とプライバシーポリシーのリンクは、<link>登録ポリシー</link>で設定します。",
+        "save": "変更を保存",
+        "saving": "保存中",
+        "saved": "{count, plural, other {#件の設定を保存しました}}",
+        "rejected": "何も保存されませんでした。{count, plural, other {#件の項目}}が拒否されました。",
+        "requestId": "リクエストID",
+        "unsaved": "{count, plural, other {#件の未保存の変更}}",
+        "discard": "変更を破棄",
+        "errors": {
+          "unexpected": "設定を保存できませんでした。しばらくしてからもう一度お試しください。"
+        },
+        "problems": {
+          "accent": "#rrggbb形式の色を使用してください。",
+          "mediaUrl": "完全なhttpsアドレスを使用してください。"
+        },
+        "pages": {
+          "login": "ログイン",
+          "register": "登録",
+          "forgot": "パスワードを忘れた場合"
+        },
+        "designs": {
+          "legend": "デザインテンプレート",
+          "legendNote": "3つのページすべてに共通の選択",
+          "split": {
+            "name": "スプリットショーケース",
+            "description": "片側にマーケティングパネル、もう一方にフォーム。"
+          },
+          "cinematic": {
+            "name": "シネマティック",
+            "description": "中央のカードの背景に全画面の画像または動画。"
+          },
+          "minimal": {
+            "name": "ミニマル",
+            "description": "アートワークなしのシンプルな中央カード。"
+          },
+          "spotlight": {
+            "name": "ブランドスポットライト",
+            "description": "フォームの横に、アクセントカラーの大胆なパネル。"
+          },
+          "aurora": {
+            "name": "オーロラ",
+            "description": "すりガラス風のカードの背後に、やわらかく光る色。"
+          }
+        },
+        "fields": {
+          "accent": "アクセントカラー",
+          "accentHint": "#0f766eのような6桁の16進カラー。短縮形（#fff）、8桁、色名は使用できません。強調語、ボタン、ブランドパネルに使用されます。リセットすると標準の色に戻ります。",
+          "accentPicker": "アクセントカラーを選択",
+          "accentHex": "16進のアクセントカラー",
+          "accentReset": "デフォルトに戻す",
+          "mediaUrl": "メディアのアドレス",
+          "mediaType": "メディアの種類",
+          "eyebrow": "アイブロウ（見出し上の短い文）",
+          "heading": "見出し",
+          "headingAccent": "見出しの強調語",
+          "subheading": "サブテキスト",
+          "emptyHint": "最大{max}文字。空欄の場合は、グレーで表示されている標準のテキストが使用されます。"
+        },
+        "media": {
+          "title": "サイドメディア",
+          "description": "デザインパネル用の画像、GIF、またはループ動画。現時点ではホスティングはお客様側で行います。公開されたhttpsアドレスを貼り付けてください。",
+          "url": "メディアのアドレス",
+          "urlHint": "httpsで始まる必要があります。メディアなしの場合は空のままにしてください。",
+          "type": "メディアの種類",
+          "types": {
+            "image": "画像",
+            "gif": "アニメーションGIF",
+            "video": "ループ動画"
+          },
+          "clear": "メディアを削除"
+        },
+        "showcase": {
+          "title": "ショーケースパネルのテキスト",
+          "description": "分割ショーケースデザインで表示されます。空欄の項目は既定のテキストのままになります。",
+          "groups": {
+            "hero": "ハイライトカード",
+            "stats": "統計",
+            "features": "機能カード",
+            "chips": "チップ",
+            "footer": "フッター行"
+          },
+          "keys": {
+            "hero_title": "ハイライトのタイトル",
+            "hero_desc": "ハイライトのテキスト",
+            "stat1_num": "統計1の値",
+            "stat1_label": "統計1のラベル",
+            "stat2_num": "統計2の値",
+            "stat2_label": "統計2のラベル",
+            "stat3_num": "統計3の値",
+            "stat3_label": "統計3のラベル",
+            "feat1_title": "機能1のタイトル",
+            "feat1_desc": "機能1のテキスト",
+            "feat2_title": "機能2のタイトル",
+            "feat2_desc": "機能2のテキスト",
+            "feat3_title": "機能3のタイトル",
+            "feat3_desc": "機能3のテキスト",
+            "feat4_title": "機能4のタイトル",
+            "feat4_desc": "機能4のテキスト",
+            "inside_heading": "チップの見出し",
+            "chip1": "チップ1",
+            "chip2": "チップ2",
+            "chip3": "チップ3",
+            "chip4": "チップ4",
+            "chip5": "チップ5",
+            "chip6": "チップ6",
+            "footer": "フッターのテキスト"
+          }
+        },
+        "preview": {
+          "title": "ライブプレビュー",
+          "note": "{page}ページを未保存の変更付きで表示しています。",
+          "showcaseNote": "ショーケースパネルのテキストは分割ショーケースデザインでのみ表示されます。",
+          "device": "プレビューサイズ",
+          "devices": {
+            "desktop": "デスクトップ",
+            "mobile": "スマートフォン"
+          },
+          "frameLabel": "ページのプレビュー",
+          "frameTitle": "{page}ページのプレビュー",
+          "form": {
+            "org": "ワークスペース名",
+            "name": "お名前",
+            "email": "メールアドレス",
+            "password": "パスワード",
+            "remember": "30日間ログインしたままにする",
+            "submit": {
+              "login": "ログイン",
+              "register": "ワークスペースを作成",
+              "forgot": "リセットリンクを送信"
+            },
+            "workspace": "ワークスペースのアドレス",
+            "forgotLink": "パスワードをお忘れですか?",
+            "newHere": "初めてですか?",
+            "createAccount": "ワークスペースを作成",
+            "haveAccount": "登録済みですか?",
+            "signInLink": "ログイン",
+            "backToSignIn": "ログインに戻る",
+            "captchaV3": "このページはreCAPTCHAで保護されています。",
+            "captchaV2": "私はロボットではありません",
+            "captchaBrand": "reCAPTCHA"
+          },
+          "enlarge": "プレビューを拡大",
+          "shrink": "並べて表示",
+          "openReal": "実際のページを開く",
+          "openRealNote": "保存済みのバージョンを新しいタブで開きます。保存していない変更はこのプレビューにのみ表示されます。",
+          "opensNewTab": "(新しいタブで開きます)"
+        },
+        "pagesLabel": "編集するページ"
+      },
+      "ipBlocked": {
+        "kicker": "アクセスがブロックされました",
+        "title": "このアドレスは許可されていません",
+        "body": "オペレーターコンソールは、許可リストにあるアドレスからのリクエストのみ受け付けます。これらのリクエストの送信元アドレスは許可リストにないため、コンソールが拒否しました。",
+        "addressLabel": "ブロックされたアドレス",
+        "addressUnknown": "サーバーがお客様のアドレスを読み取れませんでした。",
+        "fixTitle": "アクセスする方法",
+        "fixBody": "コンソールにアクセスできるスーパー管理者が、このアドレスをIP許可リストに追加します。アカウントの他の設定は変わりません。",
+        "fixPath": "セキュリティセンター › APIとWebhook › IP許可リスト",
+        "dashboard": "ダッシュボードへ移動",
+        "signOut": "ログアウト",
+        "signingOut": "ログアウト中"
+      }
+    }
+  }
+}

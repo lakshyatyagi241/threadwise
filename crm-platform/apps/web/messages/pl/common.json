@@ -1,0 +1,18 @@
+{
+  "common": {
+    "appName": "CRM",
+    "loadMore": "Wczytaj więcej",
+    "loading": "Wczytywanie",
+    "empty": "Na razie nic tu nie ma",
+    "retry": "Spróbuj ponownie",
+    "requestId": "Identyfikator żądania",
+    "search": "Szukaj",
+    "unexpected": "Coś poszło nie tak",
+    "fatal": {
+      "title": "Coś poszło nie tak",
+      "body": "Nie udało się wczytać strony. Zgłoszono to. Spróbuj ponownie, a jeśli problem się powtarza, skontaktuj się z pomocą techniczną.",
+      "bodyWithDigest": "Nie udało się wczytać strony. Zgłoszono to. Spróbuj ponownie, a jeśli problem się powtarza, skontaktuj się z pomocą techniczną i podaj {digest}.",
+      "home": "Wróć na początek"
+    }
+  }
+}

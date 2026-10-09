@@ -1,0 +1,184 @@
+{
+  "checkout-orders-merchant-payments": {
+    "orders": {
+      "eyebrow": "Boutique / Commandes",
+      "title": "Toutes les commandes",
+      "subtitle": "Toutes les commandes de tous les canaux : WhatsApp, vitrine, Twilio et manuel.",
+      "loading": "Chargement des commandes",
+      "statusTabs": "Statut de la commande",
+      "searchLabel": "Rechercher des commandes",
+      "searchPlaceholder": "Rechercher par téléphone, nom ou numéro de commande",
+      "sourceLabel": "Source",
+      "allSources": "Toutes les sources",
+      "paymentLabel": "Paiement",
+      "allPayments": "Tous les paiements",
+      "fromLabel": "Du",
+      "toLabel": "Au",
+      "shopLabel": "Boutique",
+      "invertedRange": "La date de début est postérieure à la date de fin ; aucune commande ne peut donc correspondre.",
+      "clearFilters": "Effacer les filtres",
+      "cols": {
+        "order": "Commande",
+        "customer": "Client",
+        "items": "Articles",
+        "total": "Total",
+        "payment": "Paiement",
+        "status": "Statut",
+        "source": "Source",
+        "created": "Créée le",
+        "actions": "Actions"
+      },
+      "itemsCount": "{count, plural, one {# article} other {# articles}}",
+      "anonymous": "Anonyme",
+      "openOrder": "Ouvrir la commande n° {no}",
+      "changeStatus": "Modifier le statut de la commande n° {no}",
+      "deleteOrder": "Supprimer la commande n° {no}",
+      "deleteTitle": "Supprimer la commande n° {no} ?",
+      "deleteMessage": "La commande et ses articles sont supprimés définitivement. Cette action est irréversible.",
+      "deleteConfirm": "Supprimer la commande",
+      "deleted": "La commande n° {no} a été supprimée.",
+      "statusChanged": "La commande n° {no} est maintenant « {status} ».",
+      "buyerNotified": "L’acheteur a été averti par message.",
+      "confirmStatusTitle": "Passer la commande n° {no} à « {status} » ?",
+      "confirmStatusMessage": "L’acheteur est informé du nouveau statut. Vous pourrez toujours déplacer la commande vers un autre statut plus tard.",
+      "confirmStatusConfirm": "Mettre à jour le statut",
+      "emptyTitle": "Aucune commande pour l’instant",
+      "emptyMessage": "Lorsque des clients commandent depuis votre vitrine ou sur WhatsApp, leurs commandes apparaissent ici. Partagez le lien de votre boutique pour recevoir la première.",
+      "emptyAction": "Ouvrir la vue d’ensemble de la boutique",
+      "noMatchTitle": "Aucune commande ne correspond à ces filtres",
+      "noMatchMessage": "Essayez une autre recherche, un autre statut ou une autre période, ou effacez les filtres pour voir toutes les commandes."
+    },
+    "orderDetail": {
+      "back": "Retour aux commandes",
+      "title": "Commande n° {no}",
+      "placed": "Passée {when}",
+      "loading": "Chargement de la commande",
+      "readOnly": "Vous pouvez consulter cette commande mais pas la modifier.",
+      "items": {
+        "title": "Articles",
+        "empty": "Cette commande ne contient aucun article.",
+        "qty": "Qté {qty}",
+        "retailerId": "ID {id}",
+        "unit": "{price} l’unité"
+      },
+      "totals": {
+        "title": "Totaux",
+        "subtotal": "Sous-total",
+        "shipping": "Livraison",
+        "tax": "Taxe",
+        "taxInclusive": "Incluse dans les prix",
+        "discount": "Réduction",
+        "discountCoupon": "Réduction ({code})",
+        "total": "Total"
+      },
+      "customer": {
+        "title": "Client",
+        "anonymous": "Anonyme",
+        "phone": "Téléphone",
+        "email": "E-mail",
+        "address": "Adresse de livraison",
+        "noAddress": "Aucune adresse enregistrée pour cette commande.",
+        "notes": "Notes"
+      },
+      "meta": {
+        "title": "Détails de la commande",
+        "orderId": "ID de la commande",
+        "source": "Source",
+        "shop": "Boutique",
+        "paymentMethod": "Mode de paiement",
+        "updated": "Dernière mise à jour"
+      },
+      "rto": {
+        "title": "Risque de retour à l’expéditeur",
+        "summary": "{band} ({score})",
+        "low": "Faible",
+        "medium": "Moyen",
+        "high": "Élevé"
+      },
+      "timeline": {
+        "title": "Chronologie",
+        "empty": "Rien ne s’est encore passé sur cette commande.",
+        "kind": {
+          "created": "Commande passée",
+          "status_changed": "Statut modifié",
+          "payment_link": "Lien de paiement",
+          "paid": "Paiement reçu",
+          "invoice": "Facture",
+          "note": "Note",
+          "updated": "Commande mise à jour"
+        },
+        "actor": {
+          "user": "Par un membre de l’équipe",
+          "system": "Automatique",
+          "customer": "Par le client"
+        }
+      },
+      "payments": {
+        "title": "Paiements",
+        "empty": "Aucun paiement n’a été enregistré pour cette commande.",
+        "kind": {
+          "gateway": "Paiement en ligne",
+          "payment_link": "Lien de paiement",
+          "whatsapp_pay": "WhatsApp Pay",
+          "cod": "Paiement à la livraison",
+          "manual": "Enregistré manuellement"
+        },
+        "reference": "Référence {ref}",
+        "openLink": "Ouvrir le lien"
+      },
+      "form": {
+        "title": "Mettre à jour le statut",
+        "status": "Statut",
+        "suggestion": "Étape suivante habituelle : {status}",
+        "notes": "Notes",
+        "paymentLink": "Lien de paiement",
+        "optional": "facultatif",
+        "paymentLinkHint": "Un nouveau lien est envoyé à l’acheteur avec la mise à jour.",
+        "invalidLink": "Saisissez un lien web commençant par http:// ou https://.",
+        "save": "Enregistrer les modifications",
+        "saving": "Enregistrement",
+        "saved": "Commande n° {no} mise à jour.",
+        "notified": "L’acheteur a été averti par message.",
+        "notNotified": "L’acheteur n’a pas été averti par message.",
+        "reload": "Recharger la commande"
+      },
+      "pay": {
+        "title": "Lien de paiement",
+        "current": "Lien de paiement actuel",
+        "sendTitle": "Envoyer un lien que vous avez déjà",
+        "sendLabel": "URL du lien de paiement",
+        "sendButton": "Envoyer le lien de paiement",
+        "sent": "Le lien de paiement a été envoyé à l’acheteur.",
+        "savedNotSent": "Le lien a été enregistré, mais rien n’a pu l’envoyer à l’acheteur.",
+        "generateTitle": "Générer un lien de paiement",
+        "generateHint": "Crée un lien de paiement hébergé sur votre passerelle de paiement et l’envoie à l’acheteur sur WhatsApp.",
+        "gatewayLabel": "Passerelle",
+        "generateButton": "Générer le lien et l’envoyer",
+        "noGatewayTitle": "Aucune passerelle de paiement configurée",
+        "noGatewayMessage": "Une passerelle de paiement doit être configurée avant de pouvoir générer un lien de paiement.",
+        "noGatewayAction": "Configurer une passerelle",
+        "resultTitle": "Lien de paiement prêt",
+        "copyLink": "Copier le lien",
+        "resultSent": "Envoyé à l’acheteur sur WhatsApp.",
+        "resultNotSent": "Enregistré sur la commande, mais rien n’a pu l’envoyer à l’acheteur. Partagez-le vous-même."
+      },
+      "invoice": {
+        "title": "Facture",
+        "description": "Transformez cette commande en facture et en commande de vente dans Ventes.",
+        "create": "Créer une facture",
+        "creating": "Création",
+        "created": "Facture {number} créée.",
+        "createdNoNumber": "Facture créée.",
+        "existing": "Cette commande est déjà facturée.",
+        "viewInvoice": "Facture",
+        "viewSalesOrder": "Commande de vente"
+      },
+      "delete": {
+        "title": "Supprimer la commande n° {no} ?",
+        "message": "La commande et ses articles sont supprimés définitivement. Cette action est irréversible.",
+        "confirm": "Supprimer la commande",
+        "deleted": "La commande n° {no} a été supprimée."
+      }
+    }
+  }
+}

@@ -1,0 +1,365 @@
+{
+  "install-update-licensing": {
+    "setup": {
+      "title": "Kreator konfiguracji",
+      "brand": "CRM",
+      "railEyebrow": "Kreator konfiguracji",
+      "railTitle": "Twój <i>pakiet WhatsApp</i>, gotowy w kilka minut.",
+      "railFooter": "Instalator platformy · v{version}",
+      "stepsLabel": "Kroki konfiguracji",
+      "stepOf": "Krok {n} z {total}",
+      "mobileStep": "Krok {n}/{total} · {name}",
+      "steps": {
+        "welcome": "Powitanie",
+        "requirements": "Wymagania",
+        "database": "Baza danych",
+        "application": "Aplikacja",
+        "admin": "Konto administratora",
+        "node": "Most Node",
+        "install": "Instalacja"
+      },
+      "screens": {
+        "licence": "Licencja"
+      },
+      "disabled": "Konfiguracja jest wyłączona, ponieważ na serwerze nie ustawiono tokenu konfiguracji. Ustaw SETUP_TOKEN albo utwórz pierwszego operatora z wiersza poleceń.",
+      "unavailable": "Nie udało się odczytać stanu konfiguracji. Sprawdź, czy API działa, a następnie przeładuj tę stronę.",
+      "welcome": {
+        "eyebrow": "Powitanie",
+        "title": "Uruchommy <i>{app}</i>.",
+        "intro": "Siedem prostych kroków, około trzech minut w sumie. Sprawdzimy serwer, zweryfikujemy bazę danych, potwierdzimy wszystkie ustawienia domyślne potrzebne konsoli administratora, połączymy most Node i utworzymy pierwsze konto super administratora.",
+        "tiles": {
+          "database": "Baza danych",
+          "security": "Bezpieczeństwo",
+          "translations": "Tłumaczenia",
+          "admin": "Administrator"
+        },
+        "beforeTitle": "Zanim zaczniesz",
+        "before": {
+          "database": "Baza PostgreSQL 16, do której ta instalacja ma dostęp, z zastosowanymi migracjami.",
+          "runtime": "Node.js 22 lub nowszy oraz Redis uruchomiony obok API.",
+          "token": "Token konfiguracji z konfiguracji wdrożenia (SETUP_TOKEN)."
+        },
+        "tokenLabel": "Token konfiguracji",
+        "tokenHint": "Potwierdza, że zarządzasz tym wdrożeniem. Jest sprawdzany ponownie w każdym kroku.",
+        "begin": "Rozpocznij instalację"
+      },
+      "licence": {
+        "eyebrow": "Licencja",
+        "title": "Zweryfikuj swój <i>zakup</i>.",
+        "intro": "Wpisz kod zakupu CodeCanyon. Sprawdzamy go w Envato przed instalacją — instalacja nie może być kontynuowana bez prawidłowego kodu.",
+        "label": "Kod zakupu",
+        "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+        "help": "Znajdziesz go na swoim koncie CodeCanyon → <b>Pobrane</b> → <b>Certyfikat licencji i kod zakupu</b>.",
+        "verified": "Zakup został już zweryfikowany — możesz kontynuować.",
+        "submit": "Zweryfikuj i kontynuuj"
+      },
+      "requirements": {
+        "eyebrow": "Krok {n} z {total}",
+        "title": "Wymagania <i>serwera</i>.",
+        "intro": "Sprawdzamy, czy serwer spełnia minimalne wymagania przed instalacją.",
+        "runtimeOk": "Node.js {version}",
+        "runtimeOkDetail": "— spełnia wymaganie {required}+",
+        "runtimeBad": "Node.js {version}",
+        "runtimeBadDetail": "— {app} wymaga Node.js {required} lub nowszego.",
+        "modules": "Moduły środowiska uruchomieniowego",
+        "services": "Usługi",
+        "directories": "Katalogi",
+        "database": "Baza danych",
+        "noDatabase": "Nie wykryto bazy danych.",
+        "databaseRequired": "Wymagany jest PostgreSQL.",
+        "extensionMissing": "Brak rozszerzenia bazy danych: {name}.",
+        "tiles": {
+          "database": "baza danych",
+          "redis": "redis",
+          "migrations": "migracje",
+          "permissions": "uprawnienia",
+          "temp": "pliki tymczasowe",
+          "migrationsDir": "migracje"
+        },
+        "fixNotice": "Napraw pozycje oznaczone na czerwono przed kontynuacją. Przycisk Dalej pozostaje wyłączony, dopóki wszystko nie przejdzie.",
+        "recheck": "Sprawdź ponownie",
+        "checking": "Sprawdzanie…",
+        "loadFailed": "Nie udało się uruchomić sprawdzenia wymagań."
+      },
+      "database": {
+        "eyebrow": "Krok {n} z {total}",
+        "title": "Połączenie z <i>bazą danych</i>.",
+        "intro": "Sprawdź bazę PostgreSQL, na której działa ta platforma. Zweryfikujemy połączenie, zanim przejdziemy dalej.",
+        "driver": "Sterownik bazy danych",
+        "driverName": "PostgreSQL",
+        "host": "Host",
+        "port": "Port",
+        "name": "Nazwa bazy danych",
+        "namePlaceholder": "crm",
+        "user": "Nazwa użytkownika",
+        "userPlaceholder": "postgres",
+        "password": "Hasło",
+        "passwordHint": "Pozostaw puste, aby użyć hasła tej instalacji. Samo połączenie jest ustawione w środowisku serwera; ten krok tylko je testuje.",
+        "test": "Testuj połączenie",
+        "testing": "Testowanie…",
+        "ok": "Połączenie udane.",
+        "unreachable": "Nie udało się połączyć z PostgreSQL żadną trasą. Użyj dokładnego hosta z panelu hostingu, sprawdź port, upewnij się, że baza i użytkownik istnieją oraz że serwer akceptuje połączenia z tej maszyny, a następnie spróbuj ponownie.",
+        "networkError": "Błąd sieci: {detail}"
+      },
+      "application": {
+        "eyebrow": "Krok {n} z {total}",
+        "title": "Podstawy <i>aplikacji</i>.",
+        "intro": "Nazwij instalację, ustaw publiczny adres URL i wybierz strefę czasową oraz domyślny język.",
+        "name": "Nazwa aplikacji",
+        "url": "Adres URL aplikacji",
+        "urlPlaceholder": "https://app.example.com",
+        "timezone": "Strefa czasowa",
+        "timezonePlaceholder": "Szukaj stref czasowych…",
+        "timezoneEmpty": "Brak pasujących stref czasowych.",
+        "locale": "Domyślny język"
+      },
+      "admin": {
+        "eyebrow": "Krok {n} z {total}",
+        "title": "Konto <i>administratora</i>.",
+        "intro": "Pierwsze konto super administratora i prywatna przestrzeń robocza. Członków zespołu dodasz później z konsoli.",
+        "fullName": "Imię i nazwisko",
+        "fullNamePlaceholder": "Vetrick R.",
+        "email": "E-mail",
+        "emailPlaceholder": "you@yourdomain.com",
+        "password": "Hasło",
+        "confirm": "Potwierdź hasło",
+        "workspace": "Nazwa przestrzeni roboczej",
+        "workspacePlaceholder": "Mój zespół",
+        "note": "Min. 12 znaków, w tym wielka i mała litera, cyfra i symbol · hash argon2id. Ta platforma jest wielodostępna — jedna prywatna przestrzeń robocza jest skonfigurowana wstępnie; zmienisz jej nazwę później w sekcji Przestrzenie robocze. Hasło nigdy nie jest zapisywane jako zwykły tekst, a przy pierwszym logowaniu musi być połączone z logowaniem dwuskładnikowym."
+      },
+      "node": {
+        "eyebrow": "Krok {n} z {total}",
+        "title": "<i>Most</i> Node.",
+        "intro": "WhatsApp wysyłany jest przez małą usługę Node. Wskaż ją platformie i ustaw wspólny token — instalator zapisze go po obu stronach.",
+        "url": "Adres URL serwera Node",
+        "urlHint": "Adres, na którym nasłuchuje most Node. API wywołuje go w celu wysyłania wiadomości.",
+        "port": "Port Node",
+        "portHint": "Port, na którym działa most Node.",
+        "token": "Wspólny token Node",
+        "tokenHint": "Uzupełniane automatycznie. Musi być zgodne w API i moście Node — instalator zapisuje je raz, zabezpieczone.",
+        "generate": "Generuj",
+        "info": "Są zapisywane w ustawieniach platformy, a nie w plikach .env. Token jest udostępniany jako NODE_WEBHOOK_TOKEN dla mostu Node.",
+        "submit": "Dalej i zainstaluj"
+      },
+      "install": {
+        "eyebrow": "Krok {n} z {total}",
+        "title": "Instalowanie <i>{app}</i>.",
+        "intro": "Chwila cierpliwości — konfigurujemy wszystko. Zwykle trwa to kilka sekund.",
+        "preparing": "Przygotowywanie…",
+        "complete": "Gotowe",
+        "failed": "Nie powiodło się — zobacz poniżej",
+        "paused": "Instalacja wstrzymana",
+        "retry": "Ponów od nieudanego kroku",
+        "success": "Instalacja zakończona — przekierowanie…",
+        "rows": {
+          "configuration": {
+            "done": "Konfiguracja zapisana",
+            "active": "Zapisywanie konfiguracji aplikacji i mostu Node…"
+          },
+          "migrations": {
+            "done": "Zweryfikowano migracje bazy danych",
+            "active": "Sprawdzanie migracji bazy danych…"
+          },
+          "defaults": {
+            "done": "Zweryfikowano niezbędne dane",
+            "active": "Sprawdzanie ról, uprawnień i ustawień domyślnych…"
+          },
+          "account": {
+            "done": "Administrator i przestrzeń robocza gotowe",
+            "active": "Tworzenie konta administratora i prywatnej przestrzeni roboczej…"
+          },
+          "storage": {
+            "done": "Pamięć gotowa",
+            "active": "Sprawdzanie pamięci i katalogów tymczasowych…"
+          },
+          "finalize": {
+            "done": "Instalacja sfinalizowana",
+            "active": "Blokowanie konfiguracji i zapisywanie instalacji…"
+          }
+        }
+      },
+      "completed": {
+        "body": "Konfiguracja została już zakończona w tej instalacji.",
+        "login": "Przejdź do logowania"
+      },
+      "back": "Wstecz",
+      "continue": "Dalej",
+      "show": "Pokaż",
+      "hide": "Ukryj",
+      "working": "Praca w toku",
+      "problems": {
+        "token": "Ten token konfiguracji jest nieprawidłowy.",
+        "disabled": "Konfiguracja jest wyłączona na tym serwerze.",
+        "outOfOrder": "Krok wykonano w złej kolejności. Przeładuj stronę i zacznij ponownie.",
+        "step": "Krok instalacji się nie powiódł. Sprawdź dane i logi serwera, a następnie spróbuj ponownie.",
+        "unknown": "Coś poszło nie tak. Spróbuj ponownie.",
+        "requestId": "ID żądania {id}",
+        "prerequisites": "Serwer nie jest gotowy do konfiguracji: {items}.",
+        "licence": {
+          "empty": "Wpisz kod zakupu CodeCanyon.",
+          "not_configured": "Sprawdzanie licencji nie jest skonfigurowane (brak tokenu Envato).",
+          "unreachable": "Nie udało się połączyć z Envato, aby zweryfikować kod. Sprawdź połączenie serwera z internetem.",
+          "not_found": "Nieprawidłowy kod zakupu — Envato nie ma dla niego sprzedaży.",
+          "http_error": "Weryfikacja w Envato nie powiodła się.",
+          "other_product": "Ten kod zakupu dotyczy innego produktu.",
+          "unknown": "Nie udało się zweryfikować kodu zakupu."
+        },
+        "keys": {
+          "runtime": "Wersja Node.js",
+          "database": "baza danych",
+          "redis": "Redis",
+          "migrations": "migracje bazy danych",
+          "permissions": "definicje uprawnień",
+          "temp": "katalog tymczasowy",
+          "storage": "pamięć",
+          "default": "{key}"
+        }
+      },
+      "errors": {
+        "tokenLength": "Token konfiguracji ma co najmniej {min} znaków.",
+        "dbHost": "Wpisz host bazy danych.",
+        "dbPort": "Wpisz port od 1 do 65535.",
+        "dbName": "Wpisz nazwę bazy danych.",
+        "dbUser": "Wpisz nazwę użytkownika bazy danych.",
+        "appNameRequired": "Wpisz nazwę aplikacji.",
+        "appNameLong": "Nazwa aplikacji może mieć najwyżej {max} znaków.",
+        "appUrl": "Wpisz pełny adres URL zaczynający się od http:// lub https://.",
+        "timezone": "Wybierz strefę czasową z listy.",
+        "locale": "Wybierz język z listy.",
+        "fullNameRequired": "Wpisz imię i nazwisko.",
+        "fullNameLong": "Imię i nazwisko może mieć najwyżej {max} znaków.",
+        "email": "Wpisz prawidłowy adres e-mail.",
+        "passwordMismatch": "Potwierdzenie hasła nie jest zgodne.",
+        "workspaceRequired": "Wpisz nazwę przestrzeni roboczej, co najmniej 2 znaki.",
+        "workspaceLong": "Nazwa przestrzeni roboczej może mieć najwyżej {max} znaków.",
+        "nodeUrl": "Wpisz adres URL serwera Node, zaczynający się od http:// lub https://.",
+        "nodePort": "Wpisz port od 1 do 65535.",
+        "nodeToken": "Wspólny token ma co najmniej {min} znaków.",
+        "password": {
+          "length": "Hasło musi mieć co najmniej 12 znaków.",
+          "upper": "Hasło musi zawierać wielką literę.",
+          "lower": "Hasło musi zawierać małą literę.",
+          "number": "Hasło musi zawierać cyfrę.",
+          "symbol": "Hasło musi zawierać symbol.",
+          "personal": "Hasło nie może zawierać Twojego imienia ani adresu e-mail."
+        }
+      }
+    },
+    "system": {
+      "nav": {
+        "group": "System",
+        "item": "Aktualizator"
+      },
+      "title": "Aktualizator aplikacji",
+      "titleRich": "<i>Aktualizator</i> aplikacji.",
+      "titleAccent": "aktualizator",
+      "kicker": "Administrator · Konserwacja",
+      "description": "Zweryfikuj zakup i sprawdź dokładnie, co działa w tej instalacji. Aktualizacje są dostarczane jako nowy obraz, a migracje uruchamiają się przed startem — Twoja baza danych, pamięć i przesłane pliki nigdy nie są zmieniane z tej strony.",
+      "crumbAdmin": "Administrator",
+      "crumbSettings": "Ustawienia",
+      "crumbUpdater": "Aktualizator",
+      "version": "v{version} · kompilacja {build}",
+      "buildNone": "b.d.",
+      "allSettings": "Wszystkie ustawienia",
+      "refresh": "Odśwież",
+      "loading": "Wczytywanie",
+      "errorForbidden": "Nie masz dostępu do tej strony.",
+      "errorUnexpected": "Nie udało się wczytać aktualizatora.",
+      "requestId": "ID żądania",
+      "retry": "Spróbuj ponownie",
+      "licence": {
+        "kicker": "krok 1 · licencja",
+        "title": "Zweryfikuj swój zakup",
+        "intro": "Wpisz kod zakupu CodeCanyon. Jest sprawdzany w Envato, zanim można uruchomić jakąkolwiek aktualizację.",
+        "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+        "mask": "••••••••-••••-••••-••••-••••••••••••",
+        "verify": "Zweryfikuj",
+        "verifying": "Weryfikowanie…",
+        "verified": "Zakup został zweryfikowany — możesz kontynuować.",
+        "verifiedAt": "Zweryfikowano {date}.",
+        "notVerified": "Jeszcze niezweryfikowane.",
+        "notEnabled": "Ta instalacja nie wymusza kodu zakupu, więc nie ma tu nic do weryfikacji.",
+        "superAdminOnly": "Kod zakupu może zweryfikować tylko super administrator.",
+        "reasons": {
+          "empty": "Wpisz kod zakupu CodeCanyon.",
+          "not_configured": "Sprawdzanie licencji nie jest skonfigurowane (brak tokenu Envato).",
+          "unreachable": "Nie udało się połączyć z Envato, aby zweryfikować kod. Sprawdź połączenie serwera z internetem.",
+          "not_found": "Nieprawidłowy kod zakupu — Envato nie ma dla niego sprzedaży.",
+          "http_error": "Weryfikacja w Envato nie powiodła się.",
+          "other_product": "Ten kod zakupu dotyczy innego produktu.",
+          "unknown": "Nie udało się zweryfikować kodu zakupu."
+        }
+      },
+      "process": {
+        "kicker": "proces aktualizacji",
+        "title": "Aktualizacje są dostarczane jako obraz",
+        "step2": {
+          "title": "Wykonaj kopię zapasową bazy danych",
+          "body": "Przed wdrożeniem wykonaj kopię zapasową bazy danych (pg_dump lub odzyskiwanie do punktu w czasie). Kopie zapasowe to tutaj zadanie infrastruktury, a nie przycisk."
+        },
+        "step3": {
+          "title": "Wdróż nowy obraz",
+          "body": "Wdróż nowy obraz kontenera. Bieżąca wersja i kompilacja są pokazane poniżej."
+        },
+        "step4": {
+          "title": "Uruchom migracje",
+          "body": "pnpm db:migrate stosuje nowe tabele i kolumny i nigdy nie usuwa danych. Poniższa lista pokazuje każdą migrację i jej stan."
+        },
+        "step5": {
+          "title": "Sprawdzenie stanu",
+          "body": "Zależności są sprawdzane na żywo poniżej. Odśwież tę stronę po wdrożeniu, aby potwierdzić, że wszystko działa."
+        }
+      },
+      "release": {
+        "kicker": "ta instalacja",
+        "title": "Wydanie",
+        "version": "Wersja",
+        "gitSha": "Commit kompilacji",
+        "buildNumber": "Numer kompilacji",
+        "builtAt": "Zbudowano",
+        "environment": "Środowisko",
+        "uptime": "Czas działania",
+        "none": "Nie zapisano",
+        "demo": "Tryb demo jest włączony: zapisy są odrzucane, chyba że są na liście dozwolonych."
+      },
+      "setup": {
+        "title": "Pierwsza konfiguracja",
+        "open": "Otwarte",
+        "completed": "Zakończone",
+        "completedAt": "Zakończono {date} w wersji {version}"
+      },
+      "checks": {
+        "kicker": "stan",
+        "title": "Sprawdzenie stanu",
+        "database": "Baza danych",
+        "redis": "Redis",
+        "migrations": "Migracje",
+        "up": "Działa",
+        "down": "Niedostępne",
+        "degraded": "Obniżona sprawność",
+        "latency": "{ms} ms"
+      },
+      "migrations": {
+        "kicker": "rejestr",
+        "title": "Migracje",
+        "summary": "Zastosowano: {count}",
+        "status": {
+          "current": "Aktualne",
+          "pending": "Oczekujące migracje",
+          "drift": "Plik migracji został zmieniony po jej zastosowaniu",
+          "unknown": "Pliki migracji nie są dołączone do tej kompilacji"
+        },
+        "state": {
+          "applied": "Zastosowana",
+          "pending": "Oczekująca",
+          "modified": "Zmodyfikowana",
+          "missing-file": "Brak pliku"
+        },
+        "id": "Migracja",
+        "stateLabel": "Stan",
+        "appliedAt": "Zastosowano"
+      },
+      "breadcrumb": "Ścieżka nawigacji"
+    }
+  }
+}

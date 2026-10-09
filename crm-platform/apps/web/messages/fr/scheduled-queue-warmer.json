@@ -1,0 +1,531 @@
+{
+  "scheduled-queue-warmer": {
+    "nav": {
+      "scheduled": "Planifié",
+      "warmer": "Préchauffage"
+    },
+    "common": {
+      "dismiss": "Ignorer"
+    },
+    "status": {
+      "scheduled": "En file d’attente",
+      "running": "En cours",
+      "paused": "En pause",
+      "completed": "Terminé",
+      "failed": "Échec",
+      "cancelled": "Annulé"
+    },
+    "type": {
+      "plain": "Texte brut",
+      "template": "Modèle",
+      "media": "Média",
+      "location": "Position"
+    },
+    "errors": {
+      "generic": "Une erreur est survenue. Réessayez.",
+      "FORBIDDEN": "Vous n’êtes pas autorisé à faire cela.",
+      "VALIDATION_FAILED": "Certains champs doivent être corrigés.",
+      "ROW_VERSION_CONFLICT": "Cette planification a été modifiée entre-temps. Rechargez la page et réessayez.",
+      "PLAN_FEATURE_LOCKED": "Votre forfait ne comprend pas cette fonctionnalité.",
+      "PLAN_LIMIT_REACHED": "Vous avez atteint la limite de votre forfait.",
+      "WA_UNOFFICIAL_DISABLED": "L’envoi via des numéros WhatsApp personnels (API non officielle) n’est pas activé pour votre espace de travail. Choisissez un numéro de l’API officielle WhatsApp Business.",
+      "AUTH_SEND_HALTED": "L’envoi est suspendu pour cet espace de travail.",
+      "upgrade": "Voir les forfaits et passer à une offre supérieure",
+      "requestId": "Demande {id}"
+    },
+    "actions": {
+      "done": {
+        "pause": "Planification mise en pause.",
+        "resume": "Planification reprise.",
+        "cancel": "Planification annulée.",
+        "run-now": "La planification est en cours d’exécution.",
+        "destroy": "Planification supprimée.",
+        "retry": "Planification remise en file d’attente avec la nouvelle heure."
+      }
+    },
+    "confirm": {
+      "yes": "Oui, continuer",
+      "keep": "Conserver",
+      "cancel": {
+        "title": "Annuler cette planification ?",
+        "body": "« {name} » ne sera pas envoyé. Cette action est irréversible."
+      },
+      "run-now": {
+        "title": "Exécuter cette planification maintenant ?",
+        "body": "« {name} » commencera à être envoyé immédiatement au lieu de l’heure prévue."
+      },
+      "destroy": {
+        "title": "Supprimer cette planification ?",
+        "body": "« {name} » et sa liste de destinataires seront supprimés."
+      }
+    },
+    "retry": {
+      "title": "Relancer à une nouvelle heure",
+      "body": "Choisissez une nouvelle date d’envoi pour « {name} ». Elle repassera en file d’attente.",
+      "date": "Date d’envoi",
+      "time": "Heure",
+      "timezone": "Fuseau horaire",
+      "keep": "Conserver les échecs",
+      "confirm": "Relancer maintenant"
+    },
+    "list": {
+      "crumb": "Campagnes / Messages planifiés",
+      "title": "Messages planifiés",
+      "queued": "{n} en file d’attente",
+      "create": "Planifier un message",
+      "stats": {
+        "total": "Total planifié",
+        "totalHint": "tous statuts confondus",
+        "active": "File active",
+        "activeHint": "en attente d’envoi",
+        "sent": "Total envoyé",
+        "sentHint": "messages envoyés (cette page)",
+        "delivery": "Taux de distribution",
+        "deliveryHint": "sur les envois terminés (cette page)"
+      },
+      "upNext": {
+        "eyebrow": "À venir",
+        "title": "Prochain envoi",
+        "pending": "{n} en attente",
+        "empty": "Aucun message planifié pour l’instant.",
+        "createOne": "En créer un →",
+        "recurring": "récurrent",
+        "queued": "en file d’attente"
+      },
+      "tip": {
+        "eyebrow": "Astuce",
+        "title": "Envoyer au moment de la lecture",
+        "body": "Les taux d’ouverture culminent entre 9 h et 11 h, puis entre 18 h et 20 h, dans le fuseau horaire local de vos contacts. Choisissez une heure d’envoi adaptée à votre audience. Les planifications récurrentes permettent de la définir une seule fois.",
+        "cta": "Planifier un message"
+      },
+      "tabs": {
+        "all": "Tous",
+        "upcoming": "À venir",
+        "running": "En cours",
+        "paused": "En pause",
+        "completed": "Terminés",
+        "failed": "Échecs"
+      },
+      "search": "Rechercher par nom…",
+      "cols": {
+        "schedule": "Planification",
+        "type": "Type",
+        "recipients": "Destinataires",
+        "sendTime": "Heure d’envoi",
+        "repeat": "Répétition",
+        "status": "Statut",
+        "actions": "Actions"
+      },
+      "recipients": {
+        "group": "Groupe",
+        "tag": "Étiquette",
+        "queue": "File",
+        "number": "Numéros"
+      },
+      "when": {
+        "overdue": "en retard",
+        "now": "maintenant",
+        "minutes": "dans {n} min",
+        "hours": "dans {n} h",
+        "tomorrow": "demain",
+        "date": "plus tard"
+      },
+      "completedAt": "terminé {when}",
+      "once": "une fois",
+      "actions": {
+        "open": "Ouvrir",
+        "pause": "Mettre en pause",
+        "resume": "Reprendre",
+        "runNow": "Exécuter maintenant",
+        "cancel": "Annuler",
+        "retry": "Relancer à une nouvelle heure",
+        "delete": "Supprimer",
+        "deleteHistory": "Supprimer de l’historique"
+      },
+      "empty": {
+        "title": "Aucune planification",
+        "none": "Planifiez votre premier message.",
+        "filtered": "Aucune planification ne correspond aux filtres actuels. Effacez les filtres ou planifiez votre premier message.",
+        "reset": "Réinitialiser les filtres"
+      },
+      "page": "Page {page} sur {pages}",
+      "prev": "Précédent",
+      "next": "Suivant"
+    },
+    "composer": {
+      "crumb": "Planifié / Nouveau",
+      "title": "Planifier un message",
+      "back": "Retour",
+      "forbidden": "Vous n’êtes pas autorisé à planifier des messages.",
+      "steps": "Étapes",
+      "stepNames": {
+        "basics": "Informations",
+        "audience": "Destinataires",
+        "message": "Message",
+        "when": "Quand",
+        "review": "Récapitulatif"
+      },
+      "required": "obligatoire",
+      "previous": "Précédent",
+      "next": "Suivant",
+      "submit": "Planifier le message",
+      "stepOf": "Étape {n} sur {total}",
+      "engine": {
+        "baileys": "API non officielle",
+        "waba": "API WhatsApp Cloud",
+        "twilio": "Twilio"
+      },
+      "types": {
+        "plain": {
+          "title": "Texte brut",
+          "hint": "Uniquement du texte et des emojis.",
+          "pill": "texte brut"
+        },
+        "template": {
+          "title": "Modèle",
+          "hint": "Modèle WhatsApp approuvé.",
+          "pill": "modèle"
+        },
+        "media": {
+          "title": "Avec média",
+          "hint": "Image, vidéo, document, audio.",
+          "pill": "média"
+        },
+        "location": {
+          "title": "Position",
+          "hint": "Épingle latitude/longitude.",
+          "pill": "position"
+        }
+      },
+      "basics": {
+        "title": "Informations de la planification",
+        "name": "Nom de la planification",
+        "nameHint": "Libellé interne uniquement : les destinataires ne le voient pas.",
+        "namePlaceholder": "ex. : promo de printemps / segment VIP",
+        "sender": "Expéditeur",
+        "senders": "Expéditeurs",
+        "tickAll": "Cochez tous les choix pertinents",
+        "noSenders": "Aucun expéditeur connecté. Connectez d’abord un numéro.",
+        "warming": "Préchauffage",
+        "splitHint": "Chaque expéditeur coché exécute sa propre planification avec une part équitable de l’audience.",
+        "messageType": "Type de message"
+      },
+      "audience": {
+        "title": "Destinataires",
+        "source": "Source des destinataires",
+        "sources": {
+          "group": {
+            "title": "Groupe",
+            "hint": "Choisissez un ou plusieurs groupes de contacts enregistrés."
+          },
+          "tag": {
+            "title": "Étiquettes",
+            "hint": "Tous les contacts portant une étiquette"
+          },
+          "queue": {
+            "title": "File d’audience",
+            "hint": "Cibler à nouveau les destinataires d’une diffusion passée."
+          },
+          "number": {
+            "title": "Numéros",
+            "hint": "Collez une liste manuellement."
+          }
+        },
+        "chooseGroups": "Choisissez un ou plusieurs groupes",
+        "chooseTags": "Choisissez une ou plusieurs étiquettes",
+        "chooseQueues": "Choisissez une ou plusieurs diffusions passées",
+        "tickAny": "(cochez autant que nécessaire)",
+        "noGroups": "Aucun groupe pour l’instant",
+        "noTags": "Aucune étiquette pour l’instant",
+        "noQueues": "Aucune diffusion terminée pour l’instant",
+        "contacts": "Aller aux contacts",
+        "broadcast": "Aller aux diffusions",
+        "tagsHint": "Les destinataires sont recalculés au moment de l’envoi, donc les contacts nouvellement étiquetés sont inclus.",
+        "queuesHint": "Cochez autant de diffusions que vous voulez. Les destinataires en double sont supprimés automatiquement avant l’envoi.",
+        "paste": "Coller des numéros",
+        "pasteHint": "Indicatif pays en premier, sans + initial. Les retours à la ligne ou les virgules séparent les entrées.",
+        "pastePlaceholder": "Un numéro par ligne, avec l’indicatif pays, sans signe plus",
+        "total": "Total des destinataires :",
+        "optedOut": "{n} exclu(s) : désinscrit(s) ou archivé(s)"
+      },
+      "message": {
+        "title": "Rédiger le message",
+        "content": "Contenu du message",
+        "caption": "Légende",
+        "placeholder": "Bonjour '{name}', votre mise à jour programmée est disponible…",
+        "personalise": "Utilisez '{name}', '{phone}', '{email}' pour personnaliser.",
+        "template": "Modèle approuvé",
+        "chooseTemplate": "Choisissez un modèle approuvé",
+        "browse": "Cliquez pour parcourir vos modèles",
+        "approved": "APPROUVÉ",
+        "change": "Modifier",
+        "mediaLink": "Lien du média",
+        "mediaHint": "Lien vers le fichier (https://…). Image, vidéo, audio ou document.",
+        "pin": "Épingler la position",
+        "latitude": "Latitude",
+        "longitude": "Longitude",
+        "estimate": "Heure d’envoi estimée",
+        "minutes": "environ {n} min",
+        "estimateHint": "à 60 msg/min",
+        "estimateEmpty": "choisissez d’abord les destinataires.",
+        "variables": "Variables dans le message",
+        "variablesHint": "variables détectées.",
+        "pickerEyebrow": "modèles",
+        "pickerTitle": "Choisir un modèle",
+        "pickerHint": "Seuls les modèles approuvés et actifs sont affichés.",
+        "pickerSearch": "Rechercher par nom ou langue…",
+        "pickerEmpty": "Aucun modèle ne correspond.",
+        "manageTemplates": "Gérer les modèles →",
+        "cancel": "Annuler"
+      },
+      "when": {
+        "title": "Quand envoyer",
+        "modes": {
+          "once": {
+            "title": "Envoi unique",
+            "hint": "Un seul envoi à la date et à l’heure choisies."
+          },
+          "recurring": {
+            "title": "Récurrent",
+            "hint": "Répéter chaque jour, chaque semaine ou chaque mois à une cadence fixe."
+          }
+        },
+        "date": "Date d’envoi",
+        "time": "Heure",
+        "timezone": "Fuseau horaire",
+        "recurrence": "Récurrence",
+        "every": "Répéter tous les",
+        "interval": "Intervalle",
+        "intervals": {
+          "daily": "jour(s)",
+          "weekly": "semaine(s)",
+          "monthly": "mois"
+        },
+        "end": "Fin",
+        "endNever": "Jamais",
+        "endDate": "À une date précise",
+        "endOn": "Dernier jour",
+        "days": "Jours de la semaine",
+        "daysHint": "Cliquez sur un jour pour l’activer ou le désactiver. Les planifications hebdomadaires en demandent au moins un.",
+        "lead": "Une planification doit être programmée au moins {n} minutes à l’avance."
+      },
+      "review": {
+        "title": "Vérifier et planifier",
+        "final": "définitif",
+        "schedule": "Planifier",
+        "name": "Nom",
+        "sender": "Expéditeur",
+        "type": "Type",
+        "mode": "Mode",
+        "at": "Premier envoi",
+        "once": "Envoi unique",
+        "recurring": "Tous les {n} {interval}",
+        "delivery": "Distribution",
+        "source": "Source des destinataires",
+        "recipients": "Destinataires",
+        "estimated": "Heure estimée",
+        "testTitle": "Envoyez d’abord un test",
+        "testHint": "Recevez un message d’aperçu au numéro de votre choix avant l’envoi complet.",
+        "testNumber": "Envoyer un test à ce numéro",
+        "testNumberHint": "Indicatif pays en premier, sans + initial."
+      },
+      "preview": {
+        "title": "Aperçu en direct",
+        "channel": "WhatsApp",
+        "empty": "Votre message apparaîtra ici…",
+        "media": "[ média joint ]",
+        "pin": "Épingle de position",
+        "noTemplate": "Aucun modèle choisi"
+      },
+      "errors": {
+        "nameRequired": "Donnez un nom à la planification.",
+        "senderRequired": "Choisissez au moins un expéditeur.",
+        "wabaTemplate": "Les numéros de l’API WhatsApp Cloud ne peuvent pas envoyer de planifications de modèles. Décochez-les ou choisissez un autre type de message.",
+        "audienceRequired": "Choisissez au moins un élément.",
+        "numbersRequired": "Collez au moins un numéro.",
+        "messageRequired": "Rédigez le message.",
+        "messageTooLong": "Le message dépasse 1 024 caractères.",
+        "templateRequired": "Choisissez un modèle.",
+        "mediaLink": "Saisissez un lien commençant par http:// ou https://.",
+        "latitude": "Saisissez une latitude comprise entre -90 et 90.",
+        "longitude": "Saisissez une longitude comprise entre -180 et 180.",
+        "dateRequired": "Choisissez une date.",
+        "timeRequired": "Saisissez une heure, par exemple 14:30.",
+        "timezoneRequired": "Choisissez un fuseau horaire.",
+        "tooSoon": "Choisissez une heure au moins quelques minutes à partir de maintenant.",
+        "repeatEvery": "Saisissez un nombre entier de 1 à 365.",
+        "daysRequired": "Choisissez les jours de la semaine.",
+        "endDateRequired": "Choisissez le dernier jour.",
+        "endBeforeStart": "La date de fin est antérieure au premier envoi.",
+        "testNumber": "Saisissez le numéro avec son indicatif pays."
+      }
+    },
+    "detail": {
+      "crumb": "Planifié / Analyses",
+      "title": "Analyses des planifications",
+      "back": "Retour aux messages planifiés",
+      "eyebrow": "Message planifié",
+      "untitled": "Sans titre",
+      "recurs": "Récurrence · {interval} × {n}",
+      "fires": "Déclenchement {when}",
+      "actions": {
+        "pause": "Mettre en pause",
+        "resume": "Reprendre",
+        "runNow": "Exécuter maintenant",
+        "cancel": "Annuler",
+        "retry": "Relancer à une nouvelle heure",
+        "delete": "Supprimer"
+      },
+      "kpi": {
+        "recipients": "Destinataires",
+        "delivered": "Distribués",
+        "read": "Lus",
+        "sent": "Envoyés",
+        "status": "Statut",
+        "ofSent": "sur les envoyés",
+        "failedCount": "{n} en échec",
+        "pendingCount": "{n} en attente",
+        "fires": "déclenchement {when}",
+        "paused": "en pause",
+        "done": "terminé {when}"
+      },
+      "funnel": {
+        "eyebrow": "Entonnoir de distribution",
+        "title": "De l’envoi à l’action",
+        "recipients": "Destinataires",
+        "sent": "Envoyés",
+        "delivered": "Distribués",
+        "read": "Lus",
+        "failed": "Échecs"
+      },
+      "mix": {
+        "eyebrow": "Répartition des statuts",
+        "title": "Statut de distribution",
+        "empty": "Aucune activité d’envoi pour l’instant.",
+        "delivered": "Distribué",
+        "sentOnly": "Envoyé · non distribué",
+        "failed": "Échec",
+        "pending": "En attente"
+      },
+      "recipients": {
+        "eyebrow": "Destinataires",
+        "title": "Qui a reçu quoi",
+        "none": "Aucun destinataire enregistré pour cette planification.",
+        "emptyTab": "Aucun destinataire dans cet onglet pour l’instant.",
+        "truncated": "Affichage des {n} premiers destinataires sur {total}.",
+        "tabs": {
+          "all": "Tous",
+          "sent": "Envoyés",
+          "delivered": "Distribués",
+          "read": "Lus",
+          "failed": "Échecs",
+          "pending": "En attente"
+        },
+        "cols": {
+          "recipient": "Destinataire",
+          "phone": "Téléphone",
+          "status": "Statut",
+          "when": "Quand",
+          "note": "Note"
+        },
+        "status": {
+          "pending": "En attente",
+          "processing": "En attente",
+          "sent": "Envoyé",
+          "delivered": "Distribué",
+          "read": "Lu",
+          "failed": "Échec"
+        }
+      },
+      "config": {
+        "eyebrow": "Détails de la planification",
+        "title": "Configuration",
+        "scheduleType": "Type de planification",
+        "messageType": "Type de message",
+        "scheduledAt": "Planifié pour",
+        "nextRun": "Prochain envoi",
+        "lastRun": "Dernier envoi",
+        "repeats": "Répété tous les",
+        "until": "jusqu’au {date}",
+        "sender": "Depuis l’expéditeur",
+        "provider": "Moteur",
+        "attempts": "Tentatives d’envoi"
+      },
+      "preview": {
+        "eyebrow": "Aperçu du message",
+        "title": "Ce que voient les destinataires",
+        "empty": "(corps vide)"
+      },
+      "another": "Planifier un autre message"
+    },
+    "warmer": {
+      "warming": "{n} en préchauffage",
+      "name": "Préchauffage WhatsApp",
+      "tagline": "Préchauffage des numéros",
+      "how": {
+        "title": "Fonctionnement",
+        "one": "Activez le préchauffage pour un numéro.",
+        "two": "Chaque jour, il peut envoyer un peu plus que la veille.",
+        "three": "Les messages partent lentement, uniquement pendant les plages horaires que vous choisissez.",
+        "four": "Les campagnes, diffusions et envois planifiés respectent tous cette limite."
+      },
+      "good": {
+        "title": "Bon à savoir",
+        "body": "Le préchauffage réduit le risque de bannissement pour les numéros de l’API non officielle, sans le garantir. Pour un volume élevé, utilisez un numéro officiel WhatsApp Business (API Cloud), qui n’a pas besoin de préchauffage."
+      },
+      "crumb": "Campagnes / Préchauffage",
+      "heading": "Préchauffer vos numéros",
+      "lead": "Augmentez progressivement la limite d’envoi quotidienne de chaque numéro de l’API non officielle, avec des intervalles naturels et des heures d’activité, pour réduire le risque de bannissement. Chaque numéro suit son propre calendrier.",
+      "tiles": {
+        "warming": "Numéros en préchauffage",
+        "warmingHint": "sur {n} connectés",
+        "budget": "Budget du jour",
+        "budgetHint": "messages autorisés aujourd’hui",
+        "sent": "Envoyés aujourd’hui",
+        "sentHint": "comptés dans le préchauffage",
+        "health": "Santé moyenne",
+        "healthHint": "tous numéros confondus"
+      },
+      "empty": "Aucun numéro connecté pour l’instant.",
+      "connect": "Connecter un numéro",
+      "number": "Numéro",
+      "engines": {
+        "baileys": "API non officielle",
+        "waba": "WABA",
+        "twilio": "Twilio"
+      },
+      "health": "Santé {n}",
+      "healthTitle": "Score de santé (plus haut = augmentation plus sûre)",
+      "switch": "En préchauffage",
+      "budgetToday": "Budget du jour",
+      "remaining": "Restant aujourd’hui",
+      "sentToday": "Envoyés aujourd’hui",
+      "fields": {
+        "dailyBase": "Budget/jour de départ",
+        "stepPct": "Hausse % / palier",
+        "stepDays": "Hausse tous les (jours)",
+        "maxDaily": "Budget/jour maximum",
+        "gapMin": "Intervalle min (sec)",
+        "gapMax": "Intervalle max (sec)",
+        "activeStart": "Actif à partir de (h)",
+        "activeEnd": "Actif jusqu’à (h)"
+      },
+      "hints": {
+        "dailyBase": "Nombre de messages que ce numéro peut envoyer le premier jour.",
+        "stepPct": "Augmenter cette limite quotidienne de ce pourcentage à chaque palier.",
+        "stepDays": "Fréquence d’augmentation de la limite (tous les N jours).",
+        "maxDaily": "La limite quotidienne la plus haute jamais atteinte.",
+        "gapMin": "Attente la plus courte entre deux messages.",
+        "gapMax": "Attente la plus longue entre deux messages.",
+        "activeStart": "Ne commencer l’envoi qu’après cette heure (format 24 h).",
+        "activeEnd": "Arrêter l’envoi après cette heure."
+      },
+      "spintax": {
+        "title": "Variété des formulations",
+        "hint": "Envoyez une formulation légèrement différente à chaque personne pour que les messages ne soient pas identiques. Écrivez les choix ici sous la forme '{Bonjour|Salut|Hey}'."
+      },
+      "save": "Enregistrer le préchauffage",
+      "saved": "Préchauffage enregistré."
+    }
+  }
+}

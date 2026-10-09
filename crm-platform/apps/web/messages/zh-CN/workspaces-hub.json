@@ -1,0 +1,258 @@
+{
+  "workspaces-hub": {
+    "nav": {
+      "group": "工作区",
+      "workspaces": "工作区"
+    },
+    "crumb": {
+      "admin": "管理后台",
+      "workspaces": "工作区",
+      "label": "面包屑"
+    },
+    "common": {
+      "loading": "加载中",
+      "retry": "重试",
+      "cancel": "取消",
+      "close": "关闭",
+      "none": "无",
+      "never": "从不",
+      "unlimited": "无限制",
+      "noAccess": "您的角色无法执行此操作。"
+    },
+    "list": {
+      "title": "工作区",
+      "subtitle": "在一处查看所有客户工作区：套餐、服务商、钱包、所有者和活动，并可对每个工作区执行所需操作。",
+      "kpi": {
+        "total": "工作区",
+        "active": "已启用",
+        "suspended": "已暂停",
+        "trial": "试用中",
+        "newThisMonth": "本月新增",
+        "lowBalance": "余额不足",
+        "mrr": "MRR"
+      },
+      "search": "搜索",
+      "searchPlaceholder": "名称、标识、所有者姓名或邮箱",
+      "status": {
+        "label": "状态",
+        "all": "全部",
+        "active": "已启用",
+        "suspended": "已暂停"
+      },
+      "plan": "套餐",
+      "allPlans": "所有套餐",
+      "state": "状态",
+      "allStates": "所有状态",
+      "provider": "服务商",
+      "allProviders": "所有服务商",
+      "lowOnly": "仅显示余额不足的工作区",
+      "sort": {
+        "label": "排序方式",
+        "created": "最新",
+        "last_active": "最近活跃",
+        "name": "名称"
+      },
+      "clear": "清除筛选",
+      "refresh": "刷新",
+      "columns": {
+        "menu": "列",
+        "reset": "重置列",
+        "workspace": "工作区",
+        "provider": "服务商",
+        "numbers": "号码",
+        "plan": "套餐",
+        "state": "状态",
+        "ends": "结束时间",
+        "limits": "限额",
+        "wallet": "钱包",
+        "owner": "所有者",
+        "mrr": "MRR",
+        "messages7d": "7 天消息数",
+        "lastActive": "最近活跃",
+        "actions": "操作"
+      },
+      "tableLabel": "工作区",
+      "emptyTitle": "暂无工作区",
+      "emptyMessage": "客户注册后，工作区会显示在此处。",
+      "noMatchTitle": "没有匹配的工作区",
+      "noMatchMessage": "请更改搜索或筛选条件以查看更多内容。",
+      "loadMore": "加载更多",
+      "loadingMore": "正在加载更多",
+      "loaded": "正在显示 {count, plural, other {# 个工作区}}"
+    },
+    "cell": {
+      "suspended": "已暂停",
+      "suspendedBy": {
+        "frozen": "已冻结",
+        "tos_violation": "违反条款",
+        "fraud": "欺诈"
+      },
+      "providerSource": {
+        "override": "覆盖设置",
+        "default": "默认",
+        "platform_setting": "平台设置"
+      },
+      "numbersCount": "{count, plural, other {# 个号码}}",
+      "platformOwned": "平台",
+      "unknownPlan": "未知套餐",
+      "health": {
+        "suspended": "已暂停",
+        "good": "良好",
+        "active": "活跃",
+        "low": "低使用量",
+        "new": "新建",
+        "idle": "闲置"
+      },
+      "daysLeft": "剩余 {count, plural, other {# 天}}",
+      "expired": "已过期",
+      "limits": {
+        "summary": "{messages} 条消息/月 · {users} 位用户 · {contacts} 位联系人 · {devices} 台设备",
+        "override": "覆盖设置",
+        "messages": "每月消息数",
+        "users": "用户",
+        "contacts": "联系人",
+        "devices": "设备"
+      },
+      "lowBalance": "低",
+      "noOwner": "无所有者",
+      "ago": {
+        "now": "刚刚",
+        "minutes": "{count, plural, other {# 分钟前}}",
+        "hours": "{count, plural, other {# 小时前}}",
+        "days": "{count, plural, other {# 天前}}"
+      }
+    },
+    "actions": {
+      "menu": "{name} 的操作",
+      "dashboard": "工作区仪表板",
+      "editPlan": "编辑并更改套餐",
+      "planLimits": "套餐与限额",
+      "provider": "更改并设置服务商",
+      "impersonate": "以所有者身份登录",
+      "suspend": "暂停",
+      "unsuspend": "重新启用",
+      "denied": "不允许"
+    },
+    "plan": {
+      "loading": "正在加载套餐",
+      "loadFailed": "无法加载套餐。",
+      "saved": "已保存 {name} 的套餐。"
+    },
+    "provider": {
+      "title": "{name} 的服务商",
+      "help": "此工作区的新号码将通过您选择的服务商连接。已连接的号码保持不变，直到您将其迁移。",
+      "current": "当前使用 {name}（{source}）",
+      "field": "服务商",
+      "note": "备注（可选）",
+      "noteHint": "与覆盖设置一同保存，以便下一位操作人员了解原因。",
+      "noActive": "没有已启用的服务商。请先在服务商注册表中启用一个。",
+      "save": "设置覆盖",
+      "clear": "使用默认值",
+      "switchLink": "将已连接的号码迁移到其他服务商",
+      "assignmentsLink": "服务商注册表",
+      "saved": "已为 {name} 设置服务商。",
+      "cleared": "{name} 已重新遵循默认服务商。"
+    },
+    "impersonate": {
+      "title": "以 {name} 的所有者身份登录",
+      "help": "您将以所有者身份在新标签页中打开该工作区。会话最长持续 {minutes} 分钟，并会连同您的原因一起记录。",
+      "reason": "原因",
+      "reasonHint": "至少 {min} 个字符。该内容将保留在审计日志中。",
+      "readOnly": "只读会话",
+      "readOnlyHint": "您可以浏览，但所有更改都会被拒绝。",
+      "submit": "打开工作区",
+      "opened": "正在新标签页中打开 {name}。",
+      "popupBlocked": "您的浏览器阻止了新标签页。请允许此页面弹出窗口，然后重试。",
+      "reasonShort": "请至少输入 {min} 个字符。"
+    },
+    "suspend": {
+      "title": "暂停 {name}？",
+      "message": "其用户将被登出该工作区，且在重新启用之前消息功能将停止。",
+      "reason": "原因（可选）",
+      "confirm": "暂停工作区",
+      "done": "{name} 已暂停。"
+    },
+    "unsuspend": {
+      "title": "重新启用 {name}？",
+      "message": "其用户可以再次使用该工作区。",
+      "reason": "备注（可选）",
+      "confirm": "重新启用工作区",
+      "done": "{name} 已重新启用。"
+    },
+    "errors": {
+      "unexpected": "出现错误，请重试。",
+      "forbidden": "您的角色无法执行此操作。",
+      "conflict": "此工作区已被他人修改。请刷新后重试。",
+      "notFound": "此工作区已不存在。",
+      "reasonRequired": "需要至少 8 个字符的原因。",
+      "orgSuspended": "该工作区已暂停，无法进入。",
+      "validation": "请检查输入的值后重试。",
+      "requestId": "请求 ID"
+    },
+    "detail": {
+      "crumb": "工作区",
+      "back": "所有工作区",
+      "loadFailed": "无法加载此工作区。",
+      "slug": "标识",
+      "created": "创建于 {date}",
+      "kpi": {
+        "members": "成员",
+        "contacts": "联系人",
+        "openTickets": "未关闭的工单",
+        "delivered": "已送达",
+        "wallet": "钱包",
+        "mrr": "MRR",
+        "messages7d": "消息（7 天）"
+      },
+      "chart": {
+        "title": "过去 30 天",
+        "label": "过去 30 天每日发送与送达的消息",
+        "sent": "已发送",
+        "delivered": "已送达",
+        "empty": "过去 30 天没有消息。"
+      },
+      "tabs": {
+        "label": "工作区各部分",
+        "overview": "概览",
+        "plan": "套餐与限额",
+        "wallet": "钱包",
+        "provider": "服务商",
+        "support": "支持"
+      },
+      "overview": {
+        "owner": "所有者",
+        "adminNote": "管理员备注",
+        "noNote": "无备注。",
+        "health": "健康状况",
+        "lastActive": "最近活跃",
+        "suspendedBy": "持有人"
+      },
+      "planTab": {
+        "plan": "套餐",
+        "state": "状态",
+        "ends": "结束时间",
+        "limits": "生效的限额",
+        "edit": "编辑并更改套餐",
+        "overrideNote": "此工作区有自己的限额，将取代套餐的限额。"
+      },
+      "walletTab": {
+        "open": "打开完整钱包",
+        "balance": "余额",
+        "adjust": "调整余额",
+        "adjusted": "余额已调整。"
+      },
+      "providerTab": {
+        "provider": "生效的服务商",
+        "source": "选择者",
+        "numbers": "已连接的号码",
+        "change": "更改并设置服务商",
+        "switch": "将号码迁移到其他服务商"
+      },
+      "supportTab": {
+        "text": "此工作区的工单、会话和支持记录。",
+        "open": "打开支持记录",
+        "openTickets": "{count, plural, other {# 个未关闭的工单}}"
+      }
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "help": {
+    "title": "Hilfecenter",
+    "searchLabel": "Hilfe durchsuchen",
+    "searchPlaceholder": "Anleitungen durchsuchen",
+    "resultsStatus": "{count, plural, =0 {Keine Anleitungen gefunden} one {# Anleitung} other {# Anleitungen}}",
+    "none": {
+      "title": "Noch keine Anleitungen",
+      "message": "Anleitungen zu den Funktionen Ihres Tarifs erscheinen hier."
+    },
+    "noResults": {
+      "title": "Keine Anleitungen passen zu Ihrer Suche",
+      "message": "Probieren Sie andere Begriffe oder leeren Sie die Suche, um alle Anleitungen zu sehen."
+    },
+    "areas": {
+      "overview": "Plattform",
+      "inbox": "Inbox & Chat",
+      "audience": "CRM",
+      "sales": "Vertrieb",
+      "campaigns": "Kampagnen",
+      "automation": "Automatisierung",
+      "store": "Store",
+      "apps": "Marketplace",
+      "settings": "Einstellungen",
+      "account": "Konto",
+      "getting-started": "Erste Schritte",
+      "troubleshooting": "Fehlerbehebung"
+    },
+    "allHelp": "Zurück zur Hilfe",
+    "onThisPage": "Auf dieser Seite",
+    "openScreen": "Diesen Bildschirm öffnen",
+    "shownInEnglish": "Diese Anleitung ist noch nicht in Ihre Sprache übersetzt und wird daher auf Englisch angezeigt.",
+    "tip": {
+      "label": "Hilfe: {title}",
+      "readMore": "Anleitung lesen"
+    },
+    "guideCount": "{count, plural, =0 {Keine Anleitungen} one {# Anleitung} other {# Anleitungen}}",
+    "crumb": "Mehr / Hilfe",
+    "heading": "Hilfe",
+    "headingRest": "& Anleitungen",
+    "back": "Zurück",
+    "askSupport": "Nicht gefunden? Support fragen",
+    "askSupportShort": "Support",
+    "categories": "Kategorien",
+    "allGuides": "Alle Anleitungen",
+    "needHuman": "Brauchen Sie einen Menschen?",
+    "contactSupport": "Support kontaktieren",
+    "popular": "Beliebt",
+    "searchResults": "Suchergebnisse",
+    "read": "Anleitung lesen",
+    "readMinutes": "{count, plural, one {# Min. Lesezeit} other {# Min. Lesezeit}}",
+    "moreInArea": "Mehr in {area}"
+  }
+}

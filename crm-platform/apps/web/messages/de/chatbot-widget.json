@@ -1,0 +1,350 @@
+{
+  "chatbotWidget": {
+    "nav": {
+      "title": "Chat-Widget"
+    },
+    "common": {
+      "dismiss": "Schließen"
+    },
+    "paywall": {
+      "kicker": "Tarif",
+      "title": "Chatbot-Widgets sind nicht in Ihrem Tarif enthalten",
+      "body": "Ihr Tarif enthält keine Chatbot-Widgets. Wechseln Sie auf einen höheren Tarif, um diese Funktion freizuschalten.",
+      "upgrade": "Tarife ansehen"
+    },
+    "list": {
+      "tip": "Tipp",
+      "tipBody": "Fügen Sie ein einzeiliges Snippet in eine beliebige Website ein, um eine schwebende Chat-Blase zu starten. Jedes Widget kann von einem Smart Agent betrieben werden, zu WhatsApp weiterleiten oder beides. Besucherunterhaltungen landen im Team-Posteingang.",
+      "statusViews": "Widget-Status",
+      "view": {
+        "all": "Alle Widgets",
+        "active": "Aktiv",
+        "paused": "Pausiert"
+      },
+      "status": {
+        "all": "Alle",
+        "active": "Aktiv",
+        "paused": "Pausiert"
+      },
+      "trainFirst": "Zuerst trainieren",
+      "trainBody": "Erstellen Sie unter <link>KI-Training</link> einen Smart Agent und fügen Sie Wissen hinzu. Hängen Sie ihn dann hier an, damit Ihr Widget in Ihrem Stil antwortet.",
+      "workspace": "Workspace",
+      "title": "Chatbot",
+      "titleAccent": "Widgets",
+      "intro": "Binden Sie eine schwebende Chat-Blase in jede Seite ein. Der Smart Agent antwortet direkt im Browser und übergibt bei Bedarf an den Unified Inbox.",
+      "activePill": "{count} aktiv",
+      "newWidget": "Neues Widget",
+      "card": {
+        "total": "Widgets gesamt",
+        "visitors": "Besucher",
+        "avg": "Ø pro Widget",
+        "health": "Integrität",
+        "activeHint": "{count} aktiv",
+        "allTime": "insgesamt",
+        "visitorsUnit": "Besucher"
+      },
+      "health": {
+        "healthy": "fehlerfrei",
+        "empty": "leer",
+        "attention": "Handlungsbedarf"
+      },
+      "search": "Nach Name oder Slug suchen…",
+      "col": {
+        "widget": "Widget",
+        "engine": "Engine",
+        "agent": "Smart Agent",
+        "visitors": "Besucher",
+        "updated": "Aktualisiert",
+        "actions": "Aktionen"
+      },
+      "loading": "Widgets werden geladen",
+      "loadError": "Die Widgets konnten nicht geladen werden.",
+      "retry": "Erneut versuchen",
+      "emptyTitle": "Noch keine Widgets",
+      "emptyBody": "Erstellen Sie Ihr erstes Chat-Widget. Es erscheint als schwebende Blase auf der Seite, in die Sie es einbetten.",
+      "createWidget": "Widget erstellen",
+      "noMatch": "Kein Widget auf dieser Seite entspricht Ihrer Suche.",
+      "showing": "Angezeigt:",
+      "of": "von",
+      "widgetsCount": "{count} Widgets",
+      "loadMore": "Mehr laden",
+      "pill": {
+        "active": "Aktiv",
+        "paused": "Pausiert"
+      },
+      "action": {
+        "preview": "Eigenständige Vorschau öffnen",
+        "copy": "Embed-Snippet kopieren",
+        "edit": "Widget bearbeiten",
+        "rotate": "Embed-Token rotieren",
+        "duplicate": "Widget duplizieren",
+        "delete": "Widget löschen"
+      },
+      "copied": "Snippet kopiert. Fügen Sie es auf Ihrer Website vor {tag} ein.",
+      "duplicateFailed": "Das Widget konnte nicht dupliziert werden.",
+      "rotated": "Token rotiert. Kopieren Sie das neue Snippet.",
+      "rotateFailed": "Rotation fehlgeschlagen: {reason}",
+      "networkError": "Netzwerkfehler",
+      "deleted": "Widget gelöscht.",
+      "deleteFailed": "Löschen fehlgeschlagen: {reason}",
+      "rotateTitle": "Embed-Token dieses Widgets rotieren?",
+      "rotateBody": "Das aktuelle Snippet auf Ihrer Website funktioniert sofort nicht mehr. Sie müssen das neue Snippet kopieren und einfügen.",
+      "rotate": "Rotieren",
+      "cancel": "Abbrechen",
+      "deleteTitle": "„{name}“ löschen?",
+      "deleteBody": "Das Embed-Snippet auf Ihrer Website funktioniert sofort nicht mehr. Bisherige Unterhaltungen bleiben in Ihrem Team-Posteingang.",
+      "delete": "Widget löschen",
+      "keep": "Behalten",
+      "copyManuallyTitle": "Bitte manuell kopieren",
+      "gotIt": "Verstanden",
+      "close": "Schließen"
+    },
+    "builder": {
+      "loading": "Widget wird geladen",
+      "notFoundTitle": "Widget nicht gefunden",
+      "notFoundBody": "Dieses Widget existiert in Ihrem Workspace nicht.",
+      "loadError": "Das Widget konnte nicht geladen werden.",
+      "backToWidgets": "Zurück zu Widgets",
+      "back": "Zurück zu Widgets",
+      "crumb": "Chatbot-Widgets",
+      "crumbEdit": "Bearbeiten",
+      "crumbNew": "Neu",
+      "titleNew": "Chatbot erstellen",
+      "titleEdit": "Chatbot bearbeiten",
+      "titleAccent": "Widget",
+      "stateSaved": "Gespeichert",
+      "stateDraft": "Entwurf / nicht gespeichert",
+      "saveDraft": "Entwurf speichern",
+      "stepper": "Builder-Schritte",
+      "steps": {
+        "setup": "Einrichtung",
+        "look": "Aussehen",
+        "voice": "Stimme",
+        "launch": "Start"
+      },
+      "previous": "Zurück",
+      "next": "Weiter",
+      "stepOf": "Schritt {n} von {total}",
+      "launchWidget": "Widget starten",
+      "draftSaved": "Entwurf gespeichert.",
+      "savedEmbed": "Gespeichert. Das Embed kann kopiert werden.",
+      "saveFailed": "Speichern fehlgeschlagen. Prüfen Sie den markierten Schritt.",
+      "snippetCopied": "Snippet kopiert.",
+      "clipboardBlocked": "Zwischenablage blockiert. Markieren Sie das Snippet manuell.",
+      "problem": {
+        "name": "Geben Sie Ihrem Widget einen Namen.",
+        "assistant": "Verknüpfen Sie einen Smart Agent oder stellen Sie die Engine auf WhatsApp-Deep-Link um.",
+        "whatsapp": "Geben Sie eine vollständige WhatsApp-Nummer ein: Ländervorwahl und Ziffern.",
+        "launcherColour": "Die Launcher-Füllung muss ein Hex-Farbwert sein (z. B. #075E54).",
+        "headerTitle": "Geben Sie dem Chatfenster einen Titel.",
+        "welcome": "Schreiben Sie eine Eröffnungszeile.",
+        "bgImage": "Geben Sie eine Hintergrundbild-URL an oder wechseln Sie zu einfarbig."
+      },
+      "setup": {
+        "title": "Widget-Einrichtung",
+        "required": "erforderlich",
+        "name": "Interner Name",
+        "namePlaceholder": "z. B. Widget für die Preisseite",
+        "nameHint": "Für Ihr Team. Besucher sehen diese Bezeichnung nicht.",
+        "position": "Position des Launchers",
+        "bottomRight": "Ecke unten rechts",
+        "bottomLeft": "Ecke unten links",
+        "positionHint": "Wo die runde Chat-Blase auf Ihrer Website schwebt.",
+        "engine": "Unterhaltungs-Engine",
+        "mode": {
+          "ai": {
+            "title": "Smart Agent",
+            "body": "Trainierte KI antwortet direkt im Browser."
+          },
+          "whatsapp": {
+            "title": "WhatsApp-Deep-Link",
+            "body": "Leitet den Besucher zum Chatten in die WhatsApp-App."
+          },
+          "both": {
+            "title": "Smart + WhatsApp",
+            "body": "Der Besucher wählt: hier chatten oder WhatsApp öffnen."
+          }
+        },
+        "agent": "Smart Agent (das Gehirn)",
+        "agentPlaceholder": "— Gespeicherten Smart Agent wählen —",
+        "agentHintBefore": "Keinen gefunden?",
+        "agentBuild": "Smart Agent erstellen",
+        "agentHintAfter": "zuerst.",
+        "whatsapp": "WhatsApp-Nummer",
+        "country": "Land",
+        "phonePlaceholder": "Ihre Nummer ohne Ländervorwahl",
+        "whatsappHint": "Wählen Sie die Landesflagge. Die Vorwahl wird automatisch ergänzt.",
+        "prefilled": "Vorausgefüllte Nachricht (landet in WhatsApp)",
+        "prefilledPlaceholder": "Hallo, ich möchte mehr über die Preise erfahren.",
+        "prefilledHint": "Der Besucher landet in WhatsApp mit dieser bereits eingetippten Nachricht."
+      },
+      "look": {
+        "title": "Gestaltung von Launcher und Fenster",
+        "tag": "Marke",
+        "launcherFill": "Launcher-Füllung",
+        "launcherFillHint": "Hintergrund der runden Blase.",
+        "headerTint": "Farbton der Fensterkopfzeile",
+        "headerTintHint": "Oberer Streifen des Chatfensters.",
+        "headerInk": "Farbe der Kopfzeile",
+        "headerInkHint": "Text- und Symbolfarbe der Kopfzeile.",
+        "windowTitle": "Fenstertitel (in der Kopfzeile angezeigt)",
+        "windowTitlePlaceholder": "Chatten Sie mit unserem Team",
+        "windowTitleHint": "Halten Sie ihn unter etwa 30 Zeichen.",
+        "icon": "URL eines eigenen Launcher-Symbols",
+        "optional": "optional",
+        "iconHint": "PNG / SVG · 80×80 px empfohlen · transparenter Hintergrund."
+      },
+      "voice": {
+        "title": "Eröffnungsnachricht und Chatfläche",
+        "tag": "Inhalt",
+        "opening": "Eröffnungszeile",
+        "openingPlaceholder": "Hallo! Wie können wir Ihnen heute helfen?",
+        "openingHint": "Erste Blase, die beim Öffnen des Chats angezeigt wird.",
+        "bubbleFill": "Füllung eingehender Blasen",
+        "bubbleFillHint": "Farbe der Blasen von Ihrer Seite.",
+        "bubbleInk": "Textfarbe eingehender Blasen",
+        "bubbleInkHint": "Textfarbe innerhalb der Blasen.",
+        "canvas": "Fensterhintergrund",
+        "canvasKind": {
+          "color": "Einfarbig",
+          "image": "Kachelbild"
+        },
+        "canvasColour": "Farbe des Fensterhintergrunds",
+        "canvasImage": "URL des Fensterhintergrundbilds",
+        "canvasImageHint": "Ein kachelbares PNG funktioniert am besten.",
+        "autoOpen": "Automatisch öffnen",
+        "autoOpenHint": "Öffnet den Chat etwa 1,2 s nach dem Laden der Seite.",
+        "intake": "Besucherabfrage",
+        "intakeHint": "Felder, die vor Beginn des Chats angezeigt werden. Lassen Sie alles aus für anonymen Chat.",
+        "intakeField": {
+          "name": "Anzeigename",
+          "email": "E-Mail-Adresse",
+          "phone": "Telefonnummer"
+        }
+      },
+      "launch": {
+        "title": "Senden-Schaltfläche und Embed-Snippet",
+        "tag": "Start",
+        "label": "Beschriftung der Senden-Schaltfläche",
+        "labelPlaceholder": "Nachricht senden",
+        "labelHint": "Vermeiden Sie „Absenden“. Versuchen Sie „Nachricht senden“ oder „Das Team fragen“.",
+        "fill": "Füllung der Senden-Schaltfläche",
+        "ink": "Textfarbe der Senden-Schaltfläche",
+        "ready": "Fertig. Fügen Sie dies direkt vor <code>{tag}</code> auf der Seite ein, auf der das Widget erscheinen soll.",
+        "copy": "In die Zwischenablage kopieren",
+        "preview": "Eigenständige Vorschau öffnen"
+      },
+      "preview": {
+        "title": "Live-Vorschau",
+        "chat": "Chat",
+        "hi": "Hallo!",
+        "send": "Senden",
+        "engine": {
+          "ai": "Smart Agent",
+          "whatsapp": "WhatsApp",
+          "both": "KI + WhatsApp"
+        },
+        "metaEngine": "Engine",
+        "metaPlacement": "Position",
+        "metaAutoOpen": "Automatisch öffnen",
+        "metaIntake": "Abfrage",
+        "left": "Links",
+        "right": "Rechts",
+        "on": "An",
+        "off": "Aus",
+        "none": "Keine"
+      },
+      "colorSwatch": "{label} (Farbfeld)"
+    },
+    "whatsappBuilder": {
+      "crumb": "WhatsApp-Widget",
+      "title": "WhatsApp-Widget",
+      "titleAccent": "Installieren und anpassen",
+      "type": "Widget-Typ",
+      "nameHint": "Nur Sie sehen diesen Namen. Er ist auch der im Messenger angezeigte Unternehmensname.",
+      "save": "Änderungen speichern",
+      "saved": "Änderungen gespeichert. Ihr Widget ist live.",
+      "card": {
+        "1": {
+          "title": "Gestalten Sie Ihre WhatsApp-Chat-Schaltfläche",
+          "subtitle": "Wählen Sie das schöne Chat-Button-Design, das am besten zu Ihrer Website passt",
+          "buttonType": "Schaltflächentyp",
+          "type": {
+            "pill": "Schaltfläche „Chatten Sie mit uns“",
+            "icon": "Runde Schaltfläche nur mit Symbol"
+          },
+          "iconOnly": "Nur Symbol",
+          "buttonColor": "Schaltflächenfarbe",
+          "pickCustom": "Eigene Farbe wählen",
+          "custom": "Benutzerdefiniert {hex}"
+        },
+        "2": {
+          "title": "Gestalten Sie Ihren Messenger",
+          "subtitle": "Wählen Sie ein schönes Bild für Ihren Messenger",
+          "image": "Messenger-Bild",
+          "names": {
+            "support": "Support",
+            "store": "Shop",
+            "chat": "Chat",
+            "person": "Person"
+          },
+          "url": "Oder verwenden Sie Ihre eigene Bildadresse",
+          "urlHint": "Fügen Sie die Adresse eines quadratischen Bildes ein (https://...). Das Hochladen einer Datei ist noch nicht verfügbar."
+        },
+        "3": {
+          "title": "Legen Sie Ihre Willkommensnachricht fest",
+          "subtitle": "Begrüßen Sie Ihre Kunden",
+          "greeting": "Begrüßung",
+          "greetingHint": "Begrüßen Sie Ihre Kunden, wenn sie den Messenger öffnen",
+          "intro": "Einführungsnachricht",
+          "introHint": "Stellen Sie Ihr Unternehmen vor und sagen Sie Kunden, wie Sie helfen können"
+        },
+        "4": {
+          "title": "Legen Sie die Position Ihrer Chat-Schaltfläche fest",
+          "subtitle": "Passen Sie die Position Ihrer Schaltfläche auf Computern und Mobilgeräten an",
+          "preview": "Vorschau der Chat-Schaltfläche",
+          "desktopPreview": "Desktop-Vorschau",
+          "mobilePreview": "Mobile Vorschau",
+          "desktopPosition": "Launcher-Position auf dem Desktop",
+          "mobilePosition": "Launcher-Position mobil",
+          "left": "Links",
+          "right": "Rechts",
+          "desktopSideSpacing": "Seitenabstand auf dem Desktop",
+          "desktopBottomSpacing": "Abstand unten auf dem Desktop",
+          "mobileSideSpacing": "Seitenabstand mobil",
+          "mobileBottomSpacing": "Abstand unten mobil",
+          "px": "px"
+        },
+        "5": {
+          "title": "Konfigurieren Sie Ihre WhatsApp-Nummer",
+          "subtitle": "Verbinden Sie die WhatsApp-Nummer mit dem Messenger",
+          "number": "WhatsApp-Nummer",
+          "numberHint": "Der Messenger leitet Ihre Kunden an diese WhatsApp-Nummer weiter",
+          "prefilled": "Vorausgefüllte Nachricht",
+          "prefilledHint": "Dies ist der erste Standardnachrichtentext"
+        }
+      },
+      "install": {
+        "title": "Auf Ihrer Website installieren",
+        "body": "Fügen Sie dieses Tag direkt vor dem schließenden Body-Tag jeder Seite ein, auf der das Widget erscheinen soll.",
+        "copy": "Code kopieren"
+      },
+      "problem": {
+        "name": "Geben Sie Ihrem Widget einen Namen.",
+        "avatar": "Verwenden Sie ein integriertes Bild oder eine http(s)-Bildadresse.",
+        "greeting": "Fügen Sie eine Begrüßung hinzu.",
+        "intro": "Fügen Sie eine Einführungsnachricht hinzu.",
+        "spacing": "Der Abstand muss eine ganze Zahl von Pixeln zwischen 0 und 500 sein.",
+        "whatsapp": "Geben Sie eine vollständige WhatsApp-Nummer ein: Ländervorwahl und Ziffern."
+      },
+      "preview": {
+        "title": "Live-Vorschau",
+        "desktop": "Desktop",
+        "mobile": "Mobil",
+        "frameTitle": "Live-Vorschau Ihres WhatsApp-Widgets",
+        "hint": "Klappen Sie das Panel mit der runden Schaltfläche ein, öffnen Sie es über den Launcher wieder und probieren Sie Unterhaltung starten aus.",
+        "businessName": "Ihr Unternehmen"
+      }
+    }
+  }
+}

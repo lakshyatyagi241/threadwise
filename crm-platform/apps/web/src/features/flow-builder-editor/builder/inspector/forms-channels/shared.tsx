@@ -1,6 +1,7 @@
 'use client';
 
 import type { ReactNode } from 'react';
+import { useTranslations } from 'next-intl';
 import { cn } from '@crm/ui';
 import {
   Check,
@@ -16,7 +17,12 @@ import {
 } from '../kit';
 import type { Opt } from '../kit';
 import type { FormProps } from '../types';
-import { flowOptionLabel, handoffFlows, withSavedOption } from './helpers';
+import { flowOptionLabel, handoffFlows, withSavedOption, type HelperT } from './helpers';
+
+const NS = 'flb.builder.formsChannels.shared';
+
+/** The `flb.builder.formsChannels.shared` translator, passed to the option builders below by the forms that call them. */
+export type SharedT = HelperT;
 
 /** Field-bound controls: WaDesk's `Txt`, `Ta`, `Num` and `Sel` helpers, reading and writing `data[key]`. */
 export function Txt({ data, set }: FormProps, key: string, placeholder?: string, mono?: boolean) {
@@ -163,15 +169,10 @@ export function RowInput({
   );
 }
 
-export function RemoveButton({
-  onClick,
-  title = 'Remove',
-}: {
-  onClick: () => void;
-  title?: string;
-}) {
+export function RemoveButton({ onClick, title }: { onClick: () => void; title?: string }) {
+  const t = useTranslations(NS);
   return (
-    <IconButton onClick={onClick} title={title} danger>
+    <IconButton onClick={onClick} title={title ?? t('remove')} danger>
       <XIcon />
     </IconButton>
   );
@@ -185,62 +186,66 @@ export function readRows(value: unknown): Record<string, unknown>[] {
 }
 
 /** Model + knowledge-base dropdowns shared by the AI nodes (the options WaDesk builds from its AI caches). */
-export function aiModelOptions(p: FormProps): Opt[] {
+export function aiModelOptions(p: FormProps, t: SharedT): Opt[] {
   const { aiModels } = p.env.ctx;
   const opts: Opt[] = aiModels.length
-    ? [{ v: '', l: '— pick model —' }, ...aiModels.map((m) => ({ v: m.value, l: m.label }))]
-    : [{ v: '', l: 'No AI models enabled — ask admin' }];
+    ? [{ v: '', l: t('pickModel') }, ...aiModels.map((m) => ({ v: m.value, l: m.label }))]
+    : [{ v: '', l: t('noModels') }];
   const model = p.data.model;
   if (model && !aiModels.some((m) => m.value === model))
-    opts.push({ v: String(model), l: `${String(model)} (not enabled)` });
+    opts.push({ v: String(model), l: t('modelNotEnabled', { model: String(model) }) });
   return opts;
 }
 
-export function knowledgeBaseOptions(p: FormProps): Opt[] {
+export function knowledgeBaseOptions(p: FormProps, t: SharedT): Opt[] {
   const opts: Opt[] = [
-    { v: '', l: '— none (prompt only) —' },
-    ...p.env.ctx.assistants.map((a) => ({ v: a.id, l: `${a.name} · ${a.sources} src` })),
+    { v: '', l: t('noKnowledgeBase') },
+    ...p.env.ctx.assistants.map((a) => ({
+      v: a.id,
+      l: t('knowledgeBase', { name: a.name, sources: a.sources }),
+    })),
   ];
-  return withSavedOption(opts, p.data.assistant, (id) => `Assistant ${id.slice(0, 8)}`);
+  return withSavedOption(opts, p.data.assistant, (id) =>
+    t('savedAssistant', { id: id.slice(0, 8) }),
+  );
 }
 
-export function voiceAssistantOptions(p: FormProps, key: string, first: string): Opt[] {
+export function voiceAssistantOptions(p: FormProps, key: string, first: string, t: SharedT): Opt[] {
   const opts: Opt[] = [
     { v: '', l: first },
     ...p.env.ctx.callAssistants.map((a) => ({ v: a.id, l: a.name })),
   ];
-  return withSavedOption(opts, p.data[key], (id) => `Assistant ${id.slice(0, 8)}`);
+  return withSavedOption(opts, p.data[key], (id) => t('savedAssistant', { id: id.slice(0, 8) }));
 }
 
 /** Order / Details toggles with their label inputs, shared by the Instagram and Facebook product nodes. */
 export function OrderDetailsFields({ p, detailsHint }: { p: FormProps; detailsHint: string }) {
+  const t = useTranslations(NS);
   const orderOn = p.data.orderButton !== false;
   const detailsOn = p.data.detailsButton !== false;
   return (
     <>
       <Field
-        label="Order button"
-        hint={
-          <>
-            Tapping it sends <Mono>ORDER_&lt;product&gt;</Mono> — the ordering flow / keyword rule
-            picks it up.
-          </>
-        }
+        label={t('orderButton')}
+        hint={t.rich('orderButtonHint', {
+          token: 'ORDER_<product>',
+          mono: (c) => <Mono>{c}</Mono>,
+        })}
       >
         <div className="mb-1.5">
           <Check checked={orderOn} onChange={(v) => p.set('orderButton', v)}>
-            Show an “Order” button on each card
+            {t('showOrder')}
           </Check>
         </div>
-        {orderOn ? Txt(p, 'orderLabel', 'Order') : null}
+        {orderOn ? Txt(p, 'orderLabel', t('orderLabelPlaceholder')) : null}
       </Field>
-      <Field label="Details button" hint={detailsHint}>
+      <Field label={t('detailsButton')} hint={detailsHint}>
         <div className="mb-1.5">
           <Check checked={detailsOn} onChange={(v) => p.set('detailsButton', v)}>
-            Show a “View” link to the product page
+            {t('showView')}
           </Check>
         </div>
-        {detailsOn ? Txt(p, 'detailsLabel', 'View') : null}
+        {detailsOn ? Txt(p, 'detailsLabel', t('viewLabelPlaceholder')) : null}
       </Field>
     </>
   );
@@ -248,26 +253,23 @@ export function OrderDetailsFields({ p, detailsHint }: { p: FormProps; detailsHi
 
 /** "Capture lead" form, identical for Instagram and Facebook except for the intro wording. */
 export function LeadForm({ p, askName }: { p: FormProps; askName: string }) {
+  const t = useTranslations(NS);
   return (
     <>
       <Notice className="mb-3">
-        Maps variables collected by earlier <Mono>{askName}</Mono> nodes into a saved lead. Leave a
-        field blank to skip it.
+        {t.rich('leadIntro', { askName, mono: (c) => <Mono>{c}</Mono> })}
       </Notice>
-      <Field label="Name from variable">{Txt(p, 'nameVar', 'lead_name')}</Field>
-      <Field label="Email from variable">{Txt(p, 'emailVar', 'lead_email')}</Field>
-      <Field label="Phone from variable">{Txt(p, 'phoneVar', 'lead_phone')}</Field>
-      <Field label="Notes from variable (optional)">{Txt(p, 'notesVar', '')}</Field>
-      <Field
-        label="Sales Pipeline"
-        hint="The lead is added to your default pipeline so nothing slips through."
-      >
+      <Field label={t('nameFromVariable')}>{Txt(p, 'nameVar', 'lead_name')}</Field>
+      <Field label={t('emailFromVariable')}>{Txt(p, 'emailVar', 'lead_email')}</Field>
+      <Field label={t('phoneFromVariable')}>{Txt(p, 'phoneVar', 'lead_phone')}</Field>
+      <Field label={t('notesFromVariable')}>{Txt(p, 'notesVar', '')}</Field>
+      <Field label={t('salesPipeline')} hint={t('salesPipelineHint')}>
         <Check checked={p.data.createDeal !== false} onChange={(v) => p.set('createDeal', v)}>
-          Create a pipeline deal for every lead
+          {t('createDeal')}
         </Check>
       </Field>
-      <Field label="Thank-you message (optional)" hint="Sent right after the lead is saved.">
-        {Ta(p, 'ack', 'Thanks! Our team will reach out shortly.', 2)}
+      <Field label={t('thankYou')} hint={t('thankYouHint')}>
+        {Ta(p, 'ack', t('thankYouPlaceholder'), 2)}
       </Field>
     </>
   );
@@ -293,68 +295,50 @@ export function WhatsappHandoffForm({
   excludeChannels: readonly string[];
   prefillDefault: string;
 }) {
+  const t = useTranslations(NS);
+  const th = useTranslations('flb.builder.formsChannels.helpers');
   const mode = p.data.mode === 'direct' ? 'direct' : 'deeplink';
   const flows = handoffFlows(p.env.ctx.flows, excludeChannels);
   const waFlowOpts = withSavedOption(
     [
-      { v: '', l: flows.length ? '— pick WhatsApp flow —' : 'No WhatsApp flows yet' },
-      ...flows.map((f) => ({ v: f.id, l: flowOptionLabel(f.name, f.isPublished) })),
+      { v: '', l: flows.length ? t('pickWaFlow') : t('noWaFlows') },
+      ...flows.map((f) => ({ v: f.id, l: flowOptionLabel(f.name, f.isPublished, th) })),
     ],
     p.data.waFlowId,
-    (id) => `Flow ${id.slice(0, 8)}`,
+    (id) => t('savedFlow', { id: id.slice(0, 8) }),
   );
   return (
     <>
       <div className="mb-3 rounded-lg border border-[#A7E8C0] bg-[#DCFCE7] p-2.5 text-[11.5px] leading-snug text-[#14532D]">
-        Move this {surface} to WhatsApp. {platform} and WhatsApp identities aren&apos;t linked, so
-        the person has to reach your WhatsApp themselves (deep link) or give you their number first.
+        {t('handoffIntro', { surface, platform })}
       </div>
-      <Field label="Handoff method">
+      <Field label={t('handoffMethod')}>
         {Sel(p, 'mode', [
-          { v: 'deeplink', l: 'Deep link — send a wa.me link (recommended, safe)' },
-          { v: 'direct', l: 'Direct — start a WhatsApp flow to a captured number' },
+          { v: 'deeplink', l: t('methodDeeplink') },
+          { v: 'direct', l: t('methodDirect') },
         ])}
       </Field>
       {mode === 'deeplink' ? (
         <>
-          <Field
-            label="Your WhatsApp number"
-            hint="Digits only, country code first. The wa.me link opens a chat to this number."
-          >
+          <Field label={t('waNumber')} hint={t('waNumberHint')}>
             {Txt(p, 'waNumber', '15551234567')}
           </Field>
-          <Field
-            label="Pre-filled message"
-            hint="Text WhatsApp pre-fills for the user. Make it match a WhatsApp keyword-trigger flow so it auto-starts."
-          >
+          <Field label={t('prefill')} hint={t('prefillHint')}>
             {Txt(p, 'prefillText', prefillDefault)}
           </Field>
-          <Field
-            label={`DM shown on ${platform}`}
-            hint={`The ${dmName} DM sent with the wa.me link. Supports {{variables}}.`}
-          >
-            {Ta(p, 'introText', "Let's continue on WhatsApp 👇", 2)}
+          <Field label={t('dmShown', { platform })} hint={t('dmHint', { dmName })}>
+            {Ta(p, 'introText', t('introPlaceholder'), 2)}
           </Field>
         </>
       ) : (
         <>
           <Notice tone="warn" className="mb-3">
-            ⚠ Meta only lets you message a WhatsApp number that has opted in or messaged you in the
-            last 24h. If it hasn&apos;t, the first message is blocked. Prefer the deep-link method
-            unless you know the number opted in.
+            {t('directWarning')}
           </Notice>
-          <Field
-            label="WhatsApp number from variable"
-            hint={
-              'A flow variable captured earlier (e.g. an Ask node "What\'s your WhatsApp number?").'
-            }
-          >
+          <Field label={t('numberFromVariable')} hint={t('numberFromVariableHint')}>
             {Txt(p, 'numberVar', 'wa_number')}
           </Field>
-          <Field
-            label="WhatsApp flow to start"
-            hint="The WhatsApp flow that runs for that number once handed off."
-          >
+          <Field label={t('waFlowToStart')} hint={t('waFlowToStartHint')}>
             <SelectInput
               value={p.data.waFlowId}
               onChange={(v) => p.set('waFlowId', v)}

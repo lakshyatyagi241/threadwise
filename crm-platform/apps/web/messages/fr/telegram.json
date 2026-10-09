@@ -1,0 +1,212 @@
+{
+  "telegram": {
+    "nav": {
+      "title": "Telegram"
+    },
+    "common": {
+      "dismiss": "Ignorer"
+    },
+    "connect": {
+      "title": "Connecter un bot Telegram",
+      "close": "Fermer",
+      "cancel": "Annuler",
+      "submit": "Connecter le bot",
+      "intro": "Saisissez le jeton de votre bot API HTTP pour configurer le webhook et commencer à gérer les discussions Telegram.",
+      "tokenLabel": "Jeton du bot *",
+      "tokenPlaceholder": "ex. 123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ",
+      "tokenShape": "Ce n’est pas un jeton BotFather valide.",
+      "connected": "Bot Telegram connecté.",
+      "savedNeedsAttention": "Le bot est enregistré, mais Telegram n’a pas accepté le webhook.",
+      "failed": "Impossible de connecter le bot. Réessayez.",
+      "howTitle": "Comment obtenir un jeton de bot ?",
+      "how1a": "Ouvrez Telegram et recherchez le compte",
+      "how1b": "vérifié.",
+      "how2a": "Envoyez",
+      "how2b": "et choisissez un nom d’affichage et un nom d’utilisateur.",
+      "how3": "Copiez le jeton API HTTP généré et collez-le ci-dessus."
+    },
+    "bot": {
+      "failed": "Échec. Réessayez.",
+      "webhookFixed": "La réception est de nouveau active.",
+      "live": "Actif",
+      "paused": "En pause",
+      "needsAttention": "Action requise",
+      "lastMessage": "Dernier message {when}",
+      "payments": "Paiements",
+      "on": "activé",
+      "paymentsSaved": "Paramètres de paiement enregistrés.",
+      "paymentsHint": "Collez un jeton de fournisseur de paiement depuis @BotFather (/mybots → Payments) pour activer le nœud Flux de paiement : factures natives dans le chat.",
+      "paymentsSavedPlaceholder": "•••••••• (enregistré ; laisser vide pour conserver)",
+      "paymentsToken": "Jeton du fournisseur de paiement",
+      "removeToken": "Retirer le jeton",
+      "save": "Enregistrer",
+      "webhook": "Webhook",
+      "fixInbound": "Corriger la réception (réenregistrer le webhook)",
+      "pause": "Suspendre",
+      "resume": "Reprendre",
+      "pausedDone": "Bot suspendu.",
+      "resumedDone": "Bot repris.",
+      "disconnect": "Déconnecter",
+      "disconnectConfirm": "Déconnecter ce bot Telegram ? Ses fils de discussion restent dans la boîte de réception, mais il ne peut plus envoyer ni recevoir de messages.",
+      "cancel": "Annuler",
+      "disconnected": "Bot déconnecté."
+    },
+    "hub": {
+      "kicker": "Canal · Telegram",
+      "title": "Telegram",
+      "titleAccent": "Connecter",
+      "intro": "Déployez un bot Telegram pour automatiser vos échanges, assurer le support client et diffuser des messages à vos abonnés partout dans le monde.",
+      "teamInbox": "Boîte de réception d’équipe",
+      "flows": "Flux",
+      "broadcasts": "Diffusions",
+      "telegramBroadcasts": "Diffusions Telegram",
+      "loadError": "Impossible de charger vos bots Telegram.",
+      "connectedCount": "{count} connecté(s)",
+      "notConnected": "Non connecté",
+      "botCardTitle": "Connexion du bot Telegram",
+      "botCardBody": "Collez un jeton de bot depuis @BotFather pour automatiser les échanges, assurer le support et diffuser des messages à vos abonnés.",
+      "connectAnother": "Connecter un autre bot",
+      "connectBot": "Connecter le bot",
+      "accountCardTitle": "Connexion du compte Telegram",
+      "accountCardBody": "Liez votre compte Telegram pour créer des bots directement ici : scannez un QR code ou utilisez votre numéro de téléphone, comme pour WhatsApp.",
+      "connectAccount": "Connecter le compte",
+      "accountUnavailable": "Non disponible pour le moment : il faut le service de compte Telegram, qui n’est pas configuré dans cet espace de travail.",
+      "connectedBots": "Bots connectés",
+      "guideTitle": "Guide de configuration du bot Telegram",
+      "guideBody": "Suivez ces étapes pour lier votre canal Telegram et activer les flux automatisés.",
+      "prerequisites": "Prérequis",
+      "pre": {
+        "account": "Un compte Telegram actif",
+        "name": "Un nom unique pour votre bot",
+        "app": "Accès à Telegram Web ou à l’application"
+      },
+      "stepsTitle": "Étapes de connexion",
+      "step": "Étape {n}",
+      "steps": {
+        "locate": {
+          "title": "Trouver BotFather",
+          "body": "Ouvrez Telegram et recherchez le compte officiel @BotFather (repérez le badge vérifié)."
+        },
+        "create": {
+          "title": "Créer un bot",
+          "body": "Envoyez /newbot à @BotFather et suivez les instructions pour nommer votre bot et choisir un nom d’utilisateur."
+        },
+        "token": {
+          "title": "Récupérer le jeton API",
+          "body": "BotFather génère un jeton API HTTP (par ex. 123456789:ABC…). Copiez-le en lieu sûr."
+        },
+        "connect": {
+          "title": "Connecter le bot ici",
+          "body": "Cliquez sur « Connecter le bot », collez votre jeton dans le champ, puis validez pour finaliser la liaison."
+        }
+      },
+      "unlockedTitle": "Ce qui est débloqué",
+      "unlocked": {
+        "support": {
+          "title": "Automatiser le support",
+          "body": "Laissez des bots IA répondre aux questions fréquentes et orienter les conversations, 24 h/24."
+        },
+        "broadcast": {
+          "title": "Campagnes de diffusion",
+          "body": "Envoyez des promotions, alertes et newsletters à tous vos abonnés en une seule fois."
+        },
+        "media": {
+          "title": "Médias interactifs",
+          "body": "Engagez les utilisateurs avec des boutons, des menus, des factures et des images."
+        }
+      },
+      "tipTitle": "Conseil de configuration",
+      "tipBody": "Ne partagez jamais publiquement le jeton API de votre bot. S’il est compromis, écrivez à @BotFather et exécutez /revoke pour en générer un nouveau immédiatement. En local, l’adresse d’un tunnel change à chaque redémarrage : cliquez sur « Corriger la réception » pour le réenregistrer."
+    },
+    "broadcasts": {
+      "kicker": "Telegram · Diffusions",
+      "title": "Telegram",
+      "titleAccent": "diffusions",
+      "intro": "Écrivez à tous ceux qui ont discuté avec votre bot, puis suivez les envois réussis, échoués et bloqués pour chaque diffusion.",
+      "bots": "Bots",
+      "newBroadcast": "Nouvelle diffusion",
+      "connectFirst": "Connectez d’abord un bot Telegram.",
+      "connectBot": "Connecter un bot",
+      "tile": {
+        "sent": "Envoyés",
+        "audience": "Audience",
+        "failed": "Échoués",
+        "blocked": "Bloqués",
+        "sending": "Envoi en cours",
+        "broadcasts": "{count} diffusions",
+        "audienceHint": "destinataires au total",
+        "failedHint": "erreurs de distribution",
+        "blockedHint": "bot bloqué par l’utilisateur",
+        "sendingHint": "en cours"
+      },
+      "listKicker": "Liste des diffusions",
+      "listTitle": "Diffusions récentes",
+      "col": {
+        "broadcast": "Diffusion",
+        "bot": "Bot",
+        "recipients": "Destinataires",
+        "progress": "Progression",
+        "status": "Statut",
+        "actions": "Actions"
+      },
+      "counts": "{sent} envoyé(s) · {failed} échoué(s) · {blocked} bloqué(s)",
+      "status": {
+        "draft": "Brouillon",
+        "sending": "Envoi en cours",
+        "done": "Terminée",
+        "failed": "Échec"
+      },
+      "start": "Démarrer",
+      "pause": "Suspendre",
+      "retry": "Réessayer",
+      "delete": "Supprimer",
+      "deleteConfirm": "Supprimer cette diffusion ?",
+      "cancel": "Annuler",
+      "empty": "Aucune diffusion pour le moment.",
+      "createFirst": "Créez votre première diffusion",
+      "failed": "Échec. Réessayez.",
+      "started": "Envoi démarré.",
+      "paused": "Suspendu. Les discussions non envoyées restent en attente.",
+      "retried": "{count} discussions en échec sont prêtes à être renvoyées. Appuyez sur Démarrer.",
+      "deleted": "Diffusion supprimée."
+    },
+    "compose": {
+      "kicker": "Telegram · Nouvelle diffusion",
+      "title": "Composer une",
+      "titleAccent": "diffusion",
+      "back": "Retour",
+      "loadError": "Impossible de charger les bots et les modèles.",
+      "noPermission": "Vous pouvez consulter cette page, mais vous n’êtes pas autorisé à créer des diffusions.",
+      "setup": "Configuration de la diffusion",
+      "name": "Nom de la diffusion",
+      "namePlaceholder": "ex. Vente du week-end",
+      "bot": "Bot",
+      "template": "Modèle (facultatif)",
+      "templateHint": "Préremplit le message et envoie les boutons du modèle.",
+      "templateNone": "— aucun (rédiger le vôtre) —",
+      "buttonCount": "{count} bouton(s)",
+      "message": "Message",
+      "messageHint": "Utilisez '{name}' pour personnaliser.",
+      "messagePlaceholder": "Bonjour '{name}' !…",
+      "attachment": "Pièce jointe (facultatif)",
+      "attachmentHint": "Une adresse publique vers une image, une vidéo, un fichier audio ou un document. L’envoi d’un fichier nécessite le service de stockage.",
+      "attachmentInvalid": "Saisissez une adresse complète commençant par http:// ou https://.",
+      "recipients": "Destinataires",
+      "selectAll": "Tout sélectionner",
+      "clearAll": "Tout effacer",
+      "noChats": "Personne n’a encore discuté avec ce bot.",
+      "type": {
+        "private": "privé",
+        "group": "groupe",
+        "channel": "canal"
+      },
+      "selected": "{count} sélectionné(s)",
+      "submit": "Créer la diffusion",
+      "preview": "Aperçu en direct",
+      "previewEmpty": "Aperçu de votre message…",
+      "previewNote": "Voici l’apparence de votre diffusion dans le chat de chaque destinataire.",
+      "created": "Diffusion créée avec {count} destinataires. Appuyez sur Démarrer l’envoi quand vous êtes prêt.",
+      "failed": "Impossible de créer la diffusion. Réessayez."
+    }
+  }
+}

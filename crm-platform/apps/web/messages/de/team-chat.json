@@ -1,0 +1,208 @@
+{
+  "team-chat": {
+    "nav": {
+      "teamChat": "Team-Chat"
+    },
+    "common": {
+      "dismiss": "Ausblenden"
+    },
+    "screen": {
+      "title": "Team-Chat",
+      "back": "Zurück zu den Kanälen",
+      "search": "Diesen Kanal durchsuchen",
+      "pinned": "Angeheftete Nachrichten",
+      "members": "Kanalmitglieder",
+      "deleteChannel": "Diesen Kanal löschen",
+      "type": {
+        "public": "Kanal",
+        "private": "Privat",
+        "dm": "Direktnachricht"
+      },
+      "olderMessage": "Diese Nachricht liegt weiter zurück. Laden Sie ältere Nachrichten, um sie zu sehen.",
+      "loading": "Team-Chat wird geladen",
+      "loadFailed": "Team-Chat konnte nicht geladen werden.",
+      "retry": "Erneut versuchen",
+      "deleteTitle": "Diesen Kanal löschen?",
+      "deleteMessage": "#{name} und alle zugehörigen Nachrichten werden für alle gelöscht. Dies kann nicht rückgängig gemacht werden.",
+      "deleteConfirm": "Kanal löschen",
+      "cancel": "Abbrechen",
+      "defaultDescription": "Interner Workspace-Chat",
+      "customerChats": "Kundenchats"
+    },
+    "sidebar": {
+      "label": "Kanäle und Personen",
+      "channels": "Kanäle",
+      "createChannel": "Kanal erstellen",
+      "loading": "Kanäle werden geladen",
+      "loadFailed": "Kanäle konnten nicht geladen werden.",
+      "noChannels": "Noch keine Kanäle",
+      "direct": "Direktnachrichten",
+      "people": "Personen",
+      "invite": "Teammitglied einladen",
+      "pending": "Ausstehende Anfragen",
+      "pendingCount": "{count, plural, one {# ausstehende Anfrage} other {# ausstehende Anfragen}}",
+      "unread": "{count, plural, one {# ungelesene Nachricht} other {# ungelesene Nachrichten}}",
+      "workspace": "Workspace",
+      "mode": "Modus",
+      "customerChats": "Kundenchats",
+      "teamChat": "Team-Chat",
+      "membersLink": "Mitglieder"
+    },
+    "members": {
+      "label": "Mitglieder",
+      "title": "Team-Chat",
+      "count": "{count, plural, one {# Mitglied} other {# Mitglieder}}",
+      "countUnknown": "Mitglieder",
+      "search": "Mitglieder durchsuchen",
+      "loading": "Mitglieder werden geladen",
+      "none": "Keine Mitglieder gefunden",
+      "online": "Online",
+      "offline": "Offline",
+      "you": "(Sie)",
+      "message": "Nachricht an {name}",
+      "titleAccent": "Chat"
+    },
+    "panel": {
+      "searchTitle": "Nachrichten durchsuchen",
+      "pinnedTitle": "Angeheftete Nachrichten",
+      "searchPlaceholder": "Diesen Kanal durchsuchen",
+      "searchHint": "Geben Sie mindestens zwei Zeichen ein.",
+      "close": "Schließen",
+      "failed": "Das konnte nicht geladen werden.",
+      "noResults": "Keine passenden Nachrichten.",
+      "noPinned": "In diesem Kanal ist nichts angeheftet."
+    },
+    "stream": {
+      "loading": "Nachrichten werden geladen",
+      "loadFailed": "Nachrichten konnten nicht geladen werden.",
+      "loadOlder": "Ältere Nachrichten laden",
+      "emptyTitle": "Noch keine Nachrichten in #{name}",
+      "emptyMessage": "Sagen Sie Hallo und starten Sie die Unterhaltung."
+    },
+    "message": {
+      "edited": "(bearbeitet)",
+      "pinned": "Angeheftet",
+      "editLabel": "Ihre Nachricht bearbeiten",
+      "cancel": "Abbrechen",
+      "save": "Speichern",
+      "editConflict": "Diese Nachricht wurde geändert, während Sie sie bearbeitet haben. Laden Sie die Seite neu und versuchen Sie es erneut.",
+      "reactions": "Reaktionen",
+      "reactionChip": "{emoji}, {count, plural, one {# Person} other {# Personen}}",
+      "reactionTray": "Reaktion auswählen",
+      "reply": "Antworten",
+      "react": "Reagieren",
+      "edit": "Bearbeiten",
+      "pin": "Anheften",
+      "unpin": "Lösen",
+      "delete": "Löschen",
+      "deleteTitle": "Diese Nachricht löschen?",
+      "deleteMessage": "Sie wird für alle im Kanal entfernt.",
+      "uploading": "Wird hochgeladen",
+      "retry": "Erneut versuchen",
+      "discard": "Verwerfen"
+    },
+    "composer": {
+      "placeholder": "Nachricht an #{name}",
+      "attach": "Datei anhängen",
+      "send": "Senden",
+      "hint": "Enter zum Senden, Umschalt+Enter für eine neue Zeile, @ für eine Erwähnung eines Teammitglieds.",
+      "replyingTo": "Antwort an {name}",
+      "cancelReply": "Antwort abbrechen",
+      "removeFile": "Anhang entfernen",
+      "fileTooLarge": "Diese Datei ist größer als 20 MB.",
+      "mentionList": "Zu erwähnende Teammitglieder",
+      "typingOne": "{name} schreibt",
+      "typingMany": "{count} Personen schreiben",
+      "hintSend": "Senden",
+      "hintNewLine": "neue Zeile",
+      "hintMention": "Erwähnen",
+      "hintShift": "Umschalt+↵"
+    },
+    "createChannel": {
+      "title": "Kanal erstellen",
+      "close": "Schließen",
+      "name": "Name",
+      "nameHint": "Kleinbuchstaben, Ziffern, Bindestriche und Unterstriche, keine Leerzeichen.",
+      "description": "Beschreibung (optional)",
+      "privacy": "Datenschutz",
+      "public": {
+        "label": "Öffentlich",
+        "hint": "Alle im Workspace können lesen und schreiben."
+      },
+      "private": {
+        "label": "Privat",
+        "hint": "Nur auf Einladung. Nur die Mitglieder sehen ihn."
+      },
+      "cancel": "Abbrechen",
+      "create": "Kanal erstellen",
+      "namePlaceholder": "z. B. Support",
+      "descriptionPlaceholder": "Wofür ist dieser Kanal gedacht?"
+    },
+    "invite": {
+      "title": "Teammitglied einladen",
+      "close": "Schließen",
+      "email": "E-Mail",
+      "name": "Name (optional)",
+      "note": "Hinweis für den Administrator (optional)",
+      "noteHint": "Warum diese Person beitreten sollte.",
+      "addToChannel": "Auch zu #{name} hinzufügen",
+      "approved": "Erledigt. Die Anfrage wurde genehmigt.",
+      "pending": "Einladung gesendet, wartet auf Genehmigung durch einen Administrator.",
+      "cancel": "Abbrechen",
+      "submit": "Einladung senden",
+      "emailPlaceholder": "teammitglied@firma.de",
+      "namePlaceholder": "Ihr Name",
+      "notePlaceholder": "Warum sollten sie beitreten?"
+    },
+    "invitations": {
+      "title": "Ausstehende Einladungen",
+      "close": "Schließen",
+      "loading": "Wird geladen",
+      "loadFailed": "Einladungen konnten nicht geladen werden.",
+      "empty": "Noch keine Einladungen",
+      "status": {
+        "pending": "Ausstehend",
+        "approved": "Genehmigt",
+        "declined": "Abgelehnt",
+        "expired": "Abgelaufen"
+      },
+      "requestedBy": "Angefragt von {name} · {time}",
+      "decidedBy": "{status} von {name} · {time}",
+      "needsAccount": "Diese Person hat noch kein Konto im Workspace, daher wurde niemand hinzugefügt.",
+      "approve": "Genehmigen",
+      "decline": "Ablehnen"
+    },
+    "channelMembers": {
+      "title": "Mitglieder von #{name}",
+      "close": "Schließen",
+      "admin": "Administrator",
+      "leave": "Verlassen",
+      "remove": "Entfernen",
+      "addLabel": "Teammitglied hinzufügen",
+      "choose": "Teammitglied auswählen",
+      "add": "Hinzufügen"
+    },
+    "errors": {
+      "network": "Netzwerkfehler. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+      "forbidden": "Sie sind nicht berechtigt, diese Aktion auszuführen.",
+      "signedOut": "Sie wurden abgemeldet. Melden Sie sich erneut an.",
+      "notFound": "Das existiert nicht mehr.",
+      "validation": "Prüfen Sie Ihre Eingabe und versuchen Sie es erneut.",
+      "conflict": "Dies wurde inzwischen geändert. Laden Sie die Seite neu und versuchen Sie es erneut.",
+      "tooLarge": "Diese Datei ist größer als 20 MB.",
+      "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
+      "emptyMessage": "Schreiben Sie eine Nachricht oder hängen Sie eine Datei an.",
+      "replyOtherChannel": "Sie können nur auf eine Nachricht im selben Kanal antworten.",
+      "attachmentRejected": "Diese Datei konnte nicht angehängt werden. Erlaubt sind nur Bilder, PDFs, Word-, Excel-, Text- und CSV-Dateien bis 20 MB.",
+      "editExpired": "Nachrichten können nur innerhalb von 15 Minuten bearbeitet werden.",
+      "nameTaken": "Ein Kanal mit diesem Namen existiert bereits.",
+      "channelProtected": "#general kann nicht gelöscht werden.",
+      "alreadyMember": "Ist bereits Mitglied des Workspace.",
+      "alreadyDecided": "Bereits entschieden.",
+      "notMember": "Sie sind kein Mitglied dieses Kanals.",
+      "notAuthor": "Sie können nur Ihre eigenen Nachrichten ändern.",
+      "kindInvalid": "Das gilt nicht für diese Art von Kanal.",
+      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es erneut."
+    }
+  }
+}

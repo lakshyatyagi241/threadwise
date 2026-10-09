@@ -1,6 +1,4 @@
 import {
-  FLB_ASK_INPUT_LABELS,
-  FLB_NODE_TYPES,
   flbCleanAskInputType,
   flbDefaultNodeData,
   flbNewNodeId,
@@ -9,6 +7,8 @@ import {
   type FlowNode,
   type FlowVar,
 } from '@crm/contracts';
+import { askInputLabelMsg, nodeLabelMsg } from './contract-text';
+import { dedupeMsgs, msg, renderMsg, type Msg, type Translate } from './msg';
 
 /**
  * The Simple flow builder's view of a flow. A flow is saved as the same graph the Advanced canvas edits; Simple only shows
@@ -75,7 +75,7 @@ export interface SimpleDoc {
   vars: FlowVar[];
 }
 
-export type ToSimple = { ok: true; doc: SimpleDoc } | { ok: false; reasons: string[] };
+export type ToSimple = { ok: true; doc: SimpleDoc } | { ok: false; reasons: Msg[] };
 
 const isSimpleType = (t: string): t is SimpleType =>
   (SIMPLE_TYPES as readonly string[]).includes(t);
@@ -99,8 +99,10 @@ export const stageLabel = (journeyIndex: number, stepIndex: number): string =>
  */
 export interface SimpleGroup {
   key: string;
-  /** What the list shows; a flow with no name is "Flow 3". */
+  /** The flow's name; a flow with no name is "Flow 3" (what a copy of it is named after). */
   name: string;
+  /** Set when `name` is only a stand-in ("Main flow", "Flow 3"): what the list shows instead of it, in the viewer's language. */
+  placeholder: Msg | null;
   chains: number[];
   steps: number;
 }
@@ -117,7 +119,19 @@ export function groupsOf(doc: SimpleDoc): SimpleGroup[] {
     const key = name ? name.toLowerCase() : `#${i}`;
     let g = byKey.get(key);
     if (!g) {
-      g = { key, name: name || `Flow ${groups.length + 1}`, chains: [], steps: 0 };
+      const placeholder =
+        name === MAIN_NAME && i === 0
+          ? msg('simpleModel.mainFlow')
+          : name
+            ? null
+            : msg('simpleModel.flowN', { n: groups.length + 1 });
+      g = {
+        key,
+        name: name || `Flow ${groups.length + 1}`,
+        placeholder,
+        chains: [],
+        steps: 0,
+      };
       byKey.set(key, g);
       groups.push(g);
     }
@@ -129,6 +143,10 @@ export function groupsOf(doc: SimpleDoc): SimpleGroup[] {
 }
 
 /** The entry of the list a chain belongs to. */
+/** What the list shows for an entry: its name, or the stand-in text of one that has none. */
+export const groupText = (g: SimpleGroup, t: Translate): string =>
+  g.placeholder ? renderMsg(t, g.placeholder) : g.name;
+
 export const groupIndexOf = (doc: SimpleDoc, journeyIndex: number): number =>
   Math.max(
     0,
@@ -150,19 +168,17 @@ export function stageIn(doc: SimpleDoc, journeyIndex: number, stepIndex: number)
 // --- graph -> simple ------------------------------------------------------------------------------------------------------
 
 export function toSimple(graph: Pick<FlowGraph, 'flowNodes' | 'flowEdges' | 'vars'>): ToSimple {
-  const reasons: string[] = [];
+  const reasons: Msg[] = [];
   const nodes = new Map(graph.flowNodes.map((n) => [n.id, n]));
   const triggers = graph.flowNodes.filter((n) => n.type === 'trigger');
-  if (triggers.length !== 1) reasons.push('It does not have exactly one Trigger.');
+  if (triggers.length !== 1) reasons.push(msg('simpleModel.reasons.oneTrigger'));
   for (const n of graph.flowNodes) {
     if (n.type !== 'trigger' && !isSimpleType(n.type))
-      reasons.push(
-        `It uses the "${FLB_NODE_TYPES[n.type]?.label ?? n.type}" step, which the Simple builder does not have.`,
-      );
+      reasons.push(msg('simpleModel.reasons.unsupportedStep', { node: nodeLabelMsg(n.type) }));
   }
   for (const n of graph.flowNodes) {
     if (n.type === 'ask' && (arr(n.data.options).length > 0 || n.data.acceptMedia === true))
-      reasons.push('A question has fixed answers or takes an uploaded file.');
+      reasons.push(msg('simpleModel.reasons.askFixed'));
   }
   const trigger = triggers[0];
   if (!trigger || reasons.length) return { ok: false, reasons: dedupe(reasons) };
@@ -177,7 +193,7 @@ export function toSimple(graph: Pick<FlowGraph, 'flowNodes' | 'flowEdges' | 'var
     const dst = nodes.get(e.target);
     if (!src || !dst) continue;
     if (dst.type === 'trigger') {
-      reasons.push('Something leads back into the Trigger.');
+      reasons.push(msg('simpleModel.reasons.intoTrigger'));
       continue;
     }
     const branching = BRANCHING.has(src.type);
@@ -185,17 +201,15 @@ export function toSimple(graph: Pick<FlowGraph, 'flowNodes' | 'flowEdges' | 'var
     if (branching && m) {
       const i = Number(m[1]);
       const list = option.get(src.id) ?? [];
-      if (list[i] !== undefined) reasons.push('A button or list row leads to more than one place.');
+      if (list[i] !== undefined) reasons.push(msg('simpleModel.reasons.multiLink'));
       list[i] = dst.id;
       option.set(src.id, list);
     } else if (!branching && e.sourceHandle === 'out') {
-      if (next.has(src.id)) reasons.push('A step continues into more than one step.');
+      if (next.has(src.id)) reasons.push(msg('simpleModel.reasons.multiNext'));
       next.set(src.id, dst.id);
       if (src.type !== 'trigger') feeders.set(dst.id, [...(feeders.get(dst.id) ?? []), src.id]);
     } else {
-      reasons.push(
-        `A wire leaves a "${src.type}" step from a port the Simple builder does not use.`,
-      );
+      reasons.push(msg('simpleModel.reasons.badPort', { node: nodeLabelMsg(src.type) }));
     }
   }
   if (reasons.length) return { ok: false, reasons: dedupe(reasons) };
@@ -267,7 +281,7 @@ export function toSimple(graph: Pick<FlowGraph, 'flowNodes' | 'flowEdges' | 'var
   };
 }
 
-const dedupe = (a: string[]) => Array.from(new Set(a));
+const dedupe = dedupeMsgs;
 
 // --- simple -> graph ------------------------------------------------------------------------------------------------------
 
@@ -348,133 +362,47 @@ export interface StepKind {
   type: SimpleType;
   /** For a question: what it validates the answer as. */
   preset?: string;
-  label: string;
-  help: string;
+  label: Msg;
+  help: Msg;
   group: 'send' | 'ask' | 'handoff';
 }
 
+const kind = (
+  key: string,
+  type: SimpleType,
+  group: StepKind['group'],
+  preset?: string,
+): StepKind => {
+  const id = key.replace(/-(\w)/g, (_, c: string) => c.toUpperCase());
+  return {
+    key,
+    type,
+    ...(preset ? { preset } : {}),
+    label: msg(`simpleModel.kinds.${id}.label`),
+    help: msg(`simpleModel.kinds.${id}.help`),
+    group,
+  };
+};
+
 export const STEP_KINDS: readonly StepKind[] = [
-  {
-    key: 'assign',
-    type: 'assign',
-    label: 'Assign to an agent',
-    help: 'Hand the conversation to a team or an agent',
-    group: 'handoff',
-  },
-  { key: 'message', type: 'message', label: 'Message', help: 'Send a text message', group: 'send' },
-  {
-    key: 'media',
-    type: 'media',
-    label: 'Media',
-    help: 'An image, video, audio or file',
-    group: 'send',
-  },
-  {
-    key: 'buttons',
-    type: 'buttons',
-    label: 'Buttons',
-    help: 'Up to 3 buttons. Ends this flow: each button decides what comes next',
-    group: 'send',
-  },
-  {
-    key: 'list',
-    type: 'list',
-    label: 'List',
-    help: 'A list of up to 10 choices. Ends this flow too',
-    group: 'send',
-  },
-  {
-    key: 'cta',
-    type: 'cta',
-    label: 'Link button',
-    help: 'A message with a link button',
-    group: 'send',
-  },
-  {
-    key: 'template',
-    type: 'template',
-    label: 'Template',
-    help: 'An approved WhatsApp template',
-    group: 'send',
-  },
-  {
-    key: 'location',
-    type: 'location',
-    label: 'Send a location',
-    help: 'Send a map pin',
-    group: 'send',
-  },
-  { key: 'delay', type: 'delay', label: 'Wait', help: 'Wait before the next step', group: 'send' },
-  {
-    key: 'ask',
-    type: 'ask',
-    preset: 'text',
-    label: 'Question',
-    help: 'Ask anything and save the answer',
-    group: 'ask',
-  },
-  {
-    key: 'ask-name',
-    type: 'ask',
-    preset: 'name',
-    label: 'Name',
-    help: 'Ask for a name and check it',
-    group: 'ask',
-  },
-  {
-    key: 'ask-email',
-    type: 'ask',
-    preset: 'email',
-    label: 'Email',
-    help: 'Ask for an email address and check it',
-    group: 'ask',
-  },
-  {
-    key: 'ask-phone',
-    type: 'ask',
-    preset: 'phone',
-    label: 'Phone number',
-    help: 'Ask for a phone number and check it',
-    group: 'ask',
-  },
-  {
-    key: 'ask-number',
-    type: 'ask',
-    preset: 'number',
-    label: 'Number',
-    help: 'Ask for a number and check it',
-    group: 'ask',
-  },
-  {
-    key: 'ask-alphanumeric',
-    type: 'ask',
-    preset: 'alphanumeric',
-    label: 'Letters and numbers',
-    help: 'An ID or code, no spaces or symbols',
-    group: 'ask',
-  },
-  {
-    key: 'ask-date',
-    type: 'ask',
-    preset: 'date',
-    label: 'Date',
-    help: 'Ask for a date in the shape you choose',
-    group: 'ask',
-  },
-  {
-    key: 'ask-file',
-    type: 'ask_file',
-    label: 'File or image',
-    help: 'Wait for a photo, document, video or audio',
-    group: 'ask',
-  },
-  {
-    key: 'ask-location',
-    type: 'ask_location',
-    label: 'Their location',
-    help: 'Wait for the customer to share a location',
-    group: 'ask',
-  },
+  kind('assign', 'assign', 'handoff'),
+  kind('message', 'message', 'send'),
+  kind('media', 'media', 'send'),
+  kind('buttons', 'buttons', 'send'),
+  kind('list', 'list', 'send'),
+  kind('cta', 'cta', 'send'),
+  kind('template', 'template', 'send'),
+  kind('location', 'location', 'send'),
+  kind('delay', 'delay', 'send'),
+  kind('ask', 'ask', 'ask', 'text'),
+  kind('ask-name', 'ask', 'ask', 'name'),
+  kind('ask-email', 'ask', 'ask', 'email'),
+  kind('ask-phone', 'ask', 'ask', 'phone'),
+  kind('ask-number', 'ask', 'ask', 'number'),
+  kind('ask-alphanumeric', 'ask', 'ask', 'alphanumeric'),
+  kind('ask-date', 'ask', 'ask', 'date'),
+  kind('ask-file', 'ask_file', 'ask'),
+  kind('ask-location', 'ask_location', 'ask'),
 ];
 
 const PRESET_VAR: Record<string, string> = {
@@ -488,10 +416,12 @@ const PRESET_VAR: Record<string, string> = {
 };
 
 /** A step's name on its card: a question shows what it checks (`Email`), the others their type. */
-export function stepLabel(s: Pick<SimpleStep, 'type' | 'data'>): string {
+export function stepLabel(s: Pick<SimpleStep, 'type' | 'data'>): Msg {
   if (s.type === 'ask') {
     const v = flbCleanAskInputType(s.data.validate);
-    return v === 'text' ? 'Question' : `Question · ${FLB_ASK_INPUT_LABELS[v]}`;
+    return v === 'text'
+      ? TYPE_LABEL.ask
+      : msg('simpleModel.stepLabel.questionOf', { kind: askInputLabelMsg(v) });
   }
   return TYPE_LABEL[s.type];
 }
@@ -745,7 +675,7 @@ export function removeJourney(doc: SimpleDoc, ji: number): SimpleDoc {
 export interface SimpleProblem {
   /** The step to scroll to; `null` for the trigger. */
   stepId: string | null;
-  message: string;
+  message: Msg;
 }
 
 const cut = (s: string, n: number) => s.length > n;
@@ -754,28 +684,28 @@ export function problems(doc: SimpleDoc, opts: { senderRequired: boolean }): Sim
   const out: SimpleProblem[] = [];
   const t = doc.trigger.data;
   if (str(t.kind) === 'keyword' && str(t.keywordMode) !== 'any' && !str(t.keywords).trim())
-    out.push({
-      stepId: null,
-      message: 'The trigger needs at least one keyword (or choose any message).',
-    });
+    out.push({ stepId: null, message: msg('simpleModel.problems.triggerKeyword') });
   if (opts.senderRequired && !str(t.deviceId).trim())
-    out.push({ stepId: null, message: 'Pick the WhatsApp number this flow runs on.' });
+    out.push({ stepId: null, message: msg('simpleModel.problems.triggerSender') });
   if (doc.journeys[0]!.steps.length === 0)
-    out.push({ stepId: null, message: 'Add a first step: it is what the customer receives.' });
+    out.push({ stepId: null, message: msg('simpleModel.problems.firstStep') });
 
   const varsSeen = new Map<string, string>();
   doc.journeys.forEach((j, ji) =>
     j.steps.forEach((s, si) => {
-      const at = `Step ${stageIn(doc, ji, si)}`;
-      const bad = (m: string) => out.push({ stepId: s.id, message: `${at}: ${m}` });
+      const stage = stageIn(doc, ji, si);
+      const bad = (name: string, values: Record<string, string | number> = {}) =>
+        out.push({
+          stepId: s.id,
+          message: msg(`simpleModel.problems.${name}`, { stage, ...values }),
+        });
       const d = s.data;
-      if (s.type === 'message' && !str(d.text).trim()) bad('write the message.');
-      if (s.type === 'media' && !str(d.url).trim()) bad('add the file link.');
+      if (s.type === 'message' && !str(d.text).trim()) bad('writeMessage');
+      if (s.type === 'media' && !str(d.url).trim()) bad('addFileLink');
       if (s.type === 'ask' || s.type === 'ask_file' || s.type === 'ask_location') {
-        if (!str(d.prompt).trim()) bad('write the question.');
-        if (!str(d.var).trim()) bad('name the variable the answer is saved in.');
-        if (d.saveProperty === true && !str(d.propertyKey).trim())
-          bad('choose the contact property the answer is copied to.');
+        if (!str(d.prompt).trim()) bad('writeQuestion');
+        if (!str(d.var).trim()) bad('nameVariable');
+        if (d.saveProperty === true && !str(d.propertyKey).trim()) bad('chooseAnswerProperty');
       }
       if (
         s.type === 'location' &&
@@ -784,39 +714,37 @@ export function problems(doc: SimpleDoc, opts: { senderRequired: boolean }): Sim
           Number.isNaN(Number(d.lng)) ||
           str(d.lng).trim() === '')
       )
-        bad('set the latitude and longitude.');
-      if (s.type === 'template' && !str(d.tpl).trim()) bad('choose a template.');
-      if (s.type === 'assign' && !str(d.team).trim())
-        bad('choose the team the conversation goes to.');
+        bad('setCoordinates');
+      if (s.type === 'template' && !str(d.tpl).trim()) bad('chooseTemplate');
+      if (s.type === 'assign' && !str(d.team).trim()) bad('chooseTeam');
       if (s.type === 'cta') {
         const a = arr(d.actions)[0] as Record<string, unknown> | undefined;
-        if (!a || !str(a.label).trim() || !str(a.value).trim())
-          bad('give the button a name and a link.');
+        if (!a || !str(a.label).trim() || !str(a.value).trim()) bad('ctaLabelLink');
       }
       if (
         (s.type === 'buttons' || s.type === 'list') &&
         d.saveProperty === true &&
         !str(d.propertyKey).trim()
       )
-        bad('choose the contact property the picked option is copied to.');
+        bad('choosePickedProperty');
       if (s.type === 'buttons') {
-        if (!str(d.prompt).trim()) bad('write the message above the buttons.');
+        if (!str(d.prompt).trim()) bad('buttonsPrompt');
         const o = arr(d.options).map(str);
-        if (o.length === 0) bad('add at least one button.');
-        if (o.some((x) => !x.trim())) bad('every button needs a label.');
+        if (o.length === 0) bad('addButton');
+        if (o.some((x) => !x.trim())) bad('buttonNeedsLabel');
         if (o.some((x) => cut(x, LIMITS.buttonLabel)))
-          bad(`a button label is longer than ${LIMITS.buttonLabel} characters.`);
+          bad('buttonTooLong', { max: LIMITS.buttonLabel });
       }
       if (s.type === 'list') {
-        if (!str(d.prompt).trim()) bad('write the message above the list.');
+        if (!str(d.prompt).trim()) bad('listPrompt');
         if (!str(d.button).trim() || cut(str(d.button), LIMITS.listButton))
-          bad(`the list button needs a label of up to ${LIMITS.listButton} characters.`);
+          bad('listButtonLabel', { max: LIMITS.listButton });
         const rows = arr(d.options) as Record<string, unknown>[];
-        if (rows.length === 0) bad('add at least one row.');
+        if (rows.length === 0) bad('addRow');
         if (rows.some((r) => !str(r.title).trim() || cut(str(r.title), LIMITS.rowTitle)))
-          bad(`every row needs a title of up to ${LIMITS.rowTitle} characters.`);
+          bad('rowTitle', { max: LIMITS.rowTitle });
         if (rows.some((r) => cut(str(r.description), LIMITS.rowDescription)))
-          bad(`a row description is longer than ${LIMITS.rowDescription} characters.`);
+          bad('rowDescriptionTooLong', { max: LIMITS.rowDescription });
       }
       const v = str(d.var).trim();
       if (
@@ -826,8 +754,7 @@ export function problems(doc: SimpleDoc, opts: { senderRequired: boolean }): Sim
           s.type === 'ask_location' ||
           BRANCHING.has(s.type))
       ) {
-        if (varsSeen.has(v))
-          bad(`"${v}" is already used by step ${varsSeen.get(v)}; give each answer its own name.`);
+        if (varsSeen.has(v)) bad('variableUsed', { name: v, other: varsSeen.get(v) ?? '' });
         else varsSeen.set(v, stageIn(doc, ji, si));
       }
     }),
@@ -851,8 +778,17 @@ export function unreachable(doc: SimpleDoc): SimpleStep[] {
   return out;
 }
 
+const DELAY_UNITS = ['sec', 'min', 'hour', 'day'];
+const delaySummary = (t: Translate, d: Record<string, unknown>): string =>
+  t('simpleModel.delaySummary', {
+    amount: str(d.amount),
+    unit: DELAY_UNITS.includes(str(d.unit))
+      ? t(`builder.simple.editors.delay.${str(d.unit)}`)
+      : str(d.unit),
+  });
+
 /** A step label for pickers: `2.3 · Message · "Hello there…"`. */
-export function stepSummary(s: SimpleStep): string {
+export function stepSummary(s: SimpleStep, t: Translate): string {
   const d = s.data;
   const raw =
     s.type === 'message'
@@ -870,7 +806,7 @@ export function stepSummary(s: SimpleStep): string {
                 : s.type === 'cta'
                   ? str((arr(d.actions)[0] as Record<string, unknown> | undefined)?.label)
                   : s.type === 'delay'
-                    ? `${str(d.amount)} ${str(d.unit)}`
+                    ? delaySummary(t, d)
                     : s.type === 'assign'
                       ? str(d.message)
                       : '';
@@ -878,17 +814,17 @@ export function stepSummary(s: SimpleStep): string {
   return one.length > 40 ? `${one.slice(0, 40)}…` : one;
 }
 
-export const TYPE_LABEL: Record<SimpleType, string> = {
-  message: 'Message',
-  media: 'Media',
-  buttons: 'Buttons',
-  list: 'List',
-  ask: 'Question',
-  ask_file: 'Ask for a file',
-  ask_location: 'Ask for a location',
-  delay: 'Wait',
-  location: 'Location',
-  template: 'Template',
-  cta: 'Link button',
-  assign: 'Assign to an agent',
+export const TYPE_LABEL: Record<SimpleType, Msg> = {
+  message: msg('simpleModel.typeLabel.message'),
+  media: msg('simpleModel.typeLabel.media'),
+  buttons: msg('simpleModel.typeLabel.buttons'),
+  list: msg('simpleModel.typeLabel.list'),
+  ask: msg('simpleModel.typeLabel.ask'),
+  ask_file: msg('simpleModel.typeLabel.ask_file'),
+  ask_location: msg('simpleModel.typeLabel.ask_location'),
+  delay: msg('simpleModel.typeLabel.delay'),
+  location: msg('simpleModel.typeLabel.location'),
+  template: msg('simpleModel.typeLabel.template'),
+  cta: msg('simpleModel.typeLabel.cta'),
+  assign: msg('simpleModel.typeLabel.assign'),
 };

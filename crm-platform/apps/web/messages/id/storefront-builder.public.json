@@ -1,0 +1,336 @@
+{
+  "shopPublic": {
+    "common": {
+      "close": "Tutup",
+      "ok": "OK",
+      "done": "Selesai",
+      "skip": "Lewati ke konten"
+    },
+    "strip": "Pesan lewat WhatsApp · Bayar di tempat tersedia · Chat gratis, balasan cepat",
+    "header": {
+      "navLabel": "Bagian toko",
+      "shop": "Toko",
+      "categories": "Kategori",
+      "about": "Tentang",
+      "searchPlaceholder": "Cari produk…",
+      "searchLabel": "Cari produk",
+      "wishlist": "Daftar keinginan",
+      "compare": "Bandingkan",
+      "cart": "Keranjang",
+      "withCount": "{label}, {count, plural, other {# item}}"
+    },
+    "hero": {
+      "welcome": "Selamat datang di {shop}.",
+      "sub": "Produk pilihan. Pesan item apa pun langsung lewat WhatsApp — tanpa formulir checkout, tanpa instal aplikasi.",
+      "trust": {
+        "cod": "Bayar di tempat",
+        "chat": "Dukungan chat gratis",
+        "returns": "Pengembalian mudah"
+      }
+    },
+    "catalog": {
+      "label": "Produk",
+      "emptyTitle": "Belum ada produk",
+      "emptyBody": "Pemilik masih menyiapkan semuanya — silakan cek kembali nanti.",
+      "count": "{count, plural, other {# produk}}",
+      "sort": {
+        "label": "Urutkan produk",
+        "featured": "Urutkan · Unggulan",
+        "priceAsc": "Harga · Terendah ke tertinggi",
+        "priceDesc": "Harga · Tertinggi ke terendah",
+        "nameAsc": "Nama · A → Z",
+        "nameDesc": "Nama · Z → A"
+      },
+      "view": {
+        "label": "Tata letak",
+        "grid": "Tampilan kisi",
+        "list": "Tampilan daftar"
+      },
+      "filters": {
+        "title": "Filter",
+        "category": "Kategori",
+        "price": "Harga",
+        "min": "Min",
+        "max": "Maks",
+        "range": "Rentang: {min} — {max}",
+        "availability": "Ketersediaan",
+        "inStock": "Hanya yang tersedia",
+        "onSale": "Sedang diskon",
+        "reset": "Atur ulang filter",
+        "clear": "Hapus filter"
+      },
+      "noMatch": "Tidak ada yang cocok dengan filter tersebut",
+      "showMore": "Tampilkan lebih banyak produk",
+      "loading": "Memuat…",
+      "retry": "Coba lagi",
+      "showing": "Menampilkan {shown} dari {total} produk"
+    },
+    "card": {
+      "new": "Baru",
+      "soldOut": "Habis terjual",
+      "soldOutNamed": "{name}: habis terjual",
+      "addToCart": "Tambah ke keranjang",
+      "addToCartNamed": "Tambahkan {name} ke keranjang",
+      "addWish": "Tambahkan {name} ke daftar keinginan",
+      "removeWish": "Hapus {name} dari daftar keinginan",
+      "quickView": "Tampilan cepat {name}",
+      "quickViewTitle": "Tampilan cepat",
+      "was": "Sebelumnya"
+    },
+    "quick": {
+      "details": "Detail lengkap →"
+    },
+    "product": {
+      "gallery": "Gambar produk",
+      "showImage": "Tampilkan gambar {n}",
+      "breadcrumb": "Anda di sini",
+      "save": "Hemat {percent}%",
+      "onlyLeft": "Tersisa {count}",
+      "inStock": "Tersedia · siap dikirim",
+      "quantity": "Jumlah",
+      "addCompare": "Tambah ke perbandingan",
+      "removeCompare": "Hapus dari perbandingan",
+      "share": "Bagikan produk ini",
+      "shareTitle": "Bagikan produk ini",
+      "ask": "Tanya lewat WhatsApp",
+      "sku": "SKU",
+      "category": "Kategori",
+      "weight": "Berat",
+      "grams": "{count} g",
+      "delivery": "Pengiriman",
+      "deliveryTime": "2–5 hari kerja",
+      "tags": "Tag",
+      "tabs": {
+        "label": "Informasi produk",
+        "desc": "Deskripsi",
+        "ship": "Pengiriman & pengembalian",
+        "reviews": "Ulasan"
+      },
+      "noDescription": "Belum ada deskripsi — kirim pesan ke penjual lewat WhatsApp untuk info lebih lanjut.",
+      "shippingHeading": "Pengiriman.",
+      "shippingBody": "Pesanan dikirim dalam 1–2 hari kerja. Waktu pengiriman bergantung pada lokasi Anda — biasanya 2–5 hari kerja.",
+      "freeAbove": "Gratis ongkir untuk pesanan di atas {amount}.",
+      "returnsHeading": "Pengembalian.",
+      "returnsBody": "Barang yang belum digunakan dapat dikembalikan dalam 7 hari sejak diterima. Kirim pesan kepada kami lewat WhatsApp untuk memulai pengembalian — kami akan mengatur penjemputannya.",
+      "reviewCount": "{count, plural, other {# ulasan}}",
+      "anonymous": "Anonim",
+      "ratingOf": "{rating} dari 5",
+      "noReviews": "Belum ada ulasan — jadilah yang pertama mengulas produk ini.",
+      "related": "Anda mungkin juga suka"
+    },
+    "review": {
+      "write": "Tulis ulasan",
+      "name": "Nama Anda",
+      "rating": "Penilaian",
+      "ratings": {
+        "1": "Buruk",
+        "2": "Kurang",
+        "3": "Cukup",
+        "4": "Bagus",
+        "5": "Sangat bagus"
+      },
+      "bodyLabel": "Ulasan Anda",
+      "body": "Bagikan pengalaman Anda (opsional)",
+      "submit": "Kirim ulasan",
+      "nameRequired": "Tambahkan nama Anda.",
+      "thanks": "Terima kasih atas ulasan Anda!",
+      "network": "Kesalahan jaringan. Silakan coba lagi.",
+      "failed": "Tidak dapat mengirim ulasan Anda."
+    },
+    "cart": {
+      "title": "Keranjang Anda",
+      "subtotal": "Subtotal",
+      "shipping": "Pengiriman",
+      "free": "GRATIS ✓",
+      "total": "Total",
+      "addForFree": "Tambah {amount} lagi untuk gratis ongkir",
+      "order": "Pesan lewat WhatsApp →",
+      "payVia": "Bayar via {method} · Bayar di tempat",
+      "methods": {
+        "upi": "UPI",
+        "razorpay": "Razorpay",
+        "card": "Kartu",
+        "paypal": "PayPal",
+        "bank": "Transfer bank"
+      },
+      "codOnly": "Bayar di tempat · Konfirmasi lewat chat",
+      "emptyTitle": "Keranjang Anda kosong",
+      "emptyBody": "Jelajahi katalog dan tambahkan beberapa favorit.",
+      "keepBrowsing": "Lanjut menjelajah",
+      "quantityOf": "Jumlah {name}",
+      "decrease": "Kurangi jumlah",
+      "increase": "Tambah jumlah",
+      "remove": "Hapus {name} dari keranjang",
+      "fullTitle": "Keranjang Anda penuh",
+      "fullBody": "Satu keranjang berisi hingga 100 produk berbeda. Pesan ini terlebih dahulu, lalu mulai keranjang baru."
+    },
+    "wish": {
+      "title": "Daftar keinginan",
+      "emptyTitle": "Belum ada favorit",
+      "emptyBody": "Ketuk ikon hati di produk mana pun untuk menyimpannya nanti.",
+      "remove": "Hapus {name} dari daftar keinginan"
+    },
+    "compare": {
+      "title": "Bandingkan produk",
+      "emptyTitle": "Tidak ada yang dibandingkan",
+      "emptyBody": "Ketuk “Bandingkan” pada dua produk untuk melihatnya berdampingan.",
+      "attribute": "Atribut",
+      "rows": {
+        "image": "Gambar",
+        "name": "Nama",
+        "price": "Harga",
+        "sku": "SKU",
+        "category": "Kategori",
+        "description": "Deskripsi"
+      },
+      "remove": "Hapus {name} dari perbandingan",
+      "bar": "Produk untuk dibandingkan",
+      "open": "Bandingkan →",
+      "fullTitle": "Perbandingan penuh",
+      "fullBody": "Anda dapat membandingkan hingga {count} produk sekaligus. Hapus salah satu dari bilah perbandingan untuk menambahkan yang baru."
+    },
+    "stock": {
+      "title": "Hanya {count} tersedia",
+      "soldOut": "Produk ini habis terjual. Kami akan segera mengisi stok — kirim pesan kepada kami lewat WhatsApp untuk mendapat pemberitahuan.",
+      "limit": "{count, plural, other {Hanya tersedia # unit, dan Anda sudah memiliki semuanya di keranjang.}}",
+      "maxTitle": "Batas tercapai",
+      "maxBody": "Anda dapat memesan hingga {count} unit dari satu produk sekaligus."
+    },
+    "toast": {
+      "added": "{name} · ditambahkan ke keranjang",
+      "wishAdded": "Ditambahkan ke daftar keinginan ♡",
+      "wishRemoved": "Dihapus dari daftar keinginan",
+      "compareAdded": "Ditambahkan ke perbandingan",
+      "compareRemoved": "Dihapus dari perbandingan"
+    },
+    "checkout": {
+      "title": "Checkout",
+      "summary": "{count, plural, other {# item}} · {total}",
+      "name": "Nama Anda",
+      "phone": "Nomor WhatsApp",
+      "phonePlaceholder": "+1 555 123 4567",
+      "address": "Alamat pengiriman",
+      "note": "Catatan (opsional)",
+      "coupon": "Kode diskon",
+      "apply": "Terapkan",
+      "payment": "Pembayaran",
+      "prepaid": "Detail bayar online / saat pengiriman",
+      "cod": "Bayar di tempat",
+      "place": "Buat pesanan",
+      "placing": "Membuat pesanan…",
+      "opening": "Pesanan dibuat! Membuka WhatsApp…",
+      "nameRequired": "Silakan masukkan nama Anda.",
+      "phoneInvalid": "Silakan masukkan nomor WhatsApp yang valid.",
+      "cartEmpty": "Keranjang Anda kosong.",
+      "emptyTitle": "Keranjang Anda kosong",
+      "emptyBody": "Jelajahi katalog dan tambahkan produk sebelum checkout.",
+      "failed": "Tidak dapat membuat pesanan. Silakan coba lagi.",
+      "network": "Kesalahan jaringan. Silakan coba lagi.",
+      "couponSave": "Anda hemat {discount} · Total baru {total}",
+      "couponFree": "Gratis ongkir diterapkan · Total baru {total}",
+      "couponInvalid": "Kode tersebut tidak berlaku untuk keranjang ini.",
+      "couponNetwork": "Tidak dapat memeriksa kode tersebut.",
+      "couponFallback": "Kode tidak valid."
+    },
+    "errors": {
+      "itemsUnavailable": "Item tersebut sudah tidak tersedia. Silakan muat ulang dan coba lagi.",
+      "notAvailable": "Toko ini tidak tersedia.",
+      "rateLimited": "Terlalu banyak permintaan. Silakan tunggu sebentar lalu coba lagi."
+    },
+    "placed": {
+      "title": "Pesanan dibuat",
+      "track": "Lacak pesanan #{orderNo} →"
+    },
+    "share": {
+      "title": "Bagikan",
+      "url": "Tautan untuk dibagikan",
+      "copy": "Salin",
+      "copied": "Disalin ✓",
+      "copyFailed": "Tidak dapat menyalin tautan",
+      "linkCopied": "Tautan disalin",
+      "whatsapp": "WhatsApp",
+      "whatsappHint": "Kirim ke chat",
+      "email": "Email",
+      "emailHint": "Buka aplikasi email",
+      "telegram": "Telegram",
+      "telegramHint": "Bagikan ke chat",
+      "more": "Lainnya…",
+      "moreHint": "Menu berbagi ponsel",
+      "showQr": "Tampilkan kode QR →",
+      "qrTitle": "Kode QR tautan",
+      "scan": "Pindai untuk membuka toko"
+    },
+    "info": {
+      "freeAbove": "Gratis ongkir di atas {amount}.",
+      "shipping": {
+        "title": "Pengiriman & pengantaran",
+        "body": "Pesanan dikonfirmasi lewat WhatsApp. Waktu pengiriman bergantung pada lokasi Anda — biasanya 2–5 hari kerja."
+      },
+      "returns": {
+        "title": "Pengembalian",
+        "body": "Barang yang belum digunakan dapat dikembalikan dalam 7 hari. Kirim pesan kepada kami lewat WhatsApp untuk memulai pengembalian."
+      },
+      "howToOrder": {
+        "title": "Cara memesan",
+        "body": "Jelajahi katalog, tambahkan ke keranjang, lalu ketuk “Pesan lewat WhatsApp”. Kami mengonfirmasi pesanan Anda lewat chat dan mengatur pengiriman."
+      },
+      "privacy": {
+        "title": "Privasi",
+        "body": "Kami hanya mengumpulkan yang Anda bagikan di chat untuk memproses pesanan Anda. Kami tidak pernah menjual data Anda."
+      }
+    },
+    "footer": {
+      "blurb": "Produk pilihan, dipesan lewat WhatsApp seperti panggilan telepon. Tidak perlu aplikasi — cukup chat dengan kami untuk membeli.",
+      "paymentsLabel": "Cara bayar",
+      "pay": {
+        "whatsapp": "WhatsApp",
+        "upi": "UPI",
+        "cod": "Bayar di tempat",
+        "bank": "Transfer bank"
+      },
+      "shopHeading": "Toko",
+      "allProducts": "Semua produk",
+      "helpHeading": "Bantuan",
+      "help": {
+        "shipping": "Pengiriman",
+        "returns": "Pengembalian",
+        "howToOrder": "Cara memesan",
+        "privacy": "Privasi"
+      },
+      "contactHeading": "Kontak",
+      "whatsappLink": "WhatsApp · {number}",
+      "hours": "Sen–Min · 09.00–21.00",
+      "hoursToast": "Jam: 09.00–21.00",
+      "copyright": "© {year} {shop}"
+    },
+    "order": {
+      "title": "Pesanan #{orderNo}",
+      "progress": "Progres pesanan",
+      "cancelled": "Pesanan ini dibatalkan. Hubungi kami jika itu tidak terduga.",
+      "steps": {
+        "placed": "Dibuat",
+        "confirmed": "Dikonfirmasi",
+        "paid": "Dibayar",
+        "shipped": "Dikirim"
+      },
+      "stepDone": "selesai",
+      "stepTodo": "belum",
+      "items": "Item",
+      "qty": "Jml {qty} · {price}",
+      "free": "Gratis",
+      "deliveryTo": "Pengiriman ke",
+      "payNow": "Bayar sekarang",
+      "message": "Kirim pesan kepada kami tentang pesanan ini"
+    },
+    "notFound": {
+      "kicker": "Tersesat di workspace",
+      "title": "Halaman ini salah jalan.",
+      "body": "Kami tidak dapat menemukan yang Anda cari. Tautan mungkin rusak, halaman mungkin dipindahkan, atau memang tidak pernah ada.",
+      "back": "Kembali",
+      "signIn": "Masuk",
+      "help": "Butuh bantuan?",
+      "support": "Hubungi dukungan",
+      "metaTitle": "Halaman tidak ditemukan"
+    }
+  }
+}

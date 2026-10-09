@@ -1,0 +1,560 @@
+{
+  "lead-sources": {
+    "common": {
+      "dismiss": "Đóng",
+      "loading": "Đang tải",
+      "retry": "Thử lại",
+      "copied": "Đã sao chép",
+      "copyFailed": "Không sao chép được: hãy chọn văn bản và tự sao chép",
+      "requestId": "Tham chiếu: {id}"
+    },
+    "states": {
+      "noAccessTitle": "Bạn không có quyền truy cập Khách hàng tiềm năng từ mạng xã hội",
+      "noAccessBody": "Vai trò của bạn không có quyền cần cho màn hình này ({permission}). Hãy nhờ quản trị viên không gian làm việc thêm quyền này vào vai trò của bạn.",
+      "lockedTitle": "Khách hàng tiềm năng từ mạng xã hội không có trong gói của bạn",
+      "lockedBody": "Gói hiện tại của bạn không bao gồm nguồn khách hàng tiềm năng, nên bạn không thể xem hoặc tạo. Hãy nâng cấp để đưa khách hàng tiềm năng từ quảng cáo và trang đích vào danh sách liên hệ.",
+      "upgrade": "Nâng cấp gói",
+      "manageNeeded": "Bạn chỉ có thể xem, không thể thay đổi gì ở đây: thay đổi nguồn cần quyền {permission}."
+    },
+    "errors": {
+      "conflict": "Có người khác đã thay đổi nguồn này khi bạn đang chỉnh sửa. Hãy tải lại để xem phiên bản của họ; các chỉnh sửa chưa lưu của bạn sẽ bị mất.",
+      "noAccess": "Vai trò của bạn không cho phép thao tác này.",
+      "signedOut": "Phiên làm việc đã kết thúc. Hãy đăng nhập lại để tiếp tục.",
+      "planLocked": "Gói của bạn không bao gồm Khách hàng tiềm năng từ mạng xã hội. Hãy nâng cấp để sử dụng.",
+      "planLimit": "Gói của bạn đã đạt giới hạn nguồn khách hàng tiềm năng. Hãy nâng cấp gói hoặc xóa nguồn không còn dùng.",
+      "nameTaken": "Đã có nguồn khác mang tên này. Hãy chọn tên khác.",
+      "mappingInvalid": "Ánh xạ trỏ đến các thuộc tính liên hệ không thể điền từ khách hàng tiềm năng.",
+      "defaultsInvalid": "Một mục trong quy tắc không thuộc không gian làm việc này (người dùng, pipeline, giai đoạn thương vụ hoặc giai đoạn vòng đời).",
+      "notRetryable": "Chỉ có thể thử lại khách hàng tiềm năng cần xem xét hoặc bị lỗi. Mục này đã xong hoặc đang được xử lý.",
+      "payloadPurged": "Khách hàng tiềm năng đã lưu được xóa sau thời gian lưu giữ, nên không còn gì để thử lại.",
+      "sourcePaused": "Nguồn này đang tạm dừng. Hãy tiếp tục nguồn để gửi khách hàng tiềm năng thử nghiệm hoặc thử lại.",
+      "notFound": "Không tìm thấy nội dung này. Có thể đã bị xóa.",
+      "rateLimited": "Quá nhiều yêu cầu. Hãy đợi một lát rồi thử lại.",
+      "rateLimitedWait": "Quá nhiều yêu cầu. Hãy thử lại sau {seconds} giây.",
+      "validation": "Một số nội dung bạn nhập không hợp lệ. Hãy kiểm tra các trường được đánh dấu.",
+      "validationField": "{message}",
+      "detailVerbatim": "{message}",
+      "badResponse": "Máy chủ phản hồi theo cách trang này không hiểu được. Hãy tải lại trang; nếu vẫn xảy ra, hãy liên hệ hỗ trợ.",
+      "network": "Không kết nối được tới máy chủ. Hãy kiểm tra đường truyền và thử lại.",
+      "unexpected": "Đã xảy ra lỗi phía hệ thống. Hãy thử lại sau ít phút.",
+      "request": "Yêu cầu không được chấp nhận. Hãy kiểm tra nội dung đã nhập và thử lại.",
+      "details": {
+        "unknown_property": "Thuộc tính liên hệ này không tồn tại hoặc đã bị tắt.",
+        "not_mappable": "Thuộc tính này được tính toán hoặc trỏ đến bản ghi khác, nên khách hàng tiềm năng không thể điền vào.",
+        "unknown_pipeline": "Pipeline này không có trong không gian làm việc của bạn.",
+        "unknown_stage": "Giai đoạn thương vụ này không có trong không gian làm việc của bạn.",
+        "stage_not_in_pipeline": "Giai đoạn này thuộc pipeline khác.",
+        "pipeline_required": "Chọn pipeline mà giai đoạn này thuộc về.",
+        "unknown_or_lost_stage": "Giai đoạn vòng đời này không tồn tại hoặc là giai đoạn thất bại.",
+        "unknown_or_inactive_user": "Một trong những người đã chọn không phải thành viên đang hoạt động của không gian làm việc."
+      }
+    },
+    "problems": {
+      "nameRequired": "Hãy đặt tên cho nguồn.",
+      "nameLength": "Dùng tối đa {max} ký tự.",
+      "platformLength": "Dùng tối đa {max} ký tự.",
+      "secretLength": "Khóa chia sẻ dài từ {min} đến {max} ký tự.",
+      "pathLength": "Đường dẫn dài tối đa {max} ký tự.",
+      "pathCharacters": "Đường dẫn không được chứa ký tự điều khiển.",
+      "retentionRange": "Nhập số ngày nguyên từ 1 đến {max}.",
+      "countryCode": "Nhập mã vùng gồm 1 đến 4 chữ số, ví dụ 91 hoặc 44.",
+      "textLength": "Dùng tối đa {max} ký tự.",
+      "ownerFixed": "Chọn đúng một người.",
+      "ownerRoundRobin": "Chọn ít nhất hai người để luân phiên nhận.",
+      "ownerTooMany": "Chọn tối đa {max} người.",
+      "notifyTooMany": "Chọn tối đa {max} người.",
+      "dealTitleLength": "Tiêu đề thương vụ dài tối đa {max} ký tự.",
+      "propertyRequired": "Chọn thuộc tính liên hệ cần điền.",
+      "propertyKey": "Khóa thuộc tính bắt đầu bằng chữ cái và chỉ dùng chữ thường, chữ số và dấu gạch dưới.",
+      "propertyDuplicate": "Thuộc tính này được ánh xạ hai lần.",
+      "pathRequired": "Cho biết giá trị nằm ở đâu trong dữ liệu gửi đến.",
+      "customFieldsTooMany": "Ánh xạ tối đa {max} thuộc tính tùy chỉnh.",
+      "contract": "{message}"
+    },
+    "kinds": {
+      "webhook": "Webhook",
+      "meta_lead_ads": "Biểu mẫu khách hàng tiềm năng của Meta",
+      "tiktok": "TikTok",
+      "linkedin": "LinkedIn",
+      "google_ads": "Google Ads",
+      "connector": "Kết nối Marketplace"
+    },
+    "sourceStatus": {
+      "active": "Đang hoạt động",
+      "paused": "Tạm dừng"
+    },
+    "eventStatus": {
+      "received": "Đã nhận",
+      "created": "Đã tạo liên hệ",
+      "updated": "Đã cập nhật liên hệ",
+      "duplicate": "Trùng lặp",
+      "needs_review": "Cần xem xét",
+      "failed": "Lỗi"
+    },
+    "reasons": {
+      "no_contact_point": "Không có email hoặc số điện thoại",
+      "invalid_phone": "Không đọc được số điện thoại",
+      "plan_limit_reached": "Đã đạt giới hạn liên hệ",
+      "source_paused": "Nguồn đã bị tạm dừng",
+      "internal_error": "Lỗi xử lý",
+      "identity_conflict": "Email hoặc số điện thoại thuộc liên hệ khác"
+    },
+    "guidance": {
+      "noContactPoint": "Khách hàng tiềm năng không có email hay số điện thoại dùng được. Hãy sửa ánh xạ hoặc mã quốc gia mặc định, rồi thử lại.",
+      "invalidPhone": "Đã gửi số điện thoại nhưng không đọc được đúng định dạng, và không có email. Hãy kiểm tra ánh xạ số điện thoại và mã quốc gia mặc định, rồi thử lại.",
+      "planLimit": "Gói của bạn đã đạt giới hạn liên hệ nên khách hàng tiềm năng này không thể thành liên hệ. Hãy nâng cấp gói, rồi thử lại.",
+      "sourcePaused": "Nguồn đã bị tạm dừng. Hãy tiếp tục nguồn, rồi thử lại.",
+      "internalError": "Đã xảy ra lỗi khi xử lý khách hàng tiềm năng này. Hãy thử lại; nếu vẫn lỗi, hãy gửi mã tham chiếu trong thông báo lỗi cho bộ phận hỗ trợ.",
+      "identityConflict": "Khách hàng tiềm năng đã được gộp vào một liên hệ hiện có, nhưng email hoặc số điện thoại của nó thuộc liên hệ khác, nên thông tin đó không được chuyển.",
+      "generic": "Khách hàng tiềm năng này cần được xem lại. Hãy kiểm tra lý do và lỗi, sửa ánh xạ hoặc mặc định nếu cần, rồi thử lại.",
+      "upgrade": "Nâng cấp gói"
+    },
+    "eventFilters": {
+      "all": "Tất cả khách hàng tiềm năng",
+      "attention": "Cần xử lý",
+      "needs_review": "Cần xem xét",
+      "failed": "Lỗi",
+      "created": "Đã tạo liên hệ",
+      "updated": "Đã cập nhật liên hệ",
+      "duplicate": "Trùng lặp",
+      "received": "Đang xử lý"
+    },
+    "testFilters": {
+      "all": "Khách hàng tiềm năng thật và thử nghiệm",
+      "only": "Chỉ khách hàng tiềm năng thử nghiệm",
+      "hide": "Ẩn khách hàng tiềm năng thử nghiệm"
+    },
+    "page": {
+      "title": "Khách hàng tiềm năng từ mạng xã hội",
+      "description": "Đưa khách hàng tiềm năng từ quảng cáo và trang đích vào danh sách liên hệ, kèm người phụ trách, thẻ và thương vụ bạn chọn.",
+      "newSource": "Nguồn mới",
+      "loading": "Đang tải nguồn khách hàng tiềm năng",
+      "tabs": {
+        "ads": "Quảng cáo",
+        "webhook": "Webhook",
+        "attention": "{count, plural, other {# khách hàng tiềm năng cần xử lý}}"
+      }
+    },
+    "ads": {
+      "intro": "Chọn nơi khách hàng tiềm năng của bạn đến từ đâu. Mọi nguồn đều đi về cùng một nơi: một liên hệ có ghi nhận nguồn, người phụ trách, thương vụ tùy chọn và thông báo.",
+      "available": "Có sẵn",
+      "comingSoon": "Sắp ra mắt",
+      "untilThen": "Trong thời gian này, hãy gửi khách hàng tiềm năng qua Webhook bằng Zapier hoặc Make.",
+      "sourceCount": "{count, plural, =0 {Chưa có nguồn nào} other {# nguồn}}",
+      "setUpWebhook": "Thiết lập webhook",
+      "openSources": "Mở danh sách nguồn",
+      "providers": {
+        "webhook": {
+          "name": "Webhook",
+          "body": "Gửi khách hàng tiềm năng từ bất kỳ công cụ nào có thể gửi yêu cầu web: Zapier, Make, trình tạo trang đích hoặc biểu mẫu của riêng bạn. Webhook cũng nhận khách hàng tiềm năng từ LinkedIn, TikTok và Google Ads."
+        },
+        "meta": {
+          "name": "Biểu mẫu khách hàng tiềm năng của Meta",
+          "body": "Quảng cáo khách hàng tiềm năng trên Facebook và Instagram, lấy trực tiếp từ Trang của bạn."
+        },
+        "linkedin": {
+          "name": "LinkedIn",
+          "body": "Biểu mẫu tạo khách hàng tiềm năng trên LinkedIn."
+        },
+        "tiktok": {
+          "name": "TikTok",
+          "body": "Biểu mẫu tạo khách hàng tiềm năng trên TikTok."
+        },
+        "google": {
+          "name": "Google Ads",
+          "body": "Tiện ích biểu mẫu khách hàng tiềm năng của Google Ads."
+        }
+      }
+    },
+    "sources": {
+      "emptyTitle": "Chưa có nguồn nào",
+      "empty": "Tạo nguồn webhook để lấy một URL có thể dán vào Zapier, Make hoặc công cụ biểu mẫu của bạn. Khách hàng tiềm năng gửi đến sẽ thành liên hệ.",
+      "emptyNoManage": "Chưa có nguồn khách hàng tiềm năng nào được tạo. Hãy nhờ người có quyền quản lý nguồn tạo một nguồn.",
+      "create": "Nguồn mới",
+      "caption": "Nguồn khách hàng tiềm năng",
+      "col": {
+        "name": "Tên",
+        "kind": "Loại",
+        "status": "Trạng thái",
+        "token": "URL",
+        "lastEvent": "Khách hàng tiềm năng gần nhất",
+        "attention": "Cần xử lý"
+      },
+      "connector": "Qua Marketplace",
+      "endsIn": "Kết thúc trong {hint}",
+      "noEvents": "Chưa có khách hàng tiềm năng nào",
+      "needsAttention": "{count, plural, other {# khách hàng tiềm năng}}"
+    },
+    "wizard": {
+      "title": "Nguồn khách hàng tiềm năng mới",
+      "description": "Thiết lập webhook để biến khách hàng tiềm năng gửi đến thành liên hệ.",
+      "back": "Quay lại Khách hàng tiềm năng từ mạng xã hội",
+      "stepsLabel": "Các bước tạo nguồn khách hàng tiềm năng",
+      "steps": {
+        "basics": "Thông tin cơ bản",
+        "rules": "Khách hàng tiềm năng được xử lý thế nào",
+        "connect": "Kết nối nguồn gửi",
+        "mapping": "Ánh xạ các trường"
+      },
+      "stepTitle": {
+        "basics": "Đặt tên nguồn",
+        "rules": "Khách hàng tiềm năng được xử lý thế nào",
+        "connect": "Kết nối nguồn gửi",
+        "mapping": "Ánh xạ các trường"
+      },
+      "stepHelp": {
+        "basics": "Cho biết nguồn này tên gì và dữ liệu khách hàng tiềm năng gốc được lưu bao lâu.",
+        "rules": "Chọn người phụ trách, thẻ, thương vụ và thông báo cho mỗi khách hàng tiềm năng gửi đến.",
+        "connect": "Nguồn đã được tạo. Hãy sao chép URL và token ngay: chúng chỉ hiển thị một lần.",
+        "mapping": "Cho chúng tôi biết mỗi giá trị nằm ở đâu trong dữ liệu công cụ của bạn gửi. Bản xem trước sẽ hiển thị kết quả khi bạn nhập."
+      },
+      "previous": "Quay lại",
+      "next": "Tiếp theo",
+      "cancel": "Hủy",
+      "create": "Tạo nguồn",
+      "created": "Đã tạo nguồn {name}",
+      "mappingSaved": "Đã lưu ánh xạ",
+      "planLimit": "Hạn mức nguồn khách hàng tiềm năng trong gói của bạn đã đạt tối đa, nên không thể tạo nguồn mới.",
+      "planLocked": "Gói của bạn không bao gồm khách hàng tiềm năng từ mạng xã hội.",
+      "upgrade": "Nâng cấp gói",
+      "skipMapping": "Bỏ qua bây giờ",
+      "finish": "Lưu và hoàn tất",
+      "revealGone": "URL và token không còn được hiển thị. Nếu bạn chưa lưu lại, hãy mở nguồn và đổi token để nhận URL mới.",
+      "toMapping": "Tiếp tục đến bước ánh xạ"
+    },
+    "form": {
+      "name": "Tên nguồn",
+      "nameHint": "Ví dụ Zapier: Facebook lead ads. Tên không được trùng nhau.",
+      "platform": "Nhãn nền tảng",
+      "platformHint": "Nguồn mà liên hệ của bạn hiển thị, ví dụ Facebook hoặc IndiaMART. Tối đa {max} ký tự.",
+      "platformPlaceholder": "Facebook",
+      "secret": {
+        "label": "Khóa bí mật dùng chung",
+        "isSet": "Đã đặt khóa bí mật dùng chung. Người gửi phải gửi khóa này trong tiêu đề X-Webhook-Secret.",
+        "notSet": "Chưa có khóa bí mật dùng chung. Bất kỳ ai có URL đều có thể gửi khách hàng tiềm năng.",
+        "willRemove": "Khóa bí mật dùng chung sẽ bị xóa khi bạn lưu.",
+        "willReplace": "Khóa bí mật dùng chung sẽ được thay thế khi bạn lưu.",
+        "willSet": "Khóa bí mật dùng chung sẽ được đặt khi bạn lưu.",
+        "newValue": "Khóa bí mật mới",
+        "hint": "Không bắt buộc. Từ {min} đến {max} ký tự. Sau khi lưu, khóa sẽ không hiển thị lại.",
+        "show": "Hiện khóa bí mật",
+        "hide": "Ẩn khóa bí mật",
+        "replace": "Thay thế",
+        "remove": "Xóa",
+        "keep": "Giữ khóa hiện tại"
+      },
+      "externalIdPath": "Đường dẫn mã khách hàng tiềm năng",
+      "externalIdPathHint": "Vị trí mã riêng của người gửi cho mỗi khách hàng tiềm năng trong dữ liệu, ví dụ lead.id. Giúp tránh thêm trùng một khách hàng tiềm năng hai lần. Không bắt buộc.",
+      "retention": "Giữ dữ liệu khách hàng tiềm năng thô trong (ngày)",
+      "retentionHint": "Sau thời gian này, dữ liệu đã lưu sẽ bị xóa; liên hệ vẫn được giữ. Từ 1 đến {max} ngày.",
+      "sections": {
+        "contact": "Liên hệ",
+        "owner": "Chủ sở hữu",
+        "deal": "Thương vụ",
+        "notify": "Thông báo"
+      },
+      "membersFailed": "Chúng tôi không tải được nhóm của bạn nên hiện chưa thể chọn người. Tải lại trang để thử lại.",
+      "countryCode": "Mã quốc gia mặc định",
+      "countryCodeHint": "Được thêm vào các số điện thoại gửi đến không có mã quốc gia, ví dụ 91. Nếu không đặt, số phải có sẵn mã quốc gia.",
+      "lifecycleStage": "Giai đoạn vòng đời ban đầu",
+      "lifecycleStageHint": "Giai đoạn mà liên hệ mới từ nguồn này bắt đầu.",
+      "lifecycleDefault": "Mặc định của không gian làm việc",
+      "tag": "Thẻ",
+      "tagHint": "Được gắn vào mọi liên hệ từ nguồn này. Để trống nếu không cần thẻ.",
+      "ownerMode": "Ai sở hữu liên hệ",
+      "ownerModeHint": "Chỉ áp dụng cho liên hệ chưa có chủ sở hữu.",
+      "ownerModes": {
+        "unassigned": "Không ai (chưa phân công)",
+        "fixed": "Một người",
+        "round_robin": "Luân phiên giữa các người"
+      },
+      "ownerFixed": "Chủ sở hữu",
+      "ownerChoose": "Chọn một người",
+      "unknownMember": "Người không còn khả dụng",
+      "ownerRoundRobin": "Những người luân phiên",
+      "ownerRoundRobinHint": "Chọn ít nhất hai người. Khách hàng tiềm năng sẽ được chia lần lượt cho từng người; người không còn hoạt động sẽ được bỏ qua.",
+      "pickMembers": "Chọn người",
+      "noMembers": "Không còn ai để chọn",
+      "removeMember": "Xóa {name}",
+      "dealEnabled": "Tạo thương vụ cho mỗi liên hệ mới",
+      "dealEnabledHint": "Tắt cho đến khi bạn bật. Liên hệ đã có thương vụ đang mở sẽ không được tạo thêm.",
+      "pipelinesFailed": "Chúng tôi không tải được các phễu bán hàng. Hiện chưa thể chọn phễu và giai đoạn.",
+      "pipeline": "Phễu",
+      "pipelineDefault": "Phễu mặc định của không gian làm việc",
+      "dealStage": "Giai đoạn",
+      "dealStageNeedsPipeline": "Hãy chọn phễu trước để chọn giai đoạn.",
+      "dealStageFirst": "Giai đoạn đầu tiên của phễu",
+      "dealTitle": "Tiêu đề thương vụ",
+      "dealTitleHint": "Các mục này được điền từ khách hàng tiềm năng: {tokens}.",
+      "notifyOwner": "Thông báo cho chủ sở hữu liên hệ",
+      "notifyOwnerHint": "Thông báo trong ứng dụng khi có khách hàng tiềm năng mới. Khách hàng thử nghiệm sẽ không gửi thông báo.",
+      "notifyUsers": "Thông báo thêm cho",
+      "notifyUsersHint": "Ví dụ trưởng nhóm bán hàng. Tối đa 20 người."
+    },
+    "mapping": {
+      "contact": "Trường liên hệ",
+      "contactHelp": "Nhập khóa (phone_number) hoặc đường dẫn (lead.contact.phone, answers[0].value). Để trống một ô để tìm theo tên thông dụng.",
+      "fields": {
+        "name": "Họ và tên",
+        "firstName": "Tên",
+        "lastName": "Họ",
+        "email": "Email",
+        "phone": "Điện thoại"
+      },
+      "defaults": {
+        "name": "Tìm full_name, name, contact_name",
+        "firstName": "Tìm first_name, firstname",
+        "lastName": "Tìm last_name, lastname",
+        "email": "Tìm email, email_address, mail",
+        "phone": "Tìm phone, mobile, phone_number, whatsapp"
+      },
+      "custom": "Thuộc tính tùy chỉnh",
+      "customHelp": "Điền thuộc tính liên hệ của riêng bạn từ dữ liệu mà công cụ của bạn gửi.",
+      "propertiesFailed": "Chúng tôi không tải được thuộc tính liên hệ, vì vậy hãy nhập khóa thuộc tính.",
+      "property": "Thuộc tính liên hệ",
+      "propertyChoose": "Chọn thuộc tính",
+      "path": "Đường dẫn trong payload",
+      "removeRow": "Xóa thuộc tính tùy chỉnh {number}",
+      "remove": "Xóa",
+      "addRow": "Thêm thuộc tính tùy chỉnh",
+      "attribution": "Nguồn gốc",
+      "attributionHelp": "Vị trí chứa thông tin chiến dịch. Mục nào để trống sẽ được tìm theo chính tên của nó.",
+      "attributionFields": {
+        "platform": "Nền tảng",
+        "campaign": "Chiến dịch",
+        "adset": "Nhóm quảng cáo",
+        "ad": "Quảng cáo",
+        "form": "Biểu mẫu"
+      },
+      "attributionDefaults": {
+        "platform": "Tìm platform, utm_source",
+        "campaign": "Tìm campaign, utm_campaign",
+        "adset": "Tìm adset, adgroup",
+        "ad": "Tìm ad",
+        "form": "Tìm form"
+      }
+    },
+    "preview": {
+      "title": "Xem trước trực tiếp",
+      "updating": "Đang cập nhật",
+      "help": "Kết quả ánh xạ ở trên sẽ tạo ra gì từ khách hàng tiềm năng. Xem trước không lưu hay tạo bất cứ thứ gì.",
+      "paste": "Dán khách hàng tiềm năng mẫu (JSON)",
+      "pasteHint": "Một đối tượng, tối đa 64 KB.",
+      "pasteProblems": {
+        "empty": "Dán JSON mà công cụ của bạn gửi.",
+        "invalidJson": "Đây không phải JSON hợp lệ. Hãy kiểm tra dấu ngoặc kép, dấu phẩy hoặc dấu ngoặc còn thiếu.",
+        "notObject": "Khách hàng tiềm năng phải là một đối tượng JSON: tập hợp các khóa và giá trị nằm giữa dấu ngoặc nhọn.",
+        "tooLarge": "Vượt quá 64 KB."
+      },
+      "useLast": "Dùng khách hàng tiềm năng gần nhất chúng tôi nhận được",
+      "pickStored": "Hoặc chọn một khách hàng tiềm năng đã lưu",
+      "storedOption": "{id} ({status})",
+      "auditNote": "Việc đọc một khách hàng tiềm năng đã lưu được ghi vào nhật ký kiểm tra. Mẫu đã dán thì không.",
+      "fixDraft": "Hãy sửa các trường ánh xạ được tô sáng để xem bản xem trước.",
+      "choose": "Dán một mẫu hoặc dùng khách hàng tiềm năng gần nhất để xem kết quả.",
+      "loading": "Đang đọc khách hàng tiềm năng",
+      "none": "Chưa nhận khách hàng tiềm năng nào: hãy dán một mẫu.",
+      "usable": "Khách hàng tiềm năng này sẽ được xử lý",
+      "notUsable": "Khách hàng tiềm năng này cần được xem xét",
+      "basedOnEvent": "Từ khách hàng tiềm năng đã lưu",
+      "basedOnPayload": "Từ mẫu của bạn",
+      "externalId": "mã {id}",
+      "reasonsLabel": "Lý do",
+      "reasons": {
+        "no_payload": "Chưa có khách hàng tiềm năng để đọc.",
+        "no_contact_point": "Không tìm thấy email và số điện thoại.",
+        "invalid_phone": "Tìm thấy số điện thoại nhưng không đọc được thành số, và không có email.",
+        "phone_unreadable": "Không đọc được số điện thoại thành số; sẽ dùng email.",
+        "email_invalid": "Email không hợp lệ nên sẽ bị bỏ qua."
+      },
+      "contact": {
+        "name": "Tên",
+        "firstName": "Tên",
+        "lastName": "Họ",
+        "email": "Email",
+        "phone": "Điện thoại"
+      },
+      "empty": "Không tìm thấy",
+      "phoneUnreadable": "Không đọc được thành số",
+      "attribution": {
+        "platform": "Nền tảng",
+        "campaign": "Chiến dịch",
+        "adset": "Nhóm quảng cáo",
+        "ad": "Quảng cáo",
+        "form": "Biểu mẫu"
+      },
+      "paths": "Các trường trong khách hàng tiềm năng này",
+      "pathsPick": "Nhấn vào một trường để điền: {field}",
+      "pathsFocusFirst": "Hãy nhấn vào một ô ánh xạ trước, rồi nhấn vào một trường để điền vào ô đó.",
+      "pathsMore": "{count, plural, other {# trường khác}}"
+    },
+    "reveal": {
+      "titleCreated": "Sao chép URL và token của bạn ngay bây giờ",
+      "titleRotated": "URL và token mới của bạn",
+      "bodyCreated": "Đây là lần duy nhất chúng được hiển thị. Chúng tôi chỉ giữ dấu vân tay, nên không thể hiển thị lại.",
+      "bodyRotated": "URL cũ đã ngừng hoạt động ngay. URL mới này chỉ được hiển thị lần này.",
+      "url": "URL webhook",
+      "copyUrl": "Sao chép URL",
+      "noOrigin": "Đặt địa chỉ API của bạn trước đường dẫn này để có URL đầy đủ.",
+      "token": "Token",
+      "copyToken": "Sao chép token",
+      "secretHint": "Nguồn này cũng cần khóa bí mật dùng chung: người gửi phải gửi khóa trong tiêu đề {header}.",
+      "sample": "Thử từ terminal",
+      "sampleHelp": "Trong Zapier hoặc Make, dùng hành động Webhooks để gửi JSON đến URL. Lệnh này gửi một khách hàng tiềm năng mẫu.",
+      "copied": "Tôi đã sao chép URL và token vào nơi an toàn",
+      "done": "Tôi đã sao chép, tiếp tục",
+      "doneHint": "Hãy tick vào ô trước. Sau bước này sẽ không thể hiển thị lại token."
+    },
+    "test": {
+      "title": "Gửi khách hàng tiềm năng thử nghiệm",
+      "help": "Gửi một khách hàng tiềm năng mẫu qua quy trình thật, được đánh dấu là thử nghiệm. Thao tác này tạo một liên hệ thật mà bạn có thể xóa, và không ai nhận thông báo.",
+      "paused": "Nguồn này đang tạm dừng. Hãy tiếp tục để gửi khách hàng tiềm năng thử nghiệm.",
+      "useSample": "Dùng khách hàng tiềm năng mẫu thay thế",
+      "useOwn": "Gửi payload của tôi",
+      "payload": "Payload (JSON)",
+      "payloadHint": "Một đối tượng, tối đa 64 KB.",
+      "payloadProblems": {
+        "empty": "Dán JSON cần gửi, hoặc dùng khách hàng tiềm năng mẫu.",
+        "invalidJson": "Đây không phải JSON hợp lệ. Hãy kiểm tra dấu ngoặc kép, dấu phẩy hoặc dấu ngoặc còn thiếu.",
+        "notObject": "Khách hàng tiềm năng phải là một đối tượng JSON: tập hợp các khóa và giá trị nằm giữa dấu ngoặc nhọn.",
+        "tooLarge": "Vượt quá 64 KB."
+      },
+      "send": "Gửi khách hàng tiềm năng thử nghiệm",
+      "needsManage": "Gửi khách hàng tiềm năng thử nghiệm cần quyền leads.sources.manage.",
+      "result": "Kết quả",
+      "flag": "Thử nghiệm",
+      "openContact": "Mở liên hệ"
+    },
+    "watch": {
+      "waiting": "Đang chờ khách hàng tiềm năng đầu tiên. Dán URL vào công cụ của bạn và gửi một khách hàng tiềm năng.",
+      "received": "Đã nhận khách hàng tiềm năng đầu tiên:",
+      "error": "Hiện chúng tôi không kiểm tra được khách hàng tiềm năng."
+    },
+    "detail": {
+      "loading": "Đang tải nguồn",
+      "backToList": "Quay lại danh sách nguồn",
+      "pageTitle": "Nguồn khách hàng tiềm năng",
+      "needsAttention": "{count, plural, other {# khách hàng tiềm năng cần xử lý}}",
+      "lastEvent": "Khách hàng tiềm năng gần nhất",
+      "noEvents": "chưa có",
+      "pause": "Tạm dừng",
+      "resume": "Tiếp tục",
+      "rotate": "Đổi token",
+      "delete": "Xóa",
+      "conflict": "Người khác vừa thay đổi nguồn này. Tải lại để xem phiên bản của họ; các chỉnh sửa chưa lưu của bạn sẽ mất.",
+      "reload": "Tải lại",
+      "connection": "Kết nối",
+      "connector": "Kết nối qua Marketplace. Nguồn này không có URL hay token riêng; khách hàng tiềm năng đến qua ứng dụng đã cài đặt.",
+      "connectorLink": "Mở ứng dụng đã cài đặt",
+      "endsIn": "Token của URL kết thúc bằng {hint}",
+      "noHint": "Không có token nào được ghi nhận.",
+      "urlOnce": "URL đầy đủ đã được hiển thị một lần khi tạo nguồn. Để lấy URL mới, hãy đổi token.",
+      "secretYes": "Đã đặt khóa bí mật dùng chung: người gửi phải gửi khóa trong tiêu đề X-Webhook-Secret.",
+      "secretNo": "Chưa đặt khóa bí mật dùng chung.",
+      "pausedNote": "Nguồn này đang tạm dừng: URL của nó trả về 404, nên người gửi sẽ thấy lỗi cho đến khi bạn tiếp tục.",
+      "settings": "Cài đặt",
+      "settingsHelp": "Thay đổi áp dụng cho khách hàng tiềm năng đến sau khi bạn lưu. Thử lại khách hàng tiềm năng cũ sẽ dùng cài đặt hiện tại.",
+      "basics": "Thông tin cơ bản",
+      "rules": "Điều gì xảy ra với khách hàng tiềm năng",
+      "mapping": "Ánh xạ trường",
+      "unsaved": "Bạn có thay đổi chưa lưu",
+      "discard": "Hủy thay đổi",
+      "save": "Lưu thay đổi",
+      "saved": "Đã lưu thay đổi",
+      "pausedToast": "Đã tạm dừng nguồn",
+      "resumedToast": "Đã tiếp tục nguồn",
+      "deletedToast": "Đã xóa nguồn {name}",
+      "confirm": {
+        "cancel": "Hủy",
+        "pause": {
+          "title": "Tạm dừng nguồn này?",
+          "body": "Khi tạm dừng, URL của nguồn sẽ trả về 404 và khách hàng tiềm năng gửi đến sẽ không được nhận. Bạn có thể tiếp tục bất cứ lúc nào.",
+          "action": "Tạm dừng nguồn"
+        },
+        "rotate": {
+          "title": "Đổi token?",
+          "body": "URL hiện tại sẽ ngừng hoạt động ngay, vì vậy hãy cập nhật công cụ của bạn bằng URL mới. URL mới chỉ được hiển thị một lần.",
+          "action": "Đổi token"
+        },
+        "delete": {
+          "title": "Xóa {name}?",
+          "body": "URL của nguồn sẽ ngừng hoạt động và các khách hàng tiềm năng đã lưu sẽ bị xóa cùng. Các liên hệ đã tạo vẫn được giữ. Không thể hoàn tác.",
+          "action": "Xóa nguồn"
+        }
+      }
+    },
+    "events": {
+      "title": "Khách hàng tiềm năng đã nhận",
+      "help": "Mọi khách hàng tiềm năng đến nguồn này và kết quả của chúng. Mới nhất trước.",
+      "filterStatus": "Hiển thị",
+      "filterTests": "Thử nghiệm",
+      "attentionTitle": "{count, plural, other {# khách hàng tiềm năng cần xử lý}}",
+      "attentionGroup": "{count, plural, other {# khách hàng tiềm năng:}}",
+      "showAttention": "Chỉ hiển thị các khách hàng tiềm năng này",
+      "loading": "Đang tải khách hàng tiềm năng",
+      "emptyTitle": "Chưa có khách hàng tiềm năng",
+      "empty": "Gửi một khách hàng tiềm năng thử nghiệm hoặc dán URL vào công cụ của bạn.",
+      "emptyFilteredTitle": "Không có khách hàng tiềm năng phù hợp",
+      "emptyFiltered": "Không có khách hàng tiềm năng nào khớp với bộ lọc này.",
+      "clearFilters": "Xóa bộ lọc",
+      "col": {
+        "status": "Trạng thái",
+        "lead": "Khách hàng tiềm năng",
+        "result": "Điều gì đã xảy ra",
+        "links": "Đã thành",
+        "received": "Đã nhận",
+        "actions": "Thao tác"
+      },
+      "loadMore": "Tải thêm",
+      "test": "Thử nghiệm",
+      "attempts": "{count, plural, other {# lần thử}}",
+      "deliveredAgain": "{count, plural, other {Đã gửi lại # lần}}",
+      "contact": "Liên hệ",
+      "deal": "Thương vụ",
+      "retry": "Thử lại",
+      "open": "Mở",
+      "retriedToast": "Đã thử lại: hiện là {status}"
+    },
+    "event": {
+      "title": "Chi tiết khách hàng tiềm năng",
+      "close": "Đóng",
+      "retry": "Thử lại khách hàng tiềm năng này",
+      "auditNote": "Việc mở payload được ghi vào nhật ký kiểm tra.",
+      "externalId": "Mã khách hàng tiềm năng",
+      "test": "Thử nghiệm",
+      "received": "Đã nhận",
+      "processed": "Đã xử lý",
+      "notProcessed": "chưa",
+      "attempts": "Số lần thử",
+      "duplicates": "Lần gửi lặp lại",
+      "deliveredAgain": "{count, plural, other {Đã gửi lại # lần}}",
+      "reason": "Lý do",
+      "contact": "Liên hệ",
+      "openContact": "Mở liên hệ",
+      "deal": "Thương vụ",
+      "openDeal": "Mở thương vụ",
+      "error": "Lỗi",
+      "retried": "Đã thử lại. Khách hàng tiềm năng hiện là",
+      "payload": "Payload đã lưu",
+      "loadingPayload": "Đang mở payload",
+      "purged": "Payload thô đã bị xóa sau {days} ngày. Khách hàng tiềm năng và liên hệ của nó vẫn được giữ."
+    },
+    "attribution": {
+      "title": "Nguồn gốc khách hàng tiềm năng",
+      "first": "Lần chạm đầu tiên",
+      "latest": "Lần chạm gần nhất",
+      "firstAndLatest": "Lần chạm đầu tiên và gần nhất",
+      "total": "{count} lần chạm tổng cộng",
+      "platform": "Nền tảng",
+      "source": "Nguồn",
+      "fields": {
+        "campaign": "Chiến dịch",
+        "adset": "Nhóm quảng cáo",
+        "ad": "Quảng cáo",
+        "form": "Biểu mẫu"
+      },
+      "capturedAt": "Thu nhận",
+      "openSource": "Mở nguồn khách hàng tiềm năng"
+    }
+  }
+}

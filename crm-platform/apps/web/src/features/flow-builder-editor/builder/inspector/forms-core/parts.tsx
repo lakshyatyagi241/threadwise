@@ -1,10 +1,11 @@
 'use client';
 
 import type { ReactNode } from 'react';
+import { useTranslations } from 'next-intl';
 import { cn } from '@crm/ui';
 import { controlClass, IconButton, XIcon } from '../kit';
 import type { FormEnv } from '../types';
-import type { LinkedCopy } from './helpers';
+import type { HelperT, LinkedCopy } from './helpers';
 
 /** Small building blocks shared by the core node forms. */
 
@@ -48,13 +49,16 @@ export function Link({
 
 /** "text <link> text" copy where the link is the path itself. */
 export function LinkedText({ copy, strong }: { copy: LinkedCopy; strong?: boolean }) {
+  const t = useTranslations('flb.builder.formsCore.helpers');
   return (
     <>
-      {copy.before}
-      <Link href={copy.href} strong={strong}>
-        {copy.href}
-      </Link>
-      {copy.after}
+      {t.rich(copy.key, {
+        link: () => (
+          <Link href={copy.href} strong={strong}>
+            {copy.href}
+          </Link>
+        ),
+      })}
     </>
   );
 }
@@ -103,18 +107,19 @@ export function CardHeader({
   onMove: (dir: -1 | 1) => void;
   onRemove: () => void;
 }) {
+  const t = useTranslations('flb.builder.formsCore.parts');
   return (
     <div className="flex items-center gap-2 border-b border-border bg-muted/60 px-3 py-2">
       <span className="font-mono text-[10px] text-muted-foreground">{index + 1}.</span>
       {children}
       <div className="flex-1" />
-      <IconButton title="Move up" disabled={isFirst} onClick={() => onMove(-1)}>
+      <IconButton title={t('moveUp')} disabled={isFirst} onClick={() => onMove(-1)}>
         <UpIcon />
       </IconButton>
-      <IconButton title="Move down" disabled={isLast} onClick={() => onMove(1)}>
+      <IconButton title={t('moveDown')} disabled={isLast} onClick={() => onMove(1)}>
         <DownIcon />
       </IconButton>
-      <IconButton title="Remove" danger onClick={onRemove}>
+      <IconButton title={t('remove')} danger onClick={onRemove}>
         <XIcon />
       </IconButton>
     </div>
@@ -133,6 +138,7 @@ export function OptionRow({
   onChange: (v: string) => void;
   onRemove: () => void;
 }) {
+  const t = useTranslations('flb.builder.formsCore.parts');
   return (
     <div className="mb-1.5 flex items-center gap-2">
       <span className="w-5 font-mono text-[10px] text-muted-foreground">{index + 1}.</span>
@@ -145,7 +151,7 @@ export function OptionRow({
       <button
         type="button"
         onClick={onRemove}
-        title="Remove"
+        title={t('remove')}
         className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-[#E87A5D] hover:bg-[#E87A5D]/15"
       >
         <XIcon />
@@ -224,8 +230,12 @@ export function UploadBox({
   );
 }
 
-/** Uploads through the builder and reports a failure as WaDesk's "Upload failed: <message>" toast. */
+/**
+ * Uploads through the builder and reports a failure as WaDesk's "Upload failed: <message>" toast.
+ * `t` is the `flb.builder.formsCore.parts` translator of the calling form.
+ */
 export function uploadFile(
+  t: HelperT,
   env: FormEnv,
   file: File,
   kind: 'image' | 'video' | 'audio' | 'document',
@@ -237,7 +247,7 @@ export function uploadFile(
       if (res.url) onDone({ url: res.url, filename: res.filename || file.name });
     })
     .catch((err: unknown) => {
-      env.toast(`Upload failed: ${err instanceof Error ? err.message : String(err)}`);
+      env.toast(t('uploadFailed', { message: err instanceof Error ? err.message : String(err) }));
     });
 }
 
@@ -253,6 +263,7 @@ export function UploadedFile({
   filename: string;
   size?: 'sm' | 'md';
 }) {
+  const t = useTranslations('flb.builder.formsCore.parts');
   const box = size === 'md' ? 'h-16 w-16' : 'h-14 w-14';
   return (
     <div className="mt-2 flex items-start gap-2">
@@ -269,7 +280,9 @@ export function UploadedFile({
         </span>
       )}
       <div className="min-w-0 flex-1">
-        <div className="truncate text-[11px] text-foreground/80">{filename || 'uploaded'}</div>
+        <div className="truncate text-[11px] text-foreground/80">
+          {filename || t('uploadedFallback')}
+        </div>
         <a
           href={url}
           target="_blank"

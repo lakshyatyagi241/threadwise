@@ -1,0 +1,316 @@
+{
+  "aiTraining": {
+    "nav": {
+      "title": "Yapay zekâ eğitimi"
+    },
+    "common": {
+      "dismiss": "Gizle"
+    },
+    "paywall": {
+      "kicker": "Plan",
+      "title": "Yapay zekâ eğitimi planınızda yok",
+      "body": "Planınız yapay zekâ asistanlarını içermiyor. Bu özelliğin kilidini açmak için yükseltin.",
+      "upgrade": "Planları gör"
+    },
+    "responder": {
+      "title": "WhatsApp'ınızı kim yanıtlıyor?",
+      "body": "Meta'nın kendi Business Agent'ını açarsanız yapay zekâmız ve anahtar kelimeli otomatik yanıtlar bu çalışma alanı için devre dışı kalır; böylece müşteriniz aynı mesaja asla iki yanıt almaz.",
+      "metaCheck": "Meta Business Agent kullanıyorum",
+      "mode": {
+        "wadesk_only": {
+          "label": "Yapay zekâmız yanıtlar",
+          "desc": "Yapay zekâmız ve anahtar kelimeli otomatik yanıtlar sohbetleri yönetir (varsayılan)."
+        },
+        "meta_agent_only": {
+          "label": "Meta agent yanıtlar",
+          "desc": "Meta'nın Business Agent'ı yanıtlar. Biz yalnızca konuşmayı kaydederiz, yapay zekâmız sessiz kalır."
+        },
+        "meta_agent_then_handoff": {
+          "label": "Meta agent, ardından devir",
+          "desc": "İlk soruları Meta karşılar. Yükselttiğinde sohbet, bir kişi için Ekip gelen kutunuza düşer. Otomatik yapay zekâmız sessiz kalır."
+        }
+      },
+      "save": "Kaydet",
+      "hint": "Meta'nın agent'ı için bir WhatsApp Business (Cloud API) numarası gerekir. Resmî olmayan altyapıdaki numaralar her zaman yapay zekâmızı kullanır.",
+      "readOnly": "Bu ayarı görebilirsiniz ancak değiştiremezsiniz.",
+      "saved": "Yapay zekâ yanıtlayıcı modu kaydedildi.",
+      "saveFailed": "Yanıtlayıcı modu kaydedilemedi.",
+      "loadError": "Yanıtlayıcı modu yüklenemedi.",
+      "retry": "Tekrar dene",
+      "loading": "Yanıtlayıcı modu yükleniyor"
+    },
+    "list": {
+      "tip": "İpucu",
+      "tipBody": "Akıllı agent'lar <link>sohbet widget'larınıza</link> ve akışlarınızın yapay zekâ adımına güç verir. Beş adımlı oluşturucu sizi kimlik, kişilik, beyin, güvenlik ve bilgi aşamalarında yönlendirir.",
+      "statusViews": "Agent durumu",
+      "view": {
+        "all": "Tüm agent'lar",
+        "active": "Etkin",
+        "paused": "Duraklatıldı"
+      },
+      "status": {
+        "all": "Tümü",
+        "active": "Etkin",
+        "paused": "Duraklatıldı"
+      },
+      "knowledgeTip": "Bilgi ipucu",
+      "knowledgeTipBody": "Genellikle tek bir SSS sorusu ve yanıtı yeterlidir. Birkaç yardım sayfası URL'si destek sorularının çoğunu karşılar, tüm sitenizi yüklemenize gerek yok.",
+      "workspace": "Çalışma alanı",
+      "title": "Yapay zekâ",
+      "titleAccent": "Eğitimi",
+      "intro": "Markanızın sesiyle konuşan akıllı agent'lar oluşturun. Onları URL'ler, metin, soru-yanıt çiftleri ve dosyalarla eğitin.",
+      "activePill": "{count} etkin",
+      "newAgent": "Yeni akıllı agent",
+      "card": {
+        "total": "Toplam agent",
+        "knowledge": "Bilgi girdileri",
+        "avg": "Ort. / agent",
+        "health": "Sağlık",
+        "activeHint": "{count} etkin",
+        "indexedHint": "{count} dizine eklendi",
+        "entriesUnit": "girdi"
+      },
+      "health": {
+        "healthy": "sağlıklı",
+        "empty": "boş",
+        "attention": "dikkat"
+      },
+      "col": {
+        "agent": "Agent",
+        "provider": "Sağlayıcı",
+        "knowledge": "Bilgi",
+        "tone": "Ton",
+        "updated": "Güncelleme",
+        "actions": "İşlemler"
+      },
+      "search": "Ada veya kısa ada göre ara…",
+      "loading": "Agent'lar yükleniyor",
+      "loadError": "Agent'lar yüklenemedi",
+      "retry": "Tekrar dene",
+      "emptyTitle": "Henüz akıllı agent yok",
+      "emptyBody": "İlk agent'ınızı oluşturun. Beş adımlı oluşturucu sizi kimlik, kişilik, beyin, güvenlik ve sahip olması gereken bilgi aşamalarında yönlendirir.",
+      "buildAgent": "Akıllı agent oluştur",
+      "noMatch": "Aramanızla veya durum görünümünüzle eşleşen agent yok.",
+      "entries": "{count, plural, one {# girdi} other {# girdi}}",
+      "edit": "Agent'ı düzenle",
+      "editNamed": "{name} öğesini düzenle",
+      "duplicate": "Agent'ı çoğalt",
+      "duplicateNamed": "{name} öğesini çoğalt",
+      "deleteAgent": "Agent'ı sil",
+      "deleteNamed": "{name} öğesini sil",
+      "deleteTitle": "\"{name}\" silinsin mi?",
+      "deleteBody": "Agent ve bilgi girdileri kaldırılacak. Bu agent'ı kullanan widget'lar ve akışlar, başka bir agent seçene kadar yanıt vermeyi bırakacak.",
+      "delete": "Agent'ı sil",
+      "keep": "Koru",
+      "deleted": "Agent silindi.",
+      "deleteFailed": "Silme başarısız oldu: {reason}",
+      "duplicateFailed": "Agent çoğaltılamadı.",
+      "networkError": "ağ hatası",
+      "showing": "Gösterilen",
+      "of": "/",
+      "agentsCount": "{count, plural, one {# agent} other {# agent}}",
+      "loadMore": "Daha fazla yükle"
+    },
+    "builder": {
+      "back": "Yapay zekâ eğitimine dön",
+      "crumb": "Yapay zekâ eğitimi",
+      "crumbNew": "Yeni",
+      "crumbEdit": "Düzenle",
+      "titleNew": "Akıllı agent",
+      "titleEdit": "Akıllı agent'ı düzenle",
+      "titleAccent": "oluştur",
+      "stateSaved": "Kaydedildi",
+      "stateDraft": "Taslak / kaydedilmedi",
+      "saveDraft": "Taslağı kaydet",
+      "stepper": "Oluşturucu adımları",
+      "steps": {
+        "identity": "Kimlik",
+        "persona": "Kişilik",
+        "brain": "Beyin",
+        "safety": "Güvenlik",
+        "knowledge": "Bilgi"
+      },
+      "stepOf": "Adım {n} / {total}",
+      "previous": "Önceki",
+      "next": "Sonraki",
+      "finish": "Bitir ve kapat",
+      "loading": "Agent yükleniyor",
+      "loadError": "Agent yüklenemedi",
+      "notFoundTitle": "Agent bulunamadı",
+      "notFoundBody": "Bu agent çalışma alanınızda yok veya silinmiş.",
+      "backToList": "Yapay zekâ eğitimine dön",
+      "saved": "Agent kaydedildi.",
+      "saveFailed": "Kaydetme başarısız oldu. Alanları kontrol edip tekrar deneyin.",
+      "conflict": "Bu agent başka bir yerde değiştirildi. En son sürümü almak için sayfayı yenileyin, ardından tekrar kaydedin.",
+      "problem": {
+        "name": "Asistanınıza bir ad verin.",
+        "greeting": "Bir açılış cümlesi yazın.",
+        "model": "Bir model seçin.",
+        "tokens": "Yanıt uzunluğu 50–4000 token olmalıdır.",
+        "temperature": "Yaratıcılık 0 ile 2 arasında olmalıdır."
+      },
+      "identity": {
+        "title": "Agent kimliği",
+        "required": "zorunlu",
+        "name": "Agent görünen adı",
+        "namePlaceholder": "örn. Fiyatlandırma danışmanı",
+        "nameHint": "Kayıtlarınız için. Ziyaretçiler bu etiketi görmez.",
+        "status": "Kullanıma alma durumu",
+        "statusActive": "Canlı: bu agent'ı widget'larda ve akışlarda seçin",
+        "statusPaused": "Duraklatıldı: seçicilerden gizle",
+        "statusHint": "Duraklatılan agent'lar listede kalır ancak yeni widget'lara eklenemez.",
+        "language": "Tercih edilen dil",
+        "languageHint": "ISO 639-1 kodu. Farklı olduğunda ziyaretçinin diliyle eşleşir.",
+        "tone": "Konuşma tonu",
+        "toneHint": "Kişilik özetinden bağımsız olarak yazım stilini belirler.",
+        "tones": {
+          "helpful": "Yardımsever · sakin ve konuya odaklı",
+          "friendly": "Samimi · sıcak ve rahat",
+          "formal": "Resmî · tarafsız ve kesin",
+          "playful": "Eğlenceli · hafif ve esprili"
+        }
+      },
+      "persona": {
+        "title": "Kişilik ve açılış cümlesi",
+        "tag": "içerik",
+        "greeting": "Açılış cümlesi",
+        "greetingPlaceholder": "Merhaba! Yardım etmek için buradayım. Fiyatlandırma veya planlar hakkında bana her şeyi sorabilirsiniz.",
+        "greetingHint": "Ziyaretçiye görünür. Sohbet açıldığında ilk balon olarak gösterilir.",
+        "brief": "Karakter özeti (sistem talimatları)",
+        "briefPlaceholder": "Acme Inc. için samimi destek agent'ısınız. Her zaman kısa cümlelerle yanıt verin ve geri ödemelerle ilgili her konuda bir kişiye devredin.",
+        "briefHint": "Dahilidir, ziyaretçilere asla gösterilmez. Yapılacakları, yapılmayacakları ve yükseltme kurallarını ekleyin."
+      },
+      "brain": {
+        "title": "Model ve yanıt denetimleri",
+        "tag": "beyin",
+        "provider": "Model sağlayıcı",
+        "providerHint": "Sağlayıcı anahtarlarını yöneticiniz ayarlar. İzin veren planlarda, kendi anahtarınızı eklediğiniz sağlayıcılar da görünür.",
+        "notEnabled": "{name} (etkin değil)",
+        "model": "Model adı",
+        "modelHint": "Sizin için etkinleştirilmiş modellerden birini seçin veya başka bir model kimliği yazın.",
+        "noModels": "Çalışma alanınız için henüz etkin bir yapay zekâ modeli yok. Yöneticinizden birini açmasını isteyin veya Ayarlar, Yapay zekâ anahtarları altına kendi anahtarınızı ekleyin.",
+        "tokens": "Yanıt uzunluğu bütçesi (token)",
+        "tokensHint": "Yaklaşık 1 token 4 karakterdir. 400, bir paragrafa yeter.",
+        "temperature": "Yaratıcılık (0 = katı, 2 = serbest)",
+        "temperatureHint": "Düşük değer tutarlı ve olgusal olur. Yüksek değer çeşitli ifadeler verir."
+      },
+      "safety": {
+        "title": "Yedek yanıt ve kişiye devir",
+        "tag": "güvenlik",
+        "fallback": "Yedek yanıt (model hata verdiğinde kullanılır)",
+        "fallbackPlaceholder": "Bir ekip arkadaşımız kısa süre içinde sizinle iletişime geçecek. Sabrınız için teşekkürler.",
+        "fallbackHint": "Model hiçbir şey döndürmezse veya çağrı başarısız olursa yazıldığı gibi gönderilir.",
+        "handoff": "Kişiye devri etkinleştir",
+        "handoffHint": "Ziyaretçi tetikleyici ifadeyi yazar, agent yanıt vermeyi bırakır ve ekip gelen kutunuz bildirim alır.",
+        "keyword": "Tetikleyici ifade",
+        "keywordPlaceholder": "yetkiliyle konuşmak istiyorum",
+        "keywordHint": "Ziyaretçi bunu bir mesajın herhangi bir yerinde yazdığında devir tetiklenir.",
+        "ack": "Devir onay mesajı",
+        "ackPlaceholder": "Tabii, hemen bir ekip arkadaşımızı çağırıyorum. Hatta kalın.",
+        "ackHint": "Agent sessizleşmeden önceki son mesaj."
+      }
+    },
+    "knowledge": {
+      "title": "Agent'ı eğitin",
+      "tag": "bilgi",
+      "saveFirst": "Önce agent'ı kaydedin. Bilgi girdileri kaydedilmiş bir agent'a eklenir.",
+      "addLabel": "Bilgi ekle",
+      "add": {
+        "url": {
+          "title": "Canlı URL",
+          "body": "Herkese açık bir sayfayı alın ve metnini saklayın."
+        },
+        "text": {
+          "title": "Serbest metin",
+          "body": "Bir yardım parçasını veya politikayı yapıştırın."
+        },
+        "qa": {
+          "title": "Soru-yanıt çifti",
+          "body": "Bir soru ve onun asıl yanıtı."
+        },
+        "file": {
+          "title": "PDF, DOCX, TXT ve diğerleri",
+          "body": "Bir dosya yükleyin. Metin sizin için ayıklanır."
+        }
+      },
+      "panel": {
+        "url": "Herkese açık bir URL al",
+        "text": "Düz metin yapıştır",
+        "qa": "Tekli soru-yanıt",
+        "file": "Bilgi dosyası yükle"
+      },
+      "label": "Etiket",
+      "url": "URL",
+      "content": "Metin",
+      "question": "Soru",
+      "answer": "Yanıt",
+      "file": "Dosya",
+      "placeholder": {
+        "label": {
+          "url": "Etiket (örn. Fiyatlandırma sayfası)",
+          "text": "Etiket (örn. Geri ödeme politikası özeti)",
+          "qa": "Etiket (örn. Geri ödeme süresi)",
+          "file": "Etiket (örn. Ürün el kitabı)"
+        },
+        "content": "Agent'ın bilmesi gereken herhangi bir metni yapıştırın…",
+        "question": "Soru, örn. Geri ödemeler ne kadar sürer?",
+        "answer": "Yanıt, örn. Geri ödemeler 3 ila 5 iş günü içinde tamamlanır."
+      },
+      "urlHint": "Yalnızca herkese açık http ve https sayfaları okunur. Sayfa arka planda alınır, bu yüzden girdi bir süre İşleniyor olarak görünür.",
+      "fileHint": "PDF, DOCX, TXT, Markdown, CSV veya HTML, en fazla 10 MB. Metin otomatik olarak ayıklanır.",
+      "uploading": "Yükleme ilerlemesi",
+      "submit": {
+        "url": "Al ve eğit",
+        "text": "Metni kaydet",
+        "qa": "Çifti kaydet",
+        "file": "Yükle"
+      },
+      "cancel": "İptal",
+      "added": "Bilgi eklendi.",
+      "addFailed": "Girdi eklenemedi.",
+      "problem": {
+        "label": "Bu girdiyi daha sonra bulabilmek için bir etiket ekleyin.",
+        "url": "Sayfa adresini ekleyin.",
+        "content": "Önce biraz metin yapıştırın.",
+        "question": "Soruyu ekleyin.",
+        "answer": "Yanıtı ekleyin.",
+        "file": "Bir dosya seçin (PDF, DOCX, TXT, Markdown, CSV veya HTML).",
+        "file_type": "Kabul edilen dosya türleri: TXT, Markdown, CSV, HTML, PDF, DOCX. Diğer her şey için metni bir Metin girdisine yapıştırın.",
+        "file_legacyDoc": "Eski .doc dosyaları desteklenmez. .docx olarak yeniden kaydedin (veya .pdf olarak dışa aktarın) ve tekrar yükleyin.",
+        "file_size": "Bu dosya 10 MB'ı aşıyor.",
+        "file_empty": "Bu dosya boş.",
+        "tooLarge": "Tek seferde yapıştırmak için çok fazla metin. Bunun yerine dosya olarak yükleyin."
+      },
+      "col": {
+        "kind": "Tür",
+        "label": "Etiket",
+        "state": "Durum",
+        "actions": "İşlemler"
+      },
+      "kind": {
+        "url": "url",
+        "text": "metin",
+        "qa": "s&c",
+        "file": "dosya"
+      },
+      "state": {
+        "ready": "hazır",
+        "processing": "işleniyor",
+        "failed": "başarısız"
+      },
+      "tokens": "yaklaşık {count} token",
+      "workspaceWide": "çalışma alanı genelinde",
+      "loading": "Girdiler yükleniyor",
+      "loadError": "Girdiler yüklenemedi.",
+      "retry": "Tekrar dene",
+      "empty": "Henüz bilgi yok. İlk girdiyi eklemek için yukarıdan bir tür seçin.",
+      "remove": "Kaldır",
+      "removeNamed": "{label} öğesini kaldır",
+      "removeTitle": "Bu bilgi girdisi kaldırılsın mı?",
+      "removeBody": "Agent bunu yeni yanıtlarda kullanmayı bırakır. Eski konuşmalar değişmez.",
+      "keep": "Koru",
+      "removed": "Kaldırıldı.",
+      "removeFailed": "Kaldırma başarısız oldu."
+    }
+  }
+}

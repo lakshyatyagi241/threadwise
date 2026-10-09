@@ -1,0 +1,54 @@
+{
+  "checkout-orders-merchant-payments": {
+    "groups": {
+      "eyebrow": "Boutique / Groupes",
+      "title": "Groupes WhatsApp",
+      "subtitle": "Les groupes auxquels appartient votre numéro connecté. Lorsqu’une commande est confirmée, elle est publiée dans le groupe du client et le client est mentionné avec @. Donnez un code de commande à un groupe pour que les clients puissent commander depuis celui-ci.",
+      "loading": "Chargement des groupes",
+      "summary": {
+        "groups": "Groupes synchronisés",
+        "coded": "Avec code de commande",
+        "bot": "Numéro du bot",
+        "noBot": "Aucun numéro WhatsApp n’est connecté.",
+        "connect": "Connecter un numéro dans Canaux",
+        "copyNumber": "Copier le numéro"
+      },
+      "search": {
+        "label": "Rechercher des groupes",
+        "placeholder": "Rechercher un nom de groupe..."
+      },
+      "columns": {
+        "group": "Groupe",
+        "members": "Membres",
+        "device": "Appareil du bot",
+        "synced": "Synchronisé",
+        "code": "Code de commande"
+      },
+      "row": {
+        "unnamed": "(groupe sans nom)",
+        "noCode": "Aucun code",
+        "placeholder": "p. ex. ACME",
+        "label": "Code de commande pour {name}",
+        "copyLink": "Copier le lien de commande",
+        "saved": "Code de commande enregistré.",
+        "cleared": "Code de commande effacé.",
+        "tooLong": "Utilisez {max} caractères maximum.",
+        "badChars": "Utilisez uniquement des lettres, chiffres, points, tirets et traits de soulignement.",
+        "taken": "Un autre groupe utilise déjà ce code."
+      },
+      "empty": {
+        "title": "Aucun groupe pour l’instant",
+        "message": "La liste des groupes est copiée depuis votre session WhatsApp connectée. Les groupes apparaissent ici une fois que cette session les a synchronisés ; aucun délai n’est encore promis.",
+        "action": "Ouvrir Canaux"
+      },
+      "noMatch": {
+        "title": "Aucun groupe ne correspond à votre recherche",
+        "message": "Essayez une autre partie du nom du groupe, ou effacez la recherche."
+      },
+      "how": {
+        "title": "Fonctionnement des codes de commande",
+        "body": "Donnez un code court à un groupe (par exemple ACME), puis partagez son lien de commande. Lorsqu’un client le touche et confirme une commande, la commande est publiée directement dans ce groupe précis et le client est mentionné avec @, même s’il appartient à plusieurs groupes."
+      }
+    }
+  }
+}

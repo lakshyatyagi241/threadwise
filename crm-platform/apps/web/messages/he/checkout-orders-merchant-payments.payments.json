@@ -1,0 +1,105 @@
+{
+  "checkout-orders-merchant-payments": {
+    "payments": {
+      "eyebrow": "חנות / תשלומים",
+      "title": "תשלומים",
+      "subtitle": "צד הכסף בהזמנות החנות שלך: מה שולם, מה ממתין ומה במזומן במשלוח.",
+      "listTitle": "רשימת תשלומים",
+      "loading": "טוען תשלומים",
+      "emptyFilteredTitle": "אין תשלומים תואמים",
+      "emptyFilteredMessage": "שנה את המסננים או אפס אותם כדי לראות כל תשלום.",
+      "resetFilters": "אפס מסננים",
+      "emptyTitle": "עדיין אין תשלומים",
+      "emptyMessage": "תשלום מופיע כאן ברגע שהזמנת חנות מבוצעת. פתח הזמנות כדי לראות את ההזמנות שלך או הוסף אחת ידנית.",
+      "goToOrders": "עבור להזמנות",
+      "summary": {
+        "loading": "טוען סיכומי תשלומים",
+        "orders": "הזמנות",
+        "collected": "נגבה",
+        "collectedNone": "עדיין לא נגבה דבר."
+      },
+      "filters": {
+        "search": "חיפוש",
+        "searchPlaceholder": "מספר הזמנה, לקוח או אסמכתא",
+        "status": "סטטוס",
+        "allStatuses": "כל הסטטוסים",
+        "method": "שיטה",
+        "allMethods": "כל השיטות",
+        "prepaid": "שולם מראש",
+        "cod": "מזומן במשלוח",
+        "gatewayOption": "שער תשלום...",
+        "gatewayCode": "קוד שער תשלום",
+        "gatewayCodePlaceholder": "לדוגמה razorpay",
+        "from": "מתאריך",
+        "to": "עד תאריך",
+        "rangeInverted": "תאריך ההתחלה מאוחר מתאריך הסיום, ולכן טווח התאריכים מתעלם.",
+        "reset": "אפס מסננים"
+      },
+      "table": {
+        "caption": "תשלומי הזמנות חנות, מהחדש לישן",
+        "order": "הזמנה",
+        "customer": "לקוח",
+        "status": "סטטוס",
+        "method": "שיטה",
+        "paidVia": "שולם באמצעות",
+        "reference": "אסמכתא",
+        "amount": "סכום",
+        "shop": "חנות",
+        "date": "תאריך",
+        "methodPrepaid": "שולם מראש",
+        "methodCod": "מזומן במשלוח",
+        "via": {
+          "razorpay_link": "קישור Razorpay",
+          "whatsapp_pay": "WhatsApp Pay"
+        }
+      },
+      "wa": {
+        "title": "WhatsApp Pay בצ'אט",
+        "intro": "אפשר לקונים לשלם עבור הזמנה בלי לצאת מ-WhatsApp (UPI, כרטיסים, בנקאות מקוונת, ארנקים) ולקבל את הכסף בחשבון Razorpay, PayU, BillDesk או Zaakpay שלך.",
+        "indiaOnly": "הודו היא השוק היחיד הנתמך כרגע: המדינה והמטבע קבועים להודו ול-INR.",
+        "viewOnly": "ניתן לראות את תצורות WhatsApp Pay אך לא לשנותן. בקש ממנהל סביבת העבודה הרשאה לנהל תשלומים.",
+        "howTitle": "איך מגדירים",
+        "how1": "ב-WhatsApp Manager, תחת Payments עבור הודו, צור Direct Pay Method וקשר את חשבון שער התשלום שלך.",
+        "how2": "תן לו שם והעתק את השם הזה לכאן. לא ניתן ליצור אותו מאפליקציה זו, זהו שלב בצד של Meta.",
+        "how3": "שמור את התצורה, ואז פתח הזמנות ובקש תשלום ב-WhatsApp בכל הזמנה.",
+        "how4": "הקונה לוחץ על Review and Pay, משלם בצ'אט וההזמנה מסומנת כשולמה לאחר ש-Meta מאשרת.",
+        "listTitle": "התצורות שלך",
+        "loading": "טוען תצורות",
+        "emptyTitle": "עדיין אין תצורות תשלום",
+        "emptyMessage": "הוסף אחת בעמוד זה כדי להתחיל לגבות תשלומים בצ'אט.",
+        "emptyMessageReadOnly": "אף אחד עוד לא הוסיף.",
+        "market": "הודו · INR",
+        "autoChargeOn": "חיוב אוטומטי פועל",
+        "active": "פעיל",
+        "off": "כבוי",
+        "types": {
+          "razorpay": "Razorpay",
+          "payu": "PayU",
+          "billdesk": "BillDesk",
+          "zaakpay": "Zaakpay"
+        },
+        "toast": {
+          "saved": "התצורה נשמרה",
+          "removed": "התצורה הוסרה"
+        },
+        "addTitle": "הוסף תצורת תשלום",
+        "editTitle": "ערוך את {name}",
+        "name": "שם התצורה",
+        "nameLocked": "השם מזהה את התצורה. כדי לשנות שם, הסר אותה והוסף אותה מחדש.",
+        "updatesExisting": "קיימת תצורה בשם זה: השמירה תעדכן אותה.",
+        "nameHint": "חייב להתאים בדיוק לשם ה-Direct Pay Method ב-WhatsApp Manager (Payments, India).",
+        "nameInvalid": "הזן שם באורך של 1 עד {max} תווים.",
+        "namePlaceholder": "לדוגמה my-razorpay-pay",
+        "gateway": "שער תשלום",
+        "activeLabel": "פעיל",
+        "autoCharge": "חיוב אוטומטי של הזמנות חדשות",
+        "autoChargeHint": "שלח את בקשת התשלום בצ'אט אוטומטית ברגע שהזמנה מבוצעת.",
+        "save": "שמור תצורה",
+        "cancelEdit": "בטל עריכה",
+        "removeTitle": "להסיר את {name}?",
+        "removeMessage": "לא ניתן יהיה עוד לחייב הזמנות בצ'אט עם תצורה זו. ה-Direct Pay Method ב-WhatsApp Manager אינו נפגע.",
+        "removeConfirm": "הסר תצורה"
+      }
+    }
+  }
+}

@@ -1,17 +1,23 @@
 'use client';
 
 import type { ReactNode } from 'react';
+import { useTranslations } from 'next-intl';
 import {
   FLB_ASK_FILE_GROUPS,
-  FLB_ASK_INPUT_LABELS,
   FLB_ASK_INPUT_TYPES,
   FLB_DATE_FORMATS,
-  flbAskInputWrongText,
   flbCleanAskFileExtensions,
   flbCleanAskInputType,
   flbCleanDateFormat,
   type FlbBuilderContext,
 } from '@crm/contracts';
+import {
+  askFileGroupLabel,
+  askInputLabel,
+  askInputWrongText,
+  dateFormatLabel,
+} from '../../lib/contract-text';
+import { renderMsg, useFlb } from '../../lib/msg';
 import { usePickerFeed } from '@/features/contacts-attributes-tags';
 import { Field, Input, Select, Textarea } from '@crm/ui';
 import {
@@ -19,6 +25,7 @@ import {
   LIMITS,
   stageIn,
   groupsOf,
+  groupText,
   stepLabel,
   stepSummary,
   type SimpleDoc,
@@ -45,28 +52,34 @@ export function LinkSelect({
   value: string | null;
   onChange: (target: string | null | typeof NEW_JOURNEY) => void;
 }) {
+  const t = useTranslations('flb.builder.simple.editors');
+  const tf = useFlb();
   return (
     <Select
-      aria-label="Where this leads"
+      aria-label={t('linkLabel')}
       className="h-9 text-[12.5px]"
       value={value ?? ''}
       onChange={(e) => onChange(e.target.value === '' ? null : e.target.value)}
     >
-      <option value="">Ends here (nothing more is sent)</option>
+      <option value="">{t('linkEnds')}</option>
       {groupsOf(doc).map((g) => (
-        <optgroup key={g.key} label={g.name}>
+        <optgroup key={g.key} label={groupText(g, tf)}>
           {g.chains.flatMap((ci) =>
             doc.journeys[ci]!.steps.map((s, si) => (
               <option key={s.id} value={s.id}>
-                {stageIn(doc, ci, si)} · {stepLabel(s)}
-                {s.id === stepId ? ' (this step)' : ''}
-                {stepSummary(s) ? ` · ${stepSummary(s)}` : ''}
+                {t('linkOption', {
+                  stage: stageIn(doc, ci, si),
+                  label: renderMsg(tf, stepLabel(s)),
+                  self: s.id === stepId ? 'true' : 'false',
+                  hasSummary: stepSummary(s, tf) ? 'true' : 'false',
+                  summary: stepSummary(s, tf),
+                })}
               </option>
             )),
           )}
         </optgroup>
       ))}
-      <option value={NEW_JOURNEY}>+ Lead to a new flow…</option>
+      <option value={NEW_JOURNEY}>{t('linkNew')}</option>
     </Select>
   );
 }
@@ -131,11 +144,9 @@ export function StepEditor(p: EditorProps) {
 }
 
 function MessageEditor({ step, set }: EditorProps) {
+  const t = useTranslations('flb.builder.simple.editors');
   return (
-    <Field
-      label="Message"
-      hint="*bold*  _italic_  ~strike~  — and {{name}} for the customer's name."
-    >
+    <Field label={t('message.label')} hint={t('message.hint', { token: '{{name}}' })}>
       <Textarea
         rows={5}
         value={str(step.data.text)}
@@ -148,19 +159,20 @@ function MessageEditor({ step, set }: EditorProps) {
 const MEDIA_KINDS = ['image', 'video', 'audio', 'document'] as const;
 
 function MediaEditor({ step, set }: EditorProps) {
+  const t = useTranslations('flb.builder.simple.editors');
   const kind = str(step.data.kind) || 'image';
   return (
     <div className="space-y-3">
-      <Field label="Type">
+      <Field label={t('media.type')}>
         <Select value={kind} onChange={(e) => set({ kind: e.target.value })}>
           {MEDIA_KINDS.map((k) => (
             <option key={k} value={k}>
-              {k[0]!.toUpperCase() + k.slice(1)}
+              {t(`media.kinds.${k}`)}
             </option>
           ))}
         </Select>
       </Field>
-      <Field label="File link" hint="A public https link to the file.">
+      <Field label={t('media.fileLink')} hint={t('media.fileLinkHint')}>
         <Input
           value={str(step.data.url)}
           placeholder="https://"
@@ -168,7 +180,7 @@ function MediaEditor({ step, set }: EditorProps) {
         />
       </Field>
       {kind === 'document' ? (
-        <Field label="File name shown to the customer">
+        <Field label={t('media.fileName')}>
           <Input
             value={str(step.data.filename)}
             onChange={(e) => set({ filename: e.target.value })}
@@ -176,7 +188,7 @@ function MediaEditor({ step, set }: EditorProps) {
         </Field>
       ) : null}
       {kind !== 'audio' ? (
-        <Field label="Caption (optional)">
+        <Field label={t('media.caption')}>
           <Textarea
             rows={3}
             value={str(step.data.caption)}
@@ -189,6 +201,7 @@ function MediaEditor({ step, set }: EditorProps) {
 }
 
 function ButtonsEditor({ step, doc, set, link }: EditorProps) {
+  const t = useTranslations('flb.builder.simple.editors');
   const opts = arr(step.data.options).map(str);
   const prompt = str(step.data.prompt);
   return (
@@ -196,7 +209,7 @@ function ButtonsEditor({ step, doc, set, link }: EditorProps) {
       <Field
         label={
           <span className="flex items-center justify-between">
-            Message above the buttons <Counter value={prompt} max={LIMITS.body} />
+            {t('buttons.above')} <Counter value={prompt} max={LIMITS.body} />
           </span>
         }
       >
@@ -204,10 +217,10 @@ function ButtonsEditor({ step, doc, set, link }: EditorProps) {
       </Field>
       <div className="space-y-2">
         <div className="text-[12px] font-medium">
-          Buttons{' '}
-          <span className="font-normal text-muted-foreground">
-            (up to {LIMITS.buttons}) — each one decides what is sent next
-          </span>
+          {t.rich('buttons.heading', {
+            max: LIMITS.buttons,
+            muted: (chunks) => <span className="font-normal text-muted-foreground">{chunks}</span>,
+          })}
         </div>
         {opts.map((o, i) => (
           <Row key={i}>
@@ -215,7 +228,7 @@ function ButtonsEditor({ step, doc, set, link }: EditorProps) {
               <Input
                 value={o}
                 maxLength={LIMITS.buttonLabel + 20}
-                placeholder={`Button ${i + 1}`}
+                placeholder={t('buttons.placeholder', { n: i + 1 })}
                 invalid={o.length > LIMITS.buttonLabel}
                 onChange={(e) =>
                   set({ options: opts.map((x, j) => (j === i ? e.target.value : x)) })
@@ -223,7 +236,7 @@ function ButtonsEditor({ step, doc, set, link }: EditorProps) {
               />
               <Counter value={o} max={LIMITS.buttonLabel} />
               <RemoveBtn
-                label="Remove button"
+                label={t('buttons.remove')}
                 disabled={opts.length <= 1}
                 onClick={() => set({ options: opts.filter((_, j) => j !== i) })}
               />
@@ -232,23 +245,28 @@ function ButtonsEditor({ step, doc, set, link }: EditorProps) {
               doc={doc}
               stepId={step.id}
               value={step.links[i] ?? null}
-              onChange={(t) => link(i, t)}
+              onChange={(target) => link(i, target)}
             />
           </Row>
         ))}
         {opts.length < LIMITS.buttons ? (
-          <AddBtn onClick={() => set({ options: [...opts, `Button ${opts.length + 1}`] })}>
-            Add a button
+          <AddBtn
+            onClick={() =>
+              set({ options: [...opts, t('buttons.placeholder', { n: opts.length + 1 })] })
+            }
+          >
+            {t('buttons.add')}
           </AddBtn>
         ) : null}
       </div>
-      <VarField step={step} set={set} label="Save the tapped button in" />
-      <SavePropertyField step={step} set={set} noun="the tapped button" />
+      <VarField step={step} set={set} label={t('buttons.saveIn')} />
+      <SavePropertyField step={step} set={set} noun="button" />
     </div>
   );
 }
 
 function ListEditor({ step, doc, set, link }: EditorProps) {
+  const t = useTranslations('flb.builder.simple.editors');
   const rows = arr(step.data.options).map(rec);
   const prompt = str(step.data.prompt);
   const button = str(step.data.button);
@@ -259,7 +277,7 @@ function ListEditor({ step, doc, set, link }: EditorProps) {
       <Field
         label={
           <span className="flex items-center justify-between">
-            Message above the list <Counter value={prompt} max={LIMITS.body} />
+            {t('list.above')} <Counter value={prompt} max={LIMITS.body} />
           </span>
         }
       >
@@ -268,8 +286,7 @@ function ListEditor({ step, doc, set, link }: EditorProps) {
       <Field
         label={
           <span className="flex items-center justify-between">
-            Text on the button that opens the list{' '}
-            <Counter value={button} max={LIMITS.listButton} />
+            {t('list.buttonText')} <Counter value={button} max={LIMITS.listButton} />
           </span>
         }
       >
@@ -281,20 +298,23 @@ function ListEditor({ step, doc, set, link }: EditorProps) {
       </Field>
       <div className="space-y-2">
         <div className="text-[12px] font-medium">
-          Rows <span className="font-normal text-muted-foreground">(up to {LIMITS.rows})</span>
+          {t.rich('list.heading', {
+            max: LIMITS.rows,
+            muted: (chunks) => <span className="font-normal text-muted-foreground">{chunks}</span>,
+          })}
         </div>
         {rows.map((r, i) => (
           <Row key={i}>
             <div className="mb-2 flex items-center gap-2">
               <Input
                 value={str(r.title)}
-                placeholder={`Row ${i + 1}`}
+                placeholder={t('list.rowPlaceholder', { n: i + 1 })}
                 invalid={str(r.title).length > LIMITS.rowTitle}
                 onChange={(e) => setRow(i, { title: e.target.value })}
               />
               <Counter value={str(r.title)} max={LIMITS.rowTitle} />
               <RemoveBtn
-                label="Remove row"
+                label={t('list.remove')}
                 disabled={rows.length <= 1}
                 onClick={() => set({ options: rows.filter((_, j) => j !== i) })}
               />
@@ -302,7 +322,7 @@ function ListEditor({ step, doc, set, link }: EditorProps) {
             <Input
               className="mb-2 h-9 text-[12.5px]"
               value={str(r.description)}
-              placeholder="Description (optional)"
+              placeholder={t('list.description')}
               invalid={str(r.description).length > LIMITS.rowDescription}
               onChange={(e) => setRow(i, { description: e.target.value })}
             />
@@ -310,7 +330,7 @@ function ListEditor({ step, doc, set, link }: EditorProps) {
               doc={doc}
               stepId={step.id}
               value={step.links[i] ?? null}
-              onChange={(t) => link(i, t)}
+              onChange={(target) => link(i, target)}
             />
           </Row>
         ))}
@@ -320,17 +340,21 @@ function ListEditor({ step, doc, set, link }: EditorProps) {
               set({
                 options: [
                   ...rows,
-                  { title: `Row ${rows.length + 1}`, description: '', section: '' },
+                  {
+                    title: t('list.rowPlaceholder', { n: rows.length + 1 }),
+                    description: '',
+                    section: '',
+                  },
                 ],
               })
             }
           >
-            Add a row
+            {t('list.add')}
           </AddBtn>
         ) : null}
       </div>
-      <VarField step={step} set={set} label="Save the chosen row in" />
-      <SavePropertyField step={step} set={set} noun="the chosen row" />
+      <VarField step={step} set={set} label={t('list.saveIn')} />
+      <SavePropertyField step={step} set={set} noun="row" />
     </div>
   );
 }
@@ -347,10 +371,11 @@ function WrongAnswerFields({
   placeholder: string;
   defaultRetries: string;
 }) {
+  const t = useTranslations('flb.builder.simple.editors.wrong');
   const retries = Number(step.data.retries) || 0;
   return (
     <div className="space-y-3">
-      <Field label="Message for a wrong answer" hint="Leave blank to use the ready-made one.">
+      <Field label={t('message')} hint={t('messageHint')}>
         <Textarea
           rows={2}
           value={str(step.data.wrongReply)}
@@ -359,7 +384,7 @@ function WrongAnswerFields({
         />
       </Field>
       <div className="grid grid-cols-2 gap-3">
-        <Field label="Stop after wrong answers" hint={defaultRetries}>
+        <Field label={t('stopAfter')} hint={defaultRetries}>
           <Input
             type="number"
             min={0}
@@ -371,13 +396,13 @@ function WrongAnswerFields({
           />
         </Field>
         {retries > 0 ? (
-          <Field label="Then">
+          <Field label={t('then')}>
             <Select
               value={str(step.data.onFail) === 'end' ? 'end' : 'continue'}
               onChange={(e) => set({ onFail: e.target.value })}
             >
-              <option value="continue">Carry on without an answer</option>
-              <option value="end">End the flow</option>
+              <option value="continue">{t('continue')}</option>
+              <option value="end">{t('end')}</option>
             </Select>
           </Field>
         ) : null}
@@ -390,32 +415,33 @@ function WrongAnswerFields({
 function SavePropertyField({
   step,
   set,
-  noun = 'the answer',
+  noun = 'answer',
 }: {
   step: SimpleStep;
   set: (patch: Record<string, unknown>) => void;
-  noun?: string;
+  noun?: 'answer' | 'button' | 'row';
 }) {
+  const t = useTranslations('flb.builder.simple.editors.property');
   const feed = usePickerFeed();
   const on = step.data.saveProperty === true;
   return (
-    <Field label="Contact property">
+    <Field label={t('label')}>
       <label className="flex items-center gap-2 text-[13px]">
         <input
           type="checkbox"
           checked={on}
           onChange={(e) => set({ saveProperty: e.target.checked })}
         />
-        Also copy {noun} to the contact
+        {t('copy', { what: noun })}
       </label>
       {on ? (
         <Select
-          aria-label="Contact property"
+          aria-label={t('label')}
           className="mt-2"
           value={str(step.data.propertyKey)}
           onChange={(e) => set({ propertyKey: e.target.value })}
         >
-          <option value="">Choose a property…</option>
+          <option value="">{t('choose')}</option>
           {(feed.data?.custom ?? []).map((pr) => (
             <option key={pr.key} value={pr.key}>
               {pr.name}
@@ -428,54 +454,50 @@ function SavePropertyField({
 }
 
 function AskEditor({ step, set }: EditorProps) {
+  const t = useTranslations('flb.builder.simple.editors');
+  const tf = useFlb();
   const type = flbCleanAskInputType(step.data.validate);
   const checked = type !== 'text';
   return (
     <div className="space-y-3">
-      <Field label="Question">
+      <Field label={t('question')}>
         <Textarea
           rows={3}
           value={str(step.data.prompt)}
           onChange={(e) => set({ prompt: e.target.value })}
         />
       </Field>
-      <Field
-        label="Accept"
-        hint={checked ? 'The answer is checked before the flow goes on.' : 'Any text is accepted.'}
-      >
+      <Field label={t('ask.accept')} hint={checked ? t('ask.checkedHint') : t('ask.anyTextHint')}>
         <Select value={type} onChange={(e) => set({ validate: e.target.value })}>
           {FLB_ASK_INPUT_TYPES.map((v) => (
             <option key={v} value={v}>
-              {FLB_ASK_INPUT_LABELS[v]}
+              {askInputLabel(tf, v)}
             </option>
           ))}
         </Select>
       </Field>
       {type === 'date' ? (
-        <Field
-          label="Date format"
-          hint="How the customer writes the date. It is saved as typed, and a copy as year-month-day in the _iso variable."
-        >
+        <Field label={t('ask.dateFormat')} hint={t('ask.dateFormatHint')}>
           <Select
             value={flbCleanDateFormat(step.data.dateFormat)}
             onChange={(e) => set({ dateFormat: e.target.value })}
           >
             {FLB_DATE_FORMATS.map((f) => (
               <option key={f} value={f}>
-                {f.toUpperCase()}
+                {dateFormatLabel(tf, f)}
               </option>
             ))}
           </Select>
         </Field>
       ) : null}
-      <VarField step={step} set={set} label="Save the answer in" />
+      <VarField step={step} set={set} label={t('ask.saveIn')} />
       {checked ? (
         <>
           <WrongAnswerFields
             step={step}
             set={set}
-            placeholder={flbAskInputWrongText(type, step.data.dateFormat)}
-            defaultRetries="0 keeps asking until the answer is right."
+            placeholder={askInputWrongText(tf, type, step.data.dateFormat)}
+            defaultRetries={t('ask.retriesHint')}
           />
         </>
       ) : null}
@@ -485,6 +507,8 @@ function AskEditor({ step, set }: EditorProps) {
 }
 
 function AskFileEditor({ step, set }: EditorProps) {
+  const t = useTranslations('flb.builder.simple.editors');
+  const tf = useFlb();
   const chosen = new Set(flbCleanAskFileExtensions(step.data.extensions));
   const toggle = (exts: readonly string[], on: boolean) => {
     const next = new Set(chosen);
@@ -496,7 +520,7 @@ function AskFileEditor({ step, set }: EditorProps) {
   };
   return (
     <div className="space-y-3">
-      <Field label="Question">
+      <Field label={t('question')}>
         <Textarea
           rows={3}
           value={str(step.data.prompt)}
@@ -504,11 +528,11 @@ function AskFileEditor({ step, set }: EditorProps) {
         />
       </Field>
       <Field
-        label="Files accepted"
+        label={t('askFile.accepted')}
         hint={
           chosen.size === 0
-            ? 'None ticked: any file is accepted.'
-            : `Only: ${[...chosen].join(', ')}`
+            ? t('askFile.noneTicked')
+            : t('askFile.only', { list: [...chosen].join(', ') })
         }
       >
         <div className="grid grid-cols-2 gap-2">
@@ -521,18 +545,18 @@ function AskFileEditor({ step, set }: EditorProps) {
                   checked={exts.every((e) => chosen.has(e))}
                   onChange={(e) => toggle(exts, e.target.checked)}
                 />
-                {g.label}
+                {askFileGroupLabel(tf, g.id, g.label)}
               </label>
             );
           })}
         </div>
       </Field>
-      <VarField step={step} set={set} label="Save the file link in" />
+      <VarField step={step} set={set} label={t('askFile.saveIn')} />
       <WrongAnswerFields
         step={step}
         set={set}
-        placeholder="That is not a file we can accept. Please send it as an attachment."
-        defaultRetries="After this many wrong answers the flow moves on (or ends)."
+        placeholder={t('askFile.wrongText')}
+        defaultRetries={t('retriesHint')}
       />
       <SavePropertyField step={step} set={set} />
     </div>
@@ -540,21 +564,22 @@ function AskFileEditor({ step, set }: EditorProps) {
 }
 
 function AskLocationEditor({ step, set }: EditorProps) {
+  const t = useTranslations('flb.builder.simple.editors');
   return (
     <div className="space-y-3">
-      <Field label="Question">
+      <Field label={t('question')}>
         <Textarea
           rows={3}
           value={str(step.data.prompt)}
           onChange={(e) => set({ prompt: e.target.value })}
         />
       </Field>
-      <VarField step={step} set={set} label="Save the location link in" />
+      <VarField step={step} set={set} label={t('askLocation.saveIn')} />
       <WrongAnswerFields
         step={step}
         set={set}
-        placeholder="Please share your location with the attachment (+) menu, then Location."
-        defaultRetries="After this many wrong answers the flow moves on (or ends)."
+        placeholder={t('askLocation.wrongText')}
+        defaultRetries={t('retriesHint')}
       />
     </div>
   );
@@ -569,15 +594,13 @@ function VarField({
   set: (patch: Record<string, unknown>) => void;
   label: string;
 }) {
+  const t = useTranslations('flb.builder.simple.editors.var');
   return (
     <Field
       label={label}
-      hint={
-        <>
-          Use it later as <code className="font-mono">{`{{${str(step.data.var) || 'name'}}}`}</code>
-          . Give every question its own name.
-        </>
-      }
+      hint={t.rich('hint', {
+        code: () => <code className="font-mono">{`{{${str(step.data.var) || 'name'}}}`}</code>,
+      })}
     >
       <Input
         className="font-mono"
@@ -589,36 +612,33 @@ function VarField({
 }
 
 function AssignEditor({ step, ctx, set }: EditorProps) {
+  const t = useTranslations('flb.builder.simple.editors');
   const teams = ctx.teams;
-  const team = teams.find((t) => t.id === str(step.data.team));
+  const team = teams.find((x) => x.id === str(step.data.team));
   return (
     <div className="space-y-3">
-      <Field label="Team" hint="The conversation lands in this team's queue.">
+      <Field label={t('assign.team')} hint={t('assign.teamHint')}>
         <Select
           value={str(step.data.team)}
           onChange={(e) => set({ team: e.target.value, userId: '' })}
         >
-          <option value="">{teams.length ? '— pick a team —' : 'No teams yet'}</option>
-          {teams.map((t) => (
-            <option key={t.id} value={t.id}>
-              {t.name}
-              {t.members.length ? ` · ${t.members.length} agent(s)` : ''}
+          <option value="">{teams.length ? t('assign.pickTeam') : t('assign.noTeams')}</option>
+          {teams.map((tm) => (
+            <option key={tm.id} value={tm.id}>
+              {t('assign.teamOption', { name: tm.name, count: tm.members.length })}
             </option>
           ))}
           {str(step.data.team) && !team ? (
             <option value={str(step.data.team)}>
-              {str(step.data.team)} (not in this workspace)
+              {t('assign.unknownTeam', { team: str(step.data.team) })}
             </option>
           ) : null}
         </Select>
       </Field>
       {team ? (
-        <Field
-          label="A specific agent (optional)"
-          hint="Any: the team's own assignment rule picks."
-        >
+        <Field label={t('assign.agent')} hint={t('assign.agentHint')}>
           <Select value={str(step.data.userId)} onChange={(e) => set({ userId: e.target.value })}>
-            <option value="">Any</option>
+            <option value="">{t('assign.any')}</option>
             {team.members.map((m) => (
               <option key={m.id} value={m.id}>
                 {m.name}
@@ -627,7 +647,7 @@ function AssignEditor({ step, ctx, set }: EditorProps) {
           </Select>
         </Field>
       ) : null}
-      <Field label="Note for the agent" hint="Shown on the conversation when it reaches the team.">
+      <Field label={t('assign.note')} hint={t('assign.noteHint')}>
         <Textarea
           rows={3}
           value={str(step.data.message)}
@@ -639,9 +659,10 @@ function AssignEditor({ step, ctx, set }: EditorProps) {
 }
 
 function DelayEditor({ step, set }: EditorProps) {
+  const t = useTranslations('flb.builder.simple.editors');
   return (
     <div className="grid grid-cols-2 gap-3">
-      <Field label="Wait for">
+      <Field label={t('delay.waitFor')}>
         <Input
           type="number"
           min={1}
@@ -649,15 +670,15 @@ function DelayEditor({ step, set }: EditorProps) {
           onChange={(e) => set({ amount: e.target.value === '' ? '' : Number(e.target.value) })}
         />
       </Field>
-      <Field label="Unit">
+      <Field label={t('delay.unit')}>
         <Select
           value={str(step.data.unit) || 'min'}
           onChange={(e) => set({ unit: e.target.value })}
         >
-          <option value="sec">seconds</option>
-          <option value="min">minutes</option>
-          <option value="hour">hours</option>
-          <option value="day">days</option>
+          <option value="sec">{t('delay.sec')}</option>
+          <option value="min">{t('delay.min')}</option>
+          <option value="hour">{t('delay.hour')}</option>
+          <option value="day">{t('delay.day')}</option>
         </Select>
       </Field>
     </div>
@@ -665,6 +686,7 @@ function DelayEditor({ step, set }: EditorProps) {
 }
 
 function LocationEditor({ step, set }: EditorProps) {
+  const t = useTranslations('flb.builder.simple.editors');
   const f = (key: string, label: string, props: { placeholder?: string } = {}) => (
     <Field label={label}>
       <Input
@@ -676,35 +698,33 @@ function LocationEditor({ step, set }: EditorProps) {
   );
   return (
     <div className="space-y-3">
-      {f('title', 'Place name', { placeholder: 'Our office' })}
-      {f('address', 'Address')}
+      {f('title', t('location.placeName'), { placeholder: t('location.placePlaceholder') })}
+      {f('address', t('location.address'))}
       <div className="grid grid-cols-2 gap-3">
-        {f('lat', 'Latitude', { placeholder: '18.5204' })}
-        {f('lng', 'Longitude', { placeholder: '73.8567' })}
+        {f('lat', t('location.latitude'), { placeholder: '18.5204' })}
+        {f('lng', t('location.longitude'), { placeholder: '73.8567' })}
       </div>
     </div>
   );
 }
 
 function TemplateEditor({ step, ctx, set }: EditorProps) {
-  const chosen = ctx.templates.find((t) => t.name === str(step.data.tpl));
+  const t = useTranslations('flb.builder.simple.editors');
+  const chosen = ctx.templates.find((x) => x.name === str(step.data.tpl));
   return (
     <div className="space-y-3">
-      <Field
-        label="Approved template"
-        hint="Only templates your WhatsApp number has approved are listed."
-      >
+      <Field label={t('template.label')} hint={t('template.hint')}>
         <Select
           value={str(step.data.tpl)}
           onChange={(e) => {
-            const hit = ctx.templates.find((t) => t.name === e.target.value);
+            const hit = ctx.templates.find((x) => x.name === e.target.value);
             set({ tpl: e.target.value, tplId: hit ? hit.id : null });
           }}
         >
-          <option value="">Choose a template…</option>
-          {ctx.templates.map((t) => (
-            <option key={t.id} value={t.name}>
-              {t.name}
+          <option value="">{t('template.choose')}</option>
+          {ctx.templates.map((tp) => (
+            <option key={tp.id} value={tp.name}>
+              {tp.name}
             </option>
           ))}
         </Select>
@@ -719,12 +739,13 @@ function TemplateEditor({ step, ctx, set }: EditorProps) {
 }
 
 function CtaEditor({ step, set }: EditorProps) {
+  const t = useTranslations('flb.builder.simple.editors');
   const a = rec(arr(step.data.actions)[0]);
   const setA = (patch: Record<string, unknown>) =>
     set({ actions: [{ type: 'url', label: '', value: '', ...a, ...patch }] });
   return (
     <div className="space-y-3">
-      <Field label="Message">
+      <Field label={t('message.label')}>
         <Textarea
           rows={3}
           value={str(step.data.bodyText)}
@@ -732,14 +753,14 @@ function CtaEditor({ step, set }: EditorProps) {
         />
       </Field>
       <div className="grid grid-cols-2 gap-3">
-        <Field label="Button text">
+        <Field label={t('cta.buttonText')}>
           <Input
             value={str(a.label)}
             maxLength={20}
             onChange={(e) => setA({ label: e.target.value })}
           />
         </Field>
-        <Field label="Opens (link)">
+        <Field label={t('cta.opens')}>
           <Input
             value={str(a.value)}
             placeholder="https://"

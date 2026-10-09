@@ -1,0 +1,924 @@
+{
+  "marketplace": {
+    "operator": {
+      "nav": {
+        "group": "Marketplace",
+        "catalogue": "Catalogo",
+        "categories": "Categorie",
+        "requests": "Richieste",
+        "usage": "Utilizzo"
+      },
+      "common": {
+        "loading": "Caricamento...",
+        "requestId": "ID richiesta",
+        "retry": "Riprova",
+        "noPermissions": "Nessuna autorizzazione"
+      },
+      "enums": {
+        "kind": {
+          "mini_app": "Mini app",
+          "integration": "Integrazione"
+        },
+        "appStatus": {
+          "draft": "Bozza",
+          "in_review": "In revisione",
+          "published": "Pubblicata",
+          "hidden": "Nascosta",
+          "killed": "Disattivata definitivamente"
+        },
+        "versionStatus": {
+          "draft": "Bozza",
+          "in_review": "In revisione",
+          "approved": "Approvata",
+          "rejected": "Rifiutata",
+          "published": "Pubblicata",
+          "retired": "Ritirata"
+        },
+        "requestStatus": {
+          "open": "Aperta",
+          "planned": "Pianificata",
+          "building": "In sviluppo",
+          "shipped": "Rilasciata",
+          "declined": "Rifiutata"
+        },
+        "connector": {
+          "oauth": "Accesso OAuth",
+          "push": "Push (il portale ci invia i dati)",
+          "pull": "Pull (interroghiamo il portale)",
+          "email_parse": "Analisi delle email",
+          "webhook_relay": "Relay webhook",
+          "client": "Client (installato dai membri)"
+        },
+        "risk": {
+          "low": "Rischio basso",
+          "medium": "Rischio medio",
+          "high": "Rischio alto"
+        },
+        "subscriptionStatus": {
+          "active": "A pagamento",
+          "trialing": "In prova",
+          "comped": "Omaggio",
+          "canceling": "In scadenza",
+          "ended": "Terminato"
+        },
+        "subscriptionSource": {
+          "purchase": "Acquisto",
+          "trial": "Prova",
+          "comp": "Omaggio"
+        }
+      },
+      "errors": {
+        "conflict": "Qualcun altro ha modificato questo mentre lo guardavi. Ricarica per vedere la sua versione, poi ripeti la modifica.",
+        "noAccess": "Per questo serve l’autorizzazione di piattaforma {permission}.",
+        "manifestInvalid": "Il manifest non segue il manifest v1. Ogni problema è elencato con il suo percorso.",
+        "recipeInvalid": "La ricetta non segue il formato delle ricette o non corrisponde al manifest. Ogni problema è elencato con il suo percorso.",
+        "urlRefused": "Un indirizzo nella ricetta viene rifiutato: {detail}.",
+        "urlRefusedPlain": "Un indirizzo nella ricetta viene rifiutato. Gli indirizzi devono essere https, un nome DNS pubblico, sulla porta predefinita e senza credenziali.",
+        "connectorNotAvailable": "Il tipo di connettore {type} non è ancora implementato, quindi questa scheda non può essere pubblicata. Nulla che non funzioni raggiunge un workspace.",
+        "slugTaken": "Un’altra scheda o categoria usa già quell’ID. Scegline un altro.",
+        "categoryGone": "Quella categoria non esiste più. Ricarica l’elenco.",
+        "categoryUnknown": "La categoria indicata nel manifest non esiste per questo tipo di app, oppure è disattivata. Sceglila dalla pagina Categorie.",
+        "categoryInUse": "In questa categoria ci sono app. Spostale prima in un’altra categoria, oppure disattiva la categoria per nasconderla ai workspace.",
+        "versionState": "Non consentito mentre la scheda o la versione è {status}. Ricarica per vedere lo stato attuale.",
+        "versionStatePlain": "Non consentito nello stato attuale della scheda o della versione. Ricarica per vedere lo stato attuale.",
+        "versionExists": "Il numero di versione deve essere superiore a {newest}, la versione più alta finora.",
+        "versionExistsPlain": "Quel numero di versione esiste già. Usane uno più alto.",
+        "appUnavailable": "Una scheda disattivata definitivamente non può essere pubblicata. Prima ripristinala, poi pubblicala.",
+        "appNotFound": "Questa scheda non esiste. Potrebbe essere stata eliminata.",
+        "notFound": "Elemento non trovato. Potrebbe essere stato eliminato.",
+        "rateLimited": "Troppe richieste. Attendi {seconds} secondi e riprova.",
+        "rateLimitedPlain": "Troppe richieste. Attendi un momento e riprova.",
+        "validationFields": "Alcuni campi non sono validi. Ogni problema è elencato con il suo campo.",
+        "validation": "La richiesta non era valida.",
+        "request": "Impossibile completare la richiesta.",
+        "unexpected": "Qualcosa è andato storto dal nostro lato. Riprova; se continua, indica l’ID della richiesta.",
+        "subscriptionState": "Non è possibile nello stato attuale dell’abbonamento. Un workspace che già paga non può ricevere l’omaggio (prima annulla il suo abbonamento), un’app gratuita non ha nulla da omaggiare e un abbonamento terminato non può essere annullato di nuovo.",
+        "subscriptionNotFound": "Abbonamento non trovato. Potrebbe essere stato rimosso. Ricarica l’elenco."
+      },
+      "list": {
+        "title": "Catalogo del Marketplace",
+        "description": "Ogni scheda in qualsiasi stato: mini app e integrazioni, le loro versioni e quanti workspace le hanno installate.",
+        "new": "Nuova scheda",
+        "subscriptionsLink": "Abbonamenti e ricavi",
+        "kpi": {
+          "label": "Schede per stato",
+          "loaded": "Caricate",
+          "published": "Pubblicate",
+          "inReview": "In revisione",
+          "hidden": "Nascoste",
+          "killed": "Disattivate definitivamente",
+          "note": "I conteggi riguardano le {count} schede caricate finora, non l’intero catalogo.",
+          "noteMore": "Ce ne sono altre: usa Carica altro."
+        },
+        "filters": {
+          "label": "Filtri",
+          "search": "Cerca",
+          "searchPlaceholder": "Nome o ID",
+          "kind": "Tipo",
+          "allKinds": "Tutti i tipi",
+          "status": "Stato",
+          "allStatuses": "Tutti gli stati",
+          "category": "Categoria",
+          "allCategories": "Tutte le categorie",
+          "categoryNote": "Filtra le schede già caricate: l’API non ha un filtro per categoria.",
+          "pricing": "Prezzi",
+          "allPricing": "Tutti i prezzi",
+          "free": "Gratuite",
+          "paid": "A pagamento"
+        },
+        "cols": {
+          "app": "App",
+          "kind": "Tipo",
+          "category": "Categoria",
+          "status": "Stato",
+          "versions": "Versioni",
+          "installs": "Installazioni",
+          "planFeature": "Funzione del piano",
+          "pricing": "Prezzo",
+          "subscriptions": "Abbonamenti attivi"
+        },
+        "badges": {
+          "firstParty": "Di prima parte",
+          "featured": "In evidenza"
+        },
+        "versionPublished": "Pubblicata",
+        "versionLatest": "Ultima",
+        "dash": "-",
+        "everyPlan": "Tutti i piani",
+        "killedReason": "Disattivata definitivamente: {reason}",
+        "loadMore": "Carica altro",
+        "clearFilters": "Cancella filtri",
+        "emptyTitle": "Nessuna scheda ancora",
+        "emptyMessage": "Crea la prima scheda per avviare il catalogo.",
+        "noMatchTitle": "Nessuna scheda corrisponde",
+        "noMatchMessage": "Nessun elemento corrisponde a questi filtri. Prova con filtri diversi.",
+        "noMatchMoreMessage": "Nessuna delle schede caricate finora corrisponde. Ce ne sono altre: caricale oppure cambia i filtri.",
+        "tableCaption": "Schede del Marketplace",
+        "viewSubscriptions": "Abbonamenti a {name}"
+      },
+      "new": {
+        "title": "Nuova scheda",
+        "description": "Crea una scheda in bozza con la sua prima versione. Nulla raggiunge un workspace finché un revisore non la approva e pubblica.",
+        "back": "Torna al catalogo",
+        "sections": {
+          "docs": "Manifest e ricetta",
+          "docsHelp": "Il manifest indica chi è l’app, cosa può fare e quale connettore usa. Un’integrazione richiede anche una ricetta. Entrambi vengono controllati mentre scrivi, con le regole applicate dal server.",
+          "changelog": "Note della prima versione",
+          "changelogHelp": "Mostrate agli amministratori come contenuto della prima versione."
+        },
+        "changelog": "Changelog",
+        "changelogHint": "Facoltativo, fino a {max} caratteri. Se lasciato vuoto, riporta Prima versione.",
+        "save": "Crea scheda",
+        "saving": "Creazione in corso...",
+        "cancel": "Annulla",
+        "created": "Scheda {name} creata come bozza.",
+        "draftNote": "La scheda parte come bozza. Invia la sua versione per la revisione dalla pagina della scheda."
+      },
+      "editor": {
+        "cancel": "Annulla",
+        "format": "Formato",
+        "problemCount": "{count, plural, one {# problema da correggere} other {# problemi da correggere}}",
+        "valid": {
+          "manifest": "Manifest v1 valido.",
+          "recipe": "Ricetta valida."
+        },
+        "manifest": {
+          "label": "Manifest (JSON)",
+          "hint": "Manifest v1: id, name, kind, category, version, description, scopes, pricing, support, connector."
+        },
+        "recipe": {
+          "label": "Ricetta (JSON)",
+          "hint": "La ricetta del connettore di un’integrazione: connector, authFields, mapping, rateLimits, errorMapping, setupInstructions, testPayloads.",
+          "insertStarter": "Inserisci ricetta di partenza"
+        },
+        "scopes": {
+          "title": "Autorizzazioni richieste da questa versione",
+          "help": "Ciò che un amministratore deve accettare, in parole semplici. Chiedi solo quelle strettamente necessarie."
+        },
+        "templates": {
+          "title": "Parti da un modello",
+          "help": "Riempie entrambi gli editor con un punto di partenza valido da modificare.",
+          "mini_app": "Mini app",
+          "webhook_relay": "Integrazione: relay webhook",
+          "push": "Integrazione: push",
+          "replaceTitle": "Sostituire il contenuto degli editor?",
+          "replaceBody": "Il manifest e la ricetta che hai scritto verranno sostituiti dal modello.",
+          "replaceAction": "Sostituisci"
+        },
+        "problems": {
+          "listLabel": "Problemi",
+          "errorLabel": "Errore:",
+          "warningLabel": "Avviso:",
+          "syntax": "JSON non valido.",
+          "syntaxAt": "JSON non valido, vicino alla riga {line}, colonna {column}.",
+          "empty": "Questo documento è vuoto.",
+          "recipeNotAllowed": "Una mini app non ha ricetta: svuota questo editor.",
+          "recipeMissing": "Un’integrazione richiede una ricetta prima di poter essere inviata per la revisione.",
+          "recipeKeyMismatch": "Deve essere uguale all’id del manifest: {expected}.",
+          "recipeCategoryMismatch": "Deve essere uguale alla categoria del manifest: {expected}.",
+          "recipeConnectorMismatch": "Deve essere uguale al tipo di connettore del manifest: {expected}.",
+          "idChanged": "L’id di una scheda esistente non può cambiare: deve restare {expected}.",
+          "kindChanged": "Il tipo di una scheda esistente non può cambiare: deve restare {expected}.",
+          "versionNotHigher": "La versione deve essere superiore a {newest}, la più alta finora.",
+          "versionTaken": "Un’altra versione di questa scheda usa già {version}.",
+          "categoryUnknown": "Non esiste una categoria {category} attiva per {kind}. Controlla la pagina Categorie.",
+          "categoryRefused": "Il server ha rifiutato questa categoria: non esiste per questo tipo oppure è disattivata.",
+          "recipeRequired": "Un’integrazione richiede la sua ricetta.",
+          "slugTaken": "Un’altra scheda usa già questo id."
+        }
+      },
+      "fields": {
+        "sections": {
+          "page": "Pagina della scheda",
+          "pageHelp": "Ciò che un amministratore legge nella pagina dell’app.",
+          "screenshots": "Screenshot",
+          "screenshotsHelp": "Fino a {max} immagini mostrate nella pagina dell’app. Solo link https.",
+          "data": "Informativa sul trattamento dei dati",
+          "dataHelp": "Cosa memorizza l’app, dove e come viene eliminata: la dichiarazione mostrata nella pagina dell’app.",
+          "placement": "Posizionamento e accesso",
+          "placementHelp": "Come viene classificata e quale piano può installarla."
+        },
+        "tagline": "Slogan",
+        "taglineHint": "{count} di {max} caratteri (almeno 5).",
+        "logo": "Indirizzo del logo",
+        "logoHint": "Un link immagine https. Un’integrazione senza logo usa quello della sua ricetta.",
+        "longDescription": "Descrizione lunga",
+        "longDescriptionHint": "Testo semplice; le righe vuote separano i paragrafi. Fino a {max} caratteri.",
+        "highlights": "Punti salienti",
+        "highlightsHint": "Uno per riga: fino a {max}, ciascuno fino a {length} caratteri.",
+        "screenshotUrl": "Indirizzo dello screenshot {n}",
+        "screenshotCaption": "Didascalia dello screenshot {n}",
+        "screenshotRemove": "Rimuovi screenshot {n}",
+        "screenshotAdd": "Aggiungi uno screenshot",
+        "screenshotsNone": "Nessuno screenshot.",
+        "dataSummary": "Cosa memorizza",
+        "dataSummaryHint": "Fino a {max} caratteri.",
+        "dataRegions": "Regioni",
+        "dataRegionsHint": "Separate da virgole, fino a {max}, ad esempio India, UE.",
+        "dataDeletion": "Come vengono eliminati i dati",
+        "dataDeletionHint": "Fino a {max} caratteri.",
+        "firstParty": "Di prima parte",
+        "firstPartyHint": "Creata e gestita da noi: mostrata con il distintivo di prima parte.",
+        "featured": "In evidenza",
+        "featuredHint": "Mostrata nella sezione in evidenza.",
+        "planFeature": "Funzione del piano",
+        "planFeatureHint": "Un workspace deve avere questa funzione nel piano, o tramite un componente aggiuntivo, per installare l’app. Le etichette provengono dal catalogo dei piani.",
+        "planFeatureNone": "Tutti i piani",
+        "sortOrder": "Ordine",
+        "sortOrderHint": "Un numero intero da 0 a {max}; i più bassi compaiono per primi.",
+        "problems": {
+          "required": "Campo obbligatorio.",
+          "tooShort": "Almeno {min} caratteri.",
+          "tooLong": "Al massimo {max} caratteri.",
+          "https": "Usa un indirizzo https:// completo.",
+          "tooMany": "Al massimo {max} voci.",
+          "number": "Usa un numero intero da 0 a {max}.",
+          "unknownFeature": "Usa lettere minuscole, cifre e trattini bassi, iniziando con una lettera.",
+          "slug": "Usa da 2 a 48 lettere minuscole, cifre o trattini, iniziando con una lettera.",
+          "icon": "Usa da 1 a 32 lettere minuscole, cifre o trattini."
+        }
+      },
+      "summary": {
+        "title": "Correggi questi punti prima di salvare",
+        "sentTitle": "Il server non ha salvato questo",
+        "manifest": "{count, plural, one {# problema nel manifest} other {# problemi nel manifest}}",
+        "recipe": "{count, plural, one {# problema nella ricetta} other {# problemi nella ricetta}}",
+        "fields": "{count, plural, one {# problema nei campi della scheda} other {# problemi nei campi della scheda}}"
+      },
+      "detail": {
+        "title": "Scheda",
+        "back": "Torna al catalogo",
+        "firstParty": "Di prima parte",
+        "featured": "In evidenza",
+        "none": "Nessuna",
+        "everyPlan": "Tutti i piani",
+        "kpi": {
+          "installs": "Installazioni",
+          "published": "Versione pubblicata",
+          "latest": "Ultima versione",
+          "versions": "Versioni"
+        },
+        "facts": {
+          "kind": "Tipo",
+          "category": "Categoria",
+          "connector": "Connettore",
+          "planFeature": "Funzione del piano"
+        },
+        "tabs": {
+          "overview": "Scheda",
+          "versions": "Versioni ({count})"
+        },
+        "operate": {
+          "title": "Operazioni",
+          "description": "Nascondi, disattiva definitivamente, ripristina o elimina la scheda. Ogni azione chiede conferma.",
+          "lacking": "Alcune azioni sono nascoste perché i tuoi ruoli non includono {permission}."
+        },
+        "killed": {
+          "title": "Questa scheda è disattivata definitivamente",
+          "reason": "Motivo",
+          "effect": "Ogni installazione è interrotta e ogni indirizzo di consegna risponde 410. I workspace possono solo disinstallare."
+        },
+        "notice": {
+          "killedTitle": "{name} è stata disattivata definitivamente",
+          "killedBody": "{count, plural, one {# installazione è stata disattivata.} other {# installazioni sono state disattivate.}}",
+          "publishedTitle": "{name} {version} è pubblicata",
+          "publishedUpgraded": "{count, plural, one {# installazione è passata subito a essa.} other {# installazioni sono passate subito a essa.}}",
+          "publishedWaiting": "{count, plural, one {# installazione mantiene la versione attuale finché il suo amministratore non accetta le nuove autorizzazioni.} other {# installazioni mantengono la versione attuale finché i loro amministratori non accettano le nuove autorizzazioni.}}",
+          "dismiss": "Ignora"
+        }
+      },
+      "edit": {
+        "readOnly": "Sola lettura. Modificare la scheda richiede l’autorizzazione di piattaforma {permission}.",
+        "conflict": "Qualcun altro ha salvato questa scheda mentre la modificavi. Ricarica per vedere la sua versione, poi ripeti la modifica.",
+        "reload": "Ricarica",
+        "save": "Salva modifiche",
+        "saving": "Salvataggio...",
+        "discard": "Annulla modifiche",
+        "nothingToSave": "Nessuna modifica ancora.",
+        "saved": "{name} salvata."
+      },
+      "actions": {
+        "cancel": "Annulla",
+        "hide": "Nascondi",
+        "unhide": "Mostra di nuovo",
+        "unkill": "Ripristina",
+        "delete": "Elimina",
+        "kill": "Disattivazione d’emergenza",
+        "confirm": {
+          "hide": {
+            "title": "Nascondere {name}?",
+            "body": "{name} esce da esplorazione e ricerca, quindi nessun nuovo workspace la troverà. Le installazioni esistenti continuano a funzionare.",
+            "action": "Nascondi"
+          },
+          "unhide": {
+            "title": "Mostrare di nuovo {name}?",
+            "body": "{name} ricompare in esplorazione e ricerca con la sua versione pubblicata.",
+            "action": "Mostra di nuovo"
+          },
+          "unkill": {
+            "title": "Ripristinare {name}?",
+            "body": "{name} diventa nascosta, così può essere corretta e pubblicata di nuovo. Le installazioni disattivate restano spente: i workspace devono installarla di nuovo.",
+            "action": "Ripristina"
+          },
+          "delete": {
+            "title": "Eliminare {name}?",
+            "body": "Questo elimina in modo permanente la scheda in bozza e le sue versioni. Una scheda pubblicata o installata non può essere eliminata: nascondila.",
+            "action": "Elimina scheda"
+          }
+        },
+        "done": {
+          "hide": "{name} è nascosta.",
+          "unhide": "{name} è di nuovo visibile.",
+          "unkill": "{name} è stata ripristinata come nascosta.",
+          "kill": "{name} è stata disattivata definitivamente.",
+          "delete": "{name} è stata eliminata."
+        }
+      },
+      "killDialog": {
+        "eyebrow": "Disattivazione d’emergenza",
+        "title": "Disattivare definitivamente {name}?",
+        "close": "Chiudi",
+        "cancel": "Annulla",
+        "confirm": "Disattiva definitivamente {name}",
+        "installs": "{name} è installata in {count, plural, one {# workspace} other {# workspace}}.",
+        "effects": {
+          "stop": "Ogni installazione smette di funzionare subito.",
+          "connections": "Ogni connessione viene disabilitata.",
+          "address": "Dalla richiesta successiva, l’indirizzo di consegna risponde 410 Gone.",
+          "uninstall": "I workspace possono solo disinstallarla."
+        },
+        "undo": "Ripristinando la scheda in seguito, diventa nascosta. Le installazioni disattivate restano spente e i workspace devono installarla di nuovo.",
+        "reason": "Motivo",
+        "reasonHint": "Tra {min} e {max} caratteri. Viene conservato nel registro di audit e mostrato a ogni workspace.",
+        "count": "{count} di {max} caratteri (almeno {min}).",
+        "typeSlug": "Scrivi {slug} per confermare",
+        "typeSlugHint": "L’id della scheda, esattamente come mostrato."
+      },
+      "versions": {
+        "title": "Versioni",
+        "description": "Ogni versione di questa scheda. Seleziona una per vedere il suo manifest, la ricetta e le azioni.",
+        "newVersion": "Nuova versione",
+        "newVersionHint": "Una nuova versione parte da quella che stai visualizzando ({version}) con il numero aumentato. Deve essere superiore a ogni versione precedente.",
+        "tableCaption": "Versioni di questa scheda",
+        "cols": {
+          "version": "Versione",
+          "status": "Stato",
+          "changelog": "Changelog",
+          "scopes": "Autorizzazioni",
+          "reviewNote": "Nota di revisione",
+          "dates": "Date"
+        },
+        "viewing": "Visualizzazione",
+        "none": "-",
+        "dates": {
+          "created": "Creata",
+          "submitted": "Inviata",
+          "reviewed": "Revisionata",
+          "published": "Pubblicata"
+        },
+        "selectedTitle": "Versione {version}",
+        "selectedHelp": "Le sue autorizzazioni, il manifest e la ricetta così come salvati. Le azioni seguono lo stato della versione e le tue autorizzazioni.",
+        "edit": "Modifica",
+        "newFrom": "Nuova versione da questa",
+        "submit": "Invia per la revisione",
+        "approve": "Approva",
+        "reject": "Rifiuta",
+        "publish": "Pubblica",
+        "rejectedNote": "Motivo del revisore (mostrato allo sviluppatore)",
+        "recipeMissing": "Questa integrazione non ha ancora una ricetta. Aggiungine una prima di inviare per la revisione.",
+        "permissions": "Autorizzazioni",
+        "manifest": "Manifest",
+        "recipe": "Ricetta",
+        "noRecipeIntegration": "Per questa versione non è memorizzata alcuna ricetta.",
+        "noRecipeMiniApp": "Una mini app non ha ricetta.",
+        "done": {
+          "submit": "Versione {version} inviata per la revisione.",
+          "approve": "Versione {version} approvata.",
+          "reject": "Versione {version} rifiutata.",
+          "publish": "Versione {version} pubblicata.",
+          "created": "Versione {version} salvata come bozza.",
+          "updated": "Versione {version} aggiornata."
+        }
+      },
+      "versionEditor": {
+        "newTitle": "Nuova versione",
+        "newHelp": "Parte dalla versione che stavi visualizzando, con il numero aumentato. Modifica il manifest e la ricetta, poi descrivi cosa è cambiato.",
+        "editTitle": "Modifica versione",
+        "editHelp": "Sostituisce il manifest e la ricetta di questa versione. Una versione rifiutata torna in bozza quando viene salvata.",
+        "changelog": "Changelog",
+        "changelogHint": "Cosa è cambiato in questa versione. Lo leggono gli amministratori. Fino a {max} caratteri.",
+        "saveNew": "Salva nuova versione",
+        "saveEdit": "Salva modifiche",
+        "saving": "Salvataggio...",
+        "cancel": "Annulla"
+      },
+      "versionDialogs": {
+        "approve": {
+          "title": "Approvare {name} {version}?",
+          "close": "Chiudi",
+          "cancel": "Annulla",
+          "confirm": "Approva",
+          "body": "Una versione approvata può poi essere pubblicata. L’approvazione non cambia ciò che vedono i workspace.",
+          "note": "Nota (facoltativa)",
+          "noteHint": "Conservata con la versione. Fino a {max} caratteri."
+        },
+        "reject": {
+          "title": "Rifiutare {name} {version}?",
+          "close": "Chiudi",
+          "cancel": "Annulla",
+          "confirm": "Rifiuta versione",
+          "body": "Il motivo viene mostrato allo sviluppatore. Lui modifica la versione e la invia di nuovo.",
+          "note": "Motivo",
+          "noteHint": "Almeno {min} e al massimo {max} caratteri.",
+          "count": "{count} di {max} caratteri (almeno {min})."
+        },
+        "publish": {
+          "title": "Pubblicare {name} {version}?",
+          "cancel": "Annulla",
+          "confirm": "Pubblica {version}",
+          "body": "{name} {version} diventa la versione che ottiene ogni nuova installazione.",
+          "effects": {
+            "retire": "La versione pubblicata in precedenza viene ritirata.",
+            "moveSame": "Le installazioni le cui autorizzazioni concesse coprono già questa versione passano subito a essa.",
+            "moveMore": "Le installazioni che richiedono di più continuano a funzionare sulla versione attuale finché il loro amministratore non accetta il nuovo elenco di autorizzazioni.",
+            "killed": "Le installazioni disattivate non vengono toccate."
+          },
+          "installs": "{count, plural, one {# installazione è interessata.} other {# installazioni sono interessate.}}",
+          "first": "Questa è la prima versione pubblicata.",
+          "addedScopes": "{count, plural, one {Richiede # autorizzazione che la versione pubblicata non prevede:} other {Richiede # autorizzazioni che la versione pubblicata non prevede:}}"
+        }
+      },
+      "categories": {
+        "title": "Categorie",
+        "description": "Le categorie delle due schede del Marketplace. Una categoria disattivata viene nascosta ai workspace; una con app al suo interno non può essere eliminata.",
+        "new": "Nuova categoria",
+        "emptyTitle": "Nessuna categoria",
+        "emptyMessage": "Aggiungi una categoria prima di creare schede: ogni scheda ne appartiene una.",
+        "groupCount": "{count, plural, one {# categoria} other {# categorie}}",
+        "groupEmpty": "Nessuna categoria ancora per questo tipo.",
+        "tableCaption": "Categorie",
+        "cols": {
+          "name": "Nome",
+          "slug": "Id",
+          "icon": "Icona",
+          "order": "Ordine",
+          "apps": "App",
+          "status": "Stato",
+          "actions": "Azioni"
+        },
+        "dash": "-",
+        "active": "Attiva",
+        "inactive": "Nascosta ai workspace",
+        "edit": "Modifica",
+        "delete": "Elimina",
+        "inUse": "Ha app",
+        "form": {
+          "createTitle": "Nuova categoria",
+          "editTitle": "Modifica {name}",
+          "close": "Chiudi",
+          "cancel": "Annulla",
+          "create": "Crea categoria",
+          "save": "Salva modifiche",
+          "kind": "Tipo",
+          "kinds": {
+            "mini_app": "Mini app",
+            "integration": "Integrazione"
+          },
+          "kindLocked": "Il tipo non può essere modificato.",
+          "slug": "Id (slug)",
+          "slugHint": "Da 2 a 48 lettere minuscole, cifre o trattini, iniziando con una lettera. Non può essere modificato in seguito.",
+          "slugLocked": "L’id non può essere modificato dopo la creazione.",
+          "name": "Nome",
+          "nameHint": "Da {min} a {max} caratteri.",
+          "descriptionField": "Descrizione",
+          "descriptionHint": "Facoltativa, fino a {max} caratteri.",
+          "icon": "Icona",
+          "iconHint": "Nome icona facoltativo: lettere minuscole, cifre e trattini.",
+          "sortOrder": "Ordine",
+          "sortOrderHint": "Un numero intero da 0 a {max}; i più bassi compaiono per primi.",
+          "active": "Attiva",
+          "activeHint": "Disattivata, la categoria viene nascosta ai workspace. Le sue app la mantengono.",
+          "conflict": "Qualcun altro ha modificato questa categoria. Ricarica per vedere la sua versione, poi ripeti la modifica.",
+          "reload": "Ricarica",
+          "created": "Categoria {name} creata.",
+          "saved": "Categoria {name} salvata."
+        },
+        "deleteDialog": {
+          "title": "Eliminare {name}?",
+          "body": "{name} non ha app. Eliminandola viene rimossa definitivamente.",
+          "action": "Elimina categoria",
+          "cancel": "Annulla",
+          "done": "Categoria {name} eliminata."
+        }
+      },
+      "requests": {
+        "title": "Richieste",
+        "description": "Ciò che i workspace hanno richiesto, dalla più votata. L’ordine di sviluppo segue questo elenco.",
+        "readOnly": "Sola lettura. La gestione richiede l’autorizzazione di piattaforma {permission}.",
+        "filters": {
+          "label": "Filtri",
+          "search": "Cerca",
+          "searchPlaceholder": "Nome",
+          "kind": "Tipo",
+          "allKinds": "Tutti i tipi",
+          "status": "Stato",
+          "allStatuses": "Tutti gli stati"
+        },
+        "clearFilters": "Cancella filtri",
+        "emptyTitle": "Nessuna richiesta ancora",
+        "emptyMessage": "Quando un workspace richiede un’integrazione, compare qui con i suoi voti.",
+        "noMatchTitle": "Nessuna richiesta corrisponde",
+        "noMatchMessage": "Nessun elemento corrisponde a questi filtri.",
+        "loadMore": "Carica altri",
+        "tableCaption": "Richieste per voti",
+        "cols": {
+          "votes": "Voti",
+          "request": "Richiesta",
+          "notes": "Note del workspace",
+          "firstWorkspace": "Chiesta per la prima volta da",
+          "status": "Stato",
+          "actions": "Azioni"
+        },
+        "votes": "{count, plural, one {# voto} other {# voti}}",
+        "noNotes": "Nessuna nota.",
+        "dash": "-",
+        "operatorNote": "La tua nota: {note}",
+        "triageAction": "Smistamento",
+        "triage": {
+          "title": "Smista {name}",
+          "close": "Chiudi",
+          "cancel": "Annulla",
+          "save": "Salva",
+          "saved": "{name} salvato.",
+          "votes": "{count, plural, one {# voto} other {# voti}}",
+          "status": "Stato",
+          "note": "Nota dell’operatore",
+          "noteHint": "Facoltativo, fino a {max} caratteri. La vedono solo gli operatori.",
+          "noteTooLong": "Al massimo {max} caratteri.",
+          "conflict": "Qualcun altro ha aggiornato questa richiesta. Ricarica la pagina per vedere la sua versione, poi ripeti la modifica.",
+          "reload": "Ricarica"
+        }
+      },
+      "usage": {
+        "title": "Utilizzo e stato di salute",
+        "description": "Per app: installazioni per stato e salute, e consegne accettate, ripetute, rifiutate e non riuscite nelle ultime 24 ore e negli ultimi 7 giorni.",
+        "kpi": {
+          "apps": "App",
+          "installs": "Installazioni",
+          "activeHint": "{count} attive",
+          "needsLook": "Serve un controllo",
+          "failed7d": "Consegne non riuscite (7 giorni)"
+        },
+        "sort": {
+          "label": "Ordina per",
+          "failed": "Più consegne non riuscite",
+          "installs": "Più installazioni",
+          "name": "Nome"
+        },
+        "emptyTitle": "Nessun utilizzo ancora",
+        "emptyMessage": "Le app compaiono qui una volta presenti nel catalogo.",
+        "tableCaption": "Utilizzo per app",
+        "cols": {
+          "app": "App",
+          "installs": "Installazioni",
+          "health": "Stato di salute",
+          "events24h": "Consegne, 24 ore",
+          "events7d": "Consegne, 7 giorni",
+          "attention": "Attenzione"
+        },
+        "installs": {
+          "active": "{count} attive",
+          "disabled": "{count} in pausa",
+          "killed": "{count} disattivate"
+        },
+        "health": {
+          "healthy": "{count} in buono stato",
+          "degraded": "{count} degradate",
+          "error": "{count} in errore",
+          "needsReauth": "{count} da riautenticare",
+          "unknown": "{count} sconosciute"
+        },
+        "events": {
+          "accepted": "{count} accettate",
+          "duplicate": "{count} ripetute",
+          "rejected": "{count} rifiutate",
+          "failed": "{count} non riuscite"
+        },
+        "needsLook": "Serve un controllo",
+        "reasons": {
+          "installErrors": "Installazioni in errore",
+          "needsReauth": "Installazioni da riautenticare",
+          "failed24h": "Consegne non riuscite nelle ultime 24 ore",
+          "failed7d": "Consegne non riuscite negli ultimi 7 giorni"
+        },
+        "recipeHint": "La ricetta potrebbe essersi rotta: un portale ha cambiato formato o una chiave è scaduta. Correggila con una nuova versione della ricetta.",
+        "fine": "Nessun problema rilevato",
+        "runbookNote": "Un’integrazione con molte installazioni in errore o da riautenticare, oppure un conteggio di consegne non riuscite in crescita, si sta rompendo. Correggi la sua ricetta in una nuova versione (runbook, sezione 8)."
+      },
+      "price": {
+        "free": "Gratuita",
+        "perMonth": "/ mese",
+        "trial": "{count, plural, one {Prova di # giorno} other {Prova di # giorni}}",
+        "notOnSale": "Non in vendita"
+      },
+      "pricing": {
+        "title": "Prezzo",
+        "description": "Decidi se questa app è gratuita o a pagamento e quanto costa. Conta il tuo prezzo: il manifest dello sviluppatore ne propone solo uno.",
+        "billing": "Un’app a pagamento si vende come periodo mensile prepagato: un componente aggiuntivo di fatturazione acquistato tramite il normale checkout. Non c’è ancora un rinnovo automatico con carta, quindi un workspace paga di nuovo quando il suo mese sta per finire. Una modifica del prezzo si applica alle nuove sottoscrizioni e al pagamento successivo di ciascun abbonato; un periodo già pagato non viene mai toccato.",
+        "readOnly": "Sola lettura. Modificare il prezzo richiede l’autorizzazione di piattaforma {permission}.",
+        "visibility": {
+          "label": "Stato dell’inserzione",
+          "note": "Nascondi, mostra di nuovo o disattiva l’inserzione nella sezione Gestione qui sopra. Questo pannello non la modifica."
+        },
+        "subscribers": {
+          "label": "Abbonamenti",
+          "count": "{count, plural, one {# abbonamento attivo} other {# abbonamenti attivi}}",
+          "view": "Vedi abbonamenti",
+          "hint": "Abbonamenti a pagamento, di prova e offerti gratuitamente in vigore. Quelli in scadenza o già scaduti non vengono conteggiati."
+        },
+        "changed": "Prezzo modificato l’ultima volta",
+        "conflict": "Qualcun altro ha salvato questa inserzione mentre modificavi il prezzo. Ricarica la pagina per vedere la sua versione, poi ripeti la modifica.",
+        "reload": "Ricarica",
+        "model": {
+          "legend": "Prezzo",
+          "free": "Gratuita",
+          "freeHint": "Nessun costo. Ogni workspace può installarla.",
+          "paid": "A pagamento, al mese",
+          "paidHint": "I workspace si abbonano tramite checkout e pagano mese per mese."
+        },
+        "fields": {
+          "amount": "Prezzo mensile",
+          "amountHint": "Per workspace, al mese: 9 o 9.99.",
+          "currency": "Valuta",
+          "currencyHint": "Un codice di tre lettere, come USD. La piattaforma rifiuta una valuta che non ha abilitato.",
+          "trialDays": "Periodo di prova gratuito (giorni)",
+          "trialDaysHint": "0 per nessuna prova, al massimo {max}. Ogni workspace ottiene una sola prova per app.",
+          "annualAmount": "Prezzo annuale (facoltativo)",
+          "annualAmountHint": "Salvato per dopo. La fatturazione annuale non è ancora disponibile, quindi oggi i workspace non possono pagare su base annua.",
+          "purchasable": "In vendita",
+          "purchasableHint": "Se disattivato, nessun nuovo workspace può abbonarsi. I workspace già abbonati possono ancora rinnovare."
+        },
+        "included": {
+          "title": "Incluso nei piani",
+          "help": "Facoltativo. Un workspace che rientra in una delle due regole ottiene l’app gratis. Lascia vuoti entrambi i campi per far pagare tutti i workspace.",
+          "feature": "Funzionalità del piano",
+          "featureHint": "Workspace il cui piano (contando i suoi componenti aggiuntivi) include questa funzionalità. Scegli un suggerimento o digita una chiave di funzionalità.",
+          "plan": "Piano minimo",
+          "planHint": "Workspace su questo piano o su un piano superiore. I piani sono elencati dal più basso.",
+          "planNone": "Nessuna regola di piano",
+          "planTyped": "Non è stato possibile caricare l’elenco dei piani. Digita un ID piano."
+        },
+        "grants": {
+          "title": "Concede funzionalità del piano",
+          "help": "Facoltativo. Le funzionalità del piano che un abbonamento a questa app attiva, così una funzionalità può essere venduta come app mentre i suoi controlli attuali continuano a funzionare. Si possono concedere solo funzionalità disattivate per impostazione predefinita.",
+          "thirdParty": "Solo le app di prima parte possono concedere funzionalità del piano. Per usarlo, contrassegna prima l’inserzione come di prima parte nella scheda Inserzione.",
+          "grandfather": "Tutela gli utenti esistenti",
+          "grandfatherHint": "Permette di offrire gratuitamente i workspace che hanno già una funzionalità concessa, così nessuno la perde. Salva, poi usa Offri agli utenti esistenti qui sotto. Fallo prima che la funzionalità venga disattivata nei piani.",
+          "compExisting": "Offri agli utenti esistenti",
+          "compExistingHint": "I workspace che hanno già una funzionalità concessa tramite il piano e non hanno ancora un abbonamento ottengono gratis questa app. Vedi prima chi ne ha diritto.",
+          "compExistingAction": "Offri agli utenti esistenti..."
+        },
+        "proposal": {
+          "title": "Proposta dello sviluppatore",
+          "intro": "Dal manifest della versione {version}. È solo una proposta e non cambia nulla: conta il prezzo qui sopra, che è quello visto dai workspace.",
+          "note": "Nota: {note}",
+          "models": {
+            "free": "Gratuita",
+            "included": "Inclusa nel piano",
+            "addon": "Componente aggiuntivo a pagamento"
+          }
+        },
+        "save": "Salva prezzo",
+        "saving": "Salvataggio in corso...",
+        "discard": "Annulla modifiche",
+        "nothingToSave": "Nessuna modifica ancora.",
+        "saved": "Prezzo di {name} salvato.",
+        "problems": {
+          "priceRequired": "Imposta un prezzo mensile.",
+          "priceFormat": "Usa un numero come 9 o 9.99 (al massimo due decimali).",
+          "pricePositive": "Il prezzo deve essere superiore a zero.",
+          "currencyRequired": "Scegli una valuta.",
+          "currencyFormat": "Usa un codice valuta di tre lettere.",
+          "yearlyFormat": "Usa un numero come 90 o 89.99, oppure lascia vuoto.",
+          "yearlyPositive": "Il prezzo annuale deve essere superiore a zero, oppure vuoto.",
+          "trialRange": "Usa giorni interi da 0 a {max}.",
+          "featureFormat": "Usa lettere minuscole, cifre e trattini bassi, iniziando con una lettera.",
+          "planFormat": "Usa un ID piano: lettere minuscole, cifre e trattini bassi.",
+          "grantsInvalid": "Scegli ogni funzionalità del piano una sola volta, al massimo 10 funzionalità.",
+          "grandfatherNeedsGrants": "Scegli prima almeno una funzionalità del piano concessa dall’app.",
+          "includedGranted": "Una funzionalità concessa dall’app non può anche essere ciò che la include."
+        },
+        "confirm": {
+          "cancel": "Continua a modificare",
+          "priceChange": {
+            "title": "Cambiare il prezzo di {name}?",
+            "body": "{count, plural, one {# workspace si sta abbonando} other {# workspace si stanno abbonando}} adesso. Il prezzo mensile passa da {from} a {to}.",
+            "next": "Il nuovo prezzo si applica alle nuove sottoscrizioni e al pagamento successivo di ciascun abbonato.",
+            "paid": "Un periodo già pagato da un workspace non viene mai toccato, rimborsato o riprezzato.",
+            "action": "Cambia prezzo"
+          },
+          "toFree": {
+            "title": "Rendere {name} gratuita?",
+            "body": "{count, plural, one {# workspace è abbonato} other {# workspace sono abbonati}} adesso.",
+            "free": "Ogni workspace potrà poi usare l’app senza pagare, e a nessuno verrà più addebitata.",
+            "paid": "Gli abbonati mantengono il tempo già pagato. Non viene rimborsato.",
+            "action": "Rendi gratuita"
+          }
+        }
+      },
+      "grandfather": {
+        "eyebrow": "Utenti esistenti",
+        "title": "Offri gratis agli utenti esistenti di {name}",
+        "close": "Chiudi",
+        "cancel": "Annulla",
+        "change": "Cambia",
+        "run": "{count, plural, one {Offri gratis # workspace} other {Offri gratis # workspace}}",
+        "preview": "Verifica chi ha diritto",
+        "intro": "Offri gratuitamente ogni workspace che ha già una funzionalità del piano concessa da {name}, tramite il suo piano o le sue eccezioni, e che non ha ancora un abbonamento. Prima vedi chi riceverebbe l’offerta; non cambia nulla finché non confermi.",
+        "timing": "Fallo prima che la funzionalità venga disattivata nei piani o che il suo valore predefinito cambi: legge ciò che ogni workspace ha in questo momento.",
+        "note": "Nota",
+        "matched": "{count, plural, =0 {Nessun workspace ha diritto} one {# workspace ha diritto} other {# workspace hanno diritto}}",
+        "nobody": "Nessuno ha una funzionalità concessa senza un abbonamento, quindi non c’è nulla da offrire.",
+        "sample": "Alcuni di loro:",
+        "more": "e altri {count}",
+        "confirm": "Controlla l’elenco, poi conferma per offrirli gratuitamente. Viene registrato nel registro delle attività e non si annulla con un solo passaggio: annulla ogni abbonamento per terminare un’offerta.",
+        "refused": "Possibile solo per un’inserzione a pagamento che concede funzionalità del piano e con Tutela degli utenti esistenti salvato. Controlla il suo prezzo.",
+        "done": "{count, plural, one {Offerto gratis # workspace su {name}.} other {Offerti gratis # workspace su {name}.}}"
+      },
+      "compFields": {
+        "duration": "Per quanto tempo?",
+        "months": "Per un numero di mesi",
+        "monthsLabel": "Mesi",
+        "monthsHint": "Mesi interi, da 1 a {max}.",
+        "monthsInvalid": "Usa mesi interi da 1 a {max}.",
+        "open": "Finché non lo termino",
+        "noteHint": "Tra {min} e {max} caratteri. Viene conservata nel registro delle attività.",
+        "count": "{count} di {max} caratteri (almeno {min})."
+      },
+      "cancelDialog": {
+        "eyebrow": "Abbonamento",
+        "title": "Annullare l’abbonamento di {workspace}?",
+        "close": "Chiudi",
+        "back": "Mantieni",
+        "summary": "{workspace} ha {app}.",
+        "when": "Quando deve terminare?",
+        "periodEnd": {
+          "label": "Alla fine del periodo pagato",
+          "detail": "Il rinnovo si interrompe. {workspace} mantiene {app} fino al {date}, poi l’installazione viene messa in pausa e i suoi dati vengono conservati."
+        },
+        "now": {
+          "label": "Subito",
+          "detail": "L’accesso termina subito. L’installazione viene messa in pausa e i suoi dati vengono conservati. Il tempo già pagato non viene rimborsato."
+        },
+        "noEnd": "Questo abbonamento non ha una data di fine, quindi può essere terminato solo subito.",
+        "ending": "È già impostato per terminare il {date}. Puoi comunque terminarlo subito.",
+        "reason": "Motivo",
+        "confirmPeriod": "Interrompi rinnovo",
+        "confirmNow": "Termina ora",
+        "done": {
+          "periodEnd": "Rinnovo interrotto per {workspace}. L’accesso prosegue fino alla fine del periodo pagato.",
+          "now": "{workspace} non ha più {app}."
+        }
+      },
+      "compDialog": {
+        "eyebrow": "Offerta gratuita",
+        "title": "Offri gratis un workspace",
+        "close": "Chiudi",
+        "cancel": "Annulla",
+        "submit": "Offri gratis il workspace",
+        "intro": "Dai a un workspace un’app a pagamento senza addebito. Viene registrato nel registro delle attività con la tua nota. Viene rifiutato finché il workspace paga per l’app: annulla prima quell’abbonamento.",
+        "app": "App",
+        "appPlaceholder": "Scegli un’app a pagamento",
+        "noPaidApps": "Non c’è ancora un’app a pagamento da offrire gratis. Imposta prima un prezzo su un’inserzione.",
+        "workspaceSearch": "Trova un workspace",
+        "workspaceSearchPlaceholder": "Nome del workspace",
+        "workspaceHint": "Mostro fino a {count} corrispondenze. Digita per restringere l’elenco.",
+        "workspaceChosen": "Scelto: {name}",
+        "workspaceNone": "Nessun workspace corrisponde.",
+        "workspaceResults": "Workspace corrispondenti",
+        "workspacePlan": "Piano: {plan}",
+        "workspaceLoading": "Caricamento dei workspace...",
+        "note": "Nota",
+        "effectMonths": "{count, plural, one {Il workspace ottiene l’app gratis per # mese.} other {Il workspace ottiene l’app gratis per # mesi.}}",
+        "effectOpen": "Il workspace ottiene l’app gratis finché non la termini annullando il suo abbonamento.",
+        "done": "{workspace} ora ha {app} gratis."
+      },
+      "subscriptions": {
+        "title": "Abbonamenti",
+        "description": "Chi paga per quale app a pagamento, cosa possiede ogni workspace e il ricavo mensile che porta. I valori sono prezzi di listino: senza tasse, coupon o prove.",
+        "readOnly": "Sola lettura. Offrire gratis un workspace e annullare un abbonamento richiedono l’autorizzazione di piattaforma {permission}.",
+        "comp": "Offri gratis un workspace",
+        "kpi": {
+          "label": "Abbonamenti per stato",
+          "active": "Pagante",
+          "trialing": "In prova",
+          "comped": "Offerto gratis",
+          "canceling": "In scadenza",
+          "ended": "Scaduto",
+          "mrr": "Ricavo mensile",
+          "mrrNone": "Ancora nessun abbonato pagante",
+          "mrrCurrency": "Ricavo mensile, {currency}"
+        },
+        "summary": {
+          "emptyTitle": "Ancora nessuna app a pagamento",
+          "emptyMessage": "Imposta un prezzo su un’inserzione per iniziare a venderla. Compare qui con i suoi abbonati.",
+          "caption": "Abbonamenti per app e per stato",
+          "cols": {
+            "app": "App",
+            "price": "Prezzo",
+            "active": "Paganti",
+            "trialing": "In prova",
+            "comped": "Offerti gratis",
+            "canceling": "In scadenza",
+            "ended": "Scaduti",
+            "total": "Totale",
+            "mrr": "Ricavo mensile"
+          },
+          "free": "Gratuita",
+          "totals": "Tutte le app",
+          "note": "Il ricavo mensile è il prezzo di listino di ogni abbonamento pagante, nella sua valuta. Prove, offerte gratuite e abbonamenti scaduti non vengono conteggiati, e le valute non vengono mai sommate tra loro."
+        },
+        "filters": {
+          "label": "Filtri",
+          "app": "App",
+          "allApps": "Tutte le app",
+          "status": "Stato",
+          "allStatuses": "Tutti gli stati",
+          "source": "Origine",
+          "allSources": "Tutte le origini",
+          "search": "Workspace",
+          "searchPlaceholder": "Nome del workspace"
+        },
+        "cols": {
+          "workspace": "Workspace",
+          "app": "App",
+          "status": "Stato",
+          "source": "Origine",
+          "started": "Iniziato",
+          "period": "Periodo",
+          "amount": "Importo",
+          "actions": "Azioni"
+        },
+        "period": {
+          "paidUntil": "Pagato fino al {date}",
+          "trialEnds": "La prova termina il {date}",
+          "endsOn": "Termina il {date}",
+          "compUntil": "Offerto gratis fino al {date}",
+          "compOpen": "Offerto gratis finché non lo termini",
+          "endedOn": "Terminato il {date}",
+          "none": "Nessuna data di fine"
+        },
+        "noCharge": "Nessun addebito",
+        "compBy": "Offerto da {operator}: {note}",
+        "cancel": "Annulla...",
+        "tableCaption": "Abbonamenti",
+        "emptyTitle": "Nessun abbonamento ancora",
+        "emptyMessage": "Un workspace compare qui quando si abbona, avvia una prova o riceve un’offerta gratuita.",
+        "noMatchTitle": "Nessun abbonamento corrisponde",
+        "noMatchMessage": "Nessun elemento corrisponde a questi filtri. Prova con altri.",
+        "clearFilters": "Cancella filtri",
+        "loadMore": "Carica altri"
+      }
+    }
+  }
+}

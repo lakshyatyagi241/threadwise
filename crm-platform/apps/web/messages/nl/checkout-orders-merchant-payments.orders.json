@@ -1,0 +1,184 @@
+{
+  "checkout-orders-merchant-payments": {
+    "orders": {
+      "eyebrow": "Winkel / Bestellingen",
+      "title": "Alle bestellingen",
+      "subtitle": "Elke bestelling uit elk kanaal: WhatsApp, webshop, Twilio en handmatig.",
+      "loading": "Bestellingen laden",
+      "statusTabs": "Bestelstatus",
+      "searchLabel": "Bestellingen zoeken",
+      "searchPlaceholder": "Zoeken op telefoon, naam of bestelnummer",
+      "sourceLabel": "Bron",
+      "allSources": "Alle bronnen",
+      "paymentLabel": "Betaling",
+      "allPayments": "Alle betalingen",
+      "fromLabel": "Van",
+      "toLabel": "Tot",
+      "shopLabel": "Winkel",
+      "invertedRange": "De startdatum ligt na de einddatum, dus er kan geen bestelling overeenkomen.",
+      "clearFilters": "Filters wissen",
+      "cols": {
+        "order": "Bestelling",
+        "customer": "Klant",
+        "items": "Artikelen",
+        "total": "Totaal",
+        "payment": "Betaling",
+        "status": "Status",
+        "source": "Bron",
+        "created": "Aangemaakt",
+        "actions": "Acties"
+      },
+      "itemsCount": "{count, plural, one {# artikel} other {# artikelen}}",
+      "anonymous": "Anoniem",
+      "openOrder": "Bestelling #{no} openen",
+      "changeStatus": "Status van bestelling #{no} wijzigen",
+      "deleteOrder": "Bestelling #{no} verwijderen",
+      "deleteTitle": "Bestelling #{no} verwijderen?",
+      "deleteMessage": "De bestelling en de artikelen worden definitief verwijderd. Dit kan niet ongedaan worden gemaakt.",
+      "deleteConfirm": "Bestelling verwijderen",
+      "deleted": "Bestelling #{no} is verwijderd.",
+      "statusChanged": "Bestelling #{no} is nu {status}.",
+      "buyerNotified": "De koper is een bericht gestuurd.",
+      "confirmStatusTitle": "Bestelling #{no} markeren als {status}?",
+      "confirmStatusMessage": "De koper wordt op de hoogte gebracht van de nieuwe status. Je kunt de bestelling later nog naar een andere status verplaatsen.",
+      "confirmStatusConfirm": "Status bijwerken",
+      "emptyTitle": "Nog geen bestellingen",
+      "emptyMessage": "Wanneer klanten bestellen via je webshop of op WhatsApp, verschijnen ze hier. Deel je winkellink om de eerste binnen te krijgen.",
+      "emptyAction": "Winkeloverzicht openen",
+      "noMatchTitle": "Geen bestellingen komen overeen met deze filters",
+      "noMatchMessage": "Probeer een andere zoekopdracht, status of periode, of wis de filters om alle bestellingen te zien."
+    },
+    "orderDetail": {
+      "back": "Terug naar bestellingen",
+      "title": "Bestelling #{no}",
+      "placed": "Geplaatst {when}",
+      "loading": "Bestelling laden",
+      "readOnly": "Je kunt deze bestelling bekijken maar niet wijzigen.",
+      "items": {
+        "title": "Artikelen",
+        "empty": "Deze bestelling heeft geen artikelen.",
+        "qty": "Aantal {qty}",
+        "retailerId": "ID {id}",
+        "unit": "{price} per stuk"
+      },
+      "totals": {
+        "title": "Totalen",
+        "subtotal": "Subtotaal",
+        "shipping": "Verzending",
+        "tax": "Btw",
+        "taxInclusive": "Inbegrepen in de prijzen",
+        "discount": "Korting",
+        "discountCoupon": "Korting ({code})",
+        "total": "Totaal"
+      },
+      "customer": {
+        "title": "Klant",
+        "anonymous": "Anoniem",
+        "phone": "Telefoon",
+        "email": "E-mail",
+        "address": "Verzendadres",
+        "noAddress": "Voor deze bestelling is geen adres vastgelegd.",
+        "notes": "Notities"
+      },
+      "meta": {
+        "title": "Bestelgegevens",
+        "orderId": "Bestel-ID",
+        "source": "Bron",
+        "shop": "Winkel",
+        "paymentMethod": "Betaalmethode",
+        "updated": "Laatst bijgewerkt"
+      },
+      "rto": {
+        "title": "Risico op retour naar afzender",
+        "summary": "{band} ({score})",
+        "low": "Laag",
+        "medium": "Gemiddeld",
+        "high": "Hoog"
+      },
+      "timeline": {
+        "title": "Tijdlijn",
+        "empty": "Er is nog niets gebeurd met deze bestelling.",
+        "kind": {
+          "created": "Bestelling geplaatst",
+          "status_changed": "Status gewijzigd",
+          "payment_link": "Betaallink",
+          "paid": "Betaling ontvangen",
+          "invoice": "Factuur",
+          "note": "Notitie",
+          "updated": "Bestelling bijgewerkt"
+        },
+        "actor": {
+          "user": "Door een teamlid",
+          "system": "Automatisch",
+          "customer": "Door de klant"
+        }
+      },
+      "payments": {
+        "title": "Betalingen",
+        "empty": "Er is geen betaling voor deze bestelling geregistreerd.",
+        "kind": {
+          "gateway": "Online betaling",
+          "payment_link": "Betaallink",
+          "whatsapp_pay": "WhatsApp Pay",
+          "cod": "Onder rembours",
+          "manual": "Handmatig geregistreerd"
+        },
+        "reference": "Referentie {ref}",
+        "openLink": "Link openen"
+      },
+      "form": {
+        "title": "Status bijwerken",
+        "status": "Status",
+        "suggestion": "Gebruikelijke volgende stap: {status}",
+        "notes": "Notities",
+        "paymentLink": "Betaallink",
+        "optional": "optioneel",
+        "paymentLinkHint": "Met de update wordt een nieuwe link naar de koper gestuurd.",
+        "invalidLink": "Voer een weblink in die met http:// of https:// begint.",
+        "save": "Wijzigingen opslaan",
+        "saving": "Opslaan",
+        "saved": "Bestelling #{no} bijgewerkt.",
+        "notified": "De koper is een bericht gestuurd.",
+        "notNotified": "De koper is geen bericht gestuurd.",
+        "reload": "Bestelling opnieuw laden"
+      },
+      "pay": {
+        "title": "Betaallink",
+        "current": "Huidige betaallink",
+        "sendTitle": "Stuur een link die je al hebt",
+        "sendLabel": "URL van betaallink",
+        "sendButton": "Betaallink verzenden",
+        "sent": "De betaallink is naar de koper gestuurd.",
+        "savedNotSent": "De link is opgeslagen, maar er kon niets naar de koper worden gestuurd.",
+        "generateTitle": "Een afreken-link genereren",
+        "generateHint": "Maakt een gehoste betaallink bij je betaalprovider en stuurt die via WhatsApp naar de koper.",
+        "gatewayLabel": "Provider",
+        "generateButton": "Link genereren en verzenden",
+        "noGatewayTitle": "Geen betaalprovider ingesteld",
+        "noGatewayMessage": "Er moet een betaalprovider zijn ingesteld voordat je een afreken-link kunt genereren.",
+        "noGatewayAction": "Een provider instellen",
+        "resultTitle": "Betaallink klaar",
+        "copyLink": "Link kopiëren",
+        "resultSent": "Via WhatsApp naar de koper gestuurd.",
+        "resultNotSent": "Opgeslagen bij de bestelling, maar er kon niets naar de koper worden gestuurd. Deel hem zelf."
+      },
+      "invoice": {
+        "title": "Factuur",
+        "description": "Maak van deze bestelling een factuur en een verkooporder in Sales.",
+        "create": "Factuur maken",
+        "creating": "Maken",
+        "created": "Factuur {number} gemaakt.",
+        "createdNoNumber": "Factuur gemaakt.",
+        "existing": "Voor deze bestelling is al een factuur gemaakt.",
+        "viewInvoice": "Factuur",
+        "viewSalesOrder": "Verkooporder"
+      },
+      "delete": {
+        "title": "Bestelling #{no} verwijderen?",
+        "message": "De bestelling en de artikelen worden definitief verwijderd. Dit kan niet ongedaan worden gemaakt.",
+        "confirm": "Bestelling verwijderen",
+        "deleted": "Bestelling #{no} is verwijderd."
+      }
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "checkout-orders-merchant-payments": {
+    "invoices": {
+      "eyebrow": "Mağaza / Faturalar",
+      "title": "Faturalar",
+      "subtitle": "Mağaza siparişlerinden oluşturulan faturalar. Bunları Satış bölümünde yönetin.",
+      "allInvoices": "Tüm faturalar",
+      "loading": "Faturalar yükleniyor",
+      "searching": "Daha fazla mağaza faturası aranıyor...",
+      "search": {
+        "label": "Faturalarda ara",
+        "placeholder": "Numaraya, alıcıya veya referansa göre ara..."
+      },
+      "status": {
+        "label": "Durum",
+        "all": "Tüm durumlar"
+      },
+      "columns": {
+        "number": "Fatura",
+        "buyer": "Alıcı",
+        "status": "Durum",
+        "total": "Toplam",
+        "issued": "Düzenlenme",
+        "due": "Vade",
+        "actions": "İşlemler"
+      },
+      "row": {
+        "draft": "Taslak",
+        "openInSales": "Satış'ta aç",
+        "openAria": "{number} numaralı faturayı Satış'ta aç"
+      },
+      "empty": {
+        "title": "Henüz mağaza siparişlerinden fatura yok",
+        "message": "Bir sipariş açın ve Fatura oluştur'u seçin.",
+        "action": "Siparişlere git"
+      },
+      "noMatch": {
+        "title": "Eşleşen mağaza faturası yok",
+        "message": "Daha fazlasını görmek için aramayı veya durumu değiştirin."
+      },
+      "capped": {
+        "title": "Son faturalarda bulunamadı",
+        "message": "Satış'taki en son faturalar kontrol edildi ve hiçbiri bir mağaza siparişinden gelmiyor. Daha geriye bakmak için daha fazla yükleyin.",
+        "note": "Yalnızca en son faturalar kontrol edildi. Daha geriye bakmak için daha fazla yükleyin."
+      }
+    }
+  }
+}

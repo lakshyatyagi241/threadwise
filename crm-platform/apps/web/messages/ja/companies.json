@@ -1,0 +1,218 @@
+{
+  "companies": {
+    "nav": {
+      "companies": "会社"
+    },
+    "common": {
+      "dismiss": "閉じる"
+    },
+    "errors": {
+      "network": "サーバーに接続できませんでした。接続を確認して、もう一度お試しください。",
+      "forbidden": "この操作を行う権限がありません。",
+      "signedOut": "セッションが終了しました。続行するには、もう一度サインインしてください。",
+      "conflict": "編集中に他のユーザーがこの会社を変更しました。相手の変更を読み込みましたが、あなたの編集内容は保持されています。内容を確認して、もう一度保存してください。",
+      "validation": "入力内容の一部が無効です。項目を確認して、もう一度お試しください。",
+      "unavailable": "このサーバーでは、会社機能はまだ利用できません。",
+      "rateLimited": "リクエストが多すぎます。しばらく待ってから、もう一度お試しください。",
+      "notFound": "その会社は存在しません。",
+      "planDisabled": "お使いのプランには会社機能が含まれていません。利用するにはアップグレードしてください。",
+      "ownerInvalid": "担当者は、このワークスペースの有効なメンバーである必要があります。",
+      "unexpected": "問題が発生しました。しばらくしてからもう一度お試しください。",
+      "requestId": "リクエストID",
+      "retry": "再試行"
+    },
+    "list": {
+      "eyebrow": "CRM · 組織",
+      "title": "会社",
+      "subtitle": "連絡先と取引を組織ごとにまとめて、すべての連絡先、進行中の取引、獲得した売上を一か所で確認できます。",
+      "newCompany": "新規会社",
+      "tiles": {
+        "companies": "会社",
+        "withDeals": "進行中の取引あり",
+        "wonRevenue": "獲得売上"
+      },
+      "bulk": {
+        "label": "一括操作",
+        "selected": "{count, plural, other {#社を選択中}}",
+        "delete": "削除",
+        "clear": "選択を解除"
+      },
+      "loading": "会社を読み込み中",
+      "unavailableTitle": "会社機能は利用できません",
+      "unavailable": "会社サービスは、このサーバーにまだデプロイされていません。",
+      "emptyFilteredTitle": "一致する会社がありません",
+      "emptyFiltered": "別の検索条件を試すか、フィルターをクリアしてください。",
+      "clearFilters": "フィルターをクリア",
+      "emptyTitle": "会社はまだありません",
+      "empty": "会社はまだありません。最初の会社を作成しましょう。",
+      "showing": "{count, plural, other {#社を読み込み済み}}",
+      "loadMore": "さらに読み込む",
+      "allLoaded": "すべての会社を読み込みました",
+      "deleteTitle": "会社を削除",
+      "deleteMessage": "この会社を削除しますか?連絡先と取引は保持され、紐付けのみ解除されます。",
+      "deleteManyTitle": "会社を削除",
+      "deleteManyMessage": "{count, plural, other {これらの#社を削除しますか?連絡先と取引は保持され、紐付けのみ解除されます。}}",
+      "delete": "削除",
+      "keep": "残す"
+    },
+    "toolbar": {
+      "label": "会社を絞り込み",
+      "search": "会社を検索…",
+      "industry": "業種",
+      "allIndustries": "すべての業種",
+      "owner": "担当者",
+      "allOwners": "すべての担当者",
+      "noOwner": "担当者なし",
+      "withOpenDeals": "進行中の取引あり",
+      "sort": "並び順",
+      "sorts": {
+        "created": "新しい順",
+        "name": "名前順(A〜Z)"
+      },
+      "clear": "クリア",
+      "refresh": "更新"
+    },
+    "table": {
+      "label": "会社",
+      "selectAll": "読み込み済みの会社をすべて選択",
+      "select": "{name}を選択",
+      "company": "会社",
+      "industry": "業種",
+      "contacts": "連絡先",
+      "openDeals": "進行中の取引",
+      "wonValue": "獲得金額",
+      "actions": "操作",
+      "delete": "会社を削除",
+      "deleteNamed": "会社{name}を削除"
+    },
+    "form": {
+      "eyebrow": "会社",
+      "newTitle": "新規会社",
+      "editTitle": "会社を編集",
+      "close": "閉じる",
+      "cancel": "キャンセル",
+      "create": "作成",
+      "save": "変更を保存",
+      "name": "会社名 *",
+      "namePlaceholder": "Acme Ltd",
+      "industry": "業種",
+      "website": "ウェブサイト",
+      "email": "メール",
+      "phone": "電話番号",
+      "notes": "メモ",
+      "moreDetails": "詳細情報",
+      "sizeRange": "規模",
+      "sizeHint": "例: 1-10 や 11-50。",
+      "owner": "担当者",
+      "noOwner": "担当者なし",
+      "me": "{name}(自分)",
+      "address": "住所",
+      "problems": {
+        "required": "会社名は必須です。",
+        "tooLong": "長すぎます。{limit}文字以内で入力してください。",
+        "email": "有効なメールアドレスを入力してください。",
+        "invalid": "入力内容の一部が無効です。",
+        "ownerInvalid": "担当者は、このワークスペースの有効なメンバーである必要があります。"
+      }
+    },
+    "toast": {
+      "created": "会社を作成しました。",
+      "updated": "会社を更新しました。",
+      "deleted": "{count, plural, other {#社を削除しました。}}",
+      "deletedSome": "{count, plural, other {#社を削除しました}}。{failed, plural, other {#社は削除できませんでした。}}",
+      "deleteFailed": "削除できませんでした。もう一度お試しください。",
+      "contactUnlinked": "連絡先を会社から削除しました。",
+      "contactAlreadyOut": "その連絡先はこの会社にはすでにありません。",
+      "contactUnlinkFailed": "連絡先を削除できませんでした。もう一度お試しください。",
+      "contactsLinked": "{count, plural, other {#件の連絡先を会社に追加しました。}}",
+      "contactsLinkedSome": "{count, plural, other {#件の連絡先を追加しました}}。{failed, plural, other {#件は追加できませんでした。}}",
+      "contactsLinkFailed": "連絡先を追加できませんでした。もう一度お試しください。"
+    },
+    "detail": {
+      "back": "すべての会社",
+      "loading": "会社を読み込み中",
+      "notFoundTitle": "会社が見つかりません",
+      "notFound": "この会社は存在しないか、削除されました。",
+      "edit": "編集",
+      "delete": "削除",
+      "keep": "残す",
+      "tiles": {
+        "contacts": "連絡先",
+        "openDeals": "進行中の取引",
+        "wonRevenue": "獲得売上"
+      },
+      "notes": "メモ",
+      "deleteTitle": "会社を削除",
+      "deleteMessage": "この会社を削除しますか?連絡先と取引は保持され、紐付けのみ解除されます。",
+      "details": "詳細",
+      "owner": "担当者",
+      "sizeRange": "規模",
+      "address": "住所",
+      "createdBy": "作成者",
+      "created": "作成日",
+      "updated": "最終変更"
+    },
+    "contacts": {
+      "title": "連絡先",
+      "add": "連絡先を追加",
+      "loading": "連絡先を読み込み中",
+      "empty": "この会社に紐付いた連絡先はありません。",
+      "unnamed": "(名前なし)",
+      "unlink": "会社から削除",
+      "unlinkNamed": "{name}を会社から削除",
+      "loadMore": "さらに読み込む",
+      "addModal": {
+        "title": "会社に連絡先を追加",
+        "close": "閉じる",
+        "cancel": "キャンセル",
+        "add": "{count, plural, other {#件の連絡先を追加}}",
+        "search": "名前、メール、番号で連絡先を検索",
+        "loading": "連絡先を検索中",
+        "noneTitle": "連絡先が見つかりません",
+        "none": "一致する連絡先がありません。別の名前、メール、番号を試してください。",
+        "unnamed": "(名前なし)",
+        "already": "追加済み",
+        "willMove": "別の会社に所属",
+        "hint": "1つの連絡先は1つの会社にのみ所属できます。別の会社に所属している連絡先を追加すると、こちらに移動します。"
+      }
+    },
+    "deals": {
+      "title": "取引",
+      "loading": "取引を読み込み中",
+      "empty": "この会社の取引はありません。",
+      "loadMore": "さらに読み込む",
+      "status": {
+        "open": "進行中",
+        "won": "成約",
+        "lost": "失注"
+      }
+    },
+    "activity": {
+      "title": "アクティビティ",
+      "loading": "アクティビティを読み込み中",
+      "none": "この会社にはまだ何も起きていません。",
+      "loadMore": "さらに読み込む",
+      "empty": "空",
+      "system": "システム",
+      "actions": {
+        "insert": "会社を作成しました",
+        "update": "会社を変更しました",
+        "delete": "会社を削除しました"
+      },
+      "contactLinked": "連絡先を追加しました",
+      "contactUnlinked": "連絡先を削除しました",
+      "deletedContact": "削除された連絡先",
+      "fields": {
+        "name": "名前",
+        "website": "ウェブサイト",
+        "email": "メール",
+        "phone": "電話番号",
+        "industry": "業種",
+        "sizeRange": "規模",
+        "address": "住所",
+        "notes": "メモ",
+        "owner": "担当者"
+      }
+    }
+  }
+}

@@ -1,0 +1,315 @@
+{
+  "settings": {
+    "title": "הגדרות",
+    "breadcrumb": "נתיב ניווט",
+    "backToSettings": "חזרה להגדרות",
+    "sectionsLabel": "מקטעי הגדרות",
+    "searchLabel": "חיפוש בהגדרות",
+    "searchPlaceholder": "חיפוש בהגדרות",
+    "searchHint": "הקלידו כדי לסנן כל הגדרה לפי שם או מילת מפתח. לחצו Escape כדי לנקות, וחץ למטה כדי לעבור לתוצאות.",
+    "clearSearch": "ניקוי החיפוש",
+    "results": {
+      "title": "{count, plural, one {הגדרה # מתאימה ל-“{query}”} two {# הגדרות מתאימות ל-“{query}”} other {# הגדרות מתאימות ל-“{query}”}}",
+      "status": "{count, plural, =0 {אין תוצאות} one {תוצאה #} two {# תוצאות} other {# תוצאות}}"
+    },
+    "noResults": {
+      "title": "אין הגדרות שמתאימות ל-“{query}”",
+      "message": "בדקו את האיות או נסו מילה רחבה יותר, כמו “מס”, “צוות” או “WhatsApp”."
+    },
+    "emptySection": {
+      "title": "אין כאן מה להגדיר",
+      "message": "אף אחת מההגדרות בקטע זה אינה זמינה לתפקיד שלך."
+    },
+    "inSection": "ב־{section}",
+    "soon": "בקרוב",
+    "upgrade": "שדרוג",
+    "comingSoon": "בקרוב",
+    "sections": {
+      "channels": {
+        "title": "ערוצים",
+        "description": "חבר את המקומות שבהם הלקוחות שלך שולחים לך הודעות."
+      },
+      "data": {
+        "title": "נתונים והתאמה אישית",
+        "description": "עצב את האופן שבו מתוארים אנשי קשר, עסקאות ושיחות."
+      },
+      "business": {
+        "title": "עסק וחיוב",
+        "description": "פרטי החברה שלך, מסים, תוכנית ותשלומים."
+      },
+      "people": {
+        "title": "צוות והרשאות",
+        "description": "מי יכול לעשות מה בסביבת העבודה שלך."
+      },
+      "automation": {
+        "title": "אוטומציה ובינה מלאכותית",
+        "description": "תשובות, הזמנות, ווידג׳ט האתר ו־AI."
+      },
+      "integrations": {
+        "title": "אינטגרציות ומפתחים",
+        "description": "חבר כלים אחרים והרחב את המוצר."
+      },
+      "security": {
+        "title": "נתונים ואבטחה",
+        "description": "כניסה, פרטיות, ייצוא ויומן ביקורת."
+      }
+    },
+    "tiles": {
+      "channels": {
+        "label": "כל הערוצים",
+        "description": "ראה כל ערוץ שחיברת והוסף ערוץ חדש.",
+        "keywords": "חיבורים, תיבות דואר נכנס, מספרים, חשבונות"
+      },
+      "whatsapp": {
+        "label": "WhatsApp",
+        "description": "חבר את מספר WhatsApp Business שלך כדי לשוחח עם לקוחות.",
+        "keywords": "wa, whatsapp business, cloud api, מספר, qr"
+      },
+      "unofficial-whatsapp": {
+        "label": "ממשק WhatsApp לא רשמי",
+        "description": "קשר מספר WhatsApp אישי באמצעות קוד QR וחמם אותו לשליחה בטוחה.",
+        "keywords": "whatsapp אישי, qr, קוד צימוד, מכשירים, baileys, warmer, חימום, לא רשמי"
+      },
+      "warmer": {
+        "label": "Warmer",
+        "description": "חמם את מספרי ה־WhatsApp שלך כדי שהודעות מתוזמנות ייצאו בקצב בטוח.",
+        "keywords": "חימום, מספר, מוניטין, מגבלת שליחה, תור, קצב, מתוזמן"
+      },
+      "facebook": {
+        "label": "Facebook Messenger",
+        "description": "ענה להודעות שנשלחו לדף הפייסבוק שלך.",
+        "keywords": "meta, messenger, דף, fb"
+      },
+      "instagram": {
+        "label": "Instagram",
+        "description": "ענה להודעות ישירות שנשלחו לחשבון האינסטגרם שלך.",
+        "keywords": "meta, dm, insta, הודעות ישירות"
+      },
+      "telegram": {
+        "label": "Telegram",
+        "description": "חבר בוט של Telegram כדי לשוחח עם לקוחות.",
+        "keywords": "bot, botfather, tg"
+      },
+      "tiktok": {
+        "label": "TikTok",
+        "description": "ענה להודעות שנשלחו לחשבון העסקי שלך ב־TikTok.",
+        "keywords": "tik tok, dm, וידאו"
+      },
+      "sms": {
+        "label": "SMS",
+        "description": "שלח וקבל הודעות טקסט עם השולח שלך.",
+        "keywords": "הודעת טקסט, מזהה שולח, dlt, twilio, נייד"
+      },
+      "email": {
+        "label": "אימייל",
+        "description": "חבר תיבת דואר כדי לשלוח ולקבל אימיילים בתיבת הדואר הנכנס.",
+        "keywords": "תיבת דואר, smtp, imap, gmail, outlook, שולח"
+      },
+      "line": {
+        "label": "LINE",
+        "description": "חבר את חשבון LINE הרשמי שלך.",
+        "keywords": "חשבון LINE רשמי, הודעות"
+      },
+      "viber": {
+        "label": "Viber",
+        "description": "חבר את חשבון Viber העסקי שלך.",
+        "keywords": "בוט Viber, הודעות"
+      },
+      "wechat": {
+        "label": "WeChat",
+        "description": "חבר את חשבון WeChat הרשמי שלך.",
+        "keywords": "weixin, חשבון רשמי"
+      },
+      "wa-links": {
+        "label": "קישורים ל־WhatsApp",
+        "description": "צור קישורי לחיצה־לשיחה וקודי QR שפותחים שיחת WhatsApp.",
+        "keywords": "לחיצה לשיחה, קוד qr, קישור קצר, wa.me"
+      },
+      "contact-stages": {
+        "label": "שלבי איש קשר",
+        "description": "הגדר את השלבים והסטטוסים שאיש קשר עובר בהם.",
+        "keywords": "מחזור חיים, סטטוס, ליד, לקוח, נסגר בהצלחה, אבוד, משפך"
+      },
+      "contact-properties": {
+        "label": "מאפייני איש קשר",
+        "description": "הוסף את השדות שברצונך לשמור בכל איש קשר.",
+        "keywords": "שדות מותאמים, שדות, חובה, רשימה נפתחת, עמודות, מאפיינים, משתנים, שדות מיזוג"
+      },
+      "attributes": {
+        "label": "מאפיינים",
+        "description": "תגיות ושאר התוויות שאתה מוסיף לאנשי קשר.",
+        "keywords": "תגיות, תוויות, מקורות, מאפיינים מותאמים"
+      },
+      "deal-pipelines": {
+        "label": "צינורות ושלבים",
+        "description": "ערוך את צינורות העסקאות, השלבים וסיבות האובדן שלך.",
+        "keywords": "עסקאות, שלבי מכירה, לוח, סיבת אובדן, משפך"
+      },
+      "tags": {
+        "label": "תגיות",
+        "description": "צור וארגן את התגיות שבהן משתמשים באנשי קשר ובשיחות.",
+        "keywords": "תוויות, צבע, color"
+      },
+      "saved-replies": {
+        "label": "תשובות שמורות",
+        "description": "כתוב תשובות לשימוש חוזר שהצוות שלך יכול לשלוח בלחיצה אחת.",
+        "keywords": "תשובות מוכנות, קיצורי דרך, קטעים, תבניות"
+      },
+      "business-profile": {
+        "label": "פרופיל עסקי",
+        "description": "שם החברה, הכתובת, מספר המס והלוגו שלך למסמכים.",
+        "keywords": "חברה, כתובת, gst, vat, tax id, לוגו, כותרת חשבונית"
+      },
+      "tax-rates": {
+        "label": "שיעורי מס",
+        "description": "הגדר את המסים שנוספים לחשבוניות ולהצעות המחיר שלך.",
+        "keywords": "vat, gst, מס מכירה, אחוז, שיעורים, מדינה"
+      },
+      "plans": {
+        "label": "תוכניות",
+        "description": "ראה את התוכנית והשימוש שלך, מה כלול בה, ושדרג.",
+        "keywords": "מנוי, שדרוג, מגבלות, תמחור, ניסיון, שימוש, תוכנית ושימוש, מדדים"
+      },
+      "wallet": {
+        "label": "ארנק",
+        "description": "טען את היתרה שמשלמת על הודעות.",
+        "keywords": "קרדיט, יתרה, טעינה, טעינה מחדש, כספים"
+      },
+      "billing-orders": {
+        "label": "היסטוריית הזמנות",
+        "description": "רכישות התוכנית והארנק שלך, עם קבלות.",
+        "keywords": "תשלומים, קבלות, חשבוניות, רכישות, הזמנות"
+      },
+      "account": {
+        "label": "חשבון",
+        "description": "השם, האימייל, הסיסמה והשפה שלך.",
+        "keywords": "פרופיל, אני, אווטאר, אימייל, סיסמה, העדפות"
+      },
+      "branding": {
+        "label": "כותרת תחתונה להודעה",
+        "description": "השורה שנוספת בתחתית הודעות שנשלחות מאוטומציות, משליחות מתוזמנות ומתשובות מתיבת הדואר הנכנס של הצוות.",
+        "keywords": "מיתוג, כותרת תחתונה, חתימה, white label, הסרת מיתוג, נשלח באמצעות"
+      },
+      "team-members": {
+        "label": "חברי צוות",
+        "description": "הזמן אנשים ונהל מי נמצא בסביבת העבודה שלך.",
+        "keywords": "משתמשים, צוות, הזמנה, סוכנים, עובדים, מושבים"
+      },
+      "roles": {
+        "label": "תפקידים והרשאות",
+        "description": "קבע מה כל תפקיד יכול לראות ולעשות.",
+        "keywords": "גישה, מנהל, מנהל צוות, סוכן, rbac, הרשאות"
+      },
+      "teams": {
+        "label": "צוותים",
+        "description": "קבץ אנשים לצוותים לניתוב ולדיווח.",
+        "keywords": "קבוצות, מחלקות, הקצאה, ניתוב"
+      },
+      "ai-keys": {
+        "label": "מפתחות ספק בינה מלאכותית",
+        "description": "הוסף מפתח משלך של ספק AI כדי להפעיל תכונות AI.",
+        "keywords": "openai, gemini, claude, מפתח API, מודל, טוקן"
+      },
+      "ai-training": {
+        "label": "אימון AI",
+        "description": "אמן עוזרי צ׳אט על התוכן שלך לתהליכים ולצ׳אט של האתר.",
+        "keywords": "בסיס ידע, עוזר, סוכן חכם, שאלות נפוצות, אימון, מקורות, meta business agent, מגיב"
+      },
+      "booking-types": {
+        "label": "סוגי הזמנות",
+        "description": "השירותים שלקוחות יכולים להזמין, עם שעות וכללים.",
+        "keywords": "פגישות, שירותים, זמינות, משבצות, לוח זמנים, יומן"
+      },
+      "appointment-settings": {
+        "label": "הגדרות פגישות",
+        "description": "כללי הזמנה, תזכורות ודף ההזמנות הציבורי.",
+        "keywords": "דף הזמנות, תזכורות, מרווח, הודעה מוקדמת, ביטול"
+      },
+      "google-calendar": {
+        "label": "Google Calendar",
+        "description": "חבר את היומן שלך כדי שההזמנות ושעות התפוסה יישארו מסונכרנות.",
+        "keywords": "google, יומן, meet, סנכרון, תפוס, פגישות"
+      },
+      "chat-widget": {
+        "label": "ווידג׳ט צ׳אט",
+        "description": "הוסף בועת צ׳אט לאתר שלך, הידועה גם כצ׳אט אתר.",
+        "keywords": "צ׳אט אתר, צ׳אט חי, ווידג׳ט, הטמעה, בועה"
+      },
+      "auto-reply": {
+        "label": "מענה אוטומטי",
+        "description": "קבל את פני הלקוחות והשב כשאתה לא זמין.",
+        "keywords": "הודעת היעדרות, ברוכים הבאים, ברכה, מחוץ למשרד, מילות מפתח"
+      },
+      "lead-sources": {
+        "label": "לידים מרשתות חברתיות",
+        "description": "הבא לידים ממודעות ומדפי נחיתה באמצעות Webhook.",
+        "keywords": "מודעות לידים, לידים מפייסבוק, meta, linkedin, tiktok, google ads, webhook, zapier, לכידה, טפסים"
+      },
+      "rest-api": {
+        "label": "REST API",
+        "description": "מפתחות ותיעוד לבניית פתרונות על גבי המוצר.",
+        "keywords": "מפתחות API, מפתחים, טוקנים, תיעוד, openapi"
+      },
+      "webhooks": {
+        "label": "Webhooks",
+        "description": "שלח אירועים למערכות שלך ברגע שהם מתרחשים.",
+        "keywords": "קריאות חוזרות, אירועים, http, נקודת קצה, הודעה"
+      },
+      "addons": {
+        "label": "תוספים",
+        "description": "הפעל או כבה תכונות אופציונליות בסביבת העבודה שלך.",
+        "keywords": "הרחבות, מודולים, פלאגינים, Marketplace"
+      },
+      "shopify": {
+        "label": "Shopify",
+        "description": "חבר את חנות Shopify שלך כדי לסנכרן מוצרים והזמנות ולשלוח הודעות ללקוחות שלך.",
+        "keywords": "חנות, סטור, מסחר אלקטרוני, מוצרים, הזמנות, סנכרון, עגלה נטושה"
+      },
+      "woocommerce": {
+        "label": "WooCommerce",
+        "description": "חבר את חנות WooCommerce שלך כדי לסנכרן מוצרים והזמנות ולשלוח הודעות ללקוחות שלך.",
+        "keywords": "woo, wordpress, חנות, סטור, מסחר אלקטרוני, מוצרים, הזמנות, סנכרון"
+      },
+      "i18n-translation": {
+        "label": "תרגום",
+        "description": "שפות ותרגום אוטומטי של הודעות.",
+        "keywords": "שפה, שפות, לוקל, תרגום, תרגום אוטומטי"
+      },
+      "account-security": {
+        "label": "סיסמה וכניסה דו־שלבית",
+        "description": "שנה את הסיסמה שלך והגן על הכניסה בשלב שני.",
+        "keywords": "mfa, 2fa, מאמת, הפעלות, מכשירים, כניסה, התחברות"
+      },
+      "import-export": {
+        "label": "ייבוא וייצוא",
+        "description": "הבא נתונים מקובץ או הוצא עותק.",
+        "keywords": "csv, excel, הורדה, גיבוי, העלאה, העברה"
+      },
+      "activity-log": {
+        "label": "יומן ביקורת",
+        "description": "תיעוד של מי שינה מה, ומתי.",
+        "keywords": "פעילות, היסטוריה, שינויים, נתיב ביקורת, יומן אבטחה"
+      },
+      "privacy": {
+        "label": "פרטיות ונתונים",
+        "description": "הסכמה, שמירת נתונים ובקשות למחיקת נתונים.",
+        "keywords": "gdpr, הסכמה, שמירה, מחיקת נתונים, dpa, מידע אישי"
+      },
+      "whatsapp-customers": {
+        "label": "לקוחות שמורים",
+        "description": "הגדר מראש את שמו של הלקוח וכתובת המשלוח להזמנות WhatsApp.",
+        "keywords": "לקוחות, כתובת, משלוח, הזמנה, חנות"
+      },
+      "geta-publishing": {
+        "label": "פרסום ב־Geta",
+        "description": "Push תהליכים שפורסמו לפעילות בקונסולת Geta.",
+        "keywords": "geta, פרסום, בוט, קונסולה, עלייה לאוויר, צ׳אטבוט"
+      },
+      "auto-assignment": {
+        "label": "הקצאה אוטומטית",
+        "description": "הקצה שיחות חדשות לנציג המתאים באופן אוטומטי, בתורות או לפי כללים.",
+        "keywords": "ניתוב, round robin, הקצאה, נציגים, כללי תיבת דואר, חלוקה, בעלים"
+      }
+    }
+  }
+}

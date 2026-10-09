@@ -1,0 +1,105 @@
+{
+  "checkout-orders-merchant-payments": {
+    "payments": {
+      "eyebrow": "Cửa hàng / Thanh toán",
+      "title": "Thanh toán",
+      "subtitle": "Khía cạnh tiền bạc của đơn hàng cửa hàng: những gì đã thanh toán, đang chờ và thanh toán khi nhận hàng.",
+      "listTitle": "Danh sách thanh toán",
+      "loading": "Đang tải thanh toán",
+      "emptyFilteredTitle": "Không có thanh toán nào khớp",
+      "emptyFilteredMessage": "Hãy thay đổi bộ lọc hoặc đặt lại để xem mọi thanh toán.",
+      "resetFilters": "Đặt lại bộ lọc",
+      "emptyTitle": "Chưa có thanh toán",
+      "emptyMessage": "Thanh toán sẽ xuất hiện tại đây ngay khi có đơn hàng cửa hàng được đặt. Hãy mở Đơn hàng để xem đơn hàng hoặc thêm thủ công.",
+      "goToOrders": "Đến đơn hàng",
+      "summary": {
+        "loading": "Đang tải tổng thanh toán",
+        "orders": "đơn hàng",
+        "collected": "Đã thu",
+        "collectedNone": "Chưa thu được khoản nào."
+      },
+      "filters": {
+        "search": "Tìm kiếm",
+        "searchPlaceholder": "Mã đơn hàng, khách hàng hoặc tham chiếu",
+        "status": "Trạng thái",
+        "allStatuses": "Tất cả trạng thái",
+        "method": "Phương thức",
+        "allMethods": "Tất cả phương thức",
+        "prepaid": "Trả trước",
+        "cod": "Thanh toán khi nhận hàng",
+        "gatewayOption": "Một cổng thanh toán...",
+        "gatewayCode": "Mã cổng thanh toán",
+        "gatewayCodePlaceholder": "vd: razorpay",
+        "from": "Từ",
+        "to": "Đến",
+        "rangeInverted": "Ngày bắt đầu sau ngày kết thúc nên khoảng ngày bị bỏ qua.",
+        "reset": "Đặt lại bộ lọc"
+      },
+      "table": {
+        "caption": "Thanh toán của đơn hàng cửa hàng, mới nhất trước",
+        "order": "Đơn hàng",
+        "customer": "Khách hàng",
+        "status": "Trạng thái",
+        "method": "Phương thức",
+        "paidVia": "Thanh toán qua",
+        "reference": "Tham chiếu",
+        "amount": "Số tiền",
+        "shop": "Cửa hàng",
+        "date": "Ngày",
+        "methodPrepaid": "Trả trước",
+        "methodCod": "Thanh toán khi nhận hàng",
+        "via": {
+          "razorpay_link": "Liên kết Razorpay",
+          "whatsapp_pay": "WhatsApp Pay"
+        }
+      },
+      "wa": {
+        "title": "WhatsApp Pay trong cuộc trò chuyện",
+        "intro": "Cho phép người mua thanh toán đơn hàng mà không rời khỏi WhatsApp (UPI, thẻ, ngân hàng trực tuyến, ví) và nhận tiền vào tài khoản Razorpay, PayU, BillDesk hoặc Zaakpay của riêng bạn.",
+        "indiaOnly": "Hiện chỉ hỗ trợ thị trường Ấn Độ: quốc gia và tiền tệ được cố định là Ấn Độ và INR.",
+        "viewOnly": "Bạn có thể xem các cấu hình WhatsApp Pay nhưng không thể thay đổi. Hãy nhờ quản trị viên không gian làm việc cấp quyền quản lý thanh toán.",
+        "howTitle": "Cách thiết lập",
+        "how1": "Trong WhatsApp Manager, tại Payments for India, hãy tạo một Direct Pay Method và liên kết tài khoản cổng thanh toán của bạn.",
+        "how2": "Đặt tên cho nó và sao chép tên đó vào đây. Không thể tạo từ ứng dụng này, đây là một bước phía Meta.",
+        "how3": "Lưu cấu hình, sau đó mở Đơn hàng và yêu cầu thanh toán trên WhatsApp cho bất kỳ đơn hàng nào.",
+        "how4": "Người mua nhấn Review and Pay, thanh toán trong cuộc trò chuyện và đơn hàng được đánh dấu đã thanh toán khi Meta xác nhận.",
+        "listTitle": "Các cấu hình của bạn",
+        "loading": "Đang tải cấu hình",
+        "emptyTitle": "Chưa có cấu hình thanh toán",
+        "emptyMessage": "Hãy thêm một cấu hình trên trang này để bắt đầu thu tiền trong cuộc trò chuyện.",
+        "emptyMessageReadOnly": "Chưa có ai thêm cấu hình nào.",
+        "market": "Ấn Độ · INR",
+        "autoChargeOn": "Tự động thu đang bật",
+        "active": "Đang hoạt động",
+        "off": "Tắt",
+        "types": {
+          "razorpay": "Razorpay",
+          "payu": "PayU",
+          "billdesk": "BillDesk",
+          "zaakpay": "Zaakpay"
+        },
+        "toast": {
+          "saved": "Đã lưu cấu hình",
+          "removed": "Đã xóa cấu hình"
+        },
+        "addTitle": "Thêm cấu hình thanh toán",
+        "editTitle": "Sửa {name}",
+        "name": "Tên cấu hình",
+        "nameLocked": "Tên dùng để nhận diện cấu hình. Để đổi tên, hãy xóa và thêm lại.",
+        "updatesExisting": "Đã có cấu hình với tên này: lưu sẽ cập nhật cấu hình đó.",
+        "nameHint": "Phải khớp chính xác với tên Direct Pay Method trong WhatsApp Manager (Payments, India).",
+        "nameInvalid": "Hãy nhập tên từ 1 đến {max} ký tự.",
+        "namePlaceholder": "vd: my-razorpay-pay",
+        "gateway": "Cổng thanh toán",
+        "activeLabel": "Hoạt động",
+        "autoCharge": "Tự động thu cho đơn hàng mới",
+        "autoChargeHint": "Tự động gửi yêu cầu thanh toán trong cuộc trò chuyện ngay khi đơn hàng được đặt.",
+        "save": "Lưu cấu hình",
+        "cancelEdit": "Hủy chỉnh sửa",
+        "removeTitle": "Xóa {name}?",
+        "removeMessage": "Đơn hàng sẽ không thể thu tiền trong cuộc trò chuyện bằng cấu hình này nữa. Direct Pay Method trong WhatsApp Manager không bị ảnh hưởng.",
+        "removeConfirm": "Xóa cấu hình"
+      }
+    }
+  }
+}

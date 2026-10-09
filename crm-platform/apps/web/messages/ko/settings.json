@@ -1,0 +1,315 @@
+{
+  "settings": {
+    "title": "설정",
+    "breadcrumb": "경로 표시",
+    "backToSettings": "설정으로 돌아가기",
+    "sectionsLabel": "설정 섹션",
+    "searchLabel": "설정 검색",
+    "searchPlaceholder": "설정 검색",
+    "searchHint": "이름이나 키워드로 모든 설정을 필터링하려면 입력하세요. Esc를 누르면 지워지고, 아래쪽 화살표를 누르면 결과로 이동합니다.",
+    "clearSearch": "검색 지우기",
+    "results": {
+      "title": "{count, plural, other {“{query}”와 일치하는 설정 #개}}",
+      "status": "{count, plural, =0 {결과 없음} other {결과 #개}}"
+    },
+    "noResults": {
+      "title": "“{query}”와 일치하는 설정이 없습니다",
+      "message": "철자를 확인하거나 “세금”, “팀”, “WhatsApp”처럼 더 넓은 단어로 검색해 보세요."
+    },
+    "emptySection": {
+      "title": "설정할 항목이 없습니다",
+      "message": "이 섹션의 설정은 현재 역할에서 사용할 수 없습니다."
+    },
+    "inSection": "{section} 항목",
+    "soon": "곧 제공",
+    "upgrade": "업그레이드",
+    "comingSoon": "곧 출시",
+    "sections": {
+      "channels": {
+        "title": "채널",
+        "description": "고객이 메시지를 보내는 곳을 연결하세요."
+      },
+      "data": {
+        "title": "데이터 및 맞춤 설정",
+        "description": "연락처, 거래, 대화를 어떻게 정의할지 설정하세요."
+      },
+      "business": {
+        "title": "비즈니스 및 결제",
+        "description": "회사 정보, 세금, 요금제 및 결제를 관리하세요."
+      },
+      "people": {
+        "title": "팀 및 권한",
+        "description": "워크스페이스에서 누가 무엇을 할 수 있는지 설정하세요."
+      },
+      "automation": {
+        "title": "자동화 및 AI",
+        "description": "자동 응답, 예약, 웹사이트 위젯 및 AI."
+      },
+      "integrations": {
+        "title": "연동 및 개발자",
+        "description": "다른 도구를 연결하고 제품을 확장하세요."
+      },
+      "security": {
+        "title": "데이터 및 보안",
+        "description": "로그인, 개인정보 보호, 내보내기 및 감사 기록."
+      }
+    },
+    "tiles": {
+      "channels": {
+        "label": "모든 채널",
+        "description": "연결된 모든 채널을 보고 새 채널을 추가하세요.",
+        "keywords": "연결, 수신함, 번호, 계정"
+      },
+      "whatsapp": {
+        "label": "WhatsApp",
+        "description": "WhatsApp Business 번호를 연결해 고객과 채팅하세요.",
+        "keywords": "wa, whatsapp business, cloud api, 번호, qr"
+      },
+      "unofficial-whatsapp": {
+        "label": "비공식 WhatsApp API",
+        "description": "QR 코드로 개인 WhatsApp 번호를 연결하고 안전한 발송을 위해 워밍업하세요.",
+        "keywords": "개인 whatsapp, qr, 페어링 코드, 기기, baileys, 워머, 워밍업, 비공식"
+      },
+      "warmer": {
+        "label": "워머",
+        "description": "예약 메시지가 안전한 속도로 발송되도록 WhatsApp 번호를 워밍업하세요.",
+        "keywords": "워밍업, 번호, 평판, 발송 한도, 대기열, 속도, 예약"
+      },
+      "facebook": {
+        "label": "Facebook Messenger",
+        "description": "Facebook 페이지로 받은 메시지에 응답하세요.",
+        "keywords": "meta, messenger, 페이지, fb"
+      },
+      "instagram": {
+        "label": "Instagram",
+        "description": "Instagram 계정으로 받은 다이렉트 메시지에 응답하세요.",
+        "keywords": "meta, dm, insta, 다이렉트 메시지"
+      },
+      "telegram": {
+        "label": "Telegram",
+        "description": "Telegram 봇을 연결해 고객과 채팅하세요.",
+        "keywords": "봇, botfather, tg"
+      },
+      "tiktok": {
+        "label": "TikTok",
+        "description": "TikTok 비즈니스 계정으로 받은 메시지에 응답하세요.",
+        "keywords": "tik tok, dm, 영상"
+      },
+      "sms": {
+        "label": "SMS",
+        "description": "자체 발신자 번호로 문자 메시지를 보내고 받으세요.",
+        "keywords": "문자 메시지, 발신자 ID, dlt, twilio, 모바일"
+      },
+      "email": {
+        "label": "이메일",
+        "description": "사서함을 연결해 수신함에서 이메일을 보내고 받으세요.",
+        "keywords": "사서함, smtp, imap, gmail, outlook, 발신자"
+      },
+      "line": {
+        "label": "LINE",
+        "description": "LINE 공식 계정을 연결하세요.",
+        "keywords": "line 공식 계정, 메시징"
+      },
+      "viber": {
+        "label": "Viber",
+        "description": "Viber 비즈니스 계정을 연결하세요.",
+        "keywords": "viber 봇, 메시징"
+      },
+      "wechat": {
+        "label": "WeChat",
+        "description": "WeChat 공식 계정을 연결하세요.",
+        "keywords": "weixin, 공식 계정"
+      },
+      "wa-links": {
+        "label": "WhatsApp 링크",
+        "description": "클릭하면 WhatsApp 채팅이 열리는 링크와 QR 코드를 만드세요.",
+        "keywords": "클릭 채팅, qr 코드, 짧은 링크, wa.me"
+      },
+      "contact-stages": {
+        "label": "연락처 단계",
+        "description": "연락처가 거치는 단계와 상태를 설정하세요.",
+        "keywords": "라이프사이클, 상태, 리드, 고객, 성공, 실패, 퍼널"
+      },
+      "contact-properties": {
+        "label": "연락처 속성",
+        "description": "모든 연락처에 보관할 필드를 추가하세요.",
+        "keywords": "사용자 지정 필드, 필드, 필수, 드롭다운, 열, 속성, 변수, 병합 필드"
+      },
+      "attributes": {
+        "label": "속성",
+        "description": "연락처에 붙이는 태그 및 기타 라벨.",
+        "keywords": "태그, 라벨, 출처, 사용자 지정 속성"
+      },
+      "deal-pipelines": {
+        "label": "파이프라인 및 단계",
+        "description": "거래 파이프라인, 단계 및 실패 사유를 편집하세요.",
+        "keywords": "거래, 영업 단계, 보드, 실패 사유, 퍼널"
+      },
+      "tags": {
+        "label": "태그",
+        "description": "연락처와 채팅 전반에 쓰는 태그를 만들고 정리하세요.",
+        "keywords": "라벨, 색상, color"
+      },
+      "saved-replies": {
+        "label": "저장된 답장",
+        "description": "팀이 한 번의 클릭으로 보낼 수 있는 답변을 작성하세요.",
+        "keywords": "기본 답변, 단축키, 스니펫, 템플릿"
+      },
+      "business-profile": {
+        "label": "비즈니스 프로필",
+        "description": "문서에 사용할 회사명, 주소, 세금 번호 및 로고.",
+        "keywords": "회사, 주소, gst, vat, 세금 ID, 로고, 인보이스 머리글"
+      },
+      "tax-rates": {
+        "label": "세율",
+        "description": "인보이스와 견적에 추가되는 세금을 설정하세요.",
+        "keywords": "vat, gst, 판매세, 퍼센트, 세율, 국가"
+      },
+      "plans": {
+        "label": "요금제",
+        "description": "요금제와 사용량, 포함 항목을 확인하고 업그레이드하세요.",
+        "keywords": "구독, 업그레이드, 한도, 가격, 체험판, 사용량, 요금제 및 사용량, 계측기"
+      },
+      "wallet": {
+        "label": "지갑",
+        "description": "메시지 발송 비용으로 쓰이는 잔액을 충전하세요.",
+        "keywords": "크레딧, 잔액, 충전, 재충전, 자금"
+      },
+      "billing-orders": {
+        "label": "주문 내역",
+        "description": "요금제 및 지갑 구매 내역과 영수증.",
+        "keywords": "결제, 영수증, 인보이스, 구매, 주문"
+      },
+      "account": {
+        "label": "계정",
+        "description": "이름, 이메일, 비밀번호 및 언어.",
+        "keywords": "프로필, 나, 아바타, 이메일, 비밀번호, 환경설정"
+      },
+      "branding": {
+        "label": "메시지 바닥글",
+        "description": "자동화, 예약 발송, 팀 수신함 답장으로 보낸 메시지 하단에 추가되는 문구입니다.",
+        "keywords": "브랜딩, 바닥글, 서명, 화이트 라벨, 브랜딩 제거, 발송 방식"
+      },
+      "team-members": {
+        "label": "팀원",
+        "description": "사람을 초대하고 워크스페이스 구성원을 관리하세요.",
+        "keywords": "사용자, 직원, 초대, 상담원, 임직원, 좌석"
+      },
+      "roles": {
+        "label": "역할 및 권한",
+        "description": "각 역할이 볼 수 있고 할 수 있는 작업을 정하세요.",
+        "keywords": "접근, 관리자, 매니저, 상담원, rbac, 권한"
+      },
+      "teams": {
+        "label": "팀",
+        "description": "라우팅과 보고를 위해 사람들을 팀으로 묶으세요.",
+        "keywords": "그룹, 부서, 배정, 라우팅"
+      },
+      "ai-keys": {
+        "label": "AI 제공업체 키",
+        "description": "AI 기능을 쓰려면 자체 AI 제공업체 키를 추가하세요.",
+        "keywords": "openai, gemini, claude, API 키, 모델, 토큰"
+      },
+      "ai-training": {
+        "label": "AI 학습",
+        "description": "플로우와 웹사이트 채팅에 쓸 채팅 어시스턴트를 자체 콘텐츠로 학습시키세요.",
+        "keywords": "지식 베이스, 어시스턴트, 스마트 에이전트, faq, 학습, 출처, meta business agent, 응답자"
+      },
+      "booking-types": {
+        "label": "예약 유형",
+        "description": "고객이 예약할 수 있는 서비스와 운영 시간 및 규칙.",
+        "keywords": "약속, 서비스, 가용 시간, 슬롯, 일정, 캘린더"
+      },
+      "appointment-settings": {
+        "label": "약속 설정",
+        "description": "예약 규칙, 알림 및 공개 예약 페이지.",
+        "keywords": "예약 페이지, 알림, 버퍼, 사전 고지, 취소"
+      },
+      "google-calendar": {
+        "label": "Google 캘린더",
+        "description": "캘린더를 연결해 예약과 바쁜 시간이 항상 일치하도록 하세요.",
+        "keywords": "google, 캘린더, meet, 동기화, 바쁨, 약속"
+      },
+      "chat-widget": {
+        "label": "채팅 위젯",
+        "description": "웹사이트에 채팅 말풍선을 추가하세요(웹 채팅이라고도 함).",
+        "keywords": "웹 채팅, 웹사이트 채팅, 라이브 채팅, 위젯, 삽입, 말풍선"
+      },
+      "auto-reply": {
+        "label": "자동 응답",
+        "description": "고객에게 인사하고 부재 중에는 자동으로 응답하세요.",
+        "keywords": "부재 메시지, 환영, 인사, 부재중, 키워드"
+      },
+      "lead-sources": {
+        "label": "소셜 리드",
+        "description": "웹훅을 통해 광고와 랜딩 페이지의 리드를 가져오세요.",
+        "keywords": "리드 광고, facebook 리드, meta, linkedin, tiktok, google ads, 웹훅, zapier, 수집, 양식"
+      },
+      "rest-api": {
+        "label": "REST API",
+        "description": "제품 위에 구축하기 위한 키와 문서.",
+        "keywords": "API 키, 개발자, 토큰, 문서, openapi"
+      },
+      "webhooks": {
+        "label": "웹훅",
+        "description": "이벤트가 발생하는 즉시 자체 시스템으로 보내세요.",
+        "keywords": "콜백, 이벤트, http, 엔드포인트, 알림"
+      },
+      "addons": {
+        "label": "추가 기능",
+        "description": "워크스페이스의 선택 기능을 켜거나 끄세요.",
+        "keywords": "확장, 모듈, 플러그인, 마켓플레이스"
+      },
+      "shopify": {
+        "label": "Shopify",
+        "description": "Shopify 스토어를 연결해 상품과 주문을 동기화하고 고객에게 메시지를 보내세요.",
+        "keywords": "쇼핑, 스토어, 이커머스, 상품, 주문, 동기화, 방치된 장바구니"
+      },
+      "woocommerce": {
+        "label": "WooCommerce",
+        "description": "WooCommerce 스토어를 연결해 상품과 주문을 동기화하고 고객에게 메시지를 보내세요.",
+        "keywords": "woo, wordpress, 쇼핑, 스토어, 이커머스, 상품, 주문, 동기화"
+      },
+      "i18n-translation": {
+        "label": "번역",
+        "description": "언어 및 메시지 자동 번역.",
+        "keywords": "언어, 로케일, 번역, 자동 번역"
+      },
+      "account-security": {
+        "label": "비밀번호 및 2단계 로그인",
+        "description": "비밀번호를 변경하고 2단계 인증으로 로그인을 보호하세요.",
+        "keywords": "mfa, 2fa, 인증 앱, 세션, 기기, 로그인, login"
+      },
+      "import-export": {
+        "label": "가져오기 및 내보내기",
+        "description": "파일에서 데이터를 가져오거나 사본을 내보내세요.",
+        "keywords": "csv, excel, 다운로드, 백업, 업로드, 마이그레이션"
+      },
+      "activity-log": {
+        "label": "감사 로그",
+        "description": "누가 언제 무엇을 변경했는지 기록합니다.",
+        "keywords": "활동, 기록, 변경, 감사 추적, 보안 로그"
+      },
+      "privacy": {
+        "label": "개인정보 및 데이터",
+        "description": "동의, 보관 및 데이터 삭제 요청.",
+        "keywords": "gdpr, 동의, 보관, 데이터 삭제, dpa, 개인정보"
+      },
+      "whatsapp-customers": {
+        "label": "저장된 고객",
+        "description": "WhatsApp 주문용 고객 이름과 배송 주소를 미리 설정하세요.",
+        "keywords": "고객, 주소, 배송, 주문, 스토어"
+      },
+      "geta-publishing": {
+        "label": "Geta 게시",
+        "description": "게시한 플로우를 Geta 콘솔에서 바로 라이브로 전환하세요.",
+        "keywords": "geta, 게시, 봇, 콘솔, 라이브 전환, 챗봇"
+      },
+      "auto-assignment": {
+        "label": "자동 배정",
+        "description": "새 대화를 순번 또는 규칙에 따라 적절한 상담원에게 자동으로 배정하세요.",
+        "keywords": "라우팅, 라운드 로빈, 배정, 상담원, 수신함 규칙, 분배, 담당자"
+      }
+    }
+  }
+}

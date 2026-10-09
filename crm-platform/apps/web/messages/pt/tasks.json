@@ -1,0 +1,330 @@
+{
+  "tasks": {
+    "nav": {
+      "tasks": "Tarefas"
+    },
+    "common": {
+      "dismiss": "Dispensar"
+    },
+    "hub": {
+      "title": "Tarefas",
+      "subtitle": "Acompanhamentos e afazeres. Atribua, defina prioridade e data de vencimento e marque como concluídos.",
+      "newTask": "Nova tarefa",
+      "tableLabel": "Tarefas",
+      "loading": "Carregando tarefas",
+      "useSampleData": "Usar dados de exemplo (desenvolvimento)",
+      "emptyFilteredTitle": "Nenhuma tarefa corresponde",
+      "emptyFiltered": "Tente outra busca ou limpe os filtros.",
+      "resetFilters": "Limpar filtros",
+      "empty": {
+        "mine": {
+          "title": "Nada atribuído a você",
+          "message": "As tarefas atribuídas a você aparecerão aqui. Adicione uma acima ou veja Todas as tarefas."
+        },
+        "all": {
+          "title": "Nenhuma tarefa ainda",
+          "message": "Adicione um acompanhamento ou um afazer na caixa acima e ele aparecerá aqui."
+        },
+        "overdue": {
+          "title": "Nada atrasado",
+          "message": "Todas as tarefas abertas estão em dia."
+        },
+        "today": {
+          "title": "Nada para hoje",
+          "message": "Nenhuma tarefa aberta vence pelo resto do dia."
+        },
+        "upcoming": {
+          "title": "Nada próximo",
+          "message": "Tarefas abertas com vencimento em outro dia aparecerão aqui."
+        },
+        "completed": {
+          "title": "Nenhuma tarefa concluída ainda",
+          "message": "As tarefas que você marcar como concluídas aparecerão aqui, da mais recente para a mais antiga."
+        }
+      },
+      "showing": "{count, plural, one {# tarefa carregada} other {# tarefas carregadas}}",
+      "loadMore": "Carregar mais",
+      "allLoaded": "Todas as tarefas carregadas",
+      "deleteTitle": "Excluir esta tarefa?",
+      "deleteMessage": "\"{title}\" será excluída para todos. Isso não pode ser desfeito.",
+      "delete": "Excluir",
+      "keep": "Manter"
+    },
+    "tabs": {
+      "label": "Listas de tarefas",
+      "mine": "Minhas tarefas",
+      "all": "Todas as tarefas",
+      "overdue": "Atrasadas",
+      "today": "Hoje",
+      "upcoming": "Próximas",
+      "completed": "Concluídas",
+      "count": "{count, plural, one {# tarefa} other {# tarefas}}"
+    },
+    "toolbar": {
+      "label": "Filtros de tarefas",
+      "search": "Pesquisar tarefas",
+      "status": "Status",
+      "statusOpen": "Abertas",
+      "statusDone": "Concluídas",
+      "statusAll": "Abertas e concluídas",
+      "priority": "Prioridade",
+      "allPriorities": "Todas as prioridades",
+      "priorities": {
+        "high": "Alta",
+        "medium": "Média",
+        "low": "Baixa"
+      },
+      "assignee": "Responsável",
+      "allAssignees": "Todos os responsáveis",
+      "unassigned": "Sem responsável",
+      "linked": "Vinculado a",
+      "anyLink": "Qualquer registro",
+      "linkContact": "Um contato",
+      "linkDeal": "Um negócio",
+      "clear": "Limpar",
+      "modifyColumns": "Modificar colunas",
+      "resetColumns": "Redefinir colunas",
+      "columns": {
+        "title": "Tarefa",
+        "priority": "Prioridade",
+        "due": "Vencimento",
+        "assignee": "Responsável",
+        "contact": "Contato",
+        "deal": "Negócio",
+        "created": "Criada em",
+        "completed": "Concluída em"
+      },
+      "refresh": "Atualizar",
+      "shortcuts": "Atalhos de teclado",
+      "view": "Layout",
+      "views": {
+        "list": "Lista",
+        "board": "Quadro por data de vencimento"
+      }
+    },
+    "table": {
+      "scrollArea": "Tabela de tarefas",
+      "selectAll": "Selecionar todas as tarefas carregadas",
+      "selectRow": "Selecionar {title}",
+      "columns": {
+        "title": "Tarefa",
+        "priority": "Prioridade",
+        "due": "Vencimento",
+        "assignee": "Responsável",
+        "contact": "Contato",
+        "deal": "Negócio",
+        "created": "Criada em",
+        "completed": "Concluída em"
+      }
+    },
+    "row": {
+      "complete": "Marcar como concluída",
+      "reopen": "Reabrir",
+      "completeNamed": "Marcar \"{title}\" como concluída",
+      "reopenNamed": "Reabrir \"{title}\"",
+      "moreFor": "Mais ações para {title}",
+      "open": "Abrir",
+      "edit": "Editar",
+      "delete": "Excluir",
+      "unassigned": "Sem responsável"
+    },
+    "bulk": {
+      "label": "Ações para as tarefas selecionadas",
+      "selected": "{count, plural, one {# tarefa selecionada} other {# tarefas selecionadas}}",
+      "working": "Em andamento",
+      "complete": "Concluir",
+      "assign": "Atribuir",
+      "assignTo": "Atribuir a",
+      "me": "{name} (eu)",
+      "unassign": "Remover responsável",
+      "delete": "Excluir",
+      "clear": "Limpar seleção",
+      "failed": "Não deu certo.",
+      "someFailed": "{count, plural, one {# tarefa não pôde ser alterada.} other {# tarefas não puderam ser alteradas.}}",
+      "completed": "{count, plural, one {# tarefa concluída.} other {# tarefas concluídas.}}",
+      "assigned": "{count, plural, one {# tarefa atribuída a {name}.} other {# tarefas atribuídas a {name}.}}",
+      "unassigned": "{count, plural, one {# tarefa sem responsável.} other {# tarefas sem responsável.}}",
+      "deleted": "{count, plural, one {# tarefa excluída.} other {# tarefas excluídas.}}",
+      "deleteTitle": "Excluir as tarefas selecionadas?",
+      "deleteMessage": "{count, plural, one {# tarefa será excluída para todos. Isso não pode ser desfeito.} other {# tarefas serão excluídas para todos. Isso não pode ser desfeito.}}",
+      "keep": "Manter"
+    },
+    "quick": {
+      "label": "Adicionar uma tarefa",
+      "placeholder": "Adicione uma tarefa e pressione Enter",
+      "priority": "Prioridade",
+      "priorities": {
+        "high": "Alta",
+        "medium": "Média",
+        "low": "Baixa"
+      },
+      "due": "Data e hora de vencimento",
+      "add": "Adicionar",
+      "dueRequired": "Escolha uma data e hora de vencimento.",
+      "titleRequired": "Descreva o que precisa ser feito.",
+      "options": "Mais opções (prioridade e vencimento)"
+    },
+    "form": {
+      "eyebrow": "Tarefa",
+      "newTitle": "Nova tarefa",
+      "editTitle": "Editar tarefa",
+      "close": "Fechar",
+      "cancel": "Cancelar",
+      "create": "Criar tarefa",
+      "save": "Salvar alterações",
+      "title": "Tarefa",
+      "titlePlaceholder": "ex.: Ligar para a Acme sobre a renovação",
+      "priority": "Prioridade",
+      "priorities": {
+        "high": "Alta",
+        "medium": "Média",
+        "low": "Baixa"
+      },
+      "assignee": "Atribuir a",
+      "unassigned": "Ninguém",
+      "me": "{name} (eu)",
+      "due": "Vencimento",
+      "presets": {
+        "today": "Hoje",
+        "tomorrow": "Amanhã",
+        "nextWeek": "Próxima semana"
+      },
+      "clearDue": "Limpar data",
+      "contact": "Contato",
+      "deal": "Negócio",
+      "notes": "Observações",
+      "reminderHint": "O responsável recebe um lembrete quando a tarefa vence.",
+      "assigneePick": "Escolha quem é responsável por esta tarefa.",
+      "problems": {
+        "dueRequired": "Escolha uma data e hora de vencimento.",
+        "priorityRequired": "Escolha uma prioridade.",
+        "assigneeRequired": "Escolha para quem é esta tarefa.",
+        "titleRequired": "Descreva o que precisa ser feito.",
+        "titleTooLong": "A tarefa é longa demais (no máximo 255 caracteres).",
+        "notesTooLong": "As observações são longas demais (no máximo 5000 caracteres).",
+        "dueInvalid": "Data inválida.",
+        "assigneeInvalid": "Esta pessoa não é um membro ativo deste espaço de trabalho."
+      }
+    },
+    "drawer": {
+      "loading": "Carregando tarefa",
+      "close": "Fechar",
+      "eyebrow": "Tarefa",
+      "name": "Nome da tarefa",
+      "titleRequired": "A tarefa precisa de um nome.",
+      "statusOpen": "Abrir",
+      "statusDone": "Concluída",
+      "complete": "Marcar como concluída",
+      "reopen": "Reabrir",
+      "edit": "Editar",
+      "delete": "Excluir",
+      "details": "Detalhes",
+      "notes": "Observações",
+      "notesPlaceholder": "Adicione contexto para quem vai assumir isto",
+      "linked": "Registros vinculados",
+      "company": "Empresa",
+      "noLinks": "Não vinculado a um contato ou negócio.",
+      "activity": "Atividade",
+      "events": {
+        "created": "Tarefa criada",
+        "createdBy": "Criada por {name}",
+        "reminded": "Lembrete de vencimento enviado",
+        "completed": "Marcada como concluída"
+      },
+      "deleteTitle": "Excluir esta tarefa?",
+      "deleteMessage": "“{title}” será excluída para todos. Esta ação não pode ser desfeita.",
+      "cancel": "Manter"
+    },
+    "board": {
+      "buckets": {
+        "overdue": "Atrasada",
+        "today": "Hoje",
+        "upcoming": "Próximas",
+        "no_date": "Sem data"
+      },
+      "empty": "Nada aqui."
+    },
+    "due": {
+      "none": "Sem data",
+      "overdue": "Atrasadas",
+      "today": "Hoje, {time}",
+      "tomorrow": "Amanhã, {time}",
+      "yesterday": "Ontem, {time}",
+      "date": "{date}, {time}"
+    },
+    "priority": {
+      "high": "Alta",
+      "medium": "Média",
+      "low": "Baixa"
+    },
+    "link": {
+      "unnamedContact": "Contato sem nome",
+      "unnamedDeal": "Negociação"
+    },
+    "picker": {
+      "searchContact": "Pesquisar contatos",
+      "searchDeal": "Pesquisar negociações",
+      "results": "Resultados da pesquisa",
+      "searching": "Pesquisando",
+      "unavailable": "A pesquisa não está disponível no momento.",
+      "none": "Nenhum resultado.",
+      "unlink": "Remover o link"
+    },
+    "errors": {
+      "network": "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.",
+      "forbidden": "Você não tem permissão para fazer isso.",
+      "signedOut": "Sua sessão terminou. Entre novamente para continuar.",
+      "conflict": "Outra pessoa alterou esta tarefa. Recarregue e tente novamente.",
+      "validation": "Alguns dos dados não são válidos.",
+      "unavailable": "O serviço de tarefas ainda não está disponível neste servidor.",
+      "rateLimited": "Muitas solicitações. Aguarde um momento e tente novamente.",
+      "notFound": "Não foi possível encontrar esta tarefa. Talvez ela tenha sido excluída.",
+      "planDisabled": "Seu plano não inclui tarefas. Faça upgrade para desbloqueá-las.",
+      "assigneeInvalid": "Esta pessoa não é um membro ativo deste espaço de trabalho.",
+      "unexpected": "Algo deu errado. Tente novamente em instantes.",
+      "requestId": "ID da solicitação",
+      "retry": "Tentar novamente"
+    },
+    "toast": {
+      "completed": "Tarefa concluída.",
+      "reopened": "Tarefa reaberta.",
+      "created": "Tarefa criada.",
+      "saved": "Tarefa salva.",
+      "deleted": "Tarefa excluída.",
+      "conflict": "Outra pessoa alterou esta tarefa. A lista foi recarregada; tente novamente.",
+      "failed": "Não foi possível atualizar a tarefa.",
+      "saveFailed": "Não foi possível salvar a tarefa.",
+      "deleteFailed": "Não foi possível excluir a tarefa.",
+      "createFailed": "Não foi possível criar a tarefa."
+    },
+    "shortcuts": {
+      "title": "Atalhos de teclado",
+      "close": "Fechar",
+      "intro": "Percorra a lista sem o mouse. Os atalhos são pausados enquanto você digita em um campo.",
+      "actions": {
+        "next": "Próxima tarefa",
+        "prev": "Tarefa anterior",
+        "open": "Abrir a tarefa",
+        "toggleComplete": "Concluir ou reabrir",
+        "toggleSelect": "Selecionar ou desmarcar",
+        "newTask": "Nova tarefa",
+        "focusSearch": "Pesquisar",
+        "clearSelection": "Limpar a seleção",
+        "help": "Mostrar esta lista"
+      }
+    },
+    "linked": {
+      "title": "Tarefas",
+      "addPlaceholder": "Digite o título da tarefa e clique em Adicionar para preencher os detalhes",
+      "viewAll": "Ver tudo",
+      "loading": "Carregando tarefas",
+      "unavailableTitle": "As tarefas ainda não estão disponíveis",
+      "unavailable": "O serviço de tarefas ainda não está disponível neste servidor.",
+      "empty": "Nenhuma tarefa em aberto.",
+      "loadMore": "Carregar mais",
+      "loadMoreDone": "Carregar mais concluídas",
+      "showDone": "Mostrar concluídas",
+      "hideDone": "Ocultar concluídas"
+    }
+  }
+}

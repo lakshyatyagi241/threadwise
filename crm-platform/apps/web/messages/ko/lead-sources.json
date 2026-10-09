@@ -1,0 +1,560 @@
+{
+  "lead-sources": {
+    "common": {
+      "dismiss": "닫기",
+      "loading": "불러오는 중",
+      "retry": "다시 시도",
+      "copied": "복사됨",
+      "copyFailed": "복사할 수 없습니다. 텍스트를 선택해 직접 복사하세요.",
+      "requestId": "참조: {id}"
+    },
+    "states": {
+      "noAccessTitle": "소셜 리드에 접근할 권한이 없습니다",
+      "noAccessBody": "현재 역할에 이 화면에 필요한 권한({permission})이 없습니다. 워크스페이스 관리자에게 역할에 추가해 달라고 요청하세요.",
+      "lockedTitle": "소셜 리드는 현재 요금제에 포함되어 있지 않습니다",
+      "lockedBody": "현재 요금제에는 리드 소스가 포함되어 있지 않아 보거나 만들 수 없습니다. 요금제를 업그레이드하면 광고 및 랜딩 페이지 리드를 연락처로 가져올 수 있습니다.",
+      "upgrade": "요금제 업그레이드",
+      "manageNeeded": "여기서는 보기만 할 수 있고 변경할 수 없습니다. 소스를 변경하려면 {permission} 권한이 필요합니다."
+    },
+    "errors": {
+      "conflict": "편집하는 동안 다른 사용자가 이 소스를 변경했습니다. 새로고침하여 해당 버전을 확인하세요. 저장되지 않은 편집 내용은 사라집니다.",
+      "noAccess": "현재 역할로는 이 작업을 할 수 없습니다.",
+      "signedOut": "세션이 종료되었습니다. 계속하려면 다시 로그인하세요.",
+      "planLocked": "요금제에 소셜 리드가 포함되어 있지 않습니다. 사용하려면 업그레이드하세요.",
+      "planLimit": "요금제의 리드 소스 한도에 도달했습니다. 요금제를 업그레이드하거나 더 이상 사용하지 않는 소스를 삭제하세요.",
+      "nameTaken": "이미 같은 이름의 소스가 있습니다. 다른 이름을 선택하세요.",
+      "mappingInvalid": "매핑이 리드로 채울 수 없는 연락처 속성을 가리키고 있습니다.",
+      "defaultsInvalid": "규칙에 있는 항목(사용자, 파이프라인, 단계 또는 라이프사이클 단계) 중 일부가 이 워크스페이스에 없습니다.",
+      "notRetryable": "검토가 필요하거나 실패한 리드만 다시 시도할 수 있습니다. 이 리드는 이미 완료되었거나 처리 중입니다.",
+      "payloadPurged": "저장된 리드는 보관 기간이 지나 삭제되어 다시 시도할 항목이 없습니다.",
+      "sourcePaused": "이 소스는 일시 중지되었습니다. 테스트 리드를 보내거나 리드를 다시 시도하려면 재개하세요.",
+      "notFound": "찾을 수 없습니다. 삭제되었을 수 있습니다.",
+      "rateLimited": "요청이 너무 많습니다. 잠시 후 다시 시도하세요.",
+      "rateLimitedWait": "요청이 너무 많습니다. {seconds}초 후 다시 시도하세요.",
+      "validation": "입력한 내용 중 일부가 올바르지 않습니다. 강조 표시된 필드를 확인하세요.",
+      "validationField": "{message}",
+      "detailVerbatim": "{message}",
+      "badResponse": "서버 응답을 이 페이지에서 처리할 수 없습니다. 페이지를 새로고침하세요. 계속 발생하면 지원팀에 문의하세요.",
+      "network": "서버에 연결할 수 없습니다. 연결 상태를 확인한 후 다시 시도하세요.",
+      "unexpected": "서버 측에서 문제가 발생했습니다. 잠시 후 다시 시도하세요.",
+      "request": "요청이 허용되지 않았습니다. 입력한 내용을 확인한 후 다시 시도하세요.",
+      "details": {
+        "unknown_property": "이 연락처 속성은 존재하지 않거나 꺼져 있습니다.",
+        "not_mappable": "이 속성은 계산되거나 다른 레코드를 가리키므로 리드로 채울 수 없습니다.",
+        "unknown_pipeline": "이 파이프라인은 워크스페이스에 없습니다.",
+        "unknown_stage": "이 거래 단계는 워크스페이스에 없습니다.",
+        "stage_not_in_pipeline": "이 단계는 다른 파이프라인에 속합니다.",
+        "pipeline_required": "이 단계가 속한 파이프라인을 선택하세요.",
+        "unknown_or_lost_stage": "이 라이프사이클 단계는 존재하지 않거나 실패 단계입니다.",
+        "unknown_or_inactive_user": "선택한 사용자 중 한 명이 이 워크스페이스의 활성 구성원이 아닙니다."
+      }
+    },
+    "problems": {
+      "nameRequired": "소스 이름을 입력하세요.",
+      "nameLength": "최대 {max}자까지 입력하세요.",
+      "platformLength": "최대 {max}자까지 입력하세요.",
+      "secretLength": "공유 비밀키는 {min}~{max}자입니다.",
+      "pathLength": "경로는 최대 {max}자입니다.",
+      "pathCharacters": "경로에는 제어 문자를 포함할 수 없습니다.",
+      "retentionRange": "1에서 {max} 사이의 일수를 정수로 입력하세요.",
+      "countryCode": "91 또는 44처럼 1~4자리 국가 번호를 입력하세요.",
+      "textLength": "최대 {max}자까지 입력하세요.",
+      "ownerFixed": "정확히 한 명을 선택하세요.",
+      "ownerRoundRobin": "순서대로 담당할 사용자를 두 명 이상 선택하세요.",
+      "ownerTooMany": "최대 {max}명까지 선택하세요.",
+      "notifyTooMany": "최대 {max}명까지 선택하세요.",
+      "dealTitleLength": "거래 제목은 최대 {max}자입니다.",
+      "propertyRequired": "채울 연락처 속성을 선택하세요.",
+      "propertyKey": "속성 키는 문자로 시작하며 소문자, 숫자, 밑줄만 사용합니다.",
+      "propertyDuplicate": "이 속성이 두 번 매핑되어 있습니다.",
+      "pathRequired": "페이로드에서 값이 있는 위치를 입력하세요.",
+      "customFieldsTooMany": "사용자 지정 속성은 최대 {max}개까지 매핑할 수 있습니다.",
+      "contract": "{message}"
+    },
+    "kinds": {
+      "webhook": "웹훅",
+      "meta_lead_ads": "Meta 리드 양식",
+      "tiktok": "TikTok",
+      "linkedin": "LinkedIn",
+      "google_ads": "Google Ads",
+      "connector": "마켓플레이스 연결"
+    },
+    "sourceStatus": {
+      "active": "사용 중",
+      "paused": "일시 중지"
+    },
+    "eventStatus": {
+      "received": "수신됨",
+      "created": "연락처 생성됨",
+      "updated": "연락처 업데이트됨",
+      "duplicate": "중복",
+      "needs_review": "검토 필요",
+      "failed": "실패"
+    },
+    "reasons": {
+      "no_contact_point": "이메일 또는 전화번호 없음",
+      "invalid_phone": "전화번호를 읽을 수 없음",
+      "plan_limit_reached": "연락처 한도 도달",
+      "source_paused": "소스 일시 중지됨",
+      "internal_error": "처리 오류",
+      "identity_conflict": "이메일 또는 전화번호가 다른 연락처에 속함"
+    },
+    "guidance": {
+      "noContactPoint": "리드에 사용할 수 있는 이메일이나 전화번호가 없습니다. 매핑 또는 기본 국가 번호를 수정한 후 다시 시도하세요.",
+      "invalidPhone": "전화번호가 전송되었지만 올바르게 읽을 수 없었고 이메일도 없습니다. 전화번호 매핑과 기본 국가 번호를 확인한 후 다시 시도하세요.",
+      "planLimit": "요금제의 연락처 한도에 도달하여 이 리드를 연락처로 만들 수 없었습니다. 요금제를 업그레이드한 후 다시 시도하세요.",
+      "sourcePaused": "소스가 일시 중지되었습니다. 재개한 후 다시 시도하세요.",
+      "internalError": "이 리드를 처리하는 중 문제가 발생했습니다. 다시 시도하세요. 다시 실패하면 오류의 참조 번호를 지원팀에 전달하세요.",
+      "identityConflict": "리드는 기존 연락처에 합쳐졌지만, 이메일 또는 전화번호가 이미 다른 연락처에 속해 있어 해당 정보는 옮겨지지 않았습니다.",
+      "generic": "이 리드를 확인해야 합니다. 사유와 오류를 확인하고, 필요하면 매핑이나 기본값을 수정한 후 다시 시도하세요.",
+      "upgrade": "요금제 업그레이드"
+    },
+    "eventFilters": {
+      "all": "전체 리드",
+      "attention": "확인 필요",
+      "needs_review": "검토 필요",
+      "failed": "실패",
+      "created": "연락처 생성됨",
+      "updated": "연락처 업데이트됨",
+      "duplicate": "중복",
+      "received": "처리 중"
+    },
+    "testFilters": {
+      "all": "실제 및 테스트 리드",
+      "only": "테스트 리드만",
+      "hide": "테스트 리드 숨기기"
+    },
+    "page": {
+      "title": "소셜 리드",
+      "description": "광고와 랜딩 페이지의 리드를 담당자, 태그, 거래와 함께 연락처로 가져오세요.",
+      "newSource": "새 소스",
+      "loading": "리드 소스를 불러오는 중",
+      "tabs": {
+        "ads": "광고",
+        "webhook": "웹훅",
+        "attention": "{count, plural, other {#개 리드를 확인해야 합니다}}"
+      }
+    },
+    "ads": {
+      "intro": "리드의 출처를 선택하세요. 모든 소스는 같은 결과로 끝납니다. 소스가 기록된 연락처, 담당자, 선택적 거래, 알림이 생성됩니다.",
+      "available": "사용 가능",
+      "comingSoon": "출시 예정",
+      "untilThen": "그때까지는 Zapier 또는 Make를 통해 웹훅으로 이 리드를 보내세요.",
+      "sourceCount": "{count, plural, =0 {아직 소스가 없습니다} other {소스 #개}}",
+      "setUpWebhook": "웹훅 설정",
+      "openSources": "소스 열기",
+      "providers": {
+        "webhook": {
+          "name": "웹훅",
+          "body": "웹 요청을 보낼 수 있는 도구(Zapier, Make, 랜딩 페이지 빌더 또는 직접 만든 양식)에서 리드를 전송하세요. LinkedIn, TikTok, Google Ads 리드도 함께 받을 수 있습니다."
+        },
+        "meta": {
+          "name": "Meta 리드 양식",
+          "body": "페이스북 및 인스타그램 리드 광고를 페이지에서 바로 연결합니다."
+        },
+        "linkedin": {
+          "name": "LinkedIn",
+          "body": "LinkedIn 리드 생성 양식."
+        },
+        "tiktok": {
+          "name": "TikTok",
+          "body": "TikTok 리드 생성 양식."
+        },
+        "google": {
+          "name": "Google Ads",
+          "body": "Google Ads 리드 양식 확장."
+        }
+      }
+    },
+    "sources": {
+      "emptyTitle": "아직 소스가 없습니다",
+      "empty": "웹훅 소스를 만들면 Zapier, Make 또는 양식 도구에 붙여 넣을 URL을 받을 수 있습니다. 여기로 보낸 리드는 연락처가 됩니다.",
+      "emptyNoManage": "아직 리드 소스가 만들어지지 않았습니다. 리드 소스를 관리할 수 있는 사용자에게 만들어 달라고 요청하세요.",
+      "create": "새 소스",
+      "caption": "리드 소스",
+      "col": {
+        "name": "이름",
+        "kind": "유형",
+        "status": "상태",
+        "token": "URL",
+        "lastEvent": "마지막 리드",
+        "attention": "확인 필요"
+      },
+      "connector": "마켓플레이스 경유",
+      "endsIn": "{hint}에서 종료",
+      "noEvents": "아직 리드가 없습니다",
+      "needsAttention": "{count, plural, other {리드 #개}}"
+    },
+    "wizard": {
+      "title": "새 리드 소스",
+      "description": "들어오는 리드를 연락처로 바꾸는 웹훅을 설정하세요.",
+      "back": "소셜 리드로 돌아가기",
+      "stepsLabel": "리드 소스 만들기 단계",
+      "steps": {
+        "basics": "기본 정보",
+        "rules": "리드 처리 방식",
+        "connect": "발신 연결",
+        "mapping": "필드 매핑"
+      },
+      "stepTitle": {
+        "basics": "소스 이름 지정",
+        "rules": "리드 처리 방식",
+        "connect": "발신 연결",
+        "mapping": "필드 매핑"
+      },
+      "stepHelp": {
+        "basics": "이 소스의 이름과 원본 리드 데이터의 보관 기간을 입력하세요.",
+        "rules": "들어오는 모든 리드에 대해 담당자, 태그, 거래, 알림을 선택하세요.",
+        "connect": "소스가 만들어졌습니다. URL과 토큰은 한 번만 표시되므로 지금 복사하세요.",
+        "mapping": "도구가 보내는 데이터에서 각 값이 어디에 있는지 알려주세요. 입력하면 미리보기에 결과가 표시됩니다."
+      },
+      "previous": "뒤로",
+      "next": "다음",
+      "cancel": "취소",
+      "create": "소스 만들기",
+      "created": "소스 {name}이(가) 만들어졌습니다",
+      "mappingSaved": "매핑이 저장되었습니다",
+      "planLimit": "사용 중인 요금제의 리드 소스 한도에 도달해 새 소스를 만들 수 없습니다.",
+      "planLocked": "현재 요금제에는 소셜 리드가 포함되어 있지 않습니다.",
+      "upgrade": "요금제 업그레이드",
+      "skipMapping": "나중에 하기",
+      "finish": "저장하고 완료",
+      "revealGone": "URL과 토큰은 더 이상 표시되지 않습니다. 저장해 두지 않았다면 소스를 열고 토큰을 재발급해 새 URL을 받으세요.",
+      "toMapping": "매핑으로 계속"
+    },
+    "form": {
+      "name": "소스 이름",
+      "nameHint": "예: Zapier: Facebook 리드 광고. 이름은 중복될 수 없습니다.",
+      "platform": "플랫폼 라벨",
+      "platformHint": "연락처에 소스로 표시될 이름입니다. 예: Facebook 또는 IndiaMART. 최대 {max}자.",
+      "platformPlaceholder": "Facebook",
+      "secret": {
+        "label": "공유 비밀키",
+        "isSet": "공유 비밀키가 설정되어 있습니다. 발신자는 X-Webhook-Secret 헤더로 이를 보내야 합니다.",
+        "notSet": "공유 비밀키가 없습니다. URL을 가진 누구나 리드를 보낼 수 있습니다.",
+        "willRemove": "저장하면 공유 비밀키가 삭제됩니다.",
+        "willReplace": "저장하면 공유 비밀키가 교체됩니다.",
+        "willSet": "저장하면 공유 비밀키가 설정됩니다.",
+        "newValue": "새 공유 비밀키",
+        "hint": "선택 사항. {min}~{max}자. 저장 후에는 다시 표시되지 않습니다.",
+        "show": "비밀키 표시",
+        "hide": "비밀키 숨기기",
+        "replace": "교체",
+        "remove": "삭제",
+        "keep": "현재 비밀키 유지"
+      },
+      "externalIdPath": "리드 ID 경로",
+      "externalIdPathHint": "데이터에서 발신자가 부여한 리드 ID의 위치입니다(예: lead.id). 같은 리드가 두 번 추가되는 것을 막아 줍니다. 선택 사항.",
+      "retention": "원본 리드 데이터 보관 기간(일)",
+      "retentionHint": "이 기간이 지나면 저장된 데이터가 삭제되며 연락처는 유지됩니다. 1~{max}일.",
+      "sections": {
+        "contact": "연락처",
+        "owner": "담당자",
+        "deal": "거래",
+        "notify": "알림"
+      },
+      "membersFailed": "팀 정보를 불러오지 못해 지금은 사람을 선택할 수 없습니다. 페이지를 새로고침해 다시 시도하세요.",
+      "countryCode": "기본 국가 코드",
+      "countryCodeHint": "국가 코드 없이 보낸 전화번호에 추가됩니다(예: 91). 설정하지 않으면 번호에 국가 코드가 포함되어야 합니다.",
+      "lifecycleStage": "시작 라이프사이클 단계",
+      "lifecycleStageHint": "이 소스에서 들어온 새 연락처가 시작되는 단계입니다.",
+      "lifecycleDefault": "워크스페이스 기본값",
+      "tag": "태그",
+      "tagHint": "이 소스가 가져오는 모든 연락처에 붙는 태그입니다. 비워 두면 태그가 없습니다.",
+      "ownerMode": "연락처 담당자",
+      "ownerModeHint": "담당자가 아직 없는 연락처에만 적용됩니다.",
+      "ownerModes": {
+        "unassigned": "담당자 없음(미배정)",
+        "fixed": "한 사람",
+        "round_robin": "사람들 간 순환 배정"
+      },
+      "ownerFixed": "담당자",
+      "ownerChoose": "사람 선택",
+      "unknownMember": "더 이상 사용할 수 없는 사람",
+      "ownerRoundRobin": "순환 배정 대상",
+      "ownerRoundRobinHint": "최소 두 명을 선택하세요. 리드는 순서대로 배정되며 활성 상태가 아닌 사람은 건너뜁니다.",
+      "pickMembers": "사람 선택",
+      "noMembers": "선택할 사람이 없습니다",
+      "removeMember": "{name} 제거",
+      "dealEnabled": "새 연락처마다 거래 생성",
+      "dealEnabledHint": "켜기 전까지 꺼져 있습니다. 이미 진행 중인 거래가 있는 연락처에는 거래가 추가로 생성되지 않습니다.",
+      "pipelinesFailed": "파이프라인을 불러오지 못해 지금은 파이프라인과 단계를 선택할 수 없습니다.",
+      "pipeline": "파이프라인",
+      "pipelineDefault": "워크스페이스 기본 파이프라인",
+      "dealStage": "단계",
+      "dealStageNeedsPipeline": "단계를 고르려면 먼저 파이프라인을 선택하세요.",
+      "dealStageFirst": "파이프라인의 첫 번째 단계",
+      "dealTitle": "거래 제목",
+      "dealTitleHint": "리드에서 자동으로 채워집니다: {tokens}.",
+      "notifyOwner": "연락처 담당자에게 알림",
+      "notifyOwnerHint": "새 리드가 들어오면 앱 내 알림을 보냅니다. 테스트 리드는 알림을 보내지 않습니다.",
+      "notifyUsers": "추가로 알릴 사람",
+      "notifyUsersHint": "예: 영업 관리자. 최대 20명."
+    },
+    "mapping": {
+      "contact": "연락처 필드",
+      "contactHelp": "키(phone_number) 또는 경로(lead.contact.phone, answers[0].value)를 입력하세요. 칸을 비워 두면 일반적인 이름에서 찾습니다.",
+      "fields": {
+        "name": "이름(전체)",
+        "firstName": "이름",
+        "lastName": "성",
+        "email": "이메일",
+        "phone": "전화"
+      },
+      "defaults": {
+        "name": "full_name, name, contact_name 중에서 찾음",
+        "firstName": "first_name, firstname 중에서 찾음",
+        "lastName": "last_name, lastname 중에서 찾음",
+        "email": "email, email_address, mail 중에서 찾음",
+        "phone": "phone, mobile, phone_number, whatsapp 중에서 찾음"
+      },
+      "custom": "사용자 정의 속성",
+      "customHelp": "도구가 보내는 데이터로 사용자 정의 연락처 속성을 채웁니다.",
+      "propertiesFailed": "연락처 속성을 불러오지 못해 속성 키를 직접 입력해야 합니다.",
+      "property": "연락처 속성",
+      "propertyChoose": "속성 선택",
+      "path": "페이로드 내 경로",
+      "removeRow": "사용자 정의 속성 {number} 삭제",
+      "remove": "삭제",
+      "addRow": "사용자 정의 속성 추가",
+      "attribution": "유입 경로 귀속",
+      "attributionHelp": "캠페인 정보가 있는 위치입니다. 비워 둔 항목은 같은 이름으로 찾습니다.",
+      "attributionFields": {
+        "platform": "플랫폼",
+        "campaign": "캠페인",
+        "adset": "광고 세트",
+        "ad": "광고",
+        "form": "양식"
+      },
+      "attributionDefaults": {
+        "platform": "platform, utm_source 중에서 찾음",
+        "campaign": "campaign, utm_campaign 중에서 찾음",
+        "adset": "adset, adgroup 중에서 찾음",
+        "ad": "ad 중에서 찾음",
+        "form": "form 중에서 찾음"
+      }
+    },
+    "preview": {
+      "title": "실시간 미리보기",
+      "updating": "업데이트 중",
+      "help": "위 매핑으로 리드가 어떻게 처리되는지 보여 줍니다. 미리보기는 아무것도 저장하거나 생성하지 않습니다.",
+      "paste": "샘플 리드 붙여넣기(JSON)",
+      "pasteHint": "객체이며 최대 64KB입니다.",
+      "pasteProblems": {
+        "empty": "도구가 보내는 JSON을 붙여넣으세요.",
+        "invalidJson": "올바른 JSON이 아닙니다. 빠진 따옴표, 쉼표 또는 괄호가 없는지 확인하세요.",
+        "notObject": "리드는 JSON 객체여야 합니다. 중괄호 안에 키와 값이 들어 있어야 합니다.",
+        "tooLarge": "64KB를 넘습니다."
+      },
+      "useLast": "마지막으로 받은 리드 사용",
+      "pickStored": "또는 저장된 리드 선택",
+      "storedOption": "{id} ({status})",
+      "auditNote": "저장된 리드를 읽으면 감사 로그에 기록됩니다. 붙여넣은 샘플은 기록되지 않습니다.",
+      "fixDraft": "미리보기를 보려면 강조 표시된 매핑 필드를 수정하세요.",
+      "choose": "샘플을 붙여넣거나 마지막으로 받은 리드를 사용하면 결과를 볼 수 있습니다.",
+      "loading": "리드를 읽는 중",
+      "none": "아직 받은 리드가 없습니다. 샘플을 붙여넣으세요.",
+      "usable": "이 리드는 처리됩니다",
+      "notUsable": "이 리드는 검토가 필요합니다",
+      "basedOnEvent": "저장된 리드 기준",
+      "basedOnPayload": "입력한 샘플 기준",
+      "externalId": "ID {id}",
+      "reasonsLabel": "사유",
+      "reasons": {
+        "no_payload": "아직 읽을 리드가 없습니다.",
+        "no_contact_point": "이메일과 전화번호를 찾을 수 없습니다.",
+        "invalid_phone": "전화번호를 찾았지만 숫자로 읽을 수 없고 이메일도 없습니다.",
+        "phone_unreadable": "전화번호를 숫자로 읽을 수 없어 이메일을 사용합니다.",
+        "email_invalid": "이메일 주소 형식이 올바르지 않아 무시됩니다."
+      },
+      "contact": {
+        "name": "이름",
+        "firstName": "이름",
+        "lastName": "성",
+        "email": "이메일",
+        "phone": "전화"
+      },
+      "empty": "찾지 못함",
+      "phoneUnreadable": "숫자로 읽을 수 없음",
+      "attribution": {
+        "platform": "플랫폼",
+        "campaign": "캠페인",
+        "adset": "광고 세트",
+        "ad": "광고",
+        "form": "양식"
+      },
+      "paths": "이 리드의 필드",
+      "pathsPick": "클릭하여 입력: {field}",
+      "pathsFocusFirst": "먼저 매핑 칸을 클릭한 다음 필드를 클릭하면 채워집니다.",
+      "pathsMore": "{count, plural, other {필드 #개 더}}"
+    },
+    "reveal": {
+      "titleCreated": "지금 URL과 토큰을 복사하세요",
+      "titleRotated": "새 URL과 토큰",
+      "bodyCreated": "이 값은 한 번만 표시됩니다. 저희는 지문(fingerprint)만 보관하므로 다시 표시할 수 없습니다.",
+      "bodyRotated": "이전 URL은 즉시 작동을 멈췄습니다. 이 새 URL은 지금만 표시됩니다.",
+      "url": "웹훅 URL",
+      "copyUrl": "URL 복사",
+      "noOrigin": "전체 URL을 얻으려면 이 경로 앞에 API 주소를 붙이세요.",
+      "token": "토큰",
+      "copyToken": "토큰 복사",
+      "secretHint": "이 소스는 공유 비밀키도 필요합니다. 발신자는 {header} 헤더로 이를 보내야 합니다.",
+      "sample": "터미널에서 시도하기",
+      "sampleHelp": "Zapier 또는 Make에서 URL로 JSON을 보내는 Webhooks 작업을 사용하세요. 이 명령은 샘플 리드 하나를 보냅니다.",
+      "copied": "URL과 토큰을 안전한 곳에 복사해 두었습니다",
+      "done": "복사했습니다. 계속하기",
+      "doneHint": "먼저 체크박스를 선택하세요. 이후에는 토큰을 다시 표시할 수 없습니다."
+    },
+    "test": {
+      "title": "테스트 리드 보내기",
+      "help": "테스트로 표시된 샘플 리드를 실제 처리 파이프라인으로 보냅니다. 삭제할 수 있는 실제 연락처가 생성되며 아무에게도 알림이 가지 않습니다.",
+      "paused": "이 소스는 일시중지되어 있습니다. 테스트 리드를 보내려면 재개하세요.",
+      "useSample": "대신 샘플 리드 사용",
+      "useOwn": "내 페이로드 보내기",
+      "payload": "페이로드(JSON)",
+      "payloadHint": "객체이며 최대 64KB입니다.",
+      "payloadProblems": {
+        "empty": "보낼 JSON을 붙여넣거나 샘플 리드를 사용하세요.",
+        "invalidJson": "올바른 JSON이 아닙니다. 빠진 따옴표, 쉼표 또는 괄호가 없는지 확인하세요.",
+        "notObject": "리드는 JSON 객체여야 합니다. 중괄호 안에 키와 값이 들어 있어야 합니다.",
+        "tooLarge": "64KB를 넘습니다."
+      },
+      "send": "테스트 리드 보내기",
+      "needsManage": "테스트 리드를 보내려면 leads.sources.manage 권한이 필요합니다.",
+      "result": "결과",
+      "flag": "테스트",
+      "openContact": "연락처 열기"
+    },
+    "watch": {
+      "waiting": "첫 리드를 기다리는 중입니다. URL을 도구에 붙여넣고 리드를 보내세요.",
+      "received": "첫 리드를 받았습니다:",
+      "error": "지금은 리드를 확인할 수 없습니다."
+    },
+    "detail": {
+      "loading": "소스를 불러오는 중",
+      "backToList": "소스 목록으로 돌아가기",
+      "pageTitle": "리드 소스",
+      "needsAttention": "{count, plural, other {주의가 필요한 리드 #건}}",
+      "lastEvent": "마지막 리드",
+      "noEvents": "아직 없음",
+      "pause": "일시중지",
+      "resume": "재개",
+      "rotate": "토큰 재발급",
+      "delete": "삭제",
+      "conflict": "다른 사용자가 이 소스를 변경했습니다. 새로고침하여 그 버전을 확인하세요. 저장하지 않은 수정 내용은 사라집니다.",
+      "reload": "새로고침",
+      "connection": "연결",
+      "connector": "마켓플레이스를 통해 연결되었습니다. 자체 URL이나 토큰이 없으며, 리드는 설치된 앱을 통해 들어옵니다.",
+      "connectorLink": "설치된 앱 열기",
+      "endsIn": "URL 토큰 끝 부분: {hint}",
+      "noHint": "기록된 토큰이 없습니다.",
+      "urlOnce": "전체 URL은 소스를 만들 때 한 번 표시되었습니다. 새 URL이 필요하면 토큰을 재발급하세요.",
+      "secretYes": "공유 비밀키가 설정되어 있습니다. 발신자는 X-Webhook-Secret 헤더로 이를 보내야 합니다.",
+      "secretNo": "공유 비밀키가 설정되어 있지 않습니다.",
+      "pausedNote": "이 소스는 일시중지되어 있어 URL이 404를 반환합니다. 재개할 때까지 발신자에게 오류가 표시됩니다.",
+      "settings": "설정",
+      "settingsHelp": "변경 사항은 저장 후 들어오는 리드에 적용됩니다. 이전 리드를 다시 시도하면 현재 설정이 사용됩니다.",
+      "basics": "기본 정보",
+      "rules": "리드 처리 방식",
+      "mapping": "필드 매핑",
+      "unsaved": "저장하지 않은 변경 사항이 있습니다",
+      "discard": "변경 취소",
+      "save": "변경 사항 저장",
+      "saved": "변경 사항이 저장되었습니다",
+      "pausedToast": "소스가 일시중지되었습니다",
+      "resumedToast": "소스가 재개되었습니다",
+      "deletedToast": "소스 {name}이(가) 삭제되었습니다",
+      "confirm": {
+        "cancel": "취소",
+        "pause": {
+          "title": "이 소스를 일시중지할까요?",
+          "body": "일시중지되면 URL이 404를 반환하고 이 URL로 보낸 리드는 받지 않습니다. 언제든 재개할 수 있습니다.",
+          "action": "소스 일시중지"
+        },
+        "rotate": {
+          "title": "토큰을 재발급할까요?",
+          "body": "현재 URL은 즉시 작동을 멈추므로 도구에 새 URL을 업데이트하세요. 새 URL은 한 번만 표시됩니다.",
+          "action": "토큰 재발급"
+        },
+        "delete": {
+          "title": "{name}을(를) 삭제할까요?",
+          "body": "URL이 작동을 멈추며 이 소스가 저장한 리드도 함께 삭제됩니다. 이미 만든 연락처는 유지됩니다. 이 작업은 되돌릴 수 없습니다.",
+          "action": "소스 삭제"
+        }
+      }
+    },
+    "events": {
+      "title": "받은 리드",
+      "help": "이 소스에 도착한 모든 리드와 처리 결과입니다. 최신순.",
+      "filterStatus": "보기",
+      "filterTests": "테스트",
+      "attentionTitle": "{count, plural, other {주의가 필요한 리드 #건}}",
+      "attentionGroup": "{count, plural, other {리드 #건:}}",
+      "showAttention": "이 리드만 표시",
+      "loading": "리드를 불러오는 중",
+      "emptyTitle": "아직 리드가 없습니다",
+      "empty": "테스트 리드를 보내거나 URL을 도구에 붙여넣으세요.",
+      "emptyFilteredTitle": "조건에 맞는 리드가 없습니다",
+      "emptyFiltered": "이 필터에 맞는 리드가 없습니다.",
+      "clearFilters": "필터 지우기",
+      "col": {
+        "status": "상태",
+        "lead": "리드",
+        "result": "발생 내용",
+        "links": "결과",
+        "received": "수신",
+        "actions": "작업"
+      },
+      "loadMore": "더 보기",
+      "test": "테스트",
+      "attempts": "{count, plural, other {시도 #회}}",
+      "deliveredAgain": "{count, plural, other {#회 다시 전달됨}}",
+      "contact": "연락처",
+      "deal": "거래",
+      "retry": "재시도",
+      "open": "열기",
+      "retriedToast": "재시도함: 현재 {status}"
+    },
+    "event": {
+      "title": "리드 상세",
+      "close": "닫기",
+      "retry": "이 리드 재시도",
+      "auditNote": "페이로드를 열면 감사 로그에 기록됩니다.",
+      "externalId": "리드 ID",
+      "test": "테스트",
+      "received": "수신 시각",
+      "processed": "처리됨",
+      "notProcessed": "아직 아님",
+      "attempts": "시도",
+      "duplicates": "반복 전달",
+      "deliveredAgain": "{count, plural, other {#회 다시 전달됨}}",
+      "reason": "사유",
+      "contact": "연락처",
+      "openContact": "연락처 열기",
+      "deal": "거래",
+      "openDeal": "거래 열기",
+      "error": "오류",
+      "retried": "재시도했습니다. 리드 상태는 이제",
+      "payload": "저장된 페이로드",
+      "loadingPayload": "페이로드 여는 중",
+      "purged": "원본 페이로드는 {days}일 후 삭제되었습니다. 리드와 연락처는 유지됩니다."
+    },
+    "attribution": {
+      "title": "리드 유입 귀속",
+      "first": "첫 접점",
+      "latest": "최근 접점",
+      "firstAndLatest": "첫 접점과 최근 접점",
+      "total": "총 {count}회 접점",
+      "platform": "플랫폼",
+      "source": "소스",
+      "fields": {
+        "campaign": "캠페인",
+        "adset": "광고 세트",
+        "ad": "광고",
+        "form": "양식"
+      },
+      "capturedAt": "캡처됨",
+      "openSource": "리드 소스 열기"
+    }
+  }
+}

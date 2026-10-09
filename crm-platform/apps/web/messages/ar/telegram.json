@@ -1,0 +1,212 @@
+{
+  "telegram": {
+    "nav": {
+      "title": "Telegram"
+    },
+    "common": {
+      "dismiss": "تجاهل"
+    },
+    "connect": {
+      "title": "ربط بوت Telegram",
+      "close": "إغلاق",
+      "cancel": "إلغاء",
+      "submit": "ربط البوت",
+      "intro": "أدخل رمز البوت الخاص بواجهة HTTP API لإعداد الـ webhook والبدء في التعامل مع محادثات Telegram.",
+      "tokenLabel": "رمز البوت *",
+      "tokenPlaceholder": "مثال: 123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ",
+      "tokenShape": "لا يبدو هذا كرمز من BotFather.",
+      "connected": "تم ربط بوت Telegram.",
+      "savedNeedsAttention": "تم حفظ البوت، لكن Telegram لم يقبل الـ webhook.",
+      "failed": "تعذّر ربط البوت. حاول مرة أخرى.",
+      "howTitle": "كيف أحصل على رمز البوت؟",
+      "how1a": "افتح Telegram وابحث عن حساب",
+      "how1b": "الموثّق.",
+      "how2a": "أرسل",
+      "how2b": "واختر اسم العرض واسم المستخدم.",
+      "how3": "انسخ رمز HTTP API الذي تم إنشاؤه والصقه أعلاه."
+    },
+    "bot": {
+      "failed": "لم ينجح ذلك. حاول مرة أخرى.",
+      "webhookFixed": "عاد الوارد إلى العمل.",
+      "live": "نشط",
+      "paused": "متوقف مؤقتاً",
+      "needsAttention": "يحتاج إلى انتباه",
+      "lastMessage": "آخر رسالة {when}",
+      "payments": "المدفوعات",
+      "on": "مفعّل",
+      "paymentsSaved": "تم حفظ إعدادات الدفع.",
+      "paymentsHint": "الصق رمز مزوّد الدفع من @BotFather (/mybots → Payments) لتفعيل عقدة تدفق الدفع، أي الفواتير داخل المحادثة.",
+      "paymentsSavedPlaceholder": "•••••••• (محفوظ، اتركه فارغاً للإبقاء عليه)",
+      "paymentsToken": "رمز مزوّد الدفع",
+      "removeToken": "إزالة الرمز",
+      "save": "حفظ",
+      "webhook": "Webhook",
+      "fixInbound": "إصلاح الوارد (إعادة تسجيل الـ webhook)",
+      "pause": "إيقاف مؤقت",
+      "resume": "استئناف",
+      "pausedDone": "تم إيقاف البوت مؤقتاً.",
+      "resumedDone": "تم استئناف البوت.",
+      "disconnect": "قطع الاتصال",
+      "disconnectConfirm": "هل تريد قطع اتصال بوت Telegram هذا؟ ستبقى محادثات الوارد، لكنه سيتوقف عن الإرسال والاستقبال.",
+      "cancel": "إلغاء",
+      "disconnected": "تم قطع اتصال البوت."
+    },
+    "hub": {
+      "kicker": "القناة · Telegram",
+      "title": "Telegram",
+      "titleAccent": "اتصال",
+      "intro": "انشر بوت Telegram لأتمتة سير الرسائل، وتقديم دعم العملاء، وإرسال التحديثات إلى مشتركيك حول العالم.",
+      "teamInbox": "صندوق الفريق",
+      "flows": "التدفقات",
+      "broadcasts": "البثوث",
+      "telegramBroadcasts": "بثوث Telegram",
+      "loadError": "تعذّر تحميل بوتات Telegram الخاصة بك.",
+      "connectedCount": "{count} متصل",
+      "notConnected": "غير متصل",
+      "botCardTitle": "اتصال بوت Telegram",
+      "botCardBody": "الصق رمز بوت من @BotFather لأتمتة الرسائل وتقديم الدعم والبث إلى مشتركيك.",
+      "connectAnother": "ربط بوت آخر",
+      "connectBot": "ربط البوت",
+      "accountCardTitle": "اتصال حساب Telegram",
+      "accountCardBody": "اربط حساب Telegram الخاص بك لإنشاء البوتات من هنا، بمسح رمز QR أو باستخدام رقم هاتفك، تماماً كما في WhatsApp.",
+      "connectAccount": "ربط الحساب",
+      "accountUnavailable": "غير متاح بعد: يحتاج إلى خدمة حساب Telegram، وهي غير مُعدّة في مساحة العمل هذه.",
+      "connectedBots": "البوتات المتصلة",
+      "guideTitle": "دليل إعداد بوت Telegram",
+      "guideBody": "أكمل هذه الخطوات لربط قناة Telegram الخاصة بك وتفعيل سير العمل الآلي.",
+      "prerequisites": "المتطلبات",
+      "pre": {
+        "account": "حساب Telegram نشط",
+        "name": "اسم فريد لبوتك",
+        "app": "الوصول إلى Telegram Web أو التطبيق"
+      },
+      "stepsTitle": "خطوات الاتصال",
+      "step": "الخطوة {n}",
+      "steps": {
+        "locate": {
+          "title": "ابحث عن BotFather",
+          "body": "افتح Telegram وابحث عن الحساب الرسمي @BotFather (ابحث عن شارة التوثيق)."
+        },
+        "create": {
+          "title": "أنشئ بوتاً جديداً",
+          "body": "أرسل /newbot إلى @BotFather واتبع الخطوات لتسمية البوت واختيار اسم مستخدم له."
+        },
+        "token": {
+          "title": "احصل على رمز API",
+          "body": "يُنشئ BotFather رمز HTTP API (مثل 123456789:ABC…). انسخه واحفظه في مكان آمن."
+        },
+        "connect": {
+          "title": "اربط البوت هنا",
+          "body": "انقر على «ربط البوت»، والصق الرمز في الخانة، ثم أرسل لإتمام الربط."
+        }
+      },
+      "unlockedTitle": "ما الذي يتيحه لك هذا؟",
+      "unlocked": {
+        "support": {
+          "title": "أتمتة الدعم",
+          "body": "دع بوتات الذكاء الاصطناعي تجيب عن الأسئلة الشائعة وتوجّه المحادثات على مدار الساعة."
+        },
+        "broadcast": {
+          "title": "حملات البث",
+          "body": "أرسل العروض والتنبيهات والنشرات إلى جميع المشتركين دفعة واحدة."
+        },
+        "media": {
+          "title": "وسائط تفاعلية غنية",
+          "body": "تفاعل مع المستخدمين بالأزرار والقوائم والفواتير والصور."
+        }
+      },
+      "tipTitle": "نصيحة للإعداد",
+      "tipBody": "لا تشارك رمز API الخاص بالبوت علناً أبداً. إن تعرّض للاختراق، فأرسل إلى @BotFather ونفّذ الأمر /revoke لإنشاء رمز جديد فوراً. على localhost يتغير عنوان النفق في كل إعادة تشغيل، لذا اضغط «إصلاح الوارد» لإعادة التسجيل."
+    },
+    "broadcasts": {
+      "kicker": "Telegram · البثوث",
+      "title": "Telegram",
+      "titleAccent": "بثوث",
+      "intro": "أرسل إلى كل من تواصل مع بوتك، ثم تابع عدد المُرسَل والفاشل والمحظور لكل بث.",
+      "bots": "البوتات",
+      "newBroadcast": "بث جديد",
+      "connectFirst": "اربط بوت Telegram أولاً.",
+      "connectBot": "اربط بوتاً",
+      "tile": {
+        "sent": "مُرسَل",
+        "audience": "الجمهور",
+        "failed": "فاشل",
+        "blocked": "محظور",
+        "sending": "جارٍ الإرسال",
+        "broadcasts": "{count} بث",
+        "audienceHint": "إجمالي المستلمين",
+        "failedHint": "أخطاء في التسليم",
+        "blockedHint": "حظر المستخدم البوت",
+        "sendingHint": "قيد الإرسال"
+      },
+      "listKicker": "قائمة البث",
+      "listTitle": "البثوث الأخيرة",
+      "col": {
+        "broadcast": "البث",
+        "bot": "البوت",
+        "recipients": "المستلمون",
+        "progress": "التقدم",
+        "status": "الحالة",
+        "actions": "الإجراءات"
+      },
+      "counts": "{sent} مُرسَل · {failed} فاشل · {blocked} محظور",
+      "status": {
+        "draft": "مسودة",
+        "sending": "جارٍ الإرسال",
+        "done": "مكتمل",
+        "failed": "فشل"
+      },
+      "start": "ابدأ",
+      "pause": "إيقاف مؤقت",
+      "retry": "إعادة المحاولة",
+      "delete": "حذف",
+      "deleteConfirm": "هل تريد حذف هذا البث؟",
+      "cancel": "إلغاء",
+      "empty": "لا توجد بثوث بعد.",
+      "createFirst": "أنشئ أول بث لك",
+      "failed": "لم ينجح ذلك. حاول مرة أخرى.",
+      "started": "بدأ الإرسال.",
+      "paused": "تم الإيقاف المؤقت. تبقى المحادثات غير المُرسلة في الانتظار.",
+      "retried": "{count} محادثة فاشلة جاهزة لإعادة الإرسال. اضغط «ابدأ».",
+      "deleted": "تم حذف البث."
+    },
+    "compose": {
+      "kicker": "Telegram · بث جديد",
+      "title": "أنشئ",
+      "titleAccent": "بثاً",
+      "back": "رجوع",
+      "loadError": "تعذّر تحميل البوتات والقوالب.",
+      "noPermission": "يمكنك الاطلاع على هذه الصفحة، لكن ليست لديك صلاحية لإنشاء البثوث.",
+      "setup": "إعداد البث",
+      "name": "اسم البث",
+      "namePlaceholder": "مثال: عرض عطلة نهاية الأسبوع",
+      "bot": "البوت",
+      "template": "القالب (اختياري)",
+      "templateHint": "يملأ الرسالة مسبقاً ويرسل أزرار القالب.",
+      "templateNone": "— لا شيء (اكتب رسالتك) —",
+      "buttonCount": "{count} زر",
+      "message": "الرسالة",
+      "messageHint": "استخدم '{name}' للتخصيص.",
+      "messagePlaceholder": "مرحباً '{name}'! …",
+      "attachment": "المرفق (اختياري)",
+      "attachmentHint": "عنوان عام لصورة أو فيديو أو ملف صوتي أو مستند. رفع الملف يحتاج إلى خدمة التخزين.",
+      "attachmentInvalid": "أدخل عنواناً كاملاً يبدأ بـ http:// أو https://.",
+      "recipients": "المستلمون",
+      "selectAll": "تحديد الكل",
+      "clearAll": "مسح الكل",
+      "noChats": "لم يتواصل أحد مع هذا البوت بعد.",
+      "type": {
+        "private": "خاص",
+        "group": "مجموعة",
+        "channel": "قناة"
+      },
+      "selected": "{count} محدّد",
+      "submit": "إنشاء البث",
+      "preview": "معاينة مباشرة",
+      "previewEmpty": "معاينة رسالتك…",
+      "previewNote": "هكذا سيظهر بثك في محادثة كل مستلم.",
+      "created": "تم إنشاء البث لـ {count} مستلماً. اضغط «بدء الإرسال» عند الجاهزية.",
+      "failed": "تعذّر إنشاء البث. حاول مرة أخرى."
+    }
+  }
+}

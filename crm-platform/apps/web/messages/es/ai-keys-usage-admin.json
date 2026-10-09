@@ -1,0 +1,223 @@
+{
+  "ai-keys-usage-admin": {
+    "nav": {
+      "usage": "Uso de IA",
+      "keys": "Claves de proveedores de IA"
+    },
+    "admin": {
+      "nav": {
+        "group": "IA",
+        "keys": "Claves de proveedores de IA",
+        "dashboard": "Uso de IA"
+      }
+    },
+    "common": {
+      "loading": "Cargando",
+      "retry": "Reintentar",
+      "requestId": "ID de solicitud",
+      "dismiss": "Descartar",
+      "tokens": "{count, number} tokens",
+      "dash": "-",
+      "errors": {
+        "forbidden": "No tienes permiso para ver esto.",
+        "request": "No se pudo completar esa solicitud.",
+        "unexpected": "Algo salió mal por nuestra parte. Inténtalo de nuevo en un momento.",
+        "network": "No se pudo conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
+        "conflict": "Otra persona cambió esto. Se recargó la página: aplica tu cambio de nuevo.",
+        "keyRequired": "Añade una clave de API antes de activar este proveedor.",
+        "validation": "Algunos valores no son válidos. Revisa los campos resaltados.",
+        "notFound": "Ese elemento ya no existe."
+      }
+    },
+    "windows": {
+      "label": "Intervalo de tiempo",
+      "7d": "7 días",
+      "30d": "30 días",
+      "90d": "90 días",
+      "1y": "1 año",
+      "custom": "Personalizado",
+      "from": "Desde",
+      "to": "Hasta",
+      "pick": "Elige una fecha de inicio y una de fin.",
+      "invalid": "La fecha de fin es anterior a la de inicio.",
+      "tooLong": "Elige un rango de {days} días o menos."
+    },
+    "keys": {
+      "eyebrow": "Administración · Sistema · Proveedores de IA",
+      "title": "Claves de API de IA",
+      "description": "Claves globales para todos los proveedores de IA compatibles. Los espacios de trabajo con planes sin \"Trae tu propia clave\" las usan como respaldo. Cifradas en reposo.",
+      "superOnly": "Solo un superadministrador puede gestionar las claves de IA de la plataforma.",
+      "summary": {
+        "providers": "Proveedores",
+        "providersHint": "precargados",
+        "active": "Activos",
+        "activeHint": "activados como respaldo",
+        "ready": "Listos",
+        "readyHint": "activo + con clave",
+        "noKey": "Sin clave",
+        "noKeyHint": "pega una clave para dejarlo listo"
+      },
+      "groups": {
+        "llm": "Modelos de lenguaje",
+        "voice": "Voz"
+      },
+      "card": {
+        "active": "Activo",
+        "off": "Desactivado",
+        "keySaved": "Clave guardada",
+        "keySavedLast4": "Clave guardada, termina en {last4}",
+        "noKey": "Sin clave",
+        "unreadable": "No se puede leer la clave guardada, vuelve a pegarla",
+        "apiKey": "Clave de API",
+        "apiKeyHint": "Déjalo en blanco para conservar la clave guardada.",
+        "apiKeyPlaceholder": "Pega la clave aquí",
+        "apiKeySavedPlaceholder": "•••••••••• (guardada — déjalo en blanco para conservarla)",
+        "defaultModel": "Modelo predeterminado",
+        "pickModel": "— Elige un modelo predeterminado —",
+        "customModel": "{model} (personalizado)",
+        "sortOrder": "Orden",
+        "maxTokens": "Máx. de tokens por solicitud",
+        "maxTokensHint": "Límite opcional de longitud de respuesta para todos los espacios de trabajo. En blanco significa sin límite.",
+        "extraModels": "Modelos adicionales",
+        "extraModelsHint": "Opcional. IDs de modelos que se ofrecen junto al predeterminado, separados por comas.",
+        "save": "Guardar {name}",
+        "saving": "Guardando",
+        "turnOn": "Activar",
+        "turnOff": "Desactivar",
+        "removeKey": "Quitar clave",
+        "removeTitle": "¿Quitar la clave de {name}?",
+        "removeBody": "Los espacios de trabajo dejarán de usar {name} hasta que añadas una clave de nuevo. El proveedor se desactiva.",
+        "removeConfirm": "Quitar clave",
+        "cancel": "Cancelar",
+        "slug": "proveedor: {provider} · modelo predeterminado: {model}",
+        "maxTokensPlaceholder": "p. ej., 4096"
+      },
+      "toasts": {
+        "saved": "{name} guardado.",
+        "savedOn": "{name} guardado y activado.",
+        "on": "{name} activado.",
+        "off": "{name} desactivado.",
+        "removed": "Clave de {name} quitada."
+      },
+      "help": {
+        "title": "Cómo se usan estas claves",
+        "body": "La clave propia de un espacio de trabajo prevalece solo si su plan lo permite. En caso contrario se usa el proveedor activo correspondiente de aquí. Desactivar un proveedor significa que los espacios de trabajo sin clave propia no pueden usarlo.",
+        "eyebrow": "Cómo se usan estas claves"
+      }
+    },
+    "dashboard": {
+      "eyebrow": "Administración / Panel de IA",
+      "title": "Uso de IA y consumo de tokens",
+      "description": "Cada llamada de IA de la plataforma: qué proveedor, qué modelo, qué espacio de trabajo, con claves de la plataforma o propias (BYOK), con un gasto estimado.",
+      "kpis": {
+        "tokens": "Tokens consumidos",
+        "tokensHint": "en este periodo",
+        "cost": "Costo estimado",
+        "costHint": "est. combinada",
+        "calls": "Llamadas de IA",
+        "callsHint": "solicitudes registradas",
+        "workspaces": "Espacios de trabajo que usan IA",
+        "workspacesHint": "activos"
+      },
+      "daily": "Consumo diario de tokens",
+      "byProvider": "Tokens por proveedor",
+      "split": "Quién paga: plataforma o BYOK",
+      "splitPlatform": "Claves de la plataforma",
+      "splitOwn": "Claves propias (BYOK)",
+      "topWorkspaces": "Espacios de trabajo con mayor consumo de tokens",
+      "topModels": "Modelos principales",
+      "keyHealth": "Estado de las claves de IA",
+      "live": "Activo",
+      "notLive": "Desactivado",
+      "peak": "pico {value}/día",
+      "dailyEmpty": "Aún no se registran llamadas de IA en este periodo.",
+      "providerCalls": "{count, number} llamadas",
+      "providerEmpty": "Aún no hay uso.",
+      "splitNote": "Solo los tokens de claves de la plataforma cuentan para el límite mensual de IA de un plan. Los espacios de trabajo BYOK gastan en su propia cuenta de proveedor.",
+      "workspaceEmpty": "Aún no hay uso de IA en espacios de trabajo.",
+      "workspaceMeta": "{count, number} llamadas",
+      "workspaceByok": "{tokens} BYOK",
+      "modelEmpty": "Aún no hay uso de modelos.",
+      "modelMeta": "{provider} · {count, number} llamadas",
+      "manageKeys": "Gestionar claves",
+      "noDefaultModel": "sin modelo predeterminado",
+      "noPlatformKeys": "No hay claves de IA de la plataforma configuradas.",
+      "byokKeys": "Claves BYOK activas",
+      "byokWorkspaces": "Espacios de trabajo con BYOK"
+    },
+    "usage": {
+      "title": "Uso de IA",
+      "description": "Cada llamada de IA de tu espacio de trabajo: tokens consumidos, por modelo y proveedor, claves del plan o propias, y un costo estimado.",
+      "kpis": {
+        "tokens": "Tokens usados",
+        "calls": "{count, plural, one {# llamada de IA} other {# llamadas de IA}}",
+        "platform": "Claves del plan",
+        "ownKeys": "Tus claves (BYOK)",
+        "cost": "Costo estimado",
+        "costHint": "tarifa combinada del proveedor",
+        "providers": "Proveedores",
+        "models": "Modelos"
+      },
+      "cap": {
+        "title": "Este mes · límite de IA del plan",
+        "used": "{used, number} de {limit, number} tokens usados este mes",
+        "unlimited": "{used, number} tokens usados este mes: ilimitado en tu plan",
+        "reached": "Casi has llegado a tu límite mensual. Mejora tu plan o añade tus propias claves (BYOK) para seguir usando IA.",
+        "note": "Los tokens BYOK se ejecutan en tu propia cuenta de proveedor y nunca cuentan para el límite de tu plan."
+      },
+      "daily": "Consumo diario de tokens",
+      "byProvider": "Por proveedor",
+      "split": "Claves del plan frente a tus claves",
+      "splitPlatform": "Claves del plan",
+      "splitOwn": "Tus claves (BYOK)",
+      "models": "Por modelo",
+      "columns": {
+        "model": "Modelo",
+        "provider": "Proveedor",
+        "tokens": "Tokens",
+        "calls": "Llamadas",
+        "prompt": "Prompt",
+        "completion": "Respuesta"
+      },
+      "empty": "Aún no hay uso de IA en este periodo.",
+      "costNote": "El costo es una estimación basada en tarifas combinadas publicadas por token de cada proveedor y puede diferir de la factura de tu proveedor. El recuento de tokens es exacto."
+    },
+    "own": {
+      "title": "Tus claves de proveedores de IA",
+      "description": "Añade tu propia clave de un proveedor para que tus funciones de IA usen tu cuenta en lugar de la compartida. Las claves se cifran y no se vuelven a mostrar.",
+      "allowed": "Tu plan permite que tus propias claves tengan prioridad.",
+      "notAllowed": "Tu plan aún no incluye claves propias. Puedes guardarlas ahora, pero las llamadas seguirán usando la clave compartida hasta que mejores el plan.",
+      "add": "Añadir una clave",
+      "provider": "Proveedor",
+      "apiKey": "Clave de API",
+      "apiKeyHint": "Al menos 8 caracteres.",
+      "save": "Guardar clave",
+      "replace": "Reemplazar clave",
+      "saving": "Guardando",
+      "on": "Activada",
+      "off": "Desactivada",
+      "ends": "Termina en {last4}",
+      "using": "Las llamadas usan",
+      "usingOwn": "tu clave",
+      "usingShared": "la clave compartida",
+      "usingNone": "ninguna clave (nada disponible)",
+      "turnOn": "Activar",
+      "turnOff": "Desactivar",
+      "remove": "Quitar",
+      "removeTitle": "¿Quitar tu clave de {name}?",
+      "removeBody": "Las llamadas recurren a la clave compartida si hay una disponible.",
+      "removeConfirm": "Quitar clave",
+      "cancel": "Cancelar",
+      "empty": "No has añadido ninguna clave.",
+      "toasts": {
+        "saved": "Clave de {name} guardada.",
+        "on": "Clave de {name} activada.",
+        "off": "Clave de {name} desactivada.",
+        "removed": "Clave de {name} quitada."
+      },
+      "errors": {
+        "tooShort": "Una clave tiene al menos 8 caracteres."
+      }
+    }
+  }
+}

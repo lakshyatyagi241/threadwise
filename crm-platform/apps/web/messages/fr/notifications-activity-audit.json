@@ -1,0 +1,402 @@
+{
+  "notifications": {
+    "bell": {
+      "label": "Notifications",
+      "labelUnread": "Notifications, {count} non lue(s)",
+      "title": "Notifications",
+      "markAll": "Tout marquer comme lu",
+      "empty": "Aucune notification pour l’instant.",
+      "loading": "Chargement des notifications",
+      "failed": "Impossible de charger les notifications.",
+      "retry": "Réessayer",
+      "unread": "Non lues",
+      "settings": "Paramètres des alertes",
+      "sound": "Jouer un son pour les nouvelles conversations et messages",
+      "soundOn": "Son : activé",
+      "soundOff": "Son : désactivé",
+      "desktopEnable": "Activer les alertes du bureau",
+      "desktopOn": "Alertes du bureau : activées",
+      "desktopOff": "Alertes du bureau : désactivées",
+      "desktopBlocked": "Les alertes du bureau sont bloquées dans les paramètres de votre navigateur.",
+      "desktopHint": "Affiche le nom du contact uniquement lorsque cet onglet est en arrière-plan.",
+      "preferences": "Paramètres de notification"
+    },
+    "types": {
+      "task_assigned": {
+        "title": "Tâche qui vous est assignée",
+        "body": "{actor} vous a assigné : {task}",
+        "bodyNoActor": "{task}"
+      },
+      "task_due": {
+        "title": "Tâche à échéance",
+        "body": "{task}",
+        "bodyNoActor": "{task}"
+      },
+      "task_completed": {
+        "title": "Tâche terminée",
+        "body": "{actor} a terminé : {task}",
+        "bodyNoActor": "{task}"
+      },
+      "new_lead": {
+        "title": "Nouveau lead",
+        "titleReturning": "Le lead est revenu",
+        "body": "{name} est arrivé depuis {platform}",
+        "bodyReturning": "{name} a envoyé un nouveau lead depuis {platform}",
+        "bodyNoActor": "{name} est arrivé"
+      },
+      "new_chat": {
+        "title": "Nouvelle conversation de {name}",
+        "titleNoName": "Nouvelle conversation",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "new_message": {
+        "title": "{count, plural, one {Nouveau message de {name}} other {# nouveaux messages de {name}}}",
+        "titleNoName": "{count, plural, one {Nouveau message} other {# nouveaux messages}}",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "chat_waiting": {
+        "title": "Personne n’a encore répondu à {name}",
+        "titleNoName": "Une conversation attend toujours une réponse",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "conversation_assigned": {
+        "title": "{name} vous a été assigné",
+        "titleNoName": "Une conversation vous a été assignée",
+        "titleTeam": "{name} a été assigné à votre équipe",
+        "titleTeamNoName": "Une conversation a été assignée à votre équipe",
+        "body": "Assigné par {actor}",
+        "bodyNoActor": "{preview}"
+      },
+      "mention": {
+        "title": "{actor} vous a mentionné",
+        "titleNoName": "Vous avez été mentionné dans une note",
+        "body": "{name} : {preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "device_connected": {
+        "title": "{name} est connecté",
+        "titleNoName": "Votre numéro WhatsApp est connecté"
+      },
+      "device_disconnected": {
+        "title": "{name} déconnecté",
+        "titleNoName": "Un numéro WhatsApp s’est déconnecté",
+        "body": "Ouvrez l’appareil pour vous reconnecter."
+      },
+      "device_logged_out": {
+        "title": "{name} a été déconnecté",
+        "titleNoName": "Un numéro WhatsApp a été déconnecté",
+        "body": "Scannez à nouveau le code QR pour vous reconnecter."
+      },
+      "broadcast_completed": {
+        "title": "Diffusion « {name} » terminée",
+        "titleNoName": "Une diffusion est terminée",
+        "bodySent": "{sent, plural, one {# message envoyé} other {# messages envoyés}}",
+        "bodySentFailed": "{sent, plural, one {# message envoyé} other {# messages envoyés}}, {failed, plural, one {# en échec} other {# en échec}}"
+      },
+      "broadcast_failed": {
+        "title": "Échec de la diffusion « {name} »",
+        "titleNoName": "Une diffusion a échoué",
+        "body": "{reason}",
+        "bodyNoReason": "Ouvrez-la pour voir ce qui s’est passé."
+      },
+      "campaign_completed": {
+        "title": "Campagne « {name} » terminée",
+        "titleNoName": "Une campagne est terminée",
+        "bodySent": "{sent, plural, one {# message envoyé} other {# messages envoyés}}",
+        "bodySentFailed": "{sent, plural, one {# message envoyé} other {# messages envoyés}}, {failed, plural, one {# en échec} other {# en échec}}"
+      },
+      "campaign_failed": {
+        "title": "Échec de la campagne « {name} »",
+        "titleNoName": "Une campagne a échoué",
+        "body": "{reason}",
+        "bodyNoReason": "Ouvrez-la pour voir ce qui s’est passé."
+      },
+      "scheduled_completed": {
+        "title": "Envoi programmé « {name} » envoyé",
+        "titleNoName": "Un envoi programmé a été envoyé",
+        "bodySent": "{sent, plural, one {# message envoyé} other {# messages envoyés}}",
+        "bodySentFailed": "{sent, plural, one {# message envoyé} other {# messages envoyés}}, {failed, plural, one {# en échec} other {# en échec}}"
+      },
+      "scheduled_failed": {
+        "title": "Échec de l’envoi programmé « {name} »",
+        "titleNoName": "Un envoi programmé a échoué",
+        "body": "{reason}",
+        "bodyNoReason": "Ouvrez-la pour voir ce qui s’est passé."
+      },
+      "teamchat_mention": {
+        "title": "{author} vous a mentionné dans {channel}",
+        "titleNoChannel": "{author} vous a mentionné dans Team chat",
+        "titleNoName": "Vous avez été mentionné dans Team chat"
+      },
+      "teamchat_message": {
+        "title": "{count, plural, one {Nouveau message de {author}} other {# nouveaux messages de {author}}}",
+        "titleNoName": "{count, plural, one {Nouveau message direct} other {# nouveaux messages directs}}"
+      },
+      "waba_group_join_request": {
+        "title": "{count, plural, one {Quelqu'un souhaite rejoindre {name}} other {# personnes souhaitent rejoindre {name}}}",
+        "titleNoName": "{count, plural, one {Une personne souhaite rejoindre un groupe WhatsApp} other {# personnes souhaitent rejoindre un groupe WhatsApp}}",
+        "body": "Ouvrez Groupes pour approuver ou refuser."
+      },
+      "waba_group_suspended": {
+        "title": "{name} a été suspendu",
+        "titleNoName": "Un groupe WhatsApp a été suspendu",
+        "body": "WhatsApp a suspendu ce groupe. Vous ne pouvez pas lui envoyer de messages tant qu'il n'est pas rétabli."
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{name} est de nouveau actif",
+        "titleNoName": "Un groupe WhatsApp est de nouveau actif",
+        "body": "WhatsApp a rétabli ce groupe. Vous pouvez de nouveau lui envoyer des messages."
+      }
+    },
+    "live": {
+      "open": "Ouvrir",
+      "dismiss": "Ignorer",
+      "toastRegion": "Notifications",
+      "summary": "{count} nouvelle(s) notification(s)",
+      "announceMany": "{count} nouvelle(s) notification(s)",
+      "desktop": {
+        "new_chat": "Nouvelle conversation",
+        "new_message": "Nouveau message",
+        "chat_waiting": "En attente de réponse",
+        "conversation_assigned": "Assigné à vous",
+        "mention": "Vous a mentionné",
+        "fallbackTitle": "Nouvelle notification",
+        "device_connected": "Numéro WhatsApp connecté",
+        "device_disconnected": "Numéro WhatsApp déconnecté",
+        "device_logged_out": "Numéro WhatsApp déconnecté (session fermée)",
+        "broadcast_completed": "Diffusion terminée",
+        "broadcast_failed": "Diffusion en échec",
+        "campaign_completed": "Campagne terminée",
+        "campaign_failed": "Campagne en échec",
+        "scheduled_completed": "Envoi programmé envoyé",
+        "scheduled_failed": "Envoi programmé en échec",
+        "teamchat_mention": "Vous a mentionné dans Team chat",
+        "teamchat_message": "Nouveau message direct",
+        "waba_group_join_request": "Demande d'adhésion à un groupe",
+        "waba_group_suspended": "Groupe WhatsApp suspendu",
+        "waba_group_suspension_cleared": "Groupe WhatsApp de nouveau actif"
+      }
+    },
+    "prefs": {
+      "title": "Préférences de notification",
+      "description": "Choisissez comment chaque événement vous parvient. Ces choix ne vous concernent que ; votre espace de travail définit les événements activés par défaut.",
+      "columns": {
+        "event": "Événement",
+        "bell": "Cloche",
+        "toast": "Pop-up",
+        "sound": "Son",
+        "push": "Push"
+      },
+      "groups": {
+        "conversations": "Conversations",
+        "tasks": "Tâches",
+        "leads": "Leads et formulaires",
+        "documents": "Documents de vente",
+        "wallet": "Portefeuille",
+        "devices": "Numéros WhatsApp",
+        "broadcasts": "Diffusions et campagnes",
+        "team_chat": "Team chat",
+        "whatsapp_groups": "Groupes WhatsApp"
+      },
+      "types": {
+        "new_chat": {
+          "label": "Nouvelle conversation",
+          "hint": "Une conversation sans responsable reçoit son premier message."
+        },
+        "new_message": {
+          "label": "Nouveau message sur ma conversation",
+          "hint": "Un client écrit dans une conversation qui vous est assignée."
+        },
+        "chat_waiting": {
+          "label": "Conversation toujours sans réponse",
+          "hint": "Un message client est resté sans réponse pendant quelques minutes dans une conversation sans responsable. Vous en êtes informé une seule fois."
+        },
+        "conversation_assigned": {
+          "label": "Conversation qui m’est assignée",
+          "hint": "Une conversation est assignée à vous ou à votre équipe."
+        },
+        "mention": {
+          "label": "Mentionné dans une note",
+          "hint": "Un collègue vous mentionne dans une note de conversation."
+        },
+        "teamchat_mention": {
+          "label": "Mentionné dans Team chat",
+          "hint": "Un collègue vous mentionne dans un canal de Team chat."
+        },
+        "teamchat_message": {
+          "label": "Message direct",
+          "hint": "Un collègue vous écrit dans Team chat."
+        },
+        "device_connected": {
+          "label": "Numéro connecté",
+          "hint": "Un numéro WhatsApp personnel s’est connecté."
+        },
+        "device_disconnected": {
+          "label": "Numéro déconnecté",
+          "hint": "Un numéro WhatsApp personnel a perdu sa connexion."
+        },
+        "device_logged_out": {
+          "label": "Numéro déconnecté (session fermée)",
+          "hint": "Un numéro WhatsApp personnel a été déconnecté depuis le téléphone."
+        },
+        "broadcast_completed": {
+          "label": "Diffusion terminée",
+          "hint": "Une diffusion que vous avez lancée a été envoyée."
+        },
+        "broadcast_failed": {
+          "label": "Diffusion en échec",
+          "hint": "Une diffusion que vous avez lancée a échoué."
+        },
+        "campaign_completed": {
+          "label": "Campagne terminée",
+          "hint": "Une campagne que vous avez lancée a été envoyée."
+        },
+        "campaign_failed": {
+          "label": "Campagne en échec",
+          "hint": "Une campagne que vous avez lancée a échoué."
+        },
+        "scheduled_completed": {
+          "label": "Envoi programmé envoyé",
+          "hint": "Un envoi programmé que vous avez configuré a été envoyé."
+        },
+        "scheduled_failed": {
+          "label": "Envoi programmé en échec",
+          "hint": "Un envoi programmé que vous avez configuré a échoué."
+        },
+        "task_assigned": {
+          "label": "Tâche qui m’est assignée",
+          "hint": "Une tâche vous est assignée."
+        },
+        "task_due": {
+          "label": "Tâche à échéance",
+          "hint": "Une de vos tâches arrive à échéance."
+        },
+        "task_completed": {
+          "label": "Tâche terminée",
+          "hint": "Une tâche que vous avez créée a été terminée."
+        },
+        "new_lead": {
+          "label": "Nouveau lead",
+          "hint": "Un lead est arrivé depuis une source de leads."
+        },
+        "form_submission": {
+          "label": "Formulaire envoyé",
+          "hint": "Quelqu’un a envoyé l’un de vos formulaires."
+        },
+        "form_needs_review": {
+          "label": "Formulaire à examiner",
+          "hint": "Une soumission doit être examinée."
+        },
+        "wallet_low_balance": {
+          "label": "Solde du portefeuille faible",
+          "hint": "Le solde du portefeuille de l’espace de travail est presque épuisé."
+        },
+        "sales_doc_decided": {
+          "label": "Document de vente tranché",
+          "hint": "Un devis ou une facture a été accepté ou refusé."
+        },
+        "wallet_credited": {
+          "label": "Portefeuille rechargé",
+          "hint": "Le portefeuille de l’espace de travail a été crédité."
+        },
+        "waba_group_join_request": {
+          "label": "Demande d'adhésion à un groupe",
+          "hint": "Des personnes demandent à rejoindre un groupe WhatsApp de votre numéro professionnel. Dix demandes forment une seule ligne."
+        },
+        "waba_group_suspended": {
+          "label": "Groupe suspendu",
+          "hint": "WhatsApp a suspendu l'un de vos groupes."
+        },
+        "waba_group_suspension_cleared": {
+          "label": "Groupe de nouveau actif",
+          "hint": "WhatsApp a rétabli un groupe qu'il avait suspendu. Uniquement si vous avez été informé de la suspension."
+        }
+      },
+      "loading": "Chargement de vos préférences",
+      "failed": "Impossible de charger vos préférences.",
+      "retry": "Réessayer",
+      "saveFailed": "Impossible d’enregistrer cette modification. Elle a été annulée.",
+      "saved": "Enregistré",
+      "dismiss": "Ignorer",
+      "resetRow": "Réinitialiser par défaut",
+      "resetRowFor": "Réinitialiser {event} par défaut",
+      "resetAll": "Tout réinitialiser par défaut",
+      "resetAllDone": "Toutes les préférences ont été rétablies.",
+      "customised": "Modifié",
+      "usingDefault": "Par défaut",
+      "toggleLabel": "{event} : {channel}",
+      "workspaceOff": "Désactivé par votre espace de travail",
+      "workspaceOffHelp": "Votre espace de travail a désactivé cette option ; votre choix reste applicable pour vous.",
+      "bellOffHelp": "Activez la cloche pour choisir un pop-up, un son ou un push.",
+      "notAvailable": "Non disponible",
+      "defaultSummary": "Par défaut : {bell}, {toast}, {sound}",
+      "on": "activé",
+      "off": "désactivé",
+      "channelNames": {
+        "bell": "cloche",
+        "toast": "pop-up",
+        "sound": "son",
+        "push": "push"
+      },
+      "browser": {
+        "title": "Ce navigateur",
+        "description": "Le son et les alertes du bureau sont définis par navigateur, et non par compte."
+      },
+      "empty": "Aucun type de notification à configurer pour l’instant.",
+      "defaultSummaryPush": "Par défaut : {bell}, {toast}, {sound}, {push}",
+      "push": {
+        "title": "Notifications du navigateur",
+        "description": "Recevez une notification de votre navigateur pour les événements qui atteignent votre cloche, même lorsque le CRM est fermé. Vous choisissez les événements de la colonne Push ci-dessous.",
+        "state": {
+          "on": "Activées pour cet appareil",
+          "off": "Désactivées",
+          "blocked": "Bloquées",
+          "unavailable": "Non disponible"
+        },
+        "checking": "Vérification de ce navigateur",
+        "unsupported": "Ce navigateur ne peut pas afficher de notifications lorsque le CRM est fermé. Essayez une version à jour de Chrome, Edge, Firefox ou Safari, sur une page sécurisée (https).",
+        "needsInstall": "Sur iPhone et iPad, les notifications du navigateur ne fonctionnent que pour une application ajoutée à votre écran d’accueil.",
+        "needsInstallSteps": "Ouvrez cette page dans Safari, appuyez sur Partager, choisissez Sur l’écran d’accueil, puis ouvrez le CRM depuis la nouvelle icône et revenez ici. Nécessite iOS ou iPadOS 16.4 ou version ultérieure.",
+        "blocked": "Les notifications sont bloquées pour ce site dans votre navigateur.",
+        "blockedHelp": "Seul votre navigateur peut annuler cela : ouvrez les paramètres du site (l’icône à côté de l’adresse), réglez Notifications sur Autoriser, puis revenez sur cette page.",
+        "offHelp": "Non activé sur cet appareil. Votre navigateur demandera l’autorisation lorsque vous appuierez sur Activer.",
+        "enable": "Activer sur cet appareil",
+        "enabling": "Activation...",
+        "onHelp": "Cet appareil reçoit une notification du navigateur pour les événements que vous avez activés ci-dessous, lorsque vous ne regardez pas le CRM.",
+        "howItWorks": "Vous n’êtes pas notifié lorsque le CRM est ouvert et au premier plan (la cloche et les pop-ups s’en chargent). La notification indique qui et quel type d’événement, jamais le texte du message.",
+        "test": "Envoyer une notification de test",
+        "testing": "Envoi...",
+        "disable": "Désactiver sur cet appareil",
+        "disabling": "Désactivation...",
+        "testResult": {
+          "sent": "Envoyé. Elle devrait apparaître sur vos appareils dans un instant, même si le CRM est fermé.",
+          "none_reachable": "Impossible de joindre votre navigateur ou son service push pour l’instant. Réessayez dans un instant ; un appareil qui n’existe plus est retiré automatiquement.",
+          "no_device": "Aucun appareil à qui envoyer. Activez d’abord les notifications sur cet appareil.",
+          "wait": "Un test vient d’être envoyé. Patientez quelques secondes avant d’en envoyer un autre."
+        },
+        "problem": {
+          "enable_failed": "Impossible d’activer les notifications sur cet appareil. Réessayez.",
+          "disable_failed": "Impossible de désactiver les notifications sur cet appareil. Réessayez.",
+          "remove_failed": "Impossible de retirer cet appareil. Réessayez.",
+          "test_failed": "Impossible d’envoyer le test. Réessayez."
+        },
+        "devicesFailed": "Impossible de charger vos appareils.",
+        "devices": {
+          "title": "Vos appareils",
+          "thisDevice": "Cet appareil",
+          "added": "Ajouté le {date}",
+          "lastUsed": "dernière notification le {date}",
+          "neverUsed": "pas encore notifié",
+          "remove": "Retirer",
+          "removeFor": "Retirer {device}"
+        }
+      }
+    },
+    "nav": {
+      "preferences": "Notifications"
+    }
+  }
+}

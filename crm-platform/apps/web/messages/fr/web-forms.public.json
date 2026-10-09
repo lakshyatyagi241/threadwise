@@ -1,0 +1,41 @@
+{
+  "web-forms": {
+    "public": {
+      "next": "Suivant",
+      "back": "Retour",
+      "sending": "Envoi en cours…",
+      "optional": "facultatif",
+      "selectPlaceholder": "Sélectionner une option",
+      "stepOf": "Étape {n} sur {total}",
+      "summaryTitle": "{count, plural, one {Veuillez corriger 1 champ} other {Veuillez corriger # champs}}",
+      "successTitle": "Merci",
+      "continue": "Continuer",
+      "previewNotice": "Aperçu : rien n’est envoyé depuis ici.",
+      "honeypot": "Laissez ce champ vide",
+      "privacyPolicy": "Politique de confidentialité",
+      "poweredBy": "Propulsé par {brand}",
+      "brandName": "Formulaires",
+      "captchaNeeded": "Veuillez compléter la vérification ci-dessous avant d’envoyer.",
+      "rateLimited": "Trop de tentatives. Patientez un instant puis réessayez.",
+      "closed": "Ce formulaire n’accepte pas de réponses pour le moment.",
+      "genericError": "Une erreur est survenue et vos réponses n’ont pas été envoyées. Veuillez réessayer.",
+      "notAvailableTitle": "Ce formulaire n’est pas disponible",
+      "notAvailableBody": "Le lien est peut-être incorrect, ou le formulaire a été fermé.",
+      "errors": {
+        "required": "Ce champ est obligatoire.",
+        "consent_required": "Veuillez cocher cette case pour continuer.",
+        "invalid_email": "Veuillez saisir une adresse e-mail valide.",
+        "invalid_phone": "Saisissez un numéro de téléphone valide, avec l’indicatif du pays si possible.",
+        "invalid_number": "Saisissez un numéro valide.",
+        "invalid_date": "Saisissez une date valide.",
+        "too_small": "Saisissez une valeur d’au moins {min}.",
+        "too_large": "Saisissez une valeur d’au plus {max}.",
+        "too_short": "Saisissez au moins {min} caractères.",
+        "too_long": "Saisissez au plus {max} caractères.",
+        "pattern": "Ce champ ne respecte pas le format attendu.",
+        "invalid_option": "Choisissez l’une des options proposées."
+      },
+      "closedTitle": "Ce formulaire est fermé"
+    }
+  }
+}

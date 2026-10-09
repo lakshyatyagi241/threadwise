@@ -1,0 +1,870 @@
+{
+  "marketplace": {
+    "nav": {
+      "marketplace": "Marketplace"
+    },
+    "meta": {
+      "apps": "Mini app · Marketplace",
+      "integrations": "Integrasi · Marketplace",
+      "app": "Aplikasi · Marketplace",
+      "install": "Pasang · Marketplace",
+      "installed": "Terpasang · Marketplace",
+      "manage": "Kelola aplikasi · Marketplace",
+      "requests": "Permintaan · Marketplace"
+    },
+    "common": {
+      "dismiss": "Tutup",
+      "loading": "Memuat",
+      "errorTitle": "Tidak dapat memuat ini",
+      "requestId": "ID permintaan",
+      "retry": "Coba lagi",
+      "upgrade": "Lihat paket dan tingkatkan",
+      "opensNewTab": "(dibuka di tab baru)",
+      "copy": "Salin",
+      "copied": "Tersalin",
+      "copyFailed": "Tidak dapat menyalin. Pilih teksnya dan salin secara manual.",
+      "needsPermission": "Anda memerlukan izin {permission} untuk melakukan ini. Minta admin workspace."
+    },
+    "errors": {
+      "network": "Tidak dapat terhubung ke server. Periksa koneksi Anda dan coba lagi.",
+      "forbidden": "Anda tidak memiliki izin untuk melakukan ini.",
+      "signedOut": "Sesi Anda berakhir. Masuk lagi.",
+      "conflict": "Orang lain telah mengubah ini lebih dulu. Muat ulang untuk melihat versi terbaru.",
+      "validation": "Beberapa nilai tidak valid. Periksa field dan coba lagi.",
+      "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar dan coba lagi.",
+      "rateLimitedWait": "Terlalu banyak permintaan. Coba lagi dalam {seconds, plural, one {# detik} other {# detik}}.",
+      "unavailable": "Marketplace belum tersedia di server ini.",
+      "notFound": "Item tersebut sudah tidak ada.",
+      "appNotFound": "Aplikasi ini tidak ada atau tidak tersedia untuk workspace Anda.",
+      "notInstalled": "Aplikasi ini belum terpasang di workspace Anda.",
+      "alreadyInstalled": "Aplikasi ini sudah terpasang di workspace Anda.",
+      "appUnavailable": "Aplikasi ini tidak tersedia saat ini.",
+      "appLockedPlan": "Paket Anda tidak mencakup aplikasi ini. Tingkatkan paket untuk membukanya.",
+      "appLockedModule": "Aplikasi ini tidak tersedia pada instalasi produk ini.",
+      "planLocked": "Marketplace tidak termasuk dalam paket Anda. Tingkatkan paket untuk menggunakannya.",
+      "planLimitInstalled": "Anda telah mencapai batas aplikasi terpasang di paket Anda, jadi tidak ada yang dipasang. Hapus salah satu atau tingkatkan paket Anda.",
+      "planLimitInstalledCounts": "Anda telah memasang {used} dari {cap} aplikasi yang diizinkan paket Anda, jadi tidak ada yang dipasang. Hapus salah satu atau tingkatkan paket Anda.",
+      "planLimitLeadSources": "Anda telah mencapai batas sumber prospek di paket Anda, jadi tidak ada yang dipasang. Hapus sumber prospek atau tingkatkan paket Anda.",
+      "planLimitLeadSourcesCounts": "Anda memiliki {used} dari {cap} sumber prospek yang diizinkan paket Anda, jadi tidak ada yang dipasang. Hapus salah satu atau tingkatkan paket Anda.",
+      "planLimit": "Anda telah mencapai batas paket Anda, jadi tidak ada yang dipasang. Tingkatkan paket Anda untuk melanjutkan.",
+      "planLimitCounts": "Anda telah menggunakan {used} dari {cap} yang diizinkan paket Anda, jadi tidak ada yang dipasang. Tingkatkan paket Anda untuk melanjutkan.",
+      "consentRequired": "Izin telah berubah. Tinjau kembali sebelum memasang.",
+      "reconsentRequired": "Versi baru meminta izin tambahan. Tinjau dan setujui terlebih dahulu.",
+      "scopeExceeds": "Anda tidak dapat memberikan izin yang tidak Anda miliki sendiri. Yang belum dimiliki: {permissions}.",
+      "installationKilled": "Platform menghentikan aplikasi ini. Aplikasi hanya dapat dicopot.",
+      "installationDisabled": "Aplikasi ini dijeda. Lanjutkan terlebih dahulu.",
+      "credentialMissing": "Isi field yang diperlukan.",
+      "noConnection": "Instalasi ini tidak memiliki koneksi yang dapat melakukan itu.",
+      "leadPipeline": "Layanan prospek tidak tersedia saat ini. Tidak ada yang disimpan. Coba lagi sebentar lagi.",
+      "unexpected": "Terjadi kesalahan. Coba lagi.",
+      "subscriptionRequired": "Ini aplikasi berbayar. Berlangganan untuk memasangnya.",
+      "notForSale": "Aplikasi ini tidak sedang dijual ke pelanggan baru.",
+      "trialUnavailable": "Uji coba gratis tidak tersedia untuk aplikasi ini di workspace Anda.",
+      "subscriptionNotFound": "Workspace Anda tidak memiliki langganan untuk aplikasi ini.",
+      "subscriptionState": "Itu tidak sesuai dengan status langganan saat ini. Muat ulang untuk melihat status terbaru."
+    },
+    "chips": {
+      "installed": "Terpasang",
+      "paused": "Dijeda",
+      "killed": "Dihentikan platform",
+      "healthy": "Sehat",
+      "degraded": "Terdegradasi",
+      "error": "Error",
+      "needs_reauth": "Perlu masuk lagi",
+      "unknown": "Belum diperiksa",
+      "needsConsent": "Izin baru untuk ditinjau",
+      "subscribed": "Berlangganan",
+      "trialing": "Uji coba gratis",
+      "comped": "Diberikan gratis",
+      "canceling": "Tidak diperpanjang",
+      "subscriptionEnded": "Langganan berakhir"
+    },
+    "lock": {
+      "planFeature": {
+        "chip": "Tidak termasuk dalam paket Anda",
+        "message": "Paket Anda tidak mencakup aplikasi ini. Anda dapat membaca informasinya di sini, tetapi pemasangan memerlukan peningkatan paket."
+      },
+      "moduleDisabled": {
+        "chip": "Tidak tersedia",
+        "message": "Aplikasi ini bergantung pada modul yang dinonaktifkan pada instalasi produk ini."
+      },
+      "limitReached": {
+        "chip": "Batas paket tercapai",
+        "message": "Anda sudah memasang aplikasi sebanyak yang diizinkan paket Anda. Copot salah satu atau tingkatkan paket Anda."
+      }
+    },
+    "scopes": {
+      "risk": {
+        "low": "Risiko rendah",
+        "medium": "Risiko sedang",
+        "high": "Risiko tinggi"
+      },
+      "none": "Aplikasi ini tidak meminta izin apa pun.",
+      "new": "Baru",
+      "overall": {
+        "low": {
+          "title": "Risiko keseluruhan rendah",
+          "message": "Aplikasi ini hanya meminta izin untuk membaca."
+        },
+        "medium": {
+          "title": "Risiko keseluruhan sedang",
+          "message": "Aplikasi ini dapat membaca dan mengubah data di workspace Anda."
+        },
+        "high": {
+          "title": "Risiko keseluruhan tinggi",
+          "message": "Aplikasi ini dapat bertindak atas nama Anda, misalnya mengirim pesan atau mengelola integrasi. Pasang hanya jika Anda mempercayai pengembangnya."
+        }
+      },
+      "counts": "{high} tinggi, {medium} sedang, {low} rendah"
+    },
+    "header": {
+      "title": "Marketplace",
+      "subtitle": "Tambahkan aplikasi mini dan hubungkan layanan luar ke workspace Anda.",
+      "tabsLabel": "Bagian Marketplace",
+      "moreLabel": "Terpasang dan permintaan",
+      "tabs": {
+        "mini_app": "Aplikasi mini",
+        "integration": "Integrasi"
+      },
+      "installed": "Terpasang",
+      "installedLimit": "Terpasang ({installed} dari {limit})",
+      "installedUnlimited": "Terpasang ({installed})",
+      "request": "Ajukan integrasi"
+    },
+    "card": {
+      "firstParty": "Buatan kami",
+      "pricing": {
+        "free": "Gratis",
+        "included": "Termasuk dalam paket Anda",
+        "monthly": "{price} / bulan",
+        "subscribed": "Berlangganan",
+        "notForSale": "Tidak dijual",
+        "paid": "Aplikasi berbayar",
+        "addOn": "Add-on",
+        "trial": "Uji coba gratis {days} hari"
+      },
+      "installs": "{count, plural, other {# pemasangan}}",
+      "version": "Versi {version}",
+      "cta": {
+        "install": "Pasang",
+        "manage": "Kelola",
+        "review": "Tinjau izin",
+        "killed": "Kelola",
+        "locked": "Lihat detail",
+        "view": "Lihat detail",
+        "subscribe": "Berlangganan"
+      }
+    },
+    "browse": {
+      "categoriesLabel": "Kategori",
+      "all": "Semua",
+      "shelves": {
+        "featured": "Unggulan",
+        "popular": "Populer",
+        "new": "Baru"
+      },
+      "searchLabel": "Cari di Marketplace",
+      "searchPlaceholder": {
+        "mini_app": "Cari aplikasi mini",
+        "integration": "Cari integrasi"
+      },
+      "availability": {
+        "label": "Tampilkan",
+        "all": "Semua",
+        "addons": "Add-on yang tersedia",
+        "installed": "Terpasang"
+      },
+      "sortLabel": "Urutkan berdasarkan",
+      "sort": {
+        "featured": "Unggulan",
+        "popular": "Paling banyak dipasang",
+        "new": "Terbaru",
+        "name": "Nama"
+      },
+      "unknownCategory": "Kategori itu tidak ada di tab ini.",
+      "showAll": "Tampilkan semua",
+      "resultsAll": "Semua aplikasi",
+      "resultsFiltered": "Hasil",
+      "loadedCount": "{count, plural, other {# aplikasi ditampilkan}}",
+      "loadMore": "Muat lainnya",
+      "clearFilters": "Hapus filter",
+      "empty": {
+        "search": {
+          "title": "Tidak ada yang cocok dengan pencarian Anda",
+          "message": "Coba nama yang lebih pendek, atau hapus filter. Jika belum ada, Anda dapat mengajukannya di bawah."
+        },
+        "addons": {
+          "title": "Tidak ada add-on untuk dibeli di sini",
+          "message": "Add-on yang termasuk dalam paket Anda tetapi belum Anda beli akan muncul di sini. Pilih Semua untuk melihat semuanya."
+        },
+        "installed": {
+          "title": "Belum ada yang terpasang di sini",
+          "message": "Aplikasi yang Anda pasang akan muncul di sini. Pilih Semua untuk menjelajahi semuanya."
+        },
+        "category": {
+          "title": "Belum ada apa pun di kategori ini",
+          "message": "Pilih kategori lain, atau ajukan kebutuhan Anda di bawah."
+        },
+        "none": {
+          "title": "Belum ada yang dicantumkan di sini",
+          "message": "Aplikasi baru akan muncul di sini saat dipublikasikan. Anda dapat mengajukannya di bawah."
+        }
+      }
+    },
+    "requestBox": {
+      "title": {
+        "mini_app": "Aplikasi mini belum ada?",
+        "integration": "Integrasi belum ada?"
+      },
+      "message": "Beri tahu kami apa yang Anda butuhkan. Permintaan dihitung, dan yang paling banyak diminta akan dibuat lebih dulu.",
+      "action": {
+        "mini_app": "Ajukan aplikasi mini",
+        "integration": "Ajukan integrasi"
+      }
+    },
+    "detail": {
+      "backToMarketplace": "Kembali ke Marketplace",
+      "backToApps": "Kembali ke Aplikasi mini",
+      "backToIntegrations": "Kembali ke Integrasi",
+      "notFound": {
+        "title": "Aplikasi tidak ditemukan",
+        "message": "Aplikasi ini tidak ada, atau tidak tersedia untuk workspace Anda.",
+        "integrations": "Jelajahi integrasi",
+        "apps": "Jelajahi aplikasi mini"
+      },
+      "kind": {
+        "mini_app": "Aplikasi mini",
+        "integration": "Integrasi"
+      },
+      "firstParty": "Buatan kami",
+      "install": "Pasang",
+      "manage": "Kelola",
+      "killed": "Platform menghentikan aplikasi ini. Aplikasi hanya dapat dicopot.",
+      "about": "Tentang aplikasi ini",
+      "screenshots": "Tangkapan layar",
+      "screenshotAlt": "Tangkapan layar {n} dari {name}",
+      "permissions": {
+        "title": "Yang dapat diakses",
+        "intro": "Anda akan melihat ini lagi dan perlu mengonfirmasinya sebelum aplikasi dipasang."
+      },
+      "setup": {
+        "title": "Yang perlu Anda siapkan",
+        "intro": {
+          "oauth": "Anda masuk ke layanan untuk menghubungkannya.",
+          "push": "Layanan mengirim data ke workspace Anda menggunakan kunci yang Anda masukkan di sini.",
+          "pull": "Kami mengambil data dari layanan menggunakan kunci yang Anda masukkan di sini.",
+          "email_parse": "Kami membaca email peringatan yang dikirim layanan.",
+          "webhook_relay": "Anda mendapatkan alamat web dan rahasia untuk ditempel ke alat yang mengirim data.",
+          "client": "Anda memasangnya di tempat Anda bekerja dan masuk dengan akun Anda sendiri."
+        },
+        "required": "Wajib",
+        "optional": "Opsional",
+        "kind": {
+          "secret": "dirahasiakan",
+          "text": "teks",
+          "select": "pilihan"
+        },
+        "noFields": "Tidak ada yang perlu diisi. Anda mendapatkan detail koneksi setelah pemasangan.",
+        "hasSample": "Setelah pemasangan, Anda dapat mengirim contoh prospek untuk memeriksa koneksi."
+      },
+      "data": {
+        "title": "Data Anda",
+        "intro": "Apa yang disimpan aplikasi ini, di mana, dan bagaimana penghapusannya.",
+        "summary": "Yang disimpan",
+        "regions": "Lokasi",
+        "deletion": "Cara penghapusan"
+      },
+      "changelog": {
+        "title": "Yang berubah",
+        "version": "Versi {version}"
+      },
+      "facts": {
+        "title": "Detail",
+        "version": "Versi",
+        "connector": "Cara terhubung",
+        "connectors": {
+          "oauth": "Masuk",
+          "push": "Mengirim data kepada Anda",
+          "pull": "Kami mengambil datanya",
+          "email_parse": "Email peringatan",
+          "webhook_relay": "Alamat web dan rahasia",
+          "client": "Dipasang oleh setiap anggota"
+        },
+        "installs": "Pemasangan",
+        "developer": "Pengembang"
+      },
+      "support": {
+        "title": "Dukungan dan hukum",
+        "website": "Situs web",
+        "docs": "Dokumentasi",
+        "privacy": "Kebijakan privasi",
+        "terms": "Ketentuan",
+        "status": "Halaman status",
+        "email": "Dukungan lewat email"
+      }
+    },
+    "install": {
+      "backToMarketplace": "Kembali ke Marketplace",
+      "backToApp": "Kembali ke {name}",
+      "notFound": {
+        "title": "Aplikasi tidak ditemukan",
+        "message": "Aplikasi ini tidak ada, atau tidak tersedia untuk workspace Anda."
+      },
+      "alreadyTitle": "Sudah terpasang",
+      "alreadyMessage": "{name} sudah terpasang di workspace Anda.",
+      "openManage": "Buka",
+      "lockedTitle": "{name} terkunci",
+      "noPermissionTitle": "Anda tidak dapat memasang aplikasi",
+      "noPermissionMessage": "Pemasangan aplikasi memerlukan izin yang tidak dimiliki peran Anda.",
+      "title": "Pasang {name}",
+      "stepsLabel": "Langkah pemasangan",
+      "steps": {
+        "permissions": "Izin",
+        "setup": "Siapkan",
+        "done": "Selesai"
+      },
+      "permissions": {
+        "title": "Tinjau izin",
+        "intro": "{name} meminta izin di bawah. Pemasangan memberikan izin persis ini sampai Anda mencopotnya.",
+        "diffSummary": "{missing, plural, other {# izin}} tidak disertakan dan {unexpected, plural, other {# izin}} tidak ditampilkan.",
+        "consent": "Saya mengerti dan mengizinkan aplikasi ini menggunakan izin tersebut di workspace saya.",
+        "consentNone": "Saya mengerti bahwa {name} tidak meminta izin apa pun dan ingin memasangnya.",
+        "continue": "Lanjutkan"
+      },
+      "cancel": "Batal",
+      "install": "Pasang",
+      "back": "Kembali",
+      "setup": {
+        "title": "Siapkan",
+        "intro": "Isi apa yang dibutuhkan aplikasi ini untuk terhubung. Kunci disimpan terenkripsi dan tidak dapat dibaca kembali."
+      },
+      "installing": "Memasang",
+      "missingPermissions": "Anda belum memiliki izin berikut:",
+      "seeInstalled": "Lihat yang sudah terpasang",
+      "changed": {
+        "title": "Izin berubah saat Anda melihatnya",
+        "message": "Tinjau daftar di bawah lagi. Tidak ada yang dipasang.",
+        "added": "Sekarang juga meminta:",
+        "removed": "Tidak lagi meminta:",
+        "edited": "Redaksi atau risiko sebagian izin telah berubah."
+      },
+      "gaps": {
+        "title": "Anda mungkin tidak dapat memberikan semua izin ini",
+        "message": "Pemasangan tidak pernah memberi siapa pun akses lebih daripada yang dimiliki orang yang memasang. Anda tampaknya tidak memiliki:"
+      },
+      "done": {
+        "title": "{name} sudah terpasang",
+        "message": "Versi {version} sekarang aktif di workspace Anda.",
+        "saved": "Saya sudah menyimpannya, lanjutkan",
+        "manage": "Buka pengaturan",
+        "browse": "Kembali ke Marketplace"
+      },
+      "subscribeTitle": "{name} adalah aplikasi berbayar",
+      "subscribeIntro": "Berlangganan untuk memasangnya. Anda masuk ke checkout untuk membayar bulan pertama, atau Anda dapat mencobanya gratis lebih dulu jika tersedia uji coba. Anda meninjau dan mengonfirmasi izinnya sebelum apa pun dipasang.",
+      "notForSaleTitle": "{name} tidak dijual",
+      "goToCheckout": "Ke checkout"
+    },
+    "setup": {
+      "optionalLabel": "{label} (opsional)",
+      "stored": {
+        "notSet": "Belum diatur",
+        "endsIn": "Tersimpan, berakhir dengan {last}",
+        "value": "Sebuah nilai tersimpan",
+        "set": "Tersimpan"
+      },
+      "keepBlank": "Kosongkan untuk mempertahankan nilai tersimpan. Ketik untuk menggantinya.",
+      "show": "Tampilkan nilai",
+      "hide": "Sembunyikan nilai",
+      "choose": "Pilih",
+      "clear": "Kosongkan {label}",
+      "problems": {
+        "required": "{label} wajib diisi.",
+        "pattern": "{label} tampaknya tidak benar.",
+        "option": "Pilih salah satu opsi untuk {label}.",
+        "server": "{label} tidak diterima. Periksa nilainya."
+      }
+    },
+    "reveal": {
+      "title": "Simpan rahasia koneksi Anda",
+      "warning": "Anda tidak akan melihat rahasia ini lagi. Salin sekarang dan simpan di tempat yang aman. Jika hilang, putar rahasia untuk mendapatkan yang baru.",
+      "address": "Alamat web tujuan",
+      "secret": "Rahasia",
+      "copyAddress": "Salin alamat web",
+      "copySecret": "Salin rahasia",
+      "saved": "Saya sudah menyimpan rahasia dan alamatnya.",
+      "doneHint": "Centang kotak untuk melanjutkan.",
+      "send": {
+        "title": "Cara mengirim",
+        "post": "Kirim permintaan POST dengan isi JSON ke alamat tersebut.",
+        "token": "Letakkan rahasia di header {header}.",
+        "signature": "Atau tandatangani isi dengan HMAC-SHA256 menggunakan rahasia dan kirim sha256= diikuti digest hex di header {header}."
+      },
+      "leaveConfirm": "Anda belum mengonfirmasi bahwa rahasia sudah disimpan. Jika keluar sekarang, Anda tidak akan melihatnya lagi. Tetap keluar?"
+    },
+    "portals": {
+      "maturity": {
+        "beta": "Beta",
+        "needsPortalSetup": "Perlu pengaturan portal",
+        "betaHint": "Dibuat dari dokumentasi parsial portal. Fungsinya berjalan, tetapi mungkin perlu penyesuaian setelah prospek nyata pertama.",
+        "needsPortalSetupHint": "Tidak ada yang masuk sampai tim portal itu sendiri mengaktifkannya untuk Anda."
+      },
+      "reveal": {
+        "title": "Simpan alamat pribadi Anda",
+        "warning": "Anda tidak akan melihat alamat ini lagi. Alamat ini juga merupakan kata sandi koneksi: siapa pun yang memilikinya dapat mengirim prospek ke workspace Anda. Salin sekarang dan simpan di tempat yang aman. Jika hilang, buat alamat baru; alamat lama kemudian berhenti berfungsi.",
+        "address": "Alamat pribadi Anda",
+        "copyAddress": "Salin alamat pribadi",
+        "saved": "Saya sudah menyimpan alamatnya.",
+        "sendTitle": "Yang dibutuhkan pengirim",
+        "method": "Metode: {methods}",
+        "formats": "Format yang diterima: {formats}",
+        "noHeader": "Tidak ada yang lain yang diperlukan: tanpa header dan tanpa tanda tangan. Bagian terakhir alamat adalah kata sandinya.",
+        "managerTitle": "Kirim ke manajer akun portal",
+        "managerIntro": "Tim {portal} sendiri yang mengaktifkan ini, bukan Anda. Salin pesan siap pakai dan kirim ke manajer akun Anda di sana.",
+        "copyMessage": "Salin pesan untuk manajer akun portal Anda",
+        "messageCopied": "Pesan disalin",
+        "portalFallback": "portal"
+      },
+      "formats": {
+        "json": "JSON",
+        "form": "kolom formulir",
+        "xml": "XML",
+        "query": "parameter query-string"
+      },
+      "message": {
+        "subjectLine": "Subjek: Alamat pengiriman prospek untuk akun {portal} kami",
+        "body": "Halo,\n\nMohon mulai kirim prospek dari akun {portal} kami ke alamat pribadi ini:\n\n{address}\n\nMohon kirim setiap prospek dengan {methods}. Kami menerima detailnya sebagai {formats}. Alamat ini sudah mengidentifikasi akun kami, jadi tidak perlu header, kata sandi, atau tanda tangan. Mohon jaga kerahasiaannya.\n\nMohon kirim satu prospek uji segera setelah fitur ini diaktifkan, agar kami dapat memastikan prospek itu sampai.\n\nTerima kasih."
+      },
+      "connection": {
+        "nextPoll": "Pemeriksaan berikutnya",
+        "notScheduled": "Belum dijadwalkan",
+        "syncedThrough": "Prospek diambil sampai",
+        "syncedNever": "Belum ada yang diambil",
+        "errorHint": "Masukkan kunci lagi di Kredensial atau tekan Sinkronkan sekarang.",
+        "errorHintNoSync": "Masukkan kunci lagi di Kredensial.",
+        "rotatePath": "Buat alamat baru",
+        "rotatePathConfirm": {
+          "title": "Buat alamat baru?",
+          "message": "Alamat pribadi baru dibuat dan alamat lama langsung berhenti berfungsi. Apa pun yang masih mengirim ke alamat lama akan ditolak sampai tim portal menerima alamat baru. Anda hanya akan melihat alamat baru sekali.",
+          "confirm": "Buat alamat baru"
+        },
+        "waiting": {
+          "title": "Menunggu prospek pertama dari {portal}",
+          "message": "Tim {portal} harus mengaktifkan ini. Tidak ada yang masuk sampai mereka mulai mengirim ke alamat koneksi Anda. Pastikan manajer akun Anda di sana memiliki alamatnya, dan minta prospek uji."
+        },
+        "path": {
+          "address": "Alamat pribadi",
+          "maskedNote": "Bagian terakhir alamat adalah kata sandinya. Ditampilkan sekali, saat Anda memasang atau membuat alamat baru, sehingga hanya bagian akhirnya yang ditampilkan di sini.",
+          "method": "Metode: {methods}",
+          "formats": "Format yang diterima: {formats}",
+          "noHeader": "Tidak perlu header atau tanda tangan. Alamat adalah kata sandinya: jaga kerahasiaannya.",
+          "newAddressHint": "Kehilangan alamat, atau ingin menghentikan seseorang menggunakannya? Buat alamat baru di bawah. Alamat lama langsung berhenti berfungsi dan tim portal harus diberi alamat baru."
+        }
+      },
+      "sync": {
+        "button": "Sinkronkan sekarang",
+        "needsActive": "Lanjutkan aplikasi untuk menyinkronkan sekarang.",
+        "scheduledNow": "Sinkronisasi dijadwalkan. Mulai sekarang.",
+        "scheduled": "Sinkronisasi dijadwalkan pada {time}.",
+        "waits": "Portal mengizinkan satu permintaan setiap {interval}, jadi sinkronisasi ini harus menunggu hingga saat itu.",
+        "duration": {
+          "seconds": "{count, plural, other {# detik}}",
+          "minutes": "{count, plural, other {# menit}}",
+          "hours": "{count, plural, other {# jam}}"
+        }
+      }
+    },
+    "installed": {
+      "title": "Terpasang",
+      "filters": {
+        "kind": "Jenis",
+        "status": "Status",
+        "all": "Semua"
+      },
+      "kind": {
+        "mini_app": "Aplikasi mini",
+        "integration": "Integrasi"
+      },
+      "status": {
+        "active": "Terpasang",
+        "disabled": "Dijeda",
+        "killed": "Dihentikan platform"
+      },
+      "listLabel": "Aplikasi terpasang",
+      "emptyFiltered": {
+        "title": "Tidak ada yang cocok dengan filter ini",
+        "message": "Ubah filter untuk melihat aplikasi terpasang Anda yang lain."
+      },
+      "empty": {
+        "title": "Belum ada yang terpasang",
+        "message": "Jelajahi Marketplace untuk menambah aplikasi mini atau menghubungkan layanan.",
+        "integrations": "Jelajahi integrasi",
+        "apps": "Jelajahi aplikasi mini"
+      },
+      "usage": {
+        "unlimited": "{installed} terpasang. Paket Anda tidak memiliki batas.",
+        "of": "{installed} dari {limit} terpasang",
+        "remaining": "{count, plural, other {# tempat tersisa}}",
+        "atCap": "Anda telah mencapai batas paket. Copot aplikasi atau tingkatkan paket untuk memasang yang lain.",
+        "upgrade": "Lihat paket dan tingkatkan",
+        "nearCap": "Anda mendekati batas paket Anda."
+      },
+      "version": "Versi {version}",
+      "killReason": "Alasan: {reason}",
+      "lastError": "Error terakhir: {error}",
+      "pending": "Versi {version} menunggu Anda menerima izin barunya.",
+      "installedOn": "Dipasang {date}",
+      "review": "Tinjau",
+      "manage": "Kelola",
+      "subscriptions": {
+        "title": "Langganan",
+        "intro": "Aplikasi berbayar dan uji coba Anda, termasuk aplikasi yang sudah dicopot yang masa berbayarnya masih berjalan.",
+        "listLabel": "Langganan",
+        "manage": "Kelola",
+        "viewApp": "Lihat aplikasi"
+      }
+    },
+    "manage": {
+      "backToInstalled": "Kembali ke Terpasang",
+      "notFound": {
+        "title": "Pemasangan tidak ditemukan",
+        "message": "Aplikasi ini tidak terpasang di workspace Anda, atau sudah dicopot."
+      },
+      "version": "Versi {version}",
+      "checkedAt": "Terakhir diperiksa {date}",
+      "notChecked": "Belum diperiksa. Gunakan Uji koneksi untuk memeriksa.",
+      "lastError": "Error terakhir: {error}",
+      "viewListing": "Lihat daftar",
+      "resume": "Lanjutkan",
+      "pause": "Jeda",
+      "toast": {
+        "resumed": "Aplikasi dilanjutkan.",
+        "paused": "Aplikasi dijeda.",
+        "consented": "Izin baru diterima. Sekarang di versi {version}.",
+        "uninstalled": "{name} telah dicopot."
+      },
+      "killed": {
+        "title": "Dihentikan oleh platform",
+        "message": "Aplikasi ini dimatikan untuk semua orang. Anda hanya dapat mencopotnya.",
+        "reason": "Alasan: {reason}"
+      },
+      "paused": {
+        "title": "Dijeda",
+        "message": "Aplikasi yang dijeda tidak melakukan apa pun, dan alamat webnya menolak pengiriman sampai Anda melanjutkannya."
+      },
+      "permissions": {
+        "title": "Izin yang diberikan",
+        "intro": "Apa yang dapat dilakukan aplikasi ini di workspace Anda saat ini."
+      },
+      "reconsent": {
+        "title": "Versi {version} meminta izin baru",
+        "message": "Aplikasi ini tetap berjalan di versi {current} sampai Anda menerima izin dari versi {version}.",
+        "newScopes": "Izin baru",
+        "fullList": "Daftar lengkap untuk versi baru",
+        "accept": "Terima izin baru"
+      },
+      "problem": {
+        "conflictTitle": "Berubah sementara itu",
+        "conflictMessage": "Orang lain mengubah aplikasi ini. Muat ulang untuk melihat status terbaru, lalu lakukan perubahan lagi.",
+        "reload": "Muat ulang",
+        "consentTitle": "Izin telah berubah",
+        "consentMessage": "Daftar izin berubah sejak Anda membuka halaman ini. Muat ulang untuk melihat daftar terkini."
+      },
+      "credentials": {
+        "title": "Kredensial dan pengaturan",
+        "intro": "Mengetik menggantikan nilai tersimpan. Kosongkan kolom untuk mempertahankan yang tersimpan. Kunci yang tersimpan tidak pernah ditampilkan lagi.",
+        "readOnly": "Yang tersimpan untuk aplikasi ini. Kunci tidak pernah ditampilkan.",
+        "saved": "Pengaturan disimpan.",
+        "nothingToSave": "Belum ada yang disimpan.",
+        "save": "Simpan perubahan",
+        "missing": "Isi kolom yang wajib.",
+        "invalid": "Beberapa nilai tidak diterima."
+      },
+      "connection": {
+        "title": "Koneksi",
+        "intro": "Cara aplikasi ini berkomunikasi dengan workspace Anda, dan kondisinya.",
+        "type": "Jenis",
+        "types": {
+          "oauth": "Masuk",
+          "push": "Mengirim data kepada Anda",
+          "pull": "Kami mengambil datanya",
+          "email_parse": "Email peringatan",
+          "webhook_relay": "Alamat web dan rahasia",
+          "client": "Dipasang oleh setiap anggota"
+        },
+        "status": "Status koneksi",
+        "statuses": {
+          "active": "Aktif",
+          "paused": "Dijeda",
+          "error": "Error",
+          "disabled": "Dimatikan"
+        },
+        "pollEvery": "Diperiksa setiap",
+        "seconds": "{count, plural, other {# detik}}",
+        "lastEvent": "Pengiriman terakhir",
+        "lastSuccess": "Keberhasilan terakhir",
+        "lastError": "Error terakhir",
+        "never": "Belum pernah",
+        "counters": {
+          "received": "Diterima",
+          "accepted": "Disetujui",
+          "duplicates": "Duplikat",
+          "failed": "Gagal"
+        },
+        "inbound": {
+          "address": "Alamat web tujuan",
+          "copyAddress": "Salin alamat web",
+          "method": "Kirim permintaan POST dengan isi JSON.",
+          "token": "Letakkan rahasia di header {header}.",
+          "signature": "Atau tandatangani isi dengan HMAC-SHA256 dan kirim sha256= diikuti digest hex di header {header}.",
+          "secretEndsIn": "Rahasia berakhir dengan {last}. Tidak dapat ditampilkan lagi.",
+          "secretSet": "Rahasia sudah diatur. Tidak dapat ditampilkan lagi."
+        },
+        "actions": {
+          "test": "Uji koneksi",
+          "sample": "Kirim contoh prospek",
+          "rotate": "Putar rahasia",
+          "sampleNeedsActive": "Lanjutkan aplikasi untuk mengirim contoh prospek.",
+          "testOk": "Koneksi berfungsi.",
+          "testFailed": "Uji koneksi gagal.",
+          "latency": "{ms} md",
+          "sampleAccepted": "Contoh prospek diterima. Sekarang menjadi prospek sungguhan.",
+          "sampleDuplicate": "Contoh prospek tersebut sudah diterima sebelumnya.",
+          "rotatedDone": "Saya sudah menyimpannya, lanjutkan",
+          "rotateNotApplicable": "Rahasia koneksi ini adalah kunci dari layanan lain. Ubah di Kredensial dan pengaturan.",
+          "rotateConfirm": {
+            "title": "Putar rahasia koneksi?",
+            "message": "Rahasia baru dibuat dan rahasia lama langsung berhenti berfungsi. Apa pun yang masih mengirim dengan rahasia lama akan ditolak sampai Anda memberikan yang baru. Anda hanya akan melihat rahasia baru sekali.",
+            "confirm": "Putar rahasia",
+            "cancel": "Batal"
+          }
+        }
+      },
+      "events": {
+        "title": "Pengiriman terbaru",
+        "intro": "Hal terbaru yang diterima koneksi ini, dari yang paling baru.",
+        "refresh": "Segarkan",
+        "empty": {
+          "title": "Belum ada pengiriman",
+          "message": "Saat layanan lain mengirim sesuatu, atau Anda mengirim contoh prospek, akan muncul di sini."
+        },
+        "columns": {
+          "received": "Diterima",
+          "status": "Hasil",
+          "externalId": "ID pengiriman",
+          "error": "Alasan"
+        },
+        "status": {
+          "accepted": "Disetujui",
+          "duplicate": "Duplikat",
+          "rejected": "Ditolak",
+          "failed": "Gagal"
+        },
+        "loadMore": "Muat lainnya"
+      },
+      "pauseConfirm": {
+        "title": "Jeda {name}?",
+        "message": "Aplikasi berhenti bekerja sampai Anda melanjutkannya. Alamat webnya menolak pengiriman selama itu.",
+        "confirm": "Jeda",
+        "cancel": "Batal"
+      },
+      "uninstall": {
+        "section": "Copot",
+        "sectionIntro": "Hapus aplikasi ini dari workspace Anda.",
+        "open": "Copot",
+        "title": "Copot {name}?",
+        "confirm": "Copot",
+        "cancel": "Batal",
+        "effect": "Aksesnya berakhir seketika.",
+        "effectConnection": "Aksesnya berakhir seketika, dan alamat webnya berhenti merespons.",
+        "dataLegend": "Apa yang sebaiknya terjadi pada data yang dibuatnya?",
+        "choices": {
+          "keep": {
+            "label": "Simpan data yang dibuatnya",
+            "help": "Kontak dan rekaman yang ditambahkannya tetap ada di workspace Anda."
+          },
+          "delete": {
+            "label": "Hapus data yang dibuatnya",
+            "help": "Kami mencatat permintaan Anda dan memberi tahu bagian produk yang memiliki data tersebut."
+          }
+        },
+        "honestNote": "Saat ini, kontak yang sudah dibuat aplikasi ini tetap ada di workspace Anda apa pun pilihannya. Pilihan Anda dicatat untuk bagian yang akan menghapus data.",
+        "irreversible": "Tindakan ini tidak dapat dibatalkan. Untuk menggunakan aplikasi lagi, pasang kembali.",
+        "renewal": {
+          "title": "Aplikasi ini memiliki langganan berbayar",
+          "message": "Mencopot akan menghentikan perpanjangannya, sehingga tidak ada lagi tagihan. Masa yang sudah Anda bayar tetap milik Anda, jadi Anda dapat memasang kembali sebelum berakhir tanpa biaya.",
+          "messageUntil": "Mencopot akan menghentikan perpanjangannya, sehingga tidak ada lagi tagihan. Masa yang sudah Anda bayar tetap milik Anda sampai {date}, jadi Anda dapat memasang kembali sebelum itu tanpa biaya."
+        }
+      },
+      "subscription": {
+        "title": "Langganan",
+        "subscribeTitle": "Berlangganan untuk terus menggunakan {name}",
+        "subscribeIntro": "Ini aplikasi berbayar dan workspace Anda belum memiliki langganan untuknya.",
+        "included": "Paket Anda mencakup aplikasi ini, jadi tidak ada yang perlu dibayar."
+      },
+      "subscriptionEnded": {
+        "title": "Langganan berakhir",
+        "message": {
+          "resubscribe": "{name} dijeda karena langganannya berakhir. Data dan pengaturan Anda tetap disimpan. Berlangganan lagi untuk mengaktifkannya kembali.",
+          "notForSale": "{name} dijeda karena langganannya berakhir dan tidak lagi dijual, sehingga tidak dapat diaktifkan kembali. Data dan pengaturan Anda tetap disimpan.",
+          "resumable": "{name} dijeda karena langganannya berakhir, tetapi workspace Anda kembali memiliki aksesnya. Lanjutkan untuk mengaktifkannya kembali."
+        },
+        "resubscribe": "Berlangganan lagi",
+        "resume": "Lanjutkan",
+        "noCheckout": "Checkout sedang tidak tersedia. Coba lagi sebentar lagi."
+      }
+    },
+    "requests": {
+      "title": "Permintaan",
+      "form": {
+        "title": "Ajukan sesuatu",
+        "intro": "Belum ada? Beri tahu kami apa yang Anda butuhkan. Jika orang lain sudah mengajukannya, permintaan Anda dihitung sebagai suara.",
+        "name": "Nama",
+        "namePlaceholder": "Misalnya, nama sebuah layanan",
+        "kind": "Jenis",
+        "kinds": {
+          "mini_app": "Aplikasi mini",
+          "integration": "Integrasi"
+        },
+        "category": "Kategori",
+        "categoryHint": "Opsional.",
+        "anyCategory": "Tidak yakin",
+        "website": "Situs web",
+        "websiteHint": "Opsional. Alamat https:// lengkap.",
+        "note": "Untuk apa Anda membutuhkannya?",
+        "noteHint": "Hanya terlihat oleh tim platform",
+        "problems": {
+          "nameShort": "Masukkan minimal 2 karakter.",
+          "nameLong": "Gunakan paling banyak 80 karakter.",
+          "websiteInvalid": "Masukkan alamat https:// lengkap.",
+          "noteLong": "Gunakan paling banyak 500 karakter.",
+          "server": "Ini tidak diterima. Periksa nilainya."
+        },
+        "result": {
+          "created": {
+            "title": "Permintaan ditambahkan: {name}",
+            "message": "Terima kasih. Workspace lain sekarang dapat memberikan suara untuknya."
+          },
+          "counted": {
+            "title": "Seseorang sudah mengajukan {name}",
+            "message": "Permintaan Anda dihitung sebagai suara untuknya."
+          }
+        },
+        "submit": "Kirim permintaan"
+      },
+      "list": {
+        "title": "Yang diminta orang lain",
+        "intro": "Berikan suara untuk yang Anda inginkan. Yang paling banyak diminta akan dibuat lebih dulu.",
+        "searchLabel": "Cari permintaan",
+        "searchPlaceholder": "Cari permintaan",
+        "kind": "Jenis",
+        "allKinds": "Semua jenis",
+        "kinds": {
+          "mini_app": "Aplikasi mini",
+          "integration": "Integrasi"
+        },
+        "status": "Status",
+        "allStatuses": "Semua status",
+        "statuses": {
+          "open": "Terbuka",
+          "planned": "Direncanakan",
+          "building": "Sedang dibangun",
+          "shipped": "Dikirim",
+          "declined": "Ditolak"
+        },
+        "sort": "Urutkan berdasarkan",
+        "sorts": {
+          "votes": "Suara terbanyak",
+          "new": "Terbaru"
+        },
+        "emptyFiltered": {
+          "title": "Tidak ada permintaan yang cocok",
+          "message": "Ubah filter, atau ajukan sendiri."
+        },
+        "empty": {
+          "title": "Belum ada permintaan",
+          "message": "Jadilah yang pertama mengajukan sesuatu."
+        },
+        "loadMore": "Muat lainnya",
+        "votes": "{count, plural, other {# suara}}",
+        "voted": "Memilih",
+        "vote": "Pilih"
+      }
+    },
+    "pricing": {
+      "title": "Harga",
+      "freeNote": "Tidak ada biaya untuk memasang atau menggunakan.",
+      "included": {
+        "planFeature": "Paket Anda mencakup aplikasi ini, jadi tidak ada yang perlu dibayar.",
+        "minPlan": "Paket Anda, atau paket yang lebih tinggi, mencakup aplikasi ini, jadi tidak ada yang perlu dibayar.",
+        "plan": "Paket Anda mencakup aplikasi ini, jadi tidak ada yang perlu dibayar."
+      },
+      "needsPurchase": "Termasuk dalam katalog paket Anda, beli untuk menggunakannya.",
+      "subscribedNote": "Workspace Anda memiliki langganan untuk aplikasi ini.",
+      "trialOffer": "Coba gratis selama {days, plural, other {# hari}}. Tidak ada tagihan sampai Anda memilih berlangganan.",
+      "prepaidNote": "Ditagih bulanan melalui penagihan workspace Anda. Setiap pembayaran mencakup satu bulan dan tidak ditagih otomatis: bayar lagi sebelum tanggal yang ditampilkan agar aplikasi tetap berjalan.",
+      "notForSale": {
+        "title": "Tidak dijual",
+        "message": "Aplikasi ini sedang tidak dijual ke pelanggan baru."
+      }
+    },
+    "subscribe": {
+      "subscribe": "Berlangganan",
+      "startTrial": "Mulai uji coba gratis {days} hari",
+      "hintPrice": "{price} per bulan, dibayar saat checkout. Setiap pembayaran mencakup satu bulan.",
+      "hint": "Anda membayar satu bulan setiap kali di checkout.",
+      "working": "Memproses",
+      "noCheckout": "Checkout untuk aplikasi ini sedang tidak tersedia. Coba lagi sebentar lagi.",
+      "toast": {
+        "trial_started": "Uji coba gratis {name} dimulai.",
+        "included": "{name} termasuk dalam paket Anda.",
+        "already_entitled": "Workspace Anda sudah memiliki akses ke {name}.",
+        "free": "{name} gratis."
+      }
+    },
+    "subscription": {
+      "title": "Langganan",
+      "status": {
+        "active": "Aktif",
+        "trialing": "Uji coba gratis",
+        "comped": "Diberikan gratis",
+        "canceling": "Tidak diperpanjang",
+        "ended": "Berakhir"
+      },
+      "date": {
+        "paidUntil": "Dibayar hingga {date}",
+        "trialEnds": "Uji coba gratis berakhir {date}",
+        "compUntil": "Akses gratis hingga {date}",
+        "compOpen": "Akses gratis, tanpa tanggal berakhir",
+        "cancelingUntil": "Tidak diperpanjang. Aktif hingga {date}",
+        "endedOn": "Langganan berakhir {date}",
+        "endedNoDate": "Langganan berakhir"
+      },
+      "lastPayment": "Pembayaran terakhir: {price} per bulan",
+      "nextPayment": "Harga aplikasi ini berubah. Pembayaran berikutnya Anda adalah {price} per bulan.",
+      "compNote": "Tim platform memberi Anda akses ini. Tidak dapat dibatalkan di sini.",
+      "renewHint": "Bulan yang sudah dibayar tidak diperpanjang otomatis. Perpanjang sebelum tanggal yang ditampilkan agar aplikasi tetap berjalan tanpa jeda.",
+      "actions": {
+        "renew": "Perpanjang sekarang",
+        "resubscribe": "Berlangganan lagi",
+        "subscribe": "Berlangganan sekarang",
+        "resume": "Lanjutkan langganan",
+        "cancel": "Batalkan langganan"
+      },
+      "cancelConfirm": {
+        "title": "Batalkan langganan {name}?",
+        "message": "{name} tetap aktif hingga {date}, lalu dijeda. Data dan pengaturan Anda tetap disimpan.",
+        "messageNoDate": "{name} tetap aktif hingga masa yang sudah Anda bayar berakhir, lalu dijeda. Data dan pengaturan Anda tetap disimpan.",
+        "afterwards": "Tidak ada tagihan lagi, dan Anda dapat berlangganan lagi kapan saja.",
+        "confirm": "Batalkan langganan",
+        "keep": "Pertahankan langganan"
+      },
+      "toast": {
+        "canceled": "Langganan dibatalkan. Tetap aktif hingga {date}.",
+        "canceledNoDate": "Langganan dibatalkan. Tetap aktif hingga masa berbayar berakhir.",
+        "resumed": "Langganan dilanjutkan."
+      },
+      "working": "Memproses",
+      "noCheckout": "Checkout untuk aplikasi ini sedang tidak tersedia. Coba lagi sebentar lagi."
+    }
+  }
+}

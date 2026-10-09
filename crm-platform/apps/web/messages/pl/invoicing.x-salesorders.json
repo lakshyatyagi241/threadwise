@@ -1,0 +1,353 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "SO_NOT_DRAFT": "Zmienić można tylko zamówienie w wersji roboczej. Potwierdzone zamówienie jest zamrożone: anuluj je i utwórz nowe, aby zmienić pozycje lub ceny.",
+        "SO_NOT_CONFIRMED": "Najpierw potwierdź zamówienie. Tylko potwierdzone zamówienie można zafakturować lub zarejestrować jego dostawę.",
+        "SO_CANCELLED": "To zamówienie jest anulowane, więc nie można z nim nic więcej zrobić.",
+        "SO_QUOTE_NOT_ACCEPTED": "Zamówienie sprzedaży można utworzyć tylko z zaakceptowanej oferty lub kosztorysu. Najpierw oznacz ją jako zaakceptowaną.",
+        "SO_QUOTE_TAKEN": "Ta oferta lub kosztorys ma już zamówienie sprzedaży.",
+        "SO_QUANTITY_EXCEEDS": "Ilość jest większa niż pozostało na tej pozycji. Zmniejsz ją i spróbuj ponownie.",
+        "SO_NOTHING_TO_INVOICE": "Nie ma tu nic do zrobienia: wszystko zostało już zafakturowane lub dostarczone.",
+        "SO_HAS_INVOICES": "Faktura utworzona z tego zamówienia jest nadal aktywna. Najpierw anuluj lub usuń fakturę, a potem anuluj zamówienie."
+      }
+    },
+    "salesOrders": {
+      "list": {
+        "title": "Zamówienia sprzedaży",
+        "subtitle": "Zaakceptowane oferty zamienione w zamówienia, fakturowane jednorazowo lub w częściach i dostarczane.",
+        "newOrder": "Nowe zamówienie sprzedaży",
+        "search": "Szukaj po numerze, kupującym lub referencji",
+        "reset": "Resetuj",
+        "refresh": "Odśwież",
+        "tableLabel": "Zamówienia sprzedaży",
+        "noAccessTitle": "Brak dostępu",
+        "noAccess": "Nie masz uprawnień do przeglądania zamówień sprzedaży.",
+        "emptyFilteredTitle": "Brak pasujących zamówień",
+        "emptyFiltered": "Żadne zamówienie nie pasuje do tych filtrów. Zmień je lub zresetuj.",
+        "resetFilters": "Resetuj filtry",
+        "loading": "Wczytywanie zamówień sprzedaży",
+        "showing": "Wyświetlono: {count}",
+        "loadMore": "Wczytaj więcej",
+        "allLoaded": "Wczytano wszystkie",
+        "contactLoading": "Wczytywanie...",
+        "empty": {
+          "all": {
+            "title": "Brak zamówień sprzedaży",
+            "message": "Zamień zaakceptowaną ofertę lub kosztorys w zamówienie albo utwórz nowe od zera."
+          },
+          "draft": {
+            "title": "Brak zamówień w wersji roboczej",
+            "message": "Zamówienia, które wciąż przygotowujesz, pojawią się tutaj."
+          },
+          "confirmed": {
+            "title": "Brak potwierdzonych zamówień",
+            "message": "Potwierdzone zamówienia oczekujące na fakturę lub dostawę pojawią się tutaj."
+          },
+          "cancelled": {
+            "title": "Brak anulowanych zamówień",
+            "message": "Anulowane zamówienia pojawią się tutaj wraz z powodem."
+          },
+          "closed": {
+            "title": "Brak zamkniętych zamówień",
+            "message": "Zamówienie zostaje zamknięte, gdy wszystko w nim jest zafakturowane i dostarczone."
+          }
+        }
+      },
+      "strip": {
+        "label": "Wartość otwartych zamówień",
+        "openValue": "Otwarte zamówienia ({currency})"
+      },
+      "tabs": {
+        "label": "Status zamówienia",
+        "all": "Wszystkie",
+        "draft": "Wersja robocza",
+        "confirmed": "Potwierdzone",
+        "cancelled": "Anulowane",
+        "closed": "Zamknięte",
+        "count": "{count, plural, one {1 zamówienie} few {# zamówienia} many {# zamówień} other {# zamówienia}}"
+      },
+      "quick": {
+        "label": "Szybkie filtry",
+        "toInvoice": "Do zafakturowania",
+        "toFulfil": "Do realizacji"
+      },
+      "table": {
+        "scrollArea": "Tabela zamówień sprzedaży",
+        "columns": {
+          "number": "Zamówienie",
+          "buyer": "Kupujący",
+          "quote": "Oferta",
+          "deal": "Szansa sprzedaży",
+          "expected": "Oczekiwana data",
+          "status": "Status",
+          "invoicing": "Fakturowanie",
+          "fulfilment": "Dostawa",
+          "total": "Suma",
+          "invoices": "Faktury"
+        }
+      },
+      "row": {
+        "moreFor": "Działania dla: {name}",
+        "open": "Otwórz",
+        "edit": "Edytuj",
+        "confirm": "Potwierdź zamówienie",
+        "invoiceAll": "Zafakturuj wszystko, co pozostało",
+        "fulfilAll": "Oznacz wszystko jako dostarczone",
+        "cancel": "Anuluj zamówienie",
+        "delete": "Usuń wersję roboczą"
+      },
+      "status": {
+        "draft": "Wersja robocza",
+        "confirmed": "Potwierdzone",
+        "cancelled": "Anulowane",
+        "closed": "Zamknięte"
+      },
+      "invoicingStatus": {
+        "not_invoiced": "Niezafakturowane",
+        "partially_invoiced": "Częściowo zafakturowane",
+        "invoiced": "Zafakturowane"
+      },
+      "fulfilmentStatus": {
+        "unfulfilled": "Niedostarczone",
+        "partially_fulfilled": "Częściowo dostarczone",
+        "fulfilled": "Dostarczone"
+      },
+      "actions": {
+        "failed": "Nie udało się.",
+        "confirmed": "Zamówienie {number} potwierdzone.",
+        "invoicedDraft": "Utworzono fakturę w wersji roboczej z zamówienia.",
+        "invoicedIssued": "Faktura {number} wystawiona.",
+        "fulfilled": "Dostawa zapisana.",
+        "cancelled": "Zamówienie {number} anulowane.",
+        "deleted": "Usunięto zamówienie w wersji roboczej."
+      },
+      "dialog": {
+        "close": "Zamknij",
+        "cancel": "Anuluj",
+        "how": "Które ilości",
+        "mode": {
+          "all": "Wszystko, co pozostało",
+          "lines": "Wybierz ilości"
+        },
+        "left": "pozostało: {qty}",
+        "qtyExceeds": "Na tej pozycji pozostało co najwyżej {max}.",
+        "qtyInvalid": "Wpisz ilość z co najwyżej 4 miejscami po przecinku lub 0, aby pominąć tę pozycję.",
+        "nothingHint": "Wszystko w tym zamówieniu jest już zafakturowane."
+      },
+      "confirmDialog": {
+        "title": "Potwierdzić to zamówienie?",
+        "message": "Potwierdzenie zamraża pozycje i ceny. Potem możesz zafakturować zamówienie jednorazowo lub w częściach oraz zapisywać dostawy. Nadal możesz je anulować, dopóki nie istnieje żadna faktura.",
+        "confirm": "Potwierdź zamówienie"
+      },
+      "cancelDialog": {
+        "title": "Anulować to zamówienie?",
+        "warning": "Anulowanego zamówienia nie można już fakturować ani dostarczać i nie można go ponownie otworzyć.",
+        "reason": "Powód",
+        "reasonHint": "Zapisywany przy zamówieniu dla Twojego zespołu.",
+        "reasonRequired": "Podaj, dlaczego zamówienie jest anulowane.",
+        "reasonTooLong": "Powód może mieć mniej niż {max} znaków.",
+        "cancelOrder": "Anuluj zamówienie",
+        "hasInvoices": "Zamówienie nadal ma fakturę. Najpierw anuluj lub usuń fakturę (anulowana faktura zwraca ilości), a potem anuluj zamówienie.",
+        "seeInvoices": "Zobacz faktury"
+      },
+      "deleteDialog": {
+        "title": "Usunąć tę wersję roboczą?",
+        "message": "Zamówienie w wersji roboczej zostanie trwale usunięte. Potwierdzonego zamówienia nie można usunąć, tylko anulować.",
+        "delete": "Usuń wersję roboczą"
+      },
+      "invoiceDialog": {
+        "title": "Zafakturuj to zamówienie",
+        "intro": "Rozlicz zamówienie według zamrożonych cen. Możesz je fakturować częściami: to, czego nie zafakturujesz teraz, pozostaje na zamówieniu.",
+        "invoiceAndIssue": "Utwórz i wystaw fakturę",
+        "createDraft": "Utwórz fakturę w wersji roboczej",
+        "issueDate": "Data wystawienia",
+        "issueDateHint": "Pozostaw puste dla dzisiaj ({today}).",
+        "dueDate": "Termin płatności",
+        "terms": "Termin płatności",
+        "termsDefault": "Domyślne dla przestrzeni roboczej",
+        "termsOnIssue": "Płatne w dniu wystawienia",
+        "termsDays": "{count, plural, one {1 dzień} few {# dni} many {# dni} other {# dnia}}",
+        "issueNow": "Wystaw fakturę teraz",
+        "issueNowHint": "Faktura otrzyma numer i można ją od razu wysłać.",
+        "draftHint": "Zostaw jako wersję roboczą, aby ją sprawdzić przed wystawieniem.",
+        "includeShipping": "Dolicz wysyłkę do tej faktury",
+        "problems": {
+          "nothing": "Wybierz ilość większą od zera przynajmniej na jednej pozycji.",
+          "issueDateInvalid": "Wpisz prawidłową datę wystawienia.",
+          "dueDateInvalid": "Wpisz prawidłowy termin płatności.",
+          "dueBeforeIssue": "Termin płatności nie może być wcześniejszy niż data wystawienia."
+        }
+      },
+      "fulfilDialog": {
+        "title": "Zarejestruj dostawę",
+        "intro": "Zapisz, co zostało dostarczone kupującemu. Dostawa jest śledzona osobno od fakturowania: którekolwiek może być pierwsze.",
+        "record": "Zarejestruj dostawę",
+        "note": "Uwaga",
+        "noteHint": "Opcjonalnie, na przykład numer dokumentu WZ.",
+        "problems": {
+          "nothing": "Wybierz ilość większą od zera przynajmniej na jednej pozycji.",
+          "noteTooLong": "Uwaga może mieć mniej niż {max} znaków."
+        }
+      },
+      "detail": {
+        "noAccessTitle": "Brak dostępu",
+        "noAccess": "Nie masz uprawnień do przeglądania zamówień sprzedaży.",
+        "loading": "Wczytywanie zamówienia",
+        "back": "Wróć do zamówień sprzedaży",
+        "noBuyer": "Brak kupującego",
+        "edit": "Edytuj",
+        "confirm": "Potwierdź zamówienie",
+        "recordDelivery": "Zarejestruj dostawę",
+        "invoice": "Fakturuj...",
+        "more": "Więcej działań",
+        "cancel": "Anuluj zamówienie",
+        "delete": "Usuń wersję roboczą",
+        "cancelledOn": "Anulowano {date}",
+        "draftHint": "To zamówienie jest w wersji roboczej. Potwierdź je, aby zamrozić ceny i rozpocząć fakturowanie oraz dostawę.",
+        "notes": "Uwagi",
+        "terms": "Warunki",
+        "progress": "Postęp",
+        "invoiced": "Zafakturowane",
+        "fulfilled": "Dostarczone"
+      },
+      "lines": {
+        "title": "Pozycje",
+        "scrollArea": "Pozycje zamówienia",
+        "item": "Pozycja",
+        "ordered": "Zamówiono",
+        "invoiced": "Zafakturowano",
+        "fulfilled": "Dostarczono",
+        "toInvoice": "Do zafakturowania",
+        "unitPrice": "Cena jednostkowa",
+        "amount": "Kwota",
+        "taxLine": "{name} {rate}%",
+        "taxRate": "Podatek {rate}%",
+        "invoicedBar": "Zafakturowany udział: {name}",
+        "fulfilledBar": "Dostarczony udział: {name}"
+      },
+      "totals": {
+        "title": "Podsumowanie",
+        "subtotal": "Suma częściowa",
+        "discount": "Rabat",
+        "shipping": "Wysyłka",
+        "shippingBilled": "Rozliczone",
+        "shippingPending": "Rozliczone z pierwszą fakturą",
+        "tax": "Podatek",
+        "total": "Razem"
+      },
+      "info": {
+        "title": "Szczegóły",
+        "buyer": "Kupujący",
+        "email": "E-mail",
+        "phone": "Telefon",
+        "quote": "Oferta",
+        "deal": "Szansa sprzedaży",
+        "owner": "Właściciel",
+        "reference": "Referencja",
+        "expected": "Oczekiwana",
+        "created": "Utworzono",
+        "confirmed": "Potwierdzono"
+      },
+      "invoices": {
+        "title": "Faktury z tego zamówienia",
+        "none": "Nie utworzono jeszcze faktury z tego zamówienia.",
+        "noneDraft": "Faktury można tworzyć po potwierdzeniu zamówienia.",
+        "draft": "Wersja robocza",
+        "voidNote": "Anulowana faktura zwraca ilości do zamówienia."
+      },
+      "builder": {
+        "noAccessTitle": "Brak dostępu",
+        "noAccess": "Nie masz uprawnień do zmiany zamówień sprzedaży.",
+        "loading": "Wczytywanie",
+        "frozen": "To zamówienie jest potwierdzone, więc jego pozycje i ceny są zamrożone. Anuluj je i utwórz nowe, aby je zmienić.",
+        "openOrder": "Otwórz zamówienie",
+        "back": "Wstecz",
+        "editTitle": "Edytuj {number}",
+        "newTitle": "Nowe zamówienie sprzedaży",
+        "unsaved": "Niezapisane zmiany",
+        "cancel": "Anuluj",
+        "saveChanges": "Zapisz zmiany",
+        "createDraft": "Utwórz wersję roboczą",
+        "conflict": "Ktoś inny zmienił tę wersję roboczą, gdy ją edytowałeś. Odśwież stronę, aby zobaczyć jego wersję; Twoje zmiany zostaną utracone.",
+        "reload": "Odśwież",
+        "saved": "Wersja robocza zapisana.",
+        "created": "Zamówienie {number} utworzone jako wersja robocza.",
+        "fixProblems": "Najpierw popraw zaznaczone pola.",
+        "serverRejected": "Serwer nie zaakceptował niektórych wartości. Sprawdź pola i spróbuj ponownie.",
+        "startFrom": "Zacznij od",
+        "source": {
+          "scratch": "Puste zamówienie",
+          "quote": "Zaakceptowana oferta lub kosztorys"
+        },
+        "loadingQuote": "Wczytywanie oferty...",
+        "buyer": "Kupujący",
+        "contact": "Kontakt",
+        "contactHint": "Wybierz kontakt, aby powiązać z nim zamówienie, lub wpisz kupującego poniżej.",
+        "buyerName": "Nazwa kupującego",
+        "fromQuoteHint": "Jeśli pozostanie puste, użyty zostanie kupujący z oferty.",
+        "buyerEmail": "E-mail",
+        "buyerPhone": "Telefon",
+        "details": "Szczegóły zamówienia",
+        "currency": "Waluta",
+        "currencyHint": "Trzy litery, na przykład USD lub KWD.",
+        "currencyLocked": "Ustalana po utworzeniu zamówienia.",
+        "expectedDate": "Oczekiwana data",
+        "expectedHint": "Kiedy kupujący oczekuje dostawy.",
+        "reference": "Referencja",
+        "referenceHint": "Na przykład numer zamówienia kupującego.",
+        "linesFromQuote": "Pozycje",
+        "linesFromQuoteHint": "Zamówienie przejmuje pozycje, ceny i podatki z zaakceptowanej oferty, a rabat na dokument jest wliczony w pozycje. Pozycje wersji roboczej możesz edytować także po jej utworzeniu.",
+        "lineItems": "Pozycje",
+        "shippingNotes": "Wysyłka, uwagi i warunki",
+        "shipping": "Wysyłka ({currency})",
+        "shippingHint": "Rozliczane z pierwszą fakturą.",
+        "notes": "Uwagi",
+        "notesHint": "Wyświetlane na zamówieniu.",
+        "terms": "Warunki",
+        "termsHint": "Przenoszone na faktury utworzone z tego zamówienia.",
+        "draftNote": "Zamówienie pozostaje w wersji roboczej, dopóki go nie potwierdzisz. Potwierdzenie zamraża ceny.",
+        "quoteTotals": "Podsumowanie oferty",
+        "quoteTotalsNote": "Tak jak w zaakceptowanej ofercie. Własne wartości zamówienia pojawią się po jego utworzeniu.",
+        "subtotal": "Suma częściowa",
+        "discount": "Rabat",
+        "tax": "Podatek",
+        "total": "Razem",
+        "openExisting": "Otwórz zamówienie {number}",
+        "viewOrders": "Zobacz wszystkie zamówienia",
+        "pickAnother": "Wybierz inną ofertę",
+        "problems": {
+          "buyerRequired": "Wybierz kontakt lub wpisz nazwę kupującego.",
+          "emailInvalid": "Wpisz prawidłowy adres e-mail.",
+          "currencyInvalid": "Wpisz trzyliterowy kod waluty.",
+          "expectedDateInvalid": "Wpisz prawidłową datę.",
+          "shippingInvalid": "Wpisz prawidłową kwotę.",
+          "noLines": "Dodaj co najmniej jedną pozycję.",
+          "referenceTooLong": "Referencja może mieć mniej niż 191 znaków."
+        },
+        "lineProblems": {
+          "descriptionRequired": "Opisz tę pozycję.",
+          "qtyInvalid": "Wpisz ilość większą od zera.",
+          "priceInvalid": "Wpisz prawidłową cenę.",
+          "lineDiscountInvalid": "Wpisz prawidłowy rabat.",
+          "hsnRequired": "Wpisz kod HSN/SAC.",
+          "hsnInvalid": "Wpisz prawidłowy kod HSN/SAC.",
+          "taxRateRemoved": "Stawka podatku tej pozycji już nie istnieje. Wybierz aktualną."
+        }
+      },
+      "quotePicker": {
+        "search": "Szukaj zaakceptowanych ofert",
+        "results": "Zaakceptowane oferty i kosztorysy",
+        "loading": "Wczytywanie ofert",
+        "noMatch": "Brak pasujących zaakceptowanych ofert.",
+        "none": "Nie ma jeszcze zaakceptowanej oferty ani kosztorysu.",
+        "kind": {
+          "proposal": "Propozycja",
+          "estimate": "Kosztorys"
+        },
+        "untitled": "Bez tytułu",
+        "accepted": "Zaakceptowano {date}"
+      }
+    }
+  }
+}

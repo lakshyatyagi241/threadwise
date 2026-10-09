@@ -1,0 +1,315 @@
+{
+  "settings": {
+    "title": "Cài đặt",
+    "breadcrumb": "Đường dẫn",
+    "backToSettings": "Quay lại Cài đặt",
+    "sectionsLabel": "Các mục cài đặt",
+    "searchLabel": "Tìm cài đặt",
+    "searchPlaceholder": "Tìm cài đặt",
+    "searchHint": "Nhập để lọc mọi cài đặt theo tên hoặc từ khóa. Nhấn Escape để xóa, phím mũi tên xuống để chuyển tới kết quả.",
+    "clearSearch": "Xóa tìm kiếm",
+    "results": {
+      "title": "{count, plural, other {# cài đặt khớp với “{query}”}}",
+      "status": "{count, plural, =0 {Không có kết quả} other {# kết quả}}"
+    },
+    "noResults": {
+      "title": "Không có cài đặt nào khớp “{query}”",
+      "message": "Kiểm tra chính tả hoặc thử từ rộng hơn, như “thuế”, “nhóm” hoặc “WhatsApp”."
+    },
+    "emptySection": {
+      "title": "Không có gì cần thiết lập ở đây",
+      "message": "Vai trò của bạn không có quyền truy cập bất kỳ cài đặt nào trong mục này."
+    },
+    "inSection": "Trong {section}",
+    "soon": "Sắp ra mắt",
+    "upgrade": "Nâng cấp",
+    "comingSoon": "Sắp ra mắt",
+    "sections": {
+      "channels": {
+        "title": "Kênh",
+        "description": "Kết nối các nơi khách hàng nhắn tin cho bạn."
+      },
+      "data": {
+        "title": "Dữ liệu và tùy chỉnh",
+        "description": "Định hình cách mô tả liên hệ, thương vụ và cuộc trò chuyện."
+      },
+      "business": {
+        "title": "Doanh nghiệp và thanh toán",
+        "description": "Thông tin công ty, thuế, gói và thanh toán."
+      },
+      "people": {
+        "title": "Nhóm và quyền hạn",
+        "description": "Ai được làm gì trong không gian làm việc của bạn."
+      },
+      "automation": {
+        "title": "Tự động hóa và AI",
+        "description": "Trả lời, đặt lịch, tiện ích chat trên website và AI."
+      },
+      "integrations": {
+        "title": "Tích hợp và nhà phát triển",
+        "description": "Kết nối công cụ khác và mở rộng sản phẩm."
+      },
+      "security": {
+        "title": "Dữ liệu và bảo mật",
+        "description": "Đăng nhập, quyền riêng tư, xuất dữ liệu và nhật ký kiểm tra."
+      }
+    },
+    "tiles": {
+      "channels": {
+        "label": "Tất cả kênh",
+        "description": "Xem mọi kênh bạn đã kết nối và thêm kênh mới.",
+        "keywords": "kết nối, hộp thư, số điện thoại, tài khoản"
+      },
+      "whatsapp": {
+        "label": "WhatsApp",
+        "description": "Kết nối số WhatsApp Business để trò chuyện với khách hàng.",
+        "keywords": "wa, whatsapp business, cloud api, số, qr"
+      },
+      "unofficial-whatsapp": {
+        "label": "API WhatsApp không chính thức",
+        "description": "Liên kết số WhatsApp cá nhân bằng mã QR và làm nóng số để gửi an toàn.",
+        "keywords": "whatsapp cá nhân, qr, mã ghép nối, thiết bị, baileys, trình làm nóng, làm nóng, không chính thức"
+      },
+      "warmer": {
+        "label": "Trình làm nóng",
+        "description": "Làm nóng các số WhatsApp để tin nhắn đã lên lịch được gửi với tốc độ an toàn.",
+        "keywords": "làm nóng, số, uy tín, giới hạn gửi, hàng đợi, tốc độ, đã lên lịch"
+      },
+      "facebook": {
+        "label": "Facebook Messenger",
+        "description": "Trả lời tin nhắn gửi đến trang Facebook của bạn.",
+        "keywords": "meta, messenger, trang, fb"
+      },
+      "instagram": {
+        "label": "Instagram",
+        "description": "Trả lời tin nhắn trực tiếp gửi đến tài khoản Instagram của bạn.",
+        "keywords": "meta, dm, insta, tin nhắn trực tiếp"
+      },
+      "telegram": {
+        "label": "Telegram",
+        "description": "Kết nối bot Telegram để trò chuyện với khách hàng.",
+        "keywords": "bot, botfather, tg"
+      },
+      "tiktok": {
+        "label": "TikTok",
+        "description": "Trả lời tin nhắn gửi đến tài khoản TikTok doanh nghiệp của bạn.",
+        "keywords": "tik tok, dm, video"
+      },
+      "sms": {
+        "label": "SMS",
+        "description": "Gửi và nhận tin nhắn văn bản bằng tên người gửi của riêng bạn.",
+        "keywords": "tin nhắn văn bản, sender id, dlt, twilio, di động"
+      },
+      "email": {
+        "label": "Email",
+        "description": "Kết nối hộp thư để gửi và nhận email trong hộp thư đến.",
+        "keywords": "hộp thư, smtp, imap, gmail, outlook, người gửi"
+      },
+      "line": {
+        "label": "LINE",
+        "description": "Kết nối tài khoản LINE Official của bạn.",
+        "keywords": "tài khoản line official, nhắn tin"
+      },
+      "viber": {
+        "label": "Viber",
+        "description": "Kết nối tài khoản Viber doanh nghiệp của bạn.",
+        "keywords": "viber bot, nhắn tin"
+      },
+      "wechat": {
+        "label": "WeChat",
+        "description": "Kết nối tài khoản WeChat Official của bạn.",
+        "keywords": "weixin, tài khoản chính thức"
+      },
+      "wa-links": {
+        "label": "Liên kết WhatsApp",
+        "description": "Tạo liên kết nhấn để chat và mã QR mở cuộc trò chuyện WhatsApp.",
+        "keywords": "nhấn để chat, mã qr, liên kết ngắn, wa.me"
+      },
+      "contact-stages": {
+        "label": "Giai đoạn liên hệ",
+        "description": "Đặt các giai đoạn và trạng thái mà liên hệ sẽ đi qua.",
+        "keywords": "vòng đời, trạng thái, khách tiềm năng, khách hàng, thành công, thất bại, phễu"
+      },
+      "contact-properties": {
+        "label": "Thuộc tính liên hệ",
+        "description": "Thêm các trường bạn muốn giữ trên mọi liên hệ.",
+        "keywords": "trường tùy chỉnh, trường, bắt buộc, danh sách thả xuống, cột, thuộc tính, biến, trường gộp"
+      },
+      "attributes": {
+        "label": "Thuộc tính",
+        "description": "Thẻ và các nhãn khác bạn gắn cho liên hệ.",
+        "keywords": "thẻ, nhãn, nguồn, thuộc tính tùy chỉnh"
+      },
+      "deal-pipelines": {
+        "label": "Pipeline và giai đoạn",
+        "description": "Chỉnh sửa pipeline thương vụ, giai đoạn và lý do thất bại.",
+        "keywords": "thương vụ, giai đoạn bán hàng, bảng, lý do thất bại, phễu"
+      },
+      "tags": {
+        "label": "Thẻ",
+        "description": "Tạo và sắp xếp các thẻ dùng cho liên hệ và cuộc trò chuyện.",
+        "keywords": "nhãn, màu sắc, màu"
+      },
+      "saved-replies": {
+        "label": "Câu trả lời đã lưu",
+        "description": "Soạn các câu trả lời dùng lại để nhóm gửi chỉ bằng một cú nhấp.",
+        "keywords": "câu trả lời mẫu, phím tắt, đoạn mẫu, mẫu"
+      },
+      "business-profile": {
+        "label": "Hồ sơ doanh nghiệp",
+        "description": "Tên công ty, địa chỉ, mã số thuế và logo dùng cho chứng từ.",
+        "keywords": "công ty, địa chỉ, gst, vat, mã số thuế, logo, tiêu đề hóa đơn"
+      },
+      "tax-rates": {
+        "label": "Thuế suất",
+        "description": "Đặt các loại thuế được thêm vào hóa đơn và báo giá.",
+        "keywords": "vat, gst, thuế bán hàng, phần trăm, thuế suất, quốc gia"
+      },
+      "plans": {
+        "label": "Gói dịch vụ",
+        "description": "Xem gói và mức sử dụng, nội dung gói bao gồm và nâng cấp.",
+        "keywords": "đăng ký, nâng cấp, giới hạn, giá, dùng thử, sử dụng, gói và sử dụng, chỉ số đo"
+      },
+      "wallet": {
+        "label": "Ví",
+        "description": "Nạp số dư để thanh toán cho tin nhắn.",
+        "keywords": "tín dụng, số dư, nạp tiền, nạp lại, quỹ"
+      },
+      "billing-orders": {
+        "label": "Lịch sử đơn hàng",
+        "description": "Các giao dịch mua gói và ví của bạn, kèm biên lai.",
+        "keywords": "thanh toán, biên lai, hóa đơn, mua hàng, đơn hàng"
+      },
+      "account": {
+        "label": "Tài khoản",
+        "description": "Tên, email, mật khẩu và ngôn ngữ của bạn.",
+        "keywords": "hồ sơ, tôi, ảnh đại diện, email, mật khẩu, tùy chọn"
+      },
+      "branding": {
+        "label": "Chân trang tin nhắn",
+        "description": "Dòng thêm ở cuối tin nhắn gửi từ tự động hóa, gửi theo lịch và trả lời trong Hộp thư nhóm.",
+        "keywords": "thương hiệu, chân trang, chữ ký, white label, xóa thương hiệu, gửi qua"
+      },
+      "team-members": {
+        "label": "Thành viên nhóm",
+        "description": "Mời người và quản lý thành viên trong không gian làm việc.",
+        "keywords": "người dùng, nhân viên, mời, nhân viên hỗ trợ, nhân sự, chỗ ngồi"
+      },
+      "roles": {
+        "label": "Vai trò và quyền",
+        "description": "Quyết định mỗi vai trò được xem và làm gì.",
+        "keywords": "truy cập, quản trị, quản lý, nhân viên, rbac, quyền"
+      },
+      "teams": {
+        "label": "Đội nhóm",
+        "description": "Nhóm người vào đội để phân công và báo cáo.",
+        "keywords": "nhóm, phòng ban, phân công, định tuyến"
+      },
+      "ai-keys": {
+        "label": "Khóa nhà cung cấp AI",
+        "description": "Thêm khóa nhà cung cấp AI của riêng bạn để chạy các tính năng AI.",
+        "keywords": "openai, gemini, claude, khóa api, mô hình, token"
+      },
+      "ai-training": {
+        "label": "Huấn luyện AI",
+        "description": "Huấn luyện trợ lý chat bằng nội dung của bạn cho luồng và chat trên website.",
+        "keywords": "cơ sở tri thức, trợ lý, tác nhân thông minh, faq, huấn luyện, nguồn, meta business agent, bộ trả lời"
+      },
+      "booking-types": {
+        "label": "Loại đặt lịch",
+        "description": "Các dịch vụ khách hàng có thể đặt, kèm giờ làm việc và quy tắc.",
+        "keywords": "lịch hẹn, dịch vụ, khả dụng, khung giờ, lịch, lịch trình"
+      },
+      "appointment-settings": {
+        "label": "Cài đặt lịch hẹn",
+        "description": "Quy tắc đặt lịch, nhắc nhở và trang đặt lịch công khai.",
+        "keywords": "trang đặt lịch, nhắc nhở, đệm thời gian, thông báo, hủy"
+      },
+      "google-calendar": {
+        "label": "Google Calendar",
+        "description": "Kết nối lịch để các lịch đặt và khung giờ bận luôn đồng bộ.",
+        "keywords": "google, lịch, meet, đồng bộ, bận, lịch hẹn"
+      },
+      "chat-widget": {
+        "label": "Tiện ích chat",
+        "description": "Thêm bong bóng chat vào website, còn gọi là web chat.",
+        "keywords": "web chat, chat website, chat trực tiếp, tiện ích, nhúng, bong bóng"
+      },
+      "auto-reply": {
+        "label": "Trả lời tự động",
+        "description": "Chào khách hàng và trả lời khi bạn vắng mặt.",
+        "keywords": "tin nhắn vắng mặt, chào mừng, lời chào, ngoài văn phòng, từ khóa"
+      },
+      "lead-sources": {
+        "label": "Khách tiềm năng từ mạng xã hội",
+        "description": "Đưa khách tiềm năng từ quảng cáo và trang đích vào qua webhook.",
+        "keywords": "quảng cáo khách tiềm năng, facebook leads, meta, linkedin, tiktok, google ads, webhook, zapier, thu thập, biểu mẫu"
+      },
+      "rest-api": {
+        "label": "REST API",
+        "description": "Khóa và tài liệu để phát triển trên sản phẩm.",
+        "keywords": "khóa api, nhà phát triển, token, tài liệu, openapi"
+      },
+      "webhooks": {
+        "label": "Webhook",
+        "description": "Gửi sự kiện đến hệ thống của bạn ngay khi chúng xảy ra.",
+        "keywords": "callback, sự kiện, http, endpoint, thông báo"
+      },
+      "addons": {
+        "label": "Tiện ích mở rộng",
+        "description": "Bật hoặc tắt các tính năng tùy chọn cho không gian làm việc của bạn.",
+        "keywords": "tiện ích mở rộng, mô-đun, plugin, chợ ứng dụng"
+      },
+      "shopify": {
+        "label": "Shopify",
+        "description": "Kết nối cửa hàng Shopify để đồng bộ sản phẩm, đơn hàng và nhắn tin cho khách hàng.",
+        "keywords": "shop, cửa hàng, thương mại điện tử, sản phẩm, đơn hàng, đồng bộ, giỏ hàng bị bỏ"
+      },
+      "woocommerce": {
+        "label": "WooCommerce",
+        "description": "Kết nối cửa hàng WooCommerce để đồng bộ sản phẩm, đơn hàng và nhắn tin cho khách hàng.",
+        "keywords": "woo, wordpress, shop, cửa hàng, thương mại điện tử, sản phẩm, đơn hàng, đồng bộ"
+      },
+      "i18n-translation": {
+        "label": "Dịch thuật",
+        "description": "Ngôn ngữ và dịch tự động tin nhắn.",
+        "keywords": "ngôn ngữ, địa phương, dịch, tự động dịch"
+      },
+      "account-security": {
+        "label": "Mật khẩu và đăng nhập hai bước",
+        "description": "Đổi mật khẩu và bảo vệ đăng nhập bằng bước xác minh thứ hai.",
+        "keywords": "mfa, 2fa, ứng dụng xác thực, phiên, thiết bị, đăng nhập, login"
+      },
+      "import-export": {
+        "label": "Nhập và xuất",
+        "description": "Nhập dữ liệu từ tệp hoặc xuất một bản sao ra ngoài.",
+        "keywords": "csv, excel, tải xuống, sao lưu, tải lên, di chuyển"
+      },
+      "activity-log": {
+        "label": "Nhật ký kiểm tra",
+        "description": "Ghi lại ai đã thay đổi gì và khi nào.",
+        "keywords": "hoạt động, lịch sử, thay đổi, dấu vết kiểm tra, nhật ký bảo mật"
+      },
+      "privacy": {
+        "label": "Quyền riêng tư và dữ liệu",
+        "description": "Sự đồng ý, lưu giữ dữ liệu và yêu cầu xóa dữ liệu.",
+        "keywords": "gdpr, đồng ý, lưu giữ, xóa dữ liệu, dpa, dữ liệu cá nhân"
+      },
+      "whatsapp-customers": {
+        "label": "Khách hàng đã lưu",
+        "description": "Đặt sẵn tên và địa chỉ giao hàng của khách cho đơn hàng WhatsApp.",
+        "keywords": "khách hàng, địa chỉ, giao hàng, đơn hàng, cửa hàng"
+      },
+      "geta-publishing": {
+        "label": "Xuất bản lên Geta",
+        "description": "Đưa các luồng đã xuất bản lên bảng điều khiển Geta.",
+        "keywords": "geta, xuất bản, bot, bảng điều khiển, đưa lên, chatbot"
+      },
+      "auto-assignment": {
+        "label": "Tự động phân công",
+        "description": "Tự động giao cuộc trò chuyện mới cho đúng nhân viên, theo lượt hoặc theo quy tắc.",
+        "keywords": "định tuyến, luân phiên, phân công, nhân viên, quy tắc hộp thư, phân phối, chủ sở hữu"
+      }
+    }
+  }
+}

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { Modal, cn } from '@crm/ui';
 import { useCommerceProducts } from '../../../api/hooks';
@@ -18,43 +19,29 @@ import {
 } from './helpers';
 import { ExtLink, Intro, PlusIcon, RemoveButton } from './shared';
 
+const NS = 'flb.builder.formsChannels.commerce';
+
 type Provider = 'whatsapp_shop' | 'woocommerce' | 'shopify';
 
 /**
- * WaDesk's copy. Its WooCommerce hint links to `/integrations`; the store connection lives at `/woocommerce` in this app, so
- * the link goes there (intended deviation: the other path is not a page here).
+ * Where each provider's store connection lives. WaDesk's WooCommerce hint links to `/integrations`; the store connection lives at
+ * `/woocommerce` in this app, so the link goes there (intended deviation: the other path is not a page here). The wording of
+ * each provider is in the messages under `providers.<provider>`.
  */
-const PROVIDER_COPY: Record<
-  Provider,
-  { title: string; hintBefore: string; href: string; noStore: string }
-> = {
-  whatsapp_shop: {
-    title: 'WhatsApp catalog products',
-    hintBefore: 'WhatsApp catalog connected via ',
-    href: '/catalog',
-    noStore: 'No catalog linked — go to /catalog',
-  },
-  woocommerce: {
-    title: 'WooCommerce products',
-    hintBefore: 'WooCommerce stores connected via ',
-    href: '/woocommerce',
-    noStore: 'No store connected — go to /woocommerce',
-  },
-  shopify: {
-    title: 'Shopify products',
-    hintBefore: 'Shopify stores connected via ',
-    href: '/shopify',
-    noStore: 'No store connected — go to /shopify',
-  },
+const PROVIDER_HREF: Record<Provider, string> = {
+  whatsapp_shop: '/catalog',
+  woocommerce: '/woocommerce',
+  shopify: '/shopify',
 };
 
+/** The abandoned-cart wait choices: the saved value (minutes) and the message that words it. */
 const WAIT_OPTIONS = [
-  { v: '5', l: '5 minutes' },
-  { v: '15', l: '15 minutes' },
-  { v: '60', l: '1 hour' },
-  { v: '240', l: '4 hours' },
-  { v: '1440', l: '1 day' },
-];
+  { v: '5', key: 'waitMinutes', count: 5 },
+  { v: '15', key: 'waitMinutes', count: 15 },
+  { v: '60', key: 'waitHours', count: 1 },
+  { v: '240', key: 'waitHours', count: 4 },
+  { v: '1440', key: 'waitDays', count: 1 },
+] as const;
 
 const Thumb = ({ src, className }: { src: string | null; className: string }) =>
   src ? (
@@ -83,6 +70,8 @@ function PickerBody({
   onClose: () => void;
   onPicked: (items: ProductItem[]) => void;
 }) {
+  const t = useTranslations(NS);
+  const tc = useTranslations('flb.common');
   const [q, setQ] = useState('');
   const [picked, setPicked] = useState<Record<string, ProductItem>>({});
   const products = useCommerceProducts({ provider, storeId, limit: 100 });
@@ -108,23 +97,23 @@ function PickerBody({
         type="search"
         value={q}
         onChange={(e) => setQ(e.target.value)}
-        placeholder="Search by name or SKU…"
+        placeholder={t('searchPlaceholder')}
         className={cn(controlClass, 'mb-3')}
       />
       <div className="max-h-[50vh] overflow-y-auto">
         {products.isPending ? (
           <div className="py-12 text-center text-[12.5px] italic text-muted-foreground">
-            Loading products…
+            {t('loadingProducts')}
           </div>
         ) : null}
         {products.isError ? (
           <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-[12px] text-red-700">
-            Couldn&apos;t load products: {products.error.message}
+            {t('loadFailed', { message: products.error.message })}
           </div>
         ) : null}
         {products.isSuccess && filtered.length === 0 ? (
           <div className="py-12 text-center text-[12.5px] italic text-muted-foreground">
-            No products found. {q ? 'Try a different search.' : 'Connect or sync the store first.'}
+            {t('noProducts', { searching: q ? 'yes' : 'no' })}
           </div>
         ) : null}
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
@@ -156,13 +145,15 @@ function PickerBody({
                 </div>
                 <div className="mt-1 flex items-center gap-1">
                   {!pr.inStock ? (
-                    <span className="font-mono text-[9.5px] text-red-600">out of stock</span>
+                    <span className="font-mono text-[9.5px] text-red-600">{t('outOfStock')}</span>
                   ) : null}
                   {onNode ? (
-                    <span className="font-mono text-[9.5px] text-muted-foreground">on node</span>
+                    <span className="font-mono text-[9.5px] text-muted-foreground">
+                      {t('onNode')}
+                    </span>
                   ) : null}
                   {isPicked ? (
-                    <span className="font-mono text-[9.5px] text-brand">✓ picked</span>
+                    <span className="font-mono text-[9.5px] text-brand">{t('picked')}</span>
                   ) : null}
                 </div>
               </button>
@@ -171,14 +162,14 @@ function PickerBody({
         </div>
       </div>
       <div className="mt-4 flex items-center justify-between border-t border-border pt-3">
-        <div className="text-[12px] text-muted-foreground">{count} selected</div>
+        <div className="text-[12px] text-muted-foreground">{t('selected', { count })}</div>
         <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={onClose}
             className="rounded-full border border-border bg-background px-3 py-1.5 text-[12px] hover:bg-muted"
           >
-            Cancel
+            {tc('cancel')}
           </button>
           <button
             type="button"
@@ -189,7 +180,7 @@ function PickerBody({
             }}
             className="rounded-full bg-brand px-3.5 py-1.5 text-[12px] font-semibold text-white disabled:cursor-not-allowed disabled:opacity-40"
           >
-            Add {count} to node
+            {t('addToNode', { count })}
           </button>
         </div>
       </div>
@@ -206,63 +197,63 @@ export function ProductPickerModal(props: {
   onClose: () => void;
   onPicked: (items: ProductItem[]) => void;
 }) {
+  const t = useTranslations(NS);
   return (
     <Modal
       open={props.open}
       onClose={props.onClose}
-      eyebrow="Pick products"
-      title={PROVIDER_COPY[props.provider].title}
+      eyebrow={t('pickEyebrow')}
+      title={t(`providers.${props.provider}.title`)}
       size="lg"
-      closeLabel="Close"
+      closeLabel={t('close')}
     >
-      <p className="mb-3 text-[12px] text-muted-foreground">
-        Tap products to add. Tap again to remove. Already-on-node items are skipped.
-      </p>
+      <p className="mb-3 text-[12px] text-muted-foreground">{t('pickerHelp')}</p>
       {props.open ? <PickerBody {...props} /> : null}
     </Modal>
   );
 }
 
 function CommerceFormBody({ p, provider }: { p: FormProps; provider: Provider }) {
+  const t = useTranslations(NS);
+  const th = useTranslations('flb.builder.formsChannels.helpers');
   const unofficial = useUnofficialWhatsapp();
   const [pickerOpen, setPickerOpen] = useState(false);
-  const copy = PROVIDER_COPY[provider];
+  const href = PROVIDER_HREF[provider];
   const stores = p.env.ctx.stores[provider];
   const storeId = String(p.data.storeId ?? '');
   const items = readProductItems(p.data.productItems);
-  const first = p.env.loading ? 'Loading stores…' : stores.length ? '— pick store —' : copy.noStore;
+  const first = p.env.loading
+    ? t('loadingStores')
+    : stores.length
+      ? t('pickStore')
+      : t(`providers.${provider}.noStore`);
   const storeOpts = withSavedOption(
-    [{ v: '', l: first }, ...stores.map((s) => ({ v: s.id, l: storeLabel(s.name, s.currency) }))],
+    [
+      { v: '', l: first },
+      ...stores.map((s) => ({ v: s.id, l: storeLabel(s.name, s.currency, th) })),
+    ],
     storeId,
-    (id) => `Store ${id.slice(0, 8)} (not in workspace)`,
+    (id) => t('savedStore', { id: id.slice(0, 8) }),
   );
   return (
     <>
       <Intro
-        sub={
-          <>
-            Ports: <span className="font-mono text-brand">purchased</span> fires when the order
-            webhook lands; <span className="font-mono text-[#E87A5D]">abandoned</span> fires after
-            the wait window with no purchase.
-          </>
-        }
+        sub={t.rich('portsHelp', {
+          purchased: (c) => <span className="font-mono text-brand">{c}</span>,
+          abandoned: (c) => <span className="font-mono text-[#E87A5D]">{c}</span>,
+        })}
       >
-        Pick a store, then pick the products this node will send. On a WABA conversation we send a
-        native catalog message
-        {unofficial ? '; on Baileys we send each product as a card + a checkout link' : ''}.
+        {t('intro', { unofficial: unofficial ? 'yes' : 'no' })}
       </Intro>
       <Field
-        label="Store"
-        hint={
-          <>
-            {copy.hintBefore}
-            <ExtLink href={copy.href}>{copy.href}</ExtLink>.
-          </>
-        }
+        label={t('store')}
+        hint={t.rich(`providers.${provider}.hint`, {
+          link: (c) => <ExtLink href={href}>{c}</ExtLink>,
+        })}
       >
         <SelectInput value={storeId} onChange={(v) => p.set('storeId', v)} options={storeOpts} />
       </Field>
-      <Field label="Products" hint={`Max ${MAX_PRODUCT_ITEMS} products per node. Tap × to remove.`}>
+      <Field label={t('products')} hint={t('productsHint', { max: MAX_PRODUCT_ITEMS })}>
         <div className="space-y-1.5">
           {items.map((it, i) => (
             <div
@@ -289,9 +280,7 @@ function CommerceFormBody({ p, provider }: { p: FormProps; provider: Provider })
             </div>
           ))}
           {items.length === 0 ? (
-            <div className="text-[11.5px] italic text-muted-foreground">
-              No products yet. Click below to add some.
-            </div>
+            <div className="text-[11.5px] italic text-muted-foreground">{t('noItems')}</div>
           ) : null}
           <button
             type="button"
@@ -300,45 +289,40 @@ function CommerceFormBody({ p, provider }: { p: FormProps; provider: Provider })
             className="mt-1 inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-dashed border-brand/50 bg-muted px-3 py-2 text-[12px] font-semibold text-brand hover:bg-brand/10 disabled:cursor-not-allowed disabled:opacity-40"
           >
             <PlusIcon />
-            {items.length === 0 ? 'Pick products' : 'Pick more products'}
+            {items.length === 0 ? t('pickProducts') : t('pickMore')}
           </button>
         </div>
       </Field>
-      <Field label="Header (optional)">
+      <Field label={t('header')}>
         <TextInput
           value={p.data.headerText}
           onChange={(v) => p.set('headerText', v)}
-          placeholder="Our spring picks"
+          placeholder={t('headerPlaceholder')}
         />
       </Field>
-      <Field label="Body">
+      <Field label={t('body')}>
         <TextArea
           rows={3}
           value={p.data.bodyText}
           onChange={(v) => p.set('bodyText', v)}
-          placeholder="Tap a product to see details"
+          placeholder={t('bodyPlaceholder')}
         />
       </Field>
-      <Field label="Footer (optional)">
+      <Field label={t('footer')}>
         <TextInput
           value={p.data.footerText}
           onChange={(v) => p.set('footerText', v)}
-          placeholder="Free shipping over $50"
+          placeholder={t('footerPlaceholder')}
         />
       </Field>
       <Field
-        label="Abandoned-cart wait"
-        hint={
-          <>
-            If no purchase within this window, the <b>abandoned</b> port fires so you can route to a
-            drip / follow-up.
-          </>
-        }
+        label={t('abandonedWait')}
+        hint={t.rich('abandonedWaitHint', { b: (c) => <b>{c}</b> })}
       >
         <SelectInput
           value={String(p.data.abandonedWaitMinutes || 5)}
           onChange={(v) => p.set('abandonedWaitMinutes', parseInt(v, 10))}
-          options={WAIT_OPTIONS}
+          options={WAIT_OPTIONS.map((o) => ({ v: o.v, l: t(o.key, { count: o.count }) }))}
         />
       </Field>
       <ProductPickerModal

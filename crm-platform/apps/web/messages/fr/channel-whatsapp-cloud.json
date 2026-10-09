@@ -1,0 +1,513 @@
+{
+  "channel-whatsapp-cloud": {
+    "common": {
+      "dismiss": "Ignorer",
+      "copy": "Copier",
+      "copied": "Copié",
+      "copyFailed": "Impossible de copier. Sélectionnez le texte et copiez-le à la main."
+    },
+    "screen": {
+      "title": "WhatsApp",
+      "intro": "Les numéros WhatsApp Business connectés à cet espace de travail. Les clients qui écrivent à un numéro apparaissent dans votre boîte de réception, et vos réponses partent de ce numéro.",
+      "add": "Ajouter un numéro WhatsApp",
+      "readOnly": "Vous pouvez voir les numéros connectés. Seules les personnes qui gèrent les canaux peuvent en ajouter, modifier ou supprimer un.",
+      "helpNote": "Un guide pas à pas pour connecter un numéro est conservé dans le dépôt :",
+      "providerLine": "Vos numéros sont servis via le fournisseur WhatsApp de la plateforme.",
+      "loading": "Chargement de vos numéros WhatsApp",
+      "retry": "Réessayer",
+      "listLabel": "Numéros WhatsApp connectés",
+      "empty": {
+        "title": "Aucun numéro WhatsApp connecté pour l’instant",
+        "message": "Connectez un numéro et vos clients pourront commencer à discuter avec vous dans la boîte de réception. Cela se fait en trois courtes étapes.",
+        "messageReadOnly": "Aucun numéro WhatsApp n’est encore connecté. Demandez à une personne qui gère les canaux d’en ajouter un."
+      }
+    },
+    "state": {
+      "connected": "Connecté",
+      "needs_reconnect": "Reconnexion nécessaire",
+      "error": "Erreur",
+      "not_connected": "Non connecté",
+      "help": {
+        "needs_reconnect": "WhatsApp n’accepte plus les identifiants de ce numéro : les messages ne peuvent être ni envoyés ni reçus. Reconnectez-le pour continuer.",
+        "error": "Un problème affecte ce numéro. Lancez une vérification de santé pour en connaître la cause.",
+        "not_connected": "Ce numéro est désactivé ou n’a pas encore passé sa première vérification. Aucun message n’est envoyé par ce numéro."
+      }
+    },
+    "quality": {
+      "green": "Élevée",
+      "yellow": "Moyenne",
+      "red": "Faible",
+      "unrated": "Non évaluée"
+    },
+    "tier": {
+      "limited": "{label} clients par jour",
+      "unlimited": "Illimitée"
+    },
+    "card": {
+      "verifiedName": "Nom vérifié : {name}",
+      "phoneId": "ID du numéro de téléphone",
+      "wabaId": "ID du compte professionnel",
+      "quality": "Note de qualité",
+      "tier": "Limite de messages",
+      "lastCheck": "Dernière vérification de santé",
+      "neverChecked": "Jamais vérifié",
+      "lastActivity": "Dernière activité",
+      "noActivity": "Aucune pour l’instant",
+      "token": "Jeton d’accès",
+      "tokenEnds": "se termine par {hint}",
+      "none": "Non disponible",
+      "providerChanged": {
+        "title": "Le fournisseur de ce numéro a changé",
+        "message": "La plateforme a déplacé ce numéro vers un autre fournisseur WhatsApp. Vous n’avez rien à faire, sauf lancer une vérification de santé pour confirmer qu’il fonctionne."
+      },
+      "actions": {
+        "check": "Vérifier la santé",
+        "checking": "Vérification en cours",
+        "edit": "Modifier les identifiants",
+        "reconnect": "Reconnecter",
+        "editDetails": "Modifier les détails",
+        "more": "Plus",
+        "moreLabel": "Plus d’actions pour {name}",
+        "subscribe": "Réparer les messages entrants",
+        "rotate": "Nouveau jeton de vérification",
+        "switchOff": "Désactiver",
+        "switchOn": "Activer",
+        "remove": "Supprimer"
+      }
+    },
+    "health": {
+      "issuesTitle": "Résultat de la vérification",
+      "severity": {
+        "critical": "Problème",
+        "warning": "Avertissement",
+        "info": "Remarque"
+      },
+      "phoneStatus": "Statut du numéro",
+      "webhook": "Messages entrants",
+      "subscribed": "Abonné",
+      "notSubscribed": "Non abonné",
+      "token": "Jeton d’accès",
+      "tokenValid": "Valide",
+      "tokenInvalid": "Non valide",
+      "tokenExpires": "Expiration du jeton",
+      "issues": {
+        "TOKEN_INVALID": {
+          "title": "Le jeton d’accès n’est plus valide",
+          "detail": "Remplacez-le par un nouveau jeton permanent depuis les paramètres de votre entreprise Meta."
+        },
+        "TOKEN_EXPIRED": {
+          "title": "Le jeton d’accès a expiré",
+          "detail": "Remplacez-le par un jeton permanent d’utilisateur système pour qu’il n’expire jamais."
+        },
+        "TOKEN_EXPIRING": {
+          "title": "Le jeton d’accès expire dans moins de 7 jours",
+          "detail": "Utilisez un jeton permanent d’utilisateur système pour que l’envoi ne s’interrompe pas."
+        },
+        "TOKEN_SCOPE_MISSING": {
+          "title": "Le jeton ne permet pas d’envoyer des messages",
+          "detail": "Générez un jeton qui inclut l’autorisation whatsapp_business_messaging."
+        },
+        "TOKEN_MANAGEMENT_SCOPE_MISSING": {
+          "title": "Le jeton ne permet pas de gérer le compte",
+          "detail": "Ajoutez l’autorisation whatsapp_business_management pour pouvoir configurer les webhooks et les modèles."
+        },
+        "NO_WEBHOOK_SUBSCRIPTION": {
+          "title": "Les messages entrants n’arrivent pas dans la boîte de réception",
+          "detail": "L’application n’est pas abonnée à ce compte. Utilisez Réparer les messages entrants dans le menu de la carte."
+        },
+        "QUALITY_RED": {
+          "title": "La qualité des messages est faible",
+          "detail": "WhatsApp peut limiter le nombre de clients que vous pouvez contacter. Envoyez moins de messages non sollicités."
+        },
+        "QUALITY_YELLOW": {
+          "title": "La qualité des messages est moyenne",
+          "detail": "Surveillez-la : les clients qui bloquent ou signalent le numéro la font baisser."
+        },
+        "NUMBER_NOT_VERIFIED": {
+          "title": "Le numéro n’est pas vérifié",
+          "detail": "Terminez la vérification de ce numéro dans WhatsApp Manager."
+        },
+        "ON_PREMISE_NUMBER": {
+          "title": "Le numéro est toujours sur l’ancienne API WhatsApp",
+          "detail": "Enregistrez-le sur l’API Cloud dans WhatsApp Manager, puis reconnectez-le."
+        },
+        "NO_ACCOUNT_ID": {
+          "title": "Aucun ID de compte professionnel n’est enregistré",
+          "detail": "Ajoutez-le dans Modifier les identifiants pour que le compte et son webhook puissent être vérifiés."
+        }
+      }
+    },
+    "errors": {
+      "tokenInvalid": "WhatsApp n’accepte pas le jeton d’accès. Il a peut-être expiré, été révoqué ou été copié de façon incomplète.",
+      "permissionMissing": "Il manque au jeton d’accès une autorisation nécessaire, ou il ne peut pas accéder à ce numéro.",
+      "idNotFound": "WhatsApp ne connaît pas cet ID de numéro de téléphone, ou le jeton ne peut pas le voir. Vérifiez les deux ID.",
+      "appSecretInvalid": "La clé secrète ne correspond pas à l’application. Copiez-la à nouveau depuis les paramètres de l’application.",
+      "accountRestricted": "Le compte WhatsApp est restreint ou verrouillé. Consultez son statut dans WhatsApp Manager.",
+      "numberNotRegistered": "Le numéro n’est pas encore enregistré pour l’API Cloud WhatsApp. Enregistrez-le d’abord dans WhatsApp Manager.",
+      "rateLimited": "WhatsApp limite les requêtes en ce moment. Patientez quelques minutes et réessayez.",
+      "providerUnavailable": "WhatsApp est injoignable ou a rencontré un problème temporaire. Réessayez dans un instant.",
+      "healthFailed": "Le numéro n’a pas pu être activé car la vérification auprès de WhatsApp a échoué.",
+      "alreadyConnected": "Ce numéro WhatsApp est déjà connecté dans cet espace de travail.",
+      "kindUnavailable": "Les connexions WhatsApp ne sont pas encore activées pour cet espace de travail. Contactez l’administrateur de votre plateforme.",
+      "inUse": "Ce numéro a encore des conversations ; il ne peut donc pas être supprimé.",
+      "conflict": "Quelqu’un d’autre a modifié ce numéro avant vous. Il a été rechargé ; vérifiez-le et réessayez.",
+      "forbidden": "Vous n’avez pas l’autorisation de gérer les canaux.",
+      "validation": "Certaines des informations saisies ne sont pas valides. Vérifiez les champs en surbrillance.",
+      "notFound": "Ce numéro n’existe plus. La liste a été actualisée.",
+      "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+      "generic": "Un problème est survenu. Réessayez.",
+      "genericWithId": "Un problème est survenu. Réessayez. Référence : {id}",
+      "detail": "Détails : {detail}",
+      "fix": {
+        "tokenInvalid": "Créez un jeton permanent d’utilisateur système dans les paramètres de votre entreprise Meta et collez-le dans Modifier les identifiants.",
+        "permissionMissing": "Générez le jeton avec whatsapp_business_messaging et whatsapp_business_management, et assurez-vous que l’utilisateur système a accès au compte.",
+        "idNotFound": "Les deux ID se trouvent sur la page Configuration de l’API de votre application Meta, sous WhatsApp. Ce sont deux numéros différents.",
+        "appSecretInvalid": "Elle se trouve sur la page Général des paramètres de votre application Meta.",
+        "accountRestricted": "Ouvrez WhatsApp Manager, sélectionnez le compte et lisez l’avis en haut de la page.",
+        "numberNotRegistered": "Dans WhatsApp Manager, ouvrez le numéro et terminez son enregistrement."
+      }
+    },
+    "fieldErrors": {
+      "required": "Ce champ est obligatoire.",
+      "digits": "Utilisez uniquement des chiffres, entre 5 et 32.",
+      "tokenShort": "Cela semble trop court pour un jeton d’accès.",
+      "tokenLong": "C’est trop long pour un jeton d’accès.",
+      "secretShort": "La clé secrète de l’application doit comporter au moins 8 caractères.",
+      "secretLong": "C’est trop long pour une clé secrète d’application.",
+      "nameLong": "Utilisez 120 caractères maximum.",
+      "addressLong": "Utilisez 40 caractères maximum.",
+      "sameAsPhoneId": "Identique à l’ID du numéro de téléphone. Ce sont deux ID différents."
+    },
+    "credentials": {
+      "name": {
+        "label": "Nom",
+        "hint": "Le nom que vous et votre équipe donnez à ce numéro.",
+        "placeholder": "Ligne d’assistance"
+      },
+      "displayAddress": {
+        "label": "Numéro de téléphone",
+        "hint": "Facultatif. Affiché dans la liste pour distinguer facilement les numéros.",
+        "placeholder": "+91 98765 43210"
+      },
+      "phoneNumberId": {
+        "label": "ID du numéro de téléphone",
+        "hint": "Il se trouve dans WhatsApp Manager, sous Configuration de l’API.",
+        "placeholder": "533524166787123",
+        "current": "Actuellement {value}. Laissez vide pour le conserver."
+      },
+      "businessAccountId": {
+        "label": "ID du compte WhatsApp Business",
+        "hint": "À côté de l’ID du numéro de téléphone, sur la même page.",
+        "placeholder": "102938475647382"
+      },
+      "accessToken": {
+        "label": "Jeton d’accès",
+        "hint": "Un jeton permanent d’un utilisateur système. Il est stocké chiffré et n’est plus jamais affiché.",
+        "placeholder": "EAA...",
+        "current": "Le jeton actuel se termine par {hint}. Laissez vide pour le conserver.",
+        "unusual": "Les jetons d’accès Meta commencent généralement par EAA. Vérifiez que vous avez bien copié le jeton et rien d’autre."
+      },
+      "appSecret": {
+        "label": "Clé secrète de l’application",
+        "hint": "Depuis la page Général des paramètres de votre application Meta. Elle signe les messages que Meta nous envoie.",
+        "placeholder": "0123456789abcdef...",
+        "current": "La clé secrète actuelle se termine par {hint}. Laissez vide pour la conserver."
+      },
+      "keepPlaceholder": "Inchangé",
+      "show": "Afficher",
+      "hide": "Masquer",
+      "privacy": "Les secrets sont stockés chiffrés et ne sont plus jamais affichés. Les espaces, sauts de ligne et guillemets collés avec eux sont supprimés automatiquement.",
+      "privacyPlatform": "Seules ces informations sont nécessaires. La plateforme s’occupe des identifiants."
+    },
+    "wizard": {
+      "close": "Fermer",
+      "cancel": "Annuler",
+      "back": "Retour",
+      "stepsLabel": "Étapes",
+      "stepOf": "Étape {current} sur {total}",
+      "steps": {
+        "before": "Avant de commencer",
+        "credentials": "Votre numéro",
+        "webhook": "Connecter votre webhook",
+        "webhookAutomatic": "Tester la connexion"
+      },
+      "before": {
+        "intro": {
+          "channel_token": "Pour connecter un numéro, vous avez d’abord besoin de quelques éléments côté Meta. Configurez-les une seule fois, puis revenez ici. Cochez chaque élément au fur et à mesure ; les cases ne sont là que pour vous.",
+          "platform_token": "Deux éléments sont nécessaires pour ajouter un numéro : l’ID de son compte WhatsApp Business et l’ID du numéro de téléphone. Cochez chaque élément au fur et à mesure ; les cases ne sont là que pour vous."
+        },
+        "items": {
+          "channel_token": {
+            "app": {
+              "title": "Une application Meta avec WhatsApp ajouté",
+              "detail": "Créez une application de type Business sur developers.facebook.com et ajoutez-y le produit WhatsApp. C’est cette application qui envoie et reçoit vos messages."
+            },
+            "number": {
+              "title": "Un compte WhatsApp Business et un numéro",
+              "detail": "Le numéro ne doit pas être utilisé dans l’application WhatsApp classique. Pour essayer d’abord, utilisez le numéro de test gratuit que Meta fournit à chaque nouvelle application."
+            },
+            "token": {
+              "title": "Un jeton d’accès permanent",
+              "detail": "Dans les paramètres Meta Business, ajoutez un utilisateur système, donnez-lui accès à votre application et à votre compte WhatsApp, et générez un jeton avec whatsapp_business_messaging et whatsapp_business_management. Choisissez « n’expire jamais » : un jeton de 24 heures cesse de fonctionner demain."
+            },
+            "values": {
+              "title": "Trois valeurs à copier",
+              "detail": "L’ID du numéro de téléphone et l’ID du compte professionnel (WhatsApp, Configuration de l’API) ainsi que la clé secrète de l’application (Paramètres de l’application, Général)."
+            },
+            "webhook": {
+              "title": "Accès aux paramètres de webhook de votre application",
+              "detail": "À la dernière étape, nous affichons une adresse et un jeton de vérification. Vous les collez dans WhatsApp, Configuration, dans votre application Meta."
+            }
+          },
+          "platform_token": {
+            "account": {
+              "title": "Un compte WhatsApp Business",
+              "detail": "Créez-en un dans Meta Business Suite si vous n’en avez pas. Il contient vos numéros et vos modèles de messages."
+            },
+            "number": {
+              "title": "Un numéro libre pour WhatsApp Business",
+              "detail": "Le numéro ne doit pas être utilisé dans l’application WhatsApp classique. Si c’est le cas, retirez-le d’abord de cette application."
+            },
+            "ids": {
+              "title": "Deux ID à copier",
+              "detail": "L’ID du numéro de téléphone et l’ID du compte professionnel, tous deux sur la page Configuration de l’API de WhatsApp Manager."
+            }
+          }
+        },
+        "providerLine": "Vos numéros sont servis via le fournisseur WhatsApp de la plateforme. Vous n’avez pas besoin de jeton d’accès.",
+        "runbook": "Plus de détails, avec les menus exacts à ouvrir, dans le guide du dépôt :",
+        "continue": "Continuer"
+      },
+      "embedded": {
+        "button": "Se connecter avec Facebook (inscription intégrée)",
+        "soon": "Bientôt disponible",
+        "help": "Bientôt, vous pourrez vous connecter avec Facebook et choisir votre numéro sans copier d’ID. D’ici là, saisissez les deux ID ci-dessous."
+      },
+      "credentials": {
+        "intro": {
+          "channel_token": "Saisissez les détails du numéro. Collez directement depuis Meta : les espaces et sauts de ligne sont nettoyés pour vous.",
+          "platform_token": "Saisissez les deux ID du numéro que vous souhaitez connecter."
+        },
+        "save": "Enregistrer et continuer",
+        "saving": "Enregistrement"
+      },
+      "webhook": {
+        "done": "Terminé",
+        "finishLater": "Terminer plus tard",
+        "test": {
+          "button": "Tester la connexion",
+          "running": "Test en cours",
+          "again": "Tester à nouveau",
+          "passedToast": "Test de connexion réussi."
+        }
+      }
+    },
+    "webhook": {
+      "intro": "Dernière étape : indiquez à WhatsApp où envoyer vos messages. Le numéro est déjà enregistré, mais il reste non connecté tant que ce n’est pas fait et que le test ci-dessous n’a pas réussi.",
+      "callbackUrl": "URL de rappel",
+      "verifyToken": "Jeton de vérification",
+      "onceWarning": "Ce jeton n’est affiché que maintenant. Copiez-le avant de fermer cette fenêtre. Si vous le perdez, vous pouvez en émettre un nouveau depuis le menu du numéro.",
+      "placeholderWarning": "Cette adresse est un espace réservé. Définissez NEXT_PUBLIC_API_PUBLIC_URL sur l’adresse publique de l’API et rechargez la page, ou copiez l’adresse fournie par l’administrateur de votre plateforme.",
+      "localWarning": "Cette adresse pointe vers une machine de votre propre réseau. WhatsApp ne peut pas l’atteindre. Utilisez l’adresse publique de l’API.",
+      "httpWarning": "WhatsApp n’accepte que les adresses commençant par https.",
+      "tokenMissing": "Aucun jeton de vérification n’a été renvoyé. Émettez-en un nouveau depuis le menu du numéro.",
+      "steps": {
+        "open": "Ouvrez votre application dans Meta for Developers, puis WhatsApp, puis Configuration.",
+        "paste": "Sous Webhook, choisissez Modifier, collez l’URL de rappel et le jeton de vérification, puis choisissez Vérifier et enregistrer.",
+        "subscribe": "Sous Champs du webhook, abonnez-vous à messages.",
+        "test": "Revenez ici et choisissez Tester la connexion."
+      },
+      "testTitle": "Tester la connexion",
+      "automatic": {
+        "title": "La remise des messages est configurée pour vous",
+        "message": "La plateforme dirige ce numéro vers votre boîte de réception automatiquement. Il n’y a ni adresse ni jeton à coller. Lancez le test pour confirmer que le numéro fonctionne."
+      },
+      "test": {
+        "hint": "Le test interroge WhatsApp sur le numéro et affiche sa réponse.",
+        "running": "Interrogation de WhatsApp sur ce numéro",
+        "okTitle": "Le numéro est connecté",
+        "okMessage": "WhatsApp a répondu et le numéro peut être utilisé.",
+        "verifiedName": "Nom vérifié",
+        "quality": "Note de qualité",
+        "tier": "Limite de messages",
+        "unknown": "Non communiquée"
+      }
+    },
+    "edit": {
+      "close": "Fermer",
+      "cancel": "Annuler",
+      "save": "Enregistrer et vérifier",
+      "saving": "Enregistrement",
+      "nothing": "Rien n’a été modifié. Saisissez une nouvelle valeur pour l’enregistrer.",
+      "title": {
+        "channel_token": "Modifier les identifiants",
+        "platform_token": "Modifier les détails"
+      },
+      "intro": {
+        "channel_token": "Remplacez un jeton renouvelé ou une clé secrète renouvelée. Les champs laissés vides conservent la valeur stockée. Après l’enregistrement, le numéro est vérifié puis réactivé.",
+        "platform_token": "Modifiez le nom ou les ID de ce numéro. Les champs laissés vides conservent la valeur stockée. Après l’enregistrement, le numéro est vérifié."
+      }
+    },
+    "rotate": {
+      "title": "Émettre un nouveau jeton de vérification ?",
+      "message": "Le jeton de vérification actuel de {name} cesse de fonctionner immédiatement. Vous devrez coller le nouveau dans votre application Meta et vérifier à nouveau le webhook.",
+      "confirm": "Émettre un nouveau jeton",
+      "cancel": "Annuler",
+      "close": "Fermer",
+      "done": "Terminé",
+      "resultTitle": "Votre nouveau jeton de vérification",
+      "resultIntro": "Collez les deux valeurs dans WhatsApp, Configuration, dans votre application Meta, puis choisissez Vérifier et enregistrer."
+    },
+    "remove": {
+      "title": "Supprimer ce numéro ?",
+      "message": "{name} sera retiré de cet espace de travail. Les messages ne pourront plus être envoyés ni reçus par ce numéro.",
+      "note": "Cette action est irréversible. Vous pourrez rajouter le numéro plus tard.",
+      "confirm": "Supprimer le numéro",
+      "cancel": "Annuler",
+      "inUse": {
+        "title": "Ce numéro a des conversations",
+        "message": "{name} a encore des conversations ; il ne peut donc pas être supprimé. Elles se retrouveraient sans numéro.",
+        "hint": "Vous pouvez plutôt désactiver le numéro. Toutes les conversations sont conservées, rien n’est envoyé par ce numéro, et vous pourrez le réactiver plus tard.",
+        "switchOff": "Désactiver à la place"
+      }
+    },
+    "switchOff": {
+      "title": "Désactiver ce numéro ?",
+      "message": "Rien n’est envoyé ni reçu par {name} tant qu’il est désactivé. Les conversations sont conservées et vous pouvez le réactiver.",
+      "confirm": "Désactiver",
+      "cancel": "Annuler"
+    },
+    "toasts": {
+      "checkPassed": "{name} a réussi la vérification de santé.",
+      "saved": "Modifications de {name} enregistrées.",
+      "reconnected": "{name} est de nouveau connecté.",
+      "switchedOn": "{name} est activé.",
+      "switchedOff": "{name} est désactivé.",
+      "removed": "{name} a été supprimé.",
+      "subscribed": "{name} abonné aux messages entrants."
+    },
+    "inbox": {
+      "templatesSoon": "Les modèles arrivent bientôt ; vous pourrez ainsi recontacter ce client depuis ici.",
+      "reconnect": {
+        "needs_reconnect": {
+          "title": "Ce numéro WhatsApp doit être reconnecté.",
+          "message": "WhatsApp n’accepte plus les identifiants de {name} ; les réponses ne peuvent donc pas être envoyées. Les notes internes fonctionnent toujours."
+        },
+        "error": {
+          "title": "Ce numéro WhatsApp rencontre un problème de connexion.",
+          "message": "{name} est en erreur ; les réponses ne peuvent donc pas être envoyées. Les notes internes fonctionnent toujours."
+        },
+        "not_connected": {
+          "title": "Ce numéro WhatsApp est désactivé.",
+          "message": "{name} n’est pas connecté ; les réponses ne peuvent donc pas être envoyées. Les notes internes fonctionnent toujours."
+        },
+        "open": "Ouvrir les paramètres WhatsApp",
+        "askAdmin": "Demandez à une personne qui gère les canaux de le reconnecter."
+      },
+      "failure": {
+        "openSettings": "Ouvrir les paramètres WhatsApp",
+        "windowClosed": {
+          "title": "La fenêtre de réponse de 24 heures est fermée.",
+          "hint": "WhatsApp n’autorise les réponses libres que dans les 24 heures suivant le dernier message du client. Attendez qu’il écrive à nouveau."
+        },
+        "undeliverable": {
+          "title": "WhatsApp n’a pas pu remettre ce message.",
+          "hint": "Le numéro n’est peut-être pas sur WhatsApp, ou le client n’a pas accepté les dernières conditions."
+        },
+        "recipientNotAllowed": {
+          "title": "Ce numéro ne peut pas recevoir de messages d’ici.",
+          "hint": "C’est le numéro de l’expéditeur lui-même, ou il ne figure pas dans la liste des destinataires de test."
+        },
+        "rateLimit": {
+          "title": "WhatsApp limite votre vitesse d’envoi.",
+          "hint": "Patientez quelques minutes, puis utilisez Réessayer."
+        },
+        "spamLimited": {
+          "title": "L’envoi est limité car trop de messages ont été signalés comme spam.",
+          "hint": "Patientez un moment avant d’envoyer d’autres messages, et ne contactez que les clients qui s’y attendent."
+        },
+        "engagementBlocked": {
+          "title": "WhatsApp a choisi de ne pas remettre ce message.",
+          "hint": "Il le fait pour protéger les clients de messages qu’ils ne souhaitent peut-être pas recevoir."
+        },
+        "tokenExpired": {
+          "title": "WhatsApp a rejeté le jeton d’accès du numéro.",
+          "hint": "Il a expiré ou a perdu une autorisation. Reconnectez le numéro, puis utilisez Réessayer."
+        },
+        "accountRestricted": {
+          "title": "Le compte WhatsApp rencontre un problème.",
+          "hint": "Il est restreint, verrouillé ou non enregistré. Vérifiez-le dans WhatsApp Manager."
+        },
+        "mediaRejected": {
+          "title": "WhatsApp n’a pas pu utiliser ce fichier ou ce type de message.",
+          "hint": "Essayez un autre fichier, ou envoyez l’information sous forme de texte."
+        },
+        "templateProblem": {
+          "title": "Le modèle n’a pas pu être envoyé.",
+          "hint": "Il est introuvable, en pause ou rejeté, ou ses variables ne correspondent pas."
+        },
+        "providerDown": {
+          "title": "WhatsApp a rencontré un problème temporaire.",
+          "hint": "Utilisez Réessayer dans un instant."
+        },
+        "sendPaused": {
+          "title": "L’envoi est suspendu pour toute la plateforme.",
+          "hint": "Utilisez Réessayer une fois l’envoi rétabli."
+        },
+        "channelOff": {
+          "title": "Ce numéro n’est pas connecté.",
+          "hint": "Reconnectez-le, puis utilisez Réessayer."
+        },
+        "planLimit": {
+          "title": "La limite mensuelle de messages de votre forfait est atteinte.",
+          "hint": "Passez à un forfait supérieur ou attendez la période suivante, puis utilisez Réessayer."
+        },
+        "groupSendUnavailable": {
+          "title": "L’envoi vers les groupes WhatsApp n’est pas encore disponible.",
+          "hint": "Répondez depuis l’application WhatsApp Business."
+        }
+      },
+      "media": {
+        "downloading": "Téléchargement du fichier",
+        "failed": "Impossible de télécharger ce fichier",
+        "retry": "Réessayer",
+        "retrying": "Nouvelle tentative",
+        "reason": {
+          "expired": "WhatsApp ne l’a plus. Les fichiers sont conservés environ 30 jours.",
+          "auth": "WhatsApp a refusé le jeton d’accès du numéro. Reconnectez le numéro, puis réessayez.",
+          "tooLarge": "Le fichier dépasse la taille autorisée par ce canal.",
+          "rejected": "Le fichier a été refusé car son type n’est pas sûr.",
+          "download": "WhatsApp n’a pas répondu à temps. Réessayer fonctionne généralement."
+        }
+      },
+      "interactive": {
+        "button": "A choisi un bouton",
+        "list": "A choisi dans la liste"
+      },
+      "contact": {
+        "unnamed": "Contact partagé",
+        "shared": "Fiche contact"
+      },
+      "attach": {
+        "limit": {
+          "image": "Images jusqu’à {mb} Mo",
+          "video": "Vidéos jusqu’à {mb} Mo",
+          "audio": "Audio jusqu’à {mb} Mo",
+          "document": "Documents jusqu’à {mb} Mo"
+        },
+        "kind": {
+          "image": "Images",
+          "video": "Vidéos",
+          "audio": "Fichiers audio",
+          "document": "Documents"
+        },
+        "errors": {
+          "tooLarge": "{kind} : {mb} Mo maximum sur WhatsApp. Choisissez un fichier plus petit.",
+          "kindNotAllowed": "Ce numéro ne peut pas envoyer ce type de contenu : {kind}.",
+          "unsupportedType": "WhatsApp n’accepte pas ce type de fichier. Il accepte les images JPEG et PNG, les vidéos MP4 et 3GP, l’audio AAC, MP3, AMR, M4A et OGG, ainsi que les documents PDF, Office et texte.",
+          "empty": "Ce fichier est vide."
+        }
+      }
+    }
+  }
+}

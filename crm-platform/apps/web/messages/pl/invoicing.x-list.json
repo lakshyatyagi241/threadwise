@@ -1,0 +1,268 @@
+{
+  "invoicing": {
+    "method": {
+      "bank": "Przelew bankowy",
+      "manual": "Ręcznie",
+      "wa_pay": "WhatsApp Pay",
+      "storefront": "Sklep internetowy"
+    },
+    "toolbar": {
+      "currency": "Waluta",
+      "currencyPlaceholder": "USD",
+      "issued": "Wystawiona",
+      "issuedWindow": "Zakres dat wystawienia",
+      "due": "Termin",
+      "dueWindow": "Zakres terminów płatności",
+      "dueFrom": "Termin od",
+      "dueTo": "Termin do",
+      "docType": "Typ dokumentu",
+      "anyDocType": "Wszystkie typy",
+      "mine": "Moje faktury",
+      "docTypes": {
+        "tax_invoice": "Faktura VAT",
+        "proforma": "Proforma",
+        "receipt": "Paragon"
+      }
+    },
+    "strip": {
+      "label": "Należności",
+      "outstanding": "Do zapłaty ({currency})",
+      "overdue": "W tym przeterminowane"
+    },
+    "row": {
+      "creditNote": "Utwórz notę kredytową",
+      "downloadPdf": "Pobierz PDF"
+    },
+    "bulk": {
+      "sendLink": "Oznacz link jako wysłany",
+      "someSkipped": "{count, plural, one {Pominięto # wybraną fakturę, ponieważ nie obsługuje tej akcji.} few {Pominięto # wybrane faktury, ponieważ nie obsługują tej akcji.} many {Pominięto # wybranych faktur, ponieważ nie obsługują tej akcji.} other {Pominięto # wybrane faktury, ponieważ nie obsługują tej akcji.}}",
+      "done": {
+        "send": "{count, plural, one {Oznaczono # fakturę jako wysłaną.} few {Oznaczono # faktury jako wysłane.} many {Oznaczono # faktur jako wysłane.} other {Oznaczono # faktury jako wysłane.}}"
+      },
+      "confirm": {
+        "delete": {
+          "message": "{count, plural, one {# szkic zostanie trwale usunięty. Faktury, które nie są szkicami, pozostaną bez zmian.} few {# szkice zostaną trwale usunięte. Faktury, które nie są szkicami, pozostaną bez zmian.} many {# szkiców zostanie trwale usuniętych. Faktury, które nie są szkicami, pozostaną bez zmian.} other {# szkica zostanie trwale usunięte. Faktury, które nie są szkicami, pozostaną bez zmian.}}"
+        }
+      },
+      "voidDialog": {
+        "title": "Anuluj wybrane faktury",
+        "close": "Zamknij",
+        "keep": "Zachowaj faktury",
+        "confirm": "{count, plural, one {Anuluj # fakturę} few {Anuluj # faktury} many {Anuluj # faktur} other {Anuluj # faktury}}",
+        "warning": "{count, plural, one {# faktura zostanie anulowana. Zachowa swój numer, ale nie można jej już opłacić ani edytować.} few {# faktury zostaną anulowane. Zachowają swoje numery, ale nie można ich już opłacić ani edytować.} many {# faktur zostanie anulowanych. Zachowają swoje numery, ale nie można ich już opłacić ani edytować.} other {# faktury zostaną anulowane. Zachowają swoje numery, ale nie można ich już opłacić ani edytować.}}",
+        "skipped": "{count, plural, one {Pominięto # wybraną fakturę: anulować można tylko wystawione faktury bez płatności i not kredytowych.} few {Pominięto # wybrane faktury: anulować można tylko wystawione faktury bez płatności i not kredytowych.} many {Pominięto # wybranych faktur: anulować można tylko wystawione faktury bez płatności i not kredytowych.} other {Pominięto # wybrane faktury: anulować można tylko wystawione faktury bez płatności i not kredytowych.}}",
+        "reason": "Powód (zapisywany na każdej fakturze)",
+        "reasonRequired": "Podaj, dlaczego te faktury są anulowane."
+      }
+    },
+    "actions": {
+      "sentVia": {
+        "link": "Zapisano jako wysłane wraz z linkiem.",
+        "email": "Faktura wysłana e-mailem.",
+        "whatsapp": "Faktura wysłana przez WhatsApp."
+      },
+      "markedPaid": "Oznaczono jako opłaconą.",
+      "linkRegenerated": "Utworzono nowy link. Stary przestał działać.",
+      "linkRevoked": "Link wyłączono.",
+      "linkUnavailable": "Ta faktura nie ma aktywnego linku. Otwórz fakturę, aby utworzyć nowy."
+    },
+    "voidDialog": {
+      "reasonHint": "Wymagane. Zapisywane na osi czasu faktury.",
+      "reasonRequired": "Podaj, dlaczego faktura jest anulowana.",
+      "refundFirst": "Ta faktura ma otrzymane płatności. Najpierw je zwróć (z listy płatności na fakturze), a potem anuluj fakturę.",
+      "creditsFirst": "Do tej faktury wystawiono noty kredytowe. Najpierw anuluj noty kredytowe, potem fakturę."
+    },
+    "sendDialog": {
+      "loading": "Wczytywanie faktury",
+      "channel": "Jak chcesz ją wysłać?",
+      "channels": {
+        "link": "Udostępnię link samodzielnie",
+        "email": "E-mail",
+        "whatsapp": "WhatsApp"
+      },
+      "action": {
+        "link": "Oznacz jako wysłaną",
+        "email": "Wyślij e-mail",
+        "whatsapp": "Wyślij przez WhatsApp"
+      },
+      "linkOff": "Ta faktura nie ma aktywnego linku. Utwórz nowy w karcie linku na fakturze, a następnie go udostępnij.",
+      "linkRecords": "Samodzielne udostępnienie linku tylko zapisuje informację o wysłaniu.",
+      "noEmail": "Brak adresu e-mail na tej fakturze",
+      "noPhone": "Brak numeru telefonu na tej fakturze",
+      "noEmailHelp": "Ta faktura nie ma adresu e-mail nabywcy. Zamknij okno, użyj opcji Edytuj szczegóły, aby go dodać, i spróbuj ponownie.",
+      "noPhoneHelp": "Ta faktura nie ma numeru telefonu nabywcy. Zamknij okno, użyj opcji Edytuj szczegóły, aby go dodać, i spróbuj ponownie.",
+      "message": "Wiadomość",
+      "messageHint": "Opcjonalnie. Dodawane do wiadomości wysyłanej z fakturą.",
+      "deliveryNote": "Faktura została umieszczona w kolejce do wysyłki do nabywcy. Oś czasu pokazuje, kiedy została wysłana."
+    },
+    "editDialog": {
+      "title": "Edytuj szczegóły",
+      "close": "Zamknij",
+      "cancel": "Anuluj",
+      "save": "Zapisz zmiany",
+      "saved": "Zapisano szczegóły faktury.",
+      "reload": "Odśwież fakturę",
+      "conflict": "Ktoś inny zmienił tę fakturę podczas edycji. Odśwież ją, aby zobaczyć najnowszą wersję, a potem wprowadź zmianę ponownie.",
+      "intro": "Wystawiona faktura zachowuje swoje pozycje, kwoty i numerację. Te szczegóły nadal mogą się zmienić.",
+      "email": "E-mail nabywcy",
+      "phone": "Telefon nabywcy",
+      "phoneHint": "Z kodem kraju, np. +14155550123",
+      "contact": "Kontakt",
+      "owner": "Właściciel",
+      "dueDate": "Termin płatności",
+      "dueHint": "Wydłuż lub skróć warunki płatności.",
+      "reference": "Numer referencyjny",
+      "notes": "Notatki",
+      "terms": "Warunki"
+    },
+    "payDialog": {
+      "overpayNote": "To o {extra} więcej niż saldo. Przed zapisaniem jako nadpłatę zostaniesz poproszony o potwierdzenie.",
+      "overpayConfirm": "Nadpłata {extra} ponad saldo zostanie zapisana i pokazana na fakturze jako nadpłata. Naciśnij przycisk ponownie, aby potwierdzić.",
+      "problems": {
+        "tooMuch": "To więcej, niż faktura nadal wymaga zapłaty."
+      }
+    },
+    "markPaidDialog": {
+      "title": "Oznacz jako opłaconą",
+      "close": "Zamknij",
+      "cancel": "Anuluj",
+      "confirm": "Zarejestruj płatność",
+      "message": "Zarejestrować całe saldo {amount} jako otrzymane dzisiaj?",
+      "method": "Odebrał"
+    },
+    "refundDialog": {
+      "problems": {
+        "dateFuture": "Data zwrotu nie może być z przyszłości."
+      }
+    },
+    "paymentsSection": {
+      "refundChip": "Zwrot",
+      "receipt": "Paragon",
+      "refundOf": "zwraca {receipt}",
+      "refundedSoFar": "Dotychczas zwrócono {amount}"
+    },
+    "activity": {
+      "none": "Jeszcze nic się nie wydarzyło.",
+      "actors": {
+        "buyer": "Nabywca",
+        "gateway": "Bramka płatności",
+        "system": "System"
+      },
+      "events": {
+        "sent": "Wysłano do nabywcy",
+        "overdue": "Stała się przeterminowana",
+        "partially_paid": "Opłacona częściowo",
+        "link_regenerated": "Zastąpiono publiczny link",
+        "link_revoked": "Wyłączono publiczny link",
+        "pay_attempt": "Podjęto próbę płatności online",
+        "credit_note_issued": "Nota kredytowa"
+      }
+    },
+    "linked": {
+      "invoiced": "Zafakturowano",
+      "paid": "Zapłacono",
+      "outstanding": "Do zapłaty",
+      "overdue": "Przeterminowana",
+      "latest": "{count, plural, one {Pokazano najnowszą fakturę.} few {Pokazano najnowsze # faktury.} many {Pokazano najnowszych # faktur.} other {Pokazano najnowsze # faktury.}}"
+    },
+    "detail": {
+      "editDetails": "Edytuj szczegóły",
+      "downloadPdf": "PDF",
+      "createCreditNote": "Utwórz notę kredytową",
+      "linkOffBanner": "Link nabywcy jest wyłączony, więc nabywca nie może otworzyć tej faktury. Utwórz nowy link w karcie linku.",
+      "refunded": "Zwrócono",
+      "credited": "Skorygowano",
+      "credit": "Korekta",
+      "detailsLabel": "Szczegóły faktury",
+      "contact": "Kontakt",
+      "company": "Firma",
+      "quote": "Oferta",
+      "salesOrder": "Zamówienie sprzedaży",
+      "recurring": "Harmonogram cykliczny",
+      "makeRecurring": "Ustaw jako cykliczną",
+      "reference": "Numer referencyjny",
+      "owner": "Właściciel",
+      "createdBy": "Utworzył",
+      "overpaid": "Otrzymano lub skorygowano więcej, niż wynosi ta faktura. Nadwyżka jest widoczna jako korekta.",
+      "voidNeedsRefund": "Aby anulować tę fakturę, najpierw zwróć jej płatności. Musi też nie mieć not kredytowych.",
+      "sources": {
+        "manual": "Utworzona ręcznie",
+        "quote": "Z oferty",
+        "order": "Z zamówienia",
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "own": "Sklep internetowy",
+        "api": "API",
+        "ai": "Asystent AI",
+        "recurring": "Faktura cykliczna",
+        "sales_order": "Zamówienie sprzedaży"
+      },
+      "creditNotes": {
+        "title": "Noty kredytowe",
+        "create": "Utwórz notę kredytową",
+        "loading": "Wczytywanie not kredytowych",
+        "none": "Brak not kredytowych dla tej faktury.",
+        "draft": "Szkic",
+        "status": {
+          "draft": "Szkic",
+          "issued": "Wystawiona",
+          "void": "Anuluj"
+        }
+      }
+    },
+    "linkCard": {
+      "title": "Link publiczny",
+      "address": "Adres linku",
+      "state": {
+        "active": "Aktywny",
+        "revoked": "Wyłączony",
+        "expired": "Wygasły"
+      },
+      "off": {
+        "revoked": "Link został wyłączony. Kupujący widzi stronę informującą, że faktura jest niedostępna.",
+        "expired": "Link wygasł. Kupujący widzi stronę informującą, że faktura jest niedostępna."
+      },
+      "copy": "Kopiuj",
+      "copied": "Skopiowano",
+      "expires": "Wygasa",
+      "revokedAt": "Wyłączony",
+      "views": "Liczba otwarć",
+      "firstViewed": "Pierwsze otwarcie",
+      "lastViewed": "Ostatnie otwarcie",
+      "open": "Otwórz stronę kupującego",
+      "regenerate": "Nowy link",
+      "revoke": "Wyłącz",
+      "close": "Zamknij",
+      "cancel": "Anuluj",
+      "regenerateTitle": "Utwórz nowy link",
+      "regenerateWarning": "Obecny link przestanie działać od razu. Każdy, kto go ma, zobaczy, że faktura jest niedostępna.",
+      "regenerateConfirm": "Utwórz nowy link",
+      "expiry": "Nowy link będzie działał przez",
+      "expiryNever": "Bez wygasania",
+      "expiryDays": "{count, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}}",
+      "revokeTitle": "Wyłączyć link?",
+      "revokeMessage": "Kupujący nie będzie mógł już otworzyć ani opłacić tej faktury z linku. Nowy link możesz utworzyć później.",
+      "revokeConfirm": "Wyłącz link"
+    },
+    "errors": {
+      "codes": {
+        "INV_NOT_DRAFT": "Ta faktura jest już wystawiona, więc jej pozycje i kwoty nie mogą się już zmienić.",
+        "INV_NOT_ISSUED": "Tylko wystawiona faktura może to zrobić. Najpierw wystaw wersję roboczą.",
+        "INV_ALREADY_VOID": "Ta faktura jest już anulowana.",
+        "INV_HAS_PAYMENTS": "Ta faktura ma jeszcze wpłaty. Najpierw je zwróć, a potem anuluj fakturę.",
+        "INV_HAS_CREDITS": "Do tej faktury wystawiono noty kredytowe. Najpierw anuluj noty kredytowe, a potem fakturę.",
+        "INV_NOT_DELETABLE": "Usunąć można tylko wersję roboczą. Zamiast tego anuluj tę fakturę.",
+        "INV_NO_RECIPIENT": "Faktura nie ma adresu e-mail ani numeru telefonu dla tego kanału. Dodaj go w „Edytuj dane” i spróbuj ponownie.",
+        "INV_LINK_UNAVAILABLE": "Ta faktura nie ma aktywnego linku. Utwórz nowy w karcie linku.",
+        "INV_OWNER_INVALID": "Ta osoba nie jest aktywnym członkiem tej przestrzeni roboczej. Wybierz innego właściciela.",
+        "PAY_OVERPAYMENT": "Ta kwota przekracza pozostałą do zapłaty kwotę faktury. Zmniejsz ją albo potwierdź, że rejestrujesz nadpłatę.",
+        "PAY_FUTURE_DATE": "Data płatności nie może być w przyszłości.",
+        "PAY_CURRENCY_MISMATCH": "Płatność musi być w tej samej walucie co faktura.",
+        "PAY_REFUND_EXCEEDS": "To więcej, niż można jeszcze zwrócić z tej płatności.",
+        "PAY_NOT_REFUNDABLE": "Tego wpisu nie można zwrócić. Zwrócić można tylko płatność, z której coś pozostało.",
+        "PAY_NOTHING_TO_PAY": "Ta faktura nie ma już nic do zapłaty.",
+        "ROW_VERSION_CONFLICT": "Ktoś inny właśnie zmienił tę fakturę. Odśwież stronę, aby zobaczyć najnowszą wersję, i spróbuj ponownie."
+      }
+    }
+  }
+}

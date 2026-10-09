@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { cn } from '@crm/ui';
 import { swatchValue } from '../lib/builder-model';
 
@@ -22,11 +23,12 @@ export function ColorField({
   invalid?: boolean;
   className?: string;
 }) {
+  const t = useTranslations('chatbotWidget.builder');
   return (
     <div className={cn('flex items-center gap-2', className)}>
       <input
         type="color"
-        aria-label={`${label} (swatch)`}
+        aria-label={t('colorSwatch', { label })}
         value={swatchValue(value)}
         onChange={(e) => onChange(e.target.value.toUpperCase())}
         className="size-10 shrink-0 cursor-pointer rounded-md border border-border bg-muted p-0.5"

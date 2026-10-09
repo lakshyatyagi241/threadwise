@@ -1,0 +1,531 @@
+{
+  "scheduled-queue-warmer": {
+    "nav": {
+      "scheduled": "Zaplanowane",
+      "warmer": "Rozgrzewka"
+    },
+    "common": {
+      "dismiss": "Odrzuć"
+    },
+    "status": {
+      "scheduled": "W kolejce",
+      "running": "Trwa",
+      "paused": "Wstrzymano",
+      "completed": "Gotowe",
+      "failed": "Nie powiodło się",
+      "cancelled": "Anulowano"
+    },
+    "type": {
+      "plain": "Zwykła",
+      "template": "Szablon",
+      "media": "Multimedia",
+      "location": "Lokalizacja"
+    },
+    "errors": {
+      "generic": "Coś poszło nie tak. Spróbuj ponownie.",
+      "FORBIDDEN": "Nie masz uprawnień do wykonania tej czynności.",
+      "VALIDATION_FAILED": "Niektóre pola wymagają uwagi.",
+      "ROW_VERSION_CONFLICT": "Ten harmonogram zmienił się w międzyczasie. Odśwież stronę i spróbuj ponownie.",
+      "PLAN_FEATURE_LOCKED": "Twój plan nie obejmuje tej funkcji.",
+      "PLAN_LIMIT_REACHED": "Osiągnięto limit Twojego planu.",
+      "WA_UNOFFICIAL_DISABLED": "Wysyłanie przez osobiste numery WhatsApp (nieoficjalne API) nie jest włączone w Twojej przestrzeni roboczej. Wybierz oficjalny numer WhatsApp Business API.",
+      "AUTH_SEND_HALTED": "Wysyłanie w tej przestrzeni roboczej zostało wstrzymane.",
+      "upgrade": "Zobacz plany i ulepsz",
+      "requestId": "Żądanie {id}"
+    },
+    "actions": {
+      "done": {
+        "pause": "Harmonogram wstrzymany.",
+        "resume": "Harmonogram wznowiony.",
+        "cancel": "Harmonogram anulowany.",
+        "run-now": "Harmonogram jest teraz uruchomiony.",
+        "destroy": "Harmonogram usunięty.",
+        "retry": "Harmonogram umieszczono w kolejce z nowym czasem."
+      }
+    },
+    "confirm": {
+      "yes": "Tak, kontynuuj",
+      "keep": "Zachowaj",
+      "cancel": {
+        "title": "Anulować ten harmonogram?",
+        "body": "„{name}” nie zostanie wysłany. Tej operacji nie można cofnąć."
+      },
+      "run-now": {
+        "title": "Uruchomić ten harmonogram teraz?",
+        "body": "„{name}” zacznie się wysyłać od razu, zamiast o ustawionej godzinie."
+      },
+      "destroy": {
+        "title": "Usunąć ten harmonogram?",
+        "body": "„{name}” i jego lista odbiorców zostaną usunięte."
+      }
+    },
+    "retry": {
+      "title": "Ponów z nowym czasem",
+      "body": "Wybierz nowy czas wysyłki dla „{name}”. Wróci do kolejki.",
+      "date": "Data wysyłki",
+      "time": "Godzina",
+      "timezone": "Strefa czasowa",
+      "keep": "Zachowaj jako nieudane",
+      "confirm": "Ponów teraz"
+    },
+    "list": {
+      "crumb": "Kampanie / Zaplanowane wiadomości",
+      "title": "Zaplanowane wiadomości",
+      "queued": "{n} w kolejce",
+      "create": "Zaplanuj wiadomość",
+      "stats": {
+        "total": "Łącznie zaplanowane",
+        "totalHint": "we wszystkich stanach",
+        "active": "Aktywna kolejka",
+        "activeHint": "czeka na wysłanie",
+        "sent": "Łącznie wysłane",
+        "sentHint": "wysłanych wiadomości (ta strona)",
+        "delivery": "Wskaźnik dostarczenia",
+        "deliveryHint": "w zakończonych (ta strona)"
+      },
+      "upNext": {
+        "eyebrow": "Następne",
+        "title": "Następne do wysłania",
+        "pending": "{n} oczekujących",
+        "empty": "Nic jeszcze nie zaplanowano.",
+        "createOne": "Utwórz →",
+        "recurring": "cykliczne",
+        "queued": "w kolejce"
+      },
+      "tip": {
+        "eyebrow": "Wskazówka",
+        "title": "Wysyłaj, gdy czytają",
+        "body": "Wskaźniki otwarć są najwyższe między 9–11 a 18–20 w lokalnych strefach czasowych Twoich kontaktów. Wybierz czas wysyłki pasujący do grupy odbiorców. Harmonogramy cykliczne pozwalają ustawić to raz i zapomnieć.",
+        "cta": "Zaplanuj jedną"
+      },
+      "tabs": {
+        "all": "Wszystkie",
+        "upcoming": "Nadchodzące",
+        "running": "Trwa",
+        "paused": "Wstrzymane",
+        "completed": "Zakończone",
+        "failed": "Nieudane"
+      },
+      "search": "Szukaj według nazwy…",
+      "cols": {
+        "schedule": "Harmonogram",
+        "type": "Typ",
+        "recipients": "Odbiorcy",
+        "sendTime": "Czas wysyłki",
+        "repeat": "Powtarzanie",
+        "status": "Status",
+        "actions": "Działania"
+      },
+      "recipients": {
+        "group": "Grupa",
+        "tag": "Tag",
+        "queue": "Kolejka",
+        "number": "Numery"
+      },
+      "when": {
+        "overdue": "po terminie",
+        "now": "teraz",
+        "minutes": "za {n} min",
+        "hours": "za {n} godz.",
+        "tomorrow": "jutro",
+        "date": "później"
+      },
+      "completedAt": "zakończono {when}",
+      "once": "jednorazowo",
+      "actions": {
+        "open": "Otwórz",
+        "pause": "Wstrzymaj",
+        "resume": "Wznów",
+        "runNow": "Uruchom teraz",
+        "cancel": "Anuluj",
+        "retry": "Ponów z nowym czasem",
+        "delete": "Usuń",
+        "deleteHistory": "Usuń z historii"
+      },
+      "empty": {
+        "title": "Brak harmonogramów",
+        "none": "Zaplanuj pierwszą wiadomość.",
+        "filtered": "Żaden harmonogram nie pasuje do bieżących filtrów. Wyczyść filtry lub zaplanuj pierwszą wiadomość.",
+        "reset": "Resetuj filtry"
+      },
+      "page": "Strona {page} z {pages}",
+      "prev": "Poprzednia",
+      "next": "Następna"
+    },
+    "composer": {
+      "crumb": "Zaplanowane / Nowe",
+      "title": "Zaplanuj wiadomość",
+      "back": "Wstecz",
+      "forbidden": "Nie masz uprawnień do planowania wiadomości.",
+      "steps": "Kroki",
+      "stepNames": {
+        "basics": "Podstawy",
+        "audience": "Odbiorcy",
+        "message": "Wiadomość",
+        "when": "Kiedy",
+        "review": "Podsumowanie"
+      },
+      "required": "wymagane",
+      "previous": "Poprzedni",
+      "next": "Dalej",
+      "submit": "Zaplanuj wiadomość",
+      "stepOf": "Krok {n} z {total}",
+      "engine": {
+        "baileys": "Nieoficjalne API",
+        "waba": "WhatsApp Cloud API",
+        "twilio": "Twilio"
+      },
+      "types": {
+        "plain": {
+          "title": "Zwykły tekst",
+          "hint": "Tylko tekst i emoji.",
+          "pill": "zwykły tekst"
+        },
+        "template": {
+          "title": "Szablon",
+          "hint": "Zatwierdzony szablon WhatsApp.",
+          "pill": "szablon"
+        },
+        "media": {
+          "title": "Z multimediami",
+          "hint": "Obraz, wideo, dokument, audio.",
+          "pill": "multimedia"
+        },
+        "location": {
+          "title": "Lokalizacja",
+          "hint": "Pinezka szerokości i długości geograficznej.",
+          "pill": "lokalizacja"
+        }
+      },
+      "basics": {
+        "title": "Podstawy harmonogramu",
+        "name": "Nazwa harmonogramu",
+        "nameHint": "Tylko etykieta wewnętrzna — odbiorcy jej nie widzą.",
+        "namePlaceholder": "np. Promocja wiosenna / segment VIP",
+        "sender": "Nadawca",
+        "senders": "Nadawcy",
+        "tickAll": "Zaznacz wszystkie pasujące",
+        "noSenders": "Brak połączonego nadawcy. Najpierw połącz numer.",
+        "warming": "Rozgrzewanie",
+        "splitHint": "Każdy zaznaczony nadawca uruchamia własny harmonogram z równym udziałem w odbiorcach.",
+        "messageType": "Typ wiadomości"
+      },
+      "audience": {
+        "title": "Odbiorcy",
+        "source": "Źródło odbiorców",
+        "sources": {
+          "group": {
+            "title": "Grupa",
+            "hint": "Wybierz jedną lub więcej zapisanych grup kontaktów."
+          },
+          "tag": {
+            "title": "Tagi",
+            "hint": "Wszyscy z tagiem"
+          },
+          "queue": {
+            "title": "Kolejka odbiorców",
+            "hint": "Ponownie dotrzyj do odbiorców wcześniejszej wiadomości masowej."
+          },
+          "number": {
+            "title": "Numery",
+            "hint": "Wklej listę ręcznie."
+          }
+        },
+        "chooseGroups": "Wybierz grupę/grupy",
+        "chooseTags": "Wybierz jeden lub więcej tagów",
+        "chooseQueues": "Wybierz jedną lub więcej wcześniejszych wiadomości masowych",
+        "tickAny": "(zaznacz dowolną liczbę)",
+        "noGroups": "Brak grup",
+        "noTags": "Brak tagów",
+        "noQueues": "Brak zakończonych wiadomości masowych",
+        "contacts": "Przejdź do kontaktów",
+        "broadcast": "Przejdź do wiadomości masowych",
+        "tagsHint": "Odbiorcy są przeliczani w momencie uruchomienia harmonogramu, więc uwzględniane są nowo otagowane kontakty.",
+        "queuesHint": "Zaznacz dowolną liczbę wiadomości masowych. Odbiorcy są automatycznie deduplikowani przed wysyłką.",
+        "paste": "Wklej numery",
+        "pasteHint": "Najpierw kierunkowy kraju, bez + na początku. Pozycje oddzielaj nowymi wierszami lub przecinkami.",
+        "pastePlaceholder": "Jeden numer w wierszu — z kierunkowym kraju, bez znaku +",
+        "total": "Łączna liczba odbiorców:",
+        "optedOut": "{n} pominiętych: zrezygnowali lub zarchiwizowani"
+      },
+      "message": {
+        "title": "Utwórz wiadomość",
+        "content": "Treść wiadomości",
+        "caption": "Podpis",
+        "placeholder": "Cześć '{name}', Twoja zaplanowana aktualizacja jest gotowa…",
+        "personalise": "Użyj '{name}', '{phone}', '{email}' do personalizacji.",
+        "template": "Zatwierdzony szablon",
+        "chooseTemplate": "Wybierz zatwierdzony szablon",
+        "browse": "Kliknij, aby przejrzeć szablony",
+        "approved": "ZATWIERDZONO",
+        "change": "Zmień",
+        "mediaLink": "Link do multimediów",
+        "mediaHint": "Link do pliku (https://…). Obraz, wideo, audio lub dokument.",
+        "pin": "Pinezka lokalizacji",
+        "latitude": "Szerokość geograficzna",
+        "longitude": "Długość geograficzna",
+        "estimate": "Szacowany czas wysyłki",
+        "minutes": "ok. {n} min",
+        "estimateHint": "przy 60 wiad./min",
+        "estimateEmpty": "najpierw wybierz odbiorców.",
+        "variables": "Zmienne w wiadomości",
+        "variablesHint": "wykrytych symboli zastępczych.",
+        "pickerEyebrow": "szablony",
+        "pickerTitle": "Wybierz szablon",
+        "pickerHint": "Wyświetlane są tylko zatwierdzone, aktywne szablony.",
+        "pickerSearch": "Szukaj według nazwy lub języka…",
+        "pickerEmpty": "Brak pasujących szablonów.",
+        "manageTemplates": "Zarządzaj szablonami →",
+        "cancel": "Anuluj"
+      },
+      "when": {
+        "title": "Kiedy wysłać",
+        "modes": {
+          "once": {
+            "title": "Wyślij jednorazowo",
+            "hint": "Jedna wysyłka o wybranej dacie i godzinie."
+          },
+          "recurring": {
+            "title": "Cykliczne",
+            "hint": "Powtarzaj codziennie, co tydzień lub co miesiąc według stałego rytmu."
+          }
+        },
+        "date": "Data wysyłki",
+        "time": "Godzina",
+        "timezone": "Strefa czasowa",
+        "recurrence": "Powtarzalność",
+        "every": "Powtarzaj co",
+        "interval": "Interwał",
+        "intervals": {
+          "daily": "dzień/dni",
+          "weekly": "tydzień/tygodnie",
+          "monthly": "miesiąc/miesiące"
+        },
+        "end": "Koniec",
+        "endNever": "Nigdy",
+        "endDate": "W określonej dacie",
+        "endOn": "Ostatni dzień",
+        "days": "Dni tygodnia",
+        "daysHint": "Kliknij dzień, aby przełączyć. Harmonogramy tygodniowe wymagają co najmniej jednego.",
+        "lead": "Harmonogram musi być zaplanowany co najmniej {n} min do przodu."
+      },
+      "review": {
+        "title": "Podsumowanie i harmonogram",
+        "final": "końcowe",
+        "schedule": "Harmonogram",
+        "name": "Nazwa",
+        "sender": "Nadawca",
+        "type": "Typ",
+        "mode": "Tryb",
+        "at": "Pierwsza wysyłka",
+        "once": "Wyślij jednorazowo",
+        "recurring": "Co {n} {interval}",
+        "delivery": "Dostarczenie",
+        "source": "Źródło odbiorców",
+        "recipients": "Odbiorcy",
+        "estimated": "Szacowany czas",
+        "testTitle": "Najpierw wyślij test",
+        "testHint": "Otrzymaj jedną wiadomość podglądu na wpisany numer przed pełną wysyłką.",
+        "testNumber": "Wyślij test na ten numer",
+        "testNumberHint": "Najpierw kierunkowy kraju, bez + na początku."
+      },
+      "preview": {
+        "title": "Podgląd na żywo",
+        "channel": "WhatsApp",
+        "empty": "Twoja wiadomość pojawi się tutaj…",
+        "media": "[ załączono multimedia ]",
+        "pin": "Pinezka lokalizacji",
+        "noTemplate": "Nie wybrano szablonu"
+      },
+      "errors": {
+        "nameRequired": "Nadaj harmonogramowi nazwę.",
+        "senderRequired": "Wybierz co najmniej jednego nadawcę.",
+        "wabaTemplate": "Numery WhatsApp Cloud API nie mogą wysyłać harmonogramów szablonów. Odznacz je lub wybierz inny typ wiadomości.",
+        "audienceRequired": "Wybierz co najmniej jeden.",
+        "numbersRequired": "Wklej co najmniej jeden numer.",
+        "messageRequired": "Napisz wiadomość.",
+        "messageTooLong": "Wiadomość ma ponad 1024 znaki.",
+        "templateRequired": "Wybierz szablon.",
+        "mediaLink": "Wpisz link zaczynający się od http:// lub https://.",
+        "latitude": "Wpisz szerokość geograficzną od -90 do 90.",
+        "longitude": "Wpisz długość geograficzną od -180 do 180.",
+        "dateRequired": "Wybierz datę.",
+        "timeRequired": "Wpisz godzinę, na przykład 14:30.",
+        "timezoneRequired": "Wybierz strefę czasową.",
+        "tooSoon": "Wybierz godzinę co najmniej kilka minut od teraz.",
+        "repeatEvery": "Wpisz liczbę całkowitą od 1 do 365.",
+        "daysRequired": "Wybierz dni tygodnia.",
+        "endDateRequired": "Wybierz ostatni dzień.",
+        "endBeforeStart": "Data końcowa jest przed pierwszą wysyłką.",
+        "testNumber": "Wpisz numer z kierunkowym kraju."
+      }
+    },
+    "detail": {
+      "crumb": "Zaplanowane / Analityka",
+      "title": "Analityka harmonogramu",
+      "back": "Wróć do zaplanowanych wiadomości",
+      "eyebrow": "Zaplanowana wiadomość",
+      "untitled": "Bez tytułu",
+      "recurs": "Cyklicznie · {interval} × {n}",
+      "fires": "Wysyłka {when}",
+      "actions": {
+        "pause": "Wstrzymaj",
+        "resume": "Wznów",
+        "runNow": "Uruchom teraz",
+        "cancel": "Anuluj",
+        "retry": "Ponów z nowym czasem",
+        "delete": "Usuń"
+      },
+      "kpi": {
+        "recipients": "Odbiorcy",
+        "delivered": "Dostarczono",
+        "read": "Przeczytano",
+        "sent": "Wysłano",
+        "status": "Status",
+        "ofSent": "z wysłanych",
+        "failedCount": "{n} nieudanych",
+        "pendingCount": "{n} oczekujących",
+        "fires": "wysyłka {when}",
+        "paused": "wstrzymano",
+        "done": "gotowe {when}"
+      },
+      "funnel": {
+        "eyebrow": "Lejek dostarczenia",
+        "title": "Od wysyłki do działania",
+        "recipients": "Odbiorcy",
+        "sent": "Wysłano",
+        "delivered": "Dostarczono",
+        "read": "Przeczytano",
+        "failed": "Nieudane"
+      },
+      "mix": {
+        "eyebrow": "Rozkład statusów",
+        "title": "Status dostarczenia",
+        "empty": "Brak aktywności wysyłki.",
+        "delivered": "Dostarczono",
+        "sentOnly": "Wysłano · nie dostarczono",
+        "failed": "Nieudane",
+        "pending": "Oczekuje"
+      },
+      "recipients": {
+        "eyebrow": "Odbiorcy",
+        "title": "Kto co otrzymał",
+        "none": "Brak odbiorców w zapisie dla tego harmonogramu.",
+        "emptyTab": "Brak odbiorców na tej karcie.",
+        "truncated": "Wyświetlono pierwszych {n} z {total} odbiorców.",
+        "tabs": {
+          "all": "Wszystkie",
+          "sent": "Wysłane",
+          "delivered": "Dostarczone",
+          "read": "Przeczytane",
+          "failed": "Nieudane",
+          "pending": "Oczekujące"
+        },
+        "cols": {
+          "recipient": "Odbiorca",
+          "phone": "Telefon",
+          "status": "Status",
+          "when": "Kiedy",
+          "note": "Notatka"
+        },
+        "status": {
+          "pending": "Oczekuje",
+          "processing": "Oczekuje",
+          "sent": "Wysłano",
+          "delivered": "Dostarczono",
+          "read": "Przeczytano",
+          "failed": "Nieudane"
+        }
+      },
+      "config": {
+        "eyebrow": "Szczegóły harmonogramu",
+        "title": "Konfiguracja",
+        "scheduleType": "Typ harmonogramu",
+        "messageType": "Typ wiadomości",
+        "scheduledAt": "Zaplanowano na",
+        "nextRun": "Następne uruchomienie",
+        "lastRun": "Ostatnie uruchomienie",
+        "repeats": "Powtarza się co",
+        "until": "do {date}",
+        "sender": "Od nadawcy",
+        "provider": "Silnik",
+        "attempts": "Próby wysyłki"
+      },
+      "preview": {
+        "eyebrow": "Podgląd wiadomości",
+        "title": "Co widzą odbiorcy",
+        "empty": "(pusta treść)"
+      },
+      "another": "Zaplanuj kolejną"
+    },
+    "warmer": {
+      "warming": "{n} w rozgrzewce",
+      "name": "Rozgrzewacz WhatsApp",
+      "tagline": "Rozgrzewanie numeru",
+      "how": {
+        "title": "Jak to działa",
+        "one": "Włącz rozgrzewanie dla numeru.",
+        "two": "Każdego dnia może wysłać nieco więcej niż dnia poprzedniego.",
+        "three": "Wiadomości są wysyłane powoli, tylko w wybranych przez Ciebie godzinach.",
+        "four": "Kampanie, wiadomości masowe i zaplanowane wysyłki respektują ten limit."
+      },
+      "good": {
+        "title": "Warto wiedzieć",
+        "body": "Rozgrzewanie zmniejsza ryzyko blokady numerów z nieoficjalnym API — nie jest to gwarancja. Przy dużym wolumenie użyj oficjalnego numeru WhatsApp Business (Cloud API), który nie wymaga rozgrzewania."
+      },
+      "crumb": "Kampanie / Rozgrzewacz",
+      "heading": "Rozgrzej swoje numery",
+      "lead": "Stopniowo zwiększaj dzienny limit wysyłki każdego numeru nieoficjalnego API, z ludzkimi przerwami i godzinami aktywności, aby zmniejszyć ryzyko blokady. Każdy numer rozgrzewa się według własnego harmonogramu.",
+      "tiles": {
+        "warming": "Numery w rozgrzewce",
+        "warmingHint": "z {n} połączonych",
+        "budget": "Dzisiejszy budżet",
+        "budgetHint": "wiadomości dozwolonych dzisiaj",
+        "sent": "Wysłane dzisiaj",
+        "sentHint": "wliczane do rozgrzewania",
+        "health": "Średnia kondycja",
+        "healthHint": "we wszystkich numerach"
+      },
+      "empty": "Brak połączonych numerów.",
+      "connect": "Połącz numer",
+      "number": "Numer",
+      "engines": {
+        "baileys": "Nieoficjalne API",
+        "waba": "WABA",
+        "twilio": "Twilio"
+      },
+      "health": "Kondycja {n}",
+      "healthTitle": "Wynik kondycji (wyższy = bezpieczniej zwiększać)",
+      "switch": "W rozgrzewce",
+      "budgetToday": "Dzisiejszy budżet",
+      "remaining": "Pozostało dzisiaj",
+      "sentToday": "Wysłane dzisiaj",
+      "fields": {
+        "dailyBase": "Budżet startowy/dzień",
+        "stepPct": "Wzrost +% / krok",
+        "stepDays": "Wzrost co (dni)",
+        "maxDaily": "Maks. budżet/dzień",
+        "gapMin": "Min. przerwa (s)",
+        "gapMax": "Maks. przerwa (s)",
+        "activeStart": "Aktywnie od (godz.)",
+        "activeEnd": "Aktywnie do (godz.)"
+      },
+      "hints": {
+        "dailyBase": "Ile wiadomości może wysłać ten numer pierwszego dnia.",
+        "stepPct": "Zwiększaj ten dzienny limit o ten procent w każdym kroku.",
+        "stepDays": "Jak często rośnie limit (co N dni).",
+        "maxDaily": "Najwyższa wartość, jaką osiągnie dzienny limit.",
+        "gapMin": "Najkrótsza przerwa między dwiema wiadomościami.",
+        "gapMax": "Najdłuższa przerwa między dwiema wiadomościami.",
+        "activeStart": "Zacznij wysyłać dopiero od tej godziny (zegar 24-godzinny).",
+        "activeEnd": "Zakończ wysyłanie po tej godzinie."
+      },
+      "spintax": {
+        "title": "Różnorodność spintax",
+        "hint": "Wysyłaj każdej osobie nieco inne sformułowania, aby wiadomości nie wyglądały identycznie. Zapisz tam wybory w postaci '{Hi|Hello|Hey}'."
+      },
+      "save": "Zapisz rozgrzewanie",
+      "saved": "Rozgrzewanie zapisane."
+    }
+  }
+}

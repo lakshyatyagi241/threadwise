@@ -1,0 +1,54 @@
+{
+  "help": {
+    "title": "Centro assistenza",
+    "searchLabel": "Cerca nell’assistenza",
+    "searchPlaceholder": "Cerca guide",
+    "resultsStatus": "{count, plural, =0 {Nessuna guida trovata} one {# guida} other {# guide}}",
+    "none": {
+      "title": "Nessuna guida ancora",
+      "message": "Qui compaiono le guide per le funzioni del tuo piano."
+    },
+    "noResults": {
+      "title": "Nessuna guida corrisponde alla ricerca",
+      "message": "Prova altre parole oppure cancella la ricerca per vedere tutte le guide."
+    },
+    "areas": {
+      "overview": "Piattaforma",
+      "inbox": "Inbox e chat",
+      "audience": "CRM",
+      "sales": "Vendite",
+      "campaigns": "Campagne",
+      "automation": "Automazione",
+      "store": "Store",
+      "apps": "Marketplace",
+      "settings": "Impostazioni",
+      "account": "Account",
+      "getting-started": "Per iniziare",
+      "troubleshooting": "Risoluzione dei problemi"
+    },
+    "allHelp": "Torna all’assistenza",
+    "onThisPage": "In questa pagina",
+    "openScreen": "Apri questa schermata",
+    "shownInEnglish": "Questa guida non è ancora tradotta in italiano, quindi viene mostrata in inglese.",
+    "tip": {
+      "label": "Assistenza: {title}",
+      "readMore": "Leggi la guida"
+    },
+    "guideCount": "{count, plural, =0 {Nessuna guida} one {# guida} other {# guide}}",
+    "crumb": "Altro / Assistenza",
+    "heading": "Assistenza",
+    "headingRest": "e guide",
+    "back": "Indietro",
+    "askSupport": "Non lo trovi? Chiedi al supporto",
+    "askSupportShort": "Supporto",
+    "categories": "Categorie",
+    "allGuides": "Tutte le guide",
+    "needHuman": "Serve una persona?",
+    "contactSupport": "Contatta il supporto",
+    "popular": "Popolari",
+    "searchResults": "Risultati della ricerca",
+    "read": "Leggi guida",
+    "readMinutes": "{count, plural, one {# min di lettura} other {# min di lettura}}",
+    "moreInArea": "Altro in {area}"
+  }
+}

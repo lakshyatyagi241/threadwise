@@ -1,0 +1,82 @@
+{
+  "flb": {
+    "geta": {
+      "status": {
+        "pending": "Live zetten…",
+        "live": "Live",
+        "liveTitle": "Live op Geta",
+        "push": "Live zetten",
+        "pushHint": "Hier gepubliceerd; zet hem nu live op Geta",
+        "failed": "Mislukt",
+        "failedConfiguration": "Mislukt bij het bijwerken van de configuratie",
+        "failedPublish": "Mislukt bij publiceren",
+        "retry": "Opnieuw proberen",
+        "retrying": "Opnieuw proberen…",
+        "reasonLabel": "Reden",
+        "failedNote": "De flow is hier nog steeds gepubliceerd. Opnieuw proberen begint bij de mislukte stap.",
+        "notConfigured": "Hier gepubliceerd; stel Geta-publicatie in bij de instellingen om hem live te zetten.",
+        "openSettings": "Instellingen openen",
+        "dismiss": "Sluiten"
+      },
+      "settings": {
+        "title": "Publiceren naar Geta",
+        "intro": "Wanneer je in de flowbouwer op Publiceren klikt, wordt je bot ook live gezet in de Geta-console. Vul de verbindingsgegevens één keer in voor deze workspace. Geheimen worden versleuteld opgeslagen en nooit opnieuw getoond.",
+        "viewOnly": "Je kunt de status van deze instellingen zien, maar ze niet wijzigen.",
+        "loading": "Laden…",
+        "loadFailed": "De instellingen konden niet worden geladen.",
+        "retry": "Opnieuw proberen",
+        "fixtureNotice": "Deze server draait in testmodus: publiceren wordt gesimuleerd en er wordt niets naar Geta verstuurd.",
+        "ready": "Gereed",
+        "incomplete": "Niet compleet",
+        "readyNote": "Een flow publiceren zet je bot ook live op Geta.",
+        "incompleteNote": "Vul hieronder elk veld in om gepubliceerde flows live op Geta te zetten.",
+        "baseUrl": {
+          "label": "Basis-URL",
+          "hint": "Het Geta API-adres, bijvoorbeeld https://api-core-sandbox.geta.ai"
+        },
+        "origin": {
+          "label": "Console-oorsprong (optioneel)",
+          "hint": "Wordt als origin en referer bij elk verzoek meegestuurd. Laat leeg om geen van beide te versturen."
+        },
+        "authorization": {
+          "label": "Autorisatietoken",
+          "hint": "Wordt precies zo verstuurd als je invoert, zonder “Bearer ” ervoor."
+        },
+        "getaHost": {
+          "label": "geta-host token",
+          "hint": "Wordt in de geta-host-header verstuurd."
+        },
+        "secretKept": "Opgeslagen. Laat het veld leeg om te behouden, of typ een nieuwe waarde om te vervangen.",
+        "secretPlaceholder": "Opgeslagen (verborgen)",
+        "show": "Tonen",
+        "hide": "Verbergen",
+        "remove": "Verwijderen",
+        "record": {
+          "label": "Geta-chatbotrecord",
+          "paste": "Plak het chatbotrecord (JSON)",
+          "replace": "Vervang het chatbotrecord (JSON)",
+          "hint": "Het chatbot-object precies zoals het naar Geta moet worden gestuurd, of de volledige request-body met een chatbot-sleutel. Het heeft minimaal id en bot_id nodig. Alleen modified_time wordt vernieuwd bij het versturen.",
+          "keepPlaceholder": "Laat leeg om het opgeslagen record te behouden",
+          "id": "Chatbot-id",
+          "name": "Naam",
+          "botId": "Bot-id",
+          "remove": "Het opgeslagen record verwijderen"
+        },
+        "saved": "Opgeslagen",
+        "notSet": "Niet ingesteld",
+        "save": "Opslaan",
+        "saving": "Opslaan…",
+        "saveFailed": "Opslaan mislukt.",
+        "removed": "Verwijderd.",
+        "clear": "Alles wissen",
+        "cleared": "Instellingen voor publiceren naar Geta gewist.",
+        "clearConfirm": {
+          "title": "Publiceren naar Geta wissen?",
+          "message": "Hiermee worden de basis-URL, beide tokens en het chatbotrecord verwijderd. Gepubliceerde flows blijven hier gepubliceerd, maar worden niet meer naar Geta gestuurd.",
+          "confirm": "Alles wissen",
+          "cancel": "Annuleren"
+        }
+      }
+    }
+  }
+}

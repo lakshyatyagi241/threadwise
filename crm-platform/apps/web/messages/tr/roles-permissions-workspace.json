@@ -1,0 +1,246 @@
+{
+  "roles-permissions-workspace": {
+    "nav": {
+      "team": "Ekip üyeleri",
+      "roles": "Roller"
+    },
+    "common": {
+      "settings": "Ayarlar",
+      "breadcrumb": "Gezinti yolu",
+      "loading": "Yükleniyor…",
+      "retry": "Tekrar dene",
+      "requestId": "İstek kimliği",
+      "cancel": "İptal",
+      "close": "Kapat",
+      "dismiss": "Kapat",
+      "required": "Bu alan zorunludur.",
+      "showPassword": "Parolayı göster",
+      "hidePassword": "Parolayı gizle",
+      "noAccess": {
+        "title": "Erişiminiz yok",
+        "body": "Rolleriniz bu ekranın ihtiyaç duyduğu izni içermiyor. Bir çalışma alanı sahibinden veya yöneticisinden bu izni vermesini isteyin.",
+        "bodyWithKey": "Bu ekran {permission} iznini gerektiriyor. Bir çalışma alanı sahibinden veya yöneticisinden bu izni rollerinizden birine eklemesini isteyin.",
+        "back": "Çalışma alanına dön"
+      }
+    },
+    "blurb": {
+      "owner": "Sahip: faturalandırma dahil her şey.",
+      "admin": "Yönetici: çalışma alanına tam erişim, faturalandırma yok.",
+      "manager": "Müdür: her şeyi görür, atayabilir ve çözebilir.",
+      "agent": "Temsilci: kendisine atanan konuşmaları yönetir.",
+      "viewer": "Görüntüleyici: yalnızca okuma."
+    },
+    "errors": {
+      "unexpected": "Tarafımızda bir sorun oluştu. Tekrar deneyin; sorun devam ederse istek kimliğini belirtin.",
+      "request": "İstek tamamlanamadı.",
+      "validation": "Formu kontrol edip tekrar deneyin.",
+      "passwordPolicy": "Bu parola, çalışma alanı parola politikasını karşılamıyor:",
+      "validationField": "Bu alanı kontrol edip tekrar deneyin.",
+      "forbidden": "Bunu yapmak için izniniz yok.",
+      "conflict": "Siz düzenlerken başka biri bunu değiştirdi. Onun sürümünü görmek için yeniden yükleyin, ardından değişikliklerinizi yeniden uygulayın.",
+      "grantRole": "Bunu yapamazsınız: o rol (veya üyenin mevcut rolü) sizin rolünüzün üzerinde. Yalnızca bir Sahip, Sahipleri ve Yöneticileri atayabilir, değiştirebilir veya devre dışı bırakabilir.",
+      "grantPermission": "{permission} iznini veremezsiniz: bu izne kendiniz sahip değilsiniz.",
+      "selfRoleChange": "Kendi rolünüzü değiştiremezsiniz.",
+      "lastOwner": "Çalışma alanında en az bir Sahip kalmalıdır. Önce başka birini Sahip yapın.",
+      "selfDeactivate": "Kendi hesabınızı devre dışı bırakamazsınız.",
+      "presetRole": "Sahip, Yönetici, Müdür, Temsilci ve Görüntüleyici hazır rollerdir: adları değiştirilemez veya silinemez.",
+      "roleInUse": "Üyeler hâlâ bu rolü kullanıyor. Önce onları başka bir role taşıyın, sonra rolü silin.",
+      "nameTaken": "Bu adda bir rol zaten var.",
+      "nameRequired": "Rol adı zorunludur.",
+      "nameTooLong": "Rol adı en fazla {max} karakter olabilir.",
+      "notFound": "Bu öğe artık mevcut değil. Silinmiş olabilir."
+    },
+    "team": {
+      "crumb": "Ekip üyeleri",
+      "eyebrow": "Ayarlar · Ekip",
+      "titleLead": "Ekip",
+      "titleAccent": "üye",
+      "description": "Bu çalışma alanına kişi ekleyin, her birinin neler yapabileceğini seçin ve biri ayrıldığında erişimini kapatın.",
+      "addMember": "Üye ekle",
+      "reload": "Yeniden yükle",
+      "you": "Siz",
+      "noRole": "Rol yok",
+      "changeRoleAction": "Rolü değiştir",
+      "reactivate": "Yeniden etkinleştir",
+      "selfRoleHint": "Kendi rolünüzü değiştiremezsiniz.",
+      "roleLockedHint": "Bu üyenin rolünü değiştiremezsiniz: rolü sizinkinin üzerinde veya rol atama yetkiniz yok.",
+      "selfDeactivateHint": "Kendi hesabınızı devre dışı bırakamazsınız.",
+      "rolesUnavailable": "Roller sizin için yüklenemedi, bu nedenle üye ekleme ve rol değiştirme kullanılamıyor. Rol etiketleri, gösterilen üyelerden oluşturulur.",
+      "footer": "{total} içinden {shown} gösteriliyor",
+      "status": {
+        "active": "Etkin",
+        "inactive": "Etkin değil"
+      },
+      "filter": {
+        "label": "Üyeleri role göre filtrele",
+        "all": "Tümü",
+        "preset": {
+          "owner": "Sahipler",
+          "admin": "Yöneticiler",
+          "manager": "Müdürler",
+          "agent": "Temsilciler",
+          "viewer": "Görüntüleyiciler"
+        }
+      },
+      "search": {
+        "label": "Üyelerde ara",
+        "placeholder": "Ad veya e-posta ara…"
+      },
+      "table": {
+        "caption": "Çalışma alanı üyeleri",
+        "member": "Üye",
+        "roles": "Roller",
+        "status": "Durum",
+        "actions": "İşlemler"
+      },
+      "empty": {
+        "none": "Henüz üye yok.",
+        "noMatch": "Bu filtreyle eşleşen üye yok.",
+        "clear": "Filtreleri temizle"
+      },
+      "toasts": {
+        "added": "{name} çalışma alanına eklendi.",
+        "rolesUpdated": "{name} için roller güncellendi.",
+        "deactivated": "{name} devre dışı bırakıldı.",
+        "reactivated": "{name} yeniden etkinleştirildi."
+      },
+      "deactivate": {
+        "action": "Devre dışı bırak",
+        "title": "Üyeyi devre dışı bırak",
+        "message": "{name} artık oturum açamayacak. İstediğiniz zaman yeniden etkinleştirebilirsiniz.",
+        "confirm": "Devre dışı bırak",
+        "cancel": "İptal"
+      },
+      "add": {
+        "eyebrow": "Ekip",
+        "title": "Üye ekle",
+        "fullName": "Ad soyad",
+        "email": "E-posta",
+        "emailInvalid": "Geçerli bir e-posta adresi girin.",
+        "password": "Parola",
+        "passwordHint": "En az 8 karakter. Kişiyle paylaşın; oturum açtıktan sonra değiştirebilir.",
+        "passwordGenerated": "Oluşturulan parola: göz düğmesiyle gösterin ve kaydetmeden önce kopyalayın.",
+        "passwordShort": "Parola en az 8 karakter olmalıdır.",
+        "generate": "Oluştur",
+        "role": "Rol",
+        "submit": "Üye ekle"
+      },
+      "changeRole": {
+        "title": "{name} kişisinin rollerini değiştir",
+        "legend": "Roller",
+        "keptRole": "{name} kalır: bunu veremez veya geri alamazsınız.",
+        "atLeastOne": "En az bir rol seçin.",
+        "save": "Rolleri kaydet",
+        "reload": "Yeniden yükle"
+      }
+    },
+    "list": {
+      "crumb": "Roller",
+      "eyebrow": "Ayarlar · Ekip · Roller",
+      "titleLead": "Roller ve",
+      "titleAccent": "izinler",
+      "description": "Roller, üyelerin neler yapabileceğini belirler. Hazır bir rol seçin veya izin matrisinden özel bir rol oluşturun.",
+      "teamLink": "Ekip üyeleri",
+      "addRole": "Rol ekle",
+      "empty": "Henüz rol yok.",
+      "preset": "Hazır",
+      "custom": "Özel",
+      "locked": "Kilitli",
+      "footer": "{count} rol",
+      "membersLink": "{count} üye {name} rolünü kullanıyor",
+      "table": {
+        "caption": "Çalışma alanı rolleri",
+        "name": "Rol",
+        "type": "Tür",
+        "members": "Üyeler",
+        "permissions": "İzinler",
+        "lastEdited": "Son düzenleme",
+        "actions": "İşlemler"
+      },
+      "row": {
+        "menu": "{name} için işlemler",
+        "edit": "Rolü düzenle",
+        "view": "Rolü görüntüle",
+        "delete": "Rolü sil"
+      },
+      "toasts": {
+        "deleted": "“{name}” rolü silindi."
+      }
+    },
+    "editor": {
+      "crumbRoles": "Roller",
+      "crumbNew": "Yeni rol",
+      "eyebrowNew": "Ayarlar · Roller · Yeni",
+      "eyebrowEdit": "Ayarlar · Roller · Düzenle",
+      "titleLead": "Oluştur",
+      "titleAccent": "rol",
+      "description": "Rolün adını verin ve neler yapabileceğini seçin.",
+      "summary": "{count, plural, =0 {Bu rolü kullanan üye yok.} other {# üye bu rolü kullanıyor.}}",
+      "notFoundTitle": "Rol bulunamadı",
+      "notFoundBody": "Bu rol artık mevcut değil. Silinmiş olabilir.",
+      "backToRoles": "Rollere dön",
+      "back": "Geri",
+      "save": "Değişiklikleri kaydet",
+      "create": "Rol oluştur",
+      "saving": "Kaydediliyor…",
+      "reload": "Yeniden yükle",
+      "discard": "Kaydedilmemiş değişiklikleriniz var. Kaydetmeden ayrılmak istiyor musunuz?",
+      "lockedNotice": "Sahip rolü tüm izinlere sahiptir ve değiştirilemez veya silinemez",
+      "adminNotice": "Yönetici rolünün izinlerini yalnızca bir Sahip değiştirebilir.",
+      "readOnlyNotice": "Bu rolün izinlerini değiştiremezsiniz.",
+      "details": "Rol ayrıntıları",
+      "name": "Rol adı",
+      "namePlaceholder": "örn. Destek lideri",
+      "presetNameHint": "Hazır roller adlarını korur.",
+      "template": "Bir rolden başla",
+      "templateHint": "Başka bir rolün izinlerini aşağıdaki matrise kopyalar.",
+      "templateBlank": "Boş (izin yok)",
+      "templateOption": "{name} ({count} izin)",
+      "danger": {
+        "title": "Bu rolü sil",
+        "hint": "Bu rolü kullanan kimse yok, bu nedenle silinebilir.",
+        "inUse": "{count, plural, other {# üye hâlâ bu rolü kullanıyor.}} Önce onları başka bir role taşıyın.",
+        "action": "Rolü sil"
+      },
+      "toasts": {
+        "created": "“{name}” rolü oluşturuldu.",
+        "updated": "“{name}” rolü güncellendi.",
+        "deleted": "“{name}” rolü silindi."
+      }
+    },
+    "matrix": {
+      "title": "İzinler",
+      "counter": "{count} / {total} seçildi",
+      "deniedCount": "{count} reddedildi",
+      "selectAll": "Tümünü seç",
+      "selectAllCategory": "Tümünü seç",
+      "selectAllOf": "{category} içindekilerin tümünü seç",
+      "search": "İzinlerde ara…",
+      "searchLabel": "İzinlerde ara",
+      "denyHint": "Reddetme, izni geçersiz kılar: üyenin başka bir rolü izin verse bile reddedilen izin uygulanmaz.",
+      "emptyCatalogue": "Kullanılabilir izin yok.",
+      "noMatch": "“{query}” ile eşleşen izin yok.",
+      "allow": "İzin ver",
+      "deny": "Reddet",
+      "effectLabel": "İzin ver veya reddet: {label}",
+      "scopeLabel": "Kayıt kapsamı: {label}",
+      "needsPlan": "{feature} planı gerekli",
+      "needsApp": "{app} uygulamasının kurulu olması gerekli",
+      "lockedHint": "Bu izin henüz bu çalışma alanında kullanılamıyor. Plan özelliği açıldığında veya uygulama kurulduğunda kullanılabilir olur.",
+      "scope": {
+        "all": "Tüm kayıtlar",
+        "team": "Ekip kayıtları",
+        "own": "Kendi kayıtları"
+      }
+    },
+    "delete": {
+      "title": "Rolü sil",
+      "message": "“{name}” rolü silinsin mi? Bu işlem geri alınamaz.",
+      "confirm": "Rolü sil",
+      "cancel": "İptal",
+      "inUseTitle": "“{name}” hâlâ kullanımda",
+      "inUse": "{count, plural, =0 {Üyeler hâlâ bu rolü kullanıyor.} other {# üye hâlâ bu rolü kullanıyor.}} Önce onları başka bir role taşıyın, ardından rolü silin.",
+      "viewMembers": "Bu role sahip üyeleri görüntüle"
+    }
+  }
+}

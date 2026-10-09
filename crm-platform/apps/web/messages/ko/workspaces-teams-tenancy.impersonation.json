@@ -1,0 +1,23 @@
+{
+  "workspaces-teams-tenancy": {
+    "impersonation": {
+      "label": "대리 접속 중",
+      "viewing": "{owner} 권한으로 {workspace} 보는 중",
+      "reason": "사유: {reason}",
+      "readOnly": "읽기 전용",
+      "timeLeft": "{minutes, plural, other {#분 남음}}",
+      "endsSoon": "1분 미만 남음",
+      "stop": "대리 접속 종료",
+      "stopping": "종료 중",
+      "stopFailed": "세션을 종료할 수 없습니다. 다시 시도하세요.",
+      "readOnlyRefused": "이 세션은 읽기 전용이므로 변경할 수 없습니다.",
+      "forbiddenRefused": "소유자 권한으로 워크스페이스를 보는 동안에는 사용할 수 없습니다.",
+      "ended": {
+        "title": "이 대리 접속 세션이 종료되었습니다",
+        "expired": "링크를 이미 사용했거나 만료되었습니다. 콘솔에서 다시 시작하세요.",
+        "body": "여기서는 워크스페이스에서 더 이상 할 수 있는 작업이 없습니다. 콘솔로 돌아가 새 세션을 시작하세요.",
+        "back": "콘솔로 돌아가기"
+      }
+    }
+  }
+}

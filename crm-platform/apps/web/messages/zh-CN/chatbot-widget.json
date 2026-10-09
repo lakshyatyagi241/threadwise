@@ -1,0 +1,350 @@
+{
+  "chatbotWidget": {
+    "nav": {
+      "title": "聊天小组件"
+    },
+    "common": {
+      "dismiss": "关闭"
+    },
+    "paywall": {
+      "kicker": "套餐",
+      "title": "您的套餐不包含聊天机器人小组件",
+      "body": "您的套餐不包含聊天机器人小组件。升级即可解锁此功能。",
+      "upgrade": "查看套餐"
+    },
+    "list": {
+      "tip": "提示",
+      "tipBody": "只需将一行代码添加到任意网站，即可启动悬浮聊天气泡。每个小组件可由智能体驱动、转接到 WhatsApp，或两者兼有——访客会话将进入您的团队收件箱。",
+      "statusViews": "小组件状态",
+      "view": {
+        "all": "全部小组件",
+        "active": "启用中",
+        "paused": "已暂停"
+      },
+      "status": {
+        "all": "全部",
+        "active": "启用中",
+        "paused": "已暂停"
+      },
+      "trainFirst": "先训练",
+      "trainBody": "请先在 <link>AI 训练</link>中构建智能体并添加知识库，然后在此关联，让小组件以您的口吻作答。",
+      "workspace": "工作区",
+      "title": "聊天机器人",
+      "titleAccent": "小组件",
+      "intro": "在任意页面嵌入悬浮聊天气泡。智能体在浏览器内回复，必要时转交给统一收件箱。",
+      "activePill": "{count} 个启用中",
+      "newWidget": "新建小组件",
+      "card": {
+        "total": "小组件总数",
+        "visitors": "访客",
+        "avg": "每个小组件平均",
+        "health": "健康度",
+        "activeHint": "{count} 个启用中",
+        "allTime": "累计",
+        "visitorsUnit": "访客"
+      },
+      "health": {
+        "healthy": "正常",
+        "empty": "空",
+        "attention": "需关注"
+      },
+      "search": "按名称或标识搜索…",
+      "col": {
+        "widget": "小组件",
+        "engine": "引擎",
+        "agent": "智能体",
+        "visitors": "访客",
+        "updated": "更新时间",
+        "actions": "操作"
+      },
+      "loading": "正在加载小组件",
+      "loadError": "无法加载小组件。",
+      "retry": "重试",
+      "emptyTitle": "暂无小组件",
+      "emptyBody": "构建您的第一个聊天小组件——它会以悬浮气泡的形式显示在您嵌入它的页面上。",
+      "createWidget": "创建小组件",
+      "noMatch": "此页面上没有与搜索匹配的小组件。",
+      "showing": "显示",
+      "of": "/",
+      "widgetsCount": "{count} 个小组件",
+      "loadMore": "加载更多",
+      "pill": {
+        "active": "启用中",
+        "paused": "已暂停"
+      },
+      "action": {
+        "preview": "打开独立预览",
+        "copy": "复制嵌入代码",
+        "edit": "编辑小组件",
+        "rotate": "轮换嵌入令牌",
+        "duplicate": "复制小组件",
+        "delete": "删除小组件"
+      },
+      "copied": "代码已复制——请粘贴到您网站的 {tag} 之前。",
+      "duplicateFailed": "无法复制该小组件。",
+      "rotated": "令牌已轮换——请复制新代码。",
+      "rotateFailed": "轮换失败——{reason}",
+      "networkError": "网络错误",
+      "deleted": "小组件已删除。",
+      "deleteFailed": "删除失败——{reason}",
+      "rotateTitle": "轮换此小组件的嵌入令牌？",
+      "rotateBody": "您网站上的当前代码将立即失效。您需要复制并粘贴新代码。",
+      "rotate": "轮换",
+      "cancel": "取消",
+      "deleteTitle": "删除“{name}”？",
+      "deleteBody": "您网站上的嵌入代码将立即失效。过往会话仍保留在您的团队收件箱中。",
+      "delete": "删除小组件",
+      "keep": "保留",
+      "copyManuallyTitle": "请手动复制",
+      "gotIt": "知道了",
+      "close": "关闭"
+    },
+    "builder": {
+      "loading": "正在加载小组件",
+      "notFoundTitle": "未找到小组件",
+      "notFoundBody": "您的工作区中不存在此小组件。",
+      "loadError": "无法加载该小组件。",
+      "backToWidgets": "返回小组件",
+      "back": "返回小组件",
+      "crumb": "聊天机器人小组件",
+      "crumbEdit": "编辑",
+      "crumbNew": "新建",
+      "titleNew": "构建聊天机器人",
+      "titleEdit": "编辑聊天机器人",
+      "titleAccent": "小组件",
+      "stateSaved": "已保存",
+      "stateDraft": "草稿 / 未保存",
+      "saveDraft": "保存草稿",
+      "stepper": "构建步骤",
+      "steps": {
+        "setup": "设置",
+        "look": "外观",
+        "voice": "语气",
+        "launch": "发布"
+      },
+      "previous": "上一步",
+      "next": "下一步",
+      "stepOf": "第 {n} 步，共 {total} 步",
+      "launchWidget": "发布小组件",
+      "draftSaved": "草稿已保存。",
+      "savedEmbed": "已保存——嵌入代码可复制。",
+      "saveFailed": "保存失败——请检查高亮的步骤。",
+      "snippetCopied": "代码已复制。",
+      "clipboardBlocked": "剪贴板被拦截——请手动选中代码。",
+      "problem": {
+        "name": "请为小组件命名。",
+        "assistant": "请关联智能体，或将引擎切换为 WhatsApp 深度链接。",
+        "whatsapp": "请填写完整的 WhatsApp 号码——国家/地区区号加数字。",
+        "launcherColour": "启动器填充色必须是十六进制颜色（例如 #075E54）。",
+        "headerTitle": "请为聊天窗口设置标题。",
+        "welcome": "请填写开场白。",
+        "bgImage": "请添加背景图片 URL，或切换为纯色。"
+      },
+      "setup": {
+        "title": "小组件设置",
+        "required": "必填",
+        "name": "内部名称",
+        "namePlaceholder": "例如：定价页小组件",
+        "nameHint": "仅供团队使用。访客看不到此标签。",
+        "position": "启动器位置",
+        "bottomRight": "右下角",
+        "bottomLeft": "左下角",
+        "positionHint": "圆形聊天气泡在您网站上悬浮的位置。",
+        "engine": "会话引擎",
+        "mode": {
+          "ai": {
+            "title": "智能体",
+            "body": "经过训练的 AI 直接在浏览器中回答。"
+          },
+          "whatsapp": {
+            "title": "WhatsApp 深度链接",
+            "body": "将访客带入 WhatsApp 应用进行聊天。"
+          },
+          "both": {
+            "title": "智能体 + WhatsApp",
+            "body": "由访客选择——在此聊天或打开 WhatsApp。"
+          }
+        },
+        "agent": "智能体（大脑）",
+        "agentPlaceholder": "— 选择已保存的智能体 —",
+        "agentHintBefore": "没有找到？",
+        "agentBuild": "构建智能体",
+        "agentHintAfter": "先。",
+        "whatsapp": "WhatsApp 号码",
+        "country": "国家/地区",
+        "phonePlaceholder": "不含国家/地区区号的号码",
+        "whatsappHint": "选择国家/地区旗帜——区号会自动添加。",
+        "prefilled": "预填消息（进入 WhatsApp 后显示）",
+        "prefilledPlaceholder": "你好，我想了解一下价格。",
+        "prefilledHint": "访客进入 WhatsApp 时，此消息已预先输入好。"
+      },
+      "look": {
+        "title": "启动器与窗口样式",
+        "tag": "品牌",
+        "launcherFill": "启动器填充色",
+        "launcherFillHint": "圆形气泡的背景。",
+        "headerTint": "窗口标题栏底色",
+        "headerTintHint": "聊天窗口的顶部条。",
+        "headerInk": "标题栏文字色",
+        "headerInkHint": "标题栏的文字/图标颜色。",
+        "windowTitle": "窗口标题（显示在标题栏）",
+        "windowTitlePlaceholder": "与我们的团队聊天",
+        "windowTitleHint": "请保持在约 30 个字符以内。",
+        "icon": "自定义启动器图标 URL",
+        "optional": "可选",
+        "iconHint": "PNG / SVG · 建议 80×80 像素 · 透明背景。"
+      },
+      "voice": {
+        "title": "开场消息与聊天界面",
+        "tag": "内容",
+        "opening": "开场白",
+        "openingPlaceholder": "你好！今天有什么可以帮您？",
+        "openingHint": "聊天打开时显示的第一个气泡。",
+        "bubbleFill": "收到的气泡填充色",
+        "bubbleFillHint": "您这一方气泡的颜色。",
+        "bubbleInk": "收到的气泡文字色",
+        "bubbleInkHint": "气泡内的文字颜色。",
+        "canvas": "窗口背景",
+        "canvasKind": {
+          "color": "纯色",
+          "image": "平铺图片"
+        },
+        "canvasColour": "窗口背景色",
+        "canvasImage": "窗口背景图片 URL",
+        "canvasImageHint": "可平铺的 PNG 效果最佳。",
+        "autoOpen": "自动弹出",
+        "autoOpenHint": "页面加载约 1.2 秒后自动打开聊天。",
+        "intake": "访客信息收集",
+        "intakeHint": "聊天开始前显示的预聊天字段。全部跳过即为匿名聊天。",
+        "intakeField": {
+          "name": "显示名称",
+          "email": "电子邮箱",
+          "phone": "电话号码"
+        }
+      },
+      "launch": {
+        "title": "发送按钮与嵌入代码",
+        "tag": "发布",
+        "label": "发送按钮文字",
+        "labelPlaceholder": "发送消息",
+        "labelHint": "避免使用“提交”。可以试试“发送消息”或“咨询团队”。",
+        "fill": "发送按钮填充色",
+        "ink": "发送按钮文字色",
+        "ready": "已就绪。请将此代码粘贴到您要放置小组件的页面的 <code>{tag}</code> 之前。",
+        "copy": "复制到剪贴板",
+        "preview": "打开独立预览"
+      },
+      "preview": {
+        "title": "实时预览",
+        "chat": "聊天",
+        "hi": "你好！",
+        "send": "发送",
+        "engine": {
+          "ai": "智能体",
+          "whatsapp": "WhatsApp",
+          "both": "AI + WhatsApp"
+        },
+        "metaEngine": "引擎",
+        "metaPlacement": "位置",
+        "metaAutoOpen": "自动打开",
+        "metaIntake": "信息收集",
+        "left": "左",
+        "right": "右",
+        "on": "开",
+        "off": "关",
+        "none": "无"
+      },
+      "colorSwatch": "{label}（色块）"
+    },
+    "whatsappBuilder": {
+      "crumb": "WhatsApp 小组件",
+      "title": "WhatsApp 小组件",
+      "titleAccent": "安装与自定义",
+      "type": "小组件类型",
+      "nameHint": "只有您能看到此名称。它同时也是在聊天窗口中显示的企业名称。",
+      "save": "保存更改",
+      "saved": "更改已保存。您的小组件已上线。",
+      "card": {
+        "1": {
+          "title": "设置 WhatsApp 聊天按钮样式",
+          "subtitle": "选择最适合您网站的精美聊天按钮设计",
+          "buttonType": "按钮类型",
+          "type": {
+            "pill": "“与我们聊天”按钮",
+            "icon": "仅图标的圆形按钮"
+          },
+          "iconOnly": "仅图标",
+          "buttonColor": "按钮颜色",
+          "pickCustom": "选择自定义颜色",
+          "custom": "自定义 {hex}"
+        },
+        "2": {
+          "title": "设计您的聊天窗口",
+          "subtitle": "为聊天窗口选择一张精美图片",
+          "image": "聊天窗口图片",
+          "names": {
+            "support": "客服",
+            "store": "商店",
+            "chat": "聊天",
+            "person": "人物"
+          },
+          "url": "或使用您自己的图片地址",
+          "urlHint": "粘贴方形图片的地址 (https://...)。暂不支持上传文件。"
+        },
+        "3": {
+          "title": "设置欢迎消息",
+          "subtitle": "欢迎您的客户",
+          "greeting": "问候语",
+          "greetingHint": "客户打开聊天窗口时向他们问好",
+          "intro": "介绍消息",
+          "introHint": "介绍您的业务，并告诉客户您能提供哪些帮助"
+        },
+        "4": {
+          "title": "设置聊天按钮位置",
+          "subtitle": "调整按钮在电脑和手机上的位置",
+          "preview": "聊天按钮预览",
+          "desktopPreview": "桌面端预览",
+          "mobilePreview": "移动端预览",
+          "desktopPosition": "桌面端启动器位置",
+          "mobilePosition": "移动端启动器位置",
+          "left": "左",
+          "right": "右",
+          "desktopSideSpacing": "桌面端侧边距",
+          "desktopBottomSpacing": "桌面端底部距离",
+          "mobileSideSpacing": "移动端侧边距",
+          "mobileBottomSpacing": "移动端底部距离",
+          "px": "px"
+        },
+        "5": {
+          "title": "配置您的 WhatsApp 号码",
+          "subtitle": "将 WhatsApp 号码连接到聊天窗口",
+          "number": "WhatsApp 号码",
+          "numberHint": "聊天窗口会将您的客户引导至此 WhatsApp 号码",
+          "prefilled": "预填消息",
+          "prefilledHint": "这将是默认的第一条消息文本"
+        }
+      },
+      "install": {
+        "title": "安装到您的网站",
+        "body": "请将此标签粘贴到每个需要显示该小组件的页面的 body 结束标签之前。",
+        "copy": "复制代码"
+      },
+      "problem": {
+        "name": "请为小组件命名。",
+        "avatar": "请使用内置图片或 http(s) 图片地址。",
+        "greeting": "请填写问候语。",
+        "intro": "请填写介绍消息。",
+        "spacing": "间距必须是 0 到 500 之间的整数像素值。",
+        "whatsapp": "请填写完整的 WhatsApp 号码：国家/地区区号加数字。"
+      },
+      "preview": {
+        "title": "实时预览",
+        "desktop": "桌面端",
+        "mobile": "移动端",
+        "frameTitle": "WhatsApp 小组件实时预览",
+        "hint": "用圆形按钮收起面板，从启动器再次打开，并试试“开始对话”。",
+        "businessName": "您的业务"
+      }
+    }
+  }
+}

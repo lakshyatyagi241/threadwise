@@ -1,0 +1,113 @@
+{
+  "calling-voice": {
+    "nav": {
+      "title": "Anrufe",
+      "description": "WhatsApp-Anrufe für jede Nummer ein- oder ausschalten.",
+      "keywords": "anruf, anrufe, sprache, telefon, whatsapp-anrufe, anruf-button"
+    },
+    "common": {
+      "dismiss": "Schließen"
+    },
+    "button": {
+      "label": "Anrufen",
+      "tooltip": "WhatsApp-Anruf starten",
+      "working": "Wird verarbeitet..."
+    },
+    "confirm": {
+      "title": "Keine bestätigte Anrufberechtigung",
+      "body": "Für diesen Kontakt liegt keine bestätigte Anrufberechtigung vor.",
+      "callAnyway": "Trotzdem anrufen",
+      "callAnywayHint": "Funktioniert, wenn die Person in WhatsApp bereits auf „Zulassen“ getippt hat.",
+      "askPermission": "Berechtigung anfragen",
+      "askPermissionHint": "Sendet stattdessen eine Berechtigungsanfrage. Es wird kein Anruf getätigt.",
+      "close": "Schließen"
+    },
+    "toast": {
+      "noPhone": "Dieser Kontakt hat keine Telefonnummer.",
+      "noNumber": "Anrufe sind für keine WABA-Nummer aktiviert.",
+      "alreadyPermitted": "Dieser Kontakt erlaubt bereits Anrufe – der Anruf wird gestartet...",
+      "permissionSent": "Berechtigungsanfrage gesendet. In WhatsApp sieht die Person Annehmen/Ablehnen. Versuchen Sie es nach ihrer Antwort erneut mit Anrufen.",
+      "permissionFailed": "Berechtigungsanfrage konnte nicht gesendet werden: {message}",
+      "startFailed": "Anruf konnte nicht gestartet werden: {message}",
+      "acceptInvalid": "Anruf konnte nicht angenommen werden: ungültige Anrufdaten von WhatsApp. Versuchen Sie es erneut.",
+      "acceptFailed": "Anruf konnte nicht angenommen werden: {message}",
+      "alreadyAccepted": "Der Anruf wurde bereits von einem anderen Teammitglied angenommen.",
+      "recordingStarted": "Aufnahme gestartet – sie wird beim Auflegen in den Anrufprotokollen gespeichert.",
+      "recordingSaved": "Anrufaufnahme in den Anrufprotokollen gespeichert.",
+      "recordUnsupported": "Die Aufnahme wird in diesem Browser nicht unterstützt.",
+      "noActiveCall": "Kein aktiver Anruf zum Aufnehmen."
+    },
+    "incoming": {
+      "title": "Eingehender WhatsApp-Anruf",
+      "caller": "Anrufer +{digits}",
+      "accept": "Annehmen",
+      "decline": "Ablehnen",
+      "aiHandling": "Die KI bearbeitet diesen Anruf..."
+    },
+    "panel": {
+      "label": "Anruf läuft",
+      "title": "Im Gespräch",
+      "ringing": "es klingelt...",
+      "connected": "verbunden",
+      "timer": "Anrufdauer",
+      "mute": "Stummschalten",
+      "muted": "Stummgeschaltet",
+      "end": "Beenden",
+      "record": "Aufnehmen",
+      "recording": "Aufnahme läuft",
+      "recordTooltip": "Diesen Anruf aufnehmen",
+      "recordingTooltip": "Dieser Anruf wird aufgenommen",
+      "recordingNotice": "Dieser Anruf wird aufgenommen"
+    },
+    "failures": {
+      "REJECTED": "Der Kunde hat den Anruf abgelehnt.",
+      "BUSY": "Der Kunde führt gerade ein anderes Gespräch.",
+      "NO_ANSWER": "Keine Antwort – der Kunde hat nicht abgenommen.",
+      "MISSED": "Der Kunde hat den Anruf verpasst.",
+      "CANCELLED": "Der Anruf wurde abgebrochen.",
+      "MIC_BLOCKED": "Mikrofonzugriff blockiert – die anrufende Person kann Sie nicht hören. Erteilen Sie in Ihrem Browser die Mikrofonberechtigung und versuchen Sie es erneut.",
+      "BUSY_SLOT": "In diesem Tab ist bereits ein anderer Anruf aktiv.",
+      "INVALID_SDP": "Ungültiges SDP-Angebot – v=0 oder Medienzeile fehlt",
+      "LOCAL_SDP_EMPTY": "Lokales SDP leer – ICE-Gathering fehlgeschlagen",
+      "ENDED_EARLY": "Der Anruf wurde beendet, bevor er verbunden war.",
+      "ANSWER_FAILED": "Die WhatsApp-Antwort konnte nicht angewendet werden"
+    },
+    "errors": {
+      "CALL_NUMBER_NOT_FOUND": "Diese Nummer gehört nicht mehr zu Ihrem Workspace. Laden Sie die Seite neu und versuchen Sie es erneut.",
+      "CALL_NOT_FOUND": "Dieser Anruf wurde nicht gefunden. Er ist möglicherweise bereits beendet.",
+      "CALL_NOT_WABA": "Anrufe funktionieren nur mit WhatsApp-Cloud-API-Nummern. Diese Nummer ist auf andere Weise verbunden.",
+      "CALL_NUMBER_NOT_CONNECTED": "Diese Nummer ist derzeit nicht mit der WhatsApp Cloud API verbunden. Verbinden Sie sie unter Kanäle erneut und versuchen Sie es dann noch einmal.",
+      "CALL_COEXISTENCE_UNSUPPORTED": "Eine Nummer, die auch in der WhatsApp-Business-App verwendet wird, kann keine Anrufe annehmen.",
+      "CALL_NOT_ENABLED": "Anrufe sind für diese Nummer ausgeschaltet. Schalten Sie sie zuerst unter Anrufe ein.",
+      "CALL_META_REFUSED": "WhatsApp hat die Anfrage abgelehnt. Versuchen Sie es gleich noch einmal.",
+      "CALL_PERMISSION_REQUESTED": "Berechtigungsanfrage gesendet. In WhatsApp sieht die Person Annehmen/Ablehnen. Versuchen Sie es nach ihrer Antwort erneut mit Anrufen.",
+      "CALL_STATE_CONFLICT": "Der Anruf wurde bereits von einem anderen Teammitglied angenommen.",
+      "CALL_RECORDING_FAILED": "Die Aufnahme konnte nicht gespeichert werden.",
+      "FORBIDDEN": "Sie haben keine Berechtigung, Anrufe zu nutzen.",
+      "PLAN_FEATURE_LOCKED": "Ihr Tarif enthält keine WhatsApp-Anrufe.",
+      "NETWORK": "Netzwerkfehler – bitte versuchen Sie es erneut.",
+      "UNEXPECTED": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+    },
+    "settings": {
+      "title": "Anrufe",
+      "intro": "Schalten Sie WhatsApp-Anrufe für eine Nummer ein, um den grünen Anruf-Button in deren Chats im Posteingang anzuzeigen.",
+      "cardTitle": "WhatsApp-Anrufe",
+      "numberFallback": "WhatsApp-Nummer",
+      "connection": "Verbindung: {status}",
+      "enabledStatus": "Aktiviert – der grüne Anruf-Button wird jetzt in den Chats dieser Nummer im Posteingang angezeigt.",
+      "enabledSince": "Aktiviert am {date}",
+      "offStatus": "Aus – schalten Sie es ein, damit der Anruf-Button in Chats mit dieser Nummer erscheint.",
+      "enable": "Anrufe aktivieren",
+      "disable": "Anrufe ausschalten",
+      "asking": "WhatsApp wird angefragt...",
+      "enabledDone": "Anrufe sind für diese Nummer jetzt eingeschaltet.",
+      "disabledDone": "Anrufe sind für diese Nummer jetzt ausgeschaltet.",
+      "loading": "Nummern werden geladen",
+      "loadFailed": "Ihre Nummern konnten nicht geladen werden.",
+      "retry": "Erneut versuchen",
+      "emptyTitle": "Noch keine WhatsApp-Nummern",
+      "emptyMessage": "Verbinden Sie unter Kanäle eine WhatsApp-Cloud-API-Nummer und kommen Sie dann zurück, um Anrufe einzuschalten.",
+      "viewOnly": "Sie sehen den Anrufstatus jeder Nummer. Zum Ein- oder Ausschalten benötigen Sie die Berechtigung zur Anrufverwaltung."
+    }
+  }
+}

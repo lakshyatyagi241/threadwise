@@ -1,0 +1,513 @@
+{
+  "channel-whatsapp-cloud": {
+    "common": {
+      "dismiss": "Bỏ qua",
+      "copy": "Sao chép",
+      "copied": "Đã sao chép",
+      "copyFailed": "Không thể sao chép. Hãy chọn văn bản và sao chép thủ công."
+    },
+    "screen": {
+      "title": "WhatsApp",
+      "intro": "Các số WhatsApp Business được kết nối với không gian làm việc này. Khách hàng nhắn đến một số sẽ xuất hiện trong hộp thư, và câu trả lời của bạn được gửi đi từ số đó.",
+      "add": "Thêm số WhatsApp",
+      "readOnly": "Bạn có thể xem các số đã kết nối. Chỉ những người quản lý kênh mới có thể thêm, thay đổi hoặc xóa số.",
+      "helpNote": "Hướng dẫn từng bước để kết nối một số được lưu trong kho mã nguồn:",
+      "providerLine": "Các số của bạn được phục vụ qua nhà cung cấp WhatsApp của nền tảng.",
+      "loading": "Đang tải các số WhatsApp của bạn",
+      "retry": "Thử lại",
+      "listLabel": "Các số WhatsApp đã kết nối",
+      "empty": {
+        "title": "Chưa kết nối số WhatsApp nào",
+        "message": "Kết nối một số để khách hàng có thể bắt đầu trò chuyện với bạn trong hộp thư. Chỉ mất ba bước ngắn.",
+        "messageReadOnly": "Chưa có số WhatsApp nào được kết nối. Hãy nhờ người quản lý kênh thêm một số."
+      }
+    },
+    "state": {
+      "connected": "Đã kết nối",
+      "needs_reconnect": "Cần kết nối lại",
+      "error": "Lỗi",
+      "not_connected": "Chưa kết nối",
+      "help": {
+        "needs_reconnect": "WhatsApp không còn chấp nhận thông tin xác thực của số này, nên không thể gửi hoặc nhận tin nhắn. Hãy kết nối lại để tiếp tục.",
+        "error": "Số này đang gặp sự cố. Hãy chạy kiểm tra tình trạng để xem chi tiết.",
+        "not_connected": "Số này đang tắt hoặc chưa vượt qua lần kiểm tra đầu tiên. Tin nhắn không được gửi qua số này."
+      }
+    },
+    "quality": {
+      "green": "Cao",
+      "yellow": "Trung bình",
+      "red": "Thấp",
+      "unrated": "Chưa xếp hạng"
+    },
+    "tier": {
+      "limited": "{label} khách hàng mỗi ngày",
+      "unlimited": "Không giới hạn"
+    },
+    "card": {
+      "verifiedName": "Tên đã xác minh: {name}",
+      "phoneId": "Phone number ID",
+      "wabaId": "Business account ID",
+      "quality": "Xếp hạng chất lượng",
+      "tier": "Giới hạn nhắn tin",
+      "lastCheck": "Lần kiểm tra tình trạng gần nhất",
+      "neverChecked": "Chưa từng kiểm tra",
+      "lastActivity": "Hoạt động gần nhất",
+      "noActivity": "Chưa có",
+      "token": "Access token",
+      "tokenEnds": "kết thúc bằng {hint}",
+      "none": "Không có sẵn",
+      "providerChanged": {
+        "title": "Nhà cung cấp của số này đã thay đổi",
+        "message": "Nền tảng đã chuyển số này sang nhà cung cấp WhatsApp khác. Bạn không cần làm gì, chỉ cần chạy kiểm tra tình trạng để xác nhận số vẫn hoạt động."
+      },
+      "actions": {
+        "check": "Kiểm tra tình trạng",
+        "checking": "Đang kiểm tra",
+        "edit": "Sửa thông tin xác thực",
+        "reconnect": "Kết nối lại",
+        "editDetails": "Sửa chi tiết",
+        "more": "Thêm",
+        "moreLabel": "Thêm thao tác cho {name}",
+        "subscribe": "Sửa lỗi tin nhắn đến",
+        "rotate": "Verify token mới",
+        "switchOff": "Tắt",
+        "switchOn": "Bật",
+        "remove": "Xóa"
+      }
+    },
+    "health": {
+      "issuesTitle": "Kết quả kiểm tra",
+      "severity": {
+        "critical": "Sự cố",
+        "warning": "Cảnh báo",
+        "info": "Ghi chú"
+      },
+      "phoneStatus": "Trạng thái số",
+      "webhook": "Tin nhắn đến",
+      "subscribed": "Đã đăng ký",
+      "notSubscribed": "Chưa đăng ký",
+      "token": "Access token",
+      "tokenValid": "Hợp lệ",
+      "tokenInvalid": "Không hợp lệ",
+      "tokenExpires": "Token hết hạn",
+      "issues": {
+        "TOKEN_INVALID": {
+          "title": "Access token không còn hợp lệ",
+          "detail": "Hãy thay bằng token vĩnh viễn mới từ cài đặt doanh nghiệp Meta của bạn."
+        },
+        "TOKEN_EXPIRED": {
+          "title": "Access token đã hết hạn",
+          "detail": "Hãy thay bằng token system user vĩnh viễn để token không bao giờ hết hạn."
+        },
+        "TOKEN_EXPIRING": {
+          "title": "Access token sẽ hết hạn trong vòng 7 ngày",
+          "detail": "Hãy dùng token system user vĩnh viễn để việc gửi không bị gián đoạn."
+        },
+        "TOKEN_SCOPE_MISSING": {
+          "title": "Token không thể gửi tin nhắn",
+          "detail": "Hãy tạo token có quyền whatsapp_business_messaging."
+        },
+        "TOKEN_MANAGEMENT_SCOPE_MISSING": {
+          "title": "Token không thể quản lý tài khoản",
+          "detail": "Hãy thêm quyền whatsapp_business_management để có thể thiết lập webhook và mẫu."
+        },
+        "NO_WEBHOOK_SUBSCRIPTION": {
+          "title": "Tin nhắn đến không vào được hộp thư",
+          "detail": "Ứng dụng chưa được đăng ký với tài khoản này. Hãy dùng Sửa lỗi tin nhắn đến trong menu của thẻ."
+        },
+        "QUALITY_RED": {
+          "title": "Chất lượng tin nhắn thấp",
+          "detail": "WhatsApp có thể giới hạn số khách hàng bạn có thể nhắn tin. Hãy gửi ít tin nhắn không được yêu cầu hơn."
+        },
+        "QUALITY_YELLOW": {
+          "title": "Chất lượng tin nhắn trung bình",
+          "detail": "Hãy theo dõi: việc khách hàng chặn hoặc báo cáo số sẽ làm giảm chất lượng."
+        },
+        "NUMBER_NOT_VERIFIED": {
+          "title": "Số chưa được xác minh",
+          "detail": "Hãy hoàn tất việc xác minh số này trong WhatsApp Manager."
+        },
+        "ON_PREMISE_NUMBER": {
+          "title": "Số vẫn đang dùng API WhatsApp cũ",
+          "detail": "Hãy đăng ký số trên Cloud API trong WhatsApp Manager, rồi kết nối lại."
+        },
+        "NO_ACCOUNT_ID": {
+          "title": "Chưa lưu business account ID",
+          "detail": "Hãy thêm vào mục Sửa thông tin xác thực để có thể kiểm tra tài khoản và webhook của nó."
+        }
+      }
+    },
+    "errors": {
+      "tokenInvalid": "WhatsApp không chấp nhận access token. Token có thể đã hết hạn, bị thu hồi hoặc được sao chép không đầy đủ.",
+      "permissionMissing": "Access token thiếu quyền cần thiết hoặc không thể truy cập số này.",
+      "idNotFound": "WhatsApp không nhận ra phone number ID này, hoặc token không thấy được số. Hãy kiểm tra cả hai ID.",
+      "appSecretInvalid": "App secret không khớp với ứng dụng. Hãy sao chép lại từ cài đặt ứng dụng.",
+      "accountRestricted": "Tài khoản WhatsApp bị hạn chế hoặc bị khóa. Hãy kiểm tra trạng thái trong WhatsApp Manager.",
+      "numberNotRegistered": "Số chưa được đăng ký cho WhatsApp Cloud API. Hãy đăng ký trong WhatsApp Manager trước.",
+      "rateLimited": "WhatsApp đang giới hạn yêu cầu. Hãy đợi vài phút rồi thử lại.",
+      "providerUnavailable": "Không thể kết nối đến WhatsApp hoặc có sự cố tạm thời. Hãy thử lại sau giây lát.",
+      "healthFailed": "Không thể bật số vì bước kiểm tra với WhatsApp đã thất bại.",
+      "alreadyConnected": "Số WhatsApp này đã được kết nối trong không gian làm việc này.",
+      "kindUnavailable": "Kết nối WhatsApp chưa được bật cho không gian làm việc này. Hãy hỏi quản trị viên nền tảng của bạn.",
+      "inUse": "Số này vẫn còn cuộc trò chuyện nên không thể xóa.",
+      "conflict": "Người khác đã thay đổi số này trước. Số đã được tải lại; hãy xem lại và thử lại.",
+      "forbidden": "Bạn không có quyền quản lý kênh.",
+      "validation": "Một số thông tin bạn nhập không hợp lệ. Hãy kiểm tra các trường được đánh dấu.",
+      "notFound": "Số này không còn tồn tại. Danh sách đã được làm mới.",
+      "network": "Không thể kết nối đến máy chủ. Hãy kiểm tra kết nối và thử lại.",
+      "generic": "Đã xảy ra lỗi. Hãy thử lại.",
+      "genericWithId": "Đã xảy ra lỗi. Hãy thử lại. Mã tham chiếu: {id}",
+      "detail": "Chi tiết: {detail}",
+      "fix": {
+        "tokenInvalid": "Hãy tạo token system user vĩnh viễn trong cài đặt doanh nghiệp Meta và dán vào mục Sửa thông tin xác thực.",
+        "permissionMissing": "Hãy tạo token với whatsapp_business_messaging và whatsapp_business_management, và đảm bảo system user có quyền truy cập tài khoản.",
+        "idNotFound": "Cả hai ID đều nằm trên trang API Setup của ứng dụng Meta, trong mục WhatsApp. Chúng là hai số khác nhau.",
+        "appSecretInvalid": "Nó nằm trên trang Basic trong cài đặt ứng dụng Meta của bạn.",
+        "accountRestricted": "Mở WhatsApp Manager, chọn tài khoản và đọc thông báo ở đầu trang.",
+        "numberNotRegistered": "Trong WhatsApp Manager, mở số và hoàn tất việc đăng ký."
+      }
+    },
+    "fieldErrors": {
+      "required": "Trường này là bắt buộc.",
+      "digits": "Chỉ dùng chữ số, từ 5 đến 32 ký tự.",
+      "tokenShort": "Có vẻ quá ngắn so với một access token.",
+      "tokenLong": "Quá dài so với một access token.",
+      "secretShort": "App secret phải có ít nhất 8 ký tự.",
+      "secretLong": "Quá dài so với một app secret.",
+      "nameLong": "Tối đa 120 ký tự.",
+      "addressLong": "Tối đa 40 ký tự.",
+      "sameAsPhoneId": "Giá trị này trùng với phone number ID. Đây là hai ID khác nhau."
+    },
+    "credentials": {
+      "name": {
+        "label": "Tên",
+        "hint": "Tên bạn và nhóm của bạn dùng để gọi số này.",
+        "placeholder": "Đường dây hỗ trợ"
+      },
+      "displayAddress": {
+        "label": "Số điện thoại",
+        "hint": "Tùy chọn. Hiển thị trong danh sách để dễ phân biệt các số.",
+        "placeholder": "+91 98765 43210"
+      },
+      "phoneNumberId": {
+        "label": "Phone number ID",
+        "hint": "Tìm trong WhatsApp Manager tại API Setup.",
+        "placeholder": "533524166787123",
+        "current": "Hiện tại là {value}. Để trống để giữ nguyên."
+      },
+      "businessAccountId": {
+        "label": "WhatsApp Business Account ID",
+        "hint": "Nằm cạnh phone number ID trên cùng một trang.",
+        "placeholder": "102938475647382"
+      },
+      "accessToken": {
+        "label": "Access token",
+        "hint": "Token vĩnh viễn từ system user. Được lưu mã hóa và không bao giờ hiển thị lại.",
+        "placeholder": "EAA...",
+        "current": "Token hiện tại kết thúc bằng {hint}. Để trống để giữ nguyên.",
+        "unusual": "Access token của Meta thường bắt đầu bằng EAA. Hãy kiểm tra xem bạn đã sao chép đúng token chưa."
+      },
+      "appSecret": {
+        "label": "App secret",
+        "hint": "Từ trang Basic trong cài đặt ứng dụng Meta của bạn. Nó ký các tin nhắn Meta gửi cho chúng tôi.",
+        "placeholder": "0123456789abcdef...",
+        "current": "Secret hiện tại kết thúc bằng {hint}. Để trống để giữ nguyên."
+      },
+      "keepPlaceholder": "Không đổi",
+      "show": "Hiện",
+      "hide": "Ẩn",
+      "privacy": "Các secret được lưu mã hóa và không bao giờ hiển thị lại. Khoảng trắng, ngắt dòng và dấu nháy bạn dán kèm sẽ được tự động xóa.",
+      "privacyPlatform": "Chỉ cần những thông tin này. Nền tảng sẽ lo phần thông tin xác thực."
+    },
+    "wizard": {
+      "close": "Đóng",
+      "cancel": "Hủy",
+      "back": "Quay lại",
+      "stepsLabel": "Các bước",
+      "stepOf": "Bước {current}/{total}",
+      "steps": {
+        "before": "Trước khi bắt đầu",
+        "credentials": "Số của bạn",
+        "webhook": "Kết nối webhook của bạn",
+        "webhookAutomatic": "Kiểm tra kết nối"
+      },
+      "before": {
+        "intro": {
+          "channel_token": "Để kết nối một số, trước tiên cần chuẩn bị một vài thứ từ Meta. Hãy thiết lập một lần rồi quay lại đây. Đánh dấu từng mục khi hoàn thành; các ô chọn chỉ để bạn tự theo dõi.",
+          "platform_token": "Cần hai thứ để thêm một số: ID của WhatsApp Business Account và ID của số điện thoại. Đánh dấu từng mục khi hoàn thành; các ô chọn chỉ để bạn tự theo dõi."
+        },
+        "items": {
+          "channel_token": {
+            "app": {
+              "title": "Một ứng dụng Meta đã thêm WhatsApp",
+              "detail": "Tạo ứng dụng loại Business tại developers.facebook.com và thêm sản phẩm WhatsApp vào đó. Đây là ứng dụng gửi và nhận tin nhắn của bạn."
+            },
+            "number": {
+              "title": "Một tài khoản WhatsApp Business và một số điện thoại",
+              "detail": "Số này không được đang dùng trên ứng dụng WhatsApp thông thường. Để dùng thử trước, hãy dùng số thử nghiệm miễn phí mà Meta cấp cho mỗi ứng dụng mới."
+            },
+            "token": {
+              "title": "Một access token vĩnh viễn",
+              "detail": "Trong cài đặt Meta Business, thêm một system user, cấp cho nó ứng dụng và tài khoản WhatsApp của bạn, rồi tạo token với whatsapp_business_messaging và whatsapp_business_management. Chọn không bao giờ hết hạn: token 24 giờ sẽ ngừng hoạt động vào ngày mai."
+            },
+            "values": {
+              "title": "Ba giá trị cần sao chép",
+              "detail": "Phone number ID và business account ID (WhatsApp, API Setup) cùng app secret (App settings, Basic)."
+            },
+            "webhook": {
+              "title": "Quyền truy cập cài đặt webhook của ứng dụng",
+              "detail": "Ở bước cuối, chúng tôi hiển thị một địa chỉ và một verify token. Bạn dán chúng vào WhatsApp, Configuration trong ứng dụng Meta của bạn."
+            }
+          },
+          "platform_token": {
+            "account": {
+              "title": "Một WhatsApp Business Account",
+              "detail": "Hãy tạo một tài khoản trong Meta Business Suite nếu chưa có. Tài khoản này chứa các số và mẫu tin nhắn của bạn."
+            },
+            "number": {
+              "title": "Một số điện thoại còn trống cho WhatsApp Business",
+              "detail": "Số này không được đang dùng trên ứng dụng WhatsApp thông thường. Nếu đang dùng, hãy gỡ nó khỏi đó trước."
+            },
+            "ids": {
+              "title": "Hai ID cần sao chép",
+              "detail": "Phone number ID và business account ID, đều nằm trên trang API Setup trong WhatsApp Manager."
+            }
+          }
+        },
+        "providerLine": "Các số của bạn được phục vụ qua nhà cung cấp WhatsApp của nền tảng. Bạn không cần access token.",
+        "runbook": "Chi tiết hơn, kèm các menu cần mở, có trong hướng dẫn của kho mã nguồn:",
+        "continue": "Tiếp tục"
+      },
+      "embedded": {
+        "button": "Kết nối bằng Facebook (đăng ký nhúng)",
+        "soon": "Sắp ra mắt",
+        "help": "Sắp tới bạn sẽ có thể đăng nhập bằng Facebook và chọn số mà không cần sao chép ID. Cho đến lúc đó, hãy nhập hai ID bên dưới."
+      },
+      "credentials": {
+        "intro": {
+          "channel_token": "Nhập thông tin của số. Dán trực tiếp từ Meta: khoảng trắng và ngắt dòng sẽ được tự động làm sạch.",
+          "platform_token": "Nhập hai ID của số bạn muốn kết nối."
+        },
+        "save": "Lưu và tiếp tục",
+        "saving": "Đang lưu"
+      },
+      "webhook": {
+        "done": "Xong",
+        "finishLater": "Để sau",
+        "test": {
+          "button": "Kiểm tra kết nối",
+          "running": "Đang kiểm tra",
+          "again": "Kiểm tra lại",
+          "passedToast": "Kiểm tra kết nối thành công."
+        }
+      }
+    },
+    "webhook": {
+      "intro": "Bước cuối: cho WhatsApp biết nơi gửi tin nhắn của bạn. Số đã được lưu, nhưng sẽ ở trạng thái chưa kết nối cho đến khi hoàn tất bước này và bài kiểm tra bên dưới thành công.",
+      "callbackUrl": "Callback URL",
+      "verifyToken": "Verify token",
+      "onceWarning": "Token này chỉ hiển thị lúc này. Hãy sao chép trước khi đóng cửa sổ. Nếu làm mất, bạn có thể cấp token mới từ menu của số.",
+      "placeholderWarning": "Địa chỉ này chỉ là giá trị giữ chỗ. Hãy đặt NEXT_PUBLIC_API_PUBLIC_URL thành địa chỉ công khai của API rồi tải lại, hoặc sao chép địa chỉ mà quản trị viên nền tảng đã cung cấp.",
+      "localWarning": "Địa chỉ này trỏ đến một máy trong mạng nội bộ của bạn. WhatsApp không thể truy cập. Hãy dùng địa chỉ công khai của API.",
+      "httpWarning": "WhatsApp chỉ chấp nhận địa chỉ bắt đầu bằng https.",
+      "tokenMissing": "Không nhận được verify token. Hãy cấp token mới từ menu của số.",
+      "steps": {
+        "open": "Mở ứng dụng của bạn trong Meta for Developers, rồi chọn WhatsApp, sau đó Configuration.",
+        "paste": "Tại Webhook chọn Edit, dán callback URL và verify token, rồi chọn Verify and save.",
+        "subscribe": "Tại Webhook fields, đăng ký messages.",
+        "test": "Quay lại đây và chọn Kiểm tra kết nối."
+      },
+      "testTitle": "Kiểm tra kết nối",
+      "automatic": {
+        "title": "Việc gửi tin nhắn đã được thiết lập sẵn cho bạn",
+        "message": "Nền tảng tự trỏ số này vào hộp thư của bạn. Không có địa chỉ hay token nào để dán. Hãy chạy kiểm tra để xác nhận số hoạt động."
+      },
+      "test": {
+        "hint": "Bài kiểm tra hỏi WhatsApp về số này và hiển thị câu trả lời.",
+        "running": "Đang hỏi WhatsApp về số này",
+        "okTitle": "Số đã được kết nối",
+        "okMessage": "WhatsApp đã phản hồi và số có thể sử dụng.",
+        "verifiedName": "Tên đã xác minh",
+        "quality": "Xếp hạng chất lượng",
+        "tier": "Giới hạn nhắn tin",
+        "unknown": "Không có báo cáo"
+      }
+    },
+    "edit": {
+      "close": "Đóng",
+      "cancel": "Hủy",
+      "save": "Lưu và kiểm tra",
+      "saving": "Đang lưu",
+      "nothing": "Chưa có gì thay đổi. Hãy nhập giá trị mới để lưu.",
+      "title": {
+        "channel_token": "Sửa thông tin xác thực",
+        "platform_token": "Sửa chi tiết"
+      },
+      "intro": {
+        "channel_token": "Thay token đã được gia hạn hoặc secret đã được đổi. Các trường để trống sẽ giữ giá trị đã lưu. Sau khi lưu, số sẽ được kiểm tra và bật lại.",
+        "platform_token": "Thay đổi tên hoặc các ID của số này. Các trường để trống sẽ giữ giá trị đã lưu. Sau khi lưu, số sẽ được kiểm tra."
+      }
+    },
+    "rotate": {
+      "title": "Cấp verify token mới?",
+      "message": "Verify token hiện tại của {name} sẽ ngừng hoạt động ngay lập tức. Bạn sẽ phải dán token mới vào ứng dụng Meta và xác minh lại webhook.",
+      "confirm": "Cấp token mới",
+      "cancel": "Hủy",
+      "close": "Đóng",
+      "done": "Xong",
+      "resultTitle": "Verify token mới của bạn",
+      "resultIntro": "Dán cả hai giá trị vào WhatsApp, Configuration trong ứng dụng Meta của bạn, rồi chọn Verify and save."
+    },
+    "remove": {
+      "title": "Xóa số này?",
+      "message": "{name} sẽ bị xóa khỏi không gian làm việc này. Không thể gửi hoặc nhận tin nhắn qua số này nữa.",
+      "note": "Hành động này không thể hoàn tác. Bạn có thể thêm lại số sau.",
+      "confirm": "Xóa số",
+      "cancel": "Hủy",
+      "inUse": {
+        "title": "Số này có cuộc trò chuyện",
+        "message": "{name} vẫn còn cuộc trò chuyện nên không thể xóa. Chúng sẽ không còn số nào gắn kèm.",
+        "hint": "Bạn có thể tắt số thay vì xóa. Mọi cuộc trò chuyện được giữ lại, không có gì được gửi qua số này, và bạn có thể bật lại sau.",
+        "switchOff": "Tắt thay vì xóa"
+      }
+    },
+    "switchOff": {
+      "title": "Tắt số này?",
+      "message": "Sẽ không có tin nhắn nào được gửi hoặc nhận qua {name} khi số bị tắt. Các cuộc trò chuyện được giữ lại và bạn có thể bật lại.",
+      "confirm": "Tắt",
+      "cancel": "Hủy"
+    },
+    "toasts": {
+      "checkPassed": "{name} đã vượt qua kiểm tra tình trạng.",
+      "saved": "Đã lưu thay đổi cho {name}.",
+      "reconnected": "{name} đã được kết nối lại.",
+      "switchedOn": "{name} đã được bật.",
+      "switchedOff": "{name} đã được tắt.",
+      "removed": "Đã xóa {name}.",
+      "subscribed": "Đã đăng ký {name} nhận tin nhắn đến."
+    },
+    "inbox": {
+      "templatesSoon": "Mẫu sắp ra mắt, khi đó bạn sẽ có thể liên hệ lại khách hàng này từ đây.",
+      "reconnect": {
+        "needs_reconnect": {
+          "title": "Số WhatsApp này cần được kết nối lại.",
+          "message": "WhatsApp không còn chấp nhận thông tin xác thực của {name}, nên không thể gửi trả lời. Ghi chú nội bộ vẫn dùng được."
+        },
+        "error": {
+          "title": "Số WhatsApp này có sự cố kết nối.",
+          "message": "{name} đang ở trạng thái lỗi nên không thể gửi trả lời. Ghi chú nội bộ vẫn dùng được."
+        },
+        "not_connected": {
+          "title": "Số WhatsApp này đang tắt.",
+          "message": "{name} chưa được kết nối nên không thể gửi trả lời. Ghi chú nội bộ vẫn dùng được."
+        },
+        "open": "Mở cài đặt WhatsApp",
+        "askAdmin": "Hãy nhờ người quản lý kênh kết nối lại."
+      },
+      "failure": {
+        "openSettings": "Mở cài đặt WhatsApp",
+        "windowClosed": {
+          "title": "Khung thời gian trả lời 24 giờ đã đóng.",
+          "hint": "WhatsApp chỉ cho phép trả lời tự do trong vòng 24 giờ kể từ tin nhắn cuối của khách hàng. Hãy đợi họ nhắn lại."
+        },
+        "undeliverable": {
+          "title": "WhatsApp không thể gửi tin nhắn này.",
+          "hint": "Số có thể không dùng WhatsApp, hoặc khách hàng chưa chấp nhận điều khoản mới nhất."
+        },
+        "recipientNotAllowed": {
+          "title": "Không thể nhắn tin đến số này từ đây.",
+          "hint": "Đó là số của chính người gửi, hoặc không nằm trong danh sách người nhận thử nghiệm."
+        },
+        "rateLimit": {
+          "title": "WhatsApp đang giới hạn tốc độ gửi của bạn.",
+          "hint": "Hãy đợi vài phút, rồi dùng Thử lại."
+        },
+        "spamLimited": {
+          "title": "Việc gửi bị giới hạn vì quá nhiều tin nhắn bị báo cáo là spam.",
+          "hint": "Hãy đợi một lúc trước khi gửi thêm, và chỉ nhắn cho những khách hàng mong đợi tin nhắn."
+        },
+        "engagementBlocked": {
+          "title": "WhatsApp đã chọn không gửi tin nhắn này.",
+          "hint": "WhatsApp làm vậy để bảo vệ khách hàng khỏi những tin nhắn họ có thể không muốn nhận."
+        },
+        "tokenExpired": {
+          "title": "WhatsApp đã từ chối access token của số này.",
+          "hint": "Token đã hết hạn hoặc mất một quyền. Hãy kết nối lại số, rồi dùng Thử lại."
+        },
+        "accountRestricted": {
+          "title": "Tài khoản WhatsApp có vấn đề.",
+          "hint": "Tài khoản bị hạn chế, bị khóa hoặc chưa được đăng ký. Hãy kiểm tra trong WhatsApp Manager."
+        },
+        "mediaRejected": {
+          "title": "WhatsApp không thể dùng tệp hoặc loại tin nhắn này.",
+          "hint": "Hãy thử tệp khác, hoặc gửi thông tin dưới dạng văn bản."
+        },
+        "templateProblem": {
+          "title": "Không thể gửi mẫu.",
+          "hint": "Mẫu không tìm thấy, bị tạm dừng hoặc bị từ chối, hoặc các biến không khớp."
+        },
+        "providerDown": {
+          "title": "WhatsApp gặp sự cố tạm thời.",
+          "hint": "Hãy dùng Thử lại sau giây lát."
+        },
+        "sendPaused": {
+          "title": "Việc gửi đang bị tạm dừng trên toàn nền tảng.",
+          "hint": "Hãy dùng Thử lại khi việc gửi hoạt động trở lại."
+        },
+        "channelOff": {
+          "title": "Số này chưa được kết nối.",
+          "hint": "Hãy kết nối lại, rồi dùng Thử lại."
+        },
+        "planLimit": {
+          "title": "Đã đạt giới hạn tin nhắn hằng tháng của gói.",
+          "hint": "Hãy nâng cấp gói hoặc đợi kỳ tiếp theo, rồi dùng Thử lại."
+        },
+        "groupSendUnavailable": {
+          "title": "Chưa hỗ trợ gửi đến nhóm WhatsApp.",
+          "hint": "Hãy trả lời từ ứng dụng WhatsApp Business."
+        }
+      },
+      "media": {
+        "downloading": "Đang tải tệp xuống",
+        "failed": "Không thể tải tệp này xuống",
+        "retry": "Thử lại",
+        "retrying": "Đang thử lại",
+        "reason": {
+          "expired": "WhatsApp không còn giữ tệp này. Tệp được lưu khoảng 30 ngày.",
+          "auth": "WhatsApp đã từ chối access token của số. Hãy kết nối lại số, rồi thử lại.",
+          "tooLarge": "Tệp lớn hơn mức kênh này cho phép.",
+          "rejected": "Tệp bị từ chối vì không phải loại an toàn.",
+          "download": "WhatsApp không phản hồi kịp thời. Thử lại thường sẽ được."
+        }
+      },
+      "interactive": {
+        "button": "Đã chọn một nút",
+        "list": "Đã chọn từ danh sách"
+      },
+      "contact": {
+        "unnamed": "Liên hệ được chia sẻ",
+        "shared": "Danh thiếp liên hệ"
+      },
+      "attach": {
+        "limit": {
+          "image": "Ảnh tối đa {mb} MB",
+          "video": "Video tối đa {mb} MB",
+          "audio": "Âm thanh tối đa {mb} MB",
+          "document": "Tài liệu tối đa {mb} MB"
+        },
+        "kind": {
+          "image": "Ảnh",
+          "video": "Video",
+          "audio": "Tệp âm thanh",
+          "document": "Tài liệu"
+        },
+        "errors": {
+          "tooLarge": "{kind} có thể tối đa {mb} MB trên WhatsApp. Hãy chọn tệp nhỏ hơn.",
+          "kindNotAllowed": "Số này không thể gửi {kind}.",
+          "unsupportedType": "WhatsApp không chấp nhận loại tệp này. WhatsApp nhận ảnh JPEG và PNG, video MP4 và 3GP, âm thanh AAC, MP3, AMR, M4A và OGG, cùng tài liệu PDF, Office và văn bản.",
+          "empty": "Tệp này trống."
+        }
+      }
+    }
+  }
+}

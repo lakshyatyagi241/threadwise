@@ -1,0 +1,571 @@
+{
+  "auth-registration-security": {
+    "account": {
+      "nav": {
+        "title": "Tài khoản"
+      },
+      "common": {
+        "cancel": "Hủy",
+        "loading": "Đang tải",
+        "reset": "Đặt lại",
+        "retry": "Thử lại",
+        "save": "Lưu thay đổi",
+        "saving": "Đang lưu",
+        "showPassword": "Hiện mật khẩu",
+        "hidePassword": "Ẩn mật khẩu",
+        "signOut": "Đăng xuất"
+      },
+      "errors": {
+        "unexpected": "Đã xảy ra lỗi ở phía chúng tôi. Vui lòng thử lại.",
+        "network": "Không thể kết nối máy chủ. Hãy kiểm tra kết nối và thử lại.",
+        "forbidden": "Bạn không có quyền thực hiện thao tác đó.",
+        "signedOut": "Phiên của bạn đã kết thúc. Vui lòng đăng nhập lại.",
+        "rateLimited": "Quá nhiều lần thử. Vui lòng đợi một lát rồi thử lại.",
+        "rateLimitedWait": "Quá nhiều lần thử. Hãy thử lại sau {seconds, plural, other {# giây}}.",
+        "requestId": "ID yêu cầu",
+        "locked": "Quá nhiều lần thử thất bại. Hãy đợi một lúc trước khi thử lại.",
+        "lockedWait": "Quá nhiều lần thử thất bại. Hãy thử lại sau {minutes, plural, other {# phút}}."
+      },
+      "hub": {
+        "railLabel": "Tài khoản",
+        "menuLabel": "Các mục tài khoản",
+        "groups": {
+          "account": "Tài khoản",
+          "security": "Bảo mật"
+        },
+        "tabs": {
+          "profile": "Hồ sơ",
+          "security": "Mật khẩu và bảo mật",
+          "delete": "Xóa tài khoản",
+          "plan": "Gói"
+        },
+        "pages": {
+          "profile": {
+            "title": "Hồ sơ",
+            "description": "Cập nhật ảnh, tên và thông tin liên hệ của bạn."
+          },
+          "security": {
+            "title": "Mật khẩu và bảo mật",
+            "description": "Đổi mật khẩu, bật xác thực hai yếu tố và xem nơi bạn đã đăng nhập."
+          },
+          "delete": {
+            "title": "Xóa tài khoản",
+            "description": "Xóa vĩnh viễn tài khoản của bạn khỏi không gian làm việc này."
+          }
+        },
+        "breadcrumbLabel": "Đường dẫn điều hướng",
+        "breadcrumbRoot": "Tài khoản",
+        "planBadge": "Gói {plan}",
+        "planFree": "Miễn phí",
+        "upgrade": {
+          "title": "Cần thêm dung lượng?",
+          "body": "Mở khóa thêm chiến dịch, thiết bị và trợ lý AI với gói cao hơn.",
+          "cta": "Xem các gói"
+        },
+        "lockedHint": "Hãy hoàn tất bước bảo mật cho tài khoản này trước."
+      },
+      "avatar": {
+        "alt": "Ảnh của {name}",
+        "change": "Đổi ảnh",
+        "remove": "Xóa ảnh",
+        "uploading": "Đang tải ảnh lên",
+        "removing": "Đang xóa ảnh",
+        "updated": "Đã cập nhật ảnh.",
+        "removed": "Đã xóa ảnh.",
+        "errors": {
+          "type": "Chọn ảnh JPG, PNG, WebP hoặc GIF.",
+          "too-large": "Ảnh vẫn vượt quá giới hạn {size} sau khi thu nhỏ. Hãy thử ảnh nhỏ hơn.",
+          "decode": "Không thể đọc ảnh này. Hãy thử tệp khác.",
+          "encode": "Không thể xử lý ảnh này. Hãy thử tệp khác.",
+          "rejected": "Tệp không được chấp nhận. Hãy dùng ảnh JPG, PNG, WebP hoặc GIF.",
+          "source-too-large": "Ảnh quá lớn để mở. Hãy chọn ảnh dưới 20 MB.",
+          "forbidden": "Bạn không có quyền đổi ảnh của tài khoản này.",
+          "expired": "Phiên của bạn đã kết thúc. Hãy tải lại trang, đăng nhập lại rồi thử lại."
+        },
+        "hint": "JPG, PNG, WebP hoặc GIF. Chúng tôi thu nhỏ ảnh để vừa {size}."
+      },
+      "timezone": {
+        "label": "Múi giờ",
+        "placeholder": "Tìm múi giờ, ví dụ Kolkata hoặc UTC+05:30",
+        "empty": "Không có múi giờ nào khớp với tìm kiếm."
+      },
+      "phone": {
+        "country": "Quốc gia",
+        "countryPlaceholder": "Tìm quốc gia",
+        "countryEmpty": "Không có quốc gia nào khớp với tìm kiếm.",
+        "number": "Số điện thoại",
+        "numberPlaceholder": "Số điện thoại"
+      },
+      "profile": {
+        "personalInfo": "Thông tin cá nhân",
+        "fullName": "Họ và tên",
+        "displayName": "Tên hiển thị",
+        "displayNameHint": "Cách tên bạn hiển thị với đồng đội. Mặc định là tên của bạn.",
+        "email": "Email",
+        "changeEmail": "Đổi email",
+        "verified": "Đã xác minh",
+        "unverified": "Chưa xác minh",
+        "pendingEmail": "Chúng tôi đã gửi liên kết xác nhận tới {email}. Email đăng nhập của bạn sẽ đổi sau khi bạn mở liên kết.",
+        "phone": "Điện thoại",
+        "phoneHint": "Không bắt buộc. Chọn quốc gia rồi nhập số.",
+        "language": "Ngôn ngữ",
+        "languageHint": "Ngôn ngữ của ứng dụng dành cho bạn.",
+        "languageDefault": "Dùng mặc định",
+        "theme": "Giao diện",
+        "themes": {
+          "paper": "Giấy",
+          "bright": "Sáng",
+          "dark": "Tối"
+        },
+        "workspaceTimezone": "Múi giờ",
+        "workspaceTimezoneHint": "Áp dụng cho {workspace}. Chỉ chủ sở hữu và quản trị viên mới có thể thay đổi.",
+        "saved": "Đã lưu hồ sơ.",
+        "errors": {
+          "fullNameRequired": "Nhập họ và tên của bạn.",
+          "phoneInvalid": "Nhập số điện thoại hợp lệ cho quốc gia đã chọn.",
+          "invalid": "Giá trị này không hợp lệ.",
+          "timezoneInvalid": "Chọn một múi giờ trong danh sách.",
+          "timezoneForbidden": "Chỉ chủ sở hữu và quản trị viên mới có thể đổi múi giờ của không gian làm việc."
+        },
+        "workspaceTag": "(không gian làm việc)"
+      },
+      "emailChange": {
+        "title": "Đổi email của bạn",
+        "intro": "Nhập địa chỉ mới và mật khẩu hiện tại. Chúng tôi sẽ gửi liên kết xác nhận tới địa chỉ mới; email đăng nhập của bạn chỉ đổi sau khi bạn mở liên kết.",
+        "newEmail": "Địa chỉ email mới",
+        "password": "Mật khẩu hiện tại",
+        "passwordHint": "Địa chỉ mới sẽ trở thành tên đăng nhập của bạn, nên chúng tôi cần mật khẩu.",
+        "showPassword": "Hiện mật khẩu",
+        "hidePassword": "Ẩn mật khẩu",
+        "cancel": "Hủy",
+        "submit": "Gửi liên kết xác nhận",
+        "sending": "Đang gửi",
+        "errors": {
+          "invalidEmail": "Nhập địa chỉ email hợp lệ.",
+          "same": "Đó đã là email của bạn.",
+          "taken": "Địa chỉ email này đã được dùng trong không gian làm việc này.",
+          "passwordRequired": "Nhập mật khẩu hiện tại.",
+          "passwordWrong": "Mật khẩu không đúng."
+        }
+      },
+      "messageFooterPage": {
+        "title": "Chân tin nhắn",
+        "titleLead": "Tin nhắn",
+        "titleAccent": "chân tin nhắn",
+        "description": "Dòng kết thúc các tin nhắn mà không gian làm việc của bạn gửi từ tự động hóa, tin hẹn giờ và phản hồi hộp thư nhóm."
+      },
+      "branding": {
+        "title": "Chân tin nhắn",
+        "description": "Dòng được thêm vào cuối các tin nhắn văn bản thuần và tin nhắn tương tác gửi từ tự động hóa, tin hẹn giờ và phản hồi hộp thư nhóm. Mẫu đã duyệt có nội dung riêng và bỏ qua dòng này.",
+        "label": "Chân tin nhắn tùy chỉnh (tối đa {max} ký tự)",
+        "hint": "Để trống để gửi tin nhắn không có chân tin nhắn.",
+        "preview": "Xem trước",
+        "sampleMessage": "Xin chào! Đây là thông tin bạn đã hỏi.",
+        "noFooter": "(không có chân tin nhắn)",
+        "save": "Lưu chân tin nhắn",
+        "saving": "Đang lưu",
+        "saved": "Đã cập nhật chân tin nhắn. Áp dụng từ tin nhắn tiếp theo bạn gửi.",
+        "tooLong": "Chân tin nhắn tối đa {max} ký tự.",
+        "forbidden": "Bạn không có quyền đổi chân tin nhắn.",
+        "current": "Chân tin nhắn hiện tại",
+        "currentDefault": "Chân tin nhắn hiện tại (mặc định của nền tảng)",
+        "planLocked": "Gói của bạn dùng chân tin nhắn mặc định của nền tảng trên tin nhắn gửi đi. Các gói cao hơn mở khóa chân tin nhắn tùy chỉnh hoặc không có chân tin nhắn.",
+        "permissionLocked": "Chỉ quản trị viên không gian làm việc mới có thể đổi chân tin nhắn. Bạn có thể xem tại đây nhưng không thể chỉnh sửa.",
+        "upgrade": "Xem các gói",
+        "upgradeTitle": "Nâng cấp để xóa chân tin nhắn của nền tảng.",
+        "placeholder": "Gửi qua {name}",
+        "remove": "Xóa chân tin nhắn của tôi",
+        "removed": "Đã xóa chân tin nhắn. Tin nhắn của bạn sẽ được gửi không có chân tin nhắn từ lần gửi tiếp theo."
+      },
+      "password": {
+        "title": "Đổi mật khẩu",
+        "subtitle": "Chọn mật khẩu mạnh mà bạn không dùng ở nơi nào khác.",
+        "current": "Mật khẩu hiện tại",
+        "new": "Mật khẩu mới",
+        "newHint": "Tối thiểu {count} ký tự.",
+        "confirm": "Xác nhận mật khẩu mới",
+        "submit": "Cập nhật mật khẩu",
+        "updating": "Đang cập nhật",
+        "forcedBanner": "Bạn cần đặt mật khẩu mới trước khi tiếp tục. Hãy chọn mật khẩu bên dưới.",
+        "forcedDone": "Đã cập nhật mật khẩu. Chào mừng bạn trở lại.",
+        "success": "Đã cập nhật mật khẩu. {count, plural, =0 {Bạn vẫn đăng nhập trên thiết bị này.} other {Đã đăng xuất # thiết bị khác.}}",
+        "errors": {
+          "currentRequired": "Nhập mật khẩu hiện tại.",
+          "currentWrong": "Mật khẩu không đúng.",
+          "tooShort": "Dùng tối thiểu {count} ký tự.",
+          "tooLong": "Dùng tối đa 256 ký tự.",
+          "sameAsCurrent": "Hãy chọn mật khẩu khác với mật khẩu hiện tại.",
+          "mismatch": "Hai mật khẩu không khớp.",
+          "policy": "Mật khẩu này không đáp ứng quy tắc của không gian làm việc:"
+        },
+        "rules": {
+          "min_length": "Dùng tối thiểu {count} ký tự.",
+          "upper_lower": "Kết hợp chữ hoa và chữ thường.",
+          "number": "Bao gồm ít nhất một chữ số.",
+          "symbol": "Bao gồm ít nhất một ký hiệu.",
+          "common": "Mật khẩu này quá dễ đoán."
+        },
+        "currentPlaceholder": "Nhập mật khẩu hiện tại",
+        "newPlaceholder": "Tối thiểu {count} ký tự",
+        "confirmPlaceholder": "Nhập lại mật khẩu",
+        "tips": {
+          "title": "Mẹo đặt mật khẩu",
+          "mix": "Kết hợp chữ hoa, chữ thường, chữ số và ký hiệu.",
+          "reuse": "Không dùng lại mật khẩu từ các trang khác.",
+          "manager": "Cân nhắc dùng trình quản lý mật khẩu."
+        },
+        "newHintRequires": "Phải bao gồm {rules}.",
+        "requirement": {
+          "mixedCase": "chữ hoa và chữ thường",
+          "number": "một chữ số",
+          "symbol": "một ký hiệu"
+        },
+        "resetLink": {
+          "title": "Không có mật khẩu hiện tại để nhập?",
+          "body": "Nếu bạn đăng nhập bằng Google hoặc Facebook, hoặc không nhớ mật khẩu, chúng tôi có thể gửi email liên kết tới {email} để bạn chọn mật khẩu mới mà không cần mật khẩu cũ.",
+          "send": "Gửi liên kết đặt lại cho tôi",
+          "sending": "Đang gửi",
+          "sent": "Nếu {email} có thể nhận thư, liên kết đặt lại đang được gửi đi. Hãy mở liên kết để chọn mật khẩu mới. Bạn sẽ bị đăng xuất ở mọi nơi và có thể đăng nhập lại bằng mật khẩu mới.",
+          "captchaFailed": "Hoàn tất kiểm tra captcha rồi thử lại."
+        }
+      },
+      "passwordConfirm": {
+        "password": "Mật khẩu hiện tại",
+        "required": "Nhập mật khẩu hiện tại.",
+        "wrong": "Mật khẩu không đúng.",
+        "show": "Hiện mật khẩu",
+        "hide": "Ẩn mật khẩu",
+        "cancel": "Hủy",
+        "working": "Đang xử lý"
+      },
+      "mfa": {
+        "title": "Xác thực hai yếu tố",
+        "subtitle": "Yêu cầu mã từ ứng dụng xác thực mỗi lần bạn đăng nhập.",
+        "forcedBanner": "Tổ chức của bạn yêu cầu xác thực hai yếu tố. Hãy thiết lập để tiếp tục dùng ứng dụng.",
+        "forcedDone": "Đã bật xác thực hai yếu tố. Chào mừng bạn trở lại.",
+        "offDescription": "Xác thực hai yếu tố đang tắt. Hãy bật để bảo vệ tài khoản ngay cả khi mật khẩu bị lộ.",
+        "starting": "Đang chuẩn bị thiết lập",
+        "step1": "Mở ứng dụng xác thực trên điện thoại (Google Authenticator, Microsoft Authenticator, 1Password và các ứng dụng tương tự).",
+        "step2": "Quét mã QR hoặc nhập khóa thiết lập thủ công.",
+        "step3": "Nhập mã sáu chữ số mà ứng dụng hiển thị để hoàn tất.",
+        "qrLabel": "Mã QR cho ứng dụng xác thực của bạn",
+        "manualKey": "Khóa thiết lập",
+        "manualKeyHint": "Dùng khóa này nếu bạn không quét được mã. Hãy giữ bí mật.",
+        "copy": "Sao chép",
+        "copied": "Đã sao chép",
+        "codeLabel": "Mã sáu chữ số",
+        "codeHint": "Mã thay đổi sau mỗi 30 giây.",
+        "codeInvalid": "Nhập sáu chữ số từ ứng dụng của bạn.",
+        "codeWrong": "Mã không đúng hoặc đã hết hạn. Hãy đợi mã mới rồi thử lại.",
+        "enable": "Bật",
+        "enabling": "Đang bật",
+        "expired": "Phiên thiết lập đã hết hạn. Hãy bắt đầu lại để nhận mã mới.",
+        "restart": "Bắt đầu lại",
+        "on": "Bật",
+        "since": "Từ {date}",
+        "onDescription": "Bạn sẽ được yêu cầu nhập mã từ ứng dụng xác thực mỗi lần đăng nhập.",
+        "remaining": "{count, plural, =0 {Bạn không còn mã khôi phục nào.} other {Còn # mã khôi phục.}}",
+        "remainingLow": "Hãy tạo mã mới sớm.",
+        "regenerate": "Thay mã khôi phục",
+        "regenerateTitle": "Thay mã khôi phục",
+        "regenerateDescription": "Thao tác này tạo mười mã mới và vô hiệu hóa các mã cũ. Nhập mật khẩu để tiếp tục.",
+        "regenerateConfirm": "Thay mã",
+        "disable": "Tắt",
+        "disableTitle": "Tắt xác thực hai yếu tố",
+        "disableDescription": "Tài khoản của bạn sẽ chỉ được bảo vệ bằng mật khẩu. Nhập mật khẩu để xác nhận.",
+        "disableConfirm": "Tắt",
+        "disabledDone": "Xác thực hai yếu tố đã tắt.",
+        "codesTitleEnabled": "Đã bật xác thực hai yếu tố. Hãy lưu mã khôi phục của bạn.",
+        "codesTitleRegenerated": "Mã khôi phục mới của bạn",
+        "scanTitle": "Quét mã QR này"
+      },
+      "recovery": {
+        "intro": "Nếu bạn mất điện thoại, mỗi mã này cho phép bạn đăng nhập một lần.",
+        "onlyOnce": "Các mã này chỉ hiển thị một lần. Hãy lưu ở nơi an toàn, chẳng hạn trình quản lý mật khẩu.",
+        "listLabel": "Mã khôi phục",
+        "copy": "Sao chép mã",
+        "copied": "Đã sao chép",
+        "copyFailed": "Trình duyệt không cho phép sao chép. Hãy chọn các mã và sao chép thủ công, hoặc tải xuống.",
+        "download": "Tải xuống",
+        "fileHeader": "Mã khôi phục. Mỗi mã chỉ dùng một lần.",
+        "confirmSaved": "Tôi đã lưu các mã này ở nơi an toàn.",
+        "done": "Tôi đã lưu"
+      },
+      "sessions": {
+        "title": "Nơi bạn đã đăng nhập",
+        "subtitle": "Các thiết bị đã đăng nhập vào tài khoản của bạn. Hãy thu hồi những thiết bị bạn không nhận ra.",
+        "thisDevice": "Thiết bị này",
+        "remembered": "Giữ đăng nhập",
+        "ipUnknown": "Không rõ địa chỉ",
+        "signOutOthers": "Đăng xuất khỏi tất cả thiết bị khác",
+        "signingOut": "Đang đăng xuất",
+        "empty": "Không có phiên hoạt động nào.",
+        "confirmOneTitle": "Đăng xuất thiết bị này?",
+        "confirmOneBody": "{device} sẽ bị đăng xuất và cần mật khẩu của bạn để đăng nhập lại.",
+        "confirmOthersTitle": "Đăng xuất khỏi tất cả thiết bị khác?",
+        "confirmOthersBody": "{count, plural, other {# thiết bị khác}} sẽ bị đăng xuất. Thiết bị này vẫn đăng nhập.",
+        "revoked": "Đã đăng xuất {device}.",
+        "revokedOthers": "{count, plural, =0 {Không có thiết bị khác nào đang đăng nhập.} other {Đã đăng xuất # thiết bị.}}",
+        "columns": {
+          "device": "Thiết bị",
+          "ip": "Địa chỉ IP",
+          "lastActive": "Hoạt động gần nhất",
+          "actions": "Thao tác"
+        },
+        "revoke": "Thu hồi",
+        "showing": "Hiển thị {from}–{to} trên {total}",
+        "prev": "Trước",
+        "next": "Sau",
+        "lifetimes": "Phiên đăng nhập tự kết thúc sau {session}, hoặc sau {remembered} nếu bạn chọn giữ đăng nhập.",
+        "idle": "Nếu không chọn, phiên cũng kết thúc sau {idle} không hoạt động."
+      },
+      "delete": {
+        "title": "Xóa tài khoản của bạn",
+        "warning": "Thao tác này xóa vĩnh viễn tài khoản của bạn: thông tin đăng nhập, hồ sơ, ảnh và thiết bị.",
+        "irreversible": "Không thể hoàn tác.",
+        "consequencesTitle": "Điều sẽ xảy ra",
+        "consequence1": "Bạn bị đăng xuất ở mọi nơi và không thể đăng nhập lại bằng tài khoản này.",
+        "consequence2": "Không gian làm việc và các thành viên khác vẫn còn. Công việc bạn đã làm vẫn thuộc về không gian làm việc.",
+        "consequence3": "Một bản ghi về việc xóa tài khoản được giữ lại để kiểm toán.",
+        "blocked": {
+          "sole_member": {
+            "title": "Bạn là thành viên duy nhất của không gian làm việc này.",
+            "body": "Không thể tự xóa tài khoản. Hãy nhờ đội ngũ nền tảng đóng không gian làm việc."
+          },
+          "sole_admin": {
+            "title": "Bạn là quản trị viên duy nhất.",
+            "body": "Hãy chuyển một thành viên khác thành quản trị viên trước, rồi quay lại để xóa tài khoản."
+          }
+        },
+        "phraseLabel": "Nhập {phrase} để xác nhận",
+        "phraseHint": "Đúng như hiển thị, kể cả chữ hoa.",
+        "password": "Mật khẩu hiện tại",
+        "showPassword": "Hiện mật khẩu",
+        "hidePassword": "Ẩn mật khẩu",
+        "cancel": "Hủy",
+        "submit": "Xóa vĩnh viễn tài khoản",
+        "deleting": "Đang xóa",
+        "errors": {
+          "phrase": "Nhập cụm từ đúng như hiển thị.",
+          "passwordRequired": "Nhập mật khẩu hiện tại.",
+          "passwordWrong": "Mật khẩu không đúng."
+        },
+        "considerTitle": "Trước khi xóa, hãy cân nhắc",
+        "considerPlanLink": "Hạ xuống gói miễn phí",
+        "considerPlanRest": "thay vì xóa.",
+        "considerSupportLink": "Liên hệ bộ phận hỗ trợ",
+        "considerSupportRest": "nếu có vấn đề khiến bạn rời đi. Chúng tôi có thể khắc phục.",
+        "reasonLabel": "Tại sao bạn rời đi? (không bắt buộc)",
+        "reasonHint": "Nội dung này chỉ nằm trong biểu mẫu. Không được gửi đi đâu cả.",
+        "reasonPlaceholder": "Hãy cho chúng tôi biết cần cải thiện điều gì"
+      },
+      "switcher": {
+        "heading": "Không gian làm việc",
+        "label": "Không gian làm việc: {name}. Chuyển không gian làm việc",
+        "switching": "Đang chuyển không gian làm việc",
+        "switched": "Đã chuyển sang {name}",
+        "failed": "Không thể chuyển không gian làm việc. Vui lòng thử lại.",
+        "notAvailable": "Bạn không thể chuyển sang không gian làm việc đó.",
+        "rateLimited": "Quá nhiều lần thử. Vui lòng đợi một lát rồi thử lại.",
+        "rateLimitedWait": "Quá nhiều lần thử. Hãy thử lại sau {seconds, plural, other {# giây}}."
+      },
+      "mfaChallenge": {
+        "title": "Xác nhận là bạn",
+        "intro": "{name} dùng xác thực hai yếu tố. Nhập mã từ ứng dụng xác thực để chuyển.",
+        "codeLabel": "Mã sáu chữ số",
+        "codeHint": "Mã thay đổi sau mỗi 30 giây.",
+        "codeInvalid": "Nhập sáu chữ số từ ứng dụng của bạn.",
+        "codeWrong": "Mã không đúng hoặc đã hết hạn. Hãy thử mã tiếp theo.",
+        "recoveryLabel": "Mã khôi phục",
+        "recoveryHint": "Mỗi mã khôi phục chỉ dùng một lần.",
+        "recoveryInvalid": "Nhập mã khôi phục.",
+        "recoveryWrong": "Mã khôi phục không hợp lệ.",
+        "expired": "Bước đăng nhập này đã hết hạn. Hãy đóng cửa sổ này và chọn lại không gian làm việc.",
+        "useRecovery": "Dùng mã khôi phục",
+        "useCode": "Dùng mã xác thực",
+        "cancel": "Hủy",
+        "confirm": "Xác nhận",
+        "verifying": "Đang xác minh"
+      },
+      "banners": {
+        "dismiss": "Đóng",
+        "verifyMessage": "Vui lòng xác minh địa chỉ email của bạn ({email}). Chúng tôi đã gửi liên kết khi bạn đăng ký.",
+        "resend": "Gửi lại email",
+        "resendIn": "Gửi lại sau {seconds} giây",
+        "resendWait": "Bạn có thể yêu cầu email khác sau ít phút.",
+        "sending": "Đang gửi",
+        "sent": "Đã gửi email.",
+        "notSent": "Hiện không thể gửi email.",
+        "throttled": "Vui lòng đợi trước khi yêu cầu lại.",
+        "alreadyVerified": "Email của bạn đã được xác minh."
+      },
+      "suspended": {
+        "title": "Tài khoản của bạn đã bị tạm ngưng",
+        "greeting": "Chào {name}, quản trị viên đã tạm ngưng tài khoản này. Bạn vẫn có thể đăng nhập, nhưng phần còn lại của ứng dụng bị khóa cho đến khi tài khoản được kích hoạt lại.",
+        "support": "Nếu bạn cho rằng đây là nhầm lẫn, hãy nhờ chủ sở hữu hoặc quản trị viên không gian làm việc kích hoạt lại tài khoản.",
+        "signOut": "Đăng xuất",
+        "checking": "Đang kiểm tra"
+      },
+      "verifyRequired": {
+        "title": "Vui lòng xác minh email của bạn",
+        "body": "Chúng tôi đã gửi liên kết xác minh tới địa chỉ bên dưới. Hãy mở liên kết để mở khóa không gian làm việc.",
+        "resend": "Gửi lại email xác minh",
+        "resendIn": "Gửi lại sau {seconds} giây",
+        "sending": "Đang gửi",
+        "sent": "Chúng tôi đã gửi liên kết mới tới {email}.",
+        "notSent": "Hiện không thể gửi email.",
+        "throttled": "Một liên kết vừa được gửi. Vui lòng đợi trước khi yêu cầu lại.",
+        "alreadyVerified": "Email của bạn đã được xác minh. Đang đưa bạn vào.",
+        "signOut": "Đăng xuất",
+        "help": "Không nhận được? Hãy kiểm tra thư rác. Nếu bạn đã mở liên kết trên thiết bị khác, hãy quay lại tab này và chúng tôi sẽ nhận ra."
+      },
+      "onboarding": {
+        "metaTitle": "Thiết lập không gian làm việc",
+        "notAllowed": {
+          "title": "Chưa hoàn tất thiết lập",
+          "body": "Không gian làm việc của bạn vẫn đang được thiết lập. Quản trị viên cần hoàn tất trước khi bạn có thể tiếp tục."
+        },
+        "stepper": {
+          "label": "Bước {current} trên {total} / {name}",
+          "progress": "Tiến trình thiết lập",
+          "account": "Tài khoản",
+          "workspace": "Không gian làm việc",
+          "plan": "Gói"
+        },
+        "workspace": {
+          "title": "Thiết lập không gian làm việc",
+          "subtitle": "Vài thông tin để ứng dụng phù hợp với nhóm của bạn.",
+          "name": "Tên không gian làm việc",
+          "nameHint": "Nhãn thân thiện mà nhóm bạn thấy ở đầu ứng dụng.",
+          "namePlaceholder": "Ví dụ: Bloomly Marketing",
+          "industry": "Ngành",
+          "industryPlaceholder": "Chọn ngành",
+          "industries": {
+            "ecommerce": "Thương mại điện tử",
+            "saas": "SaaS",
+            "agency": "Agency",
+            "education": "Giáo dục",
+            "healthcare": "Y tế",
+            "finance": "Tài chính",
+            "travel": "Du lịch",
+            "hospitality": "Khách sạn - nhà hàng",
+            "other": "Khác"
+          },
+          "size": "Quy mô nhóm",
+          "sizePlaceholder": "Chọn quy mô nhóm",
+          "timezone": "Múi giờ",
+          "timezoneHint": "Nhập để tìm bất kỳ múi giờ nào. Lịch hẹn và báo cáo dùng múi giờ này.",
+          "currency": "Tiền tệ",
+          "currencyHint": "Đơn vị tiền tệ tính phí ví tin nhắn của bạn. Ấn Độ mặc định là INR, các quốc gia khác là USD. Không thể đổi sau khi ví đã được sử dụng.",
+          "currencyNone": "Chưa đặt",
+          "currencyPlaceholder": "Tìm tiền tệ",
+          "currencyEmpty": "Không có tiền tệ nào khớp với tìm kiếm.",
+          "phone": "Số di động",
+          "phoneHint": "Chúng tôi dùng số này để liên hệ với bạn về tài khoản và các cập nhật quan trọng.",
+          "continue": "Tiếp tục",
+          "saving": "Đang lưu",
+          "errors": {
+            "nameInvalid": "Nhập tên không gian làm việc từ 2 đến 120 ký tự.",
+            "timezoneRequired": "Chọn múi giờ.",
+            "timezoneInvalid": "Chọn một múi giờ trong danh sách.",
+            "phoneRequired": "Nhập số di động của bạn.",
+            "phoneInvalid": "Nhập số điện thoại hợp lệ cho quốc gia đã chọn.",
+            "invalid": "Giá trị này không hợp lệ.",
+            "forbidden": "Chỉ quản trị viên không gian làm việc mới có thể thiết lập không gian làm việc.",
+            "countryRequired": "Chọn quốc gia.",
+            "countryInvalid": "Chọn một quốc gia trong danh sách.",
+            "currencyInvalid": "Tiền tệ này không khả dụng, hoặc tiền tệ thanh toán đã được sử dụng. Hãy liên hệ bộ phận hỗ trợ để thay đổi."
+          },
+          "country": "Quốc gia",
+          "countryHint": "Nơi doanh nghiệp của bạn đặt trụ sở.",
+          "countryPlaceholder": "Tìm quốc gia",
+          "countryEmpty": "Không có quốc gia nào khớp với tìm kiếm."
+        },
+        "plan": {
+          "title": "Chọn gói",
+          "intro": "Mỗi gói bao gồm hạn mức tin nhắn hằng tháng. Bắt đầu miễn phí, hoặc chọn gói để mở khóa thêm. Bạn có thể đổi sau.",
+          "empty": "Chưa có gói nào được thiết lập. Bạn có thể bắt đầu miễn phí ngay và chọn gói sau.",
+          "listLabel": "Các gói hiện có",
+          "free": "Miễn phí",
+          "back": "Quay lại",
+          "startFree": "Bắt đầu miễn phí / bỏ qua lúc này",
+          "finishing": "Đang hoàn tất",
+          "welcome": "Mọi thứ đã sẵn sàng. Chào mừng bạn!"
+        }
+      },
+      "plans": {
+        "title": "Gói",
+        "description": "Chọn mức bạn muốn không gian làm việc có thể làm.",
+        "currentPlan": "Gói của bạn",
+        "noPlan": "Chưa có gói",
+        "trialEnds": "Dùng thử miễn phí kết thúc {date}",
+        "comingSoon": "Việc chọn và thanh toán gói sẽ đi kèm tính năng thanh toán, chưa có trong bản phát hành này. Trong thời gian chờ, hãy liên hệ bộ phận hỗ trợ và chúng tôi sẽ chuyển không gian làm việc của bạn sang gói cần thiết.",
+        "contactSupport": "Liên hệ hỗ trợ",
+        "back": "Quay lại tài khoản",
+        "card": {
+          "popular": "Phổ biến nhất",
+          "current": "Gói hiện tại",
+          "free": "Miễn phí",
+          "custom": "Tùy chỉnh",
+          "lifetime": "một lần",
+          "messagesUnlimited": "Tin nhắn không giới hạn",
+          "messagesLimited": "{count, number} tin nhắn / tháng",
+          "chipsLabel": "Tính năng đi kèm",
+          "period": {
+            "days": "{count, plural, other {/ # ngày}}",
+            "weeks": "{count, plural, other {/ # tuần}}",
+            "months": "{count, plural, other {/ # tháng}}",
+            "years": "{count, plural, other {/ # năm}}"
+          },
+          "chips": {
+            "analytics": "Phân tích",
+            "automation": "Tự động hóa",
+            "ai_assistants": "Trợ lý AI",
+            "woocommerce": "WooCommerce",
+            "shopify": "Shopify",
+            "calling": "Gọi điện WhatsApp",
+            "remove_branding": "White-label",
+            "sales_pipeline": "Quy trình bán hàng",
+            "appointment_booking": "Lịch hẹn",
+            "chatbot_widgets": "Widget chatbot",
+            "wa_storefront": "Danh mục WhatsApp",
+            "inbox_sla": "SLA hộp thư",
+            "inbox_routing": "Định tuyến hộp thư",
+            "waba_calling": "Gọi điện WhatsApp",
+            "inbox_kanban": "Kanban hộp thư",
+            "team_performance": "Hiệu suất nhóm",
+            "scheduled_messages": "Tin nhắn hẹn giờ",
+            "whatsapp_warmer": "WhatsApp warmer",
+            "marketplace": "Marketplace",
+            "lead_sources": "Nguồn khách hàng tiềm năng",
+            "team_chat": "Trò chuyện nhóm",
+            "public_api": "API công khai",
+            "outbound_webhooks": "Webhook gửi đi",
+            "storefront_builder": "Trình tạo cửa hàng",
+            "invoicing": "Lập hóa đơn",
+            "forms_and_links": "Biểu mẫu và liên kết",
+            "extra_channels": "Telegram, Facebook và Instagram",
+            "form_builder": "Biểu mẫu",
+            "waba_groups": "Nhóm WhatsApp"
+          },
+          "cta": {
+            "continueFree": "Tiếp tục miễn phí",
+            "talkToSales": "Liên hệ bộ phận bán hàng",
+            "upgrade": "Nâng cấp lên {name}",
+            "downgradeUnavailable": "Không thể hạ gói",
+            "downgradeHint": "Không thể hạ gói trực tuyến. Hãy liên hệ bộ phận hỗ trợ để chuyển sang gói thấp hơn.",
+            "working": "Đang xử lý"
+          }
+        }
+      },
+      "mailFailure": {
+        "not_configured": "Nền tảng này chưa thiết lập gửi email. Hãy hỏi quản trị viên của bạn.",
+        "auth_failed": "Máy chủ thư đã từ chối đăng nhập của chúng tôi. Hãy nhờ quản trị viên kiểm tra cài đặt thư.",
+        "connection_refused": "Máy chủ thư không chấp nhận kết nối. Hãy thử lại sau, hoặc hỏi quản trị viên.",
+        "timeout": "Máy chủ thư phản hồi quá lâu. Bạn có thể thử lại ngay.",
+        "transport_error": "Không thể chuyển email tới máy chủ thư. Bạn có thể thử lại ngay.",
+        "unknown": "Không thể gửi email vì một lý do chưa xác định. Bạn có thể thử lại ngay."
+      }
+    }
+  }
+}

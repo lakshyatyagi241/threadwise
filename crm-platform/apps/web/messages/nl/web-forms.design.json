@@ -1,0 +1,113 @@
+{
+  "web-forms": {
+    "design": {
+      "presets": {
+        "title": "Thema",
+        "custom": "Aangepast: je hebt een kleur, hoek of lettertype gewijzigd van het thema waarmee je begon.",
+        "classic": "Klassiek",
+        "ocean": "Oceaan",
+        "forest": "Bos",
+        "sunset": "Zonsondergang",
+        "berry": "Bes",
+        "slate": "Leisteen",
+        "noir": "Noir",
+        "paper": "Papier"
+      },
+      "colours": {
+        "title": "Kleuren",
+        "hint": "Gebruik zescijferige hex-kleuren zoals #2563eb. Een onvolledige waarde wordt niet toegepast.",
+        "swatch": "{name} (kleurkiezer)",
+        "primary": "Primair (knoppen en accenten)",
+        "background": "Paginachtergrond",
+        "surface": "Formulierachtergrond",
+        "text": "Tekst",
+        "mutedText": "Secundaire tekst",
+        "border": "Randen",
+        "error": "Fout"
+      },
+      "contrast": {
+        "title": "Sommige kleuren zijn moeilijk leesbaar. Streef naar een contrast van minstens 4,5:1.",
+        "item": "{pair}: {ratio}:1",
+        "ok": "Alle gecontroleerde kleurparen zijn goed leesbaar.",
+        "text": "Tekst op de formulierachtergrond",
+        "muted": "Secundaire tekst op de formulierachtergrond",
+        "button": "Knoplabel op de knop"
+      },
+      "shape": {
+        "title": "Vorm en afstand",
+        "radius": "Hoeken",
+        "none": "Geen",
+        "sm": "Klein",
+        "md": "Middel",
+        "lg": "Groot",
+        "pill": "Rond",
+        "density": "Afstand",
+        "compact": "Compact",
+        "comfortable": "Comfortabel",
+        "spacious": "Ruim",
+        "shadow": "Schaduw",
+        "shadowNone": "Geen"
+      },
+      "type": {
+        "title": "Typografie",
+        "font": "Lettertype",
+        "fontHint": "Webfonts worden alleen geladen wanneer je er een kiest.",
+        "sample": "The quick brown fox jumps over the lazy dog",
+        "scale": "Tekstgrootte"
+      },
+      "fonts": {
+        "system": "Standaard van het systeem",
+        "serif": "Serif",
+        "mono": "Monospace"
+      },
+      "layout": {
+        "title": "Indeling en knoppen",
+        "preset": "Indeling",
+        "classic": "Klassieke kaart",
+        "fullWidth": "Volledige breedte",
+        "split": "Gesplitst met omslagafbeelding",
+        "minimal": "Minimaal",
+        "labelPosition": "Positie van het label",
+        "labelTop": "Boven het veld",
+        "labelLeft": "Naast het veld",
+        "buttonStyle": "Knopstijl",
+        "filled": "Gevuld",
+        "outline": "Omlijnd",
+        "buttonWidth": "Knopbreedte",
+        "widthAuto": "Passend bij het label",
+        "widthFull": "Volledige breedte",
+        "maxWidth": "Maximale breedte",
+        "maxWidthHint": "Tussen 320 en 960 pixels.",
+        "maxWidthInvalid": "Voer een geheel getal van 320 tot 960 in.",
+        "maxWidthSlider": "Schuifregelaar maximale breedte",
+        "mode": "Kleurmodus",
+        "light": "Licht",
+        "dark": "Donker",
+        "auto": "Volg het apparaat van de bezoeker"
+      },
+      "images": {
+        "title": "Afbeeldingen",
+        "logo": "Logo",
+        "logoHint": "Een https-adres. Laat leeg voor geen logo.",
+        "cover": "Omslagafbeelding",
+        "coverHint": "Wordt naast het formulier getoond in de gesplitste indeling.",
+        "background": "Achtergrondafbeelding",
+        "backgroundHint": "Een https-adres. Laat leeg voor een effen achtergrond.",
+        "invalid": "Voer een https-adres in, of laat het leeg."
+      },
+      "reset": "Terugzetten naar standaard",
+      "readOnly": "Je kunt het ontwerp bekijken maar niet wijzigen.",
+      "preview": {
+        "title": "Voorbeeld",
+        "device": "Grootte voorbeeld",
+        "desktop": "Desktop",
+        "mobile": "Mobiel",
+        "scheme": "Kleurmodus voorbeeld",
+        "light": "Licht",
+        "dark": "Donker",
+        "schemeHint": "De kleurmodus staat op Licht, dus er is geen donkere versie om te bekijken.",
+        "frameTitle": "Live voorbeeld van het formulier"
+      }
+    }
+  }
+}

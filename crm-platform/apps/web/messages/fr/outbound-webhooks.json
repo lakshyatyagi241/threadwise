@@ -1,0 +1,102 @@
+{
+  "outbound-webhooks": {
+    "common": {
+      "dismiss": "Ignorer"
+    },
+    "events": {
+      "contact_created": "Contact créé",
+      "contact_updated": "Contact mis à jour",
+      "contact_deleted": "Contact supprimé",
+      "contact_tag_added": "Étiquette ajoutée à un contact",
+      "contact_opted_in": "Contact inscrit",
+      "deal_stage_changed": "Opportunité passée à une autre étape",
+      "task_created": "Tâche créée",
+      "task_assigned": "Tâche assignée",
+      "template_status_changed": "Statut du modèle modifié",
+      "device_status_changed": "Statut de l’appareil modifié",
+      "conversation_reopened": "Conversation rouverte"
+    },
+    "page": {
+      "title": "Webhooks",
+      "subtitle": "Envoyez les événements de cet espace de travail vers vos propres systèmes au fur et à mesure. Chaque livraison est un POST JSON signé, relancé si votre serveur ne répond pas.",
+      "back": "Intégrations et développeurs",
+      "add": "Ajouter un webhook",
+      "list": "Webhooks",
+      "emptyTitle": "Aucun webhook pour l’instant",
+      "empty": "Ajoutez un endpoint pour recevoir des événements comme un nouveau contact ou une opportunité qui change d’étape.",
+      "noAccess": "Vous n’avez pas accès aux webhooks.",
+      "loadFailed": "Les webhooks n’ont pas pu être chargés.",
+      "retry": "Réessayer",
+      "allEvents": "Tous les événements",
+      "signed": "Signé",
+      "health": {
+        "off": "Désactivé",
+        "failing": "En échec",
+        "healthy": "Opérationnel",
+        "idle": "Aucune livraison pour l’instant"
+      },
+      "activeFor": "Actif : {name}",
+      "lastDelivery": "Dernière livraison {when}, réponse {status}",
+      "noDeliveries": "Rien de livré pour l’instant",
+      "noAnswer": "aucune réponse",
+      "counts": "{ok} livré(s), {failed} en échec",
+      "lastError": "Dernière erreur : {error}",
+      "deliveries": "Livraisons",
+      "test": "Envoyer un test",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "cancel": "Annuler",
+      "deleteTitle": "Supprimer ce webhook ?",
+      "deleteMessage": "{name} ne recevra plus d’événements et son journal de livraisons est supprimé. Cette action est irréversible.",
+      "created": "Webhook ajouté.",
+      "saved": "Webhook enregistré.",
+      "deleted": "Webhook supprimé.",
+      "deleteFailed": "Le webhook n’a pas pu être supprimé. Réessayez.",
+      "toggleFailed": "La modification n’a pas pu être enregistrée. Réessayez.",
+      "testOk": "Le test a été livré (réponse {status}).",
+      "testFailed": "Le test a échoué : {reason}",
+      "testError": "Le test n’a pas pu être envoyé. Réessayez."
+    },
+    "dialog": {
+      "addTitle": "Ajouter un webhook",
+      "editTitle": "Modifier le webhook",
+      "close": "Fermer",
+      "name": "Nom",
+      "nameHint": "Facultatif : un libellé pour vous, par exemple le système qui le reçoit.",
+      "url": "URL de l’endpoint",
+      "urlHint": "Une adresse https accessible depuis Internet. Les adresses privées et internes sont refusées.",
+      "urlProblem": {
+        "empty": "Saisissez l’URL de l’endpoint.",
+        "tooLong": "L’URL est trop longue.",
+        "notHttps": "L’URL doit commencer par https://.",
+        "invalid": "Cette URL n’est pas valide."
+      },
+      "secret": "Secret de signature",
+      "secretHint": "Facultatif. Lorsqu’il est défini, chaque livraison porte une signature que votre serveur peut vérifier. Il n’est jamais réaffiché.",
+      "secretSetHint": "Un secret est défini. Laissez ce champ vide pour le conserver, ou saisissez-en un nouveau pour le remplacer.",
+      "secretKeep": "Inchangé",
+      "removeSecret": "Retirer le secret de signature (les livraisons ne seront pas signées)",
+      "events": "Événements",
+      "allEvents": "Tous les événements",
+      "pickEvents": "Sélectionnez au moins un événement, ou choisissez tous les événements.",
+      "active": "Actif",
+      "cancel": "Annuler",
+      "create": "Ajouter un webhook",
+      "save": "Enregistrer les modifications",
+      "failed": "Le webhook n’a pas pu être enregistré. Réessayez."
+    },
+    "deliveries": {
+      "title": "Envois : {name}",
+      "close": "Fermer",
+      "empty": "Aucun envoi pour le moment. Utilisez Envoyer un test pour en créer un.",
+      "failed": "Les envois n’ont pas pu être chargés.",
+      "when": "Date",
+      "event": "Événement",
+      "result": "Réponse",
+      "time": "Heure",
+      "attempt": "Tentative",
+      "test": "Test",
+      "noAnswer": "Pas de réponse"
+    }
+  }
+}

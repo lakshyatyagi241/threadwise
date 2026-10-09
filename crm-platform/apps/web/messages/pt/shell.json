@@ -1,0 +1,83 @@
+{
+  "shell": {
+    "groups": {
+      "overview": "Plataforma",
+      "inbox": "Caixa de entrada e chat",
+      "audience": "CRM",
+      "sales": "Vendas",
+      "campaigns": "Campanhas",
+      "automation": "Automação",
+      "store": "Loja",
+      "apps": "Marketplace",
+      "help": "Suporte e ajuda",
+      "settings": "Configurações"
+    },
+    "locked": "Fazer upgrade",
+    "language": "Idioma",
+    "theme": "Tema",
+    "themeLight": "Claro",
+    "themeDark": "Escuro",
+    "logout": "Sair",
+    "openMenu": "Abrir menu",
+    "admin": {
+      "title": "Console da plataforma",
+      "note": "As telas de administração da plataforma aparecerão aqui quando o ator super-admin existir."
+    },
+    "soon": "Em breve",
+    "new": "Novo",
+    "comingSoon": "Em breve",
+    "appGate": {
+      "title": "{app} não faz parte do seu espaço de trabalho",
+      "body": "{app} é um app opcional. Adicione-o pelo Marketplace e ele aparecerá no seu menu.",
+      "bodyNoMarketplace": "{app} é um app opcional que este espaço de trabalho não tem. Peça a um administrador do espaço de trabalho para adicioná-lo pelo Marketplace.",
+      "browse": "Explorar o Marketplace",
+      "back": "Voltar ao painel",
+      "unofficialTitle": "{app} não está disponível",
+      "unofficialBody": "{app} é usado apenas com números pessoais do WhatsApp pareados por QR code, que não estão ativados para o seu espaço de trabalho. O WhatsApp se conecta pela API oficial do WhatsApp Business."
+    },
+    "closeMenu": "Fechar menu",
+    "mainMenu": "Menu principal",
+    "userMenu": "Menu da conta",
+    "account": "Conta",
+    "balance": "Saldo",
+    "pageSettings": {
+      "label": "Configurações desta página",
+      "hint": "Essas configurações só aparecem porque sua função permite alterá-las."
+    },
+    "notifications": "Notificações",
+    "settings": "Configurações",
+    "pinned": "Ajuda e configurações",
+    "nav": {
+      "analytics": "Analytics",
+      "notifications": "Notificações",
+      "inbox": "Caixa de entrada",
+      "quickChat": "Chat rápido",
+      "callLogs": "Registros de chamadas",
+      "teamChat": "Chat da equipe",
+      "leadFinder": "Buscador de leads",
+      "campaigns": "Campanhas",
+      "broadcasts": "Transmissões",
+      "scheduled": "Agendadas",
+      "templates": "Modelos",
+      "history": "Histórico",
+      "flows": "Fluxos",
+      "aiAssistants": "Assistentes de IA",
+      "appointments": "Agendamentos",
+      "crmDashboard": "Painel do CRM",
+      "store": "Loja",
+      "catalog": "Catálogo",
+      "support": "Suporte",
+      "guidebook": "Guia",
+      "pipelines": "Funis",
+      "tasks": "Tarefas",
+      "companies": "Empresas",
+      "emailTemplates": "Modelos de e-mail",
+      "proposals": "Propostas",
+      "estimates": "Orçamentos",
+      "invoices": "Faturas",
+      "payments": "Pagamentos"
+    },
+    "help": "Ajuda",
+    "unreadCount": "{count, plural, one {# não lida} other {# não lidas}}"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "workspaces-teams-tenancy": {
+    "impersonation": {
+      "label": "Adına oturum açılıyor",
+      "viewing": "{workspace} çalışma alanı {owner} olarak görüntüleniyor",
+      "reason": "Neden: {reason}",
+      "readOnly": "Salt okunur",
+      "timeLeft": "{minutes, plural, other {# dakika kaldı}}",
+      "endsSoon": "Bir dakikadan az kaldı",
+      "stop": "Adına oturum açmayı durdur",
+      "stopping": "Durduruluyor",
+      "stopFailed": "Oturum durdurulamadı. Yeniden deneyin.",
+      "readOnlyRefused": "Bu oturum salt okunur olduğu için değişikliklere izin verilmez.",
+      "forbiddenRefused": "Çalışma alanını sahibi olarak görüntülerken bu kullanılamaz.",
+      "ended": {
+        "title": "Bu adına oturum açma süresi sona erdi",
+        "expired": "Bağlantı zaten kullanıldı veya süresi doldu. Konsoldan yeniden başlatın.",
+        "body": "Buradan çalışma alanında başka bir şey yapılamaz. Yeni bir oturum başlatmak için konsola dönün.",
+        "back": "Konsola dön"
+      }
+    }
+  }
+}

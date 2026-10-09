@@ -1,0 +1,1066 @@
+{
+  "appointments": {
+    "nav": {
+      "appointments": "Spotkania"
+    },
+    "common": {
+      "dismiss": "Odrzuć",
+      "loading": "Ładowanie",
+      "cancel": "Anuluj",
+      "save": "Zapisz",
+      "close": "Zamknij",
+      "back": "Wstecz",
+      "minutes": "{count, plural, one {# minuta} few {# minuty} many {# minut} other {# minuty}}",
+      "minShort": "{count} min",
+      "hoursMinutes": "{hours} godz. {minutes} min",
+      "hours": "{hours} godz."
+    },
+    "status": {
+      "pending": "Oczekujące",
+      "confirmed": "Potwierdzone",
+      "cancelled": "Anulowane",
+      "completed": "Zakończone",
+      "no_show": "Nieobecność",
+      "declined": "Odrzucone"
+    },
+    "errors": {
+      "network": "Nie udało się połączyć z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+      "forbidden": "Nie masz uprawnień do wykonania tej czynności.",
+      "signedOut": "Twoja sesja wygasła. Zaloguj się ponownie, aby kontynuować.",
+      "conflict": "Ktoś inny to zmienił. Odśwież stronę, aby zobaczyć najnowszą wersję.",
+      "validation": "Niektóre informacje są nieprawidłowe. Sprawdź zaznaczone pola.",
+      "unavailable": "Spotkania nie są jeszcze dostępne na tym serwerze.",
+      "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
+      "notFound": "Nie znaleziono. Mogło zostać usunięte.",
+      "planDisabled": "Spotkania nie są częścią Twojego planu.",
+      "slotTaken": "Ten termin został właśnie zajęty. Wybierz inny.",
+      "gone": "Tej rezerwacji nie można już zmienić.",
+      "unexpected": "Coś poszło nie tak. Spróbuj ponownie za chwilę.",
+      "requestId": "Identyfikator żądania",
+      "retry": "Spróbuj ponownie",
+      "invalidTransition": "Ta rezerwacja nie jest w stanie, w którym można to zrobić. Odśwież stronę, aby zobaczyć jej stan.",
+      "notStarted": "Można to zrobić dopiero po rozpoczęciu rezerwacji.",
+      "alreadyStarted": "Ta rezerwacja już się rozpoczęła, więc nie można jej już zmienić.",
+      "bookingOff": "Rezerwacja tej usługi jest teraz niedostępna.",
+      "notDeletable": "Nie można tego usunąć, gdy ma nadchodzące rezerwacje."
+    },
+    "picker": {
+      "timeZone": "Strefa czasowa",
+      "previousMonth": "Poprzedni miesiąc",
+      "nextMonth": "Następny miesiąc",
+      "pickDay": "Wybierz dzień",
+      "times": "Dostępne godziny",
+      "timesAvailable": "{count, plural, one {# dostępny termin} few {# dostępne terminy} many {# dostępnych terminów} other {# dostępnego terminu}}",
+      "seatsLeft": "Zostało: {count}",
+      "noTimes": "Brak wolnych terminów w najbliższych dniach.",
+      "noTimesDay": "Brak terminów w tym dniu. Wybierz inny dzień.",
+      "loading": "Ładowanie terminów",
+      "loadFailed": "Nie udało się załadować terminów.",
+      "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
+      "retry": "Spróbuj ponownie",
+      "typeZone": "Ta usługa działa w strefie {zone}."
+    },
+    "hours": {
+      "openDay": "Otwarte: {day}",
+      "daySummary": "{hours} godz. {minutes} min",
+      "closed": "Zamknięte",
+      "from": "{day}, przedział {n}, godzina rozpoczęcia",
+      "to": "{day}, przedział {n}, godzina zakończenia",
+      "removeInterval": "Usuń przedział {n}: {day}",
+      "addInterval": "Dodaj przedział",
+      "copyTo": "Skopiuj godziny dnia {day} na inne dni",
+      "copyDay": "Kopiuj do",
+      "copyWeekdays": "Od poniedziałku do piątku",
+      "copyAll": "Wszystkie dni",
+      "problems": {
+        "incomplete": "Wypełnij obie godziny.",
+        "order": "Koniec musi być po początku.",
+        "overlap": "Pokrywa się z innym przedziałem."
+      }
+    },
+    "hub": {
+      "breadcrumb": "Ścieżka nawigacji",
+      "integrations": "Integracje",
+      "appointments": "Spotkania",
+      "title": "Twoje rezerwacje",
+      "subtitle": "Pozwól klientom rezerwować spotkania w czacie. Utwórz typ rezerwacji z usługami, godzinami i przypomnieniami, a klienci wybiorą termin i dostaną automatyczne potwierdzenie.",
+      "newType": "Nowy typ rezerwacji",
+      "types": "Typy rezerwacji",
+      "settings": "Ustawienia",
+      "weekTitle": "Tydzień",
+      "monthTitle": "Miesiąc",
+      "inRange": "{count, plural, =0 {Brak rezerwacji} one {# rezerwacja} few {# rezerwacje} many {# rezerwacji} other {# rezerwacji}} w widoku",
+      "tableLabel": "Rezerwacje",
+      "loading": "Ładowanie rezerwacji",
+      "useSampleData": "Użyj danych przykładowych (programistyczne)",
+      "empty": {
+        "upcoming": {
+          "title": "Brak nadchodzących rezerwacji",
+          "message": "Utwórz typ rezerwacji z usługami i godzinami, a następnie dodaj węzeł „Zarezerwuj spotkanie” do dowolnego przepływu. Potwierdzone rezerwacje pojawią się tutaj."
+        },
+        "past": {
+          "title": "Brak minionych rezerwacji",
+          "message": "Rezerwacje, które już się odbyły, pojawiają się tutaj wraz z wynikiem."
+        },
+        "filtered": {
+          "title": "Brak pasujących rezerwacji",
+          "message": "Nic nie pasuje do wyszukiwania i filtrów. Wyczyść je, aby zobaczyć wszystkie rezerwacje."
+        }
+      },
+      "resetFilters": "Wyczyść filtry",
+      "truncated": "Wyświetlono pierwsze {count} rezerwacji z tego zakresu. Zawęź filtry, aby zobaczyć resztę.",
+      "showing": "{count, plural, one {Wyświetlono # rezerwację} few {Wyświetlono # rezerwacje} many {Wyświetlono # rezerwacji} other {Wyświetlono # rezerwacji}}",
+      "loadMore": "Załaduj więcej",
+      "endOfList": "Koniec listy",
+      "cancelTitle": "Anulować to spotkanie?",
+      "cancelMessage": "Rezerwacja zostanie anulowana, a jej termin znów będzie wolny. Klient zostanie powiadomiony, a przypomnienia usunięte.",
+      "cancelConfirm": "Anuluj spotkanie",
+      "keep": "Zachowaj",
+      "declineTitle": "Odrzucić tę prośbę?",
+      "declineMessage": "Klient zostanie powiadomiony o odrzuceniu prośby, a termin znów będzie wolny.",
+      "declineConfirm": "Odrzuć prośbę"
+    },
+    "tabs": {
+      "label": "Listy rezerwacji",
+      "upcoming": "Nadchodzące",
+      "past": "Minione",
+      "count": "{count, plural, one {# rezerwacja} few {# rezerwacje} many {# rezerwacji} other {# rezerwacji}}"
+    },
+    "toolbar": {
+      "label": "Filtry i widoki",
+      "search": "Szukaj klienta, telefonu, e-maila lub usługi",
+      "status": "Status",
+      "allStatuses": "Wszystkie statusy",
+      "type": "Typ rezerwacji",
+      "allTypes": "Wszystkie typy rezerwacji",
+      "clear": "Wyczyść",
+      "navigate": "Nawigacja kalendarza",
+      "previous": "Poprzedni",
+      "next": "Następny",
+      "today": "Dziś",
+      "refresh": "Odśwież",
+      "view": "Widok",
+      "views": {
+        "list": "Lista",
+        "week": "Tydzień",
+        "month": "Miesiąc"
+      }
+    },
+    "table": {
+      "when": "Kiedy",
+      "customer": "Klient",
+      "service": "Usługa",
+      "status": "Status",
+      "actions": "Akcje",
+      "today": "Dziś",
+      "tomorrow": "Jutro",
+      "yesterday": "Wczoraj",
+      "rowLabel": "Otwórz rezerwację: {title}",
+      "noName": "Brak nazwy",
+      "needsReview": "Wymaga przeglądu"
+    },
+    "row": {
+      "moreFor": "Więcej akcji dla: {title}",
+      "open": "Otwórz",
+      "confirm": "Potwierdź",
+      "complete": "Oznacz jako zakończone",
+      "noShow": "Oznacz jako nieobecność",
+      "reschedule": "Zmień termin",
+      "copyLink": "Kopiuj link zarządzania",
+      "cancel": "Anuluj",
+      "decline": "Odrzuć"
+    },
+    "calendar": {
+      "emptyWeek": "Brak rezerwacji w tym tygodniu.",
+      "monthGrid": "Kalendarz miesięczny",
+      "more": "+{count} więcej",
+      "dayAgenda": "Rezerwacje wybranego dnia",
+      "emptyDay": "Brak rezerwacji w tym dniu."
+    },
+    "drawer": {
+      "loading": "Ładowanie rezerwacji",
+      "close": "Zamknij",
+      "noType": "Usunięty typ rezerwacji",
+      "pendingHint": "Oczekuje na potwierdzenie",
+      "minutes": "{count} min",
+      "customerTime": "Dla klienta: {time} ({zone})",
+      "confirm": "Potwierdź",
+      "complete": "Oznacz jako zakończone",
+      "noShow": "Nieobecność",
+      "reschedule": "Zmień termin",
+      "cancel": "Anuluj",
+      "customer": "Klient",
+      "openContact": "Otwórz kontakt",
+      "linkedContact": "Powiązany kontakt",
+      "noName": "Nie podano nazwy",
+      "where": "Gdzie",
+      "joinCall": "Dołącz do rozmowy wideo",
+      "answers": "Odpowiedzi na pytania rezerwacyjne",
+      "noAnswers": "Ta usługa nie zadawała pytań lub klient nie odpowiedział na żadne.",
+      "payment": "Płatność",
+      "depositPaid": "Zapłacono {amount}",
+      "notes": "Notatki",
+      "notesPlaceholder": "Prywatne notatki o tej rezerwacji",
+      "saveNotes": "Zapisz notatki",
+      "reminders": "Przypomnienia",
+      "noReminders": "Dla tej usługi nie ustawiono przypomnień.",
+      "before": "{count, plural, one {# minuta przed} few {# minuty przed} many {# minut przed} other {# minuty przed}}",
+      "reminder": {
+        "scheduled": "Zaplanowane",
+        "skipped": "Niewysłane",
+        "due": "Czas nadszedł"
+      },
+      "manageLink": "Link zarządzania",
+      "manageHint": "Udostępnij ten link klientowi, aby mógł samodzielnie zmienić termin lub anulować.",
+      "copy": "Kopiuj",
+      "openLink": "Otwórz stronę zarządzania",
+      "noManageLink": "Ta rezerwacja nie ma linku zarządzania.",
+      "source": "Zarezerwowano z",
+      "bookedOn": "Zarezerwowano dnia",
+      "cancelTitle": "Anulować to spotkanie?",
+      "cancelMessage": "Rezerwacja zostanie anulowana, a jej termin znów będzie wolny. Klient zostanie powiadomiony, a przypomnienia usunięte.",
+      "cancelConfirm": "Anuluj spotkanie",
+      "keep": "Zachowaj",
+      "decline": "Odrzuć",
+      "host": "Prowadzący",
+      "needsReview": "Zakończona, jeszcze nieoznaczona",
+      "needsReviewHint": "Ta rezerwacja się zakończyła, a nikt nie oznaczył jej jako zakończonej ani nieobecności.",
+      "cancelledBy": "{who} anulował(a) tę rezerwację",
+      "cancelledByStaff": "Personel",
+      "cancelledByInvitee": "Klient",
+      "cancelledBySystem": "System",
+      "cancelReason": "Powód",
+      "declineTitle": "Odrzucić tę prośbę?",
+      "declineMessage": "Klient zostanie powiadomiony o odrzuceniu prośby, a termin znów będzie wolny.",
+      "declineConfirm": "Odrzuć prośbę",
+      "remindersNote": "Przypomnienia wynikają z typu rezerwacji. Dostarczenie nie jest śledzone dla każdego przypomnienia."
+    },
+    "source": {
+      "chat": "Przepływ czatu",
+      "manual": "Personel",
+      "api": "API",
+      "link": "Strona rezerwacji"
+    },
+    "payment": {
+      "none": "Brak płatności",
+      "pending": "Płatność oczekuje",
+      "paid": "Opłacone",
+      "refunded": "Zwrócone",
+      "partial": "Częściowo opłacone"
+    },
+    "reschedule": {
+      "eyebrow": "Zmień termin",
+      "close": "Zamknij",
+      "cancel": "Anuluj",
+      "confirm": "Potwierdź nowy termin",
+      "current": "Teraz: {day}, {time} {zone}",
+      "noType": "Typ rezerwacji tej rezerwacji został usunięty, więc nie ma wolnych terminów, na które można ją przenieść.",
+      "taken": "Ten termin został właśnie zajęty. Wybierz inny.",
+      "newTime": "Nowy termin: {day}, {time}",
+      "notify": "Powiadom klienta o nowym terminie"
+    },
+    "toast": {
+      "conflict": "Ta rezerwacja została zmieniona przez kogoś innego. Została przeładowana.",
+      "failed": "To nie zadziałało.",
+      "confirmed": "Rezerwacja potwierdzona.",
+      "cancelled": "Spotkanie anulowane.",
+      "completed": "Oznaczono jako zakończone.",
+      "noShow": "Oznaczono jako nieobecność.",
+      "notesSaved": "Notatki zapisane.",
+      "rescheduled": "Rezerwacja przeniesiona na nowy termin.",
+      "linkCopied": "Link zarządzania skopiowany.",
+      "copyFailed": "Nie udało się skopiować linku.",
+      "declined": "Prośba odrzucona."
+    },
+    "typesList": {
+      "breadcrumb": "Ścieżka nawigacji",
+      "appointments": "Spotkania",
+      "services": "Usługi",
+      "title": "Typy rezerwacji",
+      "subtitle": "Każda usługa ma własny czas trwania, dostępność, cennik, kwestionariusz i przypomnienia. Klienci rezerwują ją z czatu lub z jej własnej strony rezerwacji.",
+      "newType": "Nowy typ rezerwacji",
+      "allBookings": "Wszystkie rezerwacje",
+      "settings": "Ustawienia",
+      "toolbar": "Filtry",
+      "search": "Szukaj typów rezerwacji",
+      "statusFilter": "Status",
+      "allStatuses": "Wszystkie statusy",
+      "active": "Aktywne",
+      "pausedLabel": "Wstrzymane",
+      "clear": "Wyczyść",
+      "tableLabel": "Typy rezerwacji",
+      "loading": "Ładowanie typów rezerwacji",
+      "useSampleData": "Użyj danych przykładowych (programistyczne)",
+      "emptyFilteredTitle": "Brak pasujących typów rezerwacji",
+      "emptyFiltered": "Nic nie pasuje do wyszukiwania i filtra.",
+      "emptyTitle": "Brak typów rezerwacji",
+      "emptyMessage": "Utwórz pierwszą usługę. Ustaw jej czas trwania, godziny i cenę, a klienci będą mogli rezerwować ją z czatu.",
+      "name": "Nazwa",
+      "details": "Szczegóły",
+      "price": "Cena",
+      "booked": "Zarezerwowano",
+      "status": "Status",
+      "actions": "Akcje",
+      "minutes": "{count} min",
+      "location": {
+        "address": "Osobiście",
+        "virtual": "Wirtualnie",
+        "phone": "Rozmowa telefoniczna",
+        "whatsapp": "WhatsApp"
+      },
+      "capacity": "{count, plural, one {# miejsce} few {# miejsca} many {# miejsc} other {# miejsca}} na termin",
+      "approval": "Wymaga zatwierdzenia",
+      "free": "Bezpłatnie",
+      "toggle": "Aktywny: {name}",
+      "moreFor": "Więcej akcji dla: {name}",
+      "edit": "Edytuj",
+      "copyLink": "Kopiuj publiczny link",
+      "openPage": "Otwórz stronę rezerwacji",
+      "duplicate": "Duplikuj",
+      "delete": "Usuń",
+      "showing": "{count, plural, one {# typ rezerwacji} few {# typy rezerwacji} many {# typów rezerwacji} other {# typu rezerwacji}}",
+      "deleteTitle": "Usunąć „{name}”?",
+      "deleteMessage": "Usunąć ten typ rezerwacji? Istniejące rezerwacje zostaną zachowane.",
+      "deleteConfirm": "Usuń typ rezerwacji",
+      "keep": "Zachowaj",
+      "activated": "„{name}” jest aktywny.",
+      "paused": "„{name}” jest wstrzymany.",
+      "duplicated": "Utworzono „{name}” (wstrzymany).",
+      "deleted": "Usunięto „{name}”.",
+      "failed": "To nie zadziałało.",
+      "linkCopied": "Publiczny link skopiowany.",
+      "copyFailed": "Nie udało się skopiować linku.",
+      "copyLinkFor": "Kopiuj publiczny link: {name}",
+      "copyLinkPaused": "Aktywuj ten typ rezerwacji, aby uzyskać publiczny link"
+    },
+    "editor": {
+      "forbidden": "Nie masz uprawnień do tworzenia ani edytowania typów rezerwacji.",
+      "notFoundTitle": "Nie znaleziono typu rezerwacji",
+      "notFound": "Nie znaleziono tego typu rezerwacji. Mógł zostać usunięty.",
+      "loading": "Ładowanie typu rezerwacji",
+      "header": {
+        "back": "Wróć do typów rezerwacji",
+        "kickerNew": "Spotkania / Nowy",
+        "kickerEdit": "Spotkania / Edycja",
+        "titleNew": "Utwórz typ rezerwacji",
+        "titleEdit": "Edytuj typ rezerwacji",
+        "draft": "Wersja robocza / niezapisane",
+        "unsaved": "Niezapisane zmiany"
+      },
+      "steps": {
+        "label": "Kroki",
+        "service": "Usługa",
+        "timing": "Czas",
+        "availability": "Dostępność",
+        "pricing": "Cennik",
+        "messaging": "Wiadomości",
+        "hasProblem": "wymaga uwagi",
+        "stepOf": "Krok {n} z {total}: {name}"
+      },
+      "nav": {
+        "back": "Wstecz",
+        "cancel": "Anuluj",
+        "next": "Dalej",
+        "create": "Utwórz typ rezerwacji",
+        "save": "Zapisz zmiany",
+        "saving": "Zapisywanie"
+      },
+      "toast": {
+        "created": "Typ rezerwacji „{name}” utworzony.",
+        "updated": "Typ rezerwacji „{name}” zaktualizowany."
+      },
+      "saveError": {
+        "conflict": "Ten typ rezerwacji został zmieniony przez kogoś innego podczas Twojej edycji. Odśwież, aby zobaczyć jego wersję. Twoje niezapisane zmiany zostaną utracone.",
+        "reload": "Załaduj najnowszą wersję"
+      },
+      "leave": {
+        "title": "Odrzucić zmiany?",
+        "message": "Masz niezapisane zmiany. Jeśli teraz wyjdziesz, zostaną utracone.",
+        "discard": "Odrzuć zmiany",
+        "keep": "Kontynuuj edycję"
+      },
+      "problems": {
+        "nameRequired": "Wpisz nazwę tego typu rezerwacji.",
+        "nameTooLong": "Nazwa może mieć maksymalnie {nameMax} znaków.",
+        "slugInvalid": "Użyj małych liter, cyfr i pojedynczych myślników, do {slugMax} znaków.",
+        "durationInvalid": "Czas trwania musi być liczbą całkowitą od {durationMin} do {durationMax} minut.",
+        "incrementInvalid": "Krok rozpoczęcia musi być liczbą całkowitą od {incrementMin} do {incrementMax} minut.",
+        "bufferInvalid": "Wpisz liczbę całkowitą minut od 0 do {bufferMax}.",
+        "minNoticeInvalid": "Wpisz liczbę całkowitą minut od 0 do {minNoticeMax}.",
+        "maxAdvanceInvalid": "Wpisz liczbę całkowitą dni od {maxAdvanceMin} do {maxAdvanceMax}.",
+        "maxPerDayInvalid": "Zostaw puste, aby nie było limitu, lub wpisz liczbę od 1 do {maxPerDayMax}.",
+        "capacityInvalid": "Pojemność musi być liczbą całkowitą od 1 do {capacityMax}.",
+        "timezoneInvalid": "Wybierz prawidłową strefę czasową.",
+        "colorInvalid": "Użyj koloru szesnastkowego, np. #075E54.",
+        "feeInvalid": "Wpisz kwotę, np. 150.00.",
+        "taxInvalid": "Wpisz procent od 0 do 100 z najwyżej dwoma miejscami po przecinku.",
+        "depositInvalid": "Wpisz kwotę zadatku większą niż 0.",
+        "depositTooHigh": "Zadatek nie może być wyższy niż suma (opłata plus podatek).",
+        "cancelFeeInvalid": "Wpisz kwotę, np. 25.00.",
+        "cancelWindowInvalid": "Wpisz liczbę całkowitą minut od 0 do {cancelWindowMax}.",
+        "reminderInvalid": "Wpisz pełne minuty przed rozpoczęciem, od 1 do {reminderMax}.",
+        "remindersDuplicate": "Każde przypomnienie wymaga innego czasu.",
+        "remindersTooMany": "Typ rezerwacji może mieć maksymalnie {reminders} przypomnień.",
+        "questionLabelRequired": "Nadaj pytaniu etykietę (do {questionLabelMax} znaków).",
+        "questionsTooMany": "Typ rezerwacji może mieć maksymalnie {questions} pytań.",
+        "questionOptionsRequired": "Dodaj co najmniej jeden wybór, po jednym w wierszu.",
+        "hoursInvalid": "Popraw oznaczone poniżej godziny tygodniowe.",
+        "overridesInvalid": "Popraw daty oznaczone na liście wyjątków dat.",
+        "descriptionTooLong": "Opis może mieć maksymalnie {descriptionMax} znaków.",
+        "locationTooLong": "Lokalizacja może mieć maksymalnie {locationMax} znaków.",
+        "server": "Serwer nie zaakceptował tej wartości. Sprawdź ją i spróbuj ponownie."
+      },
+      "service": {
+        "title": "Szczegóły usługi",
+        "hint": "Nazwij usługę i wskaż, gdzie się odbywa.",
+        "name": "Nazwa",
+        "namePlaceholder": "30-minutowe demo",
+        "description": "Opis",
+        "descriptionPlaceholder": "Co rezerwuje osoba, pokazywane na stronie rezerwacji.",
+        "locationType": "Typ lokalizacji",
+        "locationTypes": {
+          "address": "Osobiście (adres)",
+          "virtual": "Wirtualnie (wideo)",
+          "phone": "Rozmowa telefoniczna",
+          "whatsapp": "WhatsApp"
+        },
+        "locationValue": "Lokalizacja / adres",
+        "locationPlaceholders": {
+          "address": "Adres",
+          "virtual": "Link do wideo (opcjonalnie)",
+          "phone": "Numer telefonu do połączenia (opcjonalnie)",
+          "whatsapp": "Numer WhatsApp (opcjonalnie)"
+        },
+        "appearanceTitle": "Kolor",
+        "appearanceHint": "Oznacza tę usługę w kalendarzu i na stronie rezerwacji.",
+        "color": "Kolor",
+        "colorSwatches": "Wybierz kolor",
+        "linkTitle": "Publiczny link",
+        "linkHint": "Odwiedzający rezerwują pod tym adresem. Działa po zapisaniu i aktywowaniu typu rezerwacji.",
+        "slug": "Nazwa linku",
+        "slugHint": "Tworzona z nazwy, dopóki jej nie zmienisz. Małe litery, cyfry i myślniki.",
+        "slugPlaceholder": "rozmowa-wstepna",
+        "publicUrl": "Strona publiczna",
+        "copy": "Kopiuj link",
+        "copied": "Link skopiowany.",
+        "copyFailed": "Nie udało się skopiować linku. Zaznacz go i skopiuj ręcznie.",
+        "rulesTitle": "Zasady rezerwacji",
+        "requiresApproval": "Wymagaj zatwierdzenia",
+        "requiresApprovalHint": "Nowe rezerwacje czekają jako Oczekujące, dopóki ktoś z zespołu ich nie potwierdzi.",
+        "isActive": "Aktywny",
+        "isActiveHint": "Wyłącz, aby wstrzymać usługę: jej strona publiczna przestanie przyjmować rezerwacje."
+      },
+      "timing": {
+        "title": "Czas",
+        "hint": "Jak długo trwa każda rezerwacja i z jakim wyprzedzeniem można rezerwować.",
+        "duration": "Czas trwania (min)",
+        "durationHint": "Jak długo trwa jedna rezerwacja. 60 = 1 godzina.",
+        "increment": "Krok rozpoczęcia (min)",
+        "incrementHint": "Odstęp między oferowanymi godzinami rozpoczęcia. 30 oferuje 9:00, 9:30, 10:00.",
+        "capacity": "Pojemność (na termin)",
+        "capacityHint": "Liczba osób, które mogą dzielić jeden termin. 1 dla indywidualnych.",
+        "bufferBefore": "Bufor przed (min)",
+        "bufferAfter": "Bufor po (min)",
+        "bufferHint": "Wolny czas zachowywany wokół każdej rezerwacji.",
+        "minNotice": "Min. wyprzedzenie (min)",
+        "minNoticeHint": "Jak szybko przed rozpoczęciem można rezerwować. 240 = 4 godziny.",
+        "maxAdvance": "Rezerwacja do (dni)",
+        "maxAdvanceHint": "Z jakim wyprzedzeniem można rezerwować. 30 = miesiąc.",
+        "maxPerDay": "Maks. na dzień",
+        "maxPerDayHint": "Najwięcej rezerwacji w jednym dniu. Zostaw puste, aby nie było limitu.",
+        "noLimit": "Bez limitu",
+        "zoneTitle": "Strefa czasowa",
+        "zoneHint": "Godziny tygodniowe i daty są odczytywane w tej strefie. Odwiedzający widzą godziny w swojej.",
+        "zone": "Strefa czasowa tej usługi",
+        "zoneSearch": "Szukaj stref",
+        "zonePick": "Wybierz strefę czasową",
+        "zoneNone": "Żadna strefa nie pasuje do wyszukiwania."
+      },
+      "availability": {
+        "title": "Godziny tygodniowe",
+        "hint": "Dodaj godziny, w których przyjmujesz rezerwacje każdego dnia. Prawy panel pokazuje podgląd rzeczywistych terminów do rezerwacji.",
+        "empty": "Nie ustawiono godzin, więc nic nie można jeszcze zarezerwować.",
+        "total": "{hours} godz. {minutes} min czasu do rezerwacji w tygodniu."
+      },
+      "overrides": {
+        "title": "Wyjątki dat i święta",
+        "hint": "Zamknij dzień z powodu święta lub nadaj jednej dacie własne godziny. Cała reszta wynika z godzin tygodniowych.",
+        "previousMonth": "Poprzedni miesiąc",
+        "nextMonth": "Następny miesiąc",
+        "legend": "Legenda",
+        "status": {
+          "closed": "Zamknięte",
+          "custom": "Własne godziny",
+          "open": "Otwarte (godziny tygodniowe)",
+          "off": "Zamknięte (godziny tygodniowe)"
+        },
+        "clickHint": "Kliknij dzień, aby go zamknąć. Kliknij oznaczony dzień ponownie, aby przywrócić mu godziny tygodniowe.",
+        "rangeTitle": "Zamknij zakres",
+        "rangeHint": "Zamknij kilka dni naraz, np. tydzień świąteczny. Dni, które mają już wyjątek, go zachowują.",
+        "rangeFrom": "Od",
+        "rangeTo": "Do (opcjonalnie)",
+        "reason": "Powód",
+        "reasonPlaceholder": "Powód (opcjonalnie)",
+        "rangeProblems": {
+          "invalid": "Wybierz datę początkową i datę końcową nie wcześniejszą od niej.",
+          "tooLong": "Zakres może obejmować najwyżej rok.",
+          "full": "Osiągnięto limit wyjątków dat."
+        },
+        "closeRange": "Zamknij te dni",
+        "listTitle": "Wyjątki",
+        "count": "{count, plural, =0 {Brak dat} one {# data} few {# daty} many {# dat} other {# daty}}",
+        "limit": "Osiągnięto limit {max} dat. Usuń niektóre, aby dodać więcej.",
+        "empty": "Brak dat. Kliknij dzień w kalendarzu, aby go zamknąć.",
+        "remove": "Usuń wyjątek z dnia {date}",
+        "mode": "{date}: zamknięte lub własne godziny",
+        "modeClosed": "Zamknięte przez cały dzień",
+        "modeCustom": "Własne godziny",
+        "from": "{date}, godzina rozpoczęcia",
+        "to": "{date}, godzina zakończenia",
+        "reasonOf": "{date}, powód",
+        "problems": {
+          "incomplete": "Wypełnij obie godziny.",
+          "order": "Koniec musi być po początku.",
+          "dayClosedHours": "Zamknięty dzień nie ma godzin."
+        }
+      },
+      "pricing": {
+        "title": "Cennik (opcjonalnie)",
+        "hint": "Zostaw opłatę równą 0 dla bezpłatnych rezerwacji.",
+        "currency": "Waluta",
+        "currencyHint": "Domyślnie waluta Twojej przestrzeni roboczej.",
+        "fee": "Opłata ({currency})",
+        "feeHint": "Wpisz kwotę, np. {example}.",
+        "tax": "Podatek %",
+        "taxHint": "Dodawany do opłaty.",
+        "deposit": "Zadatek",
+        "depositModes": {
+          "none": "Bez przedpłaty",
+          "partial": "Zadatek częściowy",
+          "full": "Pełna kwota"
+        },
+        "depositAmount": "Kwota zadatku ({currency})",
+        "paymentNote": "Pobieranie płatności online nie jest jeszcze połączone. Zadatek jest zapisywany przy każdej rezerwacji, ale nic nie jest pobierane.",
+        "cancelFee": "Opłata za anulowanie ({currency})",
+        "noShowFee": "Opłata za nieobecność ({currency})",
+        "cancelWindow": "Okno anulowania (min)",
+        "cancelWindowHint": "Ile czasu przed rozpoczęciem rezerwację można anulować bezpłatnie. 1440 = 24 godziny.",
+        "recordedOnly": "Opłaty za anulowanie i nieobecność oraz okno anulowania są tylko zapisywane.",
+        "totalsLabel": "Ile kosztuje rezerwacja",
+        "totalFee": "Opłata",
+        "totalTax": "Podatek",
+        "totalSum": "Razem",
+        "totalDue": "Do zapłaty teraz"
+      },
+      "calendar": {
+        "title": "Kalendarz Google (opcjonalnie)",
+        "hint": "Rezerwacje działają bez tego. Połącz Kalendarz Google w Spotkania, Ustawienia, aby synchronizować terminy wolne/zajęte i dodawać linki Meet.",
+        "unavailable": "Kalendarz Google nie jest jeszcze skonfigurowany dla tej platformy. Te ustawienia są przechowywane przy typie rezerwacji na czas, gdy będzie.",
+        "calendarId": "Kalendarz",
+        "calendarPlaceholder": "główny",
+        "spreadsheetId": "Dopisywanie do arkusza (opcjonalnie)",
+        "spreadsheetPlaceholder": "Identyfikator arkusza kalkulacyjnego",
+        "createMeet": "Utwórz link Google Meet dla każdej rezerwacji",
+        "calendarDefault": "Kalendarz przestrzeni roboczej"
+      },
+      "messages": {
+        "title": "Wiadomości cyklu życia",
+        "hint": "Co klient otrzymuje, gdy rezerwacja jest potwierdzona, przypomniana, anulowana lub przeniesiona. Zostaw pole puste, aby użyć domyślnej wartości przestrzeni roboczej.",
+        "placeholdersTitle": "Dostępne symbole zastępcze",
+        "placeholdersHint": "Kliknij jeden, aby wstawić go w miejscu kursora w edytowanej wiadomości ({event}).",
+        "placeholderMeaning": {
+          "type": "nazwa typu rezerwacji",
+          "slot": "data i godzina rezerwacji",
+          "name": "imię i nazwisko klienta",
+          "manage_link": "link do zarządzania rezerwacją"
+        },
+        "events": {
+          "confirmation": "Potwierdzenie",
+          "reminder": "Przypomnienie",
+          "cancellation": "Anulowanie",
+          "reschedule": "Zmiana terminu"
+        },
+        "placeholders": {
+          "confirmation": "Cześć {name}, Twoja rezerwacja {type} została ustalona na {slot}. Zarządzaj nią tutaj: {manage_link}",
+          "reminder": "Cześć {name}, przypomnienie: Twoja rezerwacja {type} jest {slot}.",
+          "cancellation": "Cześć {name}, Twoja rezerwacja {type} w terminie {slot} została anulowana.",
+          "reschedule": "Cześć {name}, Twoja rezerwacja {type} została przeniesiona na {slot}. Szczegóły: {manage_link}"
+        },
+        "templatesNote": "Zatwierdzonych szablonów WhatsApp nie można jeszcze wybrać. Wiadomości są wysyłane jako zwykły tekst powyżej."
+      },
+      "reminders": {
+        "title": "Przypomnienia",
+        "hint": "Czasy muszą się różnić (1440 = 24 godz. przed, 180 = 3 godz. przed). Do {max}.",
+        "add": "Dodaj przypomnienie",
+        "quickAdd": "Szybkie dodanie",
+        "quick": {
+          "h24": "24 godz.",
+          "h3": "3 godz.",
+          "h1": "1 godz.",
+          "m15": "15 min"
+        },
+        "empty": "Brak przypomnień. Klienci otrzymują tylko potwierdzenie.",
+        "offsetOf": "Przypomnienie {n}, minut przed rozpoczęciem",
+        "minBefore": "min przed",
+        "labelPlaceholder": "24 godz.",
+        "labelOf": "Przypomnienie {n}, etykieta",
+        "remove": "Usuń przypomnienie {n}",
+        "count": "{count} z {max} przypomnień"
+      },
+      "questions": {
+        "title": "Kwestionariusz",
+        "hint": "Pytania zadawane przy rezerwacji. Do {max}.",
+        "add": "Dodaj pytanie",
+        "intro": "Wiadomość wprowadzająca",
+        "introHint": "Pokazywana nad pytaniami.",
+        "empty": "Brak pytań. Osoby podają tylko imię i nazwisko, e-mail i telefon.",
+        "labelPlaceholder": "Etykieta pytania",
+        "labelOf": "Pytanie {n}, etykieta",
+        "typeOf": "Pytanie {n}, typ odpowiedzi",
+        "types": {
+          "text": "Tekst",
+          "textarea": "Długi tekst",
+          "select": "Wybór",
+          "number": "Liczba",
+          "email": "E-mail",
+          "phone": "Telefon",
+          "date": "Data"
+        },
+        "optionsOf": "Pytanie {n}, opcje",
+        "optionsPlaceholder": "Jedna opcja na wiersz",
+        "optionsHint": "Do {max} opcji.",
+        "map": "Zapisz odpowiedź w polu",
+        "mapOf": "Pytanie {n}, pole kontaktu",
+        "mapNone": "Nic",
+        "mapFields": {
+          "email": "E-mail",
+          "name": "Imię i nazwisko",
+          "mobile": "Telefon komórkowy"
+        },
+        "required": "Wymagane",
+        "moveUp": "Przenieś pytanie {n} w górę",
+        "moveDown": "Przenieś pytanie {n} w dół",
+        "remove": "Usuń pytanie {n}",
+        "count": "{count} z {max} pytań"
+      },
+      "rail": {
+        "title": "Podsumowanie na żywo",
+        "viewPublic": "Zobacz stronę publiczną",
+        "cardLabel": "Podgląd karty rezerwacji",
+        "newService": "Nowa usługa",
+        "needsApproval": "Rezerwacje czekają na Twoje zatwierdzenie.",
+        "fee": "Opłata",
+        "free": "Bezpłatnie",
+        "tax": "Podatek",
+        "total": "Razem",
+        "dueNow": "Do zapłaty teraz",
+        "slotsTitle": "Podgląd terminów",
+        "refresh": "Odśwież",
+        "loading": "Ładowanie",
+        "slotsIdle": "Ustaw godziny tygodniowe, czas trwania i strefę czasową, aby zobaczyć podgląd rzeczywistych terminów.",
+        "slotsFailed": "Podgląd nie powiódł się.",
+        "slotsNone": "Brak terminów do rezerwacji dla tej konfiguracji w ciągu najbliższych {days} dni.",
+        "slotsSummary": "{count, plural, one {# termin} few {# terminy} many {# terminów} other {# terminu}} · godziny w strefie {zone}"
+      }
+    },
+    "public": {
+      "brandFallback": "Rezerwacja online",
+      "brandName": "CRM",
+      "poweredBy": "Obsługiwane przez {brand}",
+      "language": "Język",
+      "loading": "Ładowanie",
+      "problem": {
+        "retry": "Spróbuj ponownie",
+        "back": "Zobacz wszystkie usługi",
+        "notFoundOrg": {
+          "title": "Nie znaleziono tej strony rezerwacji",
+          "message": "Adres może zawierać literówkę lub ta firma nie przyjmuje rezerwacji online. Poproś ją o link."
+        },
+        "notFoundService": {
+          "title": "Ta usługa jest niedostępna",
+          "message": "Mogła zostać wstrzymana lub nie jest już oferowana. Możesz zobaczyć inne usługi tej firmy."
+        },
+        "notFoundLink": {
+          "title": "Ten link jest nieprawidłowy",
+          "message": "Rezerwacja mogła zostać usunięta lub link jest niekompletny. Użyj linku z potwierdzenia albo poproś firmę o nowy."
+        },
+        "paused": {
+          "title": "Ta usługa jest wstrzymana",
+          "message": "Obecnie nie przyjmuje rezerwacji. Spróbuj później lub zobacz inne usługi tej firmy."
+        },
+        "closed": {
+          "title": "Tej rezerwacji nie można już zmienić",
+          "message": "Została już anulowana lub zakończona. Skontaktuj się z firmą, jeśli potrzebujesz czegoś jeszcze."
+        },
+        "rateLimited": {
+          "title": "Zbyt wiele żądań",
+          "message": "Poczekaj chwilę i spróbuj ponownie."
+        },
+        "unavailable": {
+          "title": "Rezerwacja online jest teraz niedostępna",
+          "message": "Nie udało się połączyć z usługą rezerwacji. Spróbuj ponownie za kilka minut."
+        },
+        "network": {
+          "title": "Nie udało się załadować tej strony",
+          "message": "Sprawdź połączenie i spróbuj ponownie. Jeśli problem się powtarza, skontaktuj się z firmą."
+        }
+      },
+      "directory": {
+        "title": "Umów spotkanie",
+        "subtitle": "Wybierz usługę, aby zobaczyć wolne terminy w: {name}.",
+        "services": "Usługi",
+        "choose": "Wybierz godzinę",
+        "empty": {
+          "title": "Obecnie nie ma czego rezerwować",
+          "message": "Ta firma nie ma obecnie usług otwartych na rezerwację online. Zajrzyj później."
+        }
+      },
+      "location": {
+        "address": "Osobiście",
+        "virtual": "Rozmowa wideo",
+        "phone": "Rozmowa telefoniczna",
+        "whatsapp": "WhatsApp"
+      },
+      "service": {
+        "allServices": "Wszystkie usługi",
+        "approvalNote": "Firma potwierdza każdą rezerwację. Najpierw otrzymasz informację o przyjęciu prośby, potem potwierdzenie."
+      },
+      "step": {
+        "time": "Wybierz dzień i godzinę",
+        "pickHint": "Wybierz dzień, a potem godzinę, aby kontynuować.",
+        "continue": "Kontynuuj",
+        "changeTime": "Zmień godzinę",
+        "details": "Twoje dane"
+      },
+      "when": {
+        "atService": "Tam, gdzie znajduje się usługa: {day}, {range} ({zone})"
+      },
+      "where": {
+        "join": "Dołącz do rozmowy wideo",
+        "videoLater": "Rozmowa wideo",
+        "phone": "Rozmowa telefoniczna pod numerem"
+      },
+      "form": {
+        "name": "Twoje imię i nazwisko",
+        "email": "E-mail",
+        "phone": "Telefon",
+        "optional": "(opcjonalnie)",
+        "choose": "Wybierz opcję",
+        "required": "To pole jest wymagane.",
+        "tooLong": "To jest za długie.",
+        "serverInvalid": "Nie udało się tego zaakceptować. Sprawdź i spróbuj ponownie.",
+        "invalid": {
+          "text": "Sprawdź tę wartość.",
+          "textarea": "Sprawdź tę wartość.",
+          "email": "Wpisz prawidłowy adres e-mail.",
+          "phone": "Wpisz prawidłowy numer telefonu, z kodem kraju, jeśli nie jest lokalny.",
+          "number": "Wpisz liczbę.",
+          "date": "Wybierz prawidłową datę.",
+          "select": "Wybierz jedną z opcji."
+        }
+      },
+      "price": {
+        "title": "Cena",
+        "inclTax": "w tym {pct}% podatku",
+        "fee": "Opłata",
+        "tax": "Podatek ({pct}%)",
+        "total": "Razem",
+        "dueNow": "Do zapłaty przy rezerwacji",
+        "notCollected": "Na tej stronie nic nie jest pobierane. Płatność online nie jest jeszcze dostępna."
+      },
+      "book": {
+        "confirm": "Potwierdź rezerwację",
+        "request": "Poproś o rezerwację",
+        "sending": "Wysyłanie rezerwacji",
+        "slotTaken": "Ten termin został właśnie zajęty. Wybierz inny.",
+        "slotTakenHint": "Twoje dane zostały zachowane. Poniższe terminy są aktualne.",
+        "notice": {
+          "validation": {
+            "title": "Nie udało się zaakceptować niektórych informacji",
+            "message": "Sprawdź zaznaczone pola i spróbuj ponownie."
+          },
+          "rateLimited": {
+            "title": "Zbyt wiele żądań",
+            "message": "Poczekaj chwilę i naciśnij przycisk ponownie."
+          },
+          "network": {
+            "title": "Nie udało się wysłać rezerwacji",
+            "message": "Sprawdź połączenie i naciśnij przycisk ponownie. Nie zostaniesz zarezerwowany dwa razy."
+          },
+          "unavailable": {
+            "title": "Ta usługa nie jest już dostępna",
+            "message": "Mogła zostać wstrzymana. Wróć do listy usług i wybierz inną."
+          }
+        }
+      },
+      "booked": {
+        "confirmedTitle": "Twoja rezerwacja jest potwierdzona",
+        "confirmedMessage": "{name} ma Twoją rezerwację. Zachowaj poniższy link, aby ją zmienić lub anulować.",
+        "pendingTitle": "Prośba otrzymana, oczekuje na potwierdzenie",
+        "pendingMessage": "{name} potwierdzi Twoją rezerwację. Zachowaj poniższy link, aby sprawdzić jej stan, zmienić ją lub anulować.",
+        "pendingNote": "Do potwierdzenia termin jest dla Ciebie zarezerwowany, ale może się jeszcze zmienić.",
+        "manage": "Zarządzaj rezerwacją",
+        "bookAnother": "Zarezerwuj inną usługę"
+      },
+      "calendar": {
+        "title": "Dodaj do kalendarza",
+        "download": "Pobierz plik .ics",
+        "google": "Kalendarz Google",
+        "opensNewTab": "(otwiera się w nowej karcie)"
+      },
+      "manageLink": {
+        "title": "Twój link do rezerwacji",
+        "hint": "Zapisz ten link. To jedyny sposób na zmianę lub anulowanie rezerwacji i może to zrobić każdy, kto go ma.",
+        "copy": "Kopiuj",
+        "copied": "Skopiowano"
+      },
+      "manage": {
+        "title": "Twoja rezerwacja",
+        "reschedule": "Zmień termin",
+        "cancel": "Anuluj",
+        "flash": {
+          "rescheduled": "Termin Twojej rezerwacji został zmieniony.",
+          "cancelled": "Twoja rezerwacja została anulowana."
+        },
+        "failure": {
+          "closed": "Tej rezerwacji nie można już zmienić.",
+          "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
+          "network": "Nie udało się zmienić rezerwacji. Sprawdź połączenie i spróbuj ponownie."
+        },
+        "confirmCancel": {
+          "title": "Anulować tę rezerwację?",
+          "message": "Twoja rezerwacja: {what} zostanie anulowana, a termin zwolniony. Tej operacji nie można cofnąć.",
+          "confirm": "Tak, anuluj rezerwację",
+          "keep": "Zachowaj rezerwację"
+        },
+        "state": {
+          "pending": {
+            "title": "Oczekuje na potwierdzenie",
+            "message": "Firma jeszcze nie potwierdziła tej rezerwacji."
+          },
+          "cancelled": {
+            "title": "Ta rezerwacja została anulowana",
+            "message": "Nie można jej już zmienić."
+          },
+          "no_show": {
+            "title": "Ta rezerwacja została oznaczona jako niewykorzystana",
+            "message": "Nie można jej już zmienić. Skontaktuj się z firmą, jeśli to pomyłka."
+          },
+          "completed": {
+            "title": "To spotkanie jest zakończone",
+            "message": "Nie można go już zmienić."
+          },
+          "passed": {
+            "title": "To spotkanie już się rozpoczęło",
+            "message": "Nie można go już zmienić online. W razie potrzeby skontaktuj się z firmą."
+          }
+        }
+      },
+      "reschedule": {
+        "title": "Zmień termin",
+        "back": "Wróć do rezerwacji",
+        "backToBooking": "Wróć do rezerwacji",
+        "current": "Obecny termin",
+        "saving": "Zapisywanie nowego terminu",
+        "confirm": "Potwierdź nowy termin · {when}",
+        "failure": {
+          "slotTaken": "Ten termin został właśnie zajęty — wybierz inny.",
+          "closed": "Tej rezerwacji nie można już zmienić.",
+          "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
+          "validation": "Nie udało się zaakceptować tego terminu. Wybierz inny.",
+          "network": "Nie udało się zapisać nowego terminu. Sprawdź połączenie i spróbuj ponownie."
+        },
+        "closed": {
+          "closed": {
+            "title": "Tej rezerwacji nie można już zmienić",
+            "message": "Została już anulowana lub zakończona, więc nie ma terminu do przeniesienia."
+          },
+          "passed": {
+            "title": "To spotkanie już się rozpoczęło",
+            "message": "Rezerwacji nie można przenieść po jej rozpoczęciu. W razie potrzeby skontaktuj się z firmą."
+          }
+        }
+      },
+      "meta": {
+        "book": "Umów spotkanie",
+        "manage": "Twoja rezerwacja",
+        "reschedule": "Zmień termin rezerwacji"
+      }
+    },
+    "settings": {
+      "title": "Ustawienia rezerwacji",
+      "subtitle": "Wartości domyślne, godziny pracy i wiadomości dla rezerwacji w tej przestrzeni roboczej.",
+      "breadcrumb": {
+        "label": "Ścieżka nawigacji",
+        "integrations": "Integracje",
+        "appointments": "Spotkania",
+        "settings": "Ustawienia"
+      },
+      "back": "Wróć do rezerwacji",
+      "save": "Zapisz ustawienia",
+      "saving": "Zapisywanie...",
+      "saved": "Ustawienia rezerwacji zapisane.",
+      "discard": "Odrzuć zmiany",
+      "unsaved": "Masz niezapisane zmiany.",
+      "allSaved": "Wszystkie zmiany zapisane.",
+      "loading": "Ładowanie ustawień",
+      "forbidden": "Nie masz uprawnień do wyświetlania ustawień rezerwacji.",
+      "readOnly": "Możesz wyświetlać te ustawienia, ale nie możesz ich zmieniać.",
+      "fixFirst": "Najpierw popraw zaznaczone pola.",
+      "issues": "{count, plural, one {# pole wymaga uwagi, zanim będzie można zapisać.} few {# pola wymagają uwagi, zanim będzie można zapisać.} many {# pól wymaga uwagi, zanim będzie można zapisać.} other {# pola wymaga uwagi, zanim będzie można zapisać.}}",
+      "conflict": {
+        "message": "Te ustawienia zostały zmienione gdzie indziej od czasu ich otwarcia. Odśwież, aby zobaczyć najnowszą wersję; Twoje zmiany tutaj zostaną zastąpione.",
+        "reload": "Załaduj najnowsze"
+      },
+      "leave": {
+        "title": "Wyjść bez zapisywania?",
+        "message": "Twoje zmiany w ustawieniach rezerwacji nie zostały zapisane.",
+        "leave": "Wyjdź",
+        "stay": "Kontynuuj edycję"
+      },
+      "calendar": {
+        "title": "Integracja z kalendarzem",
+        "description": "Połącz kalendarz, aby rezerwacje i Twoje zajęte terminy były zsynchronizowane.",
+        "provider": "Kalendarz Google",
+        "providerSub": "Rezerwacja spotkań",
+        "status": {
+          "unavailable": "Niedostępne",
+          "disconnected": "Niepołączone",
+          "connected": "Połączone",
+          "needs_reconnect": "Wymaga ponownego połączenia"
+        },
+        "loading": "Sprawdzanie połączenia",
+        "unavailableTitle": "Kalendarz Google nie jest jeszcze skonfigurowany dla tej platformy",
+        "unavailableBody": "Administrator platformy musi dodać klienta Google OAuth (Administracja, Ustawienia, Kalendarz Google), zanim przestrzeń robocza będzie mogła się połączyć. Twoje rezerwacje nie są dotknięte.",
+        "disconnectedBody": "Niepołączone. Połączenie otwiera Google, gdzie wybierasz konto i zgadzasz się na udostępnienie dostępu do kalendarza.",
+        "disconnectedReadOnly": "Niepołączone. Poproś administratora przestrzeni roboczej o połączenie.",
+        "reconnectTitle": "Google przestało akceptować połączenie",
+        "reconnectBody": "Dostęp został wycofany lub wygasł, więc rezerwacje nie są zapisywane w Twoim kalendarzu, a jego zajęte terminy nie są odczytywane. Połącz ponownie, aby wznowić.",
+        "reconnectBodyAccount": "Dostęp dla konta {account} został wycofany lub wygasł, więc rezerwacje nie są zapisywane w Twoim kalendarzu, a jego zajęte terminy nie są odczytywane. Połącz ponownie, aby wznowić.",
+        "account": "Konto Google",
+        "calendar": "Kalendarz",
+        "primaryCalendar": "Twój główny kalendarz",
+        "connectedAgo": "Połączono {when}",
+        "errors": {
+          "notConfigured": "Kalendarz Google nie jest skonfigurowany dla tej platformy. Poproś administratora platformy o dodanie klienta Google OAuth.",
+          "notConnected": "Żaden Kalendarz Google nie jest połączony. Odśwież stronę i połącz ponownie.",
+          "providerFailed": "Google nie odpowiedziało. Spróbuj ponownie za chwilę."
+        },
+        "loadingCalendars": "Ładowanie kalendarzy",
+        "chooseLabel": "Zapisuj rezerwacje w",
+        "chooseHint": "Wyświetlane są tylko kalendarze, które to konto może edytować. Już zapisane wydarzenia pozostają tam, gdzie są.",
+        "choosePlaceholder": "Wybierz kalendarz",
+        "chooseOptionPrimary": "{name} (kalendarz główny)",
+        "chooseSave": "Użyj tego kalendarza",
+        "chooseCancel": "Anuluj",
+        "saving": "Zapisywanie",
+        "connect": "Połącz Kalendarz Google",
+        "reconnect": "Połącz ponownie z Google",
+        "redirecting": "Otwieranie Google",
+        "choose": "Wybierz kalendarz",
+        "disconnect": "Rozłącz",
+        "disconnected": "Kalendarz Google rozłączony.",
+        "calendarSaved": "Kalendarz zapisany.",
+        "confirmOff": {
+          "title": "Rozłączyć Kalendarz Google?",
+          "message": "Nowe rezerwacje przestaną trafiać do Twojego kalendarza, a jego zajęte terminy nie będą już odczytywane. Wydarzenia już w kalendarzu pozostaną, a Google zostanie poproszone o wycofanie tego dostępu.",
+          "confirm": "Rozłącz",
+          "cancel": "Zachowaj"
+        },
+        "outcome": {
+          "connected": "Kalendarz Google połączony. Potwierdzone rezerwacje trafiają teraz do Twojego kalendarza.",
+          "denied": "Dostęp nie został przyznany w Google, więc nic nie zostało połączone.",
+          "failed": "Łączenie nie zostało ukończone. Spróbuj ponownie; jeśli nadal się nie udaje, poproś administratora platformy o sprawdzenie konfiguracji Google.",
+          "expired": "Ta próba trwała zbyt długo. Naciśnij Połącz, aby zacząć od nowa.",
+          "not_configured": "Kalendarz Google nie jest skonfigurowany dla tej platformy. Poproś administratora platformy o dodanie klienta Google OAuth.",
+          "missing_scope": "Google nie przyznało wszystkich wymaganych uprawnień do kalendarza. Połącz ponownie i pozostaw zaznaczone wszystkie pola."
+        },
+        "whatTitle": "Co to robi",
+        "what": {
+          "freeBusy": "Odczytuje wolne i zajęte terminy z Twojego kalendarza.",
+          "nextSlots": "Oferuje klientom najbliższe wolne terminy.",
+          "writeBack": "Zapisuje potwierdzone rezerwacje w Twoim kalendarzu jako wydarzenia, z linkiem Meet, gdy usługa o to prosi."
+        },
+        "hint": "Rezerwacje działają bez tego. Wolne terminy wynikają z Twoich godzin pracy i zasad rezerwacji poniżej."
+      },
+      "timezone": {
+        "title": "Strefa czasowa",
+        "description": "Strefa, w której odczytywane są godziny pracy i terminy rezerwacji.",
+        "label": "Strefa czasowa przestrzeni roboczej",
+        "hint": "Klienci widzą godziny w swojej strefie; Twoje są pokazywane w tej."
+      },
+      "hours": {
+        "title": "Godziny pracy",
+        "description": "Kiedy klienci mogą rezerwować. Wyłącz dzień, aby go zamknąć, lub dodaj przedziały na przerwę.",
+        "noHours": "Żaden dzień nie jest otwarty, więc nikt nie może rezerwować."
+      },
+      "defaults": {
+        "title": "Zasady rezerwacji",
+        "description": "Wartości domyślne dla rezerwacji w tej przestrzeni roboczej.",
+        "fields": {
+          "slotDurationMinutes": "Czas trwania terminu (minuty)",
+          "maxPerDay": "Maks. rezerwacji dziennie",
+          "bufferBeforeMinutes": "Bufor przed (minuty)",
+          "bufferAfterMinutes": "Bufor po (minuty)",
+          "advanceDays": "Okno rezerwacji z wyprzedzeniem (dni)",
+          "reminderMinutesBefore": "Przypomnienie (minut przed)",
+          "defaultLocation": "Domyślna lokalizacja (opcjonalnie)"
+        },
+        "hints": {
+          "slotDurationMinutes": "Od {min} do {max} minut.",
+          "maxPerDay": "Od {min} do {max} rezerwacji.",
+          "bufferBeforeMinutes": "Od {min} do {max} minut.",
+          "bufferAfterMinutes": "Od {min} do {max} minut.",
+          "advanceDays": "Od {min} do {max} dni z wyprzedzeniem.",
+          "reminderMinutesBefore": "Od {min} do {max} minut. 0 wyłącza przypomnienia."
+        },
+        "locationHint": "Do 191 znaków.",
+        "locationPlaceholder": "np. ul. Marszałkowska 12, Warszawa"
+      },
+      "templates": {
+        "title": "Szablony wiadomości",
+        "description": "Wiadomości tekstowe otrzymywane przez klientów. Symbole zastępcze są uzupełniane dla każdej rezerwacji.",
+        "placeholders": "Symbole zastępcze",
+        "placeholder": {
+          "type": "Nazwa typu rezerwacji",
+          "slot": "Data i godzina",
+          "name": "Imię i nazwisko klienta",
+          "manage_link": "Link do zarządzania rezerwacją"
+        },
+        "events": {
+          "confirmation": "Potwierdzenie",
+          "reminder": "Przypomnienie",
+          "cancellation": "Anulowanie",
+          "reschedule": "Zmiana terminu"
+        },
+        "reset": "Przywróć domyślne",
+        "unknown": "To nie jest znany symbol zastępczy, zostanie wysłany bez zmian: {names}",
+        "counter": "{count} / {max}"
+      },
+      "v": {
+        "required": "To pole jest wymagane.",
+        "notInteger": "Wpisz liczbę całkowitą.",
+        "tooSmall": "Musi wynosić co najmniej {min}.",
+        "tooLarge": "Musi wynosić najwyżej {max}.",
+        "tooLong": "Może mieć najwyżej {max} znaków.",
+        "badZone": "Wybierz strefę czasową z listy.",
+        "badHours": "Popraw zaznaczone godziny w godzinach pracy."
+      },
+      "notAvailable": "Ustawienia rezerwacji dla całej przestrzeni roboczej nie są dostępne na tym serwerze. Zamiast tego każdy typ rezerwacji ma własne godziny, strefę czasową, przypomnienia i wiadomości.",
+      "openTypes": "Otwórz typy rezerwacji"
+    },
+    "linked": {
+      "title": "Spotkania",
+      "openBookings": "Otwórz rezerwacje",
+      "showPast": "Pokaż minione",
+      "hidePast": "Ukryj minione",
+      "empty": "Brak nadchodzących spotkań.",
+      "emptyBoth": "Brak spotkań.",
+      "loading": "Ładowanie spotkań",
+      "unavailable": "Spotkania nie są jeszcze dostępne na tym serwerze.",
+      "loadMore": "Załaduj więcej",
+      "loadMorePast": "Załaduj więcej minionych",
+      "noType": "Spotkanie"
+    }
+  }
+}

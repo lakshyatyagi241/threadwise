@@ -1,0 +1,326 @@
+{
+  "invoicing": {
+    "nav": {
+      "creditNotes": "Noty kredytowe"
+    },
+    "errors": {
+      "codes": {
+        "CN_EXCEEDS_INVOICE": "Noty kredytowe nie mogą łącznie przekraczać faktury. Zmniejsz kwoty lub skoryguj tylko pozostałą część.",
+        "CN_NOT_DRAFT": "Edytować lub usunąć można tylko szkic noty kredytowej. Odśwież stronę, aby zobaczyć jej aktualny stan.",
+        "CN_ALREADY_VOID": "Ta nota kredytowa jest już anulowana.",
+        "CN_HAS_REFUND": "Dla tej noty kredytowej zwrócono gotówkę, więc nie można jej anulować. Zwrot pozostaje w rejestrze płatności.",
+        "CN_NOTHING_TO_CREDIT": "Nie ma tu już nic do skorygowania. Wybierz pozycję z pozostałą kwotą lub dodaj kwotę.",
+        "CN_LINE_INVALID": "Pozycja do skorygowania jest nieprawidłowa: ilość jest większa niż pozostało lub kwota jest błędna. Sprawdź zaznaczone pozycje.",
+        "INV_NOT_ISSUED": "Notę kredytową można wystawić tylko do wystawionej faktury."
+      }
+    },
+    "creditNotes": {
+      "status": {
+        "draft": "Szkic",
+        "issued": "Wystawiona",
+        "void": "Anulowana"
+      },
+      "reasons": {
+        "return": "Zwrot towaru",
+        "price_adjustment": "Korekta ceny",
+        "billing_error": "Błąd w fakturze",
+        "cancellation": "Anulowanie",
+        "goodwill": "Gest dobrej woli",
+        "other": "Inne"
+      },
+      "settlements": {
+        "balance": "Zaliczone na saldo",
+        "refund": "Zwrot gotówkowy"
+      },
+      "tabs": {
+        "label": "Status noty kredytowej",
+        "all": "Wszystkie",
+        "draft": "Szkice",
+        "issued": "Wystawione",
+        "void": "Anulowane"
+      },
+      "list": {
+        "title": "Noty kredytowe",
+        "subtitle": "Dokumenty zmniejszające kwotę, którą nabywca jest winien z wystawionej faktury.",
+        "invoices": "Faktury",
+        "newCreditNote": "Nowa nota kredytowa",
+        "search": "Szukaj po numerze lub nabywcy",
+        "reset": "Wyczyść filtry",
+        "refresh": "Odśwież",
+        "tableLabel": "Noty kredytowe",
+        "noAccessTitle": "Brak dostępu",
+        "noAccess": "Nie masz uprawnień do wyświetlania not kredytowych.",
+        "emptyFilteredTitle": "Brak pasujących not kredytowych",
+        "emptyFiltered": "Spróbuj innego wyszukiwania lub wyczyść filtry.",
+        "resetFilters": "Wyczyść filtry",
+        "empty": {
+          "all": {
+            "title": "Brak not kredytowych",
+            "message": "Wystaw notę kredytową do faktury, gdy towar wraca, cena była błędna lub chcesz coś zwrócić."
+          },
+          "draft": {
+            "title": "Brak szkiców",
+            "message": "Tutaj pojawią się noty kredytowe, które wciąż przygotowujesz."
+          },
+          "issued": {
+            "title": "Nic nie wystawiono",
+            "message": "Wystawione noty kredytowe mają numer i już zmieniły swoją fakturę."
+          },
+          "void": {
+            "title": "Nic nie anulowano",
+            "message": "Tutaj zachowywane są anulowane noty kredytowe."
+          }
+        },
+        "showing": "{count, plural, one {Wczytano # notę kredytową} few {Wczytano # noty kredytowe} many {Wczytano # not kredytowych} other {Wczytano # noty kredytowe}}",
+        "loadMore": "Wczytaj więcej",
+        "allLoaded": "Wczytano wszystkie",
+        "loading": "Wczytywanie not kredytowych",
+        "contactLoading": "...",
+        "invoiceChip": "Faktura {number}",
+        "clearInvoice": "Pokaż noty kredytowe wszystkich faktur"
+      },
+      "table": {
+        "draft": "Szkic",
+        "scrollArea": "Tabela not kredytowych, przewijana w poziomie",
+        "columns": {
+          "number": "Nota kredytowa",
+          "invoice": "Faktura",
+          "buyer": "Nabywca",
+          "reason": "Powód",
+          "settlement": "Rozliczenie",
+          "total": "Suma",
+          "applied": "Zaliczone na saldo",
+          "refunded": "Zwrócono gotówką",
+          "issued": "Data wystawienia",
+          "status": "Status"
+        }
+      },
+      "row": {
+        "moreFor": "Więcej działań dla: {name}",
+        "draft": "szkic",
+        "open": "Otwórz",
+        "edit": "Edytuj szkic",
+        "issue": "Wystaw",
+        "pdf": "Pobierz PDF",
+        "print": "Drukuj",
+        "void": "Anuluj",
+        "delete": "Usuń szkic"
+      },
+      "dialogs": {
+        "draftName": "ten szkic",
+        "close": "Zamknij",
+        "keep": "Zachowaj",
+        "done": {
+          "issue": "Wystawiono notę kredytową {name}.",
+          "void": "Anulowano notę kredytową {name}.",
+          "delete": "Szkic usunięto."
+        },
+        "issue": {
+          "title": "Wystawić tę notę kredytową?",
+          "message": "Nota otrzymuje swój numer i zmniejsza kwotę, którą nabywca jest winien za fakturę. Przy zwrocie gotówkowym pieniądze są zwracane przez rejestr płatności. Potem nie można jej już edytować.",
+          "confirm": "Wystaw notę kredytową"
+        },
+        "void": {
+          "title": "Anulować tę notę kredytową?",
+          "warning": "Korekta przestaje być liczona: faktura wraca do stanu sprzed tej noty kredytowej.",
+          "reason": "Dlaczego jest anulowana?",
+          "reasonHint": "Wymagane. Zostanie zapisane na nocie kredytowej.",
+          "confirm": "Anuluj notę kredytową"
+        },
+        "delete": {
+          "title": "Usunąć ten szkic?",
+          "message": "Szkic zostanie trwale usunięty. Nic nie zostało wystawione, więc faktura się nie zmienia.",
+          "confirm": "Usuń szkic"
+        }
+      },
+      "picker": {
+        "total": "Suma faktury",
+        "paid": "Zapłacono",
+        "credited": "Dotychczas skorygowano",
+        "balance": "Saldo do zapłaty",
+        "loading": "Wczytywanie faktury",
+        "change": "Zmień fakturę",
+        "search": "Szukaj wystawionych faktur po numerze lub nabywcy",
+        "results": "Faktury, które można skorygować",
+        "searching": "Wyszukiwanie...",
+        "none": "Nie znaleziono wystawionej faktury.",
+        "more": "Pokaż więcej",
+        "totalShort": "Suma",
+        "notCreditable": "Notę kredytową można wystawić tylko do wystawionej faktury (wystawionej, częściowo opłaconej, przeterminowanej lub opłaconej). Wybierz inną fakturę."
+      },
+      "lines": {
+        "invoiceLines": "Pozycje faktury",
+        "creditLine": "Skoryguj: {name}",
+        "lineFacts": "Zafakturowano {qty} za {amount} przed podatkiem",
+        "tax": "Podatek",
+        "taxIncluded": "{name} {rate}% wliczony w cenę",
+        "taxAdded": "{name} {rate}% doliczony",
+        "alreadyCredited": "Już skorygowano {qty}, pozostało {left}",
+        "fullyCredited": "Już w pełni skorygowano",
+        "qtyToCredit": "Ilość do skorygowania",
+        "freeTitle": "Pozycje dowolne",
+        "freeHint": "Kwota z tytułu dobrej woli lub korekta niezwiązana z pozycją. Kwota przed podatkiem.",
+        "description": "Opis",
+        "amount": "Kwota przed podatkiem",
+        "taxRate": "Stawka podatku",
+        "noTax": "Bez podatku",
+        "inclusive": "wliczony",
+        "removeFree": "Usuń tę pozycję",
+        "addFree": "Dodaj pozycję dowolną"
+      },
+      "problems": {
+        "noInvoice": "Wybierz fakturę do skorygowania.",
+        "nothing": "Wybierz coś do skorygowania: pozycję lub dowolną kwotę.",
+        "qtyInvalid": "Wpisz ilość większą od 0, z najwyżej 4 miejscami po przecinku.",
+        "qtyExceeds": "Na tej pozycji można jeszcze skorygować najwyżej {max}.",
+        "descriptionRequired": "Opisz, co jest korygowane.",
+        "amountInvalid": "Wpisz kwotę większą od 0.",
+        "noteTooLong": "Notatka jest dłuższa niż 2000 znaków."
+      },
+      "estimate": {
+        "title": "Szacowana korekta",
+        "disclaimer": "Szacunek obliczony tutaj na podstawie cen i podatku z faktury. Ostateczne są wartości zapisane przez serwer.",
+        "empty": "Nic jeszcze nie ma do skorygowania. Wybierz całą fakturę lub zaznacz pozycje.",
+        "lineQty": "Ilość {qty}",
+        "taxSummary": "Podsumowanie podatku",
+        "included": "wliczony",
+        "taxOn": "{tax} od {base}",
+        "subtotal": "Przed podatkiem",
+        "tax": "Podatek",
+        "total": "Suma korekty",
+        "exceeds": "To więcej, niż faktura jeszcze pozwala skorygować ({max}). Serwer to odrzuci.",
+        "money": "Co dzieje się z pieniędzmi",
+        "balanceBefore": "Saldo do zapłaty teraz",
+        "balanceAfter": "Saldo do zapłaty po",
+        "applied": "Zaliczone na fakturę",
+        "refunded": "Zwrócono gotówką",
+        "refundNote": "Zwrot gotówkowy: nadpłata nabywcy ponad kwotę do zapłaty jest zwracana przez rejestr płatności po wystawieniu.",
+        "balanceNote": "Zaliczenie na saldo: nie wypłaca się pieniędzy. Korekta tylko zmniejsza kwotę należną od nabywcy."
+      },
+      "builder": {
+        "noAccess": "Nie masz uprawnień do tworzenia not kredytowych.",
+        "backToList": "Wróć do not kredytowych",
+        "loading": "Wczytywanie noty kredytowej",
+        "notDraft": "Edytować można tylko szkic noty kredytowej.",
+        "openIt": "Otwórz notę kredytową",
+        "back": "Wstecz",
+        "newTitle": "Nowa nota kredytowa",
+        "editTitle": "Edytuj szkic noty kredytowej",
+        "conflict": "Ktoś inny zmienił tę notę kredytową podczas edycji. Odśwież, aby zobaczyć najnowszą wersję; Twoje zmiany zostaną utracone.",
+        "reload": "Odśwież",
+        "invoice": {
+          "title": "Faktura do skorygowania",
+          "hint": "Nota kredytowa dotyczy jednej wystawionej faktury."
+        },
+        "details": {
+          "title": "Szczegóły",
+          "reason": "Powód",
+          "issueDate": "Data wystawienia",
+          "issueDateHint": "Pozostaw puste, aby użyć dnia wystawienia (dziś jest {today}).",
+          "note": "Notatka",
+          "noteHint": "Drukowane na nocie kredytowej. Opcjonalne."
+        },
+        "settlement": {
+          "title": "Co dzieje się z pieniędzmi",
+          "hint": "Wybierane teraz, stosowane po wystawieniu noty kredytowej.",
+          "balance": {
+            "title": "Zalicz na saldo faktury",
+            "body": "Faktura ma mniejsze zobowiązanie. Pieniądze się nie przemieszczają. Użyj, gdy nabywca jeszcze nie zapłacił lub zachowa korektę."
+          },
+          "refund": {
+            "title": "Zwrot gotówkowy",
+            "body": "Wszystko, co nabywca już zapłacił ponad obecne zobowiązanie, zostanie zwrócone przez rejestr płatności jako zwrot."
+          }
+        },
+        "what": {
+          "title": "Co skorygować",
+          "pickFirst": "Najpierw wybierz fakturę.",
+          "loadingCredits": "Sprawdzanie wcześniejszych not kredytowych tej faktury",
+          "full": {
+            "title": "Cała pozostała faktura",
+            "body": "Koryguje wszystkie pozycje oraz wysyłkę przy pierwszej nocie kredytowej. Nadal do skorygowania:"
+          },
+          "lines": {
+            "title": "Wybrane pozycje lub kwoty",
+            "body": "Zaznacz pozycje i ilości do skorygowania lub dodaj dowolną kwotę."
+          }
+        },
+        "saveDraft": "Zapisz szkic",
+        "saveAndIssue": "Zapisz i wystaw",
+        "cancel": "Anuluj",
+        "estimateWaiting": "Wybierz fakturę, aby zobaczyć szacowaną korektę.",
+        "savedToast": "Zapisano notę kredytową jako szkic.",
+        "issuedToast": "Wystawiono notę kredytową {number}.",
+        "savedNotIssued": "Zapisano jako szkic, ale nie udało się wystawić: {reason}"
+      },
+      "detail": {
+        "noAccess": "Nie masz uprawnień do wyświetlania not kredytowych.",
+        "loading": "Wczytywanie noty kredytowej",
+        "back": "Wróć do not kredytowych",
+        "backToList": "Wróć do not kredytowych",
+        "draft": "Szkic",
+        "againstInvoice": "Do faktury",
+        "edit": "Edytuj",
+        "issue": "Wystaw",
+        "pdf": "PDF",
+        "print": "Drukuj",
+        "void": "Anuluj",
+        "delete": "Usuń",
+        "cannotVoidRefunded": "Dla tej noty kredytowej zwrócono gotówkę, więc nie można jej anulować. Zwrot pozostaje w rejestrze płatności.",
+        "voidedOn": "Anulowano {date}",
+        "voided": "Ta nota kredytowa została anulowana.",
+        "voidReason": "Powód"
+      },
+      "money": {
+        "title": "Co stało się z pieniędzmi",
+        "titleDraft": "Co stanie się z pieniędzmi",
+        "total": "Suma korekty",
+        "applied": "Zaliczone na fakturę",
+        "refunded": "Zwrócono gotówką",
+        "voidNote": "Ta nota kredytowa została anulowana, więc nie zmniejsza już faktury.",
+        "draftNote": "Jeśli wystawisz ją w obecnym kształcie:",
+        "estimate": "Szacunek do czasu wystawienia.",
+        "balanceBody": "Rozliczenie: zaliczone na saldo. Pieniądze nie są wypłacane.",
+        "refundBody": "Rozliczenie: zwrot gotówkowy. Nadpłata ponad kwotę do zapłaty wraca do nabywcy przez rejestr płatności."
+      },
+      "after": {
+        "title": "Faktura po tej nocie kredytowej",
+        "titleNow": "Faktura teraz",
+        "total": "Suma faktury",
+        "paid": "Zapłacono",
+        "credited": "Skorygowano",
+        "balance": "Saldo do zapłaty",
+        "credit": "Nadpłata na korzyść nabywcy"
+      },
+      "paper": {
+        "label": "Nota kredytowa {number}",
+        "labelDraft": "Szkic noty kredytowej",
+        "void": "Anulowana",
+        "sellerFallback": "Twoja firma",
+        "title": "NOTA KREDYTOWA",
+        "draftNumber": "SZKIC",
+        "creditedTo": "Skorygowano na",
+        "buyerFallback": "Nabywca",
+        "issued": "Wystawiono",
+        "invoice": "Faktura",
+        "item": "Pozycja",
+        "qty": "Ilość",
+        "unit": "Cena jedn.",
+        "tax": "Podatek",
+        "net": "Netto",
+        "taxAmount": "Kwota podatku",
+        "total": "Razem",
+        "taxFallback": "Podatek",
+        "taxSummary": "Podsumowanie podatku",
+        "taxRate": "Stawka",
+        "taxBase": "Podstawa opodatkowania",
+        "included": "wliczony",
+        "subtotal": "Przed podatkiem",
+        "taxTotal": "Podatek",
+        "totalCredit": "Suma korekty",
+        "reason": "Powód",
+        "note": "Notatka"
+      }
+    }
+  }
+}

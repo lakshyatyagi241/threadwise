@@ -1,0 +1,311 @@
+{
+  "addons-extension-registry": {
+    "nav": {
+      "group": "Complementos e módulos",
+      "packs": "Complementos (cobrança)",
+      "extensions": "Complementos (código)",
+      "workspace": "Complementos"
+    },
+    "common": {
+      "loading": "Carregando",
+      "retry": "Tentar novamente",
+      "cancel": "Cancelar",
+      "save": "Salvar",
+      "saving": "Salvando",
+      "close": "Fechar",
+      "dismiss": "Dispensar",
+      "admin": "Admin",
+      "settings": "Configurações",
+      "optional": "opcional",
+      "required": "obrigatório",
+      "readOnly": "Você pode ver esta página, mas somente um superadministrador pode alterá-la.",
+      "requestId": "ID da solicitação",
+      "errors": {
+        "forbidden": "Você não tem acesso a esta página.",
+        "request": "Não foi possível concluir a solicitação.",
+        "unexpected": "Algo deu errado. Tente novamente em instantes.",
+        "conflict": "Outra pessoa alterou isto agora há pouco. Recarregue e tente novamente."
+      }
+    },
+    "packs": {
+      "crumbHere": "Complementos",
+      "eyebrow": "Admin · Cobrança e planos · Complementos",
+      "titleLead": "Com",
+      "titleAccent": "plementos",
+      "title": "Complementos",
+      "description": "Pacotes de recursos avulsos que o cliente compra além do plano, como “Complemento de campanhas” ou “+1 número de WhatsApp”. Cada complemento concede os recursos e limites definidos nele, somados ao plano do cliente. Eles aparecem na página Conta do cliente assim que ele tem um plano ativo.",
+      "new": "Novo complemento",
+      "empty": {
+        "title": "Nenhum complemento ainda.",
+        "action": "Crie seu primeiro complemento"
+      },
+      "table": {
+        "label": "Complementos",
+        "name": "Nome",
+        "price": "Preço",
+        "period": "Período",
+        "grants": "Concede",
+        "status": "Status",
+        "actions": "Ações"
+      },
+      "price": {
+        "free": "Grátis",
+        "lifetime": "pagamento único"
+      },
+      "period": {
+        "days": "{count} dias",
+        "weeks": "{count} semanas",
+        "months": "{count} meses",
+        "years": "{count} anos"
+      },
+      "grants": {
+        "none": "nada definido",
+        "unlimited": "{name} ilimitado",
+        "add": "+{amount} {name}",
+        "more": "+{count}"
+      },
+      "status": {
+        "active": "Ativo",
+        "off": "Desativado"
+      },
+      "actions": {
+        "edit": "Editar",
+        "enable": "Ativar",
+        "disable": "Desativar",
+        "delete": "Excluir"
+      },
+      "toasts": {
+        "created": "Complemento criado.",
+        "updated": "Complemento atualizado.",
+        "activated": "{name} ativado",
+        "deactivated": "{name} desativado",
+        "deleted": "{name} excluído"
+      },
+      "delete": {
+        "title": "Excluir {name}?",
+        "body": "Excluir este complemento? Os espaços de trabalho que o compraram o mantêm até ele expirar.",
+        "confirm": "Excluir",
+        "inUse": "{count, plural, one {# espaço de trabalho possui este complemento, então ele não pode ser excluído. Desative-o; os proprietários o mantêm até o fim.} other {# espaços de trabalho possuem este complemento, então ele não pode ser excluído. Desative-o; os proprietários o mantêm até o fim.}}"
+      },
+      "errors": {
+        "generic": "Não foi possível salvar o complemento.",
+        "forbidden": "Somente um superadministrador pode alterar complementos.",
+        "notFound": "Este complemento não existe mais."
+      },
+      "editor": {
+        "crumbHere": "Complementos",
+        "crumbNew": "Novo",
+        "crumbEdit": "Editar",
+        "eyebrowNew": "Admin · Complementos · Novo",
+        "eyebrowEdit": "Admin · Complementos · Editar",
+        "titleNewLead": "Criar um",
+        "titleEditLead": "Editar",
+        "titleAccent": "complemento",
+        "intro": "Um complemento concede SOMENTE o que você ativar e nada além disso. Um limite deixado em branco não é alterado, então não há “ilimitado” acidental.",
+        "fixTitle": "Corrija o seguinte:",
+        "cancel": "Cancelar",
+        "create": "Criar complemento",
+        "saveChanges": "Salvar alterações",
+        "basics": "Informações básicas do complemento",
+        "features": "Recursos que este complemento libera",
+        "featuresHint": "Marque apenas o que este complemento concede. Tudo o que ficar desmarcado continua regido pelo plano do cliente.",
+        "coreFeature": "em todos os planos",
+        "limits": "Aumentos de limite",
+        "limitsHint": "Em branco = o complemento não altera este limite. Informe um número para SOMAR ao plano (por exemplo, +2 dispositivos). Use -1 para ilimitado.",
+        "fields": {
+          "name": "Nome",
+          "namePlaceholder": "Complemento de campanhas",
+          "subtitle": "Subtítulo",
+          "subtitlePlaceholder": "Libere campanhas",
+          "amount": "Preço",
+          "offerAmount": "Preço promocional (opcional)",
+          "currency": "Moeda",
+          "billingDuration": "Duração",
+          "billingUnit": "Unidade",
+          "billingMode": "Cobrança",
+          "sortOrder": "Ordem de exibição",
+          "isActive": "Ativo",
+          "isLifetime": "Vitalício (pagamento único)"
+        },
+        "modes": {
+          "one_time": "Pagamento único (compre novamente após o término)",
+          "recurring": "Recorrente (renova por débito automático)"
+        },
+        "units": {
+          "days": "Dias",
+          "weeks": "Semanas",
+          "months": "Meses",
+          "years": "Anos"
+        },
+        "problems": {
+          "name": "Informe um nome.",
+          "amount": "Informe um valor, como 19 ou 19,99.",
+          "offerAmount": "A oferta deve ser menor que o preço.",
+          "currency": "Use um código de moeda de três letras.",
+          "billingDuration": "Informe um número inteiro igual ou maior que 1.",
+          "sortOrder": "Informe um número inteiro.",
+          "limits": "Os limites são números inteiros, ou -1 para ilimitado.",
+          "form": "Verifique os campos destacados."
+        }
+      }
+    },
+    "extensions": {
+      "crumbHere": "Complementos",
+      "eyebrow": "Admin · Complementos",
+      "titleLead": "Instalar um",
+      "titleAccent": "complemento",
+      "title": "Complementos",
+      "description": "Os complementos incorporam recursos extras a esta instalação. O Instagram é o primeiro. Verifique seu código de compra, envie o pacote e ele é instalado no local. Seus dados e configurações não são alterados.",
+      "coreVersion": "Núcleo",
+      "packsLead": "Procurando os pacotes de recursos pagos que os clientes compram além de um plano?",
+      "packsLink": "Esses são os complementos de plano (cobrança)",
+      "packsTail": ". Esta página instala código.",
+      "installed": {
+        "title": "Complementos instalados",
+        "empty": "Nenhum complemento instalado ainda. Verifique seu código de compra acima e envie um pacote.",
+        "version": "v{version}",
+        "files": "{count, plural, one {# arquivo} other {# arquivos}}",
+        "inPlace": "Módulo no local",
+        "filesKept": "arquivos mantidos no disco",
+        "active": "Ativo",
+        "disabled": "Desativado",
+        "inactive": "Inativo",
+        "enable": "Ativar",
+        "disable": "Desativar",
+        "remove": "Remover",
+        "reactivate": "Reativar",
+        "footnote": "Remover um complemento exclui apenas os arquivos que ele instalou, rastreados desde o momento em que foi adicionado, então os arquivos do núcleo nunca são tocados. Os dados permanecem no banco de dados."
+      },
+      "verify": {
+        "title": "Verifique seu código de compra",
+        "body": "A mesma licença {brand} que libera as atualizações. Os complementos estão vinculados a ela.",
+        "placeholder": "ex.: 8f2c1a44-...",
+        "label": "Código de compra",
+        "action": "Verificar",
+        "checking": "Verificando…",
+        "empty": "Informe primeiro seu código de compra.",
+        "failed": "Falha na verificação."
+      },
+      "upload": {
+        "title": "Envie o pacote do complemento",
+        "body": "O ZIP é inspecionado antes de qualquer gravação. Um pacote malformado ou incompatível é recusado e sua instalação permanece intacta.",
+        "choose": "Escolha um .zip de complemento",
+        "max": "Máx. 100 MB",
+        "action": "Instalar",
+        "installing": "Instalando…",
+        "progress": "Enviando e mesclando. Não feche esta aba."
+      },
+      "confirm": {
+        "removeTitle": "Remover {name}?",
+        "removeBody": "Isso exclui os arquivos que ele instalou. Os dados dele permanecem no banco de dados.",
+        "remove": "Remover",
+        "moduleOffTitle": "Remover {name}?",
+        "moduleOffBody": "Isso desativa o complemento, então suas páginas e automações deixam de funcionar. Os arquivos são mantidos, para que você possa reativá-lo a qualquer momento. Nada é excluído e os dados dele permanecem no banco de dados.",
+        "moduleOnTitle": "Reativar {name}?",
+        "moduleOnBody": "Isso liga o complemento novamente. Os arquivos dele ainda estão no disco, então ele volta a funcionar imediatamente.",
+        "reactivate": "Reativar"
+      },
+      "engines": {
+        "connected": "Conectado",
+        "notConnected": "Não conectado",
+        "connect": "Conectar",
+        "manage": "Gerenciar",
+        "disconnect": "Desconectar",
+        "disconnectYes": "Sim, desconectar",
+        "save": "Salvar e conectar",
+        "testing": "Conectando…",
+        "displayName": "Nome de exibição",
+        "secret": "Token secreto compartilhado",
+        "secretSaved": "•••••••• salvo, deixe em branco para manter",
+        "secretNew": "cole o segredo compartilhado",
+        "lastChecked": "Última verificação",
+        "failed": "{reason}",
+        "instagram": {
+          "title": "Instagram",
+          "body": "Roda como uma implantação {brand} separada. Conecte por URL + segredo, sem upload.",
+          "blocked": "Bloqueado: complemento nativo ativo",
+          "blockedNote": "O complemento nativo do Instagram está instalado. Remova-o abaixo para conectar um {brand} remoto.",
+          "modalTitle": "Conectar Instagram",
+          "modalBody": "Cole a URL da sua implantação {brand} e o token secreto compartilhado. O {app} verifica a conexão pela API. Nada é enviado.",
+          "url": "URL do {brand}",
+          "urlPlaceholder": "https://insta.yourdomain.com",
+          "brandPlaceholder": "IgDesk",
+          "brandHint": "Exibido em todos os rótulos “Sincronizar de …”, “Gerenciar em …” e “URL de …” do aplicativo.",
+          "disconnectTitle": "Desconectar o Instagram?",
+          "disconnectBody": "Isso desconecta o Instagram do {app}. O Instagram desaparecerá imediatamente do painel, das análises, da caixa de entrada, dos fluxos, dos modelos e das respostas automáticas de todos os espaços de trabalho, e nada disso poderá ser usado até você reconectar. Continuar?"
+        },
+        "email": {
+          "title": "E-mail",
+          "body": "Conectar vincula a plataforma de e-mail {brand} para que as mensagens cheguem à caixa de entrada da equipe, por URL + segredo, sem upload.",
+          "modalTitle": "Conectar e-mail",
+          "modalBody": "Cole a URL da sua implantação {brand} e o token secreto compartilhado. O {app} verifica a conexão pela API. Nada é enviado.",
+          "url": "URL do {brand}",
+          "urlPlaceholder": "https://mail.yourdomain.com",
+          "brandPlaceholder": "MailTrixy",
+          "brandHint": "Exibido em todos os rótulos de e-mail do aplicativo.",
+          "disconnectTitle": "Desconectar o e-mail?",
+          "disconnectBody": "Isso desconecta a plataforma de e-mail do {app}. As mensagens deixam de chegar à caixa de entrada da equipe em todos os espaços de trabalho até você reconectar. Continuar?"
+        }
+      },
+      "errors": {
+        "generic": "Não funcionou.",
+        "forbidden": "Somente um superadministrador pode alterar módulos.",
+        "invalidPackage": "O pacote não é válido.",
+        "tooLarge": "O pacote é grande demais.",
+        "coreTooOld": "Este pacote requer uma versão mais recente do núcleo.",
+        "engineConflict": "O Instagram executa um mecanismo por vez. Desconecte o outro primeiro."
+      }
+    },
+    "workspace": {
+      "title": "Complementos",
+      "description": "Pacotes de recursos extras que você compra além da sua assinatura.",
+      "needPlanTitle": "Os complementos exigem um plano ativo",
+      "needPlanBody": "Complementos são pacotes de recursos extras que você compra além da sua assinatura. Escolha um plano primeiro e depois volte aqui para adicionar recursos.",
+      "viewPlans": "Ver planos",
+      "noneTitle": "Nenhum complemento disponível",
+      "noneBody": "Não há complementos sendo oferecidos no momento. Volte mais tarde.",
+      "ownedTitle": "Seus complementos",
+      "ownedBody": "Pacotes ativos somados ao seu plano atual.",
+      "ends": "Termina em {date}",
+      "lifetime": "Vitalício",
+      "autoRenews": "Renova automaticamente",
+      "renewal": {
+        "cancel": "Cancelar renovação",
+        "confirmTitle": "Cancelar renovação?",
+        "confirmBody": "Este complemento continua ativo até o fim do período que você já pagou e depois não será renovado.",
+        "confirm": "Cancelar renovação",
+        "keep": "Manter renovação",
+        "forbidden": "Você não tem permissão para alterar o plano.",
+        "none": "Não há assinatura ativa para cancelar.",
+        "failed": "Não foi possível cancelar a renovação. Tente novamente."
+      },
+      "active": "Ativo",
+      "cardEyebrow": "Complemento",
+      "catalogTitle": "Complementos",
+      "catalogBody": "Libere recursos extras além do seu plano atual. Não é preciso trocar de plano.",
+      "count": "{count, plural, one {# complemento} other {# complementos}}",
+      "free": "Grátis",
+      "lifetimePrice": "pagamento único",
+      "per": "/ {unit}",
+      "units": {
+        "days": "dias",
+        "weeks": "semanas",
+        "months": "meses",
+        "years": "anos"
+      },
+      "buy": "Adicionar ao plano",
+      "buyAgain": "Comprar novamente",
+      "owned": "Adquirido ×{count} · comprar de novo adiciona mais",
+      "bullets": {
+        "feature": "{name}",
+        "unlimited": "{name} ilimitado",
+        "add": "+{amount} {name}"
+      },
+      "error": "Não foi possível carregar os complementos."
+    },
+    "planFields": {
+      "fromModule": "de um módulo instalado",
+      "unlimited": "Ilimitado"
+    }
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "developer-rest-api-v1": {
+    "common": {
+      "dismiss": "Schließen",
+      "copy": "Kopieren",
+      "copied": "Kopiert",
+      "copyFailed": "Kopieren nicht möglich. Markieren Sie den Text und kopieren Sie ihn von Hand."
+    },
+    "rail": {
+      "name": "Entwickler-API",
+      "tagline": "REST · /api/v1",
+      "keyActive": "Schlüssel aktiv",
+      "noKey": "Noch kein Schlüssel",
+      "baseUrl": "Basis-URL",
+      "authHeader": "Auth-Header",
+      "help": {
+        "title": "Brauchen Sie Hilfe?",
+        "body": "Vollständige Referenz zu Anfragen und Antworten, mit kopierbaren Beispielen für jeden Endpunkt.",
+        "link": "Dokumentation lesen"
+      }
+    },
+    "page": {
+      "crumbLabel": "Brotkrumennavigation",
+      "crumbSettings": "Einstellungen",
+      "crumbHere": "Entwickler",
+      "title": "Entwickler",
+      "titleAccent": "API-Schlüssel",
+      "lead": "Erzeugen Sie einen Schlüssel, um die REST-API aus Ihren eigenen Apps, Ihrem CRM oder Ihrer Automatisierung aufzurufen: Nachrichten senden, Kontakte, Vorlagen, Broadcasts und mehr verwalten. Ein Schlüssel pro Arbeitsbereich.",
+      "back": "Zurück",
+      "openDocs": "Dokumentation öffnen",
+      "loading": "Ihr API-Schlüssel wird geladen",
+      "forbidden": {
+        "title": "Sie können API-Schlüssel nicht ansehen",
+        "body": "Ihre Rolle enthält keinen Zugriff auf API-Schlüssel. Bitten Sie einen Admin des Arbeitsbereichs, Ihnen die Berechtigung für API-Schlüssel zu geben."
+      }
+    },
+    "banner": {
+      "title": "Ihr neuer API-Schlüssel",
+      "warning": "Kopieren Sie ihn jetzt und bewahren Sie ihn sicher auf. Aus Sicherheitsgründen speichern wir nur einen Hash, er wird also nie wieder angezeigt."
+    },
+    "key": {
+      "title": "Ihr API-Schlüssel",
+      "active": "Aktiv",
+      "untitled": "Unbenannter Schlüssel",
+      "created": "Erstellt {date}",
+      "lastUsed": "Zuletzt verwendet {when}",
+      "never": "nie",
+      "revoke": "Widerrufen",
+      "noRevoke": "Ihre Rolle darf API-Schlüssel nicht widerrufen.",
+      "revoked": "API-Schlüssel widerrufen. Jede App, die ihn verwendet, funktioniert sofort nicht mehr.",
+      "footer": "Pro Arbeitsbereich ist nur ein Schlüssel erlaubt. Widerrufen Sie diesen, um einen neuen auszustellen.",
+      "confirm": {
+        "title": "Diesen Schlüssel widerrufen?",
+        "message": "Jede App oder Integration, die diesen Schlüssel verwendet, funktioniert sofort nicht mehr. Dies kann nicht rückgängig gemacht werden. Danach können Sie einen neuen Schlüssel erstellen.",
+        "accept": "Widerrufen",
+        "cancel": "Abbrechen"
+      }
+    },
+    "create": {
+      "title": "Schlüssel erstellen",
+      "help": "Geben Sie dem Schlüssel einen Namen, damit Sie wissen, wo er verwendet wird. Der Schlüssel wird beim Erstellen einmalig angezeigt.",
+      "name": "Schlüsselname",
+      "placeholder": "z. B. Produktions-Backend",
+      "submit": "Schlüssel erstellen",
+      "submitting": "Schlüssel wird erstellt…",
+      "created": "API-Schlüssel erstellt. Kopieren Sie ihn jetzt - er wird nicht erneut angezeigt.",
+      "noCreate": "Ihre Rolle darf keine API-Schlüssel erstellen. Fragen Sie einen Admin des Arbeitsbereichs.",
+      "planLocked": "Ihr Tarif enthält die REST-API nicht.",
+      "errors": {
+        "required": "Geben Sie einen Namen für den Schlüssel ein.",
+        "tooLong": "Der Name darf höchstens 120 Zeichen lang sein."
+      }
+    },
+    "quickstart": {
+      "title": "Schnellstart",
+      "reference": "Vollständige Referenz",
+      "intro": "Senden Sie Ihre erste Nachricht. Ersetzen Sie Schlüssel und Empfänger:"
+    },
+    "errors": {
+      "planLimit": "Sie haben bereits einen aktiven API-Schlüssel. Widerrufen Sie ihn, bevor Sie einen neuen erstellen - pro Arbeitsbereich ist nur ein Schlüssel erlaubt.",
+      "planLocked": "Ihr Tarif enthält die REST-API nicht. Führen Sie ein Upgrade durch, um API-Schlüssel zu erstellen.",
+      "forbidden": "Sie haben keine Berechtigung dafür.",
+      "validation": "Der Schlüsselname ist ungültig. Prüfen Sie ihn und versuchen Sie es erneut.",
+      "notFound": "Dieser Schlüssel existiert nicht mehr. Die Liste wurde aktualisiert.",
+      "network": "Der Server war nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+      "unexpected": "Auf unserer Seite ist etwas schiefgelaufen. Versuchen Sie es gleich noch einmal.",
+      "loadFailed": "Ihr API-Schlüssel konnte nicht geladen werden.",
+      "retry": "Wiederholen",
+      "upgrade": "Tarife ansehen",
+      "requestId": "Anfrage-ID: {id}"
+    }
+  }
+}

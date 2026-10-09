@@ -1,0 +1,361 @@
+{
+  "message-templates": {
+    "nav": {
+      "title": "Modèles"
+    },
+    "common": {
+      "dismiss": "Ignorer",
+      "requestId": "ID de la demande"
+    },
+    "status": {
+      "draft": "Brouillon",
+      "pending": "En cours d’examen",
+      "approved": "Approuvé",
+      "rejected": "Rejeté",
+      "paused": "Suspendu",
+      "disabled": "Désactivé",
+      "deleted": "Absent de Meta"
+    },
+    "category": {
+      "MARKETING": "Marketing",
+      "UTILITY": "Utilitaire",
+      "AUTHENTICATION": "Authentification"
+    },
+    "quality": {
+      "GREEN": "Qualité élevée",
+      "YELLOW": "Qualité moyenne",
+      "RED": "Qualité faible",
+      "UNKNOWN": "Qualité en attente"
+    },
+    "errors": {
+      "generic": "Une erreur s’est produite. Réessayez, et indiquez l’ID de la demande si le problème persiste.",
+      "TPL_NOT_FOUND": "Ce modèle n’existe plus.",
+      "TPL_NAME_TAKEN": "Un modèle avec ce nom et cette langue existe déjà sur ce numéro. Choisissez un autre nom ou une autre langue.",
+      "TPL_LINT_FAILED": "Les vérifications ont relevé des problèmes que Meta refuserait. Rien n’a été envoyé. Corrigez les erreurs listées à droite.",
+      "TPL_META_REJECTED": "Meta a refusé le modèle. Le motif est indiqué ci-dessous ; le modèle est conservé en brouillon pour que vous puissiez le corriger et réessayer.",
+      "TPL_NO_CONNECTION": "Ce modèle n’a pas de numéro WhatsApp connecté pour être soumis. Connectez d’abord un numéro.",
+      "TPL_IN_USE": "Ce modèle ne peut pas être supprimé car une diffusion en cours ou programmée l’utilise.",
+      "TPL_NOT_EDITABLE": "Seul un modèle que Meta n’a pas encore approuvé, ou qu’il a rejeté, peut être modifié.",
+      "ROW_VERSION_CONFLICT": "Quelqu’un a modifié ce modèle pendant que vous le modifiiez. Rechargez la page pour voir la dernière version, puis appliquez à nouveau votre modification.",
+      "VALIDATION_FAILED": "Certains champs sont invalides. Vérifiez les champs ci-dessous.",
+      "INTERNAL": "Le serveur n’a pas pu traiter cette demande. Réessayez dans un instant."
+    },
+    "preview": {
+      "title": "Aperçu",
+      "headerImageAlt": "Exemple d’image d’en-tête",
+      "header": {
+        "image": "Image",
+        "video": "Vidéo",
+        "document": "Document",
+        "location": "Localisation"
+      },
+      "authBody": "est votre code de vérification.",
+      "authExpiry": "{count, plural, one {Ce code expire dans # minute.} other {Ce code expire dans # minutes.}}",
+      "bodyEmpty": "Le texte de votre message apparaît ici.",
+      "time": "10:30",
+      "copyCode": "Copier le code",
+      "buttonUnnamed": "Bouton",
+      "moreButtons": "{count, plural, one {+# bouton de plus} other {+# boutons de plus}}"
+    },
+    "card": {
+      "rejected": "Rejeté : {reason}",
+      "view": "Afficher",
+      "edit": "Modifier",
+      "delete": "Supprimer"
+    },
+    "library": {
+      "title": "Bibliothèque de modèles",
+      "intro": "Modèles de messages WhatsApp : rédigez-les, envoyez-les à Meta pour examen et suivez leur statut ici.",
+      "sync": "Synchroniser depuis Meta",
+      "syncing": "Synchronisation...",
+      "syncHint": "Récupérer vos modèles depuis Meta",
+      "syncDone": "Synchronisé depuis Meta : {created} nouveau(x), {updated} mis à jour, {missing} absent(s) de Meta.",
+      "syncNone": "Aucun modèle trouvé sur ce compte WhatsApp Business pour l’instant.",
+      "syncFailed": "La synchronisation depuis Meta a échoué. Vérifiez la connexion du numéro et réessayez.",
+      "syncPartial": "{count, plural, one {# numéro n’a pas pu être synchronisé.} other {# numéros n’ont pas pu être synchronisés.}}",
+      "new": "Nouveau modèle",
+      "filters": "Filtrer les modèles",
+      "search": "Rechercher",
+      "searchPlaceholder": "Nom du modèle",
+      "status": "Statut",
+      "allStatuses": "Tous les statuts",
+      "category": "Catégorie",
+      "allCategories": "Toutes les catégories",
+      "connection": "Numéro WhatsApp",
+      "allConnections": "Tous les numéros",
+      "loading": "Chargement des modèles",
+      "retry": "Réessayer",
+      "emptyTitle": "Aucun modèle pour l’instant",
+      "emptyBody": "Créez un modèle et soumettez-le à Meta, ou synchronisez ceux que vous avez déjà dans Meta Business Manager.",
+      "emptyFilteredTitle": "Aucun modèle ne correspond",
+      "emptyFilteredBody": "Modifiez ou effacez les filtres pour voir plus de modèles.",
+      "clearFilters": "Effacer les filtres",
+      "loadMore": "Charger plus"
+    },
+    "delete": {
+      "title": "Supprimer le modèle",
+      "message": "Supprimer « {name} » ? Il est retiré ici et sur Meta, et ne peut plus être envoyé.",
+      "confirm": "Supprimer le modèle",
+      "cancel": "Annuler",
+      "done": "« {name} » supprimé.",
+      "inUseHelp": "Ouvrez la diffusion qui utilise ce modèle, annulez-la ou choisissez un autre modèle, puis supprimez celui-ci."
+    },
+    "lint": {
+      "title": "Vérifications avant envoi",
+      "checking": "Vérification",
+      "unavailable": "Les vérifications n’ont pas pu être effectuées pour l’instant. L’examen de Meta s’applique toujours, et le serveur revérifie lors de l’envoi.",
+      "clean": "Aucun problème trouvé.",
+      "summary": "{errors, plural, one {# erreur} other {# erreurs}}, {warnings, plural, one {# avertissement} other {# avertissements}}",
+      "severity": {
+        "error": "Erreur",
+        "warning": "Avertissement"
+      },
+      "field": {
+        "name": "Nom",
+        "language": "Langue",
+        "header": "En-tête",
+        "body": "Corps",
+        "footer": "Pied de page",
+        "buttons": "Boutons",
+        "template": "Modèle"
+      }
+    },
+    "form": {
+      "loading": "Chargement",
+      "retry": "Réessayer",
+      "backToLibrary": "Retour à la bibliothèque",
+      "noPermission": "Vous n’êtes pas autorisé à créer ou modifier des modèles.",
+      "notEditableTitle": "Ce modèle ne peut plus être modifié",
+      "notEditableBody": "Seul un modèle que Meta n’a pas encore approuvé, ou qu’il a rejeté, peut être modifié. Créez un nouveau modèle pour modifier un modèle approuvé.",
+      "viewTemplate": "Afficher le modèle",
+      "breadcrumb": "Fil d’Ariane",
+      "breadcrumbLibrary": "Modèles",
+      "breadcrumbNew": "Nouveau",
+      "breadcrumbEdit": "Modifier",
+      "titleNew": "Nouveau modèle",
+      "titleEdit": "Modifier {name}",
+      "saveDraft": "Enregistrer le brouillon",
+      "submit": "Soumettre à Meta",
+      "reload": "Recharger le modèle",
+      "aside": "Aperçu et vérifications",
+      "why": {
+        "connection": "Choisissez un numéro WhatsApp pour l’envoi.",
+        "name": "Saisissez un nom de modèle.",
+        "fields": "Certains champs sont invalides.",
+        "errors": "Corrigez les erreurs avant l’envoi.",
+        "checking": "Vérification du modèle."
+      },
+      "toast": {
+        "submitted": "Modèle soumis à Meta pour examen.",
+        "saved": "Modèle enregistré en brouillon."
+      },
+      "errors": {
+        "name": "Saisissez un nom de modèle.",
+        "header": "L’en-tête ne peut pas dépasser 60 caractères.",
+        "body": "Le corps ne peut pas dépasser {max} caractères.",
+        "footer": "Le pied de page ne peut pas dépasser 60 caractères."
+      },
+      "identity": {
+        "title": "Identité",
+        "connection": "Numéro WhatsApp",
+        "connectionHint": "Les médias et l’envoi doivent utiliser le même numéro, sinon Meta rejette le modèle.",
+        "connectionUnknown": "Numéro plus disponible",
+        "noConnection": "Aucun numéro WhatsApp connecté pour l’envoi.",
+        "connectNumber": "Connecter un numéro",
+        "category": "Catégorie",
+        "categoryHint": "Meta examine et tarifie le modèle selon sa catégorie.",
+        "categories": {
+          "MARKETING": "Marketing",
+          "UTILITY": "Utilitaire",
+          "AUTHENTICATION": "Authentification"
+        },
+        "name": "Nom du modèle",
+        "nameHint": "a-z, 0-9 et _ uniquement, 60 caractères maximum.",
+        "nameTaken": "Ce nom est déjà utilisé pour cette langue sur ce numéro.",
+        "language": "Langue"
+      },
+      "auth": {
+        "title": "Code à usage unique",
+        "hint": "Meta rédige le message et le bouton Copier le code d’un modèle d’authentification.",
+        "expiry": "Expiration du code après (minutes)",
+        "expiryHint": "Facultatif. De {min} à {max} minutes.",
+        "expiryInvalid": "Saisissez un nombre entier de {min} à {max}.",
+        "fixedBody": "Le message affiche : un code, suivi de « est votre code de vérification » et d’un rappel de sécurité. Vous ne pouvez pas le modifier."
+      },
+      "header": {
+        "title": "En-tête",
+        "hint": "Facultatif. Texte, ou une seule image, vidéo, un document ou une localisation.",
+        "type": "Type d’en-tête",
+        "kind": {
+          "none": "Aucun",
+          "text": "Texte",
+          "image": "Image",
+          "video": "Vidéo",
+          "document": "Document",
+          "location": "Localisation"
+        },
+        "text": "Texte de l’en-tête",
+        "textHint": "{used}/{max}. Une variable au maximum.",
+        "sample": "Fichier exemple",
+        "uploading": "Envoi en cours",
+        "keptSample": "L’exemple enregistré est conservé. Choisissez un fichier pour le remplacer.",
+        "noFile": "Aucun fichier choisi",
+        "limits": "Image jusqu’à 5 Mo, vidéo jusqu’à 16 Mo, PDF jusqu’à 100 Mo.",
+        "replace": "Remplacer le fichier",
+        "choose": "Choisir un fichier exemple",
+        "tooBig": "Ce {kind} fait {size} Mo. WhatsApp accepte jusqu’à {max} Mo. Choisissez un fichier plus petit.",
+        "wrongType": "Ce type de fichier n’est pas accepté pour cet en-tête.",
+        "emptyFile": "Ce fichier est vide.",
+        "locationHelp": "La localisation est renseignée à l’envoi du message. Meta a seulement besoin de savoir que l’en-tête est une localisation."
+      },
+      "body": {
+        "title": "Corps",
+        "hint": "Le texte du message. Utilisez des variables du type '{{name}}' ; elles sont numérotées pour Meta à l’enregistrement.",
+        "toolbar": "Mise en forme du texte",
+        "format": {
+          "bold": "Gras",
+          "italic": "Italique",
+          "strike": "Barré",
+          "code": "Code"
+        },
+        "variable": "Ajouter une variable",
+        "label": "Texte du corps",
+        "counter": "{used}/{max}",
+        "wrapSample": "texte"
+      },
+      "variables": {
+        "title": "Correspondance des variables",
+        "empty": "Aucune variable pour l’instant. Saisissez un espace réservé tel que '{{name}}' dans le corps, ou utilisez Ajouter une variable.",
+        "help": "Pour chaque variable, indiquez l’attribut de contact qui la remplit à l’envoi, et donnez une valeur exemple pour l’examen de Meta.",
+        "attribute": "Attribut de contact",
+        "sample": "Valeur exemple",
+        "header": "en-tête",
+        "body": "corps"
+      },
+      "footer": {
+        "title": "Pied de page",
+        "label": "Texte du pied de page",
+        "hint": "Facultatif. {used}/{max}. Aucune variable."
+      },
+      "buttons": {
+        "title": "Boutons",
+        "hint": "Facultatif. Les réponses rapides doivent être regroupées au début ou à la fin.",
+        "add": {
+          "quick_reply": "Réponse rapide",
+          "url": "Visiter le site web",
+          "phone": "Appeler",
+          "copy_code": "Copier le code"
+        },
+        "kind": {
+          "quick_reply": "Réponse rapide",
+          "url": "Visiter le site web",
+          "phone": "Appeler",
+          "copy_code": "Copier le code",
+          "other": "Autre"
+        },
+        "count": "{used}/{max} boutons",
+        "limitReached": "{max} de ce type au maximum.",
+        "empty": "Aucun bouton. Ajoutez-en un avec les boutons ci-dessus.",
+        "moveUp": "Déplacer le bouton {n} vers le haut",
+        "moveDown": "Déplacer le bouton {n} vers le bas",
+        "remove": "Retirer le bouton {n}",
+        "keptAsIs": "« {text} » est conservé tel quel. Cet éditeur ne le modifie pas.",
+        "text": "Texte du bouton",
+        "textHint": "{used}/25",
+        "url": "URL du site web",
+        "urlHint": "Ajoutez '{{1}}' à la fin pour une partie dynamique.",
+        "urlExample": "Exemple pour la variable",
+        "phone": "Numéro de téléphone",
+        "phoneHint": "Avec l’indicatif pays.",
+        "code": "Code exemple",
+        "codeHint": "Par exemple PROMO50.",
+        "limits": "Meta autorise jusqu’à {quick} réponses rapides, {url} boutons de site web, {phone} bouton d’appel et {copy} bouton de copie de code.",
+        "allUsed": "Tous les types de boutons ont atteint leur limite.",
+        "issue": {
+          "textRequired": "Saisissez le texte du bouton.",
+          "textTooLong": "{max} caractères maximum.",
+          "urlRequired": "Saisissez l’URL.",
+          "urlInvalid": "L’URL doit commencer par http:// ou https://.",
+          "phoneRequired": "Saisissez le numéro de téléphone.",
+          "codeRequired": "Saisissez un code exemple.",
+          "quickReplyVariable": "Une réponse rapide ne peut pas contenir de variable.",
+          "urlExampleRequired": "Donnez une valeur exemple pour la variable de l’URL.",
+          "quickReplyPosition": "Les réponses rapides doivent être regroupées, au début ou à la fin des boutons."
+        }
+      },
+      "result": {
+        "metaRefused": "Enregistré, mais Meta a refusé le modèle.",
+        "metaRefusedHelp": "Le modèle est conservé en brouillon. Corrigez ce que Meta indique, puis soumettez à nouveau. Votre formulaire n’a pas changé.",
+        "submitted": "Soumis à Meta pour examen.",
+        "saved": "Enregistré en brouillon.",
+        "warnings": "À vérifier avant l’examen par Meta :",
+        "open": "Ouvrir le modèle"
+      }
+    },
+    "detail": {
+      "loading": "Chargement du modèle",
+      "retry": "Réessayer",
+      "back": "Retour à la bibliothèque",
+      "breadcrumb": "Fil d’Ariane",
+      "refresh": "Actualiser le statut",
+      "retrySubmit": "Soumettre à Meta",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "refreshed": "Statut actualisé depuis Meta.",
+      "submittedToast": "Modèle soumis à Meta pour examen.",
+      "never": "Jamais",
+      "none": "Aucun",
+      "banner": {
+        "metaFailed": "Meta a refusé le modèle",
+        "draft": "Ce modèle n’a pas encore été soumis à Meta. Soumettez-le pour lancer l’examen.",
+        "pending": "Soumis à l’examen de Meta. Cette page vérifie la réponse toutes les 15 secondes.",
+        "pendingMeta": "Soumis {submitted}. Dernière vérification {checked}.",
+        "polling": "Vous pouvez laisser cette page ouverte ou revenir plus tard.",
+        "rejected": "Rejeté par Meta",
+        "rejectedHelp": "Modifiez le modèle pour tenir compte du motif, puis soumettez-le à nouveau.",
+        "paused": "Suspendu par Meta. Il ne peut pas être envoyé tant que Meta n’a pas levé la suspension.",
+        "pausedUntil": "Suspendu par Meta jusqu’au {when}.",
+        "disabled": "Désactivé par Meta. Il ne peut pas être envoyé.",
+        "deleted": "Meta ne liste plus ce modèle. Il est conservé ici ; synchronisez à nouveau ou supprimez-le."
+      },
+      "facts": {
+        "title": "Synchronisation Meta",
+        "status": "Statut Meta",
+        "quality": "Qualité",
+        "category": "Catégorie Meta",
+        "metaId": "ID du modèle",
+        "number": "Numéro WhatsApp",
+        "numberUnknown": "Numéro plus disponible",
+        "submitted": "Soumis",
+        "approved": "Approuvé",
+        "synced": "Dernière synchronisation"
+      },
+      "components": {
+        "title": "Composants",
+        "header": "En-tête",
+        "media": "Média de l’en-tête",
+        "body": "Corps",
+        "footer": "Pied de page",
+        "buttons": "Boutons",
+        "expiry": "Expiration du code",
+        "expiryValue": "{count, plural, one {# minute} other {# minutes}}"
+      },
+      "attachment": {
+        "none": "Aucun",
+        "image": "Image",
+        "video": "Vidéo",
+        "document": "Document",
+        "location": "Localisation"
+      },
+      "lint": {
+        "title": "Vérifications",
+        "clean": "Aucun problème trouvé."
+      },
+      "payload": {
+        "title": "Données envoyées à Meta",
+        "hint": "Ce qui est envoyé à Meta pour examen, exactement tel que construit.",
+        "empty": "Rien n’a encore été construit."
+      }
+    }
+  }
+}

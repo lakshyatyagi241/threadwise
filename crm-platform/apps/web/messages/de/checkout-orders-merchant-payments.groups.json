@@ -1,0 +1,54 @@
+{
+  "checkout-orders-merchant-payments": {
+    "groups": {
+      "eyebrow": "Storefront / Gruppen",
+      "title": "WhatsApp-Gruppen",
+      "subtitle": "Gruppen, denen Ihre verbundene Nummer angehört. Wenn eine Bestellung bestätigt wird, wird sie in der Gruppe des Kunden gepostet und der Kunde mit @ erwähnt. Geben Sie einer Gruppe einen Bestellcode, damit Kunden darüber bestellen können.",
+      "loading": "Gruppen werden geladen",
+      "summary": {
+        "groups": "Synchronisierte Gruppen",
+        "coded": "Mit Bestellcode",
+        "bot": "Bot-Nummer",
+        "noBot": "Es ist keine WhatsApp-Nummer verbunden.",
+        "connect": "Nummer unter Kanäle verbinden",
+        "copyNumber": "Nummer kopieren"
+      },
+      "search": {
+        "label": "Gruppen suchen",
+        "placeholder": "Gruppennamen suchen..."
+      },
+      "columns": {
+        "group": "Gruppe",
+        "members": "Mitglieder",
+        "device": "Bot-Gerät",
+        "synced": "Synchronisiert",
+        "code": "Bestellcode"
+      },
+      "row": {
+        "unnamed": "(unbenannte Gruppe)",
+        "noCode": "Kein Code",
+        "placeholder": "z. B. ACME",
+        "label": "Bestellcode für {name}",
+        "copyLink": "Bestelllink kopieren",
+        "saved": "Bestellcode gespeichert.",
+        "cleared": "Bestellcode gelöscht.",
+        "tooLong": "Verwenden Sie höchstens {max} Zeichen.",
+        "badChars": "Verwenden Sie nur Buchstaben, Ziffern, Punkte, Bindestriche und Unterstriche.",
+        "taken": "Eine andere Gruppe verwendet diesen Code bereits."
+      },
+      "empty": {
+        "title": "Noch keine Gruppen",
+        "message": "Die Gruppenliste wird aus Ihrer verbundenen WhatsApp-Sitzung übernommen. Gruppen erscheinen hier, sobald diese Sitzung sie synchronisiert hat; eine Dauer können wir dafür noch nicht zusagen.",
+        "action": "Kanäle öffnen"
+      },
+      "noMatch": {
+        "title": "Keine Gruppen entsprechen Ihrer Suche",
+        "message": "Versuchen Sie einen anderen Teil des Gruppennamens oder setzen Sie die Suche zurück."
+      },
+      "how": {
+        "title": "So funktionieren Bestellcodes",
+        "body": "Geben Sie einer Gruppe einen kurzen Code (zum Beispiel ACME) und teilen Sie dann ihren Bestelllink. Wenn ein Kunde darauf tippt und eine Bestellung bestätigt, wird die Bestellung direkt in genau dieser Gruppe gepostet und der Kunde mit @ erwähnt, auch wenn er mehreren Gruppen angehört."
+      }
+    }
+  }
+}

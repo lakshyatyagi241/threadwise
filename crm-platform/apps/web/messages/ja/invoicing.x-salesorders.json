@@ -1,0 +1,353 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "SO_NOT_DRAFT": "変更できるのは下書きの注文のみです。確定済みの注文は固定されます。明細や価格を変更するには、注文をキャンセルして新しく作成してください。",
+        "SO_NOT_CONFIRMED": "先に注文を確定してください。請求や納品の記録ができるのは確定済みの注文のみです。",
+        "SO_CANCELLED": "この注文はキャンセル済みのため、これ以上操作できません。",
+        "SO_QUOTE_NOT_ACCEPTED": "承認済みの提案書または見積書のみ販売注文にできます。先に承認済みにしてください。",
+        "SO_QUOTE_TAKEN": "この提案書または見積書にはすでに販売注文があります。",
+        "SO_QUANTITY_EXCEEDS": "数量がこの明細の残数を超えています。数量を減らしてもう一度お試しください。",
+        "SO_NOTHING_TO_INVOICE": "すべて請求済みまたは納品済みのため、ここで行う作業はありません。",
+        "SO_HAS_INVOICES": "この注文から作成された請求書がまだ有効です。先に請求書を取り消すか削除してから、注文をキャンセルしてください。"
+      }
+    },
+    "salesOrders": {
+      "list": {
+        "title": "販売注文",
+        "subtitle": "承認された見積を注文に変換し、一括または分割で請求し、納品します。",
+        "newOrder": "新しい販売注文",
+        "search": "番号、購入者、参照で検索",
+        "reset": "リセット",
+        "refresh": "更新",
+        "tableLabel": "販売注文",
+        "noAccessTitle": "アクセス権がありません",
+        "noAccess": "販売注文を表示する権限がありません。",
+        "emptyFilteredTitle": "一致する注文はありません",
+        "emptyFiltered": "これらのフィルターに一致するものはありません。変更するかリセットしてください。",
+        "resetFilters": "フィルターをリセット",
+        "loading": "販売注文を読み込んでいます",
+        "showing": "{count} 件を表示中",
+        "loadMore": "さらに読み込む",
+        "allLoaded": "すべて読み込み済み",
+        "contactLoading": "読み込み中...",
+        "empty": {
+          "all": {
+            "title": "販売注文はまだありません",
+            "message": "承認済みの提案書または見積書を注文に変換するか、最初から作成してください。"
+          },
+          "draft": {
+            "title": "下書きの注文はありません",
+            "message": "作成中の注文がここに表示されます。"
+          },
+          "confirmed": {
+            "title": "確定済みの注文はありません",
+            "message": "請求または納品を待っている確定済みの注文がここに表示されます。"
+          },
+          "cancelled": {
+            "title": "キャンセル済みの注文はありません",
+            "message": "キャンセルした注文が理由とともにここに表示されます。"
+          },
+          "closed": {
+            "title": "完了した注文はありません",
+            "message": "すべての明細が請求および納品されると、注文は完了になります。"
+          }
+        }
+      },
+      "strip": {
+        "label": "進行中の注文の金額",
+        "openValue": "進行中の注文（{currency}）"
+      },
+      "tabs": {
+        "label": "注文の状態",
+        "all": "すべて",
+        "draft": "下書き",
+        "confirmed": "確定",
+        "cancelled": "キャンセル済み",
+        "closed": "完了",
+        "count": "{count} 件の注文"
+      },
+      "quick": {
+        "label": "クイックフィルター",
+        "toInvoice": "請求待ち",
+        "toFulfil": "納品待ち"
+      },
+      "table": {
+        "scrollArea": "販売注文の表",
+        "columns": {
+          "number": "注文",
+          "buyer": "購入者",
+          "quote": "見積",
+          "deal": "案件",
+          "expected": "納品予定日",
+          "status": "状態",
+          "invoicing": "請求",
+          "fulfilment": "納品",
+          "total": "合計",
+          "invoices": "請求書"
+        }
+      },
+      "row": {
+        "moreFor": "{name} の操作",
+        "open": "開く",
+        "edit": "編集",
+        "confirm": "注文を確定",
+        "invoiceAll": "残りをすべて請求",
+        "fulfilAll": "すべて納品済みにする",
+        "cancel": "注文をキャンセル",
+        "delete": "下書きを削除"
+      },
+      "status": {
+        "draft": "下書き",
+        "confirmed": "確定",
+        "cancelled": "キャンセル済み",
+        "closed": "完了"
+      },
+      "invoicingStatus": {
+        "not_invoiced": "未請求",
+        "partially_invoiced": "一部請求済み",
+        "invoiced": "請求済み"
+      },
+      "fulfilmentStatus": {
+        "unfulfilled": "未納品",
+        "partially_fulfilled": "一部納品済み",
+        "fulfilled": "納品済み"
+      },
+      "actions": {
+        "failed": "処理できませんでした。",
+        "confirmed": "注文 {number} を確定しました。",
+        "invoicedDraft": "注文から下書きの請求書を作成しました。",
+        "invoicedIssued": "請求書 {number} を発行しました。",
+        "fulfilled": "納品を記録しました。",
+        "cancelled": "注文 {number} をキャンセルしました。",
+        "deleted": "下書きの注文を削除しました。"
+      },
+      "dialog": {
+        "close": "閉じる",
+        "cancel": "キャンセル",
+        "how": "対象の数量",
+        "mode": {
+          "all": "残りすべて",
+          "lines": "数量を選択"
+        },
+        "left": "残り {qty}",
+        "qtyExceeds": "この明細の残りは最大 {max} です。",
+        "qtyInvalid": "小数点以下 4 桁までの数量を入力するか、この明細を飛ばす場合は 0 を入力してください。",
+        "nothingHint": "この注文のすべてはすでに請求済みです。"
+      },
+      "confirmDialog": {
+        "title": "この注文を確定しますか?",
+        "message": "確定すると明細と価格が固定されます。その後は、一括または分割で注文を請求し、納品を記録できます。有効な請求書がない間はキャンセルも可能です。",
+        "confirm": "注文を確定"
+      },
+      "cancelDialog": {
+        "title": "この注文をキャンセルしますか?",
+        "warning": "キャンセルした注文は、請求や納品ができなくなり、再開もできません。",
+        "reason": "理由",
+        "reasonHint": "チーム用に注文へ保存されます。",
+        "reasonRequired": "注文をキャンセルする理由を入力してください。",
+        "reasonTooLong": "理由は {max} 文字未満にしてください。",
+        "cancelOrder": "注文をキャンセル",
+        "hasInvoices": "この注文にはまだ請求書があります。先に請求書を取り消すか削除してください（取り消した請求書の数量は注文に戻ります）。その後、注文をキャンセルしてください。",
+        "seeInvoices": "請求書を確認"
+      },
+      "deleteDialog": {
+        "title": "この下書きを削除しますか?",
+        "message": "下書きの注文は完全に削除されます。確定済みの注文は削除できず、キャンセルのみ可能です。",
+        "delete": "下書きを削除"
+      },
+      "invoiceDialog": {
+        "title": "この注文を請求",
+        "intro": "固定された価格で注文を請求します。分割して請求することもでき、今回請求しなかった分は注文に残ります。",
+        "invoiceAndIssue": "請求書を作成して発行",
+        "createDraft": "下書きの請求書を作成",
+        "issueDate": "発行日",
+        "issueDateHint": "空欄の場合は本日（{today}）になります。",
+        "dueDate": "支払期日",
+        "terms": "支払条件",
+        "termsDefault": "ワークスペースの既定値",
+        "termsOnIssue": "発行時支払",
+        "termsDays": "{count} 日",
+        "issueNow": "今すぐ請求書を発行",
+        "issueNowHint": "請求書に番号が付与され、すぐに送信できます。",
+        "draftHint": "発行前に確認するため、下書きのままにしてください。",
+        "includeShipping": "この請求書に送料を含める",
+        "problems": {
+          "nothing": "1 行以上で 0 より大きい数量を選択してください。",
+          "issueDateInvalid": "有効な発行日を入力してください。",
+          "dueDateInvalid": "有効な支払期日を入力してください。",
+          "dueBeforeIssue": "支払期日は発行日より前にできません。"
+        }
+      },
+      "fulfilDialog": {
+        "title": "納品を記録",
+        "intro": "購入者に納品した内容を記録します。納品は請求とは別に管理されるため、どちらが先でも構いません。",
+        "record": "納品を記録",
+        "note": "メモ",
+        "noteHint": "任意です。例: 納品書番号",
+        "problems": {
+          "nothing": "1 行以上で 0 より大きい数量を選択してください。",
+          "noteTooLong": "メモは {max} 文字未満にしてください。"
+        }
+      },
+      "detail": {
+        "noAccessTitle": "アクセス権がありません",
+        "noAccess": "販売注文を表示する権限がありません。",
+        "loading": "注文を読み込んでいます",
+        "back": "販売注文に戻る",
+        "noBuyer": "購入者なし",
+        "edit": "編集",
+        "confirm": "注文を確定",
+        "recordDelivery": "納品を記録",
+        "invoice": "請求...",
+        "more": "その他の操作",
+        "cancel": "注文をキャンセル",
+        "delete": "下書きを削除",
+        "cancelledOn": "{date} にキャンセル",
+        "draftHint": "この注文は下書きです。確定すると価格が固定され、請求と納品を開始できます。",
+        "notes": "メモ",
+        "terms": "条件",
+        "progress": "進捗",
+        "invoiced": "請求済み",
+        "fulfilled": "納品済み"
+      },
+      "lines": {
+        "title": "明細",
+        "scrollArea": "注文明細",
+        "item": "品目",
+        "ordered": "注文数",
+        "invoiced": "請求済み",
+        "fulfilled": "納品済み",
+        "toInvoice": "請求待ち",
+        "unitPrice": "単価",
+        "amount": "金額",
+        "taxLine": "{name} {rate}%",
+        "taxRate": "税 {rate}%",
+        "invoicedBar": "{name} の請求済み割合",
+        "fulfilledBar": "{name} の納品済み割合"
+      },
+      "totals": {
+        "title": "合計",
+        "subtotal": "小計",
+        "discount": "割引",
+        "shipping": "送料",
+        "shippingBilled": "請求済み",
+        "shippingPending": "最初の請求書に含めて請求",
+        "tax": "税",
+        "total": "合計"
+      },
+      "info": {
+        "title": "詳細",
+        "buyer": "購入者",
+        "email": "メール",
+        "phone": "電話",
+        "quote": "見積",
+        "deal": "案件",
+        "owner": "担当者",
+        "reference": "参照",
+        "expected": "納品予定日",
+        "created": "作成日",
+        "confirmed": "確定日"
+      },
+      "invoices": {
+        "title": "この注文からの請求書",
+        "none": "この注文からの請求書はまだ作成されていません。",
+        "noneDraft": "注文を確定すると請求書を作成できます。",
+        "draft": "下書き",
+        "voidNote": "取り消した請求書の数量は注文に戻ります。"
+      },
+      "builder": {
+        "noAccessTitle": "アクセス権がありません",
+        "noAccess": "販売注文を変更する権限がありません。",
+        "loading": "読み込み中",
+        "frozen": "この注文は確定済みのため、明細と価格は固定されています。変更するには、注文をキャンセルして新しく作成してください。",
+        "openOrder": "注文を開く",
+        "back": "戻る",
+        "editTitle": "{number} を編集",
+        "newTitle": "新しい販売注文",
+        "unsaved": "未保存の変更",
+        "cancel": "キャンセル",
+        "saveChanges": "変更を保存",
+        "createDraft": "下書きを作成",
+        "conflict": "編集中に他のユーザーがこの下書きを変更しました。再読み込みして最新版を確認してください。ここでの編集内容は失われます。",
+        "reload": "再読み込み",
+        "saved": "下書きを保存しました。",
+        "created": "注文 {number} を下書きとして作成しました。",
+        "fixProblems": "先に強調表示された項目を修正してください。",
+        "serverRejected": "一部の値がサーバーに受け付けられませんでした。項目を確認して、もう一度お試しください。",
+        "startFrom": "開始元",
+        "source": {
+          "scratch": "空の注文",
+          "quote": "承認された提案書または見積書"
+        },
+        "loadingQuote": "見積を読み込んでいます...",
+        "buyer": "購入者",
+        "contact": "連絡先",
+        "contactHint": "連絡先を選択すると注文がその連絡先に紐づきます。または下に購入者を入力してください。",
+        "buyerName": "購入者名",
+        "fromQuoteHint": "空欄の場合は、見積の購入者が使用されます。",
+        "buyerEmail": "メール",
+        "buyerPhone": "電話",
+        "details": "注文の詳細",
+        "currency": "通貨",
+        "currencyHint": "USD や KWD のような 3 文字のコード。",
+        "currencyLocked": "注文の作成後は変更できません。",
+        "expectedDate": "納品予定日",
+        "expectedHint": "購入者が納品を希望する日付です。",
+        "reference": "参照",
+        "referenceHint": "例: 購入者の発注番号",
+        "linesFromQuote": "明細",
+        "linesFromQuoteHint": "注文は承認された見積の明細、価格、税を引き継ぎ、書類全体の割引は明細に反映されます。作成後も下書きの明細は編集できます。",
+        "lineItems": "明細",
+        "shippingNotes": "送料、メモ、条件",
+        "shipping": "送料（{currency}）",
+        "shippingHint": "最初の請求書に含めて請求されます。",
+        "notes": "メモ",
+        "notesHint": "注文に表示されます。",
+        "terms": "条件",
+        "termsHint": "この注文から作成される請求書に引き継がれます。",
+        "draftNote": "確定するまで注文は下書きのままです。確定すると価格が固定されます。",
+        "quoteTotals": "見積の合計",
+        "quoteTotalsNote": "承認された見積のとおりです。注文の金額は作成後に表示されます。",
+        "subtotal": "小計",
+        "discount": "割引",
+        "tax": "税",
+        "total": "合計",
+        "openExisting": "注文 {number} を開く",
+        "viewOrders": "すべての注文を表示",
+        "pickAnother": "別の見積を選択",
+        "problems": {
+          "buyerRequired": "連絡先を選択するか、購入者名を入力してください。",
+          "emailInvalid": "有効なメールアドレスを入力してください。",
+          "currencyInvalid": "3 文字の通貨コードを入力してください。",
+          "expectedDateInvalid": "有効な日付を入力してください。",
+          "shippingInvalid": "有効な金額を入力してください。",
+          "noLines": "明細を 1 行以上追加してください。",
+          "referenceTooLong": "参照は 191 文字未満にしてください。"
+        },
+        "lineProblems": {
+          "descriptionRequired": "この明細の内容を入力してください。",
+          "qtyInvalid": "0 より大きい数量を入力してください。",
+          "priceInvalid": "有効な単価を入力してください。",
+          "lineDiscountInvalid": "有効な割引額を入力してください。",
+          "hsnRequired": "HSN/SAC コードを入力してください。",
+          "hsnInvalid": "有効な HSN/SAC コードを入力してください。",
+          "taxRateRemoved": "この明細の税率はすでに存在しません。現在の税率を選択してください。"
+        }
+      },
+      "quotePicker": {
+        "search": "承認された見積を検索",
+        "results": "承認された提案書と見積書",
+        "loading": "見積を読み込んでいます",
+        "noMatch": "一致する承認済みの見積はありません。",
+        "none": "承認済みの提案書または見積書はまだありません。",
+        "kind": {
+          "proposal": "提案書",
+          "estimate": "見積書"
+        },
+        "untitled": "無題",
+        "accepted": "{date} 承認"
+      }
+    }
+  }
+}

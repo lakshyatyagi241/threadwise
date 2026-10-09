@@ -1,0 +1,484 @@
+{
+  "auth-registration-security": {
+    "guest": {
+      "shell": {
+        "appNameFallback": "CRM",
+        "header": {
+          "login": {
+            "eyebrow": "Oturum aç",
+            "title": "Tekrar",
+            "accent": "hoş geldiniz",
+            "subtitle": "Çalışma alanınıza geri dönmek için bilgilerinizi girin."
+          },
+          "register": {
+            "eyebrow": "Adım 1 / 3 · Hesap oluştur",
+            "title": "Hesabınızı",
+            "accent": "oluşturun",
+            "subtitle": "Birkaç bilgi ve çalışma alanınız hazır."
+          },
+          "forgot": {
+            "eyebrow": "Parolamı unuttum",
+            "title": "Parolanızı",
+            "accent": "sıfırlayın",
+            "subtitle": "Nereden oturum açtığınızı söyleyin, size tek kullanımlık bir bağlantı gönderelim."
+          }
+        },
+        "defaults": {
+          "login": {
+            "hero_title": "Her şey tek yerde",
+            "hero_desc": "Sohbetler, kampanyalar ve kişiler bir arada durur; kimse bağlam aramak zorunda kalmaz.",
+            "stat1_num": "7/24",
+            "stat1_label": "ortak ekip gelen kutusu",
+            "stat2_num": "5 dk",
+            "stat2_label": "tipik kurulum",
+            "stat3_num": "1 yer",
+            "stat3_label": "sohbetler ve kişiler için",
+            "feat1_title": "Ortak gelen kutusu",
+            "feat1_desc": "Sohbetleri konuyu kaybetmeden atayın, yanıtlayın ve devredin.",
+            "feat2_title": "Toplu gönderimler",
+            "feat2_desc": "Hız ayarı ve teslim takibiyle çok sayıda kişiye aynı anda ulaşın.",
+            "feat3_title": "Otomasyonlar",
+            "feat3_desc": "Kendi tasarladığınız akışlarla yönlendirin, yanıtlayın ve takip edin.",
+            "feat4_title": "Ekip kontrolü",
+            "feat4_desc": "Roller, izinler ve denetim kayıtları her çalışma alanını kontrol altında tutar.",
+            "inside_heading": "Çalışma alanınızın içinde",
+            "chip1": "Gelen kutusu",
+            "chip2": "Toplu gönderimler",
+            "chip3": "Akışlar",
+            "chip4": "Kişiler",
+            "chip5": "Raporlar",
+            "chip6": "Şablonlar"
+          },
+          "register": {
+            "hero_title": "Ücretsiz başla",
+            "hero_desc": "Önce çalışma alanınızı kurun, hazır olduğunuzda plan seçin.",
+            "stat1_num": "3 adım",
+            "stat1_label": "çalışan bir çalışma alanına",
+            "stat2_num": "5 dk",
+            "stat2_label": "tipik kurulum",
+            "stat3_num": "1. gün",
+            "stat3_label": "ekibinizi davet edin",
+            "feat1_title": "Hızlı kurulum",
+            "feat1_desc": "Çalışma alanınıza ad verin, saat diliminizi ayarlayın, hazırsınız.",
+            "feat2_title": "Ekibinizi getirin",
+            "feat2_desc": "Çalışma arkadaşlarınızı davet edin ve her birine tam olarak gereken erişimi verin.",
+            "feat3_title": "Kanalları bağlayın",
+            "feat3_desc": "Mesajlaşma numaralarınızı bağlayın ve müşterilerle konuşmaya başlayın.",
+            "feat4_title": "Kontrol sizde",
+            "feat4_desc": "İki adımlı oturum açma ve oturum denetimleri her hesabı korur.",
+            "inside_heading": "Neler sunuyoruz",
+            "chip1": "Ortak gelen kutusu",
+            "chip2": "Toplu gönderimler",
+            "chip3": "Akışlar",
+            "chip4": "Kişiler",
+            "chip5": "Raporlar",
+            "chip6": "Ekip rolleri"
+          },
+          "forgot": {
+            "hero_title": "Yeni bir bağlantı, tek kullanımlık",
+            "hero_desc": "Yalnızca bir kez çalışan ve kısa sürede geçerliliğini yitiren güvenli bir bağlantıyı e-postayla göndeririz."
+          }
+        },
+        "contentDefaults": {
+          "login": {
+            "eyebrow": "WhatsApp için ekip gelen kutusu",
+            "heading": "Her müşteri sohbeti,",
+            "headingAccent": "tek sakin çalışma alanı",
+            "subheading": "Hızlı yanıt veren ekipler için toplu gönderimler, otomasyonlar ve ortak gelen kutusu."
+          },
+          "register": {
+            "eyebrow": "Dakikalar içinde başlayın",
+            "heading": "Çalışma alanınızı",
+            "headingAccent": "kurun",
+            "subheading": "Çalışma alanınızı oluşturun, ardından ekibinizi ve ilk kanalınızı ekleyin."
+          },
+          "forgot": {
+            "eyebrow": "Hesap kurtarma",
+            "heading": "Bir dakikada",
+            "headingAccent": "geri dönün",
+            "subheading": "E-postanızı girin, yeni parola seçmeniz için size güvenli bir bağlantı gönderelim."
+          }
+        }
+      },
+      "toolbar": {
+        "language": "Dil",
+        "theme": "Temayı değiştir",
+        "themeToLight": "Açık",
+        "themeToDark": "Koyu"
+      },
+      "pages": {
+        "login": {
+          "title": "Oturum aç"
+        },
+        "signup": {
+          "title": "Hesabınızı oluşturun"
+        },
+        "verifyOtp": {
+          "title": "Numaranızı doğrulayın",
+          "eyebrow": "Numaranızı doğrulayın",
+          "heading": "WhatsApp'ınızı",
+          "accent": "kontrol edin",
+          "subtitle": "Çalışma alanınızı oluşturmayı bitirmek için gönderdiğimiz tek kullanımlık kodu girin."
+        },
+        "forgot": {
+          "title": "Parolanızı sıfırlayın"
+        },
+        "reset": {
+          "title": "Yeni bir parola seçin",
+          "eyebrow": "Parolayı sıfırla",
+          "heading": "Yeni bir",
+          "accent": "parola seçin",
+          "subtitle": "Güçlü bir parola seçin. Hemen ardından onunla oturum açacaksınız.",
+          "panel": {
+            "heroTitle": "Yeni bir parola",
+            "heroDesc": "Hatırlayacağınız birini seçin. Çalışma alanınız asgari bir uzunluk isteyebilir.",
+            "eyebrow": "Hesap kurtarma",
+            "heading": "Yeni bir",
+            "accent": "başlangıç",
+            "subheading": "Yeni parolanız kaydedildiğinde hemen onunla oturum açabilirsiniz."
+          }
+        },
+        "verifyEmail": {
+          "title": "E-postanızı onaylayın",
+          "eyebrow": "E-posta onayı",
+          "heading": "E-postanızı",
+          "accent": "onaylayın",
+          "subtitle": "Bu sayfa, gelen kutunuzdan açtığınız bağlantıyı kontrol eder.",
+          "panel": {
+            "heroTitle": "Adresinizi onaylayın",
+            "heroDesc": "Tek bir tıklama bu gelen kutusunun size ait olduğunu kanıtlar.",
+            "eyebrow": "E-posta onayı",
+            "heading": "Bağlantınız",
+            "accent": "kontrol ediliyor",
+            "subheading": "Açtığınız e-postadaki adresi onaylıyoruz."
+          }
+        },
+        "findWorkspace": {
+          "title": "Çalışma alanımı bul",
+          "eyebrow": "Çalışma alanımı bul",
+          "heading": "Çalışma alanınızı",
+          "accent": "bulun",
+          "subtitle": "E-postanızı girin, oturum açabileceğiniz çalışma alanı adreslerini size e-postayla gönderelim."
+        },
+        "confirmEmailChange": {
+          "title": "Yeni e-postanızı onaylayın",
+          "eyebrow": "E-posta değişikliği",
+          "heading": "Yeni e-postanızı",
+          "accent": "onaylayın",
+          "subtitle": "Bu sayfa, gelen kutunuzdan açtığınız bağlantıyı kontrol eder.",
+          "panel": {
+            "heroTitle": "Yeni oturum açma e-postası",
+            "heroDesc": "Adresiniz onayladığınız anda değişir.",
+            "eyebrow": "E-posta değişikliği",
+            "heading": "Yeni e-postanız",
+            "accent": "onaylanıyor",
+            "subheading": "Açtığınız mesajdaki bağlantıyı kontrol ediyoruz."
+          }
+        },
+        "socialCallback": {
+          "title": "Oturumunuz açılıyor",
+          "eyebrow": "Sosyal hesapla oturum açma",
+          "heading": "Oturumunuz",
+          "accent": "açılıyor",
+          "subtitle": "Oturum açma işleminiz tamamlanıyor."
+        }
+      },
+      "errors": {
+        "invalidCredentials": "Bu bilgiler eşleşmiyor. Çalışma alanını, e-postayı ve parolayı kontrol edin.",
+        "locked": "Çok fazla başarısız deneme. {minutes, plural, one {# dakika} other {# dakika}} sonra tekrar deneyin.",
+        "rateLimited": "Çok fazla deneme. Lütfen biraz bekleyip tekrar deneyin.",
+        "rateLimitedWait": "Çok fazla deneme. {seconds, plural, one {# saniye} other {# saniye}} sonra tekrar deneyin.",
+        "suspended": "Bu hesap askıya alındı. Çalışma alanı yöneticinizle iletişime geçin.",
+        "captcha": "Lütfen captcha doğrulamasını tamamlayıp tekrar deneyin.",
+        "signupClosed": "Kayıt kapalı. Bir yöneticiden davet isteyin.",
+        "slugTaken": "Bu çalışma alanı adresi zaten alınmış.",
+        "emailTaken": "Bu e-posta bu çalışma alanında zaten kullanılıyor.",
+        "passwordPolicy": "Bu parola güvenlik politikasını karşılamıyor:",
+        "tokenInvalid": "Bu bağlantı geçersiz veya süresi dolmuş.",
+        "emailUnverified": "Önce e-posta adresinizi onaylayın.",
+        "mfaInvalid": "Bu kod geçerli değil. Kodu kontrol edip tekrar deneyin.",
+        "mfaExpired": "Doğrulamanızın süresi doldu. Yeniden oturum açın.",
+        "otpInvalid": "Bu kod doğru değil. Tekrar deneyin.",
+        "otpExpired": "Bu kodun süresi doldu. Yeni bir kod isteyin.",
+        "otpTooMany": "Çok fazla deneme. Yeni bir kod isteyin.",
+        "otpCooldown": "Başka bir kod istemeden önce lütfen biraz bekleyin.",
+        "otpSendFailed": "Doğrulama kodu gönderilemedi. Numarayı kontrol edip tekrar deneyin.",
+        "socialUnavailable": "Bu oturum açma yöntemi kullanılamıyor.",
+        "socialExpired": "Oturum açma süresi doldu. Lütfen tekrar deneyin.",
+        "socialFailed": "{provider} ile oturum açma tamamlanamadı. Lütfen tekrar deneyin.",
+        "socialNoEmail": "Bu hesap bir e-posta adresi paylaşmadı. Bunun yerine e-posta ve parola kullanın.",
+        "ipBlocked": "Bu ağdan oturum açmaya izin verilmiyor.",
+        "workspaceUnavailable": "Bu çalışma alanı kullanılamıyor.",
+        "workspaceRequired": "Bu e-posta birden fazla çalışma alanında kullanılıyor. Devam etmek için çalışma alanınızı girin.",
+        "validation": "Lütfen vurgulanan alanları kontrol edin.",
+        "sessionExpired": "Oturumunuzun süresi güvenlik nedeniyle doldu. Lütfen tekrar deneyin.",
+        "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+        "unexpected": "Bizim tarafımızda bir sorun oluştu. Lütfen tekrar deneyin.",
+        "requestId": "İstek kimliği",
+        "signupExpired": "Lütfen kaydı baştan başlatın.",
+        "policyRules": {
+          "min_length": "En az {min, plural, one {# karakter} other {# karakter}} kullanın.",
+          "upper_lower": "Büyük ve küçük harfleri karıştırın.",
+          "number": "En az bir rakam ekleyin.",
+          "symbol": "En az bir sembol ekleyin.",
+          "common": "Bu parola tahmin edilmesi çok kolay."
+        },
+        "socialNoAccount": "Bu {provider} oturumuyla eşleşen hesap yok. E-posta ve parolanızla oturum açın veya bir hesap oluşturun.",
+        "forbidden": "Bu istek reddedildi. Sayfayı yenileyip tekrar deneyin."
+      },
+      "validation": {
+        "orgSlug": "Çalışma alanı adresinizi girin (harf, rakam, tire veya alt çizgi).",
+        "orgSlugForSocial": "Nereye oturum açacağımızı bilmemiz için önce çalışma alanı adresinizi girin.",
+        "email": "Geçerli bir e-posta adresi girin.",
+        "password": "Gösterilen gereksinimleri karşılayan bir parola girin.",
+        "passwordRequired": "Parolanızı girin.",
+        "fullName": "Ad soyadınızı girin.",
+        "orgName": "Çalışma alanınıza ad verin (en az 2 karakter).",
+        "orgNameForSocial": "Önce çalışma alanınıza ad verin, sonra Google veya Facebook ile devam edin.",
+        "phoneRequired": "Cep telefonu numaranızı girin.",
+        "phone": "Seçilen ülke için geçerli bir cep telefonu numarası girin.",
+        "newPassword": "En az {min, plural, one {# karakter} other {# karakter}} kullanın.",
+        "confirmPassword": "İki parola eşleşmiyor.",
+        "acceptTerms": "Devam etmek için koşulları kabul etmelisiniz.",
+        "referralCode": "Tavsiye kodları yalnızca harf ve rakam içerir.",
+        "code": "{length} haneli kodu girin."
+      },
+      "legal": {
+        "login": "Oturum açarak <terms>Koşullarımızı</terms> ve <privacy>Gizlilik politikamızı</privacy> kabul etmiş olursunuz.",
+        "signup": "<terms>Koşulları</terms> ve <privacy>Gizlilik politikasını</privacy> kabul ediyorum.",
+        "cookies": "<cookies>Çerez politikası</cookies>"
+      },
+      "captcha": {
+        "protected": "Bu site reCAPTCHA ile korunmaktadır. Google <privacy>Gizlilik Politikası</privacy> ve <terms>Hizmet Şartları</terms> geçerlidir."
+      },
+      "social": {
+        "divider": "veya e-posta ile",
+        "redirecting": "Sağlayıcı açılıyor",
+        "login": {
+          "google": "Google ile devam et",
+          "facebook": "Facebook ile devam et"
+        },
+        "signup": {
+          "google": "Google ile kaydol",
+          "facebook": "Facebook ile kaydol"
+        },
+        "google": "Google",
+        "facebook": "Facebook"
+      },
+      "login": {
+        "workspace": "Çalışma alanı",
+        "workspaceHint": "Ekibinizin kullandığı adres, örneğin acme.",
+        "chooseTitle": "Bir çalışma alanı seçin",
+        "chooseSubtitle": "E-postanız birden fazla çalışma alanında var. Açmak istediğinizi seçin.",
+        "chooseMembers": "{count, plural, one {# üye} other {# üye}}",
+        "chooseOpen": "Aç",
+        "chooseBack": "Farklı bir hesap kullan",
+        "chooseExpired": "Bu çok uzun sürdü. Yeniden oturum açın.",
+        "workspacePlaceholder": "calisma-alaniniz",
+        "email": "E-posta",
+        "emailPlaceholder": "siz@sirket.com",
+        "password": "Parola",
+        "forgot": "Parolanızı mı unuttunuz?",
+        "showPassword": "Parolayı göster",
+        "hidePassword": "Parolayı gizle",
+        "remember": "Beni 30 gün oturumda tut",
+        "submit": "Oturum aç",
+        "submitting": "Oturum açılıyor",
+        "newHere": "Burada yeni misiniz?",
+        "createAccount": "Hesap oluştur",
+        "lostWorkspace": "Çalışma alanı adresinizden emin değil misiniz?",
+        "findWorkspace": "Çalışma alanımı bul",
+        "loggedOut": "Oturumunuz kapatıldı.",
+        "flashReset": "Parola sıfırlandı. Yeni parolanızla oturum açın.",
+        "flashExpired": "Oturumunuzun süresi doldu. Lütfen yeniden oturum açın.",
+        "flashIdle": "{minutes, plural, one {# dakika} other {# dakika}} etkinlik olmadığı için oturumunuz kapatıldı. Devam etmek için yeniden oturum açın.",
+        "mfaExpired": "Doğrulamanız çok uzun sürdü. Yeniden oturum açın.",
+        "flashDeleted": "Hesabınız silindi."
+      },
+      "mfa": {
+        "title": "İki adımlı doğrulama",
+        "descriptionCode": "Kimlik doğrulama uygulamanızdaki 6 haneli kodu girin.",
+        "descriptionRecovery": "Tek kullanımlık kurtarma kodlarınızdan birini girin.",
+        "codeLabel": "Kimlik doğrulama kodu",
+        "recoveryLabel": "Kurtarma kodu",
+        "recoveryHint": "Her kurtarma kodu bir kez çalışır.",
+        "invalidCode": "6 haneli kodu girin.",
+        "invalidRecovery": "Bir kurtarma kodu girin (8 ile 32 karakter).",
+        "verify": "Doğrula",
+        "verifying": "Doğrulanıyor",
+        "useRecovery": "Bunun yerine kurtarma kodu kullan",
+        "useApp": "Bunun yerine kimlik doğrulama kodunu kullan",
+        "back": "Oturum açmaya dön",
+        "expiresIn": "Doğrulama {time} içinde sona erer"
+      },
+      "signup": {
+        "steps": {
+          "label": "Kayıt ilerlemesi",
+          "account": "Hesap",
+          "workspace": "Çalışma alanı",
+          "plan": "Plan"
+        },
+        "fullName": "Ad soyad",
+        "fullNamePlaceholder": "Adınız",
+        "email": "İş e-postası",
+        "orgName": "Çalışma alanı adı",
+        "orgNamePlaceholder": "Acme A.Ş.",
+        "orgNameHint": "Ekibiniz {slug} adresiyle oturum açar.",
+        "orgNameHintEmpty": "Ekibinizin göreceği ad budur.",
+        "customiseSlug": "Özel bir çalışma alanı adresi seçin",
+        "orgSlug": "Çalışma alanı adresi",
+        "orgSlugHint": "Harf, rakam, tire veya alt çizgi. Ekibiniz oturum açarken bunu girer.",
+        "orgSlugPlaceholder": "calisma-alaniniz",
+        "phone": "Cep telefonu numarası",
+        "phoneHint": "Hesabınızı doğrulamak ve önemli güncellemeler için kullanırız.",
+        "phonePlaceholder": "Ülke kodsuz numara",
+        "country": "Ülke",
+        "referral": "Tavsiye kodu",
+        "optional": "isteğe bağlı",
+        "referralPlaceholder": "Bir arkadaşınızın kodu var mı?",
+        "password": "Parola",
+        "confirmPassword": "Parolayı onayla",
+        "submit": "Devam",
+        "submitting": "Hesabınız oluşturuluyor",
+        "haveAccount": "Zaten hesabınız var mı?",
+        "signIn": "Oturum aç",
+        "closedBody": "Kayıt kapalı. Bir yöneticiden davet isteyin.",
+        "closedBack": "Oturum açmaya dön",
+        "restart": "Lütfen kaydı baştan başlatın.",
+        "countryButton": "Ülke kodu +{dial}",
+        "countrySearch": "Ülke ara",
+        "countryEmpty": "Eşleşen ülke yok"
+      },
+      "otp": {
+        "sentTo": "Şuraya bir kod gönderdik:",
+        "code": "Doğrulama kodu",
+        "expiresIn": "Kodun süresi {time} içinde dolar.",
+        "expired": "Bu kodun süresi doldu. Yeni bir kod isteyin.",
+        "verify": "Doğrula ve devam et",
+        "verifying": "Doğrulanıyor",
+        "resend": "Kodu yeniden gönder",
+        "resendIn": "Kodu {time} içinde yeniden gönder",
+        "resending": "Gönderiliyor",
+        "resent": "WhatsApp numaranıza yeni bir kod geliyor.",
+        "wrongNumber": "Yanlış numara mı?",
+        "goBack": "Geri dön",
+        "addressTakenHint": "Siz doğrularken bu çalışma alanı adresi alındı. Başka bir adres seçin, size yeni bir kod gönderelim.",
+        "chooseAnotherAddress": "Başka bir adres seç"
+      },
+      "forgot": {
+        "submit": "Sıfırlama bağlantısını e-postayla gönder",
+        "submitting": "Gönderiliyor",
+        "remembered": "Hatırladınız mı?",
+        "back": "Oturum açmaya dön",
+        "doneTitle": "Gelen kutunuzu kontrol edin",
+        "doneBody": "Bu e-posta o çalışma alanındaki bir hesaba aitse bir sıfırlama bağlantısı yolda. Bağlantı bir kez çalışır ve kısa sürede geçerliliğini yitirir.",
+        "doneHint": "Henüz gelmedi mi? Spam klasörünüzü kontrol edin veya bir dakika sonra tekrar deneyin.",
+        "tryAnother": "Farklı bir e-posta kullan"
+      },
+      "reset": {
+        "password": "Yeni parola",
+        "confirmPassword": "Yeni parolayı onayla",
+        "submit": "Yeni parolayı kaydet",
+        "submitting": "Kaydediliyor",
+        "back": "Oturum açmaya dön",
+        "invalidTitle": "Bu bağlantı artık çalışmıyor",
+        "invalidBody": "Sıfırlama bağlantıları bir kez çalışır ve kısa sürede geçerliliğini yitirir. Devam etmek için yeni bir bağlantı isteyin.",
+        "requestNew": "Yeni bağlantı iste"
+      },
+      "verifyEmail": {
+        "working": "E-postanız onaylanıyor",
+        "doneTitle": "E-posta onaylandı",
+        "doneBody": "Teşekkürler, adresiniz doğrulandı. Devam etmek için oturum açın.",
+        "failedTitle": "E-postanız onaylanamadı",
+        "failedHint": "Oturum açın ve uygulamanın üstündeki banttan yeni bir doğrulama e-postası isteyin.",
+        "signIn": "Oturum açmaya git"
+      },
+      "confirmEmailChange": {
+        "working": "Yeni e-postanız onaylanıyor",
+        "doneTitle": "E-posta adresi güncellendi",
+        "doneBody": "Bir sonraki oturum açışınızda yeni adresinizi kullanın.",
+        "failedTitle": "Değişiklik onaylanamadı",
+        "failedHint": "Oturum açın ve e-posta değişikliğini hesap sayfanızdan baştan başlatın.",
+        "signIn": "Oturum açmaya git"
+      },
+      "findWorkspace": {
+        "submit": "Çalışma alanlarımı e-postayla gönder",
+        "submitting": "Gönderiliyor",
+        "back": "Oturum açmaya dön",
+        "doneTitle": "Gelen kutunuzu kontrol edin",
+        "doneBody": "Bu adres doğrulanmış bir hesaba aitse oturum açabileceğiniz çalışma alanı adreslerini size e-postayla gönderdik.",
+        "doneHint": "Henüz gelmedi mi? Spam klasörünüzü kontrol edin veya farklı bir e-posta deneyin.",
+        "tryAnother": "Farklı bir e-posta kullan"
+      },
+      "callback": {
+        "working": "Oturum açma işleminiz tamamlanıyor",
+        "failedTitle": "Oturum açma tamamlanmadı",
+        "cancelled": "Oturum açma iptal edildi.",
+        "backToSignIn": "Oturum açmaya dön",
+        "createAccount": "Bunun yerine hesap oluştur"
+      },
+      "layout": {
+        "noscript": "Bu tarayıcıda JavaScript kapalı. Oturum açmak veya hesap oluşturmak için açın."
+      },
+      "consent": {
+        "label": "Çerez bildirimi",
+        "title": "Çerez kullanıyoruz",
+        "message": "Oturumunuzu açık tutmak ve bu sitenin nasıl kullanıldığını anlamak için çerez kullanıyoruz. Hepsini kabul edin, isteğe bağlı olanları reddedin veya izin verdiklerinizi seçin.",
+        "learnMore": "Daha fazla bilgi",
+        "decline": "Reddet",
+        "customize": "Özelleştir",
+        "acceptAll": "Tümünü kabul et",
+        "prefsTitle": "Gizlilik tercihleriniz",
+        "necessary": "Kesinlikle gerekli",
+        "necessaryHint": "Oturum açma ve güvenlik için gerekir. Her zaman açık.",
+        "analytics": "Analiz",
+        "analyticsHint": "Hangi sayfaların işe yaradığını ve hangilerinin yaramadığını görmemize yardımcı olur.",
+        "marketing": "Pazarlama",
+        "marketingHint": "Diğer web sitelerinde ilgili teklifleri göstermek için kullanılır.",
+        "rejectAll": "Tümünü reddet",
+        "save": "Tercihleri kaydet"
+      },
+      "policy": {
+        "minLength": "En az {min, plural, one {# karakter} other {# karakter}}.",
+        "mixedCase": "Büyük ve küçük harfleri karıştırın.",
+        "number": "Bir rakam ekleyin.",
+        "symbol": "Bir sembol ekleyin.",
+        "placeholder": "En az {min, plural, one {# karakter} other {# karakter}}"
+      }
+    },
+    "gate": {
+      "suspended": {
+        "titleLead": "Hesabınız",
+        "titleAccent": "askıya alındı"
+      },
+      "verify": {
+        "titleLead": "Lütfen",
+        "titleAccent": "e-postanızı doğrulayın"
+      },
+      "onboarding": {
+        "header": {
+          "step2": {
+            "eyebrow": "Adım 2 / 3 · Çalışma alanı",
+            "title": "Çalışma alanınızı",
+            "accent": "oluşturun"
+          },
+          "step3": {
+            "eyebrow": "Adım 3 / 3 · Plan",
+            "title": "Bir",
+            "accent": "plan seçin",
+            "subtitle": "Her plan aylık bir mesaj hakkıyla gelir. Ücretsiz planla başlayın veya daha fazla alan sunan bir plan seçin."
+          }
+        },
+        "timezonePlaceholder": "Saat dilimi ara...",
+        "timezoneEmpty": "Aramanızla eşleşen saat dilimi yok.",
+        "timezoneLabel": "Saat dilimi",
+        "phonePlaceholder": "Ülke kodsuz numara",
+        "plan": {
+          "credits": "Planınız her ay belirli sayıda mesaj içerir. Plan etkinken hak biterse ek gönderimler mesaj başına <rate>{credits, plural, one {# kredi} other {# kredi}}</rate> ile cüzdan kredisi kullanır. Plan bittiğinde, yenileyene kadar gönderim duraklar.",
+          "topUpPrompt": "Hakkınızı mı aşıyorsunuz?",
+          "topUp": "Mesaj kredisi ekle"
+        }
+      }
+    }
+  }
+}

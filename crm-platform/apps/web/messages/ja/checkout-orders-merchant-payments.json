@@ -1,0 +1,134 @@
+{
+  "checkout-orders-merchant-payments": {
+    "nav": {
+      "orders": "注文",
+      "coupons": "クーポン"
+    },
+    "settingsTile": {
+      "label": "決済ゲートウェイ",
+      "description": "ストアのチェックアウトと販売の請求書がオンライン決済の受付に使用する、1つのゲートウェイです。",
+      "keywords": "決済ゲートウェイ, razorpay, stripe, チェックアウト, 支払いリンク, オンライン決済, カード, upi"
+    },
+    "common": {
+      "noAccessTitle": "このページにアクセスする権限がありません",
+      "noAccessMessage": "あなたのロールにこの権限を付与するよう、ワークスペース管理者に依頼してください。",
+      "loading": "読み込み中",
+      "loadMore": "さらに読み込む",
+      "cancel": "キャンセル",
+      "close": "閉じる",
+      "save": "保存",
+      "saving": "保存中",
+      "edit": "編集",
+      "delete": "削除",
+      "remove": "削除",
+      "open": "開く",
+      "view": "表示",
+      "search": "検索",
+      "clear": "クリア",
+      "all": "すべて",
+      "no": "いいえ",
+      "none": "なし",
+      "actions": "操作",
+      "retry": "再試行",
+      "dismiss": "閉じる",
+      "copy": "コピー",
+      "copied": "コピーしました",
+      "viewContact": "連絡先を表示",
+      "allShops": "すべてのショップ",
+      "shop": "ショップ"
+    },
+    "status": {
+      "new": "新規",
+      "pending": "保留中",
+      "confirmed": "確認済み",
+      "paid": "支払い済み",
+      "processing": "処理中",
+      "completed": "完了",
+      "shipped": "発送済み",
+      "cancelled": "キャンセル済み"
+    },
+    "paymentStatus": {
+      "paid": "支払い済み",
+      "awaiting": "支払い待ち",
+      "cod": "代金引換",
+      "unpaid": "未払い"
+    },
+    "source": {
+      "waba": "WhatsApp",
+      "storefront": "ストアフロント",
+      "twilio": "Twilio",
+      "manual": "手動",
+      "shopify": "Shopify",
+      "woocommerce": "WooCommerce",
+      "whatsapp_ai": "WhatsApp AI"
+    },
+    "errors": {
+      "requestId": "リクエストID",
+      "retry": "再試行",
+      "network": {
+        "title": "サーバーに接続できません",
+        "message": "接続を確認して、もう一度お試しください。"
+      },
+      "forbidden": {
+        "title": "許可されていません",
+        "message": "あなたのロールではこの操作は許可されていません。"
+      },
+      "signedOut": {
+        "title": "サインアウトされています",
+        "message": "続行するには、もう一度サインインしてください。"
+      },
+      "conflict": {
+        "title": "他のユーザーが変更しました",
+        "message": "このレコードは、開いている間に変更されました。再読み込みして、もう一度お試しください。"
+      },
+      "validation": {
+        "title": "フォームを確認してください",
+        "message": "無効な値があります。強調表示されている項目を確認してください。"
+      },
+      "unavailable": {
+        "title": "まだ利用できません",
+        "message": "ストアのこの部分は、このサーバーではまだ利用できません。"
+      },
+      "rateLimited": {
+        "title": "リクエストが多すぎます",
+        "message": "しばらく待ってから、もう一度お試しください。"
+      },
+      "notFound": {
+        "title": "見つかりません",
+        "message": "削除されたか、存在しません。"
+      },
+      "planLocked": {
+        "title": "お使いのプランでは利用できません",
+        "message": "お使いのプランにはストアが含まれていません。利用するにはアップグレードしてください。"
+      },
+      "couponCodeTaken": {
+        "title": "コードはすでに使用されています",
+        "message": "このコードはすでに別のクーポンで使用されています。別のコードを選択してください。"
+      },
+      "groupCodeTaken": {
+        "title": "コードはすでに使用されています",
+        "message": "この注文コードはすでに別のグループで使用されています。"
+      },
+      "orderNoPhone": {
+        "title": "電話番号がありません",
+        "message": "この注文には購入者の電話番号がないため、何も送信できません。"
+      },
+      "gatewayNotConfigured": {
+        "title": "決済ゲートウェイが設定されていません",
+        "message": "先に決済ゲートウェイを設定してください。キーが不足しているか、ゲートウェイがオフになっています。"
+      },
+      "gatewayUnavailable": {
+        "title": "ゲートウェイを利用できません",
+        "message": "このゲートウェイでは、購入者が開ける支払いリンクを作成できません。"
+      },
+      "paymentLinkFailed": {
+        "title": "ゲートウェイがリンクを拒否しました",
+        "message": "キーと、金額がゲートウェイの最低額を超えているかを確認してください。"
+      },
+      "unexpected": {
+        "title": "問題が発生しました",
+        "message": "もう一度お試しください。繰り返し発生する場合は、リクエストIDをサポートに共有してください。"
+      }
+    }
+  }
+}
