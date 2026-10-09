@@ -4,8 +4,16 @@ import { NextIntlClientProvider, createTranslator } from 'next-intl';
 import type { ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import { tplMetaCategorySchema, tplStatusSchema, tplLintIssueSchema } from '@crm/contracts';
+import {
+  templateSummarySchema,
+  tplMetaCategorySchema,
+  tplStatusSchema,
+  tplLintIssueSchema,
+  type TemplateSummary,
+} from '@crm/contracts';
 import { newRow } from '../lib/buttons';
+import { previewOfSummary } from '../lib/preview';
+import { TemplateCard } from './template-card';
 import { initialState, previewOf, withBody, type PreviewModel } from '../lib/form-model';
 import { CategoryBadge, QualityBadge, StatusBadge } from './badges';
 import { ButtonsEditor } from './buttons-editor';
@@ -228,5 +236,123 @@ describe('messages', () => {
     };
     walk(messages, '');
     expect(bad).toEqual([]);
+  });
+});
+
+const summary = (over: Partial<TemplateSummary> = {}): TemplateSummary =>
+  templateSummarySchema.parse({
+    id: '22222222-2222-4222-8222-222222222222',
+    name: 'sample_purchase_feedback',
+    language: 'en_US',
+    metaCategory: 'MARKETING',
+    templateType: 'standard',
+    status: 'approved',
+    metaStatus: 'APPROVED',
+    qualityScore: null,
+    rejectionReason: null,
+    rejectionReasonCode: null,
+    metaTemplateId: 'M1',
+    connectionId: null,
+    pausedUntil: null,
+    approvedAt: null,
+    submittedAt: null,
+    lastSyncedAt: null,
+    bodyPreview: 'Thank you {{1}}',
+    header: null,
+    attachmentType: 'none',
+    headerSampleUrl: null,
+    body: 'Thank you {{1}}! *Rate us*',
+    footer: 'Reply STOP',
+    buttons: [
+      { type: 'URL', text: 'Take Survey', url: 'https://example.com' },
+      { type: 'QUICK_REPLY', text: 'Later' },
+    ],
+    rowVersion: 1,
+    createdAt: '2026-10-01T10:00:00.000Z',
+    updatedAt: '2026-10-01T10:00:00.000Z',
+    ...over,
+  });
+
+describe('library card', () => {
+  const card = (t: TemplateSummary, over: { mayEdit?: boolean; mayDelete?: boolean } = {}) =>
+    html(
+      <TemplateCard
+        template={t}
+        connectionLabel="+1555-013-7150"
+        mayEdit={over.mayEdit ?? true}
+        mayDelete={over.mayDelete ?? true}
+        onDelete={noop}
+      />,
+    );
+
+  it('shows the name, the category tag, the engine chip, the status, the type and the number', () => {
+    const out = card(summary());
+    expect(out).toContain('sample_purchase_feedback');
+    expect(out).toContain('Meta WABA');
+    expect(out).toContain('Approved');
+    expect(out).toContain('Standard');
+    expect(out).toContain('+1555-013-7150');
+    expect(out).toContain('Marketing');
+  });
+
+  it('draws the whole message: body, footer and one pill per button', () => {
+    const out = card(summary());
+    expect(out).toContain('Reply STOP');
+    expect(out).toContain('Take Survey');
+    expect(out).toContain('Later');
+    expect(out).toContain('{{1}}');
+  });
+
+  it('offers Edit template, the details link and delete', () => {
+    const out = card(summary());
+    expect(out).toContain('Edit template');
+    expect(out).toContain('View details &amp; Meta review status');
+    expect(out).toContain('aria-label="Delete sample_purchase_feedback"');
+    expect(out).toContain('href="/templates/22222222-2222-4222-8222-222222222222/edit"');
+  });
+
+  it('follows permissions and what the status allows', () => {
+    expect(card(summary(), { mayEdit: false })).not.toContain('Edit template');
+    expect(card(summary(), { mayDelete: false })).not.toContain('Delete sample');
+    expect(card(summary({ status: 'disabled' }))).not.toContain('Edit template');
+    expect(card(summary({ templateType: 'carousel' }))).not.toContain('Edit template');
+  });
+
+  it("shows Meta's reason on a rejected template", () => {
+    const out = card(summary({ status: 'rejected', rejectionReason: 'Body too promotional' }));
+    expect(out).toContain('Rejected:');
+    expect(out).toContain('Body too promotional');
+  });
+});
+
+describe('previewOfSummary', () => {
+  it('keeps the tokens as typed and carries every part of the saved template', () => {
+    const p = previewOfSummary(
+      summary({
+        header: 'Hi {{1}}',
+        footer: 'f',
+        attachmentType: 'none',
+        buttons: [{ type: 'URL', text: 'Go' }],
+      }),
+    );
+    expect(p).toMatchObject({
+      headerKind: 'text',
+      headerText: 'Hi {{1}}',
+      footer: 'f',
+      body: 'Thank you {{1}}! *Rate us*',
+    });
+    expect(p.buttons).toEqual([{ kind: 'url', text: 'Go' }]);
+  });
+
+  it('draws a media header as media and only shows an image sample for an image', () => {
+    expect(previewOfSummary(summary({ attachmentType: 'video' })).headerKind).toBe('video');
+    expect(
+      previewOfSummary(summary({ attachmentType: 'image', headerSampleUrl: 'https://x/y.png' }))
+        .headerImageUrl,
+    ).toBe('https://x/y.png');
+    expect(
+      previewOfSummary(summary({ attachmentType: 'video', headerSampleUrl: 'https://x/y.mp4' }))
+        .headerImageUrl,
+    ).toBeNull();
   });
 });

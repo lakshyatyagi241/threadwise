@@ -3,6 +3,8 @@ import { tplStatusSchema } from '@crm/contracts';
 import {
   STATUSES,
   canEdit,
+  isLive,
+  statusGroupOf,
   canRefresh,
   canSubmit,
   categoryTone,
@@ -39,11 +41,30 @@ describe('status model', () => {
     expect(categoryTone(null)).toBe('neutral');
   });
 
-  it('allows editing only before approval or after a rejection', () => {
-    expect(['draft', 'pending', 'rejected'].every((s) => canEdit(s as never))).toBe(true);
-    expect(['approved', 'paused', 'disabled', 'deleted'].some((s) => canEdit(s as never))).toBe(
-      false,
-    );
+  it('allows editing everything but a disabled or missing template, and only the shapes the API builds', () => {
+    expect(
+      ['draft', 'pending', 'rejected', 'approved', 'paused'].every((st) => canEdit(st as never)),
+    ).toBe(true);
+    expect(['disabled', 'deleted'].some((st) => canEdit(st as never))).toBe(false);
+    expect(canEdit('approved', 'carousel')).toBe(false);
+    expect(canEdit('approved', 'media')).toBe(true);
+  });
+
+  it('edits a live template in place only once Meta holds it', () => {
+    expect(isLive('approved', 'M1')).toBe(true);
+    expect(isLive('paused', 'M1')).toBe(true);
+    expect(isLive('approved', null)).toBe(false);
+    expect(isLive('rejected', 'M1')).toBe(false);
+  });
+
+  it("groups statuses the way the library's tabs count them", () => {
+    expect(statusGroupOf('approved')).toBe('approved');
+    expect(statusGroupOf('pending')).toBe('pending');
+    expect(statusGroupOf('draft')).toBe('pending');
+    expect(statusGroupOf('rejected')).toBe('rejected');
+    expect(statusGroupOf('paused')).toBe('rejected');
+    expect(statusGroupOf('disabled')).toBe('rejected');
+    expect(statusGroupOf('deleted')).toBeNull();
   });
 
   it('retries a submit for a draft or a rejected template only', () => {

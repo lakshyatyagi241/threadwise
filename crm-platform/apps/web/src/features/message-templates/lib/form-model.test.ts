@@ -10,6 +10,7 @@ import {
   contractIssues,
   hasHeaderFile,
   initialState,
+  locationOf,
   previewOf,
   sanitizeName,
   stateFromDetail,
@@ -190,5 +191,43 @@ describe('editing a saved template', () => {
     expect(p.headerImageUrl).toBe('https://cdn.test/a.png');
     expect(p.footer).toBe('Bye');
     expect(p.buttons).toEqual([{ kind: 'url', text: 'Shop' }]);
+  });
+});
+
+describe('location header', () => {
+  const pin = (over: Partial<FormState> = {}) =>
+    filled({ headerKind: 'location', latitude: '19.0760', longitude: '72.8777', ...over });
+
+  it('reads the typed coordinates, and refuses empty, non-numeric or out-of-range ones', () => {
+    expect(locationOf(pin())).toEqual({
+      latitude: 19.076,
+      longitude: 72.8777,
+      name: null,
+      address: null,
+    });
+    expect(locationOf(pin({ latitude: '' }))).toBeNull();
+    expect(locationOf(pin({ longitude: 'abc' }))).toBeNull();
+    expect(locationOf(pin({ latitude: '91' }))).toBeNull();
+    expect(locationOf(pin({ longitude: '-181' }))).toBeNull();
+  });
+
+  it('sends the pin with the name and address, and only for a location header', () => {
+    const f = toCreateInput(pin({ locationName: ' HQ ', locationAddress: 'Mumbai' }), false);
+    expect(f.attachmentType).toBe('location');
+    expect(f.headerLocation).toEqual({
+      latitude: 19.076,
+      longitude: 72.8777,
+      name: 'HQ',
+      address: 'Mumbai',
+    });
+    expect(
+      toCreateInput(filled({ latitude: '1', longitude: '2' }), false).headerLocation,
+    ).toBeNull();
+    expect(createTemplateInputSchema.safeParse(f).success).toBe(true);
+  });
+
+  it('clears the pin when the attachment changes', () => {
+    const s = withHeaderKind(pin({ locationName: 'HQ' }), 'image');
+    expect([s.latitude, s.longitude, s.locationName, s.locationAddress]).toEqual(['', '', '', '']);
   });
 });

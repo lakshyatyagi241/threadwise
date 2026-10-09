@@ -7,6 +7,7 @@ import {
   type CreateTemplateInput,
   type LintTemplateInput,
   type ListTemplatesQuery,
+  type SubmitTemplateInput,
   type SyncTemplatesInput,
   type TemplateDetail,
   type UpdateTemplateInput,
@@ -23,18 +24,48 @@ export const KEYS = {
   lint: ['tpl', 'lint'] as const,
 };
 
-export const PAGE_SIZE = 30;
+export const PAGE_SIZE_LIBRARY = 8;
 
-export type LibraryFilters = Pick<ListTemplatesQuery, 'status' | 'category' | 'connectionId' | 'q'>;
+export type LibraryFilters = Pick<
+  ListTemplatesQuery,
+  'statusGroup' | 'category' | 'connectionId' | 'q' | 'sort'
+>;
 
 /** The library: server-side filters, cursor "load more", no totals. */
 export function useTemplateList(filters: LibraryFilters) {
   return useCursorList(KEYS.list, '/templates', templateSummarySchema, {
-    limit: PAGE_SIZE,
-    status: filters.status,
+    limit: PAGE_SIZE_LIBRARY,
+    statusGroup: filters.statusGroup,
+    sort: filters.sort,
     category: filters.category,
     connectionId: filters.connectionId,
     q: filters.q || undefined,
+  });
+}
+
+/** The tab counts and "Showing N of M": Reference's sidebar, recounted whenever the library changes. */
+export function useTemplateCounts(filters: LibraryFilters) {
+  return useQuery({
+    queryKey: [
+      ...KEYS.all,
+      'counts',
+      filters.statusGroup,
+      filters.category,
+      filters.connectionId,
+      filters.q,
+    ],
+    queryFn: ({ signal }) =>
+      templatesApi.counts(
+        {
+          statusGroup: filters.statusGroup,
+          category: filters.category,
+          connectionId: filters.connectionId,
+          q: filters.q,
+        },
+        signal,
+      ),
+    placeholderData: keepPreviousData,
+    retry: false,
   });
 }
 
@@ -48,7 +79,7 @@ export function useConnections() {
   });
 }
 
-/** The detail follows a template waiting for Meta's review every 15 s, and stops once it has an answer. */
+/** The detail follows a template waiting for Meta's review every 30 s, and stops once it has an answer. */
 export function useTemplate(id: string, opts: { poll?: boolean } = {}) {
   return useQuery({
     queryKey: KEYS.detail(id),
@@ -99,7 +130,10 @@ export const useCreateTemplate = () =>
 export const useUpdateTemplate = (id: string) =>
   useAction((input: UpdateTemplateInput) => templatesApi.update(id, input));
 export const useDeleteTemplate = () => useAction((id: string) => templatesApi.remove(id));
-export const useSubmitTemplate = () => useAction((id: string) => templatesApi.submit(id));
+export const useSubmitTemplate = () =>
+  useAction((v: { id: string } & SubmitTemplateInput) =>
+    templatesApi.submit(v.id, v.connectionId ? { connectionId: v.connectionId } : {}),
+  );
 export const useRefreshTemplate = () => useAction((id: string) => templatesApi.refresh(id));
 export const useSyncTemplates = () =>
   useAction((input: SyncTemplatesInput) => templatesApi.sync(input));
