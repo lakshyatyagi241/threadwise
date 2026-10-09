@@ -204,3 +204,53 @@ describe('presigned GET', () => {
 });
 
 afterEach(() => undefined);
+
+describe('media destination env fallback', () => {
+  const settings = {
+    values: async () => SET_GROUP_SCHEMAS.storage.parse({ enabled: false }),
+    secret: async () => null,
+  } as never;
+  const env = (driver: string): Record<string, unknown> => ({
+    MEDIA_STORAGE_DRIVER: driver,
+    S3_ENDPOINT: 'http://minio:9000/',
+    S3_REGION: 'us-east-1',
+    S3_BUCKET_MEDIA: 'crm-media',
+    S3_ACCESS_KEY_ID: 'AK',
+    S3_SECRET_ACCESS_KEY: 'SK',
+    S3_FORCE_PATH_STYLE: true,
+  });
+  const config = (e: Record<string, unknown>) => ({ get: (k: string) => e[k] }) as never;
+
+  it('uses the deployment bucket only when the driver is s3 and nothing is saved', async () => {
+    const on = await new MediaStorageService(settings, config(env('s3'))).destination();
+    expect(on.disk).toBe('cloud');
+    expect(on.target?.bucket).toBe('crm-media');
+    expect(on.target?.endpoint).toBe('http://minio:9000');
+    expect(on.visibility).toBe('private');
+    const off = await new MediaStorageService(settings, config(env('local'))).destination();
+    expect(off.disk).toBe('local');
+  });
+
+  it('creates a missing bucket once and retries the write', async () => {
+    const calls: string[] = [];
+    const orig = globalThis.fetch;
+    globalThis.fetch = (async (url: string, init: { method: string }) => {
+      calls.push(`${init.method} ${new URL(url).pathname}`);
+      const first = calls.length === 1;
+      return new Response(null, { status: first ? 404 : 200 });
+    }) as never;
+    try {
+      const svc = new MediaStorageService(settings, config(env('s3')));
+      await expect(svc.put('chat/1/a.png', Buffer.from('x'), 'image/png')).resolves.toEqual({
+        key: 'chat/1/a.png',
+      });
+      expect(calls).toEqual([
+        'PUT /crm-media/chat/1/a.png',
+        'PUT /crm-media/',
+        'PUT /crm-media/chat/1/a.png',
+      ]);
+    } finally {
+      globalThis.fetch = orig;
+    }
+  });
+});
