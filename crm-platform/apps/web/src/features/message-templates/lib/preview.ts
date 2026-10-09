@@ -1,17 +1,26 @@
 import type { TemplateSummary } from '@crm/contracts';
-import type { PreviewModel } from './form-model';
+import { buttonToRow } from './buttons';
+import type { HeaderKind, PreviewModel } from './form-model';
 
-/** The library card shows what the list carries: the body preview. Header, footer and buttons live on the detail page. */
+/**
+ * A saved template as the phone shows it: every part, with `{{variable}}` tokens left as typed (WaDesk's library card and
+ * detail page show the pills, not sample values).
+ */
 export function previewOfSummary(s: TemplateSummary): PreviewModel {
+  const media = s.attachmentType !== 'none';
+  const headerKind: HeaderKind = media ? s.attachmentType : s.header ? 'text' : 'none';
   return {
     auth: s.metaCategory === 'AUTHENTICATION',
     language: s.language,
-    headerKind: 'none',
-    headerText: '',
-    headerImageUrl: null,
-    body: s.bodyPreview,
-    footer: '',
-    buttons: [],
+    headerKind,
+    headerText: headerKind === 'text' ? (s.header ?? '') : '',
+    headerImageUrl: s.attachmentType === 'image' ? s.headerSampleUrl : null,
+    body: s.body,
+    footer: s.footer ?? '',
+    buttons: s.buttons.map((b) => {
+      const r = buttonToRow(b);
+      return { kind: r.kind, text: r.text };
+    }),
     expiry: null,
   };
 }

@@ -3,13 +3,23 @@
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import type { TemplateSummary } from '@crm/contracts';
-import { Button, Card } from '@crm/ui';
-import { canEdit } from '../lib/status-model';
+import { cn } from '@crm/ui';
+import { canEdit, statusGroupOf } from '../lib/status-model';
 import { previewOfSummary } from '../lib/preview';
-import { CategoryBadge, QualityBadge, StatusBadge } from './badges';
-import { MessageBubble } from './message-bubble';
+import { CategoryPill } from './badges';
+import { ChatIcon, EyeIcon, PhoneIcon, TrashIcon } from './icons';
+import { MessageBubble } from './wa-bubble';
 
-/** One template in the library: identity, status, a bubble preview, and the actions the status allows. */
+const DOT = {
+  approved: 'bg-success',
+  pending: 'bg-warning',
+  rejected: 'bg-danger',
+} as const;
+
+/**
+ * One template in the library, laid out like WaDesk's card: name and category pill, a line of chips (engine, status, type,
+ * category, number), the WhatsApp mock-up, the rejection reason, and Edit template / view / delete.
+ */
 export function TemplateCard({
   template: tpl,
   connectionLabel,
@@ -27,58 +37,101 @@ export function TemplateCard({
   onDelete: (t: TemplateSummary) => void;
 }) {
   const t = useTranslations('message-templates.card');
+  const ts = useTranslations('message-templates.status');
+  const tc = useTranslations('message-templates.category');
+  const group = statusGroupOf(tpl.status);
   return (
-    <Card className="flex flex-col gap-3" data-testid="template-card">
-      <div className="flex items-start justify-between gap-2">
-        <h2 className="min-w-0 break-words text-sm font-semibold">
+    <article
+      className="flex w-full flex-col rounded-[14px] border border-border bg-background p-4 transition hover:-translate-y-px hover:border-brand hover:shadow-md"
+      data-testid="template-card"
+      data-status={tpl.status}
+    >
+      <div className="mb-2 flex items-start justify-between gap-2">
+        <h2 className="min-w-0 break-words text-[13px] font-semibold">
           <Link href={`/templates/${tpl.id}`} className="hover:underline focus-visible:underline">
             {tpl.name}
           </Link>
         </h2>
-        <CategoryBadge category={tpl.metaCategory} />
+        <CategoryPill category={tpl.metaCategory} />
       </div>
-      <div className="flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
-        <StatusBadge status={tpl.status} />
-        {tpl.status === 'approved' && <QualityBadge score={tpl.qualityScore} />}
-        <span className="font-mono">{tpl.language}</span>
+
+      <div className="mb-2 flex flex-wrap items-center gap-1.5 font-mono text-[10.5px] text-muted-foreground">
+        <span className="inline-flex items-center gap-1 rounded-full bg-brand/10 px-1.5 py-0.5 font-semibold text-brand">
+          <ChatIcon className="size-3" />
+          {t('engine')}
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <span
+            className={cn('size-1.5 rounded-full', group ? DOT[group] : 'bg-border')}
+            aria-hidden="true"
+          />
+          {ts(tpl.status)}
+        </span>
+        <span aria-hidden="true">·</span>
+        <span>
+          {t.has(`type.${tpl.templateType}`) ? t(`type.${tpl.templateType}`) : tpl.templateType}
+        </span>
+        {tpl.metaCategory && (
+          <>
+            <span aria-hidden="true">·</span>
+            <span>{tc(tpl.metaCategory)}</span>
+          </>
+        )}
         {connectionLabel && (
           <>
             <span aria-hidden="true">·</span>
-            <span className="max-w-40 truncate" title={connectionLabel}>
+            <span
+              className="inline-flex max-w-[150px] items-center gap-1 truncate font-semibold text-brand"
+              title={connectionLabel}
+            >
+              <PhoneIcon className="size-3 shrink-0" />
               {connectionLabel}
             </span>
           </>
         )}
       </div>
-      <div className="flex-1 rounded-xl border border-border bg-muted p-3">
+
+      <div className="flex flex-1 flex-col gap-1 overflow-hidden rounded-xl border border-border bg-muted p-3">
         <MessageBubble model={previewOfSummary(tpl)} maxButtons={3} />
       </div>
+
       {tpl.status === 'rejected' && tpl.rejectionReason && (
-        <p className="rounded-md bg-danger/10 px-2 py-1 text-xs text-danger break-words">
-          {t('rejected', { reason: tpl.rejectionReason })}
-        </p>
+        <div className="mt-2 break-words rounded-lg border border-danger/30 bg-danger/10 px-2.5 py-1.5 text-[11px] text-danger">
+          <b>{t('rejectedLabel')}</b> {tpl.rejectionReason}
+        </div>
       )}
-      <div className="flex flex-wrap gap-2">
-        <Link
-          href={`/templates/${tpl.id}`}
-          className="inline-flex h-8 items-center rounded-md border border-border px-3 text-sm font-medium hover:bg-muted"
-        >
-          {t('view')}
-        </Link>
-        {mayEdit && canEdit(tpl.status) && (
+
+      <div className="mt-3 flex items-center gap-2">
+        {mayEdit && canEdit(tpl.status, tpl.templateType) ? (
           <Link
             href={`/templates/${tpl.id}/edit`}
-            className="inline-flex h-8 items-center rounded-md border border-border px-3 text-sm font-medium hover:bg-muted"
+            className="flex-1 rounded-full border border-dashed border-brand py-[7px] text-center text-[11px] font-medium text-brand transition hover:border-solid hover:bg-brand hover:text-brand-foreground"
           >
             {t('edit')}
           </Link>
+        ) : (
+          <span className="flex-1" />
         )}
+        <Link
+          href={`/templates/${tpl.id}`}
+          title={t('viewTitle')}
+          aria-label={t('viewTitle')}
+          className="grid size-8 place-items-center rounded-full border border-border bg-background transition hover:border-brand hover:bg-brand/10 hover:text-brand"
+        >
+          <EyeIcon className="size-3.5" />
+        </Link>
         {mayDelete && (
-          <Button size="sm" variant="ghost" className="text-danger" onClick={() => onDelete(tpl)}>
-            {t('delete')}
-          </Button>
+          <button
+            type="button"
+            title={t('delete')}
+            aria-label={t('deleteNamed', { name: tpl.name })}
+            onClick={() => onDelete(tpl)}
+            className="grid size-8 place-items-center rounded-full border border-border bg-background transition hover:border-danger hover:bg-danger/10 hover:text-danger"
+          >
+            <TrashIcon className="size-3.5" />
+          </button>
         )}
       </div>
-    </Card>
+    </article>
   );
 }

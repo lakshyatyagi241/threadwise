@@ -19,12 +19,16 @@ import {
   createTemplateInputSchema,
   lintTemplateInputSchema,
   listTemplatesQuerySchema,
+  submitTemplateInputSchema,
   syncTemplatesInputSchema,
+  templateCountsQuerySchema,
   updateTemplateInputSchema,
   type CreateTemplateInput,
   type LintTemplateInput,
   type ListTemplatesQuery,
+  type SubmitTemplateInput,
   type SyncTemplatesInput,
+  type TemplateCountsQuery,
   type UpdateTemplateInput,
 } from '@crm/contracts';
 import { ActorKinds, Idempotent, RequirePermission } from '../../common/decorators';
@@ -56,6 +60,15 @@ export class TemplatesController {
   }
 
   // Literal routes first: ':id' would otherwise take them for an id.
+
+  @Get('counts')
+  @RequirePermission('tpl.templates.read')
+  @ApiOperation({
+    summary: "The numbers on the library's tabs, and the size of the filtered result",
+  })
+  async counts(@Query(zodPipe(templateCountsQuerySchema)) query: TemplateCountsQuery) {
+    return this.templates.counts(query);
+  }
 
   @Post('lint')
   @HttpCode(HttpStatus.OK)
@@ -114,9 +127,10 @@ export class TemplatesController {
   @Idempotent()
   @RequirePermission('tpl.templates.create')
   @ApiOperation({
-    summary: 'Edit a template that is pending, rejected or a draft',
+    summary:
+      'Edit a template: a draft, one in review, a rejected one, or a live (approved or paused) one',
     description:
-      'With `submit`, the copy on Meta is deleted by name and created again (Meta has no in-place edit for a template under review).',
+      'With `submit`, a live template is edited in place on Meta (it goes back to review; its name and language cannot change); a pending or rejected one has its Meta copy deleted by name and created again.',
   })
   async update(
     @Param('id', ParseUUIDPipe) id: string,
@@ -140,8 +154,11 @@ export class TemplatesController {
   @Idempotent()
   @RequirePermission('tpl.templates.sync')
   @ApiOperation({ summary: 'Send a saved template to Meta, or retry after a refusal' })
-  async submit(@Param('id', ParseUUIDPipe) id: string) {
-    return this.templates.submit(id);
+  async submit(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body(zodPipe(submitTemplateInputSchema.default({}))) body: SubmitTemplateInput,
+  ) {
+    return this.templates.submit(id, body);
   }
 
   @Post(':id/refresh')
