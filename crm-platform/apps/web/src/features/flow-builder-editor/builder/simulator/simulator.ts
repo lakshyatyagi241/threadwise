@@ -544,6 +544,14 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
           }),
         );
         return advance('out');
+      case 'api_library': {
+        // The call itself needs the workspace's saved API and a contact; the test chat does not run it.
+        const saveAs = str(d.save) || 'api_response';
+        sys(
+          `call saved API "${str(d.apiName) || '(none picked)'}" → {{${saveAs}}} (skipped in test, leaves by success)`,
+        );
+        return advance('success');
+      }
       case 'end':
         sys(tx('flowEnded'));
         stop();

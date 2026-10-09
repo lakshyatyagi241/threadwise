@@ -1961,6 +1961,10 @@
           "label": "WhatsApp form",
           "description": "Send a published Meta form"
         },
+        "api_library": {
+          "label": "API (from library)",
+          "description": "Call a saved API from the API Library"
+        },
         "google_sheets": {
           "label": "Google Sheets",
           "description": "Write or read a row"
