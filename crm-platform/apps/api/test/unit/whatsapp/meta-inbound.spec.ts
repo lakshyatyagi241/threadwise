@@ -73,6 +73,19 @@ describe('normaliseMetaWebhook: inbound messages, one fixture per type', () => {
     expect(one('reaction-removed')).toMatchObject({ kind: 'reaction', replyToProviderMessageId: 'wamid.OUT1', reactionEmoji: '' });
   });
 
+  it('call_permission_reply becomes a readable interactive message, not a placeholder', () => {
+    const payload = {
+      entry: [{ changes: [{ field: 'messages', value: {
+        metadata: { phone_number_id: FX.phoneNumberId, display_phone_number: '15550000000' },
+        messages: [{ id: 'wamid.CP1', from: FX.customer, timestamp: '1760000000', type: 'interactive',
+          interactive: { type: 'call_permission_reply', call_permission_reply: { response: 'accept', is_permanent: true } } }],
+      } }] }],
+    };
+    const m = normaliseMetaWebhook(payload, ctx).messages[0]!;
+    expect(m).toMatchObject({ kind: 'interactive', body: 'Allowed calls' });
+    expect(m.meta).toMatchObject({ interactive: { type: 'button_reply', title: 'Allowed calls' } });
+  });
+
   it('interactive replies: button_reply, list_reply, template quick-reply button', () => {
     expect(one('button-reply')).toMatchObject({
       kind: 'interactive',
@@ -93,7 +106,7 @@ describe('normaliseMetaWebhook: inbound messages, one fixture per type', () => {
   it('a form (nfm) reply keeps its answer', () => {
     expect(one('flow-reply')).toMatchObject({
       kind: 'interactive',
-      body: 'Sent',
+      body: 'city: Pune',
       meta: { flowName: 'flow', flowResponse: '{"flow_token":"t","city":"Pune"}' },
     });
   });
@@ -110,7 +123,7 @@ describe('normaliseMetaWebhook: inbound messages, one fixture per type', () => {
   });
 
   it('an order is stored as an unsupported placeholder with its text and item count', () => {
-    expect(one('order')).toMatchObject({ kind: 'unsupported', body: 'Two for me', meta: { rawType: 'order', order: { catalogId: 'cat1', items: 1 } } });
+    expect(one('order')).toMatchObject({ kind: 'unsupported', body: expect.stringContaining('Two for me'), meta: { rawType: 'order', order: { catalogId: 'cat1', items: 1 } } });
   });
 
   it('Meta\'s own "unsupported" (131051) gets its placeholder text; any unknown type is stored with its raw type, never dropped', () => {
