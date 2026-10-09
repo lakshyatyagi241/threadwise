@@ -165,15 +165,20 @@ export function CampaignsScreen() {
         />
 
         <section className="min-w-0">
-          <div className="mb-5 flex flex-wrap items-end justify-between gap-4">
+          <div
+            data-testid="campaigns-sticky-header"
+            className="sticky top-14 z-20 -mx-2 mb-4 flex flex-wrap items-end justify-between gap-4 border-b border-border/60 bg-background/95 px-2 pb-3 pt-2 backdrop-blur"
+          >
             <div>
-              <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+              <div className="mb-1 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
                 {t('workspace')} · {session.org.name}
               </div>
-              <h1 className="text-3xl font-normal leading-none tracking-tight lg:text-[44px]">
+              <h1 className="text-2xl font-normal leading-none tracking-tight lg:text-[32px]">
                 {t('title')} <span className="italic text-brand">{t('titleAccent')}</span>
               </h1>
-              <p className="mt-2 max-w-xl text-sm text-muted-foreground">{t('intro')}</p>
+              <p className="mt-1 hidden max-w-xl text-sm text-muted-foreground xl:block">
+                {t('intro')}
+              </p>
             </div>
             <div className="flex shrink-0 items-center gap-2">
               <Button variant="secondary" className="rounded-full" onClick={refresh}>
