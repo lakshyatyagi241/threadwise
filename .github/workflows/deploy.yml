@@ -86,6 +86,14 @@ jobs:
           cache-from: type=gha,scope=web
           cache-to: type=gha,scope=web,mode=max
 
+      # QA task 39: the images that are about to ship are scanned first; a fixable HIGH or CRITICAL finding stops the release.
+      - name: Scan the images before they ship
+        run: |
+          for image in "desk-api:${{ steps.tag.outputs.tag }}" "desk-web:${{ steps.tag.outputs.tag }}"; do
+            docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD/.trivyignore:/.trivyignore:ro" \
+              aquasec/trivy:0.75.0 image --scanners vuln --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 --ignorefile /.trivyignore "$image"
+          done
+
       - name: Prepare SSH
         run: |
           install -m 700 -d ~/.ssh

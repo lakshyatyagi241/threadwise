@@ -1,0 +1,5 @@
+# Reviewed exceptions for the image scan (QA task 39). One CVE id per line, with a reason and an end date in the comment above it.
+# Empty on purpose. A fixable HIGH or CRITICAL finding is fixed (upgrade the base image, remove the package), not ignored.
+# Example of the format:
+#   # Reason a reviewer can check. Ends 2026-12-31.
+#   CVE-0000-00000
