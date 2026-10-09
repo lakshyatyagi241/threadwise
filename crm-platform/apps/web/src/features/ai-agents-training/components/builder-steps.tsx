@@ -327,7 +327,7 @@ export function SafetyStep({ s, set, disabled }: Omit<StepProps, 'flash'>) {
           checked={s.handoffEnabled}
           disabled={disabled}
           onChange={(e) => set({ handoffEnabled: e.target.checked })}
-          className="size-4 shrink-0 accent-[var(--color-brand,#075e54)]"
+          className="size-4 shrink-0 accent-[var(--color-brand,#3214db)]"
         />
       </label>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
