@@ -22,6 +22,7 @@ const state = vi.hoisted(() => ({
     refetch: () => undefined,
   },
 }));
+vi.mock('next-intl', () => ({ useTranslations: () => (key: string) => key }));
 vi.mock('@/features/api-library', () => ({ useApiLibraryOptions: () => state.options }));
 
 const ID = '00000000-0000-4000-8000-000000000001';
