@@ -117,7 +117,7 @@ export function CampaignCard({
   const n = c.counts;
   /** A draft made by the "Create broadcast" wizard resumes there, not in the classic builder (which cannot show it). */
   const wizardDraft = c.wizard && c.status === 'draft';
-  const editHref = wizardDraft ? `/campaigns/wizard/${c.id}` : `/campaigns/${c.id}/edit`;
+  const editHref = wizardDraft ? `/campaigns/create?draft=${c.id}` : `/campaigns/${c.id}/edit`;
   const titleHref = wizardDraft ? editHref : `/campaigns/${c.id}`;
   /** A launched wizard broadcast is not edited in the classic builder either. */
   const editable = c.wizard ? wizardDraft : can.edit(c.status);

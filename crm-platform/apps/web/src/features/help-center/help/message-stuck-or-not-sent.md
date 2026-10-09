@@ -4,7 +4,7 @@ title: A message is stuck or was not sent
 summary: Find out why a WhatsApp message stays on Sending or shows Not sent, in the Team inbox, broadcasts, campaigns and scheduled messages.
 area: troubleshooting
 order: 20
-documents: [nav:inbox, nav:broadcasts, nav:campaigns]
+documents: [nav:inbox, nav:campaigns]
 keywords: [stuck, queued, sending, not sent, failed, retry, undelivered, wallet, balance]
 ---
 
@@ -51,7 +51,7 @@ Some problems are shown at once in the reply box instead of under a message: the
 4. **Look for a Paused note on the broadcast.** It says why. When sending is halted, the broadcast restarts by itself once the halt is lifted. If it only says Paused, select **Resume**.
 5. **Remember that a number sends one broadcast at a time.** A second broadcast on the same number waits and checks again every 15 seconds. Messages also go out one by one with a short gap, about 3 seconds by default, so a large audience takes time. The counts move while it runs.
 6. **Check a schedule's status.** A schedule marked **Queued** is simply waiting for its send time, and **Run now** sends it early. A schedule that failed shows the reason on its page, and **Retry with new time** starts it again. See [Scheduled messages](help:scheduled-messages-overview).
-7. **Open the Failures tab of a broadcast or campaign.** It lists the most common reasons. By default, failed broadcast recipients are retried by themselves up to 3 more times, waiting 60 seconds, then 2 minutes, then 4 minutes. A recipient with no usable phone number, or a number WhatsApp says cannot be reached, is not retried. After that, fix the cause and use **Retry failed**. See [Broadcasts](help:broadcasts-overview) and [Campaigns](help:campaigns-overview).
+7. **Open the Failures tab of a campaign.** It lists the most common reasons. By default, failed recipients are retried by themselves up to 3 more times, waiting 60 seconds, then 2 minutes, then 4 minutes. A recipient with no usable phone number, or a number WhatsApp says cannot be reached, is not retried. After that, fix the cause and use **Retry failed**. See [Campaigns](help:campaigns-overview).
 
 ## If none of this explains it
 

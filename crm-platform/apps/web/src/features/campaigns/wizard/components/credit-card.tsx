@@ -9,6 +9,7 @@ import { ErrorBlock, Skeleton, WizardCard } from './parts';
 export interface CreditQuery {
   data?: WizardCreditCheck;
   isPending: boolean;
+  isFetching?: boolean;
   isError: boolean;
   error: unknown;
   refetch: () => unknown;
@@ -67,8 +68,8 @@ export function CreditCard({ credit }: { credit: CreditQuery }) {
               <dd className="text-lg font-semibold tabular-nums">{money(c.balanceMinor)}</dd>
             </div>
             <div>
-              <dt className="text-xs text-muted-foreground">{t('estimatedCost')}</dt>
-              <dd className="text-lg font-semibold tabular-nums">{money(c.estimatedCostMinor)}</dd>
+              <dt className="text-xs text-muted-foreground">{t('estimatedCostFull')}</dt>
+              <dd className="text-lg font-semibold tabular-nums">{money(c.fullCostMinor)}</dd>
             </div>
             <div>
               <dt className="text-xs text-muted-foreground">{t('messages')}</dt>
@@ -77,6 +78,14 @@ export function CreditCard({ credit }: { credit: CreditQuery }) {
               </dd>
             </div>
           </dl>
+          <p className="text-sm font-medium" data-testid="charged-now">
+            {c.billingMode === 'plan'
+              ? t('chargedPlan', {
+                  amount: money(c.estimatedCostMinor),
+                  covered: c.recipients - c.chargeableMessages,
+                })
+              : t('chargedWallet', { amount: money(c.estimatedCostMinor) })}
+          </p>
           <p className="text-sm text-muted-foreground">
             {c.billingMode === 'plan'
               ? t('modePlan', { count: c.chargeableMessages })
@@ -118,7 +127,7 @@ export function CreditCard({ credit }: { credit: CreditQuery }) {
                         {money(l.unitPriceMinor)}
                       </td>
                       <td className="ps-3 py-1.5 text-end tabular-nums">
-                        {money(l.subtotalMinor)}
+                        {money(l.fullSubtotalMinor)}
                       </td>
                     </tr>
                   ))}

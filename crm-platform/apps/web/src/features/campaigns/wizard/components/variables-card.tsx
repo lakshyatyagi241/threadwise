@@ -230,6 +230,8 @@ export function VariablesCard({
   disabled,
   onVariable,
   onVariables,
+  title,
+  id = 'review-variables',
 }: {
   template: WizardTemplate | null;
   variables: WizardVariables;
@@ -240,6 +242,9 @@ export function VariablesCard({
   disabled?: boolean;
   onVariable: (slot: string, source: WizardVariableSource | null) => void;
   onVariables: (variables: WizardVariables) => void;
+  /** Replaces the card's title (the second card of an A/B test names its variant). */
+  title?: string;
+  id?: string;
 }) {
   const t = useTranslations('campaigns.wizard.review');
   const slots = template?.slots ?? [];
@@ -259,7 +264,7 @@ export function VariablesCard({
   }, [template?.id, properties.length]);
 
   return (
-    <WizardCard title={t('variablesTitle')} hint={t('variablesHint')} id="review-variables">
+    <WizardCard title={title ?? t('variablesTitle')} hint={t('variablesHint')} id={id}>
       {!template ? (
         <Alert tone="warning">{t('noTemplate')}</Alert>
       ) : slots.length === 0 ? (

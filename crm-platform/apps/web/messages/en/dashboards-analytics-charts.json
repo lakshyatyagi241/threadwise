@@ -110,7 +110,7 @@
       },
       "kicker": "Operator dashboard",
       "calm": "Workspace is calm.",
-      "running": "{n, plural, one {# broadcast is running.} other {# broadcasts are running.}}",
+      "running": "{n, plural, one {# campaign is running.} other {# campaigns are running.}}",
       "export": "Export",
       "newCampaign": "New campaign",
       "contacts": {
@@ -152,11 +152,11 @@
         "title": "Active campaigns",
         "summary": "{running} running - {scheduled} scheduled - {paused} paused",
         "viewAll": "View all {n}",
-        "untitled": "Untitled broadcast",
+        "untitled": "Untitled campaign",
         "delivered": "{done} / {total} delivered",
-        "emptyTitle": "No active broadcasts",
+        "emptyTitle": "No active campaigns",
         "emptyBody": "Spin one up to start sending to a contact group.",
-        "new": "New broadcast",
+        "new": "New campaign",
         "status": {
           "processing": "Sending",
           "sending": "Sending",
@@ -265,7 +265,7 @@
         "title": "Quick actions",
         "soon": "Soon",
         "broadcast": {
-          "label": "New broadcast",
+          "label": "New campaign",
           "hint": "to a contact group"
         },
         "flow": {

@@ -23,7 +23,8 @@ import { WizardAudienceService } from './wizard-audience.service';
 import { templateCategory } from './wizard-read.service';
 import { WizardReviewService } from './wizard-review.service';
 import { WizardRepository, type TemplateListRow } from './wizard.repository';
-import { blankCampaignFor } from './wizard-blank';
+import { blankCampaignFor, campaignColumnsOf } from './wizard-blank';
+import { assignVariants } from '../campaign-rules';
 
 /** Recipient rows are written in one transaction with the campaign; past this the audience must be narrowed (the classic builder caps at the same size). */
 export const WIZARD_MAX_RECIPIENTS = 100_000;
@@ -176,6 +177,22 @@ export class WizardRunService {
   async createRun(tx: Tx, orgId: number, i: RunInput): Promise<RunResult> {
     const { sender, count } = await this.preflight(tx, orgId, i.draft, i.template);
 
+    // A/B: variant B's template, checked here too so every run of a series (not only the launch) refuses a template that is gone.
+    let templateB: TemplateListRow | undefined;
+    if (i.draft.abTesting) {
+      templateB = i.draft.templateIdB
+        ? await this.repo.templateByUuid(tx, orgId, i.draft.templateIdB)
+        : undefined;
+      if (!templateB) {
+        throw new AppError(
+          ERROR_CODES.CAMP_TEMPLATE_NOT_ALLOWED,
+          'The variant B template of this A/B test is not available.',
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        );
+      }
+    }
+    const options = campaignColumnsOf(i.draft, templateB?.id ?? null);
+
     const id =
       i.existingId ??
       (await this.campaigns.insert(
@@ -187,26 +204,36 @@ export class WizardRunService {
           deviceId: sender.deviceId,
           templateId: i.template.id,
           createdBy: i.createdBy,
+          extra: options,
         }),
       ));
 
     // CSV numbers that are not contacts yet become contacts now, so the recipient list below (the same function the count used) has them.
     const csv = await this.audience.materializeCsv(tx, orgId, i.draft.audience);
 
+    // The whole audience first, so an A/B split is exact over everyone (as the classic create does) rather than per page.
+    const everyone: number[] = [];
     let after = 0;
-    let written = 0;
     for (;;) {
       const ids = await this.audience.recipientIds(tx, orgId, i.draft.audience, after, WRITE_CHUNK);
       if (ids.length === 0) break;
+      everyone.push(...ids);
+      after = ids[ids.length - 1]!;
+    }
+    const variants = options.abTesting
+      ? assignVariants(everyone, i.draft.abSplit, Math.random)
+      : new Map<number, 'A' | 'B'>();
+    for (let from = 0; from < everyone.length; from += WRITE_CHUNK) {
       await this.campaigns.insertRecipients(
         tx,
         orgId,
         id,
-        ids.map((contactId) => ({ contactId, variant: null })),
+        everyone
+          .slice(from, from + WRITE_CHUNK)
+          .map((contactId) => ({ contactId, variant: variants.get(contactId) ?? null })),
       );
-      written += ids.length;
-      after = ids[ids.length - 1]!;
     }
+    const written = everyone.length;
 
     const zone = i.timezone;
     await this.repo.setLaunch(tx, orgId, id, {
@@ -232,6 +259,7 @@ export class WizardRunService {
       runAt: i.runAt,
       seriesId: i.series?.id ?? null,
       occurrenceNo: i.series?.occurrenceNo ?? null,
+      options,
       retryEnabled: i.draft.retries.enabled,
       retryUntil: i.draft.retries.enabled ? retryWindowCloses(i.draft.retries, zone) : null,
     });

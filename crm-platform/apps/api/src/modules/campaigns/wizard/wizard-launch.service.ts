@@ -88,7 +88,19 @@ export class WizardLaunchService {
             buttons: template.buttons,
           }).map((s) => s.slot)
         : [];
-      const issues = wizardLaunchIssues(draft, { slots, now });
+      const templateB =
+        draft.abTesting && draft.templateIdB
+          ? await this.repo.templateByUuid(tx, orgId, draft.templateIdB)
+          : undefined;
+      const slotsB = templateB
+        ? templateSlots({
+            templateBody: templateB.body,
+            header: templateB.header,
+            variableMap: templateB.variableMap,
+            buttons: templateB.buttons,
+          }).map((s) => s.slot)
+        : [];
+      const issues = wizardLaunchIssues(draft, { slots, slotsB, now });
       if (
         template === undefined &&
         draft.templateId &&
@@ -108,6 +120,17 @@ export class WizardLaunchService {
       // The classic gates: an approved, sendable template, and groups and segments that exist in this workspace.
       const via = await this.runs.sender(tx, orgId, template, draft.senderKey);
       await this.campaigns.assertTemplateUsable(tx, orgId, template.uuid, via.provider);
+      if (draft.abTesting) {
+        if (!templateB) {
+          throw new AppError(
+            ERROR_CODES.CAMP_WIZARD_INCOMPLETE,
+            'The broadcast is not complete.',
+            HttpStatus.UNPROCESSABLE_ENTITY,
+            [{ path: 'templateIdB', message: 'template_b_required' }],
+          );
+        }
+        await this.campaigns.assertTemplateUsable(tx, orgId, templateB.uuid, via.provider);
+      }
       await this.drafts.assertSources(tx, orgId, draft.audience);
       await this.drafts.assertCsv(tx, orgId, draft.audience);
 

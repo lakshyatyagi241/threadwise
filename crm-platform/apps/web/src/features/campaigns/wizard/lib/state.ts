@@ -29,6 +29,17 @@ export type WizardAction =
   | { type: 'audience'; patch: Partial<WizardAudience> }
   | { type: 'variable'; slot: string; source: WizardVariableSource | null }
   | { type: 'variables'; variables: WizardVariables }
+  /** The campaign builder's options: A/B test and split, auto-end, Smart Delivery, link tracking. */
+  | {
+      type: 'options';
+      patch: Partial<
+        Pick<WizardDraft, 'abTesting' | 'abSplit' | 'autoEnd' | 'pacing' | 'trackLinks'>
+      >;
+    }
+  /** Variant B of an A/B test: its template (its mapping keeps what still fits) and its variable mapping. */
+  | { type: 'templateB'; template: WizardTemplate | null }
+  | { type: 'variableB'; slot: string; source: WizardVariableSource | null }
+  | { type: 'variablesB'; variables: WizardVariables }
   | { type: 'schedule'; schedule: WizardSchedule }
   | { type: 'retries'; retries: WizardRetries }
   | { type: 'go'; step: WizardView }
@@ -82,6 +93,28 @@ export function wizardReducer(state: WizardState, action: WizardAction): WizardS
     }
     case 'variables':
       return { ...state, draft: { ...d, variables: action.variables } };
+    case 'options':
+      return { ...state, draft: { ...d, ...action.patch } };
+    case 'templateB': {
+      const templateIdB = action.template?.id ?? null;
+      if (templateIdB === d.templateIdB) return state;
+      return {
+        ...state,
+        draft: {
+          ...d,
+          templateIdB,
+          variablesB: keepMatchingVariables(d.variablesB, action.template),
+        },
+      };
+    }
+    case 'variableB': {
+      const next = { ...d.variablesB };
+      if (action.source) next[action.slot] = action.source;
+      else delete next[action.slot];
+      return { ...state, draft: { ...d, variablesB: next } };
+    }
+    case 'variablesB':
+      return { ...state, draft: { ...d, variablesB: action.variables } };
     case 'schedule':
       return { ...state, draft: { ...d, schedule: action.schedule } };
     case 'retries':

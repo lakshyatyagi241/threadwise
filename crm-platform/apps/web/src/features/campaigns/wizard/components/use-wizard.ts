@@ -15,7 +15,7 @@ import {
   type WizardState,
 } from '../lib/state';
 
-export const wizardPath = (id: string) => `/campaigns/wizard/${id}`;
+export const wizardPath = (id: string) => `/campaigns/create?draft=${id}`;
 
 /**
  * The wizard's state and its saving. `dispatch` applies an action to the draft and hands what changed to the saver, which creates the
@@ -43,7 +43,7 @@ export function useWizard(initial: WizardDraftResponse | null) {
         onSaved: (saved) => {
           setMeta({ id: saved.id, rowVersion: saved.rowVersion });
           // The first save gives the draft its address: later reloads and "Back" land on it, without remounting the wizard.
-          if (typeof window !== 'undefined' && !window.location.pathname.endsWith(saved.id)) {
+          if (typeof window !== 'undefined' && !window.location.search.includes(saved.id)) {
             window.history.replaceState(window.history.state, '', wizardPath(saved.id));
           }
         },

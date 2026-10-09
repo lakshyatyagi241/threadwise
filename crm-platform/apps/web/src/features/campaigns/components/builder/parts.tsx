@@ -84,9 +84,12 @@ export function ChoiceCard({
   title,
   hint,
   compact,
+  disabled,
 }: {
   checked: boolean;
   onSelect: () => void;
+  /** Shown but not selectable (the reason is said next to the group). */
+  disabled?: boolean;
   icon?: ReactNode;
   title: string;
   hint: string;
@@ -97,9 +100,13 @@ export function ChoiceCard({
       type="button"
       role="radio"
       aria-checked={checked}
-      onClick={onSelect}
+      aria-disabled={disabled || undefined}
+      onClick={() => {
+        if (!disabled) onSelect();
+      }}
       className={cn(
         'relative rounded-2xl border text-start transition hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
+        disabled && 'cursor-not-allowed opacity-50 hover:bg-transparent',
         compact ? 'px-3.5 py-3' : 'p-4',
         checked ? 'border-brand bg-brand/5' : 'border-border',
       )}
