@@ -46,6 +46,7 @@
       "allFields": "كل الحقول",
       "success": "{count, number} ناجح",
       "failure": "{count, number} فاشل",
+      "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
       "pending": "{count, number} قيد الانتظار",
       "pendingLabel": "{count, number} عمليات تسليم فاشلة بانتظار إعادة الإرسال",
       "neverDelivered": "لم يُسلَّم شيء بعد",

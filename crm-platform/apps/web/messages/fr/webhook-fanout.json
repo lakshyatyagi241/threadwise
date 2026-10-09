@@ -46,6 +46,7 @@
       "allFields": "Tous les champs",
       "success": "{count, number} OK",
       "failure": "{count, number} en échec",
+      "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
       "pending": "{count, number} en attente",
       "pendingLabel": "{count, number} envois en échec en attente de rejeu",
       "neverDelivered": "Rien n’a encore été envoyé",
