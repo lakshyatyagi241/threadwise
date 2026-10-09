@@ -46,6 +46,7 @@
       "allFields": "Alle velden",
       "success": "{count, number} geslaagd",
       "failure": "{count, number} mislukt",
+      "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
       "pending": "{count, number} in behandeling",
       "pendingLabel": "{count, number} mislukte leveringen wachten op opnieuw afspelen",
       "neverDelivered": "Nog niets geleverd",

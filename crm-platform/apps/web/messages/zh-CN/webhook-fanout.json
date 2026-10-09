@@ -46,6 +46,7 @@
       "allFields": "所有字段",
       "success": "{count, number} 成功",
       "failure": "{count, number} 失败",
+      "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
       "pending": "{count, number} 待处理",
       "pendingLabel": "{count, number} 条失败的投递等待重放",
       "neverDelivered": "尚未投递任何内容",
