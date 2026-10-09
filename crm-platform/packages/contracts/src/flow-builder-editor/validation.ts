@@ -19,6 +19,8 @@ import {
  *    save). WaDesk looks in the Instagram list for an Instagram flow, the Facebook list for a Facebook flow and the
  *    WhatsApp numbers for every other mode, so the caller passes that list's emptiness and the message follows the mode
  *
+ *  - an "API (from library)" node must name the saved API it calls (not a WaDesk rule: the node is new, and it has nothing to run without one)
+ *
  * Not checked, on purpose (inventory rule 5): a missing Trigger, empty required fields, dangling edges, cycles, port
  * completeness, node count.
  */
@@ -97,6 +99,12 @@ export function flbValidateGraph(
     items.push(
       `"${t.label}" does not work on ${MODE_WORD[ctx.mode] ?? 'WhatsApp'} — delete it or switch the channel back on the Trigger node.`,
     );
+  }
+
+  for (const n of nodes) {
+    if (n.type !== 'api_library' || String(n.data?.apiId ?? '').trim() !== '') continue;
+    bad.add(n.id);
+    items.push('"API (from library)" has no API selected — pick one of your saved APIs.');
   }
 
   const trig = nodes.find((n) => n.type === 'trigger');

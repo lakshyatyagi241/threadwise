@@ -119,12 +119,16 @@ export interface SafeRequestInit {
   body?: string;
   timeoutMs?: number;
   maxBytes?: number;
+  /** An answer larger than `maxBytes` is cut there (and flagged) instead of failing the request. For callers that show or log the answer. */
+  truncate?: boolean;
 }
 
 export interface SafeResponse {
   status: number;
   headers: IncomingMessage['headers'];
   text: string;
+  /** Only set when the request asked for `truncate` and the answer was cut. */
+  truncated?: boolean;
 }
 
 export interface SafeFetchOptions {
@@ -155,7 +159,17 @@ export class SafeFetch {
       headers: init.headers ?? {},
       body: init.body,
     });
-    const body = await this.read(res, init.maxBytes ?? DEFAULT_MAX_BYTES);
+    const maxBytes = init.maxBytes ?? DEFAULT_MAX_BYTES;
+    if (init.truncate) {
+      const { buffer, truncated } = await this.readCapped(res, maxBytes);
+      return {
+        status: res.statusCode ?? 0,
+        headers: res.headers,
+        text: buffer.toString('utf8'),
+        truncated,
+      };
+    }
+    const body = await this.read(res, maxBytes);
     return {
       status: res.statusCode ?? 0,
       headers: res.headers,
@@ -252,6 +266,40 @@ export class SafeFetch {
       req.on('timeout', () => req.destroy(new Error('Media host timed out.')));
       req.on('error', reject);
       req.end(init.body);
+    });
+  }
+
+  /** Like `read`, but stops at `maxBytes` and says so instead of failing. */
+  private readCapped(
+    res: IncomingMessage,
+    maxBytes: number,
+  ): Promise<{ buffer: Buffer; truncated: boolean }> {
+    return new Promise((resolve, reject) => {
+      const chunks: Buffer[] = [];
+      let size = 0;
+      let done = false;
+      res.on('data', (c: Buffer) => {
+        if (done) return;
+        const room = maxBytes - size;
+        if (c.length > room) {
+          chunks.push(c.subarray(0, Math.max(room, 0)));
+          done = true;
+          res.destroy();
+          resolve({ buffer: Buffer.concat(chunks), truncated: true });
+          return;
+        }
+        size += c.length;
+        chunks.push(c);
+      });
+      res.on('end', () => {
+        if (!done) resolve({ buffer: Buffer.concat(chunks), truncated: false });
+      });
+      res.on('error', (e) => {
+        if (!done) reject(e);
+      });
+      res.on('close', () => {
+        if (!done) resolve({ buffer: Buffer.concat(chunks), truncated: false });
+      });
     });
   }
 
