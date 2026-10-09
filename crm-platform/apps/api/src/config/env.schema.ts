@@ -80,6 +80,8 @@ export const envSchema = z.object({
   CREDENTIALS_ENCRYPTION_PREVIOUS_KEYS: z.string().optional(),
 
   // --- object storage ------------------------------------------------------
+  /** Where chat media lives when the platform storage settings name no bucket: `local` (this container's disk) or `s3` (the S3_* bucket). */
+  MEDIA_STORAGE_DRIVER: z.enum(['local', 's3']).default('local'),
   S3_ENDPOINT: z.string().url().optional(),
   S3_REGION: z.string().default('us-east-1'),
   S3_BUCKET_MEDIA: z.string().default('crm-media'),
