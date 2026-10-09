@@ -2096,6 +2096,10 @@
         "wa_session": {
           "label": "WhatsApp oturumu etkin",
           "description": "Evet / hayır: müşteri son 24 saat içinde yazdı"
+        },
+        "api_library": {
+          "label": "API (kitaplıktan)",
+          "description": "API Kitaplığı'ndaki kayıtlı bir API'yi çağır"
         }
       },
       "groups": {

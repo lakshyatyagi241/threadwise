@@ -1959,6 +1959,10 @@
         "wa_session": {
           "label": "WhatsApp सत्र सक्रिय है",
           "description": "हाँ / नहीं: ग्राहक ने पिछले 24 घंटों में संदेश लिखा"
+        },
+        "api_library": {
+          "label": "API (लाइब्रेरी से)",
+          "description": "API लाइब्रेरी से सेव किया गया API कॉल करें"
         }
       },
       "groups": {

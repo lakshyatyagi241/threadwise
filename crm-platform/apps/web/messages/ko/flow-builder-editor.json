@@ -2096,6 +2096,10 @@
         "wa_session": {
           "label": "WhatsApp 세션 활성",
           "description": "예 / 아니요: 고객이 최근 24시간 내에 메시지를 보냄"
+        },
+        "api_library": {
+          "label": "API (라이브러리에서)",
+          "description": "API 라이브러리에서 저장된 API 호출"
         }
       },
       "groups": {

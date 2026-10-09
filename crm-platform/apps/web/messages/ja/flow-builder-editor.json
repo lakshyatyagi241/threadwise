@@ -2096,6 +2096,10 @@
         "wa_session": {
           "label": "WhatsAppセッションが有効",
           "description": "はい / いいえ: 顧客が過去24時間以内にメッセージを送信した"
+        },
+        "api_library": {
+          "label": "API（ライブラリから）",
+          "description": "API ライブラリから保存済みの API を呼び出す"
         }
       },
       "groups": {

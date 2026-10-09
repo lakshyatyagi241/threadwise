@@ -2096,6 +2096,10 @@
         "wa_session": {
           "label": "WhatsApp session active",
           "description": "Yes / no: the customer wrote in the last 24 hours"
+        },
+        "api_library": {
+          "label": "API (from library)",
+          "description": "Call a saved API from the API Library"
         }
       },
       "groups": {

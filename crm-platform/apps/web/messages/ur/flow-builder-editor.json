@@ -2096,6 +2096,10 @@
         "wa_session": {
           "label": "واٹس ایپ سیشن فعال",
           "description": "ہاں / نہیں: صارف نے پچھلے 24 گھنٹوں میں لکھا"
+        },
+        "api_library": {
+          "label": "API (لائبریری سے)",
+          "description": "API لائبریری سے محفوظ شدہ API کال کریں"
         }
       },
       "groups": {
