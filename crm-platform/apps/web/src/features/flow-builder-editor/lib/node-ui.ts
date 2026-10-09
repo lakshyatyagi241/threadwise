@@ -102,6 +102,7 @@ export const NODE_LOOK: Record<string, NodeLook> = {
   ),
   google_meet: l('#E8F0FE', '#1A73E8', 'M2 5h7v6H2zM10 6l3-1.5v7L10 10z'),
   wa_form: l(MINT, DEEP, 'M3 2h10v12H3zM5 5h6M5 8h6M5 11h4'),
+  api_library: l('#E8F5E9', DEEP, 'M6 4L2.5 8 6 12M10 4l3.5 4L10 12M9 3.5l-2 9'),
   google_sheets: l('#E6F4EA', '#137333', 'M3 2h10v12H3zM3 5h10M3 8h10M3 11h10M6.5 5v9M9.5 5v9'),
   google_docs: l('#E8F0FE', '#1A73E8', 'M3 2h7l3 3v9H3zM10 2v3h3M5 8h6M5 10h6M5 12h4'),
   google_form: l('#F3E8FD', '#7B2CBF', 'M3 2h10v12H3zM5 5h2M5 8h2M5 11h2M9 5h2M9 8h2M9 11h2'),

@@ -26,8 +26,10 @@ import { FORMS_ERROR_CODES } from '../forms-builder/errors';
 import { WADEV_ERROR_CODES } from '../whatsapp-devices-baileys/errors';
 import { AIAG_ERROR_CODES } from '../ai-agents-training/errors';
 import { EXT_ERROR_CODES } from '../chrome-extension-sheets-addon/errors';
+import { ALIB_ERROR_CODES } from '../api-library/errors';
 
 export const ERROR_CODES = {
+  ...ALIB_ERROR_CODES,
   ...EXT_ERROR_CODES,
   ...CPN_ERROR_CODES,
   ...PAYGW_ERROR_CODES,

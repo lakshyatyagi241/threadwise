@@ -79,3 +79,4 @@ export * from './leads';
 export * from './marketplace';
 export * from './forms-builder';
 export * from './admin-console-shell';
+export * from './api-library';

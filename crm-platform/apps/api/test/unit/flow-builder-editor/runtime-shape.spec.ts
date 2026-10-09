@@ -577,6 +577,8 @@ describe('flbToRuntimeData: the contract', () => {
         'google_docs',
         'google_form',
         'deal',
+        // not WaDesk: the API Library node (docs/api/api-library.md)
+        'api_library',
         'cf_say',
         'cf_listen',
         'cf_ai',
