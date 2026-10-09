@@ -2096,6 +2096,10 @@
         "wa_session": {
           "label": "เซสชัน WhatsApp ทำงานอยู่",
           "description": "ใช่ / ไม่ใช่: ลูกค้าส่งข้อความใน 24 ชั่วโมงที่ผ่านมา"
+        },
+        "api_library": {
+          "label": "API (จากคลัง)",
+          "description": "เรียก API ที่บันทึกไว้จากคลัง API"
         }
       },
       "groups": {

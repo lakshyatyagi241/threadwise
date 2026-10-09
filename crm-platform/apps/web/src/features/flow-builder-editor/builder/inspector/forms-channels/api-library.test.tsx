@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { renderToStaticMarkup } from 'react-dom/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   FLOW_API_LIBRARY_NODE_TYPE,
@@ -9,6 +8,7 @@ import {
   flbValidateGraph,
   type ApiLibraryOption,
 } from '@crm/contracts';
+import { renderIntl } from '../../../test-utils/intl';
 import { EMPTY_CONTEXT } from '../../../api/hooks';
 import { NODE_FORMS } from '../registry';
 import type { FormProps } from '../types';
@@ -60,7 +60,7 @@ function render(data: Record<string, unknown>) {
       flowId: null,
     },
   };
-  return renderToStaticMarkup(
+  return renderIntl(
     <QueryClientProvider client={new QueryClient()}>
       {Form(props) as ReactNode}
     </QueryClientProvider>,

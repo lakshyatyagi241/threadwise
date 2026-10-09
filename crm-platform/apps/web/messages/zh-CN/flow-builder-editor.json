@@ -2096,6 +2096,10 @@
         "wa_session": {
           "label": "WhatsApp 会话有效",
           "description": "是 / 否：客户在过去 24 小时内发过消息"
+        },
+        "api_library": {
+          "label": "API（来自 API 库）",
+          "description": "调用 API 库中已保存的 API"
         }
       },
       "groups": {

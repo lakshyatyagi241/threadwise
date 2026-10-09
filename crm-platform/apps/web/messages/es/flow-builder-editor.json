@@ -2096,6 +2096,10 @@
         "wa_session": {
           "label": "Sesión de WhatsApp activa",
           "description": "Sí / no: el cliente escribió en las últimas 24 horas"
+        },
+        "api_library": {
+          "label": "API (de la biblioteca)",
+          "description": "Llamar a una API guardada desde la Biblioteca de API"
         }
       },
       "groups": {

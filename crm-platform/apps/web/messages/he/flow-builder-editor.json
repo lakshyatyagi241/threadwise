@@ -2096,6 +2096,10 @@
         "wa_session": {
           "label": "סשן WhatsApp פעיל",
           "description": "כן / לא: הלקוח כתב ב-24 השעות האחרונות"
+        },
+        "api_library": {
+          "label": "API (מהספרייה)",
+          "description": "הפעל API שמור מספריית ה-API"
         }
       },
       "groups": {

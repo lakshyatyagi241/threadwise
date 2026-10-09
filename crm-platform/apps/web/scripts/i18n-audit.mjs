@@ -54,7 +54,8 @@ function walk(dir, out = []) {
   return out;
 }
 
-const ATTR = /\b(?:placeholder|title|aria-label|alt|label|description|message|emptyMessage|helperText|hint)=(?:"([^"{}]*[A-Za-z]{3,}[^"{}]*)"|\{'([^'{}]*[A-Za-z]{3,}[^'{}]*)'\})/g;
+const ATTR =
+  /\b(?:placeholder|title|aria-label|alt|label|description|message|emptyMessage|helperText|hint)=(?:"([^"{}]*[A-Za-z]{3,}[^"{}]*)"|\{'([^'{}]*[A-Za-z]{3,}[^'{}]*)'\})/g;
 // JSX text between tags that holds at least two letters in a row and is not code-ish.
 const TEXT = />\s*([A-Z][A-Za-z][^<>{}\n]{2,})\s*</g;
 
@@ -74,7 +75,12 @@ function hardcoded() {
       }
       for (const m of line.matchAll(TEXT)) {
         const text = m[1].trim();
-        if (/[=;()]|=>|^[A-Z0-9_ ]+$/.test(text) || text.includes('&&') || /^(Promise|Record|Array|Partial|Omit)$/.test(text)) continue;
+        if (
+          /[=;()]|=>|^[A-Z0-9_ ]+$/.test(text) ||
+          text.includes('&&') ||
+          /^(Promise|Record|Array|Partial|Omit)$/.test(text)
+        )
+          continue;
         hits.push({ file: relative(root, file), line: i + 1, text });
       }
     });
