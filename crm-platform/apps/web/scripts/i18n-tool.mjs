@@ -18,8 +18,9 @@ import {
   writeFileSync,
 } from 'node:fs';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const root = new URL('..', import.meta.url).pathname;
+const root = fileURLToPath(new URL('..', import.meta.url));
 const msgRoot = join(root, 'messages');
 const { LOCALES } = JSON.parse(readFileSync(join(root, 'scripts/.locales.json'), 'utf8'));
 const files = readdirSync(join(msgRoot, 'en'))
