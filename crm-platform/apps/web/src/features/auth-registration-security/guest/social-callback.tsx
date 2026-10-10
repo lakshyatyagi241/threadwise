@@ -14,7 +14,7 @@ import { Alert, LINK, PRIMARY_LINK, Spinner } from './ui';
 
 type State =
   | { phase: 'working' }
-  | { phase: 'mfa'; token: string; expiresAt: number; next: string | null }
+  | { phase: 'mfa'; token: string; expiresAt: number; passkey: boolean; next: string | null }
   | { phase: 'failed'; error: MappedError | null; cancelled: boolean; expired: boolean };
 
 /** The state value is single use on the server: one POST per `state`, even when React runs the effect twice. */
@@ -75,6 +75,7 @@ export function SocialCallback({
             phase: 'mfa',
             token: res.challengeToken,
             expiresAt: Date.now() + res.expiresInSeconds * 1000,
+            passkey: res.passkey === true,
             next,
           });
           return;
@@ -118,6 +119,7 @@ export function SocialCallback({
         expiresAt={view.expiresAt}
         remember={rememberMeEnabled}
         next={view.next}
+        passkey={view.passkey}
         onBack={backToSignIn}
       />
     );

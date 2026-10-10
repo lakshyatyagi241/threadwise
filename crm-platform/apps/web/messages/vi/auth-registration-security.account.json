@@ -385,7 +385,12 @@
         "useCode": "Dùng mã xác thực",
         "cancel": "Hủy",
         "confirm": "Xác nhận",
-        "verifying": "Đang xác minh"
+        "verifying": "Đang xác minh",
+        "usePasskey": "Dùng khóa truy cập",
+        "passkeyWaiting": "Đang chờ khóa truy cập của bạn",
+        "passkeyCancelled": "Việc xác nhận bằng khóa truy cập đã bị hủy hoặc hết thời gian. Hãy thử lại hoặc dùng mã.",
+        "passkeyInvalid": "Không thể xác minh khóa truy cập đó. Hãy thử lại hoặc dùng mã.",
+        "passkeyFailed": "Thiết bị của bạn không cung cấp được khóa truy cập. Hãy thử lại hoặc dùng mã."
       },
       "banners": {
         "dismiss": "Đóng",
@@ -565,6 +570,45 @@
         "timeout": "Máy chủ thư phản hồi quá lâu. Bạn có thể thử lại ngay.",
         "transport_error": "Không thể chuyển email tới máy chủ thư. Bạn có thể thử lại ngay.",
         "unknown": "Không thể gửi email vì một lý do chưa xác định. Bạn có thể thử lại ngay."
+      },
+      "passkeys": {
+        "title": "Khóa truy cập",
+        "subtitle": "Xác nhận đăng nhập bằng vân tay, khuôn mặt, khóa màn hình hoặc khóa bảo mật thay vì nhập mã.",
+        "unsupported": "Trình duyệt này không hỗ trợ khóa truy cập. Hãy mở trang này bằng phiên bản mới của Chrome, Edge, Safari hoặc Firefox.",
+        "needsMfa": "Khóa truy cập hoạt động cùng với ứng dụng xác thực. Hãy bật xác thực hai yếu tố trước, sau đó thêm khóa truy cập.",
+        "needsMfaLink": "Đến phần xác thực hai yếu tố",
+        "empty": "Bạn chưa có khóa truy cập nào. Hãy thêm một khóa để xác nhận đăng nhập bằng thiết bị của bạn.",
+        "add": "Thêm khóa truy cập",
+        "synced": "Đã đồng bộ",
+        "deviceOnly": "Chỉ trên thiết bị này",
+        "added": "Đã thêm ngày {date}",
+        "lastUsed": "Dùng lần cuối {when}",
+        "neverUsed": "Chưa từng dùng",
+        "remove": "Xóa",
+        "removeTitle": "Xóa khóa truy cập",
+        "removeDescription": "{name} sẽ không còn được dùng làm bước thứ hai khi bạn đăng nhập. Nhập mật khẩu của bạn để xóa.",
+        "removeConfirm": "Xóa khóa truy cập",
+        "removedDone": "Đã xóa khóa truy cập {name}.",
+        "addedDone": "Đã thêm khóa truy cập {name}.",
+        "addTitle": "Thêm khóa truy cập",
+        "addDescription": "Đặt một tên dễ nhận biết, ví dụ Laptop công việc hoặc Điện thoại. Sau đó trình duyệt sẽ yêu cầu bạn xác nhận bằng vân tay, khuôn mặt, khóa màn hình hoặc khóa bảo mật.",
+        "addConfirm": "Tiếp tục",
+        "nameLabel": "Tên",
+        "nameHint": "Tối đa {max} ký tự.",
+        "namePlaceholder": "Laptop công việc",
+        "nameRequired": "Nhập tên cho khóa truy cập này.",
+        "passwordNeeded": "Đã lâu kể từ lần bạn đăng nhập. Nhập mật khẩu của bạn để tiếp tục.",
+        "preparing": "Đang chuẩn bị",
+        "waiting": "Đang chờ thiết bị của bạn",
+        "saving": "Đang lưu",
+        "problems": {
+          "cancelled": "Khóa truy cập chưa được tạo vì yêu cầu đã bị hủy hoặc hết thời gian. Hãy thử lại.",
+          "alreadyRegistered": "Thiết bị này đã có khóa truy cập cho tài khoản của bạn. Hãy dùng thiết bị khác hoặc khóa bảo mật, hoặc xóa khóa truy cập hiện có trước.",
+          "invalid": "Không thể xác minh phản hồi từ thiết bị của bạn. Hãy thử lại.",
+          "limit": "Bạn đã đạt số khóa truy cập tối đa mà một tài khoản có thể có. Hãy xóa một khóa để thêm khóa khác.",
+          "unsupported": "Thiết bị này không thể tạo loại khóa truy cập này. Hãy thử thiết bị khác hoặc khóa bảo mật.",
+          "failed": "Trình duyệt hoặc thiết bị của bạn không thể tạo khóa truy cập. Hãy thử lại."
+        }
       }
     }
   }

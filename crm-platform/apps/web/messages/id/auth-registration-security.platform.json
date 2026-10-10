@@ -94,7 +94,10 @@
           "challengeExpired": "Sesi masuk itu kedaluwarsa. Masukkan kata sandi Anda lagi.",
           "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
           "unexpected": "Kami tidak dapat memasukkan Anda. Coba lagi sebentar lagi.",
-          "lockedWait": "Terlalu banyak percobaan gagal. Coba lagi dalam {minutes, plural, other {# menit}}."
+          "lockedWait": "Terlalu banyak percobaan gagal. Coba lagi dalam {minutes, plural, other {# menit}}.",
+          "passkeyInvalid": "Kunci sandi itu tidak dapat diverifikasi. Coba lagi, atau gunakan kode.",
+          "passkeyCancelled": "Proses masuk dengan kunci sandi dibatalkan atau waktunya habis. Coba lagi, atau gunakan kode.",
+          "passkeyFailed": "Perangkat Anda tidak dapat memberikan kunci sandi. Coba lagi, atau gunakan kode."
         },
         "captcha": {
           "loadFailed": "Captcha tidak dapat dimuat. Periksa koneksi atau pemblokir konten Anda, lalu coba lagi.",
@@ -115,7 +118,9 @@
           "verifying": "Memeriksa",
           "useRecovery": "Gunakan kode pemulihan",
           "useAuthenticator": "Gunakan aplikasi autentikator",
-          "back": "Kembali ke halaman masuk"
+          "back": "Kembali ke halaman masuk",
+          "usePasskey": "Gunakan kunci sandi",
+          "passkeyWaiting": "Menunggu kunci sandi Anda"
         }
       },
       "mfa": {

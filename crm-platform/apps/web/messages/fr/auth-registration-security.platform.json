@@ -94,7 +94,10 @@
           "challengeExpired": "Cette connexion a expiré. Saisissez à nouveau votre mot de passe.",
           "rateLimited": "Trop de requêtes. Patientez un instant et réessayez.",
           "unexpected": "Impossible de vous connecter. Réessayez dans un instant.",
-          "lockedWait": "Trop de tentatives échouées. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}."
+          "lockedWait": "Trop de tentatives échouées. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}.",
+          "passkeyInvalid": "Cette clé d’accès n’a pas pu être vérifiée. Réessayez ou utilisez un code.",
+          "passkeyCancelled": "La connexion avec la clé d’accès a été annulée ou a expiré. Réessayez ou utilisez un code.",
+          "passkeyFailed": "Votre appareil n’a pas pu fournir la clé d’accès. Réessayez ou utilisez un code."
         },
         "captcha": {
           "loadFailed": "Le captcha n’a pas pu se charger. Vérifiez votre connexion ou un bloqueur de contenu, puis réessayez.",
@@ -115,7 +118,9 @@
           "verifying": "Vérification",
           "useRecovery": "Utiliser un code de récupération",
           "useAuthenticator": "Utiliser l’application d’authentification",
-          "back": "Retour à la connexion"
+          "back": "Retour à la connexion",
+          "usePasskey": "Utiliser une clé d’accès",
+          "passkeyWaiting": "En attente de votre clé d’accès"
         }
       },
       "mfa": {

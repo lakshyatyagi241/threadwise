@@ -94,7 +94,10 @@
           "challengeExpired": "Die login is verlopen. Voer je wachtwoord opnieuw in.",
           "rateLimited": "Te veel aanvragen. Wacht even en probeer het opnieuw.",
           "unexpected": "We kunnen je niet inloggen. Probeer het zo meteen opnieuw.",
-          "lockedWait": "Te veel mislukte pogingen. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw."
+          "lockedWait": "Te veel mislukte pogingen. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw.",
+          "passkeyInvalid": "Die passkey kon niet worden geverifieerd. Probeer het opnieuw of gebruik een code.",
+          "passkeyCancelled": "Inloggen met een passkey is geannuleerd of verlopen. Probeer het opnieuw of gebruik een code.",
+          "passkeyFailed": "Je apparaat kon de passkey niet doorgeven. Probeer het opnieuw of gebruik een code."
         },
         "captcha": {
           "loadFailed": "De captcha kon niet worden geladen. Controleer je verbinding of een contentblocker en probeer het opnieuw.",
@@ -115,7 +118,9 @@
           "verifying": "Controleren",
           "useRecovery": "Gebruik een herstelcode",
           "useAuthenticator": "Gebruik de authenticator-app",
-          "back": "Terug naar inloggen"
+          "back": "Terug naar inloggen",
+          "usePasskey": "Gebruik een passkey",
+          "passkeyWaiting": "Wachten op je passkey"
         }
       },
       "mfa": {

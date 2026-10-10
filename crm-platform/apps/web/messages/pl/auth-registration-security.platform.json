@@ -94,7 +94,10 @@
           "challengeExpired": "To logowanie wygasło. Wpisz hasło ponownie.",
           "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
           "unexpected": "Nie udało się Cię zalogować. Spróbuj ponownie za chwilę.",
-          "lockedWait": "Zbyt wiele nieudanych prób. Spróbuj ponownie za {minutes, plural, one {# minutę} few {# minuty} many {# minut} other {# minuty}}."
+          "lockedWait": "Zbyt wiele nieudanych prób. Spróbuj ponownie za {minutes, plural, one {# minutę} few {# minuty} many {# minut} other {# minuty}}.",
+          "passkeyInvalid": "Nie udało się zweryfikować tego klucza dostępu. Spróbuj ponownie albo użyj kodu.",
+          "passkeyCancelled": "Logowanie kluczem dostępu zostało anulowane lub upłynął jego limit czasu. Spróbuj ponownie albo użyj kodu.",
+          "passkeyFailed": "Urządzenie nie przekazało klucza dostępu. Spróbuj ponownie albo użyj kodu."
         },
         "captcha": {
           "loadFailed": "Nie udało się załadować captcha. Sprawdź połączenie lub blokadę treści, a następnie spróbuj ponownie.",
@@ -115,7 +118,9 @@
           "verifying": "Sprawdzanie",
           "useRecovery": "Użyj kodu odzyskiwania",
           "useAuthenticator": "Użyj aplikacji uwierzytelniającej",
-          "back": "Wróć do logowania"
+          "back": "Wróć do logowania",
+          "usePasskey": "Użyj klucza dostępu",
+          "passkeyWaiting": "Oczekiwanie na klucz dostępu"
         }
       },
       "mfa": {

@@ -224,7 +224,8 @@
           "common": "Mật khẩu này quá dễ đoán."
         },
         "socialNoAccount": "Không có tài khoản nào khớp với đăng nhập {provider} này. Hãy đăng nhập bằng email và mật khẩu, hoặc tạo tài khoản.",
-        "forbidden": "Yêu cầu bị từ chối. Hãy tải lại trang và thử lại."
+        "forbidden": "Yêu cầu bị từ chối. Hãy tải lại trang và thử lại.",
+        "passkeyInvalid": "Không thể xác minh khóa truy cập đó. Hãy thử lại hoặc dùng mã."
       },
       "validation": {
         "orgSlug": "Nhập địa chỉ không gian làm việc (chữ cái, chữ số, dấu gạch ngang hoặc gạch dưới).",
@@ -309,7 +310,11 @@
         "useRecovery": "Dùng mã khôi phục",
         "useApp": "Dùng mã xác thực",
         "back": "Quay lại đăng nhập",
-        "expiresIn": "Xác minh hết hạn sau {time}"
+        "expiresIn": "Xác minh hết hạn sau {time}",
+        "usePasskey": "Dùng khóa truy cập",
+        "passkeyWaiting": "Đang chờ khóa truy cập của bạn",
+        "passkeyCancelled": "Đăng nhập bằng khóa truy cập đã bị hủy hoặc hết thời gian. Hãy thử lại hoặc dùng mã.",
+        "passkeyFailed": "Thiết bị của bạn không cung cấp được khóa truy cập. Hãy thử lại hoặc dùng mã."
       },
       "signup": {
         "steps": {

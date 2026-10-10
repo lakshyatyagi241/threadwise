@@ -94,7 +94,10 @@
           "challengeExpired": "Bu oturum açma işleminin süresi doldu. Parolanızı yeniden girin.",
           "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
           "unexpected": "Oturumunuz açılamadı. Biraz sonra tekrar deneyin.",
-          "lockedWait": "Çok fazla başarısız deneme. {minutes, plural, one {# dakika} other {# dakika}} sonra tekrar deneyin."
+          "lockedWait": "Çok fazla başarısız deneme. {minutes, plural, one {# dakika} other {# dakika}} sonra tekrar deneyin.",
+          "passkeyInvalid": "Bu geçiş anahtarı doğrulanamadı. Tekrar deneyin ya da bir kod kullanın.",
+          "passkeyCancelled": "Geçiş anahtarıyla oturum açma iptal edildi veya zaman aşımına uğradı. Tekrar deneyin ya da bir kod kullanın.",
+          "passkeyFailed": "Cihazınız geçiş anahtarını sağlayamadı. Tekrar deneyin ya da bir kod kullanın."
         },
         "captcha": {
           "loadFailed": "Captcha yüklenemedi. Bağlantınızı veya içerik engelleyicinizi kontrol edip yeniden deneyin.",
@@ -115,7 +118,9 @@
           "verifying": "Kontrol ediliyor",
           "useRecovery": "Kurtarma kodu kullan",
           "useAuthenticator": "Kimlik doğrulama uygulamasını kullan",
-          "back": "Oturum açmaya dön"
+          "back": "Oturum açmaya dön",
+          "usePasskey": "Geçiş anahtarı kullan",
+          "passkeyWaiting": "Geçiş anahtarınız bekleniyor"
         }
       },
       "mfa": {
