@@ -373,7 +373,7 @@ describe('second-factor attempt budget (TW-AUTH-030)', () => {
       const bad = await api()
         .post('/v2/account/mfa/disable')
         .set(bearer(a.access))
-        .send({ password: `wrong-${i}` });
+        .send({ password: `wrong-${i}`, code: '000000' });
       expect(bad.body.code).toBe('AUTH_CURRENT_PASSWORD_WRONG');
     }
     for (let i = 0; i < 2; i++) {
@@ -387,7 +387,7 @@ describe('second-factor attempt budget (TW-AUTH-030)', () => {
     const refused = await api()
       .post('/v2/account/mfa/disable')
       .set(bearer(a.access))
-      .send({ password: PASSWORD });
+      .send({ password: PASSWORD, code: '000000' });
     expect(refused.status).toBe(429);
     expect(refused.body.code).toBe('AUTH_ACCOUNT_LOCKED');
     const refusedRegen = await api()
@@ -1239,29 +1239,29 @@ describe('password rules the web hint relies on (TW-AUTH-035)', () => {
     const res = await api().get('/v2/auth/password-policy');
     expect(res.status).toBe(200);
     expect(res.body).toEqual({
-      minLength: 8,
+      minLength: 12,
       requireMixedCase: true,
       requireNumber: true,
       requireSymbol: false,
     });
     expect(res.headers['cache-control']).toContain('no-store');
     expect(res.headers['pragma']).toBe('no-cache');
-    await setPolicy({ passwordMinLength: 6, passwordRequireSymbol: true });
+    await setPolicy({ passwordMinLength: 8, passwordRequireSymbol: true });
     try {
       expect((await api().get('/v2/auth/password-policy')).body).toEqual({
-        minLength: 6,
+        minLength: 8,
         requireMixedCase: true,
         requireNumber: true,
         requireSymbol: true,
       });
     } finally {
-      await setPolicy({ passwordMinLength: 8, passwordRequireSymbol: false });
+      await setPolicy({ passwordMinLength: 12, passwordRequireSymbol: false });
     }
   });
 
   it('lets the stored policy, not the contract, decide the minimum length', async () => {
-    const six = { orgName: 'Six Co', fullName: 'Six', acceptTerms: true, password: 'Ab1xyz' };
-    // The default policy asks for 8: a 6-character password reaches the policy and fails THERE.
+    const six = { orgName: 'Six Co', fullName: 'Six', acceptTerms: true, password: 'Ab1xyzQm' };
+    // The default policy asks for 12: an 8-character password passes the contract, reaches the policy and fails THERE.
     const refused = await api()
       .post('/v2/auth/signup')
       .set('x-forwarded-for', nextIp())
@@ -1272,7 +1272,7 @@ describe('password rules the web hint relies on (TW-AUTH-035)', () => {
       'password.min_length',
     );
 
-    await setPolicy({ passwordMinLength: 6 });
+    await setPolicy({ passwordMinLength: 8 });
     try {
       const ok = await api()
         .post('/v2/auth/signup')
@@ -1280,7 +1280,7 @@ describe('password rules the web hint relies on (TW-AUTH-035)', () => {
         .send({ ...six, email: uniqueEmail() });
       expect(ok.status, JSON.stringify(ok.body)).toBe(201);
     } finally {
-      await setPolicy({ passwordMinLength: 8 });
+      await setPolicy({ passwordMinLength: 12 });
     }
   });
 });
@@ -1309,8 +1309,9 @@ describe('sign-in when the email is in several workspaces', () => {
     expect(res.body.tokens).toBeUndefined();
     const slugs = (res.body.workspaces as Array<{ slug: string }>).map((w) => w.slug).sort();
     expect(slugs).toEqual([one.slug, two.slug].sort());
-    const card = (res.body.workspaces as Array<{ slug: string; name: string; memberCount: number }>)
-      .find((w) => w.slug === two.slug)!;
+    const card = (
+      res.body.workspaces as Array<{ slug: string; name: string; memberCount: number }>
+    ).find((w) => w.slug === two.slug)!;
     expect(card.name).toBe('Multi Two');
     expect(card.memberCount).toBe(1);
 

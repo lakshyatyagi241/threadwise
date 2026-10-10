@@ -3,6 +3,10 @@ import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 export const sha256Hex = (value: string): string =>
   createHash('sha256').update(value).digest('hex');
 
+/** SHA-256 as unpadded base64url: the PKCE S256 code_challenge of a code_verifier (RFC 7636). */
+export const sha256Base64Url = (value: string): string =>
+  createHash('sha256').update(value).digest('base64url');
+
 /** URL-safe random token. 32 bytes = 256 bits, far beyond guessing. */
 export const randomToken = (bytes = 32): string => randomBytes(bytes).toString('base64url');
 

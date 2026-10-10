@@ -359,6 +359,14 @@
             "label": "Wymagaj symbolu",
             "short": "Symbol"
           },
+          "passwordBlocklistEnabled": {
+            "label": "Blokuj popularne hasła",
+            "hint": "Odrzuca najpopularniejsze hasła, podobne warianty, takie jak P@ssw0rd, wzorce klawiaturowe oraz wszystko, co zawiera imię lub adres e-mail danej osoby."
+          },
+          "passwordBreachCheck": {
+            "label": "Blokuj hasła z wycieków danych",
+            "hint": "Sprawdza nowe hasła w publicznej bazie Pwned Passwords. Z serwera wychodzi tylko pierwszych pięć znaków skrótu. Jeśli usługa jest niedostępna, hasło zostaje zaakceptowane."
+          },
           "passwordMaxAgeDays": {
             "label": "Limit wieku hasła (dni)",
             "hint": "0 oznacza, że hasła nigdy nie wygasają."

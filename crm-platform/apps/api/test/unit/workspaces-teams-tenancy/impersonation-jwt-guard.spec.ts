@@ -35,6 +35,7 @@ function build(claims: TokenClaims, assertOpen = vi.fn().mockResolvedValue(open)
     { enforceCapIfChanged: vi.fn() } as never,
     { assertOpen } as never,
     redis as never,
+    { assertActive: vi.fn() } as never,
   );
   const http = {
     getType: () => 'http',

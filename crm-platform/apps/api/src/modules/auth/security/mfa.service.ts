@@ -4,15 +4,18 @@ import { sql } from 'drizzle-orm';
 import { Redis } from 'ioredis';
 import {
   ERROR_CODES,
+  MFA_REAUTH_WINDOW_SECONDS,
   type MfaEnableResponse,
   type MfaSetupResponse,
   type MfaStatusResponse,
 } from '@crm/contracts';
 import { CryptoService } from '../../../common/crypto/crypto.service';
+import { RequestContextStore } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
 import type { Env } from '../../../config/env.schema';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
+import { MailService } from '../mail/mail.service';
 import { toIsoString, type DateLike } from '../support/dates';
 import { MfaAttemptLimiter } from '../support/mfa-attempts';
 import { createRecoveryCodes, consumeRecoveryCode } from '../support/recovery-codes';
@@ -20,6 +23,7 @@ import { AuthKeys, Ttl } from '../support/redis-keys';
 import { generateTotpSecret, otpauthUrl, verifyTotp } from '../support/totp';
 import { AccountGateService } from './account-gate.service';
 import { AuthAuditService } from './auth-audit.service';
+import { WebAuthnService } from './webauthn.service';
 import { PasswordService } from './password.service';
 
 export interface MfaSecretState {
@@ -47,6 +51,8 @@ export class MfaService {
     private readonly audit: AuthAuditService,
     private readonly gates: AccountGateService,
     private readonly limiter: MfaAttemptLimiter,
+    private readonly mail: MailService,
+    private readonly webauthn: WebAuthnService,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
     config: ConfigService<Env, true>,
   ) {
@@ -71,8 +77,88 @@ export class MfaService {
     };
   }
 
+  /**
+   * Recent authentication for the changes that weaken or take over an account (enrolling an authenticator). A session that
+   * signed in within MFA_REAUTH_WINDOW_SECONDS passes as is; an older one must send the password (counted against the same
+   * failure budget as a wrong code). Without it a hijacked session could enrol the attacker's authenticator.
+   */
+  private async assertRecentAuth(orgId: number, userId: number, password?: string): Promise<void> {
+    if (password) {
+      await this.assertPassword(orgId, userId, password);
+      return;
+    }
+    const sid = RequestContextStore.peek()?.sessionId;
+    if (sid) {
+      const res = await this.db.txAs({ orgId, userId }, async (tx) =>
+        tx.execute(sql`
+          SELECT (now() - created_at) < make_interval(secs => ${MFA_REAUTH_WINDOW_SECONDS}) AS fresh
+          FROM auth_sessions WHERE org_id = ${orgId} AND user_id = ${userId} AND uuid = ${sid}::uuid
+        `),
+      );
+      if ((res.rows[0] as { fresh?: boolean } | undefined)?.fresh === true) return;
+    }
+    throw new AppError(
+      ERROR_CODES.AUTH_REAUTH_REQUIRED,
+      'Confirm your password to continue.',
+      HttpStatus.FORBIDDEN,
+    );
+  }
+
+  /**
+   * Passkeys ride on an enrolled authenticator app (so recovery codes exist): refuse otherwise, then require recent
+   * authentication exactly like enrolment does.
+   */
+  async assertPasskeyAllowed(orgId: number, userId: number, password?: string): Promise<void> {
+    if (!(await this.status(orgId, userId)).enabled) {
+      throw new AppError(
+        ERROR_CODES.AUTH_PASSKEY_NEEDS_MFA,
+        'Turn on two-factor authentication with an authenticator app first, then add a passkey.',
+        HttpStatus.CONFLICT,
+      );
+    }
+    await this.assertRecentAuth(orgId, userId, password);
+  }
+
+  /** The password step of removing something from the account (a passkey). Counted against the same failure budget. */
+  async confirmPassword(orgId: number, userId: number, password: string): Promise<void> {
+    await this.assertPassword(orgId, userId, password);
+  }
+
+  /** Tells the person when their second factor changes: the first thing a hijacker does is weaken it. */
+  async notifyChange(
+    orgId: number,
+    userId: number,
+    change: 'enabled' | 'disabled' | 'recovery-codes' | 'passkey-added' | 'passkey-removed',
+  ): Promise<void> {
+    try {
+      const res = await this.db.txAs({ orgId, userId }, async (tx) =>
+        tx.execute(sql`
+          SELECT u.email, u.full_name, o.slug FROM users u JOIN organizations o ON o.id = u.org_id
+          WHERE u.org_id = ${orgId} AND u.id = ${userId}
+        `),
+      );
+      const row = res.rows[0] as { email: string; full_name: string; slug: string } | undefined;
+      if (row) {
+        void this.mail.sendMfaChanged(
+          row.email,
+          row.full_name,
+          change,
+          this.mail.link('/forgot-password', { org: row.slug }),
+        );
+      }
+    } catch {
+      /* a notification must never fail the change it reports */
+    }
+  }
+
   /** Idempotent within the TTL: reloading the pane shows the same secret. */
-  async beginSetup(orgId: number, userId: number, email: string): Promise<MfaSetupResponse> {
+  async beginSetup(
+    orgId: number,
+    userId: number,
+    email: string,
+    password?: string,
+  ): Promise<MfaSetupResponse> {
+    await this.assertRecentAuth(orgId, userId, password);
     const current = await this.status(orgId, userId);
     if (current.enabled) {
       throw new AppError(
@@ -94,10 +180,16 @@ export class MfaService {
     };
   }
 
-  async enable(orgId: number, userId: number, code: string): Promise<MfaEnableResponse> {
+  async enable(
+    orgId: number,
+    userId: number,
+    code: string,
+    password?: string,
+  ): Promise<MfaEnableResponse> {
     // Five wrong codes in fifteen minutes, counted with sign-in and with the confirmation
     // passwords below: enrolling is a second-factor guess target too (TW-AUTH-030).
     await this.limiter.assertAvailable('user', orgId, userId);
+    await this.assertRecentAuth(orgId, userId, password);
     const key = AuthKeys.mfaSetup(orgId, String(userId));
     const stored = await this.redis.get(key);
     if (!stored) {
@@ -156,11 +248,38 @@ export class MfaService {
     });
     await this.limiter.clear('user', orgId, userId);
     await this.gates.invalidate(orgId, userId);
+    await this.notifyChange(orgId, userId, 'enabled');
     return { recoveryCodes: plain };
   }
 
-  async disable(orgId: number, userId: number, password: string): Promise<void> {
+  /**
+   * Turning two-factor off takes the password AND the factor being removed (a current authenticator code or an unused
+   * recovery code): a hijacked session that knows the password must not be able to strip the second factor.
+   */
+  async disable(orgId: number, userId: number, password: string, code: string): Promise<void> {
     await this.assertPassword(orgId, userId, password);
+    const state = await this.loadState(orgId, userId);
+    const isTotp = /^[0-9]{6}$/.test(code);
+    const proven = isTotp
+      ? await this.verifyCode(orgId, userId, state, code)
+      : await this.verifyRecoveryCode(orgId, userId, state, code);
+    if (!proven) {
+      await this.limiter.recordFailure('user', orgId, userId);
+      await this.audit.recordStandalone({
+        event: 'auth.mfa_failed',
+        status: 'failure',
+        orgId,
+        actorType: 'user',
+        actorId: userId,
+        recordId: userId,
+        payload: { phase: 'disable' },
+      });
+      throw new AppError(
+        ERROR_CODES.AUTH_MFA_INVALID_CODE,
+        'That code is not valid.',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
     // A policy that requires MFA does not block turning it off: the account
     // gate flags the user as needing to enrol again, which is the same outcome
     // without a second code path.
@@ -181,6 +300,9 @@ export class MfaService {
       });
     });
     await this.gates.invalidate(orgId, userId);
+    // Passkeys are a second factor on top of the authenticator app: without it they have nothing to ride on.
+    await this.webauthn.removeAll({ pool: 'user', orgId, userId });
+    await this.notifyChange(orgId, userId, 'disabled');
   }
 
   async regenerateRecoveryCodes(
@@ -212,6 +334,7 @@ export class MfaService {
         recordId: userId,
       });
     });
+    await this.notifyChange(orgId, userId, 'recovery-codes');
     return { recoveryCodes: plain };
   }
 

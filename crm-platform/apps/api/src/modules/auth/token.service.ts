@@ -55,13 +55,49 @@ export function ttlToSeconds(ttl: string): number {
   return n * { s: 1, m: 60, h: 3600, d: 86_400 }[unit as 's' | 'm' | 'h' | 'd'];
 }
 
+/** Pinned on every token we mint and every token we accept (RFC 8725): the algorithm is never taken from the token. */
+export const JWT_ALGORITHM = 'HS256' as const;
+export const JWT_ISSUER = 'crm-platform';
+export const JWT_AUDIENCE = 'crm-api';
+/**
+ * Tokens minted before issuer/audience existed carry neither. They are accepted until this moment (the longest refresh
+ * lifetime plus a margin after the deploy that introduced the claims); from then on a token without them is refused and
+ * this constant and its branch can be deleted. A unit test pins the behaviour on both sides of the date.
+ */
+export const LEGACY_TOKENS_UNTIL_MS = Date.parse('2026-11-15T00:00:00Z');
+
 /**
  * jsonwebtoken's types model expiresIn as a narrow template literal union,
  * which no runtime-configured value can satisfy. Seconds as a number are
  * always valid, so everything is passed that way: one cast, here.
  */
 const signOptions = (secret: string, expiresInSeconds: number): JwtSignOptions =>
-  ({ secret, expiresIn: expiresInSeconds }) as JwtSignOptions;
+  ({
+    secret,
+    expiresIn: expiresInSeconds,
+    algorithm: JWT_ALGORITHM,
+    issuer: JWT_ISSUER,
+    audience: JWT_AUDIENCE,
+  }) as JwtSignOptions;
+
+type VerifiedClaims = TokenClaims & { iss?: string; aud?: string | string[] };
+
+/** Issuer and audience must match when present; absent is tolerated only inside the legacy window. */
+export function assertTokenClaims(claims: VerifiedClaims, now = Date.now()): void {
+  if (claims.iss === undefined && claims.aud === undefined) {
+    if (now >= LEGACY_TOKENS_UNTIL_MS) throw new Error('token has no issuer/audience');
+    return;
+  }
+  const aud = Array.isArray(claims.aud) ? claims.aud : [claims.aud];
+  if (claims.iss !== JWT_ISSUER || !aud.includes(JWT_AUDIENCE))
+    throw new Error('wrong issuer/audience');
+}
+
+const splitSecrets = (raw: string | undefined): string[] =>
+  (raw ?? '')
+    .split(',')
+    .map((s) => s.trim())
+    .filter((s) => s.length >= 32);
 
 /**
  * Issues and verifies JWTs for all human identity pools.
@@ -76,6 +112,43 @@ export class TokenService {
     private readonly jwt: JwtService,
     private readonly config: ConfigService<Env, true>,
   ) {}
+
+  /**
+   * The signing secret first, then any retired ones (verify-only), so a secret can be rotated without signing everyone
+   * out: put the new value in JWT_*_SECRET, move the old into JWT_*_PREVIOUS_SECRETS for one refresh lifetime, then drop it.
+   */
+  private secrets(kind: 'ACCESS' | 'REFRESH'): string[] {
+    const current = this.config.get(`JWT_${kind}_SECRET` as 'JWT_ACCESS_SECRET', { infer: true });
+    const previous = splitSecrets(
+      this.config.get(`JWT_${kind}_PREVIOUS_SECRETS` as 'JWT_ACCESS_PREVIOUS_SECRETS', {
+        infer: true,
+      }) as string | undefined,
+    );
+    return [current, ...previous];
+  }
+
+  /** Verifies against each accepted secret in turn. The algorithm is pinned; issuer and audience are checked. */
+  private async verifyWith(
+    token: string,
+    secrets: string[],
+    extra: { ignoreExpiration?: boolean } = {},
+  ): Promise<TokenClaims> {
+    let last: unknown = new Error('no secret');
+    for (const secret of secrets) {
+      try {
+        const claims = await this.jwt.verifyAsync<VerifiedClaims>(token, {
+          secret,
+          algorithms: [JWT_ALGORITHM],
+          ...extra,
+        });
+        assertTokenClaims(claims);
+        return claims;
+      } catch (err) {
+        last = err;
+      }
+    }
+    throw last;
+  }
 
   accessTtlSeconds(): number {
     return ttlToSeconds(this.config.get('JWT_ACCESS_TTL', { infer: true }));
@@ -133,9 +206,7 @@ export class TokenService {
 
   async verifyAccess(token: string): Promise<TokenClaims> {
     try {
-      return await this.jwt.verifyAsync<TokenClaims>(token, {
-        secret: this.config.get('JWT_ACCESS_SECRET', { infer: true }),
-      });
+      return await this.verifyWith(token, this.secrets('ACCESS'));
     } catch {
       // Never say *why* — "expired" vs "malformed" vs "bad signature" is a
       // free hint to anyone probing the endpoint.
@@ -150,10 +221,7 @@ export class TokenService {
    */
   async verifyAccessIgnoringExpiry(token: string): Promise<TokenClaims> {
     try {
-      return await this.jwt.verifyAsync<TokenClaims>(token, {
-        secret: this.config.get('JWT_ACCESS_SECRET', { infer: true }),
-        ignoreExpiration: true,
-      });
+      return await this.verifyWith(token, this.secrets('ACCESS'), { ignoreExpiration: true });
     } catch {
       throw AppError.unauthenticated('Invalid or expired token');
     }
@@ -161,9 +229,7 @@ export class TokenService {
 
   async verifyRefresh(token: string): Promise<TokenClaims> {
     try {
-      return await this.jwt.verifyAsync<TokenClaims>(token, {
-        secret: this.config.get('JWT_REFRESH_SECRET', { infer: true }),
-      });
+      return await this.verifyWith(token, this.secrets('REFRESH'));
     } catch {
       throw AppError.unauthenticated('Invalid or expired refresh token');
     }

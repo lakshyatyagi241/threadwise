@@ -65,6 +65,19 @@ export const AuthKeys = {
   impersonationEnded: (sessionUuid: string) => `auth:imp-end:${sessionUuid}`,
   /** Cached "is this workspace suspended" verdict, one per organization. */
   orgSuspended: (orgId: number) => `auth:org-susp:${orgId}`,
+  /** Pending passkey registration challenge for one person (pool + subject id). Single use. */
+  webauthnRegistration: (pool: 'user' | 'operator', subject: string) =>
+    `auth:wa-reg:${pool}:${subject}`,
+  /** Passkey assertion challenge for one sign-in in progress, keyed by the hash of its MFA challenge token. Single use. */
+  webauthnLogin: (challengeKey: string) => `auth:wa-login:${challengeKey}`,
+  /** Cached "is this partner agent still active": '1' active, '0' not. Partner tokens carry no session, so this is their revocation. */
+  partnerStatus: (orgId: number, agentId: number) => `auth:partner:${orgId}:${agentId}`,
+  /** Failed sign-ins against ONE account from ANY address (the per-IP lockout key cannot see a spread-out attack). */
+  accountFailures: (pool: string, orgId: number, email: string) =>
+    `auth:acct-fail:${pool}:${orgId}:${sha256Hex(email.toLowerCase()).slice(0, 32)}`,
+  /** Networks a person has signed in from successfully (hashed). Under attack, only these skip the extra challenge. */
+  knownNetworks: (pool: string, orgId: number, email: string) =>
+    `auth:known-nets:${pool}:${orgId}:${sha256Hex(email.toLowerCase()).slice(0, 32)}`,
 } as const;
 
 export const Ttl = {
@@ -72,14 +85,21 @@ export const Ttl = {
   mfaChallengeSeconds: 5 * 60,
   workspaceChoiceSeconds: 5 * 60,
   mfaSetupSeconds: 10 * 60,
+  webauthnChallengeSeconds: 5 * 60,
   mfaMaxAttempts: 5,
   socialStateSeconds: 10 * 60,
   gateSeconds: 30,
   /** Short on purpose: a suspend or unsuspend reaches every instance within this, even when the invalidation was missed. */
   orgSuspendedSeconds: 5,
+  /** A deactivated partner agent is refused within this long, on every instance. */
+  partnerStatusSeconds: 30,
+  /** Account-wide failure window and how long a successful network stays "known". */
+  accountAttackWindowSeconds: 60 * 60,
+  knownNetworkSeconds: 90 * 24 * 60 * 60,
   refreshGraceSeconds: 30,
   verifyEmailSeconds: 60 * 60,
-  resetPasswordSeconds: 60 * 60,
+  /** Password-reset links: 30 minutes (the reference baseline is 15-30). A reset also signs out every device, so a short window is cheap. */
+  resetPasswordSeconds: 30 * 60,
   emailChangeSeconds: 60 * 60,
   /**
    * Absolute session lifetime when "keep me signed in" is off: seven days, the

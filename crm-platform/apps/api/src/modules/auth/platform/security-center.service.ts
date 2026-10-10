@@ -68,12 +68,14 @@ const ENFORCEMENT: SecurityOverviewResponse['enforcement'] = [
     status: 'enforced',
   },
   {
-    key: 'passwordMinLength / Upper / Number / Symbol',
+    key: 'passwordMinLength / Upper / Number / Symbol / Blocklist / BreachCheck',
     controls: [
       'passwordMinLength',
       'passwordRequireUpper',
       'passwordRequireNumber',
       'passwordRequireSymbol',
+      'passwordBlocklistEnabled',
+      'passwordBreachCheck',
     ],
     consumer: 'Sign-up, reset, change and operator passwords',
     status: 'enforced',
