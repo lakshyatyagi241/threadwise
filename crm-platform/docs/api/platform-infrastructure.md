@@ -249,11 +249,20 @@ means nothing is initialised. Every 5xx from the exception filter is reported, w
 (`api`/`worker`), the request id and the masked path as tags; 4xx are not. Tracing is off unless `SENTRY_TRACES_SAMPLE_RATE` is
 set (it is read from the environment directly; the default of 0.1 in `env.schema.ts` is not used).
 
-What never leaves the process, verified by an end-to-end test against a real Sentry client: request headers that carry a
-credential or signature, cookies, the request body, query strings, and secrets in the address path (Telegram bot token, Shopify
-and WooCommerce webhook secrets, lead-hook token, marketplace hook secret). Two leaks were found and fixed while writing that
-test: Sentry sends a performance transaction per request even with tracing unset unless the rate is set to 0, and it names the
-failing request after the route, secret included.
+What never leaves the process, verified by end-to-end tests against a real Sentry client (`sentry.http.spec.ts` with tracing off,
+`sentry-tracing.http.spec.ts` with it on): request headers that carry a credential or signature, cookies, the request body, query
+strings, and secrets in the address path (Telegram bot token, Shopify and WooCommerce webhook secrets, lead-hook token,
+marketplace hook secret). Leaks found and fixed by those tests: Sentry 8 sent a performance transaction per request even with
+tracing unset unless the rate is set to 0, and it names the failing request after the route, secret included; Sentry 11 streams
+spans, ignores `beforeSendTransaction`, and put the secret in the span's `url.full` and `url.path`, so every span goes through
+`scrubSentrySpan`; it also sends request headers as `http.request.header.<name>` attributes and blanks only the ones that look like a
+credential, so signature headers (`x-hub-signature-256`) are redacted from `SECRET_HEADERS` there too.
+
+Sentry 11 collects far more than 8 unless told otherwise (user, cookies, bodies, bound database values, queue job arguments, the
+value of every local variable in a stack frame), so `initSentry` switches each category off in `NO_EXTRA_DATA`
+(`observability/sentry.ts`, replaces Sentry 8's `sendDefaultPii: false`). Request headers are still sent, with the credential ones
+redacted; response headers are not (`set-cookie`). When upgrading Sentry again, check its `dataCollection` options for new
+categories and run both end-to-end specs.
 
 ### Process crashes
 

@@ -47,10 +47,11 @@ export {
 } from './observability/worker-status.service';
 export {
   initSentry,
+  NO_EXTRA_DATA,
   reportServerError,
   flushSentry,
   scrubSentryEvent,
-  scrubSentryTransaction,
+  scrubSentrySpan,
 } from './observability/sentry';
 export { createFatalHandler, installProcessHandlers } from './observability/process-handlers';
 export { LOG_REDACT_PATHS, SECRET_HEADERS, redactHeaders } from './observability/log-redaction';
