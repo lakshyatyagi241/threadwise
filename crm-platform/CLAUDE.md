@@ -69,6 +69,14 @@ user-visible text stays as a literal in a component. After you build or change a
 invoke the `i18n-translate-sync` skill before saying it is done. The pre-pr gate runs its `check.sh` and fails when a message file
 you touched has a missing or still-English key in any locale. English-only is never "done".
 
+## The mobile app (`apps/mobile`)
+
+The iOS/Android app has its own project skills (`mobile-*`, index in `.claude/skills/README.md`), its own rules in `apps/mobile/CLAUDE.md`, and its own gate
+(`bash .claude/skills/mobile-pre-pr/scripts/gate.sh`; `pre-pr` calls it when `apps/mobile` changed). Start at `docs/mobile/README.md`; decisions are ADR-0021 to 0027.
+How the porting rules above apply to a phone (behaviour is the contract, the UI is a mobile adaptation, scope is the backlog in `docs/mobile/backlog.md`): ADR-0027, still awaiting the
+owner's answers. The parity Stop hook watches web, API and contract files, not `apps/mobile`; for a mobile feature the `mobile-feature-port` skill asks for the Maestro flow and the manual comparison instead.
+Use `mobile-feature-port` for any unit of mobile work; it chains the rest. Expo changes every release: read the versioned Expo docs, do not answer from memory.
+
 ## Before calling anything done
 
 ```bash

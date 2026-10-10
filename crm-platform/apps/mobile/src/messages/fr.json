@@ -1,0 +1,39 @@
+{
+  "common": {
+    "loading": "Chargement…",
+    "retry": "Réessayer",
+    "signOut": "Se déconnecter",
+    "back": "Retour"
+  },
+  "errors": {
+    "generic": "Une erreur s'est produite. Veuillez réessayer.",
+    "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+    "timeout": "Le serveur a mis trop de temps à répondre. Veuillez réessayer.",
+    "outdatedApp": "Cette version de l'application est obsolète. Veuillez la mettre à jour.",
+    "tooManyRequests": "Trop de tentatives. Patientez un instant puis réessayez."
+  },
+  "auth": {
+    "signInTitle": "Se connecter",
+    "signInSubtitle": "Utilisez l'adresse e-mail et le mot de passe de votre compte.",
+    "email": "Adresse e-mail",
+    "password": "Mot de passe",
+    "signInSubmit": "Se connecter",
+    "emailInvalid": "Saisissez une adresse e-mail valide.",
+    "passwordRequired": "Saisissez votre mot de passe.",
+    "mfaTitle": "Vérification en deux étapes",
+    "mfaHint": "Saisissez le code à 6 chiffres de votre application d'authentification.",
+    "mfaCode": "Code de vérification",
+    "mfaSubmit": "Vérifier",
+    "workspaceTitle": "Choisissez un espace de travail",
+    "workspaceHint": "Votre compte appartient à plusieurs espaces de travail.",
+    "invalidCredentials": "L'adresse e-mail ou le mot de passe est incorrect.",
+    "accountLocked": "Ce compte est temporairement verrouillé. Réessayez plus tard.",
+    "accountSuspended": "Ce compte a été suspendu.",
+    "mfaInvalid": "Ce code n'est pas correct. Réessayez.",
+    "mfaExpired": "La connexion a expiré. Veuillez recommencer."
+  },
+  "home": {
+    "welcome": "Bonjour, {{name}}",
+    "workspace": "Espace de travail : {{name}}"
+  }
+}

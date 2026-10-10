@@ -1,0 +1,39 @@
+{
+  "common": {
+    "loading": "Carregando…",
+    "retry": "Tentar novamente",
+    "signOut": "Sair",
+    "back": "Voltar"
+  },
+  "errors": {
+    "generic": "Algo deu errado. Tente novamente.",
+    "network": "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.",
+    "timeout": "O servidor demorou demais para responder. Tente novamente.",
+    "outdatedApp": "Esta versão do aplicativo está desatualizada. Atualize-a.",
+    "tooManyRequests": "Muitas tentativas. Aguarde um instante e tente novamente."
+  },
+  "auth": {
+    "signInTitle": "Entrar",
+    "signInSubtitle": "Use o e-mail e a senha da sua conta.",
+    "email": "E-mail",
+    "password": "Senha",
+    "signInSubmit": "Entrar",
+    "emailInvalid": "Informe um e-mail válido.",
+    "passwordRequired": "Informe sua senha.",
+    "mfaTitle": "Verificação em duas etapas",
+    "mfaHint": "Digite o código de 6 dígitos do seu aplicativo autenticador.",
+    "mfaCode": "Código de verificação",
+    "mfaSubmit": "Verificar",
+    "workspaceTitle": "Escolha um espaço de trabalho",
+    "workspaceHint": "Sua conta pertence a mais de um espaço de trabalho.",
+    "invalidCredentials": "O e-mail ou a senha está incorreto.",
+    "accountLocked": "Esta conta está bloqueada temporariamente. Tente novamente mais tarde.",
+    "accountSuspended": "Esta conta foi suspensa.",
+    "mfaInvalid": "O código não está correto. Tente novamente.",
+    "mfaExpired": "O login expirou. Comece novamente."
+  },
+  "home": {
+    "welcome": "Olá, {{name}}",
+    "workspace": "Espaço de trabalho: {{name}}"
+  }
+}
