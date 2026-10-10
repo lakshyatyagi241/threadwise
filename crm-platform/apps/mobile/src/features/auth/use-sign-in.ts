@@ -67,6 +67,9 @@ export function useSignIn() {
             return t('auth.mfaInvalid');
           case ERROR_CODES.AUTH_MFA_CHALLENGE_EXPIRED:
             return t('auth.mfaExpired');
+          // The platform asks for a CAPTCHA the app cannot produce yet (ADR-0023): say so, instead of a vague "something went wrong".
+          case ERROR_CODES.AUTH_CAPTCHA_FAILED:
+            return t('errors.captchaUnsupported');
         }
       }
       return messageForError(e, t);

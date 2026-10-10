@@ -1,0 +1,53 @@
+# Create an account from the app, land on the home screen, sign out, and sign in again with the new account.
+#
+#   maestro test apps/mobile/.maestro/sign-up.yaml \
+#     -e APP_ID=ai.geta.crm.dev -e E2E_FULL_NAME="Mobile Tester" -e E2E_EMAIL=<a NEW address> -e E2E_WORKSPACE="Mobile Test Co" \
+#     -e E2E_PHONE=9876543210 -e E2E_PASSWORD=<a password that meets the policy>
+#
+# Credentials come from -e, never from this file. Every run creates a real workspace and user on the API it talks to, so use a
+# new E2E_EMAIL (and E2E_WORKSPACE) each time, and only against a local or test API. Needs an emulator or simulator set to English,
+# a development or preview build installed, the local API running, and a platform where registration is open with no CAPTCHA and
+# no WhatsApp code (docs/runbooks/mobile-local-development.md). NOT YET RUN: no Maestro was available when this was written.
+appId: ${APP_ID}
+---
+- launchApp:
+    clearState: true
+- tapOn: 'Create an account'
+- assertVisible: 'Create your account'
+# The empty form is refused, with a message under each field that needs one.
+- tapOn:
+    id: 'sign-up-submit'
+- assertVisible: 'Enter your full name.'
+# Fill it in, field by field.
+- tapOn: 'Your name'
+- inputText: ${E2E_FULL_NAME}
+- tapOn: 'you@company.com'
+- inputText: ${E2E_EMAIL}
+- tapOn: 'Acme Inc.'
+- inputText: ${E2E_WORKSPACE}
+- tapOn: '+91'
+- inputText: ${E2E_PHONE}
+- tapOn: 'Create a password'
+- inputText: ${E2E_PASSWORD}
+- tapOn: 'Re-enter your password'
+- inputText: ${E2E_PASSWORD}
+- hideKeyboard
+- scrollUntilVisible:
+    element: 'I agree to the Terms and Privacy policy.'
+- tapOn: 'I agree to the Terms and Privacy policy.'
+- tapOn:
+    id: 'sign-up-submit'
+# The account exists and the person is signed in.
+- assertVisible: 'Hello, .*'
+- assertVisible: 'Workspace: .*'
+# Sign out, and come back in with the same details.
+- tapOn: 'Sign out'
+- assertVisible: 'Welcome back'
+- tapOn: 'you@company.com'
+- inputText: ${E2E_EMAIL}
+- tapOn: 'Enter your password'
+- inputText: ${E2E_PASSWORD}
+- hideKeyboard
+- tapOn:
+    id: 'sign-in-submit'
+- assertVisible: 'Hello, .*'

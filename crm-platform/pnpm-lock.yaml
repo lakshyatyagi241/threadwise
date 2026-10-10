@@ -314,6 +314,9 @@ importers:
       i18next:
         specifier: ^26.4.3
         version: 26.4.3(typescript@6.0.3)
+      libphonenumber-js:
+        specifier: ^1.13.14
+        version: 1.13.14
       react:
         specifier: 19.3.0
         version: 19.3.0

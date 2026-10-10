@@ -1,52 +1,12 @@
 import { getLocales } from 'expo-localization';
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import ar from '@/messages/ar.json';
-import bn from '@/messages/bn.json';
-import de from '@/messages/de.json';
 import en from '@/messages/en.json';
-import es from '@/messages/es.json';
-import fr from '@/messages/fr.json';
-import he from '@/messages/he.json';
 import hi from '@/messages/hi.json';
-import id from '@/messages/id.json';
-import it from '@/messages/it.json';
-import ja from '@/messages/ja.json';
-import ko from '@/messages/ko.json';
-import nl from '@/messages/nl.json';
-import pl from '@/messages/pl.json';
-import pt from '@/messages/pt.json';
-import ru from '@/messages/ru.json';
-import th from '@/messages/th.json';
-import tr from '@/messages/tr.json';
-import ur from '@/messages/ur.json';
-import vi from '@/messages/vi.json';
-import zhCN from '@/messages/zh-CN.json';
+import mr from '@/messages/mr.json';
 import { DEFAULT_LOCALE, matchLocale, type Locale } from './locales';
 
-const resources = {
-  en,
-  ar,
-  bn,
-  de,
-  es,
-  fr,
-  he,
-  hi,
-  id,
-  it,
-  ja,
-  ko,
-  nl,
-  pl,
-  pt,
-  ru,
-  th,
-  tr,
-  ur,
-  vi,
-  'zh-CN': zhCN,
-} satisfies Record<Locale, typeof en>;
+const resources = { en, hi, mr } satisfies Record<Locale, typeof en>;
 
 /** The first of the phone's preferred languages that the app is translated into, else English. */
 export function detectLocale(): Locale {

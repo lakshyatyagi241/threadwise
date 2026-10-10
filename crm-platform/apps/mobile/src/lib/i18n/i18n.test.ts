@@ -12,8 +12,13 @@ const withDeviceLanguages = (...tags: string[]) =>
 
 describe('detectLocale', () => {
   it('takes the first preferred language the app is translated into', () => {
-    withDeviceLanguages('sw-KE', 'pt-BR', 'fr-FR');
-    expect(detectLocale()).toBe('pt');
+    withDeviceLanguages('ta-IN', 'mr-IN', 'hi-IN');
+    expect(detectLocale()).toBe('mr');
+  });
+
+  it('skips languages the app does not have', () => {
+    withDeviceLanguages('de-DE', 'hi-IN');
+    expect(detectLocale()).toBe('hi');
   });
 
   it('falls back to English when none is supported', () => {
@@ -23,11 +28,12 @@ describe('detectLocale', () => {
 });
 
 describe('initI18n', () => {
-  it('translates, switches language, and fills a {{placeholder}}', async () => {
+  it('translates, switches between the three languages, and fills a {{placeholder}}', async () => {
     await initI18n('en');
-    expect(i18n.t('common.signOut')).toBe('Sign out');
-    await initI18n('de');
-    expect(i18n.t('common.signOut')).toBe('Abmelden');
-    expect(i18n.t('home.welcome', { name: 'Ana & Co' })).toBe('Hallo, Ana & Co');
+    expect(i18n.t('home.welcome', { name: 'Ana & Co' })).toBe('Hello, Ana & Co');
+    await initI18n('hi');
+    expect(i18n.t('home.welcome', { name: 'Ana & Co' })).toBe('नमस्ते, Ana & Co');
+    await initI18n('mr');
+    expect(i18n.t('home.welcome', { name: 'Ana & Co' })).toBe('नमस्कार, Ana & Co');
   });
 });

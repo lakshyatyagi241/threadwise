@@ -1,4 +1,4 @@
 {
-  "vi": ["auth.email"],
-  "it": ["auth.password"]
+  "hi": ["auth.emailPlaceholder", "signUp.orgNamePlaceholder", "signUp.orgSlugPlaceholder"],
+  "mr": ["auth.emailPlaceholder", "signUp.orgNamePlaceholder", "signUp.orgSlugPlaceholder"]
 }

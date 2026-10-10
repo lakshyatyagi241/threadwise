@@ -18,6 +18,16 @@ const envSchema = z.object({
     .string()
     .optional()
     .transform((v) => (v ? v : undefined)),
+  /** Where the web app lives, to open the Terms and Privacy pages when the platform stores them as paths ("/legal/terms"). Optional. */
+  webUrl: z
+    .preprocess(
+      (v) => (typeof v === 'string' && v.trim() === '' ? undefined : v),
+      z
+        .string()
+        .url('EXPO_PUBLIC_WEB_URL must be a full URL such as https://app.example.com')
+        .optional(),
+    )
+    .transform((u) => u?.replace(/\/+$/, '')),
   variant: z.enum(['development', 'preview', 'production']),
 });
 
@@ -26,5 +36,6 @@ export type AppEnv = z.infer<typeof envSchema>;
 export const env: AppEnv = envSchema.parse({
   apiUrl: process.env.EXPO_PUBLIC_API_URL,
   sentryDsn: process.env.EXPO_PUBLIC_SENTRY_DSN,
+  webUrl: process.env.EXPO_PUBLIC_WEB_URL,
   variant: Constants.expoConfig?.extra?.appVariant ?? 'development',
 });

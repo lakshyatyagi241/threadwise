@@ -1,4 +1,7 @@
+import type { RegistrationConfigResponse } from '@crm/contracts';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
+import { useRouter } from 'expo-router';
 import { I18nextProvider } from 'react-i18next';
 import { ApiError } from '@/lib/api';
 import { i18n, initI18n } from '@/lib/i18n';
@@ -8,6 +11,7 @@ import * as api from './api';
 import { SignInScreen } from './sign-in-screen';
 
 jest.mock('./api');
+jest.mock('expo-router', () => ({ useRouter: jest.fn() }));
 const signInWithPassword = jest.mocked(api.signInWithPassword);
 const signInWithMfa = jest.mocked(api.signInWithMfa);
 const signInToWorkspace = jest.mocked(api.signInToWorkspace);
@@ -26,10 +30,37 @@ const authenticated = {
   },
 };
 
+const config: RegistrationConfigResponse = {
+  appName: 'CRM Platform',
+  registrationOpen: true,
+  emailVerification: 'off',
+  trialDays: 14,
+  rememberMeEnabled: true,
+  otp: { enabled: false },
+  captcha: null,
+  social: { google: false, facebook: false },
+  defaultCountryIso: null,
+  authPages: {
+    variant: 1,
+    login: {},
+    register: {},
+    forgot: {},
+    defaulted: { login: [], register: [], forgot: [] },
+    extra: { login: {}, register: {}, forgot: {} },
+  },
+  links: { terms: 'https://example.com/terms', privacy: '/legal/privacy', cookies: null },
+};
+
+const router = { push: jest.fn() };
+
 const renderScreen = () =>
   render(
     <I18nextProvider i18n={i18n}>
-      <SignInScreen />
+      <QueryClientProvider
+        client={new QueryClient({ defaultOptions: { queries: { retry: false, retryDelay: 0 } } })}
+      >
+        <SignInScreen />
+      </QueryClientProvider>
     </I18nextProvider>,
   );
 
@@ -43,9 +74,19 @@ beforeAll(async () => {
 beforeEach(() => {
   jest.resetAllMocks();
   resetSessionForTests();
+  jest.mocked(useRouter).mockReturnValue(router as unknown as ReturnType<typeof useRouter>);
+  jest.mocked(api.fetchRegistrationConfig).mockResolvedValue(config);
 });
 
 describe('SignInScreen', () => {
+  it('hints at what to type in both fields', async () => {
+    renderScreen();
+    expect(screen.getByPlaceholderText('you@company.com')).toBeTruthy();
+    expect(screen.getByPlaceholderText('Enter your password')).toBeTruthy();
+    // Let the platform settings arrive, so the screen is not still updating when the test ends.
+    expect(await screen.findByText('Create an account')).toBeTruthy();
+  });
+
   it('validates the fields before calling the API', async () => {
     renderScreen();
     fill('Email', 'not-an-email');
@@ -88,6 +129,15 @@ describe('SignInScreen', () => {
     fill('Password', 'x');
     press('Sign in');
     expect(await screen.findByText(/Can't reach the server/)).toBeTruthy();
+  });
+
+  it('says plainly when the workspace asks for a CAPTCHA the app cannot pass', async () => {
+    signInWithPassword.mockRejectedValue(new ApiError(400, 'AUTH_CAPTCHA_FAILED', 'x'));
+    renderScreen();
+    fill('Email', 'person@example.com');
+    fill('Password', 'x');
+    press('Sign in');
+    expect(await screen.findByText(/A security check is required/)).toBeTruthy();
   });
 
   it('asks for the authenticator code, then signs in', async () => {
@@ -142,11 +192,53 @@ describe('SignInScreen', () => {
     fill('Password', 'correct horse');
     press('Sign in');
     expect(await screen.findByText('Choose a workspace')).toBeTruthy();
+    expect(screen.getByText('Admin')).toBeTruthy();
     press('Globex');
     await waitFor(() => expect(getSnapshot().status).toBe('signedIn'));
     expect(signInToWorkspace).toHaveBeenCalledWith({
       selectionToken: 'select-1',
       orgSlug: 'globex',
     });
+  });
+});
+
+describe('SignInScreen: what comes from the platform settings', () => {
+  it('shows the product name, the sign-up link and the terms line while registration is open', async () => {
+    renderScreen();
+    expect(await screen.findByText('CRM Platform')).toBeTruthy();
+    expect(screen.getByText('New here?')).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'Terms' })).toBeTruthy();
+    // The privacy address is a path and no web address is configured, so it stays plain text.
+    expect(screen.queryByRole('link', { name: 'Privacy policy' })).toBeNull();
+  });
+
+  it('opens the sign-up screen from "Create an account"', async () => {
+    renderScreen();
+    fireEvent.press(await screen.findByRole('button', { name: 'Create an account' }));
+    expect(router.push).toHaveBeenCalledWith('/sign-up');
+  });
+
+  it('offers no sign-up link while registration is closed', async () => {
+    jest
+      .mocked(api.fetchRegistrationConfig)
+      .mockResolvedValue({ ...config, registrationOpen: false });
+    renderScreen();
+    expect(await screen.findByText('CRM Platform')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Create an account' })).toBeNull();
+    expect(screen.queryByText('New here?')).toBeNull();
+  });
+
+  it('still lets the person sign in when the settings cannot be loaded, and guesses nothing', async () => {
+    jest
+      .mocked(api.fetchRegistrationConfig)
+      .mockRejectedValue(new ApiError(0, 'CLIENT_NETWORK', 'offline'));
+    signInWithPassword.mockResolvedValue(authenticated);
+    renderScreen();
+    fill('Email', 'person@example.com');
+    fill('Password', 'correct horse');
+    press('Sign in');
+    await waitFor(() => expect(getSnapshot().status).toBe('signedIn'));
+    expect(screen.queryByText('New here?')).toBeNull();
+    expect(screen.queryByRole('link', { name: 'Terms' })).toBeNull();
   });
 });
