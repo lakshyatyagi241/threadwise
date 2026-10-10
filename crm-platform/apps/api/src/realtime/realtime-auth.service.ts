@@ -6,6 +6,7 @@ import { REDIS_CLIENT } from '../infra/redis/redis.module';
 import { OrgSuspensionService, TokenService, type TokenClaims } from '../modules/auth';
 import { EpochService } from '../modules/auth/sessions/epoch.service';
 import { AuthKeys } from '../modules/auth/support/redis-keys';
+import { redisFailsClosed, reportRedisFailure } from '../modules/auth/support/resilience';
 import { RealtimeTicketService } from './ticket/realtime-ticket.service';
 
 /** Who is on the other end of a socket. Set once at the handshake and never taken from anything the client sends later. */
@@ -99,8 +100,8 @@ export class RealtimeAuthService {
 
   /**
    * The identities among these whose session was ended (sign out, revoke, password reset) or whose token epoch was bumped
-   * ("revoke everything"). One Redis round trip for the lot. Redis being down answers "none": like the HTTP guard, refusing
-   * everyone because a cache is down would be the worse outcome.
+   * ("revoke everything"). One Redis round trip for the lot. When Redis is down the answer follows the platform failure
+   * mode, like the HTTP guard: closed (production default) treats every session-backed connection as revoked, open answers "none".
    */
   async revoked(identities: SocketIdentity[]): Promise<SocketIdentity[]> {
     const backed = identities.filter((i) => i.sid !== undefined);
@@ -112,8 +113,9 @@ export class RealtimeAuthService {
       ]);
       return backed.filter((identity, index) => flags[index] || (identity.ep ?? 0) < currentEpoch);
     } catch (err) {
+      reportRedisFailure('realtime-revoked', err);
       this.logger.warn({ err }, 'realtime session check skipped: redis unavailable');
-      return [];
+      return redisFailsClosed() ? backed : [];
     }
   }
 }

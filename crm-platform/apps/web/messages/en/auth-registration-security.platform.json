@@ -359,6 +359,14 @@
             "label": "Require a symbol",
             "short": "Symbol"
           },
+          "passwordBlocklistEnabled": {
+            "label": "Block common passwords",
+            "hint": "Refuses the most common passwords, look-alike variants such as P@ssw0rd, keyboard patterns, and anything containing the person's name or email."
+          },
+          "passwordBreachCheck": {
+            "label": "Block passwords from data breaches",
+            "hint": "Checks new passwords against the public Pwned Passwords list. Only the first five characters of a hash leave the server. If the service cannot be reached, the password is accepted."
+          },
           "passwordMaxAgeDays": {
             "label": "Password age limit (days)",
             "hint": "0 means passwords never expire."

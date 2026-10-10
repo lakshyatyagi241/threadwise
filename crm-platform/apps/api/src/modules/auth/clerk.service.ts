@@ -27,6 +27,17 @@ export class ClerkService {
   }
 
   /**
+   * Clerk sign-in is an OPTIONAL door. The key is mandatory in the environment schema (so the app boots everywhere), but the
+   * example placeholder (`sk_test_replace_me`) and an empty value mean "not configured": the exchange route then answers
+   * 404 instead of being a live endpoint that can only fail.
+   */
+  isConfigured(): boolean {
+    return (
+      this.secretKey.length > 0 && !/replace[_-]?me|changeme|placeholder/i.test(this.secretKey)
+    );
+  }
+
+  /**
    * `token` is the Clerk session token the frontend gets from
    * `getToken()`/`useAuth()` — not a password, never one.
    */
@@ -44,11 +55,17 @@ export class ClerkService {
       throw AppError.unauthenticated('Clerk user not found');
     }
 
-    const email =
-      user.emailAddresses.find((e) => e.id === user.primaryEmailAddressId)?.emailAddress ??
-      user.emailAddresses[0]?.emailAddress;
+    const primary =
+      user.emailAddresses.find((e) => e.id === user.primaryEmailAddressId) ??
+      user.emailAddresses[0];
+    const email = primary?.emailAddress;
     if (!email) {
       throw AppError.unauthenticated('Clerk account has no email address');
+    }
+    // The exchange links this identity to an existing local user BY ADDRESS. An address Clerk has not verified proves
+    // nothing: anyone could register the victim's address in Clerk and take over the victim's local account.
+    if (primary?.verification?.status !== 'verified') {
+      throw AppError.unauthenticated('Clerk email address is not verified');
     }
 
     const fullName = [user.firstName, user.lastName].filter(Boolean).join(' ') || email;

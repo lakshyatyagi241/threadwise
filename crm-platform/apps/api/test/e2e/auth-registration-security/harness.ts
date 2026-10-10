@@ -98,6 +98,12 @@ export async function startHarness(options: HarnessOptions = {}): Promise<Harnes
     `INSERT INTO platform_operators (email, full_name, password_hash, role) VALUES ($1, 'Ops', $2, 'super_admin'), ('support@platform.test', 'Support', $2, 'support')`,
     [OPERATOR_EMAIL, await hash(OPERATOR_PASSWORD)],
   );
+  // These suites were written when super admins always had to enrol two-factor; the switch has been off by default since
+  // commit 5f741143, so the precondition they rely on is set explicitly (the switch's own behaviour is tested separately).
+  await owner.query(
+    `INSERT INTO platform_settings (key, value, is_secret) VALUES ('security.policy', '{"requireMfaForSuperAdmins": true}'::jsonb, false)
+     ON CONFLICT (key) DO UPDATE SET value = platform_settings.value || '{"requireMfaForSuperAdmins": true}'::jsonb`,
+  );
 
   if (options.unofficialWhatsapp !== false) {
     await owner.query(

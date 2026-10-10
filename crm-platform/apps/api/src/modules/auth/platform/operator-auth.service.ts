@@ -4,6 +4,7 @@ import { sql } from 'drizzle-orm';
 import { Redis } from 'ioredis';
 import {
   ERROR_CODES,
+  MFA_REAUTH_WINDOW_SECONDS,
   type MfaEnableResponse,
   type MfaLoginRequest,
   type MfaSetupResponse,
@@ -27,7 +28,10 @@ import { PasswordService } from '../security/password.service';
 import { RateLimitService } from '../security/rate-limit.service';
 import { MfaAttemptLimiter } from '../support/mfa-attempts';
 import { consumeRecoveryCode, createRecoveryCodes } from '../support/recovery-codes';
-import { randomToken } from '../support/crypto-utils';
+import { MailService } from '../mail/mail.service';
+import { AccountAttackGuard } from '../security/account-attack.service';
+import { WebAuthnService } from '../security/webauthn.service';
+import { randomToken, sha256Hex } from '../support/crypto-utils';
 import { toMs, type DateLike } from '../support/dates';
 import { ipAllowed, normalizeIp } from '../support/ip';
 import { AuthKeys, Ttl } from '../support/redis-keys';
@@ -89,6 +93,9 @@ export class OperatorAuthService {
     private readonly crypto: CryptoService,
     private readonly mfaLimiter: MfaAttemptLimiter,
     private readonly alerts: LoginAlertService,
+    private readonly attack: AccountAttackGuard,
+    private readonly mail: MailService,
+    private readonly webauthn: WebAuthnService,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
     config: ConfigService<Env, true>,
   ) {
@@ -180,12 +187,22 @@ export class OperatorAuthService {
       }
     }
     await this.captcha.assert(req.captchaToken, 'operator');
+    // Guesses spread over many addresses never trip the per-address lockout above; this counts the operator account itself.
+    await this.attack.assertAllowed(
+      'operator',
+      0,
+      req.email,
+      normalizeIp(meta.ip),
+      req.captchaToken,
+      policy,
+    );
 
     const operator = await this.findByEmail(req.email);
     const ok = await this.passwords.verifyOrDummy(operator?.password_hash, req.password);
     if (!operator || !ok || operator.status !== 'active') {
       if (policy.lockoutAfterFailures > 0)
         await this.rate.hit(lockKey, policy.lockoutWindowMinutes * 60);
+      await this.attack.recordFailure('operator', 0, req.email, policy);
       await this.audit.recordStandalone({
         event: 'platform.auth.failed',
         status: 'failure',
@@ -216,6 +233,7 @@ export class OperatorAuthService {
         status: 'mfa_required',
         challengeToken: token,
         expiresInSeconds: Ttl.mfaChallengeSeconds,
+        passkey: (await this.webauthn.count({ pool: 'operator', operatorId: operator.id })) > 0,
       };
     }
     return this.complete(operator, false, meta);
@@ -253,7 +271,13 @@ export class OperatorAuthService {
     await this.mfaLimiter.assertAvailable('operator', 0, operator.id);
 
     let accepted = false;
-    if (req.code && operator.mfa_secret_enc) {
+    if (req.webauthn) {
+      accepted = await this.webauthn.verifyLogin(
+        { pool: 'operator', operatorId: operator.id },
+        sha256Hex(req.challengeToken),
+        req.webauthn,
+      );
+    } else if (req.code && operator.mfa_secret_enc) {
       const step = verifyTotp(
         this.crypto.decrypt(operator.mfa_secret_enc),
         req.code,
@@ -305,6 +329,7 @@ export class OperatorAuthService {
   ): Promise<OperatorLoginResponse> {
     const ep = await this.epoch.current();
     const policy = await this.policy.policy();
+    void this.attack.rememberNetwork('operator', 0, operator.email, normalizeIp(meta.ip));
     const { sid, evicted } = await this.store.tx(async (tx) => {
       // One operator's issuance is serial, so two sign-ins cannot both slip under the cap.
       await tx.execute(
@@ -649,10 +674,156 @@ export class OperatorAuthService {
 
   // --- MFA enrolment ------------------------------------------------------------------------------------------------
 
-  async mfaSetup(): Promise<MfaSetupResponse> {
+  /**
+   * Recent authentication, as for staff users: a session that signed in within MFA_REAUTH_WINDOW_SECONDS passes, an older
+   * one must send the password. Enrolling the attacker's authenticator on a hijacked operator session would hand over the
+   * highest-privilege account, so this matters more here than anywhere.
+   */
+  private async assertRecentAuth(operator: OperatorRow, password?: string): Promise<void> {
+    if (password) {
+      await this.mfaLimiter.assertAvailable('operator', 0, operator.id);
+      if (!(await this.passwords.verifyOrDummy(operator.password_hash, password))) {
+        await this.mfaLimiter.recordFailure('operator', 0, operator.id);
+        await this.audit.recordStandalone({
+          event: 'platform.auth.mfa_failed',
+          status: 'failure',
+          actorType: 'platform_operator',
+          actorId: operator.id,
+          payload: { phase: 'confirm' },
+        });
+        throw new AppError(
+          ERROR_CODES.AUTH_CURRENT_PASSWORD_WRONG,
+          'The password you entered is not correct.',
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        );
+      }
+      return;
+    }
+    const sid = RequestContextStore.peek()?.sessionId;
+    if (sid) {
+      const res = await this.store.tx(async (tx) =>
+        tx.execute(sql`
+          SELECT (now() - created_at) < make_interval(secs => ${MFA_REAUTH_WINDOW_SECONDS}) AS fresh
+          FROM platform_sessions WHERE operator_id = ${operator.id} AND uuid = ${sid}::uuid
+        `),
+      );
+      if ((res.rows[0] as { fresh?: boolean } | undefined)?.fresh === true) return;
+    }
+    throw new AppError(
+      ERROR_CODES.AUTH_REAUTH_REQUIRED,
+      'Confirm your password to continue.',
+      HttpStatus.FORBIDDEN,
+    );
+  }
+
+  /** Options for "Use a passkey" at the operator's second-factor step. */
+  async passkeyLoginOptions(challengeToken: string) {
+    const raw = await this.redis.get(AuthKeys.mfaChallenge(challengeToken));
+    if (!raw)
+      throw new AppError(
+        ERROR_CODES.AUTH_MFA_CHALLENGE_EXPIRED,
+        'That sign-in expired. Start again.',
+        HttpStatus.UNAUTHORIZED,
+      );
+    const challenge = JSON.parse(raw) as OperatorChallenge;
+    if (typeof challenge.operatorId !== 'number') {
+      throw new AppError(
+        ERROR_CODES.AUTH_MFA_CHALLENGE_EXPIRED,
+        'That sign-in expired. Start again.',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+    await this.mfaLimiter.assertAvailable('operator', 0, challenge.operatorId);
+    if (
+      !(await this.rate.allow(
+        `auth:wa-opts:${sha256Hex(challengeToken)}`,
+        10,
+        Ttl.mfaChallengeSeconds,
+      ))
+    ) {
+      throw new AppError(
+        ERROR_CODES.RATE_LIMITED,
+        'Too many attempts. Slow down.',
+        HttpStatus.TOO_MANY_REQUESTS,
+      );
+    }
+    return this.webauthn.loginOptions(
+      { pool: 'operator', operatorId: challenge.operatorId },
+      sha256Hex(challengeToken),
+    );
+  }
+
+  // --- passkeys of the signed-in operator ----------------------------------------------------------------------
+
+  private async currentOperator(): Promise<OperatorRow> {
     const ctx = RequestContextStore.require();
     const operator = await this.findById(ctx.actorId!);
     if (!operator) throw AppError.unauthenticated();
+    return operator;
+  }
+
+  async listPasskeys() {
+    const operator = await this.currentOperator();
+    return { data: await this.webauthn.list({ pool: 'operator', operatorId: operator.id }) };
+  }
+
+  private assertMfaOn(operator: OperatorRow): void {
+    if (!operator.mfa_enabled) {
+      throw new AppError(
+        ERROR_CODES.AUTH_PASSKEY_NEEDS_MFA,
+        'Turn on two-factor authentication with an authenticator app first, then add a passkey.',
+        HttpStatus.CONFLICT,
+      );
+    }
+  }
+
+  async passkeyOptions(password?: string) {
+    const operator = await this.currentOperator();
+    this.assertMfaOn(operator);
+    await this.assertRecentAuth(operator, password);
+    return this.webauthn.registrationOptions(
+      { pool: 'operator', operatorId: operator.id },
+      { userName: operator.email, displayName: operator.full_name },
+    );
+  }
+
+  async registerPasskey(response: Record<string, unknown>, name: string, password?: string) {
+    const operator = await this.currentOperator();
+    this.assertMfaOn(operator);
+    await this.assertRecentAuth(operator, password);
+    const item = await this.webauthn.register(
+      { pool: 'operator', operatorId: operator.id },
+      response,
+      name,
+    );
+    void this.mail.sendMfaChanged(
+      operator.email,
+      operator.full_name,
+      'passkey-added',
+      this.mail.link('/platform/login', {}),
+    );
+    return item;
+  }
+
+  async removePasskey(id: string, password: string) {
+    const operator = await this.currentOperator();
+    await this.assertRecentAuth(operator, password);
+    if (!(await this.webauthn.remove({ pool: 'operator', operatorId: operator.id }, id)))
+      throw AppError.notFound('Passkey', id);
+    void this.mail.sendMfaChanged(
+      operator.email,
+      operator.full_name,
+      'passkey-removed',
+      this.mail.link('/platform/login', {}),
+    );
+    return { ok: true };
+  }
+
+  async mfaSetup(password?: string): Promise<MfaSetupResponse> {
+    const ctx = RequestContextStore.require();
+    const operator = await this.findById(ctx.actorId!);
+    if (!operator) throw AppError.unauthenticated();
+    await this.assertRecentAuth(operator, password);
     if (operator.mfa_enabled)
       throw new AppError(
         ERROR_CODES.CONFLICT,
@@ -670,12 +841,13 @@ export class OperatorAuthService {
     };
   }
 
-  async mfaEnable(code: string): Promise<MfaEnableResponse> {
+  async mfaEnable(code: string, password?: string): Promise<MfaEnableResponse> {
     const ctx = RequestContextStore.require();
     const operator = await this.findById(ctx.actorId!);
     if (!operator) throw AppError.unauthenticated();
     // A wrong enrolment code counts against the same budget as a wrong sign-in code.
     await this.mfaLimiter.assertAvailable('operator', 0, operator.id);
+    await this.assertRecentAuth(operator, password);
     const stored = await this.redis.get(AuthKeys.mfaSetup(0, operator.uuid));
     if (!stored)
       throw new AppError(
@@ -718,6 +890,12 @@ export class OperatorAuthService {
       actorType: 'platform_operator',
       actorId: operator.id,
     });
+    void this.mail.sendMfaChanged(
+      operator.email,
+      operator.full_name,
+      'enabled',
+      this.mail.link('/platform/login', {}),
+    );
     return { recoveryCodes: plain };
   }
 }

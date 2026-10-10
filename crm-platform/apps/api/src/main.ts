@@ -62,6 +62,13 @@ async function bootstrap(): Promise<void> {
   if (corsIsClosedInProduction(origins, nodeEnv)) {
     logger.warn('CORS_ORIGINS is empty in production: browsers on other origins are refused');
   }
+  if (origins.length === 0 && nodeEnv !== 'production') {
+    // Development convenience (cors-policy.ts): every origin is allowed WITH credentials. Fine on a laptop, a hole on any
+    // server other people can reach. Name the origins, and set NODE_ENV=production on every deployed environment.
+    logger.warn(
+      'CORS_ORIGINS is empty and NODE_ENV is not production: ANY origin may call this API with credentials. Never run a shared or staging server like this.',
+    );
+  }
   // The Forms add-on answers the CORS preflight of its public routes from each form's own allow-list: before the API-wide policy below,
   // which only knows the web app's origins and would refuse a customer's page.
   app.use((req: Request, res: Response, next: NextFunction) => {

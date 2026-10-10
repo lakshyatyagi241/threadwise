@@ -43,6 +43,8 @@ const SECRET_KEY = new RegExp(
     'cookie',
     // A bare "code" is an OAuth or one-time code; "country_code" and friends are not matched.
     '^code$',
+    // A bare one-time PIN / OTP / TOTP value (the compound forms, otp_code and friends, are matched below).
+    '^(?:otp|totp|pin|passcode)$',
     '(?:otp|totp|mfa|recovery|verification|backup|auth)[_-]?codes?$',
   ].join('|'),
   'i',

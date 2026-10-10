@@ -59,7 +59,8 @@ export class MailService {
 
   /** Link into the web app; the slug travels in the URL so the page needs no lookup. */
   link(path: string, params: Record<string, string>): string {
-    return `${this.webUrl}${path}?${new URLSearchParams(params).toString()}`;
+    const query = new URLSearchParams(params).toString();
+    return query ? `${this.webUrl}${path}?${query}` : `${this.webUrl}${path}`;
   }
 
   private layout(heading: string, bodyHtml: string, cta?: { label: string; url: string }): string {
@@ -117,10 +118,10 @@ export class MailService {
     return this.deliver(
       to,
       `Reset your ${this.brand} password`,
-      `Hi ${name},\n\nUse this link to choose a new password:\n${url}\n\nIt works once and expires in 60 minutes. If you did not ask for it, you can ignore this message.`,
+      `Hi ${name},\n\nUse this link to choose a new password:\n${url}\n\nIt works once and expires in 30 minutes. If you did not ask for it, you can ignore this message.`,
       this.layout(
         'Choose a new password',
-        `<p>Hi ${esc(name)}, use the button below to choose a new password. The link works once and expires in 60 minutes. If you did not ask for it, ignore this message; your password stays as it is.</p>`,
+        `<p>Hi ${esc(name)}, use the button below to choose a new password. The link works once and expires in 30 minutes. If you did not ask for it, ignore this message; your password stays as it is.</p>`,
         { label: 'Reset password', url },
       ),
     );
@@ -154,6 +155,35 @@ export class MailService {
         'Your password was changed',
         `<p>Hi ${esc(name)}, your password was just changed and your other devices were signed out. If this was not you, reset it right away.</p>`,
         { label: 'Reset password', url: resetUrl },
+      ),
+    );
+  }
+
+  /** Two-factor was turned on or off, or the recovery codes were replaced: the sign that an account is being taken over. */
+  sendMfaChanged(
+    to: string,
+    name: string,
+    change: 'enabled' | 'disabled' | 'recovery-codes' | 'passkey-added' | 'passkey-removed',
+    recoverUrl: string,
+  ): Promise<boolean> {
+    const what =
+      change === 'enabled'
+        ? 'two-factor authentication was turned on'
+        : change === 'disabled'
+          ? 'two-factor authentication was turned off'
+          : change === 'passkey-added'
+            ? 'a passkey was added to your account'
+            : change === 'passkey-removed'
+              ? 'a passkey was removed from your account'
+              : 'your two-factor recovery codes were replaced';
+    return this.deliver(
+      to,
+      `Security change on your ${this.brand} account`,
+      `Hi ${name},\n\nYour ${what}. If this was not you, reset your password straight away, which also signs out every device:\n${recoverUrl}`,
+      this.layout(
+        'Security change on your account',
+        `<p>Hi ${esc(name)}, ${esc(what)}. If this was not you, reset your password straight away; that also signs out every device.</p>`,
+        { label: 'Secure my account', url: recoverUrl },
       ),
     );
   }
