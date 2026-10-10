@@ -113,8 +113,230 @@
       "cooldown": "Please wait a moment before requesting another code."
     }
   },
-  "home": {
-    "welcome": "Hello, {{name}}",
-    "workspace": "Workspace: {{name}}"
+  "dashboard": {
+    "kicker": "Operator dashboard",
+    "synced": "Live · synced {{s}}s ago",
+    "greeting": {
+      "morning": "Good morning, {{name}}.",
+      "afternoon": "Good afternoon, {{name}}.",
+      "evening": "Good evening, {{name}}."
+    },
+    "calm": "Workspace is calm.",
+    "running_one": "{{count}} campaign is running.",
+    "running_other": "{{count}} campaigns are running.",
+    "subline_one": "{{date}} - {{range}} showing {{sent}} outbound, {{rate}}% deliverability across {{count}} connected device.",
+    "subline_other": "{{date}} - {{range}} showing {{sent}} outbound, {{rate}}% deliverability across {{count}} connected devices.",
+    "sublineOfficial": "{{date}} - {{range}} showing {{sent}} outbound, {{rate}}% deliverability.",
+    "setupBanner": "Your workspace setup is not finished. Finish it on the web to unlock the rest of your account.",
+    "range": {
+      "label": "Date range",
+      "short": {
+        "24h": "24h",
+        "7d": "7d",
+        "30d": "30d",
+        "qtd": "QTD"
+      },
+      "long": {
+        "24h": "Last 24 hours",
+        "7d": "Last 7 days",
+        "30d": "Last 30 days",
+        "qtd": "Quarter to date"
+      }
+    },
+    "trend": {
+      "up": "Up {{value}} against the previous period",
+      "down": "Down {{value}} against the previous period",
+      "flat": "No change against the previous period"
+    },
+    "kpi": {
+      "sent": "Messages sent · {{range}}",
+      "sentLegend": "{{delivered}} delivered · {{failed}} failed",
+      "sparkline": "Messages sent per hour over the last 20 hours, oldest first",
+      "readRate": "Read rate",
+      "readMini": {
+        "sent": "Sent",
+        "delivered": "Delivered",
+        "read": "Read"
+      }
+    },
+    "contacts": {
+      "title": "Active contacts",
+      "subscribed": "Subscribed",
+      "optedIn": "Opted-in",
+      "blocked": "Blocked"
+    },
+    "wallet": {
+      "title": "Wallet balance",
+      "payPerMessage": "pay per message"
+    },
+    "autopilot": {
+      "kicker": "Get more done",
+      "title": "Put replies on autopilot",
+      "body": "Build a flow or launch a campaign to reach more customers automatically."
+    },
+    "pipeline": {
+      "kicker": "Sales pipeline",
+      "open": "Open pipeline",
+      "deals": "Open deals",
+      "won": "Won this month",
+      "winRate": "Win rate"
+    },
+    "throughput": {
+      "title": "Message throughput",
+      "subtitle": {
+        "24h": "Outbound, delivered and failed, hourly, last 24 hours",
+        "7d": "Outbound, delivered and failed, daily, last 7 days",
+        "30d": "Outbound, delivered and failed, daily, last 30 days",
+        "qtd": "Outbound, delivered and failed, daily, quarter to date"
+      },
+      "peak": "Peak hour {{when}} · {{n}} messages",
+      "sent": "Sent",
+      "delivered": "Delivered",
+      "failed": "Failed",
+      "avgHour": "Average per hour",
+      "replies": "Replies",
+      "replyRate": "Reply rate",
+      "summary": "{{sent}} sent, {{delivered}} delivered and {{failed}} failed in this period."
+    },
+    "inbox": {
+      "title": "Live inbox",
+      "unread": "{{n}} unread",
+      "oldest": "oldest {{when}}",
+      "recent": "Recent conversations",
+      "empty": "No conversations yet."
+    },
+    "campaigns": {
+      "title": "Active campaigns",
+      "summary": "{{running}} running - {{scheduled}} scheduled - {{paused}} paused",
+      "total": "{{n}} in all",
+      "untitled": "Untitled campaign",
+      "delivered": "{{done}} / {{total}} delivered",
+      "emptyTitle": "No active campaigns",
+      "emptyBody": "Spin one up to start sending to a contact group.",
+      "status": {
+        "sending": "Sending",
+        "scheduled": "Scheduled",
+        "paused": "Paused",
+        "failed": "Failed",
+        "completed": "Completed"
+      }
+    },
+    "devices": {
+      "title": "Connected devices",
+      "summary": "{{total}} of {{cap}} slots used - {{online}} online",
+      "emptyTitle": "No devices connected",
+      "emptyBody": "Pair a WhatsApp number to start sending.",
+      "unzoned": "unzoned",
+      "per24h": "{{n}}/24h",
+      "deliv": "deliv",
+      "free_one": "{{count}} device slot available",
+      "free_other": "{{count}} device slots available",
+      "state": {
+        "online": "Online",
+        "connecting": "Connecting",
+        "offline": "Offline"
+      }
+    },
+    "templates": {
+      "title": "Top performing templates",
+      "subtitle": "By send volume - selected range",
+      "count_one": "{{count}} template",
+      "count_other": "{{count}} templates",
+      "empty": "No templates yet.",
+      "sent": "Sent",
+      "delivered": "Delivered",
+      "read": "Read",
+      "readRate": "Read rate",
+      "status": {
+        "approved": "Approved",
+        "inReview": "In review",
+        "rejected": "Rejected"
+      }
+    },
+    "activity": {
+      "title": "Activity log",
+      "subtitle": "Workspace events",
+      "empty": "No recent activity logged for this workspace.",
+      "by": "{{actor}} - {{module}} {{action}}"
+    },
+    "instagram": {
+      "title": "Instagram",
+      "accounts_one": "{{count}} account",
+      "accounts_other": "{{count}} accounts",
+      "connected": "Connected",
+      "tile": {
+        "needReply": "Need reply",
+        "openChats": "Open chats",
+        "dmsIn": "DMs in · 7d",
+        "dmsOut": "DMs sent · 7d",
+        "followers": "Followers"
+      }
+    },
+    "flows": {
+      "title": "Automation flows",
+      "summary": "{{active}} active · {{subscribers}} subscribers",
+      "empty": "No flows yet.",
+      "meta": "{{trigger}} trigger · {{steps}} steps · {{subs}} subscribers",
+      "statusActive": "Active",
+      "statusPaused": "Paused",
+      "stat": {
+        "flows": "Flows",
+        "active": "Active",
+        "subscribers": "Subscribers"
+      }
+    },
+    "integrations": {
+      "title": "Integrations",
+      "name": {
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "google_sheets": "Google Sheets",
+        "meta_catalog": "Meta Catalog"
+      },
+      "events": "{{n}} events / 7d",
+      "connected": {
+        "woocommerce": "Connected",
+        "shopify": "Connected",
+        "google_sheets": "API key issued",
+        "meta_catalog": "Catalog linked"
+      },
+      "notConnected": "not connected",
+      "connectedLabel": "Connected"
+    },
+    "funnel": {
+      "title": "Engagement funnel",
+      "stage": {
+        "messaged": "Contacts messaged",
+        "delivered": "Delivered",
+        "replied": "Replied",
+        "goalCompleted": "Goal completed"
+      },
+      "stageLabel": "{{stage}}: {{n}} contacts, {{pct}}% of contacts messaged",
+      "activity": {
+        "title": "Conversation activity",
+        "inbound_one": "{{count}} inbound message",
+        "inbound_other": "{{count}} inbound messages",
+        "responding_one": "{{count}} responding contact",
+        "responding_other": "{{count}} responding contacts",
+        "perContact": "{{value}} replies per responding contact"
+      },
+      "comparison": {
+        "title": "Compared with previous period",
+        "replyRate": "Reply rate"
+      }
+    },
+    "ago": {
+      "minute_one": "{{count}} minute ago",
+      "minute_other": "{{count}} minutes ago",
+      "hour_one": "{{count}} hour ago",
+      "hour_other": "{{count}} hours ago",
+      "day_one": "{{count}} day ago",
+      "day_other": "{{count}} days ago"
+    },
+    "error": {
+      "forbidden": "Your role ({{role}}) does not have access to the dashboard.",
+      "generic": "The numbers could not be loaded. Try again in a moment.",
+      "locked": "Your plan does not include analytics."
+    }
   }
 }

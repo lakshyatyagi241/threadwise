@@ -4,7 +4,8 @@
  *
  * Reading guide: `border` is for dividers, `borderStrong` for the edge of a control (a field, a checkbox: 3:1 against the page, as
  * WCAG asks of anything a person must find to use), `brand*` colours are the deep band behind the logo on the sign-in and sign-up screens, `*Soft` colours are the
- * quiet backgrounds of banners and selected rows (always paired with the strong colour of the same name for the text on them).
+ * quiet backgrounds of banners, badges and selected rows (always paired with the strong colour of the same name for the text on them),
+ * `success` is a change for the better, a connected thing or a finished job, `instagram` is that channel's accent.
  */
 export const palette = {
   light: {
@@ -28,6 +29,10 @@ export const palette = {
     dangerSoft: '#FCEBE9',
     warning: '#8A5300',
     warningSoft: '#FFF3DC',
+    success: '#1B7A43',
+    successSoft: '#E4F4EA',
+    instagram: '#C13584',
+    instagramSoft: '#FBE8F2',
     focus: '#1A73E8',
   },
   dark: {
@@ -51,6 +56,10 @@ export const palette = {
     dangerSoft: '#3A1917',
     warning: '#F5C26B',
     warningSoft: '#3A2D12',
+    success: '#7DD9A0',
+    successSoft: '#16301F',
+    instagram: '#F06AB0',
+    instagramSoft: '#3A1A2B',
     focus: '#8AB4F8',
   },
 } as const;
@@ -72,5 +81,9 @@ export const typography = {
   body: { fontSize: 16, lineHeight: 22, fontWeight: '400' },
   label: { fontSize: 14, lineHeight: 18, fontWeight: '600' },
   caption: { fontSize: 13, lineHeight: 18, fontWeight: '400' },
+  /** The title of a panel inside a screen: between a label and a heading, so cards do not all shout. */
+  subheading: { fontSize: 16, lineHeight: 22, fontWeight: '700' },
+  /** The one big number of a card. */
+  metric: { fontSize: 32, lineHeight: 38, fontWeight: '700' },
 } as const;
 export type TypographyVariant = keyof typeof typography;

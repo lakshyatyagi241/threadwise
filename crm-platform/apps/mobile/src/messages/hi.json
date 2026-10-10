@@ -113,8 +113,230 @@
       "cooldown": "दूसरा कोड माँगने से पहले कृपया थोड़ा रुकें।"
     }
   },
-  "home": {
-    "welcome": "नमस्ते, {{name}}",
-    "workspace": "वर्कस्पेस: {{name}}"
+  "dashboard": {
+    "kicker": "ऑपरेटर डैशबोर्ड",
+    "synced": "लाइव · {{s}} सेकंड पहले सिंक हुआ",
+    "greeting": {
+      "morning": "सुप्रभात, {{name}}।",
+      "afternoon": "नमस्कार, {{name}}।",
+      "evening": "शुभ संध्या, {{name}}।"
+    },
+    "calm": "वर्कस्पेस शांत है।",
+    "running_one": "{{count}} ब्रॉडकास्ट चल रहा है।",
+    "running_other": "{{count}} ब्रॉडकास्ट चल रहे हैं।",
+    "subline_one": "{{date}} - {{range}}: {{count}} कनेक्टेड डिवाइस पर {{sent}} आउटबाउंड, {{rate}}% डिलीवरेबिलिटी दिख रही है।",
+    "subline_other": "{{date}} - {{range}}: {{count}} कनेक्टेड डिवाइस पर {{sent}} आउटबाउंड, {{rate}}% डिलीवरेबिलिटी दिख रही है।",
+    "sublineOfficial": "{{date}} - {{range}}: {{sent}} आउटबाउंड, {{rate}}% डिलीवरेबिलिटी दिख रही है।",
+    "setupBanner": "आपके वर्कस्पेस का सेटअप पूरा नहीं हुआ है। अकाउंट की बाकी सुविधाएँ खोलने के लिए इसे वेब पर पूरा करें।",
+    "range": {
+      "label": "तारीख सीमा",
+      "short": {
+        "24h": "24 घं.",
+        "7d": "7 दिन",
+        "30d": "30 दिन",
+        "qtd": "QTD"
+      },
+      "long": {
+        "24h": "पिछले 24 घंटे",
+        "7d": "पिछले 7 दिन",
+        "30d": "पिछले 30 दिन",
+        "qtd": "तिमाही अब तक"
+      }
+    },
+    "trend": {
+      "up": "पिछली अवधि की तुलना में {{value}} ऊपर",
+      "down": "पिछली अवधि की तुलना में {{value}} नीचे",
+      "flat": "पिछली अवधि की तुलना में कोई बदलाव नहीं"
+    },
+    "kpi": {
+      "sent": "भेजे गए संदेश · {{range}}",
+      "sentLegend": "{{delivered}} डिलीवर हुए · {{failed}} विफल",
+      "sparkline": "पिछले 20 घंटों में प्रति घंटा भेजे गए संदेश, सबसे पुराना पहले",
+      "readRate": "पढ़ने की दर",
+      "readMini": {
+        "sent": "भेजे गए",
+        "delivered": "डिलीवर हुए",
+        "read": "पढ़े गए"
+      }
+    },
+    "contacts": {
+      "title": "सक्रिय संपर्क",
+      "subscribed": "सब्सक्राइब किए",
+      "optedIn": "ऑप्ट-इन किए",
+      "blocked": "ब्लॉक किए"
+    },
+    "wallet": {
+      "title": "वॉलेट बैलेंस",
+      "payPerMessage": "प्रति संदेश भुगतान"
+    },
+    "autopilot": {
+      "kicker": "और काम निपटाएँ",
+      "title": "जवाबों को ऑटोपायलट पर रखें",
+      "body": "अधिक ग्राहकों तक अपने आप पहुँचने के लिए फ़्लो बनाएँ या कैंपेन शुरू करें।"
+    },
+    "pipeline": {
+      "kicker": "सेल्स पाइपलाइन",
+      "open": "खुली पाइपलाइन",
+      "deals": "खुले डील",
+      "won": "इस महीने जीते",
+      "winRate": "जीत दर"
+    },
+    "throughput": {
+      "title": "संदेश थ्रूपुट",
+      "subtitle": {
+        "24h": "आउटबाउंड, डिलीवर हुए और विफल, प्रति घंटा, पिछले 24 घंटे",
+        "7d": "आउटबाउंड, डिलीवर हुए और विफल, दैनिक, पिछले 7 दिन",
+        "30d": "आउटबाउंड, डिलीवर हुए और विफल, दैनिक, पिछले 30 दिन",
+        "qtd": "आउटबाउंड, डिलीवर हुए और विफल, दैनिक, तिमाही अब तक"
+      },
+      "peak": "पीक घंटा {{when}} · {{n}} संदेश",
+      "sent": "भेजे गए",
+      "delivered": "डिलीवर हुए",
+      "failed": "विफल",
+      "avgHour": "प्रति घंटा औसत",
+      "replies": "जवाब",
+      "replyRate": "जवाब दर",
+      "summary": "इस अवधि में {{sent}} भेजे गए, {{delivered}} डिलीवर हुए और {{failed}} विफल रहे।"
+    },
+    "inbox": {
+      "title": "लाइव इनबॉक्स",
+      "unread": "{{n}} अपठित",
+      "oldest": "सबसे पुराना {{when}}",
+      "recent": "हाल की बातचीत",
+      "empty": "अभी कोई बातचीत नहीं।"
+    },
+    "campaigns": {
+      "title": "सक्रिय कैंपेन",
+      "summary": "{{running}} चल रहे - {{scheduled}} शेड्यूल्ड - {{paused}} रुके हुए",
+      "total": "कुल {{n}}",
+      "untitled": "बिना शीर्षक का ब्रॉडकास्ट",
+      "delivered": "{{done}} / {{total}} डिलीवर हुए",
+      "emptyTitle": "कोई सक्रिय ब्रॉडकास्ट नहीं",
+      "emptyBody": "किसी संपर्क ग्रुप को भेजना शुरू करने के लिए एक बनाएँ।",
+      "status": {
+        "sending": "भेजा जा रहा है",
+        "scheduled": "शेड्यूल्ड",
+        "paused": "रुका हुआ",
+        "failed": "विफल",
+        "completed": "पूर्ण"
+      }
+    },
+    "devices": {
+      "title": "कनेक्टेड डिवाइस",
+      "summary": "{{cap}} में से {{total}} स्लॉट उपयोग में - {{online}} ऑनलाइन",
+      "emptyTitle": "कोई डिवाइस कनेक्ट नहीं",
+      "emptyBody": "भेजना शुरू करने के लिए एक WhatsApp नंबर पेयर करें।",
+      "unzoned": "बिना ज़ोन",
+      "per24h": "{{n}}/24 घं.",
+      "deliv": "डिलीवर",
+      "free_one": "{{count}} डिवाइस स्लॉट उपलब्ध",
+      "free_other": "{{count}} डिवाइस स्लॉट उपलब्ध",
+      "state": {
+        "online": "ऑनलाइन",
+        "connecting": "कनेक्ट हो रहा है",
+        "offline": "ऑफ़लाइन"
+      }
+    },
+    "templates": {
+      "title": "सबसे अच्छा प्रदर्शन करने वाले टेम्पलेट",
+      "subtitle": "भेजे गए वॉल्यूम के अनुसार - चुनी गई अवधि",
+      "count_one": "{{count}} टेम्पलेट",
+      "count_other": "{{count}} टेम्पलेट",
+      "empty": "अभी कोई टेम्पलेट नहीं।",
+      "sent": "भेजे गए",
+      "delivered": "डिलीवर हुए",
+      "read": "पढ़े गए",
+      "readRate": "पढ़ने की दर",
+      "status": {
+        "approved": "स्वीकृत",
+        "inReview": "समीक्षा में",
+        "rejected": "अस्वीकृत"
+      }
+    },
+    "activity": {
+      "title": "गतिविधि लॉग",
+      "subtitle": "वर्कस्पेस इवेंट",
+      "empty": "इस वर्कस्पेस की कोई हाल की गतिविधि दर्ज नहीं है।",
+      "by": "{{actor}} - {{module}} {{action}}"
+    },
+    "instagram": {
+      "title": "Instagram",
+      "accounts_one": "{{count}} अकाउंट",
+      "accounts_other": "{{count}} अकाउंट",
+      "connected": "कनेक्टेड",
+      "tile": {
+        "needReply": "जवाब चाहिए",
+        "openChats": "चैट खोलें",
+        "dmsIn": "प्राप्त DM · 7 दिन",
+        "dmsOut": "भेजे गए DM · 7 दिन",
+        "followers": "फ़ॉलोअर"
+      }
+    },
+    "flows": {
+      "title": "ऑटोमेशन फ़्लो",
+      "summary": "{{active}} सक्रिय · {{subscribers}} सब्सक्राइबर",
+      "empty": "अभी कोई फ़्लो नहीं।",
+      "meta": "{{trigger}} ट्रिगर · {{steps}} चरण · {{subs}} सब्सक्राइबर",
+      "statusActive": "सक्रिय",
+      "statusPaused": "रुका हुआ",
+      "stat": {
+        "flows": "फ़्लो",
+        "active": "सक्रिय",
+        "subscribers": "सब्सक्राइबर"
+      }
+    },
+    "integrations": {
+      "title": "इंटीग्रेशन",
+      "name": {
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "google_sheets": "Google Sheets",
+        "meta_catalog": "Meta Catalog"
+      },
+      "events": "{{n}} इवेंट / 7 दिन",
+      "connected": {
+        "woocommerce": "कनेक्टेड",
+        "shopify": "कनेक्टेड",
+        "google_sheets": "API कुंजी जारी की गई",
+        "meta_catalog": "कैटलॉग लिंक किया गया"
+      },
+      "notConnected": "कनेक्ट नहीं है",
+      "connectedLabel": "कनेक्टेड"
+    },
+    "funnel": {
+      "title": "एंगेजमेंट फ़नल",
+      "stage": {
+        "messaged": "संदेश भेजे गए संपर्क",
+        "delivered": "डिलीवर हुए",
+        "replied": "जवाब दिया",
+        "goalCompleted": "लक्ष्य पूरा हुआ"
+      },
+      "stageLabel": "{{stage}}: {{n}} संपर्क, संदेश भेजे गए संपर्कों का {{pct}}%",
+      "activity": {
+        "title": "बातचीत गतिविधि",
+        "inbound_one": "{{count}} इनबाउंड संदेश",
+        "inbound_other": "{{count}} इनबाउंड संदेश",
+        "responding_one": "{{count}} जवाब देने वाला संपर्क",
+        "responding_other": "{{count}} जवाब देने वाले संपर्क",
+        "perContact": "{{value}} जवाब/जवाब देने वाला संपर्क"
+      },
+      "comparison": {
+        "title": "पिछली अवधि की तुलना में",
+        "replyRate": "जवाब दर"
+      }
+    },
+    "ago": {
+      "minute_one": "{{count}} मिनट पहले",
+      "minute_other": "{{count}} मिनट पहले",
+      "hour_one": "{{count}} घंटा पहले",
+      "hour_other": "{{count}} घंटे पहले",
+      "day_one": "{{count}} दिन पहले",
+      "day_other": "{{count}} दिन पहले"
+    },
+    "error": {
+      "forbidden": "आपकी भूमिका ({{role}}) को डैशबोर्ड की पहुँच नहीं है।",
+      "generic": "आँकड़े लोड नहीं हो सके। थोड़ी देर में दोबारा कोशिश करें।",
+      "locked": "आपके प्लान में एनालिटिक्स शामिल नहीं है।"
+    }
   }
 }
