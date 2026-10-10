@@ -305,7 +305,8 @@ describe('template clicks (WD-WABA-053)', () => {
     expect((w.end - old.start) / 86400).toBe(90);
     expect(insightsDisabled('Template insights are not enabled')).toBe(true);
     expect(insightsDisabled('Invalid token')).toBe(false);
-  });
+    // The first import of this service loads Nest, the database layer and the connect service; a cold run can pass the default 5 s.
+  }, 60_000);
 });
 
 describe('catalog orders (WD-WABA-042)', () => {
