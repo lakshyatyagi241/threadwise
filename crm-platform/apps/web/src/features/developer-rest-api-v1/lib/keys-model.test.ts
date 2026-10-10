@@ -1,16 +1,28 @@
 import { describe, expect, it } from 'vitest';
-import { API_KEY_NAME_MAX, ERROR_CODES, type ApiKeyResponse } from '@crm/contracts';
+import {
+  API_KEY_NAME_MAX,
+  API_SCOPES,
+  API_SCOPE_RESOURCES,
+  ERROR_CODES,
+  type ApiKeyResponse,
+  type ApiScope,
+} from '@crm/contracts';
 import { ApiError } from '@/lib/api/errors';
 import {
   activeKeys,
   afterRevoke,
   baseUrlOf,
+  SCOPE_ROWS,
   checkName,
+  checkScopes,
   dateLabel,
   errorKind,
+  isFullAccess,
+  isReadImplied,
   nameFieldError,
   quickstartCurl,
   relativeTime,
+  toggleScope,
 } from './keys-model';
 
 const key = (over: Partial<ApiKeyResponse> = {}): ApiKeyResponse => ({
@@ -18,6 +30,7 @@ const key = (over: Partial<ApiKeyResponse> = {}): ApiKeyResponse => ({
   name: 'Prod',
   prefix: 'wsk_abcdefgh',
   status: 'active',
+  scopes: [],
   lastUsedAt: null,
   expiresAt: null,
   revokedAt: null,
@@ -124,5 +137,67 @@ describe('time labels', () => {
   });
   it('formats the created date', () => {
     expect(dateLabel('2026-10-06T10:00:00.000Z', 'en')).toBe('Oct 6, 2026');
+  });
+});
+
+describe('isFullAccess', () => {
+  it('is true for a key with no scopes, as in WaDesk, and false once it has any', () => {
+    expect(isFullAccess(key())).toBe(true);
+    expect(isFullAccess(key({ scopes: ['contacts:read'] }))).toBe(false);
+  });
+});
+
+describe('scope picker rows', () => {
+  it('has one row per resource and together they are every scope the API accepts, read before write', () => {
+    expect(SCOPE_ROWS.map((r) => r.resource)).toEqual([...API_SCOPE_RESOURCES]);
+    expect(SCOPE_ROWS.flatMap((r) => [r.read, r.write])).toEqual([...API_SCOPES]);
+  });
+
+  it('shows read as implied only while its write is ticked', () => {
+    const contacts = SCOPE_ROWS.find((r) => r.resource === 'contacts')!;
+    expect(isReadImplied([], contacts)).toBe(false);
+    expect(isReadImplied(['contacts:read'], contacts)).toBe(false);
+    expect(isReadImplied(['contacts:write'], contacts)).toBe(true);
+    expect(isReadImplied(['deals:write'], contacts)).toBe(false);
+  });
+
+  it('toggles a scope on and off without touching the others', () => {
+    const one = toggleScope([], 'contacts:read');
+    expect(one).toEqual(['contacts:read']);
+    const two = toggleScope(one, 'deals:write');
+    expect(two).toEqual(['contacts:read', 'deals:write']);
+    expect(toggleScope(two, 'contacts:read')).toEqual(['deals:write']);
+    expect(one).toEqual(['contacts:read']);
+  });
+});
+
+describe('checkScopes', () => {
+  it('sends no scopes when the key is not restricted, whatever was ticked before', () => {
+    expect(checkScopes(false, [])).toEqual({ ok: true, scopes: [] });
+    expect(checkScopes(false, ['contacts:read'])).toEqual({ ok: true, scopes: [] });
+  });
+
+  it('refuses a restricted key with nothing ticked: an empty list would be full access', () => {
+    expect(checkScopes(true, [])).toEqual({ ok: false, error: 'noScopes' });
+  });
+
+  it('sends the ticked scopes in picker order', () => {
+    const picked: ApiScope[] = ['messages:write', 'contacts:read', 'account:read'];
+    expect(checkScopes(true, picked)).toEqual({
+      ok: true,
+      scopes: ['account:read', 'contacts:read', 'messages:write'],
+    });
+  });
+
+  it('leaves out a read that its write already implies, and keeps a read on its own', () => {
+    expect(checkScopes(true, ['contacts:read', 'contacts:write', 'deals:read'])).toEqual({
+      ok: true,
+      scopes: ['contacts:write', 'deals:read'],
+    });
+  });
+
+  it('every scope ticked is sent as ticked, nothing invented', () => {
+    const all = checkScopes(true, [...API_SCOPES]);
+    expect(all.ok && all.scopes).toEqual(API_SCOPES.filter((s) => !s.endsWith(':read')));
   });
 });

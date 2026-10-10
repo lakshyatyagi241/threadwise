@@ -137,6 +137,72 @@ test.describe('Developers console', () => {
     expect(problem.detail).toContain('You already have an active API key');
   });
 
+  test('a key made without restricting it is marked Full access in the list', async ({ page }) => {
+    await revokeAll(page.request);
+    await page.goto('/developers');
+
+    // Off by default, and no scope picker until it is turned on.
+    await expect(page.getByRole('switch', { name: 'Restrict this key' })).toHaveAttribute(
+      'aria-checked',
+      'false',
+    );
+    await expect(page.getByText('Allowed scopes')).toHaveCount(0);
+
+    await page.getByLabel('Key name').fill(NAME);
+    await page.getByRole('button', { name: 'Create key' }).click();
+    await expect(page.getByRole('heading', { name: 'Your new API key' })).toBeVisible();
+    const access = page.getByTestId('key-access');
+    await expect(access).toContainText('Full access');
+    await expect(access).not.toContainText('Restricted');
+
+    const res = await page.request.get('/api/v2/developer/keys?limit=100');
+    const { data } = (await res.json()) as { data: Array<{ scopes: string[] }> };
+    expect(data[0]?.scopes).toEqual([]);
+  });
+
+  test('Restrict this key: nothing ticked is refused, a write scope includes its read, the card shows the scopes', async ({
+    page,
+  }) => {
+    await revokeAll(page.request);
+    await page.goto('/developers');
+    await page.getByLabel('Key name').fill(NAME);
+
+    const restrict = page.getByRole('switch', { name: 'Restrict this key' });
+    await restrict.click();
+    await expect(restrict).toHaveAttribute('aria-checked', 'true');
+    await expect(page.getByText('Allowed scopes')).toBeVisible();
+
+    // On with nothing ticked is refused in the form: no key is made, least of all a full-access one.
+    await page.getByRole('button', { name: 'Create key' }).click();
+    await expect(
+      page.getByText('Tick at least one scope, or turn off Restrict this key.'),
+    ).toBeVisible();
+    const none = await page.request.get('/api/v2/developer/keys?limit=100');
+    expect(((await none.json()) as { data: unknown[] }).data).toHaveLength(0);
+
+    // A ticked write scope shows its read as included and locked; ticking something clears the message.
+    const contactsWrite = page.getByLabel('contacts:write', { exact: true });
+    const contactsRead = page.getByLabel('contacts:read', { exact: true });
+    await contactsWrite.check();
+    await expect(page.getByText('Tick at least one scope')).toHaveCount(0);
+    await expect(contactsRead).toBeChecked();
+    await expect(contactsRead).toBeDisabled();
+    await page.getByLabel('messages:read', { exact: true }).check();
+
+    await page.getByRole('button', { name: 'Create key' }).click();
+    await expect(page.getByRole('heading', { name: 'Your new API key' })).toBeVisible();
+    const access = page.getByTestId('key-access');
+    await expect(access).toContainText('Restricted');
+    await expect(access).toContainText('contacts:write');
+    await expect(access).toContainText('messages:read');
+    await expect(access).not.toContainText('Full access');
+
+    // What the card shows is what the server stored, once each and without the implied read.
+    const res = await page.request.get('/api/v2/developer/keys?limit=100');
+    const { data } = (await res.json()) as { data: Array<{ scopes: string[] }> };
+    expect(data[0]?.scopes).toEqual(['contacts:write', 'messages:read']);
+  });
+
   test('copy button confirms and the docs link points at /developers/docs', async ({
     page,
     context,

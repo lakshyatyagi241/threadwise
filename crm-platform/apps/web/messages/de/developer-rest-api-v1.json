@@ -54,7 +54,10 @@
         "message": "Jede App oder Integration, die diesen Schlüssel verwendet, funktioniert sofort nicht mehr. Dies kann nicht rückgängig gemacht werden. Danach können Sie einen neuen Schlüssel erstellen.",
         "accept": "Widerrufen",
         "cancel": "Abbrechen"
-      }
+      },
+      "fullAccess": "Voller Zugriff",
+      "fullAccessHint": "Dieser Schlüssel kann jeden Endpunkt der REST-API nutzen. Um einzuschränken, was ein Schlüssel darf, widerrufen Sie ihn und erstellen Sie einen neuen mit aktivierter Option „Diesen Schlüssel einschränken“.",
+      "restricted": "Eingeschränkt"
     },
     "create": {
       "title": "Schlüssel erstellen",
@@ -68,7 +71,14 @@
       "planLocked": "Ihr Tarif enthält die REST-API nicht.",
       "errors": {
         "required": "Geben Sie einen Namen für den Schlüssel ein.",
-        "tooLong": "Der Name darf höchstens 120 Zeichen lang sein."
+        "tooLong": "Der Name darf höchstens 120 Zeichen lang sein.",
+        "noScopes": "Wählen Sie mindestens einen Scope aus oder deaktivieren Sie „Diesen Schlüssel einschränken“."
+      },
+      "restrict": {
+        "label": "Diesen Schlüssel einschränken",
+        "help": "Aus: Der Schlüssel hat vollen Zugriff auf die REST-API. An: Er kann nur die unten angekreuzten Scopes nutzen.",
+        "scopes": "Erlaubte Scopes",
+        "impliedByWrite": "Im Schreib-Scope enthalten"
       }
     },
     "quickstart": {

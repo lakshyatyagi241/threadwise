@@ -54,7 +54,10 @@
         "message": "使用此密钥的任何应用或集成将立即停止工作。此操作无法撤销。之后您可以创建新密钥。",
         "accept": "撤销",
         "cancel": "取消"
-      }
+      },
+      "fullAccess": "完全访问",
+      "fullAccessHint": "此密钥可以使用 REST API 的所有端点。若要限制密钥的权限，请撤销它，然后开启“限制此密钥”并创建新密钥。",
+      "restricted": "受限"
     },
     "create": {
       "title": "创建您的密钥",
@@ -68,7 +71,14 @@
       "planLocked": "您的套餐不包含 REST API。",
       "errors": {
         "required": "请输入密钥名称。",
-        "tooLong": "名称最多 120 个字符。"
+        "tooLong": "名称最多 120 个字符。",
+        "noScopes": "请至少勾选一项权限范围，或关闭“限制此密钥”。"
+      },
+      "restrict": {
+        "label": "限制此密钥",
+        "help": "关闭：该密钥拥有 REST API 的完全访问权限。开启：仅可使用您在下方勾选的权限范围。",
+        "scopes": "允许的权限范围",
+        "impliedByWrite": "已包含在写入权限中"
       }
     },
     "quickstart": {

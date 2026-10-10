@@ -54,7 +54,10 @@
         "message": "Elke app of integratie die deze sleutel gebruikt, werkt direct niet meer. Dit kan niet ongedaan worden gemaakt. Je kunt daarna een nieuwe sleutel aanmaken.",
         "accept": "Intrekken",
         "cancel": "Annuleren"
-      }
+      },
+      "fullAccess": "Volledige toegang",
+      "fullAccessHint": "Deze sleutel kan elk endpoint van de REST-API gebruiken. Wil je beperken wat een sleutel mag, trek hem dan in en maak een nieuwe aan met „Deze sleutel beperken” ingeschakeld.",
+      "restricted": "Beperkt"
     },
     "create": {
       "title": "Je sleutel aanmaken",
@@ -68,7 +71,14 @@
       "planLocked": "Je abonnement bevat de REST API niet.",
       "errors": {
         "required": "Voer een naam voor de sleutel in.",
-        "tooLong": "De naam mag maximaal 120 tekens bevatten."
+        "tooLong": "De naam mag maximaal 120 tekens bevatten.",
+        "noScopes": "Vink minstens één scope aan of zet „Deze sleutel beperken” uit."
+      },
+      "restrict": {
+        "label": "Deze sleutel beperken",
+        "help": "Uit: de sleutel heeft volledige toegang tot de REST-API. Aan: hij kan alleen de hieronder aangevinkte scopes gebruiken.",
+        "scopes": "Toegestane scopes",
+        "impliedByWrite": "Inbegrepen bij de schrijf-scope"
       }
     },
     "quickstart": {
