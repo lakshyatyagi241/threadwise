@@ -20,7 +20,9 @@ import { RbacService } from '../../../kernel/rbac/rbac.service';
 import { SecurityPolicyService } from '../platform/security-policy.service';
 import { TenantDirectory, type OrgRef } from '../platform/tenant-directory';
 import { SessionService } from '../sessions/session.service';
+import { AccountAttackGuard } from '../security/account-attack.service';
 import { AccountGateService } from '../security/account-gate.service';
+import { WebAuthnService } from '../security/webauthn.service';
 import { AuthAuditService } from '../security/auth-audit.service';
 import { CaptchaService } from '../security/captcha.service';
 import { MfaService } from '../security/mfa.service';
@@ -29,7 +31,7 @@ import { RateLimitService } from '../security/rate-limit.service';
 import { normalizeIp } from '../support/ip';
 import { MfaAttemptLimiter } from '../support/mfa-attempts';
 import { AuthKeys, Ttl } from '../support/redis-keys';
-import { randomToken } from '../support/crypto-utils';
+import { randomToken, sha256Hex } from '../support/crypto-utils';
 import { TokenService, type TokenClaims } from '../token.service';
 import { LoginAlertService } from './login-alert.service';
 
@@ -103,6 +105,8 @@ export class LoginService {
     private readonly alerts: LoginAlertService,
     private readonly outbox: OutboxService,
     private readonly rbac: RbacService,
+    private readonly attack: AccountAttackGuard,
+    private readonly webauthn: WebAuthnService,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
   ) {}
 
@@ -144,11 +148,21 @@ export class LoginService {
     // behind one office or carrier address signing in successfully must not
     // lock each other out.
     await this.assertIpUnderCeiling('login', ip);
+    // The per-address limits above cannot see guesses spread over many addresses: this one counts the account itself.
+    await this.attack.assertAllowed(
+      'staff',
+      org.id,
+      req.email,
+      normalizeIp(meta.ip),
+      req.captchaToken,
+      policy,
+    );
 
     const row = await this.findUser(org.id, req.email);
     const passwordOk = await this.passwords.verifyOrDummy(row?.password_hash, req.password);
     if (!row || !passwordOk) {
       await this.recordFailedSignIn(lockKey, policy);
+      await this.attack.recordFailure('staff', org.id, req.email, policy);
       await this.countIpFailure('login', ip);
       await this.auditFailedSignIn(org.id, row, req.email);
       throw this.invalid();
@@ -176,6 +190,7 @@ export class LoginService {
     const matches: Array<{ org: OrgRef; row: UserRow; lockKey: string }> = [];
     const failures: Array<{ org: OrgRef; row: UserRow | undefined; lockKey: string }> = [];
     let locked: { org: OrgRef; lockKey: string } | null = null;
+    let challenged: AppError | null = null;
     for (const org of orgs) {
       const lockKey = AuthKeys.lockout(org.id, req.email, ip);
       if (
@@ -183,6 +198,20 @@ export class LoginService {
         (await this.rate.peek(lockKey)).count >= policy.lockoutAfterFailures
       ) {
         locked ??= { org, lockKey };
+        continue;
+      }
+      try {
+        await this.attack.assertAllowed(
+          'staff',
+          org.id,
+          req.email,
+          normalizeIp(meta.ip),
+          req.captchaToken,
+          policy,
+        );
+      } catch (err) {
+        if (!(err instanceof AppError)) throw err;
+        challenged ??= err;
         continue;
       }
       const row = await this.findUser(org.id, req.email);
@@ -196,8 +225,10 @@ export class LoginService {
       // them never costs the others anything (people keep different passwords per workspace).
       for (const f of failures) {
         await this.recordFailedSignIn(f.lockKey, policy);
+        await this.attack.recordFailure('staff', f.org.id, req.email, policy);
         await this.auditFailedSignIn(f.org.id, f.row, req.email);
       }
+      if (challenged && failures.length === 0) throw challenged;
       if (locked) {
         await this.assertNotLocked(locked.lockKey, policy, {
           orgId: locked.org.id,
@@ -377,7 +408,38 @@ export class LoginService {
       status: 'mfa_required',
       challengeToken: token,
       expiresInSeconds: Ttl.mfaChallengeSeconds,
+      passkey:
+        (await this.webauthn.count({
+          pool: 'user',
+          orgId: challenge.orgId,
+          userId: challenge.userId,
+        })) > 0,
     };
+  }
+
+  /** Options for "Use a passkey" at the second-factor step. Bounded per challenge so it cannot be used to probe. */
+  async passkeyLoginOptions(challengeToken: string) {
+    const raw = await this.redis.get(AuthKeys.mfaChallenge(challengeToken));
+    if (!raw) throw this.challengeExpired();
+    const challenge = JSON.parse(raw) as MfaChallenge;
+    await this.mfaLimiter.assertAvailable('user', challenge.orgId, challenge.userId);
+    if (
+      !(await this.rate.allow(
+        `auth:wa-opts:${sha256Hex(challengeToken)}`,
+        10,
+        Ttl.mfaChallengeSeconds,
+      ))
+    ) {
+      throw new AppError(
+        ERROR_CODES.RATE_LIMITED,
+        'Too many attempts. Slow down.',
+        HttpStatus.TOO_MANY_REQUESTS,
+      );
+    }
+    return this.webauthn.loginOptions(
+      { pool: 'user', orgId: challenge.orgId, userId: challenge.userId },
+      sha256Hex(challengeToken),
+    );
   }
 
   async loginMfa(req: MfaLoginRequest, meta: ClientMeta): Promise<Authenticated> {
@@ -422,14 +484,20 @@ export class LoginService {
     }
 
     const state = await this.mfa.loadState(challenge.orgId, challenge.userId);
-    const ok = req.code
-      ? await this.mfa.verifyCode(challenge.orgId, challenge.userId, state, req.code)
-      : await this.mfa.verifyRecoveryCode(
-          challenge.orgId,
-          challenge.userId,
-          state,
-          req.recoveryCode ?? '',
-        );
+    const ok = req.webauthn
+      ? await this.webauthn.verifyLogin(
+          { pool: 'user', orgId: challenge.orgId, userId: challenge.userId },
+          sha256Hex(req.challengeToken),
+          req.webauthn,
+        )
+      : req.code
+        ? await this.mfa.verifyCode(challenge.orgId, challenge.userId, state, req.code)
+        : await this.mfa.verifyRecoveryCode(
+            challenge.orgId,
+            challenge.userId,
+            state,
+            req.recoveryCode ?? '',
+          );
     if (!ok) {
       await this.mfaLimiter.recordFailure('user', challenge.orgId, challenge.userId);
       await this.audit.recordStandalone({
@@ -439,7 +507,10 @@ export class LoginService {
         actorType: 'user',
         actorId: challenge.userId,
         recordId: challenge.userId,
-        payload: { phase: 'login', method: req.code ? 'totp' : 'recovery' },
+        payload: {
+          phase: 'login',
+          method: req.webauthn ? 'passkey' : req.code ? 'totp' : 'recovery',
+        },
       });
       throw new AppError(
         ERROR_CODES.AUTH_MFA_INVALID_CODE,
@@ -502,6 +573,12 @@ export class LoginService {
     const state = await this.gates.stateFor(input.org.id, input.user.id);
     // Moving between workspaces is not a new sign-in from a new place (WD-AUTH-018).
     if (input.method !== 'switch') {
+      void this.attack.rememberNetwork(
+        'staff',
+        input.org.id,
+        input.user.email,
+        normalizeIp(input.meta.ip),
+      );
       void this.alerts.check({
         subject: {
           kind: 'user',

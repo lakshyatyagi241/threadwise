@@ -22,6 +22,10 @@ import {
   deleteAccountRequestSchema,
   mfaDisableRequestSchema,
   mfaEnableRequestSchema,
+  mfaSetupRequestSchema,
+  passkeyOptionsRequestSchema,
+  passkeyRegisterRequestSchema,
+  passkeyRemoveRequestSchema,
   regenerateRecoveryCodesRequestSchema,
   sessionListQuerySchema,
   updateBrandingRequestSchema,
@@ -31,6 +35,10 @@ import {
   type DeleteAccountRequest,
   type MfaDisableRequest,
   type MfaEnableRequest,
+  type MfaSetupRequest,
+  type PasskeyOptionsRequest,
+  type PasskeyRegisterRequest,
+  type PasskeyRemoveRequest,
   type SessionListQuery,
   type UpdateBrandingRequest,
   type UpdateProfileRequest,
@@ -45,6 +53,7 @@ import { UploadTooLargeInterceptor } from '../account/upload-too-large.intercept
 import { RecoveryService } from '../flows/recovery.service';
 import { AllowWhileGated } from '../guards/auth-gates';
 import { MfaService } from '../security/mfa.service';
+import { WebAuthnService } from '../security/webauthn.service';
 
 /** Self-service account screens. Every route acts on the caller; there is no user id in any path. */
 @ApiTags('account')
@@ -55,6 +64,7 @@ export class AccountController {
     private readonly account: AccountService,
     private readonly recovery: RecoveryService,
     private readonly mfa: MfaService,
+    private readonly webauthn: WebAuthnService,
   ) {}
 
   private actor() {
@@ -187,11 +197,15 @@ export class AccountController {
 
   @Post('mfa/setup')
   @AllowWhileGated()
-  @ApiOperation({ summary: 'Start enrolling an authenticator app (same secret within 10 minutes)' })
-  async mfaSetup() {
+  @ApiOperation({
+    summary: 'Start enrolling an authenticator app (same secret within 10 minutes)',
+    description:
+      'Needs recent authentication: a session that signed in less than 10 minutes ago passes, an older one must send the password (403 AUTH_REAUTH_REQUIRED otherwise).',
+  })
+  async mfaSetup(@Body(zodPipe(mfaSetupRequestSchema)) body: MfaSetupRequest) {
     const { orgId, userId } = this.actor();
     const profile = await this.account.getProfile();
-    return this.mfa.beginSetup(orgId, userId, profile.email);
+    return this.mfa.beginSetup(orgId, userId, profile.email, body.password);
   }
 
   @Post('mfa/enable')
@@ -199,15 +213,17 @@ export class AccountController {
   @ApiOperation({ summary: 'Confirm the first code; returns the one-time recovery codes' })
   async mfaEnable(@Body(zodPipe(mfaEnableRequestSchema)) body: MfaEnableRequest) {
     const { orgId, userId } = this.actor();
-    return this.mfa.enable(orgId, userId, body.code);
+    return this.mfa.enable(orgId, userId, body.code, body.password);
   }
 
   @Post('mfa/disable')
   @AllowWhileGated()
-  @ApiOperation({ summary: 'Turn two-factor off (password required)' })
+  @ApiOperation({
+    summary: 'Turn two-factor off (password and a current authenticator or recovery code required)',
+  })
   async mfaDisable(@Body(zodPipe(mfaDisableRequestSchema)) body: MfaDisableRequest) {
     const { orgId, userId } = this.actor();
-    await this.mfa.disable(orgId, userId, body.password);
+    await this.mfa.disable(orgId, userId, body.password, body.code);
     return { ok: true };
   }
 
@@ -220,6 +236,64 @@ export class AccountController {
   ) {
     const { orgId, userId } = this.actor();
     return this.mfa.regenerateRecoveryCodes(orgId, userId, body.password);
+  }
+
+  // --- passkeys (a second factor next to the authenticator app) ---------------------------------------------------
+
+  @Get('passkeys')
+  @AllowWhileGated()
+  @ApiOperation({ summary: 'My passkeys' })
+  async passkeys() {
+    const { orgId, userId } = this.actor();
+    return { data: await this.webauthn.list({ pool: 'user', orgId, userId }) };
+  }
+
+  @Post('passkeys/options')
+  @AllowWhileGated()
+  @ApiOperation({
+    summary: 'Registration options for a new passkey',
+    description:
+      'Needs two-factor on (409 AUTH_PASSKEY_NEEDS_MFA) and recent authentication (403 AUTH_REAUTH_REQUIRED: send the password).',
+  })
+  async passkeyOptions(@Body(zodPipe(passkeyOptionsRequestSchema)) body: PasskeyOptionsRequest) {
+    const { orgId, userId } = this.actor();
+    await this.mfa.assertPasskeyAllowed(orgId, userId, body.password);
+    const profile = await this.account.getProfile();
+    return this.webauthn.registrationOptions(
+      { pool: 'user', orgId, userId },
+      { userName: profile.email, displayName: profile.displayName ?? profile.fullName },
+    );
+  }
+
+  @Post('passkeys')
+  @AllowWhileGated()
+  @ApiOperation({ summary: "Verify the browser's answer and store the new passkey" })
+  async passkeyRegister(@Body(zodPipe(passkeyRegisterRequestSchema)) body: PasskeyRegisterRequest) {
+    const { orgId, userId } = this.actor();
+    await this.mfa.assertPasskeyAllowed(orgId, userId, body.password);
+    const item = await this.webauthn.register(
+      { pool: 'user', orgId, userId },
+      body.response,
+      body.name,
+    );
+    await this.mfa.notifyChange(orgId, userId, 'passkey-added');
+    return item;
+  }
+
+  @Post('passkeys/:id/remove')
+  @AllowWhileGated()
+  @ApiOperation({ summary: 'Remove a passkey (password required)' })
+  async passkeyRemove(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body(zodPipe(passkeyRemoveRequestSchema)) body: PasskeyRemoveRequest,
+  ) {
+    const { orgId, userId } = this.actor();
+    await this.mfa.confirmPassword(orgId, userId, body.password);
+    if (!(await this.webauthn.remove({ pool: 'user', orgId, userId }, id))) {
+      throw AppError.notFound('Passkey', id);
+    }
+    await this.mfa.notifyChange(orgId, userId, 'passkey-removed');
+    return { ok: true };
   }
 
   // --- devices -------------------------------------------------------------------------------------------------------------------

@@ -56,6 +56,24 @@ export const envSchema = z.object({
   JWT_ACCESS_TTL: z.string().default('15m'),
   JWT_REFRESH_SECRET: z.string().min(32, 'JWT_REFRESH_SECRET must be at least 32 characters'),
   JWT_REFRESH_TTL: z.string().default('30d'),
+  /**
+   * Retired signing secrets, comma-separated, accepted for VERIFYING only (each at least 32 characters). Rotation without
+   * signing everyone out: move the old JWT_*_SECRET here, put the new one in JWT_*_SECRET, remove the old one after
+   * one refresh lifetime (JWT_REFRESH_TTL).
+   */
+  JWT_ACCESS_PREVIOUS_SECRETS: z.string().optional(),
+  JWT_REFRESH_PREVIOUS_SECRETS: z.string().optional(),
+  /**
+   * What the authentication checks do when Redis errors: 'closed' refuses with 503 (no revocation or throttle is ever
+   * silently skipped), 'open' carries on and logs. Unset: closed in production, open elsewhere (modules/auth/support/resilience.ts).
+   */
+  AUTH_REDIS_FAILURE_MODE: z.enum(['open', 'closed']).optional(),
+  /**
+   * Passkeys (WebAuthn). The relying-party id is the host of WEB_APP_URL and the accepted origin is WEB_APP_URL's origin;
+   * set these only when the browser reaches the app on a different host (several subdomains sharing one registrable domain).
+   */
+  WEBAUTHN_RP_ID: z.string().min(1).optional(),
+  WEBAUTHN_ORIGINS: z.string().optional(),
 
   /**
    * Clerk verifies the credential (password, Google) client-side and hands
@@ -172,6 +190,23 @@ export function validateEnv(raw: Record<string, unknown>): Env {
     }
     if (parsed.data.JWT_REFRESH_SECRET.startsWith('dev-only')) {
       throw new Error('JWT_REFRESH_SECRET is still the development placeholder.');
+    }
+    if (parsed.data.JWT_ACCESS_SECRET === parsed.data.JWT_REFRESH_SECRET) {
+      throw new Error(
+        'JWT_ACCESS_SECRET and JWT_REFRESH_SECRET must differ: with one key a leaked access token could be replayed as a refresh token.',
+      );
+    }
+    const retired = [
+      parsed.data.JWT_ACCESS_PREVIOUS_SECRETS,
+      parsed.data.JWT_REFRESH_PREVIOUS_SECRETS,
+    ]
+      .flatMap((v) => (v ?? '').split(','))
+      .map((v) => v.trim())
+      .filter(Boolean);
+    if (retired.some((v) => v.startsWith('dev-only') || v.length < 32)) {
+      throw new Error(
+        'JWT_*_PREVIOUS_SECRETS must each be at least 32 characters and not a development placeholder.',
+      );
     }
     if (parsed.data.CHANNEL_SIMULATOR_ENABLED) {
       throw new Error(

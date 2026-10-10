@@ -54,6 +54,10 @@ export function LoginPanel() {
             <ToggleControl name="passwordRequireNumber" compact />
             <ToggleControl name="passwordRequireSymbol" compact />
           </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <ToggleControl name="passwordBlocklistEnabled" />
+            <ToggleControl name="passwordBreachCheck" />
+          </div>
           <ToggleControl name="rememberMeEnabled" />
         </div>
         <div className="grid gap-3 sm:grid-cols-2">
