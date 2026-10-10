@@ -224,7 +224,8 @@
           "common": "To hasło jest zbyt łatwe do odgadnięcia."
         },
         "socialNoAccount": "Żadne konto nie pasuje do tego logowania przez {provider}. Zaloguj się e-mailem i hasłem lub utwórz konto.",
-        "forbidden": "To żądanie zostało odrzucone. Odśwież stronę i spróbuj ponownie."
+        "forbidden": "To żądanie zostało odrzucone. Odśwież stronę i spróbuj ponownie.",
+        "passkeyInvalid": "Nie udało się zweryfikować tego klucza dostępu. Spróbuj ponownie albo użyj kodu."
       },
       "validation": {
         "orgSlug": "Wpisz adres przestrzeni roboczej (litery, cyfry, myślnik lub podkreślenie).",
@@ -309,7 +310,11 @@
         "useRecovery": "Użyj zamiast tego kodu odzyskiwania",
         "useApp": "Użyj zamiast tego kodu z aplikacji uwierzytelniającej",
         "back": "Wróć do logowania",
-        "expiresIn": "Weryfikacja wygasa za {time}"
+        "expiresIn": "Weryfikacja wygasa za {time}",
+        "usePasskey": "Użyj klucza dostępu",
+        "passkeyWaiting": "Oczekiwanie na klucz dostępu",
+        "passkeyCancelled": "Logowanie kluczem dostępu zostało anulowane lub upłynął jego limit czasu. Spróbuj ponownie albo użyj kodu.",
+        "passkeyFailed": "Urządzenie nie przekazało klucza dostępu. Spróbuj ponownie albo użyj kodu."
       },
       "signup": {
         "steps": {

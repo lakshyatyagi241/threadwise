@@ -146,6 +146,12 @@ describe('mapAuthError', () => {
     expect(mapAuthError(err(403, 'SOMETHING_ELSE')).key).toBe('forbidden');
   });
 
+  it('maps a passkey the server did not accept to its own message, not the generic one', () => {
+    const m = mapAuthError(err(400, ERROR_CODES.AUTH_PASSKEY_INVALID));
+    expect(m.key).toBe('passkeyInvalid');
+    expect(m.field).toBeUndefined();
+  });
+
   it('maps a social sign-in that matches no account', () => {
     expect(mapAuthError(err(401, ERROR_CODES.AUTH_SOCIAL_NO_ACCOUNT)).key).toBe('socialNoAccount');
   });

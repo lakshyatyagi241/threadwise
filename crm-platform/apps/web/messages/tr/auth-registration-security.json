@@ -224,7 +224,8 @@
           "common": "Bu parola tahmin edilmesi çok kolay."
         },
         "socialNoAccount": "Bu {provider} oturumuyla eşleşen hesap yok. E-posta ve parolanızla oturum açın veya bir hesap oluşturun.",
-        "forbidden": "Bu istek reddedildi. Sayfayı yenileyip tekrar deneyin."
+        "forbidden": "Bu istek reddedildi. Sayfayı yenileyip tekrar deneyin.",
+        "passkeyInvalid": "Bu geçiş anahtarı doğrulanamadı. Tekrar deneyin ya da bir kod kullanın."
       },
       "validation": {
         "orgSlug": "Çalışma alanı adresinizi girin (harf, rakam, tire veya alt çizgi).",
@@ -309,7 +310,11 @@
         "useRecovery": "Bunun yerine kurtarma kodu kullan",
         "useApp": "Bunun yerine kimlik doğrulama kodunu kullan",
         "back": "Oturum açmaya dön",
-        "expiresIn": "Doğrulama {time} içinde sona erer"
+        "expiresIn": "Doğrulama {time} içinde sona erer",
+        "usePasskey": "Geçiş anahtarı kullan",
+        "passkeyWaiting": "Geçiş anahtarınız bekleniyor",
+        "passkeyCancelled": "Geçiş anahtarıyla oturum açma iptal edildi veya zaman aşımına uğradı. Tekrar deneyin ya da bir kod kullanın.",
+        "passkeyFailed": "Cihazınız geçiş anahtarını sağlayamadı. Tekrar deneyin ya da bir kod kullanın."
       },
       "signup": {
         "steps": {

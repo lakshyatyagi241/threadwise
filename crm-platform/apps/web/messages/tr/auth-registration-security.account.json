@@ -385,7 +385,12 @@
         "useCode": "Bunun yerine kimlik doğrulama kodu kullan",
         "cancel": "İptal",
         "confirm": "Onayla",
-        "verifying": "Doğrulanıyor"
+        "verifying": "Doğrulanıyor",
+        "usePasskey": "Bunun yerine geçiş anahtarı kullan",
+        "passkeyWaiting": "Geçiş anahtarınız bekleniyor",
+        "passkeyCancelled": "Geçiş anahtarı onayı iptal edildi veya zaman aşımına uğradı. Tekrar deneyin ya da bir kod kullanın.",
+        "passkeyInvalid": "Bu geçiş anahtarı doğrulanamadı. Tekrar deneyin ya da bir kod kullanın.",
+        "passkeyFailed": "Cihazınız geçiş anahtarını sağlayamadı. Tekrar deneyin ya da bir kod kullanın."
       },
       "banners": {
         "dismiss": "Kapat",
@@ -565,6 +570,45 @@
         "timeout": "Posta sunucusu yanıt vermekte çok gecikti. Hemen tekrar deneyebilirsiniz.",
         "transport_error": "E-posta posta sunucusuna iletilemedi. Hemen tekrar deneyebilirsiniz.",
         "unknown": "E-posta, belirleyemediğimiz bir nedenle gönderilemedi. Hemen tekrar deneyebilirsiniz."
+      },
+      "passkeys": {
+        "title": "Geçiş anahtarları",
+        "subtitle": "Kod yazmak yerine parmak iziniz, yüzünüz, ekran kilidiniz veya bir güvenlik anahtarıyla oturum açışınızı onaylayın.",
+        "unsupported": "Bu tarayıcı geçiş anahtarlarını kullanamıyor. Bu sayfayı Chrome, Edge, Safari ya da Firefox tarayıcısının güncel bir sürümünde açın.",
+        "needsMfa": "Geçiş anahtarları bir kimlik doğrulama uygulamasıyla birlikte çalışır. Önce iki adımlı doğrulamayı açın, ardından bir geçiş anahtarı ekleyin.",
+        "needsMfaLink": "İki adımlı doğrulamaya git",
+        "empty": "Henüz geçiş anahtarınız yok. Oturum açışınızı cihazınızla onaylamak için bir tane ekleyin.",
+        "add": "Geçiş anahtarı ekle",
+        "synced": "Eşitlendi",
+        "deviceOnly": "Yalnızca bu cihaz",
+        "added": "{date} tarihinde eklendi",
+        "lastUsed": "Son kullanım: {when}",
+        "neverUsed": "Hiç kullanılmadı",
+        "remove": "Kaldır",
+        "removeTitle": "Geçiş anahtarını kaldır",
+        "removeDescription": "{name}, oturum açarken ikinci adım olarak çalışmayı durduracak. Kaldırmak için parolanızı girin.",
+        "removeConfirm": "Geçiş anahtarını kaldır",
+        "removedDone": "{name} geçiş anahtarı kaldırıldı.",
+        "addedDone": "{name} geçiş anahtarı eklendi.",
+        "addTitle": "Geçiş anahtarı ekle",
+        "addDescription": "Tanıyacağınız bir ad verin, örneğin İş dizüstü veya Telefon. Ardından tarayıcınız parmak iziniz, yüzünüz, ekran kilidiniz veya güvenlik anahtarınızla onay vermenizi isteyecek.",
+        "addConfirm": "Devam",
+        "nameLabel": "Ad",
+        "nameHint": "En fazla {max} karakter.",
+        "namePlaceholder": "İş dizüstü",
+        "nameRequired": "Bu geçiş anahtarı için bir ad girin.",
+        "passwordNeeded": "Oturum açalı epey oldu. Devam etmek için parolanızı girin.",
+        "preparing": "Hazırlanıyor",
+        "waiting": "Cihazınız bekleniyor",
+        "saving": "Kaydediliyor",
+        "problems": {
+          "cancelled": "Geçiş anahtarı oluşturulmadı: istek iptal edildi veya zaman aşımına uğradı. Tekrar deneyin.",
+          "alreadyRegistered": "Bu cihazda hesabınız için zaten bir geçiş anahtarı var. Başka bir cihaz veya güvenlik anahtarı kullanın ya da önce mevcut geçiş anahtarını kaldırın.",
+          "invalid": "Cihazınızın yanıtı doğrulanamadı. Tekrar deneyin.",
+          "limit": "Bir hesabın tutabileceği en fazla geçiş anahtarı sayısına ulaştınız. Yenisini eklemek için birini kaldırın.",
+          "unsupported": "Bu cihaz bu tür bir geçiş anahtarı oluşturamıyor. Başka bir cihaz veya güvenlik anahtarı deneyin.",
+          "failed": "Tarayıcınız veya cihazınız geçiş anahtarını oluşturamadı. Tekrar deneyin."
+        }
       }
     }
   }

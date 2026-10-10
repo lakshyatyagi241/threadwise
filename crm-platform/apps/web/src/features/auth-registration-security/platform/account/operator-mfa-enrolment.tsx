@@ -15,6 +15,7 @@ import { operatorFetch } from '../operator-fetch';
 import { OPERATOR_HOME } from '../operator-nav';
 import { CopyButton } from '../ui/copy-button';
 import { PageHeader } from '../ui/page-header';
+import { OperatorPasskeys } from './operator-passkeys';
 
 const NS = 'auth-registration-security.platform.mfa';
 
@@ -159,6 +160,8 @@ export function OperatorMfaEnrolment() {
           <p className="text-sm text-muted-foreground">{t('status.body')}</p>
         </Card>
       )}
+
+      {alreadyOn && <OperatorPasskeys />}
 
       {!alreadyOn && stage.name === 'setup' && (
         <Card className="space-y-4">

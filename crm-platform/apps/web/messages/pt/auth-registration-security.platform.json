@@ -94,7 +94,10 @@
           "challengeExpired": "Esse login expirou. Digite sua senha novamente.",
           "rateLimited": "Muitas solicitações. Aguarde um momento e tente novamente.",
           "unexpected": "Não foi possível fazer seu login. Tente novamente em instantes.",
-          "lockedWait": "Muitas tentativas malsucedidas. Tente novamente em {minutes, plural, one {# minuto} other {# minutos}}."
+          "lockedWait": "Muitas tentativas malsucedidas. Tente novamente em {minutes, plural, one {# minuto} other {# minutos}}.",
+          "passkeyInvalid": "Não foi possível verificar essa chave de acesso. Tente novamente ou use um código.",
+          "passkeyCancelled": "O login com chave de acesso foi cancelado ou expirou. Tente novamente ou use um código.",
+          "passkeyFailed": "Seu dispositivo não conseguiu fornecer a chave de acesso. Tente novamente ou use um código."
         },
         "captcha": {
           "loadFailed": "Não foi possível carregar o captcha. Verifique sua conexão ou um bloqueador de conteúdo e tente de novo.",
@@ -115,7 +118,9 @@
           "verifying": "Verificando",
           "useRecovery": "Usar um código de recuperação",
           "useAuthenticator": "Usar o app autenticador",
-          "back": "Voltar ao login"
+          "back": "Voltar ao login",
+          "usePasskey": "Usar uma chave de acesso",
+          "passkeyWaiting": "Aguardando sua chave de acesso"
         }
       },
       "mfa": {

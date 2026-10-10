@@ -72,6 +72,7 @@ const BY_CODE: Record<string, { key: string; field?: string }> = {
   [ERROR_CODES.AUTH_EMAIL_UNVERIFIED]: { key: 'emailUnverified' },
   [ERROR_CODES.AUTH_MFA_INVALID_CODE]: { key: 'mfaInvalid', field: 'code' },
   [ERROR_CODES.AUTH_MFA_CHALLENGE_EXPIRED]: { key: 'mfaExpired' },
+  [ERROR_CODES.AUTH_PASSKEY_INVALID]: { key: 'passkeyInvalid' },
   [ERROR_CODES.AUTH_OTP_INVALID]: { key: 'otpInvalid', field: 'code' },
   [ERROR_CODES.AUTH_OTP_EXPIRED]: { key: 'otpExpired', field: 'code' },
   [ERROR_CODES.AUTH_SIGNUP_EXPIRED]: { key: 'signupExpired' },

@@ -6,6 +6,8 @@ import {
   mfaSetupResponseSchema,
   mfaStatusResponseSchema,
   onboardingResponseSchema,
+  passkeyItemSchema,
+  passkeyListResponseSchema,
   passwordPolicyHintSchema,
   plansResponseSchema,
   profileResponseSchema,
@@ -13,12 +15,14 @@ import {
   revokeOthersResponseSchema,
   sessionListResponseSchema,
   sessionResponseSchema,
+  webauthnOptionsResponseSchema,
   workspaceListResponseSchema,
   type ChangeEmailRequest,
   type ChangePasswordRequest,
   type DeleteAccountRequest,
   type MfaRequired,
   type OnboardingWorkspaceRequest,
+  type PasskeyRegisterRequest,
   type UpdateBrandingRequest,
   type UpdateProfileRequest,
 } from '@crm/contracts';
@@ -45,6 +49,7 @@ export const keys = {
   branding: ['auth', 'branding'] as const,
   mfa: ['auth', 'mfa'] as const,
   mfaSetup: ['auth', 'mfa-setup'] as const,
+  passkeys: ['auth', 'passkeys'] as const,
   sessions: ['auth', 'sessions'] as const,
   workspaces: ['auth', 'workspaces'] as const,
   onboarding: ['auth', 'onboarding'] as const,
@@ -121,6 +126,24 @@ export const authApi = {
     apiFetch(`/account/sessions/${encodeURIComponent(id)}`, { method: 'DELETE', schema: okSchema }),
   revokeOtherSessions: () =>
     apiFetch('/account/sessions/revoke-others', {
+  /** Passkeys sit next to the authenticator app: the list, then the three calls that change it. */
+  passkeys: () => apiFetch('/account/passkeys', { schema: passkeyListResponseSchema }),
+  /** `password` only when the API asked for it (403 AUTH_REAUTH_REQUIRED). */
+  passkeyOptions: (password?: string) =>
+    apiFetch('/account/passkeys/options', {
+      method: 'POST',
+      body: password ? { password } : {},
+      schema: webauthnOptionsResponseSchema,
+    }),
+  registerPasskey: (body: PasskeyRegisterRequest) =>
+    apiFetch('/account/passkeys', { method: 'POST', body, schema: passkeyItemSchema }),
+  removePasskey: (id: string, password: string) =>
+    apiFetch(`/account/passkeys/${encodeURIComponent(id)}/remove`, {
+      method: 'POST',
+      body: { password },
+      schema: okSchema,
+    }),
+
       method: 'POST',
       body: {},
       schema: revokeOthersResponseSchema,

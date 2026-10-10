@@ -224,7 +224,8 @@
           "common": "该密码过于简单，容易被猜到。"
         },
         "socialNoAccount": "没有与该 {provider} 登录匹配的账户。请使用邮箱和密码登录，或创建账户。",
-        "forbidden": "请求被拒绝。请刷新页面后重试。"
+        "forbidden": "请求被拒绝。请刷新页面后重试。",
+        "passkeyInvalid": "无法验证该通行密钥。请重试，或使用验证码。"
       },
       "validation": {
         "orgSlug": "请输入你的工作区地址（字母、数字、短横线或下划线）。",
@@ -309,7 +310,11 @@
         "useRecovery": "改用恢复码",
         "useApp": "改用验证器验证码",
         "back": "返回登录",
-        "expiresIn": "验证将在 {time} 后过期"
+        "expiresIn": "验证将在 {time} 后过期",
+        "usePasskey": "使用通行密钥",
+        "passkeyWaiting": "正在等待你的通行密钥",
+        "passkeyCancelled": "通行密钥登录已取消或已超时。请重试，或使用验证码。",
+        "passkeyFailed": "你的设备无法提供通行密钥。请重试，或使用验证码。"
       },
       "signup": {
         "steps": {

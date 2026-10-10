@@ -385,7 +385,12 @@
         "useCode": "Gebruik in plaats daarvan een authenticatorcode",
         "cancel": "Annuleren",
         "confirm": "Bevestigen",
-        "verifying": "Verifiëren"
+        "verifying": "Verifiëren",
+        "usePasskey": "Gebruik in plaats daarvan een passkey",
+        "passkeyWaiting": "Wachten op je passkey",
+        "passkeyCancelled": "De bevestiging met de passkey is geannuleerd of verlopen. Probeer het opnieuw of gebruik een code.",
+        "passkeyInvalid": "Die passkey kon niet worden geverifieerd. Probeer het opnieuw of gebruik een code.",
+        "passkeyFailed": "Je apparaat kon de passkey niet doorgeven. Probeer het opnieuw of gebruik een code."
       },
       "banners": {
         "dismiss": "Sluiten",
@@ -565,6 +570,45 @@
         "timeout": "De mailserver deed er te lang over om te antwoorden. Je kunt het meteen opnieuw proberen.",
         "transport_error": "De e-mail kon niet aan de mailserver worden overgedragen. Je kunt het meteen opnieuw proberen.",
         "unknown": "De e-mail kon om een onbekende reden niet worden verzonden. Je kunt het meteen opnieuw proberen."
+      },
+      "passkeys": {
+        "title": "Passkeys",
+        "subtitle": "Bevestig je login met je vingerafdruk, gezicht, schermvergrendeling of een beveiligingssleutel in plaats van een code in te typen.",
+        "unsupported": "Deze browser ondersteunt geen passkeys. Open deze pagina in een actuele versie van Chrome, Edge, Safari of Firefox.",
+        "needsMfa": "Passkeys werken naast een authenticator-app. Schakel eerst tweestapsverificatie in en voeg daarna een passkey toe.",
+        "needsMfaLink": "Naar tweestapsverificatie",
+        "empty": "Je hebt nog geen passkeys. Voeg er een toe om je login met je apparaat te bevestigen.",
+        "add": "Passkey toevoegen",
+        "synced": "Gesynchroniseerd",
+        "deviceOnly": "Alleen dit apparaat",
+        "added": "Toegevoegd op {date}",
+        "lastUsed": "Laatst gebruikt: {when}",
+        "neverUsed": "Nog nooit gebruikt",
+        "remove": "Verwijderen",
+        "removeTitle": "Passkey verwijderen",
+        "removeDescription": "{name} werkt niet meer als tweede stap bij het inloggen. Voer je wachtwoord in om de passkey te verwijderen.",
+        "removeConfirm": "Passkey verwijderen",
+        "removedDone": "Passkey {name} is verwijderd.",
+        "addedDone": "Passkey {name} is toegevoegd.",
+        "addTitle": "Passkey toevoegen",
+        "addDescription": "Geef de passkey een naam die je herkent, zoals Werklaptop of Telefoon. Je browser vraagt je daarna om te bevestigen met je vingerafdruk, gezicht, schermvergrendeling of beveiligingssleutel.",
+        "addConfirm": "Doorgaan",
+        "nameLabel": "Naam",
+        "nameHint": "Maximaal {max} tekens.",
+        "namePlaceholder": "Werklaptop",
+        "nameRequired": "Voer een naam in voor deze passkey.",
+        "passwordNeeded": "Je bent al een tijdje niet ingelogd. Voer je wachtwoord in om door te gaan.",
+        "preparing": "Voorbereiden",
+        "waiting": "Wachten op je apparaat",
+        "saving": "Opslaan",
+        "problems": {
+          "cancelled": "De passkey is niet aangemaakt: het verzoek is geannuleerd of verlopen. Probeer het opnieuw.",
+          "alreadyRegistered": "Dit apparaat heeft al een passkey voor je account. Gebruik een ander apparaat of een beveiligingssleutel, of verwijder eerst de bestaande passkey.",
+          "invalid": "Het antwoord van je apparaat kon niet worden geverifieerd. Probeer het opnieuw.",
+          "limit": "Je hebt het maximale aantal passkeys voor een account bereikt. Verwijder er een om een andere toe te voegen.",
+          "unsupported": "Dit apparaat kan dit soort passkey niet aanmaken. Probeer een ander apparaat of een beveiligingssleutel.",
+          "failed": "Je browser of apparaat kon de passkey niet aanmaken. Probeer het opnieuw."
+        }
       }
     }
   }
