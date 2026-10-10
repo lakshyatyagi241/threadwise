@@ -54,7 +54,10 @@
         "message": "Bu anahtarı kullanan her uygulama veya entegrasyon hemen çalışmayı durdurur. Bu işlem geri alınamaz. Sonrasında yeni bir anahtar oluşturabilirsiniz.",
         "accept": "İptal et",
         "cancel": "İptal"
-      }
+      },
+      "fullAccess": "Tam erişim",
+      "fullAccessHint": "Bu anahtar REST API’nin tüm uç noktalarını kullanabilir. Bir anahtarın yapabileceklerini sınırlamak için onu iptal edin ve \"Bu anahtarı kısıtla\" açıkken yeni bir anahtar oluşturun.",
+      "restricted": "Kısıtlı"
     },
     "create": {
       "title": "Anahtarınızı oluşturun",
@@ -68,7 +71,14 @@
       "planLocked": "Planınız REST API'yi içermiyor.",
       "errors": {
         "required": "Anahtar için bir ad girin.",
-        "tooLong": "Ad en fazla 120 karakter olabilir."
+        "tooLong": "Ad en fazla 120 karakter olabilir.",
+        "noScopes": "En az bir kapsam işaretleyin veya \"Bu anahtarı kısıtla\" seçeneğini kapatın."
+      },
+      "restrict": {
+        "label": "Bu anahtarı kısıtla",
+        "help": "Kapalı: anahtar REST API’ye tam erişime sahiptir. Açık: yalnızca aşağıda işaretlediğiniz kapsamları kullanabilir.",
+        "scopes": "İzin verilen kapsamlar",
+        "impliedByWrite": "Yazma kapsamına dahildir"
       }
     },
     "quickstart": {

@@ -59,8 +59,9 @@ no scopes has full access, as in Reference. Resources: `account`, `contacts`, `c
 A call outside the key's scopes is `403 forbidden` with a message naming the scope (`needs the "contacts:write" scope`). The scope is
 checked before the rate limit, so a refused call does not use the budget.
 
-The console creates keys without scopes (full access). Scopes are enforced by the guard but there is no console field to set them
-yet; they are stored on the key row (`api_keys.scopes`).
+The console's create form has a "Restrict this key" switch that sets them (stored on the key row, `api_keys.scopes`). It is off by
+default, so a key made without touching it is full access, as in Reference; the key list shows a **Full access** badge on such a key, or
+the scope names on a restricted one. A restricted key's scopes are fixed at creation: revoke it and make a new one to change them.
 
 ### Order of checks
 
@@ -282,6 +283,7 @@ Query: `limit` (1 to 200, default 50), `cursor`, `order` (`asc` or `desc`, defau
       "name": "Production backend",
       "prefix": "wsk_Xk3pQ9aB",
       "status": "active",
+      "scopes": [],
       "lastUsedAt": "2026-10-05T08:41:12.000Z",
       "expiresAt": null,
       "revokedAt": null,
@@ -292,18 +294,20 @@ Query: `limit` (1 to 200, default 50), `cursor`, `order` (`asc` or `desc`, defau
 }
 ```
 
-The answer never carries the secret or the hash. `status` is `active` or `revoked`.
+The answer never carries the secret or the hash. `status` is `active` or `revoked`. `scopes` is the list the key is restricted to;
+an empty list is full access.
 
 ### `POST /v2/developer/keys`
 
 Permission `api.keys.create`; plan feature `public_api`.
 
-| Field  | Type   | Required | Rules                         |
-| ------ | ------ | -------- | ----------------------------- |
-| `name` | string | yes      | Trimmed, 1 to 120 characters. |
+| Field    | Type     | Required | Rules                                                                                                                                                           |
+| -------- | -------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `name`   | string   | yes      | Trimmed, 1 to 120 characters.                                                                                                                                   |
+| `scopes` | string[] | no       | Scope names (see Scopes above), each `<resource>:read` or `<resource>:write`; duplicates are dropped. Omitted or `[]` is full access. An unknown name is `422`. |
 
 ```json
-{ "name": "Production backend" }
+{ "name": "Production backend", "scopes": ["contacts:read", "messages:write"] }
 ```
 
 `201`:
@@ -315,6 +319,7 @@ Permission `api.keys.create`; plan feature `public_api`.
     "name": "Production backend",
     "prefix": "wsk_Xk3pQ9aB",
     "status": "active",
+    "scopes": ["contacts:read", "messages:write"],
     "lastUsedAt": null,
     "expiresAt": null,
     "revokedAt": null,
@@ -341,7 +346,8 @@ Permission `api.keys.revoke`. Revokes the key: effective on the next API call. `
 frees its place under the `api_keys` cap. `404 NOT_FOUND` for an unknown id or another workspace's key.
 
 Each create and revoke writes an audit row (`api_keys`, `insert` or `update`) and an outbox event (`api.key_created`,
-`api.key_revoked`) in the same transaction. The events carry `uuid`, `name` and `prefix`, never the secret. Reference wrote neither.
+`api.key_revoked`) in the same transaction. The events carry `uuid`, `name` and `prefix` (and `scopes` on creation), never the secret.
+The create audit row records the scopes. Reference wrote neither.
 
 ## 6. Endpoints
 

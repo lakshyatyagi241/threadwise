@@ -54,7 +54,10 @@
         "message": "Aplikasi atau integrasi apa pun yang memakai kunci ini akan langsung berhenti berfungsi. Tindakan ini tidak dapat dibatalkan. Anda dapat membuat kunci baru setelahnya.",
         "accept": "Cabut",
         "cancel": "Batal"
-      }
+      },
+      "fullAccess": "Akses penuh",
+      "fullAccessHint": "Kunci ini dapat memakai semua endpoint REST API. Untuk membatasi kemampuan kunci, cabut kunci ini lalu buat kunci baru dengan \"Batasi kunci ini\" diaktifkan.",
+      "restricted": "Dibatasi"
     },
     "create": {
       "title": "Buat kunci Anda",
@@ -68,7 +71,14 @@
       "planLocked": "Paket Anda tidak menyertakan REST API.",
       "errors": {
         "required": "Masukkan nama untuk kunci.",
-        "tooLong": "Nama maksimal 120 karakter."
+        "tooLong": "Nama maksimal 120 karakter.",
+        "noScopes": "Centang minimal satu cakupan, atau nonaktifkan \"Batasi kunci ini\"."
+      },
+      "restrict": {
+        "label": "Batasi kunci ini",
+        "help": "Nonaktif: kunci memiliki akses penuh ke REST API. Aktif: kunci hanya dapat memakai cakupan yang Anda centang di bawah.",
+        "scopes": "Cakupan yang diizinkan",
+        "impliedByWrite": "Termasuk dalam cakupan tulis"
       }
     },
     "quickstart": {
