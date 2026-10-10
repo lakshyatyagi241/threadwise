@@ -373,6 +373,12 @@ export class RecoveryService {
         }
         throw err;
       }
+      // The old mailbox loses its recovery authority at once: any reset or verification link already mailed there dies.
+      await this.tokens.revokeOutstanding(tx, org.id, consumed.userId, [
+        'password_reset',
+        'email_verify',
+        'email_change',
+      ]);
       // The new address just proved it is reachable.
       await tx.execute(sql`
         INSERT INTO user_security (org_id, user_id, email_verified_at) VALUES (${org.id}, ${consumed.userId}, now())
@@ -390,6 +396,8 @@ export class RecoveryService {
       return { userId: consumed.userId, oldEmail: oldRow.email, newEmail, name: oldRow.full_name };
     });
     await this.gates.invalidate(org.id, result.userId);
+    // A changed sign-in address is an account-recovery event: every session signs in again with the new one.
+    await this.sessions.revokeAllForUser(org.id, result.userId, 'email_changed');
     void this.mail.sendEmailChangedNotice(
       result.oldEmail,
       result.name,

@@ -359,6 +359,14 @@
             "label": "Wajibkan simbol",
             "short": "Simbol"
           },
+          "passwordBlocklistEnabled": {
+            "label": "Blokir kata sandi umum",
+            "hint": "Menolak kata sandi yang paling umum, varian serupa seperti P@ssw0rd, pola keyboard, dan apa pun yang mengandung nama atau email orang tersebut."
+          },
+          "passwordBreachCheck": {
+            "label": "Blokir kata sandi dari kebocoran data",
+            "hint": "Memeriksa kata sandi baru terhadap daftar publik Pwned Passwords. Hanya lima karakter pertama dari hash yang keluar dari server. Jika layanan tidak dapat dijangkau, kata sandi akan diterima."
+          },
           "passwordMaxAgeDays": {
             "label": "Batas usia kata sandi (hari)",
             "hint": "0 berarti kata sandi tidak pernah kedaluwarsa."

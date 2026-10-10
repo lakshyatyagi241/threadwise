@@ -47,6 +47,26 @@ export class UserTokensService {
     return token;
   }
 
+  /**
+   * Retires every unused token of these kinds for one person. Called when the thing a token was mailed to stops being
+   * theirs to rely on (the address changed): a reset link already sitting in the OLD mailbox must not outlive the change.
+   */
+  async revokeOutstanding(
+    tx: Tx,
+    orgId: number,
+    userId: number,
+    kinds: TokenKind[],
+  ): Promise<void> {
+    await tx.execute(sql`
+      DELETE FROM user_tokens
+      WHERE org_id = ${orgId} AND user_id = ${userId} AND consumed_at IS NULL
+        AND kind IN (${sql.join(
+          kinds.map((k) => sql`${k}`),
+          sql`, `,
+        )})
+    `);
+  }
+
   /** Is this token currently usable? Does not consume it. */
   async peek(orgId: number, kind: TokenKind, token: string): Promise<ConsumedToken | null> {
     const res = await this.db.txAs({ orgId }, async (tx) =>

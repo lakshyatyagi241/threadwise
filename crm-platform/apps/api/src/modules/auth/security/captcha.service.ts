@@ -31,6 +31,26 @@ export class CaptchaService {
     return config ? { version: config.version, siteKey: config.siteKey } : null;
   }
 
+  /**
+   * Like `assert` but reports instead of throwing, and says whether a captcha exists at all. Used where the captcha is an
+   * ESCALATION (an account under attack asks an unfamiliar network to prove it is human), so "not configured" must be
+   * distinguishable from "failed".
+   */
+  async check(
+    token: string | undefined,
+    action: 'login' | 'operator',
+  ): Promise<'not-configured' | 'ok' | 'failed'> {
+    const config = await this.settings.captchaConfig();
+    if (!config) return 'not-configured';
+    if (!token) return 'failed';
+    const ok = await this.port.verify(config, {
+      token,
+      remoteIp: RequestContextStore.peek()?.ip,
+      expectedAction: action,
+    });
+    return ok ? 'ok' : 'failed';
+  }
+
   async assert(
     token: string | undefined,
     action: 'login' | 'register' | 'forgot' | 'operator' | 'contact' | 'form',

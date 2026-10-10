@@ -25,12 +25,12 @@ export const orgSlugSchema = z
  * the server and reported as AUTH_PASSWORD_POLICY with per-rule details,
  * because the rules are runtime configuration, not part of the contract.
  *
- * The floor is 6, the lowest minimum length an administrator can configure
- * (policy range 6-128): the contract must never be stricter than the policy it
- * defers to, or a workspace that set its minimum to 6 could not use it. The
- * stored policy (default 8) decides the real minimum.
+ * The floor is 8, the lowest minimum length an administrator can configure
+ * (policy range 8-128, ASVS 5.0): the contract must never be stricter than the
+ * policy it defers to, or a workspace that set its minimum to 8 could not use it.
+ * The stored policy (default 12) decides the real minimum.
  */
-export const PASSWORD_CONTRACT_MIN = 6;
+export const PASSWORD_CONTRACT_MIN = 8;
 export const passwordSchema = z.string().min(PASSWORD_CONTRACT_MIN).max(256);
 
 /**
@@ -39,7 +39,7 @@ export const passwordSchema = z.string().min(PASSWORD_CONTRACT_MIN).max(256);
  * the person types, instead of a number copied into the page.
  */
 export const passwordPolicyHintSchema = z.object({
-  minLength: z.number().int().min(6).max(128),
+  minLength: z.number().int().min(8).max(128),
   /** Both an upper-case and a lower-case letter. */
   requireMixedCase: z.boolean(),
   requireNumber: z.boolean(),
@@ -102,6 +102,8 @@ export const mfaRequiredSchema = z.object({
   /** Single-use, expires in expiresInSeconds. Not a token pair. */
   challengeToken: z.string(),
   expiresInSeconds: z.number().int().positive(),
+  /** The person has a passkey: the client may offer "Use a passkey" next to the code field. */
+  passkey: z.boolean().optional(),
 });
 export type MfaRequired = z.infer<typeof mfaRequiredSchema>;
 
@@ -156,9 +158,11 @@ export const mfaLoginRequestSchema = z
       .optional(),
     /** One of the single-use recovery codes. */
     recoveryCode: z.string().min(8).max(32).optional(),
+    /** A passkey assertion (the browser's `navigator.credentials.get()` result as JSON). */
+    webauthn: z.record(z.string(), z.unknown()).optional(),
   })
-  .refine((v) => Boolean(v.code) !== Boolean(v.recoveryCode), {
-    message: 'send either code or recoveryCode',
+  .refine((v) => [v.code, v.recoveryCode, v.webauthn].filter(Boolean).length === 1, {
+    message: 'send exactly one of code, recoveryCode or webauthn',
   });
 export type MfaLoginRequest = z.infer<typeof mfaLoginRequestSchema>;
 

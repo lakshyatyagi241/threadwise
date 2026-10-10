@@ -63,15 +63,30 @@ describe('settings matrix against the reference (TW-AUTH-037)', () => {
     ).toBe(false);
   });
 
-  it('lets the password floor in the contract sit at the policy minimum of 6', () => {
-    expect(securityPolicyPatchSchema.safeParse({ passwordMinLength: 6 }).success).toBe(true);
+  it('lets the password floor in the contract sit at the policy minimum of 8', () => {
+    expect(securityPolicyPatchSchema.safeParse({ passwordMinLength: 8 }).success).toBe(true);
+    expect(securityPolicyPatchSchema.safeParse({ passwordMinLength: 7 }).success).toBe(false);
     expect(
-      changePasswordRequestSchema.safeParse({ currentPassword: 'x', newPassword: 'Ab1de6' })
+      changePasswordRequestSchema.safeParse({ currentPassword: 'x', newPassword: 'Ab1de6xy' })
         .success,
     ).toBe(true);
     expect(
       changePasswordRequestSchema.safeParse({ currentPassword: 'x', newPassword: 'Ab1d' }).success,
     ).toBe(false);
+  });
+
+  it('defaults to a strong password policy: 12 characters, blocklist and breach check on', () => {
+    const p = salvagePolicy({}).policy;
+    expect(p.passwordMinLength).toBe(12);
+    expect(p.passwordBlocklistEnabled).toBe(true);
+    expect(p.passwordBreachCheck).toBe(true);
+  });
+
+  it('reads a stored minimum below the new floor back as the default, key by key', () => {
+    const { policy, rejected } = salvagePolicy({ passwordMinLength: 6, requireMfaForAll: true });
+    expect(rejected).toEqual(['passwordMinLength']);
+    expect(policy.passwordMinLength).toBe(12);
+    expect(policy.requireMfaForAll).toBe(true);
   });
 });
 
@@ -121,7 +136,7 @@ describe('a stored policy with a bad value (TW-AUTH-037)', () => {
     expect(p.ipAllowlistEnabled).toBe(true);
     expect(p.ipAllowlistCidrs).toEqual(['198.51.100.7']);
     expect(p.waGuardrailsMode).toBe('enforce');
-    expect(p.passwordMinLength).toBe(8);
+    expect(p.passwordMinLength).toBe(12);
   });
 });
 
