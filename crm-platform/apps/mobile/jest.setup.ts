@@ -34,7 +34,8 @@ jest.mock('@sentry/react-native', () => ({
   captureException: jest.fn(),
   setUser: jest.fn(),
   init: jest.fn(),
-  wrap: <T>(c: T) => c,
+  // A spy that hands the component straight back, so a test can assert whether the root was wrapped.
+  wrap: jest.fn(<T>(c: T) => c),
 }));
 
 jest.mock('@react-native-community/netinfo', () =>

@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/react-native';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -12,7 +11,7 @@ import { Text } from '@/components/ui/text';
 import { i18n, initI18n } from '@/lib/i18n';
 import { getSnapshot, restoreSession, subscribe } from '@/lib/auth/session-manager';
 import { log } from '@/lib/observability/logger';
-import { initObservability } from '@/lib/observability/sentry';
+import { initObservability, withObservability } from '@/lib/observability/sentry';
 import { createQueryClient, wireQueryEnvironment } from '@/lib/query/query-client';
 import { spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
@@ -60,7 +59,7 @@ function RootLayout() {
   );
 }
 
-export default Sentry.wrap(RootLayout);
+export default withObservability(RootLayout);
 
 /** Rendered by Expo Router when a screen throws while rendering: a recoverable screen instead of a white one. */
 export function ErrorBoundary({ error, retry }: { error: Error; retry: () => Promise<void> }) {
