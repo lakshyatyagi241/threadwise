@@ -74,11 +74,11 @@ export const confirmEmailChangeRequestSchema = z.object({
 export const changePasswordRequestSchema = z.object({
   currentPassword: z.string().min(1).max(256),
   /**
-   * Bounds only. The floor is 6 because the administrator's policy minimum is
-   * allowed down to 6; the server enforces the stored policy (and reports every
+   * Bounds only. The floor is 8 because the administrator's policy minimum is
+   * allowed down to 8; the server enforces the stored policy (and reports every
    * broken rule as AUTH_PASSWORD_POLICY), so the contract must never be stricter than it.
    */
-  newPassword: z.string().min(6).max(256),
+  newPassword: z.string().min(8).max(256),
 });
 export type ChangePasswordRequest = z.infer<typeof changePasswordRequestSchema>;
 
@@ -133,7 +133,23 @@ export const mfaSetupResponseSchema = z.object({
 });
 export type MfaSetupResponse = z.infer<typeof mfaSetupResponseSchema>;
 
-export const mfaEnableRequestSchema = z.object({ code: z.string().regex(/^\d{6}$/) });
+/**
+ * Starting or finishing two-factor enrolment needs recent authentication: a session that signed in less than this long ago
+ * is trusted as is, an older one must send the password again (otherwise a hijacked session could enrol the attacker's
+ * authenticator and lock the owner out). Seconds.
+ */
+export const MFA_REAUTH_WINDOW_SECONDS = 600;
+
+export const mfaSetupRequestSchema = z
+  .object({ password: z.string().min(1).max(256).optional() })
+  .default({});
+export type MfaSetupRequest = z.infer<typeof mfaSetupRequestSchema>;
+
+export const mfaEnableRequestSchema = z.object({
+  code: z.string().regex(/^\d{6}$/),
+  /** Only needed when the session is older than MFA_REAUTH_WINDOW_SECONDS (the API answers AUTH_REAUTH_REQUIRED). */
+  password: z.string().min(1).max(256).optional(),
+});
 export type MfaEnableRequest = z.infer<typeof mfaEnableRequestSchema>;
 
 export const mfaEnableResponseSchema = z.object({
@@ -142,7 +158,11 @@ export const mfaEnableResponseSchema = z.object({
 });
 export type MfaEnableResponse = z.infer<typeof mfaEnableResponseSchema>;
 
-export const mfaDisableRequestSchema = z.object({ password: z.string().min(1).max(256) });
+/** Turning two-factor off needs the password AND a current authenticator code or an unused recovery code. */
+export const mfaDisableRequestSchema = z.object({
+  password: z.string().min(1).max(256),
+  code: z.string().trim().min(6).max(16),
+});
 export type MfaDisableRequest = z.infer<typeof mfaDisableRequestSchema>;
 
 export const regenerateRecoveryCodesRequestSchema = z.object({

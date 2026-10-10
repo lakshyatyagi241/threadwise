@@ -3,6 +3,7 @@ export * from './signup';
 export * from './recovery';
 export * from './session';
 export * from './account';
+export * from './passkeys';
 export * from './security-policy';
 export * from './platform';
 export * from './otp-senders';

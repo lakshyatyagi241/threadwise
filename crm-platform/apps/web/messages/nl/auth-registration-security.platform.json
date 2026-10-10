@@ -359,6 +359,14 @@
             "label": "Symbool vereisen",
             "short": "Symbool"
           },
+          "passwordBlocklistEnabled": {
+            "label": "Veelgebruikte wachtwoorden blokkeren",
+            "hint": "Weigert de meest gebruikte wachtwoorden, lookalike-varianten zoals P@ssw0rd, toetsenbordpatronen en alles wat de naam of het e-mailadres van de persoon bevat."
+          },
+          "passwordBreachCheck": {
+            "label": "Wachtwoorden uit datalekken blokkeren",
+            "hint": "Controleert nieuwe wachtwoorden aan de hand van de openbare lijst van Pwned Passwords. Alleen de eerste vijf tekens van een hash verlaten de server. Als de dienst niet bereikbaar is, wordt het wachtwoord geaccepteerd."
+          },
           "passwordMaxAgeDays": {
             "label": "Maximale wachtwoordleeftijd (dagen)",
             "hint": "0 betekent dat wachtwoorden nooit verlopen."

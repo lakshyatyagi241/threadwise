@@ -4,6 +4,8 @@ import { z } from 'zod';
 import {
   loginRequestSchema,
   selectWorkspaceRequestSchema,
+  passkeyLoginOptionsRequestSchema,
+  type PasskeyLoginOptionsRequest,
   type SelectWorkspaceRequest,
   mfaLoginRequestSchema,
   logoutRequestSchema,
@@ -15,6 +17,7 @@ import {
   type SwitchWorkspaceRequest,
 } from '@crm/contracts';
 import { Public, ActorKinds } from '../../common/decorators';
+import { AppError } from '../../common/errors/app-error';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { AccountService } from './account/account.service';
 import { SecurityPolicyService } from './platform/security-policy.service';
@@ -99,15 +102,22 @@ export class AuthController {
   }
 
   @Public()
+  @Post('login/mfa/webauthn-options')
+  @ApiOperation({ summary: 'Options for signing in with a passkey at the second-factor step' })
+  async signInPasskeyOptions(
+    @Body(zodPipe(passkeyLoginOptionsRequestSchema)) body: PasskeyLoginOptionsRequest,
+  ) {
+    return this.login.passkeyLoginOptions(body.challengeToken);
+  }
+
+  @Public()
   @Post('login/workspace')
   @ApiOperation({
     summary: 'Pick the workspace after a sign-in that matched several',
     description:
       'Takes the `selectionToken` from a `workspace_required` login answer and the chosen slug. Single use; answers like login.',
   })
-  async signInWorkspace(
-    @Body(zodPipe(selectWorkspaceRequestSchema)) body: SelectWorkspaceRequest,
-  ) {
+  async signInWorkspace(@Body(zodPipe(selectWorkspaceRequestSchema)) body: SelectWorkspaceRequest) {
     return this.login.selectWorkspace(body, clientMeta());
   }
 
@@ -135,6 +145,8 @@ export class AuthController {
     summary: 'Exchange a verified Clerk session token for a session (existing users only)',
   })
   async clerkSession(@Body(zodPipe(clerkSessionSchema)) body: z.infer<typeof clerkSessionSchema>) {
+    // Not configured (placeholder key): this door does not exist.
+    if (!this.auth.clerkConfigured()) throw AppError.notFound('Route');
     return this.auth.loginViaClerk(body.orgSlug, body.clerkToken, clientMeta());
   }
 

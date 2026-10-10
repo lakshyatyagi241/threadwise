@@ -359,6 +359,14 @@
             "label": "Yêu cầu ký hiệu",
             "short": "Ký hiệu"
           },
+          "passwordBlocklistEnabled": {
+            "label": "Chặn mật khẩu phổ biến",
+            "hint": "Từ chối các mật khẩu phổ biến nhất, biến thể tương tự như P@ssw0rd, chuỗi phím trên bàn phím và mọi mật khẩu chứa tên hoặc email của người dùng."
+          },
+          "passwordBreachCheck": {
+            "label": "Chặn mật khẩu từng bị rò rỉ dữ liệu",
+            "hint": "Đối chiếu mật khẩu mới với danh sách công khai Pwned Passwords. Chỉ năm ký tự đầu tiên của mã băm rời khỏi máy chủ. Nếu không kết nối được dịch vụ, mật khẩu vẫn được chấp nhận."
+          },
           "passwordMaxAgeDays": {
             "label": "Giới hạn tuổi mật khẩu (ngày)",
             "hint": "0 nghĩa là mật khẩu không bao giờ hết hạn."

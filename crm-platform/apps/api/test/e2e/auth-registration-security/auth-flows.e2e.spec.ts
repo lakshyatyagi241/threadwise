@@ -686,9 +686,8 @@ describe('password recovery and change', () => {
     expect((await login(a, NEW)).status).toBe(201);
     expect(mailTo(a.email, 'password was changed')).toBeTruthy();
     // Proving the inbox also proves the address.
-    const s = await api()
-      .get('/v2/auth/session')
-      .set(bearer((await login(a, NEW)).body.tokens.accessToken));
+    const again = await login(a, NEW);
+    const s = await api().get('/v2/auth/session').set(bearer(again.body.tokens.accessToken));
     expect(s.body.flags.emailUnverified).toBe(false);
   });
 
@@ -857,9 +856,9 @@ describe('two-factor authentication', () => {
     expect(sixth.body.code).toBe('AUTH_MFA_CHALLENGE_EXPIRED');
   });
 
-  it('turns off with the password, and regenerates codes only with it', async () => {
+  it('turns off only with the password AND a current code, and regenerates codes only with the password', async () => {
     const a = await signup();
-    await enrol(a);
+    const factor = await enrol(a);
     const noPw = await api()
       .post('/v2/account/mfa/recovery-codes')
       .set(bearer(a.access))
@@ -871,17 +870,35 @@ describe('two-factor authentication', () => {
       .send({ password: PASSWORD });
     expect(fresh.body.recoveryCodes).toHaveLength(10);
     expect(
-      (await api().post('/v2/account/mfa/disable').set(bearer(a.access)).send({ password: 'nope' }))
-        .status,
+      (
+        await api()
+          .post('/v2/account/mfa/disable')
+          .set(bearer(a.access))
+          .send({ password: 'nope', code: '000000' })
+      ).status,
     ).toBe(422);
+    // The password alone is no longer enough: the factor being removed must be presented too.
+    const noCode = await api()
+      .post('/v2/account/mfa/disable')
+      .set(bearer(a.access))
+      .send({ password: PASSWORD });
+    expect(noCode.status).toBe(422);
+    const wrongCode = await api()
+      .post('/v2/account/mfa/disable')
+      .set(bearer(a.access))
+      .send({ password: PASSWORD, code: '000000' });
+    expect(wrongCode.status).toBe(422);
+    expect(wrongCode.body.code).toBe('AUTH_MFA_INVALID_CODE');
+    // regenerating the codes replaced the ones from enrolment: take one from the fresh set
     expect(
       (
         await api()
           .post('/v2/account/mfa/disable')
           .set(bearer(a.access))
-          .send({ password: PASSWORD })
+          .send({ password: PASSWORD, code: fresh.body.recoveryCodes[0] })
       ).status,
     ).toBe(201);
+    void factor;
     expect((await login({ ...a, ip: nextIp() }, PASSWORD)).body.status).toBe('authenticated');
   });
 });
@@ -1460,7 +1477,7 @@ describe('platform operators and the Security Center', () => {
     expect((await op('patch', '/security/policy').send({ lockoutAfterFailures: 99 })).status).toBe(
       422,
     );
-    await setPolicy({ lockoutAfterFailures: 5, passwordMinLength: 8 });
+    await setPolicy({ lockoutAfterFailures: 5, passwordMinLength: 12 });
   });
 
   it('lets only super admins use the danger zone, and audits a refused attempt', async () => {

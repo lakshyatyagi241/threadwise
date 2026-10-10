@@ -3,7 +3,12 @@ import { hash, verify } from '@node-rs/argon2';
 import { ERROR_CODES } from '@crm/contracts';
 import { AppError } from '../../../common/errors/app-error';
 import { SecurityPolicyService } from '../platform/security-policy.service';
-import { evaluatePassword, type PasswordContext } from '../support/password-policy';
+import {
+  evaluatePassword,
+  type PasswordContext,
+  type PasswordViolation,
+} from '../support/password-policy';
+import { checkPwnedPassword } from '../support/pwned-passwords';
 
 /** argon2id hash of a random string nobody knows. Used only for timing parity. */
 const DUMMY_HASH =
@@ -39,7 +44,17 @@ export class PasswordService {
   /** Throws AUTH_PASSWORD_POLICY with one detail per broken rule. */
   async assertAcceptable(password: string, context: PasswordContext = {}): Promise<void> {
     const policy = await this.policy.policy();
-    const violations = evaluatePassword(password, policy, context);
+    const violations: PasswordViolation[] = evaluatePassword(password, policy, context);
+    // The online breach lookup only runs for a password that passes every offline rule (a weak one is refused anyway, and
+    // its hash prefix need not leave the server), is switched on in the policy, and is not a test run.
+    if (violations.length === 0 && policy.passwordBreachCheck && process.env.NODE_ENV !== 'test') {
+      if ((await checkPwnedPassword(password)) === 'breached') {
+        violations.push({
+          rule: 'breached',
+          message: 'That password has appeared in a known data breach. Choose a different one.',
+        });
+      }
+    }
     if (violations.length === 0) return;
     throw new AppError(
       ERROR_CODES.AUTH_PASSWORD_POLICY,

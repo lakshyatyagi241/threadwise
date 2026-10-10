@@ -19,7 +19,7 @@ describe('password policy', () => {
   });
 
   it('reports every broken rule, not just the first', () => {
-    expect(rules('abc')).toEqual(['min_length', 'upper_lower', 'number']);
+    expect(rules('xq')).toEqual(['min_length', 'upper_lower', 'number']);
   });
 
   it('enforces the symbol rule only when the policy asks for it', () => {
@@ -28,8 +28,9 @@ describe('password policy', () => {
     expect(rules('Str0ngPassw0rd!', { ...policy, passwordRequireSymbol: true })).toEqual([]);
   });
 
-  it('never accepts a minimum length below 6 even if configured lower', () => {
-    expect(rules('Ab1de', { ...policy, passwordMinLength: 1 })).toContain('min_length');
+  it('never accepts a minimum length below 8 even if configured lower', () => {
+    expect(rules('Ab1defg', { ...policy, passwordMinLength: 1 })).toContain('min_length');
+    expect(rules('Ab1defgh', { ...policy, passwordMinLength: 1 })).not.toContain('min_length');
   });
 
   it('rejects well-known passwords and passwords containing the email name', () => {

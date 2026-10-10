@@ -200,7 +200,7 @@ describe('Security Center tabs', () => {
     const html = panel(createElement(LoginPanel));
     expect(html).toMatch(/id="policy-sessionTimeoutMinutes"[^>]*min="5"[^>]*max="1440"/);
     expect(html).toMatch(/id="policy-lockoutAfterFailures"[^>]*min="1"[^>]*max="50"/);
-    expect(html).toMatch(/id="policy-passwordMinLength"[^>]*min="6"[^>]*max="128"/);
+    expect(html).toMatch(/id="policy-passwordMinLength"[^>]*min="8"[^>]*max="128"/);
   });
 
   it('puts the guardrail mode beside its heading and explains all three modes', () => {

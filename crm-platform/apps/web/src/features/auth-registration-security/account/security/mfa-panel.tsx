@@ -52,6 +52,8 @@ export function MfaPanel({ forcedByUrl }: { forcedByUrl: boolean }) {
   useGateRedirect(status.error);
   const [phase, setPhase] = useState<Phase>({ kind: 'idle' });
   const [notice, setNotice] = useState<'disabled' | null>(null);
+  // Set after the API answered AUTH_REAUTH_REQUIRED (session older than ten minutes) and the person typed the password.
+  const setupPassword = useRef<string | undefined>(undefined);
 
   const forced = flags.mfaEnrolmentRequired || forcedByUrl;
 
@@ -59,7 +61,7 @@ export function MfaPanel({ forcedByUrl }: { forcedByUrl: boolean }) {
   const wantsSetup = status.data?.enabled === false && phase.kind === 'idle';
   const setup = useQuery({
     queryKey: keys.mfaSetup,
-    queryFn: authApi.mfaSetup,
+    queryFn: () => authApi.mfaSetup(setupPassword.current),
     enabled: wantsSetup,
     staleTime: Infinity,
     gcTime: 0,
@@ -67,6 +69,8 @@ export function MfaPanel({ forcedByUrl }: { forcedByUrl: boolean }) {
     refetchOnWindowFocus: false,
   });
   useGateRedirect(setup.error);
+  const reauth =
+    setup.error instanceof ApiError && setup.error.code === ERROR_CODES.AUTH_REAUTH_REQUIRED;
   // Already on in another tab: show the real state instead of an error.
   const conflict = setup.error instanceof ApiError && setup.error.code === ERROR_CODES.CONFLICT;
   const refetchStatus = status.refetch;
@@ -166,7 +170,25 @@ export function MfaPanel({ forcedByUrl }: { forcedByUrl: boolean }) {
         notice={notice === 'disabled' ? t('disabledDone') : null}
         onRestart={restartSetup}
         onEnabled={finishEnable}
+        password={setupPassword.current}
       />
+    );
+  } else if (reauth) {
+    // The session is older than ten minutes: confirm the password once, then the setup continues as usual.
+    body = (
+      <div className="space-y-4">
+        <p className="text-sm text-muted-foreground">{t('offDescription')}</p>
+        <PasswordConfirmModal
+          title={t('title')}
+          description={t('offDescription')}
+          confirmLabel={t('enable')}
+          onClose={() => router.back()}
+          onConfirm={async (password) => {
+            setupPassword.current = password;
+            await queryClient.resetQueries({ queryKey: keys.mfaSetup });
+          }}
+        />
+      </div>
     );
   } else {
     body = (
@@ -207,9 +229,15 @@ export function MfaPanel({ forcedByUrl }: { forcedByUrl: boolean }) {
           description={t('disableDescription')}
           confirmLabel={t('disableConfirm')}
           danger
+          codeField={{
+            label: t('codeLabel'),
+            hint: t('codeHint'),
+            wrong: t('codeWrong'),
+            required: t('codeInvalid'),
+          }}
           onClose={() => setPhase({ kind: 'idle' })}
-          onConfirm={async (password) => {
-            await authApi.mfaDisable(password);
+          onConfirm={async (password, code) => {
+            await authApi.mfaDisable(password, code);
             setPhase({ kind: 'idle' });
             setNotice('disabled');
             await queryClient.invalidateQueries({ queryKey: keys.mfa });
@@ -245,12 +273,15 @@ function SetupView({
   notice,
   onRestart,
   onEnabled,
+  password,
 }: {
   setup: MfaSetupResponse;
   offDescription: string;
   notice: string | null;
   onRestart: () => void;
   onEnabled: (codes: string[]) => void;
+  /** Only when the API asked for the password before the setup (old session). */
+  password?: string;
 }) {
   const t = useTranslations('auth-registration-security.account.mfa');
   const router = useRouter();
@@ -274,7 +305,7 @@ function SetupView({
     setPending(true);
     setFieldError(null);
     try {
-      const result = await authApi.mfaEnable(code);
+      const result = await authApi.mfaEnable(code, password);
       onEnabled(result.recoveryCodes);
     } catch (err) {
       if (redirectOnGateError(err, router.replace, '/account/security')) return;
