@@ -94,7 +94,10 @@
           "challengeExpired": "로그인이 만료되었습니다. 비밀번호를 다시 입력하세요.",
           "rateLimited": "요청이 너무 많습니다. 잠시 후 다시 시도하세요.",
           "unexpected": "로그인할 수 없습니다. 잠시 후 다시 시도하세요.",
-          "lockedWait": "실패한 시도가 너무 많습니다. {minutes, plural, other {#분}} 후에 다시 시도하세요."
+          "lockedWait": "실패한 시도가 너무 많습니다. {minutes, plural, other {#분}} 후에 다시 시도하세요.",
+          "passkeyInvalid": "이 패스키를 확인할 수 없습니다. 다시 시도하거나 코드를 사용하세요.",
+          "passkeyCancelled": "패스키 로그인이 취소되었거나 시간이 초과되었습니다. 다시 시도하거나 코드를 사용하세요.",
+          "passkeyFailed": "기기에서 패스키를 제공하지 못했습니다. 다시 시도하거나 코드를 사용하세요."
         },
         "captcha": {
           "loadFailed": "캡차를 불러올 수 없습니다. 연결 상태나 콘텐츠 차단기를 확인한 후 다시 시도하세요.",
@@ -115,7 +118,9 @@
           "verifying": "확인 중",
           "useRecovery": "복구 코드 사용",
           "useAuthenticator": "인증 앱 사용",
-          "back": "로그인으로 돌아가기"
+          "back": "로그인으로 돌아가기",
+          "usePasskey": "패스키 사용",
+          "passkeyWaiting": "패스키를 기다리는 중"
         }
       },
       "mfa": {

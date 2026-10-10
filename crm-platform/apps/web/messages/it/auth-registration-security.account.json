@@ -385,7 +385,12 @@
         "useCode": "Usa invece un codice di autenticazione",
         "cancel": "Annulla",
         "confirm": "Conferma",
-        "verifying": "Verifica in corso"
+        "verifying": "Verifica in corso",
+        "usePasskey": "Usa invece una passkey",
+        "passkeyWaiting": "In attesa della passkey",
+        "passkeyCancelled": "La conferma con la passkey è stata annullata o è scaduta. Riprova, oppure usa un codice.",
+        "passkeyInvalid": "Non è stato possibile verificare questa passkey. Riprova, oppure usa un codice.",
+        "passkeyFailed": "Il dispositivo non è riuscito a fornire la passkey. Riprova, oppure usa un codice."
       },
       "banners": {
         "dismiss": "Chiudi",
@@ -565,6 +570,45 @@
         "timeout": "Il server di posta ha impiegato troppo tempo a rispondere. Puoi riprovare subito.",
         "transport_error": "Non è stato possibile consegnare l'email al server di posta. Puoi riprovare subito.",
         "unknown": "Non è stato possibile inviare l'email per un motivo sconosciuto. Puoi riprovare subito."
+      },
+      "passkeys": {
+        "title": "Passkey",
+        "subtitle": "Conferma l'accesso con l'impronta digitale, il volto, il blocco schermo o una chiave di sicurezza, senza digitare un codice.",
+        "unsupported": "Questo browser non supporta le passkey. Apri questa pagina in una versione recente di Chrome, Edge, Safari o Firefox.",
+        "needsMfa": "Le passkey funzionano insieme a un'app di autenticazione. Attiva prima l'autenticazione a due fattori, poi aggiungi una passkey.",
+        "needsMfaLink": "Vai all'autenticazione a due fattori",
+        "empty": "Non hai ancora nessuna passkey. Aggiungine una per confermare l'accesso con il tuo dispositivo.",
+        "add": "Aggiungi una passkey",
+        "synced": "Sincronizzata",
+        "deviceOnly": "Solo questo dispositivo",
+        "added": "Aggiunta il {date}",
+        "lastUsed": "Ultimo utilizzo: {when}",
+        "neverUsed": "Mai utilizzata",
+        "remove": "Rimuovi",
+        "removeTitle": "Rimuovi la passkey",
+        "removeDescription": "{name} non funzionerà più come secondo passaggio quando accedi. Inserisci la password per rimuovere la passkey.",
+        "removeConfirm": "Rimuovi la passkey",
+        "removedDone": "La passkey {name} è stata rimossa.",
+        "addedDone": "La passkey {name} è stata aggiunta.",
+        "addTitle": "Aggiungi una passkey",
+        "addDescription": "Dalle un nome che riconoscerai, ad esempio Portatile del lavoro o Telefono. Il browser ti chiederà poi di confermare con l'impronta digitale, il volto, il blocco schermo o la chiave di sicurezza.",
+        "addConfirm": "Continua",
+        "nameLabel": "Nome",
+        "nameHint": "Fino a {max} caratteri.",
+        "namePlaceholder": "Portatile del lavoro",
+        "nameRequired": "Inserisci un nome per questa passkey.",
+        "passwordNeeded": "È passato un po' di tempo dall'ultimo accesso. Inserisci la password per continuare.",
+        "preparing": "Preparazione in corso",
+        "waiting": "In attesa del dispositivo",
+        "saving": "Salvataggio in corso",
+        "problems": {
+          "cancelled": "La passkey non è stata creata: la richiesta è stata annullata o è scaduta. Riprova.",
+          "alreadyRegistered": "Questo dispositivo ha già una passkey per il tuo account. Usa un altro dispositivo o una chiave di sicurezza, oppure rimuovi prima la passkey esistente.",
+          "invalid": "Non è stato possibile verificare la risposta del tuo dispositivo. Riprova.",
+          "limit": "Hai raggiunto il numero massimo di passkey che un account può contenere. Rimuovine una per aggiungerne un'altra.",
+          "unsupported": "Questo dispositivo non può creare questo tipo di passkey. Prova con un altro dispositivo o una chiave di sicurezza.",
+          "failed": "Il browser o il dispositivo non è riuscito a creare la passkey. Riprova."
+        }
       }
     }
   }

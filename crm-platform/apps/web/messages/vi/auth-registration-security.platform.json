@@ -94,7 +94,10 @@
           "challengeExpired": "Phiên đăng nhập đó đã hết hạn. Hãy nhập lại mật khẩu.",
           "rateLimited": "Quá nhiều yêu cầu. Hãy đợi một lát rồi thử lại.",
           "unexpected": "Không thể đăng nhập cho bạn. Hãy thử lại sau giây lát.",
-          "lockedWait": "Quá nhiều lần thất bại. Hãy thử lại sau {minutes, plural, other {# phút}}."
+          "lockedWait": "Quá nhiều lần thất bại. Hãy thử lại sau {minutes, plural, other {# phút}}.",
+          "passkeyInvalid": "Không thể xác minh khóa truy cập đó. Hãy thử lại hoặc dùng mã.",
+          "passkeyCancelled": "Đăng nhập bằng khóa truy cập đã bị hủy hoặc hết thời gian. Hãy thử lại hoặc dùng mã.",
+          "passkeyFailed": "Thiết bị của bạn không cung cấp được khóa truy cập. Hãy thử lại hoặc dùng mã."
         },
         "captcha": {
           "loadFailed": "Không thể tải captcha. Hãy kiểm tra kết nối hoặc trình chặn nội dung, rồi thử lại.",
@@ -115,7 +118,9 @@
           "verifying": "Đang kiểm tra",
           "useRecovery": "Dùng mã khôi phục",
           "useAuthenticator": "Dùng ứng dụng xác thực",
-          "back": "Quay lại đăng nhập"
+          "back": "Quay lại đăng nhập",
+          "usePasskey": "Dùng khóa truy cập",
+          "passkeyWaiting": "Đang chờ khóa truy cập của bạn"
         }
       },
       "mfa": {

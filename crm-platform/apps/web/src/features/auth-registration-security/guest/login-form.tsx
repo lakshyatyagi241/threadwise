@@ -65,7 +65,9 @@ export function LoginForm({
   const [askWorkspace, setAskWorkspace] = useState(false);
   // "Keep me signed in" is on by default, and absent when an administrator turned it off.
   const [remember, setRemember] = useState(config.rememberMeEnabled);
-  const [mfa, setMfa] = useState<{ token: string; expiresAt: number } | null>(null);
+  const [mfa, setMfa] = useState<{ token: string; expiresAt: number; passkey: boolean } | null>(
+    null,
+  );
   const [mfaExpired, setMfaExpired] = useState(false);
   // The password opened several workspaces: the cards to pick from, until the choice lapses.
   const [choice, setChoice] = useState<{
@@ -103,7 +105,11 @@ export function LoginForm({
     if (res.status === 'mfa_required') {
       setPickedSlug(slug);
       setChoice(null);
-      setMfa({ token: res.challengeToken, expiresAt: Date.now() + res.expiresInSeconds * 1000 });
+      setMfa({
+        token: res.challengeToken,
+        expiresAt: Date.now() + res.expiresInSeconds * 1000,
+        passkey: res.passkey === true,
+      });
       return;
     }
     completeSignIn(res, next);
@@ -179,7 +185,11 @@ export function LoginForm({
       }
       if (res.status === 'mfa_required') {
         setLastEmail(parsed.data.email);
-        setMfa({ token: res.challengeToken, expiresAt: Date.now() + res.expiresInSeconds * 1000 });
+        setMfa({
+          token: res.challengeToken,
+          expiresAt: Date.now() + res.expiresInSeconds * 1000,
+          passkey: res.passkey === true,
+        });
         setPending(false);
         return;
       }
@@ -199,6 +209,7 @@ export function LoginForm({
         remember={config.rememberMeEnabled && remember}
         orgSlug={pickedSlug ?? (orgSlug.trim() || undefined)}
         next={next}
+        passkey={mfa.passkey}
         onBack={backToCredentials}
       />
     );

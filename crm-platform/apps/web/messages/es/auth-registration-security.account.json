@@ -385,7 +385,12 @@
         "useCode": "Usar un código de autenticación",
         "cancel": "Cancelar",
         "confirm": "Confirmar",
-        "verifying": "Verificando"
+        "verifying": "Verificando",
+        "usePasskey": "Usar una llave de acceso en su lugar",
+        "passkeyWaiting": "Esperando tu llave de acceso",
+        "passkeyCancelled": "La confirmación con la llave de acceso se canceló o caducó. Inténtalo de nuevo o usa un código.",
+        "passkeyInvalid": "No se pudo verificar esa llave de acceso. Inténtalo de nuevo o usa un código.",
+        "passkeyFailed": "Tu dispositivo no pudo proporcionar la llave de acceso. Inténtalo de nuevo o usa un código."
       },
       "banners": {
         "dismiss": "Descartar",
@@ -565,6 +570,45 @@
         "timeout": "El servidor de correo tardó demasiado en responder. Puedes intentarlo de nuevo ahora mismo.",
         "transport_error": "No se pudo entregar el correo al servidor de correo. Puedes intentarlo de nuevo ahora mismo.",
         "unknown": "No se pudo enviar el correo por un motivo desconocido. Puedes intentarlo de nuevo ahora mismo."
+      },
+      "passkeys": {
+        "title": "Llaves de acceso",
+        "subtitle": "Confirma tu inicio de sesión con tu huella digital, tu rostro, el bloqueo de pantalla o una llave de seguridad, sin escribir un código.",
+        "unsupported": "Este navegador no admite llaves de acceso. Abre esta página en una versión actual de Chrome, Edge, Safari o Firefox.",
+        "needsMfa": "Las llaves de acceso funcionan junto con una aplicación de autenticación. Primero activa la autenticación de dos factores y después añade una llave de acceso.",
+        "needsMfaLink": "Ir a la autenticación de dos factores",
+        "empty": "Todavía no tienes ninguna llave de acceso. Añade una para confirmar tu inicio de sesión con tu dispositivo.",
+        "add": "Añadir una llave de acceso",
+        "synced": "Sincronizada",
+        "deviceOnly": "Solo este dispositivo",
+        "added": "Añadida el {date}",
+        "lastUsed": "Último uso: {when}",
+        "neverUsed": "Nunca usada",
+        "remove": "Eliminar",
+        "removeTitle": "Eliminar llave de acceso",
+        "removeDescription": "La llave de acceso {name} dejará de funcionar como segundo paso al iniciar sesión. Introduce tu contraseña para eliminarla.",
+        "removeConfirm": "Eliminar llave de acceso",
+        "removedDone": "Se eliminó la llave de acceso {name}.",
+        "addedDone": "Se añadió la llave de acceso {name}.",
+        "addTitle": "Añadir una llave de acceso",
+        "addDescription": "Ponle un nombre que reconozcas, como Portátil del trabajo o Teléfono. Después, tu navegador te pedirá que confirmes con tu huella digital, tu rostro, el bloqueo de pantalla o una llave de seguridad.",
+        "addConfirm": "Continuar",
+        "nameLabel": "Nombre",
+        "nameHint": "Hasta {max} caracteres.",
+        "namePlaceholder": "Portátil del trabajo",
+        "nameRequired": "Introduce un nombre para esta llave de acceso.",
+        "passwordNeeded": "Hace tiempo que iniciaste sesión. Introduce tu contraseña para continuar.",
+        "preparing": "Preparando",
+        "waiting": "Esperando a tu dispositivo",
+        "saving": "Guardando",
+        "problems": {
+          "cancelled": "No se creó la llave de acceso: la solicitud se canceló o caducó. Inténtalo de nuevo.",
+          "alreadyRegistered": "Este dispositivo ya tiene una llave de acceso para tu cuenta. Usa otro dispositivo o una llave de seguridad, o elimina primero la llave de acceso existente.",
+          "invalid": "No se pudo verificar la respuesta de tu dispositivo. Inténtalo de nuevo.",
+          "limit": "Has alcanzado el número máximo de llaves de acceso que admite una cuenta. Elimina una para añadir otra.",
+          "unsupported": "Este dispositivo no puede crear este tipo de llave de acceso. Prueba con otro dispositivo o con una llave de seguridad.",
+          "failed": "Tu navegador o dispositivo no pudo crear la llave de acceso. Inténtalo de nuevo."
+        }
       }
     }
   }

@@ -5,12 +5,12 @@ summary: Change your password, turn on two-factor sign-in with an authenticator 
 area: account
 order: 40
 documents: [tile:account-security]
-keywords: [password, two-factor, 2fa, mfa, authenticator, recovery codes, sessions, devices, sign out, security]
+keywords: [password, two-factor, 2fa, mfa, authenticator, recovery codes, passkey, sessions, devices, sign out, security]
 ---
 
 ## What it is for
 
-This page protects how you sign in. It has three parts: **Change password**, **Two-factor authentication** and **Where you are signed in**. Open it from **Settings**, then **Data and security**, or from the **Security** group on the Account page.
+This page protects how you sign in. It has four parts: **Change password**, **Two-factor authentication**, **Passkeys** and **Where you are signed in**. Open it from **Settings**, then **Data and security**, or from the **Security** group on the Account page.
 
 ## How to use it
 
@@ -26,7 +26,11 @@ This page protects how you sign in. It has three parts: **Change password**, **T
 2. Enter the six-digit code the app shows and select **Turn on**.
 3. Ten recovery codes appear once. Use **Copy codes** or **Download**, tick **I have saved these codes in a safe place**, then select **I saved them**. Each code works once if you lose your phone.
 
-Once it is on, the page shows the date it started and how many recovery codes are left, and it warns you when only a few remain. **Replace recovery codes** makes ten new codes and cancels the old ones. **Turn off** removes the second step. Both ask for your password.
+Once it is on, the page shows the date it started and how many recovery codes are left, and it warns you when only a few remain. **Replace recovery codes** makes ten new codes and cancels the old ones. **Turn off** removes the second step and every passkey you added. Both ask for your password.
+
+### Add a passkey
+
+With two-factor on, the **Passkeys** card under it lets you confirm sign-in with your fingerprint, face, screen lock or a security key instead of typing a code. See [Passkeys](help:account-passkeys) for adding, reviewing and removing them.
 
 ### Review your devices
 

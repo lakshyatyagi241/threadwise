@@ -224,7 +224,8 @@
           "common": "Essa senha é fácil demais de adivinhar."
         },
         "socialNoAccount": "Nenhuma conta corresponde a esse login com {provider}. Entre com e-mail e senha ou crie uma conta.",
-        "forbidden": "Essa solicitação foi recusada. Recarregue a página e tente novamente."
+        "forbidden": "Essa solicitação foi recusada. Recarregue a página e tente novamente.",
+        "passkeyInvalid": "Não foi possível verificar essa chave de acesso. Tente novamente ou use um código."
       },
       "validation": {
         "orgSlug": "Digite o endereço do seu espaço de trabalho (letras, números, hífen ou sublinhado).",
@@ -309,7 +310,11 @@
         "useRecovery": "Usar um código de recuperação",
         "useApp": "Usar o código do autenticador",
         "back": "Voltar ao login",
-        "expiresIn": "A verificação expira em {time}"
+        "expiresIn": "A verificação expira em {time}",
+        "usePasskey": "Usar uma chave de acesso",
+        "passkeyWaiting": "Aguardando sua chave de acesso",
+        "passkeyCancelled": "O login com chave de acesso foi cancelado ou expirou. Tente novamente ou use um código.",
+        "passkeyFailed": "Seu dispositivo não conseguiu fornecer a chave de acesso. Tente novamente ou use um código."
       },
       "signup": {
         "steps": {

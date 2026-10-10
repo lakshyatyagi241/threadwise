@@ -94,7 +94,10 @@
           "challengeExpired": "L'accesso è scaduto. Inserisci di nuovo la password.",
           "rateLimited": "Troppe richieste. Attendi un momento e riprova.",
           "unexpected": "Impossibile eseguire l'accesso. Riprova tra un momento.",
-          "lockedWait": "Troppi tentativi falliti. Riprova tra {minutes, plural, one {# minuto} other {# minuti}}."
+          "lockedWait": "Troppi tentativi falliti. Riprova tra {minutes, plural, one {# minuto} other {# minuti}}.",
+          "passkeyInvalid": "Non è stato possibile verificare questa passkey. Riprova, oppure usa un codice.",
+          "passkeyCancelled": "L'accesso con la passkey è stato annullato o è scaduto. Riprova, oppure usa un codice.",
+          "passkeyFailed": "Il dispositivo non è riuscito a fornire la passkey. Riprova, oppure usa un codice."
         },
         "captcha": {
           "loadFailed": "Impossibile caricare il captcha. Controlla la connessione o un eventuale blocco dei contenuti, poi riprova.",
@@ -115,7 +118,9 @@
           "verifying": "Controllo in corso",
           "useRecovery": "Usa un codice di recupero",
           "useAuthenticator": "Usa l'app di autenticazione",
-          "back": "Torna all'accesso"
+          "back": "Torna all'accesso",
+          "usePasskey": "Usa una passkey",
+          "passkeyWaiting": "In attesa della passkey"
         }
       },
       "mfa": {

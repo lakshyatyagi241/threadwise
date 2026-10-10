@@ -224,7 +224,8 @@
           "common": "Dat wachtwoord is te makkelijk te raden."
         },
         "socialNoAccount": "Er is geen account dat bij deze {provider}-login hoort. Log in met je e-mailadres en wachtwoord, of maak een account aan.",
-        "forbidden": "Die aanvraag is geweigerd. Laad de pagina opnieuw en probeer het nog eens."
+        "forbidden": "Die aanvraag is geweigerd. Laad de pagina opnieuw en probeer het nog eens.",
+        "passkeyInvalid": "Die passkey kon niet worden geverifieerd. Probeer het opnieuw of gebruik een code."
       },
       "validation": {
         "orgSlug": "Voer je workspaceadres in (letters, cijfers, streepje of underscore).",
@@ -309,7 +310,11 @@
         "useRecovery": "Gebruik in plaats daarvan een herstelcode",
         "useApp": "Gebruik in plaats daarvan de authenticatorcode",
         "back": "Terug naar inloggen",
-        "expiresIn": "Verificatie verloopt over {time}"
+        "expiresIn": "Verificatie verloopt over {time}",
+        "usePasskey": "Gebruik een passkey",
+        "passkeyWaiting": "Wachten op je passkey",
+        "passkeyCancelled": "Inloggen met een passkey is geannuleerd of verlopen. Probeer het opnieuw of gebruik een code.",
+        "passkeyFailed": "Je apparaat kon de passkey niet doorgeven. Probeer het opnieuw of gebruik een code."
       },
       "signup": {
         "steps": {

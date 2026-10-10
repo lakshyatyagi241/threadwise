@@ -224,7 +224,8 @@
           "common": "La password è troppo facile da indovinare."
         },
         "socialNoAccount": "Nessun account corrisponde a questo accesso con {provider}. Accedi con email e password oppure crea un account.",
-        "forbidden": "La richiesta è stata rifiutata. Ricarica la pagina e riprova."
+        "forbidden": "La richiesta è stata rifiutata. Ricarica la pagina e riprova.",
+        "passkeyInvalid": "Non è stato possibile verificare questa passkey. Riprova, oppure usa un codice."
       },
       "validation": {
         "orgSlug": "Inserisci l'indirizzo del workspace (lettere, numeri, trattino o trattino basso).",
@@ -306,7 +307,11 @@
         "useRecovery": "Usa invece un codice di recupero",
         "useApp": "Usa invece il codice di autenticazione",
         "back": "Torna all'accesso",
-        "expiresIn": "La verifica scade tra {time}"
+        "expiresIn": "La verifica scade tra {time}",
+        "usePasskey": "Usa una passkey",
+        "passkeyWaiting": "In attesa della passkey",
+        "passkeyCancelled": "L'accesso con la passkey è stato annullato o è scaduto. Riprova, oppure usa un codice.",
+        "passkeyFailed": "Il dispositivo non è riuscito a fornire la passkey. Riprova, oppure usa un codice."
       },
       "signup": {
         "steps": {
