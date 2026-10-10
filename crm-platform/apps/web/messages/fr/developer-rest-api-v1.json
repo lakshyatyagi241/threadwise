@@ -54,7 +54,10 @@
         "message": "Toute application ou intégration qui utilise cette clé cessera immédiatement de fonctionner. Cette action est irréversible. Vous pourrez créer une nouvelle clé ensuite.",
         "accept": "Révoquer",
         "cancel": "Annuler"
-      }
+      },
+      "fullAccess": "Accès complet",
+      "fullAccessHint": "Cette clé peut utiliser tous les endpoints de l’API REST. Pour limiter ce qu’une clé peut faire, révoquez-la et créez-en une nouvelle avec « Restreindre cette clé » activé.",
+      "restricted": "Restreinte"
     },
     "create": {
       "title": "Créer votre clé",
@@ -68,7 +71,14 @@
       "planLocked": "Votre forfait n’inclut pas l’API REST.",
       "errors": {
         "required": "Saisissez un nom pour la clé.",
-        "tooLong": "Le nom peut contenir 120 caractères au maximum."
+        "tooLong": "Le nom peut contenir 120 caractères au maximum.",
+        "noScopes": "Cochez au moins un scope ou désactivez « Restreindre cette clé »."
+      },
+      "restrict": {
+        "label": "Restreindre cette clé",
+        "help": "Désactivé : la clé a un accès complet à l’API REST. Activé : elle ne peut utiliser que les scopes cochés ci-dessous.",
+        "scopes": "Scopes autorisés",
+        "impliedByWrite": "Inclus dans le scope d’écriture"
       }
     },
     "quickstart": {
