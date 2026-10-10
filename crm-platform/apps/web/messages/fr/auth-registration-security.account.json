@@ -385,7 +385,12 @@
         "useCode": "Utiliser plutôt un code d’authentification",
         "cancel": "Annuler",
         "confirm": "Confirmer",
-        "verifying": "Vérification"
+        "verifying": "Vérification",
+        "usePasskey": "Utiliser plutôt une clé d’accès",
+        "passkeyWaiting": "En attente de votre clé d’accès",
+        "passkeyCancelled": "La confirmation par clé d’accès a été annulée ou a expiré. Réessayez ou utilisez un code.",
+        "passkeyInvalid": "Cette clé d’accès n’a pas pu être vérifiée. Réessayez ou utilisez un code.",
+        "passkeyFailed": "Votre appareil n’a pas pu fournir la clé d’accès. Réessayez ou utilisez un code."
       },
       "banners": {
         "dismiss": "Ignorer",
@@ -565,6 +570,45 @@
         "timeout": "Le serveur de messagerie a mis trop de temps à répondre. Vous pouvez réessayer immédiatement.",
         "transport_error": "L’e-mail n’a pas pu être transmis au serveur de messagerie. Vous pouvez réessayer immédiatement.",
         "unknown": "L’e-mail n’a pas pu être envoyé pour une raison inconnue. Vous pouvez réessayer immédiatement."
+      },
+      "passkeys": {
+        "title": "Clés d’accès",
+        "subtitle": "Confirmez votre connexion avec votre empreinte digitale, votre visage, le verrouillage de l’écran ou une clé de sécurité, au lieu de saisir un code.",
+        "unsupported": "Ce navigateur ne prend pas en charge les clés d’accès. Ouvrez cette page dans une version récente de Chrome, Edge, Safari ou Firefox.",
+        "needsMfa": "Les clés d’accès fonctionnent avec une application d’authentification. Activez d’abord l’authentification à deux facteurs, puis ajoutez une clé d’accès.",
+        "needsMfaLink": "Accéder à l’authentification à deux facteurs",
+        "empty": "Vous n’avez pas encore de clé d’accès. Ajoutez-en une pour confirmer votre connexion avec votre appareil.",
+        "add": "Ajouter une clé d’accès",
+        "synced": "Synchronisée",
+        "deviceOnly": "Cet appareil uniquement",
+        "added": "Ajoutée le {date}",
+        "lastUsed": "Dernière utilisation : {when}",
+        "neverUsed": "Jamais utilisée",
+        "remove": "Retirer",
+        "removeTitle": "Retirer la clé d’accès",
+        "removeDescription": "La clé d’accès {name} ne pourra plus servir de deuxième étape lors de la connexion. Saisissez votre mot de passe pour la retirer.",
+        "removeConfirm": "Retirer la clé d’accès",
+        "removedDone": "La clé d’accès {name} a été retirée.",
+        "addedDone": "La clé d’accès {name} a été ajoutée.",
+        "addTitle": "Ajouter une clé d’accès",
+        "addDescription": "Donnez-lui un nom que vous reconnaîtrez, par exemple « Ordinateur professionnel » ou « Téléphone ». Votre navigateur vous demandera ensuite de confirmer avec votre empreinte digitale, votre visage, le verrouillage de l’écran ou votre clé de sécurité.",
+        "addConfirm": "Continuer",
+        "nameLabel": "Nom",
+        "nameHint": "{max} caractères maximum.",
+        "namePlaceholder": "Ordinateur professionnel",
+        "nameRequired": "Saisissez un nom pour cette clé d’accès.",
+        "passwordNeeded": "Votre dernière connexion remonte à un moment. Saisissez votre mot de passe pour continuer.",
+        "preparing": "Préparation",
+        "waiting": "En attente de votre appareil",
+        "saving": "Enregistrement",
+        "problems": {
+          "cancelled": "La clé d’accès n’a pas été créée : la demande a été annulée ou a expiré. Réessayez.",
+          "alreadyRegistered": "Cet appareil dispose déjà d’une clé d’accès pour votre compte. Utilisez un autre appareil ou une clé de sécurité, ou retirez d’abord la clé d’accès existante.",
+          "invalid": "La réponse de votre appareil n’a pas pu être vérifiée. Réessayez.",
+          "limit": "Vous avez atteint le nombre maximal de clés d’accès pour un compte. Retirez-en une pour en ajouter une autre.",
+          "unsupported": "Cet appareil ne peut pas créer ce type de clé d’accès. Essayez un autre appareil ou une clé de sécurité.",
+          "failed": "Votre navigateur ou votre appareil n’a pas pu créer la clé d’accès. Réessayez."
+        }
       }
     }
   }

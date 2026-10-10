@@ -58,7 +58,11 @@ export function WorkspaceSwitcher() {
 
   const [open, setOpen] = useState(false);
   const [pendingSlug, setPendingSlug] = useState<string | null>(null);
-  const [challenge, setChallenge] = useState<{ token: string; target: Target } | null>(null);
+  const [challenge, setChallenge] = useState<{
+    token: string;
+    passkey: boolean;
+    target: Target;
+  } | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -139,7 +143,7 @@ export function WorkspaceSwitcher() {
     try {
       const result = await bffPost('switch', { orgSlug: target.slug }, bffSwitchResultSchema);
       if (result.status === 'mfa_required') {
-        setChallenge({ token: result.challengeToken, target });
+        setChallenge({ token: result.challengeToken, passkey: result.passkey === true, target });
       } else {
         finish(target);
       }
@@ -248,6 +252,7 @@ export function WorkspaceSwitcher() {
       {challenge && (
         <MfaChallengeModal
           challengeToken={challenge.token}
+          passkey={challenge.passkey}
           workspaceName={challenge.target.name}
           onClose={() => setChallenge(null)}
           onSuccess={() => {

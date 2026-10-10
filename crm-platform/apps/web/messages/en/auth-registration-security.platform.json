@@ -94,7 +94,10 @@
           "challengeExpired": "That sign-in expired. Enter your password again.",
           "rateLimited": "Too many requests. Wait a moment and try again.",
           "unexpected": "We could not sign you in. Try again in a moment.",
-          "lockedWait": "Too many failed attempts. Try again in {minutes, plural, one {# minute} other {# minutes}}."
+          "lockedWait": "Too many failed attempts. Try again in {minutes, plural, one {# minute} other {# minutes}}.",
+          "passkeyInvalid": "That passkey could not be verified. Try again, or use a code.",
+          "passkeyCancelled": "Passkey sign-in was cancelled or timed out. Try again, or use a code.",
+          "passkeyFailed": "Your device could not provide the passkey. Try again, or use a code."
         },
         "captcha": {
           "loadFailed": "The captcha could not load. Check your connection or a content blocker, then retry.",
@@ -115,7 +118,9 @@
           "verifying": "Checking",
           "useRecovery": "Use a recovery code",
           "useAuthenticator": "Use the authenticator app",
-          "back": "Back to sign-in"
+          "back": "Back to sign-in",
+          "usePasskey": "Use a passkey",
+          "passkeyWaiting": "Waiting for your passkey"
         }
       },
       "mfa": {

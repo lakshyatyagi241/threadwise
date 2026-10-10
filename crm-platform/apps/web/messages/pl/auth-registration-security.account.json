@@ -385,7 +385,12 @@
         "useCode": "Użyj zamiast tego kodu z aplikacji uwierzytelniającej",
         "cancel": "Anuluj",
         "confirm": "Potwierdź",
-        "verifying": "Weryfikowanie"
+        "verifying": "Weryfikowanie",
+        "usePasskey": "Użyj zamiast tego klucza dostępu",
+        "passkeyWaiting": "Oczekiwanie na klucz dostępu",
+        "passkeyCancelled": "Potwierdzenie kluczem dostępu zostało anulowane lub upłynął jego limit czasu. Spróbuj ponownie albo użyj kodu.",
+        "passkeyInvalid": "Nie udało się zweryfikować tego klucza dostępu. Spróbuj ponownie albo użyj kodu.",
+        "passkeyFailed": "Urządzenie nie przekazało klucza dostępu. Spróbuj ponownie albo użyj kodu."
       },
       "banners": {
         "dismiss": "Odrzuć",
@@ -565,6 +570,45 @@
         "timeout": "Serwer poczty odpowiadał zbyt długo. Możesz spróbować ponownie od razu.",
         "transport_error": "Nie udało się przekazać e-maila serwerowi poczty. Możesz spróbować ponownie od razu.",
         "unknown": "Nie udało się wysłać e-maila z nieznanego powodu. Możesz spróbować ponownie od razu."
+      },
+      "passkeys": {
+        "title": "Klucze dostępu",
+        "subtitle": "Potwierdzaj logowanie odciskiem palca, twarzą, blokadą ekranu lub kluczem bezpieczeństwa zamiast wpisywania kodu.",
+        "unsupported": "Ta przeglądarka nie obsługuje kluczy dostępu. Otwórz tę stronę w aktualnej wersji Chrome, Edge, Safari lub Firefox.",
+        "needsMfa": "Klucze dostępu działają razem z aplikacją uwierzytelniającą. Najpierw włącz uwierzytelnianie dwuskładnikowe, a potem dodaj klucz dostępu.",
+        "needsMfaLink": "Przejdź do uwierzytelniania dwuskładnikowego",
+        "empty": "Nie masz jeszcze żadnych kluczy dostępu. Dodaj jeden, aby potwierdzać logowanie za pomocą urządzenia.",
+        "add": "Dodaj klucz dostępu",
+        "synced": "Zsynchronizowany",
+        "deviceOnly": "Tylko to urządzenie",
+        "added": "Dodano {date}",
+        "lastUsed": "Ostatnie użycie: {when}",
+        "neverUsed": "Nigdy nie używany",
+        "remove": "Usuń",
+        "removeTitle": "Usuń klucz dostępu",
+        "removeDescription": "{name} przestanie działać jako drugi krok podczas logowania. Wpisz hasło, aby usunąć ten klucz dostępu.",
+        "removeConfirm": "Usuń klucz dostępu",
+        "removedDone": "Klucz dostępu {name} został usunięty.",
+        "addedDone": "Klucz dostępu {name} został dodany.",
+        "addTitle": "Dodaj klucz dostępu",
+        "addDescription": "Nadaj mu nazwę, którą rozpoznasz, np. Laptop służbowy lub Telefon. Następnie przeglądarka poprosi o potwierdzenie odciskiem palca, twarzą, blokadą ekranu lub kluczem bezpieczeństwa.",
+        "addConfirm": "Kontynuuj",
+        "nameLabel": "Nazwa",
+        "nameHint": "Do {max} znaków.",
+        "namePlaceholder": "Laptop służbowy",
+        "nameRequired": "Wpisz nazwę tego klucza dostępu.",
+        "passwordNeeded": "Minęło trochę czasu od Twojego logowania. Wpisz hasło, aby kontynuować.",
+        "preparing": "Przygotowywanie",
+        "waiting": "Oczekiwanie na urządzenie",
+        "saving": "Zapisywanie",
+        "problems": {
+          "cancelled": "Nie utworzono klucza dostępu, ponieważ żądanie zostało anulowane lub upłynął jego limit czasu. Spróbuj ponownie.",
+          "alreadyRegistered": "To urządzenie ma już klucz dostępu do Twojego konta. Użyj innego urządzenia lub klucza bezpieczeństwa albo najpierw usuń istniejący klucz dostępu.",
+          "invalid": "Nie udało się zweryfikować odpowiedzi z Twojego urządzenia. Spróbuj ponownie.",
+          "limit": "Osiągnięto maksymalną liczbę kluczy dostępu, jaką może mieć konto. Usuń jeden, aby dodać kolejny.",
+          "unsupported": "To urządzenie nie może utworzyć tego rodzaju klucza dostępu. Spróbuj innego urządzenia lub klucza bezpieczeństwa.",
+          "failed": "Nie udało się utworzyć klucza dostępu w przeglądarce lub na urządzeniu. Spróbuj ponownie."
+        }
       }
     }
   }
