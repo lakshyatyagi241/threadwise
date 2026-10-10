@@ -54,7 +54,10 @@
         "message": "Mọi ứng dụng hoặc tích hợp đang dùng khóa này sẽ ngừng hoạt động ngay lập tức. Không thể hoàn tác. Sau đó bạn có thể tạo khóa mới.",
         "accept": "Thu hồi",
         "cancel": "Hủy"
-      }
+      },
+      "fullAccess": "Toàn quyền truy cập",
+      "fullAccessHint": "Khóa này có thể dùng mọi endpoint của REST API. Để giới hạn quyền của khóa, hãy thu hồi nó và tạo khóa mới với tùy chọn \"Hạn chế khóa này\" được bật.",
+      "restricted": "Bị hạn chế"
     },
     "create": {
       "title": "Tạo khóa của bạn",
@@ -68,7 +71,14 @@
       "planLocked": "Gói của bạn không bao gồm REST API.",
       "errors": {
         "required": "Nhập tên cho khóa.",
-        "tooLong": "Tên tối đa 120 ký tự."
+        "tooLong": "Tên tối đa 120 ký tự.",
+        "noScopes": "Hãy đánh dấu ít nhất một phạm vi hoặc tắt \"Hạn chế khóa này\"."
+      },
+      "restrict": {
+        "label": "Hạn chế khóa này",
+        "help": "Tắt: khóa có toàn quyền truy cập REST API. Bật: khóa chỉ dùng được các phạm vi bạn đánh dấu bên dưới.",
+        "scopes": "Phạm vi được phép",
+        "impliedByWrite": "Đã bao gồm trong phạm vi ghi"
       }
     },
     "quickstart": {
