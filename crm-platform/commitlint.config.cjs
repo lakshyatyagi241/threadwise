@@ -8,6 +8,7 @@ module.exports = {
         'api',
         'web',
         'partner',
+        'mobile',
         'db',
         'contracts',
         'config',

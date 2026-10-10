@@ -3,6 +3,7 @@ import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import prettier from 'eslint-config-prettier';
 import reactHooks from 'eslint-plugin-react-hooks';
+import mobileRules from './apps/mobile/eslint.mobile.config.mjs';
 
 export default tseslint.config(
   {
@@ -22,6 +23,13 @@ export default tseslint.config(
       // Claude skills ship Node tooling (parity harness, scripts), not application code: no tsconfig covers it.
       '.claude/**',
       '**/next-env.d.ts',
+      // Mobile: plain-node check scripts, and generated or native output (the native projects are generated, never hand-edited).
+      'apps/mobile/scripts/**',
+      'apps/mobile/jest.env.js',
+      'apps/mobile/.expo/**',
+      'apps/mobile/.expo-export/**',
+      'apps/mobile/android/**',
+      'apps/mobile/ios/**',
     ],
   },
   eslint.configs.recommended,
@@ -75,7 +83,7 @@ export default tseslint.config(
   },
   {
     // React apps: hooks rules, and JSX event handlers may be async (the promise is handled inside).
-    files: ['apps/web/**/*.{ts,tsx}', 'packages/ui/**/*.{ts,tsx}'],
+    files: ['apps/web/**/*.{ts,tsx}', 'apps/mobile/**/*.{ts,tsx}', 'packages/ui/**/*.{ts,tsx}'],
     plugins: { 'react-hooks': reactHooks },
     rules: {
       ...reactHooks.configs['recommended-latest'].rules,
@@ -85,5 +93,7 @@ export default tseslint.config(
       ],
     },
   },
+  // The mobile app's architecture rules live next to the app (docs/adr/0021 to 0026).
+  ...mobileRules,
   prettier,
 );
