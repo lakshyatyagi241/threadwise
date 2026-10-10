@@ -50,6 +50,18 @@ export const pushSubscriptionInputSchema = z.object({
 });
 export type PushSubscriptionInput = z.infer<typeof pushSubscriptionInputSchema>;
 
+/**
+ * `POST /v2/notifications/push/mobile`: the Expo push token of the native app (Android/iOS). Stored as a device beside the browsers,
+ * under a synthetic `https://exp.host/expo-push/<token>` endpoint, so the list, remove and delivery rules are the same. The token is a
+ * secret like a subscription endpoint and is never returned.
+ */
+export const EXPO_PUSH_ENDPOINT_PREFIX = 'https://exp.host/expo-push/';
+export const pushMobileInputSchema = z.object({
+  token: z.string().max(200).regex(/^Expo(nent)?PushToken\[[A-Za-z0-9_-]+\]$/),
+  platform: z.enum(['ios', 'android']),
+});
+export type PushMobileInput = z.infer<typeof pushMobileInputSchema>;
+
 /** One of the caller's devices. Never the endpoint, never the keys. */
 export const pushDeviceSchema = z.object({
   id: uuidSchema,

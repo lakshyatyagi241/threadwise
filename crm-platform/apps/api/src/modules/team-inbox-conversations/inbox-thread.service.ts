@@ -55,6 +55,12 @@ export class InboxThreadService {
     @Inject(CONVERSATIONS_FACADE) private readonly conversations: ConversationsFacade,
   ) {}
 
+  /** The conversation for a contact on a channel, created if missing. The route requires `inbox.conversation.reply`, like sending the first message. */
+  async open(contactId: string, channelId: string): Promise<{ id: string }> {
+    const ref = await this.conversations.openConversationFor(contactId, channelId);
+    return { id: ref.id };
+  }
+
   async listMessages(uuid: string, query: ListMessagesQuery): Promise<MessageListResponse> {
     const ctx = RequestContextStore.require();
     await this.db.tx(async (tx) => {

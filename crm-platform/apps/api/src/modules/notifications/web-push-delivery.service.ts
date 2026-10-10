@@ -46,9 +46,10 @@ export class WebPushDeliveryService {
   ) {}
 
   async deliver(job: WebPushJob): Promise<WebPushOutcome> {
-    if (!this.sender.isEnabled()) return { status: 'skipped', reason: 'disabled' };
+    // Without VAPID keys only native app devices can be reached; they are found after the read below.
+    const webOn = this.sender.isEnabled();
     // A retry already passed this check on its first run: the first send decided.
-    if (!job.only && (await this.presence.isVisible(job.orgId, job.userId))) {
+    if (!job.only && webOn && (await this.presence.isVisible(job.orgId, job.userId))) {
       return { status: 'skipped', reason: 'visible' };
     }
     const { row, targets } = await this.db.txAs(
@@ -58,6 +59,9 @@ export class WebPushDeliveryService {
         targets: await this.subscriptions.liveTargets(tx, job.orgId, job.userId, job.only),
       }),
     );
+    if (!webOn && !targets.some((t) => WebPushSender.isNative(t))) {
+      return { status: 'skipped', reason: 'disabled' };
+    }
     if (!row) return { status: 'skipped', reason: 'gone' };
     if (row.readAt) return { status: 'skipped', reason: 'read' };
     if (targets.length === 0) return { status: 'skipped', reason: 'no_devices' };

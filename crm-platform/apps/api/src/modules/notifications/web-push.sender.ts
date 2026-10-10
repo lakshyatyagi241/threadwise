@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import type { PushPayload } from '@crm/contracts';
+import { EXPO_PUSH_ENDPOINT_PREFIX, type PushPayload } from '@crm/contracts';
 import { webPushConfig } from '../../config/domains/web-push.env';
 import { DatabaseService } from '../../infra/db/database.service';
 import {
@@ -52,8 +52,14 @@ export class WebPushSender {
     private readonly repo: PushSubscriptionsRepository,
   ) {}
 
+  /** Browser pushes need VAPID keys. Native (Expo) devices do not: see `isNative`. */
   isEnabled(): boolean {
     return this.provider.isEnabled();
+  }
+
+  /** A native app device (Expo push token), delivered without VAPID keys. */
+  static isNative(t: Pick<PushTarget, 'endpoint'>): boolean {
+    return t.endpoint.startsWith(EXPO_PUSH_ENDPOINT_PREFIX);
   }
 
   async send(
@@ -63,6 +69,11 @@ export class WebPushSender {
   ): Promise<PushSendReport> {
     const report: PushSendReport = { sent: [], gone: [], refused: [], retry: [], unusable: [] };
     if (targets.length === 0) return report;
+    const isExpo = (t: PushTarget) => WebPushSender.isNative(t);
+    const expoTargets = targets.filter(isExpo);
+    if (expoTargets.length > 0) await this.sendExpo(expoTargets, payload, type, report);
+    targets = targets.filter((t) => !isExpo(t));
+    if (targets.length === 0 || !this.provider.isEnabled()) return report;
     const body = JSON.stringify(payload);
     const options: WebPushSendOptions = {
       ttlSeconds: webPushConfig().ttlSeconds,
@@ -89,6 +100,46 @@ export class WebPushSender {
       }
     }
     return report;
+  }
+
+  /** Native app devices: one batch call to the Expo push service. Same report buckets as the browser path; tokens are never logged. */
+  private async sendExpo(
+    targets: readonly PushTarget[],
+    payload: PushPayload,
+    type: string | undefined,
+    report: PushSendReport,
+  ): Promise<void> {
+    const messages = targets.map((t) => ({
+      to: t.endpoint.slice(EXPO_PUSH_ENDPOINT_PREFIX.length),
+      title: payload.title,
+      body: payload.body,
+      data: { url: payload.url, notificationId: payload.notificationId },
+      sound: payload.silent ? null : 'default',
+      priority: type && HIGH_URGENCY_TYPES.has(type) ? 'high' : 'default',
+      channelId: 'default',
+      ttl: webPushConfig().ttlSeconds,
+    }));
+    try {
+      const res = await fetch('https://exp.host/--/api/v2/push/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(messages),
+        signal: AbortSignal.timeout(10_000),
+      });
+      if (!res.ok) {
+        for (const t of targets) (res.status >= 500 || res.status === 429 ? report.retry : report.refused).push(t.id);
+        return;
+      }
+      const body = (await res.json()) as { data?: { status: string; details?: { error?: string } }[] };
+      targets.forEach((t, i) => {
+        const r = body.data?.[i];
+        if (r?.status === 'ok') report.sent.push(t.id);
+        else if (r?.details?.error === 'DeviceNotRegistered') report.gone.push(t.id);
+        else report.refused.push(t.id);
+      });
+    } catch {
+      for (const t of targets) report.retry.push(t.id);
+    }
   }
 
   /** Writes the outcome of a send: accepted devices get a fresh last-used time; failed ones count up; gone / unusable ones are revoked. */

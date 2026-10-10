@@ -3,6 +3,8 @@ import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import type { Redis } from 'ioredis';
 import {
   ERROR_CODES,
+  EXPO_PUSH_ENDPOINT_PREFIX,
+  type PushMobileInput,
   PUSH_MAX_DEVICES_PER_USER,
   type PushDevice,
   type PushDeviceListResponse,
@@ -68,7 +70,7 @@ export class PushSubscriptionsService {
 
   async list(): Promise<PushDeviceListResponse> {
     const { orgId, userId } = this.caller();
-    if (!webPushConfig().enabled) return { items: [] };
+    // Native app devices need no VAPID keys, so the list is never hidden by their absence.
     const rows = await this.db.tx((tx) => this.repo.listLive(tx, orgId, userId));
     return { items: rows.map(toDevice) };
   }
@@ -90,6 +92,26 @@ export class PushSubscriptionsService {
         auth: input.keys.auth,
         ua,
         label: deviceLabel(ua),
+      });
+      await this.repo.dropOthersOnEndpoint(tx, orgId, userId, endpointHash);
+      await this.repo.trimToCap(tx, orgId, userId, device.id, PUSH_MAX_DEVICES_PER_USER);
+      return toDevice(device);
+    });
+  }
+
+  /** Adds the native app. Stored like a browser device under a synthetic Expo endpoint; placeholder keys satisfy the NOT NULL columns. */
+  async subscribeMobile(input: PushMobileInput): Promise<PushDevice> {
+    const { orgId, userId } = this.caller();
+    const endpoint = `${EXPO_PUSH_ENDPOINT_PREFIX}${input.token}`;
+    const endpointHash = createHash('sha256').update(endpoint).digest('hex');
+    return this.db.tx(async (tx) => {
+      const device = await this.repo.upsert(tx, orgId, userId, {
+        endpoint,
+        endpointHash,
+        p256dh: 'expo-mobile',
+        auth: 'expo-mobile',
+        ua: `threadwise-mobile/${input.platform}`,
+        label: input.platform === 'ios' ? 'iPhone app' : 'Android app',
       });
       await this.repo.dropOthersOnEndpoint(tx, orgId, userId, endpointHash);
       await this.repo.trimToCap(tx, orgId, userId, device.id, PUSH_MAX_DEVICES_PER_USER);

@@ -11,7 +11,12 @@ import {
   Post,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { pushSubscriptionInputSchema, type PushSubscriptionInput } from '@crm/contracts';
+import {
+  pushMobileInputSchema,
+  pushSubscriptionInputSchema,
+  type PushMobileInput,
+  type PushSubscriptionInput,
+} from '@crm/contracts';
 import { ActorKinds } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { PushSubscriptionsService } from './push-subscriptions.service';
@@ -57,6 +62,17 @@ export class PushController {
     @Headers('user-agent') userAgent: string | undefined,
   ) {
     return this.push.subscribe(body, userAgent);
+  }
+
+  @Post('mobile')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Add the native app (Expo push token) as a notification device',
+    description:
+      'Body: `{ token, platform }`. Idempotent per token. Works without VAPID keys: native pushes go through the Expo push service.',
+  })
+  async subscribeMobile(@Body(zodPipe(pushMobileInputSchema)) body: PushMobileInput) {
+    return this.push.subscribeMobile(body);
   }
 
   @Delete('subscriptions/:id')
