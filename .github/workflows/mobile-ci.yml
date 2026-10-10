@@ -1,0 +1,104 @@
+name: Mobile
+
+# The mobile app's gate (crm-platform/apps/mobile, docs/adr/0025-mobile-quality-gates.md). The same commands as
+# `bash .claude/skills/mobile-pre-pr/scripts/gate.sh --full`, so a green local gate means a green PR.
+#
+# Path-filtered: a web or API PR does not wait for it. It also runs when a contract or the shared tax package changes, because the app
+# imports both; that is how a breaking contract change is caught in the PR that makes it. (pr-checks.yml and ci.yml typecheck, lint and
+# test the rest of the repo; this workflow adds what only the app has: layers, coverage floors, translations, the Expo SDK checks and a
+# real Metro bundle for iOS and Android.)
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'crm-platform/apps/mobile/**'
+      - 'crm-platform/packages/contracts/**'
+      - 'crm-platform/packages/tax/**'
+      - 'crm-platform/pnpm-lock.yaml'
+      - 'crm-platform/eslint.config.mjs'
+      - '.github/workflows/mobile-ci.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: mobile-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: '22'
+  EXPO_NO_TELEMETRY: '1'
+
+jobs:
+  gate:
+    name: Types · lint · layers · tests · translations
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: crm-platform
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: corepack enable && corepack prepare pnpm@9.15.4 --activate
+      - uses: actions/cache@v6
+        with:
+          path: ~/.local/share/pnpm/store
+          key: pnpm-${{ hashFiles('crm-platform/pnpm-lock.yaml') }}
+          restore-keys: pnpm-
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @crm/tax build && pnpm --filter @crm/contracts build
+
+      - name: Formatting
+        run: pnpm exec prettier --check apps/mobile
+      - name: Typecheck
+        run: pnpm --filter @crm/mobile typecheck
+      - name: Lint (architecture rules)
+        run: pnpm --filter @crm/mobile lint
+      - name: Layers
+        run: pnpm --filter @crm/mobile arch
+      - name: Tests and coverage floors
+        run: pnpm --filter @crm/mobile test:coverage
+      - name: Translations (21 locales)
+        run: pnpm --filter @crm/mobile i18n:check
+      - name: No secrets in EXPO_PUBLIC_* variables
+        run: pnpm --filter @crm/mobile env:check
+
+  expo:
+    name: Expo SDK checks · Metro bundle (iOS + Android)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: crm-platform
+    env:
+      # The bundle step compiles the production configuration, which demands an https API URL; it is never contacted.
+      APP_VARIANT: production
+      EXPO_PUBLIC_API_URL: https://api.example.invalid
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: corepack enable && corepack prepare pnpm@9.15.4 --activate
+      - uses: actions/cache@v6
+        with:
+          path: ~/.local/share/pnpm/store
+          key: pnpm-${{ hashFiles('crm-platform/pnpm-lock.yaml') }}
+          restore-keys: pnpm-
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @crm/tax build && pnpm --filter @crm/contracts build
+
+      - name: Dependency versions match the Expo SDK
+        run: pnpm --filter @crm/mobile deps:check
+      - name: expo-doctor
+        run: pnpm --filter @crm/mobile expo-doctor
+      - name: Bundle for iOS and Android (Hermes)
+        run: pnpm --filter @crm/mobile bundle:check
+      - name: Bundle sizes
+        run: |
+          echo "### Mobile bundle" >> "$GITHUB_STEP_SUMMARY"
+          find apps/mobile/.expo-export/_expo/static/js -type f -name '*.hbc' -printf '%P %s bytes\n' | sort >> "$GITHUB_STEP_SUMMARY"

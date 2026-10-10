@@ -116,3 +116,10 @@ export const API_SCOPE_RESOURCES = [
 ] as const;
 export type ApiScopeResource = (typeof API_SCOPE_RESOURCES)[number];
 export type ApiScope = `${ApiScopeResource}:${'read' | 'write'}`;
+
+/** Every scope a key may carry, resource by resource, `read` before `write`. The console's scope picker lists them in this order. */
+export const API_SCOPES = API_SCOPE_RESOURCES.flatMap((resource) => [
+  `${resource}:read`,
+  `${resource}:write`,
+]) as [ApiScope, ...ApiScope[]];
+export const apiScopeSchema = z.enum(API_SCOPES);

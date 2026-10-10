@@ -54,7 +54,10 @@
         "message": "Każda aplikacja lub integracja używająca tego klucza natychmiast przestanie działać. Tej operacji nie można cofnąć. Potem możesz utworzyć nowy klucz.",
         "accept": "Unieważnij",
         "cancel": "Anuluj"
-      }
+      },
+      "fullAccess": "Pełny dostęp",
+      "fullAccessHint": "Ten klucz może używać wszystkich endpointów REST API. Aby ograniczyć możliwości klucza, unieważnij go i utwórz nowy z włączoną opcją „Ogranicz ten klucz”.",
+      "restricted": "Ograniczony"
     },
     "create": {
       "title": "Utwórz klucz",
@@ -68,7 +71,14 @@
       "planLocked": "Twój plan nie obejmuje REST API.",
       "errors": {
         "required": "Wpisz nazwę klucza.",
-        "tooLong": "Nazwa może mieć maksymalnie 120 znaków."
+        "tooLong": "Nazwa może mieć maksymalnie 120 znaków.",
+        "noScopes": "Zaznacz co najmniej jeden zakres lub wyłącz „Ogranicz ten klucz”."
+      },
+      "restrict": {
+        "label": "Ogranicz ten klucz",
+        "help": "Wyłączone: klucz ma pełny dostęp do REST API. Włączone: może używać tylko zakresów zaznaczonych poniżej.",
+        "scopes": "Dozwolone zakresy",
+        "impliedByWrite": "Zawarty w zakresie zapisu"
       }
     },
     "quickstart": {

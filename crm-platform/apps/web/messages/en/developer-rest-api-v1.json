@@ -45,6 +45,9 @@
       "created": "Created {date}",
       "lastUsed": "Last used {when}",
       "never": "never",
+      "fullAccess": "Full access",
+      "fullAccessHint": "This key can use every endpoint of the REST API. To limit what a key can do, revoke it and create a new one with Restrict this key turned on.",
+      "restricted": "Restricted",
       "revoke": "Revoke",
       "noRevoke": "Your role cannot revoke API keys.",
       "revoked": "API key revoked. Any app using it will stop working immediately.",
@@ -63,12 +66,19 @@
       "placeholder": "e.g. Production backend",
       "submit": "Create key",
       "submitting": "Creating key…",
+      "restrict": {
+        "label": "Restrict this key",
+        "help": "Off: the key has full access to the REST API. On: it can only use the scopes you tick below.",
+        "scopes": "Allowed scopes",
+        "impliedByWrite": "Included with the write scope"
+      },
       "created": "API key created. Copy it now - it won't be shown again.",
       "noCreate": "Your role cannot create API keys. Ask a workspace admin.",
       "planLocked": "Your plan does not include the REST API.",
       "errors": {
         "required": "Enter a name for the key.",
-        "tooLong": "The name can be at most 120 characters."
+        "tooLong": "The name can be at most 120 characters.",
+        "noScopes": "Tick at least one scope, or turn off Restrict this key."
       }
     },
     "quickstart": {
