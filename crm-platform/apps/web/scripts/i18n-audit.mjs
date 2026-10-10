@@ -6,8 +6,9 @@
  */
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const root = new URL('..', import.meta.url).pathname;
+const root = fileURLToPath(new URL('..', import.meta.url));
 const msgRoot = join(root, 'messages');
 const mode = process.argv[2] ?? 'gaps';
 const json = process.argv.includes('--json');
