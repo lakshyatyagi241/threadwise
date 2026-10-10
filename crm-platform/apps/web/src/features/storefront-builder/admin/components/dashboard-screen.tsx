@@ -40,7 +40,10 @@ export function DashboardScreen() {
 
   return (
     <StoreShell>
-      <div className="flex flex-wrap items-end justify-between gap-4">
+      <div
+        data-testid="store-sticky-header"
+        className="sticky top-14 z-20 -mx-2 flex flex-wrap items-end justify-between gap-4 border-b border-border/60 bg-background/95 px-2 pb-3 pt-2 backdrop-blur"
+      >
         <div>
           <Eyebrow>{t('eyebrow')}</Eyebrow>
           <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{t('title')}</h1>

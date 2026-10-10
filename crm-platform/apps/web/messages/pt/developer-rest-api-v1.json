@@ -54,7 +54,10 @@
         "message": "Qualquer app ou integração que use esta chave deixará de funcionar imediatamente. Esta ação não pode ser desfeita. Você pode criar uma nova chave depois.",
         "accept": "Revogar",
         "cancel": "Cancelar"
-      }
+      },
+      "fullAccess": "Acesso total",
+      "fullAccessHint": "Esta chave pode usar todos os endpoints da API REST. Para limitar o que uma chave pode fazer, revogue-a e crie uma nova com «Restringir esta chave» ativado.",
+      "restricted": "Restrita"
     },
     "create": {
       "title": "Crie sua chave",
@@ -68,7 +71,14 @@
       "planLocked": "Seu plano não inclui a API REST.",
       "errors": {
         "required": "Informe um nome para a chave.",
-        "tooLong": "O nome pode ter no máximo 120 caracteres."
+        "tooLong": "O nome pode ter no máximo 120 caracteres.",
+        "noScopes": "Marque pelo menos um escopo ou desative «Restringir esta chave»."
+      },
+      "restrict": {
+        "label": "Restringir esta chave",
+        "help": "Desativado: a chave tem acesso total à API REST. Ativado: ela só pode usar os escopos marcados abaixo.",
+        "scopes": "Escopos permitidos",
+        "impliedByWrite": "Incluído no escopo de escrita"
       }
     },
     "quickstart": {

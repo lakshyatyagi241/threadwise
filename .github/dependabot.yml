@@ -12,6 +12,18 @@ updates:
     groups:
       minor-and-patch:
         update-types: [minor, patch]
+    ignore:
+      # Mobile app: the Expo SDK pins these together. They move in an SDK upgrade (docs/adr/0022), never one by one.
+      - dependency-name: 'expo'
+      - dependency-name: 'expo-*'
+      - dependency-name: '@expo/*'
+      - dependency-name: 'react-native'
+      - dependency-name: 'react-native-*'
+      - dependency-name: '@react-native/*'
+      - dependency-name: '@react-native-community/*'
+      - dependency-name: 'jest-expo'
+      - dependency-name: 'react-test-renderer'
+      - dependency-name: '@sentry/react-native'
     commit-message:
       prefix: 'chore(deps)'
 

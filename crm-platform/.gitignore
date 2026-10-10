@@ -38,6 +38,19 @@ apps/web/src/features/_registry/settings.generated.ts
 apps/web/src/features/_registry/help.generated.ts
 docs/help-pending.md
 
+# mobile app (apps/mobile): the native projects are generated from app.config.ts, never committed
+apps/mobile/.expo/
+apps/mobile/.expo-export/
+apps/mobile/ios/
+apps/mobile/android/
+apps/mobile/expo-env.d.ts
+# signing material: lives in EAS, never in git
+*.p8
+*.p12
+*.jks
+*.keystore
+*.mobileprovision
+
 # TypeScript incremental build caches
 *.tsbuildinfo
 

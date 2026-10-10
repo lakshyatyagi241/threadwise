@@ -59,6 +59,13 @@ else
   echo "(no db/api source changed — skipping integration tests; run 'pnpm test:integration' by hand if unsure)"
 fi
 
+if touches '^(apps/mobile/|packages/contracts/|packages/tax/)'; then
+  # format, lint, typecheck and tests already ran above for every workspace; this adds what only the mobile app has.
+  run "mobile gate (layers, coverage, translations, env, SDK versions)" bash .claude/skills/mobile-pre-pr/scripts/gate.sh --extras
+else
+  echo "(no mobile or contract files changed — skipping the mobile gate)"
+fi
+
 echo
 if [ "$FAILED" -eq 0 ]; then
   echo "${c_bold}${c_green}All checks passed.${c_reset} Safe to open the PR."

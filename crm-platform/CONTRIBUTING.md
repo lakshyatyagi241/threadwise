@@ -15,7 +15,7 @@ docs(db): document the sub-agent identity model
 refactor(kernel): extract scope-to-SQL translation
 ```
 
-Scopes: `api`, `web`, `partner`, `db`, `contracts`, `config`, `kernel`, `crm`,
+Scopes: `api`, `web`, `partner`, `mobile`, `db`, `contracts`, `config`, `kernel`, `crm`,
 `inbox`, `broadcast`, `billing`, `exams`, `identity`, `partner-api`,
 `public-api`, `realtime`, `infra`, `docs`, `ci`, `deps`.
 
@@ -68,6 +68,13 @@ Not after it. That is the entire point.
 
 `modules/a` may not import `modules/b/internals`. `pnpm arch:check` fails the
 build if it does.
+
+## The mobile app
+
+`apps/mobile` (iOS and Android) has its own rules, enforced by lint, the layer check and CI rather than by this page: start at
+[docs/mobile/README.md](docs/mobile/README.md). Its ADRs are 0021 to 0027 in [docs/adr](docs/adr). The ones that bite first: the app talks to the
+API only through `apiFetch` with `@crm/contracts` schemas, credentials live only in the OS keychain, every text is translated into all 21 locales,
+and an API change must stay compatible with the app versions still in the field.
 
 ## Before you open a PR
 

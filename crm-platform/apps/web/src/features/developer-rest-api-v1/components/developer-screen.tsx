@@ -4,21 +4,43 @@ import Link from 'next/link';
 import { useQueryClient } from '@tanstack/react-query';
 import { useLocale, useTranslations } from 'next-intl';
 import { useRef, useState, type FormEvent } from 'react';
-import { API_KEY_NAME_MAX, PLAN_UPGRADE_PATH, type ApiKeyResponse } from '@crm/contracts';
-import { Alert, Button, ConfirmDialog, Field, Input, Spinner, cn, useToast } from '@crm/ui';
+import {
+  API_KEY_NAME_MAX,
+  PLAN_UPGRADE_PATH,
+  type ApiKeyResponse,
+  type ApiScope,
+} from '@crm/contracts';
+import {
+  Alert,
+  Badge,
+  Button,
+  Checkbox,
+  ConfirmDialog,
+  Field,
+  Input,
+  Spinner,
+  Switch,
+  cn,
+  useToast,
+} from '@crm/ui';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { keysApi, refresh, useKeys } from '../api/keys';
 import {
   BACK_PATH,
   DOCS_PATH,
+  SCOPE_ROWS,
   activeKeys,
   afterRevoke,
   checkName,
+  checkScopes,
   dateLabel,
   errorKind,
+  isFullAccess,
+  isReadImplied,
   nameFieldError,
   quickstartCurl,
   relativeTime,
+  toggleScope,
   type KeyErrorKind,
   type OneTimeKey,
 } from '../lib/keys-model';
@@ -396,6 +418,29 @@ export function ActiveKeyCard({
             <span>{t('created', { date: dateLabel(apiKey.createdAt, locale) })}</span>
             <span>{t('lastUsed', { when: last ?? t('never') })}</span>
           </div>
+          <div
+            data-testid="key-access"
+            className="mt-2 flex flex-wrap items-center gap-1.5 text-[11.5px]"
+          >
+            {isFullAccess(apiKey) ? (
+              <Badge tone="warning" title={t('fullAccessHint')}>
+                {t('fullAccess')}
+              </Badge>
+            ) : (
+              <>
+                <Badge>{t('restricted')}</Badge>
+                {apiKey.scopes.map((scope) => (
+                  <code
+                    key={scope}
+                    dir="ltr"
+                    className="rounded-md border border-border bg-muted px-1.5 py-0.5 font-mono text-[11px]"
+                  >
+                    {scope}
+                  </code>
+                ))}
+              </>
+            )}
+          </div>
         </div>
         <div className="flex flex-col items-end gap-1">
           <button
@@ -430,7 +475,10 @@ export function ActiveKeyCard({
   );
 }
 
-/** The "Create your key" card: one name field, 1 to 120 characters, one submit at a time. */
+/**
+ * The "Create your key" card: one name field, 1 to 120 characters, one submit at a time, and the "Restrict this key" switch. Off (the
+ * default) is a full-access key as in WaDesk; on, only the scopes ticked below are allowed.
+ */
 export function CreateKeyCard({
   canCreate,
   planLocked,
@@ -447,6 +495,9 @@ export function CreateKeyCard({
   const { toast } = useToast();
   const [name, setName] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [restrict, setRestrict] = useState(false);
+  const [picked, setPicked] = useState<ApiScope[]>([]);
+  const [scopesError, setScopesError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const inFlight = useRef(false);
   const disabled = !canCreate || planLocked;
@@ -455,16 +506,20 @@ export function CreateKeyCard({
     e.preventDefault();
     if (inFlight.current || disabled) return;
     const check = checkName(name);
-    if (!check.ok) {
-      setError(t(`errors.${check.error}`));
-      return;
-    }
-    setError(null);
+    const scopes = checkScopes(restrict, picked);
+    setError(check.ok ? null : t(`errors.${check.error}`));
+    setScopesError(scopes.ok ? null : t(`errors.${scopes.error}`));
+    if (!check.ok || !scopes.ok) return;
     inFlight.current = true;
     setBusy(true);
     try {
-      const created = await keysApi.create({ name: check.name });
+      const created = await keysApi.create({
+        name: check.name,
+        ...(scopes.scopes.length > 0 && { scopes: scopes.scopes }),
+      });
       setName('');
+      setRestrict(false);
+      setPicked([]);
       onCreated(created);
       toast(t('created'), 'success');
     } catch (err) {
@@ -522,6 +577,86 @@ export function CreateKeyCard({
           {busy ? <Spinner /> : <PlusIcon className="size-3.5" />}
           {busy ? t('submitting') : t('submit')}
         </Button>
+
+        <div className="w-full space-y-3 border-t border-border pt-4">
+          <div className="flex items-start gap-3">
+            <Switch
+              id="key-restrict"
+              label={t('restrict.label')}
+              checked={restrict}
+              disabled={disabled || busy}
+              onCheckedChange={(on) => {
+                setRestrict(on);
+                if (!on) setScopesError(null);
+              }}
+            />
+            <div className="min-w-0">
+              <label htmlFor="key-restrict" className="text-sm font-medium">
+                {t('restrict.label')}
+              </label>
+              <p className="mt-0.5 text-xs leading-snug text-muted-foreground">
+                {t('restrict.help')}
+              </p>
+            </div>
+          </div>
+
+          {restrict && (
+            <fieldset
+              disabled={disabled || busy}
+              aria-describedby={scopesError ? 'key-scopes-error' : undefined}
+              className="min-w-0 space-y-2"
+            >
+              <legend className={cn(EYEBROW, 'mb-2')}>{t('restrict.scopes')}</legend>
+              <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                {SCOPE_ROWS.map((row) => (
+                  <div
+                    key={row.resource}
+                    data-testid={`scope-row-${row.resource}`}
+                    className="space-y-1.5 rounded-lg border border-border bg-muted/30 p-2.5"
+                  >
+                    <Checkbox
+                      id={`scope-${row.read}`}
+                      name="scopes"
+                      value={row.read}
+                      checked={picked.includes(row.read) || isReadImplied(picked, row)}
+                      disabled={isReadImplied(picked, row)}
+                      title={isReadImplied(picked, row) ? t('restrict.impliedByWrite') : undefined}
+                      onChange={() => {
+                        setPicked(toggleScope(picked, row.read));
+                        setScopesError(null);
+                      }}
+                      label={
+                        <code dir="ltr" className="font-mono text-[12px]">
+                          {row.read}
+                        </code>
+                      }
+                    />
+                    <Checkbox
+                      id={`scope-${row.write}`}
+                      name="scopes"
+                      value={row.write}
+                      checked={picked.includes(row.write)}
+                      onChange={() => {
+                        setPicked(toggleScope(picked, row.write));
+                        setScopesError(null);
+                      }}
+                      label={
+                        <code dir="ltr" className="font-mono text-[12px]">
+                          {row.write}
+                        </code>
+                      }
+                    />
+                  </div>
+                ))}
+              </div>
+              {scopesError && (
+                <p id="key-scopes-error" role="alert" className="text-xs text-danger">
+                  {scopesError}
+                </p>
+              )}
+            </fieldset>
+          )}
+        </div>
       </form>
       {!canCreate && <p className="mt-3 text-xs text-muted-foreground">{t('noCreate')}</p>}
       {canCreate && planLocked && (

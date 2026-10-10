@@ -161,6 +161,50 @@ describe('customer API: key authentication, limits, envelope', () => {
     expect((await t.call.get('/contacts')).status).toBe(200);
   });
 
+  it('holds a key created with scopes from the console to them: a read key cannot write, a key cannot leave its resources (AUTH-073)', async () => {
+    const t = await tenantWithKey(api, 'auth-scope-console', ['contacts:read']);
+    expect(t.key.scopes).toEqual(['contacts:read']);
+
+    expect((await t.call.get('/contacts')).status).toBe(200);
+    const write = await t.call.post('/contacts', { name: 'X', phone: '+919800000003' });
+    expect(write.status).toBe(403);
+    expect(write.body.error.code).toBe('forbidden');
+    expect(write.body.error.message).toContain('contacts:write');
+    for (const path of ['/me', '/deals', '/contact-groups', '/templates', '/broadcasts']) {
+      const res = await t.call.get(path);
+      expect(res.status, path).toBe(403);
+      expect(res.body.error.code, path).toBe('forbidden');
+    }
+    const send = await t.call.post('/messages', {
+      to: '919812345678',
+      type: 'text',
+      text: 'hello',
+    });
+    expect(send.status).toBe(403);
+    expect(send.body.error.message).toContain('messages:write');
+  });
+
+  it('lets a write scope do its write and read the same resource, and nothing else (AUTH-073)', async () => {
+    const t = await tenantWithKey(api, 'auth-scope-write', ['contacts:write']);
+    expect((await t.call.get('/contacts')).status).toBe(200);
+    const created = await t.call.post('/contacts', { name: 'Scoped', phone: '+919800000004' });
+    expect([200, 201], JSON.stringify(created.body)).toContain(created.status);
+    expect((await t.call.get('/deals')).status).toBe(403);
+    expect((await t.call.get('/me')).status).toBe(403);
+  });
+
+  it('keeps a key created without scopes at full access, and a scoped one beside it restricted (AUTH-073, WD-API-008)', async () => {
+    const full = await tenantWithKey(api, 'auth-scope-full');
+    expect(full.key.scopes).toEqual([]);
+    for (const path of ['/me', '/contacts', '/contact-groups']) {
+      expect((await full.call.get(path)).status, path).toBe(200);
+    }
+
+    const restricted = await tenantWithKey(api, 'auth-scope-beside', ['account:read']);
+    expect((await restricted.call.get('/me')).status).toBe(200);
+    expect((await restricted.call.get('/contacts')).status).toBe(403);
+  });
+
   it('refuses every route when the plan has no Public API feature (WD-API-009)', async () => {
     const t = await tenantWithKey(api, 'auth-plan');
     await h.owner.query(

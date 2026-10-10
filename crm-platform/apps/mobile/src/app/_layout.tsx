@@ -1,0 +1,88 @@
+import * as Sentry from '@sentry/react-native';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { Stack } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+import { StatusBar } from 'expo-status-bar';
+import { useEffect, useState, useSyncExternalStore } from 'react';
+import { I18nextProvider, useTranslation } from 'react-i18next';
+import { View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Button } from '@/components/ui/button';
+import { Text } from '@/components/ui/text';
+import { i18n, initI18n } from '@/lib/i18n';
+import { getSnapshot, restoreSession, subscribe } from '@/lib/auth/session-manager';
+import { log } from '@/lib/observability/logger';
+import { initObservability } from '@/lib/observability/sentry';
+import { createQueryClient, wireQueryEnvironment } from '@/lib/query/query-client';
+import { spacing } from '@/lib/theme/tokens';
+import { useTheme } from '@/lib/theme/use-theme';
+
+initObservability();
+wireQueryEnvironment();
+void SplashScreen.preventAutoHideAsync();
+
+// One client for the life of the process. Signing out clears its cache (lib/auth/sign-out.ts).
+const queryClient = createQueryClient();
+
+function RootLayout() {
+  const [ready, setReady] = useState(false);
+  const auth = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
+
+  useEffect(() => {
+    // The language and the stored session are both needed before the first screen, or it flashes the wrong one.
+    Promise.all([initI18n(), restoreSession()])
+      .catch((e: unknown) => log.exception(e, 'app.boot_failed'))
+      .finally(() => setReady(true));
+  }, []);
+
+  useEffect(() => {
+    if (ready && auth.status !== 'loading') void SplashScreen.hideAsync();
+  }, [ready, auth.status]);
+
+  if (!ready || auth.status === 'loading') return null;
+
+  return (
+    <SafeAreaProvider>
+      <I18nextProvider i18n={i18n}>
+        <QueryClientProvider client={queryClient}>
+          <StatusBar style="auto" />
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Protected guard={auth.status === 'signedIn'}>
+              <Stack.Screen name="(app)" />
+            </Stack.Protected>
+            <Stack.Protected guard={auth.status === 'signedOut'}>
+              <Stack.Screen name="(auth)" />
+            </Stack.Protected>
+          </Stack>
+        </QueryClientProvider>
+      </I18nextProvider>
+    </SafeAreaProvider>
+  );
+}
+
+export default Sentry.wrap(RootLayout);
+
+/** Rendered by Expo Router when a screen throws while rendering: a recoverable screen instead of a white one. */
+export function ErrorBoundary({ error, retry }: { error: Error; retry: () => Promise<void> }) {
+  const { t } = useTranslation();
+  const { colors } = useTheme();
+  useEffect(() => {
+    log.exception(error, 'app.render_crash');
+  }, [error]);
+  return (
+    <View
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        padding: spacing.xl,
+        gap: spacing.lg,
+        backgroundColor: colors.background,
+      }}
+    >
+      <Text variant="heading" accessibilityRole="alert">
+        {t('errors.generic')}
+      </Text>
+      <Button label={t('common.retry')} onPress={() => void retry()} />
+    </View>
+  );
+}

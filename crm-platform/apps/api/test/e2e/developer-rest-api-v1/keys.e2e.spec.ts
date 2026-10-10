@@ -60,6 +60,73 @@ describe('developer keys (console)', () => {
     expect(JSON.stringify(outbox.rows[0].payload)).not.toContain(secret);
   });
 
+  it('creates a full-access key when no scopes are sent, and lists it with an empty scope list (WD-API-008)', async () => {
+    const t = await api.signup('keys-scope-none');
+    const key = await mintKey(api, t, 'no scopes');
+    expect(key.scopes).toEqual([]);
+    const listed = await api.http().get('/v2/developer/keys').set(bearer(t.admin));
+    expect(listed.body.data[0].scopes).toEqual([]);
+    const row = (await h.owner.query(`SELECT scopes FROM api_keys WHERE org_id = $1`, [t.orgId]))
+      .rows[0];
+    expect(row.scopes).toEqual([]);
+
+    // an explicit empty list is the same thing
+    await api.http().delete(`/v2/developer/keys/${key.id}`).set(bearer(t.admin));
+    const empty = await mintKey(api, t, 'empty list', []);
+    expect(empty.scopes).toEqual([]);
+  });
+
+  it('creates a restricted key: the scopes are stored, listed, audited and in the event, once each (AUTH-073)', async () => {
+    const t = await api.signup('keys-scope-set');
+    const res = await api
+      .http()
+      .post('/v2/developer/keys')
+      .set(bearer(t.admin))
+      .send({
+        name: 'Read contacts, send messages',
+        scopes: ['contacts:read', 'messages:write', 'contacts:read'],
+      });
+    expect(res.status, JSON.stringify(res.body)).toBe(201);
+    expect(res.body.key.scopes).toEqual(['contacts:read', 'messages:write']);
+
+    const listed = await api.http().get('/v2/developer/keys').set(bearer(t.admin));
+    expect(listed.body.data[0].scopes).toEqual(['contacts:read', 'messages:write']);
+    const row = (await h.owner.query(`SELECT scopes FROM api_keys WHERE org_id = $1`, [t.orgId]))
+      .rows[0];
+    expect(row.scopes).toEqual(['contacts:read', 'messages:write']);
+
+    const audit = await h.owner.query(
+      `SELECT delta FROM audit_log WHERE org_id = $1 AND module = 'api_keys' AND action = 'insert'`,
+      [t.orgId],
+    );
+    expect(audit.rows[0].delta).toEqual({
+      scopes: { old: null, new: ['contacts:read', 'messages:write'] },
+    });
+    const outbox = await h.owner.query(
+      `SELECT payload FROM event_outbox WHERE org_id = $1 AND event_type = 'api.key_created'`,
+      [t.orgId],
+    );
+    expect(outbox.rows[0].payload.scopes).toEqual(['contacts:read', 'messages:write']);
+    expect(JSON.stringify(outbox.rows[0].payload)).not.toContain(res.body.secret);
+  });
+
+  it('refuses a scope nobody defined and creates nothing (AUTH-073)', async () => {
+    const t = await api.signup('keys-scope-bad');
+    for (const scopes of [['nonsense:read'], ['contacts:delete'], 'contacts:read', [42]]) {
+      const res = await api
+        .http()
+        .post('/v2/developer/keys')
+        .set(bearer(t.admin))
+        .send({ name: 'bad', scopes });
+      expect(res.status, JSON.stringify(scopes)).toBe(422);
+      expect(res.body.code).toBe('VALIDATION_FAILED');
+    }
+    expect(
+      (await h.owner.query(`SELECT count(*)::int AS n FROM api_keys WHERE org_id = $1`, [t.orgId]))
+        .rows[0].n,
+    ).toBe(0);
+  });
+
   it('refuses a blank name and a name over 120 characters (WD-API-001)', async () => {
     const t = await api.signup('keys-name');
     for (const name of ['', '   ', 'x'.repeat(121)]) {
