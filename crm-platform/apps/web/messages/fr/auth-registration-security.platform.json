@@ -359,6 +359,14 @@
             "label": "Exiger un symbole",
             "short": "Symbole"
           },
+          "passwordBlocklistEnabled": {
+            "label": "Bloquer les mots de passe courants",
+            "hint": "Refuse les mots de passe les plus courants, les variantes proches comme P@ssw0rd, les suites de touches du clavier et tout mot de passe contenant le nom ou l’adresse e-mail de la personne."
+          },
+          "passwordBreachCheck": {
+            "label": "Bloquer les mots de passe issus de fuites de données",
+            "hint": "Compare les nouveaux mots de passe à la liste publique Pwned Passwords. Seuls les cinq premiers caractères d’un hachage quittent le serveur. Si le service est injoignable, le mot de passe est accepté."
+          },
           "passwordMaxAgeDays": {
             "label": "Durée de vie maximale du mot de passe (jours)",
             "hint": "0 signifie que les mots de passe n’expirent jamais."

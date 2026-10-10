@@ -1,0 +1,23 @@
+{
+  "mfa-enforcement-defaults": {
+    "decision": "accepted",
+    "reason": "Owner decision in chat on 2026-10-10: MFA stays a Security Center switch. Enabled in the admin panel means enforced, not enabled means not enforced. desk.wabo.ai is staging and keeps it off there; production turns it on from the admin panel. Re-verify the production value before each release.",
+    "by": "lakshya (owner, chat decision)",
+    "date": "2026-10-10",
+    "expires": "2027-04-10"
+  },
+  "operator-mfa-ignored": {
+    "decision": "accepted",
+    "reason": "Same owner decision: the operator switch (requireMfaForSuperAdmins) decides whether operators are challenged; when it is off an enrolled operator is not asked. Kept deliberately (commit 5f741143) so staging can run without a second factor. Production must have the switch on.",
+    "by": "lakshya (owner, chat decision)",
+    "date": "2026-10-10",
+    "expires": "2027-04-10"
+  },
+  "password-composition": {
+    "decision": "accepted",
+    "reason": "Owner asked for strong password defaults that stay configurable in the admin panel. The default is now 12+ characters, blocklist and breach check on; the upper-case/number rules stay on by default (WaDesk parity) and can be switched off in the Security Center.",
+    "by": "lakshya (owner, chat decision)",
+    "date": "2026-10-10",
+    "expires": "2027-04-10"
+  }
+}

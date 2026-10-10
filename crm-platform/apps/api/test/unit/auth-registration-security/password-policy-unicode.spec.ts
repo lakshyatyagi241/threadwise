@@ -43,15 +43,15 @@ describe('password policy is Unicode aware', () => {
 });
 
 describe('the contract never asks for more than the policy can', () => {
-  it('has a floor of 6, the lowest minimum an administrator can set', () => {
-    expect(PASSWORD_CONTRACT_MIN).toBe(6);
-    expect(passwordSchema.safeParse('abcde').success).toBe(false);
-    expect(passwordSchema.safeParse('abcdef').success).toBe(true);
+  it('has a floor of 8, the lowest minimum an administrator can set', () => {
+    expect(PASSWORD_CONTRACT_MIN).toBe(8);
+    expect(passwordSchema.safeParse('abcdefg').success).toBe(false);
+    expect(passwordSchema.safeParse('abcdefgh').success).toBe(true);
   });
 
   it('leaves the real minimum to the stored policy', () => {
-    // A 6-character password passes the contract; the policy (default 8) still refuses it.
-    expect(rules('Ab1!xy', { ...strict, passwordMinLength: 8 })).toContain('min_length');
-    expect(rules('Ab1!xy', { ...strict, passwordMinLength: 6 })).toEqual([]);
+    // An 8-character password passes the contract; a stricter stored policy (here 12) still refuses it.
+    expect(rules('Ab1!xyQm', { ...strict, passwordMinLength: 12 })).toContain('min_length');
+    expect(rules('Ab1!xyQm', { ...strict, passwordMinLength: 8 })).toEqual([]);
   });
 });

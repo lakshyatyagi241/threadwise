@@ -74,7 +74,7 @@ jobs:
         working-directory: crm-platform
       - run: pnpm --filter @crm/tax build && pnpm --filter @crm/contracts build
         working-directory: crm-platform
-      - uses: expo/expo-github-action@v8
+      - uses: expo/expo-github-action@v9
         with:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}

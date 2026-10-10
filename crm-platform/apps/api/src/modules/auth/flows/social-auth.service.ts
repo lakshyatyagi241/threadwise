@@ -27,7 +27,7 @@ import { SecurityPolicyService } from '../platform/security-policy.service';
 import { TenantDirectory } from '../platform/tenant-directory';
 import { AuthAuditService } from '../security/auth-audit.service';
 import { PasswordService } from '../security/password.service';
-import { randomToken } from '../support/crypto-utils';
+import { randomToken, sha256Base64Url } from '../support/crypto-utils';
 import { AuthKeys, Ttl } from '../support/redis-keys';
 import { slugify, slugWithSuffix } from '../support/text';
 import { LoginService, type ClientMeta } from './login.service';
@@ -42,6 +42,8 @@ interface OAuthState {
   orgSlug: string | null;
   orgName: string | null;
   redirectUri: string;
+  /** PKCE code_verifier (providers that support it): never leaves the server, only its SHA-256 goes to the provider. */
+  codeVerifier?: string;
 }
 
 /**
@@ -129,19 +131,28 @@ export class SocialAuthService {
     }
 
     const state = randomToken(32);
+    const codeVerifier = adapter.pkce ? randomToken(48) : undefined;
     const payload: OAuthState = {
       provider,
       mode: query.mode,
       orgSlug: query.orgSlug ?? null,
       orgName: query.orgName ?? null,
       redirectUri: query.redirectUri,
+      ...(codeVerifier ? { codeVerifier } : {}),
     };
     await this.redis.setex(
       AuthKeys.socialState(state),
       Ttl.socialStateSeconds,
       JSON.stringify(payload),
     );
-    return { url: adapter.authorizeUrl(creds, query.redirectUri, state) };
+    return {
+      url: adapter.authorizeUrl(
+        creds,
+        query.redirectUri,
+        state,
+        codeVerifier ? sha256Base64Url(codeVerifier) : undefined,
+      ),
+    };
   }
 
   async callback(
@@ -167,7 +178,7 @@ export class SocialAuthService {
 
     let profile: SocialProfile;
     try {
-      profile = await adapter.fetchProfile(creds, state.redirectUri, body.code);
+      profile = await adapter.fetchProfile(creds, state.redirectUri, body.code, state.codeVerifier);
     } catch (err) {
       this.logger.warn({ err, provider }, 'social profile fetch failed');
       throw new AppError(
