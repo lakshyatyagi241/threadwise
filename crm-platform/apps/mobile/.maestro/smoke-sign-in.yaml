@@ -1,0 +1,27 @@
+# Sign in, see the home screen, sign out. The minimum that must pass before every store release (docs/mobile/testing.md).
+#
+#   maestro test apps/mobile/.maestro/smoke-sign-in.yaml \
+#     -e APP_ID=ai.geta.crm.dev -e E2E_EMAIL=<seeded email> -e E2E_PASSWORD=<seeded password>
+#
+# Credentials come from -e, never from this file. Needs an emulator or simulator set to English, a development or preview
+# build installed, and the local API seeded (docs/runbooks/local-development.md). The account must not have MFA enabled.
+appId: ${APP_ID}
+---
+- launchApp:
+    clearState: true
+- assertVisible: 'Sign in'
+- tapOn: 'Email'
+- inputText: ${E2E_EMAIL}
+- tapOn: 'Password'
+- inputText: ${E2E_PASSWORD}
+- hideKeyboard
+- tapOn:
+    id: 'sign-in-submit'
+- assertVisible: 'Hello, .*'
+- assertVisible: 'Workspace: .*'
+# The session survives a restart.
+- stopApp
+- launchApp
+- assertVisible: 'Hello, .*'
+- tapOn: 'Sign out'
+- assertVisible: 'Sign in'

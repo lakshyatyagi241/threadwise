@@ -4,6 +4,10 @@ dist
 .turbo
 coverage
 pnpm-lock.yaml
+apps/mobile/.expo
+apps/mobile/.expo-export
+apps/mobile/ios
+apps/mobile/android
 docs/db/*.dbml
 
 # Prettier has no SQL parser, and migrations are hand-formatted so the DDL
