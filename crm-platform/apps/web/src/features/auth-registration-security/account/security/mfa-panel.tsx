@@ -53,7 +53,9 @@ export function MfaPanel({ forcedByUrl }: { forcedByUrl: boolean }) {
   const [phase, setPhase] = useState<Phase>({ kind: 'idle' });
   const [notice, setNotice] = useState<'disabled' | null>(null);
   // Set after the API answered AUTH_REAUTH_REQUIRED (session older than ten minutes) and the person typed the password.
+  // The ref feeds the request (read when it runs); the state is the same value for rendering the confirmation form.
   const setupPassword = useRef<string | undefined>(undefined);
+  const [confirmedPassword, setConfirmedPassword] = useState<string | undefined>(undefined);
 
   const forced = flags.mfaEnrolmentRequired || forcedByUrl;
 
@@ -170,7 +172,7 @@ export function MfaPanel({ forcedByUrl }: { forcedByUrl: boolean }) {
         notice={notice === 'disabled' ? t('disabledDone') : null}
         onRestart={restartSetup}
         onEnabled={finishEnable}
-        password={setupPassword.current}
+        password={confirmedPassword}
       />
     );
   } else if (reauth) {
@@ -185,6 +187,7 @@ export function MfaPanel({ forcedByUrl }: { forcedByUrl: boolean }) {
           onClose={() => router.back()}
           onConfirm={async (password) => {
             setupPassword.current = password;
+            setConfirmedPassword(password);
             await queryClient.resetQueries({ queryKey: keys.mfaSetup });
           }}
         />
