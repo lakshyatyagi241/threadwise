@@ -364,6 +364,14 @@
             "label": "Richiedi un simbolo",
             "short": "Simbolo"
           },
+          "passwordBlocklistEnabled": {
+            "label": "Blocca le password comuni",
+            "hint": "Rifiuta le password più comuni, le varianti simili come P@ssw0rd, gli schemi della tastiera e qualsiasi password che contenga il nome o l'email della persona."
+          },
+          "passwordBreachCheck": {
+            "label": "Blocca le password presenti in violazioni di dati",
+            "hint": "Confronta le nuove password con l'elenco pubblico Pwned Passwords. Dal server escono solo i primi cinque caratteri di un hash. Se il servizio non è raggiungibile, la password viene accettata."
+          },
           "passwordMaxAgeDays": {
             "label": "Durata massima della password (giorni)",
             "hint": "0 significa che le password non scadono mai."

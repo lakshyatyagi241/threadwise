@@ -364,6 +364,14 @@
             "label": "Sembol iste",
             "short": "Sembol"
           },
+          "passwordBlocklistEnabled": {
+            "label": "Yaygın parolaları engelle",
+            "hint": "En yaygın parolaları, P@ssw0rd gibi benzer varyantları, klavye dizilimlerini ve kişinin adını ya da e-postasını içeren her parolayı reddeder."
+          },
+          "passwordBreachCheck": {
+            "label": "Veri ihlallerinde sızan parolaları engelle",
+            "hint": "Yeni parolaları herkese açık Pwned Passwords listesiyle karşılaştırır. Sunucudan yalnızca karma değerinin ilk beş karakteri çıkar. Hizmete ulaşılamazsa parola kabul edilir."
+          },
           "passwordMaxAgeDays": {
             "label": "Parola yaşı sınırı (gün)",
             "hint": "0, parolaların hiç sona ermediği anlamına gelir."

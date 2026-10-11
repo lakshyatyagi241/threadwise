@@ -18,22 +18,29 @@ in the line (`new-module → add-migration — schema change needed`).
 
 ## Selection table
 
-| Prompt mentions / intent                                                                                                              | Skill                      |
-| ------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| first-time repo setup, "get me running", "onboard me", pnpm dev fails                                                                 | `setup`                    |
-| new entity/resource/CRUD ("add a deals module", "companies API")                                                                      | `new-module`               |
-| schema change, new table/column, migration file                                                                                       | `add-migration`            |
-| new/changed request or response shape, DTO, Zod schema, new error code                                                                | `contracts-change`         |
-| new permission, gate route by role, RBAC                                                                                              | `rbac-permission`          |
-| side effect after a write, "notify when X", webhook fire, event                                                                       | `outbox-event`             |
-| background/scheduled/async work, queue, cron, "in the background", "every N minutes"                                                  | `worker-job`               |
-| integrate vendor API (BSP, SMS, email, payment, voice)                                                                                | `provider-adapter`         |
-| inbound webhook endpoint, provider callback                                                                                           | `webhook-handler`          |
-| frontend fetch from apps/web or apps/partner, data hook, form submit to API                                                           | `frontend-api-call`        |
-| "open a PR", "is this ready", "run the checks"                                                                                        | `pre-pr`                   |
-| any feature, screen, endpoint, contract, migration or worker job just built or changed; "compare with threadwise", "parity", "playwright" | `threadwise-playwright-parity` |
-| general code review (bugs, simplification, not repo-specific)                                                                         | `code-review`              |
-| explicit "simplify this"                                                                                                              | `simplify`                 |
+| Prompt mentions / intent                                                                                                               | Skill                      |
+| -------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| first-time repo setup, "get me running", "onboard me", pnpm dev fails                                                                  | `setup`                    |
+| new entity/resource/CRUD ("add a deals module", "companies API")                                                                       | `new-module`               |
+| schema change, new table/column, migration file                                                                                        | `add-migration`            |
+| new/changed request or response shape, DTO, Zod schema, new error code                                                                 | `contracts-change`         |
+| new permission, gate route by role, RBAC                                                                                               | `rbac-permission`          |
+| side effect after a write, "notify when X", webhook fire, event                                                                        | `outbox-event`             |
+| background/scheduled/async work, queue, cron, "in the background", "every N minutes"                                                   | `worker-job`               |
+| integrate vendor API (BSP, SMS, email, payment, voice)                                                                                 | `provider-adapter`         |
+| inbound webhook endpoint, provider callback                                                                                            | `webhook-handler`          |
+| frontend fetch from apps/web or apps/partner, data hook, form submit to API                                                            | `frontend-api-call`        |
+| "open a PR", "is this ready", "run the checks"                                                                                         | `pre-pr`                   |
+| any feature, screen, endpoint, contract, migration or worker job just built or changed; "compare with threadwise", "parity", "playwright"  | `threadwise-playwright-parity` |
+| mobile app: any screen, feature, hook or fix in `apps/mobile` ("add X to the app", "mobile", "iOS", "Android", "Expo", "React Native") | `mobile-feature-port`      |
+| mobile: set up the toolchain / first run / "app won't start"                                                                           | `mobile-setup`             |
+| mobile: build, submit, OTA update, store release, "ship the app"                                                                       | `mobile-release`           |
+| mobile: text added or changed, translations                                                                                            | `mobile-i18n-sync`         |
+| mobile: camera, push, biometrics, files, a permission, a native library                                                                | `mobile-native-capability` |
+| mobile: sign-in, tokens, session, deep link                                                                                            | `mobile-auth-session`      |
+| mobile: "open a PR", "is it ready", before a mobile merge                                                                              | `mobile-pre-pr`            |
+| general code review (bugs, simplification, not repo-specific)                                                                          | `code-review`              |
+| explicit "simplify this"                                                                                                               | `simplify`                 |
 
 ## Chains (from `.claude/skills/README.md`)
 

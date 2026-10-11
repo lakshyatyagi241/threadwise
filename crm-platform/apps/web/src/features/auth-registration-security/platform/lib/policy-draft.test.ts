@@ -78,7 +78,7 @@ describe('buildPolicyPatch', () => {
       allowZero: false,
     });
     expect(problems.lockoutWindowMinutes).toMatchObject({ code: 'range' });
-    expect(problems.passwordMinLength).toMatchObject({ code: 'range', min: 6, max: 128 });
+    expect(problems.passwordMinLength).toMatchObject({ code: 'range', min: 8, max: 128 });
   });
 
   it('refuses 0 for the timeout, session cap and lockout, which the form cannot save', () => {
@@ -233,7 +233,7 @@ describe('numeric ranges match the reference form', () => {
     lockoutWindowMinutes: [1, 1440],
     passwordMaxAgeDays: [0, 3650],
     sessionTimeoutMinutes: [5, 1440],
-    passwordMinLength: [6, 128],
+    passwordMinLength: [8, 128],
     waMaxSendsPerMinute: [0, 10_000],
     waMaxSendsPerDay: [0, 1_000_000],
     waHoldOnLinksCount: [0, 50],

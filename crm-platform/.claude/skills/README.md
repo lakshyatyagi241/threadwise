@@ -42,6 +42,22 @@ an actual Postgres connection or an actual cross-tenant request.
 | [pre-pr](pre-pr/)                                     | before opening a PR — runs the same checks as CI, locally                                                                |
 | [threadwise-playwright-parity](threadwise-playwright-parity/) | **after every feature, automatically**: Playwright twin test against the running Reference, fix sub-agents for what differs |
 
+**Mobile app** (`apps/mobile`, see [docs/mobile](../../docs/mobile/README.md))
+
+| Skill                                                 | Use it when                                                                         |
+| ----------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| [mobile-setup](mobile-setup/)                         | first time on the mobile app: toolchain, `.env`, first development build            |
+| [mobile-feature-port](mobile-feature-port/)           | **any unit of mobile work**: bringing a product feature to the app; chains the rest |
+| [mobile-new-screen](mobile-new-screen/)               | adding a route and screen                                                           |
+| [mobile-api-call](mobile-api-call/)                   | fetching or sending data from the app                                               |
+| [mobile-auth-session](mobile-auth-session/)           | sign-in, tokens, sign-out, account gates, deep links                                |
+| [mobile-i18n-sync](mobile-i18n-sync/)                 | **after any mobile text change**: all 21 locales                                    |
+| [mobile-native-capability](mobile-native-capability/) | camera, push, files, biometrics, a permission, a native library                     |
+| [mobile-test](mobile-test/)                           | unit, component and Maestro tests                                                   |
+| [mobile-quality-review](mobile-quality-review/)       | before a PR: accessibility, performance, security, store policy                     |
+| [mobile-pre-pr](mobile-pre-pr/)                       | the mobile gate, same checks as CI                                                  |
+| [mobile-release](mobile-release/)                     | EAS build, submit, OTA update, rollback                                             |
+
 ## Skills call each other
 
 A multi-step task should stay on rails end to end, so skills invoke each
@@ -61,6 +77,13 @@ other via the Skill tool rather than just linking. The common chains:
   contracts-change ──> add-migration (if the column is new)
                   └──> frontend-api-call
                   └──> pre-pr
+```
+
+```
+"add the inbox list to the app"
+  mobile-feature-port ──> mobile-new-screen ──> mobile-api-call ──> mobile-i18n-sync
+                     └──> mobile-test ──> mobile-quality-review ──> mobile-pre-pr
+                     └──> (contracts-change / new-module if the API is missing something)
 ```
 
 When a skill says **"invoke the X skill"**, do it — that's what keeps a

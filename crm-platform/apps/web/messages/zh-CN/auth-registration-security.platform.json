@@ -364,6 +364,14 @@
             "label": "要求包含符号",
             "short": "符号"
           },
+          "passwordBlocklistEnabled": {
+            "label": "拦截常见密码",
+            "hint": "拒绝最常见的密码、P@ssw0rd 之类的相似变体、键盘排列，以及包含本人姓名或邮箱的密码。"
+          },
+          "passwordBreachCheck": {
+            "label": "拦截已泄露的密码",
+            "hint": "将新密码与公开的 Pwned Passwords 列表比对。只有哈希值的前五个字符会离开服务器。如果无法连接该服务，则直接接受该密码。"
+          },
           "passwordMaxAgeDays": {
             "label": "密码有效期（天）",
             "hint": "0 表示密码永不过期。"

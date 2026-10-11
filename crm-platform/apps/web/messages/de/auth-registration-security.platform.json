@@ -364,6 +364,14 @@
             "label": "Sonderzeichen verlangen",
             "short": "Sonderzeichen"
           },
+          "passwordBlocklistEnabled": {
+            "label": "Häufige Passwörter blockieren",
+            "hint": "Lehnt die gängigsten Passwörter, ähnliche Varianten wie P@ssw0rd, Tastaturmuster und alles ab, was den Namen oder die E-Mail-Adresse der Person enthält."
+          },
+          "passwordBreachCheck": {
+            "label": "Passwörter aus Datenlecks blockieren",
+            "hint": "Prüft neue Passwörter anhand der öffentlichen Liste Pwned Passwords. Nur die ersten fünf Zeichen eines Hashes verlassen den Server. Ist der Dienst nicht erreichbar, wird das Passwort akzeptiert."
+          },
           "passwordMaxAgeDays": {
             "label": "Höchstalter von Passwörtern (Tage)",
             "hint": "0 bedeutet, dass Passwörter nie ablaufen."

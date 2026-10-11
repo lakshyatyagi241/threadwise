@@ -7,7 +7,10 @@ import { AppError } from '../../common/errors/app-error';
 import { ClerkService } from './clerk.service';
 import { LoginService, type ClientMeta } from './flows/login.service';
 import { SecurityPolicyService } from './platform/security-policy.service';
+import { AccountAttackGuard } from './security/account-attack.service';
 import { TenantDirectory } from './platform/tenant-directory';
+import { EpochService } from './sessions/epoch.service';
+import { PartnerAgentStatusService } from './sessions/partner-agent-status.service';
 import { SessionService } from './sessions/session.service';
 import { normalizeIp } from './support/ip';
 import { AuthKeys } from './support/redis-keys';
@@ -38,6 +41,9 @@ export class AuthService {
     private readonly sessions: SessionService,
     private readonly login: LoginService,
     private readonly policy: SecurityPolicyService,
+    private readonly epoch: EpochService,
+    private readonly partnerStatus: PartnerAgentStatusService,
+    private readonly attack: AccountAttackGuard,
   ) {}
 
   /**
@@ -56,6 +62,14 @@ export class AuthService {
     const policy = await this.policy.policy();
     const lockKey = AuthKeys.partnerLockout(orgId, email, normalizeIp(meta.ip) ?? 'unknown');
     await this.login.assertNotLocked(lockKey, policy, { orgId, email });
+    await this.attack.assertAllowed(
+      'partner',
+      orgId,
+      email,
+      normalizeIp(meta.ip),
+      undefined,
+      policy,
+    );
 
     const row = await this.db.txAs({ orgId }, async (tx) => {
       const result = await tx.execute(sql`
@@ -70,9 +84,11 @@ export class AuthService {
       await this.assertPassword(row, password, 'active');
     } catch (err) {
       await this.login.recordFailedSignIn(lockKey, policy);
+      await this.attack.recordFailure('partner', orgId, email, policy);
       throw err;
     }
     await this.login.clearLockout(lockKey);
+    void this.attack.rememberNetwork('partner', orgId, email, normalizeIp(meta.ip));
 
     await this.db.txAs({ orgId }, async (tx) => {
       await tx.execute(
@@ -81,7 +97,14 @@ export class AuthService {
     });
 
     this.logger.log({ orgId, agentId: row!.id }, 'partner agent login');
-    return this.tokens.issue({ sub: row!.id, org: orgId, typ: 'partner_agent', uid: row!.uuid });
+    // `ep` ties the pair to the platform epoch, so "revoke all sessions" reaches partner agents too.
+    return this.tokens.issue({
+      sub: row!.id,
+      org: orgId,
+      typ: 'partner_agent',
+      uid: row!.uuid,
+      ep: await this.epoch.current(),
+    });
   }
 
   /**
@@ -94,6 +117,10 @@ export class AuthService {
    * anyone with a Clerk account join any tenant (known issue). A
    * person with no row is now told to ask for an invitation.
    */
+  clerkConfigured(): boolean {
+    return this.clerk.isConfigured();
+  }
+
   async loginViaClerk(
     orgSlug: string,
     clerkToken: string,
@@ -166,6 +193,23 @@ export class AuthService {
     }
     if (claims.typ === 'platform_operator') {
       throw AppError.unauthenticated('Invalid or expired refresh token');
+    }
+    if (claims.typ === 'partner_agent') {
+      // No session row backs this pair, so renewal is where a suspended agent (or a bumped epoch) is stopped.
+      const ep = await this.epoch.current();
+      if ((claims.ep ?? 0) < ep) throw AppError.unauthenticated('Invalid or expired refresh token');
+      await this.partnerStatus.assertActive(
+        claims.org,
+        claims.sub,
+        'Invalid or expired refresh token',
+      );
+      return this.tokens.issue({
+        sub: claims.sub,
+        org: claims.org,
+        typ: 'partner_agent',
+        uid: claims.uid,
+        ep,
+      });
     }
     return this.tokens.issue({
       sub: claims.sub,
