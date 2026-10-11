@@ -1,0 +1,626 @@
+{
+  "faq": {
+    "nav": {
+      "faq": "FAQ",
+      "label": "Mục FAQ",
+      "tab": {
+        "faqs": "FAQ",
+        "test": "Thử nghiệm",
+        "unanswered": "Chưa trả lời",
+        "insights": "Thống kê",
+        "settings": "Cài đặt"
+      },
+      "unansweredCount": "{count, plural, other {# tin nhắn chưa trả lời}}"
+    },
+    "common": {
+      "dismiss": "Đóng",
+      "retry": "Thử lại",
+      "requestId": "Yêu cầu {id}",
+      "noAccessTitle": "Bạn không có quyền truy cập màn hình này",
+      "noAccess": "Hãy nhờ quản trị viên workspace cấp quyền {permission} cho vai trò của bạn."
+    },
+    "errors": {
+      "network": "Không kết nối được tới máy chủ. Kiểm tra kết nối và thử lại.",
+      "forbidden": "Vai trò của bạn không được phép thực hiện thao tác này.",
+      "notFound": "FAQ hoặc tin nhắn này không còn tồn tại. Có thể nó đã bị xóa.",
+      "conflict": "Có người khác đã thay đổi nội dung này khi bạn đang chỉnh sửa.",
+      "duplicateQuestion": "Một FAQ khác đã có câu hỏi này.",
+      "duplicateVariation": "FAQ này đã có cách diễn đạt này.",
+      "limitReached": "Workspace của bạn đã đạt giới hạn FAQ. Hãy xóa các FAQ hoặc biến thể không dùng, hoặc nhờ quản trị viên nền tảng tăng giới hạn.",
+      "flowNotFound": "Luồng đã chọn không còn tồn tại trong workspace này. Hãy chọn luồng khác.",
+      "embeddingUnavailable": "Nhà cung cấp AI không khả dụng. Hãy thêm khóa OpenRouter vào workspace, hoặc nhờ quản trị viên nền tảng bật khóa dùng chung, rồi thử lại.",
+      "engineDisabled": "Tính năng trả lời FAQ hiện đang tắt trên toàn nền tảng.",
+      "modelNotAllowed": "Mô hình embedding của nền tảng không được phép. Hãy liên hệ quản trị viên nền tảng.",
+      "validation": "Một số trường cần được xem lại.",
+      "rateLimited": "Quá nhiều yêu cầu. Hãy đợi một lát rồi thử lại.",
+      "unexpected": "Đã xảy ra lỗi. Hãy thử lại, và gửi mã yêu cầu cho bộ phận hỗ trợ nếu lỗi vẫn tiếp diễn."
+    },
+    "banner": {
+      "enabledToast": "Trả lời FAQ đang bật.",
+      "engineOff": "Nền tảng đã tắt tính năng trả lời FAQ. Khách hàng sẽ không nhận được câu trả lời FAQ cho đến khi bật lại.",
+      "modelChanged": "Nền tảng đã đổi mô hình AI sau khi bạn điều chỉnh ngưỡng này. Điểm số đã thay đổi, nên hãy xem lại độ nhạy.",
+      "reviewSensitivity": "Xem lại độ nhạy",
+      "offTitle": "Trả lời FAQ đang TẮT với khách hàng",
+      "offBody": "Bạn có thể viết và thử FAQ, nhưng khách hàng sẽ không nhận được câu trả lời cho đến khi bạn bật tính năng này.",
+      "offNoRight": "Hãy nhờ người có quyền faq.settings.manage (thường là quản trị viên workspace) bật tính năng này.",
+      "enable": "Bật trả lời FAQ"
+    },
+    "list": {
+      "title": "FAQ",
+      "subtitle": "Những câu khách hàng hay hỏi và câu bot trả lời. Khách hàng không cần dùng đúng từ ngữ của bạn.",
+      "add": "Thêm FAQ",
+      "stats": {
+        "label": "Tổng số FAQ",
+        "total": "FAQ",
+        "active": "Đang bật",
+        "paused": "Tạm dừng",
+        "variations": "Cách diễn đạt",
+        "pending": "Đang lập chỉ mục",
+        "pendingHint": "Có hiệu lực trong vài giây",
+        "failed": "Lập chỉ mục thất bại",
+        "failedHint": "Cần chú ý"
+      },
+      "failedBanner": "{count, plural, other {# cách diễn đạt}} không lập được chỉ mục nên chưa thể khớp với tin nhắn của khách hàng.",
+      "showFailed": "Hiện các FAQ bị lỗi",
+      "search": "Tìm FAQ",
+      "searchPlaceholder": "Tìm câu hỏi và cách diễn đạt",
+      "filter": {
+        "status": "Trạng thái",
+        "anyStatus": "Mọi trạng thái",
+        "category": "Danh mục",
+        "anyCategory": "Mọi danh mục",
+        "indexing": "Lập chỉ mục",
+        "anyIndexing": "Tất cả",
+        "pending": "Vẫn đang lập chỉ mục",
+        "failed": "Thất bại"
+      },
+      "status": {
+        "active": "Đang bật",
+        "paused": "Tạm dừng"
+      },
+      "clearFilters": "Xóa bộ lọc",
+      "bulk": {
+        "label": "Thao tác hàng loạt",
+        "selected": "{count, plural, other {Đã chọn # FAQ}}",
+        "pause": "Tạm dừng",
+        "activate": "Bật",
+        "delete": "Xóa",
+        "clear": "Bỏ chọn",
+        "done": {
+          "pause": "{count, plural, other {Đã tạm dừng # FAQ}}.",
+          "activate": "{count, plural, other {Đã bật # FAQ}}.",
+          "delete": "{count, plural, other {Đã xóa # FAQ}}."
+        }
+      },
+      "paused": "Đã tạm dừng FAQ.",
+      "activated": "Đã bật FAQ.",
+      "deleted": "Đã xóa FAQ.",
+      "empty": {
+        "title": "Dạy bot trả lời các câu hỏi thường gặp",
+        "body": "Chỉ cần viết câu hỏi và câu trả lời một lần. Bot sẽ khớp với những gì khách hàng viết, theo cách nói của họ, rồi trả lời hoặc bắt đầu một luồng.",
+        "how": "Thêm vài cách hỏi khác cho cùng một ý (cách diễn đạt) và thử trước khi khách hàng nhìn thấy.",
+        "cta": "Thêm FAQ đầu tiên",
+        "noRight": "Hãy nhờ quản trị viên workspace cấp quyền thêm FAQ."
+      },
+      "noMatch": {
+        "title": "Không có FAQ nào khớp bộ lọc này",
+        "body": "Hãy thử tìm kiếm khác hoặc xóa bộ lọc."
+      },
+      "selectAll": "Chọn tất cả FAQ trên trang này",
+      "selectRow": "Chọn {question}",
+      "col": {
+        "question": "Câu hỏi",
+        "answer": "Câu trả lời",
+        "indexing": "Cách diễn đạt đang hoạt động",
+        "answered": "Đã trả lời (90 ngày)",
+        "status": "Trạng thái",
+        "actions": "Thao tác"
+      },
+      "variationCount": "{count, plural, other {# cách diễn đạt}}",
+      "flowMissing": "Thiếu luồng",
+      "neverAnswered": "Chưa có",
+      "toggleLabel": "Đang bật: {question}",
+      "edit": "Sửa {question}",
+      "editShort": "Sửa",
+      "delete": "Xóa {question}",
+      "deleteShort": "Xóa",
+      "loadMore": "Tải thêm",
+      "loadingMore": "Đang tải",
+      "confirm": {
+        "bulkTitle": "Xóa {count, plural, other {# FAQ}}?",
+        "bulkBody": "{count, plural, other {FAQ này và các cách diễn đạt của nó}} sẽ bị xóa vĩnh viễn. Không thể hoàn tác.",
+        "rowTitle": "Xóa FAQ này?",
+        "rowBody": "“{question}” và tất cả cách diễn đạt của nó sẽ bị xóa vĩnh viễn. Không thể hoàn tác.",
+        "delete": "Xóa",
+        "cancel": "Hủy"
+      },
+      "indexing": {
+        "summary": "{ready} hoạt động, {pending} đang lập chỉ mục, {failed} lỗi",
+        "ready": "{count} hoạt động",
+        "pending": "{count} đang lập chỉ mục",
+        "failed": "{count} lỗi"
+      }
+    },
+    "editor": {
+      "back": "Quay lại FAQ",
+      "backToList": "Quay lại FAQ",
+      "newTitle": "FAQ mới",
+      "newSubtitle": "Viết câu hỏi và câu trả lời, rồi thêm các cách khác mà khách hàng có thể hỏi.",
+      "editTitle": "Sửa FAQ",
+      "unsaved": "Thay đổi chưa lưu",
+      "cancel": "Hủy",
+      "create": "Tạo FAQ",
+      "save": "Lưu thay đổi",
+      "delete": "Xóa",
+      "created": "Đã tạo FAQ.",
+      "saved": "Đã lưu FAQ.",
+      "deleted": "Đã xóa FAQ.",
+      "readOnly": "Bạn có thể xem FAQ này nhưng vai trò của bạn không thể thay đổi nó.",
+      "faqLimit": "Workspace của bạn đã đạt giới hạn {max} FAQ. Hãy xóa một FAQ để thêm cái mới.",
+      "prefilled": "Câu hỏi được điền từ một tin nhắn chưa trả lời của khách hàng. Lưu FAQ này cũng sẽ đánh dấu tin nhắn đó là đã xử lý.",
+      "tryItSaveFirst": "Hãy lưu FAQ trước, sau đó bạn có thể thử xem tin nhắn của khách hàng khớp với nó như thế nào.",
+      "conflict": {
+        "title": "Có người khác đã thay đổi FAQ này",
+        "body": "Các chỉnh sửa của bạn vẫn còn ở đây. Giữ lại và lưu đè lên phiên bản mới nhất, hoặc bỏ đi và tải phiên bản mới nhất.",
+        "keep": "Giữ chỉnh sửa của tôi",
+        "reload": "Tải phiên bản mới nhất",
+        "kept": "Đã cập nhật lên phiên bản mới nhất. Chỉnh sửa của bạn được giữ lại; hãy lưu để áp dụng."
+      },
+      "question": {
+        "title": "Câu hỏi",
+        "hint": "Câu hỏi như bạn sẽ viết. Nó cũng được tính là cách diễn đạt đầu tiên.",
+        "label": "Câu hỏi",
+        "count": "{count} / {max}"
+      },
+      "category": {
+        "label": "Danh mục",
+        "hint": "Tùy chọn. Giúp bạn lọc dễ hơn."
+      },
+      "status": {
+        "label": "Trạng thái",
+        "hint": "FAQ tạm dừng sẽ không bao giờ trả lời.",
+        "active": "Đang bật",
+        "paused": "Tạm dừng"
+      },
+      "answer": {
+        "title": "Câu trả lời",
+        "hint": "Nội dung khách hàng nhận được khi FAQ này khớp.",
+        "text": "Trả lời bằng văn bản",
+        "flow": "Bắt đầu một luồng",
+        "textLabel": "Nội dung trả lời",
+        "count": "{count} / {max} ký tự",
+        "preview": "Hiển thị trên WhatsApp",
+        "previewEmpty": "Câu trả lời của bạn sẽ hiện ở đây",
+        "flowLabel": "Luồng sẽ bắt đầu",
+        "noFlow": "Chưa chọn luồng"
+      },
+      "advanced": {
+        "title": "Nâng cao: độ nhạy riêng cho FAQ này",
+        "body": "Mặc định mọi FAQ dùng độ nhạy của workspace. Hãy dùng giá trị riêng khi FAQ này khớp quá dễ (tăng lên) hoặc quá khó (giảm xuống).",
+        "custom": "Dùng độ nhạy riêng cho FAQ này",
+        "sliderLabel": "Khớp từ mức",
+        "workspace": "Độ nhạy của workspace là {value}%.",
+        "following": "Đang theo độ nhạy của workspace ({value}%)."
+      },
+      "problem": {
+        "question": {
+          "required": "Hãy viết câu hỏi mà khách hàng hỏi.",
+          "tooLong": "Câu hỏi tối đa {max} ký tự.",
+          "invalid": "Câu hỏi này không hợp lệ."
+        },
+        "answerText": {
+          "required": "Hãy viết câu trả lời khách hàng sẽ nhận được.",
+          "tooLong": "Câu trả lời tối đa {max} ký tự.",
+          "invalid": "Câu trả lời này không hợp lệ."
+        },
+        "flowId": {
+          "required": "Hãy chọn luồng để bắt đầu.",
+          "tooLong": "Hãy chọn luồng để bắt đầu.",
+          "invalid": "Hãy chọn luồng để bắt đầu."
+        },
+        "category": {
+          "required": "Hãy viết danh mục hoặc để trống.",
+          "tooLong": "Danh mục tối đa {max} ký tự.",
+          "invalid": "Danh mục này không hợp lệ."
+        },
+        "thresholdOverride": {
+          "required": "Hãy chọn giá trị từ 5% đến 99%.",
+          "tooLong": "Hãy chọn giá trị từ 5% đến 99%.",
+          "invalid": "Hãy chọn giá trị từ 5% đến 99%."
+        }
+      },
+      "deleteConfirm": {
+        "title": "Xóa FAQ này?",
+        "body": "FAQ và tất cả cách diễn đạt của nó sẽ bị xóa vĩnh viễn. Không thể hoàn tác.",
+        "confirm": "Xóa"
+      },
+      "leave": {
+        "title": "Rời đi mà không lưu?",
+        "body": "Các thay đổi với FAQ này chưa được lưu.",
+        "leave": "Rời đi",
+        "stay": "Tiếp tục chỉnh sửa"
+      }
+    },
+    "flowPicker": {
+      "noAccess": "Bạn cần quyền xem luồng (flb.flows.read) để chọn luồng tại đây.",
+      "missing": "Luồng mà FAQ này bắt đầu không còn tồn tại. Hãy chọn luồng khác, nếu không FAQ này không thể trả lời.",
+      "selected": "Đã chọn",
+      "search": "Tìm luồng",
+      "searchPlaceholder": "Tìm luồng theo tên",
+      "retry": "Thử lại",
+      "loading": "Đang tải luồng",
+      "noMatch": "Không có luồng nào có tên đó.",
+      "none": "Bạn chưa có luồng nào. Hãy tạo một luồng trong mục Luồng trước.",
+      "listLabel": "Luồng",
+      "state": {
+        "live": "Đã xuất bản",
+        "off": "Không hoạt động",
+        "draft": "Bản nháp"
+      },
+      "note": "Luồng bắt đầu từ điều kiện kích hoạt. Chỉ các luồng đã xuất bản và đang hoạt động mới chạy được."
+    },
+    "variations": {
+      "title": "Các biến thể câu hỏi",
+      "hint": "Những cách khác mà khách hàng có thể hỏi. Mỗi cách được khớp theo ý nghĩa.",
+      "counterLabel": "Đã dùng {count} trên {max} cách diễn đạt",
+      "listLabel": "Cách diễn đạt",
+      "questionEmpty": "Câu hỏi của bạn sẽ hiện ở đây",
+      "source": {
+        "question": "Câu hỏi",
+        "manual": "Tự viết",
+        "ai": "AI",
+        "learned": "Đã học",
+        "import": "Đã nhập"
+      },
+      "none": "Chưa có cách diễn đạt bổ sung. Hãy thêm vài cách, hoặc để AI gợi ý.",
+      "edit": "Sửa {text}",
+      "remove": "Xóa {text}",
+      "editLabel": "Sửa cách diễn đạt",
+      "save": "Lưu",
+      "cancel": "Hủy",
+      "addLabel": "Cách diễn đạt mới",
+      "addPlaceholder": "Một cách hỏi khác",
+      "add": "Thêm",
+      "pasteMany": "Dán nhiều dòng",
+      "full": "FAQ này đã đạt giới hạn {max} cách diễn đạt.",
+      "failedNotice": "{count, plural, other {# cách diễn đạt}} không lập được chỉ mục. Hãy sửa và lưu cách diễn đạt để thử lại.",
+      "suggest": "Gợi ý bằng AI",
+      "suggestSaveFirst": "Hãy lưu FAQ trước, sau đó AI có thể gợi ý cách diễn đạt.",
+      "suggesting": "Đang nhờ AI gợi ý",
+      "suggestionsReady": "{count, plural, other {Có # gợi ý}}",
+      "suggestionsTitle": "Cách diễn đạt gợi ý",
+      "suggestionsHint": "Sẽ không có gì được lưu cho đến khi bạn thêm. Bỏ chọn những cái bạn không muốn.",
+      "suggestionsNone": "AI không có cách diễn đạt mới nào để gợi ý.",
+      "addSelected": "Thêm mục đã chọn ({count})",
+      "discard": "Bỏ qua",
+      "bulk": {
+        "label": "Mỗi dòng một cách diễn đạt",
+        "placeholder": "Đơn hàng của tôi đang ở đâu\nTheo dõi đơn hàng của tôi\nĐơn hàng của tôi đã gửi chưa",
+        "summary": "{count, plural, other {Sẽ thêm # cách diễn đạt mới}}",
+        "duplicates": "{count, plural, other {Đã bỏ qua # dòng trùng}}",
+        "tooLong": "{count, plural, other {# dòng}} dài hơn {max} ký tự và đã bị bỏ qua.",
+        "overflow": "{count, plural, other {# dòng}} vượt quá giới hạn cách diễn đạt và đã bị bỏ qua.",
+        "more": "và {count} mục nữa",
+        "add": "Thêm {count, plural, other {# cách diễn đạt}}"
+      },
+      "state": {
+        "ready": "Hoạt động",
+        "pending": "Đang lập chỉ mục",
+        "pendingHint": "Đã lưu. Sẽ bắt đầu khớp sau vài giây.",
+        "failed": "Thất bại",
+        "failedHint": "Hãy sửa và lưu cách diễn đạt để thử lại.",
+        "noReason": "Không có lý do được cung cấp"
+      },
+      "confirm": {
+        "title": "Xóa cách diễn đạt này?",
+        "body": "“{text}” sẽ không còn dẫn tới FAQ này.",
+        "remove": "Xóa"
+      },
+      "errors": {
+        "duplicate": "FAQ này đã có cách diễn đạt đó.",
+        "tooLong": "Một cách diễn đạt tối đa {max} ký tự.",
+        "aiKeys": "Thiết lập khóa AI của bạn"
+      }
+    },
+    "tryIt": {
+      "title": "Dùng thử",
+      "hint": "Gõ một tin nhắn của khách hàng để xem điều gì sẽ xảy ra. Sẽ không có gì được gửi đi.",
+      "label": "Tin nhắn của khách hàng",
+      "placeholder": "Đơn hàng của tôi đang ở đâu?",
+      "run": "Thử"
+    },
+    "decision": {
+      "verdict": {
+        "answer": {
+          "title": "Sẽ trả lời",
+          "body": "Một FAQ đã khớp đủ tốt. Khách hàng nhận được câu trả lời của nó (hoặc luồng của nó bắt đầu)."
+        },
+        "below": {
+          "title": "Dưới ngưỡng",
+          "body": "FAQ gần nhất không đạt đủ điểm nên sẽ không gửi gì. Hãy thêm cách diễn đạt này vào một FAQ, hoặc giảm độ nhạy."
+        },
+        "ambiguous": {
+          "title": "Mơ hồ",
+          "body": "Hai FAQ có điểm gần như nhau nên bot sẽ không đoán. Hãy làm các FAQ khác biệt hơn, hoặc giảm mức chênh lệch tối thiểu."
+        },
+        "noFaqs": {
+          "title": "Không có FAQ để khớp",
+          "body": "Chưa có FAQ nào đang bật với cách diễn đạt đang hoạt động."
+        },
+        "providerError": {
+          "title": "Lỗi nhà cung cấp",
+          "body": "Không kết nối được nhà cung cấp AI nên chỉ có thể khớp theo chính tả."
+        },
+        "notSent": {
+          "title": "Khớp nhưng không gửi",
+          "body": "Một FAQ đã khớp nhưng câu trả lời không được gửi, ví dụ vì trả lời FAQ đang tắt."
+        }
+      },
+      "tier": {
+        "exact": {
+          "name": "Khớp chính xác",
+          "body": "Tin nhắn giống một cách diễn đạt đã lưu, không phân biệt hoa thường và khoảng trắng."
+        },
+        "semantic": {
+          "name": "Khớp theo ý nghĩa",
+          "body": "Tin nhắn được so sánh theo ý nghĩa với mọi cách diễn đạt đang hoạt động, nên từ ngữ khác nhau vẫn có thể khớp."
+        },
+        "trigram": {
+          "name": "Dự phòng theo chính tả",
+          "body": "Không thể so sánh theo ý nghĩa, nên tin nhắn được so sánh từng chữ cái. Cách này bắt được lỗi gõ nhưng không bắt được từ đồng nghĩa."
+        }
+      },
+      "scoreLabel": "Điểm {score}%, mức cần đạt là {threshold}%",
+      "score": "Điểm",
+      "threshold": "Cần",
+      "margin": "Chênh lệch với hạng hai",
+      "marginValue": "{margin} điểm (cần {needed})",
+      "note": "Ghi chú",
+      "model": "Mô hình",
+      "noModel": "không dùng",
+      "latency": "Thời gian",
+      "ms": "{ms} ms",
+      "winner": {
+        "title": "Những gì khách hàng sẽ nhận được",
+        "unavailable": "Không tải được FAQ này.",
+        "flow": "Bắt đầu luồng {name}",
+        "flowMissing": "Bắt đầu một luồng không còn tồn tại"
+      },
+      "candidates": {
+        "title": "Kết quả khớp hàng đầu",
+        "matchedOn": "Khớp với",
+        "best": "Tốt nhất",
+        "paused": "Tạm dừng",
+        "scoreLabel": "Điểm {score}%",
+        "addVariation": "Thêm cụm từ này làm cách diễn đạt cho {question}",
+        "added": "Đã thêm",
+        "addedToast": "Đã thêm làm cách diễn đạt của {question}.",
+        "alreadyThere": "Cách diễn đạt đó đã có.",
+        "open": "Mở FAQ"
+      }
+    },
+    "playground": {
+      "title": "Bot của tôi sẽ trả lời câu này thế nào?",
+      "subtitle": "Chạy một tin nhắn của khách hàng qua cùng cơ chế khớp mà bot đang dùng. Sẽ không gửi gì và không tính vào thống kê.",
+      "label": "Tin nhắn của khách hàng",
+      "placeholder": "Đơn hàng của tôi đang ở đâu?",
+      "run": "Chạy",
+      "hint": "Chỉ các FAQ đã lưu mới được khớp. Các FAQ đang bật có cách diễn đạt hoạt động sẽ tham gia.",
+      "empty": "Gõ một tin nhắn ở trên rồi chạy để xem kết quả.",
+      "history": {
+        "title": "Phiên này",
+        "empty": "10 lần thử gần nhất của bạn sẽ hiện ở đây."
+      }
+    },
+    "unanswered": {
+      "title": "Tin nhắn chưa trả lời",
+      "subtitle": "Các tin nhắn của khách hàng mà không FAQ nào trả lời. Hãy dạy bot từ những tin nhắn này.",
+      "search": "Tìm tin nhắn chưa trả lời",
+      "searchPlaceholder": "Tìm tin nhắn",
+      "listLabel": "Tin nhắn chưa trả lời",
+      "emptyTitle": "Không có gì đang chờ",
+      "emptyBody": "Mọi tin nhắn của khách hàng đều đã được trả lời hoặc xử lý. Tin nhắn chưa trả lời mới sẽ hiện ở đây.",
+      "noMatch": "Không có tin nhắn nào khớp với tìm kiếm của bạn",
+      "notKept": "Không lưu nội dung tin nhắn (đã tắt ghi nhật ký truy vấn)",
+      "closest": "FAQ gần nhất:",
+      "allCandidates": "Xem tất cả {count} ứng viên",
+      "addToFaq": "Thêm vào FAQ",
+      "createFaq": "Tạo FAQ từ tin nhắn này",
+      "dismiss": "Bỏ qua",
+      "dismissed": "Đã bỏ qua tin nhắn.",
+      "learned": "Đã thêm vào “{question}”. Từ giờ tin nhắn này sẽ được trả lời.",
+      "pickTitle": "Thêm tin nhắn này vào FAQ nào?",
+      "loadMore": "Tải thêm",
+      "loadingMore": "Đang tải"
+    },
+    "picker": {
+      "close": "Đóng",
+      "search": "Tìm FAQ",
+      "searchPlaceholder": "Tìm FAQ",
+      "loading": "Đang tải FAQ",
+      "none": "Không tìm thấy FAQ.",
+      "paused": "Tạm dừng",
+      "more": "Tải thêm"
+    },
+    "log": {
+      "title": "Nhật ký khớp",
+      "hint": "Mọi tin nhắn của khách hàng mà FAQ đã xem xét, và lý do trả lời hoặc không trả lời.",
+      "viewLabel": "Hiện",
+      "view": {
+        "all": "Tất cả",
+        "answered": "Đã trả lời",
+        "unanswered": "Chưa trả lời",
+        "errors": "Lỗi"
+      },
+      "search": "Tìm trong nhật ký",
+      "searchPlaceholder": "Tìm tin nhắn",
+      "empty": "Chưa có tin nhắn nào.",
+      "col": {
+        "time": "Khi nào",
+        "message": "Tin nhắn",
+        "outcome": "Kết quả",
+        "faq": "FAQ",
+        "score": "Điểm"
+      },
+      "notKept": "Không lưu ({length} ký tự)",
+      "testRun": "(thử)",
+      "expand": "Hiện chi tiết",
+      "collapse": "Ẩn chi tiết",
+      "noCandidates": "Không có ứng viên nào được xem xét.",
+      "matchedOn": "khớp với",
+      "detail": {
+        "tier": "Cấp độ",
+        "model": "Mô hình",
+        "latency": "Thời gian",
+        "ms": "{ms} ms"
+      },
+      "loadMore": "Tải thêm",
+      "loadingMore": "Đang tải",
+      "why": {
+        "answered": "Đã trả lời bằng “{faq}” với điểm {score}%.",
+        "flowStarted": "Đã bắt đầu luồng của “{faq}” với điểm {score}%.",
+        "belowThreshold": "Kết quả khớp tốt nhất đạt {score}%, thấp hơn mức {threshold}%, nên không gửi gì.",
+        "belowThresholdNoBar": "Kết quả khớp tốt nhất đạt {score}%, chưa đủ, nên không gửi gì.",
+        "lowMargin": "Hai FAQ quá sát nhau ({score}% và {second}%), nên bot không đoán.",
+        "noFaqs": "Không có FAQ nào đang bật với cách diễn đạt hoạt động để khớp.",
+        "providerError": "Nhà cung cấp AI bị lỗi, nên bot chỉ có thể khớp theo chính tả.",
+        "notSent": "Một FAQ đã khớp nhưng câu trả lời không được gửi.",
+        "tier": "Được quyết định ở cấp {tier}.",
+        "error": "Lỗi: {error}"
+      }
+    },
+    "insights": {
+      "title": "Thống kê FAQ",
+      "subtitle": "Các FAQ của bạn trả lời tin nhắn thực tế của khách hàng tốt đến đâu, và cần cải thiện ở đâu.",
+      "range": {
+        "label": "Giai đoạn",
+        "days": "{days} ngày"
+      },
+      "empty": {
+        "title": "Chưa có tin nhắn",
+        "body": "Khi khách hàng nhắn tin và trả lời FAQ được bật, bạn sẽ thấy bot trả lời thường xuyên đến mức nào, FAQ nào hiệu quả và còn thiếu gì."
+      },
+      "kpi": {
+        "label": "Số liệu chính",
+        "messages": "Tin nhắn đã kiểm tra",
+        "answerRate": "Tỷ lệ trả lời",
+        "avgScore": "Điểm trung bình {score}%",
+        "flows": "Luồng đã bắt đầu",
+        "unanswered": "Chưa trả lời",
+        "toReview": "{count} cần xem lại",
+        "errors": "Lỗi nhà cung cấp"
+      },
+      "daily": {
+        "title": "Tin nhắn mỗi ngày",
+        "hint": "{days} ngày qua, đã trả lời và chưa trả lời"
+      },
+      "hist": {
+        "title": "Điểm của các tin nhắn",
+        "hint": "Mỗi cột là một khoảng điểm. Đường nét đứt là độ nhạy hiện tại của bạn.",
+        "advice": "Hãy tăng ngưỡng nếu có câu trả lời sai lọt qua, giảm nếu quá nhiều tin nhắn không được trả lời.",
+        "tune": "Đổi độ nhạy"
+      },
+      "top": {
+        "title": "FAQ hàng đầu",
+        "none": "Chưa có FAQ nào trả lời.",
+        "hits": "{count, plural, other {# câu trả lời}}"
+      },
+      "never": {
+        "title": "Chưa từng khớp",
+        "body": "Các FAQ không ai kích hoạt trong {days} ngày qua. Hãy kiểm tra cách diễn đạt của chúng, hoặc xóa đi.",
+        "link": "Xem lại FAQ"
+      },
+      "chart": {
+        "answered": "Đã trả lời",
+        "unanswered": "Chưa trả lời",
+        "showTable": "Xem dạng bảng",
+        "showChart": "Xem dạng biểu đồ",
+        "day": "Ngày",
+        "dailyTitle": "Tin nhắn mỗi ngày",
+        "dailyLabel": "Biểu đồ cột số tin nhắn đã trả lời và chưa trả lời mỗi ngày. Dùng dạng bảng để xem số liệu.",
+        "dayTooltip": "{day}: {answered} đã trả lời, {unanswered} chưa trả lời",
+        "histogramTitle": "Phân bố điểm",
+        "histogramLabel": "Biểu đồ phân bố điểm khớp, chia theo đã trả lời và chưa trả lời. Dùng dạng bảng để xem số liệu.",
+        "scoreRange": "Điểm",
+        "bucketTooltip": "{from}-{to}%: {answered} đã trả lời, {unanswered} chưa trả lời",
+        "thresholdMarker": "Ngưỡng {value}%"
+      }
+    },
+    "settings": {
+      "title": "Cài đặt FAQ",
+      "subtitle": "Bật trả lời FAQ và điều chỉnh mức độ khớp của tin nhắn.",
+      "unsaved": "Thay đổi chưa lưu",
+      "discard": "Bỏ qua",
+      "save": "Lưu cài đặt",
+      "saved": "Đã lưu cài đặt.",
+      "readOnly": "Bạn có thể xem các cài đặt này. Thay đổi cần quyền faq.settings.manage, thường thuộc về quản trị viên workspace.",
+      "engineOff": "Nền tảng đang tắt trả lời FAQ. Những gì bạn đặt ở đây sẽ có hiệu lực khi được bật lại.",
+      "conflict": "Có người khác đã lưu các cài đặt này. Hãy tải lại để xem phiên bản của họ, rồi thực hiện lại thay đổi của bạn.",
+      "reload": "Tải lại cài đặt",
+      "modelChanged": {
+        "title": "Xem lại độ nhạy của bạn",
+        "body": "Nền tảng đã đổi mô hình AI sau khi bạn điều chỉnh ngưỡng này. Điểm số đã thay đổi, nên hãy xem lại độ nhạy. Lưu nghĩa là xác nhận."
+      },
+      "enable": {
+        "title": "Trả lời FAQ",
+        "label": "Trả lời khách hàng bằng FAQ",
+        "on": "Bật",
+        "off": "Tắt",
+        "onBody": "Khi khách hàng nhắn tin, bot so sánh tin nhắn với các FAQ của bạn và trả lời bằng câu trả lời tốt nhất, hoặc bắt đầu luồng của nó. Luồng hoặc từ khóa kích hoạt đã xử lý tin nhắn sẽ được ưu tiên.",
+        "offBody": "Khách hàng không nhận được câu trả lời FAQ. Bạn vẫn có thể viết và thử FAQ."
+      },
+      "sens": {
+        "title": "Độ nhạy",
+        "hint": "Tin nhắn cần khớp đến mức nào. Điểm số thuộc về mô hình {model}.",
+        "label": "Trả lời khi mức khớp ít nhất là",
+        "presets": "Mức độ nhạy có sẵn",
+        "preset": {
+          "strict": "Nghiêm ngặt",
+          "balanced": "Cân bằng",
+          "forgiving": "Linh hoạt"
+        },
+        "looser": "Trả lời nhiều hơn",
+        "stricter": "Trả lời ít hơn",
+        "recommendedMark": "khuyến nghị {value}%",
+        "explain": "Ở mức {value}%, tin nhắn chỉ được trả lời khi kết quả khớp tốt nhất đạt {value}% trở lên. Cao hơn nghĩa là ít câu trả lời hơn nhưng an toàn hơn; thấp hơn nghĩa là nhiều câu trả lời hơn và khả năng sai cao hơn.",
+        "useRecommended": "Dùng giá trị khuyến nghị ({value}%)",
+        "modelScale": "Điểm số chỉ so sánh được trong cùng một mô hình. Nếu nền tảng đổi mô hình ({model}), hãy xem lại con số này."
+      },
+      "margin": {
+        "title": "Chống nhập nhằng",
+        "hint": "Ngăn bot đoán giữa hai FAQ có điểm gần như nhau.",
+        "label": "Mức chênh tối thiểu so với hạng hai",
+        "off": "Tắt",
+        "explain": "Khi FAQ tốt nhất hơn hạng hai ít hơn mức này, bot sẽ im lặng và ghi tin nhắn là chưa trả lời. Hãy để tắt nếu các FAQ của bạn ít trùng nhau."
+      },
+      "log": {
+        "title": "Tin nhắn khách hàng trong nhật ký",
+        "label": "Giữ tin nhắn khách hàng trong nhật ký khớp",
+        "onBody": "Nội dung mỗi tin nhắn được giữ 90 ngày để bạn biết vì sao tin nhắn được hoặc không được trả lời và rút kinh nghiệm. Sau đó nội dung sẽ bị xóa.",
+        "offBody": "Chỉ giữ điểm số và kết quả, không bao giờ giữ nội dung. Bạn vẫn xem được bot trả lời thường xuyên đến đâu, nhưng không thể học từ các tin nhắn chưa trả lời."
+      },
+      "facts": {
+        "title": "Mô hình và giới hạn",
+        "model": "Mô hình embedding",
+        "faqs": "FAQ",
+        "variations": "Cách diễn đạt đang dùng",
+        "perFaq": "Số cách diễn đạt tối đa mỗi FAQ",
+        "of": "{used} / {max}"
+      },
+      "how": {
+        "title": "Cách khớp hoạt động",
+        "exact": "Chính xác: tin nhắn giống một cách diễn đạt đã lưu, không phân biệt hoa thường và khoảng trắng.",
+        "semantic": "Ý nghĩa: tin nhắn được so sánh theo ý nghĩa với mọi cách diễn đạt đang hoạt động, nên từ ngữ khác nhau vẫn có thể khớp.",
+        "trigram": "Dự phòng theo chính tả: nếu nhà cung cấp AI không khả dụng, các chữ cái sẽ được so sánh, chỉ bắt được lỗi gõ.",
+        "threshold": "Điểm tốt nhất được so với độ nhạy. Cao hơn thì FAQ trả lời; thấp hơn thì tin nhắn được liệt kê trong mục Chưa trả lời."
+      },
+      "who": "Thay đổi các cài đặt này cần quyền faq.settings.manage.",
+      "leave": {
+        "title": "Rời đi mà không lưu?",
+        "body": "Các thay đổi với cài đặt này chưa được lưu.",
+        "leave": "Rời đi",
+        "stay": "Ở lại"
+      }
+    }
+  }
+}

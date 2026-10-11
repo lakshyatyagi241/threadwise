@@ -1,0 +1,626 @@
+{
+  "faq": {
+    "nav": {
+      "faq": "FAQ",
+      "label": "FAQ 分组",
+      "tab": {
+        "faqs": "FAQ",
+        "test": "测试",
+        "unanswered": "未回答",
+        "insights": "数据洞察",
+        "settings": "设置"
+      },
+      "unansweredCount": "{count, plural, other {# 条未回答的消息}}"
+    },
+    "common": {
+      "dismiss": "忽略",
+      "retry": "重试",
+      "requestId": "请求 {id}",
+      "noAccessTitle": "你无权访问此页面",
+      "noAccess": "请让工作区管理员为你的角色授予权限 {permission}。"
+    },
+    "errors": {
+      "network": "无法连接服务器。请检查网络后重试。",
+      "forbidden": "你的角色无权执行此操作。",
+      "notFound": "此 FAQ 或消息已不存在，可能已被删除。",
+      "conflict": "你编辑期间，其他人修改了此内容。",
+      "duplicateQuestion": "已有另一个 FAQ 使用了这个问题。",
+      "duplicateVariation": "此 FAQ 已包含这种问法。",
+      "limitReached": "你的工作区已达到 FAQ 数量上限。请删除不用的 FAQ 或问法，或联系平台管理员提高上限。",
+      "flowNotFound": "所选流程在此工作区中已不存在，请选择其他流程。",
+      "embeddingUnavailable": "AI 服务商不可用。请为工作区添加 OpenRouter 密钥，或联系平台管理员启用共享密钥，然后重试。",
+      "engineDisabled": "平台目前已关闭全局 FAQ 自动回答。",
+      "modelNotAllowed": "平台使用的嵌入模型不在允许范围内。请联系平台管理员。",
+      "validation": "部分字段需要修改。",
+      "rateLimited": "请求过于频繁。请稍候再试。",
+      "unexpected": "出了点问题。请重试；如果问题持续出现，请把请求 ID 发给支持团队。"
+    },
+    "banner": {
+      "enabledToast": "FAQ 自动回答已开启。",
+      "engineOff": "平台已关闭 FAQ 自动回答。在重新开启之前，客户收不到 FAQ 回答。",
+      "modelChanged": "你调整此阈值后，平台更换了 AI 模型。得分已发生变化，请重新检查灵敏度。",
+      "reviewSensitivity": "检查灵敏度",
+      "offTitle": "面向客户的 FAQ 自动回答已关闭",
+      "offBody": "你可以编写和测试 FAQ，但开启之前客户不会收到回答。",
+      "offNoRight": "请让拥有 faq.settings.manage 权限的人（通常是工作区管理员）开启。",
+      "enable": "开启 FAQ 自动回答"
+    },
+    "list": {
+      "title": "FAQ",
+      "subtitle": "客户常问的问题，以及机器人的回答。客户不必使用完全相同的措辞。",
+      "add": "添加 FAQ",
+      "stats": {
+        "label": "FAQ 统计",
+        "total": "FAQ",
+        "active": "启用中",
+        "paused": "已暂停",
+        "variations": "问法",
+        "pending": "索引中",
+        "pendingHint": "数秒内生效",
+        "failed": "索引失败",
+        "failedHint": "需要处理"
+      },
+      "failedBanner": "{count, plural, other {# 条问法}}索引失败，暂时无法匹配客户消息。",
+      "showFailed": "查看有失败项的 FAQ",
+      "search": "搜索 FAQ",
+      "searchPlaceholder": "搜索问题和问法",
+      "filter": {
+        "status": "状态",
+        "anyStatus": "任意状态",
+        "category": "分类",
+        "anyCategory": "任意分类",
+        "indexing": "索引",
+        "anyIndexing": "全部",
+        "pending": "仍在索引",
+        "failed": "失败"
+      },
+      "status": {
+        "active": "启用中",
+        "paused": "已暂停"
+      },
+      "clearFilters": "清除筛选",
+      "bulk": {
+        "label": "批量操作",
+        "selected": "{count, plural, other {已选择 # 个 FAQ}}",
+        "pause": "暂停",
+        "activate": "启用",
+        "delete": "删除",
+        "clear": "取消选择",
+        "done": {
+          "pause": "{count, plural, other {已暂停 # 个 FAQ}}。",
+          "activate": "{count, plural, other {已启用 # 个 FAQ}}。",
+          "delete": "{count, plural, other {已删除 # 个 FAQ}}。"
+        }
+      },
+      "paused": "FAQ 已暂停。",
+      "activated": "FAQ 已启用。",
+      "deleted": "FAQ 已删除。",
+      "empty": {
+        "title": "教机器人回答常见问题",
+        "body": "写下一个问题和它的答案即可。机器人会匹配客户用自己的话写的内容，并回复答案或启动流程。",
+        "how": "再添加几种相同问题的不同问法，并在客户看到之前先测试一下。",
+        "cta": "添加第一个 FAQ",
+        "noRight": "请让工作区管理员授予你添加 FAQ 的权限。"
+      },
+      "noMatch": {
+        "title": "没有符合筛选条件的 FAQ",
+        "body": "换个搜索词，或清除筛选。"
+      },
+      "selectAll": "选择本页所有 FAQ",
+      "selectRow": "选择 {question}",
+      "col": {
+        "question": "问题",
+        "answer": "答案",
+        "indexing": "生效的问法",
+        "answered": "已回答（90 天）",
+        "status": "状态",
+        "actions": "操作"
+      },
+      "variationCount": "{count, plural, other {# 条问法}}",
+      "flowMissing": "流程丢失",
+      "neverAnswered": "暂无",
+      "toggleLabel": "启用中：{question}",
+      "edit": "编辑 {question}",
+      "editShort": "编辑",
+      "delete": "删除 {question}",
+      "deleteShort": "删除",
+      "loadMore": "加载更多",
+      "loadingMore": "加载中",
+      "confirm": {
+        "bulkTitle": "删除 {count, plural, other {# 个 FAQ}}？",
+        "bulkBody": "{count, plural, other {这些 FAQ 及其问法}}将被永久删除，无法恢复。",
+        "rowTitle": "删除此 FAQ？",
+        "rowBody": "“{question}”及其所有问法将被永久删除，无法恢复。",
+        "delete": "删除",
+        "cancel": "取消"
+      },
+      "indexing": {
+        "summary": "{ready} 条生效，{pending} 条索引中，{failed} 条失败",
+        "ready": "{count} 条生效",
+        "pending": "{count} 条索引中",
+        "failed": "{count} 条失败"
+      }
+    },
+    "editor": {
+      "back": "返回 FAQ 列表",
+      "backToList": "返回 FAQ 列表",
+      "newTitle": "新建 FAQ",
+      "newSubtitle": "写下问题和答案，再添加客户可能的其他问法。",
+      "editTitle": "编辑 FAQ",
+      "unsaved": "有未保存的更改",
+      "cancel": "取消",
+      "create": "创建 FAQ",
+      "save": "保存更改",
+      "delete": "删除",
+      "created": "FAQ 已创建。",
+      "saved": "FAQ 已保存。",
+      "deleted": "FAQ 已删除。",
+      "readOnly": "你可以查看此 FAQ，但你的角色无权修改。",
+      "faqLimit": "你的工作区已达到 {max} 个 FAQ 的上限。请先删除一个再添加。",
+      "prefilled": "问题内容来自一条未回答的客户消息。保存此 FAQ 后，该消息也会标记为已处理。",
+      "tryItSaveFirst": "请先保存 FAQ，然后即可试试客户消息如何匹配它。",
+      "conflict": {
+        "title": "其他人修改了此 FAQ",
+        "body": "你的修改仍保留在这里。你可以保留修改并在最新版本之上再次保存，或放弃修改并加载最新版本。",
+        "keep": "保留我的修改",
+        "reload": "加载最新版本",
+        "kept": "已更新到最新版本。你的修改已保留，保存后生效。"
+      },
+      "question": {
+        "title": "问题",
+        "hint": "按你的写法填写问题，它同时也算作第一条问法。",
+        "label": "问题",
+        "count": "{count} / {max}"
+      },
+      "category": {
+        "label": "分类",
+        "hint": "可选，便于筛选。"
+      },
+      "status": {
+        "label": "状态",
+        "hint": "已暂停的 FAQ 不会回答。",
+        "active": "启用中",
+        "paused": "已暂停"
+      },
+      "answer": {
+        "title": "答案",
+        "hint": "此 FAQ 匹配成功时，客户收到的内容。",
+        "text": "文字回答",
+        "flow": "启动流程",
+        "textLabel": "回答内容",
+        "count": "{count} / {max} 个字符",
+        "preview": "在 WhatsApp 中的效果",
+        "previewEmpty": "你的回答会显示在这里",
+        "flowLabel": "要启动的流程",
+        "noFlow": "未选择流程"
+      },
+      "advanced": {
+        "title": "高级：仅针对此 FAQ 的灵敏度",
+        "body": "默认情况下，所有 FAQ 都使用工作区灵敏度。如果此 FAQ 太容易匹配，请调高；如果太难匹配，请调低。",
+        "custom": "为此 FAQ 使用自定义灵敏度",
+        "sliderLabel": "匹配分数不低于",
+        "workspace": "工作区灵敏度为 {value}%。",
+        "following": "沿用工作区灵敏度（{value}%）。"
+      },
+      "problem": {
+        "question": {
+          "required": "请填写客户会问的问题。",
+          "tooLong": "问题最多 {max} 个字符。",
+          "invalid": "此问题无效。"
+        },
+        "answerText": {
+          "required": "请填写客户应收到的回答。",
+          "tooLong": "回答最多 {max} 个字符。",
+          "invalid": "此回答无效。"
+        },
+        "flowId": {
+          "required": "请选择要启动的流程。",
+          "tooLong": "请选择要启动的流程。",
+          "invalid": "请选择要启动的流程。"
+        },
+        "category": {
+          "required": "请填写分类或留空。",
+          "tooLong": "分类最多 {max} 个字符。",
+          "invalid": "此分类无效。"
+        },
+        "thresholdOverride": {
+          "required": "请选择 5% 到 99% 之间的值。",
+          "tooLong": "请选择 5% 到 99% 之间的值。",
+          "invalid": "请选择 5% 到 99% 之间的值。"
+        }
+      },
+      "deleteConfirm": {
+        "title": "删除此 FAQ？",
+        "body": "此 FAQ 及其所有问法将被永久删除，无法恢复。",
+        "confirm": "删除"
+      },
+      "leave": {
+        "title": "不保存就离开？",
+        "body": "你对此 FAQ 的更改尚未保存。",
+        "leave": "离开",
+        "stay": "继续编辑"
+      }
+    },
+    "flowPicker": {
+      "noAccess": "你需要查看流程的权限（flb.flows.read）才能在此选择流程。",
+      "missing": "此 FAQ 启动的流程已不存在。请选择其他流程，否则此 FAQ 无法回答。",
+      "selected": "已选择",
+      "search": "搜索流程",
+      "searchPlaceholder": "按名称搜索流程",
+      "retry": "重试",
+      "loading": "正在加载流程",
+      "noMatch": "没有该名称的流程。",
+      "none": "你还没有流程。请先在“流程”中创建一个。",
+      "listLabel": "流程",
+      "state": {
+        "live": "已发布",
+        "off": "未启用",
+        "draft": "草稿"
+      },
+      "note": "流程从其触发器开始运行。只有已发布且已启用的流程才能运行。"
+    },
+    "variations": {
+      "title": "问法变体",
+      "hint": "客户可能的其他问法，每条都按语义匹配。",
+      "counterLabel": "已使用 {count} / {max} 条问法",
+      "listLabel": "问法",
+      "questionEmpty": "你的问题会显示在这里",
+      "source": {
+        "question": "问题",
+        "manual": "手写",
+        "ai": "AI",
+        "learned": "已学习",
+        "import": "已导入"
+      },
+      "none": "还没有额外的问法。可以添加几条，或让 AI 给出建议。",
+      "edit": "编辑 {text}",
+      "remove": "移除 {text}",
+      "editLabel": "编辑问法",
+      "save": "保存",
+      "cancel": "取消",
+      "addLabel": "新问法",
+      "addPlaceholder": "同一问题的另一种问法",
+      "add": "添加",
+      "pasteMany": "批量粘贴",
+      "full": "此 FAQ 已达到 {max} 条问法的上限。",
+      "failedNotice": "{count, plural, other {# 条问法}}索引失败。请编辑并保存该问法以重试。",
+      "suggest": "用 AI 建议",
+      "suggestSaveFirst": "请先保存 FAQ，然后 AI 才能给出问法建议。",
+      "suggesting": "正在向 AI 获取建议",
+      "suggestionsReady": "{count, plural, other {已生成 # 条建议}}",
+      "suggestionsTitle": "建议的问法",
+      "suggestionsHint": "添加之前不会保存任何内容。请取消勾选不需要的。",
+      "suggestionsNone": "AI 没有新的问法可建议。",
+      "addSelected": "添加所选（{count}）",
+      "discard": "放弃",
+      "bulk": {
+        "label": "每行一条问法",
+        "placeholder": "我的包裹在哪里\n查询我的订单\n我的订单发货了吗",
+        "summary": "{count, plural, other {将添加 # 条新问法}}",
+        "duplicates": "{count, plural, other {已排除 # 条重复项}}",
+        "tooLong": "{count, plural, other {# 行}}超过 {max} 个字符，已排除。",
+        "overflow": "{count, plural, other {# 行}}超出问法数量上限，已排除。",
+        "more": "另有 {count} 条",
+        "add": "添加 {count, plural, other {# 条问法}}"
+      },
+      "state": {
+        "ready": "生效中",
+        "pending": "索引中",
+        "pendingHint": "已保存，几秒后开始匹配。",
+        "failed": "失败",
+        "failedHint": "请编辑并保存该问法以重试。",
+        "noReason": "未给出原因"
+      },
+      "confirm": {
+        "title": "移除此问法？",
+        "body": "“{text}”将不再触发此 FAQ。",
+        "remove": "移除"
+      },
+      "errors": {
+        "duplicate": "此 FAQ 已有该问法。",
+        "tooLong": "问法最多 {max} 个字符。",
+        "aiKeys": "设置 AI 密钥"
+      }
+    },
+    "tryIt": {
+      "title": "试一试",
+      "hint": "输入一条客户消息，看看会发生什么。不会发送任何内容。",
+      "label": "客户消息",
+      "placeholder": "我的包裹在哪里？",
+      "run": "试一试"
+    },
+    "decision": {
+      "verdict": {
+        "answer": {
+          "title": "会回答",
+          "body": "有 FAQ 足够匹配。客户会收到它的回答（或启动它的流程）。"
+        },
+        "below": {
+          "title": "低于阈值",
+          "body": "最接近的 FAQ 得分不够高，因此不会发送任何内容。可以把这条问法加入某个 FAQ，或调低灵敏度。"
+        },
+        "ambiguous": {
+          "title": "有歧义",
+          "body": "两个 FAQ 得分几乎相同，机器人不会随便猜。请让 FAQ 之间区别更明显，或调低最小差距。"
+        },
+        "noFaqs": {
+          "title": "没有可匹配的 FAQ",
+          "body": "还没有带有生效问法的启用 FAQ。"
+        },
+        "providerError": {
+          "title": "服务商错误",
+          "body": "无法连接 AI 服务商，只能进行拼写匹配。"
+        },
+        "notSent": {
+          "title": "已匹配，未发送",
+          "body": "有 FAQ 匹配成功，但未发送回答，例如因为 FAQ 自动回答已关闭。"
+        }
+      },
+      "tier": {
+        "exact": {
+          "name": "完全匹配",
+          "body": "消息与已保存的问法相同（不区分大小写和空格）。"
+        },
+        "semantic": {
+          "name": "语义匹配",
+          "body": "消息已按语义与所有生效的问法比较，因此措辞不同也能匹配。"
+        },
+        "trigram": {
+          "name": "拼写回退",
+          "body": "无法按语义比较，因此逐字母比较了消息。这能识别错别字，但识别不了同义词。"
+        }
+      },
+      "scoreLabel": "得分 {score}%，需达到 {threshold}%",
+      "score": "得分",
+      "threshold": "需要",
+      "margin": "领先第二名",
+      "marginValue": "{margin} 分（需要 {needed}）",
+      "note": "备注",
+      "model": "模型",
+      "noModel": "未使用",
+      "latency": "耗时",
+      "ms": "{ms} 毫秒",
+      "winner": {
+        "title": "客户会收到的内容",
+        "unavailable": "无法加载此 FAQ。",
+        "flow": "启动流程 {name}",
+        "flowMissing": "启动的流程已不存在"
+      },
+      "candidates": {
+        "title": "最佳匹配",
+        "matchedOn": "匹配依据",
+        "best": "最佳",
+        "paused": "已暂停",
+        "scoreLabel": "得分 {score}%",
+        "addVariation": "将此短语作为变体添加到 {question}",
+        "added": "已添加",
+        "addedToast": "已添加为 {question} 的问法。",
+        "alreadyThere": "该问法已存在。",
+        "open": "打开 FAQ"
+      }
+    },
+    "playground": {
+      "title": "我的机器人会怎么回答？",
+      "subtitle": "让一条客户消息走一遍机器人实际使用的匹配流程。不会发送任何内容，也不会计入数据洞察。",
+      "label": "客户消息",
+      "placeholder": "我的包裹在哪里？",
+      "run": "运行",
+      "hint": "只会匹配已保存的 FAQ，参与匹配的是带有生效问法的启用 FAQ。",
+      "empty": "在上方输入消息并运行，即可查看判定结果。",
+      "history": {
+        "title": "本次会话",
+        "empty": "这里会显示你最近 10 次测试。"
+      }
+    },
+    "unanswered": {
+      "title": "未回答的消息",
+      "subtitle": "没有任何 FAQ 回答的客户消息。可以据此训练机器人。",
+      "search": "搜索未回答的消息",
+      "searchPlaceholder": "搜索消息",
+      "listLabel": "未回答的消息",
+      "emptyTitle": "暂无待处理",
+      "emptyBody": "所有客户消息都已回答或处理。新的未回答消息会显示在这里。",
+      "noMatch": "没有符合搜索的消息",
+      "notKept": "未保留消息文本（已关闭查询日志）",
+      "closest": "最接近的 FAQ：",
+      "allCandidates": "查看全部 {count} 个候选",
+      "addToFaq": "添加到 FAQ",
+      "createFaq": "据此创建 FAQ",
+      "dismiss": "忽略",
+      "dismissed": "消息已忽略。",
+      "learned": "已添加到“{question}”，今后将自动回答。",
+      "pickTitle": "将这条消息添加到哪个 FAQ？",
+      "loadMore": "加载更多",
+      "loadingMore": "加载中"
+    },
+    "picker": {
+      "close": "关闭",
+      "search": "搜索 FAQ",
+      "searchPlaceholder": "搜索 FAQ",
+      "loading": "正在加载 FAQ",
+      "none": "未找到 FAQ。",
+      "paused": "已暂停",
+      "more": "加载更多"
+    },
+    "log": {
+      "title": "匹配日志",
+      "hint": "FAQ 检查过的每条客户消息，以及回答或未回答的原因。",
+      "viewLabel": "显示",
+      "view": {
+        "all": "全部",
+        "answered": "已回答",
+        "unanswered": "未回答",
+        "errors": "错误"
+      },
+      "search": "搜索日志",
+      "searchPlaceholder": "搜索消息",
+      "empty": "这里还没有消息。",
+      "col": {
+        "time": "时间",
+        "message": "消息",
+        "outcome": "结果",
+        "faq": "FAQ",
+        "score": "得分"
+      },
+      "notKept": "未保留（{length} 个字符）",
+      "testRun": "（测试）",
+      "expand": "显示详情",
+      "collapse": "隐藏详情",
+      "noCandidates": "没有考虑任何候选项。",
+      "matchedOn": "匹配依据",
+      "detail": {
+        "tier": "层级",
+        "model": "模型",
+        "latency": "耗时",
+        "ms": "{ms} 毫秒"
+      },
+      "loadMore": "加载更多",
+      "loadingMore": "加载中",
+      "why": {
+        "answered": "以“{faq}”回答，得分 {score}%。",
+        "flowStarted": "启动了“{faq}”的流程，得分 {score}%。",
+        "belowThreshold": "最佳匹配得分 {score}%，低于 {threshold}% 的要求，因此未发送。",
+        "belowThresholdNoBar": "最佳匹配得分 {score}%，不够高，因此未发送。",
+        "lowMargin": "两个 FAQ 太接近（{score}% 和 {second}%），机器人没有贸然猜测。",
+        "noFaqs": "没有带生效问法的启用 FAQ 可供匹配。",
+        "providerError": "AI 服务商出错，机器人只能按拼写匹配。",
+        "notSent": "有 FAQ 匹配成功，但未发送回答。",
+        "tier": "由{tier}层判定。",
+        "error": "错误：{error}"
+      }
+    },
+    "insights": {
+      "title": "FAQ 数据洞察",
+      "subtitle": "你的 FAQ 回答真实客户消息的效果如何，以及哪里可以改进。",
+      "range": {
+        "label": "时间范围",
+        "days": "{days} 天"
+      },
+      "empty": {
+        "title": "还没有消息",
+        "body": "客户发来消息且 FAQ 自动回答开启后，你就能看到机器人的回答频率、哪些 FAQ 有效，以及还缺什么。"
+      },
+      "kpi": {
+        "label": "关键数据",
+        "messages": "已检查消息",
+        "answerRate": "回答率",
+        "avgScore": "平均得分 {score}%",
+        "flows": "已启动流程",
+        "unanswered": "未回答",
+        "toReview": "{count} 条待查看",
+        "errors": "服务商错误"
+      },
+      "daily": {
+        "title": "每日消息数",
+        "hint": "最近 {days} 天，已回答与未回答"
+      },
+      "hist": {
+        "title": "消息得分分布",
+        "hint": "每根柱子代表一个得分区间，虚线是当前灵敏度。",
+        "advice": "如果出现错误回答，请调高阈值；如果太多消息没得到回答，请调低。",
+        "tune": "调整灵敏度"
+      },
+      "top": {
+        "title": "热门 FAQ",
+        "none": "还没有 FAQ 回答过。",
+        "hits": "{count, plural, other {# 次回答}}"
+      },
+      "never": {
+        "title": "从未匹配",
+        "body": "最近 {days} 天无人触发的 FAQ。请检查它们的问法，或将其移除。",
+        "link": "查看 FAQ"
+      },
+      "chart": {
+        "answered": "已回答",
+        "unanswered": "未回答",
+        "showTable": "以表格显示",
+        "showChart": "以图表显示",
+        "day": "日期",
+        "dailyTitle": "每日消息数",
+        "dailyLabel": "每日已回答和未回答消息的柱状图。具体数字请查看表格视图。",
+        "dayTooltip": "{day}：已回答 {answered}，未回答 {unanswered}",
+        "histogramTitle": "得分分布",
+        "histogramLabel": "按已回答和未回答划分的匹配得分直方图。具体数字请查看表格视图。",
+        "scoreRange": "得分",
+        "bucketTooltip": "{from}-{to}%：已回答 {answered}，未回答 {unanswered}",
+        "thresholdMarker": "阈值 {value}%"
+      }
+    },
+    "settings": {
+      "title": "FAQ 设置",
+      "subtitle": "开启 FAQ 自动回答，并调整消息需要多接近才算匹配。",
+      "unsaved": "有未保存的更改",
+      "discard": "放弃",
+      "save": "保存设置",
+      "saved": "设置已保存。",
+      "readOnly": "你可以查看这些设置。修改需要 faq.settings.manage 权限，通常由工作区管理员持有。",
+      "engineOff": "平台已关闭 FAQ 自动回答。你在此做的设置会在重新开启后生效。",
+      "conflict": "其他人已保存了这些设置。请重新加载查看他们的版本，然后再修改一次。",
+      "reload": "重新加载设置",
+      "modelChanged": {
+        "title": "请检查灵敏度",
+        "body": "你调整此阈值后，平台更换了 AI 模型。得分已发生变化，请重新检查灵敏度。保存即表示确认。"
+      },
+      "enable": {
+        "title": "FAQ 自动回答",
+        "label": "用 FAQ 回答客户",
+        "on": "开",
+        "off": "关",
+        "onBody": "客户发来消息时，机器人会将消息与你的 FAQ 比较，回复最佳答案或启动其流程。如果已有流程或关键词触发器处理了该消息，则以它们为准。",
+        "offBody": "客户收不到 FAQ 回答。你仍可编写和测试 FAQ。"
+      },
+      "sens": {
+        "title": "灵敏度",
+        "hint": "消息需要多接近才算匹配。得分对应模型 {model}。",
+        "label": "匹配分数至少达到以下值时回答",
+        "presets": "灵敏度预设",
+        "preset": {
+          "strict": "严格",
+          "balanced": "均衡",
+          "forgiving": "宽松"
+        },
+        "looser": "回答更多",
+        "stricter": "回答更少",
+        "recommendedMark": "推荐 {value}%",
+        "explain": "设为 {value}% 时，只有最佳匹配得分达到 {value}% 或更高才会回答。值越高，回答越少但越稳妥；值越低，回答越多，但答错的可能性也越高。",
+        "useRecommended": "使用推荐值（{value}%）",
+        "modelScale": "得分只在同一模型内可比较。如果平台更换了模型（{model}），请重新检查这个数值。"
+      },
+      "margin": {
+        "title": "歧义保护",
+        "hint": "防止机器人在得分几乎相同的两个 FAQ 之间乱猜。",
+        "label": "领先第二名的最小差距",
+        "off": "关",
+        "explain": "当最佳 FAQ 领先第二名的幅度低于此值时，机器人会保持沉默，并把消息记为未回答。如果你的 FAQ 很少重叠，可以保持关闭。"
+      },
+      "log": {
+        "title": "日志中的客户消息",
+        "label": "在匹配日志中保留客户消息",
+        "onBody": "每条消息的文本会保留 90 天，方便你了解回答或未回答的原因并据此改进，之后会被删除。",
+        "offBody": "只保留得分和结果，不保留文本。你仍能看到机器人的回答频率，但无法从未回答的消息中学习。"
+      },
+      "facts": {
+        "title": "模型与限额",
+        "model": "嵌入模型",
+        "faqs": "FAQ",
+        "variations": "已使用的问法",
+        "perFaq": "每个 FAQ 允许的问法数",
+        "of": "{used} / {max}"
+      },
+      "how": {
+        "title": "匹配的工作原理",
+        "exact": "完全匹配：消息与已保存的问法相同（不区分大小写和空格）。",
+        "semantic": "语义匹配：消息按语义与所有生效的问法比较，因此措辞不同也能匹配。",
+        "trigram": "拼写回退：如果 AI 服务商不可用，则改为逐字母比较，只能识别错别字。",
+        "threshold": "最佳得分会与灵敏度比较。高于灵敏度时，FAQ 回答；低于时，消息会列入“未回答”。"
+      },
+      "who": "修改这些设置需要 faq.settings.manage 权限。",
+      "leave": {
+        "title": "不保存就离开？",
+        "body": "你对这些设置的更改尚未保存。",
+        "leave": "离开",
+        "stay": "留下"
+      }
+    }
+  }
+}

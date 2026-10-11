@@ -27,8 +27,10 @@ import { WADEV_ERROR_CODES } from '../whatsapp-devices-baileys/errors';
 import { AIAG_ERROR_CODES } from '../ai-agents-training/errors';
 import { EXT_ERROR_CODES } from '../chrome-extension-sheets-addon/errors';
 import { ALIB_ERROR_CODES } from '../api-library/errors';
+import { FAQ_ERROR_CODES } from '../faq-knowledge/errors';
 
 export const ERROR_CODES = {
+  ...FAQ_ERROR_CODES,
   ...ALIB_ERROR_CODES,
   ...EXT_ERROR_CODES,
   ...CPN_ERROR_CODES,

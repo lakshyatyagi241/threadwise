@@ -1,0 +1,626 @@
+{
+  "faq": {
+    "nav": {
+      "faq": "FAQs",
+      "label": "FAQ sections",
+      "tab": {
+        "faqs": "FAQs",
+        "test": "Test",
+        "unanswered": "Unanswered",
+        "insights": "Insights",
+        "settings": "Settings"
+      },
+      "unansweredCount": "{count, plural, one {# unanswered message} other {# unanswered messages}}"
+    },
+    "common": {
+      "dismiss": "Dismiss",
+      "retry": "Try again",
+      "requestId": "Request {id}",
+      "noAccessTitle": "You do not have access to this screen",
+      "noAccess": "Ask a workspace admin to give your role the permission {permission}."
+    },
+    "errors": {
+      "network": "Could not reach the server. Check your connection and try again.",
+      "forbidden": "Your role is not allowed to do this.",
+      "notFound": "This FAQ or message no longer exists. It may have been deleted.",
+      "conflict": "Someone else changed this while you were editing it.",
+      "duplicateQuestion": "Another FAQ already has this question.",
+      "duplicateVariation": "This FAQ already has this phrasing.",
+      "limitReached": "Your workspace reached its FAQ limit. Delete unused FAQs or variations, or ask your platform admin to raise it.",
+      "flowNotFound": "The chosen flow no longer exists in this workspace. Pick another one.",
+      "embeddingUnavailable": "The AI provider is not available. Add an OpenRouter key to your workspace, or ask your platform admin to enable the shared key, then try again.",
+      "engineDisabled": "FAQ answering is switched off for the whole platform right now.",
+      "modelNotAllowed": "The platform's embedding model is not allowed. Ask your platform admin.",
+      "validation": "Some fields need attention.",
+      "rateLimited": "Too many requests. Wait a moment and try again.",
+      "unexpected": "Something went wrong. Try again, and share the request id with support if it keeps happening."
+    },
+    "banner": {
+      "enabledToast": "FAQ answering is on.",
+      "engineOff": "FAQ answering has been switched off by the platform. Customers get no FAQ answers until it is switched back on.",
+      "modelChanged": "The platform changed the AI model after you tuned this threshold. Scores moved, so review your sensitivity.",
+      "reviewSensitivity": "Review sensitivity",
+      "offTitle": "FAQ answering is OFF for customers",
+      "offBody": "You can write and test FAQs, but customers do not get answers until you switch it on.",
+      "offNoRight": "Ask someone with the permission faq.settings.manage (usually a workspace admin) to switch it on.",
+      "enable": "Turn on FAQ answering"
+    },
+    "list": {
+      "title": "FAQs",
+      "subtitle": "Questions your customers ask, and what your bot answers. Customers do not have to use your exact words.",
+      "add": "Add FAQ",
+      "stats": {
+        "label": "FAQ totals",
+        "total": "FAQs",
+        "active": "Active",
+        "paused": "Paused",
+        "variations": "Phrasings",
+        "pending": "Indexing",
+        "pendingHint": "Live within seconds",
+        "failed": "Indexing failed",
+        "failedHint": "Needs attention"
+      },
+      "failedBanner": "{count, plural, one {# phrasing failed} other {# phrasings failed}} to index, so they cannot match customer messages yet.",
+      "showFailed": "Show FAQs with failures",
+      "search": "Search FAQs",
+      "searchPlaceholder": "Search questions and phrasings",
+      "filter": {
+        "status": "Status",
+        "anyStatus": "Any status",
+        "category": "Category",
+        "anyCategory": "Any category",
+        "indexing": "Indexing",
+        "anyIndexing": "Any",
+        "pending": "Still indexing",
+        "failed": "Failed"
+      },
+      "status": {
+        "active": "Active",
+        "paused": "Paused"
+      },
+      "clearFilters": "Clear filters",
+      "bulk": {
+        "label": "Bulk actions",
+        "selected": "{count, plural, one {# FAQ selected} other {# FAQs selected}}",
+        "pause": "Pause",
+        "activate": "Activate",
+        "delete": "Delete",
+        "clear": "Clear selection",
+        "done": {
+          "pause": "{count, plural, one {# FAQ paused} other {# FAQs paused}}.",
+          "activate": "{count, plural, one {# FAQ activated} other {# FAQs activated}}.",
+          "delete": "{count, plural, one {# FAQ deleted} other {# FAQs deleted}}."
+        }
+      },
+      "paused": "FAQ paused.",
+      "activated": "FAQ activated.",
+      "deleted": "FAQ deleted.",
+      "empty": {
+        "title": "Teach your bot the answers to common questions",
+        "body": "Write a question and its answer once. Your bot matches what customers write, in their own words, and replies with the answer or starts a flow.",
+        "how": "Add a few other ways to ask the same thing (phrasings) and test it before customers see it.",
+        "cta": "Add your first FAQ",
+        "noRight": "Ask a workspace admin for the permission to add FAQs."
+      },
+      "noMatch": {
+        "title": "No FAQ matches these filters",
+        "body": "Try a different search or clear the filters."
+      },
+      "selectAll": "Select all FAQs on this page",
+      "selectRow": "Select {question}",
+      "col": {
+        "question": "Question",
+        "answer": "Answer",
+        "indexing": "Live phrasings",
+        "answered": "Answered (90 days)",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "variationCount": "{count, plural, one {# phrasing} other {# phrasings}}",
+      "flowMissing": "Flow missing",
+      "neverAnswered": "Not yet",
+      "toggleLabel": "Active: {question}",
+      "edit": "Edit {question}",
+      "editShort": "Edit",
+      "delete": "Delete {question}",
+      "deleteShort": "Delete",
+      "loadMore": "Load more",
+      "loadingMore": "Loading",
+      "confirm": {
+        "bulkTitle": "Delete {count, plural, one {# FAQ} other {# FAQs}}?",
+        "bulkBody": "{count, plural, one {This FAQ and its phrasings} other {These FAQs and their phrasings}} will be deleted for good. This cannot be undone.",
+        "rowTitle": "Delete this FAQ?",
+        "rowBody": "\"{question}\" and all its phrasings will be deleted for good. This cannot be undone.",
+        "delete": "Delete",
+        "cancel": "Cancel"
+      },
+      "indexing": {
+        "summary": "{ready} live, {pending} indexing, {failed} failed",
+        "ready": "{count} live",
+        "pending": "{count} indexing",
+        "failed": "{count} failed"
+      }
+    },
+    "editor": {
+      "back": "Back to FAQs",
+      "backToList": "Back to FAQs",
+      "newTitle": "New FAQ",
+      "newSubtitle": "Write the question and its answer, then add other ways customers might ask it.",
+      "editTitle": "Edit FAQ",
+      "unsaved": "Unsaved changes",
+      "cancel": "Cancel",
+      "create": "Create FAQ",
+      "save": "Save changes",
+      "delete": "Delete",
+      "created": "FAQ created.",
+      "saved": "FAQ saved.",
+      "deleted": "FAQ deleted.",
+      "readOnly": "You can view this FAQ but your role cannot change it.",
+      "faqLimit": "Your workspace is at its limit of {max} FAQs. Delete one to add another.",
+      "prefilled": "The question was filled in from an unanswered customer message. Saving this FAQ also marks that message as handled.",
+      "tryItSaveFirst": "Save the FAQ first, then you can try how customer messages match it.",
+      "conflict": {
+        "title": "Someone else changed this FAQ",
+        "body": "Your edits are still here. Keep them and save again on top of the latest version, or discard them and load the latest.",
+        "keep": "Keep my edits",
+        "reload": "Load the latest version",
+        "kept": "Updated to the latest version. Your edits are kept; save to apply them."
+      },
+      "question": {
+        "title": "Question",
+        "hint": "The question as you would write it. It also counts as the first phrasing.",
+        "label": "Question",
+        "count": "{count} / {max}"
+      },
+      "category": {
+        "label": "Category",
+        "hint": "Optional. Helps you filter."
+      },
+      "status": {
+        "label": "Status",
+        "hint": "Paused FAQs never answer.",
+        "active": "Active",
+        "paused": "Paused"
+      },
+      "answer": {
+        "title": "Answer",
+        "hint": "What the customer gets when this FAQ matches.",
+        "text": "Text answer",
+        "flow": "Start a flow",
+        "textLabel": "Answer text",
+        "count": "{count} / {max} characters",
+        "preview": "How it looks in WhatsApp",
+        "previewEmpty": "Your answer appears here",
+        "flowLabel": "Flow to start",
+        "noFlow": "No flow chosen"
+      },
+      "advanced": {
+        "title": "Advanced: sensitivity for this FAQ only",
+        "body": "By default every FAQ uses the workspace sensitivity. Use a custom value when this one matches too eagerly (raise it) or too rarely (lower it).",
+        "custom": "Use a custom sensitivity for this FAQ",
+        "sliderLabel": "Match at or above",
+        "workspace": "The workspace sensitivity is {value}%.",
+        "following": "Following the workspace sensitivity ({value}%)."
+      },
+      "problem": {
+        "question": {
+          "required": "Write the question customers ask.",
+          "tooLong": "The question can be at most {max} characters.",
+          "invalid": "This question is not valid."
+        },
+        "answerText": {
+          "required": "Write the answer customers should get.",
+          "tooLong": "The answer can be at most {max} characters.",
+          "invalid": "This answer is not valid."
+        },
+        "flowId": {
+          "required": "Choose the flow to start.",
+          "tooLong": "Choose the flow to start.",
+          "invalid": "Choose the flow to start."
+        },
+        "category": {
+          "required": "Write a category or leave it empty.",
+          "tooLong": "The category can be at most {max} characters.",
+          "invalid": "This category is not valid."
+        },
+        "thresholdOverride": {
+          "required": "Choose a value between 5% and 99%.",
+          "tooLong": "Choose a value between 5% and 99%.",
+          "invalid": "Choose a value between 5% and 99%."
+        }
+      },
+      "deleteConfirm": {
+        "title": "Delete this FAQ?",
+        "body": "The FAQ and all its phrasings are deleted for good. This cannot be undone.",
+        "confirm": "Delete"
+      },
+      "leave": {
+        "title": "Leave without saving?",
+        "body": "Your changes to this FAQ are not saved.",
+        "leave": "Leave",
+        "stay": "Keep editing"
+      }
+    },
+    "flowPicker": {
+      "noAccess": "You need the permission to view flows (flb.flows.read) to choose one here.",
+      "missing": "The flow this FAQ started no longer exists. Choose another flow, or this FAQ cannot answer.",
+      "selected": "Chosen",
+      "search": "Search flows",
+      "searchPlaceholder": "Search flows by name",
+      "retry": "Try again",
+      "loading": "Loading flows",
+      "noMatch": "No flow has that name.",
+      "none": "You have no flows yet. Create one in Flows first.",
+      "listLabel": "Flows",
+      "state": {
+        "live": "Published",
+        "off": "Inactive",
+        "draft": "Draft"
+      },
+      "note": "The flow starts from its trigger. Only published, active flows can run."
+    },
+    "variations": {
+      "title": "Question variations",
+      "hint": "Other ways a customer might ask this. Each one is matched by meaning.",
+      "counterLabel": "{count} of {max} phrasings used",
+      "listLabel": "Phrasings",
+      "questionEmpty": "Your question appears here",
+      "source": {
+        "question": "Question",
+        "manual": "Written",
+        "ai": "AI",
+        "learned": "Learned",
+        "import": "Imported"
+      },
+      "none": "No extra phrasings yet. Add a few, or let AI suggest some.",
+      "edit": "Edit {text}",
+      "remove": "Remove {text}",
+      "editLabel": "Edit phrasing",
+      "save": "Save",
+      "cancel": "Cancel",
+      "addLabel": "New phrasing",
+      "addPlaceholder": "Another way to ask this",
+      "add": "Add",
+      "pasteMany": "Paste many",
+      "full": "This FAQ is at its limit of {max} phrasings.",
+      "failedNotice": "{count, plural, one {# phrasing failed} other {# phrasings failed}} to index. Edit and save the phrasing to try again.",
+      "suggest": "Suggest with AI",
+      "suggestSaveFirst": "Save the FAQ first, then AI can suggest phrasings.",
+      "suggesting": "Asking the AI for suggestions",
+      "suggestionsReady": "{count, plural, one {# suggestion ready} other {# suggestions ready}}",
+      "suggestionsTitle": "Suggested phrasings",
+      "suggestionsHint": "Nothing is saved until you add them. Untick the ones you do not want.",
+      "suggestionsNone": "The AI had no new phrasings to suggest.",
+      "addSelected": "Add selected ({count})",
+      "discard": "Discard",
+      "bulk": {
+        "label": "One phrasing per line",
+        "placeholder": "Where is my parcel\nTrack my order\nHas my order shipped",
+        "summary": "{count, plural, one {# new phrasing will be added} other {# new phrasings will be added}}",
+        "duplicates": "{count, plural, one {# duplicate left out} other {# duplicates left out}}",
+        "tooLong": "{count, plural, one {# line is} other {# lines are}} over {max} characters and left out.",
+        "overflow": "{count, plural, one {# line does} other {# lines do}} not fit under the phrasing limit and left out.",
+        "more": "and {count} more",
+        "add": "Add {count, plural, one {# phrasing} other {# phrasings}}"
+      },
+      "state": {
+        "ready": "Live",
+        "pending": "Indexing",
+        "pendingHint": "Saved. It starts matching in a few seconds.",
+        "failed": "Failed",
+        "failedHint": "Edit and save the phrasing to retry.",
+        "noReason": "No reason was given"
+      },
+      "confirm": {
+        "title": "Remove this phrasing?",
+        "body": "\"{text}\" will no longer reach this FAQ.",
+        "remove": "Remove"
+      },
+      "errors": {
+        "duplicate": "This FAQ already has that phrasing.",
+        "tooLong": "A phrasing can be at most {max} characters.",
+        "aiKeys": "Set up your AI keys"
+      }
+    },
+    "tryIt": {
+      "title": "Try it",
+      "hint": "Type a customer message and see what would happen. Nothing is sent.",
+      "label": "Customer message",
+      "placeholder": "Where is my parcel?",
+      "run": "Try"
+    },
+    "decision": {
+      "verdict": {
+        "answer": {
+          "title": "Would answer",
+          "body": "A FAQ matched well enough. The customer gets its answer (or its flow starts)."
+        },
+        "below": {
+          "title": "Below threshold",
+          "body": "The closest FAQ did not score high enough, so nothing would be sent. Add this phrasing to a FAQ, or lower the sensitivity."
+        },
+        "ambiguous": {
+          "title": "Ambiguous",
+          "body": "Two FAQs scored almost the same, so the bot would not guess. Make the FAQs more distinct, or lower the minimum margin."
+        },
+        "noFaqs": {
+          "title": "No FAQs to match",
+          "body": "There are no active FAQs with live phrasings yet."
+        },
+        "providerError": {
+          "title": "Provider error",
+          "body": "The AI provider could not be reached, so only spelling matching was possible."
+        },
+        "notSent": {
+          "title": "Matched, not sent",
+          "body": "A FAQ matched but the answer was not sent, for example because FAQ answering was off."
+        }
+      },
+      "tier": {
+        "exact": {
+          "name": "Exact match",
+          "body": "The message is the same as a saved phrasing, ignoring case and spacing."
+        },
+        "semantic": {
+          "name": "Meaning match",
+          "body": "The message was compared by meaning with every live phrasing, so different words can still match."
+        },
+        "trigram": {
+          "name": "Spelling fallback",
+          "body": "Comparing by meaning was not possible, so the message was compared letter by letter. This catches typos but not synonyms."
+        }
+      },
+      "scoreLabel": "Score {score}%, the bar to reach is {threshold}%",
+      "score": "Score",
+      "threshold": "Needs",
+      "margin": "Lead over the runner-up",
+      "marginValue": "{margin} points (needs {needed})",
+      "note": "Note",
+      "model": "Model",
+      "noModel": "none used",
+      "latency": "Time",
+      "ms": "{ms} ms",
+      "winner": {
+        "title": "What the customer would get",
+        "unavailable": "This FAQ could not be loaded.",
+        "flow": "Starts the flow {name}",
+        "flowMissing": "Starts a flow that no longer exists"
+      },
+      "candidates": {
+        "title": "Top matches",
+        "matchedOn": "Matched on",
+        "best": "Best",
+        "paused": "Paused",
+        "scoreLabel": "Score {score}%",
+        "addVariation": "Add this phrase as a variation to {question}",
+        "added": "Added",
+        "addedToast": "Added as a phrasing of {question}.",
+        "alreadyThere": "That phrasing is already there.",
+        "open": "Open FAQ"
+      }
+    },
+    "playground": {
+      "title": "How would my bot answer this?",
+      "subtitle": "Run a customer message through the same matching your bot uses. Nothing is sent and nothing is counted in the insights.",
+      "label": "Customer message",
+      "placeholder": "Where is my parcel?",
+      "run": "Run",
+      "hint": "Only saved FAQs are matched. Active FAQs with live phrasings take part.",
+      "empty": "Type a message above and run it to see the decision.",
+      "history": {
+        "title": "This session",
+        "empty": "Your last 10 tests appear here."
+      }
+    },
+    "unanswered": {
+      "title": "Unanswered messages",
+      "subtitle": "Customer messages no FAQ answered. Teach the bot from them.",
+      "search": "Search unanswered messages",
+      "searchPlaceholder": "Search messages",
+      "listLabel": "Unanswered messages",
+      "emptyTitle": "Nothing waiting",
+      "emptyBody": "Every customer message was answered or handled. New unanswered messages show up here.",
+      "noMatch": "No message matches your search",
+      "notKept": "Message text not kept (query logging is off)",
+      "closest": "Closest FAQ:",
+      "allCandidates": "See all {count} candidates",
+      "addToFaq": "Add to an FAQ",
+      "createFaq": "Create FAQ from this",
+      "dismiss": "Dismiss",
+      "dismissed": "Message dismissed.",
+      "learned": "Added to \"{question}\". It will be answered from now on.",
+      "pickTitle": "Add this message to which FAQ?",
+      "loadMore": "Load more",
+      "loadingMore": "Loading"
+    },
+    "picker": {
+      "close": "Close",
+      "search": "Search FAQs",
+      "searchPlaceholder": "Search FAQs",
+      "loading": "Loading FAQs",
+      "none": "No FAQ found.",
+      "paused": "Paused",
+      "more": "Load more"
+    },
+    "log": {
+      "title": "Match log",
+      "hint": "Every customer message the FAQ looked at, and why it did or did not answer.",
+      "viewLabel": "Show",
+      "view": {
+        "all": "All",
+        "answered": "Answered",
+        "unanswered": "Unanswered",
+        "errors": "Errors"
+      },
+      "search": "Search the log",
+      "searchPlaceholder": "Search messages",
+      "empty": "No messages here yet.",
+      "col": {
+        "time": "When",
+        "message": "Message",
+        "outcome": "Outcome",
+        "faq": "FAQ",
+        "score": "Score"
+      },
+      "notKept": "Not kept ({length} characters)",
+      "testRun": "(test)",
+      "expand": "Show details",
+      "collapse": "Hide details",
+      "noCandidates": "No candidates were considered.",
+      "matchedOn": "matched on",
+      "detail": {
+        "tier": "Tier",
+        "model": "Model",
+        "latency": "Time",
+        "ms": "{ms} ms"
+      },
+      "loadMore": "Load more",
+      "loadingMore": "Loading",
+      "why": {
+        "answered": "Answered with \"{faq}\" at {score}%.",
+        "flowStarted": "Started the flow of \"{faq}\" at {score}%.",
+        "belowThreshold": "The best match scored {score}%, below the {threshold}% bar, so nothing was sent.",
+        "belowThresholdNoBar": "The best match scored {score}%, which was not enough, so nothing was sent.",
+        "lowMargin": "Two FAQs were too close ({score}% and {second}%), so the bot did not guess.",
+        "noFaqs": "There were no active FAQs with live phrasings to match against.",
+        "providerError": "The AI provider failed, so the bot could only match by spelling.",
+        "notSent": "A FAQ matched but the answer was not sent.",
+        "tier": "Decided by the {tier} tier.",
+        "error": "Error: {error}"
+      }
+    },
+    "insights": {
+      "title": "FAQ insights",
+      "subtitle": "How well your FAQs answer real customer messages, and where to improve.",
+      "range": {
+        "label": "Period",
+        "days": "{days} days"
+      },
+      "empty": {
+        "title": "No messages yet",
+        "body": "Once customers write in and FAQ answering is on, you see how often the bot answers, which FAQs work, and what is missing."
+      },
+      "kpi": {
+        "label": "Key numbers",
+        "messages": "Messages checked",
+        "answerRate": "Answer rate",
+        "avgScore": "Average score {score}%",
+        "flows": "Flows started",
+        "unanswered": "Unanswered",
+        "toReview": "{count} to review",
+        "errors": "Provider errors"
+      },
+      "daily": {
+        "title": "Messages per day",
+        "hint": "Last {days} days, answered and unanswered"
+      },
+      "hist": {
+        "title": "How well messages scored",
+        "hint": "Each bar is a score range. The dashed line is your current sensitivity.",
+        "advice": "Raise the threshold if wrong answers slip in, lower it if too many messages go unanswered.",
+        "tune": "Change sensitivity"
+      },
+      "top": {
+        "title": "Top FAQs",
+        "none": "No FAQ has answered yet.",
+        "hits": "{count, plural, one {# answer} other {# answers}}"
+      },
+      "never": {
+        "title": "Never matched",
+        "body": "FAQs nobody triggered in the last {days} days. Check their phrasings, or remove them.",
+        "link": "Review FAQs"
+      },
+      "chart": {
+        "answered": "Answered",
+        "unanswered": "Unanswered",
+        "showTable": "Show as table",
+        "showChart": "Show as chart",
+        "day": "Day",
+        "dailyTitle": "Messages per day",
+        "dailyLabel": "Bar chart of answered and unanswered messages per day. Use the table view for the numbers.",
+        "dayTooltip": "{day}: {answered} answered, {unanswered} unanswered",
+        "histogramTitle": "Score distribution",
+        "histogramLabel": "Histogram of match scores split by answered and unanswered. Use the table view for the numbers.",
+        "scoreRange": "Score",
+        "bucketTooltip": "{from}-{to}%: {answered} answered, {unanswered} unanswered",
+        "thresholdMarker": "Threshold {value}%"
+      }
+    },
+    "settings": {
+      "title": "FAQ settings",
+      "subtitle": "Switch FAQ answering on and tune how closely a message has to match.",
+      "unsaved": "Unsaved changes",
+      "discard": "Discard",
+      "save": "Save settings",
+      "saved": "Settings saved.",
+      "readOnly": "You can view these settings. Changing them needs the permission faq.settings.manage, usually held by workspace admins.",
+      "engineOff": "FAQ answering is switched off by the platform. Whatever you set here applies once it is back on.",
+      "conflict": "Someone else saved these settings. Reload to see their version, then make your change again.",
+      "reload": "Reload settings",
+      "modelChanged": {
+        "title": "Review your sensitivity",
+        "body": "The platform changed the AI model after you tuned this threshold. Scores moved, so review your sensitivity. Saving confirms it."
+      },
+      "enable": {
+        "title": "FAQ answering",
+        "label": "Answer customers with FAQs",
+        "on": "On",
+        "off": "Off",
+        "onBody": "When a customer writes in, the bot compares the message with your FAQs and replies with the best answer, or starts its flow. A flow or keyword trigger that already took the message wins.",
+        "offBody": "Customers get no FAQ answers. You can still write and test FAQs."
+      },
+      "sens": {
+        "title": "Sensitivity",
+        "hint": "How closely a message must match. Scores belong to the model {model}.",
+        "label": "Answer when the match is at least",
+        "presets": "Sensitivity presets",
+        "preset": {
+          "strict": "Strict",
+          "balanced": "Balanced",
+          "forgiving": "Forgiving"
+        },
+        "looser": "Answers more",
+        "stricter": "Answers less",
+        "recommendedMark": "recommended {value}%",
+        "explain": "At {value}%, a message is answered only when its best match scores {value}% or more. Higher means fewer but safer answers; lower means more answers and a higher chance of a wrong one.",
+        "useRecommended": "Use the recommended value ({value}%)",
+        "modelScale": "Scores are only comparable within one model. If the platform changes the model ({model}), review this number."
+      },
+      "margin": {
+        "title": "Ambiguity guard",
+        "hint": "Stops the bot guessing between two FAQs that score almost the same.",
+        "label": "Minimum lead over the second best",
+        "off": "Off",
+        "explain": "When the best FAQ leads the runner-up by less than this, the bot stays quiet and logs the message as unanswered. Leave it off if your FAQs rarely overlap."
+      },
+      "log": {
+        "title": "Customer messages in the log",
+        "label": "Keep customer messages in the match log",
+        "onBody": "The text of each message is kept for 90 days so you can see why it was or was not answered and learn from it. After that it is deleted.",
+        "offBody": "Only scores and outcomes are kept, never the text. You can still see how often the bot answers, but you cannot learn from unanswered messages."
+      },
+      "facts": {
+        "title": "Model and limits",
+        "model": "Embedding model",
+        "faqs": "FAQs",
+        "variations": "Phrasings in use",
+        "perFaq": "Phrasings allowed per FAQ",
+        "of": "{used} of {max}"
+      },
+      "how": {
+        "title": "How matching works",
+        "exact": "Exact: the message equals a saved phrasing, ignoring case and spacing.",
+        "semantic": "Meaning: the message is compared by meaning with every live phrasing, so different words can match.",
+        "trigram": "Spelling fallback: if the AI provider is unavailable, letters are compared instead, which catches typos only.",
+        "threshold": "The best score is compared with the sensitivity. Above it, the FAQ answers; below it, the message is listed under Unanswered."
+      },
+      "who": "Changing these settings needs the permission faq.settings.manage.",
+      "leave": {
+        "title": "Leave without saving?",
+        "body": "Your changes to these settings are not saved.",
+        "leave": "Leave",
+        "stay": "Stay"
+      }
+    }
+  }
+}
