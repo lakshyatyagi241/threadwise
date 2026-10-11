@@ -278,7 +278,7 @@ describe('TW-TG-013 and 014: sending, pausing, retrying', () => {
     expect(row.finished_at).not.toBeNull();
 
     const outbound = await h.owner.query(
-      `SELECT count(*)::int AS n FROM messages WHERE org_id = $1 AND direction = 'out' AND meta ->> 'source' = 'telegram_broadcast'`,
+      `SELECT count(*)::int AS n FROM messages WHERE org_id = $1 AND direction = 'out' AND meta ->> 'source' = 'broadcast' AND sender_kind = 'broadcast'`,
       [t.orgId],
     );
     expect(outbound.rows[0].n).toBe(28);
