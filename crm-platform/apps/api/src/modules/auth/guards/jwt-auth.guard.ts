@@ -14,8 +14,10 @@ import { ImpersonationService } from '../platform/impersonation.service';
 import { OperatorAuthService } from '../platform/operator-auth.service';
 import { SecurityPolicyService } from '../platform/security-policy.service';
 import { EpochService } from '../sessions/epoch.service';
+import { PartnerAgentStatusService } from '../sessions/partner-agent-status.service';
 import { SessionService, idleTimeoutError } from '../sessions/session.service';
 import { AuthKeys } from '../support/redis-keys';
+import { onRedisFailure } from '../support/resilience';
 import { TokenService } from '../token.service';
 
 /**
@@ -36,8 +38,12 @@ import { TokenService } from '../token.service';
  *     was opened (a database sweep, only on the first request after the change)
  * and records session activity for the next idle check.
  *
- * Redis failures fail open here: the access token is only 15 minutes long,
- * and refusing every request because a cache is down is the worse outcome.
+ * Partner agents have no session row, so their revocation is the epoch (the same
+ * "revoke everything" bump) and a cached status check: a suspended agent is refused within seconds.
+ *
+ * When Redis errors the behaviour follows the platform failure mode (support/resilience.ts): CLOSED
+ * (503) by default in production, so a revoked session never works because a cache was down; OPEN
+ * elsewhere, where the 15-minute access token bounds the exposure. Either way the failure is logged.
  */
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -52,6 +58,7 @@ export class JwtAuthGuard implements CanActivate {
     private readonly operators: OperatorAuthService,
     private readonly impersonations: ImpersonationService,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
+    private readonly partners: PartnerAgentStatusService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -103,6 +110,11 @@ export class JwtAuthGuard implements CanActivate {
         throw AppError.unauthenticated('Invalid or expired token');
       }
       await this.checkSession(claims.sid!, claims.typ, claims.rm === true, claims.org, claims.sub);
+    } else if (claims.typ === 'partner_agent') {
+      if ((claims.ep ?? 0) < (await this.epoch.current())) {
+        throw AppError.unauthenticated('Invalid or expired token');
+      }
+      await this.partners.assertActive(claims.org, claims.sub);
     }
 
     const ctx = RequestContextStore.require();
@@ -123,6 +135,10 @@ export class JwtAuthGuard implements CanActivate {
     orgId: number,
     subjectId: number,
   ): Promise<void> {
+    // Revoked, but the Redis tombstone write failed: refuse regardless of what Redis says (or whether it is up).
+    if (this.sessions.isRevocationPending(sid)) {
+      throw AppError.unauthenticated('Invalid or expired token');
+    }
     let revoked: string | null = null;
     let lastActivity: string | null = null;
     let capMarker: string | null = null;
@@ -133,6 +149,8 @@ export class JwtAuthGuard implements CanActivate {
         AuthKeys.capChecked(sid),
       );
     } catch (err) {
+      // Closed mode throws the 503 here; open mode logs and lets the (short-lived) token through.
+      onRedisFailure('session-check', err);
       this.logger.warn({ err }, 'session check skipped: redis unavailable');
       return;
     }

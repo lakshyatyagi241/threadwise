@@ -22,6 +22,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "arch:check": "pnpm --filter @crm/api arch",
+    "audit:auth": "node tools/auth-audit/run.mjs",
+    "audit:authz": "node tools/authz-audit/run.mjs",
     "infra:up": "docker compose up -d",
     "infra:down": "docker compose down",
     "infra:nuke": "docker compose down -v",
@@ -61,7 +63,9 @@
   },
   "pnpm": {
     "overrides": {
-      "multer": ">=2.4.0"
+      "multer": ">=2.4.0",
+      "source-map-js@>=1.0.0 <1.2.2": ">=1.2.2",
+      "js-yaml@>=5.0.0 <=5.4.0": ">=5.4.1"
     },
     "auditConfig": {
       "ignoreGhsas": [

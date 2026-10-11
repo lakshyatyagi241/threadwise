@@ -26,6 +26,7 @@ import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
 import { assertContactScope, ContactsRepository } from '../contacts';
+import { assertOwnerWithinScope } from '../owner-scope';
 // Not the deals barrel: it re-exports the activities service, which imports this one (a cycle that leaves a constructor
 // parameter undefined at runtime).
 import { DealsRepository, type DealRow } from '../deals/deals.repository';
@@ -181,6 +182,11 @@ export class TasksService {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const assigneeId = await this.resolveAssignee(tx, ctx.orgId, input.assigneeId, ctx.userId);
+      await this.assertAssigneeAllowed(
+        tx,
+        assigneeId,
+        ctx.grants ? this.rbac.can(ctx.grants, 'record.tasks.create').scope : 'all',
+      );
       const links = await this.resolveLinks(tx, ctx.orgId, input, true);
       const id = await this.repo.insert(tx, ctx.orgId, {
         title: input.title,
@@ -236,7 +242,10 @@ export class TasksService {
       if (input.assigneeId !== undefined) {
         newAssignee = await this.resolveAssignee(tx, ctx.orgId, input.assigneeId, ctx.userId);
         assigneeChanged = newAssignee !== row.assigneeId;
-        if (assigneeChanged) patch.assignee_id = newAssignee;
+        if (assigneeChanged) {
+          await this.assertAssigneeAllowed(tx, newAssignee, scope);
+          patch.assignee_id = newAssignee;
+        }
       }
       const links = await this.resolveLinks(tx, ctx.orgId, input, false);
       this.applyLinks(patch, row, links);
@@ -339,6 +348,7 @@ export class TasksService {
         assignee = await this.resolveAssignee(tx, ctx.orgId, input.assigneeId, ctx.userId);
       }
       if (assignee === row.assigneeId) return;
+      await this.assertAssigneeAllowed(tx, assignee, scope);
       await this.repo.update(tx, ctx.orgId, row.id, undefined, { assignee_id: assignee });
       await this.afterEdit(
         tx,
@@ -500,6 +510,22 @@ export class TasksService {
       out.companyId = co;
     }
     return out;
+  }
+
+  /** AZ-007: the record scope also bounds who a task may be assigned to (the caller, a teammate, or anyone for `all`). */
+  private async assertAssigneeAllowed(
+    tx: Tx,
+    assignee: number | null,
+    scope: RecordScope,
+  ): Promise<void> {
+    const ctx = RequestContextStore.require();
+    await assertOwnerWithinScope({
+      scope,
+      actorUserId: ctx.userId,
+      nextOwnerId: assignee,
+      inActorTeam: (id) => this.repo.isInActorTeam(tx, ctx.orgId, ctx.userId!, id),
+      path: 'assigneeId',
+    });
   }
 
   /** `undefined` means the caller; `null` nobody; a uuid must be an ACTIVE member of this workspace (422 otherwise). */

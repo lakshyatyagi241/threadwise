@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { ERROR_CODES } from '@crm/contracts';
 import type {
   ContactFileResponse,
   CreateContactFileInput,
@@ -68,6 +69,17 @@ export class ContactFilesService {
         contact.ownerId,
       );
       const contactId = contact.id;
+
+      // AZ-009: a key minted per workspace looks like `<area>/<orgId>/...`; it may only name the caller's own workspace.
+      const keyOrg = /^[^/]+\/(\d+)\//.exec(input.storageKey)?.[1];
+      if (keyOrg !== undefined && Number(keyOrg) !== ctx.orgId) {
+        throw new AppError(
+          ERROR_CODES.VALIDATION_FAILED,
+          'The storage key belongs to another workspace.',
+          HttpStatus.UNPROCESSABLE_ENTITY,
+          [{ path: 'storageKey', message: 'not a key of this workspace' }],
+        );
+      }
 
       const created = await this.repo.insert(tx, ctx.orgId, {
         contactId,

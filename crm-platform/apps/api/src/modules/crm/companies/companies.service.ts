@@ -29,6 +29,7 @@ import { DisplayIdService } from '../../../kernel/identifiers/display-id.service
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
 import { assertContactScope, contactScopeCondition, ContactsRepository } from '../contacts';
+import { assertOwnerWithinScope } from '../owner-scope';
 import { addTo, moneyList, type CurrencySums } from '../deals/deal-money';
 import { companyEventPayload, companyRollup, toCompanyResponse } from './companies.mapper';
 import {
@@ -294,6 +295,7 @@ export class CompaniesService {
         input.ownerId === undefined
           ? ctx.userId
           : await this.resolveOwner(tx, ctx.orgId, input.ownerId);
+      await this.assertOwnerAllowed(tx, 'record.companies.create', ownerId);
       const id = await this.repo.insert(tx, ctx.orgId, {
         name: input.name,
         domain: input.website ?? null,
@@ -457,7 +459,10 @@ export class CompaniesService {
       }
       if (input.ownerId !== undefined) {
         const owner = await this.resolveOwner(tx, ctx.orgId, input.ownerId);
-        if (owner !== row.ownerId) patch.owner_id = owner;
+        if (owner !== row.ownerId) {
+          await this.assertOwnerAllowed(tx, 'record.companies.update', owner, scope);
+          patch.owner_id = owner;
+        }
       }
 
       if (Object.keys(patch).length > 0) {
@@ -713,6 +718,24 @@ export class CompaniesService {
       can,
     );
     return rows.map((r) => toCompanyResponse(r, companyRollup(counts.get(r.id), can)));
+  }
+
+  /** AZ-007: the record scope also bounds who a company may be handed to (the caller, a teammate, or anyone for `all`). */
+  private async assertOwnerAllowed(
+    tx: Tx,
+    permission: 'record.companies.create' | 'record.companies.update',
+    nextOwnerId: number | null,
+    scope?: RecordScope,
+  ): Promise<void> {
+    const ctx = RequestContextStore.require();
+    if (!ctx.grants && !scope) return;
+    await assertOwnerWithinScope({
+      scope: scope ?? this.rbac.can(ctx.grants!, permission).scope,
+      actorUserId: ctx.userId,
+      nextOwnerId,
+      inActorTeam: (id) => this.repo.isInActorTeam(tx, ctx.orgId, ctx.userId!, id),
+      path: 'ownerId',
+    });
   }
 
   private async lockForWrite(tx: Tx, uuid: string, scope: RecordScope): Promise<CompanyRow> {

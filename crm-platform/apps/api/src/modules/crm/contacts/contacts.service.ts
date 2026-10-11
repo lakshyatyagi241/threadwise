@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import { ERROR_CODES, canonicalizePhone, composeDisplayName } from '@crm/contracts';
@@ -37,6 +37,7 @@ import { applyPropertyPlan, planPropertyChanges } from './contact-property-value
 import { missingRequired, requiredPropertiesError } from './required-properties';
 import { ContactQuotaService } from './contact-quota.service';
 import { assertContactScope } from './contact-scope';
+import { assertOwnerWithinScope } from '../owner-scope';
 import { toContactResponse } from './contacts.mapper';
 import { ContactsRepository, encodeSortCursor, type ContactRow } from './contacts.repository';
 
@@ -232,6 +233,7 @@ export class ContactsService {
       const ownerId = input.ownerId
         ? await this.requireUser(tx, ctx.orgId, input.ownerId)
         : ctx.userId;
+      await this.assertOwnerAllowed(tx, 'record.contacts.create', ownerId ?? null);
       const companyId = input.companyId
         ? await this.requireCompany(tx, ctx.orgId, input.companyId)
         : null;
@@ -258,6 +260,7 @@ export class ContactsService {
       }
 
       assertFormFieldLimits(input.customFields);
+      await this.assertPropertiesWritable(tx, ctx.orgId, input.customFields, {});
       // Properties the workspace marked required (Contact properties screen) are part of the contract of a create.
       await this.assertRequiredProperties(tx, ctx.orgId, input.customFields);
 
@@ -688,15 +691,20 @@ export class ContactsService {
         assertFormFieldLimits(input.customFields);
         // Merge, don't replace: a client that sends three fields must not wipe
         // the other forty the org has defined.
+        await this.assertPropertiesWritable(tx, ctx.orgId, input.customFields, existing.data ?? {});
         values.data = { ...(existing.data ?? {}), ...input.customFields };
         // A save that edits properties answers for all of them; a stage or owner change alone does not (a contact that
         // predates a newly required property stays editable).
         await this.assertRequiredProperties(tx, ctx.orgId, values.data as Record<string, unknown>);
       }
       if (input.ownerId !== undefined) {
-        values.ownerId = input.ownerId
+        const nextOwner = input.ownerId
           ? await this.requireUser(tx, ctx.orgId, input.ownerId)
           : null;
+        if (nextOwner !== existing.ownerId) {
+          await this.assertOwnerAllowed(tx, 'record.contacts.update', nextOwner);
+        }
+        values.ownerId = nextOwner;
       }
       if (input.companyId !== undefined) {
         values.companyId = input.companyId
@@ -773,8 +781,11 @@ export class ContactsService {
         existing.ownerId,
       );
 
-      // Hard delete. The audit row and the outbox
-      // event are written first so the trail survives the row.
+      // Hard delete. The delete itself decides who won a race (AZ-014): `DELETE ... RETURNING` reports a row only to the
+      // call that removed it, and a second concurrent call (which waited on the row lock) gets 404 and writes nothing.
+      // The audit row and the outbox event follow in the same transaction; the audit trail keeps the record id.
+      const removed = await this.repo.deleteById(tx, ctx.orgId, existing.id);
+      if (!removed) throw AppError.notFound('Contact', uuid);
       await this.audit.record(tx, {
         module: MODULE_KEY,
         recordId: existing.id,
@@ -786,9 +797,57 @@ export class ContactsService {
         eventType: 'contact.deleted',
         payload: { uuid, displayId: existing.displayId },
       });
-
-      await this.repo.deleteById(tx, ctx.orgId, existing.id);
     });
+  }
+
+  /**
+   * AZ-007: the record scope of the permission that governs the write also bounds who the contact may be handed to (the
+   * caller themselves, a teammate, or anyone for `all`). A caller without grants (a system actor) is not scoped.
+   */
+  private async assertOwnerAllowed(
+    tx: Tx,
+    permission: 'record.contacts.create' | 'record.contacts.update',
+    nextOwnerId: number | null,
+  ): Promise<void> {
+    const ctx = RequestContextStore.require();
+    if (!ctx.grants) return;
+    await assertOwnerWithinScope({
+      scope: this.rbac.can(ctx.grants, permission).scope,
+      actorUserId: ctx.userId,
+      nextOwnerId,
+      inActorTeam: (id) => this.repo.isOwnerInActorTeam(tx, ctx.orgId, ctx.userId!, id),
+      path: 'ownerId',
+    });
+  }
+
+  /**
+   * AZ-008: a single create or update holds custom properties to the same field flags the bulk update does. A property the
+   * workspace defined that is hidden, read-only, a formula, a system property or inactive cannot be written (422
+   * CON_PROPERTY_NOT_EDITABLE). Only keys whose value CHANGES are held to it, so a form that sends back the whole object
+   * it loaded still saves. Free-form keys the workspace never defined keep their existing behaviour. System actors are not held.
+   */
+  private async assertPropertiesWritable(
+    tx: Tx,
+    orgId: number,
+    incoming: Record<string, unknown> | undefined,
+    current: Record<string, unknown>,
+  ): Promise<void> {
+    if (!incoming || !RequestContextStore.require().grants) return;
+    const changed = Object.keys(incoming).filter(
+      (k) => JSON.stringify(incoming[k] ?? null) !== JSON.stringify(current[k] ?? null),
+    );
+    if (changed.length === 0) return;
+    const defined = await this.repo.definedPropertyKeys(tx, orgId, changed);
+    if (defined.size === 0) return;
+    const editable = await this.repo.editableProperties(tx, orgId, [...defined]);
+    const blocked = [...defined].filter((k) => !editable.has(k));
+    if (blocked.length === 0) return;
+    throw new AppError(
+      ERROR_CODES.CON_PROPERTY_NOT_EDITABLE,
+      `Not an editable custom property: ${blocked.join(', ')}.`,
+      HttpStatus.UNPROCESSABLE_ENTITY,
+      blocked.map((k) => ({ path: `customFields.${k}`, message: 'not an editable property' })),
+    );
   }
 
   /** 422 CON_REQUIRED_PROPERTY_MISSING when properties the registry marks required have no value (honouring dependencies). */
@@ -890,6 +949,9 @@ export class ContactsService {
           existing.ownerId,
         );
 
+        if (ownerId !== existing.ownerId) {
+          await this.assertOwnerAllowed(rowTx, 'record.contacts.update', ownerId);
+        }
         const updated = await this.repo.updateFieldsById(rowTx, ctx.orgId, id, {
           ownerId,
           updatedBy: ctx.userId,
@@ -925,9 +987,11 @@ export class ContactsService {
     const ctx = RequestContextStore.require();
     const updateScope = this.rbac.can(ctx.grants!, 'record.contacts.update').scope;
     return this.db.tx(async (tx) => {
-      const ownerId = input.values.ownerId
+      const ownerId: number | null | undefined = input.values.ownerId
         ? await this.requireUser(tx, ctx.orgId, input.values.ownerId)
-        : input.values.ownerId; // null (unset) or undefined (leave alone) pass through
+        : input.values.ownerId === null
+          ? null
+          : undefined; // null (unset) or undefined (leave alone) pass through
       // Read once for the whole batch; each row is planned against it.
       const statusCtx =
         input.values.status !== undefined || input.values.lifecycleStage != null
@@ -959,7 +1023,12 @@ export class ContactsService {
         );
 
         const values: Record<string, unknown> = { updatedBy: ctx.userId };
-        if (input.values.ownerId !== undefined) values.ownerId = ownerId;
+        if (input.values.ownerId !== undefined) {
+          if (ownerId !== existing.ownerId) {
+            await this.assertOwnerAllowed(rowTx, 'record.contacts.update', ownerId ?? null);
+          }
+          values.ownerId = ownerId;
+        }
         if (
           input.values.lifecycleStage !== undefined &&
           input.values.lifecycleStage !== null &&

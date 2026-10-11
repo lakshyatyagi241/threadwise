@@ -70,7 +70,7 @@ export class WidgetsController {
   @ApiOperation({
     summary: 'Save a widget (the whole form plus the row version it was read at)',
     description:
-      'A stale `rowVersion` is refused with 409 ROW_VERSION_CONFLICT. QUIRK reproduced from WaDesk: an id that is not in this workspace creates a NEW widget instead of failing.',
+      'A stale `rowVersion` is refused with 409 ROW_VERSION_CONFLICT. An id that is not a widget of this workspace (of another workspace, deleted, never existed) is 404. WaDesk created a NEW widget in that case; that was a cross-tenant write path and is deliberately not kept.',
   })
   update(@Param('id', ParseUUIDPipe) id: string, @Body() body: unknown) {
     return this.widgets.update(id, body);

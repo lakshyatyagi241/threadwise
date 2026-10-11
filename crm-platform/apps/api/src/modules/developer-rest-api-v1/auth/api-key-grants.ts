@@ -82,3 +82,32 @@ export function grantsForScopes(held: readonly string[]): GrantSet {
   }
   return grants;
 }
+
+/**
+ * The workspace permissions a key minted with `held` scopes would reach, per scope. A key is never more powerful than the member who
+ * mints it (AZ-001), so key creation checks every entry against the creator's own grants. An empty list is the unrestricted key and needs
+ * every permission any scope reaches.
+ */
+export function permissionsNeededByScopes(
+  held: readonly string[],
+): Array<{ scope: ApiScope; permission: string }> {
+  const out: Array<{ scope: ApiScope; permission: string }> = [];
+  for (const scope of effectiveScopes(held)) {
+    for (const permission of SCOPE_PERMISSIONS[scope]) out.push({ scope, permission });
+  }
+  return out;
+}
+
+/**
+ * A key never reaches more than the member it acts as (AZ-001): every grant the key's scopes give is kept only where that member holds the
+ * same permission today, with the member's own record scope when it is narrower. Re-read on every call (the member's grants are cached
+ * per roles version), so a later demotion is honoured at once.
+ */
+export function capGrantsToOwner(keyGrants: GrantSet, ownerGrants: GrantSet): GrantSet {
+  const out: GrantSet = new Map();
+  for (const key of keyGrants.keys()) {
+    const owned = ownerGrants.get(key);
+    if (owned && owned.effect === 'allow') out.set(key, owned);
+  }
+  return out;
+}
