@@ -254,7 +254,7 @@ export class PlatformWorkspacesRepository {
       tx.execute(sql`SELECT org_id, array_agg(DISTINCT flag ORDER BY flag) AS flags FROM workspace_flags
                      WHERE org_id IN (${inIds}) AND cleared_at IS NULL AND flag IN (${flags}) GROUP BY org_id`),
       tx.execute(sql`SELECT org_id, count(*)::int AS n FROM messages
-                     WHERE org_id IN (${inIds}) AND direction = 'out' AND deleted_at IS NULL
+                     WHERE org_id IN (${inIds}) AND direction = 'out' AND kind <> 'reaction' AND deleted_at IS NULL
                        AND created_at >= ${week}::timestamptz GROUP BY org_id`),
       tx.execute(
         sql`SELECT org_id, max(created_at) AS at FROM messages WHERE org_id IN (${inIds}) GROUP BY org_id`,
@@ -339,7 +339,7 @@ export class PlatformWorkspacesRepository {
                count(*)::int AS sent,
                count(*) FILTER (WHERE status IN ('delivered', 'read'))::int AS delivered
         FROM messages
-        WHERE org_id = ${orgId} AND direction = 'out' AND deleted_at IS NULL AND created_at >= ${since.toISOString()}::timestamptz
+        WHERE org_id = ${orgId} AND direction = 'out' AND kind <> 'reaction' AND deleted_at IS NULL AND created_at >= ${since.toISOString()}::timestamptz
         GROUP BY 1`),
     ]);
     const n = (r: { rows: unknown[] }) => (r.rows[0] as { n: number } | undefined)?.n ?? 0;

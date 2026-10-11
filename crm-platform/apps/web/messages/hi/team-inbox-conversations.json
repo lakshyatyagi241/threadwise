@@ -162,7 +162,38 @@
       },
       "templateCopyCode": "कोड कॉपी करें",
       "templateButtonUnnamed": "बटन",
-      "templateButtonPrefix": "बटन: "
+      "templateButtonPrefix": "बटन: ",
+      "reply": "जवाब दें",
+      "quote": {
+        "you": "आप",
+        "customer": "ग्राहक",
+        "missing": "मूल संदेश",
+        "jump": "मूल संदेश पर जाएँ",
+        "replyingTo": "{name} को जवाब दे रहे हैं",
+        "kind": {
+          "text": "संदेश",
+          "image": "फ़ोटो",
+          "video": "वीडियो",
+          "audio": "ऑडियो",
+          "voice": "वॉइस मैसेज",
+          "document": "दस्तावेज़",
+          "sticker": "स्टिकर",
+          "location": "लोकेशन",
+          "contact": "संपर्क",
+          "template": "टेम्पलेट",
+          "reaction": "रिएक्शन",
+          "interactive": "चयन"
+        }
+      },
+      "react": {
+        "label": "इस संदेश पर रिएक्ट करें",
+        "add": "{emoji} से रिएक्ट करें",
+        "remove": "अपना {emoji} रिएक्शन हटाएँ",
+        "more": "और इमोजी",
+        "takeBack": "अपना रिएक्शन वापस लेने के लिए टैप करें",
+        "takeBackLabel": "आपका रिएक्शन {emoji}। वापस लें",
+        "failed": "यह रिएक्शन नहीं भेजा गया"
+      }
     },
     "media": {
       "openImage": "इमेज {name} खोलें",
@@ -232,7 +263,18 @@
       "addNote": "नोट जोड़ें",
       "hint": "Enter भेजता है। Shift+Enter नई पंक्ति जोड़ता है।",
       "template": "टेम्पलेट भेजें",
-      "groupSendUnavailable": "WhatsApp ग्रुप में भेजना अभी उपलब्ध नहीं है। WhatsApp Business ऐप से जवाब दें।"
+      "groupSendUnavailable": "WhatsApp ग्रुप में भेजना अभी उपलब्ध नहीं है। WhatsApp Business ऐप से जवाब दें।",
+      "emoji": "इमोजी डालें",
+      "emojiPanel": "इमोजी",
+      "emojiRecent": "हाल में उपयोग किए गए",
+      "emojiGroups": "इमोजी समूह",
+      "emojiGroup": {
+        "smileys": "स्माइली",
+        "gestures": "हाव-भाव",
+        "hearts": "दिल और प्रतीक",
+        "objects": "वस्तुएँ"
+      },
+      "cancelReply": "जवाब रद्द करें"
     },
     "panel": {
       "tabsLabel": "नोट्स और टाइमलाइन",

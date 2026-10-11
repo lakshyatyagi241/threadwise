@@ -165,7 +165,38 @@
       },
       "templateCopyCode": "Copy code",
       "templateButtonUnnamed": "Button",
-      "templateButtonPrefix": "Button: "
+      "templateButtonPrefix": "Button: ",
+      "reply": "Reply",
+      "quote": {
+        "you": "You",
+        "customer": "Customer",
+        "missing": "Original message",
+        "jump": "Go to the original message",
+        "replyingTo": "Replying to {name}",
+        "kind": {
+          "text": "Message",
+          "image": "Photo",
+          "video": "Video",
+          "audio": "Audio",
+          "voice": "Voice message",
+          "document": "Document",
+          "sticker": "Sticker",
+          "location": "Location",
+          "contact": "Contact",
+          "template": "Template",
+          "reaction": "Reaction",
+          "interactive": "Selection"
+        }
+      },
+      "react": {
+        "label": "React to this message",
+        "add": "React with {emoji}",
+        "remove": "Remove your {emoji} reaction",
+        "more": "More emoji",
+        "takeBack": "Tap to take your reaction back",
+        "takeBackLabel": "Your reaction {emoji}. Take it back",
+        "failed": "This reaction was not sent"
+      }
     },
     "media": {
       "openImage": "Open image {name}",
@@ -235,7 +266,18 @@
       "addNote": "Add note",
       "hint": "Enter sends. Shift+Enter adds a new line.",
       "template": "Send a template",
-      "groupSendUnavailable": "Sending to WhatsApp groups is not available yet. Reply from the WhatsApp Business app."
+      "groupSendUnavailable": "Sending to WhatsApp groups is not available yet. Reply from the WhatsApp Business app.",
+      "emoji": "Insert an emoji",
+      "emojiPanel": "Emoji",
+      "emojiRecent": "Recently used",
+      "emojiGroups": "Emoji groups",
+      "emojiGroup": {
+        "smileys": "Smileys",
+        "gestures": "Gestures",
+        "hearts": "Hearts and symbols",
+        "objects": "Objects"
+      },
+      "cancelReply": "Cancel the reply"
     },
     "panel": {
       "tabsLabel": "Notes and timeline",

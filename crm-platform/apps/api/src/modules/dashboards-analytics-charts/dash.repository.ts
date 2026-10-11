@@ -19,7 +19,8 @@ function stream(orgId: number, from: Date, to: Date): SQL {
   const t = to.toISOString();
   return sql`(
     SELECT created_at, direction, status, read_at, template_id, kind, conversation_id
-      FROM messages WHERE org_id = ${orgId} AND created_at >= ${f}::timestamptz AND created_at < ${t}::timestamptz
+      FROM messages WHERE org_id = ${orgId} AND kind <> 'reaction'
+        AND created_at >= ${f}::timestamptz AND created_at < ${t}::timestamptz
   ) m`;
 }
 

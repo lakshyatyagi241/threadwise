@@ -162,7 +162,38 @@
       },
       "templateCopyCode": "Kopiuj kod",
       "templateButtonUnnamed": "Przycisk",
-      "templateButtonPrefix": "Przycisk: "
+      "templateButtonPrefix": "Przycisk: ",
+      "reply": "Odpowiedz",
+      "quote": {
+        "you": "Ty",
+        "customer": "Klient",
+        "missing": "Oryginalna wiadomość",
+        "jump": "Przejdź do oryginalnej wiadomości",
+        "replyingTo": "Odpowiedź do: {name}",
+        "kind": {
+          "text": "Wiadomość",
+          "image": "Zdjęcie",
+          "video": "Wideo",
+          "audio": "Audio",
+          "voice": "Wiadomość głosowa",
+          "document": "Dokument",
+          "sticker": "Naklejka",
+          "location": "Lokalizacja",
+          "contact": "Kontakt",
+          "template": "Szablon",
+          "reaction": "Reakcja",
+          "interactive": "Wybór"
+        }
+      },
+      "react": {
+        "label": "Zareaguj na tę wiadomość",
+        "add": "Zareaguj: {emoji}",
+        "remove": "Usuń swoją reakcję {emoji}",
+        "more": "Więcej emoji",
+        "takeBack": "Dotknij, aby cofnąć reakcję",
+        "takeBackLabel": "Twoja reakcja {emoji}. Cofnij",
+        "failed": "Ta reakcja nie została wysłana"
+      }
     },
     "media": {
       "openImage": "Otwórz obraz {name}",
@@ -232,7 +263,18 @@
       "addNote": "Dodaj notatkę",
       "hint": "Enter wysyła. Shift+Enter dodaje nowy wiersz.",
       "template": "Wyślij szablon",
-      "groupSendUnavailable": "Wysyłanie do grup WhatsApp nie jest jeszcze dostępne. Odpowiedz w aplikacji WhatsApp Business."
+      "groupSendUnavailable": "Wysyłanie do grup WhatsApp nie jest jeszcze dostępne. Odpowiedz w aplikacji WhatsApp Business.",
+      "emoji": "Wstaw emoji",
+      "emojiPanel": "Emoji",
+      "emojiRecent": "Ostatnio używane",
+      "emojiGroups": "Grupy emoji",
+      "emojiGroup": {
+        "smileys": "Buźki",
+        "gestures": "Gesty",
+        "hearts": "Serca i symbole",
+        "objects": "Obiekty"
+      },
+      "cancelReply": "Anuluj odpowiedź"
     },
     "panel": {
       "tabsLabel": "Notatki i oś czasu",

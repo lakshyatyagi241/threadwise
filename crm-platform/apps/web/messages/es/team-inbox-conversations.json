@@ -162,7 +162,38 @@
       },
       "templateCopyCode": "Copiar código",
       "templateButtonUnnamed": "Botón",
-      "templateButtonPrefix": "Botón: "
+      "templateButtonPrefix": "Botón: ",
+      "reply": "Responder",
+      "quote": {
+        "you": "Tú",
+        "customer": "Cliente",
+        "missing": "Mensaje original",
+        "jump": "Ir al mensaje original",
+        "replyingTo": "Respondiendo a {name}",
+        "kind": {
+          "text": "Mensaje",
+          "image": "Foto",
+          "video": "Vídeo",
+          "audio": "Audio",
+          "voice": "Mensaje de voz",
+          "document": "Documento",
+          "sticker": "Sticker",
+          "location": "Ubicación",
+          "contact": "Contacto",
+          "template": "Plantilla",
+          "reaction": "Reacción",
+          "interactive": "Selección"
+        }
+      },
+      "react": {
+        "label": "Reaccionar a este mensaje",
+        "add": "Reaccionar con {emoji}",
+        "remove": "Quitar tu reacción {emoji}",
+        "more": "Más emojis",
+        "takeBack": "Toca para retirar tu reacción",
+        "takeBackLabel": "Tu reacción {emoji}. Retirarla",
+        "failed": "Esta reacción no se envió"
+      }
     },
     "media": {
       "openImage": "Abrir imagen {name}",
@@ -232,7 +263,18 @@
       "addNote": "Añadir nota",
       "hint": "Intro envía. Mayús+Intro añade una línea nueva.",
       "template": "Enviar una plantilla",
-      "groupSendUnavailable": "El envío a grupos de WhatsApp todavía no está disponible. Responde desde la app WhatsApp Business."
+      "groupSendUnavailable": "El envío a grupos de WhatsApp todavía no está disponible. Responde desde la app WhatsApp Business.",
+      "emoji": "Insertar un emoji",
+      "emojiPanel": "Emojis",
+      "emojiRecent": "Usados recientemente",
+      "emojiGroups": "Grupos de emojis",
+      "emojiGroup": {
+        "smileys": "Caritas",
+        "gestures": "Gestos",
+        "hearts": "Corazones y símbolos",
+        "objects": "Objetos"
+      },
+      "cancelReply": "Cancelar la respuesta"
     },
     "panel": {
       "tabsLabel": "Notas y cronología",

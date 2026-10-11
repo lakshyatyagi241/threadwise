@@ -162,7 +162,38 @@
       },
       "templateCopyCode": "העתק קוד",
       "templateButtonUnnamed": "כפתור",
-      "templateButtonPrefix": "כפתור: "
+      "templateButtonPrefix": "כפתור: ",
+      "reply": "השב",
+      "quote": {
+        "you": "את/ה",
+        "customer": "לקוח",
+        "missing": "הודעה מקורית",
+        "jump": "מעבר להודעה המקורית",
+        "replyingTo": "משיב ל-{name}",
+        "kind": {
+          "text": "הודעה",
+          "image": "תמונה",
+          "video": "סרטון",
+          "audio": "אודיו",
+          "voice": "הודעה קולית",
+          "document": "מסמך",
+          "sticker": "מדבקה",
+          "location": "מיקום",
+          "contact": "איש קשר",
+          "template": "תבנית",
+          "reaction": "תגובה",
+          "interactive": "בחירה"
+        }
+      },
+      "react": {
+        "label": "הגב להודעה זו",
+        "add": "הגב עם {emoji}",
+        "remove": "הסר את התגובה {emoji} שלך",
+        "more": "עוד אימוג'ים",
+        "takeBack": "הקש כדי לבטל את התגובה שלך",
+        "takeBackLabel": "התגובה שלך {emoji}. לחץ לביטול",
+        "failed": "התגובה לא נשלחה"
+      }
     },
     "media": {
       "openImage": "פתח תמונה {name}",
@@ -232,7 +263,18 @@
       "addNote": "הוסף הערה",
       "hint": "Enter שולח. Shift+Enter מוסיף שורה חדשה.",
       "template": "שלח תבנית",
-      "groupSendUnavailable": "שליחה לקבוצות WhatsApp עדיין אינה זמינה. השב מאפליקציית WhatsApp Business."
+      "groupSendUnavailable": "שליחה לקבוצות WhatsApp עדיין אינה זמינה. השב מאפליקציית WhatsApp Business.",
+      "emoji": "הוסף אימוג'י",
+      "emojiPanel": "אימוג'י",
+      "emojiRecent": "בשימוש לאחרונה",
+      "emojiGroups": "קבוצות אימוג'י",
+      "emojiGroup": {
+        "smileys": "סמיילים",
+        "gestures": "מחוות",
+        "hearts": "לבבות וסמלים",
+        "objects": "חפצים"
+      },
+      "cancelReply": "בטל תשובה"
     },
     "panel": {
       "tabsLabel": "הערות וציר זמן",

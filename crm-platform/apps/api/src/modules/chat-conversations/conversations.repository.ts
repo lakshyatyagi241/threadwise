@@ -88,6 +88,8 @@ export interface OutboundTouch {
   preview: string | null;
   /** Set when the message is recorded already sent (another domain sent it): stamps `last_outbound_at`. */
   sentAt?: Date;
+  /** A reaction takes a `seq` and nothing else: it is not the thread's latest message and not a preview. */
+  reaction?: boolean;
 }
 
 @Injectable()
@@ -298,8 +300,8 @@ export class ConversationsRepository {
     const res = await tx.execute(sql`
       UPDATE conversations SET
         msg_seq = msg_seq + 1,
-        last_message_id = ${t.messageId},
-        last_message_at = ${t.arrivedAt}::timestamptz,
+        last_message_id = ${t.reaction ? sql`last_message_id` : sql`${t.messageId}`},
+        last_message_at = ${t.reaction ? sql`last_message_at` : sql`${t.arrivedAt}::timestamptz`},
         last_outbound_at = ${t.sentAt ? sql`GREATEST(last_outbound_at, ${t.sentAt}::timestamptz)` : sql`last_outbound_at`},
         preview = COALESCE(${t.preview}, preview)
       WHERE org_id = ${orgId} AND id = ${id}

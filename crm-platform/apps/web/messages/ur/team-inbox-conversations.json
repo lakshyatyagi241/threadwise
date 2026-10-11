@@ -162,7 +162,38 @@
       },
       "templateCopyCode": "کوڈ کاپی کریں",
       "templateButtonUnnamed": "بٹن",
-      "templateButtonPrefix": "بٹن: "
+      "templateButtonPrefix": "بٹن: ",
+      "reply": "جواب دیں",
+      "quote": {
+        "you": "آپ",
+        "customer": "صارف",
+        "missing": "اصل پیغام",
+        "jump": "اصل پیغام پر جائیں",
+        "replyingTo": "{name} کو جواب دیا جا رہا ہے",
+        "kind": {
+          "text": "پیغام",
+          "image": "تصویر",
+          "video": "ویڈیو",
+          "audio": "آڈیو",
+          "voice": "صوتی پیغام",
+          "document": "دستاویز",
+          "sticker": "اسٹیکر",
+          "location": "مقام",
+          "contact": "رابطہ",
+          "template": "ٹیمپلیٹ",
+          "reaction": "ردعمل",
+          "interactive": "انتخاب"
+        }
+      },
+      "react": {
+        "label": "اس پیغام پر ردعمل دیں",
+        "add": "{emoji} کے ساتھ ردعمل دیں",
+        "remove": "اپنا {emoji} ردعمل ہٹائیں",
+        "more": "مزید ایموجی",
+        "takeBack": "اپنا ردعمل واپس لینے کے لیے ٹیپ کریں",
+        "takeBackLabel": "آپ کا ردعمل {emoji}۔ واپس لیں",
+        "failed": "یہ ردعمل نہیں بھیجا گیا"
+      }
     },
     "media": {
       "openImage": "تصویر {name} کھولیں",
@@ -232,7 +263,18 @@
       "addNote": "نوٹ شامل کریں",
       "hint": "Enter بھیجتا ہے۔ Shift+Enter نئی لائن شامل کرتا ہے۔",
       "template": "ٹیمپلیٹ بھیجیں",
-      "groupSendUnavailable": "واٹس ایپ گروپس میں بھیجنا ابھی دستیاب نہیں ہے۔ واٹس ایپ بزنس ایپ سے جواب دیں۔"
+      "groupSendUnavailable": "واٹس ایپ گروپس میں بھیجنا ابھی دستیاب نہیں ہے۔ واٹس ایپ بزنس ایپ سے جواب دیں۔",
+      "emoji": "ایموجی شامل کریں",
+      "emojiPanel": "ایموجی",
+      "emojiRecent": "حال ہی میں استعمال شدہ",
+      "emojiGroups": "ایموجی گروپس",
+      "emojiGroup": {
+        "smileys": "اسمائلیز",
+        "gestures": "اشارے",
+        "hearts": "دل اور علامات",
+        "objects": "اشیاء"
+      },
+      "cancelReply": "جواب منسوخ کریں"
     },
     "panel": {
       "tabsLabel": "نوٹس اور ٹائم لائن",

@@ -11,7 +11,7 @@ import {
   type KeyboardEvent,
   type Ref,
 } from 'react';
-import { MESSAGE_BODY_MAX, NOTE_BODY_MAX } from '@crm/contracts';
+import { MESSAGE_BODY_MAX, NOTE_BODY_MAX, type MessageResponse } from '@crm/contracts';
 import {
   AttachmentHints,
   acceptAttribute,
@@ -21,7 +21,9 @@ import {
 } from '@/features/channel-whatsapp-cloud';
 import { Button, Spinner, cn } from '@crm/ui';
 import { humanSize } from '../lib/time';
-import { CloseIcon, FileIcon, PaperclipIcon, SendIcon, TemplateIcon } from './icons';
+import { CloseIcon, FileIcon, PaperclipIcon, SendIcon, SmileIcon, TemplateIcon } from './icons';
+import { EmojiPicker } from './emoji-picker';
+import { QuotePreview } from './quote-preview';
 
 /** What the file picker offers; the server decides what it really accepts, by the file's bytes. */
 const ACCEPT = 'image/*,video/*,audio/*,.pdf,.doc,.docx,.xls,.xlsx,.txt,.csv';
@@ -63,6 +65,9 @@ export interface ComposerProps {
   attachments?: AttachmentRules;
   /** Reading only: neither tab can write. */
   onSend: (draft: { body: string; file: File | null }) => void;
+  /** The message the next send answers (shown above the box); the screen clears it after a send. */
+  replyTo?: MessageResponse | null;
+  onCancelReply?: () => void;
   onNote: (body: string) => Promise<boolean>;
   handleRef?: Ref<ComposerHandle>;
 }
@@ -80,6 +85,7 @@ export function Composer(props: ComposerProps) {
   const [file, setFile] = useState<File | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
   const [savingNote, setSavingNote] = useState(false);
+  const [emojiOpen, setEmojiOpen] = useState(false);
   const area = useRef<HTMLTextAreaElement>(null);
   const input = useRef<HTMLInputElement>(null);
   const hintId = useId();
@@ -97,6 +103,7 @@ export function Composer(props: ComposerProps) {
     setText(DRAFTS.get(conversationId) ?? '');
     setFile(null);
     setFileError(null);
+    setEmojiOpen(false);
   }
 
   useImperativeHandle(props.handleRef, () => ({
@@ -113,6 +120,12 @@ export function Composer(props: ComposerProps) {
       });
     },
   }));
+
+  // Starting a reply puts the caret in the box.
+  const replyId = props.replyTo?.id;
+  useEffect(() => {
+    if (replyId) area.current?.focus();
+  }, [replyId]);
 
   // Grow with the text, up to about six lines.
   useEffect(() => {
@@ -157,6 +170,9 @@ export function Composer(props: ComposerProps) {
     if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
       e.preventDefault();
       void submit();
+    } else if (e.key === 'Escape' && !isNote && props.replyTo) {
+      e.preventDefault();
+      props.onCancelReply?.();
     }
   }
 
@@ -175,8 +191,20 @@ export function Composer(props: ComposerProps) {
     setFile(f);
   }
 
+  function addEmoji(emoji: string) {
+    const el = area.current;
+    const at = el?.selectionStart ?? text.length;
+    const next = text.slice(0, at) + emoji + text.slice(el?.selectionEnd ?? at);
+    if (next.length > max) return;
+    change(next);
+    requestAnimationFrame(() => {
+      el?.focus();
+      el?.setSelectionRange(at + emoji.length, at + emoji.length);
+    });
+  }
+
   return (
-    <div className="border-t border-border bg-background">
+    <div className="relative border-t border-border bg-background">
       <div role="tablist" aria-label={t('modeLabel')} className="flex items-center gap-1 px-3 pt-2">
         {(['reply', 'note'] as const).map((m) => (
           <button
@@ -202,6 +230,25 @@ export function Composer(props: ComposerProps) {
           </button>
         ))}
       </div>
+
+      {props.replyTo && !isNote && !groupBlocked && (
+        <div
+          data-testid="inbox-reply-bar"
+          className="mx-3 mt-2 flex items-start gap-2 rounded-md border border-border bg-muted/50 px-2.5 py-1.5"
+        >
+          <QuotePreview message={props.replyTo} variant="composer" className="min-w-0 flex-1" />
+          <button
+            type="button"
+            data-testid="inbox-reply-cancel"
+            aria-label={t('cancelReply')}
+            title={t('cancelReply')}
+            onClick={props.onCancelReply}
+            className="rounded p-0.5 text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
+          >
+            <CloseIcon width={14} height={14} />
+          </button>
+        </div>
+      )}
 
       {file && !isNote && !groupBlocked && (
         <div className="mx-3 mt-2 flex items-center gap-2 rounded-md border border-border bg-muted/50 px-2.5 py-1.5 text-xs">
@@ -264,6 +311,32 @@ export function Composer(props: ComposerProps) {
             >
               <PaperclipIcon />
             </button>
+          </>
+        )}
+        {!groupBlocked && (
+          <>
+            <button
+              type="button"
+              title={t('emoji')}
+              aria-label={t('emoji')}
+              aria-haspopup="dialog"
+              aria-expanded={emojiOpen}
+              data-testid="inbox-emoji-button"
+              disabled={disabled}
+              onClick={() => setEmojiOpen((v) => !v)}
+              className="flex size-10 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
+            >
+              <SmileIcon />
+            </button>
+            {emojiOpen && !disabled && (
+              <EmojiPicker
+                onPick={addEmoji}
+                onClose={() => {
+                  setEmojiOpen(false);
+                  area.current?.focus();
+                }}
+              />
+            )}
           </>
         )}
         <textarea

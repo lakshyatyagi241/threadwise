@@ -162,7 +162,38 @@
       },
       "templateCopyCode": "Copia codice",
       "templateButtonUnnamed": "Pulsante",
-      "templateButtonPrefix": "Pulsante: "
+      "templateButtonPrefix": "Pulsante: ",
+      "reply": "Rispondi",
+      "quote": {
+        "you": "Tu",
+        "customer": "Cliente",
+        "missing": "Messaggio originale",
+        "jump": "Vai al messaggio originale",
+        "replyingTo": "In risposta a {name}",
+        "kind": {
+          "text": "Messaggio",
+          "image": "Foto",
+          "video": "Video",
+          "audio": "Audio",
+          "voice": "Messaggio vocale",
+          "document": "Documento",
+          "sticker": "Sticker",
+          "location": "Posizione",
+          "contact": "Contatto",
+          "template": "Modello",
+          "reaction": "Reazione",
+          "interactive": "Selezione"
+        }
+      },
+      "react": {
+        "label": "Reagisci a questo messaggio",
+        "add": "Reagisci con {emoji}",
+        "remove": "Rimuovi la tua reazione {emoji}",
+        "more": "Altre emoji",
+        "takeBack": "Tocca per ritirare la tua reazione",
+        "takeBackLabel": "La tua reazione {emoji}. Ritirala",
+        "failed": "Questa reazione non è stata inviata"
+      }
     },
     "media": {
       "openImage": "Apri immagine {name}",
@@ -232,7 +263,18 @@
       "addNote": "Aggiungi nota",
       "hint": "Invio per inviare. Maiusc+Invio per andare a capo.",
       "template": "Invia un template",
-      "groupSendUnavailable": "L’invio ai gruppi WhatsApp non è ancora disponibile. Rispondi dall’app WhatsApp Business."
+      "groupSendUnavailable": "L’invio ai gruppi WhatsApp non è ancora disponibile. Rispondi dall’app WhatsApp Business.",
+      "emoji": "Inserisci un'emoji",
+      "emojiPanel": "Emoji",
+      "emojiRecent": "Usate di recente",
+      "emojiGroups": "Gruppi di emoji",
+      "emojiGroup": {
+        "smileys": "Faccine",
+        "gestures": "Gesti",
+        "hearts": "Cuori e simboli",
+        "objects": "Oggetti"
+      },
+      "cancelReply": "Annulla la risposta"
     },
     "panel": {
       "tabsLabel": "Note e cronologia",

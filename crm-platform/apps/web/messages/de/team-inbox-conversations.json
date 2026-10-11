@@ -162,7 +162,38 @@
       },
       "templateCopyCode": "Code kopieren",
       "templateButtonUnnamed": "Schaltfläche",
-      "templateButtonPrefix": "Schaltfläche: "
+      "templateButtonPrefix": "Schaltfläche: ",
+      "reply": "Antworten",
+      "quote": {
+        "you": "Du",
+        "customer": "Kunde",
+        "missing": "Ursprüngliche Nachricht",
+        "jump": "Zur ursprünglichen Nachricht springen",
+        "replyingTo": "Antwort an {name}",
+        "kind": {
+          "text": "Nachricht",
+          "image": "Foto",
+          "video": "Video",
+          "audio": "Audio",
+          "voice": "Sprachnachricht",
+          "document": "Dokument",
+          "sticker": "Sticker",
+          "location": "Standort",
+          "contact": "Kontakt",
+          "template": "Vorlage",
+          "reaction": "Reaktion",
+          "interactive": "Auswahl"
+        }
+      },
+      "react": {
+        "label": "Auf diese Nachricht reagieren",
+        "add": "Mit {emoji} reagieren",
+        "remove": "Deine Reaktion {emoji} entfernen",
+        "more": "Weitere Emojis",
+        "takeBack": "Tippen, um deine Reaktion zurückzunehmen",
+        "takeBackLabel": "Deine Reaktion {emoji}. Zurücknehmen",
+        "failed": "Diese Reaktion wurde nicht gesendet"
+      }
     },
     "media": {
       "openImage": "Bild {name} öffnen",
@@ -232,7 +263,18 @@
       "addNote": "Notiz hinzufügen",
       "hint": "Enter sendet. Umschalt+Enter fügt eine neue Zeile hinzu.",
       "template": "Vorlage senden",
-      "groupSendUnavailable": "Das Senden an WhatsApp-Gruppen ist noch nicht verfügbar. Antworten Sie über die WhatsApp Business App."
+      "groupSendUnavailable": "Das Senden an WhatsApp-Gruppen ist noch nicht verfügbar. Antworten Sie über die WhatsApp Business App.",
+      "emoji": "Emoji einfügen",
+      "emojiPanel": "Emojis",
+      "emojiRecent": "Zuletzt verwendet",
+      "emojiGroups": "Emoji-Gruppen",
+      "emojiGroup": {
+        "smileys": "Smileys",
+        "gestures": "Gesten",
+        "hearts": "Herzen und Symbole",
+        "objects": "Objekte"
+      },
+      "cancelReply": "Antwort abbrechen"
     },
     "panel": {
       "tabsLabel": "Notizen und Verlauf",

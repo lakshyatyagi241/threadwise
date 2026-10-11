@@ -239,6 +239,17 @@ export const sendMessageSchema = z.discriminatedUnion('kind', [
     mediaId: uuidSchema,
     caption: z.string().trim().max(MESSAGE_CAPTION_MAX).optional(),
   }),
+  /**
+   * React to a message with an emoji (`emoji: ''` takes the reaction back). Answers like any send: a stored `queued` message of kind
+   * `reaction` that points at `targetMessageId`. It is not a reply to show in the thread (the target's bubble carries the emoji), needs
+   * an open window like any free-form message, and only on a channel whose capabilities say `reactions`.
+   */
+  z.object({
+    clientMessageId,
+    kind: z.literal('reaction'),
+    targetMessageId: uuidSchema,
+    emoji: z.string().max(16),
+  }),
   z.object({
     ...sendBase,
     kind: z.literal('template'),

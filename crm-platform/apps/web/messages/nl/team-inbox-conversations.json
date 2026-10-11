@@ -162,7 +162,38 @@
       },
       "templateCopyCode": "Code kopiëren",
       "templateButtonUnnamed": "Knop",
-      "templateButtonPrefix": "Knop: "
+      "templateButtonPrefix": "Knop: ",
+      "reply": "Beantwoorden",
+      "quote": {
+        "you": "Jij",
+        "customer": "Klant",
+        "missing": "Oorspronkelijk bericht",
+        "jump": "Ga naar het oorspronkelijke bericht",
+        "replyingTo": "Reageren op {name}",
+        "kind": {
+          "text": "Bericht",
+          "image": "Foto",
+          "video": "Video",
+          "audio": "Audio",
+          "voice": "Spraakbericht",
+          "document": "Document",
+          "sticker": "Sticker",
+          "location": "Locatie",
+          "contact": "Contact",
+          "template": "Sjabloon",
+          "reaction": "Reactie",
+          "interactive": "Selectie"
+        }
+      },
+      "react": {
+        "label": "Reageer op dit bericht",
+        "add": "Reageer met {emoji}",
+        "remove": "Verwijder je reactie {emoji}",
+        "more": "Meer emoji",
+        "takeBack": "Tik om je reactie in te trekken",
+        "takeBackLabel": "Jouw reactie {emoji}. Intrekken",
+        "failed": "Deze reactie is niet verzonden"
+      }
     },
     "media": {
       "openImage": "Afbeelding {name} openen",
@@ -232,7 +263,18 @@
       "addNote": "Notitie toevoegen",
       "hint": "Enter verzendt. Shift+Enter voegt een nieuwe regel toe.",
       "template": "Een sjabloon verzenden",
-      "groupSendUnavailable": "Verzenden naar WhatsApp-groepen is nog niet beschikbaar. Antwoord via de WhatsApp Business-app."
+      "groupSendUnavailable": "Verzenden naar WhatsApp-groepen is nog niet beschikbaar. Antwoord via de WhatsApp Business-app.",
+      "emoji": "Emoji invoegen",
+      "emojiPanel": "Emoji",
+      "emojiRecent": "Recent gebruikt",
+      "emojiGroups": "Emojigroepen",
+      "emojiGroup": {
+        "smileys": "Smileys",
+        "gestures": "Gebaren",
+        "hearts": "Harten en symbolen",
+        "objects": "Objecten"
+      },
+      "cancelReply": "Antwoord annuleren"
     },
     "panel": {
       "tabsLabel": "Notities en tijdlijn",

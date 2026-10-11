@@ -162,7 +162,38 @@
       },
       "templateCopyCode": "复制代码",
       "templateButtonUnnamed": "按钮",
-      "templateButtonPrefix": "按钮： "
+      "templateButtonPrefix": "按钮： ",
+      "reply": "回复",
+      "quote": {
+        "you": "你",
+        "customer": "客户",
+        "missing": "原消息",
+        "jump": "跳转到原消息",
+        "replyingTo": "正在回复 {name}",
+        "kind": {
+          "text": "消息",
+          "image": "照片",
+          "video": "视频",
+          "audio": "音频",
+          "voice": "语音消息",
+          "document": "文档",
+          "sticker": "贴纸",
+          "location": "位置",
+          "contact": "联系人",
+          "template": "模板",
+          "reaction": "回应",
+          "interactive": "选择"
+        }
+      },
+      "react": {
+        "label": "回应此消息",
+        "add": "用 {emoji} 回应",
+        "remove": "移除你的 {emoji} 回应",
+        "more": "更多表情",
+        "takeBack": "点按以撤回你的回应",
+        "takeBackLabel": "你的回应 {emoji}。撤回",
+        "failed": "此回应未发送"
+      }
     },
     "media": {
       "openImage": "打开图片 {name}",
@@ -232,7 +263,18 @@
       "addNote": "添加备注",
       "hint": "按 Enter 发送，Shift+Enter 换行。",
       "template": "发送模板",
-      "groupSendUnavailable": "暂不支持发送到 WhatsApp 群组。请使用 WhatsApp Business 应用回复。"
+      "groupSendUnavailable": "暂不支持发送到 WhatsApp 群组。请使用 WhatsApp Business 应用回复。",
+      "emoji": "插入表情",
+      "emojiPanel": "表情",
+      "emojiRecent": "最近使用",
+      "emojiGroups": "表情分组",
+      "emojiGroup": {
+        "smileys": "笑脸",
+        "gestures": "手势",
+        "hearts": "爱心和符号",
+        "objects": "物品"
+      },
+      "cancelReply": "取消回复"
     },
     "panel": {
       "tabsLabel": "备注与时间线",

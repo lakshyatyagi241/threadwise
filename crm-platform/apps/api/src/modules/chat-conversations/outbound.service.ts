@@ -26,6 +26,21 @@ import { MessageViewService } from './message-view.service';
 import { MessagesRepository, type MessageRow } from './messages.repository';
 import { envelopeOf, messageFieldsOf } from './outbound-envelope';
 
+/** What a person can react to: a message the customer's app shows (not a note-like system line, not another reaction). */
+const REACTABLE: ReadonlySet<string> = new Set([
+  'text',
+  'image',
+  'video',
+  'audio',
+  'voice',
+  'document',
+  'sticker',
+  'location',
+  'contact',
+  'template',
+  'interactive',
+]);
+
 export const conversationNotFound = (uuid: string): AppError =>
   new AppError(
     ERROR_CODES.CONVERSATION_NOT_FOUND,
@@ -94,6 +109,20 @@ export class OutboundService {
       const replyTo = input.replyToMessageId
         ? await this.replyTarget(tx, orgId, conv, input.replyToMessageId)
         : null;
+      const isReaction = input.content.kind === 'reaction';
+      if (isReaction && !(replyTo?.providerMessageId && REACTABLE.has(replyTo.kind))) {
+        throw new AppError(
+          ERROR_CODES.VALIDATION_FAILED,
+          'That message cannot be reacted to',
+          HttpStatus.UNPROCESSABLE_ENTITY,
+          [
+            {
+              path: 'targetMessageId',
+              message: 'the message is not sent yet, or is not a message a customer sees',
+            },
+          ],
+        );
+      }
 
       const request = {
         channel: runtime,
@@ -138,7 +167,8 @@ export class OutboundService {
       const after = await this.conversations.applyOutboundQueued(tx, orgId, conv.id, {
         messageId: alloc.id,
         arrivedAt: alloc.createdAt,
-        preview: previewOf({ kind: fields.kind, body: fields.body }),
+        preview: isReaction ? null : previewOf({ kind: fields.kind, body: fields.body }),
+        reaction: isReaction,
       });
       await this.messages.insert(tx, orgId, {
         id: alloc.id,
@@ -173,7 +203,12 @@ export class OutboundService {
 
     if (!done.replayed) {
       await this.enqueueJob(orgId, done.row.uuid, 1);
-      await this.realtime.messageStored(orgId, done.conv, done.row, ['lastMessage']);
+      await this.realtime.messageStored(
+        orgId,
+        done.conv,
+        done.row,
+        done.row.kind === 'reaction' ? [] : ['lastMessage'],
+      );
     }
     return { message: this.view.respond(done.row), replayed: done.replayed };
   }
