@@ -7,7 +7,7 @@ are index rows only, ported from the reference source directly.
 
 ## How a schedule moves
 
-| Step   | Reference                                                                            | Ours                                                                                                                                      |
+| Step   | Reference                                                                         | Ours                                                                                                                                      |
 | ------ | --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | Store  | `ScheduledController@store` writes rows, registers each with the Node bridge      | `ScheduleCreateService` writes rows and recipient rows in one transaction; the row is the schedule                                        |
 | Wait   | Node's in-memory cron (lost on restart, restored from `GET api/scheduled/active`) | `scheduled_messages.next_run_at`; `ScheduledDueService` queues due rows on BullMQ queue `sched-run` (job id `<uuid>-<epoch>-<attempt>`)   |

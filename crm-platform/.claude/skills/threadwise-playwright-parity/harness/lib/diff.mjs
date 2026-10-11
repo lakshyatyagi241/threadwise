@@ -267,7 +267,10 @@ export function compareScenario({
       mk({
         key: '(scenario)',
         result: 'skipped',
-        note: [W.skipReason && `threadwise: ${W.skipReason}`, O.skipReason && `ours: ${O.skipReason}`]
+        note: [
+          W.skipReason && `threadwise: ${W.skipReason}`,
+          O.skipReason && `ours: ${O.skipReason}`,
+        ]
           .filter(Boolean)
           .join('; '),
       }),

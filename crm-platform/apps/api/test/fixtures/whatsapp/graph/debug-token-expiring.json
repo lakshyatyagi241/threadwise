@@ -4,9 +4,6 @@
     "type": "USER",
     "expires_at": 1760100000,
     "is_valid": true,
-    "scopes": [
-      "whatsapp_business_management",
-      "whatsapp_business_messaging"
-    ]
+    "scopes": ["whatsapp_business_management", "whatsapp_business_messaging"]
   }
 }

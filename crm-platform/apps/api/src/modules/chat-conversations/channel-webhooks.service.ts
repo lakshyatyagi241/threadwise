@@ -56,7 +56,8 @@ export class ChannelWebhooksService {
     const found = await this.locate(channelUuid);
     const token = typeof query['hub.verify_token'] === 'string' ? query['hub.verify_token'] : '';
     const challenge = typeof query['hub.challenge'] === 'string' ? query['hub.challenge'] : '';
-    if (query['hub.mode'] !== 'subscribe' || !token || !CHALLENGE.test(challenge)) throw unauthorized();
+    if (query['hub.mode'] !== 'subscribe' || !token || !CHALLENGE.test(challenge))
+      throw unauthorized();
 
     const stored = await this.db.txAs({ orgId: found.orgId }, async (tx) => {
       const row = await this.repo.byId(tx, found.orgId, found.id);
@@ -105,7 +106,10 @@ export class ChannelWebhooksService {
       ...parsed.receipts.map((r) => this.publisher.enqueueReceipt(found.orgId, runtime.uuid, r)),
     ]);
     if (parsed.ignored?.length) {
-      this.logger.debug({ channel: runtime.uuid, ignored: parsed.ignored.slice(0, 20) }, 'webhook parts not stored');
+      this.logger.debug(
+        { channel: runtime.uuid, ignored: parsed.ignored.slice(0, 20) },
+        'webhook parts not stored',
+      );
     }
     return { received: true };
   }

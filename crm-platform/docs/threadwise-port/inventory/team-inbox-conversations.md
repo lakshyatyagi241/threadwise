@@ -2147,7 +2147,6 @@ Exposes:
 }
 ```
 
-
 ## Port note: data model reshape (2026-10-02, plan-inbox-chat.md owner decision 2)
 
 The rebuild folds this domain's two message tables (`messages` and TIB1's `inbox_messages`) into one `messages` stream and reshapes

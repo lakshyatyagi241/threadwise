@@ -79,13 +79,18 @@ function MessageBody({
     }
   }
 
-  const referral = m.referral && (m.referral.headline || m.referral.body || m.referral.sourceUrl) ? m.referral : null;
+  const referral =
+    m.referral && (m.referral.headline || m.referral.body || m.referral.sourceUrl)
+      ? m.referral
+      : null;
   const referralCard = referral ? (
     <div
       data-testid="inbox-referral"
       className="mb-1.5 rounded-md border border-border bg-muted/50 px-2 py-1 text-xs"
     >
-      <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">{t('referral')}</p>
+      <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+        {t('referral')}
+      </p>
       {referral.headline && (
         <p dir="auto" className="font-medium break-words">
           {referral.headline}
@@ -257,7 +262,10 @@ export const MessageBubble = memo(function MessageBubble({
             <p className="mb-0.5 text-[11px] font-medium text-muted-foreground">{sender}</p>
           )}
           {m.forwarded && (
-            <p data-testid="inbox-forwarded" className="mb-0.5 text-[11px] italic text-muted-foreground">
+            <p
+              data-testid="inbox-forwarded"
+              className="mb-0.5 text-[11px] italic text-muted-foreground"
+            >
               {t('forwarded')}
             </p>
           )}

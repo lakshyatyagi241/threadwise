@@ -47,12 +47,12 @@ Add-on and web page (this session):
 | TW-EXT-008 | backend-done        | `GET /api/v1/sheets-addon/shops`. Difference 7.                                                                                                                                                    |
 | TW-EXT-009 | backend-done        | The shop half of `POST /api/v1/sheets-addon/sync`. Differences 5, 8; quirks kept.                                                                                                                  |
 | TW-EXT-010 | backend-done        | The product half of the same call, through the product form's own create and update. Difference 9; quirks kept.                                                                                    |
-| TW-EXT-011 | backend-done        | `GET /api/v1/sheets-addon/contacts`. New (not in Reference).                                                                                                                                          |
-| TW-EXT-012 | backend-done        | `POST /api/v1/sheets-addon/contacts/sync`. New (not in Reference).                                                                                                                                    |
+| TW-EXT-011 | backend-done        | `GET /api/v1/sheets-addon/contacts`. New (not in Reference).                                                                                                                                       |
+| TW-EXT-012 | backend-done        | `POST /api/v1/sheets-addon/contacts/sync`. New (not in Reference).                                                                                                                                 |
 | TW-EXT-013 | backend-done        | Install per workspace, consent as a ceiling, role as the floor. New; needs the Marketplace listing to be published before a real install (the e2e inserts the install row directly).               |
 | TW-EXT-014 | backend-done        | Summary audit row and `ext.sheets.synced` event per write call.                                                                                                                                    |
 | TW-EXT-015 | backend-done        | `GET /api/v1/sheets-addon/health`. Difference 7.                                                                                                                                                   |
-| TW-EXT-016 | blocked             | Sending a message from a sheet is not in Reference; needs an owner decision (see the inventory).                                                                                                      |
+| TW-EXT-016 | blocked             | Sending a message from a sheet is not in Reference; needs an owner decision (see the inventory).                                                                                                   |
 
 ## Differences from Reference
 

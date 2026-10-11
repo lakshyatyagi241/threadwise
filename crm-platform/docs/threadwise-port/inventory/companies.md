@@ -37,21 +37,21 @@ scoping, members), `roles-permissions` (record scope), `plans-subscriptions-tria
 
 ## Feature index
 
-| Id         | Feature                                            | Status        | Priority | Effort | Depends on  |
-| ---------- | -------------------------------------------------- | ------------- | -------- | ------ | ----------- |
-| TW-CTP-001 | Plan gate (no role gate)                           | implemented   | P0       | S      |             |
-| TW-CTP-002 | Companies list: search, tiles, rollups             | implemented   | P0       | M      | 001         |
-| TW-CTP-003 | Create company                                     | implemented   | P0       | S      | 001         |
-| TW-CTP-004 | Update company                                     | partial       | P1       | S      | 003         |
-| TW-CTP-005 | Company page (360): contacts, deals, rollup, notes | implemented   | P0       | M      | 002         |
-| TW-CTP-006 | Contacts of a company: link and unlink             | partial       | P1       | M      | 005         |
+| Id         | Feature                                            | Status           | Priority | Effort | Depends on  |
+| ---------- | -------------------------------------------------- | ---------------- | -------- | ------ | ----------- |
+| TW-CTP-001 | Plan gate (no role gate)                           | implemented      | P0       | S      |             |
+| TW-CTP-002 | Companies list: search, tiles, rollups             | implemented      | P0       | M      | 001         |
+| TW-CTP-003 | Create company                                     | implemented      | P0       | S      | 001         |
+| TW-CTP-004 | Update company                                     | partial          | P1       | S      | 003         |
+| TW-CTP-005 | Company page (360): contacts, deals, rollup, notes | implemented      | P0       | M      | 002         |
+| TW-CTP-006 | Contacts of a company: link and unlink             | partial          | P1       | M      | 005         |
 | TW-CTP-007 | Company activity trail                             | not in Reference | P2       | S      | 003         |
-| TW-CTP-008 | Delete company (contacts and deals are unlinked)   | implemented   | P0       | S      | 003         |
-| TW-CTP-009 | Picker search endpoint (`GET companies/search`)    | implemented   | P1       | S      | 001         |
-| TW-CTP-010 | Deals of a company (`deals.company_id`)            | partial       | P1       | S      | TW-DEAL-038 |
-| TW-CTP-011 | AI copilot company tools                           | implemented   | P2       | S      | 003, 006    |
-| TW-CTP-012 | Client brief for a company ("Generate brief")      | implemented   | P2       | M      | 005         |
-| TW-CTP-013 | Other records that point at a company              | partial       | P1       | S      | 008         |
+| TW-CTP-008 | Delete company (contacts and deals are unlinked)   | implemented      | P0       | S      | 003         |
+| TW-CTP-009 | Picker search endpoint (`GET companies/search`)    | implemented      | P1       | S      | 001         |
+| TW-CTP-010 | Deals of a company (`deals.company_id`)            | partial          | P1       | S      | TW-DEAL-038 |
+| TW-CTP-011 | AI copilot company tools                           | implemented      | P2       | S      | 003, 006    |
+| TW-CTP-012 | Client brief for a company ("Generate brief")      | implemented      | P2       | M      | 005         |
+| TW-CTP-013 | Other records that point at a company              | partial          | P1       | S      | 008         |
 
 ## Features
 
@@ -315,7 +315,7 @@ keys, no uniqueness, no soft delete. The same migration adds `contacts.company_i
 
 ## Differences to decide
 
-| Id   | Reference behavior                                                                      | Recommendation for the port                                                                                                                                             |
+| Id   | Reference behavior                                                                   | Recommendation for the port                                                                                                                                             |
 | ---- | ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | D-01 | Plan gate on the routes only, nothing else                                           | `PLAN_FEATURE_LOCKED` on every route, reads included (the same `SalesPipelineGuard` as deals and tasks)                                                                 |
 | D-02 | No permission keys: any member does anything                                         | `record.companies.read/create/update/delete` with a record scope (own = owned or created by me, team, all); Owner/Admin/Manager all, Agent read/create all and edit own |
@@ -334,7 +334,7 @@ keys, no uniqueness, no soft delete. The same migration adds `contacts.company_i
 | D-15 | Contacts listed from every record, whatever the viewer may see                       | The contact list of a company applies the caller's contact scope; link and unlink need `record.contacts.update` on each contact                                         |
 | D-16 | Deals link to `/deals`, values with no currency                                      | Each deal links to its own page; the value carries its currency; open deals first, then newest (cursor paging)                                                          |
 | D-17 | Duplicate names allowed                                                              | Kept: companies are not unique by name (two branches can share one)                                                                                                     |
-| D-18 | No company properties screen, `custom_attributes` unused                             | Not exposed: the platform's property registry already supports `moduleKey = companies`, but Reference has nothing to port; a company properties screen is a follow-up      |
+| D-18 | No company properties screen, `custom_attributes` unused                             | Not exposed: the platform's property registry already supports `moduleKey = companies`, but Reference has nothing to port; a company properties screen is a follow-up   |
 
 ## Coverage
 
@@ -383,7 +383,7 @@ is listed here with the "Differences to decide" row it settles. Code: `apps/api/
 
 | Diff # | Decision                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | Where           |
 | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
-| D-01   | Every route is behind `SalesPipelineGuard` (`422 PLAN_FEATURE_LOCKED`, reads included). There is no company-count limit (Reference has none).                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | TW-CTP-001      |
+| D-01   | Every route is behind `SalesPipelineGuard` (`422 PLAN_FEATURE_LOCKED`, reads included). There is no company-count limit (Reference has none).                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | TW-CTP-001      |
 | D-02   | `record.companies.read/create/update/delete` (the keys 0008 seeded for the generic CRM, labels refreshed by `20261019090100`). Scope is on the PEOPLE of the company: `own` = owned by me or created by me, `team` adds teammates, `all` is the workspace; an out-of-scope company is 404, never 403. Owner and Admin and Manager hold all four; the Agent preset gets read and create at `all` and update at `own` through the new `workspace_preset_baseline` rows (companies are shared accounts, so an Agent must see them all to pick one; deleting is a Manager right); the dev seed's Counsellor the same. | TW-CTP-001      |
 | D-03   | `name`, `email` and `phone` are plain columns, with length CHECKs (191, 191, 32); a trigram index serves the name search.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | TW-CTP-002      |
 | D-04   | `GET /companies`: `q` (substring of the name, `%` `_` literal), `ownerId`, `unassigned`, `industry`, `hasOpenDeals`, `sort` (`created` newest first, `name` A to Z), cursor over `(created_at, id)` or `(lower(name), id)` with the sort inside the cursor, `limit` up to 200. No row cap.                                                                                                                                                                                                                                                                                                                        | TW-CTP-002      |
@@ -400,15 +400,15 @@ is listed here with the "Differences to decide" row it settles. Code: `apps/api/
 | D-15   | `GET /companies/:id/contacts` applies the caller's contact scope (and needs `record.contacts.read`).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | TW-CTP-005      |
 | D-16   | The company page lists deals through the deals API (`GET /deals?companyId=`), open first within the loaded page, each linking to its own page, with its currency.                                                                                                                                                                                                                                                                                                                                                                                                                                                 | TW-CTP-005, 010 |
 | D-17   | Duplicate names stay allowed.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | TW-CTP-003      |
-| D-18   | `custom_attributes` (`data`) is not exposed: Reference never wrote or read it and has no company properties screen.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | TW-CTP-013      |
+| D-18   | `custom_attributes` (`data`) is not exposed: Reference never wrote or read it and has no company properties screen.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | TW-CTP-013      |
 
 ### Other decisions
 
 | Decision                                                                                                                                                                                                                               | Where      |
 | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
 | Ids on the wire, in audit rows and in events are uuids; the audit trail names owners and contacts by uuid and the activity read resolves them to names.                                                                                | all        |
-| `GET /companies/:id/contacts` lists non-archived contacts only (the contacts list does the same), newest first by id like Reference, so a contact archived in the contacts screen leaves the company's list and count together.           | TW-CTP-005 |
-| The search matches the name only, as Reference's did. Matching the website, email or industry too is possible later; it was left out so the search box means what it did.                                                                 | TW-CTP-002 |
+| `GET /companies/:id/contacts` lists non-archived contacts only (the contacts list does the same), newest first by id like Reference, so a contact archived in the contacts screen leaves the company's list and count together.        | TW-CTP-005 |
+| The search matches the name only, as Reference's did. Matching the website, email or industry too is possible later; it was left out so the search box means what it did.                                                              | TW-CTP-002 |
 | A migration cannot clear the permission cache: on a running environment the Agent's new grants appear when the 10-minute grant cache expires (or after flushing the `rbac:*` Redis keys), as with deals and tasks.                     | rbac       |
 | `companies.name` is NOT NULL and length-checked now; the migration repairs older rows first (trim, cut to length, a missing name filled from the website or `Company <id>`), so it also runs on a database that already has companies. | schema     |
 
@@ -419,10 +419,10 @@ is listed here with the "Differences to decide" row it settles. Code: `apps/api/
 | "Generate brief" (TW-CTP-012)                                                                 | The client brief feature is not built (CRM dashboard domain).                                                  |
 | AI copilot company tools (TW-CTP-011)                                                         | Owned by the AI domain; it calls `CompaniesService`.                                                           |
 | A company's tasks card on its page                                                            | `GET /tasks?companyId=` exists; the Tasks hub needs a company filter and the linked-tasks card a company kind. |
-| A company picker on the contact and deal forms                                                | The APIs take `companyId`; Reference's forms have no company field, so it is an extension left for later.         |
-| A company properties screen (the platform's registry already accepts `moduleKey = companies`) | Reference has none (D-18).                                                                                        |
-| Companies in the contacts CSV import                                                          | Reference's import has no company column.                                                                         |
-| Company export, merge and duplicate detection                                                 | Not in Reference.                                                                                                 |
+| A company picker on the contact and deal forms                                                | The APIs take `companyId`; Reference's forms have no company field, so it is an extension left for later.      |
+| A company properties screen (the platform's registry already accepts `moduleKey = companies`) | Reference has none (D-18).                                                                                     |
+| Companies in the contacts CSV import                                                          | Reference's import has no company column.                                                                      |
+| Company export, merge and duplicate detection                                                 | Not in Reference.                                                                                              |
 
 ### Build status (tracker vocabulary)
 
@@ -434,7 +434,7 @@ rows either, and `tracker.py validate` already reports 258 problems), so the sta
 | ---------- | ------------- | ------------------------------------------------------------------------------------------------ |
 | TW-CTP-001 | frontend-done | plan gate and permissions on every route; the menu entry replaced the planned "Soon" item        |
 | TW-CTP-002 | frontend-done | list, search, filters, sort, cursor paging, tiles, rollups                                       |
-| TW-CTP-003 | frontend-done | create modal (Reference's fields + More details)                                                    |
+| TW-CTP-003 | frontend-done | create modal (Reference's fields + More details)                                                 |
 | TW-CTP-004 | frontend-done | edit form and `rowVersion`                                                                       |
 | TW-CTP-005 | frontend-done | company page: tiles, contacts, deals, notes, details                                             |
 | TW-CTP-006 | frontend-done | add and remove contacts from the company page                                                    |

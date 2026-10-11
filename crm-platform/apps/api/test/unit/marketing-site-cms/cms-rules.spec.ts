@@ -229,11 +229,11 @@ describe('layout (TW-CMS-022, 023)', () => {
   });
 
   it('reordering silently drops pinned, foreign and repeated slugs, keeping the submitted order', () => {
-    expect(checkLayout('home', undefined, ['hero', 'faq', 'feature-bento', 'logo-strip', 'faq'])).toEqual(
-      {
-        ok: true,
-        order: ['faq', 'logo-strip'],
-      },
-    );
+    expect(
+      checkLayout('home', undefined, ['hero', 'faq', 'feature-bento', 'logo-strip', 'faq']),
+    ).toEqual({
+      ok: true,
+      order: ['faq', 'logo-strip'],
+    });
   });
 });

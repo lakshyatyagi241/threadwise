@@ -19,7 +19,7 @@ Source of truth for what the feature does: the inventory entry (UX & screens, Ru
 | RTL layout (`dir=rtl`), long content, 200% zoom, dark/light                                              | custom scenario: set the attribute / viewport, record `low.overflowX.*`  |
 | Deep link, refresh, Back/Forward keep state (filters, tab, open record)                                  | custom scenario                                                          |
 | Role that lacks the permission: control hidden vs disabled vs 403 page                                   | custom scenario with `role` (needs a seeded second role on both sides)   |
-| Another tenant's record id: 404 (ours) vs whatever Reference does                                           | custom API scenario, `enum.crossTenant` (rule `tenant-404` is automatic) |
+| Another tenant's record id: 404 (ours) vs whatever Reference does                                        | custom API scenario, `enum.crossTenant` (rule `tenant-404` is automatic) |
 | Plan / limit reached: control disabled, message shown, API refuses                                       | custom scenario; set the limit through the admin UI on both sides        |
 
 ## B. Every form (`forms[]`, generated unless marked custom)
@@ -34,7 +34,7 @@ Source of truth for what the feature does: the inventory entry (UX & screens, Ru
 | Uniqueness: exact, case-different, space-padded duplicate                                                                                                                                                                    | `unique: true` on the field                 |
 | Select / checkbox: first, last, none; both states                                                                                                                                                                            | generated                                   |
 | Which fields are flagged, whether typed values survive a rejection, where focus goes                                                                                                                                         | recorded on every case                      |
-| Enter submits; double click submits once (or the duplicate is a known Reference quirk); busy state while sending                                                                                                                | `enter-key`, `double-submit`, `slow-server` |
+| Enter submits; double click submits once (or the duplicate is a known Reference quirk); busy state while sending                                                                                                             | `enter-key`, `double-submit`, `slow-server` |
 | Server returns 500: feedback shown, values kept, submit usable again                                                                                                                                                         | `server-error`                              |
 | Offline while submitting; session expired before submit                                                                                                                                                                      | `offline`, `session-expired`                |
 | Cancel with typed data (confirm?) and reopen is clean                                                                                                                                                                        | `cancel-dirty` (give `cancel`)              |
@@ -42,7 +42,7 @@ Source of truth for what the feature does: the inventory entry (UX & screens, Ru
 | File upload: type, size, empty file, duplicate, very long file name, virus-ish extension                                                                                                                                     | custom scenario (`setInputFiles`)           |
 | Dates and timezones: user timezone vs UTC storage, DST gaps, midnight boundaries                                                                                                                                             | custom scenario, read back the stored value |
 | Edit form: prefilled values equal what was stored, unchanged save is a no-op, partial update                                                                                                                                 | custom scenario (open the record)           |
-| Two tabs edit the same row: last write wins (Reference) vs 409 (ours, rule `optimistic-locking`)                                                                                                                                | custom scenario, `enum.concurrentEdit`      |
+| Two tabs edit the same row: last write wins (Reference) vs 409 (ours, rule `optimistic-locking`)                                                                                                                             | custom scenario, `enum.concurrentEdit`      |
 
 ## C. Every list (`lists[]`, generated)
 

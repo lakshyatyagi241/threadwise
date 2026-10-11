@@ -106,8 +106,12 @@ describe('permissions and plan gate (TW-AIAG-014)', () => {
     ).toBe(403);
     expect((await api.as(reader.token).delete(`${AS}/${a.id}`)).status).toBe(403);
     expect(
-      (await api.as(reader.token).put('/v2/ai-training/responder').send({ mode: 'threadwise_only' }))
-        .status,
+      (
+        await api
+          .as(reader.token)
+          .put('/v2/ai-training/responder')
+          .send({ mode: 'threadwise_only' })
+      ).status,
     ).toBe(403);
 
     const maker = await api.member(t, 'maker', [['aiag.training.read'], ['aiag.training.create']]);
@@ -1157,7 +1161,9 @@ describe('who answers WhatsApp: the responder mode (TW-AIAG-013)', () => {
       .send({ mode: 'threadwise_only', metaAgentEnabled: false });
     const res = await api.as(t.admin).put('/v2/ai-training/responder').send(body);
     expect(res.status).toBe(422);
-    expect((await api.as(t.admin).get('/v2/ai-training/responder')).body.mode).toBe('threadwise_only');
+    expect((await api.as(t.admin).get('/v2/ai-training/responder')).body.mode).toBe(
+      'threadwise_only',
+    );
   });
 
   it('a change is audited with old and new, an unchanged save is not, and it is per workspace', async () => {

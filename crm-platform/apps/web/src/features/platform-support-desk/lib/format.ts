@@ -24,7 +24,11 @@ export function shortDate(iso: string, locale: string): { day: string; time: str
   const d = new Date(iso);
   return {
     day: new Intl.DateTimeFormat(locale, { month: 'short', day: 'numeric' }).format(d),
-    time: new Intl.DateTimeFormat(locale, { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(d),
+    time: new Intl.DateTimeFormat(locale, {
+      hour: '2-digit',
+      minute: '2-digit',
+      hourCycle: 'h23',
+    }).format(d),
   };
 }
 

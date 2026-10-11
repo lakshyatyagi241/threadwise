@@ -506,7 +506,11 @@ export default (h) => {
     run: async (c) => {
       for (const [name, path, ready] of [
         ['list', '/admin/coupons', { threadwise: 'table', ours: 'main h1' }],
-        ['form', { threadwise: '/admin/coupons/create', ours: '/admin/coupons/new' }, '#couponForm'],
+        [
+          'form',
+          { threadwise: '/admin/coupons/create', ours: '/admin/coupons/new' },
+          '#couponForm',
+        ],
       ]) {
         for (const vp of [390, 820, 1366]) {
           await c.page.setViewportSize({ width: vp, height: 900 });
@@ -830,7 +834,10 @@ export default (h) => {
       // unchanged save is a no-op on the stored row and writes no audit row
       const a0 = auditCount(c);
       const save = c
-        .loc({ threadwise: '#couponForm button[type=submit]', ours: '#couponForm button[type=submit]' })
+        .loc({
+          threadwise: '#couponForm button[type=submit]',
+          ours: '#couponForm button[type=submit]',
+        })
         .first();
       const m0 = c.rec.mark();
       await save.click();
@@ -1177,7 +1184,8 @@ export default (h) => {
         scenario: /^coupon-create\.(admin_note|description|code)\.emoji$/,
         key: 'map.stored',
         quirk: 'Reference stores four-byte characters as question marks (its table is not utf8mb4)',
-        reason: 'ours stores the emoji intact; the Reference data loss is a bug we do not reproduce',
+        reason:
+          'ours stores the emoji intact; the Reference data loss is a bug we do not reproduce',
       },
       {
         scenario: /^coupon-create\.(admin_note|description)\.newline$/,

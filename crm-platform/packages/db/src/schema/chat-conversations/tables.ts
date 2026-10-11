@@ -50,7 +50,10 @@ export const conversations = pgTable(
     contactId: idColumn('contact_id'),
     title: text('title').notNull(),
     preview: text('preview'),
-    status: text('status').$type<(typeof CONVERSATION_STATUSES)[number]>().notNull().default('open'),
+    status: text('status')
+      .$type<(typeof CONVERSATION_STATUSES)[number]>()
+      .notNull()
+      .default('open'),
     customerLanguage: text('customer_language'),
     archived: boolean('archived').notNull().default(false),
     pinnedAt: timestamp('pinned_at', { withTimezone: true }),
@@ -222,7 +225,10 @@ export const conversationNotes = pgTable(
     userId: idColumn('user_id'),
     body: text('body').notNull(),
     /** Users mentioned, as uuid strings (tib1 migration 20261015090100: NOT NULL, always an array). */
-    mentions: jsonb('mentions').$type<string[]>().notNull().default(sql`'[]'::jsonb`),
+    mentions: jsonb('mentions')
+      .$type<string[]>()
+      .notNull()
+      .default(sql`'[]'::jsonb`),
     isPinned: boolean('is_pinned').notNull().default(false),
     editedAt: timestamp('edited_at', { withTimezone: true }),
     createdAt: createdAt(),

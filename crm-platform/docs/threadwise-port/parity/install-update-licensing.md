@@ -12,11 +12,11 @@ fidelity is therefore from the Blade/CSS source, not from pixels. Behaviour is c
 
 ## Screens
 
-| Reference screen              | Ours                                                                                       | Result   |
+| Reference screen           | Ours                                                                                       | Result   |
 | -------------------------- | ------------------------------------------------------------------------------------------ | -------- |
 | install layout (card+rail) | one centred card, seven-step rail on the left (lg+), progress bar and step name on mobile  | same     |
-| welcome                    | setup token field (replaces nothing in Reference: see D1)                                     | intended |
-| license (purchase code)    | shown only when `LICENCE_MODE` enforces a code; sits under rail step 1 like Reference         | same     |
+| welcome                    | setup token field (replaces nothing in Reference: see D1)                                  | intended |
+| license (purchase code)    | shown only when `LICENCE_MODE` enforces a code; sits under rail step 1 like Reference      | same     |
 | requirements               | checklist of server prerequisites, blocks "Continue" while a required one fails            | same     |
 | database                   | host, port, name, user, password, "Test connection" with transport cascade result          | same     |
 | application                | name, URL, timezone typeahead (first 25), locale                                           | same     |

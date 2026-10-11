@@ -23,7 +23,9 @@ function build() {
         // The bound values are the primitives among the chunks (the text parts are StringChunk objects).
         const params = q.queryChunks.filter((c) => c === null || typeof c !== 'object');
         const text = q.queryChunks
-          .flatMap((c) => (c !== null && typeof c === 'object' ? (c as { value: string[] }).value : []))
+          .flatMap((c) =>
+            c !== null && typeof c === 'object' ? (c as { value: string[] }).value : [],
+          )
           .join('?');
         const wabaOnly = text.includes('(NULL,');
         const phone = wabaOnly ? null : (params[0] as string | null);
@@ -93,8 +95,9 @@ describe('WhatsApp webhook: signature scope (AZ-015)', () => {
 
   it('refuses an own-secret body that names an unknown number', async () => {
     const { svc } = build();
-    await expect(send(svc, raw(change('wx', '221'), change('wx', '999')), 'attacker-secret')).rejects
-      .toMatchObject({ status: 401 });
+    await expect(
+      send(svc, raw(change('wx', '221'), change('wx', '999')), 'attacker-secret'),
+    ).rejects.toMatchObject({ status: 401 });
   });
 
   it('accepts several numbers of the one workspace signed with its own secret', async () => {
@@ -112,6 +115,8 @@ describe('WhatsApp webhook: signature scope (AZ-015)', () => {
 
   it('refuses a body signed with a secret nobody holds', async () => {
     const { svc } = build();
-    await expect(send(svc, raw(change('wx', '221')), 'nope')).rejects.toMatchObject({ status: 401 });
+    await expect(send(svc, raw(change('wx', '221')), 'nope')).rejects.toMatchObject({
+      status: 401,
+    });
   });
 });

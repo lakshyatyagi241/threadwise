@@ -31,7 +31,17 @@ export const psql = (sql) =>
 export const mysql = (sql) =>
   execFileSync(
     'mysql',
-    ['-h127.0.0.1', '-uthreadwise', '-pthreadwise_local_pw', 'threadwise', '-N', '-B', '-r', '-e', sql],
+    [
+      '-h127.0.0.1',
+      '-uthreadwise',
+      '-pthreadwise_local_pw',
+      'threadwise',
+      '-N',
+      '-B',
+      '-r',
+      '-e',
+      sql,
+    ],
     { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] },
   ).trim();
 /** One SQL text per side, each side's own dialect. */

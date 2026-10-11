@@ -23,7 +23,11 @@ import { WebchatChannelAdapter } from './webchat-channel.adapter';
       inject: [MetaCloudChannelAdapter],
       useFactory: (meta: MetaCloudChannelAdapter): ChannelAdapter[] => {
         assertSimulatorBootSafe();
-        const adapters: ChannelAdapter[] = [meta, new WebchatChannelAdapter(), new TelegramChannelAdapter()];
+        const adapters: ChannelAdapter[] = [
+          meta,
+          new WebchatChannelAdapter(),
+          new TelegramChannelAdapter(),
+        ];
         if (simulatorAllowed()) adapters.push(new SimulatorAdapter());
         return adapters;
       },

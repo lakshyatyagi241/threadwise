@@ -69,9 +69,12 @@ export default () => {
     scenarios: [
       {
         id: 'settings.fields',
-        title: 'The billing settings form keeps every Reference field; the grace period is ours alone',
+        title:
+          'The billing settings form keeps every Reference field; the grace period is ours alone',
         run: async (c) => {
-          await c.goto('/admin/checkout-settings', { ready: { threadwise: 'form', ours: 'main h1' } });
+          await c.goto('/admin/checkout-settings', {
+            ready: { threadwise: 'form', ours: 'main h1' },
+          });
           const all = await labels(c, 'main');
           for (const f of settingsFields) c.obs.flag(`field.${f}`, has(all, f));
           c.obs.flag(

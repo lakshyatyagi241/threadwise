@@ -146,7 +146,13 @@ export function ConversationList(props: ConversationListProps) {
         )}
       </div>
 
-      <div id={listId} role="tabpanel" aria-labelledby={`${tabsId}-${filters.tab}`} className="min-h-0 flex-1 overflow-y-auto thin-scrollbar" data-testid="inbox-list">
+      <div
+        id={listId}
+        role="tabpanel"
+        aria-labelledby={`${tabsId}-${filters.tab}`}
+        className="min-h-0 flex-1 overflow-y-auto thin-scrollbar"
+        data-testid="inbox-list"
+      >
         {!list.loaded && (
           <p role="status" className="flex items-center gap-2 p-4 text-sm text-muted-foreground">
             <Spinner /> {t('loading')}
@@ -317,7 +323,11 @@ function TabBar({
   };
 
   return (
-    <div role="tablist" aria-label={t('tabsLabel')} className="flex gap-0.5 rounded-lg bg-muted p-0.5">
+    <div
+      role="tablist"
+      aria-label={t('tabsLabel')}
+      className="flex gap-0.5 rounded-lg bg-muted p-0.5"
+    >
       {INBOX_TABS.map((tab, i) => {
         const n = tabCount(list.counts, tab);
         const selected = tab === value;
@@ -346,7 +356,9 @@ function TabBar({
                 data-testid={`inbox-tab-count-${tab}`}
                 className={cn(
                   'rounded-full px-1.5 text-[10px] tabular-nums',
-                  tab === 'unread' ? 'bg-primary text-primary-foreground' : 'bg-border text-foreground',
+                  tab === 'unread'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-border text-foreground',
                 )}
               >
                 {n > 999 ? '999+' : n}

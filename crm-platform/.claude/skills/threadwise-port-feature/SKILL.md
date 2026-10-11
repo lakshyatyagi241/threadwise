@@ -42,20 +42,20 @@ first (new ids continue the numbering) and port the pieces.
 
 Write down (PR description draft is fine) which of these the feature needs, then skip none silently:
 
-| Layer                   | Invoke                                                        | Notes                                                                                              |
-| ----------------------- | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| Layer                   | Invoke                                                            | Notes                                                                                              |
+| ----------------------- | ----------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
 | Tables / columns        | `threadwise-data-model-port` → `add-migration`                    | tenant shape, forced RLS, composite FKs, your `<code>` prefix, Drizzle mirror in the same commit   |
-| Request/response shapes | `contracts-change`                                            | identifiers start with your code; errors in `<domain>/errors.ts`; rebuild `@crm/contracts`         |
-| API module              | `new-module`                                                  | flat dir `modules/<domain>/`, audit + outbox in the same transaction, cursor pagination            |
-| Permissions             | `rbac-permission`                                             | keys `<code>.<resource>.<action>`, literal in the decorator, own migration, scope actually applied |
-| Side effects / events   | `outbox-event`                                                | `@OutboxSubscriber` once the registry exists; consumers idempotent                                 |
-| Background / schedules  | `worker-job`                                                  | worker module in your dir; queue `<code>-<purpose>`; per-job tenant + request context              |
+| Request/response shapes | `contracts-change`                                                | identifiers start with your code; errors in `<domain>/errors.ts`; rebuild `@crm/contracts`         |
+| API module              | `new-module`                                                      | flat dir `modules/<domain>/`, audit + outbox in the same transaction, cursor pagination            |
+| Permissions             | `rbac-permission`                                                 | keys `<code>.<resource>.<action>`, literal in the decorator, own migration, scope actually applied |
+| Side effects / events   | `outbox-event`                                                    | `@OutboxSubscriber` once the registry exists; consumers idempotent                                 |
+| Background / schedules  | `worker-job`                                                      | worker module in your dir; queue `<code>-<purpose>`; per-job tenant + request context              |
 | Vendor / channel        | `threadwise-channel-port` → `provider-adapter`, `webhook-handler` | port + adapter under `infra/providers/<domain>/`                                                   |
-| Settings / plan limits  | the domain's settings module                                  | Reference plan-feature keys map to plan gating (kernel item, check `port-map`)                        |
+| Settings / plan limits  | the domain's settings module                                      | Reference plan-feature keys map to plan gating (kernel item, check `port-map`)                     |
 | Web screens             | `threadwise-frontend-port` → `frontend-api-call`                  | route group + feature folder in your zone only                                                     |
-| Help guide              | `help-docs-sync`                                              | one guide per screen or tile you add, gated like the screen; the coverage gate fails without it    |
+| Help guide              | `help-docs-sync`                                                  | one guide per screen or tile you add, gated like the screen; the coverage gate fails without it    |
 | Tests                   | `threadwise-e2e-tests`                                            | one test per acceptance criterion                                                                  |
-| Docs                    | `docs/api/<domain>.md`                                        | request/response samples per endpoint (replaces the frozen shared api docs)                        |
+| Docs                    | `docs/api/<domain>.md`                                            | request/response samples per endpoint (replaces the frozen shared api docs)                        |
 
 ## 2. Build, in this order (vertical slice, each step compiles and is testable before the next)
 

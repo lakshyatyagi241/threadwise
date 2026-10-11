@@ -73,7 +73,7 @@ added across currencies, in the currency's own decimals (Reference summed minor 
 | `GET /companies`                            | `record.companies.read`   | cursor-paged list (below)                                                                            |
 | `GET /companies/stats`                      | `record.companies.read`   | the three tiles for the same filters                                                                 |
 | `GET /companies/industries`                 | `record.companies.read`   | the distinct industries typed so far (the industry filter's options)                                 |
-| `GET /companies/select-data`                | `record.companies.read`   | picker rows `{id, name, industry}` (Reference: `GET companies/search`)                                  |
+| `GET /companies/select-data`                | `record.companies.read`   | picker rows `{id, name, industry}` (Reference: `GET companies/search`)                               |
 | `POST /companies`                           | `record.companies.create` | 201                                                                                                  |
 | `GET /companies/:id`                        | `record.companies.read`   | with its rollup                                                                                      |
 | `PATCH /companies/:id`                      | `record.companies.update` | needs `rowVersion` (409 `ROW_VERSION_CONFLICT`); absent keeps, `null` or `""` clears                 |
@@ -117,16 +117,16 @@ changes nothing writes no audit row and no event and does not move the version.
 
 `GET /companies?q=acme&sort=name&ownerId=…&industry=retail&hasOpenDeals=true&limit=50&cursor=…`
 
-| Query          | Meaning                                                                                          |
-| -------------- | ------------------------------------------------------------------------------------------------ |
+| Query          | Meaning                                                                                             |
+| -------------- | --------------------------------------------------------------------------------------------------- |
 | `q`            | case-insensitive substring of the name (the only field Reference searched); `%` and `_` are letters |
-| `ownerId`      | owned by that member (a member who has left is still filterable)                                 |
-| `unassigned`   | owned by nobody; not together with `ownerId` (`422`)                                             |
-| `industry`     | exactly this industry, any case                                                                  |
-| `hasOpenDeals` | only companies with at least one open deal                                                       |
+| `ownerId`      | owned by that member (a member who has left is still filterable)                                    |
+| `unassigned`   | owned by nobody; not together with `ownerId` (`422`)                                                |
+| `industry`     | exactly this industry, any case                                                                     |
+| `hasOpenDeals` | only companies with at least one open deal                                                          |
 | `sort`         | `created` (newest first, Reference's order; the default) or `name` (A to Z, case-insensitive)       |
-| `limit`        | 1 to 200 (default 50); there is no 500-row cap                                                   |
-| `cursor`       | the opaque `page.nextCursor` of the last page                                                    |
+| `limit`        | 1 to 200 (default 50); there is no 500-row cap                                                      |
+| `cursor`       | the opaque `page.nextCursor` of the last page                                                       |
 
 The answer is `{ data: Company[], page: { nextCursor, hasMore, limit } }`. The cursor is a keyset over the sort key (the
 `created_at` instant at microsecond precision, or the lower-cased name) plus the row id, so rows that tie are never lost or repeated;

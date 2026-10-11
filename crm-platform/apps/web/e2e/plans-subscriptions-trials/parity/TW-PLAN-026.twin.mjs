@@ -28,7 +28,9 @@ export default () => {
         id: 'financial.legend-once',
         title: 'Revenue and Refunds labels are not repeated by a second legend under the chart',
         run: async (c) => {
-          await c.goto('/admin/financial', { ready: { threadwise: 'main, .content, body', ours: 'main h1' } });
+          await c.goto('/admin/financial', {
+            ready: { threadwise: 'main, .content, body', ours: 'main h1' },
+          });
           await c.afterAction({ quiet: 800 });
           c.obs.num('num.label.refunds', await exactCount(c, 'refunds'));
           c.obs.num('num.label.revenue', await exactCount(c, 'revenue'));
@@ -38,11 +40,16 @@ export default () => {
         id: 'financial.panels',
         title: 'The dashboard shows the same panels',
         run: async (c) => {
-          await c.goto('/admin/financial', { ready: { threadwise: 'main, .content, body', ours: 'main h1' } });
+          await c.goto('/admin/financial', {
+            ready: { threadwise: 'main, .content, body', ours: 'main h1' },
+          });
           const body = ((await c.page.locator('body').innerText()) || '').toLowerCase();
           for (const p of ['payment methods', 'order status', 'top paying workspaces'])
             c.obs.flag(`panel.${p}`, body.includes(p));
-          c.obs.flag('panel.latest orders', body.includes('latest orders') || body.includes('recent orders'));
+          c.obs.flag(
+            'panel.latest orders',
+            body.includes('latest orders') || body.includes('recent orders'),
+          );
         },
       },
     ],
@@ -51,12 +58,14 @@ export default () => {
         scenario: /keyboard$/,
         key: 'flag.keyboard.skipLink',
         quirk: 'Reference console has no skip-to-content link',
-        reason: 'ours adds a skip link on every console page; a deliberate improvement over Reference',
+        reason:
+          'ours adds a skip link on every console page; a deliberate improvement over Reference',
       },
       {
         scenario: /^financial\.legend-once$/,
         key: /^num\.num\.label\./,
-        quirk: 'empty revenue window: Reference still draws axes and a legend, ours shows a "No data" state',
+        quirk:
+          'empty revenue window: Reference still draws axes and a legend, ours shows a "No data" state',
         reason:
           'with no paid orders our chart panel shows its empty state and no legend; the counts only line up on a window with orders, which the twin run data does not have',
       },
@@ -71,7 +80,8 @@ export default () => {
         scenario: /\.load$/,
         key: 'perf.lcpMs',
         quirk: 'our web app runs in next dev for the twin run',
-        reason: 'first paint includes the dev-server compile; a production build is not what is measured',
+        reason:
+          'first paint includes the dev-server compile; a production build is not what is measured',
       },
     ],
     skip: [],

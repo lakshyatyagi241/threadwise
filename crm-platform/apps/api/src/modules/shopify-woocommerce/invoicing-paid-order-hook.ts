@@ -81,7 +81,9 @@ export class InvoicingPaidOrderHook implements PaidOrderHook {
 
         // The order has its invoice, or had one (a voided invoice is a decision, not a gap): nothing more to bill.
         const known =
-          order.invoiceId ?? (await this.billing.findInvoiceForOrder(tx, orgId, order.id))?.id ?? null;
+          order.invoiceId ??
+          (await this.billing.findInvoiceForOrder(tx, orgId, order.id))?.id ??
+          null;
         if (known !== null) {
           if (order.invoiceId === null) await this.repo.setInvoice(tx, orgId, order.id, known);
           await this.repo.settle(tx, orgId, kind, o.deliveryId, {
@@ -121,7 +123,10 @@ export class InvoicingPaidOrderHook implements PaidOrderHook {
             invoiceId: null,
             reason: out.reason,
           });
-          this.logger.warn({ orgId, kind, order: order.id, reason: out.reason }, 'store order not invoiced');
+          this.logger.warn(
+            { orgId, kind, order: order.id, reason: out.reason },
+            'store order not invoiced',
+          );
           return { outcome: 'ignored', reason: out.reason };
         }
         await this.repo.setInvoice(tx, orgId, order.id, out.id);

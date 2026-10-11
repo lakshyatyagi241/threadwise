@@ -12,15 +12,15 @@ Reference is reference only: never copy its code, assets or text.
 
 | What                                                                     | Where                                                                                                                                                                   |
 | ------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Workspace                                                                | the repo root: `reference/` (Reference, read-only), `crm-platform/` (this repo), `_work/` (manifests, tools, reports, workflow script; not in git)                  |
+| Workspace                                                                | the repo root: `reference/` (Reference, read-only), `crm-platform/` (this repo), `_work/` (manifests, tools, reports, workflow script; not in git)                      |
 | Inventory format                                                         | [inventory-spec.md](inventory-spec.md)                                                                                                                                  |
 | Inventory (one file per domain)                                          | [inventory/](inventory/)                                                                                                                                                |
 | What the target repo already has (and lacks)                             | [target-map.md](target-map.md)                                                                                                                                          |
 | Merge-conflict hotspots, skeleton PR, ownership zones, rules of the road | [conflict-map.md](conflict-map.md)                                                                                                                                      |
-| Data model: every Reference table, as migrations and Drizzle                | [schema/README.md](schema/README.md)                                                                                                                                    |
-| Skills (`.claude/skills/threadwise-*`)                                       | run-reference, feature-lookup, parity-tracker, ownership-guard, inventory-refresh, data-model-port, port-feature, e2e-tests, verify-parity, frontend-port, channel-port |
-| Coverage report (regenerate)                                             | `python3 .claude/skills/threadwise-inventory-refresh/scripts/audit_coverage.py`                                                                                             |
-| Resumable inventory workflow                                             | `_work/workflows/threadwise-inventory.mjs`                                                                                                                                  |
+| Data model: every Reference table, as migrations and Drizzle             | [schema/README.md](schema/README.md)                                                                                                                                    |
+| Skills (`.claude/skills/threadwise-*`)                                   | run-reference, feature-lookup, parity-tracker, ownership-guard, inventory-refresh, data-model-port, port-feature, e2e-tests, verify-parity, frontend-port, channel-port |
+| Coverage report (regenerate)                                             | `python3 .claude/skills/threadwise-inventory-refresh/scripts/audit_coverage.py`                                                                                         |
+| Resumable inventory workflow                                             | `_work/workflows/threadwise-inventory.mjs`                                                                                                                              |
 
 Written so far: `parity/auth-registration-security.md`, `docs/api/auth-registration-security.md`. Not written yet: the other `port-map/`, `parity/*.md`, `docs/api/` files. Ownership is generated: edit `assignment-input.json`, run `gen_ownership.py`, then `tracker.py init --all`.
 
@@ -149,7 +149,7 @@ Numbers are from the 26 finished domains only (42% of domains by count); the rem
 | D5  | Platform super-admin actor kind                                                               | Decide before any admin-console domain starts (kernel change)                                                                                        |
 | D6  | Which Next.js app moves into `apps/web`, Next version, i18n library                           | Needed before the web skeleton                                                                                                                       |
 | D7  | GitHub settings: CODEOWNERS enforcement, up-to-date branches, merge queue                     | Turn on                                                                                                                                              |
-| E   | Channel strategy: keep the unofficial WhatsApp (Baileys/QR) engine or Cloud API only          | Reference's own docs list ban risk; needs a decision either way                                                                                         |
+| E   | Channel strategy: keep the unofficial WhatsApp (Baileys/QR) engine or Cloud API only          | Reference's own docs list ban risk; needs a decision either way                                                                                      |
 
 ## Next session, in order
 

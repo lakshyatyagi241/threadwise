@@ -22,7 +22,11 @@ async function handler(req: Request, ctx: { params: Promise<{ path: string[] }> 
   const { path } = await ctx.params;
   const match = matchPublicPath(req.method, path);
   if (!match.ok)
-    return problem(match.status, match.status === 404 ? 'NOT_FOUND' : 'METHOD_NOT_ALLOWED', 'Not found');
+    return problem(
+      match.status,
+      match.status === 404 ? 'NOT_FOUND' : 'METHOD_NOT_ALLOWED',
+      'Not found',
+    );
   if (match.hasBody && !isSameOrigin(req))
     return problem(403, 'FORBIDDEN', 'Cross-origin request refused');
 

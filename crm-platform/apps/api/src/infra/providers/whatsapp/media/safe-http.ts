@@ -2,7 +2,12 @@ import { request as httpRequest, type IncomingHttpHeaders, type IncomingMessage 
 import { request as httpsRequest } from 'node:https';
 import type { Readable } from 'node:stream';
 import { MEDIA_FAILURE, MediaFetchError } from './media-fetch-error';
-import { assertAllowedUrl, guardedLookup, type DnsResolver, type HostPolicy } from './media-url-guard';
+import {
+  assertAllowedUrl,
+  guardedLookup,
+  type DnsResolver,
+  type HostPolicy,
+} from './media-url-guard';
 
 /**
  * One HTTP request, with the guard of `media-url-guard.ts` built in. This is the only HTTP client the media pipeline uses, for the
@@ -73,8 +78,14 @@ export function safeRequest(req: SafeRequest): Promise<SafeResponse> {
           ? err
           : // `EBLOCKED` comes from the lookup guard: a host that resolved to a private address.
             (err as NodeJS.ErrnoException).code === 'EBLOCKED'
-            ? new MediaFetchError(MEDIA_FAILURE.URL_REJECTED, `Download address refused: ${err.message}`, false)
-            : transportError(`Connection failed (${(err as NodeJS.ErrnoException).code ?? err.message})`),
+            ? new MediaFetchError(
+                MEDIA_FAILURE.URL_REJECTED,
+                `Download address refused: ${err.message}`,
+                false,
+              )
+            : transportError(
+                `Connection failed (${(err as NodeJS.ErrnoException).code ?? err.message})`,
+              ),
       );
     };
 
@@ -84,9 +95,13 @@ export function safeRequest(req: SafeRequest): Promise<SafeResponse> {
     );
     clientReq.on('timeout', () => clientReq.destroy(transportError('The connection went silent')));
     clientReq.on('error', fail);
-    req.signal?.addEventListener('abort', () => clientReq.destroy(transportError('The transfer was cancelled')), {
-      once: true,
-    });
+    req.signal?.addEventListener(
+      'abort',
+      () => clientReq.destroy(transportError('The transfer was cancelled')),
+      {
+        once: true,
+      },
+    );
 
     if (!req.body) clientReq.end();
     else if (Buffer.isBuffer(req.body)) clientReq.end(req.body);
@@ -106,7 +121,11 @@ export async function readSmallBody(res: SafeResponse, max = 256 * 1024): Promis
       n += (chunk as Buffer).length;
       if (n > max) {
         res.body.destroy();
-        throw new MediaFetchError(MEDIA_FAILURE.UNEXPECTED, 'Meta answered with an unexpectedly large body', false);
+        throw new MediaFetchError(
+          MEDIA_FAILURE.UNEXPECTED,
+          'Meta answered with an unexpectedly large body',
+          false,
+        );
       }
       chunks.push(chunk as Buffer);
     }

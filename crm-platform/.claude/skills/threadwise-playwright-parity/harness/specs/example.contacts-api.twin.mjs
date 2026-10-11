@@ -109,7 +109,9 @@ export default (h) => {
     mk('name-empty', 'name empty', { name: '' }, ['required']),
     mk('name-spaces', 'name only spaces', { name: '    ' }, ['required']),
     mk('name-191', "name at Reference's limit (191)", () => ({ name: 'a'.repeat(WD_MAX_NAME) })),
-    mk('name-192', "name one over Reference's limit", () => ({ name: 'a'.repeat(WD_MAX_NAME + 1) })),
+    mk('name-192', "name one over Reference's limit", () => ({
+      name: 'a'.repeat(WD_MAX_NAME + 1),
+    })),
     mk('name-padded', 'name with surrounding spaces', { name: '  Pat Padded  ' }),
     mk('name-unicode', 'unicode name', { name: 'Zoë Müller 李雷 Ñandú' }),
     mk('name-emoji', '4-byte characters', { name: 'Party 🎉🚀' }),

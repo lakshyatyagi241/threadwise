@@ -37,8 +37,12 @@ const refusal = (fn: () => unknown): WaMediaRefusal => {
   throw new Error('expected a refusal');
 };
 
-const classify = (mediaKind: WaMediaKind, mime: string, size: number, head: Buffer = Buffer.alloc(0)) =>
-  classifyForUpload({ mediaKind, mime, size, head });
+const classify = (
+  mediaKind: WaMediaKind,
+  mime: string,
+  size: number,
+  head: Buffer = Buffer.alloc(0),
+) => classifyForUpload({ mediaKind, mime, size, head });
 
 describe('limits table (Meta)', () => {
   it('image 5 MB, audio and video 16 MB, document 100 MB, sticker 500 KB (animated) and 100 KB (static)', () => {
@@ -78,9 +82,19 @@ describe('classifyForUpload: what an outbound file is sent as', () => {
   });
 
   it('Ogg audio is a voice note only when it is Opus; other Ogg audio needs a conversion that is not part of this release', () => {
-    expect(classify('audio', 'audio/ogg', 100, oggOpusBytes())).toMatchObject({ voice: true, mime: 'audio/ogg' });
-    const vorbis = Buffer.concat([Buffer.from('OggS'), Buffer.alloc(24), Buffer.from('\x01vorbis'), Buffer.alloc(40)]);
-    expect(refusal(() => classify('audio', 'audio/ogg', 100, vorbis)).code).toBe(WA_UPLOAD_REFUSAL.TRANSCODE_REQUIRED);
+    expect(classify('audio', 'audio/ogg', 100, oggOpusBytes())).toMatchObject({
+      voice: true,
+      mime: 'audio/ogg',
+    });
+    const vorbis = Buffer.concat([
+      Buffer.from('OggS'),
+      Buffer.alloc(24),
+      Buffer.from('\x01vorbis'),
+      Buffer.alloc(40),
+    ]);
+    expect(refusal(() => classify('audio', 'audio/ogg', 100, vorbis)).code).toBe(
+      WA_UPLOAD_REFUSAL.TRANSCODE_REQUIRED,
+    );
   });
 
   it('audio containers WhatsApp does not take (wav, webm) are refused with the transcode code, not converted', () => {
@@ -95,18 +109,24 @@ describe('classifyForUpload: what an outbound file is sent as', () => {
     expect(refusal(() => classify('image', 'image/gif', 100)).message).toMatch(/MP4/);
     expect(refusal(() => classify('image', 'image/webp', 100)).message).toMatch(/sticker/);
     for (const mime of ['image/bmp', 'image/tiff', 'application/pdf']) {
-      expect(refusal(() => classify('image', mime, 100)).code).toBe(WA_UPLOAD_REFUSAL.UNSUPPORTED_TYPE);
+      expect(refusal(() => classify('image', mime, 100)).code).toBe(
+        WA_UPLOAD_REFUSAL.UNSUPPORTED_TYPE,
+      );
     }
   });
 
   it('a video kind takes MP4 and 3GPP only', () => {
     for (const mime of ['video/webm', 'video/quicktime', 'video/x-matroska']) {
-      expect(refusal(() => classify('video', mime, 100)).code).toBe(WA_UPLOAD_REFUSAL.UNSUPPORTED_TYPE);
+      expect(refusal(() => classify('video', mime, 100)).code).toBe(
+        WA_UPLOAD_REFUSAL.UNSUPPORTED_TYPE,
+      );
     }
   });
 
   it('a sticker kind takes WebP only', () => {
-    expect(refusal(() => classify('sticker', 'image/png', 100)).code).toBe(WA_UPLOAD_REFUSAL.UNSUPPORTED_TYPE);
+    expect(refusal(() => classify('sticker', 'image/png', 100)).code).toBe(
+      WA_UPLOAD_REFUSAL.UNSUPPORTED_TYPE,
+    );
   });
 
   it('a document kind is open: any document the store accepted is tried, and an image sent as a document stays a document', () => {
@@ -130,9 +150,13 @@ describe('classifyForUpload: what an outbound file is sent as', () => {
 
     it('a static sticker is held to 100 KB, an animated one to 500 KB', () => {
       expect(classify('sticker', 'image/webp', 100 * KIB, webp(false)).maxBytes).toBe(100 * KIB);
-      expect(refusal(() => classify('sticker', 'image/webp', 100 * KIB + 1, webp(false))).code).toBe(WA_UPLOAD_REFUSAL.TOO_LARGE);
+      expect(
+        refusal(() => classify('sticker', 'image/webp', 100 * KIB + 1, webp(false))).code,
+      ).toBe(WA_UPLOAD_REFUSAL.TOO_LARGE);
       expect(classify('sticker', 'image/webp', 500 * KIB, webp(true)).maxBytes).toBe(500 * KIB);
-      expect(refusal(() => classify('sticker', 'image/webp', 500 * KIB + 1, webp(true))).code).toBe(WA_UPLOAD_REFUSAL.TOO_LARGE);
+      expect(refusal(() => classify('sticker', 'image/webp', 500 * KIB + 1, webp(true))).code).toBe(
+        WA_UPLOAD_REFUSAL.TOO_LARGE,
+      );
     });
   });
 });
@@ -159,7 +183,9 @@ describe('sha256HexFrom: Meta announces the digest in hex or base64', () => {
     expect(sha256HexFrom(digest.toString('hex'))).toBe(digest.toString('hex'));
     expect(sha256HexFrom(digest.toString('hex').toUpperCase())).toBe(digest.toString('hex'));
     expect(sha256HexFrom(digest.toString('base64'))).toBe(digest.toString('hex'));
-    expect(sha256HexFrom(digest.toString('base64').replace(/\+/g, '-').replace(/\//g, '_'))).toBe(digest.toString('hex'));
+    expect(sha256HexFrom(digest.toString('base64').replace(/\+/g, '-').replace(/\//g, '_'))).toBe(
+      digest.toString('hex'),
+    );
   });
 
   it('is null for anything else, so an unreadable announcement never blocks a file', () => {

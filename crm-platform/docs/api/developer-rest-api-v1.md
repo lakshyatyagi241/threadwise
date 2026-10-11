@@ -39,15 +39,15 @@ The bearer header is read first; `X-Api-Key` is used when there is no usable bea
 
 ### The key
 
-| Property       | Value                                                                                                                                                      |
-| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Format         | `wsk_` followed by 40 characters from `A-Z a-z 0-9` (44 in all). A token of any other shape is refused without a database lookup.                          |
-| Shown          | Once, in the answer to `POST /v2/developer/keys` (field `secret`). It cannot be read again; only a sha256 hash and the first 12 characters are stored.     |
-| Prefix         | The first 12 characters (`wsk_` plus 8). The console lists the prefix so a key can be recognised without the secret.                                       |
+| Property       | Value                                                                                                                                                         |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Format         | `wsk_` followed by 40 characters from `A-Z a-z 0-9` (44 in all). A token of any other shape is refused without a database lookup.                             |
+| Shown          | Once, in the answer to `POST /v2/developer/keys` (field `secret`). It cannot be read again; only a sha256 hash and the first 12 characters are stored.        |
+| Prefix         | The first 12 characters (`wsk_` plus 8). The console lists the prefix so a key can be recognised without the secret.                                          |
 | How many       | The plan limit `api_keys` decides how many active keys a workspace holds. Reference allowed exactly one; a plan limit of 1 reproduces that. `0` is unlimited. |
-| Owner          | The member who created it. If that member is deleted the key stops working (`401 invalid_api_key`).                                                        |
-| Expiry         | `expiresAt` can be set on the row; an expired key is `401 invalid_api_key`. The console does not set one.                                                  |
-| Revoked        | Takes effect on the next call.                                                                                                                             |
+| Owner          | The member who created it. If that member is deleted the key stops working (`401 invalid_api_key`).                                                           |
+| Expiry         | `expiresAt` can be set on the row; an expired key is `401 invalid_api_key`. The console does not set one.                                                     |
+| Revoked        | Takes effect on the next call.                                                                                                                                |
 | `last_used_at` | Written at most once a minute per key (Reference wrote it on every call).                                                                                     |
 
 ### Scopes
@@ -170,21 +170,21 @@ the id to quote to support. The same envelope is used for every failure under `/
 
 These are the values of `V1_ERROR_CODES` (`packages/contracts/src/developer-rest-api-v1/envelope.ts`).
 
-| `code`                   | HTTP | When                                                                                                                          |
-| ------------------------ | ---- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `missing_api_key`        | 401  | No key sent.                                                                                                                  |
-| `invalid_api_key`        | 401  | Key malformed, unknown, revoked, expired, a partner key, or its owner is gone.                                                |
-| `rate_limited`           | 429  | Over the per-key limit, or too many failed authentications from one address.                                                  |
-| `forbidden`              | 403  | The key lacks the scope the route needs.                                                                                      |
-| `not_found`              | 404  | Unknown record, a record of another workspace, a path id that is not a uuid, or a route that does not exist.                  |
+| `code`                   | HTTP | When                                                                                                                             |
+| ------------------------ | ---- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `missing_api_key`        | 401  | No key sent.                                                                                                                     |
+| `invalid_api_key`        | 401  | Key malformed, unknown, revoked, expired, a partner key, or its owner is gone.                                                   |
+| `rate_limited`           | 429  | Over the per-key limit, or too many failed authentications from one address.                                                     |
+| `forbidden`              | 403  | The key lacks the scope the route needs.                                                                                         |
+| `not_found`              | 404  | Unknown record, a record of another workspace, a path id that is not a uuid, or a route that does not exist.                     |
 | `validation_failed`      | 422  | The body or query broke a rule. Always 422 with `details` (Reference redirected without `Accept: application/json`).             |
-| `plan_feature_disabled`  | 403  | The plan lacks `public_api`, or `sales_pipeline` on the deals routes.                                                         |
+| `plan_feature_disabled`  | 403  | The plan lacks `public_api`, or `sales_pipeline` on the deals routes.                                                            |
 | `plan_limit`             | 402  | A plan cap is reached (contacts, broadcasts, campaigns, templates, scheduled messages). Reference answered 422 on some of these. |
-| `conflict`               | 409  | A concurrent edit lost the optimistic lock, or an `Idempotency-Key` request is still in flight.                               |
-| `payload_too_large`      | 413  | The request body is over the body limit.                                                                                      |
-| `unsupported_media_type` | 422  | An uploaded file has a type or content that is not allowed (`POST /media`, a file on `POST /messages`, `header_media`).       |
-| `server_error`           | 500  | An unexpected failure.                                                                                                        |
-| `method_not_allowed`     | 405  | A known path called with another method. The message lists the methods that work and the `Allow` header carries them.         |
+| `conflict`               | 409  | A concurrent edit lost the optimistic lock, or an `Idempotency-Key` request is still in flight.                                  |
+| `payload_too_large`      | 413  | The request body is over the body limit.                                                                                         |
+| `unsupported_media_type` | 422  | An uploaded file has a type or content that is not allowed (`POST /media`, a file on `POST /messages`, `header_media`).          |
+| `server_error`           | 500  | An unexpected failure.                                                                                                           |
+| `method_not_allowed`     | 405  | A known path called with another method. The message lists the methods that work and the `Allow` header carries them.            |
 
 ### Domain codes
 
@@ -204,7 +204,7 @@ status is given.
 | `missing_header_media`                             | 422  | `POST /templates/{id}/send`                               | The template has a media header, which the API cannot send yet.                                                                                                                                                                                                                                                                                                            |
 | `no_provider`                                      | 422  | `POST /templates/{id}/send`                               | No connected WhatsApp number carries the template.                                                                                                                                                                                                                                                                                                                         |
 | `tpl_name_taken`                                   | 409  | `POST /templates`                                         | The name is already used on that number.                                                                                                                                                                                                                                                                                                                                   |
-| `tpl_not_editable`                                 | 409  | `PUT /templates/{id}`                                     | The template is approved or otherwise not editable (Reference allowed it).                                                                                                                                                                                                                                                                                                    |
+| `tpl_not_editable`                                 | 409  | `PUT /templates/{id}`                                     | The template is approved or otherwise not editable (Reference allowed it).                                                                                                                                                                                                                                                                                                 |
 | `tpl_no_connection`                                | 422  | `POST /templates`                                         | The workspace has no WhatsApp number to author the template on.                                                                                                                                                                                                                                                                                                            |
 | `contact_not_found`                                | 404  | `POST /flows/{id}/enroll`                                 | No contact matches `contact_id` or `phone`.                                                                                                                                                                                                                                                                                                                                |
 | `flow_inactive`                                    | 422  | `POST /flows/{id}/enroll`                                 | The flow is not active.                                                                                                                                                                                                                                                                                                                                                    |
@@ -227,7 +227,7 @@ Every list is paged by cursor, never by page number.
 | Query parameter | Meaning                                                                                                                     |
 | --------------- | --------------------------------------------------------------------------------------------------------------------------- |
 | `limit`         | Page size. Default 25, range 1 to 100. A value outside the range is pulled into it, not refused.                            |
-| `per_page`      | Alias of `limit` (Reference's name). `limit` wins when both are sent.                                                          |
+| `per_page`      | Alias of `limit` (Reference's name). `limit` wins when both are sent.                                                       |
 | `cursor`        | The opaque `meta.next_cursor` of the previous page. Absent on the first page. Treat it as a string; its content can change. |
 | `page`          | **Refused**: `422 validation_failed`, `details.page`, with a message that names the cursor.                                 |
 
@@ -237,7 +237,7 @@ Exceptions to the 25 / 100 default:
 
 | List                                                | Default   | Maximum | Note                                                       |
 | --------------------------------------------------- | --------- | ------- | ---------------------------------------------------------- |
-| `GET /messages`, `GET /conversations/{id}/messages` | 50        | 200     | A non-numeric `limit` is read as 1, as Reference did.         |
+| `GET /messages`, `GET /conversations/{id}/messages` | 50        | 200     | A non-numeric `limit` is read as 1, as Reference did.      |
 | `GET /conversations`                                | 25        | 100     | A non-numeric `limit` is read as 1.                        |
 | `GET /flows/{id}/subscribers`                       | 100       | 200     | A non-numeric `limit` is read as 1. The cursor is numeric. |
 | `GET /contact-groups`, `GET /devices`               | not paged | -       | The whole list; `meta.count` is its length.                |
@@ -587,10 +587,10 @@ Scope `contact-groups:read`. Every group, newest first, not paged. `meta` is `{ 
 
 Scope `contact-groups:write`.
 
-| Field   | Type   | Required | Rules                                                           |
-| ------- | ------ | -------- | --------------------------------------------------------------- |
-| `name`  | string | yes      | Max 191.                                                        |
-| `note`  | string | no       | Max 500.                                                        |
+| Field   | Type   | Required | Rules                                                              |
+| ------- | ------ | -------- | ------------------------------------------------------------------ |
+| `name`  | string | yes      | Max 191.                                                           |
+| `note`  | string | no       | Max 500.                                                           |
 | `color` | string | no       | A hex colour such as `#7C3AED` (Reference took any 32 characters). |
 
 ```json
@@ -705,12 +705,12 @@ Scope `deals:write`. Same verb under two names: only the keys present change.
 | --------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `title`               | string           | 1 to 191; present means it must not be empty.                                                                                                                                                                                                          |
 | `value`               | number or string | 0 to 99999999. Sent as `null` it becomes 0.                                                                                                                                                                                                            |
-| `currency`            | string           | Three letters. With `value` it relabels both; alone it relabels the amount (Reference's behaviour).                                                                                                                                                       |
+| `currency`            | string           | Three letters. With `value` it relabels both; alone it relabels the amount (Reference's behaviour).                                                                                                                                                    |
 | `stage_id`            | uuid             | **Strict**: must be a stage of the deal's own pipeline, else `422 unprocessable`. A new stage moves the deal, runs the stage engine (status and won/lost stamps follow, one timeline row, `deal.stage_changed`). The same stage again is not a change. |
 | `contact_id`          | uuid             | Lenient: an unknown or blank value unlinks the contact.                                                                                                                                                                                                |
 | `owner_user_id`       | uuid             | A blank value clears the owner; a malformed one is `422`.                                                                                                                                                                                              |
 | `expected_close_date` | string           | Any parseable date; `null` clears it.                                                                                                                                                                                                                  |
-| `lost_reason`         | string           | Max 191. A move into a lost stage keeps the reason sent with it. On an already lost deal it replaces the reason. On an open or won deal it is not kept (the status rules forbid a reason there; Reference stored it).                                     |
+| `lost_reason`         | string           | Max 191. A move into a lost stage keeps the reason sent with it. On an already lost deal it replaces the reason. On an open or won deal it is not kept (the status rules forbid a reason there; Reference stored it).                                  |
 
 The deal is looked up first and the body validated second, so an unknown id with a bad body is `404`. Answers `200` with the deal.
 
@@ -1051,7 +1051,7 @@ dashboard's "new broadcast" form.
 | `template_id` | uuid           | yes                  | A template of this workspace, else `422 invalid_template`.                                                                                                                                                              |
 | `recipients`  | array of uuids | Without `group_id`   | Contact ids, up to 100000. Ids that are not the workspace's are dropped without a word.                                                                                                                                 |
 | `group_id`    | uuid           | Without `recipients` | A group of this workspace, else `422 invalid_group`. Its members are the audience, once each.                                                                                                                           |
-| `device_id`   | string         | no                   | Max 80. `<engine>:<uuid>` or a bare uuid of a connected sender. One that does not resolve is ignored: the broadcast has no sender (Reference).                                                                             |
+| `device_id`   | string         | no                   | Max 80. `<engine>:<uuid>` or a bare uuid of a connected sender. One that does not resolve is ignored: the broadcast has no sender (Reference).                                                                          |
 | `schedule_at` | string         | no                   | A date and time such as `2026-12-01 09:00` or `2026-12-01T09:00:00+05:30`. Only its wall-clock date and time are kept; an offset inside the text does not move them. A time in the past is accepted. Omitted: send now. |
 | `timezone`    | string         | no                   | IANA zone in which `schedule_at` is read. Default UTC. An unknown zone is `422`.                                                                                                                                        |
 
@@ -1142,23 +1142,23 @@ Audited, with a status event carrying the previous status.
 
 A campaign:
 
-| Field                                      | Type                                  | Notes                                                                                                                                                             |
-| ------------------------------------------ | ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `id`                                       | uuid                                  |                                                                                                                                                                   |
-| `name`                                     | string                                |                                                                                                                                                                   |
-| `type`                                     | string                                | `custom`, `template`, `flow`.                                                                                                                                     |
+| Field                                      | Type                                  | Notes                                                                                                                                                                |
+| ------------------------------------------ | ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`                                       | uuid                                  |                                                                                                                                                                      |
+| `name`                                     | string                                |                                                                                                                                                                      |
+| `type`                                     | string                                | `custom`, `template`, `flow`.                                                                                                                                        |
 | `status`                                   | string                                | `scheduled`, `running`, `paused`, `completed`, `failed`, `stopped`. Our `cancelled` is Reference's `stopped` and is spelled that way on the wire, in the filter too. |
-| `device_id`                                | string or null                        | The sender key `<engine>:<uuid>`.                                                                                                                                 |
-| `template_id`                              | uuid or null                          |                                                                                                                                                                   |
-| `flow_id`                                  | uuid or null                          |                                                                                                                                                                   |
-| `ab_testing`                               | boolean                               |                                                                                                                                                                   |
-| `ab_split`                                 | integer                               | Split between the two A/B variants, 10 to 90 (default 50).                                                                                                        |
-| `counts`                                   | object                                | `total_recipients`, `sent`, `delivered`, `read`, `failed`, `clicked`, `responded`.                                                                                |
-| `metrics`                                  | object                                | `delivery_rate`, `read_rate`, `click_rate`, `response_rate`: percentages rounded to two decimals.                                                                 |
-| `schedule_type`                            | string                                | `now`, `scheduled`, `recurring`.                                                                                                                                  |
-| `scheduled_for`                            | ISO-8601 or null                      | The send date and time as the instant they mean in `timezone`.                                                                                                    |
-| `timezone`                                 | string or null                        |                                                                                                                                                                   |
-| `created_at`, `updated_at`, `completed_at` | ISO-8601 (`completed_at` may be null) |                                                                                                                                                                   |
+| `device_id`                                | string or null                        | The sender key `<engine>:<uuid>`.                                                                                                                                    |
+| `template_id`                              | uuid or null                          |                                                                                                                                                                      |
+| `flow_id`                                  | uuid or null                          |                                                                                                                                                                      |
+| `ab_testing`                               | boolean                               |                                                                                                                                                                      |
+| `ab_split`                                 | integer                               | Split between the two A/B variants, 10 to 90 (default 50).                                                                                                           |
+| `counts`                                   | object                                | `total_recipients`, `sent`, `delivered`, `read`, `failed`, `clicked`, `responded`.                                                                                   |
+| `metrics`                                  | object                                | `delivery_rate`, `read_rate`, `click_rate`, `response_rate`: percentages rounded to two decimals.                                                                    |
+| `schedule_type`                            | string                                | `now`, `scheduled`, `recurring`.                                                                                                                                     |
+| `scheduled_for`                            | ISO-8601 or null                      | The send date and time as the instant they mean in `timezone`.                                                                                                       |
+| `timezone`                                 | string or null                        |                                                                                                                                                                      |
+| `created_at`, `updated_at`, `completed_at` | ISO-8601 (`completed_at` may be null) |                                                                                                                                                                      |
 
 #### `GET /campaigns/statistics`
 
@@ -1409,7 +1409,7 @@ A message:
 | `error_code`     | integer, string or null | The provider's typed code (Meta `131047`) as a number, a platform code (`AUTH_SEND_HALTED`) as text.                                                     |
 | `body`           | string or null          |                                                                                                                                                          |
 | `media_url`      | string or null          | A link to the stored file, read with `GET /media/{token}` using the same key.                                                                            |
-| `created_at`     | ISO-8601                | UTC. (Reference answered two different forms depending on the endpoint.)                                                                                    |
+| `created_at`     | ISO-8601                | UTC. (Reference answered two different forms depending on the endpoint.)                                                                                 |
 
 #### `POST /messages`
 
@@ -1518,16 +1518,16 @@ message read works for minutes and is minted again by each read. The file is alw
 
 A conversation:
 
-| Field             | Type             | Notes                                                                                                                  |
-| ----------------- | ---------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `id`              | uuid             |                                                                                                                        |
-| `contact`         | string or null   | Digits of the peer's number.                                                                                           |
-| `name`            | string or null   |                                                                                                                        |
-| `last_message`    | string or null   | Preview.                                                                                                               |
-| `last_message_at` | ISO-8601 or null |                                                                                                                        |
-| `unread`          | integer          |                                                                                                                        |
+| Field             | Type             | Notes                                                                                                                     |
+| ----------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `id`              | uuid             |                                                                                                                           |
+| `contact`         | string or null   | Digits of the peer's number.                                                                                              |
+| `name`            | string or null   |                                                                                                                           |
+| `last_message`    | string or null   | Preview.                                                                                                                  |
+| `last_message_at` | ISO-8601 or null |                                                                                                                           |
+| `unread`          | integer          |                                                                                                                           |
 | `status`          | string           | The send state of the thread: `pending`, `sent` or `failed` (Reference's queue status, not the inbox's open or resolved). |
-| `channel`         | string           | `W` unofficial WhatsApp, `WB` WhatsApp Cloud; any other channel is its kind (`telegram`, `instagram`).                 |
+| `channel`         | string           | `W` unofficial WhatsApp, `WB` WhatsApp Cloud; any other channel is its kind (`telegram`, `instagram`).                    |
 
 #### `GET /conversations`
 
@@ -1607,7 +1607,7 @@ non-uuid id.
 
 Two groups of Reference's API are not built. A call to their paths answers `404 not_found`.
 
-| Group        | Reference routes                                                  | Blocked on                                                                              |
+| Group        | Reference routes                                               | Blocked on                                                                              |
 | ------------ | -------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | Auto-replies | `/api/v1/auto-replies` (keyword and automatic reply rules)     | The auto-reply-keywords domain, which owns the rules these routes would read and write. |
 | Webhooks     | `/api/v1/webhooks` (register endpoints for signed event posts) | The integrations domain, which owns outbound webhook endpoints and their signing.       |

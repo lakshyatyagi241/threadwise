@@ -746,7 +746,7 @@ Purpose: one record per (workspace, WABA) attempt to share the platform credit l
 | Column                     | Type               | Null | Default    | Notes                                               |
 | -------------------------- | ------------------ | ---- | ---------- | --------------------------------------------------- |
 | `id`                       | bigint unsigned PK | no   | auto       | ordering key for the register                       |
-| `workspace_id`             | bigint unsigned    | no   | none       | no FK in Reference (add FK cascade in the port)        |
+| `workspace_id`             | bigint unsigned    | no   | none       | no FK in Reference (add FK cascade in the port)     |
 | `waba_id`                  | varchar(64)        | no   | none       | Meta WhatsApp Business Account id (trimmed)         |
 | `allocation_config_id`     | varchar(64)        | yes  | null       | Meta id returned by attach; required to revoke      |
 | `credit_source`            | varchar(16)        | yes  | null       | adapter name, "meta"                                |

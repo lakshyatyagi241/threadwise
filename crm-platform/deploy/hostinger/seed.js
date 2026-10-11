@@ -20,7 +20,8 @@ const ACCOUNTS = {
 };
 
 (async () => {
-  if (!password || password.length < 12) throw new Error('WORKSPACE_PASSWORD (12+ characters) is required');
+  if (!password || password.length < 12)
+    throw new Error('WORKSPACE_PASSWORD (12+ characters) is required');
   const url = process.env.MIGRATION_DATABASE_URL || process.env.DATABASE_URL;
   const c = new Client({ connectionString: url });
   await c.connect();

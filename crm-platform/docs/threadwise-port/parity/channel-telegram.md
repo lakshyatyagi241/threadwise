@@ -27,7 +27,7 @@ Evidence so far is automated, no screen yet:
 | TW-TG-008        | backend-done | `TelegramSenderService.reply`: the thread's bot sends text, media (file id, address or upload), long captions follow up. The inbox composer is TIB's.                                                |
 | TW-TG-009        | backend-done | Template buttons become the keyboard; phone buttons are appended to the text.                                                                                                                        |
 | TW-TG-010        | backend-done | `GET /telegram/bots/:id/chats`: the bot's threads, newest 500, type from recent messages. Picker is T5.                                                                                              |
-| TW-TG-011        | backend-done | `GET /telegram/broadcasts`: 50 newest plus totals over all of them (Reference counted "Sending" over the 50 only). Screen is T5.                                                                        |
+| TW-TG-011        | backend-done | `GET /telegram/broadcasts`: 50 newest plus totals over all of them (Reference counted "Sending" over the 50 only). Screen is T5.                                                                     |
 | TW-TG-012        | partial      | Draft with a frozen recipient list, forged ids dropped, template body and buttons. A file can be uploaded through `POST /v2/media/marketing` (cloud storage), or a public address pasted. Screen T5. |
 | TW-TG-013        | backend-done | BullMQ job `tg-broadcast`: batches of 25, 50 ms apart, file id reused, blocked vs failed, counters recomputed, inbox mirror through the shim.                                                        |
 | TW-TG-014        | backend-done | Start, pause, retry failed (blocked stay), delete in any status. Events `telegram.broadcast.*`.                                                                                                      |
@@ -36,7 +36,7 @@ Evidence so far is automated, no screen yet:
 
 ## Intended differences from Reference
 
-| #   | Area                   | Reference                                                                  | Here                                                                                                                                                                                               |
+| #   | Area                   | Reference                                                               | Here                                                                                                                                                                                               |
 | --- | ---------------------- | ----------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1   | Access                 | Workspace role plus plan flags                                          | Permission keys `tg.bots.read`, `tg.bots.manage`, `tg.broadcasts.read`, `tg.broadcasts.manage`, `tg.accounts.manage`.                                                                              |
 | 2   | Webhook secret         | Stored in plain text, hidden from serialization                         | Encrypted at rest like the bot token (the schema marks it encrypted).                                                                                                                              |
@@ -57,7 +57,7 @@ Evidence so far is automated, no screen yet:
 
 | Shim                                         | Real owner                                              | Effect now                                                                                                         |
 | -------------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| `TelegramPlanGate`                           | plans-subscriptions-trials (PLAN)                       | `access_telegram`, `telegram_broadcasts` and the bot cap are not enforced (Reference never enforced the cap).         |
+| `TelegramPlanGate`                           | plans-subscriptions-trials (PLAN)                       | `access_telegram`, `telegram_broadcasts` and the bot cap are not enforced (Reference never enforced the cap).      |
 | `InboxIngest` (`ChatInboxIngest`)            | chat-conversations                                      | Real: the inbound pipeline, one channel per bot; the sender is still a contact keyed by the Telegram user id here. |
 | `MediaStore` (`StorageMediaStore`)           | platform-settings-branding-storage                      | Real: contact avatars on the workspace's object storage; local disk saves nothing.                                 |
 | `TelegramTemplates` (`SqlTelegramTemplates`) | message-templates                                       | Reads `wa_templates` rows whose channel is telegram directly.                                                      |
@@ -77,13 +77,13 @@ preview, template fill, button labels and the create rule.
 
 Intended differences on the screens:
 
-| #   | Area         | Reference                                                        | Here                                                                                                               |
-| --- | ------------ | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| #   | Area         | Reference                                                     | Here                                                                                                                  |
+| --- | ------------ | ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
 | 12  | `{name}`     | Screen promises `{name}`; the sender only replaced `{{name}}` | The sender replaces `{name}` too, so what the screen promises is what is sent. Nothing Reference accepted is refused. |
-| 13  | Sending row  | "Resume" re-runs the browser loop                             | "Pause": a worker sends, so the only thing left to do to a sending broadcast is stop it.                           |
-| 14  | Attachment   | File picker (50 MB)                                           | A public address; uploading a file waits on the storage service (blocked, recorded).                               |
-| 15  | Hub header   | Team inbox, Flows, Broadcasts                                 | Adds a "Telegram broadcasts" link, the only way into that list from the hub.                                       |
-| 16  | Account card | Connect Account opens a QR and phone login                    | Shown disabled with the reason (T6, needs the Node bridge).                                                        |
+| 13  | Sending row  | "Resume" re-runs the browser loop                             | "Pause": a worker sends, so the only thing left to do to a sending broadcast is stop it.                              |
+| 14  | Attachment   | File picker (50 MB)                                           | A public address; uploading a file waits on the storage service (blocked, recorded).                                  |
+| 15  | Hub header   | Team inbox, Flows, Broadcasts                                 | Adds a "Telegram broadcasts" link, the only way into that list from the hub.                                          |
+| 16  | Account card | Connect Account opens a QR and phone login                    | Shown disabled with the reason (T6, needs the Node bridge).                                                           |
 
 Not verified: the side-by-side run against Reference (the dev sign-in is the user's), the 3-second polling while a broadcast is sending.
 

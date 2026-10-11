@@ -7,7 +7,7 @@ WhatsApp number**, and the Playwright twin run against the running Reference (`t
 
 ## Intended differences from Reference
 
-| Where                     | Reference                                                                                       | Here                                                                                                                                       | Reason                                                      |
+| Where                     | Reference                                                                                    | Here                                                                                                                                       | Reason                                                      |
 | ------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------- |
 | Opted-out contacts        | still messaged on a single-sender group, tag or queue schedule                               | never messaged, whichever audience names them; typed numbers of opted-out contacts too; the composer's preview says how many were left out | compliance (TW-SCHED-004 rule 6: "the port must fix")       |
 | Audience copies           | a person in two chosen groups could appear twice; tag audiences with two senders ended empty | one copy per person across groups, tags and broadcasts; tag audiences split like any other                                                 | TW-SCHED-004, 005 quirks                                    |

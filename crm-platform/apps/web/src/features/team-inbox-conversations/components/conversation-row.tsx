@@ -19,7 +19,9 @@ export interface ConversationRowProps {
 }
 
 /** True when the last message in the thread went out (so the preview starts with "You:"). */
-export function lastWasOutbound(row: Pick<ConversationSummary, 'lastInboundAt' | 'lastOutboundAt'>): boolean {
+export function lastWasOutbound(
+  row: Pick<ConversationSummary, 'lastInboundAt' | 'lastOutboundAt'>,
+): boolean {
   if (!row.lastOutboundAt) return false;
   if (!row.lastInboundAt) return true;
   return row.lastOutboundAt >= row.lastInboundAt;
@@ -69,10 +71,15 @@ export const ConversationRow = memo(function ConversationRow({
         <Avatar id={row.id} name={row.title} />
         <span className="min-w-0 flex-1">
           <span className="flex items-center gap-1.5">
-            <span dir="auto" className={cn('truncate text-sm', unread ? 'font-semibold' : 'font-medium')}>
+            <span
+              dir="auto"
+              className={cn('truncate text-sm', unread ? 'font-semibold' : 'font-medium')}
+            >
               {row.title}
             </span>
-            {showChannel && <ChannelTag decorative kind={row.channel.kind} name={row.channel.name} />}
+            {showChannel && (
+              <ChannelTag decorative kind={row.channel.kind} name={row.channel.name} />
+            )}
             <span className="ms-auto flex shrink-0 items-center gap-1.5">
               {row.pinned && <PinIcon width={12} height={12} className="text-primary" />}
               {unread && (
@@ -103,7 +110,9 @@ export const ConversationRow = memo(function ConversationRow({
             )}
           >
             {outbound && <span className="shrink-0 text-muted-foreground">{t('you')}</span>}
-            <span dir="auto" className="truncate">{row.preview ?? t('noMessages')}</span>
+            <span dir="auto" className="truncate">
+              {row.preview ?? t('noMessages')}
+            </span>
           </span>
           <span className="mt-1 flex flex-wrap items-center gap-1">
             {showChannel && (
@@ -118,7 +127,9 @@ export const ConversationRow = memo(function ConversationRow({
               <span
                 className={cn(
                   'rounded-full px-1.5 py-0.5 text-[10px] font-medium',
-                  chip.state === 'closed' ? 'bg-danger/15 text-danger' : 'bg-warning/15 text-warning',
+                  chip.state === 'closed'
+                    ? 'bg-danger/15 text-danger'
+                    : 'bg-warning/15 text-warning',
                 )}
               >
                 {chip.state === 'closed'

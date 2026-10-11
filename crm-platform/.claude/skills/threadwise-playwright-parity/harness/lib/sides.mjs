@@ -224,7 +224,8 @@ export class ThreadwiseSide extends Side {
 
   async doLogin(role) {
     const user = this.cfg.threadwise.users[role];
-    if (!user) throw new Error(`no Reference user configured for role "${role}" (cfg.threadwise.users)`);
+    if (!user)
+      throw new Error(`no Reference user configured for role "${role}" (cfg.threadwise.users)`);
     const context = await this.newContext();
     const page = await context.newPage();
     await page.goto(this.url(this.cfg.threadwise.loginPath), { waitUntil: 'load' });

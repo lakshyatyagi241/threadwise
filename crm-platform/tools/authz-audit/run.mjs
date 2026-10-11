@@ -34,7 +34,10 @@ const decisions = readJson(join(import.meta.dirname, 'decisions.json'), {});
 // ---- 1. inventory + static checks -------------------------------------------------------------------------------------------------
 const routes = scanRoutes();
 const checks = runStaticChecks(routes, policy, decisions);
-writeFileSync(join(OUT, 'authorization-route-inventory.json'), JSON.stringify({ routes: routes.length, routesList: routes }, null, 2));
+writeFileSync(
+  join(OUT, 'authorization-route-inventory.json'),
+  JSON.stringify({ routes: routes.length, routesList: routes }, null, 2),
+);
 
 // ---- 2. policy matrix -------------------------------------------------------------------------------------------------------------
 const matrix = buildMatrix(routes, policy);
@@ -43,13 +46,33 @@ writeFileSync(join(OUT, 'authorization-policy-matrix.csv'), matrix.csv);
 // ---- 3. dynamic suites ------------------------------------------------------------------------------------------------------------
 const suites = [];
 if (dynamic) {
-  const env = { ...process.env, AUTHZ_REPORT_DIR: OUT, SWC_NATIVE_BINDING_CACHE: process.env.SWC_NATIVE_BINDING_CACHE ?? join(process.env.USERPROFILE ?? process.env.HOME ?? '', '.cache/swc-native') };
+  const env = {
+    ...process.env,
+    AUTHZ_REPORT_DIR: OUT,
+    SWC_NATIVE_BINDING_CACHE:
+      process.env.SWC_NATIVE_BINDING_CACHE ??
+      join(process.env.USERPROFILE ?? process.env.HOME ?? '', '.cache/swc-native'),
+  };
   const vitest = join(REPO, 'apps/api/node_modules/vitest/vitest.mjs');
-  const r = spawnSync(process.execPath, [vitest, 'run', '--dir', 'test/e2e', 'authz', '--testTimeout=1800000', '--maxWorkers=2', '--reporter=json', `--outputFile=${join(OUT, 'vitest-authz.json')}`], {
-    cwd: join(REPO, 'apps/api'),
-    env,
-    stdio: 'inherit',
-  });
+  const r = spawnSync(
+    process.execPath,
+    [
+      vitest,
+      'run',
+      '--dir',
+      'test/e2e',
+      'authz',
+      '--testTimeout=1800000',
+      '--maxWorkers=2',
+      '--reporter=json',
+      `--outputFile=${join(OUT, 'vitest-authz.json')}`,
+    ],
+    {
+      cwd: join(REPO, 'apps/api'),
+      env,
+      stdio: 'inherit',
+    },
+  );
   suites.push({ name: 'e2e/authz', exitCode: r.status });
 }
 const vitestJson = readJson(join(OUT, 'vitest-authz.json'), null);
@@ -58,14 +81,37 @@ const matrixResults = readJson(join(OUT, 'matrix-results.json'), null);
 // ---- 4. findings + controls -------------------------------------------------------------------------------------------------------
 const findings = [];
 for (const c of checks) {
-  if (c.status === 'fail' || c.status === 'error') findings.push({ id: `AZ-${c.id}`, severity: c.severity, title: c.title, summary: c.summary, evidence: c.evidence.slice(0, 50), status: 'open' });
-  if (c.status === 'needs-decision') findings.push({ id: `AZ-${c.id}`, severity: c.severity, title: c.title, summary: c.summary, evidence: c.evidence.slice(0, 50), status: 'needs-decision' });
+  if (c.status === 'fail' || c.status === 'error')
+    findings.push({
+      id: `AZ-${c.id}`,
+      severity: c.severity,
+      title: c.title,
+      summary: c.summary,
+      evidence: c.evidence.slice(0, 50),
+      status: 'open',
+    });
+  if (c.status === 'needs-decision')
+    findings.push({
+      id: `AZ-${c.id}`,
+      severity: c.severity,
+      title: c.title,
+      summary: c.summary,
+      evidence: c.evidence.slice(0, 50),
+      status: 'needs-decision',
+    });
 }
 if (vitestJson) {
   for (const f of vitestJson.testResults ?? []) {
     for (const t of f.assertionResults ?? []) {
       if (t.status === 'failed') {
-        findings.push({ id: `AZ-dyn-${createHash('sha1').update(t.fullName).digest('hex').slice(0, 8)}`, severity: 'critical', title: t.fullName, summary: (t.failureMessages?.[0] ?? '').slice(0, 1500), evidence: [f.name], status: 'open' });
+        findings.push({
+          id: `AZ-dyn-${createHash('sha1').update(t.fullName).digest('hex').slice(0, 8)}`,
+          severity: 'critical',
+          title: t.fullName,
+          summary: (t.failureMessages?.[0] ?? '').slice(0, 1500),
+          evidence: [f.name],
+          status: 'open',
+        });
       }
     }
   }
@@ -78,10 +124,14 @@ for (const [id, d] of Object.entries(decisions)) {
 const controlStatus = CONTROLS.map((c) => {
   const supporting = checks.filter((k) => k.controls.includes(c.id));
   const failed = supporting.filter((k) => ['fail', 'error'].includes(k.status));
-  const decide = supporting.filter((k) => k.status === 'needs-decision' && !(decisions[k.id]?.decision === 'accepted'));
+  const decide = supporting.filter(
+    (k) => k.status === 'needs-decision' && !(decisions[k.id]?.decision === 'accepted'),
+  );
   // A spec counts as evidence only if its file ran, had tests, and every test passed.
   const specState = c.specs.map((s) => {
-    const files = (vitestJson?.testResults ?? []).filter((f) => f.name.replace(/\\/g, '/').includes(`/authz/${s}`));
+    const files = (vitestJson?.testResults ?? []).filter((f) =>
+      f.name.replace(/\\/g, '/').includes(`/authz/${s}`),
+    );
     if (!files.length) return 'missing';
     const tests = files.flatMap((f) => f.assertionResults ?? []);
     if (!tests.length) return 'missing';
@@ -97,15 +147,44 @@ const controlStatus = CONTROLS.map((c) => {
   else if (supporting.length || c.dynamic) status = dynamic ? 'Not run' : 'Not run';
   return { ...c, status, checks: supporting.map((k) => k.id) };
 });
-writeFileSync(join(OUT, 'authorization-control-matrix.csv'), ['id,priority,status,requirement,checks', ...controlStatus.map((c) => `${c.id},${c.priority},${c.status},"${c.title.replace(/"/g, '""')}","${c.checks.join(' ')}"`)].join('\n'));
+writeFileSync(
+  join(OUT, 'authorization-control-matrix.csv'),
+  [
+    'id,priority,status,requirement,checks',
+    ...controlStatus.map(
+      (c) =>
+        `${c.id},${c.priority},${c.status},"${c.title.replace(/"/g, '""')}","${c.checks.join(' ')}"`,
+    ),
+  ].join('\n'),
+);
 
 const open = findings.filter((f) => f.status === 'open');
 const blockers = open.filter((f) => ['critical', 'high'].includes(f.severity));
-const p0Unproven = controlStatus.filter((c) => c.priority === 'P0' && !['Pass', 'Not applicable'].includes(c.status));
+const p0Unproven = controlStatus.filter(
+  (c) => c.priority === 'P0' && !['Pass', 'Not applicable'].includes(c.status),
+);
 const verdict = blockers.length ? 'NO-GO' : p0Unproven.length || !dynamic ? 'CONDITIONAL' : 'GO';
 
 writeFileSync(join(OUT, 'authorization-security-findings.json'), JSON.stringify(findings, null, 2));
-writeFileSync(join(OUT, 'authorization-test-results.json'), JSON.stringify({ suites, vitest: vitestJson && { passed: vitestJson.numPassedTests, failed: vitestJson.numFailedTests, total: vitestJson.numTotalTests }, matrix: matrixResults && { routes: matrixResults.routes, notTested: matrixResults.results?.idorNotTested?.length ?? 0 } }, null, 2));
+writeFileSync(
+  join(OUT, 'authorization-test-results.json'),
+  JSON.stringify(
+    {
+      suites,
+      vitest: vitestJson && {
+        passed: vitestJson.numPassedTests,
+        failed: vitestJson.numFailedTests,
+        total: vitestJson.numTotalTests,
+      },
+      matrix: matrixResults && {
+        routes: matrixResults.routes,
+        notTested: matrixResults.results?.idorNotTested?.length ?? 0,
+      },
+    },
+    null,
+    2,
+  ),
+);
 writeFileSync(
   join(OUT, 'authorization-release-certification.json'),
   JSON.stringify(
@@ -128,17 +207,30 @@ const byStatus = controlStatus.reduce((a, c) => ((a[c.status] = (a[c.status] ?? 
 const md = [
   `# Authorization audit — ${verdict}`,
   '',
-  `Routes: ${routes.length} · dynamic suites ${dynamic ? 'ran' : 'did NOT run (use --dynamic)'} · controls: ${Object.entries(byStatus).map(([k, v]) => `${k} ${v}`).join(', ')}`,
+  `Routes: ${routes.length} · dynamic suites ${dynamic ? 'ran' : 'did NOT run (use --dynamic)'} · controls: ${Object.entries(
+    byStatus,
+  )
+    .map(([k, v]) => `${k} ${v}`)
+    .join(', ')}`,
   '',
   '## Findings',
-  ...(findings.length ? findings.map((f) => `- **${f.severity.toUpperCase()}** [${f.status}] ${f.id}: ${f.title}\n  ${f.summary.split('\n')[0]}`) : ['- none']),
+  ...(findings.length
+    ? findings.map(
+        (f) =>
+          `- **${f.severity.toUpperCase()}** [${f.status}] ${f.id}: ${f.title}\n  ${f.summary.split('\n')[0]}`,
+      )
+    : ['- none']),
   '',
   '## Checks',
   ...checks.map((c) => `- ${c.status.toUpperCase()} ${c.id}: ${c.summary}`),
   '',
   '## Matrix coverage',
   `- Policy rows: ${matrix.rows}; classes: ${JSON.stringify(matrix.byDecision)}`,
-  ...(matrixResults ? [`- IDOR cross-tenant probes: ${matrixResults.results.idor.length} tested, ${matrixResults.results.idorNotTested.length} routes without a tenant-A fixture (NOT tested)`] : []),
+  ...(matrixResults
+    ? [
+        `- IDOR cross-tenant probes: ${matrixResults.results.idor.length} tested, ${matrixResults.results.idorNotTested.length} routes without a tenant-A fixture (NOT tested)`,
+      ]
+    : []),
   '',
 ].join('\n');
 writeFileSync(join(OUT, 'report.md'), md);

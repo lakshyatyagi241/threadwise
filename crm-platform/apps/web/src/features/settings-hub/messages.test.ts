@@ -66,7 +66,9 @@ describe('settings messages', () => {
 
   it('keeps the shell keys the user menu needs', () => {
     for (const locale of ['en', 'ar']) {
-      const shell = JSON.parse(readFileSync(join(WEB, 'messages', locale, 'shell.json'), 'utf8')) as Tree;
+      const shell = JSON.parse(
+        readFileSync(join(WEB, 'messages', locale, 'shell.json'), 'utf8'),
+      ) as Tree;
       const keys = new Set(flatten(shell));
       for (const k of ['shell.help', 'shell.settings', 'shell.soon', 'shell.comingSoon']) {
         expect(keys.has(k), `${locale} ${k}`).toBe(true);

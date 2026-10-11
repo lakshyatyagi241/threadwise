@@ -17,19 +17,19 @@ src/
 
 ## Migrations applied today
 
-| File                               | Contains                                                                                                                          |
-| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| `0001_extensions`                  | citext, pgcrypto, pg_trgm, vector; tenant-context functions; `touch_row()`; `ensure_monthly_partition()`                          |
-| `0002_enums`                       | `record_lifecycle`, `perm_effect`, `record_scope`, `partner_agent_status`, `api_key_status`                                       |
-| `0003_foundation`                  | organizations, users, teams, team_members, permission_defs, roles, user_roles, role_grants, sequence_counters, Admin-lock trigger |
-| `0004_crm_contacts`                | companies, contacts, contact_identities; normalisation + search triggers                                                          |
-| `0005_partner_agents`              | partner_agents, partner_agent_leads, api_keys, `contacts.submitted_by_agent_id`                                                   |
-| `0006_outbox_audit`                | event_outbox, audit_log — RANGE-partitioned monthly, with default partitions                                                      |
-| `0007_rls_policies`                | RLS enabled **and forced**, policies, runtime roles, default privileges                                                           |
-| `0008_seed_permission_defs`        | the global capability registry                                                                                                    |
-| `20261001110000_partition_definer` | `ensure_monthly_partition()` becomes `SECURITY DEFINER` so the worker role can create partitions                                  |
-| `20261001110100_partition_rls`     | every partition mirrors its parent's RLS and policy; grants for the `0006` partitions; `inherit_partition_rls()`                  |
-| `2026100110*_<code>_threadwise_schema` | the Reference data model, one migration per domain: 202 tables ([docs/threadwise-port/schema](../../docs/threadwise-port/schema/README.md))  |
+| File                                   | Contains                                                                                                                                    |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `0001_extensions`                      | citext, pgcrypto, pg_trgm, vector; tenant-context functions; `touch_row()`; `ensure_monthly_partition()`                                    |
+| `0002_enums`                           | `record_lifecycle`, `perm_effect`, `record_scope`, `partner_agent_status`, `api_key_status`                                                 |
+| `0003_foundation`                      | organizations, users, teams, team_members, permission_defs, roles, user_roles, role_grants, sequence_counters, Admin-lock trigger           |
+| `0004_crm_contacts`                    | companies, contacts, contact_identities; normalisation + search triggers                                                                    |
+| `0005_partner_agents`                  | partner_agents, partner_agent_leads, api_keys, `contacts.submitted_by_agent_id`                                                             |
+| `0006_outbox_audit`                    | event_outbox, audit_log — RANGE-partitioned monthly, with default partitions                                                                |
+| `0007_rls_policies`                    | RLS enabled **and forced**, policies, runtime roles, default privileges                                                                     |
+| `0008_seed_permission_defs`            | the global capability registry                                                                                                              |
+| `20261001110000_partition_definer`     | `ensure_monthly_partition()` becomes `SECURITY DEFINER` so the worker role can create partitions                                            |
+| `20261001110100_partition_rls`         | every partition mirrors its parent's RLS and policy; grants for the `0006` partitions; `inherit_partition_rls()`                            |
+| `2026100110*_<code>_threadwise_schema` | the Reference data model, one migration per domain: 202 tables ([docs/threadwise-port/schema](../../docs/threadwise-port/schema/README.md)) |
 
 The inbox, broadcast, billing, AI and automation tables that the Reference port
 needs are in the `threadwise_schema` migrations; exams and settlements are not (not

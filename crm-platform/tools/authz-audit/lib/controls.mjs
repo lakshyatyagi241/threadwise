@@ -14,7 +14,12 @@ const C = 'cache-and-races';
 
 // [id, priority, title, specs[]]
 const T = [
-  [1, 'P0', 'Inventory all protected REST, GraphQL, WebSocket, webhook, worker and internal operations', []],
+  [
+    1,
+    'P0',
+    'Inventory all protected REST, GraphQL, WebSocket, webhook, worker and internal operations',
+    [],
+  ],
   [2, 'P0', 'Role-permission-resource-action matrix exists', []],
   [3, 'P0', 'Explicit deny-by-default authorization', [M]],
   [4, 'P0', 'All protected operations use trusted enforcement', [M]],

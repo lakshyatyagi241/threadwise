@@ -4,7 +4,11 @@ import { DelayedError, UnrecoverableError, type Job } from 'bullmq';
 import { RequestContextStore } from '../../common/context/request-context';
 import { ChannelError } from '../../infra/providers/chat-conversations';
 import { QUEUES } from '../../infra/queue/queues';
-import { MESSAGE_SEND_JOB, messageSendJobSchema, sendBackoffStrategy } from './message-dispatch.job';
+import {
+  MESSAGE_SEND_JOB,
+  messageSendJobSchema,
+  sendBackoffStrategy,
+} from './message-dispatch.job';
 import { IN_FLIGHT, MessageDispatchService } from './message-dispatch.service';
 
 /** How long a message whose send another worker holds waits before this one looks again (without using up an attempt). */

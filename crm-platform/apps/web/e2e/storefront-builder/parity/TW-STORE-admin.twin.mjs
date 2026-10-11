@@ -175,7 +175,10 @@ export default (h) => {
   const WIZ = '/connect?platform=wa-store';
   const wizAdd = `${WIZ}&action=add`;
   const wizEdit = { threadwise: `${WIZ}&shop=${REF.id}`, ours: `${WIZ}&shop=${OURS.uuid}` };
-  const settingsPath = { threadwise: '/store/storefront', ours: `/store/storefront?shop=${OURS.uuid}` };
+  const settingsPath = {
+    threadwise: '/store/storefront',
+    ours: `/store/storefront?shop=${OURS.uuid}`,
+  };
   const shopNameInput = { threadwise: '[name=shop_name]', ours: { label: /^shop name/i } };
   const domainInput = { threadwise: '[name=custom_domain]', ours: { label: /^custom domain/i } };
   const none = { css: '#__no-such-element__' };
@@ -1527,7 +1530,8 @@ export default (h) => {
       tags: ['wizard', 'quirk'],
       run: async (c) => {
         resetDemo(c);
-        if (c.side === 'threadwise') mysql(`update wa_storefronts set enabled=0 where id=${REF.id}`);
+        if (c.side === 'threadwise')
+          mysql(`update wa_storefronts set enabled=0 where id=${REF.id}`);
         else
           psql(
             `update wa_storefronts set enabled=false where org_id = ${orgSql} and id = ${OURS.id}`,

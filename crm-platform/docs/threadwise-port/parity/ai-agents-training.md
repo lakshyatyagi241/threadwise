@@ -14,7 +14,7 @@ Reference 1.7.0 reference vs this branch (`lakshya/aiag/ai-training`). API: [doc
 
 ## Intended differences (each needs the domain owner's approval)
 
-| Id          | Reference                                                                 | Here                                                                                                                                                          | Why                                                   |
+| Id          | Reference                                                              | Here                                                                                                                                                          | Why                                                   |
 | ----------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
 | TW-AIAG-001 | status tabs and rail buttons do nothing; delete leaves the cards stale | the status views filter the loaded rows; delete refreshes the cards                                                                                           | PORTING_RULES 5.2 (no dead buttons)                   |
 | TW-AIAG-001 | page numbers                                                           | cursor pages of 20                                                                                                                                            | architecture                                          |
@@ -29,7 +29,7 @@ Reference 1.7.0 reference vs this branch (`lakshya/aiag/ai-training`). API: [doc
 | TW-AIAG-008 | the stored path is in the database only                                | same; the response carries `hasFile` only                                                                                                                     | security                                              |
 | TW-AIAG-012 | orphan sweep on each list load                                         | not needed                                                                                                                                                    | FK cascade                                            |
 | TW-AIAG-014 | page-only paywall, JSON endpoints answered anyway                      | 422 `PLAN_FEATURE_LOCKED` on every route                                                                                                                      | plan rule of this repo                                |
-| TW-AIAG-016 | n/a                                                                    | "+ Create knowledge base" and "Refresh list" in the AI node forms; AI Training links open in a new tab                                                        | owner-reported gap (not a Reference feature)             |
+| TW-AIAG-016 | n/a                                                                    | "+ Create knowledge base" and "Refresh list" in the AI node forms; AI Training links open in a new tab                                                        | owner-reported gap (not a Reference feature)          |
 
 ## Not verified, and why
 

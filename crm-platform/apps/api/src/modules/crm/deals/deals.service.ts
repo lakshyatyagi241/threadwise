@@ -181,7 +181,11 @@ export class DealsService {
       const valueMinor = parseValue(input.value ?? '0', currency);
       const ownerId = await this.resolveOwnerForCreate(tx, ctx.orgId, ctx.userId, input.ownerId);
       if (ctx.grants) {
-        await this.assertOwnerAllowed(tx, ownerId, this.rbac.can(ctx.grants, 'record.deals.create').scope);
+        await this.assertOwnerAllowed(
+          tx,
+          ownerId,
+          this.rbac.can(ctx.grants, 'record.deals.create').scope,
+        );
       }
 
       let contactId: number | null = null;

@@ -77,7 +77,10 @@ export function isOggOpus(head: Buffer): boolean {
 /** True for a WebP with the animation flag (VP8X chunk, bit 1 of the flags byte). A static sticker has the lower limit. */
 export function isAnimatedWebp(head: Buffer): boolean {
   if (head.length < 21) return false;
-  if (head.subarray(0, 4).toString('ascii') !== 'RIFF' || head.subarray(8, 12).toString('ascii') !== 'WEBP') {
+  if (
+    head.subarray(0, 4).toString('ascii') !== 'RIFF' ||
+    head.subarray(8, 12).toString('ascii') !== 'WEBP'
+  ) {
     return false;
   }
   return head.subarray(12, 16).toString('ascii') === 'VP8X' && (head[20]! & 0x02) !== 0;
@@ -120,11 +123,20 @@ export function classifyForUpload(input: {
   switch (kind) {
     case 'image':
       if (mime === 'image/gif')
-        refuse(WA_UPLOAD_REFUSAL.UNSUPPORTED_TYPE, 'WhatsApp does not take GIF images. Send it as an MP4 video instead.');
+        refuse(
+          WA_UPLOAD_REFUSAL.UNSUPPORTED_TYPE,
+          'WhatsApp does not take GIF images. Send it as an MP4 video instead.',
+        );
       if (mime === 'image/webp')
-        refuse(WA_UPLOAD_REFUSAL.UNSUPPORTED_TYPE, 'WhatsApp takes WebP only as a sticker, not as an image. Use JPEG or PNG.');
+        refuse(
+          WA_UPLOAD_REFUSAL.UNSUPPORTED_TYPE,
+          'WhatsApp takes WebP only as a sticker, not as an image. Use JPEG or PNG.',
+        );
       if (!WA_MIMES.image.includes(mime))
-        refuse(WA_UPLOAD_REFUSAL.UNSUPPORTED_TYPE, `WhatsApp takes images as JPEG or PNG, not ${mime}.`);
+        refuse(
+          WA_UPLOAD_REFUSAL.UNSUPPORTED_TYPE,
+          `WhatsApp takes images as JPEG or PNG, not ${mime}.`,
+        );
       break;
     case 'sticker':
       if (!WA_MIMES.sticker.includes(mime))
@@ -158,7 +170,9 @@ export function classifyForUpload(input: {
   }
 
   const maxBytes =
-    kind === 'sticker' && !isAnimatedWebp(input.head) ? WA_STATIC_STICKER_MAX_BYTES : WA_MAX_BYTES[kind];
+    kind === 'sticker' && !isAnimatedWebp(input.head)
+      ? WA_STATIC_STICKER_MAX_BYTES
+      : WA_MAX_BYTES[kind];
   if (input.size > maxBytes) {
     refuse(
       WA_UPLOAD_REFUSAL.TOO_LARGE,

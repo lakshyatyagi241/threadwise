@@ -48,6 +48,8 @@ describe('TemplateConnectSyncConsumer', () => {
     const none = vi.fn().mockRejectedValue(new AppError(ERROR_CODES.TPL_NO_CONNECTION, 'x', 409));
     await expect(make(none).consumer.handle(event({ connectionId: 'a' }))).resolves.toBeUndefined();
     const boom = vi.fn().mockRejectedValue(new Error('meta down'));
-    await expect(make(boom).consumer.handle(event({ connectionId: 'a' }))).rejects.toThrow('meta down');
+    await expect(make(boom).consumer.handle(event({ connectionId: 'a' }))).rejects.toThrow(
+      'meta down',
+    );
   });
 });

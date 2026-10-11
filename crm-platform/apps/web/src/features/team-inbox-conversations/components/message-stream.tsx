@@ -184,7 +184,12 @@ export function MessageStream(props: MessageStreamProps) {
     setUnseen(0);
   };
 
-  const empty = state.loaded && !state.error && state.messages.length === 0 && state.pending.length === 0 && items.length === 0;
+  const empty =
+    state.loaded &&
+    !state.error &&
+    state.messages.length === 0 &&
+    state.pending.length === 0 &&
+    items.length === 0;
 
   return (
     <div className="relative min-h-0 flex-1">
@@ -305,4 +310,3 @@ export function MessageStream(props: MessageStreamProps) {
 function quotedOf(m: MessageResponse, byId: Map<string, MessageResponse>): MessageResponse | null {
   return m.replyToMessageId ? (byId.get(m.replyToMessageId) ?? null) : null;
 }
-

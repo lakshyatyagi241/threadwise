@@ -16,24 +16,24 @@ Reference 1.7.0 vs this tree. Round 2.
 
 ## Rows compared from source and Reference screenshots
 
-| #   | Screen          | Reference                                                                                           | Ours                                                                        | Result    |
-| --- | --------------- | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------- | --------- |
-| 1   | General         | Sections: Application identity, Brand assets, Platform toggles, Signups and free trial; guide    | Same four sections, same field order (name, footer, URL/email pairs, ...) | same      |
-| 2   | General         | Sticky "Changes apply only after you save" bar with Cancel and Save                              | Sticky save bar                                                             | same      |
-| 3   | Hub             | KPI strip (saved, healthy, needs test, secret fields, last updated) and numbered tiles           | Same strip and numbered tiles for our groups                                | same      |
-| 4   | Appearance      | Colour tokens in Brand, Surfaces, Text, Accents; live preview; reset                             | Same groups, preview, reset; blank shows the shipped colour                 | same      |
-| 5   | Mail            | Driver, host, port, encryption, sender, test card                                                | Same; test send in its own card                                             | same      |
+| #   | Screen     | Reference                                                                                     | Ours                                                                      | Result |
+| --- | ---------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | ------ |
+| 1   | General    | Sections: Application identity, Brand assets, Platform toggles, Signups and free trial; guide | Same four sections, same field order (name, footer, URL/email pairs, ...) | same   |
+| 2   | General    | Sticky "Changes apply only after you save" bar with Cancel and Save                           | Sticky save bar                                                           | same   |
+| 3   | Hub        | KPI strip (saved, healthy, needs test, secret fields, last updated) and numbered tiles        | Same strip and numbered tiles for our groups                              | same   |
+| 4   | Appearance | Colour tokens in Brand, Surfaces, Text, Accents; live preview; reset                          | Same groups, preview, reset; blank shows the shipped colour               | same   |
+| 5   | Mail       | Driver, host, port, encryption, sender, test card                                             | Same; test send in its own card                                           | same   |
 
 ## Intended differences
 
-| #   | Area                    | Reference                                                  | Here                                                                 | Why                                                                 |
-| --- | ----------------------- | ------------------------------------------------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| 1   | General toggles         | Preloader, Maintenance, Public registration, Auto-verify | Maintenance only; signup policy links to the AUTH registration screen | Preloader is dead code (TW-SET-009); registration policy is AUTH's (TW-SET-007) |
-| 2   | Settings store          | One row per key, mixed encryption                       | One versioned JSON document per group, AES-GCM secrets               | Optimistic locking, one scheme                                      |
-| 3   | Malformed colours       | Saved as empty                                          | Refused with an error                                                | Deliberate fix (TW-SET-013)                                         |
+| #   | Area                                          | Reference                                                                                                  | Here                                                                                                                                                    | Why                                                                                                                                                                                                                                                                                    |
+| --- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | General toggles                               | Preloader, Maintenance, Public registration, Auto-verify                                                   | Maintenance only; signup policy links to the AUTH registration screen                                                                                   | Preloader is dead code (TW-SET-009); registration policy is AUTH's (TW-SET-007)                                                                                                                                                                                                        |
+| 2   | Settings store                                | One row per key, mixed encryption                                                                          | One versioned JSON document per group, AES-GCM secrets                                                                                                  | Optimistic locking, one scheme                                                                                                                                                                                                                                                         |
+| 3   | Malformed colours                             | Saved as empty                                                                                             | Refused with an error                                                                                                                                   | Deliberate fix (TW-SET-013)                                                                                                                                                                                                                                                            |
 | 4   | Pusher runtime and settings (TW-SET-041, 042) | Pusher-HTTP broadcaster, Echo in the browser, an admin 'Real-time' page with credentials and a test button | None: the page, its `realtime` settings group, `POST /realtime/test` and the public `realtime` flag are removed. Live updates use the Socket.IO gateway | `intended`: Pusher real-time settings removed by owner decision 2026-10-07 because real-time runs on our own Socket.IO and nothing consumed the settings (verified: no gateway, publisher, web bootstrap or site config read them). Migration `20261105090000` deletes the stored rows |
-| 5   | Real-time test failure  | HTTP 422                                                | (removed with row 4; mail and storage tests keep HTTP 200 with `ok: false`) | Probe result is data, not a request error |
-| 6   | Custom CSS/JS           | Always injected                                         | Withheld until the master switch is on                               | Safer default                                                       |
+| 5   | Real-time test failure                        | HTTP 422                                                                                                   | (removed with row 4; mail and storage tests keep HTTP 200 with `ok: false`)                                                                             | Probe result is data, not a request error                                                                                                                                                                                                                                              |
+| 6   | Custom CSS/JS                                 | Always injected                                                                                            | Withheld until the master switch is on                                                                                                                  | Safer default                                                                                                                                                                                                                                                                          |
 
 ## Not ported on purpose
 
@@ -56,12 +56,12 @@ the four-theme switcher live in the customer shell and AUTH profile, which are o
 
 ## Evidence
 
-| What                                                   | Result                                                  |
-| ------------------------------------------------------ | ------------------------------------------------------- |
-| API e2e `test/e2e/platform-settings-branding-storage`  | 49 passed                                               |
-| API unit suite (whole)                                 | 1511 passed, 2 failed (TW-DASH-048 health probes, not SET) |
-| Web feature tests                                      | 45 passed                                               |
-| `pnpm arch:check`, `pnpm db:verify-schema`             | 0 errors                                                |
+| What                                                  | Result                                                     |
+| ----------------------------------------------------- | ---------------------------------------------------------- |
+| API e2e `test/e2e/platform-settings-branding-storage` | 49 passed                                                  |
+| API unit suite (whole)                                | 1511 passed, 2 failed (TW-DASH-048 health probes, not SET) |
+| Web feature tests                                     | 45 passed                                                  |
+| `pnpm arch:check`, `pnpm db:verify-schema`            | 0 errors                                                   |
 
 ## Tiers
 

@@ -244,7 +244,9 @@ describe('Shopify: cart link, then the order resumes the run (TW-ECOM-036, 037)'
       ]);
       expect(drafts).toEqual([]);
 
-      await pipeline.run(job('shopify', store.id, topic, shopifyOrder(`threadwise-flow:${run.uuid}`)));
+      await pipeline.run(
+        job('shopify', store.id, topic, shopifyOrder(`threadwise-flow:${run.uuid}`)),
+      );
       const done = await untilRun(p, t, f.id, 'purchased', (r) => r.status === 'completed');
       expect(done.vars).toMatchObject({
         order_id: '9001',

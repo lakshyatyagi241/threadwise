@@ -348,7 +348,8 @@ export class FlowsController {
   @RequirePermission('flb.flows.read')
   @ApiOperation({
     summary: 'The portable export file of a flow',
-    description: 'Graph verbatim under the `_threadwise_flow_export` marker, no workspace or user ids.',
+    description:
+      'Graph verbatim under the `_threadwise_flow_export` marker, no workspace or user ids.',
   })
   async exportFlow(
     @Param('id', zodPipe(uuidSchema)) id: string,

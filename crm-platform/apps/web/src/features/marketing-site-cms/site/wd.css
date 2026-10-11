@@ -42,7 +42,11 @@
     background-size: 14px 14px;
   }
   .cms-site .dot-pattern {
-    background-image: radial-gradient(circle at 1px 1px, rgba(50, 20, 219, 0.15) 1px, transparent 0);
+    background-image: radial-gradient(
+      circle at 1px 1px,
+      rgba(50, 20, 219, 0.15) 1px,
+      transparent 0
+    );
     background-size: 14px 14px;
   }
   .cms-site .grid-bg {

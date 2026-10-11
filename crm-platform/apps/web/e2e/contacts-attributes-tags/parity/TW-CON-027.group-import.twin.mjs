@@ -118,13 +118,11 @@ export default (h) => ({
           await c.page.getByRole('button', { name: 'Import contacts' }).click();
           const dlg = c.page.getByRole('dialog');
           await dlg.waitFor();
-          await dlg
-            .locator('input[type=file]')
-            .setInputFiles({
-              name: `${tag}.csv`,
-              mimeType: 'text/csv',
-              buffer: Buffer.from(csv(tag, c.digits(8))),
-            });
+          await dlg.locator('input[type=file]').setInputFiles({
+            name: `${tag}.csv`,
+            mimeType: 'text/csv',
+            buffer: Buffer.from(csv(tag, c.digits(8))),
+          });
           await dlg
             .getByText(/New contacts/i)
             .first()

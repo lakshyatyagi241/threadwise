@@ -27,7 +27,10 @@ const summary = {
 mkdirSync(OUT, { recursive: true });
 // Generated evidence is never committed (same as reports/auth-audit).
 writeFileSync(join(REPO, 'reports/authz-audit/.gitignore'), '*\n');
-writeFileSync(join(OUT, 'authorization-route-inventory.json'), JSON.stringify({ summary, routes }, null, 2));
+writeFileSync(
+  join(OUT, 'authorization-route-inventory.json'),
+  JSON.stringify({ summary, routes }, null, 2),
+);
 
 const list = (rs) => rs.map((r) => `- \`${r.id}\` — ${r.file}#${r.handler}`);
 const ungated = routes.filter((r) => r.gate === 'authenticated-only');
@@ -35,7 +38,9 @@ const coarse = routes.filter((r) => r.gate === 'operator-or-partner-coarse');
 const md = [
   '# Authorization route inventory',
   '',
-  `Routes: **${summary.routes}** · by gate: ${Object.entries(byGate).map(([k, v]) => `${k} ${v}`).join(', ')}`,
+  `Routes: **${summary.routes}** · by gate: ${Object.entries(byGate)
+    .map(([k, v]) => `${k} ${v}`)
+    .join(', ')}`,
   `IDOR candidates (object id in path): **${summary.idorCandidates}**`,
   '',
   `## Authenticated-only routes (no permission, guard or actor kind): ${ungated.length}`,

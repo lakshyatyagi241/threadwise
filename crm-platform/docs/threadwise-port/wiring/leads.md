@@ -63,5 +63,5 @@ Written by this domain in other domains' tables: `contacts` (create through `Con
 | WIRE-LEAD-017 | Meta lead ads door, reconciliation sweep, re-consent (L-06)                                          | blocked on the Facebook module and Meta app review   |
 | WIRE-LEAD-018 | TikTok and LinkedIn doors (L-13, L-14), Google Ads template (L-15)                                   | blocked on partner approval                          |
 | WIRE-LEAD-019 | Speed-to-lead first message (L-16), backfill and "sync now" (L-18), Zapier and Make templates (L-19) | later phases                                         |
-| WIRE-LEAD-020 | Reference's per-hook flow enrolment, template send and forward URL                                      | integrations domain (the ported `incoming_webhooks`) |
+| WIRE-LEAD-020 | Reference's per-hook flow enrolment, template send and forward URL                                   | integrations domain (the ported `incoming_webhooks`) |
 | WIRE-LEAD-021 | The web screens (WIRE-LEAD-006)                                                                      | the UI agent                                         |

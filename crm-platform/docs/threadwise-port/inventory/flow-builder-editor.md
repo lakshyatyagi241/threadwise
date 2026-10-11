@@ -111,9 +111,9 @@ Connections: FLR (execution, `node/services/flowService.js`, channel runners, `/
 | TW-FLB-078 | Flow-connected devices                                              | dead-code   | P2       | S      | TW-FLB-029 |
 | TW-FLB-079 | Instagram flow import and Instaflow sync                            | implemented | P2       | M      | TW-FLB-064 |
 | TW-FLB-080 | Flow showcase seeder (dev fixture)                                  | implemented | P2       | S      | TW-FLB-016 |
-| TW-FLB-081 | Ask for file / image node (addition beyond Reference)                  | implemented | P2       | M      | TW-FLB-016 |
-| TW-FLB-082 | Ask for location node (addition beyond Reference)                      | implemented | P2       | M      | TW-FLB-016 |
-| TW-FLB-083 | Geta console publishing (addition beyond Reference)                    | implemented | P2       | L      | TW-FLB-022 |
+| TW-FLB-081 | Ask for file / image node (addition beyond Reference)               | implemented | P2       | M      | TW-FLB-016 |
+| TW-FLB-082 | Ask for location node (addition beyond Reference)                   | implemented | P2       | M      | TW-FLB-016 |
+| TW-FLB-083 | Geta console publishing (addition beyond Reference)                 | implemented | P2       | L      | TW-FLB-022 |
 
 ## Features
 

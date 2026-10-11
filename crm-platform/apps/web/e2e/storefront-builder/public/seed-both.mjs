@@ -350,7 +350,15 @@ const enc = (v) =>
 const maria = (sql) =>
   execFileSync(
     'docker',
-    ['exec', '-i', 'threadwise-db', 'mariadb', '-uthreadwise', '-pthreadwise_local_pw', 'threadwise'],
+    [
+      'exec',
+      '-i',
+      'threadwise-db',
+      'mariadb',
+      '-uthreadwise',
+      '-pthreadwise_local_pw',
+      'threadwise',
+    ],
     {
       input: sql,
       encoding: 'utf8',

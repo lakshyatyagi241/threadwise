@@ -5,7 +5,9 @@
  */
 export type ShortcutAction = 'next' | 'prev' | 'resolve' | 'search';
 
-export function shortcutAction(e: Pick<KeyboardEvent, 'key' | 'ctrlKey' | 'metaKey' | 'altKey'>): ShortcutAction | null {
+export function shortcutAction(
+  e: Pick<KeyboardEvent, 'key' | 'ctrlKey' | 'metaKey' | 'altKey'>,
+): ShortcutAction | null {
   if (e.ctrlKey || e.metaKey || e.altKey) return null;
   switch (e.key) {
     case 'j':

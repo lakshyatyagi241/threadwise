@@ -296,14 +296,14 @@ Request:
 }
 ```
 
-| Field         | Rules                                                                                                                                                                                                    |
-| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Field         | Rules                                                                                                                                                                                                       |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `shop_id`     | optional uuid. Matches a shop of this workspace: that shop is updated. Absent or not a shop of this workspace: **a new shop is created** (Reference behaviour). Keep the returned id and send it next time. |
-| `shop_name`   | required, 1 to 191 characters                                                                                                                                                                            |
-| `description` | optional, up to 2000; becomes the shop's hero text                                                                                                                                                       |
-| `currency`    | optional, a 3-letter code from the product currency list (INR, USD, EUR, GBP, AED, ...), any case; absent keeps the shop's own (new shop: INR). Products always take the shop's currency                 |
-| `theme_key`   | optional, one of the storefront themes; absent keeps the shop's (new shop: default)                                                                                                                      |
-| `products`    | required, 1 to 500 items; each is read on its own                                                                                                                                                        |
+| `shop_name`   | required, 1 to 191 characters                                                                                                                                                                               |
+| `description` | optional, up to 2000; becomes the shop's hero text                                                                                                                                                          |
+| `currency`    | optional, a 3-letter code from the product currency list (INR, USD, EUR, GBP, AED, ...), any case; absent keeps the shop's own (new shop: INR). Products always take the shop's currency                    |
+| `theme_key`   | optional, one of the storefront themes; absent keeps the shop's (new shop: default)                                                                                                                         |
+| `products`    | required, 1 to 500 items; each is read on its own                                                                                                                                                           |
 
 Product row:
 

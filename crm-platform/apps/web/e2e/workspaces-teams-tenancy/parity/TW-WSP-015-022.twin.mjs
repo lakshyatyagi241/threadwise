@@ -514,7 +514,10 @@ export default (h) => {
             type: 'select',
             skipMatrix: true,
             loc: { threadwise: '[name=role]', ours: '[name=roleId]' },
-            fill: { threadwise: (c, v) => pickInviteRole(c, v), ours: (c, v) => pickInviteRole(c, v) },
+            fill: {
+              threadwise: (c, v) => pickInviteRole(c, v),
+              ours: (c, v) => pickInviteRole(c, v),
+            },
           },
         ],
         readback: { threadwise: (c) => readInvite(c), ours: (c) => readInvite(c) },
@@ -592,7 +595,10 @@ export default (h) => {
         filters: [
           {
             id: 'owners',
-            control: { threadwise: '[data-role-filter=owner]', ours: { testid: 'role-filter-owner' } },
+            control: {
+              threadwise: '[data-role-filter=owner]',
+              ours: { testid: 'role-filter-owner' },
+            },
           },
         ],
       },

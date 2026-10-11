@@ -15,7 +15,7 @@ migration registers two capability keys. Every figure is a live SQL aggregate ov
 | API module | `apps/api/src/modules/dashboards-analytics-charts/` (`dash-window.ts` and `dash-metrics.ts` are pure; repository, service, controllers, plan guard)                                             |
 | Contracts  | `packages/contracts/src/dashboards-analytics-charts/index.ts`                                                                                                                                   |
 | Migration  | `packages/db/migrations/20261005100000_dash_permissions.sql` (permission keys and Admin grants)                                                                                                 |
-| Reads      | `messages` (the folded stream, TW-DASH-002), `organizations.settings.timezone`                                                                                             |
+| Reads      | `messages` (the folded stream, TW-DASH-002), `organizations.settings.timezone`                                                                                                                  |
 | Web        | `apps/web/src/features/dashboards-analytics-charts/` (api, lib, components), routes `(app)/(dashboards-analytics-charts)/{dashboard,analytics}`, `messages/en/dashboards-analytics-charts.json` |
 | Tests      | `apps/api/test/unit/dashboards-analytics-charts/`, `apps/api/test/e2e/dashboards-analytics-charts/`, web unit tests beside the code                                                             |
 

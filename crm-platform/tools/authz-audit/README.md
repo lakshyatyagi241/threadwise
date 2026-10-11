@@ -14,16 +14,16 @@ Windows: set `SWC_NATIVE_BINDING_CACHE` (see the auth-audit README) if vitest re
 
 ## What it produces (`reports/authz-audit/latest/`, git-ignored)
 
-| File                                    | What                                                                                  |
-| --------------------------------------- | ------------------------------------------------------------------------------------- |
-| `authorization-route-inventory.json`    | every controller route: gates, real URL, object-id params                             |
-| `authorization-policy-matrix.csv`       | route x actor class -> ALLOW / DENY / CONDITIONAL / POLICY-UNDEFINED                  |
-| `authorization-control-matrix.csv`      | the 100 controls, status Pass / Fail / Needs decision / Partial / Not run / Not assessed |
-| `authorization-security-findings.json`  | open findings and decisions needed                                                    |
-| `authorization-test-results.json`       | what the dynamic suites ran                                                           |
-| `matrix-results.json`                   | raw probes of the generated matrix, including everything that could NOT be tested     |
-| `authorization-release-certification.json` | verdict (GO / CONDITIONAL / NO-GO) and blocker list                                |
-| `report.md`                             | the same, readable                                                                    |
+| File                                       | What                                                                                     |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------- |
+| `authorization-route-inventory.json`       | every controller route: gates, real URL, object-id params                                |
+| `authorization-policy-matrix.csv`          | route x actor class -> ALLOW / DENY / CONDITIONAL / POLICY-UNDEFINED                     |
+| `authorization-control-matrix.csv`         | the 100 controls, status Pass / Fail / Needs decision / Partial / Not run / Not assessed |
+| `authorization-security-findings.json`     | open findings and decisions needed                                                       |
+| `authorization-test-results.json`          | what the dynamic suites ran                                                              |
+| `matrix-results.json`                      | raw probes of the generated matrix, including everything that could NOT be tested        |
+| `authorization-release-certification.json` | verdict (GO / CONDITIONAL / NO-GO) and blocker list                                      |
+| `report.md`                                | the same, readable                                                                       |
 
 ## Layers
 

@@ -4,7 +4,13 @@ import { pathToFileURL } from 'node:url';
 import { randomUUID } from 'node:crypto';
 import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { Api, bearer, startHarness, type Harness, type Tenant } from '../contacts-attributes-tags/support';
+import {
+  Api,
+  bearer,
+  startHarness,
+  type Harness,
+  type Tenant,
+} from '../contacts-attributes-tags/support';
 import { OPERATOR_EMAIL, OPERATOR_PASSWORD } from '../auth-registration-security/harness';
 import { operatorToken } from '../install-update-licensing/helpers';
 
@@ -48,7 +54,9 @@ interface Probe {
   note?: string;
 }
 
-const REPORT_DIR = resolve(process.env.AUTHZ_REPORT_DIR ?? join(__dirname, '../../../../../reports/authz-audit/latest'));
+const REPORT_DIR = resolve(
+  process.env.AUTHZ_REPORT_DIR ?? join(__dirname, '../../../../../reports/authz-audit/latest'),
+);
 
 let h: Harness;
 let api: Api;
@@ -66,7 +74,8 @@ const nextIp = () => `10.99.${Math.floor(xff / 250) % 250}.${xff++ % 250}`;
 /** Routes the gate lets the right actor through but that refuse for a documented environment reason. */
 const ENV_GATED: Record<string, string> = {
   'POST /v2/channels/simulator': 'dev-only simulator channel, flag off outside development',
-  'POST /v2/extension/sheets/key': 'needs the Google Sheets add-on installed in the workspace (app.google-sheets.use is granted on install)',
+  'POST /v2/extension/sheets/key':
+    'needs the Google Sheets add-on installed in the workspace (app.google-sheets.use is granted on install)',
 };
 
 const results = {
@@ -105,7 +114,8 @@ interface TableProbe {
   hasUpdated: boolean;
 }
 let tables: TableProbe[] = [];
-const VOLATILE = /(^|_)(sessions?|refresh|login_attempts?|rate_limits?|security_events?|throttle|audit_log)(_|$)/;
+const VOLATILE =
+  /(^|_)(sessions?|refresh|login_attempts?|rate_limits?|security_events?|throttle|audit_log)(_|$)/;
 
 async function discoverTables() {
   const cols = await h.owner.query(
@@ -137,11 +147,18 @@ async function snapshot(orgIds: number[]): Promise<Map<string, string>> {
 }
 
 function diff(before: Map<string, string>, after: Map<string, string>): string[] {
-  return [...after].filter(([k, v]) => before.get(k) !== v).map(([k, v]) => `${k}: ${before.get(k)} -> ${v}`);
+  return [...after]
+    .filter(([k, v]) => before.get(k) !== v)
+    .map(([k, v]) => `${k}: ${before.get(k)} -> ${v}`);
 }
 
 /** Runs `fn` per controller file and records any row change the denied requests caused. */
-async function withEffects(phase: string, list: Route[], orgIds: number[], fn: (r: Route) => Promise<void>) {
+async function withEffects(
+  phase: string,
+  list: Route[],
+  orgIds: number[],
+  fn: (r: Route) => Promise<void>,
+) {
   const byFile = new Map<string, Route[]>();
   for (const r of list) byFile.set(r.file, [...(byFile.get(r.file) ?? []), r]);
   for (const [file, rs] of byFile) {
@@ -156,7 +173,9 @@ async function withEffects(phase: string, list: Route[], orgIds: number[], fn: (
 
 beforeAll(async () => {
   const mod = (await import(
-    /* @vite-ignore */ pathToFileURL(join(__dirname, '../../../../../tools/authz-audit/lib/routes.mjs')).href
+    /* @vite-ignore */ pathToFileURL(
+      join(__dirname, '../../../../../tools/authz-audit/lib/routes.mjs'),
+    ).href
   )) as { scanRoutes: () => Route[] };
   routes = mod.scanRoutes();
 
@@ -171,7 +190,9 @@ beforeAll(async () => {
 
   const orgIds = [A.orgId, B.orgId, ...others.map((t) => t.orgId)];
   const workspace = routes.filter((r) => r.gate === 'permission');
-  const operatorRoutes = routes.filter((r) => r.gate === 'operator-permission' || r.gate === 'operator-or-partner-coarse');
+  const operatorRoutes = routes.filter(
+    (r) => r.gate === 'operator-permission' || r.gate === 'operator-or-partner-coarse',
+  );
   const needAuth = routes.filter((r) => r.gate !== 'public');
 
   await withEffects('anon', needAuth, orgIds, async (r) => {
@@ -202,7 +223,11 @@ afterAll(async () => {
   mkdirSync(REPORT_DIR, { recursive: true });
   writeFileSync(
     join(REPORT_DIR, 'matrix-results.json'),
-    JSON.stringify({ generatedAt: new Date().toISOString(), routes: routes.length, results }, null, 2),
+    JSON.stringify(
+      { generatedAt: new Date().toISOString(), routes: routes.length, results },
+      null,
+      2,
+    ),
   );
   await h?.stop();
 });
@@ -216,7 +241,10 @@ async function foreignIds(): Promise<Map<string, string>> {
         AND table_name IN (SELECT table_name FROM information_schema.columns WHERE table_schema = 'public' AND column_name = 'org_id')`,
   );
   for (const { table_name } of cand.rows as Array<{ table_name: string }>) {
-    const r = await h.owner.query(`SELECT uuid::text AS u FROM "${table_name}" WHERE org_id = $1 LIMIT 1`, [A.orgId]);
+    const r = await h.owner.query(
+      `SELECT uuid::text AS u FROM "${table_name}" WHERE org_id = $1 LIMIT 1`,
+      [A.orgId],
+    );
     if (r.rows[0]) byTable.set(table_name, r.rows[0].u as string);
   }
   return byTable;
@@ -227,17 +255,29 @@ function tableFor(route: Route, param: string, ids: Map<string, string>): string
   const at = segs.indexOf(`:${param}`);
   const seg = at > 0 ? segs[at - 1]! : '';
   const base = seg.replace(/-/g, '_');
-  const variants = [base, base.replace(/ies$/, 'y'), base.replace(/s$/, ''), `${base}s`, `${base.replace(/y$/, 'ie')}s`];
+  const variants = [
+    base,
+    base.replace(/ies$/, 'y'),
+    base.replace(/s$/, ''),
+    `${base}s`,
+    `${base.replace(/y$/, 'ie')}s`,
+  ];
   for (const v of variants) if (ids.has(v)) return v;
   return null;
 }
 
 async function runIdor(_orgIds: number[]) {
   const ids = await foreignIds();
-  const candidates = routes.filter((r) => r.gate === 'permission' && r.objectIdParams.length > 0 && !r.v1Api);
+  const candidates = routes.filter(
+    (r) => r.gate === 'permission' && r.objectIdParams.length > 0 && !r.v1Api,
+  );
   const watched = new Map<string, string>();
   const rowHash = async (table: string, uuid: string) =>
-    (await h.owner.query(`SELECT md5(to_jsonb(t)::text) AS h FROM "${table}" t WHERE uuid = $1`, [uuid])).rows[0]?.h as string | undefined;
+    (
+      await h.owner.query(`SELECT md5(to_jsonb(t)::text) AS h FROM "${table}" t WHERE uuid = $1`, [
+        uuid,
+      ])
+    ).rows[0]?.h as string | undefined;
   for (const [t, u] of ids) watched.set(`${t}:${u}`, (await rowHash(t, u)) ?? 'missing');
 
   const adminB = B.admin;
@@ -253,19 +293,29 @@ async function runIdor(_orgIds: number[]) {
       }
     }
     if (!table) {
-      results.idorNotTested.push({ route: r.id, reason: 'no tenant-A row found for the path segment (add a fixture)' });
+      results.idorNotTested.push({
+        route: r.id,
+        reason: 'no tenant-A row found for the path segment (add a fixture)',
+      });
       continue;
     }
     touched.add(table);
     const { status, body } = await call(r, adminB, values);
-    const leaked = status < 300 || (r.method === 'GET' && body.includes(values[r.objectIdParams[0]!]!) && status !== 404);
+    const leaked =
+      status < 300 ||
+      (r.method === 'GET' && body.includes(values[r.objectIdParams[0]!]!) && status !== 404);
     results.idor.push({ route: r.id, file: r.file, status, note: leaked ? 'LEAK' : undefined });
   }
   for (const [key, before] of watched) {
     const [t, u] = key.split(':') as [string, string];
     if (!touched.has(t)) continue;
     const after = (await rowHash(t, u)) ?? 'missing';
-    if (after !== before) results.sideEffects.push({ group: `idor:${t}`, phase: 'idor', diff: [`row ${u} changed or vanished`] });
+    if (after !== before)
+      results.sideEffects.push({
+        group: `idor:${t}`,
+        phase: 'idor',
+        diff: [`row ${u} changed or vanished`],
+      });
   }
 }
 
@@ -277,7 +327,13 @@ async function runPositive(workspace: Route[]) {
       keyToken.set(key, (await api.member(A, `k${keyToken.size}`, [[key]])).token);
     } catch (err) {
       if (/permission_key_fkey/.test(String(err))) results.unknownKeys.push(key);
-      else results.positive.push({ route: `member:${key}`, file: '-', status: 0, note: `could not create member: ${String(err).slice(0, 120)}` });
+      else
+        results.positive.push({
+          route: `member:${key}`,
+          file: '-',
+          status: 0,
+          note: `could not create member: ${String(err).slice(0, 120)}`,
+        });
     }
   }
   for (const r of workspace) {
@@ -286,17 +342,27 @@ async function runPositive(workspace: Route[]) {
     const { status, body } = await call(r, token);
     // A 403 that names a DIFFERENT permission key is a second, service-level check behind the route gate (defence in depth); a 403 that
     // names the route's own key, or none, means the gate refused the right actor.
-    const second = status === 403 && !r.permissions.some((k) => body.includes(k)) && /[a-z]+\.[a-z-]+\.[a-z-]+/.test(body);
-    results.positive.push({ route: r.id, file: r.file, status: second ? 200 : status, note: second ? 'second-gate' : ENV_GATED[r.id] });
+    const second =
+      status === 403 &&
+      !r.permissions.some((k) => body.includes(k)) &&
+      /[a-z]+\.[a-z-]+\.[a-z-]+/.test(body);
+    results.positive.push({
+      route: r.id,
+      file: r.file,
+      status: second ? 200 : status,
+      note: second ? 'second-gate' : ENV_GATED[r.id],
+    });
     if (status >= 500) results.serverErrors.push({ route: r.id, file: r.file, status });
     const admin = await call(r, A.admin);
-    if (admin.status === 401 || admin.status === 403) results.adminBlocked.push({ route: r.id, file: r.file, status: admin.status });
+    if (admin.status === 401 || admin.status === 403)
+      results.adminBlocked.push({ route: r.id, file: r.file, status: admin.status });
   }
 }
 
 // ---- assertions ------------------------------------------------------------------------------------------------------------------
 
-const bad = (list: Probe[], ok: (s: number) => boolean) => list.filter((p) => !ok(p.status)).map((p) => `${p.route} -> ${p.status} (${p.file})`);
+const bad = (list: Probe[], ok: (s: number) => boolean) =>
+  list.filter((p) => !ok(p.status)).map((p) => `${p.route} -> ${p.status} (${p.file})`);
 
 describe('generated authorization matrix', () => {
   it('scans every controller', () => {
@@ -332,7 +398,9 @@ describe('generated authorization matrix', () => {
   });
 
   it('shows no cross-tenant read, write or delete for tenant A object ids', () => {
-    expect(results.idor.filter((p) => p.note === 'LEAK').map((p) => `${p.route} -> ${p.status}`)).toEqual([]);
+    expect(
+      results.idor.filter((p) => p.note === 'LEAK').map((p) => `${p.route} -> ${p.status}`),
+    ).toEqual([]);
   });
 
   it('leaves tenant data untouched by every denied or foreign request', () => {

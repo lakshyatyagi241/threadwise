@@ -9,7 +9,12 @@ import { z } from 'zod';
  */
 
 /** The only placeholders. Anything else inside `{{ }}` is refused at save time. */
-export const HEADER_PLACEHOLDERS = ['providerToken', 'wabaId', 'phoneNumberId', 'channelToken'] as const;
+export const HEADER_PLACEHOLDERS = [
+  'providerToken',
+  'wabaId',
+  'phoneNumberId',
+  'channelToken',
+] as const;
 export type HeaderPlaceholder = (typeof HEADER_PLACEHOLDERS)[number];
 
 export const MAX_HEADER_TEMPLATES = 12;
@@ -69,12 +74,18 @@ export function headerTemplateProblems(templates: Readonly<Record<string, unknow
   for (const [rawName, rawValue] of entries) {
     const name = rawName.toLowerCase();
     if (!HEADER_NAME.test(name)) {
-      problems.push(`Header name "${rawName.slice(0, 40)}" is not a valid name (letters, digits and hyphens)`);
+      problems.push(
+        `Header name "${rawName.slice(0, 40)}" is not a valid name (letters, digits and hyphens)`,
+      );
       continue;
     }
     if (seen.has(name)) problems.push(`Header "${name}" appears twice`);
     seen.add(name);
-    if (DENIED_HEADER_NAMES.includes(name) || name.startsWith('sec-') || name.startsWith('proxy-')) {
+    if (
+      DENIED_HEADER_NAMES.includes(name) ||
+      name.startsWith('sec-') ||
+      name.startsWith('proxy-')
+    ) {
       problems.push(`Header "${name}" is managed by the connection and cannot be set`);
       continue;
     }
@@ -90,9 +101,13 @@ export function headerTemplateProblems(templates: Readonly<Record<string, unknow
       problems.push(`Header "${name}" holds a control or non-ASCII character`);
       continue;
     }
-    const unknown = placeholdersOf(rawValue).filter((p) => !(HEADER_PLACEHOLDERS as readonly string[]).includes(p));
+    const unknown = placeholdersOf(rawValue).filter(
+      (p) => !(HEADER_PLACEHOLDERS as readonly string[]).includes(p),
+    );
     if (unknown.length) {
-      problems.push(`Header "${name}" uses an unknown placeholder: ${[...new Set(unknown)].join(', ')}`);
+      problems.push(
+        `Header "${name}" uses an unknown placeholder: ${[...new Set(unknown)].join(', ')}`,
+      );
       continue;
     }
     // A brace that is not part of a known placeholder is a typo that would be sent literally.
@@ -108,7 +123,8 @@ export const headerTemplatesSchema = z
   .record(z.string())
   .transform((v) => Object.fromEntries(Object.entries(v).map(([k, val]) => [k.toLowerCase(), val])))
   .superRefine((v, ctx) => {
-    for (const message of headerTemplateProblems(v)) ctx.addIssue({ code: z.ZodIssueCode.custom, message });
+    for (const message of headerTemplateProblems(v))
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message });
   });
 
 export type HeaderTemplates = Record<string, string>;
@@ -161,5 +177,7 @@ export function renderHeaderTemplates(
 
 /** Secrets that a rendered header set carries, for scrubbing from errors and logs. */
 export function secretValuesIn(values: HeaderValues): string[] {
-  return [values.providerToken, values.channelToken].filter((v): v is string => typeof v === 'string' && v.length >= 6);
+  return [values.providerToken, values.channelToken].filter(
+    (v): v is string => typeof v === 'string' && v.length >= 6,
+  );
 }

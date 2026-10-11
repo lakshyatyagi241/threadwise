@@ -21,16 +21,28 @@ function walk(dir, test, out = []) {
 const grepLines = (file, re) =>
   read(file)
     .split('\n')
-    .flatMap((line, i) => (re.test(line) ? [`${rel(file)}:${i + 1}: ${line.trim().slice(0, 160)}`] : []));
+    .flatMap((line, i) =>
+      re.test(line) ? [`${rel(file)}:${i + 1}: ${line.trim().slice(0, 160)}`] : [],
+    );
 
 const res = (o) => ({ evidence: [], ...o });
 
 /** AUTHZ-003/010: how deny-by-default is enforced. */
 function denyByDefault(routes) {
   const guard = join(SRC, 'modules/auth/guards/permissions.guard.ts');
-  if (!existsSync(guard)) return res({ id: 'deny-by-default', controls: ['AUTHZ-003'], title: 'Deny by default', status: 'error', severity: 'high', summary: 'permissions.guard.ts not found' });
+  if (!existsSync(guard))
+    return res({
+      id: 'deny-by-default',
+      controls: ['AUTHZ-003'],
+      title: 'Deny by default',
+      status: 'error',
+      severity: 'high',
+      summary: 'permissions.guard.ts not found',
+    });
   const passThrough = grepLines(guard, /if \(!required \|\| required\.length === 0\) return true/);
-  const spec = existsSync(join(REPO, 'apps/api/test/unit/roles-permissions/route-permission-coverage.spec.ts'));
+  const spec = existsSync(
+    join(REPO, 'apps/api/test/unit/roles-permissions/route-permission-coverage.spec.ts'),
+  );
   const open = routes.filter((r) => r.gate === 'authenticated-only');
   return res({
     id: 'deny-by-default',
@@ -48,7 +60,13 @@ function denyByDefault(routes) {
 /** AUTHZ-010 / 066: every authenticated-only route is declared with a reason. */
 function declaredPolicies(routes, policy) {
   const declared = new Set(Object.keys(policy.selfService ?? {}));
-  const undeclared = routes.filter((r) => r.gate === 'authenticated-only' && !declared.has(r.id) && !declared.has(r.file) && !declared.has(`${r.file}#${r.handler}`));
+  const undeclared = routes.filter(
+    (r) =>
+      r.gate === 'authenticated-only' &&
+      !declared.has(r.id) &&
+      !declared.has(r.file) &&
+      !declared.has(`${r.file}#${r.handler}`),
+  );
   return res({
     id: 'policy-declared',
     controls: ['AUTHZ-001', 'AUTHZ-010', 'AUTHZ-066'],
@@ -70,7 +88,8 @@ function operatorGranularity(routes, decisions) {
     id: 'operator-granularity',
     controls: ['AUTHZ-008', 'AUTHZ-021', 'AUTHZ-025'],
     title: 'Platform operator routes are authorised per action, not only per actor kind',
-    status: coarse.length === 0 ? 'pass' : d?.decision === 'accepted' ? 'accepted' : 'needs-decision',
+    status:
+      coarse.length === 0 ? 'pass' : d?.decision === 'accepted' ? 'accepted' : 'needs-decision',
     severity: 'medium',
     summary: `${coarse.length} operator/partner routes are reachable by any operator regardless of platform role (OperatorGuard only). Only ${routes.filter((r) => r.gate === 'operator-permission').length} use PlatformPermissionGuard. Decide which need a platform permission key.`,
     evidence: coarse.slice(0, 40).map((r) => `${r.id} (${r.file}#${r.handler})`),
@@ -83,7 +102,8 @@ function windows(files, re, after) {
   for (const f of files) {
     const lines = read(f).split('\n');
     lines.forEach((line, i) => {
-      if (re.test(line)) out.push({ at: `${rel(f)}:${i + 1}`, text: lines.slice(i, i + 1 + after).join('\n') });
+      if (re.test(line))
+        out.push({ at: `${rel(f)}:${i + 1}`, text: lines.slice(i, i + 1 + after).join('\n') });
     });
   }
   return out;
@@ -94,9 +114,18 @@ const firstLine = (w) => w.text.split('\n')[0].trim().slice(0, 140);
 /** AUTHZ-041/042/045/046: privileged fields accepted in request schemas. */
 function massAssignment() {
   const dir = join(REPO, 'packages/contracts/src');
-  if (!existsSync(dir)) return res({ id: 'mass-assignment', controls: ['AUTHZ-041'], title: 'Mass assignment', status: 'error', severity: 'high', summary: 'packages/contracts/src not found' });
+  if (!existsSync(dir))
+    return res({
+      id: 'mass-assignment',
+      controls: ['AUTHZ-041'],
+      title: 'Mass assignment',
+      status: 'error',
+      severity: 'high',
+      summary: 'packages/contracts/src not found',
+    });
   const files = walk(dir, (p) => p.endsWith('.ts') && !p.endsWith('.d.ts'));
-  const re = /^\s*(orgId|org_id|tenantId|workspaceId|isAdmin|is_admin|isOwner|isSuperAdmin|passwordHash|roleId|roleIds|permissions?|ownerId|createdBy)\??\s*:/;
+  const re =
+    /^\s*(orgId|org_id|tenantId|workspaceId|isAdmin|is_admin|isOwner|isSuperAdmin|passwordHash|roleId|roleIds|permissions?|ownerId|createdBy)\??\s*:/;
   const hits = files.flatMap((f) => grepLines(f, re));
   return res({
     id: 'mass-assignment',
@@ -112,7 +141,11 @@ function massAssignment() {
 /** AUTHZ-019/089: Redis and cache keys. */
 function cacheKeys() {
   const files = walk(SRC, (p) => p.endsWith('.ts') && !p.includes('.spec.'));
-  const sites = windows(files, /(this\.(redis|cache)|redis)\.(get|set|setex|hget|hset|hgetall|sadd|incr|expire)\(/, 1);
+  const sites = windows(
+    files,
+    /(this\.(redis|cache)|redis)\.(get|set|setex|hget|hset|hgetall|sadd|incr|expire)\(/,
+    1,
+  );
   const tenantTokens = /org|tenant|workspace|ws[:_]/i;
   const literalFirstArg = sites.filter((w) => /\(\s*[`'"]/.test(w.text.split('\n')[0]));
   const suspicious = literalFirstArg.filter((w) => !tenantTokens.test(w.text.split('\n')[0]));
@@ -146,10 +179,20 @@ function jobTenantContext() {
 /** AUTHZ-076/077: WebSocket rooms. */
 function websocketRooms() {
   const dir = join(SRC, 'realtime');
-  if (!existsSync(dir)) return res({ id: 'ws-rooms', controls: ['AUTHZ-076'], title: 'WebSocket rooms', status: 'error', severity: 'high', summary: 'apps/api/src/realtime not found' });
+  if (!existsSync(dir))
+    return res({
+      id: 'ws-rooms',
+      controls: ['AUTHZ-076'],
+      title: 'WebSocket rooms',
+      status: 'error',
+      severity: 'high',
+      summary: 'apps/api/src/realtime not found',
+    });
   const files = walk(dir, (p) => p.endsWith('.ts') && !p.includes('.spec.'));
   const joins = files.flatMap((f) => grepLines(f, /\.(join|to)\(/));
-  const authz = files.flatMap((f) => grepLines(f, /authori[sz]e|canJoin|assertCan|room.*(org|tenant)/i));
+  const authz = files.flatMap((f) =>
+    grepLines(f, /authori[sz]e|canJoin|assertCan|room.*(org|tenant)/i),
+  );
   return res({
     id: 'ws-rooms',
     controls: ['AUTHZ-076', 'AUTHZ-077', 'AUTHZ-078'],
@@ -166,7 +209,9 @@ function apiKeyScopes() {
   const dir = join(SRC, 'modules/developer-rest-api-v1');
   const files = walk(dir, (p) => p.endsWith('.ts') && !p.includes('.spec.'));
   const scope = files.flatMap((f) => grepLines(f, /scope/i));
-  const emptyMeansAll = files.flatMap((f) => grepLines(f, /scopes?\.length\s*===?\s*0|!.*scopes?\.length|empty.*scope|scope.*empty/i));
+  const emptyMeansAll = files.flatMap((f) =>
+    grepLines(f, /scopes?\.length\s*===?\s*0|!.*scopes?\.length|empty.*scope|scope.*empty/i),
+  );
   return res({
     id: 'api-key-scopes',
     controls: ['AUTHZ-060', 'AUTHZ-067'],

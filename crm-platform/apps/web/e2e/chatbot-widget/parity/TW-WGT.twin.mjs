@@ -960,7 +960,10 @@ export default (h) => {
         els.map((e) => e.getAttribute('data-widget-id')),
       )) {
         c.onCleanup(() =>
-          c.http('DELETE', c.side === 'threadwise' ? `/chatbot-widgets/${id}` : `/v2/widgets/${id}`),
+          c.http(
+            'DELETE',
+            c.side === 'threadwise' ? `/chatbot-widgets/${id}` : `/v2/widgets/${id}`,
+          ),
         );
       }
     },

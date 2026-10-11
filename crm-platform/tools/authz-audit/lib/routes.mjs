@@ -29,7 +29,9 @@ function constantMap() {
   for (const root of roots) {
     for (const f of walkTs(root, (p) => p.endsWith('.ts') && !p.endsWith('.d.ts'))) {
       const text = readFileSync(f, 'utf8');
-      for (const m of text.matchAll(/export const ([A-Z][A-Z0-9_]*)\s*(?::[^=]+)?=\s*['"`]([^'"`$]+)['"`]/g)) {
+      for (const m of text.matchAll(
+        /export const ([A-Z][A-Z0-9_]*)\s*(?::[^=]+)?=\s*['"`]([^'"`$]+)['"`]/g,
+      )) {
         constants.set(m[1], m[2]);
       }
     }
@@ -66,7 +68,9 @@ function gateOf(text) {
     public: has(text, 'Public'),
     permissions: decoratorArgs(text, 'RequirePermission'),
     actorKinds: decoratorArgs(text, 'ActorKinds'),
-    guards: [...text.matchAll(/@UseGuards\(([^)]*)\)/g)].flatMap((m) => m[1].split(',').map((s) => s.trim())),
+    guards: [...text.matchAll(/@UseGuards\(([^)]*)\)/g)].flatMap((m) =>
+      m[1].split(',').map((s) => s.trim()),
+    ),
     v1Api: has(text, 'V1Controller'),
     planFeature: decoratorArgs(text, 'RequirePlanFeature'),
     idempotent: has(text, 'Idempotent'),
@@ -98,7 +102,9 @@ export function scanRoutes() {
       const v1 = /@V1Controller\(\s*['"`]([^'"`]*)['"`]/.exec(classDeco);
       // `@Controller('x')`, `@Controller({ path: 'x', version })`, or `@Controller({ version })` with no prefix at all.
       const ctl = /@Controller\(([^)]*)\)/.exec(classDeco)?.[1] ?? '';
-      const controllerPath = ctl.trim().startsWith('{') ? (/path:\s*['"`]([^'"`]*)['"`]/.exec(ctl)?.[1] ?? '') : (strArgs(ctl)[0] ?? '');
+      const controllerPath = ctl.trim().startsWith('{')
+        ? (/path:\s*['"`]([^'"`]*)['"`]/.exec(ctl)?.[1] ?? '')
+        : (strArgs(ctl)[0] ?? '');
       const prefix = v1 ? `api/v1/${v1[1]}` : controllerPath;
       const neutral = Boolean(v1) || /VERSION_NEUTRAL/.test(classDeco);
       const version = neutral ? null : (/version:\s*['"`](\d+)/.exec(classDeco)?.[1] ?? '2');
@@ -118,7 +124,8 @@ export function scanRoutes() {
         const sigEnd = body.indexOf('{', end);
         const sig = body.slice(end, sigEnd === -1 ? end + 600 : sigEnd);
         const sub = strArgs(m[2])[0] ?? '';
-        const routePath = '/' + [prefix, sub].filter(Boolean).join('/').replace(/\/+/g, '/').replace(/^\//, '');
+        const routePath =
+          '/' + [prefix, sub].filter(Boolean).join('/').replace(/\/+/g, '/').replace(/^\//, '');
         const mg = gateOf(deco);
         const gate = {
           public: classGate.public || mg.public,

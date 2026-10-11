@@ -895,7 +895,8 @@ export default (h) => {
         scenario: /^currency-add\.symbol\.emoji$/,
         key: 'map.stored',
         quirk: 'Reference stores four-byte characters as question marks (its table is not utf8mb4)',
-        reason: 'ours stores the emoji intact; the Reference data loss is a bug we do not reproduce',
+        reason:
+          'ours stores the emoji intact; the Reference data loss is a bug we do not reproduce',
       },
       {
         scenario: /^currency-add\.(name|symbol)\.zero-width$/,

@@ -602,7 +602,10 @@ export default (h) => {
           .evaluate((m) => m.querySelectorAll('canvas, svg').length > 0);
         o.flag(`bucket.${b}.chartDrawn`, mark);
       }
-      o.flag('pageStillRenders', await c.visible({ threadwise: '#ah-search', ours: '#aff-search' }));
+      o.flag(
+        'pageStillRenders',
+        await c.visible({ threadwise: '#ah-search', ours: '#aff-search' }),
+      );
     },
   });
 

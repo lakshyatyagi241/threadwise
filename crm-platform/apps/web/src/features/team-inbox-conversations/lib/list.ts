@@ -1,4 +1,9 @@
-import type { ConversationStatus, ConversationSummary, InboxCounts, InboxTab } from '@crm/contracts';
+import type {
+  ConversationStatus,
+  ConversationSummary,
+  InboxCounts,
+  InboxTab,
+} from '@crm/contracts';
 
 /**
  * The conversation list as a pure reducer: what is loaded, how a row that changed over a socket is placed, and which tab a row
@@ -199,7 +204,9 @@ export function listReducer(state: ListState, action: ListAction): ListState {
     case 'unread':
       return {
         ...state,
-        rows: state.rows.map((r) => (r.id === action.id ? { ...r, unreadCount: action.unread } : r)),
+        rows: state.rows.map((r) =>
+          r.id === action.id ? { ...r, unreadCount: action.unread } : r,
+        ),
       };
     case 'counts':
       return { ...state, counts: action.counts };

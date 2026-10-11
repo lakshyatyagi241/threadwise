@@ -24,16 +24,16 @@ Inventory: [companies.md](../inventory/companies.md). API: [docs/api/companies.m
 | WIRE-CTP-006 | New / edit modal on `/companies` and the page                                   | `POST /companies`, `PATCH /companies/:id`              |
 | WIRE-CTP-007 | Delete (page, row button, bulk bar)                                             | `DELETE /companies/:id`, `POST /companies/bulk/delete` |
 | WIRE-CTP-008 | AI copilot (`create_company`, `link_contact_company`)                           | not built (AI domain); calls `CompaniesService`        |
-| WIRE-CTP-009 | Nothing else: no import, no flow, no public API, no shop sync creates companies | Reference has none either                                 |
+| WIRE-CTP-009 | Nothing else: no import, no flow, no public API, no shop sync creates companies | Reference has none either                              |
 
 ## Writers of a company link
 
-| Id           | Link                                      | Writer                                                                                                                                                                                     |
-| ------------ | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Id           | Link                                      | Writer                                                                                                                                                                                        |
+| ------------ | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | WIRE-CTP-010 | `contacts.company_id`                     | `POST /companies/:id/contacts`, `DELETE /companies/:id/contacts/:contactId` (company page); `POST/PATCH /contacts` with `companyId` (API only: Reference's contact form has no company field) |
-| WIRE-CTP-011 | `deals.company_id`                        | `POST/PATCH /deals` with `companyId`; a deal inherits its contact's company (deals domain, TW-DEAL-038)                                                                                    |
-| WIRE-CTP-012 | `tasks.company_id`                        | `POST/PATCH /tasks`, `PUT /tasks/:id/links`; a task created from a deal inherits the deal's company                                                                                        |
-| WIRE-CTP-013 | `projects`, proposals, invoices, payments | their own domains (not built or not wired to a company picker yet); the foreign keys already unlink on delete                                                                              |
+| WIRE-CTP-011 | `deals.company_id`                        | `POST/PATCH /deals` with `companyId`; a deal inherits its contact's company (deals domain, TW-DEAL-038)                                                                                       |
+| WIRE-CTP-012 | `tasks.company_id`                        | `POST/PATCH /tasks`, `PUT /tasks/:id/links`; a task created from a deal inherits the deal's company                                                                                           |
+| WIRE-CTP-013 | `projects`, proposals, invoices, payments | their own domains (not built or not wired to a company picker yet); the foreign keys already unlink on delete                                                                                 |
 
 ## Consumers of a company
 

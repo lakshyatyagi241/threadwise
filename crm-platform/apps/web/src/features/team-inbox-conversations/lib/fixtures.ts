@@ -107,7 +107,11 @@ export function outbound(seq: number, over: Partial<MessageResponse> = {}): Mess
   });
 }
 
-export function note(n: number, createdAt: string, over: Partial<ConversationNote> = {}): ConversationNote {
+export function note(
+  n: number,
+  createdAt: string,
+  over: Partial<ConversationNote> = {},
+): ConversationNote {
   return {
     id: uuid(3000 + n),
     conversationId: uuid(1),

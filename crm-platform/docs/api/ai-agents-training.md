@@ -20,7 +20,7 @@ id is always 404.
 | `POST /assistants/:id/sources`      | update    | JSON `{kind: 'url'\|'text'\|'qa', label, ...}`. Text and Q&A are `ready`; a URL answers `processing` and is read by the worker.                                                  |
 | `POST /assistants/:id/sources/file` | update    | Multipart `file` + `label`. TXT, MD, CSV, HTML, PDF, DOCX up to 10 MB. 422 `AIAG_FILE_TYPE_UNSUPPORTED`, `AIAG_FILE_NO_TEXT`, `AIAG_FILE_UNREADABLE`; 413 `AIAG_FILE_TOO_LARGE`. |
 | `DELETE /sources/:id`               | update    | 204; removes the entry and its stored file.                                                                                                                                      |
-| `GET /responder`                    | read      | `{ mode: 'threadwise_only'\|'meta_agent_only'\|'meta_agent_then_handoff', metaAgentEnabled }`.                                                                                       |
+| `GET /responder`                    | read      | `{ mode: 'threadwise_only'\|'meta_agent_only'\|'meta_agent_then_handoff', metaAgentEnabled }`.                                                                                   |
 | `PUT /responder`                    | responder | Stores the two settings on `workspace_settings` and audits a change. Does not change what the senders do.                                                                        |
 
 Sample: a Q&A entry and what comes back.

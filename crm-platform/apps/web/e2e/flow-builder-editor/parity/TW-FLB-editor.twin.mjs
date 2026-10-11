@@ -2333,7 +2333,8 @@ export default (h) => {
       o.flag('noName.accepted', none.accepted);
       o.list('noName.flagged', none.flagged);
       const nog = await apiSave(c, {
-        raw: c.side === 'threadwise' ? { flow_name: flowName(c, 'ng') } : { name: flowName(c, 'ng') },
+        raw:
+          c.side === 'threadwise' ? { flow_name: flowName(c, 'ng') } : { name: flowName(c, 'ng') },
       });
       o.flag('noGraph.accepted', nog.accepted);
       o.list('noGraph.flagged', nog.flagged);

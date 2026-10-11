@@ -1267,7 +1267,6 @@ Connections: **TIB1** (conversation columns, queue poll host, kanban, bulk toolb
 }
 ```
 
-
 ## Port note: data model (2026-10-02)
 
 `agent_statuses` gains `last_assigned_at`, the clock a real round robin needs (Reference's pick used the oldest `conversations.updated_at`,
@@ -1284,6 +1283,7 @@ Not built (the rows stay in-progress): the actions `set_priority`, `add_tag`, `m
 `priority`, `time_of_day`/`day_of_week` and `incoming_device` conditions; business hours settings (001), SLA, snooze, reports.
 
 Additions beyond the inventory (parity deviations, decided by the owner's request):
+
 - Strategies `least_busy` and `specific` on a set of people and teams (Reference's only assign actions were `assign_team`/`assign_user`).
 - The `contact` condition (the shared segment rule builder over contact fields and tags), `keywords` any/all, `languages` (from the translation reading), `channelKinds`.
 - Real priority (`sort`) with a reorder endpoint and up/down buttons; duplicate; one fallback only; rules saved switched off ("Save" vs "Save and Activate").
