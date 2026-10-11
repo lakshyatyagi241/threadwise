@@ -1,0 +1,58 @@
+{
+  "web-forms": {
+    "payment": {
+      "title": "Pembayaran",
+      "description": "Tagih pengunjung lewat gateway pembayaran Anda setelah mereka mengirim formulir. Formulir dianggap lunas hanya jika gateway mengonfirmasinya.",
+      "enabled": "Terima pembayaran",
+      "enabledHint": "Setelah jawaban disimpan, pengunjung diarahkan ke halaman pembayaran gateway Anda.",
+      "gateway": {
+        "checking": "Memeriksa gateway pembayaran Anda...",
+        "failed": "Gateway pembayaran tidak dapat diperiksa. Coba lagi sebentar lagi.",
+        "ready": "Pembayaran masuk ke {name} ({mode}).",
+        "mode": {
+          "test": "mode uji coba",
+          "live": "mode langsung"
+        },
+        "none": "Belum ada gateway pembayaran yang terhubung, jadi formulir ini belum bisa menerima pembayaran.",
+        "noLink": "{name} tidak dapat membuat tautan pembayaran, sehingga tidak bisa dipakai pada formulir. Hubungkan Razorpay atau Stripe.",
+        "open": "Buka gateway pembayaran"
+      },
+      "amountType": "Cara menentukan jumlah",
+      "amountTypes": {
+        "fixed": "Harga tetap",
+        "from_field": "Dari kolom pilihan",
+        "pay_what_you_want": "Pengunjung mengisi jumlahnya"
+      },
+      "amountTypeHints": {
+        "fixed": "Setiap pengunjung membayar harga yang sama.",
+        "from_field": "Setiap opsi pada kolom dropdown atau radio memiliki harganya sendiri.",
+        "pay_what_you_want": "Untuk donasi dan tip. Anda menentukan jumlah terkecil dan terbesar."
+      },
+      "currency": "Mata uang",
+      "currencyHint": "Tiga huruf, seperti INR atau USD. Gateway Anda harus mendukungnya.",
+      "amount": "Harga",
+      "amountHint": "Dalam {currency}, ditulis seperti Anda mengucapkannya, misalnya 499.00.",
+      "fieldChoice": "Kolom pilihan",
+      "fieldNumber": "Kolom jumlah",
+      "fieldNone": "Pilih kolom",
+      "noChoiceFields": "Tambahkan kolom dropdown atau radio ke formulir terlebih dahulu.",
+      "noNumberFields": "Tambahkan kolom angka atau mata uang ke formulir terlebih dahulu.",
+      "optionPrices": "Harga tiap opsi",
+      "optionPrice": "Harga untuk \"{label}\"",
+      "min": "Jumlah terkecil",
+      "minHint": "Jumlah di bawah ini ditolak.",
+      "max": "Jumlah terbesar (opsional)",
+      "maxHint": "Kosongkan jika tanpa batas atas.",
+      "descriptionLabel": "Tampil di halaman pembayaran",
+      "descriptionHint": "Catatan singkat untuk pembayar, misalnya untuk apa mereka membayar.",
+      "issues": {
+        "amountRequired": "Masukkan harga.",
+        "fieldRequired": "Pilih kolom sumber jumlah.",
+        "fieldNotRequired": "Jadikan kolom ini wajib diisi agar setiap pengunjung memberikan jumlah.",
+        "optionsNeedAmounts": "Beri setiap opsi sebuah harga.",
+        "minRequired": "Masukkan jumlah terkecil.",
+        "minAboveMax": "Jumlah terkecil tidak boleh lebih besar dari jumlah terbesar."
+      }
+    }
+  }
+}

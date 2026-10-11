@@ -1,0 +1,58 @@
+{
+  "web-forms": {
+    "payment": {
+      "title": "Paiement",
+      "description": "Le visiteur règle via votre passerelle de paiement après l'envoi. Le formulaire n'est considéré comme payé que lorsque la passerelle le confirme.",
+      "enabled": "Encaisser un paiement",
+      "enabledHint": "Une fois les réponses enregistrées, le visiteur est redirigé vers la page de paiement hébergée de votre passerelle.",
+      "gateway": {
+        "checking": "Vérification de votre passerelle de paiement...",
+        "failed": "Impossible de vérifier votre passerelle de paiement. Réessayez dans un instant.",
+        "ready": "Les paiements vont vers {name} ({mode}).",
+        "mode": {
+          "test": "mode test",
+          "live": "mode production"
+        },
+        "none": "Aucune passerelle de paiement n'est connectée : ce formulaire ne peut pas encore encaisser de paiement.",
+        "noLink": "{name} ne peut pas créer de lien de paiement hébergé et ne peut donc pas être utilisé dans un formulaire. Connectez Razorpay ou Stripe.",
+        "open": "Ouvrir les passerelles de paiement"
+      },
+      "amountType": "Définition du montant",
+      "amountTypes": {
+        "fixed": "Prix fixe",
+        "from_field": "Depuis un champ à choix",
+        "pay_what_you_want": "Le visiteur saisit le montant"
+      },
+      "amountTypeHints": {
+        "fixed": "Chaque visiteur paie le même prix.",
+        "from_field": "Chaque option d'une liste déroulante ou d'un champ radio a son propre prix.",
+        "pay_what_you_want": "Pour les dons et les pourboires. Vous fixez le montant minimum et maximum."
+      },
+      "currency": "Devise",
+      "currencyHint": "Trois lettres, comme INR ou USD. Votre passerelle doit l'accepter.",
+      "amount": "Prix",
+      "amountHint": "En {currency}, écrit comme on le dit, par exemple 499.00.",
+      "fieldChoice": "Champ à choix",
+      "fieldNumber": "Champ de montant",
+      "fieldNone": "Choisir un champ",
+      "noChoiceFields": "Ajoutez d'abord une liste déroulante ou un champ radio au formulaire.",
+      "noNumberFields": "Ajoutez d'abord un champ numérique ou monétaire au formulaire.",
+      "optionPrices": "Prix de chaque option",
+      "optionPrice": "Prix pour « {label} »",
+      "min": "Montant minimum",
+      "minHint": "Tout montant inférieur est refusé.",
+      "max": "Montant maximum (facultatif)",
+      "maxHint": "Laissez vide pour ne fixer aucune limite.",
+      "descriptionLabel": "Affiché sur la page de paiement",
+      "descriptionHint": "Un court message pour le payeur, par exemple ce qu'il règle.",
+      "issues": {
+        "amountRequired": "Saisissez le prix.",
+        "fieldRequired": "Choisissez le champ dont provient le montant.",
+        "fieldNotRequired": "Rendez ce champ obligatoire pour que chaque visiteur indique un montant.",
+        "optionsNeedAmounts": "Donnez un prix à chaque option.",
+        "minRequired": "Saisissez le montant minimum.",
+        "minAboveMax": "Le montant minimum ne peut pas dépasser le montant maximum."
+      }
+    }
+  }
+}

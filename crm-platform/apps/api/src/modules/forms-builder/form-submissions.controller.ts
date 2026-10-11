@@ -104,6 +104,40 @@ export class FormSubmissionsController {
     return this.submissions.retry(id, sid, scope);
   }
 
+  @Post(':sid/payment-link')
+  @HttpCode(HttpStatus.OK)
+  @Idempotent()
+  @RequirePermission('record.form-submissions.update')
+  @ApiOperation({
+    summary: 'A fresh payment link for a submission awaiting payment',
+    description:
+      'Opens a new attempt (the amount is worked out again from the version the visitor saw) and returns the hosted link; `url` is null when the gateway refused. 409 FORMS_PAYMENT_STATE for a submission with nothing to pay, 422 FORMS_PAYMENT_UNAVAILABLE without a usable gateway.',
+  })
+  paymentLink(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Param('sid', ParseUUIDPipe) sid: string,
+    @GrantedScope('record.form-submissions.update') scope: RecordScope,
+  ) {
+    return this.submissions.newPaymentLink(id, sid, scope);
+  }
+
+  @Post(':sid/mark-paid')
+  @HttpCode(HttpStatus.OK)
+  @Idempotent()
+  @RequirePermission('record.form-submissions.update')
+  @ApiOperation({
+    summary: 'Mark a submission as paid (money that arrived outside the gateway)',
+    description:
+      'An audited staff action for a bank transfer or cash. 409 FORMS_PAYMENT_STATE unless the submission is awaiting payment.',
+  })
+  markPaid(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Param('sid', ParseUUIDPipe) sid: string,
+    @GrantedScope('record.form-submissions.update') scope: RecordScope,
+  ) {
+    return this.submissions.markPaid(id, sid, scope);
+  }
+
   @Delete(':sid')
   @HttpCode(HttpStatus.NO_CONTENT)
   @RequirePermission('record.form-submissions.delete')

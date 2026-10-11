@@ -1,4 +1,9 @@
-import { publicFormSubmitResponseSchema, type PublicFormEventInput } from '@crm/contracts';
+import {
+  publicFormSubmissionStatusSchema,
+  publicFormSubmitResponseSchema,
+  type PublicFormEventInput,
+  type PublicFormSubmissionStatus,
+} from '@crm/contracts';
 import { toApiError } from '@/lib/api/errors';
 import { CONSENT_KEY, type FieldIssue, type IssueCode } from '../lib/types';
 import type { SubmitOutcome, SubmitPayload } from '../lib/submit';
@@ -21,6 +26,7 @@ const KNOWN: ReadonlySet<string> = new Set<IssueCode>([
   'too_long',
   'pattern',
   'invalid_option',
+  'invalid_amount',
   'consent_required',
 ]);
 
@@ -86,6 +92,7 @@ export async function submitForm(key: string, payload: SubmitPayload): Promise<S
       retryAfterSeconds: Number.isFinite(wait) ? wait : null,
     };
   }
+  if (error.code === 'FORMS_PAYMENT_UNAVAILABLE') return { ok: false, kind: 'payment_unavailable' };
   if (res.status === 404) return { ok: false, kind: 'closed' };
   return { ok: false, kind: 'error' };
 }
@@ -102,5 +109,24 @@ export function sendEvent(key: string, event: PublicFormEventInput): void {
     }).catch(() => undefined);
   } catch {
     /* analytics only */
+  }
+}
+
+/** Where a submission's payment stands, for the page the visitor returns to from the gateway. Null when the answer is not understood. */
+export async function submissionStatus(
+  key: string,
+  token: string,
+): Promise<PublicFormSubmissionStatus | 'missing' | null> {
+  try {
+    const res = await fetch(
+      `${BASE}/${encodeURIComponent(key)}/submissions/${encodeURIComponent(token)}`,
+      { headers: { Accept: 'application/json' }, credentials: 'omit', cache: 'no-store' },
+    );
+    if (res.status === 404) return 'missing';
+    if (!res.ok) return null;
+    const parsed = publicFormSubmissionStatusSchema.safeParse(await res.json());
+    return parsed.success ? parsed.data : null;
+  } catch {
+    return null;
   }
 }

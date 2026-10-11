@@ -1,0 +1,42 @@
+{
+  "web-forms": {
+    "popup": {
+      "title": "Mostrar como popup",
+      "description": "Abra o formulário em um popup no seu próprio site, em vez de colocá-lo na página. Escolha quando ele abre e copie o código.",
+      "trigger": "Abrir o popup",
+      "triggers": {
+        "delay": "Após um atraso",
+        "scroll_down": "Quando o visitante rola a página para baixo",
+        "scroll_up": "Quando o visitante rola de volta para cima",
+        "click": "Quando alguém clica em um botão"
+      },
+      "triggerHints": {
+        "delay": "Abre um tempo definido depois que a página carrega.",
+        "scroll_down": "Abre quando o visitante rola a página até este ponto.",
+        "scroll_up": "Abre quando o visitante leu a página até embaixo e rola de volta para cima, sinal de que pode estar saindo.",
+        "click": "Abre apenas quando alguém clica em um botão ou link que tenha o código mostrado abaixo."
+      },
+      "delay": "Segundos antes de abrir",
+      "delayHint": "De {min} a {max}.",
+      "scroll": "Até onde descer na página (porcentagem)",
+      "scrollHint": "De {min} a {max}.",
+      "position": "Onde aparece",
+      "positions": {
+        "center": "Centro da tela, escurecendo a página",
+        "bottom_right": "Canto inferior, sem escurecer a página"
+      },
+      "days": "Mostrar novamente após (dias)",
+      "daysHint": "0 mostra a cada visita. Depois que alguém envia o formulário, ele nunca mais aparece para essa pessoa.",
+      "note": "Antes, adicione seu site em Sites permitidos abaixo, ou o popup ficará em branco.",
+      "code": {
+        "title": "Código do popup",
+        "description": "Cole onde o popup deve carregar, normalmente logo antes da tag de fechamento body."
+      },
+      "button": {
+        "title": "Um botão que o abre",
+        "description": "Adicione isto a qualquer página para que as pessoas abram o popup por conta própria. Funciona com todos os gatilhos."
+      },
+      "copy": "Copiar código"
+    }
+  }
+}

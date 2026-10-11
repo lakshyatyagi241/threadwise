@@ -126,7 +126,9 @@
         "exporting": "Przetwarzanie…",
         "exportHintAttention": "Wybierz pojedynczy status, aby wyeksportować go z tej grupy, albo użyj opcji Wszystkie.",
         "exportHintSearch": "Eksport ignoruje tekst wyszukiwania.",
-        "notSpam": "Nie spam: przetwórz"
+        "notSpam": "Nie spam: przetwórz",
+        "newPaymentLink": "Pobierz nowy link do płatności",
+        "markPaid": "Oznacz jako opłacone"
       },
       "confirmDelete": {
         "title": "Usunąć te odpowiedzi?",
@@ -143,7 +145,11 @@
         "deleteFailed": "Nie udało się usunąć odpowiedzi. Spróbuj ponownie.",
         "exported": "Plik CSV został pobrany.",
         "exportTruncated": "Eksport został ucięty do {max} najnowszych wierszy. Zawęż daty, aby pobrać resztę.",
-        "exportFailed": "Nie udało się wykonać eksportu. Spróbuj ponownie."
+        "exportFailed": "Nie udało się wykonać eksportu. Spróbuj ponownie.",
+        "linkReady": "Nowy link do płatności jest gotowy.",
+        "linkFailed": "Bramka nie zwróciła linku. Spróbuj ponownie za chwilę.",
+        "markedPaid": "Oznaczono jako opłacone.",
+        "markPaidFailed": "Nie udało się oznaczyć tego zgłoszenia jako opłaconego."
       },
       "state": {
         "loading": "Wczytywanie zgłoszeń",
@@ -164,6 +170,29 @@
       "cap": {
         "notice": "Część zgłoszeń zapisano do przeglądu, bo osiągnięto miesięczny limit zgłoszeń w Twoim planie.",
         "upgrade": "Zmień plan"
+      },
+      "payments": {
+        "title": "Płatność",
+        "status": {
+          "pending": "Oczekuje na płatność",
+          "paid": "Opłacone",
+          "failed": "Nieudane",
+          "expired": "Wygasło"
+        },
+        "via": {
+          "gateway": "przez bramkę",
+          "manual": "oznaczone ręcznie"
+        },
+        "gateway": "Bramka",
+        "paidAt": "Opłacono",
+        "expiresAt": "Link wygasa",
+        "reference": "Numer referencyjny",
+        "duplicate": "Dla tego zgłoszenia przyszła druga płatność. Zwróć ją w swojej bramce płatności.",
+        "freshLink": "Nowy link do płatności (wyślij go odwiedzającemu):",
+        "copy": "Kopiuj link",
+        "markPaidConfirm": "Oznaczyć to zgłoszenie jako opłacone? Używaj tego tylko, gdy pieniądze wpłynęły poza bramką, np. przelewem lub gotówką. Zapisujemy to pod Twoim nazwiskiem.",
+        "markPaidYes": "Tak, oznacz jako opłacone",
+        "cancel": "Anuluj"
       }
     }
   }

@@ -19,13 +19,47 @@ const FRAME_DOC =
  * so its stylesheet applies there and nothing of it leaks into the builder, and the builder's styles never touch the form. The frame
  * is sandboxed without scripts: React still drives the portal from this window, but the page itself can run nothing.
  */
+export type PreviewDevice = 'desktop' | 'mobile' | 'popup';
+export const PREVIEW_DEVICES: readonly PreviewDevice[] = ['desktop', 'mobile', 'popup'];
+
+/** The three ways the form is seen: on a page, on a phone, and in a popup over the owner's own website. */
+export function PreviewDeviceToggle({
+  value,
+  onChange,
+}: {
+  value: PreviewDevice;
+  onChange: (v: PreviewDevice) => void;
+}) {
+  const t = useTranslations('web-forms.design');
+  return (
+    <div role="group" aria-label={t('preview.device')} className="inline-flex gap-1">
+      {PREVIEW_DEVICES.map((d) => (
+        <button
+          key={d}
+          type="button"
+          aria-pressed={value === d}
+          onClick={() => onChange(d)}
+          className={cn(
+            'min-h-9 rounded-md border px-3 text-sm focus-visible:ring-2 focus-visible:ring-primary',
+            value === d
+              ? 'border-primary bg-primary/10 font-medium text-foreground'
+              : 'border-border text-muted-foreground hover:bg-muted',
+          )}
+        >
+          {t(`preview.${d}`)}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 export function PreviewFrame({
   form,
   device,
   forceMode,
 }: {
   form: RenderableForm;
-  device: 'desktop' | 'mobile';
+  device: PreviewDevice;
   forceMode?: 'light' | 'dark';
 }) {
   const t = useTranslations('web-forms.design');
@@ -61,7 +95,56 @@ export function PreviewFrame({
         className="block size-full border-0"
       />
       {body
-        ? createPortal(<FormRenderer form={form} mode="preview" forceMode={forceMode} />, body)
+        ? createPortal(
+            device === 'popup' ? (
+              // What the loader draws on a website: the page dimmed, the form in a dialog with a close button, no page chrome.
+              <div
+                data-testid="popup-preview"
+                style={{
+                  minHeight: '100vh',
+                  background: 'rgba(15,23,42,.55)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: 12,
+                  boxSizing: 'border-box',
+                }}
+              >
+                <div
+                  style={{
+                    position: 'relative',
+                    width: 'min(560px,100%)',
+                    maxHeight: 'calc(100vh - 24px)',
+                    overflow: 'auto',
+                    borderRadius: 12,
+                  }}
+                >
+                  <span
+                    aria-hidden="true"
+                    style={{
+                      position: 'absolute',
+                      top: 8,
+                      insetInlineEnd: 8,
+                      zIndex: 1,
+                      width: 36,
+                      height: 36,
+                      borderRadius: '50%',
+                      background: 'rgba(15,23,42,.1)',
+                      color: '#111',
+                      font: '22px/36px sans-serif',
+                      textAlign: 'center',
+                    }}
+                  >
+                    {'\u00d7'}
+                  </span>
+                  <FormRenderer form={form} mode="preview" embed forceMode={forceMode} />
+                </div>
+              </div>
+            ) : (
+              <FormRenderer form={form} mode="preview" forceMode={forceMode} />
+            ),
+            body,
+          )
         : null}
     </div>
   );

@@ -9,6 +9,7 @@ import { formAction } from '../api/forms';
 import { checkOrigin, qrTarget } from '../lib/share';
 import type { FormDetail } from '../lib/types';
 import type { BuilderTabProps } from './builder-types';
+import { PopupEmbed } from './popup-embed';
 import { ChipEditor } from './settings-tab';
 
 const MAX_ORIGINS = 20;
@@ -50,7 +51,7 @@ async function writeClipboard(text: string): Promise<boolean> {
   }
 }
 
-function Block({
+export function Block({
   title,
   description,
   children,
@@ -112,7 +113,7 @@ function CopyButton({
   );
 }
 
-function Snippet({
+export function Snippet({
   title,
   description,
   code,
@@ -306,6 +307,8 @@ export function ShareTab(props: BuilderTabProps) {
           copyLabel={t('embed.copy')}
         />
       </Block>
+
+      <PopupEmbed form={form} />
 
       <Block title={t('domains.title')} description={t('domains.description')}>
         {live.allowedOrigins.length === 0 && <Alert tone="info">{t('domains.none')}</Alert>}

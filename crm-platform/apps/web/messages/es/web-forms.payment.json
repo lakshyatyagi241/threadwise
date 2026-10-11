@@ -1,0 +1,58 @@
+{
+  "web-forms": {
+    "payment": {
+      "title": "Pago",
+      "description": "Cobra al visitante en tu pasarela de pago cuando envíe el formulario. El formulario solo se considera pagado cuando la pasarela lo confirma.",
+      "enabled": "Cobrar un pago",
+      "enabledHint": "Tras guardar las respuestas, el visitante pasa a la página de pago alojada de tu pasarela.",
+      "gateway": {
+        "checking": "Comprobando tu pasarela de pago...",
+        "failed": "No se pudo comprobar tu pasarela de pago. Inténtalo de nuevo en un momento.",
+        "ready": "Los pagos van a {name} ({mode}).",
+        "mode": {
+          "test": "modo de prueba",
+          "live": "modo real"
+        },
+        "none": "No hay ninguna pasarela de pago conectada, así que este formulario aún no puede cobrar.",
+        "noLink": "{name} no puede crear un enlace de pago alojado, por lo que no se puede usar en un formulario. Conecta Razorpay o Stripe.",
+        "open": "Abrir pasarelas de pago"
+      },
+      "amountType": "Cómo se define el importe",
+      "amountTypes": {
+        "fixed": "Precio fijo",
+        "from_field": "Desde un campo de opciones",
+        "pay_what_you_want": "El visitante indica el importe"
+      },
+      "amountTypeHints": {
+        "fixed": "Todos los visitantes pagan el mismo precio.",
+        "from_field": "Cada opción de un campo desplegable o de selección única tiene su propio precio.",
+        "pay_what_you_want": "Para donaciones y propinas. Tú defines el importe mínimo y el máximo."
+      },
+      "currency": "Moneda",
+      "currencyHint": "Tres letras, como INR o USD. Tu pasarela debe aceptarla.",
+      "amount": "Precio",
+      "amountHint": "En {currency}, escrito como lo dirías, por ejemplo 499.00.",
+      "fieldChoice": "Campo de opciones",
+      "fieldNumber": "Campo de importe",
+      "fieldNone": "Elige un campo",
+      "noChoiceFields": "Primero añade al formulario un campo desplegable o de selección única.",
+      "noNumberFields": "Primero añade al formulario un campo numérico o de moneda.",
+      "optionPrices": "Precio de cada opción",
+      "optionPrice": "Precio de «{label}»",
+      "min": "Importe mínimo",
+      "minHint": "Cualquier importe menor se rechaza.",
+      "max": "Importe máximo (opcional)",
+      "maxHint": "Déjalo vacío para no poner límite superior.",
+      "descriptionLabel": "Se muestra en la página de pago",
+      "descriptionHint": "Una nota breve para quien paga, por ejemplo el motivo del pago.",
+      "issues": {
+        "amountRequired": "Introduce el precio.",
+        "fieldRequired": "Elige el campo del que sale el importe.",
+        "fieldNotRequired": "Haz este campo obligatorio para que todos los visitantes indiquen un importe.",
+        "optionsNeedAmounts": "Asigna un precio a cada opción.",
+        "minRequired": "Introduce el importe mínimo.",
+        "minAboveMax": "El importe mínimo no puede superar al máximo."
+      }
+    }
+  }
+}

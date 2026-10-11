@@ -41,6 +41,7 @@ import {
 import type { Definition, FormCaptchaMode } from '../lib/types';
 import type { BuilderTabProps } from './builder-types';
 import { useFormUsers } from './forms-users';
+import { PaymentPanel } from './payment-panel';
 
 const CONTROL_ERROR = 'text-xs text-danger';
 const HINT = 'text-xs text-muted-foreground';
@@ -57,7 +58,7 @@ interface ControlA11y {
 }
 
 /** A label tied to its control by id, with the hint or the error tied back by `aria-describedby`. */
-function FieldBox({
+export function FieldBox({
   label,
   hint,
   error,
@@ -92,7 +93,7 @@ function FieldBox({
   );
 }
 
-function SwitchRow({
+export function SwitchRow({
   label,
   hint,
   checked,
@@ -129,7 +130,7 @@ function SwitchRow({
   );
 }
 
-function Section({
+export function Section({
   title,
   description,
   children,
@@ -499,6 +500,8 @@ export function SettingsTab(props: BuilderTabProps) {
           <p className={HINT}>{t('after.redirectKeepsMessage')}</p>
         )}
       </Section>
+
+      <PaymentPanel draft={draft} setDraft={setDraft} disabled={disabled} />
 
       <Section title={t('consent.title')} description={t('consent.description')}>
         <SwitchRow

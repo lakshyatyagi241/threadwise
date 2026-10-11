@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { NotificationPublisher, NotificationsRepository } from '../notifications';
 import { FormNotificationConsumer } from './form-notification.consumer';
+import { FormPaymentSweepService } from './form-payment-sweep.service';
+import { FormPaymentsRepository } from './form-payments.repository';
 import { FormRetentionSweepService } from './form-retention-sweep.service';
 
 /**
@@ -14,6 +16,8 @@ import { FormRetentionSweepService } from './form-retention-sweep.service';
     NotificationPublisher,
     FormNotificationConsumer,
     FormRetentionSweepService,
+    FormPaymentsRepository,
+    FormPaymentSweepService,
   ],
 })
 export class FormsBuilderWorkerModule {}

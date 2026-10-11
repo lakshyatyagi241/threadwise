@@ -313,6 +313,14 @@
         "waba_group_suspension_cleared": {
           "label": "グループ再開",
           "hint": "WhatsAppが停止していたグループを復旧しました。停止の通知を受け取っていた場合のみ表示されます。"
+        },
+        "form_payment": {
+          "label": "フォームの支払いを受領",
+          "hint": "訪問者がいずれかのフォームで支払いました。"
+        },
+        "form_payment_duplicate": {
+          "label": "フォームの二重支払い",
+          "hint": "訪問者が2回支払ったため、追加分の返金が必要です。"
         }
       },
       "loading": "設定を読み込み中",

@@ -8,6 +8,7 @@ import {
   type FormDefinition,
   type FormDetail,
   type FormShare,
+  type FormPaymentAttempt,
   type FormSubmissionDetail,
   type FormSubmissionSummary,
   type FormSummary,
@@ -157,9 +158,12 @@ export function toAnswers(
 export function toSubmissionDetail(
   row: SubmissionRow,
   def: FormDefinition | null,
+  payments: FormPaymentAttempt[] = [],
 ): FormSubmissionDetail {
   return {
     ...toSubmissionSummary(row, def),
+    payments,
+    duplicatePayment: row.duplicatePayment,
     answers: toAnswers(def, row.answers),
     attribution: {
       utm: row.utm,

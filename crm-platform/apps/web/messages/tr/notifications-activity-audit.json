@@ -313,6 +313,14 @@
         "waba_group_suspension_cleared": {
           "label": "Grup yeniden etkin",
           "hint": "WhatsApp, askıya aldığı bir grubu geri yükledi. Yalnızca askıya alma hakkında bilgilendirildiyseniz."
+        },
+        "form_payment": {
+          "label": "Form ödemesi alındı",
+          "hint": "Bir ziyaretçi formlarınızdan birinde ödeme yaptı."
+        },
+        "form_payment_duplicate": {
+          "label": "Form iki kez ödendi",
+          "hint": "Bir ziyaretçi ikinci kez ödeme yaptı ve fazla ödemenin iade edilmesi gerekiyor."
         }
       },
       "loading": "Tercihleriniz yükleniyor",

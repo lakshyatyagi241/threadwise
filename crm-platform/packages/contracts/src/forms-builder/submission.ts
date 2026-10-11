@@ -71,7 +71,28 @@ export const formSubmissionSummarySchema = z.object({
 });
 export type FormSubmissionSummary = z.infer<typeof formSubmissionSummarySchema>;
 
+/** One payment attempt, as staff see it. */
+export const FORM_PAYMENT_ATTEMPT_STATUSES = ['pending', 'paid', 'failed', 'expired'] as const;
+export const formPaymentAttemptSchema = z.object({
+  id: uuidSchema,
+  reference: z.string(),
+  gateway: z.string(),
+  /** Minor units as a string (a bigint does not survive JSON). */
+  amountMinor: z.string(),
+  currency: z.string(),
+  status: z.enum(FORM_PAYMENT_ATTEMPT_STATUSES),
+  settledVia: z.enum(['gateway', 'manual']).nullable(),
+  providerRef: z.string().nullable(),
+  paidAt: z.string().datetime().nullable(),
+  expiresAt: z.string().datetime(),
+  createdAt: z.string().datetime(),
+});
+export type FormPaymentAttempt = z.infer<typeof formPaymentAttemptSchema>;
+
 export const formSubmissionDetailSchema = formSubmissionSummarySchema.extend({
+  payments: z.array(formPaymentAttemptSchema),
+  /** A second payment arrived for a submission already paid: refund it by hand. */
+  duplicatePayment: z.boolean(),
   answers: z.array(formAnswerSchema),
   attribution: z.object({
     utm: z.record(z.string()),
@@ -170,6 +191,8 @@ export type PublicFormSubmitInput = z.infer<typeof publicFormSubmitSchema>;
 export const publicFormNextSchema = z.discriminatedUnion('type', [
   z.object({ type: z.literal('message'), message: z.string() }),
   z.object({ type: z.literal('redirect'), url: z.string() }),
+  /** The form takes payment: the visitor goes to the gateway's hosted page. The form is paid only when the gateway confirms. */
+  z.object({ type: z.literal('pay'), url: z.string(), message: z.string().optional() }),
 ]);
 export type PublicFormNext = z.infer<typeof publicFormNextSchema>;
 
@@ -179,6 +202,23 @@ export const publicFormSubmitResponseSchema = z.object({
   next: publicFormNextSchema,
 });
 export type PublicFormSubmitResponse = z.infer<typeof publicFormSubmitResponseSchema>;
+
+/** `GET /v2/public/forms/:publicKey/submissions/:token`: where a payment stands, for the page the visitor returns to. */
+export const FORM_PAYMENT_STATES = [
+  'not_required',
+  'awaiting_payment',
+  'paid',
+  'expired',
+  'failed',
+] as const;
+export const publicFormSubmissionStatusSchema = z.object({
+  payment: z.enum(FORM_PAYMENT_STATES),
+  /** The message or the redirect the form's thank-you settings give; sent once the payment is confirmed (or none is due). */
+  next: publicFormNextSchema.nullable(),
+  /** When awaiting payment and the link is still good: the page may offer it again. */
+  payUrl: z.string().nullable(),
+});
+export type PublicFormSubmissionStatus = z.infer<typeof publicFormSubmissionStatusSchema>;
 
 export const publicFormEventSchema = z.object({
   visitId: z.string().regex(/^[A-Za-z0-9_-]{8,64}$/),
@@ -197,3 +237,7 @@ export const FORM_PAGE_HIDDEN_KEYS = [
   'referrer',
   'page_url',
 ] as const;
+
+/** `POST /v2/forms/:id/submissions/:sid/payment-link`: the fresh hosted link; null when the gateway refused (try again). */
+export const formPaymentLinkResultSchema = z.object({ url: z.string().nullable() });
+export type FormPaymentLinkResult = z.infer<typeof formPaymentLinkResultSchema>;

@@ -7,7 +7,8 @@ order: 18
 documents: []
 gates:
   planFeature: form_builder
-keywords: [submissions, answers, spam, needs attention, retry, export csv, erase, consent, utm, gdpr]
+keywords:
+  [submissions, answers, spam, needs attention, retry, export csv, erase, consent, utm, gdpr]
 ---
 
 ## What it is for

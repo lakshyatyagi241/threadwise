@@ -313,6 +313,14 @@
         "waba_group_suspension_cleared": {
           "label": "群组已恢复正常",
           "hint": "WhatsApp 已恢复一个此前被暂停的群组。仅当你曾收到暂停通知时才会显示。"
+        },
+        "form_payment": {
+          "label": "收到表单付款",
+          "hint": "有访客通过您的某个表单付款。"
+        },
+        "form_payment_duplicate": {
+          "label": "表单重复付款",
+          "hint": "访客第二次付款，多付的款项需要退款。"
         }
       },
       "loading": "正在加载你的偏好设置",

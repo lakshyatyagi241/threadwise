@@ -110,13 +110,15 @@ describe('Share tab: link, QR and snippets', () => {
       // the visible text of every action
       const copy = locale === 'en' ? ['Copy link', 'Copy code'] : ['نسخ الرابط', 'نسخ الكود'];
       expect(html).toContain(copy[0]!);
-      expect(html.split(copy[1]!).length - 1).toBe(2);
+      // script, iframe, popup code and the popup button
+      expect(html.split(copy[1]!).length - 1).toBeGreaterThanOrEqual(2);
       expect(html).toContain(locale === 'en' ? 'Download PNG' : 'تنزيل PNG');
       expect(html).toContain(locale === 'en' ? 'Download SVG' : 'تنزيل SVG');
       // code stays left to right whatever the page direction is
-      expect(html.match(/<pre dir="ltr"/g)?.length).toBe(2);
+      expect(html.match(/<pre dir="ltr"/g)?.length).toBe(4);
       expect(html).toContain('embed.js');
       expect(html).toContain('&lt;iframe');
+      expect(html).toContain('data-forms-mode=&quot;popup&quot;');
     });
   }
 

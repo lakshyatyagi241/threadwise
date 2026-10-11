@@ -68,6 +68,8 @@ export const NOTIFICATION_LEGACY_TYPES = [
   'wallet_credited',
   'form_submission',
   'form_needs_review',
+  'form_payment',
+  'form_payment_duplicate',
   'sales_doc_decided',
 ] as const;
 

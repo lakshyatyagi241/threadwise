@@ -106,7 +106,8 @@
         "light": "浅色",
         "dark": "深色",
         "schemeHint": "颜色模式设为浅色，因此没有可预览的深色版本。",
-        "frameTitle": "表单实时预览"
+        "frameTitle": "表单实时预览",
+        "popup": "弹窗"
       }
     }
   }

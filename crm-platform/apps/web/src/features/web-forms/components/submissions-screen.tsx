@@ -33,10 +33,13 @@ import {
   deleteSubmission,
   exportSubmissions,
   retrySubmission,
+  markSubmissionPaid,
+  newPaymentLink,
   useForm,
   useSubmission,
   useSubmissions,
 } from '../api/forms';
+import { formatMinor } from '../lib/payment';
 import {
   SUBMISSION_TABS,
   answerView,
@@ -775,8 +778,10 @@ export function SubmissionDrawer({
   const dialog = useRef<HTMLDialogElement>(null);
   const titleId = useId();
   const detail = useSubmission(formId, summary.id);
-  const [busy, setBusy] = useState<'retry' | 'delete' | null>(null);
+  const [busy, setBusy] = useState<'retry' | 'delete' | 'link' | 'paid' | null>(null);
   const [confirming, setConfirming] = useState(false);
+  const [confirmingPaid, setConfirmingPaid] = useState(false);
+  const [freshLink, setFreshLink] = useState<string | null>(null);
 
   useEffect(() => {
     const el = dialog.current;
@@ -804,6 +809,39 @@ export function SubmissionDrawer({
     }
   };
 
+  const getLink = async () => {
+    setBusy('link');
+    try {
+      const r = await newPaymentLink(formId, summary.id);
+      if (r.url) {
+        setFreshLink(r.url);
+        toast(t('toast.linkReady'), 'success');
+      } else {
+        toast(t('toast.linkFailed'), 'danger');
+      }
+      onChanged(summary.id);
+    } catch {
+      toast(t('toast.linkFailed'), 'danger');
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const markPaid = async () => {
+    setBusy('paid');
+    try {
+      await markSubmissionPaid(formId, summary.id);
+      toast(t('toast.markedPaid'), 'success');
+      setConfirmingPaid(false);
+      onChanged(summary.id);
+    } catch {
+      toast(t('toast.markPaidFailed'), 'danger');
+      setConfirmingPaid(false);
+    } finally {
+      setBusy(null);
+    }
+  };
+
   const erase = async () => {
     setBusy('delete');
     try {
@@ -822,6 +860,7 @@ export function SubmissionDrawer({
 
   const showRetry = canUpdate && canRetry(status, removed);
   const showDelete = canErase && canDelete(removed);
+  const showPay = canUpdate && status === 'awaiting_payment';
 
   return (
     <dialog
@@ -862,7 +901,7 @@ export function SubmissionDrawer({
           </Alert>
         )}
 
-        {(showRetry || showDelete) && (
+        {(showRetry || showDelete || showPay) && (
           <div className="flex flex-wrap gap-2" aria-label={t('drawer.actions')} role="group">
             {showRetry && (
               <Button onClick={() => void retry()} disabled={busy !== null} data-testid="retry">
@@ -873,6 +912,26 @@ export function SubmissionDrawer({
                     ? t('actions.notSpam')
                     : t('actions.retry')}
               </Button>
+            )}
+            {showPay && (
+              <>
+                <Button
+                  onClick={() => void getLink()}
+                  disabled={busy !== null}
+                  data-testid="new-payment-link"
+                >
+                  {busy === 'link' && <Spinner />}
+                  {t('actions.newPaymentLink')}
+                </Button>
+                <Button
+                  variant="secondary"
+                  onClick={() => setConfirmingPaid(true)}
+                  disabled={busy !== null}
+                  data-testid="mark-paid"
+                >
+                  {t('actions.markPaid')}
+                </Button>
+              </>
             )}
             {showDelete && (
               <Button
@@ -885,6 +944,39 @@ export function SubmissionDrawer({
               </Button>
             )}
           </div>
+        )}
+
+        {freshLink && (
+          <Alert tone="info" className="space-y-1" data-testid="fresh-payment-link">
+            <p className="font-medium">{t('payments.freshLink')}</p>
+            <p className="[overflow-wrap:anywhere]" dir="ltr">
+              {freshLink}
+            </p>
+            <Button
+              variant="secondary"
+              onClick={() => void navigator.clipboard?.writeText(freshLink)}
+            >
+              {t('payments.copy')}
+            </Button>
+          </Alert>
+        )}
+        {confirmingPaid && (
+          <Alert tone="warning" className="space-y-2" data-testid="mark-paid-confirm">
+            <p>{t('payments.markPaidConfirm')}</p>
+            <div className="flex gap-2">
+              <Button onClick={() => void markPaid()} disabled={busy !== null}>
+                {busy === 'paid' && <Spinner />}
+                {t('payments.markPaidYes')}
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={() => setConfirmingPaid(false)}
+                disabled={busy !== null}
+              >
+                {t('payments.cancel')}
+              </Button>
+            </div>
+          </Alert>
         )}
 
         {detail.isPending ? (
@@ -940,6 +1032,53 @@ export function SubmissionDrawer({
                 {d.error && <Row label={t('drawer.error')}>{d.error}</Row>}
               </dl>
             </Section>
+
+            {d.payments.length > 0 && (
+              <Section title={t('payments.title')}>
+                {d.duplicatePayment && (
+                  <Alert tone="warning" data-testid="duplicate-payment">
+                    {t('payments.duplicate')}
+                  </Alert>
+                )}
+                <ul className="space-y-3" data-testid="payments">
+                  {d.payments.map((p) => (
+                    <li key={p.id} className="space-y-1 text-sm">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="font-medium" dir="ltr">
+                          {formatMinor(BigInt(p.amountMinor), p.currency)}
+                        </span>
+                        <Badge
+                          tone={
+                            p.status === 'paid'
+                              ? 'success'
+                              : p.status === 'pending'
+                                ? 'warning'
+                                : 'neutral'
+                          }
+                        >
+                          {t(`payments.status.${p.status}`)}
+                        </Badge>
+                      </div>
+                      <dl className="space-y-1 text-muted-foreground">
+                        <Row label={t('payments.gateway')}>{p.gateway}</Row>
+                        {p.paidAt && (
+                          <Row label={t('payments.paidAt')}>
+                            {dateTime(p.paidAt)}
+                            {p.settledVia ? ` (${t(`payments.via.${p.settledVia}`)})` : ''}
+                          </Row>
+                        )}
+                        {p.status === 'pending' && (
+                          <Row label={t('payments.expiresAt')}>{dateTime(p.expiresAt)}</Row>
+                        )}
+                        <Row label={t('payments.reference')}>
+                          <span dir="ltr">{p.reference}</span>
+                        </Row>
+                      </dl>
+                    </li>
+                  ))}
+                </ul>
+              </Section>
+            )}
 
             <Section title={t('drawer.links')}>
               <dl className="space-y-2">

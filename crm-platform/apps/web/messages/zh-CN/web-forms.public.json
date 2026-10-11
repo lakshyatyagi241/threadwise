@@ -33,9 +33,32 @@
         "too_short": "请至少输入 {min} 个字符。",
         "too_long": "最多输入 {max} 个字符。",
         "pattern": "格式不符合要求。",
-        "invalid_option": "请选择列出的选项之一。"
+        "invalid_option": "请选择列出的选项之一。",
+        "invalid_amount": "请输入允许范围内的金额。"
       },
-      "closedTitle": "此表单已关闭"
+      "closedTitle": "此表单已关闭",
+      "payTitle": "还差一步",
+      "payTotal": "应付金额",
+      "payFromChoice": "金额取决于您在上方的选择。",
+      "payEnter": "请在上方输入您想支付的金额。",
+      "payNote": "提交后，您将进入安全的支付页面。",
+      "payRedirecting": "您的答案已保存。正在跳转到支付页面...",
+      "payContinue": "继续支付",
+      "paymentUnavailable": "此表单目前无法收款。请稍后再试。",
+      "payReturn": {
+        "confirmingTitle": "正在确认您的付款",
+        "confirmingBody": "我们正在等待支付服务商确认，通常只需几秒钟。请勿重复支付。",
+        "slowTitle": "仍在等待确认",
+        "slowBody": "如果您已付款，确认很快就会到达，您可以关闭此页面。如果尚未付款，请返回重试。",
+        "paidTitle": "已收到付款",
+        "expiredTitle": "支付链接已过期",
+        "expiredBody": "未扣款。请向表单发送者索取新的支付链接。",
+        "failedTitle": "支付未成功",
+        "failedBody": "未扣款。您可以重试。",
+        "tryAgain": "重新支付",
+        "missingTitle": "找不到此笔付款",
+        "missingBody": "链接可能有误或已过旧。"
+      }
     }
   }
 }

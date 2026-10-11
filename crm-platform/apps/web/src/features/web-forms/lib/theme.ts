@@ -105,14 +105,14 @@ export const RADIUS_PX: Record<ThemeTokens['radius'], string> = {
   pill: '999px',
 };
 const DENSITY_GAP: Record<ThemeTokens['density'], string> = {
-  compact: '12px',
-  comfortable: '18px',
-  spacious: '26px',
+  compact: '10px',
+  comfortable: '14px',
+  spacious: '22px',
 };
 const DENSITY_PAD: Record<ThemeTokens['density'], string> = {
-  compact: '9px',
-  comfortable: '12px',
-  spacious: '15px',
+  compact: '8px',
+  comfortable: '10px',
+  spacious: '13px',
 };
 const SHADOW: Record<ThemeTokens['shadow'], string> = {
   none: 'none',

@@ -91,6 +91,8 @@ const LOOK: Record<NotificationPrefType, Look> = {
   new_lead: look('lead', 'info'),
   form_submission: look('form', 'info'),
   form_needs_review: look('form', 'info'),
+  form_payment: look('form', 'success'),
+  form_payment_duplicate: look('form', 'danger'),
   sales_doc_decided: look('document', 'info'),
   wallet_low_balance: look('wallet', 'danger'),
   wallet_credited: look('wallet', 'success'),

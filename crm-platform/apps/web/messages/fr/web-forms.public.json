@@ -33,9 +33,32 @@
         "too_short": "Saisissez au moins {min} caractères.",
         "too_long": "Saisissez au plus {max} caractères.",
         "pattern": "Ce champ ne respecte pas le format attendu.",
-        "invalid_option": "Choisissez l’une des options proposées."
+        "invalid_option": "Choisissez l’une des options proposées.",
+        "invalid_amount": "Saisissez un montant dans la plage autorisée."
       },
-      "closedTitle": "Ce formulaire est fermé"
+      "closedTitle": "Ce formulaire est fermé",
+      "payTitle": "Plus qu'une étape",
+      "payTotal": "Montant à payer",
+      "payFromChoice": "Le montant dépend de votre choix ci-dessus.",
+      "payEnter": "Saisissez ci-dessus le montant que vous souhaitez payer.",
+      "payNote": "Après l'envoi, vous serez redirigé vers une page de paiement sécurisée.",
+      "payRedirecting": "Vos réponses sont enregistrées. Redirection vers la page de paiement...",
+      "payContinue": "Continuer vers le paiement",
+      "paymentUnavailable": "Ce formulaire ne peut pas encaisser de paiement pour le moment. Veuillez réessayer plus tard.",
+      "payReturn": {
+        "confirmingTitle": "Confirmation de votre paiement",
+        "confirmingBody": "Nous attendons la confirmation du prestataire de paiement. Cela prend généralement quelques secondes. Merci de ne pas payer une seconde fois.",
+        "slowTitle": "Confirmation toujours en attente",
+        "slowBody": "Si vous avez payé, la confirmation arrivera sous peu et vous pouvez fermer cette page. Sinon, revenez en arrière et réessayez.",
+        "paidTitle": "Paiement reçu",
+        "expiredTitle": "Le lien de paiement a expiré",
+        "expiredBody": "Aucun montant n'a été prélevé. Demandez un nouveau lien de paiement à l'expéditeur du formulaire.",
+        "failedTitle": "Le paiement n'a pas abouti",
+        "failedBody": "Aucun montant n'a été prélevé. Vous pouvez réessayer.",
+        "tryAgain": "Réessayer de payer",
+        "missingTitle": "Paiement introuvable",
+        "missingBody": "Le lien est peut-être incorrect ou trop ancien."
+      }
     }
   }
 }

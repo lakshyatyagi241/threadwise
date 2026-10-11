@@ -280,3 +280,16 @@ export const formPropertySchema = z.object({
 export type FormProperty = z.infer<typeof formPropertySchema>;
 export const formPropertyListSchema = z.object({ data: z.array(formPropertySchema) });
 export type FormPropertyList = z.infer<typeof formPropertyListSchema>;
+
+/** `GET /v2/forms/meta/payment-gateway`: can this workspace take payment on a form, and on which gateway (Settings > Payments sets it). */
+export const formPaymentGatewaySchema = z.object({
+  /** A gateway is connected and can make a hosted payment link. */
+  ready: z.boolean(),
+  /** The gateway's slug and name, when one is connected. */
+  slug: z.string().nullable(),
+  name: z.string().nullable(),
+  mode: z.enum(['test', 'live']).nullable(),
+  /** Why not: `none_connected`, or `no_link_support` (the gateway cannot make a hosted link). */
+  reason: z.enum(['none_connected', 'no_link_support']).nullable(),
+});
+export type FormPaymentGateway = z.infer<typeof formPaymentGatewaySchema>;
