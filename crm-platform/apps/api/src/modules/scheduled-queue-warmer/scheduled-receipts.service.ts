@@ -24,10 +24,12 @@ export class ScheduledReceiptsService {
 
   /** True when the message belongs to a scheduled message, whether or not the report changed anything. */
   async handle(r: DeliveryReport): Promise<boolean> {
-    const found = await this.db.privileged(async (tx) => {
+    // The report names the workspace of the device that sent it, so the lookup runs in that workspace (RLS on) and is also filtered by
+    // org_id: a provider message id that happened to exist in another workspace is never claimed from here (TI-014).
+    const found = await this.db.txAs({ orgId: r.orgId, userId: null }, async (tx) => {
       const res = await tx.execute(sql`
         SELECT org_id, id, scheduled_message_id, status FROM scheduled_message_contacts
-         WHERE wa_message_id = ${r.providerMessageId} LIMIT 1`);
+         WHERE org_id = ${r.orgId} AND wa_message_id = ${r.providerMessageId} LIMIT 1`);
       return res.rows[0] as
         | {
             org_id: number | string;

@@ -104,7 +104,8 @@ await this.db.privileged(async (tx) => { ... });   // sets app.privileged = on
 **Never from an HTTP request handler.**
 
 The honest limitation: `app.privileged` is a GUC, so the mechanism is
-application-enforced rather than database-enforced. It is kept honest by review,
+application-enforced rather than database-enforced (measured, and a proposed fix, in
+[ADR-0028](../adr/0028-privileged-mode-must-not-be-a-settable-guc.md)). It is kept honest by review,
 by the fact that all queries are parameterised, and by keeping the call sites
 countable on one hand.
 
@@ -144,3 +145,22 @@ Hash-partitioning entity tables by `org_id` (64 buckets) is planned for the
 high-volume tables. Because `org_id` is already first in every PK, that change
 is additive. Whale tenants escalate to dedicated, time-subpartitioned
 partitions. See [scale.md](scale.md).
+
+## The tenancy audit, and what it makes you do
+
+`pnpm audit:tenancy` ([tools/tenancy-audit](../../tools/tenancy-audit/README.md)) checks the rules above instead of trusting them. It
+runs on every PR that touches a migration, the db package or API source, and nightly with the full e2e evidence. What it will fail
+you on:
+
+- **A new table with `org_id`** needs nothing extra: the generated probe (`test/integration/tenancy-isolation.generated.spec.ts`)
+  seeds two tenants in it and attacks it as the restricted role. A table the probe cannot seed is a failure, not a skip.
+- **A new table without `org_id`** must be classified in `tools/tenancy-audit/policy/table-classification.json`
+  (global catalogue, platform-only, shared by design, or tenant root), with the reason.
+- **A new foreign key** between tenant tables must be composite on `(org_id, id)`.
+- **A new unique index on a tenant table that does not include `org_id`** is a platform-wide namespace (a token, an external
+  identity, a public name). Classify it in `policy/global-unique.json` with the reason, or add `org_id` to it.
+- **A new `privileged()` call site** (a new file that lifts RLS) must be read and listed in `policy/privileged-allowlist.json`
+  with why it cannot be a tenant context. From a request handler, the answer is almost always "it can".
+- **A new queue processor** must open the job's tenant context (`txAs({ orgId })` and friends) or be declared in
+  `policy/processor-declarations.json`.
+- **A Redis key** for tenant data carries the org id; a key without one is listed in `policy/redis-reviewed.json` with why.

@@ -505,6 +505,37 @@ describe('manual connect (TW-WABA-006)', () => {
     expect((await api.as(t.admin).get('/v2/waba/numbers')).body.items).toHaveLength(0);
   });
 
+  // TI-003 (tenancy audit): the token proves access to the phone, not that the phone sits on the WABA that was typed. WABA-level
+  // webhooks (template status, account updates) route by waba_id, so a claimed foreign WABA would pull another tenant's events here.
+  it('refuses a WABA that does not list the phone number, and saves nothing', async () => {
+    useNumericIds();
+    rules.unshift(phoneProbe(), {
+      match: new RegExp(`GET .*/${numeric.waba}/phone_numbers`),
+      status: 200,
+      body: { data: [{ id: '777000999', display_phone_number: '+1 777 000 999' }] },
+    });
+    const t = await api.signup('mx');
+    const res = await post(t, '/v2/waba/numbers/connect/manual', manual());
+    expect(res.status, JSON.stringify(res.body)).toBe(403);
+    expect(res.body.code).toBe('WABA_ID_MISMATCH');
+    expect((await api.as(t.admin).get('/v2/waba/numbers')).body.items).toHaveLength(0);
+    expect(calls.some((c) => c.url.endsWith(`/${numeric.waba}/subscribed_apps`))).toBe(false);
+  });
+
+  it('refuses a WABA the token cannot read at all (somebody else\'s), and saves nothing', async () => {
+    useNumericIds();
+    rules.unshift(phoneProbe(), {
+      match: new RegExp(`GET .*/${numeric.waba}/phone_numbers`),
+      status: 400,
+      body: { error: { message: '(#100) Object does not exist or missing permissions', code: 100 } },
+    });
+    const t = await api.signup('my');
+    const res = await post(t, '/v2/waba/numbers/connect/manual', manual());
+    expect(res.status, JSON.stringify(res.body)).toBe(403);
+    expect(res.body.code).toBe('WABA_ID_MISMATCH');
+    expect((await api.as(t.admin).get('/v2/waba/numbers')).body.items).toHaveLength(0);
+  });
+
   it('translates an expired token (190/463) into advice', async () => {
     useNumericIds();
     rules.unshift({

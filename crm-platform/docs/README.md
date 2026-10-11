@@ -16,16 +16,17 @@
 
 ## Architecture
 
-| Document                                            | Covers                                                    |
-| --------------------------------------------------- | --------------------------------------------------------- |
-| [overview.md](architecture/overview.md)             | the shape of the system, layers, request lifecycle        |
-| [multi-tenancy.md](architecture/multi-tenancy.md)   | RLS, tenant context, the non-superuser rule               |
-| [kernel.md](architecture/kernel.md)                 | metadata, three storage tiers, outbox, audit, display ids |
-| [rbac.md](architecture/rbac.md)                     | capabilities, scopes, merge rules, caching                |
-| [messaging.md](architecture/messaging.md)           | inbox, identity resolution, broadcast pipeline            |
-| [billing.md](architecture/billing.md)               | wallet, two-level ledger, rate cards                      |
-| [scale.md](architecture/scale.md)                   | partitioning, hot rows, the target numbers                |
-| [partner-agents.md](architecture/partner-agents.md) | the sub-agent model                                       |
+| Document                                            | Covers                                                     |
+| --------------------------------------------------- | ---------------------------------------------------------- |
+| [overview.md](architecture/overview.md)             | the shape of the system, layers, request lifecycle         |
+| [multi-tenancy.md](architecture/multi-tenancy.md)   | RLS, tenant context, the non-superuser rule                |
+| [tenant-context.md](architecture/tenant-context.md) | how the tenant identity is resolved and carried everywhere |
+| [kernel.md](architecture/kernel.md)                 | metadata, three storage tiers, outbox, audit, display ids  |
+| [rbac.md](architecture/rbac.md)                     | capabilities, scopes, merge rules, caching                 |
+| [messaging.md](architecture/messaging.md)           | inbox, identity resolution, broadcast pipeline             |
+| [billing.md](architecture/billing.md)               | wallet, two-level ledger, rate cards                       |
+| [scale.md](architecture/scale.md)                   | partitioning, hot rows, the target numbers                 |
+| [partner-agents.md](architecture/partner-agents.md) | the sub-agent model                                        |
 
 ## Mobile app
 

@@ -14,6 +14,7 @@ import {
   text,
   timestamp,
   unique,
+  uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
@@ -70,6 +71,9 @@ export const shopifyIntegrations = pgTable(
     }).onDelete('set null'),
     index('idx_shopify_integrations_user_id').on(t.orgId, t.userId),
     index('idx_shopify_integrations_webhook_secret').on(t.orgId, t.webhookSecret),
+    uniqueIndex('uq_shopify_integrations_webhook_secret')
+      .on(t.webhookSecret)
+      .where(sql`length(${t.webhookSecret}) >= 16`),
   ],
 );
 
@@ -242,6 +246,9 @@ export const woocommerceIntegrations = pgTable(
     }).onDelete('set null'),
     index('idx_woocommerce_integrations_user_id').on(t.orgId, t.userId),
     index('idx_woocommerce_integrations_webhook_secret').on(t.orgId, t.webhookSecret),
+    uniqueIndex('uq_woocommerce_integrations_webhook_secret')
+      .on(t.webhookSecret)
+      .where(sql`length(${t.webhookSecret}) >= 16`),
   ],
 );
 
