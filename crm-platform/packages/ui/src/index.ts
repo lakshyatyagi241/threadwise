@@ -13,6 +13,7 @@ export {
 export { Textarea, type TextareaProps } from './components/textarea';
 export { Checkbox, type CheckboxProps } from './components/checkbox';
 export { Switch, type SwitchProps } from './components/switch';
+export { Slider, type SliderProps } from './components/slider';
 export { Alert } from './components/alert';
 export { Spinner } from './components/spinner';
 export { Tabs, type TabItem, type TabsProps } from './components/tabs';

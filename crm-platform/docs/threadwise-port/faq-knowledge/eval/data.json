@@ -1,0 +1,306 @@
+{
+  "faqs": [
+    {
+      "id": "restart",
+      "q": "Restart",
+      "vars": ["Begin", "Start over", "Beginning", "Again", "Re-start"],
+      "tests": [
+        "start again please",
+        "can we begin from the top",
+        "restrat",
+        "mujhe dobara shuru karna hai",
+        "reset this chat and go back to the first step"
+      ]
+    },
+    {
+      "id": "track",
+      "q": "Where is my order?",
+      "vars": [
+        "Track my order",
+        "Order status",
+        "When will my order arrive",
+        "Order tracking",
+        "Has my parcel shipped"
+      ],
+      "tests": [
+        "why hasn't my order arrived yet",
+        "my parcel is late, where is it",
+        "ordr status",
+        "mera order kaha hai",
+        "I placed an order last week and nothing has come, can you check it"
+      ]
+    },
+    {
+      "id": "refund",
+      "q": "How do I get a refund?",
+      "vars": [
+        "Refund policy",
+        "Return my money",
+        "I want my money back",
+        "Cancel and refund",
+        "Money back request"
+      ],
+      "tests": [
+        "can i get my money back for this",
+        "refund kaise milega",
+        "how long until refund hits my account",
+        "i was charged twice need it reversed",
+        "refnd"
+      ]
+    },
+    {
+      "id": "hours",
+      "q": "What are your business hours?",
+      "vars": [
+        "Opening hours",
+        "When are you open",
+        "Working time",
+        "Timings",
+        "What time do you close"
+      ],
+      "tests": [
+        "are you open on sunday",
+        "till what time is the shop open",
+        "office timing kya hai",
+        "do you work on public holidays",
+        "hours"
+      ]
+    },
+    {
+      "id": "pay",
+      "q": "Which payment methods do you accept?",
+      "vars": [
+        "Payment options",
+        "How can I pay",
+        "Do you take credit cards",
+        "Accepted payments",
+        "Can I pay with UPI"
+      ],
+      "tests": [
+        "is cash on delivery available",
+        "do you accept paypal",
+        "paise kaise de sakte hain",
+        "can i split payment across two cards",
+        "payment mode"
+      ]
+    },
+    {
+      "id": "ship",
+      "q": "How much is shipping?",
+      "vars": [
+        "Delivery charges",
+        "Shipping cost",
+        "Is delivery free",
+        "Postage fee",
+        "Shipping fees"
+      ],
+      "tests": [
+        "what do you charge for delivery to Colombo",
+        "free shipping above what amount",
+        "delivery ka charge kitna hai",
+        "does shipping cost extra for heavy items",
+        "shiping price"
+      ]
+    },
+    {
+      "id": "intl",
+      "q": "Do you ship internationally?",
+      "vars": [
+        "International delivery",
+        "Ship abroad",
+        "Deliver to other countries",
+        "Overseas shipping",
+        "Do you deliver outside India"
+      ],
+      "tests": [
+        "can you send this to Dubai",
+        "is delivery available to the UK",
+        "bahar ke desh me bhejte ho kya",
+        "I live in Sri Lanka, do you deliver here",
+        "worldwide shipping?"
+      ]
+    },
+    {
+      "id": "cancel",
+      "q": "How can I cancel my order?",
+      "vars": [
+        "Cancel order",
+        "I want to cancel",
+        "Stop my order",
+        "Cancellation",
+        "Undo my purchase"
+      ],
+      "tests": [
+        "i ordered by mistake, please stop it",
+        "how do i cancel before it ships",
+        "order cancel karna hai",
+        "can i cancel after payment",
+        "cancl order"
+      ]
+    },
+    {
+      "id": "human",
+      "q": "Talk to a human agent",
+      "vars": [
+        "Speak to someone",
+        "Customer support",
+        "Connect me to an agent",
+        "Human please",
+        "Live agent"
+      ],
+      "tests": [
+        "I want to talk to a real person",
+        "this bot is useless get me support",
+        "kisi insaan se baat karao",
+        "is there a phone number i can call",
+        "agent"
+      ]
+    },
+    {
+      "id": "warranty",
+      "q": "What is the warranty period?",
+      "vars": [
+        "Warranty details",
+        "Is there a guarantee",
+        "How long is the warranty",
+        "Product warranty",
+        "Guarantee period"
+      ],
+      "tests": [
+        "does this come with a one year warranty",
+        "my device broke, is it covered",
+        "warranty kitne saal ki hai",
+        "what does the guarantee not cover",
+        "warrenty"
+      ]
+    },
+    {
+      "id": "size",
+      "q": "Size guide",
+      "vars": [
+        "What size should I pick",
+        "Sizing chart",
+        "Which size fits me",
+        "Measurements",
+        "Size help"
+      ],
+      "tests": [
+        "i am 172 cm and 70 kg which size",
+        "does it run small",
+        "size chart dikhao",
+        "what is the chest measurement for medium",
+        "sizes available"
+      ]
+    },
+    {
+      "id": "promo",
+      "q": "Do you have any discount codes?",
+      "vars": ["Promo code", "Coupons", "Any offers running", "Discount", "Is there a sale"],
+      "tests": [
+        "my coupon is not working",
+        "any festival offers going on",
+        "koi discount milega kya",
+        "how do i apply a voucher at checkout",
+        "offers"
+      ]
+    },
+    {
+      "id": "address",
+      "q": "Change delivery address",
+      "vars": [
+        "Update my address",
+        "Wrong address",
+        "Edit shipping address",
+        "Deliver to a different address",
+        "Address correction"
+      ],
+      "tests": [
+        "i entered the wrong pincode",
+        "can you ship it to my office instead",
+        "address badalna hai",
+        "I moved house after ordering",
+        "change adress"
+      ]
+    },
+    {
+      "id": "invoice",
+      "q": "Get my invoice",
+      "vars": ["Download invoice", "GST bill", "Send me the receipt", "Tax invoice", "Bill copy"],
+      "tests": [
+        "i need a gst invoice for my company",
+        "please email me the receipt",
+        "invoice kaha milega",
+        "where can i download my bill",
+        "invoce"
+      ]
+    },
+    {
+      "id": "visa",
+      "q": "Do I need a visa for Sri Lanka?",
+      "vars": [
+        "Sri Lanka visa",
+        "Visa requirements",
+        "Entry permit",
+        "ETA for Sri Lanka",
+        "Visa on arrival"
+      ],
+      "tests": [
+        "hi I want to know about SriLanka entry rules",
+        "do indians need a visa to visit colombo",
+        "srilanka jane ke liye visa chahiye",
+        "how to apply for the electronic travel authorisation",
+        "visa fee"
+      ]
+    },
+    {
+      "id": "account",
+      "q": "Reset my password",
+      "vars": [
+        "Forgot password",
+        "Can't log in",
+        "Account recovery",
+        "Change password",
+        "Login problem"
+      ],
+      "tests": [
+        "i cannot sign in to my account",
+        "how do i recover my account",
+        "password bhool gaya",
+        "the reset email never arrived",
+        "pasword reset"
+      ]
+    }
+  ],
+  "negatives": [
+    "what is the capital of France",
+    "tell me a joke",
+    "who won the cricket match yesterday",
+    "I love your service",
+    "hello",
+    "ok thanks",
+    "yes",
+    "no",
+    "can you write me a python script",
+    "what's the weather in Mumbai today",
+    "how are you",
+    "good morning",
+    "what is the meaning of life",
+    "recommend a movie",
+    "bitcoin price",
+    "mera naam rahul hai",
+    "do you sell laptops",
+    "can I get a job at your company",
+    "what is your CEO's name",
+    "where is your head office located",
+    "I need a loan",
+    "book me a flight to Goa",
+    "how do I bake a cake",
+    "are you a robot",
+    "test",
+    "asdfgh",
+    "what's 12 times 13",
+    "is the moon made of cheese",
+    "I want to invest in stocks",
+    "send me a pizza"
+  ]
+}

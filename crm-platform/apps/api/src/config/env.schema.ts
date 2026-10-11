@@ -130,6 +130,14 @@ export const envSchema = z.object({
    * keys are assigned there); the rule lives in config/domains/chat-conversations.env.ts. A production process that sets it does not boot.
    */
   CHANNEL_SIMULATOR_ENABLED: booleanish.default(false),
+  /**
+   * The FAQ engine's AI vendor (ADR-0021): `openrouter` (the default, with a key from the AI keys screens) or `fixture`, an offline
+   * stand-in for tests and demos that embeds by shared words and needs no key or network. Declared here because only declared
+   * keys of a `.env` file reach `process.env`. A production process that sets `fixture` does not boot.
+   */
+  FAQ_AI_DRIVER: z.enum(['openrouter', 'fixture']).optional(),
+  /** Overrides OpenRouter's base URL for the FAQ engine (a gateway, a local stub). */
+  FAQ_OPENROUTER_BASE_URL: z.string().url().optional(),
   EASEBUZZ_ENV: z.enum(['test', 'prod']).default('test'),
   EASEBUZZ_KEY: z.string().optional(),
   EASEBUZZ_SALT: z.string().optional(),
@@ -172,6 +180,11 @@ export function validateEnv(raw: Record<string, unknown>): Env {
     }
     if (parsed.data.JWT_REFRESH_SECRET.startsWith('dev-only')) {
       throw new Error('JWT_REFRESH_SECRET is still the development placeholder.');
+    }
+    if (parsed.data.FAQ_AI_DRIVER === 'fixture') {
+      throw new Error(
+        'FAQ_AI_DRIVER=fixture must not be set in production: the fixture is an offline stand-in, not the AI vendor.',
+      );
     }
     if (parsed.data.CHANNEL_SIMULATOR_ENABLED) {
       throw new Error(

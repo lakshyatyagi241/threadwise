@@ -87,3 +87,4 @@ export * from './outbound-webhooks';
 export * from './forms-builder';
 export * from './chrome-extension-sheets-addon';
 export * from './api-library';
+export * from './faq-knowledge';
