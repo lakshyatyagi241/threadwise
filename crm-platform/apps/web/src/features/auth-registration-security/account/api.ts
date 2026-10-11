@@ -136,6 +136,10 @@ export const authApi = {
     apiFetch(`/account/sessions/${encodeURIComponent(id)}`, { method: 'DELETE', schema: okSchema }),
   revokeOtherSessions: () =>
     apiFetch('/account/sessions/revoke-others', {
+      method: 'POST',
+      body: {},
+      schema: revokeOthersResponseSchema,
+    }),
   /** Passkeys sit next to the authenticator app: the list, then the three calls that change it. */
   passkeys: () => apiFetch('/account/passkeys', { schema: passkeyListResponseSchema }),
   /** `password` only when the API asked for it (403 AUTH_REAUTH_REQUIRED). */
@@ -152,11 +156,6 @@ export const authApi = {
       method: 'POST',
       body: { password },
       schema: okSchema,
-    }),
-
-      method: 'POST',
-      body: {},
-      schema: revokeOthersResponseSchema,
     }),
 };
 
