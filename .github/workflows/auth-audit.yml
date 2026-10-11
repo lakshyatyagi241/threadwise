@@ -49,7 +49,7 @@ jobs:
         run: node tools/auth-audit/run.mjs --install ${{ (github.event_name == 'schedule' || inputs.full) && '--full' || '' }}
       - name: Keep the evidence
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: auth-audit-${{ github.run_id }}
           path: crm-platform/reports/auth-audit/latest
