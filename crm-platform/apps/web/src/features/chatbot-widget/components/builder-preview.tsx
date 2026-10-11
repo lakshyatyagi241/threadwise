@@ -14,10 +14,13 @@ export function BuilderPreview({
   s,
   device,
   onDevice,
+  showEngine = true,
 }: {
   s: BuilderState;
   device: PreviewDevice;
   onDevice: (device: PreviewDevice) => void;
+  /** A flow bot's widget has no engine to name: the bot answers. */
+  showEngine?: boolean;
 }) {
   const t = useTranslations('chatbotWidget.builder.preview');
   const engine = t(`engine.${MODE_KEY[s.mode]}`);
@@ -26,7 +29,7 @@ export function BuilderPreview({
   return (
     <LauncherPreview s={s} device={device} onDevice={onDevice}>
       <div className="grid grid-cols-2 gap-2">
-        <Meta label={t('metaEngine')} value={engine} />
+        {showEngine ? <Meta label={t('metaEngine')} value={engine} /> : null}
         <Meta
           label={t('metaPlacement')}
           value={s.position === 'bottom_left' ? t('left') : t('right')}

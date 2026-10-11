@@ -405,6 +405,13 @@ export const STEP_KINDS: readonly StepKind[] = [
   kind('ask-location', 'ask_location', 'ask'),
 ];
 
+/** The step types the website chat widget can show today (the Advanced catalogue's web list, as Simple steps). */
+const WEB_STEP_TYPES: ReadonlySet<SimpleType> = new Set(['message', 'buttons', 'ask', 'delay']);
+
+/** The "+" menu entries for a channel: a website chat bot only offers what the widget can render. */
+export const stepKindsFor = (channel: 'chat' | 'web'): readonly StepKind[] =>
+  channel === 'web' ? STEP_KINDS.filter((k) => WEB_STEP_TYPES.has(k.type)) : STEP_KINDS;
+
 const PRESET_VAR: Record<string, string> = {
   text: 'answer',
   name: 'name',

@@ -14,10 +14,12 @@ import {
   text,
   timestamp,
   unique,
+  uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
 import { aiChatAssistants } from '../ai-agents-training/tables';
 import { createdAt, idColumn, orgIdColumn, rowVersion, updatedAt } from '../columns';
+import { flows } from '../flow-builder-editor/tables';
 import { organizations, users } from '../foundation';
 
 export const chatbotWidgets = pgTable(
@@ -60,6 +62,9 @@ export const chatbotWidgets = pgTable(
     launcher: jsonb('launcher')
       .notNull()
       .default(sql`'{}'::jsonb`),
+    // migrations/20261114090000_wgt_flow_bots.sql: the flow bot this widget belongs to, and when its owner first saved Customize.
+    flowId: idColumn('flow_id'),
+    customizedAt: timestamp('customized_at', { withTimezone: true }),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -84,6 +89,14 @@ export const chatbotWidgets = pgTable(
       columns: [t.orgId, t.assistantId],
       foreignColumns: [aiChatAssistants.orgId, aiChatAssistants.id],
     }).onDelete('set null'),
+    foreignKey({
+      name: 'fk_chatbot_widgets_flow_id',
+      columns: [t.orgId, t.flowId],
+      foreignColumns: [flows.orgId, flows.id],
+    }).onDelete('cascade'),
+    uniqueIndex('uq_chatbot_widgets_flow_id')
+      .on(t.orgId, t.flowId)
+      .where(sql`${t.flowId} IS NOT NULL`),
     index('idx_chatbot_widgets_assistant_id').on(t.orgId, t.assistantId),
     index('idx_chatbot_widgets_user_id').on(t.orgId, t.userId),
     index('idx_chatbot_widgets_status').on(t.orgId, t.status),

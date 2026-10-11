@@ -189,3 +189,18 @@ describe('visitors and the transcript (TW-WGT-011, 012, 015)', () => {
     expect(cookieValue('x=%E0%A4%A', 'x')).toBeNull();
   });
 });
+
+describe('reply buttons a flow bot offers', () => {
+  it('rides along with the line, and only when there are some', () => {
+    const buttons = [
+      { id: 'b_1_p0', title: 'Docs' },
+      { id: 'b_1_p1', title: 'Price' },
+    ];
+    expect(
+      toTranscriptEntry({ id: 3, direction: 'out', body: 'Pick one', agentId: null, buttons }),
+    ).toMatchObject({ buttons });
+    expect(
+      toTranscriptEntry({ id: 4, direction: 'out', body: 'Plain', agentId: null, buttons: null }),
+    ).not.toHaveProperty('buttons');
+  });
+});

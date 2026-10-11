@@ -309,6 +309,11 @@
         "label": "Auto-assignment",
         "description": "Give new conversations to the right agent automatically, in turn or by rules.",
         "keywords": "routing, round robin, assign, agents, inbox rules, distribute, owner"
+      },
+      "web": {
+        "label": "Website chat",
+        "description": "Bots built for your website chat and the widget each one runs in.",
+        "keywords": "web, website, widget, chatbot, embed, live chat"
       }
     }
   }

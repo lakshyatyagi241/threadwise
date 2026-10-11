@@ -21,6 +21,7 @@ const MODE_TYPE: Partial<Record<FlowType, FlowType>> = {
   instagram: 'instagram',
   facebook: 'facebook',
   call: 'call',
+  web: 'web',
 };
 
 /**
@@ -69,7 +70,12 @@ export function validateGraph(
     );
   }
   const trig = nodes.find((n) => n.type === 'trigger');
-  if (trig && !String(trig.data?.deviceId ?? '').trim() && ctx.senderAvailable) {
+  if (
+    trig &&
+    ctx.mode !== 'web' &&
+    !String(trig.data?.deviceId ?? '').trim() &&
+    ctx.senderAvailable
+  ) {
     items.push(
       msg(
         ctx.mode === 'instagram'

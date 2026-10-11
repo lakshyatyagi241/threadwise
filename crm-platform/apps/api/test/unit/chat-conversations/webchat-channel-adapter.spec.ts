@@ -17,19 +17,29 @@ const channel: ChannelRuntime = {
   credentials: {},
 };
 
-describe('WebchatChannelAdapter (skeleton)', () => {
+describe('WebchatChannelAdapter', () => {
   it('has no 24 hour rule and no templates: a visitor on the page is there now', () => {
     expect(adapter.capabilities()).toMatchObject({ windowHours: null, templates: false });
     expect(adapter.windowInfo(channel, null, new Date())).toEqual({ open: true, expiresAt: null });
   });
 
-  it('has no public provider webhook, takes no credentials, and refuses to send until the widget adapter lands', async () => {
+  it('has no public provider webhook, takes no credentials and is not connected by hand', () => {
     expect(adapter.publicWebhook).toBe(false);
     expect(adapter.credentialsSchema).toBeNull();
     expect(adapter.verifyInbound()).toBe(false);
     expect(adapter.parseInbound()).toEqual({ messages: [], receipts: [] });
-    await expect(
-      adapter.send(channel, { kind: 'text', to: 'v', clientReference: 'r', attempt: 1, body: 'x' }),
-    ).rejects.toMatchObject({ code: 'CHANNEL_NOT_LIVE', retryable: false });
+    expect(adapter.live).toBe(false);
+  });
+
+  it("accepts a reply without a provider: the thread keeps it and the visitor's poll shows it", async () => {
+    const sent = await adapter.send(channel, {
+      kind: 'text',
+      to: 'v',
+      clientReference: 'flow:run:1:0',
+      attempt: 1,
+      body: 'hello',
+    });
+    expect(sent.providerMessageId).toBe('web:flow:run:1:0');
+    expect(sent.acceptedAt).toBeInstanceOf(Date);
   });
 });

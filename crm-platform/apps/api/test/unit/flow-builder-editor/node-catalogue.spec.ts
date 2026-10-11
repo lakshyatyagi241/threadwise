@@ -113,6 +113,25 @@ describe('node catalogue: palette and per-channel availability (TW-FLB-016)', ()
     expect(FLB_NODE_TYPES.trigger?.singleton).toBe(true);
   });
 
+  it('a Website chat flow offers only what the widget renders: text, quick replies, a question and the AI reply, plus the logic nodes', () => {
+    const web = ids('web');
+    for (const t of [
+      'trigger',
+      'message',
+      'buttons',
+      'ask',
+      'ai',
+      'condition',
+      'delay',
+      'webhook',
+      'end',
+    ])
+      expect(web).toContain(t);
+    // Rich WhatsApp components stay off the web channel until the widget can show them.
+    for (const t of ['media', 'list', 'template', 'sequence', 'cta', 'ask_file', 'ask_location'])
+      expect(web).not.toContain(t);
+  });
+
   it('searching "sheet" matches only the Google Sheets nodes by label, description and group (case-insensitive)', () => {
     const q = 'sheet';
     const hit = flbPaletteFor('chat').filter(

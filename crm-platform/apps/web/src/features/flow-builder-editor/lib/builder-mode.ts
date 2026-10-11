@@ -8,10 +8,13 @@ export type BuilderMode = 'simple' | 'advanced';
  * flow) still needs the canvas.
  */
 export function openHref(mode: BuilderMode, id: string, flowType: FlowType | string): string {
-  return mode === 'simple' && flowType === 'chat' ? `/flows/simple/${id}` : `/flows/builder/${id}`;
+  return mode === 'simple' && (flowType === 'chat' || flowType === 'web')
+    ? `/flows/simple/${id}`
+    : `/flows/builder/${id}`;
 }
 
-/** Where "Create flow" goes in Simple mode; the canvas mode asks messaging or call first. */
-export function newHref(mode: BuilderMode): string {
-  return mode === 'simple' ? '/flows/simple' : '/flows/builder';
+/** Where "Create flow" goes. Both builders ask for the channel first (the create sheet), because a bot is built for one channel. */
+export function newHref(mode: BuilderMode, channel: 'chat' | 'web' = 'chat'): string {
+  const base = mode === 'simple' ? '/flows/simple' : '/flows/builder';
+  return channel === 'web' ? `${base}?type=web` : base;
 }

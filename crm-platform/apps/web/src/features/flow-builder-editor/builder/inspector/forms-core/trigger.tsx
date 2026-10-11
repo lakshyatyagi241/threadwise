@@ -55,6 +55,8 @@ export function TriggerForm({ data: d, set, setMany, env }: FormProps) {
   const channel = resolveTriggerChannel(d.channel, env.channels, env.mode);
   const isIg = channel === 'instagram';
   const kind = str(d.kind);
+  // A website chat bot starts from the visitor's first message and has no number to send from.
+  const isWeb = env.openedAs === 'web';
 
   const tagOpts: Opt[] = [
     { v: '', l: loading ? t('tagsLoading') : t('tagPick') },
@@ -82,7 +84,9 @@ export function TriggerForm({ data: d, set, setMany, env }: FormProps) {
     .map((c) => ({ v: c, l: flowTypeLabel(tf, c) }));
 
   const selectedRules = asArray(d.keywordRuleIds).map(String);
-  const kindOpts: Opt[] = [...(isIg ? ['comment_to_dm'] : []), ...KIND_OPTIONS].map((id) => ({
+  const kindOpts: Opt[] = (
+    isWeb ? ['keyword'] : [...(isIg ? ['comment_to_dm'] : []), ...KIND_OPTIONS]
+  ).map((id) => ({
     v: id,
     l: t(`kind.${id}`),
   }));
@@ -410,19 +414,21 @@ export function TriggerForm({ data: d, set, setMany, env }: FormProps) {
         </Notice>
       ) : null}
 
-      <Field label={senderLabel(th, channel, kind)} hint={<LinkedText copy={hint} />}>
-        <SelectInput
-          value={d.deviceId}
-          options={senderOptions(th, channel, senders)}
-          onChange={(v) => set('deviceId', v)}
-        />
-      </Field>
-      {senderMissing ? (
+      {isWeb ? null : (
+        <Field label={senderLabel(th, channel, kind)} hint={<LinkedText copy={hint} />}>
+          <SelectInput
+            value={d.deviceId}
+            options={senderOptions(th, channel, senders)}
+            onChange={(v) => set('deviceId', v)}
+          />
+        </Field>
+      )}
+      {senderMissing && !isWeb ? (
         <Notice tone="danger" className="-mt-2">
           {th(senderPickKey(channel))}
         </Notice>
       ) : null}
-      {senderNone ? (
+      {senderNone && !isWeb ? (
         <Notice tone="warn" className="-mt-2">
           <LinkedText copy={senderNoneCopy(channel, unofficial)} strong />
         </Notice>
