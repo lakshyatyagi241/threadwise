@@ -46,8 +46,14 @@ describe('the catalog through the unofficial engine (TW-NODE-024)', () => {
 
   it('sends text and a picture with its caption through the device with that number', async () => {
     const { bridge, sent, transport } = build();
-    await bridge.sendText({ senderPhone: '+91 98000 00001', to: '+91 98111 11111', text: 'hi' });
+    await bridge.sendText({
+      orgId: 3,
+      senderPhone: '+91 98000 00001',
+      to: '+91 98111 11111',
+      text: 'hi',
+    });
     await bridge.sendImage({
+      orgId: 3,
       senderPhone: '919800000001',
       to: '919811111111',
       imageUrl: 'https://x/y.jpg',
@@ -72,6 +78,7 @@ describe('the catalog through the unofficial engine (TW-NODE-024)', () => {
   it('sends a carousel as one intro text, then each card as a picture (a card without one as text)', async () => {
     const { bridge, sent } = build();
     const r = await bridge.sendCarousel({
+      orgId: 3,
       senderPhone: '919800000001',
       to: '919811111111',
       cards: [card(), card({ name: 'Tea', image_url: null, url: null })],
@@ -88,8 +95,39 @@ describe('the catalog through the unofficial engine (TW-NODE-024)', () => {
 
   it('says so in words when no connected device has that number', async () => {
     const { bridge } = build(null);
-    await expect(bridge.sendText({ senderPhone: '1', to: '2', text: 'x' })).rejects.toThrow(
-      /not connected/,
-    );
+    await expect(
+      bridge.sendText({ orgId: 3, senderPhone: '1', to: '2', text: 'x' }),
+    ).rejects.toThrow(/not connected/);
+  });
+
+  // TI-008 (tenancy audit): from a worker there is no request context. The lookup used to drop its org filter and take the newest
+  // connected device with that number in ANY workspace, so one workspace's order text could leave through another's device.
+  it('fails closed without a workspace instead of searching every workspace for the number', async () => {
+    const { bridge, transport } = build();
+    await expect(
+      bridge.sendText({ senderPhone: '919800000001', to: '2', text: 'x' }),
+    ).rejects.toThrow(/needs an orgId/);
+    expect(transport.open).not.toHaveBeenCalled();
+  });
+
+  it('always constrains the device lookup to the workspace it was given', async () => {
+    const queries: string[] = [];
+    const db = {
+      privileged: vi.fn(async (fn: (tx: unknown) => unknown) =>
+        fn({
+          execute: async (q: { queryChunks?: unknown[] }) => {
+            queries.push(JSON.stringify(q));
+            return { rows: [{ org_id: 7, id: 1, label: 'L' }] };
+          },
+        }),
+      ),
+    };
+    const open = { send: vi.fn(async () => ({ providerMessageId: 'm' })) };
+    const transport = { open: vi.fn().mockResolvedValue(open) };
+    const bridge = new NodeCatalogBridge(db as never, { get: () => transport } as never);
+    await bridge.sendText({ orgId: 7, senderPhone: '919800000001', to: '2', text: 'x' });
+    expect(queries.join()).toContain('org_id = ');
+    expect(queries.join()).not.toContain('IS NULL OR org_id');
+    expect(transport.open).toHaveBeenCalledWith(7, expect.anything());
   });
 });

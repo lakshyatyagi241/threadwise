@@ -380,6 +380,22 @@ export class WabaConnectService {
       );
     }
 
+    // The token proved access to the phone, not that the phone sits on the WABA that was typed. WABA-level webhooks (template
+    // status, account updates) route by waba_id alone, so a foreign waba_id here would pull that tenant's events into this
+    // workspace (TI-003). Same rule as Embedded Signup: the WABA must be readable with this token and must list the phone.
+    let wabaPhones: PhoneInfo[];
+    try {
+      wabaPhones = await this.admin.listPhoneNumbers(token, input.wabaId);
+    } catch (e) {
+      if (e instanceof WabaApiError && e.retryable) {
+        throw this.rejected(translateConnectError(asApiError(e)), 'accessToken', e);
+      }
+      throw this.notOnWaba('That WhatsApp Business Account cannot be read with this token.');
+    }
+    if (!wabaPhones.some((p) => p.id === input.phoneNumberId)) {
+      throw this.notOnWaba('That phone number is not on the WhatsApp Business Account.');
+    }
+
     const owner = input.businessId ? null : await this.admin.getOwnerBusiness(token, input.wabaId);
     const businessId = input.businessId ?? owner?.id ?? null;
     const conn: WabaConnection = {
@@ -1343,6 +1359,10 @@ export class WabaConnectService {
       if (e instanceof AppError) throw e;
       throw this.rejected(`${what}: ${translateConnectError(asApiError(e))}`, undefined, e);
     }
+  }
+
+  private notOnWaba(message: string): AppError {
+    return new AppError(ERROR_CODES.WABA_ID_MISMATCH, message, HttpStatus.FORBIDDEN);
   }
 
   private rejected(message: string, field?: string, cause?: unknown): AppError {
