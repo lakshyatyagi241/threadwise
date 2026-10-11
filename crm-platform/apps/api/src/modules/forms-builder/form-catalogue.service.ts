@@ -3,12 +3,17 @@ import type {
   FieldType,
   FormBindObject,
   FormFieldKind,
+  FormPaymentGateway,
   FormProperty,
   FormPropertyList,
   FormTemplateList,
 } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
 import { DatabaseService } from '../../infra/db/database.service';
+import {
+  WorkspaceGatewayResolver,
+  supportsPaymentLinks,
+} from '../checkout-orders-merchant-payments';
 import { ContactsRepository } from '../crm';
 import { FORM_TEMPLATES } from './form-templates';
 import { FormsRepository } from './forms.repository';
@@ -76,6 +81,7 @@ export class FormCatalogueService {
     private readonly db: DatabaseService,
     private readonly repo: FormsRepository,
     private readonly contacts: ContactsRepository,
+    private readonly gateways: WorkspaceGatewayResolver,
   ) {}
 
   async properties(object: FormBindObject): Promise<FormPropertyList> {
@@ -116,6 +122,21 @@ export class FormCatalogueService {
       }
       return { data: out };
     });
+  }
+
+  /** Whether the workspace can take payment on a form: the shared gateway (Settings > Payments) must exist and be able to make a hosted link. */
+  async paymentGateway(): Promise<FormPaymentGateway> {
+    const ctx = RequestContextStore.require();
+    const gw = await this.gateways.resolve(ctx.orgId);
+    if (!gw) return { ready: false, slug: null, name: null, mode: null, reason: 'none_connected' };
+    const ready = supportsPaymentLinks(gw.slug);
+    return {
+      ready,
+      slug: gw.slug,
+      name: gw.name,
+      mode: gw.mode,
+      reason: ready ? null : 'no_link_support',
+    };
   }
 
   templates(): FormTemplateList {

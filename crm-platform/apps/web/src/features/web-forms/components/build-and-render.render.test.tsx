@@ -262,6 +262,24 @@ describe('Form renderer', () => {
     expect(html.match(/<style>/g)?.length).toBe(1);
   });
 
+  it('shows what the visitor will pay, from the frozen price, only when the form takes payment', () => {
+    expect(renderPublic(<FormRenderer {...base} />)).not.toContain('form-payment-summary');
+    const paid = publicForm({
+      payment: { amountType: 'fixed', amountMinor: 49_900, currency: 'INR' },
+    });
+    const html = renderPublic(<FormRenderer form={paid} mode="live" />);
+    expect(html).toContain('data-testid="form-payment-summary"');
+    expect(html).toContain('499.00');
+  });
+
+  it('says the amount depends on the choice until one is made', () => {
+    const paid = publicForm({
+      payment: { amountType: 'from_field', fieldId: 'x', currency: 'INR' },
+    });
+    const html = renderPublic(<FormRenderer form={paid} mode="live" />);
+    expect(html).toContain('depends on what you choose');
+  });
+
   it('renders the honeypot only when the form has one, hidden from people and assistive tech', () => {
     expect(renderPublic(<FormRenderer {...base} />)).not.toContain('class="wf-hp"');
     const html = renderPublic(<FormRenderer {...base} honeypotField="website_url" />);

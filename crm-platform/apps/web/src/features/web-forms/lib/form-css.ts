@@ -72,6 +72,10 @@ export const FORM_CSS = `
 .wf-rating label:has(input:checked){background:var(--f-primary);border-color:var(--f-primary);color:#fff}
 .wf-rating label:has(input:focus-visible){box-shadow:0 0 0 3px color-mix(in srgb,var(--f-primary) 35%,transparent)}
 .wf-consent{margin-top:var(--f-gap)}
+.wf-pay{display:flex;flex-direction:column;gap:2px;margin-top:var(--f-gap);padding:12px 14px;border:1px solid var(--f-border);border-radius:var(--f-radius);background:var(--f-bg)}
+.wf-pay-label{font-size:.8em;color:var(--f-muted)}
+.wf-pay-amount{font-size:1.25em}
+.wf-pay-note{font-size:.8em;color:var(--f-muted)}
 .wf-actions{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
 .wf-btn{font:inherit;font-weight:600;min-height:46px;padding:0 22px;border-radius:var(--f-radius);cursor:pointer;border:1px solid var(--f-primary);background:var(--f-primary);color:#fff}
 .wf-root[data-button="outline"] .wf-btn[data-kind="primary"]{background:transparent;color:var(--f-primary)}

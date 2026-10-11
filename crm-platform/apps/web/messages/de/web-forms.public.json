@@ -33,9 +33,32 @@
         "too_short": "Geben Sie mindestens {min} Zeichen ein.",
         "too_long": "Geben Sie höchstens {max} Zeichen ein.",
         "pattern": "Dies entspricht nicht dem erwarteten Format.",
-        "invalid_option": "Wählen Sie eine der aufgelisteten Optionen."
+        "invalid_option": "Wählen Sie eine der aufgelisteten Optionen.",
+        "invalid_amount": "Geben Sie einen Betrag im zulässigen Bereich ein."
       },
-      "closedTitle": "Dieses Formular ist geschlossen"
+      "closedTitle": "Dieses Formular ist geschlossen",
+      "payTitle": "Noch ein Schritt",
+      "payTotal": "Zu zahlender Betrag",
+      "payFromChoice": "Der Betrag hängt von Ihrer Auswahl oben ab.",
+      "payEnter": "Geben Sie oben den Betrag ein, den Sie zahlen möchten.",
+      "payNote": "Nach dem Absenden gelangen Sie zu einer sicheren Zahlungsseite.",
+      "payRedirecting": "Ihre Antworten sind gespeichert. Sie werden zur Zahlungsseite weitergeleitet...",
+      "payContinue": "Weiter zur Zahlung",
+      "paymentUnavailable": "Dieses Formular kann derzeit keine Zahlungen annehmen. Bitte versuchen Sie es später noch einmal.",
+      "payReturn": {
+        "confirmingTitle": "Ihre Zahlung wird bestätigt",
+        "confirmingBody": "Wir warten auf die Bestätigung des Zahlungsanbieters. Das dauert meist nur wenige Sekunden. Bitte zahlen Sie nicht erneut.",
+        "slowTitle": "Bestätigung steht noch aus",
+        "slowBody": "Wenn Sie bezahlt haben, trifft die Bestätigung in Kürze ein und Sie können diese Seite schließen. Wenn nicht, gehen Sie zurück und versuchen Sie es erneut.",
+        "paidTitle": "Zahlung eingegangen",
+        "expiredTitle": "Der Zahlungslink ist abgelaufen",
+        "expiredBody": "Es wurde kein Geld abgebucht. Bitten Sie den Absender des Formulars um einen neuen Zahlungslink.",
+        "failedTitle": "Die Zahlung ist fehlgeschlagen",
+        "failedBody": "Es wurde kein Geld abgebucht. Sie können es erneut versuchen.",
+        "tryAgain": "Erneut zahlen",
+        "missingTitle": "Diese Zahlung wurde nicht gefunden",
+        "missingBody": "Der Link ist möglicherweise falsch oder zu alt."
+      }
     }
   }
 }

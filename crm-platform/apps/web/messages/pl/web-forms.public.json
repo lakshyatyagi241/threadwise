@@ -33,9 +33,32 @@
         "too_short": "Wpisz co najmniej {min} znaków.",
         "too_long": "Wpisz co najwyżej {max} znaków.",
         "pattern": "Ta wartość nie ma oczekiwanego formatu.",
-        "invalid_option": "Wybierz jedną z podanych opcji."
+        "invalid_option": "Wybierz jedną z podanych opcji.",
+        "invalid_amount": "Wpisz kwotę w dozwolonym zakresie."
       },
-      "closedTitle": "Ten formularz jest zamknięty"
+      "closedTitle": "Ten formularz jest zamknięty",
+      "payTitle": "Jeszcze jeden krok",
+      "payTotal": "Kwota do zapłaty",
+      "payFromChoice": "Kwota zależy od Twojego wyboru powyżej.",
+      "payEnter": "Wpisz powyżej kwotę, którą chcesz zapłacić.",
+      "payNote": "Po wysłaniu przejdziesz na bezpieczną stronę płatności.",
+      "payRedirecting": "Twoje odpowiedzi zostały zapisane. Przekierowujemy Cię na stronę płatności...",
+      "payContinue": "Przejdź do płatności",
+      "paymentUnavailable": "Ten formularz nie może teraz przyjmować płatności. Spróbuj ponownie później.",
+      "payReturn": {
+        "confirmingTitle": "Potwierdzanie płatności",
+        "confirmingBody": "Czekamy na potwierdzenie od operatora płatności. Zwykle trwa to kilka sekund. Nie płać ponownie.",
+        "slowTitle": "Nadal czekamy na potwierdzenie",
+        "slowBody": "Jeśli już zapłacono, potwierdzenie wkrótce nadejdzie i możesz zamknąć tę stronę. Jeśli nie, wróć i spróbuj ponownie.",
+        "paidTitle": "Płatność otrzymana",
+        "expiredTitle": "Link do płatności wygasł",
+        "expiredBody": "Nie pobrano żadnych pieniędzy. Poproś nadawcę formularza o nowy link do płatności.",
+        "failedTitle": "Płatność nie powiodła się",
+        "failedBody": "Nie pobrano żadnych pieniędzy. Możesz spróbować ponownie.",
+        "tryAgain": "Spróbuj zapłacić ponownie",
+        "missingTitle": "Nie znaleziono tej płatności",
+        "missingBody": "Link może być nieprawidłowy lub zbyt stary."
+      }
     }
   }
 }

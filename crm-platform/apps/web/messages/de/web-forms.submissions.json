@@ -126,7 +126,9 @@
         "exporting": "Wird exportiert",
         "exportHintAttention": "Wählen Sie einen einzelnen Status für den Export aus dieser Gruppe oder verwenden Sie Alle.",
         "exportHintSearch": "Der Export ignoriert den Suchtext.",
-        "notSpam": "Kein Spam: verarbeiten"
+        "notSpam": "Kein Spam: verarbeiten",
+        "newPaymentLink": "Neuen Zahlungslink erstellen",
+        "markPaid": "Als bezahlt markieren"
       },
       "confirmDelete": {
         "title": "Diese Antworten löschen?",
@@ -143,7 +145,11 @@
         "deleteFailed": "Die Antworten konnten nicht gelöscht werden. Bitte versuchen Sie es erneut.",
         "exported": "Die CSV-Datei wurde heruntergeladen.",
         "exportTruncated": "Der Export wurde bei den neuesten {max} Zeilen abgeschnitten. Engen Sie die Daten ein, um den Rest zu erhalten.",
-        "exportFailed": "Der Export konnte nicht erstellt werden. Bitte versuchen Sie es erneut."
+        "exportFailed": "Der Export konnte nicht erstellt werden. Bitte versuchen Sie es erneut.",
+        "linkReady": "Ein neuer Zahlungslink ist bereit.",
+        "linkFailed": "Das Gateway hat keinen Link geliefert. Versuchen Sie es gleich noch einmal.",
+        "markedPaid": "Als bezahlt markiert.",
+        "markPaidFailed": "Diese Einsendung konnte nicht als bezahlt markiert werden."
       },
       "state": {
         "loading": "Übermittlungen werden geladen",
@@ -164,6 +170,29 @@
       "cap": {
         "notice": "Einige Übermittlungen wurden zur Prüfung gespeichert, weil das monatliche Übermittlungslimit Ihres Tarifs erreicht wurde.",
         "upgrade": "Tarif aktualisieren"
+      },
+      "payments": {
+        "title": "Zahlung",
+        "status": {
+          "pending": "Zahlung ausstehend",
+          "paid": "Bezahlt",
+          "failed": "Fehlgeschlagen",
+          "expired": "Abgelaufen"
+        },
+        "via": {
+          "gateway": "über das Gateway",
+          "manual": "manuell markiert"
+        },
+        "gateway": "Gateway",
+        "paidAt": "Bezahlt am",
+        "expiresAt": "Link läuft ab",
+        "reference": "Referenz",
+        "duplicate": "Für diese Einsendung ist eine zweite Zahlung eingegangen. Erstatten Sie sie über Ihr Zahlungsgateway.",
+        "freshLink": "Neuer Zahlungslink (an den Besucher senden):",
+        "copy": "Link kopieren",
+        "markPaidConfirm": "Diese Einsendung als bezahlt markieren? Verwenden Sie dies nur, wenn das Geld außerhalb des Gateways eingegangen ist, etwa per Überweisung oder bar. Die Aktion wird unter Ihrem Namen protokolliert.",
+        "markPaidYes": "Ja, als bezahlt markieren",
+        "cancel": "Abbrechen"
       }
     }
   }

@@ -313,6 +313,14 @@
         "waba_group_suspension_cleared": {
           "label": "Grup aktif kembali",
           "hint": "WhatsApp memulihkan grup yang sebelumnya ditangguhkan. Hanya jika Anda diberi tahu tentang penangguhan tersebut."
+        },
+        "form_payment": {
+          "label": "Pembayaran formulir diterima",
+          "hint": "Pengunjung melakukan pembayaran di salah satu formulir Anda."
+        },
+        "form_payment_duplicate": {
+          "label": "Formulir dibayar dua kali",
+          "hint": "Pengunjung membayar untuk kedua kalinya dan kelebihan pembayaran perlu dikembalikan."
         }
       },
       "loading": "Memuat preferensi Anda",

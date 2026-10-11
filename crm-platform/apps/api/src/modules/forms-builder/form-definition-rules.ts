@@ -28,6 +28,8 @@ export interface PublishContext {
   contactRequired: ReadonlyArray<{ key: string; label: string }>;
   /** A lifecycle stage a submission may put a contact in. */
   stageUsable: (stage: string) => boolean;
+  /** The workspace has a gateway that can make a hosted payment link. Absent = not checked. */
+  paymentGatewayReady?: boolean;
 }
 
 const TEXTLIKE: readonly FormFieldKind[] = ['short_text', 'long_text', 'dropdown', 'radio'];
@@ -121,6 +123,10 @@ export function publishProblems(def: FormDefinition, ctx: PublishContext): FormP
   const stage = def.after.lifecycleStage;
   if (stage && !ctx.stageUsable(stage))
     out.push(problem('after.lifecycleStage', 'lifecycle_stage_unknown'));
+
+  if (def.payment.enabled && ctx.paymentGatewayReady === false) {
+    out.push(problem('payment', 'payment_no_gateway'));
+  }
 
   return out;
 }

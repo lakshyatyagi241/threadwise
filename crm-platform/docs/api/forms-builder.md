@@ -78,6 +78,9 @@ before `:id`.
 | `POST /forms/:id/versions/:n/restore`                | `record.forms.update`            | `RestoreFormVersionInput` -> `FormDetail`; copies the version into the draft (not republished); 404 `FORMS_VERSION_UNKNOWN`                     |
 | `GET /forms/:id/submissions`                         | `record.form-submissions.read`   | `ListFormSubmissionsQuery` (`status`, `tab`, `from`, `to`, `q`, `contactId`, cursor, `order`) -> `FormSubmissionList`                           |
 | `GET /forms/:id/submissions/:sid`                    | `record.form-submissions.read`   | `FormSubmissionDetail` (answers with the labels of the version they were made against; **audited** `read`)                                      |
+| `GET /forms/meta/payment-gateway` | `record.forms.read` | `FormPaymentGateway { ready, slug, name, mode, reason }`: can the workspace take payment on a form (the shared gateway exists and can make a hosted link) |
+| `POST /forms/:id/submissions/:sid/payment-link` | `record.form-submissions.update` | a fresh attempt and hosted link for a submission `awaiting_payment` -> `{ url \| null }`; 409 `FORMS_PAYMENT_STATE`, 422 `FORMS_PAYMENT_UNAVAILABLE`, 410 when the answers were purged |
+| `POST /forms/:id/submissions/:sid/mark-paid` | `record.form-submissions.update` | money that arrived outside the gateway; audited under the caller; `FormSubmissionSummary`; 409 `FORMS_PAYMENT_STATE` unless `awaiting_payment` |
 | `POST /forms/:id/submissions/:sid/retry`             | `record.form-submissions.update` | `FormSubmissionSummary`; for `needs_review`, `failed`, `spam` ("not spam"); 409 `FORMS_SUBMISSION_NOT_RETRYABLE`, 410 `FORMS_SUBMISSION_PURGED` |
 | `DELETE /forms/:id/submissions/:sid`                 | `record.form-submissions.delete` | 204; erase (below)                                                                                                                              |
 | `POST /forms/:id/submissions/export`                 | `record.form-submissions.export` | `ExportFormSubmissionsInput` -> `text/csv` attachment; `X-Export-Truncated`, `X-Export-Rows`                                                    |
@@ -129,7 +132,8 @@ nothing). It is refused with 422 `FORMS_PUBLISH_INVALID`, one `{ path, message }
 | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `GET /:publicKey`         | `PublicForm`: steps (bindings removed, rich text sanitised), theme, consent line, honeypot input name, captcha need and **public** site key, `poweredBy`, `frameAncestors`. `Cache-Control: public, max-age=30`, `ETag`, `If-None-Match` -> 304, `X-Robots-Tag: noindex`, `Vary: Origin` |
 | `POST /:publicKey/events` | `PublicFormEventInput` (`visitId`, `kind` view/start/step/submit/complete, `step`) -> **204 always** (also for an unknown key); nothing personal is stored                                                                                                                               |
-| `POST /:publicKey/submit` | `PublicFormSubmitInput` -> **201** `PublicFormSubmitResponse { submissionToken, next: { type: 'message' \| 'redirect' } }`; JSON only (415 otherwise); body class `public-form` (256 KiB)                                                                                                |
+| `GET /:publicKey/submissions/:token` | `PublicFormSubmissionStatus { payment: not_required \| awaiting_payment \| paid \| expired \| failed, next, payUrl }` for the page the visitor returns to from the gateway; `Cache-Control: no-store`; 404 for any token that is not this form's receipt |
+| `POST /:publicKey/submit` | `PublicFormSubmitInput` -> **201** `PublicFormSubmitResponse { submissionToken, next: { type: 'message' \| 'redirect' \| 'pay' } }`; JSON only (415 otherwise); body class `public-form` (256 KiB)                                                                                                |
 
 `PublicForm.frameAncestors` carries the `Content-Security-Policy: frame-ancestors` value the web page must answer with: `'none'` for the hosted page,
 the form's allow-list for `?embed=1`. The API computes it so the web app never decides what may frame a form.
@@ -250,3 +254,34 @@ by `PlanEntitlementService` right after, as the lead hook does); `webhook_url` i
 `web_form_deliveries` are later phases; the workspace defaults route and its `forms.settings.manage` key (spec 7.1) are not built; the export is
 synchronous with a row cap. See [the wiring map](../threadwise-port/wiring/forms-builder.md) and the parity note in
 [product-extensions.md](../threadwise-port/parity/product-extensions.md).
+
+## Payments (spec section 10, phase 3)
+
+A form with `payment.enabled` charges the visitor on the workspace's shared gateway (`WorkspaceGatewayResolver`, a hosted payment link made by
+`GatewayLinkService`; Razorpay and Stripe are the verified drivers). Card data never touches this app.
+
+- **Definition.** `payment { enabled, amountType: fixed | from_field | pay_what_you_want, amountMinor, fieldId, minMinor, maxMinor, currency, description }`;
+  a `from_field` option carries `amountMinor`. The contract refuses a payment block without its price, a choice field whose options lack a price,
+  or a pay-what-you-want field that is not a required number. Publish adds `payment_no_gateway` when no usable gateway exists.
+- **The server decides the amount** (`computeAmount`, `form-payment-rules.ts`) from the frozen version and the validated answers; no amount the
+  browser sends is read. An answer that does not name a priced option, or an amount outside the limits, is a 422 `invalid_amount` on the field. Money is
+  `bigint` minor units with the currency's exponent; no float.
+- **Submit.** With payment on and no usable gateway the door answers 422 `FORMS_PAYMENT_UNAVAILABLE` and stores nothing (closed, never a free pass).
+  Otherwise one transaction stores the submission, writes the CRM, inserts a `web_form_payments` attempt `pending` (reference `FRM-<uuid>`, 48-hour
+  expiry) and sets the submission `awaiting_payment`; after commit the link is minted and the visitor gets `next: { type: 'pay', url }`. The same
+  idempotency key again returns the open attempt's link (re-minted when it lapsed). A gateway that refuses leaves the attempt pending: staff use
+  *new payment link*.
+- **Settle.** The gateway's verified notification reaches `FormPaymentsService.settle` by the `FRM-` prefix (`GatewayPaymentRegistry`). The
+  attempt must exist in this workspace, on this gateway, with the same amount and currency (a provider that states no amount is refused, outbox
+  `form.payment_rejected`); a replay is `duplicate`; money that arrives for an expired attempt is still recorded. The attempt and the submission become
+  `paid`, the contact timeline gets *Paid ...*, outbox `form.payment_succeeded`. A second paid attempt for a submission is recorded and flags
+  `duplicatePayment` (refund by hand; there is no gateway refund call).
+- **The redirect back is never proof.** `/f/<key>/pay-return?s=<receipt>` only reads `GET .../submissions/:token` and polls until `paid`.
+- **Expiry.** `FormPaymentSweepService` (worker, every 30 minutes) marks attempts past `expires_at` `expired`; the submission stays `awaiting_payment`.
+- **Not built (recorded):** per-item and deposit amounts, tax, coupon field, invoice and receipt (phase 3b), resend link by email or WhatsApp, in-app
+  notification for a payment, failed-payment and refund webhooks (the shared gateway only handles "paid").
+
+**Payment notifications.** `FormNotificationConsumer` also reads `form.payment_succeeded` and `form.payment_duplicate` (payload carries `contactName`, `amount`
+(major units), `currency`, `paymentId`, `ownerId`, `notify`, `notifyEmails`). The people are the same as for a submission (the contact's owner when the form
+says so, plus the listed users still active). In-app types `form_payment` and `form_payment_duplicate` (link to the submission, deduplicated on the payment
+attempt, so a redelivery tells nobody twice); the listed addresses get one mail per payment (not for a duplicate), with the name, the amount and a link, no answers.

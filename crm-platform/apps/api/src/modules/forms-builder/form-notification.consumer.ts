@@ -21,7 +21,12 @@ import {
   type WrittenNotification,
 } from '../notifications';
 
-export const FORM_NOTIFY_EVENTS = ['form.submitted', 'form.needs_review'] as const;
+export const FORM_NOTIFY_EVENTS = [
+  'form.submitted',
+  'form.needs_review',
+  'form.payment_succeeded',
+  'form.payment_duplicate',
+] as const;
 
 const str = (v: unknown): string | null => (typeof v === 'string' && v !== '' ? v : null);
 
@@ -108,6 +113,14 @@ export class FormNotificationConsumer implements OutboxSubscriber, OnModuleInit 
       return;
     }
 
+    if (
+      event.eventType === 'form.payment_succeeded' ||
+      event.eventType === 'form.payment_duplicate'
+    ) {
+      await this.handlePayment(event, p, recipients, { formId, formName, submissionId, link });
+      return;
+    }
+
     const returning = p.created === false;
     const name = plain(str(p.contactName) ?? 'Someone', 120);
     await this.inApp(event, recipients, {
@@ -129,6 +142,82 @@ export class FormNotificationConsumer implements OutboxSubscriber, OnModuleInit 
       ? p.notifyEmails.filter((v): v is string => typeof v === 'string')
       : [];
     await this.emailAll(emails, submissionId, formName, name, returning, `${this.webUrl}${link}`);
+  }
+
+  /**
+   * A payment on a form: the in-app note goes to the same people as the submission (the contact's owner and the listed users), once per
+   * payment attempt; a second payment for a submission already paid is its own, louder note because it needs a refund. The notification
+   * email goes to the listed addresses for a normal payment only.
+   */
+  private async handlePayment(
+    event: OutboxEvent,
+    p: Record<string, unknown>,
+    recipients: string[],
+    form: { formId: string; formName: string; submissionId: string; link: string },
+  ): Promise<void> {
+    const paymentId = str(p.paymentId);
+    if (!paymentId) return;
+    const duplicate = event.eventType === 'form.payment_duplicate';
+    const name = plain(str(p.contactName) ?? 'Someone', 120);
+    const amount = plain(`${str(p.amount) ?? ''} ${str(p.currency) ?? ''}`, 40);
+    await this.inApp(event, recipients, {
+      type: duplicate ? 'form_payment_duplicate' : 'form_payment',
+      title: duplicate ? 'A form was paid twice' : 'Payment received on a form',
+      body: duplicate
+        ? `${name} paid ${amount} again for ${form.formName}. Refund the extra payment from your gateway.`
+        : `${name} paid ${amount} for ${form.formName}`,
+      link: form.link,
+      data: {
+        formId: form.formId,
+        formName: form.formName,
+        submissionId: form.submissionId,
+        paymentId,
+        contactName: name,
+        amount,
+      },
+      dedupeKey: `${duplicate ? 'form_payment_dup' : 'form_payment'}:${paymentId}`,
+    });
+    if (duplicate) return;
+    const emails = Array.isArray(p.notifyEmails)
+      ? p.notifyEmails.filter((v): v is string => typeof v === 'string')
+      : [];
+    await this.emailPayment(
+      emails,
+      paymentId,
+      form.formName,
+      name,
+      amount,
+      `${this.webUrl}${form.link}`,
+    );
+  }
+
+  private async emailPayment(
+    emails: string[],
+    paymentId: string,
+    formName: string,
+    contactName: string,
+    amount: string,
+    url: string,
+  ): Promise<void> {
+    if (!this.mail || emails.length === 0) return;
+    for (const to of emails) {
+      const key = `form:paymail:${paymentId}:${createHash('sha256').update(to).digest('hex').slice(0, 20)}`;
+      try {
+        const claimed = await this.redis.set(key, '1', 'EX', 7 * 86_400, 'NX');
+        if (claimed !== 'OK') continue;
+        await this.mail.send({
+          to,
+          subject: `[${this.brand}] Payment received: ${formName}`,
+          text: [
+            `${contactName} paid ${amount} for "${formName}".`,
+            '',
+            `Open the submission: ${url}`,
+          ].join('\n'),
+        });
+      } catch (err) {
+        this.logger.warn({ err }, 'form payment mail failed; the payment is recorded');
+      }
+    }
   }
 
   private async inApp(

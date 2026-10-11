@@ -175,6 +175,8 @@ export const webFormSubmissions = pgTable(
     userAgent: text('user_agent'),
     consent: jsonb('consent').$type<Record<string, unknown>>(),
     spamScore: integer('spam_score').notNull().default(0),
+    /** A second paid notification arrived for a submission already paid: kept for a manual refund. */
+    duplicatePayment: boolean('duplicate_payment').notNull().default(false),
     answersExpiresAt: timestamp('answers_expires_at', { withTimezone: true }),
     payloadPurgedAt: timestamp('payload_purged_at', { withTimezone: true }),
     erasedAt: timestamp('erased_at', { withTimezone: true }),
@@ -304,3 +306,60 @@ export const webFormEvents = pgTable(
 );
 
 export type WebFormEventsRow = typeof webFormEvents.$inferSelect;
+
+/** One payment attempt of a submission (migrations/20261117090000_forms_payments.sql). The server computed `amountMinor`; `reference` is ours (`FRM-<uuid>`). */
+export const webFormPayments = pgTable(
+  'web_form_payments',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    submissionId: idColumn('submission_id').notNull(),
+    reference: text('reference').notNull(),
+    gatewaySlug: text('gateway_slug').notNull(),
+    amountMinor: bigint('amount_minor', { mode: 'bigint' }).notNull(),
+    currency: text('currency').notNull(),
+    status: text('status').notNull().default('pending'),
+    settledVia: text('settled_via'),
+    providerRef: text('provider_ref'),
+    linkUrl: text('link_url'),
+    paidAt: timestamp('paid_at', { withTimezone: true }),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('uq_web_form_payments_org_id_uuid').on(t.orgId, t.uuid),
+    unique('uq_web_form_payments_reference').on(t.orgId, t.reference),
+    foreignKey({
+      name: 'web_form_payments_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    check(
+      'chk_web_form_payments_status',
+      sql`${t.status} in ('pending', 'paid', 'failed', 'expired')`,
+    ),
+    check(
+      'chk_web_form_payments_via',
+      sql`${t.settledVia} is null or ${t.settledVia} in ('gateway', 'manual')`,
+    ),
+    check('chk_web_form_payments_amount', sql`${t.amountMinor} > 0`),
+    check('chk_web_form_payments_currency', sql`${t.currency} ~ '^[A-Z]{3}$'`),
+    check('chk_web_form_payments_paid', sql`(${t.status} = 'paid') = (${t.paidAt} is not null)`),
+    foreignKey({
+      name: 'fk_web_form_payments_submission',
+      columns: [t.orgId, t.submissionId],
+      foreignColumns: [webFormSubmissions.orgId, webFormSubmissions.id],
+    }).onDelete('cascade'),
+    index('idx_web_form_payments_submission').on(t.orgId, t.submissionId, t.id.desc()),
+    index('idx_web_form_payments_pending')
+      .on(t.expiresAt)
+      .where(sql`${t.status} = 'pending'`),
+  ],
+);
+
+export type WebFormPaymentsRow = typeof webFormPayments.$inferSelect;
+export type NewWebFormPaymentsRow = typeof webFormPayments.$inferInsert;

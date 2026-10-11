@@ -27,6 +27,10 @@ import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { HtmlSanitizerService } from '../auth';
+import {
+  WorkspaceGatewayResolver,
+  supportsPaymentLinks,
+} from '../checkout-orders-merchant-payments';
 import { ContactsRepository } from '../crm';
 import { publishProblems, type PublishContext } from './form-definition-rules';
 import { newPublicKey } from './form-key';
@@ -85,6 +89,7 @@ export class FormsService {
     private readonly outbox: OutboxService,
     private readonly sanitizer: HtmlSanitizerService,
     private readonly contacts: ContactsRepository,
+    private readonly gateways: WorkspaceGatewayResolver,
     config: ConfigService<Env, true>,
   ) {
     this.bases = {
@@ -579,7 +584,12 @@ export class FormsService {
     ]);
     const stage = def.after.lifecycleStage;
     const stageOk = stage ? await this.repo.stageUsable(tx, orgId, stage) : true;
+    // Only asked when the form takes payment: a form without it never depends on the gateway.
+    const gateway = def.payment.enabled ? await this.gateways.resolve(orgId, null, { tx }) : null;
     return {
+      paymentGatewayReady: def.payment.enabled
+        ? gateway !== null && supportsPaymentLinks(gateway.slug)
+        : undefined,
       contactProps: new Map(contactProps.map((p) => [p.key, { type: p.type, label: p.label }])),
       companyProps: new Map(companyProps.map((p) => [p.key, { type: p.type, label: p.label }])),
       // A rule that depends on another property's value is not required of every submission: only the unconditional ones are.

@@ -1,0 +1,58 @@
+{
+  "web-forms": {
+    "payment": {
+      "title": "Zahlung",
+      "description": "Der Besucher zahlt nach dem Absenden über Ihr Zahlungsgateway. Das Formular gilt erst als bezahlt, wenn das Gateway die Zahlung bestätigt.",
+      "enabled": "Zahlung einziehen",
+      "enabledHint": "Nach dem Speichern der Antworten wird der Besucher zur gehosteten Zahlungsseite Ihres Gateways weitergeleitet.",
+      "gateway": {
+        "checking": "Ihr Zahlungsgateway wird geprüft...",
+        "failed": "Ihr Zahlungsgateway konnte nicht geprüft werden. Versuchen Sie es gleich noch einmal.",
+        "ready": "Zahlungen gehen an {name} ({mode}).",
+        "mode": {
+          "test": "Testmodus",
+          "live": "Live-Modus"
+        },
+        "none": "Es ist kein Zahlungsgateway verbunden, daher kann dieses Formular noch keine Zahlungen annehmen.",
+        "noLink": "{name} kann keinen gehosteten Zahlungslink erstellen und lässt sich daher nicht in einem Formular verwenden. Verbinden Sie Razorpay oder Stripe.",
+        "open": "Zahlungsgateways öffnen"
+      },
+      "amountType": "Festlegung des Betrags",
+      "amountTypes": {
+        "fixed": "Festpreis",
+        "from_field": "Aus einem Auswahlfeld",
+        "pay_what_you_want": "Der Besucher gibt den Betrag ein"
+      },
+      "amountTypeHints": {
+        "fixed": "Jeder Besucher zahlt denselben Preis.",
+        "from_field": "Jede Option eines Dropdown- oder Radiofelds hat einen eigenen Preis.",
+        "pay_what_you_want": "Für Spenden und Trinkgelder. Sie legen den kleinsten und den größten Betrag fest."
+      },
+      "currency": "Währung",
+      "currencyHint": "Drei Buchstaben, z. B. INR oder USD. Ihr Gateway muss sie unterstützen.",
+      "amount": "Preis",
+      "amountHint": "In {currency}, so geschrieben, wie man ihn sagt, zum Beispiel 499.00.",
+      "fieldChoice": "Auswahlfeld",
+      "fieldNumber": "Betragsfeld",
+      "fieldNone": "Feld auswählen",
+      "noChoiceFields": "Fügen Sie dem Formular zuerst ein Dropdown- oder Radiofeld hinzu.",
+      "noNumberFields": "Fügen Sie dem Formular zuerst ein Zahlen- oder Währungsfeld hinzu.",
+      "optionPrices": "Preis jeder Option",
+      "optionPrice": "Preis für „{label}“",
+      "min": "Kleinster Betrag",
+      "minHint": "Niedrigere Beträge werden abgelehnt.",
+      "max": "Größter Betrag (optional)",
+      "maxHint": "Leer lassen, wenn es keine Obergrenze gibt.",
+      "descriptionLabel": "Auf der Zahlungsseite angezeigt",
+      "descriptionHint": "Ein kurzer Hinweis für den Zahler, zum Beispiel wofür er zahlt.",
+      "issues": {
+        "amountRequired": "Geben Sie den Preis ein.",
+        "fieldRequired": "Wählen Sie das Feld, aus dem der Betrag stammt.",
+        "fieldNotRequired": "Machen Sie dieses Feld zur Pflicht, damit jeder Besucher einen Betrag angibt.",
+        "optionsNeedAmounts": "Geben Sie jeder Option einen Preis.",
+        "minRequired": "Geben Sie den kleinsten Betrag ein.",
+        "minAboveMax": "Der kleinste Betrag darf nicht höher als der größte sein."
+      }
+    }
+  }
+}

@@ -69,6 +69,17 @@ export class FormsController {
     return this.catalogue.properties(query.object);
   }
 
+  @Get('meta/payment-gateway')
+  @RequirePermission('record.forms.read')
+  @ApiOperation({
+    summary: 'Can this workspace take payment on a form, and on which gateway',
+    description:
+      "The workspace's shared payment gateway (Settings > Payments). A form can only enable payment when `ready` is true.",
+  })
+  paymentGateway() {
+    return this.catalogue.paymentGateway();
+  }
+
   @Get()
   @RequirePermission('record.forms.read')
   @ApiOperation({

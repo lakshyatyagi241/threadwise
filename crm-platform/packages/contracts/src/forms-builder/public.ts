@@ -4,6 +4,7 @@ import {
   formStepSchema,
   formThemeSchema,
   formSettingsSchema,
+  formPaymentSchema,
 } from './definition';
 
 /**
@@ -34,6 +35,18 @@ export const publicFormSchema = z.object({
     version: true,
   }),
   theme: formThemeSchema,
+  /** What the visitor will be asked to pay: shown before they submit. Null when the form takes no payment. */
+  payment: formPaymentSchema
+    .pick({
+      amountType: true,
+      amountMinor: true,
+      fieldId: true,
+      minMinor: true,
+      maxMinor: true,
+      currency: true,
+      description: true,
+    })
+    .nullable(),
   /** The name of the honeypot input the page must render, hidden from people and from assistive tech; null when the form has none. */
   honeypotField: z.string().nullable(),
   captcha: z.object({

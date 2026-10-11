@@ -313,6 +313,14 @@
         "waba_group_suspension_cleared": {
           "label": "Grupa znów aktywna",
           "hint": "WhatsApp przywrócił grupę, którą wcześniej zawiesił. Tylko jeśli zostałeś o zawieszeniu poinformowany."
+        },
+        "form_payment": {
+          "label": "Otrzymano płatność z formularza",
+          "hint": "Odwiedzający zapłacił w jednym z Twoich formularzy."
+        },
+        "form_payment_duplicate": {
+          "label": "Formularz opłacony dwukrotnie",
+          "hint": "Odwiedzający zapłacił po raz drugi, a dodatkową płatność trzeba zwrócić."
         }
       },
       "loading": "Wczytywanie Twoich preferencji",

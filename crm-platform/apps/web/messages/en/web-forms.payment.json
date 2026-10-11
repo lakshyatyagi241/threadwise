@@ -1,0 +1,58 @@
+{
+  "web-forms": {
+    "payment": {
+      "title": "Payment",
+      "description": "Charge the visitor on your payment gateway after they submit. The form counts as paid only when the gateway confirms it.",
+      "enabled": "Collect payment",
+      "enabledHint": "After the answers are saved, the visitor is sent to your gateway's hosted payment page.",
+      "gateway": {
+        "checking": "Checking your payment gateway...",
+        "failed": "Could not check your payment gateway. Try again in a moment.",
+        "ready": "Payments go to {name} ({mode}).",
+        "mode": {
+          "test": "test mode",
+          "live": "live mode"
+        },
+        "none": "No payment gateway is connected, so this form cannot take payment yet.",
+        "noLink": "{name} cannot make a hosted payment link, so it cannot be used on a form. Connect Razorpay or Stripe.",
+        "open": "Open payment gateways"
+      },
+      "amountType": "How the amount is set",
+      "amountTypes": {
+        "fixed": "Fixed price",
+        "from_field": "From a choice field",
+        "pay_what_you_want": "The visitor enters the amount"
+      },
+      "amountTypeHints": {
+        "fixed": "Every visitor pays the same price.",
+        "from_field": "Each option of a dropdown or radio field has its own price.",
+        "pay_what_you_want": "For donations and tips. You set the smallest and largest amount."
+      },
+      "currency": "Currency",
+      "currencyHint": "Three letters, such as INR or USD. Your gateway must accept it.",
+      "amount": "Price",
+      "amountHint": "In {currency}, written as you would say it, for example 499.00.",
+      "fieldChoice": "Choice field",
+      "fieldNumber": "Amount field",
+      "fieldNone": "Choose a field",
+      "noChoiceFields": "Add a dropdown or radio field to the form first.",
+      "noNumberFields": "Add a number or currency field to the form first.",
+      "optionPrices": "Price of each option",
+      "optionPrice": "Price for \"{label}\"",
+      "min": "Smallest amount",
+      "minHint": "Anything lower is refused.",
+      "max": "Largest amount (optional)",
+      "maxHint": "Leave empty for no upper limit.",
+      "descriptionLabel": "Shown on the payment page",
+      "descriptionHint": "A short note for the payer, such as what they are paying for.",
+      "issues": {
+        "amountRequired": "Enter the price.",
+        "fieldRequired": "Choose the field the amount comes from.",
+        "fieldNotRequired": "Make this field required, so every visitor gives an amount.",
+        "optionsNeedAmounts": "Give every option a price.",
+        "minRequired": "Enter the smallest amount.",
+        "minAboveMax": "The smallest amount cannot be above the largest."
+      }
+    }
+  }
+}

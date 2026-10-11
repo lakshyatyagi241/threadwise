@@ -290,6 +290,14 @@
           "label": "Form needs review",
           "hint": "A submission needs a look."
         },
+        "form_payment": {
+          "label": "Form payment received",
+          "hint": "A visitor paid on one of your forms."
+        },
+        "form_payment_duplicate": {
+          "label": "Form paid twice",
+          "hint": "A visitor paid a second time and the extra payment needs a refund."
+        },
         "wallet_low_balance": {
           "label": "Wallet balance low",
           "hint": "The workspace wallet is running low."

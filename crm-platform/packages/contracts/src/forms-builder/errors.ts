@@ -20,6 +20,10 @@ export const FORMS_ERROR_CODES = {
   FORMS_SUBMISSION_NOT_RETRYABLE: 'FORMS_SUBMISSION_NOT_RETRYABLE',
   /** The submission's answers were purged by the retention sweep or erased, so a retry has nothing to read. */
   FORMS_SUBMISSION_PURGED: 'FORMS_SUBMISSION_PURGED',
+  /** The form takes payment but the workspace has no gateway that can make a hosted link (or the plan turned payments off): the form is closed, never free. */
+  FORMS_PAYMENT_UNAVAILABLE: 'FORMS_PAYMENT_UNAVAILABLE',
+  /** The submission has no payment due, or is already paid. */
+  FORMS_PAYMENT_STATE: 'FORMS_PAYMENT_STATE',
   /** The template key is not one of the gallery's. */
   FORMS_TEMPLATE_UNKNOWN: 'FORMS_TEMPLATE_UNKNOWN',
   /** The version number does not exist for the form. */

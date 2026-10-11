@@ -126,7 +126,9 @@
         "exporting": "Đang xuất",
         "exportHintAttention": "Chọn một trạng thái để xuất từ nhóm này, hoặc chọn Tất cả.",
         "exportHintSearch": "Khi xuất, nội dung ô tìm kiếm sẽ bị bỏ qua.",
-        "notSpam": "Không phải thư rác: xử lý"
+        "notSpam": "Không phải thư rác: xử lý",
+        "newPaymentLink": "Lấy liên kết thanh toán mới",
+        "markPaid": "Đánh dấu đã thanh toán"
       },
       "confirmDelete": {
         "title": "Xóa các câu trả lời này?",
@@ -143,7 +145,11 @@
         "deleteFailed": "Không thể xóa câu trả lời. Vui lòng thử lại.",
         "exported": "Đã tải xuống tệp CSV.",
         "exportTruncated": "Việc xuất đã bị cắt ở {max} dòng mới nhất. Hãy thu hẹp khoảng ngày để lấy phần còn lại.",
-        "exportFailed": "Không thể xuất dữ liệu. Vui lòng thử lại."
+        "exportFailed": "Không thể xuất dữ liệu. Vui lòng thử lại.",
+        "linkReady": "Liên kết thanh toán mới đã sẵn sàng.",
+        "linkFailed": "Cổng thanh toán không trả về liên kết. Hãy thử lại sau giây lát.",
+        "markedPaid": "Đã đánh dấu là đã thanh toán.",
+        "markPaidFailed": "Không thể đánh dấu bài gửi này là đã thanh toán."
       },
       "state": {
         "loading": "Đang tải bài gửi",
@@ -164,6 +170,29 @@
       "cap": {
         "notice": "Một số bài gửi đã được lưu để xem xét vì đã đạt giới hạn bài gửi hằng tháng của gói.",
         "upgrade": "Nâng cấp gói"
+      },
+      "payments": {
+        "title": "Thanh toán",
+        "status": {
+          "pending": "Chờ thanh toán",
+          "paid": "Đã thanh toán",
+          "failed": "Không thành công",
+          "expired": "Hết hạn"
+        },
+        "via": {
+          "gateway": "bởi cổng thanh toán",
+          "manual": "đánh dấu thủ công"
+        },
+        "gateway": "Cổng thanh toán",
+        "paidAt": "Thanh toán lúc",
+        "expiresAt": "Liên kết hết hạn",
+        "reference": "Mã tham chiếu",
+        "duplicate": "Một khoản thanh toán thứ hai đã đến cho bài gửi này. Hãy hoàn tiền từ cổng thanh toán của bạn.",
+        "freshLink": "Liên kết thanh toán mới (gửi cho khách truy cập):",
+        "copy": "Sao chép liên kết",
+        "markPaidConfirm": "Đánh dấu bài gửi này là đã thanh toán? Chỉ dùng khi tiền được nhận ngoài cổng thanh toán, như chuyển khoản ngân hàng hoặc tiền mặt. Thao tác này được ghi lại dưới tên bạn.",
+        "markPaidYes": "Có, đánh dấu đã thanh toán",
+        "cancel": "Hủy"
       }
     }
   }
