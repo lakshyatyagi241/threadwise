@@ -59,7 +59,7 @@ export const ChatbotForm: FormComponent = (p) => {
       hint={
         agents.length
           ? t('agentHint')
-          : t.rich('noAgentsHint', { link: (c) => <ExtLink href="/team-inbox">{c}</ExtLink> })
+          : t.rich('noAgentsHint', { link: (c) => <ExtLink href="/inbox">{c}</ExtLink> })
       }
     >
       <SelectInput value={p.data.bot} onChange={(v) => p.set('bot', v)} options={opts} />

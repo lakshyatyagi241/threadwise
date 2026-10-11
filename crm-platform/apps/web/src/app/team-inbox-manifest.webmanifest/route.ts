@@ -1,6 +1,6 @@
 import { apiBase } from '@/lib/auth/server';
 
-/** The Team Inbox app manifest (TW-SET-038), scoped to /team-inbox; 404 while that app is off. */
+/** The Team Inbox app manifest (TW-SET-038), scoped to /inbox; 404 while that app is off. */
 export async function GET() {
   try {
     const res = await fetch(`${apiBase()}/v2/public/team-inbox-manifest.webmanifest`, {
