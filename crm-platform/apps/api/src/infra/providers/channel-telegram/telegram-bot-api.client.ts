@@ -103,7 +103,7 @@ class BotApiClient implements TelegramBotApi {
     try {
       const form = new FormData();
       for (const [k, v] of Object.entries(params)) form.set(k, v);
-      form.set(field, new Blob([file.bytes]), file.filename || 'file');
+      form.set(field, new Blob([new Uint8Array(file.bytes)]), file.filename || 'file');
       const res = await fetch(`${BASE}/bot${this.token}/${method}`, {
         method: 'POST',
         body: form,
