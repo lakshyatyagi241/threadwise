@@ -737,8 +737,8 @@ describe('TW-SET-038 Team Inbox app', () => {
     expect(m).toMatchObject({
       name: 'Acme Inbox',
       short_name: 'Inbox',
-      start_url: '/team-inbox',
-      scope: '/team-inbox',
+      start_url: '/inbox',
+      scope: '/inbox',
       display: 'standalone',
       icons: [],
     });

@@ -78,7 +78,7 @@ export function AssignForm({ data: d, set, env }: FormProps) {
         label={t('teamLabel')}
         hint={
           teams.length
-            ? t.rich('teamHint', { link: (chunks) => <Link href="/team-inbox">{chunks}</Link> })
+            ? t.rich('teamHint', { link: (chunks) => <Link href="/inbox">{chunks}</Link> })
             : undefined
         }
       >
@@ -117,7 +117,7 @@ export function ChatbotForm({ data: d, set, env }: FormProps) {
       hint={
         agents.length
           ? t('botHint')
-          : t.rich('botHintNone', { link: (chunks) => <Link href="/team-inbox">{chunks}</Link> })
+          : t.rich('botHintNone', { link: (chunks) => <Link href="/inbox">{chunks}</Link> })
       }
     >
       <SelectInput value={d.bot} options={opts} onChange={(v) => set('bot', v)} />
