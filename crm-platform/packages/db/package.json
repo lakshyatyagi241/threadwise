@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@node-rs/argon2": "^2.2.2",
-    "@types/node": "^22.10.6",
+    "@types/node": "^26.6.4",
     "@types/pg": "^8.11.10",
     "dotenv": "^16.4.7",
     "tsx": "^4.23.15",
