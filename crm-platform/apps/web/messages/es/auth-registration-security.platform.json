@@ -94,7 +94,10 @@
           "challengeExpired": "Ese inicio de sesión ha caducado. Introduce tu contraseña de nuevo.",
           "rateLimited": "Demasiadas solicitudes. Espera un momento e inténtalo de nuevo.",
           "unexpected": "No pudimos iniciar tu sesión. Inténtalo de nuevo en un momento.",
-          "lockedWait": "Demasiados intentos fallidos. Inténtalo de nuevo en {minutes, plural, one {# minuto} many {# de minutos} other {# minutos}}."
+          "lockedWait": "Demasiados intentos fallidos. Inténtalo de nuevo en {minutes, plural, one {# minuto} many {# de minutos} other {# minutos}}.",
+          "passkeyInvalid": "No se pudo verificar esa llave de acceso. Inténtalo de nuevo o usa un código.",
+          "passkeyCancelled": "El inicio de sesión con llave de acceso se canceló o caducó. Inténtalo de nuevo o usa un código.",
+          "passkeyFailed": "Tu dispositivo no pudo proporcionar la llave de acceso. Inténtalo de nuevo o usa un código."
         },
         "captcha": {
           "loadFailed": "No se pudo cargar el captcha. Revisa tu conexión o un bloqueador de contenido y reintenta.",
@@ -115,7 +118,9 @@
           "verifying": "Comprobando",
           "useRecovery": "Usar un código de recuperación",
           "useAuthenticator": "Usar la aplicación de autenticación",
-          "back": "Volver a iniciar sesión"
+          "back": "Volver a iniciar sesión",
+          "usePasskey": "Usar una llave de acceso",
+          "passkeyWaiting": "Esperando tu llave de acceso"
         }
       },
       "mfa": {
@@ -358,6 +363,14 @@
           "passwordRequireSymbol": {
             "label": "Exigir un símbolo",
             "short": "Símbolo"
+          },
+          "passwordBlocklistEnabled": {
+            "label": "Bloquear contraseñas comunes",
+            "hint": "Rechaza las contraseñas más comunes, variantes parecidas como P@ssw0rd, patrones de teclado y cualquier contraseña que contenga el nombre o el correo de la persona."
+          },
+          "passwordBreachCheck": {
+            "label": "Bloquear contraseñas de filtraciones de datos",
+            "hint": "Comprueba las contraseñas nuevas con la lista pública de Pwned Passwords. Solo los primeros cinco caracteres de un hash salen del servidor. Si no se puede acceder al servicio, se acepta la contraseña."
           },
           "passwordMaxAgeDays": {
             "label": "Antigüedad máxima de la contraseña (días)",

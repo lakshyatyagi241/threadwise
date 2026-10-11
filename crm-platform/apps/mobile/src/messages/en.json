@@ -1,0 +1,39 @@
+{
+  "common": {
+    "loading": "Loading…",
+    "retry": "Try again",
+    "signOut": "Sign out",
+    "back": "Back"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "network": "Can't reach the server. Check your connection and try again.",
+    "timeout": "The server took too long to answer. Please try again.",
+    "outdatedApp": "This version of the app is out of date. Please update it.",
+    "tooManyRequests": "Too many attempts. Please wait a moment and try again."
+  },
+  "auth": {
+    "signInTitle": "Sign in",
+    "signInSubtitle": "Use the email and password of your account.",
+    "email": "Email",
+    "password": "Password",
+    "signInSubmit": "Sign in",
+    "emailInvalid": "Enter a valid email address.",
+    "passwordRequired": "Enter your password.",
+    "mfaTitle": "Two-step verification",
+    "mfaHint": "Enter the 6-digit code from your authenticator app.",
+    "mfaCode": "Verification code",
+    "mfaSubmit": "Verify",
+    "workspaceTitle": "Choose a workspace",
+    "workspaceHint": "Your account belongs to more than one workspace.",
+    "invalidCredentials": "The email or password is incorrect.",
+    "accountLocked": "This account is temporarily locked. Try again later.",
+    "accountSuspended": "This account has been suspended.",
+    "mfaInvalid": "That code is not correct. Try again.",
+    "mfaExpired": "The sign-in expired. Please start again."
+  },
+  "home": {
+    "welcome": "Hello, {{name}}",
+    "workspace": "Workspace: {{name}}"
+  }
+}

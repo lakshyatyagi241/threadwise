@@ -94,7 +94,10 @@
           "challengeExpired": "Phiên đăng nhập đó đã hết hạn. Hãy nhập lại mật khẩu.",
           "rateLimited": "Quá nhiều yêu cầu. Hãy đợi một lát rồi thử lại.",
           "unexpected": "Không thể đăng nhập cho bạn. Hãy thử lại sau giây lát.",
-          "lockedWait": "Quá nhiều lần thất bại. Hãy thử lại sau {minutes, plural, other {# phút}}."
+          "lockedWait": "Quá nhiều lần thất bại. Hãy thử lại sau {minutes, plural, other {# phút}}.",
+          "passkeyInvalid": "Không thể xác minh khóa truy cập đó. Hãy thử lại hoặc dùng mã.",
+          "passkeyCancelled": "Đăng nhập bằng khóa truy cập đã bị hủy hoặc hết thời gian. Hãy thử lại hoặc dùng mã.",
+          "passkeyFailed": "Thiết bị của bạn không cung cấp được khóa truy cập. Hãy thử lại hoặc dùng mã."
         },
         "captcha": {
           "loadFailed": "Không thể tải captcha. Hãy kiểm tra kết nối hoặc trình chặn nội dung, rồi thử lại.",
@@ -115,7 +118,9 @@
           "verifying": "Đang kiểm tra",
           "useRecovery": "Dùng mã khôi phục",
           "useAuthenticator": "Dùng ứng dụng xác thực",
-          "back": "Quay lại đăng nhập"
+          "back": "Quay lại đăng nhập",
+          "usePasskey": "Dùng khóa truy cập",
+          "passkeyWaiting": "Đang chờ khóa truy cập của bạn"
         }
       },
       "mfa": {
@@ -358,6 +363,14 @@
           "passwordRequireSymbol": {
             "label": "Yêu cầu ký hiệu",
             "short": "Ký hiệu"
+          },
+          "passwordBlocklistEnabled": {
+            "label": "Chặn mật khẩu phổ biến",
+            "hint": "Từ chối các mật khẩu phổ biến nhất, biến thể tương tự như P@ssw0rd, chuỗi phím trên bàn phím và mọi mật khẩu chứa tên hoặc email của người dùng."
+          },
+          "passwordBreachCheck": {
+            "label": "Chặn mật khẩu từng bị rò rỉ dữ liệu",
+            "hint": "Đối chiếu mật khẩu mới với danh sách công khai Pwned Passwords. Chỉ năm ký tự đầu tiên của mã băm rời khỏi máy chủ. Nếu không kết nối được dịch vụ, mật khẩu vẫn được chấp nhận."
           },
           "passwordMaxAgeDays": {
             "label": "Giới hạn tuổi mật khẩu (ngày)",

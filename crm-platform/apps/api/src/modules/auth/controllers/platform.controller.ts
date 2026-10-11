@@ -15,6 +15,11 @@ import {
   authPagesPatchSchema,
   logoutRequestSchema,
   mfaEnableRequestSchema,
+  mfaSetupRequestSchema,
+  passkeyLoginOptionsRequestSchema,
+  passkeyOptionsRequestSchema,
+  passkeyRegisterRequestSchema,
+  passkeyRemoveRequestSchema,
   mfaLoginRequestSchema,
   operatorLoginRequestSchema,
   otpSenderCreateSchema,
@@ -31,6 +36,11 @@ import {
   socialCaptchaSettingsPatchSchema,
   type AuthPagesPatch,
   type MfaEnableRequest,
+  type MfaSetupRequest,
+  type PasskeyLoginOptionsRequest,
+  type PasskeyOptionsRequest,
+  type PasskeyRegisterRequest,
+  type PasskeyRemoveRequest,
   type MfaLoginRequest,
   type OperatorLoginRequest,
   type OtpSenderCreate,
@@ -84,6 +94,17 @@ export class PlatformAuthController {
   }
 
   @Public()
+  @Post('login/mfa/webauthn-options')
+  @ApiOperation({
+    summary: 'Options for signing in with a passkey at the operator second-factor step',
+  })
+  async loginPasskeyOptions(
+    @Body(zodPipe(passkeyLoginOptionsRequestSchema)) body: PasskeyLoginOptionsRequest,
+  ) {
+    return this.operators.passkeyLoginOptions(body.challengeToken);
+  }
+
+  @Public()
   @Post('refresh')
   @ApiOperation({ summary: 'Rotate an operator refresh token' })
   async refresh(@Body(zodPipe(refreshRequestSchema)) body: z.infer<typeof refreshRequestSchema>) {
@@ -120,8 +141,8 @@ export class PlatformAuthController {
   @ActorKinds('platform_operator')
   @UseGuards(OperatorGuard)
   @AllowWhileGated()
-  async mfaSetup() {
-    return this.operators.mfaSetup();
+  async mfaSetup(@Body(zodPipe(mfaSetupRequestSchema)) body: MfaSetupRequest) {
+    return this.operators.mfaSetup(body.password);
   }
 
   @Post('mfa/enable')
@@ -129,7 +150,42 @@ export class PlatformAuthController {
   @UseGuards(OperatorGuard)
   @AllowWhileGated()
   async mfaEnable(@Body(zodPipe(mfaEnableRequestSchema)) body: MfaEnableRequest) {
-    return this.operators.mfaEnable(body.code);
+    return this.operators.mfaEnable(body.code, body.password);
+  }
+
+  @Get('passkeys')
+  @ActorKinds('platform_operator')
+  @UseGuards(OperatorGuard)
+  @AllowWhileGated()
+  async passkeys() {
+    return this.operators.listPasskeys();
+  }
+
+  @Post('passkeys/options')
+  @ActorKinds('platform_operator')
+  @UseGuards(OperatorGuard)
+  @AllowWhileGated()
+  async passkeyOptions(@Body(zodPipe(passkeyOptionsRequestSchema)) body: PasskeyOptionsRequest) {
+    return this.operators.passkeyOptions(body.password);
+  }
+
+  @Post('passkeys')
+  @ActorKinds('platform_operator')
+  @UseGuards(OperatorGuard)
+  @AllowWhileGated()
+  async passkeyRegister(@Body(zodPipe(passkeyRegisterRequestSchema)) body: PasskeyRegisterRequest) {
+    return this.operators.registerPasskey(body.response, body.name, body.password);
+  }
+
+  @Post('passkeys/:id/remove')
+  @ActorKinds('platform_operator')
+  @UseGuards(OperatorGuard)
+  @AllowWhileGated()
+  async passkeyRemove(
+    @Param('id') id: string,
+    @Body(zodPipe(passkeyRemoveRequestSchema)) body: PasskeyRemoveRequest,
+  ) {
+    return this.operators.removePasskey(id, body.password);
   }
 }
 

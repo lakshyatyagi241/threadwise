@@ -23,12 +23,20 @@ export interface SocialProfile {
 
 export interface SocialOAuthProvider {
   readonly name: SocialProviderName;
-  authorizeUrl(credentials: SocialCredentials, redirectUri: string, state: string): string;
+  /** True when the provider supports PKCE (RFC 7636, S256): the flow then sends a challenge and later the verifier. */
+  readonly pkce?: boolean;
+  authorizeUrl(
+    credentials: SocialCredentials,
+    redirectUri: string,
+    state: string,
+    codeChallenge?: string,
+  ): string;
   /** Exchanges the code and fetches the profile. Throws on any failure. */
   fetchProfile(
     credentials: SocialCredentials,
     redirectUri: string,
     code: string,
+    codeVerifier?: string,
   ): Promise<SocialProfile>;
 }
 

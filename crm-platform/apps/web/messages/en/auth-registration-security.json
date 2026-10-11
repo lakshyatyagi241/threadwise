@@ -198,6 +198,7 @@
         "emailUnverified": "Confirm your email address first.",
         "mfaInvalid": "That code is not valid. Check the code and try again.",
         "mfaExpired": "Your verification expired. Sign in again.",
+        "passkeyInvalid": "That passkey could not be verified. Try again, or use a code.",
         "otpInvalid": "That code is not correct. Try again.",
         "otpExpired": "That code has expired. Request a new one.",
         "otpTooMany": "Too many attempts. Request a new code.",
@@ -309,7 +310,11 @@
         "useRecovery": "Use a recovery code instead",
         "useApp": "Use the authenticator code instead",
         "back": "Back to sign in",
-        "expiresIn": "Verification expires in {time}"
+        "expiresIn": "Verification expires in {time}",
+        "usePasskey": "Use a passkey",
+        "passkeyWaiting": "Waiting for your passkey",
+        "passkeyCancelled": "Passkey sign-in was cancelled or timed out. Try again, or use a code.",
+        "passkeyFailed": "Your device could not provide the passkey. Try again, or use a code."
       },
       "signup": {
         "steps": {

@@ -49,7 +49,10 @@ import { SecurityPolicyService } from './platform/security-policy.service';
 import { TenantDirectory } from './platform/tenant-directory';
 import { SessionService } from './sessions/session.service';
 import { EpochService } from './sessions/epoch.service';
+import { PartnerAgentStatusService } from './sessions/partner-agent-status.service';
 import { MfaAttemptLimiter } from './support/mfa-attempts';
+import { AccountAttackGuard } from './security/account-attack.service';
+import { WebAuthnService } from './security/webauthn.service';
 import { AccountGateService } from './security/account-gate.service';
 import { AuthAuditService } from './security/auth-audit.service';
 import { CaptchaService } from './security/captcha.service';
@@ -101,6 +104,7 @@ import { TokenService } from './token.service';
     // sessions
     SessionService,
     EpochService,
+    PartnerAgentStatusService,
     // flows
     LoginService,
     LoginAlertService,
@@ -117,6 +121,8 @@ import { TokenService } from './token.service';
     // security services
     AuthAuditService,
     AccountGateService,
+    AccountAttackGuard,
+    WebAuthnService,
     OrgSuspensionService,
     CaptchaService,
     MfaService,
@@ -161,6 +167,7 @@ import { TokenService } from './token.service';
     ImpersonationService,
     SessionService,
     EpochService,
+    PartnerAgentStatusService,
     AccountGateService,
     OrgSuspensionService,
     PasswordService,

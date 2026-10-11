@@ -94,7 +94,10 @@
           "challengeExpired": "Diese Anmeldung ist abgelaufen. Geben Sie Ihr Passwort erneut ein.",
           "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
           "unexpected": "Die Anmeldung war nicht möglich. Versuchen Sie es gleich noch einmal.",
-          "lockedWait": "Zu viele fehlgeschlagene Versuche. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut."
+          "lockedWait": "Zu viele fehlgeschlagene Versuche. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut.",
+          "passkeyInvalid": "Dieser Passkey konnte nicht überprüft werden. Versuchen Sie es erneut oder verwenden Sie einen Code.",
+          "passkeyCancelled": "Die Anmeldung mit dem Passkey wurde abgebrochen oder ist abgelaufen. Versuchen Sie es erneut oder verwenden Sie einen Code.",
+          "passkeyFailed": "Ihr Gerät konnte den Passkey nicht bereitstellen. Versuchen Sie es erneut oder verwenden Sie einen Code."
         },
         "captcha": {
           "loadFailed": "Das Captcha konnte nicht geladen werden. Prüfen Sie Ihre Verbindung oder einen Inhaltsblocker und versuchen Sie es erneut.",
@@ -115,7 +118,9 @@
           "verifying": "Wird geprüft",
           "useRecovery": "Wiederherstellungscode verwenden",
           "useAuthenticator": "Authenticator-App verwenden",
-          "back": "Zurück zur Anmeldung"
+          "back": "Zurück zur Anmeldung",
+          "usePasskey": "Passkey verwenden",
+          "passkeyWaiting": "Warten auf Ihren Passkey"
         }
       },
       "mfa": {
@@ -358,6 +363,14 @@
           "passwordRequireSymbol": {
             "label": "Sonderzeichen verlangen",
             "short": "Sonderzeichen"
+          },
+          "passwordBlocklistEnabled": {
+            "label": "Häufige Passwörter blockieren",
+            "hint": "Lehnt die gängigsten Passwörter, ähnliche Varianten wie P@ssw0rd, Tastaturmuster und alles ab, was den Namen oder die E-Mail-Adresse der Person enthält."
+          },
+          "passwordBreachCheck": {
+            "label": "Passwörter aus Datenlecks blockieren",
+            "hint": "Prüft neue Passwörter anhand der öffentlichen Liste Pwned Passwords. Nur die ersten fünf Zeichen eines Hashes verlassen den Server. Ist der Dienst nicht erreichbar, wird das Passwort akzeptiert."
           },
           "passwordMaxAgeDays": {
             "label": "Höchstalter von Passwörtern (Tage)",

@@ -54,7 +54,10 @@
         "message": "Qualsiasi app o integrazione che usa questa chiave smetterà subito di funzionare. L'operazione non può essere annullata. Potrai creare una nuova chiave in seguito.",
         "accept": "Revoca",
         "cancel": "Annulla"
-      }
+      },
+      "fullAccess": "Accesso completo",
+      "fullAccessHint": "Questa chiave può usare ogni endpoint della API REST. Per limitare ciò che una chiave può fare, revocala e creane una nuova con «Limita questa chiave» attivato.",
+      "restricted": "Limitata"
     },
     "create": {
       "title": "Crea la tua chiave",
@@ -68,7 +71,14 @@
       "planLocked": "Il tuo piano non include l'API REST.",
       "errors": {
         "required": "Inserisci un nome per la chiave.",
-        "tooLong": "Il nome può avere al massimo 120 caratteri."
+        "tooLong": "Il nome può avere al massimo 120 caratteri.",
+        "noScopes": "Seleziona almeno uno scope o disattiva «Limita questa chiave»."
+      },
+      "restrict": {
+        "label": "Limita questa chiave",
+        "help": "Disattivato: la chiave ha accesso completo alla API REST. Attivato: può usare solo gli scope selezionati qui sotto.",
+        "scopes": "Scope consentiti",
+        "impliedByWrite": "Incluso nello scope di scrittura"
       }
     },
     "quickstart": {

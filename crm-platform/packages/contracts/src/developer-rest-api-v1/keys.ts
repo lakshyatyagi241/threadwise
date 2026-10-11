@@ -6,6 +6,7 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
 import { paginationQuerySchema } from '../common/pagination';
+import { API_SCOPES, apiScopeSchema } from './envelope';
 
 /** The console form allows 120 characters (Reference `DeveloperApiController@store`). */
 export const API_KEY_NAME_MAX = 120;
@@ -16,8 +17,13 @@ export const API_KEY_PREFIX = 'wsk_';
 export const apiKeyStatusSchema = z.enum(['active', 'revoked']);
 export type ApiKeyStatusValue = z.infer<typeof apiKeyStatusSchema>;
 
+/**
+ * `scopes` is the restriction picked in the console. Omitted or empty means full access (Reference parity, TW-API-008): the console form
+ * refuses "restrict" with nothing picked, so an empty list is never sent for a key the person meant to restrict.
+ */
 export const createApiKeySchema = z.object({
   name: z.string().trim().min(1).max(API_KEY_NAME_MAX),
+  scopes: z.array(apiScopeSchema).max(API_SCOPES.length).optional(),
 });
 export type CreateApiKeyInput = z.infer<typeof createApiKeySchema>;
 
@@ -27,6 +33,8 @@ export const apiKeyResponseSchema = z.object({
   name: z.string(),
   prefix: z.string(),
   status: apiKeyStatusSchema,
+  /** The scopes the key is restricted to. Empty is full access. */
+  scopes: z.array(apiScopeSchema),
   lastUsedAt: z.string().datetime().nullable(),
   expiresAt: z.string().datetime().nullable(),
   revokedAt: z.string().datetime().nullable(),
