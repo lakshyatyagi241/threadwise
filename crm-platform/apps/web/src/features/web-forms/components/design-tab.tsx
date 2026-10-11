@@ -4,7 +4,7 @@ import { useId, useState, type ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
 import { Alert, Button, Field, Select, cn } from '@crm/ui';
 import { DesignColorField, useBufferedText } from './design-color-field';
-import { PreviewFrame } from './preview-frame';
+import { PreviewFrame, type PreviewDevice } from './preview-frame';
 import type { BuilderTabProps } from './builder-types';
 import {
   DEFAULT_THEME,
@@ -231,7 +231,7 @@ export function DesignTab({ draft, setDraft, canEdit }: BuilderTabProps) {
   const uid = useId();
   const theme = draft.theme;
   const locked = !canEdit;
-  const [device, setDevice] = useState<'desktop' | 'mobile'>('desktop');
+  const [device, setDevice] = useState<PreviewDevice>('desktop');
   const [previewMode, setPreviewMode] = useState<'light' | 'dark'>('light');
   const patch = (p: Partial<ThemeTokens>) => setDraft((d) => withTheme(d, p));
   const preset = presetOf(theme);
@@ -559,10 +559,11 @@ export function DesignTab({ draft, setDraft, canEdit }: BuilderTabProps) {
               hideLegend
               value={device}
               onChange={setDevice}
-              columns="grid-cols-2"
+              columns="grid-cols-3"
               options={[
                 { value: 'desktop', label: t('preview.desktop') },
                 { value: 'mobile', label: t('preview.mobile') },
+                { value: 'popup', label: t('preview.popup') },
               ]}
             />
             <Choice

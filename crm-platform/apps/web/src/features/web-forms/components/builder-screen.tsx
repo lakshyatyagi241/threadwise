@@ -37,7 +37,7 @@ import type { CrmProperty, Definition, FormDetail, FormLiveSettings } from '../l
 import type { BuilderTabProps } from './builder-types';
 import { BuildTab } from './build-tab';
 import { DesignTab } from './design-tab';
-import { PreviewFrame } from './preview-frame';
+import { PreviewDeviceToggle, PreviewFrame, type PreviewDevice } from './preview-frame';
 import { SettingsTab } from './settings-tab';
 import { ShareTab } from './share-tab';
 
@@ -106,6 +106,7 @@ function Builder({ initial }: { initial: FormDetail }) {
   > | null>(null);
   const [versionsOpen, setVersionsOpen] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewDevice, setPreviewDevice] = useState<PreviewDevice>('desktop');
   const [restoring, setRestoring] = useState<number | null>(null);
   // Counts every edit, so a save that finishes after the person kept typing never overwrites what they typed since.
   const edits = useRef(0);
@@ -430,8 +431,11 @@ function Builder({ initial }: { initial: FormDetail }) {
           closeLabel={t('close')}
           size="lg"
         >
+          <div className="mb-3">
+            <PreviewDeviceToggle value={previewDevice} onChange={setPreviewDevice} />
+          </div>
           <div className="h-[70dvh] min-h-[420px]">
-            <PreviewFrame form={work.draft} device="desktop" />
+            <PreviewFrame form={work.draft} device={previewDevice} />
           </div>
         </Modal>
       )}

@@ -106,7 +106,8 @@
         "light": "Licht",
         "dark": "Donker",
         "schemeHint": "De kleurmodus staat op Licht, dus er is geen donkere versie om te bekijken.",
-        "frameTitle": "Live voorbeeld van het formulier"
+        "frameTitle": "Live voorbeeld van het formulier",
+        "popup": "Pop-up"
       }
     }
   }

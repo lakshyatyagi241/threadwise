@@ -1,0 +1,42 @@
+{
+  "web-forms": {
+    "popup": {
+      "title": "Tampilkan sebagai popup",
+      "description": "Buka formulir dalam popup di situs web Anda sendiri, bukan menempatkannya di dalam halaman. Pilih kapan popup terbuka, lalu salin kodenya.",
+      "trigger": "Buka popup",
+      "triggers": {
+        "delay": "Setelah jeda waktu",
+        "scroll_down": "Saat pengunjung menggulir ke bawah",
+        "scroll_up": "Saat pengunjung menggulir kembali ke atas",
+        "click": "Saat seseorang mengeklik tombol"
+      },
+      "triggerHints": {
+        "delay": "Terbuka setelah waktu tertentu sejak halaman dimuat.",
+        "scroll_down": "Terbuka saat pengunjung sudah menggulir halaman sejauh ini ke bawah.",
+        "scroll_up": "Terbuka saat pengunjung sudah membaca halaman ke bawah lalu menggulir kembali ke atas, tanda bahwa mereka mungkin akan pergi.",
+        "click": "Hanya terbuka saat seseorang mengeklik tombol atau tautan yang memuat kode di bawah."
+      },
+      "delay": "Detik sebelum terbuka",
+      "delayHint": "Dari {min} hingga {max}.",
+      "scroll": "Seberapa jauh ke bawah halaman (persen)",
+      "scrollHint": "Dari {min} hingga {max}.",
+      "position": "Posisi tampil",
+      "positions": {
+        "center": "Tengah layar, halaman diredupkan",
+        "bottom_right": "Sudut bawah, halaman tidak diredupkan"
+      },
+      "days": "Tampilkan lagi setelah (hari)",
+      "daysHint": "0 menampilkannya di setiap kunjungan. Setelah seseorang mengirim formulir, popup tidak akan ditampilkan lagi kepadanya.",
+      "note": "Tambahkan situs web Anda ke Situs web yang diizinkan di bawah terlebih dahulu, atau popup akan tetap kosong.",
+      "code": {
+        "title": "Kode popup",
+        "description": "Tempel di tempat popup harus dimuat, biasanya tepat sebelum tag penutup body."
+      },
+      "button": {
+        "title": "Tombol untuk membukanya",
+        "description": "Tambahkan ke halaman mana pun agar orang bisa membuka popup sendiri. Berfungsi dengan semua pemicu."
+      },
+      "copy": "Salin kode"
+    }
+  }
+}

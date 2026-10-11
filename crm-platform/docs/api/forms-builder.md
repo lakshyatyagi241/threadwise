@@ -199,6 +199,17 @@ actor of the workspace the key proved:
 An unexpected error rolls the whole transaction back, is recorded `failed` in a transaction of its own (`form.submission_failed`), the sender gets a
 generic 500, and the **same idempotency key** retried recovers it.
 
+**Popup mode.** An element with `data-forms-mode="popup"` opens the same hosted page in a dialog instead of inline. Options are attributes the Share tab
+writes (the loader clamps each to the same limits): `data-forms-trigger` = `delay` (default) | `scroll_down` | `scroll_up` | `click`;
+`data-forms-delay` seconds 0 to 600 (default 5); `data-forms-scroll` percent 5 to 100 (default 50); `data-forms-position` = `center` (dims the page,
+click outside closes) | `bottom_right` (no dimming); `data-forms-days` 0 to 365 (default 7; 0 = every visit); `data-forms-title`, `data-forms-close` (labels).
+`scroll_up` opens after the visitor went at least 200px down and then back up by 80px or more. Any element with `data-forms-open="<publicKey>"`, or
+`FormsPopup[<publicKey>].open()`, opens it on demand whatever the trigger. The dialog has `role="dialog"` and `aria-modal`, closes on its button, Escape or
+(centre only) the backdrop, locks page scroll while centred, returns focus on close, rises from the bottom as a full-width sheet at 480px and below, and
+uses the same one-way, origin-checked message channel. The "seen" state is in `localStorage` (`forms:popup:<key>`: an expiry time, or `done` after a
+submit); a blocked storage only means it may show again. The Design tab and the Preview dialog have a **Popup** preview (the page dimmed, a dialog, a close
+button).
+
 ### Spam and abuse controls
 
 - **Honeypot** (`form.honeypot`, default on): any text in the input named by `honeypotField` is a bot. Silent 201, **nothing stored**, a counter

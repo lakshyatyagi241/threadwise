@@ -106,7 +106,8 @@
         "light": "Claro",
         "dark": "Oscuro",
         "schemeHint": "El modo de color está en Claro, así que no hay versión oscura que mostrar.",
-        "frameTitle": "Vista previa en directo del formulario"
+        "frameTitle": "Vista previa en directo del formulario",
+        "popup": "Ventana emergente"
       }
     }
   }

@@ -1,0 +1,42 @@
+{
+  "web-forms": {
+    "popup": {
+      "title": "Tonen als pop-up",
+      "description": "Open het formulier in een pop-up op je eigen website in plaats van het in de pagina te plaatsen. Kies wanneer het opent en kopieer dan de code.",
+      "trigger": "De pop-up openen",
+      "triggers": {
+        "delay": "Na een vertraging",
+        "scroll_down": "Wanneer de bezoeker omlaag scrolt",
+        "scroll_up": "Wanneer de bezoeker weer omhoog scrolt",
+        "click": "Wanneer iemand op een knop klikt"
+      },
+      "triggerHints": {
+        "delay": "Opent na een ingestelde tijd nadat de pagina is geladen.",
+        "scroll_down": "Opent zodra de bezoeker zo ver naar beneden op de pagina is gescrold.",
+        "scroll_up": "Opent wanneer de bezoeker de pagina heeft gelezen en dan weer omhoog scrolt, een teken dat hij misschien weggaat.",
+        "click": "Opent alleen wanneer iemand klikt op een knop of link met de hieronder getoonde code."
+      },
+      "delay": "Seconden voordat hij opent",
+      "delayHint": "Van {min} tot {max}.",
+      "scroll": "Hoe ver omlaag op de pagina (procent)",
+      "scrollHint": "Van {min} tot {max}.",
+      "position": "Waar hij verschijnt",
+      "positions": {
+        "center": "Midden van het scherm, met een verduisterde pagina",
+        "bottom_right": "Hoek rechtsonder, zonder de pagina te verduisteren"
+      },
+      "days": "Opnieuw tonen na (dagen)",
+      "daysHint": "0 toont hem bij elk bezoek. Zodra iemand het formulier verstuurt, zien ze het nooit meer.",
+      "note": "Voeg eerst je website toe aan Toegestane websites hieronder, anders blijft de pop-up leeg.",
+      "code": {
+        "title": "Pop-upcode",
+        "description": "Plak dit waar de pop-up moet laden, meestal vlak voor de afsluitende body-tag."
+      },
+      "button": {
+        "title": "Een knop die hem opent",
+        "description": "Voeg dit toe aan een pagina zodat mensen de pop-up zelf kunnen openen. Werkt met elke trigger."
+      },
+      "copy": "Code kopiëren"
+    }
+  }
+}

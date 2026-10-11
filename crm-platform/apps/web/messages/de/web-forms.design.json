@@ -106,7 +106,8 @@
         "light": "Hell",
         "dark": "Dunkel",
         "schemeHint": "Der Farbmodus ist auf Hell gesetzt, daher gibt es keine dunkle Version zur Vorschau.",
-        "frameTitle": "Live-Vorschau des Formulars"
+        "frameTitle": "Live-Vorschau des Formulars",
+        "popup": "Popup"
       }
     }
   }

@@ -5,7 +5,18 @@ summary: Build web forms, publish them on a link or your own site, and turn ever
 area: campaigns
 order: 15
 documents: [nav:forms]
-keywords: [forms, form builder, lead capture, contact form, embed, hosted form, submissions, web form, sign up form]
+keywords:
+  [
+    forms,
+    form builder,
+    lead capture,
+    contact form,
+    embed,
+    hosted form,
+    submissions,
+    web form,
+    sign up form,
+  ]
 ---
 
 ## What it is for

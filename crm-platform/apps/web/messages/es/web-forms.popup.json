@@ -1,0 +1,42 @@
+{
+  "web-forms": {
+    "popup": {
+      "title": "Mostrar como ventana emergente",
+      "description": "Abre el formulario en una ventana emergente en tu propio sitio web en lugar de colocarlo en la página. Elige cuándo se abre y copia el código.",
+      "trigger": "Abrir la ventana emergente",
+      "triggers": {
+        "delay": "Tras un retraso",
+        "scroll_down": "Cuando el visitante se desplaza hacia abajo",
+        "scroll_up": "Cuando el visitante vuelve a subir",
+        "click": "Cuando alguien hace clic en un botón"
+      },
+      "triggerHints": {
+        "delay": "Se abre un tiempo determinado después de cargar la página.",
+        "scroll_down": "Se abre cuando el visitante ha bajado hasta este punto de la página.",
+        "scroll_up": "Se abre cuando el visitante ha leído la página hacia abajo y vuelve a subir, señal de que quizá se va.",
+        "click": "Se abre solo cuando alguien hace clic en un botón o enlace que lleva el código que se muestra abajo."
+      },
+      "delay": "Segundos antes de abrirse",
+      "delayHint": "De {min} a {max}.",
+      "scroll": "Hasta dónde bajar en la página (porcentaje)",
+      "scrollHint": "De {min} a {max}.",
+      "position": "Dónde aparece",
+      "positions": {
+        "center": "Centro de la pantalla, oscureciendo la página",
+        "bottom_right": "Esquina inferior, sin oscurecer la página"
+      },
+      "days": "Volver a mostrar después de (días)",
+      "daysHint": "0 la muestra en cada visita. Cuando alguien envía el formulario, no se le vuelve a mostrar.",
+      "note": "Primero añade tu sitio web a Sitios web permitidos más abajo, o la ventana emergente se quedará en blanco.",
+      "code": {
+        "title": "Código de la ventana emergente",
+        "description": "Pégalo donde deba cargarse la ventana emergente, normalmente justo antes de la etiqueta de cierre body."
+      },
+      "button": {
+        "title": "Un botón que la abre",
+        "description": "Añade esto a cualquier página para que las personas abran la ventana emergente por sí mismas. Funciona con todos los activadores."
+      },
+      "copy": "Copiar código"
+    }
+  }
+}
