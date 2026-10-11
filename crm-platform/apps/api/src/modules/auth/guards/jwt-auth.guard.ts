@@ -135,6 +135,10 @@ export class JwtAuthGuard implements CanActivate {
     orgId: number,
     subjectId: number,
   ): Promise<void> {
+    // Revoked, but the Redis tombstone write failed: refuse regardless of what Redis says (or whether it is up).
+    if (this.sessions.isRevocationPending(sid)) {
+      throw AppError.unauthenticated('Invalid or expired token');
+    }
     let revoked: string | null = null;
     let lastActivity: string | null = null;
     let capMarker: string | null = null;

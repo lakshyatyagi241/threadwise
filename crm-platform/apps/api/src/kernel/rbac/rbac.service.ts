@@ -14,6 +14,14 @@ export type GrantSet = Map<string, Grant>;
 
 const CACHE_TTL_SECONDS = 600;
 
+/** Sets the cached roles version only if the key is empty or holds a lower one, so a slow reader cannot put an old version back. */
+const RAISE_VERSION_LUA = `
+local c = redis.call('GET', KEYS[1])
+if (not c) or (tonumber(c) < tonumber(ARGV[1])) then
+  redis.call('SET', KEYS[1], ARGV[1], 'EX', tonumber(ARGV[2]))
+end
+return 1`;
+
 /**
  * RBAC v3.
  *
@@ -79,14 +87,43 @@ export class RbacService {
     return { allowed: true, scope: grant.scope };
   }
 
-  /** Called after any role/grant change. Invalidates the whole org at once. */
+  /**
+   * Called after any role/grant change, and only AFTER the change has committed: bumping inside the transaction lets a
+   * concurrent request cache the old grants under the new version. Invalidation must not fail silently (AZ-012): the
+   * cached version is deleted with a retry, then overwritten with the new version, and the error is surfaced only when
+   * the cache can be neither cleared nor overwritten.
+   */
   async bumpRolesVersion(orgId: number): Promise<void> {
-    await this.db.privileged(async (tx) => {
-      await tx.execute(
-        sql`UPDATE organizations SET roles_version = roles_version + 1 WHERE id = ${orgId}`,
+    const version = await this.db.privileged(async (tx) => {
+      const res = await tx.execute(
+        sql`UPDATE organizations SET roles_version = roles_version + 1 WHERE id = ${orgId} RETURNING roles_version`,
       );
+      return Number((res.rows[0] as { roles_version?: number } | undefined)?.roles_version ?? 0);
     });
-    await this.redis.del(`rbac:version:${orgId}`).catch(() => undefined);
+    const key = `rbac:version:${orgId}`;
+    let deleted = false;
+    for (let attempt = 0; attempt < 3 && !deleted; attempt++) {
+      try {
+        await this.redis.del(key);
+        deleted = true;
+      } catch (err) {
+        this.logger.warn({ err, orgId, attempt }, 'rbac version cache delete failed');
+      }
+    }
+    // Put the new version in place and never move it backwards: a reader that loaded the old version before this bump
+    // may still be about to write it.
+    try {
+      await this.redis.eval(RAISE_VERSION_LUA, 1, key, String(version), String(CACHE_TTL_SECONDS));
+    } catch (err) {
+      if (!deleted) {
+        this.logger.error(
+          { err, orgId, version },
+          'rbac version cache could not be invalidated: removed grants may stay live',
+        );
+        throw new Error('Role change saved, but the permission cache could not be refreshed.');
+      }
+      this.logger.warn({ err, orgId }, 'rbac version cache could not be primed');
+    }
   }
 
   private async rolesVersion(orgId: number): Promise<number> {
@@ -98,7 +135,9 @@ export class RbacService {
       tx.execute(sql`SELECT roles_version FROM organizations WHERE id = ${orgId}`),
     );
     const version = Number((result.rows[0] as { roles_version?: number })?.roles_version ?? 1);
-    await this.redis.setex(cacheKey, CACHE_TTL_SECONDS, String(version)).catch(() => undefined);
+    await this.redis
+      .eval(RAISE_VERSION_LUA, 1, cacheKey, String(version), String(CACHE_TTL_SECONDS))
+      .catch(() => undefined);
     return version;
   }
 

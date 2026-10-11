@@ -4,6 +4,7 @@ import type { Tx } from '@crm/db';
 import { ERROR_CODES, type RecordScope } from '@crm/contracts';
 import { AppError } from '../../common/errors/app-error';
 import { RbacService, type GrantSet } from '../../kernel/rbac/rbac.service';
+import { AuthAuditService } from '../auth';
 
 /** The five WaDesk workspace roles, by preset `system_key`, and their rank in the ladder (WD-RBAC-024). */
 export const PRESET_RANK: Readonly<Record<string, number>> = {
@@ -16,6 +17,9 @@ export const PRESET_RANK: Readonly<Record<string, number>> = {
 
 /** Only an Owner may grant or revoke these two (WD-RBAC-026 rule 1). */
 const OWNER_GRANTED = new Set(['admin', 'workspace_admin']);
+
+/** First key of the per-workspace advisory lock that serializes owner/role changes. */
+const OWNER_LOCK_NAMESPACE = 7301;
 
 const SCOPE_RANK: Record<RecordScope, number> = { own: 0, team: 1, all: 2 };
 
@@ -44,7 +48,39 @@ export interface RoleChange {
  */
 @Injectable()
 export class WorkspaceRoleRulesService {
-  constructor(private readonly rbac: RbacService) {}
+  constructor(
+    private readonly rbac: RbacService,
+    private readonly securityAudit: AuthAuditService,
+  ) {}
+
+  /**
+   * Runs a privileged role/member action and, when a rule refuses it, records a sanitized denial event in its own
+   * transaction (the refused transaction rolls back, so nothing inside it survives). Only the action name, the error code
+   * and the status are stored: no request body, token or password. The error is rethrown unchanged.
+   */
+  async withDenialAudit<T>(action: string, run: () => Promise<T>): Promise<T> {
+    try {
+      return await run();
+    } catch (err) {
+      if (
+        err instanceof AppError &&
+        (err.getStatus() === HttpStatus.FORBIDDEN || String(err.code).startsWith('RBAC_'))
+      ) {
+        await this.securityAudit.recordStandalone({
+          event: 'rbac.action_denied',
+          status: 'warning',
+          actorType: 'user',
+          payload: { action, errorCode: err.code, status: err.getStatus() },
+        });
+      }
+      throw err;
+    }
+  }
+
+  /** Owner changes in one workspace run one at a time; the checks after the lock read what the previous change committed. */
+  private async lockOwners(tx: Tx, orgId: number): Promise<void> {
+    await tx.execute(sql`SELECT pg_advisory_xact_lock(${OWNER_LOCK_NAMESPACE}, ${orgId})`);
+  }
 
   async assertCanChangeRoles(tx: Tx, change: RoleChange): Promise<void> {
     const { orgId, actorUserId, targetUserId } = change;
@@ -53,6 +89,7 @@ export class WorkspaceRoleRulesService {
     const added = [...next].filter((id) => !current.has(id));
     const removed = [...current].filter((id) => !next.has(id));
     if (added.length === 0 && removed.length === 0) return;
+    await this.lockOwners(tx, orgId);
 
     if (actorUserId === targetUserId) {
       throw new AppError(
@@ -174,6 +211,7 @@ export class WorkspaceRoleRulesService {
     targetUserId: number,
     targetRoleIds: number[],
   ): Promise<void> {
+    await this.lockOwners(tx, orgId);
     if (actorUserId === targetUserId) {
       throw new AppError(
         ERROR_CODES.RBAC_SELF_DEACTIVATE,

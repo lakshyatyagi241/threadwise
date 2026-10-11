@@ -87,6 +87,10 @@ export class RolesService {
   }
 
   async create(input: CreateRoleInput): Promise<RoleResponse> {
+    return this.roleRules.withDenialAudit('role.create', () => this.createInTx(input));
+  }
+
+  private async createInTx(input: CreateRoleInput): Promise<RoleResponse> {
     const ctx = RequestContextStore.require();
 
     return this.db.tx(async (tx) => {
@@ -125,9 +129,13 @@ export class RolesService {
   }
 
   async update(uuid: string, input: UpdateRoleInput): Promise<RoleResponse> {
+    return this.roleRules.withDenialAudit('role.update', () => this.updateInTx(uuid, input));
+  }
+
+  private async updateInTx(uuid: string, input: UpdateRoleInput): Promise<RoleResponse> {
     const ctx = RequestContextStore.require();
 
-    return this.db.tx(async (tx) => {
+    const result = await this.db.tx(async (tx) => {
       const existing = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!existing) throw AppError.notFound('Role', uuid);
       if (existing.isLocked) {
@@ -169,8 +177,6 @@ export class RolesService {
 
       if (input.grants !== undefined) {
         await this.repo.replaceGrants(tx, ctx.orgId, existing.id, input.grants);
-        // Every user holding this role has a stale cached grant set now.
-        await this.rbac.bumpRolesVersion(ctx.orgId);
       }
 
       await this.audit.record(tx, { module: MODULE_KEY, recordId: existing.id, action: 'update' });
@@ -183,11 +189,21 @@ export class RolesService {
         (await this.views(tx, ctx.orgId, ctx.userId!, [after!])).get(after!.id)!,
       );
     });
+    // Every user holding this role has a stale cached grant set now. Bump only once the change is committed, so a request
+    // racing the edit cannot cache the old grants under the new version.
+    if (input.grants !== undefined) await this.rbac.bumpRolesVersion(ctx.orgId);
+    return result;
   }
 
   async remove(uuid: string): Promise<void> {
     const ctx = RequestContextStore.require();
 
+    await this.roleRules.withDenialAudit('role.delete', () => this.removeInTx(uuid, ctx.orgId));
+    await this.rbac.bumpRolesVersion(ctx.orgId);
+  }
+
+  private async removeInTx(uuid: string, orgId: number): Promise<void> {
+    const ctx = { orgId };
     await this.db.tx(async (tx) => {
       const existing = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!existing) throw AppError.notFound('Role', uuid);
@@ -211,7 +227,6 @@ export class RolesService {
 
       await this.audit.record(tx, { module: MODULE_KEY, recordId: existing.id, action: 'delete' });
       await this.repo.deleteById(tx, ctx.orgId, existing.id);
-      await this.rbac.bumpRolesVersion(ctx.orgId);
     });
   }
 
