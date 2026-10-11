@@ -1,4 +1,4 @@
-# Sign in, see the home screen, sign out. The minimum that must pass before every store release (docs/mobile/testing.md).
+# Sign in, see the dashboard, sign out. The minimum that must pass before every store release (docs/mobile/testing.md).
 #
 #   maestro test apps/mobile/.maestro/smoke-sign-in.yaml \
 #     -e APP_ID=ai.geta.crm.dev -e E2E_EMAIL=<seeded email> -e E2E_PASSWORD=<seeded password>
@@ -17,11 +17,13 @@ appId: ${APP_ID}
 - hideKeyboard
 - tapOn:
     id: 'sign-in-submit'
-- assertVisible: 'Hello, .*'
-- assertVisible: 'Workspace: .*'
+- assertVisible: 'Good (morning|afternoon|evening).*'
+- assertVisible: 'Messages sent.*'
 # The session survives a restart.
 - stopApp
 - launchApp
-- assertVisible: 'Hello, .*'
+- assertVisible: 'Good (morning|afternoon|evening).*'
+- scrollUntilVisible:
+    element: 'Sign out'
 - tapOn: 'Sign out'
 - assertVisible: 'Sign in'

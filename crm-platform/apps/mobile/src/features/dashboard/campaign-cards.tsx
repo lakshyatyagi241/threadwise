@@ -141,7 +141,7 @@ export function TemplatesCard({ data }: { data: DashWidgets['templates'] }) {
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <View style={styles.stat}>
-      <Text variant="caption" muted numberOfLines={1}>
+      <Text variant="caption" muted numberOfLines={2}>
         {label}
       </Text>
       <Text variant="label">{value}</Text>

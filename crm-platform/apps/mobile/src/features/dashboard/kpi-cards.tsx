@@ -6,7 +6,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ProgressBar } from '@/components/ui/progress-bar';
 import { Text } from '@/components/ui/text';
-import { compact } from '@/lib/format/numbers';
+import { compact, formatCount } from '@/lib/format/numbers';
 import { radius, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 import { formatMoney } from './format';
@@ -36,7 +36,7 @@ export function SentCard({
           {summary ? <Trend delta={summary.sentDeltaPct} /> : null}
         </View>
         <Text variant="metric">
-          {summary ? summary.current.sent.toLocaleString(i18n.language) : WAITING}
+          {summary ? formatCount(summary.current.sent, i18n.language) : WAITING}
         </Text>
         {summary ? (
           <>
@@ -115,7 +115,7 @@ export function ContactsCard({ data }: { data: DashWidgets['contacts'] | undefin
           </Text>
           {data ? <Trend delta={data.deltaPct} /> : null}
         </View>
-        <Text variant="metric">{data ? data.total.toLocaleString(i18n.language) : WAITING}</Text>
+        <Text variant="metric">{data ? formatCount(data.total, i18n.language) : WAITING}</Text>
         {rows.map(([key, count, tone]) => (
           <View key={key} style={styles.barRow}>
             <Text variant="caption" muted style={styles.barLabel}>
@@ -124,9 +124,9 @@ export function ContactsCard({ data }: { data: DashWidgets['contacts'] | undefin
             <View style={styles.fill}>
               <ProgressBar percent={(count / denominator) * 100} tone={tone} />
             </View>
-            <Text variant="caption" style={styles.barCount}>
-              {count}
-            </Text>
+            <View style={styles.barCount}>
+              <Text variant="caption">{count}</Text>
+            </View>
           </View>
         ))}
       </View>
@@ -163,7 +163,7 @@ export function AutopilotCard() {
   const { colors } = useTheme();
   return (
     <View testID="card-autopilot" style={[styles.autopilot, { backgroundColor: colors.brand }]}>
-      <Text variant="caption" color="onBrandMuted" style={styles.kicker}>
+      <Text variant="overline" color="onBrandMuted">
         {t('dashboard.autopilot.kicker')}
       </Text>
       <Text variant="heading" color="onBrand" accessibilityRole="header">
@@ -188,7 +188,6 @@ const styles = StyleSheet.create({
   },
   barRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   barLabel: { width: 84 },
-  barCount: { width: 40, textAlign: 'right' },
+  barCount: { width: 40, alignItems: 'flex-end' },
   autopilot: { borderRadius: radius.lg, padding: spacing.xl, gap: spacing.sm },
-  kicker: { textTransform: 'uppercase', letterSpacing: 1.5 },
 });

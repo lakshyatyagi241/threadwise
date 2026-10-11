@@ -1,4 +1,14 @@
-import { barLength, clampPercent, compact, directionOf, isGood, niceMax, signed } from './numbers';
+import {
+  barLength,
+  clampPercent,
+  compact,
+  directionOf,
+  formatCount,
+  isGood,
+  latinDigits,
+  niceMax,
+  signed,
+} from './numbers';
 
 describe('compact', () => {
   it('writes small numbers as they are and large ones with k and M', () => {
@@ -60,5 +70,19 @@ describe('signed, directionOf and isGood', () => {
     expect(isGood(0)).toBeNull();
     expect(isGood(-5, true)).toBe(true);
     expect(isGood(5, true)).toBe(false);
+  });
+});
+
+describe('formatCount and latinDigits', () => {
+  it('groups a count for the language but always with ordinary digits', () => {
+    expect(formatCount(1250, 'en')).toBe('1,250');
+    expect(formatCount(1250, 'hi')).toBe('1,250');
+    // Marathi would write ‘१,२५०’ by default; a screen mixes it with plain numbers, so it is kept to plain digits.
+    expect(formatCount(1250, 'mr')).toBe('1,250');
+    expect(latinDigits('mr')).toBe('mr-u-nu-latn');
+  });
+
+  it('falls back to the bare number for a language tag the runtime rejects', () => {
+    expect(formatCount(1250, 'not a tag')).toBe('1250');
   });
 });

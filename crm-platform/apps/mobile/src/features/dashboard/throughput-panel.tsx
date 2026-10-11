@@ -28,11 +28,11 @@ export function ThroughputPanel({ range, summary, throughput, failed, timezone }
 
   const series: BarSeries[] = throughput
     ? [
-        { name: t('dashboard.throughput.sent'), values: throughput.sent, color: 'primary' },
+        { name: t('dashboard.throughput.sent'), values: throughput.sent, color: 'chartSent' },
         {
           name: t('dashboard.throughput.delivered'),
           values: throughput.delivered,
-          color: 'success',
+          color: 'chartDelivered',
         },
         { name: t('dashboard.throughput.failed'), values: throughput.failed, color: 'danger' },
       ]

@@ -337,6 +337,11 @@
       "forbidden": "Your role ({{role}}) does not have access to the dashboard.",
       "generic": "The numbers could not be loaded. Try again in a moment.",
       "locked": "Your plan does not include analytics."
+    },
+    "greetingNoName": {
+      "morning": "Good morning.",
+      "afternoon": "Good afternoon.",
+      "evening": "Good evening."
     }
   }
 }

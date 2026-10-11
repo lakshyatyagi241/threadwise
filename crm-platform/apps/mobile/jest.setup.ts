@@ -1,8 +1,20 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
+import { notifyManager } from '@tanstack/react-query';
 import { configure } from '@testing-library/react-native';
+import { initI18n } from '@/lib/i18n';
 
 // A cold transform on a busy CI runner can take longer than the 1 s default to render the first screen.
 configure({ asyncUtilTimeout: 5000 });
+
+// The query library tells a screen that a request has finished one zero-delay timer later, which in a test lands outside act() and
+// prints a warning. Delivering it in the same microtask turn keeps it inside the act() or waitFor() the test is already in.
+notifyManager.setScheduler((callback) => queueMicrotask(callback));
+
+// Every piece of text reads the app's language, so each test file starts with English ready. A test that needs another language
+// switches to it and puts English back afterwards.
+beforeAll(async () => {
+  await initI18n('en');
+});
 
 // Native modules have no implementation under Node: replace each with the smallest honest fake.
 

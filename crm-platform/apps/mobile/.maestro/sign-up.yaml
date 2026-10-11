@@ -1,4 +1,4 @@
-# Create an account from the app, land on the home screen, sign out, and sign in again with the new account.
+# Create an account from the app, land on the dashboard, sign out, and sign in again with the new account.
 #
 #   maestro test apps/mobile/.maestro/sign-up.yaml \
 #     -e APP_ID=ai.geta.crm.dev -e E2E_FULL_NAME="Mobile Tester" -e E2E_EMAIL=<a NEW address> -e E2E_WORKSPACE="Mobile Test Co" \
@@ -38,9 +38,13 @@ appId: ${APP_ID}
 - tapOn:
     id: 'sign-up-submit'
 # The account exists and the person is signed in.
-- assertVisible: 'Hello, .*'
-- assertVisible: 'Workspace: .*'
+- assertVisible: 'Good (morning|afternoon|evening).*'
+- assertVisible: 'Messages sent.*'
+# A new workspace has not finished its setup (that part is on the web), and the dashboard says so.
+- assertVisible: 'Your workspace setup is not finished.*'
 # Sign out, and come back in with the same details.
+- scrollUntilVisible:
+    element: 'Sign out'
 - tapOn: 'Sign out'
 - assertVisible: 'Welcome back'
 - tapOn: 'you@company.com'
@@ -50,4 +54,4 @@ appId: ${APP_ID}
 - hideKeyboard
 - tapOn:
     id: 'sign-in-submit'
-- assertVisible: 'Hello, .*'
+- assertVisible: 'Good (morning|afternoon|evening).*'

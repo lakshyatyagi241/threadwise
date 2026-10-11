@@ -19,3 +19,10 @@ export function matchLocale(tag: string | null | undefined): Locale | null {
   const base = tag.toLowerCase().split(/[-_]/)[0] ?? '';
   return isLocale(base) ? base : null;
 }
+
+/**
+ * Whether the language is written in a script that is shaped rather than set letter by letter (Devanagari: Hindi, Marathi). Such text
+ * needs a little room at the end of a shrink-wrapped line (see `Text`) and must not be letter-spaced, which pulls its marks apart.
+ */
+export const usesShapedScript = (language: string | null | undefined): boolean =>
+  !(language ?? DEFAULT_LOCALE).toLowerCase().startsWith(DEFAULT_LOCALE);

@@ -92,3 +92,13 @@ describe('small helpers', () => {
     expect(isPlanLocked(new ApiError(402, 'OTHER', 'no'))).toBe(false);
   });
 });
+
+describe('Marathi keeps ordinary digits', () => {
+  it('writes the date, the chart labels and money with plain numbers', () => {
+    const instant = new Date('2026-10-10T09:00:00.000Z');
+    expect(longDate(instant, 'mr', 'UTC')).toContain('10');
+    expect(bucketLabel('2026-10-10T09:00:00.000Z', true, 'mr', 'UTC')).toBe('09:00');
+    expect(bucketLabel('2026-10-10T09:00:00.000Z', false, 'mr', 'UTC')).toMatch(/10/);
+    expect(formatMoney(2500, 'INR', 'mr')).toContain('2,500.00');
+  });
+});

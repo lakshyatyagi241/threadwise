@@ -12,15 +12,6 @@ interface Props extends Omit<PressableProps, 'children' | 'style'> {
   align?: 'center' | 'start';
 }
 
-/**
- * Android measures a shrink-wrapped text with one set of font metrics and draws it with another. For some scripts (Devanagari in
- * semi-bold, seen with Marathi and Hindi) the drawn text is a fraction of a pixel wider than its box, so the last word wraps onto a
- * second line the button has no room for and disappears. One trailing no-break space gives every label that little bit of slack;
- * it is invisible, and the spoken name (`accessibilityLabel`) is the label without it. Built from its code so that no invisible
- * character sits in the source.
- */
-const SLACK = String.fromCharCode(0xa0);
-
 export function Button({
   label,
   variant = 'primary',
@@ -62,7 +53,7 @@ export function Button({
             { color: textColor },
           ]}
         >
-          {label + SLACK}
+          {label}
         </Text>
       )}
     </Pressable>

@@ -41,7 +41,7 @@ export function InboxCard({ data, now }: { data: DashWidgets['inbox']; now: Date
         </Text>
       ) : (
         <View style={styles.list}>
-          <Text variant="caption" muted style={styles.upper}>
+          <Text variant="overline" muted>
             {t('dashboard.inbox.recent')}
           </Text>
           {data.recent.map((conversation) => (
@@ -122,7 +122,7 @@ export function FlowsCard({ data }: { data: DashWidgets['flows'] }) {
                 <Text variant="label" numberOfLines={1}>
                   {flow.name}
                 </Text>
-                <Text variant="caption" muted numberOfLines={1}>
+                <Text variant="caption" muted numberOfLines={2}>
                   {t('dashboard.flows.meta', {
                     trigger: humanize(flow.trigger),
                     steps: flow.steps,
@@ -185,7 +185,6 @@ export function ActivityCard({ data, now }: { data: DashWidgets['activity']; now
 const styles = StyleSheet.create({
   fill: { flex: 1 },
   list: { gap: spacing.md },
-  upper: { textTransform: 'uppercase', letterSpacing: 1 },
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   conversation: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   avatar: {

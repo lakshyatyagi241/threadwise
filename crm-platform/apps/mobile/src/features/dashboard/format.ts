@@ -1,4 +1,5 @@
 import { ApiError } from '@/lib/api';
+import { latinDigits } from '@/lib/format/numbers';
 
 /** Display helpers for the dashboard. Pure. */
 
@@ -26,7 +27,9 @@ export function greetingKey(now: Date, timezone: string): Greeting {
 export function longDate(now: Date, locale: string, timezone: string): string {
   const options = { weekday: 'long', month: 'long', day: 'numeric' } as const;
   try {
-    return new Intl.DateTimeFormat(locale, { timeZone: timezone, ...options }).format(now);
+    return new Intl.DateTimeFormat(latinDigits(locale), { timeZone: timezone, ...options }).format(
+      now,
+    );
   } catch {
     return now.toDateString();
   }
@@ -43,7 +46,7 @@ export function bucketLabel(
     ? ({ hour: '2-digit', minute: '2-digit', hourCycle: 'h23' } as const)
     : ({ month: 'short', day: 'numeric' } as const);
   try {
-    return new Intl.DateTimeFormat(locale, { timeZone: timezone, ...options }).format(
+    return new Intl.DateTimeFormat(latinDigits(locale), { timeZone: timezone, ...options }).format(
       new Date(iso),
     );
   } catch {
@@ -54,7 +57,7 @@ export function bucketLabel(
 /** An amount in a currency, grouped for the locale; a currency the runtime does not know falls back to the code and the number. */
 export function formatMoney(amount: number, currency: string, locale: string, digits = 2): string {
   try {
-    return new Intl.NumberFormat(locale, {
+    return new Intl.NumberFormat(latinDigits(locale), {
       style: 'currency',
       currency,
       minimumFractionDigits: digits,

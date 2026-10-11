@@ -34,5 +34,5 @@ export function PipelineCard({ data }: { data: NonNullable<DashWidgets['pipeline
 
 const styles = StyleSheet.create({
   grid: { flexDirection: 'row', flexWrap: 'wrap', rowGap: spacing.lg },
-  cell: { width: '50%', gap: 2 },
+  cell: { width: '50%', gap: 2, paddingEnd: spacing.md },
 });

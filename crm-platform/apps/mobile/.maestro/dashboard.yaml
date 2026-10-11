@@ -1,0 +1,41 @@
+# Sign in and use the dashboard: the cards are there, the date range changes every card, and signing out works from the bottom.
+#
+#   maestro test apps/mobile/.maestro/dashboard.yaml \
+#     -e APP_ID=ai.geta.crm.dev -e E2E_EMAIL=<seeded email> -e E2E_PASSWORD=<seeded password>
+#
+# Credentials come from -e, never from this file. Needs an emulator or simulator set to English, a development or preview build
+# installed, and the local API running; the account must not have MFA enabled and must be allowed to see the dashboard (an owner
+# or admin). The numbers themselves are not asserted: a fresh workspace shows zeros everywhere and that is still a pass.
+# NOT YET RUN: no Maestro was available when this was written.
+appId: ${APP_ID}
+---
+- launchApp:
+    clearState: true
+- tapOn: 'Email'
+- inputText: ${E2E_EMAIL}
+- tapOn: 'Password'
+- inputText: ${E2E_PASSWORD}
+- hideKeyboard
+- tapOn:
+    id: 'sign-in-submit'
+# The greeting and the first cards, for the default window of seven days.
+- assertVisible: 'Good (morning|afternoon|evening).*'
+- assertVisible: 'Messages sent · 7d'
+- assertVisible: 'Read rate'
+# Another window changes the cards' titles at once.
+- tapOn: 'Last 30 days'
+- assertVisible: 'Messages sent · 30d'
+- tapOn: 'Last 24 hours'
+- assertVisible: 'Messages sent · 24h'
+# Further down: the chart, and the funnel.
+- scrollUntilVisible:
+    element: 'Message throughput'
+- scrollUntilVisible:
+    element: 'Engagement funnel'
+- scrollUntilVisible:
+    element: 'Integrations'
+# Sign out is the last thing on the screen.
+- scrollUntilVisible:
+    element: 'Sign out'
+- tapOn: 'Sign out'
+- assertVisible: 'Sign in'

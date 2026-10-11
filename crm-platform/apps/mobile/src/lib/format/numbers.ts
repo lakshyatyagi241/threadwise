@@ -1,5 +1,20 @@
 /** Number helpers for figures and charts. Pure. */
 
+/**
+ * The locale tag with ordinary (Latin) digits. Marathi would otherwise print ‘१,२५०’ for one figure while the rest of the screen,
+ * which is written with plain numbers, says 1250: one screen, one kind of digit. The words and the grouping stay in the language.
+ */
+export const latinDigits = (language: string): string => `${language}-u-nu-latn`;
+
+/** A count grouped for the language, with ordinary digits. */
+export function formatCount(n: number, language: string): string {
+  try {
+    return n.toLocaleString(latinDigits(language));
+  } catch {
+    return String(n);
+  }
+}
+
 /** 1,234 -> "1.2k", 1,500,000 -> "1.5M"; below a thousand the number as written. */
 export function compact(n: number): string {
   const abs = Math.abs(n);

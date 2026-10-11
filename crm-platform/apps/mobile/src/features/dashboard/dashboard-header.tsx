@@ -57,13 +57,15 @@ export function DashboardHeader({
   return (
     <FadeIn style={styles.stack}>
       <View style={styles.kickerRow}>
-        <Text variant="caption" color="onBrandMuted" style={styles.kicker}>
+        <Text variant="overline" color="onBrandMuted">
           {t('dashboard.kicker')}
         </Text>
         {updatedAt > 0 ? <LiveChip updatedAt={updatedAt} /> : null}
       </View>
       <Text variant="title" color="onBrand" accessibilityRole="header">
-        {t(`dashboard.greeting.${greetingKey(now, timezone)}`, { name })}{' '}
+        {name
+          ? t(`dashboard.greeting.${greetingKey(now, timezone)}`, { name })
+          : t(`dashboard.greetingNoName.${greetingKey(now, timezone)}`)}{' '}
         <Text variant="title" color="brandAccent">
           {running > 0 ? t('dashboard.running', { count: running }) : t('dashboard.calm')}
         </Text>
@@ -98,7 +100,6 @@ const styles = StyleSheet.create({
     columnGap: spacing.md,
     rowGap: spacing.xs,
   },
-  kicker: { textTransform: 'uppercase', letterSpacing: 1.5 },
   chip: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
   dot: { width: 8, height: 8, borderRadius: radius.pill },
 });

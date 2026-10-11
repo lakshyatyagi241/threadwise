@@ -61,14 +61,14 @@ export function FunnelCard({ funnel, subtitle }: { funnel: DashFunnel; subtitle:
         ))}
       </View>
       <View style={[styles.section, { borderColor: colors.border }]}>
-        <Text variant="caption" muted style={styles.upper}>
+        <Text variant="overline" muted>
           {t('dashboard.funnel.activity.title')}
         </Text>
         <Text testID="funnel-activity">{summary}</Text>
       </View>
       {comparison ? (
         <View style={styles.compare} testID="funnel-comparison">
-          <Text variant="caption" muted style={styles.upper}>
+          <Text variant="overline" muted>
             {t('dashboard.funnel.comparison.title')}
           </Text>
           <View style={styles.row}>
@@ -89,5 +89,4 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   section: { borderTopWidth: 1, paddingTop: spacing.md, gap: spacing.xs },
   compare: { gap: spacing.xs },
-  upper: { textTransform: 'uppercase', letterSpacing: 1 },
 });

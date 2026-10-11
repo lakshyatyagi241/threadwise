@@ -169,7 +169,9 @@ describe('DashboardScreen', () => {
     const { queryClient } = show();
     await loaded(queryClient);
     expect(summaryCall).toHaveBeenLastCalledWith('7d', expect.anything());
-    fireEvent.press(screen.getByRole('radio', { name: 'Last 30 days' }));
+    await act(async () => {
+      fireEvent.press(screen.getByRole('radio', { name: 'Last 30 days' }));
+    });
     await waitFor(() => expect(summaryCall).toHaveBeenLastCalledWith('30d', expect.anything()));
     await waitFor(() => expect(queryClient.isFetching()).toBe(0));
     expect(throughputCall).toHaveBeenLastCalledWith('30d', expect.anything());

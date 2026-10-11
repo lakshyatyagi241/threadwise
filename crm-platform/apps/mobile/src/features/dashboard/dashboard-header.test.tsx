@@ -30,6 +30,12 @@ describe('DashboardHeader', () => {
     expect(screen.getByText('Operator dashboard')).toBeTruthy();
   });
 
+  it('greets without a name rather than leaving a gap while the name is not known yet', () => {
+    renderApp(<DashboardHeader {...base} name="" />);
+    expect(screen.getByRole('header', { name: /Good morning\. Workspace is calm\./ })).toBeTruthy();
+    expect(screen.queryByText(/Good morning, /)).toBeNull();
+  });
+
   it('says how many campaigns are sending', () => {
     renderApp(<DashboardHeader {...base} running={1} />);
     expect(screen.getByRole('header', { name: /1 campaign is running\./ })).toBeTruthy();

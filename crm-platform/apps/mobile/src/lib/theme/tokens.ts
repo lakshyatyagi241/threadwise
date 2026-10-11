@@ -5,7 +5,7 @@
  * Reading guide: `border` is for dividers, `borderStrong` for the edge of a control (a field, a checkbox: 3:1 against the page, as
  * WCAG asks of anything a person must find to use), `brand*` colours are the deep band behind the logo on the sign-in and sign-up screens, `*Soft` colours are the
  * quiet backgrounds of banners, badges and selected rows (always paired with the strong colour of the same name for the text on them),
- * `success` is a change for the better, a connected thing or a finished job, `instagram` is that channel's accent.
+ * `success` is a change for the better, a connected thing or a finished job, `instagram` is that channel's accent, `chartSent` and `chartDelivered` are two greens far enough apart in lightness to tell apart side by side (3:1 against the card).
  */
 export const palette = {
   light: {
@@ -31,8 +31,10 @@ export const palette = {
     warningSoft: '#FFF3DC',
     success: '#1B7A43',
     successSoft: '#E4F4EA',
-    instagram: '#C13584',
+    instagram: '#A82A74',
     instagramSoft: '#FBE8F2',
+    chartSent: '#0B6B4D',
+    chartDelivered: '#3FA37A',
     focus: '#1A73E8',
   },
   dark: {
@@ -60,6 +62,8 @@ export const palette = {
     successSoft: '#16301F',
     instagram: '#F06AB0',
     instagramSoft: '#3A1A2B',
+    chartSent: '#3DB88D',
+    chartDelivered: '#A6E8C6',
     focus: '#8AB4F8',
   },
 } as const;
@@ -83,6 +87,8 @@ export const typography = {
   caption: { fontSize: 13, lineHeight: 18, fontWeight: '400' },
   /** The title of a panel inside a screen: between a label and a heading, so cards do not all shout. */
   subheading: { fontSize: 16, lineHeight: 22, fontWeight: '700' },
+  /** A small line above a group of things: upper case and spaced out in English (see `Text`). */
+  overline: { fontSize: 12, lineHeight: 16, fontWeight: '600' },
   /** The one big number of a card. */
   metric: { fontSize: 32, lineHeight: 38, fontWeight: '700' },
 } as const;

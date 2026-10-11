@@ -1,4 +1,4 @@
-import { LOCALES, matchLocale } from './locales';
+import { usesShapedScript, LOCALES, matchLocale } from './locales';
 
 describe('matchLocale', () => {
   it('accepts supported tags as they are', () => {
@@ -22,5 +22,20 @@ describe('matchLocale', () => {
 
   it('lists English, Hindi and Marathi', () => {
     expect([...LOCALES]).toEqual(['en', 'hi', 'mr']);
+  });
+});
+
+describe('usesShapedScript', () => {
+  it('is false for English and for a phone that has not said', () => {
+    expect(usesShapedScript('en')).toBe(false);
+    expect(usesShapedScript('en-GB')).toBe(false);
+    expect(usesShapedScript(undefined)).toBe(false);
+    expect(usesShapedScript(null)).toBe(false);
+  });
+
+  it('is true for Hindi and Marathi', () => {
+    expect(usesShapedScript('hi')).toBe(true);
+    expect(usesShapedScript('mr')).toBe(true);
+    expect(usesShapedScript('hi-IN')).toBe(true);
   });
 });

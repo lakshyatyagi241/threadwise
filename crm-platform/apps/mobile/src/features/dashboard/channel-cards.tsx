@@ -6,6 +6,7 @@ import { Panel } from '@/components/ui/panel';
 import { Text } from '@/components/ui/text';
 import { radius, spacing, type ThemeColors } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
+import { formatCount } from '@/lib/format/numbers';
 import { followersLabel } from './format';
 
 const STATE_TONE = { online: 'success', connecting: 'warning', offline: 'danger' } as const;
@@ -82,10 +83,10 @@ export function InstagramBand({ data }: { data: NonNullable<DashWidgets['instagr
   const { t, i18n } = useTranslation();
   const { colors } = useTheme();
   const tiles = [
-    ['dashboard.instagram.tile.needReply', data.needsReply.toLocaleString(i18n.language)],
-    ['dashboard.instagram.tile.openChats', data.open.toLocaleString(i18n.language)],
-    ['dashboard.instagram.tile.dmsIn', data.dmsIn7d.toLocaleString(i18n.language)],
-    ['dashboard.instagram.tile.dmsOut', data.dmsOut7d.toLocaleString(i18n.language)],
+    ['dashboard.instagram.tile.needReply', formatCount(data.needsReply, i18n.language)],
+    ['dashboard.instagram.tile.openChats', formatCount(data.open, i18n.language)],
+    ['dashboard.instagram.tile.dmsIn', formatCount(data.dmsIn7d, i18n.language)],
+    ['dashboard.instagram.tile.dmsOut', formatCount(data.dmsOut7d, i18n.language)],
     ['dashboard.instagram.tile.followers', followersLabel(data.followers)],
   ] as const;
   return (
