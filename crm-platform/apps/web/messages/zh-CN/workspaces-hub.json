@@ -78,7 +78,8 @@
       "noMatchMessage": "请更改搜索或筛选条件以查看更多内容。",
       "loadMore": "加载更多",
       "loadingMore": "正在加载更多",
-      "loaded": "正在显示 {count, plural, other {# 个工作区}}"
+      "loaded": "正在显示 {count, plural, other {# 个工作区}}",
+      "retentionLink": "数据保留"
     },
     "cell": {
       "suspended": "已暂停",
@@ -252,6 +253,147 @@
         "text": "此工作区的工单、会话和支持记录。",
         "open": "打开支持记录",
         "openTickets": "{count, plural, other {# 个未关闭的工单}}"
+      }
+    },
+    "retention": {
+      "crumb": "数据保留",
+      "title": "工作区数据保留",
+      "subtitle": "按闲置时间从长到短列出闲置工作区：各自的归档和清除时间、已发送的提醒，以及保护或恢复的操作。",
+      "backToList": "返回工作区",
+      "deniedTitle": "无权访问",
+      "tableLabel": "工作区数据保留",
+      "status": {
+        "active": "活跃",
+        "archived": "已归档",
+        "suspended": "已暂停",
+        "deleted": "已被所有者删除"
+      },
+      "filters": {
+        "label": "筛选",
+        "status": "状态",
+        "allStatuses": "所有状态",
+        "minDays": "最少闲置天数",
+        "neverDeleteOnly": "仅显示永不删除",
+        "clear": "清除筛选"
+      },
+      "columns": {
+        "workspace": "工作区",
+        "status": "状态",
+        "daysInactive": "闲置天数",
+        "lastActivity": "最后活动",
+        "archiveOn": "归档日期",
+        "eraseOn": "清除日期",
+        "reminders": "已发送提醒",
+        "protection": "保护",
+        "actions": "操作"
+      },
+      "remindersArchive": "归档 {n}/3",
+      "remindersErase": "清除 {n}/3",
+      "emptyTitle": "没有可显示的工作区",
+      "emptyMessage": "工作区创建后会显示在这里。",
+      "noMatchTitle": "没有匹配的工作区",
+      "noMatchMessage": "更改筛选条件以查看更多。",
+      "loadMore": "加载更多",
+      "loadingMore": "正在加载更多",
+      "loaded": "{count, plural, other {已显示 # 个工作区}}",
+      "badge": {
+        "neverDelete": "永不删除",
+        "legalHold": "法律保留",
+        "paidPlan": "付费套餐（豁免）",
+        "paidPlanHint": "使用有效付费套餐的工作区不会因闲置而被归档。",
+        "until": "截至 {date}",
+        "indefinite": "无到期时间",
+        "by": "由 {who} 设置"
+      },
+      "actions": {
+        "menu": "{name} 的保留操作",
+        "history": "历史记录",
+        "policy": "更改时间设置",
+        "exemptOn": "永不删除",
+        "exemptOff": "取消永不删除",
+        "restore": "恢复",
+        "holdOn": "设置法律保留",
+        "holdOff": "解除法律保留"
+      },
+      "event": {
+        "reminder_sent": "已发送提醒",
+        "archived": "已归档",
+        "deleted": "已清除",
+        "delete_blocked": "清除被阻止",
+        "restored": "已恢复",
+        "policy_changed": "时间设置已更改",
+        "exemption_set": "已开启永不删除",
+        "exemption_cleared": "已取消永不删除",
+        "legal_hold_set": "已设置法律保留",
+        "legal_hold_cleared": "已解除法律保留"
+      },
+      "history": {
+        "title": "{name} 的历史记录",
+        "emptyTitle": "暂无历史记录",
+        "emptyMessage": "提醒和更改会显示在这里。",
+        "stage": "步骤",
+        "stages": {
+          "archive": "归档",
+          "delete": "清除"
+        },
+        "reminderNo": "提醒 {n}",
+        "daysInactive": "{count, plural, other {闲置 # 天}}",
+        "by": "操作者",
+        "system": "系统",
+        "reason": "原因"
+      },
+      "dialog": {
+        "reason": "原因",
+        "reasonHint": "5 到 500 个字符。将保存在合规日志中。",
+        "errors": {
+          "reasonShort": "请至少输入 5 个字符。",
+          "reasonLong": "最多输入 500 个字符。",
+          "archiveWhole": "请输入整数天数。",
+          "archiveMin": "至少闲置 60 天后归档。",
+          "archiveMax": "最多闲置 3650 天后归档。",
+          "eraseWhole": "请输入整数天数。",
+          "eraseMin": "至少闲置 120 天后清除。",
+          "eraseMax": "最多闲置 7300 天后清除。",
+          "gap": "清除必须在归档至少 {days} 天之后。",
+          "noChange": "请至少更改一项时间设置。",
+          "untilPast": "请选择未来的日期。"
+        },
+        "mode": "时间设置来源",
+        "days": "天数",
+        "useDefault": "使用平台默认值",
+        "custom": "自定义天数",
+        "policyTitle": "更改 {name} 的时间设置",
+        "policyMessage": "工作区被归档和被清除前的闲置天数。提醒时间会随之调整。",
+        "archiveAfter": "归档前闲置（天）",
+        "archiveHint": "平台默认 {default} 天；至少 {min} 天。",
+        "eraseAfter": "清除前闲置（天）",
+        "eraseHint": "平台默认 {default} 天；至少 {min} 天。",
+        "policyConfirm": "保存时间设置",
+        "policyDone": "已保存 {name} 的时间设置。",
+        "exemptOnTitle": "将 {name} 设为永不删除？",
+        "exemptOnMessage": "开启后，该工作区不会因闲置而被归档或清除。",
+        "exemptOnConfirm": "开启永不删除",
+        "exemptOnDone": "{name} 将永不删除。",
+        "exemptOffTitle": "取消 {name} 的永不删除？",
+        "exemptOffMessage": "该工作区将重新遵循其时间设置，可能被归档和清除。",
+        "exemptOffConfirm": "取消永不删除",
+        "exemptOffDone": "{name} 已重新遵循其时间设置。",
+        "until": "复核日期（可选）",
+        "untilHint": "保护将于此日期结束，以便重新复核。留空表示无到期时间。",
+        "restoreTitle": "恢复 {name}？",
+        "restoreMessage": "该工作区将变为活跃，成员可再次登录，闲置计时重新开始。",
+        "restoreConfirm": "恢复工作区",
+        "restoreDone": "{name} 已恢复。",
+        "holdOnTitle": "对 {name} 设置法律保留？",
+        "holdOnMessage": "保留期间，无论时间设置如何，该工作区都不会被归档或清除。",
+        "holdOnSure": "我了解这将停止所有归档和清除。",
+        "holdOnConfirm": "设置法律保留",
+        "holdOnDone": "已对 {name} 设置法律保留。",
+        "holdOffTitle": "解除 {name} 的法律保留？",
+        "holdOffMessage": "该工作区将重新遵循其时间设置，可能被归档和清除。",
+        "holdOffSure": "我确认可以解除保留。",
+        "holdOffConfirm": "解除法律保留",
+        "holdOffDone": "已解除 {name} 的法律保留。"
       }
     }
   }

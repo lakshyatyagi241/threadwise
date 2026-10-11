@@ -153,6 +153,18 @@ export const envSchema = z.object({
    * stand-in for tests and demos that embeds by shared words and needs no key or network. Declared here because only declared
    * keys of a `.env` file reach `process.env`. A production process that sets `fixture` does not boot.
    */
+  // Workspace inactivity lifecycle (ADR-0028). Three independent switches, all safe by default.
+  /** Master switch for the daily sweep. Off = no reminders, archives or erasures. */
+  ORG_LIFECYCLE_ENABLED: booleanish.default(false),
+  /** On = decisions are only logged, nothing changes. Turn the sweep on in dry run first. */
+  ORG_LIFECYCLE_DRY_RUN: booleanish.default(true),
+  /** Erasure is a second switch: archiving can be live while erasing is not. */
+  ORG_LIFECYCLE_DELETE_ENABLED: booleanish.default(false),
+  /**
+   * How long the platform keeps its own sales records (orders) after a workspace is erased, without the buyer's identity. Tax law sets
+   * the period; 8 years covers India's GST rules. Confirm with legal before changing.
+   */
+  FINANCIAL_RECORD_RETENTION_YEARS: z.coerce.number().int().min(1).max(15).default(8),
   FAQ_AI_DRIVER: z.enum(['openrouter', 'fixture']).optional(),
   /** Overrides OpenRouter's base URL for the FAQ engine (a gateway, a local stub). */
   FAQ_OPENROUTER_BASE_URL: z.string().url().optional(),

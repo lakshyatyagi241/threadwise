@@ -9,6 +9,9 @@ import { InvitationsService } from './invitations.service';
 import { MembersController } from './members.controller';
 import { MembersRepository } from './members.repository';
 import { MembersService } from './members.service';
+import { LifecycleRepository } from './lifecycle/lifecycle.repository';
+import { LifecycleService } from './lifecycle/lifecycle.service';
+import { PlatformWorkspaceLifecycleController } from './platform-workspace-lifecycle.controller';
 import { PlatformWorkspacesController } from './platform-workspaces.controller';
 import { PlatformWorkspacesRepository } from './platform-workspaces.repository';
 import { PlatformWorkspacesService } from './platform-workspaces.service';
@@ -35,6 +38,7 @@ import { TeamsService } from './teams.service';
     TeamsController,
     InvitationsController,
     PlatformWorkspacesController,
+    PlatformWorkspaceLifecycleController,
   ],
   providers: [
     MembersRepository,
@@ -44,7 +48,9 @@ import { TeamsService } from './teams.service';
     InvitationsService,
     PlatformWorkspacesRepository,
     PlatformWorkspacesService,
+    LifecycleRepository,
+    LifecycleService,
   ],
-  exports: [MembersService, TeamsService, PlatformWorkspacesService],
+  exports: [MembersService, TeamsService, PlatformWorkspacesService, LifecycleService],
 })
 export class WorkspacesTeamsTenancyModule {}

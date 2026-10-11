@@ -85,18 +85,18 @@ afterAll(async () => {
 });
 
 describe('seed (TW-RBAC-001, 003)', () => {
-  it('has the six Reference roles and 107 permissions, with the seeded matrix', async () => {
+  it('has the six Reference roles and 109 permissions, with the seeded matrix', async () => {
     const roles = platformRoleListResponseSchema.parse((await sup('get', '/roles')).body);
     const count = Object.fromEntries(roles.data.map((r) => [r.name, r.permissionCount]));
     expect(count).toMatchObject({
-      'Super Admin': 107,
-      Admin: 107,
+      'Super Admin': 109,
+      Admin: 108,
       Manager: 42,
       User: 22,
       'Platform Support': 9,
       Auditor: 4,
     });
-    expect(roles.kpis.totalPermissions).toBe(107);
+    expect(roles.kpis.totalPermissions).toBe(109);
     expect(roles.kpis.systemRoles).toBe(2);
     expect(roles.data.find((r) => r.name === 'Super Admin')).toMatchObject({
       isLocked: true,
@@ -353,7 +353,7 @@ describe('edit role (TW-RBAC-007)', () => {
       rowVersion: superRole.rowVersion,
     });
     expect(same.status, JSON.stringify(same.body)).toBe(200);
-    expect(platformRoleDetailSchema.parse(same.body).permissionCount).toBe(107);
+    expect(platformRoleDetailSchema.parse(same.body).permissionCount).toBe(109);
   });
 
   it('is enforced by the database even if the service is bypassed', async () => {
@@ -394,7 +394,7 @@ describe('duplicate role (TW-RBAC-008)', () => {
       (await sup('post', `/roles/${(await roleByName('Super Admin')).id}/duplicate`)).body,
     );
     expect(copy.isLocked).toBe(false);
-    expect(copy.permissionCount).toBe(107);
+    expect(copy.permissionCount).toBe(109);
     expect((await sup('delete', `/roles/${copy.id}`)).status).toBe(200);
   });
 });
@@ -572,7 +572,7 @@ describe('permission catalogue (TW-RBAC-011..013)', () => {
     expect(
       platformRoleDetailSchema.parse((await sup('get', `/roles/${superRole.id}`)).body)
         .permissionCount,
-    ).toBe(107);
+    ).toBe(109);
   });
 
   it('lets an operator who only manages roles read the catalogue for the role editor', async () => {
@@ -637,7 +637,7 @@ describe('staff role assignment (TW-RBAC-021) and the Super Admin tier (TW-RBAC-
     const support = staff.data.find((s) => s.email === 'support@platform.test')!;
     const original = support.roles.map((r) => r.id);
 
-    // The support operator becomes an Admin (all 107 keys, so role.manage) but is not a Super Admin.
+    // The support operator becomes an Admin (every key except the Super Admin-only legal hold, so role.manage) but is not a Super Admin.
     expect(
       (await sup('put', `/staff/${support.id}/roles`).send({ roleIds: [admin.id] })).status,
     ).toBe(200);

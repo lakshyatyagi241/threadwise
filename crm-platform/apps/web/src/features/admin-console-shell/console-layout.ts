@@ -172,6 +172,7 @@ export const NOT_IN_MENU: Readonly<Record<string, string>> = {
   'wallet/workspaces': 'legacy address, redirects to the Workspaces tab',
   'whatsapp-providers/assignments': 'legacy address, redirects to the Workspaces tab',
   'workspaces/[id]': 'a workspace, opened from the Workspaces tab',
+  'workspaces/retention': 'the inactivity lifecycle (ADR-0028), opened from the Workspaces tab',
   'account/security': 'opened from "Your account" and the account menu',
   notifications: 'opened from the notification bell',
   'ai-keys': 'legacy address, redirects to /admin/api-keys',

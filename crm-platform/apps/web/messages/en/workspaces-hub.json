@@ -78,7 +78,8 @@
       "noMatchMessage": "Change the search or the filters to see more.",
       "loadMore": "Load more",
       "loadingMore": "Loading more",
-      "loaded": "{count, plural, one {# workspace} other {# workspaces}} shown"
+      "loaded": "{count, plural, one {# workspace} other {# workspaces}} shown",
+      "retentionLink": "Retention"
     },
     "cell": {
       "suspended": "Suspended",
@@ -252,6 +253,147 @@
         "text": "Tickets, conversations and the support history of this workspace.",
         "open": "Open the support record",
         "openTickets": "{count, plural, one {# open ticket} other {# open tickets}}"
+      }
+    },
+    "retention": {
+      "crumb": "Retention",
+      "title": "Workspace retention",
+      "subtitle": "Idle workspaces, most idle first: when each is archived and erased, the reminders sent, and the controls to protect or restore one.",
+      "backToList": "Back to workspaces",
+      "deniedTitle": "No access",
+      "tableLabel": "Workspace retention",
+      "status": {
+        "active": "Active",
+        "archived": "Archived",
+        "suspended": "Suspended",
+        "deleted": "Deleted by owner"
+      },
+      "filters": {
+        "label": "Filters",
+        "status": "Status",
+        "allStatuses": "All statuses",
+        "minDays": "Minimum days inactive",
+        "neverDeleteOnly": "Never delete only",
+        "clear": "Clear filters"
+      },
+      "columns": {
+        "workspace": "Workspace",
+        "status": "Status",
+        "daysInactive": "Days inactive",
+        "lastActivity": "Last activity",
+        "archiveOn": "Archive on",
+        "eraseOn": "Erase on",
+        "reminders": "Reminders sent",
+        "protection": "Protection",
+        "actions": "Actions"
+      },
+      "remindersArchive": "Archive {n}/3",
+      "remindersErase": "Erase {n}/3",
+      "emptyTitle": "No workspaces to show",
+      "emptyMessage": "Workspaces appear here once they exist.",
+      "noMatchTitle": "No workspace matches",
+      "noMatchMessage": "Change the filters to see more.",
+      "loadMore": "Load more",
+      "loadingMore": "Loading more",
+      "loaded": "{count, plural, one {# workspace} other {# workspaces}} shown",
+      "badge": {
+        "neverDelete": "Never delete",
+        "legalHold": "Legal hold",
+        "paidPlan": "Paid plan (exempt)",
+        "paidPlanHint": "A workspace on an active paid plan is never archived for inactivity.",
+        "until": "Until {date}",
+        "indefinite": "No expiry",
+        "by": "Set by {who}"
+      },
+      "actions": {
+        "menu": "Retention actions for {name}",
+        "history": "History",
+        "policy": "Change timings",
+        "exemptOn": "Never delete",
+        "exemptOff": "Clear never delete",
+        "restore": "Restore",
+        "holdOn": "Place legal hold",
+        "holdOff": "Lift legal hold"
+      },
+      "event": {
+        "reminder_sent": "Reminder sent",
+        "archived": "Archived",
+        "deleted": "Erased",
+        "delete_blocked": "Erase blocked",
+        "restored": "Restored",
+        "policy_changed": "Timings changed",
+        "exemption_set": "Never delete turned on",
+        "exemption_cleared": "Never delete cleared",
+        "legal_hold_set": "Legal hold placed",
+        "legal_hold_cleared": "Legal hold lifted"
+      },
+      "history": {
+        "title": "History of {name}",
+        "emptyTitle": "No history yet",
+        "emptyMessage": "Reminders and changes appear here.",
+        "stage": "Step",
+        "stages": {
+          "archive": "Archive",
+          "delete": "Erase"
+        },
+        "reminderNo": "reminder {n}",
+        "daysInactive": "{count, plural, one {# day inactive} other {# days inactive}}",
+        "by": "By",
+        "system": "System",
+        "reason": "Reason"
+      },
+      "dialog": {
+        "reason": "Reason",
+        "reasonHint": "5 to 500 characters. It is kept in the compliance log.",
+        "errors": {
+          "reasonShort": "Write at least 5 characters.",
+          "reasonLong": "Use at most 500 characters.",
+          "archiveWhole": "Enter a whole number of days.",
+          "archiveMin": "Archive after at least 60 days.",
+          "archiveMax": "Archive after at most 3650 days.",
+          "eraseWhole": "Enter a whole number of days.",
+          "eraseMin": "Erase after at least 120 days.",
+          "eraseMax": "Erase after at most 7300 days.",
+          "gap": "Erase must come at least {days} days after archive.",
+          "noChange": "Change at least one timing.",
+          "untilPast": "Pick a date in the future."
+        },
+        "mode": "Timing source",
+        "days": "Days",
+        "useDefault": "Use platform default",
+        "custom": "Custom days",
+        "policyTitle": "Change timings for {name}",
+        "policyMessage": "Days of inactivity before the workspace is archived and before it is erased. The reminders move with them.",
+        "archiveAfter": "Archive after (days)",
+        "archiveHint": "Platform default {default} days; at least {min}.",
+        "eraseAfter": "Erase after (days)",
+        "eraseHint": "Platform default {default} days; at least {min}.",
+        "policyConfirm": "Save timings",
+        "policyDone": "Timings saved for {name}.",
+        "exemptOnTitle": "Never delete {name}?",
+        "exemptOnMessage": "The workspace is never archived or erased for inactivity while this is on.",
+        "exemptOnConfirm": "Turn on never delete",
+        "exemptOnDone": "{name} will never be deleted.",
+        "exemptOffTitle": "Clear never delete for {name}?",
+        "exemptOffMessage": "The workspace follows its timings again and can be archived and erased.",
+        "exemptOffConfirm": "Clear never delete",
+        "exemptOffDone": "{name} follows its timings again.",
+        "until": "Review on (optional)",
+        "untilHint": "The protection ends on this date so it is looked at again. Leave empty for no expiry.",
+        "restoreTitle": "Restore {name}?",
+        "restoreMessage": "The workspace becomes active, its people can sign in again, and the inactivity clock restarts.",
+        "restoreConfirm": "Restore workspace",
+        "restoreDone": "{name} is restored.",
+        "holdOnTitle": "Place a legal hold on {name}?",
+        "holdOnMessage": "While the hold is on the workspace is never archived or erased, whatever its timings.",
+        "holdOnSure": "I understand this stops all archiving and erasing.",
+        "holdOnConfirm": "Place legal hold",
+        "holdOnDone": "Legal hold placed on {name}.",
+        "holdOffTitle": "Lift the legal hold on {name}?",
+        "holdOffMessage": "The workspace follows its timings again and can be archived and erased.",
+        "holdOffSure": "I confirm the hold may be lifted.",
+        "holdOffConfirm": "Lift legal hold",
+        "holdOffDone": "Legal hold lifted on {name}."
       }
     }
   }

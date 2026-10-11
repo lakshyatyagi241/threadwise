@@ -78,7 +78,8 @@
       "noMatchMessage": "Cambia la ricerca o i filtri per vederne di più.",
       "loadMore": "Carica altri",
       "loadingMore": "Caricamento altri",
-      "loaded": "{count, plural, one {# workspace mostrato} other {# workspace mostrati}}"
+      "loaded": "{count, plural, one {# workspace mostrato} other {# workspace mostrati}}",
+      "retentionLink": "Conservazione"
     },
     "cell": {
       "suspended": "Sospeso",
@@ -252,6 +253,147 @@
         "text": "Ticket, conversazioni e storico di supporto di questo workspace.",
         "open": "Apri la scheda di supporto",
         "openTickets": "{count, plural, one {# ticket aperto} other {# ticket aperti}}"
+      }
+    },
+    "retention": {
+      "crumb": "Conservazione",
+      "title": "Conservazione dei workspace",
+      "subtitle": "Workspace inattivi, dal più inattivo: quando vengono archiviati ed eliminati, i promemoria inviati e i controlli per proteggerli o ripristinarli.",
+      "backToList": "Torna ai workspace",
+      "deniedTitle": "Nessun accesso",
+      "tableLabel": "Conservazione dei workspace",
+      "status": {
+        "active": "Attivo",
+        "archived": "Archiviato",
+        "suspended": "Sospeso",
+        "deleted": "Eliminato dal proprietario"
+      },
+      "filters": {
+        "label": "Filtri",
+        "status": "Stato",
+        "allStatuses": "Tutti gli stati",
+        "minDays": "Giorni minimi di inattività",
+        "neverDeleteOnly": "Solo Non eliminare mai",
+        "clear": "Cancella filtri"
+      },
+      "columns": {
+        "workspace": "Workspace",
+        "status": "Stato",
+        "daysInactive": "Giorni di inattività",
+        "lastActivity": "Ultima attività",
+        "archiveOn": "Archiviazione il",
+        "eraseOn": "Eliminazione il",
+        "reminders": "Promemoria inviati",
+        "protection": "Protezione",
+        "actions": "Azioni"
+      },
+      "remindersArchive": "Archiviazione {n}/3",
+      "remindersErase": "Eliminazione {n}/3",
+      "emptyTitle": "Nessun workspace da mostrare",
+      "emptyMessage": "I workspace compariranno qui non appena esistono.",
+      "noMatchTitle": "Nessun workspace corrisponde",
+      "noMatchMessage": "Modifica i filtri per vedere altro.",
+      "loadMore": "Carica altri",
+      "loadingMore": "Caricamento in corso",
+      "loaded": "{count, plural, one {# workspace mostrato} other {# workspace mostrati}}",
+      "badge": {
+        "neverDelete": "Non eliminare mai",
+        "legalHold": "Blocco legale",
+        "paidPlan": "Piano a pagamento (esente)",
+        "paidPlanHint": "Un workspace con un piano a pagamento attivo non viene mai archiviato per inattività.",
+        "until": "Fino al {date}",
+        "indefinite": "Nessuna scadenza",
+        "by": "Impostato da {who}"
+      },
+      "actions": {
+        "menu": "Azioni di conservazione per {name}",
+        "history": "Cronologia",
+        "policy": "Modifica tempistiche",
+        "exemptOn": "Non eliminare mai",
+        "exemptOff": "Rimuovi Non eliminare mai",
+        "restore": "Ripristina",
+        "holdOn": "Applica blocco legale",
+        "holdOff": "Rimuovi blocco legale"
+      },
+      "event": {
+        "reminder_sent": "Promemoria inviato",
+        "archived": "Archiviato",
+        "deleted": "Eliminato",
+        "delete_blocked": "Eliminazione bloccata",
+        "restored": "Ripristinato",
+        "policy_changed": "Tempistiche modificate",
+        "exemption_set": "Non eliminare mai attivato",
+        "exemption_cleared": "Non eliminare mai rimosso",
+        "legal_hold_set": "Blocco legale applicato",
+        "legal_hold_cleared": "Blocco legale rimosso"
+      },
+      "history": {
+        "title": "Cronologia di {name}",
+        "emptyTitle": "Ancora nessuna cronologia",
+        "emptyMessage": "Promemoria e modifiche compariranno qui.",
+        "stage": "Passaggio",
+        "stages": {
+          "archive": "Archivia",
+          "delete": "Elimina"
+        },
+        "reminderNo": "promemoria {n}",
+        "daysInactive": "{count, plural, one {# giorno di inattività} other {# giorni di inattività}}",
+        "by": "Da",
+        "system": "Sistema",
+        "reason": "Motivo"
+      },
+      "dialog": {
+        "reason": "Motivo",
+        "reasonHint": "Da 5 a 500 caratteri. Viene conservato nel registro di conformità.",
+        "errors": {
+          "reasonShort": "Scrivi almeno 5 caratteri.",
+          "reasonLong": "Usa al massimo 500 caratteri.",
+          "archiveWhole": "Inserisci un numero intero di giorni.",
+          "archiveMin": "Archivia dopo almeno 60 giorni.",
+          "archiveMax": "Archivia dopo al massimo 3650 giorni.",
+          "eraseWhole": "Inserisci un numero intero di giorni.",
+          "eraseMin": "Elimina dopo almeno 120 giorni.",
+          "eraseMax": "Elimina dopo al massimo 7300 giorni.",
+          "gap": "L'eliminazione deve avvenire almeno {days} giorni dopo l'archiviazione.",
+          "noChange": "Modifica almeno una tempistica.",
+          "untilPast": "Scegli una data futura."
+        },
+        "mode": "Origine delle tempistiche",
+        "days": "Giorni",
+        "useDefault": "Usa predefinito della piattaforma",
+        "custom": "Giorni personalizzati",
+        "policyTitle": "Modifica tempistiche per {name}",
+        "policyMessage": "Giorni di inattività prima che il workspace venga archiviato e prima che venga eliminato. I promemoria si spostano di conseguenza.",
+        "archiveAfter": "Archivia dopo (giorni)",
+        "archiveHint": "Predefinito della piattaforma: {default} giorni; minimo {min}.",
+        "eraseAfter": "Elimina dopo (giorni)",
+        "eraseHint": "Predefinito della piattaforma: {default} giorni; minimo {min}.",
+        "policyConfirm": "Salva tempistiche",
+        "policyDone": "Tempistiche salvate per {name}.",
+        "exemptOnTitle": "Non eliminare mai {name}?",
+        "exemptOnMessage": "Finché questa opzione è attiva, il workspace non viene mai archiviato né eliminato per inattività.",
+        "exemptOnConfirm": "Attiva Non eliminare mai",
+        "exemptOnDone": "{name} non verrà mai eliminato.",
+        "exemptOffTitle": "Rimuovere Non eliminare mai per {name}?",
+        "exemptOffMessage": "Il workspace torna a seguire le sue tempistiche e può essere archiviato ed eliminato.",
+        "exemptOffConfirm": "Rimuovi Non eliminare mai",
+        "exemptOffDone": "{name} torna a seguire le sue tempistiche.",
+        "until": "Revisione il (facoltativo)",
+        "untilHint": "La protezione termina in questa data, così viene riesaminata. Lascia vuoto per nessuna scadenza.",
+        "restoreTitle": "Ripristinare {name}?",
+        "restoreMessage": "Il workspace torna attivo, i suoi utenti possono accedere di nuovo e il conteggio dell'inattività riparte.",
+        "restoreConfirm": "Ripristina workspace",
+        "restoreDone": "{name} è stato ripristinato.",
+        "holdOnTitle": "Applicare un blocco legale a {name}?",
+        "holdOnMessage": "Finché il blocco è attivo, il workspace non viene mai archiviato né eliminato, a prescindere dalle tempistiche.",
+        "holdOnSure": "Capisco che questo ferma ogni archiviazione ed eliminazione.",
+        "holdOnConfirm": "Applica blocco legale",
+        "holdOnDone": "Blocco legale applicato a {name}.",
+        "holdOffTitle": "Rimuovere il blocco legale da {name}?",
+        "holdOffMessage": "Il workspace torna a seguire le sue tempistiche e può essere archiviato ed eliminato.",
+        "holdOffSure": "Confermo che il blocco può essere rimosso.",
+        "holdOffConfirm": "Rimuovi blocco legale",
+        "holdOffDone": "Blocco legale rimosso da {name}."
       }
     }
   }
