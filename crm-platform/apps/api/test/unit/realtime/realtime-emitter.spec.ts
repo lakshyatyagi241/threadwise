@@ -148,3 +148,34 @@ describe('RealtimeEmitter: delivery', () => {
     ).resolves.toEqual({ rooms: [] });
   });
 });
+
+describe('RealtimeEmitter: restricted events (AZ-016)', () => {
+  it('names the permission room per workspace and shows it to a client as the workspace room', () => {
+    const ref = { kind: 'perm' as const, permission: 'wallet.balance.read' };
+    expect(roomName(3, ref)).toBe('perm:3:wallet.balance.read');
+    expect(roomKeyFor(ref)).toBe('org');
+  });
+
+  it('wallet.updated aimed at the org room goes to the permission room only, unsequenced, and leaves the org counter alone', async () => {
+    const report = await emitter.emit(3, [{ kind: 'org' }], REALTIME_EVENT.walletUpdated, {
+      balanceMinor: 5,
+      reason: 'topup',
+    });
+    expect(report.rooms).toEqual([{ room: 'org', seq: 0 }]);
+    expect(redis.published).toHaveLength(1);
+    expect(JSON.stringify(redis.published[0])).toContain('perm:3:wallet.balance.read');
+    expect(JSON.stringify(redis.published[0])).not.toContain('org:3"');
+    expect(await emitter.currentSeq(3, { kind: 'org' })).toBe(0);
+  });
+
+  it('a restricted event is never sent to any other room kind', async () => {
+    const report = await emitter.emit(
+      3,
+      [{ kind: 'user', userId: 1 }],
+      REALTIME_EVENT.walletUpdated,
+      { balanceMinor: 5, reason: 'topup' },
+    );
+    expect(report.rooms).toEqual([]);
+    expect(redis.published).toHaveLength(0);
+  });
+});
