@@ -1,0 +1,101 @@
+{
+  "_comment": "Every authenticated-only route (signed-in workspace member, no @RequirePermission) must be declared here with the reason it is safe. Key = 'file' (all routes of the controller) or 'file#handler'. 'review': 'documented' = the reason comes from the code's own comments or the owner's spec, not yet proven by a test of this audit; 'tested' = covered by a dynamic test in apps/api/test/e2e/authz; 'decision' = needs a human policy answer (listed in the report). Never add an entry to silence the check without reading the handler.",
+  "selfService": {
+    "infra/providers/chat-conversations/media/media.controller.ts": {
+      "reason": "short-lived signed token bound to one person and workspace; visibility rule re-checked at read time (AUTHZ-064/074)",
+      "review": "documented"
+    },
+    "modules/addons-extension-registry/addons.controller.ts": {
+      "reason": "installed-add-on list shown in the shell to every member (read-only catalogue of this workspace)",
+      "review": "documented"
+    },
+    "modules/admin-console-shell/shell-user.controller.ts": {
+      "reason": "the caller's own shell state: config, tour flag, quick access, announcements, overview tiles",
+      "review": "documented"
+    },
+    "modules/admin-console-shell/shell.controller.ts": {
+      "reason": "navigation layout resolved from the caller's own permissions",
+      "review": "documented"
+    },
+    "modules/admin-console-shell/workspace-settings.controller.ts": {
+      "reason": "WaDesk gates General / notification / Data & export to the workspace OWNER, not a permission key; the service checks ownership on every read, write, export and delete (non-owner gets 403)",
+      "review": "tested"
+    },
+    "modules/admin/users/users.controller.ts#me": {
+      "reason": "caller's own profile",
+      "review": "documented"
+    },
+    "modules/auth/auth.controller.ts": {
+      "reason": "session, workspace list and switch act on the caller's own session; switch must verify live membership (AUTHZ-016/017/027)",
+      "review": "tested"
+    },
+    "modules/auth/controllers/account.controller.ts": {
+      "reason": "the caller's own profile, password, MFA, passkeys, sessions; deleteAccount must refuse the last owner",
+      "review": "documented"
+    },
+    "modules/auth/controllers/impersonation.controller.ts": {
+      "reason": "impersonation state of the caller's own session; start/stop are operator-side and covered by impersonation guard rules",
+      "review": "decision"
+    },
+    "modules/auth/controllers/onboarding.controller.ts": {
+      "reason": "the caller's own onboarding state",
+      "review": "documented"
+    },
+    "modules/auth/controllers/registration.controller.ts": {
+      "reason": "verification mail for the caller's own address",
+      "review": "documented"
+    },
+    "modules/chrome-extension-sheets-addon/sheets-key.controller.ts": {
+      "reason": "status and revoke act on the caller's own add-on key; a member whose role lost the app can still switch their own key off (generate needs app.google-sheets.use)",
+      "review": "documented"
+    },
+    "modules/coupons-credits-referral-currency/referrals.controller.ts": {
+      "reason": "the caller's own referral overview, list and export (pinned to the caller in the service)",
+      "review": "documented"
+    },
+    "modules/dashboards-analytics-charts/dash.controller.ts": {
+      "reason": "the caller's own quick-access shortcuts",
+      "review": "documented"
+    },
+    "modules/localization-translation/languages.controller.ts": {
+      "reason": "the caller's own language preference",
+      "review": "documented"
+    },
+    "modules/marketing-site-cms/workspace-cms.controller.ts": {
+      "reason": "live announcements and help articles shown to every member; the helpful-vote is one changeable vote per user",
+      "review": "documented"
+    },
+    "modules/notifications/notifications.controller.ts": {
+      "reason": "the caller's own notification feed and preferences",
+      "review": "tested"
+    },
+    "modules/notifications/push.controller.ts": {
+      "reason": "the caller's own browser push subscriptions, pinned to the caller in the service",
+      "review": "tested"
+    },
+    "modules/plans-subscriptions-trials/billing.controller.ts": {
+      "reason": "plan picker, entitlements, status and usage are readable by every member (WaDesk: Authenticate only). DECISION: billing status and usage figures visible to non-billing roles (AUTHZ-062)",
+      "review": "decision"
+    },
+    "modules/plans-subscriptions-trials/plans.controller.ts": {
+      "reason": "plan catalogue shown on upgrade prompts; changing the plan needs plan.subscription.manage",
+      "review": "documented"
+    },
+    "modules/team-chat/team-chat.controller.ts": {
+      "reason": "checked per action in the service from the member's tchat.* capabilities and channel membership (AUTHZ-036/040)",
+      "review": "tested"
+    },
+    "modules/workspaces-teams-tenancy/members.controller.ts": {
+      "reason": "member directory every workspace member can open (WaDesk shows it to any signed-in member); every write is gated",
+      "review": "documented"
+    },
+    "modules/workspaces-teams-tenancy/teams.controller.ts": {
+      "reason": "team directory every member can open; every write is gated",
+      "review": "documented"
+    },
+    "realtime/ticket/realtime-ticket.controller.ts": {
+      "reason": "mints a one-time realtime ticket for the caller's own session; every room is authorised again at join",
+      "review": "tested"
+    }
+  }
+}

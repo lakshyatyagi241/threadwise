@@ -3,6 +3,7 @@ import { Emitter } from '@socket.io/redis-emitter';
 import { randomUUID } from 'node:crypto';
 import { Redis } from 'ioredis';
 import {
+  REALTIME_EVENT,
   REALTIME_NAMESPACE,
   REALTIME_SYSTEM_EVENTS,
   type RealtimeEnvelope,
@@ -16,6 +17,16 @@ import { roomKeyFor, roomName, type RoomRef } from './rooms';
 const SEQ_TTL_SECONDS = 30 * 24 * 3600;
 
 const seqKey = (room: string) => `rt:seq:${room}`;
+
+/**
+ * Events whose payload is restricted to members holding a permission (AZ-016). Whatever room a producer names, these never go to
+ * the shared `org` room: an `org` target is rewritten to the permission room, which the gateway fills only with sockets whose
+ * member holds the permission. They are state events (the latest figure wins), so they carry sequence 0 and do not count in the
+ * `org` room's sequence, which the members who never receive them would otherwise see as a gap.
+ */
+export const RESTRICTED_EVENT_PERMISSION: Readonly<Record<string, string>> = {
+  [REALTIME_EVENT.walletUpdated]: 'wallet.balance.read',
+};
 
 export interface EmitReport {
   /** Each room the event went to, with the sequence number it carried there. */
@@ -100,19 +111,29 @@ export class RealtimeEmitter {
     type: string,
     payload: unknown,
   ): Promise<EmitReport> {
+    const permission = RESTRICTED_EVENT_PERMISSION[type];
     const unique = new Map<string, RoomRef>();
-    for (const ref of rooms) unique.set(roomName(orgId, ref), ref);
+    for (const ref of rooms) {
+      // A restricted event only ever goes to its permission room, whatever the caller named.
+      const target: RoomRef = permission && ref.kind === 'org' ? { kind: 'perm', permission } : ref;
+      if (permission && target.kind !== 'perm') continue;
+      unique.set(roomName(orgId, target), target);
+    }
     if (unique.size === 0) return { rooms: [] };
 
     try {
       const names = [...unique.keys()];
+      const counted = names.filter((name) => unique.get(name)!.kind !== 'perm');
       const pipeline = this.redis.pipeline();
-      for (const name of names) pipeline.incr(seqKey(name)).expire(seqKey(name), SEQ_TTL_SECONDS);
-      const results = (await pipeline.exec()) ?? [];
+      for (const name of counted) {
+        pipeline.incr(seqKey(name)).expire(seqKey(name), SEQ_TTL_SECONDS);
+      }
+      const results = counted.length > 0 ? ((await pipeline.exec()) ?? []) : [];
 
       const report: EmitReport = { rooms: [] };
-      names.forEach((name, i) => {
-        const seq = Number(results[i * 2]?.[1] ?? 0);
+      names.forEach((name) => {
+        const at = counted.indexOf(name);
+        const seq = at < 0 ? 0 : Number(results[at * 2]?.[1] ?? 0);
         const ref = unique.get(name)!;
         const envelope: RealtimeEnvelope = {
           v: 1,

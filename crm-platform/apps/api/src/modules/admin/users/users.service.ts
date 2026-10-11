@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import type { Tx } from '@crm/db';
 import type {
   CreateUserInput,
   ListUsersQuery,
@@ -13,7 +14,7 @@ import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
-import { PasswordService } from '../../auth';
+import { AccountGateService, PasswordService, SessionService } from '../../auth';
 import { WorkspaceRoleRulesService } from '../../roles-permissions';
 import { toUserResponse } from './users.mapper';
 import { UsersRepository } from './users.repository';
@@ -33,7 +34,20 @@ export class UsersService {
     private readonly rbac: RbacService,
     private readonly passwords: PasswordService,
     private readonly roleRules: WorkspaceRoleRulesService,
+    private readonly sessions: SessionService,
+    private readonly gates: AccountGateService,
   ) {}
+
+  /** Role uuids in a request must all be roles of the caller's workspace: an unknown or foreign one is refused, never dropped. */
+  private async resolveRoleIdsStrict(tx: Tx, orgId: number, uuids: string[]): Promise<number[]> {
+    const ids = await this.repo.resolveRoleIds(tx, orgId, uuids);
+    if (ids.length !== new Set(uuids).size) {
+      throw AppError.validation('One or more roles do not exist in this workspace', [
+        { path: 'roleIds', message: 'unknown role' },
+      ]);
+    }
+    return ids;
+  }
 
   async list(query: ListUsersQuery): Promise<PageResponse<UserResponse>> {
     const ctx = RequestContextStore.require();
@@ -88,6 +102,10 @@ export class UsersService {
   }
 
   async create(input: CreateUserInput): Promise<UserResponse> {
+    return this.roleRules.withDenialAudit('user.create', () => this.createInTx(input));
+  }
+
+  private async createInTx(input: CreateUserInput): Promise<UserResponse> {
     const ctx = RequestContextStore.require();
 
     return this.db.tx(async (tx) => {
@@ -111,7 +129,7 @@ export class UsersService {
         passwordHash,
       });
 
-      const roleIds = await this.repo.resolveRoleIds(tx, ctx.orgId, input.roleIds);
+      const roleIds = await this.resolveRoleIdsStrict(tx, ctx.orgId, input.roleIds);
       if (roleIds.length > 0) {
         // Creating a member needs org.member.invite (WD-RBAC-027) and each role handed out must be one the actor may grant (WD-RBAC-026).
         const actorGrants = await this.rbac.grantsForUser(ctx.orgId, ctx.userId!);
@@ -144,9 +162,15 @@ export class UsersService {
   }
 
   async update(uuid: string, input: UpdateUserInput): Promise<UserResponse> {
-    const ctx = RequestContextStore.require();
+    return this.roleRules.withDenialAudit('user.update', () => this.updateInTx(uuid, input));
+  }
 
-    return this.db.tx(async (tx) => {
+  private async updateInTx(uuid: string, input: UpdateUserInput): Promise<UserResponse> {
+    const ctx = RequestContextStore.require();
+    let rolesChanged = false;
+    let suspendedUserId = null as number | null;
+
+    const result = await this.db.tx(async (tx) => {
       const existing = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!existing) throw AppError.notFound('User', uuid);
 
@@ -176,8 +200,12 @@ export class UsersService {
         if (!updated) throw AppError.rowVersionConflict('User');
       }
 
+      if (input.status === 'inactive' && existing.status !== 'inactive') {
+        suspendedUserId = existing.id;
+      }
+
       if (input.roleIds !== undefined) {
-        const roleIds = await this.repo.resolveRoleIds(tx, ctx.orgId, input.roleIds);
+        const roleIds = await this.resolveRoleIdsStrict(tx, ctx.orgId, input.roleIds);
         const before = await this.repo.currentRoles(tx, ctx.orgId, existing.id);
         const beforeIds = before.map((r) => r.id);
         await this.roleRules.assertCanChangeRoles(tx, {
@@ -188,8 +216,7 @@ export class UsersService {
           newRoleIds: roleIds,
         });
         await this.repo.replaceRoles(tx, ctx.orgId, existing.id, roleIds);
-        // Role membership changed — every cached grant set for this user is stale.
-        await this.rbac.bumpRolesVersion(ctx.orgId);
+        rolesChanged = true;
         // WaDesk's member.role_changed row carried only the new role; the previous one is recorded too.
         await this.audit.record(tx, {
           module: MODULE_KEY,
@@ -210,5 +237,14 @@ export class UsersService {
       const roleRows = await this.repo.rolesForUsers(tx, ctx.orgId, [existing.id]);
       return toUserResponse(after!, roleRows);
     });
+
+    // Both run only once the change is committed, so a request racing the edit cannot cache the old state again.
+    if (rolesChanged) await this.rbac.bumpRolesVersion(ctx.orgId);
+    if (suspendedUserId !== null) {
+      // Suspension ends access now, not when the access token or the 30 s gate cache runs out.
+      await this.sessions.revokeAllForUser(ctx.orgId, suspendedUserId, 'member_suspended');
+      await this.gates.invalidate(ctx.orgId, suspendedUserId);
+    }
+    return result;
   }
 }

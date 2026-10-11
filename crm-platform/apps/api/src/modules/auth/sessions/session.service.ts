@@ -613,12 +613,49 @@ export class SessionService {
 
   // --- redis helpers ---------------------------------------------------------
 
+  /**
+   * Sids whose tombstone could not be written to Redis. The guard consults this (in memory, no
+   * query) so a revoked token stops working on this instance even while Redis rejects writes;
+   * a background retry keeps trying until the tombstone lands or the access token has expired.
+   */
+  private readonly unconfirmedTombstones = new Map<string, number>();
+
+  /** True when the session was revoked but its Redis tombstone is still unwritten. */
+  isRevocationPending(sid: string): boolean {
+    const until = this.unconfirmedTombstones.get(sid);
+    if (until === undefined) return false;
+    if (until <= Date.now()) {
+      this.unconfirmedTombstones.delete(sid);
+      return false;
+    }
+    return true;
+  }
+
+  private async writeTombstone(sid: string): Promise<boolean> {
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        await this.redis.set(AuthKeys.revoked(sid), '1', 'EX', Ttl.accessRevocationSeconds);
+        this.unconfirmedTombstones.delete(sid);
+        return true;
+      } catch (err) {
+        this.logger.error({ err, sid, attempt }, 'failed to write session tombstone');
+        if (attempt < 2) await new Promise((r) => setTimeout(r, 50 * (attempt + 1)));
+      }
+    }
+    return false;
+  }
+
   async tombstone(sid: string): Promise<void> {
-    await this.redis
-      .set(AuthKeys.revoked(sid), '1', 'EX', Ttl.accessRevocationSeconds)
-      .catch((err: unknown) => {
-        this.logger.error({ err, sid }, 'failed to write session tombstone');
+    if (await this.writeTombstone(sid)) return;
+    // Still failing: remember it locally so the guard refuses this token, and keep retrying.
+    this.unconfirmedTombstones.set(sid, Date.now() + Ttl.accessRevocationSeconds * 1000);
+    const timer = setInterval(() => {
+      if (!this.isRevocationPending(sid)) return clearInterval(timer);
+      void this.writeTombstone(sid).then((ok) => {
+        if (ok) clearInterval(timer);
       });
+    }, 5000);
+    timer.unref();
   }
 
   async touchActivity(sid: string): Promise<void> {

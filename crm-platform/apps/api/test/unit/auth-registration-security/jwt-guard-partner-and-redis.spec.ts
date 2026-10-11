@@ -32,6 +32,7 @@ function build(
     touchActivity: vi.fn(),
     expireIdle: vi.fn(),
     tombstone: vi.fn(),
+    isRevocationPending: vi.fn().mockReturnValue(false),
     enforceCapIfChanged: vi.fn(),
   };
   const guard = new JwtAuthGuard(
