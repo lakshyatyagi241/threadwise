@@ -176,12 +176,35 @@
       "cancelBody": "Eksekusi akan berhenti di posisinya saat ini. Pelanggan tidak akan diberi tahu.",
       "cancelConfirm": "Batalkan eksekusi",
       "cancelKeep": "Biarkan",
-      "cancelled": "Eksekusi dibatalkan"
+      "cancelled": "Eksekusi dibatalkan",
+      "tlTitle": "Linimasa eksekusi",
+      "tlNodes": "Node dijalankan",
+      "tlErrors": "Kesalahan",
+      "tlTime": "Waktu node",
+      "filterAll": "Semua langkah",
+      "filterErrors": "Hanya kesalahan",
+      "changedTitle": "Alur ini diedit setelah dijalankan",
+      "changedBody": "Log menampilkan alur persis seperti saat dijalankan.",
+      "removed": "Dihapus dari alur",
+      "exit": "Keluaran {port}",
+      "visit": "Kunjungan {n}",
+      "truncated": "Lebih dari {max} langkah dijalankan. Langkah berikutnya dihitung tetapi tidak dicantumkan.",
+      "retention": "Log dihapus {days} hari setelah eksekusi berakhir.",
+      "pathTitle": "Jalur yang ditempuh",
+      "notReached": "Tidak tercapai",
+      "noErrors": "Tidak ada kesalahan pada eksekusi ini."
     },
     "event": {
       "step": "Langkah",
       "reply": "Balasan pelanggan",
-      "end": "Akhir"
+      "end": "Akhir",
+      "advance": "Dilanjutkan",
+      "wait": "Menunggu balasan",
+      "sleep": "Jeda",
+      "halt": "Dihentikan",
+      "exec": "Dijalankan",
+      "truncated": "Batas log tercapai",
+      "start": "Dimulai"
     },
     "subs": {
       "kicker": "Alur",
@@ -469,6 +492,13 @@
       "manyBody": "{n} kontak akan masuk kembali ke alur dari awal dan menerima pesannya lagi. Tindakan ini tidak dapat dibatalkan.",
       "summary": "{queued} dimulai ulang, {succeeded} selesai, {failed} gagal, {skipped} dilewati.",
       "flowInactive": "Aktifkan kembali alur ini sebelum menjalankan ulang kontak yang gagal."
+    },
+    "outcome": {
+      "ok": "OK",
+      "error": "Kesalahan",
+      "skipped": "Dilewati",
+      "waiting": "Menunggu",
+      "timeout": "Waktu habis"
     }
   }
 }

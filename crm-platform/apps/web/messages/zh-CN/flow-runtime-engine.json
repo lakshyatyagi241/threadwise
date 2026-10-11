@@ -176,12 +176,35 @@
       "cancelBody": "运行将停在当前位置。客户不会收到通知。",
       "cancelConfirm": "取消运行",
       "cancelKeep": "保留",
-      "cancelled": "运行已取消"
+      "cancelled": "运行已取消",
+      "tlTitle": "执行时间线",
+      "tlNodes": "已执行节点",
+      "tlErrors": "错误",
+      "tlTime": "节点耗时",
+      "filterAll": "全部步骤",
+      "filterErrors": "仅错误",
+      "changedTitle": "此流程在运行后被编辑过",
+      "changedBody": "日志按流程实际运行时的样子显示。",
+      "removed": "已从流程中移除",
+      "exit": "出口 {port}",
+      "visit": "第 {n} 次",
+      "truncated": "执行了超过 {max} 个步骤。后续步骤已计数但未列出。",
+      "retention": "日志在运行结束 {days} 天后删除。",
+      "pathTitle": "经过的路径",
+      "notReached": "未到达",
+      "noErrors": "本次运行没有错误。"
     },
     "event": {
       "step": "步骤",
       "reply": "客户回复",
-      "end": "结束"
+      "end": "结束",
+      "advance": "已继续",
+      "wait": "等待回复",
+      "sleep": "延迟",
+      "halt": "已暂停",
+      "exec": "已执行",
+      "truncated": "已达日志上限",
+      "start": "已启动"
     },
     "subs": {
       "kicker": "流程",
@@ -469,6 +492,13 @@
       "manyBody": "{n} 位联系人将从头重新进入流程，并再次收到相关消息。此操作无法撤销。",
       "summary": "已排队重新启动 {queued} 次，已完成 {succeeded} 次，失败 {failed} 次，已跳过 {skipped} 次。",
       "flowInactive": "请先重新开启此流程，再重新运行其失败的联系人。"
+    },
+    "outcome": {
+      "ok": "正常",
+      "error": "错误",
+      "skipped": "已跳过",
+      "waiting": "等待中",
+      "timeout": "已超时"
     }
   }
 }

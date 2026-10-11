@@ -176,12 +176,35 @@
       "cancelBody": "실행이 현재 위치에서 중지됩니다. 고객에게는 알리지 않습니다.",
       "cancelConfirm": "실행 취소",
       "cancelKeep": "유지",
-      "cancelled": "실행이 취소됨"
+      "cancelled": "실행이 취소됨",
+      "tlTitle": "실행 타임라인",
+      "tlNodes": "실행된 노드",
+      "tlErrors": "오류",
+      "tlTime": "노드 시간",
+      "filterAll": "모든 단계",
+      "filterErrors": "오류만",
+      "changedTitle": "실행 후 이 플로우가 수정되었습니다",
+      "changedBody": "로그는 플로우가 실행된 그대로 표시됩니다.",
+      "removed": "플로우에서 제거됨",
+      "exit": "출구 {port}",
+      "visit": "{n}번째 방문",
+      "truncated": "{max}개가 넘는 단계가 실행되었습니다. 이후 단계는 집계만 되고 목록에는 없습니다.",
+      "retention": "로그는 실행 종료 {days}일 후 삭제됩니다.",
+      "pathTitle": "거친 경로",
+      "notReached": "도달하지 않음",
+      "noErrors": "이 실행에는 오류가 없습니다."
     },
     "event": {
       "step": "단계",
       "reply": "고객 답장",
-      "end": "종료"
+      "end": "종료",
+      "advance": "다음으로 이동",
+      "wait": "답장 대기 중",
+      "sleep": "지연",
+      "halt": "중단됨",
+      "exec": "실행됨",
+      "truncated": "로그 한도 도달",
+      "start": "시작됨"
     },
     "subs": {
       "kicker": "플로우",
@@ -469,6 +492,13 @@
       "manyBody": "연락처 {n}명이 처음부터 플로우에 다시 들어가 메시지를 다시 받습니다. 이 작업은 되돌릴 수 없습니다.",
       "summary": "{queued}건 다시 시작, {succeeded}건 완료, {failed}건 실패, {skipped}건 건너뜀.",
       "flowInactive": "실패한 연락처를 다시 실행하기 전에 이 플로우를 다시 켜세요."
+    },
+    "outcome": {
+      "ok": "정상",
+      "error": "오류",
+      "skipped": "건너뜀",
+      "waiting": "대기 중",
+      "timeout": "시간 초과"
     }
   }
 }

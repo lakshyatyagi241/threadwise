@@ -127,6 +127,32 @@ export const flowRetryLogs = pgTable(
 export type FlowRetryLogsRow = typeof flowRetryLogs.$inferSelect;
 export type NewFlowRetryLogsRow = typeof flowRetryLogs.$inferInsert;
 
+export const flowGraphVersions = pgTable(
+  'flow_graph_versions',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    flowId: idColumn('flow_id').notNull(),
+    hash: text('hash').notNull(),
+    graph: jsonb('graph').notNull(),
+    createdAt: createdAt(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('flow_graph_versions_org_id_flow_id_hash_key').on(t.orgId, t.flowId, t.hash),
+    foreignKey({
+      name: 'fk_flow_graph_versions_org',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_flow_graph_versions_flow_id',
+      columns: [t.orgId, t.flowId],
+      foreignColumns: [flows.orgId, flows.id],
+    }).onDelete('cascade'),
+  ],
+);
+
 export const flowRuns = pgTable(
   'flow_runs',
   {
@@ -146,7 +172,11 @@ export const flowRuns = pgTable(
     endReason: text('end_reason'),
     failureCode: text('failure_code'),
     failureReason: text('failure_reason'),
-    graph: jsonb('graph').notNull(),
+    graph: jsonb('graph'),
+    graphVersionId: idColumn('graph_version_id'),
+    nodeCount: integer('node_count').notNull().default(0),
+    errorCount: integer('error_count').notNull().default(0),
+    durationMs: integer('duration_ms').notNull().default(0),
     currentNodeId: text('current_node_id'),
     stepSeq: integer('step_seq').notNull().default(0),
     vars: jsonb('vars')
@@ -233,6 +263,13 @@ export const flowRunSteps = pgTable(
       .notNull()
       .default(sql`'{}'::jsonb`),
     error: text('error'),
+    nodeLabel: text('node_label'),
+    outcome: text('outcome'),
+    port: integer('port'),
+    durationMs: integer('duration_ms'),
+    attempt: integer('attempt'),
+    summary: text('summary'),
+    errorCode: text('error_code'),
     createdAt: createdAt(),
   },
   (t) => [

@@ -176,12 +176,35 @@
       "cancelBody": "L’exécution s’arrête là où elle en est. Le client n’est pas informé.",
       "cancelConfirm": "Annuler l’exécution",
       "cancelKeep": "La conserver",
-      "cancelled": "Exécution annulée"
+      "cancelled": "Exécution annulée",
+      "tlTitle": "Chronologie d'exécution",
+      "tlNodes": "Nœuds exécutés",
+      "tlErrors": "Erreurs",
+      "tlTime": "Durée des nœuds",
+      "filterAll": "Toutes les étapes",
+      "filterErrors": "Erreurs uniquement",
+      "changedTitle": "Ce flux a été modifié après l'exécution",
+      "changedBody": "Le journal montre le flux exactement tel qu'il s'est exécuté.",
+      "removed": "Retiré du flux",
+      "exit": "Sortie {port}",
+      "visit": "Passage {n}",
+      "truncated": "Plus de {max} étapes ont été exécutées. Les suivantes sont comptées mais non listées.",
+      "retention": "Les journaux sont supprimés {days} jours après la fin d'une exécution.",
+      "pathTitle": "Chemin suivi",
+      "notReached": "Non atteints",
+      "noErrors": "Aucune erreur dans cette exécution."
     },
     "event": {
       "step": "Étape",
       "reply": "Réponse du client",
-      "end": "Fin"
+      "end": "Fin",
+      "advance": "Passé à la suite",
+      "wait": "En attente d'une réponse",
+      "sleep": "Délai",
+      "halt": "Interrompu",
+      "exec": "Exécuté",
+      "truncated": "Limite du journal atteinte",
+      "start": "Démarré"
     },
     "subs": {
       "kicker": "Flux",
@@ -469,6 +492,13 @@
       "manyBody": "{n} contacts réintègrent leur flux depuis le début et reçoivent de nouveau ses messages. Cette action est irréversible.",
       "summary": "{queued} relancées, {succeeded} terminées, {failed} en échec, {skipped} ignorées.",
       "flowInactive": "Réactivez ce flux avant de relancer ses contacts en échec."
+    },
+    "outcome": {
+      "ok": "OK",
+      "error": "Erreur",
+      "skipped": "Ignoré",
+      "waiting": "En attente",
+      "timeout": "Délai dépassé"
     }
   }
 }

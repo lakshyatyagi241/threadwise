@@ -11,6 +11,7 @@ import { CatalogCartResume, CommerceResume } from './runtime/nodes/commerce/comm
 import { CommerceNodesModule } from './runtime/nodes/commerce/commerce-nodes.module';
 import { SocialHandoffConsumer } from './runtime/nodes/actions/social-handoff.consumer';
 import { FlowRunProcessor } from './runtime/flow-run.processor';
+import { FlowRunRetentionService } from './runtime/flow-run-retention.service';
 import { FlowSweeperService } from './runtime/flow-sweeper.service';
 import { FlowInboundService } from './triggers/inbound.service';
 import { FlowScheduleSweeper } from './triggers/schedule.sweeper';
@@ -34,6 +35,7 @@ import { FlowTriggerEventsConsumer } from './triggers/trigger-events.consumer';
   providers: [
     FlowRunProcessor,
     FlowSweeperService,
+    FlowRunRetentionService,
     FlowInboundService,
     FlowTriggerEventsConsumer,
     FlowScheduleSweeper,

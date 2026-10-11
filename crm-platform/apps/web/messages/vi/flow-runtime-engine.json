@@ -176,12 +176,35 @@
       "cancelBody": "Lần chạy sẽ dừng tại chỗ. Khách hàng sẽ không được thông báo.",
       "cancelConfirm": "Hủy lần chạy",
       "cancelKeep": "Giữ lại",
-      "cancelled": "Đã hủy lần chạy"
+      "cancelled": "Đã hủy lần chạy",
+      "tlTitle": "Dòng thời gian thực thi",
+      "tlNodes": "Số node đã chạy",
+      "tlErrors": "Lỗi",
+      "tlTime": "Thời gian node",
+      "filterAll": "Tất cả bước",
+      "filterErrors": "Chỉ lỗi",
+      "changedTitle": "Luồng này đã được sửa sau lần chạy",
+      "changedBody": "Nhật ký hiển thị luồng đúng như khi nó chạy.",
+      "removed": "Đã xóa khỏi luồng",
+      "exit": "Lối ra {port}",
+      "visit": "Lần ghé {n}",
+      "truncated": "Đã chạy hơn {max} bước. Các bước sau được đếm nhưng không liệt kê.",
+      "retention": "Nhật ký bị xóa {days} ngày sau khi lần chạy kết thúc.",
+      "pathTitle": "Đường đã đi",
+      "notReached": "Chưa tới",
+      "noErrors": "Không có lỗi trong lần chạy này."
     },
     "event": {
       "step": "Bước",
       "reply": "Phản hồi của khách hàng",
-      "end": "Kết thúc"
+      "end": "Kết thúc",
+      "advance": "Đã chuyển tiếp",
+      "wait": "Đang chờ phản hồi",
+      "sleep": "Trì hoãn",
+      "halt": "Đã dừng",
+      "exec": "Đã chạy",
+      "truncated": "Đã đạt giới hạn nhật ký",
+      "start": "Đã bắt đầu"
     },
     "subs": {
       "kicker": "Luồng",
@@ -469,6 +492,13 @@
       "manyBody": "{n} liên hệ sẽ quay lại luồng từ đầu và nhận lại các tin nhắn của luồng. Thao tác này không thể hoàn tác.",
       "summary": "Đã khởi động lại {queued}, đã hoàn thành {succeeded}, thất bại {failed}, đã bỏ qua {skipped}.",
       "flowInactive": "Hãy bật lại luồng này trước khi chạy lại các liên hệ thất bại."
+    },
+    "outcome": {
+      "ok": "OK",
+      "error": "Lỗi",
+      "skipped": "Bỏ qua",
+      "waiting": "Đang chờ",
+      "timeout": "Hết thời gian"
     }
   }
 }

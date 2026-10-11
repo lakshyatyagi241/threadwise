@@ -43,6 +43,8 @@ function run(): RunState {
     triggerText: null,
     status: 'running',
     graph,
+    graphVersionId: null,
+    nodeCount: 0,
     currentNodeId: 'a',
     stepSeq: 7,
     vars: {},
@@ -129,7 +131,7 @@ describe('a node that waits and decodes its own answer', () => {
       { kind: 'external', id: '', text: '', data: { paid: true } },
       deps(ex, sent),
     );
-    expect(out.transition).toEqual({ t: 'goto', nodeId: 'yes', delayMs: 0 });
+    expect(out.transition).toEqual({ t: 'goto', nodeId: 'yes', delayMs: 0, port: 1 });
     expect(r.vars.paid).toBe(true);
     // The answer's sends are numbered from 1000 so they never share a client reference with the step that asked.
     expect(sent[0]!.index).toBe(1000);
