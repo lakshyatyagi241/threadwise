@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "f90f817b-0968-41da-b220-8c32a5cba0c7"
+      }
+    },
+    "android": {
+      "package": "com.nishantdhabe.crmplatform"
+    }
+  }
+}
