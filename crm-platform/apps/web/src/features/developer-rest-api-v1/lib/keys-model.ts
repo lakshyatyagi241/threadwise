@@ -1,4 +1,12 @@
-import { API_KEY_NAME_MAX, ERROR_CODES, type ApiKeyResponse } from '@crm/contracts';
+import {
+  API_KEY_NAME_MAX,
+  API_SCOPES,
+  API_SCOPE_RESOURCES,
+  ERROR_CODES,
+  type ApiKeyResponse,
+  type ApiScope,
+  type ApiScopeResource,
+} from '@crm/contracts';
 import { ApiError } from '@/lib/api/errors';
 
 /** The pure half of the Developers console (WD-API-001 to 004, 151): which key is live, the name rule, the quickstart, error kinds. */
@@ -27,6 +35,52 @@ export function checkName(raw: string): NameCheck {
   if (name.length === 0) return { ok: false, error: 'required' };
   if (name.length > API_KEY_NAME_MAX) return { ok: false, error: 'tooLong' };
   return { ok: true, name };
+}
+
+/** A key with no scopes is full access (WaDesk parity, WD-API-008), and the list says so. */
+export function isFullAccess(key: Pick<ApiKeyResponse, 'scopes'>): boolean {
+  return key.scopes.length === 0;
+}
+
+/** One row of the scope picker: a resource and its two scopes, `read` before `write`. */
+export interface ScopeRow {
+  resource: ApiScopeResource;
+  read: ApiScope;
+  write: ApiScope;
+}
+
+export const SCOPE_ROWS: readonly ScopeRow[] = API_SCOPE_RESOURCES.map((resource) => ({
+  resource,
+  read: `${resource}:read`,
+  write: `${resource}:write`,
+}));
+
+/** `<resource>:write` also grants `<resource>:read` (the guard expands it), so a ticked write shows its read as implied. */
+export function isReadImplied(picked: readonly ApiScope[], row: ScopeRow): boolean {
+  return picked.includes(row.write);
+}
+
+export function toggleScope(picked: readonly ApiScope[], scope: ApiScope): ApiScope[] {
+  return picked.includes(scope) ? picked.filter((s) => s !== scope) : [...picked, scope];
+}
+
+export type ScopesCheck = { ok: true; scopes: ApiScope[] } | { ok: false; error: 'noScopes' };
+
+/**
+ * What the form sends. Restriction off is no scopes, which the API reads as full access. Restriction on with nothing ticked is refused
+ * here rather than sent: an empty list would silently make the key full access, the opposite of what the person asked for. The list goes
+ * out in picker order, without a `read` its `write` already implies.
+ */
+export function checkScopes(restrict: boolean, picked: readonly ApiScope[]): ScopesCheck {
+  if (!restrict) return { ok: true, scopes: [] };
+  const scopes = API_SCOPES.filter(
+    (s) => picked.includes(s) && !(s.endsWith(':read') && picked.includes(writeOf(s))),
+  );
+  return scopes.length === 0 ? { ok: false, error: 'noScopes' } : { ok: true, scopes };
+}
+
+function writeOf(read: ApiScope): ApiScope {
+  return read.replace(/:read$/, ':write') as ApiScope;
 }
 
 /** The base URL shown in the rail: the public API origin without a trailing slash, plus `/api/v1`. */

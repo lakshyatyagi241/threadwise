@@ -46,6 +46,7 @@
       "allFields": "Alle Felder",
       "success": "{count, number} erfolgreich",
       "failure": "{count, number} fehlgeschlagen",
+      "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
       "pending": "{count, number} ausstehend",
       "pendingLabel": "{count, number} fehlgeschlagene Zustellungen warten auf erneutes Senden",
       "neverDelivered": "Noch nichts zugestellt",

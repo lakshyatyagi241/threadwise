@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { and, desc, eq, lt, or, sql } from 'drizzle-orm';
+import type { ApiScope } from '@crm/contracts';
 import { schema, type Tx } from '@crm/db';
 import { decodeCursor, type Cursor } from '../../../common/pagination/cursor';
 
@@ -11,6 +12,8 @@ export interface NewBearerKey {
   name: string;
   keyPrefix: string;
   keyHash: string;
+  /** Empty is full access (WD-API-008). */
+  scopes: ApiScope[];
   userId: number | null;
   createdBy: number | null;
 }
@@ -40,6 +43,7 @@ export class ApiKeysRepository {
         keyPrefix: key.keyPrefix,
         keyHash: key.keyHash,
         kind: 'bearer',
+        scopes: key.scopes,
         signingSecretEnc: null,
         // 0 = no cap of its own: the plan and the platform ceiling decide (WD-API-006).
         rateLimitPerMinute: 0,

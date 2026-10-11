@@ -224,7 +224,8 @@
           "common": "Kata sandi itu terlalu mudah ditebak."
         },
         "socialNoAccount": "Tidak ada akun yang cocok dengan login {provider} itu. Masuk dengan email dan kata sandi Anda, atau buat akun.",
-        "forbidden": "Permintaan itu ditolak. Muat ulang halaman lalu coba lagi."
+        "forbidden": "Permintaan itu ditolak. Muat ulang halaman lalu coba lagi.",
+        "passkeyInvalid": "Kunci sandi itu tidak dapat diverifikasi. Coba lagi, atau gunakan kode."
       },
       "validation": {
         "orgSlug": "Masukkan alamat ruang kerja Anda (huruf, angka, tanda hubung, atau garis bawah).",
@@ -309,7 +310,11 @@
         "useRecovery": "Gunakan kode pemulihan",
         "useApp": "Gunakan kode autentikator",
         "back": "Kembali ke halaman masuk",
-        "expiresIn": "Verifikasi kedaluwarsa dalam {time}"
+        "expiresIn": "Verifikasi kedaluwarsa dalam {time}",
+        "usePasskey": "Gunakan kunci sandi",
+        "passkeyWaiting": "Menunggu kunci sandi Anda",
+        "passkeyCancelled": "Proses masuk dengan kunci sandi dibatalkan atau waktunya habis. Coba lagi, atau gunakan kode.",
+        "passkeyFailed": "Perangkat Anda tidak dapat memberikan kunci sandi. Coba lagi, atau gunakan kode."
       },
       "signup": {
         "steps": {

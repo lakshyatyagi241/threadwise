@@ -107,9 +107,11 @@ describe('error reporting', () => {
   });
 
   it('does not report a client error', async () => {
-    const before = received.length;
+    // Sentry 11 also sends envelopes that carry no error: session counts and client reports (how many spans it dropped)
+    const errorEvents = () => received.filter((body) => body.includes('"type":"event"')).length;
+    const before = errorEvents();
     await supertest(app.getHttpServer()).get('/missing');
     await flushSentry(1000);
-    expect(received.length).toBe(before);
+    expect(errorEvents()).toBe(before);
   });
 });

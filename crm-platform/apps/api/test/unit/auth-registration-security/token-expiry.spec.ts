@@ -1,6 +1,6 @@
 import { JwtService } from '@nestjs/jwt';
 import { describe, expect, it } from 'vitest';
-import { TokenService } from '../../../src/modules/auth/token.service';
+import { JWT_AUDIENCE, JWT_ISSUER, TokenService } from '../../../src/modules/auth/token.service';
 
 const env: Record<string, string> = {
   JWT_ACCESS_SECRET: 'access-secret-for-tests-0123456789abcdef',
@@ -19,6 +19,8 @@ describe('sign-out credentials (WD-AUTH-012)', () => {
     const expired = await jwt.signAsync(claims, {
       secret: env.JWT_ACCESS_SECRET,
       expiresIn: -10,
+      issuer: JWT_ISSUER,
+      audience: JWT_AUDIENCE,
     });
     await expect(tokens.verifyAccess(expired)).rejects.toMatchObject({ code: 'UNAUTHENTICATED' });
     await expect(tokens.verifyAccessIgnoringExpiry(expired)).resolves.toMatchObject({

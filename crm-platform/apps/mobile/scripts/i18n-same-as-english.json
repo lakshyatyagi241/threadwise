@@ -1,0 +1,4 @@
+{
+  "vi": ["auth.email"],
+  "it": ["auth.password"]
+}

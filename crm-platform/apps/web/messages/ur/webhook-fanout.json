@@ -46,6 +46,7 @@
       "allFields": "تمام فیلڈز",
       "success": "{count, number} کامیاب",
       "failure": "{count, number} ناکام",
+      "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
       "pending": "{count, number} زیرِ التوا",
       "pendingLabel": "{count, number} ناکام ڈیلیوریز دوبارہ بھیجے جانے کے انتظار میں",
       "neverDelivered": "ابھی تک کچھ ڈیلیور نہیں ہوا",

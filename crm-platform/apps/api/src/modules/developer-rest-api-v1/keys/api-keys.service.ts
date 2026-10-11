@@ -56,6 +56,8 @@ export class ApiKeysService {
   async create(input: CreateApiKeyInput): Promise<CreateApiKeyResponse> {
     const ctx = RequestContextStore.require();
     if (ctx.userId == null) throw AppError.unauthenticated();
+    // No scopes (omitted or empty) is a full-access key, as in WaDesk (WD-API-008).
+    const scopes = [...new Set(input.scopes ?? [])];
 
     for (let attempt = 1; ; attempt += 1) {
       const raw = generateRawKey();
@@ -68,6 +70,7 @@ export class ApiKeysService {
             name: input.name,
             keyPrefix: keyPrefixOf(raw),
             keyHash: hashRawKey(raw),
+            scopes,
             // The key acts as the member who minted it (WaDesk `user_id`), so what it creates is theirs.
             userId: ctx.userId,
             createdBy: ctx.userId,
@@ -76,12 +79,18 @@ export class ApiKeysService {
             module: MODULE_KEY,
             recordId: created.id,
             action: 'insert',
+            delta: { scopes: { old: null, new: scopes } },
           });
           await this.outbox.emit(tx, {
             aggregateModule: MODULE_KEY,
             aggregateId: created.id,
             eventType: 'api.key_created',
-            payload: { uuid: created.uuid, name: created.name, prefix: created.keyPrefix },
+            payload: {
+              uuid: created.uuid,
+              name: created.name,
+              prefix: created.keyPrefix,
+              scopes,
+            },
           });
           return created;
         });

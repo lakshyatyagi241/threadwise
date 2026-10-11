@@ -1,0 +1,10 @@
+{
+  "_help": "Copy to decisions.json. Keys are finding ids from the report (e.g. redis-failure-behaviour). decision: accepted | deferred | fixed-elsewhere. reason, by and date are required; expires is optional (the finding re-opens after it).",
+  "redis-failure-behaviour": {
+    "decision": "accepted",
+    "reason": "EXAMPLE ONLY. Access tokens last 15 minutes and Redis errors page the on-call; revisit after the incident drill.",
+    "by": "name",
+    "date": "2026-01-01",
+    "expires": "2026-04-01"
+  }
+}

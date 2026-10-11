@@ -385,7 +385,12 @@
         "useCode": "Gunakan kode autentikator",
         "cancel": "Batal",
         "confirm": "Konfirmasi",
-        "verifying": "Memverifikasi"
+        "verifying": "Memverifikasi",
+        "usePasskey": "Gunakan kunci sandi",
+        "passkeyWaiting": "Menunggu kunci sandi Anda",
+        "passkeyCancelled": "Konfirmasi kunci sandi dibatalkan atau waktunya habis. Coba lagi, atau gunakan kode.",
+        "passkeyInvalid": "Kunci sandi itu tidak dapat diverifikasi. Coba lagi, atau gunakan kode.",
+        "passkeyFailed": "Perangkat Anda tidak dapat memberikan kunci sandi. Coba lagi, atau gunakan kode."
       },
       "banners": {
         "dismiss": "Tutup",
@@ -565,6 +570,45 @@
         "timeout": "Server email terlalu lama menjawab. Anda dapat mencoba lagi sekarang.",
         "transport_error": "Email tidak dapat diserahkan ke server email. Anda dapat mencoba lagi sekarang.",
         "unknown": "Email tidak dapat dikirim karena alasan yang tidak kami ketahui. Anda dapat mencoba lagi sekarang."
+      },
+      "passkeys": {
+        "title": "Kunci sandi",
+        "subtitle": "Konfirmasi proses masuk Anda dengan sidik jari, wajah, kunci layar, atau kunci keamanan, tanpa perlu mengetik kode.",
+        "unsupported": "Browser ini tidak dapat menggunakan kunci sandi. Buka halaman ini di Chrome, Edge, Safari, atau Firefox versi terbaru.",
+        "needsMfa": "Kunci sandi bekerja bersama aplikasi autentikator. Aktifkan autentikasi dua faktor terlebih dahulu, lalu tambahkan kunci sandi.",
+        "needsMfaLink": "Buka autentikasi dua faktor",
+        "empty": "Anda belum punya kunci sandi. Tambahkan satu untuk mengonfirmasi proses masuk dengan perangkat Anda.",
+        "add": "Tambahkan kunci sandi",
+        "synced": "Disinkronkan",
+        "deviceOnly": "Hanya di perangkat ini",
+        "added": "Ditambahkan {date}",
+        "lastUsed": "Terakhir digunakan {when}",
+        "neverUsed": "Belum pernah digunakan",
+        "remove": "Hapus",
+        "removeTitle": "Hapus kunci sandi",
+        "removeDescription": "{name} tidak akan lagi berfungsi sebagai langkah kedua saat Anda masuk. Masukkan kata sandi Anda untuk menghapusnya.",
+        "removeConfirm": "Hapus kunci sandi",
+        "removedDone": "Kunci sandi {name} telah dihapus.",
+        "addedDone": "Kunci sandi {name} telah ditambahkan.",
+        "addTitle": "Tambahkan kunci sandi",
+        "addDescription": "Beri nama yang mudah Anda kenali, misalnya Laptop kantor atau Ponsel. Setelah itu, browser Anda akan meminta konfirmasi dengan sidik jari, wajah, kunci layar, atau kunci keamanan.",
+        "addConfirm": "Lanjutkan",
+        "nameLabel": "Nama",
+        "nameHint": "Maksimal {max} karakter.",
+        "namePlaceholder": "Laptop kantor",
+        "nameRequired": "Masukkan nama untuk kunci sandi ini.",
+        "passwordNeeded": "Sudah cukup lama sejak Anda masuk. Masukkan kata sandi Anda untuk melanjutkan.",
+        "preparing": "Menyiapkan",
+        "waiting": "Menunggu perangkat Anda",
+        "saving": "Menyimpan",
+        "problems": {
+          "cancelled": "Kunci sandi tidak dibuat karena permintaan dibatalkan atau waktunya habis. Coba lagi.",
+          "alreadyRegistered": "Perangkat ini sudah memiliki kunci sandi untuk akun Anda. Gunakan perangkat lain atau kunci keamanan, atau hapus kunci sandi yang ada terlebih dahulu.",
+          "invalid": "Respons perangkat Anda tidak dapat diverifikasi. Coba lagi.",
+          "limit": "Anda telah mencapai jumlah maksimum kunci sandi yang dapat dimiliki satu akun. Hapus satu untuk menambahkan yang lain.",
+          "unsupported": "Perangkat ini tidak dapat membuat jenis kunci sandi ini. Coba perangkat lain atau kunci keamanan.",
+          "failed": "Browser atau perangkat Anda tidak dapat membuat kunci sandi. Coba lagi."
+        }
       }
     }
   }

@@ -385,7 +385,12 @@
         "useCode": "改用验证器验证码",
         "cancel": "取消",
         "confirm": "确认",
-        "verifying": "正在验证"
+        "verifying": "正在验证",
+        "usePasskey": "改用通行密钥",
+        "passkeyWaiting": "正在等待你的通行密钥",
+        "passkeyCancelled": "通行密钥确认已取消或已超时。请重试，或使用验证码。",
+        "passkeyInvalid": "无法验证该通行密钥。请重试，或使用验证码。",
+        "passkeyFailed": "你的设备无法提供通行密钥。请重试，或使用验证码。"
       },
       "banners": {
         "dismiss": "忽略",
@@ -565,6 +570,45 @@
         "timeout": "邮件服务器响应超时。你可以立即重试。",
         "transport_error": "邮件无法提交给邮件服务器。你可以立即重试。",
         "unknown": "邮件发送失败，原因不明。你可以立即重试。"
+      },
+      "passkeys": {
+        "title": "通行密钥",
+        "subtitle": "使用指纹、面容、屏幕锁定或安全密钥确认登录，无需输入验证码。",
+        "unsupported": "此浏览器无法使用通行密钥。请在最新版本的 Chrome、Edge、Safari 或 Firefox 中打开此页面。",
+        "needsMfa": "通行密钥需与验证器应用配合使用。请先开启双重验证，再添加通行密钥。",
+        "needsMfaLink": "前往双重验证",
+        "empty": "你还没有通行密钥。添加一个，即可用设备确认登录。",
+        "add": "添加通行密钥",
+        "synced": "已同步",
+        "deviceOnly": "仅限此设备",
+        "added": "添加于 {date}",
+        "lastUsed": "上次使用：{when}",
+        "neverUsed": "从未使用",
+        "remove": "移除",
+        "removeTitle": "移除通行密钥",
+        "removeDescription": "{name} 将不再作为登录时的第二步验证方式。请输入密码以移除。",
+        "removeConfirm": "移除通行密钥",
+        "removedDone": "通行密钥 {name} 已移除。",
+        "addedDone": "通行密钥 {name} 已添加。",
+        "addTitle": "添加通行密钥",
+        "addDescription": "请起一个便于你辨认的名称，例如“工作笔记本”或“手机”。随后浏览器会要求你通过指纹、面容、屏幕锁定或安全密钥进行确认。",
+        "addConfirm": "继续",
+        "nameLabel": "名称",
+        "nameHint": "最多 {max} 个字符。",
+        "namePlaceholder": "工作笔记本",
+        "nameRequired": "请输入此通行密钥的名称。",
+        "passwordNeeded": "你已有一段时间没有登录了。请输入密码以继续。",
+        "preparing": "正在准备",
+        "waiting": "正在等待你的设备",
+        "saving": "正在保存",
+        "problems": {
+          "cancelled": "通行密钥未创建：请求已取消或已超时。请重试。",
+          "alreadyRegistered": "此设备上已有你账户的通行密钥。请使用其他设备或安全密钥，或先移除现有的通行密钥。",
+          "invalid": "无法验证你设备的响应。请重试。",
+          "limit": "你的账户已达到可保存的通行密钥数量上限。请先移除一个，再添加新的。",
+          "unsupported": "此设备无法创建这类通行密钥。请尝试其他设备或安全密钥。",
+          "failed": "你的浏览器或设备无法创建通行密钥。请重试。"
+        }
       }
     }
   }

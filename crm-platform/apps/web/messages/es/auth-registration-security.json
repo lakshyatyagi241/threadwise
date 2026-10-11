@@ -224,7 +224,8 @@
           "common": "Esa contraseña es demasiado fácil de adivinar."
         },
         "socialNoAccount": "Ninguna cuenta coincide con ese inicio de sesión de {provider}. Inicia sesión con tu correo y contraseña, o crea una cuenta.",
-        "forbidden": "Se rechazó esa solicitud. Recarga la página e inténtalo de nuevo."
+        "forbidden": "Se rechazó esa solicitud. Recarga la página e inténtalo de nuevo.",
+        "passkeyInvalid": "No se pudo verificar esa llave de acceso. Inténtalo de nuevo o usa un código."
       },
       "validation": {
         "orgSlug": "Introduce la dirección de tu espacio de trabajo (letras, números, guion o guion bajo).",
@@ -309,7 +310,11 @@
         "useRecovery": "Usar un código de recuperación",
         "useApp": "Usar el código de autenticación",
         "back": "Volver a iniciar sesión",
-        "expiresIn": "La verificación caduca en {time}"
+        "expiresIn": "La verificación caduca en {time}",
+        "usePasskey": "Usar una llave de acceso",
+        "passkeyWaiting": "Esperando tu llave de acceso",
+        "passkeyCancelled": "El inicio de sesión con llave de acceso se canceló o caducó. Inténtalo de nuevo o usa un código.",
+        "passkeyFailed": "Tu dispositivo no pudo proporcionar la llave de acceso. Inténtalo de nuevo o usa un código."
       },
       "signup": {
         "steps": {

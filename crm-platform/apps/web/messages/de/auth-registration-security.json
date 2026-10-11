@@ -224,7 +224,8 @@
           "common": "Das Passwort ist zu leicht zu erraten."
         },
         "socialNoAccount": "Zu dieser {provider}-Anmeldung gehört kein Konto. Melden Sie sich mit E-Mail und Passwort an oder erstellen Sie ein Konto.",
-        "forbidden": "Die Anfrage wurde abgelehnt. Laden Sie die Seite neu und versuchen Sie es erneut."
+        "forbidden": "Die Anfrage wurde abgelehnt. Laden Sie die Seite neu und versuchen Sie es erneut.",
+        "passkeyInvalid": "Dieser Passkey konnte nicht überprüft werden. Versuchen Sie es erneut oder verwenden Sie einen Code."
       },
       "validation": {
         "orgSlug": "Geben Sie Ihre Workspace-Adresse ein (Buchstaben, Zahlen, Bindestrich oder Unterstrich).",
@@ -309,7 +310,11 @@
         "useRecovery": "Stattdessen einen Wiederherstellungscode verwenden",
         "useApp": "Stattdessen den Authenticator-Code verwenden",
         "back": "Zurück zur Anmeldung",
-        "expiresIn": "Die Bestätigung läuft in {time} ab"
+        "expiresIn": "Die Bestätigung läuft in {time} ab",
+        "usePasskey": "Passkey verwenden",
+        "passkeyWaiting": "Warten auf Ihren Passkey",
+        "passkeyCancelled": "Die Anmeldung mit dem Passkey wurde abgebrochen oder ist abgelaufen. Versuchen Sie es erneut oder verwenden Sie einen Code.",
+        "passkeyFailed": "Ihr Gerät konnte den Passkey nicht bereitstellen. Versuchen Sie es erneut oder verwenden Sie einen Code."
       },
       "signup": {
         "steps": {

@@ -9,10 +9,14 @@ import {
   emailSchema,
   mfaRequiredSchema,
   operatorAuthenticatedSchema,
+  webauthnOptionsResponseSchema,
 } from '@crm/contracts';
 import { Alert, Button, Card, Field, Input, PasswordInput, Spinner } from '@crm/ui';
 import { ApiError, toApiError } from '@/lib/api/errors';
 import { lockedMinutes } from '../../shared/error-utils';
+import { KeyIcon } from '../../shared/icons';
+import { assertPasskey, usePasskeySupport } from '../../shared/passkeys/passkey-browser';
+import { classifyPasskeyError } from '../../shared/passkeys/passkey-failure';
 import { fieldMessage, retryAfterSeconds } from '../lib/api-errors';
 import { formatMmSs } from '../lib/kpi';
 import { OPERATOR_ACCOUNT_PATH, OPERATOR_HOME } from '../operator-nav';
@@ -36,9 +40,13 @@ function focusField(id: string, select = false) {
 }
 
 type Step =
-  { kind: 'credentials' } | { kind: 'mfa'; challengeToken: string; expiresInSeconds: number };
+  | { kind: 'credentials' }
+  | { kind: 'mfa'; challengeToken: string; expiresInSeconds: number; passkey: boolean };
 type Problem =
   | { kind: 'invalid' }
+  | { kind: 'passkeyInvalid' }
+  | { kind: 'passkeyCancelled' }
+  | { kind: 'passkeyFailed' }
   | { kind: 'locked'; minutes: number | null }
   | { kind: 'ipBlocked'; ip: string }
   | { kind: 'captcha' }
@@ -99,6 +107,8 @@ export function OperatorLogin({
     captcha?: string;
   }>({});
   const [useRecovery, setUseRecovery] = useState(false);
+  const [viaPasskey, setViaPasskey] = useState(false);
+  const passkeySupported = usePasskeySupport();
   const [notice, setNotice] = useState<'expired' | 'idle' | null>(
     expired ? 'expired' : idleMinutes ? 'idle' : null,
   );
@@ -139,6 +149,8 @@ export function OperatorLogin({
         return { kind: 'captcha' };
       case ERROR_CODES.AUTH_MFA_CHALLENGE_EXPIRED:
         return { kind: 'challengeExpired' };
+      case ERROR_CODES.AUTH_PASSKEY_INVALID:
+        return { kind: 'passkeyInvalid' };
       case ERROR_CODES.RATE_LIMITED: {
         const wait = retryAfterSeconds(e);
         if (wait) lock.start(wait);
@@ -191,6 +203,7 @@ export function OperatorLogin({
           kind: 'mfa',
           challengeToken: res.data.challengeToken,
           expiresInSeconds: res.data.expiresInSeconds,
+          passkey: res.data.passkey === true,
         });
         setPending(false);
         return;
@@ -235,10 +248,51 @@ export function OperatorLogin({
     }
   }
 
+  /** The browser asks for the passkey (fingerprint, face, screen lock or key); the API checks the answer. */
+  async function signInWithPasskey() {
+    if (pending || locked || step.kind !== 'mfa') return;
+    setFieldErrors({});
+    setPending(true);
+    setViaPasskey(true);
+    setProblem(null);
+    try {
+      const options = webauthnOptionsResponseSchema.parse(
+        await post('/api/platform/auth/login/mfa/webauthn-options', {
+          challengeToken: step.challengeToken,
+        }),
+      );
+      const assertion = await assertPasskey(options);
+      const raw = (await post('/api/platform-auth/mfa', {
+        challengeToken: step.challengeToken,
+        webauthn: assertion,
+      })) as { mfaEnrolmentRequired?: boolean };
+      finish(raw.mfaEnrolmentRequired === true);
+    } catch (err) {
+      // Not an API answer: the browser's prompt was closed, or the device could not provide the passkey.
+      const p: Problem =
+        err instanceof ApiError
+          ? explain(err)
+          : {
+              kind:
+                classifyPasskeyError(err) === 'cancelled' ? 'passkeyCancelled' : 'passkeyFailed',
+            };
+      if (p.kind === 'challengeExpired' || p.kind === 'ipBlocked') backToCredentials(p);
+      else setProblem(p);
+      setPending(false);
+      setViaPasskey(false);
+    }
+  }
+
   const problemText = (p: Problem): string => {
     switch (p.kind) {
       case 'invalid':
         return step.kind === 'mfa' ? t('problems.invalidCode') : t('problems.invalid');
+      case 'passkeyInvalid':
+        return t('problems.passkeyInvalid');
+      case 'passkeyCancelled':
+        return t('problems.passkeyCancelled');
+      case 'passkeyFailed':
+        return t('problems.passkeyFailed');
       case 'locked':
         return p.minutes ? t('problems.lockedWait', { minutes: p.minutes }) : t('problems.locked');
       case 'ipBlocked':
@@ -419,13 +473,29 @@ export function OperatorLogin({
               : t('mfa.windowLeft', { time: formatMmSs(challengeLeft) })}
           </p>
           <Button type="submit" className="w-full" disabled={pending || challengeOver || locked}>
-            {pending && <Spinner label={t('mfa.verifying')} />}
-            {pending
+            {pending && !viaPasskey && <Spinner label={t('mfa.verifying')} />}
+            {pending && !viaPasskey
               ? t('mfa.verifying')
               : locked
                 ? t('problems.tryAgainIn', { time: formatMmSs(lock.remaining) })
                 : t('mfa.verify')}
           </Button>
+          {step.passkey && passkeySupported && (
+            <Button
+              type="button"
+              variant="secondary"
+              className="w-full"
+              disabled={pending || challengeOver || locked}
+              onClick={() => void signInWithPasskey()}
+            >
+              {viaPasskey ? (
+                <Spinner label={t('mfa.passkeyWaiting')} />
+              ) : (
+                <KeyIcon className="size-4" />
+              )}
+              {viaPasskey ? t('mfa.passkeyWaiting') : t('mfa.usePasskey')}
+            </Button>
+          )}
           <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
             <button
               type="button"

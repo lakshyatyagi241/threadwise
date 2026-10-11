@@ -385,7 +385,12 @@
         "useCode": "Usar um código do autenticador",
         "cancel": "Cancelar",
         "confirm": "Confirmar",
-        "verifying": "Verificando"
+        "verifying": "Verificando",
+        "usePasskey": "Usar uma chave de acesso em vez disso",
+        "passkeyWaiting": "Aguardando sua chave de acesso",
+        "passkeyCancelled": "A confirmação com a chave de acesso foi cancelada ou expirou. Tente novamente ou use um código.",
+        "passkeyInvalid": "Não foi possível verificar essa chave de acesso. Tente novamente ou use um código.",
+        "passkeyFailed": "Seu dispositivo não conseguiu fornecer a chave de acesso. Tente novamente ou use um código."
       },
       "banners": {
         "dismiss": "Dispensar",
@@ -565,6 +570,45 @@
         "timeout": "O servidor de e-mail demorou demais para responder. Você pode tentar novamente agora.",
         "transport_error": "Não foi possível entregar o e-mail ao servidor de e-mail. Você pode tentar novamente agora.",
         "unknown": "Não foi possível enviar o e-mail por um motivo desconhecido. Você pode tentar novamente agora."
+      },
+      "passkeys": {
+        "title": "Chaves de acesso",
+        "subtitle": "Confirme seu login com sua impressão digital, seu rosto, o bloqueio de tela ou uma chave de segurança, em vez de digitar um código.",
+        "unsupported": "Este navegador não é compatível com chaves de acesso. Abra esta página em uma versão atual do Chrome, Edge, Safari ou Firefox.",
+        "needsMfa": "As chaves de acesso funcionam junto com um app autenticador. Ative primeiro a autenticação em duas etapas e depois adicione uma chave de acesso.",
+        "needsMfaLink": "Ir para a autenticação em duas etapas",
+        "empty": "Você ainda não tem nenhuma chave de acesso. Adicione uma para confirmar seu login com o seu dispositivo.",
+        "add": "Adicionar uma chave de acesso",
+        "synced": "Sincronizada",
+        "deviceOnly": "Somente este dispositivo",
+        "added": "Adicionada em {date}",
+        "lastUsed": "Último uso: {when}",
+        "neverUsed": "Nunca usada",
+        "remove": "Remover",
+        "removeTitle": "Remover chave de acesso",
+        "removeDescription": "A chave de acesso {name} deixará de funcionar como segunda etapa no login. Digite sua senha para removê-la.",
+        "removeConfirm": "Remover chave de acesso",
+        "removedDone": "A chave de acesso {name} foi removida.",
+        "addedDone": "A chave de acesso {name} foi adicionada.",
+        "addTitle": "Adicionar uma chave de acesso",
+        "addDescription": "Dê um nome que você reconheça, como Notebook do trabalho ou Celular. Em seguida, o navegador pedirá que você confirme com sua impressão digital, seu rosto, o bloqueio de tela ou uma chave de segurança.",
+        "addConfirm": "Continuar",
+        "nameLabel": "Nome",
+        "nameHint": "Até {max} caracteres.",
+        "namePlaceholder": "Notebook do trabalho",
+        "nameRequired": "Digite um nome para esta chave de acesso.",
+        "passwordNeeded": "Faz um tempo que você fez login. Digite sua senha para continuar.",
+        "preparing": "Preparando",
+        "waiting": "Aguardando seu dispositivo",
+        "saving": "Salvando",
+        "problems": {
+          "cancelled": "A chave de acesso não foi criada: a solicitação foi cancelada ou expirou. Tente novamente.",
+          "alreadyRegistered": "Este dispositivo já tem uma chave de acesso para sua conta. Use outro dispositivo ou uma chave de segurança, ou remova primeiro a chave de acesso existente.",
+          "invalid": "Não foi possível verificar a resposta do seu dispositivo. Tente novamente.",
+          "limit": "Você atingiu o número máximo de chaves de acesso que uma conta pode ter. Remova uma para adicionar outra.",
+          "unsupported": "Este dispositivo não consegue criar esse tipo de chave de acesso. Tente outro dispositivo ou uma chave de segurança.",
+          "failed": "Seu navegador ou dispositivo não conseguiu criar a chave de acesso. Tente novamente."
+        }
       }
     }
   }

@@ -46,6 +46,7 @@
       "allFields": "すべての項目",
       "success": "{count, number} 件成功",
       "failure": "{count, number} 件失敗",
+      "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
       "pending": "{count, number} 件保留中",
       "pendingLabel": "再送信待ちの失敗した配信が {count, number} 件あります",
       "neverDelivered": "まだ配信されていません",
