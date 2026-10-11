@@ -78,7 +78,8 @@
       "noMatchMessage": "Ubah pencarian atau filter untuk melihat lebih banyak.",
       "loadMore": "Muat lainnya",
       "loadingMore": "Memuat lebih banyak",
-      "loaded": "{count, plural, other {# workspace}} ditampilkan"
+      "loaded": "{count, plural, other {# workspace}} ditampilkan",
+      "retentionLink": "Retensi"
     },
     "cell": {
       "suspended": "Ditangguhkan",
@@ -252,6 +253,147 @@
         "text": "Tiket, percakapan, dan riwayat dukungan dari workspace ini.",
         "open": "Buka catatan dukungan",
         "openTickets": "{count, plural, other {# tiket terbuka}}"
+      }
+    },
+    "retention": {
+      "crumb": "Retensi",
+      "title": "Retensi workspace",
+      "subtitle": "Workspace tidak aktif, dari yang paling lama tidak aktif: kapan masing-masing diarsipkan dan dihapus, pengingat yang dikirim, serta kontrol untuk melindungi atau memulihkan workspace.",
+      "backToList": "Kembali ke workspace",
+      "deniedTitle": "Tidak ada akses",
+      "tableLabel": "Retensi workspace",
+      "status": {
+        "active": "Aktif",
+        "archived": "Diarsipkan",
+        "suspended": "Ditangguhkan",
+        "deleted": "Dihapus oleh pemilik"
+      },
+      "filters": {
+        "label": "Filter",
+        "status": "Status",
+        "allStatuses": "Semua status",
+        "minDays": "Minimum hari tidak aktif",
+        "neverDeleteOnly": "Hanya Jangan pernah hapus",
+        "clear": "Hapus filter"
+      },
+      "columns": {
+        "workspace": "Workspace",
+        "status": "Status",
+        "daysInactive": "Hari tidak aktif",
+        "lastActivity": "Aktivitas terakhir",
+        "archiveOn": "Arsip pada",
+        "eraseOn": "Hapus pada",
+        "reminders": "Pengingat terkirim",
+        "protection": "Perlindungan",
+        "actions": "Aksi"
+      },
+      "remindersArchive": "Arsip {n}/3",
+      "remindersErase": "Hapus {n}/3",
+      "emptyTitle": "Tidak ada workspace untuk ditampilkan",
+      "emptyMessage": "Workspace muncul di sini setelah dibuat.",
+      "noMatchTitle": "Tidak ada workspace yang cocok",
+      "noMatchMessage": "Ubah filter untuk melihat lebih banyak.",
+      "loadMore": "Muat lebih banyak",
+      "loadingMore": "Memuat lebih banyak",
+      "loaded": "{count, plural, other {# workspace}} ditampilkan",
+      "badge": {
+        "neverDelete": "Jangan pernah hapus",
+        "legalHold": "Penahanan hukum",
+        "paidPlan": "Paket berbayar (dikecualikan)",
+        "paidPlanHint": "Workspace dengan paket berbayar aktif tidak pernah diarsipkan karena tidak aktif.",
+        "until": "Sampai {date}",
+        "indefinite": "Tanpa kedaluwarsa",
+        "by": "Ditetapkan oleh {who}"
+      },
+      "actions": {
+        "menu": "Aksi retensi untuk {name}",
+        "history": "Riwayat",
+        "policy": "Ubah waktu",
+        "exemptOn": "Jangan pernah hapus",
+        "exemptOff": "Cabut Jangan pernah hapus",
+        "restore": "Pulihkan",
+        "holdOn": "Tetapkan penahanan hukum",
+        "holdOff": "Cabut penahanan hukum"
+      },
+      "event": {
+        "reminder_sent": "Pengingat terkirim",
+        "archived": "Diarsipkan",
+        "deleted": "Dihapus",
+        "delete_blocked": "Penghapusan diblokir",
+        "restored": "Dipulihkan",
+        "policy_changed": "Waktu diubah",
+        "exemption_set": "Jangan pernah hapus diaktifkan",
+        "exemption_cleared": "Jangan pernah hapus dicabut",
+        "legal_hold_set": "Penahanan hukum ditetapkan",
+        "legal_hold_cleared": "Penahanan hukum dicabut"
+      },
+      "history": {
+        "title": "Riwayat {name}",
+        "emptyTitle": "Belum ada riwayat",
+        "emptyMessage": "Pengingat dan perubahan muncul di sini.",
+        "stage": "Langkah",
+        "stages": {
+          "archive": "Arsip",
+          "delete": "Hapus"
+        },
+        "reminderNo": "pengingat {n}",
+        "daysInactive": "{count, plural, other {# hari tidak aktif}}",
+        "by": "Oleh",
+        "system": "Sistem",
+        "reason": "Alasan"
+      },
+      "dialog": {
+        "reason": "Alasan",
+        "reasonHint": "5 sampai 500 karakter. Disimpan dalam log kepatuhan.",
+        "errors": {
+          "reasonShort": "Tulis minimal 5 karakter.",
+          "reasonLong": "Gunakan maksimal 500 karakter.",
+          "archiveWhole": "Masukkan jumlah hari berupa bilangan bulat.",
+          "archiveMin": "Arsipkan setelah minimal 60 hari.",
+          "archiveMax": "Arsipkan setelah maksimal 3650 hari.",
+          "eraseWhole": "Masukkan jumlah hari berupa bilangan bulat.",
+          "eraseMin": "Hapus setelah minimal 120 hari.",
+          "eraseMax": "Hapus setelah maksimal 7300 hari.",
+          "gap": "Penghapusan harus dilakukan minimal {days} hari setelah pengarsipan.",
+          "noChange": "Ubah setidaknya satu waktu.",
+          "untilPast": "Pilih tanggal di masa depan."
+        },
+        "mode": "Sumber waktu",
+        "days": "Hari",
+        "useDefault": "Gunakan default platform",
+        "custom": "Hari khusus",
+        "policyTitle": "Ubah waktu untuk {name}",
+        "policyMessage": "Jumlah hari tidak aktif sebelum workspace diarsipkan dan sebelum dihapus. Pengingat ikut menyesuaikan.",
+        "archiveAfter": "Arsipkan setelah (hari)",
+        "archiveHint": "Default platform {default} hari; minimal {min}.",
+        "eraseAfter": "Hapus setelah (hari)",
+        "eraseHint": "Default platform {default} hari; minimal {min}.",
+        "policyConfirm": "Simpan waktu",
+        "policyDone": "Waktu disimpan untuk {name}.",
+        "exemptOnTitle": "Jangan pernah hapus {name}?",
+        "exemptOnMessage": "Selama ini aktif, workspace tidak pernah diarsipkan atau dihapus karena tidak aktif.",
+        "exemptOnConfirm": "Aktifkan Jangan pernah hapus",
+        "exemptOnDone": "{name} tidak akan pernah dihapus.",
+        "exemptOffTitle": "Cabut Jangan pernah hapus untuk {name}?",
+        "exemptOffMessage": "Workspace kembali mengikuti waktunya dan dapat diarsipkan serta dihapus.",
+        "exemptOffConfirm": "Cabut Jangan pernah hapus",
+        "exemptOffDone": "{name} kembali mengikuti waktunya.",
+        "until": "Tinjau pada (opsional)",
+        "untilHint": "Perlindungan berakhir pada tanggal ini agar ditinjau kembali. Kosongkan jika tanpa kedaluwarsa.",
+        "restoreTitle": "Pulihkan {name}?",
+        "restoreMessage": "Workspace menjadi aktif, penggunanya dapat masuk lagi, dan hitungan ketidakaktifan dimulai ulang.",
+        "restoreConfirm": "Pulihkan workspace",
+        "restoreDone": "{name} telah dipulihkan.",
+        "holdOnTitle": "Tetapkan penahanan hukum pada {name}?",
+        "holdOnMessage": "Selama penahanan aktif, workspace tidak pernah diarsipkan atau dihapus, apa pun waktunya.",
+        "holdOnSure": "Saya paham ini menghentikan semua pengarsipan dan penghapusan.",
+        "holdOnConfirm": "Tetapkan penahanan hukum",
+        "holdOnDone": "Penahanan hukum ditetapkan pada {name}.",
+        "holdOffTitle": "Cabut penahanan hukum pada {name}?",
+        "holdOffMessage": "Workspace kembali mengikuti waktunya dan dapat diarsipkan serta dihapus.",
+        "holdOffSure": "Saya konfirmasi penahanan boleh dicabut.",
+        "holdOffConfirm": "Cabut penahanan hukum",
+        "holdOffDone": "Penahanan hukum dicabut pada {name}."
       }
     }
   }

@@ -271,6 +271,26 @@ tenant transaction. Contract: `packages/contracts/src/workspaces-teams-tenancy/a
 delegate to the platform inbox (frozen flag, status sync, `platform.inbox.*` audit); a remaining `fraud` or `tos_violation` flag keeps
 the workspace suspended after a lift (`suspendedBy` shows it). Reads are not audited.
 
+## Operator workspace lifecycle (inactivity: remind, archive, erase)
+
+Not a Reference feature: added at the owner's request (ADR-0028). Operator-only, on its own path (`/v2/platform/workspace-lifecycle`, a sibling
+of the hub because `/v2/platform/workspaces/:id` would swallow a literal segment). Contract: `packages/contracts/src/workspaces-teams-tenancy/lifecycle.ts`.
+
+| Method | Path                                              | Key                             | Notes                                                                        |
+| ------ | ------------------------------------------------- | ------------------------------- | ---------------------------------------------------------------------------- |
+| GET    | `/v2/platform/workspace-lifecycle`                | `platform.workspace.view_all`   | filters `status`, `minDaysInactive`, `exempt`; `order=asc` = most idle first |
+| GET    | `/v2/platform/workspace-lifecycle/:id`            | `platform.workspace.view_all`   | effective timings, schedule, reminders sent, exemption, hold                 |
+| GET    | `/v2/platform/workspace-lifecycle/:id/log`        | `platform.workspace.view_all`   | the compliance history (newest first)                                        |
+| PATCH  | `/v2/platform/workspace-lifecycle/:id/policy`     | `platform.workspace.retention`  | `{ archiveAfterDays?, deleteAfterDays?, reason }`; `null` = platform default |
+| POST   | `/v2/platform/workspace-lifecycle/:id/exemption`  | `platform.workspace.retention`  | `{ exempt, reason, until? }`: the never-delete switch                        |
+| POST   | `/v2/platform/workspace-lifecycle/:id/restore`    | `platform.workspace.retention`  | archived only; restarts the inactivity clock                                 |
+| POST   | `/v2/platform/workspace-lifecycle/:id/legal-hold` | `platform.workspace.legal_hold` | `{ legalHold, reason }`; Super Admin only                                    |
+
+Defaults 90 / 180 days; overrides archive 60 to 3650, erase 120 to 7300, erase at least 60 days after archive. Every write needs a reason
+and is recorded with the operator in `org_lifecycle_log`. A workspace on an active paid plan is never idle-archived (`exemptByPlan`).
+A workspace its owner deleted (`status = 'deleted'`) is listed too and is erased 30 days after the deletion (a legal hold stops it; never-delete does not).
+Settings: `ORG_LIFECYCLE_ENABLED`, `ORG_LIFECYCLE_DRY_RUN`, `ORG_LIFECYCLE_DELETE_ENABLED`, `FINANCIAL_RECORD_RETENTION_YEARS` (see ADR-0028 for what each does).
+
 ### GET /v2/platform/workspaces
 
 Query: `q` (name, slug, owner name or email), `status` (`all|active|suspended`), `plan` (slug), `state` (`free_trial|free|paid_active|paid_grace|paid_lapsed|custom_quote`),

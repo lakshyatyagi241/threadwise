@@ -78,7 +78,8 @@
       "noMatchMessage": "Modifiez la recherche ou les filtres pour voir davantage de résultats.",
       "loadMore": "Charger plus",
       "loadingMore": "Chargement en cours",
-      "loaded": "{count, plural, one {# espace de travail affiché} other {# espaces de travail affichés}}"
+      "loaded": "{count, plural, one {# espace de travail affiché} other {# espaces de travail affichés}}",
+      "retentionLink": "Conservation"
     },
     "cell": {
       "suspended": "Suspendu",
@@ -252,6 +253,147 @@
         "text": "Tickets, conversations et historique de support de cet espace de travail.",
         "open": "Ouvrir le dossier de support",
         "openTickets": "{count, plural, one {# ticket ouvert} other {# tickets ouverts}}"
+      }
+    },
+    "retention": {
+      "crumb": "Conservation",
+      "title": "Conservation des espaces de travail",
+      "subtitle": "Espaces de travail inactifs, les plus inactifs en premier : date d'archivage et d'effacement de chacun, rappels envoyés et actions pour en protéger ou en restaurer un.",
+      "backToList": "Retour aux espaces de travail",
+      "deniedTitle": "Aucun accès",
+      "tableLabel": "Conservation des espaces de travail",
+      "status": {
+        "active": "Actif",
+        "archived": "Archivé",
+        "suspended": "Suspendu",
+        "deleted": "Supprimé par le propriétaire"
+      },
+      "filters": {
+        "label": "Filtres",
+        "status": "Statut",
+        "allStatuses": "Tous les statuts",
+        "minDays": "Nombre minimal de jours d'inactivité",
+        "neverDeleteOnly": "« Ne jamais supprimer » uniquement",
+        "clear": "Effacer les filtres"
+      },
+      "columns": {
+        "workspace": "Espace de travail",
+        "status": "Statut",
+        "daysInactive": "Jours d'inactivité",
+        "lastActivity": "Dernière activité",
+        "archiveOn": "Archivage le",
+        "eraseOn": "Effacement le",
+        "reminders": "Rappels envoyés",
+        "protection": "Protection",
+        "actions": "Actions"
+      },
+      "remindersArchive": "Archivage {n}/3",
+      "remindersErase": "Effacement {n}/3",
+      "emptyTitle": "Aucun espace de travail à afficher",
+      "emptyMessage": "Les espaces de travail apparaîtront ici une fois créés.",
+      "noMatchTitle": "Aucun espace de travail correspondant",
+      "noMatchMessage": "Modifiez les filtres pour en voir plus.",
+      "loadMore": "Charger plus",
+      "loadingMore": "Chargement en cours",
+      "loaded": "{count, plural, one {# espace de travail affiché} many {# d'espaces de travail affichés} other {# espaces de travail affichés}}",
+      "badge": {
+        "neverDelete": "Ne jamais supprimer",
+        "legalHold": "Blocage juridique",
+        "paidPlan": "Forfait payant (exempté)",
+        "paidPlanHint": "Un espace de travail sous forfait payant actif n'est jamais archivé pour inactivité.",
+        "until": "Jusqu'au {date}",
+        "indefinite": "Sans expiration",
+        "by": "Défini par {who}"
+      },
+      "actions": {
+        "menu": "Actions de conservation pour {name}",
+        "history": "Historique",
+        "policy": "Modifier les délais",
+        "exemptOn": "Ne jamais supprimer",
+        "exemptOff": "Retirer « Ne jamais supprimer »",
+        "restore": "Restaurer",
+        "holdOn": "Placer un blocage juridique",
+        "holdOff": "Lever le blocage juridique"
+      },
+      "event": {
+        "reminder_sent": "Rappel envoyé",
+        "archived": "Archivé",
+        "deleted": "Effacé",
+        "delete_blocked": "Effacement bloqué",
+        "restored": "Restauré",
+        "policy_changed": "Délais modifiés",
+        "exemption_set": "« Ne jamais supprimer » activé",
+        "exemption_cleared": "« Ne jamais supprimer » retiré",
+        "legal_hold_set": "Blocage juridique placé",
+        "legal_hold_cleared": "Blocage juridique levé"
+      },
+      "history": {
+        "title": "Historique de {name}",
+        "emptyTitle": "Aucun historique pour l'instant",
+        "emptyMessage": "Les rappels et les modifications apparaîtront ici.",
+        "stage": "Étape",
+        "stages": {
+          "archive": "Archivage",
+          "delete": "Effacement"
+        },
+        "reminderNo": "rappel {n}",
+        "daysInactive": "{count, plural, one {# jour d'inactivité} many {# de jours d'inactivité} other {# jours d'inactivité}}",
+        "by": "Par",
+        "system": "Système",
+        "reason": "Motif"
+      },
+      "dialog": {
+        "reason": "Motif",
+        "reasonHint": "De 5 à 500 caractères. Conservé dans le journal de conformité.",
+        "errors": {
+          "reasonShort": "Saisissez au moins 5 caractères.",
+          "reasonLong": "Saisissez au plus 500 caractères.",
+          "archiveWhole": "Saisissez un nombre entier de jours.",
+          "archiveMin": "Archivage après 60 jours minimum.",
+          "archiveMax": "Archivage après 3650 jours maximum.",
+          "eraseWhole": "Saisissez un nombre entier de jours.",
+          "eraseMin": "Effacement après 120 jours minimum.",
+          "eraseMax": "Effacement après 7300 jours maximum.",
+          "gap": "L'effacement doit avoir lieu au moins {days} jours après l'archivage.",
+          "noChange": "Modifiez au moins un délai.",
+          "untilPast": "Choisissez une date future."
+        },
+        "mode": "Source des délais",
+        "days": "Jours",
+        "useDefault": "Utiliser la valeur par défaut de la plateforme",
+        "custom": "Jours personnalisés",
+        "policyTitle": "Modifier les délais de {name}",
+        "policyMessage": "Jours d'inactivité avant l'archivage de l'espace de travail et avant son effacement. Les rappels suivent ces délais.",
+        "archiveAfter": "Archiver après (jours)",
+        "archiveHint": "Valeur par défaut de la plateforme : {default} jours ; minimum {min}.",
+        "eraseAfter": "Effacer après (jours)",
+        "eraseHint": "Valeur par défaut de la plateforme : {default} jours ; minimum {min}.",
+        "policyConfirm": "Enregistrer les délais",
+        "policyDone": "Délais enregistrés pour {name}.",
+        "exemptOnTitle": "Activer « Ne jamais supprimer » pour {name} ?",
+        "exemptOnMessage": "Tant que cette option est activée, l'espace de travail n'est ni archivé ni effacé pour inactivité.",
+        "exemptOnConfirm": "Activer « Ne jamais supprimer »",
+        "exemptOnDone": "{name} ne sera jamais supprimé.",
+        "exemptOffTitle": "Retirer « Ne jamais supprimer » pour {name} ?",
+        "exemptOffMessage": "L'espace de travail suit de nouveau ses délais et peut être archivé puis effacé.",
+        "exemptOffConfirm": "Retirer « Ne jamais supprimer »",
+        "exemptOffDone": "{name} suit de nouveau ses délais.",
+        "until": "Revoir le (facultatif)",
+        "untilHint": "La protection prend fin à cette date afin d'être réexaminée. Laissez vide pour ne pas définir d'expiration.",
+        "restoreTitle": "Restaurer {name} ?",
+        "restoreMessage": "L'espace de travail redevient actif, ses membres peuvent se reconnecter et le compteur d'inactivité repart de zéro.",
+        "restoreConfirm": "Restaurer l'espace de travail",
+        "restoreDone": "{name} est restauré.",
+        "holdOnTitle": "Placer un blocage juridique sur {name} ?",
+        "holdOnMessage": "Tant que le blocage est actif, l'espace de travail n'est ni archivé ni effacé, quels que soient ses délais.",
+        "holdOnSure": "Je comprends que cela arrête tout archivage et tout effacement.",
+        "holdOnConfirm": "Placer un blocage juridique",
+        "holdOnDone": "Blocage juridique placé sur {name}.",
+        "holdOffTitle": "Lever le blocage juridique sur {name} ?",
+        "holdOffMessage": "L'espace de travail suit de nouveau ses délais et peut être archivé puis effacé.",
+        "holdOffSure": "Je confirme que le blocage peut être levé.",
+        "holdOffConfirm": "Lever le blocage juridique",
+        "holdOffDone": "Blocage juridique levé sur {name}."
       }
     }
   }

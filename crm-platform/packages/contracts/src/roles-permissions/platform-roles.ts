@@ -14,6 +14,9 @@ export const PLATFORM_PERMISSION_KEYS = [
   'platform.workspace.impersonate',
   'platform.workspace.flag',
   'platform.workspace.unflag',
+  // The inactivity lifecycle: timings, never-delete, restore (retention); the legal hold (a separate decision, Super Admin only).
+  'platform.workspace.retention',
+  'platform.workspace.legal_hold',
   'platform.conversation.view_all',
   'platform.conversation.flag_spam',
   'platform.note.write',
