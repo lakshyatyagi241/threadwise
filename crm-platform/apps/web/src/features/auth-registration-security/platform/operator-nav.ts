@@ -16,6 +16,7 @@ import { SET_OPERATOR_NAV } from '../../platform-settings-branding-storage/opera
 import { WSHUB_OPERATOR_NAV } from '../../workspaces-hub/operator-nav';
 import { PLAN_OPERATOR_NAV } from '../../plans-subscriptions-trials/operator-nav';
 import { NODE_OPERATOR_NAV } from '../../node-bridge-runtime/operator-nav';
+import { SMS_OPERATOR_NAV } from '../../channel-sms/operator/operator-nav';
 import { ROLES_OPERATOR_NAV } from '../../roles-permissions/operator-nav';
 import { WAP_OPERATOR_NAV } from '../../whatsapp-providers/operator-nav';
 import { CAT_OPERATOR_NAV } from '../../catalog-products/operator-nav';
@@ -76,6 +77,8 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
   ...ROLES_OPERATOR_NAV,
   // Node bridge domain (NODE): address, token and sender pacing
   ...NODE_OPERATOR_NAV,
+  // SMS channel (SMS domain): the platform switch
+  ...SMS_OPERATOR_NAV,
   // WhatsApp provider registry (WAP): providers, workspace assignments and the number switch
   ...WAP_OPERATOR_NAV,
   // catalog domain (CAT): the platform's WhatsApp Catalog settings

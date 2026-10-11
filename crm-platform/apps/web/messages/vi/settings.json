@@ -97,7 +97,7 @@
       },
       "sms": {
         "label": "SMS",
-        "description": "Gửi và nhận tin nhắn văn bản bằng tên người gửi của riêng bạn.",
+        "description": "Gửi tin nhắn văn bản bằng số Twilio hoặc tên người gửi MSG91 của riêng bạn.",
         "keywords": "tin nhắn văn bản, sender id, dlt, twilio, di động"
       },
       "email": {

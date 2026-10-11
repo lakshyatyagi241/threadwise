@@ -1,0 +1,214 @@
+{
+  "sms": {
+    "common": {
+      "dismiss": "Sluiten",
+      "close": "Sluiten",
+      "cancel": "Annuleren"
+    },
+    "hub": {
+      "kicker": "Kanalen",
+      "title": "SMS",
+      "titleAccent": "afzenders",
+      "intro": "Verstuur sms-berichten vanaf je eigen Twilio-nummers en MSG91-afzenders. SMS is hier alleen voor verzenden: je bereikt contacten via broadcasts en campagnes.",
+      "campaigns": "Campagnes",
+      "broadcasts": "Broadcasts",
+      "channels": "Kanalen",
+      "loadError": "Je SMS-nummers konden niet worden geladen. Probeer het zo opnieuw.",
+      "cardCaption": "Twilio · MSG91",
+      "activeCount": "{count, plural, one {# nummer actief} other {# nummers actief}}",
+      "notConnected": "Niet verbonden",
+      "howTitle": "Zo werkt het",
+      "how": {
+        "connect": {
+          "title": "Verbind een afzender",
+          "body": "Voeg een Twilio-nummer of een MSG91-afzender toe. We controleren de inloggegevens bij de provider voordat we ze opslaan."
+        },
+        "report": {
+          "title": "Plak het adres voor bezorgrapporten",
+          "body": "Voeg het toe in je MSG91- of Twilio-paneel, zodat bezorgde en mislukte berichten in je rapporten verschijnen."
+        },
+        "send": {
+          "title": "Verstuur broadcasts en campagnes",
+          "body": "Kies deze afzender wanneer je een broadcast of campagne maakt. Elke ontvanger krijgt één bericht."
+        },
+        "billing": {
+          "title": "Verrekend met je SMS-quotum",
+          "body": "Berichten tellen mee voor het maandelijkse SMS-quotum van je abonnement en worden nooit van het WhatsApp-tegoed afgeschreven."
+        }
+      },
+      "reportTitle": "Onthoud: plak dit bij je provider",
+      "reportBody": "Voeg dit adres voor bezorgrapporten toe in het paneel van je provider, zodat we berichten als bezorgd of mislukt kunnen markeren.",
+      "reportLabel": "URL voor bezorgrapporten",
+      "copy": "Kopiëren",
+      "copied": "Gekopieerd",
+      "copyFailed": "Kopiëren mislukt. Selecteer het adres en kopieer het handmatig.",
+      "connectedTitle": "Verbonden nummers",
+      "total": "{count} in totaal",
+      "empty": "Nog geen SMS-nummer verbonden.",
+      "connectFirst": "Verbind je eerste nummer"
+    },
+    "card": {
+      "active": "Actief",
+      "inactive": "Inactief",
+      "rate": "Tarief / segment",
+      "dltSender": "DLT-afzender",
+      "dltTemplate": "DLT-sjabloon",
+      "alphanumeric": "Afzender-ID: eenrichtingsverkeer en niet in elk land geaccepteerd.",
+      "activate": "Activeren",
+      "deactivate": "Deactiveren",
+      "remove": "Verwijderen",
+      "removeTitle": "SMS-nummer verwijderen",
+      "removeConfirm": "Dit SMS-nummer verwijderen?",
+      "activated": "SMS-nummer geactiveerd.",
+      "deactivated": "SMS-nummer gedeactiveerd.",
+      "removed": "SMS-nummer verwijderd.",
+      "failed": "Het SMS-nummer kon niet worden bijgewerkt. Probeer het opnieuw.",
+      "changed": "Dit nummer is elders gewijzigd. De lijst is opnieuw geladen, probeer het opnieuw.",
+      "notAvailable": "SMS is niet beschikbaar in je abonnement of is uitgeschakeld.",
+      "cancel": "Annuleren"
+    },
+    "connect": {
+      "title": "Verbind een nummer",
+      "intro": "Voeg er zoveel toe als je nodig hebt. Meerdere Twilio-nummers en MSG91-afzenders kunnen tegelijk actief zijn.",
+      "provider": "SMS-provider",
+      "providerTwilio": "Twilio (wereldwijd)",
+      "providerMsg91": "MSG91 (India / DLT)",
+      "providerHint": "Twilio voor de meeste landen; MSG91 voor betrouwbare bezorging in India.",
+      "from": "Van-nummer / afzender-ID",
+      "fromPlaceholder": "+17372508034",
+      "fromHint": "Een nummer in internationaal formaat (Twilio) of je geregistreerde afzender (MSG91). Een afzender van letters is eenrichtingsverkeer: geen antwoorden.",
+      "sid": "Twilio Account SID",
+      "sidPlaceholder": "ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "sidHint": "Alleen Twilio. Laat leeg om de sleutels te hergebruiken die al voor WhatsApp zijn verbonden.",
+      "token": "Auth Token / MSG91 Auth Key",
+      "tokenHint": "Versleuteld opgeslagen. Laat bij Twilio leeg om de sleutels te hergebruiken die al voor WhatsApp zijn verbonden.",
+      "dltOptions": "MSG91- / India-opties (DLT)",
+      "senderId": "DLT-afzender-ID",
+      "senderIdPlaceholder": "ACMEIN",
+      "senderIdHint": "Alleen MSG91. Je DLT-geregistreerde afzender van 6 letters.",
+      "dltTemplate": "DLT-sjabloon-ID",
+      "dltTemplateHint": "Alleen MSG91. De goedgekeurde DLT-sjabloon-ID voor bezorging in India.",
+      "reportBoxTitle": "Bezorgrapporten in het MSG91-paneel",
+      "reportBoxBody": "Plak in je MSG91-paneel dit adres als URL voor bezorgrapporten (DLR):",
+      "rate": "Tarief per segment",
+      "ratePlaceholder": "0.0075",
+      "rateHint": "Alleen voor je SMS-uitgavenrapportage. Nooit in rekening gebracht bij het WhatsApp-tegoed.",
+      "currency": "Valuta",
+      "submit": "Verifiëren + SMS verbinden",
+      "submitting": "Verifiëren…",
+      "errorTitle": "Het SMS-nummer kon niet worden verbonden:",
+      "providerError": "De provider meldde: {reason}",
+      "connected": "SMS-nummer verbonden. Je kunt nu beginnen met verzenden.",
+      "failed": "Het SMS-nummer kon niet worden verbonden. Probeer het opnieuw.",
+      "errors": {
+        "fromRequired": "Het veld Van-nummer is verplicht.",
+        "fromTooLong": "Het van-nummer mag maximaal 32 tekens bevatten.",
+        "sidTooLong": "De account-SID mag maximaal 64 tekens bevatten.",
+        "sidShape": "Dit is geen account-SID. Deze moet met AC beginnen; een API-sleutel die met SK begint werkt niet.",
+        "tokenRequired": "Een MSG91 Auth Key is verplicht.",
+        "tokenTooLong": "De auth token mag maximaal 255 tekens bevatten.",
+        "senderIdTooLong": "De afzender-ID mag maximaal 16 tekens bevatten.",
+        "dltTemplateTooLong": "De DLT-sjabloon-ID mag maximaal 64 tekens bevatten.",
+        "rateInvalid": "Het tarief per segment moet een getal zijn, nul of hoger.",
+        "currencyTooLong": "De valuta mag maximaal 8 tekens bevatten."
+      },
+      "api": {
+        "notAvailable": "SMS is niet beschikbaar in je abonnement, of het platform heeft het uitgeschakeld.",
+        "unavailable": "Dit SMS-nummer is niet verbonden of heeft geen inloggegevens. Verbind het eerst opnieuw."
+      }
+    },
+    "lookup": {
+      "title": "Controleer een nummer voordat je het een sms stuurt",
+      "hint": "SMS wordt in rekening gebracht bij verzending, niet bij aankomst. Controleer dus of een nummer een echte mobiele lijn is voordat je een bericht stuurt.",
+      "label": "Telefoonnummer",
+      "placeholder": "+1 555 123 4567",
+      "check": "Nummer controleren",
+      "checking": "Controleren…",
+      "unreachable": "De opzoekservice is niet bereikbaar.",
+      "carrier": "Provider: {carrier}.",
+      "kind": {
+        "mobile": "Mobiel — kan sms ontvangen.",
+        "landline": "Vaste lijn — kan geen sms ontvangen. Een bericht ernaartoe wordt in rekening gebracht en gaat verloren.",
+        "voip": "VoIP — ontvangt sms mogelijk niet betrouwbaar.",
+        "invalid": "Geen geldig nummer — een bericht ernaartoe wordt in rekening gebracht en komt nooit aan."
+      }
+    },
+    "guide": {
+      "title": "Installatiegids",
+      "twilio": {
+        "title": "Twilio (wereldwijd)",
+        "p1": "Kopieer de Account SID (begint met AC) en de Auth Token van de startpagina van de Twilio-console. Een API-sleutel die met SK begint werkt niet.",
+        "p2": "Koop een nummer dat sms ondersteunt, of gebruik je proefnummer, en plak het als Van-nummer in internationaal formaat.",
+        "p3": "Plak in de instellingen van het Twilio-nummer het adres voor bezorgrapporten hierboven als status-callback-URL.",
+        "p4": "Proefaccounts kunnen alleen geverifieerde nummers sms'en en weigeren aangepaste tekst."
+      },
+      "msg91": {
+        "title": "MSG91 (India / DLT)",
+        "p1": "Indiase providers filteren buitenlandse long-codenummers. Gebruik daarom MSG91 voor betrouwbare bezorging in India.",
+        "p2": "Plak je MSG91 Auth Key in het veld Auth Token.",
+        "p3": "Registreer op het DLT-portaal een afzender-ID van 6 letters en een berichtsjabloon, en plak beide bij de DLT-opties.",
+        "p4": "Met een DLT-sjabloon-ID gebruikt de afzender de sjabloonroute van MSG91; zonder verstuurt hij gewone tekst."
+      },
+      "billing": {
+        "title": "Segmenten, kosten en facturatie",
+        "p1": "Een bericht tot 160 gewone tekens is één segment (GSM-7). Eén emoji of niet-Latijns teken verlaagt de limiet naar 70 (UCS-2) en kan de kosten verdrievoudigen.",
+        "p2": "Langere berichten worden opgesplitst in segmenten van 153 tekens (67 bij UCS-2) en elk segment wordt in rekening gebracht.",
+        "p3": "Het tarief dat je invoert is alleen voor uitgavenrapportage. Berichten worden gemeten tegen het maandelijkse SMS-quotum van je abonnement, nooit tegen het WhatsApp-tegoed.",
+        "p4": "Een afzender-ID van letters is eenrichtingsverkeer en wordt niet in elk land geaccepteerd, bijvoorbeeld de VS en Canada."
+      }
+    },
+    "segments": {
+      "summary": "{units} tekens · {segments, plural, one {# segment} other {# segmenten}} · {encoding}",
+      "remaining": "nog {remaining} in dit segment",
+      "ucs2": "Dit bericht bevat tekens buiten het GSM-alfabet (emoji of niet-Latijns schrift), dus het is beperkt tot {perSegment} tekens per sms en wordt gefactureerd als {segments} berichten.",
+      "gsm": "Dit bericht bestaat uit {units} tekens en wordt gefactureerd als {segments} berichten."
+    },
+    "compose": {
+      "note": "SMS verstuurt alleen platte tekst. Koptekst, voettekst, bijlage, knoppen en split-tests worden niet gebruikt en zijn daarom verborgen.",
+      "bodyHint": "Houd het kort: elke 160 tekens is een extra segment en elk segment wordt in rekening gebracht."
+    },
+    "chooser": {
+      "name": "SMS",
+      "hint": "Stuur je contacten een sms vanaf een Twilio-nummer of een MSG91-afzender.",
+      "cta": "SMS-campagne maken"
+    },
+    "operator": {
+      "nav": {
+        "group": "Kanalen",
+        "item": "SMS"
+      },
+      "title": "SMS-kanaal",
+      "eyebrow": "platformschakelaar",
+      "superOnly": "Alleen een superbeheerder kan de SMS-schakelaar wijzigen. Je kunt de status wel zien.",
+      "loading": "Laden",
+      "retry": "Opnieuw proberen",
+      "status": {
+        "enabled": "Ingeschakeld",
+        "disabled": "Uitgeschakeld"
+      },
+      "explanation": "Zet het SMS-kanaal voor alle werkruimtes aan of uit. Het toont of verbergt alleen de toegangspunten (het SMS-menu, de afzenderkeuzes en het SMS-sjabloonkanaal). Afzenders, sjablonen en verzendingen die al lopen worden nooit verwijderd of gestopt.",
+      "state": {
+        "enabled": "SMS staat aan. Werkruimtes waarvan het abonnement SMS bevat, kunnen afzenders koppelen en sms'jes versturen via broadcasts en campagnes.",
+        "disabled": "SMS staat uit. Werkruimtes zien het SMS-menu, de afzenderkeuzes en de SMS-sjablonen niet. Zet het aan zodra je het kanaal wilt aanbieden."
+      },
+      "enable": "SMS inschakelen",
+      "disable": "SMS uitschakelen",
+      "cancel": "Annuleren",
+      "enabledToast": "SMS is nu ingeschakeld voor het platform.",
+      "disabledToast": "SMS is nu uitgeschakeld voor het platform.",
+      "disableDialog": {
+        "title": "SMS uitschakelen?",
+        "body": "Alle werkruimtes zien het SMS-menu, de afzenderkeuzes en de SMS-sjablonen meteen niet meer. Er wordt niets verwijderd en bestaande afzenders blijven werken. Je kunt het op elk moment weer inschakelen.",
+        "confirm": "SMS uitschakelen"
+      },
+      "errors": {
+        "forbidden": "Je hebt hier geen toestemming voor.",
+        "conflict": "Iemand anders heeft deze instelling gewijzigd. De pagina is vernieuwd; probeer het opnieuw.",
+        "validation": "Controleer de waarde en probeer het opnieuw.",
+        "request": "Dat verzoek kon niet worden voltooid.",
+        "unexpected": "Er is iets misgegaan aan onze kant. Probeer het zo meteen opnieuw.",
+        "network": "De server is niet bereikbaar. Controleer je verbinding."
+      }
+    }
+  }
+}

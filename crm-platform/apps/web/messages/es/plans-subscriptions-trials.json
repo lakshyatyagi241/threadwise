@@ -43,7 +43,8 @@
       "ai_token_limit_monthly": "Tokens de IA al mes",
       "forms": "Formularios web",
       "form_submissions_monthly": "Envíos de formularios al mes",
-      "ai_form_generations_monthly": "Generaciones del creador de formularios con IA al mes"
+      "ai_form_generations_monthly": "Generaciones del creador de formularios con IA al mes",
+      "sms_monthly": "SMS al mes"
     },
     "features": {
       "automation": "Automatización",
@@ -74,7 +75,8 @@
       "forms_and_links": "Formularios y enlaces",
       "extra_channels": "Telegram, Facebook e Instagram",
       "form_builder": "Formularios",
-      "waba_groups": "Grupos de WhatsApp"
+      "waba_groups": "Grupos de WhatsApp",
+      "sms": "Canal SMS"
     },
     "limitGroups": {
       "messaging": "Mensajería",
@@ -124,7 +126,8 @@
       "ai_token_limit_monthly": "Tokens que usan los asistentes de IA en el mes natural con las claves de la plataforma. Los espacios de trabajo con sus propias claves no tienen límite.",
       "forms": "Formularios web activos (app de Formularios). Archivar un formulario libera su lugar. 0 = ilimitado.",
       "form_submissions_monthly": "Envíos de formularios aceptados en el mes natural, sin contar el spam. Si se supera el límite, el envío se guarda para revisión y nunca se descarta. 0 = ilimitado.",
-      "ai_form_generations_monthly": "Generaciones del creador de formularios con IA en el mes natural, incluidos los reintentos de reparación. 0 = ilimitado."
+      "ai_form_generations_monthly": "Generaciones del creador de formularios con IA en el mes natural, incluidos los reintentos de reparación. 0 = ilimitado.",
+      "sms_monthly": "Mensajes SMS salientes enviados en el mes natural. 0 = ilimitado."
     },
     "planAddons": {
       "title": "Complementos disponibles en tu plan",

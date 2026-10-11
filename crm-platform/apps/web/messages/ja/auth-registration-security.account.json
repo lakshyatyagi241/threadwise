@@ -551,7 +551,8 @@
             "forms_and_links": "フォームとリンク",
             "extra_channels": "Telegram、Facebook、Instagram",
             "form_builder": "フォーム",
-            "waba_groups": "WhatsAppグループ"
+            "waba_groups": "WhatsAppグループ",
+            "sms": "SMS"
           },
           "cta": {
             "continueFree": "無料で続ける",

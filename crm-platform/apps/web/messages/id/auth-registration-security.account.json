@@ -551,7 +551,8 @@
             "forms_and_links": "Formulir dan tautan",
             "extra_channels": "Telegram, Facebook, dan Instagram",
             "form_builder": "Formulir",
-            "waba_groups": "Grup WhatsApp"
+            "waba_groups": "Grup WhatsApp",
+            "sms": "SMS"
           },
           "cta": {
             "continueFree": "Lanjut gratis",

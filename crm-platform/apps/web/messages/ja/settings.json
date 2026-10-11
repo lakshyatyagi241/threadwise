@@ -97,7 +97,7 @@
       },
       "sms": {
         "label": "SMS",
-        "description": "自社の送信者IDを使って SMS を送受信します。",
+        "description": "ご自身のTwilio番号またはMSG91送信元からテキストメッセージを送信します。",
         "keywords": "テキストメッセージ、送信者ID、dlt、twilio、携帯"
       },
       "email": {

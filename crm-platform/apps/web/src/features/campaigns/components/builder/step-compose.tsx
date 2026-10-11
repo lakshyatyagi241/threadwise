@@ -8,7 +8,8 @@ import type { AttributeCatalog, CampaignBuilder, ComposeTemplate } from '@crm/co
 import { OverridesPanel } from '@/features/broadcasts/components/overrides-panel';
 import { UploadMediaButton } from '@/features/broadcasts/components/upload-media-button';
 import { editorType, type BuilderForm, type ButtonRow } from '../../lib/builder-model';
-import { isLimitedEngine } from '../../lib/engine-gate';
+import { SegmentCounter } from '@/features/channel-sms/components/segment-counter';
+import { isLimitedEngine, isSmsEngine } from '../../lib/engine-gate';
 import { PlusIcon, TrashIcon } from '../icons';
 import { LabelRow, StepCard } from './parts';
 
@@ -60,8 +61,10 @@ export function StepCompose({
   templates: ComposeTemplate[];
 }) {
   const t = useTranslations('campaigns.builder.compose');
+  const sms = useTranslations('sms.compose');
   const kind = editorType(form.type);
   const limited = isLimitedEngine(engine);
+  const text = isSmsEngine(engine);
   const approvedOnly =
     engine === 'waba' || (engine === '' && builder?.requiresApprovedTemplates === true);
   const flows = builder?.flows ?? [];
@@ -120,20 +123,22 @@ export function StepCompose({
         <>
           {limited && (
             <p className="rounded-xl border border-warning/40 bg-warning/10 px-3 py-2 text-[12px]">
-              {t(`engineNotes.${engine}`)}
+              {text ? sms('note') : t(`engineNotes.${engine}`)}
             </p>
           )}
-          <div>
-            <LabelRow note={t('headerNote')}>{t('header')}</LabelRow>
-            <Input
-              id="camp-header"
-              aria-label={t('headerText')}
-              maxLength={60}
-              value={form.customHeader}
-              onChange={(e) => patch({ customHeader: e.target.value })}
-              placeholder={t('headerPlaceholder')}
-            />
-          </div>
+          {!text && (
+            <div>
+              <LabelRow note={t('headerNote')}>{t('header')}</LabelRow>
+              <Input
+                id="camp-header"
+                aria-label={t('headerText')}
+                maxLength={60}
+                value={form.customHeader}
+                onChange={(e) => patch({ customHeader: e.target.value })}
+                placeholder={t('headerPlaceholder')}
+              />
+            </div>
+          )}
 
           <div>
             <LabelRow note={t('required')}>{t('body')}</LabelRow>
@@ -146,7 +151,14 @@ export function StepCompose({
               onChange={(e) => patch({ customMessage: e.target.value })}
               placeholder={t('bodyPlaceholder')}
             />
-            <p className="mt-1 text-[11px] text-muted-foreground">{t('bodyHint')}</p>
+            {text ? (
+              <>
+                <SegmentCounter text={form.customMessage} />
+                <p className="mt-1 text-[11px] text-muted-foreground">{sms('bodyHint')}</p>
+              </>
+            ) : (
+              <p className="mt-1 text-[11px] text-muted-foreground">{t('bodyHint')}</p>
+            )}
           </div>
 
           {form.abTesting && (
@@ -164,66 +176,70 @@ export function StepCompose({
             </div>
           )}
 
-          <div className="rounded-xl border border-border p-3">
-            <LabelRow note={t('attachmentNote')}>{t('attachment')}</LabelRow>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-[180px_1fr]">
-              <Field label={t('attachmentType')} htmlFor="camp-attach-type">
-                <Select
-                  id="camp-attach-type"
-                  value={attachment}
-                  onChange={(e) => {
-                    const next = e.target.value as Attachment;
-                    setAttachment(next);
-                    if (next === 'none') patch({ mediaUrl: '' });
-                  }}
-                >
-                  {ATTACHMENTS.map((k) => (
-                    <option key={k} value={k}>
-                      {t(`attachments.${k}.name`)}
-                    </option>
-                  ))}
-                </Select>
-              </Field>
-              {attachment === 'none' ? (
-                <p className="self-end pb-2 text-[12px] text-muted-foreground">
-                  {t('noAttachment')}
-                </p>
-              ) : (
-                <Field
-                  label={t(`attachments.${attachment}.title`)}
-                  htmlFor="camp-media"
-                  hint={t(`attachments.${attachment}.hint`)}
-                >
-                  <Input
-                    id="camp-media"
-                    type="url"
-                    value={form.mediaUrl}
-                    onChange={(e) => patch({ mediaUrl: e.target.value })}
-                    placeholder="https://…"
-                  />
-                  <div className="mt-1.5">
-                    <UploadMediaButton
-                      accept={ACCEPT[attachment]}
-                      onUploaded={(m) => patch({ mediaUrl: m.url })}
-                    />
-                  </div>
+          {!text && (
+            <div className="rounded-xl border border-border p-3">
+              <LabelRow note={t('attachmentNote')}>{t('attachment')}</LabelRow>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-[180px_1fr]">
+                <Field label={t('attachmentType')} htmlFor="camp-attach-type">
+                  <Select
+                    id="camp-attach-type"
+                    value={attachment}
+                    onChange={(e) => {
+                      const next = e.target.value as Attachment;
+                      setAttachment(next);
+                      if (next === 'none') patch({ mediaUrl: '' });
+                    }}
+                  >
+                    {ATTACHMENTS.map((k) => (
+                      <option key={k} value={k}>
+                        {t(`attachments.${k}.name`)}
+                      </option>
+                    ))}
+                  </Select>
                 </Field>
-              )}
+                {attachment === 'none' ? (
+                  <p className="self-end pb-2 text-[12px] text-muted-foreground">
+                    {t('noAttachment')}
+                  </p>
+                ) : (
+                  <Field
+                    label={t(`attachments.${attachment}.title`)}
+                    htmlFor="camp-media"
+                    hint={t(`attachments.${attachment}.hint`)}
+                  >
+                    <Input
+                      id="camp-media"
+                      type="url"
+                      value={form.mediaUrl}
+                      onChange={(e) => patch({ mediaUrl: e.target.value })}
+                      placeholder="https://…"
+                    />
+                    <div className="mt-1.5">
+                      <UploadMediaButton
+                        accept={ACCEPT[attachment]}
+                        onUploaded={(m) => patch({ mediaUrl: m.url })}
+                      />
+                    </div>
+                  </Field>
+                )}
+              </div>
             </div>
-          </div>
+          )}
 
-          <div>
-            <LabelRow note={t('footerNote')}>{t('footer')}</LabelRow>
-            <Input
-              id="camp-footer"
-              aria-label={t('footer')}
-              maxLength={60}
-              value={form.customFooter}
-              onChange={(e) => patch({ customFooter: e.target.value })}
-              placeholder={t('footerPlaceholder')}
-            />
-            <p className="mt-1 text-[11px] text-muted-foreground">{t('footerHint')}</p>
-          </div>
+          {!text && (
+            <div>
+              <LabelRow note={t('footerNote')}>{t('footer')}</LabelRow>
+              <Input
+                id="camp-footer"
+                aria-label={t('footer')}
+                maxLength={60}
+                value={form.customFooter}
+                onChange={(e) => patch({ customFooter: e.target.value })}
+                placeholder={t('footerPlaceholder')}
+              />
+              <p className="mt-1 text-[11px] text-muted-foreground">{t('footerHint')}</p>
+            </div>
+          )}
 
           {limited ? null : (
             <div>
@@ -360,6 +376,7 @@ export function StepCompose({
               <div className="rounded-xl border border-border bg-muted/30 p-3 text-[12.5px]">
                 <div className="font-semibold">{a.name}</div>
                 <div className="mt-1 whitespace-pre-wrap text-muted-foreground">{a.body}</div>
+                {text && <SegmentCounter text={a.body} />}
               </div>
               <OverridesPanel
                 key={a.id}

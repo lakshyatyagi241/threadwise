@@ -551,7 +551,8 @@
             "forms_and_links": "表单和链接",
             "extra_channels": "Telegram、Facebook 和 Instagram",
             "form_builder": "表单",
-            "waba_groups": "WhatsApp 群组"
+            "waba_groups": "WhatsApp 群组",
+            "sms": "SMS"
           },
           "cta": {
             "continueFree": "继续免费使用",

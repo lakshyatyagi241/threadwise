@@ -97,7 +97,7 @@
       },
       "sms": {
         "label": "SMS",
-        "description": "Send and receive text messages with your own sender.",
+        "description": "Send text messages with your own Twilio number or MSG91 sender.",
         "keywords": "text message, sender id, dlt, twilio, mobile"
       },
       "email": {

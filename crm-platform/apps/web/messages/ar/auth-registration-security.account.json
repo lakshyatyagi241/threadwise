@@ -551,7 +551,8 @@
             "forms_and_links": "النماذج والروابط",
             "extra_channels": "تيليجرام وفيسبوك وإنستغرام",
             "form_builder": "النماذج",
-            "waba_groups": "مجموعات واتساب"
+            "waba_groups": "مجموعات واتساب",
+            "sms": "SMS"
           },
           "cta": {
             "continueFree": "المتابعة مجانًا",

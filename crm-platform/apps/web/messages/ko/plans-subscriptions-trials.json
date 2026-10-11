@@ -43,7 +43,8 @@
       "ai_token_limit_monthly": "월별 AI 토큰",
       "forms": "웹 양식",
       "form_submissions_monthly": "월별 양식 제출",
-      "ai_form_generations_monthly": "월별 AI 양식 빌더 생성"
+      "ai_form_generations_monthly": "월별 AI 양식 빌더 생성",
+      "sms_monthly": "월간 SMS"
     },
     "features": {
       "automation": "자동화",
@@ -74,7 +75,8 @@
       "forms_and_links": "양식 및 링크",
       "extra_channels": "Telegram, Facebook, Instagram",
       "form_builder": "양식",
-      "waba_groups": "WhatsApp 그룹"
+      "waba_groups": "WhatsApp 그룹",
+      "sms": "SMS 채널"
     },
     "limitGroups": {
       "messaging": "메시징",
@@ -124,7 +126,8 @@
       "ai_token_limit_monthly": "달력 월 기준으로 AI 어시스턴트가 플랫폼 키로 사용하는 토큰입니다. 자체 키를 사용하는 워크스페이스에는 제한이 없습니다.",
       "forms": "활성 웹 양식(양식 앱)입니다. 양식을 보관하면 자리가 확보됩니다. 0 = 무제한",
       "form_submissions_monthly": "달력 월 기준으로 접수된 양식 제출입니다(스팸 제외). 한도를 넘으면 제출 내용은 검토를 위해 저장되며 버려지지 않습니다. 0 = 무제한",
-      "ai_form_generations_monthly": "달력 월 기준 AI 양식 빌더 생성 횟수(복구 재시도 포함)입니다. 0 = 무제한"
+      "ai_form_generations_monthly": "달력 월 기준 AI 양식 빌더 생성 횟수(복구 재시도 포함)입니다. 0 = 무제한",
+      "sms_monthly": "달력 기준 한 달 동안 발송된 SMS 메시지 수. 0 = 무제한."
     },
     "planAddons": {
       "title": "요금제에서 이용 가능한 추가 기능",

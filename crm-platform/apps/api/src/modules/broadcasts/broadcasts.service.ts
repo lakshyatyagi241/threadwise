@@ -104,6 +104,10 @@ export class BroadcastsService {
 
     return this.db.tx(async (tx) => {
       const resolved = await this.senders.resolve(tx, orgId, input.senderKeys);
+      // SMS is a paid channel of its own (TW-SMS-016): Reference only checked `broadcast` here, and the owner wants `sms` enforced.
+      const sms = resolved.length > 0 && resolved.every((s) => s.engine === 'sms');
+      if (resolved.some((s) => s.engine === 'sms'))
+        await this.entitlements.assertFeature(orgId, 'sms');
 
       const contactIds = await this.resolveAudience(tx, orgId, input);
       if (contactIds.length === 0) {
@@ -119,7 +123,8 @@ export class BroadcastsService {
       // Emergency halt and content screening once for the batch (the same hook every send path shares), then the wallet.
       await this.sendPolicy.screenBulk(orgId, '', { source: 'broadcast' });
       try {
-        await this.wallet.precheck(orgId, contactIds.length);
+        // SMS is metered by its own monthly cap and never charged to the wallet, so an empty wallet does not stop it (TW-SMS-027).
+        if (!sms) await this.wallet.precheck(orgId, contactIds.length);
       } catch (err) {
         if (err instanceof AppError) throw err;
         throw refuse(

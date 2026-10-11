@@ -43,7 +43,8 @@
       "ai_token_limit_monthly": "Aylık AI token",
       "forms": "Web formları",
       "form_submissions_monthly": "Aylık form gönderimi",
-      "ai_form_generations_monthly": "Aylık AI form oluşturucu üretimi"
+      "ai_form_generations_monthly": "Aylık AI form oluşturucu üretimi",
+      "sms_monthly": "Aylık SMS"
     },
     "features": {
       "automation": "Otomasyon",
@@ -74,7 +75,8 @@
       "forms_and_links": "Formlar ve bağlantılar",
       "extra_channels": "Telegram, Facebook ve Instagram",
       "form_builder": "Formlar",
-      "waba_groups": "WhatsApp grupları"
+      "waba_groups": "WhatsApp grupları",
+      "sms": "SMS kanalı"
     },
     "limitGroups": {
       "messaging": "Mesajlaşma",
@@ -124,7 +126,8 @@
       "ai_token_limit_monthly": "AI asistanlarının takvim ayında platform anahtarlarında kullandığı token'lar. Kendi anahtarlarını kullanan çalışma alanlarında sınır yoktur.",
       "forms": "Etkin web formları (Formlar uygulaması). Bir formu arşivlemek yerini boşaltır. 0 = sınırsız.",
       "form_submissions_monthly": "Takvim ayında kabul edilen form gönderimleri, spam hariç. Sınırın üzerindeki bir gönderim yine de inceleme için kaydedilir, asla atılmaz. 0 = sınırsız.",
-      "ai_form_generations_monthly": "Takvim ayında AI form oluşturucu üretimleri, onarım yeniden denemesi dahil. 0 = sınırsız."
+      "ai_form_generations_monthly": "Takvim ayında AI form oluşturucu üretimleri, onarım yeniden denemesi dahil. 0 = sınırsız.",
+      "sms_monthly": "Takvim ayında gönderilen giden SMS mesajları. 0 = sınırsız."
     },
     "planAddons": {
       "title": "Planınızda kullanılabilir eklentiler",
