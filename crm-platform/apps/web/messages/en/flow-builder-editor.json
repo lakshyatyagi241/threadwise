@@ -161,6 +161,11 @@
       "title": "What kind of",
       "titleAccent": "flow",
       "subtitle": "Pick WhatsApp, Instagram, or Facebook inside the builder, on the Trigger step.",
+      "subtitleSimple": "Each bot is built for one channel, because not every component works on every channel.",
+      "whatsapp": "WhatsApp",
+      "whatsappNote": "Replies to customers on a connected WhatsApp number",
+      "web": "Website chat",
+      "webNote": "A chat widget you add to your website",
       "messaging": "Messaging flow",
       "messagingNote": "WhatsApp, Instagram, or Facebook — switch channel on the Trigger node",
       "call": "Call",
@@ -619,6 +624,15 @@
           "save": "Save",
           "publish": "Publish"
         }
+      },
+      "webBot": {
+        "aria": "Bot sections",
+        "build": "Build",
+        "customize": "Customize",
+        "install": "Install",
+        "saveFirst": "Save the bot first.",
+        "needsCustomizing": "The widget still uses the default look. Open Customize.",
+        "customizeFirst": "Customize your chat widget and save it once before publishing."
       },
       "simple": {
         "loading": "Loading the flow…",
@@ -2100,10 +2114,6 @@
         "wa_session": {
           "label": "WhatsApp session active",
           "description": "Yes / no: the customer wrote in the last 24 hours"
-        },
-        "api_library": {
-          "label": "API (from library)",
-          "description": "Call a saved API from the API Library"
         }
       },
       "groups": {
@@ -2152,7 +2162,8 @@
         "line": "LINE",
         "wechat": "WeChat",
         "viber": "Viber",
-        "email": "Email"
+        "email": "Email",
+        "web": "Website chat"
       },
       "dateFormats": {
         "ddDmmDyyyy": "DD-MM-YYYY",

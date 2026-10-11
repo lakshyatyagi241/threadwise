@@ -99,6 +99,30 @@
       "gotIt": "Got it",
       "close": "Close"
     },
+    "flowBot": {
+      "customize": {
+        "loading": "Loading the widget…",
+        "loadError": "The widget could not be loaded. Refresh to try again.",
+        "untouched": "You are still using the default look. Review it, then save to unlock Install and Publish.",
+        "position": "Where the chat button sits",
+        "right": "Bottom right",
+        "left": "Bottom left",
+        "save": "Save customization",
+        "saved": "Customization saved",
+        "saveFailed": "Could not save the widget. Try again."
+      },
+      "install": {
+        "loading": "Loading the install code…",
+        "locked": "Save the Customize tab first. Your install code appears here once the widget exists.",
+        "title": "Install on your website",
+        "lead": "Paste this just before the closing body tag on every page where the chat should appear.",
+        "notPublished": "This bot is not published yet, so visitors will not get answers. Publish it from the Build tab.",
+        "copy": "Copy code",
+        "copied": "Install code copied",
+        "clipboardBlocked": "Your browser blocked copying. Select the code and copy it by hand.",
+        "preview": "Open the chat page"
+      }
+    },
     "builder": {
       "loading": "Loading widget",
       "notFoundTitle": "Widget not found",
@@ -344,6 +368,26 @@
         "frameTitle": "Live preview of your WhatsApp widget",
         "hint": "Collapse the panel with the round button, open it again from the launcher, and try Start Conversation.",
         "businessName": "Your business"
+      }
+    },
+    "webBots": {
+      "title": "Website chat bots",
+      "intro": "Every bot you built for website chat and the widget it runs in. Open a row to change the widget's look or copy its install code.",
+      "create": "New website bot",
+      "loading": "Loading your website bots…",
+      "loadError": "The website bots could not be loaded. Refresh to try again.",
+      "emptyTitle": "No website chat bots yet",
+      "emptyBody": "Create a bot for website chat and its widget shows up here.",
+      "widgetLine": "Widget: {title}",
+      "noWidget": "No widget yet. Customize it to create one.",
+      "customize": "Customize",
+      "install": "Install",
+      "more": "Showing {shown} of {total} bots. Open the rest from Flows.",
+      "state": {
+        "needs_customizing": "Needs customizing",
+        "draft": "Draft",
+        "live": "Live",
+        "paused": "Paused"
       }
     }
   }

@@ -160,13 +160,13 @@ export function flbNormalizeAiGraph(raw: unknown): FlowGraph {
   return g;
 }
 
-/** The flow type a graph runs as: call flows stay call; otherwise the Trigger's `channel` if it is available, else the type it was opened as. */
+/** The flow type a graph runs as: call and web flows keep the channel they were created for; otherwise the Trigger's `channel` if it is available, else the type it was opened as. */
 export function flbFlowTypeOf(
   nodes: ReadonlyArray<{ type: string; data?: FlbNodeData | null }>,
   opened: FlowType,
   available: readonly FlowType[],
 ): FlowType {
-  if (opened === 'call') return 'call';
+  if (opened === 'call' || opened === 'web') return opened;
   const trig = nodes.find((n) => n.type === 'trigger');
   const c = trig?.data?.channel;
   return flbIsFlowType(c) && available.includes(c) ? c : opened;

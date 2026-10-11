@@ -14,12 +14,15 @@ import {
   type FlbPortContext,
 } from '@crm/contracts';
 import { ApiError } from '@/lib/api/errors';
+import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { useFlowWidget } from '@/features/chatbot-widget/api/widgets';
 import { flowsApi } from '../api/flows';
 import { useMsg, type Msg } from '../lib/msg';
 import { validateGraph } from '../lib/validation-text';
 import { getaApi } from '../geta-publish/api';
 import { POLL_EVERY_MS, POLL_MAX_TRIES, viewOf } from '../geta-publish/status-model';
 import { GetaPublishStatus } from '../geta-publish/sync-status';
+import { WebBotPanels, WebBotTabs, useInitialTab, type WebBotTab } from './web-bot-tabs';
 import { FLB_KEYS, useBuilderContext } from '../api/hooks';
 import {
   ZOOM_DEFAULT,
@@ -155,6 +158,7 @@ function BuilderInner({
   testOpenInitially,
 }: InnerProps) {
   const tb = useTranslations('flb.builder.shell.screen');
+  const tw = useTranslations('flb.builder.webBot');
   const seed = useMemo<CanvasState>(
     () => ({
       nodes: initial?.graph.flowNodes ?? [],
@@ -236,10 +240,19 @@ function BuilderInner({
   // The channel the flow was opened as: a call flow stays call; a messaging channel only if this workspace can run it.
   const openedAs: FlowType = useMemo(() => {
     const t = initial?.flowType ?? (flbIsFlowType(typeParam) ? typeParam : 'chat');
-    if (t === 'call') return 'call';
+    if (t === 'call' || t === 'web') return t;
     return ctx.channels.includes(t) ? t : 'chat';
   }, [initial, typeParam, ctx.channels]);
   const mode = flbFlowTypeOf(state.nodes, openedAs, ctx.channels);
+  // A website chat bot has Customize and Install beside the canvas; the others only build.
+  const isWeb = mode === 'web';
+  const initialTab = useInitialTab(!!initial);
+  const [tab, setTab] = useState<WebBotTab>(initialTab);
+  // Another channel has no tabs, whatever the link asked for.
+  const shownTab: WebBotTab = isWeb ? tab : 'build';
+  const canEditFlow = useCan('flb.flows.update');
+  const widgetQuery = useFlowWidget(isWeb ? flowId : null);
+  const needsCustomizing = isWeb && !!flowId && widgetQuery.data?.widget === null;
   const portCtx = useMemo<FlbPortContext>(
     () => ({ templateButtons: (node) => templateQuickReplies(ctx.templates, node) }),
     [ctx.templates],
@@ -467,6 +480,17 @@ function BuilderInner({
         const saved = await persist(name.trim() || tb('newFlow'));
         id = saved.id;
       }
+      if (isWeb) {
+        // A website bot goes live with the look its owner chose, so Customize has to be saved once first.
+        const widget = !flowId
+          ? null
+          : ((widgetQuery.data ?? (await widgetQuery.refetch()).data)?.widget ?? null);
+        if (!widget) {
+          setTab('customize');
+          toast(tw('customizeFirst'));
+          return;
+        }
+      }
       const pub = await flowsApi.publish(id);
       setRowVersion(pub.rowVersion);
       setStatus('Published');
@@ -562,7 +586,16 @@ function BuilderInner({
         }
       />
 
-      <div className="relative flex min-h-0 flex-1">
+      {isWeb ? (
+        <WebBotTabs
+          tab={shownTab}
+          onTab={setTab}
+          saved={!!flowId}
+          needsCustomizing={needsCustomizing}
+        />
+      ) : null}
+
+      <div className={`relative flex min-h-0 flex-1 ${shownTab === 'build' ? '' : 'hidden'}`}>
         {sidebarOpen ? (
           <>
             <Palette mode={mode} query={query} onSearch={setQuery} onAddCenter={addAtCenter} />
@@ -721,6 +754,16 @@ function BuilderInner({
           onRemoveOption={(i) => selectedNode && commit(removeOption(state, selectedNode.id, i))}
         />
       </div>
+
+      {isWeb && flowId ? (
+        <WebBotPanels
+          tab={shownTab}
+          flowId={flowId}
+          flowName={name}
+          published={published}
+          canEdit={canEditFlow}
+        />
+      ) : null}
 
       <SaveConfirmModal
         open={saveOpen}

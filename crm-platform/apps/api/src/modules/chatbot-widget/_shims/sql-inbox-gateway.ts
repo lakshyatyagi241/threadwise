@@ -28,7 +28,18 @@ interface LineRow {
   body: string | null;
   agent_id: number | string | null;
   sent_at: Date | string | null;
+  buttons: unknown;
 }
+
+/** The reply buttons a flow bot stored in a line's meta (`widget_buttons`), or null. */
+const buttonsOf = (raw: unknown): NonNullable<InboxLine['buttons']> | null => {
+  if (!Array.isArray(raw)) return null;
+  const out = raw
+    .filter((b): b is { id: unknown; title: unknown } => typeof b === 'object' && b !== null)
+    .map((b) => ({ id: String(b.id ?? ''), title: String(b.title ?? '') }))
+    .filter((b) => b.id !== '' && b.title !== '');
+  return out.length ? out : null;
+};
 
 const toLine = (r: LineRow): InboxLine => ({
   id: Number(r.id),
@@ -36,6 +47,7 @@ const toLine = (r: LineRow): InboxLine => ({
   body: r.body,
   agentId: r.agent_id === null ? null : Number(r.agent_id),
   sentAt: r.sent_at ? new Date(r.sent_at) : null,
+  buttons: buttonsOf(r.buttons),
 });
 
 /**
@@ -248,6 +260,14 @@ export class SqlInboxGateway implements InboxGateway {
     return msg;
   }
 
+  async channelUuidOf(tx: Tx, orgId: number, conversationId: number): Promise<string> {
+    const res = await tx.execute(sql`
+      SELECT ch.uuid FROM conversations v
+      JOIN channels ch ON ch.org_id = v.org_id AND ch.id = v.channel_id
+      WHERE v.org_id = ${orgId} AND v.id = ${conversationId}`);
+    return String((res.rows[0] as { uuid: string }).uuid);
+  }
+
   async humanHasTakenOver(tx: Tx, orgId: number, conversationId: number): Promise<boolean> {
     // QUIRK: reproduced deliberately (TW-WGT-017 rule 2). Reference compared its ENCRYPTED `from_number` column with the plain
     // bot sender in SQL, which is true for every stored value, so ANY outbound line in the thread (the bot's own earlier
@@ -267,8 +287,9 @@ export class SqlInboxGateway implements InboxGateway {
 
   async recent(tx: Tx, orgId: number, conversationId: number, limit: number): Promise<InboxLine[]> {
     const res = await tx.execute(sql`
-      SELECT id, direction, body, agent_id, sent_at FROM (
-        SELECT id, direction, body, sender_agent_id AS agent_id, COALESCE(sent_at, provider_ts, created_at) AS sent_at
+      SELECT id, direction, body, agent_id, sent_at, buttons FROM (
+        SELECT id, direction, body, sender_agent_id AS agent_id, COALESCE(sent_at, provider_ts, created_at) AS sent_at,
+               meta->'widget_buttons' AS buttons
         FROM messages
         WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND COALESCE(meta->>'source', '') <> 'welcome'
         ORDER BY id DESC LIMIT ${limit}
@@ -279,7 +300,8 @@ export class SqlInboxGateway implements InboxGateway {
   /** The OLDEST `limit` lines, oldest first (TW-WGT-012 rule 2: Reference's transcript takes the first 200, not the newest). */
   async oldest(tx: Tx, orgId: number, conversationId: number, limit: number): Promise<InboxLine[]> {
     const res = await tx.execute(sql`
-      SELECT id, direction, body, sender_agent_id AS agent_id, COALESCE(sent_at, provider_ts, created_at) AS sent_at
+      SELECT id, direction, body, sender_agent_id AS agent_id, COALESCE(sent_at, provider_ts, created_at) AS sent_at,
+             meta->'widget_buttons' AS buttons
       FROM messages
       WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND COALESCE(meta->>'source', '') <> 'welcome'
       ORDER BY id LIMIT ${limit}`);
@@ -293,7 +315,8 @@ export class SqlInboxGateway implements InboxGateway {
     since: number,
   ): Promise<InboxLine[]> {
     const res = await tx.execute(sql`
-      SELECT id, direction, body, sender_agent_id AS agent_id, COALESCE(sent_at, provider_ts, created_at) AS sent_at
+      SELECT id, direction, body, sender_agent_id AS agent_id, COALESCE(sent_at, provider_ts, created_at) AS sent_at,
+             meta->'widget_buttons' AS buttons
       FROM messages
       WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND direction = 'out' AND id > ${since}
         AND COALESCE(meta->>'source', '') <> 'welcome'

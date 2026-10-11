@@ -25,6 +25,8 @@ export const toWidget = (row: WidgetRow, base: string): Widget => ({
   status: row.status as WidgetStatus,
   mode: row.mode as WidgetMode,
   assistantId: row.assistantUuid,
+  flowId: row.flowUuid,
+  customizedAt: row.customizedAt ? row.customizedAt.toISOString() : null,
   targetWhatsappCc: row.targetWhatsappCc,
   targetWhatsappNumber: row.targetWhatsappNumber,
   prefilledMessage: row.prefilledMessage,

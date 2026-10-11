@@ -1,6 +1,5 @@
 import type { ChannelCapabilities } from '@crm/contracts';
 import {
-  ChannelError,
   windowFromLastInbound,
   type ChannelAdapter,
   type ChannelRuntime,
@@ -24,9 +23,10 @@ const WEBCHAT_CAPABILITIES: ChannelCapabilities = {
 /**
  * The website chat widget as a channel (its rows are created by the widget domain, one per widget, `external_id` = the widget uuid).
  *
- * A skeleton for now: it makes those channels listable with their real capabilities. Its inbound side is the widget's own public
- * routes, not a provider webhook, so `verifyInbound` is false and `parseInbound` empty; `send` is refused until the widget adapter
- * (plan-inbox-chat.md Phase 2) stores the reply for the visitor's poll, and `live` stays false until then.
+ * Its inbound side is the widget's own public routes, not a provider webhook, so `verifyInbound` is false and `parseInbound` empty.
+ * Sending a reply has nothing to hand over to a provider: the dispatcher's caller stores the line on the thread, and the visitor's open
+ * widget picks it up on its next poll. So `send` only accepts the message. `live` stays false: an operator cannot connect or
+ * disconnect a widget channel by hand, its status follows the widget.
  */
 export class WebchatChannelAdapter implements ChannelAdapter {
   readonly kind = 'webchat' as const;
@@ -47,14 +47,12 @@ export class WebchatChannelAdapter implements ChannelAdapter {
     return windowFromLastInbound(WEBCHAT_CAPABILITIES.windowHours, lastInboundAt, now);
   }
 
-  send(_channel: ChannelRuntime, _envelope: OutboundEnvelope): Promise<SendResult> {
-    return Promise.reject(
-      new ChannelError(
-        'CHANNEL_NOT_LIVE',
-        'Replying through the web chat widget is not enabled yet',
-        false,
-      ),
-    );
+  send(_channel: ChannelRuntime, envelope: OutboundEnvelope): Promise<SendResult> {
+    // The client reference is unique per message, so it doubles as the id the thread's ledger keeps.
+    return Promise.resolve({
+      providerMessageId: `web:${envelope.clientReference}`,
+      acceptedAt: new Date(),
+    });
   }
 
   verifyInbound(): boolean {

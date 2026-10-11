@@ -158,6 +158,8 @@ export interface TranscriptSource {
   direction: string;
   body: string | null;
   agentId: number | null;
+  /** Reply buttons a flow bot offered with this line. */
+  buttons?: Array<{ id: string; title: string }> | null;
 }
 
 /**
@@ -175,6 +177,7 @@ export function toTranscriptEntry(m: TranscriptSource) {
         : m.agentId
           ? ('agent' as const)
           : ('assistant' as const),
+    ...(m.buttons && m.buttons.length ? { buttons: m.buttons } : {}),
   };
 }
 

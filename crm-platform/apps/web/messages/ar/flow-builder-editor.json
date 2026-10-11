@@ -337,6 +337,15 @@
           "publish": "نشر"
         }
       },
+      "webBot": {
+        "aria": "أقسام البوت",
+        "build": "البناء",
+        "customize": "التخصيص",
+        "install": "التثبيت",
+        "saveFirst": "احفظ البوت أولاً.",
+        "needsCustomizing": "ما زالت الأداة بالمظهر الافتراضي. افتح التخصيص.",
+        "customizeFirst": "خصّص أداة الدردشة واحفظها مرة واحدة قبل النشر."
+      },
       "simple": {
         "loading": "جارٍ تحميل التدفق…",
         "genericError": "حدث خطأ ما.",
@@ -1705,6 +1714,11 @@
       "title": "ما نوع",
       "titleAccent": "التدفق",
       "subtitle": "اختر WhatsApp أو Instagram أو Facebook داخل المنشئ، في خطوة المشغّل.",
+      "subtitleSimple": "يُبنى كل بوت لقناة واحدة، لأن بعض المكوّنات لا تعمل على كل القنوات.",
+      "whatsapp": "واتساب",
+      "whatsappNote": "يردّ على العملاء عبر رقم واتساب متصل",
+      "web": "دردشة الموقع",
+      "webNote": "أداة دردشة تضيفها إلى موقعك",
       "messaging": "تدفق مراسلة",
       "messagingNote": "WhatsApp أو Instagram أو Facebook — بدّل القناة من عقدة المشغّل",
       "call": "مكالمة",
@@ -2148,7 +2162,8 @@
         "line": "LINE",
         "wechat": "WeChat",
         "viber": "Viber",
-        "email": "البريد الإلكتروني"
+        "email": "البريد الإلكتروني",
+        "web": "دردشة الموقع"
       },
       "dateFormats": {
         "ddDmmDyyyy": "DD-MM-YYYY",
