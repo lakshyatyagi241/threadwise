@@ -1,0 +1,39 @@
+{
+  "common": {
+    "loading": "Wird geladen…",
+    "retry": "Erneut versuchen",
+    "signOut": "Abmelden",
+    "back": "Zurück"
+  },
+  "errors": {
+    "generic": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+    "network": "Der Server ist nicht erreichbar. Prüfe deine Verbindung und versuche es erneut.",
+    "timeout": "Der Server hat zu lange nicht geantwortet. Bitte versuche es erneut.",
+    "outdatedApp": "Diese App-Version ist veraltet. Bitte aktualisiere sie.",
+    "tooManyRequests": "Zu viele Versuche. Bitte warte einen Moment und versuche es erneut."
+  },
+  "auth": {
+    "signInTitle": "Anmelden",
+    "signInSubtitle": "Verwende die E-Mail-Adresse und das Passwort deines Kontos.",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "signInSubmit": "Anmelden",
+    "emailInvalid": "Gib eine gültige E-Mail-Adresse ein.",
+    "passwordRequired": "Gib dein Passwort ein.",
+    "mfaTitle": "Bestätigung in zwei Schritten",
+    "mfaHint": "Gib den 6-stelligen Code aus deiner Authenticator-App ein.",
+    "mfaCode": "Bestätigungscode",
+    "mfaSubmit": "Bestätigen",
+    "workspaceTitle": "Arbeitsbereich auswählen",
+    "workspaceHint": "Dein Konto gehört zu mehr als einem Arbeitsbereich.",
+    "invalidCredentials": "Die E-Mail-Adresse oder das Passwort ist falsch.",
+    "accountLocked": "Dieses Konto ist vorübergehend gesperrt. Versuche es später erneut.",
+    "accountSuspended": "Dieses Konto wurde gesperrt.",
+    "mfaInvalid": "Der Code ist nicht korrekt. Versuche es erneut.",
+    "mfaExpired": "Die Anmeldung ist abgelaufen. Bitte beginne von vorn."
+  },
+  "home": {
+    "welcome": "Hallo, {{name}}",
+    "workspace": "Arbeitsbereich: {{name}}"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "common": {
+    "loading": "Yükleniyor…",
+    "retry": "Tekrar dene",
+    "signOut": "Çıkış yap",
+    "back": "Geri"
+  },
+  "errors": {
+    "generic": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
+    "network": "Sunucuya ulaşılamıyor. Bağlantınızı kontrol edip tekrar deneyin.",
+    "timeout": "Sunucu yanıt vermekte çok gecikti. Lütfen tekrar deneyin.",
+    "outdatedApp": "Uygulamanın bu sürümü güncel değil. Lütfen güncelleyin.",
+    "tooManyRequests": "Çok fazla deneme yapıldı. Lütfen biraz bekleyip tekrar deneyin."
+  },
+  "auth": {
+    "signInTitle": "Giriş yap",
+    "signInSubtitle": "Hesabınızın e-posta adresini ve parolasını kullanın.",
+    "email": "E-posta",
+    "password": "Parola",
+    "signInSubmit": "Giriş yap",
+    "emailInvalid": "Geçerli bir e-posta adresi girin.",
+    "passwordRequired": "Parolanızı girin.",
+    "mfaTitle": "İki adımlı doğrulama",
+    "mfaHint": "Kimlik doğrulama uygulamanızdaki 6 haneli kodu girin.",
+    "mfaCode": "Doğrulama kodu",
+    "mfaSubmit": "Doğrula",
+    "workspaceTitle": "Bir çalışma alanı seçin",
+    "workspaceHint": "Hesabınız birden fazla çalışma alanına ait.",
+    "invalidCredentials": "E-posta veya parola hatalı.",
+    "accountLocked": "Bu hesap geçici olarak kilitlendi. Lütfen daha sonra tekrar deneyin.",
+    "accountSuspended": "Bu hesap askıya alındı.",
+    "mfaInvalid": "Kod doğru değil. Tekrar deneyin.",
+    "mfaExpired": "Oturum açma süresi doldu. Lütfen baştan başlayın."
+  },
+  "home": {
+    "welcome": "Merhaba, {{name}}",
+    "workspace": "Çalışma alanı: {{name}}"
+  }
+}

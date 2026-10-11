@@ -37,10 +37,16 @@ export const securityPolicySchema = z.object({
   lockoutAfterFailures: z.number().int().min(1).max(50).default(5),
   lockoutWindowMinutes: z.number().int().min(1).max(1440).default(15),
   // --- password rules (sign-up, reset, change, admin-set)
-  passwordMinLength: z.number().int().min(6).max(128).default(8),
+  // Strong by default (ASVS 5.0 floor is 8; NIST asks 15 for password-only sign-in). An administrator can lower it to 8, never below:
+  // a stored value under the floor (older range) reads back as this default, per key.
+  passwordMinLength: z.number().int().min(8).max(128).default(12),
   passwordRequireUpper: z.boolean().default(true),
   passwordRequireNumber: z.boolean().default(true),
   passwordRequireSymbol: z.boolean().default(false),
+  /** Refuse passwords on the built-in list of the most common passwords, their leet-speak and keyboard-walk variants, and ones containing the person's name or email. */
+  passwordBlocklistEnabled: z.boolean().default(true),
+  /** Refuse passwords found in public breaches (Pwned Passwords, k-anonymity: only a 5-character hash prefix leaves the server). Fails open if the service is unreachable. */
+  passwordBreachCheck: z.boolean().default(true),
   /** 0 = never expires. */
   passwordMaxAgeDays: z.number().int().min(0).max(3650).default(0),
   // --- send guardrails

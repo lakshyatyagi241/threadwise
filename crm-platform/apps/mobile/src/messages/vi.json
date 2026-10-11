@@ -1,0 +1,39 @@
+{
+  "common": {
+    "loading": "Đang tải…",
+    "retry": "Thử lại",
+    "signOut": "Đăng xuất",
+    "back": "Quay lại"
+  },
+  "errors": {
+    "generic": "Đã xảy ra lỗi. Vui lòng thử lại.",
+    "network": "Không thể kết nối với máy chủ. Hãy kiểm tra kết nối và thử lại.",
+    "timeout": "Máy chủ phản hồi quá lâu. Vui lòng thử lại.",
+    "outdatedApp": "Phiên bản ứng dụng này đã cũ. Vui lòng cập nhật.",
+    "tooManyRequests": "Bạn đã thử quá nhiều lần. Vui lòng chờ một lát rồi thử lại."
+  },
+  "auth": {
+    "signInTitle": "Đăng nhập",
+    "signInSubtitle": "Dùng email và mật khẩu của tài khoản bạn.",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "signInSubmit": "Đăng nhập",
+    "emailInvalid": "Nhập một địa chỉ email hợp lệ.",
+    "passwordRequired": "Nhập mật khẩu của bạn.",
+    "mfaTitle": "Xác minh hai bước",
+    "mfaHint": "Nhập mã gồm 6 chữ số từ ứng dụng xác thực của bạn.",
+    "mfaCode": "Mã xác minh",
+    "mfaSubmit": "Xác minh",
+    "workspaceTitle": "Chọn không gian làm việc",
+    "workspaceHint": "Tài khoản của bạn thuộc nhiều hơn một không gian làm việc.",
+    "invalidCredentials": "Email hoặc mật khẩu không đúng.",
+    "accountLocked": "Tài khoản này đang bị khóa tạm thời. Hãy thử lại sau.",
+    "accountSuspended": "Tài khoản này đã bị tạm ngưng.",
+    "mfaInvalid": "Mã không đúng. Hãy thử lại.",
+    "mfaExpired": "Phiên đăng nhập đã hết hạn. Vui lòng bắt đầu lại."
+  },
+  "home": {
+    "welcome": "Xin chào, {{name}}",
+    "workspace": "Không gian làm việc: {{name}}"
+  }
+}

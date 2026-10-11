@@ -202,6 +202,58 @@ export const platformSessions = pgTable(
   (t) => [index('idx_platform_sessions_operator').on(t.operatorId, t.createdAt)],
 );
 
+/** Mirror of 20261114090000_auth_webauthn_credentials.sql: passkeys as a second factor for workspace staff. */
+export const webauthnCredentials = pgTable(
+  'webauthn_credentials',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull(),
+    userId: idColumn('user_id').notNull(),
+    credentialId: text('credential_id').notNull(),
+    publicKey: bytea('public_key').notNull(),
+    counter: bigint('counter', { mode: 'number' }).notNull().default(0),
+    transports: text('transports')
+      .array()
+      .notNull()
+      .default(sql`'{}'`),
+    deviceType: text('device_type').$type<'singleDevice' | 'multiDevice'>().notNull(),
+    backedUp: boolean('backed_up').notNull().default(false),
+    name: text('name').notNull(),
+    createdAt: createdAt(),
+    lastUsedAt: ts('last_used_at'),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    uniqueIndex('webauthn_credentials_org_id_uuid_key').on(t.orgId, t.uuid),
+    uniqueIndex('webauthn_credentials_credential_id_key').on(t.credentialId),
+    index('idx_webauthn_credentials_user').on(t.orgId, t.userId),
+  ],
+);
+
+/** Same, for platform operators (no organization; privileged access only). */
+export const platformWebauthnCredentials = pgTable(
+  'platform_webauthn_credentials',
+  {
+    id: idColumn('id').primaryKey().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().unique(),
+    operatorId: idColumn('operator_id').notNull(),
+    credentialId: text('credential_id').notNull().unique(),
+    publicKey: bytea('public_key').notNull(),
+    counter: bigint('counter', { mode: 'number' }).notNull().default(0),
+    transports: text('transports')
+      .array()
+      .notNull()
+      .default(sql`'{}'`),
+    deviceType: text('device_type').$type<'singleDevice' | 'multiDevice'>().notNull(),
+    backedUp: boolean('backed_up').notNull().default(false),
+    name: text('name').notNull(),
+    createdAt: createdAt(),
+    lastUsedAt: ts('last_used_at'),
+  },
+  (t) => [index('idx_platform_webauthn_operator').on(t.operatorId)],
+);
+
 export const securityEvents = pgTable(
   'security_events',
   {

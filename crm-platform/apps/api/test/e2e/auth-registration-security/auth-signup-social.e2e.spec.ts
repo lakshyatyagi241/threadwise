@@ -633,9 +633,10 @@ describe('social sign-in', () => {
       const stored = await avatarOf(a.email);
       expect(stored?.mime).toBe('image/png');
       expect(stored!.bytes.equals(PNG)).toBe(true);
+      const second = await signIn(a.slug, 'av-1');
       const served = await api()
         .get('/v2/account/avatar')
-        .set(bearer((await signIn(a.slug, 'av-1')).body.tokens.accessToken));
+        .set(bearer(second.body.tokens.accessToken));
       expect(served.status).toBe(200);
       expect(served.headers['content-type']).toContain('image/png');
       const audited = await h.owner.query(

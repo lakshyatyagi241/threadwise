@@ -380,25 +380,25 @@ describe('change password (WD-AUTH-027)', () => {
     expect(JSON.stringify(events[0])).not.toContain(NEXT);
   });
 
-  it('accepts a 6-character password when the administrator sets the minimum to 6, and enforces the stored policy', async () => {
+  it('accepts an 8-character password when the administrator sets the minimum to 8, and enforces the stored policy', async () => {
     const a = await signup();
-    await setPolicy({ passwordMinLength: 6, passwordRequireSymbol: false });
+    await setPolicy({ passwordMinLength: 8, passwordRequireSymbol: false });
     try {
       const ok = await api()
         .post('/v2/account/password')
         .set(bearer(a.access))
-        .send({ currentPassword: PASSWORD, newPassword: 'Ab1cde' });
+        .send({ currentPassword: PASSWORD, newPassword: 'Ab1cdefg' });
       expect(ok.status, JSON.stringify(ok.body)).toBe(201);
 
       await setPolicy({ passwordMinLength: 12 });
       const short = await api()
         .post('/v2/account/password')
         .set(bearer(a.access))
-        .send({ currentPassword: 'Ab1cde', newPassword: 'Ab1cdefgh' });
+        .send({ currentPassword: 'Ab1cdefg', newPassword: 'Ab1cdefghij' });
       expect(short.status).toBe(422);
       expect(short.body.code).toBe('AUTH_PASSWORD_POLICY');
     } finally {
-      await setPolicy({ passwordMinLength: 8 });
+      await setPolicy({ passwordMinLength: 12 });
     }
   });
 
@@ -899,11 +899,11 @@ describe('policy store (WD-AUTH-037/038)', () => {
     const diff = (await securityEvents('platform.security.policy_updated')).at(-1)!.payload as {
       changes: Record<string, { from: unknown; to: unknown }>;
     };
-    expect(diff.changes.passwordMinLength).toEqual({ from: 8, to: 11 });
+    expect(diff.changes.passwordMinLength).toEqual({ from: 12, to: 11 });
     expect(diff.changes.passwordRequireSymbol).toEqual({ from: false, to: true });
     expect(diff.changes.webhookReplayWindowSec).toEqual({ from: 300, to: 400 });
     await setPolicy({
-      passwordMinLength: 8,
+      passwordMinLength: 12,
       passwordRequireSymbol: false,
       webhookReplayWindowSec: 300,
     });
@@ -1014,7 +1014,7 @@ describe('policy store (WD-AUTH-037/038)', () => {
       deviceLogoutOnInactiveDays: 45,
     });
     await setPolicy({
-      passwordMinLength: 8,
+      passwordMinLength: 12,
       webhookReplayWindowSec: 300,
       deviceLogoutOnInactiveDays: 30,
     });
@@ -1058,7 +1058,7 @@ describe('event viewer identity (WD-AUTH-046)', () => {
       orgId: null,
       orgSlug: null,
     });
-    await setPolicy({ passwordMinLength: 8 });
+    await setPolicy({ passwordMinLength: 12 });
   });
 
   it('searches event names by text', async () => {

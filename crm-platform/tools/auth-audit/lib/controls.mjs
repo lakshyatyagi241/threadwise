@@ -1,0 +1,192 @@
+// The 100-control authentication register (AUTH-001..AUTH-100).
+//
+// Source: the WaDesk "Authentication Audit & Security Engineering Standard" reference. The text of each control is
+// kept close to the reference. `asvs` is a CHAPTER-level mapping to OWASP ASVS 5.0 (V6 Authentication, V7 Session
+// Management, V8 Authorization, V9 Self-contained Tokens, V10 OAuth/OIDC, V11 Cryptography, V3 Web Frontend,
+// V4 API, V16 Logging, V13/V15 Configuration & Architecture). It is deliberately not requirement-level: exact ASVS
+// requirement ids must be checked against the ASVS 5.0 text before anyone quotes them to an auditor.
+//
+// Priority P0..P3 = implementation priority, not vulnerability severity.
+
+export const DOMAINS = {
+  A: 'Identity, signup and account lifecycle',
+  B: 'Password security',
+  C: 'Login and attack resistance',
+  D: 'Sessions, cookies and tokens',
+  E: 'MFA and passkeys',
+  F: 'Account recovery and password reset',
+  G: 'Multi-tenant authentication boundaries',
+  H: 'API keys, OAuth and machine authentication',
+  I: 'Browser, frontend and real-time authentication',
+  J: 'Audit trails and suspicious-activity monitoring',
+  K: 'Reliability and performance',
+  L: 'Delivery and continuous validation',
+};
+
+const ASVS = {
+  A: 'V6',
+  B: 'V6',
+  C: 'V6',
+  D: 'V7, V9',
+  E: 'V6',
+  F: 'V6',
+  G: 'V8',
+  H: 'V10, V9',
+  I: 'V3, V4',
+  J: 'V16',
+  K: 'V13, V15',
+  L: 'V13, V15',
+};
+
+// [number, domain, priority, requirement]
+const RAW = [
+  [
+    1,
+    'A',
+    'P0',
+    'Inventory every authentication entry point: UI, REST, GraphQL, WebSocket, SSO, admin and machine credentials',
+  ],
+  [2, 'A', 'P0', 'Define user identity, organization identity and workspace membership distinctly'],
+  [3, 'A', 'P0', 'Reject access for suspended, deleted or blocked identities'],
+  [4, 'A', 'P0', 'Require email/phone verification where identity ownership is relied upon'],
+  [5, 'A', 'P0', 'Prevent account enumeration through signup, login and account recovery'],
+  [6, 'A', 'P1', 'Define duplicate identity handling across organizations'],
+  [
+    7,
+    'A',
+    'P0',
+    'Secure invitation acceptance against replay, expiry bypass and unintended membership',
+  ],
+  [8, 'A', 'P1', 'Revalidate account status after identity or membership changes'],
+  [
+    9,
+    'A',
+    'P1',
+    'Ensure old email/phone identifiers cannot retain recovery authority after changes',
+  ],
+  [10, 'B', 'P0', 'Verify Argon2id, or appropriately configured approved password hashing'],
+  [11, 'B', 'P0', 'Never store or log plaintext passwords or reversible password encryption'],
+  [12, 'B', 'P0', 'Reject compromised/common passwords using a blocklist'],
+  [13, 'B', 'P1', 'Follow modern password length rules and allow long passphrases'],
+  [14, 'B', 'P1', 'Remove unnecessary uppercase/digit/symbol composition requirements'],
+  [15, 'B', 'P0', 'Use secure random generation for temporary credentials'],
+  [16, 'B', 'P0', 'Never silently truncate passwords or change case'],
+  [17, 'B', 'P1', 'Support Unicode password handling consistently'],
+  [18, 'B', 'P0', 'Revoke/rotate affected credentials after confirmed compromise'],
+  [19, 'C', 'P0', 'Validate credentials on the server only'],
+  [20, 'C', 'P0', 'Reject inactive/unverified accounts according to policy'],
+  [21, 'C', 'P0', 'Implement per-account and per-source login throttling'],
+  [22, 'C', 'P0', 'Resist credential stuffing and password spraying'],
+  [23, 'C', 'P0', 'Avoid exploitable timing differences and detailed user-existence errors'],
+  [24, 'C', 'P1', 'Implement progressive challenges rather than unsafe permanent lockouts'],
+  [25, 'C', 'P1', 'Detect suspicious login patterns and new-device anomalies'],
+  [26, 'C', 'P1', 'Notify users about high-risk sign-ins'],
+  [27, 'C', 'P0', 'Return consistent sanitized authentication errors'],
+  [28, 'C', 'P0', 'Ensure login throttling and abuse counters work across all instances'],
+  [29, 'D', 'P0', 'Generate cryptographically secure, unpredictable session identifiers'],
+  [30, 'D', 'P0', 'Rotate session identifiers after login and privilege elevation'],
+  [31, 'D', 'P0', 'Enforce server-side session validation on every protected request'],
+  [32, 'D', 'P0', 'Implement idle timeout and absolute session lifetime'],
+  [33, 'D', 'P0', 'Ensure logout immediately invalidates the server session'],
+  [34, 'D', 'P0', 'Support logout from all devices with effective revocation'],
+  [35, 'D', 'P0', 'Protect cookies with Secure, HttpOnly and appropriate SameSite settings'],
+  [36, 'D', 'P0', 'Prevent session fixation and session replay after termination'],
+  [
+    37,
+    'D',
+    'P0',
+    'Validate JWT signature, algorithm, issuer, audience, expiry and not-before when JWTs are used',
+  ],
+  [38, 'D', 'P0', 'Rotate refresh tokens and detect reuse where refresh-token flows exist'],
+  [39, 'D', 'P0', 'Protect signing keys and support controlled key rotation'],
+  [40, 'D', 'P1', 'Store session state securely with appropriate TTL and cleanup'],
+  [41, 'D', 'P1', 'Enforce the documented concurrent-session policy'],
+  [42, 'D', 'P0', 'Ensure role/status changes can invalidate or restrict existing sessions'],
+  [43, 'D', 'P1', 'Prevent leakage through browser storage, URLs, referrers, caches and logs'],
+  [44, 'E', 'P0', 'Enforce MFA for privileged staff and administrators'],
+  [45, 'E', 'P0', 'Verify MFA cannot be bypassed using alternate login/API paths'],
+  [46, 'E', 'P0', 'Secure MFA enrollment and require recent authentication'],
+  [47, 'E', 'P0', 'Protect TOTP secrets and prevent OTP replay'],
+  [48, 'E', 'P0', 'Rate-limit and expire OTP challenges'],
+  [49, 'E', 'P0', 'Ensure recovery codes are unpredictable, single-use and securely stored'],
+  [50, 'E', 'P0', 'Secure MFA reset, disable and factor replacement'],
+  [51, 'E', 'P1', 'Offer phishing-resistant WebAuthn/passkeys'],
+  [52, 'E', 'P1', 'Require step-up authentication for sensitive operations'],
+  [53, 'E', 'P1', 'Notify users when MFA factors are changed'],
+  [54, 'F', 'P0', 'Use cryptographically random reset tokens'],
+  [55, 'F', 'P0', 'Ensure reset tokens expire and are single-use'],
+  [56, 'F', 'P0', 'Avoid user enumeration in forgot-password responses'],
+  [57, 'F', 'P0', 'Bind reset operations to the intended identity'],
+  [58, 'F', 'P0', 'Prevent replay and concurrent double-use of reset tokens'],
+  [59, 'F', 'P0', 'Revoke appropriate sessions after successful account recovery'],
+  [60, 'F', 'P0', 'Protect reset links from host-header manipulation and token leakage'],
+  [61, 'F', 'P1', 'Rate-limit reset requests and send account-change notifications'],
+  [62, 'F', 'P0', 'Secure email changes and alternate recovery channels'],
+  [63, 'G', 'P0', 'Prevent identities from obtaining sessions for unauthorized tenants'],
+  [64, 'G', 'P0', 'Validate workspace membership independently of client-supplied IDs'],
+  [65, 'G', 'P0', 'Re-evaluate tenant scope when switching organizations'],
+  [66, 'G', 'P0', 'Enforce role changes immediately or within a documented secure bound'],
+  [67, 'G', 'P0', 'Prevent suspended memberships from retaining access'],
+  [68, 'G', 'P0', 'Block horizontal/vertical privilege escalation through auth context'],
+  [
+    69,
+    'G',
+    'P0',
+    'Prevent service and admin impersonation outside explicitly authorized audited workflows',
+  ],
+  [70, 'G', 'P0', 'Ensure tenant-aware sessions cannot reuse stale authorization data'],
+  [71, 'G', 'P1', 'Verify tenant-aware impersonation/support-access expiration and logging'],
+  [72, 'H', 'P0', 'Store only protected digests of high-entropy API keys where possible'],
+  [73, 'H', 'P0', 'Enforce API-key scopes and tenant binding'],
+  [74, 'H', 'P0', 'Support API-key revocation and rotation'],
+  [75, 'H', 'P1', 'Implement API-key expiry and inactivity rules as policy'],
+  [76, 'H', 'P0', 'Verify OAuth/OIDC state, PKCE, nonce and claims as applicable'],
+  [77, 'H', 'P0', 'Restrict redirect URIs and prevent open redirects'],
+  [78, 'H', 'P0', 'Verify issuer/audience and identity-token signatures'],
+  [79, 'H', 'P0', 'Prevent machine credentials being confused with end-user sessions'],
+  [80, 'H', 'P1', 'Use narrow service-to-service credentials and rotate secrets'],
+  [81, 'I', 'P0', 'Prevent sensitive credentials from appearing in frontend bundles'],
+  [82, 'I', 'P0', 'Protect cookie-authenticated state-changing requests against CSRF'],
+  [83, 'I', 'P0', 'Enforce restrictive CORS policy and valid origins'],
+  [84, 'I', 'P0', 'Authenticate WebSocket handshakes and authorize subscriptions'],
+  [85, 'I', 'P0', 'Terminate or restrict real-time connections after session revocation'],
+  [86, 'I', 'P1', 'Clear sensitive client-side caches on logout/account switch'],
+  [87, 'I', 'P1', 'Handle session expiry, refresh and concurrent tabs safely'],
+  [88, 'I', 'P1', 'Prevent login/open-redirect and return-URL abuse'],
+  [89, 'J', 'P0', 'Record login success/failure and identity-relevant events'],
+  [90, 'J', 'P0', 'Record password, MFA, recovery and privilege changes'],
+  [91, 'J', 'P0', 'Exclude passwords, bearer tokens, OTPs and recovery secrets from logs'],
+  [92, 'J', 'P1', 'Detect abnormal authentication failure rates and attack patterns'],
+  [93, 'J', 'P1', 'Alert on suspicious privileged-account activity'],
+  [94, 'J', 'P1', 'Enforce log access controls, retention and tamper resistance'],
+  [95, 'K', 'P1', 'Load-test login/session validation and refresh behavior'],
+  [96, 'K', 'P0', 'Fail closed for protected access if authoritative auth checks are unavailable'],
+  [97, 'K', 'P1', 'Test Redis/session-store outage, recovery and concurrent invalidation'],
+  [98, 'K', 'P1', 'Monitor authentication latency, error rates and dependency saturation'],
+  [99, 'L', 'P0', 'Run automated security regression on every relevant PR and release'],
+  [
+    100,
+    'L',
+    'P0',
+    'Generate signed/versioned audit evidence and enforce release-blocking findings',
+  ],
+];
+
+export const CONTROLS = RAW.map(([n, domain, priority, requirement]) => ({
+  id: `AUTH-${String(n).padStart(3, '0')}`,
+  domain,
+  domainName: DOMAINS[domain],
+  priority,
+  requirement,
+  asvs: ASVS[domain],
+}));
+
+/**
+ * Controls that do not apply to this product, with the reason. Applicability is a decision, so it is written down
+ * here and shown in the report; it is never inferred from a missing check. All 100 apply today: the product has a
+ * web BFF with cookies (CSRF), JWT sessions, social OAuth, API keys and WebSockets. (GraphQL, named in AUTH-001, does
+ * not exist; that is a fact AUTH-001's check records, not a reason to drop the control.)
+ *
+ * Shape: { 'AUTH-nnn': 'reason it does not apply' }
+ */
+export const NOT_APPLICABLE = {};

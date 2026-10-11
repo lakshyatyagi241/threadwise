@@ -27,6 +27,11 @@
 | [scale.md](architecture/scale.md)                   | partitioning, hot rows, the target numbers                |
 | [partner-agents.md](architecture/partner-agents.md) | the sub-agent model                                       |
 
+## Mobile app
+
+[mobile/README.md](mobile/README.md): the iOS/Android app (`apps/mobile`): [handover](mobile/handover.md), [backlog](mobile/backlog.md), [security](mobile/security.md),
+[i18n](mobile/i18n.md), [testing](mobile/testing.md). Decisions: ADR-0021 to 0027 in [adr/](adr/).
+
 ## Runbooks
 
 | Document                                                                  | For                                                             |
@@ -36,6 +41,9 @@
 | [outbox-backlog.md](runbooks/outbox-backlog.md)                           | when events stop being processed                                |
 | [google-calendar-setup.md](runbooks/google-calendar-setup.md)             | creating the Google OAuth client for workspace calendars        |
 | [marketplace-publish-listing.md](runbooks/marketplace-publish-listing.md) | publishing a Marketplace listing and writing a connector recipe |
+| [mobile-local-development.md](runbooks/mobile-local-development.md)       | running the mobile app on an emulator or phone                  |
+| [mobile-store-setup.md](runbooks/mobile-store-setup.md)                   | Apple, Google and Expo accounts, bundle id, first store listing |
+| [mobile-release.md](runbooks/mobile-release.md)                           | OTA updates, store releases, rollbacks                          |
 
 ## Database
 

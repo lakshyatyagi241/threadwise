@@ -364,6 +364,14 @@
             "label": "기호 필수",
             "short": "기호"
           },
+          "passwordBlocklistEnabled": {
+            "label": "흔한 비밀번호 차단",
+            "hint": "가장 흔한 비밀번호, P@ssw0rd 같은 유사 변형, 키보드 패턴, 그리고 본인의 이름이나 이메일이 들어간 비밀번호를 거부합니다."
+          },
+          "passwordBreachCheck": {
+            "label": "데이터 유출 이력이 있는 비밀번호 차단",
+            "hint": "새 비밀번호를 공개된 Pwned Passwords 목록과 대조합니다. 해시의 처음 다섯 글자만 서버 밖으로 전송됩니다. 서비스에 연결할 수 없으면 비밀번호는 그대로 허용됩니다."
+          },
           "passwordMaxAgeDays": {
             "label": "비밀번호 사용 기한(일)",
             "hint": "0은 비밀번호가 만료되지 않음을 의미합니다."

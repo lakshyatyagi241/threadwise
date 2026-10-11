@@ -4,12 +4,13 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { maskSecretUrl } from '../../../src/common/logging/mask-secret-url';
 import {
   LOG_REDACT_PATHS,
+  NO_EXTRA_DATA,
   SECRET_HEADERS,
   createFatalHandler,
   initSentry,
   redactHeaders,
   scrubSentryEvent,
-  scrubSentryTransaction,
+  scrubSentrySpan,
 } from '../../../src/modules/platform-infrastructure';
 
 describe('log redaction', () => {
@@ -134,33 +135,65 @@ describe('scrubSentryEvent', () => {
   });
 });
 
-describe('scrubSentryTransaction', () => {
-  it('masks the secret in the name and in every address field, and drops the query', () => {
-    const tx = scrubSentryTransaction({
-      transaction: 'GET /v2/shopify/webhook/s3cr3t',
-      contexts: {
-        trace: {
-          data: {
-            url: 'http://x/v2/shopify/webhook/s3cr3t',
-            'http.url': 'http://x/v2/shopify/webhook/s3cr3t?token=abc',
-            'http.target': '/v2/shopify/webhook/s3cr3t?token=abc',
-            'http.query': 'token=abc',
-            'http.method': 'GET',
-          },
-        },
+describe('scrubSentrySpan', () => {
+  it('masks the secret in the name and in every address attribute, and drops the query', () => {
+    const span = scrubSentrySpan({
+      name: 'GET /v2/shopify/webhook/s3cr3t',
+      attributes: {
+        'url.full': 'http://x/v2/shopify/webhook/s3cr3t?token=abc',
+        'url.path': '/v2/shopify/webhook/s3cr3t',
+        'url.query': 'token=abc',
+        'url.fragment': 'frag',
+        'http.url': 'http://x/v2/shopify/webhook/s3cr3t?token=abc',
+        'http.target': '/v2/shopify/webhook/s3cr3t?token=abc',
+        'http.query': 'token=abc',
+        'http.request.method': 'GET',
+        'http.response.status_code': 500,
       },
     });
-    expect(tx.transaction).toBe('GET /v2/shopify/webhook/[secret]');
-    expect(tx.contexts?.trace?.data).toEqual({
-      url: 'http://x/v2/shopify/webhook/[secret]',
+    expect(span.name).toBe('GET /v2/shopify/webhook/[secret]');
+    expect(span.attributes).toEqual({
+      'url.full': 'http://x/v2/shopify/webhook/[secret]',
+      'url.path': '/v2/shopify/webhook/[secret]',
       'http.url': 'http://x/v2/shopify/webhook/[secret]',
       'http.target': '/v2/shopify/webhook/[secret]',
-      'http.method': 'GET',
+      'http.request.method': 'GET',
+      'http.response.status_code': 500,
     });
   });
 
-  it('copes with a transaction that has no trace data', () => {
-    expect(scrubSentryTransaction({})).toEqual({});
+  it('masks a secret in an attribute it has no rule for, and in the { value } form of one', () => {
+    const span = scrubSentrySpan({
+      attributes: {
+        'some.future.address': 'https://x/v2/telegram/inbound/123:ABC',
+        'url.full': { value: 'https://x/v2/public/lead-hooks/tok?a=b', unit: undefined },
+      },
+    });
+    expect(span.attributes).toEqual({
+      'some.future.address': 'https://x/v2/telegram/inbound/[secret]',
+      'url.full': { value: 'https://x/v2/public/lead-hooks/[secret]', unit: undefined },
+    });
+  });
+
+  it('redacts a secret header carried as an attribute and keeps the others', () => {
+    const span = scrubSentrySpan({
+      attributes: {
+        'http.request.header.x-hub-signature-256': ['sha256=ff'],
+        'http.request.header.X-Webhook-Secret': ['w'],
+        'http.request.header.user-agent': ['curl'],
+        'http.response.header.content-type': ['application/json'],
+      },
+    });
+    expect(span.attributes).toEqual({
+      'http.request.header.x-hub-signature-256': ['[redacted]'],
+      'http.request.header.X-Webhook-Secret': ['[redacted]'],
+      'http.request.header.user-agent': ['curl'],
+      'http.response.header.content-type': ['application/json'],
+    });
+  });
+
+  it('copes with a span that has no attributes', () => {
+    expect(scrubSentrySpan({})).toEqual({});
   });
 });
 
@@ -168,6 +201,23 @@ describe('initSentry', () => {
   it('does nothing without a DSN', () => {
     expect(initSentry('api', {})).toBe(false);
     expect(initSentry('api', { SENTRY_DSN: '   ' })).toBe(false);
+  });
+
+  /**
+   * Sentry 11 collects everything it can unless each category is switched off (the old `sendDefaultPii: false` is gone). These
+   * are the categories that can carry a credential or customer data and that `scrubSentryEvent` cannot look inside.
+   */
+  it('switches off every data category that can carry a secret', () => {
+    expect(NO_EXTRA_DATA).toEqual({
+      userInfo: false,
+      cookies: false,
+      httpHeaders: { request: true, response: false },
+      httpBodies: [],
+      urlQueryParams: false,
+      databaseQueryData: false,
+      queues: false,
+      stackFrameVariables: false,
+    });
   });
 });
 

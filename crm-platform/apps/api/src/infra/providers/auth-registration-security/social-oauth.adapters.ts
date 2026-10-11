@@ -11,8 +11,14 @@ async function json<T>(res: Response, what: string): Promise<T> {
 @Injectable()
 export class GoogleOAuthAdapter implements SocialOAuthProvider {
   readonly name = 'google' as const;
+  readonly pkce = true;
 
-  authorizeUrl(credentials: SocialCredentials, redirectUri: string, state: string): string {
+  authorizeUrl(
+    credentials: SocialCredentials,
+    redirectUri: string,
+    state: string,
+    codeChallenge?: string,
+  ): string {
     const params = new URLSearchParams({
       client_id: credentials.clientId,
       redirect_uri: redirectUri,
@@ -21,6 +27,7 @@ export class GoogleOAuthAdapter implements SocialOAuthProvider {
       access_type: 'online',
       prompt: 'select_account',
       state,
+      ...(codeChallenge ? { code_challenge: codeChallenge, code_challenge_method: 'S256' } : {}),
     });
     return `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
   }
@@ -29,6 +36,7 @@ export class GoogleOAuthAdapter implements SocialOAuthProvider {
     credentials: SocialCredentials,
     redirectUri: string,
     code: string,
+    codeVerifier?: string,
   ): Promise<SocialProfile> {
     const token = await json<{ access_token?: string }>(
       await fetch('https://oauth2.googleapis.com/token', {
@@ -40,6 +48,7 @@ export class GoogleOAuthAdapter implements SocialOAuthProvider {
           client_secret: credentials.clientSecret,
           redirect_uri: redirectUri,
           grant_type: 'authorization_code',
+          ...(codeVerifier ? { code_verifier: codeVerifier } : {}),
         }),
         signal: AbortSignal.timeout(TIMEOUT_MS),
       }),
@@ -76,9 +85,16 @@ export class GoogleOAuthAdapter implements SocialOAuthProvider {
 @Injectable()
 export class FacebookOAuthAdapter implements SocialOAuthProvider {
   readonly name = 'facebook' as const;
+  /** Facebook Login does not take a PKCE challenge on this flow; the single-use state plus the client secret protect the code. */
+  readonly pkce = false;
   private readonly version = 'v19.0';
 
-  authorizeUrl(credentials: SocialCredentials, redirectUri: string, state: string): string {
+  authorizeUrl(
+    credentials: SocialCredentials,
+    redirectUri: string,
+    state: string,
+    _codeChallenge?: string,
+  ): string {
     const params = new URLSearchParams({
       client_id: credentials.clientId,
       redirect_uri: redirectUri,

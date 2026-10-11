@@ -106,6 +106,13 @@ export const ERROR_CODES = {
   // auth, registration and account security
   AUTH_INVALID_CREDENTIALS: 'AUTH_INVALID_CREDENTIALS',
   AUTH_ACCOUNT_LOCKED: 'AUTH_ACCOUNT_LOCKED',
+  /**
+   * A dependency the sign-in checks rely on (the Redis revocation/throttle store) is down and the platform is configured to
+   * refuse rather than guess. 503 + Retry-After; nothing about the credential was decided.
+   */
+  AUTH_SERVICE_DEGRADED: 'AUTH_SERVICE_DEGRADED',
+  /** Repeated failures against one account from many addresses: this one must solve the captcha / is not a known network. */
+  AUTH_CHALLENGE_REQUIRED: 'AUTH_CHALLENGE_REQUIRED',
   AUTH_ACCOUNT_SUSPENDED: 'AUTH_ACCOUNT_SUSPENDED',
   AUTH_CAPTCHA_FAILED: 'AUTH_CAPTCHA_FAILED',
   AUTH_SIGNUP_CLOSED: 'AUTH_SIGNUP_CLOSED',
@@ -119,7 +126,14 @@ export const ERROR_CODES = {
   AUTH_MFA_INVALID_CODE: 'AUTH_MFA_INVALID_CODE',
   AUTH_MFA_CHALLENGE_EXPIRED: 'AUTH_MFA_CHALLENGE_EXPIRED',
   AUTH_MFA_ENROLMENT_REQUIRED: 'AUTH_MFA_ENROLMENT_REQUIRED',
+  /** A sensitive change (turning two-factor on) needs the password again: the session is older than the re-authentication window. 403, not 401. */
+  AUTH_REAUTH_REQUIRED: 'AUTH_REAUTH_REQUIRED',
   AUTH_MFA_SETUP_EXPIRED: 'AUTH_MFA_SETUP_EXPIRED',
+  /** A passkey registration or sign-in assertion did not verify (wrong origin, challenge, signature, counter). */
+  AUTH_PASSKEY_INVALID: 'AUTH_PASSKEY_INVALID',
+  AUTH_PASSKEY_LIMIT: 'AUTH_PASSKEY_LIMIT',
+  /** Passkeys are a second factor next to an authenticator app: turn two-factor on first. */
+  AUTH_PASSKEY_NEEDS_MFA: 'AUTH_PASSKEY_NEEDS_MFA',
   AUTH_OTP_INVALID: 'AUTH_OTP_INVALID',
   AUTH_OTP_EXPIRED: 'AUTH_OTP_EXPIRED',
   AUTH_SIGNUP_EXPIRED: 'AUTH_SIGNUP_EXPIRED',
