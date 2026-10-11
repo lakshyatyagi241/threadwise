@@ -702,6 +702,22 @@ export class ContactsRepository {
     }));
   }
 
+  /** Which of `keys` are contact properties the workspace defined (any state): the rest are free-form keys. */
+  async definedPropertyKeys(tx: Tx, orgId: number, keys: readonly string[]): Promise<Set<string>> {
+    if (keys.length === 0) return new Set();
+    const rows = await tx
+      .select({ key: fields.key })
+      .from(fields)
+      .where(
+        and(
+          eq(fields.orgId, orgId),
+          eq(fields.moduleKey, 'contacts'),
+          inArray(fields.key, [...keys]),
+        ),
+      );
+    return new Set(rows.map((r) => r.key));
+  }
+
   /**
    * The custom properties among `keys` that a bulk edit may set: active, not a system property, not hidden, not read-only,
    * not a formula. Keys missing from the answer are not editable.

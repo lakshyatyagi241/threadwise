@@ -15,6 +15,7 @@ import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { PlanEntitlementService } from '../../plans-subscriptions-trials';
+import { permissionsNeededByScopes } from '../auth/api-key-grants';
 import { generateRawKey, hashRawKey, keyPrefixOf } from './api-key-secret';
 import { toApiKeyResponse } from './api-keys.mapper';
 import { ApiKeysRepository } from './api-keys.repository';
@@ -58,6 +59,9 @@ export class ApiKeysService {
     if (ctx.userId == null) throw AppError.unauthenticated();
     // No scopes (omitted or empty) is a full-access key, as in Reference (TW-API-008).
     const scopes = [...new Set(input.scopes ?? [])];
+    // An explicit scope list cannot exceed the creator's own permissions. An unrestricted key (`[]`) is still minted, as the product
+    // defines it, but the bearer guard caps every call to the creator's live grants (AZ-001), so it can never do more than they can.
+    if (scopes.length > 0) this.assertCreatorHolds(ctx.grants, scopes);
 
     for (let attempt = 1; ; attempt += 1) {
       const raw = generateRawKey();
@@ -100,6 +104,27 @@ export class ApiKeysService {
         throw err;
       }
     }
+  }
+
+  /**
+   * AZ-001: a key's grants derive from its scopes alone, so without this check a member with only `api.keys.create` could mint an
+   * unrestricted key and read the whole workspace. Every workspace permission a scope reaches must be one the creator holds. The
+   * creator's grants are the ones the permissions guard loaded on this very request. (Use-time capping: see `capGrantsToOwner`.)
+   */
+  private assertCreatorHolds(
+    grants: Map<string, { effect: 'allow' | 'deny'; scope: string }> | undefined,
+    scopes: readonly string[],
+  ): void {
+    const held = (permission: string) => grants?.get(permission)?.effect === 'allow';
+    const missing = permissionsNeededByScopes(scopes).filter((n) => !held(n.permission));
+    const first = missing[0];
+    if (!first) return;
+    throw new AppError(
+      ERROR_CODES.FORBIDDEN,
+      `You cannot give a key the "${first.scope}" scope: your role lacks ${first.permission}.`,
+      HttpStatus.FORBIDDEN,
+      missing.map((n) => ({ path: 'scopes', message: `${n.scope}: ${n.permission}` })),
+    );
   }
 
   /** Idempotent: revoking a revoked key answers the same and keeps its first `revoked_at`. */

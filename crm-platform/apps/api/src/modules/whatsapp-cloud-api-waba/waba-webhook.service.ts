@@ -94,16 +94,19 @@ export class WabaWebhookService {
     }
     const changes = splitWebhook(payload);
 
-    const secrets = [
+    // The platform app signs deliveries for every number it serves. A customer's own Meta app signs only its own numbers, and one
+    // signature covers the whole body, so it is accepted only when EVERY number and WABA the body names belongs to that app's workspace.
+    const platformSecrets = [
       this.env.META_APP_SECRET,
       this.config.get('WHATSAPP_APP_SECRET', { infer: true }),
-      ...(await this.ownAppSecrets(changes)),
     ].filter((s): s is string => typeof s === 'string' && s !== '');
-    const signatureValid =
-      Boolean(input.signatureHeader) &&
-      secrets.some((s) =>
-        this.provider.verifyWebhookSignature(input.rawBody!, input.signatureHeader!, s),
-      );
+    const verifies = (s: string) =>
+      this.provider.verifyWebhookSignature(input.rawBody!, input.signatureHeader!, s);
+    let signatureValid = Boolean(input.signatureHeader) && platformSecrets.some(verifies);
+    if (!signatureValid && input.signatureHeader) {
+      const own = await this.ownAppSecrets(changes);
+      signatureValid = own !== null && own.some(verifies);
+    }
     const auth = authenticateWebhook({
       signatureHeader: input.signatureHeader,
       signatureValid,
@@ -152,32 +155,61 @@ export class WabaWebhookService {
     return { queued: actionable.length };
   }
 
-  /** Numbers connected on the customer's own Meta app sign with that app's secret, stored with their credentials. */
-  private async ownAppSecrets(changes: WebhookChange[]): Promise<string[]> {
+  /**
+   * The app secrets of the single workspace that owns every number and WABA id named in the payload, or null when the payload
+   * names anything else (an unknown id, or ids of two workspaces): such a body cannot be authenticated by one tenant's secret.
+   */
+  private async ownAppSecrets(changes: WebhookChange[]): Promise<string[] | null> {
     const phones = [
       ...new Set(changes.map((c) => c.phoneNumberId).filter((p): p is string => Boolean(p))),
-    ].slice(0, 5);
+    ];
+    const wabas = [...new Set(changes.map((c) => c.wabaId).filter(Boolean))];
+    if (changes.length === 0 || phones.length + wabas.length > 50) return null;
+    let orgId: number | null = null;
     const out: string[] = [];
-    for (const phone of phones) {
-      try {
+    const same = (org: number): boolean => {
+      if (orgId === null) orgId = org;
+      return orgId === org;
+    };
+    try {
+      // A change that names a phone number is routed by it, a change without one by its WABA id (waba_route_lookup).
+      const routes = new Map(changes.map((c) => [c.phoneNumberId ?? `waba:${c.wabaId}`, c]));
+      for (const c of routes.values()) {
         const found = await this.db.primary.execute(
-          sql`SELECT * FROM waba_route_lookup(${phone}, NULL)`,
+          sql`SELECT * FROM waba_route_lookup(${c.phoneNumberId}, ${c.phoneNumberId ? null : c.wabaId})`,
         );
         const r = found.rows[0] as
           { route_org_id: number | string; route_config_id: number | string } | undefined;
+        if (!r || !same(Number(r.route_org_id))) return null;
+      }
+      // A WABA id that resolves must resolve to the same workspace as the numbers.
+      for (const waba of wabas) {
+        const found = await this.db.primary.execute(
+          sql`SELECT * FROM waba_route_lookup(NULL, ${waba})`,
+        );
+        const r = found.rows[0] as { route_org_id: number | string } | undefined;
+        if (r && !same(Number(r.route_org_id))) return null;
+      }
+      if (orgId === null) return null;
+      const org: number = orgId;
+      for (const phone of phones) {
+        const found = await this.db.primary.execute(
+          sql`SELECT * FROM waba_route_lookup(${phone}, NULL)`,
+        );
+        const r = found.rows[0] as { route_config_id: number | string } | undefined;
         if (!r) continue;
-        const orgId = Number(r.route_org_id);
-        const row = await this.db.txAs({ orgId }, (tx) =>
-          this.repo.findById(tx, orgId, Number(r.route_config_id)),
+        const row = await this.db.txAs({ orgId: org }, (tx) =>
+          this.repo.findById(tx, org, Number(r.route_config_id)),
         );
         if (!row?.credentials_json) continue;
         const secret = (
           JSON.parse(this.crypto.decrypt(row.credentials_json)) as { app_secret?: string }
         ).app_secret;
         if (secret) out.push(secret);
-      } catch (err) {
-        this.logger.debug({ err: (err as Error).message }, 'could not read a number app secret');
       }
+    } catch (err) {
+      this.logger.debug({ err: (err as Error).message }, 'could not read a number app secret');
+      return null;
     }
     return out;
   }
