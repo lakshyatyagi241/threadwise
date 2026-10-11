@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { ConfirmDialog, cn, useToast } from '@crm/ui';
-import { uuidSchema } from '@crm/contracts';
+import { uuidSchema, type MessageResponse } from '@crm/contracts';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { ApiError } from '@/lib/api/errors';
 import { useRealtimeEvent } from '@/lib/realtime';
@@ -293,14 +293,25 @@ export function InboxScreen() {
     [thread, toast, errorText],
   );
 
+  const onReact = useCallback(
+    async (message: MessageResponse, emoji: string) => {
+      try {
+        await thread.react(message, emoji);
+      } catch (e) {
+        toast(errorText(e), 'danger');
+      }
+    },
+    [thread, toast, errorText],
+  );
+
   const onSend = useCallback(
-    (draft: { body: string; file: File | null }) => {
+    (draft: { body: string; file: File | null; replyToMessageId?: string | null }) => {
       // A group thread cannot be replied to yet (the composer is off; this is the belt to that braces).
       if (isGroupThread(detail.detail?.peerKey)) return;
       // The simulator's one-shot fault goes in as a prefix on the text (or the caption of a file).
       const body = withFault(draft.body, fault);
       if (fault !== 'none') setFault('none');
-      thread.send({ body, file: draft.file });
+      thread.send({ body, file: draft.file, replyToMessageId: draft.replyToMessageId });
     },
     [fault, thread, detail.detail?.peerKey],
   );
@@ -443,6 +454,7 @@ export function InboxScreen() {
               onBack={back}
               onSeenLatest={onSeenLatest}
               onSend={onSend}
+              onReact={onReact}
               onNote={addNote}
               onDeleteNote={setNoteToDelete}
               canDeleteNote={canDeleteNote}

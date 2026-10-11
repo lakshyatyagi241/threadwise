@@ -165,7 +165,38 @@
       },
       "templateCopyCode": "نسخ الرمز",
       "templateButtonUnnamed": "زر",
-      "templateButtonPrefix": "زر: "
+      "templateButtonPrefix": "زر: ",
+      "reply": "رد",
+      "quote": {
+        "you": "أنت",
+        "customer": "العميل",
+        "missing": "الرسالة الأصلية",
+        "jump": "الانتقال إلى الرسالة الأصلية",
+        "replyingTo": "الرد على {name}",
+        "kind": {
+          "text": "رسالة",
+          "image": "صورة",
+          "video": "فيديو",
+          "audio": "صوت",
+          "voice": "رسالة صوتية",
+          "document": "مستند",
+          "sticker": "ملصق",
+          "location": "موقع",
+          "contact": "جهة اتصال",
+          "template": "قالب",
+          "reaction": "تفاعل",
+          "interactive": "اختيار"
+        }
+      },
+      "react": {
+        "label": "تفاعل مع هذه الرسالة",
+        "add": "تفاعل بـ {emoji}",
+        "remove": "إزالة تفاعلك {emoji}",
+        "more": "المزيد من الرموز التعبيرية",
+        "takeBack": "انقر لسحب تفاعلك",
+        "takeBackLabel": "تفاعلك {emoji}. سحب التفاعل",
+        "failed": "لم يتم إرسال هذا التفاعل"
+      }
     },
     "media": {
       "openImage": "فتح الصورة {name}",
@@ -235,7 +266,18 @@
       "addNote": "إضافة ملاحظة",
       "hint": "Enter للإرسال. Shift+Enter لسطر جديد.",
       "template": "إرسال قالب",
-      "groupSendUnavailable": "الإرسال إلى مجموعات واتساب غير متاح بعد. ردّ من تطبيق WhatsApp Business."
+      "groupSendUnavailable": "الإرسال إلى مجموعات واتساب غير متاح بعد. ردّ من تطبيق WhatsApp Business.",
+      "emoji": "إدراج رمز تعبيري",
+      "emojiPanel": "الرموز التعبيرية",
+      "emojiRecent": "المستخدمة مؤخرًا",
+      "emojiGroups": "مجموعات الرموز التعبيرية",
+      "emojiGroup": {
+        "smileys": "الوجوه",
+        "gestures": "الإيماءات",
+        "hearts": "القلوب والرموز",
+        "objects": "الأشياء"
+      },
+      "cancelReply": "إلغاء الرد"
     },
     "panel": {
       "tabsLabel": "الملاحظات والسجل الزمني",

@@ -183,3 +183,11 @@ export const VideoIcon = (p: SVGProps<SVGSVGElement>) => (
     <path d="m10 9 5 3-5 3Z" />
   </Icon>
 );
+
+export const SmileIcon = (p: SVGProps<SVGSVGElement>) => (
+  <Icon {...p}>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+    <path d="M9 9.5h.01M15 9.5h.01" />
+  </Icon>
+);

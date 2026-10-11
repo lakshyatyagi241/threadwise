@@ -162,7 +162,38 @@
       },
       "templateCopyCode": "কোড কপি করুন",
       "templateButtonUnnamed": "বাটন",
-      "templateButtonPrefix": "বাটন: "
+      "templateButtonPrefix": "বাটন: ",
+      "reply": "উত্তর দিন",
+      "quote": {
+        "you": "আপনি",
+        "customer": "গ্রাহক",
+        "missing": "মূল বার্তা",
+        "jump": "মূল বার্তায় যান",
+        "replyingTo": "{name}-কে উত্তর দিচ্ছেন",
+        "kind": {
+          "text": "বার্তা",
+          "image": "ছবি",
+          "video": "ভিডিও",
+          "audio": "অডিও",
+          "voice": "ভয়েস মেসেজ",
+          "document": "ডকুমেন্ট",
+          "sticker": "স্টিকার",
+          "location": "লোকেশন",
+          "contact": "কন্টাক্ট",
+          "template": "টেমপ্লেট",
+          "reaction": "রিঅ্যাকশন",
+          "interactive": "নির্বাচন"
+        }
+      },
+      "react": {
+        "label": "এই বার্তায় রিঅ্যাক্ট করুন",
+        "add": "{emoji} দিয়ে রিঅ্যাক্ট করুন",
+        "remove": "আপনার {emoji} রিঅ্যাকশন সরান",
+        "more": "আরও ইমোজি",
+        "takeBack": "রিঅ্যাকশন ফিরিয়ে নিতে ট্যাপ করুন",
+        "takeBackLabel": "আপনার রিঅ্যাকশন {emoji}। ফিরিয়ে নিন",
+        "failed": "এই রিঅ্যাকশন পাঠানো হয়নি"
+      }
     },
     "media": {
       "openImage": "ছবি {name} খুলুন",
@@ -232,7 +263,18 @@
       "addNote": "নোট যোগ করুন",
       "hint": "Enter চাপলে পাঠানো হবে। Shift+Enter চাপলে নতুন লাইন যোগ হবে।",
       "template": "টেমপ্লেট পাঠান",
-      "groupSendUnavailable": "WhatsApp গ্রুপে পাঠানো এখনও সম্ভব নয়। WhatsApp Business অ্যাপ থেকে উত্তর দিন।"
+      "groupSendUnavailable": "WhatsApp গ্রুপে পাঠানো এখনও সম্ভব নয়। WhatsApp Business অ্যাপ থেকে উত্তর দিন।",
+      "emoji": "ইমোজি যোগ করুন",
+      "emojiPanel": "ইমোজি",
+      "emojiRecent": "সম্প্রতি ব্যবহৃত",
+      "emojiGroups": "ইমোজি গ্রুপ",
+      "emojiGroup": {
+        "smileys": "স্মাইলি",
+        "gestures": "অঙ্গভঙ্গি",
+        "hearts": "হৃদয় ও চিহ্ন",
+        "objects": "বস্তু"
+      },
+      "cancelReply": "উত্তর বাতিল করুন"
     },
     "panel": {
       "tabsLabel": "নোট ও টাইমলাইন",

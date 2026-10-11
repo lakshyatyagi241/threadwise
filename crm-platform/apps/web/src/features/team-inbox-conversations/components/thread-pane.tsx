@@ -3,7 +3,12 @@
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState, type Ref } from 'react';
 import { Badge, Button, EmptyState, Spinner, cn } from '@crm/ui';
-import type { ChannelResponse, ConversationNote, InboxConversationDetail } from '@crm/contracts';
+import type {
+  ChannelResponse,
+  ConversationNote,
+  InboxConversationDetail,
+  MessageResponse,
+} from '@crm/contracts';
 import { ReconnectBanner } from '@/features/channel-whatsapp-cloud';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { CallButton } from '@/features/calling-voice';
@@ -35,7 +40,9 @@ export interface ThreadPaneProps {
   onTogglePanel: () => void;
   onBack: () => void;
   onSeenLatest: (seq: number) => void;
-  onSend: (draft: { body: string; file: File | null }) => void;
+  onSend: (draft: { body: string; file: File | null; replyToMessageId?: string | null }) => void;
+  /** Puts an emoji on a message (`''` takes it back); the screen shows the refusal. */
+  onReact: (message: MessageResponse, emoji: string) => Promise<void>;
   onNote: (body: string) => Promise<boolean>;
   onDeleteNote: (id: string) => void;
   canDeleteNote: (note: ConversationNote) => boolean;
@@ -58,6 +65,11 @@ export function ThreadPane(props: ThreadPaneProps) {
   const canManageChannels = useCan('inbox.channel.manage');
   const { detail, thread } = props;
   const [templatesOpen, setTemplatesOpen] = useState(false);
+  // The message the next send answers. It belongs to one thread: another conversation starts without it.
+  const [reply, setReply] = useState<{ conversationId: string; message: MessageResponse } | null>(
+    null,
+  );
+  const replyTo = reply && reply.conversationId === props.conversationId ? reply.message : null;
 
   if (props.notFound) {
     return (
@@ -206,6 +218,19 @@ export function ThreadPane(props: ThreadPaneProps) {
         onSeenLatest={props.onSeenLatest}
         onLoadOlder={() => void thread.loadOlder()}
         onRetryMessage={props.onRetryMessage}
+        onReply={
+          props.can.reply && !replyDisabled && !groupThread
+            ? (message) => {
+                setReply({ conversationId: props.conversationId, message });
+                props.onMode('reply');
+              }
+            : undefined
+        }
+        onReact={
+          props.can.reply && !replyDisabled && !groupThread && detail?.capabilities.reactions
+            ? props.onReact
+            : undefined
+        }
         canManageChannel={canManageChannels}
         onRetryPending={thread.retryPending}
         onDismissPending={thread.dismissPending}
@@ -270,7 +295,12 @@ export function ThreadPane(props: ThreadPaneProps) {
         }
         canTemplate={canTemplate}
         onTemplate={() => setTemplatesOpen(true)}
-        onSend={props.onSend}
+        onSend={(draft) => {
+          props.onSend({ ...draft, replyToMessageId: replyTo?.id ?? null });
+          setReply(null);
+        }}
+        replyTo={replyTo}
+        onCancelReply={() => setReply(null)}
         onNote={props.onNote}
         handleRef={props.composerRef}
       />

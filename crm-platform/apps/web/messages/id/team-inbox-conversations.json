@@ -162,7 +162,38 @@
       },
       "templateCopyCode": "Salin kode",
       "templateButtonUnnamed": "Tombol",
-      "templateButtonPrefix": "Tombol: "
+      "templateButtonPrefix": "Tombol: ",
+      "reply": "Balas",
+      "quote": {
+        "you": "Anda",
+        "customer": "Pelanggan",
+        "missing": "Pesan asli",
+        "jump": "Buka pesan asli",
+        "replyingTo": "Membalas {name}",
+        "kind": {
+          "text": "Pesan",
+          "image": "Foto",
+          "video": "Video",
+          "audio": "Audio",
+          "voice": "Pesan suara",
+          "document": "Dokumen",
+          "sticker": "Stiker",
+          "location": "Lokasi",
+          "contact": "Kontak",
+          "template": "Templat",
+          "reaction": "Reaksi",
+          "interactive": "Pilihan"
+        }
+      },
+      "react": {
+        "label": "Beri reaksi pada pesan ini",
+        "add": "Beri reaksi {emoji}",
+        "remove": "Hapus reaksi {emoji} Anda",
+        "more": "Emoji lainnya",
+        "takeBack": "Ketuk untuk menarik reaksi Anda",
+        "takeBackLabel": "Reaksi Anda {emoji}. Tarik kembali",
+        "failed": "Reaksi ini tidak terkirim"
+      }
     },
     "media": {
       "openImage": "Buka gambar {name}",
@@ -232,7 +263,18 @@
       "addNote": "Tambahkan catatan",
       "hint": "Enter untuk mengirim. Shift+Enter untuk baris baru.",
       "template": "Kirim templat",
-      "groupSendUnavailable": "Pengiriman ke grup WhatsApp belum tersedia. Balas dari aplikasi WhatsApp Business."
+      "groupSendUnavailable": "Pengiriman ke grup WhatsApp belum tersedia. Balas dari aplikasi WhatsApp Business.",
+      "emoji": "Sisipkan emoji",
+      "emojiPanel": "Emoji",
+      "emojiRecent": "Terakhir digunakan",
+      "emojiGroups": "Grup emoji",
+      "emojiGroup": {
+        "smileys": "Smiley",
+        "gestures": "Gestur",
+        "hearts": "Hati dan simbol",
+        "objects": "Objek"
+      },
+      "cancelReply": "Batalkan balasan"
     },
     "panel": {
       "tabsLabel": "Catatan dan linimasa",

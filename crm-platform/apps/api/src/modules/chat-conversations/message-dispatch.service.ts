@@ -189,16 +189,15 @@ export class MessageDispatchService {
         acceptedAt: sent.acceptedAt.toISOString(),
         replayed: sent.replayed,
       });
+      // A reaction is not an answer: it must not end the customer's wait, stamp a first response or move "last outbound".
+      const reaction = row.kind === 'reaction';
       const humanReply = row.senderKind === 'agent';
-      const { row: after, firstResponse } = await this.conversations.applyOutboundSent(
-        tx,
-        orgId,
-        conv.id,
-        {
-          at: sent.acceptedAt,
-          humanReply,
-        },
-      );
+      const { row: after, firstResponse } = reaction
+        ? { row: lockedConv, firstResponse: false }
+        : await this.conversations.applyOutboundSent(tx, orgId, conv.id, {
+            at: sent.acceptedAt,
+            humanReply,
+          });
       if (firstResponse) {
         await this.lifecycle.firstResponse(tx, orgId, after, sent.acceptedAt, row.senderUserId);
       }
@@ -215,6 +214,7 @@ export class MessageDispatchService {
       'sent',
       sent.acceptedAt,
     );
+    if (row.kind === 'reaction') return;
     const changed = ['lastOutbound', 'waiting'];
     if (done.firstResponse) changed.push('firstResponse');
     await this.realtime.conversationChanged(orgId, done.after, changed);

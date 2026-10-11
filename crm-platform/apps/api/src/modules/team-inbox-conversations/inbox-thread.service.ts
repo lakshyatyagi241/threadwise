@@ -101,6 +101,7 @@ export class InboxThreadService {
     const content = await this.db.tx(async (tx): Promise<OutboundContent> => {
       await this.assertCanReply(tx, ctx, uuid);
       if (input.kind === 'text') return { kind: 'text', body: input.body };
+      if (input.kind === 'reaction') return { kind: 'reaction', emoji: input.emoji };
       if (input.kind === 'template') return this.templateContent(tx, ctx.orgId, uuid, input);
 
       const claim = await this.uploads.claim(
@@ -137,7 +138,8 @@ export class InboxThreadService {
         conversationId: uuid,
         clientMessageId: input.clientMessageId,
         content,
-        replyToMessageId: input.replyToMessageId,
+        replyToMessageId:
+          input.kind === 'reaction' ? input.targetMessageId : input.replyToMessageId,
       });
       return (await this.withTemplatePreviews([message]))[0]!;
     } catch (err) {

@@ -162,7 +162,38 @@
       },
       "templateCopyCode": "Копировать код",
       "templateButtonUnnamed": "Кнопка",
-      "templateButtonPrefix": "Кнопка: "
+      "templateButtonPrefix": "Кнопка: ",
+      "reply": "Ответить",
+      "quote": {
+        "you": "Вы",
+        "customer": "Клиент",
+        "missing": "Исходное сообщение",
+        "jump": "Перейти к исходному сообщению",
+        "replyingTo": "Ответ для {name}",
+        "kind": {
+          "text": "Сообщение",
+          "image": "Фото",
+          "video": "Видео",
+          "audio": "Аудио",
+          "voice": "Голосовое сообщение",
+          "document": "Документ",
+          "sticker": "Стикер",
+          "location": "Геопозиция",
+          "contact": "Контакт",
+          "template": "Шаблон",
+          "reaction": "Реакция",
+          "interactive": "Выбор"
+        }
+      },
+      "react": {
+        "label": "Отреагировать на сообщение",
+        "add": "Отреагировать: {emoji}",
+        "remove": "Убрать вашу реакцию {emoji}",
+        "more": "Другие эмодзи",
+        "takeBack": "Нажмите, чтобы отменить реакцию",
+        "takeBackLabel": "Ваша реакция {emoji}. Отменить",
+        "failed": "Эта реакция не была отправлена"
+      }
     },
     "media": {
       "openImage": "Открыть изображение {name}",
@@ -232,7 +263,18 @@
       "addNote": "Добавить заметку",
       "hint": "Enter — отправить, Shift+Enter — новая строка.",
       "template": "Отправить шаблон",
-      "groupSendUnavailable": "Отправка в группы WhatsApp пока недоступна. Ответьте из приложения WhatsApp Business."
+      "groupSendUnavailable": "Отправка в группы WhatsApp пока недоступна. Ответьте из приложения WhatsApp Business.",
+      "emoji": "Вставить эмодзи",
+      "emojiPanel": "Эмодзи",
+      "emojiRecent": "Недавние",
+      "emojiGroups": "Группы эмодзи",
+      "emojiGroup": {
+        "smileys": "Смайлики",
+        "gestures": "Жесты",
+        "hearts": "Сердца и символы",
+        "objects": "Объекты"
+      },
+      "cancelReply": "Отменить ответ"
     },
     "panel": {
       "tabsLabel": "Заметки и лента событий",

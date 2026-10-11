@@ -560,7 +560,7 @@ export class MessagesRepository {
       FROM messages m
       JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
       JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
-      WHERE m.org_id = ${orgId} AND m.created_at >= ${monthStart} AND m.direction = 'out' AND m.status <> 'failed'
+      WHERE m.org_id = ${orgId} AND m.created_at >= ${monthStart} AND m.direction = 'out' AND m.status <> 'failed' AND m.kind <> 'reaction'
         AND COALESCE((ch.settings ->> 'metered')::boolean, true)`);
     return Number(rowsOf(res)[0]?.n ?? 0);
   }

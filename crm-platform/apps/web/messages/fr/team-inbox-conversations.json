@@ -162,7 +162,38 @@
       },
       "templateCopyCode": "Copier le code",
       "templateButtonUnnamed": "Bouton",
-      "templateButtonPrefix": "Bouton : "
+      "templateButtonPrefix": "Bouton : ",
+      "reply": "Répondre",
+      "quote": {
+        "you": "Vous",
+        "customer": "Client",
+        "missing": "Message d'origine",
+        "jump": "Aller au message d'origine",
+        "replyingTo": "Réponse à {name}",
+        "kind": {
+          "text": "Message",
+          "image": "Photo",
+          "video": "Vidéo",
+          "audio": "Audio",
+          "voice": "Message vocal",
+          "document": "Document",
+          "sticker": "Sticker",
+          "location": "Position",
+          "contact": "Contact",
+          "template": "Modèle",
+          "reaction": "Réaction",
+          "interactive": "Sélection"
+        }
+      },
+      "react": {
+        "label": "Réagir à ce message",
+        "add": "Réagir avec {emoji}",
+        "remove": "Retirer votre réaction {emoji}",
+        "more": "Plus d'emojis",
+        "takeBack": "Appuyez pour retirer votre réaction",
+        "takeBackLabel": "Votre réaction {emoji}. La retirer",
+        "failed": "Cette réaction n'a pas été envoyée"
+      }
     },
     "media": {
       "openImage": "Ouvrir l’image {name}",
@@ -232,7 +263,18 @@
       "addNote": "Ajouter une note",
       "hint": "Entrée envoie. Maj+Entrée ajoute un saut de ligne.",
       "template": "Envoyer un modèle",
-      "groupSendUnavailable": "L’envoi vers les groupes WhatsApp n’est pas encore disponible. Répondez depuis l’application WhatsApp Business."
+      "groupSendUnavailable": "L’envoi vers les groupes WhatsApp n’est pas encore disponible. Répondez depuis l’application WhatsApp Business.",
+      "emoji": "Insérer un emoji",
+      "emojiPanel": "Emojis",
+      "emojiRecent": "Récemment utilisés",
+      "emojiGroups": "Groupes d'emojis",
+      "emojiGroup": {
+        "smileys": "Smileys",
+        "gestures": "Gestes",
+        "hearts": "Cœurs et symboles",
+        "objects": "Objets"
+      },
+      "cancelReply": "Annuler la réponse"
     },
     "panel": {
       "tabsLabel": "Notes et historique",

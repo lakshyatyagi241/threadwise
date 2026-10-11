@@ -162,7 +162,38 @@
       },
       "templateCopyCode": "Sao chép mã",
       "templateButtonUnnamed": "Nút",
-      "templateButtonPrefix": "Nút: "
+      "templateButtonPrefix": "Nút: ",
+      "reply": "Trả lời",
+      "quote": {
+        "you": "Bạn",
+        "customer": "Khách hàng",
+        "missing": "Tin nhắn gốc",
+        "jump": "Đến tin nhắn gốc",
+        "replyingTo": "Đang trả lời {name}",
+        "kind": {
+          "text": "Tin nhắn",
+          "image": "Ảnh",
+          "video": "Video",
+          "audio": "Âm thanh",
+          "voice": "Tin nhắn thoại",
+          "document": "Tài liệu",
+          "sticker": "Nhãn dán",
+          "location": "Vị trí",
+          "contact": "Liên hệ",
+          "template": "Mẫu tin",
+          "reaction": "Biểu cảm",
+          "interactive": "Lựa chọn"
+        }
+      },
+      "react": {
+        "label": "Thả cảm xúc cho tin nhắn này",
+        "add": "Thả {emoji}",
+        "remove": "Gỡ cảm xúc {emoji} của bạn",
+        "more": "Thêm emoji",
+        "takeBack": "Nhấn để thu hồi cảm xúc của bạn",
+        "takeBackLabel": "Cảm xúc của bạn {emoji}. Thu hồi",
+        "failed": "Chưa gửi được cảm xúc này"
+      }
     },
     "media": {
       "openImage": "Mở hình ảnh {name}",
@@ -232,7 +263,18 @@
       "addNote": "Thêm ghi chú",
       "hint": "Enter để gửi. Shift+Enter để xuống dòng.",
       "template": "Gửi mẫu tin nhắn",
-      "groupSendUnavailable": "Hiện chưa hỗ trợ gửi tin đến nhóm WhatsApp. Hãy trả lời từ ứng dụng WhatsApp Business."
+      "groupSendUnavailable": "Hiện chưa hỗ trợ gửi tin đến nhóm WhatsApp. Hãy trả lời từ ứng dụng WhatsApp Business.",
+      "emoji": "Chèn emoji",
+      "emojiPanel": "Emoji",
+      "emojiRecent": "Dùng gần đây",
+      "emojiGroups": "Nhóm emoji",
+      "emojiGroup": {
+        "smileys": "Mặt cười",
+        "gestures": "Cử chỉ",
+        "hearts": "Trái tim và biểu tượng",
+        "objects": "Đồ vật"
+      },
+      "cancelReply": "Hủy trả lời"
     },
     "panel": {
       "tabsLabel": "Ghi chú và dòng thời gian",

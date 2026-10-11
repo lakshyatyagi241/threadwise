@@ -162,7 +162,38 @@
       },
       "templateCopyCode": "코드 복사",
       "templateButtonUnnamed": "버튼",
-      "templateButtonPrefix": "버튼: "
+      "templateButtonPrefix": "버튼: ",
+      "reply": "답장",
+      "quote": {
+        "you": "나",
+        "customer": "고객",
+        "missing": "원본 메시지",
+        "jump": "원본 메시지로 이동",
+        "replyingTo": "{name}님에게 답장 중",
+        "kind": {
+          "text": "메시지",
+          "image": "사진",
+          "video": "동영상",
+          "audio": "오디오",
+          "voice": "음성 메시지",
+          "document": "문서",
+          "sticker": "스티커",
+          "location": "위치",
+          "contact": "연락처",
+          "template": "템플릿",
+          "reaction": "반응",
+          "interactive": "선택 항목"
+        }
+      },
+      "react": {
+        "label": "이 메시지에 반응하기",
+        "add": "{emoji}(으)로 반응",
+        "remove": "{emoji} 반응 삭제",
+        "more": "이모지 더보기",
+        "takeBack": "탭하여 반응 취소",
+        "takeBackLabel": "내 반응 {emoji}. 취소하기",
+        "failed": "이 반응이 전송되지 않았습니다"
+      }
     },
     "media": {
       "openImage": "이미지 {name} 열기",
@@ -232,7 +263,18 @@
       "addNote": "메모 추가",
       "hint": "Enter로 보내고, Shift+Enter로 줄을 바꿉니다.",
       "template": "템플릿 보내기",
-      "groupSendUnavailable": "WhatsApp 그룹으로의 발송은 아직 지원되지 않습니다. WhatsApp Business 앱에서 답장하세요."
+      "groupSendUnavailable": "WhatsApp 그룹으로의 발송은 아직 지원되지 않습니다. WhatsApp Business 앱에서 답장하세요.",
+      "emoji": "이모지 삽입",
+      "emojiPanel": "이모지",
+      "emojiRecent": "최근 사용",
+      "emojiGroups": "이모지 그룹",
+      "emojiGroup": {
+        "smileys": "스마일리",
+        "gestures": "제스처",
+        "hearts": "하트 및 기호",
+        "objects": "사물"
+      },
+      "cancelReply": "답장 취소"
     },
     "panel": {
       "tabsLabel": "메모 및 타임라인",

@@ -48,6 +48,15 @@ export function envelopeOf(
           ...(row.body ? { caption: row.body } : {}),
         },
       };
+    case 'reaction':
+      // The target is the message this row answers; a reaction without a provider id to point at cannot be sent.
+      if (!replyToProviderMessageId)
+        throw new Error('A reaction needs a message the provider knows');
+      return {
+        ...common,
+        kind: 'reaction',
+        reaction: { providerMessageId: replyToProviderMessageId, emoji: row.body ?? '' },
+      };
     case 'template': {
       const meta = row.meta as {
         templateName?: string;
@@ -85,6 +94,14 @@ export function messageFieldsOf(content: OutboundContent): {
         kind: kindOfFileMime(content.media.mime),
         body: content.caption?.trim() || null,
         media: content.media,
+        meta: {},
+        templateId: null,
+      };
+    case 'reaction':
+      return {
+        kind: 'reaction',
+        body: content.emoji.trim() || null,
+        media: null,
         meta: {},
         templateId: null,
       };

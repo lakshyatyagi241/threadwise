@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import { messageResponseSchema } from '@crm/contracts';
+import { messageResponseSchema, type MessageResponse } from '@crm/contracts';
 import { useRealtimeEvent, useResync, useRoom } from '@/lib/realtime';
 import { errorCode } from '../lib/errors';
 import {
@@ -26,6 +26,8 @@ const STUCK_TRIES = 6;
 export interface SendDraft {
   body: string;
   file: File | null;
+  /** The message this send answers (its `id`). */
+  replyToMessageId?: string | null;
 }
 
 export interface Thread {
@@ -39,6 +41,8 @@ export interface Thread {
    * Sends an approved template with the values for its variables. Resolves with the stored message merged into the thread and
    * rejects with the API error, so the picker that asked can show it and stay open.
    */
+  /** Puts an emoji on a message (`''` takes it back). Rejects with the API error so the screen can say why. */
+  react: (target: MessageResponse, emoji: string) => Promise<void>;
   sendTemplate: (input: { templateId: string; variables: Record<string, string> }) => Promise<void>;
   /** Send again a request that never produced a stored message. */
   retryPending: (clientMessageId: string) => void;
@@ -224,11 +228,13 @@ export function useThread(
               clientMessageId: p.clientMessageId,
               mediaId,
               caption: p.body || undefined,
+              ...(p.replyToMessageId ? { replyToMessageId: p.replyToMessageId } : {}),
             })
           : await inboxApi.send(id, {
               kind: 'text',
               clientMessageId: p.clientMessageId,
               body: p.body,
+              ...(p.replyToMessageId ? { replyToMessageId: p.replyToMessageId } : {}),
             });
       files.current.delete(p.clientMessageId);
       if (latest.current.conversationId === id) dispatch({ type: 'merge', messages: [message] });
@@ -256,6 +262,7 @@ export function useThread(
         clientMessageId,
         kind: draft.file ? 'media' : 'text',
         body,
+        replyToMessageId: draft.replyToMessageId ?? null,
         media: draft.file
           ? {
               mediaId: '',
@@ -291,6 +298,23 @@ export function useThread(
     [],
   );
 
+  const react = useCallback(async (target: MessageResponse, emoji: string) => {
+    const id = latest.current.conversationId;
+    if (!id) return;
+    try {
+      const message = await inboxApi.send(id, {
+        kind: 'reaction',
+        clientMessageId: crypto.randomUUID(),
+        targetMessageId: target.id,
+        emoji,
+      });
+      if (latest.current.conversationId === id) dispatch({ type: 'merge', messages: [message] });
+    } catch (e) {
+      if (errorCode(e) === 'SERVICE_WINDOW_CLOSED') latest.current.options.onWindowClosed();
+      throw e;
+    }
+  }, []);
+
   const retryPending = useCallback(
     (clientMessageId: string) => {
       const p = latest.current.state.pending.find((x) => x.clientMessageId === clientMessageId);
@@ -320,6 +344,7 @@ export function useThread(
       olderLoading,
       send,
       sendTemplate,
+      react,
       retryPending,
       dismissPending,
       retryMessage,
@@ -334,6 +359,7 @@ export function useThread(
       olderLoading,
       send,
       sendTemplate,
+      react,
       retryPending,
       dismissPending,
       retryMessage,

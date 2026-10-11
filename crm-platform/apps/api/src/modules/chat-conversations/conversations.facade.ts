@@ -71,6 +71,8 @@ export interface OutboundMediaRef {
 export type OutboundContent =
   | { kind: 'text'; body: string }
   | { kind: 'media'; media: OutboundMediaRef; caption?: string }
+  /** An emoji on the message `EnqueueOutboundInput.replyToMessageId` names; an empty emoji removes the reaction. */
+  | { kind: 'reaction'; emoji: string }
   /** The caller resolved the template (the TPL domain owns `wa_templates`); `body` is what the thread shows. */
   | {
       kind: 'template';

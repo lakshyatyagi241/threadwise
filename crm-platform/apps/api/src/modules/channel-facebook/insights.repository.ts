@@ -34,7 +34,7 @@ export class InsightsRepository {
       FROM conversations c JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
       WHERE c.org_id = ${orgId} AND ch.kind = 'facebook' AND ch.external_id = ${pageId}`);
     const msgs = await tx.execute(sql`
-      SELECT count(*) FILTER (WHERE m.direction = 'in')::int AS msg_in, count(*) FILTER (WHERE m.direction = 'out')::int AS msg_out
+      SELECT count(*) FILTER (WHERE m.direction = 'in')::int AS msg_in, count(*) FILTER (WHERE m.direction = 'out' AND m.kind <> 'reaction')::int AS msg_out
       FROM messages m
       JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
       JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id

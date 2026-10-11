@@ -35,8 +35,11 @@ const MESSAGE_FROM = sql`
   JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
   JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id`;
 
-/** What the history shows: a deleted-for-everyone message and the thread's own system lines (a call bubble) are not messages a client sent or got. */
-const VISIBLE = sql`m.deleted_at IS NULL AND m.kind <> 'system'`;
+/**
+ * What the history shows: a deleted-for-everyone message and the thread's own system lines (a call bubble) are not messages a client sent
+ * or got, and an emoji an agent put on a message is shown on that message, not as a message of its own.
+ */
+const VISIBLE = sql`m.deleted_at IS NULL AND m.kind NOT IN ('system', 'reaction')`;
 
 type MessageWithPaging = MessageReadRow & { id: number; createdAt: Date; createdAtIso: string };
 
@@ -125,7 +128,7 @@ export class MessagingRepository {
              coalesce(c.last_message_at, c.created_at) AS sort_at,
              ${ISO('coalesce(c.last_message_at, c.created_at)')} AS sort_at_iso,
              (SELECT m.status FROM messages m
-               WHERE m.org_id = c.org_id AND m.conversation_id = c.id AND m.direction = 'out'
+               WHERE m.org_id = c.org_id AND m.conversation_id = c.id AND m.direction = 'out' AND m.kind <> 'reaction'
                ORDER BY m.seq DESC LIMIT 1) AS last_outbound_status
       FROM conversations c
       JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id

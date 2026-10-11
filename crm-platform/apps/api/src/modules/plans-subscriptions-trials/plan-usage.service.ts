@@ -40,7 +40,7 @@ const METERS: ReadonlyArray<{
       n(
         tx,
         sql`SELECT count(*)::int AS n FROM messages
-        WHERE org_id = ${orgId} AND direction = 'out'
+        WHERE org_id = ${orgId} AND direction = 'out' AND kind <> 'reaction'
           AND created_at >= ${from.toISOString()}::timestamptz AND created_at < ${to.toISOString()}::timestamptz`,
       ),
   },

@@ -162,7 +162,38 @@
       },
       "templateCopyCode": "コードをコピー",
       "templateButtonUnnamed": "ボタン",
-      "templateButtonPrefix": "ボタン: "
+      "templateButtonPrefix": "ボタン: ",
+      "reply": "返信",
+      "quote": {
+        "you": "あなた",
+        "customer": "お客様",
+        "missing": "元のメッセージ",
+        "jump": "元のメッセージへ移動",
+        "replyingTo": "{name}に返信中",
+        "kind": {
+          "text": "メッセージ",
+          "image": "写真",
+          "video": "動画",
+          "audio": "音声",
+          "voice": "ボイスメッセージ",
+          "document": "ドキュメント",
+          "sticker": "スタンプ",
+          "location": "位置情報",
+          "contact": "連絡先",
+          "template": "テンプレート",
+          "reaction": "リアクション",
+          "interactive": "選択"
+        }
+      },
+      "react": {
+        "label": "このメッセージにリアクション",
+        "add": "{emoji}でリアクション",
+        "remove": "{emoji}のリアクションを削除",
+        "more": "その他の絵文字",
+        "takeBack": "タップしてリアクションを取り消す",
+        "takeBackLabel": "あなたのリアクション {emoji}。取り消す",
+        "failed": "このリアクションは送信されませんでした"
+      }
     },
     "media": {
       "openImage": "画像 {name} を開く",
@@ -232,7 +263,18 @@
       "addNote": "メモを追加",
       "hint": "Enterで送信、Shift+Enterで改行します。",
       "template": "テンプレートを送信",
-      "groupSendUnavailable": "WhatsApp グループへの送信はまだ利用できません。WhatsApp Business アプリから返信してください。"
+      "groupSendUnavailable": "WhatsApp グループへの送信はまだ利用できません。WhatsApp Business アプリから返信してください。",
+      "emoji": "絵文字を挿入",
+      "emojiPanel": "絵文字",
+      "emojiRecent": "最近使用した絵文字",
+      "emojiGroups": "絵文字グループ",
+      "emojiGroup": {
+        "smileys": "顔文字",
+        "gestures": "ジェスチャー",
+        "hearts": "ハートと記号",
+        "objects": "オブジェクト"
+      },
+      "cancelReply": "返信をキャンセル"
     },
     "panel": {
       "tabsLabel": "メモとタイムライン",

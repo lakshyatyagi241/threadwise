@@ -162,7 +162,38 @@
       },
       "templateCopyCode": "คัดลอกรหัส",
       "templateButtonUnnamed": "ปุ่ม",
-      "templateButtonPrefix": "ปุ่ม: "
+      "templateButtonPrefix": "ปุ่ม: ",
+      "reply": "ตอบกลับ",
+      "quote": {
+        "you": "คุณ",
+        "customer": "ลูกค้า",
+        "missing": "ข้อความต้นฉบับ",
+        "jump": "ไปยังข้อความต้นฉบับ",
+        "replyingTo": "กำลังตอบกลับ {name}",
+        "kind": {
+          "text": "ข้อความ",
+          "image": "รูปภาพ",
+          "video": "วิดีโอ",
+          "audio": "เสียง",
+          "voice": "ข้อความเสียง",
+          "document": "เอกสาร",
+          "sticker": "สติกเกอร์",
+          "location": "ตำแหน่งที่ตั้ง",
+          "contact": "ผู้ติดต่อ",
+          "template": "เทมเพลต",
+          "reaction": "รีแอ็กชัน",
+          "interactive": "ตัวเลือกที่เลือก"
+        }
+      },
+      "react": {
+        "label": "รีแอ็กต่อข้อความนี้",
+        "add": "รีแอ็กด้วย {emoji}",
+        "remove": "ลบรีแอ็กชัน {emoji} ของคุณ",
+        "more": "อีโมจิเพิ่มเติม",
+        "takeBack": "แตะเพื่อยกเลิกรีแอ็กชันของคุณ",
+        "takeBackLabel": "รีแอ็กชันของคุณ {emoji} ยกเลิกรีแอ็กชัน",
+        "failed": "ไม่ได้ส่งรีแอ็กชันนี้"
+      }
     },
     "media": {
       "openImage": "เปิดรูปภาพ {name}",
@@ -232,7 +263,18 @@
       "addNote": "เพิ่มบันทึก",
       "hint": "กด Enter เพื่อส่ง กด Shift+Enter เพื่อขึ้นบรรทัดใหม่",
       "template": "ส่งเทมเพลต",
-      "groupSendUnavailable": "ยังไม่รองรับการส่งข้อความไปยังกลุ่ม WhatsApp กรุณาตอบกลับจากแอป WhatsApp Business"
+      "groupSendUnavailable": "ยังไม่รองรับการส่งข้อความไปยังกลุ่ม WhatsApp กรุณาตอบกลับจากแอป WhatsApp Business",
+      "emoji": "แทรกอีโมจิ",
+      "emojiPanel": "อีโมจิ",
+      "emojiRecent": "ใช้ล่าสุด",
+      "emojiGroups": "กลุ่มอีโมจิ",
+      "emojiGroup": {
+        "smileys": "หน้ายิ้ม",
+        "gestures": "ท่าทาง",
+        "hearts": "หัวใจและสัญลักษณ์",
+        "objects": "วัตถุ"
+      },
+      "cancelReply": "ยกเลิกการตอบกลับ"
     },
     "panel": {
       "tabsLabel": "บันทึกและไทม์ไลน์",

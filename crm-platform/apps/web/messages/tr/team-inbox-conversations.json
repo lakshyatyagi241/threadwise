@@ -162,7 +162,38 @@
       },
       "templateCopyCode": "Kodu kopyala",
       "templateButtonUnnamed": "Düğme",
-      "templateButtonPrefix": "Düğme: "
+      "templateButtonPrefix": "Düğme: ",
+      "reply": "Yanıtla",
+      "quote": {
+        "you": "Siz",
+        "customer": "Müşteri",
+        "missing": "Orijinal mesaj",
+        "jump": "Orijinal mesaja git",
+        "replyingTo": "{name} kişisine yanıt veriliyor",
+        "kind": {
+          "text": "Mesaj",
+          "image": "Fotoğraf",
+          "video": "Video",
+          "audio": "Ses",
+          "voice": "Sesli mesaj",
+          "document": "Belge",
+          "sticker": "Çıkartma",
+          "location": "Konum",
+          "contact": "Kişi",
+          "template": "Şablon",
+          "reaction": "Tepki",
+          "interactive": "Seçim"
+        }
+      },
+      "react": {
+        "label": "Bu mesaja tepki ver",
+        "add": "{emoji} ile tepki ver",
+        "remove": "{emoji} tepkini kaldır",
+        "more": "Daha fazla emoji",
+        "takeBack": "Tepkini geri almak için dokun",
+        "takeBackLabel": "Tepkin {emoji}. Geri al",
+        "failed": "Bu tepki gönderilmedi"
+      }
     },
     "media": {
       "openImage": "{name} görselini aç",
@@ -232,7 +263,18 @@
       "addNote": "Not ekle",
       "hint": "Enter gönderir. Shift+Enter yeni satır ekler.",
       "template": "Şablon gönder",
-      "groupSendUnavailable": "WhatsApp gruplarına gönderim henüz kullanılamıyor. WhatsApp Business uygulamasından yanıtlayın."
+      "groupSendUnavailable": "WhatsApp gruplarına gönderim henüz kullanılamıyor. WhatsApp Business uygulamasından yanıtlayın.",
+      "emoji": "Emoji ekle",
+      "emojiPanel": "Emoji",
+      "emojiRecent": "Son kullanılanlar",
+      "emojiGroups": "Emoji grupları",
+      "emojiGroup": {
+        "smileys": "Yüz ifadeleri",
+        "gestures": "El hareketleri",
+        "hearts": "Kalpler ve semboller",
+        "objects": "Nesneler"
+      },
+      "cancelReply": "Yanıtı iptal et"
     },
     "panel": {
       "tabsLabel": "Notlar ve zaman çizelgesi",

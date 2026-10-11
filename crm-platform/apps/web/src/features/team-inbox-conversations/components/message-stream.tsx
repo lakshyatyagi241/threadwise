@@ -4,7 +4,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Button, Spinner, cn } from '@crm/ui';
 import type { ConversationNote, MessageResponse } from '@crm/contracts';
-import { buildItems, lastSeq, type ThreadState } from '../lib/thread';
+import { agentReactions, buildItems, lastSeq, type ThreadState } from '../lib/thread';
 import { dayLabel } from '../lib/time';
 import { MessageBubble, NoteBubble, PendingBubble } from './message-bubble';
 import { ArrowDownIcon } from './icons';
@@ -33,6 +33,10 @@ export interface MessageStreamProps {
   onSeenLatest: (seq: number) => void;
   onLoadOlder: () => void;
   onRetryMessage: (id: string) => Promise<void>;
+  /** Starts a reply to a message; absent when the person may not reply (no Reply button then). */
+  onReply?: (message: MessageResponse) => void;
+  /** Puts an emoji on a message (`''` takes it back); absent when the person or the channel cannot react. */
+  onReact?: (message: MessageResponse, emoji: string) => Promise<void>;
   canManageChannel: boolean;
   onRetryPending: (clientMessageId: string) => void;
   onDismissPending: (clientMessageId: string) => void;
@@ -65,6 +69,7 @@ export function MessageStream(props: MessageStreamProps) {
     [state.messages, props.notes, state.pending, state.hasMoreBefore],
   );
   const byId = useMemo(() => new Map(state.messages.map((m) => [m.id, m])), [state.messages]);
+  const reactions = useMemo(() => agentReactions(state.messages), [state.messages]);
   const newestSeq = lastSeq(state.messages);
 
   // Follow rules, applied after the list changed and before the browser paints.
@@ -258,6 +263,9 @@ export function MessageStream(props: MessageStreamProps) {
                     key={item.key}
                     message={item.message}
                     quoted={quotedOf(item.message, byId)}
+                    onReply={props.onReply}
+                    onReact={props.onReact}
+                    agentReaction={reactions.get(item.message.id) ?? null}
                     onRetry={props.onRetryMessage}
                     canManageChannel={props.canManageChannel}
                   />
