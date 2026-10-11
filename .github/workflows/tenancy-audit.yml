@@ -1,0 +1,100 @@
+name: Tenancy audit
+
+# The multi-tenancy isolation audit (crm-platform/tools/tenancy-audit): catalog inventory, a cross-tenant probe generated for every
+# tenant table, static scans of the privileged() call sites, queue processors and Redis keys. Exit code 1 (NO-GO) fails the job.
+#   pull request  the database-backed audit (a scratch Postgres service, about 3 minutes) whenever a migration, the db package, API source
+#                 or the tool itself changed
+#   nightly       also the authz dynamic suite and the isolation e2e specs (Docker on the runner), then the audit reads their reports
+#   manual        either mode
+# Pre-release: run `node tools/tenancy-audit/run.mjs --strict` after the nightly evidence for the release commit; anything short of GO fails.
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "crm-platform/packages/db/**"
+      - "crm-platform/apps/api/src/**"
+      - "crm-platform/apps/api/test/e2e/tenancy/**"
+      - "crm-platform/apps/api/test/integration/tenancy-isolation.generated.spec.ts"
+      - "crm-platform/tools/tenancy-audit/**"
+      - ".github/workflows/tenancy-audit.yml"
+  schedule:
+    - cron: "45 21 * * *"
+  workflow_dispatch:
+    inputs:
+      full:
+        description: "Also run the authz dynamic suite and the isolation e2e specs (needs Docker)"
+        type: boolean
+        default: true
+
+concurrency:
+  group: tenancy-audit-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    defaults:
+      run:
+        working-directory: crm-platform
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: crm
+          POSTGRES_PASSWORD: crm
+          POSTGRES_DB: crm
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U crm"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      MIGRATION_DATABASE_URL: postgres://crm:crm@localhost:5432/crm
+      DATABASE_URL: postgres://crm:crm@localhost:5432/crm
+      TENANCY_APP_DATABASE_URL: postgres://crm_app_user:test@localhost:5432/crm
+      FULL: ${{ (github.event_name == 'schedule' || inputs.full) && 'true' || 'false' }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - run: corepack enable && corepack prepare pnpm@9.15.4 --activate
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @crm/tax build && pnpm --filter @crm/contracts build && pnpm --filter @crm/config build && pnpm --filter @crm/db build
+      - name: The restricted application role (the one under test; a superuser would bypass RLS)
+        run: >-
+          PGPASSWORD=crm psql -h localhost -U crm -d crm -v ON_ERROR_STOP=1
+          -c "CREATE ROLE crm_app_user LOGIN PASSWORD 'test' NOSUPERUSER NOCREATEDB NOCREATEROLE NOBYPASSRLS"
+      - name: Migrations apply from scratch
+        run: pnpm db:migrate
+
+      # Nightly / manual only: the executed evidence for the API, worker, realtime, export, cache and AI controls.
+      - name: Authz dynamic suite
+        if: env.FULL == 'true'
+        continue-on-error: true
+        run: node tools/authz-audit/run.mjs --dynamic
+      - name: Isolation e2e specs
+        if: env.FULL == 'true'
+        run: node tools/tenancy-audit/collect-e2e.mjs
+
+      - name: Run the audit
+        run: node tools/tenancy-audit/run.mjs
+      - name: Keep the evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tenancy-audit-${{ github.run_id }}
+          path: |
+            crm-platform/reports/tenancy-audit/latest
+            crm-platform/reports/tenancy-audit/e2e
+            crm-platform/reports/authz-audit/latest
+          retention-days: 90
+      - name: Summary
+        if: always()
+        run: |
+          if [ -f reports/tenancy-audit/latest/report.md ]; then
+            head -c 60000 reports/tenancy-audit/latest/report.md >> "$GITHUB_STEP_SUMMARY"
+          fi

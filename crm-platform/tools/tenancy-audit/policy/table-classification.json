@@ -1,0 +1,267 @@
+{
+  "_migrations": {
+    "class": "GLOBAL",
+    "reason": "migration ledger, runtime-internal",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "admin_ai_keys": {
+    "class": "PLATFORM_ONLY",
+    "reason": "operator_write / privileged_only policy, no tenant policy",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "announcements": {
+    "class": "GLOBAL",
+    "reason": "platform catalogue, read_all/catalogue_read, write operator-only",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "blog_categories": {
+    "class": "GLOBAL",
+    "reason": "platform catalogue, read_all/catalogue_read, write operator-only",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "blog_posts": {
+    "class": "GLOBAL",
+    "reason": "platform catalogue, read_all/catalogue_read, write operator-only",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "contact_messages": {
+    "class": "PLATFORM_ONLY",
+    "reason": "public marketing-site contact form: anyone inserts, operators read",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "coupons": {
+    "class": "PLATFORM_ONLY",
+    "reason": "operator_write / privileged_only policy, no tenant policy",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "credit_packages": {
+    "class": "GLOBAL",
+    "reason": "platform catalogue, read_all/catalogue_read, write operator-only",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "currencies": {
+    "class": "GLOBAL",
+    "reason": "platform catalogue, read_all/catalogue_read, write operator-only",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "extensions": {
+    "class": "PLATFORM_ONLY",
+    "reason": "operator_write / privileged_only policy, no tenant policy",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "flow_templates": {
+    "class": "GLOBAL",
+    "reason": "platform catalogue, read_all/catalogue_read, write operator-only",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "frontend_content": {
+    "class": "GLOBAL",
+    "reason": "platform catalogue, read_all/catalogue_read, write operator-only",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "gateway_plan_cache": {
+    "class": "PLATFORM_ONLY",
+    "reason": "operator_write / privileged_only policy, no tenant policy",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "impersonation_sessions": {
+    "class": "PLATFORM_ONLY",
+    "reason": "operator act-as sessions, target_workspace_id, operator_write only",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "invoice_webhook_events": {
+    "class": "PLATFORM_ONLY",
+    "reason": "operator_write / privileged_only policy, no tenant policy",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "languages": {
+    "class": "GLOBAL",
+    "reason": "platform catalogue, read_all/catalogue_read, write operator-only",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "legal_pages": {
+    "class": "GLOBAL",
+    "reason": "platform catalogue, read_all/catalogue_read, write operator-only",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "market_requests": {
+    "class": "SHARED_AUTHORIZED",
+    "reason": "public integration wishlist, SELECT using(true); created_by_org_id is visible at DB level, the API does not return it",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "marketplace_app_versions": {
+    "class": "SHARED_AUTHORIZED",
+    "reason": "published/retired versions readable by all",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "marketplace_apps": {
+    "class": "SHARED_AUTHORIZED",
+    "reason": "published apps readable by all; unpublished only to installers",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "marketplace_categories": {
+    "class": "SHARED_AUTHORIZED",
+    "reason": "active categories readable by all",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "message_rates": {
+    "class": "GLOBAL",
+    "reason": "platform catalogue, read_all/catalogue_read, write operator-only",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "meta_rate_cards": {
+    "class": "GLOBAL",
+    "reason": "platform catalogue, read_all/catalogue_read, write operator-only",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "organizations": {
+    "class": "TENANT_ROOT",
+    "reason": "keyed on id = current_org_id(); the tenant row itself",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "package_features": {
+    "class": "GLOBAL",
+    "reason": "platform catalogue, read_all/catalogue_read, write operator-only",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "packages": {
+    "class": "GLOBAL",
+    "reason": "platform catalogue, read_all/catalogue_read, write operator-only",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "payment_gateways": {
+    "class": "PLATFORM_ONLY",
+    "reason": "operator_write / privileged_only policy, no tenant policy",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "permission_defs": {
+    "class": "GLOBAL",
+    "reason": "permission catalogue; no RLS, no tenant data",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "plan_message_margins": {
+    "class": "GLOBAL",
+    "reason": "platform catalogue, read_all/catalogue_read, write operator-only",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "plan_visible_addons": {
+    "class": "GLOBAL",
+    "reason": "platform catalogue, read_all/catalogue_read, write operator-only",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "plans": {
+    "class": "GLOBAL",
+    "reason": "platform catalogue, read_all/catalogue_read, write operator-only",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "platform_operator_roles": {
+    "class": "PLATFORM_ONLY",
+    "reason": "operator_write / privileged_only policy, no tenant policy",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "platform_operators": {
+    "class": "PLATFORM_ONLY",
+    "reason": "operator_write / privileged_only policy, no tenant policy",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "platform_permissions": {
+    "class": "PLATFORM_ONLY",
+    "reason": "operator_write / privileged_only policy, no tenant policy",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "platform_role_permissions": {
+    "class": "PLATFORM_ONLY",
+    "reason": "operator_write / privileged_only policy, no tenant policy",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "platform_roles": {
+    "class": "PLATFORM_ONLY",
+    "reason": "operator_write / privileged_only policy, no tenant policy",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "platform_sessions": {
+    "class": "PLATFORM_ONLY",
+    "reason": "operator_write / privileged_only policy, no tenant policy",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "platform_settings": {
+    "class": "PLATFORM_ONLY",
+    "reason": "operator_write / privileged_only policy, no tenant policy",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "platform_setup": {
+    "class": "PLATFORM_ONLY",
+    "reason": "operator_write / privileged_only policy, no tenant policy",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "platform_webauthn_credentials": {
+    "class": "PLATFORM_ONLY",
+    "reason": "operator_write / privileged_only policy, no tenant policy",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "pricing_faqs": {
+    "class": "GLOBAL",
+    "reason": "platform catalogue, read_all/catalogue_read, write operator-only",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "referral_codes": {
+    "class": "PLATFORM_ONLY",
+    "reason": "keyed by owner_org_id, operator_write only",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "referrals": {
+    "class": "PLATFORM_ONLY",
+    "reason": "referrer_org_id/referred_org_id, operator_write only",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "security_events": {
+    "class": "PLATFORM_ONLY",
+    "reason": "append by any context (WITH CHECK true), read/prune privileged only; see finding TI-005",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "support_agent_roster": {
+    "class": "PLATFORM_ONLY",
+    "reason": "operator_write / privileged_only policy, no tenant policy",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "support_playbooks": {
+    "class": "PLATFORM_ONLY",
+    "reason": "operator_write / privileged_only policy, no tenant policy",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "support_sla_policies": {
+    "class": "PLATFORM_ONLY",
+    "reason": "operator_write / privileged_only policy, no tenant policy",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "translation_providers": {
+    "class": "PLATFORM_ONLY",
+    "reason": "operator_write / privileged_only policy, no tenant policy",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "wallet_platform_log": {
+    "class": "PLATFORM_ONLY",
+    "reason": "operator_write / privileged_only policy, no tenant policy",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "webhook_forward_failures": {
+    "class": "PLATFORM_ONLY",
+    "reason": "operator_write / privileged_only policy, no tenant policy",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "webhook_forward_targets": {
+    "class": "PLATFORM_ONLY",
+    "reason": "operator_write / privileged_only policy, no tenant policy",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "whatsapp_providers": {
+    "class": "PLATFORM_ONLY",
+    "reason": "operator_write / privileged_only policy, no tenant policy",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "workspace_preset_baseline": {
+    "class": "GLOBAL",
+    "reason": "role preset template; no RLS, no tenant data",
+    "reviewed": "2026-10-11 (policy text read in catalog)"
+  }
+}

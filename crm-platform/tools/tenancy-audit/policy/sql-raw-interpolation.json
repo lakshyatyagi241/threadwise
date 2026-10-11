@@ -1,0 +1,97 @@
+{
+  "common/sql/org-id-list.ts": {
+    "status": "reviewed",
+    "reason": "every id is coerced with Math.trunc(Number()) and non-finite values dropped, so only digits reach SQL",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/appointments-booking/appointments.repository.ts": {
+    "status": "reviewed",
+    "reason": "column names are the literal strings passed to set(col, ...) in appointments.service.ts, never request keys",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/appointments-booking/booking-types.repository.ts": {
+    "status": "reviewed",
+    "reason": "column names are the literal strings passed to set(col, ...) / the insert object literal in booking-types.service.ts",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/campaigns/wizard/wizard-csv-sql.ts": {
+    "status": "reviewed",
+    "reason": "alias is a fixed table alias chosen in code",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/crm/contact-dedupe/contact-dedupe.service.ts": {
+    "status": "reviewed",
+    "reason": "table and column come from the fixed reference list of the dedupe service, not from input",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/crm/deals/deal-reports.repository.ts": {
+    "status": "reviewed",
+    "reason": "column is typed 'won_at' | 'lost_at'",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/crm/pipelines/pipelines.repository.ts": {
+    "status": "reviewed",
+    "reason": "ids.map(Number): integers only",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/developer-rest-api-v1/resources/messaging/messaging.repository.ts": {
+    "status": "reviewed",
+    "reason": "column is a fixed column name passed by the repository itself",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/flow-builder-editor/flows.repository.ts": {
+    "status": "reviewed",
+    "reason": "statusPredicate() returns one of a fixed set of predicates keyed by a validated status enum",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/marketplace/browse.repository.ts": {
+    "status": "reviewed",
+    "reason": "sort expressions come from the SORTS table keyed by a validated enum; the pricing column list is a constant",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/marketplace/installations.repository.ts": {
+    "status": "reviewed",
+    "reason": "column names are checked against /^[a-z_]+$/ and come from the repository patch type; the column list is a constant",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/marketplace/operator-catalogue.store.ts": {
+    "status": "reviewed",
+    "reason": "column names are checked against /^[a-z_]+$/ (operator-only store); the column list is a constant",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/roles-permissions/pg-array.ts": {
+    "status": "reviewed",
+    "reason": "type is a fixed SQL type name passed by the caller in code",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/wallet-message-billing/pg-array.ts": {
+    "status": "reviewed",
+    "reason": "type is a fixed SQL type name passed by the caller in code",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/storefront-builder/admin/store-coupons.repository.ts": {
+    "status": "reviewed",
+    "reason": "interpolates a module constant (a fixed column list or format string), never request text (ISO_MICROS)",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/storefront-builder/admin/store-groups.service.ts": {
+    "status": "reviewed",
+    "reason": "interpolates a module constant (a fixed column list or format string), never request text (ISO_MICROS)",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/storefront-builder/admin/store-orders.repository.ts": {
+    "status": "reviewed",
+    "reason": "interpolates a module constant (a fixed column list or format string), never request text (ISO_MICROS)",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/team-inbox-conversations/conversations.repository.ts": {
+    "status": "reviewed",
+    "reason": "interpolates a module constant (a fixed column list or format string), never request text (ts() timestamp formatter on fixed columns)",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/team-inbox-conversations/notes.repository.ts": {
+    "status": "reviewed",
+    "reason": "interpolates a module constant (a fixed column list or format string), never request text (US() timestamp formatter on a fixed column)",
+    "reviewedOn": "2026-10-11"
+  }
+}
