@@ -65,7 +65,7 @@
     },
     "library": {
       "title": "Vorlagenbibliothek",
-      "intro": "WhatsApp-Nachrichtenvorlagen: Erstellen Sie sie, senden Sie sie zur Prüfung an Meta und verfolgen Sie hier ihren Status.",
+      "intro": "Wählen Sie eine Vorlage oder reichen Sie Ihre eigene ein. Alle Vorlagen müssen die <link>WhatsApp-Richtlinien</link> einhalten, bevor Meta sie genehmigt.",
       "sync": "Von Meta synchronisieren",
       "syncing": "Synchronisierung läuft...",
       "syncHint": "Ihre Vorlagen von Meta abrufen",

@@ -277,7 +277,75 @@
         "hearts": "Hearts and symbols",
         "objects": "Objects"
       },
-      "cancelReply": "Cancel the reply"
+      "cancelReply": "Cancel the reply",
+      "share": {
+        "open": "Share a location, contact or buttons",
+        "title": "Share",
+        "eyebrow": "Send to the customer",
+        "close": "Close",
+        "cancel": "Cancel",
+        "send": "Send",
+        "sending": "Sending…",
+        "sent": "Sent",
+        "windowHint": "Like any free-form message, these need an open 24 hour window on a WhatsApp Cloud API number.",
+        "tab": {
+          "location": "Location",
+          "contacts": "Contact",
+          "buttons": "Buttons"
+        },
+        "location": {
+          "latitude": "Latitude",
+          "longitude": "Longitude",
+          "name": "Place name (optional)",
+          "address": "Address (optional)",
+          "pasteHint": "You can paste \"28.6139, 77.2090\" from a map here."
+        },
+        "contact": {
+          "card": "Contact {n}",
+          "name": "Name",
+          "org": "Company (optional)",
+          "phone": "Phone",
+          "email": "Email",
+          "remove": "Remove contact {n}",
+          "add": "Add another contact"
+        },
+        "buttons": {
+          "type": "Kind of button",
+          "kind": {
+            "buttons": "Reply buttons",
+            "cta_url": "Link button",
+            "list": "List"
+          },
+          "header": "Header (optional)",
+          "body": "Message",
+          "footer": "Footer (optional)",
+          "titles": "Buttons (up to 3)",
+          "titleN": "Button {n}",
+          "add": "Add a button",
+          "linkText": "Button text",
+          "url": "Link",
+          "listButton": "Button that opens the list",
+          "section": "Section {n}",
+          "sectionTitle": "Section title",
+          "rowTitle": "Row {n} title",
+          "rowDescription": "Row {n} description (optional)",
+          "addRow": "Add a row",
+          "addSection": "Add a section",
+          "removeSection": "Remove section {n}",
+          "rows": "Rows",
+          "rowCount": "{n} of {max} rows"
+        },
+        "problem": {
+          "required": "{label} is required",
+          "range": "{label} is out of range",
+          "phoneOrEmail": "Add a phone number or an email",
+          "phone": "Enter a valid phone number",
+          "email": "Enter a valid email address",
+          "duplicate": "{label} repeats another button",
+          "url": "Enter a link starting with http:// or https://",
+          "tooManyRows": "A list holds at most 10 rows in total"
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Notes and timeline",

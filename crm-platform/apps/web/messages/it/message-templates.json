@@ -65,7 +65,7 @@
     },
     "library": {
       "title": "Libreria dei template",
-      "intro": "Template di messaggi WhatsApp: scrivili, inviali a Meta per la revisione e tieni qui sotto controllo il loro stato.",
+      "intro": "Scegli un modello iniziale o invia il tuo. Tutti i modelli devono rispettare le <link>linee guida di WhatsApp</link> prima di essere approvati da Meta.",
       "sync": "Sincronizza da Meta",
       "syncing": "Sincronizzazione...",
       "syncHint": "Recupera i tuoi template da Meta",

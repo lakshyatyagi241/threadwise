@@ -141,6 +141,9 @@
       },
       "template": "Messaggio template: {name}",
       "unavailable": "Messaggio non disponibile",
+      "unsupported": "Il cliente ha inviato qualcosa che questo canale non può mostrare.",
+      "forwarded": "Inoltrato",
+      "referral": "Proveniente da un annuncio o da un link",
       "sentIn": "Inviato in {lang}. Mostra il testo scritto",
       "translatedFrom": "Tradotto da {lang}. Mostra l’originale",
       "bot": "Bot",
@@ -274,7 +277,75 @@
         "hearts": "Cuori e simboli",
         "objects": "Oggetti"
       },
-      "cancelReply": "Annulla la risposta"
+      "cancelReply": "Annulla la risposta",
+      "share": {
+        "open": "Condividi una posizione, un contatto o dei pulsanti",
+        "title": "Condividi",
+        "eyebrow": "Invia al cliente",
+        "close": "Chiudi",
+        "cancel": "Annulla",
+        "send": "Invia",
+        "sending": "Invio in corso…",
+        "sent": "Inviato",
+        "windowHint": "Come ogni messaggio libero, richiedono una finestra di 24 ore aperta su un numero WhatsApp Cloud API.",
+        "tab": {
+          "location": "Posizione",
+          "contacts": "Contatto",
+          "buttons": "Pulsanti"
+        },
+        "location": {
+          "latitude": "Latitudine",
+          "longitude": "Longitudine",
+          "name": "Nome del luogo (facoltativo)",
+          "address": "Indirizzo (facoltativo)",
+          "pasteHint": "Puoi incollare qui \"28.6139, 77.2090\" da una mappa."
+        },
+        "contact": {
+          "card": "Contatto {n}",
+          "name": "Nome",
+          "org": "Azienda (facoltativo)",
+          "phone": "Telefono",
+          "email": "Email",
+          "remove": "Rimuovi il contatto {n}",
+          "add": "Aggiungi un altro contatto"
+        },
+        "buttons": {
+          "type": "Tipo di pulsante",
+          "kind": {
+            "buttons": "Pulsanti di risposta",
+            "cta_url": "Pulsante con link",
+            "list": "Elenco"
+          },
+          "header": "Intestazione (facoltativo)",
+          "body": "Messaggio",
+          "footer": "Piè di pagina (facoltativo)",
+          "titles": "Pulsanti (fino a 3)",
+          "titleN": "Pulsante {n}",
+          "add": "Aggiungi un pulsante",
+          "linkText": "Testo del pulsante",
+          "url": "Link",
+          "listButton": "Pulsante che apre l'elenco",
+          "section": "Sezione {n}",
+          "sectionTitle": "Titolo della sezione",
+          "rowTitle": "Titolo della riga {n}",
+          "rowDescription": "Descrizione della riga {n} (facoltativa)",
+          "addRow": "Aggiungi una riga",
+          "addSection": "Aggiungi una sezione",
+          "removeSection": "Rimuovi la sezione {n}",
+          "rows": "Righe",
+          "rowCount": "{n} di {max} righe"
+        },
+        "problem": {
+          "required": "{label} è obbligatorio",
+          "range": "{label} è fuori intervallo",
+          "phoneOrEmail": "Aggiungi un numero di telefono o un'email",
+          "phone": "Inserisci un numero di telefono valido",
+          "email": "Inserisci un indirizzo email valido",
+          "duplicate": "{label} ripete un altro pulsante",
+          "url": "Inserisci un link che inizi con http:// o https://",
+          "tooManyRows": "Un elenco contiene al massimo 10 righe in totale"
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Note e cronologia",

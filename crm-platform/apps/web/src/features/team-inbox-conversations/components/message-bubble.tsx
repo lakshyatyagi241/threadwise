@@ -14,7 +14,16 @@ import {
 import { isRetryableSend } from '../lib/errors';
 import type { AgentReaction, PendingSend } from '../lib/thread';
 import { clockTime, fullStamp, humanSize } from '../lib/time';
-import { AlertIcon, FileIcon, NoteIcon, ReplyIcon, SmileIcon, TrashIcon } from './icons';
+import {
+  AlertIcon,
+  FileIcon,
+  LinkIcon,
+  MenuIcon,
+  NoteIcon,
+  ReplyIcon,
+  SmileIcon,
+  TrashIcon,
+} from './icons';
 import {
   AudioMedia,
   DocumentMedia,
@@ -118,6 +127,60 @@ function MessageBody({
 
   if (m.kind === 'reaction') {
     return <span className="text-2xl leading-none">{m.reaction ?? m.body}</span>;
+  }
+
+  // Buttons an agent or a flow sent: the text, then the buttons as WhatsApp draws them under it.
+  if (m.kind === 'interactive' && m.sentInteractive) {
+    const s = m.sentInteractive;
+    return (
+      <div data-testid="inbox-sent-interactive" className="space-y-1.5">
+        {s.header && (
+          <p dir="auto" className="font-semibold break-words">
+            {s.header}
+          </p>
+        )}
+        <p dir="auto" className="whitespace-pre-wrap break-words">
+          {s.body}
+        </p>
+        {s.footer && (
+          <p dir="auto" className="text-xs text-muted-foreground break-words">
+            {s.footer}
+          </p>
+        )}
+        {s.sections && s.sections.length > 0 && (
+          <ul className="space-y-1 rounded-lg bg-background/50 px-2 py-1.5 text-xs">
+            {s.sections.map((sec, i) => (
+              <li key={i}>
+                {sec.title && <p className="font-semibold">{sec.title}</p>}
+                <ul>
+                  {sec.rows.map((r, j) => (
+                    <li key={j} dir="auto" className="break-words">
+                      {r.title}
+                      {r.description && (
+                        <span className="text-muted-foreground"> · {r.description}</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+        )}
+        <div className="-mx-1 flex flex-col gap-1 pt-1">
+          {s.buttons.map((b, i) => (
+            <span
+              key={i}
+              data-testid="inbox-sent-button"
+              className="flex items-center justify-center gap-1.5 rounded-lg bg-background/70 px-3 py-1.5 text-center text-sm font-medium text-primary"
+            >
+              {s.type === 'cta_url' && <LinkIcon width={14} height={14} aria-hidden />}
+              {s.type === 'list' && <MenuIcon width={14} height={14} aria-hidden />}
+              <span className="break-words">{b.title}</span>
+            </span>
+          ))}
+        </div>
+      </div>
+    );
   }
 
   if (m.kind === 'interactive' && (m.interactive || caption)) {

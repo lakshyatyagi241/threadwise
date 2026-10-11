@@ -65,7 +65,7 @@
     },
     "library": {
       "title": "Biblioteca de modelos",
-      "intro": "Modelos de mensagem do WhatsApp: escreva, envie para análise da Meta e acompanhe o status aqui.",
+      "intro": "Escolha um modelo inicial ou envie o seu. Todos os modelos devem seguir as <link>diretrizes do WhatsApp</link> antes de serem aprovados pela Meta.",
       "sync": "Sincronizar com a Meta",
       "syncing": "Sincronizando...",
       "syncHint": "Buscar seus modelos na Meta",

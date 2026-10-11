@@ -154,6 +154,10 @@ export class InboxBridge implements InboundSink, OnModuleInit {
       peerKey,
       ...(m.pushName ? { peerName: m.pushName } : {}),
       providerTimestamp: m.timestamp,
+      ...(m.replyToProviderMessageId
+        ? { replyToProviderMessageId: m.replyToProviderMessageId }
+        : {}),
+      ...(m.forwarded ? { meta: { forwarded: true } } : {}),
     };
     if (m.reaction) {
       return {
@@ -205,7 +209,20 @@ export class InboxBridge implements InboundSink, OnModuleInit {
       return {
         ...base,
         kind: 'contact',
-        body: [m.contact.name, m.contact.phone].filter(Boolean).join(' · '),
+        body: m.contacts?.length
+          ? (m.contacts.find((c) => c.name)?.name ?? m.contact.name)
+          : [m.contact.name, m.contact.phone].filter(Boolean).join(' · '),
+        ...(m.contacts?.length
+          ? { meta: { ...(m.forwarded ? { forwarded: true } : {}), contacts: m.contacts } }
+          : {}),
+      };
+    }
+    if (m.unsupported) {
+      return {
+        ...base,
+        kind: 'unsupported',
+        body: `[${m.unsupported.label} message]`,
+        meta: { ...(m.forwarded ? { forwarded: true } : {}), rawType: m.unsupported.rawType },
       };
     }
     return { ...base, kind: 'text', body: m.text ?? '' };
@@ -217,6 +234,7 @@ export class InboxBridge implements InboundSink, OnModuleInit {
       return [`[${KIND_LABEL[m.media.kind] ?? 'File'}]`, m.text].filter(Boolean).join(' ');
     if (m.location) return `[Location] ${m.location.name ?? ''}`.trim();
     if (m.contact) return `[Contact] ${m.contact.name}`;
+    if (m.unsupported) return `[${m.unsupported.label}]`;
     return m.text ?? '';
   }
 

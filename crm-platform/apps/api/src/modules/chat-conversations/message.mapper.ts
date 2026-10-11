@@ -58,6 +58,44 @@ function interactiveOf(row: MessageRow): MessageResponse['interactive'] {
   return { type, id: str(i.id), title: str(i.title) ?? '', description: str(i.description) };
 }
 
+/** The buttons of an interactive message we sent. */
+function sentInteractiveOf(row: MessageRow): MessageResponse['sentInteractive'] {
+  const i = row.meta.sentInteractive as Record<string, unknown> | undefined;
+  if (row.kind !== 'interactive' || row.direction !== 'out' || !i || typeof i !== 'object')
+    return null;
+  const common = { header: str(i.header), body: str(i.body) ?? '', footer: str(i.footer) };
+  if (i.type === 'cta_url') {
+    return {
+      type: 'cta_url',
+      ...common,
+      buttons: [{ title: str(i.text) ?? '', url: str(i.url) }],
+    };
+  }
+  if (i.type === 'list' && Array.isArray(i.sections)) {
+    return {
+      type: 'list',
+      ...common,
+      buttons: [{ title: str(i.button) ?? '', url: null }],
+      sections: (i.sections as Array<Record<string, unknown>>).map((sec) => ({
+        title: str(sec.title),
+        rows: ((sec.rows as Array<Record<string, unknown>> | undefined) ?? []).map((r) => ({
+          title: str(r.title) ?? '',
+          description: str(r.description),
+        })),
+      })),
+    };
+  }
+  if (i.type !== 'buttons' || !Array.isArray(i.buttons)) return null;
+  return {
+    type: 'buttons',
+    ...common,
+    buttons: (i.buttons as Array<Record<string, unknown>>).map((b) => ({
+      title: str(b.title) ?? '',
+      url: null,
+    })),
+  };
+}
+
 /** The ad or link that opened the chat (Meta `referral`), on the message that carried it. */
 function referralOf(row: MessageRow): MessageResponse['referral'] {
   const r = row.meta.referral as Record<string, unknown> | undefined;
@@ -98,9 +136,7 @@ function flowLines(raw: unknown): string | null {
  * Rows stored before the adapter understood a type hold a placeholder ("[Interactive · call_permission_reply]"). They are read as
  * what they are now, so old threads match new ones without a data migration.
  */
-function legacyView(
-  row: MessageRow,
-): {
+function legacyView(row: MessageRow): {
   kind: MessageRow['kind'];
   body: string | null;
   interactive: MessageResponse['interactive'];
@@ -177,6 +213,7 @@ export function toMessageResponse(row: MessageRow, link: MediaLinker): MessageRe
     interactive: legacy?.interactive ?? interactiveOf(row),
     forwarded: row.meta.forwarded === true ? true : undefined,
     referral: referralOf(row),
+    sentInteractive: sentInteractiveOf(row),
     unsupported:
       row.meta.unsupported === true &&
       row.meta.rawType !== 'order' &&

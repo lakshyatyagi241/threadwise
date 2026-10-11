@@ -51,6 +51,8 @@ export const channelCapabilitiesSchema = z.object({
   templates: z.boolean(),
   media: z.array(messageMediaKindSchema),
   reactions: z.boolean(),
+  /** The channel sends reply buttons and link buttons (WhatsApp interactive messages). Absent = no. */
+  interactive: z.boolean().optional(),
   /** Edit and delete-for-everyone (unofficial WhatsApp engines only). */
   editDelete: z.boolean(),
   receipts: z.array(z.enum(['sent', 'delivered', 'read'])),

@@ -65,7 +65,7 @@
     },
     "library": {
       "title": "Biblioteka szablonów",
-      "intro": "Szablony wiadomości WhatsApp: twórz je, wysyłaj do weryfikacji w Meta i śledź ich status tutaj.",
+      "intro": "Wybierz gotowy szablon lub prześlij własny. Wszystkie szablony muszą być zgodne z <link>wytycznymi WhatsApp</link>, zanim zatwierdzi je Meta.",
       "sync": "Synchronizuj z Meta",
       "syncing": "Synchronizowanie...",
       "syncHint": "Pobierz szablony z Meta",

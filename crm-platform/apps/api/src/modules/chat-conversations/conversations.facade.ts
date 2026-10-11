@@ -68,11 +68,39 @@ export interface OutboundMediaRef {
   sha256: string;
 }
 
+/** An interactive message as stored (button ids are made by the sender: `btn-1`, `btn-2`...). */
+export type OutboundInteractive =
+  | {
+      type: 'buttons';
+      body: string;
+      header?: string;
+      footer?: string;
+      buttons: { id: string; title: string }[];
+    }
+  | {
+      type: 'list';
+      body: string;
+      header?: string;
+      footer?: string;
+      button: string;
+      sections: {
+        title?: string;
+        rows: { id: string; title: string; description?: string }[];
+      }[];
+    }
+  | { type: 'cta_url'; body: string; header?: string; footer?: string; text: string; url: string };
+
 export type OutboundContent =
   | { kind: 'text'; body: string }
   | { kind: 'media'; media: OutboundMediaRef; caption?: string }
   /** An emoji on the message `EnqueueOutboundInput.replyToMessageId` names; an empty emoji removes the reaction. */
   | { kind: 'reaction'; emoji: string }
+  | { kind: 'location'; latitude: number; longitude: number; name?: string; address?: string }
+  | {
+      kind: 'contacts';
+      contacts: { name: string; phones: string[]; emails: string[]; org?: string }[];
+    }
+  | { kind: 'interactive'; interactive: OutboundInteractive }
   /** The caller resolved the template (the TPL domain owns `wa_templates`); `body` is what the thread shows. */
   | {
       kind: 'template';

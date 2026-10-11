@@ -135,6 +135,8 @@ export class OutboundService {
             mediaName: fields.media?.name ?? null,
             mediaSha256: fields.media?.sha256 ?? null,
             meta: fields.meta,
+            latitude: fields.latitude ?? null,
+            longitude: fields.longitude ?? null,
             clientMessageId: input.clientMessageId,
             uuid: input.clientMessageId,
           },
@@ -167,7 +169,13 @@ export class OutboundService {
       const after = await this.conversations.applyOutboundQueued(tx, orgId, conv.id, {
         messageId: alloc.id,
         arrivedAt: alloc.createdAt,
-        preview: isReaction ? null : previewOf({ kind: fields.kind, body: fields.body }),
+        preview: isReaction
+          ? null
+          : previewOf({
+              kind: fields.kind,
+              body: fields.body,
+              locationName: (fields.meta.locationName as string | undefined) ?? null,
+            }),
         reaction: isReaction,
       });
       await this.messages.insert(tx, orgId, {
@@ -182,6 +190,8 @@ export class OutboundService {
         senderAgentId: sender.kind === 'bot' ? (sender.agentId ?? null) : null,
         body: fields.body,
         media: fields.media,
+        latitude: fields.latitude ?? null,
+        longitude: fields.longitude ?? null,
         status: 'queued',
         clientMessageId: input.clientMessageId,
         replyToMessageUuid: replyTo?.uuid ?? null,

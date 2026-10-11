@@ -191,3 +191,16 @@ export const SmileIcon = (p: SVGProps<SVGSVGElement>) => (
     <path d="M9 9.5h.01M15 9.5h.01" />
   </Icon>
 );
+
+export const ShareIcon = (p: SVGProps<SVGSVGElement>) => (
+  <Icon {...p}>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 8v8M8 12h8" />
+  </Icon>
+);
+
+export const MenuIcon = (p: SVGProps<SVGSVGElement>) => (
+  <Icon {...p}>
+    <path d="M4 7h16M4 12h16M4 17h16" />
+  </Icon>
+);

@@ -65,7 +65,7 @@
     },
     "library": {
       "title": "Sjabloonbibliotheek",
-      "intro": "WhatsApp-berichtsjablonen: schrijf ze, stuur ze naar Meta voor beoordeling en volg hier hun status.",
+      "intro": "Kies een startsjabloon of dien je eigen sjabloon in. Alle sjablonen moeten voldoen aan de <link>richtlijnen van WhatsApp</link> voordat Meta ze goedkeurt.",
       "sync": "Synchroniseren vanuit Meta",
       "syncing": "Synchroniseren...",
       "syncHint": "Haal je sjablonen op uit Meta",
