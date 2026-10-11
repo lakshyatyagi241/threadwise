@@ -5,19 +5,7 @@ summary: Teach your bot the answers to common questions. It matches what custome
 area: automation
 order: 6
 documents: [nav:faq]
-keywords:
-  [
-    faq,
-    questions,
-    answers,
-    variations,
-    phrasings,
-    threshold,
-    sensitivity,
-    unanswered,
-    auto reply,
-    knowledge,
-  ]
+keywords: [faq, questions, answers, variations, phrasings, threshold, sensitivity, unanswered, auto reply, knowledge]
 ---
 
 ## What it is for
