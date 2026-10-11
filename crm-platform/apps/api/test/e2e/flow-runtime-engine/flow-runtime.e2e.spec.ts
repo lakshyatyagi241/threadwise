@@ -717,11 +717,15 @@ describe('an Instagram flow hands the chat to a WhatsApp flow (TW-FLR-010 rule 6
       'One moment, moving you to WhatsApp',
     ]);
 
-    const ev = await p.h.owner.query(
-      `SELECT id, aggregate_module, aggregate_id, payload FROM event_outbox
-        WHERE org_id = $1 AND event_type = 'flow.whatsapp_handoff_requested'`,
-      [t.orgId],
-    );
+    // The node sends the intro first and announces the hand-off a moment later in its own transaction: wait for the event.
+    const ev = await until('the hand-off event', async () => {
+      const r = await p.h.owner.query(
+        `SELECT id, aggregate_module, aggregate_id, payload FROM event_outbox
+          WHERE org_id = $1 AND event_type = 'flow.whatsapp_handoff_requested'`,
+        [t.orgId],
+      );
+      return r.rows.length > 0 ? r : null;
+    });
     expect(ev.rows.length).toBe(1);
     const consumer = p.h.app.get(
       (

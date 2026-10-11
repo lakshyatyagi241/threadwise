@@ -20,6 +20,8 @@ export type Transition =
       t: 'goto';
       nodeId: string;
       delayMs: number;
+      /** The exit it left by: the run log shows the branch a Condition took. */
+      port?: number;
       /** A sub-flow swapped `run.graph` for this flow's: the engine persists the new graph and logs the flow id. */
       subflowId?: number;
     }
@@ -74,7 +76,7 @@ export function advanceFrom(
 ): Transition {
   const edge = edgeFrom(run.graph, fromNodeId, port);
   if (!edge || !nodeById(run.graph, edge.to)) return parkOrEnd(run);
-  return { t: 'goto', nodeId: edge.to, delayMs: branch ? 0 : paceMs };
+  return { t: 'goto', nodeId: edge.to, delayMs: branch ? 0 : paceMs, port };
 }
 
 /**

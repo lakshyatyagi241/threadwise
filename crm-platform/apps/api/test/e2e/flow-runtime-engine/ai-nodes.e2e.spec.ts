@@ -261,10 +261,12 @@ describe('Sub-flow', () => {
     expect(sent).toEqual(['in A', 'in B for Asha', 'B done']);
     const run = await untilRun(p, t, a.id, 'completed', (r) => r.status === 'completed');
     expect(run.end_reason).toBe('end_node');
-    // The run row keeps the graph it ended on, and the log names the sub flow.
-    const row = await p.h.owner.query(`SELECT graph, flow_id FROM flow_runs WHERE id = $1`, [
-      run.id,
-    ]);
+    // The run points at the stored version of the graph it ended on, and the log names the sub flow.
+    const row = await p.h.owner.query(
+      `SELECT COALESCE(r.graph, gv.graph) AS graph, r.flow_id FROM flow_runs r
+         LEFT JOIN flow_graph_versions gv ON gv.org_id = r.org_id AND gv.id = r.graph_version_id WHERE r.id = $1`,
+      [run.id],
+    );
     expect((row.rows[0].graph.nodes as Array<{ id: string }>).map((n) => n.id)).toEqual([
       'b1',
       'b2',

@@ -7,6 +7,8 @@ export interface RuntimeNode {
   id: string;
   /** PascalCase executor name: Message, Media, Question, InteractiveButtons, List, Poll, Condition, TimeDelay, CTA, Location, End, ... */
   type: string;
+  /** The name the user gave the node in the editor, when it has one: the run log shows it. */
+  label?: string;
   /** Everything the executor reads, shaped by the compiler. Merge tags are left as written and resolved when the node runs. */
   props: Record<string, unknown>;
 }

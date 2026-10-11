@@ -354,7 +354,8 @@ export function compileGraph(input: unknown): RuntimeGraph {
       builderType === 'ask' && flbAskNeedsInputCheck(props)
         ? 'AskInput'
         : (TYPE_MAP[builderType] ?? (str(n.flowNodeType) || ucfirst(builderType)));
-    nodes.push({ id, type: mapped, props });
+    const given = str(obj(n.data).label ?? obj(n.data).name ?? obj(n.data).title).trim();
+    nodes.push({ id, type: mapped, ...(given ? { label: given.slice(0, 80) } : {}), props });
   }
 
   const edges: RuntimeEdge[] = [];

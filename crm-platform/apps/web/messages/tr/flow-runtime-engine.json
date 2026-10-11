@@ -176,12 +176,35 @@
       "cancelBody": "Çalıştırma olduğu yerde durur. Müşteriye bilgi verilmez.",
       "cancelConfirm": "Çalıştırmayı iptal et",
       "cancelKeep": "Vazgeç",
-      "cancelled": "Çalıştırma iptal edildi"
+      "cancelled": "Çalıştırma iptal edildi",
+      "tlTitle": "Yürütme zaman çizelgesi",
+      "tlNodes": "Çalışan düğümler",
+      "tlErrors": "Hatalar",
+      "tlTime": "Düğüm süresi",
+      "filterAll": "Tüm adımlar",
+      "filterErrors": "Yalnızca hatalar",
+      "changedTitle": "Bu akış çalıştırmadan sonra düzenlendi",
+      "changedBody": "Günlük, akışı tam olarak çalıştığı haliyle gösterir.",
+      "removed": "Akıştan kaldırıldı",
+      "exit": "Çıkış {port}",
+      "visit": "{n}. ziyaret",
+      "truncated": "{max} adımdan fazlası çalıştı. Sonrakiler sayıldı ancak listelenmedi.",
+      "retention": "Günlükler, bir çalıştırma bittikten {days} gün sonra silinir.",
+      "pathTitle": "İzlenen yol",
+      "notReached": "Ulaşılmadı",
+      "noErrors": "Bu çalıştırmada hata yok."
     },
     "event": {
       "step": "Adım",
       "reply": "Müşteri yanıtı",
-      "end": "Son"
+      "end": "Son",
+      "advance": "İlerledi",
+      "wait": "Yanıt bekleniyor",
+      "sleep": "Gecikme",
+      "halt": "Durduruldu",
+      "exec": "Çalıştırıldı",
+      "truncated": "Günlük sınırına ulaşıldı",
+      "start": "Başlatıldı"
     },
     "subs": {
       "kicker": "Akış",
@@ -469,6 +492,13 @@
       "manyBody": "{n} kişi akışa baştan yeniden girer ve mesajlarını yeniden alır. Bu işlem geri alınamaz.",
       "summary": "{queued} yeniden başlatıldı, {succeeded} tamamlandı, {failed} başarısız, {skipped} atlandı.",
       "flowInactive": "Başarısız kişileri yeniden çalıştırmadan önce bu akışı yeniden açın."
+    },
+    "outcome": {
+      "ok": "Tamam",
+      "error": "Hata",
+      "skipped": "Atlandı",
+      "waiting": "Bekliyor",
+      "timeout": "Zaman aşımı"
     }
   }
 }

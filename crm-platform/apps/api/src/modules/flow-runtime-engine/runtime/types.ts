@@ -78,6 +78,10 @@ export interface RunState {
   triggerText: string | null;
   status: FlowRunStatus;
   graph: RuntimeGraph;
+  /** The stored version the run points at; null for a run that started before versions existed (its graph is on the row). */
+  graphVersionId: number | null;
+  /** How many node executions the run has logged: the log stops at a cap. */
+  nodeCount: number;
   currentNodeId: string | null;
   stepSeq: number;
   vars: VariableBag;
