@@ -13,6 +13,8 @@ export function envelopeOf(
     | 'mediaName'
     | 'mediaSha256'
     | 'meta'
+    | 'latitude'
+    | 'longitude'
     | 'clientMessageId'
     | 'uuid'
   >,
@@ -73,6 +75,39 @@ export function envelopeOf(
         },
       };
     }
+    case 'location':
+      if (row.latitude === null || row.longitude === null)
+        throw new Error('A location needs its coordinates');
+      return {
+        ...common,
+        kind: 'location',
+        location: {
+          latitude: row.latitude,
+          longitude: row.longitude,
+          ...(typeof row.meta.locationName === 'string' ? { name: row.meta.locationName } : {}),
+          ...(typeof row.meta.locationAddress === 'string'
+            ? { address: row.meta.locationAddress }
+            : {}),
+        },
+      };
+    case 'contact':
+      return {
+        ...common,
+        kind: 'contacts',
+        contacts: (
+          (row.meta.contacts as
+            | { name: string; phones: string[]; emails: string[]; org?: string | null }[]
+            | undefined) ?? []
+        ).map((c) => ({
+          name: c.name,
+          phones: c.phones.map((phone) => ({ phone })),
+          emails: c.emails,
+          ...(c.org ? { org: c.org } : {}),
+        })),
+      };
+    case 'interactive':
+      if (!row.meta.sentInteractive) throw new Error('An interactive message needs its content');
+      return { ...common, kind: 'interactive', interactive: row.meta.sentInteractive };
     default:
       throw new Error(`A ${row.kind} message cannot be sent`);
   }
@@ -85,6 +120,8 @@ export function messageFieldsOf(content: OutboundContent): {
   media: { key: string; mime: string; size: number; name: string; sha256: string } | null;
   meta: Record<string, unknown>;
   templateId: number | null;
+  latitude?: number;
+  longitude?: number;
 } {
   switch (content.kind) {
     case 'text':
@@ -103,6 +140,42 @@ export function messageFieldsOf(content: OutboundContent): {
         body: content.emoji.trim() || null,
         media: null,
         meta: {},
+        templateId: null,
+      };
+    case 'location':
+      return {
+        kind: 'location',
+        body: null,
+        media: null,
+        latitude: content.latitude,
+        longitude: content.longitude,
+        meta: {
+          ...(content.name ? { locationName: content.name } : {}),
+          ...(content.address ? { locationAddress: content.address } : {}),
+        },
+        templateId: null,
+      };
+    case 'contacts':
+      return {
+        kind: 'contact',
+        body: content.contacts[0]!.name,
+        media: null,
+        meta: {
+          contacts: content.contacts.map((c) => ({
+            name: c.name,
+            phones: c.phones,
+            emails: c.emails,
+            org: c.org ?? null,
+          })),
+        },
+        templateId: null,
+      };
+    case 'interactive':
+      return {
+        kind: 'interactive',
+        body: content.interactive.body,
+        media: null,
+        meta: { sentInteractive: content.interactive },
         templateId: null,
       };
     case 'template':

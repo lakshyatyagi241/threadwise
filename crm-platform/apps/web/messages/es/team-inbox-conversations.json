@@ -141,6 +141,9 @@
       },
       "template": "Mensaje de plantilla: {name}",
       "unavailable": "Mensaje no disponible",
+      "unsupported": "El cliente envió algo que este canal no puede mostrar.",
+      "forwarded": "Reenviado",
+      "referral": "Llegó desde un anuncio o enlace",
       "sentIn": "Enviado en {lang}. Mostrar el texto que escribiste",
       "translatedFrom": "Traducido del {lang}. Mostrar el original",
       "bot": "Bot",
@@ -274,7 +277,75 @@
         "hearts": "Corazones y símbolos",
         "objects": "Objetos"
       },
-      "cancelReply": "Cancelar la respuesta"
+      "cancelReply": "Cancelar la respuesta",
+      "share": {
+        "open": "Compartir una ubicación, un contacto o botones",
+        "title": "Compartir",
+        "eyebrow": "Enviar al cliente",
+        "close": "Cerrar",
+        "cancel": "Cancelar",
+        "send": "Enviar",
+        "sending": "Enviando…",
+        "sent": "Enviado",
+        "windowHint": "Como cualquier mensaje de formato libre, requieren una ventana de 24 horas abierta en un número de WhatsApp Cloud API.",
+        "tab": {
+          "location": "Ubicación",
+          "contacts": "Contacto",
+          "buttons": "Botones"
+        },
+        "location": {
+          "latitude": "Latitud",
+          "longitude": "Longitud",
+          "name": "Nombre del lugar (opcional)",
+          "address": "Dirección (opcional)",
+          "pasteHint": "Puedes pegar \"28.6139, 77.2090\" desde un mapa aquí."
+        },
+        "contact": {
+          "card": "Contacto {n}",
+          "name": "Nombre",
+          "org": "Empresa (opcional)",
+          "phone": "Teléfono",
+          "email": "Correo electrónico",
+          "remove": "Quitar el contacto {n}",
+          "add": "Añadir otro contacto"
+        },
+        "buttons": {
+          "type": "Tipo de botón",
+          "kind": {
+            "buttons": "Botones de respuesta",
+            "cta_url": "Botón de enlace",
+            "list": "Lista"
+          },
+          "header": "Encabezado (opcional)",
+          "body": "Mensaje",
+          "footer": "Pie de mensaje (opcional)",
+          "titles": "Botones (hasta 3)",
+          "titleN": "Botón {n}",
+          "add": "Añadir un botón",
+          "linkText": "Texto del botón",
+          "url": "Enlace",
+          "listButton": "Botón que abre la lista",
+          "section": "Sección {n}",
+          "sectionTitle": "Título de la sección",
+          "rowTitle": "Título de la fila {n}",
+          "rowDescription": "Descripción de la fila {n} (opcional)",
+          "addRow": "Añadir una fila",
+          "addSection": "Añadir una sección",
+          "removeSection": "Quitar la sección {n}",
+          "rows": "Filas",
+          "rowCount": "{n} de {max} filas"
+        },
+        "problem": {
+          "required": "{label} es obligatorio",
+          "range": "{label} está fuera de rango",
+          "phoneOrEmail": "Añade un número de teléfono o un correo electrónico",
+          "phone": "Introduce un número de teléfono válido",
+          "email": "Introduce una dirección de correo electrónico válida",
+          "duplicate": "{label} repite otro botón",
+          "url": "Introduce un enlace que empiece por http:// o https://",
+          "tooManyRows": "Una lista admite como máximo 10 filas en total"
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Notas y cronología",

@@ -102,6 +102,37 @@ export class InboxThreadService {
       await this.assertCanReply(tx, ctx, uuid);
       if (input.kind === 'text') return { kind: 'text', body: input.body };
       if (input.kind === 'reaction') return { kind: 'reaction', emoji: input.emoji };
+      if (input.kind === 'location') {
+        const { latitude, longitude, name, address } = input;
+        return { kind: 'location', latitude, longitude, name, address };
+      }
+      if (input.kind === 'contacts') return { kind: 'contacts', contacts: input.contacts };
+      if (input.kind === 'interactive') {
+        const i = input.interactive;
+        if (i.type === 'buttons') {
+          return {
+            kind: 'interactive',
+            interactive: {
+              ...i,
+              buttons: i.buttons.map((b, n) => ({ id: `btn-${n + 1}`, title: b.title })),
+            },
+          };
+        }
+        if (i.type === 'list') {
+          let n = 0;
+          return {
+            kind: 'interactive',
+            interactive: {
+              ...i,
+              sections: i.sections.map((sec) => ({
+                ...sec,
+                rows: sec.rows.map((r) => ({ ...r, id: `row-${++n}` })),
+              })),
+            },
+          };
+        }
+        return { kind: 'interactive', interactive: i };
+      }
       if (input.kind === 'template') return this.templateContent(tx, ctx.orgId, uuid, input);
 
       const claim = await this.uploads.claim(

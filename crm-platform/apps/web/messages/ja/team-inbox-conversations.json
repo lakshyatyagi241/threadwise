@@ -141,6 +141,9 @@
       },
       "template": "テンプレートメッセージ: {name}",
       "unavailable": "メッセージを表示できません",
+      "unsupported": "お客様がこのチャネルでは表示できないものを送信しました。",
+      "forwarded": "転送済み",
+      "referral": "広告またはリンクから流入",
       "sentIn": "{lang} で送信されました。入力したテキストを表示",
       "translatedFrom": "{lang} から翻訳されました。原文を表示",
       "bot": "ボット",
@@ -274,7 +277,75 @@
         "hearts": "ハートと記号",
         "objects": "オブジェクト"
       },
-      "cancelReply": "返信をキャンセル"
+      "cancelReply": "返信をキャンセル",
+      "share": {
+        "open": "位置情報、連絡先、ボタンを共有",
+        "title": "共有",
+        "eyebrow": "お客様に送信",
+        "close": "閉じる",
+        "cancel": "キャンセル",
+        "send": "送信",
+        "sending": "送信中…",
+        "sent": "送信済み",
+        "windowHint": "自由形式のメッセージと同様に、WhatsApp Cloud API の番号で24時間のウィンドウが開いている必要があります。",
+        "tab": {
+          "location": "位置情報",
+          "contacts": "連絡先",
+          "buttons": "ボタン"
+        },
+        "location": {
+          "latitude": "緯度",
+          "longitude": "経度",
+          "name": "場所の名前（任意）",
+          "address": "住所（任意）",
+          "pasteHint": "地図から \"28.6139, 77.2090\" をここに貼り付けられます。"
+        },
+        "contact": {
+          "card": "連絡先 {n}",
+          "name": "名前",
+          "org": "会社（任意）",
+          "phone": "電話番号",
+          "email": "メール",
+          "remove": "連絡先 {n} を削除",
+          "add": "連絡先を追加"
+        },
+        "buttons": {
+          "type": "ボタンの種類",
+          "kind": {
+            "buttons": "返信ボタン",
+            "cta_url": "リンクボタン",
+            "list": "リスト"
+          },
+          "header": "ヘッダー（任意）",
+          "body": "メッセージ",
+          "footer": "フッター（任意）",
+          "titles": "ボタン（最大3つ）",
+          "titleN": "ボタン {n}",
+          "add": "ボタンを追加",
+          "linkText": "ボタンのテキスト",
+          "url": "リンク",
+          "listButton": "リストを開くボタン",
+          "section": "セクション {n}",
+          "sectionTitle": "セクションのタイトル",
+          "rowTitle": "行 {n} のタイトル",
+          "rowDescription": "行 {n} の説明（任意）",
+          "addRow": "行を追加",
+          "addSection": "セクションを追加",
+          "removeSection": "セクション {n} を削除",
+          "rows": "行",
+          "rowCount": "{n} / {max} 行"
+        },
+        "problem": {
+          "required": "{label}は必須です",
+          "range": "{label}が範囲外です",
+          "phoneOrEmail": "電話番号またはメールを追加してください",
+          "phone": "有効な電話番号を入力してください",
+          "email": "有効なメールアドレスを入力してください",
+          "duplicate": "{label}が他のボタンと重複しています",
+          "url": "http:// または https:// で始まるリンクを入力してください",
+          "tooManyRows": "リストには合計で最大10行まで含められます"
+        }
+      }
     },
     "panel": {
       "tabsLabel": "メモとタイムライン",

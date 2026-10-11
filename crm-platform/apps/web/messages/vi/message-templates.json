@@ -65,7 +65,7 @@
     },
     "library": {
       "title": "Thư viện mẫu",
-      "intro": "Mẫu tin nhắn WhatsApp: soạn mẫu, gửi Meta xét duyệt và theo dõi trạng thái tại đây.",
+      "intro": "Chọn một mẫu có sẵn hoặc gửi mẫu của riêng bạn. Mọi mẫu phải tuân thủ <link>nguyên tắc của WhatsApp</link> trước khi được Meta phê duyệt.",
       "sync": "Đồng bộ từ Meta",
       "syncing": "Đang đồng bộ...",
       "syncHint": "Lấy mẫu của bạn từ Meta",

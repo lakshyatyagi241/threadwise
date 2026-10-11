@@ -141,6 +141,9 @@
       },
       "template": "Tin nhắn mẫu: {name}",
       "unavailable": "Tin nhắn không khả dụng",
+      "unsupported": "Khách hàng đã gửi nội dung mà kênh này không thể hiển thị.",
+      "forwarded": "Đã chuyển tiếp",
+      "referral": "Đến từ quảng cáo hoặc liên kết",
       "sentIn": "Đã gửi bằng {lang}. Hiện nội dung bạn đã nhập",
       "translatedFrom": "Đã dịch từ {lang}. Hiện bản gốc",
       "bot": "Bot",
@@ -274,7 +277,75 @@
         "hearts": "Trái tim và biểu tượng",
         "objects": "Đồ vật"
       },
-      "cancelReply": "Hủy trả lời"
+      "cancelReply": "Hủy trả lời",
+      "share": {
+        "open": "Chia sẻ vị trí, danh bạ hoặc nút",
+        "title": "Chia sẻ",
+        "eyebrow": "Gửi cho khách hàng",
+        "close": "Đóng",
+        "cancel": "Hủy",
+        "send": "Gửi",
+        "sending": "Đang gửi…",
+        "sent": "Đã gửi",
+        "windowHint": "Giống mọi tin nhắn tự do, các tin này cần khung 24 giờ đang mở trên số WhatsApp Cloud API.",
+        "tab": {
+          "location": "Vị trí",
+          "contacts": "Liên hệ",
+          "buttons": "Nút"
+        },
+        "location": {
+          "latitude": "Vĩ độ",
+          "longitude": "Kinh độ",
+          "name": "Tên địa điểm (không bắt buộc)",
+          "address": "Địa chỉ (không bắt buộc)",
+          "pasteHint": "Bạn có thể dán \"28.6139, 77.2090\" từ bản đồ vào đây."
+        },
+        "contact": {
+          "card": "Liên hệ {n}",
+          "name": "Tên",
+          "org": "Công ty (không bắt buộc)",
+          "phone": "Điện thoại",
+          "email": "Email",
+          "remove": "Xóa liên hệ {n}",
+          "add": "Thêm liên hệ khác"
+        },
+        "buttons": {
+          "type": "Loại nút",
+          "kind": {
+            "buttons": "Nút trả lời",
+            "cta_url": "Nút liên kết",
+            "list": "Danh sách"
+          },
+          "header": "Tiêu đề (không bắt buộc)",
+          "body": "Tin nhắn",
+          "footer": "Chân trang (không bắt buộc)",
+          "titles": "Nút (tối đa 3)",
+          "titleN": "Nút {n}",
+          "add": "Thêm nút",
+          "linkText": "Văn bản nút",
+          "url": "Liên kết",
+          "listButton": "Nút mở danh sách",
+          "section": "Phần {n}",
+          "sectionTitle": "Tiêu đề phần",
+          "rowTitle": "Tiêu đề dòng {n}",
+          "rowDescription": "Mô tả dòng {n} (không bắt buộc)",
+          "addRow": "Thêm dòng",
+          "addSection": "Thêm phần",
+          "removeSection": "Xóa phần {n}",
+          "rows": "Dòng",
+          "rowCount": "{n}/{max} dòng"
+        },
+        "problem": {
+          "required": "{label} là bắt buộc",
+          "range": "{label} nằm ngoài phạm vi",
+          "phoneOrEmail": "Thêm số điện thoại hoặc email",
+          "phone": "Nhập số điện thoại hợp lệ",
+          "email": "Nhập địa chỉ email hợp lệ",
+          "duplicate": "{label} trùng với một nút khác",
+          "url": "Nhập liên kết bắt đầu bằng http:// hoặc https://",
+          "tooManyRows": "Một danh sách có tối đa 10 dòng trong tổng số"
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Ghi chú và dòng thời gian",

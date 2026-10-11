@@ -141,6 +141,9 @@
       },
       "template": "Message modèle : {name}",
       "unavailable": "Message indisponible",
+      "unsupported": "Le client a envoyé un contenu que ce canal ne peut pas afficher.",
+      "forwarded": "Transféré",
+      "referral": "Provient d’une publicité ou d’un lien",
       "sentIn": "Envoyé en {lang}. Afficher le texte que vous avez rédigé",
       "translatedFrom": "Traduit depuis {lang}. Afficher l’original",
       "bot": "Bot",
@@ -274,7 +277,75 @@
         "hearts": "Cœurs et symboles",
         "objects": "Objets"
       },
-      "cancelReply": "Annuler la réponse"
+      "cancelReply": "Annuler la réponse",
+      "share": {
+        "open": "Partager une position, un contact ou des boutons",
+        "title": "Partager",
+        "eyebrow": "Envoyer au client",
+        "close": "Fermer",
+        "cancel": "Annuler",
+        "send": "Envoyer",
+        "sending": "Envoi en cours…",
+        "sent": "Envoyé",
+        "windowHint": "Comme tout message libre, ils nécessitent une fenêtre de 24 heures ouverte sur un numéro WhatsApp Cloud API.",
+        "tab": {
+          "location": "Position",
+          "contacts": "Contact",
+          "buttons": "Boutons"
+        },
+        "location": {
+          "latitude": "Latitude",
+          "longitude": "Longitude",
+          "name": "Nom du lieu (facultatif)",
+          "address": "Adresse (facultatif)",
+          "pasteHint": "Vous pouvez coller \"28.6139, 77.2090\" depuis une carte ici."
+        },
+        "contact": {
+          "card": "Contact {n}",
+          "name": "Nom",
+          "org": "Entreprise (facultatif)",
+          "phone": "Téléphone",
+          "email": "E-mail",
+          "remove": "Retirer le contact {n}",
+          "add": "Ajouter un autre contact"
+        },
+        "buttons": {
+          "type": "Type de bouton",
+          "kind": {
+            "buttons": "Boutons de réponse",
+            "cta_url": "Bouton de lien",
+            "list": "Liste"
+          },
+          "header": "En-tête (facultatif)",
+          "body": "Message",
+          "footer": "Pied de page (facultatif)",
+          "titles": "Boutons (jusqu’à 3)",
+          "titleN": "Bouton {n}",
+          "add": "Ajouter un bouton",
+          "linkText": "Texte du bouton",
+          "url": "Lien",
+          "listButton": "Bouton qui ouvre la liste",
+          "section": "Section {n}",
+          "sectionTitle": "Titre de la section",
+          "rowTitle": "Titre de la ligne {n}",
+          "rowDescription": "Description de la ligne {n} (facultatif)",
+          "addRow": "Ajouter une ligne",
+          "addSection": "Ajouter une section",
+          "removeSection": "Supprimer la section {n}",
+          "rows": "Lignes",
+          "rowCount": "{n} lignes sur {max}"
+        },
+        "problem": {
+          "required": "{label} est obligatoire",
+          "range": "{label} est hors limites",
+          "phoneOrEmail": "Ajoutez un numéro de téléphone ou un e-mail",
+          "phone": "Saisissez un numéro de téléphone valide",
+          "email": "Saisissez une adresse e-mail valide",
+          "duplicate": "{label} répète un autre bouton",
+          "url": "Saisissez un lien commençant par http:// ou https://",
+          "tooManyRows": "Une liste contient au maximum 10 lignes au total"
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Notes et historique",

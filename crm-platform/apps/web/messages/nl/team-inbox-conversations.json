@@ -141,6 +141,9 @@
       },
       "template": "Sjabloonbericht: {name}",
       "unavailable": "Bericht niet beschikbaar",
+      "unsupported": "De klant heeft iets gestuurd dat dit kanaal niet kan weergeven.",
+      "forwarded": "Doorgestuurd",
+      "referral": "Afkomstig van een advertentie of link",
       "sentIn": "Verzonden in {lang}. Toon de tekst die je schreef",
       "translatedFrom": "Vertaald uit {lang}. Toon het origineel",
       "bot": "Bot",
@@ -274,7 +277,75 @@
         "hearts": "Harten en symbolen",
         "objects": "Objecten"
       },
-      "cancelReply": "Antwoord annuleren"
+      "cancelReply": "Antwoord annuleren",
+      "share": {
+        "open": "Een locatie, contact of knoppen delen",
+        "title": "Delen",
+        "eyebrow": "Naar de klant sturen",
+        "close": "Sluiten",
+        "cancel": "Annuleren",
+        "send": "Verzenden",
+        "sending": "Verzenden…",
+        "sent": "Verzonden",
+        "windowHint": "Zoals elk vrij bericht hebben deze een open venster van 24 uur nodig op een WhatsApp Cloud API-nummer.",
+        "tab": {
+          "location": "Locatie",
+          "contacts": "Contact",
+          "buttons": "Knoppen"
+        },
+        "location": {
+          "latitude": "Breedtegraad",
+          "longitude": "Lengtegraad",
+          "name": "Naam van de plek (optioneel)",
+          "address": "Adres (optioneel)",
+          "pasteHint": "Je kunt hier \"28.6139, 77.2090\" uit een kaart plakken."
+        },
+        "contact": {
+          "card": "Contact {n}",
+          "name": "Naam",
+          "org": "Bedrijf (optioneel)",
+          "phone": "Telefoon",
+          "email": "E-mail",
+          "remove": "Contact {n} verwijderen",
+          "add": "Nog een contact toevoegen"
+        },
+        "buttons": {
+          "type": "Soort knop",
+          "kind": {
+            "buttons": "Antwoordknoppen",
+            "cta_url": "Linkknop",
+            "list": "Lijst"
+          },
+          "header": "Koptekst (optioneel)",
+          "body": "Bericht",
+          "footer": "Voettekst (optioneel)",
+          "titles": "Knoppen (maximaal 3)",
+          "titleN": "Knop {n}",
+          "add": "Een knop toevoegen",
+          "linkText": "Knoptekst",
+          "url": "Link",
+          "listButton": "Knop die de lijst opent",
+          "section": "Sectie {n}",
+          "sectionTitle": "Titel van de sectie",
+          "rowTitle": "Titel van rij {n}",
+          "rowDescription": "Beschrijving van rij {n} (optioneel)",
+          "addRow": "Een rij toevoegen",
+          "addSection": "Een sectie toevoegen",
+          "removeSection": "Sectie {n} verwijderen",
+          "rows": "Rijen",
+          "rowCount": "{n} van {max} rijen"
+        },
+        "problem": {
+          "required": "{label} is verplicht",
+          "range": "{label} valt buiten het bereik",
+          "phoneOrEmail": "Voeg een telefoonnummer of e-mailadres toe",
+          "phone": "Voer een geldig telefoonnummer in",
+          "email": "Voer een geldig e-mailadres in",
+          "duplicate": "{label} herhaalt een andere knop",
+          "url": "Voer een link in die begint met http:// of https://",
+          "tooManyRows": "Een lijst bevat in totaal maximaal 10 rijen"
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Notities en tijdlijn",

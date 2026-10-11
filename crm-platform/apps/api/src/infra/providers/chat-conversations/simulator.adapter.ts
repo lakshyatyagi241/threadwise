@@ -55,7 +55,8 @@ const SIMULATOR_CAPABILITIES: ChannelCapabilities = {
   // A WhatsApp-like profile so the screens built against the simulator have the real shape.
   windowHours: 24,
   templates: true,
-  media: ['image', 'video', 'audio', 'document', 'location'],
+  media: ['image', 'video', 'audio', 'document', 'location', 'contact'],
+  interactive: true,
   reactions: true,
   editDelete: false,
   receipts: ['sent', 'delivered', 'read'],

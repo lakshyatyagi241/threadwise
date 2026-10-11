@@ -141,6 +141,9 @@
       },
       "template": "Wiadomość z szablonu: {name}",
       "unavailable": "Wiadomość niedostępna",
+      "unsupported": "Klient wysłał coś, czego ten kanał nie może wyświetlić.",
+      "forwarded": "Przekazano dalej",
+      "referral": "Pochodzi z reklamy lub linku",
       "sentIn": "Wysłano w języku: {lang}. Pokaż tekst, który napisałeś",
       "translatedFrom": "Przetłumaczono z języka: {lang}. Pokaż oryginał",
       "bot": "Bot",
@@ -274,7 +277,75 @@
         "hearts": "Serca i symbole",
         "objects": "Obiekty"
       },
-      "cancelReply": "Anuluj odpowiedź"
+      "cancelReply": "Anuluj odpowiedź",
+      "share": {
+        "open": "Udostępnij lokalizację, kontakt lub przyciski",
+        "title": "Udostępnij",
+        "eyebrow": "Wyślij do klienta",
+        "close": "Zamknij",
+        "cancel": "Anuluj",
+        "send": "Wyślij",
+        "sending": "Wysyłanie…",
+        "sent": "Wysłano",
+        "windowHint": "Jak każda wiadomość dowolna, wymagają otwartego okna 24 godzin na numerze WhatsApp Cloud API.",
+        "tab": {
+          "location": "Lokalizacja",
+          "contacts": "Kontakt",
+          "buttons": "Przyciski"
+        },
+        "location": {
+          "latitude": "Szerokość geograficzna",
+          "longitude": "Długość geograficzna",
+          "name": "Nazwa miejsca (opcjonalnie)",
+          "address": "Adres (opcjonalnie)",
+          "pasteHint": "Możesz tutaj wkleić \"28.6139, 77.2090\" z mapy."
+        },
+        "contact": {
+          "card": "Kontakt {n}",
+          "name": "Imię i nazwisko",
+          "org": "Firma (opcjonalnie)",
+          "phone": "Telefon",
+          "email": "E-mail",
+          "remove": "Usuń kontakt {n}",
+          "add": "Dodaj kolejny kontakt"
+        },
+        "buttons": {
+          "type": "Rodzaj przycisku",
+          "kind": {
+            "buttons": "Przyciski odpowiedzi",
+            "cta_url": "Przycisk z linkiem",
+            "list": "Lista"
+          },
+          "header": "Nagłówek (opcjonalnie)",
+          "body": "Wiadomość",
+          "footer": "Stopka (opcjonalnie)",
+          "titles": "Przyciski (do 3)",
+          "titleN": "Przycisk {n}",
+          "add": "Dodaj przycisk",
+          "linkText": "Tekst przycisku",
+          "url": "Link",
+          "listButton": "Przycisk otwierający listę",
+          "section": "Sekcja {n}",
+          "sectionTitle": "Tytuł sekcji",
+          "rowTitle": "Tytuł wiersza {n}",
+          "rowDescription": "Opis wiersza {n} (opcjonalnie)",
+          "addRow": "Dodaj wiersz",
+          "addSection": "Dodaj sekcję",
+          "removeSection": "Usuń sekcję {n}",
+          "rows": "Wiersze",
+          "rowCount": "{n} z {max} wierszy"
+        },
+        "problem": {
+          "required": "Pole „{label}” jest wymagane",
+          "range": "Pole „{label}” jest poza zakresem",
+          "phoneOrEmail": "Dodaj numer telefonu lub adres e-mail",
+          "phone": "Wpisz prawidłowy numer telefonu",
+          "email": "Wpisz prawidłowy adres e-mail",
+          "duplicate": "Pole „{label}” powtarza inny przycisk",
+          "url": "Wpisz link zaczynający się od http:// lub https://",
+          "tooManyRows": "Lista może zawierać łącznie co najwyżej 10 wierszy"
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Notatki i oś czasu",

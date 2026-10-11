@@ -65,7 +65,7 @@
     },
     "library": {
       "title": "Şablon kütüphanesi",
-      "intro": "WhatsApp mesaj şablonları: yazın, Meta incelemesine gönderin ve durumlarını buradan takip edin.",
+      "intro": "Hazır bir şablon seçin veya kendi şablonunuzu gönderin. Tüm şablonlar Meta tarafından onaylanmadan önce <link>WhatsApp yönergelerine</link> uymalıdır.",
       "sync": "Meta'dan eşitle",
       "syncing": "Eşitleniyor...",
       "syncHint": "Şablonlarınızı Meta'dan getirin",

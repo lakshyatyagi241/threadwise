@@ -24,6 +24,31 @@ import {
 import { DeviceControlService } from '../runtime/device-control.service';
 import { inboxKeys, SENT_MARKER_TTL_S } from './inbox-keys';
 
+/** A vCard 3.0 value: backslash, semicolon, comma and line breaks are escaped so a name can never add a field. */
+const vcardText = (v: string) =>
+  v.replace(/\\/g, '\\\\').replace(/[;,]/g, '\\$&').replace(/\r?\n/g, '\\n');
+
+/** The card of one shared contact; a phone gets `waid` so WhatsApp offers "Message" on it. */
+export function vcardOf(c: {
+  name: string;
+  phones: { phone: string; type?: string | undefined }[];
+  emails: string[];
+  org?: string | undefined;
+}): string {
+  return [
+    'BEGIN:VCARD',
+    'VERSION:3.0',
+    `FN:${vcardText(c.name)}`,
+    ...(c.org ? [`ORG:${vcardText(c.org)}`] : []),
+    ...c.phones.map((p) => {
+      const d = p.phone.replace(/\D+/g, '');
+      return `TEL;type=CELL;waid=${d}:${p.phone.replace(/[^\d+]/g, '')}`;
+    }),
+    ...c.emails.map((e) => `EMAIL:${vcardText(e)}`),
+    'END:VCARD',
+  ].join('\n');
+}
+
 /**
  * What a linked WhatsApp number can do through the inbox. No 24-hour rule and no templates: it is an ordinary WhatsApp account,
  * not the Cloud API. Reactions go out, and edits and deletes are possible on the engine (the inbox does not offer them yet).
@@ -31,7 +56,7 @@ import { inboxKeys, SENT_MARKER_TTL_S } from './inbox-keys';
 const CAPABILITIES: ChannelCapabilities = {
   windowHours: null,
   templates: false,
-  media: ['image', 'video', 'audio', 'document', 'location'],
+  media: ['image', 'video', 'audio', 'document', 'location', 'contact'],
   reactions: true,
   editDelete: true,
   receipts: ['sent', 'delivered', 'read'],
@@ -154,11 +179,28 @@ export class QrChannelAdapter implements ChannelAdapter {
             'Templates are a WhatsApp Cloud API feature; this number sends plain messages',
             false,
           );
-        case 'contacts':
+        case 'contacts': {
+          const cards = envelope.contacts.map((c) => ({ name: c.name, vcard: vcardOf(c) }));
+          providerMessageId = (
+            await this.control.sendMessage(
+              channel.orgId,
+              deviceId,
+              {
+                type: 'contact',
+                to,
+                name: cards[0]!.name,
+                phone: envelope.contacts[0]!.phones[0]?.phone ?? '',
+                cards,
+              },
+              context,
+            )
+          ).providerMessageId;
+          break;
+        }
         case 'interactive':
           throw new ChannelError(
             'CHANNEL_CAPABILITY_UNSUPPORTED',
-            'Contact cards and interactive messages are WhatsApp Cloud API features; this number sends plain messages',
+            'Buttons and lists are WhatsApp Cloud API features; this number sends plain messages',
             false,
           );
       }
