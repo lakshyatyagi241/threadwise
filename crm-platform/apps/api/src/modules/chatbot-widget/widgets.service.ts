@@ -236,10 +236,10 @@ export class WidgetsService {
 
     const row = await this.db.tx(async (tx) => {
       const current = await this.repo.findByUuid(tx, orgId, uuid);
-      // QUIRK: reproduced deliberately (TW-WGT-006 rule 4). Saving with an id that is not in this workspace (another
-      // workspace's widget, a deleted one, one that never existed) silently creates a NEW widget instead of failing, and the
-      // widget that id pointed at is untouched.
-      if (!current) return this.createIn(tx, orgId, ctx.userId, input);
+      // DELIBERATE DEVIATION from Reference (TW-WGT-006 rule 4; authorisation finding AZ-019): Reference silently CREATED a new
+      // widget when the id was not one of the workspace's. An id that is not this workspace's widget (another workspace's,
+      // a deleted one, one that never existed) is now a 404, identical for all three, and nothing is created.
+      if (!current) throw AppError.notFound('Widget', uuid);
       const assistantId = await this.resolveAssistant(tx, orgId, input);
       // A renamed widget keeps its slug (Reference): the address people may have shared does not move.
       const ok = await this.repo.update(

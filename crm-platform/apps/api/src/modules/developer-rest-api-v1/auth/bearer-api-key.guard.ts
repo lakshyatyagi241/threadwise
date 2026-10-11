@@ -8,8 +8,9 @@ import { RequestContextStore } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
+import { RbacService } from '../../../kernel/rbac/rbac.service';
 import { ApiKeyAccessService } from '../../public-api';
-import { grantsForScopes } from './api-key-grants';
+import { SCOPE_PERMISSIONS, capGrantsToOwner, grantsForScopes } from './api-key-grants';
 import { API_SCOPE_KEY, scopeAllows } from './api-scope';
 import { keyPrefixOf, looksLikeRawKey, rawKeyMatches } from '../keys/api-key-secret';
 
@@ -45,6 +46,7 @@ export class BearerApiKeyGuard implements CanActivate {
     private readonly db: DatabaseService,
     private readonly access: ApiKeyAccessService,
     private readonly reflector: Reflector,
+    private readonly rbac: RbacService,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
   ) {}
 
@@ -104,7 +106,22 @@ export class BearerApiKeyGuard implements CanActivate {
     ctx.actorId = key.id;
     // The key acts as the member who minted it, so what it creates is theirs (Reference `user_id`).
     ctx.userId = key.owner_id;
-    ctx.grants = grantsForScopes(key.scopes);
+    ctx.grants = capGrantsToOwner(
+      grantsForScopes(key.scopes),
+      await this.rbac.grantsForUser(key.org_id, key.owner_id),
+    );
+    // AZ-001: the resource services read grants only for record scope, so the key's reach is enforced here: the member the key acts as
+    // must still hold every permission behind the route's scope. A key minted by a member without them (or after a demotion) is refused.
+    if (required) {
+      const lacking = SCOPE_PERMISSIONS[required].find((p) => !ctx.grants?.has(p));
+      if (lacking) {
+        throw new AppError(
+          ERROR_CODES.FORBIDDEN,
+          `The member this API key acts as no longer has access to this endpoint (needs "${required}").`,
+          403,
+        );
+      }
+    }
     ctx.ip = ip;
 
     await this.access.assertPlanFeatures(context, key.org_id);

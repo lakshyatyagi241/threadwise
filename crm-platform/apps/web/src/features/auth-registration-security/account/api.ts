@@ -126,16 +126,6 @@ export const authApi = {
       schema: mfaEnableResponseSchema,
     }),
 
-  /** One page of the device list (ten rows, the current device first); pass the previous page's `nextCursor` for the next. */
-  sessions: (cursor?: string) =>
-    apiFetch('/account/sessions', {
-      query: { limit: SESSIONS_PER_PAGE, cursor },
-      schema: sessionListResponseSchema,
-    }),
-  revokeSession: (id: string) =>
-    apiFetch(`/account/sessions/${encodeURIComponent(id)}`, { method: 'DELETE', schema: okSchema }),
-  revokeOtherSessions: () =>
-    apiFetch('/account/sessions/revoke-others', {
   /** Passkeys sit next to the authenticator app: the list, then the three calls that change it. */
   passkeys: () => apiFetch('/account/passkeys', { schema: passkeyListResponseSchema }),
   /** `password` only when the API asked for it (403 AUTH_REAUTH_REQUIRED). */
@@ -154,6 +144,16 @@ export const authApi = {
       schema: okSchema,
     }),
 
+  /** One page of the device list (ten rows, the current device first); pass the previous page's `nextCursor` for the next. */
+  sessions: (cursor?: string) =>
+    apiFetch('/account/sessions', {
+      query: { limit: SESSIONS_PER_PAGE, cursor },
+      schema: sessionListResponseSchema,
+    }),
+  revokeSession: (id: string) =>
+    apiFetch(`/account/sessions/${encodeURIComponent(id)}`, { method: 'DELETE', schema: okSchema }),
+  revokeOtherSessions: () =>
+    apiFetch('/account/sessions/revoke-others', {
       method: 'POST',
       body: {},
       schema: revokeOthersResponseSchema,

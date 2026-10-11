@@ -53,14 +53,26 @@ export class ContactLinkService {
   async resolve(invitee: InviteeFacts, hostUuid: string | null): Promise<number | null> {
     if (!invitee.email && !invitee.phone) return null;
     try {
-      const created = await this.contacts.create({
-        name: invitee.name ?? undefined,
-        email: invitee.email ?? undefined,
-        phone: invitee.phone ?? undefined,
-        ownerId: hostUuid ?? undefined,
-        source: 'appointment',
-        customFields: {},
-      });
+      const make = (ownerId: string | undefined) =>
+        this.contacts.create({
+          name: invitee.name ?? undefined,
+          email: invitee.email ?? undefined,
+          phone: invitee.phone ?? undefined,
+          ownerId,
+          source: 'appointment',
+          customFields: {},
+        });
+      let created;
+      try {
+        created = await make(hostUuid ?? undefined);
+      } catch (err) {
+        // AZ-007: a caller whose record scope does not reach the host (own scope, or a host outside their teams) may not
+        // hand a contact to them. The booking still goes ahead; the contact is then owned by the caller, as for any create.
+        if (!(hostUuid && err instanceof AppError && err.getStatus() === HttpStatus.FORBIDDEN)) {
+          throw err;
+        }
+        created = await make(undefined);
+      }
       return await this.idOf(created.id);
     } catch (err) {
       if (err instanceof AppError && err.code === ERROR_CODES.PLAN_LIMIT_REACHED) {
