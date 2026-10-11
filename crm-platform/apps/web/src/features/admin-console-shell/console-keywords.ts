@@ -88,6 +88,8 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
   'settings-flow-builder': 'flow builder simple advanced canvas automation chatbot step by step',
   'settings-catalog': 'catalog catalogue whatsapp commerce products meta',
   'ai-keys': 'ai keys api keys openai anthropic gemini llm provider token voice',
+  'faq-engine':
+    'faq faqs knowledge base questions answers embedding embeddings vector semantic matching openrouter threshold reindex',
   'settings-privacy': 'privacy gdpr ada cookies consent accessibility data protection',
   'settings-analytics': 'analytics google analytics tag manager pixel tracking facebook',
   'settings-custom': 'custom code css javascript scripts head body snippet',

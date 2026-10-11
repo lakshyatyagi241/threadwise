@@ -1,0 +1,172 @@
+{
+  "faq-knowledge-admin": {
+    "nav": {
+      "group": "AI",
+      "engine": "FAQ-engine"
+    },
+    "common": {
+      "loading": "Laden",
+      "retry": "Opnieuw proberen",
+      "requestId": "Verzoek-id",
+      "dash": "-",
+      "cancel": "Annuleren",
+      "errors": {
+        "forbidden": "Je hebt geen toestemming om dit te doen.",
+        "request": "Dat verzoek kon niet worden voltooid.",
+        "unexpected": "Er ging iets mis aan onze kant. Probeer het zo meteen opnieuw.",
+        "network": "De server is niet bereikbaar. Controleer je verbinding en probeer het opnieuw.",
+        "validation": "Sommige waarden zijn niet geldig. Controleer de gemarkeerde velden.",
+        "modelNotAllowed": "Dat AI-model staat niet op de lijst met toegestane modellen. Laad de pagina opnieuw en kies er een uit de lijst.",
+        "notFound": "Dat item bestaat niet meer."
+      }
+    },
+    "page": {
+      "eyebrow": "Beheer · AI · FAQ-engine",
+      "title": "FAQ-engine",
+      "description": "Bepaalt hoe de FAQ's van elke workspace worden gekoppeld aan klantberichten: de schakelaar, het AI-model voor matching, de limieten en de gezondheid van de index.",
+      "superOnly": "Alleen een superbeheerder kan de FAQ-engine bekijken of wijzigen."
+    },
+    "status": {
+      "label": "Enginestatus",
+      "engine": {
+        "title": "Engine",
+        "on": "Aan",
+        "off": "Uit",
+        "hintOn": "{count, plural, one {# workspace heeft FAQ's ingeschakeld} other {# workspaces hebben FAQ's ingeschakeld}}",
+        "hintOff": "Geen enkele workspace antwoordt vanuit FAQ's en bewerkingen zijn geblokkeerd."
+      },
+      "key": {
+        "title": "OpenRouter-sleutel van het platform",
+        "ready": "Gereed",
+        "missing": "Ontbreekt",
+        "explainReady": "Workspaces die geen eigen OpenRouter-sleutel hebben opgeslagen, gebruiken deze om vectoren te maken en te vergelijken.",
+        "explainMissing": "Workspaces die geen eigen OpenRouter-sleutel hebben opgeslagen, zijn van deze sleutel afhankelijk. Zonder kunnen ze geen vectoren maken en valt matching terug op spellingsgelijkenis.",
+        "link": "Voeg de sleutel toe bij AI-providersleutels"
+      },
+      "model": {
+        "title": "AI-model in gebruik",
+        "dimensions": "{count, number} dimensies",
+        "unknown": "Niet op de lijst met toegestane modellen"
+      },
+      "index": {
+        "title": "Indexgezondheid",
+        "ready": "Gereed",
+        "waiting": "Wachten",
+        "failed": "Mislukt",
+        "stale": "{count, plural, one {# vector hoort bij een ouder model en komt nergens mee overeen totdat hij opnieuw is aangemaakt} other {# vectoren horen bij een ouder model en komen nergens mee overeen totdat ze opnieuw zijn aangemaakt}}",
+        "totals": "{faqs, number} FAQ's · {variations, number} varianten"
+      },
+      "activity": {
+        "title": "Laatste 30 dagen",
+        "matches": "Gecontroleerde klantberichten",
+        "answered": "Beantwoord",
+        "rate": "Antwoordpercentage",
+        "tokens": "Embedding-tokens"
+      }
+    },
+    "settings": {
+      "title": "Instellingen",
+      "description": "Geldt voor elke workspace. Alleen de velden die je wijzigt, worden opgeslagen.",
+      "engine": {
+        "label": "FAQ-engine",
+        "hint": "Zet dit uit om te voorkomen dat workspaces met FAQ's antwoorden. Bewerkingen zijn geblokkeerd zolang het uitstaat."
+      },
+      "embeddingModel": {
+        "label": "AI-model voor matching",
+        "hint": "Zet elke vraag om in getallen, zodat vergelijkbare formuleringen kunnen worden gevonden.",
+        "option": "{label} · {price} per miljoen tokens · voorgestelde drempel {threshold}",
+        "unknownOption": "{id} (niet op de lijst met toegestane modellen)",
+        "details": "{dimensions, number} dimensies · {price} per miljoen tokens · voorgestelde drempel {threshold}",
+        "saved": "Opgeslagen model"
+      },
+      "generationModel": {
+        "label": "Generatiemodel",
+        "hint": "De OpenRouter-model-id die variantsuggesties schrijft, bijvoorbeeld openai/gpt-4o-mini.",
+        "placeholder": "openai/gpt-4o-mini"
+      },
+      "threshold": {
+        "label": "Standaarddrempel voor overeenkomst",
+        "hint": "Een bericht komt overeen als de score minstens zo hoog is. Wordt alleen gebruikt door workspaces die nooit een eigen drempel hebben opgeslagen. Scores hangen af van het AI-model.",
+        "value": "{value}",
+        "follow": "Het model volgen",
+        "followHint": "De standaardgevoeligheid is de aanbevolen waarde van het model ({value}) en verandert mee als het model wijzigt. Zet uit om een vast getal in te stellen."
+      },
+      "limits": {
+        "title": "Limieten",
+        "maxFaqs": "Maximum aantal FAQ's per workspace",
+        "maxVariationsPerFaq": "Maximum aantal varianten per FAQ",
+        "semanticPerHour": "Semantische matches per workspace per uur",
+        "semanticPerHourHint": "Daarna valt een workspace de rest van het uur terug op spellingsgelijkenis. 0 betekent altijd spellingsgelijkenis."
+      },
+      "errors": {
+        "integer": "Voer een geheel getal in.",
+        "range": "Voer een waarde tussen {min} en {max} in.",
+        "modelId": "Gebruik een OpenRouter-model-id zoals openai/gpt-4o-mini.",
+        "invalid": "Deze waarde is niet geldig."
+      },
+      "unchanged": "Geen wijzigingen om op te slaan.",
+      "changed": "{count, plural, one {# wijziging klaar om op te slaan} other {# wijzigingen klaar om op te slaan}}",
+      "save": "Wijzigingen opslaan",
+      "saving": "Opslaan",
+      "reset": "Wijzigingen verwerpen",
+      "saved": "Instellingen opgeslagen.",
+      "confirm": {
+        "title": "Controleren voor het opslaan",
+        "confirm": "Wijzigingen opslaan",
+        "engineOff": "Als je de engine uitzet, antwoordt geen enkele workspace meer vanuit FAQ's en zijn FAQ-bewerkingen geblokkeerd totdat je hem weer aanzet.",
+        "modelChange": "Het AI-model wijzigen van {from} naar {to} zorgt dat elke opgeslagen vector opnieuw wordt gemaakt. Tot dat klaar is, gebruikt matching alleen spellingsgelijkenis. De standaardgevoeligheid volgt het nieuwe model (aanbevolen {threshold}), tenzij je een vaste waarde instelt. Drempels die een workspace zelf heeft opgeslagen, moeten mogelijk opnieuw worden afgesteld, omdat scores met het model veranderen."
+      }
+    },
+    "maintenance": {
+      "title": "Onderhoud",
+      "description": "Maak de index opnieuw aan als iets niet klopt. Het werk draait op de achtergrond.",
+      "progress": "{ready, number} van {total, number} gereed",
+      "progressLabel": "Indexeervoortgang",
+      "polling": "Ververst elke 5 seconden zolang er {count, number} wachten.",
+      "idle": "Er wacht niets op indexering.",
+      "reindexAll": "Alles opnieuw indexeren",
+      "retryFailed": "Mislukte opnieuw proberen",
+      "retryFailedNone": "Geen mislukte vectoren om opnieuw te proberen.",
+      "confirmAll": {
+        "title": "Alles opnieuw indexeren?",
+        "message": "Elke opgeslagen vector wordt opnieuw gemaakt met het huidige model. Voor de rijen die nog niet gereed zijn, gebruikt matching spellingsgelijkenis, en embedding-tokens worden opnieuw in rekening gebracht.",
+        "confirm": "Alles opnieuw indexeren"
+      },
+      "confirmFailed": {
+        "title": "De mislukte vectoren opnieuw proberen?",
+        "message": "Alleen de vectoren die het hebben opgegeven, worden opnieuw in de wachtrij gezet. Controleer eerst de OpenRouter-sleutel van het platform als ze blijven mislukken.",
+        "confirm": "Mislukte opnieuw proberen"
+      },
+      "queued": "{count, plural, =0 {Niets in de wachtrij gezet.} one {# vector in de wachtrij gezet.} other {# vectoren in de wachtrij gezet.}}"
+    },
+    "workspaces": {
+      "title": "Workspaces",
+      "description": "Drukste eerst. Ingeschakelde workspaces komen vóór de rest.",
+      "search": "Workspaces zoeken",
+      "searchPlaceholder": "Naam van workspace",
+      "limit": "Rijen",
+      "limitOption": "{count, number} rijen",
+      "tableLabel": "Workspaces op FAQ-activiteit",
+      "columns": {
+        "name": "Workspace",
+        "enabled": "FAQ's",
+        "faqs": "Geschreven FAQ's",
+        "variations": "Varianten",
+        "indexing": "Indexeren",
+        "matches": "Matches (30 dagen)",
+        "answered": "Beantwoord (30 dagen)"
+      },
+      "enabled": "Aan",
+      "disabled": "Uit",
+      "upToDate": "Bijgewerkt",
+      "pending": "{count, number} wachten",
+      "failed": "{count, number} mislukt",
+      "answered": "{count, number} ({rate})",
+      "emptyTitle": "Nog geen workspaces",
+      "emptyMessage": "Workspaces verschijnen hier zodra ze bestaan.",
+      "noMatchTitle": "Geen workspace komt overeen met die zoekopdracht",
+      "noMatchMessage": "Controleer de spelling of wis het zoekveld.",
+      "clearSearch": "Zoekopdracht wissen"
+    }
+  }
+}

@@ -140,6 +140,7 @@ export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
       'settings-google-calendar',
       'settings-flow-builder',
       'ai-keys',
+      'faq-engine',
       'settings-privacy',
       'settings-analytics',
       'settings-custom',

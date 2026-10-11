@@ -21,6 +21,7 @@ import { WAP_OPERATOR_NAV } from '../../whatsapp-providers/operator-nav';
 import { CAT_OPERATOR_NAV } from '../../catalog-products/operator-nav';
 import { MARKET_OPERATOR_NAV } from '../../marketplace/operator-nav';
 import { SUPP_OPERATOR_NAV } from '../../platform-support-desk/operator-nav';
+import { FAQ_OPERATOR_NAV } from '../../faq-knowledge/platform/operator-nav';
 
 const NS = 'auth-registration-security.platform.nav';
 const BSP = 'bsp-billing-engine.nav';
@@ -132,6 +133,8 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     labelKey: 'ai-keys-usage-admin.admin.nav.dashboard',
     groupKey: 'ai-keys-usage-admin.admin.nav.group',
   },
+  // FAQ engine (FAQ, not a WaDesk feature): messages/en/faq-knowledge-admin.json
+  ...FAQ_OPERATOR_NAV,
   // Webhook forwarding (WFWD, not a WaDesk feature): messages/en/webhook-fanout.json
   {
     id: 'webhook-forwarding',
