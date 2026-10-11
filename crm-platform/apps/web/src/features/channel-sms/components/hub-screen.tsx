@@ -46,7 +46,7 @@ export function HubScreen() {
   };
 
   return (
-    <main className="mx-auto max-w-none space-y-6 px-4 py-7 sm:px-6 lg:px-7">
+    <div className="mx-auto max-w-none space-y-6 px-4 py-7 sm:px-6 lg:px-7">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="min-w-0">
           <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
@@ -70,7 +70,7 @@ export function HubScreen() {
         </div>
       </div>
 
-      {senders.isError && <Alert tone="danger">{t('loadError')}</Alert>}
+      {(senders.isError || senders.failureCount > 0) && <Alert tone="danger">{t('loadError')}</Alert>}
 
       <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[320px_1fr]">
         <aside className="space-y-5 lg:sticky lg:top-6">
@@ -155,11 +155,11 @@ export function HubScreen() {
                 {t('total', { count: list.length })}
               </span>
             </div>
-            {senders.isLoading ? (
+            {senders.isLoading && senders.failureCount === 0 ? (
               <div className="flex justify-center py-6">
                 <Spinner />
               </div>
-            ) : list.length === 0 ? (
+            ) : senders.isLoading ? null : list.length === 0 ? (
               <div className="rounded-2xl border border-dashed border-border p-6 text-center">
                 <p className="text-sm text-muted-foreground">{t('empty')}</p>
                 {canManage && (
@@ -200,6 +200,6 @@ export function HubScreen() {
           </section>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

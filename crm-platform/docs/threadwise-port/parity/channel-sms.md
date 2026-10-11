@@ -62,3 +62,32 @@ against a live Twilio or MSG91 account):
 
 Everything provider-side: Twilio and MSG91 were only exercised through scripted HTTP. MSG91's request and response shapes (flow route, plain route,
 balance check, delivery-report fields and codes) come from its public documentation, as in Reference, and need a sandbox test before launch.
+
+## Twin run (Playwright, Reference vs ours) — TW-SMS-001/002/008, the `/sms` hub and connect form
+
+Run 2026-10-11 against the running Reference and this checkout (depth `full`, 12 scenarios per side: page probes, hub structure, connect-form structure,
+empty submit, script-in-From, lookup guard). Spec: `apps/web/e2e/channel-sms/parity/TW-SMS-001.twin.mjs`. Final verdict: same 82, intended 6, defects 0,
+review 3 (shell structure counts, decided: ignore).
+
+Defects found in the first run and fixed:
+
+- `sms-hub.degraded`: with the senders request failing, "Connected numbers" kept a spinner during the retries. It now shows the load error and no spinner.
+- `sms-hub.a11y`: the hub drew its own `<main>` inside the shell's `<main>` (duplicate main landmark). Now a plain container.
+- Spec issues (our fields are matched by id, not by name) were fixed in the spec, not the app.
+
+| #   | Criterion / UX item                                | Reference                     | Ours                         | Result   | Note                                                                                       |
+| --- | -------------------------------------------------- | ----------------------------- | ---------------------------- | -------- | ------------------------------------------------------------------------------------------ |
+| 1   | Hub sections, lookup tool, connect button          | present                       | present                      | same     |                                                                                            |
+| 2   | Connect form fields, kinds, length limits, options | 8 fields, Twilio/MSG91        | same                         | same     |                                                                                            |
+| 3   | Empty From submit                                  | refused, nothing saved        | refused, nothing saved       | same     |                                                                                            |
+| 4   | Script typed in From                               | never executed                | never executed               | same     |                                                                                            |
+| 5   | Lookup with a blank number                         | no crash                      | no crash                     | same     |                                                                                            |
+| 6   | Page probes (load, auth, perf, degraded, a11y)     | equivalent                    | equivalent                   | same     |                                                                                            |
+| 7   | Inbound webhook URL / reply-from-inbox copy        | shown                         | not shown                    | intended | owner decision: SMS is send-only                                                           |
+| 8   | Two 19-20px breadcrumb links                       | none                          | present                      | intended | shared settings-hub breadcrumb on every Settings tile screen, outside the SMS zone        |
+| 9   | One Tab stop without a focus ring                  | none                          | Next.js dev overlay portal   | intended | dev-server artifact (measured); every SMS control shows a ring                             |
+| 10  | Pagination kind                                    | load more                     | none                         | intended | cursor pagination rule                                                                     |
+
+Not compared by the twin (and why): a valid connect, toggle and remove (they call Twilio/MSG91; covered by the API e2e against a fake provider), the campaign
+SMS sender and segment counter (a Reference campaign needs a live sender), and the operator `/admin/sms` switch (Reference has no counterpart screen; covered by
+`sms-platform.e2e.spec.ts`).
