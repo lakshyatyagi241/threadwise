@@ -549,7 +549,12 @@
           "cardGallery": "Galeria de cartões",
           "cardCount": "{count} cartão(ões)",
           "payLink": "Link de pagamento",
-          "invoice": "Fatura"
+          "invoice": "Fatura",
+          "faqAllFaqs": "Todas as FAQs",
+          "faqCategory": "FAQs da categoria {name}",
+          "faqScore": "pontuação mín. {score}",
+          "faqWorkspaceScore": "pontuação do workspace",
+          "faqNotSent": "não enviada"
         },
         "overlays": {
           "startPinned": "Este é o ponto de partida (clique para desafixar)",
@@ -704,9 +709,11 @@
           "groups": {
             "send": "Enviar",
             "ask": "Perguntar ao cliente",
-            "handoff": "Transferir"
+            "handoff": "Transferir",
+            "answer": "Responder"
           },
-          "blockedTitle": "Botões e listas encerram um fluxo, então só podem ficar por último."
+          "blockedTitle": "Botões e listas encerram um fluxo, então só podem ficar por último.",
+          "blockedTitleFaq": "Responder com FAQ tem duas saídas, por isso só pode ficar por último."
         },
         "card": {
           "branchLabel": "{title} → {target}",
@@ -715,7 +722,11 @@
           "moveUp": "Mover para cima",
           "moveDown": "Mover para baixo",
           "duplicate": "Duplicar",
-          "deleteStep": "Excluir etapa"
+          "deleteStep": "Excluir etapa",
+          "faqExits": {
+            "matched": "Respondida",
+            "no_match": "Sem correspondência"
+          }
         },
         "editors": {
           "linkLabel": "Para onde isto leva",
@@ -831,8 +842,19 @@
           "cta": {
             "buttonText": "Texto do botão",
             "opens": "Abre (link)"
+          },
+          "faq": {
+            "exits": {
+              "matched": "Se uma FAQ respondeu, ir para",
+              "no_match": "Se nenhuma FAQ respondeu, ir para"
+            },
+            "exitsHint": {
+              "matched": "Nesse ponto, uma resposta em texto já foi enviada. Uma FAQ que inicia um fluxo continua nesse fluxo.",
+              "no_match": "Nada foi parecido o bastante, ou a resposta automática com FAQ está desativada."
+            }
           }
-        }
+        },
+        "faqEnds": "Esta etapa encerra esta parte: o que é enviado depois depende de uma FAQ ter respondido ou não."
       },
       "formsCore": {
         "helpers": {
@@ -1765,6 +1787,44 @@
           "afterSending": "Após o envio",
           "afterSendingHint": "Ligado: o fluxo pausa aqui e só segue pela saída \"out\" depois que o cliente pagar (o valor chega como {paidAmount} {paidCurrency}). Desligado: a fatura é enviada e o fluxo continua imediatamente.",
           "waitUntilPaid": "Aguardar o pagamento e depois continuar"
+        },
+        "faq": {
+          "intro": {
+            "body": "Compara uma mensagem com suas FAQs pelo significado e a responde. Sai por <mono>respondida</mono> quando uma FAQ respondeu, e por <mono>sem correspondência</mono> caso contrário.",
+            "sub": "Funciona sem ativar a resposta automática com FAQ. <link>Gerenciar suas FAQs</link>"
+          },
+          "exitsLabel": "Saídas",
+          "exitMatchedName": "Respondida",
+          "exitMatched": "uma FAQ respondeu: o texto dela foi enviado (a menos que o envio esteja desativado), ou o fluxo dela assumiu e não volta.",
+          "exitNoMatchName": "Sem correspondência",
+          "exitNoMatch": "nada foi parecido o bastante, a resposta com FAQ está desativada na plataforma, o fluxo ou a etapa vinculada não existe mais, ou a mensagem estava vazia.",
+          "noFaqs": "Você ainda não tem FAQs, então esta etapa sempre sai por sem correspondência. <link>Adicione sua primeira FAQ</link>",
+          "query": "Mensagem a comparar",
+          "queryHint": "Por padrão, é a última mensagem do cliente. Uma variável salva por uma etapa de Pergunta também funciona, por exemplo <mono>{variable}</mono>. Digite / para inserir uma.",
+          "category": "Somente estas FAQs",
+          "allFaqs": "Todas as FAQs",
+          "loadingCategories": "Carregando categorias…",
+          "categoryGone": "{name} (nenhuma FAQ a usa)",
+          "categoryHint": "Somente FAQs desta categoria podem responder. As categorias vêm das suas FAQs.",
+          "categoriesFailed": "Não foi possível carregar as categorias das suas FAQs.",
+          "retry": "Tentar novamente",
+          "minScore": "Pontuação mínima",
+          "useWorkspaceScore": "Usar a configuração do workspace",
+          "minScoreHint": "Substitui a pontuação do workspace somente nesta etapa, de {min} a {max}. As pontuações dependem do modelo de embeddings da plataforma, então teste uma mensagem em <link>Teste de FAQ</link> antes de escolher um número.",
+          "minScoreInvalid": "Digite um número de {min} a {max}, ou use a configuração do workspace.",
+          "sendAnswer": "Enviar a resposta ao cliente",
+          "sendAnswerToggle": "Enviar como mensagem a resposta de texto correspondente",
+          "sendAnswerOnHint": "A FAQ de texto correspondente é enviada ao cliente. Uma FAQ que inicia um fluxo continua nesse fluxo.",
+          "sendAnswerOffHint": "Nada é enviado: a resposta é apenas salva nas variáveis abaixo, para que uma etapa posterior redija a resposta. Uma FAQ que inicia um fluxo ainda continua nesse fluxo.",
+          "save": "Salvar o resultado como",
+          "saveHint": "O nome sob o qual o resultado é salvo. As etapas seguintes o leem como mostrado abaixo.",
+          "variables": {
+            "answer": "o texto da resposta",
+            "matched": "sim ou não",
+            "question": "a pergunta da FAQ correspondente",
+            "score": "o quão próxima foi a correspondência",
+            "id": "o id da FAQ correspondente"
+          }
         }
       },
       "attrPicker": {
@@ -2100,6 +2160,10 @@
         "api_library": {
           "label": "API (da biblioteca)",
           "description": "Chamar uma API salva da Biblioteca de API"
+        },
+        "faq": {
+          "label": "Responder com FAQ",
+          "description": "Compara uma mensagem com suas FAQs"
         }
       },
       "groups": {
@@ -2242,7 +2306,8 @@
         "wrongChannel": "“{node}” não funciona em {channel} — exclua-o ou reative o canal no nó Gatilho.",
         "noSenderInstagram": "O nó Gatilho não tem conta do Instagram selecionada — escolha uma na etapa Gatilho.",
         "noSenderFacebook": "O nó Gatilho não tem Página do Facebook selecionada — escolha uma na etapa Gatilho.",
-        "noSenderNumber": "O nó Gatilho não tem número selecionado — escolha um na etapa Gatilho."
+        "noSenderNumber": "O nó Gatilho não tem número selecionado — escolha um na etapa Gatilho.",
+        "faqMinScore": "“{node}” tem uma pontuação mínima fora do intervalo de 0.05 a 0.99. Corrija-a ou deixe em branco para usar a configuração do workspace."
       }
     },
     "simpleModel": {
@@ -2321,6 +2386,10 @@
         "askLocation": {
           "label": "Localização do cliente",
           "help": "Aguardar o cliente compartilhar uma localização"
+        },
+        "faq": {
+          "label": "Responder com FAQ",
+          "help": "Compara a mensagem do cliente com suas FAQs. Encerra este fluxo: uma saída se uma FAQ respondeu, outra se não"
         }
       },
       "typeLabel": {
@@ -2335,7 +2404,8 @@
         "location": "Localização",
         "template": "Modelo",
         "cta": "Botão de link",
-        "assign": "Atribuir a um atendente"
+        "assign": "Atribuir a um atendente",
+        "faq": "Responder com FAQ"
       },
       "stepLabel": {
         "questionOf": "Pergunta · {kind}"
@@ -2372,8 +2442,10 @@
         "addRow": "Etapa {stage}: adicione pelo menos uma linha.",
         "rowTitle": "Etapa {stage}: cada linha precisa de um título de até {max} caracteres.",
         "rowDescriptionTooLong": "Etapa {stage}: a descrição de uma linha tem mais de {max} caracteres.",
-        "variableUsed": "Etapa {stage}: “{name}” já é usado pela etapa {other}; dê a cada resposta o seu próprio nome."
-      }
+        "variableUsed": "Etapa {stage}: “{name}” já é usado pela etapa {other}; dê a cada resposta o seu próprio nome.",
+        "faqMinScore": "Etapa {stage}: a pontuação mínima deve estar entre 0.05 e 0.99, ou use a configuração do workspace."
+      },
+      "faqSummary": "{hasCategory, select, true {Das suas FAQs · {category}} other {Das suas FAQs}}"
     },
     "waboImport": {
       "notes": {
@@ -2480,7 +2552,9 @@
       "optionNotConnected": "Saída \"{port}\" (opção {n}) não conectada — parar.",
       "buttonNotConnected": "Botão \"{label}\" não conectado — parar.",
       "simPurchase": "Compra simulada: {name} → saída \"comprado\"",
-      "simAbandon": "Abandono simulado → saída \"abandonado\""
+      "simAbandon": "Abandono simulado → saída \"abandonado\"",
+      "faqAnswered": "(simulado) Responder com FAQ para “{query}”: o chat de teste não consulta suas FAQs, então nada é enviado e {ref} fica vazio. Seguindo pela saída “respondida”.",
+      "faqNoMatch": "(simulado) Responder com FAQ para “{query}”: o chat de teste não consulta suas FAQs e a saída “respondida” não está conectada, então seguindo por “sem correspondência”. {ref} fica vazio."
     }
   }
 }

@@ -61,7 +61,9 @@
         "matches": "已检查的客户消息",
         "answered": "已回答",
         "rate": "回答率",
-        "tokens": "嵌入 token"
+        "tokens": "嵌入 token",
+        "verified": "二次核对",
+        "vetoed": "已拦截的回答"
       }
     },
     "settings": {
@@ -96,7 +98,8 @@
         "maxFaqs": "每个工作区的 FAQ 数量上限",
         "maxVariationsPerFaq": "每个 FAQ 的变体数量上限",
         "semanticPerHour": "每个工作区每小时的语义匹配次数",
-        "semanticPerHourHint": "超过后，工作区在当前小时的剩余时间会退回到拼写相似度。0 表示始终使用拼写相似度。"
+        "semanticPerHourHint": "超过后，工作区在当前小时的剩余时间会退回到拼写相似度。0 表示始终使用拼写相似度。",
+        "verifyPerHour": "每个工作区每小时的二次核对次数"
       },
       "errors": {
         "integer": "请输入整数。",
@@ -115,6 +118,19 @@
         "confirm": "保存更改",
         "engineOff": "关闭引擎后，所有工作区都将停止用 FAQ 回答客户，并且在重新开启之前无法编辑 FAQ。",
         "modelChange": "将嵌入模型从 {from} 更换为 {to} 后，所有已存储的向量都会重新生成。完成之前，匹配只使用拼写相似度。除非你设置了固定值，默认灵敏度将跟随新模型（推荐 {threshold}）。单独保存过的工作区阈值可能需要重新调整，因为得分会随模型变化。"
+      },
+      "verify": {
+        "title": "对临界匹配进行二次核对",
+        "description": "小型聊天模型会再次核对刚刚达到工作区阈值的匹配，它只能拦截回答。各工作区在自己的 FAQ 设置中开启。",
+        "enabled": {
+          "label": "允许二次核对",
+          "hint": "关闭后，所有工作区都将停止核对，无论它们如何设置。"
+        },
+        "model": {
+          "label": "核对模型",
+          "hint": "用于判断临界匹配的 OpenRouter 模型 ID，例如 openai/gpt-4o-mini。小型快速的模型即可。"
+        },
+        "perHourHint": "超过此数量后，当前小时内的临界匹配将不再核对，直接生效。0 表示从不核对。"
       }
     },
     "maintenance": {

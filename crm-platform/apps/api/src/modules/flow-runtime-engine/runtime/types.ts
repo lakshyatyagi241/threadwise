@@ -154,7 +154,14 @@ export type NodeResult =
   | { kind: 'park' }
   | { kind: 'end'; reason: FlowRunEndReason }
   /** Sub-flow (TW-FLR-031): replace the running graph with another flow's, keep the variables, start at its first node. */
-  | { kind: 'subflow'; flowId: number | string }
+  /** `startNodeId`: enter the flow at that node instead of its first one (the FAQ's "link to node"). `missPort`: the exit taken when the flow or node cannot be entered (default 1); `missVars`: variables set only in that case. */
+  | {
+      kind: 'subflow';
+      flowId: number | string;
+      startNodeId?: string;
+      missPort?: number;
+      missVars?: Record<string, unknown>;
+    }
   | { kind: 'halt'; reason: string }
   | { kind: 'fail'; code: string; reason: string };
 

@@ -17,6 +17,16 @@ import {
   askInputWrongText,
   dateFormatLabel,
 } from '../../lib/contract-text';
+import {
+  FAQ_DEFAULT_QUERY,
+  FAQ_MIN_SCORE,
+  FAQ_MIN_SCORE_START,
+  FAQ_VARIABLES,
+  faqSaveName,
+  hasOwnMinScore,
+  minScoreOutOfRange,
+} from '../../lib/faq-node';
+import { useFaqSummary } from '../../api/hooks';
 import { renderMsg, useFlb } from '../../lib/msg';
 import { usePickerFeed } from '@/features/contacts-attributes-tags';
 import { Field, Input, Select, Textarea } from '@crm/ui';
@@ -140,6 +150,8 @@ export function StepEditor(p: EditorProps) {
       return <CtaEditor {...p} />;
     case 'assign':
       return <AssignEditor {...p} />;
+    case 'faq':
+      return <FaqEditor {...p} />;
   }
 }
 
@@ -608,6 +620,137 @@ function VarField({
         onChange={(e) => set({ var: slug(e.target.value) })}
       />
     </Field>
+  );
+}
+
+/**
+ * "Answer from FAQ": the same settings as the Advanced form, and one "where it leads" for each of its two exits (an FAQ answered / no
+ * FAQ answered). Like buttons and lists it ends its part of the flow: a flow FAQ continues in its own flow and does not come back.
+ */
+function FaqEditor({ step, doc, set, link }: EditorProps) {
+  // The settings read the Advanced form's texts (one translation each); only the two "where it leads" lines are Simple's own.
+  const t = useTranslations('flb.builder.formsChannels.faq');
+  const ts = useTranslations('flb.builder.simple.editors.faq');
+  const summary = useFaqSummary();
+  const categories = summary.data?.categories ?? [];
+  const category = str(step.data.category);
+  const own = hasOwnMinScore(step.data.minScore);
+  const outOfRange = minScoreOutOfRange(step.data.minScore);
+  const send = step.data.sendAnswer !== false;
+  const save = faqSaveName(step.data.save);
+  const code = (c: ReactNode) => <code className="font-mono">{c}</code>;
+  const page = (href: string) =>
+    function PageLink(c: ReactNode) {
+      return (
+        <a href={href} target="_blank" rel="noreferrer" className="text-brand underline">
+          {c}
+        </a>
+      );
+    };
+  return (
+    <div className="space-y-3">
+      <p className="text-[12px] text-muted-foreground">{t.rich('intro.body', { mono: code })}</p>
+      {summary.isSuccess && summary.data.total === 0 ? (
+        <p role="note" className="rounded-xl bg-muted p-2.5 text-[12px]">
+          {t.rich('noFaqs', { link: page('/faq/new') })}
+        </p>
+      ) : null}
+      <Field label={t('query')} hint={t.rich('queryHint', { mono: code, variable: '{{answer}}' })}>
+        <Input
+          className="font-mono"
+          value={str(step.data.query)}
+          placeholder={FAQ_DEFAULT_QUERY}
+          onChange={(e) => set({ query: e.target.value })}
+        />
+      </Field>
+      <Field
+        label={t('category')}
+        hint={
+          <>
+            {summary.isError ? `${t('categoriesFailed')} ` : ''}
+            {t('categoryHint')}
+          </>
+        }
+      >
+        <Select value={category} onChange={(e) => set({ category: e.target.value })}>
+          <option value="">{summary.isPending ? t('loadingCategories') : t('allFaqs')}</option>
+          {categories.map((c) => (
+            <option key={c} value={c}>
+              {c}
+            </option>
+          ))}
+          {category && !categories.includes(category) ? (
+            <option value={category}>{t('categoryGone', { name: category })}</option>
+          ) : null}
+        </Select>
+      </Field>
+      <Field
+        label={t('minScore')}
+        hint={t.rich('minScoreHint', { ...FAQ_MIN_SCORE, link: page('/faq/test') })}
+      >
+        <label className="flex items-center gap-2 text-[13px]">
+          <input
+            type="checkbox"
+            checked={!own}
+            onChange={(e) => set({ minScore: e.target.checked ? null : FAQ_MIN_SCORE_START })}
+          />
+          {t('useWorkspaceScore')}
+        </label>
+        {own ? (
+          <Input
+            className="mt-2"
+            type="number"
+            min={FAQ_MIN_SCORE.min}
+            max={FAQ_MIN_SCORE.max}
+            step={0.01}
+            aria-label={t('minScore')}
+            invalid={outOfRange}
+            value={step.data.minScore === '' ? '' : str(step.data.minScore)}
+            onChange={(e) => set({ minScore: e.target.value === '' ? '' : Number(e.target.value) })}
+          />
+        ) : null}
+        {outOfRange ? (
+          <p role="alert" className="mt-1.5 text-[11.5px] text-danger">
+            {t('minScoreInvalid', FAQ_MIN_SCORE)}
+          </p>
+        ) : null}
+      </Field>
+      <Field label={t('sendAnswer')} hint={send ? t('sendAnswerOnHint') : t('sendAnswerOffHint')}>
+        <label className="flex items-center gap-2 text-[13px]">
+          <input
+            type="checkbox"
+            checked={send}
+            onChange={(e) => set({ sendAnswer: e.target.checked })}
+          />
+          {t('sendAnswerToggle')}
+        </label>
+      </Field>
+      <Field label={t('save')} hint={t('saveHint')}>
+        <Input
+          className="font-mono"
+          value={str(step.data.save)}
+          placeholder="faq"
+          onChange={(e) => set({ save: slug(e.target.value) })}
+        />
+        <ul className="mt-2 space-y-1 text-[11.5px] text-muted-foreground">
+          {FAQ_VARIABLES.map((name) => (
+            <li key={name}>
+              <code className="font-mono">{`{{${save}.${name}}}`}</code> {t(`variables.${name}`)}
+            </li>
+          ))}
+        </ul>
+      </Field>
+      {(['matched', 'no_match'] as const).map((handle, i) => (
+        <Field key={handle} label={ts(`exits.${handle}`)} hint={ts(`exitsHint.${handle}`)}>
+          <LinkSelect
+            doc={doc}
+            stepId={step.id}
+            value={step.links[i] ?? null}
+            onChange={(target) => link(i, target)}
+          />
+        </Field>
+      ))}
+    </div>
   );
 }
 

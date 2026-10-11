@@ -76,6 +76,8 @@ export interface LaunchInput {
   /** A retry of a failed run: the same subscriber row, a new run. */
   retry?: boolean;
   conversationId?: number | null;
+  /** Enter the flow at this node instead of its first (the FAQ's "link to node"). A node the flow no longer has fails the launch. */
+  startNodeId?: string | null;
 }
 
 export type LaunchOutcome =
@@ -146,6 +148,15 @@ export class FlowLaunchService {
       );
     }
 
+    if (input.startNodeId && !graph.nodes.some((n) => n.id === input.startNodeId)) {
+      return {
+        outcome: 'failed',
+        reason: 'The step this should start at is no longer in the flow',
+        code: 'FLR_NODE_NOT_FOUND',
+        subscriberId: null,
+      };
+    }
+
     // The subscriber row decides whether anything launches.
     let subscriber: SubscriberRow | null = null;
     if (input.withSubscriber && input.contactId) {
@@ -208,7 +219,7 @@ export class FlowLaunchService {
       triggerRef: input.triggerRef ?? null,
       triggerText: input.triggerText ? input.triggerText.trim().toLowerCase() : null,
       graph: graph as RuntimeGraph,
-      currentNodeId: graph.nodes[0]!.id,
+      currentNodeId: input.startNodeId ?? graph.nodes[0]!.id,
       vars,
       timeoutSeconds:
         input.timeoutSeconds ??

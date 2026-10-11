@@ -11,7 +11,9 @@ import { FaqEmbeddingService } from './faq-embedding.service';
 import { FaqGenerateService } from './faq-generate.service';
 import { FaqInsightsService } from './faq-insights.service';
 import { FaqLogRepository } from './faq-log.repository';
+import { FaqFlowService } from './faq-flow.service';
 import { FaqMatchService } from './faq-match.service';
+import { FaqVerifyService } from './faq-verify.service';
 import { FaqSettingsService } from './faq-settings.service';
 import { FaqRepository } from './faq.repository';
 import { FaqService } from './faq.service';
@@ -47,7 +49,9 @@ export const faqAiProvider = {
     FaqLogRepository,
     FaqEmbeddingService,
     FaqSettingsService,
+    FaqVerifyService,
     FaqMatchService,
+    FaqFlowService,
     FaqService,
     FaqGenerateService,
     FaqInsightsService,
@@ -60,6 +64,7 @@ export const faqAiProvider = {
     FaqEmbeddingService,
     FaqSettingsService,
     FaqMatchService,
+    FaqFlowService,
   ],
 })
 export class FaqKnowledgeModule {}

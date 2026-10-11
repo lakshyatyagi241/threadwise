@@ -8,6 +8,7 @@ import {
   type FlowVar,
 } from '@crm/contracts';
 import { askInputLabelMsg, nodeLabelMsg } from './contract-text';
+import { minScoreOutOfRange } from './faq-node';
 import { dedupeMsgs, msg, renderMsg, type Msg, type Translate } from './msg';
 
 /**
@@ -33,11 +34,26 @@ export const SIMPLE_TYPES = [
   'template',
   'cta',
   'assign',
+  'faq',
 ] as const;
 export type SimpleType = (typeof SIMPLE_TYPES)[number];
 
-/** The steps that end their journey: what happens next depends on what the customer taps. */
-export const BRANCHING: ReadonlySet<string> = new Set(['buttons', 'list']);
+/**
+ * The steps that end their journey: what happens next depends on what the customer taps (buttons, list) or on whether an FAQ answered
+ * (`faq`, "Answer from FAQ").
+ */
+export const BRANCHING: ReadonlySet<string> = new Set(['buttons', 'list', 'faq']);
+
+/**
+ * A branching step whose exits are fixed by the step, not written by the author: the graph port each exit leaves by, in the order of
+ * the step's `links`. The other branching steps have one exit per button / row, on ports `p0`, `p1`, ...
+ */
+export const FIXED_EXITS: Readonly<Record<string, readonly string[]>> = {
+  faq: ['matched', 'no_match'],
+};
+
+/** The graph port exit `i` of a branching step leaves by. */
+export const exitHandle = (type: string, i: number): string => FIXED_EXITS[type]?.[i] ?? `p${i}`;
 
 export const LIMITS = {
   buttons: 3,
@@ -84,7 +100,7 @@ const str = (v: unknown): string =>
 const arr = (v: unknown): unknown[] => (Array.isArray(v) ? v : []);
 
 export const optionCount = (s: Pick<SimpleStep, 'type' | 'data'>): number =>
-  BRANCHING.has(s.type) ? arr(s.data.options).length : 0;
+  FIXED_EXITS[s.type]?.length ?? (BRANCHING.has(s.type) ? arr(s.data.options).length : 0);
 
 export const MAIN_NAME = 'Main flow';
 
@@ -197,9 +213,11 @@ export function toSimple(graph: Pick<FlowGraph, 'flowNodes' | 'flowEdges' | 'var
       continue;
     }
     const branching = BRANCHING.has(src.type);
-    const m = /^p(\d+)$/.exec(e.sourceHandle);
-    if (branching && m) {
-      const i = Number(m[1]);
+    const fixed = FIXED_EXITS[src.type];
+    const m = fixed ? null : /^p(\d+)$/.exec(e.sourceHandle);
+    const exit = fixed ? fixed.indexOf(e.sourceHandle) : m ? Number(m[1]) : -1;
+    if (branching && exit >= 0) {
+      const i = exit;
       const list = option.get(src.id) ?? [];
       if (list[i] !== undefined) reasons.push(msg('simpleModel.reasons.multiLink'));
       list[i] = dst.id;
@@ -321,7 +339,7 @@ export function toGraph(doc: SimpleDoc): FlowGraph {
       else if (!BRANCHING.has(s.type) && s.goto && known.has(s.goto)) edge(s.id, 'out', s.goto);
       if (BRANCHING.has(s.type)) {
         s.links.forEach((target, i) => {
-          if (target && known.has(target)) edge(s.id, `p${i}`, target);
+          if (target && known.has(target)) edge(s.id, exitHandle(s.type, i), target);
         });
       }
     });
@@ -364,7 +382,7 @@ export interface StepKind {
   preset?: string;
   label: Msg;
   help: Msg;
-  group: 'send' | 'ask' | 'handoff';
+  group: 'send' | 'ask' | 'answer' | 'handoff';
 }
 
 const kind = (
@@ -385,6 +403,7 @@ const kind = (
 };
 
 export const STEP_KINDS: readonly StepKind[] = [
+  kind('faq', 'faq', 'answer'),
   kind('assign', 'assign', 'handoff'),
   kind('message', 'message', 'send'),
   kind('media', 'media', 'send'),
@@ -458,9 +477,14 @@ export function newStep(
     data.options = [{ title: 'Item 1', description: '', section: '' }];
   }
   if (type === 'message') data.text = '';
+  // `faq` keeps the catalogue defaults: the customer's last message, every FAQ, the workspace's score, answer sent, saved as `faq`.
   if (type === 'location') Object.assign(data, { lat: '', lng: '', title: '', address: '' });
   if (type === 'cta') data.actions = [{ type: 'url', label: 'Visit website', value: '' }];
-  const links = BRANCHING.has(type) ? [null] : [];
+  const links = FIXED_EXITS[type]
+    ? FIXED_EXITS[type].map(() => null)
+    : BRANCHING.has(type)
+      ? [null]
+      : [];
   return { id: flbNewNodeId(), type, data, links };
 }
 
@@ -717,6 +741,7 @@ export function problems(doc: SimpleDoc, opts: { senderRequired: boolean }): Sim
         bad('setCoordinates');
       if (s.type === 'template' && !str(d.tpl).trim()) bad('chooseTemplate');
       if (s.type === 'assign' && !str(d.team).trim()) bad('chooseTeam');
+      if (s.type === 'faq' && minScoreOutOfRange(d.minScore)) bad('faqMinScore');
       if (s.type === 'cta') {
         const a = arr(d.actions)[0] as Record<string, unknown> | undefined;
         if (!a || !str(a.label).trim() || !str(a.value).trim()) bad('ctaLabelLink');
@@ -809,7 +834,12 @@ export function stepSummary(s: SimpleStep, t: Translate): string {
                     ? delaySummary(t, d)
                     : s.type === 'assign'
                       ? str(d.message)
-                      : '';
+                      : s.type === 'faq'
+                        ? t('simpleModel.faqSummary', {
+                            hasCategory: str(d.category).trim() ? 'true' : 'false',
+                            category: str(d.category).trim(),
+                          })
+                        : '';
   const one = raw.replace(/\s+/g, ' ').trim();
   return one.length > 40 ? `${one.slice(0, 40)}…` : one;
 }
@@ -827,4 +857,5 @@ export const TYPE_LABEL: Record<SimpleType, Msg> = {
   template: msg('simpleModel.typeLabel.template'),
   cta: msg('simpleModel.typeLabel.cta'),
   assign: msg('simpleModel.typeLabel.assign'),
+  faq: msg('simpleModel.typeLabel.faq'),
 };

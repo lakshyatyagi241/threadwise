@@ -499,3 +499,130 @@ describe('the list of flows (groups)', () => {
     }
   });
 });
+
+describe('the Answer from FAQ step in the Simple builder', () => {
+  const faqGraph = () =>
+    graph(
+      [
+        node('t', 'trigger'),
+        node('f', 'faq', {
+          query: '{{user_message}}',
+          category: 'Billing',
+          minScore: 0.6,
+          sendAnswer: true,
+          save: 'faq',
+        }),
+        node('yes', 'message', { text: 'Glad that helped', journeyName: 'Answered' }, 400, 0),
+        node(
+          'no',
+          'assign',
+          { team: 'support', userId: '', message: '', journeyName: 'Handoff' },
+          800,
+          0,
+        ),
+      ],
+      [edge('t', 'out', 'f'), edge('f', 'matched', 'yes'), edge('f', 'no_match', 'no')],
+    );
+
+  it('is a step of the menu, in its own Answer group', () => {
+    const kind = STEP_KINDS.find((k) => k.type === 'faq')!;
+    expect(kind.group).toBe('answer');
+    expect(en(kind.label)).toBe('Answer from FAQ');
+    expect(en(stepLabel({ type: 'faq', data: {} }))).toBe('Answer from FAQ');
+  });
+
+  it('reads the two exits as two links and writes them back on the same ports', () => {
+    const r = toSimple(faqGraph());
+    if (!r.ok) throw new Error(r.reasons.map(en).join('; '));
+    const step = allSteps(r.doc).find((s) => s.id === 'f')!;
+    expect(step.type).toBe('faq');
+    expect(step.links).toEqual(['yes', 'no']);
+    expect(step.data).toMatchObject({ category: 'Billing', minScore: 0.6, save: 'faq' });
+    const back = toGraph(r.doc);
+    expect(back.flowEdges.map((e) => `${e.source}.${e.sourceHandle}>${e.target}`).sort()).toEqual(
+      ['f.matched>yes', 'f.no_match>no', 't.out>f'].sort(),
+    );
+    expect(toSimple(back).ok).toBe(true);
+    expect(back.flowNodes.find((n) => n.id === 'f')!.data).toMatchObject({ minScore: 0.6 });
+  });
+
+  it('an exit that is not wired ends the conversation, and only that one', () => {
+    const g = faqGraph();
+    g.flowEdges = g.flowEdges.filter((e) => e.sourceHandle !== 'no_match');
+    const r = toSimple(g);
+    expect(r.ok && allSteps(r.doc).find((s) => s.id === 'f')!.links).toEqual(['yes', null]);
+  });
+
+  it('refuses a faq node wired from a port Simple has no place for, or from "out"', () => {
+    const g = faqGraph();
+    g.flowEdges.push(edge('f', 'out', 'yes'));
+    const r = toSimple(g);
+    expect(r).toMatchObject({ ok: false });
+    expect(r.ok === false && r.reasons.map(en)).toEqual([
+      expect.stringContaining('Answer from FAQ'),
+    ]);
+  });
+
+  it('a new step has the catalogue defaults and one empty link per exit', () => {
+    const s = newStep('faq', []);
+    expect(s.data).toEqual({
+      query: '{{user_message}}',
+      category: '',
+      minScore: null,
+      sendAnswer: true,
+      save: 'faq',
+    });
+    expect(s.links).toEqual([null, null]);
+  });
+
+  it('ends its part like buttons do: nothing can follow it, it can only be added and moved last, and it is not duplicated', () => {
+    let d = emptyDoc();
+    const m = newStep('message', []);
+    d = insertStep(d, 0, 0, m);
+    const f = newStep('faq', [m]);
+    expect(insertStep(d, 0, 0, f)).toBe(d); // before another step: refused
+    d = insertStep(d, 0, 1, f);
+    expect(allSteps(d).map((s) => s.type)).toEqual(['message', 'faq']);
+    const after = newStep('message', allSteps(d));
+    expect(insertStep(d, 0, 2, after)).toBe(d); // after it: refused
+    expect(moveStep(d, f.id, -1)).toBe(d); // moving it up would cut the message off
+    expect(duplicateStep(d, f.id)).toBe(d);
+  });
+
+  it('keeps one link per exit when the step is edited, and drops a link whose target is removed', () => {
+    let d = emptyDoc();
+    const target = newStep('message', []);
+    d = addJourney(d, target);
+    const f = newStep('faq', []);
+    d = insertStep(d, 0, 0, f);
+    d = updateStep(d, f.id, { links: [target.id, null] });
+    d = updateStep(d, f.id, { data: { category: 'Billing' } });
+    expect(allSteps(d).find((s) => s.id === f.id)!.links).toEqual([target.id, null]);
+    expect(allSteps(removeStep(d, target.id)).find((s) => s.id === f.id)!.links).toEqual([
+      null,
+      null,
+    ]);
+    // both exits leading into the other part count as reaching it
+    d = updateStep(d, f.id, { links: [null, target.id] });
+    expect(unreachable(d)).toEqual([]);
+  });
+
+  it('blocks publishing a minimum score outside 0.05 to 0.99, and nothing else about it', () => {
+    const make = (data: Record<string, unknown>) => {
+      const d = emptyDoc();
+      const f = { ...newStep('faq', []), data: { ...newStep('faq', []).data, ...data } };
+      d.journeys[0]!.steps = [f];
+      // The trigger's own problems (no keyword yet) are not what is under test.
+      return problems(d, { senderRequired: false })
+        .filter((p) => p.stepId !== null)
+        .map((p) => en(p.message));
+    };
+    expect(make({ minScore: 1.4 })).toEqual([
+      'Step 1.1: the minimum score must be from 0.05 to 0.99, or use the workspace setting.',
+    ]);
+    expect(make({ minScore: 0.01 })).toHaveLength(1);
+    expect(make({ minScore: 0.5 })).toEqual([]);
+    expect(make({ minScore: null })).toEqual([]);
+    expect(make({ query: '', category: 'x' })).toEqual([]);
+  });
+});

@@ -21,6 +21,9 @@ export const DEFAULTS = {
   maxFaqs: 500,
   maxVariationsPerFaq: 60,
   semanticPerHour: 600,
+  verifyEnabled: true,
+  verifyModel: 'openai/gpt-4o-mini',
+  verifyPerHour: 300,
 } as const;
 
 /** The browser build the installed Playwright expects may be missing offline; fall back to the one on disk. */
@@ -35,7 +38,17 @@ export const LAUNCH = existsSync(chromium.executablePath())
 export function sql(query: string): string {
   return execFileSync(
     'docker',
-    ['exec', 'crm-postgres', 'psql', '-U', 'crm', '-d', 'faq_scratch', '-Atc', query],
+    [
+      'exec',
+      'crm-postgres',
+      'psql',
+      '-U',
+      'crm',
+      '-d',
+      process.env.FAQ_DB ?? 'faq_scratch',
+      '-Atc',
+      query,
+    ],
     { encoding: 'utf8' },
   ).trim();
 }
@@ -110,6 +123,9 @@ export async function restoreConfig(): Promise<void> {
       'maxFaqs',
       'maxVariationsPerFaq',
       'semanticPerHour',
+      'verifyEnabled',
+      'verifyModel',
+      'verifyPerHour',
     ] as const) {
       if (config[key] !== DEFAULTS[key]) patch[key] = DEFAULTS[key];
     }
@@ -153,6 +169,10 @@ export async function openFaq(page: Page): Promise<void> {
 export const sw = (page: Page) => page.getByRole('switch', { name: 'FAQ engine' });
 export const save = (page: Page) => page.getByRole('button', { name: 'Save changes', exact: true });
 export const field = {
+  verifySwitch: (p: Page) => p.getByRole('switch', { name: 'Allow the second check' }),
+  verifyModel: (p: Page) => p.getByRole('textbox', { name: 'Check model' }),
+  verifyPerHour: (p: Page) =>
+    p.getByRole('textbox', { name: 'Second checks per workspace per hour' }),
   model: (p: Page) => p.getByRole('combobox', { name: 'Embedding model' }),
   generation: (p: Page) => p.getByRole('textbox', { name: 'Generation model' }),
   slider: (p: Page) => p.getByRole('slider', { name: 'Default match threshold' }),

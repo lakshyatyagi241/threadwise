@@ -93,6 +93,7 @@ export class FaqInsightsService {
         embeddingModel: result.embeddingModel,
         latencyMs: result.latencyMs,
         error: null,
+        verify: result.verify,
       }),
     );
     return publicDecision(result);
@@ -160,5 +161,6 @@ export function publicDecision(r: MatchResult): FaqMatchDecision {
     embeddingModel: r.embeddingModel,
     latencyMs: r.latencyMs,
     note: r.note,
+    verify: r.verify,
   };
 }

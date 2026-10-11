@@ -232,3 +232,87 @@ describe('OpenRouter adapter', () => {
     ]);
   });
 });
+
+describe('the borderline judge', () => {
+  const req = {
+    apiKey: 'sk-test',
+    model: 'openai/gpt-4o-mini',
+    system: 'sys',
+    user: 'Customer message: "hi"',
+  };
+
+  it('fixture: confirms by default, and the markers reject, fail or answer garbage', async () => {
+    const ai = new FixtureFaqAiAdapter();
+    expect(JSON.parse((await ai.judge(req)).text)).toMatchObject({ answers: true });
+    expect(JSON.parse((await ai.judge({ ...req, user: 'x [[reject]]' })).text)).toMatchObject({
+      answers: false,
+    });
+    expect((await ai.judge({ ...req, user: 'x [[judge-garbage]]' })).text).toBe('maybe?');
+    await expect(ai.judge({ ...req, user: 'x [[judge-fail]]' })).rejects.toBeInstanceOf(FaqAiError);
+  });
+
+  describe('OpenRouter', () => {
+    const ai = new OpenRouterFaqAiAdapter();
+    afterEach(() => vi.unstubAllGlobals());
+
+    it('asks for a deterministic JSON answer of a few tokens and returns the text with the usage', async () => {
+      const fetchMock = vi.fn(
+        async () =>
+          new Response(
+            JSON.stringify({
+              choices: [{ message: { content: '{"answers":true,"reason":"ok"}' } }],
+              usage: { prompt_tokens: 120, completion_tokens: 9 },
+            }),
+            { status: 200 },
+          ),
+      );
+      vi.stubGlobal('fetch', fetchMock);
+      const out = await ai.judge(req);
+      expect(out).toEqual({
+        text: '{"answers":true,"reason":"ok"}',
+        promptTokens: 120,
+        completionTokens: 9,
+      });
+      const [url, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit];
+      expect(url).toBe('https://openrouter.ai/api/v1/chat/completions');
+      expect(JSON.parse(init.body as string)).toMatchObject({
+        model: 'openai/gpt-4o-mini',
+        temperature: 0,
+        max_tokens: 150,
+        response_format: { type: 'json_object' },
+        messages: [
+          { role: 'system', content: 'sys' },
+          { role: 'user', content: 'Customer message: "hi"' },
+        ],
+      });
+    });
+
+    it('maps a refused key, a rate limit and an unreadable answer to FaqAiError kinds, never leaking the body', async () => {
+      for (const [status, kind] of [
+        [401, 'auth'],
+        [429, 'rate_limited'],
+        [500, 'provider'],
+      ] as const) {
+        vi.stubGlobal(
+          'fetch',
+          vi.fn(async () => new Response('secret echo sk-test', { status })),
+        );
+        await expect(ai.judge(req)).rejects.toMatchObject({ kind });
+        await expect(ai.judge(req)).rejects.not.toThrow(/sk-test/);
+      }
+      vi.stubGlobal(
+        'fetch',
+        vi.fn(async () => new Response('not json', { status: 200 })),
+      );
+      await expect(ai.judge(req)).rejects.toMatchObject({ kind: 'bad_response' });
+    });
+
+    it('an empty completion comes back as empty text (the caller then lets the match stand)', async () => {
+      vi.stubGlobal(
+        'fetch',
+        vi.fn(async () => new Response(JSON.stringify({ choices: [] }), { status: 200 })),
+      );
+      expect((await ai.judge(req)).text).toBe('');
+    });
+  });
+});

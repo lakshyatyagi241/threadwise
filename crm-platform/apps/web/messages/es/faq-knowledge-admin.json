@@ -61,7 +61,9 @@
         "matches": "Mensajes de clientes revisados",
         "answered": "Respondidos",
         "rate": "Tasa de respuesta",
-        "tokens": "Tokens de embeddings"
+        "tokens": "Tokens de embeddings",
+        "verified": "Segundas revisiones",
+        "vetoed": "Respuestas retenidas"
       }
     },
     "settings": {
@@ -96,7 +98,8 @@
         "maxFaqs": "Máximo de preguntas frecuentes por espacio de trabajo",
         "maxVariationsPerFaq": "Máximo de variantes por pregunta frecuente",
         "semanticPerHour": "Coincidencias por significado por espacio de trabajo y hora",
-        "semanticPerHourHint": "Superado este límite, el espacio de trabajo recurre a la similitud ortográfica durante el resto de la hora. 0 significa siempre similitud ortográfica."
+        "semanticPerHourHint": "Superado este límite, el espacio de trabajo recurre a la similitud ortográfica durante el resto de la hora. 0 significa siempre similitud ortográfica.",
+        "verifyPerHour": "Segundas revisiones por espacio de trabajo por hora"
       },
       "errors": {
         "integer": "Introduce un número entero.",
@@ -115,6 +118,19 @@
         "confirm": "Guardar cambios",
         "engineOff": "Si desactivas el motor, ningún espacio de trabajo responderá a los clientes con preguntas frecuentes y se bloquearán las ediciones hasta que lo vuelvas a activar.",
         "modelChange": "Cambiar el modelo de IA de {from} a {to} hace que se vuelvan a generar todos los vectores guardados. Hasta que termine, las coincidencias usan solo similitud ortográfica. La sensibilidad predeterminada seguirá al nuevo modelo (recomendado {threshold}) a menos que fijes un valor. Los umbrales que los espacios de trabajo guardaron por su cuenta pueden requerir un nuevo ajuste, porque las puntuaciones cambian con el modelo."
+      },
+      "verify": {
+        "title": "Segunda revisión para casos dudosos",
+        "description": "Un modelo de chat pequeño vuelve a comprobar las coincidencias que apenas alcanzaron el umbral de un espacio de trabajo. Solo puede retener una respuesta. Cada espacio de trabajo la activa en sus propios ajustes de preguntas frecuentes.",
+        "enabled": {
+          "label": "Permitir la segunda revisión",
+          "hint": "Desactívala para detener la revisión en todos los espacios de trabajo, sea cual sea su configuración."
+        },
+        "model": {
+          "label": "Modelo de revisión",
+          "hint": "El id del modelo de OpenRouter que evalúa los casos dudosos, por ejemplo openai/gpt-4o-mini. Basta con un modelo pequeño y rápido."
+        },
+        "perHourHint": "Pasado este límite, un caso dudoso se mantiene sin revisar durante el resto de la hora. 0 significa no revisar nunca."
       }
     },
     "maintenance": {

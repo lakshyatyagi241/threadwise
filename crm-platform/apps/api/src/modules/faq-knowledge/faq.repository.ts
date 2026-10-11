@@ -19,6 +19,8 @@ export interface EntryRow {
   flowId: number | null;
   flowUuid: string | null;
   flowName: string | null;
+  flowNodeId: string | null;
+  flowNodeLabel: string | null;
   category: string | null;
   status: string;
   thresholdOverride: number | null;
@@ -37,6 +39,7 @@ export interface EntryWrite {
   answerType: string;
   answerText: string | null;
   flowId: number | null;
+  flowNodeId: string | null;
   category: string | null;
   status: string;
   thresholdOverride: number | null;
@@ -84,7 +87,10 @@ export class FaqRepository {
 
   private cols(): SQL {
     return sql`
-      f.id, f.uuid, f.question, f.answer_type, f.answer_text, f.flow_id, fl.uuid AS flow_uuid, fl.flow_name,
+      f.id, f.uuid, f.question, f.answer_type, f.answer_text, f.flow_id, f.flow_node_id, fl.uuid AS flow_uuid, fl.flow_name,
+      (SELECT coalesce(nullif(btrim(n->'data'->>'label'), ''), nullif(btrim(n->'data'->>'name'), ''), n->>'type')
+         FROM jsonb_array_elements(coalesce(fl.flow_data->'flowNodes', '[]'::jsonb)) n
+         WHERE n->>'id' = f.flow_node_id LIMIT 1) AS flow_node_label,
       f.category, f.status, f.threshold_override, f.created_at, f.updated_at, f.row_version,
       vc.total AS variation_count, vc.ready AS ready_count, vc.failed AS failed_count,
       h.hits AS hit_count, h.last_hit AS last_hit_at`;
@@ -115,6 +121,8 @@ export class FaqRepository {
       flowId: numOrNull(r.flow_id),
       flowUuid: text(r.flow_uuid),
       flowName: text(r.flow_name),
+      flowNodeId: text(r.flow_node_id),
+      flowNodeLabel: text(r.flow_node_label),
       category: text(r.category),
       status: r.status as string,
       thresholdOverride: numOrNull(r.threshold_override),
@@ -208,8 +216,8 @@ export class FaqRepository {
 
   async insertEntry(tx: Tx, orgId: number, userId: number | null, w: EntryWrite): Promise<number> {
     const res = await tx.execute(sql`
-      INSERT INTO faqs (org_id, question, answer_type, answer_text, flow_id, category, status, threshold_override, created_by)
-      VALUES (${orgId}, ${w.question}, ${w.answerType}, ${w.answerText}, ${w.flowId}, ${w.category}, ${w.status},
+      INSERT INTO faqs (org_id, question, answer_type, answer_text, flow_id, flow_node_id, category, status, threshold_override, created_by)
+      VALUES (${orgId}, ${w.question}, ${w.answerType}, ${w.answerText}, ${w.flowId}, ${w.flowNodeId}, ${w.category}, ${w.status},
               ${w.thresholdOverride}, ${userId})
       RETURNING id`);
     return num((res.rows[0] as Raw).id);
@@ -225,7 +233,7 @@ export class FaqRepository {
   ): Promise<boolean> {
     const res = await tx.execute(sql`
       UPDATE faqs SET question = ${w.question}, answer_type = ${w.answerType}, answer_text = ${w.answerText},
-        flow_id = ${w.flowId}, category = ${w.category}, status = ${w.status}, threshold_override = ${w.thresholdOverride}
+        flow_id = ${w.flowId}, flow_node_id = ${w.flowNodeId}, category = ${w.category}, status = ${w.status}, threshold_override = ${w.thresholdOverride}
       WHERE org_id = ${orgId} AND id = ${id} AND row_version = ${rowVersion}
       RETURNING id`);
     return res.rows.length > 0;
@@ -281,6 +289,30 @@ export class FaqRepository {
     );
     const r = (res.rows as Raw[])[0];
     return r ? { id: num(r.id), name: r.flow_name as string } : null;
+  }
+
+  /** The steps of a flow, for the "start at" picker and to check a saved node still exists. */
+  async flowNodes(
+    tx: Tx,
+    orgId: number,
+    flowUuid: string,
+  ): Promise<Array<{ id: string; type: string; label: string }> | null> {
+    const res = await tx.execute(sql`
+      SELECT n->>'id' AS id, n->>'type' AS type,
+             coalesce(nullif(btrim(n->'data'->>'label'), ''), nullif(btrim(n->'data'->>'name'), ''), '') AS label
+      FROM flows fl, jsonb_array_elements(coalesce(fl.flow_data->'flowNodes', '[]'::jsonb)) n
+      WHERE fl.org_id = ${orgId} AND fl.uuid = ${flowUuid}::uuid AND coalesce(n->>'id', '') <> ''`);
+    if (res.rows.length === 0) {
+      const exists = await tx.execute(
+        sql`SELECT 1 FROM flows WHERE org_id = ${orgId} AND uuid = ${flowUuid}::uuid`,
+      );
+      if (exists.rows.length === 0) return null;
+    }
+    return (res.rows as Raw[]).map((r) => ({
+      id: r.id as string,
+      type: (r.type as string | null) ?? '',
+      label: (r.label as string | null) ?? '',
+    }));
   }
 
   async countFaqs(tx: Tx, orgId: number): Promise<number> {
@@ -528,34 +560,53 @@ export class FaqRepository {
   }
 
   /** The customer typed one of the phrasings (or the question) word for word, ignoring case and spacing. */
-  async exact(tx: Tx, orgId: number, query: string): Promise<Scored[]> {
+  async exact(
+    tx: Tx,
+    orgId: number,
+    query: string,
+    category: string | null = null,
+  ): Promise<Scored[]> {
     const res = await tx.execute(sql`
       SELECT f.id AS faq_id, f.uuid AS faq_uuid, f.question, f.status, f.threshold_override, v.text, 1.0 AS score
       FROM faq_variations v JOIN faqs f ON f.org_id = v.org_id AND f.id = v.faq_id
       WHERE v.org_id = ${orgId} AND f.status = 'active' AND lower(btrim(v.text)) = lower(btrim(${query}))
+        AND (${category}::text IS NULL OR f.category = ${category}::text)
       ORDER BY f.id LIMIT 5`);
     return (res.rows as Raw[]).map((r) => this.toScored(r));
   }
 
   /** Exact cosine scan of this workspace's vectors for the current model (ADR-0021: no ANN index). Score = 1 - cosine distance. */
-  async vector(tx: Tx, orgId: number, model: string, literal: string): Promise<Scored[]> {
+  async vector(
+    tx: Tx,
+    orgId: number,
+    model: string,
+    literal: string,
+    category: string | null = null,
+  ): Promise<Scored[]> {
     const res = await tx.execute(sql`
       SELECT f.id AS faq_id, f.uuid AS faq_uuid, f.question, f.status, f.threshold_override, v.text,
              1 - (v.embedding <=> ${literal}::halfvec) AS score
       FROM faq_variations v JOIN faqs f ON f.org_id = v.org_id AND f.id = v.faq_id
       WHERE v.org_id = ${orgId} AND f.status = 'active' AND v.embed_state = 'ready' AND v.embedding_model = ${model}
+        AND (${category}::text IS NULL OR f.category = ${category}::text)
       ORDER BY v.embedding <=> ${literal}::halfvec
       LIMIT ${VECTOR_FETCH}`);
     return (res.rows as Raw[]).map((r) => this.toScored(r));
   }
 
   /** The fallback when no vector is available: spelling similarity over every variation of an active FAQ. */
-  async trigram(tx: Tx, orgId: number, query: string): Promise<Scored[]> {
+  async trigram(
+    tx: Tx,
+    orgId: number,
+    query: string,
+    category: string | null = null,
+  ): Promise<Scored[]> {
     const res = await tx.execute(sql`
       SELECT f.id AS faq_id, f.uuid AS faq_uuid, f.question, f.status, f.threshold_override, v.text,
              similarity(lower(v.text), lower(${query})) AS score
       FROM faq_variations v JOIN faqs f ON f.org_id = v.org_id AND f.id = v.faq_id
       WHERE v.org_id = ${orgId} AND f.status = 'active' AND similarity(lower(v.text), lower(${query})) >= 0.3
+        AND (${category}::text IS NULL OR f.category = ${category}::text)
       ORDER BY score DESC LIMIT ${VECTOR_FETCH}`);
     return (res.rows as Raw[]).map((r) => this.toScored(r));
   }
@@ -564,15 +615,23 @@ export class FaqRepository {
     tx: Tx,
     orgId: number,
     faqId: number,
-  ): Promise<{ answerType: string; answerText: string | null; flowId: number | null } | null> {
+  ): Promise<{
+    answerType: string;
+    answerText: string | null;
+    flowId: number | null;
+    flowNodeId: string | null;
+    question: string;
+  } | null> {
     const res = await tx.execute(sql`
-      SELECT answer_type, answer_text, flow_id FROM faqs WHERE org_id = ${orgId} AND id = ${faqId} AND status = 'active'`);
+      SELECT answer_type, answer_text, flow_id, flow_node_id, question FROM faqs WHERE org_id = ${orgId} AND id = ${faqId} AND status = 'active'`);
     const r = (res.rows as Raw[])[0];
     return r
       ? {
           answerType: r.answer_type as string,
           answerText: text(r.answer_text),
           flowId: numOrNull(r.flow_id),
+          flowNodeId: text(r.flow_node_id),
+          question: r.question as string,
         }
       : null;
   }

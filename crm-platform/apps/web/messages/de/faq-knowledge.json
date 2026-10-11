@@ -33,7 +33,8 @@
       "modelNotAllowed": "Das KI-Modell der Plattform ist nicht zulässig. Wenden Sie sich an Ihren Plattform-Admin.",
       "validation": "Einige Felder müssen geprüft werden.",
       "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
-      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es erneut und nennen Sie dem Support die Anfrage-ID, falls es weiterhin auftritt."
+      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es erneut und nennen Sie dem Support die Anfrage-ID, falls es weiterhin auftritt.",
+      "flowNodeNotFound": "Der gewählte Schritt ist in diesem Flow nicht mehr vorhanden. Wählen Sie einen anderen Schritt oder den Start des Flows."
     },
     "banner": {
       "enabledToast": "Die FAQ-Beantwortung ist eingeschaltet.",
@@ -139,7 +140,9 @@
         "ready": "{count} aktiv",
         "pending": "{count} in Indexierung",
         "failed": "{count} fehlgeschlagen"
-      }
+      },
+      "stepMissing": "Schritt fehlt",
+      "startsAt": "Beginnt bei: {step}"
     },
     "editor": {
       "back": "Zurück zu den FAQs",
@@ -192,7 +195,9 @@
         "preview": "So sieht es in WhatsApp aus",
         "previewEmpty": "Ihre Antwort erscheint hier",
         "flowLabel": "Zu startender Flow",
-        "noFlow": "Kein Flow ausgewählt"
+        "noFlow": "Kein Flow ausgewählt",
+        "startsAt": "Beginnt bei Schritt: {step}",
+        "stepGone": "Der Schritt, bei dem diese FAQ beginnt, existiert nicht mehr, daher erhalten Kunden keine Antwort."
       },
       "advanced": {
         "title": "Erweitert: Empfindlichkeit nur für diese FAQ",
@@ -227,6 +232,11 @@
           "required": "Wählen Sie einen Wert zwischen 5 % und 99 %.",
           "tooLong": "Wählen Sie einen Wert zwischen 5 % und 99 %.",
           "invalid": "Wählen Sie einen Wert zwischen 5 % und 99 %."
+        },
+        "flowNodeId": {
+          "required": "Wählen Sie einen Schritt dieses Flows oder den Start des Flows.",
+          "tooLong": "Wählen Sie einen Schritt dieses Flows oder den Start des Flows.",
+          "invalid": "Wählen Sie einen Schritt dieses Flows oder den Start des Flows."
         }
       },
       "deleteConfirm": {
@@ -257,7 +267,7 @@
         "off": "Inaktiv",
         "draft": "Entwurf"
       },
-      "note": "Der Flow startet mit seinem Auslöser. Nur veröffentlichte, aktive Flows können laufen."
+      "note": "Der Flow beginnt bei dem Schritt, den Sie unten wählen, oder an seinem Start. Es können nur veröffentlichte, aktive Flows ausgeführt werden."
     },
     "variations": {
       "title": "Fragevarianten",
@@ -354,6 +364,10 @@
         "notSent": {
           "title": "Passend, nicht gesendet",
           "body": "Eine FAQ passte, aber die Antwort wurde nicht gesendet, z. B. weil die FAQ-Beantwortung ausgeschaltet war."
+        },
+        "vetoed": {
+          "title": "Antwort zurückgehalten",
+          "body": "Der Treffer hatte genug Punkte, doch die Zweitprüfung hat widersprochen, daher würde nichts gesendet."
         }
       },
       "tier": {
@@ -486,8 +500,11 @@
         "providerError": "Der KI-Anbieter ist ausgefallen, daher konnte der Bot nur nach Schreibweise abgleichen.",
         "notSent": "Eine FAQ passte, aber die Antwort wurde nicht gesendet.",
         "tier": "Entschieden von der Stufe {tier}.",
-        "error": "Fehler: {error}"
-      }
+        "error": "Fehler: {error}",
+        "vetoed": "Der beste Treffer erreichte {score} % und lag über der Schwelle von {threshold} %, doch die Zweitprüfung kam zu dem Ergebnis, dass er die Nachricht nicht beantwortet, daher wurde nichts gesendet.",
+        "vetoedNoBar": "Der beste Treffer erreichte {score} %, doch die Zweitprüfung kam zu dem Ergebnis, dass er die Nachricht nicht beantwortet, daher wurde nichts gesendet."
+      },
+      "flowRun": "(aus einem Flow)"
     },
     "insights": {
       "title": "FAQ-Auswertung",
@@ -612,7 +629,8 @@
         "exact": "Exakt: Die Nachricht entspricht einer gespeicherten Formulierung, unabhängig von Groß-/Kleinschreibung und Leerzeichen.",
         "semantic": "Bedeutung: Die Nachricht wird inhaltlich mit jeder aktiven Formulierung verglichen, sodass auch andere Wörter passen können.",
         "trigram": "Schreibweise als Ersatz: Ist der KI-Anbieter nicht verfügbar, werden Buchstaben verglichen. Das erkennt nur Tippfehler.",
-        "threshold": "Die beste Punktzahl wird mit der Empfindlichkeit verglichen. Darüber antwortet die FAQ; darunter erscheint die Nachricht unter Unbeantwortet."
+        "threshold": "Die beste Punktzahl wird mit der Empfindlichkeit verglichen. Darüber antwortet die FAQ; darunter erscheint die Nachricht unter Unbeantwortet.",
+        "verify": "Zweitprüfung (optional): Ein Treffer, der die Empfindlichkeit nur knapp erreicht hat, kann von einem kleinen Chat-Modell gegengeprüft werden. Dieses kann eine Antwort nur zurückhalten."
       },
       "who": "Zum Ändern dieser Einstellungen ist die Berechtigung faq.settings.manage nötig.",
       "leave": {
@@ -620,6 +638,52 @@
         "body": "Ihre Änderungen an diesen Einstellungen sind nicht gespeichert.",
         "leave": "Verlassen",
         "stay": "Bleiben"
+      },
+      "verify": {
+        "title": "Zweitprüfung bei knappen Treffern",
+        "hint": "Ein kleines Chat-Modell prüft Treffer gegen, die die Schwelle nur knapp erreicht haben.",
+        "unavailable": "Die Plattform hat die Zweitprüfung ausgeschaltet, daher läuft sie auch dann nicht, wenn Sie sie hier einschalten. Wenden Sie sich an Ihren Plattform-Admin.",
+        "label": "Knappe Treffer per Zweitprüfung kontrollieren",
+        "on": "Ein",
+        "off": "Aus",
+        "onBody": "Erreicht ein Treffer die Schwelle nur knapp, liest ein kleines Chat-Modell die Nachricht des Kunden und die FAQ und beurteilt, ob die Antwort passt. Es kann nur Nein sagen: Es löst nie eine Antwort aus.",
+        "offBody": "Jeder Treffer, der die Schwelle erreicht, wird ohne zweite Prüfung beantwortet.",
+        "bandLabel": "Ab wann ein Treffer als knapp gilt",
+        "bandValue": "+{value}%",
+        "explainOn": "Treffer mit {from} % bis {to} % werden von {model} geprüft. Ein \"Nein\" bedeutet: Es wird keine Antwort gesendet und die Nachricht erscheint unter Unbeantwortet.",
+        "explainOff": "Jeder Treffer mit {threshold} % oder mehr wird beantwortet. Schalten Sie die Zweitprüfung ein, um die knappsten Treffer gegenprüfen zu lassen.",
+        "cost": "Jede Prüfung sendet die Nachricht des Kunden und die Frage der FAQ an das Modell: einige hundert Tokens, und bei einer knappen Antwort dauert es etwa eine Sekunde länger. Treffer außerhalb des Bereichs werden nie geprüft. Schlägt die Prüfung fehl, ist sie nicht verfügbar oder ist das Stundenlimit erreicht, gilt der Treffer, als gäbe es keine Prüfung."
+      }
+    },
+    "flowNode": {
+      "label": "Beginnen bei",
+      "start": "Start des Flows",
+      "hint": "Wählen Sie einen Schritt, um den Anfang des Flows zu überspringen. Kunden steigen bei dem Schritt in den Flow ein, den Sie auswählen.",
+      "loading": "Schritte dieses Flows werden geladen",
+      "empty": "Dieser Flow hat keine weiteren Schritte und beginnt daher an seinem Anfang.",
+      "retry": "Erneut versuchen",
+      "deletedOption": "Gelöschter Schritt (anderen wählen)",
+      "missing": {
+        "title": "Der Schritt, bei dem diese FAQ beginnt, existiert nicht mehr",
+        "body": "Dieser Schritt wurde aus dem Flow gelöscht. Solange Sie keinen anderen Schritt wählen, erhalten Kunden, die zu dieser FAQ passen, keine Antwort. Wählen Sie unten einen Schritt oder den Start des Flows.",
+        "fix": "Beim Start des Flows beginnen"
+      }
+    },
+    "verify": {
+      "title": "Zweitprüfung",
+      "chip": {
+        "confirmed": "Zweitprüfung: Ja",
+        "vetoed": "Zweitprüfung: Nein",
+        "failed": "Zweitprüfung fehlgeschlagen",
+        "skipped": "Zweitprüfung übersprungen"
+      },
+      "model": "Geprüft von",
+      "reason": "Grund",
+      "body": {
+        "confirmed": "Der Treffer war knapp, daher hat ein kleines Chat-Modell die Nachricht und die FAQ gelesen und bestätigt, dass die Antwort passt.",
+        "vetoed": "Der Treffer war knapp und die Zweitprüfung kam zu dem Ergebnis, dass diese FAQ die Nachricht nicht beantwortet. Die Antwort wurde zurückgehalten, nichts wurde gesendet, und die Nachricht erscheint unter Unbeantwortet.",
+        "failed": "Der Treffer war knapp, doch die Prüfung konnte nicht abgeschlossen werden. Der Treffer blieb bestehen und die Antwort wurde gesendet, als gäbe es keine Zweitprüfung.",
+        "skipped": "Die Zweitprüfung wurde für diesen Treffer nicht ausgeführt, daher blieb der Treffer unverändert."
       }
     }
   }

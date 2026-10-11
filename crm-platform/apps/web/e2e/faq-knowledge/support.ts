@@ -20,7 +20,7 @@ export const API = 'http://localhost:3200';
 export const WEB = process.env.WEB_URL ?? 'http://localhost:3201';
 export const PASSWORD = 'Str0ngPassw0rd#1';
 export const RUN = `pw${Date.now()}`;
-const DB = 'faq_scratch';
+const DB = process.env.FAQ_DB ?? 'faq_scratch';
 
 // --- database -------------------------------------------------------------------------------------------------------------
 
@@ -126,6 +126,8 @@ export async function call<T = any>(
       'x-forwarded-for': ip(),
     },
     body: body === undefined ? undefined : JSON.stringify(body),
+    // A request that never answers must fail the test with a clear error instead of hanging it until the test timeout.
+    signal: AbortSignal.timeout(60_000),
   });
   const text = await res.text();
   return { status: res.status, body: (text ? JSON.parse(text) : undefined) as T };
@@ -135,6 +137,8 @@ export interface FaqSeed {
   question: string;
   answerText?: string;
   flowId?: string;
+  /** Start the flow at this step (the editor's node id). */
+  flowNodeId?: string;
   category?: string;
   status?: 'active' | 'paused';
   variations?: string[];
@@ -148,6 +152,7 @@ export async function seedFaq(ws: Workspace, f: FaqSeed): Promise<any> {
     answerType: f.flowId ? 'flow' : 'text',
     answerText: f.flowId ? undefined : (f.answerText ?? `Answer to ${f.question}`),
     flowId: f.flowId,
+    flowNodeId: f.flowNodeId,
     category: f.category,
     status: f.status ?? 'active',
     variations: f.variations ?? [],
@@ -179,7 +184,14 @@ export async function getSettings(ws: Workspace) {
 
 export async function putSettings(
   ws: Workspace,
-  patch: Partial<{ enabled: boolean; threshold: number; minMargin: number; logQueries: boolean }>,
+  patch: Partial<{
+    enabled: boolean;
+    threshold: number;
+    minMargin: number;
+    logQueries: boolean;
+    verifyMode: 'off' | 'borderline';
+    verifyBand: number;
+  }>,
 ) {
   const cur = await getSettings(ws);
   const r = await call(ws, 'PUT', '/v2/faq/settings', {
@@ -192,6 +204,20 @@ export async function putSettings(
   });
   expect(r.status, JSON.stringify(r.body)).toBeLessThan(300);
   return r.body;
+}
+
+/**
+ * Makes `query` a close call for the second check: reads its meaning score with the check off, then saves a bar just under that
+ * score with the check on and a band of `bandPoints`, so the score is inside [bar, bar + band). Returns the score and the bar.
+ */
+export async function closeCall(ws: Workspace, query: string, bandPoints = 0.1) {
+  await putSettings(ws, { verifyMode: 'off' });
+  const probe = (await call(ws, 'POST', '/v2/faq/test', { query })).body;
+  expect(probe.tier, `"${query}" must be a meaning match`).toBe('semantic');
+  const score = probe.score as number;
+  const threshold = Math.round((Math.floor(score * 100 + 1e-6) / 100 - 0.01) * 100) / 100;
+  await putSettings(ws, { threshold, verifyMode: 'borderline', verifyBand: bandPoints });
+  return { score, threshold };
 }
 
 export async function entries(ws: Workspace, query = ''): Promise<any> {
@@ -218,6 +244,111 @@ export function seedFlow(ws: Workspace, name: string, text = 'Hello from the flo
      RETURNING uuid`,
   );
   return id!;
+}
+
+/**
+ * A published, active flow of three steps after the trigger: `a` says "Intro step", `b` (named "Second") says "Second step", then
+ * an End. It is what an FAQ links to when the test is about starting at a step.
+ */
+export function seedStepsFlow(ws: Workspace, name: string): string {
+  const graph = {
+    flowNodes: [
+      { id: 't', type: 'trigger', data: {}, isStart: true },
+      { id: 'a', type: 'message', data: { text: 'Intro step' } },
+      { id: 'b', type: 'message', data: { label: 'Second', text: 'Second step' } },
+      { id: 'z', type: 'end', data: {} },
+    ],
+    flowEdges: [
+      { source: 't', sourceHandle: 'out', target: 'a' },
+      { source: 'a', sourceHandle: 'out', target: 'b' },
+      { source: 'b', sourceHandle: 'out', target: 'z' },
+    ],
+    vars: {},
+  };
+  return sqlOne(
+    `INSERT INTO flows (org_id, flow_name, flow_data, trigger_kind, trigger_keywords, is_published, is_active, provider, flow_type)
+     VALUES (${ws.orgId}, '${name.replace(/'/g, "''")}', '${JSON.stringify(graph)}'::jsonb, 'keyword', NULL, true, true, 'simulator', 'chat')
+     RETURNING uuid`,
+  )!;
+}
+
+/** Replaces a flow's steps (to simulate the author deleting one after an FAQ was pointed at it). */
+export function setFlowNodes(
+  ws: Workspace,
+  uuid: string,
+  nodes: Array<{ id: string; type: string; data?: object }>,
+) {
+  const graph = {
+    flowNodes: nodes.map((n, i) => ({
+      ...n,
+      data: n.data ?? {},
+      ...(i === 0 ? { isStart: true } : {}),
+    })),
+    flowEdges: [],
+    vars: {},
+  };
+  sql(
+    `UPDATE flows SET flow_data = '${JSON.stringify(graph)}'::jsonb WHERE org_id=${ws.orgId} AND uuid='${uuid}'`,
+  );
+}
+
+export interface BuilderNode {
+  id: string;
+  type: string;
+  data?: Record<string, unknown>;
+  x?: number;
+  y?: number;
+}
+
+/**
+ * A published, active flow in the shape the flow builder opens (every node has a position, every edge an id). `edges` are
+ * `[source, sourceHandle, target]`; `keywords` makes it start when a customer's message contains them.
+ */
+export function seedBuilderFlow(
+  ws: Workspace,
+  name: string,
+  nodes: BuilderNode[],
+  edges: Array<[string, string, string]>,
+  opts: { keywords?: string; published?: boolean } = {},
+): string {
+  const graph = {
+    flowNodes: nodes.map((n, i) => ({
+      id: n.id,
+      type: n.type,
+      x: n.x ?? 80 + i * 300,
+      y: n.y ?? 120,
+      data: n.data ?? {},
+      ...(i === 0 ? { isStart: true } : {}),
+    })),
+    flowEdges: edges.map(([source, sourceHandle, target], i) => ({
+      id: `e${i + 1}`,
+      source,
+      sourceHandle,
+      target,
+    })),
+    vars: [],
+  };
+  const published = opts.published ?? true;
+  return sqlOne(
+    `INSERT INTO flows (org_id, flow_name, flow_data, trigger_kind, trigger_keywords, is_published, is_active, provider, flow_type)
+     VALUES (${ws.orgId}, '${name.replace(/'/g, "''")}', '${JSON.stringify(graph).replace(/'/g, "''")}'::jsonb, 'keyword',
+       ${opts.keywords ? `'${opts.keywords.replace(/'/g, "''")}'` : 'NULL'}, ${published}, true, 'simulator', 'chat')
+     RETURNING uuid`,
+  )!;
+}
+
+/** The graph the API holds for a flow (what the builder saved). */
+export function flowGraph(ws: Workspace, uuid: string): any {
+  return JSON.parse(
+    sqlOne(`SELECT flow_data::text FROM flows WHERE org_id=${ws.orgId} AND uuid='${uuid}'`)!,
+  );
+}
+
+/** The plan flag the flow builder needs to create and edit flows (a new workspace starts on a plan without it). */
+export function enableAutomation(ws: Workspace) {
+  sql(
+    `UPDATE org_plan_state SET overrides = overrides || '{"features":{"automation":true}}'::jsonb WHERE org_id=${ws.orgId}`,
+  );
 }
 
 export function deleteFlow(ws: Workspace, uuid: string) {
@@ -294,6 +425,51 @@ export async function customerSays(ws: Workspace, sim: Sim, text: string, from =
   expect(r.status, JSON.stringify(r.body)).toBe(202);
 }
 
+/** How many match-log rows (from the customer's own message or from a flow) the customer with this number has. */
+export const loggedFor = (ws: Workspace, from: string) =>
+  Number(
+    sqlOne(
+      `SELECT count(*) FROM faq_match_logs l JOIN conversations c ON c.org_id=l.org_id AND c.id=l.conversation_id
+       WHERE l.org_id=${ws.orgId} AND c.peer_key='${from}'`,
+    ),
+  );
+
+let askCounter = 0;
+/**
+ * A new customer writes `text`; resolves with their number once the FAQ engine has looked at the message (a match-log row exists) and,
+ * when given, `done(from)` holds (the visible result of work a job does after the match, such as a flow's replies).
+ *
+ * The local stack shares its Redis queues with whatever other workers run on the machine, and a job taken by a worker of another
+ * database is lost: a message that is never looked at is sent again as a NEW customer (up to 4 times), and a job that comes back
+ * only through the engine's own recovery sweep (about two minutes) is waited for up to `settleMs`. The caller's assertions then
+ * run on an attempt that was really handled.
+ */
+export async function customerAsks(
+  ws: Workspace,
+  sim: Sim,
+  text: string,
+  done: (from: string) => boolean = () => true,
+  settleMs = 240_000,
+): Promise<string> {
+  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+  for (let attempt = 1; attempt <= 6; attempt++) {
+    const from = `9198${String(Date.now()).slice(-7)}${String(++askCounter).padStart(2, '0')}`;
+    await customerSays(ws, sim, text, from);
+    const looked = Date.now() + 25_000;
+    while (Date.now() < looked && loggedFor(ws, from) === 0) await sleep(500);
+    if (loggedFor(ws, from) === 0) continue;
+    const settled = Date.now() + settleMs;
+    while (Date.now() < settled) {
+      if (done(from)) return from;
+      await sleep(1000);
+    }
+    throw new Error(`"${text}" was matched but its result never showed within ${settleMs} ms`);
+  }
+  throw new Error(
+    `"${text}" was never looked at by the FAQ engine in 6 attempts (is a worker running for this database?)`,
+  );
+}
+
 /** What the customer received, oldest first. */
 export function repliesTo(ws: Workspace, from: string): string[] {
   return sql(
@@ -311,16 +487,26 @@ export const logCount = (ws: Workspace, extra = '') =>
 
 // --- browser -----------------------------------------------------------------------------------------------------------------
 
-/** Signs in through the login screen and waits for the app. */
+/**
+ * Signs in through the login screen and waits for the app. A click on the server-rendered form before React has attached submits it
+ * natively and reloads the login page, so a sign-in that has not left the page after 25 seconds is tried again (up to 3 times).
+ */
 export async function signIn(page: Page, email: string, password = PASSWORD) {
-  await page.goto('/login', { timeout: 60_000 });
-  await page.getByLabel('Email').fill(email);
-  await page.getByLabel('Password', { exact: true }).fill(password);
-  await page.getByRole('button', { name: 'Sign in' }).click();
-  await page.waitForURL(/\/(dashboard|inbox|onboarding|faq|home)/, {
-    timeout: 120_000,
-    waitUntil: 'commit',
-  });
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    await page.goto('/login', { timeout: 60_000 });
+    await page.getByLabel('Email').fill(email);
+    await page.getByLabel('Password', { exact: true }).fill(password);
+    await page.getByRole('button', { name: 'Sign in' }).click();
+    try {
+      await page.waitForURL(/\/(dashboard|inbox|onboarding|faq|home)/, {
+        timeout: attempt === 3 ? 120_000 : 25_000,
+        waitUntil: 'commit',
+      });
+      return;
+    } catch (e) {
+      if (attempt === 3) throw e;
+    }
+  }
 }
 
 /** Console problems and failed requests of the pages a test opens; the test fails at its end if any show up. */
@@ -332,7 +518,15 @@ export class Watch {
     this.allowed.push(...patterns);
   }
   attach(page: Page) {
+    // The machine's network interface changing under the browser (a VPN or Wi-Fi switch) aborts requests and script loads: that is the
+    // environment's doing, not the page's, so it and the script-load error it causes are not counted.
+    let networkChanged = false;
     const add = (text: string) => {
+      if (/ERR_NETWORK_CHANGED/.test(text)) {
+        networkChanged = true;
+        return;
+      }
+      if (networkChanged && /^pageerror Event @/.test(text)) return;
       if (!this.allowed.some((re) => re.test(text))) this.problems.push(text);
     };
     page.on('console', (m) => {
@@ -426,8 +620,16 @@ export async function hydrated(page: Page) {
 }
 
 export async function go(page: Page, path: string) {
-  await page.goto(path, { timeout: 60_000 });
-  await expect(page.locator('h1').first()).toBeVisible({ timeout: 30_000 });
+  // The dev server compiles a screen on its first visit and can be slow on a busy machine: one reload before giving up.
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      await page.goto(path, { timeout: 120_000 });
+      await expect(page.locator('h1').first()).toBeVisible({ timeout: 45_000 });
+      break;
+    } catch (e) {
+      if (attempt === 2) throw e;
+    }
+  }
   await hydrated(page);
 }
 
@@ -480,7 +682,7 @@ export async function operator(): Promise<{
     patch: async (body) => {
       // The dev server can drop a connection while it compiles; a restore must not be lost to that, so retry.
       let r!: Awaited<ReturnType<typeof ctx.patch>>;
-      for (let attempt = 1; attempt <= 4; attempt++) {
+      for (let attempt = 1; attempt <= 6; attempt++) {
         try {
           r = await ctx.patch('/api/platform/faq', {
             data: body,

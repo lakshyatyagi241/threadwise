@@ -102,6 +102,12 @@ export const NODE_LOOK: Record<string, NodeLook> = {
   ),
   google_meet: l('#E8F0FE', '#1A73E8', 'M2 5h7v6H2zM10 6l3-1.5v7L10 10z'),
   wa_form: l(MINT, DEEP, 'M3 2h10v12H3zM5 5h6M5 8h6M5 11h4'),
+  // Not a Reference node: a speech bubble with a question mark, in the AI group's plum.
+  faq: l(
+    '#F3E9FF',
+    PLUM,
+    'M3 2.5h10v8H8.5L5 13.5v-3H3zM6.6 5.6a1.4 1.4 0 0 1 2.8 0c0 1-1.4 1.1-1.4 2M8 9h.01',
+  ),
   api_library: l('#E8F5E9', DEEP, 'M6 4L2.5 8 6 12M10 4l3.5 4L10 12M9 3.5l-2 9'),
   google_sheets: l('#E6F4EA', '#137333', 'M3 2h10v12H3zM3 5h10M3 8h10M3 11h10M6.5 5v9M9.5 5v9'),
   google_docs: l('#E8F0FE', '#1A73E8', 'M3 2h7l3 3v9H3zM10 2v3h3M5 8h6M5 10h6M5 12h4'),

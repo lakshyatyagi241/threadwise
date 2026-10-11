@@ -11,6 +11,7 @@ import { flowsApi } from '../../api/flows';
 import { FLB_KEYS, useBuilderContext } from '../../api/hooks';
 import {
   BRANCHING,
+  FIXED_EXITS,
   STEP_KINDS,
   stepLabel,
   addJourney,
@@ -764,7 +765,9 @@ function Editor({
                       />
                       {BRANCHING.has(s.type) ? (
                         <p className="my-3 text-center text-[11.5px] text-muted-foreground">
-                          {t('branchingEnds', { kind: s.type === 'list' ? 'list' : 'buttons' })}
+                          {s.type === 'faq'
+                            ? t('faqEnds')
+                            : t('branchingEnds', { kind: s.type === 'list' ? 'list' : 'buttons' })}
                         </p>
                       ) : (
                         <>
@@ -938,7 +941,7 @@ function AddMenu({
           role="menu"
           className="absolute top-12 z-20 max-h-[70vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-border bg-background p-2 shadow-xl"
         >
-          {(['send', 'ask', 'handoff'] as const).map((group) => (
+          {(['send', 'ask', 'answer', 'handoff'] as const).map((group) => (
             <div key={group} className="mb-1 last:mb-0">
               <div className="px-2.5 pt-1.5 pb-1 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
                 {t(`groups.${group}`)}
@@ -952,7 +955,11 @@ function AddMenu({
                       type="button"
                       role="menuitem"
                       disabled={blocked}
-                      title={blocked ? t('blockedTitle') : undefined}
+                      title={
+                        blocked
+                          ? t(k.type === 'faq' ? 'blockedTitleFaq' : 'blockedTitle')
+                          : undefined
+                      }
                       onClick={() => {
                         setOpen(false);
                         onPick(k);
@@ -1001,13 +1008,21 @@ function StepCard(p: {
     }
     return null;
   };
-  const labels: string[] = BRANCHING.has(s.type)
-    ? (Array.isArray(s.data.options) ? s.data.options : []).map((o: unknown, i: number) => {
-        const label = typeof o === 'string' ? o : str((o as Record<string, unknown>).title);
-        const to = stageOf(s.links[i] ?? null);
-        return t('branchLabel', { title: label || `#${i + 1}`, target: to ?? t('ends') });
-      })
-    : [];
+  const fixed = FIXED_EXITS[s.type];
+  const labels: string[] = fixed
+    ? fixed.map((handle, i) =>
+        t('branchLabel', {
+          title: t(`faqExits.${handle}`),
+          target: stageOf(s.links[i] ?? null) ?? t('ends'),
+        }),
+      )
+    : BRANCHING.has(s.type)
+      ? (Array.isArray(s.data.options) ? s.data.options : []).map((o: unknown, i: number) => {
+          const label = typeof o === 'string' ? o : str((o as Record<string, unknown>).title);
+          const to = stageOf(s.links[i] ?? null);
+          return t('branchLabel', { title: label || `#${i + 1}`, target: to ?? t('ends') });
+        })
+      : [];
   return (
     <section
       id={`step-${s.id}`}

@@ -9,10 +9,11 @@ import { Badge, Button, Spinner, cn, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { refreshFaqs, useFaqEntry } from '../api/hooks';
 import { faqApi } from '../api/service';
-import { marginOf, pct, scoreBar, tierKey, verdictOf, verdictTone } from '../lib/decision';
+import { marginOf, pct, scoreBar, tierKey, verdictTone, verdictWithCheck } from '../lib/decision';
 import { errorKey } from '../lib/errors';
 import { CheckIcon, FlowIcon } from './icons';
 import { CARD, ScoreBar } from './parts';
+import { VerifyDetail } from './verify-parts';
 
 /**
  * One matching decision in plain terms: what would happen, the score against the bar it had to reach, which tier decided and why,
@@ -29,7 +30,7 @@ export function DecisionView({
   compact?: boolean;
 }) {
   const t = useTranslations('faq.decision');
-  const verdict = verdictOf(decision.outcome);
+  const verdict = verdictWithCheck(decision);
   const tone = verdictTone(verdict);
   const bar = scoreBar(decision.score, decision.threshold);
   const margin = marginOf(decision);
@@ -85,6 +86,8 @@ export function DecisionView({
             </dl>
           </div>
         )}
+
+        {decision.verify && <VerifyDetail verify={decision.verify} />}
 
         {decision.tier && (
           <p className="rounded-md bg-muted/60 p-3 text-sm">
