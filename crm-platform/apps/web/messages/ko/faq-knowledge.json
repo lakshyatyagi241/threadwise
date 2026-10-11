@@ -1,0 +1,626 @@
+{
+  "faq": {
+    "nav": {
+      "faq": "FAQ",
+      "label": "FAQ 섹션",
+      "tab": {
+        "faqs": "FAQ",
+        "test": "테스트",
+        "unanswered": "답변 없음",
+        "insights": "인사이트",
+        "settings": "설정"
+      },
+      "unansweredCount": "{count, plural, other {답변되지 않은 메시지 #개}}"
+    },
+    "common": {
+      "dismiss": "닫기",
+      "retry": "다시 시도",
+      "requestId": "요청 {id}",
+      "noAccessTitle": "이 화면에 접근할 수 없습니다",
+      "noAccess": "워크스페이스 관리자에게 내 역할에 {permission} 권한을 부여해 달라고 요청하세요."
+    },
+    "errors": {
+      "network": "서버에 연결할 수 없습니다. 연결 상태를 확인하고 다시 시도하세요.",
+      "forbidden": "내 역할로는 이 작업을 할 수 없습니다.",
+      "notFound": "이 FAQ 또는 메시지가 더 이상 없습니다. 삭제되었을 수 있습니다.",
+      "conflict": "편집하는 동안 다른 사람이 내용을 변경했습니다.",
+      "duplicateQuestion": "다른 FAQ에 이미 같은 질문이 있습니다.",
+      "duplicateVariation": "이 FAQ에 이미 같은 표현이 있습니다.",
+      "limitReached": "워크스페이스의 FAQ 한도에 도달했습니다. 사용하지 않는 FAQ나 변형을 삭제하거나, 플랫폼 관리자에게 한도 상향을 요청하세요.",
+      "flowNotFound": "선택한 플로우가 이 워크스페이스에 더 이상 없습니다. 다른 플로우를 선택하세요.",
+      "embeddingUnavailable": "AI 제공업체를 사용할 수 없습니다. 워크스페이스에 OpenRouter 키를 추가하거나 플랫폼 관리자에게 공유 키 활성화를 요청한 후 다시 시도하세요.",
+      "engineDisabled": "현재 플랫폼 전체에서 FAQ 답변이 꺼져 있습니다.",
+      "modelNotAllowed": "플랫폼의 임베딩 모델이 허용되지 않습니다. 플랫폼 관리자에게 문의하세요.",
+      "validation": "확인이 필요한 항목이 있습니다.",
+      "rateLimited": "요청이 너무 많습니다. 잠시 후 다시 시도하세요.",
+      "unexpected": "문제가 발생했습니다. 다시 시도하고, 계속되면 요청 ID를 지원팀에 전달하세요."
+    },
+    "banner": {
+      "enabledToast": "FAQ 답변이 켜져 있습니다.",
+      "engineOff": "플랫폼에서 FAQ 답변을 껐습니다. 다시 켜질 때까지 고객은 FAQ 답변을 받지 못합니다.",
+      "modelChanged": "이 임계값을 조정한 뒤 플랫폼이 AI 모델을 변경했습니다. 점수가 달라졌으니 민감도를 검토하세요.",
+      "reviewSensitivity": "민감도 검토",
+      "offTitle": "고객에게 FAQ 답변이 꺼져 있습니다",
+      "offBody": "FAQ를 작성하고 테스트할 수 있지만, 켜기 전에는 고객이 답변을 받지 못합니다.",
+      "offNoRight": "faq.settings.manage 권한이 있는 사람(보통 워크스페이스 관리자)에게 켜 달라고 요청하세요.",
+      "enable": "FAQ 답변 켜기"
+    },
+    "list": {
+      "title": "FAQ",
+      "subtitle": "고객이 하는 질문과 봇의 답변입니다. 고객이 정확히 같은 표현을 쓸 필요는 없습니다.",
+      "add": "FAQ 추가",
+      "stats": {
+        "label": "FAQ 합계",
+        "total": "FAQ",
+        "active": "활성",
+        "paused": "일시중지",
+        "variations": "표현",
+        "pending": "인덱싱",
+        "pendingHint": "몇 초 안에 적용",
+        "failed": "인덱싱 실패",
+        "failedHint": "확인 필요"
+      },
+      "failedBanner": "{count, plural, other {표현 #개}}의 인덱싱에 실패하여 아직 고객 메시지와 매칭되지 않습니다.",
+      "showFailed": "실패한 FAQ 보기",
+      "search": "FAQ 검색",
+      "searchPlaceholder": "질문과 표현 검색",
+      "filter": {
+        "status": "상태",
+        "anyStatus": "모든 상태",
+        "category": "카테고리",
+        "anyCategory": "모든 카테고리",
+        "indexing": "인덱싱",
+        "anyIndexing": "전체",
+        "pending": "인덱싱 중",
+        "failed": "실패"
+      },
+      "status": {
+        "active": "활성",
+        "paused": "일시중지"
+      },
+      "clearFilters": "필터 지우기",
+      "bulk": {
+        "label": "일괄 작업",
+        "selected": "{count, plural, other {FAQ #개 선택됨}}",
+        "pause": "일시중지",
+        "activate": "활성화",
+        "delete": "삭제",
+        "clear": "선택 해제",
+        "done": {
+          "pause": "{count, plural, other {FAQ #개를 일시중지했습니다}}.",
+          "activate": "{count, plural, other {FAQ #개를 활성화했습니다}}.",
+          "delete": "{count, plural, other {FAQ #개를 삭제했습니다}}."
+        }
+      },
+      "paused": "FAQ를 일시중지했습니다.",
+      "activated": "FAQ를 활성화했습니다.",
+      "deleted": "FAQ를 삭제했습니다.",
+      "empty": {
+        "title": "자주 묻는 질문의 답변을 봇에게 가르치세요",
+        "body": "질문과 답변을 한 번만 작성하세요. 봇이 고객이 쓴 말을 그대로 알아듣고 답변하거나 플로우를 시작합니다.",
+        "how": "같은 질문을 하는 다른 방식(표현)을 몇 가지 추가하고, 고객에게 공개하기 전에 테스트하세요.",
+        "cta": "첫 FAQ 추가",
+        "noRight": "FAQ를 추가할 권한을 워크스페이스 관리자에게 요청하세요."
+      },
+      "noMatch": {
+        "title": "조건에 맞는 FAQ가 없습니다",
+        "body": "다른 검색어를 입력하거나 필터를 지우세요."
+      },
+      "selectAll": "이 페이지의 FAQ 모두 선택",
+      "selectRow": "{question} 선택",
+      "col": {
+        "question": "질문",
+        "answer": "답변",
+        "indexing": "활성 표현",
+        "answered": "답변 횟수 (90일)",
+        "status": "상태",
+        "actions": "작업"
+      },
+      "variationCount": "{count, plural, other {표현 #개}}",
+      "flowMissing": "플로우 없음",
+      "neverAnswered": "아직 없음",
+      "toggleLabel": "활성: {question}",
+      "edit": "{question} 편집",
+      "editShort": "편집",
+      "delete": "{question} 삭제",
+      "deleteShort": "삭제",
+      "loadMore": "더 보기",
+      "loadingMore": "로딩 중",
+      "confirm": {
+        "bulkTitle": "{count, plural, other {FAQ #개}}를 삭제할까요?",
+        "bulkBody": "{count, plural, other {이 FAQ와 표현이}} 영구적으로 삭제됩니다. 이 작업은 되돌릴 수 없습니다.",
+        "rowTitle": "이 FAQ를 삭제할까요?",
+        "rowBody": "\"{question}\"와(과) 모든 표현이 영구적으로 삭제됩니다. 이 작업은 되돌릴 수 없습니다.",
+        "delete": "삭제",
+        "cancel": "취소"
+      },
+      "indexing": {
+        "summary": "활성 {ready}, 인덱싱 중 {pending}, 실패 {failed}",
+        "ready": "활성 {count}",
+        "pending": "인덱싱 중 {count}",
+        "failed": "실패 {count}"
+      }
+    },
+    "editor": {
+      "back": "FAQ로 돌아가기",
+      "backToList": "FAQ로 돌아가기",
+      "newTitle": "새 FAQ",
+      "newSubtitle": "질문과 답변을 작성한 뒤, 고객이 질문할 수 있는 다른 방식을 추가하세요.",
+      "editTitle": "FAQ 편집",
+      "unsaved": "저장되지 않은 변경 사항",
+      "cancel": "취소",
+      "create": "FAQ 만들기",
+      "save": "변경 사항 저장",
+      "delete": "삭제",
+      "created": "FAQ를 만들었습니다.",
+      "saved": "FAQ를 저장했습니다.",
+      "deleted": "FAQ를 삭제했습니다.",
+      "readOnly": "이 FAQ를 볼 수는 있지만 내 역할로는 변경할 수 없습니다.",
+      "faqLimit": "워크스페이스가 FAQ {max}개 한도에 도달했습니다. 하나를 삭제한 후 추가하세요.",
+      "prefilled": "답변되지 않은 고객 메시지로 질문이 채워졌습니다. 이 FAQ를 저장하면 해당 메시지도 처리됨으로 표시됩니다.",
+      "tryItSaveFirst": "먼저 FAQ를 저장하면 고객 메시지가 어떻게 매칭되는지 테스트할 수 있습니다.",
+      "conflict": {
+        "title": "다른 사람이 이 FAQ를 변경했습니다",
+        "body": "내가 편집한 내용은 그대로 있습니다. 유지한 채 최신 버전 위에 다시 저장하거나, 버리고 최신 버전을 불러올 수 있습니다.",
+        "keep": "내 편집 내용 유지",
+        "reload": "최신 버전 불러오기",
+        "kept": "최신 버전으로 업데이트했습니다. 편집 내용은 유지되었으니 저장해서 적용하세요."
+      },
+      "question": {
+        "title": "질문",
+        "hint": "직접 쓰는 방식 그대로의 질문입니다. 첫 번째 표현으로도 사용됩니다.",
+        "label": "질문",
+        "count": "{count} / {max}"
+      },
+      "category": {
+        "label": "카테고리",
+        "hint": "선택 사항. 필터링에 도움이 됩니다."
+      },
+      "status": {
+        "label": "상태",
+        "hint": "일시중지된 FAQ는 답변하지 않습니다.",
+        "active": "활성",
+        "paused": "일시중지"
+      },
+      "answer": {
+        "title": "답변",
+        "hint": "이 FAQ가 매칭될 때 고객이 받는 내용입니다.",
+        "text": "텍스트 답변",
+        "flow": "플로우 시작",
+        "textLabel": "답변 텍스트",
+        "count": "{count} / {max}자",
+        "preview": "WhatsApp에서의 모습",
+        "previewEmpty": "여기에 답변이 표시됩니다",
+        "flowLabel": "시작할 플로우",
+        "noFlow": "선택된 플로우 없음"
+      },
+      "advanced": {
+        "title": "고급: 이 FAQ만의 민감도",
+        "body": "기본적으로 모든 FAQ는 워크스페이스 민감도를 따릅니다. 이 FAQ가 너무 쉽게 매칭되면 값을 높이고, 너무 드물게 매칭되면 낮춰서 사용자 지정 값을 쓰세요.",
+        "custom": "이 FAQ에 사용자 지정 민감도 사용",
+        "sliderLabel": "다음 이상일 때 매칭",
+        "workspace": "워크스페이스 민감도는 {value}%입니다.",
+        "following": "워크스페이스 민감도({value}%)를 따릅니다."
+      },
+      "problem": {
+        "question": {
+          "required": "고객이 하는 질문을 작성하세요.",
+          "tooLong": "질문은 최대 {max}자까지 입력할 수 있습니다.",
+          "invalid": "올바르지 않은 질문입니다."
+        },
+        "answerText": {
+          "required": "고객이 받을 답변을 작성하세요.",
+          "tooLong": "답변은 최대 {max}자까지 입력할 수 있습니다.",
+          "invalid": "올바르지 않은 답변입니다."
+        },
+        "flowId": {
+          "required": "시작할 플로우를 선택하세요.",
+          "tooLong": "시작할 플로우를 선택하세요.",
+          "invalid": "시작할 플로우를 선택하세요."
+        },
+        "category": {
+          "required": "카테고리를 입력하거나 비워 두세요.",
+          "tooLong": "카테고리는 최대 {max}자까지 입력할 수 있습니다.",
+          "invalid": "올바르지 않은 카테고리입니다."
+        },
+        "thresholdOverride": {
+          "required": "5%에서 99% 사이의 값을 선택하세요.",
+          "tooLong": "5%에서 99% 사이의 값을 선택하세요.",
+          "invalid": "5%에서 99% 사이의 값을 선택하세요."
+        }
+      },
+      "deleteConfirm": {
+        "title": "이 FAQ를 삭제할까요?",
+        "body": "FAQ와 모든 표현이 영구적으로 삭제됩니다. 이 작업은 되돌릴 수 없습니다.",
+        "confirm": "삭제"
+      },
+      "leave": {
+        "title": "저장하지 않고 나갈까요?",
+        "body": "이 FAQ의 변경 사항이 저장되지 않았습니다.",
+        "leave": "나가기",
+        "stay": "계속 편집"
+      }
+    },
+    "flowPicker": {
+      "noAccess": "여기서 플로우를 선택하려면 플로우 조회 권한(flb.flows.read)이 필요합니다.",
+      "missing": "이 FAQ가 시작하던 플로우가 더 이상 없습니다. 다른 플로우를 선택하지 않으면 이 FAQ는 답변할 수 없습니다.",
+      "selected": "선택됨",
+      "search": "플로우 검색",
+      "searchPlaceholder": "이름으로 플로우 검색",
+      "retry": "다시 시도",
+      "loading": "플로우 로딩 중",
+      "noMatch": "해당 이름의 플로우가 없습니다.",
+      "none": "아직 플로우가 없습니다. 먼저 플로우 메뉴에서 만드세요.",
+      "listLabel": "플로우",
+      "state": {
+        "live": "게시됨",
+        "off": "비활성",
+        "draft": "초안"
+      },
+      "note": "플로우는 트리거에서 시작됩니다. 게시되고 활성화된 플로우만 실행할 수 있습니다."
+    },
+    "variations": {
+      "title": "질문 변형",
+      "hint": "고객이 이 질문을 할 수 있는 다른 방식입니다. 각 표현은 의미로 매칭됩니다.",
+      "counterLabel": "표현 {max}개 중 {count}개 사용",
+      "listLabel": "표현",
+      "questionEmpty": "여기에 질문이 표시됩니다",
+      "source": {
+        "question": "질문",
+        "manual": "직접 작성",
+        "ai": "AI",
+        "learned": "학습됨",
+        "import": "가져옴"
+      },
+      "none": "추가 표현이 아직 없습니다. 직접 추가하거나 AI에게 제안을 받아 보세요.",
+      "edit": "{text} 편집",
+      "remove": "{text} 삭제",
+      "editLabel": "표현 편집",
+      "save": "저장",
+      "cancel": "취소",
+      "addLabel": "새 표현",
+      "addPlaceholder": "같은 질문을 하는 다른 방식",
+      "add": "추가",
+      "pasteMany": "여러 개 붙여넣기",
+      "full": "이 FAQ는 표현 {max}개 한도에 도달했습니다.",
+      "failedNotice": "{count, plural, other {표현 #개}}의 인덱싱에 실패했습니다. 표현을 편집하고 저장하면 다시 시도합니다.",
+      "suggest": "AI로 제안받기",
+      "suggestSaveFirst": "먼저 FAQ를 저장하면 AI가 표현을 제안할 수 있습니다.",
+      "suggesting": "AI에게 제안을 요청하는 중",
+      "suggestionsReady": "{count, plural, other {제안 #개 준비됨}}",
+      "suggestionsTitle": "제안된 표현",
+      "suggestionsHint": "추가하기 전에는 아무것도 저장되지 않습니다. 원하지 않는 항목은 선택을 해제하세요.",
+      "suggestionsNone": "AI가 제안할 새 표현이 없습니다.",
+      "addSelected": "선택 항목 추가 ({count})",
+      "discard": "버리기",
+      "bulk": {
+        "label": "한 줄에 표현 하나",
+        "placeholder": "내 택배는 어디 있나요\n주문 조회\n주문한 상품이 발송되었나요",
+        "summary": "{count, plural, other {새 표현 #개가 추가됩니다}}",
+        "duplicates": "{count, plural, other {중복 #개 제외됨}}",
+        "tooLong": "{count, plural, other {#줄이}} {max}자를 초과하여 제외되었습니다.",
+        "overflow": "{count, plural, other {#줄이}} 표현 한도를 넘어 제외되었습니다.",
+        "more": "외 {count}개",
+        "add": "{count, plural, other {표현 #개}} 추가"
+      },
+      "state": {
+        "ready": "활성",
+        "pending": "인덱싱 중",
+        "pendingHint": "저장했습니다. 몇 초 후부터 매칭됩니다.",
+        "failed": "실패",
+        "failedHint": "표현을 편집하고 저장하면 다시 시도합니다.",
+        "noReason": "사유가 제공되지 않았습니다"
+      },
+      "confirm": {
+        "title": "이 표현을 삭제할까요?",
+        "body": "\"{text}\"은(는) 더 이상 이 FAQ로 연결되지 않습니다.",
+        "remove": "삭제"
+      },
+      "errors": {
+        "duplicate": "이 FAQ에 이미 같은 표현이 있습니다.",
+        "tooLong": "표현은 최대 {max}자까지 입력할 수 있습니다.",
+        "aiKeys": "AI 키 설정"
+      }
+    },
+    "tryIt": {
+      "title": "사용해 보기",
+      "hint": "고객 메시지를 입력하면 어떻게 처리될지 확인할 수 있습니다. 실제로 전송되지 않습니다.",
+      "label": "고객 메시지",
+      "placeholder": "내 택배는 어디 있나요?",
+      "run": "테스트"
+    },
+    "decision": {
+      "verdict": {
+        "answer": {
+          "title": "답변함",
+          "body": "FAQ가 충분히 잘 매칭되었습니다. 고객에게 답변이 전달됩니다(또는 플로우가 시작됩니다)."
+        },
+        "below": {
+          "title": "기준 미달",
+          "body": "가장 가까운 FAQ의 점수가 충분히 높지 않아 아무것도 전송되지 않습니다. 이 표현을 FAQ에 추가하거나 민감도를 낮추세요."
+        },
+        "ambiguous": {
+          "title": "모호함",
+          "body": "두 FAQ의 점수가 거의 같아 봇이 추측하지 않습니다. FAQ를 더 뚜렷하게 구분하거나 최소 격차를 낮추세요."
+        },
+        "noFaqs": {
+          "title": "매칭할 FAQ 없음",
+          "body": "활성 표현이 있는 활성 FAQ가 아직 없습니다."
+        },
+        "providerError": {
+          "title": "제공업체 오류",
+          "body": "AI 제공업체에 연결할 수 없어 철자 매칭만 가능했습니다."
+        },
+        "notSent": {
+          "title": "매칭됨, 전송 안 됨",
+          "body": "FAQ가 매칭되었지만 FAQ 답변이 꺼져 있는 등의 이유로 답변이 전송되지 않았습니다."
+        }
+      },
+      "tier": {
+        "exact": {
+          "name": "정확히 일치",
+          "body": "대소문자와 공백을 무시하고 저장된 표현과 같은 메시지입니다."
+        },
+        "semantic": {
+          "name": "의미 일치",
+          "body": "모든 활성 표현과 의미를 비교했기 때문에 다른 단어라도 매칭될 수 있습니다."
+        },
+        "trigram": {
+          "name": "철자 대체 매칭",
+          "body": "의미 비교를 할 수 없어 글자 단위로 비교했습니다. 오타는 잡아내지만 동의어는 잡지 못합니다."
+        }
+      },
+      "scoreLabel": "점수 {score}%, 필요한 기준 {threshold}%",
+      "score": "점수",
+      "threshold": "필요",
+      "margin": "2위와의 격차",
+      "marginValue": "{margin}점 (필요 {needed})",
+      "note": "참고",
+      "model": "모델",
+      "noModel": "사용 안 함",
+      "latency": "시간",
+      "ms": "{ms} ms",
+      "winner": {
+        "title": "고객이 받게 될 내용",
+        "unavailable": "이 FAQ를 불러올 수 없습니다.",
+        "flow": "플로우 {name} 시작",
+        "flowMissing": "더 이상 없는 플로우를 시작합니다"
+      },
+      "candidates": {
+        "title": "상위 매칭",
+        "matchedOn": "매칭된 표현",
+        "best": "최고",
+        "paused": "일시중지",
+        "scoreLabel": "점수 {score}%",
+        "addVariation": "이 문구를 {question}의 변형으로 추가",
+        "added": "추가됨",
+        "addedToast": "{question}의 표현으로 추가했습니다.",
+        "alreadyThere": "이미 있는 표현입니다.",
+        "open": "FAQ 열기"
+      }
+    },
+    "playground": {
+      "title": "내 봇은 이 질문에 어떻게 답할까요?",
+      "subtitle": "봇이 사용하는 것과 같은 매칭으로 고객 메시지를 확인해 보세요. 실제로 전송되지 않으며 인사이트에도 집계되지 않습니다.",
+      "label": "고객 메시지",
+      "placeholder": "내 택배는 어디 있나요?",
+      "run": "실행",
+      "hint": "저장된 FAQ만 매칭됩니다. 활성 표현이 있는 활성 FAQ가 대상입니다.",
+      "empty": "위에 메시지를 입력하고 실행하면 결과를 볼 수 있습니다.",
+      "history": {
+        "title": "이번 세션",
+        "empty": "최근 테스트 10건이 여기에 표시됩니다."
+      }
+    },
+    "unanswered": {
+      "title": "답변되지 않은 메시지",
+      "subtitle": "어떤 FAQ도 답변하지 못한 고객 메시지입니다. 이를 바탕으로 봇을 학습시키세요.",
+      "search": "답변되지 않은 메시지 검색",
+      "searchPlaceholder": "메시지 검색",
+      "listLabel": "답변되지 않은 메시지",
+      "emptyTitle": "대기 중인 항목 없음",
+      "emptyBody": "모든 고객 메시지에 답변했거나 처리했습니다. 새로 답변되지 않은 메시지는 여기에 표시됩니다.",
+      "noMatch": "검색과 일치하는 메시지가 없습니다",
+      "notKept": "메시지 텍스트가 저장되지 않았습니다(쿼리 로깅 꺼짐)",
+      "closest": "가장 가까운 FAQ:",
+      "allCandidates": "후보 {count}개 모두 보기",
+      "addToFaq": "FAQ에 추가",
+      "createFaq": "이 메시지로 FAQ 만들기",
+      "dismiss": "무시",
+      "dismissed": "메시지를 무시했습니다.",
+      "learned": "\"{question}\"에 추가했습니다. 이제부터 답변됩니다.",
+      "pickTitle": "이 메시지를 어느 FAQ에 추가할까요?",
+      "loadMore": "더 보기",
+      "loadingMore": "로딩 중"
+    },
+    "picker": {
+      "close": "닫기",
+      "search": "FAQ 검색",
+      "searchPlaceholder": "FAQ 검색",
+      "loading": "FAQ 로딩 중",
+      "none": "FAQ를 찾을 수 없습니다.",
+      "paused": "일시중지",
+      "more": "더 보기"
+    },
+    "log": {
+      "title": "매칭 로그",
+      "hint": "FAQ가 확인한 모든 고객 메시지와 답변했는지 여부 및 그 이유입니다.",
+      "viewLabel": "보기",
+      "view": {
+        "all": "전체",
+        "answered": "답변됨",
+        "unanswered": "답변 없음",
+        "errors": "오류"
+      },
+      "search": "로그 검색",
+      "searchPlaceholder": "메시지 검색",
+      "empty": "아직 메시지가 없습니다.",
+      "col": {
+        "time": "시각",
+        "message": "메시지",
+        "outcome": "결과",
+        "faq": "FAQ",
+        "score": "점수"
+      },
+      "notKept": "저장 안 됨 ({length}자)",
+      "testRun": "(테스트)",
+      "expand": "자세히 보기",
+      "collapse": "자세히 숨기기",
+      "noCandidates": "검토된 후보가 없습니다.",
+      "matchedOn": "매칭된 표현",
+      "detail": {
+        "tier": "단계",
+        "model": "모델",
+        "latency": "시간",
+        "ms": "{ms} ms"
+      },
+      "loadMore": "더 보기",
+      "loadingMore": "로딩 중",
+      "why": {
+        "answered": "\"{faq}\" FAQ로 {score}%에서 답변했습니다.",
+        "flowStarted": "\"{faq}\" FAQ의 플로우를 {score}%에서 시작했습니다.",
+        "belowThreshold": "최고 매칭 점수는 {score}%로 {threshold}% 기준 미만이어서 아무것도 전송되지 않았습니다.",
+        "belowThresholdNoBar": "최고 매칭 점수가 {score}%로 충분하지 않아 아무것도 전송되지 않았습니다.",
+        "lowMargin": "두 FAQ의 점수가 너무 비슷하여({score}%와 {second}%) 봇이 추측하지 않았습니다.",
+        "noFaqs": "매칭할 활성 표현이 있는 활성 FAQ가 없었습니다.",
+        "providerError": "AI 제공업체에 오류가 발생해 봇이 철자로만 매칭할 수 있었습니다.",
+        "notSent": "FAQ가 매칭되었지만 답변이 전송되지 않았습니다.",
+        "tier": "{tier} 단계에서 결정되었습니다.",
+        "error": "오류: {error}"
+      }
+    },
+    "insights": {
+      "title": "FAQ 인사이트",
+      "subtitle": "FAQ가 실제 고객 메시지에 얼마나 잘 답하는지, 어디를 개선해야 하는지 확인하세요.",
+      "range": {
+        "label": "기간",
+        "days": "{days}일"
+      },
+      "empty": {
+        "title": "아직 메시지가 없습니다",
+        "body": "고객이 메시지를 보내고 FAQ 답변이 켜져 있으면 봇의 답변 비율, 효과적인 FAQ, 부족한 부분을 확인할 수 있습니다."
+      },
+      "kpi": {
+        "label": "핵심 수치",
+        "messages": "확인한 메시지",
+        "answerRate": "답변률",
+        "avgScore": "평균 점수 {score}%",
+        "flows": "시작된 플로우",
+        "unanswered": "답변 없음",
+        "toReview": "검토할 항목 {count}개",
+        "errors": "제공업체 오류"
+      },
+      "daily": {
+        "title": "일별 메시지",
+        "hint": "최근 {days}일, 답변됨 및 답변 없음"
+      },
+      "hist": {
+        "title": "메시지 점수 분포",
+        "hint": "각 막대는 점수 구간입니다. 점선은 현재 민감도입니다.",
+        "advice": "잘못된 답변이 나가면 임계값을 높이고, 답변되지 않는 메시지가 너무 많으면 낮추세요.",
+        "tune": "민감도 변경"
+      },
+      "top": {
+        "title": "상위 FAQ",
+        "none": "아직 답변한 FAQ가 없습니다.",
+        "hits": "{count, plural, other {답변 #회}}"
+      },
+      "never": {
+        "title": "매칭된 적 없음",
+        "body": "최근 {days}일 동안 아무도 사용하지 않은 FAQ입니다. 표현을 확인하거나 삭제하세요.",
+        "link": "FAQ 검토"
+      },
+      "chart": {
+        "answered": "답변됨",
+        "unanswered": "답변 없음",
+        "showTable": "표로 보기",
+        "showChart": "차트로 보기",
+        "day": "일",
+        "dailyTitle": "일별 메시지",
+        "dailyLabel": "일별 답변됨 및 답변 없음 메시지의 막대 차트입니다. 수치는 표 보기에서 확인하세요.",
+        "dayTooltip": "{day}: 답변됨 {answered}, 답변 없음 {unanswered}",
+        "histogramTitle": "점수 분포",
+        "histogramLabel": "답변됨과 답변 없음으로 나눈 매칭 점수 히스토그램입니다. 수치는 표 보기에서 확인하세요.",
+        "scoreRange": "점수",
+        "bucketTooltip": "{from}-{to}%: 답변됨 {answered}, 답변 없음 {unanswered}",
+        "thresholdMarker": "임계값 {value}%"
+      }
+    },
+    "settings": {
+      "title": "FAQ 설정",
+      "subtitle": "FAQ 답변을 켜고 메시지가 얼마나 비슷해야 매칭될지 조정하세요.",
+      "unsaved": "저장되지 않은 변경 사항",
+      "discard": "버리기",
+      "save": "설정 저장",
+      "saved": "설정을 저장했습니다.",
+      "readOnly": "이 설정은 볼 수만 있습니다. 변경하려면 보통 워크스페이스 관리자에게 있는 faq.settings.manage 권한이 필요합니다.",
+      "engineOff": "플랫폼에서 FAQ 답변을 껐습니다. 여기서 설정한 내용은 다시 켜지면 적용됩니다.",
+      "conflict": "다른 사람이 이 설정을 저장했습니다. 새로고침하여 그 버전을 확인한 뒤 다시 변경하세요.",
+      "reload": "설정 새로고침",
+      "modelChanged": {
+        "title": "민감도 검토",
+        "body": "이 임계값을 조정한 뒤 플랫폼이 AI 모델을 변경했습니다. 점수가 달라졌으니 민감도를 검토하세요. 저장하면 확인한 것으로 처리됩니다."
+      },
+      "enable": {
+        "title": "FAQ 답변",
+        "label": "FAQ로 고객에게 답변",
+        "on": "켜짐",
+        "off": "꺼짐",
+        "onBody": "고객이 메시지를 보내면 봇이 메시지를 FAQ와 비교하여 가장 알맞은 답변을 보내거나 해당 플로우를 시작합니다. 이미 플로우나 키워드 트리거가 처리한 메시지는 그쪽이 우선합니다.",
+        "offBody": "고객이 FAQ 답변을 받지 못합니다. FAQ 작성과 테스트는 계속 할 수 있습니다."
+      },
+      "sens": {
+        "title": "민감도",
+        "hint": "메시지가 얼마나 비슷해야 매칭되는지 정합니다. 점수는 {model} 모델 기준입니다.",
+        "label": "매칭 점수가 다음 이상이면 답변",
+        "presets": "민감도 프리셋",
+        "preset": {
+          "strict": "엄격",
+          "balanced": "균형",
+          "forgiving": "유연"
+        },
+        "looser": "더 많이 답변",
+        "stricter": "더 적게 답변",
+        "recommendedMark": "권장 {value}%",
+        "explain": "{value}%에서는 최고 매칭 점수가 {value}% 이상일 때만 답변합니다. 높을수록 답변은 적지만 더 안전하고, 낮을수록 답변은 많아지지만 오답 가능성도 커집니다.",
+        "useRecommended": "권장 값({value}%) 사용",
+        "modelScale": "점수는 같은 모델 안에서만 비교할 수 있습니다. 플랫폼이 모델({model})을 변경하면 이 값을 검토하세요."
+      },
+      "margin": {
+        "title": "모호성 방지",
+        "hint": "점수가 거의 같은 두 FAQ 사이에서 봇이 추측하지 않도록 합니다.",
+        "label": "2위와의 최소 격차",
+        "off": "꺼짐",
+        "explain": "최고 FAQ와 2위의 격차가 이 값보다 작으면 봇은 답변하지 않고 메시지를 답변 없음으로 기록합니다. FAQ가 거의 겹치지 않는다면 꺼 두세요."
+      },
+      "log": {
+        "title": "로그의 고객 메시지",
+        "label": "매칭 로그에 고객 메시지 보관",
+        "onBody": "각 메시지의 텍스트를 90일 동안 보관하여 답변 여부와 이유를 확인하고 학습에 활용할 수 있습니다. 이후에는 삭제됩니다.",
+        "offBody": "점수와 결과만 보관하고 텍스트는 보관하지 않습니다. 봇의 답변 비율은 볼 수 있지만 답변되지 않은 메시지로 학습할 수는 없습니다."
+      },
+      "facts": {
+        "title": "모델 및 한도",
+        "model": "매칭용 AI 모델",
+        "faqs": "FAQ",
+        "variations": "사용 중인 표현",
+        "perFaq": "FAQ당 허용 표현 수",
+        "of": "{max}개 중 {used}개"
+      },
+      "how": {
+        "title": "매칭 방식",
+        "exact": "정확히 일치: 대소문자와 공백을 무시하고 저장된 표현과 같은 메시지입니다.",
+        "semantic": "의미 일치: 모든 활성 표현과 의미를 비교하므로 다른 단어라도 매칭될 수 있습니다.",
+        "trigram": "철자 대체 매칭: AI 제공업체를 사용할 수 없으면 글자를 비교하며, 오타만 잡아냅니다.",
+        "threshold": "최고 점수를 민감도와 비교합니다. 이상이면 FAQ가 답변하고, 미만이면 메시지가 답변 없음 목록에 표시됩니다."
+      },
+      "who": "이 설정을 변경하려면 faq.settings.manage 권한이 필요합니다.",
+      "leave": {
+        "title": "저장하지 않고 나갈까요?",
+        "body": "이 설정의 변경 사항이 저장되지 않았습니다.",
+        "leave": "나가기",
+        "stay": "머무르기"
+      }
+    }
+  }
+}

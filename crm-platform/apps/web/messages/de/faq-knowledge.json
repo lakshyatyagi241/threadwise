@@ -1,0 +1,626 @@
+{
+  "faq": {
+    "nav": {
+      "faq": "FAQs",
+      "label": "FAQ-Bereiche",
+      "tab": {
+        "faqs": "FAQs",
+        "test": "Testen",
+        "unanswered": "Unbeantwortet",
+        "insights": "Auswertung",
+        "settings": "Einstellungen"
+      },
+      "unansweredCount": "{count, plural, one {# unbeantwortete Nachricht} other {# unbeantwortete Nachrichten}}"
+    },
+    "common": {
+      "dismiss": "Schließen",
+      "retry": "Erneut versuchen",
+      "requestId": "Anfrage {id}",
+      "noAccessTitle": "Sie haben keinen Zugriff auf diese Seite",
+      "noAccess": "Bitten Sie einen Workspace-Admin, Ihrer Rolle die Berechtigung {permission} zu erteilen."
+    },
+    "errors": {
+      "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+      "forbidden": "Ihre Rolle darf das nicht tun.",
+      "notFound": "Diese FAQ oder Nachricht existiert nicht mehr. Möglicherweise wurde sie gelöscht.",
+      "conflict": "Jemand anderes hat dies geändert, während Sie es bearbeitet haben.",
+      "duplicateQuestion": "Eine andere FAQ enthält bereits diese Frage.",
+      "duplicateVariation": "Diese FAQ enthält diese Formulierung bereits.",
+      "limitReached": "Ihr Workspace hat das FAQ-Limit erreicht. Löschen Sie nicht benötigte FAQs oder Varianten oder bitten Sie Ihren Plattform-Admin, das Limit zu erhöhen.",
+      "flowNotFound": "Der gewählte Flow existiert in diesem Workspace nicht mehr. Wählen Sie einen anderen.",
+      "embeddingUnavailable": "Der KI-Anbieter ist nicht verfügbar. Hinterlegen Sie einen OpenRouter-Schlüssel in Ihrem Workspace oder bitten Sie Ihren Plattform-Admin, den gemeinsamen Schlüssel zu aktivieren, und versuchen Sie es dann erneut.",
+      "engineDisabled": "Die FAQ-Beantwortung ist für die gesamte Plattform derzeit ausgeschaltet.",
+      "modelNotAllowed": "Das KI-Modell der Plattform ist nicht zulässig. Wenden Sie sich an Ihren Plattform-Admin.",
+      "validation": "Einige Felder müssen geprüft werden.",
+      "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
+      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es erneut und nennen Sie dem Support die Anfrage-ID, falls es weiterhin auftritt."
+    },
+    "banner": {
+      "enabledToast": "Die FAQ-Beantwortung ist eingeschaltet.",
+      "engineOff": "Die FAQ-Beantwortung wurde von der Plattform ausgeschaltet. Kunden erhalten keine FAQ-Antworten, bis sie wieder eingeschaltet wird.",
+      "modelChanged": "Die Plattform hat das KI-Modell geändert, nachdem Sie diesen Schwellenwert eingestellt haben. Die Werte haben sich verschoben, prüfen Sie daher Ihre Empfindlichkeit.",
+      "reviewSensitivity": "Empfindlichkeit prüfen",
+      "offTitle": "Die FAQ-Beantwortung ist für Kunden AUSGESCHALTET",
+      "offBody": "Sie können FAQs schreiben und testen, doch Kunden erhalten erst Antworten, wenn Sie die Funktion einschalten.",
+      "offNoRight": "Bitten Sie jemanden mit der Berechtigung faq.settings.manage (meist ein Workspace-Admin), sie einzuschalten.",
+      "enable": "FAQ-Beantwortung einschalten"
+    },
+    "list": {
+      "title": "FAQs",
+      "subtitle": "Fragen Ihrer Kunden und die Antworten Ihres Bots. Kunden müssen nicht Ihre genauen Worte verwenden.",
+      "add": "FAQ hinzufügen",
+      "stats": {
+        "label": "FAQ-Übersicht",
+        "total": "FAQs",
+        "active": "Aktiv",
+        "paused": "Pausiert",
+        "variations": "Formulierungen",
+        "pending": "Wird indexiert",
+        "pendingHint": "In wenigen Sekunden aktiv",
+        "failed": "Indexierung fehlgeschlagen",
+        "failedHint": "Erfordert Aufmerksamkeit"
+      },
+      "failedBanner": "{count, plural, one {# Formulierung konnte} other {# Formulierungen konnten}} nicht indexiert werden und {count, plural, one {kann} other {können}} daher noch nicht zu Kundennachrichten passen.",
+      "showFailed": "FAQs mit Fehlern anzeigen",
+      "search": "FAQs durchsuchen",
+      "searchPlaceholder": "Fragen und Formulierungen durchsuchen",
+      "filter": {
+        "status": "Status",
+        "anyStatus": "Beliebiger Status",
+        "category": "Kategorie",
+        "anyCategory": "Beliebige Kategorie",
+        "indexing": "Indexierung",
+        "anyIndexing": "Beliebig",
+        "pending": "Wird noch indexiert",
+        "failed": "Fehlgeschlagen"
+      },
+      "status": {
+        "active": "Aktiv",
+        "paused": "Pausiert"
+      },
+      "clearFilters": "Filter zurücksetzen",
+      "bulk": {
+        "label": "Sammelaktionen",
+        "selected": "{count, plural, one {# FAQ ausgewählt} other {# FAQs ausgewählt}}",
+        "pause": "Pausieren",
+        "activate": "Aktivieren",
+        "delete": "Löschen",
+        "clear": "Auswahl aufheben",
+        "done": {
+          "pause": "{count, plural, one {# FAQ pausiert} other {# FAQs pausiert}}.",
+          "activate": "{count, plural, one {# FAQ aktiviert} other {# FAQs aktiviert}}.",
+          "delete": "{count, plural, one {# FAQ gelöscht} other {# FAQs gelöscht}}."
+        }
+      },
+      "paused": "FAQ pausiert.",
+      "activated": "FAQ aktiviert.",
+      "deleted": "FAQ gelöscht.",
+      "empty": {
+        "title": "Bringen Sie Ihrem Bot die Antworten auf häufige Fragen bei",
+        "body": "Schreiben Sie eine Frage und ihre Antwort nur einmal. Ihr Bot erkennt, was Kunden in eigenen Worten schreiben, und antwortet oder startet einen Flow.",
+        "how": "Fügen Sie ein paar weitere Formulierungen derselben Frage hinzu und testen Sie sie, bevor Kunden sie sehen.",
+        "cta": "Erste FAQ hinzufügen",
+        "noRight": "Bitten Sie einen Workspace-Admin um die Berechtigung, FAQs hinzuzufügen."
+      },
+      "noMatch": {
+        "title": "Keine FAQ passt zu diesen Filtern",
+        "body": "Versuchen Sie eine andere Suche oder setzen Sie die Filter zurück."
+      },
+      "selectAll": "Alle FAQs auf dieser Seite auswählen",
+      "selectRow": "{question} auswählen",
+      "col": {
+        "question": "Frage",
+        "answer": "Antwort",
+        "indexing": "Aktive Formulierungen",
+        "answered": "Beantwortet (90 Tage)",
+        "status": "Status",
+        "actions": "Aktionen"
+      },
+      "variationCount": "{count, plural, one {# Formulierung} other {# Formulierungen}}",
+      "flowMissing": "Flow fehlt",
+      "neverAnswered": "Noch nicht",
+      "toggleLabel": "Aktiv: {question}",
+      "edit": "{question} bearbeiten",
+      "editShort": "Bearbeiten",
+      "delete": "{question} löschen",
+      "deleteShort": "Löschen",
+      "loadMore": "Mehr laden",
+      "loadingMore": "Wird geladen",
+      "confirm": {
+        "bulkTitle": "{count, plural, one {# FAQ} other {# FAQs}} löschen?",
+        "bulkBody": "{count, plural, one {Diese FAQ und ihre Formulierungen werden} other {Diese FAQs und ihre Formulierungen werden}} endgültig gelöscht. Das lässt sich nicht rückgängig machen.",
+        "rowTitle": "Diese FAQ löschen?",
+        "rowBody": "„{question}“ und alle Formulierungen werden endgültig gelöscht. Das lässt sich nicht rückgängig machen.",
+        "delete": "Löschen",
+        "cancel": "Abbrechen"
+      },
+      "indexing": {
+        "summary": "{ready} aktiv, {pending} in Indexierung, {failed} fehlgeschlagen",
+        "ready": "{count} aktiv",
+        "pending": "{count} in Indexierung",
+        "failed": "{count} fehlgeschlagen"
+      }
+    },
+    "editor": {
+      "back": "Zurück zu den FAQs",
+      "backToList": "Zurück zu den FAQs",
+      "newTitle": "Neue FAQ",
+      "newSubtitle": "Schreiben Sie die Frage und ihre Antwort und fügen Sie weitere Formulierungen hinzu, mit denen Kunden fragen könnten.",
+      "editTitle": "FAQ bearbeiten",
+      "unsaved": "Nicht gespeicherte Änderungen",
+      "cancel": "Abbrechen",
+      "create": "FAQ erstellen",
+      "save": "Änderungen speichern",
+      "delete": "Löschen",
+      "created": "FAQ erstellt.",
+      "saved": "FAQ gespeichert.",
+      "deleted": "FAQ gelöscht.",
+      "readOnly": "Sie können diese FAQ ansehen, Ihre Rolle darf sie aber nicht ändern.",
+      "faqLimit": "Ihr Workspace hat sein Limit von {max} FAQs erreicht. Löschen Sie eine, um eine weitere hinzuzufügen.",
+      "prefilled": "Die Frage wurde aus einer unbeantworteten Kundennachricht übernommen. Mit dem Speichern dieser FAQ wird die Nachricht auch als erledigt markiert.",
+      "tryItSaveFirst": "Speichern Sie zuerst die FAQ, dann können Sie testen, wie Kundennachrichten dazu passen.",
+      "conflict": {
+        "title": "Jemand anderes hat diese FAQ geändert",
+        "body": "Ihre Änderungen sind noch vorhanden. Behalten Sie sie und speichern Sie erneut auf Basis der neuesten Version oder verwerfen Sie sie und laden Sie die neueste Version.",
+        "keep": "Meine Änderungen behalten",
+        "reload": "Neueste Version laden",
+        "kept": "Auf die neueste Version aktualisiert. Ihre Änderungen bleiben erhalten; speichern Sie, um sie zu übernehmen."
+      },
+      "question": {
+        "title": "Frage",
+        "hint": "Die Frage, wie Sie sie schreiben würden. Sie zählt auch als erste Formulierung.",
+        "label": "Frage",
+        "count": "{count} / {max}"
+      },
+      "category": {
+        "label": "Kategorie",
+        "hint": "Optional. Hilft beim Filtern."
+      },
+      "status": {
+        "label": "Status",
+        "hint": "Pausierte FAQs antworten nie.",
+        "active": "Aktiv",
+        "paused": "Pausiert"
+      },
+      "answer": {
+        "title": "Antwort",
+        "hint": "Das erhält der Kunde, wenn diese FAQ passt.",
+        "text": "Textantwort",
+        "flow": "Flow starten",
+        "textLabel": "Antworttext",
+        "count": "{count} / {max} Zeichen",
+        "preview": "So sieht es in WhatsApp aus",
+        "previewEmpty": "Ihre Antwort erscheint hier",
+        "flowLabel": "Zu startender Flow",
+        "noFlow": "Kein Flow ausgewählt"
+      },
+      "advanced": {
+        "title": "Erweitert: Empfindlichkeit nur für diese FAQ",
+        "body": "Standardmäßig verwendet jede FAQ die Empfindlichkeit des Workspace. Nutzen Sie einen eigenen Wert, wenn diese FAQ zu schnell (Wert erhöhen) oder zu selten (Wert senken) zutrifft.",
+        "custom": "Eigene Empfindlichkeit für diese FAQ verwenden",
+        "sliderLabel": "Zutreffend ab",
+        "workspace": "Die Empfindlichkeit des Workspace beträgt {value} %.",
+        "following": "Folgt der Empfindlichkeit des Workspace ({value} %)."
+      },
+      "problem": {
+        "question": {
+          "required": "Schreiben Sie die Frage, die Kunden stellen.",
+          "tooLong": "Die Frage darf höchstens {max} Zeichen lang sein.",
+          "invalid": "Diese Frage ist ungültig."
+        },
+        "answerText": {
+          "required": "Schreiben Sie die Antwort, die Kunden erhalten sollen.",
+          "tooLong": "Die Antwort darf höchstens {max} Zeichen lang sein.",
+          "invalid": "Diese Antwort ist ungültig."
+        },
+        "flowId": {
+          "required": "Wählen Sie den Flow, der gestartet werden soll.",
+          "tooLong": "Wählen Sie den Flow, der gestartet werden soll.",
+          "invalid": "Wählen Sie den Flow, der gestartet werden soll."
+        },
+        "category": {
+          "required": "Geben Sie eine Kategorie ein oder lassen Sie das Feld leer.",
+          "tooLong": "Die Kategorie darf höchstens {max} Zeichen lang sein.",
+          "invalid": "Diese Kategorie ist ungültig."
+        },
+        "thresholdOverride": {
+          "required": "Wählen Sie einen Wert zwischen 5 % und 99 %.",
+          "tooLong": "Wählen Sie einen Wert zwischen 5 % und 99 %.",
+          "invalid": "Wählen Sie einen Wert zwischen 5 % und 99 %."
+        }
+      },
+      "deleteConfirm": {
+        "title": "Diese FAQ löschen?",
+        "body": "Die FAQ und alle ihre Formulierungen werden endgültig gelöscht. Das lässt sich nicht rückgängig machen.",
+        "confirm": "Löschen"
+      },
+      "leave": {
+        "title": "Ohne Speichern verlassen?",
+        "body": "Ihre Änderungen an dieser FAQ sind nicht gespeichert.",
+        "leave": "Verlassen",
+        "stay": "Weiter bearbeiten"
+      }
+    },
+    "flowPicker": {
+      "noAccess": "Sie benötigen die Berechtigung zum Ansehen von Flows (flb.flows.read), um hier einen auszuwählen.",
+      "missing": "Der Flow, den diese FAQ gestartet hat, existiert nicht mehr. Wählen Sie einen anderen Flow, sonst kann diese FAQ nicht antworten.",
+      "selected": "Ausgewählt",
+      "search": "Flows durchsuchen",
+      "searchPlaceholder": "Flows nach Namen suchen",
+      "retry": "Erneut versuchen",
+      "loading": "Flows werden geladen",
+      "noMatch": "Kein Flow hat diesen Namen.",
+      "none": "Sie haben noch keine Flows. Erstellen Sie zuerst einen unter Flows.",
+      "listLabel": "Flows",
+      "state": {
+        "live": "Veröffentlicht",
+        "off": "Inaktiv",
+        "draft": "Entwurf"
+      },
+      "note": "Der Flow startet mit seinem Auslöser. Nur veröffentlichte, aktive Flows können laufen."
+    },
+    "variations": {
+      "title": "Fragevarianten",
+      "hint": "Weitere Möglichkeiten, wie ein Kunde dies fragen könnte. Jede wird nach Bedeutung abgeglichen.",
+      "counterLabel": "{count} von {max} Formulierungen verwendet",
+      "listLabel": "Formulierungen",
+      "questionEmpty": "Ihre Frage erscheint hier",
+      "source": {
+        "question": "Frage",
+        "manual": "Geschrieben",
+        "ai": "KI",
+        "learned": "Gelernt",
+        "import": "Importiert"
+      },
+      "none": "Noch keine zusätzlichen Formulierungen. Fügen Sie ein paar hinzu oder lassen Sie die KI welche vorschlagen.",
+      "edit": "{text} bearbeiten",
+      "remove": "{text} entfernen",
+      "editLabel": "Formulierung bearbeiten",
+      "save": "Speichern",
+      "cancel": "Abbrechen",
+      "addLabel": "Neue Formulierung",
+      "addPlaceholder": "Eine weitere Art, dies zu fragen",
+      "add": "Hinzufügen",
+      "pasteMany": "Mehrere einfügen",
+      "full": "Diese FAQ hat ihr Limit von {max} Formulierungen erreicht.",
+      "failedNotice": "{count, plural, one {# Formulierung konnte} other {# Formulierungen konnten}} nicht indexiert werden. Bearbeiten und speichern Sie die Formulierung, um es erneut zu versuchen.",
+      "suggest": "Mit KI vorschlagen",
+      "suggestSaveFirst": "Speichern Sie zuerst die FAQ, dann kann die KI Formulierungen vorschlagen.",
+      "suggesting": "Die KI wird nach Vorschlägen gefragt",
+      "suggestionsReady": "{count, plural, one {# Vorschlag bereit} other {# Vorschläge bereit}}",
+      "suggestionsTitle": "Vorgeschlagene Formulierungen",
+      "suggestionsHint": "Nichts wird gespeichert, bevor Sie es hinzufügen. Entfernen Sie das Häkchen bei unerwünschten Vorschlägen.",
+      "suggestionsNone": "Die KI hatte keine neuen Formulierungen vorzuschlagen.",
+      "addSelected": "Auswahl hinzufügen ({count})",
+      "discard": "Verwerfen",
+      "bulk": {
+        "label": "Eine Formulierung pro Zeile",
+        "placeholder": "Wo ist mein Paket\nSendung verfolgen\nWurde meine Bestellung versandt",
+        "summary": "{count, plural, one {# neue Formulierung wird hinzugefügt} other {# neue Formulierungen werden hinzugefügt}}",
+        "duplicates": "{count, plural, one {# Duplikat ausgelassen} other {# Duplikate ausgelassen}}",
+        "tooLong": "{count, plural, one {# Zeile ist} other {# Zeilen sind}} länger als {max} Zeichen und {count, plural, one {wurde} other {wurden}} ausgelassen.",
+        "overflow": "{count, plural, one {# Zeile passt} other {# Zeilen passen}} nicht mehr unter das Formulierungslimit und {count, plural, one {wurde} other {wurden}} ausgelassen.",
+        "more": "und {count} weitere",
+        "add": "{count, plural, one {# Formulierung} other {# Formulierungen}} hinzufügen"
+      },
+      "state": {
+        "ready": "Aktiv",
+        "pending": "Wird indexiert",
+        "pendingHint": "Gespeichert. Sie wird in wenigen Sekunden berücksichtigt.",
+        "failed": "Fehlgeschlagen",
+        "failedHint": "Bearbeiten und speichern Sie die Formulierung, um es erneut zu versuchen.",
+        "noReason": "Es wurde kein Grund angegeben"
+      },
+      "confirm": {
+        "title": "Diese Formulierung entfernen?",
+        "body": "„{text}“ führt dann nicht mehr zu dieser FAQ.",
+        "remove": "Entfernen"
+      },
+      "errors": {
+        "duplicate": "Diese FAQ enthält diese Formulierung bereits.",
+        "tooLong": "Eine Formulierung darf höchstens {max} Zeichen lang sein.",
+        "aiKeys": "KI-Schlüssel einrichten"
+      }
+    },
+    "tryIt": {
+      "title": "Ausprobieren",
+      "hint": "Geben Sie eine Kundennachricht ein und sehen Sie, was passieren würde. Es wird nichts gesendet.",
+      "label": "Kundennachricht",
+      "placeholder": "Wo ist mein Paket?",
+      "run": "Testen"
+    },
+    "decision": {
+      "verdict": {
+        "answer": {
+          "title": "Würde antworten",
+          "body": "Eine FAQ passte gut genug. Der Kunde erhält ihre Antwort (oder ihr Flow startet)."
+        },
+        "below": {
+          "title": "Unter dem Schwellenwert",
+          "body": "Die ähnlichste FAQ hat nicht genug Punkte erreicht, daher würde nichts gesendet. Fügen Sie diese Formulierung einer FAQ hinzu oder senken Sie die Empfindlichkeit."
+        },
+        "ambiguous": {
+          "title": "Mehrdeutig",
+          "body": "Zwei FAQs erreichten fast dieselbe Punktzahl, daher würde der Bot nicht raten. Machen Sie die FAQs unterscheidbarer oder senken Sie den Mindestabstand."
+        },
+        "noFaqs": {
+          "title": "Keine FAQs zum Abgleichen",
+          "body": "Es gibt noch keine aktiven FAQs mit aktiven Formulierungen."
+        },
+        "providerError": {
+          "title": "Anbieterfehler",
+          "body": "Der KI-Anbieter war nicht erreichbar, daher war nur ein Abgleich nach Schreibweise möglich."
+        },
+        "notSent": {
+          "title": "Passend, nicht gesendet",
+          "body": "Eine FAQ passte, aber die Antwort wurde nicht gesendet, z. B. weil die FAQ-Beantwortung ausgeschaltet war."
+        }
+      },
+      "tier": {
+        "exact": {
+          "name": "Exakte Übereinstimmung",
+          "body": "Die Nachricht entspricht einer gespeicherten Formulierung, unabhängig von Groß-/Kleinschreibung und Leerzeichen."
+        },
+        "semantic": {
+          "name": "Übereinstimmung nach Bedeutung",
+          "body": "Die Nachricht wurde inhaltlich mit jeder aktiven Formulierung verglichen, sodass auch andere Wörter passen können."
+        },
+        "trigram": {
+          "name": "Abgleich nach Schreibweise",
+          "body": "Ein inhaltlicher Vergleich war nicht möglich, daher wurde die Nachricht Buchstabe für Buchstabe verglichen. Das erkennt Tippfehler, aber keine Synonyme."
+        }
+      },
+      "scoreLabel": "Punktzahl {score} %, erforderlich sind {threshold} %",
+      "score": "Punktzahl",
+      "threshold": "Erforderlich",
+      "margin": "Vorsprung vor dem Zweitplatzierten",
+      "marginValue": "{margin} Punkte (erforderlich: {needed})",
+      "note": "Hinweis",
+      "model": "Modell",
+      "noModel": "keines verwendet",
+      "latency": "Dauer",
+      "ms": "{ms} ms",
+      "winner": {
+        "title": "Das würde der Kunde erhalten",
+        "unavailable": "Diese FAQ konnte nicht geladen werden.",
+        "flow": "Startet den Flow {name}",
+        "flowMissing": "Startet einen Flow, der nicht mehr existiert"
+      },
+      "candidates": {
+        "title": "Beste Treffer",
+        "matchedOn": "Treffer bei",
+        "best": "Beste",
+        "paused": "Pausiert",
+        "scoreLabel": "Punktzahl {score} %",
+        "addVariation": "Diese Formulierung als Variante zu {question} hinzufügen",
+        "added": "Hinzugefügt",
+        "addedToast": "Als Formulierung zu {question} hinzugefügt.",
+        "alreadyThere": "Diese Formulierung ist bereits vorhanden.",
+        "open": "FAQ öffnen"
+      }
+    },
+    "playground": {
+      "title": "Wie würde mein Bot das beantworten?",
+      "subtitle": "Lassen Sie eine Kundennachricht durch denselben Abgleich laufen, den Ihr Bot verwendet. Es wird nichts gesendet und nichts in der Auswertung gezählt.",
+      "label": "Kundennachricht",
+      "placeholder": "Wo ist mein Paket?",
+      "run": "Ausführen",
+      "hint": "Nur gespeicherte FAQs werden abgeglichen. Aktive FAQs mit aktiven Formulierungen werden berücksichtigt.",
+      "empty": "Geben Sie oben eine Nachricht ein und führen Sie sie aus, um die Entscheidung zu sehen.",
+      "history": {
+        "title": "Diese Sitzung",
+        "empty": "Ihre letzten 10 Tests erscheinen hier."
+      }
+    },
+    "unanswered": {
+      "title": "Unbeantwortete Nachrichten",
+      "subtitle": "Kundennachrichten, die keine FAQ beantwortet hat. Lernen Sie daraus für den Bot.",
+      "search": "Unbeantwortete Nachrichten durchsuchen",
+      "searchPlaceholder": "Nachrichten durchsuchen",
+      "listLabel": "Unbeantwortete Nachrichten",
+      "emptyTitle": "Nichts offen",
+      "emptyBody": "Jede Kundennachricht wurde beantwortet oder bearbeitet. Neue unbeantwortete Nachrichten erscheinen hier.",
+      "noMatch": "Keine Nachricht passt zu Ihrer Suche",
+      "notKept": "Nachrichtentext nicht gespeichert (Protokollierung ist ausgeschaltet)",
+      "closest": "Ähnlichste FAQ:",
+      "allCandidates": "Alle {count} Kandidaten anzeigen",
+      "addToFaq": "Zu einer FAQ hinzufügen",
+      "createFaq": "FAQ daraus erstellen",
+      "dismiss": "Verwerfen",
+      "dismissed": "Nachricht verworfen.",
+      "learned": "Zu „{question}“ hinzugefügt. Sie wird ab jetzt beantwortet.",
+      "pickTitle": "Zu welcher FAQ soll diese Nachricht hinzugefügt werden?",
+      "loadMore": "Mehr laden",
+      "loadingMore": "Wird geladen"
+    },
+    "picker": {
+      "close": "Schließen",
+      "search": "FAQs durchsuchen",
+      "searchPlaceholder": "FAQs durchsuchen",
+      "loading": "FAQs werden geladen",
+      "none": "Keine FAQ gefunden.",
+      "paused": "Pausiert",
+      "more": "Mehr laden"
+    },
+    "log": {
+      "title": "Abgleichsprotokoll",
+      "hint": "Jede Kundennachricht, die die FAQ geprüft hat, und warum sie beantwortet wurde oder nicht.",
+      "viewLabel": "Anzeigen",
+      "view": {
+        "all": "Alle",
+        "answered": "Beantwortet",
+        "unanswered": "Unbeantwortet",
+        "errors": "Fehler"
+      },
+      "search": "Protokoll durchsuchen",
+      "searchPlaceholder": "Nachrichten durchsuchen",
+      "empty": "Noch keine Nachrichten.",
+      "col": {
+        "time": "Wann",
+        "message": "Nachricht",
+        "outcome": "Ergebnis",
+        "faq": "FAQ",
+        "score": "Punktzahl"
+      },
+      "notKept": "Nicht gespeichert ({length} Zeichen)",
+      "testRun": "(Test)",
+      "expand": "Details anzeigen",
+      "collapse": "Details ausblenden",
+      "noCandidates": "Es wurden keine Kandidaten berücksichtigt.",
+      "matchedOn": "Treffer bei",
+      "detail": {
+        "tier": "Stufe",
+        "model": "Modell",
+        "latency": "Dauer",
+        "ms": "{ms} ms"
+      },
+      "loadMore": "Mehr laden",
+      "loadingMore": "Wird geladen",
+      "why": {
+        "answered": "Mit „{faq}“ beantwortet bei {score} %.",
+        "flowStarted": "Flow von „{faq}“ gestartet bei {score} %.",
+        "belowThreshold": "Der beste Treffer erreichte {score} % und lag unter der Schwelle von {threshold} %, daher wurde nichts gesendet.",
+        "belowThresholdNoBar": "Der beste Treffer erreichte {score} %, das reichte nicht aus, daher wurde nichts gesendet.",
+        "lowMargin": "Zwei FAQs lagen zu dicht beieinander ({score} % und {second} %), daher hat der Bot nicht geraten.",
+        "noFaqs": "Es gab keine aktiven FAQs mit aktiven Formulierungen zum Abgleichen.",
+        "providerError": "Der KI-Anbieter ist ausgefallen, daher konnte der Bot nur nach Schreibweise abgleichen.",
+        "notSent": "Eine FAQ passte, aber die Antwort wurde nicht gesendet.",
+        "tier": "Entschieden von der Stufe {tier}.",
+        "error": "Fehler: {error}"
+      }
+    },
+    "insights": {
+      "title": "FAQ-Auswertung",
+      "subtitle": "Wie gut Ihre FAQs echte Kundennachrichten beantworten und wo Sie nachbessern können.",
+      "range": {
+        "label": "Zeitraum",
+        "days": "{days} Tage"
+      },
+      "empty": {
+        "title": "Noch keine Nachrichten",
+        "body": "Sobald Kunden schreiben und die FAQ-Beantwortung eingeschaltet ist, sehen Sie, wie oft der Bot antwortet, welche FAQs funktionieren und was fehlt."
+      },
+      "kpi": {
+        "label": "Kennzahlen",
+        "messages": "Geprüfte Nachrichten",
+        "answerRate": "Antwortquote",
+        "avgScore": "Durchschnittliche Punktzahl {score} %",
+        "flows": "Gestartete Flows",
+        "unanswered": "Unbeantwortet",
+        "toReview": "{count} zu prüfen",
+        "errors": "Anbieterfehler"
+      },
+      "daily": {
+        "title": "Nachrichten pro Tag",
+        "hint": "Letzte {days} Tage, beantwortet und unbeantwortet"
+      },
+      "hist": {
+        "title": "Wie gut Nachrichten abgeschnitten haben",
+        "hint": "Jeder Balken steht für einen Punktebereich. Die gestrichelte Linie ist Ihre aktuelle Empfindlichkeit.",
+        "advice": "Erhöhen Sie den Schwellenwert, wenn falsche Antworten durchrutschen, und senken Sie ihn, wenn zu viele Nachrichten unbeantwortet bleiben.",
+        "tune": "Empfindlichkeit ändern"
+      },
+      "top": {
+        "title": "Top-FAQs",
+        "none": "Noch keine FAQ hat geantwortet.",
+        "hits": "{count, plural, one {# Antwort} other {# Antworten}}"
+      },
+      "never": {
+        "title": "Nie getroffen",
+        "body": "FAQs, die in den letzten {days} Tagen nie ausgelöst wurden. Prüfen Sie ihre Formulierungen oder entfernen Sie sie.",
+        "link": "FAQs prüfen"
+      },
+      "chart": {
+        "answered": "Beantwortet",
+        "unanswered": "Unbeantwortet",
+        "showTable": "Als Tabelle anzeigen",
+        "showChart": "Als Diagramm anzeigen",
+        "day": "Tag",
+        "dailyTitle": "Nachrichten pro Tag",
+        "dailyLabel": "Balkendiagramm der beantworteten und unbeantworteten Nachrichten pro Tag. Die Zahlen finden Sie in der Tabellenansicht.",
+        "dayTooltip": "{day}: {answered} beantwortet, {unanswered} unbeantwortet",
+        "histogramTitle": "Punkteverteilung",
+        "histogramLabel": "Histogramm der Treffer-Punktzahlen, getrennt nach beantwortet und unbeantwortet. Die Zahlen finden Sie in der Tabellenansicht.",
+        "scoreRange": "Punktzahl",
+        "bucketTooltip": "{from}–{to} %: {answered} beantwortet, {unanswered} unbeantwortet",
+        "thresholdMarker": "Schwellenwert {value} %"
+      }
+    },
+    "settings": {
+      "title": "FAQ-Einstellungen",
+      "subtitle": "Schalten Sie die FAQ-Beantwortung ein und legen Sie fest, wie genau eine Nachricht passen muss.",
+      "unsaved": "Nicht gespeicherte Änderungen",
+      "discard": "Verwerfen",
+      "save": "Einstellungen speichern",
+      "saved": "Einstellungen gespeichert.",
+      "readOnly": "Sie können diese Einstellungen ansehen. Zum Ändern ist die Berechtigung faq.settings.manage nötig, die meist Workspace-Admins haben.",
+      "engineOff": "Die FAQ-Beantwortung ist von der Plattform ausgeschaltet. Ihre Einstellungen hier gelten, sobald sie wieder eingeschaltet ist.",
+      "conflict": "Jemand anderes hat diese Einstellungen gespeichert. Laden Sie neu, um deren Version zu sehen, und nehmen Sie Ihre Änderung dann erneut vor.",
+      "reload": "Einstellungen neu laden",
+      "modelChanged": {
+        "title": "Empfindlichkeit prüfen",
+        "body": "Die Plattform hat das KI-Modell geändert, nachdem Sie diesen Schwellenwert eingestellt haben. Die Werte haben sich verschoben, prüfen Sie daher Ihre Empfindlichkeit. Mit dem Speichern bestätigen Sie sie."
+      },
+      "enable": {
+        "title": "FAQ-Beantwortung",
+        "label": "Kunden mit FAQs antworten",
+        "on": "Ein",
+        "off": "Aus",
+        "onBody": "Wenn ein Kunde schreibt, vergleicht der Bot die Nachricht mit Ihren FAQs und antwortet mit der besten Antwort oder startet ihren Flow. Ein Flow oder Stichwort-Auslöser, der die Nachricht bereits übernommen hat, hat Vorrang.",
+        "offBody": "Kunden erhalten keine FAQ-Antworten. Sie können FAQs weiterhin schreiben und testen."
+      },
+      "sens": {
+        "title": "Empfindlichkeit",
+        "hint": "Wie genau eine Nachricht passen muss. Die Werte gehören zum Modell {model}.",
+        "label": "Antworten, wenn der Treffer mindestens",
+        "presets": "Voreinstellungen für die Empfindlichkeit",
+        "preset": {
+          "strict": "Streng",
+          "balanced": "Ausgewogen",
+          "forgiving": "Nachsichtig"
+        },
+        "looser": "Antwortet öfter",
+        "stricter": "Antwortet seltener",
+        "recommendedMark": "empfohlen {value} %",
+        "explain": "Bei {value} % wird eine Nachricht nur beantwortet, wenn ihr bester Treffer {value} % oder mehr erreicht. Höher bedeutet weniger, aber sicherere Antworten; niedriger bedeutet mehr Antworten und ein höheres Risiko für falsche.",
+        "useRecommended": "Empfohlenen Wert verwenden ({value} %)",
+        "modelScale": "Werte sind nur innerhalb eines Modells vergleichbar. Wenn die Plattform das Modell ({model}) ändert, prüfen Sie diesen Wert."
+      },
+      "margin": {
+        "title": "Schutz vor Mehrdeutigkeit",
+        "hint": "Verhindert, dass der Bot zwischen zwei FAQs mit fast gleicher Punktzahl rät.",
+        "label": "Mindestvorsprung vor dem Zweitbesten",
+        "off": "Aus",
+        "explain": "Liegt die beste FAQ weniger weit vor der zweitbesten, bleibt der Bot still und protokolliert die Nachricht als unbeantwortet. Lassen Sie es aus, wenn sich Ihre FAQs selten überschneiden."
+      },
+      "log": {
+        "title": "Kundennachrichten im Protokoll",
+        "label": "Kundennachrichten im Abgleichsprotokoll speichern",
+        "onBody": "Der Text jeder Nachricht wird 90 Tage lang gespeichert, damit Sie sehen, warum sie beantwortet wurde oder nicht, und daraus lernen können. Danach wird er gelöscht.",
+        "offBody": "Es werden nur Punktzahlen und Ergebnisse gespeichert, nie der Text. Sie sehen weiterhin, wie oft der Bot antwortet, können aber nicht aus unbeantworteten Nachrichten lernen."
+      },
+      "facts": {
+        "title": "Modell und Limits",
+        "model": "KI-Modell für den Abgleich",
+        "faqs": "FAQs",
+        "variations": "Verwendete Formulierungen",
+        "perFaq": "Erlaubte Formulierungen pro FAQ",
+        "of": "{used} von {max}"
+      },
+      "how": {
+        "title": "So funktioniert der Abgleich",
+        "exact": "Exakt: Die Nachricht entspricht einer gespeicherten Formulierung, unabhängig von Groß-/Kleinschreibung und Leerzeichen.",
+        "semantic": "Bedeutung: Die Nachricht wird inhaltlich mit jeder aktiven Formulierung verglichen, sodass auch andere Wörter passen können.",
+        "trigram": "Schreibweise als Ersatz: Ist der KI-Anbieter nicht verfügbar, werden Buchstaben verglichen. Das erkennt nur Tippfehler.",
+        "threshold": "Die beste Punktzahl wird mit der Empfindlichkeit verglichen. Darüber antwortet die FAQ; darunter erscheint die Nachricht unter Unbeantwortet."
+      },
+      "who": "Zum Ändern dieser Einstellungen ist die Berechtigung faq.settings.manage nötig.",
+      "leave": {
+        "title": "Ohne Speichern verlassen?",
+        "body": "Ihre Änderungen an diesen Einstellungen sind nicht gespeichert.",
+        "leave": "Verlassen",
+        "stay": "Bleiben"
+      }
+    }
+  }
+}

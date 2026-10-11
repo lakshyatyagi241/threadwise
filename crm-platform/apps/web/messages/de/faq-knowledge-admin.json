@@ -1,0 +1,172 @@
+{
+  "faq-knowledge-admin": {
+    "nav": {
+      "group": "KI",
+      "engine": "FAQ-Engine"
+    },
+    "common": {
+      "loading": "Wird geladen",
+      "retry": "Erneut versuchen",
+      "requestId": "Anfrage-ID",
+      "dash": "-",
+      "cancel": "Abbrechen",
+      "errors": {
+        "forbidden": "Sie haben keine Berechtigung dafür.",
+        "request": "Diese Anfrage konnte nicht abgeschlossen werden.",
+        "unexpected": "Auf unserer Seite ist etwas schiefgelaufen. Versuchen Sie es gleich noch einmal.",
+        "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+        "validation": "Einige Werte sind ungültig. Prüfen Sie die markierten Felder.",
+        "modelNotAllowed": "Dieses KI-Modell steht nicht auf der Liste der zulässigen Modelle. Laden Sie die Seite neu und wählen Sie eines aus der Liste.",
+        "notFound": "Dieses Element existiert nicht mehr."
+      }
+    },
+    "page": {
+      "eyebrow": "Admin · KI · FAQ-Engine",
+      "title": "FAQ-Engine",
+      "description": "Steuert, wie die FAQs aller Workspaces mit Kundennachrichten abgeglichen werden: den Schalter, das KI-Modell, die Limits und den Zustand des Index.",
+      "superOnly": "Nur ein Super-Admin kann die FAQ-Engine sehen oder ändern."
+    },
+    "status": {
+      "label": "Engine-Status",
+      "engine": {
+        "title": "Engine",
+        "on": "Ein",
+        "off": "Aus",
+        "hintOn": "{count, plural, one {# Workspace hat FAQs eingeschaltet} other {# Workspaces haben FAQs eingeschaltet}}",
+        "hintOff": "Kein Workspace antwortet per FAQ und Änderungen sind gesperrt."
+      },
+      "key": {
+        "title": "OpenRouter-Schlüssel der Plattform",
+        "ready": "Bereit",
+        "missing": "Fehlt",
+        "explainReady": "Workspaces ohne eigenen gespeicherten OpenRouter-Schlüssel nutzen diesen, um Vektoren zu erstellen und abzugleichen.",
+        "explainMissing": "Workspaces ohne eigenen gespeicherten OpenRouter-Schlüssel sind auf diesen angewiesen. Ohne ihn können sie keine Vektoren erstellen, und der Abgleich fällt auf Schreibweisen-Ähnlichkeit zurück.",
+        "link": "Schlüssel unter KI-Anbieter-Schlüssel hinzufügen"
+      },
+      "model": {
+        "title": "Verwendetes KI-Modell für den Abgleich",
+        "dimensions": "{count, number} Dimensionen",
+        "unknown": "Nicht auf der Liste der zulässigen Modelle"
+      },
+      "index": {
+        "title": "Zustand der Indexierung",
+        "ready": "Bereit",
+        "waiting": "Wartet",
+        "failed": "Fehlgeschlagen",
+        "stale": "{count, plural, one {# Vektor gehört zu einem älteren Modell und passt zu nichts, bis er neu berechnet wird} other {# Vektoren gehören zu einem älteren Modell und passen zu nichts, bis sie neu berechnet werden}}",
+        "totals": "{faqs, number} FAQs · {variations, number} Varianten"
+      },
+      "activity": {
+        "title": "Letzte 30 Tage",
+        "matches": "Geprüfte Kundennachrichten",
+        "answered": "Beantwortet",
+        "rate": "Antwortquote",
+        "tokens": "Tokens für den Abgleich"
+      }
+    },
+    "settings": {
+      "title": "Einstellungen",
+      "description": "Gilt für jeden Workspace. Es werden nur die Felder gespeichert, die Sie ändern.",
+      "engine": {
+        "label": "FAQ-Engine",
+        "hint": "Schalten Sie sie aus, damit kein Workspace mehr per FAQ antwortet. Solange sie aus ist, sind Änderungen gesperrt."
+      },
+      "embeddingModel": {
+        "label": "KI-Modell für den Abgleich",
+        "hint": "Wandelt jede Frage in Zahlen um, damit ähnliche Formulierungen gefunden werden.",
+        "option": "{label} · {price} pro Million Tokens · empfohlener Schwellenwert {threshold}",
+        "unknownOption": "{id} (nicht auf der Liste der zulässigen Modelle)",
+        "details": "{dimensions, number} Dimensionen · {price} pro Million Tokens · empfohlener Schwellenwert {threshold}",
+        "saved": "Gespeichertes Modell"
+      },
+      "generationModel": {
+        "label": "Modell zur Texterzeugung",
+        "hint": "Die OpenRouter-Modell-ID, die Vorschläge für Varianten schreibt, zum Beispiel openai/gpt-4o-mini.",
+        "placeholder": "openai/gpt-4o-mini"
+      },
+      "threshold": {
+        "label": "Standard-Schwellenwert für Treffer",
+        "hint": "Eine Nachricht passt, wenn ihre Punktzahl mindestens so hoch ist. Gilt nur für Workspaces, die nie einen eigenen Schwellenwert gespeichert haben. Die Werte hängen vom KI-Modell ab.",
+        "value": "{value}",
+        "follow": "Dem Modell folgen",
+        "followHint": "Die Standard-Empfindlichkeit ist der empfohlene Wert des Modells ({value}) und ändert sich mit dem Modell. Schalten Sie aus, um eine feste Zahl zu setzen."
+      },
+      "limits": {
+        "title": "Limits",
+        "maxFaqs": "Maximale FAQs pro Workspace",
+        "maxVariationsPerFaq": "Maximale Varianten pro FAQ",
+        "semanticPerHour": "Inhaltliche Treffer pro Workspace und Stunde",
+        "semanticPerHourHint": "Darüber fällt ein Workspace für den Rest der Stunde auf Schreibweisen-Ähnlichkeit zurück. 0 bedeutet immer Schreibweisen-Ähnlichkeit."
+      },
+      "errors": {
+        "integer": "Geben Sie eine ganze Zahl ein.",
+        "range": "Geben Sie einen Wert zwischen {min} und {max} ein.",
+        "modelId": "Verwenden Sie eine OpenRouter-Modell-ID wie openai/gpt-4o-mini.",
+        "invalid": "Dieser Wert ist ungültig."
+      },
+      "unchanged": "Keine Änderungen zu speichern.",
+      "changed": "{count, plural, one {# Änderung bereit zum Speichern} other {# Änderungen bereit zum Speichern}}",
+      "save": "Änderungen speichern",
+      "saving": "Wird gespeichert",
+      "reset": "Änderungen verwerfen",
+      "saved": "Einstellungen gespeichert.",
+      "confirm": {
+        "title": "Vor dem Speichern prüfen",
+        "confirm": "Änderungen speichern",
+        "engineOff": "Wenn Sie die Engine ausschalten, antwortet kein Workspace mehr per FAQ, und FAQ-Änderungen sind gesperrt, bis Sie sie wieder einschalten.",
+        "modelChange": "Wenn Sie das KI-Modell von {from} auf {to} ändern, werden alle gespeicherten Vektoren neu erstellt. Bis dahin nutzt der Abgleich nur Schreibweisen-Ähnlichkeit. Die Standard-Empfindlichkeit folgt dem neuen Modell (empfohlen {threshold}), sofern Sie keinen festen Wert setzen. Schwellenwerte, die ein Workspace selbst gespeichert hat, müssen eventuell neu eingestellt werden, da sich die Werte mit dem Modell ändern."
+      }
+    },
+    "maintenance": {
+      "title": "Wartung",
+      "description": "Berechnen Sie den Index neu, wenn etwas nicht stimmt. Die Arbeit läuft im Hintergrund.",
+      "progress": "{ready, number} von {total, number} bereit",
+      "progressLabel": "Fortschritt der Indexierung",
+      "polling": "Aktualisiert sich alle 5 Sekunden, solange {count, number} warten.",
+      "idle": "Nichts wartet auf die Indexierung.",
+      "reindexAll": "Alles neu indexieren",
+      "retryFailed": "Fehlgeschlagene wiederholen",
+      "retryFailedNone": "Keine fehlgeschlagenen Vektoren zum Wiederholen.",
+      "confirmAll": {
+        "title": "Alles neu indexieren?",
+        "message": "Jeder gespeicherte Vektor wird mit dem aktuellen Modell neu erstellt. Für noch nicht bereite Einträge nutzt der Abgleich Schreibweisen-Ähnlichkeit, und die Tokens werden erneut berechnet.",
+        "confirm": "Alles neu indexieren"
+      },
+      "confirmFailed": {
+        "title": "Fehlgeschlagene Vektoren wiederholen?",
+        "message": "Nur die Vektoren, die aufgegeben haben, werden erneut eingereiht. Prüfen Sie zuerst den OpenRouter-Schlüssel der Plattform, falls sie weiter fehlschlagen.",
+        "confirm": "Fehlgeschlagene wiederholen"
+      },
+      "queued": "{count, plural, =0 {Nichts einzureihen.} one {# Vektor eingereiht.} other {# Vektoren eingereiht.}}"
+    },
+    "workspaces": {
+      "title": "Workspaces",
+      "description": "Die aktivsten zuerst. Workspaces mit eingeschalteten FAQs stehen vor den übrigen.",
+      "search": "Workspaces durchsuchen",
+      "searchPlaceholder": "Workspace-Name",
+      "limit": "Zeilen",
+      "limitOption": "{count, number} Zeilen",
+      "tableLabel": "Workspaces nach FAQ-Aktivität",
+      "columns": {
+        "name": "Workspace",
+        "enabled": "FAQs",
+        "faqs": "Geschriebene FAQs",
+        "variations": "Varianten",
+        "indexing": "Indexierung",
+        "matches": "Treffer (30 Tage)",
+        "answered": "Beantwortet (30 Tage)"
+      },
+      "enabled": "Ein",
+      "disabled": "Aus",
+      "upToDate": "Aktuell",
+      "pending": "{count, number} wartend",
+      "failed": "{count, number} fehlgeschlagen",
+      "answered": "{count, number} ({rate})",
+      "emptyTitle": "Noch keine Workspaces",
+      "emptyMessage": "Workspaces erscheinen hier, sobald sie existieren.",
+      "noMatchTitle": "Kein Workspace passt zu dieser Suche",
+      "noMatchMessage": "Prüfen Sie die Schreibweise oder leeren Sie das Suchfeld.",
+      "clearSearch": "Suche zurücksetzen"
+    }
+  }
+}

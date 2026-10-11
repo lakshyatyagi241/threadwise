@@ -20,6 +20,8 @@ const ONLY_ROLES: Readonly<Record<string, readonly OperatorRole[]>> = {
   premium: ['super_admin'],
   // PlatformAiKeysController (platform/ai-keys): class-level super_admin. The AI usage dashboard is a separate, open controller.
   'ai-keys': ['super_admin'],
+  // FaqPlatformController (platform/faq): class-level super_admin, reads included.
+  'faq-engine': ['super_admin'],
   // WebhookFanoutController (platform/webhook-targets): class-level super_admin.
   'webhook-forwarding': ['super_admin'],
   // AdminDashController (platform/dashboard): class-level super_admin and auditor, so not support.
