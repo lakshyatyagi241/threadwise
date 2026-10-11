@@ -1,4 +1,4 @@
-# Reference port
+# Threadwise port
 
 Rebuild every feature of **Reference** (a CodeCanyon Laravel + Node WhatsApp CRM, v1.7.0) inside **crm-platform**
 (NestJS, Postgres with row-level security, Drizzle, BullMQ, Next.js), with three people working in parallel and as

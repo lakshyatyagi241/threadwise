@@ -1,5 +1,6 @@
-# Reference port workspace
+# Threadwise port workspace
 
+Naming: **Threadwise** is the product we build. **Reference** is the licensed Laravel app in `reference/` that we port behavior from (it was previously shipped under another name).
 Goal: rebuild every Reference feature in `crm-platform/` (NestJS, Postgres+RLS, Drizzle, BullMQ, Next.js), three people in parallel
 (Lakshya, Vedant, Punya). The project owner holds the license for Reference and has authorized using its source directly as the
 reference: read the Laravel code, views, JS/CSS, migrations and docs, and port them into NestJS and Next.js (same behavior, same
@@ -15,7 +16,7 @@ Start here: `crm-platform/docs/threadwise-port/README.md` (status, findings, dec
 
 | Folder              | What                                                                                   | Rules                                                    |
 | ------------------- | -------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| `reference/` | the licensed Laravel product (`Threadwise/` app, `Documentation/`, `Update/`, `Database/`) | read-only; run it with the `threadwise-run-reference` skill  |
+| `reference/` | the licensed Laravel product (`app/`, `Documentation/`, `Update/`, `Database/`) | read-only; run it with the `threadwise-run-reference` skill  |
 | `crm-platform/`     | the build target (git, origin `geta-ai/crm-platform`)                                  | follow its own `CLAUDE.md`, `CONTRIBUTING.md` and skills |
 | `_work/`            | manifests, tools, reports, resumable workflow script; not in git                       | regenerate with the `threadwise-inventory-refresh` skill     |
 
