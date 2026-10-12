@@ -61,7 +61,7 @@ describe('calling-voice messages', () => {
     expect(at('toast.noPhone')).toBe('No phone number on this contact.');
     expect(at('toast.noNumber')).toBe('Calling is not enabled on any WABA number.');
     expect(at('toast.alreadyPermitted')).toBe(
-      'This contact already allows calls - starting the call...',
+      'This contact already allows calls. Press Call to start the call.',
     );
     expect(at('toast.permissionSent')).toBe(
       'Permission request sent. They will see Accept/Decline in WhatsApp - try Call again after they respond.',

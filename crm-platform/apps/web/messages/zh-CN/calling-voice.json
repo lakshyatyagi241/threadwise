@@ -25,7 +25,7 @@
     "toast": {
       "noPhone": "此联系人没有电话号码。",
       "noNumber": "没有任何 WABA 号码启用了通话功能。",
-      "alreadyPermitted": "此联系人已允许通话——正在发起通话...",
+      "alreadyPermitted": "此联系人已允许通话。点击“通话”即可发起通话。",
       "permissionSent": "权限请求已发送。对方将在 WhatsApp 中看到“接受/拒绝”——待其回复后请再次尝试通话。",
       "permissionFailed": "无法发送权限请求：{message}",
       "startFailed": "无法发起通话：{message}",
