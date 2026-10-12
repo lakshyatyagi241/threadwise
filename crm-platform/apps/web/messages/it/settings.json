@@ -329,6 +329,11 @@
         "label": "Lead scoring con IA",
         "description": "Assegna un punteggio a ogni contatto con l'IA, scegli cosa viene inviato e vedi quanto costa.",
         "keywords": "punteggio lead, scoring, valutazione, ia, caldo, tiepido, freddo, openrouter, costo, qualificare"
+      },
+      "help-assistant": {
+        "label": "Assistente di aiuto",
+        "description": "Attiva l'assistente che guida il tuo team o svolge i passaggi al posto suo.",
+        "keywords": "ai, assistente, agente, guida, aiuto, automazione"
       }
     }
   }

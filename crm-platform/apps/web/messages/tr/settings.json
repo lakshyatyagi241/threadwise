@@ -329,6 +329,11 @@
         "label": "Yapay zeka ile potansiyel müşteri puanlama",
         "description": "Her kişiyi yapay zeka ile puanlayın, nelerin gönderileceğini seçin ve maliyeti görün.",
         "keywords": "potansiyel müşteri puanı, puanlama, yapay zeka, ai, sıcak, ılık, soğuk, openrouter, maliyet, nitelendirme"
+      },
+      "help-assistant": {
+        "label": "Yardım asistanı",
+        "description": "Ekibinize yol gösteren veya adımları onlar için yapan asistanı açın.",
+        "keywords": "yapay zeka, asistan, ajan, kılavuz, yardım, otomasyon"
       }
     }
   }

@@ -329,6 +329,11 @@
         "label": "Ocenianie leadów przez AI",
         "description": "Oceniaj każdy kontakt przez AI, wybierz, co jest wysyłane, i sprawdź, ile to kosztuje.",
         "keywords": "lead, ocena leada, ocenianie, ai, gorący, ciepły, zimny, openrouter, koszt, kwalifikacja"
+      },
+      "help-assistant": {
+        "label": "Asystent pomocy",
+        "description": "Włącz asystenta, który prowadzi Twój zespół lub wykonuje kroki za niego.",
+        "keywords": "ai, asystent, agent, przewodnik, pomoc, automatyzacja"
       }
     }
   }

@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { cn } from '@crm/ui';
+import { AGENT_IGNORE } from '@/lib/agent-marks';
 import type { PreviewModel } from '../lib/form-model';
 import { FormattedText } from './message-bubble';
 import {
@@ -103,7 +104,7 @@ export function MessageBubble({
               </p>
             )}
             {model.body ? (
-              <p className="break-words" data-testid="bubble-body">
+              <p {...AGENT_IGNORE} className="break-words" data-testid="bubble-body">
                 <FormattedText text={model.body} />
               </p>
             ) : (

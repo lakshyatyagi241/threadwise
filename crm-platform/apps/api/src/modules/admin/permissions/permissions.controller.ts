@@ -64,16 +64,28 @@ export class PermissionsController {
       for (const f of found) installed.add(f.slug);
     }
     for (const f of features) if (await this.entitlements.featureEnabled(ctx.orgId, f)) on.add(f);
-    const open = (r: (typeof rows)[number]) =>
-      (!r.planFeature || on.has(r.planFeature)) && (!r.appSlug || installed.has(r.appSlug));
+    // A Marketplace app's plan feature is on only while the app is installed and running (plans-subscriptions-trials/app-grants.ts). A
+    // feature that is off because the workspace subscribed but has not installed the app is an `app` lock (install it), not a plan
+    // lock (upgrade). A PAUSED app counts as installed here: the admin still manages who may use it once it is resumed.
+    const withheld = features.some((f) => !on.has(f))
+      ? await this.entitlements.withheldByApps(ctx.orgId)
+      : {};
+    const planOk = (r: (typeof rows)[number]) =>
+      !r.planFeature || on.has(r.planFeature) || withheld[r.planFeature]?.installed === true;
+    // A feature the plan itself carries is on without any installation, so an app slug never closes a key whose plan feature is on.
+    const appOk = (r: (typeof rows)[number]) =>
+      !r.appSlug || installed.has(r.appSlug) || (!!r.planFeature && on.has(r.planFeature));
+    const open = (r: (typeof rows)[number]) => planOk(r) && appOk(r);
     if (includeLocked === '1' || includeLocked === 'true') {
       return {
         data: rows.map((r) => {
           if (open(r)) return r;
-          const lock: PermissionDefResponse['lock'] =
-            r.planFeature && !on.has(r.planFeature)
-              ? { kind: 'plan_feature', key: r.planFeature }
-              : { kind: 'app', slug: r.appSlug! };
+          const held = r.planFeature ? withheld[r.planFeature] : undefined;
+          const lock: PermissionDefResponse['lock'] = !planOk(r)
+            ? held
+              ? { kind: 'app', slug: held.slug }
+              : { kind: 'plan_feature', key: r.planFeature! }
+            : { kind: 'app', slug: r.appSlug! };
           return { ...r, lock };
         }),
       };

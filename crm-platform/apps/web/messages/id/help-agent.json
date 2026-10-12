@@ -1,0 +1,135 @@
+{
+  "help-agent": {
+    "launcher": {
+      "label": "Tanya",
+      "shortcut": "Tanya asisten (Ctrl atau Cmd + Shift + L)"
+    },
+    "panel": {
+      "title": "Tanya asisten",
+      "subtitle": "Katakan apa yang ingin Anda lakukan. Saya membaca halaman ini dan mengklik untuk Anda, dan saya bertanya dulu sebelum apa pun disimpan, dikirim, dihapus, atau dibayar.",
+      "close": "Tutup",
+      "taskLabel": "Apa yang ingin Anda lakukan?",
+      "taskPlaceholder": "Contoh: tambahkan tag VIP ke kontak",
+      "tooLong": "Maksimal {max} karakter.",
+      "doItForMe": "Lakukan untuk saya",
+      "showMe": "Tunjukkan saja",
+      "stop": "Hentikan",
+      "stopping": "Menghentikan...",
+      "newTask": "Tugas baru",
+      "tryAgain": "Coba lagi",
+      "openGuide": "Buka panduan",
+      "showSteps": "Tampilkan langkah",
+      "guidesTitle": "Dari panduan Bantuan",
+      "examplesTitle": "Coba tanyakan",
+      "disabledHere": "Asisten nonaktif di layar ini karena menampilkan pesan dan detail yang ditulis pelanggan. Buka layar lain untuk memakainya."
+    },
+    "notice": {
+      "title": "Sebelum mulai",
+      "sent": "Untuk mengerjakan tugas, asisten mengirim permintaan Anda dan teks halaman yang sedang Anda buka ke penyedia AI.",
+      "masked": "Nomor telepon, alamat email, dan data rahasia disembunyikan lebih dulu. Nama dan teks lain di halaman tidak disembunyikan.",
+      "asks": "Asisten memakai akun Anda sendiri, jadi hanya bisa melakukan apa yang bisa Anda lakukan. Asisten bertanya dulu sebelum menyimpan, mengirim, menghapus, membayar, mengundang orang, atau mengubah pengaturan.",
+      "limits": "Asisten tidak pernah mengetik kata sandi atau data kartu, tidak pernah membuka situs web lain, dan Anda bisa menghentikannya kapan saja.",
+      "accept": "Saya mengerti"
+    },
+    "status": {
+      "progress": "Langkah {n} dari {max}",
+      "thinking": "Berpikir...",
+      "starting": "Memulai..."
+    },
+    "activity": {
+      "click": "Mengklik: {label}",
+      "type": "Mengetik di: {label}",
+      "select": "Memilih di: {label}",
+      "blocked": "Dilewati: {label}",
+      "declined": "Anda menolak: {label}",
+      "shown": "Menunjukkan: {label}"
+    },
+    "confirm": {
+      "title": "Izinkan ini?",
+      "clickBody": "Asisten akan mengklik \"{label}\".",
+      "selectBody": "Asisten akan memilih \"{detail}\" di \"{label}\".",
+      "allow": "Izinkan sekali",
+      "deny": "Tolak",
+      "reasons": {
+        "marked": "Ini salah satu tombol paling sensitif di aplikasi.",
+        "submit": "Ini menyimpan atau mengirimkan isi halaman.",
+        "delete": "Ini menghapus, menghilangkan, atau memutuskan sesuatu.",
+        "send": "Ini mengirim, memublikasikan, atau memulai sesuatu yang akan dilihat orang lain.",
+        "pay": "Ini bisa mengeluarkan uang atau mengubah biaya yang Anda bayar.",
+        "invite": "Ini mengundang seseorang ke workspace Anda.",
+        "connect": "Ini menghubungkan atau memutuskan saluran atau aplikasi.",
+        "access": "Ini mengubah siapa yang boleh melakukan apa, atau data rahasia atau penagihan.",
+        "settings": "Ini menyalakan atau mematikan sesuatu.",
+        "toggle": "Sakelar ini langsung berlaku.",
+        "dialog": "Ini mengonfirmasi apa yang diminta jendela.",
+        "signout": "Ini mengeluarkan Anda dari akun."
+      }
+    },
+    "question": {
+      "title": "Asisten bertanya",
+      "answerLabel": "Jawaban Anda",
+      "send": "Kirim"
+    },
+    "result": {
+      "completedTitle": "Selesai",
+      "failedTitle": "Saya tidak bisa menyelesaikan ini",
+      "stoppedTitle": "Dihentikan",
+      "summary": "{steps, plural, other {# langkah}}, {confirmed} diizinkan, {denied} ditolak."
+    },
+    "stopped": {
+      "person": "Anda menghentikan tugas.",
+      "budget": "Tugas mencapai batas langkah lalu berhenti. Coba permintaan yang lebih kecil.",
+      "location": "Tugas berhenti karena mencapai layar yang tidak boleh dipakai asisten."
+    },
+    "errors": {
+      "disabled": "Asisten dinonaktifkan untuk workspace ini atau di layar ini.",
+      "planLocked": "Asisten tidak termasuk dalam paket Anda.",
+      "forbidden": "Anda tidak punya izin untuk memakai asisten.",
+      "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
+      "taskLimit": "Anda sudah memulai tugas sebanyak batas yang diizinkan saat ini. Coba lagi nanti.",
+      "stepLimit": "Langkah tugas ini sudah habis. Mulai tugas baru dengan permintaan yang lebih kecil.",
+      "closed": "Tugas ini sudah berakhir. Mulai tugas baru.",
+      "providerDown": "Layanan AI tidak menjawab. Coba lagi sebentar lagi, atau hubungi pemilik platform jika terus terjadi.",
+      "monthlyLimit": "Workspace Anda telah memakai jatah AI bulan ini.",
+      "signedOut": "Sesi Anda berakhir. Masuk lagi.",
+      "network": "Tidak dapat menjangkau server. Periksa koneksi Anda lalu coba lagi.",
+      "generic": "Terjadi kesalahan. Coba lagi.",
+      "retryIn": "Coba lagi dalam {seconds} detik.",
+      "requestId": "ID permintaan: {id}"
+    },
+    "examples": {
+      "howDo": "Bagaimana cara memakai {title}?",
+      "showMe": "Tunjukkan dari mana mulai di {title}",
+      "whereIs": "Di mana saya menemukan {title}?",
+      "generic1": "Bagaimana cara menghubungkan nomor WhatsApp saya?",
+      "generic2": "Di mana saya mengubah profil bisnis?",
+      "generic3": "Bagaimana cara mengundang rekan tim?"
+    },
+    "helpCard": {
+      "title": "Tanya asisten",
+      "body": "Katakan apa yang ingin Anda lakukan. Asisten menemukan panduan yang tepat, menunjukkan di mana harus mengklik, atau mengerjakan langkahnya untuk Anda dan bertanya dulu sebelum hal penting.",
+      "button": "Buka asisten"
+    },
+    "settingsPage": {
+      "title": "Asisten Bantuan",
+      "description": "Biarkan tim Anda meminta apa yang ingin mereka lakukan, lalu aplikasi memandu mereka atau mengerjakan langkahnya dengan akun mereka sendiri.",
+      "loading": "Memuat",
+      "loadFailed": "Pengaturan tidak dapat dimuat.",
+      "requestId": "ID permintaan: {id}",
+      "shareTitle": "Apa yang dibagikan saat seseorang memakainya",
+      "share1": "Permintaan yang diketik pengguna dan teks yang terlihat di halaman mereka dikirim ke penyedia AI yang dipakai platform.",
+      "share2": "Nomor telepon, alamat email, data rahasia, dan kolom pribadi pada formulir disembunyikan lebih dulu. Nama dan teks bebas lain di halaman tidak disembunyikan.",
+      "share3": "Pesan pelanggan dan obrolan tim tidak pernah dibaca: asisten nonaktif di layar tersebut.",
+      "share4": "Asisten bertindak dengan izin milik pengguna yang sedang masuk dan bertanya dulu sebelum menyimpan, mengirim, menghapus, membayar, atau mengubah pengaturan. Hanya jumlah dan hasil tiap tugas yang disimpan, tidak pernah teks permintaannya.",
+      "optIn": "Dengan mengaktifkannya, Anda menyatakan workspace Anda setuju membagikan hal ini kepada penyedia AI.",
+      "switchLabel": "Aktifkan Asisten Bantuan untuk workspace ini",
+      "stateOn": "Aktif. Orang yang punya izin melihat tombol Tanya.",
+      "stateOff": "Nonaktif. Tidak ada yang melihat asisten.",
+      "saveFailed": "Pengaturan tidak dapat disimpan.",
+      "savedOn": "Asisten aktif.",
+      "savedOff": "Asisten nonaktif.",
+      "whoCanUse": "Hanya peran dengan izin \"Gunakan Asisten Bantuan\" yang melihatnya. Pemilik dan admin memilikinya.",
+      "rolesLink": "Buka peran"
+    }
+  }
+}

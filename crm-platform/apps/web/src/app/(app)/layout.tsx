@@ -12,6 +12,7 @@ import { BackgroundErrorBanner } from '@/components/shell/background-error-banne
 import { fetchEnabledFeatures } from '@/features/plans-subscriptions-trials/server';
 import { fetchConnectedChannels } from '@/features/whatsapp-cloud-api-waba/server';
 import { HelpProvider } from '@/features/help-center';
+import { HelpAgentRoot } from '@/features/help-agent/components/assistant-root';
 import { helpFor } from '@/features/help-center/view';
 import { AppGate, type AppRouteGate } from '@/components/shell/app-gate';
 import { InboxNavCounts } from '@/features/team-inbox-conversations';
@@ -107,7 +108,10 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
                   enabled={enabledFeatures ? [...enabledFeatures] : null}
                   marketplaceHref={marketplaceHref}
                 >
-                  {children}
+                  {/* The Help assistant (launcher, panel, shortcut): nothing renders unless the plan, the workspace and the role allow it. */}
+                  <HelpAgentRoot planEnabled={enabledFeatures?.has('help_agent') ?? false}>
+                    {children}
+                  </HelpAgentRoot>
                 </AppGate>
               </AccountGate>
               <PlanPaywall

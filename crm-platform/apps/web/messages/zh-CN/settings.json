@@ -329,6 +329,11 @@
         "label": "AI 线索评分",
         "description": "用 AI 为每位联系人评分，自主选择发送的内容，并查看费用。",
         "keywords": "线索评分, 评分, ai, 热, 温, 冷, openrouter, 费用, 资格审核"
+      },
+      "help-assistant": {
+        "label": "帮助助手",
+        "description": "开启助手，为团队提供指引或代为完成步骤。",
+        "keywords": "ai, 助手, 智能体, 指南, 帮助, 自动化"
       }
     }
   }

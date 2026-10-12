@@ -329,6 +329,11 @@
         "label": "KI-Lead-Scoring",
         "description": "Bewerten Sie jeden Kontakt mit KI, legen Sie fest, was gesendet wird, und sehen Sie die Kosten.",
         "keywords": "lead-score, scoring, bewertung, ki, heiß, warm, kalt, openrouter, kosten, qualifizieren"
+      },
+      "help-assistant": {
+        "label": "Hilfe-Assistent",
+        "description": "Schalten Sie den Assistenten ein, der Ihr Team anleitet oder die Schritte für es erledigt.",
+        "keywords": "ki, assistent, agent, anleitung, hilfe, automatisierung"
       }
     }
   }

@@ -8,6 +8,7 @@ import { useFormatter, useTranslations } from 'next-intl';
 import { contactActivityResponseSchema } from '@crm/contracts';
 import { Badge, Button, ConfirmDialog, EmptyState, Spinner, StatTile, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { AGENT_IGNORE } from '@/lib/agent-marks';
 import { LinkedAppointments } from '@/features/appointments';
 import { ContactAttributionCard } from '@/features/lead-sources';
 import { CompanyLink } from '@/features/companies';
@@ -404,7 +405,10 @@ function Timeline({ id }: { id: string }) {
       ) : list.items.length === 0 ? (
         <p className="py-6 text-center text-sm text-muted-foreground">{t('noActivity')}</p>
       ) : (
-        <ol className="relative space-y-5 ps-6 before:absolute before:inset-y-1 before:start-[9px] before:w-px before:bg-border">
+        <ol
+          {...AGENT_IGNORE}
+          className="relative space-y-5 ps-6 before:absolute before:inset-y-1 before:start-[9px] before:w-px before:bg-border"
+        >
           {list.items.map((a) => (
             <li key={a.id} className="relative">
               <span className="absolute -start-6 top-1 size-[18px] rounded-full border border-border bg-background" />

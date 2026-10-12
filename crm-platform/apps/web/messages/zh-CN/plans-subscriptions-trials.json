@@ -78,6 +78,7 @@
       "form_builder": "表单",
       "waba_groups": "WhatsApp 群组",
       "sms": "SMS 渠道",
+      "help_agent": "帮助助手",
       "email_channel": "电子邮件(Gmail)渠道"
     },
     "limitGroups": {

@@ -132,7 +132,10 @@ describe('routes that must stay open (third parties, visitors, paywall rendering
 });
 
 function stubEntitlements(enabled: boolean): PlanEntitlementService {
-  const stub = { featureEnabled: async () => enabled } as unknown as PlanEntitlementService;
+  const stub = {
+    featureEnabled: async () => enabled,
+    forOrg: async () => null,
+  } as unknown as PlanEntitlementService;
   (stub as { assertFeature: unknown }).assertFeature =
     PlanEntitlementService.prototype.assertFeature.bind(stub);
   return stub;

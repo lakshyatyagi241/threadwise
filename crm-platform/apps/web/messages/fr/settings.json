@@ -329,6 +329,11 @@
         "label": "Scoring des leads par IA",
         "description": "Évaluez chaque contact avec l'IA, choisissez ce qui est envoyé et consultez le coût.",
         "keywords": "score de lead, scoring, notation, ia, chaud, tiède, froid, openrouter, coût, qualifier"
+      },
+      "help-assistant": {
+        "label": "Assistant d’aide",
+        "description": "Activez l’assistant qui guide votre équipe ou réalise les étapes à sa place.",
+        "keywords": "ia, assistant, agent, guide, aide, automatisation"
       }
     }
   }

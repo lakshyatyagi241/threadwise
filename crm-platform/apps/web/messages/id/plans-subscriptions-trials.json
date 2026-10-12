@@ -78,6 +78,7 @@
       "form_builder": "Formulir",
       "waba_groups": "Grup WhatsApp",
       "sms": "Kanal SMS",
+      "help_agent": "Asisten Bantuan",
       "email_channel": "Kanal email (Gmail)"
     },
     "limitGroups": {

@@ -78,6 +78,7 @@
       "form_builder": "Moduli",
       "waba_groups": "Gruppi WhatsApp",
       "sms": "Canale SMS",
+      "help_agent": "Assistente di aiuto",
       "email_channel": "Canale e-mail (Gmail)"
     },
     "limitGroups": {

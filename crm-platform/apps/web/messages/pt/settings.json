@@ -329,6 +329,11 @@
         "label": "Pontuação de leads com IA",
         "description": "Pontue cada contato com IA, escolha o que é enviado e veja quanto custa.",
         "keywords": "pontuação de lead, pontuação, ia, quente, morno, frio, openrouter, custo, qualificar"
+      },
+      "help-assistant": {
+        "label": "Assistente de ajuda",
+        "description": "Ative o assistente que orienta sua equipe ou faz os passos por ela.",
+        "keywords": "ia, assistente, agente, guia, ajuda, automação"
       }
     }
   }

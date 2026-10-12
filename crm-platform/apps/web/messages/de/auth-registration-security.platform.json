@@ -1420,6 +1420,7 @@
             "form_builder": "Gehostete und eingebettete Webformulare, die Kontakte im CRM erstellen. Die kostenpflichtige App Formulare steuert diesen Schalter.",
             "waba_groups": "WhatsApp-Gruppen von einer Cloud-API-Nummer aus erstellen und verwalten: Einladungslink, Beitrittsanfragen, Mitglieder. Die Nummer muss ein Official Business Account sein.",
             "sms": "Reiner SMS-Versand über Twilio oder MSG91: Absender verbinden, SMS-Broadcasts und -Kampagnen senden.",
+            "help_agent": "Der Hilfe-Assistent in der App: Nutzer beschreiben eine Aufgabe in einfachen Worten, und er führt sie an oder erledigt sie in der eigenen Sitzung – bei Risiken fragt er vorher nach. Verbraucht KI-Tokens.",
             "email_channel": "Gmail- und Google-Workspace-Postfächer mit dem Team-Posteingang verbinden. Die kostenpflichtige E-Mail-App steuert diesen Schalter."
           },
           "units": {
@@ -1602,6 +1603,7 @@
             "form_builder": "Formulare (Webformular-Builder)",
             "waba_groups": "WhatsApp-Gruppen (Cloud API)",
             "sms": "SMS-Kanal",
+            "help_agent": "Hilfe-Assistent (KI, verbraucht Tokens)",
             "email_channel": "E-Mail-Kanal (Gmail)"
           },
           "problems": {

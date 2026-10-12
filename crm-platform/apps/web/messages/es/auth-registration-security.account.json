@@ -554,6 +554,7 @@
             "form_builder": "Formularios",
             "waba_groups": "Grupos de WhatsApp",
             "sms": "SMS",
+            "help_agent": "Asistente de ayuda",
             "email_channel": "Canal de correo (Gmail)"
           },
           "cta": {

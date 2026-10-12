@@ -78,6 +78,7 @@
       "form_builder": "แบบฟอร์ม",
       "waba_groups": "กลุ่ม WhatsApp",
       "sms": "ช่องทาง SMS",
+      "help_agent": "ผู้ช่วยด้านความช่วยเหลือ",
       "email_channel": "ช่องทางอีเมล (Gmail)"
     },
     "limitGroups": {

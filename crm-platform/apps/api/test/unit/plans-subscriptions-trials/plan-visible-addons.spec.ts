@@ -29,6 +29,7 @@ const ent = (over: Partial<Entitlements> = {}): Entitlements =>
     planKnown: true,
     platformOwned: false,
     visibleApps: { all: false, appIds: new Set<number>() },
+    appWithheld: {},
     ...over,
   }) as Entitlements;
 
