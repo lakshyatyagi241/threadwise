@@ -361,7 +361,9 @@ export const wizardAudienceCountSchema = z.object({
   optedOut: z.number().int(),
   /** Of those, never messaged: no usable WhatsApp number. */
   invalidNumber: z.number().int(),
-  /** Who will be messaged: matching minus the two above. */
+  /** Of those, never messaged: the workspace requires a recorded consent and there is none. 0 while that switch is off. */
+  noConsent: z.number().int().default(0),
+  /** Who will be messaged: matching minus the three above. */
   recipients: z.number().int(),
   /** Of the recipients, numbers from the CSV that are not contacts yet (they are created when the broadcast is launched). */
   newContacts: z.number().int().default(0),
