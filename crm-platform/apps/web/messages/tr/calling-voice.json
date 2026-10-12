@@ -25,7 +25,7 @@
     "toast": {
       "noPhone": "Bu kişide telefon numarası yok.",
       "noNumber": "Hiçbir WABA numarasında arama etkin değil.",
-      "alreadyPermitted": "Bu kişi aramalara zaten izin veriyor - arama başlatılıyor...",
+      "alreadyPermitted": "Bu kişi aramalara zaten izin veriyor. Aramayı başlatmak için Ara'ya basın.",
       "permissionSent": "İzin isteği gönderildi. WhatsApp içinde Kabul/Reddet seçeneklerini görecek - yanıt verdikten sonra yeniden Ara'yı deneyin.",
       "permissionFailed": "İzin isteği gönderilemedi: {message}",
       "startFailed": "Arama başlatılamadı: {message}",
