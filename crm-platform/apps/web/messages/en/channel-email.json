@@ -1,0 +1,169 @@
+{
+  "email": {
+    "common": {
+      "dismiss": "Dismiss"
+    },
+    "hub": {
+      "kicker": "Channels",
+      "title": "Email",
+      "titleAccent": "mailboxes",
+      "intro": "Connect your Gmail or Google Workspace mailboxes. Customer emails arrive in the team inbox, one conversation per email thread, and your replies go out from the same address.",
+      "inbox": "Open inbox",
+      "channels": "Channels",
+      "loadError": "Could not load your mailboxes. Try again in a moment.",
+      "cardCaption": "Gmail · Google Workspace",
+      "connectedCount": "{count, plural, one {# mailbox connected} other {# mailboxes connected}}",
+      "notConnected": "Not connected",
+      "usageLabel": "Mailboxes used",
+      "usage": "{used} of {limit} mailboxes",
+      "usageUnlimited": "{used, plural, one {# mailbox} other {# mailboxes}}, no limit",
+      "howTitle": "How it works",
+      "how": {
+        "connect": {
+          "title": "Connect a mailbox",
+          "body": "Sign in with Google and allow Threadwise to read and send mail for that address."
+        },
+        "inbox": {
+          "title": "Mail arrives in the inbox",
+          "body": "New mail is fetched every minute. Each email thread becomes one conversation, and each mailbox is its own inbox."
+        },
+        "reply": {
+          "title": "Reply from the inbox",
+          "body": "Your reply goes out from the mailbox on the same thread, with Cc and Bcc if you add them."
+        },
+        "limit": {
+          "title": "Mailboxes follow your plan",
+          "body": "Your plan sets how many mailboxes you can connect. Emails are not counted against your message quota."
+        }
+      },
+      "connectedTitle": "Connected mailboxes",
+      "total": "{count, plural, one {# mailbox} other {# mailboxes}}",
+      "empty": "No mailbox connected yet. Connect Gmail below to start receiving email in the inbox.",
+      "addTitle": "Add a mailbox",
+      "providers": {
+        "google": {
+          "name": "Gmail / Google Workspace",
+          "hint": "Sign in with the Google account that owns the mailbox, for example support@yourcompany.com."
+        },
+        "imap": {
+          "name": "Other mail (IMAP / SMTP)",
+          "hint": "Any other mail provider with a username and password."
+        },
+        "microsoft": {
+          "name": "Microsoft 365 / Outlook",
+          "hint": "Sign in with a Microsoft work or school account."
+        }
+      },
+      "connectGmail": "Connect Gmail",
+      "soon": "Soon",
+      "notReady": "Google sign-in is not set up for this platform yet. Ask your platform administrator to add the Google credentials.",
+      "limitReached": "You have used all {limit, plural, one {# mailbox} other {# mailboxes}} your plan allows. Remove a mailbox, or ask your administrator to upgrade the plan.",
+      "noPermission": "You can see the mailboxes, but only people allowed to manage them can connect one.",
+      "connectFailed": "Could not start the Google sign-in. Try again."
+    },
+    "card": {
+      "status": {
+        "connected": "Connected",
+        "needs_reauth": "Needs reconnect",
+        "error": "Error",
+        "disconnected": "Disconnected"
+      },
+      "sendsAs": "Replies go out as",
+      "displayName": "Display name",
+      "edit": "Edit",
+      "save": "Save",
+      "cancel": "Cancel",
+      "renamed": "Display name saved.",
+      "needsReauthHint": "Google no longer lets us read this mailbox. Reconnect it to receive and send mail again.",
+      "lastError": "Last problem: {error}",
+      "lastSynced": "Last synced",
+      "neverSynced": "Not synced yet",
+      "conversations": "Conversations",
+      "openInbox": "Open in inbox",
+      "sync": "Sync now",
+      "syncStarted": "Sync started. New mail appears in the inbox in a moment.",
+      "reconnect": "Reconnect",
+      "remove": "Remove",
+      "removeTitle": "Remove mailbox",
+      "removeConfirm": "Remove {address}? Its conversations stay in the inbox as read-only history, and no new mail is received or sent from it. You can connect the same address again later.",
+      "removed": "Mailbox removed.",
+      "failed": "Could not update the mailbox. Try again."
+    },
+    "outcome": {
+      "connected": "Mailbox connected. Mail from the last 7 days is being fetched into the inbox.",
+      "denied": "Google sign-in was cancelled, so nothing was connected.",
+      "missing_scope": "Google did not give access to read and send mail. Connect again and tick every permission on the Google screen.",
+      "limit": "Your plan's mailbox limit is reached, so this mailbox was not connected.",
+      "not_configured": "Google sign-in is not set up for this platform yet. Ask your platform administrator.",
+      "wrong_account": "You signed in with a different Google account than the mailbox being reconnected. Sign in with the same address.",
+      "failed": "Something went wrong while connecting the mailbox. Try again."
+    },
+    "errors": {
+      "notConfigured": "Google sign-in is not set up for this platform yet. Ask your platform administrator.",
+      "limit": "Your plan's mailbox limit is reached.",
+      "unavailable": "This mailbox is disconnected or needs to be reconnected first.",
+      "sendRefused": "Google refused to send this email. Check the addresses and the size, then try again.",
+      "wrongAccount": "That is a different Google account than this mailbox. Sign in with the same address.",
+      "locked": "The email add-on is not part of your plan.",
+      "changed": "This mailbox was changed somewhere else. The list has been reloaded, try again."
+    },
+    "guide": {
+      "title": "Setup guide",
+      "google": {
+        "title": "Connect Gmail or Google Workspace",
+        "p1": "Choose Connect Gmail and sign in with the account that owns the mailbox, such as a shared support@ or sales@ address.",
+        "p2": "On the Google screen, allow reading and sending mail. Without both, mail cannot be received or sent.",
+        "p3": "You are brought back here and the first 7 days of mail are fetched into the inbox without notifying anyone.",
+        "p4": "Add more mailboxes the same way, up to the number your plan allows. Each one shows as its own inbox."
+      },
+      "consent": {
+        "title": "What we read and send",
+        "p1": "We read your inbox mail to show it in the team inbox. Spam, trash and drafts are skipped.",
+        "p2": "Mail we sent ourselves from your account elsewhere is not copied into the inbox.",
+        "p3": "Automatic replies, bounces and mailing-list mail are stored and marked Automated.",
+        "p4": "Removing a mailbox stops reading and sending. Its past conversations stay as read-only history."
+      },
+      "trouble": {
+        "title": "If something looks wrong",
+        "p1": "Needs reconnect means Google revoked or expired the access. Select Reconnect and sign in with the same address.",
+        "p2": "Error shows the last problem. Select Sync now to try again; if it keeps failing, reconnect the mailbox.",
+        "p3": "Connect is disabled when the platform has no Google sign-in set up or your plan's mailbox limit is reached.",
+        "p4": "Images in an email stay hidden until you choose Load images in the conversation."
+      }
+    },
+    "thread": {
+      "noSubject": "(no subject)",
+      "automated": "Automated",
+      "from": "From",
+      "to": "To",
+      "cc": "Cc",
+      "date": "Date",
+      "imagesBlocked": "Pictures from the internet are hidden.",
+      "loadImages": "Load images",
+      "frameTitle": "Email: {subject}",
+      "truncated": "This email was long, so only the first part is shown.",
+      "noBody": "This email has no text.",
+      "attachments": "{count, plural, one {# attachment} other {# attachments}}",
+      "tooLarge": "too large to keep ({size})",
+      "download": "Download {name} ({size})"
+    },
+    "composer": {
+      "toggle": "Cc, Bcc and subject",
+      "cc": "Cc",
+      "bcc": "Bcc",
+      "subject": "Subject",
+      "subjectPlaceholder": "Subject",
+      "addressesPlaceholder": "name@example.com, other@example.com",
+      "problem": {
+        "ccInvalid": "These Cc addresses are not valid: {list}",
+        "bccInvalid": "These Bcc addresses are not valid: {list}",
+        "ccTooMany": "Cc takes at most 20 addresses.",
+        "bccTooMany": "Bcc takes at most 20 addresses.",
+        "subjectTooLong": "The subject can be at most 998 characters."
+      }
+    },
+    "inbox": {
+      "group": "Email"
+    }
+  }
+}

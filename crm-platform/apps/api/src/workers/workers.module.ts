@@ -15,6 +15,7 @@ import { CampaignsWorkerModule } from '../modules/campaigns';
 import { ChannelFacebookWorkerModule } from '../modules/channel-facebook';
 import { ChannelInstagramWorkerModule } from '../modules/channel-instagram';
 import { ShopifyWoocommerceWorkerModule } from '../modules/shopify-woocommerce';
+import { ChannelEmailWorkerModule } from '../modules/channel-email';
 import { ChannelSmsWorkerModule } from '../modules/channel-sms';
 import { ChannelTelegramWorkerModule } from '../modules/channel-telegram';
 import {
@@ -94,6 +95,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     CampaignsWorkerModule,
     ChannelTelegramWorkerModule,
     ChannelSmsWorkerModule,
+    ChannelEmailWorkerModule,
     ChannelFacebookWorkerModule,
     ChannelInstagramWorkerModule,
     ShopifyWoocommerceWorkerModule,

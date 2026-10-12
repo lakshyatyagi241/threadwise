@@ -369,6 +369,17 @@ export const googleCalendarSettingsSchema = z.object({
   redirectUri: url(300),
 });
 
+// --- The Email (Gmail) add-on: the Google OAuth client every workspace connects its mailboxes through. A SEPARATE client from Calendar, because
+// the Gmail scopes are restricted and need Google's own verification (docs/threadwise-port/plan/channel-email-build.md decision 5) -------
+export const googleMailSettingsSchema = z.object({
+  /** The master switch. Off: no workspace can connect a mailbox, and no mailbox is read or sent from (what is stored is kept). */
+  enabled: flag(true),
+  /** The OAuth 2.0 client id from Google Cloud (Web application). Empty: the `GOOGLE_MAIL_CLIENT_ID` environment value applies. */
+  clientId: text(200),
+  /** The redirect URI registered on that client. Empty: `<APP_URL>/v2/public/email/google/callback`. */
+  redirectUri: url(300),
+});
+
 // --- Flow builder: which builder(s) every workspace is offered (an addition beyond Reference) ---------------------------------------
 export const FLB_BUILDER_MODES = ['simple', 'advanced'] as const;
 export type FlbBuilderMode = (typeof FLB_BUILDER_MODES)[number];
@@ -392,6 +403,7 @@ export const SET_GROUP_SCHEMAS = {
   whatsapp: whatsappSettingsSchema,
   campaigns: campaignsSettingsSchema,
   googleCalendar: googleCalendarSettingsSchema,
+  googleMail: googleMailSettingsSchema,
   flowBuilder: flowBuilderSettingsSchema,
 } as const;
 export type SetGroup = keyof typeof SET_GROUP_SCHEMAS;
@@ -416,6 +428,8 @@ export const SET_SECRET_FIELDS = {
   campaigns: [],
   /** The OAuth client secret: sent to Google when a code is exchanged or a token refreshed, never returned. */
   googleCalendar: ['clientSecret'],
+  /** The Gmail OAuth client secret: sent to Google when a code is exchanged or a token refreshed, never returned. */
+  googleMail: ['clientSecret'],
   flowBuilder: [],
 } as const satisfies Record<SetGroup, readonly string[]>;
 

@@ -8,9 +8,11 @@ import {
 import { usage } from '../../../src/modules/marketplace/cli/seed-app.args';
 import {
   APPOINTMENTS_CONFIG,
+  EMAIL_CONFIG,
   FORMS_CONFIG,
 } from '../../../src/modules/marketplace/cli/seed-app.config';
 import { parseArgs as parseFormsArgs } from '../../../src/modules/marketplace/cli/seed-forms.args';
+import { parseArgs as parseEmailArgs } from '../../../src/modules/marketplace/cli/seed-email.args';
 
 const options = (argv: string[]) => {
   const r = parseArgs(argv);
@@ -218,5 +220,30 @@ describe('seed:forms arguments and per-app config', () => {
       /cannot be combined/,
     );
     expect(formsError(['--yes'])).toMatch(/only confirms --all-workspaces/);
+  });
+});
+
+describe('seed:email arguments and config', () => {
+  it('defaults to 499 INR, a real run, nobody comped, and the config grants email_channel', () => {
+    const r = parseEmailArgs([]);
+    if (r.kind !== 'options') throw new Error(JSON.stringify(r));
+    expect(r.options).toEqual({
+      price: '499.00',
+      currency: 'INR',
+      dryRun: false,
+      force: false,
+      workspace: null,
+      allWorkspaces: false,
+      yes: false,
+    });
+    expect(EMAIL_CONFIG).toMatchObject({
+      slug: 'email',
+      feature: 'email_channel',
+      grandfatherExisting: false,
+      version: '1.0.0',
+      migration: '20261118100100_mkt_email_app',
+    });
+    expect(usage(EMAIL_CONFIG)).toMatch(/seed:email/);
+    expect(parseEmailArgs(['--all-workspaces']).kind).toBe('error');
   });
 });

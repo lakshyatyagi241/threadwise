@@ -83,3 +83,12 @@ export type MailConnectOutcome = (typeof MAIL_CONNECT_OUTCOMES)[number];
 
 /** The public OAuth callback Google redirects to (registered as the redirect URI in the Google Cloud console). */
 export const MAIL_GOOGLE_CALLBACK_PATH = '/v2/public/email/google/callback';
+
+/** What Google puts on the callback address: the code (or an `error` such as `access_denied`), the signed state we issued, the granted scopes. */
+export const mailCallbackQuerySchema = z.object({
+  code: z.string().max(2048).optional(),
+  state: z.string().max(2048).optional(),
+  error: z.string().max(200).optional(),
+  scope: z.string().max(2048).optional(),
+});
+export type MailCallbackQuery = z.infer<typeof mailCallbackQuerySchema>;

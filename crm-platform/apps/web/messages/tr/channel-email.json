@@ -1,0 +1,169 @@
+{
+  "email": {
+    "common": {
+      "dismiss": "Kapat"
+    },
+    "hub": {
+      "kicker": "Kanallar",
+      "title": "E-posta",
+      "titleAccent": "posta kutuları",
+      "intro": "Gmail veya Google Workspace posta kutularınızı bağlayın. Müşteri e-postaları ekip gelen kutusuna düşer, her e-posta zinciri tek bir görüşme olur ve yanıtlarınız aynı adresten gönderilir.",
+      "inbox": "Gelen kutusunu aç",
+      "channels": "Kanallar",
+      "loadError": "Posta kutularınız yüklenemedi. Biraz sonra tekrar deneyin.",
+      "cardCaption": "Gmail · Google Workspace",
+      "connectedCount": "{count, plural, one {# posta kutusu bağlı} other {# posta kutusu bağlı}}",
+      "notConnected": "Bağlı değil",
+      "usageLabel": "Kullanılan posta kutuları",
+      "usage": "{used} / {limit} posta kutusu",
+      "usageUnlimited": "{used, plural, one {# posta kutusu} other {# posta kutusu}}, sınırsız",
+      "howTitle": "Nasıl çalışır",
+      "how": {
+        "connect": {
+          "title": "Posta kutusu bağlayın",
+          "body": "Google ile oturum açın ve Threadwise'ın bu adres için e-posta okumasına ve göndermesine izin verin."
+        },
+        "inbox": {
+          "title": "E-postalar gelen kutusuna düşer",
+          "body": "Yeni e-postalar her dakika alınır. Her e-posta zinciri tek bir görüşme olur ve her posta kutusu kendi gelen kutusuna sahiptir."
+        },
+        "reply": {
+          "title": "Gelen kutusundan yanıtlayın",
+          "body": "Yanıtınız, eklerseniz Cc ve Bcc ile birlikte, aynı zincirde posta kutusundan gönderilir."
+        },
+        "limit": {
+          "title": "Posta kutuları planınıza bağlıdır",
+          "body": "Planınız kaç posta kutusu bağlayabileceğinizi belirler. E-postalar mesaj kotanızdan düşülmez."
+        }
+      },
+      "connectedTitle": "Bağlı posta kutuları",
+      "total": "{count, plural, one {# posta kutusu} other {# posta kutusu}}",
+      "empty": "Henüz bağlı posta kutusu yok. Gelen kutusunda e-posta almaya başlamak için aşağıdan Gmail'i bağlayın.",
+      "addTitle": "Posta kutusu ekle",
+      "providers": {
+        "google": {
+          "name": "Gmail / Google Workspace",
+          "hint": "Posta kutusunun sahibi olan Google hesabıyla oturum açın, örneğin support@yourcompany.com."
+        },
+        "imap": {
+          "name": "Diğer e-posta (IMAP / SMTP)",
+          "hint": "Kullanıcı adı ve parola ile çalışan diğer tüm e-posta sağlayıcıları."
+        },
+        "microsoft": {
+          "name": "Microsoft 365 / Outlook",
+          "hint": "Microsoft iş veya okul hesabıyla oturum açın."
+        }
+      },
+      "connectGmail": "Gmail'i bağla",
+      "soon": "Yakında",
+      "notReady": "Bu platformda Google ile oturum açma henüz kurulmadı. Platform yöneticinizden Google kimlik bilgilerini eklemesini isteyin.",
+      "limitReached": "Planınızın izin verdiği {limit, plural, one {# posta kutusunun} other {# posta kutusunun}} tamamını kullandınız. Bir posta kutusunu kaldırın veya yöneticinizden planı yükseltmesini isteyin.",
+      "noPermission": "Posta kutularını görebilirsiniz, ancak yalnızca yönetme yetkisi olanlar yeni posta kutusu bağlayabilir.",
+      "connectFailed": "Google ile oturum açma başlatılamadı. Tekrar deneyin."
+    },
+    "card": {
+      "status": {
+        "connected": "Bağlı",
+        "needs_reauth": "Yeniden bağlanmalı",
+        "error": "Hata",
+        "disconnected": "Bağlantı kesildi"
+      },
+      "sendsAs": "Yanıtlar şu adresten gider",
+      "displayName": "Görünen ad",
+      "edit": "Düzenle",
+      "save": "Kaydet",
+      "cancel": "İptal",
+      "renamed": "Görünen ad kaydedildi.",
+      "needsReauthHint": "Google artık bu posta kutusunu okumamıza izin vermiyor. E-posta almak ve göndermek için yeniden bağlayın.",
+      "lastError": "Son sorun: {error}",
+      "lastSynced": "Son eşitleme",
+      "neverSynced": "Henüz eşitlenmedi",
+      "conversations": "Görüşmeler",
+      "openInbox": "Gelen kutusunda aç",
+      "sync": "Şimdi eşitle",
+      "syncStarted": "Eşitleme başladı. Yeni e-postalar birazdan gelen kutusunda görünecek.",
+      "reconnect": "Yeniden bağlan",
+      "remove": "Kaldır",
+      "removeTitle": "Posta kutusunu kaldır",
+      "removeConfirm": "{address} kaldırılsın mı? Görüşmeleri salt okunur geçmiş olarak gelen kutusunda kalır ve bu adresten yeni e-posta alınmaz veya gönderilmez. Aynı adresi daha sonra yeniden bağlayabilirsiniz.",
+      "removed": "Posta kutusu kaldırıldı.",
+      "failed": "Posta kutusu güncellenemedi. Tekrar deneyin."
+    },
+    "outcome": {
+      "connected": "Posta kutusu bağlandı. Son 7 günün e-postaları gelen kutusuna alınıyor.",
+      "denied": "Google ile oturum açma iptal edildi, bu yüzden hiçbir şey bağlanmadı.",
+      "missing_scope": "Google, e-posta okuma ve gönderme erişimi vermedi. Yeniden bağlanın ve Google ekranındaki tüm izinleri işaretleyin.",
+      "limit": "Planınızın posta kutusu sınırına ulaşıldığı için bu posta kutusu bağlanmadı.",
+      "not_configured": "Bu platformda Google ile oturum açma henüz kurulmadı. Platform yöneticinize başvurun.",
+      "wrong_account": "Yeniden bağlanan posta kutusundan farklı bir Google hesabıyla oturum açtınız. Aynı adresle oturum açın.",
+      "failed": "Posta kutusu bağlanırken bir sorun oluştu. Tekrar deneyin."
+    },
+    "errors": {
+      "notConfigured": "Bu platformda Google ile oturum açma henüz kurulmadı. Platform yöneticinize başvurun.",
+      "limit": "Planınızın posta kutusu sınırına ulaşıldı.",
+      "unavailable": "Bu posta kutusunun bağlantısı kesilmiş veya önce yeniden bağlanması gerekiyor.",
+      "sendRefused": "Google bu e-postayı göndermeyi reddetti. Adresleri ve boyutu kontrol edip tekrar deneyin.",
+      "wrongAccount": "Bu, posta kutusuna ait olandan farklı bir Google hesabı. Aynı adresle oturum açın.",
+      "locked": "E-posta eklentisi planınıza dahil değil.",
+      "changed": "Bu posta kutusu başka bir yerde değiştirildi. Liste yeniden yüklendi, tekrar deneyin."
+    },
+    "guide": {
+      "title": "Kurulum rehberi",
+      "google": {
+        "title": "Gmail veya Google Workspace'i bağlayın",
+        "p1": "Gmail'i bağla'yı seçin ve posta kutusunun sahibi olan hesapla oturum açın; örneğin ortak bir support@ veya sales@ adresi.",
+        "p2": "Google ekranında e-posta okuma ve göndermeye izin verin. İkisi olmadan e-posta alınamaz veya gönderilemez.",
+        "p3": "Buraya geri yönlendirilirsiniz ve ilk 7 günün e-postaları kimseye bildirim gitmeden gelen kutusuna alınır.",
+        "p4": "Daha fazla posta kutusunu aynı şekilde, planınızın izin verdiği sayıya kadar ekleyin. Her biri kendi gelen kutusu olarak görünür."
+      },
+      "consent": {
+        "title": "Neleri okur ve göndeririz",
+        "p1": "Ekip gelen kutusunda göstermek için gelen kutunuzdaki e-postaları okuruz. Spam, çöp kutusu ve taslaklar atlanır.",
+        "p2": "Hesabınızdan başka bir yerde gönderdiğiniz e-postalar gelen kutusuna kopyalanmaz.",
+        "p3": "Otomatik yanıtlar, geri dönen e-postalar ve posta listesi e-postaları saklanır ve Otomatik olarak işaretlenir.",
+        "p4": "Posta kutusunu kaldırmak okumayı ve göndermeyi durdurur. Geçmiş görüşmeleri salt okunur geçmiş olarak kalır."
+      },
+      "trouble": {
+        "title": "Bir şey ters görünüyorsa",
+        "p1": "Yeniden bağlanmalı, Google'ın erişimi iptal ettiği veya erişimin süresinin dolduğu anlamına gelir. Yeniden bağlan'ı seçin ve aynı adresle oturum açın.",
+        "p2": "Hata, son sorunu gösterir. Tekrar denemek için Şimdi eşitle'yi seçin; sorun sürerse posta kutusunu yeniden bağlayın.",
+        "p3": "Platformda Google ile oturum açma kurulu değilse veya planınızın posta kutusu sınırına ulaşıldıysa Bağlan devre dışıdır.",
+        "p4": "Bir e-postadaki görseller, görüşmede Görselleri yükle'yi seçene kadar gizli kalır."
+      }
+    },
+    "thread": {
+      "noSubject": "(konu yok)",
+      "automated": "Otomatik",
+      "from": "Kimden",
+      "to": "Kime",
+      "cc": "Cc",
+      "date": "Tarih",
+      "imagesBlocked": "İnternetten gelen görseller gizlendi.",
+      "loadImages": "Görselleri yükle",
+      "frameTitle": "E-posta: {subject}",
+      "truncated": "Bu e-posta uzundu, bu yüzden yalnızca ilk bölümü gösteriliyor.",
+      "noBody": "Bu e-postada metin yok.",
+      "attachments": "{count, plural, one {# ek} other {# ek}}",
+      "tooLarge": "saklanamayacak kadar büyük ({size})",
+      "download": "{name} dosyasını indir ({size})"
+    },
+    "composer": {
+      "toggle": "Cc, Bcc ve konu",
+      "cc": "Cc",
+      "bcc": "Bcc",
+      "subject": "Konu",
+      "subjectPlaceholder": "Konu",
+      "addressesPlaceholder": "name@example.com, other@example.com",
+      "problem": {
+        "ccInvalid": "Bu Cc adresleri geçerli değil: {list}",
+        "bccInvalid": "Bu Bcc adresleri geçerli değil: {list}",
+        "ccTooMany": "Cc en fazla 20 adres alabilir.",
+        "bccTooMany": "Bcc en fazla 20 adres alabilir.",
+        "subjectTooLong": "Konu en fazla 998 karakter olabilir."
+      }
+    },
+    "inbox": {
+      "group": "E-posta"
+    }
+  }
+}

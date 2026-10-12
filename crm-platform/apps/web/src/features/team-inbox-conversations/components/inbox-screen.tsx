@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { ConfirmDialog, cn, useToast } from '@crm/ui';
-import { uuidSchema, type MessageResponse } from '@crm/contracts';
+import { uuidSchema, type EmailReplyExtras, type MessageResponse } from '@crm/contracts';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { ApiError } from '@/lib/api/errors';
 import { useRealtimeEvent } from '@/lib/realtime';
@@ -73,7 +73,13 @@ export function InboxScreen() {
   const rawId = params.get('c');
   const selectedId = rawId && uuidSchema.safeParse(rawId).success ? rawId.toLowerCase() : null;
 
-  const [filters, setFilters] = useState<ListFilters>(DEFAULT_FILTERS);
+  // `/inbox?channel=<id>` (the "Open in inbox" link of a mailbox, TW-MAIL-024) starts filtered by that channel.
+  const [filters, setFilters] = useState<ListFilters>(() => {
+    const channel = params.get('channel');
+    return channel && /^[0-9a-f-]{36}$/i.test(channel)
+      ? { ...DEFAULT_FILTERS, channelId: channel }
+      : DEFAULT_FILTERS;
+  });
   const patchFilters = useCallback(
     (patch: Partial<ListFilters>) => setFilters((f) => ({ ...f, ...patch })),
     [],
@@ -305,13 +311,23 @@ export function InboxScreen() {
   );
 
   const onSend = useCallback(
-    (draft: { body: string; file: File | null; replyToMessageId?: string | null }) => {
+    (draft: {
+      body: string;
+      file: File | null;
+      replyToMessageId?: string | null;
+      email?: EmailReplyExtras;
+    }) => {
       // A group thread cannot be replied to yet (the composer is off; this is the belt to that braces).
       if (isGroupThread(detail.detail?.peerKey)) return;
       // The simulator's one-shot fault goes in as a prefix on the text (or the caption of a file).
       const body = withFault(draft.body, fault);
       if (fault !== 'none') setFault('none');
-      thread.send({ body, file: draft.file, replyToMessageId: draft.replyToMessageId });
+      thread.send({
+        body,
+        file: draft.file,
+        replyToMessageId: draft.replyToMessageId,
+        ...(draft.email ? { email: draft.email } : {}),
+      });
     },
     [fault, thread, detail.detail?.peerKey],
   );

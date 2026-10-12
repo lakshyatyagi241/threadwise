@@ -17,6 +17,7 @@
       "whatsapp": "WhatsApp (WABA)",
       "campaigns": "קמפיינים",
       "googleCalendar": "Google Calendar",
+      "googleMail": "Gmail",
       "flowBuilder": "עורך תהליכים"
     },
     "hub": {
@@ -930,6 +931,33 @@
           }
         }
       },
+      "googleMail": {
+        "title": "דוא\"ל Gmail",
+        "description": "לקוח ה-OAuth של Google שדרכו כל סביבת עבודה מחברת את התיבות שלה.",
+        "sections": {
+          "oauth": {
+            "title": "לקוח OAuth של Google"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "לאפשר לסביבות עבודה לחבר Gmail",
+            "hint": "כבוי: אף סביבת עבודה לא יכולה להתחבר, ודואר לא נקרא ולא נשלח. תיבות שכבר מחוברות נשמרות."
+          },
+          "clientId": {
+            "label": "Client ID",
+            "hint": "מ-Google Cloud, Credentials, OAuth 2.0 Client ID (Web application). ריק משתמש ב-GOOGLE_MAIL_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "סוד הלקוח",
+            "hint": "נשמר מוצפן ולא יוצג שוב. ריק שומר על השמור; GOOGLE_MAIL_CLIENT_SECRET הוא הגיבוי."
+          },
+          "redirectUri": {
+            "label": "עקיפת Redirect URI",
+            "hint": "השאירו ריק כדי להשתמש בכתובת שלמעלה. היא חייבת להתאים בדיוק ל-Authorised redirect URI בלקוח."
+          }
+        }
+      },
       "flowBuilder": {
         "title": "עורך תהליכים",
         "description": "אילו עורכי תהליכים מוצעים לסביבות העבודה.",
@@ -1062,6 +1090,11 @@
         "title": "Google Calendar",
         "description": "לקוח OAuth של Google שסביבות העבודה משתמשות בו לחיבור היומן לצורך הזמנות ושעות תפוסות.",
         "tags": "Google / OAuth / Calendar"
+      },
+      "googleMail": {
+        "title": "דוא\"ל Gmail",
+        "description": "לקוח ה-OAuth של Google שבאמצעותו סביבות עבודה מחברות את תיבות ה-Gmail שלהן.",
+        "tags": "Google / OAuth / Gmail"
       },
       "flowBuilder": {
         "title": "עורך תהליכים",
@@ -1644,6 +1677,38 @@
             "workspaces": {
               "title": "4. סביבות העבודה מתחברות",
               "body": "הדביקו כאן את מזהה הלקוח והסוד ושמרו. מנהלים מתחברים לאחר מכן מ-Appointments, Settings, Google Calendar."
+            }
+          }
+        }
+      },
+      "googleMail": {
+        "title": "דוא\"ל Gmail",
+        "eyebrow": "ניהול - דוא\"ל",
+        "description": "לקוח OAuth אחד של Google Cloud לכל הפלטפורמה, נפרד מ-Google Calendar. כל סביבת עבודה מחברת את התיבות שלה מתוך דוא\"ל ואינה רואה את מזהה הלקוח או הסוד.",
+        "sections": {
+          "oauth": {
+            "title": "לקוח OAuth של Google",
+            "description": "בלי מזהה לקוח וסוד, סביבות עבודה לא יכולות לחבר תיבה."
+          }
+        },
+        "guide": {
+          "title": "הגדירו ב-Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. פרויקט ו-API",
+              "body": "ב-Google Cloud Console צרו פרויקט והפעילו את Gmail API."
+            },
+            "redirect": {
+              "title": "2. לקוח OAuth",
+              "body": "צרו OAuth 2.0 Client ID מסוג Web application והוסיפו את ה-redirect URI המוצג בעמוד זה תחת Authorised redirect URIs."
+            },
+            "consent": {
+              "title": "3. מסך הסכמה",
+              "body": "הוסיפו את ההיקפים openid, email, gmail.readonly ו-gmail.send. היקפי Gmail מוגבלים: Google חייבת לאמת את האפליקציה לשימוש כללי, ובמצב בדיקה ההרשאה פוקעת אחרי 7 ימים."
+            },
+            "workspaces": {
+              "title": "4. סביבות העבודה מתחברות",
+              "body": "הדביקו כאן את מזהה הלקוח והסוד ושמרו. לאחר מכן מנהלים מתחברים מתוך דוא\"ל."
             }
           }
         }

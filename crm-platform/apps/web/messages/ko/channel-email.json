@@ -1,0 +1,169 @@
+{
+  "email": {
+    "common": {
+      "dismiss": "닫기"
+    },
+    "hub": {
+      "kicker": "채널",
+      "title": "이메일",
+      "titleAccent": "사서함",
+      "intro": "Gmail 또는 Google Workspace 사서함을 연결하세요. 고객 이메일은 팀 수신함에 도착하며 이메일 스레드마다 하나의 대화가 만들어지고, 답장은 같은 주소로 발송됩니다.",
+      "inbox": "수신함 열기",
+      "channels": "채널",
+      "loadError": "사서함을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.",
+      "cardCaption": "Gmail · Google Workspace",
+      "connectedCount": "{count, plural, other {사서함 #개 연결됨}}",
+      "notConnected": "연결되지 않음",
+      "usageLabel": "사용 중인 사서함",
+      "usage": "사서함 {limit}개 중 {used}개 사용",
+      "usageUnlimited": "{used, plural, other {사서함 #개}}, 제한 없음",
+      "howTitle": "작동 방식",
+      "how": {
+        "connect": {
+          "title": "사서함 연결",
+          "body": "Google로 로그인하고 해당 주소의 메일을 읽고 보낼 수 있도록 Threadwise에 허용하세요."
+        },
+        "inbox": {
+          "title": "메일이 수신함에 도착",
+          "body": "새 메일은 1분마다 가져옵니다. 이메일 스레드마다 하나의 대화가 되며, 사서함마다 별도의 수신함이 만들어집니다."
+        },
+        "reply": {
+          "title": "수신함에서 답장",
+          "body": "답장은 같은 스레드에서 사서함 주소로 발송되며, 원하면 Cc와 Bcc도 추가할 수 있습니다."
+        },
+        "limit": {
+          "title": "사서함 수는 요금제에 따라 결정",
+          "body": "연결할 수 있는 사서함 수는 요금제에 따라 정해집니다. 이메일은 메시지 할당량에 포함되지 않습니다."
+        }
+      },
+      "connectedTitle": "연결된 사서함",
+      "total": "{count, plural, other {사서함 #개}}",
+      "empty": "아직 연결된 사서함이 없습니다. 아래에서 Gmail을 연결하면 수신함에서 이메일을 받을 수 있습니다.",
+      "addTitle": "사서함 추가",
+      "providers": {
+        "google": {
+          "name": "Gmail / Google Workspace",
+          "hint": "사서함을 소유한 Google 계정(예: support@yourcompany.com)으로 로그인하세요."
+        },
+        "imap": {
+          "name": "기타 메일(IMAP / SMTP)",
+          "hint": "사용자 이름과 비밀번호를 사용하는 다른 모든 메일 제공업체입니다."
+        },
+        "microsoft": {
+          "name": "Microsoft 365 / Outlook",
+          "hint": "Microsoft 회사 또는 학교 계정으로 로그인하세요."
+        }
+      },
+      "connectGmail": "Gmail 연결",
+      "soon": "출시 예정",
+      "notReady": "이 플랫폼에는 아직 Google 로그인이 설정되지 않았습니다. 플랫폼 관리자에게 Google 자격 증명을 추가해 달라고 요청하세요.",
+      "limitReached": "요금제에서 허용하는 {limit, plural, other {사서함 #개}}를 모두 사용했습니다. 사서함을 삭제하거나 관리자에게 요금제 업그레이드를 요청하세요.",
+      "noPermission": "사서함은 볼 수 있지만, 연결은 관리 권한이 있는 사용자만 할 수 있습니다.",
+      "connectFailed": "Google 로그인을 시작하지 못했습니다. 다시 시도해 주세요."
+    },
+    "card": {
+      "status": {
+        "connected": "연결됨",
+        "needs_reauth": "재연결 필요",
+        "error": "오류",
+        "disconnected": "연결 끊김"
+      },
+      "sendsAs": "답장 발신 주소",
+      "displayName": "표시 이름",
+      "edit": "편집",
+      "save": "저장",
+      "cancel": "취소",
+      "renamed": "표시 이름을 저장했습니다.",
+      "needsReauthHint": "Google에서 이 사서함을 읽도록 더 이상 허용하지 않습니다. 다시 연결하면 메일을 다시 주고받을 수 있습니다.",
+      "lastError": "최근 문제: {error}",
+      "lastSynced": "마지막 동기화",
+      "neverSynced": "아직 동기화되지 않음",
+      "conversations": "대화",
+      "openInbox": "수신함에서 열기",
+      "sync": "지금 동기화",
+      "syncStarted": "동기화를 시작했습니다. 새 메일이 곧 수신함에 표시됩니다.",
+      "reconnect": "재연결",
+      "remove": "삭제",
+      "removeTitle": "사서함 삭제",
+      "removeConfirm": "{address}을(를) 삭제하시겠습니까? 이 사서함의 대화는 읽기 전용 기록으로 수신함에 남으며, 이후 새 메일은 수신도 발송도 되지 않습니다. 같은 주소는 나중에 다시 연결할 수 있습니다.",
+      "removed": "사서함을 삭제했습니다.",
+      "failed": "사서함을 업데이트하지 못했습니다. 다시 시도해 주세요."
+    },
+    "outcome": {
+      "connected": "사서함이 연결되었습니다. 최근 7일간의 메일을 수신함으로 가져오는 중입니다.",
+      "denied": "Google 로그인이 취소되어 아무것도 연결되지 않았습니다.",
+      "missing_scope": "Google에서 메일 읽기 및 발송 권한을 부여하지 않았습니다. 다시 연결하고 Google 화면에서 모든 권한을 선택하세요.",
+      "limit": "요금제의 사서함 한도에 도달하여 이 사서함은 연결되지 않았습니다.",
+      "not_configured": "이 플랫폼에는 아직 Google 로그인이 설정되지 않았습니다. 플랫폼 관리자에게 문의하세요.",
+      "wrong_account": "다시 연결하려는 사서함과 다른 Google 계정으로 로그인했습니다. 같은 주소로 로그인하세요.",
+      "failed": "사서함을 연결하는 중 문제가 발생했습니다. 다시 시도해 주세요."
+    },
+    "errors": {
+      "notConfigured": "이 플랫폼에는 아직 Google 로그인이 설정되지 않았습니다. 플랫폼 관리자에게 문의하세요.",
+      "limit": "요금제의 사서함 한도에 도달했습니다.",
+      "unavailable": "이 사서함은 연결이 끊겼거나 먼저 다시 연결해야 합니다.",
+      "sendRefused": "Google에서 이 이메일 발송을 거부했습니다. 주소와 크기를 확인한 후 다시 시도하세요.",
+      "wrongAccount": "이 사서함과 다른 Google 계정입니다. 같은 주소로 로그인하세요.",
+      "locked": "이메일 추가 기능은 현재 요금제에 포함되어 있지 않습니다.",
+      "changed": "이 사서함이 다른 곳에서 변경되었습니다. 목록을 다시 불러왔으니 다시 시도하세요."
+    },
+    "guide": {
+      "title": "설정 가이드",
+      "google": {
+        "title": "Gmail 또는 Google Workspace 연결",
+        "p1": "Gmail 연결을 선택하고, 공용 support@ 또는 sales@ 주소처럼 사서함을 소유한 계정으로 로그인하세요.",
+        "p2": "Google 화면에서 메일 읽기와 발송을 허용하세요. 둘 중 하나라도 없으면 메일을 받거나 보낼 수 없습니다.",
+        "p3": "이 화면으로 돌아오면 처음 7일간의 메일이 누구에게도 알림을 보내지 않고 수신함으로 가져와집니다.",
+        "p4": "같은 방법으로 요금제에서 허용하는 수만큼 사서함을 더 추가할 수 있습니다. 각각 별도의 수신함으로 표시됩니다."
+      },
+      "consent": {
+        "title": "읽고 보내는 내용",
+        "p1": "팀 수신함에 표시하기 위해 받은편지함의 메일을 읽습니다. 스팸, 휴지통, 임시 보관함은 제외됩니다.",
+        "p2": "다른 곳에서 내 계정으로 직접 보낸 메일은 수신함에 복사되지 않습니다.",
+        "p3": "자동 응답, 반송 메일, 메일링 리스트 메일은 저장되며 자동으로 표시됩니다.",
+        "p4": "사서함을 삭제하면 읽기와 발송이 중단됩니다. 이전 대화는 읽기 전용 기록으로 남습니다."
+      },
+      "trouble": {
+        "title": "문제가 있을 때",
+        "p1": "재연결 필요는 Google에서 액세스를 취소했거나 만료되었다는 뜻입니다. 재연결을 선택하고 같은 주소로 로그인하세요.",
+        "p2": "오류에는 최근 문제가 표시됩니다. 지금 동기화를 선택해 다시 시도하세요. 계속 실패하면 사서함을 다시 연결하세요.",
+        "p3": "플랫폼에 Google 로그인이 설정되어 있지 않거나 요금제의 사서함 한도에 도달하면 연결 버튼이 비활성화됩니다.",
+        "p4": "이메일 속 이미지는 대화에서 이미지 불러오기를 선택하기 전까지 숨겨집니다."
+      }
+    },
+    "thread": {
+      "noSubject": "(제목 없음)",
+      "automated": "자동",
+      "from": "보낸 사람",
+      "to": "받는 사람",
+      "cc": "Cc",
+      "date": "날짜",
+      "imagesBlocked": "인터넷의 이미지는 숨겨져 있습니다.",
+      "loadImages": "이미지 불러오기",
+      "frameTitle": "이메일: {subject}",
+      "truncated": "이메일이 길어 앞부분만 표시됩니다.",
+      "noBody": "이 이메일에는 텍스트가 없습니다.",
+      "attachments": "{count, plural, other {첨부 파일 #개}}",
+      "tooLarge": "너무 커서 보관할 수 없음({size})",
+      "download": "{name} 다운로드({size})"
+    },
+    "composer": {
+      "toggle": "Cc, Bcc 및 제목",
+      "cc": "Cc",
+      "bcc": "Bcc",
+      "subject": "제목",
+      "subjectPlaceholder": "제목",
+      "addressesPlaceholder": "name@example.com, other@example.com",
+      "problem": {
+        "ccInvalid": "다음 Cc 주소가 올바르지 않습니다: {list}",
+        "bccInvalid": "다음 Bcc 주소가 올바르지 않습니다: {list}",
+        "ccTooMany": "Cc에는 최대 20개의 주소를 입력할 수 있습니다.",
+        "bccTooMany": "Bcc에는 최대 20개의 주소를 입력할 수 있습니다.",
+        "subjectTooLong": "제목은 최대 998자까지 입력할 수 있습니다."
+      }
+    },
+    "inbox": {
+      "group": "이메일"
+    }
+  }
+}

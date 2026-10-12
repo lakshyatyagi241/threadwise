@@ -244,6 +244,26 @@ export class MessagesRepository {
     return r ? toRow(r) : null;
   }
 
+  /**
+   * The `meta.email` block of the thread's newest inbound mail to answer: a person's mail is preferred over an automated one (a bounce
+   * or an out-of-office is not who a reply goes to), and within each the newest by `seq`. Null when the thread holds no email message.
+   */
+  async latestInboundEmailMeta(
+    tx: Tx,
+    orgId: number,
+    conversationId: number,
+  ): Promise<Record<string, unknown> | null> {
+    const res = await tx.execute(sql`
+      SELECT m.meta -> 'email' AS email
+      FROM messages m
+      WHERE m.org_id = ${orgId} AND m.conversation_id = ${conversationId} AND m.direction = 'in'
+        AND m.meta -> 'email' IS NOT NULL
+      ORDER BY COALESCE((m.meta -> 'email' ->> 'automated')::boolean, false) ASC, m.seq DESC
+      LIMIT 1`);
+    const email = rowsOf(res)[0]?.email;
+    return email && typeof email === 'object' ? (email as Record<string, unknown>) : null;
+  }
+
   async byId(tx: Tx, orgId: number, id: number, createdAtText: string): Promise<MessageRow | null> {
     const res = await tx.execute(sql`
       SELECT ${SELECT} ${FROM}

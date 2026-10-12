@@ -508,6 +508,24 @@ export const GROUP_SPECS: GroupSpec[] = [
     ],
   },
   {
+    id: 'googleMail',
+    group: 'googleMail',
+    slug: 'google-mail',
+    guide: ['project', 'redirect', 'consent', 'workspaces'],
+    sections: [
+      {
+        id: 'oauth',
+        eyebrow: 'google-oauth',
+        custom: 'googleCallback',
+        fields: [
+          f('enabled', 'toggle'),
+          ...halves(f('clientId', 'text', { mono: true }), f('clientSecret', 'secret')),
+          f('redirectUri', 'url', { mono: true }),
+        ],
+      },
+    ],
+  },
+  {
     id: 'whatsapp',
     group: 'whatsapp',
     slug: 'whatsapp',
@@ -594,4 +612,5 @@ export const HUB_ORDER = [
   'campaigns',
   'flowBuilder',
   'googleCalendar',
+  'googleMail',
 ] as const;

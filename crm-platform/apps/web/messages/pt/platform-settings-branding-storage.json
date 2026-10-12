@@ -17,6 +17,7 @@
       "whatsapp": "WhatsApp (WABA)",
       "campaigns": "Campanhas",
       "googleCalendar": "Google Agenda",
+      "googleMail": "Gmail",
       "flowBuilder": "Construtor de fluxos"
     },
     "hub": {
@@ -930,6 +931,33 @@
           }
         }
       },
+      "googleMail": {
+        "title": "E-mail Gmail",
+        "description": "O cliente OAuth do Google pelo qual cada espaço de trabalho conecta suas caixas.",
+        "sections": {
+          "oauth": {
+            "title": "Cliente OAuth do Google"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Permitir que os espaços de trabalho conectem o Gmail",
+            "hint": "Desativado: nenhum espaço de trabalho pode conectar e nenhum e-mail é lido ou enviado. As caixas já conectadas são mantidas."
+          },
+          "clientId": {
+            "label": "ID do cliente",
+            "hint": "Do Google Cloud, Credenciais, ID do cliente OAuth 2.0 (Aplicativo da Web). Se vazio, usa GOOGLE_MAIL_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Segredo do cliente",
+            "hint": "Armazenado criptografado e não será mais exibido. Se vazio, mantém o salvo; GOOGLE_MAIL_CLIENT_SECRET é a alternativa."
+          },
+          "redirectUri": {
+            "label": "Substituição do URI de redirecionamento",
+            "hint": "Deixe vazio para usar o endereço acima. Ele deve corresponder exatamente a um URI de redirecionamento autorizado no cliente."
+          }
+        }
+      },
       "flowBuilder": {
         "title": "Construtor de fluxos",
         "description": "Quais construtores de fluxo são oferecidos aos espaços de trabalho.",
@@ -1062,6 +1090,11 @@
         "title": "Google Agenda",
         "description": "O cliente OAuth do Google que os espaços de trabalho usam para conectar sua agenda para reservas e horários ocupados.",
         "tags": "Google / OAuth / Agenda"
+      },
+      "googleMail": {
+        "title": "E-mail Gmail",
+        "description": "O cliente OAuth do Google que os espaços de trabalho usam para conectar suas caixas do Gmail.",
+        "tags": "Google / OAuth / Gmail"
       },
       "flowBuilder": {
         "title": "Construtor de fluxos",
@@ -1644,6 +1677,38 @@
             "workspaces": {
               "title": "4. Espaços de trabalho conectam",
               "body": "Cole o ID e o segredo do cliente aqui e salve. Os admins então conectam em Agendamentos, Configurações, Google Agenda."
+            }
+          }
+        }
+      },
+      "googleMail": {
+        "title": "E-mail Gmail",
+        "eyebrow": "Admin - E-mail",
+        "description": "Um único cliente OAuth do Google Cloud para toda a plataforma, separado do Google Agenda. Cada espaço de trabalho conecta suas próprias caixas em E-mail e nunca vê o ID do cliente nem o segredo.",
+        "sections": {
+          "oauth": {
+            "title": "Cliente OAuth do Google",
+            "description": "Sem ID do cliente e segredo, os espaços de trabalho não conseguem conectar uma caixa."
+          }
+        },
+        "guide": {
+          "title": "Configure no Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. Projeto e API",
+              "body": "No Google Cloud Console, crie um projeto e ative a API do Gmail."
+            },
+            "redirect": {
+              "title": "2. Cliente OAuth",
+              "body": "Crie um ID de cliente OAuth 2.0 do tipo Aplicativo da Web e adicione o URI de redirecionamento exibido nesta página em URIs de redirecionamento autorizados."
+            },
+            "consent": {
+              "title": "3. Tela de consentimento",
+              "body": "Adicione os escopos openid, email, gmail.readonly e gmail.send. Os escopos do Gmail são restritos: o Google precisa verificar o app para uso geral e, em modo de teste, a autorização termina após 7 dias."
+            },
+            "workspaces": {
+              "title": "4. Espaços de trabalho conectam",
+              "body": "Cole aqui o ID do cliente e o segredo e salve. Depois os administradores conectam em E-mail."
             }
           }
         }

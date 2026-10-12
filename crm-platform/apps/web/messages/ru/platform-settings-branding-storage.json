@@ -17,6 +17,7 @@
       "whatsapp": "WhatsApp (WABA)",
       "campaigns": "Кампании",
       "googleCalendar": "Google Календарь",
+      "googleMail": "Gmail",
       "flowBuilder": "Конструктор сценариев"
     },
     "hub": {
@@ -930,6 +931,33 @@
           }
         }
       },
+      "googleMail": {
+        "title": "Почта Gmail",
+        "description": "Клиент Google OAuth, через который каждое рабочее пространство подключает свои ящики.",
+        "sections": {
+          "oauth": {
+            "title": "Клиент Google OAuth"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Разрешить рабочим пространствам подключать Gmail",
+            "hint": "Выключено: ни одно рабочее пространство не может подключиться, почта не читается и не отправляется. Уже подключённые ящики сохраняются."
+          },
+          "clientId": {
+            "label": "Client ID",
+            "hint": "Из Google Cloud: Credentials, OAuth 2.0 Client ID (Web application). Если пусто, используется GOOGLE_MAIL_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Секрет клиента",
+            "hint": "Хранится в зашифрованном виде и больше не отображается. Если пусто, сохраняется текущий; запасной вариант — GOOGLE_MAIL_CLIENT_SECRET."
+          },
+          "redirectUri": {
+            "label": "Переопределение Redirect URI",
+            "hint": "Оставьте пустым, чтобы использовать адрес выше. Он должен точно совпадать с Authorised redirect URI в клиенте."
+          }
+        }
+      },
       "flowBuilder": {
         "title": "Конструктор сценариев",
         "description": "Какие конструкторы сценариев предлагаются рабочим пространствам.",
@@ -1062,6 +1090,11 @@
         "title": "Google Календарь",
         "description": "Клиент Google OAuth, который рабочие пространства используют для подключения календаря к записям и занятым слотам.",
         "tags": "Google / OAuth / Календарь"
+      },
+      "googleMail": {
+        "title": "Почта Gmail",
+        "description": "Клиент Google OAuth, через который рабочие пространства подключают свои ящики Gmail.",
+        "tags": "Google / OAuth / Gmail"
       },
       "flowBuilder": {
         "title": "Конструктор сценариев",
@@ -1644,6 +1677,38 @@
             "workspaces": {
               "title": "4. Подключение рабочих пространств",
               "body": "Вставьте ID клиента и секрет здесь и сохраните. Затем администраторы подключаются в разделе «Записи», «Настройки», «Google Календарь»."
+            }
+          }
+        }
+      },
+      "googleMail": {
+        "title": "Почта Gmail",
+        "eyebrow": "Админ - Почта",
+        "description": "Один клиент Google Cloud OAuth на всю платформу, отдельный от Google Календаря. Каждое рабочее пространство подключает свои ящики в разделе «Почта» и никогда не видит идентификатор клиента и секрет.",
+        "sections": {
+          "oauth": {
+            "title": "Клиент Google OAuth",
+            "description": "Без идентификатора клиента и секрета рабочие пространства не смогут подключить ящик."
+          }
+        },
+        "guide": {
+          "title": "Настройте в Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. Проект и API",
+              "body": "В Google Cloud Console создайте проект и включите Gmail API."
+            },
+            "redirect": {
+              "title": "2. Клиент OAuth",
+              "body": "Создайте OAuth 2.0 Client ID типа Web application и добавьте redirect URI с этой страницы в Authorised redirect URIs."
+            },
+            "consent": {
+              "title": "3. Экран согласия",
+              "body": "Добавьте области доступа openid, email, gmail.readonly и gmail.send. Области Gmail ограниченные: для общего использования Google должен проверить приложение, а в режиме тестирования доступ истекает через 7 дней."
+            },
+            "workspaces": {
+              "title": "4. Подключение рабочих пространств",
+              "body": "Вставьте сюда идентификатор клиента и секрет и сохраните. После этого администраторы подключают ящики в разделе «Почта»."
             }
           }
         }

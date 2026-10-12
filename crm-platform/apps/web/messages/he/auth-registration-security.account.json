@@ -552,7 +552,8 @@
             "extra_channels": "Telegram, Facebook ו-Instagram",
             "form_builder": "טפסים",
             "waba_groups": "קבוצות WhatsApp",
-            "sms": "SMS"
+            "sms": "SMS",
+            "email_channel": "ערוץ דוא\"ל (Gmail)"
           },
           "cta": {
             "continueFree": "המשך בחינם",

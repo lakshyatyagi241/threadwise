@@ -10,7 +10,8 @@
       "webchat": "웹사이트 채팅",
       "telegram": "Telegram",
       "facebook": "Facebook Messenger",
-      "instagram": "Instagram"
+      "instagram": "Instagram",
+      "email": "이메일 (Gmail)"
     },
     "page": {
       "back": "자동화 및 AI",

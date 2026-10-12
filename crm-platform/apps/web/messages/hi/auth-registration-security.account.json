@@ -552,7 +552,8 @@
             "extra_channels": "Telegram, Facebook और Instagram",
             "form_builder": "फ़ॉर्म",
             "waba_groups": "WhatsApp ग्रुप",
-            "sms": "SMS"
+            "sms": "SMS",
+            "email_channel": "ईमेल (Gmail) चैनल"
           },
           "cta": {
             "continueFree": "फ़्री जारी रखें",

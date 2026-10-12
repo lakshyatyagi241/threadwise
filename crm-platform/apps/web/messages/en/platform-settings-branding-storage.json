@@ -17,6 +17,7 @@
       "whatsapp": "WhatsApp (WABA)",
       "campaigns": "Campaigns",
       "googleCalendar": "Google Calendar",
+      "googleMail": "Gmail",
       "flowBuilder": "Flow builder"
     },
     "hub": {
@@ -930,6 +931,33 @@
           }
         }
       },
+      "googleMail": {
+        "title": "Gmail email",
+        "description": "The Google OAuth client every workspace connects its mailboxes through.",
+        "sections": {
+          "oauth": {
+            "title": "Google OAuth client"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Allow workspaces to connect Gmail",
+            "hint": "Off: no workspace can connect, and no mail is read or sent. Connected mailboxes are kept."
+          },
+          "clientId": {
+            "label": "Client ID",
+            "hint": "From Google Cloud, Credentials, OAuth 2.0 Client ID (Web application). Empty uses GOOGLE_MAIL_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Client secret",
+            "hint": "Stored encrypted and never shown again. Empty keeps the saved one; GOOGLE_MAIL_CLIENT_SECRET is the fallback."
+          },
+          "redirectUri": {
+            "label": "Redirect URI override",
+            "hint": "Leave empty to use the address above. It must match an Authorised redirect URI on the client exactly."
+          }
+        }
+      },
       "flowBuilder": {
         "title": "Flow builder",
         "description": "Which flow builder workspaces are offered.",
@@ -1062,6 +1090,11 @@
         "title": "Google Calendar",
         "description": "The Google OAuth client workspaces use to connect their calendar for bookings and busy times.",
         "tags": "Google / OAuth / Calendar"
+      },
+      "googleMail": {
+        "title": "Gmail email",
+        "description": "The Google OAuth client workspaces use to connect their Gmail mailboxes.",
+        "tags": "Google / OAuth / Gmail"
       },
       "flowBuilder": {
         "title": "Flow builder",
@@ -1644,6 +1677,38 @@
             "workspaces": {
               "title": "4. Workspaces connect",
               "body": "Paste the client id and secret here and save. Admins then connect from Appointments, Settings, Google Calendar."
+            }
+          }
+        }
+      },
+      "googleMail": {
+        "title": "Gmail email",
+        "eyebrow": "Admin - Email",
+        "description": "One Google Cloud OAuth client for the whole platform, separate from Google Calendar. Each workspace connects its own mailboxes from Email and never sees the client id or secret.",
+        "sections": {
+          "oauth": {
+            "title": "Google OAuth client",
+            "description": "Without a client id and secret, workspaces cannot connect a mailbox."
+          }
+        },
+        "guide": {
+          "title": "Set it up in Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. Project and API",
+              "body": "In Google Cloud Console create a project and enable the Gmail API."
+            },
+            "redirect": {
+              "title": "2. OAuth client",
+              "body": "Create an OAuth 2.0 Client ID of type Web application and add the redirect URI shown on this page under Authorised redirect URIs."
+            },
+            "consent": {
+              "title": "3. Consent screen",
+              "body": "Add the openid, email, gmail.readonly and gmail.send scopes. Gmail scopes are restricted: Google must verify the app for general use, and in Testing a grant ends after 7 days."
+            },
+            "workspaces": {
+              "title": "4. Workspaces connect",
+              "body": "Paste the client id and secret here and save. Admins then connect from Email."
             }
           }
         }

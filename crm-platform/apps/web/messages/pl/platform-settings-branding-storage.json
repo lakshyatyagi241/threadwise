@@ -17,6 +17,7 @@
       "whatsapp": "WhatsApp (WABA)",
       "campaigns": "Kampanie",
       "googleCalendar": "Kalendarz Google",
+      "googleMail": "Gmail",
       "flowBuilder": "Kreator przepływów"
     },
     "hub": {
@@ -930,6 +931,33 @@
           }
         }
       },
+      "googleMail": {
+        "title": "E-mail Gmail",
+        "description": "Klient OAuth Google, przez który każda przestrzeń robocza łączy swoje skrzynki.",
+        "sections": {
+          "oauth": {
+            "title": "Klient OAuth Google"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Zezwól przestrzeniom roboczym na łączenie Gmaila",
+            "hint": "Wyłączone: żadna przestrzeń robocza nie może się połączyć, a poczta nie jest czytana ani wysyłana. Już połączone skrzynki zostają."
+          },
+          "clientId": {
+            "label": "Identyfikator klienta",
+            "hint": "Z Google Cloud, Credentials, OAuth 2.0 Client ID (Web application). Puste pole używa GOOGLE_MAIL_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Sekret klienta",
+            "hint": "Przechowywany zaszyfrowany, nigdy więcej nie wyświetlany. Puste pole zachowuje zapisany; GOOGLE_MAIL_CLIENT_SECRET jest wartością rezerwową."
+          },
+          "redirectUri": {
+            "label": "Nadpisanie URI przekierowania",
+            "hint": "Pozostaw puste, aby użyć powyższego adresu. Musi dokładnie odpowiadać autoryzowanemu URI przekierowania w kliencie."
+          }
+        }
+      },
       "flowBuilder": {
         "title": "Kreator przepływów",
         "description": "Które kreatory przepływów są oferowane przestrzeniom roboczym.",
@@ -1062,6 +1090,11 @@
         "title": "Kalendarz Google",
         "description": "Klient OAuth Google, którego przestrzenie robocze używają do łączenia kalendarza na potrzeby rezerwacji i terminów zajętości.",
         "tags": "Google / OAuth / Calendar"
+      },
+      "googleMail": {
+        "title": "E-mail Gmail",
+        "description": "Klient OAuth Google, przez który przestrzenie robocze łączą swoje skrzynki Gmail.",
+        "tags": "Google / OAuth / Gmail"
       },
       "flowBuilder": {
         "title": "Kreator przepływów",
@@ -1644,6 +1677,38 @@
             "workspaces": {
               "title": "4. Połączenie przestrzeni roboczych",
               "body": "Wklej tutaj identyfikator i sekret klienta i zapisz. Administratorzy połączą się następnie z poziomu Terminy, Ustawienia, Kalendarz Google."
+            }
+          }
+        }
+      },
+      "googleMail": {
+        "title": "E-mail Gmail",
+        "eyebrow": "Admin - E-mail",
+        "description": "Jeden klient OAuth Google Cloud dla całej platformy, oddzielny od Kalendarza Google. Każda przestrzeń robocza łączy własne skrzynki w sekcji E-mail i nigdy nie widzi identyfikatora klienta ani sekretu.",
+        "sections": {
+          "oauth": {
+            "title": "Klient OAuth Google",
+            "description": "Bez identyfikatora klienta i sekretu przestrzenie robocze nie mogą połączyć skrzynki."
+          }
+        },
+        "guide": {
+          "title": "Skonfiguruj w Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. Projekt i API",
+              "body": "W Google Cloud Console utwórz projekt i włącz Gmail API."
+            },
+            "redirect": {
+              "title": "2. Klient OAuth",
+              "body": "Utwórz identyfikator klienta OAuth 2.0 typu Web application i dodaj URI przekierowania pokazany na tej stronie w sekcji Authorised redirect URIs."
+            },
+            "consent": {
+              "title": "3. Ekran zgody",
+              "body": "Dodaj zakresy openid, email, gmail.readonly i gmail.send. Zakresy Gmaila są ograniczone: do ogólnego użytku Google musi zweryfikować aplikację, a w trybie testowym zgoda wygasa po 7 dniach."
+            },
+            "workspaces": {
+              "title": "4. Połączenie przestrzeni roboczych",
+              "body": "Wklej tutaj identyfikator klienta i sekret i zapisz. Potem administratorzy łączą skrzynki w sekcji E-mail."
             }
           }
         }

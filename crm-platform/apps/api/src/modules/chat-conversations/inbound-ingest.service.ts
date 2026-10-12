@@ -210,14 +210,16 @@ export class InboundIngestService {
     if (!conv) {
       const link = noContact
         ? { contactId: null, needsContact: false }
-        : await this.linkContact(tx, orgId, channel.kind, peerKey, peerName);
+        : await this.linkContact(tx, orgId, channel.kind, peerKey, peerName, m.contactIdentity);
       conv = await this.conversations.insert(tx, orgId, {
         channelId: channel.id,
         peerKey,
         peerName: m.group ? null : peerName,
         title: m.group
           ? (m.group.title?.trim() || 'WhatsApp group').slice(0, 200)
-          : defaultTitle(channel.kind, peerKey, peerName),
+          : m.title?.trim()
+            ? m.title.trim().slice(0, 200)
+            : defaultTitle(channel.kind, peerKey, peerName),
         contactId: link.contactId,
         needsContact: link.needsContact,
       });
@@ -227,7 +229,14 @@ export class InboundIngestService {
       const patch: { peerName?: string | null; contactId?: number | null; needsContact?: boolean } =
         {};
       if (conv.contactId === null && !noContact) {
-        const link = await this.linkContact(tx, orgId, channel.kind, peerKey, peerName);
+        const link = await this.linkContact(
+          tx,
+          orgId,
+          channel.kind,
+          peerKey,
+          peerName,
+          m.contactIdentity,
+        );
         if (link.contactId !== null || link.needsContact !== conv.needsContact) {
           patch.contactId = link.contactId;
           patch.needsContact = link.needsContact;
@@ -278,7 +287,7 @@ export class InboundIngestService {
     if (m.location?.name) meta.locationName = m.location.name;
     if (m.location?.address) meta.locationAddress = m.location.address;
     if (m.kind === 'unsupported') meta.unsupported = true;
-    Object.assign(meta, channelMetaOf(m.meta));
+    Object.assign(meta, channelMetaOf(m.meta, channel.kind));
     if (stored.error) meta.mediaError = stored.error;
     if (m.media && !stored.media) meta.mediaName = m.media.name ?? null;
     if (stored.pending && m.media) {
@@ -384,10 +393,15 @@ export class InboundIngestService {
     orgId: number,
     channelKind: string,
     peerKey: string,
-    name: string | null,
+    peerName: string | null,
+    given?: NormalisedInbound['contactIdentity'],
   ): Promise<{ contactId: number | null; needsContact: boolean }> {
-    const identity = identityOfPeer(channelKind, peerKey);
-    if (!identity) return { contactId: null, needsContact: false };
+    // An email thread is keyed by the provider's thread id, so the adapter says whose mail it is; a phone channel's key is the number.
+    const identity = given
+      ? { kind: given.kind, value: given.value.trim() }
+      : identityOfPeer(channelKind, peerKey);
+    if (!identity || identity.value === '') return { contactId: null, needsContact: false };
+    const name = given?.name?.trim() || peerName;
     try {
       return await tx.transaction(async (sp) => {
         const r = await this.contacts.resolveOrCreateByIdentity(sp as Tx, orgId, {

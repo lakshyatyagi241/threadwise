@@ -1,0 +1,169 @@
+{
+  "email": {
+    "common": {
+      "dismiss": "关闭"
+    },
+    "hub": {
+      "kicker": "渠道",
+      "title": "电子邮件",
+      "titleAccent": "邮箱",
+      "intro": "连接您的 Gmail 或 Google Workspace 邮箱。客户邮件会进入团队收件箱，每个邮件会话对应一个对话，您的回复将从同一个地址发出。",
+      "inbox": "打开收件箱",
+      "channels": "渠道",
+      "loadError": "无法加载您的邮箱。请稍后重试。",
+      "cardCaption": "Gmail · Google Workspace",
+      "connectedCount": "{count, plural, other {已连接 # 个邮箱}}",
+      "notConnected": "未连接",
+      "usageLabel": "已使用的邮箱",
+      "usage": "{used} / {limit} 个邮箱",
+      "usageUnlimited": "{used, plural, other {# 个邮箱}}，无限制",
+      "howTitle": "工作原理",
+      "how": {
+        "connect": {
+          "title": "连接邮箱",
+          "body": "使用 Google 登录，并允许 Threadwise 读取和发送该地址的邮件。"
+        },
+        "inbox": {
+          "title": "邮件进入收件箱",
+          "body": "新邮件每分钟同步一次。每个邮件会话会成为一个对话，每个邮箱对应各自独立的收件箱。"
+        },
+        "reply": {
+          "title": "在收件箱中回复",
+          "body": "您的回复会从该邮箱在同一邮件会话中发出，如有需要还可添加 Cc 和 Bcc。"
+        },
+        "limit": {
+          "title": "邮箱数量取决于您的套餐",
+          "body": "您的套餐决定可连接的邮箱数量。电子邮件不计入消息配额。"
+        }
+      },
+      "connectedTitle": "已连接的邮箱",
+      "total": "{count, plural, other {# 个邮箱}}",
+      "empty": "尚未连接任何邮箱。请在下方连接 Gmail，开始在收件箱中接收邮件。",
+      "addTitle": "添加邮箱",
+      "providers": {
+        "google": {
+          "name": "Gmail / Google Workspace",
+          "hint": "使用拥有该邮箱的 Google 账号登录，例如 support@yourcompany.com。"
+        },
+        "imap": {
+          "name": "其他邮箱 (IMAP / SMTP)",
+          "hint": "任何使用用户名和密码的其他邮件服务商。"
+        },
+        "microsoft": {
+          "name": "Microsoft 365 / Outlook",
+          "hint": "使用 Microsoft 工作或学校账号登录。"
+        }
+      },
+      "connectGmail": "连接 Gmail",
+      "soon": "即将推出",
+      "notReady": "此平台尚未设置 Google 登录。请联系平台管理员添加 Google 凭据。",
+      "limitReached": "您已用完套餐允许的 {limit, plural, other {# 个邮箱}}。请移除一个邮箱，或联系管理员升级套餐。",
+      "noPermission": "您可以查看邮箱，但只有获得管理权限的人员才能连接邮箱。",
+      "connectFailed": "无法启动 Google 登录。请重试。"
+    },
+    "card": {
+      "status": {
+        "connected": "已连接",
+        "needs_reauth": "需要重新连接",
+        "error": "错误",
+        "disconnected": "已断开"
+      },
+      "sendsAs": "回复将以此身份发出",
+      "displayName": "显示名称",
+      "edit": "编辑",
+      "save": "保存",
+      "cancel": "取消",
+      "renamed": "显示名称已保存。",
+      "needsReauthHint": "Google 不再允许我们读取此邮箱。请重新连接以再次收发邮件。",
+      "lastError": "最近的问题：{error}",
+      "lastSynced": "上次同步",
+      "neverSynced": "尚未同步",
+      "conversations": "对话",
+      "openInbox": "在收件箱中打开",
+      "sync": "立即同步",
+      "syncStarted": "已开始同步。新邮件稍后会出现在收件箱中。",
+      "reconnect": "重新连接",
+      "remove": "移除",
+      "removeTitle": "移除邮箱",
+      "removeConfirm": "移除 {address}？其对话将作为只读历史记录保留在收件箱中，且不会再通过它接收或发送新邮件。您之后可以重新连接同一地址。",
+      "removed": "邮箱已移除。",
+      "failed": "无法更新邮箱。请重试。"
+    },
+    "outcome": {
+      "connected": "邮箱已连接。正在将最近 7 天的邮件同步到收件箱。",
+      "denied": "Google 登录已取消，未连接任何邮箱。",
+      "missing_scope": "Google 未授予读取和发送邮件的权限。请重新连接，并在 Google 页面勾选所有权限。",
+      "limit": "已达到套餐的邮箱数量上限，因此未连接此邮箱。",
+      "not_configured": "此平台尚未设置 Google 登录。请联系平台管理员。",
+      "wrong_account": "您登录的 Google 账号与要重新连接的邮箱不一致。请使用相同的地址登录。",
+      "failed": "连接邮箱时出错。请重试。"
+    },
+    "errors": {
+      "notConfigured": "此平台尚未设置 Google 登录。请联系平台管理员。",
+      "limit": "已达到套餐的邮箱数量上限。",
+      "unavailable": "此邮箱已断开，或需要先重新连接。",
+      "sendRefused": "Google 拒绝发送此邮件。请检查地址和大小，然后重试。",
+      "wrongAccount": "这与此邮箱对应的不是同一个 Google 账号。请使用相同的地址登录。",
+      "locked": "您的套餐不包含电子邮件附加功能。",
+      "changed": "此邮箱已在其他地方被修改。列表已重新加载，请重试。"
+    },
+    "guide": {
+      "title": "设置指南",
+      "google": {
+        "title": "连接 Gmail 或 Google Workspace",
+        "p1": "选择“连接 Gmail”，并使用拥有该邮箱的账号登录，例如共享的 support@ 或 sales@ 地址。",
+        "p2": "在 Google 页面中，允许读取和发送邮件。缺少任何一项，都无法收发邮件。",
+        "p3": "您将返回此处，前 7 天的邮件会同步到收件箱，且不会通知任何人。",
+        "p4": "以同样的方式添加更多邮箱，数量以套餐允许为限。每个邮箱都会显示为独立的收件箱。"
+      },
+      "consent": {
+        "title": "我们读取和发送的内容",
+        "p1": "我们会读取您的收件箱邮件，以便在团队收件箱中显示。垃圾邮件、已删除邮件和草稿会被跳过。",
+        "p2": "我们在其他地方通过您的账号发出的邮件不会复制到收件箱。",
+        "p3": "自动回复、退信和邮件列表邮件会被保存并标记为“自动”。",
+        "p4": "移除邮箱后将停止读取和发送。其过往对话将作为只读历史记录保留。"
+      },
+      "trouble": {
+        "title": "如果出现异常",
+        "p1": "“需要重新连接”表示 Google 撤销了授权或授权已过期。请选择“重新连接”，并使用相同的地址登录。",
+        "p2": "“错误”会显示最近的问题。请选择“立即同步”重试；如果持续失败，请重新连接该邮箱。",
+        "p3": "当平台未设置 Google 登录，或已达到套餐的邮箱数量上限时，“连接”将被禁用。",
+        "p4": "邮件中的图片默认隐藏，直到您在对话中选择“加载图片”。"
+      }
+    },
+    "thread": {
+      "noSubject": "（无主题）",
+      "automated": "自动",
+      "from": "发件人",
+      "to": "收件人",
+      "cc": "抄送",
+      "date": "日期",
+      "imagesBlocked": "来自互联网的图片已隐藏。",
+      "loadImages": "加载图片",
+      "frameTitle": "邮件：{subject}",
+      "truncated": "此邮件较长，仅显示前面一部分。",
+      "noBody": "此邮件没有文本内容。",
+      "attachments": "{count, plural, other {# 个附件}}",
+      "tooLarge": "过大，未保存（{size}）",
+      "download": "下载 {name}（{size}）"
+    },
+    "composer": {
+      "toggle": "抄送、密送和主题",
+      "cc": "抄送 (Cc)",
+      "bcc": "密送 (Bcc)",
+      "subject": "主题",
+      "subjectPlaceholder": "主题",
+      "addressesPlaceholder": "name@example.com, other@example.com",
+      "problem": {
+        "ccInvalid": "以下抄送地址无效：{list}",
+        "bccInvalid": "以下密送地址无效：{list}",
+        "ccTooMany": "抄送最多可填 20 个地址。",
+        "bccTooMany": "密送最多可填 20 个地址。",
+        "subjectTooLong": "主题最多 998 个字符。"
+      }
+    },
+    "inbox": {
+      "group": "电子邮件"
+    }
+  }
+}

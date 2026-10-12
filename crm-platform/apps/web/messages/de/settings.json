@@ -102,8 +102,8 @@
       },
       "email": {
         "label": "E-Mail",
-        "description": "Verbinden Sie ein Postfach, um E-Mails im Posteingang zu senden und zu empfangen.",
-        "keywords": "postfach, smtp, imap, gmail, outlook, absender"
+        "description": "Verbinden Sie Gmail- oder Google-Workspace-Postfächer, damit Ihr Team Kunden-E-Mails im gemeinsamen Posteingang lesen und beantworten kann.",
+        "keywords": "postfach, gmail, google workspace, gemeinsamer posteingang, support-e-mail, outlook, imap"
       },
       "line": {
         "label": "LINE",

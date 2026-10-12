@@ -17,6 +17,7 @@
       "whatsapp": "WhatsApp (WABA)",
       "campaigns": "Campañas",
       "googleCalendar": "Google Calendar",
+      "googleMail": "Gmail",
       "flowBuilder": "Editor de flujos"
     },
     "hub": {
@@ -930,6 +931,33 @@
           }
         }
       },
+      "googleMail": {
+        "title": "Correo Gmail",
+        "description": "El cliente OAuth de Google con el que cada espacio de trabajo conecta sus buzones.",
+        "sections": {
+          "oauth": {
+            "title": "Cliente OAuth de Google"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Permitir que los espacios de trabajo conecten Gmail",
+            "hint": "Desactivado: ningún espacio de trabajo puede conectar y no se lee ni se envía correo. Los buzones ya conectados se conservan."
+          },
+          "clientId": {
+            "label": "ID de cliente",
+            "hint": "Desde Google Cloud, Credenciales, ID de cliente OAuth 2.0 (aplicación web). Si está vacío se usa GOOGLE_MAIL_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Secreto de cliente",
+            "hint": "Se guarda cifrado y no se vuelve a mostrar. Si está vacío se conserva el guardado; GOOGLE_MAIL_CLIENT_SECRET es la alternativa."
+          },
+          "redirectUri": {
+            "label": "Sustituir URI de redirección",
+            "hint": "Déjalo vacío para usar la dirección de arriba. Debe coincidir exactamente con un URI de redirección autorizado en el cliente."
+          }
+        }
+      },
       "flowBuilder": {
         "title": "Editor de flujos",
         "description": "Qué editores de flujos se ofrecen a los espacios de trabajo.",
@@ -1062,6 +1090,11 @@
         "title": "Google Calendar",
         "description": "El cliente OAuth de Google que usan los espacios de trabajo para conectar su calendario y gestionar citas y horas ocupadas.",
         "tags": "Google / OAuth / Calendar"
+      },
+      "googleMail": {
+        "title": "Correo Gmail",
+        "description": "El cliente OAuth de Google que usan los espacios de trabajo para conectar sus buzones de Gmail.",
+        "tags": "Google / OAuth / Gmail"
       },
       "flowBuilder": {
         "title": "Editor de flujos",
@@ -1644,6 +1677,38 @@
             "workspaces": {
               "title": "4. Los espacios de trabajo se conectan",
               "body": "Pega aquí el ID y el secreto del cliente y guarda. Después, los administradores se conectan desde Citas, Ajustes, Google Calendar."
+            }
+          }
+        }
+      },
+      "googleMail": {
+        "title": "Correo Gmail",
+        "eyebrow": "Admin - Correo",
+        "description": "Un único cliente OAuth de Google Cloud para toda la plataforma, distinto del de Google Calendar. Cada espacio de trabajo conecta sus propios buzones desde Correo y nunca ve el ID de cliente ni el secreto.",
+        "sections": {
+          "oauth": {
+            "title": "Cliente OAuth de Google",
+            "description": "Sin ID de cliente y secreto, los espacios de trabajo no pueden conectar un buzón."
+          }
+        },
+        "guide": {
+          "title": "Configurarlo en Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. Proyecto y API",
+              "body": "En Google Cloud Console crea un proyecto y activa la API de Gmail."
+            },
+            "redirect": {
+              "title": "2. Cliente OAuth",
+              "body": "Crea un ID de cliente OAuth 2.0 de tipo aplicación web y añade el URI de redirección que aparece en esta página en URI de redirección autorizados."
+            },
+            "consent": {
+              "title": "3. Pantalla de consentimiento",
+              "body": "Añade los permisos openid, email, gmail.readonly y gmail.send. Los permisos de Gmail son restringidos: Google debe verificar la app para uso general y, en modo de pruebas, la autorización termina a los 7 días."
+            },
+            "workspaces": {
+              "title": "4. Los espacios de trabajo se conectan",
+              "body": "Pega aquí el ID de cliente y el secreto y guarda. Los administradores conectan después desde Correo."
             }
           }
         }

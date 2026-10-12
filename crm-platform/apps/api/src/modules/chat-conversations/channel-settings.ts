@@ -8,12 +8,15 @@ import {
  * Per-channel settings with their defaults, as a pure function so the rules are testable without a database.
  *
  * `metered` decides whether sends through the channel count toward the plan's monthly messages and charge the wallet. The simulator is
- * never metered, whatever a client sends: it is a development tool and must not spend a customer's allowance or balance.
+ * never metered, whatever a client sends: it is a development tool and must not spend a customer's allowance or balance. Email is the
+ * same (`email_mailboxes` is its limit).
  */
 export function normalizeSettings(kind: string, stored: unknown): ChannelSettings {
   const s = (
     typeof stored === 'object' && stored !== null ? stored : {}
   ) as Partial<ChannelSettings>;
+  // An email is not billed per message (the plan limits mailboxes instead), whatever a client sends.
+  if (kind === 'email') return { metered: false };
   if (kind !== 'simulator') return { metered: s.metered ?? true };
   return {
     metered: false,

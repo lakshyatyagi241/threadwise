@@ -31,3 +31,5 @@ export {
   type InboundMessageListener,
   type InboundStoredEvent,
 } from './inbound-hooks';
+export { EmailMessageAccess, type EmailMessageRef } from './email-message-access.service';
+export { isAutomatedEmail } from './inbound-hooks';

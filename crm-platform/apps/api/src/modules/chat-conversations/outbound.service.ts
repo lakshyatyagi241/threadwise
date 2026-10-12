@@ -105,6 +105,15 @@ export class OutboundService {
       }
 
       const runtime = await this.channels.runtime(tx, orgId, channel);
+      // Cc, bcc and a subject belong to email: any other kind of channel has nowhere to put them.
+      if (input.content.kind === 'text' && input.content.email && channel.kind !== 'email') {
+        throw new AppError(
+          ERROR_CODES.CHANNEL_CAPABILITY_UNSUPPORTED,
+          'This channel cannot send cc, bcc or a subject',
+          HttpStatus.UNPROCESSABLE_ENTITY,
+          [{ path: 'email', message: 'only an email conversation takes these' }],
+        );
+      }
       const fields = messageFieldsOf(input.content);
       const replyTo = input.replyToMessageId
         ? await this.replyTarget(tx, orgId, conv, input.replyToMessageId)

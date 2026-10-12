@@ -20,6 +20,14 @@ import {
   useAttachmentError,
 } from '@/features/channel-whatsapp-cloud';
 import { Button, Spinner, cn } from '@crm/ui';
+import type { EmailReplyExtras } from '@crm/contracts';
+import { EmailExtrasFields } from '@/features/channel-email/components/extras-fields';
+import {
+  EMAIL_BODY_MAX,
+  EMPTY_EXTRAS,
+  buildExtras,
+  type ExtrasDraft,
+} from '@/features/channel-email/lib/composer-extras';
 import { humanSize } from '../lib/time';
 import {
   CloseIcon,
@@ -75,8 +83,13 @@ export interface ComposerProps {
   onShare?: () => void;
   /** The type and size rules of the channel, so a file WhatsApp would refuse is turned away before it is uploaded. */
   attachments?: AttachmentRules;
+  /**
+   * An email conversation: the box adds Cc, Bcc and a subject, takes a long body and drops what email cannot carry (emoji). The
+   * subject placeholder is `Re: <subject>` of the thread.
+   */
+  email?: { defaultSubject: string };
   /** Reading only: neither tab can write. */
-  onSend: (draft: { body: string; file: File | null }) => void;
+  onSend: (draft: { body: string; file: File | null; email?: EmailReplyExtras }) => void;
   /** The message the next send answers (shown above the box); the screen clears it after a send. */
   replyTo?: MessageResponse | null;
   onCancelReply?: () => void;
@@ -98,6 +111,8 @@ export function Composer(props: ComposerProps) {
   const [fileError, setFileError] = useState<string | null>(null);
   const [savingNote, setSavingNote] = useState(false);
   const [emojiOpen, setEmojiOpen] = useState(false);
+  const [extras, setExtras] = useState<ExtrasDraft>(EMPTY_EXTRAS);
+  const [extrasTried, setExtrasTried] = useState(false);
   const area = useRef<HTMLTextAreaElement>(null);
   const input = useRef<HTMLInputElement>(null);
   const hintId = useId();
@@ -116,6 +131,8 @@ export function Composer(props: ComposerProps) {
     setFile(null);
     setFileError(null);
     setEmojiOpen(false);
+    setExtras(EMPTY_EXTRAS);
+    setExtrasTried(false);
   }
 
   useImperativeHandle(props.handleRef, () => ({
@@ -150,7 +167,8 @@ export function Composer(props: ComposerProps) {
   const isNote = mode === 'note';
   const groupBlocked = !isNote && props.groupSendBlocked === true;
   const disabled = isNote ? !props.canNote : props.replyDisabled || !props.canReply || groupBlocked;
-  const max = isNote ? NOTE_BODY_MAX : MESSAGE_BODY_MAX;
+  const isEmail = props.email !== undefined;
+  const max = isNote ? NOTE_BODY_MAX : isEmail ? EMAIL_BODY_MAX : MESSAGE_BODY_MAX;
   const trimmed = text.trim();
   const canSubmit = !disabled && !savingNote && (trimmed.length > 0 || (!isNote && file !== null));
 
@@ -170,7 +188,19 @@ export function Composer(props: ComposerProps) {
       requestAnimationFrame(() => area.current?.focus());
       return;
     }
-    props.onSend({ body: trimmed, file });
+    let emailExtras: EmailReplyExtras | undefined;
+    if (isEmail) {
+      const built = buildExtras(extras);
+      if (Object.keys(built.problems).length > 0) {
+        // Keep the draft: the fields say what to fix.
+        setExtrasTried(true);
+        return;
+      }
+      emailExtras = built.extras;
+    }
+    props.onSend({ body: trimmed, file, ...(emailExtras ? { email: emailExtras } : {}) });
+    setExtras(EMPTY_EXTRAS);
+    setExtrasTried(false);
     change('');
     setFile(null);
     setFileError(null);
@@ -288,6 +318,16 @@ export function Composer(props: ComposerProps) {
         </p>
       )}
 
+      {isEmail && !isNote && !groupBlocked && (
+        <EmailExtrasFields
+          value={extras}
+          onChange={setExtras}
+          defaultSubject={props.email?.defaultSubject ?? ''}
+          showProblems={extrasTried}
+          disabled={disabled}
+        />
+      )}
+
       <div className="flex items-end gap-2 p-3">
         {!isNote && !groupBlocked && props.canTemplate && props.onTemplate && (
           <button
@@ -338,7 +378,7 @@ export function Composer(props: ComposerProps) {
             </button>
           </>
         )}
-        {!groupBlocked && (
+        {!groupBlocked && !isEmail && (
           <>
             <button
               type="button"

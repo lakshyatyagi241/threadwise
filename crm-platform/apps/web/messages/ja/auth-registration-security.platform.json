@@ -1419,7 +1419,8 @@
             "extra_channels": "Telegram、Facebook、Instagramのチャネル。",
             "form_builder": "CRMに連絡先を作成する、ホスト型および埋め込み型のウェブフォーム。このスイッチは有料のフォームアプリが管理します。",
             "waba_groups": "Cloud API番号からWhatsAppグループを作成・管理します：招待リンク、参加リクエスト、メンバー。番号は公式ビジネスアカウントである必要があります。",
-            "sms": "TwilioまたはMSG91経由の送信専用SMS：送信元を接続し、SMS一斉配信とキャンペーンを送信します。"
+            "sms": "TwilioまたはMSG91経由の送信専用SMS：送信元を接続し、SMS一斉配信とキャンペーンを送信します。",
+            "email_channel": "GmailとGoogle Workspaceのメールボックスをチームの受信箱に接続します。このスイッチは有料のメールアプリが管理します。"
           },
           "units": {
             "days": "日",
@@ -1561,7 +1562,8 @@
             "forms": "ウェブフォーム",
             "form_submissions_monthly": "月間フォーム送信数",
             "ai_form_generations_monthly": "月間AIフォームビルダー生成回数",
-            "sms_monthly": "月間SMS数"
+            "sms_monthly": "月間SMS数",
+            "email_mailboxes": "メールボックス数"
           },
           "featureGroups": {
             "messaging": "メッセージ",
@@ -1599,7 +1601,8 @@
             "extra_channels": "Telegram、Facebook、Instagramチャネル",
             "form_builder": "フォーム（ウェブフォームビルダー）",
             "waba_groups": "WhatsAppグループ（Cloud API）",
-            "sms": "SMSチャネル"
+            "sms": "SMSチャネル",
+            "email_channel": "メール(Gmail)チャネル"
           },
           "problems": {
             "required": "この項目は必須です。",
@@ -1652,7 +1655,8 @@
             "forms": "有効なウェブフォーム（フォームアプリ）。フォームをアーカイブすると枠が空きます。0＝無制限。",
             "form_submissions_monthly": "暦月内に受け付けたフォーム送信数（スパムを除く）。上限を超えた送信も、破棄されず確認用に保存されます。0＝無制限。",
             "ai_form_generations_monthly": "暦月内のAIフォームビルダーの生成回数（修復の再試行を含む）。0＝無制限。",
-            "sms_monthly": "暦月に送信した発信SMSメッセージ数。0 = 無制限。"
+            "sms_monthly": "暦月に送信した発信SMSメッセージ数。0 = 無制限。",
+            "email_mailboxes": "接続済みのGmailメールボックス(接続解除すると枠が空きます)。0 = 無制限。"
           }
         }
       },

@@ -1,0 +1,58 @@
+import { Injectable, Logger } from '@nestjs/common';
+import { Interval } from '@nestjs/schedule';
+import { DatabaseService } from '../../infra/db/database.service';
+import { GoogleMailConfig } from './mail-config.service';
+import { MailPlan } from './mail-plan';
+import { ERROR_BACKOFF_MINUTES } from './mail-sync-rules';
+import { MailSyncPublisher } from './mail-sync.publisher';
+import { MailboxesRepository } from './mailboxes.repository';
+
+export const MAIL_SWEEP_INTERVAL_MS = 60_000;
+
+/**
+ * Every 60 seconds, one sync job for each connected mailbox (TW-MAIL-021). Polling, not Gmail push (Pub/Sub, TW-MAIL-033): a minute is the
+ * delay a customer's mail can wait in a team inbox. The job id is the mailbox, so a sync still running or waiting is never queued twice.
+ * Workspaces that no longer own the `email_channel` feature are left out (their mail and conversations stay, nothing new arrives), and so
+ * is everything while the platform has no Google client. Registered only in the worker process.
+ */
+@Injectable()
+export class MailSyncSweep {
+  private readonly logger = new Logger(MailSyncSweep.name);
+
+  constructor(
+    private readonly db: DatabaseService,
+    private readonly repo: MailboxesRepository,
+    private readonly plan: MailPlan,
+    private readonly config: GoogleMailConfig,
+    private readonly publisher: MailSyncPublisher,
+  ) {}
+
+  @Interval(MAIL_SWEEP_INTERVAL_MS)
+  async tick(): Promise<number> {
+    try {
+      return await this.run();
+    } catch (err) {
+      this.logger.error({ err }, 'mail sync sweep failed');
+      return 0;
+    }
+  }
+
+  async run(): Promise<number> {
+    if (!(await this.config.ready())) return 0;
+    const due = await this.db.privileged((tx) =>
+      this.repo.dueEverywhere(tx, ERROR_BACKOFF_MINUTES),
+    );
+    const entitled = new Map<number, boolean>();
+    let queued = 0;
+    for (const { orgId, uuid } of due) {
+      let ok = entitled.get(orgId);
+      if (ok === undefined) {
+        ok = await this.plan.isEnabled(orgId).catch(() => false);
+        entitled.set(orgId, ok);
+      }
+      if (!ok) continue;
+      if (await this.publisher.enqueue(orgId, uuid)) queued += 1;
+    }
+    return queued;
+  }
+}

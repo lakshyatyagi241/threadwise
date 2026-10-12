@@ -17,6 +17,7 @@
       "whatsapp": "WhatsApp (WABA)",
       "campaigns": "Kampagnen",
       "googleCalendar": "Google Kalender",
+      "googleMail": "Gmail",
       "flowBuilder": "Flow-Builder"
     },
     "hub": {
@@ -930,6 +931,33 @@
           }
         }
       },
+      "googleMail": {
+        "title": "Gmail-E-Mail",
+        "description": "Der Google-OAuth-Client, über den jeder Arbeitsbereich seine Postfächer verbindet.",
+        "sections": {
+          "oauth": {
+            "title": "Google-OAuth-Client"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Arbeitsbereichen das Verbinden von Gmail erlauben",
+            "hint": "Aus: Kein Arbeitsbereich kann verbinden, und es wird keine E-Mail gelesen oder gesendet. Bereits verbundene Postfächer bleiben erhalten."
+          },
+          "clientId": {
+            "label": "Client-ID",
+            "hint": "Aus der Google Cloud, Anmeldedaten, OAuth-2.0-Client-ID (Webanwendung). Leer verwendet GOOGLE_MAIL_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Client-Geheimnis",
+            "hint": "Verschlüsselt gespeichert und nie wieder angezeigt. Leer behält den gespeicherten Wert; GOOGLE_MAIL_CLIENT_SECRET ist der Ausweichwert."
+          },
+          "redirectUri": {
+            "label": "Überschreibung der Weiterleitungs-URI",
+            "hint": "Leer lassen, um die oben genannte Adresse zu verwenden. Sie muss exakt einer autorisierten Weiterleitungs-URI des Clients entsprechen."
+          }
+        }
+      },
       "flowBuilder": {
         "title": "Flow-Builder",
         "description": "Welche Flow-Builder den Workspaces angeboten werden.",
@@ -1062,6 +1090,11 @@
         "title": "Google Kalender",
         "description": "Der Google-OAuth-Client, den Workspaces zum Verbinden ihres Kalenders für Buchungen und belegte Zeiten verwenden.",
         "tags": "Google / OAuth / Kalender"
+      },
+      "googleMail": {
+        "title": "Gmail-E-Mail",
+        "description": "Der Google-OAuth-Client, über den Arbeitsbereiche ihre Gmail-Postfächer verbinden.",
+        "tags": "Google / OAuth / Gmail"
       },
       "flowBuilder": {
         "title": "Flow-Builder",
@@ -1644,6 +1677,38 @@
             "workspaces": {
               "title": "4. Workspaces verbinden sich",
               "body": "Fügen Sie Client-ID und Geheimnis hier ein und speichern Sie. Admins verbinden sich danach unter Termine, Einstellungen, Google Kalender."
+            }
+          }
+        }
+      },
+      "googleMail": {
+        "title": "Gmail-E-Mail",
+        "eyebrow": "Admin - E-Mail",
+        "description": "Ein Google-Cloud-OAuth-Client für die ganze Plattform, getrennt von Google Kalender. Jeder Arbeitsbereich verbindet seine eigenen Postfächer unter E-Mail und sieht Client-ID und Secret nie.",
+        "sections": {
+          "oauth": {
+            "title": "Google-OAuth-Client",
+            "description": "Ohne Client-ID und Secret können Arbeitsbereiche kein Postfach verbinden."
+          }
+        },
+        "guide": {
+          "title": "In Google Cloud einrichten",
+          "items": {
+            "project": {
+              "title": "1. Projekt und API",
+              "body": "Erstellen Sie in der Google Cloud Console ein Projekt und aktivieren Sie die Gmail API."
+            },
+            "redirect": {
+              "title": "2. OAuth-Client",
+              "body": "Erstellen Sie eine OAuth-2.0-Client-ID vom Typ Webanwendung und fügen Sie die auf dieser Seite angezeigte Weiterleitungs-URI unter Autorisierte Weiterleitungs-URIs hinzu."
+            },
+            "consent": {
+              "title": "3. Zustimmungsbildschirm",
+              "body": "Fügen Sie die Bereiche openid, email, gmail.readonly und gmail.send hinzu. Die Gmail-Bereiche sind eingeschränkt: Google muss die App für die allgemeine Nutzung prüfen, und im Testmodus endet eine Freigabe nach 7 Tagen."
+            },
+            "workspaces": {
+              "title": "4. Workspaces verbinden sich",
+              "body": "Fügen Sie Client-ID und Secret hier ein und speichern Sie. Danach verbinden Admins unter E-Mail."
             }
           }
         }

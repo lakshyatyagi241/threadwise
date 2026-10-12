@@ -10,7 +10,8 @@
       "webchat": "网站聊天",
       "telegram": "Telegram",
       "facebook": "Facebook Messenger",
-      "instagram": "Instagram"
+      "instagram": "Instagram",
+      "email": "电子邮件 (Gmail)"
     },
     "page": {
       "back": "自动化与 AI",

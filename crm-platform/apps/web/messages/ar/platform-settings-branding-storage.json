@@ -17,6 +17,7 @@
       "whatsapp": "WhatsApp (WABA)",
       "campaigns": "الحملات",
       "googleCalendar": "Google Calendar",
+      "googleMail": "Gmail",
       "flowBuilder": "منشئ التدفقات"
     },
     "hub": {
@@ -930,6 +931,33 @@
           }
         }
       },
+      "googleMail": {
+        "title": "بريد Gmail",
+        "description": "عميل OAuth من Google الذي تربط عبره كل مساحة عمل صناديق بريدها.",
+        "sections": {
+          "oauth": {
+            "title": "عميل Google OAuth"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "السماح لمساحات العمل بربط Gmail",
+            "hint": "متوقف: لا تستطيع أي مساحة عمل الربط ولا تُقرأ رسائل ولا تُرسل. تبقى الصناديق المتصلة."
+          },
+          "clientId": {
+            "label": "معرّف العميل",
+            "hint": "من Google Cloud، بيانات الاعتماد، معرّف عميل OAuth 2.0 (تطبيق ويب). الفارغ يستخدم GOOGLE_MAIL_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "سر العميل",
+            "hint": "يُخزَّن مشفّرًا ولا يُعرض مرة أخرى. الفارغ يبقي المحفوظ؛ والبديل هو GOOGLE_MAIL_CLIENT_SECRET."
+          },
+          "redirectUri": {
+            "label": "تجاوز عنوان إعادة التوجيه",
+            "hint": "اتركه فارغًا لاستخدام العنوان أعلاه. يجب أن يطابق تمامًا عنوان إعادة توجيه مصرّحًا به في العميل."
+          }
+        }
+      },
       "flowBuilder": {
         "title": "منشئ التدفقات",
         "description": "أي منشئ تدفقات يُعرض لمساحات العمل.",
@@ -1062,6 +1090,11 @@
         "title": "Google Calendar",
         "description": "عميل Google OAuth الذي تستخدمه مساحات العمل لربط تقويمها للحجوزات وأوقات الانشغال.",
         "tags": "Google / OAuth / التقويم"
+      },
+      "googleMail": {
+        "title": "بريد Gmail",
+        "description": "عميل OAuth من Google الذي تستخدمه مساحات العمل لربط صناديق Gmail الخاصة بها.",
+        "tags": "Google / OAuth / Gmail"
       },
       "flowBuilder": {
         "title": "منشئ التدفقات",
@@ -1644,6 +1677,38 @@
             "workspaces": {
               "title": "4. تربط مساحات العمل",
               "body": "الصق معرّف العميل وسره هنا واحفظ. ثم يربط المشرفون من المواعيد، الإعدادات، Google Calendar."
+            }
+          }
+        }
+      },
+      "googleMail": {
+        "title": "بريد Gmail",
+        "eyebrow": "المشرف - البريد الإلكتروني",
+        "description": "عميل OAuth واحد من Google Cloud للمنصة كلها، منفصل عن Google Calendar. تربط كل مساحة عمل صناديقها من البريد الإلكتروني ولا ترى معرّف العميل ولا السر أبدًا.",
+        "sections": {
+          "oauth": {
+            "title": "عميل Google OAuth",
+            "description": "بدون معرّف العميل والسر لا تستطيع مساحات العمل ربط صندوق بريد."
+          }
+        },
+        "guide": {
+          "title": "أعدّه في Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. المشروع وواجهة API",
+              "body": "في Google Cloud Console أنشئ مشروعًا وفعّل Gmail API."
+            },
+            "redirect": {
+              "title": "2. عميل OAuth",
+              "body": "أنشئ معرّف عميل OAuth 2.0 من نوع تطبيق ويب وأضف عنوان إعادة التوجيه المعروض في هذه الصفحة ضمن عناوين إعادة التوجيه المصرّح بها."
+            },
+            "consent": {
+              "title": "3. شاشة الموافقة",
+              "body": "أضف النطاقات openid وemail وgmail.readonly وgmail.send. نطاقات Gmail مقيّدة: يجب أن تتحقق Google من التطبيق للاستخدام العام، وفي وضع الاختبار ينتهي التفويض بعد 7 أيام."
+            },
+            "workspaces": {
+              "title": "4. تربط مساحات العمل",
+              "body": "الصق معرّف العميل والسر هنا واحفظ. بعدها يربط المشرفون صناديقهم من البريد الإلكتروني."
             }
           }
         }

@@ -17,6 +17,7 @@
       "whatsapp": "WhatsApp (WABA)",
       "campaigns": "キャンペーン",
       "googleCalendar": "Google カレンダー",
+      "googleMail": "Gmail",
       "flowBuilder": "フロービルダー"
     },
     "hub": {
@@ -930,6 +931,33 @@
           }
         }
       },
+      "googleMail": {
+        "title": "Gmailメール",
+        "description": "各ワークスペースがメールボックスを接続するGoogle OAuthクライアントです。",
+        "sections": {
+          "oauth": {
+            "title": "Google OAuth クライアント"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "ワークスペースによるGmail接続を許可",
+            "hint": "オフ:どのワークスペースも接続できず、メールの読み取りと送信も行われません。接続済みのメールボックスは保持されます。"
+          },
+          "clientId": {
+            "label": "Client ID",
+            "hint": "Google Cloud の「認証情報」から OAuth 2.0 クライアント ID(ウェブアプリケーション)を取得します。空欄の場合は GOOGLE_MAIL_CLIENT_ID を使用します。"
+          },
+          "clientSecret": {
+            "label": "クライアントシークレット",
+            "hint": "暗号化して保存され、再表示されません。空欄の場合は保存済みの値を維持します。GOOGLE_MAIL_CLIENT_SECRET が代替として使われます。"
+          },
+          "redirectUri": {
+            "label": "リダイレクト URI の上書き",
+            "hint": "空欄の場合は上記のアドレスを使用します。クライアントの承認済みリダイレクト URI と完全に一致させる必要があります。"
+          }
+        }
+      },
       "flowBuilder": {
         "title": "フロービルダー",
         "description": "ワークスペースに提供されるフロービルダー。",
@@ -1062,6 +1090,11 @@
         "title": "Google カレンダー",
         "description": "予約と予定の空き状況のためにワークスペースがカレンダーを接続する Google OAuth クライアント。",
         "tags": "Google / OAuth / Calendar"
+      },
+      "googleMail": {
+        "title": "Gmailメール",
+        "description": "ワークスペースがGmailメールボックスを接続するために使うGoogle OAuthクライアントです。",
+        "tags": "Google / OAuth / Gmail"
       },
       "flowBuilder": {
         "title": "フロービルダー",
@@ -1644,6 +1677,38 @@
             "workspaces": {
               "title": "4. ワークスペースの接続",
               "body": "ここにクライアント ID とシークレットを貼り付けて保存してください。その後、管理者は予約の設定から Google カレンダーを接続します。"
+            }
+          }
+        }
+      },
+      "googleMail": {
+        "title": "Gmailメール",
+        "eyebrow": "管理 - メール",
+        "description": "プラットフォーム全体で1つのGoogle Cloud OAuthクライアントを使います(Googleカレンダーとは別です)。各ワークスペースはメールから自分のメールボックスを接続し、クライアントIDやシークレットは表示されません。",
+        "sections": {
+          "oauth": {
+            "title": "Google OAuth クライアント",
+            "description": "クライアントIDとシークレットがないと、ワークスペースはメールボックスを接続できません。"
+          }
+        },
+        "guide": {
+          "title": "Google Cloud で設定する",
+          "items": {
+            "project": {
+              "title": "1. プロジェクトと API",
+              "body": "Google Cloud Consoleでプロジェクトを作成し、Gmail APIを有効にします。"
+            },
+            "redirect": {
+              "title": "2. OAuth クライアント",
+              "body": "種類が「ウェブアプリケーション」の OAuth 2.0 クライアント ID を作成し、このページに表示されているリダイレクト URI を「承認済みのリダイレクト URI」に追加します。"
+            },
+            "consent": {
+              "title": "3. 同意画面",
+              "body": "openid、email、gmail.readonly、gmail.sendのスコープを追加します。Gmailのスコープは制限付きで、一般利用にはGoogleによるアプリの確認が必要です。テスト中は付与が7日で失効します。"
+            },
+            "workspaces": {
+              "title": "4. ワークスペースの接続",
+              "body": "クライアントIDとシークレットをここに貼り付けて保存します。その後、管理者がメールから接続します。"
             }
           }
         }

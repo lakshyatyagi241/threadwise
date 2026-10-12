@@ -102,8 +102,8 @@
       },
       "email": {
         "label": "Email",
-        "description": "Collega una casella di posta per inviare e ricevere email nell’inbox.",
-        "keywords": "casella di posta, smtp, imap, gmail, outlook, mittente"
+        "description": "Collega caselle Gmail o Google Workspace così il tuo team può leggere e rispondere alle email dei clienti nell’inbox condivisa.",
+        "keywords": "casella di posta, gmail, google workspace, inbox condivisa, email di supporto, outlook, imap"
       },
       "line": {
         "label": "LINE",

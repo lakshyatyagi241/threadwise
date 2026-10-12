@@ -102,8 +102,8 @@
       },
       "email": {
         "label": "E-mail",
-        "description": "Połącz skrzynkę pocztową, aby wysyłać i odbierać e-maile w skrzynce odbiorczej.",
-        "keywords": "skrzynka, smtp, imap, gmail, outlook, nadawca"
+        "description": "Połącz skrzynki Gmail lub Google Workspace, aby zespół mógł czytać i odpowiadać na e-maile klientów we wspólnej skrzynce odbiorczej.",
+        "keywords": "skrzynka pocztowa, gmail, google workspace, wspólna skrzynka, e-mail do wsparcia, outlook, imap"
       },
       "line": {
         "label": "LINE",

@@ -17,6 +17,7 @@
       "whatsapp": "WhatsApp (WABA)",
       "campaigns": "अभियान",
       "googleCalendar": "Google कैलेंडर",
+      "googleMail": "Gmail",
       "flowBuilder": "फ़्लो बिल्डर"
     },
     "hub": {
@@ -930,6 +931,33 @@
           }
         }
       },
+      "googleMail": {
+        "title": "Gmail ईमेल",
+        "description": "वह Google OAuth क्लाइंट जिससे हर वर्कस्पेस अपने मेलबॉक्स जोड़ता है।",
+        "sections": {
+          "oauth": {
+            "title": "Google OAuth क्लाइंट"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "वर्कस्पेस को Gmail जोड़ने दें",
+            "hint": "बंद: कोई वर्कस्पेस नहीं जोड़ सकता, और कोई मेल पढ़ा या भेजा नहीं जाता। पहले से जुड़े मेलबॉक्स सुरक्षित रहते हैं।"
+          },
+          "clientId": {
+            "label": "क्लाइंट ID",
+            "hint": "Google Cloud में Credentials, OAuth 2.0 Client ID (Web application) से। खाली होने पर GOOGLE_MAIL_CLIENT_ID इस्तेमाल होता है।"
+          },
+          "clientSecret": {
+            "label": "क्लाइंट सीक्रेट",
+            "hint": "एन्क्रिप्टेड रूप में सहेजा जाता है, फिर कभी नहीं दिखता। खाली रखने पर सहेजा हुआ रहता है; GOOGLE_MAIL_CLIENT_SECRET विकल्प है।"
+          },
+          "redirectUri": {
+            "label": "रीडायरेक्ट URI ओवरराइड",
+            "hint": "ऊपर का पता इस्तेमाल करने के लिए खाली छोड़ें। यह क्लाइंट पर Authorised redirect URI से बिल्कुल मेल खाना चाहिए।"
+          }
+        }
+      },
       "flowBuilder": {
         "title": "फ़्लो बिल्डर",
         "description": "कौन से फ़्लो बिल्डर वर्कस्पेस को दिए जाते हैं।",
@@ -1062,6 +1090,11 @@
         "title": "Google कैलेंडर",
         "description": "Google OAuth क्लाइंट, जिससे वर्कस्पेस बुकिंग और व्यस्त समय के लिए अपना कैलेंडर कनेक्ट करते हैं।",
         "tags": "Google / OAuth / कैलेंडर"
+      },
+      "googleMail": {
+        "title": "Gmail ईमेल",
+        "description": "वह Google OAuth क्लाइंट जिससे वर्कस्पेस अपने Gmail मेलबॉक्स जोड़ते हैं।",
+        "tags": "Google / OAuth / Gmail"
       },
       "flowBuilder": {
         "title": "फ़्लो बिल्डर",
@@ -1644,6 +1677,38 @@
             "workspaces": {
               "title": "4. वर्कस्पेस कनेक्ट करें",
               "body": "क्लाइंट ID और सीक्रेट यहाँ चिपकाकर सहेजें। फिर एडमिन अपॉइंटमेंट, सेटिंग्स, Google Calendar से कनेक्ट करते हैं।"
+            }
+          }
+        }
+      },
+      "googleMail": {
+        "title": "Gmail ईमेल",
+        "eyebrow": "एडमिन - ईमेल",
+        "description": "पूरे प्लेटफ़ॉर्म के लिए एक Google Cloud OAuth क्लाइंट, जो Google Calendar से अलग है। हर वर्कस्पेस ईमेल से अपने मेलबॉक्स जोड़ता है और उसे क्लाइंट आईडी या सीक्रेट कभी नहीं दिखता।",
+        "sections": {
+          "oauth": {
+            "title": "Google OAuth क्लाइंट",
+            "description": "क्लाइंट आईडी और सीक्रेट के बिना वर्कस्पेस मेलबॉक्स नहीं जोड़ सकते।"
+          }
+        },
+        "guide": {
+          "title": "Google Cloud में सेट करें",
+          "items": {
+            "project": {
+              "title": "1. प्रोजेक्ट और API",
+              "body": "Google Cloud Console में एक प्रोजेक्ट बनाएँ और Gmail API चालू करें।"
+            },
+            "redirect": {
+              "title": "2. OAuth क्लाइंट",
+              "body": "Web application प्रकार का OAuth 2.0 Client ID बनाएँ और इस पेज पर दिखाया गया redirect URI Authorised redirect URIs में जोड़ें।"
+            },
+            "consent": {
+              "title": "3. कंसेंट स्क्रीन",
+              "body": "openid, email, gmail.readonly और gmail.send स्कोप जोड़ें। Gmail स्कोप प्रतिबंधित हैं: सामान्य उपयोग के लिए Google को ऐप सत्यापित करना होगा, और टेस्टिंग मोड में अनुमति 7 दिन बाद समाप्त हो जाती है।"
+            },
+            "workspaces": {
+              "title": "4. वर्कस्पेस कनेक्ट करें",
+              "body": "क्लाइंट आईडी और सीक्रेट यहाँ चिपकाकर सेव करें। इसके बाद एडमिन ईमेल से मेलबॉक्स जोड़ते हैं।"
             }
           }
         }

@@ -102,8 +102,8 @@
       },
       "email": {
         "label": "אימייל",
-        "description": "חבר תיבת דואר כדי לשלוח ולקבל אימיילים בתיבת הדואר הנכנס.",
-        "keywords": "תיבת דואר, smtp, imap, gmail, outlook, שולח"
+        "description": "חבר תיבות דואר של Gmail או Google Workspace כדי שהצוות שלך יוכל לקרוא ולענות לאימיילים של לקוחות בתיבת הדואר המשותפת.",
+        "keywords": "תיבת דואר, gmail, google workspace, תיבת דואר משותפת, אימייל תמיכה, outlook, imap"
       },
       "line": {
         "label": "LINE",

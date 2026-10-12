@@ -44,7 +44,8 @@
       "forms": "Formularze internetowe",
       "form_submissions_monthly": "Zgłoszenia formularzy miesięcznie",
       "ai_form_generations_monthly": "Generacje kreatora formularzy AI miesięcznie",
-      "sms_monthly": "SMS miesięcznie"
+      "sms_monthly": "SMS miesięcznie",
+      "email_mailboxes": "Skrzynki e-mail"
     },
     "features": {
       "automation": "Automatyzacja",
@@ -76,7 +77,8 @@
       "extra_channels": "Telegram, Facebook i Instagram",
       "form_builder": "Formularze",
       "waba_groups": "Grupy WhatsApp",
-      "sms": "Kanał SMS"
+      "sms": "Kanał SMS",
+      "email_channel": "Kanał e-mail (Gmail)"
     },
     "limitGroups": {
       "messaging": "Wiadomości",
@@ -127,7 +129,8 @@
       "forms": "Aktywne formularze internetowe (aplikacja Formularze). Zarchiwizowanie formularza zwalnia miejsce. 0 = bez limitu.",
       "form_submissions_monthly": "Zgłoszenia formularzy przyjęte w miesiącu kalendarzowym, bez spamu. Po przekroczeniu limitu zgłoszenie nadal jest zapisywane do przeglądu, nigdy nie jest odrzucane. 0 = bez limitu.",
       "ai_form_generations_monthly": "Generacje kreatora formularzy AI w miesiącu kalendarzowym, łącznie z ponowieniem naprawy. 0 = bez limitu.",
-      "sms_monthly": "Wychodzące wiadomości SMS wysłane w miesiącu kalendarzowym. 0 = bez limitu."
+      "sms_monthly": "Wychodzące wiadomości SMS wysłane w miesiącu kalendarzowym. 0 = bez limitu.",
+      "email_mailboxes": "Połączone skrzynki Gmail (odłączona zwalnia miejsce). 0 = bez limitu."
     },
     "planAddons": {
       "title": "Dodatki dostępne w Twoim planie",

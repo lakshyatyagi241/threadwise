@@ -17,6 +17,7 @@
       "whatsapp": "WhatsApp (WABA)",
       "campaigns": "Kampanye",
       "googleCalendar": "Google Calendar",
+      "googleMail": "Gmail",
       "flowBuilder": "Pembuat alur"
     },
     "hub": {
@@ -930,6 +931,33 @@
           }
         }
       },
+      "googleMail": {
+        "title": "Email Gmail",
+        "description": "Klien OAuth Google tempat setiap ruang kerja menghubungkan kotak suratnya.",
+        "sections": {
+          "oauth": {
+            "title": "Klien OAuth Google"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Izinkan ruang kerja menghubungkan Gmail",
+            "hint": "Nonaktif: tidak ada ruang kerja yang dapat terhubung dan tidak ada email yang dibaca atau dikirim. Kotak surat yang sudah terhubung tetap disimpan."
+          },
+          "clientId": {
+            "label": "Client ID",
+            "hint": "Dari Google Cloud, Credentials, OAuth 2.0 Client ID (Web application). Kosong akan menggunakan GOOGLE_MAIL_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Client secret",
+            "hint": "Disimpan terenkripsi dan tidak akan ditampilkan lagi. Kosong berarti tetap menggunakan yang tersimpan; GOOGLE_MAIL_CLIENT_SECRET sebagai cadangan."
+          },
+          "redirectUri": {
+            "label": "Penggantian Redirect URI",
+            "hint": "Kosongkan untuk menggunakan alamat di atas. Harus sama persis dengan Authorised redirect URI pada klien."
+          }
+        }
+      },
       "flowBuilder": {
         "title": "Pembuat alur",
         "description": "Pembuat alur mana yang ditawarkan kepada workspace.",
@@ -1062,6 +1090,11 @@
         "title": "Google Calendar",
         "description": "Klien OAuth Google yang digunakan workspace untuk menghubungkan kalender mereka untuk pemesanan dan jadwal sibuk.",
         "tags": "Google / OAuth / Calendar"
+      },
+      "googleMail": {
+        "title": "Email Gmail",
+        "description": "Klien OAuth Google yang dipakai ruang kerja untuk menghubungkan kotak surat Gmail mereka.",
+        "tags": "Google / OAuth / Gmail"
       },
       "flowBuilder": {
         "title": "Pembuat alur",
@@ -1644,6 +1677,38 @@
             "workspaces": {
               "title": "4. Workspace terhubung",
               "body": "Tempel client id dan secret di sini lalu simpan. Admin kemudian terhubung dari Janji temu, Pengaturan, Google Calendar."
+            }
+          }
+        }
+      },
+      "googleMail": {
+        "title": "Email Gmail",
+        "eyebrow": "Admin - Email",
+        "description": "Satu klien OAuth Google Cloud untuk seluruh platform, terpisah dari Google Kalender. Setiap ruang kerja menghubungkan kotak suratnya sendiri dari Email dan tidak pernah melihat ID klien atau rahasianya.",
+        "sections": {
+          "oauth": {
+            "title": "Klien OAuth Google",
+            "description": "Tanpa ID klien dan rahasia, ruang kerja tidak dapat menghubungkan kotak surat."
+          }
+        },
+        "guide": {
+          "title": "Siapkan di Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. Proyek dan API",
+              "body": "Di Google Cloud Console, buat proyek dan aktifkan Gmail API."
+            },
+            "redirect": {
+              "title": "2. Klien OAuth",
+              "body": "Buat OAuth 2.0 Client ID bertipe Web application dan tambahkan redirect URI yang ditampilkan di halaman ini di bawah Authorised redirect URIs."
+            },
+            "consent": {
+              "title": "3. Layar persetujuan",
+              "body": "Tambahkan cakupan openid, email, gmail.readonly, dan gmail.send. Cakupan Gmail bersifat terbatas: Google harus memverifikasi aplikasi untuk penggunaan umum, dan dalam mode Pengujian izin berakhir setelah 7 hari."
+            },
+            "workspaces": {
+              "title": "4. Workspace terhubung",
+              "body": "Tempel ID klien dan rahasia di sini lalu simpan. Setelah itu admin menghubungkan dari Email."
             }
           }
         }

@@ -1,0 +1,169 @@
+{
+  "email": {
+    "common": {
+      "dismiss": "Fermer"
+    },
+    "hub": {
+      "kicker": "Canaux",
+      "title": "Boîtes",
+      "titleAccent": "e-mail",
+      "intro": "Connectez vos boîtes Gmail ou Google Workspace. Les e-mails de vos clients arrivent dans la boîte de réception de l’équipe, une conversation par fil d’e-mails, et vos réponses partent de la même adresse.",
+      "inbox": "Ouvrir la boîte de réception",
+      "channels": "Canaux",
+      "loadError": "Impossible de charger vos boîtes e-mail. Réessayez dans un instant.",
+      "cardCaption": "Gmail · Google Workspace",
+      "connectedCount": "{count, plural, one {# boîte e-mail connectée} other {# boîtes e-mail connectées}}",
+      "notConnected": "Non connectée",
+      "usageLabel": "Boîtes e-mail utilisées",
+      "usage": "{used} sur {limit} boîtes e-mail",
+      "usageUnlimited": "{used, plural, one {# boîte e-mail} other {# boîtes e-mail}}, sans limite",
+      "howTitle": "Comment ça marche",
+      "how": {
+        "connect": {
+          "title": "Connecter une boîte e-mail",
+          "body": "Connectez-vous avec Google et autorisez Threadwise à lire et à envoyer des e-mails pour cette adresse."
+        },
+        "inbox": {
+          "title": "Les e-mails arrivent dans la boîte de réception",
+          "body": "Les nouveaux e-mails sont récupérés toutes les minutes. Chaque fil d’e-mails devient une conversation, et chaque boîte e-mail a sa propre boîte de réception."
+        },
+        "reply": {
+          "title": "Répondre depuis la boîte de réception",
+          "body": "Votre réponse part de la boîte e-mail dans le même fil, avec Cc et Cci si vous en ajoutez."
+        },
+        "limit": {
+          "title": "Les boîtes e-mail dépendent de votre offre",
+          "body": "Votre offre définit le nombre de boîtes e-mail que vous pouvez connecter. Les e-mails ne comptent pas dans votre quota de messages."
+        }
+      },
+      "connectedTitle": "Boîtes e-mail connectées",
+      "total": "{count, plural, one {# boîte e-mail} other {# boîtes e-mail}}",
+      "empty": "Aucune boîte e-mail connectée pour le moment. Connectez Gmail ci-dessous pour recevoir des e-mails dans la boîte de réception.",
+      "addTitle": "Ajouter une boîte e-mail",
+      "providers": {
+        "google": {
+          "name": "Gmail / Google Workspace",
+          "hint": "Connectez-vous avec le compte Google propriétaire de la boîte e-mail, par exemple support@yourcompany.com."
+        },
+        "imap": {
+          "name": "Autre messagerie (IMAP / SMTP)",
+          "hint": "Tout autre fournisseur de messagerie avec un nom d’utilisateur et un mot de passe."
+        },
+        "microsoft": {
+          "name": "Microsoft 365 / Outlook",
+          "hint": "Connectez-vous avec un compte Microsoft professionnel ou scolaire."
+        }
+      },
+      "connectGmail": "Connecter Gmail",
+      "soon": "Bientôt",
+      "notReady": "La connexion Google n’est pas encore configurée pour cette plateforme. Demandez à votre administrateur de la plateforme d’ajouter les identifiants Google.",
+      "limitReached": "Vous avez utilisé toutes les {limit, plural, one {# boîte e-mail} other {# boîtes e-mail}} que votre offre autorise. Supprimez une boîte e-mail ou demandez à votre administrateur de passer à une offre supérieure.",
+      "noPermission": "Vous pouvez voir les boîtes e-mail, mais seules les personnes autorisées à les gérer peuvent en connecter une.",
+      "connectFailed": "Impossible de démarrer la connexion Google. Réessayez."
+    },
+    "card": {
+      "status": {
+        "connected": "Connectée",
+        "needs_reauth": "Reconnexion requise",
+        "error": "Erreur",
+        "disconnected": "Déconnectée"
+      },
+      "sendsAs": "Les réponses partent de",
+      "displayName": "Nom affiché",
+      "edit": "Modifier",
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "renamed": "Nom affiché enregistré.",
+      "needsReauthHint": "Google ne nous autorise plus à lire cette boîte e-mail. Reconnectez-la pour recevoir et envoyer à nouveau des e-mails.",
+      "lastError": "Dernier problème : {error}",
+      "lastSynced": "Dernière synchronisation",
+      "neverSynced": "Pas encore synchronisée",
+      "conversations": "Conversations",
+      "openInbox": "Ouvrir dans la boîte de réception",
+      "sync": "Synchroniser maintenant",
+      "syncStarted": "Synchronisation lancée. Les nouveaux e-mails apparaissent dans la boîte de réception dans un instant.",
+      "reconnect": "Reconnecter",
+      "remove": "Supprimer",
+      "removeTitle": "Supprimer la boîte e-mail",
+      "removeConfirm": "Supprimer {address} ? Ses conversations restent dans la boîte de réception en lecture seule, et plus aucun e-mail n’est reçu ni envoyé depuis cette adresse. Vous pourrez la reconnecter plus tard.",
+      "removed": "Boîte e-mail supprimée.",
+      "failed": "Impossible de mettre à jour la boîte e-mail. Réessayez."
+    },
+    "outcome": {
+      "connected": "Boîte e-mail connectée. Les e-mails des 7 derniers jours sont en cours de récupération dans la boîte de réception.",
+      "denied": "La connexion Google a été annulée, rien n’a donc été connecté.",
+      "missing_scope": "Google n’a pas accordé l’accès pour lire et envoyer des e-mails. Reconnectez-vous et cochez toutes les autorisations sur l’écran Google.",
+      "limit": "La limite de boîtes e-mail de votre offre est atteinte, cette boîte e-mail n’a donc pas été connectée.",
+      "not_configured": "La connexion Google n’est pas encore configurée pour cette plateforme. Contactez votre administrateur de la plateforme.",
+      "wrong_account": "Vous vous êtes connecté avec un autre compte Google que celui de la boîte e-mail à reconnecter. Connectez-vous avec la même adresse.",
+      "failed": "Un problème est survenu lors de la connexion de la boîte e-mail. Réessayez."
+    },
+    "errors": {
+      "notConfigured": "La connexion Google n’est pas encore configurée pour cette plateforme. Contactez votre administrateur de la plateforme.",
+      "limit": "La limite de boîtes e-mail de votre offre est atteinte.",
+      "unavailable": "Cette boîte e-mail est déconnectée ou doit d’abord être reconnectée.",
+      "sendRefused": "Google a refusé d’envoyer cet e-mail. Vérifiez les adresses et la taille, puis réessayez.",
+      "wrongAccount": "Il s’agit d’un autre compte Google que celui de cette boîte e-mail. Connectez-vous avec la même adresse.",
+      "locked": "Le module e-mail ne fait pas partie de votre offre.",
+      "changed": "Cette boîte e-mail a été modifiée ailleurs. La liste a été rechargée, réessayez."
+    },
+    "guide": {
+      "title": "Guide de configuration",
+      "google": {
+        "title": "Connecter Gmail ou Google Workspace",
+        "p1": "Choisissez Connecter Gmail et connectez-vous avec le compte propriétaire de la boîte e-mail, par exemple une adresse partagée support@ ou sales@.",
+        "p2": "Sur l’écran Google, autorisez la lecture et l’envoi d’e-mails. Sans les deux, les e-mails ne peuvent être ni reçus ni envoyés.",
+        "p3": "Vous revenez ici et les e-mails des 7 premiers jours sont récupérés dans la boîte de réception, sans notifier personne.",
+        "p4": "Ajoutez d’autres boîtes e-mail de la même façon, jusqu’au nombre autorisé par votre offre. Chacune apparaît comme une boîte de réception distincte."
+      },
+      "consent": {
+        "title": "Ce que nous lisons et envoyons",
+        "p1": "Nous lisons les e-mails de votre boîte de réception pour les afficher dans la boîte de réception de l’équipe. Les spams, la corbeille et les brouillons sont ignorés.",
+        "p2": "Les e-mails que nous avons envoyés nous-mêmes depuis votre compte ailleurs ne sont pas copiés dans la boîte de réception.",
+        "p3": "Les réponses automatiques, les e-mails rejetés et les e-mails de listes de diffusion sont enregistrés et marqués Automatique.",
+        "p4": "Supprimer une boîte e-mail arrête la lecture et l’envoi. Ses conversations passées restent en lecture seule."
+      },
+      "trouble": {
+        "title": "En cas de problème",
+        "p1": "Reconnexion requise signifie que Google a révoqué l’accès ou qu’il a expiré. Sélectionnez Reconnecter et connectez-vous avec la même adresse.",
+        "p2": "Erreur affiche le dernier problème. Sélectionnez Synchroniser maintenant pour réessayer ; si cela échoue encore, reconnectez la boîte e-mail.",
+        "p3": "Connecter est désactivé lorsque la plateforme n’a pas de connexion Google configurée ou que la limite de boîtes e-mail de votre offre est atteinte.",
+        "p4": "Les images d’un e-mail restent masquées tant que vous ne choisissez pas Charger les images dans la conversation."
+      }
+    },
+    "thread": {
+      "noSubject": "(sans objet)",
+      "automated": "Automatique",
+      "from": "De",
+      "to": "À",
+      "cc": "Cc",
+      "date": "Date",
+      "imagesBlocked": "Les images provenant d’Internet sont masquées.",
+      "loadImages": "Charger les images",
+      "frameTitle": "E-mail : {subject}",
+      "truncated": "Cet e-mail était long, seule la première partie est affichée.",
+      "noBody": "Cet e-mail ne contient pas de texte.",
+      "attachments": "{count, plural, one {# pièce jointe} other {# pièces jointes}}",
+      "tooLarge": "trop volumineux pour être conservé ({size})",
+      "download": "Télécharger {name} ({size})"
+    },
+    "composer": {
+      "toggle": "Cc, Cci et objet",
+      "cc": "Cc",
+      "bcc": "Cci",
+      "subject": "Objet",
+      "subjectPlaceholder": "Objet",
+      "addressesPlaceholder": "name@example.com, other@example.com",
+      "problem": {
+        "ccInvalid": "Ces adresses Cc ne sont pas valides : {list}",
+        "bccInvalid": "Ces adresses Cci ne sont pas valides : {list}",
+        "ccTooMany": "Cc accepte au maximum 20 adresses.",
+        "bccTooMany": "Cci accepte au maximum 20 adresses.",
+        "subjectTooLong": "L’objet ne peut pas dépasser 998 caractères."
+      }
+    },
+    "inbox": {
+      "group": "E-mail"
+    }
+  }
+}

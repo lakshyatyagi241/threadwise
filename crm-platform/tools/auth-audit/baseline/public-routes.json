@@ -74,6 +74,7 @@
     "GET /v2/public/cms/pricing",
     "GET /v2/public/cms/site-info",
     "GET /v2/public/cms/sitemap",
+    "GET /v2/public/email/google/callback",
     "GET /v2/public/forms/:publicKey",
     "GET /v2/public/forms/:publicKey/embed.js",
     "POST /v2/public/forms/:publicKey/events",

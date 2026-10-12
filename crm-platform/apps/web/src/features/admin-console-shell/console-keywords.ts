@@ -86,6 +86,7 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
   'settings-whatsapp': 'whatsapp waba meta app embedded signup credentials business cloud api',
   'settings-campaigns': 'campaigns broadcast sending limits rate',
   'settings-google-calendar': 'google calendar oauth appointments sync',
+  'settings-google-mail': 'google gmail email mailbox oauth inbox add-on credentials',
   'settings-flow-builder': 'flow builder simple advanced canvas automation chatbot step by step',
   'settings-catalog': 'catalog catalogue whatsapp commerce products meta',
   'ai-keys': 'ai keys api keys openai anthropic gemini llm provider token voice',

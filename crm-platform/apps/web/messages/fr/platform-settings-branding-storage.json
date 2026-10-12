@@ -17,6 +17,7 @@
       "whatsapp": "WhatsApp (WABA)",
       "campaigns": "Campagnes",
       "googleCalendar": "Google Agenda",
+      "googleMail": "Gmail",
       "flowBuilder": "Éditeur de flux"
     },
     "hub": {
@@ -930,6 +931,33 @@
           }
         }
       },
+      "googleMail": {
+        "title": "E-mail Gmail",
+        "description": "Le client OAuth Google par lequel chaque espace de travail connecte ses boîtes.",
+        "sections": {
+          "oauth": {
+            "title": "Client OAuth Google"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Autoriser les espaces de travail à connecter Gmail",
+            "hint": "Désactivé : aucun espace de travail ne peut se connecter et aucun e-mail n'est lu ni envoyé. Les boîtes déjà connectées sont conservées."
+          },
+          "clientId": {
+            "label": "ID client",
+            "hint": "Depuis Google Cloud, Identifiants, ID client OAuth 2.0 (application Web). Si vide, GOOGLE_MAIL_CLIENT_ID est utilisé."
+          },
+          "clientSecret": {
+            "label": "Secret client",
+            "hint": "Stocké chiffré et jamais réaffiché. Si vide, le secret enregistré est conservé ; GOOGLE_MAIL_CLIENT_SECRET sert de solution de repli."
+          },
+          "redirectUri": {
+            "label": "Remplacement de l’URI de redirection",
+            "hint": "Laissez vide pour utiliser l’adresse ci-dessus. Elle doit correspondre exactement à un URI de redirection autorisé du client."
+          }
+        }
+      },
       "flowBuilder": {
         "title": "Éditeur de flux",
         "description": "Quels éditeurs de flux sont proposés aux espaces de travail.",
@@ -1062,6 +1090,11 @@
         "title": "Google Agenda",
         "description": "Le client OAuth Google qu’utilisent les espaces de travail pour connecter leur agenda aux réservations et aux créneaux occupés.",
         "tags": "Google / OAuth / Agenda"
+      },
+      "googleMail": {
+        "title": "E-mail Gmail",
+        "description": "Le client OAuth Google que les espaces de travail utilisent pour connecter leurs boîtes Gmail.",
+        "tags": "Google / OAuth / Gmail"
       },
       "flowBuilder": {
         "title": "Éditeur de flux",
@@ -1644,6 +1677,38 @@
             "workspaces": {
               "title": "4. Connexion des espaces de travail",
               "body": "Collez l’ID et le secret du client ici, puis enregistrez. Les administrateurs se connectent ensuite depuis Rendez-vous, Paramètres, Google Agenda."
+            }
+          }
+        }
+      },
+      "googleMail": {
+        "title": "E-mail Gmail",
+        "eyebrow": "Admin - E-mail",
+        "description": "Un seul client OAuth Google Cloud pour toute la plateforme, distinct de Google Agenda. Chaque espace de travail connecte ses propres boîtes depuis E-mail et ne voit jamais l'ID client ni le secret.",
+        "sections": {
+          "oauth": {
+            "title": "Client OAuth Google",
+            "description": "Sans ID client ni secret, les espaces de travail ne peuvent pas connecter de boîte."
+          }
+        },
+        "guide": {
+          "title": "Configurer dans Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. Projet et API",
+              "body": "Dans la console Google Cloud, créez un projet et activez l'API Gmail."
+            },
+            "redirect": {
+              "title": "2. Client OAuth",
+              "body": "Créez un ID client OAuth 2.0 de type application Web et ajoutez l’URI de redirection affiché sur cette page dans les URI de redirection autorisés."
+            },
+            "consent": {
+              "title": "3. Écran de consentement",
+              "body": "Ajoutez les portées openid, email, gmail.readonly et gmail.send. Les portées Gmail sont restreintes : Google doit valider l'application pour un usage général, et en mode Test une autorisation expire au bout de 7 jours."
+            },
+            "workspaces": {
+              "title": "4. Connexion des espaces de travail",
+              "body": "Collez ici l'ID client et le secret, puis enregistrez. Les administrateurs connectent ensuite depuis E-mail."
             }
           }
         }

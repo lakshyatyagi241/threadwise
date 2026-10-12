@@ -17,6 +17,7 @@
       "whatsapp": "WhatsApp (WABA)",
       "campaigns": "Campagnes",
       "googleCalendar": "Google Agenda",
+      "googleMail": "Gmail",
       "flowBuilder": "Flowbouwer"
     },
     "hub": {
@@ -930,6 +931,33 @@
           }
         }
       },
+      "googleMail": {
+        "title": "Gmail-e-mail",
+        "description": "De Google OAuth-client waarmee elke werkruimte haar postvakken koppelt.",
+        "sections": {
+          "oauth": {
+            "title": "Google OAuth-client"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Werkruimtes toestaan Gmail te koppelen",
+            "hint": "Uit: geen enkele werkruimte kan koppelen en er wordt geen e-mail gelezen of verstuurd. Al gekoppelde postvakken blijven bewaard."
+          },
+          "clientId": {
+            "label": "Client-ID",
+            "hint": "Vanuit Google Cloud, Credentials, OAuth 2.0 Client-ID (Webapplicatie). Leeg gebruikt GOOGLE_MAIL_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Clientgeheim",
+            "hint": "Versleuteld opgeslagen en nooit meer getoond. Leeg behoudt het opgeslagen geheim; GOOGLE_MAIL_CLIENT_SECRET is de terugval."
+          },
+          "redirectUri": {
+            "label": "Overschrijving redirect-URI",
+            "hint": "Laat leeg om het adres hierboven te gebruiken. Het moet exact overeenkomen met een geautoriseerde redirect-URI van de client."
+          }
+        }
+      },
       "flowBuilder": {
         "title": "Flowbouwer",
         "description": "Welke flowbouwers werkruimtes krijgen aangeboden.",
@@ -1062,6 +1090,11 @@
         "title": "Google Agenda",
         "description": "De Google OAuth-client waarmee werkruimtes hun agenda verbinden voor afspraken en bezette tijden.",
         "tags": "Google / OAuth / Agenda"
+      },
+      "googleMail": {
+        "title": "Gmail-e-mail",
+        "description": "De Google OAuth-client waarmee werkruimtes hun Gmail-postvakken koppelen.",
+        "tags": "Google / OAuth / Gmail"
       },
       "flowBuilder": {
         "title": "Flowbouwer",
@@ -1644,6 +1677,38 @@
             "workspaces": {
               "title": "4. Werkruimtes verbinden",
               "body": "Plak het client-ID en -geheim hier en sla op. Beheerders verbinden daarna via Afspraken, Instellingen, Google Agenda."
+            }
+          }
+        }
+      },
+      "googleMail": {
+        "title": "Gmail-e-mail",
+        "eyebrow": "Beheer - E-mail",
+        "description": "Eén Google Cloud OAuth-client voor het hele platform, los van Google Agenda. Elke werkruimte koppelt haar eigen postvakken via E-mail en ziet de client-ID en het geheim nooit.",
+        "sections": {
+          "oauth": {
+            "title": "Google OAuth-client",
+            "description": "Zonder client-ID en geheim kunnen werkruimtes geen postvak koppelen."
+          }
+        },
+        "guide": {
+          "title": "Instellen in Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. Project en API",
+              "body": "Maak in de Google Cloud Console een project en schakel de Gmail API in."
+            },
+            "redirect": {
+              "title": "2. OAuth-client",
+              "body": "Maak een OAuth 2.0 Client-ID van het type Webapplicatie en voeg de redirect-URI die op deze pagina staat toe onder Geautoriseerde redirect-URI's."
+            },
+            "consent": {
+              "title": "3. Toestemmingsscherm",
+              "body": "Voeg de scopes openid, email, gmail.readonly en gmail.send toe. Gmail-scopes zijn beperkt: Google moet de app controleren voor algemeen gebruik, en in de testmodus verloopt een toestemming na 7 dagen."
+            },
+            "workspaces": {
+              "title": "4. Werkruimtes verbinden",
+              "body": "Plak hier de client-ID en het geheim en sla op. Daarna koppelen beheerders via E-mail."
             }
           }
         }

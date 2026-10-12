@@ -51,15 +51,42 @@ const common = {
 };
 
 export const OUTBOUND_TEXT_MAX = 4096;
+/** The text limit of an email reply (the schema carries this one; `outboundTextMaxFor` is the per-kind rule the dispatcher applies). */
+export const OUTBOUND_TEXT_MAX_EMAIL = 100_000;
+/** The longest text an outbound message may carry on a channel of this kind. */
+export const outboundTextMaxFor = (channelKind: string): number =>
+  channelKind === 'email' ? OUTBOUND_TEXT_MAX_EMAIL : OUTBOUND_TEXT_MAX;
+
+/**
+ * What an email adapter needs to send a reply on its thread, beyond the body. Built by the conversation core (message dispatch) from the
+ * conversation, the newest inbound message's `meta.email` and the reply extras; only ever set for a channel of kind `email`.
+ */
+export const outboundEmailSchema = z.object({
+  /** Recipients: the sender of the newest inbound mail. */
+  to: z.array(z.string().trim().email().max(320)).min(1).max(20),
+  cc: z.array(z.string().trim().email().max(320)).max(20).default([]),
+  bcc: z.array(z.string().trim().email().max(320)).max(20).default([]),
+  /** The reply's subject (`Re: <original>` unless the agent overrode it). */
+  subject: z.string().trim().min(1).max(998),
+  /** RFC 5322 Message-ID (no angle brackets) of the mail this answers; null when unknown. */
+  inReplyTo: z.string().max(998).nullable(),
+  /** The References chain, oldest first, ending with `inReplyTo`. */
+  references: z.array(z.string().max(998)).max(100).default([]),
+  /** The provider's thread id (Gmail threadId): the reply is sent inside it. */
+  threadId: z.string().max(128),
+});
+export type OutboundEmail = z.infer<typeof outboundEmailSchema>;
 export const OUTBOUND_CAPTION_MAX = 1024;
 
 export const outboundEnvelopeSchema = z.discriminatedUnion('kind', [
   z.object({
     ...common,
     kind: z.literal('text'),
-    body: z.string().min(1).max(OUTBOUND_TEXT_MAX),
+    body: z.string().min(1).max(OUTBOUND_TEXT_MAX_EMAIL),
     /** Ask the provider to render a link preview (WhatsApp `preview_url`). */
     previewUrl: z.boolean().optional(),
+    /** Email channels only (refused for any other kind by the dispatcher). */
+    email: outboundEmailSchema.optional(),
   }),
   z.object({
     ...common,
@@ -306,6 +333,16 @@ export interface NormalisedInbound {
   /** The message a reaction or a reply points at. */
   replyToProviderMessageId?: string;
   reactionEmoji?: string;
+  /**
+   * The conversation's title when this message creates it (an email's subject); never overwritten by a later message. Without it the
+   * title is the sender's name.
+   */
+  title?: string;
+  /**
+   * Who to link or create as the contact, when the thread key is not itself the sender's identity (an email thread is keyed by the
+   * provider's thread id, the contact is the sender's address). Without it the contact comes from `peerKey` (phone channels only).
+   */
+  contactIdentity?: { kind: 'email'; value: string; name?: string };
   /**
    * What the channel knows beyond the common fields, stored on the message and read by the screens that render it: `contacts` (cards),
    * `interactive` (what the customer picked), `referral` (the ad or link that opened the chat), `rawType` (an unsupported kind),

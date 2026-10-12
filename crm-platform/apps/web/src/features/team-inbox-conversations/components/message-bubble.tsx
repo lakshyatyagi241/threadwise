@@ -11,6 +11,7 @@ import {
   MediaStateNote,
   mediaView,
 } from '@/features/channel-whatsapp-cloud';
+import { EmailMessageBody } from '@/features/channel-email/components/email-message';
 import { isRetryableSend } from '../lib/errors';
 import type { AgentReaction, PendingSend } from '../lib/thread';
 import { clockTime, fullStamp, humanSize } from '../lib/time';
@@ -88,6 +89,19 @@ function MessageBody({
       default:
         visual = <DocumentMedia media={media} />;
     }
+  }
+
+  // An email carries its own header, HTML body and files (TW-MAIL-026); the frame and the lists are the email feature's.
+  if (m.email) {
+    return (
+      <EmailMessageBody
+        email={m.email}
+        conversationId={m.conversationId}
+        messageId={m.id}
+        body={m.body}
+        date={m.providerAt ?? m.createdAt}
+      />
+    );
   }
 
   const referral =
@@ -343,6 +357,7 @@ export const MessageBubble = memo(function MessageBubble({
           <div
             className={cn(
               BUBBLE,
+              m.email && 'w-full sm:max-w-[90%]',
               out
                 ? 'rounded-ee-md border border-primary/25 bg-primary/15 text-foreground'
                 : 'rounded-es-md border border-border bg-background',

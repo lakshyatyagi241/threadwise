@@ -44,7 +44,8 @@
       "forms": "Formulir web",
       "form_submissions_monthly": "Pengiriman formulir per bulan",
       "ai_form_generations_monthly": "Pembuatan formulir AI per bulan",
-      "sms_monthly": "SMS per bulan"
+      "sms_monthly": "SMS per bulan",
+      "email_mailboxes": "Kotak surat email"
     },
     "features": {
       "automation": "Otomatisasi",
@@ -76,7 +77,8 @@
       "extra_channels": "Telegram, Facebook dan Instagram",
       "form_builder": "Formulir",
       "waba_groups": "Grup WhatsApp",
-      "sms": "Kanal SMS"
+      "sms": "Kanal SMS",
+      "email_channel": "Kanal email (Gmail)"
     },
     "limitGroups": {
       "messaging": "Pesan",
@@ -127,7 +129,8 @@
       "forms": "Formulir web aktif (aplikasi Formulir). Mengarsipkan formulir akan membebaskan tempatnya. 0 = tanpa batas.",
       "form_submissions_monthly": "Pengiriman formulir yang diterima dalam bulan kalender, tidak termasuk spam. Melebihi batas, pengiriman tetap disimpan untuk ditinjau, tidak pernah dibuang. 0 = tanpa batas.",
       "ai_form_generations_monthly": "Pembuatan formulir AI dalam bulan kalender, termasuk percobaan ulang perbaikan. 0 = tanpa batas.",
-      "sms_monthly": "Pesan SMS keluar yang dikirim dalam bulan kalender. 0 = tanpa batas."
+      "sms_monthly": "Pesan SMS keluar yang dikirim dalam bulan kalender. 0 = tanpa batas.",
+      "email_mailboxes": "Kotak surat Gmail yang terhubung (yang diputus membebaskan tempatnya). 0 = tanpa batas."
     },
     "planAddons": {
       "title": "Add-on yang tersedia di paket Anda",

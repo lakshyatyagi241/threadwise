@@ -17,6 +17,7 @@
       "whatsapp": "WhatsApp (WABA)",
       "campaigns": "แคมเปญ",
       "googleCalendar": "Google Calendar",
+      "googleMail": "Gmail",
       "flowBuilder": "ตัวสร้างโฟลว์"
     },
     "hub": {
@@ -930,6 +931,33 @@
           }
         }
       },
+      "googleMail": {
+        "title": "อีเมล Gmail",
+        "description": "ไคลเอนต์ Google OAuth ที่ทุกเวิร์กสเปซใช้เชื่อมต่อกล่องจดหมาย",
+        "sections": {
+          "oauth": {
+            "title": "ไคลเอนต์ Google OAuth"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "อนุญาตให้เวิร์กสเปซเชื่อมต่อ Gmail",
+            "hint": "ปิด: ไม่มีเวิร์กสเปซใดเชื่อมต่อได้ และจะไม่มีการอ่านหรือส่งอีเมล กล่องจดหมายที่เชื่อมต่อแล้วจะยังคงอยู่"
+          },
+          "clientId": {
+            "label": "Client ID",
+            "hint": "จาก Google Cloud > Credentials > OAuth 2.0 Client ID (Web application) หากว่างจะใช้ GOOGLE_MAIL_CLIENT_ID"
+          },
+          "clientSecret": {
+            "label": "Client secret",
+            "hint": "เก็บไว้แบบเข้ารหัสและจะไม่แสดงอีก หากว่างจะคงค่าที่บันทึกไว้; GOOGLE_MAIL_CLIENT_SECRET เป็นค่าสำรอง"
+          },
+          "redirectUri": {
+            "label": "แทนที่ Redirect URI",
+            "hint": "เว้นว่างเพื่อใช้ที่อยู่ด้านบน ต้องตรงกับ Authorised redirect URI ในไคลเอนต์ทุกประการ"
+          }
+        }
+      },
       "flowBuilder": {
         "title": "ตัวสร้างโฟลว์",
         "description": "ตัวสร้างโฟลว์ใดที่เสนอให้พื้นที่ทำงาน",
@@ -1062,6 +1090,11 @@
         "title": "Google Calendar",
         "description": "ไคลเอนต์ Google OAuth ที่พื้นที่ทำงานใช้เชื่อมปฏิทินเพื่อการจองและช่วงเวลาที่ไม่ว่าง",
         "tags": "Google / OAuth / Calendar"
+      },
+      "googleMail": {
+        "title": "อีเมล Gmail",
+        "description": "ไคลเอนต์ Google OAuth ที่เวิร์กสเปซใช้เชื่อมต่อกล่องจดหมาย Gmail",
+        "tags": "Google / OAuth / Gmail"
       },
       "flowBuilder": {
         "title": "ตัวสร้างโฟลว์",
@@ -1644,6 +1677,38 @@
             "workspaces": {
               "title": "4. พื้นที่ทำงานเชื่อมต่อ",
               "body": "วาง client id และ secret ที่นี่แล้วบันทึก จากนั้นผู้ดูแลจะเชื่อมต่อจาก การนัดหมาย > การตั้งค่า > Google Calendar"
+            }
+          }
+        }
+      },
+      "googleMail": {
+        "title": "อีเมล Gmail",
+        "eyebrow": "ผู้ดูแล - อีเมล",
+        "description": "ไคลเอนต์ Google Cloud OAuth หนึ่งตัวสำหรับทั้งแพลตฟอร์ม แยกจาก Google Calendar แต่ละเวิร์กสเปซเชื่อมต่อกล่องจดหมายของตนเองจากอีเมล และจะไม่เห็นรหัสไคลเอนต์หรือรหัสลับ",
+        "sections": {
+          "oauth": {
+            "title": "ไคลเอนต์ Google OAuth",
+            "description": "หากไม่มีรหัสไคลเอนต์และรหัสลับ เวิร์กสเปซจะเชื่อมต่อกล่องจดหมายไม่ได้"
+          }
+        },
+        "guide": {
+          "title": "ตั้งค่าใน Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. โปรเจกต์และ API",
+              "body": "ใน Google Cloud Console ให้สร้างโปรเจกต์และเปิดใช้ Gmail API"
+            },
+            "redirect": {
+              "title": "2. ไคลเอนต์ OAuth",
+              "body": "สร้าง OAuth 2.0 Client ID ประเภท Web application และเพิ่ม redirect URI ที่แสดงในหน้านี้ภายใต้ Authorised redirect URIs"
+            },
+            "consent": {
+              "title": "3. หน้าจอยินยอม",
+              "body": "เพิ่มขอบเขต openid, email, gmail.readonly และ gmail.send ขอบเขตของ Gmail เป็นแบบจำกัด Google ต้องตรวจสอบแอปก่อนใช้งานทั่วไป และในโหมดทดสอบ การอนุญาตจะหมดอายุหลัง 7 วัน"
+            },
+            "workspaces": {
+              "title": "4. พื้นที่ทำงานเชื่อมต่อ",
+              "body": "วางรหัสไคลเอนต์และรหัสลับที่นี่แล้วบันทึก จากนั้นผู้ดูแลจะเชื่อมต่อได้จากอีเมล"
             }
           }
         }

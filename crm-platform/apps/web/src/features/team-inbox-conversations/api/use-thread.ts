@@ -1,7 +1,12 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import { messageResponseSchema, type MessageResponse, type SendMessageInput } from '@crm/contracts';
+import {
+  messageResponseSchema,
+  type EmailReplyExtras,
+  type MessageResponse,
+  type SendMessageInput,
+} from '@crm/contracts';
 import type { ShareInput } from '../lib/share';
 import { useRealtimeEvent, useResync, useRoom } from '@/lib/realtime';
 import { errorCode } from '../lib/errors';
@@ -29,6 +34,8 @@ export interface SendDraft {
   file: File | null;
   /** The message this send answers (its `id`). */
   replyToMessageId?: string | null;
+  /** Email conversations: cc, bcc and subject of the reply. */
+  email?: EmailReplyExtras;
 }
 
 export interface Thread {
@@ -238,6 +245,7 @@ export function useThread(
               clientMessageId: p.clientMessageId,
               body: p.body,
               ...(p.replyToMessageId ? { replyToMessageId: p.replyToMessageId } : {}),
+              ...(p.email ? { email: p.email } : {}),
             });
       files.current.delete(p.clientMessageId);
       if (latest.current.conversationId === id) dispatch({ type: 'merge', messages: [message] });
@@ -266,6 +274,7 @@ export function useThread(
         kind: draft.file ? 'media' : 'text',
         body,
         replyToMessageId: draft.replyToMessageId ?? null,
+        ...(draft.email ? { email: draft.email } : {}),
         media: draft.file
           ? {
               mediaId: '',

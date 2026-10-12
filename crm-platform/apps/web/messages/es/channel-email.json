@@ -1,0 +1,169 @@
+{
+  "email": {
+    "common": {
+      "dismiss": "Descartar"
+    },
+    "hub": {
+      "kicker": "Canales",
+      "title": "Correo electrónico",
+      "titleAccent": "buzones",
+      "intro": "Conecta tus buzones de Gmail o Google Workspace. Los correos de tus clientes llegan a la bandeja del equipo, una conversación por hilo de correo, y tus respuestas salen desde la misma dirección.",
+      "inbox": "Abrir bandeja",
+      "channels": "Canales",
+      "loadError": "No se pudieron cargar tus buzones. Inténtalo de nuevo en un momento.",
+      "cardCaption": "Gmail · Google Workspace",
+      "connectedCount": "{count, plural, one {# buzón conectado} other {# buzones conectados}}",
+      "notConnected": "Sin conectar",
+      "usageLabel": "Buzones en uso",
+      "usage": "{used} de {limit} buzones",
+      "usageUnlimited": "{used, plural, one {# buzón} other {# buzones}}, sin límite",
+      "howTitle": "Cómo funciona",
+      "how": {
+        "connect": {
+          "title": "Conecta un buzón",
+          "body": "Inicia sesión con Google y permite que Threadwise lea y envíe correo de esa dirección."
+        },
+        "inbox": {
+          "title": "El correo llega a la bandeja",
+          "body": "El correo nuevo se descarga cada minuto. Cada hilo de correo se convierte en una conversación y cada buzón es su propia bandeja."
+        },
+        "reply": {
+          "title": "Responde desde la bandeja",
+          "body": "Tu respuesta sale desde el buzón dentro del mismo hilo, con Cc y Bcc si los añades."
+        },
+        "limit": {
+          "title": "Los buzones dependen de tu plan",
+          "body": "Tu plan define cuántos buzones puedes conectar. Los correos no cuentan para tu cuota de mensajes."
+        }
+      },
+      "connectedTitle": "Buzones conectados",
+      "total": "{count, plural, one {# buzón} other {# buzones}}",
+      "empty": "Aún no hay ningún buzón conectado. Conecta Gmail abajo para empezar a recibir correo en la bandeja.",
+      "addTitle": "Añadir un buzón",
+      "providers": {
+        "google": {
+          "name": "Gmail / Google Workspace",
+          "hint": "Inicia sesión con la cuenta de Google propietaria del buzón, por ejemplo support@tuempresa.com."
+        },
+        "imap": {
+          "name": "Otro correo (IMAP / SMTP)",
+          "hint": "Cualquier otro proveedor de correo con usuario y contraseña."
+        },
+        "microsoft": {
+          "name": "Microsoft 365 / Outlook",
+          "hint": "Inicia sesión con una cuenta de trabajo o escuela de Microsoft."
+        }
+      },
+      "connectGmail": "Conectar Gmail",
+      "soon": "Próximamente",
+      "notReady": "El inicio de sesión con Google aún no está configurado en esta plataforma. Pide a tu administrador que añada las credenciales de Google.",
+      "limitReached": "Has usado los {limit, plural, one {# buzón} other {# buzones}} que permite tu plan. Elimina un buzón o pide a tu administrador que mejore el plan.",
+      "noPermission": "Puedes ver los buzones, pero solo quienes tienen permiso para gestionarlos pueden conectar uno.",
+      "connectFailed": "No se pudo iniciar la sesión con Google. Inténtalo de nuevo."
+    },
+    "card": {
+      "status": {
+        "connected": "Conectado",
+        "needs_reauth": "Requiere reconexión",
+        "error": "Error",
+        "disconnected": "Desconectado"
+      },
+      "sendsAs": "Las respuestas salen como",
+      "displayName": "Nombre visible",
+      "edit": "Editar",
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "renamed": "Nombre visible guardado.",
+      "needsReauthHint": "Google ya no nos permite leer este buzón. Reconéctalo para volver a recibir y enviar correo.",
+      "lastError": "Último problema: {error}",
+      "lastSynced": "Última sincronización",
+      "neverSynced": "Aún sin sincronizar",
+      "conversations": "Conversaciones",
+      "openInbox": "Abrir en la bandeja",
+      "sync": "Sincronizar ahora",
+      "syncStarted": "Sincronización iniciada. El correo nuevo aparecerá en la bandeja en un momento.",
+      "reconnect": "Reconectar",
+      "remove": "Eliminar",
+      "removeTitle": "Eliminar buzón",
+      "removeConfirm": "¿Eliminar {address}? Sus conversaciones permanecen en la bandeja como historial de solo lectura y ya no se recibe ni se envía correo desde él. Puedes volver a conectar la misma dirección más adelante.",
+      "removed": "Buzón eliminado.",
+      "failed": "No se pudo actualizar el buzón. Inténtalo de nuevo."
+    },
+    "outcome": {
+      "connected": "Buzón conectado. Se está descargando a la bandeja el correo de los últimos 7 días.",
+      "denied": "Se canceló el inicio de sesión con Google, así que no se conectó nada.",
+      "missing_scope": "Google no concedió acceso para leer y enviar correo. Conéctalo de nuevo y marca todos los permisos en la pantalla de Google.",
+      "limit": "Se alcanzó el límite de buzones de tu plan, así que este buzón no se conectó.",
+      "not_configured": "El inicio de sesión con Google aún no está configurado en esta plataforma. Pregunta a tu administrador.",
+      "wrong_account": "Iniciaste sesión con una cuenta de Google distinta a la del buzón que se reconecta. Inicia sesión con la misma dirección.",
+      "failed": "Algo salió mal al conectar el buzón. Inténtalo de nuevo."
+    },
+    "errors": {
+      "notConfigured": "El inicio de sesión con Google aún no está configurado en esta plataforma. Pregunta a tu administrador.",
+      "limit": "Se alcanzó el límite de buzones de tu plan.",
+      "unavailable": "Este buzón está desconectado o primero debe reconectarse.",
+      "sendRefused": "Google rechazó el envío de este correo. Revisa las direcciones y el tamaño e inténtalo de nuevo.",
+      "wrongAccount": "Esa es una cuenta de Google distinta a la de este buzón. Inicia sesión con la misma dirección.",
+      "locked": "El complemento de correo no forma parte de tu plan.",
+      "changed": "Este buzón se modificó en otro lugar. Se recargó la lista, inténtalo de nuevo."
+    },
+    "guide": {
+      "title": "Guía de configuración",
+      "google": {
+        "title": "Conectar Gmail o Google Workspace",
+        "p1": "Elige Conectar Gmail e inicia sesión con la cuenta propietaria del buzón, como una dirección compartida support@ o sales@.",
+        "p2": "En la pantalla de Google, permite leer y enviar correo. Sin ambos permisos no se puede recibir ni enviar correo.",
+        "p3": "Volverás aquí y los primeros 7 días de correo se descargarán en la bandeja sin avisar a nadie.",
+        "p4": "Añade más buzones de la misma forma, hasta el número que permita tu plan. Cada uno aparece como su propia bandeja."
+      },
+      "consent": {
+        "title": "Qué leemos y enviamos",
+        "p1": "Leemos el correo de tu bandeja de entrada para mostrarlo en la bandeja del equipo. Se omiten el spam, la papelera y los borradores.",
+        "p2": "El correo que enviamos nosotros mismos desde tu cuenta en otro lugar no se copia a la bandeja.",
+        "p3": "Las respuestas automáticas, los rebotes y el correo de listas de distribución se guardan y se marcan como Automatizado.",
+        "p4": "Al eliminar un buzón se deja de leer y enviar. Sus conversaciones pasadas permanecen como historial de solo lectura."
+      },
+      "trouble": {
+        "title": "Si algo no funciona",
+        "p1": "Requiere reconexión significa que Google revocó el acceso o este caducó. Selecciona Reconectar e inicia sesión con la misma dirección.",
+        "p2": "Error muestra el último problema. Selecciona Sincronizar ahora para reintentar; si sigue fallando, reconecta el buzón.",
+        "p3": "Conectar está desactivado cuando la plataforma no tiene configurado el inicio de sesión con Google o se alcanzó el límite de buzones de tu plan.",
+        "p4": "Las imágenes de un correo permanecen ocultas hasta que eliges Cargar imágenes en la conversación."
+      }
+    },
+    "thread": {
+      "noSubject": "(sin asunto)",
+      "automated": "Automatizado",
+      "from": "De",
+      "to": "Para",
+      "cc": "Cc",
+      "date": "Fecha",
+      "imagesBlocked": "Las imágenes de internet están ocultas.",
+      "loadImages": "Cargar imágenes",
+      "frameTitle": "Correo: {subject}",
+      "truncated": "Este correo era largo, así que solo se muestra la primera parte.",
+      "noBody": "Este correo no tiene texto.",
+      "attachments": "{count, plural, one {# archivo adjunto} other {# archivos adjuntos}}",
+      "tooLarge": "demasiado grande para conservarlo ({size})",
+      "download": "Descargar {name} ({size})"
+    },
+    "composer": {
+      "toggle": "Cc, Bcc y asunto",
+      "cc": "Cc",
+      "bcc": "Bcc",
+      "subject": "Asunto",
+      "subjectPlaceholder": "Asunto",
+      "addressesPlaceholder": "nombre@ejemplo.com, otro@ejemplo.com",
+      "problem": {
+        "ccInvalid": "Estas direcciones de Cc no son válidas: {list}",
+        "bccInvalid": "Estas direcciones de Bcc no son válidas: {list}",
+        "ccTooMany": "Cc admite como máximo 20 direcciones.",
+        "bccTooMany": "Bcc admite como máximo 20 direcciones.",
+        "subjectTooLong": "El asunto puede tener como máximo 998 caracteres."
+      }
+    },
+    "inbox": {
+      "group": "Correo electrónico"
+    }
+  }
+}

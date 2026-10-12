@@ -7,6 +7,7 @@ import {
   ChannelError,
   envelopeText,
   outboundEnvelopeSchema,
+  outboundTextMaxFor,
   type ChannelAdapter,
   type ChannelRuntime,
   type OutboundEnvelope,
@@ -124,6 +125,14 @@ export class ChannelDispatcher {
     const envelope = this.parse(req.envelope);
     const adapter = this.adapters.for(req.channel.kind);
     this.assertChannelCan(adapter, req.channel, envelope, req.lastInboundAt, now);
+    // An email reply is sent inside a customer's thread: with no mail to answer there is nobody to send to.
+    if (req.channel.kind === 'email' && envelope.kind === 'text' && !envelope.email) {
+      throw new AppError(
+        ERROR_CODES.VALIDATION_FAILED,
+        'There is no email in this conversation to reply to',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
 
     await this.guard.beforeSend({
       orgId: req.channel.orgId,
@@ -228,6 +237,16 @@ export class ChannelDispatcher {
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     };
+    if (envelope.kind === 'text') {
+      // The envelope schema carries the largest limit (email's); every other kind keeps WhatsApp's.
+      const max = outboundTextMaxFor(channel.kind);
+      if (envelope.body.length > max) {
+        throw AppError.validation('Outbound message failed validation', [
+          { path: 'body', message: `at most ${max} characters on this channel` },
+        ]);
+      }
+      if (envelope.email && channel.kind !== 'email') unsupported('cc, bcc or a subject');
+    }
     if (envelope.kind === 'template' && !caps.templates) unsupported('templates');
     if (envelope.kind === 'reaction' && !caps.reactions) unsupported('reactions');
     if (envelope.kind === 'media' && !caps.media.includes(envelope.media.mediaKind)) {

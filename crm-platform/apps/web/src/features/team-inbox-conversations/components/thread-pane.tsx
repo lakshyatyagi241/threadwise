@@ -5,10 +5,15 @@ import { useEffect, useRef, useState, type Ref } from 'react';
 import { Badge, Button, EmptyState, Spinner, cn } from '@crm/ui';
 import type {
   ChannelResponse,
+  EmailReplyExtras,
   ConversationNote,
   InboxConversationDetail,
   MessageResponse,
 } from '@crm/contracts';
+import {
+  defaultReplySubject,
+  latestEmailSubject,
+} from '@/features/channel-email/lib/composer-extras';
 import { ReconnectBanner } from '@/features/channel-whatsapp-cloud';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { CallButton } from '@/features/calling-voice';
@@ -41,7 +46,12 @@ export interface ThreadPaneProps {
   onTogglePanel: () => void;
   onBack: () => void;
   onSeenLatest: (seq: number) => void;
-  onSend: (draft: { body: string; file: File | null; replyToMessageId?: string | null }) => void;
+  onSend: (draft: {
+    body: string;
+    file: File | null;
+    replyToMessageId?: string | null;
+    email?: EmailReplyExtras;
+  }) => void;
   /** Puts an emoji on a message (`''` takes it back); the screen shows the refusal. */
   onReact: (message: MessageResponse, emoji: string) => Promise<void>;
   onNote: (body: string) => Promise<boolean>;
@@ -106,6 +116,7 @@ export function ThreadPane(props: ThreadPaneProps) {
     props.can.reply &&
     !channelDown &&
     !groupThread &&
+    detail?.channel.kind !== 'email' &&
     props.mode === 'reply';
   // A place, contact cards and buttons are free-form messages: they need the window like text does (the composer disables the button).
   const shareKinds: ShareKind[] =
@@ -117,6 +128,9 @@ export function ThreadPane(props: ThreadPaneProps) {
         ]
       : [];
   const resolved = detail?.status === 'resolved' || detail?.status === 'closed';
+  // Email: the reply box adds Cc, Bcc and a subject; templates, shares and files are not part of an email reply (yet).
+  const isEmail = detail?.channel.kind === 'email';
+  const emailSubject = isEmail ? latestEmailSubject(thread.state.messages, detail?.title) : '';
 
   return (
     <section aria-label={detail?.title ?? t('title')} className="flex h-full min-h-0 flex-col">
@@ -297,7 +311,8 @@ export function ThreadPane(props: ThreadPaneProps) {
         replyDisabled={replyDisabled}
         canReply={props.can.reply}
         canNote={props.can.note}
-        canAttach={(detail?.capabilities.media.length ?? 0) > 0}
+        canAttach={!isEmail && (detail?.capabilities.media.length ?? 0) > 0}
+        email={isEmail ? { defaultSubject: defaultReplySubject(emailSubject) } : undefined}
         groupSendBlocked={groupThread}
         attachments={
           detail

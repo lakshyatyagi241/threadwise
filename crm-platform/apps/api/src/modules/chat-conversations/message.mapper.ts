@@ -1,4 +1,4 @@
-import type { MessageResponse } from '@crm/contracts';
+import { emailMetaSchema, type EmailMeta, type MessageResponse } from '@crm/contracts';
 import type { MessageRow } from './messages.repository';
 
 /** Mints the short-lived url of a stored file for one reader; null leaves the url out (the realtime payload has no single reader). */
@@ -166,6 +166,13 @@ function legacyView(row: MessageRow): {
   return null;
 }
 
+/** An email message's `meta.email` block, validated on the way out (a row written by an older build or by hand never breaks the response). */
+function emailOf(row: MessageRow): EmailMeta | undefined {
+  if (row.meta.email === undefined) return undefined;
+  const parsed = emailMetaSchema.safeParse(row.meta.email);
+  return parsed.success ? parsed.data : undefined;
+}
+
 /**
  * The only place a message row becomes its wire shape (internal ids never leave: every reference is a uuid; the storage key never
  * leaves: the file is a link minted per reader).
@@ -214,6 +221,7 @@ export function toMessageResponse(row: MessageRow, link: MediaLinker): MessageRe
     forwarded: row.meta.forwarded === true ? true : undefined,
     referral: referralOf(row),
     sentInteractive: sentInteractiveOf(row),
+    email: emailOf(row),
     unsupported:
       row.meta.unsupported === true &&
       row.meta.rawType !== 'order' &&

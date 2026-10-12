@@ -1,6 +1,7 @@
 import {
   canAdvanceMessageStatus,
   type ConversationNote,
+  type EmailReplyExtras,
   type MessageResponse,
   type MessageStatus,
 } from '@crm/contracts';
@@ -19,6 +20,8 @@ export interface PendingSend {
   body: string;
   /** The message this send answers (its `id`), or null. */
   replyToMessageId?: string | null;
+  /** Email conversations: cc, bcc and subject of the reply, kept so a retry sends them again. */
+  email?: EmailReplyExtras;
   /** For a media send: what the bubble shows while it goes. */
   media: { mediaId: string; name: string; mime: string; sizeBytes: number | null } | null;
   /** `sending` until the server answered; `failed` when the request itself was refused or never arrived. */

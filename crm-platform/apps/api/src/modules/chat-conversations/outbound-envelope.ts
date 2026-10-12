@@ -1,8 +1,58 @@
+import type { EmailMeta } from '@crm/contracts';
+import type { OutboundEmail } from '../../infra/providers/chat-conversations';
 import type { OutboundContent } from './conversations.facade';
 import { kindOfFileMime } from './message-rules';
 import type { MessageRow } from './messages.repository';
 
 /** What a stored message becomes for the dispatcher (which validates it against `outboundEnvelopeSchema`). */
+/** The reply extras kept on a queued email message (`messages.meta.emailReply`), so a retry sends the same cc, bcc and subject. */
+export interface StoredEmailReply {
+  cc: string[];
+  bcc: string[];
+  subject?: string;
+}
+
+const REFERENCES_MAX = 100;
+
+/** `Re: <subject>`, without stacking a second `Re:` on a subject that already has one. */
+export function replySubject(original: string | null | undefined): string {
+  const subject = (original ?? '').replace(/\s+/g, ' ').trim();
+  if (subject === '') return 'Re:';
+  return /^re:/i.test(subject) ? subject : `Re: ${subject}`;
+}
+
+/**
+ * What an email adapter needs to answer a thread: recipients, subject and the RFC 5322 threading headers. `inbound` is the thread's
+ * newest mail to answer (`meta.email`), `reply` the agent's extras kept on the message. The reply goes to the sender of that mail;
+ * `References` is its own chain plus its Message-ID (the earliest id and the newest ones kept when the chain is long). Null when there is
+ * no mail to answer: the dispatcher then refuses the message (a thread is only ever started by a customer's mail).
+ */
+export function emailEnvelopeOf(
+  inbound: Pick<EmailMeta, 'subject' | 'from' | 'messageId' | 'references' | 'threadId'> | null,
+  reply: Partial<StoredEmailReply> | null | undefined,
+  threadId: string,
+): OutboundEmail | null {
+  if (!inbound) return null;
+  const chain = [...inbound.references, inbound.messageId].filter(
+    (id, i, all) => id !== '' && all.indexOf(id) === i,
+  );
+  const references =
+    chain.length > REFERENCES_MAX ? [chain[0]!, ...chain.slice(-(REFERENCES_MAX - 1))] : chain;
+  return {
+    to: [inbound.from.address],
+    cc: reply?.cc ?? [],
+    bcc: reply?.bcc ?? [],
+    subject: reply?.subject?.trim() || replySubject(inbound.subject),
+    inReplyTo: inbound.messageId || null,
+    references,
+    threadId: inbound.threadId || threadId,
+  };
+}
+
+/** The thread id inside an email conversation's peer key (`t:<threadId>`). */
+export const threadIdOfPeerKey = (peerKey: string): string =>
+  peerKey.startsWith('t:') ? peerKey.slice(2) : peerKey;
+
 export function envelopeOf(
   row: Pick<
     MessageRow,
@@ -21,6 +71,8 @@ export function envelopeOf(
   peerKey: string,
   replyToProviderMessageId: string | null,
   attempt: number,
+  /** Only for a message on an email channel; see `emailEnvelopeOf`. */
+  email?: OutboundEmail | null,
 ): unknown {
   const common = {
     to: peerKey,
@@ -32,7 +84,7 @@ export function envelopeOf(
   };
   switch (row.kind) {
     case 'text':
-      return { ...common, kind: 'text', body: row.body ?? '' };
+      return { ...common, kind: 'text', body: row.body ?? '', ...(email ? { email } : {}) };
     case 'image':
     case 'video':
     case 'audio':
@@ -124,8 +176,24 @@ export function messageFieldsOf(content: OutboundContent): {
   longitude?: number;
 } {
   switch (content.kind) {
-    case 'text':
-      return { kind: 'text', body: content.body, media: null, meta: {}, templateId: null };
+    case 'text': {
+      const extras = content.email;
+      const emailReply: StoredEmailReply | null =
+        extras && (extras.cc.length > 0 || extras.bcc.length > 0 || extras.subject)
+          ? {
+              cc: extras.cc,
+              bcc: extras.bcc,
+              ...(extras.subject ? { subject: extras.subject } : {}),
+            }
+          : null;
+      return {
+        kind: 'text',
+        body: content.body,
+        media: null,
+        meta: emailReply ? { emailReply } : {},
+        templateId: null,
+      };
+    }
     case 'media':
       return {
         kind: kindOfFileMime(content.media.mime),

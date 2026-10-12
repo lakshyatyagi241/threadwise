@@ -10,7 +10,8 @@
       "webchat": "ウェブサイトのチャット",
       "telegram": "Telegram",
       "facebook": "Facebook Messenger",
-      "instagram": "Instagram"
+      "instagram": "Instagram",
+      "email": "メール (Gmail)"
     },
     "page": {
       "back": "オートメーションと AI",

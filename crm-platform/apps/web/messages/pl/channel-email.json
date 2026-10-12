@@ -1,0 +1,169 @@
+{
+  "email": {
+    "common": {
+      "dismiss": "Zamknij"
+    },
+    "hub": {
+      "kicker": "Kanały",
+      "title": "E-mail",
+      "titleAccent": "skrzynki pocztowe",
+      "intro": "Połącz swoje skrzynki Gmail lub Google Workspace. E-maile od klientów trafiają do skrzynki zespołu, po jednej rozmowie na każdy wątek, a Twoje odpowiedzi wychodzą z tego samego adresu.",
+      "inbox": "Otwórz skrzynkę odbiorczą",
+      "channels": "Kanały",
+      "loadError": "Nie udało się wczytać skrzynek pocztowych. Spróbuj ponownie za chwilę.",
+      "cardCaption": "Gmail · Google Workspace",
+      "connectedCount": "{count, plural, one {# połączona skrzynka} few {# połączone skrzynki} many {# połączonych skrzynek} other {# połączonej skrzynki}}",
+      "notConnected": "Niepołączono",
+      "usageLabel": "Wykorzystane skrzynki",
+      "usage": "{used} z {limit} skrzynek",
+      "usageUnlimited": "{used, plural, one {# skrzynka} few {# skrzynki} many {# skrzynek} other {# skrzynki}}, bez limitu",
+      "howTitle": "Jak to działa",
+      "how": {
+        "connect": {
+          "title": "Połącz skrzynkę",
+          "body": "Zaloguj się przez Google i zezwól Threadwise na odczyt i wysyłanie poczty z tego adresu."
+        },
+        "inbox": {
+          "title": "Poczta trafia do skrzynki odbiorczej",
+          "body": "Nowa poczta jest pobierana co minutę. Każdy wątek e-mailowy staje się jedną rozmową, a każda skrzynka ma własną skrzynkę odbiorczą."
+        },
+        "reply": {
+          "title": "Odpowiadaj ze skrzynki odbiorczej",
+          "body": "Twoja odpowiedź wychodzi ze skrzynki w tym samym wątku, razem z Cc i Bcc, jeśli je dodasz."
+        },
+        "limit": {
+          "title": "Liczba skrzynek zależy od planu",
+          "body": "Twój plan określa, ile skrzynek możesz połączyć. E-maile nie wliczają się do limitu wiadomości."
+        }
+      },
+      "connectedTitle": "Połączone skrzynki",
+      "total": "{count, plural, one {# skrzynka} few {# skrzynki} many {# skrzynek} other {# skrzynki}}",
+      "empty": "Nie połączono jeszcze żadnej skrzynki. Połącz Gmail poniżej, aby zacząć odbierać e-maile w skrzynce odbiorczej.",
+      "addTitle": "Dodaj skrzynkę",
+      "providers": {
+        "google": {
+          "name": "Gmail / Google Workspace",
+          "hint": "Zaloguj się na konto Google, do którego należy skrzynka, na przykład support@yourcompany.com."
+        },
+        "imap": {
+          "name": "Inna poczta (IMAP / SMTP)",
+          "hint": "Dowolny inny dostawca poczty z nazwą użytkownika i hasłem."
+        },
+        "microsoft": {
+          "name": "Microsoft 365 / Outlook",
+          "hint": "Zaloguj się na konto służbowe lub szkolne Microsoft."
+        }
+      },
+      "connectGmail": "Połącz Gmail",
+      "soon": "Wkrótce",
+      "notReady": "Logowanie przez Google nie zostało jeszcze skonfigurowane dla tej platformy. Poproś administratora platformy o dodanie danych uwierzytelniających Google.",
+      "limitReached": "Wykorzystano wszystkie {limit, plural, one {# skrzynkę} few {# skrzynki} many {# skrzynek} other {# skrzynki}} dozwolone w Twoim planie. Usuń skrzynkę lub poproś administratora o zmianę planu na wyższy.",
+      "noPermission": "Możesz zobaczyć skrzynki, ale połączyć nową mogą tylko osoby z uprawnieniami do zarządzania nimi.",
+      "connectFailed": "Nie udało się rozpocząć logowania przez Google. Spróbuj ponownie."
+    },
+    "card": {
+      "status": {
+        "connected": "Połączono",
+        "needs_reauth": "Wymaga ponownego połączenia",
+        "error": "Błąd",
+        "disconnected": "Rozłączono"
+      },
+      "sendsAs": "Odpowiedzi wychodzą jako",
+      "displayName": "Nazwa wyświetlana",
+      "edit": "Edytuj",
+      "save": "Zapisz",
+      "cancel": "Anuluj",
+      "renamed": "Zapisano nazwę wyświetlaną.",
+      "needsReauthHint": "Google nie pozwala już odczytywać tej skrzynki. Połącz ją ponownie, aby znów odbierać i wysyłać pocztę.",
+      "lastError": "Ostatni problem: {error}",
+      "lastSynced": "Ostatnia synchronizacja",
+      "neverSynced": "Jeszcze nie zsynchronizowano",
+      "conversations": "Rozmowy",
+      "openInbox": "Otwórz w skrzynce odbiorczej",
+      "sync": "Synchronizuj teraz",
+      "syncStarted": "Synchronizacja rozpoczęta. Nowa poczta za chwilę pojawi się w skrzynce odbiorczej.",
+      "reconnect": "Połącz ponownie",
+      "remove": "Usuń",
+      "removeTitle": "Usuń skrzynkę",
+      "removeConfirm": "Usunąć {address}? Jej rozmowy pozostaną w skrzynce odbiorczej jako historia tylko do odczytu, a nowa poczta nie będzie z niej odbierana ani wysyłana. Ten sam adres możesz połączyć ponownie później.",
+      "removed": "Skrzynka została usunięta.",
+      "failed": "Nie udało się zaktualizować skrzynki. Spróbuj ponownie."
+    },
+    "outcome": {
+      "connected": "Skrzynka połączona. Poczta z ostatnich 7 dni jest pobierana do skrzynki odbiorczej.",
+      "denied": "Logowanie przez Google zostało anulowane, więc nic nie zostało połączone.",
+      "missing_scope": "Google nie udzieliło dostępu do odczytu i wysyłania poczty. Połącz ponownie i zaznacz wszystkie uprawnienia na ekranie Google.",
+      "limit": "Osiągnięto limit skrzynek w Twoim planie, więc ta skrzynka nie została połączona.",
+      "not_configured": "Logowanie przez Google nie zostało jeszcze skonfigurowane dla tej platformy. Zapytaj administratora platformy.",
+      "wrong_account": "Zalogowano się na inne konto Google niż skrzynka, którą łączysz ponownie. Zaloguj się na ten sam adres.",
+      "failed": "Podczas łączenia skrzynki coś poszło nie tak. Spróbuj ponownie."
+    },
+    "errors": {
+      "notConfigured": "Logowanie przez Google nie zostało jeszcze skonfigurowane dla tej platformy. Zapytaj administratora platformy.",
+      "limit": "Osiągnięto limit skrzynek w Twoim planie.",
+      "unavailable": "Ta skrzynka jest rozłączona lub najpierw trzeba ją połączyć ponownie.",
+      "sendRefused": "Google odmówiło wysłania tego e-maila. Sprawdź adresy i rozmiar, a następnie spróbuj ponownie.",
+      "wrongAccount": "To inne konto Google niż to, do którego należy skrzynka. Zaloguj się na ten sam adres.",
+      "locked": "Dodatek e-mail nie jest częścią Twojego planu.",
+      "changed": "Ta skrzynka została zmieniona w innym miejscu. Lista została wczytana ponownie, spróbuj jeszcze raz."
+    },
+    "guide": {
+      "title": "Przewodnik konfiguracji",
+      "google": {
+        "title": "Połącz Gmail lub Google Workspace",
+        "p1": "Wybierz Połącz Gmail i zaloguj się na konto, do którego należy skrzynka, na przykład wspólny adres support@ lub sales@.",
+        "p2": "Na ekranie Google zezwól na odczyt i wysyłanie poczty. Bez obu uprawnień poczta nie może być odbierana ani wysyłana.",
+        "p3": "Zostaniesz przeniesiony z powrotem tutaj, a poczta z pierwszych 7 dni zostanie pobrana do skrzynki odbiorczej bez powiadamiania nikogo.",
+        "p4": "Dodawaj kolejne skrzynki w ten sam sposób, do liczby dozwolonej w Twoim planie. Każda pojawi się jako osobna skrzynka odbiorcza."
+      },
+      "consent": {
+        "title": "Co odczytujemy i wysyłamy",
+        "p1": "Odczytujemy pocztę z Twojej skrzynki odbiorczej, aby wyświetlić ją w skrzynce zespołu. Spam, kosz i wersje robocze są pomijane.",
+        "p2": "Poczta wysłana przez nas samych z Twojego konta w innym miejscu nie jest kopiowana do skrzynki odbiorczej.",
+        "p3": "Automatyczne odpowiedzi, odbicia i poczta z list dyskusyjnych są zapisywane i oznaczane jako Automatyczne.",
+        "p4": "Usunięcie skrzynki wstrzymuje odczyt i wysyłanie. Jej dotychczasowe rozmowy pozostają jako historia tylko do odczytu."
+      },
+      "trouble": {
+        "title": "Jeśli coś wygląda nieprawidłowo",
+        "p1": "Wymaga ponownego połączenia oznacza, że Google cofnęło dostęp lub wygasł. Wybierz Połącz ponownie i zaloguj się na ten sam adres.",
+        "p2": "Błąd pokazuje ostatni problem. Wybierz Synchronizuj teraz, aby spróbować ponownie; jeśli problem się powtarza, połącz skrzynkę ponownie.",
+        "p3": "Opcja łączenia jest wyłączona, gdy platforma nie ma skonfigurowanego logowania przez Google lub osiągnięto limit skrzynek w Twoim planie.",
+        "p4": "Obrazy w e-mailu pozostają ukryte, dopóki nie wybierzesz Załaduj obrazy w rozmowie."
+      }
+    },
+    "thread": {
+      "noSubject": "(brak tematu)",
+      "automated": "Automatyczna",
+      "from": "Od",
+      "to": "Do",
+      "cc": "Cc",
+      "date": "Data",
+      "imagesBlocked": "Obrazy z internetu są ukryte.",
+      "loadImages": "Załaduj obrazy",
+      "frameTitle": "E-mail: {subject}",
+      "truncated": "Ten e-mail był długi, więc wyświetlono tylko jego początek.",
+      "noBody": "Ten e-mail nie zawiera tekstu.",
+      "attachments": "{count, plural, one {# załącznik} few {# załączniki} many {# załączników} other {# załącznika}}",
+      "tooLarge": "zbyt duży, aby go zachować ({size})",
+      "download": "Pobierz {name} ({size})"
+    },
+    "composer": {
+      "toggle": "Cc, Bcc i temat",
+      "cc": "Cc",
+      "bcc": "Bcc",
+      "subject": "Temat",
+      "subjectPlaceholder": "Temat",
+      "addressesPlaceholder": "name@example.com, other@example.com",
+      "problem": {
+        "ccInvalid": "Te adresy w polu Cc są nieprawidłowe: {list}",
+        "bccInvalid": "Te adresy w polu Bcc są nieprawidłowe: {list}",
+        "ccTooMany": "Pole Cc przyjmuje najwyżej 20 adresów.",
+        "bccTooMany": "Pole Bcc przyjmuje najwyżej 20 adresów.",
+        "subjectTooLong": "Temat może mieć co najwyżej 998 znaków."
+      }
+    },
+    "inbox": {
+      "group": "E-mail"
+    }
+  }
+}

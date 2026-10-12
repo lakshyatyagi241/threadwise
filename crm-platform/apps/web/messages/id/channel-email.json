@@ -1,0 +1,169 @@
+{
+  "email": {
+    "common": {
+      "dismiss": "Tutup"
+    },
+    "hub": {
+      "kicker": "Kanal",
+      "title": "Email",
+      "titleAccent": "kotak surat",
+      "intro": "Hubungkan kotak surat Gmail atau Google Workspace Anda. Email pelanggan masuk ke inbox tim, satu percakapan untuk setiap utas email, dan balasan Anda dikirim dari alamat yang sama.",
+      "inbox": "Buka inbox",
+      "channels": "Kanal",
+      "loadError": "Kotak surat Anda tidak dapat dimuat. Coba lagi sebentar lagi.",
+      "cardCaption": "Gmail · Google Workspace",
+      "connectedCount": "{count, plural, other {# kotak surat terhubung}}",
+      "notConnected": "Belum terhubung",
+      "usageLabel": "Kotak surat terpakai",
+      "usage": "{used} dari {limit} kotak surat",
+      "usageUnlimited": "{used, plural, other {# kotak surat}}, tanpa batas",
+      "howTitle": "Cara kerjanya",
+      "how": {
+        "connect": {
+          "title": "Hubungkan kotak surat",
+          "body": "Masuk dengan Google dan izinkan Threadwise membaca serta mengirim email untuk alamat tersebut."
+        },
+        "inbox": {
+          "title": "Email masuk ke inbox",
+          "body": "Email baru diambil setiap menit. Setiap utas email menjadi satu percakapan, dan setiap kotak surat memiliki inbox sendiri."
+        },
+        "reply": {
+          "title": "Balas dari inbox",
+          "body": "Balasan Anda dikirim dari kotak surat pada utas yang sama, dengan Cc dan Bcc jika Anda menambahkannya."
+        },
+        "limit": {
+          "title": "Kotak surat mengikuti paket Anda",
+          "body": "Paket Anda menentukan jumlah kotak surat yang dapat dihubungkan. Email tidak dihitung dalam kuota pesan Anda."
+        }
+      },
+      "connectedTitle": "Kotak surat terhubung",
+      "total": "{count, plural, other {# kotak surat}}",
+      "empty": "Belum ada kotak surat yang terhubung. Hubungkan Gmail di bawah untuk mulai menerima email di inbox.",
+      "addTitle": "Tambah kotak surat",
+      "providers": {
+        "google": {
+          "name": "Gmail / Google Workspace",
+          "hint": "Masuk dengan akun Google pemilik kotak surat, misalnya support@yourcompany.com."
+        },
+        "imap": {
+          "name": "Email lain (IMAP / SMTP)",
+          "hint": "Penyedia email lain mana pun dengan nama pengguna dan kata sandi."
+        },
+        "microsoft": {
+          "name": "Microsoft 365 / Outlook",
+          "hint": "Masuk dengan akun kerja atau sekolah Microsoft."
+        }
+      },
+      "connectGmail": "Hubungkan Gmail",
+      "soon": "Segera hadir",
+      "notReady": "Login Google belum disiapkan untuk platform ini. Minta administrator platform Anda untuk menambahkan kredensial Google.",
+      "limitReached": "Anda telah menggunakan semua {limit, plural, other {# kotak surat}} yang diizinkan paket Anda. Hapus satu kotak surat, atau minta administrator Anda untuk meningkatkan paket.",
+      "noPermission": "Anda dapat melihat kotak surat, tetapi hanya orang yang diberi izin mengelolanya yang dapat menghubungkan kotak surat.",
+      "connectFailed": "Login Google tidak dapat dimulai. Coba lagi."
+    },
+    "card": {
+      "status": {
+        "connected": "Terhubung",
+        "needs_reauth": "Perlu dihubungkan ulang",
+        "error": "Error",
+        "disconnected": "Terputus"
+      },
+      "sendsAs": "Balasan dikirim sebagai",
+      "displayName": "Nama tampilan",
+      "edit": "Ubah",
+      "save": "Simpan",
+      "cancel": "Batal",
+      "renamed": "Nama tampilan disimpan.",
+      "needsReauthHint": "Google tidak lagi mengizinkan kami membaca kotak surat ini. Hubungkan ulang untuk menerima dan mengirim email kembali.",
+      "lastError": "Masalah terakhir: {error}",
+      "lastSynced": "Terakhir disinkronkan",
+      "neverSynced": "Belum disinkronkan",
+      "conversations": "Percakapan",
+      "openInbox": "Buka di inbox",
+      "sync": "Sinkronkan sekarang",
+      "syncStarted": "Sinkronisasi dimulai. Email baru akan muncul di inbox sebentar lagi.",
+      "reconnect": "Hubungkan ulang",
+      "remove": "Hapus",
+      "removeTitle": "Hapus kotak surat",
+      "removeConfirm": "Hapus {address}? Percakapannya tetap ada di inbox sebagai riwayat baca-saja, dan tidak ada email baru yang diterima atau dikirim dari alamat ini. Anda dapat menghubungkan alamat yang sama lagi nanti.",
+      "removed": "Kotak surat dihapus.",
+      "failed": "Kotak surat tidak dapat diperbarui. Coba lagi."
+    },
+    "outcome": {
+      "connected": "Kotak surat terhubung. Email dari 7 hari terakhir sedang diambil ke inbox.",
+      "denied": "Login Google dibatalkan, sehingga tidak ada yang terhubung.",
+      "missing_scope": "Google tidak memberikan akses untuk membaca dan mengirim email. Hubungkan lagi dan centang semua izin di layar Google.",
+      "limit": "Batas kotak surat paket Anda telah tercapai, sehingga kotak surat ini tidak terhubung.",
+      "not_configured": "Login Google belum disiapkan untuk platform ini. Hubungi administrator platform Anda.",
+      "wrong_account": "Anda masuk dengan akun Google yang berbeda dari kotak surat yang sedang dihubungkan ulang. Masuk dengan alamat yang sama.",
+      "failed": "Terjadi kesalahan saat menghubungkan kotak surat. Coba lagi."
+    },
+    "errors": {
+      "notConfigured": "Login Google belum disiapkan untuk platform ini. Hubungi administrator platform Anda.",
+      "limit": "Batas kotak surat paket Anda telah tercapai.",
+      "unavailable": "Kotak surat ini terputus atau perlu dihubungkan ulang terlebih dahulu.",
+      "sendRefused": "Google menolak mengirim email ini. Periksa alamat dan ukurannya, lalu coba lagi.",
+      "wrongAccount": "Itu akun Google yang berbeda dari kotak surat ini. Masuk dengan alamat yang sama.",
+      "locked": "Add-on email tidak termasuk dalam paket Anda.",
+      "changed": "Kotak surat ini diubah di tempat lain. Daftar telah dimuat ulang, coba lagi."
+    },
+    "guide": {
+      "title": "Panduan penyiapan",
+      "google": {
+        "title": "Hubungkan Gmail atau Google Workspace",
+        "p1": "Pilih Hubungkan Gmail dan masuk dengan akun pemilik kotak surat, seperti alamat bersama support@ atau sales@.",
+        "p2": "Di layar Google, izinkan membaca dan mengirim email. Tanpa keduanya, email tidak dapat diterima atau dikirim.",
+        "p3": "Anda akan dikembalikan ke sini dan email 7 hari pertama diambil ke inbox tanpa memberi notifikasi kepada siapa pun.",
+        "p4": "Tambahkan kotak surat lain dengan cara yang sama, hingga jumlah yang diizinkan paket Anda. Masing-masing tampil sebagai inbox tersendiri."
+      },
+      "consent": {
+        "title": "Yang kami baca dan kirim",
+        "p1": "Kami membaca email di inbox Anda untuk menampilkannya di inbox tim. Spam, sampah, dan draf dilewati.",
+        "p2": "Email yang kami kirim sendiri dari akun Anda di tempat lain tidak disalin ke inbox.",
+        "p3": "Balasan otomatis, email pentalan, dan email milis disimpan dan ditandai Otomatis.",
+        "p4": "Menghapus kotak surat menghentikan pembacaan dan pengiriman. Percakapan sebelumnya tetap ada sebagai riwayat baca-saja."
+      },
+      "trouble": {
+        "title": "Jika ada yang tampak salah",
+        "p1": "Perlu dihubungkan ulang berarti Google mencabut atau akses telah kedaluwarsa. Pilih Hubungkan ulang dan masuk dengan alamat yang sama.",
+        "p2": "Error menampilkan masalah terakhir. Pilih Sinkronkan sekarang untuk mencoba lagi; jika terus gagal, hubungkan ulang kotak surat.",
+        "p3": "Hubungkan dinonaktifkan jika platform belum menyiapkan login Google atau batas kotak surat paket Anda telah tercapai.",
+        "p4": "Gambar dalam email tetap disembunyikan sampai Anda memilih Muat gambar di percakapan."
+      }
+    },
+    "thread": {
+      "noSubject": "(tanpa subjek)",
+      "automated": "Otomatis",
+      "from": "Dari",
+      "to": "Kepada",
+      "cc": "Cc",
+      "date": "Tanggal",
+      "imagesBlocked": "Gambar dari internet disembunyikan.",
+      "loadImages": "Muat gambar",
+      "frameTitle": "Email: {subject}",
+      "truncated": "Email ini panjang, sehingga hanya bagian pertama yang ditampilkan.",
+      "noBody": "Email ini tidak memiliki teks.",
+      "attachments": "{count, plural, other {# lampiran}}",
+      "tooLarge": "terlalu besar untuk disimpan ({size})",
+      "download": "Unduh {name} ({size})"
+    },
+    "composer": {
+      "toggle": "Cc, Bcc, dan subjek",
+      "cc": "Cc",
+      "bcc": "Bcc",
+      "subject": "Subjek",
+      "subjectPlaceholder": "Subjek",
+      "addressesPlaceholder": "name@example.com, other@example.com",
+      "problem": {
+        "ccInvalid": "Alamat Cc ini tidak valid: {list}",
+        "bccInvalid": "Alamat Bcc ini tidak valid: {list}",
+        "ccTooMany": "Cc maksimal 20 alamat.",
+        "bccTooMany": "Bcc maksimal 20 alamat.",
+        "subjectTooLong": "Subjek maksimal 998 karakter."
+      }
+    },
+    "inbox": {
+      "group": "Email"
+    }
+  }
+}

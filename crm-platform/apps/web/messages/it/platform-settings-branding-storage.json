@@ -17,6 +17,7 @@
       "whatsapp": "WhatsApp (WABA)",
       "campaigns": "Campagne",
       "googleCalendar": "Google Calendar",
+      "googleMail": "Gmail",
       "flowBuilder": "Flow builder"
     },
     "hub": {
@@ -930,6 +931,33 @@
           }
         }
       },
+      "googleMail": {
+        "title": "E-mail Gmail",
+        "description": "Il client OAuth di Google tramite cui ogni spazio di lavoro collega le sue caselle.",
+        "sections": {
+          "oauth": {
+            "title": "Client OAuth di Google"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Consenti agli spazi di lavoro di collegare Gmail",
+            "hint": "Disattivato: nessuno spazio di lavoro può collegarsi e nessuna e-mail viene letta o inviata. Le caselle già collegate vengono mantenute."
+          },
+          "clientId": {
+            "label": "ID client",
+            "hint": "Da Google Cloud, Credenziali, ID client OAuth 2.0 (applicazione web). Se vuoto, si usa GOOGLE_MAIL_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Segreto client",
+            "hint": "Salvato cifrato e non più mostrato. Se vuoto, resta quello salvato; GOOGLE_MAIL_CLIENT_SECRET è il valore di riserva."
+          },
+          "redirectUri": {
+            "label": "Sostituzione del redirect URI",
+            "hint": "Lascia vuoto per usare l’indirizzo sopra. Deve corrispondere esattamente a un redirect URI autorizzato del client."
+          }
+        }
+      },
       "flowBuilder": {
         "title": "Flow builder",
         "description": "Quali flow builder vengono offerti ai workspace.",
@@ -1062,6 +1090,11 @@
         "title": "Google Calendar",
         "description": "Il client OAuth di Google che i workspace usano per collegare il calendario per prenotazioni e orari occupati.",
         "tags": "Google / OAuth / Calendar"
+      },
+      "googleMail": {
+        "title": "E-mail Gmail",
+        "description": "Il client OAuth di Google che gli spazi di lavoro usano per collegare le loro caselle Gmail.",
+        "tags": "Google / OAuth / Gmail"
       },
       "flowBuilder": {
         "title": "Flow builder",
@@ -1644,6 +1677,38 @@
             "workspaces": {
               "title": "4. Collegamento dei workspace",
               "body": "Incolla qui ID e segreto del client e salva. Gli admin si collegano poi da Appuntamenti, Impostazioni, Google Calendar."
+            }
+          }
+        }
+      },
+      "googleMail": {
+        "title": "E-mail Gmail",
+        "eyebrow": "Admin - E-mail",
+        "description": "Un solo client OAuth di Google Cloud per tutta la piattaforma, separato da Google Calendar. Ogni spazio di lavoro collega le proprie caselle da E-mail e non vede mai ID client e segreto.",
+        "sections": {
+          "oauth": {
+            "title": "Client OAuth di Google",
+            "description": "Senza ID client e segreto, gli spazi di lavoro non possono collegare una casella."
+          }
+        },
+        "guide": {
+          "title": "Configuralo in Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. Progetto e API",
+              "body": "In Google Cloud Console crea un progetto e attiva l'API Gmail."
+            },
+            "redirect": {
+              "title": "2. Client OAuth",
+              "body": "Crea un ID client OAuth 2.0 di tipo Applicazione web e aggiungi il redirect URI mostrato in questa pagina tra i Redirect URI autorizzati."
+            },
+            "consent": {
+              "title": "3. Schermata di consenso",
+              "body": "Aggiungi gli ambiti openid, email, gmail.readonly e gmail.send. Gli ambiti Gmail sono limitati: Google deve verificare l'app per l'uso generale e, in modalità Test, l'autorizzazione termina dopo 7 giorni."
+            },
+            "workspaces": {
+              "title": "4. Collegamento dei workspace",
+              "body": "Incolla qui ID client e segreto e salva. Poi gli amministratori collegano da E-mail."
             }
           }
         }

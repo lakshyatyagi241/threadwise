@@ -17,6 +17,7 @@
       "whatsapp": "WhatsApp (WABA)",
       "campaigns": "Kampanyalar",
       "googleCalendar": "Google Takvim",
+      "googleMail": "Gmail",
       "flowBuilder": "Akış oluşturucu"
     },
     "hub": {
@@ -930,6 +931,33 @@
           }
         }
       },
+      "googleMail": {
+        "title": "Gmail e-posta",
+        "description": "Her çalışma alanının posta kutularını bağladığı Google OAuth istemcisi.",
+        "sections": {
+          "oauth": {
+            "title": "Google OAuth istemcisi"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Çalışma alanlarının Gmail bağlamasına izin ver",
+            "hint": "Kapalı: hiçbir çalışma alanı bağlanamaz ve e-posta okunmaz ya da gönderilmez. Zaten bağlı posta kutuları korunur."
+          },
+          "clientId": {
+            "label": "İstemci kimliği",
+            "hint": "Google Cloud, Kimlik bilgileri, OAuth 2.0 İstemci Kimliği (Web uygulaması). Boş bırakılırsa GOOGLE_MAIL_CLIENT_ID kullanılır."
+          },
+          "clientSecret": {
+            "label": "İstemci gizli anahtarı",
+            "hint": "Şifreli olarak saklanır, bir daha gösterilmez. Boş bırakılırsa kayıtlı olan korunur; GOOGLE_MAIL_CLIENT_SECRET yedek olarak kullanılır."
+          },
+          "redirectUri": {
+            "label": "Yönlendirme URI geçersiz kılma",
+            "hint": "Yukarıdaki adresi kullanmak için boş bırakın. İstemcideki Yetkili yönlendirme URI'lerinden biriyle birebir eşleşmelidir."
+          }
+        }
+      },
       "flowBuilder": {
         "title": "Akış oluşturucu",
         "description": "Çalışma alanlarına sunulan akış oluşturucular.",
@@ -1062,6 +1090,11 @@
         "title": "Google Takvim",
         "description": "Çalışma alanlarının randevu ve meşgul saatler için takvimlerini bağlamak amacıyla kullandığı Google OAuth istemcisi.",
         "tags": "Google / OAuth / Calendar"
+      },
+      "googleMail": {
+        "title": "Gmail e-posta",
+        "description": "Çalışma alanlarının Gmail posta kutularını bağlamak için kullandığı Google OAuth istemcisi.",
+        "tags": "Google / OAuth / Gmail"
       },
       "flowBuilder": {
         "title": "Akış oluşturucu",
@@ -1644,6 +1677,38 @@
             "workspaces": {
               "title": "4. Çalışma alanları bağlanır",
               "body": "İstemci kimliğini ve gizli anahtarı buraya yapıştırıp kaydedin. Yöneticiler daha sonra Randevular, Ayarlar, Google Takvim bölümünden bağlanır."
+            }
+          }
+        }
+      },
+      "googleMail": {
+        "title": "Gmail e-posta",
+        "eyebrow": "Yönetici - E-posta",
+        "description": "Tüm platform için tek bir Google Cloud OAuth istemcisi; Google Takvim'den ayrıdır. Her çalışma alanı kendi posta kutularını E-posta bölümünden bağlar ve istemci kimliğini ya da gizli anahtarı hiç görmez.",
+        "sections": {
+          "oauth": {
+            "title": "Google OAuth istemcisi",
+            "description": "İstemci kimliği ve gizli anahtar olmadan çalışma alanları posta kutusu bağlayamaz."
+          }
+        },
+        "guide": {
+          "title": "Google Cloud'da kurun",
+          "items": {
+            "project": {
+              "title": "1. Proje ve API",
+              "body": "Google Cloud Console'da bir proje oluşturun ve Gmail API'yi etkinleştirin."
+            },
+            "redirect": {
+              "title": "2. OAuth istemcisi",
+              "body": "Web uygulaması türünde bir OAuth 2.0 İstemci Kimliği oluşturun ve bu sayfada gösterilen yönlendirme URI'sini Yetkili yönlendirme URI'leri altına ekleyin."
+            },
+            "consent": {
+              "title": "3. Onay ekranı",
+              "body": "openid, email, gmail.readonly ve gmail.send kapsamlarını ekleyin. Gmail kapsamları kısıtlıdır: genel kullanım için Google'ın uygulamayı doğrulaması gerekir, Test modunda ise izin 7 gün sonra sona erer."
+            },
+            "workspaces": {
+              "title": "4. Çalışma alanları bağlanır",
+              "body": "İstemci kimliğini ve gizli anahtarı buraya yapıştırıp kaydedin. Ardından yöneticiler E-posta bölümünden bağlanır."
             }
           }
         }

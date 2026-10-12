@@ -1419,7 +1419,8 @@
             "extra_channels": "Kanal Telegram, Facebook, dan Instagram.",
             "form_builder": "Formulir web yang di-host dan disematkan yang membuat kontak di CRM. Aplikasi Formulir berbayar memegang sakelar ini.",
             "waba_groups": "Buat dan kelola grup WhatsApp dari nomor Cloud API: tautan undangan, permintaan bergabung, anggota. Nomor harus berupa Official Business Account.",
-            "sms": "SMS khusus kirim lewat Twilio atau MSG91: hubungkan pengirim, kirim siaran dan kampanye SMS."
+            "sms": "SMS khusus kirim lewat Twilio atau MSG91: hubungkan pengirim, kirim siaran dan kampanye SMS.",
+            "email_channel": "Hubungkan kotak surat Gmail dan Google Workspace ke kotak masuk tim. Aplikasi Email berbayar mengendalikan sakelar ini."
           },
           "units": {
             "days": "Hari",
@@ -1561,7 +1562,8 @@
             "forms": "Formulir web",
             "form_submissions_monthly": "Pengiriman formulir per bulan",
             "ai_form_generations_monthly": "Pembuatan oleh pembuat formulir AI per bulan",
-            "sms_monthly": "SMS per bulan"
+            "sms_monthly": "SMS per bulan",
+            "email_mailboxes": "Kotak surat email"
           },
           "featureGroups": {
             "messaging": "Pesan",
@@ -1599,7 +1601,8 @@
             "extra_channels": "Kanal Telegram, Facebook, dan Instagram",
             "form_builder": "Formulir (pembuat formulir web)",
             "waba_groups": "Grup WhatsApp (Cloud API)",
-            "sms": "Kanal SMS"
+            "sms": "Kanal SMS",
+            "email_channel": "Kanal email (Gmail)"
           },
           "problems": {
             "required": "Kolom ini wajib diisi.",
@@ -1652,7 +1655,8 @@
             "forms": "Formulir web aktif (aplikasi Formulir). Mengarsipkan formulir membebaskan tempatnya. 0 = tanpa batas.",
             "form_submissions_monthly": "Pengiriman formulir yang diterima dalam bulan kalender, tidak termasuk spam. Melebihi batas, pengiriman tetap disimpan untuk ditinjau, tidak pernah dibuang. 0 = tanpa batas.",
             "ai_form_generations_monthly": "Pembuatan oleh pembuat formulir AI dalam bulan kalender, termasuk percobaan ulang perbaikan. 0 = tanpa batas.",
-            "sms_monthly": "Pesan SMS keluar yang dikirim dalam bulan kalender. 0 = tanpa batas."
+            "sms_monthly": "Pesan SMS keluar yang dikirim dalam bulan kalender. 0 = tanpa batas.",
+            "email_mailboxes": "Kotak surat Gmail yang terhubung (yang diputus membebaskan tempatnya). 0 = tanpa batas."
           }
         }
       },

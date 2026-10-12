@@ -1,0 +1,169 @@
+{
+  "email": {
+    "common": {
+      "dismiss": "Đóng"
+    },
+    "hub": {
+      "kicker": "Kênh",
+      "title": "Email",
+      "titleAccent": "hộp thư",
+      "intro": "Kết nối hộp thư Gmail hoặc Google Workspace của bạn. Email của khách hàng sẽ đến hộp thư đến của nhóm, mỗi chuỗi email là một cuộc trò chuyện, và phản hồi của bạn được gửi đi từ cùng địa chỉ đó.",
+      "inbox": "Mở hộp thư đến",
+      "channels": "Kênh",
+      "loadError": "Không thể tải các hộp thư của bạn. Hãy thử lại sau giây lát.",
+      "cardCaption": "Gmail · Google Workspace",
+      "connectedCount": "{count, plural, other {Đã kết nối # hộp thư}}",
+      "notConnected": "Chưa kết nối",
+      "usageLabel": "Hộp thư đã dùng",
+      "usage": "{used} trên {limit} hộp thư",
+      "usageUnlimited": "{used, plural, other {# hộp thư}}, không giới hạn",
+      "howTitle": "Cách hoạt động",
+      "how": {
+        "connect": {
+          "title": "Kết nối hộp thư",
+          "body": "Đăng nhập bằng Google và cho phép Threadwise đọc và gửi email cho địa chỉ đó."
+        },
+        "inbox": {
+          "title": "Email đến hộp thư đến",
+          "body": "Email mới được lấy về mỗi phút. Mỗi chuỗi email trở thành một cuộc trò chuyện, và mỗi hộp thư có hộp thư đến riêng."
+        },
+        "reply": {
+          "title": "Trả lời từ hộp thư đến",
+          "body": "Phản hồi của bạn được gửi từ hộp thư trong cùng chuỗi email, kèm Cc và Bcc nếu bạn thêm."
+        },
+        "limit": {
+          "title": "Số hộp thư theo gói của bạn",
+          "body": "Gói của bạn quy định số hộp thư có thể kết nối. Email không được tính vào hạn mức tin nhắn."
+        }
+      },
+      "connectedTitle": "Hộp thư đã kết nối",
+      "total": "{count, plural, other {# hộp thư}}",
+      "empty": "Chưa có hộp thư nào được kết nối. Hãy kết nối Gmail bên dưới để bắt đầu nhận email trong hộp thư đến.",
+      "addTitle": "Thêm hộp thư",
+      "providers": {
+        "google": {
+          "name": "Gmail / Google Workspace",
+          "hint": "Đăng nhập bằng tài khoản Google sở hữu hộp thư, ví dụ support@yourcompany.com."
+        },
+        "imap": {
+          "name": "Email khác (IMAP / SMTP)",
+          "hint": "Bất kỳ nhà cung cấp email nào khác sử dụng tên người dùng và mật khẩu."
+        },
+        "microsoft": {
+          "name": "Microsoft 365 / Outlook",
+          "hint": "Đăng nhập bằng tài khoản cơ quan hoặc trường học của Microsoft."
+        }
+      },
+      "connectGmail": "Kết nối Gmail",
+      "soon": "Sắp ra mắt",
+      "notReady": "Đăng nhập Google chưa được thiết lập cho nền tảng này. Hãy nhờ quản trị viên nền tảng thêm thông tin xác thực Google.",
+      "limitReached": "Bạn đã dùng hết {limit, plural, other {# hộp thư}} mà gói của bạn cho phép. Hãy xóa một hộp thư hoặc nhờ quản trị viên nâng cấp gói.",
+      "noPermission": "Bạn có thể xem các hộp thư, nhưng chỉ những người được phép quản lý mới có thể kết nối hộp thư.",
+      "connectFailed": "Không thể bắt đầu đăng nhập Google. Hãy thử lại."
+    },
+    "card": {
+      "status": {
+        "connected": "Đã kết nối",
+        "needs_reauth": "Cần kết nối lại",
+        "error": "Lỗi",
+        "disconnected": "Đã ngắt kết nối"
+      },
+      "sendsAs": "Phản hồi được gửi với tư cách",
+      "displayName": "Tên hiển thị",
+      "edit": "Sửa",
+      "save": "Lưu",
+      "cancel": "Hủy",
+      "renamed": "Đã lưu tên hiển thị.",
+      "needsReauthHint": "Google không còn cho phép chúng tôi đọc hộp thư này. Hãy kết nối lại để nhận và gửi email trở lại.",
+      "lastError": "Sự cố gần nhất: {error}",
+      "lastSynced": "Đồng bộ lần cuối",
+      "neverSynced": "Chưa đồng bộ",
+      "conversations": "Cuộc trò chuyện",
+      "openInbox": "Mở trong hộp thư đến",
+      "sync": "Đồng bộ ngay",
+      "syncStarted": "Đã bắt đầu đồng bộ. Email mới sẽ xuất hiện trong hộp thư đến sau giây lát.",
+      "reconnect": "Kết nối lại",
+      "remove": "Xóa",
+      "removeTitle": "Xóa hộp thư",
+      "removeConfirm": "Xóa {address}? Các cuộc trò chuyện của hộp thư này vẫn ở trong hộp thư đến dưới dạng lịch sử chỉ đọc, và sẽ không nhận hay gửi email mới từ địa chỉ này. Bạn có thể kết nối lại cùng địa chỉ sau.",
+      "removed": "Đã xóa hộp thư.",
+      "failed": "Không thể cập nhật hộp thư. Hãy thử lại."
+    },
+    "outcome": {
+      "connected": "Đã kết nối hộp thư. Email trong 7 ngày gần nhất đang được lấy về hộp thư đến.",
+      "denied": "Đăng nhập Google đã bị hủy nên chưa có gì được kết nối.",
+      "missing_scope": "Google chưa cấp quyền đọc và gửi email. Hãy kết nối lại và chọn tất cả các quyền trên màn hình Google.",
+      "limit": "Đã đạt giới hạn số hộp thư của gói, nên hộp thư này chưa được kết nối.",
+      "not_configured": "Đăng nhập Google chưa được thiết lập cho nền tảng này. Hãy liên hệ quản trị viên nền tảng.",
+      "wrong_account": "Bạn đã đăng nhập bằng tài khoản Google khác với hộp thư đang được kết nối lại. Hãy đăng nhập bằng đúng địa chỉ đó.",
+      "failed": "Đã xảy ra lỗi khi kết nối hộp thư. Hãy thử lại."
+    },
+    "errors": {
+      "notConfigured": "Đăng nhập Google chưa được thiết lập cho nền tảng này. Hãy liên hệ quản trị viên nền tảng.",
+      "limit": "Đã đạt giới hạn số hộp thư của gói.",
+      "unavailable": "Hộp thư này đã bị ngắt kết nối hoặc cần được kết nối lại trước.",
+      "sendRefused": "Google từ chối gửi email này. Hãy kiểm tra địa chỉ và dung lượng rồi thử lại.",
+      "wrongAccount": "Đó là tài khoản Google khác với hộp thư này. Hãy đăng nhập bằng đúng địa chỉ đó.",
+      "locked": "Tiện ích email không có trong gói của bạn.",
+      "changed": "Hộp thư này đã được thay đổi ở nơi khác. Danh sách đã được tải lại, hãy thử lại."
+    },
+    "guide": {
+      "title": "Hướng dẫn thiết lập",
+      "google": {
+        "title": "Kết nối Gmail hoặc Google Workspace",
+        "p1": "Chọn Kết nối Gmail và đăng nhập bằng tài khoản sở hữu hộp thư, chẳng hạn địa chỉ dùng chung support@ hoặc sales@.",
+        "p2": "Trên màn hình Google, hãy cho phép đọc và gửi email. Thiếu một trong hai thì không thể nhận hoặc gửi email.",
+        "p3": "Bạn sẽ được đưa trở lại đây và email của 7 ngày đầu được lấy về hộp thư đến mà không thông báo cho ai.",
+        "p4": "Thêm các hộp thư khác theo cách tương tự, tối đa theo số lượng gói của bạn cho phép. Mỗi hộp thư hiển thị như một hộp thư đến riêng."
+      },
+      "consent": {
+        "title": "Những gì chúng tôi đọc và gửi",
+        "p1": "Chúng tôi đọc email trong hộp thư đến của bạn để hiển thị trong hộp thư đến của nhóm. Thư rác, thùng rác và thư nháp sẽ bị bỏ qua.",
+        "p2": "Email do chính chúng tôi gửi từ tài khoản của bạn ở nơi khác sẽ không được sao chép vào hộp thư đến.",
+        "p3": "Thư trả lời tự động, thư bị trả lại và thư từ danh sách gửi thư được lưu và đánh dấu là Tự động.",
+        "p4": "Xóa hộp thư sẽ dừng việc đọc và gửi. Các cuộc trò chuyện trước đó vẫn được giữ làm lịch sử chỉ đọc."
+      },
+      "trouble": {
+        "title": "Nếu có điều gì đó bất thường",
+        "p1": "Cần kết nối lại nghĩa là Google đã thu hồi hoặc quyền truy cập đã hết hạn. Hãy chọn Kết nối lại và đăng nhập bằng đúng địa chỉ đó.",
+        "p2": "Lỗi hiển thị sự cố gần nhất. Hãy chọn Đồng bộ ngay để thử lại; nếu vẫn thất bại, hãy kết nối lại hộp thư.",
+        "p3": "Nút Kết nối bị vô hiệu hóa khi nền tảng chưa thiết lập đăng nhập Google hoặc đã đạt giới hạn số hộp thư của gói.",
+        "p4": "Hình ảnh trong email sẽ bị ẩn cho đến khi bạn chọn Tải hình ảnh trong cuộc trò chuyện."
+      }
+    },
+    "thread": {
+      "noSubject": "(không có chủ đề)",
+      "automated": "Tự động",
+      "from": "Từ",
+      "to": "Đến",
+      "cc": "Cc",
+      "date": "Ngày",
+      "imagesBlocked": "Hình ảnh từ internet đã bị ẩn.",
+      "loadImages": "Tải hình ảnh",
+      "frameTitle": "Email: {subject}",
+      "truncated": "Email này dài nên chỉ hiển thị phần đầu.",
+      "noBody": "Email này không có nội dung văn bản.",
+      "attachments": "{count, plural, other {# tệp đính kèm}}",
+      "tooLarge": "quá lớn để lưu ({size})",
+      "download": "Tải xuống {name} ({size})"
+    },
+    "composer": {
+      "toggle": "Cc, Bcc và chủ đề",
+      "cc": "Cc",
+      "bcc": "Bcc",
+      "subject": "Chủ đề",
+      "subjectPlaceholder": "Chủ đề",
+      "addressesPlaceholder": "name@example.com, other@example.com",
+      "problem": {
+        "ccInvalid": "Các địa chỉ Cc này không hợp lệ: {list}",
+        "bccInvalid": "Các địa chỉ Bcc này không hợp lệ: {list}",
+        "ccTooMany": "Cc chỉ nhận tối đa 20 địa chỉ.",
+        "bccTooMany": "Bcc chỉ nhận tối đa 20 địa chỉ.",
+        "subjectTooLong": "Chủ đề dài tối đa 998 ký tự."
+      }
+    },
+    "inbox": {
+      "group": "Email"
+    }
+  }
+}

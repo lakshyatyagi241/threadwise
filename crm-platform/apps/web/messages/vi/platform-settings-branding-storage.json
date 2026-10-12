@@ -17,6 +17,7 @@
       "whatsapp": "WhatsApp (WABA)",
       "campaigns": "Chiến dịch",
       "googleCalendar": "Google Calendar",
+      "googleMail": "Gmail",
       "flowBuilder": "Trình tạo luồng"
     },
     "hub": {
@@ -930,6 +931,33 @@
           }
         }
       },
+      "googleMail": {
+        "title": "Email Gmail",
+        "description": "Ứng dụng khách OAuth của Google mà mỗi không gian làm việc dùng để kết nối hộp thư.",
+        "sections": {
+          "oauth": {
+            "title": "Client OAuth của Google"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Cho phép không gian làm việc kết nối Gmail",
+            "hint": "Tắt: không không gian làm việc nào kết nối được và không có email nào được đọc hay gửi. Các hộp thư đã kết nối vẫn được giữ."
+          },
+          "clientId": {
+            "label": "ID client",
+            "hint": "Lấy từ Google Cloud, Credentials, OAuth 2.0 Client ID (Web application). Để trống sẽ dùng GOOGLE_MAIL_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Khóa bí mật client",
+            "hint": "Được lưu dưới dạng mã hóa và sẽ không hiển thị lại. Để trống sẽ giữ khóa đã lưu; GOOGLE_MAIL_CLIENT_SECRET là phương án dự phòng."
+          },
+          "redirectUri": {
+            "label": "Ghi đè URI chuyển hướng",
+            "hint": "Để trống để dùng địa chỉ ở trên. Địa chỉ này phải khớp chính xác với một Authorised redirect URI của client."
+          }
+        }
+      },
       "flowBuilder": {
         "title": "Trình tạo luồng",
         "description": "Các trình tạo luồng nào được cung cấp cho không gian làm việc.",
@@ -1062,6 +1090,11 @@
         "title": "Google Calendar",
         "description": "Client OAuth của Google mà không gian làm việc dùng để kết nối lịch cho việc đặt lịch và thời gian bận.",
         "tags": "Google / OAuth / Lịch"
+      },
+      "googleMail": {
+        "title": "Email Gmail",
+        "description": "Ứng dụng khách OAuth của Google mà các không gian làm việc dùng để kết nối hộp thư Gmail.",
+        "tags": "Google / OAuth / Gmail"
       },
       "flowBuilder": {
         "title": "Trình tạo luồng",
@@ -1644,6 +1677,38 @@
             "workspaces": {
               "title": "4. Không gian làm việc kết nối",
               "body": "Dán client id và secret tại đây rồi lưu. Sau đó quản trị viên kết nối từ Lịch hẹn, Cài đặt, Google Calendar."
+            }
+          }
+        }
+      },
+      "googleMail": {
+        "title": "Email Gmail",
+        "eyebrow": "Quản trị - Email",
+        "description": "Một ứng dụng khách OAuth của Google Cloud cho cả nền tảng, tách biệt với Google Calendar. Mỗi không gian làm việc tự kết nối hộp thư của mình từ Email và không bao giờ thấy ID ứng dụng khách hay khóa bí mật.",
+        "sections": {
+          "oauth": {
+            "title": "Client OAuth của Google",
+            "description": "Không có ID ứng dụng khách và khóa bí mật, các không gian làm việc không thể kết nối hộp thư."
+          }
+        },
+        "guide": {
+          "title": "Thiết lập trong Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. Dự án và API",
+              "body": "Trong Google Cloud Console, tạo một dự án và bật Gmail API."
+            },
+            "redirect": {
+              "title": "2. Client OAuth",
+              "body": "Tạo OAuth 2.0 Client ID loại Web application và thêm URI chuyển hướng hiển thị trên trang này vào mục Authorised redirect URIs."
+            },
+            "consent": {
+              "title": "3. Màn hình đồng ý",
+              "body": "Thêm các phạm vi openid, email, gmail.readonly và gmail.send. Phạm vi Gmail bị hạn chế: Google phải xác minh ứng dụng để dùng rộng rãi, và ở chế độ Thử nghiệm, quyền cấp hết hạn sau 7 ngày."
+            },
+            "workspaces": {
+              "title": "4. Không gian làm việc kết nối",
+              "body": "Dán ID ứng dụng khách và khóa bí mật vào đây rồi lưu. Sau đó quản trị viên kết nối từ Email."
             }
           }
         }
