@@ -367,7 +367,8 @@
         "failed": "无法切换工作区，请重试。",
         "notAvailable": "你无法切换到该工作区。",
         "rateLimited": "尝试次数过多，请稍候再试。",
-        "rateLimitedWait": "尝试次数过多，请在 {seconds, plural, other {# 秒}}后重试。"
+        "rateLimitedWait": "尝试次数过多，请在 {seconds, plural, other {# 秒}}后重试。",
+        "unverified": "请先在此工作区验证您的邮箱，才能切换到该工作区。"
       },
       "mfaChallenge": {
         "title": "确认是你本人",
