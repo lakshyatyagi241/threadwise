@@ -153,7 +153,7 @@ describe.each(['en', 'ar'] as const)('plan editor tabs (%s)', (locale) => {
     expect(html).toContain(GONE);
     expect(html).toMatch(/9(\.00|[.,]00)/);
     // The inactive pack is flagged as not on sale.
-    expect(html).toContain('bg-warning/15');
+    expect(html).toContain('bg-warning/5');
   });
 
   it('puts counts and an error dot on the tabs', () => {
