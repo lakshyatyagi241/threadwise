@@ -39,6 +39,15 @@ updates:
       - dependency-name: 'jest-expo'
       - dependency-name: 'react-test-renderer'
       - dependency-name: '@sentry/react-native'
+      # zod 4 is a rewrite: ZodEffects is gone, z.record takes two arguments, error maps and several chained methods changed. The shared
+      # contracts, the API, the web app and the mobile app all build on the zod 3 API (a 4.6.5 bump left @crm/contracts with 154 type
+      # errors). Moving to zod 4 is a planned migration of every schema, not a routine bump: hold the major until then.
+      - dependency-name: 'zod'
+        update-types: ['version-update:semver-major']
+      # https-proxy-agent 9 ships ESM-only types behind `exports`, which the API's `moduleResolution: node` cannot read ("Cannot find
+      # module 'https-proxy-agent'"). Hold the major until the API moves to node16/bundler resolution.
+      - dependency-name: 'https-proxy-agent'
+        update-types: ['version-update:semver-major']
     commit-message:
       prefix: 'chore(deps)'
 
