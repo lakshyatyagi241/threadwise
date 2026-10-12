@@ -70,7 +70,9 @@ export function HubScreen() {
         </div>
       </div>
 
-      {(senders.isError || senders.failureCount > 0) && <Alert tone="danger">{t('loadError')}</Alert>}
+      {(senders.isError || senders.failureCount > 0) && (
+        <Alert tone="danger">{t('loadError')}</Alert>
+      )}
 
       <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[320px_1fr]">
         <aside className="space-y-5 lg:sticky lg:top-6">
