@@ -149,6 +149,14 @@ export interface WabaAdminPort {
   /** Adds the platform system user to the WABA so the platform can manage it. Best effort. */
   assignSystemUser(wabaId: string, token: string): Promise<boolean>;
   registerPhone(conn: WabaConnection, pin: string): Promise<void>;
+  /** Asks Meta to send the number its 6-digit ownership code by SMS or voice call. */
+  requestVerificationCode(
+    conn: WabaConnection,
+    method: 'SMS' | 'VOICE',
+    language: string,
+  ): Promise<void>;
+  /** Confirms the number with the code Meta sent. */
+  verifyCode(conn: WabaConnection, code: string): Promise<void>;
   /** Stops delivery to this app for the WABA. */
   unsubscribe(conn: WabaConnection): Promise<void>;
   /**

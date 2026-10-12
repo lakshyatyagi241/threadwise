@@ -58,6 +58,10 @@ export const useSetPrimary = () => useAction((id: string) => wabaApi.setPrimary(
 export const useResubscribe = () => useAction((id: string) => wabaApi.resubscribe(id));
 export const useRegister = () =>
   useAction((v: { id: string; pin?: string }) => wabaApi.register(v.id, v.pin));
+export const useRequestCode = () =>
+  useAction((v: { id: string; method: 'SMS' | 'VOICE' }) => wabaApi.requestCode(v.id, v.method));
+export const useVerifyCode = () =>
+  useAction((v: { id: string; code: string }) => wabaApi.verifyCode(v.id, v.code));
 export const useDisconnect = () => useAction((id: string) => wabaApi.disconnect(id));
 export const useRemove = () => useAction((id: string) => wabaApi.remove(id));
 export const useSetToken = () =>
