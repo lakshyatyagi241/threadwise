@@ -14,6 +14,11 @@ export const waKeys = {
   attempt: (org: number, device: number) => `wa:attempt:${org}:${device}`,
   /** One per running worker: proof the runtime is alive (TW-NODE-004). */
   worker: (id: string) => `wa:worker:${id}`,
+  /** Per-device group-operation counters (ban safety). `scope` is `min`, `day`, `create` or `join`; `bucket` the window it counts. */
+  groupCount: (org: number, device: number, scope: string, bucket: string) =>
+    `wa:grp:${org}:${device}:${scope}:${bucket}`,
+  /** Set while the device's group operations are paused after a refusal that looked like a limit or ban signal. */
+  groupCooldown: (org: number, device: number) => `wa:grpcool:${org}:${device}`,
   commandChannel: 'wa:cmd',
   commandResult: (id: string) => `wa:cmd:res:${id}`,
 } as const;

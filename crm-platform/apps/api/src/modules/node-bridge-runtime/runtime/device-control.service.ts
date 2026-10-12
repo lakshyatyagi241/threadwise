@@ -18,6 +18,7 @@ import {
   type UnofficialWhatsappGate,
 } from '../../auth/unofficial-whatsapp.port';
 import { parseStoredQr, waKeys, type StoredCode } from './wa-redis';
+import { GroupOpLimiter, loadGroupLimits, opKindOf } from './group-limiter';
 
 const POLL_MS = 200;
 
@@ -65,11 +66,19 @@ export class DeviceControlService {
     groups(orgId: number, deviceId: number, action: GroupAction): Promise<DeviceCommandResult>;
   } | null = null;
 
+  /**
+   * The per-device group limiter (decision D11): enforced in `groupAction` before the command is sent, read by the Groups tab's state, and
+   * started by the worker when WhatsApp refuses in a way that looks like a limit or a ban signal.
+   */
+  readonly groupLimiter: GroupOpLimiter;
+
   constructor(
     private readonly db: DatabaseService,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
     @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
-  ) {}
+  ) {
+    this.groupLimiter = new GroupOpLimiter(redis, loadGroupLimits());
+  }
 
   /** Sends a message through a connected number. The error says what to do when the number is not connected. */
   async sendMessage(
@@ -108,15 +117,62 @@ export class DeviceControlService {
     if (!(r.ok && r.status === 'acted')) throw failure(r);
   }
 
-  /** Group directory and management on a device's number (TW-NODE-021). */
+  /**
+   * Group directory and management on a device's number (TW-NODE-021). The unofficial gate first, then the checks that need no WhatsApp
+   * call (people per call, joining by link switched on, the per-device limiter: `rate_limited` carries `retryAfterSeconds`), then the
+   * command to the worker that owns the device. A refusal never reaches WhatsApp.
+   */
   async groupAction(
     orgId: number,
     deviceId: number,
     action: GroupAction,
   ): Promise<DeviceCommandResult> {
     await this.unofficial.assertEnabledFor(orgId);
+    const limits = this.groupLimiter.limits;
+    if (
+      'participants' in action &&
+      Array.isArray(action.participants) &&
+      action.participants.length > limits.participantsPerCall
+    ) {
+      return {
+        ok: false,
+        status: 'error',
+        message: `At most ${limits.participantsPerCall} people per call.`,
+      };
+    }
+    if (
+      (action.type === 'accept_invite' || action.type === 'get_invite_info') &&
+      !limits.joinByLinkEnabled
+    ) {
+      return {
+        ok: false,
+        status: 'disabled',
+        message: 'Joining a group by invite link is switched off.',
+      };
+    }
+    const refusal = await this.groupLimiter.acquire(orgId, deviceId, opKindOf(action));
+    if (refusal) {
+      return {
+        ok: false,
+        status: 'rate_limited',
+        message:
+          refusal.scope === 'cooldown'
+            ? 'This number is resting after WhatsApp refused a group request. Try again later.'
+            : 'Too many group operations on this number. Try again later.',
+        retryAfterSeconds: refusal.retryAfterSeconds,
+        scope: refusal.scope,
+      };
+    }
     if (this.local?.owns(orgId, deviceId)) return this.local.groups(orgId, deviceId, action);
-    return this.sendIfOwned({ type: 'group', orgId, deviceId, action });
+    // The picture does not travel in the command (it is JSON on a channel): it waits in Redis for the worker that owns the device.
+    let wire = action;
+    if (action.type === 'picture' && action.data) {
+      const { data, ...rest } = action;
+      const bufferKey = `wa:out:${orgId}:${deviceId}:${randomUUID()}`;
+      await this.redis.set(bufferKey, data, 'EX', 300);
+      wire = { ...rest, bufferKey };
+    }
+    return this.sendIfOwned({ type: 'group', orgId, deviceId, action: wire });
   }
 
   /** A device nobody owns cannot send: say so at once instead of waiting out the command's long timeout. */

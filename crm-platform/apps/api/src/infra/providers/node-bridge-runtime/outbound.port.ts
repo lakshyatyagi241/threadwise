@@ -2,11 +2,25 @@
  * What can be sent through a WhatsApp number (TW-NODE-022 to 025). One command shape for every engine; a transport that cannot
  * send a kind says so with UnsupportedSendError, and its text is shown to the user, so it says what to do instead.
  */
-export type SendCommand =
-  | { type: 'text'; to: string; body: string; footer?: string }
+/** The message a send answers (a reply in a thread). In a group, `participant` is who wrote it (their id) so WhatsApp can show the quote. */
+export interface SendQuote {
+  /** WhatsApp's id of the quoted message. */
+  providerMessageId: string;
+  fromMe: boolean;
+  participant?: string;
+  /** What to show in the quote when the app has the text. */
+  text?: string;
+}
+
+export type SendCommand = SendCommandBody & { quote?: SendQuote };
+
+type SendCommandBody =
+  | { type: 'text'; to: string; body: string; footer?: string; toGroup?: boolean }
   | {
       type: 'media';
       to: string;
+      /** `to` is a group id (bare or `...@g.us`), not a phone number. Every kind except `group_text` addresses a group this way. */
+      toGroup?: boolean;
       /** Where to fetch it from; empty when the bytes are given (`data` in this process, `bufferKey` between processes). */
       mediaUrl: string;
       /** The file itself, when the caller already holds it (the inbox's stored media). */
@@ -21,6 +35,7 @@ export type SendCommand =
   | {
       type: 'location';
       to: string;
+      toGroup?: boolean;
       latitude: number;
       longitude: number;
       name?: string;
@@ -29,12 +44,17 @@ export type SendCommand =
   | {
       type: 'contact';
       to: string;
+      toGroup?: boolean;
       name: string;
       phone: string;
       vcard?: string;
       /** Several cards in one message (the inbox's Share dialog); when set, `vcard` and `phone` are not used. */
       cards?: { name: string; vcard: string }[];
     }
+  /**
+   * Text into a group. `groupJid` is the bare id or `...@g.us`. `mentions` are WhatsApp ids of members (a participant's `jid`); the body must
+   * contain `@<user part of the id>` for WhatsApp to draw the tag (see `mentionToken` in group-mapping.ts).
+   */
   | { type: 'group_text'; groupJid: string; body: string; mentions?: string[] };
 
 export interface SendContext {

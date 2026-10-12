@@ -3,6 +3,7 @@ import type { Redis } from 'ioredis';
 import { CryptoService } from '../../../src/common/crypto/crypto.service';
 import { DatabaseService } from '../../../src/infra/db/database.service';
 import { DeviceAuthStore } from '../../../src/infra/providers/node-bridge-runtime/device-auth-store';
+import type { GroupSnapshot } from '../../../src/infra/providers/node-bridge-runtime/inbound.port';
 import type {
   MessageAction,
   SendCommand,
@@ -28,6 +29,44 @@ import {
 import { DeviceLease } from '../../../src/modules/node-bridge-runtime/runtime/wa-redis';
 import type { Harness } from '../contacts-attributes-tags/support';
 
+/** A personal-number group as the socket reports it; override what the test is about. */
+export function fakeGroupSnapshot(over: Partial<GroupSnapshot> = {}): GroupSnapshot {
+  const groupId = over.groupId ?? '120363000000000001';
+  return {
+    jid: `${groupId}@g.us`,
+    groupId,
+    subject: 'Team',
+    description: null,
+    size: 2,
+    isAdmin: true,
+    announce: false,
+    restrict: false,
+    joinApproval: false,
+    memberAddMode: 'all_member_add',
+    owner: null,
+    creation: '2026-01-01T00:00:00.000Z',
+    addressingMode: 'pn',
+    inviteCode: null,
+    participants: [
+      {
+        jid: '919000000001@s.whatsapp.net',
+        phone: '919000000001',
+        lid: null,
+        name: 'Me',
+        admin: 'superadmin',
+      },
+      {
+        jid: '919000000002@s.whatsapp.net',
+        phone: '919000000002',
+        lid: null,
+        name: 'Asha',
+        admin: null,
+      },
+    ],
+    ...over,
+  };
+}
+
 /** A WhatsApp socket that does what the test says: records sends and actions, emits what it is told. */
 export class FakeSocket implements WaSocket {
   listener: ((e: SocketEvent) => void) | null = null;
@@ -40,6 +79,13 @@ export class FakeSocket implements WaSocket {
   /** What the next send does. */
   onSend: (n: number) => string | Error = (n) => `wamid.fake.${n}`;
   groupResult: GroupResult = { ok: true };
+  /**
+   * What the next group action of a type answers, before the `groupResult` fallback: a result, a function of the action, or an Error to
+   * throw (a Boom-like one, e.g. `Object.assign(new Error('forbidden'), { isBoom: true, data: 403 })`, reads as WhatsApp's refusal).
+   */
+  groupReplies: Partial<
+    Record<GroupAction['type'], GroupResult | Error | ((a: GroupAction) => GroupResult)>
+  > = {};
   subscribe(l: (e: SocketEvent) => void) {
     this.listener = l;
   }
@@ -62,9 +108,12 @@ export class FakeSocket implements WaSocket {
   async act(action: MessageAction) {
     this.actions.push(action);
   }
-  async groups(action: GroupAction) {
+  async groups(action: GroupAction): Promise<GroupResult> {
     this.groupCalls.push(action);
-    return this.groupResult;
+    const reply = this.groupReplies[action.type];
+    if (reply instanceof Error) throw reply;
+    if (typeof reply === 'function') return reply(action);
+    return reply ?? this.groupResult;
   }
   emit(e: SocketEvent) {
     this.listener?.(e);
