@@ -324,6 +324,11 @@
         "label": "Website-Chat",
         "description": "Bots für den Chat Ihrer Website und das Widget, in dem jeder davon läuft.",
         "keywords": "Web, Website, Widget, Chatbot, Einbetten, Live-Chat"
+      },
+      "help-assistant": {
+        "label": "Hilfe-Assistent",
+        "description": "Schalten Sie den Assistenten ein, der Ihr Team anleitet oder die Schritte für es erledigt.",
+        "keywords": "ki, assistent, agent, anleitung, hilfe, automatisierung"
       }
     }
   }

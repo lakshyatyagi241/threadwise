@@ -78,6 +78,7 @@
       "form_builder": "Formularze",
       "waba_groups": "Grupy WhatsApp",
       "sms": "Kanał SMS",
+      "help_agent": "Asystent pomocy",
       "email_channel": "Kanał e-mail (Gmail)"
     },
     "limitGroups": {

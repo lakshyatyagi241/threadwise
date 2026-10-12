@@ -95,6 +95,11 @@
         "description": "Answer messages sent to your TikTok business account.",
         "keywords": "tik tok, dm, video"
       },
+      "help-assistant": {
+        "label": "Help assistant",
+        "description": "Switch on the assistant that guides your team or does the steps for them.",
+        "keywords": "ai, assistant, agent, guide, help, automation"
+      },
       "sms": {
         "label": "SMS",
         "description": "Send text messages with your own Twilio number or MSG91 sender.",

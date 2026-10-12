@@ -78,6 +78,7 @@
       "form_builder": "Формы",
       "waba_groups": "Группы WhatsApp",
       "sms": "Канал SMS",
+      "help_agent": "Помощник",
       "email_channel": "Канал электронной почты (Gmail)"
     },
     "limitGroups": {
