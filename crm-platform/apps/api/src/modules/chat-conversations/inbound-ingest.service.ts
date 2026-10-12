@@ -309,6 +309,8 @@ export class InboundIngestService {
         id: m.peerKey,
         participant: m.group.participant,
         ...(m.group.participantName ? { senderName: m.group.participantName } : {}),
+        // A LID-only speaker has no phone (`participant` is empty): their anonymous id keeps the bubble addressable (a quote, a mention).
+        ...(m.group.participantLid ? { senderLid: m.group.participantLid } : {}),
       };
     }
     if (m.history) meta.historySync = true;

@@ -335,7 +335,7 @@ export const waGroupParticipantResultSchema = z.object({
 });
 export type WaGroupParticipantResult = z.infer<typeof waGroupParticipantResultSchema>;
 
-/** The answer of a participants call. Partial success is a success: read `results`. All failing answers 4xx with the group error code. */
+/** The answer of a participants call. Partial success is a success, and so is "nobody could be added" (the reasons are in `results`); refusals before WhatsApp (not admin, limits, left) are 4xx with the group error code. */
 export const waGroupParticipantResultsSchema = z.object({
   okCount: z.number().int().nonnegative(),
   failCount: z.number().int().nonnegative(),
@@ -480,3 +480,54 @@ export const waGroupMentionSchema = z.object({
   name: z.string().max(100).optional(),
 });
 export type WaGroupMention = z.infer<typeof waGroupMentionSchema>;
+
+// --- the device-scoped routes (the API as built) ------------------------------------------------------------------------------
+
+/**
+ * The API addresses a group by its number in the PATH (`/v2/devices/:id/groups/...`, `:id` = `devices.uuid`), so the bodies and queries of
+ * the routes below drop the `deviceId` field the schemas above carry (it stays in them for clients that send it in the body).
+ */
+export const waDeviceGroupListByDeviceQuerySchema = waDeviceGroupListQuerySchema.omit({
+  deviceId: true,
+});
+export type WaDeviceGroupListByDeviceQuery = z.infer<typeof waDeviceGroupListByDeviceQuerySchema>;
+export const createWaDeviceGroupBodySchema = createWaDeviceGroupInputSchema.omit({
+  deviceId: true,
+});
+export type CreateWaDeviceGroupBody = z.infer<typeof createWaDeviceGroupBodySchema>;
+export const waDeviceGroupJoinPreviewBodySchema = waDeviceGroupJoinPreviewInputSchema.omit({
+  deviceId: true,
+});
+export type WaDeviceGroupJoinPreviewBody = z.infer<typeof waDeviceGroupJoinPreviewBodySchema>;
+export const waDeviceGroupJoinBodySchema = waDeviceGroupJoinInputSchema.omit({ deviceId: true });
+export type WaDeviceGroupJoinBody = z.infer<typeof waDeviceGroupJoinBodySchema>;
+
+/**
+ * `GET /v2/devices/:id/groups/:gid/join-requests?fresh=1`: the cached queue by default; `fresh` asks WhatsApp now (one counted group
+ * operation), the recovery path when a `group.join-request` event was missed.
+ */
+export const waDeviceGroupJoinRequestsQuerySchema = z.object({
+  fresh: z
+    .union([z.boolean(), z.enum(['1', '0', 'true', 'false'])])
+    .optional()
+    .transform((v) => v === true || v === '1' || v === 'true'),
+});
+export type WaDeviceGroupJoinRequestsQuery = z.infer<typeof waDeviceGroupJoinRequestsQuerySchema>;
+
+/** `POST /v2/devices/:id/groups/:gid/participants`: add, promote or demote people (removing is `DELETE`). Up to 20 numbers. */
+export const changeWaGroupParticipantsInputSchema = z.object({
+  action: z.enum(['add', 'promote', 'demote']),
+  numbers: numbersSchema,
+});
+export type ChangeWaGroupParticipantsInput = z.infer<typeof changeWaGroupParticipantsInputSchema>;
+
+/** `POST /v2/devices/:id/groups/sync`: read the whole group list from WhatsApp now (counted, and at most once a minute per number). */
+export const waDeviceGroupsSyncResultSchema = z.object({
+  /** Groups the number is in after the read. */
+  groups: z.number().int().nonnegative(),
+  /** Groups newly found to be left by this read. */
+  left: z.number().int().nonnegative(),
+  /** The read was skipped because one ran in the last minute; nothing was asked of WhatsApp. */
+  throttled: z.boolean(),
+});
+export type WaDeviceGroupsSyncResult = z.infer<typeof waDeviceGroupsSyncResultSchema>;

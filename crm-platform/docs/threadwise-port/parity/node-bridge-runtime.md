@@ -137,7 +137,7 @@ Reference: Admin > Channel Settings (`/admin/settings/channel-setting`), ours: `
   `DeviceControlService`; `InboxBridge` (worker) turns what the runtime reads into the inbox's own `channel.ingest` jobs and keeps the channel's status in step.
 - Plan decision 1 (plan-inbox-chat.md) puts QR onboarding off by default with a ban warning at connect; neither the flag nor the warning is built here (WADEV owns
   the connect screen).
-- Deviations: group messages are not threads (Reference's inbox listed individual chats); a customer file larger than 25 MB, or one that fails to download, arrives as
+- Deviations: group messages ARE threads here, as in Reference's current code (peer key `g:<bare id>`, storage only, no contact per speaker, no automation; a message typed on the phone is mirrored as outbound; the speaker's name is kept, which Reference dropped, and a LID-only speaker is stored instead of lost; see `whatsapp-personal-groups.md` D2/D3); a customer file larger than 25 MB, or one that fails to download, arrives as
   text saying it is not available; an echo's file or place is described on the thread, not copied; reactions sent from the inbox assume the target is the customer's message.
 - Not verified: a live number. Tested with a fake socket against real Postgres, Redis and the inbox workers (`inbox-bridge.e2e.spec.ts`).
 - Touches the chat-conversations zone (Lakshya): channel kind and peer rule, `ChannelAdapterRegistry.register` and export, `ChannelRegistryService.syncDeviceChannel`,

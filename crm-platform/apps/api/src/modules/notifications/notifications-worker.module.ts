@@ -4,6 +4,7 @@ import { WebPushLibProvider } from '../../infra/providers/web-push/web-push-lib.
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { ConversationNotificationConsumer } from './conversation-notification.consumer';
 import { ConversationReadState } from './conversation-read-state';
+import { DeviceGroupNotificationConsumer } from './device-group-notification.consumer';
 import { DeviceNotificationConsumer } from './device-notification.consumer';
 import { NotificationFanout } from './notification-fanout';
 import { NotificationPrefsResolver } from './notification-prefs.resolver';
@@ -43,6 +44,7 @@ import { WabaGroupNotificationConsumer } from './waba-group-notification.consume
     EmailBounceNotificationConsumer,
     TeamChatNotificationConsumer,
     WabaGroupNotificationConsumer,
+    DeviceGroupNotificationConsumer,
     NotificationRetentionService,
     WaitingNudgeService,
     PushSubscriptionsRepository,

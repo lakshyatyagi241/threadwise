@@ -49,6 +49,8 @@ const inboundSchema = z.object({
       title: z.string().optional(),
       participant: z.string(),
       participantName: z.string().optional(),
+      /** A LID-only speaker has no phone: `participant` is then empty and this is their anonymous id (digits). */
+      participantLid: z.string().optional(),
     })
     .optional(),
   history: z.object({ direction: z.enum(['in', 'out']) }).optional(),

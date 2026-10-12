@@ -149,6 +149,16 @@
         "title": "{name} đã hoạt động trở lại",
         "titleNoName": "Một nhóm WhatsApp đã hoạt động trở lại",
         "body": "WhatsApp đã khôi phục nhóm này. Bạn có thể nhắn tin lại."
+      },
+      "device_group_join_request": {
+        "title": "{count, plural, other {# người muốn tham gia {name}}}",
+        "titleNoName": "{count, plural, other {# người muốn tham gia một nhóm WhatsApp}}",
+        "body": "Mở Nhóm để duyệt hoặc từ chối."
+      },
+      "device_group_removed": {
+        "title": "Số của bạn đã bị xóa khỏi {name}",
+        "titleNoName": "Số của bạn đã bị xóa khỏi một nhóm WhatsApp",
+        "body": "Ai đó đã xóa số cá nhân của bạn khỏi nhóm này. Nhóm được giữ lại ở đây, chỉ có thể đọc."
       }
     },
     "live": {
@@ -177,7 +187,9 @@
         "teamchat_message": "Tin nhắn trực tiếp mới",
         "waba_group_join_request": "Yêu cầu tham gia nhóm",
         "waba_group_suspended": "Nhóm WhatsApp bị tạm ngưng",
-        "waba_group_suspension_cleared": "Nhóm WhatsApp hoạt động trở lại"
+        "waba_group_suspension_cleared": "Nhóm WhatsApp hoạt động trở lại",
+        "device_group_join_request": "Yêu cầu tham gia nhóm",
+        "device_group_removed": "Bị xóa khỏi nhóm WhatsApp"
       }
     },
     "prefs": {
@@ -334,6 +346,14 @@
         "billing_subscription_canceled": {
           "label": "Đã hủy gói đăng ký",
           "hint": "Nhà cung cấp thanh toán của bạn đã chấm dứt một gói đăng ký của không gian làm việc này."
+        },
+        "device_group_join_request": {
+          "label": "Yêu cầu tham gia nhóm của số cá nhân",
+          "hint": "Có người xin tham gia nhóm của một số WhatsApp cá nhân mà bạn quản lý. Mười yêu cầu gộp thành một dòng."
+        },
+        "device_group_removed": {
+          "label": "Bị xóa khỏi nhóm của số cá nhân",
+          "hint": "Ai đó đã xóa một trong các số WhatsApp cá nhân của bạn khỏi một nhóm. Đây có thể là dấu hiệu số đã bị báo cáo."
         }
       },
       "loading": "Đang tải tùy chọn của bạn",

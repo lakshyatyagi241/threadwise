@@ -83,6 +83,9 @@ export class InboundMessageHooks {
     // A suspended workspace still receives and stores its messages (no data loss) but nothing answers them: no flow, keyword
     // reply or AI agent starts. `consumed: true` also stops the auto reply that runs after the listeners (ADR-0019).
     if (await this.suspension?.isSuspended(event.orgId)) return { consumed: true };
+    // A group (`g:<id>` thread) has many speakers and no customer: nothing reacts to it, whatever listener is registered. Ingest does not
+    // call the hooks for a group either; this keeps a future caller from running a flow or an AI reply on one.
+    if (event.peerKey?.startsWith('g:')) return { consumed: true };
     // Auto-generated mail never reaches a listener (no routing, no flow, no reply): it is stored for the agent to read and that is all.
     if (event.channelKind === 'email' && isAutomatedEmail(event)) return { consumed: true };
     let consumed = false;

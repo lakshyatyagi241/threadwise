@@ -175,6 +175,12 @@ export class DeviceControlService {
     return this.sendIfOwned({ type: 'group', orgId, deviceId, action: wire });
   }
 
+  /** Does a worker hold this device's session right now (its lease is alive)? For the Groups tab's state; nothing is sent. */
+  async hasOwner(orgId: number, deviceId: number): Promise<boolean> {
+    if (this.local?.owns(orgId, deviceId)) return true;
+    return (await this.redis.exists(waKeys.lease(orgId, deviceId))) > 0;
+  }
+
   /** A device nobody owns cannot send: say so at once instead of waiting out the command's long timeout. */
   private async sendIfOwned(
     command:

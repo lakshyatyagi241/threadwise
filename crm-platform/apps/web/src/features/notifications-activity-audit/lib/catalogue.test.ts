@@ -177,6 +177,8 @@ describe('the WhatsApp Groups types (BL-099)', () => {
       'waba_group_join_request',
       'waba_group_suspended',
       'waba_group_suspension_cleared',
+      'device_group_join_request',
+      'device_group_removed',
     ]);
     expect(typeMeta('waba_group_join_request')).toMatchObject({ icon: 'group', tone: 'info' });
     expect(typeMeta('waba_group_suspended').tone).toBe('danger');
@@ -202,5 +204,52 @@ describe('the WhatsApp Groups types (BL-099)', () => {
         data: {},
       }),
     ).toBe('/waba-groups?account=x');
+  });
+});
+
+describe('the personal-number Groups types', () => {
+  const dev = '44444444-4444-4444-8444-444444444444';
+
+  it('are in the WhatsApp groups section with the quiet defaults and no push; a removal is a problem', () => {
+    expect(typeMeta('device_group_join_request')).toMatchObject({
+      group: 'whatsapp_groups',
+      icon: 'group',
+      tone: 'info',
+      toast: true,
+      sound: false,
+      push: false,
+    });
+    expect(typeMeta('device_group_removed')).toMatchObject({
+      group: 'whatsapp_groups',
+      icon: 'group',
+      tone: 'danger',
+      push: false,
+    });
+  });
+
+  it('opens the Groups tab of /devices on the number, and plain /devices/groups when the row names none', () => {
+    expect(
+      notificationHref({ type: 'device_group_join_request', link: null, data: { deviceId: dev } }),
+    ).toBe(`/devices/groups?device=${dev}`);
+    expect(notificationHref({ type: 'device_group_removed', link: null, data: {} })).toBe(
+      '/devices/groups',
+    );
+  });
+
+  it('never builds the link from an id that is not a uuid, and keeps the server link when it sent one', () => {
+    expect(
+      notificationHref({
+        type: 'device_group_removed',
+        link: null,
+        data: { deviceId: '../../admin' },
+      }),
+    ).toBe('/devices/groups');
+    expect(
+      notificationHref({
+        type: 'device_group_removed',
+        link: `/devices/groups?device=${dev}`,
+        data: {},
+      }),
+    ).toBe(`/devices/groups?device=${dev}`);
   });
 });

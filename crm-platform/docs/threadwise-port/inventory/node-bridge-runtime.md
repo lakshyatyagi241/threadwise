@@ -642,7 +642,7 @@ sources_read: 92
 - **Priority:** P0
 - **Effort:** M
 - **Depends on:** TW-NODE-016, TW-NODE-017
-- **Summary:** Messages the account sends that Laravel did not initiate (phone typing, another linked device, flow and auto-reply sends) are mirrored into the team inbox as outbound, and group chat messages are stored read-only (no automation).
+- **Summary:** Messages the account sends that Laravel did not initiate (phone typing, another linked device, flow and auto-reply sends) are mirrored into the team inbox as outbound, and group chat messages are stored on the group's thread (no automation). Port: group messages are inbox threads (`g:<bare id>`), a phone-typed group message is mirrored as outbound once, a LID-only speaker is stored (empty phone, the anonymous id kept), the speaker's name is kept on the message (personal-number groups D2/D3, `whatsapp-personal-groups.md` TW-WAGRP-015 to 021).
 - **Actors & access:** system.
 - **UX & screens:** team inbox thread shows both sides; group threads are readable and repliable.
 - **Endpoints:** posts to `api/inbound-message` with `direction:"out"` or `@g.us` raw_jid.
@@ -650,7 +650,7 @@ sources_read: 92
 - **Rules & edge cases:**
   1. `syncOutboundFromPhone` (from-me events of type notify or append): skips groups, newsletters, broadcasts, status; skips events with no text and no media; skips anything older than 600 s (history replay); recipient = digits of `remoteJidAlt` or `remoteJid`; media (image, video, audio, document, sticker) downloaded with one retry after 1.5 s, at most 16 MB, base64 in body; location (static or live) and contact cards mapped like inbound; timeout 30 s with media, 10 s otherwise.
   2. `mirrorOwnAutoReply` and `mirrorOwnMediaReply` explicitly post the bridge's own keyword/auto-reply sends (Baileys does not reliably re-emit a socket's own send, and `emitOwnEvents` is false), keyed by the sent message id so the server-side dedup collapses them with any echo; media over 16 MB falls back to a text row (caption or `[type]`).
-  3. Groups: `forwardGroupInbound` posts group messages (text, image, video, audio, document, sticker) with `raw_jid=<group jid>@g.us`, `sender_phone` = the participant's phone (`participantPn` else `participant`, digits), `sender_name`, `group_subject` fetched with `groupMetadata` (best-effort), `direction` in/out by `fromMe`, timeout 15 s (60 s with media). No flow, keyword or AI runs for group messages. QUIRK: when the participant phone cannot be resolved (LID-only participant) `sender_phone` is empty and Laravel's `required` rule rejects the row (422), silently losing that group message.
+  3. Groups: `forwardGroupInbound` posts group messages (text, image, video, audio, document, sticker) with `raw_jid=<group jid>@g.us`, `sender_phone` = the participant's phone (`participantPn` else `participant`, digits), `sender_name`, `group_subject` fetched with `groupMetadata` (best-effort), `direction` in/out by `fromMe`, timeout 15 s (60 s with media). No flow, keyword or AI runs for group messages. QUIRK (not ported): when the participant phone cannot be resolved (LID-only participant) `sender_phone` is empty and Laravel's `required` rule rejects the row (422), silently losing that group message; here that message is stored with an empty number and the anonymous id.
   4. Group directory sync is separate (TW-NODE-021).
   5. Status/protocol/edit events carry no body or media and are dropped.
 - **Async & events:** unawaited posts.

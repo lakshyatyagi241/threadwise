@@ -213,3 +213,35 @@ describe('WhatsApp group notifications (BL-099)', () => {
     );
   });
 });
+
+describe('personal-number group notifications', () => {
+  const GROUP = { groupId: ID, deviceId: ID, groupName: 'Sales club' };
+
+  it('counts the people who want to join and names the group, with a wording that needs no name', () => {
+    expect(
+      notificationText(en, n('device_group_join_request', { ...GROUP, count: 1 }, { count: 1 })),
+    ).toEqual({
+      title: 'Someone wants to join Sales club',
+      body: 'Open Groups to approve or reject.',
+    });
+    expect(
+      notificationText(en, n('device_group_join_request', { ...GROUP, count: 3 }, { count: 3 }))
+        .title,
+    ).toBe('3 people want to join Sales club');
+    expect(
+      notificationText(en, n('device_group_join_request', { groupId: ID }, { count: 2 })).title,
+    ).toBe('2 people want to join a WhatsApp group');
+    const ar2 = notificationText(ar, n('device_group_join_request', GROUP, { count: 2 })).title;
+    expect(ar2).toContain('Sales club');
+  });
+
+  it('says the number was removed, in English and Arabic', () => {
+    expect(notificationText(en, n('device_group_removed', GROUP)).title).toBe(
+      'Your number was removed from Sales club',
+    );
+    expect(notificationText(en, n('device_group_removed', { groupId: ID })).title).toBe(
+      'Your number was removed from a WhatsApp group',
+    );
+    expect(notificationText(ar, n('device_group_removed', GROUP)).title).toContain('Sales club');
+  });
+});

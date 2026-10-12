@@ -1,0 +1,302 @@
+{
+  "whatsapp-devices-baileys": {
+    "nav": {
+      "groups": "Nhóm của số cá nhân"
+    },
+    "area": {
+      "groups": "Nhóm"
+    },
+    "errors": {
+      "WA_GROUP_NOT_ADMIN": "Số này không phải quản trị viên của nhóm nên WhatsApp đã từ chối thay đổi.",
+      "WA_GROUP_NOT_FOUND": "Không tìm thấy nhóm này cho số này. Có thể nhóm đã bị xóa.",
+      "WA_GROUP_DEVICE_NOT_READY": "Số này hiện chưa được kết nối. Hãy kết nối số hoặc chờ một lát rồi thử lại.",
+      "WA_GROUP_RATE_LIMITED": "Số này đã thực hiện quá nhiều thao tác nhóm. Hãy chờ một lát rồi thử lại.",
+      "WA_GROUP_RATE_LIMITED_ops_minute": "Số này đã thực hiện quá nhiều thao tác nhóm trong phút vừa qua. Hãy chờ một lát rồi thử lại.",
+      "WA_GROUP_RATE_LIMITED_ops_day": "Số này đã đạt giới hạn thao tác nhóm trong hôm nay. Hãy thử lại vào ngày mai.",
+      "WA_GROUP_RATE_LIMITED_creates_day": "Số này đã đạt giới hạn tạo nhóm mới trong hôm nay. Hãy thử lại vào ngày mai.",
+      "WA_GROUP_RATE_LIMITED_join_link_day": "Số này đã đạt giới hạn tham gia bằng liên kết mời trong hôm nay. Hãy thử lại vào ngày mai.",
+      "WA_GROUP_RATE_LIMITED_cooldown": "WhatsApp đã hạn chế số này nên các thao tác nhóm bị tạm dừng một thời gian để bảo vệ số.",
+      "WA_GROUP_LIMIT_REACHED": "WhatsApp cho biết nhóm đã đầy hoặc số này không thể tham gia thêm nhóm.",
+      "WA_GROUP_LEFT": "Số này đã rời nhóm nên nhóm chỉ có thể đọc.",
+      "WA_GROUP_INVALID_NUMBER": "Một trong các số điện thoại không hợp lệ hoặc chính là số này.",
+      "WA_GROUP_JOIN_LINK_INVALID": "Liên kết mời này không hợp lệ, đã bị thu hồi hoặc nhóm không còn tồn tại.",
+      "WA_GROUP_JOIN_BY_LINK_DISABLED": "Tính năng tham gia nhóm bằng liên kết mời đã bị tắt trên nền tảng này.",
+      "WA_GROUP_ANNOUNCE_ONLY": "Chỉ quản trị viên mới có thể gửi tin nhắn trong nhóm này, và số này không phải quản trị viên.",
+      "WA_GROUP_UNAVAILABLE": "WhatsApp không chấp nhận yêu cầu. Hãy thử lại sau vài phút."
+    },
+    "groups": {
+      "eyebrow": "API WhatsApp không chính thức / Nhóm",
+      "headingA": "Nhóm của",
+      "headingB": "số cá nhân của bạn",
+      "intro": "Các nhóm mà mỗi số đã liên kết tham gia. Tạo nhóm, thêm hoặc xóa người, duyệt người muốn tham gia, chia sẻ liên kết mời và rời nhóm. Tin nhắn trong nhóm cũng xuất hiện trong hộp thư chung.",
+      "loading": "Đang tải",
+      "loadFailed": "Không thể tải các số của bạn.",
+      "retry": "Thử lại",
+      "close": "Đóng",
+      "cancel": "Hủy",
+      "loadMore": "Tải thêm",
+      "loadingMore": "Đang tải",
+      "untitled": "Nhóm chưa đặt tên",
+      "memberCount": "{count, plural, =0 {Không có thành viên} other {# thành viên}}",
+      "membersButton": "Thành viên",
+      "editButton": "Sửa",
+      "leave": "Rời",
+      "openChat": "Mở cuộc trò chuyện",
+      "leftOn": "Số này đã rời nhóm vào {date}. Nhóm được giữ lại ở đây, chỉ có thể đọc.",
+      "leftNote": "Số này đã rời nhóm. Nhóm được giữ lại ở đây, chỉ có thể đọc.",
+      "badge": {
+        "admin": "Bạn là quản trị viên",
+        "notAdmin": "Không phải quản trị viên",
+        "left": "Đã rời",
+        "announce": "Chỉ quản trị viên được gửi",
+        "restrict": "Chỉ quản trị viên sửa thông tin",
+        "approval": "Duyệt để tham gia",
+        "requests": "{count, plural, other {# yêu cầu}}"
+      },
+      "blocked": {
+        "left": "Số này đã rời nhóm.",
+        "offline": "Số này đang ngoại tuyến: hãy kết nối để thay đổi nhóm.",
+        "notAdmin": "Số này không phải quản trị viên ở đây: bạn có thể đọc nhóm nhưng không thể thay đổi."
+      },
+      "kpi": {
+        "groups": "Nhóm",
+        "groupsSub": "Số này đang ở trong",
+        "members": "Thành viên",
+        "membersSub": "Trong tất cả các nhóm",
+        "admin": "Với tư cách quản trị viên",
+        "adminSub": "Nhóm bạn có thể quản lý",
+        "joinRequests": "Đang chờ tham gia",
+        "joinRequestsSub": "Yêu cầu cần trả lời",
+        "left": "Đã rời",
+        "leftSub": "Giữ ở chế độ chỉ đọc"
+      },
+      "list": {
+        "title": "Nhóm",
+        "search": "Tìm theo tên",
+        "statusLabel": "Hiển thị",
+        "statusAll": "Tất cả nhóm",
+        "statusActive": "Đang hoạt động",
+        "statusLeft": "Đã rời",
+        "empty": "Chưa có nhóm nào. Hãy tạo một nhóm hoặc thêm số này vào nhóm trên điện thoại, nhóm sẽ xuất hiện ở đây.",
+        "noMatch": "Không có nhóm nào phù hợp.",
+        "sync": "Làm mới từ WhatsApp",
+        "syncing": "Đang làm mới",
+        "synced": "{count, plural, other {Đã đọc # nhóm từ WhatsApp.}}",
+        "syncThrottled": "Danh sách vừa được làm mới. Hãy chờ một phút trước khi làm mới lại."
+      },
+      "rail": {
+        "title": "Số",
+        "noNumber": "Chưa có số cá nhân nào.",
+        "online": "Trực tuyến",
+        "offline": "Ngoại tuyến",
+        "notAdminHint": "{count, plural, other {Số này không phải quản trị viên trong # nhóm: bạn có thể đọc nhưng không thể thay đổi.}}",
+        "limitsTitle": "Thao tác nhóm còn lại",
+        "limitMinute": "Phút này",
+        "limitDay": "Hôm nay",
+        "limitCreates": "Nhóm mới hôm nay",
+        "limitJoins": "Tham gia bằng liên kết hôm nay",
+        "perCall": "Tối đa {count, plural, other {# người}} cho mỗi lần thêm hoặc xóa.",
+        "howTitle": "Cách hoạt động của nhóm ở đây",
+        "howRisk": "Nhóm được quản lý qua kết nối không chính thức. WhatsApp theo dõi chặt chẽ các thao tác nhóm, vì vậy mỗi số có giới hạn để được bảo vệ và các giới hạn này cũng áp dụng cho bạn.",
+        "howAdmin": "Chỉ quản trị viên của nhóm mới có thể thay đổi nhóm. Nếu số này không phải quản trị viên, bạn chỉ có thể đọc nhóm và trò chuyện trong đó.",
+        "howInbox": "Nội dung thành viên viết sẽ xuất hiện trong hộp thư chung. Phản hồi được gửi từ số này và tính là một tin nhắn."
+      },
+      "state": {
+        "noDevice": {
+          "title": "Chưa kết nối số cá nhân nào",
+          "message": "Nhóm thuộc về một số WhatsApp cá nhân. Hãy kết nối một số trước.",
+          "connect": "Kết nối số"
+        },
+        "gateOff": {
+          "title": "Không khả dụng cho không gian làm việc này",
+          "message": "Kết nối WhatsApp không chính thức không còn được bật cho không gian làm việc này nên không thể sử dụng nhóm."
+        },
+        "denied": {
+          "title": "Bạn không thể xem nhóm",
+          "message": "Vai trò của bạn không bao gồm quyền xem nhóm của số cá nhân. Hãy hỏi quản trị viên không gian làm việc của bạn."
+        },
+        "offline": {
+          "not_connected": {
+            "title": "Số này đang ngoại tuyến",
+            "message": "Các nhóm bên dưới là dữ liệu lưu lần cuối. Hãy kết nối số để thay đổi."
+          },
+          "worker_unavailable": {
+            "title": "Dịch vụ kết nối đang bận",
+            "message": "Số đã được liên kết nhưng hiện chưa có gì giữ phiên của số. Các nhóm bên dưới là dữ liệu lưu lần cuối. Hãy thử lại sau vài phút."
+          },
+          "open": "Mở số này"
+        },
+        "rateLimited": {
+          "title": "Thao tác nhóm đang tạm dừng",
+          "message": "Để bảo vệ số này khỏi giới hạn của WhatsApp, các thao tác nhóm mới phải chờ.",
+          "countdown": "Thử lại sau {time}"
+        }
+      },
+      "create": {
+        "open": "Tạo nhóm",
+        "title": "Tạo nhóm",
+        "risk": "Tạo nhóm và thêm người là những thao tác WhatsApp theo dõi nhiều nhất. Chỉ thêm những người quen biết bạn và mong đợi được thêm, và tạo ít nhóm mỗi ngày. WhatsApp có thể hạn chế số này.",
+        "subject": "Tên nhóm",
+        "subjectHint": "Tối đa 60 ký tự.",
+        "numbers": "Người cần thêm",
+        "numbersHint": "Số điện thoại kèm mã quốc gia, mỗi dòng một số hoặc cách nhau bằng dấu phẩy. Tối đa {max} lúc này; bạn có thể thêm sau.",
+        "numbersPlaceholder": "+919876543210\n+14155550123",
+        "description": "Mô tả (không bắt buộc)",
+        "descriptionHint": "Tối đa {max} ký tự.",
+        "counted": "{count} trên {max} số",
+        "duplicates": "{count, plural, other {Đã bỏ qua # số trùng}}",
+        "invalid": "Không phải số điện thoại: {numbers}",
+        "selfIgnored": "Số này do chính WhatsApp thêm và đã bị loại khỏi danh sách.",
+        "overCap": "Mỗi lần chỉ thêm tối đa {max} số.",
+        "readNotice": "Đọc đầy đủ thông báo rủi ro",
+        "acknowledge": "Tôi hiểu rằng việc tạo nhóm và thêm người có thể khiến số này bị WhatsApp hạn chế.",
+        "offlineHint": "Hãy kết nối số này để tạo nhóm.",
+        "submit": "Tạo nhóm",
+        "submitting": "Đang tạo",
+        "created": "Đã tạo nhóm: {name}",
+        "resultSummary": "{ok, plural, =0 {Không có ai được thêm.} other {Đã thêm # người.}} {failed, plural, =0 {} other {Không thể thêm # người.}}",
+        "descriptionNotSet": "Nhóm đã được tạo nhưng WhatsApp không chấp nhận phần mô tả. Hãy sửa nhóm để thử lại."
+      },
+      "outcome": {
+        "someone": "Một thành viên",
+        "done": "Xong",
+        "already_member": "Đã ở trong nhóm.",
+        "not_member": "Không ở trong nhóm.",
+        "not_on_whatsapp": "Số này không dùng WhatsApp.",
+        "privacy_blocked": "Cài đặt quyền riêng tư của họ không cho phép số này thêm họ. Hãy gửi liên kết mời cho họ.",
+        "not_allowed": "WhatsApp không cho phép thao tác này với người này.",
+        "group_full": "Nhóm đã đầy.",
+        "failed": "WhatsApp không chấp nhận trường hợp này."
+      },
+      "edit": {
+        "title": "Sửa nhóm",
+        "saved": "Đã cập nhật nhóm.",
+        "saving": "Đang lưu",
+        "save": "Lưu",
+        "choosePicture": "Chọn ảnh",
+        "pictureHint": "JPEG hoặc PNG, tối đa {mb} MB.",
+        "pictureType": "Hãy dùng ảnh JPEG hoặc PNG.",
+        "pictureSize": "Ảnh vượt quá {mb} MB.",
+        "subject": "Tên nhóm",
+        "description": "Mô tả",
+        "settings": "Cài đặt",
+        "announce": "Chỉ quản trị viên được gửi tin nhắn",
+        "announceHint": "Thành viên có thể đọc nhưng không thể viết.",
+        "restrict": "Chỉ quản trị viên được sửa thông tin nhóm",
+        "restrictHint": "Tên, mô tả và ảnh.",
+        "approval": "Quản trị viên duyệt thành viên mới",
+        "approvalHint": "Người dùng liên kết mời phải chờ được duyệt.",
+        "addMode": "Chỉ quản trị viên được thêm thành viên",
+        "addModeHint": "Các thành viên khác không thể thêm người.",
+        "offline": "Số này đang ngoại tuyến nên không thể lưu gì.",
+        "removePicture": "Xóa ảnh",
+        "keepPicture": "Giữ ảnh"
+      },
+      "members": {
+        "title": "Thành viên của {name}",
+        "readOnly": {
+          "left": "Số này đã rời nhóm: danh sách là dữ liệu lưu lần cuối và không thể thay đổi.",
+          "offline": "Số này đang ngoại tuyến: danh sách là dữ liệu lưu lần cuối.",
+          "notAdmin": "Số này không phải quản trị viên: bạn có thể đọc danh sách nhưng không thể thay đổi."
+        },
+        "held": "Thao tác nhóm đang tạm dừng một lát. Hãy thử lại khi đếm ngược kết thúc.",
+        "add": {
+          "label": "Thêm người",
+          "hint": "Số điện thoại kèm mã quốc gia, mỗi dòng một số hoặc cách nhau bằng dấu phẩy. Mỗi lần tối đa {max}.",
+          "placeholder": "+919876543210",
+          "counted": "{count} trên {max} số",
+          "invalid": "Không phải số điện thoại: {numbers}",
+          "overCap": "Mỗi lần chỉ thêm tối đa {max}.",
+          "risk": "Thêm những người không quen biết bạn là lý do phổ biến khiến WhatsApp hạn chế một số.",
+          "adding": "Đang thêm",
+          "submit": "Thêm"
+        },
+        "done": {
+          "add": "{count, plural, other {Đã thêm # người.}}",
+          "remove": "{count, plural, other {Đã xóa # người.}}",
+          "promote": "{count, plural, other {# người hiện là quản trị viên.}}",
+          "demote": "{count, plural, other {# người không còn là quản trị viên.}}"
+        },
+        "result": "{ok, plural, =0 {Không có ai được thay đổi.} other {Đã thay đổi # người.}} {failed, plural, =0 {} other {# người không được thay đổi.}}",
+        "search": "Tìm thành viên",
+        "searchPlaceholder": "Tên hoặc số",
+        "total": "{count, plural, other {# thành viên}}",
+        "noAccess": "Bạn không có quyền xem các thành viên.",
+        "loading": "Đang tải thành viên",
+        "noMatch": "Không có thành viên nào phù hợp.",
+        "empty": "Chưa lưu thành viên nào.",
+        "member": "Thành viên",
+        "noNumber": "WhatsApp không hiển thị số của thành viên này.",
+        "you": "Số này",
+        "owner": "Chủ nhóm",
+        "admin": "Quản trị viên",
+        "promote": "Đặt làm quản trị viên",
+        "demote": "Gỡ quyền quản trị viên",
+        "remove": "Xóa",
+        "selected": "{count, plural, =0 {Chưa chọn ai} other {Đã chọn #}}",
+        "limit": "Tối đa {max} mỗi lần",
+        "removeConfirm": "{count, plural, other {Xóa # người khỏi nhóm này?}}"
+      },
+      "requests": {
+        "readOnly": {
+          "left": "Số này đã rời nhóm.",
+          "offline": "Số này đang ngoại tuyến: hãy kết nối để trả lời.",
+          "notAdmin": "Số này không phải quản trị viên nên không thể trả lời các yêu cầu này."
+        },
+        "hidden": "{count, plural, other {# người đang chờ tham gia.}}",
+        "title": "{count, plural, other {# người đang chờ tham gia}}",
+        "working": "…",
+        "approveAll": "Duyệt tất cả",
+        "rejectAll": "Từ chối tất cả",
+        "loading": "Đang tải yêu cầu",
+        "none": "Không có yêu cầu nào để hiển thị.",
+        "someone": "Một người",
+        "approve": "Duyệt",
+        "reject": "Từ chối",
+        "approved": "{count, plural, other {Đã duyệt # người.}}",
+        "rejected": "{count, plural, other {Đã từ chối # yêu cầu.}}",
+        "someFailed": "{ok} đã xong, {failed} chưa xong:"
+      },
+      "link": {
+        "show": "Liên kết mời",
+        "hide": "Ẩn liên kết mời",
+        "loading": "Đang tải liên kết",
+        "label": "Liên kết mời",
+        "copy": "Sao chép",
+        "copied": "Đã sao chép",
+        "copyFailed": "Không thể sao chép liên kết. Hãy chọn liên kết và sao chép thủ công.",
+        "newLink": "Liên kết mới",
+        "reset": "Đã tạo liên kết mời mới. Liên kết cũ không còn dùng được.",
+        "confirmTitle": "Tạo liên kết mời mới?",
+        "confirmMessage": "Liên kết cũ sẽ ngừng hoạt động ngay lập tức. Bất kỳ ai có liên kết này sẽ không thể dùng nó để tham gia.",
+        "confirmButton": "Tạo liên kết mới"
+      },
+      "join": {
+        "open": "Tham gia bằng liên kết mời",
+        "title": "Tham gia nhóm bằng liên kết mời",
+        "risk": "Tham gia nhóm từ liên kết là thao tác khiến WhatsApp hạn chế số nhiều nhất. Số này chỉ có thể làm vậy vài lần mỗi ngày. Chỉ tham gia những nhóm bạn biết.",
+        "invite": "Liên kết mời",
+        "inviteHint": "Một liên kết chat.whatsapp.com hoặc chỉ mã của liên kết.",
+        "invalid": "Đây không phải liên kết hoặc mã mời WhatsApp.",
+        "lookUp": "Tra cứu",
+        "lookingUp": "Đang tra cứu",
+        "submit": "Tham gia",
+        "joining": "Đang tham gia",
+        "joined": "Đã tham gia nhóm. Nhóm sẽ xuất hiện trong danh sách sau vài giây.",
+        "requested": "Đã gửi yêu cầu. Quản trị viên của nhóm cần duyệt yêu cầu.",
+        "alreadyMember": "Số này đã ở trong nhóm này.",
+        "approvalRequired": "Quản trị viên cần duyệt yêu cầu tham gia.",
+        "acknowledge": "Tôi hiểu rằng việc tham gia nhóm bằng liên kết có thể khiến số này bị WhatsApp hạn chế.",
+        "offline": "Hãy kết nối số này để tham gia nhóm."
+      },
+      "confirm": {
+        "leaveTitle": "Rời nhóm này?",
+        "leaveMessage": "Số này sẽ rời {name}. Bạn không thể tham gia lại từ đây nếu không có lời mời. Nhóm và tin nhắn của nhóm vẫn ở trong hộp thư, chỉ có thể đọc.",
+        "leaveConfirm": "Rời nhóm"
+      },
+      "notice": {
+        "left": "Số này đã rời nhóm."
+      }
+    }
+  }
+}

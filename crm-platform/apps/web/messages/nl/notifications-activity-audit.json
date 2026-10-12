@@ -149,6 +149,16 @@
         "title": "{name} is weer actief",
         "titleNoName": "Een WhatsApp-groep is weer actief",
         "body": "WhatsApp heeft deze groep hersteld. Je kunt er weer berichten naartoe sturen."
+      },
+      "device_group_join_request": {
+        "title": "{count, plural, one {Iemand wil deelnemen aan {name}} other {# personen willen deelnemen aan {name}}}",
+        "titleNoName": "{count, plural, one {Iemand wil deelnemen aan een WhatsApp-groep} other {# personen willen deelnemen aan een WhatsApp-groep}}",
+        "body": "Open Groepen om goed te keuren of af te wijzen."
+      },
+      "device_group_removed": {
+        "title": "Je nummer is verwijderd uit {name}",
+        "titleNoName": "Je nummer is verwijderd uit een WhatsApp-groep",
+        "body": "Iemand heeft je persoonlijke nummer uit deze groep verwijderd. De groep wordt hier alleen-lezen bewaard."
       }
     },
     "live": {
@@ -177,7 +187,9 @@
         "teamchat_message": "Nieuw direct bericht",
         "waba_group_join_request": "Verzoek om een groep te joinen",
         "waba_group_suspended": "WhatsApp-groep geschorst",
-        "waba_group_suspension_cleared": "WhatsApp-groep weer actief"
+        "waba_group_suspension_cleared": "WhatsApp-groep weer actief",
+        "device_group_join_request": "Verzoek om deel te nemen aan een groep",
+        "device_group_removed": "Verwijderd uit een WhatsApp-groep"
       }
     },
     "prefs": {
@@ -334,6 +346,14 @@
         "billing_subscription_canceled": {
           "label": "Abonnement geannuleerd",
           "hint": "Je betalingsprovider heeft een abonnement van deze werkruimte beëindigd."
+        },
+        "device_group_join_request": {
+          "label": "Verzoek om deel te nemen aan een groep van een persoonlijk nummer",
+          "hint": "Mensen vragen om deel te nemen aan een groep van een persoonlijk WhatsApp-nummer dat je beheert. Tien verzoeken vormen één rij."
+        },
+        "device_group_removed": {
+          "label": "Verwijderd uit een groep van een persoonlijk nummer",
+          "hint": "Iemand heeft een van je persoonlijke WhatsApp-nummers uit een groep verwijderd. Dit kan een teken zijn dat het nummer is gerapporteerd."
         }
       },
       "loading": "Je voorkeuren laden",

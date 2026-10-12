@@ -11,6 +11,7 @@ import { MessageLogArchiveService } from './message-log-archive.service';
 import { MessageLogExportProcessor } from './message-log-export.processor';
 import { MessageLogExportRunner } from './message-log-export.runner';
 import { QueuedMessageRecoveryService } from './queued-message-recovery.service';
+import { DeviceGroupRetitleConsumer } from './device-group-retitle.consumer';
 import { WabaChannelSyncConsumer } from './waba-channel-sync.consumer';
 import { WabaGroupRetitleConsumer } from './waba-group-retitle.consumer';
 import { WabaInboxBindingModule } from './waba-inbox-binding.module';
@@ -44,6 +45,7 @@ import { WabaInboxBindingModule } from './waba-inbox-binding.module';
     MediaFetchRecoveryService,
     WabaChannelSyncConsumer,
     WabaGroupRetitleConsumer,
+    DeviceGroupRetitleConsumer,
     MessageLogArchiveService,
     MessageLogExportRunner,
     MessageLogExportProcessor,

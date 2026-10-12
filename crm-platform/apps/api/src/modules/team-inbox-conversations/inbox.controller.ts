@@ -21,6 +21,7 @@ import {
   createConversationNoteSchema,
   createMessageLogExportSchema,
   listConversationEventsQuerySchema,
+  listConversationGroupMembersQuerySchema,
   listConversationNotesQuerySchema,
   listConversationsQuerySchema,
   listInboxTemplatesQuerySchema,
@@ -31,6 +32,7 @@ import {
   type CreateConversationNoteInput,
   type CreateMessageLogExportInput,
   type ListConversationEventsQuery,
+  type ListConversationGroupMembersQuery,
   type ListConversationNotesQuery,
   type ListConversationsQuery,
   type ListInboxTemplatesQuery,
@@ -174,6 +176,21 @@ export class InboxController {
   })
   async get(@Param('id', ParseUUIDPipe) id: string) {
     return this.conversations.detail(id);
+  }
+
+  @Get('conversations/:id/group-members')
+  @RequirePermission('inbox.conversation.read')
+  @ApiOperation({
+    summary: 'The members of a personal-number group thread, for @mentions',
+    description:
+      'Read from the group directory (no call to WhatsApp). Empty for a thread that is not a group on a linked personal number.',
+  })
+  async groupMembers(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Query(zodPipe(listConversationGroupMembersQuerySchema))
+    query: ListConversationGroupMembersQuery,
+  ) {
+    return this.conversations.groupMembers(id, query);
   }
 
   @Get('conversations/:id/messages')

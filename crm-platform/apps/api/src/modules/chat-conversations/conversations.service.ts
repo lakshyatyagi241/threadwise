@@ -140,6 +140,7 @@ export class ConversationsService implements ConversationsFacade {
       const found = await this.findOrCreate(tx, orgId, channel, peerKey, {
         contactId: contact,
         peerName: null,
+        ...(input.threadTitle ? { title: input.threadTitle } : {}),
       });
       const conv = found.conv;
       const alloc = await this.messages.allocate(tx);
@@ -317,7 +318,7 @@ export class ConversationsService implements ConversationsFacade {
     orgId: number,
     channel: ChannelRow,
     peerKey: string,
-    opts: { contactId: number | null; peerName: string | null },
+    opts: { contactId: number | null; peerName: string | null; title?: string },
   ): Promise<{ conv: ConversationRow; channel: ChannelRow; created: boolean }> {
     await this.conversations.lockPeer(tx, orgId, channel.id, peerKey);
     const existing = await this.conversations.findForUpdate(tx, orgId, channel.id, peerKey);
@@ -344,7 +345,9 @@ export class ConversationsService implements ConversationsFacade {
       channelId: channel.id,
       peerKey,
       peerName: opts.peerName,
-      title: defaultTitle(channel.kind, peerKey, contactName),
+      title: opts.title?.trim()
+        ? opts.title.trim().slice(0, 200)
+        : defaultTitle(channel.kind, peerKey, contactName),
       contactId: opts.contactId,
       needsContact: false,
     });

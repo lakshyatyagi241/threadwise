@@ -74,7 +74,15 @@ export class UnsupportedSendError extends Error {}
 
 /** A change to a message already sent or received (TW-NODE-025). `messageId` is WhatsApp's id for it. */
 export type MessageAction =
-  | { type: 'react'; to: string; messageId: string; fromMe: boolean; emoji: string }
+  | {
+      type: 'react';
+      to: string;
+      messageId: string;
+      fromMe: boolean;
+      emoji: string;
+      /** In a group, the id of whoever wrote the message being reacted to (WhatsApp needs it to place the reaction). */
+      participant?: string;
+    }
   | { type: 'pin'; to: string; messageId: string; fromMe: boolean; pin: boolean }
   | { type: 'star'; to: string; messageId: string; fromMe: boolean; star: boolean }
   | { type: 'edit'; to: string; messageId: string; text: string }

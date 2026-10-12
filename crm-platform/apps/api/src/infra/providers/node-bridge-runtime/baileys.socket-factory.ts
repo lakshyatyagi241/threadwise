@@ -375,7 +375,12 @@ export class BaileysSocketFactory implements WaSocketFactory {
     const act = (a: MessageAction): Promise<void> =>
       serialize(async () => {
         const jid = jidOf(a.to);
-        const key = { remoteJid: jid, id: a.messageId, fromMe: 'fromMe' in a ? a.fromMe : true };
+        const key = {
+          remoteJid: jid,
+          id: a.messageId,
+          fromMe: 'fromMe' in a ? a.fromMe : true,
+          ...(a.type === 'react' && a.participant ? { participant: a.participant } : {}),
+        };
         switch (a.type) {
           case 'react':
             await sock.sendMessage(jid, { react: { text: a.emoji, key } });

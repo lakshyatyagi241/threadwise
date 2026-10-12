@@ -445,20 +445,70 @@ describe('ChannelDispatcher: a WhatsApp group thread (g:<group id>)', () => {
     },
   );
 
-  it('a number-only channel (the unofficial QR engine) still refuses every group send with WABA_GROUP_SEND_UNAVAILABLE', async () => {
-    const qr = { ...(whatsapp as object), kind: 'whatsapp_qr' } as unknown as ChannelAdapter;
-    const { dispatcher } = build(qr);
-    for (const envelope of [...allowed, ...refused]) {
+  describe('a personal number (the unofficial QR engine)', () => {
+    const qr = {
+      ...(whatsapp as object),
+      kind: 'whatsapp_qr',
+      // The linked number's own capabilities: no templates, no 24 hour rule, files and places and cards, reactions.
+      capabilities: () => ({
+        windowHours: null,
+        templates: false,
+        reactions: true,
+        typing: false,
+        media: ['image', 'video', 'audio', 'document', 'location', 'contact'],
+      }),
+    } as unknown as ChannelAdapter;
+    const qrChannel = () =>
+      channel({ kind: 'whatsapp_qr', settings: { metered: false } as ChannelSettings });
+    const qrAllowed = [
+      to('text', { body: 'hi' }),
+      to('media', { media: { key: 'k', mediaKind: 'image', mime: 'image/jpeg' } }),
+      to('location', { location: { latitude: 1, longitude: 2 } }),
+      to('contacts', {
+        contacts: [{ name: 'A', phones: [{ phone: '+919800000001' }], emails: [] }],
+      }),
+      to('reaction', { reaction: { providerMessageId: 'wamid.1', emoji: '👍' } }),
+    ];
+
+    it.each(qrAllowed.map((e) => [e.kind, e] as const))(
+      'a %s is accepted into a group',
+      async (_k, envelope) => {
+        const { dispatcher } = build(qr);
+        const q = await dispatcher.assertCanQueue({
+          channel: qrChannel(),
+          envelope,
+          lastInboundAt: recent,
+        });
+        expect(q.window.open).toBe(true);
+      },
+    );
+
+    it('refuses a template and buttons in a group with CHANNEL_CAPABILITY_UNSUPPORTED (422)', async () => {
+      const { dispatcher } = build(qr);
+      for (const envelope of [
+        to('template', { template: { name: 't', language: 'en', variables: {} } }),
+        to('interactive', { interactive: { type: 'location_request', body: 'Where?' } }),
+      ]) {
+        const e = await dispatcher
+          .assertCanQueue({ channel: qrChannel(), envelope, lastInboundAt: recent })
+          .catch((x: unknown) => x as AppError);
+        expect((e as AppError).code).toBe('CHANNEL_CAPABILITY_UNSUPPORTED');
+        expect((e as AppError).getStatus()).toBe(422);
+      }
+      expect(send).not.toHaveBeenCalled();
+    });
+
+    it('a disconnected number refuses a group send like any other', async () => {
+      const { dispatcher } = build(qr);
       const r = await code(
         dispatcher.assertCanQueue({
-          channel: channel({ kind: 'whatsapp_qr', settings: { metered: false } as ChannelSettings }),
-          envelope,
+          channel: { ...qrChannel(), status: 'disconnected' } as ChannelRuntime,
+          envelope: to('text', { body: 'hi' }),
           lastInboundAt: recent,
         }),
       );
-      expect(r).toBe('WABA_GROUP_SEND_UNAVAILABLE');
-    }
-    expect(send).not.toHaveBeenCalled();
+      expect(r).toBe('CHANNEL_DISCONNECTED');
+    });
   });
 
   it('a normal phone thread on the same channel still sends through the adapter once', async () => {

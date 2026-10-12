@@ -14,6 +14,7 @@ import {
 import { EmailMessageBody } from '@/features/channel-email/components/email-message';
 import { composerErrorKey } from '@/features/channel-email/lib/composer-errors';
 import { isRetryableSend } from '../lib/errors';
+import { displayMentions } from '../lib/mentions';
 import type { AgentReaction, PendingSend } from '../lib/thread';
 import { clockTime, fullStamp, humanSize } from '../lib/time';
 import {
@@ -55,7 +56,8 @@ function MessageBody({
   const [showOriginal, setShowOriginal] = useState(false);
 
   const translated = m.isTranslated && m.translatedBody;
-  const text = translated ? m.translatedBody : m.body;
+  // A personal-number group message names the members it @mentions by their number in the body: show their names.
+  const text = translated ? m.translatedBody : displayMentions(m.body, m.mentions);
   const caption = text?.trim() ? text : null;
   const alt = m.media?.name ?? caption ?? t('kind.image');
 
@@ -571,7 +573,7 @@ export function PendingBubble({ pending: p, progress, onRetry, onDismiss }: Pend
           )}
           {p.body && (
             <p dir="auto" className="whitespace-pre-wrap break-words">
-              {p.body}
+              {displayMentions(p.body, p.mentions)}
             </p>
           )}
         </div>

@@ -149,6 +149,16 @@
         "title": "{name} снова активна",
         "titleNoName": "Группа WhatsApp снова активна",
         "body": "WhatsApp восстановил эту группу. Теперь в неё можно писать."
+      },
+      "device_group_join_request": {
+        "title": "{count, plural, one {Кто-то хочет вступить в {name}} few {# человека хотят вступить в {name}} many {# человек хотят вступить в {name}} other {# человека хотят вступить в {name}}}",
+        "titleNoName": "{count, plural, one {Кто-то хочет вступить в группу WhatsApp} few {# человека хотят вступить в группу WhatsApp} many {# человек хотят вступить в группу WhatsApp} other {# человека хотят вступить в группу WhatsApp}}",
+        "body": "Откройте «Группы», чтобы одобрить или отклонить."
+      },
+      "device_group_removed": {
+        "title": "Ваш номер удалён из группы {name}",
+        "titleNoName": "Ваш номер удалён из группы WhatsApp",
+        "body": "Кто-то удалил ваш личный номер из этой группы. Группа сохранена здесь только для чтения."
       }
     },
     "live": {
@@ -177,7 +187,9 @@
         "teamchat_message": "Новое личное сообщение",
         "waba_group_join_request": "Запрос на вступление в группу",
         "waba_group_suspended": "Группа WhatsApp приостановлена",
-        "waba_group_suspension_cleared": "Группа WhatsApp снова активна"
+        "waba_group_suspension_cleared": "Группа WhatsApp снова активна",
+        "device_group_join_request": "Заявка на вступление в группу",
+        "device_group_removed": "Удалены из группы WhatsApp"
       }
     },
     "prefs": {
@@ -334,6 +346,14 @@
         "billing_subscription_canceled": {
           "label": "Подписка отменена",
           "hint": "Ваш платёжный провайдер завершил подписку этого рабочего пространства."
+        },
+        "device_group_join_request": {
+          "label": "Заявка на вступление в группу личного номера",
+          "hint": "Люди просят вступить в группу личного номера WhatsApp, которым вы управляете. Десять заявок объединяются в одну строку."
+        },
+        "device_group_removed": {
+          "label": "Удалены из группы личного номера",
+          "hint": "Кто-то удалил один из ваших личных номеров WhatsApp из группы. Это может означать, что на номер пожаловались."
         }
       },
       "loading": "Загрузка ваших настроек",
