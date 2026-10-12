@@ -1,9 +1,15 @@
 import { Readable } from 'node:stream';
 import { WabaApiError } from '../../whatsapp-cloud-api-waba/waba-errors';
 import { WabaHttp } from '../../whatsapp-cloud-api-waba/waba-http';
-import { downloadAuthApplies, downloadPolicy, type DnsResolver } from './media-url-guard';
+import {
+  downloadAuthApplies,
+  downloadPolicy,
+  isMetaMediaHost,
+  type DnsResolver,
+} from './media-url-guard';
 import { MEDIA_FAILURE, MediaFetchError, redact, safeUrlForLog } from './media-fetch-error';
 import {
+  providerHostOf,
   secretsIn,
   wabaAuthOf,
   type MediaAuthContext,
@@ -109,6 +115,22 @@ export function classifyWabaFailure(err: WabaApiError, ...secrets: string[]): Gr
   };
 }
 
+/**
+ * The headers for one download hop: the provider's own on its host, and on Meta's file host the business access token as a Bearer
+ * (also for a number on a BSP route such as Interakt, whose partner key that host does not accept). Nothing anywhere else.
+ */
+export function downloadHeadersFor(
+  host: string,
+  profile: MediaProviderProfile,
+  providerHeaders: Record<string, string>,
+  metaHeaders: Record<string, string> | null,
+): Record<string, string> {
+  if (metaHeaders && isMetaMediaHost(host) && host.toLowerCase() !== providerHostOf(profile)) {
+    return metaHeaders;
+  }
+  return downloadAuthApplies(host, profile) ? providerHeaders : {};
+}
+
 export interface MediaLookup {
   url: string;
   mime: string | null;
@@ -187,6 +209,10 @@ export class GraphMediaClient {
     signal?: AbortSignal,
   ): Promise<DownloadedStream> {
     const headers = this.authHeaders(profile, ctx);
+    // Meta's file host takes the business access token only, also for a number on a BSP route (Interakt's key is not accepted there).
+    const metaHeaders: Record<string, string> | null = ctx.channelToken
+      ? { Authorization: `Bearer ${ctx.channelToken}` }
+      : null;
     const policy = downloadPolicy(profile, this.cfg, downloadUrl);
     let url = downloadUrl;
     let carryAuth = true;
@@ -196,7 +222,7 @@ export class GraphMediaClient {
       const res = await safeRequest({
         method: 'GET',
         url,
-        headers: carryAuth && downloadAuthApplies(host, profile) ? headers : {},
+        headers: carryAuth ? downloadHeadersFor(host, profile, headers, metaHeaders) : {},
         policy,
         requestTimeoutMs: this.cfg.requestTimeoutMs,
         idleTimeoutMs: this.cfg.idleTimeoutMs,
@@ -227,7 +253,7 @@ export class GraphMediaClient {
       }
       if (res.status !== 200) {
         const text = await readSmallBody(res, 4096).catch(() => '');
-        throw this.failure(res.status, text, headers, safeUrlForLog(url));
+        throw this.failure(res.status, text, { ...headers, ...metaHeaders }, safeUrlForLog(url));
       }
       const length = Number(res.headers['content-length']);
       return {
