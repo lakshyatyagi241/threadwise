@@ -1,0 +1,390 @@
+{
+  "email": {
+    "common": {
+      "dismiss": "Dispensar"
+    },
+    "hub": {
+      "kicker": "Canais",
+      "title": "E-mail",
+      "titleAccent": "caixas de e-mail",
+      "intro": "Conecte seu Gmail, Microsoft 365 ou qualquer caixa IMAP. Os e-mails dos clientes chegam na caixa de entrada da equipe, uma conversa por thread, e suas respostas saem do mesmo endereço.",
+      "inbox": "Abrir caixa de entrada",
+      "channels": "Canais",
+      "loadError": "Não foi possível carregar suas caixas de e-mail. Tente novamente em instantes.",
+      "cardCaption": "Gmail · Microsoft 365 · IMAP",
+      "connectedCount": "{count, plural, one {# caixa de e-mail conectada} other {# caixas de e-mail conectadas}}",
+      "notConnected": "Não conectada",
+      "usageLabel": "Caixas de e-mail usadas",
+      "usage": "{used} de {limit} caixas de e-mail",
+      "usageUnlimited": "{used, plural, one {# caixa de e-mail} other {# caixas de e-mail}}, sem limite",
+      "howTitle": "Como funciona",
+      "how": {
+        "connect": {
+          "title": "Conecte uma caixa de e-mail",
+          "body": "Entre com Google ou Microsoft, ou informe as configurações do seu servidor de e-mail, e permita que o Threadwise leia e envie e-mails desse endereço."
+        },
+        "inbox": {
+          "title": "O e-mail chega à caixa de entrada",
+          "body": "Novos e-mails são buscados a cada minuto. Cada thread de e-mail vira uma conversa, e cada caixa de e-mail é a sua própria caixa de entrada."
+        },
+        "reply": {
+          "title": "Responda pela caixa de entrada",
+          "body": "Sua resposta sai da caixa de e-mail na mesma thread, com Cc e Bcc se você os adicionar."
+        },
+        "limit": {
+          "title": "As caixas de e-mail seguem seu plano",
+          "body": "Seu plano define quantas caixas de e-mail você pode conectar. Os e-mails não contam na sua cota de mensagens."
+        }
+      },
+      "connectedTitle": "Caixas de e-mail conectadas",
+      "total": "{count, plural, one {# caixa de e-mail} other {# caixas de e-mail}}",
+      "empty": "Nenhuma caixa conectada ainda. Conecte uma abaixo para começar a receber e-mails na caixa de entrada.",
+      "addTitle": "Adicionar uma caixa de e-mail",
+      "providers": {
+        "google": {
+          "name": "Gmail / Google Workspace",
+          "hint": "Entre com a conta do Google que é dona da caixa de e-mail, por exemplo support@suaempresa.com."
+        },
+        "imap": {
+          "name": "Outro e-mail (IMAP / SMTP)",
+          "hint": "Qualquer outro provedor de e-mail com usuário e senha."
+        },
+        "microsoft": {
+          "name": "Microsoft 365 / Outlook",
+          "hint": "Entre com uma conta Microsoft de trabalho ou escola."
+        }
+      },
+      "notReady": "{provider} ainda não está configurado nesta plataforma. Peça ao administrador da plataforma para adicionar as credenciais.",
+      "limitReached": "Você usou todas as {limit, plural, one {# caixa de e-mail} other {# caixas de e-mail}} que seu plano permite. Remova uma caixa de e-mail ou peça ao administrador para fazer upgrade do plano.",
+      "noPermission": "Você pode ver as caixas de e-mail, mas somente pessoas com permissão para gerenciá-las podem conectar uma.",
+      "connectFailed": "Não foi possível iniciar o login. Tente novamente.",
+      "connect": {
+        "google": "Conectar Gmail",
+        "microsoft": "Conectar Microsoft 365",
+        "imap": "Conectar IMAP / SMTP"
+      },
+      "imapConnected": "Caixa conectada. Os e-mails dos últimos 7 dias estão sendo buscados na caixa de entrada.",
+      "imapReconnected": "Caixa reconectada.",
+      "scope": {
+        "title": "Para quem é esta caixa?",
+        "shared": "Compartilhada",
+        "sharedHint": "Uma caixa da empresa, como suporte@. Toda a equipe pode atender suas conversas.",
+        "personal": "Pessoal",
+        "personalHint": "Sua própria caixa. Só você pode ler as conversas dela.",
+        "onlyPersonal": "Você pode conectar sua própria caixa pessoal. Só você pode ler as conversas dela."
+      }
+    },
+    "card": {
+      "status": {
+        "connected": "Conectada",
+        "needs_reauth": "Precisa reconectar",
+        "error": "Erro",
+        "disconnected": "Desconectada"
+      },
+      "sendsAs": "As respostas saem como",
+      "displayName": "Nome de exibição",
+      "edit": "Editar",
+      "save": "Salvar",
+      "cancel": "Cancelar",
+      "renamed": "Nome de exibição salvo.",
+      "needsReauthHint": "O provedor não nos deixa mais ler esta caixa. Reconecte-a para voltar a receber e enviar e-mails.",
+      "lastError": "Último problema: {error}",
+      "lastSynced": "Última sincronização",
+      "neverSynced": "Ainda não sincronizada",
+      "conversations": "Conversas",
+      "openInbox": "Abrir na caixa de entrada",
+      "sync": "Sincronizar agora",
+      "syncStarted": "Sincronização iniciada. Os novos e-mails aparecem na caixa de entrada em instantes.",
+      "reconnect": "Reconectar",
+      "remove": "Remover",
+      "removeTitle": "Remover caixa de e-mail",
+      "removeConfirm": "Remover {address}? As conversas dela permanecem na caixa de entrada como histórico somente leitura, e nenhum novo e-mail é recebido ou enviado por ela. Você pode conectar o mesmo endereço novamente mais tarde.",
+      "removed": "Caixa de e-mail removida.",
+      "failed": "Não foi possível atualizar a caixa de e-mail. Tente novamente.",
+      "provider": {
+        "google": "Gmail",
+        "microsoft": "Microsoft 365",
+        "imap": "IMAP / SMTP"
+      },
+      "scope": {
+        "shared": "Compartilhada",
+        "personal": "Pessoal",
+        "personalOf": "Pessoal · {name}"
+      },
+      "push": "Atualizações em tempo real",
+      "pushHint": "Os e-mails novos chegam assim que o provedor avisa.",
+      "signature": "Assinatura",
+      "signatureHint": "As respostas desta caixa recebem a assinatura dela.",
+      "summaryNote": "Esta é a caixa pessoal de outra pessoa. Só o dono pode lê-la e gerenciá-la.",
+      "sendLimit": "Limite de envios por hora",
+      "limitDefault": "Padrão da plataforma",
+      "limitPerHour": "{count, plural, one {# e-mail por hora} other {# e-mails por hora}}",
+      "limitSaved": "Limite de envios salvo.",
+      "needsReauthImap": "O servidor de e-mail recusou a senha salva. Reconecte e digite a senha novamente."
+    },
+    "outcome": {
+      "connected": "Caixa de e-mail conectada. Os e-mails dos últimos 7 dias estão sendo buscados na caixa de entrada.",
+      "denied": "O login foi cancelado, então nada foi conectado.",
+      "missing_scope": "O acesso para ler e enviar e-mails não foi concedido. Conecte novamente e permita todas as permissões na tela de login.",
+      "limit": "O limite de caixas de e-mail do seu plano foi atingido, então esta caixa de e-mail não foi conectada.",
+      "not_configured": "O login deste provedor ainda não está configurado nesta plataforma. Fale com o administrador da plataforma.",
+      "wrong_account": "Você entrou com uma conta diferente da caixa que está sendo reconectada. Entre com o mesmo endereço.",
+      "failed": "Algo deu errado ao conectar a caixa de e-mail. Tente novamente."
+    },
+    "errors": {
+      "notConfigured": "O login deste provedor ainda não está configurado nesta plataforma. Fale com o administrador da plataforma.",
+      "limit": "O limite de caixas de e-mail do seu plano foi atingido.",
+      "unavailable": "Esta caixa de e-mail está desconectada ou precisa ser reconectada primeiro.",
+      "sendRefused": "O provedor de e-mail recusou o envio deste e-mail. Confira os endereços e o tamanho e tente novamente.",
+      "wrongAccount": "Esta é uma conta diferente da desta caixa. Entre com o mesmo endereço.",
+      "locked": "A integração de e-mail não faz parte do seu plano.",
+      "changed": "Esta caixa de e-mail foi alterada em outro lugar. A lista foi recarregada, tente novamente.",
+      "personalDisabled": "As caixas pessoais estão desativadas neste espaço de trabalho.",
+      "personalNotAllowed": "Você não tem permissão para conectar uma caixa pessoal.",
+      "providerUnsupported": "Este provedor de e-mail não está disponível.",
+      "rateLimited": "Esta caixa atingiu o limite de envios. Tente novamente mais tarde."
+    },
+    "guide": {
+      "title": "Guia de configuração",
+      "google": {
+        "title": "Conectar Gmail ou Google Workspace",
+        "p1": "Escolha Conectar Gmail e entre com a conta dona da caixa de e-mail, como um endereço compartilhado support@ ou sales@.",
+        "p2": "Na tela do Google, permita ler e enviar e-mails. Sem as duas permissões, não é possível receber nem enviar e-mails.",
+        "p3": "Você volta para cá e os primeiros 7 dias de e-mails são buscados na caixa de entrada sem notificar ninguém.",
+        "p4": "Adicione mais caixas de e-mail da mesma forma, até o número que seu plano permitir. Cada uma aparece como sua própria caixa de entrada."
+      },
+      "consent": {
+        "title": "O que lemos e enviamos",
+        "p1": "Lemos os e-mails da sua caixa de entrada para exibi-los na caixa de entrada da equipe. Spam, lixeira e rascunhos são ignorados.",
+        "p2": "E-mails que nós mesmos enviamos da sua conta em outro lugar não são copiados para a caixa de entrada.",
+        "p3": "Respostas automáticas, e-mails devolvidos e mensagens de listas de e-mail são armazenados e marcados como Automático.",
+        "p4": "Remover uma caixa de e-mail interrompe a leitura e o envio. Suas conversas anteriores permanecem como histórico somente leitura."
+      },
+      "trouble": {
+        "title": "Se algo parecer errado",
+        "p1": "Precisa reconectar significa que o provedor revogou ou expirou o acesso, ou que o servidor de e-mail recusou a senha. Selecione Reconectar.",
+        "p2": "Erro mostra o último problema. Selecione Sincronizar agora para tentar de novo; se continuar falhando, reconecte a caixa de e-mail.",
+        "p3": "Conectar fica desativado quando a plataforma não tem o login desse provedor configurado ou o limite de caixas do seu plano foi atingido.",
+        "p4": "As imagens de um e-mail ficam ocultas até você escolher Carregar imagens na conversa."
+      },
+      "other": {
+        "title": "Conectar Microsoft 365 ou outro provedor de e-mail",
+        "p1": "Para Microsoft 365 ou Outlook, escolha Conectar Microsoft 365 e entre com a conta de trabalho ou escola dona da caixa.",
+        "p2": "Para qualquer outro provedor, escolha Conectar IMAP / SMTP e informe servidor, porta, segurança, usuário e senha do seu provedor.",
+        "p3": "Primeiro fazemos login no servidor de entrada e no de saída. Se um recusar, a mensagem diz qual.",
+        "p4": "Alguns provedores exigem uma senha de app em vez da senha normal. Crie uma nas configurações de segurança do seu provedor."
+      },
+      "personal": {
+        "title": "Caixas pessoais e compartilhamento",
+        "p1": "Um administrador ativa as caixas pessoais em Compartilhamento de e-mail e escolhe quem pode conectar uma.",
+        "p2": "Ao conectar uma caixa, escolha Pessoal. Só você pode ler as conversas dela na caixa de entrada.",
+        "p3": "Os administradores veem apenas um resumo da sua caixa, a menos que o espaço de trabalho permita que leiam caixas pessoais.",
+        "p4": "Desativar as caixas pessoais nunca abre uma caixa pessoal existente para outras pessoas."
+      }
+    },
+    "thread": {
+      "noSubject": "(sem assunto)",
+      "automated": "Automático",
+      "from": "De",
+      "to": "Para",
+      "cc": "Cc",
+      "date": "Data",
+      "imagesBlocked": "As imagens da internet estão ocultas.",
+      "loadImages": "Carregar imagens",
+      "frameTitle": "E-mail: {subject}",
+      "truncated": "Este e-mail era longo, então apenas a primeira parte é exibida.",
+      "noBody": "Este e-mail não tem texto.",
+      "attachments": "{count, plural, one {# anexo} other {# anexos}}",
+      "tooLarge": "grande demais para guardar ({size})",
+      "download": "Baixar {name} ({size})",
+      "bounce": {
+        "title": "Não entregue a {address}.",
+        "reason": "Motivo: {reason}",
+        "hard": "O endereço foi recusado em definitivo. Verifique se há erros de digitação e envie um novo e-mail ao endereço corrigido.",
+        "soft": "Parece algo temporário, como uma caixa cheia. Pode funcionar se você enviar mais tarde, ou edite o endereço."
+      }
+    },
+    "composer": {
+      "toggle": "Cc, Cco e assunto",
+      "cc": "Cc",
+      "bcc": "Cco",
+      "subject": "Assunto",
+      "subjectPlaceholder": "Assunto",
+      "addressesPlaceholder": "nome@exemplo.com, outro@exemplo.com",
+      "problem": {
+        "ccInvalid": "Estes endereços de Cc não são válidos: {list}",
+        "bccInvalid": "Estes endereços de Cco não são válidos: {list}",
+        "ccTooMany": "Cc aceita no máximo 20 endereços.",
+        "bccTooMany": "Cco aceita no máximo 20 endereços.",
+        "subjectTooLong": "O assunto pode ter no máximo 998 caracteres."
+      },
+      "editor": {
+        "toolbar": "Formatação do texto",
+        "bold": "Negrito",
+        "italic": "Itálico",
+        "underline": "Sublinhado",
+        "bulletList": "Lista com marcadores",
+        "numberedList": "Lista numerada",
+        "quote": "Citação",
+        "link": "Adicionar link",
+        "clear": "Limpar formatação",
+        "linkAddress": "Endereço do link",
+        "linkApply": "Adicionar",
+        "linkInvalid": "Digite um endereço web, de e-mail ou de telefone.",
+        "label": "Resposta por e-mail",
+        "toPlain": "Mudar para texto simples",
+        "toRich": "Mudar para texto formatado",
+        "hint": "Pressione Ctrl+Enter (Cmd+Enter no Mac) para enviar. Enter insere uma nova linha."
+      },
+      "attach": {
+        "dismiss": "Dispensar",
+        "list": "Arquivos anexados ({count})",
+        "uploading": "Enviando {name}",
+        "ready": "Anexado",
+        "failed": "Falha no envio",
+        "retry": "Tentar de novo",
+        "remove": "Remover {name}",
+        "waiting": "Aguardando o envio dos arquivos terminar.",
+        "fixFailed": "Tente de novo ou remova os arquivos que não foram enviados.",
+        "refused": {
+          "empty": "{name} está vazio e não foi adicionado.",
+          "tooLarge": "{name} é maior que {max} e não foi adicionado.",
+          "tooMany": "Só cabem {count} arquivos em um e-mail. {name} não foi adicionado.",
+          "totalTooLarge": "Com {name} o e-mail ficaria grande demais e ele não foi adicionado.",
+          "blocked": "{name} é um tipo de arquivo que o e-mail não pode levar e não foi adicionado."
+        }
+      },
+      "error": {
+        "rateLimited": "Esta caixa de e-mail atingiu o limite de envios por hora. {seconds, plural, =0 {Tente de novo daqui a pouco.} other {Tente de novo em # s.}}",
+        "attachmentTooLarge": "Um arquivo é grande demais para anexar. Cada arquivo pode ter no máximo 10 MB e todos juntos 20 MB.",
+        "tooManyAttachments": "Arquivos demais. Um e-mail aceita no máximo 10.",
+        "attachmentGone": "Um anexo expirou ou foi removido. Anexe-o de novo.",
+        "signatureGone": "A assinatura escolhida não existe mais. Escolha outra.",
+        "sendRefused": "O provedor de e-mail recusou esta mensagem. Confira os endereços e o tamanho e tente de novo.",
+        "unavailable": "Esta caixa de e-mail está desconectada ou precisa ser reconectada primeiro.",
+        "attachmentBlocked": "Esse tipo de arquivo não pode ser enviado por e-mail.",
+        "network": "Não foi possível falar com o servidor. Verifique sua conexão e tente de novo.",
+        "generic": "Não foi possível enviar o e-mail. Tente de novo.",
+        "bodyTooLong": "Este e-mail é longo demais para enviar. Reduza o texto e tente de novo."
+      },
+      "signature": {
+        "label": "Assinatura",
+        "auto": "Padrão ({name})",
+        "autoNone": "Padrão (nenhuma)",
+        "none": "Sem assinatura",
+        "mine": "{name} (minha)",
+        "shared": "{name} (caixa de e-mail)",
+        "preview": "Pré-visualização da assinatura",
+        "noneShown": "Nenhuma assinatura será adicionada."
+      }
+    },
+    "inbox": {
+      "group": "E-mail"
+    },
+    "imap": {
+      "eyebrow": "Outro e-mail",
+      "title": "Conectar caixa IMAP / SMTP",
+      "reconnectTitle": "Reconectar caixa IMAP / SMTP",
+      "close": "Fechar",
+      "intro": "Informe as configurações que seu provedor de e-mail fornece para este endereço. Fazemos login nos dois servidores antes de salvar qualquer coisa.",
+      "reconnectIntro": "Digite a senha novamente. Fazemos login nos dois servidores antes de salvar qualquer coisa.",
+      "address": "Endereço da caixa",
+      "displayName": "Nome de exibição",
+      "preset": "Provedor de e-mail",
+      "presetHint": "Escolher um preenche as configurações do servidor. Você ainda pode alterá-las.",
+      "presetCustom": "Outro (informar as configurações)",
+      "incoming": "E-mail recebido (IMAP)",
+      "outgoing": "E-mail enviado (SMTP)",
+      "host": "Servidor",
+      "port": "Porta",
+      "securityLabel": "Segurança",
+      "security": {
+        "ssl": "SSL/TLS",
+        "starttls": "STARTTLS",
+        "none": "Nenhuma"
+      },
+      "username": "Usuário",
+      "password": "Senha",
+      "passwordHint": "Guardada criptografada e nunca mais exibida.",
+      "passwordAgain": "Digite a senha novamente. Ela nunca é exibida.",
+      "showPassword": "Mostrar senha",
+      "hidePassword": "Ocultar senha",
+      "sameCredentials": "Usar o mesmo usuário e senha para enviar",
+      "noEncryption": "Esta conexão não é criptografada. Qualquer pessoa na rede poderia ler a senha e os e-mails.",
+      "verifyNote": "O certificado do servidor é sempre verificado.",
+      "cancel": "Cancelar",
+      "submit": "Verificar e conectar",
+      "reconnectSubmit": "Verificar e reconectar",
+      "verifying": "Verificando",
+      "errors": {
+        "required": "Este campo é obrigatório.",
+        "invalid": "Este valor não é válido."
+      },
+      "failure": {
+        "imapAuth": "O servidor de entrada (IMAP) recusou o usuário ou a senha. Confira e tente novamente.",
+        "smtpAuth": "O servidor de saída (SMTP) recusou o usuário ou a senha. Confira e tente novamente.",
+        "unreachable": "Não foi possível alcançar o servidor de e-mail ou o certificado dele não é válido. Confira servidor, porta e segurança.",
+        "generic": "Não foi possível conectar a caixa. Tente novamente."
+      }
+    },
+    "sharing": {
+      "title": "Compartilhamento de e-mail",
+      "intro": "Decida se as pessoas podem conectar a própria caixa e quem pode vê-la.",
+      "enabled": {
+        "title": "Caixas pessoais",
+        "body": "Permita que as pessoas conectem a própria caixa. As conversas dela só ficam visíveis para elas."
+      },
+      "who": {
+        "title": "Quem pode conectar uma",
+        "body": "Somente pessoas com permissão para gerenciar caixas pessoais.",
+        "admins": "Somente administradores",
+        "agents": "Administradores e agentes"
+      },
+      "admins": {
+        "title": "Administradores podem ler caixas pessoais",
+        "body": "Os administradores podem abrir as conversas das caixas pessoais de outras pessoas. Desativado, eles veem apenas um resumo."
+      },
+      "offNote": "Desativar as caixas pessoais apenas oculta a opção de conectar. As caixas pessoais existentes continuam privadas para seus donos.",
+      "save": "Salvar",
+      "reset": "Descartar alterações",
+      "saved": "Compartilhamento de e-mail salvo.",
+      "failed": "Não foi possível salvar. Tente novamente."
+    },
+    "signatures": {
+      "title": "Assinaturas",
+      "intro": "Uma assinatura é adicionada ao final das suas respostas. Cada caixa de e-mail pode ter uma compartilhada e você pode ter a sua, que é usada primeiro.",
+      "new": "Nova assinatura",
+      "edit": "Editar assinatura",
+      "scope": "A quem pertence",
+      "scopes": {
+        "user": "A mim",
+        "mailbox": "A uma caixa de e-mail",
+        "userBadge": "Minha",
+        "mailboxBadge": "Caixa de e-mail"
+      },
+      "mailbox": "Caixa de e-mail",
+      "pickMailbox": "Escolha uma caixa de e-mail",
+      "mailboxRequired": "Escolha uma caixa de e-mail.",
+      "name": "Nome",
+      "nameRequired": "Dê um nome à assinatura.",
+      "body": "Assinatura",
+      "bodyPlaceholder": "Seu nome, cargo, telefone, links...",
+      "variables": "Você pode usar {name}, {title} e {phone}. Eles são preenchidos com os dados de quem envia.",
+      "tooLong": "A assinatura é longa demais.",
+      "defaultUser": "Usar como minha assinatura padrão",
+      "defaultMailbox": "Usar como padrão desta caixa de e-mail",
+      "save": "Salvar",
+      "cancel": "Cancelar",
+      "loading": "Carregando assinaturas...",
+      "loadError": "Não foi possível carregar as assinaturas. Tente de novo em instantes.",
+      "empty": "Ainda não há assinaturas.",
+      "default": "Padrão",
+      "editShort": "Editar",
+      "delete": "Excluir",
+      "confirmDelete": "Excluir em definitivo",
+      "noPermission": "Você não tem permissão para gerenciar assinaturas.",
+      "changed": "Esta assinatura foi alterada em outro lugar. A lista foi recarregada, tente de novo.",
+      "failed": "Não foi possível salvar a assinatura. Tente de novo."
+    }
+  }
+}

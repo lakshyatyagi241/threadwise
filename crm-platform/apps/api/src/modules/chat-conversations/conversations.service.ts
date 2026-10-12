@@ -85,7 +85,9 @@ export class ConversationsService implements ConversationsFacade {
       if (!isPhoneChannel(channel.kind)) {
         throw new AppError(
           ERROR_CODES.CHANNEL_CAPABILITY_UNSUPPORTED,
-          'This channel cannot start a conversation with a contact',
+          channel.kind === 'email'
+            ? 'An email conversation starts from a customer email: it cannot be opened from a contact'
+            : 'This channel cannot start a conversation with a contact',
           HttpStatus.UNPROCESSABLE_ENTITY,
         );
       }

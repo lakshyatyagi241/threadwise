@@ -34,7 +34,8 @@
         "registered": "Registered \"{name}\" on the Cloud API.",
         "disconnected": "Disconnected \"{name}\".",
         "removed": "Removed \"{name}\".",
-        "warningsTitle": "Connected, but check this:"
+        "warningsTitle": "Connected, but check this:",
+        "verified": "Verified \"{name}\"."
       },
       "notReady": {
         "title": "Embedded Signup is not configured",
@@ -81,7 +82,8 @@
         "register": "Register",
         "meta": "Meta",
         "disconnect": "Disconnect",
-        "remove": "Remove"
+        "remove": "Remove",
+        "verify": "Verify number"
       },
       "confirm": {
         "fixInboundTitle": "Fix inbound?",
@@ -100,6 +102,17 @@
         "pin": "Two-step PIN (optional)",
         "pinError": "The PIN is 6 digits",
         "submit": "Register"
+      },
+      "verifyDialog": {
+        "title": "Verify this number",
+        "message": "Meta will send a 6-digit code to {phone}. Choose how to receive it.",
+        "enterCode": "Enter the 6-digit code Meta sent to {phone}.",
+        "sendSms": "Send code by SMS",
+        "sendVoice": "Send code by call",
+        "code": "Verification code",
+        "codeError": "The code is 6 digits",
+        "submit": "Verify",
+        "resend": "Send a new code"
       }
     },
     "connect": {

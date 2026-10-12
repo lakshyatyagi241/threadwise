@@ -102,8 +102,8 @@
       },
       "email": {
         "label": "Email",
-        "description": "Подключите почтовый ящик, чтобы отправлять и получать письма в инбоксе.",
-        "keywords": "почтовый ящик, smtp, imap, gmail, outlook, отправитель"
+        "description": "Подключайте почтовые ящики Gmail или Google Workspace, чтобы команда читала письма клиентов и отвечала на них в общем инбоксе.",
+        "keywords": "почтовый ящик, gmail, google workspace, общий инбокс, почта поддержки, outlook, imap"
       },
       "line": {
         "label": "LINE",

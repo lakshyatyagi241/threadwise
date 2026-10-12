@@ -102,8 +102,8 @@
       },
       "email": {
         "label": "E-posta",
-        "description": "Gelen kutusunda e-posta göndermek ve almak için bir posta kutusu bağlayın.",
-        "keywords": "posta kutusu, smtp, imap, gmail, outlook, gönderen"
+        "description": "Ekibiniz müşteri e-postalarını ortak gelen kutusunda okuyup yanıtlayabilsin diye Gmail veya Google Workspace posta kutularını bağlayın.",
+        "keywords": "posta kutusu, gmail, google workspace, ortak gelen kutusu, destek e-postası, outlook, imap"
       },
       "line": {
         "label": "LINE",

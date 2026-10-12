@@ -40,6 +40,10 @@ const inboundSchema = z.object({
   reactionEmoji: z.string().optional(),
   meta: z.record(z.unknown()).optional(),
   providerTimestamp: z.string().datetime(),
+  title: z.string().optional(),
+  contactIdentity: z
+    .object({ kind: z.literal('email'), value: z.string(), name: z.string().optional() })
+    .optional(),
   group: z
     .object({
       title: z.string().optional(),

@@ -10,7 +10,8 @@
       "webchat": "Чат на сайте",
       "telegram": "Telegram",
       "facebook": "Facebook Messenger",
-      "instagram": "Instagram"
+      "instagram": "Instagram",
+      "email": "Email (Gmail)"
     },
     "page": {
       "back": "Автоматизация и ИИ",

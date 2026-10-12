@@ -78,6 +78,11 @@
       "payments": "Płatności"
     },
     "help": "Pomoc",
-    "unreadCount": "{count, plural, one {# nieprzeczytana} few {# nieprzeczytane} many {# nieprzeczytanych} other {# nieprzeczytanych}}"
+    "unreadCount": "{count, plural, one {# nieprzeczytana} few {# nieprzeczytane} many {# nieprzeczytanych} other {# nieprzeczytanych}}",
+    "backgroundError": {
+      "message": "Nie udało się odświeżyć niektórych danych na żywo, takich jak powiadomienia, saldo czy liczniki skrzynki odbiorczej. To, co widzisz, może być nieaktualne.",
+      "retry": "Spróbuj ponownie",
+      "dismiss": "Zamknij"
+    }
   }
 }

@@ -31,4 +31,12 @@ export {
   type InboundMessageListener,
   type InboundStoredEvent,
 } from './inbound-hooks';
+export { EmailMessageAccess, type EmailMessageRef } from './email-message-access.service';
+export { isAutomatedEmail } from './inbound-hooks';
+export {
+  EmailDeliveryService,
+  EMAIL_BOUNCED_EVENT,
+  type RecordBounceInput,
+  type RecordBounceOutcome,
+} from './email-delivery.service';
 export { MESSAGE_LOG_FACADE, type MessageLogFacade } from './message-log.facade';

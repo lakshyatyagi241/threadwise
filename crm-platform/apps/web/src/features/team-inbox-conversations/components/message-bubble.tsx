@@ -11,6 +11,8 @@ import {
   MediaStateNote,
   mediaView,
 } from '@/features/channel-whatsapp-cloud';
+import { EmailMessageBody } from '@/features/channel-email/components/email-message';
+import { composerErrorKey } from '@/features/channel-email/lib/composer-errors';
 import { isRetryableSend } from '../lib/errors';
 import type { AgentReaction, PendingSend } from '../lib/thread';
 import { clockTime, fullStamp, humanSize } from '../lib/time';
@@ -89,6 +91,19 @@ function MessageBody({
       default:
         visual = <DocumentMedia media={media} />;
     }
+  }
+
+  // An email carries its own header, HTML body and files (TW-MAIL-026); the frame and the lists are the email feature's.
+  if (m.email) {
+    return (
+      <EmailMessageBody
+        email={m.email}
+        conversationId={m.conversationId}
+        messageId={m.id}
+        body={m.body}
+        date={m.providerAt ?? m.createdAt}
+      />
+    );
   }
 
   const referral =
@@ -347,6 +362,7 @@ export const MessageBubble = memo(function MessageBubble({
           <div
             className={cn(
               BUBBLE,
+              m.email && 'w-full sm:max-w-[90%]',
               out
                 ? 'rounded-ee-md border border-primary/25 bg-primary/15 text-foreground'
                 : 'rounded-es-md border border-border bg-background',
@@ -355,6 +371,20 @@ export const MessageBubble = memo(function MessageBubble({
           >
             {out && sender && (
               <p className="mb-0.5 text-[11px] font-medium text-muted-foreground">{sender}</p>
+            )}
+            {!out && m.group && (
+              <p
+                dir="auto"
+                data-testid="inbox-group-author"
+                className="mb-0.5 text-[11px] font-medium text-primary"
+              >
+                {m.group.senderName ?? m.group.participant ?? t('groupMember')}
+                {m.group.senderName && m.group.participant && (
+                  <span className="ms-1 font-normal text-muted-foreground" dir="ltr">
+                    {m.group.participant}
+                  </span>
+                )}
+              </p>
             )}
             {m.forwarded && (
               <p
@@ -458,6 +488,15 @@ export const MessageBubble = memo(function MessageBubble({
             {clockTime(m.createdAt, locale)}
           </time>
           {out && <Ticks status={m.status} />}
+          {out && m.groupDelivery && m.groupDelivery.deliveredTo > 0 && (
+            <span data-testid="inbox-group-tally">
+              {t('groupTally', {
+                delivered: m.groupDelivery.deliveredTo,
+                billable: m.groupDelivery.billable,
+                free: m.groupDelivery.free,
+              })}
+            </span>
+          )}
         </div>
         {failed && (
           <div className="mt-0.5 flex flex-wrap items-center justify-end gap-2 px-1 text-xs text-danger">
@@ -503,8 +542,10 @@ export interface PendingBubbleProps {
 export function PendingBubble({ pending: p, progress, onRetry, onDismiss }: PendingBubbleProps) {
   const t = useTranslations('team-inbox-conversations.bubble');
   const errorText = useErrorText();
+  const mailError = useTranslations('email.composer.error');
   const locale = useLocale();
   const failed = p.status === 'failed';
+  const mailKey = p.error ? composerErrorKey(p.error) : null;
   return (
     <li
       data-testid="inbox-pending"
@@ -545,7 +586,11 @@ export function PendingBubble({ pending: p, progress, onRetry, onDismiss }: Pend
         </div>
         {failed && (
           <div className="mt-0.5 flex flex-wrap items-center justify-end gap-2 px-1 text-xs text-danger">
-            <span role="alert">{errorText(p.error ?? 'NETWORK')}</span>
+            <span role="alert">
+              {mailKey
+                ? mailError(mailKey, { seconds: p.retryAfterS ?? 0 })
+                : errorText(p.error ?? 'NETWORK')}
+            </span>
             {isRetryableSend(p.error ?? 'NETWORK') && (
               <button
                 type="button"

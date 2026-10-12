@@ -102,8 +102,8 @@
       },
       "email": {
         "label": "البريد الإلكتروني",
-        "description": "اربط صندوق بريد لإرسال البريد واستقباله في صندوق الوارد.",
-        "keywords": "ايميل, صندوق بريد, smtp, gmail, email"
+        "description": "اربط صناديق بريد Gmail أو Google Workspace ليتمكن فريقك من قراءة رسائل العملاء والرد عليها في صندوق الوارد المشترك.",
+        "keywords": "صندوق بريد, gmail, google workspace, صندوق وارد مشترك, بريد الدعم, outlook, imap"
       },
       "line": {
         "label": "لاين",

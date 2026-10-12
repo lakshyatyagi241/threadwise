@@ -1,4 +1,4 @@
-import type { MessageResponse } from '@crm/contracts';
+import { emailMetaSchema, type EmailMeta, type MessageResponse } from '@crm/contracts';
 import type { MessageRow } from './messages.repository';
 
 /** Mints the short-lived url of a stored file for one reader; null leaves the url out (the realtime payload has no single reader). */
@@ -109,6 +109,21 @@ function referralOf(row: MessageRow): MessageResponse['referral'] {
   };
 }
 
+/** The member who posted in a WhatsApp group (`meta.group`, set by the inbound ingest). */
+function groupAuthorOf(row: MessageRow): MessageResponse['group'] {
+  const g = row.meta.group as Record<string, unknown> | undefined;
+  if (!g || typeof g !== 'object' || row.direction !== 'in') return undefined;
+  return { participant: str(g.participant), senderName: str(g.senderName) };
+}
+
+/** The tally of a message sent to a WhatsApp group (`meta.group_delivery`, folded from Meta's per-member statuses). */
+function groupDeliveryOf(row: MessageRow): MessageResponse['groupDelivery'] {
+  const d = row.meta.group_delivery as Record<string, unknown> | undefined;
+  if (!d || typeof d !== 'object' || row.direction !== 'out') return undefined;
+  const n = (v: unknown) => (typeof v === 'number' && Number.isFinite(v) && v >= 0 ? Math.floor(v) : 0);
+  return { deliveredTo: n(d.delivered_to), billable: n(d.billable_count), free: n(d.free_count) };
+}
+
 const humanType = (t: string): string => {
   const s = t.replace(/_/g, ' ');
   return s.charAt(0).toUpperCase() + s.slice(1);
@@ -166,6 +181,13 @@ function legacyView(row: MessageRow): {
   return null;
 }
 
+/** An email message's `meta.email` block, validated on the way out (a row written by an older build or by hand never breaks the response). */
+function emailOf(row: MessageRow): EmailMeta | undefined {
+  if (row.meta.email === undefined) return undefined;
+  const parsed = emailMetaSchema.safeParse(row.meta.email);
+  return parsed.success ? parsed.data : undefined;
+}
+
 /**
  * The only place a message row becomes its wire shape (internal ids never leave: every reference is a uuid; the storage key never
  * leaves: the file is a link minted per reader).
@@ -213,7 +235,10 @@ export function toMessageResponse(row: MessageRow, link: MediaLinker): MessageRe
     interactive: legacy?.interactive ?? interactiveOf(row),
     forwarded: row.meta.forwarded === true ? true : undefined,
     referral: referralOf(row),
+    group: groupAuthorOf(row),
+    groupDelivery: groupDeliveryOf(row),
     sentInteractive: sentInteractiveOf(row),
+    email: emailOf(row),
     unsupported:
       row.meta.unsupported === true &&
       row.meta.rawType !== 'order' &&

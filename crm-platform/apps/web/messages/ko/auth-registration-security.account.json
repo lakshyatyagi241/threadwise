@@ -554,7 +554,8 @@
             "form_builder": "양식",
             "waba_groups": "WhatsApp 그룹",
             "sms": "SMS",
-            "help_agent": "도움말 어시스턴트"
+            "help_agent": "도움말 어시스턴트",
+            "email_channel": "이메일(Gmail) 채널"
           },
           "cta": {
             "continueFree": "무료로 계속",

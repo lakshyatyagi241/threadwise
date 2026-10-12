@@ -10,7 +10,8 @@
       "webchat": "Website chat",
       "telegram": "Telegram",
       "facebook": "Facebook Messenger",
-      "instagram": "Instagram"
+      "instagram": "Instagram",
+      "email": "Email (Gmail)"
     },
     "page": {
       "back": "Automation and AI",

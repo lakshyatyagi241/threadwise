@@ -135,7 +135,9 @@
       "groupSendUnavailable": "暂不支持发送到 WhatsApp 群组。请使用 WhatsApp Business 应用回复。",
       "logRange": "请选择最近一年内的日期，开始日期须早于结束日期，且不能是未来日期。",
       "logBusy": "已有一个导出正在准备中。请等待收到邮件后再发起新的导出。",
-      "logNotReady": "此导出尚未就绪或已过期。请重新发起导出。"
+      "logNotReady": "此导出尚未就绪或已过期。请重新发起导出。",
+      "groupSuspended": "Meta 已暂停此群组，在 Meta 解除之前无法向其发送消息。",
+      "walletEmpty": "消息钱包余额不足以支付此群消息（每位成员收取一次费用）。请充值后重试。"
     },
     "bubble": {
       "kind": {
@@ -201,7 +203,9 @@
         "takeBackLabel": "你的回应 {emoji}。撤回",
         "failed": "此回应未发送"
       },
-      "deliveryLog": "投递日志"
+      "deliveryLog": "投递日志",
+      "groupMember": "群成员",
+      "groupTally": "已送达 {delivered, plural, other {# 位成员}}：计费 {billable}，免费 {free}"
     },
     "media": {
       "openImage": "打开图片 {name}",

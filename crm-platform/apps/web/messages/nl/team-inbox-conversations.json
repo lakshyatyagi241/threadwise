@@ -135,7 +135,9 @@
       "groupSendUnavailable": "Verzenden naar WhatsApp-groepen is nog niet beschikbaar. Antwoord via de WhatsApp Business-app.",
       "logRange": "Kies datums binnen het afgelopen jaar, waarbij de start voor het einde ligt en niet in de toekomst.",
       "logBusy": "Er wordt al een export voorbereid. Wacht op de e-mail ervan en vraag daarna een nieuwe aan.",
-      "logNotReady": "Deze export is niet gereed of is verlopen. Vraag hem opnieuw aan."
+      "logNotReady": "Deze export is niet gereed of is verlopen. Vraag hem opnieuw aan.",
+      "groupSuspended": "Meta heeft deze groep opgeschort, dus er kunnen geen berichten naartoe worden gestuurd totdat Meta dit opheft.",
+      "walletEmpty": "Je berichtenportemonnee dekt dit groepsbericht niet (één kost per lid). Waardeer op en probeer het opnieuw."
     },
     "bubble": {
       "kind": {
@@ -201,7 +203,9 @@
         "takeBackLabel": "Jouw reactie {emoji}. Intrekken",
         "failed": "Deze reactie is niet verzonden"
       },
-      "deliveryLog": "Bezorglogboek"
+      "deliveryLog": "Bezorglogboek",
+      "groupMember": "Groepslid",
+      "groupTally": "Bezorgd bij {delivered, plural, one {# lid} other {# leden}}: {billable} berekend, {free} gratis"
     },
     "media": {
       "openImage": "Afbeelding {name} openen",

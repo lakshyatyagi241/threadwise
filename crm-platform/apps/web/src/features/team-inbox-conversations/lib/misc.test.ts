@@ -1,11 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { ApiError } from '@/lib/api/errors';
 import { ERROR_KINDS, errorCode, errorKind, isRetryableSend } from './errors';
-import { isGroupThread } from './group-thread';
+import { isGroupSendBlocked, isGroupThread } from './group-thread';
 import { shortcutAction } from './shortcuts';
 import { eventLabel } from './timeline';
 
 describe('group threads', () => {
+  it('the Reply tab is off on a group thread only for a channel that cannot send to a group', () => {
+    expect(isGroupSendBlocked('g:Y2FwaV9ncm91cDox', 'whatsapp_cloud')).toBe(false);
+    expect(isGroupSendBlocked('g:Y2FwaV9ncm91cDox', 'whatsapp_qr')).toBe(true);
+    expect(isGroupSendBlocked('919876543210', 'whatsapp_qr')).toBe(false);
+  });
   it('a thread keyed g:<id> is a group; a phone number or nothing is not', () => {
     expect(isGroupThread('g:Y2FwaV9ncm91cDox')).toBe(true);
     expect(isGroupThread('919876543210')).toBe(false);
@@ -22,6 +27,8 @@ describe('error kinds', () => {
     expect(errorKind('ROW_VERSION_CONFLICT')).toBe('conflict');
     expect(errorKind('CONVERSATION_NOT_FOUND')).toBe('notFound');
     expect(errorKind('WABA_GROUP_SEND_UNAVAILABLE')).toBe('groupSendUnavailable');
+    expect(errorKind('WABA_GROUP_SUSPENDED')).toBe('groupSuspended');
+    expect(errorKind('WALLET_EMPTY')).toBe('walletEmpty');
     expect(isRetryableSend('WABA_GROUP_SEND_UNAVAILABLE')).toBe(false);
     expect(errorKind('SOMETHING_NEW')).toBe('generic');
   });

@@ -78,6 +78,11 @@
       "payments": "Pembayaran"
     },
     "help": "Bantuan",
-    "unreadCount": "{count, plural, other {# belum dibaca}}"
+    "unreadCount": "{count, plural, other {# belum dibaca}}",
+    "backgroundError": {
+      "message": "Beberapa angka langsung, seperti notifikasi, saldo, atau jumlah kotak masuk, tidak dapat diperbarui. Yang Anda lihat mungkin sudah usang.",
+      "retry": "Coba lagi",
+      "dismiss": "Tutup"
+    }
   }
 }

@@ -3,7 +3,7 @@ import { sql, type SQL } from 'drizzle-orm';
 import type { InboxCounts, InboxTab } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { AppError } from '../../common/errors/app-error';
-import type { ConversationViewer } from '../../realtime';
+import { channelOwnerSql, type ConversationViewer } from '../../realtime';
 import { visibleToSql } from './visibility-sql';
 
 type Raw = Record<string, unknown>;
@@ -40,6 +40,8 @@ export interface InboxConversationRow {
   assigneeTeamColor: string | null;
   assigneeAgentUuid: string | null;
   assigneeAgentName: string | null;
+  /** Who owns the channel (a personal mailbox's owner), for the visibility rule: see `ConversationRecord`. */
+  channelOwnerUserId: number | null;
   snoozedUntil: string | null;
   /** Timestamps as text at the database's microsecond precision: they are keyset cursor material and must round-trip exactly. */
   lastMessageAt: string | null;
@@ -68,6 +70,8 @@ export interface LockedConversation {
   assigneeUserId: number | null;
   assigneeTeamId: number | null;
   assigneeAgentId: number | null;
+  /** Who owns the channel (a personal mailbox's owner), for the visibility rule: see `ConversationRecord`. */
+  channelOwnerUserId: number | null;
   resolvedAt: string | null;
   rowVersion: number;
 }
@@ -114,7 +118,7 @@ export function decodeListCursor(raw: string): ListCursor {
 const ts = (column: string) =>
   `to_char(${column} AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"')`;
 
-const SELECT_ROW = sql.raw(`
+const SELECT_COLUMNS = sql.raw(`
   c.id, c.uuid, c.channel_id, ch.uuid AS channel_uuid, ch.kind AS channel_kind, ch.name AS channel_name, c.peer_key, c.peer_name, c.title, c.preview, c.status, c.priority, c.archived,
   ${ts('c.pinned_at')} AS pinned_at, ${ts('c.muted_at')} AS muted_at, c.unread_count, c.needs_contact,
   c.contact_id, ct.uuid AS contact_uuid, ct.name AS contact_name,
@@ -128,6 +132,8 @@ const SELECT_ROW = sql.raw(`
   c.customer_language, ${ts('c.waiting_since')} AS waiting_since, ${ts('c.first_response_at')} AS first_response_at,
   ${ts('c.resolved_at')} AS resolved_at, ${ts('c.sla_first_response_due')} AS sla_first_response_due,
   ${ts('c.sla_resolution_due')} AS sla_resolution_due, c.sla_breached`);
+
+const SELECT_ROW = sql`${SELECT_COLUMNS}, ${channelOwnerSql('c')} AS channel_owner_user_id`;
 
 const FROM_ROW = sql`
   FROM conversations c
@@ -171,6 +177,7 @@ function toRow(r: Raw): InboxConversationRow {
     assigneeTeamColor: str(r.assignee_team_color),
     assigneeAgentUuid: str(r.assignee_agent_uuid),
     assigneeAgentName: str(r.assignee_agent_name),
+    channelOwnerUserId: int(r.channel_owner_user_id),
     snoozedUntil: str(r.snoozed_until),
     lastMessageAt: str(r.last_message_at),
     lastInboundAt: str(r.last_inbound_at),
@@ -189,6 +196,21 @@ function toRow(r: Raw): InboxConversationRow {
     slaBreached: r.sla_breached === true,
   };
 }
+
+/** The visibility columns of one conversation (`ConversationRecord` plus its id). */
+export interface ConversationRecordRow {
+  id: number;
+  assigneeUserId: number | null;
+  assigneeTeamId: number | null;
+  channelOwnerUserId: number | null;
+}
+
+const toRecord = (r: Raw): ConversationRecordRow => ({
+  id: Number(r.id),
+  assigneeUserId: int(r.assignee_user_id),
+  assigneeTeamId: int(r.assignee_team_id),
+  channelOwnerUserId: int(r.channel_owner_user_id),
+});
 
 /** Escapes the three characters that mean something to LIKE, so a search for `50%` looks for 50 followed by a percent sign. */
 export const likePattern = (q: string): string => `%${q.replace(/[\\%_]/g, '\\$&')}%`;
@@ -280,9 +302,10 @@ export class ConversationsRepository {
    */
   async lockByUuid(tx: Tx, orgId: number, uuid: string): Promise<LockedConversation | null> {
     const res = await tx.execute(sql`
-      SELECT id, uuid, channel_id, status, assignee_user_id, assignee_team_id, assignee_agent_id,
-             ${sql.raw(ts('resolved_at'))} AS resolved_at, row_version
-      FROM conversations WHERE org_id = ${orgId} AND uuid = ${uuid} FOR UPDATE`);
+      SELECT c.id, c.uuid, c.channel_id, c.status, c.assignee_user_id, c.assignee_team_id, c.assignee_agent_id,
+             ${channelOwnerSql('c')} AS channel_owner_user_id,
+             ${sql.raw(ts('c.resolved_at'))} AS resolved_at, c.row_version
+      FROM conversations c WHERE c.org_id = ${orgId} AND c.uuid = ${uuid} FOR UPDATE OF c`);
     const r = rowsOf(res)[0];
     if (!r) return null;
     return {
@@ -293,28 +316,20 @@ export class ConversationsRepository {
       assigneeUserId: int(r.assignee_user_id),
       assigneeTeamId: int(r.assignee_team_id),
       assigneeAgentId: int(r.assignee_agent_id),
+      channelOwnerUserId: int(r.channel_owner_user_id),
       resolvedAt: str(r.resolved_at),
       rowVersion: Number(r.row_version),
     };
   }
 
   /** The visibility columns of a conversation by uuid, without a lock (the cheap "may this person see it" check for reads). */
-  async recordByUuid(
-    tx: Tx,
-    orgId: number,
-    uuid: string,
-  ): Promise<{ id: number; assigneeUserId: number | null; assigneeTeamId: number | null } | null> {
+  async recordByUuid(tx: Tx, orgId: number, uuid: string): Promise<ConversationRecordRow | null> {
     const res = await tx.execute(
-      sql`SELECT id, assignee_user_id, assignee_team_id FROM conversations WHERE org_id = ${orgId} AND uuid = ${uuid}`,
+      sql`SELECT c.id, c.assignee_user_id, c.assignee_team_id, ${channelOwnerSql('c')} AS channel_owner_user_id
+          FROM conversations c WHERE c.org_id = ${orgId} AND c.uuid = ${uuid}`,
     );
     const r = rowsOf(res)[0];
-    return r
-      ? {
-          id: Number(r.id),
-          assigneeUserId: int(r.assignee_user_id),
-          assigneeTeamId: int(r.assignee_team_id),
-        }
-      : null;
+    return r ? toRecord(r) : null;
   }
 
   /**
@@ -325,20 +340,14 @@ export class ConversationsRepository {
     tx: Tx,
     orgId: number,
     messageUuid: string,
-  ): Promise<{ id: number; assigneeUserId: number | null; assigneeTeamId: number | null } | null> {
+  ): Promise<ConversationRecordRow | null> {
     const res = await tx.execute(sql`
-      SELECT c.id, c.assignee_user_id, c.assignee_team_id
+      SELECT c.id, c.assignee_user_id, c.assignee_team_id, ${channelOwnerSql('c')} AS channel_owner_user_id
       FROM conversations c
       WHERE c.org_id = ${orgId}
         AND c.id = (SELECT m.conversation_id FROM messages m WHERE m.org_id = ${orgId} AND m.uuid = ${messageUuid} LIMIT 1)`);
     const r = rowsOf(res)[0];
-    return r
-      ? {
-          id: Number(r.id),
-          assigneeUserId: int(r.assignee_user_id),
-          assigneeTeamId: int(r.assignee_team_id),
-        }
-      : null;
+    return r ? toRecord(r) : null;
   }
 
   /** The wire id of a staff user: events and outbox payloads carry uuids, never the internal id. */

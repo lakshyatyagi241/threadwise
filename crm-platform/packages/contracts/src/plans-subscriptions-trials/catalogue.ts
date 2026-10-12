@@ -85,6 +85,8 @@ export const PLAN_LIMIT_DEFS = [
   { key: 'ai_form_generations_monthly', group: 'ai' },
   // SMS messages sent per calendar month, counted per message (a three-segment text counts once), failed sends not counted (TW-SMS-026). 0 = unlimited.
   { key: 'sms_monthly', group: 'messaging' },
+  // Connected Gmail mailboxes the workspace holds (the Email add-on; not disconnected ones). Default for a plan that has it: 3 (DEFAULT_EMAIL_MAILBOXES). 0 = unlimited.
+  { key: 'email_mailboxes', group: 'messaging' },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanLimitGroup }>;
 
 export type PlanLimitKey = (typeof PLAN_LIMIT_DEFS)[number]['key'];
@@ -152,6 +154,8 @@ export const PLAN_FEATURE_DEFS = [
   // The in-app assistant that guides or does a task on the person's own session (docs/specs/help-agent-assistant.md). Default false: it
   // spends AI tokens, so the owner hands it to chosen plans; the workspace switch and the `help.agent.use` permission are separate gates.
   { key: 'help_agent', group: 'aiCalling', default: false },
+  // The Email (Gmail) channel add-on: connect Gmail mailboxes into the team inbox. Default FALSE: the Marketplace app `email` owns this key (`grants_plan_features`).
+  { key: 'email_channel', group: 'messaging', default: false },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanFeatureGroup; default: boolean }>;
 
 export type PlanFeatureKey = (typeof PLAN_FEATURE_DEFS)[number]['key'];
@@ -189,6 +193,7 @@ export const PLAN_FEATURE_LABELS: Record<PlanFeatureKey, string> = {
   waba_groups: 'WhatsApp groups',
   sms: 'SMS channel',
   help_agent: 'Help assistant',
+  email_channel: 'Email (Gmail) channel',
 };
 export const PLAN_FEATURE_KEYS = PLAN_FEATURE_DEFS.map((d) => d.key) as PlanFeatureKey[];
 
@@ -229,6 +234,7 @@ export const PLAN_CHIP_ORDER: readonly PlanFeatureKey[] = [
   'waba_groups',
   'sms',
   'help_agent',
+  'email_channel',
 ];
 export const PLAN_CHIP_MAX = 3;
 

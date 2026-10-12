@@ -7,7 +7,7 @@ import { Alert, Button, Checkbox, Field, Input, Modal, Select, Spinner } from '@
 import { useToast } from '@/features/auth-registration-security/platform/ui/toast';
 import { ApiError } from '@/lib/api/errors';
 import { BILLING_KEYS, billingApi } from '../../billing-api';
-import { money, toMinorUnits } from '../../lib/billing-format';
+import { minorToMajor, money, toMinorUnits } from '../../lib/billing-format';
 
 const NS = 'platform-payment-gateways.billing.refund';
 
@@ -84,7 +84,7 @@ export function RefundDialog({
       toast.success(
         r.status === 'processed'
           ? t('processed', {
-              amount: money(String(Number(r.amountMinor) / 100), r.currency, locale),
+              amount: money(minorToMajor(r.amountMinor, r.currency), r.currency, locale),
             })
           : t('pending'),
       );
@@ -139,7 +139,7 @@ export function RefundDialog({
                 <option value="">{t('pickCharge')}</option>
                 {paid.map((c) => (
                   <option key={c.id} value={c.paymentId ?? ''}>
-                    {money(String(Number(c.amountMinor) / 100), c.currency, locale)}
+                    {money(minorToMajor(c.amountMinor, c.currency), c.currency, locale)}
                     {c.paidAt ? ` · ${c.paidAt.slice(0, 10)}` : ''} · {c.paymentId}
                   </option>
                 ))}

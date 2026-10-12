@@ -102,8 +102,8 @@
       },
       "email": {
         "label": "E-mail",
-        "description": "Conecte uma caixa de e-mail para enviar e receber e-mails na caixa de entrada.",
-        "keywords": "caixa de e-mail, smtp, imap, gmail, outlook, remetente"
+        "description": "Conecte caixas de e-mail do Gmail ou Google Workspace para que sua equipe leia e responda os e-mails de clientes na caixa de entrada compartilhada.",
+        "keywords": "caixa de e-mail, gmail, google workspace, caixa de entrada compartilhada, e-mail de suporte, outlook, imap"
       },
       "line": {
         "label": "LINE",

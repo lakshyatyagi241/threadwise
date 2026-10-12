@@ -78,6 +78,11 @@
       "payments": "Ödemeler"
     },
     "help": "Yardım",
-    "unreadCount": "{count, plural, other {# okunmamış}}"
+    "unreadCount": "{count, plural, other {# okunmamış}}",
+    "backgroundError": {
+      "message": "Bildirimler, bakiye veya gelen kutusu sayıları gibi bazı canlı değerler yenilenemedi. Gördükleriniz güncel olmayabilir.",
+      "retry": "Tekrar dene",
+      "dismiss": "Kapat"
+    }
   }
 }

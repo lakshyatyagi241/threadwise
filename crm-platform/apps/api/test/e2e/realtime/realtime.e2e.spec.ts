@@ -185,7 +185,12 @@ async function conversation(
   t: Tenant,
   assignee: { userId?: number | null; teamId?: number | null } = {},
   uuid: string = randomUUID(),
-): Promise<{ uuid: string; assigneeUserId: number | null; assigneeTeamId: number | null }> {
+): Promise<{
+  uuid: string;
+  assigneeUserId: number | null;
+  assigneeTeamId: number | null;
+  channelOwnerUserId: null;
+}> {
   await h.owner.query(
     `INSERT INTO conversations (org_id, uuid, channel_id, peer_key, title, assignee_user_id, assignee_team_id)
      VALUES ($1,$2,$3,$4,'Test thread',$5,$6)`,
@@ -198,7 +203,12 @@ async function conversation(
       assignee.teamId ?? null,
     ],
   );
-  return { uuid, assigneeUserId: assignee.userId ?? null, assigneeTeamId: assignee.teamId ?? null };
+  return {
+    uuid,
+    assigneeUserId: assignee.userId ?? null,
+    assigneeTeamId: assignee.teamId ?? null,
+    channelOwnerUserId: null,
+  };
 }
 
 const READ = (scope: 'all' | 'team' | 'own'): Grant[] => [['inbox.conversation.read', scope]];
@@ -519,7 +529,12 @@ describe('delivery', () => {
     const messageId = randomUUID();
     const lines = await runChild({
       orgId: t.orgId,
-      conversation: { uuid: thread.uuid, assigneeUserId: owner.userId, assigneeTeamId: null },
+      conversation: {
+        uuid: thread.uuid,
+        assigneeUserId: owner.userId,
+        assigneeTeamId: null,
+        channelOwnerUserId: null,
+      },
       messageId,
     });
     expect(JSON.parse(lines[0]!).report.rooms).toEqual([{ room: `conv:${thread.uuid}`, seq: 1 }]);
@@ -550,7 +565,12 @@ describe('delivery', () => {
 
     const lines = await runChild({
       orgId: t.orgId,
-      conversation: { uuid: thread.uuid, assigneeUserId: owner.userId, assigneeTeamId: null },
+      conversation: {
+        uuid: thread.uuid,
+        assigneeUserId: owner.userId,
+        assigneeTeamId: null,
+        channelOwnerUserId: null,
+      },
       messageId: randomUUID(),
     });
     const { audience } = JSON.parse(lines[1]!);
@@ -582,7 +602,12 @@ describe('delivery', () => {
     await emitter.emit(t2.orgId, [{ kind: 'conv', id: th.uuid }], REALTIME_EVENT.unread, payload);
     await runChild({
       orgId: t2.orgId,
-      conversation: { uuid: th.uuid, assigneeUserId: agent.userId, assigneeTeamId: null },
+      conversation: {
+        uuid: th.uuid,
+        assigneeUserId: agent.userId,
+        assigneeTeamId: null,
+        channelOwnerUserId: null,
+      },
       messageId: randomUUID(),
     });
     await emitter.emit(t2.orgId, [{ kind: 'conv', id: th.uuid }], REALTIME_EVENT.unread, payload);
@@ -676,9 +701,11 @@ describe('delivery', () => {
   });
 
   it('the resolver the API holds answers the same as the one in the other process', async () => {
-    const audience = await h.app
-      .get(AudienceResolver)
-      .forConversation(t.orgId, { assigneeUserId: owner.userId, assigneeTeamId: null });
+    const audience = await h.app.get(AudienceResolver).forConversation(t.orgId, {
+      assigneeUserId: owner.userId,
+      assigneeTeamId: null,
+      channelOwnerUserId: null,
+    });
     expect(audience).toContain(owner.userId);
     expect(audience).toContain(allReader.userId);
     expect(audience).not.toContain(colleague.userId);
@@ -696,9 +723,11 @@ describe('delivery', () => {
     try {
       const c = await connectAs(owner.token);
       await join(c, conv(thread.uuid));
-      const audience = await worker
-        .get(AudienceResolver)
-        .forConversation(t.orgId, { assigneeUserId: owner.userId, assigneeTeamId: null });
+      const audience = await worker.get(AudienceResolver).forConversation(t.orgId, {
+        assigneeUserId: owner.userId,
+        assigneeTeamId: null,
+        channelOwnerUserId: null,
+      });
       expect(audience).toContain(owner.userId);
       await worker
         .get(RealtimeEmitter)

@@ -1,0 +1,390 @@
+{
+  "email": {
+    "common": {
+      "dismiss": "Tutup"
+    },
+    "hub": {
+      "kicker": "Kanal",
+      "title": "Email",
+      "titleAccent": "kotak surat",
+      "intro": "Hubungkan Gmail, Microsoft 365, atau kotak surat IMAP apa pun. Email pelanggan masuk ke kotak masuk tim, satu percakapan per utas email, dan balasan Anda keluar dari alamat yang sama.",
+      "inbox": "Buka inbox",
+      "channels": "Kanal",
+      "loadError": "Kotak surat Anda tidak dapat dimuat. Coba lagi sebentar lagi.",
+      "cardCaption": "Gmail · Microsoft 365 · IMAP",
+      "connectedCount": "{count, plural, other {# kotak surat terhubung}}",
+      "notConnected": "Belum terhubung",
+      "usageLabel": "Kotak surat terpakai",
+      "usage": "{used} dari {limit} kotak surat",
+      "usageUnlimited": "{used, plural, other {# kotak surat}}, tanpa batas",
+      "howTitle": "Cara kerjanya",
+      "how": {
+        "connect": {
+          "title": "Hubungkan kotak surat",
+          "body": "Masuk dengan Google atau Microsoft, atau isi pengaturan server email Anda, lalu izinkan Threadwise membaca dan mengirim email untuk alamat itu."
+        },
+        "inbox": {
+          "title": "Email masuk ke inbox",
+          "body": "Email baru diambil setiap menit. Setiap utas email menjadi satu percakapan, dan setiap kotak surat memiliki inbox sendiri."
+        },
+        "reply": {
+          "title": "Balas dari inbox",
+          "body": "Balasan Anda dikirim dari kotak surat pada utas yang sama, dengan Cc dan Bcc jika Anda menambahkannya."
+        },
+        "limit": {
+          "title": "Kotak surat mengikuti paket Anda",
+          "body": "Paket Anda menentukan jumlah kotak surat yang dapat dihubungkan. Email tidak dihitung dalam kuota pesan Anda."
+        }
+      },
+      "connectedTitle": "Kotak surat terhubung",
+      "total": "{count, plural, other {# kotak surat}}",
+      "empty": "Belum ada kotak surat yang terhubung. Hubungkan satu di bawah untuk mulai menerima email di kotak masuk.",
+      "addTitle": "Tambah kotak surat",
+      "providers": {
+        "google": {
+          "name": "Gmail / Google Workspace",
+          "hint": "Masuk dengan akun Google pemilik kotak surat, misalnya support@yourcompany.com."
+        },
+        "imap": {
+          "name": "Email lain (IMAP / SMTP)",
+          "hint": "Penyedia email lain mana pun dengan nama pengguna dan kata sandi."
+        },
+        "microsoft": {
+          "name": "Microsoft 365 / Outlook",
+          "hint": "Masuk dengan akun kerja atau sekolah Microsoft."
+        }
+      },
+      "notReady": "{provider} belum diatur untuk platform ini. Minta administrator platform menambahkan kredensialnya.",
+      "limitReached": "Anda telah menggunakan semua {limit, plural, other {# kotak surat}} yang diizinkan paket Anda. Hapus satu kotak surat, atau minta administrator Anda untuk meningkatkan paket.",
+      "noPermission": "Anda dapat melihat kotak surat, tetapi hanya orang yang diberi izin mengelolanya yang dapat menghubungkan kotak surat.",
+      "connectFailed": "Tidak dapat memulai proses masuk. Coba lagi.",
+      "connect": {
+        "google": "Hubungkan Gmail",
+        "microsoft": "Hubungkan Microsoft 365",
+        "imap": "Hubungkan IMAP / SMTP"
+      },
+      "imapConnected": "Kotak surat terhubung. Email 7 hari terakhir sedang diambil ke kotak masuk.",
+      "imapReconnected": "Kotak surat terhubung kembali.",
+      "scope": {
+        "title": "Kotak surat ini untuk siapa?",
+        "shared": "Bersama",
+        "sharedHint": "Kotak surat perusahaan seperti support@. Seluruh tim dapat menangani percakapannya.",
+        "personal": "Pribadi",
+        "personalHint": "Kotak surat Anda sendiri. Hanya Anda yang dapat membaca percakapannya.",
+        "onlyPersonal": "Anda dapat menghubungkan kotak surat pribadi Anda sendiri. Hanya Anda yang dapat membaca percakapannya."
+      }
+    },
+    "card": {
+      "status": {
+        "connected": "Terhubung",
+        "needs_reauth": "Perlu dihubungkan ulang",
+        "error": "Error",
+        "disconnected": "Terputus"
+      },
+      "sendsAs": "Balasan dikirim sebagai",
+      "displayName": "Nama tampilan",
+      "edit": "Ubah",
+      "save": "Simpan",
+      "cancel": "Batal",
+      "renamed": "Nama tampilan disimpan.",
+      "needsReauthHint": "Penyedia tidak lagi mengizinkan kami membaca kotak surat ini. Hubungkan kembali untuk menerima dan mengirim email lagi.",
+      "lastError": "Masalah terakhir: {error}",
+      "lastSynced": "Terakhir disinkronkan",
+      "neverSynced": "Belum disinkronkan",
+      "conversations": "Percakapan",
+      "openInbox": "Buka di inbox",
+      "sync": "Sinkronkan sekarang",
+      "syncStarted": "Sinkronisasi dimulai. Email baru akan muncul di inbox sebentar lagi.",
+      "reconnect": "Hubungkan ulang",
+      "remove": "Hapus",
+      "removeTitle": "Hapus kotak surat",
+      "removeConfirm": "Hapus {address}? Percakapannya tetap ada di inbox sebagai riwayat baca-saja, dan tidak ada email baru yang diterima atau dikirim dari alamat ini. Anda dapat menghubungkan alamat yang sama lagi nanti.",
+      "removed": "Kotak surat dihapus.",
+      "failed": "Kotak surat tidak dapat diperbarui. Coba lagi.",
+      "provider": {
+        "google": "Gmail",
+        "microsoft": "Microsoft 365",
+        "imap": "IMAP / SMTP"
+      },
+      "scope": {
+        "shared": "Bersama",
+        "personal": "Pribadi",
+        "personalOf": "Pribadi · {name}"
+      },
+      "push": "Pembaruan langsung",
+      "pushHint": "Email baru masuk segera setelah penyedia memberi tahu.",
+      "signature": "Tanda tangan",
+      "signatureHint": "Balasan dari kotak surat ini memakai tanda tangannya.",
+      "summaryNote": "Ini kotak surat pribadi orang lain. Hanya pemiliknya yang dapat membaca dan mengelolanya.",
+      "sendLimit": "Batas kirim per jam",
+      "limitDefault": "Default platform",
+      "limitPerHour": "{count, plural, other {# email per jam}}",
+      "limitSaved": "Batas kirim disimpan.",
+      "needsReauthImap": "Server email menolak kata sandi yang tersimpan. Hubungkan kembali dan masukkan kata sandi lagi."
+    },
+    "outcome": {
+      "connected": "Kotak surat terhubung. Email dari 7 hari terakhir sedang diambil ke inbox.",
+      "denied": "Proses masuk dibatalkan, jadi tidak ada yang terhubung.",
+      "missing_scope": "Akses untuk membaca dan mengirim email tidak diberikan. Hubungkan lagi dan izinkan semua izin di layar masuk.",
+      "limit": "Batas kotak surat paket Anda telah tercapai, sehingga kotak surat ini tidak terhubung.",
+      "not_configured": "Proses masuk untuk penyedia ini belum diatur untuk platform ini. Tanyakan kepada administrator platform.",
+      "wrong_account": "Anda masuk dengan akun berbeda dari kotak surat yang sedang dihubungkan kembali. Masuk dengan alamat yang sama.",
+      "failed": "Terjadi kesalahan saat menghubungkan kotak surat. Coba lagi."
+    },
+    "errors": {
+      "notConfigured": "Proses masuk untuk penyedia ini belum diatur untuk platform ini. Tanyakan kepada administrator platform.",
+      "limit": "Batas kotak surat paket Anda telah tercapai.",
+      "unavailable": "Kotak surat ini terputus atau perlu dihubungkan ulang terlebih dahulu.",
+      "sendRefused": "Penyedia email menolak mengirim email ini. Periksa alamat dan ukurannya, lalu coba lagi.",
+      "wrongAccount": "Itu akun yang berbeda dari kotak surat ini. Masuk dengan alamat yang sama.",
+      "locked": "Integrasi email tidak termasuk dalam paket Anda.",
+      "changed": "Kotak surat ini diubah di tempat lain. Daftar telah dimuat ulang, coba lagi.",
+      "personalDisabled": "Kotak surat pribadi dinonaktifkan untuk ruang kerja ini.",
+      "personalNotAllowed": "Anda tidak diizinkan menghubungkan kotak surat pribadi.",
+      "providerUnsupported": "Penyedia email ini tidak tersedia.",
+      "rateLimited": "Kotak surat ini mencapai batas pengiriman. Coba lagi nanti."
+    },
+    "guide": {
+      "title": "Panduan penyiapan",
+      "google": {
+        "title": "Hubungkan Gmail atau Google Workspace",
+        "p1": "Pilih Hubungkan Gmail dan masuk dengan akun pemilik kotak surat, seperti alamat bersama support@ atau sales@.",
+        "p2": "Di layar Google, izinkan membaca dan mengirim email. Tanpa keduanya, email tidak dapat diterima atau dikirim.",
+        "p3": "Anda akan dikembalikan ke sini dan email 7 hari pertama diambil ke inbox tanpa memberi notifikasi kepada siapa pun.",
+        "p4": "Tambahkan kotak surat lain dengan cara yang sama, hingga jumlah yang diizinkan paket Anda. Masing-masing tampil sebagai inbox tersendiri."
+      },
+      "consent": {
+        "title": "Yang kami baca dan kirim",
+        "p1": "Kami membaca email di inbox Anda untuk menampilkannya di inbox tim. Spam, sampah, dan draf dilewati.",
+        "p2": "Email yang kami kirim sendiri dari akun Anda di tempat lain tidak disalin ke inbox.",
+        "p3": "Balasan otomatis, email pentalan, dan email milis disimpan dan ditandai Otomatis.",
+        "p4": "Menghapus kotak surat menghentikan pembacaan dan pengiriman. Percakapan sebelumnya tetap ada sebagai riwayat baca-saja."
+      },
+      "trouble": {
+        "title": "Jika ada yang tampak salah",
+        "p1": "Perlu hubungkan ulang berarti penyedia mencabut atau kedaluwarsakan akses, atau server email menolak kata sandi. Pilih Hubungkan kembali.",
+        "p2": "Error menampilkan masalah terakhir. Pilih Sinkronkan sekarang untuk mencoba lagi; jika terus gagal, hubungkan ulang kotak surat.",
+        "p3": "Hubungkan dinonaktifkan jika platform belum mengatur proses masuk untuk penyedia itu atau batas kotak surat paket Anda tercapai.",
+        "p4": "Gambar dalam email tetap disembunyikan sampai Anda memilih Muat gambar di percakapan."
+      },
+      "other": {
+        "title": "Hubungkan Microsoft 365 atau penyedia email lain",
+        "p1": "Untuk Microsoft 365 atau Outlook, pilih Hubungkan Microsoft 365 dan masuk dengan akun kerja atau sekolah pemilik kotak surat.",
+        "p2": "Untuk penyedia lain, pilih Hubungkan IMAP / SMTP dan isi server, port, keamanan, nama pengguna, dan kata sandi dari penyedia Anda.",
+        "p3": "Kami masuk dulu ke server masuk dan keluar. Jika salah satu menolak, pesan menyebutkan yang mana.",
+        "p4": "Beberapa penyedia memerlukan kata sandi aplikasi, bukan kata sandi biasa. Buat di pengaturan keamanan penyedia Anda."
+      },
+      "personal": {
+        "title": "Kotak surat pribadi dan berbagi",
+        "p1": "Administrator mengaktifkan kotak surat pribadi di Berbagi email dan memilih siapa yang dapat menghubungkannya.",
+        "p2": "Saat menghubungkan kotak surat, pilih Pribadi. Hanya Anda yang dapat membaca percakapannya di kotak masuk.",
+        "p3": "Admin hanya melihat ringkasan kotak surat Anda, kecuali ruang kerja mengizinkan admin membaca kotak surat pribadi.",
+        "p4": "Menonaktifkan kotak surat pribadi tidak pernah membuka kotak surat pribadi yang ada untuk orang lain."
+      }
+    },
+    "thread": {
+      "noSubject": "(tanpa subjek)",
+      "automated": "Otomatis",
+      "from": "Dari",
+      "to": "Kepada",
+      "cc": "Cc",
+      "date": "Tanggal",
+      "imagesBlocked": "Gambar dari internet disembunyikan.",
+      "loadImages": "Muat gambar",
+      "frameTitle": "Email: {subject}",
+      "truncated": "Email ini panjang, sehingga hanya bagian pertama yang ditampilkan.",
+      "noBody": "Email ini tidak memiliki teks.",
+      "attachments": "{count, plural, other {# lampiran}}",
+      "tooLarge": "terlalu besar untuk disimpan ({size})",
+      "download": "Unduh {name} ({size})",
+      "bounce": {
+        "title": "Tidak terkirim ke {address}.",
+        "reason": "Alasan: {reason}",
+        "hard": "Alamat ditolak secara permanen. Periksa apakah ada salah ketik, lalu kirim email baru ke alamat yang sudah diperbaiki.",
+        "soft": "Ini tampaknya sementara, misalnya kotak surat penuh. Mengirim lagi nanti mungkin berhasil, atau ubah alamatnya."
+      }
+    },
+    "composer": {
+      "toggle": "Cc, Bcc, dan subjek",
+      "cc": "Cc",
+      "bcc": "Bcc",
+      "subject": "Subjek",
+      "subjectPlaceholder": "Subjek",
+      "addressesPlaceholder": "name@example.com, other@example.com",
+      "problem": {
+        "ccInvalid": "Alamat Cc ini tidak valid: {list}",
+        "bccInvalid": "Alamat Bcc ini tidak valid: {list}",
+        "ccTooMany": "Cc maksimal 20 alamat.",
+        "bccTooMany": "Bcc maksimal 20 alamat.",
+        "subjectTooLong": "Subjek maksimal 998 karakter."
+      },
+      "editor": {
+        "toolbar": "Format teks",
+        "bold": "Tebal",
+        "italic": "Miring",
+        "underline": "Garis bawah",
+        "bulletList": "Daftar berpoin",
+        "numberedList": "Daftar bernomor",
+        "quote": "Kutipan",
+        "link": "Tambah tautan",
+        "clear": "Hapus format",
+        "linkAddress": "Alamat tautan",
+        "linkApply": "Tambah",
+        "linkInvalid": "Masukkan alamat web, email, atau telepon.",
+        "label": "Balasan email",
+        "toPlain": "Beralih ke teks biasa",
+        "toRich": "Beralih ke teks berformat",
+        "hint": "Tekan Ctrl+Enter (Cmd+Enter di Mac) untuk mengirim. Enter membuat baris baru."
+      },
+      "attach": {
+        "dismiss": "Tutup",
+        "list": "File terlampir ({count})",
+        "uploading": "Mengunggah {name}",
+        "ready": "Terlampir",
+        "failed": "Unggahan gagal",
+        "retry": "Coba lagi",
+        "remove": "Hapus {name}",
+        "waiting": "Menunggu file selesai diunggah.",
+        "fixFailed": "Coba lagi atau hapus file yang gagal diunggah.",
+        "refused": {
+          "empty": "{name} kosong dan tidak ditambahkan.",
+          "tooLarge": "{name} lebih besar dari {max} dan tidak ditambahkan.",
+          "tooMany": "Satu email hanya muat {count} file. {name} tidak ditambahkan.",
+          "totalTooLarge": "Dengan {name}, email akan terlalu besar sehingga tidak ditambahkan.",
+          "blocked": "{name} adalah jenis file yang tidak dapat dibawa email dan tidak ditambahkan."
+        }
+      },
+      "error": {
+        "rateLimited": "Kotak surat ini telah mencapai batas pengiriman per jam. {seconds, plural, =0 {Coba lagi sebentar lagi.} other {Coba lagi dalam # dtk.}}",
+        "attachmentTooLarge": "Ada file yang terlalu besar untuk dilampirkan. Tiap file maksimal 10 MB dan semua file bersama maksimal 20 MB.",
+        "tooManyAttachments": "Terlalu banyak file. Satu email menerima maksimal 10.",
+        "attachmentGone": "Lampiran sudah kedaluwarsa atau dihapus. Lampirkan lagi.",
+        "signatureGone": "Tanda tangan yang dipilih sudah tidak ada. Pilih yang lain.",
+        "sendRefused": "Penyedia email menolak email ini. Periksa alamat dan ukurannya, lalu coba lagi.",
+        "unavailable": "Kotak surat ini terputus atau perlu disambungkan ulang terlebih dahulu.",
+        "attachmentBlocked": "Jenis file itu tidak dapat dikirim lewat email.",
+        "network": "Tidak dapat menjangkau server. Periksa koneksi Anda dan coba lagi.",
+        "generic": "Email tidak dapat dikirim. Coba lagi.",
+        "bodyTooLong": "Email ini terlalu panjang untuk dikirim. Persingkat lalu coba lagi."
+      },
+      "signature": {
+        "label": "Tanda tangan",
+        "auto": "Default ({name})",
+        "autoNone": "Default (tidak ada)",
+        "none": "Tanpa tanda tangan",
+        "mine": "{name} (milik saya)",
+        "shared": "{name} (kotak surat)",
+        "preview": "Pratinjau tanda tangan",
+        "noneShown": "Tidak ada tanda tangan yang akan ditambahkan."
+      }
+    },
+    "inbox": {
+      "group": "Email"
+    },
+    "imap": {
+      "eyebrow": "Email lain",
+      "title": "Hubungkan kotak surat IMAP / SMTP",
+      "reconnectTitle": "Hubungkan kembali kotak surat IMAP / SMTP",
+      "close": "Tutup",
+      "intro": "Masukkan pengaturan yang diberikan penyedia email Anda untuk alamat ini. Kami masuk ke kedua server sebelum menyimpan apa pun.",
+      "reconnectIntro": "Masukkan kata sandi lagi. Kami masuk ke kedua server sebelum menyimpan apa pun.",
+      "address": "Alamat kotak surat",
+      "displayName": "Nama tampilan",
+      "preset": "Penyedia email",
+      "presetHint": "Memilih salah satu akan mengisi pengaturan server. Anda masih dapat mengubahnya.",
+      "presetCustom": "Lainnya (isi pengaturan)",
+      "incoming": "Email masuk (IMAP)",
+      "outgoing": "Email keluar (SMTP)",
+      "host": "Server",
+      "port": "Port",
+      "securityLabel": "Keamanan",
+      "security": {
+        "ssl": "SSL/TLS",
+        "starttls": "STARTTLS",
+        "none": "Tidak ada"
+      },
+      "username": "Nama pengguna",
+      "password": "Kata sandi",
+      "passwordHint": "Disimpan terenkripsi dan tidak pernah ditampilkan lagi.",
+      "passwordAgain": "Ketik kata sandi lagi. Kata sandi tidak pernah ditampilkan.",
+      "showPassword": "Tampilkan kata sandi",
+      "hidePassword": "Sembunyikan kata sandi",
+      "sameCredentials": "Gunakan nama pengguna dan kata sandi yang sama untuk mengirim",
+      "noEncryption": "Koneksi ini tidak terenkripsi. Siapa pun di jaringan dapat membaca kata sandi dan email.",
+      "verifyNote": "Sertifikat server selalu diperiksa.",
+      "cancel": "Batal",
+      "submit": "Verifikasi dan hubungkan",
+      "reconnectSubmit": "Verifikasi dan hubungkan kembali",
+      "verifying": "Memverifikasi",
+      "errors": {
+        "required": "Kolom ini wajib diisi.",
+        "invalid": "Nilai ini tidak valid."
+      },
+      "failure": {
+        "imapAuth": "Server masuk (IMAP) menolak nama pengguna atau kata sandi. Periksa lalu coba lagi.",
+        "smtpAuth": "Server keluar (SMTP) menolak nama pengguna atau kata sandi. Periksa lalu coba lagi.",
+        "unreachable": "Tidak dapat menjangkau server email atau sertifikatnya tidak valid. Periksa server, port, dan keamanan.",
+        "generic": "Tidak dapat menghubungkan kotak surat. Coba lagi."
+      }
+    },
+    "sharing": {
+      "title": "Berbagi email",
+      "intro": "Tentukan apakah orang dapat menghubungkan kotak surat sendiri dan siapa yang dapat melihatnya.",
+      "enabled": {
+        "title": "Kotak surat pribadi",
+        "body": "Izinkan orang menghubungkan kotak surat sendiri. Percakapannya hanya terlihat oleh mereka."
+      },
+      "who": {
+        "title": "Siapa yang dapat menghubungkan",
+        "body": "Hanya orang dengan izin mengelola kotak surat pribadi.",
+        "admins": "Hanya admin",
+        "agents": "Admin dan agen"
+      },
+      "admins": {
+        "title": "Admin dapat membaca kotak surat pribadi",
+        "body": "Admin dapat membuka percakapan kotak surat pribadi orang lain. Jika nonaktif, mereka hanya melihat ringkasan."
+      },
+      "offNote": "Menonaktifkan kotak surat pribadi hanya menyembunyikan opsi menghubungkan. Kotak surat pribadi yang ada tetap privat bagi pemiliknya.",
+      "save": "Simpan",
+      "reset": "Buang perubahan",
+      "saved": "Berbagi email disimpan.",
+      "failed": "Tidak dapat menyimpan. Coba lagi."
+    },
+    "signatures": {
+      "title": "Tanda tangan",
+      "intro": "Tanda tangan ditambahkan di akhir balasan Anda. Setiap kotak surat dapat memiliki satu tanda tangan bersama, dan Anda dapat memiliki sendiri yang dipakai lebih dulu.",
+      "new": "Tanda tangan baru",
+      "edit": "Ubah tanda tangan",
+      "scope": "Milik siapa",
+      "scopes": {
+        "user": "Saya",
+        "mailbox": "Sebuah kotak surat",
+        "userBadge": "Milik saya",
+        "mailboxBadge": "Kotak surat"
+      },
+      "mailbox": "Kotak surat",
+      "pickMailbox": "Pilih kotak surat",
+      "mailboxRequired": "Pilih kotak surat.",
+      "name": "Nama",
+      "nameRequired": "Beri nama pada tanda tangan.",
+      "body": "Tanda tangan",
+      "bodyPlaceholder": "Nama, jabatan, telepon, tautan Anda...",
+      "variables": "Anda dapat memakai {name}, {title}, dan {phone}. Isinya diisi dengan data pengirim.",
+      "tooLong": "Tanda tangan terlalu panjang.",
+      "defaultUser": "Pakai sebagai tanda tangan default saya",
+      "defaultMailbox": "Pakai sebagai default kotak surat ini",
+      "save": "Simpan",
+      "cancel": "Batal",
+      "loading": "Memuat tanda tangan...",
+      "loadError": "Tanda tangan tidak dapat dimuat. Coba lagi sebentar lagi.",
+      "empty": "Belum ada tanda tangan.",
+      "default": "Default",
+      "editShort": "Ubah",
+      "delete": "Hapus",
+      "confirmDelete": "Hapus permanen",
+      "noPermission": "Anda tidak memiliki izin untuk mengelola tanda tangan.",
+      "changed": "Tanda tangan ini diubah di tempat lain. Daftar telah dimuat ulang, coba lagi.",
+      "failed": "Tanda tangan tidak dapat disimpan. Coba lagi."
+    }
+  }
+}

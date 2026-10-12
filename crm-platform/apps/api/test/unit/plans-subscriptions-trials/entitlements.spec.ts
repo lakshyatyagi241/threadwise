@@ -83,6 +83,7 @@ describe('registry', () => {
       'waba_groups',
       'sms',
       'help_agent',
+      'email_channel',
     ]);
     expect(PLAN_CHIP_MAX).toBe(3);
   });

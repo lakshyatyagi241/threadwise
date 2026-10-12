@@ -1420,7 +1420,8 @@
             "form_builder": "Formularios web alojados e incrustados que crean contactos en el CRM. La aplicación de pago Formularios controla este interruptor.",
             "waba_groups": "Crea y gestiona grupos de WhatsApp desde un número de la API en la nube: enlace de invitación, solicitudes de unión, miembros. El número debe ser una Cuenta de Empresa Oficial.",
             "sms": "SMS solo de envío mediante Twilio o MSG91: conecta remitentes y envía difusiones y campañas por SMS.",
-            "help_agent": "El asistente de ayuda dentro de la app: la gente pide una tarea con sus palabras y él la guía o la hace en su propia sesión, preguntando antes de cualquier acción de riesgo. Consume tokens de IA."
+            "help_agent": "El asistente de ayuda dentro de la app: la gente pide una tarea con sus palabras y él la guía o la hace en su propia sesión, preguntando antes de cualquier acción de riesgo. Consume tokens de IA.",
+            "email_channel": "Conecta buzones de Gmail y Google Workspace a la bandeja de equipo. La aplicación de pago Correo controla este interruptor."
           },
           "units": {
             "days": "Días",
@@ -1562,7 +1563,8 @@
             "forms": "Formularios web",
             "form_submissions_monthly": "Envíos de formulario al mes",
             "ai_form_generations_monthly": "Generaciones del creador de formularios con IA al mes",
-            "sms_monthly": "SMS al mes"
+            "sms_monthly": "SMS al mes",
+            "email_mailboxes": "Buzones de correo"
           },
           "featureGroups": {
             "messaging": "Mensajería",
@@ -1601,7 +1603,8 @@
             "form_builder": "Formularios (creador de formularios web)",
             "waba_groups": "Grupos de WhatsApp (API en la nube)",
             "sms": "Canal SMS",
-            "help_agent": "Asistente de ayuda (IA, consume tokens)"
+            "help_agent": "Asistente de ayuda (IA, consume tokens)",
+            "email_channel": "Canal de correo (Gmail)"
           },
           "problems": {
             "required": "Este campo es obligatorio.",
@@ -1654,7 +1657,8 @@
             "forms": "Formularios web activos (aplicación Formularios). Archivar un formulario libera su plaza. 0 = ilimitado.",
             "form_submissions_monthly": "Envíos de formulario aceptados en el mes natural, sin contar spam. Por encima del tope, un envío se guarda igualmente para revisión, nunca se descarta. 0 = ilimitado.",
             "ai_form_generations_monthly": "Generaciones del creador de formularios con IA en el mes natural, incluido un reintento de reparación. 0 = ilimitado.",
-            "sms_monthly": "Mensajes SMS salientes enviados en el mes natural. 0 = ilimitado."
+            "sms_monthly": "Mensajes SMS salientes enviados en el mes natural. 0 = ilimitado.",
+            "email_mailboxes": "Buzones de Gmail conectados (uno desconectado libera su lugar). 0 = ilimitado."
           }
         }
       },

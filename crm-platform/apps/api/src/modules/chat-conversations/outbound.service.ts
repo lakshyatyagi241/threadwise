@@ -1,14 +1,17 @@
 import { InjectQueue } from '@nestjs/bullmq';
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import type { Queue } from 'bullmq';
+import { sql } from 'drizzle-orm';
 import { ERROR_CODES, type MessageResponse } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import type { ChannelRuntime } from '../../infra/providers/chat-conversations';
+import { groupIdOf, isGroupPeer } from '../../infra/providers/whatsapp/group-peer';
 import { QUEUES } from '../../infra/queue/queues';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
+import { WalletGateService } from '../wallet-message-billing';
 import { ChannelDispatcher } from './channel-dispatcher.service';
 import { ChannelRegistryService } from './channel-registry.service';
 import { ChannelsRepository } from './channels.repository';
@@ -75,6 +78,7 @@ export class OutboundService {
     private readonly channels: ChannelRegistryService,
     private readonly dispatcher: ChannelDispatcher,
     private readonly plans: PlanEntitlementService,
+    private readonly wallet: WalletGateService,
     private readonly realtime: ChatRealtimePublisher,
     private readonly view: MessageViewService,
     @InjectQueue(QUEUES.MESSAGE_DISPATCH) private readonly queue: Queue,
@@ -105,6 +109,15 @@ export class OutboundService {
       }
 
       const runtime = await this.channels.runtime(tx, orgId, channel);
+      // Cc, bcc and a subject belong to email: any other kind of channel has nowhere to put them.
+      if (input.content.kind === 'text' && input.content.email && channel.kind !== 'email') {
+        throw new AppError(
+          ERROR_CODES.CHANNEL_CAPABILITY_UNSUPPORTED,
+          'This channel cannot send cc, bcc or a subject',
+          HttpStatus.UNPROCESSABLE_ENTITY,
+          [{ path: 'email', message: 'only an email conversation takes these' }],
+        );
+      }
       const fields = messageFieldsOf(input.content);
       const replyTo = input.replyToMessageId
         ? await this.replyTarget(tx, orgId, conv, input.replyToMessageId)
@@ -147,6 +160,7 @@ export class OutboundService {
         lastInboundAt: conv.lastInboundAt,
         source: 'inbox',
       };
+      await this.assertGroupSendable(tx, orgId, runtime, conv.peerKey);
       await this.dispatcher.assertCanQueue(request, {
         monthlyUsed: await this.monthlyUsed(tx, orgId, runtime),
       });
@@ -249,6 +263,7 @@ export class OutboundService {
       const replyTo = row.replyToMessageUuid
         ? await this.messages.byUuid(tx, orgId, row.replyToMessageUuid)
         : null;
+      await this.assertGroupSendable(tx, orgId, runtime, conv.peerKey);
       await this.dispatcher.assertCanQueue(
         {
           channel: runtime,
@@ -366,6 +381,38 @@ export class OutboundService {
       `Message ${uuid} not found`,
       HttpStatus.NOT_FOUND,
     );
+  }
+
+  /**
+   * A Cloud API group (`g:<group id>`): refuse before anything is stored or queued when Meta suspended it (D10), or when the
+   * workspace's own wallet cannot cover one message to every member (D8). A group send is billed once per member, so the launch gate
+   * is asked for `participant_count` recipients (at least one: the count is 0 until Meta's lifecycle webhook fills it). The gate is
+   * per workspace, passes platform-owned workspaces and a plan's free allowance, and fails open if the billing lookup itself fails.
+   */
+  private async assertGroupSendable(
+    tx: Tx,
+    orgId: number,
+    runtime: ChannelRuntime,
+    peerKey: string,
+  ): Promise<void> {
+    if (runtime.kind !== 'whatsapp_cloud' || !isGroupPeer(peerKey)) return;
+    const found = await tx.execute(
+      sql`SELECT suspended, participant_count FROM waba_groups
+           WHERE org_id = ${orgId} AND group_id = ${groupIdOf(peerKey)} LIMIT 1`,
+    );
+    const row = found.rows[0] as { suspended?: boolean; participant_count?: number } | undefined;
+    if (row?.suspended === true) {
+      throw new AppError(
+        ERROR_CODES.WABA_GROUP_SUSPENDED,
+        'Meta suspended this group for a policy violation. It cannot be messaged until Meta clears it.',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+    await this.wallet.assertCanLaunch({
+      orgId,
+      source: 'group_message',
+      recipients: Math.max(1, Number(row?.participant_count ?? 0)),
+    });
   }
 
   private keyReused(): AppError {

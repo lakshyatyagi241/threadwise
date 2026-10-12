@@ -17,6 +17,8 @@
       "whatsapp": "WhatsApp (WABA)",
       "campaigns": "캠페인",
       "googleCalendar": "Google 캘린더",
+      "googleMail": "Gmail",
+      "microsoftMail": "Microsoft 365",
       "flowBuilder": "플로우 빌더"
     },
     "hub": {
@@ -930,6 +932,79 @@
           }
         }
       },
+      "googleMail": {
+        "title": "Gmail 이메일",
+        "description": "모든 워크스페이스가 메일함을 연결할 때 거치는 Google OAuth 클라이언트입니다.",
+        "sections": {
+          "oauth": {
+            "title": "Google OAuth 클라이언트"
+          },
+          "push": {
+            "title": "Gmail 푸시 (선택)"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "워크스페이스의 Gmail 연결 허용",
+            "hint": "끔: 어떤 워크스페이스도 연결할 수 없으며 메일을 읽거나 보내지 않습니다. 이미 연결된 메일함은 유지됩니다."
+          },
+          "clientId": {
+            "label": "클라이언트 ID",
+            "hint": "Google Cloud의 사용자 인증 정보에서 OAuth 2.0 클라이언트 ID(웹 애플리케이션)를 입력하세요. 비워 두면 GOOGLE_MAIL_CLIENT_ID를 사용합니다."
+          },
+          "clientSecret": {
+            "label": "클라이언트 시크릿",
+            "hint": "암호화되어 저장되며 다시 표시되지 않습니다. 비워 두면 저장된 값을 유지하며, 대체 값은 GOOGLE_MAIL_CLIENT_SECRET입니다."
+          },
+          "redirectUri": {
+            "label": "리디렉션 URI 재정의",
+            "hint": "위 주소를 사용하려면 비워 두세요. 클라이언트의 승인된 리디렉션 URI와 정확히 일치해야 합니다."
+          },
+          "pubsubTopic": {
+            "label": "Pub/Sub 토픽",
+            "hint": "projects/PROJECT_ID/topics/TOPIC_ID. 이 토픽에서 gmail-api-push@system.gserviceaccount.com에 Publisher 역할을 부여하세요. 비워 두면 GOOGLE_MAIL_PUBSUB_TOPIC을 사용하며, 토픽이 없으면 메일함은 폴링으로만 확인합니다."
+          },
+          "pushAudience": {
+            "label": "푸시 대상(Audience)",
+            "hint": "푸시 구독에 설정한 대상 값입니다. 비워 두면 GOOGLE_MAIL_PUSH_AUDIENCE를, 없으면 이 플랫폼의 푸시 엔드포인트 주소를 사용합니다."
+          },
+          "pushServiceAccount": {
+            "label": "푸시 서비스 계정",
+            "hint": "푸시 구독이 서명에 사용하는 서비스 계정입니다. 다른 계정의 푸시는 거부됩니다. 비워 두면 GOOGLE_MAIL_PUSH_SERVICE_ACCOUNT를 사용합니다."
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "Microsoft 365 이메일",
+        "description": "각 워크스페이스가 Outlook 및 Microsoft 365 사서함을 연결하는 데 사용하는 Microsoft 앱입니다.",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra 앱"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "워크스페이스의 Microsoft 365 연결 허용",
+            "hint": "끔: 어떤 워크스페이스도 연결할 수 없으며 메일을 읽거나 보내지 않습니다. 이미 연결된 메일함은 유지됩니다."
+          },
+          "clientId": {
+            "label": "애플리케이션(클라이언트) ID",
+            "hint": "Microsoft Entra 관리 센터의 앱 등록, 개요에서 확인합니다. 비워 두면 MICROSOFT_MAIL_CLIENT_ID를 사용합니다."
+          },
+          "clientSecret": {
+            "label": "클라이언트 시크릿",
+            "hint": "암호화되어 저장되며 다시 표시되지 않습니다. 비워 두면 저장된 값을 유지하며, 대체 값은 MICROSOFT_MAIL_CLIENT_SECRET입니다."
+          },
+          "tenant": {
+            "label": "테넌트",
+            "hint": "common은 회사, 학교, 개인 계정을 허용합니다. 단일 테넌트 앱에는 디렉터리(테넌트) ID를 사용하세요. 비워 두면 MICROSOFT_MAIL_TENANT, 없으면 common을 사용합니다."
+          },
+          "redirectUri": {
+            "label": "리디렉션 URI 재정의",
+            "hint": "위 주소를 사용하려면 비워 두세요. 클라이언트의 승인된 리디렉션 URI와 정확히 일치해야 합니다."
+          }
+        }
+      },
       "flowBuilder": {
         "title": "플로우 빌더",
         "description": "워크스페이스에 제공할 플로우 빌더입니다.",
@@ -1062,6 +1137,16 @@
         "title": "Google 캘린더",
         "description": "워크스페이스가 예약 및 바쁜 시간 확인을 위해 캘린더를 연결할 때 사용하는 Google OAuth 클라이언트입니다.",
         "tags": "Google / OAuth / 캘린더"
+      },
+      "googleMail": {
+        "title": "Gmail 이메일",
+        "description": "워크스페이스가 Gmail 메일함을 연결할 때 사용하는 Google OAuth 클라이언트입니다.",
+        "tags": "Google / OAuth / Gmail"
+      },
+      "microsoftMail": {
+        "title": "Microsoft 365 이메일",
+        "description": "워크스페이스가 Outlook 및 Microsoft 365 사서함을 연결하는 데 사용하는 Microsoft 앱입니다.",
+        "tags": "Microsoft / OAuth / Outlook"
       },
       "flowBuilder": {
         "title": "플로우 빌더",
@@ -1648,6 +1733,78 @@
           }
         }
       },
+      "googleMail": {
+        "title": "Gmail 이메일",
+        "eyebrow": "관리자 - 이메일",
+        "description": "플랫폼 전체에서 하나의 Google Cloud OAuth 클라이언트를 사용하며 Google 캘린더와는 별개입니다. 각 워크스페이스는 이메일에서 자신의 메일함을 연결하며 클라이언트 ID와 시크릿은 볼 수 없습니다.",
+        "sections": {
+          "oauth": {
+            "title": "Google OAuth 클라이언트",
+            "description": "클라이언트 ID와 시크릿이 없으면 워크스페이스가 메일함을 연결할 수 없습니다."
+          },
+          "push": {
+            "title": "Gmail 푸시 (선택)",
+            "description": "새 메일이 다음 폴링을 기다리지 않고 몇 초 안에 팀 받은편지함에 도착합니다. 폴링은 안전장치로 계속 동작합니다."
+          }
+        },
+        "guide": {
+          "title": "Google Cloud에서 설정하기",
+          "items": {
+            "project": {
+              "title": "1. 프로젝트 및 API",
+              "body": "Google Cloud Console에서 프로젝트를 만들고 Gmail API를 사용 설정하세요."
+            },
+            "redirect": {
+              "title": "2. OAuth 클라이언트",
+              "body": "웹 애플리케이션 유형의 OAuth 2.0 클라이언트 ID를 만들고, 이 페이지에 표시된 리디렉션 URI를 승인된 리디렉션 URI에 추가하세요."
+            },
+            "consent": {
+              "title": "3. 동의 화면",
+              "body": "openid, email, gmail.readonly, gmail.send 범위를 추가하세요. Gmail 범위는 제한된 범위여서 일반 사용을 위해서는 Google의 앱 인증이 필요하며, 테스트 모드에서는 승인이 7일 후 만료됩니다."
+            },
+            "workspaces": {
+              "title": "4. 워크스페이스 연결",
+              "body": "클라이언트 ID와 시크릿을 여기에 붙여넣고 저장하세요. 이후 관리자가 이메일에서 연결합니다."
+            },
+            "push": {
+              "title": "5. 즉시 수신 (선택)",
+              "body": "Pub/Sub 토픽을 만들고 gmail-api-push@system.gserviceaccount.com에 Publisher 역할을 부여한 뒤, OIDC 인증이 있는 푸시 구독을 APP_URL/v2/public/email/google/push에 추가하고 여기에 토픽, 대상, 서비스 계정을 입력하세요."
+            }
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "Microsoft 365 이메일",
+        "eyebrow": "관리자 - 이메일",
+        "description": "전체 플랫폼에 Microsoft Entra 앱 하나를 사용합니다. 각 워크스페이스는 이메일에서 자기 사서함을 연결하며 클라이언트 ID와 시크릿은 볼 수 없습니다.",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra 앱",
+            "description": "클라이언트 ID와 시크릿이 없으면 워크스페이스가 메일함을 연결할 수 없습니다."
+          }
+        },
+        "guide": {
+          "title": "Microsoft Entra에서 설정하기",
+          "items": {
+            "registration": {
+              "title": "1. 앱 등록",
+              "body": "Microsoft Entra 관리 센터에서 앱 등록을 만드세요. 고객이 사용하는 계정 유형(회사 또는 학교 계정, Outlook.com용 개인 계정)을 선택하고 애플리케이션(클라이언트) ID와 테넌트를 여기에 복사합니다."
+            },
+            "redirect": {
+              "title": "2. 리디렉션 URI와 시크릿",
+              "body": "이 페이지에 표시된 리디렉션 URI를 웹 플랫폼 리디렉션으로 추가하고, 인증서 및 비밀에서 클라이언트 비밀을 만든 다음 그 값을 여기에 붙여넣으세요."
+            },
+            "permissions": {
+              "title": "3. API 권한",
+              "body": "Microsoft Graph 위임된 권한 Mail.Read, Mail.Send, User.Read, offline_access를 추가하세요. 일반 사용을 위해서는 게시자 확인을 완료해야 하며, 일부 조직은 관리자 동의도 요구합니다."
+            },
+            "workspaces": {
+              "title": "4. 워크스페이스 연결",
+              "body": "클라이언트 ID와 시크릿을 여기에 붙여넣고 저장하세요. 이후 관리자가 이메일에서 연결합니다."
+            }
+          }
+        }
+      },
       "flowBuilder": {
         "title": "플로우 빌더",
         "eyebrow": "관리자 - 자동화",
@@ -1735,6 +1892,12 @@
     "googleCallback": {
       "redirectTitle": "리디렉션 URI",
       "redirectHint": "OAuth 클라이언트의 승인된 리디렉션 URI에 이 주소를 정확히 등록하세요. 워크스페이스 관리자가 동의한 후 Google이 브라우저를 이동시키는 주소입니다.",
+      "copy": "복사",
+      "copied": "복사됨"
+    },
+    "microsoftCallback": {
+      "redirectTitle": "리디렉션 URI",
+      "redirectHint": "이 주소를 앱 등록에 웹 리디렉션 URI로 정확히 등록하세요. 워크스페이스 관리자가 동의한 뒤 Microsoft가 브라우저를 이 주소로 보냅니다.",
       "copy": "복사",
       "copied": "복사됨"
     }

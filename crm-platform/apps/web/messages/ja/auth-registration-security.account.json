@@ -554,7 +554,8 @@
             "form_builder": "フォーム",
             "waba_groups": "WhatsAppグループ",
             "sms": "SMS",
-            "help_agent": "ヘルプアシスタント"
+            "help_agent": "ヘルプアシスタント",
+            "email_channel": "メール(Gmail)チャネル"
           },
           "cta": {
             "continueFree": "無料で続ける",

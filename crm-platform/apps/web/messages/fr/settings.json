@@ -102,8 +102,8 @@
       },
       "email": {
         "label": "E-mail",
-        "description": "Connectez une boîte e-mail pour envoyer et recevoir des e-mails dans la boîte de réception.",
-        "keywords": "boîte e-mail, smtp, imap, gmail, outlook, expéditeur"
+        "description": "Connectez des boîtes Gmail ou Google Workspace pour que votre équipe lise et réponde aux e-mails des clients dans la boîte de réception partagée.",
+        "keywords": "boîte e-mail, gmail, google workspace, boîte de réception partagée, e-mail de support, outlook, imap"
       },
       "line": {
         "label": "LINE",

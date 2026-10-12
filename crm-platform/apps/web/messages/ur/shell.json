@@ -78,6 +78,11 @@
       "payments": "ادائیگیاں"
     },
     "help": "مدد",
-    "unreadCount": "{count, plural, one {# غیر پڑھا} other {# غیر پڑھے}}"
+    "unreadCount": "{count, plural, one {# غیر پڑھا} other {# غیر پڑھے}}",
+    "backgroundError": {
+      "message": "کچھ لائیو اعداد، جیسے اطلاعات، بیلنس یا ان باکس کی گنتی، تازہ نہیں ہو سکے۔ جو آپ دیکھ رہے ہیں وہ پرانا ہو سکتا ہے۔",
+      "retry": "دوبارہ کوشش کریں",
+      "dismiss": "بند کریں"
+    }
   }
 }

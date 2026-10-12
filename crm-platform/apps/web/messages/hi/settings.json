@@ -102,8 +102,8 @@
       },
       "email": {
         "label": "ईमेल",
-        "description": "इनबॉक्स में ईमेल भेजने और प्राप्त करने के लिए मेलबॉक्स कनेक्ट करें।",
-        "keywords": "मेलबॉक्स, smtp, imap, gmail, outlook, सेंडर"
+        "description": "Gmail या Google Workspace मेलबॉक्स कनेक्ट करें, ताकि आपकी टीम साझा इनबॉक्स में ग्राहकों के ईमेल पढ़ सके और उनका जवाब दे सके।",
+        "keywords": "मेलबॉक्स, gmail, google workspace, साझा इनबॉक्स, सपोर्ट ईमेल, outlook, imap"
       },
       "line": {
         "label": "LINE",

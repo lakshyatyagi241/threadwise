@@ -101,6 +101,31 @@ function deps(executor: NodeExecutor, sent: Array<{ m: OutboundMessage; index: n
 }
 
 describe('a node that waits and decodes its own answer', () => {
+  it('logs what the node said back when it keeps waiting (a re-prompt), and what the answer saved', async () => {
+    const r = run();
+    r.wait = { nodeId: 'a', variable: 'x', kind: 'Custom', handler: 'Probe' };
+    const out = await applyCustomReply(
+      r,
+      { kind: 'text', id: '', text: 'Lakshya Tyagi' },
+      deps(probe(() => ({ action: 'stay', setVars: { attempts: '1' } }))),
+    );
+    expect(out.transition.t).toBe('wait');
+    expect(out.sent).toEqual(['text: got it']);
+    expect(out.io?.out).toEqual([
+      { kind: 'message', name: 'text', value: 'got it' },
+      { kind: 'variable', name: 'attempts', value: '1' },
+    ]);
+  });
+
+  it('marks a reply whose message did not go out', async () => {
+    const r = run();
+    r.wait = { nodeId: 'a', variable: 'x', kind: 'Custom', handler: 'Probe' };
+    const d = deps(probe(() => ({ action: 'stay' })));
+    d.send = async () => ({ ok: false, error: 'blocked', code: 'X', halt: false });
+    const out = await applyCustomReply(r, { kind: 'text', id: '', text: 'x' }, d);
+    expect(out.sendFailed).toBe(true);
+  });
+
   it('parks a Custom wait carrying its handler, data, timeout and timeout port, with a stable step key', async () => {
     const r = run();
     const out = await executeCurrent(r, deps(probe(() => ({ action: 'ignore' }))));
@@ -132,6 +157,11 @@ describe('a node that waits and decodes its own answer', () => {
       deps(ex, sent),
     );
     expect(out.transition).toEqual({ t: 'goto', nodeId: 'yes', delayMs: 0, port: 1 });
+    // The routed answer is logged too: what the node said and the variable it saved.
+    expect(out.sent).toEqual(['text: got it']);
+    expect(out.io?.out).toEqual(
+      expect.arrayContaining([{ kind: 'variable', name: 'paid', value: 'true' }]),
+    );
     expect(r.vars.paid).toBe(true);
     // The answer's sends are numbered from 1000 so they never share a client reference with the step that asked.
     expect(sent[0]!.index).toBe(1000);

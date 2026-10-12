@@ -1420,7 +1420,8 @@
             "form_builder": "Hosted and embedded web forms that create contacts in the CRM. The paid Forms app owns this switch.",
             "waba_groups": "Create and manage WhatsApp groups from a Cloud API number: invite link, join requests, members. The number must be an Official Business Account.",
             "sms": "Send-only SMS through Twilio or MSG91: connect senders, send SMS broadcasts and campaigns.",
-            "help_agent": "The in-app Help assistant: people ask for a task in plain words and it guides or does it on their own session, asking before anything risky. Spends AI tokens."
+            "help_agent": "The in-app Help assistant: people ask for a task in plain words and it guides or does it on their own session, asking before anything risky. Spends AI tokens.",
+            "email_channel": "Connect Gmail and Google Workspace mailboxes to the team inbox. The paid Email app owns this switch."
           },
           "units": {
             "days": "Days",
@@ -1562,7 +1563,8 @@
             "forms": "Web forms",
             "form_submissions_monthly": "Form submissions per month",
             "ai_form_generations_monthly": "AI form builder generations per month",
-            "sms_monthly": "SMS per month"
+            "sms_monthly": "SMS per month",
+            "email_mailboxes": "Email mailboxes"
           },
           "featureGroups": {
             "messaging": "Messaging",
@@ -1601,7 +1603,8 @@
             "form_builder": "Forms (web form builder)",
             "waba_groups": "WhatsApp groups (Cloud API)",
             "sms": "SMS channel",
-            "help_agent": "Help assistant (AI, spends tokens)"
+            "help_agent": "Help assistant (AI, spends tokens)",
+            "email_channel": "Email (Gmail) channel"
           },
           "problems": {
             "required": "This field is required.",
@@ -1654,7 +1657,8 @@
             "forms": "Active web forms (Forms app). Archiving a form frees its place. 0 = unlimited.",
             "form_submissions_monthly": "Form submissions accepted in the calendar month, spam excluded. Over the cap a submission is still saved for review, never dropped. 0 = unlimited.",
             "ai_form_generations_monthly": "AI form builder generations in the calendar month, a repair retry included. 0 = unlimited.",
-            "sms_monthly": "Outbound SMS messages sent in the calendar month. 0 = unlimited."
+            "sms_monthly": "Outbound SMS messages sent in the calendar month. 0 = unlimited.",
+            "email_mailboxes": "Connected Gmail mailboxes (a disconnected one frees its place). 0 = unlimited."
           }
         }
       },

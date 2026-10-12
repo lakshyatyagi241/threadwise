@@ -554,7 +554,8 @@
             "form_builder": "טפסים",
             "waba_groups": "קבוצות WhatsApp",
             "sms": "SMS",
-            "help_agent": "עוזר העזרה"
+            "help_agent": "עוזר העזרה",
+            "email_channel": "ערוץ דוא\"ל (Gmail)"
           },
           "cta": {
             "continueFree": "המשך בחינם",

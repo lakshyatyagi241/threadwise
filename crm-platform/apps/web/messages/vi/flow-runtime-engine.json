@@ -207,7 +207,9 @@
         "request": "Yêu cầu",
         "response": "Phản hồi",
         "result": "Kết quả"
-      }
+      },
+      "factMenuKept": "Không có bước tiếp theo ở đây. Các lựa chọn của {node} vẫn còn hiệu lực.",
+      "factAnswered": "Trả lời sau {time}"
     },
     "event": {
       "step": "Bước",
@@ -513,7 +515,9 @@
       "error": "Lỗi",
       "skipped": "Bỏ qua",
       "waiting": "Đang chờ",
-      "timeout": "Hết thời gian"
+      "timeout": "Hết thời gian",
+      "answered": "Đã trả lời",
+      "gaveUp": "Không phản hồi"
     }
   }
 }

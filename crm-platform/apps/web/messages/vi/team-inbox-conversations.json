@@ -135,7 +135,9 @@
       "groupSendUnavailable": "Hiện chưa hỗ trợ gửi tin đến nhóm WhatsApp. Hãy trả lời từ ứng dụng WhatsApp Business.",
       "logRange": "Chọn ngày trong vòng một năm qua, ngày bắt đầu phải trước ngày kết thúc và không ở tương lai.",
       "logBusy": "Một bản xuất đang được chuẩn bị. Hãy chờ email của bản đó rồi mới yêu cầu bản khác.",
-      "logNotReady": "Bản xuất này chưa sẵn sàng hoặc đã hết hạn. Hãy yêu cầu lại."
+      "logNotReady": "Bản xuất này chưa sẵn sàng hoặc đã hết hạn. Hãy yêu cầu lại.",
+      "groupSuspended": "Meta đã tạm ngưng nhóm này nên không thể nhắn tin cho nhóm cho đến khi Meta gỡ bỏ.",
+      "walletEmpty": "Ví tin nhắn của bạn không đủ cho tin nhắn nhóm này (tính phí cho mỗi thành viên). Hãy nạp tiền rồi thử lại."
     },
     "bubble": {
       "kind": {
@@ -201,7 +203,9 @@
         "takeBackLabel": "Cảm xúc của bạn {emoji}. Thu hồi",
         "failed": "Chưa gửi được cảm xúc này"
       },
-      "deliveryLog": "Nhật ký gửi"
+      "deliveryLog": "Nhật ký gửi",
+      "groupMember": "Thành viên nhóm",
+      "groupTally": "Đã gửi tới {delivered, plural, other {# thành viên}}: {billable} tính phí, {free} miễn phí"
     },
     "media": {
       "openImage": "Mở hình ảnh {name}",

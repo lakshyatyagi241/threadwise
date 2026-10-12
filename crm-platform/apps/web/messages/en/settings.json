@@ -107,8 +107,8 @@
       },
       "email": {
         "label": "Email",
-        "description": "Connect a mailbox to send and receive email in the inbox.",
-        "keywords": "mailbox, smtp, imap, gmail, outlook, sender"
+        "description": "Connect Gmail or Google Workspace mailboxes so your team can read and answer customer email in the shared inbox.",
+        "keywords": "mailbox, gmail, google workspace, shared inbox, support email, outlook, imap"
       },
       "line": {
         "label": "LINE",

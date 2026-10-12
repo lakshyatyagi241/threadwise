@@ -102,8 +102,8 @@
       },
       "email": {
         "label": "ای میل",
-        "description": "ان باکس میں ای میل بھیجنے اور وصول کرنے کے لیے میل باکس جوڑیں۔",
-        "keywords": "میل باکس، smtp، imap، gmail، outlook، بھیجنے والا"
+        "description": "Gmail یا Google Workspace میل باکس جوڑیں تاکہ آپ کی ٹیم مشترکہ ان باکس میں صارفین کی ای میل پڑھ اور ان کا جواب دے سکے۔",
+        "keywords": "میل باکس، gmail، google workspace، مشترکہ ان باکس، سپورٹ ای میل، outlook، imap"
       },
       "line": {
         "label": "LINE",

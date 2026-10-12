@@ -135,7 +135,9 @@
       "groupSendUnavailable": "Pengiriman ke grup WhatsApp belum tersedia. Balas dari aplikasi WhatsApp Business.",
       "logRange": "Pilih tanggal dalam satu tahun terakhir, dengan tanggal mulai sebelum tanggal akhir dan tidak di masa depan.",
       "logBusy": "Ekspor sedang disiapkan. Tunggu emailnya, lalu minta ekspor berikutnya.",
-      "logNotReady": "Ekspor ini belum siap atau sudah kedaluwarsa. Minta lagi."
+      "logNotReady": "Ekspor ini belum siap atau sudah kedaluwarsa. Minta lagi.",
+      "groupSuspended": "Meta menangguhkan grup ini, sehingga tidak dapat dikirimi pesan sampai Meta memulihkannya.",
+      "walletEmpty": "Dompet pesan Anda tidak cukup untuk pesan grup ini (satu tagihan per anggota). Isi saldo lalu coba lagi."
     },
     "bubble": {
       "kind": {
@@ -201,7 +203,9 @@
         "takeBackLabel": "Reaksi Anda {emoji}. Tarik kembali",
         "failed": "Reaksi ini tidak terkirim"
       },
-      "deliveryLog": "Log pengiriman"
+      "deliveryLog": "Log pengiriman",
+      "groupMember": "Anggota grup",
+      "groupTally": "Terkirim ke {delivered, plural, other {# anggota}}: {billable} ditagih, {free} gratis"
     },
     "media": {
       "openImage": "Buka gambar {name}",

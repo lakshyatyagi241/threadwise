@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useEffect, useId, useRef, useState, type KeyboardEvent, type RefObject } from 'react';
 import { Button, EmptyState, Select, Spinner, cn } from '@crm/ui';
+import { EmailChannelOptions } from '@/features/channel-email/components/channel-options';
 import {
   CONVERSATION_STATUSES,
   INBOX_TABS,
@@ -124,11 +125,14 @@ export function ConversationList(props: ConversationListProps) {
               className="h-8 text-xs"
             >
               <option value="">{t('allChannels')}</option>
-              {channels!.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
+              {channels!
+                .filter((c) => c.kind !== 'email')
+                .map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              <EmailChannelOptions channels={channels!} />
             </Select>
           )}
         </div>

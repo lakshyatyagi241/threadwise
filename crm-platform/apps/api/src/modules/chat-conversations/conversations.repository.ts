@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import { channelOwnerSql } from '../../realtime';
 
 /**
  * Every SQL statement the conversation side of the message pipelines runs on `conversations` and `conversation_events`. Each method
@@ -37,12 +38,14 @@ export interface ConversationRow {
   firstResponseAt: Date | null;
   assigneeUserId: number | null;
   assigneeTeamId: number | null;
+  /** The owner of the personal mailbox the thread is on, null for a shared channel: the visibility rule needs it (`ConversationRecord`). */
+  channelOwnerUserId: number | null;
   rowVersion: number;
 }
 
 const COLUMNS = sql`id, uuid, channel_id, peer_key, peer_name, title, contact_id, needs_contact, status, unread_count, msg_seq,
   last_message_at, last_inbound_at, last_outbound_at, window_expires_at, waiting_since, first_response_at,
-  assignee_user_id, assignee_team_id, row_version`;
+  assignee_user_id, assignee_team_id, row_version, ${channelOwnerSql('conversations')} AS channel_owner_user_id`;
 
 export const toConversationRow = (r: Raw): ConversationRow => ({
   id: Number(r.id),
@@ -64,6 +67,7 @@ export const toConversationRow = (r: Raw): ConversationRow => ({
   firstResponseAt: date(r.first_response_at),
   assigneeUserId: num(r.assignee_user_id),
   assigneeTeamId: num(r.assignee_team_id),
+  channelOwnerUserId: num(r.channel_owner_user_id),
   rowVersion: Number(r.row_version),
 });
 

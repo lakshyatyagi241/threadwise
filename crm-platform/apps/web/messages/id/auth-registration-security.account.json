@@ -554,7 +554,8 @@
             "form_builder": "Formulir",
             "waba_groups": "Grup WhatsApp",
             "sms": "SMS",
-            "help_agent": "Asisten Bantuan"
+            "help_agent": "Asisten Bantuan",
+            "email_channel": "Kanal email (Gmail)"
           },
           "cta": {
             "continueFree": "Lanjut gratis",

@@ -1,4 +1,9 @@
-import type { ListMessagesQuery, MessageListResponse, MessageResponse } from '@crm/contracts';
+import type {
+  EmailReplyExtras,
+  ListMessagesQuery,
+  MessageListResponse,
+  MessageResponse,
+} from '@crm/contracts';
 
 /**
  * The door other domains use to reach conversations (plan-inbox-chat.md sections 3.1 and 5.1). The team-inbox read model and its
@@ -91,7 +96,8 @@ export type OutboundInteractive =
   | { type: 'cta_url'; body: string; header?: string; footer?: string; text: string; url: string };
 
 export type OutboundContent =
-  | { kind: 'text'; body: string }
+  /** `email`: cc, bcc and a subject override; accepted only for a conversation on an email channel. */
+  | { kind: 'text'; body: string; email?: EmailReplyExtras }
   | { kind: 'media'; media: OutboundMediaRef; caption?: string }
   /** An emoji on the message `EnqueueOutboundInput.replyToMessageId` names; an empty emoji removes the reaction. */
   | { kind: 'reaction'; emoji: string }

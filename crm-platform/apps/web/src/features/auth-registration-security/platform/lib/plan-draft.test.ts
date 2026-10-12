@@ -85,6 +85,7 @@ const stored: PlanAdminItem = {
     form_submissions_monthly: 0,
     ai_form_generations_monthly: 0,
     sms_monthly: 0,
+    email_mailboxes: 0,
   },
   features: {
     automation: true,
@@ -118,6 +119,7 @@ const stored: PlanAdminItem = {
     waba_groups: false,
     sms: false,
     help_agent: false,
+    email_channel: false,
   },
   moduleFeatures: {},
   moduleLimits: {},

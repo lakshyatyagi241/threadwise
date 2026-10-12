@@ -554,7 +554,8 @@
             "form_builder": "النماذج",
             "waba_groups": "مجموعات واتساب",
             "sms": "SMS",
-            "help_agent": "المساعد الذكي"
+            "help_agent": "المساعد الذكي",
+            "email_channel": "قناة البريد الإلكتروني (Gmail)"
           },
           "cta": {
             "continueFree": "المتابعة مجانًا",

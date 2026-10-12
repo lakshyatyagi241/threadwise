@@ -135,7 +135,9 @@
       "groupSendUnavailable": "Sending to WhatsApp groups is not available yet. Reply from the WhatsApp Business app.",
       "logRange": "Choose dates inside the last year, with the start before the end and not in the future.",
       "logBusy": "An export is already being prepared. Wait for its email, then request another.",
-      "logNotReady": "This export is not ready, or it has expired. Request it again."
+      "logNotReady": "This export is not ready, or it has expired. Request it again.",
+      "groupSuspended": "Meta suspended this group, so it cannot be messaged until Meta clears it.",
+      "walletEmpty": "Your message wallet cannot cover this group message (one charge per member). Top up and try again."
     },
     "bubble": {
       "kind": {
@@ -201,7 +203,9 @@
         "takeBackLabel": "Your reaction {emoji}. Take it back",
         "failed": "This reaction was not sent"
       },
-      "deliveryLog": "Delivery log"
+      "deliveryLog": "Delivery log",
+      "groupMember": "Group member",
+      "groupTally": "Delivered to {delivered, plural, one {# member} other {# members}}: {billable} billed, {free} free"
     },
     "media": {
       "openImage": "Open image {name}",

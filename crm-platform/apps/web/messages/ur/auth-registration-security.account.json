@@ -554,7 +554,8 @@
             "form_builder": "فارمز",
             "waba_groups": "WhatsApp گروپس",
             "sms": "SMS",
-            "help_agent": "مددگار اسسٹنٹ"
+            "help_agent": "مددگار اسسٹنٹ",
+            "email_channel": "ای میل (Gmail) چینل"
           },
           "cta": {
             "continueFree": "مفت جاری رکھیں",

@@ -102,8 +102,8 @@
       },
       "email": {
         "label": "メール",
-        "description": "メールボックスを接続して、受信箱でメールを送受信します。",
-        "keywords": "メールボックス、smtp、imap、gmail、outlook、送信者"
+        "description": "Gmail または Google Workspace のメールボックスを接続して、チームで共有の受信箱からお客様のメールを読み、返信します。",
+        "keywords": "メールボックス、gmail、google workspace、共有受信箱、サポートメール、outlook、imap"
       },
       "line": {
         "label": "LINE",

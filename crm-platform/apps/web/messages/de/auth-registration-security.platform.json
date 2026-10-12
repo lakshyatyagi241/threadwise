@@ -1420,7 +1420,8 @@
             "form_builder": "Gehostete und eingebettete Webformulare, die Kontakte im CRM erstellen. Die kostenpflichtige App Formulare steuert diesen Schalter.",
             "waba_groups": "WhatsApp-Gruppen von einer Cloud-API-Nummer aus erstellen und verwalten: Einladungslink, Beitrittsanfragen, Mitglieder. Die Nummer muss ein Official Business Account sein.",
             "sms": "Reiner SMS-Versand über Twilio oder MSG91: Absender verbinden, SMS-Broadcasts und -Kampagnen senden.",
-            "help_agent": "Der Hilfe-Assistent in der App: Nutzer beschreiben eine Aufgabe in einfachen Worten, und er führt sie an oder erledigt sie in der eigenen Sitzung – bei Risiken fragt er vorher nach. Verbraucht KI-Tokens."
+            "help_agent": "Der Hilfe-Assistent in der App: Nutzer beschreiben eine Aufgabe in einfachen Worten, und er führt sie an oder erledigt sie in der eigenen Sitzung – bei Risiken fragt er vorher nach. Verbraucht KI-Tokens.",
+            "email_channel": "Gmail- und Google-Workspace-Postfächer mit dem Team-Posteingang verbinden. Die kostenpflichtige E-Mail-App steuert diesen Schalter."
           },
           "units": {
             "days": "Tage",
@@ -1562,7 +1563,8 @@
             "forms": "Webformulare",
             "form_submissions_monthly": "Formulareinsendungen pro Monat",
             "ai_form_generations_monthly": "KI-Formular-Builder-Generierungen pro Monat",
-            "sms_monthly": "SMS pro Monat"
+            "sms_monthly": "SMS pro Monat",
+            "email_mailboxes": "E-Mail-Postfächer"
           },
           "featureGroups": {
             "messaging": "Nachrichten",
@@ -1601,7 +1603,8 @@
             "form_builder": "Formulare (Webformular-Builder)",
             "waba_groups": "WhatsApp-Gruppen (Cloud API)",
             "sms": "SMS-Kanal",
-            "help_agent": "Hilfe-Assistent (KI, verbraucht Tokens)"
+            "help_agent": "Hilfe-Assistent (KI, verbraucht Tokens)",
+            "email_channel": "E-Mail-Kanal (Gmail)"
           },
           "problems": {
             "required": "Dieses Feld ist erforderlich.",
@@ -1654,7 +1657,8 @@
             "forms": "Aktive Webformulare (App Formulare). Beim Archivieren eines Formulars wird der Platz frei. 0 = unbegrenzt.",
             "form_submissions_monthly": "Im Kalendermonat angenommene Formulareinsendungen, ohne Spam. Über dem Limit wird eine Einsendung weiterhin zur Prüfung gespeichert und nie verworfen. 0 = unbegrenzt.",
             "ai_form_generations_monthly": "KI-Formular-Builder-Generierungen im Kalendermonat, einschließlich eines Reparaturversuchs. 0 = unbegrenzt.",
-            "sms_monthly": "Im Kalendermonat gesendete ausgehende SMS-Nachrichten. 0 = unbegrenzt."
+            "sms_monthly": "Im Kalendermonat gesendete ausgehende SMS-Nachrichten. 0 = unbegrenzt.",
+            "email_mailboxes": "Verbundene Gmail-Postfächer (ein getrenntes gibt seinen Platz frei). 0 = unbegrenzt."
           }
         }
       },

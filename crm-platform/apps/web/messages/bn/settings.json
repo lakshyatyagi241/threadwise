@@ -102,8 +102,8 @@
       },
       "email": {
         "label": "ইমেইল",
-        "description": "ইনবক্সে ইমেইল পাঠাতে ও গ্রহণ করতে একটি মেইলবক্স যুক্ত করুন।",
-        "keywords": "mailbox, smtp, imap, gmail, outlook, সেন্ডার"
+        "description": "Gmail বা Google Workspace মেইলবক্স যুক্ত করুন, যাতে আপনার টিম শেয়ার্ড ইনবক্সে গ্রাহকদের ইমেইল পড়তে ও উত্তর দিতে পারে।",
+        "keywords": "মেইলবক্স, gmail, google workspace, শেয়ার্ড ইনবক্স, সাপোর্ট ইমেইল, outlook, imap"
       },
       "line": {
         "label": "LINE",

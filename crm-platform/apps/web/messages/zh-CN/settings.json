@@ -102,8 +102,8 @@
       },
       "email": {
         "label": "电子邮件",
-        "description": "连接邮箱，在收件箱中收发邮件。",
-        "keywords": "邮箱, smtp, imap, gmail, outlook, 发件人"
+        "description": "连接 Gmail 或 Google Workspace 邮箱，让团队在共享收件箱中阅读和回复客户邮件。",
+        "keywords": "邮箱, gmail, google workspace, 共享收件箱, 客服邮件, outlook, imap"
       },
       "line": {
         "label": "LINE",

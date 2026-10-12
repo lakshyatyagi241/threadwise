@@ -299,6 +299,10 @@
           "label": "Dokument sprzedażowy rozstrzygnięty",
           "hint": "Oferta lub faktura została zaakceptowana albo odrzucona."
         },
+        "email_bounced": {
+          "label": "E-mail niedostarczony",
+          "hint": "Wysłana przez Ciebie wiadomość e-mail wróciła lub jest opóźniona."
+        },
         "wallet_credited": {
           "label": "Portfel doładowany",
           "hint": "Portfel przestrzeni roboczej został zasilony."
