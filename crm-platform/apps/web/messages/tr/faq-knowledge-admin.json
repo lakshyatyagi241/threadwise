@@ -61,7 +61,9 @@
         "matches": "Kontrol edilen müşteri mesajları",
         "answered": "Yanıtlanan",
         "rate": "Yanıt oranı",
-        "tokens": "Gömme token sayısı"
+        "tokens": "Gömme token sayısı",
+        "verified": "İkinci kontroller",
+        "vetoed": "Tutulan yanıtlar"
       }
     },
     "settings": {
@@ -96,7 +98,8 @@
         "maxFaqs": "Çalışma alanı başına en fazla SSS",
         "maxVariationsPerFaq": "SSS başına en fazla varyasyon",
         "semanticPerHour": "Çalışma alanı başına saatlik anlam eşleşmesi",
-        "semanticPerHourHint": "Bunun üzerinde çalışma alanı, saatin geri kalanında yazım benzerliğine döner. 0 her zaman yazım benzerliği demektir."
+        "semanticPerHourHint": "Bunun üzerinde çalışma alanı, saatin geri kalanında yazım benzerliğine döner. 0 her zaman yazım benzerliği demektir.",
+        "verifyPerHour": "Çalışma alanı başına saatlik ikinci kontrol sayısı"
       },
       "errors": {
         "integer": "Bir tam sayı girin.",
@@ -115,6 +118,19 @@
         "confirm": "Değişiklikleri kaydet",
         "engineOff": "Motoru kapatmak, hiçbir çalışma alanının müşterilere SSS ile yanıt vermesine izin vermez ve siz yeniden açana kadar SSS düzenlemelerini engeller.",
         "modelChange": "Gömme modelini {from} modelinden {to} modeline değiştirmek, saklanan tüm vektörlerin yeniden üretilmesini sağlar. Bu bitene kadar eşleştirme yalnızca yazım benzerliğini kullanır. Sabit bir değer belirlemediyseniz varsayılan hassasiyet yeni modeli izler (önerilen {threshold}). Skorlar modelle değiştiği için ayrı kaydedilmiş çalışma alanı eşiklerinin yeniden ayarlanması gerekebilir."
+      },
+      "verify": {
+        "title": "Sınırdaki eşleşmeler için ikinci kontrol",
+        "description": "Küçük bir sohbet modeli, bir çalışma alanının eşiğine yeni ulaşan eşleşmeleri yeniden kontrol eder. Yalnızca yanıtı tutabilir. Çalışma alanları bunu kendi SSS ayarlarından açar.",
+        "enabled": {
+          "label": "İkinci kontrole izin ver",
+          "hint": "Çalışma alanlarının ayarından bağımsız olarak kontrolü tüm çalışma alanları için durdurmak üzere kapatın."
+        },
+        "model": {
+          "label": "Kontrol modeli",
+          "hint": "Sınırdaki eşleşmeleri değerlendiren OpenRouter model kimliği, örneğin openai/gpt-4o-mini. Küçük ve hızlı bir model yeterlidir."
+        },
+        "perHourHint": "Bu sayıdan sonra, saatin geri kalanında sınırdaki eşleşmeler kontrol edilmeden geçerli kalır. 0 hiçbir zaman kontrol etme anlamına gelir."
       }
     },
     "maintenance": {

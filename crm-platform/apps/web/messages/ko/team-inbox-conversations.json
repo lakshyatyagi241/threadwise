@@ -1,7 +1,8 @@
 {
   "team-inbox-conversations": {
     "nav": {
-      "inbox": "수신함"
+      "inbox": "수신함",
+      "messageLogs": "메시지 로그"
     },
     "common": {
       "dismiss": "닫기"
@@ -131,7 +132,10 @@
       "generic": "문제가 발생했습니다. 다시 시도하세요.",
       "genericWithId": "문제가 발생했습니다. 다시 시도하세요. 참조: {id}",
       "templateNotSendable": "이 대화에는 해당 템플릿을 보낼 수 없습니다. 다른 템플릿을 선택하세요.",
-      "groupSendUnavailable": "WhatsApp 그룹으로의 발송은 아직 지원되지 않습니다. WhatsApp Business 앱에서 답장하세요."
+      "groupSendUnavailable": "WhatsApp 그룹으로의 발송은 아직 지원되지 않습니다. WhatsApp Business 앱에서 답장하세요.",
+      "logRange": "최근 1년 이내의 날짜를 선택하세요. 시작일은 종료일보다 앞서야 하며 미래 날짜는 선택할 수 없습니다.",
+      "logBusy": "이미 내보내기를 준비 중입니다. 이메일이 도착할 때까지 기다린 후 다시 요청하세요.",
+      "logNotReady": "이 내보내기는 아직 준비되지 않았거나 만료되었습니다. 다시 요청하세요."
     },
     "bubble": {
       "kind": {
@@ -196,7 +200,8 @@
         "takeBack": "탭하여 반응 취소",
         "takeBackLabel": "내 반응 {emoji}. 취소하기",
         "failed": "이 반응이 전송되지 않았습니다"
-      }
+      },
+      "deliveryLog": "전송 로그"
     },
     "media": {
       "openImage": "이미지 {name} 열기",
@@ -554,6 +559,80 @@
         "named_variables": "명명된 변수를 사용하며, 수신함에서는 아직 지원되지 않습니다."
       },
       "hasMore": "처음 {count}개의 템플릿을 표시합니다. 나머지는 이름 또는 내용으로 검색하세요."
+    },
+    "log": {
+      "title": "전송 로그",
+      "close": "닫기",
+      "loading": "로그를 불러오는 중",
+      "tryAgain": "다시 시도",
+      "statusNow": "현재 상태",
+      "createdAt": "생성일시",
+      "providerId": "제공업체 메시지 ID",
+      "failedNoReason": "이 메시지는 전달되지 않았습니다.",
+      "expired": "이 메시지는 {days}일이 지났습니다. 로그가 더 이상 보관되지 않습니다.",
+      "empty": "이 메시지에 기록된 로그가 없습니다. 로그 보관 이전에 보낸 메시지에는 로그가 없습니다.",
+      "archived": "{days}일이 지난 항목은 아카이브에서 불러옵니다.",
+      "exportLink": "메시지 로그 내보내기",
+      "source": {
+        "system": "자체 시스템",
+        "provider": "제공업체 수신 확인"
+      },
+      "event": {
+        "queued": "전송 대기열에 추가됨",
+        "attempt": "전송 시도 {attempt}",
+        "accepted": "제공업체가 수락함",
+        "sentReceipt": "제공업체가 전송을 확인함",
+        "delivered": "고객의 휴대폰에 전달됨",
+        "read": "고객이 읽음",
+        "failedReceipt": "제공업체가 미전달로 보고함",
+        "failedSend": "전송할 수 없음",
+        "retryAuto": "자동으로 다시 시도합니다",
+        "retryManual": "팀원이 재시도를 눌렀습니다"
+      },
+      "notApplied": "이 보고는 늦게 도착했거나 이전 전송에 대한 것입니다. 메시지에는 반영되지 않았습니다.",
+      "replayed": "새 요청은 보내지 않았으며, 제공업체의 이전 응답을 재사용했습니다.",
+      "resent": "새 메시지로 제공업체에 다시 보냈습니다."
+    },
+    "logs": {
+      "back": "받은편지함으로 돌아가기",
+      "title": "메시지 로그",
+      "intro": "모든 메시지에는 전송 로그가 보관됩니다. 받은편지함에서는 {hot}일 동안, 이후에는 발생 후 {days}일까지 아카이브에 보관됩니다. 날짜 범위를 지정해 내보내기를 요청하면 백그라운드에서 준비되며, 완료되면 이메일로 알려 드립니다.",
+      "requested": "내보내기를 요청했습니다. 준비되면 이메일로 알려 드립니다.",
+      "requestedTo": "내보내기를 요청했습니다. 준비되면 {email}(으)로 이메일을 보내 드립니다.",
+      "form": {
+        "title": "내보내기 요청",
+        "from": "시작",
+        "to": "종료",
+        "status": "현재 상태가 다음인 메시지만",
+        "anyStatus": "모든 상태",
+        "hint": "날짜는 UTC 기준입니다. 최대 {days}일 전까지 조회할 수 있습니다. 내보내기는 한 번에 하나씩 준비됩니다.",
+        "submit": "내보내기 요청",
+        "sending": "요청 중"
+      },
+      "problem": {
+        "order": "시작일은 종료일보다 늦을 수 없습니다.",
+        "future": "종료일은 미래 날짜일 수 없습니다.",
+        "tooOld": "로그는 {days}일 동안 보관됩니다. 더 늦은 시작일을 선택하세요.",
+        "invalid": "두 날짜를 모두 입력하세요."
+      },
+      "history": {
+        "title": "내 내보내기",
+        "loading": "내보내기 목록을 불러오는 중",
+        "tryAgain": "다시 시도",
+        "empty": "아직 내보내기가 없습니다.",
+        "onlyStatus": "{status} 메시지만",
+        "requestedAt": "요청일 {date}",
+        "lines": "{count, plural, other {#줄}}",
+        "until": "{date}까지 사용 가능",
+        "download": "다운로드",
+        "status": {
+          "queued": "대기 중",
+          "running": "준비 중",
+          "ready": "준비됨",
+          "failed": "실패",
+          "expired": "만료됨"
+        }
+      }
     }
   }
 }

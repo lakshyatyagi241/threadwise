@@ -368,6 +368,16 @@ const EXECUTOR_READS: Record<string, { save?: Read; reads: Read | 'raw-data-unto
     save: { apiId: '9b6c7a52-0d6e-4c7d-9a65-3c1d6b1f0a11', save: '{{res}}' },
     reads: { apiId: '9b6c7a52-0d6e-4c7d-9a65-3c1d6b1f0a11', variable: 'res' },
   },
+  faq: {
+    save: { query: '{{answer}}', save: '{{hit}}', minScore: '0.6', category: ' billing ' },
+    reads: {
+      query: '{{answer}}',
+      variable: 'hit',
+      minScore: 0.6,
+      category: 'billing',
+      sendAnswer: true,
+    },
+  },
   google_sheets: { save: { saveAs: '{{row}}' }, reads: { saveAs: 'row', mode: 'write' } },
   google_docs: { save: { saveAs: '{{u}}' }, reads: { saveAs: 'u', shareable: true } },
   google_form: { save: { expiresInSec: '60' }, reads: { expiresInSec: 60 } },

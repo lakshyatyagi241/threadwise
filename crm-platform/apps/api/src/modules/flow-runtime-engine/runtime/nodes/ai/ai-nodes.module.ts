@@ -14,9 +14,11 @@ import {
 import { AiKeysUsageAdminModule } from '../../../../ai-keys-usage-admin';
 import { CatalogProductsModule } from '../../../../catalog-products';
 import { CrmModule } from '../../../../crm';
+import { FaqKnowledgeModule } from '../../../../faq-knowledge';
 import { LocalizationTranslationModule } from '../../../../localization-translation';
 import { AiCallService } from './ai-call.service';
 import { AiNodes } from './ai-nodes';
+import { FaqNodes } from './faq-node';
 import { OrderingFlowService } from './ordering.service';
 
 /** Imports the domains this node group calls (their public modules only); never the flow runtime module (it imports this one). */
@@ -25,10 +27,12 @@ import { OrderingFlowService } from './ordering.service';
     AiKeysUsageAdminModule,
     CatalogProductsModule,
     CrmModule,
+    FaqKnowledgeModule,
     LocalizationTranslationModule,
   ],
   providers: [
     AiNodes,
+    FaqNodes,
     AiCallService,
     OrderingFlowService,
     { provide: FLOW_AI_PORT, useClass: HttpFlowAiAdapter },
@@ -38,6 +42,6 @@ import { OrderingFlowService } from './ordering.service';
     { provide: ORDER_MEDIA_PORT, useClass: NoOrderMedia },
     { provide: ORDER_GROUP_NOTIFY_PORT, useClass: NoOrderGroupNotify },
   ],
-  exports: [AiNodes, AiCallService, OrderingFlowService, AI_AGENT_HANDOFF_PORT],
+  exports: [AiNodes, FaqNodes, AiCallService, OrderingFlowService, AI_AGENT_HANDOFF_PORT],
 })
 export class AiNodesModule {}

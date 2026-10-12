@@ -286,6 +286,44 @@ export function SettingsCard({ config }: { config: FaqPlatformConfig }) {
           </label>
         </div>
 
+        <fieldset className="space-y-3 rounded-md border p-3">
+          <legend className="px-1 text-sm font-semibold">{t('verify.title')}</legend>
+          <p className="text-xs text-muted-foreground">{t('verify.description')}</p>
+          <div className="flex items-start justify-between gap-4">
+            <div className="min-w-0 space-y-0.5">
+              <label htmlFor={`${id}-verify`} className="block text-sm font-medium">
+                {t('verify.enabled.label')}
+              </label>
+              <p className="text-xs text-muted-foreground">{t('verify.enabled.hint')}</p>
+            </div>
+            <Switch
+              id={`${id}-verify`}
+              label={t('verify.enabled.label')}
+              checked={draft.verifyEnabled}
+              onCheckedChange={(v) => set({ verifyEnabled: v }, 'verifyEnabled')}
+            />
+          </div>
+          <Field
+            label={t('verify.model.label')}
+            htmlFor={`${id}-verify-model`}
+            hint={t('verify.model.hint')}
+            error={message(problems.verifyModel)}
+          >
+            <Input
+              id={`${id}-verify-model`}
+              dir="ltr"
+              autoComplete="off"
+              spellCheck={false}
+              maxLength={120}
+              placeholder={t('generationModel.placeholder')}
+              value={draft.verifyModel}
+              invalid={Boolean(problems.verifyModel)}
+              onChange={(e) => set({ verifyModel: e.target.value }, 'verifyModel')}
+            />
+          </Field>
+          <div className="max-w-xs">{limitField('verifyPerHour', t('verify.perHourHint'))}</div>
+        </fieldset>
+
         <fieldset className="space-y-3 border-t pt-4">
           <legend className="pe-2 text-sm font-semibold">{t('limits.title')}</legend>
           <div className="grid gap-4 md:grid-cols-3">

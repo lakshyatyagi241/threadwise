@@ -61,7 +61,9 @@
         "matches": "Customer messages checked",
         "answered": "Answered",
         "rate": "Answer rate",
-        "tokens": "Embedding tokens"
+        "tokens": "Embedding tokens",
+        "verified": "Second checks",
+        "vetoed": "Answers withheld"
       }
     },
     "settings": {
@@ -96,7 +98,8 @@
         "maxFaqs": "Maximum FAQs per workspace",
         "maxVariationsPerFaq": "Maximum variations per FAQ",
         "semanticPerHour": "Semantic matches per workspace per hour",
-        "semanticPerHourHint": "Past this, a workspace falls back to spelling similarity for the rest of the hour. 0 means always spelling similarity."
+        "semanticPerHourHint": "Past this, a workspace falls back to spelling similarity for the rest of the hour. 0 means always spelling similarity.",
+        "verifyPerHour": "Second checks per workspace per hour"
       },
       "errors": {
         "integer": "Enter a whole number.",
@@ -115,6 +118,19 @@
         "confirm": "Save changes",
         "engineOff": "Turning the engine off stops every workspace from answering customers from FAQs and blocks FAQ edits until you turn it back on.",
         "modelChange": "Changing the embedding model from {from} to {to} makes every stored vector again. Until that finishes, matching uses spelling similarity only. The default sensitivity will follow the new model (recommended {threshold}) unless you set a fixed value. Workspace thresholds that were saved on their own may need retuning because scores change with the model."
+      },
+      "verify": {
+        "title": "Second check for close calls",
+        "description": "A small chat model double-checks matches that only just reached a workspace's bar. It can only withhold an answer. Workspaces switch it on in their own FAQ settings.",
+        "enabled": {
+          "label": "Allow the second check",
+          "hint": "Turn it off to stop the check for every workspace, whatever they set."
+        },
+        "model": {
+          "label": "Check model",
+          "hint": "The OpenRouter model id that judges close calls, for example openai/gpt-4o-mini. A small, fast model is enough."
+        },
+        "perHourHint": "Past this, a close call stands unchecked for the rest of the hour. 0 means never check."
       }
     },
     "maintenance": {

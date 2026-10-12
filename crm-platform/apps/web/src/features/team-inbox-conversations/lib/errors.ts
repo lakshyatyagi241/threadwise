@@ -21,6 +21,9 @@ export const ERROR_KINDS = [
   'unsupported',
   'templateNotSendable',
   'groupSendUnavailable',
+  'logRange',
+  'logBusy',
+  'logNotReady',
   'network',
   'generic',
 ] as const;
@@ -50,6 +53,10 @@ const BY_CODE: Record<string, ErrorKind> = {
   PAYLOAD_TOO_LARGE: 'tooLarge',
   CHANNEL_CAPABILITY_UNSUPPORTED: 'unsupported',
   WABA_GROUP_SEND_UNAVAILABLE: 'groupSendUnavailable',
+  MESSAGE_LOG_EXPORT_RANGE_INVALID: 'logRange',
+  MESSAGE_LOG_EXPORT_IN_PROGRESS: 'logBusy',
+  MESSAGE_LOG_EXPORT_NOT_FOUND: 'notFound',
+  MESSAGE_LOG_EXPORT_NOT_READY: 'logNotReady',
   UNSUPPORTED_MEDIA_TYPE: 'unsupported',
   NETWORK: 'network',
 };

@@ -192,7 +192,12 @@
       "retention": "Logs are deleted {days} days after a run ends.",
       "pathTitle": "Path taken",
       "notReached": "Not reached",
-      "noErrors": "No errors in this run."
+      "noErrors": "No errors in this run.",
+      "factNext": "Next: {node}",
+      "factWaiting": "Waiting at: {node}",
+      "factDelay": "Waits {time}",
+      "factReplied": "Customer replied: {text}",
+      "factEnded": "Ended: {reason}"
     },
     "event": {
       "step": "Step",

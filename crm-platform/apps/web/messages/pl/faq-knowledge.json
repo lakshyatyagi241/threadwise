@@ -33,7 +33,8 @@
       "modelNotAllowed": "Model AI do dopasowywania używany przez platformę jest niedozwolony. Skontaktuj się z administratorem platformy.",
       "validation": "Niektóre pola wymagają poprawy.",
       "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
-      "unexpected": "Coś poszło nie tak. Spróbuj ponownie, a jeśli problem się powtarza, podaj pomocy technicznej identyfikator żądania."
+      "unexpected": "Coś poszło nie tak. Spróbuj ponownie, a jeśli problem się powtarza, podaj pomocy technicznej identyfikator żądania.",
+      "flowNodeNotFound": "Wybranego kroku nie ma już w tym przepływie. Wybierz inny krok albo zacznij od początku przepływu."
     },
     "banner": {
       "enabledToast": "Odpowiadanie przez FAQ jest włączone.",
@@ -139,7 +140,9 @@
         "ready": "Aktywnych: {count}",
         "pending": "W indeksowaniu: {count}",
         "failed": "Z błędem: {count}"
-      }
+      },
+      "stepMissing": "Brak kroku",
+      "startsAt": "Start od: {step}"
     },
     "editor": {
       "back": "Wróć do FAQ",
@@ -192,7 +195,9 @@
         "preview": "Jak to wygląda w WhatsApp",
         "previewEmpty": "Tutaj pojawi się Twoja odpowiedź",
         "flowLabel": "Przepływ do uruchomienia",
-        "noFlow": "Nie wybrano przepływu"
+        "noFlow": "Nie wybrano przepływu",
+        "startsAt": "Start od kroku: {step}",
+        "stepGone": "Krok, od którego startuje to FAQ, już nie istnieje, więc klienci nie dostają odpowiedzi."
       },
       "advanced": {
         "title": "Zaawansowane: czułość tylko dla tego FAQ",
@@ -227,6 +232,11 @@
           "required": "Wybierz wartość od 5% do 99%.",
           "tooLong": "Wybierz wartość od 5% do 99%.",
           "invalid": "Wybierz wartość od 5% do 99%."
+        },
+        "flowNodeId": {
+          "required": "Wybierz krok tego przepływu albo początek przepływu.",
+          "tooLong": "Wybierz krok tego przepływu albo początek przepływu.",
+          "invalid": "Wybierz krok tego przepływu albo początek przepływu."
         }
       },
       "deleteConfirm": {
@@ -257,7 +267,7 @@
         "off": "Nieaktywny",
         "draft": "Wersja robocza"
       },
-      "note": "Przepływ startuje od swojego wyzwalacza. Uruchomić można tylko opublikowane, aktywne przepływy."
+      "note": "Przepływ startuje od kroku wybranego poniżej albo od swojego początku. Uruchomić można tylko opublikowane, aktywne przepływy."
     },
     "variations": {
       "title": "Warianty pytania",
@@ -354,6 +364,10 @@
         "notSent": {
           "title": "Dopasowano, nie wysłano",
           "body": "FAQ pasowało, ale odpowiedź nie została wysłana, na przykład dlatego, że odpowiadanie przez FAQ było wyłączone."
+        },
+        "vetoed": {
+          "title": "Odpowiedź wstrzymana",
+          "body": "Dopasowanie miało wystarczająco wysoki wynik, ale drugie sprawdzenie odrzuciło je, więc nic by nie wysłano."
         }
       },
       "tier": {
@@ -486,8 +500,11 @@
         "providerError": "Dostawca AI zawiódł, więc bot mógł dopasować tylko według pisowni.",
         "notSent": "FAQ pasowało, ale odpowiedź nie została wysłana.",
         "tier": "Zdecydował poziom: {tier}.",
-        "error": "Błąd: {error}"
-      }
+        "error": "Błąd: {error}",
+        "vetoed": "Najlepsze dopasowanie uzyskało {score}%, powyżej progu {threshold}%, ale drugie sprawdzenie uznało, że nie odpowiada ono na wiadomość, więc nic nie wysłano.",
+        "vetoedNoBar": "Najlepsze dopasowanie uzyskało {score}%, ale drugie sprawdzenie uznało, że nie odpowiada ono na wiadomość, więc nic nie wysłano."
+      },
+      "flowRun": "(z przepływu)"
     },
     "insights": {
       "title": "Statystyki FAQ",
@@ -612,7 +629,8 @@
         "exact": "Dokładne: wiadomość jest równa zapisanemu sformułowaniu, z pominięciem wielkości liter i spacji.",
         "semantic": "Według znaczenia: wiadomość jest porównywana pod względem znaczenia z każdym aktywnym sformułowaniem, więc pasować mogą także inne słowa.",
         "trigram": "Zapasowe według pisowni: gdy dostawca AI jest niedostępny, porównywane są litery, co wyłapuje tylko literówki.",
-        "threshold": "Najlepszy wynik jest porównywany z czułością. Powyżej niej FAQ odpowiada; poniżej wiadomość trafia na listę Bez odpowiedzi."
+        "threshold": "Najlepszy wynik jest porównywany z czułością. Powyżej niej FAQ odpowiada; poniżej wiadomość trafia na listę Bez odpowiedzi.",
+        "verify": "Drugie sprawdzenie (opcjonalne): dopasowanie, które ledwo osiągnęło czułość, może zostać dodatkowo sprawdzone przez mały model czatu, który może jedynie wstrzymać odpowiedź."
       },
       "who": "Zmiana tych ustawień wymaga uprawnienia faq.settings.manage.",
       "leave": {
@@ -620,6 +638,52 @@
         "body": "Zmiany w tych ustawieniach nie zostały zapisane.",
         "leave": "Wyjdź",
         "stay": "Zostań"
+      },
+      "verify": {
+        "title": "Drugie sprawdzenie niepewnych dopasowań",
+        "hint": "Mały model czatu dodatkowo sprawdza dopasowania, które ledwo osiągnęły próg.",
+        "unavailable": "Platforma wyłączyła drugie sprawdzenie, więc nie działa ono, nawet jeśli włączysz je tutaj. Skontaktuj się z administratorem platformy.",
+        "label": "Sprawdzaj niepewne dopasowania drugą opinią",
+        "on": "Wł.",
+        "off": "Wył.",
+        "onBody": "Gdy dopasowanie ledwo przekracza próg, mały model czatu czyta wiadomość klienta i FAQ, a potem ocenia, czy odpowiedź pasuje. Może tylko odmówić: nigdy nie sprawia, że odpowiedź zostanie wysłana.",
+        "offBody": "Każde dopasowanie, które osiąga próg, dostaje odpowiedź bez ponownego sprawdzenia.",
+        "bandLabel": "Jak blisko progu dopasowanie jest niepewne",
+        "bandValue": "+{value}%",
+        "explainOn": "Dopasowania z wynikiem od {from}% do {to}% są sprawdzane przez {model}. Odpowiedź „nie” oznacza, że odpowiedź nie zostanie wysłana, a wiadomość pojawi się w zakładce Bez odpowiedzi.",
+        "explainOff": "Każde dopasowanie z wynikiem {threshold}% lub wyższym dostaje odpowiedź. Włącz drugie sprawdzenie, aby najbardziej niepewne dopasowania były dodatkowo weryfikowane.",
+        "cost": "Każde sprawdzenie wysyła do modelu wiadomość klienta i pytanie z FAQ: kilkaset tokenów, a odpowiedź na graniczne dopasowanie jest opóźniona o około sekundę. Dopasowania poza tym zakresem nigdy nie są sprawdzane. Jeśli sprawdzenie się nie powiedzie, jest niedostępne lub osiągnięto limit godzinowy, dopasowanie obowiązuje tak, jakby sprawdzenia nie było."
+      }
+    },
+    "flowNode": {
+      "label": "Zacznij od",
+      "start": "Początek przepływu",
+      "hint": "Wybierz krok, aby pominąć początek przepływu. Klienci wejdą do przepływu na wybranym kroku.",
+      "loading": "Wczytywanie kroków tego przepływu",
+      "empty": "Ten przepływ nie ma innych kroków, więc startuje od początku.",
+      "retry": "Spróbuj ponownie",
+      "deletedOption": "Usunięty krok (wybierz inny)",
+      "missing": {
+        "title": "Krok, od którego startuje to FAQ, już nie istnieje",
+        "body": "Ten krok został usunięty z przepływu. Dopóki nie wybierzesz innego kroku, klienci pasujący do tego FAQ nie dostaną odpowiedzi. Wybierz krok poniżej albo zacznij od początku przepływu.",
+        "fix": "Zacznij od początku przepływu"
+      }
+    },
+    "verify": {
+      "title": "Drugie sprawdzenie",
+      "chip": {
+        "confirmed": "Drugie sprawdzenie: tak",
+        "vetoed": "Drugie sprawdzenie: nie",
+        "failed": "Drugie sprawdzenie nie powiodło się",
+        "skipped": "Drugie sprawdzenie pominięte"
+      },
+      "model": "Sprawdził",
+      "reason": "Powód",
+      "body": {
+        "confirmed": "Dopasowanie było niepewne, więc mały model czatu przeczytał wiadomość i FAQ i potwierdził, że odpowiedź pasuje.",
+        "vetoed": "Dopasowanie było niepewne, a drugie sprawdzenie uznało, że to FAQ nie odpowiada na wiadomość. Odpowiedź została wstrzymana, nic nie wysłano, a wiadomość pojawia się w zakładce Bez odpowiedzi.",
+        "failed": "Dopasowanie było niepewne, ale sprawdzenia nie udało się dokończyć, więc dopasowanie obowiązywało, a odpowiedź wysłano tak, jakby drugiego sprawdzenia nie było.",
+        "skipped": "Drugie sprawdzenie nie zostało uruchomione dla tego dopasowania, więc obowiązywało ono bez zmian."
       }
     }
   }

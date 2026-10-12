@@ -192,7 +192,12 @@
       "retention": "रन समाप्त होने के {days} दिन बाद लॉग हटा दिए जाते हैं।",
       "pathTitle": "अपनाया गया रास्ता",
       "notReached": "नहीं पहुँचे",
-      "noErrors": "इस रन में कोई त्रुटि नहीं।"
+      "noErrors": "इस रन में कोई त्रुटि नहीं।",
+      "factNext": "अगला: {node}",
+      "factWaiting": "यहाँ प्रतीक्षा: {node}",
+      "factDelay": "{time} प्रतीक्षा",
+      "factReplied": "ग्राहक ने उत्तर दिया: {text}",
+      "factEnded": "समाप्त: {reason}"
     },
     "event": {
       "step": "स्टेप",

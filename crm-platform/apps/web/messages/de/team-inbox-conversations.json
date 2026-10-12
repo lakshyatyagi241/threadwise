@@ -1,7 +1,8 @@
 {
   "team-inbox-conversations": {
     "nav": {
-      "inbox": "Posteingang"
+      "inbox": "Posteingang",
+      "messageLogs": "Nachrichtenprotokolle"
     },
     "common": {
       "dismiss": "Ausblenden"
@@ -131,7 +132,10 @@
       "generic": "Etwas ist schiefgelaufen. Versuchen Sie es erneut.",
       "genericWithId": "Etwas ist schiefgelaufen. Versuchen Sie es erneut. Referenz: {id}",
       "templateNotSendable": "Diese Vorlage kann in dieser Unterhaltung nicht gesendet werden. Wählen Sie eine andere.",
-      "groupSendUnavailable": "Das Senden an WhatsApp-Gruppen ist noch nicht verfügbar. Antworten Sie über die WhatsApp Business App."
+      "groupSendUnavailable": "Das Senden an WhatsApp-Gruppen ist noch nicht verfügbar. Antworten Sie über die WhatsApp Business App.",
+      "logRange": "Wählen Sie Daten innerhalb des letzten Jahres, wobei der Beginn vor dem Ende liegt und nicht in der Zukunft.",
+      "logBusy": "Ein Export wird bereits vorbereitet. Warten Sie auf die E-Mail dazu und fordern Sie dann einen weiteren an.",
+      "logNotReady": "Dieser Export ist nicht bereit oder abgelaufen. Fordern Sie ihn erneut an."
     },
     "bubble": {
       "kind": {
@@ -196,7 +200,8 @@
         "takeBack": "Tippen, um deine Reaktion zurückzunehmen",
         "takeBackLabel": "Deine Reaktion {emoji}. Zurücknehmen",
         "failed": "Diese Reaktion wurde nicht gesendet"
-      }
+      },
+      "deliveryLog": "Zustellprotokoll"
     },
     "media": {
       "openImage": "Bild {name} öffnen",
@@ -554,6 +559,80 @@
         "named_variables": "Verwendet benannte Variablen, die der Posteingang noch nicht unterstützt."
       },
       "hasMore": "Es werden die ersten {count} Vorlagen angezeigt. Suchen Sie nach Name oder Text, um die übrigen zu finden."
+    },
+    "log": {
+      "title": "Zustellprotokoll",
+      "close": "Schließen",
+      "loading": "Protokoll wird geladen",
+      "tryAgain": "Erneut versuchen",
+      "statusNow": "Aktueller Status",
+      "createdAt": "Erstellt",
+      "providerId": "Nachrichten-ID des Anbieters",
+      "failedNoReason": "Diese Nachricht wurde nicht zugestellt.",
+      "expired": "Diese Nachricht ist älter als {days} Tage. Ihr Protokoll wird nicht mehr aufbewahrt.",
+      "empty": "Für diese Nachricht wurde kein Protokoll aufgezeichnet. Nachrichten, die vor Einführung der Protokolle gesendet wurden, haben keines.",
+      "archived": "Einträge, die älter als {days} Tage sind, werden aus dem Archiv gelesen.",
+      "exportLink": "Nachrichtenprotokolle exportieren",
+      "source": {
+        "system": "Unser System",
+        "provider": "Empfangsbestätigung des Anbieters"
+      },
+      "event": {
+        "queued": "In Sendewarteschlange",
+        "attempt": "Sendeversuch {attempt}",
+        "accepted": "Vom Anbieter angenommen",
+        "sentReceipt": "Anbieter hat den Versand bestätigt",
+        "delivered": "Auf dem Telefon des Kunden zugestellt",
+        "read": "Vom Kunden gelesen",
+        "failedReceipt": "Anbieter hat sie als nicht zugestellt gemeldet",
+        "failedSend": "Konnte nicht gesendet werden",
+        "retryAuto": "Wird automatisch erneut versucht",
+        "retryManual": "Ein Teammitglied hat auf „Erneut senden“ geklickt"
+      },
+      "notApplied": "Diese Meldung kam zu spät oder gehörte zu einem früheren Versand. Sie hat die Nachricht nicht verändert.",
+      "replayed": "Es wurde keine neue Anfrage gestellt: Die frühere Antwort des Anbieters wurde wiederverwendet.",
+      "resent": "Als neue Nachricht erneut an den Anbieter gesendet."
+    },
+    "logs": {
+      "back": "Zurück zum Posteingang",
+      "title": "Nachrichtenprotokolle",
+      "intro": "Jede Nachricht behält ihr Zustellprotokoll: {hot} Tage im Posteingang, danach im Archiv bis {days} Tage nach dem Ereignis. Fordern Sie einen Export für einen Zeitraum an; er wird im Hintergrund vorbereitet und Ihnen per E-Mail geschickt, sobald er bereit ist.",
+      "requested": "Export angefordert. Wir senden Ihnen eine E-Mail, sobald er bereit ist.",
+      "requestedTo": "Export angefordert. Wir senden eine E-Mail an {email}, sobald er bereit ist.",
+      "form": {
+        "title": "Export anfordern",
+        "from": "Von",
+        "to": "Bis",
+        "status": "Nur Nachrichten mit aktuellem Status",
+        "anyStatus": "Beliebiger Status",
+        "hint": "Die Daten gelten in UTC. Sie können bis zu {days} Tage zurückgehen. Es wird jeweils nur ein Export vorbereitet.",
+        "submit": "Export anfordern",
+        "sending": "Wird angefordert"
+      },
+      "problem": {
+        "order": "Das Startdatum darf nicht nach dem Enddatum liegen.",
+        "future": "Das Enddatum darf nicht in der Zukunft liegen.",
+        "tooOld": "Protokolle werden {days} Tage aufbewahrt. Wählen Sie ein späteres Startdatum.",
+        "invalid": "Geben Sie beide Daten ein."
+      },
+      "history": {
+        "title": "Ihre Exporte",
+        "loading": "Exporte werden geladen",
+        "tryAgain": "Erneut versuchen",
+        "empty": "Noch keine Exporte.",
+        "onlyStatus": "Nur Nachrichten mit Status {status}",
+        "requestedAt": "Angefordert {date}",
+        "lines": "{count, plural, one {# Zeile} other {# Zeilen}}",
+        "until": "Verfügbar bis {date}",
+        "download": "Herunterladen",
+        "status": {
+          "queued": "Wartend",
+          "running": "Wird vorbereitet",
+          "ready": "Bereit",
+          "failed": "Fehlgeschlagen",
+          "expired": "Abgelaufen"
+        }
+      }
     }
   }
 }

@@ -1,6 +1,7 @@
 import type {
   AssignConversationInput,
   CreateConversationNoteInput,
+  CreateMessageLogExportInput,
   CreateSimulatorChannelInput,
   InboxMediaUpload,
   SendMessageInput,
@@ -25,13 +26,47 @@ import {
   inboxTemplateListResponseSchema,
   markConversationReadResponseSchema,
   messageListResponseSchema,
+  messageLogExportListSchema,
+  messageLogExportSchema,
+  messageLogResponseSchema,
   messageResponseSchema,
   noteListSchema,
   simulatorInboundResponseSchema,
 } from './schemas';
 
+/** The finished export as a file. It needs the session, so it is fetched (a bare link carries no auth) and the body handed to the browser. */
+export async function downloadMessageLogExport(
+  exportId: string,
+): Promise<{ blob: Blob; fileName: string }> {
+  const res = await fetch(`/api/v2/inbox/message-logs/exports/${exportId}/download`, {
+    headers: { Accept: 'text/csv', 'X-Request-Id': crypto.randomUUID() },
+    credentials: 'same-origin',
+  });
+  if (!res.ok) {
+    let body: unknown;
+    try {
+      body = await res.json();
+    } catch {
+      body = undefined;
+    }
+    throw toApiError(res.status, body, res.headers.get('x-request-id'));
+  }
+  const named = /filename="?([^";]+)"?/i.exec(res.headers.get('content-disposition') ?? '');
+  return { blob: await res.blob(), fileName: named?.[1] ?? 'message-log.csv' };
+}
+
 /** Every inbox call. Paths are the plan's endpoint list (section 4.2); the proxy adds the session token. */
 export const inboxApi = {
+  messageLog: (messageId: string, signal?: AbortSignal) =>
+    apiFetch(`/inbox/messages/${messageId}/log`, { schema: messageLogResponseSchema, signal }),
+  logExports: (signal?: AbortSignal) =>
+    apiFetch('/inbox/message-logs/exports', { schema: messageLogExportListSchema, signal }),
+  requestLogExport: (input: CreateMessageLogExportInput) =>
+    apiFetch('/inbox/message-logs/exports', {
+      method: 'POST',
+      body: input,
+      schema: messageLogExportSchema,
+    }),
   conversations: (filters: ListFilters, cursor: string | null, signal?: AbortSignal) =>
     apiFetch('/inbox/conversations', {
       query: { limit: 30, ...listQuery(filters), cursor: cursor ?? undefined },

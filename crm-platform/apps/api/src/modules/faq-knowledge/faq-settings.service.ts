@@ -19,6 +19,8 @@ export interface EffectiveSettings {
   threshold: number;
   minMargin: number;
   logQueries: boolean;
+  verifyMode: 'off' | 'borderline';
+  verifyBand: number;
 }
 
 export const SETTINGS_MODULE_KEY = 'faq_settings';
@@ -51,6 +53,8 @@ export class FaqSettingsService {
       threshold: row?.threshold ?? cfg.defaultThreshold,
       minMargin: row?.minMargin ?? 0,
       logQueries: row?.logQueries ?? true,
+      verifyMode: row?.verifyMode ?? 'off',
+      verifyBand: row?.verifyBand ?? 0.1,
     };
   }
 
@@ -66,6 +70,10 @@ export class FaqSettingsService {
       threshold: row?.threshold ?? cfg.defaultThreshold,
       minMargin: row?.minMargin ?? 0,
       logQueries: row?.logQueries ?? true,
+      verifyMode: row?.verifyMode ?? 'off',
+      verifyBand: row?.verifyBand ?? 0.1,
+      verifyAvailable: cfg.verifyEnabled,
+      verifyModel: cfg.verifyModel,
       isDefault: row === null,
       engineEnabled: cfg.engineEnabled,
       embeddingModel: cfg.embeddingModel,
@@ -98,6 +106,9 @@ export class FaqSettingsService {
           threshold: input.threshold,
           minMargin: input.minMargin,
           logQueries: input.logQueries,
+          // A client that does not know the check yet keeps what is saved.
+          verifyMode: input.verifyMode ?? before?.verifyMode ?? 'off',
+          verifyBand: input.verifyBand ?? before?.verifyBand ?? 0.1,
           // Saving is the owner's confirmation that the numbers suit the model in force now.
           tunedModel: cfg.embeddingModel,
         },
@@ -105,9 +116,20 @@ export class FaqSettingsService {
       );
       if (!ok) throw AppError.rowVersionConflict('FAQ settings');
       const delta: Record<string, { old: unknown; new: unknown }> = {};
-      const was = before ?? { enabled: false, threshold: null, minMargin: null, logQueries: true };
+      const was = before ?? {
+        enabled: false,
+        threshold: null,
+        minMargin: null,
+        logQueries: true,
+        verifyMode: 'off',
+        verifyBand: 0.1,
+      };
       for (const k of ['enabled', 'threshold', 'minMargin', 'logQueries'] as const) {
         if (was[k] !== input[k]) delta[k] = { old: was[k], new: input[k] };
+      }
+      for (const k of ['verifyMode', 'verifyBand'] as const) {
+        if (input[k] !== undefined && was[k] !== input[k])
+          delta[k] = { old: was[k], new: input[k] };
       }
       await this.audit.record(tx, {
         module: SETTINGS_MODULE_KEY,

@@ -37,7 +37,7 @@ import { NotificationsWorkerModule } from '../modules/notifications';
 import { WebhookFanoutWorkerModule } from '../modules/webhook-fanout';
 import { OutboundWebhooksWorkerModule } from '../modules/outbound-webhooks';
 import { ApiLibraryWorkerModule } from '../modules/api-library';
-import { FaqKnowledgeWorkerModule } from '../modules/faq-knowledge';
+import { FaqKnowledgeWorkerModule } from '../modules/faq-knowledge/faq-knowledge-worker.module';
 import { WabaWorkerModule } from '../modules/whatsapp-cloud-api-waba';
 import { AiAgentsTrainingWorkerModule } from '../modules/ai-agents-training';
 import { FlowBuilderEditorWorkerModule } from '../modules/flow-builder-editor';

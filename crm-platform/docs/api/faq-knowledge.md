@@ -11,7 +11,7 @@ Decision record: [ADR-0021](../adr/0021-faq-semantic-matching-pgvector.md). Mode
 
 Code: `apps/api/src/modules/faq-knowledge/` (module), `apps/api/src/infra/providers/faq-knowledge/` (the AI port, the OpenRouter adapter,
 the offline fixture), `packages/contracts/src/faq-knowledge/` (shapes), `packages/db/migrations/20261114090000_faq_core.sql` and
-`20261114090100_faq_permissions.sql` (tables, keys), `packages/db/src/schema/faq-knowledge/`.
+`20261114090100_faq_permissions.sql` (tables, keys), `20261116090000_faq_flow_node_verify.sql` (link to node, the borderline check, flow-origin logs), `packages/db/src/schema/faq-knowledge/`.
 
 ## 1. How a customer message is handled
 
@@ -28,19 +28,30 @@ message). The FAQ listener is an `after` listener: it only sees a typed text mes
 The best FAQ answers when its score reaches its bar (the FAQ's own `thresholdOverride`, else the workspace `threshold`) and, if the workspace
 set a `minMargin`, leads the runner-up FAQ by at least that much. Otherwise nothing is sent and the message goes to the **Unanswered** list.
 
+**Borderline check (optional, off by default).** When the workspace sets `verifyMode: borderline`, a **semantic** match whose score is in
+`[bar, bar + verifyBand)` (the bar is the FAQ's own or the workspace's; the band is 0.01 to 0.30, default 0.10) is shown to a small chat
+model (platform setting `verifyModel`, default `openai/gpt-4o-mini`) with the customer message, the matched question and its closest wording,
+and the runner-up question. The model answers JSON `{answers, reason}`. It can only **veto**: `rejected` turns the outcome into
+`below_threshold` (nothing is sent, the message is listed as Unanswered with the reason); `confirmed` changes nothing; `error` (provider
+failed, unreadable answer) and `skipped` (workspace off, platform switch off, hourly cap `verifyPerHour`, no key, allowance used) leave the
+match standing, so an outage never silences the FAQ. The customer's text is passed as quoted data and the prompt says to ignore
+instructions inside it. Exact matches, the trigram fallback and scores outside the band are never checked. The verdict, model and reason
+are on the decision and on the log row, and the tokens are in the AI ledger.
+
 Acting on a match: a text answer is queued through the inbox send path as a bot message (so the 24 hour window, channel capabilities and
 dispatch retries apply; one answer per customer message, keyed by a uuid derived from the message), a flow answer starts the flow
-(`source: keyword`, `triggerText` = the message). Every decision writes one `faq_match_logs` row with the outcome that really happened.
+(`source: keyword`, `triggerText` = the message) **at the FAQ's `flowNodeId` when it has one** ("link to node"; the launcher fails with
+`FLR_NODE_NOT_FOUND` when the step was since deleted, which the log shows as `not_sent`: "The step this should start at is no longer in the flow"). Every decision writes one `faq_match_logs` row with the outcome that really happened.
 
-| Outcome           | Meaning                                                                                                  |
-| ----------------- | -------------------------------------------------------------------------------------------------------- |
-| `answered`        | A text answer was queued.                                                                                |
-| `flow_started`    | The linked flow started.                                                                                 |
-| `below_threshold` | Nothing was similar enough (also: too short to be a question).                                           |
-| `low_margin`      | Two FAQs scored alike; asking is safer than guessing.                                                    |
-| `no_faqs`         | The workspace has no active FAQ.                                                                         |
-| `provider_error`  | The vendor failed and spelling similarity found nothing either (the log keeps the reason).               |
-| `not_sent`        | Matched, but the answer could not be sent (flow deleted, window closed, channel down); `error` says why. |
+| Outcome           | Meaning                                                                                                          |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `answered`        | A text answer was queued.                                                                                        |
+| `flow_started`    | The linked flow started.                                                                                         |
+| `below_threshold` | Nothing was similar enough (also: too short to be a question).                                                   |
+| `low_margin`      | Two FAQs scored alike; asking is safer than guessing.                                                            |
+| `no_faqs`         | The workspace has no active FAQ.                                                                                 |
+| `provider_error`  | The vendor failed and spelling similarity found nothing either (the log keeps the reason).                       |
+| `not_sent`        | Matched, but the answer could not be sent (flow or step deleted, window closed, channel down); `error` says why. |
 
 ## 2. Permissions
 
@@ -63,24 +74,25 @@ Platform routes (`/v2/platform/faq`) are for the `super_admin` operator role onl
 Every id on the wire is a uuid. Lists are cursor pages (`?limit=&cursor=`) ending in `page: { nextCursor, hasMore, limit }`. A failed
 validation is `422 VALIDATION_FAILED` with `errors[].path`; a stale `rowVersion` is `409 ROW_VERSION_CONFLICT`.
 
-| Method and path                         | Body or query                                                                                             | Answer                                                                                  |
-| --------------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `GET /entries`                          | `search status category indexing limit cursor`                                                            | `{ data: FaqEntrySummary[], page, stats }`                                              |
-| `POST /entries` (Idempotency-Key)       | `question answerType answerText? flowId? category? status? thresholdOverride? variations[] resolveLogId?` | `201 FaqEntry`                                                                          |
-| `GET /entries/:id`                      |                                                                                                           | `FaqEntry` with every variation                                                         |
-| `PATCH /entries/:id`                    | the form plus `rowVersion`                                                                                | `FaqEntry`                                                                              |
-| `DELETE /entries/:id`                   |                                                                                                           | `204`                                                                                   |
-| `POST /entries/bulk`                    | `{ action: delete\|pause\|activate, ids[] }` (max 200)                                                    | `{ affected }`                                                                          |
-| `POST /entries/:id/variations`          | `{ texts[], source: manual\|ai\|import }`                                                                 | `201 FaqVariation[]` (only the new ones)                                                |
-| `PATCH /entries/:id/variations/:vid`    | `{ text, rowVersion }`                                                                                    | `FaqVariation` (its vector is made again)                                               |
-| `DELETE /entries/:id/variations/:vid`   |                                                                                                           | `204` (the question itself cannot be removed)                                           |
-| `POST /entries/:id/variations/generate` | `{ count: 3..20 }`                                                                                        | `{ suggestions[], model }`, **nothing saved**                                           |
-| `POST /test`                            | `{ query }`                                                                                               | `FaqMatchDecision`; sends nothing, not counted                                          |
-| `GET /settings`, `PUT /settings`        | `{ enabled threshold minMargin logQueries rowVersion? }`                                                  | `FaqSettings`                                                                           |
-| `GET /insights/summary`                 | `?days=1..90`                                                                                             | `FaqInsights`                                                                           |
-| `GET /insights/log`                     | `view=all\|answered\|unanswered\|errors search faqId limit cursor`                                        | `{ data: FaqLogItem[], page }`                                                          |
-| `POST /insights/log/:id/learn`          | `{ faqId }`                                                                                               | `{ added }`; the message becomes a `learned` variation and every copy of it is resolved |
-| `POST /insights/log/:id/dismiss`        |                                                                                                           | `204`                                                                                   |
+| Method and path                         | Body or query                                                                                                         | Answer                                                                                                        |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `GET /entries`                          | `search status category indexing limit cursor`                                                                        | `{ data: FaqEntrySummary[], page, stats }`                                                                    |
+| `POST /entries` (Idempotency-Key)       | `question answerType answerText? flowId? flowNodeId? category? status? thresholdOverride? variations[] resolveLogId?` | `201 FaqEntry`                                                                                                |
+| `GET /entries/:id`                      |                                                                                                                       | `FaqEntry` with every variation                                                                               |
+| `PATCH /entries/:id`                    | the form plus `rowVersion`                                                                                            | `FaqEntry`                                                                                                    |
+| `DELETE /entries/:id`                   |                                                                                                                       | `204`                                                                                                         |
+| `POST /entries/bulk`                    | `{ action: delete\|pause\|activate, ids[] }` (max 200)                                                                | `{ affected }`                                                                                                |
+| `POST /entries/:id/variations`          | `{ texts[], source: manual\|ai\|import }`                                                                             | `201 FaqVariation[]` (only the new ones)                                                                      |
+| `PATCH /entries/:id/variations/:vid`    | `{ text, rowVersion }`                                                                                                | `FaqVariation` (its vector is made again)                                                                     |
+| `DELETE /entries/:id/variations/:vid`   |                                                                                                                       | `204` (the question itself cannot be removed)                                                                 |
+| `POST /entries/:id/variations/generate` | `{ count: 3..20 }`                                                                                                    | `{ suggestions[], model }`, **nothing saved**                                                                 |
+| `GET /flows/:flowId/nodes`              |                                                                                                                       | `{ data: [{ id, type, label }] }`, the steps of a flow of this workspace (`422 FAQ_FLOW_NOT_FOUND` otherwise) |
+| `POST /test`                            | `{ query }`                                                                                                           | `FaqMatchDecision`; sends nothing, not counted                                                                |
+| `GET /settings`, `PUT /settings`        | `{ enabled threshold minMargin logQueries verifyMode? verifyBand? rowVersion? }`                                      | `FaqSettings`                                                                                                 |
+| `GET /insights/summary`                 | `?days=1..90`                                                                                                         | `FaqInsights`                                                                                                 |
+| `GET /insights/log`                     | `view=all\|answered\|unanswered\|errors search faqId limit cursor`                                                    | `{ data: FaqLogItem[], page }`                                                                                |
+| `POST /insights/log/:id/learn`          | `{ faqId }`                                                                                                           | `{ added }`; the message becomes a `learned` variation and every copy of it is resolved                       |
+| `POST /insights/log/:id/dismiss`        |                                                                                                                       | `204`                                                                                                         |
 
 Rules worth knowing:
 
@@ -97,16 +109,19 @@ Rules worth knowing:
 - **Hits** (`hitCount`, `lastHitAt`) are counted from the log (last 90 days). They are not a column, so a hit never changes `rowVersion`.
 - **Limits** come from the platform: FAQs per workspace (default 500) and variations per FAQ (default 60), `422 FAQ_LIMIT_REACHED`.
   Adding variations past the cap takes what fits.
+- **Link to node.** `flowNodeId` is the editor's node id inside the flow; it is validated against the flow when the FAQ is saved
+  (`422 FAQ_FLOW_NODE_NOT_FOUND`, path `flowNodeId`), a blank one means "the flow's start", and it is dropped when the answer becomes a
+  text. A flow can be edited later, so the entry carries `flowNodeLabel` (null = the step is gone) and the editor warns.
 - **The log** is kept 90 days (daily sweep); `origin: test` rows (the playground) never show in the insights or the unanswered list.
 
 ## 4. Platform routes (`/v2/platform/faq`, super admin)
 
-| Method and path   | Body or query                                                                                                                    | Answer                                |
-| ----------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
-| `GET /`           | -                                                                                                                                | `{ config, platformKeyReady, stats }` |
-| `GET /workspaces` | `search limit`                                                                                                                   | `{ data: FaqPlatformWorkspace[] }`    |
-| `PATCH /`         | any of `engineEnabled embeddingModel generationModel defaultThreshold(number\|null) maxFaqs maxVariationsPerFaq semanticPerHour` | `{ config, platformKeyReady, stats }` |
-| `POST /reindex`   | `{ scope: all\|failed }`                                                                                                         | `{ queued }`                          |
+| Method and path   | Body or query                                                                                                                                                            | Answer                                |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------- |
+| `GET /`           | -                                                                                                                                                                        | `{ config, platformKeyReady, stats }` |
+| `GET /workspaces` | `search limit`                                                                                                                                                           | `{ data: FaqPlatformWorkspace[] }`    |
+| `PATCH /`         | any of `engineEnabled embeddingModel generationModel defaultThreshold(number\|null) maxFaqs maxVariationsPerFaq semanticPerHour verifyEnabled verifyModel verifyPerHour` | `{ config, platformKeyReady, stats }` |
+| `POST /reindex`   | `{ scope: all\|failed }`                                                                                                                                                 | `{ queued }`                          |
 
 - `embeddingModel` must be on the allow-list (`FAQ_EMBEDDING_MODELS`: every model answers 3072 dimensions, the width of the column). Changing it
   marks every vector `pending`; matching uses spelling similarity until the worker has re-made them, and a default threshold the operator
@@ -127,6 +142,25 @@ costs one embedding (about $0.000002) unless it repeats within six hours or is a
 
 ## 6. Error codes
 
-`FAQ_ENGINE_DISABLED` (422), `FAQ_LIMIT_REACHED` (422), `FAQ_DUPLICATE_QUESTION` (409), `FAQ_FLOW_NOT_FOUND` (422), `FAQ_EMBEDDING_UNAVAILABLE`
+`FAQ_ENGINE_DISABLED` (422), `FAQ_LIMIT_REACHED` (422), `FAQ_DUPLICATE_QUESTION` (409), `FAQ_FLOW_NOT_FOUND` (422), `FAQ_FLOW_NODE_NOT_FOUND` (422), `FAQ_EMBEDDING_UNAVAILABLE`
 (422 for a missing or refused key, 502 for a vendor failure). `FAQ_MODEL_NOT_ALLOWED` is reserved: a model that is not on the allow-list is today a plain `422 VALIDATION_FAILED`.
 Plus the generic `NOT_FOUND`, `VALIDATION_FAILED`, `ROW_VERSION_CONFLICT`, `PLAN_LIMIT_REACHED`.
+
+## 7. The Flow "Answer from FAQ" node
+
+Builder type `faq` (group AI, runtime `Faq`; `packages/contracts/src/faq-knowledge/node.ts`, `runtime/nodes/ai/faq-node.ts`). It asks the same
+matcher through `FaqFlowService` for a message the run holds, so a flow can answer by meaning where it used to need a list of keywords.
+
+- **Data:** `query` (merge tags; default `{{user_message}}`, a variable a Question node saved works), `category` (blank = all FAQs),
+  `minScore` (0.05 to 0.99, null = the workspace bar), `sendAnswer` (default true), `save` (variable prefix, default `faq`).
+- **Exits:** `matched` (1) and `no_match` (2). A text FAQ is sent (unless `sendAnswer` is off) and the node leaves by `matched`. A flow FAQ
+  hands the run to its flow at its chosen step (the run does not come back, like the Sub-flow node). `no_match` is also taken when the
+  engine is off, the query is empty, the matcher throws, or the linked flow or step is gone or not live (then `<save>.matched` is set to
+  `no`, not left at `yes`).
+- **Variables:** `<save>.matched` (yes/no), `.score`, `.question`, `.answer`, `.id`.
+- **It runs whether or not the workspace switched automatic answering on** (placing the node is the opt-in); it stops only when the platform
+  operator switches the engine off. The borderline check applies to it like any semantic match.
+- **Log:** one `faq_match_logs` row with `origin: flow` per match, outcome `answered` / `flow_started` / the miss reason. Flow rows never appear in
+  the Unanswered list or the insights (those read `origin: inbound`).
+- **Order against keyword flows:** unchanged. A keyword flow (or a run waiting for an answer) takes the message first; the FAQ only sees what
+  nobody took. The e2e test `order of answering` pins it.

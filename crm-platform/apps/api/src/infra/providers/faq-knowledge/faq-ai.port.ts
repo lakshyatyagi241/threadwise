@@ -34,6 +34,13 @@ export interface FaqSuggestResult {
   completionTokens: number;
 }
 
+export interface FaqJudgeRequest {
+  apiKey: string;
+  model: string;
+  system: string;
+  user: string;
+}
+
 export type FaqAiErrorKind =
   'auth' | 'rate_limited' | 'provider' | 'timeout' | 'bad_response' | 'dimension_mismatch';
 
@@ -52,6 +59,11 @@ export interface FaqAiPort {
   embed(req: FaqEmbedRequest): Promise<FaqEmbedResult>;
   /** Throws FaqAiError. */
   complete(req: FaqSuggestRequest & { system: string; user: string }): Promise<FaqSuggestResult>;
+  /**
+   * A short, deterministic yes/no judgement (the borderline check). Same result shape as `complete`; the caller parses the text.
+   * Throws FaqAiError.
+   */
+  judge(req: FaqJudgeRequest): Promise<FaqSuggestResult>;
 }
 
 export const FAQ_AI_PORT = Symbol('FAQ_AI_PORT');

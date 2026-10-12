@@ -2,7 +2,7 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { FAQ_LIMITS, type FaqSettings } from '@crm/contracts';
 import { Alert, Button, ConfirmDialog, Slider, Spinner, Switch, cn, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
@@ -11,11 +11,13 @@ import { faqApi } from '../api/service';
 import { errorKey, isRowVersionConflict } from '../lib/errors';
 import {
   activePreset,
+  clampBand,
   clampThreshold,
   formFromSettings,
   presetsFor,
   settingsDirty,
   toSettingsInput,
+  verifyRange,
   type PresetId,
   type SettingsForm,
 } from '../lib/settings-model';
@@ -57,6 +59,8 @@ function SettingsBody({ settings }: { settings: FaqSettings }) {
     setError(null);
   };
 
+  // A double click must send one request: `isPending` only turns true after the next render.
+  const saving = useRef(false);
   const save = useMutation({
     mutationFn: () => faqApi.saveSettings(toSettingsInput(form, settings)),
     onSuccess: (saved) => {
@@ -64,6 +68,9 @@ function SettingsBody({ settings }: { settings: FaqSettings }) {
       toast(t('saved'));
     },
     onError: setError,
+    onSettled: () => {
+      saving.current = false;
+    },
   });
   const reload = useMutation({
     mutationFn: () => faqApi.settings(),
@@ -74,6 +81,9 @@ function SettingsBody({ settings }: { settings: FaqSettings }) {
     onError: setError,
   });
 
+  const verifyOn = form.verifyMode === 'borderline';
+  const verifyRangeNow = verifyRange(form.threshold, form.verifyBand);
+  const verifyDisabled = disabled || !settings.verifyAvailable;
   const conflict = isRowVersionConflict(error);
   const limitPct = (used: number, max: number) =>
     Math.min(100, Math.round((used / Math.max(1, max)) * 100));
@@ -104,7 +114,11 @@ function SettingsBody({ settings }: { settings: FaqSettings }) {
               <Button
                 variant="brand"
                 disabled={!dirty || save.isPending}
-                onClick={() => save.mutate()}
+                onClick={() => {
+                  if (saving.current) return;
+                  saving.current = true;
+                  save.mutate();
+                }}
               >
                 {save.isPending && <Spinner />}
                 {t('save')}
@@ -257,6 +271,55 @@ function SettingsBody({ settings }: { settings: FaqSettings }) {
         <p className="text-sm text-muted-foreground">{t('margin.explain')}</p>
       </SectionCard>
 
+      <SectionCard id="faq-set-verify" title={t('verify.title')} hint={t('verify.hint')}>
+        {!settings.verifyAvailable && <Alert tone="info">{t('verify.unavailable')}</Alert>}
+        <div className="flex items-start gap-3">
+          <Switch
+            id="faq-verify"
+            checked={verifyOn}
+            disabled={verifyDisabled}
+            label={t('verify.label')}
+            onCheckedChange={(v) => set({ verifyMode: v ? 'borderline' : 'off' })}
+          />
+          <div className="min-w-0 text-sm">
+            <label htmlFor="faq-verify" className="font-medium">
+              {verifyOn ? t('verify.on') : t('verify.off')}
+            </label>
+            <p className="mt-1 text-muted-foreground">
+              {verifyOn ? t('verify.onBody') : t('verify.offBody')}
+            </p>
+          </div>
+        </div>
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <label htmlFor="faq-verify-band" className="text-sm font-medium">
+            {t('verify.bandLabel')}
+          </label>
+          <span className="text-2xl font-semibold tabular-nums">
+            {t('verify.bandValue', { value: Math.round(form.verifyBand * 100) })}
+          </span>
+        </div>
+        <Slider
+          id="faq-verify-band"
+          min={FAQ_LIMITS.verifyBandMin}
+          max={FAQ_LIMITS.verifyBandMax}
+          step={0.01}
+          value={form.verifyBand}
+          disabled={verifyDisabled}
+          aria-valuetext={t('verify.bandValue', { value: Math.round(form.verifyBand * 100) })}
+          onValueChange={(v) => set({ verifyBand: clampBand(v) })}
+        />
+        <p className="text-sm" aria-live="polite">
+          {verifyOn
+            ? t('verify.explainOn', {
+                from: verifyRangeNow.from,
+                to: verifyRangeNow.to,
+                model: settings.verifyModel,
+              })
+            : t('verify.explainOff', { threshold: verifyRangeNow.from })}
+        </p>
+        <p className="text-xs text-muted-foreground">{t('verify.cost')}</p>
+      </SectionCard>
+
       <SectionCard id="faq-set-log" title={t('log.title')}>
         <div className="flex items-start gap-3">
           <Switch
@@ -331,6 +394,7 @@ function SettingsBody({ settings }: { settings: FaqSettings }) {
             <li>{t('how.exact')}</li>
             <li>{t('how.semantic')}</li>
             <li>{t('how.trigram')}</li>
+            {settings.verifyAvailable && <li>{t('how.verify')}</li>}
           </ol>
           <p className="text-sm text-muted-foreground">{t('how.threshold')}</p>
         </SectionCard>

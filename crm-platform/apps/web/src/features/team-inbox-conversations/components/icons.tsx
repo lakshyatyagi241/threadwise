@@ -204,3 +204,12 @@ export const MenuIcon = (p: SVGProps<SVGSVGElement>) => (
     <path d="M4 7h16M4 12h16M4 17h16" />
   </Icon>
 );
+/** A list with bullets: the delivery log of a message. */
+export const ListIcon = (p: SVGProps<SVGSVGElement>) => (
+  <Icon {...p}>
+    <path d="M9 6h11M9 12h11M9 18h11" />
+    <circle cx="4.5" cy="6" r="1" />
+    <circle cx="4.5" cy="12" r="1" />
+    <circle cx="4.5" cy="18" r="1" />
+  </Icon>
+);

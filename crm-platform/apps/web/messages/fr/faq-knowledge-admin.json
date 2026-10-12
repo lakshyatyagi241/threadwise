@@ -61,7 +61,9 @@
         "matches": "Messages clients analysés",
         "answered": "Avec réponse",
         "rate": "Taux de réponse",
-        "tokens": "Jetons de correspondance"
+        "tokens": "Jetons de correspondance",
+        "verified": "Secondes vérifications",
+        "vetoed": "Réponses retenues"
       }
     },
     "settings": {
@@ -96,7 +98,8 @@
         "maxFaqs": "Nombre maximal de FAQ par espace de travail",
         "maxVariationsPerFaq": "Nombre maximal de variantes par FAQ",
         "semanticPerHour": "Correspondances par le sens par espace de travail et par heure",
-        "semanticPerHourHint": "Au-delà, un espace de travail se rabat sur la similarité orthographique pour le reste de l’heure. 0 signifie toujours la similarité orthographique."
+        "semanticPerHourHint": "Au-delà, un espace de travail se rabat sur la similarité orthographique pour le reste de l’heure. 0 signifie toujours la similarité orthographique.",
+        "verifyPerHour": "Secondes vérifications par espace de travail et par heure"
       },
       "errors": {
         "integer": "Saisissez un nombre entier.",
@@ -115,6 +118,19 @@
         "confirm": "Enregistrer les modifications",
         "engineOff": "Désactiver le moteur empêche tous les espaces de travail de répondre aux clients avec des FAQ et bloque les modifications de FAQ jusqu’à sa réactivation.",
         "modelChange": "Passer du modèle {from} au modèle {to} recrée tous les vecteurs enregistrés. Tant que ce n’est pas terminé, la correspondance n’utilise que la similarité orthographique. La sensibilité par défaut suivra le nouveau modèle (recommandé : {threshold}) sauf si vous fixez une valeur. Les seuils enregistrés séparément par les espaces de travail devront peut-être être réajustés, car les scores changent avec le modèle."
+      },
+      "verify": {
+        "title": "Seconde vérification des cas limites",
+        "description": "Un petit modèle de chat revérifie les correspondances qui atteignent tout juste le seuil d’un espace de travail. Il peut uniquement retenir une réponse. Chaque espace de travail l’active dans ses propres paramètres FAQ.",
+        "enabled": {
+          "label": "Autoriser la seconde vérification",
+          "hint": "Désactivez-la pour arrêter la vérification dans tous les espaces de travail, quel que soit leur réglage."
+        },
+        "model": {
+          "label": "Modèle de vérification",
+          "hint": "L’identifiant du modèle OpenRouter qui juge les cas limites, par exemple openai/gpt-4o-mini. Un modèle petit et rapide suffit."
+        },
+        "perHourHint": "Au-delà, un cas limite est conservé sans vérification jusqu’à la fin de l’heure. 0 signifie ne jamais vérifier."
       }
     },
     "maintenance": {

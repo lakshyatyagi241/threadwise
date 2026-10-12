@@ -192,7 +192,12 @@
       "retention": "Os registros são excluídos {days} dias após o fim de uma execução.",
       "pathTitle": "Caminho seguido",
       "notReached": "Não alcançados",
-      "noErrors": "Nenhum erro nesta execução."
+      "noErrors": "Nenhum erro nesta execução.",
+      "factNext": "Próximo: {node}",
+      "factWaiting": "Aguardando em: {node}",
+      "factDelay": "Espera {time}",
+      "factReplied": "O cliente respondeu: {text}",
+      "factEnded": "Terminou: {reason}"
     },
     "event": {
       "step": "Etapa",

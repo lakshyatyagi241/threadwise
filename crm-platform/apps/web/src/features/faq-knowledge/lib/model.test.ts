@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { FAQ_LIMITS } from '@crm/contracts';
+import { FAQ_LIMITS, type FaqEntry, type FaqFlowNode } from '@crm/contracts';
 import {
   chunkTexts,
   draftFromEntry,
@@ -7,6 +7,11 @@ import {
   isDirty,
   mapServerProblems,
   parseVariationLines,
+  stepDisplayName,
+  stepIsMissing,
+  stepOptionLabel,
+  stepOptions,
+  stepSelectValue,
   toCreateInput,
   toUpdateInput,
   validateDraft,
@@ -98,6 +103,8 @@ describe('draft helpers', () => {
       answerText: null,
       flowId: null,
       flowName: null,
+      flowNodeId: null,
+      flowNodeLabel: null,
       category: null,
       status: 'paused',
       thresholdOverride: 0.6,
@@ -152,5 +159,107 @@ describe('parseVariationLines', () => {
     expect(variationRoom(58, 60)).toBe(2);
     expect(variationRoom(70, 60)).toBe(0);
     expect(variationKey('  Hi   There ')).toBe('hi there');
+  });
+});
+
+describe('the step a flow answer starts at', () => {
+  const nodes: FaqFlowNode[] = [
+    { id: 'trig-1', type: 'trigger', label: '' },
+    { id: 'a1b2c3d4-0000-4000-8000-000000000000', type: 'message', label: '' },
+    { id: 'n-ask', type: 'ask', label: 'Order number' },
+    { id: 'n-odd', type: 'future_node', label: '  ' },
+  ];
+  const flowDraft = {
+    ...emptyDraft({ question: 'Refund?' }),
+    answerType: 'flow' as const,
+    flowId: FLOW,
+  };
+
+  it('lists the steps as "<type name> · <label or short id>" and leaves the trigger to the flow start', () => {
+    expect(stepOptions(nodes).map((o) => o.label)).toEqual([
+      'Send message · #a1b2c3',
+      'Ask question · Order number',
+      'future_node · #n-odd',
+    ]);
+    expect(stepOptions(nodes).every((o) => !o.start && o.value !== '')).toBe(true);
+    expect(stepOptions([{ id: 't', type: 'trigger', label: '' }])).toEqual([]);
+    expect(stepOptionLabel({ id: 'x', type: 'ask', label: ' Name ' })).toBe('Ask question · Name');
+  });
+  it('names a saved step by the catalogue when the API fell back to the raw type', () => {
+    expect(stepDisplayName('message')).toBe('Send message');
+    expect(stepDisplayName('Order number')).toBe('Order number');
+  });
+  it('shows the trigger as the flow start and any other saved step as itself', () => {
+    expect(stepSelectValue(null, nodes)).toBe('');
+    expect(stepSelectValue('trig-1', nodes)).toBe('');
+    expect(stepSelectValue('n-ask', nodes)).toBe('n-ask');
+    expect(stepSelectValue('gone', nodes)).toBe('gone');
+    expect(stepSelectValue('trig-1', undefined)).toBe('trig-1');
+  });
+
+  it('is part of the draft, the dirty check and the saved body', () => {
+    const entry = {
+      question: 'Refund?',
+      answerType: 'flow',
+      answerText: null,
+      flowId: FLOW,
+      flowName: 'Refunds',
+      flowNodeId: 'n-ask',
+      flowNodeLabel: 'Order number',
+      category: null,
+      status: 'active',
+      thresholdOverride: null,
+    } as unknown as FaqEntry;
+    const d = draftFromEntry(entry);
+    expect(d.flowNodeId).toBe('n-ask');
+    expect(isDirty(d, d)).toBe(false);
+    expect(isDirty({ ...d, flowNodeId: null }, d)).toBe(true);
+    expect(toUpdateInput(d, 3)).toMatchObject({ flowId: FLOW, flowNodeId: 'n-ask', rowVersion: 3 });
+    expect(toCreateInput(d, [])).toMatchObject({ flowNodeId: 'n-ask' });
+  });
+  it('sends no step for the flow start, for a text answer and while no flow is chosen', () => {
+    expect(toUpdateInput(flowDraft, 1).flowNodeId ?? null).toBeNull();
+    const text = {
+      ...flowDraft,
+      answerType: 'text' as const,
+      answerText: 'Hi',
+      flowNodeId: 'n-ask',
+    };
+    expect(toUpdateInput(text, 1).flowNodeId ?? null).toBeNull();
+    const noFlow = { ...flowDraft, flowId: null, flowNodeId: 'n-ask' };
+    expect(
+      toCreateInput({ ...noFlow, answerType: 'text', answerText: 'x' }, []).flowNodeId ?? null,
+    ).toBeNull();
+  });
+  it('maps a too-long step id to the step field and a server problem on flowNodeId to the form', () => {
+    const long = { ...flowDraft, flowNodeId: 'x'.repeat(FAQ_LIMITS.flowNodeId + 1) };
+    expect(validateDraft(long)).toEqual({ flowNodeId: 'tooLong' });
+    expect(
+      mapServerProblems([{ path: 'flowNodeId', message: 'Pick a step that is in this flow.' }]),
+    ).toEqual({ fields: { flowNodeId: 'Pick a step that is in this flow.' }, other: [] });
+  });
+
+  describe('stepIsMissing', () => {
+    const saved = { flowId: FLOW, flowNodeId: 'n-gone', flowNodeLabel: null };
+    const chosen = { ...flowDraft, flowNodeId: 'n-gone' };
+    it('trusts the loaded steps first: an id they do not list is gone', () => {
+      expect(stepIsMissing(chosen, null, nodes)).toBe(true);
+      expect(stepIsMissing({ ...chosen, flowNodeId: 'n-ask' }, saved, nodes)).toBe(false);
+      expect(stepIsMissing({ ...chosen, flowNodeId: 'trig-1' }, null, nodes)).toBe(false);
+    });
+    it('before the steps arrive, goes by the saved entry having no name for the step', () => {
+      expect(stepIsMissing(chosen, saved, undefined)).toBe(true);
+      expect(stepIsMissing(chosen, { ...saved, flowNodeLabel: 'Ask question' }, undefined)).toBe(
+        false,
+      );
+      expect(stepIsMissing(chosen, null, undefined)).toBe(false);
+      // Another flow was picked since: what the entry saved says nothing about it.
+      expect(stepIsMissing({ ...chosen, flowId: 'other' }, saved, undefined)).toBe(false);
+    });
+    it('is false with no step chosen, no flow or a text answer', () => {
+      expect(stepIsMissing({ ...flowDraft, flowNodeId: null }, saved, nodes)).toBe(false);
+      expect(stepIsMissing({ ...chosen, flowId: null }, saved, nodes)).toBe(false);
+      expect(stepIsMissing({ ...chosen, answerType: 'text' }, saved, nodes)).toBe(false);
+    });
   });
 });

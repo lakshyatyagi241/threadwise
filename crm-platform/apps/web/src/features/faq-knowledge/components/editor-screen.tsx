@@ -29,6 +29,7 @@ import {
   emptyDraft,
   isDirty,
   mapServerProblems,
+  stepDisplayName,
   toCreateInput,
   toUpdateInput,
   validateDraft,
@@ -37,6 +38,7 @@ import {
   type FaqDraft,
 } from '../lib/model';
 import { clearPrefill, readPrefill, type Prefill } from '../lib/prefill';
+import { FlowNodeSelect } from './flow-node-select';
 import { FlowPicker } from './flow-picker';
 import { FaqIcon, TrashIcon } from './icons';
 import { LoadError, NoAccess, PageHeader, SectionCard, SkeletonRows } from './parts';
@@ -202,6 +204,11 @@ function EditorBody({
       const key = errorKey(err);
       if (key === 'duplicateQuestion') fields.question = te('duplicateQuestion');
       if (key === 'flowNotFound') fields.flowId = te('flowNotFound');
+      if (key === 'flowNodeNotFound') {
+        fields.flowNodeId = te('flowNodeNotFound');
+        // The step may have been removed since the list was read: show the flow as it is now.
+        if (draft.flowId) void qc.invalidateQueries({ queryKey: KEYS.flowNodes(draft.flowId) });
+      }
       setServerFields(fields);
       setFormError(Object.keys(fields).length > 0 && key !== 'limitReached' ? null : err);
       if (Object.keys(fields).length > 0) focusFirstInvalid();
@@ -525,7 +532,25 @@ function EditorBody({
                     <div className="space-y-2" id="faq-flow">
                       <p className="text-sm font-medium">{t('answer.flowLabel')}</p>
                       {readOnly ? (
-                        <p className="text-sm">{draft.flowName ?? t('answer.noFlow')}</p>
+                        <>
+                          <p className="text-sm">{draft.flowName ?? t('answer.noFlow')}</p>
+                          {entry?.flowNodeId && (
+                            <p
+                              className={cn(
+                                'text-sm',
+                                entry.flowNodeLabel === null
+                                  ? 'text-danger'
+                                  : 'text-muted-foreground',
+                              )}
+                            >
+                              {entry.flowNodeLabel === null
+                                ? t('answer.stepGone')
+                                : t('answer.startsAt', {
+                                    step: stepDisplayName(entry.flowNodeLabel),
+                                  })}
+                            </p>
+                          )}
+                        </>
                       ) : (
                         <FlowPicker
                           value={
@@ -534,7 +559,14 @@ function EditorBody({
                           missing={flowMissing}
                           invalid={!!fieldError('flowId')}
                           describedBy="faq-flow-error"
-                          onChange={(f) => set({ flowId: f.id, flowName: f.name })}
+                          onChange={(f) =>
+                            // A step belongs to one flow: choosing another flow clears it (choosing the same one keeps it).
+                            set({
+                              flowId: f.id,
+                              flowName: f.name,
+                              flowNodeId: f.id === draft.flowId ? draft.flowNodeId : null,
+                            })
+                          }
                         />
                       )}
                       {fieldError('flowId') && (
@@ -546,6 +578,18 @@ function EditorBody({
                         >
                           {fieldError('flowId')}
                         </p>
+                      )}
+                      {!readOnly && draft.flowId && !flowMissing && (
+                        <FlowNodeSelect
+                          // The steps of one flow are not the steps of another: a new flow starts a fresh select.
+                          key={draft.flowId}
+                          flowId={draft.flowId}
+                          value={draft.flowNodeId}
+                          saved={entry}
+                          invalid={!!fieldError('flowNodeId')}
+                          error={fieldError('flowNodeId')}
+                          onChange={(flowNodeId) => set({ flowNodeId })}
+                        />
                       )}
                     </div>
                   ),

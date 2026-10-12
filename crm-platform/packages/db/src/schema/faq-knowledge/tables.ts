@@ -44,6 +44,8 @@ export const faqSettings = pgTable(
     minMargin: numeric('min_margin', { precision: 4, scale: 3 }).notNull().default('0.000'),
     logQueries: boolean('log_queries').notNull().default(true),
     tunedModel: text('tuned_model'),
+    verifyMode: text('verify_mode').notNull().default('off'),
+    verifyBand: numeric('verify_band', { precision: 4, scale: 3 }).notNull().default('0.100'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -57,6 +59,8 @@ export const faqSettings = pgTable(
     }).onDelete('cascade'),
     check('ck_faq_settings_threshold', sql`${t.threshold} between 0.050 and 0.990`),
     check('ck_faq_settings_margin', sql`${t.minMargin} between 0.000 and 0.500`),
+    check('ck_faq_settings_verify_mode', sql`${t.verifyMode} in ('off', 'borderline')`),
+    check('ck_faq_settings_verify_band', sql`${t.verifyBand} between 0.010 and 0.300`),
   ],
 );
 
@@ -70,6 +74,7 @@ export const faqs = pgTable(
     answerType: text('answer_type').notNull().default('text'),
     answerText: text('answer_text'),
     flowId: idColumn('flow_id'),
+    flowNodeId: text('flow_node_id'),
     category: text('category'),
     status: text('status').notNull().default('active'),
     thresholdOverride: numeric('threshold_override', { precision: 4, scale: 3 }),
@@ -98,6 +103,10 @@ export const faqs = pgTable(
     }).onDelete('set null'),
     check('ck_faqs_answer_type', sql`${t.answerType} in ('text', 'flow')`),
     check('ck_faqs_status', sql`${t.status} in ('active', 'paused')`),
+    check(
+      'ck_faqs_flow_node',
+      sql`${t.flowNodeId} is null or (${t.answerType} = 'flow' and btrim(${t.flowNodeId}) <> '' and length(${t.flowNodeId}) <= 120)`,
+    ),
     check(
       'ck_faqs_answer_shape',
       sql`(${t.answerType} = 'text' and ${t.answerText} is not null and btrim(${t.answerText}) <> '') or (${t.answerType} = 'flow')`,
@@ -196,6 +205,9 @@ export const faqMatchLogs = pgTable(
     embeddingModel: text('embedding_model'),
     latencyMs: integer('latency_ms'),
     error: text('error'),
+    verifyVerdict: text('verify_verdict'),
+    verifyModel: text('verify_model'),
+    verifyReason: text('verify_reason'),
     resolvedAt: timestamp('resolved_at', { withTimezone: true }),
   },
   (t) => [
@@ -211,7 +223,11 @@ export const faqMatchLogs = pgTable(
       columns: [t.orgId, t.matchedFaqId],
       foreignColumns: [faqs.orgId, faqs.id],
     }).onDelete('set null'),
-    check('ck_faq_match_logs_origin', sql`${t.origin} in ('inbound', 'test')`),
+    check('ck_faq_match_logs_origin', sql`${t.origin} in ('inbound', 'test', 'flow')`),
+    check(
+      'ck_faq_match_logs_verify',
+      sql`${t.verifyVerdict} is null or ${t.verifyVerdict} in ('confirmed', 'rejected', 'error', 'skipped')`,
+    ),
     check(
       'ck_faq_match_logs_outcome',
       sql`${t.outcome} in ('answered', 'flow_started', 'below_threshold', 'low_margin', 'no_faqs', 'provider_error', 'not_sent')`,

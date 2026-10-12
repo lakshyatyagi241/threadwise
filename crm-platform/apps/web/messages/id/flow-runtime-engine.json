@@ -192,7 +192,12 @@
       "retention": "Log dihapus {days} hari setelah eksekusi berakhir.",
       "pathTitle": "Jalur yang ditempuh",
       "notReached": "Tidak tercapai",
-      "noErrors": "Tidak ada kesalahan pada eksekusi ini."
+      "noErrors": "Tidak ada kesalahan pada eksekusi ini.",
+      "factNext": "Berikutnya: {node}",
+      "factWaiting": "Menunggu di: {node}",
+      "factDelay": "Menunggu {time}",
+      "factReplied": "Pelanggan membalas: {text}",
+      "factEnded": "Berakhir: {reason}"
     },
     "event": {
       "step": "Langkah",

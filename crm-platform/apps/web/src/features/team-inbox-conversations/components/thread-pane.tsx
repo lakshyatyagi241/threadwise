@@ -64,6 +64,7 @@ export interface ThreadPaneProps {
 export function ThreadPane(props: ThreadPaneProps) {
   const t = useTranslations('team-inbox-conversations.thread');
   const canManageChannels = useCan('inbox.channel.manage');
+  const canExportLogs = useCan('inbox.logs.export');
   const { detail, thread } = props;
   const [templatesOpen, setTemplatesOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
@@ -243,6 +244,7 @@ export function ThreadPane(props: ThreadPaneProps) {
             : undefined
         }
         canManageChannel={canManageChannels}
+        canExportLogs={canExportLogs}
         onRetryPending={thread.retryPending}
         onDismissPending={thread.dismissPending}
         onDeleteNote={props.onDeleteNote}

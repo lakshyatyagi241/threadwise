@@ -61,7 +61,9 @@
         "matches": "Gecontroleerde klantberichten",
         "answered": "Beantwoord",
         "rate": "Antwoordpercentage",
-        "tokens": "Embedding-tokens"
+        "tokens": "Embedding-tokens",
+        "verified": "Tweede controles",
+        "vetoed": "Achtergehouden antwoorden"
       }
     },
     "settings": {
@@ -96,7 +98,8 @@
         "maxFaqs": "Maximum aantal FAQ's per workspace",
         "maxVariationsPerFaq": "Maximum aantal varianten per FAQ",
         "semanticPerHour": "Semantische matches per workspace per uur",
-        "semanticPerHourHint": "Daarna valt een workspace de rest van het uur terug op spellingsgelijkenis. 0 betekent altijd spellingsgelijkenis."
+        "semanticPerHourHint": "Daarna valt een workspace de rest van het uur terug op spellingsgelijkenis. 0 betekent altijd spellingsgelijkenis.",
+        "verifyPerHour": "Tweede controles per workspace per uur"
       },
       "errors": {
         "integer": "Voer een geheel getal in.",
@@ -115,6 +118,19 @@
         "confirm": "Wijzigingen opslaan",
         "engineOff": "Als je de engine uitzet, antwoordt geen enkele workspace meer vanuit FAQ's en zijn FAQ-bewerkingen geblokkeerd totdat je hem weer aanzet.",
         "modelChange": "Het AI-model wijzigen van {from} naar {to} zorgt dat elke opgeslagen vector opnieuw wordt gemaakt. Tot dat klaar is, gebruikt matching alleen spellingsgelijkenis. De standaardgevoeligheid volgt het nieuwe model (aanbevolen {threshold}), tenzij je een vaste waarde instelt. Drempels die een workspace zelf heeft opgeslagen, moeten mogelijk opnieuw worden afgesteld, omdat scores met het model veranderen."
+      },
+      "verify": {
+        "title": "Tweede controle bij twijfelgevallen",
+        "description": "Een klein chatmodel controleert overeenkomsten die de drempel van een workspace net halen. Het kan een antwoord alleen tegenhouden. Workspaces zetten dit zelf aan in hun FAQ-instellingen.",
+        "enabled": {
+          "label": "Tweede controle toestaan",
+          "hint": "Zet dit uit om de controle voor alle workspaces te stoppen, wat ze zelf ook instellen."
+        },
+        "model": {
+          "label": "Controlemodel",
+          "hint": "De OpenRouter-model-id die twijfelgevallen beoordeelt, bijvoorbeeld openai/gpt-4o-mini. Een klein, snel model is genoeg."
+        },
+        "perHourHint": "Daarboven blijft een twijfelgeval de rest van het uur ongecontroleerd staan. 0 betekent nooit controleren."
       }
     },
     "maintenance": {

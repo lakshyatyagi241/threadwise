@@ -49,5 +49,25 @@ Before choosing a model we measured eleven embedding models served by OpenRouter
 - The scan is O(variations in the workspace) per message. The documented trigger to add HNSW is a workspace over 50k variations.
 - Query text is stored in `faq_match_logs` for 90 days (a retention sweep deletes older rows); a workspace can switch query
   logging off, after which only scores and outcomes are kept.
-- "Start the flow at a given node" (Geta's link-to-node) needs a start-node parameter on the flow launcher, which belongs to the
-  flow runtime domain; the FAQ starts the flow from its trigger until that exists.
+- "Start the flow at a given node" (Geta's link-to-node) is built (see the addendum): the launcher takes an optional `startNodeId`.
+
+## Addendum (2026-10-11): link to node, the borderline check, the flow node
+
+Decided with the project owner after the first release.
+
+1. **Link to node.** `faqs.flow_node_id` (text, only with a flow answer). `FlowLaunchService` takes an optional `startNodeId` (a node the
+   graph no longer has fails the launch with `FLR_NODE_NOT_FOUND`, which the FAQ logs as `not_sent`); a Sub-flow transition takes the same
+   option with a `missPort`/`missVars` so a caller can choose the exit when the flow or step cannot be entered.
+2. **A second opinion for close calls, not a second matcher.** A vector score is a similarity, not a probability, and the evaluation
+   (embedding-eval.md) still lets one off-topic message in thirty through at the best threshold. For matches inside a configurable band above
+   the bar, a small chat model (default `openai/gpt-4o-mini`, any OpenRouter slug) judges "does this FAQ fully serve this message". It can
+   only veto (a wrong auto-answer costs more than a silent miss, and the Unanswered list plus "learn" repair silence), never creates a match,
+   and any failure leaves the match standing. Off by default per workspace; the platform operator can switch it off, change the model and
+   cap calls per workspace per hour. Rejected alternatives: replacing the vector match with an LLM over all FAQs (cost and latency on every
+   message, no control of precision); a cross-encoder reranker (another model to host).
+3. **The FAQ as a flow step.** Builder node `faq` calls the same matcher through `FaqFlowService`, with the exits `matched` / `no_match`,
+   an optional category and an optional per-node bar. Logged with `origin: flow`, which the unanswered list and the insights ignore.
+   `FaqKnowledgeWorkerModule` is no longer re-exported by the module barrel: the flow runtime imports the barrel for this node and the worker
+   module imports the flow runtime, so exporting it would be a cycle; `WorkersModule` imports it from its file.
+4. **Keyword rules first.** Unchanged and now pinned by an end-to-end test: flow keyword triggers and waiting runs take a message before
+   the FAQ sees it.

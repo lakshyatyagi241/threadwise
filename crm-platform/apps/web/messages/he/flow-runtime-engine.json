@@ -192,7 +192,12 @@
       "retention": "יומנים נמחקים {days} ימים לאחר סיום הרצה.",
       "pathTitle": "המסלול שנעבר",
       "notReached": "לא הושגו",
-      "noErrors": "אין שגיאות בהרצה זו."
+      "noErrors": "אין שגיאות בהרצה זו.",
+      "factNext": "הבא: {node}",
+      "factWaiting": "ממתין ב: {node}",
+      "factDelay": "ממתין {time}",
+      "factReplied": "הלקוח השיב: {text}",
+      "factEnded": "הסתיים: {reason}"
     },
     "event": {
       "step": "שלב",

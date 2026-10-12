@@ -61,7 +61,9 @@
         "matches": "Messaggi dei clienti analizzati",
         "answered": "Con risposta",
         "rate": "Tasso di risposta",
-        "tokens": "Token di embedding"
+        "tokens": "Token di embedding",
+        "verified": "Secondi controlli",
+        "vetoed": "Risposte trattenute"
       }
     },
     "settings": {
@@ -96,7 +98,8 @@
         "maxFaqs": "Massimo di FAQ per spazio di lavoro",
         "maxVariationsPerFaq": "Massimo di varianti per FAQ",
         "semanticPerHour": "Confronti semantici per spazio di lavoro all'ora",
-        "semanticPerHourHint": "Oltre questo valore, uno spazio di lavoro ripiega sulla somiglianza ortografica per il resto dell'ora. 0 significa sempre somiglianza ortografica."
+        "semanticPerHourHint": "Oltre questo valore, uno spazio di lavoro ripiega sulla somiglianza ortografica per il resto dell'ora. 0 significa sempre somiglianza ortografica.",
+        "verifyPerHour": "Secondi controlli per spazio di lavoro all'ora"
       },
       "errors": {
         "integer": "Inserisci un numero intero.",
@@ -115,6 +118,19 @@
         "confirm": "Salva modifiche",
         "engineOff": "Disattivando il motore, nessuno spazio di lavoro potrà rispondere ai clienti con le FAQ e le modifiche alle FAQ saranno bloccate finché non lo riattivi.",
         "modelChange": "Cambiando il modello di embedding da {from} a {to}, ogni vettore salvato viene rigenerato. Fino al termine, il confronto usa solo la somiglianza ortografica. La sensibilità predefinita seguirà il nuovo modello (consigliato {threshold}) a meno che tu non imposti un valore fisso. Le soglie degli spazi di lavoro salvate separatamente potrebbero richiedere una nuova regolazione perché i punteggi cambiano con il modello."
+      },
+      "verify": {
+        "title": "Secondo controllo per i casi al limite",
+        "description": "Un piccolo modello di chat ricontrolla le corrispondenze che hanno appena raggiunto la soglia di uno spazio di lavoro. Può solo trattenere una risposta. Gli spazi di lavoro lo attivano nelle proprie impostazioni FAQ.",
+        "enabled": {
+          "label": "Consenti il secondo controllo",
+          "hint": "Disattivalo per fermare il controllo in ogni spazio di lavoro, a prescindere dalle loro impostazioni."
+        },
+        "model": {
+          "label": "Modello di controllo",
+          "hint": "L'ID del modello OpenRouter che valuta i casi al limite, ad esempio openai/gpt-4o-mini. Basta un modello piccolo e veloce."
+        },
+        "perHourHint": "Oltre questo valore, un caso al limite resta senza controllo per il resto dell'ora. 0 significa non controllare mai."
       }
     },
     "maintenance": {

@@ -61,7 +61,9 @@
         "matches": "Tin nhắn khách hàng đã kiểm tra",
         "answered": "Đã trả lời",
         "rate": "Tỷ lệ trả lời",
-        "tokens": "Token embedding"
+        "tokens": "Token embedding",
+        "verified": "Lần kiểm tra lại",
+        "vetoed": "Câu trả lời bị giữ lại"
       }
     },
     "settings": {
@@ -96,7 +98,8 @@
         "maxFaqs": "Số FAQ tối đa mỗi workspace",
         "maxVariationsPerFaq": "Số biến thể tối đa mỗi FAQ",
         "semanticPerHour": "Số lần khớp ngữ nghĩa mỗi workspace mỗi giờ",
-        "semanticPerHourHint": "Quá mức này, workspace chuyển sang độ giống về chính tả trong phần còn lại của giờ đó. 0 nghĩa là luôn dùng độ giống về chính tả."
+        "semanticPerHourHint": "Quá mức này, workspace chuyển sang độ giống về chính tả trong phần còn lại của giờ đó. 0 nghĩa là luôn dùng độ giống về chính tả.",
+        "verifyPerHour": "Số lần kiểm tra lại mỗi workspace mỗi giờ"
       },
       "errors": {
         "integer": "Hãy nhập một số nguyên.",
@@ -115,6 +118,19 @@
         "confirm": "Lưu thay đổi",
         "engineOff": "Tắt bộ máy sẽ ngăn mọi workspace trả lời khách hàng bằng FAQ và chặn chỉnh sửa FAQ cho đến khi bạn bật lại.",
         "modelChange": "Đổi mô hình embedding từ {from} sang {to} sẽ tạo lại mọi vector đã lưu. Cho đến khi hoàn tất, việc khớp chỉ dùng độ giống về chính tả. Độ nhạy mặc định sẽ theo mô hình mới (khuyến nghị {threshold}) trừ khi bạn đặt giá trị cố định. Các ngưỡng workspace đã lưu riêng có thể cần điều chỉnh lại vì điểm số thay đổi theo mô hình."
+      },
+      "verify": {
+        "title": "Kiểm tra lại các kết quả sát ngưỡng",
+        "description": "Một mô hình chat nhỏ kiểm tra lại các kết quả khớp chỉ vừa đạt mức cần đạt của workspace. Mô hình chỉ có thể giữ lại câu trả lời. Các workspace tự bật tính năng này trong phần cài đặt FAQ của mình.",
+        "enabled": {
+          "label": "Cho phép kiểm tra lại",
+          "hint": "Tắt để dừng việc kiểm tra lại cho mọi workspace, bất kể họ cài đặt thế nào."
+        },
+        "model": {
+          "label": "Mô hình kiểm tra",
+          "hint": "ID mô hình OpenRouter dùng để đánh giá các kết quả sát ngưỡng, ví dụ openai/gpt-4o-mini. Một mô hình nhỏ và nhanh là đủ."
+        },
+        "perHourHint": "Vượt quá mức này, kết quả sát ngưỡng sẽ được giữ nguyên mà không kiểm tra trong phần còn lại của giờ. Giá trị 0 nghĩa là không bao giờ kiểm tra."
       }
     },
     "maintenance": {

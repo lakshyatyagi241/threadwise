@@ -21,6 +21,9 @@ const configSchema = z.object({
   maxFaqs: count,
   maxVariationsPerFaq: count,
   semanticPerHour: count,
+  verifyEnabled: z.boolean(),
+  verifyModel: z.string(),
+  verifyPerHour: count,
   allowedModels: z.array(
     z.object({
       id: z.string(),
@@ -51,6 +54,8 @@ export const overviewSchema: Out<FaqPlatformOverview> = z.object({
     matches30d: count,
     answered30d: count,
     embeddingTokens30d: count,
+    verified30d: count,
+    vetoed30d: count,
   }),
 });
 
