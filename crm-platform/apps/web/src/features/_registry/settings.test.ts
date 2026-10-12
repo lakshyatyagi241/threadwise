@@ -225,10 +225,10 @@ describe('the planned tiles', () => {
       expect(SETTINGS_SECTIONS as readonly string[]).toContain(t.section);
   });
 
-  // Telegram and WhatsApp are built: their tiles are declared in features/<domain>/settings.ts and left this list.
+  // Telegram, WhatsApp and SMS are built: their tiles are declared in features/<domain>/settings.ts and left this list.
   it('cover the channels that left the menu, as Soon tiles', () => {
     const channels = PLANNED_SETTINGS.filter((t) => t.section === 'channels').map((t) => t.id);
-    for (const id of ['channels', 'sms', 'email', 'line', 'viber', 'wechat', 'wa-links']) {
+    for (const id of ['channels', 'email', 'line', 'viber', 'wechat', 'wa-links']) {
       expect(channels, id).toContain(id);
     }
   });

@@ -193,3 +193,12 @@ org-aware form; the bridge pull `GET /api/whatsapp-message-settings` has no work
   enforcement, per-row due sweep, device runtime stopping one workspace's sockets), `test/integration/node-bridge-runtime/unofficial-workspaces-rls.spec.ts`.
   The e2e harness starts the older suites with the switch ON and every test workspace allowed (a test-only trigger on `organizations`); `unofficialWhatsapp:
 'platform-only'` turns only the platform switch on, `false` leaves both off (the new spec).
+
+## Inbound content the inbox can show (Baileys path) — `intended`
+
+Reference read only the top-level Baileys message, kept the first card of a contacts message, dropped polls, products, orders and similar types, and lost
+the reply and forwarded context. Our normalizer now matches what the Cloud API path already stores (same `meta` keys, same bubbles): it reads inside
+disappearing-chat, view-once, captioned-document and edit wrappers; keeps every card of a contacts message (`meta.contacts`); carries
+`contextInfo.stanzaId` as `replyToProviderMessageId` and `isForwarded` as `meta.forwarded`; and stores a poll, product, order, list, buttons, template,
+interactive, group-invite, event or payment message as an `unsupported` placeholder with `meta.rawType` instead of dropping it. Reason: a customer message must
+never vanish from the thread. Owner approval pending. Evidence: `test/unit/node-bridge-runtime/inbound-normalizer.spec.ts` (rich content block).

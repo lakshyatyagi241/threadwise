@@ -5,7 +5,11 @@ import { CONSENT_KEY, type Answers, type FieldIssue, type FormShape } from './ty
 /** The body of `POST /v2/public/forms/:publicKey/submit` (spec section 7.2): the contract's own type, so a change there stops here. */
 export type SubmitPayload = PublicFormSubmitInput;
 
-export type SubmitNext = { type: 'message'; message: string } | { type: 'redirect'; url: string };
+export type SubmitNext =
+  | { type: 'message'; message: string }
+  | { type: 'redirect'; url: string }
+  /** The form takes payment: the visitor goes to the gateway's hosted page. */
+  | { type: 'pay'; url: string; message?: string };
 
 /** What the page does with the API's answer. The visitor is only ever told what their own input and the door's rules allow. */
 export type SubmitOutcome =
@@ -13,6 +17,7 @@ export type SubmitOutcome =
   | { ok: false; kind: 'validation'; issues: FieldIssue[] }
   | { ok: false; kind: 'rate_limited'; retryAfterSeconds: number | null }
   | { ok: false; kind: 'closed' }
+  | { ok: false; kind: 'payment_unavailable' }
   | { ok: false; kind: 'error' };
 
 const KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'] as const;

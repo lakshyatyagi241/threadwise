@@ -253,8 +253,8 @@
           "off": "Desativado"
         },
         "captchaHints": {
-          "inherit": "Usa o que o seu espaço de trabalho definiu para formulários públicos.",
-          "on": "Os visitantes precisam passar na verificação antes de enviar.",
+          "inherit": "Usa o CAPTCHA que o administrador da sua plataforma configurou para os formulários públicos, se houver.",
+          "on": "Os visitantes precisam passar na verificação antes de enviar. Exige um CAPTCHA configurado na plataforma, e a publicação é recusada sem um.",
           "off": "Sem verificação. Conta com o campo armadilha oculto e os limites de taxa."
         },
         "retention": "Manter respostas por (dias)",
@@ -271,6 +271,17 @@
           "perFormPerMinuteHint": "Envios para este formulário, de qualquer lugar.",
           "perContactPerHour": "Por contato, por hora",
           "perContactPerHourHint": "Envios com o mesmo e-mail ou número de telefone."
+        },
+        "captchaStatus": {
+          "available": "Há um CAPTCHA configurado nesta plataforma (reCAPTCHA {version}).",
+          "none": "Nenhum CAPTCHA está configurado nesta plataforma, então nada é verificado aqui. Peça ao administrador da plataforma para adicionar um, ou conte com o campo armadilha oculto e os limites de taxa.",
+          "noneOn": "Este formulário está definido para verificar sempre, mas a plataforma não tem CAPTCHA, então não verifica nada e não pode ser publicado. Peça ao administrador da plataforma para adicionar um, ou escolha outra opção.",
+          "failed": "Não foi possível verificar se há um CAPTCHA configurado."
+        },
+        "caught": {
+          "blocked": "{count, plural, =0 {O campo armadilha oculto não barrou nenhum bot neste mês.} one {O campo armadilha oculto barrou 1 bot neste mês.} other {O campo armadilha oculto barrou # bots neste mês.}}",
+          "held": "{count, plural, one {1 envio está retido como spam.} other {# envios estão retidos como spam.}}",
+          "review": "Revisar"
         }
       }
     }

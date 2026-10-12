@@ -126,7 +126,9 @@
         "exporting": "Exporteren",
         "exportHintAttention": "Kies één status om uit deze groep te exporteren, of gebruik Alle.",
         "exportHintSearch": "De export negeert de zoektekst.",
-        "notSpam": "Geen spam: verwerken"
+        "notSpam": "Geen spam: verwerken",
+        "newPaymentLink": "Nieuwe betaallink aanvragen",
+        "markPaid": "Markeren als betaald"
       },
       "confirmDelete": {
         "title": "Deze antwoorden verwijderen?",
@@ -143,7 +145,11 @@
         "deleteFailed": "De antwoorden konden niet worden verwijderd. Probeer het opnieuw.",
         "exported": "De CSV is gedownload.",
         "exportTruncated": "De export is afgekapt op de nieuwste {max} rijen. Beperk de data om de rest te krijgen.",
-        "exportFailed": "De export kon niet worden gemaakt. Probeer het opnieuw."
+        "exportFailed": "De export kon niet worden gemaakt. Probeer het opnieuw.",
+        "linkReady": "Er is een nieuwe betaallink beschikbaar.",
+        "linkFailed": "De gateway heeft geen link gegeven. Probeer het zo meteen opnieuw.",
+        "markedPaid": "Gemarkeerd als betaald.",
+        "markPaidFailed": "Deze inzending kon niet als betaald worden gemarkeerd."
       },
       "state": {
         "loading": "Inzendingen laden",
@@ -164,6 +170,29 @@
       "cap": {
         "notice": "Sommige inzendingen zijn opgeslagen om te bekijken omdat de maandelijkse inzendinglimiet van je abonnement is bereikt.",
         "upgrade": "Upgrade je abonnement"
+      },
+      "payments": {
+        "title": "Betaling",
+        "status": {
+          "pending": "In afwachting van betaling",
+          "paid": "Betaald",
+          "failed": "Mislukt",
+          "expired": "Verlopen"
+        },
+        "via": {
+          "gateway": "via de gateway",
+          "manual": "handmatig gemarkeerd"
+        },
+        "gateway": "Gateway",
+        "paidAt": "Betaald",
+        "expiresAt": "Link verloopt",
+        "reference": "Referentie",
+        "duplicate": "Er is een tweede betaling binnengekomen voor deze inzending. Betaal deze terug via uw betaalgateway.",
+        "freshLink": "Nieuwe betaallink (stuur deze naar de bezoeker):",
+        "copy": "Link kopiëren",
+        "markPaidConfirm": "Deze inzending als betaald markeren? Gebruik dit alleen als het geld buiten de gateway is ontvangen, zoals bij een bankoverschrijving of contante betaling. Het wordt onder uw naam vastgelegd.",
+        "markPaidYes": "Ja, markeer als betaald",
+        "cancel": "Annuleren"
       }
     }
   }

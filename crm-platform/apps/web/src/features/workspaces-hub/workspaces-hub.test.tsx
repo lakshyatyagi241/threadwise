@@ -3,7 +3,7 @@ import { join, resolve } from 'node:path';
 import { NextIntlClientProvider } from 'next-intl';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
-import type { WorkspaceHubRow } from '@crm/contracts';
+import type { OrgLifecycleLogEntry, OrgLifecycleResponse, WorkspaceHubRow } from '@crm/contracts';
 import { ERROR_CODES, WORKSPACE_HUB_COLUMNS } from '@crm/contracts';
 import { ApiError } from '@/lib/api/errors';
 import { OPERATOR_NAV } from '@/features/auth-registration-security/platform/operator-nav';
@@ -24,7 +24,18 @@ import {
 import { readRaw, resetColumns, setColumn, type ColumnStorage } from './lib/columns-store';
 import { hubError } from './lib/errors';
 import { agoParts, capText, endsInfo } from './lib/format';
-import { hubAccess } from './lib/permissions';
+import { hubAccess, retentionAccess } from './lib/permissions';
+import {
+  checkExempt,
+  checkPolicy,
+  hasRetentionFilter,
+  policyDraftFor,
+  reasonError,
+  toLifecycleFilters,
+  untilIso,
+} from './lib/retention';
+import { RetentionTable, retentionActions } from './components/retention-table';
+import { detailReason } from './components/retention-history-drawer';
 import { impersonationDraft, suspendBody, toListFilters } from './lib/query';
 import { hubRedirectPath } from './lib/redirect';
 import { WSHUB_OPERATOR_NAV } from './operator-nav';
@@ -441,5 +452,232 @@ describe('messages', () => {
       expect(k in en, k).toBe(true);
       expect(vars(v), k).toEqual(vars(en[k]!));
     }
+  });
+});
+
+const life = (over: Partial<OrgLifecycleResponse> = {}): OrgLifecycleResponse => ({
+  id: '33333333-3333-4333-8333-333333333333',
+  name: 'Idle Co',
+  slug: 'idle-co',
+  status: 'active',
+  lastActivityAt: '2026-06-01T00:00:00.000Z',
+  daysInactive: 120,
+  archivedAt: null,
+  archiveAfterDays: 90,
+  deleteAfterDays: 180,
+  archiveOverride: null,
+  deleteOverride: null,
+  scheduledArchiveAt: '2026-10-20T00:00:00.000Z',
+  scheduledDeleteAt: '2027-02-01T00:00:00.000Z',
+  retentionExempt: false,
+  retentionExemptReason: null,
+  retentionExemptUntil: null,
+  retentionExemptBy: null,
+  legalHold: false,
+  exemptByPlan: false,
+  remindersSent: { archive: 2, delete: 0 },
+  ...over,
+});
+
+const none = { view: true, manage: false, legalHold: false };
+
+describe('retention permissions', () => {
+  it('reads each key on its own and offers nothing while the map is unknown', () => {
+    expect(retentionAccess(undefined)).toEqual({ view: false, manage: false, legalHold: false });
+    expect(
+      retentionAccess({
+        'platform.workspace.view_all': true,
+        'platform.workspace.retention': true,
+      }),
+    ).toEqual({ view: true, manage: true, legalHold: false });
+    expect(retentionAccess({ 'platform.workspace.legal_hold': true }).legalHold).toBe(true);
+  });
+
+  it('shows only the actions the keys allow, and Restore only for an archived row', () => {
+    expect(retentionActions(life(), none)).toEqual([]);
+    expect(retentionActions(life(), { ...none, manage: true })).toEqual(['policy', 'exempt']);
+    expect(retentionActions(life({ status: 'archived' }), { ...none, manage: true })).toEqual([
+      'policy',
+      'exempt',
+      'restore',
+    ]);
+    expect(retentionActions(life(), { ...none, legalHold: true })).toEqual(['legalHold']);
+  });
+});
+
+describe('retention table', () => {
+  const render = (rows: OrgLifecycleResponse[], access = none) =>
+    wrap(
+      <RetentionTable
+        rows={rows}
+        access={access}
+        onAction={() => undefined}
+        onHistory={() => undefined}
+      />,
+    );
+
+  it('renders the columns, reminders and the three badges', () => {
+    const html = render([
+      life({
+        retentionExempt: true,
+        retentionExemptReason: 'Key customer',
+        legalHold: true,
+        exemptByPlan: true,
+      }),
+    ]);
+    for (const k of ['Days inactive', 'Archive on', 'Erase on', 'Reminders sent']) {
+      expect(html).toContain(k);
+    }
+    expect(html).toContain('Archive 2/3');
+    expect(html).toContain('Erase 0/3');
+    expect(html).toContain('Never delete');
+    expect(html).toContain('Key customer');
+    expect(html).toContain('Legal hold');
+    expect(html).toContain('Paid plan (exempt)');
+  });
+
+  it('renders no action menu without a key, and one with it', () => {
+    expect(render([life()])).not.toContain('Retention actions for');
+    expect(render([life()], { ...none, manage: true })).toContain('Retention actions for Idle Co');
+    expect(render([life()])).toContain('History');
+  });
+});
+
+describe('timings dialog validation', () => {
+  const row = life();
+  const draft = (p: Partial<ReturnType<typeof policyDraftFor>>) => ({
+    ...policyDraftFor(row),
+    ...p,
+  });
+  const custom = (days: string) => ({ mode: 'custom' as const, days });
+  const dflt = { mode: 'default' as const, days: '' };
+
+  it('needs a change and a reason', () => {
+    expect(checkPolicy(row, draft({ reason: 'long enough' })).errors).toContain('noChange');
+    const ok = checkPolicy(row, draft({ archive: custom('100'), reason: 'ok reason' }));
+    expect(ok.errors).toEqual([]);
+    expect(ok.body).toEqual({ archiveAfterDays: 100, reason: 'ok reason' });
+    expect(checkPolicy(row, draft({ archive: custom('100'), reason: 'abc' })).body).toBeNull();
+  });
+
+  it('enforces 60 and 120 minimums and the maximums', () => {
+    expect(
+      checkPolicy(row, draft({ archive: custom('59'), reason: 'ok reason' })).errors,
+    ).toContain('archiveMin');
+    expect(
+      checkPolicy(row, draft({ archive: custom('3651'), reason: 'ok reason' })).errors,
+    ).toContain('archiveMax');
+    expect(checkPolicy(row, draft({ erase: custom('119'), reason: 'ok reason' })).errors).toContain(
+      'eraseMin',
+    );
+    expect(
+      checkPolicy(row, draft({ erase: custom('7301'), reason: 'ok reason' })).errors,
+    ).toContain('eraseMax');
+    expect(
+      checkPolicy(row, draft({ archive: custom('1.5'), reason: 'ok reason' })).errors,
+    ).toContain('archiveWhole');
+  });
+
+  it('enforces the 60-day gap on effective values, defaults included', () => {
+    // archive 150 against the default erase of 180 leaves 30 days
+    expect(
+      checkPolicy(row, draft({ archive: custom('150'), reason: 'ok reason' })).errors,
+    ).toContain('gap');
+    expect(
+      checkPolicy(row, draft({ archive: custom('120'), erase: custom('180'), reason: 'ok reason' }))
+        .errors,
+    ).toEqual([]);
+    expect(
+      checkPolicy(row, draft({ archive: custom('100'), erase: custom('150'), reason: 'ok reason' }))
+        .errors,
+    ).toContain('gap');
+  });
+
+  it('sends null to go back to the platform default', () => {
+    const withOverride = life({ archiveOverride: 100, deleteOverride: 200 });
+    const r = checkPolicy(withOverride, {
+      archive: dflt,
+      erase: { mode: 'custom', days: '200' },
+      reason: 'back to default',
+    });
+    expect(r.body).toEqual({ archiveAfterDays: null, reason: 'back to default' });
+  });
+});
+
+describe('never delete, reasons and filters', () => {
+  it('needs a 5 to 500 character reason', () => {
+    expect(reasonError('abcd')).toBe('reasonShort');
+    expect(reasonError('    a   ')).toBe('reasonShort');
+    expect(reasonError('x'.repeat(501))).toBe('reasonLong');
+    expect(reasonError('valid')).toBeNull();
+  });
+
+  it('builds the on and off bodies and rejects an expiry in the past', () => {
+    const now = Date.parse('2026-10-11T00:00:00Z');
+    expect(checkExempt(true, 'key account', '', now).body).toEqual({
+      exempt: true,
+      reason: 'key account',
+    });
+    expect(checkExempt(true, 'key account', '2026-12-31', now).body).toEqual({
+      exempt: true,
+      reason: 'key account',
+      until: untilIso('2026-12-31'),
+    });
+    expect(checkExempt(true, 'key account', '2026-01-01', now)).toMatchObject({
+      until: 'untilPast',
+      body: null,
+    });
+    expect(checkExempt(false, 'review done', '2026-01-01', now).body).toEqual({
+      exempt: false,
+      reason: 'review done',
+    });
+    expect(checkExempt(false, 'no', '', now).body).toBeNull();
+  });
+
+  it('turns the address into a list query and drops unknown values', () => {
+    expect(toLifecycleFilters({ status: 'archived', min: '30', exempt: 'true' })).toEqual({
+      status: 'archived',
+      minDaysInactive: 30,
+      exempt: 'true',
+    });
+    expect(toLifecycleFilters({ status: 'weird', min: '-3', exempt: '' })).toEqual({
+      status: undefined,
+      minDaysInactive: undefined,
+      exempt: undefined,
+    });
+    expect(hasRetentionFilter({ status: '', min: '', exempt: '' })).toBe(false);
+    expect(hasRetentionFilter({ status: '', min: '5', exempt: '' })).toBe(true);
+  });
+});
+
+describe('retention errors and history', () => {
+  it('maps a problem+json code to the inline message key', () => {
+    expect(
+      hubError(new ApiError(403, ERROR_CODES.RBAC_PLATFORM_PERMISSION_REQUIRED, 'x')).key,
+    ).toBe('forbidden');
+    expect(hubError(new ApiError(422, ERROR_CODES.VALIDATION_FAILED, 'x')).key).toBe('validation');
+  });
+
+  it('shows the reason only when the log details carry a text one', () => {
+    const e = (details: Record<string, unknown>): Pick<OrgLifecycleLogEntry, 'details'> => ({
+      details,
+    });
+    expect(detailReason(e({ reason: 'legal request' }))).toBe('legal request');
+    expect(detailReason(e({ reason: 5 }))).toBeNull();
+    expect(detailReason(e({}))).toBeNull();
+  });
+
+  it('has every retention message the code names', () => {
+    const need = [
+      'retention.title',
+      'retention.status.archived',
+      'retention.badge.paidPlan',
+      'retention.actions.holdOff',
+      'retention.event.reminder_sent',
+      'retention.dialog.errors.gap',
+      'retention.dialog.policyConfirm',
+      'list.retentionLink',
+    ].map((k) => `workspaces-hub.${k}`);
+    expect(need.filter((k) => !(k in en))).toEqual([]);
   });
 });

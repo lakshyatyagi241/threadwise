@@ -24,6 +24,7 @@
     "arch:check": "pnpm --filter @crm/api arch",
     "audit:auth": "node tools/auth-audit/run.mjs",
     "audit:authz": "node tools/authz-audit/run.mjs",
+    "audit:tenancy": "node tools/tenancy-audit/run.mjs",
     "infra:up": "docker compose up -d",
     "infra:down": "docker compose down",
     "infra:nuke": "docker compose down -v",

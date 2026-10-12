@@ -2,14 +2,19 @@
 
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import {
+  flowWidgetResponseSchema,
   listWidgetsResponseSchema,
   registrationConfigResponseSchema,
   rotateWidgetTokenResponseSchema,
+  webBotsResponseSchema,
   widgetAssistantsResponseSchema,
   widgetSchema,
   type CreateWidgetInput,
+  type FlowWidgetResponse,
+  type FlowWidgetSaveInput,
   type ListWidgetsResponse,
   type UpdateWidgetInput,
+  type WebBotsResponse,
   type Widget,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
@@ -19,6 +24,8 @@ export const KEYS = {
   list: ['wgt', 'list'] as const,
   one: (id: string) => ['wgt', 'one', id] as const,
   assistants: ['wgt', 'assistants'] as const,
+  flow: (flowId: string) => ['wgt', 'flow', flowId] as const,
+  webBots: ['wgt', 'web-bots'] as const,
 };
 
 const PAGE = 20;
@@ -87,3 +94,25 @@ export const rotateWidgetToken = (id: string) =>
 
 export const deleteWidget = (id: string): Promise<void> =>
   apiFetch(`/widgets/${id}`, { method: 'DELETE' });
+
+/** The widget a website chat bot owns; `widget` is null until Customize has been saved once. */
+export function useFlowWidget(flowId: string | null) {
+  return useQuery({
+    queryKey: KEYS.flow(flowId ?? ''),
+    enabled: flowId !== null,
+    queryFn: ({ signal }): Promise<FlowWidgetResponse> =>
+      apiFetch(`/flows/${flowId}/widget`, { schema: flowWidgetResponseSchema, signal }),
+  });
+}
+
+export const saveFlowWidget = (flowId: string, body: FlowWidgetSaveInput): Promise<Widget> =>
+  apiFetch(`/flows/${flowId}/widget`, { method: 'PUT', body, schema: widgetSchema });
+
+/** The workspace's website chat bots with their widgets (Settings > Channels > Web). */
+export function useWebBots() {
+  return useQuery({
+    queryKey: KEYS.webBots,
+    queryFn: ({ signal }): Promise<WebBotsResponse> =>
+      apiFetch('/widgets/flow-bots', { schema: webBotsResponseSchema, signal }),
+  });
+}

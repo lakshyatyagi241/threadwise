@@ -1,4 +1,11 @@
-import { CanActivate, ExecutionContext, Inject, Injectable, Logger } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Inject,
+  Injectable,
+  Logger,
+  Optional,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import type { Request } from 'express';
 import { Redis } from 'ioredis';
@@ -10,6 +17,7 @@ import {
 } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
+import { ActivityService } from '../../../kernel/activity/activity.service';
 import { ImpersonationService } from '../platform/impersonation.service';
 import { OperatorAuthService } from '../platform/operator-auth.service';
 import { SecurityPolicyService } from '../platform/security-policy.service';
@@ -59,6 +67,7 @@ export class JwtAuthGuard implements CanActivate {
     private readonly impersonations: ImpersonationService,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
     private readonly partners: PartnerAgentStatusService,
+    @Optional() private readonly activity?: ActivityService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -124,6 +133,12 @@ export class JwtAuthGuard implements CanActivate {
     ctx.userId = claims.typ === 'user' ? claims.sub : null;
     ctx.sessionId = claims.sid;
     ctx.impersonation = impersonation;
+
+    // Any authenticated request by a workspace's own people is workspace activity: it resets the inactivity clock (ADR-0028). An operator
+    // looking at a workspace (act-as) is not the customer being active, so it does not count.
+    if (!impersonation && claims.org > 0 && claims.typ !== 'platform_operator') {
+      this.activity?.touch(claims.org);
+    }
 
     return true;
   }

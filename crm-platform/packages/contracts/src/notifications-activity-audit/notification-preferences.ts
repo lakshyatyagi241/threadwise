@@ -58,6 +58,8 @@ export const NOTIFICATION_CATALOG: Record<NotificationPrefType, NotificationCata
   new_lead: { group: 'leads', toast: true, sound: false, push: false },
   form_submission: { group: 'leads', toast: true, sound: false, push: false },
   form_needs_review: { group: 'leads', toast: true, sound: false, push: false },
+  form_payment: { group: 'leads', toast: true, sound: false, push: false },
+  form_payment_duplicate: { group: 'leads', toast: true, sound: false, push: false },
   sales_doc_decided: { group: 'documents', toast: true, sound: false, push: false },
   wallet_low_balance: { group: 'wallet', toast: true, sound: false, push: false },
   wallet_credited: { group: 'wallet', toast: true, sound: false, push: false },

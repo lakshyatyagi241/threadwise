@@ -106,7 +106,8 @@
         "light": "Chiaro",
         "dark": "Scuro",
         "schemeHint": "La modalità colore è impostata su Chiaro, quindi non c’è una versione scura da mostrare in anteprima.",
-        "frameTitle": "Anteprima live del modulo"
+        "frameTitle": "Anteprima live del modulo",
+        "popup": "Popup"
       }
     }
   }

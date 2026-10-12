@@ -250,14 +250,14 @@ describe('the broadcasts page (TW-IG-014)', () => {
   it('is refused while the engine is off, and for a message that is empty, too long, or aimed at no one or too many', async () => {
     const t = await api.signup('igbh');
     const id = await thread(t, 'ig:a1_1', 'Ok');
-    expect((await broadcast(t, { name: 'x', message: '', threadIds: [id] })).status).toBe(400);
+    expect((await broadcast(t, { name: 'x', message: '', threadIds: [id] })).status).toBe(422);
     expect(
       (await broadcast(t, { name: 'x', message: 'y'.repeat(1001), threadIds: [id] })).status,
-    ).toBe(400);
-    expect((await broadcast(t, { name: '', message: 'hi', threadIds: [id] })).status).toBe(400);
-    expect((await broadcast(t, { name: 'x', message: 'hi', threadIds: [] })).status).toBe(400);
+    ).toBe(422);
+    expect((await broadcast(t, { name: '', message: 'hi', threadIds: [id] })).status).toBe(422);
+    expect((await broadcast(t, { name: 'x', message: 'hi', threadIds: [] })).status).toBe(422);
     const many = Array.from({ length: 201 }, () => '00000000-0000-4000-8000-000000000000');
-    expect((await broadcast(t, { name: 'x', message: 'hi', threadIds: many })).status).toBe(400);
+    expect((await broadcast(t, { name: 'x', message: 'hi', threadIds: many })).status).toBe(422);
     await engine(false);
     const off = await broadcast(t, { name: 'x', message: 'hi', threadIds: [id] });
     expect(off.status).toBe(422);

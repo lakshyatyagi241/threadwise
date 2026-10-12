@@ -176,12 +176,35 @@
       "cancelBody": "The run stops where it is. The customer is not told.",
       "cancelConfirm": "Cancel run",
       "cancelKeep": "Keep it",
-      "cancelled": "Run cancelled"
+      "cancelled": "Run cancelled",
+      "tlTitle": "Execution timeline",
+      "tlNodes": "Nodes run",
+      "tlErrors": "Errors",
+      "tlTime": "Node time",
+      "filterAll": "All steps",
+      "filterErrors": "Errors only",
+      "changedTitle": "This flow was edited after the run",
+      "changedBody": "The log shows the flow exactly as it ran.",
+      "removed": "Removed from the flow",
+      "exit": "Exit {port}",
+      "visit": "Visit {n}",
+      "truncated": "More than {max} steps ran. Later ones were counted but not listed.",
+      "retention": "Logs are deleted {days} days after a run ends.",
+      "pathTitle": "Path taken",
+      "notReached": "Not reached",
+      "noErrors": "No errors in this run."
     },
     "event": {
       "step": "Step",
       "reply": "Customer reply",
-      "end": "End"
+      "end": "End",
+      "advance": "Moved on",
+      "wait": "Waiting for a reply",
+      "sleep": "Delay",
+      "halt": "Halted",
+      "exec": "Ran",
+      "truncated": "Log limit reached",
+      "start": "Started"
     },
     "subs": {
       "kicker": "Flow",
@@ -469,6 +492,13 @@
       "manyBody": "{n} contacts re-enter their flow from the start and receive its messages again. This cannot be undone.",
       "summary": "{queued} re-started, {succeeded} completed, {failed} failed, {skipped} skipped.",
       "flowInactive": "Turn this flow back on before re-running its failed contacts."
+    },
+    "outcome": {
+      "ok": "OK",
+      "error": "Error",
+      "skipped": "Skipped",
+      "waiting": "Waiting",
+      "timeout": "Timed out"
     }
   }
 }

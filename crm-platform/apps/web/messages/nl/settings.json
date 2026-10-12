@@ -81,7 +81,7 @@
       },
       "sms": {
         "label": "SMS",
-        "description": "Verstuur en ontvang sms-berichten met je eigen afzender.",
+        "description": "Verstuur sms-berichten met je eigen Twilio-nummer of MSG91-afzender.",
         "keywords": "sms, afzender-id, dlt, twilio, mobiel"
       },
       "email": {

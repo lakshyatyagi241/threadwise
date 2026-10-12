@@ -57,7 +57,7 @@ export function HubScreen() {
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t('intro')}</p>
         </div>
         <div className="flex shrink-0 flex-wrap items-center gap-2">
-          <Link href="/team-inbox" className={pillLink}>
+          <Link href="/inbox" className={pillLink}>
             {t('teamInbox')}
           </Link>
           {canPosts && (

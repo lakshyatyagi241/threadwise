@@ -551,7 +551,8 @@
             "forms_and_links": "ফর্ম ও লিংক",
             "extra_channels": "Telegram, Facebook ও Instagram",
             "form_builder": "ফর্ম",
-            "waba_groups": "WhatsApp গ্রুপ"
+            "waba_groups": "WhatsApp গ্রুপ",
+            "sms": "SMS"
           },
           "cta": {
             "continueFree": "ফ্রি-তে চালিয়ে যান",

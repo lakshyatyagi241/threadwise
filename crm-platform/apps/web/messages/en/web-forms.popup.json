@@ -1,0 +1,42 @@
+{
+  "web-forms": {
+    "popup": {
+      "title": "Show as a popup",
+      "description": "Open the form in a popup on your own website instead of placing it in the page. Choose when it opens, then copy the code.",
+      "trigger": "Open the popup",
+      "triggers": {
+        "delay": "After a delay",
+        "scroll_down": "When the visitor scrolls down",
+        "scroll_up": "When the visitor scrolls back up",
+        "click": "When someone clicks a button"
+      },
+      "triggerHints": {
+        "delay": "Opens a set time after the page loads.",
+        "scroll_down": "Opens once the visitor has scrolled this far down the page.",
+        "scroll_up": "Opens when the visitor has read down the page and then scrolls back up, a sign they may be leaving.",
+        "click": "Opens only when someone clicks a button or link that carries the code shown below."
+      },
+      "delay": "Seconds before it opens",
+      "delayHint": "From {min} to {max}.",
+      "scroll": "How far down the page (percent)",
+      "scrollHint": "From {min} to {max}.",
+      "position": "Where it appears",
+      "positions": {
+        "center": "Centre of the screen, dimming the page",
+        "bottom_right": "Bottom corner, without dimming the page"
+      },
+      "days": "Show again after (days)",
+      "daysHint": "0 shows it on every visit. Once someone sends the form, it never shows to them again.",
+      "note": "Add your website to Allowed websites below first, or the popup will stay blank.",
+      "code": {
+        "title": "Popup code",
+        "description": "Paste this where the popup should load, usually just before the closing body tag."
+      },
+      "button": {
+        "title": "A button that opens it",
+        "description": "Add this to any page to let people open the popup themselves. It works with every trigger."
+      },
+      "copy": "Copy code"
+    }
+  }
+}

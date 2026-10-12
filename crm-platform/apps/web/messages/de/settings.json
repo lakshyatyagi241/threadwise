@@ -97,7 +97,7 @@
       },
       "sms": {
         "label": "SMS",
-        "description": "Senden und empfangen Sie Textnachrichten mit Ihrem eigenen Absender.",
+        "description": "Senden Sie Textnachrichten mit Ihrer eigenen Twilio-Nummer oder Ihrem MSG91-Absender.",
         "keywords": "textnachricht, absender-id, dlt, twilio, mobil"
       },
       "email": {

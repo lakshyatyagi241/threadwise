@@ -1,8 +1,10 @@
 import { Controller, Get, Param, ParseUUIDPipe, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
+  broadcastComposeQuerySchema,
   listBroadcastRecipientsQuerySchema,
   listBroadcastsQuerySchema,
+  type BroadcastComposeQuery,
   type ListBroadcastRecipientsQuery,
   type ListBroadcastsQuery,
 } from '@crm/contracts';
@@ -32,10 +34,11 @@ export class BroadcastsReadController {
   @Get('compose')
   @RequirePermission('bcast.broadcasts.create')
   @ApiOperation({
-    summary: 'What the compose page opens with: approved templates and connected sending numbers',
+    summary:
+      'What the compose page opens with: approved templates and connected sending numbers (`?channel=sms` for the SMS card)',
   })
-  compose() {
-    return this.composer.compose();
+  compose(@Query(zodPipe(broadcastComposeQuerySchema)) query: BroadcastComposeQuery) {
+    return this.composer.compose(query);
   }
 
   @Get('summary')

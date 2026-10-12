@@ -43,7 +43,8 @@
       "ai_token_limit_monthly": "Token AI mỗi tháng",
       "forms": "Biểu mẫu web",
       "form_submissions_monthly": "Lượt gửi biểu mẫu mỗi tháng",
-      "ai_form_generations_monthly": "Lượt tạo bằng trình dựng biểu mẫu AI mỗi tháng"
+      "ai_form_generations_monthly": "Lượt tạo bằng trình dựng biểu mẫu AI mỗi tháng",
+      "sms_monthly": "SMS mỗi tháng"
     },
     "features": {
       "automation": "Tự động hóa",
@@ -74,7 +75,8 @@
       "forms_and_links": "Biểu mẫu và liên kết",
       "extra_channels": "Telegram, Facebook và Instagram",
       "form_builder": "Biểu mẫu",
-      "waba_groups": "Nhóm WhatsApp"
+      "waba_groups": "Nhóm WhatsApp",
+      "sms": "Kênh SMS"
     },
     "limitGroups": {
       "messaging": "Nhắn tin",
@@ -124,7 +126,8 @@
       "ai_token_limit_monthly": "Token mà trợ lý AI sử dụng trong tháng dương lịch bằng khóa của nền tảng. Không gian làm việc dùng khóa riêng không bị giới hạn.",
       "forms": "Biểu mẫu web đang hoạt động (ứng dụng Biểu mẫu). Lưu trữ một biểu mẫu sẽ giải phóng chỗ của nó. 0 = không giới hạn.",
       "form_submissions_monthly": "Lượt gửi biểu mẫu được chấp nhận trong tháng dương lịch, không tính thư rác. Khi vượt hạn mức, lượt gửi vẫn được lưu để xem xét, không bao giờ bị bỏ. 0 = không giới hạn.",
-      "ai_form_generations_monthly": "Lượt tạo bằng trình dựng biểu mẫu AI trong tháng dương lịch, kể cả lần thử sửa lại. 0 = không giới hạn."
+      "ai_form_generations_monthly": "Lượt tạo bằng trình dựng biểu mẫu AI trong tháng dương lịch, kể cả lần thử sửa lại. 0 = không giới hạn.",
+      "sms_monthly": "Số tin nhắn SMS gửi đi trong tháng dương lịch. 0 = không giới hạn."
     },
     "planAddons": {
       "title": "Tiện ích bổ sung có trong gói của bạn",

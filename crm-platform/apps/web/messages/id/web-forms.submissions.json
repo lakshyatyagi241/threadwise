@@ -126,7 +126,9 @@
         "exporting": "Mengekspor",
         "exportHintAttention": "Pilih satu status untuk diekspor dari grup ini, atau gunakan Semua.",
         "exportHintSearch": "Ekspor mengabaikan teks pencarian.",
-        "notSpam": "Bukan spam: proses"
+        "notSpam": "Bukan spam: proses",
+        "newPaymentLink": "Dapatkan tautan pembayaran baru",
+        "markPaid": "Tandai sudah dibayar"
       },
       "confirmDelete": {
         "title": "Hapus jawaban ini?",
@@ -143,7 +145,11 @@
         "deleteFailed": "Jawaban tidak dapat dihapus. Silakan coba lagi.",
         "exported": "CSV telah diunduh.",
         "exportTruncated": "Ekspor dipotong pada {max} baris terbaru. Persempit tanggal untuk mendapatkan sisanya.",
-        "exportFailed": "Ekspor tidak dapat dibuat. Silakan coba lagi."
+        "exportFailed": "Ekspor tidak dapat dibuat. Silakan coba lagi.",
+        "linkReady": "Tautan pembayaran baru sudah siap.",
+        "linkFailed": "Gateway tidak memberikan tautan. Coba lagi sebentar lagi.",
+        "markedPaid": "Ditandai sudah dibayar.",
+        "markPaidFailed": "Pengiriman ini tidak dapat ditandai sudah dibayar."
       },
       "state": {
         "loading": "Memuat pengiriman",
@@ -164,6 +170,29 @@
       "cap": {
         "notice": "Beberapa pengiriman disimpan untuk ditinjau karena batas pengiriman bulanan paket Anda sudah tercapai.",
         "upgrade": "Tingkatkan paket Anda"
+      },
+      "payments": {
+        "title": "Pembayaran",
+        "status": {
+          "pending": "Menunggu pembayaran",
+          "paid": "Dibayar",
+          "failed": "Gagal",
+          "expired": "Kedaluwarsa"
+        },
+        "via": {
+          "gateway": "oleh gateway",
+          "manual": "ditandai manual"
+        },
+        "gateway": "Gateway",
+        "paidAt": "Dibayar pada",
+        "expiresAt": "Tautan kedaluwarsa",
+        "reference": "Referensi",
+        "duplicate": "Pembayaran kedua masuk untuk pengiriman ini. Kembalikan dananya dari gateway pembayaran Anda.",
+        "freshLink": "Tautan pembayaran baru (kirim ke pengunjung):",
+        "copy": "Salin tautan",
+        "markPaidConfirm": "Tandai pengiriman ini sudah dibayar? Gunakan hanya jika uang diterima di luar gateway, seperti transfer bank atau tunai. Tindakan ini dicatat atas nama Anda.",
+        "markPaidYes": "Ya, tandai sudah dibayar",
+        "cancel": "Batal"
       }
     }
   }

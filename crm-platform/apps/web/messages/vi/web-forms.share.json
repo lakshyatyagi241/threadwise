@@ -253,8 +253,8 @@
           "off": "Tắt"
         },
         "captchaHints": {
-          "inherit": "Dùng cài đặt mà không gian làm việc của bạn đã đặt cho biểu mẫu công khai.",
-          "on": "Người truy cập phải vượt qua kiểm tra trước khi có thể gửi.",
+          "inherit": "Dùng CAPTCHA mà quản trị viên nền tảng đã thiết lập cho biểu mẫu công khai, nếu có.",
+          "on": "Khách truy cập phải vượt qua bước kiểm tra trước khi gửi. Cần có CAPTCHA được thiết lập trên nền tảng; nếu không, việc xuất bản sẽ bị từ chối.",
           "off": "Không kiểm tra. Dựa vào trường bẫy ẩn và giới hạn tần suất."
         },
         "retention": "Giữ câu trả lời trong (ngày)",
@@ -271,6 +271,17 @@
           "perFormPerMinuteHint": "Bài gửi đến biểu mẫu này từ bất kỳ đâu.",
           "perContactPerHour": "Theo liên hệ, mỗi giờ",
           "perContactPerHourHint": "Bài gửi có cùng email hoặc số điện thoại."
+        },
+        "captchaStatus": {
+          "available": "Nền tảng này đã thiết lập CAPTCHA (reCAPTCHA {version}).",
+          "none": "Nền tảng này chưa thiết lập CAPTCHA nên ở đây không có gì được kiểm tra. Hãy nhờ quản trị viên nền tảng thêm CAPTCHA, hoặc dựa vào trường bẫy ẩn và giới hạn tần suất.",
+          "noneOn": "Biểu mẫu này được đặt là luôn kiểm tra, nhưng nền tảng chưa có CAPTCHA nên không kiểm tra gì và không thể xuất bản. Hãy nhờ quản trị viên nền tảng thêm CAPTCHA, hoặc chọn cài đặt khác.",
+          "failed": "Không thể kiểm tra xem CAPTCHA đã được thiết lập hay chưa."
+        },
+        "caught": {
+          "blocked": "{count, plural, =0 {Trường bẫy ẩn chưa chặn bot nào trong tháng này.} other {Trường bẫy ẩn đã chặn # bot trong tháng này.}}",
+          "held": "{count, plural, other {# lượt gửi đang bị giữ lại vì là spam.}}",
+          "review": "Xem lại"
         }
       }
     }

@@ -253,8 +253,8 @@
           "off": "Kapalı"
         },
         "captchaHints": {
-          "inherit": "Çalışma alanınızın herkese açık formlar için belirlediği ayarı kullanır.",
-          "on": "Ziyaretçiler göndermeden önce doğrulamayı geçmek zorundadır.",
+          "inherit": "Varsa, platform yöneticinizin herkese açık formlar için ayarladığı CAPTCHA'yı kullanır.",
+          "on": "Ziyaretçiler göndermeden önce doğrulamayı geçmelidir. Platformda CAPTCHA kurulu olması gerekir; yoksa yayınlama reddedilir.",
           "off": "Doğrulama yok. Gizli tuzak alanına ve istek sınırlarına güvenir."
         },
         "retention": "Yanıtları sakla (gün)",
@@ -271,6 +271,17 @@
           "perFormPerMinuteHint": "Bu forma her yerden gelen gönderimler.",
           "perContactPerHour": "Kişi başına, saat başına",
           "perContactPerHourHint": "Aynı e-posta veya telefon numarasına sahip gönderimler."
+        },
+        "captchaStatus": {
+          "available": "Bu platformda bir CAPTCHA kurulu (reCAPTCHA {version}).",
+          "none": "Bu platformda CAPTCHA kurulu değil, bu yüzden burada hiçbir şey denetlenmiyor. Platform yöneticinizden bir tane eklemesini isteyin ya da gizli tuzak alanına ve hız sınırlarına güvenin.",
+          "noneOn": "Bu form her zaman denetleyecek şekilde ayarlı, ancak platformda CAPTCHA olmadığı için hiçbir şey denetlenmiyor ve form yayınlanamıyor. Platform yöneticinizden bir tane eklemesini isteyin veya başka bir ayar seçin.",
+          "failed": "CAPTCHA kurulu olup olmadığı denetlenemedi."
+        },
+        "caught": {
+          "blocked": "{count, plural, =0 {Gizli tuzak alanı bu ay hiçbir botu durdurmadı.} one {Gizli tuzak alanı bu ay 1 botu durdurdu.} other {Gizli tuzak alanı bu ay # botu durdurdu.}}",
+          "held": "{count, plural, one {1 gönderim spam olarak bekletiliyor.} other {# gönderim spam olarak bekletiliyor.}}",
+          "review": "İncele"
         }
       }
     }

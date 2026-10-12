@@ -1418,7 +1418,8 @@
             "forms_and_links": "リード獲得フォームと共有可能なリンク。",
             "extra_channels": "Telegram、Facebook、Instagramのチャネル。",
             "form_builder": "CRMに連絡先を作成する、ホスト型および埋め込み型のウェブフォーム。このスイッチは有料のフォームアプリが管理します。",
-            "waba_groups": "Cloud API番号からWhatsAppグループを作成・管理します：招待リンク、参加リクエスト、メンバー。番号は公式ビジネスアカウントである必要があります。"
+            "waba_groups": "Cloud API番号からWhatsAppグループを作成・管理します：招待リンク、参加リクエスト、メンバー。番号は公式ビジネスアカウントである必要があります。",
+            "sms": "TwilioまたはMSG91経由の送信専用SMS：送信元を接続し、SMS一斉配信とキャンペーンを送信します。"
           },
           "units": {
             "days": "日",
@@ -1559,7 +1560,8 @@
             "ai_token_limit_monthly": "月間AIトークン数（プラットフォームのキー）",
             "forms": "ウェブフォーム",
             "form_submissions_monthly": "月間フォーム送信数",
-            "ai_form_generations_monthly": "月間AIフォームビルダー生成回数"
+            "ai_form_generations_monthly": "月間AIフォームビルダー生成回数",
+            "sms_monthly": "月間SMS数"
           },
           "featureGroups": {
             "messaging": "メッセージ",
@@ -1596,7 +1598,8 @@
             "forms_and_links": "フォーム、クリックしてチャットのリンク、グループ",
             "extra_channels": "Telegram、Facebook、Instagramチャネル",
             "form_builder": "フォーム（ウェブフォームビルダー）",
-            "waba_groups": "WhatsAppグループ（Cloud API）"
+            "waba_groups": "WhatsAppグループ（Cloud API）",
+            "sms": "SMSチャネル"
           },
           "problems": {
             "required": "この項目は必須です。",
@@ -1648,7 +1651,8 @@
             "ai_token_limit_monthly": "AIアシスタントが暦月内にプラットフォームのキーで使用するトークン数です。独自のキーを使用するワークスペースには上限がありません。",
             "forms": "有効なウェブフォーム（フォームアプリ）。フォームをアーカイブすると枠が空きます。0＝無制限。",
             "form_submissions_monthly": "暦月内に受け付けたフォーム送信数（スパムを除く）。上限を超えた送信も、破棄されず確認用に保存されます。0＝無制限。",
-            "ai_form_generations_monthly": "暦月内のAIフォームビルダーの生成回数（修復の再試行を含む）。0＝無制限。"
+            "ai_form_generations_monthly": "暦月内のAIフォームビルダーの生成回数（修復の再試行を含む）。0＝無制限。",
+            "sms_monthly": "暦月に送信した発信SMSメッセージ数。0 = 無制限。"
           }
         }
       },

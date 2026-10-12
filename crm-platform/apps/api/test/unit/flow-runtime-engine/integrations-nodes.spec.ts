@@ -68,6 +68,8 @@ function newRun(
     triggerText: null,
     status: 'running',
     graph,
+    graphVersionId: null,
+    nodeCount: 0,
     currentNodeId: 'n1',
     stepSeq: 4,
     vars,

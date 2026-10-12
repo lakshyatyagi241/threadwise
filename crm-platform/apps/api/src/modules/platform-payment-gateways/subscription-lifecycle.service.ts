@@ -131,7 +131,15 @@ export class SubscriptionLifecycleService {
     if (evt.subscriptionId) sub = await one(sql`s.gateway_subscription_id = ${evt.subscriptionId}`);
     if (!sub && evt.orderNumber)
       sub = await one(sql`s.meta ->> 'order_number' = ${evt.orderNumber}`);
-    if (!sub && evt.gatewayPlanId) sub = await one(sql`s.gateway_plan_id = ${evt.gatewayPlanId}`);
+    // A plan id alone is shared: gateway_plan_cache makes one plan per account, price and cadence and every workspace on it uses that
+    // id, so 'newest subscription on this plan' would apply the event to some other workspace (TI-009). Only an unambiguous match counts.
+    if (!sub && evt.gatewayPlanId) {
+      const res = await tx.execute(
+        sql`SELECT ${COLS} FROM subscriptions s WHERE s.gateway = ${gateway} AND s.gateway_plan_id = ${evt.gatewayPlanId} ORDER BY s.id DESC LIMIT 2`,
+      );
+      const rows = res.rows as Raw[];
+      if (rows.length === 1) sub = toSub(rows[0]!);
+    }
     if (sub && !sub.gatewaySubscriptionId && evt.subscriptionId) {
       await tx.execute(
         sql`UPDATE subscriptions SET gateway_subscription_id = ${evt.subscriptionId} WHERE org_id = ${sub.orgId} AND id = ${sub.id}`,

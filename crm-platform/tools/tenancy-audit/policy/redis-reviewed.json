@@ -1,0 +1,154 @@
+{
+  "common/interceptors/idempotency.interceptor.ts": {
+    "status": "reviewed",
+    "reason": "key idem:<orgId>:<key>, slot = actor+route, body fingerprint"
+  },
+  "infra/providers/whatsapp/media/upload-cache.ts": {
+    "status": "reviewed",
+    "reason": "uploadCacheKey includes orgId, channel, phone number, sha256"
+  },
+  "modules/chat-conversations/channel-dispatcher.service.ts": {
+    "status": "reviewed",
+    "reason": "key chat:dispatch:<orgId>:<channel>:<ref>"
+  },
+  "modules/forms-builder/form-notification.consumer.ts": {
+    "status": "reviewed",
+    "reason": "submissionId is a UUID (globally unique)"
+  },
+  "modules/faq-knowledge/faq-embedding.service.ts": {
+    "status": "reviewed",
+    "reason": "shared cache of query-text embeddings keyed by model+sha256(text); deterministic function of the text, holds no tenant data"
+  },
+  "modules/broadcasts/tracking/link-redirect.service.ts": {
+    "status": "reviewed",
+    "reason": "per-IP rate limit, global by policy"
+  },
+  "modules/channel-telegram/inbound.service.ts": {
+    "status": "reviewed",
+    "reason": "per-bot-token rate limit; token is tenant-specific"
+  },
+  "modules/chatbot-widget/widget-throttle.service.ts": {
+    "status": "reviewed",
+    "reason": "per-IP rate limit, global by policy"
+  },
+  "modules/crm/invoicing/invoice-public.service.ts": {
+    "status": "reviewed",
+    "reason": "public-link rate limit by scope+key"
+  },
+  "modules/dashboards-analytics-charts/health.service.ts": {
+    "status": "reviewed",
+    "reason": "health probe value, no data"
+  },
+  "modules/localization-translation/languages.service.ts": {
+    "status": "reviewed",
+    "reason": "platform language list"
+  },
+  "modules/roles-permissions/platform-rbac.service.ts": {
+    "status": "reviewed",
+    "reason": "operator RBAC cache, platform scope"
+  },
+  "infra/providers/localization-translation/redis-stores.ts": {
+    "status": "baseline-unreviewed",
+    "reason": "key template has no org token by heuristic; not read line by line yet"
+  },
+  "modules/auth/flows/login-alert.service.ts": {
+    "status": "baseline-unreviewed",
+    "reason": "auth keys: random challenge/session ids or IP/email counters, resolved before a tenant exists"
+  },
+  "modules/auth/flows/login.service.ts": {
+    "status": "baseline-unreviewed",
+    "reason": "auth keys: random challenge/session ids or IP/email counters, resolved before a tenant exists"
+  },
+  "modules/auth/flows/signup.service.ts": {
+    "status": "baseline-unreviewed",
+    "reason": "auth keys: random challenge/session ids or IP/email counters, resolved before a tenant exists"
+  },
+  "modules/auth/maintenance/otp-template-refresh.service.ts": {
+    "status": "baseline-unreviewed",
+    "reason": "auth keys: random challenge/session ids or IP/email counters, resolved before a tenant exists"
+  },
+  "modules/auth/platform/impersonation.service.ts": {
+    "status": "baseline-unreviewed",
+    "reason": "auth keys: random challenge/session ids or IP/email counters, resolved before a tenant exists"
+  },
+  "modules/auth/platform/operator-auth.service.ts": {
+    "status": "baseline-unreviewed",
+    "reason": "auth keys: random challenge/session ids or IP/email counters, resolved before a tenant exists"
+  },
+  "modules/auth/security/emergency-halt.service.ts": {
+    "status": "baseline-unreviewed",
+    "reason": "auth keys: random challenge/session ids or IP/email counters, resolved before a tenant exists"
+  },
+  "modules/auth/security/rate-limit.service.ts": {
+    "status": "baseline-unreviewed",
+    "reason": "auth keys: random challenge/session ids or IP/email counters, resolved before a tenant exists"
+  },
+  "modules/auth/sessions/epoch.service.ts": {
+    "status": "baseline-unreviewed",
+    "reason": "auth keys: random challenge/session ids or IP/email counters, resolved before a tenant exists"
+  },
+  "modules/auth/sessions/session.service.ts": {
+    "status": "baseline-unreviewed",
+    "reason": "auth keys: random challenge/session ids or IP/email counters, resolved before a tenant exists"
+  },
+  "modules/broadcasts/send-safety.ts": {
+    "status": "baseline-unreviewed",
+    "reason": "key template has no org token by heuristic; not read line by line yet"
+  },
+  "modules/chrome-extension-sheets-addon/sheets-key.guard.ts": {
+    "status": "baseline-unreviewed",
+    "reason": "key template has no org token by heuristic; not read line by line yet"
+  },
+  "modules/developer-rest-api-v1/auth/bearer-api-key.guard.ts": {
+    "status": "baseline-unreviewed",
+    "reason": "key template has no org token by heuristic; not read line by line yet"
+  },
+  "modules/faq-knowledge/faq-embed.worker.ts": {
+    "status": "baseline-unreviewed",
+    "reason": "key template has no org token by heuristic; not read line by line yet"
+  },
+  "modules/node-bridge-runtime/inbox/inbox-bridge.service.ts": {
+    "status": "baseline-unreviewed",
+    "reason": "key template has no org token by heuristic; not read line by line yet"
+  },
+  "modules/node-bridge-runtime/inbox/qr-channel.adapter.ts": {
+    "status": "baseline-unreviewed",
+    "reason": "key template has no org token by heuristic; not read line by line yet"
+  },
+  "modules/node-bridge-runtime/runtime/device-runtime.service.ts": {
+    "status": "baseline-unreviewed",
+    "reason": "key template has no org token by heuristic; not read line by line yet"
+  },
+  "modules/platform-infrastructure/coordination/redis-lock.service.ts": {
+    "status": "baseline-unreviewed",
+    "reason": "key template has no org token by heuristic; not read line by line yet"
+  },
+  "modules/platform-infrastructure/observability/worker-heartbeat.service.ts": {
+    "status": "baseline-unreviewed",
+    "reason": "key template has no org token by heuristic; not read line by line yet"
+  },
+  "modules/platform-infrastructure/observability/worker-status.service.ts": {
+    "status": "baseline-unreviewed",
+    "reason": "key template has no org token by heuristic; not read line by line yet"
+  },
+  "modules/public-api/api-key-access.service.ts": {
+    "status": "reviewed",
+    "reason": "rate-limit counters per key prefix (ratelimit:apikey:<prefix>:<minute>; the prefix is unique to one workspace) and failed-auth counters per scope+IP (apikey:authfail:<scope>:<ip>, global by policy, TI-013)"
+  },
+  "modules/shopify-woocommerce/concierge.service.ts": {
+    "status": "baseline-unreviewed",
+    "reason": "key template has no org token by heuristic; not read line by line yet"
+  },
+  "modules/shopify-woocommerce/webhook.service.ts": {
+    "status": "baseline-unreviewed",
+    "reason": "key template has no org token by heuristic; not read line by line yet"
+  },
+  "modules/storefront-builder/public/checkout.service.ts": {
+    "status": "baseline-unreviewed",
+    "reason": "key template has no org token by heuristic; not read line by line yet"
+  },
+  "modules/storefront-builder/public/public-rate-limiter.ts": {
+    "status": "baseline-unreviewed",
+    "reason": "key template has no org token by heuristic; not read line by line yet"
+  }
+}

@@ -78,7 +78,8 @@
       "noMatchMessage": "Altere a pesquisa ou os filtros para ver mais.",
       "loadMore": "Carregar mais",
       "loadingMore": "Carregando mais",
-      "loaded": "{count, plural, one {# espaço de trabalho exibido} other {# espaços de trabalho exibidos}}"
+      "loaded": "{count, plural, one {# espaço de trabalho exibido} other {# espaços de trabalho exibidos}}",
+      "retentionLink": "Retenção"
     },
     "cell": {
       "suspended": "Suspenso",
@@ -252,6 +253,147 @@
         "text": "Tickets, conversas e o histórico de suporte deste espaço de trabalho.",
         "open": "Abrir o registro de suporte",
         "openTickets": "{count, plural, one {# ticket aberto} other {# tickets abertos}}"
+      }
+    },
+    "retention": {
+      "crumb": "Retenção",
+      "title": "Retenção de espaços de trabalho",
+      "subtitle": "Espaços de trabalho inativos, do mais inativo ao menos: quando cada um é arquivado e apagado, os lembretes enviados e os controles para protegê-lo ou restaurá-lo.",
+      "backToList": "Voltar aos espaços de trabalho",
+      "deniedTitle": "Sem acesso",
+      "tableLabel": "Retenção de espaços de trabalho",
+      "status": {
+        "active": "Ativo",
+        "archived": "Arquivado",
+        "suspended": "Suspenso",
+        "deleted": "Excluído pelo proprietário"
+      },
+      "filters": {
+        "label": "Filtros",
+        "status": "Status",
+        "allStatuses": "Todos os status",
+        "minDays": "Mínimo de dias de inatividade",
+        "neverDeleteOnly": "Somente \"Nunca excluir\"",
+        "clear": "Limpar filtros"
+      },
+      "columns": {
+        "workspace": "Espaço de trabalho",
+        "status": "Status",
+        "daysInactive": "Dias de inatividade",
+        "lastActivity": "Última atividade",
+        "archiveOn": "Arquivar em",
+        "eraseOn": "Apagar em",
+        "reminders": "Lembretes enviados",
+        "protection": "Proteção",
+        "actions": "Ações"
+      },
+      "remindersArchive": "Arquivamento {n}/3",
+      "remindersErase": "Exclusão {n}/3",
+      "emptyTitle": "Nenhum espaço de trabalho para mostrar",
+      "emptyMessage": "Os espaços de trabalho aparecem aqui quando existirem.",
+      "noMatchTitle": "Nenhum espaço de trabalho corresponde",
+      "noMatchMessage": "Altere os filtros para ver mais.",
+      "loadMore": "Carregar mais",
+      "loadingMore": "Carregando mais",
+      "loaded": "{count, plural, one {# espaço de trabalho exibido} many {# espaços de trabalho exibidos} other {# espaços de trabalho exibidos}}",
+      "badge": {
+        "neverDelete": "Nunca excluir",
+        "legalHold": "Retenção legal",
+        "paidPlan": "Plano pago (isento)",
+        "paidPlanHint": "Um espaço de trabalho com plano pago ativo nunca é arquivado por inatividade.",
+        "until": "Até {date}",
+        "indefinite": "Sem expiração",
+        "by": "Definido por {who}"
+      },
+      "actions": {
+        "menu": "Ações de retenção de {name}",
+        "history": "Histórico",
+        "policy": "Alterar prazos",
+        "exemptOn": "Nunca excluir",
+        "exemptOff": "Remover \"Nunca excluir\"",
+        "restore": "Restaurar",
+        "holdOn": "Aplicar retenção legal",
+        "holdOff": "Suspender retenção legal"
+      },
+      "event": {
+        "reminder_sent": "Lembrete enviado",
+        "archived": "Arquivado",
+        "deleted": "Apagado",
+        "delete_blocked": "Exclusão bloqueada",
+        "restored": "Restaurado",
+        "policy_changed": "Prazos alterados",
+        "exemption_set": "\"Nunca excluir\" ativado",
+        "exemption_cleared": "\"Nunca excluir\" removido",
+        "legal_hold_set": "Retenção legal aplicada",
+        "legal_hold_cleared": "Retenção legal suspensa"
+      },
+      "history": {
+        "title": "Histórico de {name}",
+        "emptyTitle": "Ainda sem histórico",
+        "emptyMessage": "Lembretes e alterações aparecem aqui.",
+        "stage": "Etapa",
+        "stages": {
+          "archive": "Arquivar",
+          "delete": "Apagar"
+        },
+        "reminderNo": "lembrete {n}",
+        "daysInactive": "{count, plural, one {# dia de inatividade} many {# dias de inatividade} other {# dias de inatividade}}",
+        "by": "Por",
+        "system": "Sistema",
+        "reason": "Motivo"
+      },
+      "dialog": {
+        "reason": "Motivo",
+        "reasonHint": "De 5 a 500 caracteres. Fica guardado no registro de conformidade.",
+        "errors": {
+          "reasonShort": "Escreva pelo menos 5 caracteres.",
+          "reasonLong": "Use no máximo 500 caracteres.",
+          "archiveWhole": "Informe um número inteiro de dias.",
+          "archiveMin": "Arquivar após no mínimo 60 dias.",
+          "archiveMax": "Arquivar após no máximo 3650 dias.",
+          "eraseWhole": "Informe um número inteiro de dias.",
+          "eraseMin": "Apagar após no mínimo 120 dias.",
+          "eraseMax": "Apagar após no máximo 7300 dias.",
+          "gap": "A exclusão deve ocorrer pelo menos {days} dias após o arquivamento.",
+          "noChange": "Altere pelo menos um prazo.",
+          "untilPast": "Escolha uma data futura."
+        },
+        "mode": "Origem do prazo",
+        "days": "Dias",
+        "useDefault": "Usar padrão da plataforma",
+        "custom": "Dias personalizados",
+        "policyTitle": "Alterar prazos de {name}",
+        "policyMessage": "Dias de inatividade antes de o espaço de trabalho ser arquivado e antes de ser apagado. Os lembretes acompanham esses prazos.",
+        "archiveAfter": "Arquivar após (dias)",
+        "archiveHint": "Padrão da plataforma: {default} dias; mínimo {min}.",
+        "eraseAfter": "Apagar após (dias)",
+        "eraseHint": "Padrão da plataforma: {default} dias; mínimo {min}.",
+        "policyConfirm": "Salvar prazos",
+        "policyDone": "Prazos salvos para {name}.",
+        "exemptOnTitle": "Nunca excluir {name}?",
+        "exemptOnMessage": "Enquanto isto estiver ativado, o espaço de trabalho nunca é arquivado nem apagado por inatividade.",
+        "exemptOnConfirm": "Ativar \"Nunca excluir\"",
+        "exemptOnDone": "{name} nunca será excluído.",
+        "exemptOffTitle": "Remover \"Nunca excluir\" de {name}?",
+        "exemptOffMessage": "O espaço de trabalho volta a seguir seus prazos e pode ser arquivado e apagado.",
+        "exemptOffConfirm": "Remover \"Nunca excluir\"",
+        "exemptOffDone": "{name} volta a seguir seus prazos.",
+        "until": "Revisar em (opcional)",
+        "untilHint": "A proteção termina nesta data para ser analisada de novo. Deixe vazio para não expirar.",
+        "restoreTitle": "Restaurar {name}?",
+        "restoreMessage": "O espaço de trabalho fica ativo, seus usuários podem entrar de novo e o contador de inatividade reinicia.",
+        "restoreConfirm": "Restaurar espaço de trabalho",
+        "restoreDone": "{name} foi restaurado.",
+        "holdOnTitle": "Aplicar retenção legal a {name}?",
+        "holdOnMessage": "Enquanto a retenção estiver ativa, o espaço de trabalho nunca é arquivado nem apagado, quaisquer que sejam seus prazos.",
+        "holdOnSure": "Entendo que isso interrompe todo arquivamento e exclusão.",
+        "holdOnConfirm": "Aplicar retenção legal",
+        "holdOnDone": "Retenção legal aplicada a {name}.",
+        "holdOffTitle": "Suspender a retenção legal de {name}?",
+        "holdOffMessage": "O espaço de trabalho volta a seguir seus prazos e pode ser arquivado e apagado.",
+        "holdOffSure": "Confirmo que a retenção pode ser suspensa.",
+        "holdOffConfirm": "Suspender retenção legal",
+        "holdOffDone": "Retenção legal suspensa em {name}."
       }
     }
   }

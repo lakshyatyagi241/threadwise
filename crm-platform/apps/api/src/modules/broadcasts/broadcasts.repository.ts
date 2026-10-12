@@ -199,9 +199,10 @@ export class BroadcastsRepository {
   /** The row, locked, so a concurrent retry, delete or run waits for this decision. */
   async lock(tx: Tx, orgId: number, uuid: string) {
     const res = await tx.execute(sql`
-      SELECT id, status FROM broadcasts WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid FOR UPDATE`);
-    const r = res.rows[0] as { id: number | string; status: string } | undefined;
-    return r ? { id: Number(r.id), status: r.status } : undefined;
+      SELECT id, status, provider FROM broadcasts WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid FOR UPDATE`);
+    const r = res.rows[0] as
+      { id: number | string; status: string; provider: string | null } | undefined;
+    return r ? { id: Number(r.id), status: r.status, provider: r.provider } : undefined;
   }
 
   /** Recipients go with it (foreign key cascade). */

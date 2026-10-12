@@ -1,0 +1,58 @@
+{
+  "web-forms": {
+    "payment": {
+      "title": "Płatność",
+      "description": "Pobierz opłatę od odwiedzającego w Twojej bramce płatności po wysłaniu formularza. Formularz jest uznany za opłacony dopiero po potwierdzeniu przez bramkę.",
+      "enabled": "Przyjmuj płatności",
+      "enabledHint": "Po zapisaniu odpowiedzi odwiedzający trafia na stronę płatności Twojej bramki.",
+      "gateway": {
+        "checking": "Sprawdzanie Twojej bramki płatności...",
+        "failed": "Nie udało się sprawdzić Twojej bramki płatności. Spróbuj ponownie za chwilę.",
+        "ready": "Płatności trafiają do {name} ({mode}).",
+        "mode": {
+          "test": "tryb testowy",
+          "live": "tryb produkcyjny"
+        },
+        "none": "Nie połączono żadnej bramki płatności, więc ten formularz nie może jeszcze przyjmować płatności.",
+        "noLink": "{name} nie tworzy hostowanego linku do płatności, więc nie można jej użyć w formularzu. Połącz Razorpay lub Stripe.",
+        "open": "Otwórz bramki płatności"
+      },
+      "amountType": "Sposób ustalania kwoty",
+      "amountTypes": {
+        "fixed": "Stała cena",
+        "from_field": "Z pola wyboru",
+        "pay_what_you_want": "Odwiedzający wpisuje kwotę"
+      },
+      "amountTypeHints": {
+        "fixed": "Każdy odwiedzający płaci taką samą cenę.",
+        "from_field": "Każda opcja pola listy rozwijanej lub przycisków radio ma własną cenę.",
+        "pay_what_you_want": "Do darowizn i napiwków. Ty ustalasz najmniejszą i największą kwotę."
+      },
+      "currency": "Waluta",
+      "currencyHint": "Trzy litery, np. INR lub USD. Twoja bramka musi ją obsługiwać.",
+      "amount": "Cena",
+      "amountHint": "W {currency}, zapisana tak, jak byś ją wypowiedział, na przykład 499.00.",
+      "fieldChoice": "Pole wyboru",
+      "fieldNumber": "Pole kwoty",
+      "fieldNone": "Wybierz pole",
+      "noChoiceFields": "Najpierw dodaj do formularza pole listy rozwijanej lub przycisków radio.",
+      "noNumberFields": "Najpierw dodaj do formularza pole liczby lub waluty.",
+      "optionPrices": "Cena każdej opcji",
+      "optionPrice": "Cena dla „{label}”",
+      "min": "Najmniejsza kwota",
+      "minHint": "Niższe kwoty są odrzucane.",
+      "max": "Największa kwota (opcjonalnie)",
+      "maxHint": "Zostaw puste, aby nie ustalać górnego limitu.",
+      "descriptionLabel": "Widoczne na stronie płatności",
+      "descriptionHint": "Krótka informacja dla płacącego, np. za co płaci.",
+      "issues": {
+        "amountRequired": "Wpisz cenę.",
+        "fieldRequired": "Wybierz pole, z którego pochodzi kwota.",
+        "fieldNotRequired": "Ustaw to pole jako wymagane, aby każdy odwiedzający podał kwotę.",
+        "optionsNeedAmounts": "Podaj cenę dla każdej opcji.",
+        "minRequired": "Wpisz najmniejszą kwotę.",
+        "minAboveMax": "Najmniejsza kwota nie może być większa od największej."
+      }
+    }
+  }
+}

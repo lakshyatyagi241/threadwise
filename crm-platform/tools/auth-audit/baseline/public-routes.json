@@ -124,6 +124,8 @@
     "POST /v2/shopify/embedded/session",
     "GET /v2/shopify/oauth/callback",
     "POST /v2/shopify/webhook/:secret",
+    "POST /v2/sms/status",
+    "POST /v2/sms/status/:secret",
     "POST /v2/store-public/:slug/abandon",
     "POST /v2/store-public/:slug/checkout",
     "POST /v2/store-public/:slug/coupon",

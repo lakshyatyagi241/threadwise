@@ -5,6 +5,7 @@ import type { FlowRunEndReason, FlowRunSource, FlowRunStatus } from '@crm/contra
 import type { RuntimeGraph } from '../graph/runtime-graph';
 import type { LastOut, MenuMemory, RunState, WaitSpec } from './types';
 import type { VariableBag } from './variables';
+import { hashGraph } from './step-log';
 
 type Row = Record<string, unknown>;
 const rowsOf = (res: unknown): Row[] => (res as { rows: Row[] }).rows;
@@ -17,12 +18,13 @@ const json = (v: unknown) => sql`${JSON.stringify(v ?? null)}::jsonb`;
 /** The columns a run is read with, joined to the channel and contact the sender needs. */
 const SELECT = sql`
   r.id, r.uuid, r.org_id, r.flow_id, r.subscriber_id, r.contact_id, r.channel_id, r.peer_key, r.conversation_id, r.source,
-  r.trigger_text, r.status, r.graph, r.current_node_id, r.step_seq, r.vars, r.visits, r.wait, r.last_menu, r.last_out,
+  r.trigger_text, r.status, COALESCE(r.graph, gv.graph) AS graph, r.graph_version_id, r.node_count, r.current_node_id, r.step_seq, r.vars, r.visits, r.wait, r.last_menu, r.last_out,
   r.timeout_seconds, r.cooldown_seconds, r.halt_reason, r.started_at, r.expires_at, r.max_expires_at, r.resume_at,
   ch.uuid AS channel_uuid, ch.kind AS channel_kind, ct.uuid AS contact_uuid
   FROM flow_runs r
   LEFT JOIN channels ch ON ch.org_id = r.org_id AND ch.id = r.channel_id
-  LEFT JOIN contacts ct ON ct.org_id = r.org_id AND ct.id = r.contact_id`;
+  LEFT JOIN contacts ct ON ct.org_id = r.org_id AND ct.id = r.contact_id
+  LEFT JOIN flow_graph_versions gv ON gv.org_id = r.org_id AND gv.id = r.graph_version_id`;
 
 function toState(r: Row): RunState {
   const menus = (r.last_menu ?? { latest: null, byNode: {} }) as MenuMemory;
@@ -43,6 +45,8 @@ function toState(r: Row): RunState {
     triggerText: (r.trigger_text as string | null) ?? null,
     status: r.status as FlowRunStatus,
     graph: r.graph as RuntimeGraph,
+    graphVersionId: numOrNull(r.graph_version_id),
+    nodeCount: num(r.node_count),
     currentNodeId: (r.current_node_id as string | null) ?? null,
     stepSeq: num(r.step_seq),
     vars: (r.vars ?? {}) as VariableBag,
@@ -97,20 +101,41 @@ export interface RunPatch {
   endReason: FlowRunEndReason | null;
   failureCode: string | null;
   failureReason: string | null;
-  /** Set only when a Sub-flow swapped the graph: the run row keeps the new graph. Left out, the stored graph is untouched. */
-  graph?: RuntimeGraph;
+  /** Set only when a Sub-flow swapped the graph: the run points at the new flow's stored version. Left out, the graph is untouched. */
+  graphVersionId?: number;
+  /** What this step adds to the run's log totals. */
+  log: { nodes: number; errors: number; ms: number };
 }
 
 /** SQL for runs and their log. Every method runs in the caller's transaction, under the tenant's row-level security. */
 @Injectable()
 export class RunRepository {
+  /**
+   * Stores a graph once per flow and content: a thousand runs of the same version share one row. Returns its id.
+   * The no-op update makes the insert return the existing row's id on a repeat.
+   */
+  async upsertGraphVersion(
+    tx: Tx,
+    orgId: number,
+    flowId: number,
+    graph: RuntimeGraph,
+  ): Promise<number> {
+    const res = await tx.execute(sql`
+      INSERT INTO flow_graph_versions (org_id, flow_id, hash, graph)
+      VALUES (${orgId}, ${flowId}, ${hashGraph(graph)}, ${json(graph)})
+      ON CONFLICT (org_id, flow_id, hash) DO UPDATE SET hash = EXCLUDED.hash
+      RETURNING id`);
+    return num(rowsOf(res)[0]!.id);
+  }
+
   async insert(tx: Tx, orgId: number, r: NewRun): Promise<{ id: number; uuid: string }> {
+    const versionId = await this.upsertGraphVersion(tx, orgId, r.flowId, r.graph);
     const res = await tx.execute(sql`
       INSERT INTO flow_runs (org_id, flow_id, subscriber_id, contact_id, channel_id, peer_key, conversation_id, source, trigger_ref,
-                             trigger_text, graph, current_node_id, vars, timeout_seconds, cooldown_seconds, variant, campaign_id,
+                             trigger_text, graph_version_id, current_node_id, vars, timeout_seconds, cooldown_seconds, variant, campaign_id,
                              max_expires_at)
       VALUES (${orgId}, ${r.flowId}, ${r.subscriberId}, ${r.contactId}, ${r.channelId}, ${r.peerKey}, ${r.conversationId},
-              ${r.source}, ${r.triggerRef}, ${r.triggerText}, ${json(r.graph)}, ${r.currentNodeId}, ${json(r.vars)},
+              ${r.source}, ${r.triggerRef}, ${r.triggerText}, ${versionId}, ${r.currentNodeId}, ${json(r.vars)},
               ${r.timeoutSeconds}, ${r.cooldownSeconds}, ${r.variant}, ${r.campaignId}, ${r.maxExpiresAt.toISOString()}::timestamptz)
       RETURNING id, uuid`);
     const row = rowsOf(res)[0]!;
@@ -179,7 +204,10 @@ export class RunRepository {
         resume_at = ${p.resumeAt?.toISOString() ?? null}::timestamptz,
         ended_at = ${p.endedAt?.toISOString() ?? null}::timestamptz,
         end_reason = ${p.endReason}, failure_code = ${p.failureCode}, failure_reason = ${p.failureReason},
-        graph = ${p.graph ? json(p.graph) : sql`graph`}
+        node_count = node_count + ${p.log.nodes}, error_count = error_count + ${p.log.errors},
+        duration_ms = duration_ms + ${p.log.ms},
+        graph = ${p.graphVersionId !== undefined ? sql`NULL` : sql`graph`},
+        graph_version_id = ${p.graphVersionId !== undefined ? p.graphVersionId : sql`graph_version_id`}
       WHERE org_id = ${orgId} AND id = ${id} AND step_seq = ${expectedSeq}
       RETURNING id`);
     return rowsOf(res).length > 0;
@@ -218,11 +246,46 @@ export class RunRepository {
       event: string;
       detail?: Record<string, unknown>;
       error?: string | null;
+      nodeLabel?: string | null;
+      outcome?: string | null;
+      port?: number | null;
+      durationMs?: number | null;
+      attempt?: number | null;
+      summary?: string | null;
+      errorCode?: string | null;
     },
   ): Promise<void> {
     await tx.execute(sql`
-      INSERT INTO flow_run_steps (org_id, run_id, seq, node_id, node_type, event, detail, error)
-      VALUES (${orgId}, ${runId}, ${s.seq}, ${s.nodeId}, ${s.nodeType}, ${s.event}, ${json(s.detail ?? {})}, ${s.error ?? null})`);
+      INSERT INTO flow_run_steps (org_id, run_id, seq, node_id, node_type, event, detail, error, node_label, outcome, port,
+                                  duration_ms, attempt, summary, error_code)
+      VALUES (${orgId}, ${runId}, ${s.seq}, ${s.nodeId}, ${s.nodeType}, ${s.event}, ${json(s.detail ?? {})}, ${s.error ?? null},
+              ${s.nodeLabel ?? null}, ${s.outcome ?? null}, ${s.port ?? null}, ${s.durationMs ?? null}, ${s.attempt ?? null},
+              ${s.summary ?? null}, ${s.errorCode ?? null})`);
+  }
+
+  /**
+   * The retention sweep (cross-tenant: run as privileged): deletes runs that ended before `cutoff`, a batch at a time. Their steps
+   * go with them (cascade). A live run has no ended_at, so it is never touched.
+   */
+  async purgeEndedBefore(tx: Tx, cutoff: Date, limit: number): Promise<number> {
+    const res = await tx.execute(sql`
+      DELETE FROM flow_runs WHERE (org_id, id) IN (
+        SELECT org_id, id FROM flow_runs WHERE ended_at IS NOT NULL AND ended_at < ${cutoff.toISOString()}::timestamptz
+        ORDER BY ended_at LIMIT ${limit})
+      RETURNING id`);
+    return rowsOf(res).length;
+  }
+
+  /** Graph versions no run points at any more and older than `cutoff`: nothing can show them, so they go. */
+  async purgeUnusedGraphVersions(tx: Tx, cutoff: Date, limit: number): Promise<number> {
+    const res = await tx.execute(sql`
+      DELETE FROM flow_graph_versions WHERE (org_id, id) IN (
+        SELECT v.org_id, v.id FROM flow_graph_versions v
+        WHERE v.created_at < ${cutoff.toISOString()}::timestamptz
+          AND NOT EXISTS (SELECT 1 FROM flow_runs r WHERE r.org_id = v.org_id AND r.graph_version_id = v.id)
+        LIMIT ${limit})
+      RETURNING id`);
+    return rowsOf(res).length;
   }
 
   /** Ends a live run from outside (replaced by a new start, an operator took over, cancelled). */

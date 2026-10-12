@@ -141,6 +141,9 @@
       },
       "template": "Şablon mesajı: {name}",
       "unavailable": "Mesaj kullanılamıyor",
+      "unsupported": "Müşteri, bu kanalın görüntüleyemediği bir şey gönderdi.",
+      "forwarded": "İletildi",
+      "referral": "Bir reklamdan veya bağlantıdan geldi",
       "sentIn": "{lang} dilinde gönderildi. Yazdığınız metni göster",
       "translatedFrom": "{lang} dilinden çevrildi. Orijinali göster",
       "bot": "Bot",
@@ -274,7 +277,75 @@
         "hearts": "Kalpler ve semboller",
         "objects": "Nesneler"
       },
-      "cancelReply": "Yanıtı iptal et"
+      "cancelReply": "Yanıtı iptal et",
+      "share": {
+        "open": "Konum, kişi veya düğme paylaş",
+        "title": "Paylaş",
+        "eyebrow": "Müşteriye gönder",
+        "close": "Kapat",
+        "cancel": "İptal",
+        "send": "Gönder",
+        "sending": "Gönderiliyor…",
+        "sent": "Gönderildi",
+        "windowHint": "Her serbest biçimli mesaj gibi bunlar da bir WhatsApp Cloud API numarasında açık bir 24 saatlik pencere gerektirir.",
+        "tab": {
+          "location": "Konum",
+          "contacts": "Kişi",
+          "buttons": "Düğmeler"
+        },
+        "location": {
+          "latitude": "Enlem",
+          "longitude": "Boylam",
+          "name": "Yer adı (isteğe bağlı)",
+          "address": "Adres (isteğe bağlı)",
+          "pasteHint": "Bir haritadan \"28.6139, 77.2090\" değerini buraya yapıştırabilirsiniz."
+        },
+        "contact": {
+          "card": "Kişi {n}",
+          "name": "Ad",
+          "org": "Şirket (isteğe bağlı)",
+          "phone": "Telefon",
+          "email": "E-posta",
+          "remove": "{n}. kişiyi kaldır",
+          "add": "Başka bir kişi ekle"
+        },
+        "buttons": {
+          "type": "Düğme türü",
+          "kind": {
+            "buttons": "Yanıt düğmeleri",
+            "cta_url": "Bağlantı düğmesi",
+            "list": "Liste"
+          },
+          "header": "Üst bilgi (isteğe bağlı)",
+          "body": "Mesaj",
+          "footer": "Alt bilgi (isteğe bağlı)",
+          "titles": "Düğmeler (en fazla 3)",
+          "titleN": "Düğme {n}",
+          "add": "Düğme ekle",
+          "linkText": "Düğme metni",
+          "url": "Bağlantı",
+          "listButton": "Listeyi açan düğme",
+          "section": "Bölüm {n}",
+          "sectionTitle": "Bölüm başlığı",
+          "rowTitle": "Satır {n} başlığı",
+          "rowDescription": "Satır {n} açıklaması (isteğe bağlı)",
+          "addRow": "Satır ekle",
+          "addSection": "Bölüm ekle",
+          "removeSection": "{n}. bölümü kaldır",
+          "rows": "Satırlar",
+          "rowCount": "{n} / {max} satır"
+        },
+        "problem": {
+          "required": "{label} gerekli",
+          "range": "{label} aralığın dışında",
+          "phoneOrEmail": "Bir telefon numarası veya e-posta ekleyin",
+          "phone": "Geçerli bir telefon numarası girin",
+          "email": "Geçerli bir e-posta adresi girin",
+          "duplicate": "{label} başka bir düğmeyle aynı",
+          "url": "http:// veya https:// ile başlayan bir bağlantı girin",
+          "tooManyRows": "Bir liste toplamda en fazla 10 satır içerebilir"
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Notlar ve zaman çizelgesi",

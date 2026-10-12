@@ -106,7 +106,8 @@
         "light": "Açık",
         "dark": "Koyu",
         "schemeHint": "Renk modu Açık olarak ayarlı, bu yüzden önizlenecek koyu bir sürüm yok.",
-        "frameTitle": "Formun canlı önizlemesi"
+        "frameTitle": "Formun canlı önizlemesi",
+        "popup": "Açılır pencere"
       }
     }
   }

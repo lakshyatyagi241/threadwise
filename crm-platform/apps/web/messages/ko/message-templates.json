@@ -65,7 +65,7 @@
     },
     "library": {
       "title": "템플릿 라이브러리",
-      "intro": "WhatsApp 메시지 템플릿을 작성하고, Meta 검토를 위해 제출하며, 여기에서 상태를 확인하세요.",
+      "intro": "스타터 템플릿을 고르거나 직접 제출하세요. 모든 템플릿은 Meta의 승인을 받기 전에 <link>WhatsApp 가이드라인</link>을 따라야 합니다.",
       "sync": "Meta에서 동기화",
       "syncing": "동기화 중...",
       "syncHint": "Meta에서 템플릿 가져오기",

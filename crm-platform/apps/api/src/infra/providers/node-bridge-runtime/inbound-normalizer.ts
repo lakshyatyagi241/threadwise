@@ -50,6 +50,15 @@ function vcardPhone(vcard: string): string | null {
   const v = m?.[1]?.replace(/[^\d+]/g, '');
   return v || null;
 }
+/** Every value of a vCard property (`TEL`, `EMAIL`), phones keep digits and `+` only. */
+function vcardValues(vcard: string, prop: 'TEL' | 'EMAIL'): string[] {
+  const out: string[] = [];
+  for (const m of vcard.matchAll(new RegExp(`^${prop}[^:\\r\\n]*:([^\\r\\n]+)`, 'gim'))) {
+    const v = prop === 'TEL' ? m[1]!.replace(/[^\d+]/g, '') : m[1]!.trim();
+    if (v) out.push(v);
+  }
+  return out.slice(0, 5);
+}
 const vcardName = (vcard: string): string | null =>
   /^FN:([^\r\n]+)/im.exec(vcard)?.[1]?.trim() ?? null;
 
@@ -78,6 +87,45 @@ function nativeFlowText(r: Record<string, any> | undefined): string | null {
     return null;
   }
 }
+
+/** Wrappers WhatsApp puts around the real content (disappearing chats, view-once, a captioned document, an edit). */
+const WRAPPERS = [
+  'ephemeralMessage',
+  'viewOnceMessage',
+  'viewOnceMessageV2',
+  'viewOnceMessageV2Extension',
+  'documentWithCaptionMessage',
+  'editedMessage',
+] as const;
+
+export function unwrap(
+  content: Record<string, any> | null | undefined,
+): Record<string, any> | null {
+  let cur = content ?? null;
+  for (let i = 0; cur && i < 4; i++) {
+    const key = WRAPPERS.find((w) => cur![w]?.message);
+    if (!key) break;
+    cur = cur[key].message;
+  }
+  return cur;
+}
+
+/** Message types the inbox has no bubble for: kept as a labelled placeholder with the raw type. */
+const UNSUPPORTED_KEYS: Record<string, string> = {
+  pollCreationMessage: 'Poll',
+  pollCreationMessageV2: 'Poll',
+  pollCreationMessageV3: 'Poll',
+  pollUpdateMessage: 'Poll vote',
+  productMessage: 'Product',
+  orderMessage: 'Order',
+  listMessage: 'List',
+  buttonsMessage: 'Buttons',
+  templateMessage: 'Template',
+  interactiveMessage: 'Interactive message',
+  groupInviteMessage: 'Group invite',
+  eventMessage: 'Event',
+  paymentInviteMessage: 'Payment',
+};
 
 const MEDIA_KEYS = [
   ['imageMessage', 'image'],
@@ -113,7 +161,7 @@ export function normalizeMessage(
   const timestamp = new Date((ts ?? now.getTime() / 1000) * 1000);
   if (now.getTime() - timestamp.getTime() > (opts.maxAgeMs ?? STALE_AFTER_MS)) return null;
 
-  const content = msg.message;
+  const content = unwrap(msg.message);
   if (!content) return null; // protocol, status and key-exchange events carry no body
 
   const isGroup = remote.endsWith('@g.us');
@@ -163,16 +211,37 @@ export function normalizeMessage(
     ? { name: card.displayName ?? vcardName(vcard) ?? '', phone: vcardPhone(vcard), vcard }
     : null;
 
-  // Nothing to show (no text, no media, no location, no contact): drop, as Reference did.
+  const cards = [
+    ...(content.contactMessage ? [content.contactMessage] : []),
+    ...(content.contactsArrayMessage?.contacts ?? []),
+  ]
+    .filter((c) => typeof c?.vcard === 'string')
+    .slice(0, 10)
+    .map((c) => ({
+      name: (c.displayName ?? vcardName(c.vcard) ?? null) as string | null,
+      phones: vcardValues(c.vcard, 'TEL'),
+      emails: vcardValues(c.vcard, 'EMAIL'),
+      org: /^ORG:([^\r\n;]+)/im.exec(c.vcard)?.[1]?.trim() ?? null,
+    }));
+  const unsupportedKey = Object.keys(UNSUPPORTED_KEYS).find((k) => content[k]);
+  const unsupported =
+    !text && !media && !location && !contact && unsupportedKey
+      ? { rawType: unsupportedKey, label: UNSUPPORTED_KEYS[unsupportedKey]! }
+      : null;
+
+  // Nothing to show (no text, no media, no location, no contact, no known rich type): drop, as Reference did.
   const caption = media
     ? (content[MEDIA_KEYS.find(([, k]) => k === media!.kind)![0]].caption ?? null)
     : null;
   const shown = text ?? (typeof caption === 'string' && caption !== '' ? caption : null);
-  if (shown === null && !media && !location && !contact) return null;
+  if (shown === null && !media && !location && !contact && !unsupported) return null;
 
   const ctx = Object.values(content)
     .map((v) => (v as { contextInfo?: Record<string, any> } | null)?.contextInfo)
     .find((c) => c?.isForwarded);
+  const replyTo = Object.values(content)
+    .map((v) => (v as { contextInfo?: Record<string, any> } | null)?.contextInfo?.stanzaId)
+    .find((v) => typeof v === 'string' && v !== '');
   return wrap(
     {
       ...base(msg, id, chat, fromMe, participant, timestamp),
@@ -181,6 +250,9 @@ export function normalizeMessage(
       location,
       contact,
       forwarded: ctx ? { score: Number(ctx.forwardingScore ?? 0) } : null,
+      contacts: cards,
+      replyToProviderMessageId: replyTo ?? null,
+      unsupported,
     },
     isGroup,
     fromMe,

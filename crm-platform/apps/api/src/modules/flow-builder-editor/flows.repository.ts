@@ -304,6 +304,34 @@ export class FlowsRepository {
     );
   }
 
+  /** The inbox channel of a website chat bot's widget, or null before the widget exists. */
+  async webWidgetChannelId(tx: Tx, orgId: number, flowId: number): Promise<number | null> {
+    const res = await tx.execute(sql`
+      SELECT ch.id FROM chatbot_widgets w
+      JOIN channels ch ON ch.org_id = w.org_id AND ch.kind = 'webchat' AND ch.external_id = w.uuid::text
+      WHERE w.org_id = ${orgId} AND w.flow_id = ${flowId}`);
+    const row = res.rows[0] as { id: number | string } | undefined;
+    return row ? Number(row.id) : null;
+  }
+
+  /** Ties a published website chat bot to its widget's channel (it was saved before the widget existed, or the widget moved). */
+  async tieToWidgetChannel(tx: Tx, orgId: number, flowId: number): Promise<void> {
+    await tx.execute(sql`
+      UPDATE flows SET provider = 'webchat', trigger_device_id = NULL, trigger_channel_id = (
+        SELECT ch.id FROM chatbot_widgets w
+        JOIN channels ch ON ch.org_id = w.org_id AND ch.kind = 'webchat' AND ch.external_id = w.uuid::text
+        WHERE w.org_id = ${orgId} AND w.flow_id = ${flowId})
+      WHERE org_id = ${orgId} AND id = ${flowId}`);
+  }
+
+  /** Whether a website chat bot's owner has saved Customize (its widget exists with a customization time). */
+  async hasCustomizedWidget(tx: Tx, orgId: number, flowId: number): Promise<boolean> {
+    const res = await tx.execute(
+      sql`SELECT 1 FROM chatbot_widgets WHERE org_id = ${orgId} AND flow_id = ${flowId} AND customized_at IS NOT NULL`,
+    );
+    return res.rows.length > 0;
+  }
+
   async setPublished(tx: Tx, orgId: number, id: number, published: boolean): Promise<void> {
     await tx.execute(
       published

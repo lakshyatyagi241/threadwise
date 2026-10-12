@@ -5,6 +5,7 @@ import {
   coerceForEngine,
   engineOf,
   isLimitedEngine,
+  isSmsEngine,
   kindsFor,
   senderOf,
   templatesFor,
@@ -52,9 +53,17 @@ describe('the sending number decides what a campaign can be', () => {
     expect(kindsFor('')).toEqual(['custom', 'template', 'flow']);
   });
 
-  it('Twilio and Meta numbers cannot carry buttons', () => {
+  it('an SMS number sends a custom text or a template, never a flow', () => {
+    expect(kindsFor('sms')).toEqual(['custom', 'template']);
+    expect(isSmsEngine('sms')).toBe(true);
+    expect(isSmsEngine('twilio')).toBe(false);
+    expect(engineOf('sms:5d1b')).toBe('sms');
+  });
+
+  it('Twilio, SMS and Meta numbers cannot carry buttons', () => {
     expect(isLimitedEngine('waba')).toBe(true);
     expect(isLimitedEngine('twilio')).toBe(true);
+    expect(isLimitedEngine('sms')).toBe(true);
     expect(isLimitedEngine('baileys')).toBe(false);
   });
 
@@ -94,6 +103,29 @@ describe('what a form is forced to when the number cannot send it', () => {
       templateOverrides: null,
     });
     expect(coerceForEngine(f, 'baileys', [tpl('x', 'baileys')])).toEqual({});
+  });
+
+  it('turns a flow into a custom text and clears what a text cannot carry on an SMS number', () => {
+    const f = {
+      ...form,
+      type: 'flow' as const,
+      flowId: 'f1',
+      customHeader: 'Hi',
+      customFooter: 'Bye',
+      mediaUrl: 'https://x.test/a.png',
+      abTesting: true,
+      buttons: [{ type: 'url' as const, text: 'Go', value: 'https://x.test' }],
+    };
+    expect(coerceForEngine(f, 'sms', [])).toEqual({
+      type: 'custom',
+      buttons: [],
+      customHeader: '',
+      customFooter: '',
+      mediaUrl: '',
+      abTesting: false,
+      flowId: '',
+    });
+    expect(coerceForEngine(form, 'sms', [])).toEqual({});
   });
 
   it('drops buttons on Meta and Twilio only', () => {

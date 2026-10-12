@@ -1418,7 +1418,8 @@
             "forms_and_links": "Moduli di acquisizione dei lead e link condivisibili.",
             "extra_channels": "I canali Telegram, Facebook e Instagram.",
             "form_builder": "Moduli web ospitati e incorporati che creano contatti nel CRM. L'app a pagamento Moduli controlla questo interruttore.",
-            "waba_groups": "Crea e gestisci gruppi WhatsApp da un numero Cloud API: link di invito, richieste di adesione, membri. Il numero deve essere un Official Business Account."
+            "waba_groups": "Crea e gestisci gruppi WhatsApp da un numero Cloud API: link di invito, richieste di adesione, membri. Il numero deve essere un Official Business Account.",
+            "sms": "SMS solo in invio tramite Twilio o MSG91: collega i mittenti, invia broadcast e campagne SMS."
           },
           "units": {
             "days": "Giorni",
@@ -1559,7 +1560,8 @@
             "ai_token_limit_monthly": "Token AI al mese (chiavi della piattaforma)",
             "forms": "Moduli web",
             "form_submissions_monthly": "Invii di moduli al mese",
-            "ai_form_generations_monthly": "Generazioni del creatore di moduli AI al mese"
+            "ai_form_generations_monthly": "Generazioni del creatore di moduli AI al mese",
+            "sms_monthly": "SMS al mese"
           },
           "featureGroups": {
             "messaging": "Messaggistica",
@@ -1596,7 +1598,8 @@
             "forms_and_links": "Moduli, link click-to-chat e gruppi",
             "extra_channels": "Canali Telegram, Facebook e Instagram",
             "form_builder": "Moduli (generatore di moduli web)",
-            "waba_groups": "Gruppi WhatsApp (Cloud API)"
+            "waba_groups": "Gruppi WhatsApp (Cloud API)",
+            "sms": "Canale SMS"
           },
           "problems": {
             "required": "Questo campo è obbligatorio.",
@@ -1648,7 +1651,8 @@
             "ai_token_limit_monthly": "Token usati dagli assistenti AI nel mese di calendario con le chiavi della piattaforma. I workspace con chiavi proprie non hanno limiti.",
             "forms": "Moduli web attivi (app Moduli). Archiviare un modulo libera il posto. 0 = illimitato.",
             "form_submissions_monthly": "Invii di moduli accettati nel mese di calendario, spam escluso. Oltre il limite un invio viene comunque salvato per la revisione, mai scartato. 0 = illimitato.",
-            "ai_form_generations_monthly": "Generazioni del creatore di moduli AI nel mese di calendario, inclusi i nuovi tentativi di correzione. 0 = illimitato."
+            "ai_form_generations_monthly": "Generazioni del creatore di moduli AI nel mese di calendario, inclusi i nuovi tentativi di correzione. 0 = illimitato.",
+            "sms_monthly": "Messaggi SMS in uscita inviati nel mese di calendario. 0 = illimitato."
           }
         }
       },

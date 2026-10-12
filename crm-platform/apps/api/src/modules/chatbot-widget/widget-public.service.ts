@@ -1,13 +1,16 @@
 import { HttpException, Inject, Injectable, Logger } from '@nestjs/common';
+import { randomUUID } from 'node:crypto';
 import { sql } from 'drizzle-orm';
 import {
   toPublicLauncher,
   widgetMessageRequestSchema,
   type WidgetHistoryResponse,
+  type WidgetMessageRequest,
   type WidgetMessageResponse,
   type WidgetPublicConfig,
 } from '@crm/contracts';
 import { DatabaseService } from '../../infra/db/database.service';
+import { ChannelIngestPublisher } from '../chat-conversations';
 import {
   ASSISTANT_DIRECTORY,
   INBOX_GATEWAY,
@@ -92,6 +95,7 @@ export class WidgetPublicService {
     private readonly aiReply: WidgetAiReplyService,
     @Inject(INBOX_GATEWAY) private readonly inbox: InboxGateway,
     @Inject(ASSISTANT_DIRECTORY) private readonly assistants: AssistantDirectory,
+    private readonly ingest: ChannelIngestPublisher,
   ) {}
 
   /** The widget behind a token, whatever its status; undefined for a malformed, unknown or rotated token. */
@@ -271,6 +275,9 @@ export class WidgetPublicService {
       assistantUuid: widget.assistantUuid,
     };
 
+    // A flow bot's widget: the flow runtime answers, so the visitor's line goes through the inbox's own pipeline.
+    if (widget.flowId !== null) return this.flowMessage(orgId, widget, req, data, forInbox);
+
     // 1. Everything that must commit together: the visitor, the thread, the visitor's line. History is read before the
     //    line is written, so the message is answered once, not also quoted as past conversation.
     const stored = await this.db.txAs({ orgId }, async (tx) => {
@@ -344,6 +351,50 @@ export class WidgetPublicService {
     return { ok: true, inbound: { id: stored.inbound.id }, reply };
   }
 
+  /**
+   * A message to a flow bot's widget. The visitor and the thread are kept here as for any widget, but the line itself is not
+   * written here: it joins the inbox's ingest queue like a message from any channel, so the worker stores it and the flow runtime
+   * starts or resumes the bot. The answer reaches the visitor through the history poll, so `reply` is always null.
+   */
+  private async flowMessage(
+    orgId: number,
+    widget: WidgetRow,
+    req: PublicRequest,
+    data: WidgetMessageRequest,
+    forInbox: WidgetForInbox,
+  ): Promise<WidgetMessageResponse> {
+    const prepared = await this.db.txAs({ orgId }, async (tx) => {
+      const { visitor } = (await this.resolveVisitor(tx, orgId, widget, req, true))!;
+      await this.visitors.touch(tx, orgId, visitor.id);
+      await this.visitors.updateProfile(tx, orgId, visitor.id, data);
+      const fresh: VisitorForInbox = {
+        id: visitor.id,
+        visitorUuid: visitor.visitorUuid,
+        name: data.name || visitor.name,
+        email: data.email || visitor.email,
+        phone: data.phone || visitor.phone,
+        conversationId: visitor.conversationId,
+      };
+      const conversation = await this.inbox.ensureConversation(tx, orgId, forInbox, fresh);
+      return {
+        peerKey: visitor.visitorUuid,
+        peerName: fresh.name,
+        channelUuid: await this.inbox.channelUuidOf(tx, orgId, conversation.id),
+      };
+    });
+    const tapped = data.tap_id ? { interactive: { id: data.tap_id, title: data.body } } : undefined;
+    await this.ingest.enqueueInbound(orgId, prepared.channelUuid, {
+      providerMessageId: `wgt-${randomUUID()}`,
+      peerKey: prepared.peerKey,
+      ...(prepared.peerName ? { peerName: prepared.peerName } : {}),
+      kind: tapped ? 'interactive' : 'text',
+      body: data.body,
+      ...(tapped ? { meta: tapped } : {}),
+      providerTimestamp: new Date(),
+    });
+    return { ok: true, inbound: { id: 0 }, reply: null };
+  }
+
   // --- history --------------------------------------------------------------------------------------------------------
 
   /**
@@ -372,6 +423,7 @@ export class WidgetPublicService {
           body: m.body,
           at: m.sentAt ? m.sentAt.toISOString() : null,
           from: historyFrom(m.agentId),
+          ...(m.buttons ? { buttons: m.buttons } : {}),
         })),
       };
     });

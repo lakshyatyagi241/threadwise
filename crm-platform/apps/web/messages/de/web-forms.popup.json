@@ -1,0 +1,42 @@
+{
+  "web-forms": {
+    "popup": {
+      "title": "Als Popup anzeigen",
+      "description": "Öffnen Sie das Formular als Popup auf Ihrer eigenen Website, statt es in die Seite einzubetten. Legen Sie fest, wann es sich öffnet, und kopieren Sie dann den Code.",
+      "trigger": "Popup öffnen",
+      "triggers": {
+        "delay": "Nach einer Verzögerung",
+        "scroll_down": "Wenn der Besucher nach unten scrollt",
+        "scroll_up": "Wenn der Besucher wieder nach oben scrollt",
+        "click": "Wenn jemand auf eine Schaltfläche klickt"
+      },
+      "triggerHints": {
+        "delay": "Öffnet sich nach einer festgelegten Zeit, nachdem die Seite geladen wurde.",
+        "scroll_down": "Öffnet sich, sobald der Besucher so weit nach unten gescrollt hat.",
+        "scroll_up": "Öffnet sich, wenn der Besucher die Seite weit nach unten gelesen hat und dann wieder nach oben scrollt – ein Zeichen, dass er die Seite womöglich verlässt.",
+        "click": "Öffnet sich nur, wenn jemand auf eine Schaltfläche oder einen Link mit dem unten gezeigten Code klickt."
+      },
+      "delay": "Sekunden bis zum Öffnen",
+      "delayHint": "Von {min} bis {max}.",
+      "scroll": "Wie weit nach unten auf der Seite (Prozent)",
+      "scrollHint": "Von {min} bis {max}.",
+      "position": "Wo es erscheint",
+      "positions": {
+        "center": "Bildschirmmitte, Seite abgedunkelt",
+        "bottom_right": "Untere Ecke, Seite nicht abgedunkelt"
+      },
+      "days": "Erneut anzeigen nach (Tagen)",
+      "daysHint": "Bei 0 erscheint es bei jedem Besuch. Sobald jemand das Formular absendet, wird es ihm nie wieder angezeigt.",
+      "note": "Fügen Sie Ihre Website zuerst unten unter „Erlaubte Websites“ hinzu, sonst bleibt das Popup leer.",
+      "code": {
+        "title": "Popup-Code",
+        "description": "Fügen Sie ihn dort ein, wo das Popup geladen werden soll, meist direkt vor dem schließenden Body-Tag."
+      },
+      "button": {
+        "title": "Eine Schaltfläche zum Öffnen",
+        "description": "Fügen Sie dies auf einer beliebigen Seite ein, damit Besucher das Popup selbst öffnen können. Funktioniert mit jedem Auslöser."
+      },
+      "copy": "Code kopieren"
+    }
+  }
+}

@@ -25,7 +25,7 @@ row stands for; `subject` (`{ kind: 'conversation', id }`, absent on rows writte
 `NOTIFICATION_TYPES`: `task_assigned`, `task_due`, `task_completed`, `new_lead`, the conversation types `new_chat`, `new_message`,
 `conversation_assigned`, `mention`, and (phase 2) `device_connected`, `device_disconnected`, `device_logged_out`, `broadcast_completed`, `broadcast_failed`,
 `campaign_completed`, `campaign_failed`, `scheduled_completed`, `scheduled_failed`, `teamchat_mention`, `teamchat_message`, and (BL-099) `waba_group_join_request`, `waba_group_suspended`, `waba_group_suspension_cleared`. Other values are still written by
-other domains without being in the enum (`NOTIFICATION_LEGACY_TYPES`: `wallet_low_balance`, `wallet_credited`, `form_submission`, `form_needs_review`,
+other domains without being in the enum (`NOTIFICATION_LEGACY_TYPES`: `wallet_low_balance`, `wallet_credited`, `form_submission`, `form_needs_review`, `form_payment`, `form_payment_duplicate`,
 `sales_doc_decided`; they can still be tuned in the preferences); a client words an unknown type from the server's English `title` / `body`. `data` carries what a
 client needs to word it in the viewer's language (`taskTitle`, `actorName`, ... and for the conversation types `conversationId`, `contactName`,
 `channelKind`, `preview` (at most 80 characters, render it as text), `count`, `assignedByName`, `teamAssigned`, `authorName`, `noteId`); `title` / `body` are

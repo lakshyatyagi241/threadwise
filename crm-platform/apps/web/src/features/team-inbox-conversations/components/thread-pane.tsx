@@ -17,6 +17,7 @@ import type { Thread } from '../api/use-thread';
 import { isGroupThread } from '../lib/group-thread';
 import { computeWindow, formatWindowLeft, type WindowView } from '../lib/window';
 import { Composer, type ComposerHandle, type ComposerMode } from './composer';
+import { ShareDialog, type ShareKind } from './share-dialog';
 import { TemplatePicker } from './template-picker';
 import { AlertIcon, BackIcon, CheckCircleIcon, ClockIcon, PanelIcon } from './icons';
 import { MessageStream } from './message-stream';
@@ -65,6 +66,7 @@ export function ThreadPane(props: ThreadPaneProps) {
   const canManageChannels = useCan('inbox.channel.manage');
   const { detail, thread } = props;
   const [templatesOpen, setTemplatesOpen] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
   // The message the next send answers. It belongs to one thread: another conversation starts without it.
   const [reply, setReply] = useState<{ conversationId: string; message: MessageResponse } | null>(
     null,
@@ -105,6 +107,15 @@ export function ThreadPane(props: ThreadPaneProps) {
     !channelDown &&
     !groupThread &&
     props.mode === 'reply';
+  // A place, contact cards and buttons are free-form messages: they need the window like text does (the composer disables the button).
+  const shareKinds: ShareKind[] =
+    detail && props.can.reply && !channelDown && !groupThread && props.mode === 'reply'
+      ? [
+          ...(detail.capabilities.media.includes('location') ? (['location'] as const) : []),
+          ...(detail.capabilities.media.includes('contact') ? (['contacts'] as const) : []),
+          ...(detail.capabilities.interactive ? (['buttons'] as const) : []),
+        ]
+      : [];
   const resolved = detail?.status === 'resolved' || detail?.status === 'closed';
 
   return (
@@ -295,6 +306,8 @@ export function ThreadPane(props: ThreadPaneProps) {
         }
         canTemplate={canTemplate}
         onTemplate={() => setTemplatesOpen(true)}
+        canShare={shareKinds.length > 0}
+        onShare={() => setShareOpen(true)}
         onSend={(draft) => {
           props.onSend({ ...draft, replyToMessageId: replyTo?.id ?? null });
           setReply(null);
@@ -303,6 +316,12 @@ export function ThreadPane(props: ThreadPaneProps) {
         onCancelReply={() => setReply(null)}
         onNote={props.onNote}
         handleRef={props.composerRef}
+      />
+      <ShareDialog
+        open={shareOpen}
+        onClose={() => setShareOpen(false)}
+        kinds={shareKinds}
+        onSend={thread.sendShare}
       />
       <TemplatePicker
         conversationId={props.conversationId}

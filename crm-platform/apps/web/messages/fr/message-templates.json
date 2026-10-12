@@ -65,7 +65,7 @@
     },
     "library": {
       "title": "Bibliothèque de modèles",
-      "intro": "Modèles de messages WhatsApp : rédigez-les, envoyez-les à Meta pour examen et suivez leur statut ici.",
+      "intro": "Choisissez un modèle de départ ou soumettez le vôtre. Tous les modèles doivent respecter les <link>consignes de WhatsApp</link> avant d'être approuvés par Meta.",
       "sync": "Synchroniser depuis Meta",
       "syncing": "Synchronisation...",
       "syncHint": "Récupérer vos modèles depuis Meta",

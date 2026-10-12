@@ -78,7 +78,8 @@
       "noMatchMessage": "Ändern Sie die Suche oder die Filter, um mehr zu sehen.",
       "loadMore": "Mehr laden",
       "loadingMore": "Lade weitere",
-      "loaded": "{count, plural, one {# Workspace} other {# Workspaces}} angezeigt"
+      "loaded": "{count, plural, one {# Workspace} other {# Workspaces}} angezeigt",
+      "retentionLink": "Aufbewahrung"
     },
     "cell": {
       "suspended": "Gesperrt",
@@ -252,6 +253,147 @@
         "text": "Tickets, Unterhaltungen und der Support-Verlauf dieses Workspace.",
         "open": "Support-Datensatz öffnen",
         "openTickets": "{count, plural, one {# offenes Ticket} other {# offene Tickets}}"
+      }
+    },
+    "retention": {
+      "crumb": "Aufbewahrung",
+      "title": "Aufbewahrung von Workspaces",
+      "subtitle": "Inaktive Workspaces, die am längsten inaktiven zuerst: wann jeder archiviert und gelöscht wird, welche Erinnerungen gesendet wurden und wie Sie einen schützen oder wiederherstellen.",
+      "backToList": "Zurück zu den Workspaces",
+      "deniedTitle": "Kein Zugriff",
+      "tableLabel": "Aufbewahrung von Workspaces",
+      "status": {
+        "active": "Aktiv",
+        "archived": "Archiviert",
+        "suspended": "Gesperrt",
+        "deleted": "Vom Inhaber gelöscht"
+      },
+      "filters": {
+        "label": "Filter",
+        "status": "Status",
+        "allStatuses": "Alle Status",
+        "minDays": "Mindestanzahl inaktiver Tage",
+        "neverDeleteOnly": "Nur „Nie löschen“",
+        "clear": "Filter zurücksetzen"
+      },
+      "columns": {
+        "workspace": "Workspace",
+        "status": "Status",
+        "daysInactive": "Tage inaktiv",
+        "lastActivity": "Letzte Aktivität",
+        "archiveOn": "Archivierung am",
+        "eraseOn": "Löschung am",
+        "reminders": "Gesendete Erinnerungen",
+        "protection": "Schutz",
+        "actions": "Aktionen"
+      },
+      "remindersArchive": "Archivierung {n}/3",
+      "remindersErase": "Löschung {n}/3",
+      "emptyTitle": "Keine Workspaces vorhanden",
+      "emptyMessage": "Workspaces erscheinen hier, sobald sie existieren.",
+      "noMatchTitle": "Kein passender Workspace",
+      "noMatchMessage": "Ändern Sie die Filter, um mehr zu sehen.",
+      "loadMore": "Mehr laden",
+      "loadingMore": "Wird geladen",
+      "loaded": "{count, plural, one {# Workspace} other {# Workspaces}} angezeigt",
+      "badge": {
+        "neverDelete": "Nie löschen",
+        "legalHold": "Rechtliche Sperre",
+        "paidPlan": "Bezahlter Tarif (ausgenommen)",
+        "paidPlanHint": "Ein Workspace mit aktivem bezahltem Tarif wird wegen Inaktivität nie archiviert.",
+        "until": "Bis {date}",
+        "indefinite": "Kein Ablauf",
+        "by": "Festgelegt von {who}"
+      },
+      "actions": {
+        "menu": "Aufbewahrungsaktionen für {name}",
+        "history": "Verlauf",
+        "policy": "Fristen ändern",
+        "exemptOn": "Nie löschen",
+        "exemptOff": "„Nie löschen“ aufheben",
+        "restore": "Wiederherstellen",
+        "holdOn": "Rechtliche Sperre setzen",
+        "holdOff": "Rechtliche Sperre aufheben"
+      },
+      "event": {
+        "reminder_sent": "Erinnerung gesendet",
+        "archived": "Archiviert",
+        "deleted": "Gelöscht",
+        "delete_blocked": "Löschung blockiert",
+        "restored": "Wiederhergestellt",
+        "policy_changed": "Fristen geändert",
+        "exemption_set": "„Nie löschen“ aktiviert",
+        "exemption_cleared": "„Nie löschen“ aufgehoben",
+        "legal_hold_set": "Rechtliche Sperre gesetzt",
+        "legal_hold_cleared": "Rechtliche Sperre aufgehoben"
+      },
+      "history": {
+        "title": "Verlauf von {name}",
+        "emptyTitle": "Noch kein Verlauf",
+        "emptyMessage": "Erinnerungen und Änderungen erscheinen hier.",
+        "stage": "Schritt",
+        "stages": {
+          "archive": "Archivierung",
+          "delete": "Löschung"
+        },
+        "reminderNo": "Erinnerung {n}",
+        "daysInactive": "{count, plural, one {# Tag inaktiv} other {# Tage inaktiv}}",
+        "by": "Von",
+        "system": "System",
+        "reason": "Grund"
+      },
+      "dialog": {
+        "reason": "Grund",
+        "reasonHint": "5 bis 500 Zeichen. Wird im Compliance-Protokoll gespeichert.",
+        "errors": {
+          "reasonShort": "Geben Sie mindestens 5 Zeichen ein.",
+          "reasonLong": "Geben Sie höchstens 500 Zeichen ein.",
+          "archiveWhole": "Geben Sie eine ganze Zahl von Tagen ein.",
+          "archiveMin": "Archivierung frühestens nach 60 Tagen.",
+          "archiveMax": "Archivierung spätestens nach 3650 Tagen.",
+          "eraseWhole": "Geben Sie eine ganze Zahl von Tagen ein.",
+          "eraseMin": "Löschung frühestens nach 120 Tagen.",
+          "eraseMax": "Löschung spätestens nach 7300 Tagen.",
+          "gap": "Die Löschung muss mindestens {days} Tage nach der Archivierung erfolgen.",
+          "noChange": "Ändern Sie mindestens eine Frist.",
+          "untilPast": "Wählen Sie ein Datum in der Zukunft."
+        },
+        "mode": "Quelle der Fristen",
+        "days": "Tage",
+        "useDefault": "Plattform-Standard verwenden",
+        "custom": "Eigene Tage",
+        "policyTitle": "Fristen für {name} ändern",
+        "policyMessage": "Tage der Inaktivität, bis der Workspace archiviert und bis er gelöscht wird. Die Erinnerungen verschieben sich entsprechend.",
+        "archiveAfter": "Archivieren nach (Tagen)",
+        "archiveHint": "Plattform-Standard {default} Tage; mindestens {min}.",
+        "eraseAfter": "Löschen nach (Tagen)",
+        "eraseHint": "Plattform-Standard {default} Tage; mindestens {min}.",
+        "policyConfirm": "Fristen speichern",
+        "policyDone": "Fristen für {name} gespeichert.",
+        "exemptOnTitle": "„Nie löschen“ für {name} aktivieren?",
+        "exemptOnMessage": "Solange dies aktiv ist, wird der Workspace wegen Inaktivität weder archiviert noch gelöscht.",
+        "exemptOnConfirm": "„Nie löschen“ aktivieren",
+        "exemptOnDone": "{name} wird nie gelöscht.",
+        "exemptOffTitle": "„Nie löschen“ für {name} aufheben?",
+        "exemptOffMessage": "Der Workspace folgt wieder seinen Fristen und kann archiviert und gelöscht werden.",
+        "exemptOffConfirm": "„Nie löschen“ aufheben",
+        "exemptOffDone": "{name} folgt wieder seinen Fristen.",
+        "until": "Prüfung am (optional)",
+        "untilHint": "Der Schutz endet an diesem Datum, damit er erneut geprüft wird. Leer lassen für kein Ablaufdatum.",
+        "restoreTitle": "{name} wiederherstellen?",
+        "restoreMessage": "Der Workspace wird aktiv, seine Nutzer können sich wieder anmelden und die Inaktivitätszeit beginnt von vorn.",
+        "restoreConfirm": "Workspace wiederherstellen",
+        "restoreDone": "{name} wurde wiederhergestellt.",
+        "holdOnTitle": "Rechtliche Sperre für {name} setzen?",
+        "holdOnMessage": "Solange die Sperre aktiv ist, wird der Workspace unabhängig von seinen Fristen weder archiviert noch gelöscht.",
+        "holdOnSure": "Mir ist bewusst, dass dadurch jede Archivierung und Löschung gestoppt wird.",
+        "holdOnConfirm": "Rechtliche Sperre setzen",
+        "holdOnDone": "Rechtliche Sperre für {name} gesetzt.",
+        "holdOffTitle": "Rechtliche Sperre für {name} aufheben?",
+        "holdOffMessage": "Der Workspace folgt wieder seinen Fristen und kann archiviert und gelöscht werden.",
+        "holdOffSure": "Ich bestätige, dass die Sperre aufgehoben werden darf.",
+        "holdOffConfirm": "Rechtliche Sperre aufheben",
+        "holdOffDone": "Rechtliche Sperre für {name} aufgehoben."
       }
     }
   }

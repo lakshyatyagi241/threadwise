@@ -51,7 +51,9 @@
         "generic": "Problem: {reason}",
         "reason": {
           "crm_required_unbound": "Eine Eigenschaft, die Ihr Workspace verlangt, fehlt im Formular.",
-          "no_contact_point": "Fügen Sie ein E-Mail- oder Telefonfeld hinzu, das mit dem Kontakt verknüpft ist, damit jede Einsendung einer Person zugeordnet werden kann."
+          "no_contact_point": "Fügen Sie ein E-Mail- oder Telefonfeld hinzu, das mit dem Kontakt verknüpft ist, damit jede Einsendung einer Person zugeordnet werden kann.",
+          "payment_no_gateway": "Verbinden Sie ein Zahlungsgateway, das Zahlungslinks erstellen kann, oder schalten Sie die Zahlung aus.",
+          "captcha_not_configured": "CAPTCHA ist auf „immer an“ gesetzt, aber die Plattform hat kein CAPTCHA. Wählen Sie eine andere Einstellung oder bitten Sie Ihren Plattformadministrator, eines hinzuzufügen."
         },
         "code": {
           "no_fields": "Fügen Sie mindestens ein Feld hinzu.",

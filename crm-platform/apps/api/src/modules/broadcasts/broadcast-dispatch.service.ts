@@ -294,6 +294,7 @@ export class BroadcastDispatchService {
                   shape,
                   mergeBase,
                   clientReference,
+                  sender.engine,
                 ),
               );
             } else {
@@ -375,7 +376,8 @@ export class BroadcastDispatchService {
 
           // A human-paced gap between messages, and a longer rest between batches. Not after the last recipient.
           processed++;
-          if (processed < pendingTotal) {
+          // SMS is sent one message at a time with no pacing: the provider and the carrier set the rate, not a human-like gap.
+          if (processed < pendingTotal && sender.engine !== 'sms') {
             if (batching && ++sinceBatch >= pacing.batchSize) {
               sinceBatch = 0;
               await this.rest(batchCooldownMs(pacing, this.runtime.random), leaseKey, leaseToken);
@@ -419,6 +421,7 @@ export class BroadcastDispatchService {
     shape: TemplateShape & { headerLocation: unknown },
     base: Omit<MergeContext, 'contact'>,
     clientReference: string,
+    engine: string,
   ): Promise<OutgoingText> {
     const contact = await this.db.tx((tx) => this.merge.contactFor(tx, orgId, contactId));
     const ctx: MergeContext = { ...base, contact };
@@ -433,7 +436,12 @@ export class BroadcastDispatchService {
         : null;
     return {
       to,
-      text: renderPlainBody(template.templateBody, vars.body),
+      // An SMS template with `{{first_name}}` and no variable map would render every token empty (Reference's defect, TW-SMS-014): its
+      // tokens are resolved against the contact itself instead.
+      text:
+        engine === 'sms' && vars.body === undefined
+          ? renderMergeTags(template.templateBody, ctx).rendered
+          : renderPlainBody(template.templateBody, vars.body),
       header: vars.header ?? (template.header && !media ? template.header : null),
       footer: template.footer,
       media,

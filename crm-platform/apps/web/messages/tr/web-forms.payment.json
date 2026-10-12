@@ -1,0 +1,58 @@
+{
+  "web-forms": {
+    "payment": {
+      "title": "Ödeme",
+      "description": "Gönderimden sonra ziyaretçiden ödeme geçidiniz üzerinden tahsilat yapın. Form, yalnızca geçit onayladığında ödenmiş sayılır.",
+      "enabled": "Ödeme al",
+      "enabledHint": "Yanıtlar kaydedildikten sonra ziyaretçi, geçidinizin barındırılan ödeme sayfasına yönlendirilir.",
+      "gateway": {
+        "checking": "Ödeme geçidiniz kontrol ediliyor...",
+        "failed": "Ödeme geçidiniz kontrol edilemedi. Birazdan tekrar deneyin.",
+        "ready": "Ödemeler {name} ({mode}) hesabına gider.",
+        "mode": {
+          "test": "test modu",
+          "live": "canlı mod"
+        },
+        "none": "Bağlı bir ödeme geçidi yok, bu yüzden bu form henüz ödeme alamaz.",
+        "noLink": "{name} barındırılan ödeme bağlantısı oluşturamaz, bu yüzden formda kullanılamaz. Razorpay veya Stripe bağlayın.",
+        "open": "Ödeme geçitlerini aç"
+      },
+      "amountType": "Tutar nasıl belirlenir",
+      "amountTypes": {
+        "fixed": "Sabit fiyat",
+        "from_field": "Bir seçim alanından",
+        "pay_what_you_want": "Ziyaretçi tutarı girer"
+      },
+      "amountTypeHints": {
+        "fixed": "Her ziyaretçi aynı fiyatı öder.",
+        "from_field": "Açılır liste veya radyo alanının her seçeneğinin kendi fiyatı vardır.",
+        "pay_what_you_want": "Bağış ve bahşiş için. En düşük ve en yüksek tutarı siz belirlersiniz."
+      },
+      "currency": "Para birimi",
+      "currencyHint": "INR veya USD gibi üç harf. Ödeme geçidiniz bunu desteklemelidir.",
+      "amount": "Fiyat",
+      "amountHint": "{currency} cinsinden, söylediğiniz gibi yazın; örneğin 499.00.",
+      "fieldChoice": "Seçim alanı",
+      "fieldNumber": "Tutar alanı",
+      "fieldNone": "Bir alan seçin",
+      "noChoiceFields": "Önce forma bir açılır liste veya radyo alanı ekleyin.",
+      "noNumberFields": "Önce forma bir sayı veya para birimi alanı ekleyin.",
+      "optionPrices": "Her seçeneğin fiyatı",
+      "optionPrice": "“{label}” fiyatı",
+      "min": "En düşük tutar",
+      "minHint": "Bundan düşük her tutar reddedilir.",
+      "max": "En yüksek tutar (isteğe bağlı)",
+      "maxHint": "Üst sınır istemiyorsanız boş bırakın.",
+      "descriptionLabel": "Ödeme sayfasında gösterilir",
+      "descriptionHint": "Ödeyen kişi için kısa bir not; örneğin neyin ödemesini yaptığı.",
+      "issues": {
+        "amountRequired": "Fiyatı girin.",
+        "fieldRequired": "Tutarın alınacağı alanı seçin.",
+        "fieldNotRequired": "Her ziyaretçi bir tutar girsin diye bu alanı zorunlu yapın.",
+        "optionsNeedAmounts": "Her seçeneğe bir fiyat verin.",
+        "minRequired": "En düşük tutarı girin.",
+        "minAboveMax": "En düşük tutar en yüksek tutardan büyük olamaz."
+      }
+    }
+  }
+}

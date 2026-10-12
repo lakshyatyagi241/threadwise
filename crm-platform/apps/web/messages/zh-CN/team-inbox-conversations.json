@@ -141,6 +141,9 @@
       },
       "template": "模板消息：{name}",
       "unavailable": "消息不可用",
+      "unsupported": "客户发送了此渠道无法显示的内容。",
+      "forwarded": "已转发",
+      "referral": "来自广告或链接",
       "sentIn": "以 {lang} 发送。显示您输入的文本",
       "translatedFrom": "已从 {lang} 翻译。显示原文",
       "bot": "机器人",
@@ -274,7 +277,75 @@
         "hearts": "爱心和符号",
         "objects": "物品"
       },
-      "cancelReply": "取消回复"
+      "cancelReply": "取消回复",
+      "share": {
+        "open": "分享位置、联系人或按钮",
+        "title": "分享",
+        "eyebrow": "发送给客户",
+        "close": "关闭",
+        "cancel": "取消",
+        "send": "发送",
+        "sending": "发送中…",
+        "sent": "已发送",
+        "windowHint": "与任何自由格式消息一样，这些消息需要在 WhatsApp Cloud API 号码上有处于开启状态的 24 小时窗口。",
+        "tab": {
+          "location": "位置",
+          "contacts": "联系人",
+          "buttons": "按钮"
+        },
+        "location": {
+          "latitude": "纬度",
+          "longitude": "经度",
+          "name": "地点名称（可选）",
+          "address": "地址（可选）",
+          "pasteHint": "您可以在此粘贴来自地图的 \"28.6139, 77.2090\"。"
+        },
+        "contact": {
+          "card": "联系人 {n}",
+          "name": "姓名",
+          "org": "公司（可选）",
+          "phone": "电话",
+          "email": "邮箱",
+          "remove": "移除联系人 {n}",
+          "add": "添加另一个联系人"
+        },
+        "buttons": {
+          "type": "按钮类型",
+          "kind": {
+            "buttons": "回复按钮",
+            "cta_url": "链接按钮",
+            "list": "列表"
+          },
+          "header": "页眉（可选）",
+          "body": "消息",
+          "footer": "页脚（可选）",
+          "titles": "按钮（最多 3 个）",
+          "titleN": "按钮 {n}",
+          "add": "添加按钮",
+          "linkText": "按钮文字",
+          "url": "链接",
+          "listButton": "打开列表的按钮",
+          "section": "分组 {n}",
+          "sectionTitle": "分组标题",
+          "rowTitle": "第 {n} 行标题",
+          "rowDescription": "第 {n} 行描述（可选）",
+          "addRow": "添加一行",
+          "addSection": "添加分组",
+          "removeSection": "删除分组 {n}",
+          "rows": "行",
+          "rowCount": "{n} / {max} 行"
+        },
+        "problem": {
+          "required": "{label}为必填项",
+          "range": "{label}超出范围",
+          "phoneOrEmail": "请添加电话号码或邮箱",
+          "phone": "请输入有效的电话号码",
+          "email": "请输入有效的邮箱地址",
+          "duplicate": "{label}与其他按钮重复",
+          "url": "请输入以 http:// 或 https:// 开头的链接",
+          "tooManyRows": "一个列表总共最多包含 10 行"
+        }
+      }
     },
     "panel": {
       "tabsLabel": "备注与时间线",

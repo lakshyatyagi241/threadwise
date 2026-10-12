@@ -15,6 +15,7 @@ import { CampaignsWorkerModule } from '../modules/campaigns';
 import { ChannelFacebookWorkerModule } from '../modules/channel-facebook';
 import { ChannelInstagramWorkerModule } from '../modules/channel-instagram';
 import { ShopifyWoocommerceWorkerModule } from '../modules/shopify-woocommerce';
+import { ChannelSmsWorkerModule } from '../modules/channel-sms';
 import { ChannelTelegramWorkerModule } from '../modules/channel-telegram';
 import {
   ContactImportWorkerModule,
@@ -45,6 +46,7 @@ import { LeadsWorkerModule } from '../modules/leads';
 import { FormsBuilderWorkerModule } from '../modules/forms-builder';
 import { ScheduledQueueWarmerWorkerModule } from '../modules/scheduled-queue-warmer';
 import { MarketplaceWorkerModule } from '../modules/marketplace';
+import { WorkspacesTeamsTenancyWorkerModule } from '../modules/workspaces-teams-tenancy';
 import { OutboxDrainService } from './outbox-drain.service';
 import { PartitionMaintenanceService } from './partition-maintenance.service';
 
@@ -91,6 +93,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     TeamInboxRoutingSlaWorkerModule,
     CampaignsWorkerModule,
     ChannelTelegramWorkerModule,
+    ChannelSmsWorkerModule,
     ChannelFacebookWorkerModule,
     ChannelInstagramWorkerModule,
     ShopifyWoocommerceWorkerModule,
@@ -104,6 +107,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     FormsBuilderWorkerModule,
     MarketplaceWorkerModule,
     PlatformSupportDeskWorkerModule,
+    WorkspacesTeamsTenancyWorkerModule,
   ],
   providers: [
     OutboxDrainService,

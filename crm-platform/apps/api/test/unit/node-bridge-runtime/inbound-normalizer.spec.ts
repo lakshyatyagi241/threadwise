@@ -295,3 +295,59 @@ describe('groups (TW-NODE-018 rule 3)', () => {
     expect(group({ fromMe: true })).toMatchObject({ kind: 'group', message: { fromMe: true } });
   });
 });
+
+describe('rich content (wrappers, several contacts, replies, unsupported types)', () => {
+  const read = (message: RawMessage['message']) => {
+    const n = normalizeMessage(msg({ message }), 'notify', NOW);
+    return n && n.kind !== 'group' ? n.message : null;
+  };
+
+  it('reads the content inside a disappearing-chat or view-once wrapper', () => {
+    expect(read({ ephemeralMessage: { message: { conversation: 'secret' } } })).toMatchObject({
+      text: 'secret',
+    });
+    expect(
+      read({
+        viewOnceMessageV2: {
+          message: { imageMessage: { mimetype: 'image/jpeg', caption: 'once' } },
+        },
+      }),
+    ).toMatchObject({ media: { kind: 'image' }, text: 'once' });
+  });
+
+  it('keeps every card of a contacts message with all phones, emails and the company', () => {
+    const vcard = (n: string, tel: string) =>
+      `BEGIN:VCARD\nFN:${n}\nORG:Acme;\nTEL;type=CELL:${tel}\nEMAIL:${n.toLowerCase()}@x.io\nEND:VCARD`;
+    const m = read({
+      contactsArrayMessage: {
+        contacts: [
+          { displayName: 'Ann', vcard: vcard('Ann', '+91 98765 43210') },
+          { displayName: 'Bob', vcard: vcard('Bob', '+1 555 0100') },
+        ],
+      },
+    });
+    expect(m?.contacts).toEqual([
+      { name: 'Ann', phones: ['+919876543210'], emails: ['ann@x.io'], org: 'Acme' },
+      { name: 'Bob', phones: ['+15550100'], emails: ['bob@x.io'], org: 'Acme' },
+    ]);
+  });
+
+  it('carries the id of the message being replied to', () => {
+    expect(
+      read({ extendedTextMessage: { text: 'yes', contextInfo: { stanzaId: 'WAMID.Q1' } } }),
+    ).toMatchObject({ replyToProviderMessageId: 'WAMID.Q1' });
+  });
+
+  it('keeps a poll, a product or an order as a placeholder instead of dropping it', () => {
+    expect(read({ pollCreationMessageV3: { name: 'Lunch?' } })).toMatchObject({
+      unsupported: { rawType: 'pollCreationMessageV3', label: 'Poll' },
+    });
+    expect(read({ orderMessage: { itemCount: 2 } })).toMatchObject({
+      unsupported: { label: 'Order' },
+    });
+  });
+
+  it('still drops an event with nothing to show', () => {
+    expect(read({ senderKeyDistributionMessage: {} })).toBeNull();
+  });
+});

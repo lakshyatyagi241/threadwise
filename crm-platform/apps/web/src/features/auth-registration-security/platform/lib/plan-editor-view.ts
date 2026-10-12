@@ -48,6 +48,7 @@ export type LimitUnit = 'perMonth' | 'perBroadcast' | 'perMinute' | 'perPlanPeri
  */
 export const LIMIT_UNITS: Record<PlanLimitKey, LimitUnit> = {
   monthly_messages: 'perMonth',
+  sms_monthly: 'perMonth',
   broadcasts: 'total',
   scheduled_messages: 'total',
   total_campaigns: 'perPlanPeriod',

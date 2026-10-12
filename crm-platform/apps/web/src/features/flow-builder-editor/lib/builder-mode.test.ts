@@ -15,4 +15,15 @@ describe('builder mode links', () => {
     expect(newHref('simple')).toBe('/flows/simple');
     expect(newHref('advanced')).toBe('/flows/builder');
   });
+
+  it('a website chat bot opens in the Simple builder in Simple mode and on the canvas otherwise', () => {
+    expect(openHref('simple', 'f1', 'web')).toBe('/flows/simple/f1');
+    expect(openHref('advanced', 'f1', 'web')).toBe('/flows/builder/f1');
+  });
+
+  it('a new website chat bot carries its channel to either builder', () => {
+    expect(newHref('simple', 'web')).toBe('/flows/simple?type=web');
+    expect(newHref('advanced', 'web')).toBe('/flows/builder?type=web');
+    expect(newHref('simple', 'chat')).toBe('/flows/simple');
+  });
 });

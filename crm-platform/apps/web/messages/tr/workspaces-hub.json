@@ -78,7 +78,8 @@
       "noMatchMessage": "Daha fazlasını görmek için aramayı veya filtreleri değiştirin.",
       "loadMore": "Daha fazla yükle",
       "loadingMore": "Daha fazla yükleniyor",
-      "loaded": "{count, plural, other {# çalışma alanı}} gösteriliyor"
+      "loaded": "{count, plural, other {# çalışma alanı}} gösteriliyor",
+      "retentionLink": "Saklama"
     },
     "cell": {
       "suspended": "Askıya alındı",
@@ -252,6 +253,147 @@
         "text": "Bu çalışma alanının talepleri, görüşmeleri ve destek geçmişi.",
         "open": "Destek kaydını aç",
         "openTickets": "{count, plural, other {# açık talep}}"
+      }
+    },
+    "retention": {
+      "crumb": "Saklama",
+      "title": "Çalışma alanı saklama",
+      "subtitle": "Boştaki çalışma alanları, en uzun süredir boşta olandan başlayarak: her birinin ne zaman arşivlenip silineceği, gönderilen hatırlatmalar ve korumak veya geri yüklemek için kontroller.",
+      "backToList": "Çalışma alanlarına dön",
+      "deniedTitle": "Erişim yok",
+      "tableLabel": "Çalışma alanı saklama",
+      "status": {
+        "active": "Etkin",
+        "archived": "Arşivlendi",
+        "suspended": "Askıya alındı",
+        "deleted": "Sahibi tarafından silindi"
+      },
+      "filters": {
+        "label": "Filtreler",
+        "status": "Durum",
+        "allStatuses": "Tüm durumlar",
+        "minDays": "En az hareketsiz gün",
+        "neverDeleteOnly": "Yalnızca Asla silme",
+        "clear": "Filtreleri temizle"
+      },
+      "columns": {
+        "workspace": "Çalışma alanı",
+        "status": "Durum",
+        "daysInactive": "Hareketsiz gün",
+        "lastActivity": "Son etkinlik",
+        "archiveOn": "Arşiv tarihi",
+        "eraseOn": "Silme tarihi",
+        "reminders": "Gönderilen hatırlatmalar",
+        "protection": "Koruma",
+        "actions": "İşlemler"
+      },
+      "remindersArchive": "Arşiv {n}/3",
+      "remindersErase": "Silme {n}/3",
+      "emptyTitle": "Gösterilecek çalışma alanı yok",
+      "emptyMessage": "Çalışma alanları oluşturulunca burada görünür.",
+      "noMatchTitle": "Eşleşen çalışma alanı yok",
+      "noMatchMessage": "Daha fazlasını görmek için filtreleri değiştirin.",
+      "loadMore": "Daha fazla yükle",
+      "loadingMore": "Daha fazlası yükleniyor",
+      "loaded": "{count, plural, one {# çalışma alanı gösteriliyor} other {# çalışma alanı gösteriliyor}}",
+      "badge": {
+        "neverDelete": "Asla silme",
+        "legalHold": "Yasal saklama",
+        "paidPlan": "Ücretli plan (muaf)",
+        "paidPlanHint": "Etkin ücretli planı olan bir çalışma alanı hareketsizlik nedeniyle asla arşivlenmez.",
+        "until": "{date} tarihine kadar",
+        "indefinite": "Süre sınırı yok",
+        "by": "Ayarlayan: {who}"
+      },
+      "actions": {
+        "menu": "{name} için saklama işlemleri",
+        "history": "Geçmiş",
+        "policy": "Süreleri değiştir",
+        "exemptOn": "Asla silme",
+        "exemptOff": "Asla silmeyi kaldır",
+        "restore": "Geri yükle",
+        "holdOn": "Yasal saklama uygula",
+        "holdOff": "Yasal saklamayı kaldır"
+      },
+      "event": {
+        "reminder_sent": "Hatırlatma gönderildi",
+        "archived": "Arşivlendi",
+        "deleted": "Silindi",
+        "delete_blocked": "Silme engellendi",
+        "restored": "Geri yüklendi",
+        "policy_changed": "Süreler değiştirildi",
+        "exemption_set": "Asla silme açıldı",
+        "exemption_cleared": "Asla silme kaldırıldı",
+        "legal_hold_set": "Yasal saklama uygulandı",
+        "legal_hold_cleared": "Yasal saklama kaldırıldı"
+      },
+      "history": {
+        "title": "{name} geçmişi",
+        "emptyTitle": "Henüz geçmiş yok",
+        "emptyMessage": "Hatırlatmalar ve değişiklikler burada görünür.",
+        "stage": "Adım",
+        "stages": {
+          "archive": "Arşivle",
+          "delete": "Sil"
+        },
+        "reminderNo": "hatırlatma {n}",
+        "daysInactive": "{count, plural, one {# gün hareketsiz} other {# gün hareketsiz}}",
+        "by": "Yapan",
+        "system": "Sistem",
+        "reason": "Gerekçe"
+      },
+      "dialog": {
+        "reason": "Gerekçe",
+        "reasonHint": "5 ile 500 karakter arası. Uyumluluk günlüğünde saklanır.",
+        "errors": {
+          "reasonShort": "En az 5 karakter yazın.",
+          "reasonLong": "En fazla 500 karakter kullanın.",
+          "archiveWhole": "Tam sayı olarak gün girin.",
+          "archiveMin": "En az 60 gün sonra arşivleyin.",
+          "archiveMax": "En çok 3650 gün sonra arşivleyin.",
+          "eraseWhole": "Tam sayı olarak gün girin.",
+          "eraseMin": "En az 120 gün sonra silin.",
+          "eraseMax": "En çok 7300 gün sonra silin.",
+          "gap": "Silme, arşivden en az {days} gün sonra olmalıdır.",
+          "noChange": "En az bir süreyi değiştirin.",
+          "untilPast": "Gelecekte bir tarih seçin."
+        },
+        "mode": "Süre kaynağı",
+        "days": "Gün",
+        "useDefault": "Platform varsayılanını kullan",
+        "custom": "Özel gün",
+        "policyTitle": "{name} için süreleri değiştir",
+        "policyMessage": "Çalışma alanı arşivlenmeden ve silinmeden önceki hareketsizlik günleri. Hatırlatmalar bunlarla birlikte kayar.",
+        "archiveAfter": "Arşivlemeden önce (gün)",
+        "archiveHint": "Platform varsayılanı {default} gün; en az {min}.",
+        "eraseAfter": "Silmeden önce (gün)",
+        "eraseHint": "Platform varsayılanı {default} gün; en az {min}.",
+        "policyConfirm": "Süreleri kaydet",
+        "policyDone": "{name} için süreler kaydedildi.",
+        "exemptOnTitle": "{name} asla silinmesin mi?",
+        "exemptOnMessage": "Bu açıkken çalışma alanı hareketsizlik nedeniyle asla arşivlenmez veya silinmez.",
+        "exemptOnConfirm": "Asla silmeyi aç",
+        "exemptOnDone": "{name} asla silinmeyecek.",
+        "exemptOffTitle": "{name} için asla silmeyi kaldır?",
+        "exemptOffMessage": "Çalışma alanı yeniden kendi sürelerine uyar ve arşivlenip silinebilir.",
+        "exemptOffConfirm": "Asla silmeyi kaldır",
+        "exemptOffDone": "{name} yeniden kendi sürelerine uyuyor.",
+        "until": "İnceleme tarihi (isteğe bağlı)",
+        "untilHint": "Koruma bu tarihte sona erer ve yeniden gözden geçirilir. Süre sınırı istemiyorsanız boş bırakın.",
+        "restoreTitle": "{name} geri yüklensin mi?",
+        "restoreMessage": "Çalışma alanı etkin olur, kullanıcıları yeniden oturum açabilir ve hareketsizlik sayacı yeniden başlar.",
+        "restoreConfirm": "Çalışma alanını geri yükle",
+        "restoreDone": "{name} geri yüklendi.",
+        "holdOnTitle": "{name} için yasal saklama uygulansın mı?",
+        "holdOnMessage": "Saklama açıkken çalışma alanı, süreleri ne olursa olsun asla arşivlenmez veya silinmez.",
+        "holdOnSure": "Bunun tüm arşivleme ve silme işlemlerini durdurduğunu anlıyorum.",
+        "holdOnConfirm": "Yasal saklama uygula",
+        "holdOnDone": "{name} için yasal saklama uygulandı.",
+        "holdOffTitle": "{name} için yasal saklama kaldırılsın mı?",
+        "holdOffMessage": "Çalışma alanı yeniden kendi sürelerine uyar ve arşivlenip silinebilir.",
+        "holdOffSure": "Saklamanın kaldırılabileceğini onaylıyorum.",
+        "holdOffConfirm": "Yasal saklamayı kaldır",
+        "holdOffDone": "{name} için yasal saklama kaldırıldı."
       }
     }
   }

@@ -315,6 +315,191 @@ describe('embed loader (spec 7.3)', () => {
   });
 });
 
+describe('embed loader: popup mode', () => {
+  const key = 'aB3dE5gH7jK9mN1pQ3sT5v';
+  const script = buildEmbedScript(key, 'https://app.example.com');
+
+  /** A page just big enough for the loader: records what it appends, which timers it sets and which listeners it adds. */
+  function page(attrs: Record<string, string>, stored: Record<string, string> = {}) {
+    const store = { ...stored };
+    const timers: Array<{ fn: () => void; ms: number }> = [];
+    const winListeners: Record<string, Array<(e?: unknown) => void>> = {};
+    const docListeners: Record<string, Array<(e?: unknown) => void>> = {};
+    const appended: Array<Record<string, any>> = []; // eslint-disable-line @typescript-eslint/no-explicit-any
+    const element = (): Record<string, any> => ({
+      // eslint-disable-line @typescript-eslint/no-explicit-any
+      style: {},
+      attrs: {} as Record<string, string>,
+      children: [] as unknown[],
+      setAttribute(n: string, v: string) {
+        this.attrs[n] = v;
+      },
+      appendChild(c: unknown) {
+        this.children.push(c);
+      },
+      addEventListener: () => undefined,
+      focus: () => undefined,
+    });
+    const node = {
+      attrs: { 'data-forms-key': key, 'data-forms-mode': 'popup', ...attrs } as Record<
+        string,
+        string
+      >,
+      getAttribute(n: string) {
+        return this.attrs[n] ?? null;
+      },
+      setAttribute(n: string, v: string) {
+        this.attrs[n] = v;
+      },
+      dispatchEvent: () => undefined,
+    };
+    const win = {
+      pageYOffset: 0,
+      innerHeight: 800,
+      location: { href: '' },
+      localStorage: {
+        getItem: (k: string) => store[k] ?? null,
+        setItem: (k: string, v: string) => {
+          store[k] = v;
+        },
+      },
+      setTimeout: (fn: () => void, ms: number) => timers.push({ fn, ms }),
+      clearTimeout: () => undefined,
+      addEventListener: (t: string, fn: (e?: unknown) => void) => {
+        (winListeners[t] ??= []).push(fn);
+      },
+      removeEventListener: (t: string, fn: unknown) => {
+        winListeners[t] = (winListeners[t] ?? []).filter((f) => f !== fn);
+      },
+    } as Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
+    const doc = {
+      currentScript: null,
+      activeElement: null,
+      head: element(),
+      body: { appendChild: (c: Record<string, any>) => appended.push(c) }, // eslint-disable-line @typescript-eslint/no-explicit-any
+      documentElement: { scrollHeight: 2800, style: {} as Record<string, string> },
+      querySelectorAll: () => [node],
+      getElementById: () => null,
+      createElement: element,
+      addEventListener: (t: string, fn: (e?: unknown) => void) => {
+        (docListeners[t] ??= []).push(fn);
+      },
+      removeEventListener: () => undefined,
+    };
+    vm.runInNewContext(script, {
+      document: doc,
+      window: win,
+      encodeURIComponent,
+      CustomEvent: class {},
+      isFinite,
+      parseFloat,
+      Number,
+      Date,
+      Math,
+      Array,
+    });
+    const scrollTo = (y: number) => {
+      win.pageYOffset = y;
+      for (const fn of [...(winListeners.scroll ?? [])]) fn();
+    };
+    return { appended, timers, win, doc, store, scrollTo, winListeners, docListeners };
+  }
+
+  it('does nothing until the trigger fires, then draws one dialog with the form frame', () => {
+    const p = page({ 'data-forms-trigger': 'delay', 'data-forms-delay': '3' });
+    expect(p.appended).toHaveLength(0);
+    expect(p.timers).toHaveLength(1);
+    expect(p.timers[0]!.ms).toBe(3000);
+    p.timers[0]!.fn();
+    expect(p.appended).toHaveLength(1);
+    const panel = p.appended[0]!.children[0];
+    expect(panel.attrs.role).toBe('dialog');
+    const frame = panel.children[1];
+    expect(frame.src).toBe(`https://app.example.com/f/${key}?embed=1`);
+    expect(p.doc.documentElement.style.overflow).toBe('hidden');
+  });
+
+  it('holds the options to the same limits the Share tab writes', () => {
+    expect(page({ 'data-forms-trigger': 'delay', 'data-forms-delay': '99999' }).timers[0]!.ms).toBe(
+      600_000,
+    );
+    expect(page({ 'data-forms-trigger': 'delay', 'data-forms-delay': 'soon' }).timers[0]!.ms).toBe(
+      5000,
+    );
+    expect(page({ 'data-forms-trigger': 'bogus' }).timers).toHaveLength(1);
+  });
+
+  it('scroll down opens past the chosen depth, once', () => {
+    const p = page({ 'data-forms-trigger': 'scroll_down', 'data-forms-scroll': '50' });
+    p.scrollTo(300); // 15% of 2000px of room
+    expect(p.appended).toHaveLength(0);
+    p.scrollTo(1100);
+    expect(p.appended).toHaveLength(1);
+    p.scrollTo(1500);
+    expect(p.appended).toHaveLength(1);
+  });
+
+  it('scroll up opens only after the visitor went down and came back up 80px or more', () => {
+    const p = page({ 'data-forms-trigger': 'scroll_up' });
+    p.scrollTo(100);
+    p.scrollTo(20); // never went far enough down
+    expect(p.appended).toHaveLength(0);
+    p.scrollTo(600);
+    p.scrollTo(560); // only 40px back
+    expect(p.appended).toHaveLength(0);
+    p.scrollTo(500);
+    expect(p.appended).toHaveLength(1);
+  });
+
+  it('a click trigger opens nothing by itself but exposes FormsPopup[key].open and the data-forms-open button', () => {
+    const p = page({ 'data-forms-trigger': 'click' });
+    expect(p.timers).toHaveLength(0);
+    expect(p.winListeners.scroll ?? []).toHaveLength(0);
+    p.win.FormsPopup[key].open();
+    expect(p.appended).toHaveLength(1);
+  });
+
+  it('a visitor who already saw it, or sent the form, is left alone for automatic triggers', () => {
+    const later = String(Date.now() + 86_400_000);
+    expect(
+      page({ 'data-forms-trigger': 'delay' }, { [`forms:popup:${key}`]: later }).timers,
+    ).toHaveLength(0);
+    expect(
+      page({ 'data-forms-trigger': 'delay' }, { [`forms:popup:${key}`]: 'done' }).timers,
+    ).toHaveLength(0);
+    expect(
+      page({ 'data-forms-trigger': 'delay' }, { [`forms:popup:${key}`]: '1' }).timers,
+    ).toHaveLength(1);
+  });
+
+  it('puts no popup code on an inline embed', () => {
+    const listeners: unknown[] = [];
+    vm.runInNewContext(script, {
+      document: {
+        currentScript: null,
+        querySelectorAll: () => [
+          {
+            getAttribute: (n: string) => (n === 'data-forms-key' ? key : null),
+            setAttribute: () => undefined,
+            appendChild: () => undefined,
+          },
+        ],
+        createElement: () => ({ style: {}, setAttribute: () => undefined, contentWindow: {} }),
+      },
+      window: {
+        addEventListener: (_: string, fn: unknown) => listeners.push(fn),
+        location: { href: '' },
+      },
+      encodeURIComponent,
+      CustomEvent: class {},
+      isFinite,
+      Math,
+      Array,
+    });
+    expect(listeners).toHaveLength(1);
+  });
+});
+
 /** A Redis stand-in for the commands the throttle uses: a fixed window per key. */
 function fakeRedis(opts: { failing?: boolean } = {}) {
   const counts = new Map<string, number>();

@@ -1418,7 +1418,8 @@
             "forms_and_links": "Formulaires de capture de leads et liens partageables.",
             "extra_channels": "Les canaux Telegram, Facebook et Instagram.",
             "form_builder": "Formulaires web hébergés et intégrés qui créent des contacts dans le CRM. L’application payante Formulaires gère cet interrupteur.",
-            "waba_groups": "Créer et gérer des groupes WhatsApp depuis un numéro de l’API Cloud : lien d’invitation, demandes d’adhésion, membres. Le numéro doit être un compte d’entreprise officiel."
+            "waba_groups": "Créer et gérer des groupes WhatsApp depuis un numéro de l’API Cloud : lien d’invitation, demandes d’adhésion, membres. Le numéro doit être un compte d’entreprise officiel.",
+            "sms": "SMS en envoi uniquement via Twilio ou MSG91 : connectez des expéditeurs, envoyez des diffusions et campagnes SMS."
           },
           "units": {
             "days": "Jours",
@@ -1559,7 +1560,8 @@
             "ai_token_limit_monthly": "Jetons IA par mois (clés de la plateforme)",
             "forms": "Formulaires web",
             "form_submissions_monthly": "Soumissions de formulaires par mois",
-            "ai_form_generations_monthly": "Générations du créateur de formulaires IA par mois"
+            "ai_form_generations_monthly": "Générations du créateur de formulaires IA par mois",
+            "sms_monthly": "SMS par mois"
           },
           "featureGroups": {
             "messaging": "Messagerie",
@@ -1596,7 +1598,8 @@
             "forms_and_links": "Formulaires, liens click-to-chat et groupes",
             "extra_channels": "Canaux Telegram, Facebook et Instagram",
             "form_builder": "Formulaires (créateur de formulaires web)",
-            "waba_groups": "Groupes WhatsApp (API Cloud)"
+            "waba_groups": "Groupes WhatsApp (API Cloud)",
+            "sms": "Canal SMS"
           },
           "problems": {
             "required": "Ce champ est obligatoire.",
@@ -1648,7 +1651,8 @@
             "ai_token_limit_monthly": "Jetons que les assistants IA utilisent dans le mois calendaire sur les clés de la plateforme. Les espaces de travail avec leurs propres clés ne sont pas plafonnés.",
             "forms": "Formulaires web actifs (application Formulaires). Archiver un formulaire libère sa place. 0 = illimité.",
             "form_submissions_monthly": "Soumissions de formulaires acceptées dans le mois calendaire, spam exclu. Au-delà du plafond, une soumission est tout de même enregistrée pour examen, jamais perdue. 0 = illimité.",
-            "ai_form_generations_monthly": "Générations du créateur de formulaires IA dans le mois calendaire, nouvelle tentative de réparation comprise. 0 = illimité."
+            "ai_form_generations_monthly": "Générations du créateur de formulaires IA dans le mois calendaire, nouvelle tentative de réparation comprise. 0 = illimité.",
+            "sms_monthly": "Messages SMS sortants envoyés sur le mois civil. 0 = illimité."
           }
         }
       },

@@ -44,6 +44,17 @@ export class WidgetsController {
     return this.widgets.assistantPicker();
   }
 
+  @Get('flow-bots')
+  @RequirePermission('flb.flows.read')
+  @ApiOperation({
+    summary: "The workspace's website chat bots with their widgets (Settings > Channels > Web)",
+    description:
+      "`state` is `needs_customizing` until the bot's widget has been saved once, then `draft`, `live` or `paused`. Newest 200; `total` counts all.",
+  })
+  flowBots() {
+    return this.widgets.webBots();
+  }
+
   @Get(':id')
   @RequirePermission('wgt.widgets.read')
   @ApiOperation({ summary: 'One widget, as the builder edits it' })

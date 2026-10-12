@@ -176,12 +176,35 @@
       "cancelBody": "実行は現在の位置で停止します。顧客には通知されません。",
       "cancelConfirm": "実行をキャンセル",
       "cancelKeep": "継続する",
-      "cancelled": "実行をキャンセルしました"
+      "cancelled": "実行をキャンセルしました",
+      "tlTitle": "実行タイムライン",
+      "tlNodes": "実行したノード",
+      "tlErrors": "エラー",
+      "tlTime": "ノード時間",
+      "filterAll": "すべてのステップ",
+      "filterErrors": "エラーのみ",
+      "changedTitle": "実行後にこのフローが編集されました",
+      "changedBody": "ログには実行時のフローがそのまま表示されます。",
+      "removed": "フローから削除済み",
+      "exit": "出口 {port}",
+      "visit": "{n} 回目",
+      "truncated": "{max} を超えるステップが実行されました。以降はカウントのみで一覧には表示されません。",
+      "retention": "ログは実行終了の {days} 日後に削除されます。",
+      "pathTitle": "たどった経路",
+      "notReached": "未到達",
+      "noErrors": "この実行にエラーはありません。"
     },
     "event": {
       "step": "ステップ",
       "reply": "顧客の返信",
-      "end": "終了"
+      "end": "終了",
+      "advance": "次へ進行",
+      "wait": "返信待ち",
+      "sleep": "遅延",
+      "halt": "停止",
+      "exec": "実行",
+      "truncated": "ログ上限に到達",
+      "start": "開始"
     },
     "subs": {
       "kicker": "フロー",
@@ -469,6 +492,13 @@
       "manyBody": "{n} 件の連絡先が最初からフローに再登録され、メッセージが再度送信されます。この操作は元に戻せません。",
       "summary": "{queued} 件を再開、{succeeded} 件が完了、{failed} 件が失敗、{skipped} 件をスキップしました。",
       "flowInactive": "失敗した連絡先を再実行する前に、このフローを再度オンにしてください。"
+    },
+    "outcome": {
+      "ok": "OK",
+      "error": "エラー",
+      "skipped": "スキップ",
+      "waiting": "待機中",
+      "timeout": "タイムアウト"
     }
   }
 }

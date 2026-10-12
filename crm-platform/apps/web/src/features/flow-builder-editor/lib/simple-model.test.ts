@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { FlowEdge, FlowGraph, FlowNode } from '@crm/contracts';
 import {
+  stepKindsFor,
   addJourney,
   allSteps,
   duplicateGroup,
@@ -624,5 +625,16 @@ describe('the Answer from FAQ step in the Simple builder', () => {
     expect(make({ minScore: 0.5 })).toEqual([]);
     expect(make({ minScore: null })).toEqual([]);
     expect(make({ query: '', category: 'x' })).toEqual([]);
+  });
+});
+
+describe('steps per channel', () => {
+  it('a website chat bot offers only what the widget can show', () => {
+    const keys = stepKindsFor('web').map((k) => k.type);
+    expect(new Set(keys)).toEqual(new Set(['message', 'buttons', 'ask', 'delay']));
+  });
+
+  it('a WhatsApp bot keeps every step', () => {
+    expect(stepKindsFor('chat')).toEqual(STEP_KINDS);
   });
 });

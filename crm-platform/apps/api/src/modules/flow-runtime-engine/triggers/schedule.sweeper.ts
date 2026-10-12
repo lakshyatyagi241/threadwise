@@ -91,7 +91,7 @@ export class FlowScheduleSweeper {
         const claimed = await this.db.privileged(async (tx) => {
           const res = (await tx.execute(sql`
             UPDATE flows SET trigger_last_occurrence = ${key}
-             WHERE id = ${flowId} AND trigger_last_occurrence IS NOT DISTINCT FROM ${last} RETURNING id`)) as unknown as Rows;
+             WHERE org_id = ${orgId} AND id = ${flowId} AND trigger_last_occurrence IS NOT DISTINCT FROM ${last} RETURNING id`)) as unknown as Rows;
           return res.rows.length > 0;
         });
         if (!claimed) continue;

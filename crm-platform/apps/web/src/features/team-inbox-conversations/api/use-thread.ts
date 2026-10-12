@@ -1,7 +1,8 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import { messageResponseSchema, type MessageResponse } from '@crm/contracts';
+import { messageResponseSchema, type MessageResponse, type SendMessageInput } from '@crm/contracts';
+import type { ShareInput } from '../lib/share';
 import { useRealtimeEvent, useResync, useRoom } from '@/lib/realtime';
 import { errorCode } from '../lib/errors';
 import {
@@ -44,6 +45,8 @@ export interface Thread {
   /** Puts an emoji on a message (`''` takes it back). Rejects with the API error so the screen can say why. */
   react: (target: MessageResponse, emoji: string) => Promise<void>;
   sendTemplate: (input: { templateId: string; variables: Record<string, string> }) => Promise<void>;
+  /** Sends a place, contact cards or buttons. Rejects with the API error so the dialog can say why. */
+  sendShare: (input: ShareInput) => Promise<void>;
   /** Send again a request that never produced a stored message. */
   retryPending: (clientMessageId: string) => void;
   dismissPending: (clientMessageId: string) => void;
@@ -298,6 +301,22 @@ export function useThread(
     [],
   );
 
+  const sendShare = useCallback(async (input: ShareInput) => {
+    const id = latest.current.conversationId;
+    if (!id) return;
+    try {
+      const message = await inboxApi.send(id, {
+        ...input,
+        clientMessageId: crypto.randomUUID(),
+      } as SendMessageInput);
+      if (latest.current.conversationId === id) dispatch({ type: 'merge', messages: [message] });
+      latest.current.options.onSent();
+    } catch (e) {
+      if (errorCode(e) === 'SERVICE_WINDOW_CLOSED') latest.current.options.onWindowClosed();
+      throw e;
+    }
+  }, []);
+
   const react = useCallback(async (target: MessageResponse, emoji: string) => {
     const id = latest.current.conversationId;
     if (!id) return;
@@ -344,6 +363,7 @@ export function useThread(
       olderLoading,
       send,
       sendTemplate,
+      sendShare,
       react,
       retryPending,
       dismissPending,
@@ -359,6 +379,7 @@ export function useThread(
       olderLoading,
       send,
       sendTemplate,
+      sendShare,
       react,
       retryPending,
       dismissPending,

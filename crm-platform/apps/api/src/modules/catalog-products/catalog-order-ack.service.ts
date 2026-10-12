@@ -77,7 +77,12 @@ export class CatalogOrderAckService {
         return true;
       }
       if (plan.fallback?.phone) {
-        await this.bridge.sendText({ senderPhone: plan.fallback.phone, to, text });
+        await this.bridge.sendText({
+          orgId: order.orgId,
+          senderPhone: plan.fallback.phone,
+          to,
+          text,
+        });
         return true;
       }
       return false;

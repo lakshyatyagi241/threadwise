@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useInfiniteQuery } from '@tanstack/react-query';
@@ -10,7 +11,7 @@ import { useUrlState } from '@/features/platform-payment-gateways/lib/use-url-st
 import { useDebounced } from '@/features/roles-permissions/lib/use-debounced';
 import { fetchHubList, hubKeys } from '../api';
 import { useStoredColumns } from '../lib/use-stored-columns';
-import { useHubAccess } from '../lib/use-hub-access';
+import { useHubAccess, useRetentionAccess } from '../lib/use-hub-access';
 import { useRowActions } from '../lib/use-row-actions';
 import { toListFilters } from '../lib/query';
 import { formatMrr } from '../lib/format';
@@ -27,6 +28,7 @@ export function WorkspacesPage() {
   const columns = useStoredColumns();
   const access = useHubAccess();
   const actions = useRowActions();
+  const retention = useRetentionAccess();
 
   const [search, setSearch] = useState(values.q);
   const settled = useDebounced(search.trim(), 300);
@@ -55,7 +57,20 @@ export function WorkspacesPage() {
   return (
     <div className="space-y-6">
       <Breadcrumb />
-      <PageHeader title={t('title')} description={t('subtitle')} />
+      <PageHeader
+        title={t('title')}
+        description={t('subtitle')}
+        actions={
+          retention.view ? (
+            <Link
+              href="/admin/workspaces/retention"
+              className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              {t('retentionLink')}
+            </Link>
+          ) : undefined
+        }
+      />
 
       {kpis && (
         <div

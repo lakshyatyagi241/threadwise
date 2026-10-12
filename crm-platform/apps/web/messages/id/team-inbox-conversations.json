@@ -141,6 +141,9 @@
       },
       "template": "Pesan templat: {name}",
       "unavailable": "Pesan tidak tersedia",
+      "unsupported": "Pelanggan mengirim sesuatu yang tidak dapat ditampilkan oleh kanal ini.",
+      "forwarded": "Diteruskan",
+      "referral": "Berasal dari iklan atau tautan",
       "sentIn": "Dikirim dalam {lang}. Tampilkan teks yang Anda tulis",
       "translatedFrom": "Diterjemahkan dari {lang}. Tampilkan yang asli",
       "bot": "Bot",
@@ -274,7 +277,75 @@
         "hearts": "Hati dan simbol",
         "objects": "Objek"
       },
-      "cancelReply": "Batalkan balasan"
+      "cancelReply": "Batalkan balasan",
+      "share": {
+        "open": "Bagikan lokasi, kontak, atau tombol",
+        "title": "Bagikan",
+        "eyebrow": "Kirim ke pelanggan",
+        "close": "Tutup",
+        "cancel": "Batal",
+        "send": "Kirim",
+        "sending": "Mengirim…",
+        "sent": "Terkirim",
+        "windowHint": "Seperti pesan bebas lainnya, ini memerlukan jendela 24 jam yang terbuka pada nomor WhatsApp Cloud API.",
+        "tab": {
+          "location": "Lokasi",
+          "contacts": "Kontak",
+          "buttons": "Tombol"
+        },
+        "location": {
+          "latitude": "Lintang",
+          "longitude": "Bujur",
+          "name": "Nama tempat (opsional)",
+          "address": "Alamat (opsional)",
+          "pasteHint": "Anda bisa menempelkan \"28.6139, 77.2090\" dari peta di sini."
+        },
+        "contact": {
+          "card": "Kontak {n}",
+          "name": "Nama",
+          "org": "Perusahaan (opsional)",
+          "phone": "Telepon",
+          "email": "Email",
+          "remove": "Hapus kontak {n}",
+          "add": "Tambah kontak lain"
+        },
+        "buttons": {
+          "type": "Jenis tombol",
+          "kind": {
+            "buttons": "Tombol balasan",
+            "cta_url": "Tombol tautan",
+            "list": "Daftar"
+          },
+          "header": "Header (opsional)",
+          "body": "Pesan",
+          "footer": "Footer (opsional)",
+          "titles": "Tombol (maksimal 3)",
+          "titleN": "Tombol {n}",
+          "add": "Tambah tombol",
+          "linkText": "Teks tombol",
+          "url": "Tautan",
+          "listButton": "Tombol yang membuka daftar",
+          "section": "Bagian {n}",
+          "sectionTitle": "Judul bagian",
+          "rowTitle": "Judul baris {n}",
+          "rowDescription": "Deskripsi baris {n} (opsional)",
+          "addRow": "Tambah baris",
+          "addSection": "Tambah bagian",
+          "removeSection": "Hapus bagian {n}",
+          "rows": "Baris",
+          "rowCount": "{n} dari {max} baris"
+        },
+        "problem": {
+          "required": "{label} wajib diisi",
+          "range": "{label} di luar rentang",
+          "phoneOrEmail": "Tambahkan nomor telepon atau email",
+          "phone": "Masukkan nomor telepon yang valid",
+          "email": "Masukkan alamat email yang valid",
+          "duplicate": "{label} sama dengan tombol lain",
+          "url": "Masukkan tautan yang diawali http:// atau https://",
+          "tooManyRows": "Sebuah daftar memuat paling banyak 10 baris secara total"
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Catatan dan linimasa",

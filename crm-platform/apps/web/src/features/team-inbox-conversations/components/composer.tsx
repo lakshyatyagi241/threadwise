@@ -21,7 +21,15 @@ import {
 } from '@/features/channel-whatsapp-cloud';
 import { Button, Spinner, cn } from '@crm/ui';
 import { humanSize } from '../lib/time';
-import { CloseIcon, FileIcon, PaperclipIcon, SendIcon, SmileIcon, TemplateIcon } from './icons';
+import {
+  CloseIcon,
+  FileIcon,
+  PaperclipIcon,
+  SendIcon,
+  ShareIcon,
+  SmileIcon,
+  TemplateIcon,
+} from './icons';
 import { EmojiPicker } from './emoji-picker';
 import { QuotePreview } from './quote-preview';
 
@@ -61,6 +69,10 @@ export interface ComposerProps {
   canTemplate?: boolean;
   /** Opens the template picker. */
   onTemplate?: () => void;
+  /** The channel carries a place, contact cards or buttons and the agent may reply: the "Share" button is shown. */
+  canShare?: boolean;
+  /** Opens the share dialog. */
+  onShare?: () => void;
   /** The type and size rules of the channel, so a file WhatsApp would refuse is turned away before it is uploaded. */
   attachments?: AttachmentRules;
   /** Reading only: neither tab can write. */
@@ -287,6 +299,19 @@ export function Composer(props: ComposerProps) {
             className="flex size-10 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
           >
             <TemplateIcon />
+          </button>
+        )}
+        {!isNote && !groupBlocked && props.canShare && props.onShare && (
+          <button
+            type="button"
+            title={t('share.open')}
+            aria-label={t('share.open')}
+            data-testid="inbox-share-button"
+            disabled={disabled}
+            onClick={props.onShare}
+            className="flex size-10 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
+          >
+            <ShareIcon />
           </button>
         )}
         {!isNote && !groupBlocked && props.canAttach && (

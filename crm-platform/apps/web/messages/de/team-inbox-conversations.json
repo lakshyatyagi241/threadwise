@@ -141,6 +141,9 @@
       },
       "template": "Vorlagennachricht: {name}",
       "unavailable": "Nachricht nicht verfügbar",
+      "unsupported": "Der Kunde hat etwas gesendet, das dieser Kanal nicht anzeigen kann.",
+      "forwarded": "Weitergeleitet",
+      "referral": "Kam über eine Anzeige oder einen Link",
       "sentIn": "In {lang} gesendet. Originaltext anzeigen",
       "translatedFrom": "Aus {lang} übersetzt. Original anzeigen",
       "bot": "Bot",
@@ -274,7 +277,75 @@
         "hearts": "Herzen und Symbole",
         "objects": "Objekte"
       },
-      "cancelReply": "Antwort abbrechen"
+      "cancelReply": "Antwort abbrechen",
+      "share": {
+        "open": "Standort, Kontakt oder Schaltflächen teilen",
+        "title": "Teilen",
+        "eyebrow": "An den Kunden senden",
+        "close": "Schließen",
+        "cancel": "Abbrechen",
+        "send": "Senden",
+        "sending": "Wird gesendet…",
+        "sent": "Gesendet",
+        "windowHint": "Wie jede Freitextnachricht benötigen diese ein geöffnetes 24-Stunden-Fenster auf einer WhatsApp-Cloud-API-Nummer.",
+        "tab": {
+          "location": "Standort",
+          "contacts": "Kontakt",
+          "buttons": "Schaltflächen"
+        },
+        "location": {
+          "latitude": "Breitengrad",
+          "longitude": "Längengrad",
+          "name": "Name des Orts (optional)",
+          "address": "Adresse (optional)",
+          "pasteHint": "Sie können \"28.6139, 77.2090\" aus einer Karte hier einfügen."
+        },
+        "contact": {
+          "card": "Kontakt {n}",
+          "name": "Name",
+          "org": "Unternehmen (optional)",
+          "phone": "Telefon",
+          "email": "E-Mail",
+          "remove": "Kontakt {n} entfernen",
+          "add": "Weiteren Kontakt hinzufügen"
+        },
+        "buttons": {
+          "type": "Art der Schaltfläche",
+          "kind": {
+            "buttons": "Antwortschaltflächen",
+            "cta_url": "Link-Schaltfläche",
+            "list": "Liste"
+          },
+          "header": "Kopfzeile (optional)",
+          "body": "Nachricht",
+          "footer": "Fußzeile (optional)",
+          "titles": "Schaltflächen (bis zu 3)",
+          "titleN": "Schaltfläche {n}",
+          "add": "Schaltfläche hinzufügen",
+          "linkText": "Text der Schaltfläche",
+          "url": "Link",
+          "listButton": "Schaltfläche, die die Liste öffnet",
+          "section": "Abschnitt {n}",
+          "sectionTitle": "Titel des Abschnitts",
+          "rowTitle": "Titel von Zeile {n}",
+          "rowDescription": "Beschreibung von Zeile {n} (optional)",
+          "addRow": "Zeile hinzufügen",
+          "addSection": "Abschnitt hinzufügen",
+          "removeSection": "Abschnitt {n} entfernen",
+          "rows": "Zeilen",
+          "rowCount": "{n} von {max} Zeilen"
+        },
+        "problem": {
+          "required": "{label} ist erforderlich",
+          "range": "{label} liegt außerhalb des Bereichs",
+          "phoneOrEmail": "Fügen Sie eine Telefonnummer oder eine E-Mail hinzu",
+          "phone": "Geben Sie eine gültige Telefonnummer ein",
+          "email": "Geben Sie eine gültige E-Mail-Adresse ein",
+          "duplicate": "{label} wiederholt eine andere Schaltfläche",
+          "url": "Geben Sie einen Link ein, der mit http:// oder https:// beginnt",
+          "tooManyRows": "Eine Liste enthält insgesamt höchstens 10 Zeilen"
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Notizen und Verlauf",

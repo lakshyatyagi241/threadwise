@@ -45,6 +45,18 @@ const METERS: ReadonlyArray<{
       ),
   },
   {
+    // SMS accepted by the provider this calendar month: the ledger the SMS sender reserves from (`plan_usage`, metric `sms_sent`).
+    key: 'sms_monthly',
+    window: 'month',
+    count: (tx, orgId, from) =>
+      n(
+        tx,
+        sql`SELECT coalesce(sum(count), 0)::int AS n FROM plan_usage
+            WHERE org_id = ${orgId} AND metric = 'sms_sent'
+              AND period = ${`${from.getUTCFullYear()}${String(from.getUTCMonth() + 1).padStart(2, '0')}`}`,
+      ),
+  },
+  {
     key: 'contacts',
     window: 'total',
     count: (tx, orgId) =>
@@ -307,6 +319,7 @@ const METERS: ReadonlyArray<{
 /** Keys whose enforcement is not "live row count < cap": see assertCanAdd. */
 const NOT_A_ROW_COUNT: ReadonlySet<PlanLimitKey> = new Set<PlanLimitKey>([
   'monthly_messages',
+  'sms_monthly',
   'total_campaigns',
   'broadcast_recipients',
   'ai_token_limit_monthly',

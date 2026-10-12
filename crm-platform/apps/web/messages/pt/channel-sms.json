@@ -1,0 +1,214 @@
+{
+  "sms": {
+    "common": {
+      "dismiss": "Dispensar",
+      "close": "Fechar",
+      "cancel": "Cancelar"
+    },
+    "hub": {
+      "kicker": "Canais",
+      "title": "SMS",
+      "titleAccent": "remetentes",
+      "intro": "Envie mensagens de texto dos seus próprios números Twilio e remetentes MSG91. Aqui o SMS é somente de envio: você alcança os contatos por meio de transmissões e campanhas.",
+      "campaigns": "Campanhas",
+      "broadcasts": "Transmissões",
+      "channels": "Canais",
+      "loadError": "Não foi possível carregar seus números de SMS. Tente novamente em instantes.",
+      "cardCaption": "Twilio · MSG91",
+      "activeCount": "{count, plural, one {# número ativo} other {# números ativos}}",
+      "notConnected": "Não conectado",
+      "howTitle": "Como funciona",
+      "how": {
+        "connect": {
+          "title": "Conecte um remetente",
+          "body": "Adicione um número Twilio ou um remetente MSG91. Verificamos as credenciais com o provedor antes de salvar."
+        },
+        "report": {
+          "title": "Cole o endereço de relatórios de entrega",
+          "body": "Adicione-o no painel da MSG91 ou da Twilio para que os textos entregues e com falha apareçam nos seus relatórios."
+        },
+        "send": {
+          "title": "Envie transmissões e campanhas",
+          "body": "Escolha este remetente ao criar uma transmissão ou uma campanha. Cada destinatário recebe um texto."
+        },
+        "billing": {
+          "title": "Cobrado na sua cota de SMS",
+          "body": "Os textos contam na cota mensal de SMS do seu plano e nunca são cobrados da carteira do WhatsApp."
+        }
+      },
+      "reportTitle": "Lembre-se: cole isto no seu provedor",
+      "reportBody": "Adicione este endereço de relatórios de entrega no painel do seu provedor para que possamos marcar os textos como entregues ou com falha.",
+      "reportLabel": "URL de relatório de entrega",
+      "copy": "Copiar",
+      "copied": "Copiado",
+      "copyFailed": "Não foi possível copiar. Selecione o endereço e copie manualmente.",
+      "connectedTitle": "Números conectados",
+      "total": "{count} no total",
+      "empty": "Nenhum número de SMS conectado ainda.",
+      "connectFirst": "Conecte seu primeiro número"
+    },
+    "card": {
+      "active": "Ativo",
+      "inactive": "Inativo",
+      "rate": "Tarifa / segmento",
+      "dltSender": "Remetente DLT",
+      "dltTemplate": "Modelo DLT",
+      "alphanumeric": "Sender ID: unidirecional e não aceito em todos os países.",
+      "activate": "Ativar",
+      "deactivate": "Desativar",
+      "remove": "Remover",
+      "removeTitle": "Remover número de SMS",
+      "removeConfirm": "Remover este número de SMS?",
+      "activated": "Número de SMS ativado.",
+      "deactivated": "Número de SMS desativado.",
+      "removed": "Número de SMS removido.",
+      "failed": "Não foi possível atualizar o número de SMS. Tente novamente.",
+      "changed": "Este número foi alterado em outro lugar. A lista foi recarregada, tente novamente.",
+      "notAvailable": "O SMS não está disponível no seu plano ou foi desativado.",
+      "cancel": "Cancelar"
+    },
+    "connect": {
+      "title": "Conectar um número",
+      "intro": "Adicione quantos precisar. Vários números Twilio e remetentes MSG91 podem funcionar ao mesmo tempo.",
+      "provider": "Provedor de SMS",
+      "providerTwilio": "Twilio (global)",
+      "providerMsg91": "MSG91 (Índia / DLT)",
+      "providerHint": "Twilio para a maioria dos países; MSG91 para entrega confiável na Índia.",
+      "from": "Número de origem / Sender ID",
+      "fromPlaceholder": "+17372508034",
+      "fromHint": "Um número em formato internacional (Twilio) ou seu remetente registrado (MSG91). Um remetente formado por letras é unidirecional: sem respostas.",
+      "sid": "Account SID da Twilio",
+      "sidPlaceholder": "ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "sidHint": "Somente Twilio. Deixe em branco para reutilizar as chaves já conectadas para o WhatsApp.",
+      "token": "Auth Token / Auth Key da MSG91",
+      "tokenHint": "Salvo criptografado. Na Twilio, deixe em branco para reutilizar as chaves já conectadas para o WhatsApp.",
+      "dltOptions": "Opções da MSG91 / Índia (DLT)",
+      "senderId": "Sender ID da DLT",
+      "senderIdPlaceholder": "ACMEIN",
+      "senderIdHint": "Somente MSG91. Seu remetente de 6 letras registrado na DLT.",
+      "dltTemplate": "ID do modelo DLT",
+      "dltTemplateHint": "Somente MSG91. O ID do modelo DLT aprovado usado para entrega na Índia.",
+      "reportBoxTitle": "Relatórios de entrega do painel da MSG91",
+      "reportBoxBody": "No painel da MSG91, cole este endereço como a URL de relatório de entrega (DLR):",
+      "rate": "Tarifa por segmento",
+      "ratePlaceholder": "0.0075",
+      "rateHint": "Apenas para o relatório de gastos com SMS. Nunca cobrado da carteira do WhatsApp.",
+      "currency": "Moeda",
+      "submit": "Verificar e conectar SMS",
+      "submitting": "Verificando…",
+      "errorTitle": "Não foi possível conectar o número de SMS:",
+      "providerError": "O provedor informou: {reason}",
+      "connected": "Número de SMS conectado. Você já pode começar a enviar.",
+      "failed": "Não foi possível conectar o número de SMS. Tente novamente.",
+      "errors": {
+        "fromRequired": "O campo do número de origem é obrigatório.",
+        "fromTooLong": "O número de origem não pode ter mais de 32 caracteres.",
+        "sidTooLong": "O SID da conta não pode ter mais de 64 caracteres.",
+        "sidShape": "Isso não é um Account SID. Ele deve começar com AC; uma chave de API começando com SK não funcionará.",
+        "tokenRequired": "É necessária uma Auth Key da MSG91.",
+        "tokenTooLong": "O Auth Token não pode ter mais de 255 caracteres.",
+        "senderIdTooLong": "O ID do remetente não pode ter mais de 16 caracteres.",
+        "dltTemplateTooLong": "O ID do modelo DLT não pode ter mais de 64 caracteres.",
+        "rateInvalid": "A tarifa por segmento deve ser um número maior ou igual a zero.",
+        "currencyTooLong": "A moeda não pode ter mais de 8 caracteres."
+      },
+      "api": {
+        "notAvailable": "O SMS não está disponível no seu plano, ou a plataforma o desativou.",
+        "unavailable": "Este número de SMS está desconectado ou sem credenciais. Reconecte-o primeiro."
+      }
+    },
+    "lookup": {
+      "title": "Verifique um número antes de enviar um texto",
+      "hint": "O SMS é cobrado quando é enviado, não quando chega, então confirme que o número é um celular real antes de enviar.",
+      "label": "Número de telefone",
+      "placeholder": "+1 555 123 4567",
+      "check": "Verificar número",
+      "checking": "Verificando…",
+      "unreachable": "Não foi possível acessar o serviço de consulta.",
+      "carrier": "Operadora: {carrier}.",
+      "kind": {
+        "mobile": "Celular — pode receber SMS.",
+        "landline": "Fixo — não pode receber SMS. Enviar para ele é cobrado e perdido.",
+        "voip": "VoIP — pode não receber SMS de forma confiável.",
+        "invalid": "Número inválido — enviar para ele seria cobrado e nunca chegaria."
+      }
+    },
+    "guide": {
+      "title": "Guia de configuração",
+      "twilio": {
+        "title": "Twilio (global)",
+        "p1": "Copie o Account SID (começa com AC) e o Auth Token da página inicial do console da Twilio. Uma chave de API começando com SK não funcionará.",
+        "p2": "Compre um número com suporte a SMS, ou use seu número de teste, e cole-o como número de origem em formato internacional.",
+        "p3": "Nas configurações do número Twilio, cole o endereço de relatórios de entrega acima como URL de callback de status.",
+        "p4": "Contas de teste só podem enviar para números verificados e recusam texto personalizado."
+      },
+      "msg91": {
+        "title": "MSG91 (Índia / DLT)",
+        "p1": "As operadoras indianas filtram números longos estrangeiros, então use a MSG91 para entrega confiável na Índia.",
+        "p2": "Cole sua Auth Key da MSG91 no campo Auth Token.",
+        "p3": "No portal DLT, registre um ID de remetente de 6 letras e um modelo de mensagem, e cole ambos nas opções de DLT.",
+        "p4": "Com um ID de modelo DLT, o remetente usa a rota de modelos da MSG91; sem ele, envia texto simples."
+      },
+      "billing": {
+        "title": "Segmentos, custo e cobrança",
+        "p1": "Um texto de até 160 caracteres simples é um segmento (GSM-7). Um emoji ou caractere não latino reduz o limite para 70 (UCS-2) e pode triplicar o custo.",
+        "p2": "Textos mais longos são divididos em segmentos de 153 caracteres (67 com UCS-2), e cada segmento é cobrado.",
+        "p3": "A tarifa que você informa serve apenas para o relatório de gastos. Os textos são contabilizados na cota mensal de SMS do seu plano, nunca na carteira do WhatsApp.",
+        "p4": "Um ID de remetente formado por letras é unidirecional e não é aceito em todos os países, por exemplo EUA e Canadá."
+      }
+    },
+    "segments": {
+      "summary": "{units} caracteres · {segments, plural, one {# segmento} other {# segmentos}} · {encoding}",
+      "remaining": "{remaining} restantes neste segmento",
+      "ucs2": "Esta mensagem contém caracteres fora do alfabeto GSM (emoji ou escrita não latina), por isso é limitada a {perSegment} caracteres por SMS e será cobrada como {segments} mensagens.",
+      "gsm": "Esta mensagem tem {units} caracteres e será cobrada como {segments} mensagens."
+    },
+    "compose": {
+      "note": "O SMS envia apenas texto simples. Cabeçalho, rodapé, anexo, botões e teste A/B não são usados, por isso ficam ocultos.",
+      "bodyHint": "Seja breve: a cada 160 caracteres há outro segmento, e cada segmento é cobrado."
+    },
+    "chooser": {
+      "name": "SMS",
+      "hint": "Envie texto aos seus contatos de um número Twilio ou de um remetente MSG91.",
+      "cta": "Criar campanha de SMS"
+    },
+    "operator": {
+      "nav": {
+        "group": "Canais",
+        "item": "SMS"
+      },
+      "title": "Canal SMS",
+      "eyebrow": "interruptor da plataforma",
+      "superOnly": "Apenas um superadministrador pode alterar o interruptor de SMS. Você pode ver o estado dele.",
+      "loading": "Carregando",
+      "retry": "Tentar novamente",
+      "status": {
+        "enabled": "Ativado",
+        "disabled": "Desativado"
+      },
+      "explanation": "Ativa ou desativa o canal SMS para todos os espaços de trabalho. Isso apenas mostra ou oculta os pontos de entrada (o menu SMS, os seletores de remetente e o canal de modelos SMS). Remetentes, modelos e envios em andamento nunca são excluídos nem interrompidos.",
+      "state": {
+        "enabled": "O SMS está ativado. Os espaços de trabalho cujo plano inclui SMS podem conectar remetentes e enviar mensagens de texto por transmissões e campanhas.",
+        "disabled": "O SMS está desativado. Os espaços de trabalho não veem o menu SMS, os seletores de remetente nem os modelos SMS. Ative quando estiver pronto para oferecer o canal."
+      },
+      "enable": "Ativar SMS",
+      "disable": "Desativar SMS",
+      "cancel": "Cancelar",
+      "enabledToast": "O SMS agora está ativado na plataforma.",
+      "disabledToast": "O SMS agora está desativado na plataforma.",
+      "disableDialog": {
+        "title": "Desativar o SMS?",
+        "body": "Todos os espaços de trabalho deixam de ver imediatamente o menu SMS, os seletores de remetente e os modelos SMS. Nada é excluído e os remetentes existentes continuam funcionando. Você pode ativar novamente a qualquer momento.",
+        "confirm": "Desativar SMS"
+      },
+      "errors": {
+        "forbidden": "Você não tem permissão para fazer isso.",
+        "conflict": "Outra pessoa alterou esta configuração. A página foi atualizada; tente novamente.",
+        "validation": "Verifique o valor e tente novamente.",
+        "request": "Não foi possível concluir a solicitação.",
+        "unexpected": "Algo deu errado do nosso lado. Tente novamente em instantes.",
+        "network": "Não foi possível acessar o servidor. Verifique sua conexão."
+      }
+    }
+  }
+}

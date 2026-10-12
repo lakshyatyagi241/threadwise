@@ -69,6 +69,28 @@ export class FormsController {
     return this.catalogue.properties(query.object);
   }
 
+  @Get('meta/protection')
+  @RequirePermission('record.forms.read')
+  @ApiOperation({
+    summary: 'What keeps spam out of the forms right now',
+    description:
+      'Whether the platform has a CAPTCHA provider (a form set to always-on does nothing without one), how many bots the hidden trap field dropped this month, and how many submissions are held as spam.',
+  })
+  protection() {
+    return this.catalogue.protection();
+  }
+
+  @Get('meta/payment-gateway')
+  @RequirePermission('record.forms.read')
+  @ApiOperation({
+    summary: 'Can this workspace take payment on a form, and on which gateway',
+    description:
+      "The workspace's shared payment gateway (Settings > Payments). A form can only enable payment when `ready` is true.",
+  })
+  paymentGateway() {
+    return this.catalogue.paymentGateway();
+  }
+
   @Get()
   @RequirePermission('record.forms.read')
   @ApiOperation({

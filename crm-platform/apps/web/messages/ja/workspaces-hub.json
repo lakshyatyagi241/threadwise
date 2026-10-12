@@ -78,7 +78,8 @@
       "noMatchMessage": "検索またはフィルターを変更すると、さらに表示されます。",
       "loadMore": "さらに読み込む",
       "loadingMore": "さらに読み込み中",
-      "loaded": "{count, plural, other {# 件のワークスペース}}を表示中"
+      "loaded": "{count, plural, other {# 件のワークスペース}}を表示中",
+      "retentionLink": "保持"
     },
     "cell": {
       "suspended": "停止中",
@@ -252,6 +253,147 @@
         "text": "このワークスペースのチケット、会話、サポート履歴。",
         "open": "サポートの記録を開く",
         "openTickets": "{count, plural, other {# 件の未対応チケット}}"
+      }
+    },
+    "retention": {
+      "crumb": "保持",
+      "title": "ワークスペースの保持",
+      "subtitle": "非アクティブなワークスペースを非アクティブ期間の長い順に表示します。アーカイブと消去の時期、送信済みのリマインダー、保護や復元の操作を確認できます。",
+      "backToList": "ワークスペースに戻る",
+      "deniedTitle": "アクセス権がありません",
+      "tableLabel": "ワークスペースの保持",
+      "status": {
+        "active": "アクティブ",
+        "archived": "アーカイブ済み",
+        "suspended": "停止中",
+        "deleted": "オーナーが削除"
+      },
+      "filters": {
+        "label": "フィルター",
+        "status": "ステータス",
+        "allStatuses": "すべてのステータス",
+        "minDays": "最低非アクティブ日数",
+        "neverDeleteOnly": "削除しないもののみ",
+        "clear": "フィルターをクリア"
+      },
+      "columns": {
+        "workspace": "ワークスペース",
+        "status": "ステータス",
+        "daysInactive": "非アクティブ日数",
+        "lastActivity": "最終アクティビティ",
+        "archiveOn": "アーカイブ日",
+        "eraseOn": "消去日",
+        "reminders": "送信済みリマインダー",
+        "protection": "保護",
+        "actions": "操作"
+      },
+      "remindersArchive": "アーカイブ {n}/3",
+      "remindersErase": "消去 {n}/3",
+      "emptyTitle": "表示するワークスペースがありません",
+      "emptyMessage": "ワークスペースが作成されるとここに表示されます。",
+      "noMatchTitle": "一致するワークスペースがありません",
+      "noMatchMessage": "フィルターを変更して他の結果を表示します。",
+      "loadMore": "さらに読み込む",
+      "loadingMore": "読み込み中",
+      "loaded": "{count, plural, other {# 件のワークスペース}}を表示中",
+      "badge": {
+        "neverDelete": "削除しない",
+        "legalHold": "リーガルホールド",
+        "paidPlan": "有料プラン（対象外）",
+        "paidPlanHint": "有効な有料プランのワークスペースは、非アクティブを理由にアーカイブされることはありません。",
+        "until": "{date}まで",
+        "indefinite": "期限なし",
+        "by": "設定者: {who}"
+      },
+      "actions": {
+        "menu": "{name}の保持操作",
+        "history": "履歴",
+        "policy": "期間を変更",
+        "exemptOn": "削除しない",
+        "exemptOff": "「削除しない」を解除",
+        "restore": "復元",
+        "holdOn": "リーガルホールドを設定",
+        "holdOff": "リーガルホールドを解除"
+      },
+      "event": {
+        "reminder_sent": "リマインダー送信済み",
+        "archived": "アーカイブ済み",
+        "deleted": "消去済み",
+        "delete_blocked": "消去をブロック",
+        "restored": "復元済み",
+        "policy_changed": "期間を変更しました",
+        "exemption_set": "「削除しない」をオンにしました",
+        "exemption_cleared": "「削除しない」を解除しました",
+        "legal_hold_set": "リーガルホールドを設定しました",
+        "legal_hold_cleared": "リーガルホールドを解除しました"
+      },
+      "history": {
+        "title": "{name}の履歴",
+        "emptyTitle": "履歴はまだありません",
+        "emptyMessage": "リマインダーや変更がここに表示されます。",
+        "stage": "ステップ",
+        "stages": {
+          "archive": "アーカイブ",
+          "delete": "消去"
+        },
+        "reminderNo": "リマインダー {n}",
+        "daysInactive": "{count, plural, other {非アクティブ # 日}}",
+        "by": "実行者",
+        "system": "システム",
+        "reason": "理由"
+      },
+      "dialog": {
+        "reason": "理由",
+        "reasonHint": "5〜500文字。コンプライアンスログに保存されます。",
+        "errors": {
+          "reasonShort": "5文字以上で入力してください。",
+          "reasonLong": "500文字以内で入力してください。",
+          "archiveWhole": "日数は整数で入力してください。",
+          "archiveMin": "アーカイブは60日以上にしてください。",
+          "archiveMax": "アーカイブは3650日以内にしてください。",
+          "eraseWhole": "日数は整数で入力してください。",
+          "eraseMin": "消去は120日以上にしてください。",
+          "eraseMax": "消去は7300日以内にしてください。",
+          "gap": "消去はアーカイブの {days} 日以上後にしてください。",
+          "noChange": "少なくとも1つの期間を変更してください。",
+          "untilPast": "未来の日付を選択してください。"
+        },
+        "mode": "期間の設定元",
+        "days": "日数",
+        "useDefault": "プラットフォームの既定値を使用",
+        "custom": "カスタム日数",
+        "policyTitle": "{name}の期間を変更",
+        "policyMessage": "ワークスペースがアーカイブされるまで、および消去されるまでの非アクティブ日数です。リマインダーもこれに合わせて移動します。",
+        "archiveAfter": "アーカイブまでの日数",
+        "archiveHint": "プラットフォームの既定値は {default} 日、最小は {min} 日です。",
+        "eraseAfter": "消去までの日数",
+        "eraseHint": "プラットフォームの既定値は {default} 日、最小は {min} 日です。",
+        "policyConfirm": "期間を保存",
+        "policyDone": "{name}の期間を保存しました。",
+        "exemptOnTitle": "{name}を削除しない設定にしますか？",
+        "exemptOnMessage": "オンの間、このワークスペースは非アクティブを理由にアーカイブも消去もされません。",
+        "exemptOnConfirm": "「削除しない」をオンにする",
+        "exemptOnDone": "{name}は削除されません。",
+        "exemptOffTitle": "{name}の「削除しない」を解除しますか？",
+        "exemptOffMessage": "ワークスペースは再び設定された期間に従い、アーカイブと消去の対象になります。",
+        "exemptOffConfirm": "「削除しない」を解除",
+        "exemptOffDone": "{name}は再び設定された期間に従います。",
+        "until": "確認日（任意）",
+        "untilHint": "この日に保護が終了し、再確認されます。期限を設けない場合は空のままにします。",
+        "restoreTitle": "{name}を復元しますか？",
+        "restoreMessage": "ワークスペースがアクティブになり、メンバーは再びサインインでき、非アクティブ期間のカウントがリセットされます。",
+        "restoreConfirm": "ワークスペースを復元",
+        "restoreDone": "{name}を復元しました。",
+        "holdOnTitle": "{name}にリーガルホールドを設定しますか？",
+        "holdOnMessage": "ホールド中は、期間の設定にかかわらず、ワークスペースはアーカイブも消去もされません。",
+        "holdOnSure": "すべてのアーカイブと消去が停止されることを理解しました。",
+        "holdOnConfirm": "リーガルホールドを設定",
+        "holdOnDone": "{name}にリーガルホールドを設定しました。",
+        "holdOffTitle": "{name}のリーガルホールドを解除しますか？",
+        "holdOffMessage": "ワークスペースは再び設定された期間に従い、アーカイブと消去の対象になります。",
+        "holdOffSure": "ホールドの解除を確認します。",
+        "holdOffConfirm": "リーガルホールドを解除",
+        "holdOffDone": "{name}のリーガルホールドを解除しました。"
       }
     }
   }

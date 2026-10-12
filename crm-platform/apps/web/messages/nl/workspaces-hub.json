@@ -78,7 +78,8 @@
       "noMatchMessage": "Pas de zoekopdracht of de filters aan om er meer te zien.",
       "loadMore": "Meer laden",
       "loadingMore": "Meer laden",
-      "loaded": "{count, plural, one {# workspace} other {# workspaces}} getoond"
+      "loaded": "{count, plural, one {# workspace} other {# workspaces}} getoond",
+      "retentionLink": "Bewaartermijn"
     },
     "cell": {
       "suspended": "Geschorst",
@@ -252,6 +253,147 @@
         "text": "Tickets, gesprekken en de supportgeschiedenis van deze workspace.",
         "open": "Het supportdossier openen",
         "openTickets": "{count, plural, one {# open ticket} other {# open tickets}}"
+      }
+    },
+    "retention": {
+      "crumb": "Bewaartermijn",
+      "title": "Bewaartermijn van workspaces",
+      "subtitle": "Inactieve workspaces, langst inactief eerst: wanneer elk wordt gearchiveerd en gewist, welke herinneringen zijn verstuurd en de opties om een workspace te beschermen of te herstellen.",
+      "backToList": "Terug naar workspaces",
+      "deniedTitle": "Geen toegang",
+      "tableLabel": "Bewaartermijn van workspaces",
+      "status": {
+        "active": "Actief",
+        "archived": "Gearchiveerd",
+        "suspended": "Opgeschort",
+        "deleted": "Verwijderd door eigenaar"
+      },
+      "filters": {
+        "label": "Filters",
+        "status": "Status",
+        "allStatuses": "Alle statussen",
+        "minDays": "Minimum aantal dagen inactief",
+        "neverDeleteOnly": "Alleen nooit verwijderen",
+        "clear": "Filters wissen"
+      },
+      "columns": {
+        "workspace": "Workspace",
+        "status": "Status",
+        "daysInactive": "Dagen inactief",
+        "lastActivity": "Laatste activiteit",
+        "archiveOn": "Archiveren op",
+        "eraseOn": "Wissen op",
+        "reminders": "Verstuurde herinneringen",
+        "protection": "Bescherming",
+        "actions": "Acties"
+      },
+      "remindersArchive": "Archiveren {n}/3",
+      "remindersErase": "Wissen {n}/3",
+      "emptyTitle": "Geen workspaces om te tonen",
+      "emptyMessage": "Workspaces verschijnen hier zodra ze bestaan.",
+      "noMatchTitle": "Geen workspace gevonden",
+      "noMatchMessage": "Pas de filters aan om meer te zien.",
+      "loadMore": "Meer laden",
+      "loadingMore": "Meer laden...",
+      "loaded": "{count, plural, one {# workspace} other {# workspaces}} getoond",
+      "badge": {
+        "neverDelete": "Nooit verwijderen",
+        "legalHold": "Juridische blokkade",
+        "paidPlan": "Betaald abonnement (vrijgesteld)",
+        "paidPlanHint": "Een workspace met een actief betaald abonnement wordt nooit gearchiveerd wegens inactiviteit.",
+        "until": "Tot {date}",
+        "indefinite": "Geen einddatum",
+        "by": "Ingesteld door {who}"
+      },
+      "actions": {
+        "menu": "Bewaaracties voor {name}",
+        "history": "Geschiedenis",
+        "policy": "Termijnen wijzigen",
+        "exemptOn": "Nooit verwijderen",
+        "exemptOff": "Nooit verwijderen opheffen",
+        "restore": "Herstellen",
+        "holdOn": "Juridische blokkade plaatsen",
+        "holdOff": "Juridische blokkade opheffen"
+      },
+      "event": {
+        "reminder_sent": "Herinnering verstuurd",
+        "archived": "Gearchiveerd",
+        "deleted": "Gewist",
+        "delete_blocked": "Wissen geblokkeerd",
+        "restored": "Hersteld",
+        "policy_changed": "Termijnen gewijzigd",
+        "exemption_set": "Nooit verwijderen ingeschakeld",
+        "exemption_cleared": "Nooit verwijderen opgeheven",
+        "legal_hold_set": "Juridische blokkade geplaatst",
+        "legal_hold_cleared": "Juridische blokkade opgeheven"
+      },
+      "history": {
+        "title": "Geschiedenis van {name}",
+        "emptyTitle": "Nog geen geschiedenis",
+        "emptyMessage": "Herinneringen en wijzigingen verschijnen hier.",
+        "stage": "Stap",
+        "stages": {
+          "archive": "Archiveren",
+          "delete": "Wissen"
+        },
+        "reminderNo": "herinnering {n}",
+        "daysInactive": "{count, plural, one {# dag inactief} other {# dagen inactief}}",
+        "by": "Door",
+        "system": "Systeem",
+        "reason": "Reden"
+      },
+      "dialog": {
+        "reason": "Reden",
+        "reasonHint": "5 tot 500 tekens. Wordt bewaard in het compliancelogboek.",
+        "errors": {
+          "reasonShort": "Schrijf minstens 5 tekens.",
+          "reasonLong": "Gebruik hooguit 500 tekens.",
+          "archiveWhole": "Voer een geheel aantal dagen in.",
+          "archiveMin": "Archiveren na minimaal 60 dagen.",
+          "archiveMax": "Archiveren na maximaal 3650 dagen.",
+          "eraseWhole": "Voer een geheel aantal dagen in.",
+          "eraseMin": "Wissen na minimaal 120 dagen.",
+          "eraseMax": "Wissen na maximaal 7300 dagen.",
+          "gap": "Wissen moet minstens {days} dagen na archiveren plaatsvinden.",
+          "noChange": "Wijzig minstens één termijn.",
+          "untilPast": "Kies een datum in de toekomst."
+        },
+        "mode": "Bron van termijnen",
+        "days": "Dagen",
+        "useDefault": "Platformstandaard gebruiken",
+        "custom": "Eigen aantal dagen",
+        "policyTitle": "Termijnen wijzigen voor {name}",
+        "policyMessage": "Dagen inactiviteit voordat de workspace wordt gearchiveerd en voordat deze wordt gewist. De herinneringen schuiven mee.",
+        "archiveAfter": "Archiveren na (dagen)",
+        "archiveHint": "Platformstandaard {default} dagen; minimaal {min}.",
+        "eraseAfter": "Wissen na (dagen)",
+        "eraseHint": "Platformstandaard {default} dagen; minimaal {min}.",
+        "policyConfirm": "Termijnen opslaan",
+        "policyDone": "Termijnen opgeslagen voor {name}.",
+        "exemptOnTitle": "{name} nooit verwijderen?",
+        "exemptOnMessage": "Zolang dit aan staat, wordt de workspace nooit gearchiveerd of gewist wegens inactiviteit.",
+        "exemptOnConfirm": "Nooit verwijderen inschakelen",
+        "exemptOnDone": "{name} wordt nooit verwijderd.",
+        "exemptOffTitle": "Nooit verwijderen opheffen voor {name}?",
+        "exemptOffMessage": "De workspace volgt weer zijn termijnen en kan worden gearchiveerd en gewist.",
+        "exemptOffConfirm": "Nooit verwijderen opheffen",
+        "exemptOffDone": "{name} volgt weer zijn termijnen.",
+        "until": "Beoordelen op (optioneel)",
+        "untilHint": "De bescherming eindigt op deze datum, zodat ze opnieuw wordt bekeken. Laat leeg voor geen einddatum.",
+        "restoreTitle": "{name} herstellen?",
+        "restoreMessage": "De workspace wordt actief, de gebruikers kunnen weer inloggen en de inactiviteitsteller begint opnieuw.",
+        "restoreConfirm": "Workspace herstellen",
+        "restoreDone": "{name} is hersteld.",
+        "holdOnTitle": "Juridische blokkade plaatsen op {name}?",
+        "holdOnMessage": "Zolang de blokkade geldt, wordt de workspace nooit gearchiveerd of gewist, wat de termijnen ook zijn.",
+        "holdOnSure": "Ik begrijp dat dit alle archivering en alle wissingen stopt.",
+        "holdOnConfirm": "Juridische blokkade plaatsen",
+        "holdOnDone": "Juridische blokkade geplaatst op {name}.",
+        "holdOffTitle": "Juridische blokkade op {name} opheffen?",
+        "holdOffMessage": "De workspace volgt weer zijn termijnen en kan worden gearchiveerd en gewist.",
+        "holdOffSure": "Ik bevestig dat de blokkade mag worden opgeheven.",
+        "holdOffConfirm": "Juridische blokkade opheffen",
+        "holdOffDone": "Juridische blokkade opgeheven op {name}."
       }
     }
   }

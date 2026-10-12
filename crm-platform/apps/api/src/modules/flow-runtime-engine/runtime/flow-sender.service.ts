@@ -91,7 +91,12 @@ export class FlowSender {
       });
 
       const clientReference = `flow:${run.uuid}:${run.stepSeq}:${index}`;
-      const envelope = await this.envelopeOf(run, rendered, clientReference);
+      // The widget draws reply buttons from the thread, not from the envelope: the channel is sent the question as text.
+      const envelope = await this.envelopeOf(
+        run,
+        textForWebchat(run.channelKind, rendered),
+        clientReference,
+      );
       const sent = await this.dispatcher.send({
         channel: runtime,
         envelope,
@@ -103,7 +108,8 @@ export class FlowSender {
         peerKey: run.peerKey,
         ...(run.contactUuid ? { contactId: run.contactUuid } : {}),
         source: 'flow',
-        body: threadTextOf(rendered),
+        // The widget draws reply buttons itself, so its thread keeps the question and the buttons apart.
+        ...webButtons(run.channelKind, rendered),
         providerMessageId: sent.providerMessageId,
         // A template node knows the name, language and values it sent (not the template's uuid, so the bubble has no header, footer or
         // buttons to draw: it shows the name and the text).
@@ -218,4 +224,29 @@ export async function envelopeFor(
       };
     }
   }
+}
+
+/**
+ * On a website chat thread a reply-button message is stored as the question alone, with the buttons in the meta the widget reads.
+ * Every other channel (and every other kind of message) keeps the thread text with the options after it.
+ */
+function webButtons(
+  channelKind: string | null,
+  r: Rendered,
+): { body: string; meta?: Record<string, unknown> } {
+  if (channelKind === 'webchat' && r.kind === 'interactive' && r.interactive.type === 'buttons') {
+    return {
+      body: r.interactive.body,
+      meta: { widget_buttons: r.interactive.buttons.map((b) => ({ id: b.id, title: b.title })) },
+    };
+  }
+  return { body: threadTextOf(r) };
+}
+
+/** What goes to the webchat channel for a reply-button message: the question as plain text (the buttons ride in the thread's meta). */
+function textForWebchat(channelKind: string | null, r: Rendered): Rendered {
+  if (channelKind === 'webchat' && r.kind === 'interactive' && r.interactive.type === 'buttons') {
+    return { kind: 'text', body: r.interactive.body };
+  }
+  return r;
 }

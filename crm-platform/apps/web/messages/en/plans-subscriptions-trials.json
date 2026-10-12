@@ -43,7 +43,8 @@
       "ai_token_limit_monthly": "AI tokens per month",
       "forms": "Web forms",
       "form_submissions_monthly": "Form submissions per month",
-      "ai_form_generations_monthly": "AI form builder generations per month"
+      "ai_form_generations_monthly": "AI form builder generations per month",
+      "sms_monthly": "SMS per month"
     },
     "features": {
       "automation": "Automation",
@@ -74,7 +75,8 @@
       "forms_and_links": "Forms and links",
       "extra_channels": "Telegram, Facebook and Instagram",
       "form_builder": "Forms",
-      "waba_groups": "WhatsApp groups"
+      "waba_groups": "WhatsApp groups",
+      "sms": "SMS channel"
     },
     "limitGroups": {
       "messaging": "Messaging",
@@ -124,7 +126,8 @@
       "ai_token_limit_monthly": "Tokens the AI assistants use in the calendar month on the platform's keys. Workspaces on their own keys are not capped.",
       "forms": "Active web forms (Forms app). Archiving a form frees its place. 0 = unlimited.",
       "form_submissions_monthly": "Form submissions accepted in the calendar month, spam excluded. Over the cap a submission is still saved for review, never dropped. 0 = unlimited.",
-      "ai_form_generations_monthly": "AI form builder generations in the calendar month, a repair retry included. 0 = unlimited."
+      "ai_form_generations_monthly": "AI form builder generations in the calendar month, a repair retry included. 0 = unlimited.",
+      "sms_monthly": "Outbound SMS messages sent in the calendar month. 0 = unlimited."
     },
     "planAddons": {
       "title": "Add-ons available on your plan",

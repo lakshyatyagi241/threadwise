@@ -176,12 +176,35 @@
       "cancelBody": "Uruchomienie zatrzyma się w obecnym miejscu. Klient nie zostanie o tym poinformowany.",
       "cancelConfirm": "Anuluj uruchomienie",
       "cancelKeep": "Zachowaj",
-      "cancelled": "Anulowano uruchomienie"
+      "cancelled": "Anulowano uruchomienie",
+      "tlTitle": "Oś czasu wykonania",
+      "tlNodes": "Wykonane węzły",
+      "tlErrors": "Błędy",
+      "tlTime": "Czas węzłów",
+      "filterAll": "Wszystkie kroki",
+      "filterErrors": "Tylko błędy",
+      "changedTitle": "Ten przepływ edytowano po uruchomieniu",
+      "changedBody": "Dziennik pokazuje przepływ dokładnie tak, jak działał.",
+      "removed": "Usunięty z przepływu",
+      "exit": "Wyjście {port}",
+      "visit": "Wizyta {n}",
+      "truncated": "Wykonano ponad {max} kroków. Kolejne policzono, ale nie wymieniono.",
+      "retention": "Dzienniki są usuwane {days} dni po zakończeniu uruchomienia.",
+      "pathTitle": "Przebyta ścieżka",
+      "notReached": "Nieosiągnięte",
+      "noErrors": "Brak błędów w tym uruchomieniu."
     },
     "event": {
       "step": "Krok",
       "reply": "Odpowiedź klienta",
-      "end": "Koniec"
+      "end": "Koniec",
+      "advance": "Przeszło dalej",
+      "wait": "Oczekiwanie na odpowiedź",
+      "sleep": "Opóźnienie",
+      "halt": "Wstrzymano",
+      "exec": "Wykonano",
+      "truncated": "Osiągnięto limit dziennika",
+      "start": "Uruchomiono"
     },
     "subs": {
       "kicker": "Przepływ",
@@ -469,6 +492,13 @@
       "manyBody": "{n} kontaktów ponownie wejdzie do przepływu od początku i otrzyma jego wiadomości ponownie. Tej operacji nie można cofnąć.",
       "summary": "Ponownie uruchomione: {queued}, zakończone: {succeeded}, nieudane: {failed}, pominięte: {skipped}.",
       "flowInactive": "Włącz ponownie ten przepływ, zanim ponowisz nieudane kontakty."
+    },
+    "outcome": {
+      "ok": "OK",
+      "error": "Błąd",
+      "skipped": "Pominięto",
+      "waiting": "Oczekuje",
+      "timeout": "Przekroczono czas"
     }
   }
 }

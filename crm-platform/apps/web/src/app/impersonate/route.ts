@@ -7,7 +7,7 @@ import { apiBase } from '@/lib/auth/server';
 
 const ENDED = '/impersonate/ended';
 /** Where the operator lands: the customer's inbox, as Reference does (TW-WSP-032 rule 4). */
-const LANDING = '/team-inbox';
+const LANDING = '/inbox';
 
 /**
  * GET /impersonate?code=...: the operator's click lands here (the API's start call returned this URL). The one-time code is

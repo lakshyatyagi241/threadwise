@@ -126,7 +126,9 @@
         "exporting": "Exportando",
         "exportHintAttention": "Escolha um único status para exportar deste grupo, ou use Todos.",
         "exportHintSearch": "A exportação ignora o texto da pesquisa.",
-        "notSpam": "Não é spam: processar"
+        "notSpam": "Não é spam: processar",
+        "newPaymentLink": "Gerar novo link de pagamento",
+        "markPaid": "Marcar como pago"
       },
       "confirmDelete": {
         "title": "Excluir estas respostas?",
@@ -143,7 +145,11 @@
         "deleteFailed": "Não foi possível excluir as respostas. Tente novamente.",
         "exported": "O CSV foi baixado.",
         "exportTruncated": "A exportação foi limitada às {max} linhas mais recentes. Restrinja as datas para obter o restante.",
-        "exportFailed": "Não foi possível gerar a exportação. Tente novamente."
+        "exportFailed": "Não foi possível gerar a exportação. Tente novamente.",
+        "linkReady": "Um novo link de pagamento está pronto.",
+        "linkFailed": "O gateway não retornou um link. Tente novamente em instantes.",
+        "markedPaid": "Marcado como pago.",
+        "markPaidFailed": "Não foi possível marcar este envio como pago."
       },
       "state": {
         "loading": "Carregando envios",
@@ -164,6 +170,29 @@
       "cap": {
         "notice": "Alguns envios foram salvos para revisão porque o limite mensal de envios do seu plano foi atingido.",
         "upgrade": "Faça upgrade do seu plano"
+      },
+      "payments": {
+        "title": "Pagamento",
+        "status": {
+          "pending": "Aguardando pagamento",
+          "paid": "Pago",
+          "failed": "Falhou",
+          "expired": "Expirado"
+        },
+        "via": {
+          "gateway": "pelo gateway",
+          "manual": "marcado manualmente"
+        },
+        "gateway": "Gateway",
+        "paidAt": "Pago",
+        "expiresAt": "O link expira",
+        "reference": "Referência",
+        "duplicate": "Um segundo pagamento chegou para este envio. Reembolse-o pelo seu gateway de pagamento.",
+        "freshLink": "Novo link de pagamento (envie ao visitante):",
+        "copy": "Copiar link",
+        "markPaidConfirm": "Marcar este envio como pago? Use isto apenas quando o dinheiro chegou fora do gateway, como transferência bancária ou dinheiro em espécie. O registro fica em seu nome.",
+        "markPaidYes": "Sim, marcar como pago",
+        "cancel": "Cancelar"
       }
     }
   }

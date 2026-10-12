@@ -317,7 +317,9 @@ export class CampaignDispatchService {
     locks: Array<[string, string]>;
   }): Promise<CampaignRunResult> {
     const { orgId, c, maxAttempts } = o;
-    const official = o.sender.engine === 'waba' || o.sender.engine === 'twilio';
+    // Providers that take the rate themselves and need no human-like gap: SMS is sent one message at a time with no pacing.
+    const official =
+      o.sender.engine === 'waba' || o.sender.engine === 'twilio' || o.sender.engine === 'sms';
     const tMin = c.throttleMinSec ?? 0;
     const tMax = c.throttleMaxSec ?? 0;
     const randomDelay = tMin > 0 && tMax >= tMin;

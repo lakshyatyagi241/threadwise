@@ -106,7 +106,8 @@
         "light": "Jasny",
         "dark": "Ciemny",
         "schemeHint": "Tryb kolorów to Jasny, więc nie ma wersji ciemnej do podglądu.",
-        "frameTitle": "Podgląd formularza na żywo"
+        "frameTitle": "Podgląd formularza na żywo",
+        "popup": "Wyskakujące okno"
       }
     }
   }
