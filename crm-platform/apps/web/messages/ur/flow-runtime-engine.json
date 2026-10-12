@@ -484,7 +484,17 @@
       "factWaiting": "یہاں انتظار: {node}",
       "factDelay": "{time} انتظار",
       "factReplied": "کسٹمر نے جواب دیا: {text}",
-      "factEnded": "ختم: {reason}"
+      "factEnded": "ختم: {reason}",
+      "ioInput": "ان پٹ",
+      "ioOutput": "آؤٹ پٹ",
+      "ioKind": {
+        "message": "بھیجا گیا پیغام",
+        "reply": "کسٹمر کا جواب",
+        "variable": "متغیر",
+        "request": "درخواست",
+        "response": "جواب",
+        "result": "نتیجہ"
+      }
     },
     "event": {
       "step": "مرحلہ",

@@ -197,7 +197,17 @@
       "factWaiting": "Menunggu di: {node}",
       "factDelay": "Menunggu {time}",
       "factReplied": "Pelanggan membalas: {text}",
-      "factEnded": "Berakhir: {reason}"
+      "factEnded": "Berakhir: {reason}",
+      "ioInput": "Masukan",
+      "ioOutput": "Keluaran",
+      "ioKind": {
+        "message": "Pesan terkirim",
+        "reply": "Balasan pelanggan",
+        "variable": "Variabel",
+        "request": "Permintaan",
+        "response": "Respons",
+        "result": "Hasil"
+      }
     },
     "event": {
       "step": "Langkah",

@@ -21,9 +21,11 @@ import { FlowSender, HALT_RETRY_MS } from './flow-sender.service';
 import { RunRepository, type RunPatch } from './run.repository';
 import {
   MAX_LOGGED_STEPS,
+  finishIo,
   nodeLabel,
   shouldLog,
   stepFields,
+  varsChanged,
   type StepOutcomeKind,
 } from './step-log';
 import { SubscriberRepository } from './subscriber.repository';
@@ -234,15 +236,29 @@ export class FlowEngine {
     const result = await this.db.txAs({ orgId }, async (tx) => {
       const state = await this.runs.byId(tx, orgId, runId, true);
       if (!state || state.status !== 'waiting' || !state.wait) return 'not_waiting' as const;
+      const before = { ...state.vars };
       const outcome =
         state.wait.kind === 'Custom'
           ? await applyCustomReply(state, reply, this.deps())
           : applyReply(state, reply);
       if (outcome.transition.t === 'none') return 'ignored' as const;
+      // The reply row: what the customer sent in, and what the answer saved.
+      const recorded = finishIo({
+        in: [
+          {
+            kind: 'reply',
+            name: reply.id || null,
+            value:
+              reply.text || (reply.kind === 'external' ? JSON.stringify(reply.data ?? {}) : ''),
+          },
+        ],
+        out: varsChanged(before, state.vars),
+      });
       const detail = {
         text: reply.text.slice(0, 200),
         ...(reply.id ? { tap: reply.id } : {}),
         ...(reply.kind === 'external' ? { external: true } : {}),
+        ...(recorded ? { io: recorded } : {}),
       };
       const committed = await this.commit(tx, state, outcome, state.stepSeq, 'reply', detail, {
         durationMs: null,
@@ -510,6 +526,7 @@ export class FlowEngine {
     }
     const detail: Record<string, unknown> = {};
     if (outcome.notes.length > 0) detail.notes = outcome.notes;
+    if (outcome.io) detail.io = outcome.io;
     if (t.t === 'goto') detail.next = t.nodeId;
     if (t.t === 'goto' && t.subflowId !== undefined) detail.flow_id = t.subflowId;
     if (t.t === 'wait') detail.waitingOn = t.wait.nodeId;

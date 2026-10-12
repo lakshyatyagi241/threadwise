@@ -197,7 +197,17 @@
       "factWaiting": "في انتظار: {node}",
       "factDelay": "ينتظر {time}",
       "factReplied": "ردّ العميل: {text}",
-      "factEnded": "انتهى: {reason}"
+      "factEnded": "انتهى: {reason}",
+      "ioInput": "المُدخل",
+      "ioOutput": "المُخرج",
+      "ioKind": {
+        "message": "الرسالة المرسلة",
+        "reply": "رد العميل",
+        "variable": "متغيّر",
+        "request": "طلب",
+        "response": "استجابة",
+        "result": "النتيجة"
+      }
     },
     "event": {
       "step": "الخطوة",

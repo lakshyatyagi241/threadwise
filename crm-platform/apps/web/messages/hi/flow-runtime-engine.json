@@ -197,7 +197,17 @@
       "factWaiting": "यहाँ प्रतीक्षा: {node}",
       "factDelay": "{time} प्रतीक्षा",
       "factReplied": "ग्राहक ने उत्तर दिया: {text}",
-      "factEnded": "समाप्त: {reason}"
+      "factEnded": "समाप्त: {reason}",
+      "ioInput": "इनपुट",
+      "ioOutput": "आउटपुट",
+      "ioKind": {
+        "message": "भेजा गया संदेश",
+        "reply": "ग्राहक का उत्तर",
+        "variable": "वेरिएबल",
+        "request": "अनुरोध",
+        "response": "प्रतिक्रिया",
+        "result": "परिणाम"
+      }
     },
     "event": {
       "step": "स्टेप",
