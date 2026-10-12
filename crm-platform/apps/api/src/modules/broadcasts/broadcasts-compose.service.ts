@@ -5,7 +5,9 @@ import type {
   BroadcastComposeQuery,
   ComposeSender,
   ComposeTemplate,
+  SenderHidden,
 } from '@crm/contracts';
+import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { DatabaseService } from '../../infra/db/database.service';
 import { PlatformSettingsService } from '../auth';
@@ -136,6 +138,7 @@ export class BroadcastsComposeService {
 
       const twilio = await tx.execute(sql`
         SELECT 1 FROM wa_provider_configs WHERE org_id = ${orgId} AND provider = 'twilio' AND status = 'connected' LIMIT 1`);
+      const hidden = await this.hiddenSenders(tx, orgId, unofficialOn);
 
       return {
         templates: (tpl.rows as unknown as TemplateRaw[]).map((r): ComposeTemplate => ({
@@ -163,16 +166,60 @@ export class BroadcastsComposeService {
           engineLabel: ENGINE_LABEL[r.engine] ?? r.engine,
           isDefault: r.engine === defaultEngine,
         })),
+        hidden,
         twilioEnabled: twilio.rows.length > 0,
       };
     });
+  }
+
+  /**
+   * The numbers the workspace has that the list leaves out, counted by engine and reason (never a number, label or secret), so an
+   * empty list can say why. It reads the same rows the list filters: personal devices (all of them while the unofficial engine is off for
+   * the workspace, else the ones not connected or inactive) and Meta or Twilio configs that are not `connected` (pending, failed, other).
+   * `providers` is the scope: the WhatsApp composer's engines, or `sms` for the SMS card.
+   */
+  private async hiddenSenders(
+    tx: Tx,
+    orgId: number,
+    unofficialOn: boolean,
+    scope: 'whatsapp' | 'sms' = 'whatsapp',
+  ): Promise<SenderHidden[]> {
+    const out: SenderHidden[] = [];
+    if (scope === 'whatsapp') {
+      const dev = await tx.execute(sql`
+        SELECT count(*)::int AS count FROM devices
+        WHERE org_id = ${orgId} AND (NOT ${unofficialOn}::boolean OR status <> 'connected' OR NOT active)`);
+      const n = Number((dev.rows[0] as { count: number | string } | undefined)?.count ?? 0);
+      if (n > 0)
+        out.push({
+          engine: 'baileys',
+          reason: unofficialOn ? 'not_connected' : 'unofficial_disabled',
+          count: n,
+        });
+    }
+    const providers = scope === 'sms' ? sql`('sms')` : sql`('waba', 'twilio')`;
+    const cfg = await tx.execute(sql`
+      SELECT provider AS engine,
+             CASE status WHEN 'pending' THEN 'pending' WHEN 'failed' THEN 'error' ELSE 'not_connected' END AS reason,
+             count(*)::int AS count
+      FROM wa_provider_configs
+      WHERE org_id = ${orgId} AND provider IN ${providers} AND status <> 'connected'
+      GROUP BY 1, 2
+      ORDER BY 1, 2`);
+    for (const r of cfg.rows as unknown as Array<{
+      engine: string;
+      reason: SenderHidden['reason'];
+      count: number | string;
+    }>)
+      out.push({ engine: r.engine, reason: r.reason, count: Number(r.count) });
+    return out;
   }
 
   /** The SMS card's composer: plain-text SMS templates (approved on save) and the connected SMS senders, oldest first. */
   private async composeSms(orgId: number): Promise<BroadcastCompose> {
     const on = await this.settings.get<unknown>('sms_enabled');
     if (!(on === true || on === 1 || on === '1' || on === 'true')) {
-      return { templates: [], senders: [], twilioEnabled: false };
+      return { templates: [], senders: [], hidden: [], twilioEnabled: false };
     }
     return this.db.tx(async (tx) => {
       const tpl = await tx.execute(sql`
@@ -186,7 +233,9 @@ export class BroadcastsComposeService {
         SELECT uuid, provider AS engine, coalesce(nullif(display_label, ''), phone_number) AS label, NULL AS country_code, phone_number
         FROM wa_provider_configs WHERE org_id = ${orgId} AND provider = 'sms' AND status = 'connected'
         ORDER BY id`);
+      const hidden = await this.hiddenSenders(tx, orgId, false, 'sms');
       return {
+        hidden,
         templates: (tpl.rows as unknown as TemplateRaw[]).map((r): ComposeTemplate => ({
           id: r.uuid,
           name: r.template_name,

@@ -163,6 +163,7 @@ export class CampaignsReadService {
     const base = await this.compose.compose(query);
     return this.db.tx(async (tx) => ({
       senders: base.senders,
+      hidden: base.hidden,
       templates: base.templates,
       groups: await this.repo.groupsWithCounts(tx, orgId),
       tags: await this.repo.tagsWithCounts(tx, orgId),

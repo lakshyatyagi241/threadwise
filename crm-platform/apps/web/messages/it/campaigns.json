@@ -227,8 +227,6 @@
         "senderHint": "Se lasciata sul predefinito, la campagna parte dal motore principale del tuo Workspace.",
         "defaultSender": "Mittente predefinito",
         "nameHint": "Etichetta interna per report e cronologia della coda.",
-        "noSenders": "Nessun mittente collegato.",
-        "connectOne": "Collegane uno →",
         "type": "Tipo di campagna",
         "types": {
           "custom": {
@@ -897,8 +895,7 @@
         "previewEmpty": "Scegli un template per vedere come appare il messaggio.",
         "senderLabel": "Invia da",
         "senderHint": "Il numero WhatsApp da cui viene inviato questo broadcast.",
-        "pickSender": "Scegli un numero",
-        "noSenders": "Nessun numero WhatsApp collegato. Collegane prima uno."
+        "pickSender": "Scegli un numero"
       },
       "audience": {
         "selectionTitle": "Scelti nel Contact Hub",
@@ -1403,6 +1400,41 @@
         "runs": "Esecuzioni",
         "noRuns": "Nessuna esecuzione è ancora iniziata.",
         "cancel": "Annulla serie"
+      }
+    },
+    "senderEmpty": {
+      "loading": "Caricamento dei tuoi numeri…",
+      "none": {
+        "title": "Nessun numero WhatsApp collegato",
+        "body": "Collega un numero WhatsApp Business per scegliere da quale numero inviare questa campagna.",
+        "action": "Collega un numero WhatsApp"
+      },
+      "sms": {
+        "none": {
+          "title": "Nessun mittente SMS collegato",
+          "body": "Collega un mittente SMS per scegliere da quale mittente inviare questa campagna.",
+          "action": "Collega un mittente SMS"
+        }
+      },
+      "pending": {
+        "title": "{count, plural, one {# numero è ancora in fase di collegamento} other {# numeri sono ancora in fase di collegamento}}",
+        "body": "Un numero può inviare campagne quando il collegamento è completato. Apri il suo stato per terminare la configurazione.",
+        "action": "Controlla lo stato del numero"
+      },
+      "error": {
+        "title": "{count, plural, one {Il collegamento di # numero non è riuscito} other {Il collegamento di # numeri non è riuscito}}",
+        "body": "Ricollega il numero dalla sua pagina di stato e comparirà qui.",
+        "action": "Risolvi il collegamento"
+      },
+      "disconnected": {
+        "title": "{count, plural, one {# numero è scollegato} other {# numeri sono scollegati}}",
+        "body": "Ricollegalo per inviare campagne da questo numero. I numeri collegati compaiono qui.",
+        "action": "Ricollega un numero"
+      },
+      "personal_off": {
+        "title": "I numeri personali sono disattivati per questo workspace",
+        "body": "{count, plural, one {Il tuo numero personale (QR) non può} other {I tuoi # numeri personali (QR) non possono}} inviare campagne finché questa opzione è disattivata. Un amministratore della piattaforma può attivarla per questo workspace, oppure puoi collegare un numero WhatsApp Business ufficiale.",
+        "action": "Collega un numero ufficiale"
       }
     }
   }

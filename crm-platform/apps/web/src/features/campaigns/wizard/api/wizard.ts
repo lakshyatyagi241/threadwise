@@ -67,7 +67,11 @@ export function useWizardSenders() {
     queryKey: KEYS.senders,
     queryFn: ({ signal }) =>
       apiFetch(`${BASE}/senders`, { schema: wizardSendersResponseSchema, signal }),
-    staleTime: 60_000,
+    // The numbers come and go (one connected a moment ago, one that just disconnected): read them again on every visit and when the
+    // window regains focus, so the "Send from" list is never a minute behind.
+    staleTime: 0,
+    refetchOnMount: 'always',
+    refetchOnWindowFocus: true,
   });
 }
 

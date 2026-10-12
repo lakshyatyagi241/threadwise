@@ -227,8 +227,6 @@
         "senderHint": "Laissée sur la valeur par défaut, la campagne part sur le moteur principal de votre espace de travail.",
         "defaultSender": "Expéditeur par défaut",
         "nameHint": "Libellé interne pour les rapports et l'historique de la file.",
-        "noSenders": "Aucun expéditeur connecté.",
-        "connectOne": "En connecter un →",
         "type": "Type de campagne",
         "types": {
           "custom": {
@@ -897,8 +895,7 @@
         "previewEmpty": "Choisissez un modèle pour voir à quoi ressemble le message.",
         "senderLabel": "Envoyer depuis",
         "senderHint": "Le numéro WhatsApp depuis lequel cette diffusion est envoyée.",
-        "pickSender": "Choisir un numéro",
-        "noSenders": "Aucun numéro WhatsApp n’est connecté. Connectez-en un d’abord."
+        "pickSender": "Choisir un numéro"
       },
       "audience": {
         "selectionTitle": "Choisi dans le Hub de contacts",
@@ -1403,6 +1400,41 @@
         "runs": "Exécutions",
         "noRuns": "Aucune exécution n’a encore démarré.",
         "cancel": "Annuler la série"
+      }
+    },
+    "senderEmpty": {
+      "loading": "Chargement de vos numéros…",
+      "none": {
+        "title": "Aucun numéro WhatsApp n'est connecté",
+        "body": "Connectez un numéro WhatsApp Business pour choisir depuis quel numéro cette campagne est envoyée.",
+        "action": "Connecter un numéro WhatsApp"
+      },
+      "sms": {
+        "none": {
+          "title": "Aucun expéditeur SMS n'est connecté",
+          "body": "Connectez un expéditeur SMS pour choisir depuis quel expéditeur cette campagne est envoyée.",
+          "action": "Connecter un expéditeur SMS"
+        }
+      },
+      "pending": {
+        "title": "{count, plural, one {# numéro est encore en cours de connexion} other {# numéros sont encore en cours de connexion}}",
+        "body": "Un numéro peut envoyer des campagnes une fois sa connexion terminée. Ouvrez son statut pour finir la configuration.",
+        "action": "Vérifier le statut du numéro"
+      },
+      "error": {
+        "title": "{count, plural, one {La connexion de # numéro a échoué} other {La connexion de # numéros a échoué}}",
+        "body": "Reconnectez le numéro depuis sa page de statut et il apparaîtra ici.",
+        "action": "Corriger la connexion"
+      },
+      "disconnected": {
+        "title": "{count, plural, one {# numéro est déconnecté} other {# numéros sont déconnectés}}",
+        "body": "Reconnectez-le pour envoyer des campagnes depuis ce numéro. Les numéros connectés apparaissent ici.",
+        "action": "Reconnecter un numéro"
+      },
+      "personal_off": {
+        "title": "Les numéros personnels sont désactivés pour cet espace de travail",
+        "body": "{count, plural, one {Votre numéro personnel (QR) ne peut pas} other {Vos # numéros personnels (QR) ne peuvent pas}} envoyer de campagnes tant que cette option est désactivée. Un administrateur de la plateforme peut l'activer pour cet espace de travail, ou vous pouvez connecter un numéro WhatsApp Business officiel.",
+        "action": "Connecter un numéro officiel"
       }
     }
   }

@@ -21,6 +21,7 @@ import {
   type UpdateDeviceInput,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
+import { invalidateSenderLists } from '@/lib/sender-lists';
 
 export const KEYS = {
   all: ['wadev'] as const,
@@ -80,6 +81,8 @@ export const deviceApi = {
 };
 
 export function refresh(qc: QueryClient) {
+  // The campaign screens' "Send from" lists follow the numbers.
+  void invalidateSenderLists(qc);
   return qc.invalidateQueries({ queryKey: KEYS.all });
 }
 
