@@ -207,7 +207,9 @@
         "request": "リクエスト",
         "response": "レスポンス",
         "result": "結果"
-      }
+      },
+      "factMenuKept": "ここから先のステップはありません。{node} の選択肢は有効なままです。",
+      "factAnswered": "{time} 後に返信"
     },
     "event": {
       "step": "ステップ",
@@ -513,7 +515,9 @@
       "error": "エラー",
       "skipped": "スキップ",
       "waiting": "待機中",
-      "timeout": "タイムアウト"
+      "timeout": "タイムアウト",
+      "answered": "返信あり",
+      "gaveUp": "返信なし"
     }
   }
 }

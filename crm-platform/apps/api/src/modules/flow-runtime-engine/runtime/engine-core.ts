@@ -60,6 +60,8 @@ export interface StepOutcome {
   notes: string[];
   /** One line per message this step sent to the customer, for the run log. */
   sent?: string[];
+  /** A message of this step did not go out, though the run went on (a media link the provider refused). */
+  sendFailed?: boolean;
   /** What the node took in and produced, for the run log. */
   io?: { in: FlowStepIoItem[]; out: FlowStepIoItem[] };
   /** A contact property to write after the step commits ("also save to a contact attribute"); the engine does it. */
@@ -191,6 +193,7 @@ export async function executeCurrent(run: RunState, deps: StepDeps): Promise<Ste
   let sends = 0;
   const sent: string[] = [];
   const io = newIo();
+  let sendFailed = false;
   const before = { ...run.vars };
   const ctx: NodeContext = {
     run,
@@ -198,6 +201,7 @@ export async function executeCurrent(run: RunState, deps: StepDeps): Promise<Ste
     stepKey: `flow:${run.uuid}:${run.stepSeq}:${node.id}`,
     send: async (message) => {
       const out = await deps.send(run, message, sends++);
+      if (!out.ok) sendFailed = true;
       sent.push(describeSent(message, out));
       io.out.push({ kind: 'message', name: message.kind, value: outboundWords(message) });
       return out;
@@ -219,6 +223,7 @@ export async function executeCurrent(run: RunState, deps: StepDeps): Promise<Ste
     nodeType: node.type,
     notes,
     sent,
+    ...(sendFailed ? { sendFailed } : {}),
     ...(recorded ? { io: recorded } : {}),
   };
 }
@@ -241,16 +246,38 @@ export async function applyCustomReply(
   }
   const notes: string[] = [];
   let sends = 1000;
+  const sent: string[] = [];
+  const io = newIo();
+  let sendFailed = false;
   const ctx: NodeContext = {
     run,
     node,
     stepKey: `flow:${run.uuid}:${run.stepSeq}:${node.id}:reply`,
-    send: (message) => deps.send(run, message, sends++),
+    send: async (message) => {
+      const out = await deps.send(run, message, sends++);
+      sent.push(describeSent(message, out));
+      io.out.push({ kind: 'message', name: message.kind, value: outboundWords(message) });
+      if (!out.ok) sendFailed = true;
+      return out;
+    },
     render: (t) => interpolate(t, run.vars),
+    io: (side, item) => io[side].push(item),
     note: (text) => notes.push(text),
     now: deps.now,
   };
+  const before = { ...run.vars };
   const d = await executor.onReply(ctx, reply);
+  // What the node said back (a "please enter a valid number") and what its answer saved, for the run log. Called after the decision's
+  // variables are applied, so they count as saved.
+  const logged = () => {
+    const out = [...io.out, ...varsChanged(before, run.vars)];
+    const recorded = finishIo({ in: io.in, out });
+    return {
+      sent,
+      ...(sendFailed ? { sendFailed } : {}),
+      ...(recorded ? { io: recorded } : {}),
+    };
+  };
   switch (d.action) {
     case 'ignore':
       return { ...base, transition: { t: 'none' }, notes: ['not an answer: still waiting'] };
@@ -260,16 +287,23 @@ export async function applyCustomReply(
         ...base,
         transition: { t: 'wait', wait: { ...wait, data: d.data ?? wait.data } },
         notes: [...notes, 'not complete yet: still waiting'],
+        ...logged(),
       };
     case 'route':
       Object.assign(run.vars, d.setVars ?? {});
       run.currentNodeId = node.id;
-      return { ...base, transition: advanceFrom(run, node.id, d.port, true, 0), notes };
+      return {
+        ...base,
+        transition: advanceFrom(run, node.id, d.port, true, 0),
+        notes,
+        ...logged(),
+      };
     case 'end':
       return {
         ...base,
         transition: { t: 'end', status: 'completed', reason: d.reason },
         notes,
+        ...logged(),
       };
     case 'fail':
       return {
@@ -282,6 +316,7 @@ export async function applyCustomReply(
           failureReason: d.reason,
         },
         notes,
+        ...logged(),
       };
   }
 }
