@@ -1,0 +1,175 @@
+{
+  "contact-consent": {
+    "common": {
+      "dismiss": "Schließen",
+      "retry": "Erneut versuchen",
+      "loading": "Wird geladen..."
+    },
+    "errors": {
+      "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+      "forbidden": "Sie haben dafür keine Berechtigung.",
+      "notFound": "Dieser Kontakt existiert nicht mehr.",
+      "conflict": "Jemand anderes hat dies während Ihrer Bearbeitung geändert. Laden Sie neu und versuchen Sie es erneut.",
+      "noteRequired": "Geben Sie an, warum der Kontakt zugestimmt hat (was er gesagt oder unterschrieben hat und wo), bevor Sie die Einwilligung erfassen.",
+      "settingsInvalid": "Ein Schlüsselwort braucht mindestens einen Buchstaben oder eine Ziffer, und bei aktivierter Erkennung muss mindestens ein STOP-Schlüsselwort bleiben.",
+      "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
+      "validation": "Einige Werte sind ungültig. Prüfen Sie das Formular und versuchen Sie es erneut.",
+      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es erneut."
+    },
+    "settings": {
+      "title": "Einwilligung und STOP-Antworten",
+      "subtitle": "Legen Sie die Wörter fest, mit denen sich ein Kontakt abmeldet oder wieder anmeldet, unsere Antwort, die Abmeldezeile für Marketingnachrichten und ob Marketing eine erfasste Einwilligung braucht.",
+      "exportProof": "Einwilligungsnachweis exportieren (CSV)",
+      "discard": "Änderungen verwerfen",
+      "save": "Änderungen speichern",
+      "saved": "Einwilligungseinstellungen gespeichert.",
+      "conflict": "Jemand anderes hat diese Einstellungen zuerst gespeichert. Das Formular zeigt jetzt den gespeicherten Stand.",
+      "conflictOk": "OK",
+      "problems": {
+        "noOptOutWord": "Fügen Sie mindestens ein STOP-Schlüsselwort hinzu oder schalten Sie die Erkennung aus.",
+        "badLang": "Ein Sprachcode sieht so aus: en, ar oder pt-BR."
+      }
+    },
+    "policy": {
+      "title": "Marketing-Richtlinie",
+      "requireConsent": "Erfasste Einwilligung für Marketingversand verlangen",
+      "requireConsentHint": "Aus: Marketing geht an jeden Kontakt, der sich nicht abgemeldet hat. An: nur an Kontakte mit erfasster Einwilligung. Bei Kampagnen- und Broadcast-Zielgruppen sehen Sie, wie viele übersprungen wurden.",
+      "withdrawnAlways": "Abgemeldete Kontakte werden immer übersprungen, unabhängig von diesem Schalter."
+    },
+    "detect": {
+      "title": "STOP- und START-Antworten",
+      "enabled": "STOP- und START-Antworten erkennen",
+      "enabledHint": "Sendet ein Kontakt nur eines der folgenden Wörter, wird er in diesem Kanal abgemeldet oder wieder angemeldet.",
+      "autoReply": "Bestätigungsantwort senden",
+      "autoReplyHint": "Eine kurze Freitextantwort innerhalb des 24-Stunden-Fensters, einmal pro Änderung gesendet. Sie ist keine Kampagne und zählt nicht als Marketing.",
+      "rule": "Die gesamte Nachricht muss das Schlüsselwort sein: Großbuchstaben, Leerzeichen, Satzzeichen, Emojis und arabische Diakritika werden ignoriert. „Bitte senden Sie mir keine Rechnungen mehr“ oder „hör nicht auf“ stimmen nicht überein, damit sich niemand versehentlich abmeldet."
+    },
+    "lang": {
+      "groupLabel": "Wörter und Antworten für {lang}",
+      "title": "Sprache",
+      "remove": "Sprache entfernen",
+      "optOutWords": "STOP-Schlüsselwörter (Abmeldung)",
+      "optInWords": "START-Schlüsselwörter (Wiederanmeldung)",
+      "wordsHint": "Eines pro Zeile.",
+      "optOutReply": "Antwort nach STOP",
+      "optInReply": "Antwort nach START",
+      "replyHint": "Sie können '{{name}}' für den Vornamen des Kontakts verwenden. Erklären Sie, wie man sich wieder anmeldet.",
+      "footer": "Abmeldezeile für Marketingnachrichten",
+      "footerHint": "Wird unter Marketingtexten ergänzt. Nennen Sie das Wort, das gesendet werden soll.",
+      "add": "Sprache hinzufügen",
+      "addHint": "Ein Sprachcode wie fr oder pt-BR.",
+      "invalid": "Verwenden Sie einen Code wie fr oder pt-BR.",
+      "addButton": "Hinzufügen"
+    },
+    "footer": {
+      "title": "Die Abmeldezeile",
+      "intro": "Broadcast- und Kampagnen-Editoren können diese Zeile unter Marketingtexten ergänzen, damit Empfänger wissen, dass sie mit STOP antworten können. Genehmigte Vorlagen werden nie geändert: Setzen Sie die Zeile in die Vorlage selbst.",
+      "defaultOn": "Warnen, wenn ein Marketingtext keine Abmeldezeile hat",
+      "defaultOnHint": "Der Editor zeigt eine Warnung und eine Schaltfläche, um sie mit einem Klick zu ergänzen.",
+      "noneSet": "Für keine Sprache ist eine Abmeldezeile festgelegt.",
+      "previewLabel": "Das sieht der Empfänger",
+      "sample": "Unser Frühjahrsverkauf startet heute. Besuchen Sie uns diese Woche."
+    },
+    "test": {
+      "title": "Nachricht testen",
+      "intro": "Geben Sie ein, was ein Kontakt senden könnte, und sehen Sie, was passieren würde. Es wird nichts geändert oder gesendet. Es gelten die obigen Wörter, auch vor dem Speichern.",
+      "label": "Nachricht eines Kontakts",
+      "run": "Testen",
+      "failed": "Der Test konnte nicht ausgeführt werden. Versuchen Sie es erneut.",
+      "outcome": {
+        "opts_out": "Damit wird der Kontakt vom Marketing abgemeldet.",
+        "opts_in": "Damit wird der Kontakt wieder angemeldet.",
+        "no_match": "Nichts passiert: Die Nachricht ist kein Schlüsselwort.",
+        "detection_off": "Nichts passiert: Die Erkennung ist ausgeschaltet."
+      },
+      "matched": "Stimmt mit dem Schlüsselwort „{keyword}“ ({lang}) überein.",
+      "replyLabel": "Der Kontakt erhält",
+      "noReply": "Es wird keine Antwort gesendet."
+    },
+    "card": {
+      "title": "Einwilligung",
+      "status": {
+        "optedOut": "Abgemeldet",
+        "subscribed": "Angemeldet",
+        "none": "Keine Einwilligung erfasst"
+      },
+      "export": "Nachweis exportieren (CSV)",
+      "markSubscribed": "Als angemeldet markieren",
+      "markUnsubscribed": "Als abgemeldet markieren",
+      "loading": "Einwilligung wird geladen...",
+      "noneRecorded": "Für diesen Kontakt ist keine Einwilligung erfasst. Marketingversand folgt der Richtlinie Ihres Workspace.",
+      "perChannel": "Einwilligung nach Kanal",
+      "timeline": "Einwilligungsverlauf",
+      "channel": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "telegram": "Telegram",
+        "email": "E-Mail",
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "webchat": "Web-Chat"
+      },
+      "state": {
+        "granted": "angemeldet",
+        "withdrawn": "abgemeldet"
+      },
+      "action": {
+        "granted": "Angemeldet",
+        "withdrawn": "Abgemeldet"
+      },
+      "source": {
+        "form": "Formular",
+        "keyword": "Schlüsselwort-Antwort",
+        "manual": "Von einer Person erfasst",
+        "import": "Import",
+        "api": "API",
+        "flow": "Flow",
+        "inbound_message": "Nachricht",
+        "contact_request": "Kontaktanfrage",
+        "legacy": "Vor dem Einwilligungsverlauf"
+      },
+      "by": "von {name}",
+      "evidence": {
+        "consentText": "Angezeigter Text",
+        "consentVersion": "Version",
+        "consentHash": "Hash",
+        "formId": "Formular",
+        "submissionId": "Übermittlung",
+        "messageId": "Nachricht",
+        "keyword": "Schlüsselwort",
+        "fileName": "Datei",
+        "apiKeyId": "API-Schlüssel",
+        "flowId": "Flow",
+        "reference": "Referenz"
+      },
+      "dialog": {
+        "titleGranted": "Als angemeldet markieren",
+        "titleWithdrawn": "Als abgemeldet markieren",
+        "introGranted": "Erfassen Sie, dass dieser Kontakt dem Erhalt von Marketingnachrichten zugestimmt hat. Der Grund wird als Nachweis gespeichert.",
+        "introWithdrawn": "Erfassen Sie, dass dieser Kontakt keine Marketingnachrichten mehr möchte. Er wird bei jeder Kampagne und jedem Broadcast übersprungen.",
+        "channel": "Kanal",
+        "noteRequired": "Warum? (erforderlich)",
+        "noteOptional": "Notiz (optional)",
+        "noteHint": "Zum Beispiel: Papierformular am Schalter unterschrieben oder am 3. März per E-Mail zugestimmt.",
+        "confirm": "Speichern",
+        "cancel": "Abbrechen",
+        "close": "Schließen",
+        "savedGranted": "Als angemeldet markiert.",
+        "savedWithdrawn": "Als abgemeldet markiert."
+      }
+    },
+    "composer": {
+      "add": "Abmeldezeile hinzufügen",
+      "missing": "Diese Marketingnachricht sagt nicht, wie man sich abmeldet. Ergänzen Sie eine Zeile wie „Antworten Sie STOP, um sich abzumelden“.",
+      "addButton": "Zeile hinzufügen",
+      "templateHint": "Vorlagen sind durch ihre Genehmigung festgelegt. Damit Empfänger wissen, dass sie sich abmelden können, setzen Sie eine Zeile wie „{line}“ in die Vorlage selbst.",
+      "footerSuggestion": "Empfohlen für eine Marketing-Vorlage: „{line}“",
+      "footerUse": "Als Fußzeile verwenden"
+    },
+    "import": {
+      "legend": "Einwilligung",
+      "label": "Ich habe die Einwilligung, diesen Kontakten Nachrichten zu senden",
+      "hint": "Wenn aktiviert, wird jeder Kontakt in der Datei als mit Marketing einverstanden erfasst, mit dem Dateinamen als Nachweis. Wenn nicht aktiviert, erfasst der Import keine Einwilligung. Kontakte, die sich abgemeldet haben, bleiben abgemeldet."
+    }
+  }
+}

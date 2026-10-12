@@ -1,0 +1,52 @@
+---
+id: contact-consent
+title: Consent, STOP and START replies
+summary: Keep a proof of who agreed to marketing, let contacts opt out by replying STOP, and tell them they can.
+area: settings
+order: 20
+documents: [tile:consent]
+keywords: [consent, opt out, opt in, unsubscribe, stop, start, keyword, gdpr, compliance, marketing, footer, proof, ledger]
+---
+
+## What it is for
+
+Every contact has a consent history: when they agreed to marketing messages or opted out, on which channel, from where (a form, an import, a reply, a person) and with what proof. The history can only be added to, never edited, so it stands as evidence. The contact's **Unsubscribed** flag, which every campaign and broadcast already checks, always follows it.
+
+A contact with no history shows **No consent recorded**. We never assume consent for you.
+
+## How a contact opts out by replying STOP
+
+Open **Settings**, then **Consent and STOP replies** under Security. When a contact sends **only** one of the STOP words (STOP, STOPALL, UNSUBSCRIBE, CANCEL, END, QUIT or OPT OUT, plus the Arabic words), they are opted out of marketing on that channel. This works for WhatsApp, Telegram and every other channel that receives messages, and for numbers connected the official way or with a QR code.
+
+The message must be the keyword and nothing else. Capital letters, spaces, punctuation, emoji and Arabic diacritics are ignored, so `Stop.` and `STOP!!` work. A sentence such as "please stop sending me invoices" or "don't stop" does **not** match, so nobody is opted out by accident. A STOP is never passed to a flow, an FAQ answer or an AI agent.
+
+The same screen lists the START words (START, SUBSCRIBE, UNSTOP and the Arabic words). A contact who sends one is subscribed again.
+
+You can change every list, add a language, and use **Test a message** to see what would happen for any text, before or after you save. Nothing is sent or changed by the test.
+
+## The confirmation reply
+
+By default the contact receives one short answer: "You have been unsubscribed from marketing messages and will not receive more. Reply START to subscribe again." After START: "You are subscribed again. Reply STOP at any time to unsubscribe." Edit the text for each language, or switch it off. It is a normal reply inside the 24 hour window, not a campaign. It is sent once per change: a second STOP from an opted-out contact adds to the history but is not answered again.
+
+## Telling people they can reply STOP
+
+Recipients only type STOP if they know they can. In the campaign composer, a marketing text without an opt-out instruction shows a warning with a button that adds your **opt-out line** (by default "Reply STOP to unsubscribe") under the text. The tick box **Add the opt-out line** adds or removes it. Set the wording for each language under **The opt-out line**; the preview shows what the recipient sees.
+
+Templates are fixed by their approval, so we cannot add a line to one. Include the line in the template when you create it. The composer only reminds you.
+
+## Require recorded consent
+
+The switch **Require recorded consent for marketing sends** is off by default, so nothing changes for existing contacts. When you switch it on, campaigns and broadcasts send marketing only to contacts with a recorded consent. The audience step shows how many were skipped for lack of consent. Contacts who opted out are skipped whatever this switch says.
+
+## On a contact
+
+The **Consent** card on a contact's page shows the status, the state per channel and the history with who did it and the proof. **Mark as subscribed** asks you to say why (for example, signed the paper form). **Mark as unsubscribed** needs no reason. **Export proof (CSV)** downloads the history of that contact. The settings screen can export the whole workspace.
+
+Forms record the consent line a visitor ticked, with the exact text and its version, when the box is marked as marketing. A form never overrides an opt-out.
+
+## Permissions and limits
+
+- **settings.consent.manage** opens the settings and the workspace export.
+- **contacts.consent.read** shows the Consent card and exports one contact. **contacts.consent.manage** records a change.
+- We store ids, hashes and the matched keyword as proof, never an IP address and never the text of a contact's message.
+- If a keyword change does not seem to apply, wait a minute: each server keeps the list for up to a minute.

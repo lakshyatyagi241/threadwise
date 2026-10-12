@@ -932,6 +932,7 @@
         "optedOut": "수신 거부",
         "invalidNumbers": "잘못된 번호",
         "alwaysSkipped": "수신 거부한 연락처와 잘못된 번호는 항상 건너뜁니다.",
+        "noConsent": "기록된 동의 없음 (제외됨)",
         "willBeMessaged": "메시지를 받을 대상",
         "about": "약 {count}",
         "approximate": "대상이 너무 커서 제때 정확히 계산할 수 없어 추정치입니다.",

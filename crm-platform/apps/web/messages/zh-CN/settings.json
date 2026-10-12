@@ -334,6 +334,11 @@
         "label": "帮助助手",
         "description": "开启助手，为团队提供指引或代为完成步骤。",
         "keywords": "ai, 助手, 智能体, 指南, 帮助, 自动化"
+      },
+      "consent": {
+        "label": "同意与 STOP 回复",
+        "description": "设置 STOP 和 START 词语、确认回复、退订提示行，以及营销是否需要已记录的同意。",
+        "keywords": "同意, 退订, 重新订阅, 取消订阅, stop, start, gdpr, 合规, 隐私, 营销"
       }
     }
   }

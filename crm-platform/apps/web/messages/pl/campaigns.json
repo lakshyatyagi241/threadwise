@@ -932,6 +932,7 @@
         "optedOut": "Zrezygnowali",
         "invalidNumbers": "Nieprawidłowe numery",
         "alwaysSkipped": "Kontakty, które zrezygnowały, i nieprawidłowe numery są zawsze pomijane.",
+        "noConsent": "Brak zapisanej zgody (pominięto)",
         "willBeMessaged": "Otrzymają wiadomość",
         "about": "około {count}",
         "approximate": "To jest szacunek: grupa odbiorców jest zbyt duża, aby policzyć ją dokładnie na czas.",

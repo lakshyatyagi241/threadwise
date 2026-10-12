@@ -24,7 +24,7 @@ import {
 export type ImportOptions = Pick<
   ContactImportOptions,
   'mapping' | 'status' | 'source' | 'groupId' | 'tagIds' | 'defaultCountryCode'
->;
+> & { consentConfirmed?: boolean };
 
 async function upload<T>(
   path: string,

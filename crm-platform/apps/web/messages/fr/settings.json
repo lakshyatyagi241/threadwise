@@ -334,6 +334,11 @@
         "label": "Assistant d’aide",
         "description": "Activez l’assistant qui guide votre équipe ou réalise les étapes à sa place.",
         "keywords": "ia, assistant, agent, guide, aide, automatisation"
+      },
+      "consent": {
+        "label": "Consentement et réponses STOP",
+        "description": "Choisissez les mots STOP et START, les réponses de confirmation, la ligne de désinscription et si le marketing exige un consentement enregistré.",
+        "keywords": "consentement, désinscription, réinscription, se désabonner, stop, start, rgpd, conformité, confidentialité, marketing"
       }
     }
   }

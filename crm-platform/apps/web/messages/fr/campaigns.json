@@ -932,6 +932,7 @@
         "optedOut": "Désabonnés",
         "invalidNumbers": "Numéros invalides",
         "alwaysSkipped": "Les contacts désabonnés et les numéros invalides sont toujours ignorés.",
+        "noConsent": "Aucun consentement enregistré (ignoré)",
         "willBeMessaged": "Recevront un message",
         "about": "environ {count}",
         "approximate": "Il s’agit d’une estimation : l’audience est trop grande pour être comptée exactement dans les délais.",

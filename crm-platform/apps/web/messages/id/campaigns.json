@@ -932,6 +932,7 @@
         "optedOut": "Berhenti berlangganan",
         "invalidNumbers": "Nomor tidak valid",
         "alwaysSkipped": "Kontak yang berhenti berlangganan dan nomor tidak valid selalu dilewati.",
+        "noConsent": "Tidak ada persetujuan tercatat (dilewati)",
         "willBeMessaged": "Akan dikirimi pesan",
         "about": "sekitar {count}",
         "approximate": "Ini perkiraan: audiens terlalu besar untuk dihitung secara tepat dalam waktu singkat.",

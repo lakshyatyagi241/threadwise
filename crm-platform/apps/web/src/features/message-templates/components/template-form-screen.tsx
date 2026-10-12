@@ -24,6 +24,7 @@ import {
   useToast,
 } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { OptOutFooterSuggestion } from '@/features/contact-consent';
 import {
   useConnections,
   useCreateTemplate,
@@ -530,6 +531,11 @@ function TemplateForm({ initial, detail }: { initial: FormState; detail?: Templa
                     maxLength={FOOTER_MAX + 20}
                     invalid={Boolean(contract.footer)}
                     onChange={(e) => set({ footer: e.target.value })}
+                  />
+                  <OptOutFooterSuggestion
+                    footer={current.footer}
+                    max={FOOTER_MAX}
+                    onUse={(line) => set({ footer: line })}
                   />
                   <IssueList issues={issues} field="footer" />
                 </Field>

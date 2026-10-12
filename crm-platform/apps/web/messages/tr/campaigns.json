@@ -932,6 +932,7 @@
         "optedOut": "Çıkmış",
         "invalidNumbers": "Geçersiz numaralar",
         "alwaysSkipped": "Çıkmış kişiler ve geçersiz numaralar her zaman atlanır.",
+        "noConsent": "Kayıtlı onay yok (atlandı)",
         "willBeMessaged": "Mesaj gönderilecek",
         "about": "yaklaşık {count}",
         "approximate": "Bu bir tahmindir: kitle zamanında tam sayılamayacak kadar büyük.",

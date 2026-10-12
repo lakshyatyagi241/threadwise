@@ -965,6 +965,7 @@
         "optedOut": "Opted out",
         "invalidNumbers": "Invalid numbers",
         "alwaysSkipped": "Opted-out contacts and invalid numbers are always skipped.",
+        "noConsent": "No consent recorded (skipped)",
         "willBeMessaged": "Will be messaged",
         "about": "about {count}",
         "approximate": "This is an estimate: the audience is too large to count exactly in time.",
