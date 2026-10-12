@@ -207,7 +207,9 @@
         "request": "İstek",
         "response": "Yanıt",
         "result": "Sonuç"
-      }
+      },
+      "factMenuKept": "Burada sonraki adım yok. {node} seçenekleri etkin kalır.",
+      "factAnswered": "{time} sonra yanıtlandı"
     },
     "event": {
       "step": "Adım",
@@ -513,7 +515,9 @@
       "error": "Hata",
       "skipped": "Atlandı",
       "waiting": "Bekliyor",
-      "timeout": "Zaman aşımı"
+      "timeout": "Zaman aşımı",
+      "answered": "Yanıtlandı",
+      "gaveUp": "Yanıt yok"
     }
   }
 }

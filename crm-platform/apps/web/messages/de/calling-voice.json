@@ -25,7 +25,7 @@
     "toast": {
       "noPhone": "Dieser Kontakt hat keine Telefonnummer.",
       "noNumber": "Anrufe sind für keine WABA-Nummer aktiviert.",
-      "alreadyPermitted": "Dieser Kontakt erlaubt bereits Anrufe – der Anruf wird gestartet...",
+      "alreadyPermitted": "Dieser Kontakt erlaubt bereits Anrufe. Klicke auf Anrufen, um den Anruf zu starten.",
       "permissionSent": "Berechtigungsanfrage gesendet. In WhatsApp sieht die Person Annehmen/Ablehnen. Versuchen Sie es nach ihrer Antwort erneut mit Anrufen.",
       "permissionFailed": "Berechtigungsanfrage konnte nicht gesendet werden: {message}",
       "startFailed": "Anruf konnte nicht gestartet werden: {message}",

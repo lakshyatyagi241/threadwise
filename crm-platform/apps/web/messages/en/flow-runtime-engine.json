@@ -207,7 +207,9 @@
         "request": "Request",
         "response": "Response",
         "result": "Result"
-      }
+      },
+      "factMenuKept": "No next step here. The options from {node} stay active.",
+      "factAnswered": "Answered after {time}"
     },
     "event": {
       "step": "Step",
@@ -513,7 +515,9 @@
       "error": "Error",
       "skipped": "Skipped",
       "waiting": "Waiting",
-      "timeout": "Timed out"
+      "timeout": "Timed out",
+      "answered": "Answered",
+      "gaveUp": "No reply"
     }
   }
 }

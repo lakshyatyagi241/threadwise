@@ -199,7 +199,8 @@
         "devices": "Số WhatsApp",
         "broadcasts": "Gửi hàng loạt và chiến dịch",
         "team_chat": "Chat nhóm",
-        "whatsapp_groups": "Nhóm WhatsApp"
+        "whatsapp_groups": "Nhóm WhatsApp",
+        "billing": "Thanh toán và gói đăng ký"
       },
       "types": {
         "new_chat": {
@@ -298,6 +299,10 @@
           "label": "Chứng từ bán hàng đã có quyết định",
           "hint": "Một báo giá hoặc hóa đơn đã được chấp nhận hoặc từ chối."
         },
+        "email_bounced": {
+          "label": "Email chưa được gửi tới",
+          "hint": "Một email bạn đã gửi bị trả lại hoặc bị chậm."
+        },
         "wallet_credited": {
           "label": "Ví đã nạp tiền",
           "hint": "Ví của không gian làm việc đã được cộng tiền."
@@ -321,6 +326,14 @@
         "form_payment_duplicate": {
           "label": "Biểu mẫu bị thanh toán hai lần",
           "hint": "Một khách truy cập đã thanh toán lần thứ hai và khoản thanh toán thừa cần được hoàn tiền."
+        },
+        "billing_payment_failed": {
+          "label": "Thanh toán gói đăng ký thất bại",
+          "hint": "Một khoản thu gia hạn không thành công và cần bạn xử lý."
+        },
+        "billing_subscription_canceled": {
+          "label": "Đã hủy gói đăng ký",
+          "hint": "Nhà cung cấp thanh toán của bạn đã chấm dứt một gói đăng ký của không gian làm việc này."
         }
       },
       "loading": "Đang tải tùy chọn của bạn",

@@ -11,6 +11,14 @@ export const settings = [
     gates: { permission: 'paygw.orders.read' },
   }),
   settingsTile({
+    id: 'billing-subscriptions',
+    section: 'business',
+    href: '/billing/subscriptions',
+    icon: 'history',
+    order: 31,
+    gates: { permission: 'plan.subscription.manage' },
+  }),
+  settingsTile({
     id: 'wallet',
     section: 'business',
     href: '/billing/checkout/wallet',

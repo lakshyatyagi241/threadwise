@@ -6,7 +6,8 @@
       "orders": "Riwayat pesanan",
       "billingHistory": "Riwayat penagihan",
       "invoices": "Faktur",
-      "billingSettings": "Pengaturan penagihan"
+      "billingSettings": "Pengaturan penagihan",
+      "subscriptions": "Langganan"
     },
     "admin": {
       "title": "Gateway pembayaran",
@@ -299,7 +300,8 @@
           "markPaid": "Tandai dibayar",
           "cancelOrder": "Batal",
           "approve": "Setujui",
-          "reject": "Tolak"
+          "reject": "Tolak",
+          "refund": "Pengembalian dana"
         },
         "confirm": {
           "approveTitle": "Tandai pesanan ini sebagai dibayar?",
@@ -673,6 +675,79 @@
           "faqsHint": "Item akordion yang ditampilkan di bawah paket.",
           "configured": "{count} dikonfigurasi."
         }
+      },
+      "subscriptions": {
+        "title": "Langganan",
+        "eyebrow": "Penagihan",
+        "titleFirst": "Platform",
+        "titleSecond": "langganan",
+        "description": "Langganan paket dan add-on yang dikelola melalui penyedia pembayaran, di semua ruang kerja. Akhiri satu langganan, segarkan dari penyedia, atau kembalikan dana suatu tagihan.",
+        "kpi": {
+          "active": "Aktif",
+          "pastDue": "Pembayaran gagal",
+          "canceled": "Dibatalkan"
+        },
+        "statusFilter": "Status langganan",
+        "statuses": {
+          "all": "Semua",
+          "active": "Aktif",
+          "past_due": "Pembayaran gagal",
+          "pending": "Tertunda",
+          "canceled": "Dibatalkan",
+          "expired": "Kedaluwarsa"
+        },
+        "kind": {
+          "plan": "Paket",
+          "addon": "Add-on"
+        },
+        "search": "Cari ruang kerja atau ID penyedia",
+        "noun": "langganan",
+        "empty": "Tidak ada langganan yang cocok.",
+        "col": {
+          "workspace": "Ruang kerja",
+          "item": "Item",
+          "price": "Harga",
+          "paidUntil": "Dibayar hingga",
+          "status": "Status",
+          "provider": "Penyedia",
+          "actions": "Tindakan"
+        },
+        "cancelFailed": "Pembatalan di penyedia gagal",
+        "cancelFailedHint": "Catatan lokal sudah diakhiri, tetapi penyedia tidak mengonfirmasi pembatalan. Selesaikan di dasbor penyedia agar penagihan berhenti.",
+        "actions": {
+          "sync": "Segarkan",
+          "refund": "Pengembalian dana",
+          "endAtCycle": "Akhiri di akhir siklus",
+          "endNow": "Akhiri sekarang"
+        },
+        "confirm": {
+          "title": "Akhiri langganan ini?",
+          "atCycle": "{name} tetap memiliki akses hingga akhir siklus yang dibayar dan tidak akan ditagih lagi.",
+          "now": "Akhiri langganan {name} sekarang di penyedia. Tidak ada penagihan lebih lanjut."
+        },
+        "ended": "Langganan diakhiri di penyedia.",
+        "endedLocalOnly": "Diakhiri di sini, tetapi penyedia tidak mengonfirmasi pembatalan. Selesaikan di dasbor penyedia.",
+        "endedUnsupported": "Diakhiri di sini. Penyedia ini tidak dapat dibatalkan dari sini.",
+        "alreadyEnded": "Sudah diakhiri sebelumnya.",
+        "synced": "Diperiksa dengan penyedia: {outcome}."
+      },
+      "refund": {
+        "title": "Kembalikan dana {label}",
+        "intro": "Pengembalian dana dikirim ke penyedia pembayaran dan dikembalikan ke metode pembayaran asli pembeli.",
+        "charge": "Tagihan yang dikembalikan",
+        "pickCharge": "Pilih tagihan yang sudah dibayar",
+        "loadingCharges": "Memuat tagihan",
+        "chargesFailed": "Penyedia pembayaran tidak dapat dimintai tagihan untuk langganan ini.",
+        "noPaidCharges": "Penyedia tidak mencantumkan tagihan yang sudah dibayar untuk langganan ini.",
+        "amount": "Jumlah ({currency})",
+        "amountHint": "Kosongkan untuk mengembalikan semua yang belum dikembalikan.",
+        "reason": "Alasan",
+        "endSubscription": "Akhiri juga langganan sekarang agar tidak ditagih lagi",
+        "submit": "Kembalikan dana",
+        "processed": "Dana {amount} dikembalikan.",
+        "pending": "Pengembalian dana terkirim. Penyedia sedang memprosesnya.",
+        "failed": "Penyedia menolak pengembalian dana.",
+        "badAmount": "Masukkan jumlah berupa angka, misalnya 12.50."
       }
     },
     "offline": {
@@ -711,6 +786,74 @@
       "rejected": "Jenis file itu tidak diizinkan. Gunakan JPG, PNG, WEBP atau PDF.",
       "closed": "Bukti pembayaran tidak dapat lagi dikirim untuk pesanan ini.",
       "failed": "File tidak dapat diunggah. Coba lagi."
+    },
+    "subscriptions": {
+      "title": "Langganan",
+      "subtitle": "Langganan paket dan add-on Anda melalui penyedia pembayaran: apa yang diperpanjang, dibayar hingga kapan, dan apa yang ditagihkan.",
+      "loading": "Memuat langganan",
+      "loadFailed": "Kami tidak dapat memuat langganan Anda. Coba lagi sebentar lagi.",
+      "emptyTitle": "Belum ada langganan",
+      "emptyMessage": "Saat Anda membayar paket atau add-on dengan perpanjangan otomatis, langganannya muncul di sini.",
+      "browsePlans": "Lihat paket",
+      "failedBanner": "Pembayaran terakhir untuk {names} gagal. Akses Anda tetap berlanjut untuk sementara selama penyedia mencoba lagi; perbarui metode pembayaran Anda melalui bank atau penyedia agar akses tidak hilang.",
+      "paymentFailed": "Pembayaran terakhir gagal. Penyedia sedang mencoba lagi.",
+      "kind": {
+        "plan": "Paket",
+        "addon": "Add-on"
+      },
+      "status": {
+        "active": "Aktif",
+        "past_due": "Pembayaran gagal",
+        "pending": "Menunggu pembayaran",
+        "canceled": "Dibatalkan",
+        "expired": "Kedaluwarsa"
+      },
+      "cycle": {
+        "monthly": "bulan",
+        "yearly": "tahun"
+      },
+      "price": "{amount} per {cycle}",
+      "renewsOn": "Diperpanjang pada {date}",
+      "endsOn": "Dibayar hingga {date}. Tidak akan diperpanjang.",
+      "endedOn": "Berakhir pada {date}",
+      "refreshFromProvider": "Segarkan dari penyedia",
+      "showCharges": "Tampilkan tagihan",
+      "hideCharges": "Sembunyikan tagihan",
+      "cancel": "Batalkan langganan",
+      "confirmTitle": "Batalkan {name}?",
+      "confirmBody": "Anda tetap memiliki akses hingga {date}. Setelah itu tidak akan diperpanjang dan Anda tidak akan ditagih lagi.",
+      "confirmBodyNoDate": "Tidak akan diperpanjang dan Anda tidak akan ditagih lagi.",
+      "confirm": "Batalkan langganan",
+      "keep": "Pertahankan",
+      "cancelDone": "Dibatalkan. Masa berlangganan yang sudah dibayar tetap berjalan dan tidak ada tagihan lagi.",
+      "cancelFailed": "Kami tidak dapat membatalkan langganan ini. Coba lagi, atau hubungi dukungan.",
+      "forbidden": "Anda tidak memiliki izin untuk mengelola langganan.",
+      "sync": {
+        "up_to_date": "Sudah yang terbaru dengan penyedia pembayaran.",
+        "renewed": "Diperbarui: penyedia memiliki perpanjangan yang lebih baru.",
+        "gateway_canceled": "Penyedia menampilkan langganan ini sebagai dibatalkan.",
+        "gateway_expired": "Penyedia menampilkan langganan ini sebagai berakhir.",
+        "unknown": "Diperiksa dengan penyedia pembayaran.",
+        "failed": "Kami tidak dapat menghubungi penyedia pembayaran. Coba lagi sebentar lagi."
+      },
+      "chargesFailed": "Kami tidak dapat memuat tagihan.",
+      "chargesFromOrders": "Penyedia pembayaran tidak dapat dihubungi, jadi yang ditampilkan adalah pesanan Anda yang sudah dibayar.",
+      "noCharges": "Belum ada tagihan.",
+      "col": {
+        "date": "Tanggal",
+        "amount": "Jumlah",
+        "status": "Status",
+        "receipt": "Tanda terima"
+      },
+      "chargeStatus": {
+        "paid": "Dibayar",
+        "issued": "Menunggu pembayaran",
+        "failed": "Gagal",
+        "cancelled": "Dibatalkan",
+        "expired": "Kedaluwarsa",
+        "other": "Lainnya"
+      },
+      "openReceipt": "Buka tanda terima"
     }
   }
 }

@@ -102,8 +102,8 @@
       },
       "email": {
         "label": "E-mail",
-        "description": "Conecte uma caixa de e-mail para enviar e receber e-mails na caixa de entrada.",
-        "keywords": "caixa de e-mail, smtp, imap, gmail, outlook, remetente"
+        "description": "Conecte caixas de e-mail do Gmail ou Google Workspace para que sua equipe leia e responda os e-mails de clientes na caixa de entrada compartilhada.",
+        "keywords": "caixa de e-mail, gmail, google workspace, caixa de entrada compartilhada, e-mail de suporte, outlook, imap"
       },
       "line": {
         "label": "LINE",
@@ -315,10 +315,20 @@
         "description": "Exporte o registro de entrega das suas mensagens, até um ano atrás, como um arquivo enviado ao seu e-mail.",
         "keywords": "exportar, registro de entrega, histórico, arquivo, csv, mensagens"
       },
+      "billing-subscriptions": {
+        "label": "Assinaturas",
+        "description": "O que renova, até quando está pago e cancelamento.",
+        "keywords": "assinatura, renovar, renovação automática, cancelar, débito automático, pagamento falhou, cobranças"
+      },
       "web": {
         "label": "Chat do site",
         "description": "Bots criados para o chat do seu site e o widget em que cada um é executado.",
         "keywords": "web, site, widget, chatbot, incorporar, chat ao vivo"
+      },
+      "help-assistant": {
+        "label": "Assistente de ajuda",
+        "description": "Ative o assistente que orienta sua equipe ou faz os passos por ela.",
+        "keywords": "ia, assistente, agente, guia, ajuda, automação"
       }
     }
   }

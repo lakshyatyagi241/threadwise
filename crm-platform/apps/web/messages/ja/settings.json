@@ -102,8 +102,8 @@
       },
       "email": {
         "label": "メール",
-        "description": "メールボックスを接続して、受信箱でメールを送受信します。",
-        "keywords": "メールボックス、smtp、imap、gmail、outlook、送信者"
+        "description": "Gmail または Google Workspace のメールボックスを接続して、チームで共有の受信箱からお客様のメールを読み、返信します。",
+        "keywords": "メールボックス、gmail、google workspace、共有受信箱、サポートメール、outlook、imap"
       },
       "line": {
         "label": "LINE",
@@ -315,10 +315,20 @@
         "description": "メッセージの配信ログを最大1年前までさかのぼってエクスポートし、ファイルをメールで受け取れます。",
         "keywords": "エクスポート, 配信ログ, 履歴, アーカイブ, csv, メッセージ"
       },
+      "billing-subscriptions": {
+        "label": "サブスクリプション",
+        "description": "更新内容、支払い済み期間、キャンセル。",
+        "keywords": "サブスクリプション, 更新, 自動更新, キャンセル, 自動支払い, 支払い失敗, 請求"
+      },
       "web": {
         "label": "ウェブサイトチャット",
         "description": "ウェブサイトのチャット用に作成したボットと、それぞれが動作するウィジェット。",
         "keywords": "ウェブ, ウェブサイト, ウィジェット, チャットボット, 埋め込み, ライブチャット"
+      },
+      "help-assistant": {
+        "label": "ヘルプアシスタント",
+        "description": "チームを案内したり、手順を代行したりするアシスタントをオンにします。",
+        "keywords": "ai, アシスタント, エージェント, ガイド, ヘルプ, 自動化"
       }
     }
   }

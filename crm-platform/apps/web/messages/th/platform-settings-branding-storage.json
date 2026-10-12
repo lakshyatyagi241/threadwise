@@ -17,6 +17,8 @@
       "whatsapp": "WhatsApp (WABA)",
       "campaigns": "แคมเปญ",
       "googleCalendar": "Google Calendar",
+      "googleMail": "Gmail",
+      "microsoftMail": "Microsoft 365",
       "flowBuilder": "ตัวสร้างโฟลว์"
     },
     "hub": {
@@ -930,6 +932,79 @@
           }
         }
       },
+      "googleMail": {
+        "title": "อีเมล Gmail",
+        "description": "ไคลเอนต์ Google OAuth ที่ทุกเวิร์กสเปซใช้เชื่อมต่อกล่องจดหมาย",
+        "sections": {
+          "oauth": {
+            "title": "ไคลเอนต์ Google OAuth"
+          },
+          "push": {
+            "title": "Gmail push (ไม่บังคับ)"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "อนุญาตให้เวิร์กสเปซเชื่อมต่อ Gmail",
+            "hint": "ปิด: ไม่มีเวิร์กสเปซใดเชื่อมต่อได้ และจะไม่มีการอ่านหรือส่งอีเมล กล่องจดหมายที่เชื่อมต่อแล้วจะยังคงอยู่"
+          },
+          "clientId": {
+            "label": "Client ID",
+            "hint": "จาก Google Cloud > Credentials > OAuth 2.0 Client ID (Web application) หากว่างจะใช้ GOOGLE_MAIL_CLIENT_ID"
+          },
+          "clientSecret": {
+            "label": "Client secret",
+            "hint": "เก็บไว้แบบเข้ารหัสและจะไม่แสดงอีก หากว่างจะคงค่าที่บันทึกไว้; GOOGLE_MAIL_CLIENT_SECRET เป็นค่าสำรอง"
+          },
+          "redirectUri": {
+            "label": "แทนที่ Redirect URI",
+            "hint": "เว้นว่างเพื่อใช้ที่อยู่ด้านบน ต้องตรงกับ Authorised redirect URI ในไคลเอนต์ทุกประการ"
+          },
+          "pubsubTopic": {
+            "label": "หัวข้อ Pub/Sub",
+            "hint": "projects/PROJECT_ID/topics/TOPIC_ID ให้สิทธิ์ Publisher บนหัวข้อนี้แก่ gmail-api-push@system.gserviceaccount.com หากเว้นว่างจะใช้ GOOGLE_MAIL_PUBSUB_TOPIC และถ้าไม่มีหัวข้อ กล่องจดหมายจะถูกตรวจเป็นรอบเท่านั้น"
+          },
+          "pushAudience": {
+            "label": "Audience ของ push",
+            "hint": "audience ที่ตั้งไว้ในการสมัครรับ push หากเว้นว่างจะใช้ GOOGLE_MAIL_PUSH_AUDIENCE มิฉะนั้นใช้ที่อยู่ endpoint push ของแพลตฟอร์มนี้"
+          },
+          "pushServiceAccount": {
+            "label": "บัญชีบริการของ push",
+            "hint": "บัญชีบริการที่การสมัครรับ push ใช้ลงนาม push จากบัญชีอื่นจะถูกปฏิเสธ หากเว้นว่างจะใช้ GOOGLE_MAIL_PUSH_SERVICE_ACCOUNT"
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "อีเมล Microsoft 365",
+        "description": "แอปของ Microsoft ที่ทุกเวิร์กสเปซใช้เชื่อมต่อกล่องจดหมาย Outlook และ Microsoft 365",
+        "sections": {
+          "oauth": {
+            "title": "แอป Microsoft Entra"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "อนุญาตให้เวิร์กสเปซเชื่อมต่อ Microsoft 365",
+            "hint": "ปิด: ไม่มีเวิร์กสเปซใดเชื่อมต่อได้ และจะไม่มีการอ่านหรือส่งอีเมล กล่องจดหมายที่เชื่อมต่อแล้วจะยังคงอยู่"
+          },
+          "clientId": {
+            "label": "รหัสแอปพลิเคชัน (ไคลเอนต์)",
+            "hint": "จากศูนย์ผู้ดูแลระบบ Microsoft Entra, การลงทะเบียนแอป, ภาพรวม หากเว้นว่างจะใช้ MICROSOFT_MAIL_CLIENT_ID"
+          },
+          "clientSecret": {
+            "label": "Client secret",
+            "hint": "เก็บไว้แบบเข้ารหัสและจะไม่แสดงอีก หากว่างจะคงค่าที่บันทึกไว้; MICROSOFT_MAIL_CLIENT_SECRET เป็นค่าสำรอง"
+          },
+          "tenant": {
+            "label": "Tenant",
+            "hint": "common อนุญาตบัญชีงาน บัญชีโรงเรียน และบัญชีส่วนตัว ใช้รหัสไดเรกทอรี (tenant) สำหรับแอปแบบ tenant เดียว หากเว้นว่างจะใช้ MICROSOFT_MAIL_TENANT หากไม่มีจะใช้ common"
+          },
+          "redirectUri": {
+            "label": "แทนที่ Redirect URI",
+            "hint": "เว้นว่างเพื่อใช้ที่อยู่ด้านบน ต้องตรงกับ Authorised redirect URI ในไคลเอนต์ทุกประการ"
+          }
+        }
+      },
       "flowBuilder": {
         "title": "ตัวสร้างโฟลว์",
         "description": "ตัวสร้างโฟลว์ใดที่เสนอให้พื้นที่ทำงาน",
@@ -1062,6 +1137,16 @@
         "title": "Google Calendar",
         "description": "ไคลเอนต์ Google OAuth ที่พื้นที่ทำงานใช้เชื่อมปฏิทินเพื่อการจองและช่วงเวลาที่ไม่ว่าง",
         "tags": "Google / OAuth / Calendar"
+      },
+      "googleMail": {
+        "title": "อีเมล Gmail",
+        "description": "ไคลเอนต์ Google OAuth ที่เวิร์กสเปซใช้เชื่อมต่อกล่องจดหมาย Gmail",
+        "tags": "Google / OAuth / Gmail"
+      },
+      "microsoftMail": {
+        "title": "อีเมล Microsoft 365",
+        "description": "แอปของ Microsoft ที่เวิร์กสเปซใช้เชื่อมต่อกล่องจดหมาย Outlook และ Microsoft 365",
+        "tags": "Microsoft / OAuth / Outlook"
       },
       "flowBuilder": {
         "title": "ตัวสร้างโฟลว์",
@@ -1648,6 +1733,78 @@
           }
         }
       },
+      "googleMail": {
+        "title": "อีเมล Gmail",
+        "eyebrow": "ผู้ดูแล - อีเมล",
+        "description": "ไคลเอนต์ Google Cloud OAuth หนึ่งตัวสำหรับทั้งแพลตฟอร์ม แยกจาก Google Calendar แต่ละเวิร์กสเปซเชื่อมต่อกล่องจดหมายของตนเองจากอีเมล และจะไม่เห็นรหัสไคลเอนต์หรือรหัสลับ",
+        "sections": {
+          "oauth": {
+            "title": "ไคลเอนต์ Google OAuth",
+            "description": "หากไม่มีรหัสไคลเอนต์และรหัสลับ เวิร์กสเปซจะเชื่อมต่อกล่องจดหมายไม่ได้"
+          },
+          "push": {
+            "title": "Gmail push (ไม่บังคับ)",
+            "description": "อีเมลใหม่เข้ากล่องข้อความของทีมภายในไม่กี่วินาที โดยไม่ต้องรอการตรวจรอบถัดไป การตรวจเป็นรอบยังทำงานอยู่เพื่อเป็นตัวสำรอง"
+          }
+        },
+        "guide": {
+          "title": "ตั้งค่าใน Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. โปรเจกต์และ API",
+              "body": "ใน Google Cloud Console ให้สร้างโปรเจกต์และเปิดใช้ Gmail API"
+            },
+            "redirect": {
+              "title": "2. ไคลเอนต์ OAuth",
+              "body": "สร้าง OAuth 2.0 Client ID ประเภท Web application และเพิ่ม redirect URI ที่แสดงในหน้านี้ภายใต้ Authorised redirect URIs"
+            },
+            "consent": {
+              "title": "3. หน้าจอยินยอม",
+              "body": "เพิ่มขอบเขต openid, email, gmail.readonly และ gmail.send ขอบเขตของ Gmail เป็นแบบจำกัด Google ต้องตรวจสอบแอปก่อนใช้งานทั่วไป และในโหมดทดสอบ การอนุญาตจะหมดอายุหลัง 7 วัน"
+            },
+            "workspaces": {
+              "title": "4. พื้นที่ทำงานเชื่อมต่อ",
+              "body": "วางรหัสไคลเอนต์และรหัสลับที่นี่แล้วบันทึก จากนั้นผู้ดูแลจะเชื่อมต่อได้จากอีเมล"
+            },
+            "push": {
+              "title": "5. อีเมลทันที (ไม่บังคับ)",
+              "body": "สร้างหัวข้อ Pub/Sub ให้สิทธิ์ Publisher แก่ gmail-api-push@system.gserviceaccount.com เพิ่มการสมัครรับ push ไปที่ APP_URL/v2/public/email/google/push พร้อมการยืนยันตัวตนแบบ OIDC แล้วกรอกหัวข้อ audience และบัญชีบริการที่นี่"
+            }
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "อีเมล Microsoft 365",
+        "eyebrow": "ผู้ดูแล - อีเมล",
+        "description": "แอป Microsoft Entra เพียงหนึ่งแอปสำหรับทั้งแพลตฟอร์ม แต่ละเวิร์กสเปซเชื่อมต่อกล่องจดหมายของตนเองจากอีเมล และไม่เห็นรหัสหรือความลับของไคลเอนต์",
+        "sections": {
+          "oauth": {
+            "title": "แอป Microsoft Entra",
+            "description": "หากไม่มีรหัสไคลเอนต์และรหัสลับ เวิร์กสเปซจะเชื่อมต่อกล่องจดหมายไม่ได้"
+          }
+        },
+        "guide": {
+          "title": "ตั้งค่าใน Microsoft Entra",
+          "items": {
+            "registration": {
+              "title": "1. ลงทะเบียนแอป",
+              "body": "ในศูนย์ผู้ดูแลระบบ Microsoft Entra ให้สร้างการลงทะเบียนแอป เลือกประเภทบัญชีที่ลูกค้าของคุณใช้ (บัญชีงานหรือโรงเรียน และบัญชีส่วนตัวสำหรับ Outlook.com) แล้วคัดลอกรหัสแอปพลิเคชัน (ไคลเอนต์) และ tenant มาที่นี่"
+            },
+            "redirect": {
+              "title": "2. URI เปลี่ยนเส้นทางและความลับ",
+              "body": "เพิ่ม URI เปลี่ยนเส้นทางที่แสดงในหน้านี้เป็นการเปลี่ยนเส้นทางของแพลตฟอร์ม Web จากนั้นสร้างความลับของไคลเอนต์ใน ใบรับรองและความลับ แล้ววางค่าที่นี่"
+            },
+            "permissions": {
+              "title": "3. สิทธิ์ API",
+              "body": "เพิ่มสิทธิ์แบบมอบสิทธิ์ของ Microsoft Graph ได้แก่ Mail.Read, Mail.Send, User.Read และ offline_access สำหรับการใช้งานทั่วไปให้ทำการยืนยันผู้เผยแพร่ให้เสร็จ บางองค์กรยังต้องให้ผู้ดูแลระบบยินยอมด้วย"
+            },
+            "workspaces": {
+              "title": "4. พื้นที่ทำงานเชื่อมต่อ",
+              "body": "วางรหัสไคลเอนต์และรหัสลับที่นี่แล้วบันทึก จากนั้นผู้ดูแลจะเชื่อมต่อได้จากอีเมล"
+            }
+          }
+        }
+      },
       "flowBuilder": {
         "title": "ตัวสร้างโฟลว์",
         "eyebrow": "ผู้ดูแล - ระบบอัตโนมัติ",
@@ -1735,6 +1892,12 @@
     "googleCallback": {
       "redirectTitle": "Redirect URI",
       "redirectHint": "ลงทะเบียนที่อยู่นี้ตรงๆ เป็น Authorised redirect URI ในไคลเอนต์ OAuth เป็นที่ที่ Google ส่งเบราว์เซอร์ไปหลังผู้ดูแลพื้นที่ทำงานยินยอม",
+      "copy": "คัดลอก",
+      "copied": "คัดลอกแล้ว"
+    },
+    "microsoftCallback": {
+      "redirectTitle": "Redirect URI",
+      "redirectHint": "ลงทะเบียนที่อยู่นี้ให้ตรงทุกตัวอักษรเป็น URI เปลี่ยนเส้นทางแบบ Web ในการลงทะเบียนแอป นี่คือที่ที่ Microsoft ส่งเบราว์เซอร์กลับมาหลังจากผู้ดูแลเวิร์กสเปซยินยอม",
       "copy": "คัดลอก",
       "copied": "คัดลอกแล้ว"
     }

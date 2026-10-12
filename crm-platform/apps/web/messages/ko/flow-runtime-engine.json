@@ -207,7 +207,9 @@
         "request": "요청",
         "response": "응답",
         "result": "결과"
-      }
+      },
+      "factMenuKept": "여기에는 다음 단계가 없습니다. {node}의 옵션은 계속 유효합니다.",
+      "factAnswered": "{time} 후 응답"
     },
     "event": {
       "step": "단계",
@@ -513,7 +515,9 @@
       "error": "오류",
       "skipped": "건너뜀",
       "waiting": "대기 중",
-      "timeout": "시간 초과"
+      "timeout": "시간 초과",
+      "answered": "응답함",
+      "gaveUp": "응답 없음"
     }
   }
 }

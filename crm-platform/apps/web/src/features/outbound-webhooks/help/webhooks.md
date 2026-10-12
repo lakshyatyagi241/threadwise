@@ -14,7 +14,7 @@ A webhook sends a message to a web address of yours each time something happens 
 
 ## How to use it
 
-1. Open **Settings**, go to **Integrations and developer** and select **Webhooks**.
+1. Open **Marketplace**, stay on the **Integrations** tab and select **Webhooks** under **Integrations and developer**.
 2. Select **Add webhook**. Enter the **Endpoint URL**: an https address that is reachable from the internet.
 3. Choose the **Events** you want, or leave **All events** on.
 4. Optionally type a **Signing secret**. When it is set, every delivery carries a signature your server can check.

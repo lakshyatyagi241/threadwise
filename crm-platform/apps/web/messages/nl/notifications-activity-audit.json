@@ -199,7 +199,8 @@
         "devices": "WhatsApp-nummers",
         "broadcasts": "Broadcasts en campagnes",
         "team_chat": "Teamchat",
-        "whatsapp_groups": "WhatsApp-groepen"
+        "whatsapp_groups": "WhatsApp-groepen",
+        "billing": "Facturatie en abonnementen"
       },
       "types": {
         "new_chat": {
@@ -298,6 +299,10 @@
           "label": "Verkoopdocument beslist",
           "hint": "Een offerte of factuur is geaccepteerd of afgewezen."
         },
+        "email_bounced": {
+          "label": "E-mail niet bezorgd",
+          "hint": "Een e-mail die je verstuurde is teruggekomen of vertraagd."
+        },
         "wallet_credited": {
           "label": "Wallet opgeladen",
           "hint": "Het walletsaldo van de workspace is bijgeschreven."
@@ -321,6 +326,14 @@
         "form_payment_duplicate": {
           "label": "Formulier twee keer betaald",
           "hint": "Een bezoeker heeft een tweede keer betaald en de extra betaling moet worden terugbetaald."
+        },
+        "billing_payment_failed": {
+          "label": "Abonnementsbetaling mislukt",
+          "hint": "Een verlengingsbetaling is niet doorgegaan en vraagt je aandacht."
+        },
+        "billing_subscription_canceled": {
+          "label": "Abonnement geannuleerd",
+          "hint": "Je betalingsprovider heeft een abonnement van deze werkruimte beëindigd."
         }
       },
       "loading": "Je voorkeuren laden",

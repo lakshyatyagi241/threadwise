@@ -30,6 +30,7 @@ function ent(over: Partial<Entitlements> = {}): Entitlements {
     planFeatures: {},
     state: 'paid_active',
     visibleApps: { all: true, appIds: new Set<number>() },
+    appWithheld: {},
     ...over,
   };
 }

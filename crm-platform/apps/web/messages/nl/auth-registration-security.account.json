@@ -367,7 +367,8 @@
         "failed": "We kunnen niet van workspace wisselen. Probeer het opnieuw.",
         "notAvailable": "Je kunt niet naar die workspace wisselen.",
         "rateLimited": "Te veel pogingen. Wacht even en probeer het opnieuw.",
-        "rateLimitedWait": "Te veel pogingen. Probeer het over {seconds, plural, one {# seconde} other {# seconden}} opnieuw."
+        "rateLimitedWait": "Te veel pogingen. Probeer het over {seconds, plural, one {# seconde} other {# seconden}} opnieuw.",
+        "unverified": "Verifieer je e-mailadres in deze werkruimte om ernaartoe te wisselen."
       },
       "mfaChallenge": {
         "title": "Bevestig dat jij het bent",
@@ -552,7 +553,9 @@
             "extra_channels": "Telegram, Facebook en Instagram",
             "form_builder": "Formulieren",
             "waba_groups": "WhatsApp-groepen",
-            "sms": "SMS"
+            "sms": "SMS",
+            "help_agent": "Hulpassistent",
+            "email_channel": "E-mailkanaal (Gmail)"
           },
           "cta": {
             "continueFree": "Gratis doorgaan",

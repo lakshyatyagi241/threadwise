@@ -6,7 +6,8 @@
       "orders": "Historia zamówień",
       "billingHistory": "Historia rozliczeń",
       "invoices": "Faktury",
-      "billingSettings": "Ustawienia rozliczeń"
+      "billingSettings": "Ustawienia rozliczeń",
+      "subscriptions": "Subskrypcje"
     },
     "admin": {
       "title": "Bramki płatności",
@@ -299,7 +300,8 @@
           "markPaid": "Oznacz jako opłacone",
           "cancelOrder": "Anuluj",
           "approve": "Zatwierdź",
-          "reject": "Odrzuć"
+          "reject": "Odrzuć",
+          "refund": "Zwrot"
         },
         "confirm": {
           "approveTitle": "Oznaczyć to zamówienie jako opłacone?",
@@ -673,6 +675,79 @@
           "faqsHint": "Elementy akordeonu wyświetlane pod planami.",
           "configured": "Skonfigurowano: {count}."
         }
+      },
+      "subscriptions": {
+        "title": "Subskrypcje",
+        "eyebrow": "Płatności",
+        "titleFirst": "Platforma",
+        "titleSecond": "subskrypcje",
+        "description": "Subskrypcje planów i dodatków prowadzone u operatora płatności we wszystkich obszarach roboczych. Zakończ subskrypcję, odśwież ją z danych operatora lub zwróć opłatę.",
+        "kpi": {
+          "active": "Aktywna",
+          "pastDue": "Płatność nieudana",
+          "canceled": "Anulowana"
+        },
+        "statusFilter": "Status subskrypcji",
+        "statuses": {
+          "all": "Wszystkie",
+          "active": "Aktywna",
+          "past_due": "Płatność nieudana",
+          "pending": "Oczekuje",
+          "canceled": "Anulowana",
+          "expired": "Wygasła"
+        },
+        "kind": {
+          "plan": "Plan",
+          "addon": "Dodatek"
+        },
+        "search": "Szukaj obszaru roboczego lub identyfikatora operatora",
+        "noun": "subskrypcje",
+        "empty": "Brak pasujących subskrypcji.",
+        "col": {
+          "workspace": "Obszar roboczy",
+          "item": "Pozycja",
+          "price": "Cena",
+          "paidUntil": "Opłacona do",
+          "status": "Status",
+          "provider": "Operator",
+          "actions": "Akcje"
+        },
+        "cancelFailed": "Anulowanie u operatora nie powiodło się",
+        "cancelFailedHint": "Lokalny rekord został zakończony, ale operator nie potwierdził anulowania. Dokończ to w panelu operatora, aby przestał pobierać opłaty.",
+        "actions": {
+          "sync": "Odśwież",
+          "refund": "Zwrot",
+          "endAtCycle": "Zakończ z końcem okresu",
+          "endNow": "Zakończ teraz"
+        },
+        "confirm": {
+          "title": "Zakończyć tę subskrypcję?",
+          "atCycle": "{name} zachowuje dostęp do końca opłaconego okresu i nie zostanie ponownie obciążony.",
+          "now": "Zakończ teraz subskrypcję {name} u operatora. Nie zostaną pobrane żadne kolejne opłaty."
+        },
+        "ended": "Subskrypcja zakończona u operatora.",
+        "endedLocalOnly": "Zakończona tutaj, ale operator nie potwierdził anulowania. Dokończ to w panelu operatora.",
+        "endedUnsupported": "Zakończona tutaj. Tego operatora nie można anulować stąd.",
+        "alreadyEnded": "Została już zakończona.",
+        "synced": "Sprawdzono u operatora: {outcome}."
+      },
+      "refund": {
+        "title": "Zwrot {label}",
+        "intro": "Zwrot jest wysyłany do operatora płatności i wraca na pierwotną metodę płatności kupującego.",
+        "charge": "Opłata do zwrotu",
+        "pickCharge": "Wybierz opłaconą opłatę",
+        "loadingCharges": "Ładowanie opłat",
+        "chargesFailed": "Nie udało się zapytać operatora płatności o opłaty tej subskrypcji.",
+        "noPaidCharges": "Operator nie wykazuje żadnej opłaconej opłaty dla tej subskrypcji.",
+        "amount": "Kwota ({currency})",
+        "amountHint": "Zostaw puste, aby zwrócić wszystko, co nie zostało jeszcze zwrócone.",
+        "reason": "Powód",
+        "endSubscription": "Zakończ też teraz subskrypcję, aby nie była ponownie obciążana",
+        "submit": "Zwrot",
+        "processed": "Zwrócono {amount}.",
+        "pending": "Zwrot wysłany. Operator go przetwarza.",
+        "failed": "Operator odrzucił zwrot.",
+        "badAmount": "Wpisz kwotę jako liczbę, na przykład 12.50."
       }
     },
     "offline": {
@@ -711,6 +786,74 @@
       "rejected": "Ten typ pliku jest niedozwolony. Użyj pliku JPG, PNG, WEBP lub PDF.",
       "closed": "Potwierdzenia płatności nie można już przesłać dla tego zamówienia.",
       "failed": "Nie udało się przesłać pliku. Spróbuj ponownie."
+    },
+    "subscriptions": {
+      "title": "Subskrypcje",
+      "subtitle": "Twoje subskrypcje planów i dodatków u operatora płatności: co się odnawia, do kiedy masz opłacone i co zostało pobrane.",
+      "loading": "Ładowanie subskrypcji",
+      "loadFailed": "Nie udało się wczytać Twoich subskrypcji. Spróbuj ponownie za chwilę.",
+      "emptyTitle": "Brak subskrypcji",
+      "emptyMessage": "Gdy zapłacisz za plan lub dodatek z automatycznym odnawianiem, pojawi się tutaj.",
+      "browsePlans": "Przeglądaj plany",
+      "failedBanner": "Ostatnia płatność za {names} nie powiodła się. Twój dostęp na razie trwa, a operator ponawia próbę; zaktualizuj metodę płatności w banku lub u operatora, aby go nie stracić.",
+      "paymentFailed": "Ostatnia płatność nie powiodła się. Operator ponawia próbę.",
+      "kind": {
+        "plan": "Plan",
+        "addon": "Dodatek"
+      },
+      "status": {
+        "active": "Aktywna",
+        "past_due": "Płatność nieudana",
+        "pending": "Oczekiwanie na płatność",
+        "canceled": "Anulowana",
+        "expired": "Wygasła"
+      },
+      "cycle": {
+        "monthly": "miesiąc",
+        "yearly": "rok"
+      },
+      "price": "{amount} za {cycle}",
+      "renewsOn": "Odnowienie: {date}",
+      "endsOn": "Opłacona do {date}. Nie zostanie odnowiona.",
+      "endedOn": "Zakończona {date}",
+      "refreshFromProvider": "Odśwież z danych operatora",
+      "showCharges": "Pokaż opłaty",
+      "hideCharges": "Ukryj opłaty",
+      "cancel": "Anuluj subskrypcję",
+      "confirmTitle": "Anulować {name}?",
+      "confirmBody": "Zachowasz dostęp do {date}. Potem subskrypcja nie zostanie odnowiona i nie będziesz ponownie obciążany.",
+      "confirmBodyNoDate": "Subskrypcja nie zostanie odnowiona i nie będziesz ponownie obciążany.",
+      "confirm": "Anuluj subskrypcję",
+      "keep": "Zachowaj",
+      "cancelDone": "Anulowano. Opłacony okres nadal trwa i nic więcej nie zostanie pobrane.",
+      "cancelFailed": "Nie udało się anulować tej subskrypcji. Spróbuj ponownie lub skontaktuj się z pomocą techniczną.",
+      "forbidden": "Nie masz uprawnień do zarządzania subskrypcjami.",
+      "sync": {
+        "up_to_date": "Dane są już zgodne z operatorem płatności.",
+        "renewed": "Zaktualizowano: operator miał nowsze odnowienie.",
+        "gateway_canceled": "Operator pokazuje tę subskrypcję jako anulowaną.",
+        "gateway_expired": "Operator pokazuje tę subskrypcję jako zakończoną.",
+        "unknown": "Sprawdzono u operatora płatności.",
+        "failed": "Nie udało się połączyć z operatorem płatności. Spróbuj ponownie za chwilę."
+      },
+      "chargesFailed": "Nie udało się wczytać opłat.",
+      "chargesFromOrders": "Nie udało się połączyć z operatorem płatności, więc zamiast tego widzisz swoje opłacone zamówienia.",
+      "noCharges": "Brak opłat.",
+      "col": {
+        "date": "Data",
+        "amount": "Kwota",
+        "status": "Status",
+        "receipt": "Potwierdzenie"
+      },
+      "chargeStatus": {
+        "paid": "Opłacona",
+        "issued": "Oczekuje na płatność",
+        "failed": "Nieudana",
+        "cancelled": "Anulowana",
+        "expired": "Wygasła",
+        "other": "Inne"
+      },
+      "openReceipt": "Otwórz potwierdzenie"
     }
   }
 }

@@ -86,8 +86,8 @@
       },
       "email": {
         "label": "E-mail",
-        "description": "Verbind een mailbox om e-mail te verzenden en ontvangen in de inbox.",
-        "keywords": "mailbox, smtp, imap, gmail, outlook, afzender"
+        "description": "Verbind Gmail- of Google Workspace-mailboxen zodat je team klant-e-mail in de gedeelde inbox kan lezen en beantwoorden.",
+        "keywords": "mailbox, gmail, google workspace, gedeelde inbox, support-e-mail, outlook, imap"
       },
       "line": {
         "label": "LINE",
@@ -299,10 +299,20 @@
         "description": "Exporteer het bezorglogboek van je berichten, tot een jaar terug, als bestand dat naar je e-mail wordt gestuurd.",
         "keywords": "export, bezorglogboek, geschiedenis, archief, csv, berichten"
       },
+      "billing-subscriptions": {
+        "label": "Abonnementen",
+        "description": "Wat wordt verlengd, tot wanneer het betaald is, en annuleren.",
+        "keywords": "abonnement, verlengen, automatisch verlengen, annuleren, automatische betaling, mislukte betaling, afschrijvingen"
+      },
       "web": {
         "label": "Websitechat",
         "description": "Bots die zijn gemaakt voor de chat op je website en de widget waarin elk daarvan draait.",
         "keywords": "web, website, widget, chatbot, insluiten, livechat"
+      },
+      "help-assistant": {
+        "label": "Hulpassistent",
+        "description": "Zet de assistent aan die je team begeleidt of de stappen voor hen uitvoert.",
+        "keywords": "ai, assistent, agent, gids, hulp, automatisering"
       }
     },
     "title": "Instellingen",

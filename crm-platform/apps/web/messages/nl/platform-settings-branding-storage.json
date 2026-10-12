@@ -17,6 +17,8 @@
       "whatsapp": "WhatsApp (WABA)",
       "campaigns": "Campagnes",
       "googleCalendar": "Google Agenda",
+      "googleMail": "Gmail",
+      "microsoftMail": "Microsoft 365",
       "flowBuilder": "Flowbouwer"
     },
     "hub": {
@@ -930,6 +932,79 @@
           }
         }
       },
+      "googleMail": {
+        "title": "Gmail-e-mail",
+        "description": "De Google OAuth-client waarmee elke werkruimte haar postvakken koppelt.",
+        "sections": {
+          "oauth": {
+            "title": "Google OAuth-client"
+          },
+          "push": {
+            "title": "Gmail-push (optioneel)"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Werkruimtes toestaan Gmail te koppelen",
+            "hint": "Uit: geen enkele werkruimte kan koppelen en er wordt geen e-mail gelezen of verstuurd. Al gekoppelde postvakken blijven bewaard."
+          },
+          "clientId": {
+            "label": "Client-ID",
+            "hint": "Vanuit Google Cloud, Credentials, OAuth 2.0 Client-ID (Webapplicatie). Leeg gebruikt GOOGLE_MAIL_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Clientgeheim",
+            "hint": "Versleuteld opgeslagen en nooit meer getoond. Leeg behoudt het opgeslagen geheim; GOOGLE_MAIL_CLIENT_SECRET is de terugval."
+          },
+          "redirectUri": {
+            "label": "Overschrijving redirect-URI",
+            "hint": "Laat leeg om het adres hierboven te gebruiken. Het moet exact overeenkomen met een geautoriseerde redirect-URI van de client."
+          },
+          "pubsubTopic": {
+            "label": "Pub/Sub-onderwerp",
+            "hint": "projects/PROJECT_ID/topics/TOPIC_ID. Geef gmail-api-push@system.gserviceaccount.com daarop de rol Publisher. Leeg gebruikt GOOGLE_MAIL_PUBSUB_TOPIC; zonder onderwerp worden mailboxen alleen periodiek gecontroleerd."
+          },
+          "pushAudience": {
+            "label": "Push-doelgroep",
+            "hint": "De doelgroep (audience) die op het push-abonnement is ingesteld. Leeg gebruikt GOOGLE_MAIL_PUSH_AUDIENCE, anders het adres van het push-eindpunt van dit platform."
+          },
+          "pushServiceAccount": {
+            "label": "Push-serviceaccount",
+            "hint": "Het serviceaccount waarmee het push-abonnement ondertekent. Een push van een ander account wordt geweigerd. Leeg gebruikt GOOGLE_MAIL_PUSH_SERVICE_ACCOUNT."
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "Microsoft 365-e-mail",
+        "description": "De Microsoft-app waarmee elke werkruimte haar Outlook- en Microsoft 365-postvakken koppelt.",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra-app"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Werkruimtes toestaan Microsoft 365 te koppelen",
+            "hint": "Uit: geen enkele werkruimte kan koppelen en er wordt geen e-mail gelezen of verstuurd. Al gekoppelde postvakken blijven bewaard."
+          },
+          "clientId": {
+            "label": "Toepassings-id (client)",
+            "hint": "Uit het Microsoft Entra-beheercentrum, App-registraties, Overzicht. Leeg gebruikt MICROSOFT_MAIL_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Clientgeheim",
+            "hint": "Versleuteld opgeslagen en nooit meer getoond. Leeg behoudt het opgeslagen geheim; MICROSOFT_MAIL_CLIENT_SECRET is de terugval."
+          },
+          "tenant": {
+            "label": "Tenant",
+            "hint": "common staat werk-, school- en persoonlijke accounts toe; gebruik een directory-id (tenant-id) voor een app met één tenant. Leeg gebruikt MICROSOFT_MAIL_TENANT, anders common."
+          },
+          "redirectUri": {
+            "label": "Overschrijving redirect-URI",
+            "hint": "Laat leeg om het adres hierboven te gebruiken. Het moet exact overeenkomen met een geautoriseerde redirect-URI van de client."
+          }
+        }
+      },
       "flowBuilder": {
         "title": "Flowbouwer",
         "description": "Welke flowbouwers werkruimtes krijgen aangeboden.",
@@ -1062,6 +1137,16 @@
         "title": "Google Agenda",
         "description": "De Google OAuth-client waarmee werkruimtes hun agenda verbinden voor afspraken en bezette tijden.",
         "tags": "Google / OAuth / Agenda"
+      },
+      "googleMail": {
+        "title": "Gmail-e-mail",
+        "description": "De Google OAuth-client waarmee werkruimtes hun Gmail-postvakken koppelen.",
+        "tags": "Google / OAuth / Gmail"
+      },
+      "microsoftMail": {
+        "title": "Microsoft 365-e-mail",
+        "description": "De Microsoft-app waarmee werkruimten hun Outlook- en Microsoft 365-postvakken koppelen.",
+        "tags": "Microsoft / OAuth / Outlook"
       },
       "flowBuilder": {
         "title": "Flowbouwer",
@@ -1648,6 +1733,78 @@
           }
         }
       },
+      "googleMail": {
+        "title": "Gmail-e-mail",
+        "eyebrow": "Beheer - E-mail",
+        "description": "Eén Google Cloud OAuth-client voor het hele platform, los van Google Agenda. Elke werkruimte koppelt haar eigen postvakken via E-mail en ziet de client-ID en het geheim nooit.",
+        "sections": {
+          "oauth": {
+            "title": "Google OAuth-client",
+            "description": "Zonder client-ID en geheim kunnen werkruimtes geen postvak koppelen."
+          },
+          "push": {
+            "title": "Gmail-push (optioneel)",
+            "description": "Nieuwe mail komt binnen enkele seconden in de teaminbox, zonder te wachten op de volgende controle. Periodieke controle blijft actief als vangnet."
+          }
+        },
+        "guide": {
+          "title": "Instellen in Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. Project en API",
+              "body": "Maak in de Google Cloud Console een project en schakel de Gmail API in."
+            },
+            "redirect": {
+              "title": "2. OAuth-client",
+              "body": "Maak een OAuth 2.0 Client-ID van het type Webapplicatie en voeg de redirect-URI die op deze pagina staat toe onder Geautoriseerde redirect-URI's."
+            },
+            "consent": {
+              "title": "3. Toestemmingsscherm",
+              "body": "Voeg de scopes openid, email, gmail.readonly en gmail.send toe. Gmail-scopes zijn beperkt: Google moet de app controleren voor algemeen gebruik, en in de testmodus verloopt een toestemming na 7 dagen."
+            },
+            "workspaces": {
+              "title": "4. Werkruimtes verbinden",
+              "body": "Plak hier de client-ID en het geheim en sla op. Daarna koppelen beheerders via E-mail."
+            },
+            "push": {
+              "title": "5. Directe mail (optioneel)",
+              "body": "Maak een Pub/Sub-onderwerp, geef gmail-api-push@system.gserviceaccount.com de rol Publisher, voeg een push-abonnement toe op APP_URL/v2/public/email/google/push met OIDC-authenticatie en vul hier onderwerp, doelgroep en serviceaccount in."
+            }
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "Microsoft 365-e-mail",
+        "eyebrow": "Beheer - E-mail",
+        "description": "Eén Microsoft Entra-app voor het hele platform. Elke werkruimte koppelt haar eigen postvakken via E-mail en ziet de client-id en het geheim nooit.",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra-app",
+            "description": "Zonder client-ID en geheim kunnen werkruimtes geen postvak koppelen."
+          }
+        },
+        "guide": {
+          "title": "Instellen in Microsoft Entra",
+          "items": {
+            "registration": {
+              "title": "1. App-registratie",
+              "body": "Maak in het Microsoft Entra-beheercentrum een app-registratie. Kies de accounttypen van uw klanten (werk of school, en persoonlijke accounts voor Outlook.com) en kopieer de toepassings-id (client) en de tenant hierheen."
+            },
+            "redirect": {
+              "title": "2. Omleidings-URI en geheim",
+              "body": "Voeg de op deze pagina getoonde omleidings-URI toe als omleiding van het platform Web en maak onder Certificaten en geheimen een clientgeheim; plak de waarde hier."
+            },
+            "permissions": {
+              "title": "3. API-machtigingen",
+              "body": "Voeg de gedelegeerde Microsoft Graph-machtigingen Mail.Read, Mail.Send, User.Read en offline_access toe. Voor algemeen gebruik rondt u de uitgeversverificatie af; sommige organisaties eisen ook toestemming van een beheerder."
+            },
+            "workspaces": {
+              "title": "4. Werkruimtes verbinden",
+              "body": "Plak hier de client-ID en het geheim en sla op. Daarna koppelen beheerders via E-mail."
+            }
+          }
+        }
+      },
       "flowBuilder": {
         "title": "Flowbouwer",
         "eyebrow": "Beheer - Automatisering",
@@ -1735,6 +1892,12 @@
     "googleCallback": {
       "redirectTitle": "Redirect-URI",
       "redirectHint": "Registreer dit exacte adres als Geautoriseerde redirect-URI bij de OAuth-client. Hier stuurt Google de browser naartoe nadat een beheerder van de werkruimte akkoord is gegaan.",
+      "copy": "Kopiëren",
+      "copied": "Gekopieerd"
+    },
+    "microsoftCallback": {
+      "redirectTitle": "Redirect-URI",
+      "redirectHint": "Registreer precies dit adres als Web-omleidings-URI in de app-registratie. Hier stuurt Microsoft de browser heen nadat een beheerder van de werkruimte toestemming heeft gegeven.",
       "copy": "Kopiëren",
       "copied": "Gekopieerd"
     }

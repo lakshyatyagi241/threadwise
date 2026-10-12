@@ -17,6 +17,8 @@
       "whatsapp": "WhatsApp (WABA)",
       "campaigns": "Campagne",
       "googleCalendar": "Google Calendar",
+      "googleMail": "Gmail",
+      "microsoftMail": "Microsoft 365",
       "flowBuilder": "Flow builder"
     },
     "hub": {
@@ -930,6 +932,79 @@
           }
         }
       },
+      "googleMail": {
+        "title": "E-mail Gmail",
+        "description": "Il client OAuth di Google tramite cui ogni spazio di lavoro collega le sue caselle.",
+        "sections": {
+          "oauth": {
+            "title": "Client OAuth di Google"
+          },
+          "push": {
+            "title": "Push Gmail (facoltativo)"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Consenti agli spazi di lavoro di collegare Gmail",
+            "hint": "Disattivato: nessuno spazio di lavoro può collegarsi e nessuna e-mail viene letta o inviata. Le caselle già collegate vengono mantenute."
+          },
+          "clientId": {
+            "label": "ID client",
+            "hint": "Da Google Cloud, Credenziali, ID client OAuth 2.0 (applicazione web). Se vuoto, si usa GOOGLE_MAIL_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Segreto client",
+            "hint": "Salvato cifrato e non più mostrato. Se vuoto, resta quello salvato; GOOGLE_MAIL_CLIENT_SECRET è il valore di riserva."
+          },
+          "redirectUri": {
+            "label": "Sostituzione del redirect URI",
+            "hint": "Lascia vuoto per usare l’indirizzo sopra. Deve corrispondere esattamente a un redirect URI autorizzato del client."
+          },
+          "pubsubTopic": {
+            "label": "Argomento Pub/Sub",
+            "hint": "projects/PROJECT_ID/topics/TOPIC_ID. Assegna a gmail-api-push@system.gserviceaccount.com il ruolo Publisher su di esso. Vuoto usa GOOGLE_MAIL_PUBSUB_TOPIC; senza argomento le caselle vengono solo controllate periodicamente."
+          },
+          "pushAudience": {
+            "label": "Audience del push",
+            "hint": "L'audience impostata sulla sottoscrizione push. Vuoto usa GOOGLE_MAIL_PUSH_AUDIENCE, altrimenti l'indirizzo dell'endpoint push di questa piattaforma."
+          },
+          "pushServiceAccount": {
+            "label": "Account di servizio del push",
+            "hint": "L'account di servizio con cui firma la sottoscrizione push. Un push da qualsiasi altro account viene rifiutato. Vuoto usa GOOGLE_MAIL_PUSH_SERVICE_ACCOUNT."
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "E-mail Microsoft 365",
+        "description": "L'app Microsoft con cui ogni spazio di lavoro collega le caselle Outlook e Microsoft 365.",
+        "sections": {
+          "oauth": {
+            "title": "App Microsoft Entra"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Consenti agli spazi di lavoro di collegare Microsoft 365",
+            "hint": "Disattivato: nessuno spazio di lavoro può collegarsi e nessuna e-mail viene letta o inviata. Le caselle già collegate vengono mantenute."
+          },
+          "clientId": {
+            "label": "ID applicazione (client)",
+            "hint": "Dall'interfaccia di amministrazione di Microsoft Entra, Registrazioni app, Panoramica. Vuoto usa MICROSOFT_MAIL_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Segreto client",
+            "hint": "Salvato cifrato e non più mostrato. Se vuoto, resta quello salvato; MICROSOFT_MAIL_CLIENT_SECRET è il valore di riserva."
+          },
+          "tenant": {
+            "label": "Tenant",
+            "hint": "common consente account aziendali, dell'istituto di istruzione e personali; usa un ID directory (tenant) per un'app a tenant singolo. Vuoto usa MICROSOFT_MAIL_TENANT, altrimenti common."
+          },
+          "redirectUri": {
+            "label": "Sostituzione del redirect URI",
+            "hint": "Lascia vuoto per usare l’indirizzo sopra. Deve corrispondere esattamente a un redirect URI autorizzato del client."
+          }
+        }
+      },
       "flowBuilder": {
         "title": "Flow builder",
         "description": "Quali flow builder vengono offerti ai workspace.",
@@ -1062,6 +1137,16 @@
         "title": "Google Calendar",
         "description": "Il client OAuth di Google che i workspace usano per collegare il calendario per prenotazioni e orari occupati.",
         "tags": "Google / OAuth / Calendar"
+      },
+      "googleMail": {
+        "title": "E-mail Gmail",
+        "description": "Il client OAuth di Google che gli spazi di lavoro usano per collegare le loro caselle Gmail.",
+        "tags": "Google / OAuth / Gmail"
+      },
+      "microsoftMail": {
+        "title": "E-mail Microsoft 365",
+        "description": "L'app Microsoft che gli spazi di lavoro usano per collegare le caselle Outlook e Microsoft 365.",
+        "tags": "Microsoft / OAuth / Outlook"
       },
       "flowBuilder": {
         "title": "Flow builder",
@@ -1648,6 +1733,78 @@
           }
         }
       },
+      "googleMail": {
+        "title": "E-mail Gmail",
+        "eyebrow": "Admin - E-mail",
+        "description": "Un solo client OAuth di Google Cloud per tutta la piattaforma, separato da Google Calendar. Ogni spazio di lavoro collega le proprie caselle da E-mail e non vede mai ID client e segreto.",
+        "sections": {
+          "oauth": {
+            "title": "Client OAuth di Google",
+            "description": "Senza ID client e segreto, gli spazi di lavoro non possono collegare una casella."
+          },
+          "push": {
+            "title": "Push Gmail (facoltativo)",
+            "description": "La nuova posta arriva nella casella del team in pochi secondi, senza attendere il prossimo controllo. Il controllo periodico resta attivo come rete di sicurezza."
+          }
+        },
+        "guide": {
+          "title": "Configuralo in Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. Progetto e API",
+              "body": "In Google Cloud Console crea un progetto e attiva l'API Gmail."
+            },
+            "redirect": {
+              "title": "2. Client OAuth",
+              "body": "Crea un ID client OAuth 2.0 di tipo Applicazione web e aggiungi il redirect URI mostrato in questa pagina tra i Redirect URI autorizzati."
+            },
+            "consent": {
+              "title": "3. Schermata di consenso",
+              "body": "Aggiungi gli ambiti openid, email, gmail.readonly e gmail.send. Gli ambiti Gmail sono limitati: Google deve verificare l'app per l'uso generale e, in modalità Test, l'autorizzazione termina dopo 7 giorni."
+            },
+            "workspaces": {
+              "title": "4. Collegamento dei workspace",
+              "body": "Incolla qui ID client e segreto e salva. Poi gli amministratori collegano da E-mail."
+            },
+            "push": {
+              "title": "5. Posta istantanea (facoltativo)",
+              "body": "Crea un argomento Pub/Sub, assegna a gmail-api-push@system.gserviceaccount.com il ruolo Publisher, aggiungi una sottoscrizione push a APP_URL/v2/public/email/google/push con autenticazione OIDC, poi inserisci qui argomento, audience e account di servizio."
+            }
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "E-mail Microsoft 365",
+        "eyebrow": "Admin - E-mail",
+        "description": "Una sola app Microsoft Entra per tutta la piattaforma. Ogni spazio di lavoro collega le proprie caselle da E-mail e non vede mai l'ID o il segreto client.",
+        "sections": {
+          "oauth": {
+            "title": "App Microsoft Entra",
+            "description": "Senza ID client e segreto, gli spazi di lavoro non possono collegare una casella."
+          }
+        },
+        "guide": {
+          "title": "Configurala in Microsoft Entra",
+          "items": {
+            "registration": {
+              "title": "1. Registrazione dell'app",
+              "body": "Nell'interfaccia di amministrazione di Microsoft Entra crea una registrazione app. Scegli i tipi di account dei tuoi clienti (aziendali o scolastici, e personali per Outlook.com) e copia qui l'ID applicazione (client) e il tenant."
+            },
+            "redirect": {
+              "title": "2. URI di reindirizzamento e segreto",
+              "body": "Aggiungi l'URI di reindirizzamento mostrato in questa pagina come reindirizzamento della piattaforma Web, poi crea un segreto client in Certificati e segreti e incolla qui il suo valore."
+            },
+            "permissions": {
+              "title": "3. Autorizzazioni API",
+              "body": "Aggiungi le autorizzazioni delegate di Microsoft Graph Mail.Read, Mail.Send, User.Read e offline_access. Per l'uso generale completa la verifica dell'editore; alcune organizzazioni richiedono anche il consenso di un amministratore."
+            },
+            "workspaces": {
+              "title": "4. Collegamento dei workspace",
+              "body": "Incolla qui ID client e segreto e salva. Poi gli amministratori collegano da E-mail."
+            }
+          }
+        }
+      },
       "flowBuilder": {
         "title": "Flow builder",
         "eyebrow": "Admin - Automazione",
@@ -1735,6 +1892,12 @@
     "googleCallback": {
       "redirectTitle": "Redirect URI",
       "redirectHint": "Registra questo indirizzo esatto come Redirect URI autorizzato nel client OAuth. È dove Google rimanda il browser dopo che l’admin del workspace ha accettato.",
+      "copy": "Copia",
+      "copied": "Copiato"
+    },
+    "microsoftCallback": {
+      "redirectTitle": "Redirect URI",
+      "redirectHint": "Registra esattamente questo indirizzo come URI di reindirizzamento Web nella registrazione dell'app. È dove Microsoft rimanda il browser dopo il consenso di un amministratore dello spazio di lavoro.",
       "copy": "Copia",
       "copied": "Copiato"
     }

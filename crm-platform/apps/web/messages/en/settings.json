@@ -95,6 +95,11 @@
         "description": "Answer messages sent to your TikTok business account.",
         "keywords": "tik tok, dm, video"
       },
+      "help-assistant": {
+        "label": "Help assistant",
+        "description": "Switch on the assistant that guides your team or does the steps for them.",
+        "keywords": "ai, assistant, agent, guide, help, automation"
+      },
       "sms": {
         "label": "SMS",
         "description": "Send text messages with your own Twilio number or MSG91 sender.",
@@ -102,8 +107,8 @@
       },
       "email": {
         "label": "Email",
-        "description": "Connect a mailbox to send and receive email in the inbox.",
-        "keywords": "mailbox, smtp, imap, gmail, outlook, sender"
+        "description": "Connect Gmail or Google Workspace mailboxes so your team can read and answer customer email in the shared inbox.",
+        "keywords": "mailbox, gmail, google workspace, shared inbox, support email, outlook, imap"
       },
       "line": {
         "label": "LINE",
@@ -179,6 +184,11 @@
         "label": "Order history",
         "description": "Your plan and wallet purchases, with receipts.",
         "keywords": "payments, receipts, invoices, purchases, orders"
+      },
+      "billing-subscriptions": {
+        "label": "Subscriptions",
+        "description": "What renews, when it is paid until, and cancel.",
+        "keywords": "subscription, renew, auto-renew, cancel, autopay, failed payment, charges"
       },
       "account": {
         "label": "Account",

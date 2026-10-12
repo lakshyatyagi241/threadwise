@@ -207,7 +207,9 @@
         "request": "Anfrage",
         "response": "Antwort",
         "result": "Ergebnis"
-      }
+      },
+      "factMenuKept": "Hier gibt es keinen nächsten Schritt. Die Optionen von {node} bleiben aktiv.",
+      "factAnswered": "Beantwortet nach {time}"
     },
     "event": {
       "step": "Schritt",
@@ -513,7 +515,9 @@
       "error": "Fehler",
       "skipped": "Übersprungen",
       "waiting": "Wartet",
-      "timeout": "Zeitüberschreitung"
+      "timeout": "Zeitüberschreitung",
+      "answered": "Beantwortet",
+      "gaveUp": "Keine Antwort"
     }
   }
 }

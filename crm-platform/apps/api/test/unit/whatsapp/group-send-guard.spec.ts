@@ -69,35 +69,67 @@ describe('metaRecipient: a g: peer never becomes a number', () => {
   });
 });
 
-describe('buildMessageBody: a g: peer never reaches a Meta body, whatever the kind', () => {
+describe('buildMessageBody: a g: peer is addressed as a group, never as a phone number', () => {
   const common = { to: GROUP_KEYS[0]!, clientReference: 'ref-1', attempt: 1 };
-  const envelopes = [
-    { ...common, kind: 'text', body: 'hello' },
-    {
-      ...common,
-      kind: 'media',
-      media: { key: 'k', mediaKind: 'image', mime: 'image/jpeg', caption: 'c' },
-    },
-    { ...common, kind: 'template', template: { name: 'hello', language: 'en', variables: {} } },
-    { ...common, kind: 'reaction', reaction: { providerMessageId: 'wamid.1', emoji: '👍' } },
-    {
-      ...common,
-      kind: 'interactive',
-      interactive: { type: 'location_request', body: 'Where are you?' },
-    },
-  ];
-  it.each(envelopes.map((e) => [e.kind, e] as const))('%s', (_kind, raw) => {
-    const envelope = outboundEnvelopeSchema.parse(raw);
-    refuses(() =>
-      buildMessageBody(envelope, {
-        kind: 'image',
-        mime: 'image/jpeg',
-        voice: false,
-        via: 'id',
-        mediaId: 'M1',
-        cached: false,
-      } as never),
+  const prepared = {
+    kind: 'image',
+    mime: 'image/jpeg',
+    voice: false,
+    via: 'id',
+    mediaId: 'M1',
+    cached: false,
+  } as never;
+
+  it('text goes to the group id verbatim with recipient_type group', () => {
+    const body = buildMessageBody(outboundEnvelopeSchema.parse({ ...common, kind: 'text', body: 'hello' }));
+    expect(body).toMatchObject({
+      messaging_product: 'whatsapp',
+      recipient_type: 'group',
+      to: 'Y2FwaV9ncm91cDoxMjM0NTY3ODkwMTIzNDU2',
+      type: 'text',
+    });
+  });
+  it('keeps every character of the id: digits, case, padding and a leading space on the key', () => {
+    for (const k of GROUP_KEYS) {
+      const body = buildMessageBody(
+        outboundEnvelopeSchema.parse({ ...common, to: k, kind: 'text', body: 'x' }),
+      );
+      expect(body.recipient_type).toBe('group');
+      expect(body.to).toBe(k.trimStart().slice(2));
+    }
+  });
+  it('media and template are allowed', () => {
+    const media = buildMessageBody(
+      outboundEnvelopeSchema.parse({
+        ...common,
+        kind: 'media',
+        media: { key: 'k', mediaKind: 'image', mime: 'image/jpeg', caption: 'c' },
+      }),
+      prepared,
     );
+    expect(media).toMatchObject({ recipient_type: 'group', type: 'image' });
+    const tpl = buildMessageBody(
+      outboundEnvelopeSchema.parse({
+        ...common,
+        kind: 'template',
+        template: { name: 'hello', language: 'en', variables: {} },
+      }),
+    );
+    expect(tpl).toMatchObject({ recipient_type: 'group', type: 'template' });
+  });
+  it.each([
+    ['reaction', { reaction: { providerMessageId: 'wamid.1', emoji: '👍' } }],
+    ['interactive', { interactive: { type: 'location_request', body: 'Where are you?' } }],
+  ])('%s is refused: Meta does not take it on a group', (kind, extra) => {
+    const envelope = outboundEnvelopeSchema.parse({ ...common, kind, ...extra });
+    try {
+      buildMessageBody(envelope);
+      throw new Error('expected a refusal');
+    } catch (e) {
+      expect(e).toBeInstanceOf(ChannelError);
+      expect((e as ChannelError).code).toBe('CHANNEL_CAPABILITY_UNSUPPORTED');
+      expect((e as ChannelError).retryable).toBe(false);
+    }
   });
 });
 

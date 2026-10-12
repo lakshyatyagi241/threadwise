@@ -102,8 +102,8 @@
       },
       "email": {
         "label": "Correo electrónico",
-        "description": "Conecta un buzón para enviar y recibir correos desde la bandeja.",
-        "keywords": "buzón, smtp, imap, gmail, outlook, remitente"
+        "description": "Conecta buzones de Gmail o Google Workspace para que tu equipo lea y responda los correos de clientes en la bandeja compartida.",
+        "keywords": "buzón, gmail, google workspace, bandeja compartida, correo de soporte, outlook, imap"
       },
       "line": {
         "label": "LINE",
@@ -315,10 +315,20 @@
         "description": "Exporta el registro de entrega de tus mensajes, hasta un año atrás, como un archivo enviado a tu correo.",
         "keywords": "exportar, registro de entrega, historial, archivo, csv, mensajes"
       },
+      "billing-subscriptions": {
+        "label": "Suscripciones",
+        "description": "Qué se renueva, hasta cuándo está pagado y cancelar.",
+        "keywords": "suscripción, renovar, renovación automática, cancelar, pago automático, pago fallido, cargos"
+      },
       "web": {
         "label": "Chat del sitio web",
         "description": "Bots creados para el chat de tu sitio web y el widget en el que se ejecuta cada uno.",
         "keywords": "web, sitio web, widget, chatbot, incrustar, chat en vivo"
+      },
+      "help-assistant": {
+        "label": "Asistente de ayuda",
+        "description": "Activa el asistente que guía a tu equipo o hace los pasos por ellos.",
+        "keywords": "ia, asistente, agente, guía, ayuda, automatización"
       }
     }
   }

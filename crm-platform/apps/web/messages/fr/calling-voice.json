@@ -25,7 +25,7 @@
     "toast": {
       "noPhone": "Aucun numéro de téléphone pour ce contact.",
       "noNumber": "Les appels ne sont activés sur aucun numéro WABA.",
-      "alreadyPermitted": "Ce contact autorise déjà les appels : démarrage de l’appel...",
+      "alreadyPermitted": "Ce contact autorise déjà les appels. Cliquez sur Appeler pour démarrer l’appel.",
       "permissionSent": "Demande d’autorisation envoyée. Il verra Accepter/Refuser dans WhatsApp : réessayez d’appeler après sa réponse.",
       "permissionFailed": "Impossible d’envoyer la demande d’autorisation : {message}",
       "startFailed": "Impossible de démarrer l’appel : {message}",

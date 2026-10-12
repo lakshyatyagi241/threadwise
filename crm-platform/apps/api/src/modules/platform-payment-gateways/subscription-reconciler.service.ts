@@ -2,7 +2,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { GatewayService } from './gateway.service';
 import { PaygwStore } from './paygw.store';
-import { SubscriptionLifecycleService, toSub, type SubRow } from './subscription-lifecycle.service';
+import { SubscriptionLifecycleService } from './subscription-lifecycle.service';
+import { toSub, type SubRow } from './subscription-row';
 
 /** TW-PAYGW-030 constants: one provider poll per subscription per window, and plans this close to their end are worth polling. */
 export const RECONCILE_THROTTLE_HOURS = 6;
@@ -75,6 +76,23 @@ export class SubscriptionReconcilerService {
       }
     }
     return tally;
+  }
+
+  /**
+   * "Refresh from the provider" for one subscription a person asked about: the same poll the sweep does, now, without the throttle.
+   * The workspace is named explicitly (the caller has checked the subscription is theirs). `unknown` = no such subscription.
+   */
+  async syncNow(orgId: number, subscriptionId: number): Promise<ReconcileOutcome | 'unknown'> {
+    const sub = await this.store.tx(async (tx) => {
+      const res = await tx.execute(sql`
+        SELECT s.org_id, s.id, s.user_id, s.gateway, s.gateway_subscription_id, s.gateway_plan_id, s.gateway_customer_id,
+               s.plan_id, s.kind, s.workspace_addon_id, s.billing_cycle, s.status, s.current_period_end, s.renewals_count, s.meta
+        FROM subscriptions s WHERE s.org_id = ${orgId} AND s.id = ${subscriptionId}`);
+      const r = (res.rows as Raw[])[0];
+      return r ? toSub(r) : null;
+    });
+    if (!sub) return 'unknown';
+    return this.reconcileOne(sub);
   }
 
   /** One claimed subscription: ask the provider, then apply what it says (TW-PAYGW-030 rule 2 and 3). */

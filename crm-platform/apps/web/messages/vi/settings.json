@@ -102,8 +102,8 @@
       },
       "email": {
         "label": "Email",
-        "description": "Kết nối hộp thư để gửi và nhận email trong hộp thư đến.",
-        "keywords": "hộp thư, smtp, imap, gmail, outlook, người gửi"
+        "description": "Kết nối hộp thư Gmail hoặc Google Workspace để nhóm của bạn đọc và trả lời email khách hàng trong hộp thư đến dùng chung.",
+        "keywords": "hộp thư, gmail, google workspace, hộp thư đến dùng chung, email hỗ trợ, outlook, imap"
       },
       "line": {
         "label": "LINE",
@@ -315,10 +315,20 @@
         "description": "Xuất nhật ký gửi của tin nhắn, lùi tối đa một năm, thành tệp được gửi đến email của bạn.",
         "keywords": "xuất, nhật ký gửi, lịch sử, lưu trữ, csv, tin nhắn"
       },
+      "billing-subscriptions": {
+        "label": "Gói đăng ký",
+        "description": "Gói nào sẽ gia hạn, đã trả đến khi nào và hủy gói.",
+        "keywords": "gói đăng ký, gia hạn, tự động gia hạn, hủy, tự động thanh toán, thanh toán thất bại, các khoản thu"
+      },
       "web": {
         "label": "Chat trên website",
         "description": "Các bot được tạo cho chat trên website của bạn và widget mà mỗi bot chạy trong đó.",
         "keywords": "web, website, widget, chatbot, nhúng, chat trực tuyến"
+      },
+      "help-assistant": {
+        "label": "Trợ lý trợ giúp",
+        "description": "Bật trợ lý hướng dẫn nhóm của bạn hoặc làm các bước giúp họ.",
+        "keywords": "ai, trợ lý, tác nhân, hướng dẫn, trợ giúp, tự động hóa"
       }
     }
   }

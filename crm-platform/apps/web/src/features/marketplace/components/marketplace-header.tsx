@@ -74,14 +74,22 @@ export function MarketplaceHeader({ section }: { section: HeaderSection }) {
           <Link
             href={mktRoutes.installed}
             aria-current={section === 'installed' ? 'page' : undefined}
-            className={cn(TEXT_LINK, section === 'installed' && 'underline')}
+            className={cn(
+              TEXT_LINK,
+              'inline-flex min-h-7 items-center',
+              section === 'installed' && 'underline',
+            )}
           >
             <InstalledLinkLabel />
           </Link>
           <Link
             href={mktRoutes.requests}
             aria-current={section === 'requests' ? 'page' : undefined}
-            className={cn(TEXT_LINK, section === 'requests' && 'underline')}
+            className={cn(
+              TEXT_LINK,
+              'inline-flex min-h-7 items-center',
+              section === 'requests' && 'underline',
+            )}
           >
             {t('request')}
           </Link>

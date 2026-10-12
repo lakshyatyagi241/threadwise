@@ -17,6 +17,8 @@
       "whatsapp": "WhatsApp (WABA)",
       "campaigns": "Campaigns",
       "googleCalendar": "Google Calendar",
+      "googleMail": "Gmail",
+      "microsoftMail": "Microsoft 365",
       "flowBuilder": "Flow builder"
     },
     "hub": {
@@ -930,6 +932,79 @@
           }
         }
       },
+      "googleMail": {
+        "title": "Gmail email",
+        "description": "The Google OAuth client every workspace connects its mailboxes through.",
+        "sections": {
+          "oauth": {
+            "title": "Google OAuth client"
+          },
+          "push": {
+            "title": "Gmail push (optional)"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Allow workspaces to connect Gmail",
+            "hint": "Off: no workspace can connect, and no mail is read or sent. Connected mailboxes are kept."
+          },
+          "clientId": {
+            "label": "Client ID",
+            "hint": "From Google Cloud, Credentials, OAuth 2.0 Client ID (Web application). Empty uses GOOGLE_MAIL_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Client secret",
+            "hint": "Stored encrypted and never shown again. Empty keeps the saved one; GOOGLE_MAIL_CLIENT_SECRET is the fallback."
+          },
+          "redirectUri": {
+            "label": "Redirect URI override",
+            "hint": "Leave empty to use the address above. It must match an Authorised redirect URI on the client exactly."
+          },
+          "pubsubTopic": {
+            "label": "Pub/Sub topic",
+            "hint": "projects/PROJECT_ID/topics/TOPIC_ID. Give gmail-api-push@system.gserviceaccount.com the Publisher role on it. Empty uses GOOGLE_MAIL_PUBSUB_TOPIC; with no topic, mailboxes are polled only."
+          },
+          "pushAudience": {
+            "label": "Push audience",
+            "hint": "The audience set on the push subscription. Empty uses GOOGLE_MAIL_PUSH_AUDIENCE, else this platform's push endpoint address."
+          },
+          "pushServiceAccount": {
+            "label": "Push service account",
+            "hint": "The service account the push subscription signs as. A push from any other account is refused. Empty uses GOOGLE_MAIL_PUSH_SERVICE_ACCOUNT."
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "Microsoft 365 email",
+        "description": "The Microsoft app every workspace connects its Outlook and Microsoft 365 mailboxes through.",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra app"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Allow workspaces to connect Microsoft 365",
+            "hint": "Off: no workspace can connect, and no mail is read or sent. Connected mailboxes are kept."
+          },
+          "clientId": {
+            "label": "Application (client) ID",
+            "hint": "From the Microsoft Entra admin center, App registrations, Overview. Empty uses MICROSOFT_MAIL_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Client secret",
+            "hint": "Stored encrypted and never shown again. Empty keeps the saved one; MICROSOFT_MAIL_CLIENT_SECRET is the fallback."
+          },
+          "tenant": {
+            "label": "Tenant",
+            "hint": "common allows work, school and personal accounts; use a directory (tenant) ID for a single-tenant app. Empty uses MICROSOFT_MAIL_TENANT, else common."
+          },
+          "redirectUri": {
+            "label": "Redirect URI override",
+            "hint": "Leave empty to use the address above. It must match an Authorised redirect URI on the client exactly."
+          }
+        }
+      },
       "flowBuilder": {
         "title": "Flow builder",
         "description": "Which flow builder workspaces are offered.",
@@ -1062,6 +1137,16 @@
         "title": "Google Calendar",
         "description": "The Google OAuth client workspaces use to connect their calendar for bookings and busy times.",
         "tags": "Google / OAuth / Calendar"
+      },
+      "googleMail": {
+        "title": "Gmail email",
+        "description": "The Google OAuth client workspaces use to connect their Gmail mailboxes.",
+        "tags": "Google / OAuth / Gmail"
+      },
+      "microsoftMail": {
+        "title": "Microsoft 365 email",
+        "description": "The Microsoft app workspaces use to connect their Outlook and Microsoft 365 mailboxes.",
+        "tags": "Microsoft / OAuth / Outlook"
       },
       "flowBuilder": {
         "title": "Flow builder",
@@ -1648,6 +1733,78 @@
           }
         }
       },
+      "googleMail": {
+        "title": "Gmail email",
+        "eyebrow": "Admin - Email",
+        "description": "One Google Cloud OAuth client for the whole platform, separate from Google Calendar. Each workspace connects its own mailboxes from Email and never sees the client id or secret.",
+        "sections": {
+          "oauth": {
+            "title": "Google OAuth client",
+            "description": "Without a client id and secret, workspaces cannot connect a mailbox."
+          },
+          "push": {
+            "title": "Gmail push (optional)",
+            "description": "New mail reaches the team inbox within seconds instead of at the next poll. Polling stays on as a safety net."
+          }
+        },
+        "guide": {
+          "title": "Set it up in Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. Project and API",
+              "body": "In Google Cloud Console create a project and enable the Gmail API."
+            },
+            "redirect": {
+              "title": "2. OAuth client",
+              "body": "Create an OAuth 2.0 Client ID of type Web application and add the redirect URI shown on this page under Authorised redirect URIs."
+            },
+            "consent": {
+              "title": "3. Consent screen",
+              "body": "Add the openid, email, gmail.readonly and gmail.send scopes. Gmail scopes are restricted: Google must verify the app for general use, and in Testing a grant ends after 7 days."
+            },
+            "workspaces": {
+              "title": "4. Workspaces connect",
+              "body": "Paste the client id and secret here and save. Admins then connect from Email."
+            },
+            "push": {
+              "title": "5. Instant mail (optional)",
+              "body": "Create a Pub/Sub topic, give gmail-api-push@system.gserviceaccount.com the Publisher role, add a push subscription to APP_URL/v2/public/email/google/push with OIDC authentication, then enter the topic, audience and service account here."
+            }
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "Microsoft 365 email",
+        "eyebrow": "Admin - Email",
+        "description": "One Microsoft Entra app for the whole platform. Each workspace connects its own mailboxes from Email and never sees the client id or secret.",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra app",
+            "description": "Without a client id and secret, workspaces cannot connect a mailbox."
+          }
+        },
+        "guide": {
+          "title": "Set it up in Microsoft Entra",
+          "items": {
+            "registration": {
+              "title": "1. App registration",
+              "body": "In the Microsoft Entra admin center create an app registration. Choose the account types your customers use (work or school, and personal accounts for Outlook.com), and copy the Application (client) ID and the tenant here."
+            },
+            "redirect": {
+              "title": "2. Redirect URI and secret",
+              "body": "Add the redirect URI shown on this page as a Web platform redirect, then create a client secret under Certificates and secrets and paste its value here."
+            },
+            "permissions": {
+              "title": "3. API permissions",
+              "body": "Add the delegated Microsoft Graph permissions Mail.Read, Mail.Send, User.Read and offline_access. For general use, complete publisher verification; some organizations also require an admin to consent."
+            },
+            "workspaces": {
+              "title": "4. Workspaces connect",
+              "body": "Paste the client id and secret here and save. Admins then connect from Email."
+            }
+          }
+        }
+      },
       "flowBuilder": {
         "title": "Flow builder",
         "eyebrow": "Admin - Automation",
@@ -1735,6 +1892,12 @@
     "googleCallback": {
       "redirectTitle": "Redirect URI",
       "redirectHint": "Register this exact address as an Authorised redirect URI on the OAuth client. It is where Google sends the browser after a workspace admin agrees.",
+      "copy": "Copy",
+      "copied": "Copied"
+    },
+    "microsoftCallback": {
+      "redirectTitle": "Redirect URI",
+      "redirectHint": "Register this exact address as a Web redirect URI on the app registration. It is where Microsoft sends the browser after a workspace admin agrees.",
       "copy": "Copy",
       "copied": "Copied"
     }

@@ -102,8 +102,8 @@
       },
       "email": {
         "label": "E-mail",
-        "description": "Connectez une boîte e-mail pour envoyer et recevoir des e-mails dans la boîte de réception.",
-        "keywords": "boîte e-mail, smtp, imap, gmail, outlook, expéditeur"
+        "description": "Connectez des boîtes Gmail ou Google Workspace pour que votre équipe lise et réponde aux e-mails des clients dans la boîte de réception partagée.",
+        "keywords": "boîte e-mail, gmail, google workspace, boîte de réception partagée, e-mail de support, outlook, imap"
       },
       "line": {
         "label": "LINE",
@@ -315,10 +315,20 @@
         "description": "Exportez le journal de livraison de vos messages, jusqu'à un an en arrière, sous forme de fichier envoyé à votre e-mail.",
         "keywords": "exporter, journal de livraison, historique, archive, csv, messages"
       },
+      "billing-subscriptions": {
+        "label": "Abonnements",
+        "description": "Ce qui se renouvelle, jusqu'à quand c'est payé, et résiliation.",
+        "keywords": "abonnement, renouvellement, renouvellement automatique, résilier, prélèvement automatique, paiement échoué, paiements"
+      },
       "web": {
         "label": "Chat du site web",
         "description": "Les bots conçus pour le chat de votre site web et le widget dans lequel chacun s’exécute.",
         "keywords": "web, site web, widget, chatbot, intégrer, chat en direct"
+      },
+      "help-assistant": {
+        "label": "Assistant d’aide",
+        "description": "Activez l’assistant qui guide votre équipe ou réalise les étapes à sa place.",
+        "keywords": "ia, assistant, agent, guide, aide, automatisation"
       }
     }
   }

@@ -1,0 +1,390 @@
+{
+  "email": {
+    "common": {
+      "dismiss": "关闭"
+    },
+    "hub": {
+      "kicker": "渠道",
+      "title": "电子邮件",
+      "titleAccent": "邮箱",
+      "intro": "连接你的 Gmail、Microsoft 365 或任何 IMAP 邮箱。客户邮件会进入团队收件箱，每个邮件线程对应一个会话，你的回复会从同一地址发出。",
+      "inbox": "打开收件箱",
+      "channels": "渠道",
+      "loadError": "无法加载您的邮箱。请稍后重试。",
+      "cardCaption": "Gmail · Microsoft 365 · IMAP",
+      "connectedCount": "{count, plural, other {已连接 # 个邮箱}}",
+      "notConnected": "未连接",
+      "usageLabel": "已使用的邮箱",
+      "usage": "{used} / {limit} 个邮箱",
+      "usageUnlimited": "{used, plural, other {# 个邮箱}}，无限制",
+      "howTitle": "工作原理",
+      "how": {
+        "connect": {
+          "title": "连接邮箱",
+          "body": "使用 Google 或 Microsoft 登录，或填写你的邮件服务器设置，并允许 Threadwise 读取和发送该地址的邮件。"
+        },
+        "inbox": {
+          "title": "邮件进入收件箱",
+          "body": "新邮件每分钟同步一次。每个邮件会话会成为一个对话，每个邮箱对应各自独立的收件箱。"
+        },
+        "reply": {
+          "title": "在收件箱中回复",
+          "body": "您的回复会从该邮箱在同一邮件会话中发出，如有需要还可添加 Cc 和 Bcc。"
+        },
+        "limit": {
+          "title": "邮箱数量取决于您的套餐",
+          "body": "您的套餐决定可连接的邮箱数量。电子邮件不计入消息配额。"
+        }
+      },
+      "connectedTitle": "已连接的邮箱",
+      "total": "{count, plural, other {# 个邮箱}}",
+      "empty": "尚未连接任何邮箱。在下方连接一个，即可在收件箱中接收邮件。",
+      "addTitle": "添加邮箱",
+      "providers": {
+        "google": {
+          "name": "Gmail / Google Workspace",
+          "hint": "使用拥有该邮箱的 Google 账号登录，例如 support@yourcompany.com。"
+        },
+        "imap": {
+          "name": "其他邮箱 (IMAP / SMTP)",
+          "hint": "任何使用用户名和密码的其他邮件服务商。"
+        },
+        "microsoft": {
+          "name": "Microsoft 365 / Outlook",
+          "hint": "使用 Microsoft 工作或学校账号登录。"
+        }
+      },
+      "notReady": "此平台尚未设置 {provider}。请让平台管理员添加凭据。",
+      "limitReached": "您已用完套餐允许的 {limit, plural, other {# 个邮箱}}。请移除一个邮箱，或联系管理员升级套餐。",
+      "noPermission": "您可以查看邮箱，但只有获得管理权限的人员才能连接邮箱。",
+      "connectFailed": "无法启动登录，请重试。",
+      "connect": {
+        "google": "连接 Gmail",
+        "microsoft": "连接 Microsoft 365",
+        "imap": "连接 IMAP / SMTP"
+      },
+      "imapConnected": "邮箱已连接。正在将最近 7 天的邮件拉取到收件箱。",
+      "imapReconnected": "邮箱已重新连接。",
+      "scope": {
+        "title": "这个邮箱是给谁用的？",
+        "shared": "共享",
+        "sharedHint": "公司邮箱，例如 support@。整个团队都可以处理它的会话。",
+        "personal": "个人",
+        "personalHint": "你自己的邮箱。只有你可以阅读它的会话。",
+        "onlyPersonal": "你可以连接自己的个人邮箱。只有你可以阅读它的会话。"
+      }
+    },
+    "card": {
+      "status": {
+        "connected": "已连接",
+        "needs_reauth": "需要重新连接",
+        "error": "错误",
+        "disconnected": "已断开"
+      },
+      "sendsAs": "回复将以此身份发出",
+      "displayName": "显示名称",
+      "edit": "编辑",
+      "save": "保存",
+      "cancel": "取消",
+      "renamed": "显示名称已保存。",
+      "needsReauthHint": "服务商不再允许我们读取此邮箱。请重新连接，以便再次收发邮件。",
+      "lastError": "最近的问题：{error}",
+      "lastSynced": "上次同步",
+      "neverSynced": "尚未同步",
+      "conversations": "对话",
+      "openInbox": "在收件箱中打开",
+      "sync": "立即同步",
+      "syncStarted": "已开始同步。新邮件稍后会出现在收件箱中。",
+      "reconnect": "重新连接",
+      "remove": "移除",
+      "removeTitle": "移除邮箱",
+      "removeConfirm": "移除 {address}？其对话将作为只读历史记录保留在收件箱中，且不会再通过它接收或发送新邮件。您之后可以重新连接同一地址。",
+      "removed": "邮箱已移除。",
+      "failed": "无法更新邮箱。请重试。",
+      "provider": {
+        "google": "Gmail",
+        "microsoft": "Microsoft 365",
+        "imap": "IMAP / SMTP"
+      },
+      "scope": {
+        "shared": "共享",
+        "personal": "个人",
+        "personalOf": "个人 · {name}"
+      },
+      "push": "实时更新",
+      "pushHint": "服务商一通知，新邮件就会到达。",
+      "signature": "签名",
+      "signatureHint": "从此邮箱发出的回复会带上它的签名。",
+      "summaryNote": "这是他人的个人邮箱。只有所有者可以阅读和管理。",
+      "sendLimit": "每小时发送上限",
+      "limitDefault": "平台默认值",
+      "limitPerHour": "{count, plural, other {每小时 # 封邮件}}",
+      "limitSaved": "发送上限已保存。",
+      "needsReauthImap": "邮件服务器拒绝了已保存的密码。请重新连接并再次输入密码。"
+    },
+    "outcome": {
+      "connected": "邮箱已连接。正在将最近 7 天的邮件同步到收件箱。",
+      "denied": "登录已取消，因此没有连接任何内容。",
+      "missing_scope": "未授予读取和发送邮件的权限。请重新连接，并在登录界面允许所有权限。",
+      "limit": "已达到套餐的邮箱数量上限，因此未连接此邮箱。",
+      "not_configured": "此服务商的登录尚未在此平台设置。请联系平台管理员。",
+      "wrong_account": "你登录的账号与正在重新连接的邮箱不同。请使用相同的地址登录。",
+      "failed": "连接邮箱时出错。请重试。"
+    },
+    "errors": {
+      "notConfigured": "此服务商的登录尚未在此平台设置。请联系平台管理员。",
+      "limit": "已达到套餐的邮箱数量上限。",
+      "unavailable": "此邮箱已断开，或需要先重新连接。",
+      "sendRefused": "邮件服务商拒绝发送这封邮件。请检查地址和大小后重试。",
+      "wrongAccount": "这与此邮箱不是同一个账号。请使用相同的地址登录。",
+      "locked": "您的套餐不包含电子邮件集成。",
+      "changed": "此邮箱已在其他地方被修改。列表已重新加载，请重试。",
+      "personalDisabled": "此工作区已关闭个人邮箱。",
+      "personalNotAllowed": "你无权连接个人邮箱。",
+      "providerUnsupported": "此邮件服务商不可用。",
+      "rateLimited": "此邮箱已达发送上限。请稍后再试。"
+    },
+    "guide": {
+      "title": "设置指南",
+      "google": {
+        "title": "连接 Gmail 或 Google Workspace",
+        "p1": "选择“连接 Gmail”，并使用拥有该邮箱的账号登录，例如共享的 support@ 或 sales@ 地址。",
+        "p2": "在 Google 页面中，允许读取和发送邮件。缺少任何一项，都无法收发邮件。",
+        "p3": "您将返回此处，前 7 天的邮件会同步到收件箱，且不会通知任何人。",
+        "p4": "以同样的方式添加更多邮箱，数量以套餐允许为限。每个邮箱都会显示为独立的收件箱。"
+      },
+      "consent": {
+        "title": "我们读取和发送的内容",
+        "p1": "我们会读取您的收件箱邮件，以便在团队收件箱中显示。垃圾邮件、已删除邮件和草稿会被跳过。",
+        "p2": "我们在其他地方通过您的账号发出的邮件不会复制到收件箱。",
+        "p3": "自动回复、退信和邮件列表邮件会被保存并标记为“自动”。",
+        "p4": "移除邮箱后将停止读取和发送。其过往对话将作为只读历史记录保留。"
+      },
+      "trouble": {
+        "title": "如果出现异常",
+        "p1": "“需要重新连接”表示服务商撤销了访问或访问已过期，或邮件服务器拒绝了密码。请选择“重新连接”。",
+        "p2": "“错误”会显示最近的问题。请选择“立即同步”重试；如果持续失败，请重新连接该邮箱。",
+        "p3": "当平台未设置该服务商的登录，或已达套餐的邮箱数量上限时，“连接”按钮会被禁用。",
+        "p4": "邮件中的图片默认隐藏，直到您在对话中选择“加载图片”。"
+      },
+      "other": {
+        "title": "连接 Microsoft 365 或其他邮件服务商",
+        "p1": "对于 Microsoft 365 或 Outlook，选择“连接 Microsoft 365”，并使用拥有该邮箱的工作或学校账号登录。",
+        "p2": "对于其他服务商，选择“连接 IMAP / SMTP”，并填写服务商提供的服务器、端口、安全性、用户名和密码。",
+        "p3": "我们会先登录收信和发信两个服务器。若其中一个拒绝，提示会说明是哪一个。",
+        "p4": "有些服务商需要应用专用密码，而不是你的常规密码。请在服务商的安全设置中创建。"
+      },
+      "personal": {
+        "title": "个人邮箱与共享",
+        "p1": "管理员在“邮件共享”中开启个人邮箱，并选择谁可以连接。",
+        "p2": "连接邮箱时选择“个人”。只有你可以在收件箱中阅读它的会话。",
+        "p3": "除非工作区允许管理员阅读个人邮箱，否则管理员只能看到你邮箱的摘要。",
+        "p4": "关闭个人邮箱绝不会向他人开放已有的个人邮箱。"
+      }
+    },
+    "thread": {
+      "noSubject": "（无主题）",
+      "automated": "自动",
+      "from": "发件人",
+      "to": "收件人",
+      "cc": "抄送",
+      "date": "日期",
+      "imagesBlocked": "来自互联网的图片已隐藏。",
+      "loadImages": "加载图片",
+      "frameTitle": "邮件：{subject}",
+      "truncated": "此邮件较长，仅显示前面一部分。",
+      "noBody": "此邮件没有文本内容。",
+      "attachments": "{count, plural, other {# 个附件}}",
+      "tooLarge": "过大，未保存（{size}）",
+      "download": "下载 {name}（{size}）",
+      "bounce": {
+        "title": "未能送达 {address}。",
+        "reason": "原因：{reason}",
+        "hard": "该地址已被永久拒绝。请检查是否拼写有误，然后向更正后的地址发送新邮件。",
+        "soft": "这看起来是暂时性问题，例如邮箱已满。稍后重新发送可能会成功，也可以修改地址。"
+      }
+    },
+    "composer": {
+      "toggle": "抄送、密送和主题",
+      "cc": "抄送 (Cc)",
+      "bcc": "密送 (Bcc)",
+      "subject": "主题",
+      "subjectPlaceholder": "主题",
+      "addressesPlaceholder": "name@example.com, other@example.com",
+      "problem": {
+        "ccInvalid": "以下抄送地址无效：{list}",
+        "bccInvalid": "以下密送地址无效：{list}",
+        "ccTooMany": "抄送最多可填 20 个地址。",
+        "bccTooMany": "密送最多可填 20 个地址。",
+        "subjectTooLong": "主题最多 998 个字符。"
+      },
+      "editor": {
+        "toolbar": "文字格式",
+        "bold": "加粗",
+        "italic": "斜体",
+        "underline": "下划线",
+        "bulletList": "项目符号列表",
+        "numberedList": "编号列表",
+        "quote": "引用",
+        "link": "添加链接",
+        "clear": "清除格式",
+        "linkAddress": "链接地址",
+        "linkApply": "添加",
+        "linkInvalid": "请输入网址、邮箱地址或电话号码。",
+        "label": "邮件回复",
+        "toPlain": "切换为纯文本",
+        "toRich": "切换为格式化文本",
+        "hint": "按 Ctrl+Enter（Mac 上为 Cmd+Enter）发送，按 Enter 换行。"
+      },
+      "attach": {
+        "dismiss": "关闭",
+        "list": "已附加的文件（{count}）",
+        "uploading": "正在上传 {name}",
+        "ready": "已附加",
+        "failed": "上传失败",
+        "retry": "重试",
+        "remove": "移除 {name}",
+        "waiting": "正在等待文件上传完成。",
+        "fixFailed": "请重试或移除未能上传的文件。",
+        "refused": {
+          "empty": "{name} 是空文件，未添加。",
+          "tooLarge": "{name} 超过 {max}，未添加。",
+          "tooMany": "一封邮件最多只能放 {count} 个文件，{name} 未添加。",
+          "totalTooLarge": "添加 {name} 会使邮件过大，因此未添加。",
+          "blocked": "{name} 的文件类型无法通过邮件发送，未添加。"
+        }
+      },
+      "error": {
+        "rateLimited": "此邮箱已达到每小时发送上限。{seconds, plural, =0 {请稍后再试。} other {请在 # 秒后再试。}}",
+        "attachmentTooLarge": "有文件太大，无法附加。每个文件最大 10 MB，所有文件合计最大 20 MB。",
+        "tooManyAttachments": "文件太多。一封邮件最多 10 个。",
+        "attachmentGone": "有附件已过期或被移除，请重新附加。",
+        "signatureGone": "所选签名已不存在，请选择其他签名。",
+        "sendRefused": "邮件服务商拒绝了这封邮件。请检查地址和大小后重试。",
+        "unavailable": "此邮箱已断开连接，需要先重新连接。",
+        "attachmentBlocked": "该文件类型无法通过邮件发送。",
+        "network": "无法连接到服务器。请检查网络后重试。",
+        "generic": "邮件未能发送，请重试。",
+        "bodyTooLong": "这封邮件太长，无法发送。请缩短后重试。"
+      },
+      "signature": {
+        "label": "签名",
+        "auto": "默认（{name}）",
+        "autoNone": "默认（无）",
+        "none": "不使用签名",
+        "mine": "{name}（我的）",
+        "shared": "{name}（邮箱）",
+        "preview": "签名预览",
+        "noneShown": "不会添加签名。"
+      }
+    },
+    "inbox": {
+      "group": "电子邮件"
+    },
+    "imap": {
+      "eyebrow": "其他邮箱",
+      "title": "连接 IMAP / SMTP 邮箱",
+      "reconnectTitle": "重新连接 IMAP / SMTP 邮箱",
+      "close": "关闭",
+      "intro": "输入你的邮件服务商为该地址提供的设置。在保存任何内容之前，我们会先登录两个服务器进行验证。",
+      "reconnectIntro": "请再次输入密码。在保存任何内容之前，我们会先登录两个服务器进行验证。",
+      "address": "邮箱地址",
+      "displayName": "显示名称",
+      "preset": "邮件服务商",
+      "presetHint": "选择后会自动填入服务器设置，你仍可修改。",
+      "presetCustom": "其他（手动输入设置）",
+      "incoming": "收信（IMAP）",
+      "outgoing": "发信（SMTP）",
+      "host": "服务器",
+      "port": "端口",
+      "securityLabel": "安全性",
+      "security": {
+        "ssl": "SSL/TLS",
+        "starttls": "STARTTLS",
+        "none": "无"
+      },
+      "username": "用户名",
+      "password": "密码",
+      "passwordHint": "加密存储，且不再显示。",
+      "passwordAgain": "请再次输入密码。密码不会被显示。",
+      "showPassword": "显示密码",
+      "hidePassword": "隐藏密码",
+      "sameCredentials": "发信使用相同的用户名和密码",
+      "noEncryption": "此连接未加密。网络上的任何人都可能读取密码和邮件。",
+      "verifyNote": "始终会校验服务器证书。",
+      "cancel": "取消",
+      "submit": "验证并连接",
+      "reconnectSubmit": "验证并重新连接",
+      "verifying": "正在验证",
+      "errors": {
+        "required": "此字段为必填项。",
+        "invalid": "此值无效。"
+      },
+      "failure": {
+        "imapAuth": "收信服务器（IMAP）拒绝了用户名或密码。请检查后重试。",
+        "smtpAuth": "发信服务器（SMTP）拒绝了用户名或密码。请检查后重试。",
+        "unreachable": "无法连接到邮件服务器，或其证书无效。请检查服务器、端口和安全性。",
+        "generic": "无法连接邮箱，请重试。"
+      }
+    },
+    "sharing": {
+      "title": "邮件共享",
+      "intro": "决定成员能否连接自己的邮箱，以及谁可以查看。",
+      "enabled": {
+        "title": "个人邮箱",
+        "body": "允许成员连接自己的邮箱。其会话仅对本人可见。"
+      },
+      "who": {
+        "title": "谁可以连接",
+        "body": "仅限有权管理个人邮箱的成员。",
+        "admins": "仅管理员",
+        "agents": "管理员和客服"
+      },
+      "admins": {
+        "title": "管理员可以阅读个人邮箱",
+        "body": "管理员可以打开他人个人邮箱的会话。关闭时，他们只能看到摘要。"
+      },
+      "offNote": "关闭个人邮箱只会隐藏连接选项。已有的个人邮箱仍然只对其所有者私有。",
+      "save": "保存",
+      "reset": "放弃更改",
+      "saved": "邮件共享已保存。",
+      "failed": "无法保存，请重试。"
+    },
+    "signatures": {
+      "title": "签名",
+      "intro": "签名会添加在回复的末尾。每个邮箱可以有一个共享签名，你也可以有自己的签名，并优先使用。",
+      "new": "新建签名",
+      "edit": "编辑签名",
+      "scope": "归属于",
+      "scopes": {
+        "user": "我",
+        "mailbox": "某个邮箱",
+        "userBadge": "我的",
+        "mailboxBadge": "邮箱"
+      },
+      "mailbox": "邮箱",
+      "pickMailbox": "选择邮箱",
+      "mailboxRequired": "请选择邮箱。",
+      "name": "名称",
+      "nameRequired": "请为签名命名。",
+      "body": "签名",
+      "bodyPlaceholder": "你的姓名、职位、电话、链接……",
+      "variables": "你可以使用 {name}、{title} 和 {phone}，它们会替换为发送者的信息。",
+      "tooLong": "签名太长。",
+      "defaultUser": "设为我的默认签名",
+      "defaultMailbox": "设为此邮箱的默认签名",
+      "save": "保存",
+      "cancel": "取消",
+      "loading": "正在加载签名……",
+      "loadError": "无法加载签名，请稍后重试。",
+      "empty": "还没有签名。",
+      "default": "默认",
+      "editShort": "编辑",
+      "delete": "删除",
+      "confirmDelete": "永久删除",
+      "noPermission": "你没有管理签名的权限。",
+      "changed": "此签名已在别处被修改，列表已重新加载，请重试。",
+      "failed": "无法保存签名，请重试。"
+    }
+  }
+}

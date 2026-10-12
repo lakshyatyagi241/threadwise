@@ -124,7 +124,11 @@ export interface PaymentDriver {
    * recurring product leaves it out and the caller records that the remote cancel was not possible. Never throws for a provider
    * failure: returns `{ ok: false, reason }`.
    */
-  cancelSubscription?(ref: SubscriptionRef): Promise<CancelResult>;
+  cancelSubscription?(ref: SubscriptionRef, opts?: CancelOptions): Promise<CancelResult>;
+  /** The charges (invoices) the provider raised for one subscription, newest first; null = cannot tell (no such call, or it failed). */
+  listSubscriptionCharges?(ref: SubscriptionRef): Promise<SubscriptionCharge[] | null>;
+  /** Return money for one captured payment (all of it, or `amountMinor`). Never throws for a provider failure. */
+  refundPayment?(req: RefundRequest): Promise<RefundResult>;
   /** Recurring (TW-PAYGW-012/029/030). A driver that leaves these out is always charged one-time. */
   supportsRecurring?(): boolean;
   createSubscription?(order: DriverOrder, urls: DriverUrls): Promise<PaymentResult>;
@@ -155,6 +159,39 @@ export interface SubscriptionRef {
   gatewaySubscriptionId: string;
   gatewayCustomerId: string | null;
   gatewayPlanId: string | null;
+}
+
+export interface CancelOptions {
+  /** true (the default): keep the cycle already paid and stop the next charge. false: end the subscription now. */
+  atCycleEnd?: boolean;
+}
+
+/** One charge the provider raised for a subscription: what the workspace was billed and whether it was paid. */
+export interface SubscriptionCharge {
+  id: string;
+  amountMinor: bigint;
+  currency: string;
+  status: 'paid' | 'issued' | 'failed' | 'cancelled' | 'expired' | 'other';
+  issuedAt: string | null;
+  paidAt: string | null;
+  /** The provider's hosted page for the charge (a receipt the buyer can open), when it has one. */
+  receiptUrl: string | null;
+  paymentId: string | null;
+}
+
+export interface RefundRequest {
+  paymentId: string;
+  /** Omitted = the whole payment. */
+  amountMinor?: bigint;
+  note?: string;
+}
+
+export interface RefundResult {
+  ok: boolean;
+  refundId?: string;
+  /** `processed` or `pending` as the provider says it. */
+  status?: string;
+  reason?: string;
 }
 
 export interface CancelResult {

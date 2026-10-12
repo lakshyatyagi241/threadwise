@@ -102,8 +102,8 @@
       },
       "email": {
         "label": "电子邮件",
-        "description": "连接邮箱，在收件箱中收发邮件。",
-        "keywords": "邮箱, smtp, imap, gmail, outlook, 发件人"
+        "description": "连接 Gmail 或 Google Workspace 邮箱，让团队在共享收件箱中阅读和回复客户邮件。",
+        "keywords": "邮箱, gmail, google workspace, 共享收件箱, 客服邮件, outlook, imap"
       },
       "line": {
         "label": "LINE",
@@ -315,10 +315,20 @@
         "description": "导出您的消息投递日志，最多可回溯一年，文件将发送到您的邮箱。",
         "keywords": "导出, 投递日志, 历史记录, 归档, csv, 消息"
       },
+      "billing-subscriptions": {
+        "label": "订阅",
+        "description": "查看续订内容、已付至何时，并可取消。",
+        "keywords": "订阅, 续订, 自动续订, 取消, 自动扣款, 付款失败, 扣款"
+      },
       "web": {
         "label": "网站聊天",
         "description": "为您的网站聊天创建的机器人，以及每个机器人所运行的小组件。",
         "keywords": "网页, 网站, 小组件, 聊天机器人, 嵌入, 在线聊天"
+      },
+      "help-assistant": {
+        "label": "帮助助手",
+        "description": "开启助手，为团队提供指引或代为完成步骤。",
+        "keywords": "ai, 助手, 智能体, 指南, 帮助, 自动化"
       }
     }
   }

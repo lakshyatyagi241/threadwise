@@ -7,6 +7,8 @@ import { AppError } from '../../common/errors/app-error';
 import { RbacService } from '../../kernel/rbac/rbac.service';
 import {
   PERM_CONVERSATION_READ,
+  PERM_MAIL_SETTINGS_MANAGE,
+  adminsCanReadPersonal,
   conversationVisible,
   type ConversationRecord,
   type ConversationViewer,
@@ -48,7 +50,17 @@ export class InboxAccess {
   ): Promise<ConversationViewer> {
     const can = this.rbac.can(ctx.grants ?? new Map(), permission);
     const teamIds = can.allowed && can.scope === 'team' ? await this.teamIds(tx, ctx) : [];
-    return { userId: ctx.userId!, scope: can.allowed ? can.scope : null, teamIds };
+    // An admin of a workspace whose policy lets admins read personal mailboxes (TW-MAIL-035); everyone else reads only their own.
+    const readsPersonalMail =
+      can.allowed && this.rbac.can(ctx.grants ?? new Map(), PERM_MAIL_SETTINGS_MANAGE).allowed
+        ? await adminsCanReadPersonal(tx, ctx.orgId)
+        : false;
+    return {
+      userId: ctx.userId!,
+      scope: can.allowed ? can.scope : null,
+      teamIds,
+      readsPersonalMail,
+    };
   }
 
   /** The caller's scope for a permission, or null when they do not hold it. */

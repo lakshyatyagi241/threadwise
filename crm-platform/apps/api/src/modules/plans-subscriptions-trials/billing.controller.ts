@@ -11,6 +11,9 @@ import {
   type ChangePlanRequest,
   type CancelSubscriptionResponse,
   type ChangePlanResponse,
+  type SubscriptionChargesResponse,
+  type SubscriptionListResponse,
+  type SyncSubscriptionResponse,
   uuidSchema,
 } from '@crm/contracts';
 import { ActorKinds, Idempotent, RequirePermission } from '../../common/decorators';
@@ -78,6 +81,52 @@ export class BillingController {
     @Body(zodPipe(changePlanRequestSchema)) body: ChangePlanRequest,
   ): Promise<ChangePlanResponse> {
     return this.billing.change(body.planSlug);
+  }
+
+  @Get('subscriptions')
+  @RequirePermission('plan.subscription.manage')
+  @ApiOperation({
+    summary:
+      'Every subscription of the workspace (plan and add-ons): status, next charge, whether it renews',
+  })
+  subscriptionList(): Promise<SubscriptionListResponse> {
+    return this.subscriptions.list();
+  }
+
+  @Get('subscriptions/:id/charges')
+  @RequirePermission('plan.subscription.manage')
+  @ApiOperation({
+    summary:
+      'What the payment provider charged this subscription, cycle by cycle, with its receipt page',
+  })
+  subscriptionCharges(
+    @Param('id', zodPipe(uuidSchema)) id: string,
+  ): Promise<SubscriptionChargesResponse> {
+    return this.subscriptions.charges(id);
+  }
+
+  @Post('subscriptions/:id/sync')
+  @Idempotent()
+  @RequirePermission('plan.subscription.manage')
+  @ApiOperation({
+    summary: 'Ask the payment provider for this subscription now and apply what it says',
+  })
+  subscriptionSync(
+    @Param('id', zodPipe(uuidSchema)) id: string,
+  ): Promise<SyncSubscriptionResponse> {
+    return this.subscriptions.sync(id);
+  }
+
+  @Post('subscriptions/:id/cancel')
+  @Idempotent()
+  @RequirePermission('plan.subscription.manage')
+  @ApiOperation({
+    summary: 'Stop one subscription (plan or add-on) from renewing; the paid period keeps running',
+  })
+  subscriptionCancel(
+    @Param('id', zodPipe(uuidSchema)) id: string,
+  ): Promise<CancelSubscriptionResponse> {
+    return this.subscriptions.cancelById(id);
   }
 
   @Post('subscription/cancel')

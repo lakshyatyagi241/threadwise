@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useQuery } from '@tanstack/react-query';
+import { BACKGROUND_META } from '@/lib/api/background';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
 import { IMPERSONATION_KEY, impersonationApi, stopImpersonation } from '../api/impersonation';
 import { minutesLeft } from '../lib/impersonation';
@@ -20,6 +21,7 @@ export function ImpersonationBanner() {
   const q = useQuery({
     queryKey: IMPERSONATION_KEY,
     queryFn: ({ signal }) => impersonationApi.status(signal),
+    meta: BACKGROUND_META,
     staleTime: 30_000,
     refetchInterval: 30_000,
     refetchOnWindowFocus: true,

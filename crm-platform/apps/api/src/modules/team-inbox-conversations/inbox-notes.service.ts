@@ -107,6 +107,7 @@ export class InboxNotesService {
         rowVersion: result.locked.rowVersion,
         assigneeUserId: result.locked.assigneeUserId,
         assigneeTeamId: result.locked.assigneeTeamId,
+        channelOwnerUserId: result.locked.channelOwnerUserId,
       },
       ['notes'],
       { excludeUserIds: [ctx.userId!] },

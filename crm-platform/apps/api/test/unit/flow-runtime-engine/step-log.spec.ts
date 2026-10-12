@@ -216,4 +216,24 @@ describe('step log helpers', () => {
     expect(r.input).toEqual([{ kind: 'reply', name: null, value: 'yes' }]);
     expect(r.output).toEqual([]);
   });
+
+  it('marks a node whose message never reached the customer as an error, though the run went on', () => {
+    const f = stepFields(
+      outcome({ sent: ['image: x (not sent: bad link)'], sendFailed: true }),
+      node(),
+      { durationMs: 1, attempt: 1 },
+    );
+    expect(f.outcome).toBe('error');
+    expect(f.summary).toContain('not sent');
+    // A wait that failed to send keeps its own state.
+    const w = stepFields(
+      outcome({
+        transition: { t: 'wait', wait: { nodeId: 'n1', variable: 'x', kind: 'Question' } },
+        sendFailed: true,
+      }),
+      node(),
+      { durationMs: 1, attempt: 1 },
+    );
+    expect(w.outcome).toBe('waiting');
+  });
 });

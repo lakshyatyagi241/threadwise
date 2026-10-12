@@ -102,8 +102,8 @@
       },
       "email": {
         "label": "Email",
-        "description": "Hubungkan kotak surat untuk mengirim dan menerima email di Inbox.",
-        "keywords": "kotak surat, smtp, imap, gmail, outlook, pengirim"
+        "description": "Hubungkan kotak surat Gmail atau Google Workspace agar tim Anda dapat membaca dan menjawab email pelanggan di inbox bersama.",
+        "keywords": "kotak surat, gmail, google workspace, inbox bersama, email dukungan, outlook, imap"
       },
       "line": {
         "label": "LINE",
@@ -315,10 +315,20 @@
         "description": "Ekspor log pengiriman pesan Anda, hingga satu tahun ke belakang, sebagai file yang dikirim ke email Anda.",
         "keywords": "ekspor, log pengiriman, riwayat, arsip, csv, pesan"
       },
+      "billing-subscriptions": {
+        "label": "Langganan",
+        "description": "Apa yang diperpanjang, dibayar hingga kapan, dan pembatalan.",
+        "keywords": "langganan, perpanjangan, perpanjangan otomatis, batalkan, autodebet, pembayaran gagal, tagihan"
+      },
       "web": {
         "label": "Obrolan situs web",
         "description": "Bot yang dibuat untuk obrolan situs web Anda dan widget tempat masing-masing berjalan.",
         "keywords": "web, situs web, widget, chatbot, sematkan, obrolan langsung"
+      },
+      "help-assistant": {
+        "label": "Asisten Bantuan",
+        "description": "Aktifkan asisten yang memandu tim Anda atau mengerjakan langkahnya untuk mereka.",
+        "keywords": "ai, asisten, agen, panduan, bantuan, otomatisasi"
       }
     }
   }

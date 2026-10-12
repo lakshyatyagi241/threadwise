@@ -59,6 +59,18 @@ export const wabaApi = {
       body: pin ? { pin } : {},
       schema: wabaConnectionSchema,
     }),
+  requestCode: (id: string, method: 'SMS' | 'VOICE') =>
+    apiFetch(`${base}/numbers/${id}/verify/request`, {
+      method: 'POST',
+      body: { method },
+      schema: wabaConnectionSchema,
+    }),
+  verifyCode: (id: string, code: string) =>
+    apiFetch(`${base}/numbers/${id}/verify`, {
+      method: 'POST',
+      body: { code },
+      schema: wabaConnectionSchema,
+    }),
   disconnect: (id: string) =>
     apiFetch(`${base}/numbers/${id}/disconnect`, { method: 'POST', schema: wabaConnectionSchema }),
   profile: (id: string, signal?: AbortSignal) =>

@@ -40,7 +40,9 @@ import { CampaignsModule } from './modules/campaigns';
 import { ChannelFacebookModule } from './modules/channel-facebook';
 import { ChannelInstagramModule } from './modules/channel-instagram';
 import { ShopifyWoocommerceModule } from './modules/shopify-woocommerce';
+import { ChannelEmailModule } from './modules/channel-email';
 import { ChannelSmsModule } from './modules/channel-sms';
+import { HelpAgentModule } from './modules/help-agent';
 import { ChannelTelegramModule } from './modules/channel-telegram';
 import { AiAgentsTrainingModule } from './modules/ai-agents-training';
 import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
@@ -207,6 +209,8 @@ import { HealthModule } from './health/health.module';
     CallingVoiceModule,
     ChannelTelegramModule,
     ChannelSmsModule,
+    HelpAgentModule,
+    ChannelEmailModule,
     ChannelFacebookModule,
     ChannelInstagramModule,
     ShopifyWoocommerceModule,

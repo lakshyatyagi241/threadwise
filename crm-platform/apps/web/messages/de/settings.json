@@ -102,8 +102,8 @@
       },
       "email": {
         "label": "E-Mail",
-        "description": "Verbinden Sie ein Postfach, um E-Mails im Posteingang zu senden und zu empfangen.",
-        "keywords": "postfach, smtp, imap, gmail, outlook, absender"
+        "description": "Verbinden Sie Gmail- oder Google-Workspace-Postfächer, damit Ihr Team Kunden-E-Mails im gemeinsamen Posteingang lesen und beantworten kann.",
+        "keywords": "postfach, gmail, google workspace, gemeinsamer posteingang, support-e-mail, outlook, imap"
       },
       "line": {
         "label": "LINE",
@@ -315,10 +315,20 @@
         "description": "Exportieren Sie das Zustellprotokoll Ihrer Nachrichten bis zu einem Jahr rückwirkend als Datei, die an Ihre E-Mail-Adresse gesendet wird.",
         "keywords": "Export, Zustellprotokoll, Verlauf, Archiv, CSV, Nachrichten"
       },
+      "billing-subscriptions": {
+        "label": "Abonnements",
+        "description": "Was sich verlängert, bis wann bezahlt ist, und Kündigung.",
+        "keywords": "Abonnement, Verlängerung, automatische Verlängerung, kündigen, Lastschrift, fehlgeschlagene Zahlung, Zahlungen"
+      },
       "web": {
         "label": "Website-Chat",
         "description": "Bots für den Chat Ihrer Website und das Widget, in dem jeder davon läuft.",
         "keywords": "Web, Website, Widget, Chatbot, Einbetten, Live-Chat"
+      },
+      "help-assistant": {
+        "label": "Hilfe-Assistent",
+        "description": "Schalten Sie den Assistenten ein, der Ihr Team anleitet oder die Schritte für es erledigt.",
+        "keywords": "ki, assistent, agent, anleitung, hilfe, automatisierung"
       }
     }
   }

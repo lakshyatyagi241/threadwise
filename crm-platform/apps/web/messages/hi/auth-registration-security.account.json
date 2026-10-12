@@ -367,7 +367,8 @@
         "failed": "हम वर्कस्पेस नहीं बदल सके। कृपया फिर कोशिश करें।",
         "notAvailable": "आप उस वर्कस्पेस पर स्विच नहीं कर सकते।",
         "rateLimited": "बहुत ज़्यादा कोशिशें। कृपया थोड़ा रुककर फिर कोशिश करें।",
-        "rateLimitedWait": "बहुत ज़्यादा कोशिशें। {seconds, plural, one {# सेकंड} other {# सेकंड}} बाद फिर कोशिश करें।"
+        "rateLimitedWait": "बहुत ज़्यादा कोशिशें। {seconds, plural, one {# सेकंड} other {# सेकंड}} बाद फिर कोशिश करें।",
+        "unverified": "इस वर्कस्पेस में बदलने के लिए पहले इसमें अपना ईमेल सत्यापित करें।"
       },
       "mfaChallenge": {
         "title": "पुष्टि करें कि यह आप हैं",
@@ -552,7 +553,9 @@
             "extra_channels": "Telegram, Facebook और Instagram",
             "form_builder": "फ़ॉर्म",
             "waba_groups": "WhatsApp ग्रुप",
-            "sms": "SMS"
+            "sms": "SMS",
+            "help_agent": "सहायता असिस्टेंट",
+            "email_channel": "ईमेल (Gmail) चैनल"
           },
           "cta": {
             "continueFree": "फ़्री जारी रखें",

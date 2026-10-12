@@ -21,6 +21,8 @@ export const ERROR_KINDS = [
   'unsupported',
   'templateNotSendable',
   'groupSendUnavailable',
+  'groupSuspended',
+  'walletEmpty',
   'logRange',
   'logBusy',
   'logNotReady',
@@ -53,6 +55,8 @@ const BY_CODE: Record<string, ErrorKind> = {
   PAYLOAD_TOO_LARGE: 'tooLarge',
   CHANNEL_CAPABILITY_UNSUPPORTED: 'unsupported',
   WABA_GROUP_SEND_UNAVAILABLE: 'groupSendUnavailable',
+  WABA_GROUP_SUSPENDED: 'groupSuspended',
+  WALLET_EMPTY: 'walletEmpty',
   MESSAGE_LOG_EXPORT_RANGE_INVALID: 'logRange',
   MESSAGE_LOG_EXPORT_IN_PROGRESS: 'logBusy',
   MESSAGE_LOG_EXPORT_NOT_FOUND: 'notFound',
@@ -73,6 +77,13 @@ export function errorCode(e: unknown): string {
 
 export function errorKind(code: string): ErrorKind {
   return BY_CODE[code] ?? 'generic';
+}
+
+/** Seconds the server asked to wait before trying again (`Retry-After`, or the problem's `retryAfterSeconds`), when it said. */
+export function retryAfterOf(e: unknown): number | undefined {
+  if (!(e instanceof ApiError)) return undefined;
+  const n = Number(e.fieldErrors.find((f) => f.path === 'retryAfterSeconds')?.message);
+  return Number.isFinite(n) && n > 0 ? Math.ceil(n) : undefined;
 }
 
 /** The request id of an API error, shown beside a generic failure so support can find it in the logs. */

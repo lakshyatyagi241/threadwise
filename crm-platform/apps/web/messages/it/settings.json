@@ -102,8 +102,8 @@
       },
       "email": {
         "label": "Email",
-        "description": "Collega una casella di posta per inviare e ricevere email nell’inbox.",
-        "keywords": "casella di posta, smtp, imap, gmail, outlook, mittente"
+        "description": "Collega caselle Gmail o Google Workspace così il tuo team può leggere e rispondere alle email dei clienti nell’inbox condivisa.",
+        "keywords": "casella di posta, gmail, google workspace, inbox condivisa, email di supporto, outlook, imap"
       },
       "line": {
         "label": "LINE",
@@ -315,10 +315,20 @@
         "description": "Esporta il registro di consegna dei tuoi messaggi, fino a un anno indietro, come file inviato alla tua e-mail.",
         "keywords": "esportare, registro di consegna, cronologia, archivio, csv, messaggi"
       },
+      "billing-subscriptions": {
+        "label": "Abbonamenti",
+        "description": "Cosa si rinnova, fino a quando è pagato e annullamento.",
+        "keywords": "abbonamento, rinnovo, rinnovo automatico, annulla, addebito automatico, pagamento non riuscito, addebiti"
+      },
       "web": {
         "label": "Chat del sito web",
         "description": "Bot creati per la chat del tuo sito web e il widget in cui viene eseguito ciascuno.",
         "keywords": "web, sito web, widget, chatbot, incorporare, chat live"
+      },
+      "help-assistant": {
+        "label": "Assistente di aiuto",
+        "description": "Attiva l'assistente che guida il tuo team o svolge i passaggi al posto suo.",
+        "keywords": "ai, assistente, agente, guida, aiuto, automazione"
       }
     }
   }

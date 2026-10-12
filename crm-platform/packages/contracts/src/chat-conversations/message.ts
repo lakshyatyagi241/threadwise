@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
+import { emailMetaSchema, emailReplyExtrasSchema } from '../channel-email/email-meta';
 import {
   messageDirectionSchema,
   messageKindSchema,
@@ -16,6 +17,14 @@ import {
 
 /** Longest free-form text a send accepts (WhatsApp's own text limit). */
 export const MESSAGE_BODY_MAX = 4096;
+/**
+ * Longest text a send accepts on an email conversation. The send schema carries this (one schema for every channel); the API refuses a
+ * body over {@link MESSAGE_BODY_MAX} on any other channel kind (`VALIDATION_FAILED`, path `body`).
+ */
+export const MESSAGE_BODY_MAX_EMAIL = 100_000;
+/** The longest text a send may carry on a channel of this kind. */
+export const messageBodyMaxFor = (channelKind: string): number =>
+  channelKind === 'email' ? MESSAGE_BODY_MAX_EMAIL : MESSAGE_BODY_MAX;
 export const MESSAGE_CAPTION_MAX = 1024;
 /** WhatsApp's own limits for an interactive message. */
 export const INTERACTIVE_BODY_MAX = 1024;
@@ -146,6 +155,21 @@ export const messageReferralSchema = z.object({
 });
 export type MessageReferral = z.infer<typeof messageReferralSchema>;
 
+/** Who wrote an inbound message in a WhatsApp group: the member's name when WhatsApp gave one, and their number or id. */
+export const messageGroupAuthorSchema = z.object({
+  participant: z.string().nullable(),
+  senderName: z.string().nullable(),
+});
+export type MessageGroupAuthor = z.infer<typeof messageGroupAuthorSchema>;
+
+/** What Meta reported for a message sent to a group: how many members it reached, and how many of those were billed or free. */
+export const messageGroupDeliverySchema = z.object({
+  deliveredTo: z.number().int().nonnegative(),
+  billable: z.number().int().nonnegative(),
+  free: z.number().int().nonnegative(),
+});
+export type MessageGroupDelivery = z.infer<typeof messageGroupDeliverySchema>;
+
 /**
  * `pending`: the message is stored and its file is still being copied from the provider (a background job, with retries): show a
  * placeholder, the file arrives by a later `inbox.message.new` for the same message. `ready`: the file is stored. `failed`: the
@@ -180,8 +204,14 @@ export const messageResponseSchema = z.object({
   referral: messageReferralSchema.nullable().optional(),
   /** The buttons of an interactive message an agent or flow sent (outbound only). */
   sentInteractive: messageSentInteractiveSchema.nullable().optional(),
+  /** Email channel only: subject, addresses, sanitised HTML, attachments (TW-MAIL-026). Absent on every other channel. */
+  email: emailMetaSchema.nullable().optional(),
   /** The customer sent something the channel cannot show (a poll, an unknown type): the body says so, the bubble marks it. */
   unsupported: z.boolean().optional(),
+  /** A message a member posted in a WhatsApp group (inbound only). */
+  group: messageGroupAuthorSchema.nullable().optional(),
+  /** The delivery tally of a message sent to a WhatsApp group (outbound only), once Meta has reported any member. */
+  groupDelivery: messageGroupDeliverySchema.nullable().optional(),
   /** The customer forwarded this message from another chat. */
   forwarded: z.boolean().optional(),
   /** Set for an inbound media message: whether its file could be stored. */
@@ -265,7 +295,9 @@ export const sendMessageSchema = z.discriminatedUnion('kind', [
   z.object({
     ...sendBase,
     kind: z.literal('text'),
-    body: z.string().trim().min(1).max(MESSAGE_BODY_MAX),
+    body: z.string().trim().min(1).max(MESSAGE_BODY_MAX_EMAIL),
+    /** Email channel only: cc, bcc and a subject override for the reply (TW-MAIL-022). */
+    email: emailReplyExtrasSchema.optional(),
   }),
   z.object({
     ...sendBase,

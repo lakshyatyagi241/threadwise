@@ -322,6 +322,20 @@ describe('secrets (TW-SET-001 rule 5, 024 rule 2)', () => {
     ).toBe(0);
   });
 
+  it('googleMail reads with the default redirect URI, an unset secret and the master switch on', async () => {
+    const res = await group('googleMail');
+    expect(res.values).toMatchObject({ enabled: true, clientId: '', redirectUri: '' });
+    expect(res.secrets.clientSecret!.isSet).toBe(false);
+    expect(String(res.extra?.redirectUri)).toMatch(/\/v2\/public\/email\/google\/callback$/);
+  });
+
+  it('microsoftMail reads with the default redirect URI, an unset secret and the master switch on', async () => {
+    const res = await group('microsoftMail');
+    expect(res.values).toMatchObject({ enabled: true, clientId: '', tenant: '', redirectUri: '' });
+    expect(res.secrets.clientSecret!.isSet).toBe(false);
+    expect(String(res.extra?.redirectUri)).toMatch(/\/v2\/public\/email\/microsoft\/callback$/);
+  });
+
   it('a secret-only change still bumps the version and is audited', async () => {
     const a = await save('googleCalendar', {}, { clientSecret: 's1' });
     expect(a.rowVersion).toBe(1);

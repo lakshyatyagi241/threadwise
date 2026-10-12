@@ -32,6 +32,8 @@ export * from './contacts-attributes-tags';
 export * from './broadcasts';
 export * from './channel-telegram';
 export * from './channel-sms';
+export * from './help-agent';
+export * from './channel-email';
 export * from './channel-facebook';
 export * from './channel-instagram';
 export * from './shopify-woocommerce';

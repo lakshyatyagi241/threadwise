@@ -1419,7 +1419,9 @@
             "extra_channels": "Các kênh Telegram, Facebook và Instagram.",
             "form_builder": "Biểu mẫu web được lưu trữ và nhúng tạo liên hệ trong CRM. Ứng dụng Biểu mẫu trả phí nắm công tắc này.",
             "waba_groups": "Tạo và quản lý nhóm WhatsApp từ số Cloud API: liên kết mời, yêu cầu tham gia, thành viên. Số phải là Official Business Account.",
-            "sms": "SMS chỉ gửi qua Twilio hoặc MSG91: kết nối người gửi, gửi chiến dịch và tin nhắn hàng loạt qua SMS."
+            "sms": "SMS chỉ gửi qua Twilio hoặc MSG91: kết nối người gửi, gửi chiến dịch và tin nhắn hàng loạt qua SMS.",
+            "help_agent": "Trợ lý trợ giúp trong ứng dụng: mọi người yêu cầu một việc bằng lời đơn giản, trợ lý hướng dẫn hoặc làm giúp ngay trên phiên của họ và hỏi trước khi làm điều có rủi ro. Tốn token AI.",
+            "email_channel": "Kết nối hộp thư Gmail và Google Workspace với hộp thư đến của nhóm. Ứng dụng Email trả phí điều khiển công tắc này."
           },
           "units": {
             "days": "Ngày",
@@ -1561,7 +1563,8 @@
             "forms": "Biểu mẫu web",
             "form_submissions_monthly": "Lượt gửi biểu mẫu mỗi tháng",
             "ai_form_generations_monthly": "Lượt tạo bằng trình tạo biểu mẫu AI mỗi tháng",
-            "sms_monthly": "SMS mỗi tháng"
+            "sms_monthly": "SMS mỗi tháng",
+            "email_mailboxes": "Hộp thư email"
           },
           "featureGroups": {
             "messaging": "Nhắn tin",
@@ -1599,7 +1602,9 @@
             "extra_channels": "Kênh Telegram, Facebook và Instagram",
             "form_builder": "Biểu mẫu (trình tạo biểu mẫu web)",
             "waba_groups": "Nhóm WhatsApp (Cloud API)",
-            "sms": "Kênh SMS"
+            "sms": "Kênh SMS",
+            "help_agent": "Trợ lý trợ giúp (AI, tốn token)",
+            "email_channel": "Kênh email (Gmail)"
           },
           "problems": {
             "required": "Trường này là bắt buộc.",
@@ -1652,7 +1657,8 @@
             "forms": "Biểu mẫu web đang hoạt động (ứng dụng Biểu mẫu). Lưu trữ một biểu mẫu sẽ giải phóng chỗ. 0 = không giới hạn.",
             "form_submissions_monthly": "Lượt gửi biểu mẫu được chấp nhận trong tháng dương lịch, không tính spam. Vượt giới hạn, lượt gửi vẫn được lưu để xem xét, không bị bỏ. 0 = không giới hạn.",
             "ai_form_generations_monthly": "Lượt tạo bằng trình tạo biểu mẫu AI trong tháng dương lịch, gồm cả lần thử sửa lại. 0 = không giới hạn.",
-            "sms_monthly": "Số tin nhắn SMS gửi đi trong tháng dương lịch. 0 = không giới hạn."
+            "sms_monthly": "Số tin nhắn SMS gửi đi trong tháng dương lịch. 0 = không giới hạn.",
+            "email_mailboxes": "Số hộp thư Gmail đã kết nối (hộp thư ngắt kết nối sẽ giải phóng chỗ). 0 = không giới hạn."
           }
         }
       },

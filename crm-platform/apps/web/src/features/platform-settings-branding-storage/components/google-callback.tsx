@@ -10,8 +10,8 @@ const NS = 'platform-settings-branding-storage.googleCallback';
  * TW-APPT-028: the read-only address to register on the Google OAuth client (Authorised redirect URIs). The server works it out from
  * what is saved, the environment and the API's own origin, so what is shown is what the connect flow will actually send to Google.
  */
-export function GoogleCallback({ uri }: { uri: string }) {
-  const t = useTranslations(NS);
+export function GoogleCallback({ uri, ns = NS }: { uri: string; ns?: string }) {
+  const t = useTranslations(ns);
   const [copied, setCopied] = useState(false);
   return (
     <div>

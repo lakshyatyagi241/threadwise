@@ -25,25 +25,41 @@ const sorted = (ids: number[]) => [...ids].sort((a, b) => a - b);
 describe('AudienceResolver.forConversation', () => {
   it('an unassigned conversation goes to the all-scope reader and to team-scope readers, not to own-scope or no grant', async () => {
     const { resolver: r } = resolver();
-    const audience = await r.forConversation(1, { assigneeUserId: null, assigneeTeamId: null });
+    const audience = await r.forConversation(1, {
+      assigneeUserId: null,
+      assigneeTeamId: null,
+      channelOwnerUserId: null,
+    });
     expect(sorted(audience)).toEqual([1, 2, 3]);
   });
 
   it("one assigned to a person reaches that person (even with scope own), the all reader, nobody else's", async () => {
     const { resolver: r } = resolver();
-    const audience = await r.forConversation(1, { assigneeUserId: 4, assigneeTeamId: null });
+    const audience = await r.forConversation(1, {
+      assigneeUserId: 4,
+      assigneeTeamId: null,
+      channelOwnerUserId: null,
+    });
     expect(sorted(audience)).toEqual([1, 4]);
   });
 
   it('one assigned to a team reaches that team (team scope) and the all reader, not another team', async () => {
     const { resolver: r } = resolver();
-    const audience = await r.forConversation(1, { assigneeUserId: null, assigneeTeamId: MY_TEAM });
+    const audience = await r.forConversation(1, {
+      assigneeUserId: null,
+      assigneeTeamId: MY_TEAM,
+      channelOwnerUserId: null,
+    });
     expect(sorted(audience)).toEqual([1, 2]);
   });
 
   it('never includes a member without a read grant, even their own assignment', async () => {
     const { resolver: r } = resolver();
-    const audience = await r.forConversation(1, { assigneeUserId: 5, assigneeTeamId: MY_TEAM });
+    const audience = await r.forConversation(1, {
+      assigneeUserId: 5,
+      assigneeTeamId: MY_TEAM,
+      channelOwnerUserId: null,
+    });
     expect(audience).not.toContain(5);
   });
 
@@ -51,7 +67,7 @@ describe('AudienceResolver.forConversation', () => {
     const { resolver: r } = resolver();
     const audience = await r.forConversation(
       1,
-      { assigneeUserId: 2, assigneeTeamId: null },
+      { assigneeUserId: 2, assigneeTeamId: null, channelOwnerUserId: null },
       { alsoUserIds: [4, 4], excludeUserIds: [1] },
     );
     expect(sorted(audience)).toEqual([2, 4]);
@@ -59,10 +75,14 @@ describe('AudienceResolver.forConversation', () => {
 
   it('asks the directory for the conversation read permission unless told otherwise', async () => {
     const { resolver: r, viewers } = resolver();
-    await r.forConversation(9, { assigneeUserId: null, assigneeTeamId: null });
+    await r.forConversation(9, {
+      assigneeUserId: null,
+      assigneeTeamId: null,
+      channelOwnerUserId: null,
+    });
     await r.forConversation(
       9,
-      { assigneeUserId: null, assigneeTeamId: null },
+      { assigneeUserId: null, assigneeTeamId: null, channelOwnerUserId: null },
       { permission: 'inbox.conversation.note' },
     );
     expect(viewers).toHaveBeenNthCalledWith(1, 9, 'inbox.conversation.read');

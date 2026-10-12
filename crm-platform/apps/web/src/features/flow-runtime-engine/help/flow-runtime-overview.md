@@ -26,6 +26,9 @@ Each time a flow starts for a contact, it is recorded as a run. **Flow runs** sh
 Open a run and look at **Execution timeline**. It lists every node the run executed, in order, with its result (OK, Error, Skipped, Waiting or Timed out), the exit it left by, how long it took and which visit it was when a flow loops back. Each row shows what the node sent to the customer, so you can read the conversation back. Select a node to see its **Input** (what it read from the run, the customer's reply, a request it made) and **Output** (the full message the customer received, the variables it saved, a response, the result of a condition), plus the time, the next step and the error if it failed. Long values are shortened and passwords or tokens are hidden.
 
 - **Path taken** shows the nodes the run reached, in order, and **Not reached** shows the rest of the flow.
+- A question or menu first shows **Waiting** (the node sent it and parked). Once the customer replies it shows **Answered** and how long they took; **No reply** means the run ended before they did. Only the latest wait of a live run still says Waiting.
+- When a branch runs out of steps right after a menu was shown, the run keeps that menu's options active so the buttons still work. The last row then says "No next step here. The options from … stay active." and the run stays waiting until it times out.
+- A node whose message the channel refused (for example an image link WhatsApp rejects) shows **Error** even though the flow carried on.
 - Use **Errors only** to jump to the node that failed.
 - The timeline shows each node as it was when it ran. If someone edits the flow afterwards, a notice says so, and nodes that were deleted are marked **Removed from the flow**. The log itself does not change.
 - A run logs at most 200 steps. If it ran more, the timeline says the later ones were counted but not listed. Failures are always kept.

@@ -25,7 +25,7 @@
     "toast": {
       "noPhone": "Geen telefoonnummer bij dit contact.",
       "noNumber": "Bellen is op geen enkel WABA-nummer ingeschakeld.",
-      "alreadyPermitted": "Dit contact staat gesprekken al toe - het gesprek wordt gestart...",
+      "alreadyPermitted": "Dit contact staat gesprekken al toe. Druk op Bellen om het gesprek te starten.",
       "permissionSent": "Toestemmingsverzoek verzonden. Ze zien Accepteren/Weigeren in WhatsApp - probeer Bellen opnieuw nadat ze hebben gereageerd.",
       "permissionFailed": "Het toestemmingsverzoek kon niet worden verzonden: {message}",
       "startFailed": "Het gesprek kon niet worden gestart: {message}",

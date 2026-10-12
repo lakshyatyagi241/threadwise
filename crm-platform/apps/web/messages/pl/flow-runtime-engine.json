@@ -207,7 +207,9 @@
         "request": "Żądanie",
         "response": "Odpowiedź",
         "result": "Wynik"
-      }
+      },
+      "factMenuKept": "Brak następnego kroku. Opcje z {node} pozostają aktywne.",
+      "factAnswered": "Odpowiedź po {time}"
     },
     "event": {
       "step": "Krok",
@@ -513,7 +515,9 @@
       "error": "Błąd",
       "skipped": "Pominięto",
       "waiting": "Oczekuje",
-      "timeout": "Przekroczono czas"
+      "timeout": "Przekroczono czas",
+      "answered": "Odpowiedziano",
+      "gaveUp": "Brak odpowiedzi"
     }
   }
 }

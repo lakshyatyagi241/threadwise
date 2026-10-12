@@ -34,7 +34,8 @@
         "registered": "\"{name}\" in der Cloud API registriert.",
         "disconnected": "\"{name}\" getrennt.",
         "removed": "\"{name}\" entfernt.",
-        "warningsTitle": "Verbunden, aber bitte prüfen Sie Folgendes:"
+        "warningsTitle": "Verbunden, aber bitte prüfen Sie Folgendes:",
+        "verified": "„{name}“ wurde verifiziert."
       },
       "notReady": {
         "title": "Embedded Signup ist nicht konfiguriert",
@@ -81,7 +82,8 @@
         "register": "Registrieren",
         "meta": "Meta",
         "disconnect": "Trennen",
-        "remove": "Entfernen"
+        "remove": "Entfernen",
+        "verify": "Nummer verifizieren"
       },
       "confirm": {
         "fixInboundTitle": "Eingehend reparieren?",
@@ -100,6 +102,17 @@
         "pin": "Zwei-Faktor-PIN (optional)",
         "pinError": "Die PIN besteht aus 6 Ziffern",
         "submit": "Registrieren"
+      },
+      "verifyDialog": {
+        "title": "Diese Nummer verifizieren",
+        "message": "Meta sendet einen 6-stelligen Code an {phone}. Wählen Sie, wie Sie ihn erhalten möchten.",
+        "enterCode": "Geben Sie den 6-stelligen Code ein, den Meta an {phone} gesendet hat.",
+        "sendSms": "Code per SMS senden",
+        "sendVoice": "Code per Anruf senden",
+        "code": "Verifizierungscode",
+        "codeError": "Der Code hat 6 Ziffern",
+        "submit": "Verifizieren",
+        "resend": "Neuen Code senden"
       }
     },
     "connect": {

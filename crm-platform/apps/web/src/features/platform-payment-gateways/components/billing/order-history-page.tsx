@@ -19,6 +19,7 @@ import {
   ymd,
 } from '../../lib/billing-format';
 import { useUrlState } from '../../lib/use-url-state';
+import { RefundDialog, type RefundTarget } from './refund-dialog';
 import {
   BillingHeader,
   Crumb,
@@ -59,6 +60,7 @@ export function OrderHistoryPage() {
   const { values, page, set, setPage } = useUrlState(DEFAULTS);
   const [pending, setPending] = useState<Pending | null>(null);
   const [note, setNote] = useState('');
+  const [refund, setRefund] = useState<RefundTarget | null>(null);
 
   const query = {
     window: values.window as '90d' | 'this_year' | 'all',
@@ -259,6 +261,15 @@ export function OrderHistoryPage() {
                 onCancel={() =>
                   setPending({ kind: 'cancel', row: { id: o.id, orderNumber: o.orderNumber } })
                 }
+                onRefund={() =>
+                  setRefund({
+                    kind: 'order',
+                    id: o.id,
+                    label: o.orderNumber,
+                    currency: o.currency,
+                    total: o.total,
+                  })
+                }
               />
             ))
           )}
@@ -286,6 +297,7 @@ export function OrderHistoryPage() {
         onConfirm={() => pending && act.mutate(pending)}
         onClose={() => setPending(null)}
       />
+      <RefundDialog target={refund} locale={locale} onClose={() => setRefund(null)} />
       <Modal
         open={pending?.kind === 'reject'}
         onClose={() => setPending(null)}
@@ -326,12 +338,14 @@ function OrderRow({
   canEdit,
   onApprove,
   onCancel,
+  onRefund,
 }: {
   o: AdminOrderRow;
   locale: string;
   canEdit: boolean;
   onApprove: () => void;
   onCancel: () => void;
+  onRefund: () => void;
 }) {
   const t = useTranslations(NS);
   const tc = useTranslations('platform-payment-gateways.billing.common');
@@ -383,6 +397,18 @@ function OrderRow({
         {o.awaitingApproval && (
           <div className="mt-1 font-mono text-[10px] uppercase tracking-wider text-warning">
             {t('awaitingApproval')}
+          </div>
+        )}
+        {o.status === 'paid' && canEdit && (
+          <div className="mt-1.5">
+            <Button
+              size="sm"
+              variant="secondary"
+              className="h-7 rounded-full border-danger/40 px-2 text-[11px] text-danger"
+              onClick={onRefund}
+            >
+              {t('actions.refund')}
+            </Button>
           </div>
         )}
         {open && canEdit && (

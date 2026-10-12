@@ -468,9 +468,13 @@ export class WabaGroupsAdminService {
     return new AppError(ERROR_CODES.WABA_GROUP_NOT_FOUND, 'Group not found.', HttpStatus.NOT_FOUND);
   }
 
-  /** Groups go straight to Meta. Interakt and registry routes are not verified to pass the Groups API through (spec 10). */
+  /**
+   * Groups go straight to Meta's Graph host with the number's own Meta token (as Reference did), so the number's route label does not
+   * matter: a number that Interakt only funds (credit line) still qualifies. A registry provider's number is refused (its route is not
+   * known to pass the Groups API through), and so is any number without a Meta access token (an Interakt-only auth key is not one).
+   */
   private supported(conn: WabaConnection): boolean {
-    return conn.provider === 'meta' && !conn.registry && Boolean(conn.accessToken);
+    return !conn.registry && Boolean(conn.accessToken);
   }
 
   private usable(num: Number_): WabaConnection {

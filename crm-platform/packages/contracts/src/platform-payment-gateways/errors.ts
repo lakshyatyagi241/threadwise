@@ -20,4 +20,8 @@ export const PAYGW_ERROR_CODES = {
   PAYGW_COUPON_REJECTED: 'PAYGW_COUPON_REJECTED',
   /** An admin action the order's current status does not allow (cancel a paid order, void a paid invoice...). */
   PAYGW_ORDER_STATE: 'PAYGW_ORDER_STATE',
+  /** A refund the order, the payment or the gateway cannot take (not paid, wallet top-up, already refunded, more than was paid). */
+  PAYGW_REFUND_REFUSED: 'PAYGW_REFUND_REFUSED',
+  /** The provider refused the refund; the attempt is kept with its reason. */
+  PAYGW_REFUND_FAILED: 'PAYGW_REFUND_FAILED',
 } as const;

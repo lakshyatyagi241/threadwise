@@ -1,0 +1,135 @@
+{
+  "help-agent": {
+    "launcher": {
+      "label": "Perguntar",
+      "shortcut": "Pergunte ao assistente (Ctrl ou Cmd + Shift + L)"
+    },
+    "panel": {
+      "title": "Pergunte ao assistente",
+      "subtitle": "Diga o que você quer fazer. Eu leio esta página e clico por você, e pergunto antes de qualquer coisa ser salva, enviada, excluída ou paga.",
+      "close": "Fechar",
+      "taskLabel": "O que você quer fazer?",
+      "taskPlaceholder": "Por exemplo: adicionar a tag VIP a um contato",
+      "tooLong": "Use no máximo {max} caracteres.",
+      "doItForMe": "Faça por mim",
+      "showMe": "Mostre-me",
+      "stop": "Parar",
+      "stopping": "Parando...",
+      "newTask": "Nova tarefa",
+      "tryAgain": "Tentar novamente",
+      "openGuide": "Abrir guia",
+      "showSteps": "Mostrar passos",
+      "guidesTitle": "Dos guias de ajuda",
+      "examplesTitle": "Experimente perguntar",
+      "disabledHere": "O assistente está desativado nesta tela porque ela mostra mensagens e dados escritos por clientes. Abra outra tela para usá-lo."
+    },
+    "notice": {
+      "title": "Antes de começar",
+      "sent": "Para fazer uma tarefa, o assistente envia seu pedido e o texto da página em que você está a um provedor de IA.",
+      "masked": "Números de telefone, e-mails e segredos são ocultados antes. Nomes e outros textos da página não são.",
+      "asks": "Ele usa a sua própria conta, então só pode fazer o que você pode fazer. Ele pergunta antes de salvar, enviar, excluir, pagar, convidar pessoas ou alterar configurações.",
+      "limits": "Ele nunca digita senhas nem dados de cartão, nunca abre outros sites, e você pode pará-lo a qualquer momento.",
+      "accept": "Entendi"
+    },
+    "status": {
+      "progress": "Passo {n} de {max}",
+      "thinking": "Pensando...",
+      "starting": "Iniciando..."
+    },
+    "activity": {
+      "click": "Clicando em: {label}",
+      "type": "Digitando em: {label}",
+      "select": "Escolhendo em: {label}",
+      "blocked": "Ignorado: {label}",
+      "declined": "Você recusou: {label}",
+      "shown": "Mostrando: {label}"
+    },
+    "confirm": {
+      "title": "Permitir?",
+      "clickBody": "O assistente vai clicar em \"{label}\".",
+      "selectBody": "O assistente vai escolher \"{detail}\" em \"{label}\".",
+      "allow": "Permitir desta vez",
+      "deny": "Negar",
+      "reasons": {
+        "marked": "Este é um dos botões mais sensíveis do app.",
+        "submit": "Isto salva ou envia o que está na página.",
+        "delete": "Isto exclui, remove ou desconecta algo.",
+        "send": "Isto envia, publica ou inicia algo que outras pessoas vão ver.",
+        "pay": "Isto pode gastar dinheiro ou mudar o que você paga.",
+        "invite": "Isto convida alguém para o seu workspace.",
+        "connect": "Isto conecta ou desconecta um canal ou um app.",
+        "access": "Isto muda quem pode fazer o quê, ou um segredo ou dado de cobrança.",
+        "settings": "Isto ativa ou desativa algo.",
+        "toggle": "Esta chave tem efeito imediato.",
+        "dialog": "Isto confirma o que a janela está pedindo.",
+        "signout": "Isto desconecta você da conta."
+      }
+    },
+    "question": {
+      "title": "O assistente pergunta",
+      "answerLabel": "Sua resposta",
+      "send": "Enviar"
+    },
+    "result": {
+      "completedTitle": "Concluído",
+      "failedTitle": "Não consegui concluir isto",
+      "stoppedTitle": "Parado",
+      "summary": "{steps, plural, one {# passo} other {# passos}}, {confirmed} permitidos, {denied} recusados."
+    },
+    "stopped": {
+      "person": "Você parou a tarefa.",
+      "budget": "A tarefa atingiu o limite de passos e parou. Tente um pedido menor.",
+      "location": "A tarefa parou porque chegou a uma tela que o assistente não pode usar."
+    },
+    "errors": {
+      "disabled": "O assistente está desativado para este workspace ou nesta tela.",
+      "planLocked": "O assistente não faz parte do seu plano.",
+      "forbidden": "Você não tem permissão para usar o assistente.",
+      "rateLimited": "Muitas solicitações. Aguarde um momento e tente novamente.",
+      "taskLimit": "Você já iniciou o máximo de tarefas permitido por enquanto. Tente novamente mais tarde.",
+      "stepLimit": "Esta tarefa usou todos os passos. Inicie uma nova com um pedido menor.",
+      "closed": "Esta tarefa foi encerrada. Inicie uma nova.",
+      "providerDown": "O serviço de IA não respondeu. Tente novamente em instantes ou fale com o proprietário da plataforma se continuar acontecendo.",
+      "monthlyLimit": "Seu workspace já usou a cota de IA deste mês.",
+      "signedOut": "Sua sessão terminou. Entre novamente.",
+      "network": "Não foi possível acessar o servidor. Verifique sua conexão e tente novamente.",
+      "generic": "Algo deu errado. Tente novamente.",
+      "retryIn": "Tente novamente em {seconds} segundos.",
+      "requestId": "ID da solicitação: {id}"
+    },
+    "examples": {
+      "howDo": "Como uso {title}?",
+      "showMe": "Mostre-me por onde começar em {title}",
+      "whereIs": "Onde encontro {title}?",
+      "generic1": "Como conecto meu número de WhatsApp?",
+      "generic2": "Onde altero o perfil da minha empresa?",
+      "generic3": "Como convido um colega de equipe?"
+    },
+    "helpCard": {
+      "title": "Pergunte ao assistente",
+      "body": "Diga o que você quer fazer. Ele encontra o guia certo, mostra onde clicar ou faz os passos por você, perguntando antes de qualquer coisa importante.",
+      "button": "Abrir o assistente"
+    },
+    "settingsPage": {
+      "title": "Assistente de ajuda",
+      "description": "Deixe sua equipe pedir o que quer fazer e faça o app orientá-la ou executar os passos na própria conta.",
+      "loading": "Carregando",
+      "loadFailed": "Não foi possível carregar a configuração.",
+      "requestId": "ID da solicitação: {id}",
+      "shareTitle": "O que é compartilhado quando alguém o usa",
+      "share1": "O pedido digitado pela pessoa e o texto visível da página em que ela está são enviados ao provedor de IA usado pela plataforma.",
+      "share2": "Números de telefone, e-mails, segredos e os campos pessoais de formulários são ocultados antes. Nomes e outros textos livres da página não são.",
+      "share3": "Mensagens de clientes e o chat da equipe nunca são lidos: o assistente fica desativado nessas telas.",
+      "share4": "O assistente age com as permissões da própria pessoa conectada e pergunta antes de salvar, enviar, excluir, pagar ou alterar configurações. Apenas contagens e o resultado de cada tarefa são guardados, nunca o texto do pedido.",
+      "optIn": "Ao ativá-lo, você confirma que seu workspace concorda em compartilhar isso com o provedor de IA.",
+      "switchLabel": "Ativar o Assistente de ajuda neste workspace",
+      "stateOn": "Ativado. Pessoas com a permissão veem o botão Perguntar.",
+      "stateOff": "Desativado. Ninguém vê o assistente.",
+      "saveFailed": "Não foi possível salvar a configuração.",
+      "savedOn": "O assistente está ativado.",
+      "savedOff": "O assistente está desativado.",
+      "whoCanUse": "Só os papéis com a permissão \"Usar o Assistente de ajuda\" o veem. Proprietários e administradores a têm.",
+      "rolesLink": "Abrir papéis"
+    }
+  }
+}

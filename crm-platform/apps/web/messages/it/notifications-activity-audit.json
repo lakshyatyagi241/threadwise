@@ -199,7 +199,8 @@
         "devices": "Numeri WhatsApp",
         "broadcasts": "Broadcast e campagne",
         "team_chat": "Team chat",
-        "whatsapp_groups": "Gruppi WhatsApp"
+        "whatsapp_groups": "Gruppi WhatsApp",
+        "billing": "Fatturazione e abbonamenti"
       },
       "types": {
         "new_chat": {
@@ -298,6 +299,10 @@
           "label": "Documento di vendita deciso",
           "hint": "Un preventivo o una fattura è stato accettato o rifiutato."
         },
+        "email_bounced": {
+          "label": "Email non consegnata",
+          "hint": "Un'email che hai inviato è stata respinta o è in ritardo."
+        },
         "wallet_credited": {
           "label": "Wallet ricaricato",
           "hint": "Il wallet del workspace è stato accreditato."
@@ -321,6 +326,14 @@
         "form_payment_duplicate": {
           "label": "Modulo pagato due volte",
           "hint": "Un visitatore ha pagato una seconda volta e il pagamento extra va rimborsato."
+        },
+        "billing_payment_failed": {
+          "label": "Pagamento dell'abbonamento non riuscito",
+          "hint": "Un addebito di rinnovo non è andato a buon fine e richiede la tua attenzione."
+        },
+        "billing_subscription_canceled": {
+          "label": "Abbonamento annullato",
+          "hint": "Il tuo fornitore di pagamenti ha terminato un abbonamento di questo spazio di lavoro."
         }
       },
       "loading": "Caricamento delle tue preferenze",

@@ -116,6 +116,36 @@ describe('MessageBubble', () => {
     expect(out).toContain('aria-label="Read"');
   });
 
+  it("names the member who wrote in a WhatsApp group, with their number", () => {
+    const out = bubble(
+      message(3, { group: { participant: '919900000001', senderName: 'Asha' } }),
+    );
+    expect(out).toContain('data-testid="inbox-group-author"');
+    expect(out).toContain('Asha');
+    expect(out).toContain('919900000001');
+  });
+
+  it('falls back to the number, then to "Group member", when WhatsApp gave no name', () => {
+    expect(
+      bubble(message(3, { group: { participant: '919900000002', senderName: null } })),
+    ).toContain('919900000002');
+    expect(bubble(message(3, { group: { participant: null, senderName: null } }))).toContain(
+      'Group member',
+    );
+  });
+
+  it('shows the delivery tally of a message sent to a group, and nothing before Meta reports', () => {
+    const out = bubble(
+      outbound(4, { status: 'delivered', groupDelivery: { deliveredTo: 4, billable: 3, free: 1 } }),
+    );
+    expect(out).toContain('data-testid="inbox-group-tally"');
+    expect(out).toContain('Delivered to 4 members: 3 billed, 1 free');
+    expect(
+      bubble(outbound(4, { groupDelivery: { deliveredTo: 0, billable: 0, free: 0 } })),
+    ).not.toContain('inbox-group-tally');
+    expect(bubble(outbound(4))).not.toContain('inbox-group-tally');
+  });
+
   it('shows the failure reason with a Retry button for a failed message', () => {
     const out = bubble(
       outbound(2, {

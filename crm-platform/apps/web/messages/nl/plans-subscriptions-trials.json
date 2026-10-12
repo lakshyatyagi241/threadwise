@@ -44,7 +44,8 @@
       "forms": "Webformulieren",
       "form_submissions_monthly": "Formulierinzendingen per maand",
       "ai_form_generations_monthly": "AI-formulierbouwer-generaties per maand",
-      "sms_monthly": "SMS per maand"
+      "sms_monthly": "SMS per maand",
+      "email_mailboxes": "E-mailpostvakken"
     },
     "features": {
       "automation": "Automatisering",
@@ -76,7 +77,9 @@
       "extra_channels": "Telegram, Facebook en Instagram",
       "form_builder": "Formulieren",
       "waba_groups": "WhatsApp-groepen",
-      "sms": "SMS-kanaal"
+      "sms": "SMS-kanaal",
+      "help_agent": "Hulpassistent",
+      "email_channel": "E-mailkanaal (Gmail)"
     },
     "limitGroups": {
       "messaging": "Berichten",
@@ -127,7 +130,8 @@
       "forms": "Actieve webformulieren (Formulieren-app). Een formulier archiveren maakt ruimte vrij. 0 = onbeperkt.",
       "form_submissions_monthly": "Geaccepteerde formulierinzendingen in de kalendermaand, spam uitgesloten. Boven de limiet wordt een inzending nog steeds opgeslagen ter beoordeling, nooit weggegooid. 0 = onbeperkt.",
       "ai_form_generations_monthly": "AI-formulierbouwer-generaties in de kalendermaand, inclusief een herstelpoging. 0 = onbeperkt.",
-      "sms_monthly": "Uitgaande SMS-berichten verzonden in de kalendermaand. 0 = onbeperkt."
+      "sms_monthly": "Uitgaande SMS-berichten verzonden in de kalendermaand. 0 = onbeperkt.",
+      "email_mailboxes": "Gekoppelde Gmail-postvakken (een losgekoppeld postvak geeft zijn plek vrij). 0 = onbeperkt."
     },
     "planAddons": {
       "title": "Add-ons beschikbaar in je abonnement",

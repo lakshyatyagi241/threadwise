@@ -135,7 +135,9 @@
       "groupSendUnavailable": "WhatsApp gruplarına gönderim henüz kullanılamıyor. WhatsApp Business uygulamasından yanıtlayın.",
       "logRange": "Son bir yıl içinde, başlangıcı bitişten önce olan ve gelecekte olmayan tarihler seçin.",
       "logBusy": "Bir dışa aktarma zaten hazırlanıyor. E-postasını bekleyin, sonra yenisini isteyin.",
-      "logNotReady": "Bu dışa aktarma hazır değil veya süresi doldu. Yeniden isteyin."
+      "logNotReady": "Bu dışa aktarma hazır değil veya süresi doldu. Yeniden isteyin.",
+      "groupSuspended": "Meta bu grubu askıya aldı; Meta kaldırana kadar gruba mesaj gönderilemez.",
+      "walletEmpty": "Mesaj cüzdanınız bu grup mesajını karşılayamıyor (üye başına bir ücret). Bakiye yükleyip tekrar deneyin."
     },
     "bubble": {
       "kind": {
@@ -201,7 +203,9 @@
         "takeBackLabel": "Tepkin {emoji}. Geri al",
         "failed": "Bu tepki gönderilmedi"
       },
-      "deliveryLog": "Teslimat günlüğü"
+      "deliveryLog": "Teslimat günlüğü",
+      "groupMember": "Grup üyesi",
+      "groupTally": "{delivered, plural, other {# üyeye}} iletildi: {billable} ücretli, {free} ücretsiz"
     },
     "media": {
       "openImage": "{name} görselini aç",

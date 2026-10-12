@@ -16,6 +16,8 @@ import {
   connectEmbeddedInputSchema,
   connectManualInputSchema,
   registerNumberInputSchema,
+  requestVerificationCodeInputSchema,
+  verifyCodeInputSchema,
   setTokenInputSchema,
   updateBusinessProfileInputSchema,
   updateConnectionInputSchema,
@@ -23,6 +25,8 @@ import {
   type ConnectEmbeddedInput,
   type ConnectManualInput,
   type RegisterNumberInput,
+  type RequestVerificationCodeInput,
+  type VerifyCodeInput,
   type SetTokenInput,
   type UpdateBusinessProfileInput,
   type UpdateConnectionInput,
@@ -135,6 +139,30 @@ export class WabaConnectionsController {
     @Body(zodPipe(registerNumberInputSchema)) body: RegisterNumberInput,
   ) {
     return this.connections.register(id, body);
+  }
+
+  @Post('numbers/:id/verify/request')
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('waba.numbers.manage')
+  @ApiOperation({
+    summary: 'Ask Meta to send the number its 6-digit ownership code (SMS or voice)',
+  })
+  requestCode(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body(zodPipe(requestVerificationCodeInputSchema)) body: RequestVerificationCodeInput,
+  ) {
+    return this.connections.requestVerificationCode(id, body);
+  }
+
+  @Post('numbers/:id/verify')
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('waba.numbers.manage')
+  @ApiOperation({ summary: 'Verify the number with the code Meta sent' })
+  verify(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body(zodPipe(verifyCodeInputSchema)) body: VerifyCodeInput,
+  ) {
+    return this.connections.verifyCode(id, body);
   }
 
   @Put('numbers/:id/token')

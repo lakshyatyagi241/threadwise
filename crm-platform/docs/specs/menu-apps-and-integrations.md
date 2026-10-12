@@ -1,9 +1,9 @@
 # Spec: The menu, apps and integrations
 
-|                   |                                                                                                                                                                                                                                                                            |
-| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Status**        | Phases 1 and 2 built (web); phase 3 and 4 wait for the owner's decisions (section 7)                                                                                                                                                                                       |
-| **Owner request** | 2026-10-05                                                                                                                                                                                                                                                                 |
+|                   |                                                                                                                                                                                                                                                                        |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Status**        | Phases 1 and 2 built (web); phase 3 and 4 wait for the owner's decisions (section 7)                                                                                                                                                                                   |
+| **Owner request** | 2026-10-05                                                                                                                                                                                                                                                             |
 | **Related**       | [marketplace-mini-apps-and-integrations.md](marketplace-mini-apps-and-integrations.md), [docs/api/marketplace.md](../api/marketplace.md) ("Apps that own existing plan features"), [parity/product-extensions.md](../threadwise-port/parity/product-extensions.md) item 22 |
 
 ## 1. Problem
@@ -12,15 +12,15 @@ The sidebar lists everything the product has, whether or not the workspace can u
 
 ## 2. The rule
 
-| Kind of screen                                         | In the sidebar                                                                 | Not owned or not available                                                                | Example                                   |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- | ----------------------------------------- |
-| Core daily work                                        | Always (subject to permission)                                                 | n/a                                                                                       | Inbox, Contacts, Campaigns                |
-| **App** (a Marketplace app that grants a plan feature) | Only while the workspace has the app (`gates.app`)                             | **Removed**, route closed, Settings tiles removed, permissions hidden in the Roles editor | Appointments                              |
-| Plan feature                                           | Always                                                                         | Kept, marked "Upgrade" (Reference's rule, unchanged)                                      | Analytics, Flows                          |
-| Connection / integration                               | Not in the sidebar: a tile in **Settings > Integrations**                      | Locked tile if the plan lacks it                                                          | Shopify, WooCommerce                      |
-| Set-up of a feature                                    | Not in the sidebar: a Settings tile next to what it configures                 | n/a                                                                                       | Warmer (Settings > Channels)              |
-| A screen its area already links to                     | Not drawn (`inMenu: false`), but only while the link that covers it is visible | Drawn again for a role that cannot see that link                                          | Store: Orders, Products, Reviews, Coupons |
-| Not built yet                                          | Not drawn (`SHOW_PLANNED_IN_MENU` is off); still listed in `planned.ts`        | n/a                                                                                       | History, Notifications                    |
+| Kind of screen                                         | In the sidebar                                                                                                                          | Not owned or not available                                                                | Example                                   |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------- |
+| Core daily work                                        | Always (subject to permission)                                                                                                          | n/a                                                                                       | Inbox, Contacts, Campaigns                |
+| **App** (a Marketplace app that grants a plan feature) | Only while the workspace is subscribed AND has the app installed (`gates.app`; a plan that carries the feature itself needs no install) | **Removed**, route closed, Settings tiles removed, permissions hidden in the Roles editor | Appointments                              |
+| Plan feature                                           | Always                                                                                                                                  | Kept, marked "Upgrade" (WaDesk's rule, unchanged)                                         | Analytics, Flows                          |
+| Connection / integration                               | Not in the sidebar: a tile in **Settings > Integrations**                                                                               | Locked tile if the plan lacks it                                                          | Shopify, WooCommerce                      |
+| Set-up of a feature                                    | Not in the sidebar: a Settings tile next to what it configures                                                                          | n/a                                                                                       | Warmer (Settings > Channels)              |
+| A screen its area already links to                     | Not drawn (`inMenu: false`), but only while the link that covers it is visible                                                          | Drawn again for a role that cannot see that link                                          | Store: Orders, Products, Reviews, Coupons |
+| Not built yet                                          | Not drawn (`SHOW_PLANNED_IN_MENU` is off); still listed in `planned.ts`                                                                 | n/a                                                                                       | History, Notifications                    |
 
 "Owned" means the plan feature is in the workspace's entitlement set, which already merges a plan, an override and a purchased or comped add-on. That is the same resolver the API gates use, so the menu cannot disagree with the server. The server stays the authority: the app's routes answer `PLAN_FEATURE_LOCKED` on their own.
 
@@ -77,7 +77,7 @@ The web suite passes (5,964 tests) except `platform-payment-gateways/lib/billing
 
 ## 6. Not verified
 
-- Not compared with the running Reference reference (it was not running) and not exercised in a signed-in browser session by the author of this change; unit and render tests only. The seeded `nachiket.challawar@geta.ai` sign-in has no password here.
+- Not compared with the running WaDesk reference (it was not running) and not exercised in a signed-in browser session by the author of this change; unit and render tests only. The seeded `nachiket.challawar@geta.ai` sign-in has no password here.
 - The Help coverage and settings checks ran against English guides only (the guides have no Arabic text).
 - No API behaviour changed, so nothing was re-tested there.
 

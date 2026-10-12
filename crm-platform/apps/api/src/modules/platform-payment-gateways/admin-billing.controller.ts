@@ -19,7 +19,9 @@ import { ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import type { Response } from 'express';
 import {
   INVOICE_LOGO_MAX_KB,
+  adminCancelSubscriptionRequestSchema,
   adminOrdersQuerySchema,
+  adminSubscriptionsQuerySchema,
   billingAnalyticsQuerySchema,
   billingHistoryQuerySchema,
   invoiceMarkPaidRequestSchema,
@@ -27,9 +29,13 @@ import {
   manualInvoiceRequestSchema,
   orderActionRequestSchema,
   orderAnalyticsQuerySchema,
+  refundRequestSchema,
   saveBillingSettingsRequestSchema,
+  subscriptionRefundRequestSchema,
   uuidSchema,
+  type AdminCancelSubscriptionRequest,
   type AdminOrdersQuery,
+  type AdminSubscriptionsQuery,
   type BillingAnalyticsQuery,
   type BillingHistoryQuery,
   type InvoiceMarkPaidRequest,
@@ -37,16 +43,27 @@ import {
   type ManualInvoiceRequest,
   type OrderActionRequest,
   type OrderAnalyticsQuery,
+  type RefundRequest,
   type SaveBillingSettingsRequest,
+  type SubscriptionRefundRequest,
 } from '@crm/contracts';
 import { ActorKinds } from '../../common/decorators';
+import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { OperatorGuard, OperatorRoles } from '../auth';
 import { AdminBillingService } from './admin-billing.service';
 import { BillingSettingsService } from './billing-settings.service';
+import { PlatformSubscriptionsService } from './platform-subscriptions.service';
+import { RefundService } from './refund.service';
 
 const id = () => zodPipe(uuidSchema);
+
+const operatorId = (): number => {
+  const ctx = RequestContextStore.require();
+  if (ctx.actorId === null || ctx.actorId === undefined) throw AppError.unauthenticated();
+  return ctx.actorId;
+};
 
 /**
  * The operator console's Billing screens: order history (TW-PAYGW-037..040), billing history (041, 042), invoices (043..046)
@@ -61,6 +78,8 @@ export class AdminBillingController {
   constructor(
     private readonly billing: AdminBillingService,
     private readonly settings: BillingSettingsService,
+    private readonly subscriptions: PlatformSubscriptionsService,
+    private readonly refunds: RefundService,
   ) {}
 
   // ---- order history ---------------------------------------------------------------------------------------------------
@@ -130,6 +149,88 @@ export class AdminBillingController {
   @ApiOperation({ summary: 'Cancel an unfinished (pending) order' })
   cancel(@Param('id', id()) uuid: string) {
     return this.billing.cancel(uuid);
+  }
+
+  @Post('orders/:id/refund')
+  @OperatorRoles('super_admin')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: 'Refund a paid one-time order through its payment gateway (all of it, or part)',
+    description:
+      "422 PAYGW_REFUND_REFUSED for an unpaid order, a wallet top-up, a subscription payment (use the subscription), more than was paid, or a gateway that cannot refund; 200 with `status: failed` and the provider's reason when the provider refuses.",
+  })
+  refundOrder(
+    @Param('id', id()) uuid: string,
+    @Body(zodPipe(refundRequestSchema)) body: RefundRequest,
+  ) {
+    return this.refunds.refundOrder(uuid, body, operatorId());
+  }
+
+  @Get('orders/:id/refunds')
+  @ApiOperation({ summary: 'Refunds made against an order, newest first' })
+  async orderRefunds(@Param('id', id()) uuid: string) {
+    return { data: await this.refunds.listFor('order', uuid) };
+  }
+
+  // ---- subscriptions ---------------------------------------------------------------------------------------------------
+
+  @Get('subscriptions')
+  @ApiOperation({
+    summary:
+      'Every workspace subscription (plans and add-ons) with filters, KPIs and the provider ids',
+  })
+  subscriptionList(@Query(zodPipe(adminSubscriptionsQuerySchema)) q: AdminSubscriptionsQuery) {
+    return this.subscriptions.list(q);
+  }
+
+  @Post('subscriptions/:id/cancel')
+  @OperatorRoles('super_admin')
+  @HttpCode(200)
+  @ApiOperation({
+    summary:
+      'End a subscription at the payment provider, at the end of the paid cycle (default) or now',
+  })
+  subscriptionCancel(
+    @Param('id', id()) uuid: string,
+    @Body(zodPipe(adminCancelSubscriptionRequestSchema)) body: AdminCancelSubscriptionRequest,
+  ) {
+    return this.subscriptions.end(uuid, body);
+  }
+
+  @Post('subscriptions/:id/sync')
+  @OperatorRoles('super_admin')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: 'Ask the payment provider for this subscription now and apply what it says',
+  })
+  subscriptionSync(@Param('id', id()) uuid: string) {
+    return this.subscriptions.sync(uuid);
+  }
+
+  @Post('subscriptions/:id/refund')
+  @OperatorRoles('super_admin')
+  @HttpCode(200)
+  @ApiOperation({
+    summary:
+      'Refund one paid charge of a subscription through the provider (optionally ending the subscription)',
+  })
+  subscriptionRefund(
+    @Param('id', id()) uuid: string,
+    @Body(zodPipe(subscriptionRefundRequestSchema)) body: SubscriptionRefundRequest,
+  ) {
+    return this.refunds.refundSubscriptionCharge(uuid, body, operatorId());
+  }
+
+  @Get('subscriptions/:id/charges')
+  @ApiOperation({ summary: 'What the payment provider charged this subscription, cycle by cycle' })
+  async subscriptionCharges(@Param('id', id()) uuid: string) {
+    return { data: await this.refunds.chargesFor(uuid) };
+  }
+
+  @Get('subscriptions/:id/refunds')
+  @ApiOperation({ summary: 'Refunds made against a subscription, newest first' })
+  async subscriptionRefunds(@Param('id', id()) uuid: string) {
+    return { data: await this.refunds.listFor('subscription', uuid) };
   }
 
   // ---- billing history -------------------------------------------------------------------------------------------------

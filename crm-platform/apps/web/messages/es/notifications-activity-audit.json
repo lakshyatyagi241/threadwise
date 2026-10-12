@@ -199,7 +199,8 @@
         "devices": "Números de WhatsApp",
         "broadcasts": "Difusiones y campañas",
         "team_chat": "Chat de equipo",
-        "whatsapp_groups": "Grupos de WhatsApp"
+        "whatsapp_groups": "Grupos de WhatsApp",
+        "billing": "Facturación y suscripciones"
       },
       "types": {
         "new_chat": {
@@ -298,6 +299,10 @@
           "label": "Documento de venta resuelto",
           "hint": "Se aceptó o rechazó un presupuesto o factura."
         },
+        "email_bounced": {
+          "label": "Correo no entregado",
+          "hint": "Un correo que enviaste rebotó o se retrasó."
+        },
         "wallet_credited": {
           "label": "Monedero recargado",
           "hint": "Se abonó saldo al monedero del espacio de trabajo."
@@ -321,6 +326,14 @@
         "form_payment_duplicate": {
           "label": "Formulario pagado dos veces",
           "hint": "Un visitante pagó por segunda vez y el pago adicional debe reembolsarse."
+        },
+        "billing_payment_failed": {
+          "label": "Falló el pago de la suscripción",
+          "hint": "Un cargo de renovación no se procesó y requiere tu atención."
+        },
+        "billing_subscription_canceled": {
+          "label": "Suscripción cancelada",
+          "hint": "Tu proveedor de pagos finalizó una suscripción de este espacio de trabajo."
         }
       },
       "loading": "Cargando tus preferencias",

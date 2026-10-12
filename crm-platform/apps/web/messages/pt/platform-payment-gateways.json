@@ -6,7 +6,8 @@
       "orders": "Histórico de pedidos",
       "billingHistory": "Histórico de cobrança",
       "invoices": "Faturas",
-      "billingSettings": "Configurações de faturamento"
+      "billingSettings": "Configurações de faturamento",
+      "subscriptions": "Assinaturas"
     },
     "admin": {
       "title": "Gateways de pagamento",
@@ -299,7 +300,8 @@
           "markPaid": "Marcar como pago",
           "cancelOrder": "Cancelar",
           "approve": "Aprovar",
-          "reject": "Rejeitar"
+          "reject": "Rejeitar",
+          "refund": "Reembolso"
         },
         "confirm": {
           "approveTitle": "Marcar este pedido como pago?",
@@ -673,6 +675,79 @@
           "faqsHint": "Itens de acordeão exibidos abaixo dos planos.",
           "configured": "{count} configurados."
         }
+      },
+      "subscriptions": {
+        "title": "Assinaturas",
+        "eyebrow": "Faturamento",
+        "titleFirst": "Plataforma",
+        "titleSecond": "assinaturas",
+        "description": "Assinaturas de planos e complementos mantidas com um provedor de pagamento, em todos os espaços de trabalho. Encerre uma, atualize-a pelo provedor ou reembolse uma cobrança.",
+        "kpi": {
+          "active": "Ativa",
+          "pastDue": "Pagamento falhou",
+          "canceled": "Cancelada"
+        },
+        "statusFilter": "Status da assinatura",
+        "statuses": {
+          "all": "Todas",
+          "active": "Ativa",
+          "past_due": "Pagamento falhou",
+          "pending": "Pendente",
+          "canceled": "Cancelada",
+          "expired": "Expirada"
+        },
+        "kind": {
+          "plan": "Plano",
+          "addon": "Complemento"
+        },
+        "search": "Buscar espaço de trabalho ou ID do provedor",
+        "noun": "assinaturas",
+        "empty": "Nenhuma assinatura encontrada.",
+        "col": {
+          "workspace": "Espaço de trabalho",
+          "item": "Item",
+          "price": "Preço",
+          "paidUntil": "Pago até",
+          "status": "Status",
+          "provider": "Provedor",
+          "actions": "Ações"
+        },
+        "cancelFailed": "Falha ao cancelar no provedor",
+        "cancelFailedHint": "O registro local foi encerrado, mas o provedor não confirmou o cancelamento. Conclua no painel do provedor para parar as cobranças.",
+        "actions": {
+          "sync": "Atualizar",
+          "refund": "Reembolso",
+          "endAtCycle": "Encerrar no fim do ciclo",
+          "endNow": "Encerrar agora"
+        },
+        "confirm": {
+          "title": "Encerrar esta assinatura?",
+          "atCycle": "{name} mantém o acesso até o fim do ciclo pago e não será cobrado novamente.",
+          "now": "Encerrar agora a assinatura de {name} no provedor. Nenhuma nova cobrança será feita."
+        },
+        "ended": "Assinatura encerrada no provedor.",
+        "endedLocalOnly": "Encerrada aqui, mas o provedor não confirmou o cancelamento. Conclua no painel do provedor.",
+        "endedUnsupported": "Encerrada aqui. Este provedor não pode ser cancelado por aqui.",
+        "alreadyEnded": "Já estava encerrada.",
+        "synced": "Verificado com o provedor: {outcome}."
+      },
+      "refund": {
+        "title": "Reembolsar {label}",
+        "intro": "O reembolso é enviado ao provedor de pagamento e volta para a forma de pagamento original do comprador.",
+        "charge": "Cobrança a reembolsar",
+        "pickCharge": "Escolha uma cobrança paga",
+        "loadingCharges": "Carregando cobranças",
+        "chargesFailed": "Não foi possível consultar o provedor de pagamento sobre as cobranças desta assinatura.",
+        "noPaidCharges": "O provedor não lista nenhuma cobrança paga para esta assinatura.",
+        "amount": "Valor ({currency})",
+        "amountHint": "Deixe vazio para reembolsar tudo o que ainda não foi reembolsado.",
+        "reason": "Motivo",
+        "endSubscription": "Encerrar também a assinatura agora para que não seja cobrada novamente",
+        "submit": "Reembolsar",
+        "processed": "{amount} reembolsado.",
+        "pending": "Reembolso enviado. O provedor está processando.",
+        "failed": "O provedor recusou o reembolso.",
+        "badAmount": "Digite o valor como número, por exemplo 12.50."
       }
     },
     "offline": {
@@ -711,6 +786,74 @@
       "rejected": "Este tipo de arquivo não é permitido. Use JPG, PNG, WEBP ou PDF.",
       "closed": "Não é mais possível enviar o comprovante de pagamento deste pedido.",
       "failed": "Não foi possível enviar o arquivo. Tente novamente."
+    },
+    "subscriptions": {
+      "title": "Assinaturas",
+      "subtitle": "Suas assinaturas de planos e complementos com o provedor de pagamento: o que renova, até quando você está pago e o que foi cobrado.",
+      "loading": "Carregando assinaturas",
+      "loadFailed": "Não foi possível carregar suas assinaturas. Tente novamente em instantes.",
+      "emptyTitle": "Nenhuma assinatura ainda",
+      "emptyMessage": "Quando você pagar um plano ou complemento com renovação automática, ele aparecerá aqui.",
+      "browsePlans": "Ver planos",
+      "failedBanner": "O último pagamento de {names} falhou. Seu acesso continua por enquanto enquanto o provedor tenta novamente; atualize sua forma de pagamento com seu banco ou o provedor para não perdê-lo.",
+      "paymentFailed": "O último pagamento falhou. O provedor está tentando novamente.",
+      "kind": {
+        "plan": "Plano",
+        "addon": "Complemento"
+      },
+      "status": {
+        "active": "Ativa",
+        "past_due": "Pagamento falhou",
+        "pending": "Aguardando pagamento",
+        "canceled": "Cancelada",
+        "expired": "Expirada"
+      },
+      "cycle": {
+        "monthly": "mês",
+        "yearly": "ano"
+      },
+      "price": "{amount} por {cycle}",
+      "renewsOn": "Renova em {date}",
+      "endsOn": "Pago até {date}. Não será renovada.",
+      "endedOn": "Encerrada em {date}",
+      "refreshFromProvider": "Atualizar pelo provedor",
+      "showCharges": "Mostrar cobranças",
+      "hideCharges": "Ocultar cobranças",
+      "cancel": "Cancelar assinatura",
+      "confirmTitle": "Cancelar {name}?",
+      "confirmBody": "Você mantém o acesso até {date}. Depois disso, não será renovada e você não será cobrado novamente.",
+      "confirmBodyNoDate": "Não será renovada e você não será cobrado novamente.",
+      "confirm": "Cancelar assinatura",
+      "keep": "Manter",
+      "cancelDone": "Cancelada. Seu período pago continua e nada mais será cobrado.",
+      "cancelFailed": "Não foi possível cancelar esta assinatura. Tente novamente ou contate o suporte.",
+      "forbidden": "Você não tem permissão para gerenciar assinaturas.",
+      "sync": {
+        "up_to_date": "Já está atualizado com o provedor de pagamento.",
+        "renewed": "Atualizada: o provedor tinha uma renovação mais recente.",
+        "gateway_canceled": "O provedor mostra esta assinatura como cancelada.",
+        "gateway_expired": "O provedor mostra esta assinatura como encerrada.",
+        "unknown": "Verificado com o provedor de pagamento.",
+        "failed": "Não foi possível acessar o provedor de pagamento. Tente novamente em instantes."
+      },
+      "chargesFailed": "Não foi possível carregar as cobranças.",
+      "chargesFromOrders": "Não foi possível acessar o provedor de pagamento, então são exibidos seus pedidos pagos.",
+      "noCharges": "Nenhuma cobrança ainda.",
+      "col": {
+        "date": "Data",
+        "amount": "Valor",
+        "status": "Status",
+        "receipt": "Recibo"
+      },
+      "chargeStatus": {
+        "paid": "Pago",
+        "issued": "Aguardando pagamento",
+        "failed": "Falhou",
+        "cancelled": "Cancelado",
+        "expired": "Expirado",
+        "other": "Outro"
+      },
+      "openReceipt": "Abrir recibo"
     }
   }
 }

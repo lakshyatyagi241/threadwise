@@ -93,3 +93,34 @@ export function periodEnd(iso: string, period: 'monthly' | 'yearly' | null): str
   d.setUTCDate(Math.min(day, last));
   return d.toISOString();
 }
+
+/** How many decimals a currency has (JPY 0, INR 2, KWD 3); two when the code is unknown. */
+export function currencyDigits(currency: string): number {
+  try {
+    return (
+      new Intl.NumberFormat('en', { style: 'currency', currency }).resolvedOptions()
+        .maximumFractionDigits ?? 2
+    );
+  } catch {
+    return 2;
+  }
+}
+
+/** A minor-unit amount as text ("1250" in INR is "12.50", "1250" in JPY is "1250"). Display only. */
+export function minorToMajor(minor: string, currency: string): string {
+  const digits = currencyDigits(currency);
+  if (digits === 0) return minor;
+  const padded = minor.padStart(digits + 1, '0');
+  return `${padded.slice(0, -digits)}.${padded.slice(-digits)}`;
+}
+
+/** Minor units of a major-unit amount typed by a person ("12.50" in INR is "1250"); null when it is not a positive amount. */
+export function toMinorUnits(input: string, currency: string): string | null {
+  const text = input.trim().replace(',', '.');
+  if (!/^\d+(\.\d+)?$/.test(text)) return null;
+  const digits = currencyDigits(currency);
+  const [whole = '0', frac = ''] = text.split('.');
+  if (frac.length > digits) return null;
+  const minor = BigInt(whole + frac.padEnd(digits, '0'));
+  return minor > 0n ? minor.toString() : null;
+}

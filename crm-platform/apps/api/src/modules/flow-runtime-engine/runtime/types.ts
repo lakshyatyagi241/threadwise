@@ -261,6 +261,8 @@ export interface StepOutcome {
   notes: string[];
   /** One line per message this step sent to the customer, for the run log. */
   sent?: string[];
+  /** A message of this step did not go out, though the run went on (a media link the provider refused). */
+  sendFailed?: boolean;
   /** What the node took in and produced, for the run log. */
   io?: { in: FlowStepIoItem[]; out: FlowStepIoItem[] };
   /** A contact property to write after the step commits ("also save to a contact attribute"); the engine does it. */

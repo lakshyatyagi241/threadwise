@@ -28,7 +28,7 @@
     "comingSoon": "Coming soon",
     "appGate": {
       "title": "{app} isn't part of your workspace",
-      "body": "{app} is an optional app. Add it from the Marketplace and it will appear in your menu.",
+      "body": "{app} is an optional app. Subscribe to it and install it from the Marketplace (if you already subscribed, press Install) and it will appear in your menu.",
       "bodyNoMarketplace": "{app} is an optional app that this workspace doesn't have. Ask a workspace admin to add it from the Marketplace.",
       "browse": "Browse the Marketplace",
       "back": "Back to the dashboard",
@@ -77,6 +77,11 @@
       "payments": "Payments"
     },
     "help": "Help",
+    "backgroundError": {
+      "message": "Some live figures, such as notifications, balance or inbox counts, could not be refreshed. What you see may be out of date.",
+      "retry": "Try again",
+      "dismiss": "Dismiss"
+    },
     "unreadCount": "{count, plural, one {# unread} other {# unread}}"
   }
 }
