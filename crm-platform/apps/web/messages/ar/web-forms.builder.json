@@ -131,7 +131,14 @@
         "custom": "مخصصة",
         "requiredByCrm": "مطلوبة",
         "inForm": "في النموذج",
-        "full": "بلغ النموذج حد العناصر."
+        "full": "بلغ النموذج حد العناصر.",
+        "section": {
+          "contact": "جهة الاتصال",
+          "contactAddress": "عنوان جهة الاتصال",
+          "company": "الشركة",
+          "companyAddress": "عنوان الشركة"
+        },
+        "addAddress": "إضافة كل حقول العنوان"
       },
       "list": {
         "title": "الحقول",

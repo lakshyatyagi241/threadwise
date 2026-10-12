@@ -131,7 +131,14 @@
         "custom": "Tùy chỉnh",
         "requiredByCrm": "Bắt buộc",
         "inForm": "Trong biểu mẫu",
-        "full": "Biểu mẫu đã đạt giới hạn số khối."
+        "full": "Biểu mẫu đã đạt giới hạn số khối.",
+        "section": {
+          "contact": "Liên hệ",
+          "contactAddress": "Địa chỉ liên hệ",
+          "company": "Công ty",
+          "companyAddress": "Địa chỉ công ty"
+        },
+        "addAddress": "Thêm tất cả trường địa chỉ"
       },
       "list": {
         "title": "Trường",

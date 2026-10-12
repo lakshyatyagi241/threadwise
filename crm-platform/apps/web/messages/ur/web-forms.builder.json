@@ -131,7 +131,14 @@
         "custom": "حسبِ ضرورت",
         "requiredByCrm": "لازمی",
         "inForm": "فارم میں",
-        "full": "فارم بلاکس کی حد تک پہنچ گیا ہے۔"
+        "full": "فارم بلاکس کی حد تک پہنچ گیا ہے۔",
+        "section": {
+          "contact": "رابطہ",
+          "contactAddress": "رابطے کا پتہ",
+          "company": "کمپنی",
+          "companyAddress": "کمپنی کا پتہ"
+        },
+        "addAddress": "پتے کے تمام فیلڈز شامل کریں"
       },
       "list": {
         "title": "فیلڈز",

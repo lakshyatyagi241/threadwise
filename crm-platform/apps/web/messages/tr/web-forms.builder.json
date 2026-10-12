@@ -131,7 +131,14 @@
         "custom": "Özel",
         "requiredByCrm": "Zorunlu",
         "inForm": "Formda",
-        "full": "Form blok sınırına ulaştı."
+        "full": "Form blok sınırına ulaştı.",
+        "section": {
+          "contact": "Kişi",
+          "contactAddress": "Kişi adresi",
+          "company": "Şirket",
+          "companyAddress": "Şirket adresi"
+        },
+        "addAddress": "Tüm adres alanlarını ekle"
       },
       "list": {
         "title": "Alanlar",

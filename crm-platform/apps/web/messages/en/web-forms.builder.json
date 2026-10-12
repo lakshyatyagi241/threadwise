@@ -131,7 +131,14 @@
         "custom": "Custom",
         "requiredByCrm": "Required",
         "inForm": "In form",
-        "full": "The form has reached its limit of blocks."
+        "full": "The form has reached its limit of blocks.",
+        "section": {
+          "contact": "Contact",
+          "contactAddress": "Contact address",
+          "company": "Company",
+          "companyAddress": "Company address"
+        },
+        "addAddress": "Add all address fields"
       },
       "list": {
         "title": "Fields",

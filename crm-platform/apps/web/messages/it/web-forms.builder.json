@@ -131,7 +131,14 @@
         "custom": "Personalizzata",
         "requiredByCrm": "Obbligatorio",
         "inForm": "Nel modulo",
-        "full": "Il modulo ha raggiunto il limite di blocchi."
+        "full": "Il modulo ha raggiunto il limite di blocchi.",
+        "section": {
+          "contact": "Contatto",
+          "contactAddress": "Indirizzo del contatto",
+          "company": "Azienda",
+          "companyAddress": "Indirizzo dell'azienda"
+        },
+        "addAddress": "Aggiungi tutti i campi indirizzo"
       },
       "list": {
         "title": "Campi",

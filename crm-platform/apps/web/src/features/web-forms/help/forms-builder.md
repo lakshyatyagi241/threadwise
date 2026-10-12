@@ -16,14 +16,16 @@ The builder has four tabs: **Build**, **Design**, **What happens next** and **Sh
 
 ## Build
 
-1. Add fields from the left. **New fields** lists the field types: short text, long text, email, phone number, number, amount, date, dropdown, single choice, multiple choice, checkbox and rating. **Text and layout** adds a heading, a paragraph or a divider.
+1. Add fields from the left. **CRM properties** comes first: pick a contact or company property and the field is added already linked to it (Full name and Email are marked **In form** once used). Below it, **New fields** lists the field types: short text, long text, email, phone number, number, amount, date, dropdown, single choice, multiple choice, checkbox and rating. **Text and layout** adds a heading, a paragraph or a divider.
 2. Select a block to change its settings on the right: label, help text, placeholder, required, width (full or half) and its rules. A choice field has an options list you can reorder.
-3. Move a block with its up and down buttons, duplicate it, or remove it. On a phone, **Add a field** opens the same list in a dialog.
+3. Move a block with its up and down buttons, duplicate it, or remove it. On a phone or a narrow window, **Add a field** opens the same list in a dialog, and a field's settings open under it; the three-column layout needs a wide screen.
 4. Set the form title and the introduction above the list. The introduction accepts plain text and the simple tags b, i, u, br, ul, ol, li and a.
 
 ### Where an answer goes
 
 Each field either stays with the submission only (**Create new field**) or fills a CRM property (**Map to CRM property**). The property list shows built-in contact and company properties and your custom ones. A property your workspace marks as required must be in the form and must be required, and the form cannot be published without it. A property can be used by one field only.
+
+**Address.** The contact and the company each have their own **address** group. **Add all address fields** adds Street, City, State or region, Postal code and Country in one go. The CRM keeps one address line, so the parts are joined into it ("12 Park Street, Kolkata, West Bengal 700016, India"); parts left empty are skipped. If a field is also linked to the **Full address**, that field wins and the parts are ignored. A returning contact keeps an address a person already entered; only blanks are filled. **Middle name** is also available for contacts.
 
 A form needs a way to reach the person: link an email or a phone field to the contact. Without it the form cannot be published.
 

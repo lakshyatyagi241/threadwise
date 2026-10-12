@@ -703,7 +703,12 @@ export class FormSubmitService {
       label: string;
       owner: number | null;
       customTypes: Map<string, string>;
-      extras: { title: string | null; address: string | null; message: string | null };
+      extras: {
+        title: string | null;
+        address: string | null;
+        message: string | null;
+        middleName: string | null;
+      };
       created: boolean;
     },
   ): Promise<void> {
@@ -715,6 +720,7 @@ export class FormSubmitService {
     if (blank(row.name) && v.name.name) patch.name = v.name.name;
     if (blank(row.firstName) && v.name.first) patch.firstName = v.name.first;
     if (blank(row.lastName) && v.name.last) patch.lastName = v.name.last;
+    if (blank(v.extras.middleName) && b.middle_name) patch.middleName = b.middle_name.slice(0, 191);
     if (blank(row.source)) patch.source = v.label;
     if (v.owner !== null && row.ownerId === null) patch.ownerId = v.owner;
     if (blank(v.extras.title) && b.title) patch.title = b.title.slice(0, 191);
