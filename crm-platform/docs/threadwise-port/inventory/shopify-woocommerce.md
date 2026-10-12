@@ -70,7 +70,7 @@ the domain named; the port builds everything it can and puts the rest behind int
 | TW-ECOM-031 | Concierge on WhatsApp: reorder, points, review reward, change address (WooCommerce) | pending               | P1       | L      | TW-ECOM-010                |
 | TW-ECOM-032 | WooCommerce companion plugin download                                               | done                  | P1       | M      | none                       |
 | TW-ECOM-033 | "Send from" sender chosen per WooCommerce integration                               | pending               | P1       | S      | TW-ECOM-009                |
-| TW-ECOM-034 | Inbound chokepoints: COD reply, stock opt-in, concierge, in Reference's order          | partial               | P0       | M      | team-inbox-conversations   |
+| TW-ECOM-034 | Inbound chokepoints: COD reply, stock opt-in, concierge, in Reference's order       | partial               | P0       | M      | team-inbox-conversations   |
 | TW-ECOM-035 | Invoices tab and auto-invoice on a paid order                                       | done                  | P1       | M      | invoicing                  |
 | TW-ECOM-036 | Checkout links for the flow commerce node (Shopify cart, WooCommerce order)         | done                  | P1       | M      | flow-runtime-engine        |
 | TW-ECOM-037 | Flow resume on a purchase (purchased port)                                          | done                  | P1       | S      | flow-runtime-engine        |

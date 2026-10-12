@@ -42,3 +42,24 @@
 [dir='rtl'] .animate-\[ann-scroll_var\(--ann-seconds\)_linear_infinite\] {
   animation-direction: reverse;
 }
+
+/* A message the reader was just taken to (a quoted reply tapped): a brief tint so it is easy to find. */
+@keyframes inbox-flash {
+  0%,
+  60% {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary, #6366f1) 45%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+.inbox-flash {
+  animation: inbox-flash 1.6s ease-out;
+  border-radius: 1rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .inbox-flash {
+    animation: none;
+    outline: 2px solid var(--color-primary, #6366f1);
+  }
+}

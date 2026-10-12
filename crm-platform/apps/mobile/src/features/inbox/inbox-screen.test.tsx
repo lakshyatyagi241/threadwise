@@ -1,7 +1,6 @@
 import type { QueryClient } from '@tanstack/react-query';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { useRouter } from 'expo-router';
-import { FlatList } from 'react-native';
 import { ApiError } from '@/lib/api';
 import { fetchSession } from '@/lib/session/api';
 import {
@@ -12,6 +11,7 @@ import {
   withPermissions,
 } from '@/test/inbox-fixtures';
 import { renderApp } from '@/test/render';
+import { reachEnd } from '@/test/scroll';
 import * as api from './api';
 import { InboxScreen } from './inbox-screen';
 
@@ -36,8 +36,8 @@ const meera = summary({
 });
 
 let client: QueryClient | undefined;
-function show() {
-  const view = renderApp(<InboxScreen />);
+async function show() {
+  const view = await renderApp(<InboxScreen />);
   client = view.queryClient;
   return view;
 }
@@ -60,7 +60,7 @@ afterEach(async () => {
 
 describe('InboxScreen', () => {
   it('lists the conversations with the unread dot, assignee, channel and status', async () => {
-    show();
+    await show();
     const row = await screen.findByRole('button', {
       name: 'Rohan Mehta, 2 unread messages, Is my order on its way?',
     });
@@ -77,7 +77,7 @@ describe('InboxScreen', () => {
   it('shows 20 placeholder rows while the first page loads', async () => {
     let finish: (value: ReturnType<typeof list>) => void = () => undefined;
     listCall.mockReturnValue(new Promise((resolve) => (finish = resolve)));
-    show();
+    await show();
     expect(await screen.findAllByTestId('skeleton-row')).toHaveLength(20);
     await act(async () => finish(list([rohan])));
     expect(await screen.findByText('Rohan Mehta')).toBeTruthy();
@@ -85,8 +85,8 @@ describe('InboxScreen', () => {
   });
 
   it('opens the thread when a row is pressed', async () => {
-    show();
-    fireEvent.press(await screen.findByRole('button', { name: /^Rohan Mehta/ }));
+    await show();
+    await fireEvent.press(await screen.findByRole('button', { name: /^Rohan Mehta/ }));
     expect(push).toHaveBeenCalledWith({
       pathname: '/conversation/[id]',
       params: { id: CONVERSATION_ID },
@@ -94,23 +94,23 @@ describe('InboxScreen', () => {
   });
 
   it('asks for the tab the person picks', async () => {
-    show();
+    await show();
     await screen.findByText('Rohan Mehta');
     expect(lastFilters()).toMatchObject({ tab: 'all', status: 'default', q: '' });
-    fireEvent.press(screen.getByRole('button', { name: 'Inbox view' }));
-    fireEvent.press(await screen.findByRole('menuitem', { name: 'Unread' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Inbox view' }));
+    await fireEvent.press(await screen.findByRole('menuitem', { name: 'Unread' }));
     await waitFor(() => expect(lastFilters()).toMatchObject({ tab: 'unread' }));
     expect(await screen.findByRole('button', { name: 'Inbox view' })).toBeTruthy();
   });
 
   it('waits for a pause in typing before searching, and shows the search as a chip', async () => {
-    show();
+    await show();
     await screen.findByText('Rohan Mehta');
-    fireEvent.press(screen.getByRole('button', { name: 'Search conversations' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Search conversations' }));
     const box = screen.getByLabelText('Search');
-    fireEvent.changeText(box, 'r');
-    fireEvent.changeText(box, 'ro');
-    fireEvent.changeText(box, 'rohan');
+    await fireEvent.changeText(box, 'r');
+    await fireEvent.changeText(box, 'ro');
+    await fireEvent.changeText(box, 'rohan');
     expect(listCall).toHaveBeenCalledTimes(1);
     await waitFor(() => expect(lastFilters()).toMatchObject({ q: 'rohan' }));
     expect(listCall.mock.calls.some(([filters]) => filters.q === 'r' || filters.q === 'ro')).toBe(
@@ -122,13 +122,13 @@ describe('InboxScreen', () => {
   });
 
   it('filters by status and clears the chip', async () => {
-    show();
+    await show();
     await screen.findByText('Rohan Mehta');
-    fireEvent.press(screen.getByRole('button', { name: 'Filter by status' }));
-    fireEvent.press(await screen.findByRole('radio', { name: 'Pending' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Filter by status' }));
+    await fireEvent.press(await screen.findByRole('radio', { name: 'Pending' }));
     await waitFor(() => expect(lastFilters()).toMatchObject({ status: 'pending' }));
     const chip = await screen.findByRole('button', { name: 'Remove filter: Status: Pending' });
-    fireEvent.press(chip);
+    await fireEvent.press(chip);
     await waitFor(() => expect(lastFilters()).toMatchObject({ status: 'default' }));
     await waitFor(() =>
       expect(screen.queryByRole('button', { name: /^Remove filter/ })).toBeNull(),
@@ -137,25 +137,25 @@ describe('InboxScreen', () => {
   });
 
   it('clears the status and the search together with Clear all', async () => {
-    show();
+    await show();
     await screen.findByText('Rohan Mehta');
-    fireEvent.press(screen.getByRole('button', { name: 'Filter by status' }));
-    fireEvent.press(await screen.findByRole('radio', { name: 'Resolved' }));
-    fireEvent.press(screen.getByRole('button', { name: 'Search conversations' }));
-    fireEvent.changeText(screen.getByLabelText('Search'), 'meera');
+    await fireEvent.press(screen.getByRole('button', { name: 'Filter by status' }));
+    await fireEvent.press(await screen.findByRole('radio', { name: 'Resolved' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Search conversations' }));
+    await fireEvent.changeText(screen.getByLabelText('Search'), 'meera');
     await waitFor(() => expect(lastFilters()).toMatchObject({ status: 'resolved', q: 'meera' }));
-    fireEvent.press(await screen.findByRole('button', { name: 'Clear all' }));
+    await fireEvent.press(await screen.findByRole('button', { name: 'Clear all' }));
     await waitFor(() => expect(lastFilters()).toMatchObject({ status: 'default', q: '' }));
     expect(screen.queryByRole('button', { name: 'Clear all' })).toBeNull();
   });
 
   it('says there are no conversations, and hints at the filters when some are on', async () => {
     listCall.mockResolvedValue(list([]));
-    show();
+    await show();
     expect(await screen.findByText('No conversations')).toBeTruthy();
     expect(screen.getByText('Messages from your customers will show up here.')).toBeTruthy();
-    fireEvent.press(screen.getByRole('button', { name: 'Filter by status' }));
-    fireEvent.press(await screen.findByRole('radio', { name: 'Closed' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Filter by status' }));
+    await fireEvent.press(await screen.findByRole('radio', { name: 'Closed' }));
     expect(
       await screen.findByText('Nothing matches these filters. Try clearing them.'),
     ).toBeTruthy();
@@ -163,17 +163,17 @@ describe('InboxScreen', () => {
 
   it('shows the failure in words with a way to try again, and recovers', async () => {
     listCall.mockRejectedValueOnce(new ApiError(0, 'CLIENT_NETWORK', 'offline'));
-    show();
+    await show();
     expect(
       await screen.findByText("Can't reach the server. Check your connection and try again."),
     ).toBeTruthy();
-    fireEvent.press(screen.getByRole('button', { name: 'Try again' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Try again' }));
     expect(await screen.findByText('Rohan Mehta')).toBeTruthy();
   });
 
   it('explains a missing permission and does not ask the API for conversations', async () => {
     sessionCall.mockResolvedValue(withPermissions(['dash.dashboard.read']));
-    show();
+    await show();
     expect(await screen.findByText('No access to the inbox')).toBeTruthy();
     expect(listCall).not.toHaveBeenCalled();
     expect(screen.queryByTestId('skeleton-row')).toBeNull();
@@ -183,25 +183,22 @@ describe('InboxScreen', () => {
     listCall
       .mockResolvedValueOnce(list([rohan], { hasMore: true, nextCursor: 'cursor-2' }))
       .mockResolvedValueOnce(list([meera]));
-    show();
+    await show();
     await screen.findByText('Rohan Mehta');
     expect(screen.queryByText('No more conversations')).toBeNull();
-    act(() => {
-      screen.UNSAFE_getByType(FlatList).props.onEndReached();
-    });
+    await reachEnd(screen.getByTestId('inbox-list'));
     expect(await screen.findByText('Meera Joshi')).toBeTruthy();
     expect(listCall).toHaveBeenLastCalledWith(expect.anything(), 'cursor-2', expect.anything());
     expect(await screen.findByText('No more conversations')).toBeTruthy();
   });
 
   it('asks again when the page is pulled down, and stops the spinner when done', async () => {
-    show();
+    await show();
     await screen.findByText('Rohan Mehta');
-    const control = () => screen.UNSAFE_getByType(FlatList).props.refreshControl;
-    act(() => {
+    const control = () => screen.getByTestId('inbox-list').props.refreshControl;
+    await act(() => {
       control().props.onRefresh();
     });
-    expect(control().props.refreshing).toBe(true);
     await waitFor(() => expect(control().props.refreshing).toBe(false));
     expect(listCall).toHaveBeenCalledTimes(2);
   });

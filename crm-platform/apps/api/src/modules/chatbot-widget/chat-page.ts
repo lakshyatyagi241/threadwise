@@ -27,6 +27,10 @@ body { display: flex; flex-direction: column; background: #fff; }
 .bubble { max-width: 78%; padding: 8px 12px; border-radius: 14px; font-size: 13.5px; line-height: 1.4; word-wrap: break-word; white-space: pre-wrap; box-shadow: 0 1px 2px rgba(0,0,0,.06); }
 .bubble.in { align-self: flex-start; }
 .bubble.out { align-self: flex-end; background: #DCF8C6; color: #1f2937; }
+.chips { align-self: flex-start; display: flex; flex-wrap: wrap; gap: 6px; max-width: 90%; }
+.chip { padding: 6px 12px; border-radius: 16px; border: 1px solid #075E54; background: #fff; color: #075E54; font-size: 12.5px; font-weight: 600; cursor: pointer; }
+.chip:hover { background: #f0fdf4; }
+.chip:disabled { opacity: .5; cursor: default; }
 .typing { align-self: flex-start; font-size: 11.5px; color: #6b7280; padding: 4px 8px; font-style: italic; }
 .intake { background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 10px; padding: 10px; margin-bottom: 8px; }
 .intake .title { font-size: 12px; color: #374151; margin-bottom: 6px; font-weight: 600; }
@@ -78,8 +82,30 @@ const SCRIPT = `
     }
     b.textContent = text;
     if (extras && extras.id) b.dataset.id = extras.id;
+    // Reply buttons only stay on the newest line: any new line (a tap, a typed answer, the bot's next message) retires them.
+    clearChips();
     m.appendChild(b);
+    if (extras && extras.buttons && extras.buttons.length) addChips(extras.buttons);
     m.scrollTop = m.scrollHeight;
+  }
+
+  function clearChips() {
+    var old = document.querySelectorAll('.chips');
+    for (var i = 0; i < old.length; i++) old[i].remove();
+  }
+
+  function addChips(buttons) {
+    var box = document.createElement('div');
+    box.className = 'chips';
+    buttons.forEach(function (btn) {
+      var c = document.createElement('button');
+      c.type = 'button';
+      c.className = 'chip';
+      c.textContent = btn.title;
+      c.onclick = function () { send(btn.title, btn.id); };
+      box.appendChild(c);
+    });
+    $('msgs').appendChild(box);
   }
 
   function paintChrome() {
@@ -164,8 +190,8 @@ const SCRIPT = `
         paintChrome();
         var transcript = data.transcript || [];
         if (transcript.length) {
-          transcript.forEach(function (m) {
-            addBubble(m.dir === 'out' ? 'out' : 'in', m.body || '', { id: m.id });
+          transcript.forEach(function (m, i) {
+            addBubble(m.dir === 'out' ? 'out' : 'in', m.body || '', { id: m.id, buttons: i === transcript.length - 1 ? m.buttons : null });
             if ((m.id || 0) > lastSeenMsgId) lastSeenMsgId = m.id;
           });
         } else if (cfg.welcome_message) {
@@ -183,13 +209,14 @@ const SCRIPT = `
     // with a disabled Send button.
   }
 
-  function send() {
+  function send(tapTitle, tapId) {
     var txt = $('txt');
-    var body = (txt.value || '').trim();
+    var body = typeof tapTitle === 'string' ? tapTitle : (txt.value || '').trim();
     if (!body) return;
-    txt.value = '';
+    if (typeof tapTitle !== 'string') txt.value = '';
     addBubble('out', body);
     var payload = { body: body };
+    if (tapId) payload.tap_id = tapId;
     var vid = storedUuid();
     if (vid) payload.visitor_uuid = vid;
     if (intakeDone) {
@@ -220,6 +247,8 @@ const SCRIPT = `
           addBubble('in', json.reply.body, { id: json.reply.id });
           lastSeenMsgId = Math.max(lastSeenMsgId, json.reply.id || 0);
         }
+        // A flow bot answers through the poll: look often for a little while after the visitor writes.
+        burstPoll();
       })
       .catch(function () {
         typing.remove();
@@ -227,7 +256,7 @@ const SCRIPT = `
       })
   }
 
-  $('send').addEventListener('click', send);
+  $('send').addEventListener('click', function () { send(); });
   $('txt').addEventListener('keydown', function (e) { if (e.key === 'Enter') send(); });
 
   // Replies a person typed in the team inbox arrive here: every business message not drawn yet is shown once.
@@ -235,14 +264,25 @@ const SCRIPT = `
     fetch(withVid(API_HIS + '?since=' + lastSeenMsgId), { credentials: 'include' })
       .then(function (res) { return res.ok ? res.json() : { messages: [] }; })
       .then(function (json) {
-        (json.messages || []).forEach(function (m) {
-          if (!document.querySelector('[data-id="' + m.id + '"]')) addBubble('in', m.body || '', { id: m.id });
+        var list = json.messages || [];
+        list.forEach(function (m, i) {
+          if (!document.querySelector('[data-id="' + m.id + '"]')) addBubble('in', m.body || '', { id: m.id, buttons: i === list.length - 1 ? m.buttons : null });
           if (m.id > lastSeenMsgId) lastSeenMsgId = m.id;
         });
       })
       .catch(function () {});
   }
   setInterval(poll, 4000);
+  var burstTimer = null;
+  function burstPoll() {
+    if (burstTimer) clearInterval(burstTimer);
+    var left = 20;
+    burstTimer = setInterval(function () {
+      poll();
+      left -= 1;
+      if (left <= 0) { clearInterval(burstTimer); burstTimer = null; }
+    }, 1000);
+  }
 
   loadConfig();
 })();

@@ -43,7 +43,8 @@
       "ai_token_limit_monthly": "प्रति माह AI टोकन",
       "forms": "वेब फ़ॉर्म",
       "form_submissions_monthly": "प्रति माह फ़ॉर्म सबमिशन",
-      "ai_form_generations_monthly": "प्रति माह AI फ़ॉर्म बिल्डर जनरेशन"
+      "ai_form_generations_monthly": "प्रति माह AI फ़ॉर्म बिल्डर जनरेशन",
+      "sms_monthly": "प्रति माह SMS"
     },
     "features": {
       "automation": "ऑटोमेशन",
@@ -74,7 +75,8 @@
       "forms_and_links": "फ़ॉर्म और लिंक",
       "extra_channels": "Telegram, Facebook और Instagram",
       "form_builder": "फ़ॉर्म",
-      "waba_groups": "WhatsApp ग्रुप"
+      "waba_groups": "WhatsApp ग्रुप",
+      "sms": "SMS चैनल"
     },
     "limitGroups": {
       "messaging": "मैसेजिंग",
@@ -124,7 +126,8 @@
       "ai_token_limit_monthly": "प्लेटफ़ॉर्म की कुंजियों पर AI सहायकों द्वारा कैलेंडर महीने में इस्तेमाल किए गए टोकन। अपनी कुंजियों वाले वर्कस्पेस पर सीमा नहीं है।",
       "forms": "सक्रिय वेब फ़ॉर्म (Forms ऐप)। फ़ॉर्म आर्काइव करने से जगह खाली होती है। 0 = असीमित।",
       "form_submissions_monthly": "कैलेंडर महीने में स्वीकार किए गए फ़ॉर्म सबमिशन, स्पैम छोड़कर। सीमा से ऊपर भी सबमिशन समीक्षा के लिए सेव होता है, कभी हटाया नहीं जाता। 0 = असीमित।",
-      "ai_form_generations_monthly": "कैलेंडर महीने में AI फ़ॉर्म बिल्डर जनरेशन, मरम्मत के दोबारा प्रयास सहित। 0 = असीमित।"
+      "ai_form_generations_monthly": "कैलेंडर महीने में AI फ़ॉर्म बिल्डर जनरेशन, मरम्मत के दोबारा प्रयास सहित। 0 = असीमित।",
+      "sms_monthly": "कैलेंडर माह में भेजे गए आउटबाउंड SMS संदेश। 0 = असीमित।"
     },
     "planAddons": {
       "title": "आपके प्लान में उपलब्ध ऐड-ऑन",

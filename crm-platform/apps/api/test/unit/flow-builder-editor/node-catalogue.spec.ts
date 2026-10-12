@@ -16,9 +16,9 @@ import {
 const ids = (mode: FlowType) => flbPaletteFor(mode).map((d) => d.id);
 
 describe('node catalogue: palette and per-channel availability (TW-FLB-016)', () => {
-  it('a WhatsApp flow lists the 35 nodes Reference lists plus the Ask for file / location additions and the five CRM additions and the API Library node, including Template, List, Sequence, MySQL and the Google nodes', () => {
+  it('a WhatsApp flow lists the 35 nodes Reference lists plus the Ask for file / location additions and the five CRM additions and the API Library node and the FAQ node, including Template, List, Sequence, MySQL and the Google nodes', () => {
     const chat = ids('chat');
-    expect(chat).toHaveLength(45);
+    expect(chat).toHaveLength(46);
     for (const t of [
       'template',
       'list',
@@ -29,6 +29,7 @@ describe('node catalogue: palette and per-channel availability (TW-FLB-016)', ()
       'google_form',
       'deal',
       'api_library',
+      'faq',
     ]) {
       expect(chat).toContain(t);
     }
@@ -49,6 +50,7 @@ describe('node catalogue: palette and per-channel availability (TW-FLB-016)', ()
         'delay',
         'webhook',
         'ai',
+        'faq',
         'end',
         'update_contact',
         'list_member',
@@ -111,6 +113,25 @@ describe('node catalogue: palette and per-channel availability (TW-FLB-016)', ()
       expect(flbNodeInMode(FLB_NODE_TYPES.end!, mode)).toBe(true);
     }
     expect(FLB_NODE_TYPES.trigger?.singleton).toBe(true);
+  });
+
+  it('a Website chat flow offers only what the widget renders: text, quick replies, a question and the AI reply, plus the logic nodes', () => {
+    const web = ids('web');
+    for (const t of [
+      'trigger',
+      'message',
+      'buttons',
+      'ask',
+      'ai',
+      'condition',
+      'delay',
+      'webhook',
+      'end',
+    ])
+      expect(web).toContain(t);
+    // Rich WhatsApp components stay off the web channel until the widget can show them.
+    for (const t of ['media', 'list', 'template', 'sequence', 'cta', 'ask_file', 'ask_location'])
+      expect(web).not.toContain(t);
   });
 
   it('searching "sheet" matches only the Google Sheets nodes by label, description and group (case-insensitive)', () => {

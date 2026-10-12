@@ -7,7 +7,7 @@ Spec: `docs/threadwise-port/inventory/platform-settings-branding-storage.md`. Zo
 | Piece          | Where                                                                                       |
 | -------------- | ------------------------------------------------------------------------------------------- |
 | API module     | `apps/api/src/modules/platform-settings-branding-storage/` (flat, one Nest module)          |
-| Providers      | `apps/api/src/infra/providers/platform-settings-branding-storage/` (S3 probe) |
+| Providers      | `apps/api/src/infra/providers/platform-settings-branding-storage/` (S3 probe)               |
 | Contracts      | `packages/contracts/src/platform-settings-branding-storage/`                                |
 | Web (operator) | `apps/web/src/app/(admin)/(platform-settings-branding-storage)/admin/settings/...`          |
 | Web feature    | `apps/web/src/features/platform-settings-branding-storage/`, messages `messages/en/...json` |

@@ -100,10 +100,10 @@ No route for the hand-off. After the pipeline's mirror step, its own guarded `in
 
 No HTTP route. The flow runtime's Commerce shop node (Shopify, WooCommerce) calls `EcomFlowShop`, bound to its `FlowShopGate` at start.
 
-| Call           | What                                                                                                                                                                                                                           |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `inStock`      | The retailer ids sellable now, from the mirrored products; unknown ids are kept; `null` for `whatsapp_shop`.                                                                                                                   |
-| `sendNative`   | Always false here (the node sends its card stack).                                                                                                                                                                             |
+| Call           | What                                                                                                                                                                                                                               |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `inStock`      | The retailer ids sellable now, from the mirrored products; unknown ids are kept; `null` for `whatsapp_shop`.                                                                                                                       |
+| `sendNative`   | Always false here (the node sends its card stack).                                                                                                                                                                                 |
 | `checkoutLink` | Shopify: Storefront cart (store with `metadata.storefrontAccessToken`) else draft order, note `threadwise-flow:<run>`. WooCommerce: pending order with meta `_wa_flow_session` = run. `null` when the store, product or API fails. |
 
 `orders/create`, `orders/paid` (Shopify) and `order.created`, `order.updated` (WooCommerce) carrying the run reference advance the waiting run through `purchased`; the reference is a run uuid only, in the same workspace.

@@ -82,7 +82,7 @@ const RELEASE_IF_OWNER =
  *    once per `clientReference`. The halt is checked at send time, not only at enqueue time, so a halt stops what is already queued.
  *
  * Idempotency: a send that succeeded is remembered for 24 hours under its client reference; a retry (a redelivered job, a double
- * click) gets the stored answer and the provider is not called again. A failed send stores nothing, so a retry really retries. The
+ * click) gets the stored answer and the provider is not called again. A failed send stores nothing, so a retry really retries; a send the provider accepted and then failed in a receipt is forgotten by `forget` when the agent presses Retry. The
  * residual window (the process dies after the provider accepted and before the answer is stored) is documented in
  * plan-inbox-chat.md section 3.4: the Cloud API has no idempotency key of its own.
  */
@@ -183,6 +183,16 @@ export class ChannelDispatcher {
     );
   }
 
+  /**
+   * Forgets the stored answer of a send. A provider can accept a message (the answer is stored) and then report, in a receipt, that it
+   * could not deliver it; the agent's Retry of that message must really send again, not be handed the first answer. Only called for a
+   * message the provider had already accepted, so it cannot double-send one that is still in flight.
+   */
+  async forget(channel: ChannelRuntime, clientReference: string): Promise<void> {
+    const key = `chat:dispatch:${channel.orgId}:${channel.uuid}:${clientReference}`;
+    await this.redisCall(() => this.redis.del(key));
+  }
+
   // --- internals ---------------------------------------------------------------------------------------------------------------
 
   private parse(raw: unknown): OutboundEnvelope {
@@ -236,6 +246,7 @@ export class ChannelDispatcher {
     if (envelope.kind === 'location' && !caps.media.includes('location')) unsupported('locations');
     if (envelope.kind === 'contacts' && !caps.media.includes('contact'))
       unsupported('contact cards');
+    if (envelope.kind === 'interactive' && !caps.interactive) unsupported('buttons');
 
     const window = adapter.windowInfo(channel, lastInboundAt, now);
     // A template is the one thing allowed outside the window; everything else is a free-form reply.
@@ -283,6 +294,7 @@ export class ChannelDispatcher {
             status: step.status,
             at: new Date(acceptedAt.getTime() + step.delayMs),
             errorCode: step.errorCode,
+            errorMessage: step.errorMessage,
           },
           { delayMs: step.delayMs },
         );

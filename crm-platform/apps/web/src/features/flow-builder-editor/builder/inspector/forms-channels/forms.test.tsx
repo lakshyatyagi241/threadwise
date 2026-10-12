@@ -145,7 +145,7 @@ describe('Chatbot form', () => {
   it('with no agent it says so and points at the team inbox', () => {
     const html = render('chatbot', { bot: '' });
     expect(html).toContain('No agents yet');
-    expect(html).toContain('/team-inbox');
+    expect(html).toContain('/inbox');
   });
 });
 

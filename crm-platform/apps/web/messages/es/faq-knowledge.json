@@ -1,0 +1,690 @@
+{
+  "faq": {
+    "nav": {
+      "faq": "Preguntas frecuentes",
+      "label": "Secciones de preguntas frecuentes",
+      "tab": {
+        "faqs": "Preguntas frecuentes",
+        "test": "Probar",
+        "unanswered": "Sin respuesta",
+        "insights": "Estadísticas",
+        "settings": "Ajustes"
+      },
+      "unansweredCount": "{count, plural, one {# mensaje sin respuesta} other {# mensajes sin respuesta}}"
+    },
+    "common": {
+      "dismiss": "Descartar",
+      "retry": "Reintentar",
+      "requestId": "Solicitud {id}",
+      "noAccessTitle": "No tienes acceso a esta pantalla",
+      "noAccess": "Pide a un administrador del espacio de trabajo que dé a tu rol el permiso {permission}."
+    },
+    "errors": {
+      "network": "No se pudo conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
+      "forbidden": "Tu rol no tiene permiso para hacer esto.",
+      "notFound": "Esta pregunta frecuente o mensaje ya no existe. Es posible que se haya eliminado.",
+      "conflict": "Otra persona modificó esto mientras lo editabas.",
+      "duplicateQuestion": "Otra pregunta frecuente ya tiene esta pregunta.",
+      "duplicateVariation": "Esta pregunta frecuente ya tiene esta formulación.",
+      "limitReached": "Tu espacio de trabajo alcanzó el límite de preguntas frecuentes. Elimina las que no uses o sus variantes, o pide a tu administrador de plataforma que lo aumente.",
+      "flowNotFound": "El flujo elegido ya no existe en este espacio de trabajo. Elige otro.",
+      "embeddingUnavailable": "El proveedor de IA no está disponible. Añade una clave de OpenRouter a tu espacio de trabajo, o pide a tu administrador de plataforma que active la clave compartida, y vuelve a intentarlo.",
+      "engineDisabled": "Las respuestas con preguntas frecuentes están desactivadas para toda la plataforma en este momento.",
+      "modelNotAllowed": "El modelo de IA para coincidencias de la plataforma no está permitido. Consulta a tu administrador de plataforma.",
+      "validation": "Algunos campos requieren atención.",
+      "rateLimited": "Demasiadas solicitudes. Espera un momento e inténtalo de nuevo.",
+      "unexpected": "Algo salió mal. Inténtalo de nuevo y comparte el id de solicitud con soporte si el problema continúa.",
+      "flowNodeNotFound": "El paso elegido ya no está en este flujo. Elige otro paso o empieza desde el inicio del flujo."
+    },
+    "banner": {
+      "enabledToast": "Las respuestas con preguntas frecuentes están activadas.",
+      "engineOff": "La plataforma desactivó las respuestas con preguntas frecuentes. Los clientes no recibirán respuestas hasta que se vuelvan a activar.",
+      "modelChanged": "La plataforma cambió el modelo de IA después de que ajustaras este umbral. Las puntuaciones cambiaron, así que revisa tu sensibilidad.",
+      "reviewSensitivity": "Revisar sensibilidad",
+      "offTitle": "Las respuestas con preguntas frecuentes están DESACTIVADAS para los clientes",
+      "offBody": "Puedes redactar y probar preguntas frecuentes, pero los clientes no recibirán respuestas hasta que las actives.",
+      "offNoRight": "Pide a alguien con el permiso faq.settings.manage (normalmente un administrador del espacio de trabajo) que las active.",
+      "enable": "Activar respuestas con preguntas frecuentes"
+    },
+    "list": {
+      "title": "Preguntas frecuentes",
+      "subtitle": "Las preguntas que hacen tus clientes y lo que responde tu bot. Los clientes no tienen que usar tus palabras exactas.",
+      "add": "Añadir pregunta frecuente",
+      "stats": {
+        "label": "Totales de preguntas frecuentes",
+        "total": "Preguntas frecuentes",
+        "active": "Activas",
+        "paused": "En pausa",
+        "variations": "Formulaciones",
+        "pending": "Indexando",
+        "pendingHint": "Activas en segundos",
+        "failed": "Error de indexación",
+        "failedHint": "Requiere atención"
+      },
+      "failedBanner": "{count, plural, one {# formulación no se pudo indexar} other {# formulaciones no se pudieron indexar}}, por lo que aún no pueden coincidir con mensajes de clientes.",
+      "showFailed": "Ver preguntas frecuentes con errores",
+      "search": "Buscar preguntas frecuentes",
+      "searchPlaceholder": "Buscar preguntas y formulaciones",
+      "filter": {
+        "status": "Estado",
+        "anyStatus": "Cualquier estado",
+        "category": "Categoría",
+        "anyCategory": "Cualquier categoría",
+        "indexing": "Indexación",
+        "anyIndexing": "Cualquiera",
+        "pending": "Aún indexando",
+        "failed": "Con errores"
+      },
+      "status": {
+        "active": "Activas",
+        "paused": "En pausa"
+      },
+      "clearFilters": "Borrar filtros",
+      "bulk": {
+        "label": "Acciones en lote",
+        "selected": "{count, plural, one {# pregunta frecuente seleccionada} other {# preguntas frecuentes seleccionadas}}",
+        "pause": "Pausar",
+        "activate": "Activar",
+        "delete": "Eliminar",
+        "clear": "Borrar selección",
+        "done": {
+          "pause": "{count, plural, one {# pregunta frecuente en pausa} other {# preguntas frecuentes en pausa}}.",
+          "activate": "{count, plural, one {# pregunta frecuente activada} other {# preguntas frecuentes activadas}}.",
+          "delete": "{count, plural, one {# pregunta frecuente eliminada} other {# preguntas frecuentes eliminadas}}."
+        }
+      },
+      "paused": "Pregunta frecuente en pausa.",
+      "activated": "Pregunta frecuente activada.",
+      "deleted": "Pregunta frecuente eliminada.",
+      "empty": {
+        "title": "Enseña a tu bot las respuestas a las preguntas comunes",
+        "body": "Escribe una pregunta y su respuesta una sola vez. Tu bot reconoce lo que escriben los clientes, con sus propias palabras, y responde con la respuesta o inicia un flujo.",
+        "how": "Añade otras formas de preguntar lo mismo (formulaciones) y pruébalo antes de que lo vean los clientes.",
+        "cta": "Añade tu primera pregunta frecuente",
+        "noRight": "Pide a un administrador del espacio de trabajo el permiso para añadir preguntas frecuentes."
+      },
+      "noMatch": {
+        "title": "Ninguna pregunta frecuente coincide con estos filtros",
+        "body": "Prueba otra búsqueda o borra los filtros."
+      },
+      "selectAll": "Seleccionar todas las preguntas frecuentes de esta página",
+      "selectRow": "Seleccionar {question}",
+      "col": {
+        "question": "Pregunta",
+        "answer": "Respuesta",
+        "indexing": "Formulaciones activas",
+        "answered": "Respondidas (90 días)",
+        "status": "Estado",
+        "actions": "Acciones"
+      },
+      "variationCount": "{count, plural, one {# formulación} other {# formulaciones}}",
+      "flowMissing": "Falta el flujo",
+      "neverAnswered": "Aún no",
+      "toggleLabel": "Activa: {question}",
+      "edit": "Editar {question}",
+      "editShort": "Editar",
+      "delete": "Eliminar {question}",
+      "deleteShort": "Eliminar",
+      "loadMore": "Cargar más",
+      "loadingMore": "Cargando",
+      "confirm": {
+        "bulkTitle": "¿Eliminar {count, plural, one {# pregunta frecuente} other {# preguntas frecuentes}}?",
+        "bulkBody": "{count, plural, one {Esta pregunta frecuente y sus formulaciones se eliminarán} other {Estas preguntas frecuentes y sus formulaciones se eliminarán}} de forma permanente. Esta acción no se puede deshacer.",
+        "rowTitle": "¿Eliminar esta pregunta frecuente?",
+        "rowBody": "\"{question}\" y todas sus formulaciones se eliminarán de forma permanente. Esta acción no se puede deshacer.",
+        "delete": "Eliminar",
+        "cancel": "Cancelar"
+      },
+      "indexing": {
+        "summary": "{ready} activas, {pending} indexando, {failed} con errores",
+        "ready": "{count} activas",
+        "pending": "{count} indexando",
+        "failed": "{count} con errores"
+      },
+      "stepMissing": "Falta el paso",
+      "startsAt": "Empieza en: {step}"
+    },
+    "editor": {
+      "back": "Volver a preguntas frecuentes",
+      "backToList": "Volver a preguntas frecuentes",
+      "newTitle": "Nueva pregunta frecuente",
+      "newSubtitle": "Escribe la pregunta y su respuesta, y luego añade otras formas en que los clientes podrían preguntarla.",
+      "editTitle": "Editar pregunta frecuente",
+      "unsaved": "Cambios sin guardar",
+      "cancel": "Cancelar",
+      "create": "Crear pregunta frecuente",
+      "save": "Guardar cambios",
+      "delete": "Eliminar",
+      "created": "Pregunta frecuente creada.",
+      "saved": "Pregunta frecuente guardada.",
+      "deleted": "Pregunta frecuente eliminada.",
+      "readOnly": "Puedes ver esta pregunta frecuente, pero tu rol no puede modificarla.",
+      "faqLimit": "Tu espacio de trabajo llegó al límite de {max} preguntas frecuentes. Elimina una para añadir otra.",
+      "prefilled": "La pregunta se completó a partir de un mensaje de cliente sin respuesta. Al guardar esta pregunta frecuente, ese mensaje también se marcará como atendido.",
+      "tryItSaveFirst": "Primero guarda la pregunta frecuente; después podrás probar cómo coinciden los mensajes de clientes.",
+      "conflict": {
+        "title": "Otra persona modificó esta pregunta frecuente",
+        "body": "Tus ediciones siguen aquí. Consérvalas y guarda de nuevo sobre la última versión, o descártalas y carga la última.",
+        "keep": "Conservar mis ediciones",
+        "reload": "Cargar la última versión",
+        "kept": "Actualizado a la última versión. Se conservan tus ediciones; guarda para aplicarlas."
+      },
+      "question": {
+        "title": "Pregunta",
+        "hint": "La pregunta tal como la escribirías. También cuenta como la primera formulación.",
+        "label": "Pregunta",
+        "count": "{count} / {max}"
+      },
+      "category": {
+        "label": "Categoría",
+        "hint": "Opcional. Te ayuda a filtrar."
+      },
+      "status": {
+        "label": "Estado",
+        "hint": "Las preguntas frecuentes en pausa nunca responden.",
+        "active": "Activa",
+        "paused": "En pausa"
+      },
+      "answer": {
+        "title": "Respuesta",
+        "hint": "Lo que recibe el cliente cuando coincide esta pregunta frecuente.",
+        "text": "Respuesta de texto",
+        "flow": "Iniciar un flujo",
+        "textLabel": "Texto de la respuesta",
+        "count": "{count} / {max} caracteres",
+        "preview": "Así se ve en WhatsApp",
+        "previewEmpty": "Tu respuesta aparece aquí",
+        "flowLabel": "Flujo a iniciar",
+        "noFlow": "Ningún flujo elegido",
+        "startsAt": "Empieza en el paso: {step}",
+        "stepGone": "El paso donde empieza esta pregunta frecuente ya no existe, así que los clientes no reciben respuesta."
+      },
+      "advanced": {
+        "title": "Avanzado: sensibilidad solo para esta pregunta frecuente",
+        "body": "De forma predeterminada, cada pregunta frecuente usa la sensibilidad del espacio de trabajo. Usa un valor personalizado cuando esta coincida con demasiada facilidad (súbelo) o muy pocas veces (bájalo).",
+        "custom": "Usar una sensibilidad personalizada para esta pregunta frecuente",
+        "sliderLabel": "Coincidir desde",
+        "workspace": "La sensibilidad del espacio de trabajo es {value}%.",
+        "following": "Se usa la sensibilidad del espacio de trabajo ({value}%)."
+      },
+      "problem": {
+        "question": {
+          "required": "Escribe la pregunta que hacen los clientes.",
+          "tooLong": "La pregunta puede tener como máximo {max} caracteres.",
+          "invalid": "Esta pregunta no es válida."
+        },
+        "answerText": {
+          "required": "Escribe la respuesta que deben recibir los clientes.",
+          "tooLong": "La respuesta puede tener como máximo {max} caracteres.",
+          "invalid": "Esta respuesta no es válida."
+        },
+        "flowId": {
+          "required": "Elige el flujo que se iniciará.",
+          "tooLong": "Elige el flujo que se iniciará.",
+          "invalid": "Elige el flujo que se iniciará."
+        },
+        "category": {
+          "required": "Escribe una categoría o déjala vacía.",
+          "tooLong": "La categoría puede tener como máximo {max} caracteres.",
+          "invalid": "Esta categoría no es válida."
+        },
+        "thresholdOverride": {
+          "required": "Elige un valor entre 5 % y 99 %.",
+          "tooLong": "Elige un valor entre 5 % y 99 %.",
+          "invalid": "Elige un valor entre 5 % y 99 %."
+        },
+        "flowNodeId": {
+          "required": "Elige un paso de este flujo o el inicio del flujo.",
+          "tooLong": "Elige un paso de este flujo o el inicio del flujo.",
+          "invalid": "Elige un paso de este flujo o el inicio del flujo."
+        }
+      },
+      "deleteConfirm": {
+        "title": "¿Eliminar esta pregunta frecuente?",
+        "body": "La pregunta frecuente y todas sus formulaciones se eliminarán de forma permanente. Esta acción no se puede deshacer.",
+        "confirm": "Eliminar"
+      },
+      "leave": {
+        "title": "¿Salir sin guardar?",
+        "body": "Los cambios en esta pregunta frecuente no se han guardado.",
+        "leave": "Salir",
+        "stay": "Seguir editando"
+      }
+    },
+    "flowPicker": {
+      "noAccess": "Necesitas el permiso para ver flujos (flb.flows.read) para elegir uno aquí.",
+      "missing": "El flujo que iniciaba esta pregunta frecuente ya no existe. Elige otro flujo; de lo contrario, esta pregunta frecuente no podrá responder.",
+      "selected": "Elegido",
+      "search": "Buscar flujos",
+      "searchPlaceholder": "Buscar flujos por nombre",
+      "retry": "Reintentar",
+      "loading": "Cargando flujos",
+      "noMatch": "Ningún flujo tiene ese nombre.",
+      "none": "Aún no tienes flujos. Primero crea uno en Flujos.",
+      "listLabel": "Flujos",
+      "state": {
+        "live": "Publicado",
+        "off": "Inactivo",
+        "draft": "Borrador"
+      },
+      "note": "El flujo empieza en el paso que elijas abajo o en su inicio. Solo se pueden ejecutar flujos publicados y activos."
+    },
+    "variations": {
+      "title": "Variantes de la pregunta",
+      "hint": "Otras formas en que un cliente podría preguntar esto. Cada una se compara por significado.",
+      "counterLabel": "{count} de {max} formulaciones en uso",
+      "listLabel": "Formulaciones",
+      "questionEmpty": "Tu pregunta aparece aquí",
+      "source": {
+        "question": "Pregunta",
+        "manual": "Escrita",
+        "ai": "IA",
+        "learned": "Aprendida",
+        "import": "Importada"
+      },
+      "none": "Aún no hay formulaciones adicionales. Añade algunas o deja que la IA sugiera.",
+      "edit": "Editar {text}",
+      "remove": "Quitar {text}",
+      "editLabel": "Editar formulación",
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "addLabel": "Nueva formulación",
+      "addPlaceholder": "Otra forma de preguntar esto",
+      "add": "Añadir",
+      "pasteMany": "Pegar varias",
+      "full": "Esta pregunta frecuente alcanzó el límite de {max} formulaciones.",
+      "failedNotice": "{count, plural, one {# formulación no se pudo indexar} other {# formulaciones no se pudieron indexar}}. Edita y guarda la formulación para reintentar.",
+      "suggest": "Sugerir con IA",
+      "suggestSaveFirst": "Primero guarda la pregunta frecuente; después la IA podrá sugerir formulaciones.",
+      "suggesting": "Pidiendo sugerencias a la IA",
+      "suggestionsReady": "{count, plural, one {# sugerencia lista} other {# sugerencias listas}}",
+      "suggestionsTitle": "Formulaciones sugeridas",
+      "suggestionsHint": "No se guarda nada hasta que las añadas. Desmarca las que no quieras.",
+      "suggestionsNone": "La IA no tenía formulaciones nuevas que sugerir.",
+      "addSelected": "Añadir seleccionadas ({count})",
+      "discard": "Descartar",
+      "bulk": {
+        "label": "Una formulación por línea",
+        "placeholder": "¿Dónde está mi paquete?\nSeguir mi pedido\n¿Ya se envió mi pedido?",
+        "summary": "{count, plural, one {Se añadirá # formulación nueva} other {Se añadirán # formulaciones nuevas}}",
+        "duplicates": "{count, plural, one {# duplicada omitida} other {# duplicadas omitidas}}",
+        "tooLong": "{count, plural, one {# línea supera} other {# líneas superan}} los {max} caracteres y se omitió.",
+        "overflow": "{count, plural, one {# línea no cabe} other {# líneas no caben}} en el límite de formulaciones y se omitió.",
+        "more": "y {count} más",
+        "add": "Añadir {count, plural, one {# formulación} other {# formulaciones}}"
+      },
+      "state": {
+        "ready": "Activa",
+        "pending": "Indexando",
+        "pendingHint": "Guardada. Empezará a coincidir en unos segundos.",
+        "failed": "Con error",
+        "failedHint": "Edita y guarda la formulación para reintentar.",
+        "noReason": "No se indicó ningún motivo"
+      },
+      "confirm": {
+        "title": "¿Quitar esta formulación?",
+        "body": "\"{text}\" ya no llegará a esta pregunta frecuente.",
+        "remove": "Quitar"
+      },
+      "errors": {
+        "duplicate": "Esta pregunta frecuente ya tiene esa formulación.",
+        "tooLong": "Una formulación puede tener como máximo {max} caracteres.",
+        "aiKeys": "Configura tus claves de IA"
+      }
+    },
+    "tryIt": {
+      "title": "Probar",
+      "hint": "Escribe un mensaje de cliente y mira qué pasaría. No se envía nada.",
+      "label": "Mensaje del cliente",
+      "placeholder": "¿Dónde está mi paquete?",
+      "run": "Probar"
+    },
+    "decision": {
+      "verdict": {
+        "answer": {
+          "title": "Respondería",
+          "body": "Una pregunta frecuente coincidió lo suficiente. El cliente recibe su respuesta (o se inicia su flujo)."
+        },
+        "below": {
+          "title": "Por debajo del umbral",
+          "body": "La pregunta frecuente más cercana no alcanzó la puntuación necesaria, así que no se enviaría nada. Añade esta formulación a una pregunta frecuente o baja la sensibilidad."
+        },
+        "ambiguous": {
+          "title": "Ambiguo",
+          "body": "Dos preguntas frecuentes obtuvieron casi la misma puntuación, así que el bot no adivinaría. Haz las preguntas más distintas o baja el margen mínimo."
+        },
+        "noFaqs": {
+          "title": "No hay preguntas frecuentes para comparar",
+          "body": "Aún no hay preguntas frecuentes activas con formulaciones activas."
+        },
+        "providerError": {
+          "title": "Error del proveedor",
+          "body": "No se pudo conectar con el proveedor de IA, así que solo fue posible comparar por ortografía."
+        },
+        "notSent": {
+          "title": "Coincidió, no enviado",
+          "body": "Una pregunta frecuente coincidió, pero no se envió la respuesta; por ejemplo, porque las respuestas con preguntas frecuentes estaban desactivadas."
+        },
+        "vetoed": {
+          "title": "Respuesta retenida",
+          "body": "La coincidencia obtuvo una puntuación suficiente, pero la segunda revisión dijo que no, así que no se enviaría nada."
+        }
+      },
+      "tier": {
+        "exact": {
+          "name": "Coincidencia exacta",
+          "body": "El mensaje es igual a una formulación guardada, sin distinguir mayúsculas ni espacios."
+        },
+        "semantic": {
+          "name": "Coincidencia por significado",
+          "body": "El mensaje se comparó por significado con todas las formulaciones activas, así que palabras distintas aún pueden coincidir."
+        },
+        "trigram": {
+          "name": "Alternativa por ortografía",
+          "body": "No fue posible comparar por significado, así que el mensaje se comparó letra por letra. Esto detecta errores de escritura, pero no sinónimos."
+        }
+      },
+      "scoreLabel": "Puntuación {score} %, el mínimo necesario es {threshold} %",
+      "score": "Puntuación",
+      "threshold": "Necesita",
+      "margin": "Ventaja sobre la segunda",
+      "marginValue": "{margin} puntos (necesita {needed})",
+      "note": "Nota",
+      "model": "Modelo",
+      "noModel": "ninguno",
+      "latency": "Tiempo",
+      "ms": "{ms} ms",
+      "winner": {
+        "title": "Lo que recibiría el cliente",
+        "unavailable": "No se pudo cargar esta pregunta frecuente.",
+        "flow": "Inicia el flujo {name}",
+        "flowMissing": "Inicia un flujo que ya no existe"
+      },
+      "candidates": {
+        "title": "Mejores coincidencias",
+        "matchedOn": "Coincidió con",
+        "best": "Mejor",
+        "paused": "En pausa",
+        "scoreLabel": "Puntuación {score} %",
+        "addVariation": "Añadir esta frase como variante de {question}",
+        "added": "Añadida",
+        "addedToast": "Añadida como formulación de {question}.",
+        "alreadyThere": "Esa formulación ya está.",
+        "open": "Abrir pregunta frecuente"
+      }
+    },
+    "playground": {
+      "title": "¿Cómo respondería mi bot a esto?",
+      "subtitle": "Pasa un mensaje de cliente por la misma comparación que usa tu bot. No se envía nada y no se cuenta en las estadísticas.",
+      "label": "Mensaje del cliente",
+      "placeholder": "¿Dónde está mi paquete?",
+      "run": "Ejecutar",
+      "hint": "Solo se comparan las preguntas frecuentes guardadas. Participan las activas con formulaciones activas.",
+      "empty": "Escribe un mensaje arriba y ejecútalo para ver la decisión.",
+      "history": {
+        "title": "Esta sesión",
+        "empty": "Aquí aparecen tus últimas 10 pruebas."
+      }
+    },
+    "unanswered": {
+      "title": "Mensajes sin respuesta",
+      "subtitle": "Mensajes de clientes que ninguna pregunta frecuente respondió. Enseña al bot a partir de ellos.",
+      "search": "Buscar mensajes sin respuesta",
+      "searchPlaceholder": "Buscar mensajes",
+      "listLabel": "Mensajes sin respuesta",
+      "emptyTitle": "Nada pendiente",
+      "emptyBody": "Todos los mensajes de clientes fueron respondidos o atendidos. Los nuevos mensajes sin respuesta aparecerán aquí.",
+      "noMatch": "Ningún mensaje coincide con tu búsqueda",
+      "notKept": "No se guardó el texto del mensaje (el registro de consultas está desactivado)",
+      "closest": "Pregunta frecuente más cercana:",
+      "allCandidates": "Ver los {count} candidatos",
+      "addToFaq": "Añadir a una pregunta frecuente",
+      "createFaq": "Crear pregunta frecuente con esto",
+      "dismiss": "Descartar",
+      "dismissed": "Mensaje descartado.",
+      "learned": "Añadido a \"{question}\". Desde ahora se responderá.",
+      "pickTitle": "¿A qué pregunta frecuente quieres añadir este mensaje?",
+      "loadMore": "Cargar más",
+      "loadingMore": "Cargando"
+    },
+    "picker": {
+      "close": "Cerrar",
+      "search": "Buscar preguntas frecuentes",
+      "searchPlaceholder": "Buscar preguntas frecuentes",
+      "loading": "Cargando preguntas frecuentes",
+      "none": "No se encontró ninguna pregunta frecuente.",
+      "paused": "En pausa",
+      "more": "Cargar más"
+    },
+    "log": {
+      "title": "Registro de coincidencias",
+      "hint": "Cada mensaje de cliente que revisó el sistema de preguntas frecuentes, y por qué respondió o no.",
+      "viewLabel": "Mostrar",
+      "view": {
+        "all": "Todos",
+        "answered": "Respondidos",
+        "unanswered": "Sin respuesta",
+        "errors": "Errores"
+      },
+      "search": "Buscar en el registro",
+      "searchPlaceholder": "Buscar mensajes",
+      "empty": "Aún no hay mensajes.",
+      "col": {
+        "time": "Cuándo",
+        "message": "Mensaje",
+        "outcome": "Resultado",
+        "faq": "Pregunta frecuente",
+        "score": "Puntuación"
+      },
+      "notKept": "No guardado ({length} caracteres)",
+      "testRun": "(prueba)",
+      "expand": "Mostrar detalles",
+      "collapse": "Ocultar detalles",
+      "noCandidates": "No se consideró ningún candidato.",
+      "matchedOn": "coincidió con",
+      "detail": {
+        "tier": "Nivel",
+        "model": "Modelo",
+        "latency": "Tiempo",
+        "ms": "{ms} ms"
+      },
+      "loadMore": "Cargar más",
+      "loadingMore": "Cargando",
+      "why": {
+        "answered": "Respondió con \"{faq}\" con un {score} %.",
+        "flowStarted": "Inició el flujo de \"{faq}\" con un {score} %.",
+        "belowThreshold": "La mejor coincidencia obtuvo {score} %, por debajo del mínimo de {threshold} %, así que no se envió nada.",
+        "belowThresholdNoBar": "La mejor coincidencia obtuvo {score} %, que no fue suficiente, así que no se envió nada.",
+        "lowMargin": "Dos preguntas frecuentes estaban demasiado cerca ({score} % y {second} %), así que el bot no adivinó.",
+        "noFaqs": "No había preguntas frecuentes activas con formulaciones activas para comparar.",
+        "providerError": "El proveedor de IA falló, así que el bot solo pudo comparar por ortografía.",
+        "notSent": "Una pregunta frecuente coincidió, pero no se envió la respuesta.",
+        "tier": "Decidido por el nivel {tier}.",
+        "error": "Error: {error}",
+        "vetoed": "La mejor coincidencia obtuvo {score} %, por encima del umbral de {threshold} %, pero la segunda revisión dijo que no responde al mensaje, así que no se envió nada.",
+        "vetoedNoBar": "La mejor coincidencia obtuvo {score} %, pero la segunda revisión dijo que no responde al mensaje, así que no se envió nada."
+      },
+      "flowRun": "(desde un flujo)"
+    },
+    "insights": {
+      "title": "Estadísticas de preguntas frecuentes",
+      "subtitle": "Qué tan bien responden tus preguntas frecuentes a mensajes reales de clientes, y dónde mejorar.",
+      "range": {
+        "label": "Periodo",
+        "days": "{days} días"
+      },
+      "empty": {
+        "title": "Aún no hay mensajes",
+        "body": "Cuando los clientes escriban y las respuestas con preguntas frecuentes estén activadas, verás con qué frecuencia responde el bot, qué preguntas funcionan y qué falta."
+      },
+      "kpi": {
+        "label": "Cifras clave",
+        "messages": "Mensajes revisados",
+        "answerRate": "Tasa de respuesta",
+        "avgScore": "Puntuación media {score} %",
+        "flows": "Flujos iniciados",
+        "unanswered": "Sin respuesta",
+        "toReview": "{count} por revisar",
+        "errors": "Errores del proveedor"
+      },
+      "daily": {
+        "title": "Mensajes por día",
+        "hint": "Últimos {days} días, respondidos y sin respuesta"
+      },
+      "hist": {
+        "title": "Qué puntuación obtuvieron los mensajes",
+        "hint": "Cada barra es un rango de puntuación. La línea discontinua es tu sensibilidad actual.",
+        "advice": "Sube el umbral si se cuelan respuestas incorrectas; bájalo si demasiados mensajes quedan sin respuesta.",
+        "tune": "Cambiar sensibilidad"
+      },
+      "top": {
+        "title": "Preguntas frecuentes principales",
+        "none": "Ninguna pregunta frecuente ha respondido todavía.",
+        "hits": "{count, plural, one {# respuesta} other {# respuestas}}"
+      },
+      "never": {
+        "title": "Nunca coincidieron",
+        "body": "Preguntas frecuentes que nadie activó en los últimos {days} días. Revisa sus formulaciones o elimínalas.",
+        "link": "Revisar preguntas frecuentes"
+      },
+      "chart": {
+        "answered": "Respondidos",
+        "unanswered": "Sin respuesta",
+        "showTable": "Ver como tabla",
+        "showChart": "Ver como gráfico",
+        "day": "Día",
+        "dailyTitle": "Mensajes por día",
+        "dailyLabel": "Gráfico de barras de mensajes respondidos y sin respuesta por día. Usa la vista de tabla para ver los números.",
+        "dayTooltip": "{day}: {answered} respondidos, {unanswered} sin respuesta",
+        "histogramTitle": "Distribución de puntuaciones",
+        "histogramLabel": "Histograma de puntuaciones de coincidencia, separado por respondidos y sin respuesta. Usa la vista de tabla para ver los números.",
+        "scoreRange": "Puntuación",
+        "bucketTooltip": "{from}-{to} %: {answered} respondidos, {unanswered} sin respuesta",
+        "thresholdMarker": "Umbral {value} %"
+      }
+    },
+    "settings": {
+      "title": "Ajustes de preguntas frecuentes",
+      "subtitle": "Activa las respuestas con preguntas frecuentes y ajusta qué tan parecido debe ser un mensaje.",
+      "unsaved": "Cambios sin guardar",
+      "discard": "Descartar",
+      "save": "Guardar ajustes",
+      "saved": "Ajustes guardados.",
+      "readOnly": "Puedes ver estos ajustes. Para cambiarlos necesitas el permiso faq.settings.manage, que suelen tener los administradores del espacio de trabajo.",
+      "engineOff": "La plataforma desactivó las respuestas con preguntas frecuentes. Lo que configures aquí se aplicará cuando se vuelvan a activar.",
+      "conflict": "Otra persona guardó estos ajustes. Recarga para ver su versión y vuelve a hacer tu cambio.",
+      "reload": "Recargar ajustes",
+      "modelChanged": {
+        "title": "Revisa tu sensibilidad",
+        "body": "La plataforma cambió el modelo de IA después de que ajustaras este umbral. Las puntuaciones cambiaron, así que revisa tu sensibilidad. Al guardar, la confirmas."
+      },
+      "enable": {
+        "title": "Respuestas con preguntas frecuentes",
+        "label": "Responder a los clientes con preguntas frecuentes",
+        "on": "Sí",
+        "off": "No",
+        "onBody": "Cuando un cliente escribe, el bot compara el mensaje con tus preguntas frecuentes y responde con la mejor respuesta, o inicia su flujo. Si un flujo o una palabra clave ya tomó el mensaje, esa tiene prioridad.",
+        "offBody": "Los clientes no reciben respuestas de preguntas frecuentes. Aún puedes redactarlas y probarlas."
+      },
+      "sens": {
+        "title": "Sensibilidad",
+        "hint": "Qué tan parecido debe ser un mensaje. Las puntuaciones pertenecen al modelo {model}.",
+        "label": "Responder cuando la coincidencia sea al menos",
+        "presets": "Valores predefinidos de sensibilidad",
+        "preset": {
+          "strict": "Estricta",
+          "balanced": "Equilibrada",
+          "forgiving": "Flexible"
+        },
+        "looser": "Responde más",
+        "stricter": "Responde menos",
+        "recommendedMark": "recomendado {value} %",
+        "explain": "Con {value} %, un mensaje solo se responde cuando su mejor coincidencia obtiene {value} % o más. Más alto significa menos respuestas pero más seguras; más bajo significa más respuestas y mayor probabilidad de error.",
+        "useRecommended": "Usar el valor recomendado ({value} %)",
+        "modelScale": "Las puntuaciones solo son comparables dentro de un mismo modelo. Si la plataforma cambia el modelo ({model}), revisa este número."
+      },
+      "margin": {
+        "title": "Protección contra ambigüedad",
+        "hint": "Evita que el bot adivine entre dos preguntas frecuentes con una puntuación casi igual.",
+        "label": "Ventaja mínima sobre la segunda mejor",
+        "off": "Desactivada",
+        "explain": "Cuando la mejor pregunta frecuente supera a la siguiente por menos de este valor, el bot no responde y registra el mensaje como sin respuesta. Déjala desactivada si tus preguntas rara vez se parecen."
+      },
+      "log": {
+        "title": "Mensajes de clientes en el registro",
+        "label": "Conservar los mensajes de clientes en el registro de coincidencias",
+        "onBody": "El texto de cada mensaje se conserva 90 días para que puedas ver por qué se respondió o no y aprender de ello. Después se elimina.",
+        "offBody": "Solo se conservan puntuaciones y resultados, nunca el texto. Aún puedes ver con qué frecuencia responde el bot, pero no puedes aprender de los mensajes sin respuesta."
+      },
+      "facts": {
+        "title": "Modelo y límites",
+        "model": "Modelo de IA para coincidencias",
+        "faqs": "Preguntas frecuentes",
+        "variations": "Formulaciones en uso",
+        "perFaq": "Formulaciones permitidas por pregunta frecuente",
+        "of": "{used} de {max}"
+      },
+      "how": {
+        "title": "Cómo funcionan las coincidencias",
+        "exact": "Exacta: el mensaje es igual a una formulación guardada, sin distinguir mayúsculas ni espacios.",
+        "semantic": "Por significado: el mensaje se compara por significado con todas las formulaciones activas, así que palabras distintas pueden coincidir.",
+        "trigram": "Alternativa por ortografía: si el proveedor de IA no está disponible, se comparan las letras, lo que solo detecta errores de escritura.",
+        "threshold": "La mejor puntuación se compara con la sensibilidad. Si la supera, la pregunta frecuente responde; si no, el mensaje aparece en Sin respuesta.",
+        "verify": "Segunda revisión (opcional): un modelo de chat pequeño puede volver a comprobar una coincidencia que apenas alcanzó la sensibilidad, y solo puede retener una respuesta."
+      },
+      "who": "Cambiar estos ajustes requiere el permiso faq.settings.manage.",
+      "leave": {
+        "title": "¿Salir sin guardar?",
+        "body": "Los cambios en estos ajustes no se han guardado.",
+        "leave": "Salir",
+        "stay": "Quedarme"
+      },
+      "verify": {
+        "title": "Segunda revisión para casos dudosos",
+        "hint": "Un modelo de chat pequeño vuelve a comprobar las coincidencias que apenas alcanzaron el umbral.",
+        "unavailable": "La plataforma desactivó la segunda revisión, así que no se ejecuta aunque la actives aquí. Consulta a tu administrador de plataforma.",
+        "label": "Comprobar los casos dudosos con una segunda opinión",
+        "on": "Activada",
+        "off": "Desactivada",
+        "onBody": "Cuando una coincidencia apenas supera el umbral, un modelo de chat pequeño lee el mensaje del cliente y la pregunta frecuente, y dice si la respuesta encaja. Solo puede decir que no: nunca hace que se envíe una respuesta.",
+        "offBody": "Toda coincidencia que alcanza el umbral se responde sin una segunda revisión.",
+        "bandLabel": "Qué tan cerca cuenta como caso dudoso",
+        "bandValue": "+{value}%",
+        "explainOn": "Las coincidencias con una puntuación de {from} % a {to} % las revisa {model}. Un \"no\" significa que no se envía respuesta y el mensaje aparece en Sin respuesta.",
+        "explainOff": "Toda coincidencia con una puntuación de {threshold} % o más se responde. Activa la segunda revisión para que se vuelvan a comprobar los casos más dudosos.",
+        "cost": "Cada revisión envía al modelo el mensaje del cliente y la pregunta de la pregunta frecuente: unos cientos de tokens, y añade alrededor de un segundo a una respuesta dudosa. Las coincidencias fuera del rango nunca se revisan. Si la revisión falla, no está disponible o se alcanza el límite por hora, la coincidencia se mantiene como si no hubiera revisión."
+      }
+    },
+    "flowNode": {
+      "label": "Empezar en",
+      "start": "El inicio del flujo",
+      "hint": "Elige un paso para saltarte el comienzo del flujo. Los clientes entran al flujo en el paso que elijas.",
+      "loading": "Cargando los pasos de este flujo",
+      "empty": "Este flujo no tiene otros pasos, así que empieza desde el principio.",
+      "retry": "Reintentar",
+      "deletedOption": "Paso eliminado (elige otro)",
+      "missing": {
+        "title": "Ya no existe el paso donde empieza esta pregunta frecuente",
+        "body": "Ese paso se eliminó del flujo. Hasta que elijas otro paso, los clientes que coincidan con esta pregunta frecuente no recibirán respuesta. Elige un paso abajo o empieza desde el inicio del flujo.",
+        "fix": "Empezar desde el inicio del flujo"
+      }
+    },
+    "verify": {
+      "title": "Segunda revisión",
+      "chip": {
+        "confirmed": "Segunda revisión: sí",
+        "vetoed": "Segunda revisión: no",
+        "failed": "Segunda revisión fallida",
+        "skipped": "Segunda revisión omitida"
+      },
+      "model": "Revisado por",
+      "reason": "Motivo",
+      "body": {
+        "confirmed": "La coincidencia era un caso dudoso, así que un modelo de chat pequeño leyó el mensaje y la pregunta frecuente, y confirmó que la respuesta encaja.",
+        "vetoed": "La coincidencia era un caso dudoso y la segunda revisión dijo que esta pregunta frecuente no responde al mensaje. Se retuvo la respuesta, no se envió nada y el mensaje aparece en Sin respuesta.",
+        "failed": "La coincidencia era un caso dudoso, pero la revisión no pudo terminar, así que la coincidencia se mantuvo y la respuesta se envió como si no hubiera segunda revisión.",
+        "skipped": "La segunda revisión no se ejecutó para esta coincidencia, así que la coincidencia se mantuvo tal cual."
+      }
+    }
+  }
+}

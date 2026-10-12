@@ -4,7 +4,7 @@ import type { FlowRunEndReason } from '@crm/contracts';
 import { ContactsService } from '../../crm';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { compileGraph } from '../graph/compile-graph';
-import { nodeById } from '../graph/runtime-graph';
+import { nodeById, type RuntimeNode } from '../graph/runtime-graph';
 import { profileOf } from './channel-render';
 import {
   applyCustomReply,
@@ -19,6 +19,15 @@ import {
 import { FlowRunPublisher } from './flow-run.publisher';
 import { FlowSender, HALT_RETRY_MS } from './flow-sender.service';
 import { RunRepository, type RunPatch } from './run.repository';
+import {
+  MAX_LOGGED_STEPS,
+  finishIo,
+  nodeLabel,
+  shouldLog,
+  stepFields,
+  varsChanged,
+  type StepOutcomeKind,
+} from './step-log';
 import { SubscriberRepository } from './subscriber.repository';
 import type { InboundReply, NodeExecutor, RunState } from './types';
 import { FLOW_NODE_EXECUTORS } from './node-executors';
@@ -31,6 +40,14 @@ const SUBFLOW_DEPTH_VAR = '__subflow_depth';
 /** What a call did, for the worker's log and the tests. */
 export type AdvanceResult = 'stepped' | 'stale' | 'ended' | 'lost' | 'not_due';
 export type ReplyResult = 'routed' | 'ignored' | 'not_waiting';
+
+/** What the commit needs to write the node's log row: how long it took and the node as it was when it ran. */
+interface StepMeta {
+  durationMs: number | null;
+  node: RuntimeNode | null;
+  /** Overrides the outcome the transition implies (a wait that gave up is a `timeout`). */
+  outcome?: StepOutcomeKind;
+}
 
 interface Committed {
   /** The step number to queue, and when; null when nothing is queued (a wait, an end). */
@@ -95,6 +112,8 @@ export class FlowEngine {
     }
 
     let outcome: StepOutcome;
+    let durationMs: number | null = null;
+    let node: RuntimeNode | null = null;
     if (state.status === 'sleeping') {
       const left = (state.resumeAt?.getTime() ?? 0) - now.getTime();
       if (left > 1_000) {
@@ -103,16 +122,32 @@ export class FlowEngine {
         return 'not_due';
       }
       outcome = wakeFromSleep(state);
+      node = outcome.nodeId ? nodeById(state.graph, outcome.nodeId) : null;
     } else {
       // A halted run that is due simply runs its node again; its sends were never made, so nothing doubles.
+      const began = Date.now();
       outcome = await executeCurrent(state, this.deps());
+      durationMs = Date.now() - began;
+      // Read before a Sub-flow swaps the graph: the log keeps the node that ran, not one of the new flow.
+      node = outcome.nodeId ? nodeById(state.graph, outcome.nodeId) : null;
       if (outcome.transition.t === 'subflow') {
-        outcome = await this.enterSubflow(orgId, state, outcome, outcome.transition.flowId);
+        outcome = await this.enterSubflow(
+          orgId,
+          state,
+          outcome,
+          outcome.transition.flowId,
+          outcome.transition.startNodeId,
+          outcome.transition.missPort ?? 1,
+          outcome.transition.missVars,
+        );
       }
     }
 
     const committed = await this.db.txAs({ orgId }, async (tx) => {
-      const saved = await this.commit(tx, state, outcome, seq, 'step');
+      const saved = await this.commit(tx, state, outcome, seq, 'step', undefined, {
+        durationMs,
+        node,
+      });
       return saved;
     });
     if (committed === 'lost') return 'lost';
@@ -133,13 +168,26 @@ export class FlowEngine {
     state: RunState,
     outcome: StepOutcome,
     flowId: number | string,
+    startNodeId?: string,
+    missPort = 1,
+    missVars?: Record<string, unknown>,
   ): Promise<StepOutcome> {
     const nodeId = state.currentNodeId ?? '';
-    const pass = (note: string): StepOutcome => ({
-      ...outcome,
-      transition: advanceFrom(state, nodeId, 1, false, profileOf(state.channelKind ?? '').paceMs),
-      notes: [...outcome.notes, note],
-    });
+    // `missPort` is the exit a caller wants when the flow cannot be entered: 1 for a Sub-flow node, `no_match` for the FAQ node.
+    const pass = (note: string, port = missPort): StepOutcome => {
+      if (missVars) Object.assign(state.vars, missVars);
+      return {
+        ...outcome,
+        transition: advanceFrom(
+          state,
+          nodeId,
+          port,
+          false,
+          profileOf(state.channelKind ?? '').paceMs,
+        ),
+        notes: [...outcome.notes, note],
+      };
+    };
     const depth = Number(state.vars[SUBFLOW_DEPTH_VAR] ?? 0) || 0;
     if (depth >= MAX_SUBFLOW_DEPTH) {
       return {
@@ -159,7 +207,10 @@ export class FlowEngine {
       return pass(`sub-flow ${flowId} is not live (publish it and switch it on): moved on`);
     }
     const graph = compileGraph(flow.data);
-    const first = graph.nodes[0];
+    if (startNodeId !== undefined && !nodeById(graph, startNodeId)) {
+      return pass(`sub-flow ${flowId} has no step ${startNodeId} (it was deleted): moved on`);
+    }
+    const first = startNodeId !== undefined ? nodeById(graph, startNodeId) : graph.nodes[0];
     if (!first || !nodeById(graph, first.id)) {
       return {
         ...outcome,
@@ -185,17 +236,34 @@ export class FlowEngine {
     const result = await this.db.txAs({ orgId }, async (tx) => {
       const state = await this.runs.byId(tx, orgId, runId, true);
       if (!state || state.status !== 'waiting' || !state.wait) return 'not_waiting' as const;
+      const before = { ...state.vars };
       const outcome =
         state.wait.kind === 'Custom'
           ? await applyCustomReply(state, reply, this.deps())
           : applyReply(state, reply);
       if (outcome.transition.t === 'none') return 'ignored' as const;
+      // The reply row: what the customer sent in, and what the answer saved.
+      const recorded = finishIo({
+        in: [
+          {
+            kind: 'reply',
+            name: reply.id || null,
+            value:
+              reply.text || (reply.kind === 'external' ? JSON.stringify(reply.data ?? {}) : ''),
+          },
+        ],
+        out: varsChanged(before, state.vars),
+      });
       const detail = {
         text: reply.text.slice(0, 200),
         ...(reply.id ? { tap: reply.id } : {}),
         ...(reply.kind === 'external' ? { external: true } : {}),
+        ...(recorded ? { io: recorded } : {}),
       };
-      const committed = await this.commit(tx, state, outcome, state.stepSeq, 'reply', detail);
+      const committed = await this.commit(tx, state, outcome, state.stepSeq, 'reply', detail, {
+        durationMs: null,
+        node: outcome.nodeId ? nodeById(state.graph, outcome.nodeId) : null,
+      });
       if (committed !== 'lost' && outcome.saveProperty && state.contactId !== null)
         saved.v = { contactId: state.contactId, ...outcome.saveProperty };
       return committed;
@@ -299,7 +367,11 @@ export class FlowEngine {
           nodeType: null,
           notes: ['the wait timed out: left by the timeout branch'],
         };
-        const c = await this.commit(tx, state, outcome, state.stepSeq, 'step');
+        const c = await this.commit(tx, state, outcome, state.stepSeq, 'step', undefined, {
+          durationMs: null,
+          node: nodeById(state.graph, state.wait.nodeId),
+          outcome: 'timeout',
+        });
         return c === 'lost' ? false : c;
       }
       const done = await this.runs.endLive(tx, orgId, runId, 'expired', reason);
@@ -310,6 +382,12 @@ export class FlowEngine {
           nodeType: null,
           event: 'end',
           detail: { status: 'expired', reason },
+          nodeLabel: nodeLabel(
+            state.currentNodeId ? nodeById(state.graph, state.currentNodeId) : null,
+            null,
+          ),
+          outcome: 'timeout',
+          summary: reason,
         });
       }
       return done;
@@ -355,6 +433,12 @@ export class FlowEngine {
         nodeType: null,
         event: 'end',
         detail: { status: 'cancelled', reason },
+        nodeLabel: nodeLabel(
+          state.currentNodeId ? nodeById(state.graph, state.currentNodeId) : null,
+          null,
+        ),
+        outcome: 'skipped',
+        summary: reason,
       });
     }
     return done;
@@ -388,50 +472,88 @@ export class FlowEngine {
     expectedSeq: number,
     event: 'step' | 'reply',
     replyDetail?: Record<string, unknown>,
+    meta: StepMeta = { durationMs: null, node: null },
   ): Promise<Committed | 'lost'> {
     const t = outcome.transition;
     const now = this.now();
     const patch = this.patchOf(state, t, now);
+    const fields = stepFields(outcome, meta.node, {
+      durationMs: meta.durationMs,
+      attempt: event === 'step' && outcome.nodeId ? (state.visits[outcome.nodeId] ?? null) : null,
+    });
+    if (meta.outcome) fields.outcome = meta.outcome;
+    patch.log = {
+      nodes: 1,
+      errors: fields.outcome === 'error' ? 1 : 0,
+      ms: meta.durationMs ?? 0,
+    };
+    // A Sub-flow swapped the graph: store the new flow's graph once and point the run at it.
+    if (t.t === 'goto' && t.subflowId !== undefined) {
+      patch.graphVersionId = await this.runs.upsertGraphVersion(
+        tx,
+        state.orgId,
+        t.subflowId,
+        state.graph,
+      );
+    }
     const saved = await this.runs.save(tx, state.orgId, state.id, expectedSeq, patch);
     if (!saved) return 'lost';
 
     const seq = expectedSeq + 1;
-    if (event === 'reply') {
+    // Ordinary steps stop being logged at the cap (a loop or a long halt would otherwise grow the log without end); a failure and the
+    // end of the run always are. The step that reaches the cap leaves one marker row so the screen can say the log was cut.
+    const important = fields.outcome === 'error' || t.t === 'end';
+    const logIt = shouldLog(state.nodeCount, important);
+    if (!logIt && state.nodeCount === MAX_LOGGED_STEPS) {
+      await this.runs.appendStep(tx, state.orgId, state.id, {
+        seq,
+        nodeId: null,
+        nodeType: null,
+        event: 'truncated',
+        summary: `log limit of ${MAX_LOGGED_STEPS} steps reached`,
+      });
+    }
+    if (logIt && event === 'reply') {
       await this.runs.appendStep(tx, state.orgId, state.id, {
         seq,
         nodeId: outcome.nodeId,
         nodeType: outcome.nodeType,
         event: 'reply',
         detail: replyDetail ?? {},
+        nodeLabel: fields.nodeLabel,
+        outcome: 'ok',
       });
     }
     const detail: Record<string, unknown> = {};
     if (outcome.notes.length > 0) detail.notes = outcome.notes;
+    if (outcome.io) detail.io = outcome.io;
     if (t.t === 'goto') detail.next = t.nodeId;
     if (t.t === 'goto' && t.subflowId !== undefined) detail.flow_id = t.subflowId;
     if (t.t === 'wait') detail.waitingOn = t.wait.nodeId;
     if (t.t === 'sleep') detail.seconds = t.seconds;
     if (t.t === 'halt') detail.reason = t.reason;
     if (t.t === 'end') detail.reason = t.reason;
-    await this.runs.appendStep(tx, state.orgId, state.id, {
-      seq,
-      nodeId: outcome.nodeId,
-      nodeType: outcome.nodeType,
-      event:
-        t.t === 'goto'
-          ? 'advance'
-          : t.t === 'end'
-            ? 'end'
-            : t.t === 'wait'
-              ? 'wait'
-              : t.t === 'sleep'
-                ? 'sleep'
-                : t.t === 'halt'
-                  ? 'halt'
-                  : 'exec',
-      detail,
-      error: t.t === 'end' && t.status === 'failed' ? (t.failureReason ?? null) : null,
-    });
+    if (logIt)
+      await this.runs.appendStep(tx, state.orgId, state.id, {
+        seq,
+        nodeId: outcome.nodeId,
+        nodeType: outcome.nodeType,
+        ...fields,
+        event:
+          t.t === 'goto'
+            ? 'advance'
+            : t.t === 'end'
+              ? 'end'
+              : t.t === 'wait'
+                ? 'wait'
+                : t.t === 'sleep'
+                  ? 'sleep'
+                  : t.t === 'halt'
+                    ? 'halt'
+                    : 'exec',
+        detail,
+        error: t.t === 'end' && t.status === 'failed' ? (t.failureReason ?? null) : null,
+      });
 
     if (t.t === 'end' && state.subscriberId !== null) {
       if (t.status === 'completed')
@@ -474,6 +596,7 @@ export class FlowEngine {
       endReason: null,
       failureCode: null,
       failureReason: null,
+      log: { nodes: 0, errors: 0, ms: 0 },
     };
     switch (t.t) {
       case 'goto':
@@ -481,7 +604,6 @@ export class FlowEngine {
           ...base,
           status: 'running',
           currentNodeId: t.nodeId,
-          ...(t.subflowId !== undefined ? { graph: state.graph } : {}),
         };
       case 'wait':
         return {

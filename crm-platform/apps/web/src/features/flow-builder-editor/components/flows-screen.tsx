@@ -398,11 +398,7 @@ export function FlowsScreen() {
                 <button
                   type="button"
                   data-flow-create
-                  onClick={() =>
-                    builderMode === 'simple'
-                      ? router.push(newHref(builderMode))
-                      : setCreateOpen(true)
-                  }
+                  onClick={() => setCreateOpen(true)}
                   className="flex items-center gap-2 rounded-full bg-brand px-4 py-2 text-[12px] font-semibold text-brand-foreground hover:opacity-90"
                 >
                   <Svg d="M8 3v10M3 8h10" />
@@ -568,12 +564,13 @@ export function FlowsScreen() {
                     {t('reset')}
                   </button>
                   {canCreate ? (
-                    <Link
-                      href={newHref(builderMode)}
+                    <button
+                      type="button"
+                      onClick={() => setCreateOpen(true)}
                       className="rounded-full bg-brand px-4 py-2 text-[12px] font-semibold text-brand-foreground"
                     >
                       {t('create')}
-                    </Link>
+                    </button>
                   ) : null}
                 </div>
               </div>
@@ -685,7 +682,7 @@ export function FlowsScreen() {
         </div>
       </div>
 
-      <CreateSheet open={createOpen} onClose={() => setCreateOpen(false)} />
+      <CreateSheet open={createOpen} mode={builderMode} onClose={() => setCreateOpen(false)} />
       <RenameDialog
         key={renaming?.id ?? 'none'}
         flow={renaming}
@@ -806,7 +803,15 @@ function BuilderPicker({
   );
 }
 
-function CreateSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
+function CreateSheet({
+  open,
+  mode,
+  onClose,
+}: {
+  open: boolean;
+  mode: BuilderMode;
+  onClose: () => void;
+}) {
   const t = useTranslations('flb.create');
   const tc = useTranslations('flb.common');
   const router = useRouter();
@@ -857,24 +862,36 @@ function CreateSheet({ open, onClose }: { open: boolean; onClose: () => void }) 
         </Button>
       }
     >
-      <p className="mb-3 text-[12px] text-muted-foreground">{t('subtitle')}</p>
+      <p className="mb-3 text-[12px] text-muted-foreground">
+        {mode === 'simple' ? t('subtitleSimple') : t('subtitle')}
+      </p>
       <div className="space-y-2">
         {row(
-          '/flows/builder',
-          t('messaging'),
-          t('messagingNote'),
+          newHref(mode),
+          mode === 'simple' ? t('whatsapp') : t('messaging'),
+          mode === 'simple' ? t('whatsappNote') : t('messagingNote'),
           'M3 5.5A2.5 2.5 0 0 1 5.5 3h5A2.5 2.5 0 0 1 13 5.5v3A2.5 2.5 0 0 1 10.5 11H8l-3.5 2v-2A2.5 2.5 0 0 1 3 8.5v-3Z',
           'bg-[var(--flb-mint)]',
           'chat',
         )}
         {row(
-          '/flows/builder?type=call',
-          t('call'),
-          t('callNote'),
-          'M3 4c0 5 4 9 9 9l1.5-2.5-3-1.5-1 1A7 7 0 0 1 6 6l1-1L5.5 2 3 3.5z',
+          newHref(mode, 'web'),
+          t('web'),
+          t('webNote'),
+          'M2 8a6 6 0 1 0 12 0A6 6 0 0 0 2 8Zm0 0h12M8 2c1.7 1.7 2.5 3.7 2.5 6S9.7 12.3 8 14C6.3 12.3 5.5 10.3 5.5 8S6.3 3.7 8 2Z',
           'bg-muted',
-          'call',
+          'web',
         )}
+        {mode === 'simple'
+          ? null
+          : row(
+              '/flows/builder?type=call',
+              t('call'),
+              t('callNote'),
+              'M3 4c0 5 4 9 9 9l1.5-2.5-3-1.5-1 1A7 7 0 0 1 6 6l1-1L5.5 2 3 3.5z',
+              'bg-muted',
+              'call',
+            )}
       </div>
     </Modal>
   );

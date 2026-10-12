@@ -43,6 +43,10 @@ export function profileOf(kind: string): ChannelProfile {
     case 'facebook':
     case 'instagram':
       return { buttons: true, list: false, ctaUrl: true, location: false, paceMs: 0 };
+    // The website chat widget draws up to three reply buttons itself (the thread keeps them in its meta, see `FlowSender`); a longer
+    // menu or a link button is text, and a typed number answers a menu.
+    case 'webchat':
+      return { buttons: true, list: false, ctaUrl: false, location: false, paceMs: 0 };
     default:
       // TikTok, LINE, Viber, WeChat and email (TW-FLR-063, 065 to 068) are text with numbered options, like Telegram.
       return { ...PLAIN, location: false };

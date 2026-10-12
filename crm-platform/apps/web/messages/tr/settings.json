@@ -97,7 +97,7 @@
       },
       "sms": {
         "label": "SMS",
-        "description": "Kendi gönderen adınızla kısa mesaj gönderin ve alın.",
+        "description": "Kendi Twilio numaranız veya MSG91 göndereninizle kısa mesaj gönderin.",
         "keywords": "kısa mesaj, gönderen kimliği, dlt, twilio, mobil"
       },
       "email": {
@@ -309,6 +309,16 @@
         "label": "Otomatik atama",
         "description": "Yeni konuşmaları sıra ile veya kurallara göre otomatik olarak doğru temsilciye verin.",
         "keywords": "yönlendirme, sırayla dağıtım, ata, temsilciler, gelen kutusu kuralları, dağıt, sahip"
+      },
+      "message-logs": {
+        "label": "Mesaj günlükleri",
+        "description": "Mesajlarınızın teslimat günlüğünü bir yıla kadar geriye dönük olarak e-postanıza gönderilen bir dosya şeklinde dışa aktarın.",
+        "keywords": "dışa aktarma, teslimat günlüğü, geçmiş, arşiv, csv, mesajlar"
+      },
+      "web": {
+        "label": "Web sitesi sohbeti",
+        "description": "Web sitenizin sohbeti için oluşturulan botlar ve her birinin çalıştığı widget.",
+        "keywords": "web, web sitesi, widget, chatbot, gömme, canlı sohbet"
       }
     }
   }

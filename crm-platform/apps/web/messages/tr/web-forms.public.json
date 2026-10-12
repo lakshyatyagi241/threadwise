@@ -33,9 +33,32 @@
         "too_short": "En az {min} karakter girin.",
         "too_long": "En fazla {max} karakter girin.",
         "pattern": "Beklenen biçimle eşleşmiyor.",
-        "invalid_option": "Listelenen seçeneklerden birini seçin."
+        "invalid_option": "Listelenen seçeneklerden birini seçin.",
+        "invalid_amount": "İzin verilen aralıkta bir tutar girin."
       },
-      "closedTitle": "Bu form kapalı"
+      "closedTitle": "Bu form kapalı",
+      "payTitle": "Bir adım daha",
+      "payTotal": "Ödenecek tutar",
+      "payFromChoice": "Tutar, yukarıda yaptığınız seçime bağlıdır.",
+      "payEnter": "Ödemek istediğiniz tutarı yukarıya girin.",
+      "payNote": "Gönderdikten sonra güvenli bir ödeme sayfasına geçeceksiniz.",
+      "payRedirecting": "Yanıtlarınız kaydedildi. Ödeme sayfasına yönlendiriliyorsunuz...",
+      "payContinue": "Ödemeye devam et",
+      "paymentUnavailable": "Bu form şu anda ödeme alamıyor. Lütfen daha sonra tekrar deneyin.",
+      "payReturn": {
+        "confirmingTitle": "Ödemeniz onaylanıyor",
+        "confirmingBody": "Ödeme sağlayıcısının onayını bekliyoruz. Bu genellikle birkaç saniye sürer. Lütfen tekrar ödeme yapmayın.",
+        "slowTitle": "Onay hâlâ bekleniyor",
+        "slowBody": "Ödeme yaptıysanız onay kısa süre içinde gelir ve bu sayfayı kapatabilirsiniz. Ödeme yapmadıysanız geri dönüp tekrar deneyin.",
+        "paidTitle": "Ödeme alındı",
+        "expiredTitle": "Ödeme bağlantısının süresi doldu",
+        "expiredBody": "Hesabınızdan para çekilmedi. Formu gönderen kişiden yeni bir ödeme bağlantısı isteyin.",
+        "failedTitle": "Ödeme tamamlanamadı",
+        "failedBody": "Hesabınızdan para çekilmedi. Tekrar deneyebilirsiniz.",
+        "tryAgain": "Tekrar ödemeyi dene",
+        "missingTitle": "Bu ödemeyi bulamadık",
+        "missingBody": "Bağlantı yanlış veya çok eski olabilir."
+      }
     }
   }
 }

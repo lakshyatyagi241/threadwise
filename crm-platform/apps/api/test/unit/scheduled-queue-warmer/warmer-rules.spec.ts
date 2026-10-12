@@ -78,7 +78,12 @@ describe('the ramp (TW-SCHED-038)', () => {
 describe('active hours and gap', () => {
   it('a plain window, an overnight window and all day', () => {
     const day = warming({ active_start: 9, active_end: 21 });
-    expect([8, 9, 20, 21].map((h) => withinActiveHours(day, h))).toEqual([false, true, true, false]);
+    expect([8, 9, 20, 21].map((h) => withinActiveHours(day, h))).toEqual([
+      false,
+      true,
+      true,
+      false,
+    ]);
     const night = warming({ active_start: 21, active_end: 6 });
     expect([20, 21, 23, 0, 5, 6].map((h) => withinActiveHours(night, h))).toEqual([
       false,
@@ -136,9 +141,9 @@ describe('health score and spintax (TW-SCHED-040)', () => {
     expect(healthScore(base)).toBe(80);
     expect(healthScore({ ...base, failed24h: 10 })).toBe(60);
     expect(healthScore({ ...base, sent24h: 60 })).toBe(65);
-    expect(healthScore({ status: 'banned', ageDays: 0, sent24h: 0, failed24h: 1000, budget: 0 })).toBe(
-      0,
-    );
+    expect(
+      healthScore({ status: 'banned', ageDays: 0, sent24h: 0, failed24h: 1000, budget: 0 }),
+    ).toBe(0);
   });
   it('varies {a|b}, leaves merge tags and single braces alone, and cannot loop', () => {
     expect(spin('Hi {there|friend}!', () => 0)).toBe('Hi there!');

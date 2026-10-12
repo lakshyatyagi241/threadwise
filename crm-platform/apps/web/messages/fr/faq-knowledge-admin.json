@@ -1,0 +1,188 @@
+{
+  "faq-knowledge-admin": {
+    "nav": {
+      "group": "IA",
+      "engine": "Moteur FAQ"
+    },
+    "common": {
+      "loading": "Chargement",
+      "retry": "Réessayer",
+      "requestId": "Identifiant de requête",
+      "dash": "-",
+      "cancel": "Annuler",
+      "errors": {
+        "forbidden": "Vous n’avez pas la permission d’effectuer cette action.",
+        "request": "Cette requête n’a pas pu aboutir.",
+        "unexpected": "Une erreur est survenue de notre côté. Réessayez dans un instant.",
+        "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+        "validation": "Certaines valeurs ne sont pas valides. Vérifiez les champs en surbrillance.",
+        "modelNotAllowed": "Ce modèle d’IA ne figure pas dans la liste autorisée. Rechargez la page et choisissez-en un dans la liste.",
+        "notFound": "Cet élément n’existe plus."
+      }
+    },
+    "page": {
+      "eyebrow": "Admin · IA · Moteur FAQ",
+      "title": "Moteur FAQ",
+      "description": "Contrôle la façon dont les FAQ de chaque espace de travail sont comparées aux messages clients : l’interrupteur, le modèle d’IA, les limites et l’état de l’index.",
+      "superOnly": "Seul un super administrateur peut voir ou modifier le moteur FAQ."
+    },
+    "status": {
+      "label": "État du moteur",
+      "engine": {
+        "title": "Moteur",
+        "on": "Activé",
+        "off": "Désactivé",
+        "hintOn": "{count, plural, one {# espace de travail a activé les FAQ} many {# d’espaces de travail ont activé les FAQ} other {# espaces de travail ont activé les FAQ}}",
+        "hintOff": "Aucun espace de travail ne répond avec des FAQ et les modifications sont bloquées."
+      },
+      "key": {
+        "title": "Clé OpenRouter de la plateforme",
+        "ready": "Prête",
+        "missing": "Manquante",
+        "explainReady": "Les espaces de travail qui n’ont pas enregistré leur propre clé OpenRouter utilisent celle-ci pour créer et comparer les vecteurs.",
+        "explainMissing": "Les espaces de travail qui n’ont pas enregistré leur propre clé OpenRouter dépendent de celle-ci. Sans elle, ils ne peuvent pas créer de vecteurs et la correspondance se rabat sur la similarité orthographique.",
+        "link": "Ajoutez la clé dans Clés des fournisseurs d’IA"
+      },
+      "model": {
+        "title": "Modèle d’IA de correspondance utilisé",
+        "dimensions": "{count, number} dimensions",
+        "unknown": "Ne figure pas dans la liste autorisée"
+      },
+      "index": {
+        "title": "État de l’indexation",
+        "ready": "Prêts",
+        "waiting": "En attente",
+        "failed": "En échec",
+        "stale": "{count, plural, one {# vecteur appartient à un ancien modèle et ne correspond à rien tant qu’il n’est pas recalculé} many {# de vecteurs appartiennent à un ancien modèle et ne correspondent à rien tant qu’ils ne sont pas recalculés} other {# vecteurs appartiennent à un ancien modèle et ne correspondent à rien tant qu’ils ne sont pas recalculés}}",
+        "totals": "{faqs, number} FAQ · {variations, number} variantes"
+      },
+      "activity": {
+        "title": "30 derniers jours",
+        "matches": "Messages clients analysés",
+        "answered": "Avec réponse",
+        "rate": "Taux de réponse",
+        "tokens": "Jetons de correspondance",
+        "verified": "Secondes vérifications",
+        "vetoed": "Réponses retenues"
+      }
+    },
+    "settings": {
+      "title": "Paramètres",
+      "description": "S’applique à chaque espace de travail. Seuls les champs que vous modifiez sont enregistrés.",
+      "engine": {
+        "label": "Moteur FAQ",
+        "hint": "Désactivez-le pour empêcher tous les espaces de travail de répondre avec des FAQ. Les modifications sont bloquées tant qu’il est désactivé."
+      },
+      "embeddingModel": {
+        "label": "Modèle d’IA de correspondance",
+        "hint": "Transforme chaque question en nombres afin de retrouver les formulations proches.",
+        "option": "{label} · {price} par million de jetons · seuil suggéré {threshold}",
+        "unknownOption": "{id} (ne figure pas dans la liste autorisée)",
+        "details": "{dimensions, number} dimensions · {price} par million de jetons · seuil suggéré {threshold}",
+        "saved": "Modèle enregistré"
+      },
+      "generationModel": {
+        "label": "Modèle de génération",
+        "hint": "L’identifiant du modèle OpenRouter qui rédige les suggestions de variantes, par exemple openai/gpt-4o-mini.",
+        "placeholder": "openai/gpt-4o-mini"
+      },
+      "threshold": {
+        "label": "Seuil de correspondance par défaut",
+        "hint": "Un message correspond lorsque son score atteint au moins cette valeur. Utilisé uniquement par les espaces de travail qui n’ont jamais enregistré leur propre seuil. Les scores dépendent du modèle d’IA.",
+        "value": "{value}",
+        "follow": "Suivre le modèle",
+        "followHint": "La sensibilité par défaut est la valeur recommandée du modèle ({value}) et change avec le modèle. Désactivez pour fixer un nombre."
+      },
+      "limits": {
+        "title": "Limites",
+        "maxFaqs": "Nombre maximal de FAQ par espace de travail",
+        "maxVariationsPerFaq": "Nombre maximal de variantes par FAQ",
+        "semanticPerHour": "Correspondances par le sens par espace de travail et par heure",
+        "semanticPerHourHint": "Au-delà, un espace de travail se rabat sur la similarité orthographique pour le reste de l’heure. 0 signifie toujours la similarité orthographique.",
+        "verifyPerHour": "Secondes vérifications par espace de travail et par heure"
+      },
+      "errors": {
+        "integer": "Saisissez un nombre entier.",
+        "range": "Saisissez une valeur comprise entre {min} et {max}.",
+        "modelId": "Utilisez un identifiant de modèle OpenRouter tel que openai/gpt-4o-mini.",
+        "invalid": "Cette valeur n’est pas valide."
+      },
+      "unchanged": "Aucune modification à enregistrer.",
+      "changed": "{count, plural, one {# modification prête à être enregistrée} many {# de modifications prêtes à être enregistrées} other {# modifications prêtes à être enregistrées}}",
+      "save": "Enregistrer les modifications",
+      "saving": "Enregistrement",
+      "reset": "Abandonner les modifications",
+      "saved": "Paramètres enregistrés.",
+      "confirm": {
+        "title": "Vérifier avant d’enregistrer",
+        "confirm": "Enregistrer les modifications",
+        "engineOff": "Désactiver le moteur empêche tous les espaces de travail de répondre aux clients avec des FAQ et bloque les modifications de FAQ jusqu’à sa réactivation.",
+        "modelChange": "Passer du modèle {from} au modèle {to} recrée tous les vecteurs enregistrés. Tant que ce n’est pas terminé, la correspondance n’utilise que la similarité orthographique. La sensibilité par défaut suivra le nouveau modèle (recommandé : {threshold}) sauf si vous fixez une valeur. Les seuils enregistrés séparément par les espaces de travail devront peut-être être réajustés, car les scores changent avec le modèle."
+      },
+      "verify": {
+        "title": "Seconde vérification des cas limites",
+        "description": "Un petit modèle de chat revérifie les correspondances qui atteignent tout juste le seuil d’un espace de travail. Il peut uniquement retenir une réponse. Chaque espace de travail l’active dans ses propres paramètres FAQ.",
+        "enabled": {
+          "label": "Autoriser la seconde vérification",
+          "hint": "Désactivez-la pour arrêter la vérification dans tous les espaces de travail, quel que soit leur réglage."
+        },
+        "model": {
+          "label": "Modèle de vérification",
+          "hint": "L’identifiant du modèle OpenRouter qui juge les cas limites, par exemple openai/gpt-4o-mini. Un modèle petit et rapide suffit."
+        },
+        "perHourHint": "Au-delà, un cas limite est conservé sans vérification jusqu’à la fin de l’heure. 0 signifie ne jamais vérifier."
+      }
+    },
+    "maintenance": {
+      "title": "Maintenance",
+      "description": "Recalculez l’index quand quelque chose semble anormal. Le traitement s’exécute en arrière-plan.",
+      "progress": "{ready, number} sur {total, number} prêts",
+      "progressLabel": "Progression de l’indexation",
+      "polling": "Actualisation toutes les 5 secondes tant que {count, number} sont en attente.",
+      "idle": "Rien n’attend d’être indexé.",
+      "reindexAll": "Tout réindexer",
+      "retryFailed": "Relancer les échecs",
+      "retryFailedNone": "Aucun vecteur en échec à relancer.",
+      "confirmAll": {
+        "title": "Tout réindexer ?",
+        "message": "Chaque vecteur enregistré est recréé avec le modèle actuel. La correspondance utilise la similarité orthographique pour les lignes pas encore prêtes, et les jetons de correspondance sont facturés à nouveau.",
+        "confirm": "Tout réindexer"
+      },
+      "confirmFailed": {
+        "title": "Relancer les vecteurs en échec ?",
+        "message": "Seuls les vecteurs qui ont abandonné sont remis en file d’attente. Vérifiez d’abord la clé OpenRouter de la plateforme s’ils continuent d’échouer.",
+        "confirm": "Relancer les échecs"
+      },
+      "queued": "{count, plural, =0 {Rien à mettre en file d’attente.} one {# vecteur mis en file d’attente.} many {# de vecteurs mis en file d’attente.} other {# vecteurs mis en file d’attente.}}"
+    },
+    "workspaces": {
+      "title": "Espaces de travail",
+      "description": "Les plus actifs d’abord. Les espaces de travail activés passent avant les autres.",
+      "search": "Rechercher des espaces de travail",
+      "searchPlaceholder": "Nom de l’espace de travail",
+      "limit": "Lignes",
+      "limitOption": "{count, number} lignes",
+      "tableLabel": "Espaces de travail par activité FAQ",
+      "columns": {
+        "name": "Espace de travail",
+        "enabled": "FAQ",
+        "faqs": "FAQ rédigées",
+        "variations": "Variantes",
+        "indexing": "Indexation",
+        "matches": "Correspondances (30 jours)",
+        "answered": "Avec réponse (30 jours)"
+      },
+      "enabled": "Activé",
+      "disabled": "Désactivé",
+      "upToDate": "À jour",
+      "pending": "{count, number} en attente",
+      "failed": "{count, number} en échec",
+      "answered": "{count, number} ({rate})",
+      "emptyTitle": "Aucun espace de travail pour l’instant",
+      "emptyMessage": "Les espaces de travail s’affichent ici dès qu’ils existent.",
+      "noMatchTitle": "Aucun espace de travail ne correspond à cette recherche",
+      "noMatchMessage": "Vérifiez l’orthographe ou effacez le champ de recherche.",
+      "clearSearch": "Effacer la recherche"
+    }
+  }
+}

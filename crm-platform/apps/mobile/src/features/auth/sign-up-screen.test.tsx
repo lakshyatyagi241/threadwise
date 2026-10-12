@@ -75,8 +75,8 @@ const router = {
   canGoBack: jest.fn(),
 };
 
-const renderScreen = () =>
-  render(
+const renderScreen = async () =>
+  await render(
     <I18nextProvider i18n={i18n}>
       <QueryClientProvider
         client={new QueryClient({ defaultOptions: { queries: { retry: false, retryDelay: 0 } } })}
@@ -86,24 +86,24 @@ const renderScreen = () =>
     </I18nextProvider>,
   );
 
-const fill = (label: string, value: string) =>
-  fireEvent.changeText(screen.getByLabelText(label), value);
-const press = (name: string) => fireEvent.press(screen.getByRole('button', { name }));
+const fill = async (label: string, value: string) =>
+  await fireEvent.changeText(screen.getByLabelText(label), value);
+const press = async (name: string) => await fireEvent.press(screen.getByRole('button', { name }));
 const valueOf = (label: string): unknown => screen.getByLabelText(label).props.value;
-const agree = () =>
-  fireEvent.press(
+const agree = async () =>
+  await fireEvent.press(
     screen.getByRole('checkbox', { name: 'I agree to the Terms and Privacy policy.' }),
   );
 
 async function fillForm(overrides: Partial<Record<string, string>> = {}) {
   await screen.findByText('Create your account');
-  fill('Full name', overrides.name ?? 'Asha Rao');
-  fill('Work email', overrides.email ?? 'asha@acme.test');
-  fill('Workspace name', overrides.org ?? 'Acme Ltd');
-  fill('Mobile number', overrides.phone ?? '98765 43210');
-  fill('Password', overrides.password ?? 'Correct-Horse-9');
-  fill('Confirm password', overrides.confirm ?? overrides.password ?? 'Correct-Horse-9');
-  agree();
+  await fill('Full name', overrides.name ?? 'Asha Rao');
+  await fill('Work email', overrides.email ?? 'asha@acme.test');
+  await fill('Workspace name', overrides.org ?? 'Acme Ltd');
+  await fill('Mobile number', overrides.phone ?? '98765 43210');
+  await fill('Password', overrides.password ?? 'Correct-Horse-9');
+  await fill('Confirm password', overrides.confirm ?? overrides.password ?? 'Correct-Horse-9');
+  await agree();
 }
 
 beforeAll(async () => {
@@ -120,7 +120,7 @@ beforeEach(() => {
 
 describe('SignUpScreen: before the form', () => {
   it('shows the form with the platform name and the live password rules once the settings are known', async () => {
-    renderScreen();
+    await renderScreen();
     expect(await screen.findByText('Create your account')).toBeTruthy();
     expect(screen.getByText('CRM Platform')).toBeTruthy();
     expect(await screen.findByText('Minimum length: 12.')).toBeTruthy();
@@ -133,12 +133,12 @@ describe('SignUpScreen: before the form', () => {
     jest
       .mocked(api.fetchRegistrationConfig)
       .mockRejectedValue(new ApiError(0, 'CLIENT_NETWORK', 'offline'));
-    renderScreen();
+    await renderScreen();
     expect(await screen.findByText(/Can't reach the server/)).toBeTruthy();
     expect(screen.queryByLabelText('Full name')).toBeNull();
 
     jest.mocked(api.fetchRegistrationConfig).mockResolvedValue(config);
-    press('Try again');
+    await press('Try again');
     expect(await screen.findByLabelText('Full name')).toBeTruthy();
   });
 
@@ -146,12 +146,12 @@ describe('SignUpScreen: before the form', () => {
     jest
       .mocked(api.fetchRegistrationConfig)
       .mockResolvedValue({ ...config, registrationOpen: false });
-    renderScreen();
+    await renderScreen();
     expect(
       await screen.findByText('Registration is closed. Ask an administrator for an invitation.'),
     ).toBeTruthy();
     expect(screen.queryByLabelText('Full name')).toBeNull();
-    press('Back to sign in');
+    await press('Back to sign in');
     expect(router.back).toHaveBeenCalled();
   });
 
@@ -159,7 +159,7 @@ describe('SignUpScreen: before the form', () => {
     jest
       .mocked(api.fetchRegistrationConfig)
       .mockResolvedValue({ ...config, captcha: { version: 'v2', siteKey: 'site-key' } });
-    renderScreen();
+    await renderScreen();
     expect(await screen.findByText(/A security check is required/)).toBeTruthy();
     expect(screen.queryByLabelText('Full name')).toBeNull();
   });
@@ -167,7 +167,7 @@ describe('SignUpScreen: before the form', () => {
 
 describe('SignUpScreen: filling in the form', () => {
   it('hints at what to type in every empty field, the passwords included', async () => {
-    renderScreen();
+    await renderScreen();
     await screen.findByText('Create your account');
     for (const hint of [
       'Your name',
@@ -180,14 +180,14 @@ describe('SignUpScreen: filling in the form', () => {
     ]) {
       expect(screen.getByPlaceholderText(hint)).toBeTruthy();
     }
-    press('Choose a custom workspace address');
+    await press('Choose a custom workspace address');
     expect(screen.getByPlaceholderText('your-workspace')).toBeTruthy();
   });
 
   it('checks the form before calling the API', async () => {
-    renderScreen();
+    await renderScreen();
     await screen.findByText('Create your account');
-    press('Create an account');
+    await press('Create an account');
     expect(await screen.findByText('Enter your full name.')).toBeTruthy();
     expect(screen.getByText('Enter a valid email address.')).toBeTruthy();
     expect(screen.getByText('Name your workspace (at least 2 characters).')).toBeTruthy();
@@ -198,9 +198,9 @@ describe('SignUpScreen: filling in the form', () => {
   });
 
   it('holds the password to the platform minimum, and asks for the two to match', async () => {
-    renderScreen();
+    await renderScreen();
     await fillForm({ password: 'Short-Pw-1', confirm: 'Different-Pw-1' });
-    press('Create an account');
+    await press('Create an account');
     // The rule also sits in the checklist, so the same sentence shows twice: once as a rule, once as the problem.
     expect(await screen.findAllByText('Minimum length: 12.')).toHaveLength(2);
     expect(screen.getByText('The two passwords do not match.')).toBeTruthy();
@@ -208,38 +208,38 @@ describe('SignUpScreen: filling in the form', () => {
   });
 
   it("clears a field's problem as soon as the person starts to fix it", async () => {
-    renderScreen();
+    await renderScreen();
     await screen.findByText('Create your account');
-    press('Create an account');
+    await press('Create an account');
     expect(await screen.findByText('Enter your full name.')).toBeTruthy();
-    fill('Full name', 'A');
+    await fill('Full name', 'A');
     expect(screen.queryByText('Enter your full name.')).toBeNull();
   });
 
   it('shows the address the workspace will get, from the name being typed', async () => {
-    renderScreen();
+    await renderScreen();
     await screen.findByText('This is the name your team sees.');
-    fill('Workspace name', 'Acme Inc.');
+    await fill('Workspace name', 'Acme Inc.');
     expect(screen.getByText('Your team signs in with the address acme-inc.')).toBeTruthy();
   });
 
   it('upper-cases and limits the referral code, and writes a valid number the international way', async () => {
-    renderScreen();
+    await renderScreen();
     await screen.findByText('Create your account');
-    fill('Referral code (optional)', 'ab-12 cd');
+    await fill('Referral code (optional)', 'ab-12 cd');
     expect(valueOf('Referral code (optional)')).toBe('AB12CD');
-    fill('Mobile number', '9876543210');
-    fireEvent(screen.getByLabelText('Mobile number'), 'blur');
+    await fill('Mobile number', '9876543210');
+    await fireEvent(screen.getByLabelText('Mobile number'), 'blur');
     expect(valueOf('Mobile number')).toBe('+91 98765 43210');
   });
 
   it('opens the workspace address field on request, and sends what was typed', async () => {
     signUp.mockResolvedValue(authenticated);
-    renderScreen();
+    await renderScreen();
     await fillForm();
-    press('Choose a custom workspace address');
-    fill('Workspace address', 'acme-team');
-    press('Create an account');
+    await press('Choose a custom workspace address');
+    await fill('Workspace address', 'acme-team');
+    await press('Create an account');
     await waitFor(() => expect(signUp).toHaveBeenCalled());
     expect(signUp).toHaveBeenCalledWith({ ...expectedBody, orgSlug: 'acme-team' });
   });
@@ -248,28 +248,28 @@ describe('SignUpScreen: filling in the form', () => {
 describe('SignUpScreen: creating the account', () => {
   it('sends the sign-up the contract describes and starts the session', async () => {
     signUp.mockResolvedValue(authenticated);
-    renderScreen();
+    await renderScreen();
     await fillForm();
-    press('Create an account');
+    await press('Create an account');
     await waitFor(() => expect(getSnapshot().status).toBe('signedIn'));
     expect(signUp).toHaveBeenCalledWith(expectedBody);
   });
 
   it('sends the referral code when one was typed', async () => {
     signUp.mockResolvedValue(authenticated);
-    renderScreen();
+    await renderScreen();
     await fillForm();
-    fill('Referral code (optional)', 'friend7');
-    press('Create an account');
+    await fill('Referral code (optional)', 'friend7');
+    await press('Create an account');
     await waitFor(() => expect(signUp).toHaveBeenCalled());
     expect(signUp).toHaveBeenCalledWith({ ...expectedBody, referralCode: 'FRIEND7' });
   });
 
   it('sends the form from the keyboard\'s "go" key on the last field, like Enter on the web', async () => {
     signUp.mockResolvedValue(authenticated);
-    renderScreen();
+    await renderScreen();
     await fillForm();
-    fireEvent(screen.getByLabelText('Confirm password'), 'submitEditing');
+    await fireEvent(screen.getByLabelText('Confirm password'), 'submitEditing');
     await waitFor(() => expect(getSnapshot().status).toBe('signedIn'));
     expect(signUp).toHaveBeenCalledWith(expectedBody);
   });
@@ -281,10 +281,10 @@ describe('SignUpScreen: creating the account', () => {
         finish = resolve;
       }),
     );
-    renderScreen();
+    await renderScreen();
     await fillForm();
-    press('Create an account');
-    press('Create an account');
+    await press('Create an account');
+    await press('Create an account');
     expect(signUp).toHaveBeenCalledTimes(1);
     finish(authenticated);
     await waitFor(() => expect(getSnapshot().status).toBe('signedIn'));
@@ -308,26 +308,26 @@ describe('SignUpScreen: what the server can refuse', () => {
     ['too many attempts', new ApiError(429, 'RATE_LIMITED', 'x'), /Too many attempts/],
   ])('shows the message for %s', async (_name, error, message) => {
     signUp.mockRejectedValue(error);
-    renderScreen();
+    await renderScreen();
     await fillForm();
-    press('Create an account');
+    await press('Create an account');
     expect(await screen.findByText(message)).toBeTruthy();
     expect(getSnapshot().status).not.toBe('signedIn');
   });
 
   it('opens the address field when the address is taken, so another one can be typed', async () => {
     signUp.mockRejectedValue(new ApiError(409, 'AUTH_SLUG_TAKEN', 'x'));
-    renderScreen();
+    await renderScreen();
     await fillForm();
     expect(screen.queryByLabelText('Workspace address')).toBeNull();
-    press('Create an account');
+    await press('Create an account');
     expect(await screen.findByText('That workspace address is already taken.')).toBeTruthy();
     expect(screen.getByLabelText('Workspace address')).toBeTruthy();
 
     // The next try sends the address that was typed, not a derived one.
     signUp.mockResolvedValue(authenticated);
-    fill('Workspace address', 'acme-two');
-    press('Create an account');
+    await fill('Workspace address', 'acme-two');
+    await press('Create an account');
     await waitFor(() => expect(signUp).toHaveBeenCalledTimes(2));
     expect(signUp).toHaveBeenLastCalledWith({ ...expectedBody, orgSlug: 'acme-two' });
   });
@@ -338,9 +338,9 @@ describe('SignUpScreen: what the server can refuse', () => {
         { path: 'password.common', message: 'That password is too easy to guess.' },
       ]),
     );
-    renderScreen();
+    await renderScreen();
     await fillForm();
-    press('Create an account');
+    await press('Create an account');
     expect(await screen.findByText(/does not meet the security policy/)).toBeTruthy();
     expect(screen.getByText(/That password is too easy to guess\./)).toBeTruthy();
   });
@@ -349,9 +349,9 @@ describe('SignUpScreen: what the server can refuse', () => {
 describe('SignUpScreen: the WhatsApp code', () => {
   const reachCodeStep = async (cooldown?: number) => {
     signUp.mockResolvedValue(codeRequired(cooldown));
-    renderScreen();
+    await renderScreen();
     await fillForm();
-    press('Create an account');
+    await press('Create an account');
     await screen.findByText('Check your WhatsApp');
   };
 
@@ -366,8 +366,8 @@ describe('SignUpScreen: the WhatsApp code', () => {
 
   it('checks the length of the code before asking the server', async () => {
     await reachCodeStep();
-    fill('Verification code', '123');
-    press('Verify and continue');
+    await fill('Verification code', '123');
+    await press('Verify and continue');
     expect(await screen.findByText('Enter the 6-digit code.')).toBeTruthy();
     expect(verifySignUpOtp).not.toHaveBeenCalled();
   });
@@ -375,21 +375,21 @@ describe('SignUpScreen: the WhatsApp code', () => {
   it('empties the box on a wrong code, then signs in with the right one', async () => {
     await reachCodeStep();
     verifySignUpOtp.mockRejectedValueOnce(new ApiError(400, 'AUTH_OTP_INVALID', 'x'));
-    fill('Verification code', '000000');
-    press('Verify and continue');
+    await fill('Verification code', '000000');
+    await press('Verify and continue');
     expect(await screen.findByText('That code is not correct. Try again.')).toBeTruthy();
     expect(valueOf('Verification code')).toBe('');
 
     verifySignUpOtp.mockResolvedValueOnce(authenticated);
-    fill('Verification code', '123456');
-    press('Verify and continue');
+    await fill('Verification code', '123456');
+    await press('Verify and continue');
     await waitFor(() => expect(getSnapshot().status).toBe('signedIn'));
     expect(verifySignUpOtp).toHaveBeenLastCalledWith({ challengeId: 'c-1', code: '123456' });
   });
 
   it('keeps only digits in the code box', async () => {
     await reachCodeStep();
-    fill('Verification code', '12 3a4-56789');
+    await fill('Verification code', '12 3a4-56789');
     expect(valueOf('Verification code')).toBe('123456');
   });
 
@@ -402,14 +402,14 @@ describe('SignUpScreen: the WhatsApp code', () => {
   it('sends a new code when the wait is over', async () => {
     await reachCodeStep(0);
     resendSignUpOtp.mockResolvedValue({ expiresInSeconds: 300, resendCooldownSeconds: 0 });
-    press('Resend code');
+    await press('Resend code');
     expect(await screen.findByText('A new code is on its way to your WhatsApp.')).toBeTruthy();
     expect(resendSignUpOtp).toHaveBeenCalledWith({ challengeId: 'c-1' });
   });
 
   it('goes back to the form with everything still typed', async () => {
     await reachCodeStep();
-    press('Wrong number? Go back');
+    await press('Wrong number? Go back');
     expect(await screen.findByLabelText('Full name')).toBeTruthy();
     expect(valueOf('Full name')).toBe('Asha Rao');
     expect(valueOf('Work email')).toBe('asha@acme.test');
@@ -419,8 +419,8 @@ describe('SignUpScreen: the WhatsApp code', () => {
   it('returns to the form with a message when the pending sign-up has expired', async () => {
     await reachCodeStep();
     verifySignUpOtp.mockRejectedValue(new ApiError(410, 'AUTH_SIGNUP_EXPIRED', 'x'));
-    fill('Verification code', '123456');
-    press('Verify and continue');
+    await fill('Verification code', '123456');
+    await press('Verify and continue');
     expect(await screen.findByText('Please start registration again.')).toBeTruthy();
     expect(screen.getByLabelText('Full name')).toBeTruthy();
   });
@@ -428,8 +428,8 @@ describe('SignUpScreen: the WhatsApp code', () => {
   it('returns to the form and opens the address when it was taken while the code was on its way', async () => {
     await reachCodeStep();
     verifySignUpOtp.mockRejectedValue(new ApiError(409, 'AUTH_SLUG_TAKEN', 'x'));
-    fill('Verification code', '123456');
-    press('Verify and continue');
+    await fill('Verification code', '123456');
+    await press('Verify and continue');
     expect(await screen.findByText('That workspace address is already taken.')).toBeTruthy();
     expect(screen.getByLabelText('Workspace address')).toBeTruthy();
   });
@@ -437,17 +437,17 @@ describe('SignUpScreen: the WhatsApp code', () => {
 
 describe('SignUpScreen: leaving', () => {
   it('goes back to sign-in from the link at the bottom', async () => {
-    renderScreen();
+    await renderScreen();
     await screen.findByText('Create your account');
-    press('Sign in');
+    await press('Sign in');
     expect(router.back).toHaveBeenCalled();
   });
 
   it('goes to sign-in when there is nothing to go back to (the screen was opened directly)', async () => {
     router.canGoBack.mockReturnValue(false);
-    renderScreen();
+    await renderScreen();
     await screen.findByText('Create your account');
-    press('Sign in');
+    await press('Sign in');
     expect(router.replace).toHaveBeenCalledWith('/sign-in');
   });
 });

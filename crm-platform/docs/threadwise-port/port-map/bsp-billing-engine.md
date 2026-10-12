@@ -17,14 +17,14 @@ contracts WALLET consumes (billing mode, Meta cost resolution).
 
 ## Tables
 
-| Table                                        | Owner        | Shape                                                                                                                                                                                    |
-| -------------------------------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `bsp_credit_allocations`                     | BSP          | tenant (org_id first, forced RLS), already ported; migration `bsp_reseller_core` adds UNIQUE (org_id, waba_id), status/source CHECKs, `created_by_operator_id`, a platform listing index |
-| `workspace_settings.bill_to_platform_credit` | WSP          | the reseller flag (`true` = reseller). BSP writes only this column (upsert of the org's row)                                                                                             |
-| `wa_provider_configs`                        | WADEV        | read only: `provider='waba'`, `status='connected'`, `meta_json->>'waba_id'`, phone                                                                                                       |
-| `usage_charges` (Reference `message_charges`)   | WALLET       | read only (P&L): `status`, `revenue_minor`, `cost_minor`, `created_at`                                                                                                                   |
-| `message_rates`, `wallets`, `currencies`     | WALLET / CPN | read only (cost resolution, wallet float, currency list)                                                                                                                                 |
-| `platform_settings`                          | AUTH         | through `PlatformSettingsService`: `bsp.connection` (JSON, non secret) and the secret `bsp.system_user_token` (encrypted envelope)                                                       |
+| Table                                         | Owner        | Shape                                                                                                                                                                                    |
+| --------------------------------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `bsp_credit_allocations`                      | BSP          | tenant (org_id first, forced RLS), already ported; migration `bsp_reseller_core` adds UNIQUE (org_id, waba_id), status/source CHECKs, `created_by_operator_id`, a platform listing index |
+| `workspace_settings.bill_to_platform_credit`  | WSP          | the reseller flag (`true` = reseller). BSP writes only this column (upsert of the org's row)                                                                                             |
+| `wa_provider_configs`                         | WADEV        | read only: `provider='waba'`, `status='connected'`, `meta_json->>'waba_id'`, phone                                                                                                       |
+| `usage_charges` (Reference `message_charges`) | WALLET       | read only (P&L): `status`, `revenue_minor`, `cost_minor`, `created_at`                                                                                                                   |
+| `message_rates`, `wallets`, `currencies`      | WALLET / CPN | read only (cost resolution, wallet float, currency list)                                                                                                                                 |
+| `platform_settings`                           | AUTH         | through `PlatformSettingsService`: `bsp.connection` (JSON, non secret) and the secret `bsp.system_user_token` (encrypted envelope)                                                       |
 
 There is no markup table, no BSP wallet and none of the six dropped `bsp_*` tables (TW-BSP-018, -019).
 

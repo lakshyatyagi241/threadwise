@@ -108,3 +108,17 @@ export function avatarColor(id: string): (typeof AVATAR_COLORS)[number] {
   for (const ch of id) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
   return AVATAR_COLORS[h % AVATAR_COLORS.length]!;
 }
+
+/** A moment to the second with its time zone: the delivery log's lines, where two steps can be a second apart. */
+export function exactStamp(iso: string | null, locale: string): string {
+  if (!iso) return '';
+  return new Date(iso).toLocaleString(locale, {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    timeZoneName: 'short',
+  });
+}

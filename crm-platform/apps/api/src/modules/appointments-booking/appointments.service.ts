@@ -95,9 +95,18 @@ export class AppointmentsService {
   ): Promise<AppointmentPageResponse> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
+      // AZ-020: a contact that does not exist and one the caller may not read (no record.contacts.read, or outside its
+      // scope) answer the same 404, with the same text, so the route cannot be used to find out which contacts exist.
       const contact = await this.repo.resolveContact(tx, ctx.orgId, contactUuid);
-      if (!contact) throw AppError.notFound('Contact', contactUuid);
-      await this.assertContactVisible(tx, contact.ownerId);
+      try {
+        if (!contact) throw AppError.notFound('Contact', contactUuid);
+        await this.assertContactVisible(tx, contact.ownerId);
+      } catch (err) {
+        if (err instanceof AppError && (err.getStatus() === 403 || err.getStatus() === 404)) {
+          throw AppError.notFound('Contact', contactUuid);
+        }
+        throw err;
+      }
       return this.listIn(tx, { ...query, contactId: undefined }, scope, { contactId: contact.id });
     });
   }

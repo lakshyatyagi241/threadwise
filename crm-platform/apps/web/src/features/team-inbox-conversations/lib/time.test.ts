@@ -19,13 +19,17 @@ describe('days', () => {
   it('labels today and yesterday in words and older days as dates', () => {
     expect(dayLabel(local(2), NOW, 'en').toLowerCase()).toBe('today');
     expect(dayLabel(local(1), NOW, 'en').toLowerCase()).toBe('yesterday');
-    expect(dayLabel(new Date(2026, 8, 20, 12).toISOString(), NOW, 'en')).toMatch(/20 Sept|Sept 20|Sep 20|20 Sep/);
+    expect(dayLabel(new Date(2026, 8, 20, 12).toISOString(), NOW, 'en')).toMatch(
+      /20 Sept|Sept 20|Sep 20|20 Sep/,
+    );
   });
 });
 
 describe('listTime', () => {
   it('says now for the last seconds and minutes ago after that', () => {
-    expect(listTime(new Date(NOW - 10_000).toISOString(), NOW, 'en').toLowerCase()).toContain('now');
+    expect(listTime(new Date(NOW - 10_000).toISOString(), NOW, 'en').toLowerCase()).toContain(
+      'now',
+    );
     expect(listTime(new Date(NOW - 5 * 60_000).toISOString(), NOW, 'en')).toMatch(/5/);
   });
 

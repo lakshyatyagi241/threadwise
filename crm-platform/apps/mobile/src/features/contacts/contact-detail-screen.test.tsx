@@ -33,8 +33,8 @@ const settled = (queryClient: QueryClient) =>
   waitFor(() => expect(queryClient.isFetching()).toBe(0));
 
 let client: QueryClient | undefined;
-function show() {
-  const view = renderApp(<ContactDetailScreen />);
+async function show() {
+  const view = await renderApp(<ContactDetailScreen />);
   client = view.queryClient;
   return view;
 }
@@ -58,7 +58,7 @@ afterEach(async () => {
 
 describe('ContactDetailScreen', () => {
   it('shows who the contact is and where they stand', async () => {
-    show();
+    await show();
     expect(await screen.findByRole('header', { name: 'Aarav Sharma' })).toBeTruthy();
     expect(getCall).toHaveBeenCalledWith(aarav.id, expect.anything());
     expect(screen.getByText('Qualified')).toBeTruthy();
@@ -72,10 +72,10 @@ describe('ContactDetailScreen', () => {
   });
 
   it('opens the dialler and the mail app from the phone and the email', async () => {
-    show();
-    fireEvent.press(await screen.findByRole('link', { name: 'Call +919812345678' }));
+    await show();
+    await fireEvent.press(await screen.findByRole('link', { name: 'Call +919812345678' }));
     expect(Linking.openURL).toHaveBeenCalledWith('tel:+919812345678');
-    fireEvent.press(screen.getByRole('link', { name: 'Write to aarav@example.test' }));
+    await fireEvent.press(screen.getByRole('link', { name: 'Write to aarav@example.test' }));
     expect(Linking.openURL).toHaveBeenCalledWith('mailto:aarav@example.test');
   });
 
@@ -83,7 +83,7 @@ describe('ContactDetailScreen', () => {
     getCall.mockResolvedValue(phoneOnly);
     tagsCall.mockResolvedValue([]);
     jest.mocked(useLocalSearchParams).mockReturnValue({ id: phoneOnly.id });
-    show();
+    await show();
     expect(await screen.findByRole('link', { name: 'Call +919800000002' })).toBeTruthy();
     expect(screen.queryByText('Email')).toBeNull();
     expect(screen.queryByText('Custom fields')).toBeNull();
@@ -91,33 +91,33 @@ describe('ContactDetailScreen', () => {
   });
 
   it('goes back, to the list when there is nowhere to go back to', async () => {
-    show();
-    fireEvent.press(await screen.findByRole('button', { name: 'Back' }));
+    await show();
+    await fireEvent.press(await screen.findByRole('button', { name: 'Back' }));
     expect(router.back).toHaveBeenCalled();
     router.canGoBack.mockReturnValue(false);
-    fireEvent.press(screen.getByRole('button', { name: 'Back' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Back' }));
     expect(router.replace).toHaveBeenCalledWith('/contacts');
   });
 
   it('says so when the contact no longer exists', async () => {
     getCall.mockRejectedValue(new ApiError(404, 'NOT_FOUND', 'gone'));
-    show();
+    await show();
     expect(await screen.findByText('This contact no longer exists.')).toBeTruthy();
   });
 
   it('shows the failure with a way to try again', async () => {
     getCall.mockRejectedValueOnce(new ApiError(0, 'CLIENT_TIMEOUT', 'slow'));
-    show();
+    await show();
     expect(
       await screen.findByText('The server took too long to answer. Please try again.'),
     ).toBeTruthy();
-    fireEvent.press(screen.getByRole('button', { name: 'Try again' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Try again' }));
     expect(await screen.findByRole('header', { name: 'Aarav Sharma' })).toBeTruthy();
   });
 
   it('tells a person without the permission, and asks for nothing', async () => {
     sessionCall.mockResolvedValue(sessionNoContacts);
-    const { queryClient } = show();
+    const { queryClient } = await show();
     expect(await screen.findByText("You can't view contacts")).toBeTruthy();
     await settled(queryClient);
     expect(getCall).not.toHaveBeenCalled();
@@ -127,12 +127,12 @@ describe('ContactDetailScreen', () => {
   describe('editing', () => {
     it('opens the form filled in, and sends only what changed with the row version', async () => {
       updateCall.mockResolvedValue({ ...aarav, name: 'Aarav S.', rowVersion: 4 });
-      show();
-      fireEvent.press(await screen.findByRole('button', { name: 'Edit contact' }));
+      await show();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Edit contact' }));
       expect(screen.getByLabelText('Name').props.value).toBe('Aarav Sharma');
       expect(screen.getByLabelText('Phone').props.value).toBe('+919812345678');
-      fireEvent.changeText(screen.getByLabelText('Name'), 'Aarav S.');
-      fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
+      await fireEvent.changeText(screen.getByLabelText('Name'), 'Aarav S.');
+      await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
       await waitFor(() =>
         expect(updateCall).toHaveBeenCalledWith(
           aarav.id,
@@ -146,10 +146,10 @@ describe('ContactDetailScreen', () => {
 
     it('sends an emptied field as null', async () => {
       updateCall.mockResolvedValue({ ...aarav, email: null });
-      show();
-      fireEvent.press(await screen.findByRole('button', { name: 'Edit contact' }));
-      fireEvent.changeText(screen.getByLabelText('Email'), '');
-      fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
+      await show();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Edit contact' }));
+      await fireEvent.changeText(screen.getByLabelText('Email'), '');
+      await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
       await waitFor(() =>
         expect(updateCall).toHaveBeenCalledWith(
           aarav.id,
@@ -161,11 +161,11 @@ describe('ContactDetailScreen', () => {
 
     it('reloads the contact and asks for another look when someone else saved first', async () => {
       updateCall.mockRejectedValue(new ApiError(409, 'ROW_VERSION_CONFLICT', 'Conflict'));
-      show();
-      fireEvent.press(await screen.findByRole('button', { name: 'Edit contact' }));
+      await show();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Edit contact' }));
       getCall.mockResolvedValue({ ...aarav, name: 'Aarav Verma', rowVersion: 4 });
-      fireEvent.changeText(screen.getByLabelText('Name'), 'Aarav S.');
-      fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
+      await fireEvent.changeText(screen.getByLabelText('Name'), 'Aarav S.');
+      await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
       expect(
         await screen.findByText('This contact was changed by someone else. Review and save again.'),
       ).toBeTruthy();
@@ -173,8 +173,8 @@ describe('ContactDetailScreen', () => {
       // The form now holds the other person's version, and saving again carries the new row version.
       await waitFor(() => expect(screen.getByLabelText('Name').props.value).toBe('Aarav Verma'));
       updateCall.mockResolvedValue({ ...aarav, name: 'Aarav S.', rowVersion: 5 });
-      fireEvent.changeText(screen.getByLabelText('Name'), 'Aarav S.');
-      fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
+      await fireEvent.changeText(screen.getByLabelText('Name'), 'Aarav S.');
+      await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
       await waitFor(() =>
         expect(updateCall).toHaveBeenLastCalledWith(
           aarav.id,
@@ -190,10 +190,10 @@ describe('ContactDetailScreen', () => {
           { path: 'phone', message: 'bad' },
         ]),
       );
-      show();
-      fireEvent.press(await screen.findByRole('button', { name: 'Edit contact' }));
-      fireEvent.changeText(screen.getByLabelText('Phone'), '+910000000');
-      fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
+      await show();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Edit contact' }));
+      await fireEvent.changeText(screen.getByLabelText('Phone'), '+910000000');
+      await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
       expect(
         await screen.findByText(
           'Enter the phone number with the country code, for example +919876543210.',
@@ -203,19 +203,19 @@ describe('ContactDetailScreen', () => {
     });
 
     it('closes without a request when nothing changed, and on cancel', async () => {
-      show();
-      fireEvent.press(await screen.findByRole('button', { name: 'Edit contact' }));
-      fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
+      await show();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Edit contact' }));
+      await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
       expect(updateCall).not.toHaveBeenCalled();
       expect(await screen.findByRole('header', { name: 'Aarav Sharma' })).toBeTruthy();
-      fireEvent.press(screen.getByRole('button', { name: 'Edit contact' }));
-      fireEvent.press(screen.getByRole('button', { name: 'Cancel' }));
+      await fireEvent.press(screen.getByRole('button', { name: 'Edit contact' }));
+      await fireEvent.press(screen.getByRole('button', { name: 'Cancel' }));
       expect(screen.queryByRole('button', { name: 'Save changes' })).toBeNull();
     });
 
     it('is not offered to a person who may only read', async () => {
       sessionCall.mockResolvedValue(sessionReadOnly);
-      show();
+      await show();
       await screen.findByRole('header', { name: 'Aarav Sharma' });
       expect(screen.queryByRole('button', { name: 'Edit contact' })).toBeNull();
       expect(screen.queryByLabelText('Add a tag')).toBeNull();
@@ -226,10 +226,10 @@ describe('ContactDetailScreen', () => {
   describe('tags', () => {
     it('adds a tag by name', async () => {
       attachCall.mockResolvedValue({ ...vipTag, name: 'Hot' });
-      show();
+      await show();
       await screen.findByText('VIP');
-      fireEvent.changeText(screen.getByLabelText('Add a tag'), ' Hot ');
-      fireEvent.press(screen.getByRole('button', { name: 'Add tag' }));
+      await fireEvent.changeText(screen.getByLabelText('Add a tag'), ' Hot ');
+      await fireEvent.press(screen.getByRole('button', { name: 'Add tag' }));
       await waitFor(() =>
         expect(attachCall).toHaveBeenCalledWith(aarav.id, 'Hot', expect.any(String)),
       );
@@ -238,17 +238,17 @@ describe('ContactDetailScreen', () => {
 
     it('removes a tag', async () => {
       detachCall.mockResolvedValue(undefined);
-      show();
-      fireEvent.press(await screen.findByRole('button', { name: 'Remove tag VIP' }));
+      await show();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Remove tag VIP' }));
       await waitFor(() => expect(detachCall).toHaveBeenCalledWith(aarav.id, vipTag.id));
     });
 
     it('says when a tag could not be added', async () => {
       attachCall.mockRejectedValue(new ApiError(403, 'FORBIDDEN', 'no'));
-      show();
+      await show();
       await screen.findByText('VIP');
-      fireEvent.changeText(screen.getByLabelText('Add a tag'), 'Hot');
-      await act(async () => fireEvent.press(screen.getByRole('button', { name: 'Add tag' })));
+      await fireEvent.changeText(screen.getByLabelText('Add a tag'), 'Hot');
+      await act(async () => await fireEvent.press(screen.getByRole('button', { name: 'Add tag' })));
       expect(await screen.findByText('Something went wrong. Please try again.')).toBeTruthy();
     });
   });

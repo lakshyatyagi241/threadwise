@@ -343,13 +343,16 @@ export function NumberInput({
   placeholder,
   min,
   max,
+  step,
+  ...rest
 }: {
   value: unknown;
   onChange: (v: number) => void;
   placeholder?: string;
   min?: number;
   max?: number;
-}) {
+  step?: number;
+} & Pick<ComponentProps<'input'>, 'id' | 'aria-invalid' | 'aria-describedby'>) {
   return (
     <input
       type="number"
@@ -358,7 +361,9 @@ export function NumberInput({
       placeholder={placeholder}
       min={min}
       max={max}
+      step={step}
       className={controlClass}
+      {...rest}
     />
   );
 }

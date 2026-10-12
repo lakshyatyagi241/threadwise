@@ -401,13 +401,26 @@ export class FormsRepository {
     tx: Tx,
     orgId: number,
     id: number,
-  ): Promise<{ title: string | null; address: string | null; message: string | null }> {
+  ): Promise<{
+    title: string | null;
+    address: string | null;
+    message: string | null;
+    middleName: string | null;
+  }> {
     const res = await tx.execute(
-      sql`SELECT title, address, message FROM contacts WHERE org_id = ${orgId} AND id = ${id}`,
+      sql`SELECT title, address, message, middle_name FROM contacts WHERE org_id = ${orgId} AND id = ${id}`,
     );
     const r = res.rows[0] as
-      { title: string | null; address: string | null; message: string | null } | undefined;
-    return r ?? { title: null, address: null, message: null };
+      | {
+          title: string | null;
+          address: string | null;
+          message: string | null;
+          middle_name: string | null;
+        }
+      | undefined;
+    return r
+      ? { title: r.title, address: r.address, message: r.message, middleName: r.middle_name }
+      : { title: null, address: null, message: null, middleName: null };
   }
 
   /** One attribution touch for a contact: where a submission came from (platform `form`). Append-only, like the lead pipeline's. */
@@ -528,6 +541,23 @@ export class FormsRepository {
     await tx.execute(sql`
       INSERT INTO web_form_events (org_id, form_id, version_id, visit_id, kind, step_index)
       VALUES (${orgId}, ${v.formId}, ${v.versionId}, ${v.visitId}, ${v.kind}, ${v.step})`);
+  }
+
+  /** Bots the hidden trap field dropped this month, and the submissions currently held as spam, for the Protection section. */
+  async protectionCounts(
+    tx: Tx,
+    orgId: number,
+    now: Date,
+  ): Promise<{ blockedThisMonth: number; heldAsSpam: number }> {
+    const period = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1))
+      .toISOString()
+      .slice(0, 10);
+    const res = await tx.execute(sql`
+      SELECT
+        COALESCE((SELECT spam_blocked FROM web_form_usage_monthly WHERE org_id = ${orgId} AND period = ${period}::date), 0)::int AS blocked,
+        (SELECT count(*) FROM web_form_submissions WHERE org_id = ${orgId} AND status = 'spam' AND erased_at IS NULL)::int AS held`);
+    const r = res.rows[0] as { blocked: number | string; held: number | string };
+    return { blockedThisMonth: Number(r.blocked), heldAsSpam: Number(r.held) };
   }
 
   /** Adds one view of the monthly spam counter (nothing is stored for a submission the honeypot dropped). */

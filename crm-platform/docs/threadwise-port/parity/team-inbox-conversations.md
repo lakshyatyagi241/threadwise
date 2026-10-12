@@ -7,7 +7,7 @@ verification note applies (no signed-in reference session; behaviour here is fro
 
 ## Intended differences
 
-| #   | Reference                                                                                                                                                    | Here                                                                                                                                                     | Reason                                                                          |
+| #   | Reference                                                                                                                                                 | Here                                                                                                                                                     | Reason                                                                          |
 | --- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
 | 1   | Queue is a growing window (`per_page` 30, 60 ... up to 1,000) with a `sig` short-circuit                                                                  | Keyset cursor; counts in `meta.counts`; no `sig` (sockets plus a 60 second poll of `/counts`)                                                            | Architecture (cursor paging, realtime)                                          |
 | 2   | Three view keys (`view_all_teams`, `view_team`, `view_assigned`) and a 403 for a thread you may not see                                                   | One read permission with scope all, team, own; **404** for a thread outside the scope                                                                    | Plan 3.7; a 403 would reveal that the thread exists                             |
@@ -37,3 +37,15 @@ exercised by this domain's tests.
 ## Not verified
 
 Everything about how the reference looks or behaves signed in; timing of ticks against a live provider; behaviour with a real WhatsApp Cloud channel.
+
+## Composer: share a location, contact cards and buttons — `intended` (contacts and buttons are additions)
+
+- **Location** matches Reference ("Share a location": latitude and longitude validated to real ranges, an optional place name and address), as a `Share` dialog tab.
+- **Contact cards and buttons are not in Reference's chat composer.** Added at the project owner's request (2026-10-11), because our channel layer, flows and inbound side already
+  carry both kinds, so the inbox could show customers' cards and button picks but not send them. `POST /inbox/conversations/:id/messages` accepts `kind: "location" | "contacts" | "interactive"`
+  (reply buttons, up to 3 titles of 20 characters; a list of up to 10 rows in up to 10 sections, row titles 24 characters, descriptions 72, a section title on each once there are two; or one http(s) link button). They are free-form messages: they need the open window and a channel that carries them
+  (`capabilities.media` has `location` / `contact`, `capabilities.interactive` is true: WhatsApp Cloud API and the simulator). A QR-linked number sends locations and contact cards (one message, one vCard per
+  card, no 24 hour rule) and refuses buttons and lists with `CHANNEL_CAPABILITY_UNSUPPORTED`. Button ids are `btn-1`..`btn-3` and list row ids `row-1`.., so a customer's pick comes back as a
+  `button_reply` / `list_reply` with that id.
+- Not provable here: delivery of a contact card or a button message on a live Cloud API number (needs a real WABA). The Meta payload builders are covered by `test/unit/whatsapp/meta-outbound-rich.spec.ts`; the send path by `rich-send.spec.ts`.
+- Evidence: `test/unit/chat-conversations/rich-send.spec.ts`, `apps/web/.../lib/share.test.ts`, `components/share.test.tsx`.

@@ -1,0 +1,58 @@
+{
+  "web-forms": {
+    "payment": {
+      "title": "Thanh toán",
+      "description": "Thu tiền khách truy cập qua cổng thanh toán của bạn sau khi họ gửi biểu mẫu. Biểu mẫu chỉ được tính là đã thanh toán khi cổng xác nhận.",
+      "enabled": "Thu thanh toán",
+      "enabledHint": "Sau khi lưu câu trả lời, khách truy cập được chuyển đến trang thanh toán của cổng thanh toán.",
+      "gateway": {
+        "checking": "Đang kiểm tra cổng thanh toán của bạn...",
+        "failed": "Không thể kiểm tra cổng thanh toán của bạn. Hãy thử lại sau giây lát.",
+        "ready": "Thanh toán sẽ chuyển đến {name} ({mode}).",
+        "mode": {
+          "test": "chế độ thử nghiệm",
+          "live": "chế độ trực tiếp"
+        },
+        "none": "Chưa kết nối cổng thanh toán nào nên biểu mẫu này chưa thể nhận thanh toán.",
+        "noLink": "{name} không thể tạo liên kết thanh toán nên không dùng được cho biểu mẫu. Hãy kết nối Razorpay hoặc Stripe.",
+        "open": "Mở cổng thanh toán"
+      },
+      "amountType": "Cách đặt số tiền",
+      "amountTypes": {
+        "fixed": "Giá cố định",
+        "from_field": "Từ trường lựa chọn",
+        "pay_what_you_want": "Khách truy cập tự nhập số tiền"
+      },
+      "amountTypeHints": {
+        "fixed": "Mọi khách truy cập trả cùng một mức giá.",
+        "from_field": "Mỗi tùy chọn của trường danh sách thả xuống hoặc nút radio có giá riêng.",
+        "pay_what_you_want": "Dành cho quyên góp và tiền boa. Bạn đặt số tiền nhỏ nhất và lớn nhất."
+      },
+      "currency": "Tiền tệ",
+      "currencyHint": "Ba chữ cái, như INR hoặc USD. Cổng thanh toán của bạn phải hỗ trợ loại tiền này.",
+      "amount": "Giá",
+      "amountHint": "Tính bằng {currency}, viết như cách bạn đọc, ví dụ 499.00.",
+      "fieldChoice": "Trường lựa chọn",
+      "fieldNumber": "Trường số tiền",
+      "fieldNone": "Chọn một trường",
+      "noChoiceFields": "Hãy thêm trường danh sách thả xuống hoặc nút radio vào biểu mẫu trước.",
+      "noNumberFields": "Hãy thêm trường số hoặc tiền tệ vào biểu mẫu trước.",
+      "optionPrices": "Giá của từng tùy chọn",
+      "optionPrice": "Giá của \"{label}\"",
+      "min": "Số tiền nhỏ nhất",
+      "minHint": "Số tiền thấp hơn sẽ bị từ chối.",
+      "max": "Số tiền lớn nhất (không bắt buộc)",
+      "maxHint": "Để trống nếu không giới hạn trên.",
+      "descriptionLabel": "Hiển thị trên trang thanh toán",
+      "descriptionHint": "Ghi chú ngắn cho người thanh toán, ví dụ họ đang thanh toán cho việc gì.",
+      "issues": {
+        "amountRequired": "Nhập giá.",
+        "fieldRequired": "Chọn trường lấy số tiền.",
+        "fieldNotRequired": "Hãy đặt trường này là bắt buộc để mọi khách truy cập đều nhập số tiền.",
+        "optionsNeedAmounts": "Hãy đặt giá cho mọi tùy chọn.",
+        "minRequired": "Nhập số tiền nhỏ nhất.",
+        "minAboveMax": "Số tiền nhỏ nhất không được lớn hơn số tiền lớn nhất."
+      }
+    }
+  }
+}

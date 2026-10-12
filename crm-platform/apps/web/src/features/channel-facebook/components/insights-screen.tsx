@@ -354,7 +354,7 @@ export function InsightsScreen() {
                       </div>
                     ))}
                     <Link
-                      href="/team-inbox"
+                      href="/inbox"
                       className="mt-2 inline-flex text-xs font-semibold text-brand hover:underline"
                     >
                       {t('convos.open')} →

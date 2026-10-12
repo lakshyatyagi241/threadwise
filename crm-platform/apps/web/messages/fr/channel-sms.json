@@ -1,0 +1,214 @@
+{
+  "sms": {
+    "common": {
+      "dismiss": "Masquer",
+      "close": "Fermer",
+      "cancel": "Annuler"
+    },
+    "hub": {
+      "kicker": "Canaux",
+      "title": "SMS",
+      "titleAccent": "expéditeurs",
+      "intro": "Envoyez des SMS depuis vos propres numéros Twilio et expéditeurs MSG91. Ici, le SMS est en envoi seul : vous contactez vos contacts via des diffusions et des campagnes.",
+      "campaigns": "Campagnes",
+      "broadcasts": "Diffusions",
+      "channels": "Canaux",
+      "loadError": "Impossible de charger vos numéros SMS. Réessayez dans un instant.",
+      "cardCaption": "Twilio · MSG91",
+      "activeCount": "{count, plural, one {# numéro actif} other {# numéros actifs}}",
+      "notConnected": "Non connecté",
+      "howTitle": "Comment ça marche",
+      "how": {
+        "connect": {
+          "title": "Connectez un expéditeur",
+          "body": "Ajoutez un numéro Twilio ou un expéditeur MSG91. Nous vérifions les identifiants auprès du fournisseur avant d’enregistrer."
+        },
+        "report": {
+          "title": "Collez l’adresse des rapports de livraison",
+          "body": "Ajoutez-la dans votre espace MSG91 ou Twilio pour que les SMS délivrés et échoués apparaissent dans vos rapports."
+        },
+        "send": {
+          "title": "Envoyez des diffusions et des campagnes",
+          "body": "Choisissez cet expéditeur lorsque vous créez une diffusion ou une campagne. Chaque destinataire reçoit un SMS."
+        },
+        "billing": {
+          "title": "Facturé sur votre quota SMS",
+          "body": "Les SMS sont décomptés du quota SMS mensuel de votre forfait et ne sont jamais débités du portefeuille WhatsApp."
+        }
+      },
+      "reportTitle": "À retenir : collez ceci chez votre fournisseur",
+      "reportBody": "Ajoutez cette adresse de rapports de livraison dans l’espace de votre fournisseur afin que nous puissions marquer les SMS comme délivrés ou échoués.",
+      "reportLabel": "URL des rapports de livraison",
+      "copy": "Copier",
+      "copied": "Copié",
+      "copyFailed": "Copie impossible. Sélectionnez l’adresse et copiez-la manuellement.",
+      "connectedTitle": "Numéros connectés",
+      "total": "{count} au total",
+      "empty": "Aucun numéro SMS connecté pour l’instant.",
+      "connectFirst": "Connecter votre premier numéro"
+    },
+    "card": {
+      "active": "Actif",
+      "inactive": "Inactif",
+      "rate": "Tarif / segment",
+      "dltSender": "Expéditeur DLT",
+      "dltTemplate": "Modèle DLT",
+      "alphanumeric": "Sender ID : à sens unique, et non accepté dans tous les pays.",
+      "activate": "Activer",
+      "deactivate": "Désactiver",
+      "remove": "Supprimer",
+      "removeTitle": "Supprimer le numéro SMS",
+      "removeConfirm": "Supprimer ce numéro SMS ?",
+      "activated": "Numéro SMS activé.",
+      "deactivated": "Numéro SMS désactivé.",
+      "removed": "Numéro SMS supprimé.",
+      "failed": "Impossible de mettre à jour le numéro SMS. Réessayez.",
+      "changed": "Ce numéro a été modifié ailleurs. La liste a été rechargée, réessayez.",
+      "notAvailable": "Le SMS n’est pas disponible avec votre forfait ou a été désactivé.",
+      "cancel": "Annuler"
+    },
+    "connect": {
+      "title": "Connecter un numéro",
+      "intro": "Ajoutez-en autant que nécessaire. Plusieurs numéros Twilio et expéditeurs MSG91 peuvent fonctionner en même temps.",
+      "provider": "Fournisseur SMS",
+      "providerTwilio": "Twilio (monde entier)",
+      "providerMsg91": "MSG91 (Inde / DLT)",
+      "providerHint": "Twilio pour la plupart des pays ; MSG91 pour une livraison fiable en Inde.",
+      "from": "Numéro d’expédition / Sender ID",
+      "fromPlaceholder": "+17372508034",
+      "fromHint": "Un numéro au format international (Twilio) ou votre expéditeur enregistré (MSG91). Un expéditeur composé de lettres est à sens unique : pas de réponses.",
+      "sid": "Account SID Twilio",
+      "sidPlaceholder": "ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "sidHint": "Twilio uniquement. Laissez vide pour réutiliser les clés déjà connectées pour WhatsApp.",
+      "token": "Auth Token / MSG91 Auth Key",
+      "tokenHint": "Enregistré de façon chiffrée. Pour Twilio, laissez vide pour réutiliser les clés déjà connectées pour WhatsApp.",
+      "dltOptions": "Options MSG91 / Inde (DLT)",
+      "senderId": "Sender ID DLT",
+      "senderIdPlaceholder": "ACMEIN",
+      "senderIdHint": "MSG91 uniquement. Votre expéditeur de 6 lettres enregistré auprès de DLT.",
+      "dltTemplate": "ID du modèle DLT",
+      "dltTemplateHint": "MSG91 uniquement. L’identifiant du modèle DLT approuvé utilisé pour la livraison en Inde.",
+      "reportBoxTitle": "Rapports de livraison dans l’espace MSG91",
+      "reportBoxBody": "Dans votre espace MSG91, collez cette adresse comme URL des rapports de livraison (DLR) :",
+      "rate": "Tarif par segment",
+      "ratePlaceholder": "0.0075",
+      "rateHint": "Uniquement pour le suivi de vos dépenses SMS. Jamais facturé sur le portefeuille WhatsApp.",
+      "currency": "Devise",
+      "submit": "Vérifier et connecter le SMS",
+      "submitting": "Vérification…",
+      "errorTitle": "Impossible de connecter le numéro SMS :",
+      "providerError": "Réponse du fournisseur : {reason}",
+      "connected": "Numéro SMS connecté. Vous pouvez commencer à envoyer.",
+      "failed": "Impossible de connecter le numéro SMS. Réessayez.",
+      "errors": {
+        "fromRequired": "Le champ numéro d’expédition est obligatoire.",
+        "fromTooLong": "Le numéro d’expédition ne doit pas dépasser 32 caractères.",
+        "sidTooLong": "L’Account SID ne doit pas dépasser 64 caractères.",
+        "sidShape": "Ce n’est pas un Account SID. Il doit commencer par AC ; une clé API commençant par SK ne fonctionnera pas.",
+        "tokenRequired": "Une Auth Key MSG91 est obligatoire.",
+        "tokenTooLong": "L’Auth Token ne doit pas dépasser 255 caractères.",
+        "senderIdTooLong": "Le Sender ID ne doit pas dépasser 16 caractères.",
+        "dltTemplateTooLong": "L’ID du modèle DLT ne doit pas dépasser 64 caractères.",
+        "rateInvalid": "Le tarif par segment doit être un nombre supérieur ou égal à zéro.",
+        "currencyTooLong": "La devise ne doit pas dépasser 8 caractères."
+      },
+      "api": {
+        "notAvailable": "Le SMS n’est pas disponible avec votre forfait, ou la plateforme l’a désactivé.",
+        "unavailable": "Ce numéro SMS est déconnecté ou n’a pas d’identifiants. Reconnectez-le d’abord."
+      }
+    },
+    "lookup": {
+      "title": "Vérifiez un numéro avant de lui envoyer un SMS",
+      "hint": "Le SMS est facturé à l’envoi, pas à la réception : vérifiez qu’il s’agit bien d’un mobile avant d’envoyer.",
+      "label": "Numéro de téléphone",
+      "placeholder": "+1 555 123 4567",
+      "check": "Vérifier le numéro",
+      "checking": "Vérification…",
+      "unreachable": "Impossible de joindre le service de vérification.",
+      "carrier": "Opérateur : {carrier}.",
+      "kind": {
+        "mobile": "Mobile — peut recevoir des SMS.",
+        "landline": "Fixe — ne peut pas recevoir de SMS. L’envoi est facturé et perdu.",
+        "voip": "VoIP — peut ne pas recevoir les SMS de façon fiable.",
+        "invalid": "Numéro non valide — l’envoi serait facturé et n’arriverait jamais."
+      }
+    },
+    "guide": {
+      "title": "Guide de configuration",
+      "twilio": {
+        "title": "Twilio (monde entier)",
+        "p1": "Copiez l’Account SID (il commence par AC) et l’Auth Token depuis la page d’accueil de la console Twilio. Une clé API commençant par SK ne fonctionnera pas.",
+        "p2": "Achetez un numéro compatible SMS, ou utilisez votre numéro d’essai, et collez-le comme numéro d’expédition au format international.",
+        "p3": "Dans les paramètres du numéro Twilio, collez l’adresse des rapports de livraison ci-dessus comme URL de rappel de statut.",
+        "p4": "Les comptes d’essai ne peuvent envoyer des SMS qu’à des numéros vérifiés et refusent le texte personnalisé."
+      },
+      "msg91": {
+        "title": "MSG91 (Inde / DLT)",
+        "p1": "Les opérateurs indiens filtrent les numéros longs étrangers : utilisez MSG91 pour une livraison fiable en Inde.",
+        "p2": "Collez votre Auth Key MSG91 dans le champ Auth Token.",
+        "p3": "Sur le portail DLT, enregistrez un Sender ID de 6 lettres et un modèle de message, puis collez les deux dans les options DLT.",
+        "p4": "Avec un ID de modèle DLT, l’expéditeur utilise la route par modèle de MSG91 ; sans lui, il envoie du texte brut."
+      },
+      "billing": {
+        "title": "Segments, coût et facturation",
+        "p1": "Un SMS de 160 caractères simples maximum compte pour un segment (GSM-7). Un seul émoji ou caractère non latin ramène la limite à 70 (UCS-2) et peut tripler le coût.",
+        "p2": "Les SMS plus longs sont découpés en segments de 153 caractères (67 avec UCS-2), et chaque segment est facturé.",
+        "p3": "Le tarif saisi sert uniquement au suivi des dépenses. Les SMS sont comptabilisés sur le quota SMS mensuel de votre forfait, jamais sur le portefeuille WhatsApp.",
+        "p4": "Un Sender ID composé de lettres est à sens unique et n’est pas accepté dans tous les pays, par exemple les États-Unis et le Canada."
+      }
+    },
+    "segments": {
+      "summary": "{units} caractères · {segments, plural, one {# segment} other {# segments}} · {encoding}",
+      "remaining": "{remaining} restants dans ce segment",
+      "ucs2": "Ce message contient des caractères hors de l’alphabet GSM (émoji ou écriture non latine) ; il est donc limité à {perSegment} caractères par SMS et sera facturé comme {segments} messages.",
+      "gsm": "Ce message fait {units} caractères et sera facturé comme {segments} messages."
+    },
+    "compose": {
+      "note": "Le SMS envoie uniquement du texte brut. L’en-tête, le pied de page, les pièces jointes, les boutons et les tests A/B ne sont pas utilisés ; ils sont donc masqués.",
+      "bodyHint": "Soyez bref : tous les 160 caractères, un nouveau segment commence, et chaque segment est facturé."
+    },
+    "chooser": {
+      "name": "SMS",
+      "hint": "Envoyez des SMS à vos contacts depuis un numéro Twilio ou un expéditeur MSG91.",
+      "cta": "Créer une campagne SMS"
+    },
+    "operator": {
+      "nav": {
+        "group": "Canaux",
+        "item": "SMS"
+      },
+      "title": "Canal SMS",
+      "eyebrow": "interrupteur de la plateforme",
+      "superOnly": "Seul un super administrateur peut modifier l'interrupteur SMS. Vous pouvez voir son état.",
+      "loading": "Chargement",
+      "retry": "Réessayer",
+      "status": {
+        "enabled": "Activé",
+        "disabled": "Désactivé"
+      },
+      "explanation": "Active ou désactive le canal SMS pour tous les espaces de travail. Cela affiche ou masque seulement les points d'entrée (le menu SMS, les sélecteurs d'expéditeur et le canal de modèles SMS). Les expéditeurs, les modèles et les envois en cours ne sont jamais supprimés ni arrêtés.",
+      "state": {
+        "enabled": "Le SMS est activé. Les espaces de travail dont l'offre inclut le SMS peuvent connecter des expéditeurs et envoyer des SMS depuis les diffusions et les campagnes.",
+        "disabled": "Le SMS est désactivé. Les espaces de travail ne voient ni le menu SMS, ni les sélecteurs d'expéditeur, ni les modèles SMS. Activez-le quand vous êtes prêt à proposer le canal."
+      },
+      "enable": "Activer le SMS",
+      "disable": "Désactiver le SMS",
+      "cancel": "Annuler",
+      "enabledToast": "Le SMS est maintenant activé pour la plateforme.",
+      "disabledToast": "Le SMS est maintenant désactivé pour la plateforme.",
+      "disableDialog": {
+        "title": "Désactiver le SMS ?",
+        "body": "Tous les espaces de travail cessent immédiatement de voir le menu SMS, les sélecteurs d'expéditeur et les modèles SMS. Rien n'est supprimé et les expéditeurs existants continuent de fonctionner. Vous pouvez le réactiver à tout moment.",
+        "confirm": "Désactiver le SMS"
+      },
+      "errors": {
+        "forbidden": "Vous n'avez pas l'autorisation d'effectuer cette action.",
+        "conflict": "Quelqu'un d'autre a modifié ce réglage. La page a été actualisée ; réessayez.",
+        "validation": "Vérifiez la valeur et réessayez.",
+        "request": "Cette demande n'a pas pu aboutir.",
+        "unexpected": "Un problème est survenu de notre côté. Réessayez dans un instant.",
+        "network": "Impossible de joindre le serveur. Vérifiez votre connexion."
+      }
+    }
+  }
+}

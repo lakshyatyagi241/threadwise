@@ -1,0 +1,58 @@
+{
+  "web-forms": {
+    "payment": {
+      "title": "お支払い",
+      "description": "送信後、訪問者はお使いの決済ゲートウェイで支払います。ゲートウェイが確認して初めて、フォームは支払い済みとなります。",
+      "enabled": "支払いを受け付ける",
+      "enabledHint": "回答の保存後、訪問者はゲートウェイのホスト型決済ページに移動します。",
+      "gateway": {
+        "checking": "決済ゲートウェイを確認しています...",
+        "failed": "決済ゲートウェイを確認できませんでした。しばらくしてからもう一度お試しください。",
+        "ready": "支払いは {name}（{mode}）に送られます。",
+        "mode": {
+          "test": "テストモード",
+          "live": "本番モード"
+        },
+        "none": "決済ゲートウェイが接続されていないため、このフォームではまだ支払いを受け付けられません。",
+        "noLink": "{name} はホスト型の決済リンクを作成できないため、フォームでは使用できません。Razorpay または Stripe を接続してください。",
+        "open": "決済ゲートウェイを開く"
+      },
+      "amountType": "金額の決め方",
+      "amountTypes": {
+        "fixed": "固定価格",
+        "from_field": "選択フィールドから",
+        "pay_what_you_want": "訪問者が金額を入力"
+      },
+      "amountTypeHints": {
+        "fixed": "すべての訪問者が同じ価格を支払います。",
+        "from_field": "ドロップダウンまたはラジオフィールドの各選択肢に、それぞれ価格を設定します。",
+        "pay_what_you_want": "寄付やチップ向けです。最小額と最大額を設定します。"
+      },
+      "currency": "通貨",
+      "currencyHint": "INR や USD のような3文字のコードです。ゲートウェイが対応している必要があります。",
+      "amount": "価格",
+      "amountHint": "{currency} 建てで、口にする通りに入力します（例: 499.00）。",
+      "fieldChoice": "選択フィールド",
+      "fieldNumber": "金額フィールド",
+      "fieldNone": "フィールドを選択",
+      "noChoiceFields": "先にドロップダウンまたはラジオフィールドをフォームに追加してください。",
+      "noNumberFields": "先に数値または通貨フィールドをフォームに追加してください。",
+      "optionPrices": "各選択肢の価格",
+      "optionPrice": "「{label}」の価格",
+      "min": "最小額",
+      "minHint": "これより低い金額は受け付けられません。",
+      "max": "最大額（任意）",
+      "maxHint": "上限なしの場合は空欄にしてください。",
+      "descriptionLabel": "決済ページに表示する内容",
+      "descriptionHint": "支払う人へのひとこと（何の支払いかなど）。",
+      "issues": {
+        "amountRequired": "価格を入力してください。",
+        "fieldRequired": "金額の取得元となるフィールドを選択してください。",
+        "fieldNotRequired": "すべての訪問者が金額を入力するよう、このフィールドを必須にしてください。",
+        "optionsNeedAmounts": "すべての選択肢に価格を設定してください。",
+        "minRequired": "最小額を入力してください。",
+        "minAboveMax": "最小額は最大額を超えられません。"
+      }
+    }
+  }
+}

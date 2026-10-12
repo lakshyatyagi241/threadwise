@@ -313,6 +313,14 @@
         "waba_group_suspension_cleared": {
           "label": "Grupo ativo novamente",
           "hint": "O WhatsApp restaurou um grupo que havia suspendido. Apenas se você foi informado sobre a suspensão."
+        },
+        "form_payment": {
+          "label": "Pagamento de formulário recebido",
+          "hint": "Um visitante pagou em um dos seus formulários."
+        },
+        "form_payment_duplicate": {
+          "label": "Formulário pago duas vezes",
+          "hint": "Um visitante pagou uma segunda vez e o pagamento extra precisa ser reembolsado."
         }
       },
       "loading": "Carregando suas preferências",

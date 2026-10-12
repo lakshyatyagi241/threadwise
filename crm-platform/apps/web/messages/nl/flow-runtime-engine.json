@@ -176,12 +176,50 @@
       "cancelBody": "De run stopt waar hij nu is. De klant wordt niet op de hoogte gesteld.",
       "cancelConfirm": "Run annuleren",
       "cancelKeep": "Behouden",
-      "cancelled": "Run geannuleerd"
+      "cancelled": "Run geannuleerd",
+      "tlTitle": "Uitvoeringstijdlijn",
+      "tlNodes": "Uitgevoerde knooppunten",
+      "tlErrors": "Fouten",
+      "tlTime": "Knooppunttijd",
+      "filterAll": "Alle stappen",
+      "filterErrors": "Alleen fouten",
+      "changedTitle": "Deze flow is na de run bewerkt",
+      "changedBody": "Het logboek toont de flow precies zoals hij liep.",
+      "removed": "Uit de flow verwijderd",
+      "exit": "Uitgang {port}",
+      "visit": "Bezoek {n}",
+      "truncated": "Meer dan {max} stappen uitgevoerd. Latere zijn geteld maar niet getoond.",
+      "retention": "Logboeken worden {days} dagen na het einde van een run verwijderd.",
+      "pathTitle": "Gevolgde route",
+      "notReached": "Niet bereikt",
+      "noErrors": "Geen fouten in deze run.",
+      "factNext": "Volgende: {node}",
+      "factWaiting": "Wacht bij: {node}",
+      "factDelay": "Wacht {time}",
+      "factReplied": "Klant antwoordde: {text}",
+      "factEnded": "Beëindigd: {reason}",
+      "ioInput": "Invoer",
+      "ioOutput": "Uitvoer",
+      "ioKind": {
+        "message": "Verzonden bericht",
+        "reply": "Antwoord van klant",
+        "variable": "Variabele",
+        "request": "Verzoek",
+        "response": "Antwoord",
+        "result": "Resultaat"
+      }
     },
     "event": {
       "step": "Stap",
       "reply": "Antwoord van klant",
-      "end": "Einde"
+      "end": "Einde",
+      "advance": "Doorgegaan",
+      "wait": "Wacht op antwoord",
+      "sleep": "Vertraging",
+      "halt": "Gepauzeerd",
+      "exec": "Uitgevoerd",
+      "truncated": "Logboeklimiet bereikt",
+      "start": "Gestart"
     },
     "subs": {
       "kicker": "Flow",
@@ -469,6 +507,13 @@
       "manyBody": "{n} contacten gaan vanaf het begin weer in hun flow en ontvangen de berichten opnieuw. Dit kan niet ongedaan worden gemaakt.",
       "summary": "{queued} opnieuw gestart, {succeeded} afgerond, {failed} mislukt, {skipped} overgeslagen.",
       "flowInactive": "Zet deze flow weer aan voordat je de mislukte contacten opnieuw uitvoert."
+    },
+    "outcome": {
+      "ok": "OK",
+      "error": "Fout",
+      "skipped": "Overgeslagen",
+      "waiting": "Wacht",
+      "timeout": "Time-out"
     }
   }
 }

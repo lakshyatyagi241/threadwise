@@ -60,7 +60,7 @@ Manifest (`extension.json`), extension page, pack create/update/list, grant fiel
 | operator identity, audit, store          | AUTH     | reused (`OperatorGuard`, `PlatformStore` now exported from the auth barrel)                                                                               |
 | order finalisation calls fulfilment      | CHK      | **blocked**: `AddonFulfilmentService.fulfil(tx, ...)` is ready and tested; checkout must call it, and the workspace page shows state only (no Buy button) |
 | plan form lists module-contributed flags | PLAN     | `GET /platform/addons/fields` exposes core plus module keys; the plan editor does not consume it yet                                                      |
-| licence model for the purchase code      | INST     | `verify` accepts any code like Reference's stub, behind `ADDONS_REQUIRE_PURCHASE_CODE`                                                                       |
+| licence model for the purchase code      | INST     | `verify` accepts any code like Reference's stub, behind `ADDONS_REQUIRE_PURCHASE_CODE`                                                                    |
 | native Instagram / email modules         | IG, MAIL | engine connections work; native modules arrive as installable packages                                                                                    |
 
 ## Build order and status

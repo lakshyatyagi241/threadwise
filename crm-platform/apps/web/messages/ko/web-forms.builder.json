@@ -51,7 +51,9 @@
         "generic": "문제: {reason}",
         "reason": {
           "crm_required_unbound": "워크스페이스에서 필수로 지정한 속성이 양식에 없습니다.",
-          "no_contact_point": "이메일 또는 전화번호 필드를 연락처에 연결해 추가하세요. 그래야 모든 응답을 사람과 매칭할 수 있습니다."
+          "no_contact_point": "이메일 또는 전화번호 필드를 연락처에 연결해 추가하세요. 그래야 모든 응답을 사람과 매칭할 수 있습니다.",
+          "payment_no_gateway": "결제 링크를 만들 수 있는 결제 게이트웨이를 연결하거나 결제를 끄세요.",
+          "captcha_not_configured": "CAPTCHA가 항상 켜짐으로 설정되어 있지만 플랫폼에 CAPTCHA가 없습니다. 다른 설정을 선택하거나 플랫폼 관리자에게 CAPTCHA 추가를 요청하세요."
         },
         "code": {
           "no_fields": "필드를 하나 이상 추가하세요.",
@@ -129,7 +131,14 @@
         "custom": "커스텀",
         "requiredByCrm": "필수",
         "inForm": "양식에 있음",
-        "full": "양식의 블록 한도에 도달했습니다."
+        "full": "양식의 블록 한도에 도달했습니다.",
+        "section": {
+          "contact": "연락처",
+          "contactAddress": "연락처 주소",
+          "company": "회사",
+          "companyAddress": "회사 주소"
+        },
+        "addAddress": "모든 주소 필드 추가"
       },
       "list": {
         "title": "필드",

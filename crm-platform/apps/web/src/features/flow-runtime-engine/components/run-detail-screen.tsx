@@ -8,7 +8,8 @@ import { Button, ConfirmDialog, EmptyState, Spinner, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { ApiError } from '@/lib/api/errors';
 import { cancelRun, refreshAll, useRun } from '../api/flow-runtime';
-import { contactLabel, detailPairs, isLive, secondsBetween, shortId } from '../lib/model';
+import { contactLabel, isLive, secondsBetween, shortId } from '../lib/model';
+import { RunTimeline } from './run-timeline';
 import {
   CARD,
   Denied,
@@ -171,57 +172,7 @@ export function RunDetailScreen({ id }: { id: string }) {
         )}
       </section>
 
-      <section className={`${CARD} mb-5 overflow-hidden`}>
-        <div className="border-b border-border px-5 py-4">
-          <div className={KICKER}>{t('run.kicker')}</div>
-          <h2 className="mt-0.5 text-xl leading-tight">{t('run.logTitle')}</h2>
-        </div>
-        {r.log.length === 0 ? (
-          <p className="px-5 py-8 text-center text-sm text-muted-foreground">{t('run.logEmpty')}</p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[760px] text-[12.5px]">
-              <thead className="border-b border-border bg-muted text-muted-foreground">
-                <tr>
-                  <th className={TH}>{t('run.colSeq')}</th>
-                  <th className={TH}>{t('run.colAt')}</th>
-                  <th className={TH}>{t('run.colEvent')}</th>
-                  <th className={TH}>{t('run.colNode')}</th>
-                  <th className={TH}>{t('run.colNotes')}</th>
-                  <th className={TH}>{t('run.colError')}</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border align-top">
-                {r.log.map((s) => (
-                  <tr key={s.seq}>
-                    <td className="px-3 py-2.5 font-mono tabular-nums">{s.seq}</td>
-                    <td className="whitespace-nowrap px-3 py-2.5">{when(s.at)}</td>
-                    <td className="px-3 py-2.5">
-                      {t.has(`event.${s.event}`) ? t(`event.${s.event}`) : s.event}
-                    </td>
-                    <td className="px-3 py-2.5 font-mono text-xs">
-                      {s.nodeId ?? t('common.noValue')}
-                      {s.nodeType && (
-                        <span className="block text-muted-foreground">{s.nodeType}</span>
-                      )}
-                    </td>
-                    <td className="max-w-[320px] px-3 py-2.5">
-                      {detailPairs(s.detail).map(([k, v]) => (
-                        <div key={k} className="break-words">
-                          <span className="text-muted-foreground">{k}:</span> {v}
-                        </div>
-                      ))}
-                    </td>
-                    <td className="max-w-[260px] break-words px-3 py-2.5 text-danger">
-                      {s.error ?? ''}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </section>
+      <RunTimeline run={r} />
 
       <section className={`${CARD} overflow-hidden`}>
         <div className="border-b border-border px-5 py-4">

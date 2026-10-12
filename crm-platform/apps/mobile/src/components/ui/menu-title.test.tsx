@@ -9,17 +9,21 @@ const OPTIONS = [
 ] as const;
 
 describe('MenuTitle', () => {
-  it('shows the chosen view as the title', () => {
-    renderApp(<MenuTitle label="Inbox view" options={OPTIONS} value="mine" onChange={jest.fn()} />);
+  it('shows the chosen view as the title', async () => {
+    await renderApp(
+      <MenuTitle label="Inbox view" options={OPTIONS} value="mine" onChange={jest.fn()} />,
+    );
     expect(screen.getByRole('button', { name: 'Inbox view' })).toBeTruthy();
     expect(screen.getByText(/Mine/)).toBeTruthy();
   });
 
-  it('opens the list and reports the new choice', () => {
+  it('opens the list and reports the new choice', async () => {
     const onChange = jest.fn();
-    renderApp(<MenuTitle label="Inbox view" options={OPTIONS} value="all" onChange={onChange} />);
-    fireEvent.press(screen.getByRole('button', { name: 'Inbox view' }));
-    fireEvent.press(screen.getByRole('menuitem', { name: /Unassigned/ }));
+    await renderApp(
+      <MenuTitle label="Inbox view" options={OPTIONS} value="all" onChange={onChange} />,
+    );
+    await fireEvent.press(screen.getByRole('button', { name: 'Inbox view' }));
+    await fireEvent.press(screen.getByRole('menuitem', { name: /Unassigned/ }));
     expect(onChange).toHaveBeenCalledWith('unassigned');
   });
 });

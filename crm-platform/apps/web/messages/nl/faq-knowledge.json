@@ -1,0 +1,690 @@
+{
+  "faq": {
+    "nav": {
+      "faq": "FAQ's",
+      "label": "FAQ-secties",
+      "tab": {
+        "faqs": "FAQ's",
+        "test": "Testen",
+        "unanswered": "Onbeantwoord",
+        "insights": "Inzichten",
+        "settings": "Instellingen"
+      },
+      "unansweredCount": "{count, plural, one {# onbeantwoord bericht} other {# onbeantwoorde berichten}}"
+    },
+    "common": {
+      "dismiss": "Sluiten",
+      "retry": "Opnieuw proberen",
+      "requestId": "Verzoek {id}",
+      "noAccessTitle": "Je hebt geen toegang tot dit scherm",
+      "noAccess": "Vraag een workspace-beheerder om je rol de machtiging {permission} te geven."
+    },
+    "errors": {
+      "network": "De server is niet bereikbaar. Controleer je verbinding en probeer het opnieuw.",
+      "forbidden": "Je rol mag dit niet doen.",
+      "notFound": "Deze FAQ of dit bericht bestaat niet meer. Mogelijk is het verwijderd.",
+      "conflict": "Iemand anders heeft dit gewijzigd terwijl je het bewerkte.",
+      "duplicateQuestion": "Een andere FAQ heeft deze vraag al.",
+      "duplicateVariation": "Deze FAQ heeft deze formulering al.",
+      "limitReached": "Je workspace heeft de FAQ-limiet bereikt. Verwijder ongebruikte FAQ's of varianten, of vraag je platformbeheerder de limiet te verhogen.",
+      "flowNotFound": "De gekozen flow bestaat niet meer in deze workspace. Kies een andere.",
+      "embeddingUnavailable": "De AI-provider is niet beschikbaar. Voeg een OpenRouter-sleutel toe aan je workspace of vraag je platformbeheerder de gedeelde sleutel in te schakelen en probeer het dan opnieuw.",
+      "engineDisabled": "FAQ-antwoorden zijn op dit moment voor het hele platform uitgeschakeld.",
+      "modelNotAllowed": "Het embedding-model van het platform is niet toegestaan. Vraag het aan je platformbeheerder.",
+      "validation": "Sommige velden vragen aandacht.",
+      "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
+      "unexpected": "Er ging iets mis. Probeer het opnieuw en deel de verzoek-id met support als het blijft gebeuren.",
+      "flowNodeNotFound": "De gekozen stap staat niet meer in deze flow. Kies een andere stap of begin bij het begin van de flow."
+    },
+    "banner": {
+      "enabledToast": "FAQ-antwoorden staan aan.",
+      "engineOff": "FAQ-antwoorden zijn door het platform uitgeschakeld. Klanten krijgen geen FAQ-antwoorden totdat ze weer zijn ingeschakeld.",
+      "modelChanged": "Het platform heeft het AI-model gewijzigd nadat je deze drempel afstelde. De scores zijn verschoven, controleer dus je gevoeligheid.",
+      "reviewSensitivity": "Gevoeligheid controleren",
+      "offTitle": "FAQ-antwoorden staan UIT voor klanten",
+      "offBody": "Je kunt FAQ's schrijven en testen, maar klanten krijgen pas antwoorden als je dit inschakelt.",
+      "offNoRight": "Vraag iemand met de machtiging faq.settings.manage (meestal een workspace-beheerder) om dit in te schakelen.",
+      "enable": "FAQ-antwoorden inschakelen"
+    },
+    "list": {
+      "title": "FAQ's",
+      "subtitle": "Vragen die je klanten stellen en wat je bot antwoordt. Klanten hoeven niet je exacte woorden te gebruiken.",
+      "add": "FAQ toevoegen",
+      "stats": {
+        "label": "FAQ-totalen",
+        "total": "FAQ's",
+        "active": "Actief",
+        "paused": "Gepauzeerd",
+        "variations": "Formuleringen",
+        "pending": "Indexeren",
+        "pendingHint": "Binnen enkele seconden live",
+        "failed": "Indexeren mislukt",
+        "failedHint": "Aandacht nodig"
+      },
+      "failedBanner": "{count, plural, one {# formulering is} other {# formuleringen zijn}} niet geïndexeerd en {count, plural, one {kan} other {kunnen}} dus nog niet overeenkomen met klantberichten.",
+      "showFailed": "FAQ's met fouten tonen",
+      "search": "FAQ's zoeken",
+      "searchPlaceholder": "Zoek in vragen en formuleringen",
+      "filter": {
+        "status": "Status",
+        "anyStatus": "Elke status",
+        "category": "Categorie",
+        "anyCategory": "Elke categorie",
+        "indexing": "Indexeren",
+        "anyIndexing": "Alle",
+        "pending": "Nog bezig met indexeren",
+        "failed": "Mislukt"
+      },
+      "status": {
+        "active": "Actief",
+        "paused": "Gepauzeerd"
+      },
+      "clearFilters": "Filters wissen",
+      "bulk": {
+        "label": "Bulkacties",
+        "selected": "{count, plural, one {# FAQ geselecteerd} other {# FAQ's geselecteerd}}",
+        "pause": "Pauzeren",
+        "activate": "Activeren",
+        "delete": "Verwijderen",
+        "clear": "Selectie wissen",
+        "done": {
+          "pause": "{count, plural, one {# FAQ gepauzeerd} other {# FAQ's gepauzeerd}}.",
+          "activate": "{count, plural, one {# FAQ geactiveerd} other {# FAQ's geactiveerd}}.",
+          "delete": "{count, plural, one {# FAQ verwijderd} other {# FAQ's verwijderd}}."
+        }
+      },
+      "paused": "FAQ gepauzeerd.",
+      "activated": "FAQ geactiveerd.",
+      "deleted": "FAQ verwijderd.",
+      "empty": {
+        "title": "Leer je bot de antwoorden op veelgestelde vragen",
+        "body": "Schrijf een vraag en het antwoord één keer op. Je bot herkent wat klanten in hun eigen woorden schrijven en antwoordt met het antwoord of start een flow.",
+        "how": "Voeg een paar andere manieren toe om hetzelfde te vragen (formuleringen) en test het voordat klanten het zien.",
+        "cta": "Voeg je eerste FAQ toe",
+        "noRight": "Vraag een workspace-beheerder om de machtiging om FAQ's toe te voegen."
+      },
+      "noMatch": {
+        "title": "Geen FAQ komt overeen met deze filters",
+        "body": "Probeer een andere zoekopdracht of wis de filters."
+      },
+      "selectAll": "Alle FAQ's op deze pagina selecteren",
+      "selectRow": "{question} selecteren",
+      "col": {
+        "question": "Vraag",
+        "answer": "Antwoord",
+        "indexing": "Live formuleringen",
+        "answered": "Beantwoord (90 dagen)",
+        "status": "Status",
+        "actions": "Acties"
+      },
+      "variationCount": "{count, plural, one {# formulering} other {# formuleringen}}",
+      "flowMissing": "Flow ontbreekt",
+      "neverAnswered": "Nog niet",
+      "toggleLabel": "Actief: {question}",
+      "edit": "{question} bewerken",
+      "editShort": "Bewerken",
+      "delete": "{question} verwijderen",
+      "deleteShort": "Verwijderen",
+      "loadMore": "Meer laden",
+      "loadingMore": "Laden",
+      "confirm": {
+        "bulkTitle": "{count, plural, one {# FAQ} other {# FAQ's}} verwijderen?",
+        "bulkBody": "{count, plural, one {Deze FAQ en de bijbehorende formuleringen worden} other {Deze FAQ's en de bijbehorende formuleringen worden}} definitief verwijderd. Dit kan niet ongedaan worden gemaakt.",
+        "rowTitle": "Deze FAQ verwijderen?",
+        "rowBody": "\"{question}\" en alle formuleringen worden definitief verwijderd. Dit kan niet ongedaan worden gemaakt.",
+        "delete": "Verwijderen",
+        "cancel": "Annuleren"
+      },
+      "indexing": {
+        "summary": "{ready} live, {pending} indexeren, {failed} mislukt",
+        "ready": "{count} live",
+        "pending": "{count} indexeren",
+        "failed": "{count} mislukt"
+      },
+      "stepMissing": "Stap ontbreekt",
+      "startsAt": "Begint bij: {step}"
+    },
+    "editor": {
+      "back": "Terug naar FAQ's",
+      "backToList": "Terug naar FAQ's",
+      "newTitle": "Nieuwe FAQ",
+      "newSubtitle": "Schrijf de vraag en het antwoord en voeg daarna andere manieren toe waarop klanten het kunnen vragen.",
+      "editTitle": "FAQ bewerken",
+      "unsaved": "Niet-opgeslagen wijzigingen",
+      "cancel": "Annuleren",
+      "create": "FAQ maken",
+      "save": "Wijzigingen opslaan",
+      "delete": "Verwijderen",
+      "created": "FAQ gemaakt.",
+      "saved": "FAQ opgeslagen.",
+      "deleted": "FAQ verwijderd.",
+      "readOnly": "Je kunt deze FAQ bekijken, maar je rol mag hem niet wijzigen.",
+      "faqLimit": "Je workspace heeft de limiet van {max} FAQ's bereikt. Verwijder er een om een nieuwe toe te voegen.",
+      "prefilled": "De vraag is overgenomen uit een onbeantwoord klantbericht. Door deze FAQ op te slaan wordt dat bericht ook als afgehandeld gemarkeerd.",
+      "tryItSaveFirst": "Sla de FAQ eerst op. Daarna kun je testen hoe klantberichten hiermee overeenkomen.",
+      "conflict": {
+        "title": "Iemand anders heeft deze FAQ gewijzigd",
+        "body": "Je wijzigingen staan er nog. Bewaar ze en sla opnieuw op bovenop de nieuwste versie, of verwerp ze en laad de nieuwste versie.",
+        "keep": "Mijn wijzigingen behouden",
+        "reload": "Nieuwste versie laden",
+        "kept": "Bijgewerkt naar de nieuwste versie. Je wijzigingen zijn bewaard; sla op om ze toe te passen."
+      },
+      "question": {
+        "title": "Vraag",
+        "hint": "De vraag zoals jij die zou schrijven. Telt ook als eerste formulering.",
+        "label": "Vraag",
+        "count": "{count} / {max}"
+      },
+      "category": {
+        "label": "Categorie",
+        "hint": "Optioneel. Helpt bij het filteren."
+      },
+      "status": {
+        "label": "Status",
+        "hint": "Gepauzeerde FAQ's antwoorden nooit.",
+        "active": "Actief",
+        "paused": "Gepauzeerd"
+      },
+      "answer": {
+        "title": "Antwoord",
+        "hint": "Wat de klant krijgt als deze FAQ overeenkomt.",
+        "text": "Tekstantwoord",
+        "flow": "Een flow starten",
+        "textLabel": "Antwoordtekst",
+        "count": "{count} / {max} tekens",
+        "preview": "Zo ziet het eruit in WhatsApp",
+        "previewEmpty": "Je antwoord verschijnt hier",
+        "flowLabel": "Te starten flow",
+        "noFlow": "Geen flow gekozen",
+        "startsAt": "Begint bij stap: {step}",
+        "stepGone": "De stap waarmee deze FAQ begint bestaat niet meer, dus klanten krijgen geen antwoord."
+      },
+      "advanced": {
+        "title": "Geavanceerd: gevoeligheid alleen voor deze FAQ",
+        "body": "Standaard gebruikt elke FAQ de gevoeligheid van de workspace. Gebruik een eigen waarde als deze FAQ te snel (verhoog de waarde) of te zelden (verlaag de waarde) overeenkomt.",
+        "custom": "Eigen gevoeligheid gebruiken voor deze FAQ",
+        "sliderLabel": "Overeenkomst vanaf",
+        "workspace": "De gevoeligheid van de workspace is {value}%.",
+        "following": "Volgt de gevoeligheid van de workspace ({value}%)."
+      },
+      "problem": {
+        "question": {
+          "required": "Schrijf de vraag die klanten stellen.",
+          "tooLong": "De vraag mag maximaal {max} tekens bevatten.",
+          "invalid": "Deze vraag is niet geldig."
+        },
+        "answerText": {
+          "required": "Schrijf het antwoord dat klanten moeten krijgen.",
+          "tooLong": "Het antwoord mag maximaal {max} tekens bevatten.",
+          "invalid": "Dit antwoord is niet geldig."
+        },
+        "flowId": {
+          "required": "Kies de flow die moet starten.",
+          "tooLong": "Kies de flow die moet starten.",
+          "invalid": "Kies de flow die moet starten."
+        },
+        "category": {
+          "required": "Schrijf een categorie of laat het veld leeg.",
+          "tooLong": "De categorie mag maximaal {max} tekens bevatten.",
+          "invalid": "Deze categorie is niet geldig."
+        },
+        "thresholdOverride": {
+          "required": "Kies een waarde tussen 5% en 99%.",
+          "tooLong": "Kies een waarde tussen 5% en 99%.",
+          "invalid": "Kies een waarde tussen 5% en 99%."
+        },
+        "flowNodeId": {
+          "required": "Kies een stap van deze flow of het begin van de flow.",
+          "tooLong": "Kies een stap van deze flow of het begin van de flow.",
+          "invalid": "Kies een stap van deze flow of het begin van de flow."
+        }
+      },
+      "deleteConfirm": {
+        "title": "Deze FAQ verwijderen?",
+        "body": "De FAQ en alle formuleringen worden definitief verwijderd. Dit kan niet ongedaan worden gemaakt.",
+        "confirm": "Verwijderen"
+      },
+      "leave": {
+        "title": "Verlaten zonder op te slaan?",
+        "body": "Je wijzigingen aan deze FAQ zijn niet opgeslagen.",
+        "leave": "Verlaten",
+        "stay": "Verder bewerken"
+      }
+    },
+    "flowPicker": {
+      "noAccess": "Je hebt de machtiging om flows te bekijken (flb.flows.read) nodig om hier een flow te kiezen.",
+      "missing": "De flow die door deze FAQ werd gestart, bestaat niet meer. Kies een andere flow, anders kan deze FAQ niet antwoorden.",
+      "selected": "Gekozen",
+      "search": "Flows zoeken",
+      "searchPlaceholder": "Flows zoeken op naam",
+      "retry": "Opnieuw proberen",
+      "loading": "Flows laden",
+      "noMatch": "Geen flow met die naam.",
+      "none": "Je hebt nog geen flows. Maak er eerst een aan bij Flows.",
+      "listLabel": "Flows",
+      "state": {
+        "live": "Gepubliceerd",
+        "off": "Inactief",
+        "draft": "Concept"
+      },
+      "note": "De flow begint bij de stap die je hieronder kiest, of bij het begin. Alleen gepubliceerde, actieve flows kunnen draaien."
+    },
+    "variations": {
+      "title": "Vraagvarianten",
+      "hint": "Andere manieren waarop een klant dit kan vragen. Elke variant wordt op betekenis vergeleken.",
+      "counterLabel": "{count} van {max} formuleringen gebruikt",
+      "listLabel": "Formuleringen",
+      "questionEmpty": "Je vraag verschijnt hier",
+      "source": {
+        "question": "Vraag",
+        "manual": "Geschreven",
+        "ai": "AI",
+        "learned": "Geleerd",
+        "import": "Geïmporteerd"
+      },
+      "none": "Nog geen extra formuleringen. Voeg er een paar toe of laat AI er suggesties voor doen.",
+      "edit": "{text} bewerken",
+      "remove": "{text} verwijderen",
+      "editLabel": "Formulering bewerken",
+      "save": "Opslaan",
+      "cancel": "Annuleren",
+      "addLabel": "Nieuwe formulering",
+      "addPlaceholder": "Een andere manier om dit te vragen",
+      "add": "Toevoegen",
+      "pasteMany": "Meerdere plakken",
+      "full": "Deze FAQ heeft de limiet van {max} formuleringen bereikt.",
+      "failedNotice": "{count, plural, one {# formulering} other {# formuleringen}} niet geïndexeerd. Bewerk en sla de formulering op om het opnieuw te proberen.",
+      "suggest": "Voorstellen met AI",
+      "suggestSaveFirst": "Sla de FAQ eerst op. Daarna kan AI formuleringen voorstellen.",
+      "suggesting": "AI om suggesties vragen",
+      "suggestionsReady": "{count, plural, one {# suggestie klaar} other {# suggesties klaar}}",
+      "suggestionsTitle": "Voorgestelde formuleringen",
+      "suggestionsHint": "Er wordt niets opgeslagen totdat je ze toevoegt. Vink af wat je niet wilt.",
+      "suggestionsNone": "De AI had geen nieuwe formuleringen om voor te stellen.",
+      "addSelected": "Selectie toevoegen ({count})",
+      "discard": "Verwerpen",
+      "bulk": {
+        "label": "Eén formulering per regel",
+        "placeholder": "Waar is mijn pakket\nVolg mijn bestelling\nIs mijn bestelling verzonden",
+        "summary": "{count, plural, one {# nieuwe formulering wordt toegevoegd} other {# nieuwe formuleringen worden toegevoegd}}",
+        "duplicates": "{count, plural, one {# dubbele weggelaten} other {# dubbele weggelaten}}",
+        "tooLong": "{count, plural, one {# regel is} other {# regels zijn}} langer dan {max} tekens en {count, plural, one {is} other {zijn}} weggelaten.",
+        "overflow": "{count, plural, one {# regel past} other {# regels passen}} niet binnen de formuleringslimiet en {count, plural, one {is} other {zijn}} weggelaten.",
+        "more": "en nog {count}",
+        "add": "{count, plural, one {# formulering} other {# formuleringen}} toevoegen"
+      },
+      "state": {
+        "ready": "Live",
+        "pending": "Indexeren",
+        "pendingHint": "Opgeslagen. Binnen enkele seconden wordt er gematcht.",
+        "failed": "Mislukt",
+        "failedHint": "Bewerk en sla de formulering op om het opnieuw te proberen.",
+        "noReason": "Er is geen reden opgegeven"
+      },
+      "confirm": {
+        "title": "Deze formulering verwijderen?",
+        "body": "\"{text}\" bereikt deze FAQ niet meer.",
+        "remove": "Verwijderen"
+      },
+      "errors": {
+        "duplicate": "Deze FAQ heeft die formulering al.",
+        "tooLong": "Een formulering mag maximaal {max} tekens bevatten.",
+        "aiKeys": "Je AI-sleutels instellen"
+      }
+    },
+    "tryIt": {
+      "title": "Uitproberen",
+      "hint": "Typ een klantbericht en zie wat er zou gebeuren. Er wordt niets verstuurd.",
+      "label": "Klantbericht",
+      "placeholder": "Waar is mijn pakket?",
+      "run": "Proberen"
+    },
+    "decision": {
+      "verdict": {
+        "answer": {
+          "title": "Zou antwoorden",
+          "body": "Een FAQ kwam goed genoeg overeen. De klant krijgt het antwoord (of de flow start)."
+        },
+        "below": {
+          "title": "Onder de drempel",
+          "body": "De dichtstbijzijnde FAQ scoorde niet hoog genoeg, dus er zou niets worden verstuurd. Voeg deze formulering toe aan een FAQ of verlaag de gevoeligheid."
+        },
+        "ambiguous": {
+          "title": "Dubbelzinnig",
+          "body": "Twee FAQ's scoorden bijna gelijk, dus de bot zou niet gokken. Maak de FAQ's onderscheidender of verlaag de minimale marge."
+        },
+        "noFaqs": {
+          "title": "Geen FAQ's om mee te vergelijken",
+          "body": "Er zijn nog geen actieve FAQ's met live formuleringen."
+        },
+        "providerError": {
+          "title": "Providerfout",
+          "body": "De AI-provider was niet bereikbaar, dus alleen spellingvergelijking was mogelijk."
+        },
+        "notSent": {
+          "title": "Overeenkomst, niet verstuurd",
+          "body": "Een FAQ kwam overeen, maar het antwoord is niet verstuurd, bijvoorbeeld omdat FAQ-antwoorden uitstonden."
+        },
+        "vetoed": {
+          "title": "Antwoord achtergehouden",
+          "body": "De overeenkomst scoorde hoog genoeg, maar de tweede controle zei nee, dus er zou niets worden verstuurd."
+        }
+      },
+      "tier": {
+        "exact": {
+          "name": "Exacte overeenkomst",
+          "body": "Het bericht is gelijk aan een opgeslagen formulering, ongeacht hoofdletters en spaties."
+        },
+        "semantic": {
+          "name": "Overeenkomst op betekenis",
+          "body": "Het bericht is op betekenis vergeleken met elke live formulering, dus andere woorden kunnen toch overeenkomen."
+        },
+        "trigram": {
+          "name": "Terugval op spelling",
+          "body": "Vergelijken op betekenis was niet mogelijk, dus het bericht is letter voor letter vergeleken. Dit vangt typefouten, maar geen synoniemen."
+        }
+      },
+      "scoreLabel": "Score {score}%, te halen drempel is {threshold}%",
+      "score": "Score",
+      "threshold": "Nodig",
+      "margin": "Voorsprong op de nummer twee",
+      "marginValue": "{margin} punten (nodig: {needed})",
+      "note": "Opmerking",
+      "model": "Model",
+      "noModel": "niet gebruikt",
+      "latency": "Tijd",
+      "ms": "{ms} ms",
+      "winner": {
+        "title": "Wat de klant zou krijgen",
+        "unavailable": "Deze FAQ kon niet worden geladen.",
+        "flow": "Start de flow {name}",
+        "flowMissing": "Start een flow die niet meer bestaat"
+      },
+      "candidates": {
+        "title": "Beste overeenkomsten",
+        "matchedOn": "Overeenkomst op",
+        "best": "Beste",
+        "paused": "Gepauzeerd",
+        "scoreLabel": "Score {score}%",
+        "addVariation": "Deze zin als variant toevoegen aan {question}",
+        "added": "Toegevoegd",
+        "addedToast": "Toegevoegd als formulering van {question}.",
+        "alreadyThere": "Die formulering bestaat al.",
+        "open": "FAQ openen"
+      }
+    },
+    "playground": {
+      "title": "Hoe zou mijn bot dit beantwoorden?",
+      "subtitle": "Laat een klantbericht door dezelfde matching lopen die je bot gebruikt. Er wordt niets verstuurd en niets meegeteld in de inzichten.",
+      "label": "Klantbericht",
+      "placeholder": "Waar is mijn pakket?",
+      "run": "Uitvoeren",
+      "hint": "Alleen opgeslagen FAQ's worden vergeleken. Actieve FAQ's met live formuleringen doen mee.",
+      "empty": "Typ hierboven een bericht en voer het uit om de beslissing te zien.",
+      "history": {
+        "title": "Deze sessie",
+        "empty": "Je laatste 10 tests verschijnen hier."
+      }
+    },
+    "unanswered": {
+      "title": "Onbeantwoorde berichten",
+      "subtitle": "Klantberichten waar geen FAQ een antwoord op had. Leer de bot ervan.",
+      "search": "Onbeantwoorde berichten zoeken",
+      "searchPlaceholder": "Berichten zoeken",
+      "listLabel": "Onbeantwoorde berichten",
+      "emptyTitle": "Niets in de wacht",
+      "emptyBody": "Elk klantbericht is beantwoord of afgehandeld. Nieuwe onbeantwoorde berichten verschijnen hier.",
+      "noMatch": "Geen bericht komt overeen met je zoekopdracht",
+      "notKept": "Berichttekst niet bewaard (logging van berichten staat uit)",
+      "closest": "Dichtstbijzijnde FAQ:",
+      "allCandidates": "Alle {count} kandidaten bekijken",
+      "addToFaq": "Aan een FAQ toevoegen",
+      "createFaq": "FAQ maken hiervan",
+      "dismiss": "Negeren",
+      "dismissed": "Bericht genegeerd.",
+      "learned": "Toegevoegd aan \"{question}\". Dit wordt voortaan beantwoord.",
+      "pickTitle": "Aan welke FAQ wil je dit bericht toevoegen?",
+      "loadMore": "Meer laden",
+      "loadingMore": "Laden"
+    },
+    "picker": {
+      "close": "Sluiten",
+      "search": "FAQ's zoeken",
+      "searchPlaceholder": "FAQ's zoeken",
+      "loading": "FAQ's laden",
+      "none": "Geen FAQ gevonden.",
+      "paused": "Gepauzeerd",
+      "more": "Meer laden"
+    },
+    "log": {
+      "title": "Matchlogboek",
+      "hint": "Elk klantbericht dat de FAQ heeft bekeken en waarom het wel of niet is beantwoord.",
+      "viewLabel": "Tonen",
+      "view": {
+        "all": "Alle",
+        "answered": "Beantwoord",
+        "unanswered": "Onbeantwoord",
+        "errors": "Fouten"
+      },
+      "search": "Logboek doorzoeken",
+      "searchPlaceholder": "Berichten zoeken",
+      "empty": "Nog geen berichten.",
+      "col": {
+        "time": "Wanneer",
+        "message": "Bericht",
+        "outcome": "Uitkomst",
+        "faq": "FAQ",
+        "score": "Score"
+      },
+      "notKept": "Niet bewaard ({length} tekens)",
+      "testRun": "(test)",
+      "expand": "Details tonen",
+      "collapse": "Details verbergen",
+      "noCandidates": "Er zijn geen kandidaten overwogen.",
+      "matchedOn": "overeenkomst op",
+      "detail": {
+        "tier": "Niveau",
+        "model": "Model",
+        "latency": "Tijd",
+        "ms": "{ms} ms"
+      },
+      "loadMore": "Meer laden",
+      "loadingMore": "Laden",
+      "why": {
+        "answered": "Beantwoord met \"{faq}\" met {score}%.",
+        "flowStarted": "De flow van \"{faq}\" gestart met {score}%.",
+        "belowThreshold": "De beste overeenkomst scoorde {score}%, onder de drempel van {threshold}%, dus er is niets verstuurd.",
+        "belowThresholdNoBar": "De beste overeenkomst scoorde {score}%, wat niet genoeg was, dus er is niets verstuurd.",
+        "lowMargin": "Twee FAQ's lagen te dicht bij elkaar ({score}% en {second}%), dus de bot heeft niet gegokt.",
+        "noFaqs": "Er waren geen actieve FAQ's met live formuleringen om mee te vergelijken.",
+        "providerError": "De AI-provider is uitgevallen, dus de bot kon alleen op spelling vergelijken.",
+        "notSent": "Een FAQ kwam overeen, maar het antwoord is niet verstuurd.",
+        "tier": "Beslist door het niveau {tier}.",
+        "error": "Fout: {error}",
+        "vetoed": "De beste overeenkomst scoorde {score}%, boven de drempel van {threshold}%, maar de tweede controle oordeelde dat het geen antwoord op het bericht is, dus er is niets verstuurd.",
+        "vetoedNoBar": "De beste overeenkomst scoorde {score}%, maar de tweede controle oordeelde dat het geen antwoord op het bericht is, dus er is niets verstuurd."
+      },
+      "flowRun": "(vanuit een flow)"
+    },
+    "insights": {
+      "title": "FAQ-inzichten",
+      "subtitle": "Hoe goed je FAQ's echte klantberichten beantwoorden en waar je kunt verbeteren.",
+      "range": {
+        "label": "Periode",
+        "days": "{days} dagen"
+      },
+      "empty": {
+        "title": "Nog geen berichten",
+        "body": "Zodra klanten berichten sturen en FAQ-antwoorden aanstaan, zie je hoe vaak de bot antwoordt, welke FAQ's werken en wat er ontbreekt."
+      },
+      "kpi": {
+        "label": "Kerncijfers",
+        "messages": "Gecontroleerde berichten",
+        "answerRate": "Antwoordpercentage",
+        "avgScore": "Gemiddelde score {score}%",
+        "flows": "Gestarte flows",
+        "unanswered": "Onbeantwoord",
+        "toReview": "{count} te bekijken",
+        "errors": "Providerfouten"
+      },
+      "daily": {
+        "title": "Berichten per dag",
+        "hint": "Laatste {days} dagen, beantwoord en onbeantwoord"
+      },
+      "hist": {
+        "title": "Hoe goed berichten scoorden",
+        "hint": "Elke balk is een scorebereik. De stippellijn is je huidige gevoeligheid.",
+        "advice": "Verhoog de drempel als er foute antwoorden doorkomen, verlaag hem als te veel berichten onbeantwoord blijven.",
+        "tune": "Gevoeligheid wijzigen"
+      },
+      "top": {
+        "title": "Top-FAQ's",
+        "none": "Nog geen FAQ heeft geantwoord.",
+        "hits": "{count, plural, one {# antwoord} other {# antwoorden}}"
+      },
+      "never": {
+        "title": "Nooit gematcht",
+        "body": "FAQ's die de afgelopen {days} dagen door niemand zijn geactiveerd. Controleer hun formuleringen of verwijder ze.",
+        "link": "FAQ's bekijken"
+      },
+      "chart": {
+        "answered": "Beantwoord",
+        "unanswered": "Onbeantwoord",
+        "showTable": "Als tabel tonen",
+        "showChart": "Als grafiek tonen",
+        "day": "Dag",
+        "dailyTitle": "Berichten per dag",
+        "dailyLabel": "Staafdiagram van beantwoorde en onbeantwoorde berichten per dag. Gebruik de tabelweergave voor de cijfers.",
+        "dayTooltip": "{day}: {answered} beantwoord, {unanswered} onbeantwoord",
+        "histogramTitle": "Scoreverdeling",
+        "histogramLabel": "Histogram van matchscores, verdeeld in beantwoord en onbeantwoord. Gebruik de tabelweergave voor de cijfers.",
+        "scoreRange": "Score",
+        "bucketTooltip": "{from}-{to}%: {answered} beantwoord, {unanswered} onbeantwoord",
+        "thresholdMarker": "Drempel {value}%"
+      }
+    },
+    "settings": {
+      "title": "FAQ-instellingen",
+      "subtitle": "Schakel FAQ-antwoorden in en stel af hoe nauw een bericht moet overeenkomen.",
+      "unsaved": "Niet-opgeslagen wijzigingen",
+      "discard": "Verwerpen",
+      "save": "Instellingen opslaan",
+      "saved": "Instellingen opgeslagen.",
+      "readOnly": "Je kunt deze instellingen bekijken. Voor wijzigen is de machtiging faq.settings.manage nodig, meestal bij workspace-beheerders.",
+      "engineOff": "FAQ-antwoorden zijn door het platform uitgeschakeld. Wat je hier instelt, geldt zodra ze weer aanstaan.",
+      "conflict": "Iemand anders heeft deze instellingen opgeslagen. Laad opnieuw om hun versie te zien en voer je wijziging dan opnieuw door.",
+      "reload": "Instellingen opnieuw laden",
+      "modelChanged": {
+        "title": "Controleer je gevoeligheid",
+        "body": "Het platform heeft het AI-model gewijzigd nadat je deze drempel afstelde. De scores zijn verschoven, controleer dus je gevoeligheid. Opslaan bevestigt dit."
+      },
+      "enable": {
+        "title": "FAQ-antwoorden",
+        "label": "Klanten beantwoorden met FAQ's",
+        "on": "Aan",
+        "off": "Uit",
+        "onBody": "Als een klant een bericht stuurt, vergelijkt de bot het met je FAQ's en antwoordt met het beste antwoord of start de bijbehorende flow. Een flow of trefwoordtrigger die het bericht al oppakte, heeft voorrang.",
+        "offBody": "Klanten krijgen geen FAQ-antwoorden. Je kunt FAQ's nog wel schrijven en testen."
+      },
+      "sens": {
+        "title": "Gevoeligheid",
+        "hint": "Hoe nauw een bericht moet overeenkomen. Scores horen bij het model {model}.",
+        "label": "Antwoorden als de overeenkomst minstens",
+        "presets": "Gevoeligheidsvoorinstellingen",
+        "preset": {
+          "strict": "Streng",
+          "balanced": "Gebalanceerd",
+          "forgiving": "Soepel"
+        },
+        "looser": "Antwoordt vaker",
+        "stricter": "Antwoordt minder vaak",
+        "recommendedMark": "aanbevolen {value}%",
+        "explain": "Bij {value}% wordt een bericht alleen beantwoord als de beste overeenkomst {value}% of hoger scoort. Hoger betekent minder maar veiligere antwoorden; lager betekent meer antwoorden en meer kans op een fout antwoord.",
+        "useRecommended": "Aanbevolen waarde gebruiken ({value}%)",
+        "modelScale": "Scores zijn alleen binnen één model vergelijkbaar. Als het platform het model ({model}) wijzigt, controleer dan dit getal."
+      },
+      "margin": {
+        "title": "Dubbelzinnigheidsbeveiliging",
+        "hint": "Voorkomt dat de bot gokt tussen twee FAQ's die bijna gelijk scoren.",
+        "label": "Minimale voorsprong op de nummer twee",
+        "off": "Uit",
+        "explain": "Als de beste FAQ minder dan dit voorsprong heeft op de nummer twee, zwijgt de bot en logt hij het bericht als onbeantwoord. Laat dit uit als je FAQ's zelden overlappen."
+      },
+      "log": {
+        "title": "Klantberichten in het logboek",
+        "label": "Klantberichten bewaren in het matchlogboek",
+        "onBody": "De tekst van elk bericht wordt 90 dagen bewaard, zodat je kunt zien waarom het wel of niet is beantwoord en ervan kunt leren. Daarna wordt hij verwijderd.",
+        "offBody": "Alleen scores en uitkomsten worden bewaard, nooit de tekst. Je ziet nog wel hoe vaak de bot antwoordt, maar je kunt niet leren van onbeantwoorde berichten."
+      },
+      "facts": {
+        "title": "Model en limieten",
+        "model": "AI-model voor matching",
+        "faqs": "FAQ's",
+        "variations": "Formuleringen in gebruik",
+        "perFaq": "Toegestane formuleringen per FAQ",
+        "of": "{used} van {max}"
+      },
+      "how": {
+        "title": "Hoe matching werkt",
+        "exact": "Exact: het bericht is gelijk aan een opgeslagen formulering, ongeacht hoofdletters en spaties.",
+        "semantic": "Betekenis: het bericht wordt op betekenis vergeleken met elke live formulering, dus andere woorden kunnen overeenkomen.",
+        "trigram": "Terugval op spelling: als de AI-provider niet beschikbaar is, worden letters vergeleken, wat alleen typefouten opvangt.",
+        "threshold": "De beste score wordt vergeleken met de gevoeligheid. Erboven antwoordt de FAQ; eronder komt het bericht bij Onbeantwoord te staan.",
+        "verify": "Tweede controle (optioneel): een overeenkomst die de gevoeligheid net haalt, kan door een klein chatmodel worden gecontroleerd. Dat model kan een antwoord alleen tegenhouden."
+      },
+      "who": "Voor het wijzigen van deze instellingen is de machtiging faq.settings.manage nodig.",
+      "leave": {
+        "title": "Verlaten zonder op te slaan?",
+        "body": "Je wijzigingen aan deze instellingen zijn niet opgeslagen.",
+        "leave": "Verlaten",
+        "stay": "Blijven"
+      },
+      "verify": {
+        "title": "Tweede controle bij twijfelgevallen",
+        "hint": "Een klein chatmodel controleert overeenkomsten die de drempel net halen.",
+        "unavailable": "Het platform heeft de tweede controle uitgeschakeld, dus ze draait niet, ook niet als je haar hier aanzet. Vraag het aan je platformbeheerder.",
+        "label": "Twijfelgevallen laten controleren door een tweede mening",
+        "on": "Aan",
+        "off": "Uit",
+        "onBody": "Als een overeenkomst de drempel net haalt, leest een klein chatmodel het bericht van de klant en de FAQ en beoordeelt het of het antwoord past. Het kan alleen nee zeggen: het zorgt er nooit voor dat er een antwoord komt.",
+        "offBody": "Elke overeenkomst die de drempel haalt, wordt beantwoord zonder tweede controle.",
+        "bandLabel": "Wanneer telt iets als twijfelgeval",
+        "bandValue": "+{value}%",
+        "explainOn": "Overeenkomsten met een score van {from}% tot {to}% worden gecontroleerd door {model}. Bij \"nee\" wordt er geen antwoord verstuurd en verschijnt het bericht onder Onbeantwoord.",
+        "explainOff": "Elke overeenkomst met een score van {threshold}% of hoger wordt beantwoord. Zet de tweede controle aan om de twijfelgevallen te laten controleren.",
+        "cost": "Elke controle stuurt het bericht van de klant en de vraag van de FAQ naar het model: een paar honderd tokens, en het kost ongeveer een seconde extra bij een grensgeval. Overeenkomsten buiten het bereik worden nooit gecontroleerd. Als de controle mislukt, niet beschikbaar is of de limiet per uur is bereikt, blijft de overeenkomst gelden alsof er geen controle was."
+      }
+    },
+    "flowNode": {
+      "label": "Beginnen bij",
+      "start": "Het begin van de flow",
+      "hint": "Kies een stap om het begin van de flow over te slaan. Klanten stappen in de flow in bij de stap die je kiest.",
+      "loading": "Stappen van deze flow laden",
+      "empty": "Deze flow heeft geen andere stappen, dus hij begint bij het begin.",
+      "retry": "Opnieuw proberen",
+      "deletedOption": "Verwijderde stap (kies een andere)",
+      "missing": {
+        "title": "De stap waarmee deze FAQ begint bestaat niet meer",
+        "body": "Die stap is uit de flow verwijderd. Totdat je een andere stap kiest, krijgen klanten die bij deze FAQ passen geen antwoord. Kies hieronder een stap of begin bij het begin van de flow.",
+        "fix": "Beginnen bij het begin van de flow"
+      }
+    },
+    "verify": {
+      "title": "Tweede controle",
+      "chip": {
+        "confirmed": "Tweede controle: ja",
+        "vetoed": "Tweede controle: nee",
+        "failed": "Tweede controle mislukt",
+        "skipped": "Tweede controle overgeslagen"
+      },
+      "model": "Gecontroleerd door",
+      "reason": "Reden",
+      "body": {
+        "confirmed": "De overeenkomst was een twijfelgeval, dus een klein chatmodel las het bericht en de FAQ en vond dat het antwoord past.",
+        "vetoed": "De overeenkomst was een twijfelgeval en de tweede controle oordeelde dat deze FAQ geen antwoord op het bericht is. Het antwoord is achtergehouden, er is niets verstuurd en het bericht verschijnt onder Onbeantwoord.",
+        "failed": "De overeenkomst was een twijfelgeval, maar de controle kon niet worden afgerond. De overeenkomst bleef dus gelden en het antwoord is verstuurd alsof er geen tweede controle was.",
+        "skipped": "De tweede controle is voor deze overeenkomst niet uitgevoerd, dus de overeenkomst bleef gelden zoals ze was."
+      }
+    }
+  }
+}

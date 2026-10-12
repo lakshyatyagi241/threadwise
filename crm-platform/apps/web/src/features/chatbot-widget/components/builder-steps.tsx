@@ -19,17 +19,21 @@ export interface StepProps {
   set: (patch: Partial<BuilderState>) => void;
   /** The control currently flashed after a failed check. */
   flash: string | null;
+  /** Drop the step number: the step sits on a page that is not the numbered wizard (a flow bot's Customize tab). */
+  plain?: boolean;
 }
 
 const ring = (flash: string | null, field: string) =>
   flash === field ? 'border-danger ring-2 ring-danger/40' : 'border-border';
 
-function StepHead({ n, title, tag }: { n: string; title: string; tag: string }) {
+function StepHead({ n, title, tag }: { n: string | null; title: string; tag: string }) {
   return (
     <div className="mb-4 flex items-center gap-2.5">
-      <span className="inline-flex size-[23px] shrink-0 items-center justify-center rounded-[7px] bg-muted font-mono text-[10px] font-semibold text-brand">
-        {n}
-      </span>
+      {n === null ? null : (
+        <span className="inline-flex size-[23px] shrink-0 items-center justify-center rounded-[7px] bg-muted font-mono text-[10px] font-semibold text-brand">
+          {n}
+        </span>
+      )}
       <span className="flex-1 text-lg leading-none">{title}</span>
       <span className="font-mono text-[10px] text-muted-foreground">{tag}</span>
     </div>
@@ -214,11 +218,11 @@ export function SetupStep({
   );
 }
 
-export function LookStep({ s, set, flash }: StepProps) {
+export function LookStep({ s, set, flash, plain }: StepProps) {
   const t = useTranslations('chatbotWidget.builder.look');
   return (
     <div data-step="2">
-      <StepHead n="02" title={t('title')} tag={t('tag')} />
+      <StepHead n={plain ? null : '02'} title={t('title')} tag={t('tag')} />
       <div className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
         <div>
           <label htmlFor="wgt-f-buttonColor" className={LABEL}>
@@ -295,11 +299,11 @@ export function LookStep({ s, set, flash }: StepProps) {
   );
 }
 
-export function VoiceStep({ s, set, flash }: StepProps) {
+export function VoiceStep({ s, set, flash, plain }: StepProps) {
   const t = useTranslations('chatbotWidget.builder.voice');
   return (
     <div data-step="3">
-      <StepHead n="03" title={t('title')} tag={t('tag')} />
+      <StepHead n={plain ? null : '03'} title={t('title')} tag={t('tag')} />
       <div className="mb-4">
         <label htmlFor="wgt-f-welcomeMessage" className={LABEL}>
           {t('opening')} <span className="text-danger">*</span>
@@ -439,6 +443,7 @@ export function VoiceStep({ s, set, flash }: StepProps) {
 export function LaunchStep({
   s,
   set,
+  plain,
   snippet,
   onCopy,
 }: StepProps & {
@@ -449,7 +454,7 @@ export function LaunchStep({
   const t = useTranslations('chatbotWidget.builder.launch');
   return (
     <div data-step="4">
-      <StepHead n="04" title={t('title')} tag={t('tag')} />
+      <StepHead n={plain ? null : '04'} title={t('title')} tag={t('tag')} />
       <div className="mb-4">
         <label htmlFor="wgt-f-buttonLabel" className={LABEL}>
           {t('label')}

@@ -1,7 +1,8 @@
 {
   "team-inbox-conversations": {
     "nav": {
-      "inbox": "Inbox"
+      "inbox": "Inbox",
+      "messageLogs": "Berichtlogboeken"
     },
     "common": {
       "dismiss": "Sluiten"
@@ -131,7 +132,10 @@
       "generic": "Er ging iets mis. Probeer het opnieuw.",
       "genericWithId": "Er ging iets mis. Probeer het opnieuw. Referentie: {id}",
       "templateNotSendable": "Dat sjabloon kan niet in dit gesprek worden verzonden. Kies een ander.",
-      "groupSendUnavailable": "Verzenden naar WhatsApp-groepen is nog niet beschikbaar. Antwoord via de WhatsApp Business-app."
+      "groupSendUnavailable": "Verzenden naar WhatsApp-groepen is nog niet beschikbaar. Antwoord via de WhatsApp Business-app.",
+      "logRange": "Kies datums binnen het afgelopen jaar, waarbij de start voor het einde ligt en niet in de toekomst.",
+      "logBusy": "Er wordt al een export voorbereid. Wacht op de e-mail ervan en vraag daarna een nieuwe aan.",
+      "logNotReady": "Deze export is niet gereed of is verlopen. Vraag hem opnieuw aan."
     },
     "bubble": {
       "kind": {
@@ -141,6 +145,9 @@
       },
       "template": "Sjabloonbericht: {name}",
       "unavailable": "Bericht niet beschikbaar",
+      "unsupported": "De klant heeft iets gestuurd dat dit kanaal niet kan weergeven.",
+      "forwarded": "Doorgestuurd",
+      "referral": "Afkomstig van een advertentie of link",
       "sentIn": "Verzonden in {lang}. Toon de tekst die je schreef",
       "translatedFrom": "Vertaald uit {lang}. Toon het origineel",
       "bot": "Bot",
@@ -162,7 +169,39 @@
       },
       "templateCopyCode": "Code kopiëren",
       "templateButtonUnnamed": "Knop",
-      "templateButtonPrefix": "Knop: "
+      "templateButtonPrefix": "Knop: ",
+      "reply": "Beantwoorden",
+      "quote": {
+        "you": "Jij",
+        "customer": "Klant",
+        "missing": "Oorspronkelijk bericht",
+        "jump": "Ga naar het oorspronkelijke bericht",
+        "replyingTo": "Reageren op {name}",
+        "kind": {
+          "text": "Bericht",
+          "image": "Foto",
+          "video": "Video",
+          "audio": "Audio",
+          "voice": "Spraakbericht",
+          "document": "Document",
+          "sticker": "Sticker",
+          "location": "Locatie",
+          "contact": "Contact",
+          "template": "Sjabloon",
+          "reaction": "Reactie",
+          "interactive": "Selectie"
+        }
+      },
+      "react": {
+        "label": "Reageer op dit bericht",
+        "add": "Reageer met {emoji}",
+        "remove": "Verwijder je reactie {emoji}",
+        "more": "Meer emoji",
+        "takeBack": "Tik om je reactie in te trekken",
+        "takeBackLabel": "Jouw reactie {emoji}. Intrekken",
+        "failed": "Deze reactie is niet verzonden"
+      },
+      "deliveryLog": "Bezorglogboek"
     },
     "media": {
       "openImage": "Afbeelding {name} openen",
@@ -232,7 +271,86 @@
       "addNote": "Notitie toevoegen",
       "hint": "Enter verzendt. Shift+Enter voegt een nieuwe regel toe.",
       "template": "Een sjabloon verzenden",
-      "groupSendUnavailable": "Verzenden naar WhatsApp-groepen is nog niet beschikbaar. Antwoord via de WhatsApp Business-app."
+      "groupSendUnavailable": "Verzenden naar WhatsApp-groepen is nog niet beschikbaar. Antwoord via de WhatsApp Business-app.",
+      "emoji": "Emoji invoegen",
+      "emojiPanel": "Emoji",
+      "emojiRecent": "Recent gebruikt",
+      "emojiGroups": "Emojigroepen",
+      "emojiGroup": {
+        "smileys": "Smileys",
+        "gestures": "Gebaren",
+        "hearts": "Harten en symbolen",
+        "objects": "Objecten"
+      },
+      "cancelReply": "Antwoord annuleren",
+      "share": {
+        "open": "Een locatie, contact of knoppen delen",
+        "title": "Delen",
+        "eyebrow": "Naar de klant sturen",
+        "close": "Sluiten",
+        "cancel": "Annuleren",
+        "send": "Verzenden",
+        "sending": "Verzenden…",
+        "sent": "Verzonden",
+        "windowHint": "Zoals elk vrij bericht hebben deze een open venster van 24 uur nodig op een WhatsApp Cloud API-nummer.",
+        "tab": {
+          "location": "Locatie",
+          "contacts": "Contact",
+          "buttons": "Knoppen"
+        },
+        "location": {
+          "latitude": "Breedtegraad",
+          "longitude": "Lengtegraad",
+          "name": "Naam van de plek (optioneel)",
+          "address": "Adres (optioneel)",
+          "pasteHint": "Je kunt hier \"28.6139, 77.2090\" uit een kaart plakken."
+        },
+        "contact": {
+          "card": "Contact {n}",
+          "name": "Naam",
+          "org": "Bedrijf (optioneel)",
+          "phone": "Telefoon",
+          "email": "E-mail",
+          "remove": "Contact {n} verwijderen",
+          "add": "Nog een contact toevoegen"
+        },
+        "buttons": {
+          "type": "Soort knop",
+          "kind": {
+            "buttons": "Antwoordknoppen",
+            "cta_url": "Linkknop",
+            "list": "Lijst"
+          },
+          "header": "Koptekst (optioneel)",
+          "body": "Bericht",
+          "footer": "Voettekst (optioneel)",
+          "titles": "Knoppen (maximaal 3)",
+          "titleN": "Knop {n}",
+          "add": "Een knop toevoegen",
+          "linkText": "Knoptekst",
+          "url": "Link",
+          "listButton": "Knop die de lijst opent",
+          "section": "Sectie {n}",
+          "sectionTitle": "Titel van de sectie",
+          "rowTitle": "Titel van rij {n}",
+          "rowDescription": "Beschrijving van rij {n} (optioneel)",
+          "addRow": "Een rij toevoegen",
+          "addSection": "Een sectie toevoegen",
+          "removeSection": "Sectie {n} verwijderen",
+          "rows": "Rijen",
+          "rowCount": "{n} van {max} rijen"
+        },
+        "problem": {
+          "required": "{label} is verplicht",
+          "range": "{label} valt buiten het bereik",
+          "phoneOrEmail": "Voeg een telefoonnummer of e-mailadres toe",
+          "phone": "Voer een geldig telefoonnummer in",
+          "email": "Voer een geldig e-mailadres in",
+          "duplicate": "{label} herhaalt een andere knop",
+          "url": "Voer een link in die begint met http:// of https://",
+          "tooManyRows": "Een lijst bevat in totaal maximaal 10 rijen"
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Notities en tijdlijn",
@@ -441,6 +559,80 @@
         "named_variables": "Gebruikt benoemde variabelen, die de inbox nog niet ondersteunt."
       },
       "hasMore": "De eerste {count} sjablonen worden getoond. Zoek op naam of tekst om de andere te vinden."
+    },
+    "log": {
+      "title": "Bezorglogboek",
+      "close": "Sluiten",
+      "loading": "Logboek laden",
+      "tryAgain": "Opnieuw proberen",
+      "statusNow": "Huidige status",
+      "createdAt": "Aangemaakt",
+      "providerId": "Bericht-ID van de provider",
+      "failedNoReason": "Dit bericht is niet bezorgd.",
+      "expired": "Dit bericht is ouder dan {days} dagen. Het logboek ervan wordt niet meer bewaard.",
+      "empty": "Voor dit bericht is geen logboek vastgelegd. Berichten die zijn verzonden voordat logboeken werden bijgehouden, hebben er geen.",
+      "archived": "Vermeldingen ouder dan {days} dagen worden uit het archief gelezen.",
+      "exportLink": "Berichtlogboeken exporteren",
+      "source": {
+        "system": "Ons systeem",
+        "provider": "Ontvangstbevestiging van de provider"
+      },
+      "event": {
+        "queued": "In de wachtrij om te verzenden",
+        "attempt": "Verzendpoging {attempt}",
+        "accepted": "Geaccepteerd door de provider",
+        "sentReceipt": "Provider heeft bevestigd dat het is verzonden",
+        "delivered": "Bezorgd op de telefoon van de klant",
+        "read": "Gelezen door de klant",
+        "failedReceipt": "Provider meldde het als niet bezorgd",
+        "failedSend": "Kon niet worden verzonden",
+        "retryAuto": "Wordt automatisch opnieuw geprobeerd",
+        "retryManual": "Een teamlid heeft op Opnieuw proberen gedrukt"
+      },
+      "notApplied": "Deze melding kwam te laat of hoorde bij een eerdere verzending. Het bericht is niet gewijzigd.",
+      "replayed": "Er is geen nieuw verzoek gedaan: het eerdere antwoord van de provider is hergebruikt.",
+      "resent": "Opnieuw als nieuw bericht naar de provider verzonden."
+    },
+    "logs": {
+      "back": "Terug naar de inbox",
+      "title": "Berichtlogboeken",
+      "intro": "Elk bericht bewaart zijn bezorglogboek: {hot} dagen in de inbox, daarna in het archief tot {days} dagen nadat het gebeurde. Vraag een export aan voor een periode; die wordt op de achtergrond voorbereid en naar je gemaild zodra hij gereed is.",
+      "requested": "Export aangevraagd. We mailen je zodra hij gereed is.",
+      "requestedTo": "Export aangevraagd. We mailen {email} zodra hij gereed is.",
+      "form": {
+        "title": "Export aanvragen",
+        "from": "Van",
+        "to": "Tot",
+        "status": "Alleen berichten die nu de status hebben",
+        "anyStatus": "Elke status",
+        "hint": "Datums zijn in UTC. Je kunt tot {days} dagen teruggaan. Er wordt telkens één export voorbereid.",
+        "submit": "Export aanvragen",
+        "sending": "Aanvragen"
+      },
+      "problem": {
+        "order": "De startdatum mag niet na de einddatum liggen.",
+        "future": "De einddatum mag niet in de toekomst liggen.",
+        "tooOld": "Logboeken worden {days} dagen bewaard. Kies een latere startdatum.",
+        "invalid": "Vul beide datums in."
+      },
+      "history": {
+        "title": "Je exports",
+        "loading": "Exports laden",
+        "tryAgain": "Opnieuw proberen",
+        "empty": "Nog geen exports.",
+        "onlyStatus": "Alleen berichten met status {status}",
+        "requestedAt": "Aangevraagd {date}",
+        "lines": "{count, plural, one {# regel} other {# regels}}",
+        "until": "Beschikbaar tot {date}",
+        "download": "Downloaden",
+        "status": {
+          "queued": "Wachtend",
+          "running": "Wordt voorbereid",
+          "ready": "Gereed",
+          "failed": "Mislukt",
+          "expired": "Verlopen"
+        }
+      }
     }
   }
 }

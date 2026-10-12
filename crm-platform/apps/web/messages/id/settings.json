@@ -97,7 +97,7 @@
       },
       "sms": {
         "label": "SMS",
-        "description": "Kirim dan terima pesan teks dengan pengirim Anda sendiri.",
+        "description": "Kirim pesan teks dengan nomor Twilio atau pengirim MSG91 Anda sendiri.",
         "keywords": "pesan teks, sender id, dlt, twilio, seluler"
       },
       "email": {
@@ -309,6 +309,16 @@
         "label": "Penugasan otomatis",
         "description": "Berikan percakapan baru ke agen yang tepat secara otomatis, bergiliran atau berdasarkan aturan.",
         "keywords": "routing, round robin, tetapkan, agen, aturan inbox, distribusikan, pemilik"
+      },
+      "message-logs": {
+        "label": "Log pesan",
+        "description": "Ekspor log pengiriman pesan Anda, hingga satu tahun ke belakang, sebagai file yang dikirim ke email Anda.",
+        "keywords": "ekspor, log pengiriman, riwayat, arsip, csv, pesan"
+      },
+      "web": {
+        "label": "Obrolan situs web",
+        "description": "Bot yang dibuat untuk obrolan situs web Anda dan widget tempat masing-masing berjalan.",
+        "keywords": "web, situs web, widget, chatbot, sematkan, obrolan langsung"
       }
     }
   }

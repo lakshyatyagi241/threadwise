@@ -176,12 +176,50 @@
       "cancelBody": "A execução para no ponto em que está. O cliente não é avisado.",
       "cancelConfirm": "Cancelar execução",
       "cancelKeep": "Manter",
-      "cancelled": "Execução cancelada"
+      "cancelled": "Execução cancelada",
+      "tlTitle": "Linha do tempo da execução",
+      "tlNodes": "Nós executados",
+      "tlErrors": "Erros",
+      "tlTime": "Tempo dos nós",
+      "filterAll": "Todas as etapas",
+      "filterErrors": "Somente erros",
+      "changedTitle": "Este fluxo foi editado após a execução",
+      "changedBody": "O registro mostra o fluxo exatamente como foi executado.",
+      "removed": "Removido do fluxo",
+      "exit": "Saída {port}",
+      "visit": "Visita {n}",
+      "truncated": "Mais de {max} etapas foram executadas. As seguintes foram contadas, mas não listadas.",
+      "retention": "Os registros são excluídos {days} dias após o fim de uma execução.",
+      "pathTitle": "Caminho seguido",
+      "notReached": "Não alcançados",
+      "noErrors": "Nenhum erro nesta execução.",
+      "factNext": "Próximo: {node}",
+      "factWaiting": "Aguardando em: {node}",
+      "factDelay": "Espera {time}",
+      "factReplied": "O cliente respondeu: {text}",
+      "factEnded": "Terminou: {reason}",
+      "ioInput": "Entrada",
+      "ioOutput": "Saída",
+      "ioKind": {
+        "message": "Mensagem enviada",
+        "reply": "Resposta do cliente",
+        "variable": "Variável",
+        "request": "Requisição",
+        "response": "Resposta",
+        "result": "Resultado"
+      }
     },
     "event": {
       "step": "Etapa",
       "reply": "Resposta do cliente",
-      "end": "Fim"
+      "end": "Fim",
+      "advance": "Avançou",
+      "wait": "Aguardando resposta",
+      "sleep": "Atraso",
+      "halt": "Interrompido",
+      "exec": "Executado",
+      "truncated": "Limite do registro atingido",
+      "start": "Iniciado"
     },
     "subs": {
       "kicker": "Fluxo",
@@ -469,6 +507,13 @@
       "manyBody": "{n} contatos voltam ao fluxo desde o início e recebem as mensagens novamente. Isso não pode ser desfeito.",
       "summary": "{queued} reiniciadas, {succeeded} concluídas, {failed} com falha, {skipped} ignoradas.",
       "flowInactive": "Ative este fluxo novamente antes de executar de novo os contatos com falha."
+    },
+    "outcome": {
+      "ok": "OK",
+      "error": "Erro",
+      "skipped": "Ignorado",
+      "waiting": "Aguardando",
+      "timeout": "Tempo esgotado"
     }
   }
 }

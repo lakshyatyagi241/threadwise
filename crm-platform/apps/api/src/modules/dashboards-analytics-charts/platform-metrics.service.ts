@@ -95,7 +95,7 @@ export class PlatformMetricsService {
   private outMessages(tx: Tx, a: Date, b: Date): Promise<number> {
     return this.n(
       tx,
-      sql`SELECT count(*)::int AS n FROM messages WHERE direction = 'out' AND deleted_at IS NULL
+      sql`SELECT count(*)::int AS n FROM messages WHERE direction = 'out' AND kind <> 'reaction' AND deleted_at IS NULL
           AND created_at >= ${iso(a)}::timestamptz AND created_at < ${iso(b)}::timestamptz`,
     );
   }
@@ -192,7 +192,7 @@ export class PlatformMetricsService {
         SELECT o.slug, o.name, u.full_name AS owner, coalesce(p.name, 'Free') AS plan,
                p.amount::text AS amount, p.offer_amount::text AS offer_amount, p.billing_unit, p.billing_duration, p.currency,
                coalesce(p.is_free, true) AS is_free,
-               (SELECT count(*)::int FROM messages m WHERE m.org_id = o.id AND m.direction = 'out' AND m.deleted_at IS NULL
+               (SELECT count(*)::int FROM messages m WHERE m.org_id = o.id AND m.direction = 'out' AND m.kind <> 'reaction' AND m.deleted_at IS NULL
                   AND m.created_at >= ${week}::timestamptz) AS messages,
                (SELECT max(m.created_at) FROM messages m WHERE m.org_id = o.id) AS last_active
         FROM organizations o
@@ -286,13 +286,13 @@ export class PlatformMetricsService {
     }
     const top = await tx.execute(sql`
       SELECT m.org_id, o.name, count(*)::int AS n FROM messages m JOIN organizations o ON o.id = m.org_id
-      WHERE m.direction = 'out' AND m.created_at >= ${iso(new Date(now.getTime() - 3_600_000))}::timestamptz
+      WHERE m.direction = 'out' AND m.kind <> 'reaction' AND m.created_at >= ${iso(new Date(now.getTime() - 3_600_000))}::timestamptz
       GROUP BY m.org_id, o.name ORDER BY n DESC LIMIT 1`);
     const lead = top.rows[0] as { org_id: number; name: string; n: number } | undefined;
     if (lead) {
       const week = await this.n(
         tx,
-        sql`SELECT count(*)::int AS n FROM messages WHERE org_id = ${lead.org_id} AND direction = 'out'
+        sql`SELECT count(*)::int AS n FROM messages WHERE org_id = ${lead.org_id} AND direction = 'out' AND kind <> 'reaction'
             AND created_at >= ${iso(new Date(now.getTime() - 7 * DAY))}::timestamptz`,
       );
       const ratio = spikeRatio(lead.n, week);

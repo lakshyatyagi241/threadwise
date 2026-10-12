@@ -61,8 +61,8 @@ assignment.
 The biggest table in the system: 10–25M rows/month, range-partitioned monthly.
 
 `messages` holds the **latest** status. The full history of transitions lives
-in `message_events`, which is 2–4× larger and retained ~180 days before its
-partitions are dropped.
+in `message_events`, which is 2–4× larger. Its rows stay live for 90 days, then a daily sweep archives them (compressed, one
+object per workspace and day) and the archive is deleted after one year.
 
 Both tables are **exempt from the audit and outbox triggers**. They are the
 log. Auditing an append-only table doubles the write volume to record nothing

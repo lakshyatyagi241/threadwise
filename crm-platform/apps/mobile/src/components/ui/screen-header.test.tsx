@@ -10,9 +10,9 @@ const frame = {
 };
 
 describe('ScreenHeader', () => {
-  it('shows the title and runs a button when it is pressed', () => {
+  it('shows the title and runs a button when it is pressed', async () => {
     const onPress = jest.fn();
-    renderApp(
+    await renderApp(
       <SafeAreaProvider initialMetrics={frame}>
         <ScreenHeader actions={<HeaderIconButton icon="search" label="Search" onPress={onPress} />}>
           <Text>Inbox</Text>
@@ -20,12 +20,12 @@ describe('ScreenHeader', () => {
       </SafeAreaProvider>,
     );
     expect(screen.getByText(/Inbox/)).toBeTruthy();
-    fireEvent.press(screen.getByRole('button', { name: 'Search' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Search' }));
     expect(onPress).toHaveBeenCalledTimes(1);
   });
 
-  it('accepts a Material icon and a dot', () => {
-    renderApp(
+  it('accepts a Material icon and a dot', async () => {
+    await renderApp(
       <SafeAreaProvider initialMetrics={frame}>
         <ScreenHeader
           actions={

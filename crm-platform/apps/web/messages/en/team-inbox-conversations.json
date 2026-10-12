@@ -1,7 +1,8 @@
 {
   "team-inbox-conversations": {
     "nav": {
-      "inbox": "Inbox"
+      "inbox": "Inbox",
+      "messageLogs": "Message logs"
     },
     "common": {
       "dismiss": "Dismiss"
@@ -131,7 +132,10 @@
       "generic": "Something went wrong. Try again.",
       "genericWithId": "Something went wrong. Try again. Reference: {id}",
       "templateNotSendable": "That template cannot be sent into this conversation. Pick another one.",
-      "groupSendUnavailable": "Sending to WhatsApp groups is not available yet. Reply from the WhatsApp Business app."
+      "groupSendUnavailable": "Sending to WhatsApp groups is not available yet. Reply from the WhatsApp Business app.",
+      "logRange": "Choose dates inside the last year, with the start before the end and not in the future.",
+      "logBusy": "An export is already being prepared. Wait for its email, then request another.",
+      "logNotReady": "This export is not ready, or it has expired. Request it again."
     },
     "bubble": {
       "kind": {
@@ -165,7 +169,39 @@
       },
       "templateCopyCode": "Copy code",
       "templateButtonUnnamed": "Button",
-      "templateButtonPrefix": "Button: "
+      "templateButtonPrefix": "Button: ",
+      "reply": "Reply",
+      "quote": {
+        "you": "You",
+        "customer": "Customer",
+        "missing": "Original message",
+        "jump": "Go to the original message",
+        "replyingTo": "Replying to {name}",
+        "kind": {
+          "text": "Message",
+          "image": "Photo",
+          "video": "Video",
+          "audio": "Audio",
+          "voice": "Voice message",
+          "document": "Document",
+          "sticker": "Sticker",
+          "location": "Location",
+          "contact": "Contact",
+          "template": "Template",
+          "reaction": "Reaction",
+          "interactive": "Selection"
+        }
+      },
+      "react": {
+        "label": "React to this message",
+        "add": "React with {emoji}",
+        "remove": "Remove your {emoji} reaction",
+        "more": "More emoji",
+        "takeBack": "Tap to take your reaction back",
+        "takeBackLabel": "Your reaction {emoji}. Take it back",
+        "failed": "This reaction was not sent"
+      },
+      "deliveryLog": "Delivery log"
     },
     "media": {
       "openImage": "Open image {name}",
@@ -235,7 +271,86 @@
       "addNote": "Add note",
       "hint": "Enter sends. Shift+Enter adds a new line.",
       "template": "Send a template",
-      "groupSendUnavailable": "Sending to WhatsApp groups is not available yet. Reply from the WhatsApp Business app."
+      "groupSendUnavailable": "Sending to WhatsApp groups is not available yet. Reply from the WhatsApp Business app.",
+      "emoji": "Insert an emoji",
+      "emojiPanel": "Emoji",
+      "emojiRecent": "Recently used",
+      "emojiGroups": "Emoji groups",
+      "emojiGroup": {
+        "smileys": "Smileys",
+        "gestures": "Gestures",
+        "hearts": "Hearts and symbols",
+        "objects": "Objects"
+      },
+      "cancelReply": "Cancel the reply",
+      "share": {
+        "open": "Share a location, contact or buttons",
+        "title": "Share",
+        "eyebrow": "Send to the customer",
+        "close": "Close",
+        "cancel": "Cancel",
+        "send": "Send",
+        "sending": "Sending…",
+        "sent": "Sent",
+        "windowHint": "Like any free-form message, these need an open 24 hour window on a WhatsApp Cloud API number.",
+        "tab": {
+          "location": "Location",
+          "contacts": "Contact",
+          "buttons": "Buttons"
+        },
+        "location": {
+          "latitude": "Latitude",
+          "longitude": "Longitude",
+          "name": "Place name (optional)",
+          "address": "Address (optional)",
+          "pasteHint": "You can paste \"28.6139, 77.2090\" from a map here."
+        },
+        "contact": {
+          "card": "Contact {n}",
+          "name": "Name",
+          "org": "Company (optional)",
+          "phone": "Phone",
+          "email": "Email",
+          "remove": "Remove contact {n}",
+          "add": "Add another contact"
+        },
+        "buttons": {
+          "type": "Kind of button",
+          "kind": {
+            "buttons": "Reply buttons",
+            "cta_url": "Link button",
+            "list": "List"
+          },
+          "header": "Header (optional)",
+          "body": "Message",
+          "footer": "Footer (optional)",
+          "titles": "Buttons (up to 3)",
+          "titleN": "Button {n}",
+          "add": "Add a button",
+          "linkText": "Button text",
+          "url": "Link",
+          "listButton": "Button that opens the list",
+          "section": "Section {n}",
+          "sectionTitle": "Section title",
+          "rowTitle": "Row {n} title",
+          "rowDescription": "Row {n} description (optional)",
+          "addRow": "Add a row",
+          "addSection": "Add a section",
+          "removeSection": "Remove section {n}",
+          "rows": "Rows",
+          "rowCount": "{n} of {max} rows"
+        },
+        "problem": {
+          "required": "{label} is required",
+          "range": "{label} is out of range",
+          "phoneOrEmail": "Add a phone number or an email",
+          "phone": "Enter a valid phone number",
+          "email": "Enter a valid email address",
+          "duplicate": "{label} repeats another button",
+          "url": "Enter a link starting with http:// or https://",
+          "tooManyRows": "A list holds at most 10 rows in total"
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Notes and timeline",
@@ -444,6 +559,80 @@
         "named_variables": "Uses named variables, which the inbox does not support yet."
       },
       "hasMore": "Showing the first {count} templates. Search by name or text to find the others."
+    },
+    "log": {
+      "title": "Delivery log",
+      "close": "Close",
+      "loading": "Loading the log",
+      "tryAgain": "Try again",
+      "statusNow": "Status now",
+      "createdAt": "Created",
+      "providerId": "Provider message ID",
+      "failedNoReason": "This message was not delivered.",
+      "expired": "This message is older than {days} days. Its log is no longer kept.",
+      "empty": "No log was recorded for this message. Messages sent before logs were kept have none.",
+      "archived": "Entries older than {days} days are read from the archive.",
+      "exportLink": "Export message logs",
+      "source": {
+        "system": "Our system",
+        "provider": "Provider receipt"
+      },
+      "event": {
+        "queued": "Queued to send",
+        "attempt": "Send attempt {attempt}",
+        "accepted": "Accepted by the provider",
+        "sentReceipt": "Provider confirmed it was sent",
+        "delivered": "Delivered to the customer's phone",
+        "read": "Read by the customer",
+        "failedReceipt": "Provider reported it as not delivered",
+        "failedSend": "Could not be sent",
+        "retryAuto": "Will try again automatically",
+        "retryManual": "A teammate pressed Retry"
+      },
+      "notApplied": "This report arrived late or for an earlier send. It did not change the message.",
+      "replayed": "No new request was made: the provider's earlier answer was reused.",
+      "resent": "Sent again to the provider as a new message."
+    },
+    "logs": {
+      "back": "Back to the inbox",
+      "title": "Message logs",
+      "intro": "Every message keeps its delivery log: {hot} days in the inbox, then in the archive until {days} days after it happened. Request an export of a date range; it is prepared in the background and emailed to you when it is ready.",
+      "requested": "Export requested. We will email you when it is ready.",
+      "requestedTo": "Export requested. We will email {email} when it is ready.",
+      "form": {
+        "title": "Request an export",
+        "from": "From",
+        "to": "To",
+        "status": "Only messages that are now",
+        "anyStatus": "Any status",
+        "hint": "Dates are in UTC. You can go back up to {days} days. One export is prepared at a time.",
+        "submit": "Request export",
+        "sending": "Requesting"
+      },
+      "problem": {
+        "order": "The start date must not be after the end date.",
+        "future": "The end date cannot be in the future.",
+        "tooOld": "Logs are kept for {days} days. Choose a later start date.",
+        "invalid": "Enter both dates."
+      },
+      "history": {
+        "title": "Your exports",
+        "loading": "Loading exports",
+        "tryAgain": "Try again",
+        "empty": "No exports yet.",
+        "onlyStatus": "Only {status} messages",
+        "requestedAt": "Requested {date}",
+        "lines": "{count, plural, one {# line} other {# lines}}",
+        "until": "Available until {date}",
+        "download": "Download",
+        "status": {
+          "queued": "Waiting",
+          "running": "Preparing",
+          "ready": "Ready",
+          "failed": "Failed",
+          "expired": "Expired"
+        }
+      }
     }
   }
 }

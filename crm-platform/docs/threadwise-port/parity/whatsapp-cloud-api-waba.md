@@ -27,7 +27,7 @@ The first real-Meta run is `pnpm waba:smoke` (see `docs/threadwise-port/waba-int
 
 ## Intended differences from Reference
 
-| Where                                                           | Reference                                         | Here                                                                                                      | Reason                                                |
+| Where                                                           | Reference                                      | Here                                                                                                      | Reason                                                |
 | --------------------------------------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
 | Same number in two workspaces                                   | allowed                                        | refused (`WABA_NUMBER_IN_USE`, partial unique index)                                                      | inbound routing by phone number id would be ambiguous |
 | Webhook authentication                                          | signature, with fallbacks                      | signature **or** the platform key in the callback URL (`?k=`), `requireSignature` closes the URL-key door | Interakt documents no signature                       |

@@ -44,6 +44,17 @@ export class WidgetsController {
     return this.widgets.assistantPicker();
   }
 
+  @Get('flow-bots')
+  @RequirePermission('flb.flows.read')
+  @ApiOperation({
+    summary: "The workspace's website chat bots with their widgets (Settings > Channels > Web)",
+    description:
+      "`state` is `needs_customizing` until the bot's widget has been saved once, then `draft`, `live` or `paused`. Newest 200; `total` counts all.",
+  })
+  flowBots() {
+    return this.widgets.webBots();
+  }
+
   @Get(':id')
   @RequirePermission('wgt.widgets.read')
   @ApiOperation({ summary: 'One widget, as the builder edits it' })
@@ -70,7 +81,7 @@ export class WidgetsController {
   @ApiOperation({
     summary: 'Save a widget (the whole form plus the row version it was read at)',
     description:
-      'A stale `rowVersion` is refused with 409 ROW_VERSION_CONFLICT. QUIRK reproduced from Reference: an id that is not in this workspace creates a NEW widget instead of failing.',
+      'A stale `rowVersion` is refused with 409 ROW_VERSION_CONFLICT. An id that is not a widget of this workspace (of another workspace, deleted, never existed) is 404. Reference created a NEW widget in that case; that was a cross-tenant write path and is deliberately not kept.',
   })
   update(@Param('id', ParseUUIDPipe) id: string, @Body() body: unknown) {
     return this.widgets.update(id, body);

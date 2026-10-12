@@ -1,0 +1,690 @@
+{
+  "faq": {
+    "nav": {
+      "faq": "FAQs",
+      "label": "Seções de FAQ",
+      "tab": {
+        "faqs": "FAQs",
+        "test": "Testar",
+        "unanswered": "Sem resposta",
+        "insights": "Análises",
+        "settings": "Configurações"
+      },
+      "unansweredCount": "{count, plural, one {# mensagem sem resposta} other {# mensagens sem resposta}}"
+    },
+    "common": {
+      "dismiss": "Dispensar",
+      "retry": "Tentar novamente",
+      "requestId": "Solicitação {id}",
+      "noAccessTitle": "Você não tem acesso a esta tela",
+      "noAccess": "Peça a um administrador do workspace para dar ao seu perfil a permissão {permission}."
+    },
+    "errors": {
+      "network": "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.",
+      "forbidden": "Seu perfil não tem permissão para fazer isso.",
+      "notFound": "Esta FAQ ou mensagem não existe mais. Ela pode ter sido excluída.",
+      "conflict": "Outra pessoa alterou isto enquanto você editava.",
+      "duplicateQuestion": "Outra FAQ já tem esta pergunta.",
+      "duplicateVariation": "Esta FAQ já tem esta formulação.",
+      "limitReached": "Seu workspace atingiu o limite de FAQs. Exclua FAQs ou variações não usadas, ou peça ao administrador da plataforma para aumentar o limite.",
+      "flowNotFound": "O fluxo escolhido não existe mais neste workspace. Escolha outro.",
+      "embeddingUnavailable": "O provedor de IA não está disponível. Adicione uma chave do OpenRouter ao seu workspace, ou peça ao administrador da plataforma para ativar a chave compartilhada, e tente novamente.",
+      "engineDisabled": "As respostas por FAQ estão desativadas em toda a plataforma no momento.",
+      "modelNotAllowed": "O modelo de IA da plataforma para correspondência não é permitido. Fale com o administrador da plataforma.",
+      "validation": "Alguns campos precisam de atenção.",
+      "rateLimited": "Muitas solicitações. Aguarde um momento e tente novamente.",
+      "unexpected": "Algo deu errado. Tente novamente e informe o ID da solicitação ao suporte se o problema continuar.",
+      "flowNodeNotFound": "A etapa escolhida não está mais neste fluxo. Escolha outra etapa ou comece pelo início do fluxo."
+    },
+    "banner": {
+      "enabledToast": "As respostas por FAQ estão ativadas.",
+      "engineOff": "As respostas por FAQ foram desativadas pela plataforma. Os clientes não recebem respostas de FAQ até que sejam reativadas.",
+      "modelChanged": "A plataforma mudou o modelo de IA depois que você ajustou este limite. As pontuações mudaram, então revise sua sensibilidade.",
+      "reviewSensitivity": "Revisar sensibilidade",
+      "offTitle": "As respostas por FAQ estão DESATIVADAS para os clientes",
+      "offBody": "Você pode escrever e testar FAQs, mas os clientes não recebem respostas até você ativar.",
+      "offNoRight": "Peça a quem tem a permissão faq.settings.manage (geralmente um administrador do workspace) para ativar.",
+      "enable": "Ativar respostas por FAQ"
+    },
+    "list": {
+      "title": "FAQs",
+      "subtitle": "As perguntas que seus clientes fazem e o que seu bot responde. Os clientes não precisam usar exatamente as suas palavras.",
+      "add": "Adicionar FAQ",
+      "stats": {
+        "label": "Totais de FAQs",
+        "total": "FAQs",
+        "active": "Ativas",
+        "paused": "Pausadas",
+        "variations": "Formulações",
+        "pending": "Indexando",
+        "pendingHint": "Ativas em poucos segundos",
+        "failed": "Falha na indexação",
+        "failedHint": "Requer atenção"
+      },
+      "failedBanner": "{count, plural, one {# formulação não foi indexada} other {# formulações não foram indexadas}} e ainda não podem corresponder às mensagens dos clientes.",
+      "showFailed": "Mostrar FAQs com falhas",
+      "search": "Pesquisar FAQs",
+      "searchPlaceholder": "Pesquisar perguntas e formulações",
+      "filter": {
+        "status": "Status",
+        "anyStatus": "Qualquer status",
+        "category": "Categoria",
+        "anyCategory": "Qualquer categoria",
+        "indexing": "Indexação",
+        "anyIndexing": "Qualquer",
+        "pending": "Ainda indexando",
+        "failed": "Com falha"
+      },
+      "status": {
+        "active": "Ativas",
+        "paused": "Pausadas"
+      },
+      "clearFilters": "Limpar filtros",
+      "bulk": {
+        "label": "Ações em massa",
+        "selected": "{count, plural, one {# FAQ selecionada} other {# FAQs selecionadas}}",
+        "pause": "Pausar",
+        "activate": "Ativar",
+        "delete": "Excluir",
+        "clear": "Limpar seleção",
+        "done": {
+          "pause": "{count, plural, one {# FAQ pausada} other {# FAQs pausadas}}.",
+          "activate": "{count, plural, one {# FAQ ativada} other {# FAQs ativadas}}.",
+          "delete": "{count, plural, one {# FAQ excluída} other {# FAQs excluídas}}."
+        }
+      },
+      "paused": "FAQ pausada.",
+      "activated": "FAQ ativada.",
+      "deleted": "FAQ excluída.",
+      "empty": {
+        "title": "Ensine ao seu bot as respostas das perguntas frequentes",
+        "body": "Escreva uma pergunta e sua resposta uma única vez. Seu bot reconhece o que os clientes escrevem, com as próprias palavras deles, e responde com a resposta ou inicia um fluxo.",
+        "how": "Adicione algumas outras formas de fazer a mesma pergunta (formulações) e teste antes que os clientes vejam.",
+        "cta": "Adicione sua primeira FAQ",
+        "noRight": "Peça a um administrador do workspace a permissão para adicionar FAQs."
+      },
+      "noMatch": {
+        "title": "Nenhuma FAQ corresponde a estes filtros",
+        "body": "Tente outra pesquisa ou limpe os filtros."
+      },
+      "selectAll": "Selecionar todas as FAQs desta página",
+      "selectRow": "Selecionar {question}",
+      "col": {
+        "question": "Pergunta",
+        "answer": "Resposta",
+        "indexing": "Formulações ativas",
+        "answered": "Respondidas (90 dias)",
+        "status": "Status",
+        "actions": "Ações"
+      },
+      "variationCount": "{count, plural, one {# formulação} other {# formulações}}",
+      "flowMissing": "Fluxo ausente",
+      "neverAnswered": "Ainda não",
+      "toggleLabel": "Ativa: {question}",
+      "edit": "Editar {question}",
+      "editShort": "Editar",
+      "delete": "Excluir {question}",
+      "deleteShort": "Excluir",
+      "loadMore": "Carregar mais",
+      "loadingMore": "Carregando",
+      "confirm": {
+        "bulkTitle": "Excluir {count, plural, one {# FAQ} other {# FAQs}}?",
+        "bulkBody": "{count, plural, one {Esta FAQ e suas formulações serão excluídas} other {Estas FAQs e suas formulações serão excluídas}} permanentemente. Esta ação não pode ser desfeita.",
+        "rowTitle": "Excluir esta FAQ?",
+        "rowBody": "\"{question}\" e todas as suas formulações serão excluídas permanentemente. Esta ação não pode ser desfeita.",
+        "delete": "Excluir",
+        "cancel": "Cancelar"
+      },
+      "indexing": {
+        "summary": "{ready} ativas, {pending} indexando, {failed} com falha",
+        "ready": "{count} ativas",
+        "pending": "{count} indexando",
+        "failed": "{count} com falha"
+      },
+      "stepMissing": "Etapa ausente",
+      "startsAt": "Começa em: {step}"
+    },
+    "editor": {
+      "back": "Voltar para FAQs",
+      "backToList": "Voltar para FAQs",
+      "newTitle": "Nova FAQ",
+      "newSubtitle": "Escreva a pergunta e sua resposta e depois adicione outras formas como os clientes podem perguntar.",
+      "editTitle": "Editar FAQ",
+      "unsaved": "Alterações não salvas",
+      "cancel": "Cancelar",
+      "create": "Criar FAQ",
+      "save": "Salvar alterações",
+      "delete": "Excluir",
+      "created": "FAQ criada.",
+      "saved": "FAQ salva.",
+      "deleted": "FAQ excluída.",
+      "readOnly": "Você pode ver esta FAQ, mas seu perfil não pode alterá-la.",
+      "faqLimit": "Seu workspace atingiu o limite de {max} FAQs. Exclua uma para adicionar outra.",
+      "prefilled": "A pergunta foi preenchida a partir de uma mensagem de cliente sem resposta. Salvar esta FAQ também marca essa mensagem como tratada.",
+      "tryItSaveFirst": "Salve a FAQ primeiro para poder testar como as mensagens dos clientes correspondem a ela.",
+      "conflict": {
+        "title": "Outra pessoa alterou esta FAQ",
+        "body": "Suas edições continuam aqui. Mantenha-as e salve novamente sobre a versão mais recente, ou descarte-as e carregue a versão mais recente.",
+        "keep": "Manter minhas edições",
+        "reload": "Carregar a versão mais recente",
+        "kept": "Atualizado para a versão mais recente. Suas edições foram mantidas; salve para aplicá-las."
+      },
+      "question": {
+        "title": "Pergunta",
+        "hint": "A pergunta como você a escreveria. Ela também conta como a primeira formulação.",
+        "label": "Pergunta",
+        "count": "{count} / {max}"
+      },
+      "category": {
+        "label": "Categoria",
+        "hint": "Opcional. Ajuda a filtrar."
+      },
+      "status": {
+        "label": "Status",
+        "hint": "FAQs pausadas nunca respondem.",
+        "active": "Ativa",
+        "paused": "Pausada"
+      },
+      "answer": {
+        "title": "Resposta",
+        "hint": "O que o cliente recebe quando esta FAQ corresponde.",
+        "text": "Resposta em texto",
+        "flow": "Iniciar um fluxo",
+        "textLabel": "Texto da resposta",
+        "count": "{count} / {max} caracteres",
+        "preview": "Como fica no WhatsApp",
+        "previewEmpty": "Sua resposta aparece aqui",
+        "flowLabel": "Fluxo a iniciar",
+        "noFlow": "Nenhum fluxo escolhido",
+        "startsAt": "Começa na etapa: {step}",
+        "stepGone": "A etapa em que esta FAQ começa não existe mais, então os clientes não recebem resposta."
+      },
+      "advanced": {
+        "title": "Avançado: sensibilidade só para esta FAQ",
+        "body": "Por padrão, toda FAQ usa a sensibilidade do workspace. Use um valor personalizado quando esta corresponder com facilidade demais (aumente) ou raramente demais (diminua).",
+        "custom": "Usar uma sensibilidade personalizada para esta FAQ",
+        "sliderLabel": "Corresponder a partir de",
+        "workspace": "A sensibilidade do workspace é {value}%.",
+        "following": "Seguindo a sensibilidade do workspace ({value}%)."
+      },
+      "problem": {
+        "question": {
+          "required": "Escreva a pergunta que os clientes fazem.",
+          "tooLong": "A pergunta pode ter no máximo {max} caracteres.",
+          "invalid": "Esta pergunta não é válida."
+        },
+        "answerText": {
+          "required": "Escreva a resposta que os clientes devem receber.",
+          "tooLong": "A resposta pode ter no máximo {max} caracteres.",
+          "invalid": "Esta resposta não é válida."
+        },
+        "flowId": {
+          "required": "Escolha o fluxo a iniciar.",
+          "tooLong": "Escolha o fluxo a iniciar.",
+          "invalid": "Escolha o fluxo a iniciar."
+        },
+        "category": {
+          "required": "Escreva uma categoria ou deixe em branco.",
+          "tooLong": "A categoria pode ter no máximo {max} caracteres.",
+          "invalid": "Esta categoria não é válida."
+        },
+        "thresholdOverride": {
+          "required": "Escolha um valor entre 5% e 99%.",
+          "tooLong": "Escolha um valor entre 5% e 99%.",
+          "invalid": "Escolha um valor entre 5% e 99%."
+        },
+        "flowNodeId": {
+          "required": "Escolha uma etapa deste fluxo ou o início do fluxo.",
+          "tooLong": "Escolha uma etapa deste fluxo ou o início do fluxo.",
+          "invalid": "Escolha uma etapa deste fluxo ou o início do fluxo."
+        }
+      },
+      "deleteConfirm": {
+        "title": "Excluir esta FAQ?",
+        "body": "A FAQ e todas as suas formulações serão excluídas permanentemente. Esta ação não pode ser desfeita.",
+        "confirm": "Excluir"
+      },
+      "leave": {
+        "title": "Sair sem salvar?",
+        "body": "Suas alterações nesta FAQ não foram salvas.",
+        "leave": "Sair",
+        "stay": "Continuar editando"
+      }
+    },
+    "flowPicker": {
+      "noAccess": "Você precisa da permissão para ver fluxos (flb.flows.read) para escolher um aqui.",
+      "missing": "O fluxo que esta FAQ iniciava não existe mais. Escolha outro fluxo, senão esta FAQ não poderá responder.",
+      "selected": "Escolhido",
+      "search": "Pesquisar fluxos",
+      "searchPlaceholder": "Pesquisar fluxos pelo nome",
+      "retry": "Tentar novamente",
+      "loading": "Carregando fluxos",
+      "noMatch": "Nenhum fluxo tem esse nome.",
+      "none": "Você ainda não tem fluxos. Crie um em Fluxos primeiro.",
+      "listLabel": "Fluxos",
+      "state": {
+        "live": "Publicado",
+        "off": "Inativo",
+        "draft": "Rascunho"
+      },
+      "note": "O fluxo começa na etapa que você escolher abaixo ou no início dele. Somente fluxos publicados e ativos podem ser executados."
+    },
+    "variations": {
+      "title": "Variações da pergunta",
+      "hint": "Outras formas como um cliente pode perguntar isto. Cada uma é reconhecida pelo significado.",
+      "counterLabel": "{count} de {max} formulações usadas",
+      "listLabel": "Formulações",
+      "questionEmpty": "Sua pergunta aparece aqui",
+      "source": {
+        "question": "Pergunta",
+        "manual": "Escrita",
+        "ai": "IA",
+        "learned": "Aprendida",
+        "import": "Importada"
+      },
+      "none": "Ainda não há formulações extras. Adicione algumas ou deixe a IA sugerir.",
+      "edit": "Editar {text}",
+      "remove": "Remover {text}",
+      "editLabel": "Editar formulação",
+      "save": "Salvar",
+      "cancel": "Cancelar",
+      "addLabel": "Nova formulação",
+      "addPlaceholder": "Outra forma de perguntar isto",
+      "add": "Adicionar",
+      "pasteMany": "Colar várias",
+      "full": "Esta FAQ atingiu o limite de {max} formulações.",
+      "failedNotice": "{count, plural, one {# formulação não foi indexada} other {# formulações não foram indexadas}}. Edite e salve a formulação para tentar novamente.",
+      "suggest": "Sugerir com IA",
+      "suggestSaveFirst": "Salve a FAQ primeiro para que a IA possa sugerir formulações.",
+      "suggesting": "Pedindo sugestões à IA",
+      "suggestionsReady": "{count, plural, one {# sugestão pronta} other {# sugestões prontas}}",
+      "suggestionsTitle": "Formulações sugeridas",
+      "suggestionsHint": "Nada é salvo até você adicionar. Desmarque as que você não quer.",
+      "suggestionsNone": "A IA não teve novas formulações para sugerir.",
+      "addSelected": "Adicionar selecionadas ({count})",
+      "discard": "Descartar",
+      "bulk": {
+        "label": "Uma formulação por linha",
+        "placeholder": "Onde está meu pacote\nRastrear meu pedido\nMeu pedido já foi enviado",
+        "summary": "{count, plural, one {# nova formulação será adicionada} other {# novas formulações serão adicionadas}}",
+        "duplicates": "{count, plural, one {# duplicada ficou de fora} other {# duplicadas ficaram de fora}}",
+        "tooLong": "{count, plural, one {# linha ultrapassa} other {# linhas ultrapassam}} {max} caracteres e ficou de fora.",
+        "overflow": "{count, plural, one {# linha não cabe} other {# linhas não cabem}} no limite de formulações e ficou de fora.",
+        "more": "e mais {count}",
+        "add": "Adicionar {count, plural, one {# formulação} other {# formulações}}"
+      },
+      "state": {
+        "ready": "Ativa",
+        "pending": "Indexando",
+        "pendingHint": "Salvo. Começa a corresponder em alguns segundos.",
+        "failed": "Com falha",
+        "failedHint": "Edite e salve a formulação para tentar novamente.",
+        "noReason": "Nenhum motivo informado"
+      },
+      "confirm": {
+        "title": "Remover esta formulação?",
+        "body": "\"{text}\" não chegará mais a esta FAQ.",
+        "remove": "Remover"
+      },
+      "errors": {
+        "duplicate": "Esta FAQ já tem essa formulação.",
+        "tooLong": "Uma formulação pode ter no máximo {max} caracteres.",
+        "aiKeys": "Configurar suas chaves de IA"
+      }
+    },
+    "tryIt": {
+      "title": "Experimente",
+      "hint": "Digite uma mensagem de cliente e veja o que aconteceria. Nada é enviado.",
+      "label": "Mensagem do cliente",
+      "placeholder": "Onde está meu pacote?",
+      "run": "Testar"
+    },
+    "decision": {
+      "verdict": {
+        "answer": {
+          "title": "Responderia",
+          "body": "Uma FAQ correspondeu bem o bastante. O cliente recebe a resposta dela (ou o fluxo dela é iniciado)."
+        },
+        "below": {
+          "title": "Abaixo do limite",
+          "body": "A FAQ mais próxima não atingiu pontuação suficiente, então nada seria enviado. Adicione esta formulação a uma FAQ ou diminua a sensibilidade."
+        },
+        "ambiguous": {
+          "title": "Ambíguo",
+          "body": "Duas FAQs tiveram pontuações quase iguais, então o bot não arriscaria. Torne as FAQs mais distintas ou diminua a margem mínima."
+        },
+        "noFaqs": {
+          "title": "Nenhuma FAQ para comparar",
+          "body": "Ainda não há FAQs ativas com formulações ativas."
+        },
+        "providerError": {
+          "title": "Erro do provedor",
+          "body": "Não foi possível acessar o provedor de IA, então só foi possível comparar a grafia."
+        },
+        "notSent": {
+          "title": "Correspondeu, não enviada",
+          "body": "Uma FAQ correspondeu, mas a resposta não foi enviada, por exemplo porque as respostas por FAQ estavam desativadas."
+        },
+        "vetoed": {
+          "title": "Resposta retida",
+          "body": "A correspondência teve pontuação suficiente, mas a segunda verificação disse não, então nada seria enviado."
+        }
+      },
+      "tier": {
+        "exact": {
+          "name": "Correspondência exata",
+          "body": "A mensagem é igual a uma formulação salva, ignorando maiúsculas e espaços."
+        },
+        "semantic": {
+          "name": "Correspondência por significado",
+          "body": "A mensagem foi comparada pelo significado com cada formulação ativa, então palavras diferentes ainda podem corresponder."
+        },
+        "trigram": {
+          "name": "Alternativa por grafia",
+          "body": "Não foi possível comparar pelo significado, então a mensagem foi comparada letra por letra. Isso pega erros de digitação, mas não sinônimos."
+        }
+      },
+      "scoreLabel": "Pontuação {score}%, o mínimo a atingir é {threshold}%",
+      "score": "Pontuação",
+      "threshold": "Precisa",
+      "margin": "Vantagem sobre a segunda colocada",
+      "marginValue": "{margin} pontos (precisa de {needed})",
+      "note": "Observação",
+      "model": "Modelo",
+      "noModel": "nenhum usado",
+      "latency": "Tempo",
+      "ms": "{ms} ms",
+      "winner": {
+        "title": "O que o cliente receberia",
+        "unavailable": "Não foi possível carregar esta FAQ.",
+        "flow": "Inicia o fluxo {name}",
+        "flowMissing": "Inicia um fluxo que não existe mais"
+      },
+      "candidates": {
+        "title": "Melhores correspondências",
+        "matchedOn": "Correspondeu em",
+        "best": "Melhor",
+        "paused": "Pausada",
+        "scoreLabel": "Pontuação {score}%",
+        "addVariation": "Adicionar esta frase como variação de {question}",
+        "added": "Adicionada",
+        "addedToast": "Adicionada como formulação de {question}.",
+        "alreadyThere": "Essa formulação já existe.",
+        "open": "Abrir FAQ"
+      }
+    },
+    "playground": {
+      "title": "Como meu bot responderia a isto?",
+      "subtitle": "Passe uma mensagem de cliente pela mesma correspondência que seu bot usa. Nada é enviado e nada é contado nas análises.",
+      "label": "Mensagem do cliente",
+      "placeholder": "Onde está meu pacote?",
+      "run": "Executar",
+      "hint": "Só FAQs salvas são comparadas. Participam as FAQs ativas com formulações ativas.",
+      "empty": "Digite uma mensagem acima e execute para ver a decisão.",
+      "history": {
+        "title": "Esta sessão",
+        "empty": "Seus últimos 10 testes aparecem aqui."
+      }
+    },
+    "unanswered": {
+      "title": "Mensagens sem resposta",
+      "subtitle": "Mensagens de clientes que nenhuma FAQ respondeu. Ensine o bot a partir delas.",
+      "search": "Pesquisar mensagens sem resposta",
+      "searchPlaceholder": "Pesquisar mensagens",
+      "listLabel": "Mensagens sem resposta",
+      "emptyTitle": "Nada aguardando",
+      "emptyBody": "Toda mensagem de cliente foi respondida ou tratada. Novas mensagens sem resposta aparecem aqui.",
+      "noMatch": "Nenhuma mensagem corresponde à sua pesquisa",
+      "notKept": "Texto da mensagem não guardado (o registro de consultas está desativado)",
+      "closest": "FAQ mais próxima:",
+      "allCandidates": "Ver todos os {count} candidatos",
+      "addToFaq": "Adicionar a uma FAQ",
+      "createFaq": "Criar FAQ a partir disto",
+      "dismiss": "Dispensar",
+      "dismissed": "Mensagem dispensada.",
+      "learned": "Adicionada a \"{question}\". A partir de agora ela será respondida.",
+      "pickTitle": "Adicionar esta mensagem a qual FAQ?",
+      "loadMore": "Carregar mais",
+      "loadingMore": "Carregando"
+    },
+    "picker": {
+      "close": "Fechar",
+      "search": "Pesquisar FAQs",
+      "searchPlaceholder": "Pesquisar FAQs",
+      "loading": "Carregando FAQs",
+      "none": "Nenhuma FAQ encontrada.",
+      "paused": "Pausada",
+      "more": "Carregar mais"
+    },
+    "log": {
+      "title": "Registro de correspondências",
+      "hint": "Toda mensagem de cliente que a FAQ analisou e por que respondeu ou não.",
+      "viewLabel": "Mostrar",
+      "view": {
+        "all": "Todas",
+        "answered": "Respondidas",
+        "unanswered": "Sem resposta",
+        "errors": "Erros"
+      },
+      "search": "Pesquisar no registro",
+      "searchPlaceholder": "Pesquisar mensagens",
+      "empty": "Ainda não há mensagens aqui.",
+      "col": {
+        "time": "Quando",
+        "message": "Mensagem",
+        "outcome": "Resultado",
+        "faq": "FAQ",
+        "score": "Pontuação"
+      },
+      "notKept": "Não guardada ({length} caracteres)",
+      "testRun": "(teste)",
+      "expand": "Mostrar detalhes",
+      "collapse": "Ocultar detalhes",
+      "noCandidates": "Nenhum candidato foi considerado.",
+      "matchedOn": "correspondeu em",
+      "detail": {
+        "tier": "Nível",
+        "model": "Modelo",
+        "latency": "Tempo",
+        "ms": "{ms} ms"
+      },
+      "loadMore": "Carregar mais",
+      "loadingMore": "Carregando",
+      "why": {
+        "answered": "Respondeu com \"{faq}\" em {score}%.",
+        "flowStarted": "Iniciou o fluxo de \"{faq}\" em {score}%.",
+        "belowThreshold": "A melhor correspondência teve {score}%, abaixo do mínimo de {threshold}%, então nada foi enviado.",
+        "belowThresholdNoBar": "A melhor correspondência teve {score}%, o que não foi suficiente, então nada foi enviado.",
+        "lowMargin": "Duas FAQs ficaram próximas demais ({score}% e {second}%), então o bot não arriscou.",
+        "noFaqs": "Não havia FAQs ativas com formulações ativas para comparar.",
+        "providerError": "O provedor de IA falhou, então o bot só pôde comparar pela grafia.",
+        "notSent": "Uma FAQ correspondeu, mas a resposta não foi enviada.",
+        "tier": "Decidido pelo nível {tier}.",
+        "error": "Erro: {error}",
+        "vetoed": "A melhor correspondência teve pontuação de {score}%, acima do limite de {threshold}%, mas a segunda verificação disse que ela não responde à mensagem, então nada foi enviado.",
+        "vetoedNoBar": "A melhor correspondência teve pontuação de {score}%, mas a segunda verificação disse que ela não responde à mensagem, então nada foi enviado."
+      },
+      "flowRun": "(de um fluxo)"
+    },
+    "insights": {
+      "title": "Análises das FAQs",
+      "subtitle": "Como suas FAQs respondem às mensagens reais dos clientes e onde melhorar.",
+      "range": {
+        "label": "Período",
+        "days": "{days} dias"
+      },
+      "empty": {
+        "title": "Ainda sem mensagens",
+        "body": "Quando os clientes escreverem e as respostas por FAQ estiverem ativadas, você verá com que frequência o bot responde, quais FAQs funcionam e o que falta."
+      },
+      "kpi": {
+        "label": "Números principais",
+        "messages": "Mensagens verificadas",
+        "answerRate": "Taxa de resposta",
+        "avgScore": "Pontuação média {score}%",
+        "flows": "Fluxos iniciados",
+        "unanswered": "Sem resposta",
+        "toReview": "{count} para revisar",
+        "errors": "Erros do provedor"
+      },
+      "daily": {
+        "title": "Mensagens por dia",
+        "hint": "Últimos {days} dias, respondidas e sem resposta"
+      },
+      "hist": {
+        "title": "Como as mensagens pontuaram",
+        "hint": "Cada barra é uma faixa de pontuação. A linha tracejada é a sua sensibilidade atual.",
+        "advice": "Aumente o limite se respostas erradas passarem, diminua se muitas mensagens ficarem sem resposta.",
+        "tune": "Alterar sensibilidade"
+      },
+      "top": {
+        "title": "Principais FAQs",
+        "none": "Nenhuma FAQ respondeu ainda.",
+        "hits": "{count, plural, one {# resposta} other {# respostas}}"
+      },
+      "never": {
+        "title": "Nunca correspondeu",
+        "body": "FAQs que ninguém acionou nos últimos {days} dias. Confira as formulações ou remova.",
+        "link": "Revisar FAQs"
+      },
+      "chart": {
+        "answered": "Respondidas",
+        "unanswered": "Sem resposta",
+        "showTable": "Ver como tabela",
+        "showChart": "Ver como gráfico",
+        "day": "Dia",
+        "dailyTitle": "Mensagens por dia",
+        "dailyLabel": "Gráfico de barras de mensagens respondidas e sem resposta por dia. Use a visualização em tabela para ver os números.",
+        "dayTooltip": "{day}: {answered} respondidas, {unanswered} sem resposta",
+        "histogramTitle": "Distribuição de pontuações",
+        "histogramLabel": "Histograma das pontuações de correspondência separado entre respondidas e sem resposta. Use a visualização em tabela para ver os números.",
+        "scoreRange": "Pontuação",
+        "bucketTooltip": "{from}-{to}%: {answered} respondidas, {unanswered} sem resposta",
+        "thresholdMarker": "Limite {value}%"
+      }
+    },
+    "settings": {
+      "title": "Configurações de FAQ",
+      "subtitle": "Ative as respostas por FAQ e ajuste o quanto uma mensagem precisa corresponder.",
+      "unsaved": "Alterações não salvas",
+      "discard": "Descartar",
+      "save": "Salvar configurações",
+      "saved": "Configurações salvas.",
+      "readOnly": "Você pode ver estas configurações. Alterá-las exige a permissão faq.settings.manage, geralmente dos administradores do workspace.",
+      "engineOff": "As respostas por FAQ estão desativadas pela plataforma. O que você definir aqui vale quando forem reativadas.",
+      "conflict": "Outra pessoa salvou estas configurações. Recarregue para ver a versão dela e depois refaça sua alteração.",
+      "reload": "Recarregar configurações",
+      "modelChanged": {
+        "title": "Revise sua sensibilidade",
+        "body": "A plataforma mudou o modelo de IA depois que você ajustou este limite. As pontuações mudaram, então revise sua sensibilidade. Salvar confirma."
+      },
+      "enable": {
+        "title": "Respostas por FAQ",
+        "label": "Responder aos clientes com FAQs",
+        "on": "Ativado",
+        "off": "Desativado",
+        "onBody": "Quando um cliente escreve, o bot compara a mensagem com suas FAQs e responde com a melhor resposta, ou inicia o fluxo dela. Um fluxo ou gatilho de palavra-chave que já tratou a mensagem tem prioridade.",
+        "offBody": "Os clientes não recebem respostas de FAQ. Você ainda pode escrever e testar FAQs."
+      },
+      "sens": {
+        "title": "Sensibilidade",
+        "hint": "O quanto uma mensagem precisa corresponder. As pontuações pertencem ao modelo {model}.",
+        "label": "Responder quando a correspondência for de pelo menos",
+        "presets": "Predefinições de sensibilidade",
+        "preset": {
+          "strict": "Rígida",
+          "balanced": "Equilibrada",
+          "forgiving": "Flexível"
+        },
+        "looser": "Responde mais",
+        "stricter": "Responde menos",
+        "recommendedMark": "recomendado {value}%",
+        "explain": "Com {value}%, uma mensagem só é respondida quando sua melhor correspondência tem {value}% ou mais. Mais alto significa menos respostas, porém mais seguras; mais baixo significa mais respostas e maior chance de errar.",
+        "useRecommended": "Usar o valor recomendado ({value}%)",
+        "modelScale": "As pontuações só são comparáveis dentro de um mesmo modelo. Se a plataforma mudar o modelo ({model}), revise este número."
+      },
+      "margin": {
+        "title": "Proteção contra ambiguidade",
+        "hint": "Impede o bot de arriscar entre duas FAQs com pontuações quase iguais.",
+        "label": "Vantagem mínima sobre a segunda melhor",
+        "off": "Desativada",
+        "explain": "Quando a melhor FAQ fica à frente da segunda por menos que isso, o bot não responde e registra a mensagem como sem resposta. Deixe desativada se suas FAQs raramente se sobrepõem."
+      },
+      "log": {
+        "title": "Mensagens de clientes no registro",
+        "label": "Guardar mensagens de clientes no registro de correspondências",
+        "onBody": "O texto de cada mensagem é guardado por 90 dias para você ver por que foi ou não respondida e aprender com ela. Depois disso, é excluído.",
+        "offBody": "Só pontuações e resultados são guardados, nunca o texto. Você ainda vê com que frequência o bot responde, mas não pode aprender com as mensagens sem resposta."
+      },
+      "facts": {
+        "title": "Modelo e limites",
+        "model": "Modelo de IA para correspondência",
+        "faqs": "FAQs",
+        "variations": "Formulações em uso",
+        "perFaq": "Formulações permitidas por FAQ",
+        "of": "{used} de {max}"
+      },
+      "how": {
+        "title": "Como a correspondência funciona",
+        "exact": "Exata: a mensagem é igual a uma formulação salva, ignorando maiúsculas e espaços.",
+        "semantic": "Significado: a mensagem é comparada pelo significado com cada formulação ativa, então palavras diferentes podem corresponder.",
+        "trigram": "Alternativa por grafia: se o provedor de IA estiver indisponível, as letras são comparadas, o que pega apenas erros de digitação.",
+        "threshold": "A melhor pontuação é comparada com a sensibilidade. Acima dela, a FAQ responde; abaixo, a mensagem aparece em Sem resposta.",
+        "verify": "Segunda verificação (opcional): uma correspondência que mal atingiu a sensibilidade pode ser conferida por um modelo de chat pequeno, que só pode reter uma resposta."
+      },
+      "who": "Alterar estas configurações exige a permissão faq.settings.manage.",
+      "leave": {
+        "title": "Sair sem salvar?",
+        "body": "Suas alterações nestas configurações não foram salvas.",
+        "leave": "Sair",
+        "stay": "Ficar"
+      },
+      "verify": {
+        "title": "Segunda verificação para casos duvidosos",
+        "hint": "Um modelo de chat pequeno confere as correspondências que mal atingiram o limite.",
+        "unavailable": "A plataforma desativou a segunda verificação, então ela não é executada mesmo que você a ative aqui. Fale com o administrador da plataforma.",
+        "label": "Conferir casos duvidosos com uma segunda opinião",
+        "on": "Ativada",
+        "off": "Desativada",
+        "onBody": "Quando uma correspondência mal passa do limite, um modelo de chat pequeno lê a mensagem do cliente e a FAQ e diz se a resposta serve. Ele só pode dizer não: nunca faz uma resposta ser enviada.",
+        "offBody": "Toda correspondência que atinge o limite é respondida sem uma segunda conferência.",
+        "bandLabel": "Quão próximo conta como caso duvidoso",
+        "bandValue": "+{value}%",
+        "explainOn": "As correspondências com pontuação de {from}% até {to}% são conferidas por {model}. Um \"não\" significa que nenhuma resposta é enviada e a mensagem aparece em Sem resposta.",
+        "explainOff": "Toda correspondência com pontuação de {threshold}% ou mais é respondida. Ative a segunda verificação para que os casos mais duvidosos sejam conferidos.",
+        "cost": "Cada verificação envia ao modelo a mensagem do cliente e a pergunta da FAQ: algumas centenas de tokens, e acrescenta cerca de um segundo a uma resposta no limite. Correspondências fora da faixa nunca são conferidas. Se a verificação falhar, não estiver disponível ou o limite por hora for atingido, a correspondência vale como se não houvesse verificação."
+      }
+    },
+    "flowNode": {
+      "label": "Começar em",
+      "start": "O início do fluxo",
+      "hint": "Escolha uma etapa para pular o começo do fluxo. Os clientes entram no fluxo na etapa que você escolher.",
+      "loading": "Carregando as etapas deste fluxo",
+      "empty": "Este fluxo não tem outras etapas, então ele começa pelo início.",
+      "retry": "Tentar novamente",
+      "deletedOption": "Etapa excluída (escolha outra)",
+      "missing": {
+        "title": "A etapa em que esta FAQ começa não existe mais",
+        "body": "Essa etapa foi excluída do fluxo. Até você escolher outra etapa, os clientes que correspondem a esta FAQ não recebem resposta. Escolha uma etapa abaixo ou comece pelo início do fluxo.",
+        "fix": "Começar pelo início do fluxo"
+      }
+    },
+    "verify": {
+      "title": "Segunda verificação",
+      "chip": {
+        "confirmed": "Segunda verificação: sim",
+        "vetoed": "Segunda verificação: não",
+        "failed": "Segunda verificação falhou",
+        "skipped": "Segunda verificação ignorada"
+      },
+      "model": "Conferido por",
+      "reason": "Motivo",
+      "body": {
+        "confirmed": "A correspondência era um caso duvidoso, então um modelo de chat pequeno leu a mensagem e a FAQ e concordou que a resposta serve.",
+        "vetoed": "A correspondência era um caso duvidoso e a segunda verificação disse que esta FAQ não responde à mensagem. A resposta foi retida, nada foi enviado e a mensagem aparece em Sem resposta.",
+        "failed": "A correspondência era um caso duvidoso, mas a verificação não pôde ser concluída, então a correspondência valeu e a resposta foi enviada como se não houvesse segunda verificação.",
+        "skipped": "A segunda verificação não foi executada para esta correspondência, então ela valeu como estava."
+      }
+    }
+  }
+}

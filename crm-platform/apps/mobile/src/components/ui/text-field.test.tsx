@@ -3,15 +3,15 @@ import { Text } from './text';
 import { TextField } from './text-field';
 
 describe('TextField', () => {
-  it('names the input by its label and passes typing through', () => {
+  it('names the input by its label and passes typing through', async () => {
     const onChangeText = jest.fn();
-    render(<TextField label="Work email" value="" onChangeText={onChangeText} />);
-    fireEvent.changeText(screen.getByLabelText('Work email'), 'a@b.test');
+    await render(<TextField label="Work email" value="" onChangeText={onChangeText} />);
+    await fireEvent.changeText(screen.getByLabelText('Work email'), 'a@b.test');
     expect(onChangeText).toHaveBeenCalledWith('a@b.test');
   });
 
-  it('shows the hint, and replaces it with the error when there is one', () => {
-    const { rerender } = render(
+  it('shows the hint, and replaces it with the error when there is one', async () => {
+    const { rerender } = await render(
       <TextField
         label="Phone"
         value=""
@@ -22,7 +22,7 @@ describe('TextField', () => {
     expect(screen.getByText('We use it to verify you.')).toBeTruthy();
     expect(screen.getByLabelText('Phone').props.accessibilityHint).toBe('We use it to verify you.');
 
-    rerender(
+    await rerender(
       <TextField
         label="Phone"
         value=""
@@ -36,10 +36,10 @@ describe('TextField', () => {
     expect(screen.getByText('Enter your mobile number.')).toBeTruthy();
   });
 
-  it('still tells the caller when it gains and loses focus', () => {
+  it('still tells the caller when it gains and loses focus', async () => {
     const onFocus = jest.fn();
     const onBlur = jest.fn();
-    render(
+    await render(
       <TextField
         label="Name"
         value=""
@@ -48,14 +48,14 @@ describe('TextField', () => {
         onBlur={onBlur}
       />,
     );
-    fireEvent(screen.getByLabelText('Name'), 'focus');
-    fireEvent(screen.getByLabelText('Name'), 'blur');
+    await fireEvent(screen.getByLabelText('Name'), 'focus');
+    await fireEvent(screen.getByLabelText('Name'), 'blur');
     expect(onFocus).toHaveBeenCalledTimes(1);
     expect(onBlur).toHaveBeenCalledTimes(1);
   });
 
-  it('shows what sits at the end of the field', () => {
-    render(
+  it('shows what sits at the end of the field', async () => {
+    await render(
       <TextField label="Name" value="" onChangeText={() => undefined} end={<Text>suffix</Text>} />,
     );
     expect(screen.getByText('suffix')).toBeTruthy();

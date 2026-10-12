@@ -463,12 +463,57 @@
       "cancelBody": "رن جہاں ہے وہیں رک جائے گا۔ گاہک کو نہیں بتایا جائے گا۔",
       "cancelConfirm": "رن منسوخ کریں",
       "cancelKeep": "رکھیں",
-      "cancelled": "رن منسوخ ہو گیا"
+      "cancelled": "رن منسوخ ہو گیا",
+      "tlTitle": "عملدرآمد کی ٹائم لائن",
+      "tlNodes": "چلائے گئے نوڈ",
+      "tlErrors": "خرابیاں",
+      "tlTime": "نوڈ کا وقت",
+      "filterAll": "تمام مراحل",
+      "filterErrors": "صرف خرابیاں",
+      "changedTitle": "اس فلو میں رن کے بعد ترمیم کی گئی",
+      "changedBody": "لاگ فلو کو بالکل ویسا دکھاتا ہے جیسا وہ چلا تھا۔",
+      "removed": "فلو سے ہٹا دیا گیا",
+      "exit": "اخراج {port}",
+      "visit": "بار {n}",
+      "truncated": "{max} سے زیادہ مراحل چلے۔ بعد کے مراحل گنے گئے مگر فہرست میں نہیں۔",
+      "retention": "رن ختم ہونے کے {days} دن بعد لاگز حذف ہو جاتے ہیں۔",
+      "pathTitle": "اختیار کیا گیا راستہ",
+      "notReached": "نہیں پہنچے",
+      "noErrors": "اس رن میں کوئی خرابی نہیں۔",
+      "factNext": "اگلا: {node}",
+      "factWaiting": "یہاں انتظار: {node}",
+      "factDelay": "{time} انتظار",
+      "factReplied": "کسٹمر نے جواب دیا: {text}",
+      "factEnded": "ختم: {reason}",
+      "ioInput": "ان پٹ",
+      "ioOutput": "آؤٹ پٹ",
+      "ioKind": {
+        "message": "بھیجا گیا پیغام",
+        "reply": "کسٹمر کا جواب",
+        "variable": "متغیر",
+        "request": "درخواست",
+        "response": "جواب",
+        "result": "نتیجہ"
+      }
     },
     "event": {
       "step": "مرحلہ",
       "reply": "گاہک کا جواب",
-      "end": "ختم"
+      "end": "ختم",
+      "advance": "آگے بڑھا",
+      "wait": "جواب کا انتظار",
+      "sleep": "تاخیر",
+      "halt": "روکا گیا",
+      "exec": "چلایا گیا",
+      "truncated": "لاگ کی حد پوری ہو گئی",
+      "start": "شروع ہوا"
+    },
+    "outcome": {
+      "ok": "ٹھیک",
+      "error": "خرابی",
+      "skipped": "چھوڑا گیا",
+      "waiting": "انتظار میں",
+      "timeout": "وقت ختم"
     }
   }
 }

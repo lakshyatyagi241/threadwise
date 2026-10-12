@@ -75,6 +75,17 @@ export class FormPublicService {
         version: def.consent.version,
       },
       theme: def.theme,
+      payment: def.payment.enabled
+        ? {
+            amountType: def.payment.amountType,
+            amountMinor: def.payment.amountMinor,
+            fieldId: def.payment.fieldId,
+            minMinor: def.payment.minMinor,
+            maxMinor: def.payment.maxMinor,
+            currency: def.payment.currency,
+            description: def.payment.description,
+          }
+        : null,
       honeypotField: form.honeypot ? HONEYPOT_FIELD : null,
       captcha: {
         required: !closed && form.captchaMode !== 'off' && captcha !== null,

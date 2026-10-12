@@ -53,8 +53,8 @@ const config: RegistrationConfigResponse = {
 
 const router = { push: jest.fn() };
 
-const renderScreen = () =>
-  render(
+const renderScreen = async () =>
+  await render(
     <I18nextProvider i18n={i18n}>
       <QueryClientProvider
         client={new QueryClient({ defaultOptions: { queries: { retry: false, retryDelay: 0 } } })}
@@ -64,9 +64,10 @@ const renderScreen = () =>
     </I18nextProvider>,
   );
 
-const fill = (label: string, value: string) =>
-  fireEvent.changeText(screen.getByLabelText(label), value);
-const press = (label: string) => fireEvent.press(screen.getByRole('button', { name: label }));
+const fill = async (label: string, value: string) =>
+  await fireEvent.changeText(screen.getByLabelText(label), value);
+const press = async (label: string) =>
+  await fireEvent.press(screen.getByRole('button', { name: label }));
 
 beforeAll(async () => {
   await initI18n('en');
@@ -80,7 +81,7 @@ beforeEach(() => {
 
 describe('SignInScreen', () => {
   it('hints at what to type in both fields', async () => {
-    renderScreen();
+    await renderScreen();
     expect(screen.getByPlaceholderText('you@company.com')).toBeTruthy();
     expect(screen.getByPlaceholderText('Enter your password')).toBeTruthy();
     // Let the platform settings arrive, so the screen is not still updating when the test ends.
@@ -88,9 +89,9 @@ describe('SignInScreen', () => {
   });
 
   it('validates the fields before calling the API', async () => {
-    renderScreen();
-    fill('Email', 'not-an-email');
-    press('Sign in');
+    await renderScreen();
+    await fill('Email', 'not-an-email');
+    await press('Sign in');
     expect(await screen.findByText('Enter a valid email address.')).toBeTruthy();
     expect(screen.getByText('Enter your password.')).toBeTruthy();
     expect(signInWithPassword).not.toHaveBeenCalled();
@@ -98,10 +99,10 @@ describe('SignInScreen', () => {
 
   it('signs in with the typed credentials and keeps the session', async () => {
     signInWithPassword.mockResolvedValue(authenticated);
-    renderScreen();
-    fill('Email', ' person@example.com ');
-    fill('Password', 'correct horse');
-    press('Sign in');
+    await renderScreen();
+    await fill('Email', ' person@example.com ');
+    await fill('Password', 'correct horse');
+    await press('Sign in');
     await waitFor(() => expect(getSnapshot().status).toBe('signedIn'));
     expect(signInWithPassword).toHaveBeenCalledWith({
       email: 'person@example.com',
@@ -114,29 +115,29 @@ describe('SignInScreen', () => {
     signInWithPassword.mockRejectedValue(
       new ApiError(401, 'AUTH_INVALID_CREDENTIALS', 'whatever the server said'),
     );
-    renderScreen();
-    fill('Email', 'person@example.com');
-    fill('Password', 'nope');
-    press('Sign in');
+    await renderScreen();
+    await fill('Email', 'person@example.com');
+    await fill('Password', 'nope');
+    await press('Sign in');
     expect(await screen.findByText('The email or password is incorrect.')).toBeTruthy();
     expect(getSnapshot().status).not.toBe('signedIn');
   });
 
   it('shows the offline message when the server cannot be reached', async () => {
     signInWithPassword.mockRejectedValue(new ApiError(0, 'CLIENT_NETWORK', 'x'));
-    renderScreen();
-    fill('Email', 'person@example.com');
-    fill('Password', 'x');
-    press('Sign in');
+    await renderScreen();
+    await fill('Email', 'person@example.com');
+    await fill('Password', 'x');
+    await press('Sign in');
     expect(await screen.findByText(/Can't reach the server/)).toBeTruthy();
   });
 
   it('says plainly when the workspace asks for a CAPTCHA the app cannot pass', async () => {
     signInWithPassword.mockRejectedValue(new ApiError(400, 'AUTH_CAPTCHA_FAILED', 'x'));
-    renderScreen();
-    fill('Email', 'person@example.com');
-    fill('Password', 'x');
-    press('Sign in');
+    await renderScreen();
+    await fill('Email', 'person@example.com');
+    await fill('Password', 'x');
+    await press('Sign in');
     expect(await screen.findByText(/A security check is required/)).toBeTruthy();
   });
 
@@ -147,13 +148,13 @@ describe('SignInScreen', () => {
       expiresInSeconds: 300,
     });
     signInWithMfa.mockResolvedValue(authenticated);
-    renderScreen();
-    fill('Email', 'person@example.com');
-    fill('Password', 'correct horse');
-    press('Sign in');
+    await renderScreen();
+    await fill('Email', 'person@example.com');
+    await fill('Password', 'correct horse');
+    await press('Sign in');
     expect(await screen.findByText('Two-step verification')).toBeTruthy();
-    fill('Verification code', '123456');
-    press('Verify');
+    await fill('Verification code', '123456');
+    await press('Verify');
     await waitFor(() => expect(getSnapshot().status).toBe('signedIn'));
     expect(signInWithMfa).toHaveBeenCalledWith({ challengeToken: 'challenge-1', code: '123456' });
   });
@@ -165,13 +166,13 @@ describe('SignInScreen', () => {
       expiresInSeconds: 300,
     });
     signInWithMfa.mockRejectedValue(new ApiError(401, 'AUTH_MFA_CHALLENGE_EXPIRED', 'x'));
-    renderScreen();
-    fill('Email', 'person@example.com');
-    fill('Password', 'correct horse');
-    press('Sign in');
+    await renderScreen();
+    await fill('Email', 'person@example.com');
+    await fill('Password', 'correct horse');
+    await press('Sign in');
     await screen.findByText('Two-step verification');
-    fill('Verification code', '123456');
-    press('Verify');
+    await fill('Verification code', '123456');
+    await press('Verify');
     expect(await screen.findByText('The sign-in expired. Please start again.')).toBeTruthy();
     expect(screen.getByLabelText('Password')).toBeTruthy();
   });
@@ -187,13 +188,13 @@ describe('SignInScreen', () => {
       ],
     });
     signInToWorkspace.mockResolvedValue(authenticated);
-    renderScreen();
-    fill('Email', 'person@example.com');
-    fill('Password', 'correct horse');
-    press('Sign in');
+    await renderScreen();
+    await fill('Email', 'person@example.com');
+    await fill('Password', 'correct horse');
+    await press('Sign in');
     expect(await screen.findByText('Choose a workspace')).toBeTruthy();
     expect(screen.getByText('Admin')).toBeTruthy();
-    press('Globex');
+    await press('Globex');
     await waitFor(() => expect(getSnapshot().status).toBe('signedIn'));
     expect(signInToWorkspace).toHaveBeenCalledWith({
       selectionToken: 'select-1',
@@ -204,7 +205,7 @@ describe('SignInScreen', () => {
 
 describe('SignInScreen: what comes from the platform settings', () => {
   it('shows the product name, the sign-up link and the terms line while registration is open', async () => {
-    renderScreen();
+    await renderScreen();
     expect(await screen.findByText('CRM Platform')).toBeTruthy();
     expect(screen.getByText('New here?')).toBeTruthy();
     expect(screen.getByRole('link', { name: 'Terms' })).toBeTruthy();
@@ -213,8 +214,8 @@ describe('SignInScreen: what comes from the platform settings', () => {
   });
 
   it('opens the sign-up screen from "Create an account"', async () => {
-    renderScreen();
-    fireEvent.press(await screen.findByRole('button', { name: 'Create an account' }));
+    await renderScreen();
+    await fireEvent.press(await screen.findByRole('button', { name: 'Create an account' }));
     expect(router.push).toHaveBeenCalledWith('/sign-up');
   });
 
@@ -222,7 +223,7 @@ describe('SignInScreen: what comes from the platform settings', () => {
     jest
       .mocked(api.fetchRegistrationConfig)
       .mockResolvedValue({ ...config, registrationOpen: false });
-    renderScreen();
+    await renderScreen();
     expect(await screen.findByText('CRM Platform')).toBeTruthy();
     expect(screen.queryByRole('button', { name: 'Create an account' })).toBeNull();
     expect(screen.queryByText('New here?')).toBeNull();
@@ -233,10 +234,10 @@ describe('SignInScreen: what comes from the platform settings', () => {
       .mocked(api.fetchRegistrationConfig)
       .mockRejectedValue(new ApiError(0, 'CLIENT_NETWORK', 'offline'));
     signInWithPassword.mockResolvedValue(authenticated);
-    renderScreen();
-    fill('Email', 'person@example.com');
-    fill('Password', 'correct horse');
-    press('Sign in');
+    await renderScreen();
+    await fill('Email', 'person@example.com');
+    await fill('Password', 'correct horse');
+    await press('Sign in');
     await waitFor(() => expect(getSnapshot().status).toBe('signedIn'));
     expect(screen.queryByText('New here?')).toBeNull();
     expect(screen.queryByRole('link', { name: 'Terms' })).toBeNull();

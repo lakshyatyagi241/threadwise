@@ -1,0 +1,238 @@
+{
+  "ai_crm_actions_pkey": {
+    "category": "partitioned-primary-key",
+    "reason": "primary key of a partitioned table must contain the partition column, not org_id; ids come from a global identity and are never client-chosen"
+  },
+  "ai_token_usage_pkey": {
+    "category": "partitioned-primary-key",
+    "reason": "primary key of a partitioned table must contain the partition column, not org_id; ids come from a global identity and are never client-chosen"
+  },
+  "api_library_logs_pkey": {
+    "category": "partitioned-primary-key",
+    "reason": "primary key of a partitioned table must contain the partition column, not org_id; ids come from a global identity and are never client-chosen"
+  },
+  "audit_log_pkey": {
+    "category": "partitioned-primary-key",
+    "reason": "primary key of a partitioned table must contain the partition column, not org_id; ids come from a global identity and are never client-chosen"
+  },
+  "auto_reply_lookups_pkey": {
+    "category": "partitioned-primary-key",
+    "reason": "primary key of a partitioned table must contain the partition column, not org_id; ids come from a global identity and are never client-chosen"
+  },
+  "conversation_events_pkey": {
+    "category": "partitioned-primary-key",
+    "reason": "primary key of a partitioned table must contain the partition column, not org_id; ids come from a global identity and are never client-chosen"
+  },
+  "event_outbox_pkey": {
+    "category": "partitioned-primary-key",
+    "reason": "primary key of a partitioned table must contain the partition column, not org_id; ids come from a global identity and are never client-chosen"
+  },
+  "hubspot_integration_logs_pkey": {
+    "category": "partitioned-primary-key",
+    "reason": "primary key of a partitioned table must contain the partition column, not org_id; ids come from a global identity and are never client-chosen"
+  },
+  "invoice_logs_pkey": {
+    "category": "partitioned-primary-key",
+    "reason": "primary key of a partitioned table must contain the partition column, not org_id; ids come from a global identity and are never client-chosen"
+  },
+  "keyword_reply_logs_pkey": {
+    "category": "partitioned-primary-key",
+    "reason": "primary key of a partitioned table must contain the partition column, not org_id; ids come from a global identity and are never client-chosen"
+  },
+  "message_events_pkey": {
+    "category": "partitioned-primary-key",
+    "reason": "primary key of a partitioned table must contain the partition column, not org_id; ids come from a global identity and are never client-chosen"
+  },
+  "messages_pkey": {
+    "category": "partitioned-primary-key",
+    "reason": "primary key of a partitioned table must contain the partition column, not org_id; ids come from a global identity and are never client-chosen"
+  },
+  "shopify_integration_logs_pkey": {
+    "category": "partitioned-primary-key",
+    "reason": "primary key of a partitioned table must contain the partition column, not org_id; ids come from a global identity and are never client-chosen"
+  },
+  "slack_integration_logs_pkey": {
+    "category": "partitioned-primary-key",
+    "reason": "primary key of a partitioned table must contain the partition column, not org_id; ids come from a global identity and are never client-chosen"
+  },
+  "translation_usage_pkey": {
+    "category": "partitioned-primary-key",
+    "reason": "primary key of a partitioned table must contain the partition column, not org_id; ids come from a global identity and are never client-chosen"
+  },
+  "trello_integration_logs_pkey": {
+    "category": "partitioned-primary-key",
+    "reason": "primary key of a partitioned table must contain the partition column, not org_id; ids come from a global identity and are never client-chosen"
+  },
+  "uq_ai_call_logs_twilio_call_sid": {
+    "category": "external-identity",
+    "reason": "an identity owned by an outside system (phone number, call id, team id, template id): one workspace at a time by design"
+  },
+  "uq_api_keys_prefix": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "uq_appointments_manage_token_hash": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "uq_channels_whatsapp_number": {
+    "category": "external-identity",
+    "reason": "an identity owned by an outside system (phone number, call id, team id, template id): one workspace at a time by design"
+  },
+  "uq_chatbot_widget_visitors_visitor_uuid": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "uq_chatbot_widgets_embed_token": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "uq_crm_briefs_public_token": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "uq_google_form_sessions_webhook_token": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "uq_incoming_webhooks_token": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "uq_invoice_gateway_connections_endpoint": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "uq_invoices_token_hash": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "uq_lead_sources_token_hash": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "uq_line_channels_webhook_token": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "uq_marketplace_connections_public_key": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "uq_marketplace_subscriptions_uuid": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "uq_orders_order_number": {
+    "category": "global-number",
+    "reason": "a human-readable number shared across workspaces; lookups go through RLS, the number alone grants nothing"
+  },
+  "uq_orders_return_token": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "uq_sales_docs_token_hash": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "uq_shopify_integrations_webhook_secret": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "uq_slack_integrations_team_id": {
+    "category": "external-identity",
+    "reason": "an identity owned by an outside system (phone number, call id, team id, template id): one workspace at a time by design"
+  },
+  "uq_support_tickets_ticket_number": {
+    "category": "global-number",
+    "reason": "a human-readable number shared across workspaces; lookups go through RLS, the number alone grants nothing"
+  },
+  "uq_telegram_bots_webhook_token": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "uq_user_device_tokens_token_hash": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "uq_user_settings_sheets_key_hash": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "uq_viber_channels_webhook_token": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "uq_wa_calls_correlation_id": {
+    "category": "external-identity",
+    "reason": "an identity owned by an outside system (phone number, call id, team id, template id): one workspace at a time by design"
+  },
+  "uq_wa_calls_meta_call_id": {
+    "category": "external-identity",
+    "reason": "an identity owned by an outside system (phone number, call id, team id, template id): one workspace at a time by design"
+  },
+  "uq_wa_chat_links_slug": {
+    "category": "public-namespace",
+    "reason": "a public URL name (slug / domain) that must be unique across the platform"
+  },
+  "uq_wa_link_clicks_token": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "uq_wa_provider_configs_waba_phone": {
+    "category": "external-identity",
+    "reason": "an identity owned by an outside system (phone number, call id, team id, template id): one workspace at a time by design"
+  },
+  "uq_wa_storefronts_custom_domain": {
+    "category": "public-namespace",
+    "reason": "a public URL name (slug / domain) that must be unique across the platform"
+  },
+  "uq_wa_storefronts_slug": {
+    "category": "public-namespace",
+    "reason": "a public URL name (slug / domain) that must be unique across the platform"
+  },
+  "uq_wa_templates_meta_template_id": {
+    "category": "external-identity",
+    "reason": "an identity owned by an outside system (phone number, call id, team id, template id): one workspace at a time by design"
+  },
+  "uq_web_form_submissions_receipt": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "uq_web_forms_public_key": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "uq_wechat_channels_webhook_token": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "uq_woocommerce_integrations_webhook_secret": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "usage_charges_pkey": {
+    "category": "partitioned-primary-key",
+    "reason": "primary key of a partitioned table must contain the partition column, not org_id; ids come from a global identity and are never client-chosen"
+  },
+  "wa_call_events_pkey": {
+    "category": "partitioned-primary-key",
+    "reason": "primary key of a partitioned table must contain the partition column, not org_id; ids come from a global identity and are never client-chosen"
+  },
+  "web_form_events_pkey": {
+    "category": "partitioned-primary-key",
+    "reason": "primary key of a partitioned table must contain the partition column, not org_id; ids come from a global identity and are never client-chosen"
+  },
+  "webauthn_credentials_credential_id_key": {
+    "category": "secret-or-token",
+    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
+  },
+  "webhook_deliveries_pkey": {
+    "category": "partitioned-primary-key",
+    "reason": "primary key of a partitioned table must contain the partition column, not org_id; ids come from a global identity and are never client-chosen"
+  },
+  "woocommerce_integration_logs_pkey": {
+    "category": "partitioned-primary-key",
+    "reason": "primary key of a partitioned table must contain the partition column, not org_id; ids come from a global identity and are never client-chosen"
+  }
+}

@@ -1,9 +1,9 @@
 # Spec: Help center (plan-aware documentation, tooltips, auto-docs)
 
-|             |                                                                                                                                                                                                                                                                                                                                                                                                           |
-| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Status**  | Draft for owner review                                                                                                                                                                                                                                                                                                                                                                                    |
-| **Author**  | Drafted with Claude Code from the owner's brief (2026-10-04) and a read-only survey of the repo                                                                                                                                                                                                                                                                                                           |
+|             |                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Status**  | Draft for owner review                                                                                                                                                                                                                                                                                                                                                                                            |
+| **Author**  | Drafted with Claude Code from the owner's brief (2026-10-04) and a read-only survey of the repo                                                                                                                                                                                                                                                                                                                   |
 | **Related** | `apps/web/src/features/_registry/` (nav, settings, planned, gate resolution), `apps/web/src/components/shell/` (rail, top bar, user menu), `packages/contracts/src/plans-subscriptions-trials/catalogue.ts` (plan feature keys), `apps/api/src/modules/addons-extension-registry/module-registry.service.ts` (dormant features), `docs/threadwise-port/ownership.json`, `.claude/skills/threadwise-port-feature/` |
 
 ---
@@ -34,13 +34,13 @@ every screen that is built today.
 
 **Out of (v1):**
 
-| Not in scope                                                                                      | Why                                                                                                                                                                                        |
-| ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| The operator console (`(admin)` shell)                                                            | A different audience and shell. Docs carry an `audience` field (`workspace` default, `operator` reserved) so it can be added without reshaping anything.                                   |
+| Not in scope                                                                                         | Why                                                                                                                                                                                        |
+| ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| The operator console (`(admin)` shell)                                                               | A different audience and shell. Docs carry an `audience` field (`workspace` default, `operator` reserved) so it can be added without reshaping anything.                                   |
 | Reference's **Guidebook** (operator-authored articles in a `guidebook_articles` table, `/guidebook`) | Retired on 2026-10-06 (owner decision): `/guidebook`, its admin editor and its tables are gone and `/guidebook` redirects to `/help`. The useful topics were rewritten as built-in guides. |
-| Per-workspace or third-party (Marketplace mini app) documentation                                 | Needs authoring UI and review; v1 docs are repo content.                                                                                                                                   |
-| Docs stored in the database / edited in the browser                                               | Repo files are reviewed in PRs, versioned with the feature, and are what Claude drafts.                                                                                                    |
-| Translating bodies into Arabic                                                                    | Supported by the format (section 4.1); chrome strings are translated now, bodies fall back to English.                                                                                     |
+| Per-workspace or third-party (Marketplace mini app) documentation                                    | Needs authoring UI and review; v1 docs are repo content.                                                                                                                                   |
+| Docs stored in the database / edited in the browser                                                  | Repo files are reviewed in PRs, versioned with the feature, and are what Claude drafts.                                                                                                    |
+| Translating bodies into Arabic                                                                       | Supported by the format (section 4.1); chrome strings are translated now, bodies fall back to English.                                                                                     |
 
 ## 3. Terms
 
@@ -183,7 +183,7 @@ tip read from it.
 | `_registry/types.ts`                                           | comment only                                                               |
 | `scripts/gen-registry.mjs`                                     | third registry                                                             |
 | `messages/{en,ar}/help-center.json`, `shell.json`              | chrome strings (`shell.help` label, tooltip/search/empty copy)             |
-| `docs/threadwise-port/ownership.json`                              | new `help-center` zone; `features/*/help/**` becomes a shared seam (see 8) |
+| `docs/threadwise-port/ownership.json`                          | new `help-center` zone; `features/*/help/**` becomes a shared seam (see 8) |
 
 ## 5. Data and API
 

@@ -29,6 +29,8 @@ interface Props {
   onBack?: () => void;
   /** Pull-to-refresh for the page. */
   refreshControl?: ReactElement<RefreshControlProps>;
+  /** For a test to find the scrolling page. */
+  testID?: string;
   /** Cards. The first one overlaps the band, so start with a card, not with loose text. */
   children: ReactNode;
 }
@@ -38,7 +40,7 @@ interface Props {
  * band. The band reaches behind the status bar, the page carries the bottom inset, and the whole thing scrolls so a large font
  * size or an open keyboard never hides anything.
  */
-export function BrandFrame({ header, compact, onBack, refreshControl, children }: Props) {
+export function BrandFrame({ header, compact, onBack, refreshControl, testID, children }: Props) {
   const { t } = useTranslation();
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
@@ -47,6 +49,7 @@ export function BrandFrame({ header, compact, onBack, refreshControl, children }
       <StatusBar style="light" />
       <KeyboardAvoidingView style={styles.root} behavior="padding">
         <ScrollView
+          testID={testID}
           contentContainerStyle={styles.scroll}
           keyboardShouldPersistTaps="handled"
           keyboardDismissMode="on-drag"

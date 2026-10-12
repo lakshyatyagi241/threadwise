@@ -437,7 +437,9 @@ describe('export file name (TW-FLB-008)', () => {
     expect(flowExportFileName('Café ñandú', 'abc')).toBe('cafe-nandu.threadwise-flow.json');
     expect(flowExportFileName('★★★', 'abc')).toBe('flow-abc.threadwise-flow.json');
     // Laravel's Str::slug drops punctuation instead of turning it into a dash, reads "@" as "at" and treats "_" as a separator
-    expect(flowExportFileName('a/b\\c:d*e?f"g<h>i|j', 'abc')).toBe('abcdefghij.threadwise-flow.json');
+    expect(flowExportFileName('a/b\\c:d*e?f"g<h>i|j', 'abc')).toBe(
+      'abcdefghij.threadwise-flow.json',
+    );
     expect(flowExportFileName("Q&A v1.2 it's", 'abc')).toBe('qa-v12-its.threadwise-flow.json');
     expect(flowExportFileName('sale_2024 @ shop', 'abc')).toBe(
       'sale-2024-at-shop.threadwise-flow.json',

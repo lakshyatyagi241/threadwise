@@ -1,0 +1,337 @@
+{
+  "infra/db/database.service.ts": {
+    "status": "reviewed",
+    "reason": "the privileged() definition itself; no caller-controlled input",
+    "reviewedOn": "2026-10-11"
+  },
+  "kernel/rbac/rbac.service.ts": {
+    "status": "reviewed",
+    "reason": "org-keyed roles_version read/bump; callers pass the authenticated org; returns an integer for a cache key",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/api-library/api-library-retention.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/appointments-booking/appointment-lifecycle-sweep.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/appointments-booking/appointment-reminder-sweep.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/appointments-booking/public-booking.service.ts": {
+    "status": "reviewed",
+    "reason": "pre-tenant public lookup by slug / token hash, then pins ctx.orgId to the hit"
+  },
+  "modules/auth/maintenance/auth-maintenance.service.ts": {
+    "status": "reviewed",
+    "reason": "cron retention across tenants, intended",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/auth/platform/platform-store.ts": {
+    "status": "reviewed-partial",
+    "reason": "one-line pass-through with 54 consumer files; the tenant-reachable ones were read (ai-models returns model names only, ai-usage tenant route stays on db.tx), the rest were not all opened",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/auth/platform/tenant-directory.ts": {
+    "status": "reviewed",
+    "reason": "pre-tenant identity directory; every later step is gated by credentials. Informational: findOrgBySlug returns the org settings JSON, callers use it internally (confirm none returns the OrgRef to a client)",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/broadcasts/broadcast-due.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/broadcasts/broadcast-resume.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs; per-row work runs inside the privileged tx with explicit org_id predicates (weaker than txAs, no bug)",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/broadcasts/broadcast-retry-sweeper.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs; explicit org_id predicates inside the privileged tx",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/campaigns/campaign-sweeper.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs; hardening: resumeStalled/reconcileMetaBlocks rely on explicit org_id predicates rather than a tenant context",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/campaigns/wizard/wizard-csv.service.ts": {
+    "status": "reviewed",
+    "reason": "worker retention purge across tenants"
+  },
+  "modules/campaigns/wizard/wizard-retry.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/campaigns/wizard/wizard-series.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/catalog-products/catalog-settings.service.ts": {
+    "status": "reviewed",
+    "reason": "operator-only page (platform/settings/catalog); cross-tenant usage tiles are the point"
+  },
+  "modules/catalog-products/catalog-sweeps.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/catalog-products/inventory.service.ts": {
+    "status": "reviewed",
+    "reason": "worker sweep of expired reservations; each release then runs in the row's own tenant"
+  },
+  "modules/channel-facebook/page-health-sweep.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/channel-instagram/inbound.service.ts": {
+    "status": "reviewed",
+    "reason": "existence check of workspace_id after a timing-safe check of the platform engine secret; returns no tenant data",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/channel-instagram/pull-sweep.service.ts": {
+    "status": "reviewed-partial",
+    "reason": "selects distinct org ids and enqueues {orgId} jobs; the consuming PullService was not read",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/chat-conversations/media-fetch-recovery.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/chat-conversations/queued-message-recovery.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/chrome-extension-sheets-addon/sheets-key.guard.ts": {
+    "status": "reviewed",
+    "reason": "pre-tenant lookup keyed by a high-entropy secret or hash; returns routing data; the org is set only after the secret verifies (128-bit key, sha256, unique partial index, per-IP failure throttle)",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/crm/invoicing/invoice-overdue-sweep.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/crm/invoicing/recurring-invoices.service.ts": {
+    "status": "reviewed",
+    "reason": "dueAcrossTenants returns {orgId,id}; each schedule runs under RequestContextStore.run + db.tx; tenant controller methods use db.tx",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/crm/sales-docs/sales-doc-expiry-sweep.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs; hardening: per-org writes run under the privileged flag with explicit org_id",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/crm/sales-docs/sales-docs-public.service.ts": {
+    "status": "reviewed",
+    "reason": "pre-tenant public lookup by token hash, then pins ctx.orgId to the hit"
+  },
+  "modules/crm/segments/segment-count-sweep.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/crm/tasks/task-due-sweep.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/developer-rest-api-v1/auth/bearer-api-key.guard.ts": {
+    "status": "reviewed",
+    "reason": "pre-tenant lookup keyed by a high-entropy secret or hash; returns routing data; the org is set only after the secret verifies (unique key prefix, constant-time hash compare, status/expiry/owner checks, failure throttle)",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/faq-knowledge/faq-embed.worker.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs; markStale is an intentional platform-wide model-change heal",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/faq-knowledge/faq-platform.service.ts": {
+    "status": "reviewed",
+    "reason": "platform/operator data behind OperatorGuard routes; no tenant route reaches it (FaqPlatformService is not exported from its module)",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/faq-knowledge/faq-retention.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/flow-builder-editor/builder-context.service.ts": {
+    "status": "reviewed",
+    "reason": "reads platform admin_ai_keys model list (no tenant data)"
+  },
+  "modules/flow-builder-editor/flow-ai.service.ts": {
+    "status": "reviewed",
+    "reason": "falls back to the platform AI key when the workspace has none (by design)"
+  },
+  "modules/flow-builder-editor/flow-media.service.ts": {
+    "status": "reviewed",
+    "reason": "reads the caller's own organizations.uuid for the storage prefix"
+  },
+  "modules/flow-builder-editor/flow-templates-admin.service.ts": {
+    "status": "reviewed",
+    "reason": "platform/operator data behind OperatorGuard routes; no tenant route reaches it. Product decision TI-012: graphFrom copies ANY tenant's flow by uuid into a global starter template",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/flow-builder-editor/flows.service.ts": {
+    "status": "reviewed",
+    "reason": "platform flow_templates clone counter after the tenant clone committed"
+  },
+  "modules/flow-runtime-engine/runtime/flow-sweeper.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/flow-runtime-engine/triggers/schedule.sweeper.ts": {
+    "status": "reviewed-fixed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs. The claim UPDATE had no org_id predicate (TI-010); fixed to WHERE org_id = $1 AND id = $2",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/forms-builder/form-retention-sweep.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/leads/lead-retention-sweep.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/marketing-site-cms/cms-store.ts": {
+    "status": "reviewed-partial",
+    "reason": "platform/operator data behind OperatorGuard routes; no tenant route reaches it; upload.service.ts also uses store.tx and its route guard was not traced",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/marketplace/inbound.worker.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/marketplace/pull.worker.ts": {
+    "status": "reviewed-partial",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs; PullRunService was not read",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/marketplace/subscription-lifecycle.service.ts": {
+    "status": "reviewed",
+    "reason": "worker sweep re-locks each row by org_id and id; cancelAllForApp and operator comp/cancel sit behind OperatorGuard + PlatformPermissionGuard",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/message-templates/template-sweep.processor.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/node-bridge-runtime/outbound/catalog-bridge.adapter.ts": {
+    "status": "reviewed-fixed",
+    "reason": "device lookup by sender phone dropped its org filter when called from a worker (no request context), so it could pick another workspace's connected device with the same number (TI-008); now takes an explicit orgId and fails closed",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/node-bridge-runtime/runtime/device-runtime.service.ts": {
+    "status": "reviewed",
+    "reason": "worker only; restore adopts each device under its own org, flipStale is an intentional global stale-device sweep",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/node-bridge-runtime/unofficial-workspaces.service.ts": {
+    "status": "reviewed",
+    "reason": "platform/operator data behind OperatorGuard routes; no tenant route reaches it",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/notifications/notification-retention.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/notifications/push-subscriptions-prune.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/notifications/waiting-nudge.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/plans-subscriptions-trials/plan-store.ts": {
+    "status": "reviewed",
+    "reason": "operator consumers + worker; one tenant-request use: BillingService.change runs a privileged tx (statements all keyed by ctx.orgId). Design decision TI-011",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/platform-infrastructure/observability/worker-heartbeat.service.ts": {
+    "status": "reviewed",
+    "reason": "read-only count and lag on event_outbox; GET /ready exposes the platform-wide aggregate (no per-tenant data)",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/platform-payment-gateways/paygw.store.ts": {
+    "status": "reviewed-partial",
+    "reason": "blanket wrapper with ~60 call sites; operator routes and signed/tokened public receivers read, not every site. The webhook subscription match fell back to the newest subscription on a shared plan id (TI-009); fixed in subscription-lifecycle.service.ts",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/platform-support-desk/support-store.ts": {
+    "status": "reviewed",
+    "reason": "platform/operator data behind OperatorGuard routes; no tenant route reaches it",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/public-api/api-key.guard.ts": {
+    "status": "reviewed",
+    "reason": "pre-tenant lookup keyed by a high-entropy secret or hash; returns routing data; the org is set only after the secret verifies. Hardening TI-013: error messages distinguish unknown / revoked / invalid before the secret verifies, and there is no failed-auth throttle (the v1 guard has one)",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/roles-permissions/platform-rbac.store.ts": {
+    "status": "reviewed-partial",
+    "reason": "platform/operator data behind OperatorGuard routes; no tenant route reaches it; not every consumer of platform-rbac.service.tx was traced (none touches tenant data)",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/scheduled-queue-warmer/scheduled-due.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/shopify-woocommerce/platform-settings.service.ts": {
+    "status": "reviewed",
+    "reason": "platform/operator data behind OperatorGuard routes; no tenant route reaches it (aggregates only)",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/store-orders-sales/store-order-backfill.service.ts": {
+    "status": "reviewed",
+    "reason": "operator CLI only; writes go through runInOrg + txAs",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/storefront-builder/recovery/cart-recovery-sweep.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/whatsapp-cloud-api-waba/waba-click-sync.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
+    "reviewedOn": "2026-10-11"
+  },
+  "realtime/realtime.gateway.ts": {
+    "status": "reviewed",
+    "reason": "reads roles_version of the socket's own, server-derived org"
+  },
+  "workers/outbox-drain.service.ts": {
+    "status": "reviewed-partial",
+    "reason": "claims event_outbox rows, updates keyed by id + created_at, hands subscribers the row's orgId; each subscriber's own tenant context was not audited here",
+    "reviewedOn": "2026-10-11"
+  },
+  "workers/partition-maintenance.service.ts": {
+    "status": "reviewed",
+    "reason": "catalog/schema objects only; no tenant rows",
+    "reviewedOn": "2026-10-11"
+  }
+}

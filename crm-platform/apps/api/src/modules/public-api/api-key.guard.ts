@@ -51,6 +51,9 @@ export class ApiKeyGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request & { rawBody?: Buffer }>();
 
+    const ip = request.ip ?? 'unknown';
+    await this.access.assertNotLockedOut('signed', ip);
+
     const header = request.header('authorization');
     if (!header?.startsWith('ApiKey ')) {
       throw new AppError(ERROR_CODES.API_KEY_INVALID, 'Missing API key', 401);
@@ -58,19 +61,23 @@ export class ApiKeyGuard implements CanActivate {
 
     const [prefix, secret] = header.slice('ApiKey '.length).trim().split('.');
     if (!prefix || !secret) {
+      await this.access.recordAuthFailure('signed', ip);
       throw new AppError(ERROR_CODES.API_KEY_INVALID, 'Malformed API key', 401);
     }
 
     const key = await this.lookupKey(prefix);
     if (!key) {
+      await this.access.recordAuthFailure('signed', ip);
       throw new AppError(ERROR_CODES.API_KEY_INVALID, 'Unknown API key', 401);
     }
     if (key.status !== 'active' || (key.expires_at && new Date(key.expires_at) < new Date())) {
+      await this.access.recordAuthFailure('signed', ip);
       throw new AppError(ERROR_CODES.API_KEY_INVALID, 'API key is revoked or expired', 401);
     }
 
     const secretOk = await verify(key.key_hash, secret).catch(() => false);
     if (!secretOk) {
+      await this.access.recordAuthFailure('signed', ip);
       throw new AppError(ERROR_CODES.API_KEY_INVALID, 'Invalid API key', 401);
     }
 

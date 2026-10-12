@@ -51,7 +51,9 @@
         "generic": "Vấn đề: {reason}",
         "reason": {
           "crm_required_unbound": "Biểu mẫu thiếu một thuộc tính mà không gian làm việc của bạn yêu cầu.",
-          "no_contact_point": "Hãy thêm trường email hoặc số điện thoại được liên kết với liên hệ, để mỗi lượt gửi có thể khớp với một người."
+          "no_contact_point": "Hãy thêm trường email hoặc số điện thoại được liên kết với liên hệ, để mỗi lượt gửi có thể khớp với một người.",
+          "payment_no_gateway": "Hãy kết nối cổng thanh toán có thể tạo liên kết thanh toán, hoặc tắt thanh toán.",
+          "captcha_not_configured": "CAPTCHA được đặt là luôn bật, nhưng nền tảng chưa có CAPTCHA. Hãy chọn cài đặt khác, hoặc nhờ quản trị viên nền tảng thêm CAPTCHA."
         },
         "code": {
           "no_fields": "Hãy thêm ít nhất một trường.",
@@ -129,7 +131,14 @@
         "custom": "Tùy chỉnh",
         "requiredByCrm": "Bắt buộc",
         "inForm": "Trong biểu mẫu",
-        "full": "Biểu mẫu đã đạt giới hạn số khối."
+        "full": "Biểu mẫu đã đạt giới hạn số khối.",
+        "section": {
+          "contact": "Liên hệ",
+          "contactAddress": "Địa chỉ liên hệ",
+          "company": "Công ty",
+          "companyAddress": "Địa chỉ công ty"
+        },
+        "addAddress": "Thêm tất cả trường địa chỉ"
       },
       "list": {
         "title": "Trường",

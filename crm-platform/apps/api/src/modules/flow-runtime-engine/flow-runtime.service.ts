@@ -19,6 +19,7 @@ import {
   type FlowRetryOutcome,
   type FlowRunDetail,
   type FlowRunList,
+  type FlowRunStep,
   type FlowSubscriberList,
   type ListFlowHistoryQuery,
   type ListFlowRetriesQuery,
@@ -33,10 +34,13 @@ import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
+import { compileGraph } from './graph/compile-graph';
+import type { RuntimeGraph } from './graph/runtime-graph';
 import { FlowEngine } from './runtime/engine.service';
 import { FlowRunPublisher } from './runtime/flow-run.publisher';
 import { FlowLaunchService } from './runtime/launch.service';
 import { RunRepository } from './runtime/run.repository';
+import { compactGraph, hashGraph, splitIo } from './runtime/step-log';
 import { SubscriberRepository } from './runtime/subscriber.repository';
 import { likePattern, windowOf } from './flow-runtime.window';
 
@@ -714,7 +718,9 @@ export class FlowRuntimeService {
                r.started_at, r.last_activity_at, r.ended_at, r.resume_at,
                f.uuid AS flow_uuid, f.flow_name, c.uuid AS contact_uuid, c.name AS contact_name,
                ch.uuid AS channel_uuid, ch.name AS channel_name, ch.kind AS channel_kind,
-               (SELECT count(*)::int FROM flow_run_steps s WHERE s.org_id = r.org_id AND s.run_id = r.id) AS steps
+               CASE WHEN r.node_count > 0 THEN r.node_count
+                    ELSE (SELECT count(*)::int FROM flow_run_steps s WHERE s.org_id = r.org_id AND s.run_id = r.id) END AS steps,
+               r.node_count, r.error_count, r.duration_ms
         FROM flow_runs r
         JOIN flows f ON f.org_id = r.org_id AND f.id = r.flow_id
         LEFT JOIN contacts c ON c.org_id = r.org_id AND c.id = r.contact_id
@@ -741,11 +747,15 @@ export class FlowRuntimeService {
       const res = await tx.execute(sql`
         SELECT r.id, r.uuid, r.peer_key, r.source, r.status, r.end_reason, r.failure_reason, r.halt_reason, r.current_node_id,
                r.started_at, r.last_activity_at, r.ended_at, r.resume_at, r.trigger_text, r.vars, r.wait, r.expires_at,
+               COALESCE(r.graph, gv.graph) AS run_graph, f.flow_data AS current_flow_data,
                f.uuid AS flow_uuid, f.flow_name, c.uuid AS contact_uuid, c.name AS contact_name,
                ch.uuid AS channel_uuid, ch.name AS channel_name, ch.kind AS channel_kind,
-               (SELECT count(*)::int FROM flow_run_steps s WHERE s.org_id = r.org_id AND s.run_id = r.id) AS steps
+               CASE WHEN r.node_count > 0 THEN r.node_count
+                    ELSE (SELECT count(*)::int FROM flow_run_steps s WHERE s.org_id = r.org_id AND s.run_id = r.id) END AS steps,
+               r.node_count, r.error_count, r.duration_ms
         FROM flow_runs r
         JOIN flows f ON f.org_id = r.org_id AND f.id = r.flow_id
+        LEFT JOIN flow_graph_versions gv ON gv.org_id = r.org_id AND gv.id = r.graph_version_id
         LEFT JOIN contacts c ON c.org_id = r.org_id AND c.id = r.contact_id
         LEFT JOIN channels ch ON ch.org_id = r.org_id AND ch.id = r.channel_id
         WHERE r.org_id = ${orgId} AND r.uuid = ${runUuid}::uuid`);
@@ -753,7 +763,8 @@ export class FlowRuntimeService {
       if (!r) throw notFound('FLR_RUN_NOT_FOUND', 'Run');
       const steps = rowsOf(
         await tx.execute(sql`
-          SELECT seq, node_id, node_type, event, detail, error, created_at FROM flow_run_steps
+          SELECT seq, node_id, node_type, event, detail, error, created_at, node_label, outcome, port, duration_ms, attempt, summary,
+                 error_code FROM flow_run_steps
           WHERE org_id = ${orgId} AND run_id = ${Number(r.id)} ORDER BY seq, id`),
       );
       const wait = r.wait as { nodeId: string; kind: string } | null;
@@ -769,10 +780,18 @@ export class FlowRuntimeService {
           nodeId: (s.node_id as string | null) ?? null,
           nodeType: (s.node_type as string | null) ?? null,
           event: String(s.event),
-          detail: (s.detail ?? {}) as Record<string, unknown>,
+          ...splitIo((s.detail ?? {}) as Record<string, unknown>),
           error: (s.error as string | null) ?? null,
           at: iso(s.created_at)!,
+          nodeLabel: (s.node_label as string | null) ?? null,
+          outcome: (s.outcome as FlowRunStep['outcome']) ?? null,
+          port: s.port === null ? null : Number(s.port),
+          durationMs: s.duration_ms === null ? null : Number(s.duration_ms),
+          attempt: s.attempt === null ? null : Number(s.attempt),
+          summary: (s.summary as string | null) ?? null,
+          errorCode: (s.error_code as string | null) ?? null,
         })),
+        ...this.pathOf(r, steps),
       };
     });
   }
@@ -1080,6 +1099,33 @@ export class FlowRuntimeService {
     return sub;
   }
 
+  /**
+   * The flow as the run walked it, and how it differs from the flow now. The run's own graph is the truth for the path; the current
+   * flow only tells which logged nodes have since been removed, so an edit never rewrites what happened.
+   */
+  private pathOf(
+    r: Row,
+    steps: Row[],
+  ): Pick<FlowRunDetail, 'graph' | 'flowChanged' | 'removedNodeIds' | 'logTruncated'> {
+    const runGraph = (r.run_graph as RuntimeGraph | null) ?? null;
+    let current: RuntimeGraph | null = null;
+    try {
+      current = compileGraph(r.current_flow_data);
+    } catch {
+      current = null;
+    }
+    const nowIds = new Set(current?.nodes.map((n) => n.id) ?? []);
+    const logged = new Set(
+      steps.map((s) => s.node_id as string | null).filter((id): id is string => !!id),
+    );
+    return {
+      graph: runGraph ? compactGraph(runGraph) : null,
+      flowChanged: !!runGraph && !!current && hashGraph(runGraph) !== hashGraph(current),
+      removedNodeIds: current ? [...logged].filter((id) => !nowIds.has(id)) : [],
+      logTruncated: steps.some((s) => s.event === 'truncated'),
+    };
+  }
+
   private summaryOf(r: Row) {
     return {
       id: String(r.uuid),
@@ -1103,6 +1149,9 @@ export class FlowRuntimeService {
       endedAt: iso(r.ended_at),
       resumeAt: iso(r.resume_at),
       steps: Number(r.steps),
+      nodeCount: Number(r.node_count),
+      errorCount: Number(r.error_count),
+      durationMs: Number(r.duration_ms),
     };
   }
 }

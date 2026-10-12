@@ -1,6 +1,5 @@
-import { readFileSync } from 'node:fs';
-import { join, relative } from 'node:path';
-import { execSync } from 'node:child_process';
+import { readdirSync, readFileSync } from 'node:fs';
+import { join, relative, sep } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 /**
@@ -43,7 +42,16 @@ const SELF_SERVICE_HANDLERS: ReadonlyArray<string> = [
 ];
 
 const root = join(__dirname, '../../../src');
-const files = execSync(`find ${root} -name '*.controller.ts'`).toString().trim().split('\n');
+
+function controllerFiles(dir: string): string[] {
+  return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const full = join(dir, entry.name);
+    if (entry.isDirectory()) return controllerFiles(full);
+    return entry.name.endsWith('.controller.ts') ? [full] : [];
+  });
+}
+
+const files = controllerFiles(root).sort();
 
 interface Route {
   file: string;
@@ -56,8 +64,10 @@ const GATE =
   /@RequirePermission|@Public\(\)|@V1Controller\(|@UseGuards\([^)]*OperatorGuard|@ActorKinds\('(partner_agent|platform_operator|candidate)'/;
 
 function routesOf(path: string): Route[] {
-  const src = readFileSync(path, 'utf8');
-  const file = relative(root, path);
+  // The scan splits on `\n\n`; a Windows checkout with autocrlf has `\r\n`, which would blur the chunk boundaries.
+  const src = readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
+  // The allow-lists use forward slashes; `relative` returns backslashes on Windows.
+  const file = relative(root, path).split(sep).join('/');
   const out: Route[] = [];
   // One chunk per class: the decorators above `export class` (the tail of the previous chunk) gate every route inside it.
   const chunks = src.split(/^export class /m);

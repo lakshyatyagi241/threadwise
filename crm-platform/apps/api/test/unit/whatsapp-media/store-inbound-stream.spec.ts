@@ -36,7 +36,9 @@ const gateway = (disk: 'local' | 'cloud', extra: Partial<ChatMediaObjectGateway>
     destination: vi.fn(async () => ({ disk })),
     put: vi.fn(async (key: string) => (disk === 'cloud' ? { key } : null)),
     remove: vi.fn(async () => undefined),
-    url: vi.fn(async (key: string, ttl?: number) => `https://bucket.example/${key}?ttl=${ttl}&sig=abc`),
+    url: vi.fn(
+      async (key: string, ttl?: number) => `https://bucket.example/${key}?ttl=${ttl}&sig=abc`,
+    ),
     ...extra,
   };
   return g as typeof g & ChatMediaObjectGateway;
@@ -48,7 +50,11 @@ const build = (g: ChatMediaObjectGateway) =>
     new UploadPolicyService(),
     local,
     new MediaTokenService(
-      new CryptoService(new ConfigService({ CREDENTIALS_ENCRYPTION_KEY: Buffer.alloc(32, 5).toString('base64') }) as never),
+      new CryptoService(
+        new ConfigService({
+          CREDENTIALS_ENCRYPTION_KEY: Buffer.alloc(32, 5).toString('base64'),
+        }) as never,
+      ),
     ),
   );
 
@@ -88,7 +94,11 @@ describe('storeInboundStream: the happy path', () => {
   it('stores a streamed file under a generated key, with its real size and sha256, and leaves no spool file', async () => {
     const bytes = pngBytes(50_000);
     const store = build(gateway('local'));
-    const chunks = [bytes.subarray(0, 10_000), bytes.subarray(10_000, 30_000), bytes.subarray(30_000)];
+    const chunks = [
+      bytes.subarray(0, 10_000),
+      bytes.subarray(10_000, 30_000),
+      bytes.subarray(30_000),
+    ];
     const stored = await store.storeInboundStream({
       orgId: 7,
       stream: Readable.from(chunks),
@@ -96,7 +106,13 @@ describe('storeInboundStream: the happy path', () => {
       filename: '../../evil/../name.png',
       maxBytes: 5 * 1024 * 1024,
     });
-    expect(stored).toMatchObject({ mime: 'image/png', size: 50_000, kind: 'image', sha256: sha256Hex(bytes), name: 'name.png' });
+    expect(stored).toMatchObject({
+      mime: 'image/png',
+      size: 50_000,
+      kind: 'image',
+      sha256: sha256Hex(bytes),
+      name: 'name.png',
+    });
     expect(stored.key).toMatch(/^chat\/7\/\d{4}\/\d{2}\/\d+_[0-9a-f]{24}\.png$/);
     expect((await readFile(join(root, ...stored.key.split('/')))).equals(bytes)).toBe(true);
     expect(await spoolFiles()).toEqual([]);
@@ -138,7 +154,11 @@ describe('storeInboundStream: what it refuses, and what it leaves behind when it
     }, 1);
 
     const err = await reason(
-      build(gateway('local')).storeInboundStream({ orgId: 3, stream: source, maxBytes: 100 * 1024 }),
+      build(gateway('local')).storeInboundStream({
+        orgId: 3,
+        stream: source,
+        maxBytes: 100 * 1024,
+      }),
     );
     clearInterval(feed);
     expect(err).toBeInstanceOf(MediaTooLargeError);
@@ -153,14 +173,25 @@ describe('storeInboundStream: what it refuses, and what it leaves behind when it
   it('exactly the limit is accepted, one byte over is refused', async () => {
     const store = build(gateway('local'));
     const exact = pngBytes(5000);
-    await expect(store.storeInboundStream({ orgId: 1, stream: Readable.from([exact]), maxBytes: 5000 })).resolves.toMatchObject({ size: 5000 });
-    expect(await reason(store.storeInboundStream({ orgId: 1, stream: Readable.from([exact]), maxBytes: 4999 }))).toBeInstanceOf(MediaTooLargeError);
+    await expect(
+      store.storeInboundStream({ orgId: 1, stream: Readable.from([exact]), maxBytes: 5000 }),
+    ).resolves.toMatchObject({ size: 5000 });
+    expect(
+      await reason(
+        store.storeInboundStream({ orgId: 1, stream: Readable.from([exact]), maxBytes: 4999 }),
+      ),
+    ).toBeInstanceOf(MediaTooLargeError);
   });
 
   it('applies the store\'s per-type limit once the real type is known (a "document" that is really a big image)', async () => {
     process.env.MEDIA_MAX_BYTES_IMAGE = '4000';
     const err = await reason(
-      build(gateway('local')).storeInboundStream({ orgId: 1, stream: Readable.from([pngBytes(10_000)]), declaredMime: 'application/pdf', maxBytes: 100 * 1024 * 1024 }),
+      build(gateway('local')).storeInboundStream({
+        orgId: 1,
+        stream: Readable.from([pngBytes(10_000)]),
+        declaredMime: 'application/pdf',
+        maxBytes: 100 * 1024 * 1024,
+      }),
     );
     expect(err).toBeInstanceOf(MediaTooLargeError);
     expect((err as MediaTooLargeError).limitBytes).toBe(4000);
@@ -182,13 +213,34 @@ describe('storeInboundStream: what it refuses, and what it leaves behind when it
   });
 
   it.each([
-    ['an HTML page declared as an image', Buffer.from('<html><script>alert(1)</script></html>'), 'image/png'],
-    ['a script declared as a document', Buffer.from('<?php system($_GET["c"]); ?>'), 'application/pdf'],
-    ['an SVG declared as an image', Buffer.from('<svg xmlns="http://www.w3.org/2000/svg"><script/></svg>'), 'image/svg+xml'],
-    ['binary nobody knows', Buffer.from([0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x00, 0x00]), 'application/octet-stream'],
+    [
+      'an HTML page declared as an image',
+      Buffer.from('<html><script>alert(1)</script></html>'),
+      'image/png',
+    ],
+    [
+      'a script declared as a document',
+      Buffer.from('<?php system($_GET["c"]); ?>'),
+      'application/pdf',
+    ],
+    [
+      'an SVG declared as an image',
+      Buffer.from('<svg xmlns="http://www.w3.org/2000/svg"><script/></svg>'),
+      'image/svg+xml',
+    ],
+    [
+      'binary nobody knows',
+      Buffer.from([0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x00, 0x00]),
+      'application/octet-stream',
+    ],
   ])('refuses %s (content mismatch), stores nothing', async (_why, bytes, declared) => {
     const err = await reason(
-      build(gateway('local')).storeInboundStream({ orgId: 1, stream: Readable.from([bytes]), declaredMime: declared, maxBytes: 1024 * 1024 }),
+      build(gateway('local')).storeInboundStream({
+        orgId: 1,
+        stream: Readable.from([bytes]),
+        declaredMime: declared,
+        maxBytes: 1024 * 1024,
+      }),
     );
     expect(err).toBeInstanceOf(AppError);
     expect((err as AppError).code).toBe('AUTH_UPLOAD_REJECTED');
@@ -197,7 +249,13 @@ describe('storeInboundStream: what it refuses, and what it leaves behind when it
   });
 
   it('refuses an empty body', async () => {
-    const err = await reason(build(gateway('local')).storeInboundStream({ orgId: 1, stream: Readable.from([]), maxBytes: 1024 }));
+    const err = await reason(
+      build(gateway('local')).storeInboundStream({
+        orgId: 1,
+        stream: Readable.from([]),
+        maxBytes: 1024,
+      }),
+    );
     expect((err as AppError).code).toBe('AUTH_UPLOAD_REJECTED');
     expect(await spoolFiles()).toEqual([]);
   });
@@ -214,7 +272,13 @@ describe('storeInboundStream: what it refuses, and what it leaves behind when it
         setTimeout(() => this.destroy(new Error('connection reset')), 5);
       },
     });
-    const err = await reason(build(gateway('local')).storeInboundStream({ orgId: 1, stream: source, maxBytes: 1024 * 1024 }));
+    const err = await reason(
+      build(gateway('local')).storeInboundStream({
+        orgId: 1,
+        stream: source,
+        maxBytes: 1024 * 1024,
+      }),
+    );
     expect((err as Error).message).toMatch(/connection reset|premature/i);
     expect(await spoolFiles()).toEqual([]);
     expect(await keysUnder(1)).toEqual([]);
@@ -239,7 +303,11 @@ describe('storeInboundStream: a cloud bucket', () => {
   it('hands the finished file to the bucket in one piece and writes nothing to local disk', async () => {
     const bytes = pdfBytes(8000);
     const g = gateway('cloud');
-    const stored = await build(g).storeInboundStream({ orgId: 2, stream: Readable.from([bytes]), maxBytes: 1024 * 1024 });
+    const stored = await build(g).storeInboundStream({
+      orgId: 2,
+      stream: Readable.from([bytes]),
+      maxBytes: 1024 * 1024,
+    });
     expect(g.put).toHaveBeenCalledTimes(1);
     const [key, body, mime] = vi.mocked(g.put).mock.calls[0] as unknown as [string, Buffer, string];
     expect(key).toBe(stored.key);
@@ -272,9 +340,12 @@ describe('the spool: leftovers of killed workers', () => {
   });
 
   it('a spool path can never be a key: the directory name starts with a dot, which no key segment may', async () => {
-    const { isSafeMediaKey } = await import('../../../src/infra/providers/chat-conversations/media/local-disk-media.store');
+    const { isSafeMediaKey } =
+      await import('../../../src/infra/providers/chat-conversations/media/local-disk-media.store');
     expect(isSafeMediaKey('.spool/abc.part')).toBe(false);
-    await expect(local.adopt('chat/1/2026/10/a.png', join(root, 'chat', 'x.part'))).rejects.toThrow('not a spool file');
+    await expect(local.adopt('chat/1/2026/10/a.png', join(root, 'chat', 'x.part'))).rejects.toThrow(
+      'not a spool file',
+    );
   });
 });
 
@@ -287,13 +358,23 @@ describe('temporaryPublicLink: the privacy trade is explicit and only a bucket c
     expect(link!.expiresAt.getTime()).toBeLessThanOrEqual(Date.now() + 900_000 + 1000);
   });
 
-  it('local storage cannot make one (nothing is public), another workspace\'s key is refused, a file on disk is not linked', async () => {
-    expect(await build(gateway('local')).temporaryPublicLink(5, 'chat/5/2026/10/abc.png', 900)).toBeNull();
-    expect(await build(gateway('cloud')).temporaryPublicLink(6, 'chat/5/2026/10/abc.png', 900)).toBeNull();
-    const onDisk = await build(gateway('cloud')).storeInboundStream({ orgId: 5, stream: Readable.from([pngBytes()]), maxBytes: 1024 * 1024 });
+  it("local storage cannot make one (nothing is public), another workspace's key is refused, a file on disk is not linked", async () => {
+    expect(
+      await build(gateway('local')).temporaryPublicLink(5, 'chat/5/2026/10/abc.png', 900),
+    ).toBeNull();
+    expect(
+      await build(gateway('cloud')).temporaryPublicLink(6, 'chat/5/2026/10/abc.png', 900),
+    ).toBeNull();
+    const onDisk = await build(gateway('cloud')).storeInboundStream({
+      orgId: 5,
+      stream: Readable.from([pngBytes()]),
+      maxBytes: 1024 * 1024,
+    });
     // the cloud gateway "put" it, so it is not on disk: link works; a key that IS on disk (stored while storage was local) is not
     await local.put('chat/5/2026/10/ondisk.png', pngBytes());
-    expect(await build(gateway('cloud')).temporaryPublicLink(5, 'chat/5/2026/10/ondisk.png', 900)).toBeNull();
+    expect(
+      await build(gateway('cloud')).temporaryPublicLink(5, 'chat/5/2026/10/ondisk.png', 900),
+    ).toBeNull();
     expect(onDisk.key).toBeTruthy();
   });
 });

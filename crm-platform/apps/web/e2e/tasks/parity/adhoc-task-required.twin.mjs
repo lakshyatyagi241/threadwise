@@ -14,8 +14,14 @@ export default () => ({
         await c.click({ role: 'button', name: /new task/i });
         const dlg = c.page.getByRole('dialog');
         await dlg.waitFor();
-        o.flag('assignee.noNobody', (await dlg.locator('option', { hasText: /^nobody$/i }).count()) === 0);
-        o.flag('due.noClearButton', (await dlg.getByRole('button', { name: /clear date/i }).count()) === 0);
+        o.flag(
+          'assignee.noNobody',
+          (await dlg.locator('option', { hasText: /^nobody$/i }).count()) === 0,
+        );
+        o.flag(
+          'due.noClearButton',
+          (await dlg.getByRole('button', { name: /clear date/i }).count()) === 0,
+        );
         await dlg.locator('#task-title').fill(c.tag('req'));
         await dlg.getByRole('button', { name: /^(create|add|save)/i }).click();
         await c.afterAction({ quiet: 300 });
@@ -34,7 +40,13 @@ export default () => ({
         await input.fill(c.tag('quick'));
         await input.press('Enter');
         await c.afterAction({ quiet: 300 });
-        o.flag('quick.dueErrorShown', await c.page.getByText(/choose a due date/i).first().isVisible());
+        o.flag(
+          'quick.dueErrorShown',
+          await c.page
+            .getByText(/choose a due date/i)
+            .first()
+            .isVisible(),
+        );
         o.flag('quick.titleKept', (await input.inputValue()) !== '');
       },
     },

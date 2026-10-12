@@ -16,8 +16,8 @@ beforeAll(async () => {
 });
 
 describe('CampaignsCard', () => {
-  it('lists the latest campaigns with status, progress and how many were delivered', () => {
-    renderApp(<CampaignsCard data={widgets.campaigns} />);
+  it('lists the latest campaigns with status, progress and how many were delivered', async () => {
+    await renderApp(<CampaignsCard data={widgets.campaigns} />);
     expect(screen.getByText('2 running - 1 scheduled - 1 paused')).toBeTruthy();
     expect(screen.getByText('9 in all')).toBeTruthy();
     expect(screen.getByText('Diwali offer')).toBeTruthy();
@@ -27,21 +27,21 @@ describe('CampaignsCard', () => {
     expect(screen.getByText('60%')).toBeTruthy();
   });
 
-  it('names an unnamed campaign and shows an unknown status as it came', () => {
-    renderApp(<CampaignsCard data={widgets.campaigns} />);
+  it('names an unnamed campaign and shows an unknown status as it came', async () => {
+    await renderApp(<CampaignsCard data={widgets.campaigns} />);
     expect(screen.getByText('Untitled campaign')).toBeTruthy();
     expect(screen.getByText('mystery_status')).toBeTruthy();
   });
 
-  it('says so when there are none', () => {
-    renderApp(<CampaignsCard data={emptyWidgets.campaigns} />);
+  it('says so when there are none', async () => {
+    await renderApp(<CampaignsCard data={emptyWidgets.campaigns} />);
     expect(screen.getByText('No active campaigns')).toBeTruthy();
   });
 });
 
 describe('TemplatesCard', () => {
-  it('shows each template with its status and its send, delivery and read figures', () => {
-    renderApp(<TemplatesCard data={widgets.templates} />);
+  it('shows each template with its status and its send, delivery and read figures', async () => {
+    await renderApp(<TemplatesCard data={widgets.templates} />);
     expect(screen.getByText('2 templates')).toBeTruthy();
     expect(screen.getByText('order_update')).toBeTruthy();
     expect(screen.getByText('EN - UTILITY - text')).toBeTruthy();
@@ -50,22 +50,22 @@ describe('TemplatesCard', () => {
     expect(screen.getByText('66.7%')).toBeTruthy();
   });
 
-  it('shows dashes for a template that was never sent and its review state', () => {
-    renderApp(<TemplatesCard data={widgets.templates} />);
+  it('shows dashes for a template that was never sent and its review state', async () => {
+    await renderApp(<TemplatesCard data={widgets.templates} />);
     expect(screen.getByText('welcome_back')).toBeTruthy();
     expect(screen.getByText('In review')).toBeTruthy();
     expect(screen.getAllByText('-').length).toBeGreaterThanOrEqual(4);
   });
 
-  it('says so when there are none', () => {
-    renderApp(<TemplatesCard data={emptyWidgets.templates} />);
+  it('says so when there are none', async () => {
+    await renderApp(<TemplatesCard data={emptyWidgets.templates} />);
     expect(screen.getByText('No templates yet.')).toBeTruthy();
   });
 });
 
 describe('DevicesCard', () => {
-  it('shows each paired number with its state, region, volume and delivery rate', () => {
-    renderApp(<DevicesCard data={widgets.devices} />);
+  it('shows each paired number with its state, region, volume and delivery rate', async () => {
+    await renderApp(<DevicesCard data={widgets.devices} />);
     expect(screen.getByText('2 of 6 slots used - 1 online')).toBeTruthy();
     expect(screen.getByText('+919876500001')).toBeTruthy();
     expect(screen.getByText('Sales phone - IN - 40/24h')).toBeTruthy();
@@ -75,22 +75,22 @@ describe('DevicesCard', () => {
     expect(screen.getByText('4 device slots available')).toBeTruthy();
   });
 
-  it('falls back to the label and "unzoned" for a device without a number or region', () => {
-    renderApp(<DevicesCard data={widgets.devices} />);
+  it('falls back to the label and "unzoned" for a device without a number or region', async () => {
+    await renderApp(<DevicesCard data={widgets.devices} />);
     expect(screen.getByText('Support phone')).toBeTruthy();
     expect(screen.getByText('Support phone - unzoned - 0/24h')).toBeTruthy();
   });
 
-  it('says so when no device is paired', () => {
-    renderApp(<DevicesCard data={{ ...emptyWidgets.devices, total: 6 }} />);
+  it('says so when no device is paired', async () => {
+    await renderApp(<DevicesCard data={{ ...emptyWidgets.devices, total: 6 }} />);
     expect(screen.getByText('No devices connected')).toBeTruthy();
     expect(screen.queryByText(/slot/)).toBeTruthy();
   });
 });
 
 describe('InstagramBand', () => {
-  it('shows the linked accounts and the five numbers', () => {
-    renderApp(<InstagramBand data={widgets.instagram!} />);
+  it('shows the linked accounts and the five numbers', async () => {
+    await renderApp(<InstagramBand data={widgets.instagram!} />);
     expect(screen.getByText('2 accounts')).toBeTruthy();
     expect(screen.getByLabelText('@acme.shop, Connected')).toBeTruthy();
     expect(screen.getByLabelText('@acme.deals, expired')).toBeTruthy();
@@ -101,8 +101,8 @@ describe('InstagramBand', () => {
 });
 
 describe('IntegrationsCard', () => {
-  it('shows what is connected, with the weekly events where there are some', () => {
-    renderApp(<IntegrationsCard data={widgets.integrations} />);
+  it('shows what is connected, with the weekly events where there are some', async () => {
+    await renderApp(<IntegrationsCard data={widgets.integrations} />);
     expect(screen.getByText('2 / 4')).toBeTruthy();
     expect(screen.getByText('WooCommerce')).toBeTruthy();
     expect(screen.getByText('25 events / 7d')).toBeTruthy();
@@ -113,8 +113,8 @@ describe('IntegrationsCard', () => {
 });
 
 describe('InboxCard', () => {
-  it('shows how many are waiting, for how long, and the latest conversations', () => {
-    renderApp(<InboxCard data={widgets.inbox} now={NOW} />);
+  it('shows how many are waiting, for how long, and the latest conversations', async () => {
+    await renderApp(<InboxCard data={widgets.inbox} now={NOW} />);
     expect(screen.getByText('3 unread - oldest 2 hours ago')).toBeTruthy();
     expect(screen.getByText('Asha Verma')).toBeTruthy();
     expect(screen.getByText('30 minutes ago')).toBeTruthy();
@@ -123,16 +123,16 @@ describe('InboxCard', () => {
     expect(screen.getByText('Ravi Kumar')).toBeTruthy();
   });
 
-  it('says so when there are no conversations', () => {
-    renderApp(<InboxCard data={emptyWidgets.inbox} now={NOW} />);
+  it('says so when there are no conversations', async () => {
+    await renderApp(<InboxCard data={emptyWidgets.inbox} now={NOW} />);
     expect(screen.getByText('0 unread')).toBeTruthy();
     expect(screen.getByText('No conversations yet.')).toBeTruthy();
   });
 });
 
 describe('FlowsCard', () => {
-  it('shows the counters and the latest flows with their trigger and state', () => {
-    renderApp(<FlowsCard data={widgets.flows} />);
+  it('shows the counters and the latest flows with their trigger and state', async () => {
+    await renderApp(<FlowsCard data={widgets.flows} />);
     expect(screen.getByText('3 active · 1200 subscribers')).toBeTruthy();
     expect(screen.getByText('1.2k')).toBeTruthy();
     expect(screen.getByText('Order follow-up')).toBeTruthy();
@@ -141,29 +141,29 @@ describe('FlowsCard', () => {
     expect(screen.getByText('Paused')).toBeTruthy();
   });
 
-  it('says so when there are none', () => {
-    renderApp(<FlowsCard data={emptyWidgets.flows} />);
+  it('says so when there are none', async () => {
+    await renderApp(<FlowsCard data={emptyWidgets.flows} />);
     expect(screen.getByText('No flows yet.')).toBeTruthy();
   });
 });
 
 describe('ActivityCard', () => {
-  it('shows who did what, and how long ago', () => {
-    renderApp(<ActivityCard data={widgets.activity} now={NOW} />);
+  it('shows who did what, and how long ago', async () => {
+    await renderApp(<ActivityCard data={widgets.activity} now={NOW} />);
     expect(screen.getByText('Asha - contacts imported 40 contacts')).toBeTruthy();
     expect(screen.getByText('15 minutes ago')).toBeTruthy();
     expect(screen.getByText('- - billing renewed the plan')).toBeTruthy();
   });
 
-  it('says so when nothing happened', () => {
-    renderApp(<ActivityCard data={[]} now={NOW} />);
+  it('says so when nothing happened', async () => {
+    await renderApp(<ActivityCard data={[]} now={NOW} />);
     expect(screen.getByText('No recent activity logged for this workspace.')).toBeTruthy();
   });
 });
 
 describe('PipelineCard', () => {
-  it('shows the open value, deals, won this month and win rate', () => {
-    renderApp(<PipelineCard data={widgets.pipeline!} />);
+  it('shows the open value, deals, won this month and win rate', async () => {
+    await renderApp(<PipelineCard data={widgets.pipeline!} />);
     expect(screen.getByText('Sales pipeline')).toBeTruthy();
     expect(screen.getByText(/125,000\.00/)).toBeTruthy();
     expect(screen.getByText('14')).toBeTruthy();
@@ -173,8 +173,8 @@ describe('PipelineCard', () => {
 });
 
 describe('FunnelCard', () => {
-  it('reads each stage out with its count and share, and shows the activity and the comparison', () => {
-    renderApp(<FunnelCard funnel={summary.funnel} subtitle="Last 7 days" />);
+  it('reads each stage out with its count and share, and shows the activity and the comparison', async () => {
+    await renderApp(<FunnelCard funnel={summary.funnel} subtitle="Last 7 days" />);
     expect(screen.getByText('Last 7 days')).toBeTruthy();
     expect(
       screen.getByLabelText('Contacts messaged: 120 contacts, 100% of contacts messaged'),
@@ -191,13 +191,13 @@ describe('FunnelCard', () => {
     expect(screen.getByLabelText('Up 3.2 pp against the previous period')).toBeTruthy();
   });
 
-  it('leaves out the comparison when the previous window had no contacts, and shows a dash for no replies', () => {
+  it('leaves out the comparison when the previous window had no contacts, and shows a dash for no replies', async () => {
     const funnel = {
       ...summary.funnel,
       comparison: null,
       activity: { inbound: 1, respondingContacts: 1, repliesPerContact: null },
     };
-    renderApp(<FunnelCard funnel={funnel} subtitle="Last 7 days" />);
+    await renderApp(<FunnelCard funnel={funnel} subtitle="Last 7 days" />);
     expect(screen.queryByTestId('funnel-comparison')).toBeNull();
     expect(
       screen.getByText(
@@ -208,8 +208,8 @@ describe('FunnelCard', () => {
 });
 
 describe('ThroughputPanel', () => {
-  it('shows the peak, the legend with totals, the chart and the four figures', () => {
-    renderApp(
+  it('shows the peak, the legend with totals, the chart and the four figures', async () => {
+    await renderApp(
       <ThroughputPanel
         range="7d"
         summary={summary}
@@ -232,8 +232,8 @@ describe('ThroughputPanel', () => {
     expect(screen.getByText('33.3%')).toBeTruthy();
   });
 
-  it('labels an hourly chart by the hour', () => {
-    renderApp(
+  it('labels an hourly chart by the hour', async () => {
+    await renderApp(
       <ThroughputPanel
         range="24h"
         summary={summary}
@@ -254,8 +254,8 @@ describe('ThroughputPanel', () => {
     expect(screen.queryByText(/Peak hour/)).toBeNull();
   });
 
-  it('shows a spinner while loading and a message when the request failed', () => {
-    const { rerender } = renderApp(
+  it('shows a spinner while loading and a message when the request failed', async () => {
+    const { rerender } = await renderApp(
       <ThroughputPanel
         range="7d"
         summary={undefined}
@@ -265,7 +265,7 @@ describe('ThroughputPanel', () => {
       />,
     );
     expect(screen.getByLabelText('Loading…')).toBeTruthy();
-    rerender(
+    await rerender(
       <ThroughputPanel
         range="7d"
         summary={undefined}

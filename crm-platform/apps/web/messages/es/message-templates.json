@@ -65,7 +65,7 @@
     },
     "library": {
       "title": "Biblioteca de plantillas",
-      "intro": "Plantillas de mensajes de WhatsApp: escríbelas, envíalas a Meta para revisión y sigue su estado aquí.",
+      "intro": "Elige una plantilla de inicio o envía la tuya. Todas las plantillas deben cumplir las <link>directrices de WhatsApp</link> antes de que Meta las apruebe.",
       "sync": "Sincronizar desde Meta",
       "syncing": "Sincronizando...",
       "syncHint": "Obtener tus plantillas desde Meta",

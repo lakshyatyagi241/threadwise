@@ -15,6 +15,9 @@ import {
   resolveLimit,
 } from '../plans-subscriptions-trials';
 
+/** Failed authentications one address may make per minute before it is refused with 429 (same number as the bearer-key guard). */
+export const AUTH_FAILURES_PER_MINUTE = 30;
+
 /**
  * The limit a request is held to: the key's own limit, never above the platform ceiling from the security policy
  * (`apiRateLimitPerMinute`, 0 = no ceiling). A key with no limit of its own gets the ceiling; neither set means unlimited.
@@ -41,6 +44,32 @@ export class ApiKeyAccessService {
     private readonly entitlements: PlanEntitlementService,
     private readonly reflector: Reflector,
   ) {}
+
+  /** One counter per address that lives 60 seconds from its first failure, so a burst cannot straddle a clock minute and escape. */
+  private authFailureKey(scope: string, ip: string): string {
+    return `apikey:authfail:${scope}:${ip}`;
+  }
+
+  /**
+   * Failed-authentication throttle (TI-013): a caller guessing key prefixes or secrets gets AUTH_FAILURES_PER_MINUTE tries a minute
+   * per address, then 429. A Redis outage does not lock anyone out (the counter reads as 0).
+   */
+  async assertNotLockedOut(scope: string, ip: string): Promise<void> {
+    const failures = Number(await this.redis.get(this.authFailureKey(scope, ip)).catch(() => 0));
+    if (failures >= AUTH_FAILURES_PER_MINUTE) {
+      throw new AppError(
+        ERROR_CODES.RATE_LIMITED,
+        'Too many failed authentication attempts. Try again in a minute.',
+        429,
+      );
+    }
+  }
+
+  async recordAuthFailure(scope: string, ip: string): Promise<void> {
+    const key = this.authFailureKey(scope, ip);
+    const n = await this.redis.incr(key).catch(() => 0);
+    if (n === 1) await this.redis.expire(key, 60).catch(() => undefined);
+  }
 
   /**
    * The workspace's plan caps its keys (TW-PLAN-022); a plan with 0 (or no plan state) falls back to the platform ceiling, and a workspace

@@ -313,6 +313,14 @@
         "waba_group_suspension_cleared": {
           "label": "Nhóm hoạt động trở lại",
           "hint": "WhatsApp đã khôi phục một nhóm trước đó bị tạm ngưng. Chỉ hiển thị nếu bạn đã được thông báo về việc tạm ngưng."
+        },
+        "form_payment": {
+          "label": "Đã nhận thanh toán biểu mẫu",
+          "hint": "Một khách truy cập đã thanh toán trên một trong các biểu mẫu của bạn."
+        },
+        "form_payment_duplicate": {
+          "label": "Biểu mẫu bị thanh toán hai lần",
+          "hint": "Một khách truy cập đã thanh toán lần thứ hai và khoản thanh toán thừa cần được hoàn tiền."
         }
       },
       "loading": "Đang tải tùy chọn của bạn",

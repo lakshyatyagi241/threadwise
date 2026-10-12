@@ -1,0 +1,188 @@
+{
+  "faq-knowledge-admin": {
+    "nav": {
+      "group": "IA",
+      "engine": "Motor de preguntas frecuentes"
+    },
+    "common": {
+      "loading": "Cargando",
+      "retry": "Reintentar",
+      "requestId": "Id de solicitud",
+      "dash": "-",
+      "cancel": "Cancelar",
+      "errors": {
+        "forbidden": "No tienes permiso para hacer esto.",
+        "request": "No se pudo completar esa solicitud.",
+        "unexpected": "Algo salió mal por nuestra parte. Inténtalo de nuevo en un momento.",
+        "network": "No se pudo conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
+        "validation": "Algunos valores no son válidos. Revisa los campos resaltados.",
+        "modelNotAllowed": "Ese modelo de IA no está en la lista de permitidos. Recarga la página y elige uno de la lista.",
+        "notFound": "Ese elemento ya no existe."
+      }
+    },
+    "page": {
+      "eyebrow": "Admin · IA · Motor de preguntas frecuentes",
+      "title": "Motor de preguntas frecuentes",
+      "description": "Controla cómo se comparan las preguntas frecuentes de todos los espacios de trabajo con los mensajes de clientes: el interruptor, el modelo de IA, los límites y el estado del índice.",
+      "superOnly": "Solo un superadministrador puede ver o cambiar el motor de preguntas frecuentes."
+    },
+    "status": {
+      "label": "Estado del motor",
+      "engine": {
+        "title": "Motor",
+        "on": "Activado",
+        "off": "Desactivado",
+        "hintOn": "{count, plural, one {# espacio de trabajo tiene las preguntas frecuentes activadas} other {# espacios de trabajo tienen las preguntas frecuentes activadas}}",
+        "hintOff": "Ningún espacio de trabajo responde con preguntas frecuentes y las ediciones están bloqueadas."
+      },
+      "key": {
+        "title": "Clave de OpenRouter de la plataforma",
+        "ready": "Lista",
+        "missing": "Falta",
+        "explainReady": "Los espacios de trabajo que no han guardado su propia clave de OpenRouter usan esta para crear y comparar vectores.",
+        "explainMissing": "Los espacios de trabajo que no han guardado su propia clave de OpenRouter dependen de esta. Sin ella no pueden crear vectores y las coincidencias recurren a la similitud ortográfica.",
+        "link": "Añade la clave en Claves de proveedores de IA"
+      },
+      "model": {
+        "title": "Modelo de IA en uso",
+        "dimensions": "{count, number} dimensiones",
+        "unknown": "No está en la lista de permitidos"
+      },
+      "index": {
+        "title": "Estado de la indexación",
+        "ready": "Listos",
+        "waiting": "En espera",
+        "failed": "Con errores",
+        "stale": "{count, plural, one {# vector pertenece a un modelo anterior y no coincide con nada hasta que se vuelva a procesar} other {# vectores pertenecen a un modelo anterior y no coinciden con nada hasta que se vuelvan a procesar}}",
+        "totals": "{faqs, number} preguntas frecuentes · {variations, number} variantes"
+      },
+      "activity": {
+        "title": "Últimos 30 días",
+        "matches": "Mensajes de clientes revisados",
+        "answered": "Respondidos",
+        "rate": "Tasa de respuesta",
+        "tokens": "Tokens de embeddings",
+        "verified": "Segundas revisiones",
+        "vetoed": "Respuestas retenidas"
+      }
+    },
+    "settings": {
+      "title": "Ajustes",
+      "description": "Se aplica a todos los espacios de trabajo. Solo se guardan los campos que cambies.",
+      "engine": {
+        "label": "Motor de preguntas frecuentes",
+        "hint": "Desactívalo para que ningún espacio de trabajo responda con preguntas frecuentes. Las ediciones se bloquean mientras esté desactivado."
+      },
+      "embeddingModel": {
+        "label": "Modelo de IA para coincidencias",
+        "hint": "Convierte cada pregunta en números para poder encontrar redacciones parecidas.",
+        "option": "{label} · {price} por millón de tokens · umbral sugerido {threshold}",
+        "unknownOption": "{id} (no está en la lista de permitidos)",
+        "details": "{dimensions, number} dimensiones · {price} por millón de tokens · umbral sugerido {threshold}",
+        "saved": "Modelo guardado"
+      },
+      "generationModel": {
+        "label": "Modelo de generación",
+        "hint": "El id del modelo de OpenRouter que redacta las sugerencias de variantes, por ejemplo openai/gpt-4o-mini.",
+        "placeholder": "openai/gpt-4o-mini"
+      },
+      "threshold": {
+        "label": "Umbral de coincidencia predeterminado",
+        "hint": "Un mensaje coincide cuando su puntuación es al menos esta. Solo lo usan los espacios de trabajo que nunca guardaron su propio umbral. Las puntuaciones dependen del modelo de IA.",
+        "value": "{value}",
+        "follow": "Seguir el modelo",
+        "followHint": "La sensibilidad predeterminada es el valor recomendado del modelo ({value}) y cambia cuando cambia el modelo. Desactiva para fijar un número."
+      },
+      "limits": {
+        "title": "Límites",
+        "maxFaqs": "Máximo de preguntas frecuentes por espacio de trabajo",
+        "maxVariationsPerFaq": "Máximo de variantes por pregunta frecuente",
+        "semanticPerHour": "Coincidencias por significado por espacio de trabajo y hora",
+        "semanticPerHourHint": "Superado este límite, el espacio de trabajo recurre a la similitud ortográfica durante el resto de la hora. 0 significa siempre similitud ortográfica.",
+        "verifyPerHour": "Segundas revisiones por espacio de trabajo por hora"
+      },
+      "errors": {
+        "integer": "Introduce un número entero.",
+        "range": "Introduce un valor entre {min} y {max}.",
+        "modelId": "Usa un id de modelo de OpenRouter como openai/gpt-4o-mini.",
+        "invalid": "Este valor no es válido."
+      },
+      "unchanged": "No hay cambios que guardar.",
+      "changed": "{count, plural, one {# cambio listo para guardar} other {# cambios listos para guardar}}",
+      "save": "Guardar cambios",
+      "saving": "Guardando",
+      "reset": "Descartar cambios",
+      "saved": "Ajustes guardados.",
+      "confirm": {
+        "title": "Revisa antes de guardar",
+        "confirm": "Guardar cambios",
+        "engineOff": "Si desactivas el motor, ningún espacio de trabajo responderá a los clientes con preguntas frecuentes y se bloquearán las ediciones hasta que lo vuelvas a activar.",
+        "modelChange": "Cambiar el modelo de IA de {from} a {to} hace que se vuelvan a generar todos los vectores guardados. Hasta que termine, las coincidencias usan solo similitud ortográfica. La sensibilidad predeterminada seguirá al nuevo modelo (recomendado {threshold}) a menos que fijes un valor. Los umbrales que los espacios de trabajo guardaron por su cuenta pueden requerir un nuevo ajuste, porque las puntuaciones cambian con el modelo."
+      },
+      "verify": {
+        "title": "Segunda revisión para casos dudosos",
+        "description": "Un modelo de chat pequeño vuelve a comprobar las coincidencias que apenas alcanzaron el umbral de un espacio de trabajo. Solo puede retener una respuesta. Cada espacio de trabajo la activa en sus propios ajustes de preguntas frecuentes.",
+        "enabled": {
+          "label": "Permitir la segunda revisión",
+          "hint": "Desactívala para detener la revisión en todos los espacios de trabajo, sea cual sea su configuración."
+        },
+        "model": {
+          "label": "Modelo de revisión",
+          "hint": "El id del modelo de OpenRouter que evalúa los casos dudosos, por ejemplo openai/gpt-4o-mini. Basta con un modelo pequeño y rápido."
+        },
+        "perHourHint": "Pasado este límite, un caso dudoso se mantiene sin revisar durante el resto de la hora. 0 significa no revisar nunca."
+      }
+    },
+    "maintenance": {
+      "title": "Mantenimiento",
+      "description": "Vuelve a procesar el índice cuando algo parezca ir mal. El trabajo se ejecuta en segundo plano.",
+      "progress": "{ready, number} de {total, number} listos",
+      "progressLabel": "Progreso de indexación",
+      "polling": "Se actualiza cada 5 segundos mientras {count, number} estén en espera.",
+      "idle": "No hay nada en espera de indexación.",
+      "reindexAll": "Reindexar todo",
+      "retryFailed": "Reintentar los fallidos",
+      "retryFailedNone": "No hay vectores fallidos que reintentar.",
+      "confirmAll": {
+        "title": "¿Reindexar todo?",
+        "message": "Todos los vectores guardados se generan de nuevo con el modelo actual. Las coincidencias usan similitud ortográfica para las filas que aún no están listas, y los tokens de embeddings se cobran otra vez.",
+        "confirm": "Reindexar todo"
+      },
+      "confirmFailed": {
+        "title": "¿Reintentar los vectores fallidos?",
+        "message": "Solo se vuelven a poner en cola los vectores que se rindieron. Revisa primero la clave de OpenRouter de la plataforma si siguen fallando.",
+        "confirm": "Reintentar fallidos"
+      },
+      "queued": "{count, plural, =0 {Nada que poner en cola.} one {# vector en cola.} other {# vectores en cola.}}"
+    },
+    "workspaces": {
+      "title": "Espacios de trabajo",
+      "description": "Los más activos primero. Los que tienen la función activada van antes que el resto.",
+      "search": "Buscar espacios de trabajo",
+      "searchPlaceholder": "Nombre del espacio de trabajo",
+      "limit": "Filas",
+      "limitOption": "{count, number} filas",
+      "tableLabel": "Espacios de trabajo por actividad de preguntas frecuentes",
+      "columns": {
+        "name": "Espacio de trabajo",
+        "enabled": "Preguntas frecuentes",
+        "faqs": "Preguntas frecuentes redactadas",
+        "variations": "Variantes",
+        "indexing": "Indexación",
+        "matches": "Coincidencias (30 días)",
+        "answered": "Respondidas (30 días)"
+      },
+      "enabled": "Activado",
+      "disabled": "Desactivado",
+      "upToDate": "Al día",
+      "pending": "{count, number} en espera",
+      "failed": "{count, number} con errores",
+      "answered": "{count, number} ({rate})",
+      "emptyTitle": "Aún no hay espacios de trabajo",
+      "emptyMessage": "Los espacios de trabajo aparecen aquí cuando existan.",
+      "noMatchTitle": "Ningún espacio de trabajo coincide con esa búsqueda",
+      "noMatchMessage": "Revisa la ortografía o borra el cuadro de búsqueda.",
+      "clearSearch": "Borrar búsqueda"
+    }
+  }
+}

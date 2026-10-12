@@ -253,8 +253,8 @@
           "off": "Wyłączona"
         },
         "captchaHints": {
-          "inherit": "Używa ustawienia przestrzeni roboczej dla formularzy publicznych.",
-          "on": "Odwiedzający muszą przejść weryfikację, zanim wyślą formularz.",
+          "inherit": "Używa CAPTCHA skonfigurowanej przez administratora platformy dla formularzy publicznych, jeśli jest dostępna.",
+          "on": "Odwiedzający muszą przejść weryfikację, zanim wyślą formularz. Wymaga skonfigurowanej CAPTCHA na platformie, a bez niej publikacja jest odrzucana.",
           "off": "Brak weryfikacji. Polegaj na ukrytym polu pułapki i limitach częstotliwości."
         },
         "retention": "Przechowuj odpowiedzi (dni)",
@@ -271,6 +271,17 @@
           "perFormPerMinuteHint": "Zgłoszenia do tego formularza z dowolnego miejsca.",
           "perContactPerHour": "Na kontakt, na godzinę",
           "perContactPerHourHint": "Zgłoszenia z tym samym e-mailem lub numerem telefonu."
+        },
+        "captchaStatus": {
+          "available": "Na tej platformie skonfigurowano CAPTCHA (reCAPTCHA {version}).",
+          "none": "Na tej platformie nie skonfigurowano CAPTCHA, więc nic tu nie jest sprawdzane. Poproś administratora platformy o jej dodanie lub polegaj na ukrytym polu-pułapce i limitach żądań.",
+          "noneOn": "Ten formularz jest ustawiony na zawsze sprawdzaj, ale platforma nie ma CAPTCHA, więc nic nie sprawdza i nie można go opublikować. Poproś administratora platformy o jej dodanie lub wybierz inne ustawienie.",
+          "failed": "Nie udało się sprawdzić, czy CAPTCHA jest skonfigurowana."
+        },
+        "caught": {
+          "blocked": "{count, plural, =0 {Ukryte pole-pułapka nie zatrzymało w tym miesiącu żadnych botów.} one {Ukryte pole-pułapka zatrzymało w tym miesiącu 1 bota.} few {Ukryte pole-pułapka zatrzymało w tym miesiącu # boty.} many {Ukryte pole-pułapka zatrzymało w tym miesiącu # botów.} other {Ukryte pole-pułapka zatrzymało w tym miesiącu # bota.}}",
+          "held": "{count, plural, one {1 zgłoszenie jest wstrzymane jako spam.} few {# zgłoszenia są wstrzymane jako spam.} many {# zgłoszeń jest wstrzymanych jako spam.} other {# zgłoszenia jest wstrzymane jako spam.}}",
+          "review": "Przejrzyj"
         }
       }
     }

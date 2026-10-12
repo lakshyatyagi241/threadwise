@@ -106,7 +106,8 @@
         "light": "Claro",
         "dark": "Escuro",
         "schemeHint": "O modo de cor está definido como Claro, então não há versão escura para visualizar.",
-        "frameTitle": "Visualização em tempo real do formulário"
+        "frameTitle": "Visualização em tempo real do formulário",
+        "popup": "Popup"
       }
     }
   }

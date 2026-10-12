@@ -1,0 +1,188 @@
+{
+  "faq-knowledge-admin": {
+    "nav": {
+      "group": "AI",
+      "engine": "Motore FAQ"
+    },
+    "common": {
+      "loading": "Caricamento",
+      "retry": "Riprova",
+      "requestId": "ID richiesta",
+      "dash": "-",
+      "cancel": "Annulla",
+      "errors": {
+        "forbidden": "Non hai il permesso di eseguire questa azione.",
+        "request": "Impossibile completare la richiesta.",
+        "unexpected": "Si è verificato un problema da parte nostra. Riprova tra un momento.",
+        "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
+        "validation": "Alcuni valori non sono validi. Controlla i campi evidenziati.",
+        "modelNotAllowed": "Questo modello di embedding non è nell'elenco consentito. Ricarica la pagina e scegline uno dall'elenco.",
+        "notFound": "Questo elemento non esiste più."
+      }
+    },
+    "page": {
+      "eyebrow": "Admin · AI · Motore FAQ",
+      "title": "Motore FAQ",
+      "description": "Controlla come le FAQ di ogni spazio di lavoro vengono confrontate con i messaggi dei clienti: l'interruttore, il modello di embedding, i limiti e lo stato dell'indice.",
+      "superOnly": "Solo un super admin può vedere o modificare il motore FAQ."
+    },
+    "status": {
+      "label": "Stato del motore",
+      "engine": {
+        "title": "Motore",
+        "on": "Attivo",
+        "off": "Disattivo",
+        "hintOn": "{count, plural, one {# spazio di lavoro ha le FAQ attive} other {# spazi di lavoro hanno le FAQ attive}}",
+        "hintOff": "Nessuno spazio di lavoro risponde con le FAQ e le modifiche sono bloccate."
+      },
+      "key": {
+        "title": "Chiave OpenRouter della piattaforma",
+        "ready": "Pronta",
+        "missing": "Mancante",
+        "explainReady": "Gli spazi di lavoro che non hanno salvato una propria chiave OpenRouter usano questa per creare e confrontare i vettori.",
+        "explainMissing": "Gli spazi di lavoro che non hanno salvato una propria chiave OpenRouter dipendono da questa. Senza di essa non possono creare vettori e il confronto ripiega sulla somiglianza ortografica.",
+        "link": "Aggiungi la chiave in Chiavi provider AI"
+      },
+      "model": {
+        "title": "Modello di embedding in uso",
+        "dimensions": "{count, number} dimensioni",
+        "unknown": "Non nell'elenco consentito"
+      },
+      "index": {
+        "title": "Stato dell'indicizzazione",
+        "ready": "Pronti",
+        "waiting": "In attesa",
+        "failed": "Non riusciti",
+        "stale": "{count, plural, one {# vettore appartiene a un modello precedente e non corrisponde a nulla finché non viene rigenerato} other {# vettori appartengono a un modello precedente e non corrispondono a nulla finché non vengono rigenerati}}",
+        "totals": "{faqs, number} FAQ · {variations, number} varianti"
+      },
+      "activity": {
+        "title": "Ultimi 30 giorni",
+        "matches": "Messaggi dei clienti analizzati",
+        "answered": "Con risposta",
+        "rate": "Tasso di risposta",
+        "tokens": "Token di embedding",
+        "verified": "Secondi controlli",
+        "vetoed": "Risposte trattenute"
+      }
+    },
+    "settings": {
+      "title": "Impostazioni",
+      "description": "Si applica a ogni spazio di lavoro. Vengono salvati solo i campi che modifichi.",
+      "engine": {
+        "label": "Motore FAQ",
+        "hint": "Disattivalo per impedire a tutti gli spazi di lavoro di rispondere con le FAQ. Le modifiche sono bloccate mentre è disattivato."
+      },
+      "embeddingModel": {
+        "label": "Modello AI per il confronto",
+        "hint": "Trasforma ogni domanda in numeri per poter trovare formulazioni simili.",
+        "option": "{label} · {price} per milione di token · soglia suggerita {threshold}",
+        "unknownOption": "{id} (non nell'elenco consentito)",
+        "details": "{dimensions, number} dimensioni · {price} per milione di token · soglia suggerita {threshold}",
+        "saved": "Modello salvato"
+      },
+      "generationModel": {
+        "label": "Modello di generazione",
+        "hint": "L'ID del modello OpenRouter che scrive i suggerimenti di varianti, ad esempio openai/gpt-4o-mini.",
+        "placeholder": "openai/gpt-4o-mini"
+      },
+      "threshold": {
+        "label": "Soglia di corrispondenza predefinita",
+        "hint": "Un messaggio corrisponde quando il suo punteggio è almeno pari a questo valore. Usata solo dagli spazi di lavoro che non hanno mai salvato una propria soglia. I punteggi dipendono dal modello di embedding.",
+        "value": "{value}",
+        "follow": "Segui il modello",
+        "followHint": "La sensibilità predefinita è il valore consigliato dal modello ({value}) e cambia quando cambia il modello. Disattiva per fissare un numero."
+      },
+      "limits": {
+        "title": "Limiti",
+        "maxFaqs": "Massimo di FAQ per spazio di lavoro",
+        "maxVariationsPerFaq": "Massimo di varianti per FAQ",
+        "semanticPerHour": "Confronti semantici per spazio di lavoro all'ora",
+        "semanticPerHourHint": "Oltre questo valore, uno spazio di lavoro ripiega sulla somiglianza ortografica per il resto dell'ora. 0 significa sempre somiglianza ortografica.",
+        "verifyPerHour": "Secondi controlli per spazio di lavoro all'ora"
+      },
+      "errors": {
+        "integer": "Inserisci un numero intero.",
+        "range": "Inserisci un valore tra {min} e {max}.",
+        "modelId": "Usa un ID modello OpenRouter come openai/gpt-4o-mini.",
+        "invalid": "Questo valore non è valido."
+      },
+      "unchanged": "Nessuna modifica da salvare.",
+      "changed": "{count, plural, one {# modifica pronta da salvare} other {# modifiche pronte da salvare}}",
+      "save": "Salva modifiche",
+      "saving": "Salvataggio",
+      "reset": "Scarta modifiche",
+      "saved": "Impostazioni salvate.",
+      "confirm": {
+        "title": "Controlla prima di salvare",
+        "confirm": "Salva modifiche",
+        "engineOff": "Disattivando il motore, nessuno spazio di lavoro potrà rispondere ai clienti con le FAQ e le modifiche alle FAQ saranno bloccate finché non lo riattivi.",
+        "modelChange": "Cambiando il modello di embedding da {from} a {to}, ogni vettore salvato viene rigenerato. Fino al termine, il confronto usa solo la somiglianza ortografica. La sensibilità predefinita seguirà il nuovo modello (consigliato {threshold}) a meno che tu non imposti un valore fisso. Le soglie degli spazi di lavoro salvate separatamente potrebbero richiedere una nuova regolazione perché i punteggi cambiano con il modello."
+      },
+      "verify": {
+        "title": "Secondo controllo per i casi al limite",
+        "description": "Un piccolo modello di chat ricontrolla le corrispondenze che hanno appena raggiunto la soglia di uno spazio di lavoro. Può solo trattenere una risposta. Gli spazi di lavoro lo attivano nelle proprie impostazioni FAQ.",
+        "enabled": {
+          "label": "Consenti il secondo controllo",
+          "hint": "Disattivalo per fermare il controllo in ogni spazio di lavoro, a prescindere dalle loro impostazioni."
+        },
+        "model": {
+          "label": "Modello di controllo",
+          "hint": "L'ID del modello OpenRouter che valuta i casi al limite, ad esempio openai/gpt-4o-mini. Basta un modello piccolo e veloce."
+        },
+        "perHourHint": "Oltre questo valore, un caso al limite resta senza controllo per il resto dell'ora. 0 significa non controllare mai."
+      }
+    },
+    "maintenance": {
+      "title": "Manutenzione",
+      "description": "Rigenera l'indice quando qualcosa non sembra funzionare. L'operazione viene eseguita in background.",
+      "progress": "{ready, number} di {total, number} pronti",
+      "progressLabel": "Avanzamento dell'indicizzazione",
+      "polling": "Aggiornamento ogni 5 secondi finché ce ne sono {count, number} in attesa.",
+      "idle": "Niente in attesa di indicizzazione.",
+      "reindexAll": "Reindicizza tutto",
+      "retryFailed": "Riprova quelli non riusciti",
+      "retryFailedNone": "Nessun vettore non riuscito da riprovare.",
+      "confirmAll": {
+        "title": "Reindicizzare tutto?",
+        "message": "Ogni vettore salvato viene rigenerato con il modello attuale. Per le righe non ancora pronte il confronto usa la somiglianza ortografica, e i token di embedding vengono fatturati di nuovo.",
+        "confirm": "Reindicizza tutto"
+      },
+      "confirmFailed": {
+        "title": "Riprovare i vettori non riusciti?",
+        "message": "Solo i vettori che si erano arresi vengono rimessi in coda. Se continuano a fallire, controlla prima la chiave OpenRouter della piattaforma.",
+        "confirm": "Riprova quelli non riusciti"
+      },
+      "queued": "{count, plural, =0 {Niente da mettere in coda.} one {# vettore messo in coda.} other {# vettori messi in coda.}}"
+    },
+    "workspaces": {
+      "title": "Spazi di lavoro",
+      "description": "Prima i più attivi. Gli spazi di lavoro con le FAQ attive vengono prima degli altri.",
+      "search": "Cerca spazi di lavoro",
+      "searchPlaceholder": "Nome dello spazio di lavoro",
+      "limit": "Righe",
+      "limitOption": "{count, number} righe",
+      "tableLabel": "Spazi di lavoro per attività FAQ",
+      "columns": {
+        "name": "Spazio di lavoro",
+        "enabled": "FAQ",
+        "faqs": "FAQ scritte",
+        "variations": "Varianti",
+        "indexing": "Indicizzazione",
+        "matches": "Confronti (30 giorni)",
+        "answered": "Risposte (30 giorni)"
+      },
+      "enabled": "Attivo",
+      "disabled": "Disattivo",
+      "upToDate": "Aggiornato",
+      "pending": "{count, number} in attesa",
+      "failed": "{count, number} non riusciti",
+      "answered": "{count, number} ({rate})",
+      "emptyTitle": "Ancora nessuno spazio di lavoro",
+      "emptyMessage": "Gli spazi di lavoro compaiono qui una volta creati.",
+      "noMatchTitle": "Nessuno spazio di lavoro corrisponde alla ricerca",
+      "noMatchMessage": "Controlla l'ortografia o svuota la casella di ricerca.",
+      "clearSearch": "Cancella ricerca"
+    }
+  }
+}

@@ -170,6 +170,10 @@ export const widgetSchema = z.object({
   status: z.enum(WIDGET_STATUSES),
   mode: z.enum(WIDGET_MODES),
   assistantId: uuidSchema.nullable(),
+  /** The flow bot that owns this widget; null for a plain chat widget. */
+  flowId: uuidSchema.nullable(),
+  /** When the owner first saved Customize; null while the default look is still untouched. */
+  customizedAt: z.string().nullable(),
   targetWhatsappCc: z.string().nullable(),
   targetWhatsappNumber: z.string().nullable(),
   prefilledMessage: z.string().nullable(),
@@ -204,6 +208,56 @@ export const widgetSchema = z.object({
   rowVersion: z.number().int(),
 });
 export type Widget = z.infer<typeof widgetSchema>;
+
+/**
+ * The look of a flow bot's widget (the Customize tab). The bot supplies the widget's name and the flow runtime supplies its
+ * answers, so the AI and WhatsApp fields of a plain widget are not part of it. The first save creates the widget; every later
+ * save carries the row version it was read at.
+ */
+export const flowWidgetSaveSchema = widgetFieldsSchema
+  .omit({
+    name: true,
+    mode: true,
+    assistantId: true,
+    targetWhatsappCc: true,
+    targetWhatsappNumber: true,
+  })
+  .extend({ rowVersion: z.number().int().min(1).optional() });
+export type FlowWidgetSaveInput = z.infer<typeof flowWidgetSaveSchema>;
+
+/** `widget` is null until the owner has saved Customize once: that is the "needs customizing" state. */
+export const flowWidgetResponseSchema = z.object({ widget: widgetSchema.nullable() });
+export type FlowWidgetResponse = z.infer<typeof flowWidgetResponseSchema>;
+
+/**
+ * One row of Settings > Channels > Web: a website chat bot and its widget. `state` is the one word the row shows: no saved
+ * Customize yet, a bot not published, a live bot, or a bot that is switched off (paused widget or inactive flow).
+ */
+export const WEB_BOT_STATES = ['needs_customizing', 'draft', 'live', 'paused'] as const;
+export type WebBotState = (typeof WEB_BOT_STATES)[number];
+export const webBotItemSchema = z.object({
+  flowId: uuidSchema,
+  name: z.string(),
+  state: z.enum(WEB_BOT_STATES),
+  isPublished: z.boolean(),
+  /** The widget the bot owns; null until its owner has saved Customize once. */
+  widget: z
+    .object({
+      id: uuidSchema,
+      headerTitle: z.string(),
+      status: z.enum(WIDGET_STATUSES),
+      customizedAt: z.string().nullable(),
+    })
+    .nullable(),
+  updatedAt: z.string(),
+});
+export type WebBotItem = z.infer<typeof webBotItemSchema>;
+export const webBotsResponseSchema = z.object({
+  data: z.array(webBotItemSchema),
+  /** All website chat bots of the workspace; `data` holds the newest 200. */
+  total: z.number().int(),
+});
+export type WebBotsResponse = z.infer<typeof webBotsResponseSchema>;
 
 export const widgetListItemSchema = widgetSchema.extend({
   assistant: widgetAssistantRefSchema.nullable(),
@@ -258,6 +312,10 @@ export type RotateWidgetTokenResponse = z.infer<typeof rotateWidgetTokenResponse
 const blankToNull = (v: unknown) =>
   typeof v === 'string' ? (v.trim() === '' ? null : v.trim()) : v;
 
+/** A reply button a flow bot offers; the visitor's tap comes back as `tap_id`. */
+export const widgetButtonSchema = z.object({ id: z.string(), title: z.string() });
+export type WidgetButton = z.infer<typeof widgetButtonSchema>;
+
 /** `POST /widget/<token>/api/message` body (TW-WGT-014). `visitor_uuid` may also ride in the query, a header or a cookie. */
 export const widgetMessageRequestSchema = z.object({
   body: z.string().trim().min(1).max(WIDGET_LIMITS.visitorBody),
@@ -265,6 +323,8 @@ export const widgetMessageRequestSchema = z.object({
   email: z.preprocess(blankToNull, z.string().email().max(WIDGET_LIMITS.visitorEmail).nullish()),
   phone: z.preprocess(blankToNull, z.string().max(WIDGET_LIMITS.visitorPhone).nullish()),
   visitor_uuid: z.preprocess(blankToNull, z.string().max(64).nullish()),
+  /** A flow bot's reply button the visitor tapped: `body` is its title, this is its id. Ignored by a widget with no flow. */
+  tap_id: z.preprocess(blankToNull, z.string().max(128).nullish()),
 });
 export type WidgetMessageRequest = z.infer<typeof widgetMessageRequestSchema>;
 
@@ -306,6 +366,8 @@ export const widgetPublicConfigSchema = z.object({
       dir: z.enum(['in', 'out']),
       body: z.string().nullable(),
       from: z.enum(['visitor', 'agent', 'assistant']),
+      /** Reply buttons offered with this line (a flow bot's question). */
+      buttons: z.array(widgetButtonSchema).optional(),
     }),
   ),
 });
@@ -326,6 +388,7 @@ export const widgetHistoryResponseSchema = z.object({
       body: z.string().nullable(),
       at: z.string().nullable(),
       from: z.enum(['agent', 'assistant']),
+      buttons: z.array(widgetButtonSchema).optional(),
     }),
   ),
 });

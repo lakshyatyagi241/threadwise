@@ -3,7 +3,12 @@
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState, type Ref } from 'react';
 import { Badge, Button, EmptyState, Spinner, cn } from '@crm/ui';
-import type { ChannelResponse, ConversationNote, InboxConversationDetail } from '@crm/contracts';
+import type {
+  ChannelResponse,
+  ConversationNote,
+  InboxConversationDetail,
+  MessageResponse,
+} from '@crm/contracts';
 import { ReconnectBanner } from '@/features/channel-whatsapp-cloud';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { CallButton } from '@/features/calling-voice';
@@ -12,6 +17,7 @@ import type { Thread } from '../api/use-thread';
 import { isGroupThread } from '../lib/group-thread';
 import { computeWindow, formatWindowLeft, type WindowView } from '../lib/window';
 import { Composer, type ComposerHandle, type ComposerMode } from './composer';
+import { ShareDialog, type ShareKind } from './share-dialog';
 import { TemplatePicker } from './template-picker';
 import { AlertIcon, BackIcon, CheckCircleIcon, ClockIcon, PanelIcon } from './icons';
 import { MessageStream } from './message-stream';
@@ -35,7 +41,9 @@ export interface ThreadPaneProps {
   onTogglePanel: () => void;
   onBack: () => void;
   onSeenLatest: (seq: number) => void;
-  onSend: (draft: { body: string; file: File | null }) => void;
+  onSend: (draft: { body: string; file: File | null; replyToMessageId?: string | null }) => void;
+  /** Puts an emoji on a message (`''` takes it back); the screen shows the refusal. */
+  onReact: (message: MessageResponse, emoji: string) => Promise<void>;
   onNote: (body: string) => Promise<boolean>;
   onDeleteNote: (id: string) => void;
   canDeleteNote: (note: ConversationNote) => boolean;
@@ -56,8 +64,15 @@ export interface ThreadPaneProps {
 export function ThreadPane(props: ThreadPaneProps) {
   const t = useTranslations('team-inbox-conversations.thread');
   const canManageChannels = useCan('inbox.channel.manage');
+  const canExportLogs = useCan('inbox.logs.export');
   const { detail, thread } = props;
   const [templatesOpen, setTemplatesOpen] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
+  // The message the next send answers. It belongs to one thread: another conversation starts without it.
+  const [reply, setReply] = useState<{ conversationId: string; message: MessageResponse } | null>(
+    null,
+  );
+  const replyTo = reply && reply.conversationId === props.conversationId ? reply.message : null;
 
   if (props.notFound) {
     return (
@@ -93,6 +108,15 @@ export function ThreadPane(props: ThreadPaneProps) {
     !channelDown &&
     !groupThread &&
     props.mode === 'reply';
+  // A place, contact cards and buttons are free-form messages: they need the window like text does (the composer disables the button).
+  const shareKinds: ShareKind[] =
+    detail && props.can.reply && !channelDown && !groupThread && props.mode === 'reply'
+      ? [
+          ...(detail.capabilities.media.includes('location') ? (['location'] as const) : []),
+          ...(detail.capabilities.media.includes('contact') ? (['contacts'] as const) : []),
+          ...(detail.capabilities.interactive ? (['buttons'] as const) : []),
+        ]
+      : [];
   const resolved = detail?.status === 'resolved' || detail?.status === 'closed';
 
   return (
@@ -206,7 +230,21 @@ export function ThreadPane(props: ThreadPaneProps) {
         onSeenLatest={props.onSeenLatest}
         onLoadOlder={() => void thread.loadOlder()}
         onRetryMessage={props.onRetryMessage}
+        onReply={
+          props.can.reply && !replyDisabled && !groupThread
+            ? (message) => {
+                setReply({ conversationId: props.conversationId, message });
+                props.onMode('reply');
+              }
+            : undefined
+        }
+        onReact={
+          props.can.reply && !replyDisabled && !groupThread && detail?.capabilities.reactions
+            ? props.onReact
+            : undefined
+        }
         canManageChannel={canManageChannels}
+        canExportLogs={canExportLogs}
         onRetryPending={thread.retryPending}
         onDismissPending={thread.dismissPending}
         onDeleteNote={props.onDeleteNote}
@@ -270,9 +308,22 @@ export function ThreadPane(props: ThreadPaneProps) {
         }
         canTemplate={canTemplate}
         onTemplate={() => setTemplatesOpen(true)}
-        onSend={props.onSend}
+        canShare={shareKinds.length > 0}
+        onShare={() => setShareOpen(true)}
+        onSend={(draft) => {
+          props.onSend({ ...draft, replyToMessageId: replyTo?.id ?? null });
+          setReply(null);
+        }}
+        replyTo={replyTo}
+        onCancelReply={() => setReply(null)}
         onNote={props.onNote}
         handleRef={props.composerRef}
+      />
+      <ShareDialog
+        open={shareOpen}
+        onClose={() => setShareOpen(false)}
+        kinds={shareKinds}
+        onSend={thread.sendShare}
       />
       <TemplatePicker
         conversationId={props.conversationId}

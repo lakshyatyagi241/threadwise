@@ -11,6 +11,7 @@ import { FlowEngine } from './engine.service';
 import { FlowRunPublisher } from './flow-run.publisher';
 import { RunRepository } from './run.repository';
 import { seedVariables } from './seed';
+import { clip, maskSecrets } from './step-log';
 import { SubscriberRepository, type SubscriberRow } from './subscriber.repository';
 
 const HOUR_MS = 3_600_000;
@@ -76,6 +77,8 @@ export interface LaunchInput {
   /** A retry of a failed run: the same subscriber row, a new run. */
   retry?: boolean;
   conversationId?: number | null;
+  /** Enter the flow at this node instead of its first (the FAQ's "link to node"). A node the flow no longer has fails the launch. */
+  startNodeId?: string | null;
 }
 
 export type LaunchOutcome =
@@ -146,6 +149,15 @@ export class FlowLaunchService {
       );
     }
 
+    if (input.startNodeId && !graph.nodes.some((n) => n.id === input.startNodeId)) {
+      return {
+        outcome: 'failed',
+        reason: 'The step this should start at is no longer in the flow',
+        code: 'FLR_NODE_NOT_FOUND',
+        subscriberId: null,
+      };
+    }
+
     // The subscriber row decides whether anything launches.
     let subscriber: SubscriberRow | null = null;
     if (input.withSubscriber && input.contactId) {
@@ -208,7 +220,7 @@ export class FlowLaunchService {
       triggerRef: input.triggerRef ?? null,
       triggerText: input.triggerText ? input.triggerText.trim().toLowerCase() : null,
       graph: graph as RuntimeGraph,
-      currentNodeId: graph.nodes[0]!.id,
+      currentNodeId: input.startNodeId ?? graph.nodes[0]!.id,
       vars,
       timeoutSeconds:
         input.timeoutSeconds ??
@@ -217,6 +229,32 @@ export class FlowLaunchService {
       variant: input.variant ?? null,
       campaignId: input.campaignId ?? null,
       maxExpiresAt: new Date(Date.now() + MAX_RUN_LIFETIME_MS),
+    });
+    // The first row of the run's log: why it started. A refusal (no sender) has no run, so it stays on the subscriber as before.
+    await this.runs.appendStep(tx, orgId, run.id, {
+      seq: 0,
+      nodeId: null,
+      nodeType: null,
+      event: 'start',
+      detail: {
+        source: input.source,
+        ...(input.triggerRef ? { trigger_ref: clip(input.triggerRef, 80) } : {}),
+        ...(input.retry ? { retry: true } : {}),
+        ...(live ? { replaced_run: live.id } : {}),
+      },
+      outcome: 'ok',
+      summary: clip(
+        maskSecrets(
+          [
+            `started by ${input.source}`,
+            input.triggerText ? `typed "${input.triggerText}"` : '',
+            live ? 'replaced a run in progress' : '',
+          ]
+            .filter(Boolean)
+            .join(', '),
+        ),
+        240,
+      ),
     });
     if (subscriber) await this.subscribers.attachRun(tx, orgId, subscriber.id, run.id);
     return {

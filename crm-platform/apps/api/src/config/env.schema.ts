@@ -148,6 +148,26 @@ export const envSchema = z.object({
    * keys are assigned there); the rule lives in config/domains/chat-conversations.env.ts. A production process that sets it does not boot.
    */
   CHANNEL_SIMULATOR_ENABLED: booleanish.default(false),
+  /**
+   * The FAQ engine's AI vendor (ADR-0021): `openrouter` (the default, with a key from the AI keys screens) or `fixture`, an offline
+   * stand-in for tests and demos that embeds by shared words and needs no key or network. Declared here because only declared
+   * keys of a `.env` file reach `process.env`. A production process that sets `fixture` does not boot.
+   */
+  // Workspace inactivity lifecycle (ADR-0028). Three independent switches, all safe by default.
+  /** Master switch for the daily sweep. Off = no reminders, archives or erasures. */
+  ORG_LIFECYCLE_ENABLED: booleanish.default(false),
+  /** On = decisions are only logged, nothing changes. Turn the sweep on in dry run first. */
+  ORG_LIFECYCLE_DRY_RUN: booleanish.default(true),
+  /** Erasure is a second switch: archiving can be live while erasing is not. */
+  ORG_LIFECYCLE_DELETE_ENABLED: booleanish.default(false),
+  /**
+   * How long the platform keeps its own sales records (orders) after a workspace is erased, without the buyer's identity. Tax law sets
+   * the period; 8 years covers India's GST rules. Confirm with legal before changing.
+   */
+  FINANCIAL_RECORD_RETENTION_YEARS: z.coerce.number().int().min(1).max(15).default(8),
+  FAQ_AI_DRIVER: z.enum(['openrouter', 'fixture']).optional(),
+  /** Overrides OpenRouter's base URL for the FAQ engine (a gateway, a local stub). */
+  FAQ_OPENROUTER_BASE_URL: z.string().url().optional(),
   EASEBUZZ_ENV: z.enum(['test', 'prod']).default('test'),
   EASEBUZZ_KEY: z.string().optional(),
   EASEBUZZ_SALT: z.string().optional(),
@@ -190,6 +210,11 @@ export function validateEnv(raw: Record<string, unknown>): Env {
     }
     if (parsed.data.JWT_REFRESH_SECRET.startsWith('dev-only')) {
       throw new Error('JWT_REFRESH_SECRET is still the development placeholder.');
+    }
+    if (parsed.data.FAQ_AI_DRIVER === 'fixture') {
+      throw new Error(
+        'FAQ_AI_DRIVER=fixture must not be set in production: the fixture is an offline stand-in, not the AI vendor.',
+      );
     }
     if (parsed.data.JWT_ACCESS_SECRET === parsed.data.JWT_REFRESH_SECRET) {
       throw new Error(

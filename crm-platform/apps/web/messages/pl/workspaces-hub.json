@@ -78,7 +78,8 @@
       "noMatchMessage": "Zmień wyszukiwanie lub filtry, aby zobaczyć więcej.",
       "loadMore": "Wczytaj więcej",
       "loadingMore": "Wczytywanie kolejnych",
-      "loaded": "Wyświetlono: {count, plural, one {# przestrzeń robocza} few {# przestrzenie robocze} many {# przestrzeni roboczych} other {# przestrzeni roboczej}}"
+      "loaded": "Wyświetlono: {count, plural, one {# przestrzeń robocza} few {# przestrzenie robocze} many {# przestrzeni roboczych} other {# przestrzeni roboczej}}",
+      "retentionLink": "Retencja"
     },
     "cell": {
       "suspended": "Zawieszone",
@@ -252,6 +253,147 @@
         "text": "Zgłoszenia, rozmowy i historia wsparcia tej przestrzeni roboczej.",
         "open": "Otwórz kartę wsparcia",
         "openTickets": "{count, plural, one {# otwarte zgłoszenie} few {# otwarte zgłoszenia} many {# otwartych zgłoszeń} other {# otwartego zgłoszenia}}"
+      }
+    },
+    "retention": {
+      "crumb": "Retencja",
+      "title": "Retencja przestrzeni roboczych",
+      "subtitle": "Nieaktywne przestrzenie robocze, od najdłużej nieaktywnych: kiedy każda zostanie zarchiwizowana i usunięta, wysłane przypomnienia oraz elementy do ochrony lub przywrócenia przestrzeni.",
+      "backToList": "Wróć do przestrzeni roboczych",
+      "deniedTitle": "Brak dostępu",
+      "tableLabel": "Retencja przestrzeni roboczych",
+      "status": {
+        "active": "Aktywna",
+        "archived": "Zarchiwizowana",
+        "suspended": "Zawieszona",
+        "deleted": "Usunięte przez właściciela"
+      },
+      "filters": {
+        "label": "Filtry",
+        "status": "Status",
+        "allStatuses": "Wszystkie statusy",
+        "minDays": "Minimalna liczba dni nieaktywności",
+        "neverDeleteOnly": "Tylko „Nigdy nie usuwaj”",
+        "clear": "Wyczyść filtry"
+      },
+      "columns": {
+        "workspace": "Przestrzeń robocza",
+        "status": "Status",
+        "daysInactive": "Dni nieaktywności",
+        "lastActivity": "Ostatnia aktywność",
+        "archiveOn": "Archiwizacja",
+        "eraseOn": "Usunięcie",
+        "reminders": "Wysłane przypomnienia",
+        "protection": "Ochrona",
+        "actions": "Akcje"
+      },
+      "remindersArchive": "Archiwizacja {n}/3",
+      "remindersErase": "Usunięcie {n}/3",
+      "emptyTitle": "Brak przestrzeni roboczych do wyświetlenia",
+      "emptyMessage": "Przestrzenie robocze pojawią się tutaj po ich utworzeniu.",
+      "noMatchTitle": "Brak pasujących przestrzeni roboczych",
+      "noMatchMessage": "Zmień filtry, aby zobaczyć więcej.",
+      "loadMore": "Wczytaj więcej",
+      "loadingMore": "Wczytywanie kolejnych",
+      "loaded": "{count, plural, one {Wyświetlono # przestrzeń roboczą} few {Wyświetlono # przestrzenie robocze} many {Wyświetlono # przestrzeni roboczych} other {Wyświetlono # przestrzeni roboczej}}",
+      "badge": {
+        "neverDelete": "Nigdy nie usuwaj",
+        "legalHold": "Blokada prawna",
+        "paidPlan": "Plan płatny (wyłączona)",
+        "paidPlanHint": "Przestrzeń robocza z aktywnym planem płatnym nigdy nie jest archiwizowana z powodu nieaktywności.",
+        "until": "Do {date}",
+        "indefinite": "Bez wygaśnięcia",
+        "by": "Ustawił(a) {who}"
+      },
+      "actions": {
+        "menu": "Akcje retencji dla {name}",
+        "history": "Historia",
+        "policy": "Zmień terminy",
+        "exemptOn": "Nigdy nie usuwaj",
+        "exemptOff": "Wyłącz „Nigdy nie usuwaj”",
+        "restore": "Przywróć",
+        "holdOn": "Nałóż blokadę prawną",
+        "holdOff": "Zdejmij blokadę prawną"
+      },
+      "event": {
+        "reminder_sent": "Wysłano przypomnienie",
+        "archived": "Zarchiwizowano",
+        "deleted": "Usunięto",
+        "delete_blocked": "Usunięcie zablokowane",
+        "restored": "Przywrócono",
+        "policy_changed": "Zmieniono terminy",
+        "exemption_set": "Włączono „Nigdy nie usuwaj”",
+        "exemption_cleared": "Wyłączono „Nigdy nie usuwaj”",
+        "legal_hold_set": "Nałożono blokadę prawną",
+        "legal_hold_cleared": "Zdjęto blokadę prawną"
+      },
+      "history": {
+        "title": "Historia: {name}",
+        "emptyTitle": "Brak historii",
+        "emptyMessage": "Przypomnienia i zmiany pojawią się tutaj.",
+        "stage": "Krok",
+        "stages": {
+          "archive": "Archiwizacja",
+          "delete": "Usunięcie"
+        },
+        "reminderNo": "przypomnienie {n}",
+        "daysInactive": "{count, plural, one {# dzień nieaktywności} few {# dni nieaktywności} many {# dni nieaktywności} other {# dnia nieaktywności}}",
+        "by": "Przez",
+        "system": "System",
+        "reason": "Powód"
+      },
+      "dialog": {
+        "reason": "Powód",
+        "reasonHint": "Od 5 do 500 znaków. Zapisywany w dzienniku zgodności.",
+        "errors": {
+          "reasonShort": "Wpisz co najmniej 5 znaków.",
+          "reasonLong": "Użyj najwyżej 500 znaków.",
+          "archiveWhole": "Wpisz całkowitą liczbę dni.",
+          "archiveMin": "Archiwizacja po co najmniej 60 dniach.",
+          "archiveMax": "Archiwizacja po najwyżej 3650 dniach.",
+          "eraseWhole": "Wpisz całkowitą liczbę dni.",
+          "eraseMin": "Usunięcie po co najmniej 120 dniach.",
+          "eraseMax": "Usunięcie po najwyżej 7300 dniach.",
+          "gap": "Usunięcie musi nastąpić co najmniej {days} dni po archiwizacji.",
+          "noChange": "Zmień co najmniej jeden termin.",
+          "untilPast": "Wybierz datę z przyszłości."
+        },
+        "mode": "Źródło terminów",
+        "days": "Dni",
+        "useDefault": "Użyj domyślnych ustawień platformy",
+        "custom": "Własna liczba dni",
+        "policyTitle": "Zmień terminy dla {name}",
+        "policyMessage": "Liczba dni nieaktywności przed archiwizacją i przed usunięciem przestrzeni roboczej. Przypomnienia przesuwają się razem z nimi.",
+        "archiveAfter": "Archiwizuj po (dni)",
+        "archiveHint": "Domyślnie na platformie {default} dni; co najmniej {min}.",
+        "eraseAfter": "Usuń po (dni)",
+        "eraseHint": "Domyślnie na platformie {default} dni; co najmniej {min}.",
+        "policyConfirm": "Zapisz terminy",
+        "policyDone": "Zapisano terminy dla {name}.",
+        "exemptOnTitle": "Nigdy nie usuwać {name}?",
+        "exemptOnMessage": "Dopóki ta opcja jest włączona, przestrzeń robocza nigdy nie jest archiwizowana ani usuwana z powodu nieaktywności.",
+        "exemptOnConfirm": "Włącz „Nigdy nie usuwaj”",
+        "exemptOnDone": "Przestrzeń {name} nigdy nie zostanie usunięta.",
+        "exemptOffTitle": "Wyłączyć „Nigdy nie usuwaj” dla {name}?",
+        "exemptOffMessage": "Przestrzeń robocza znów podlega swoim terminom i może zostać zarchiwizowana oraz usunięta.",
+        "exemptOffConfirm": "Wyłącz „Nigdy nie usuwaj”",
+        "exemptOffDone": "Przestrzeń {name} znów podlega swoim terminom.",
+        "until": "Przegląd dnia (opcjonalnie)",
+        "untilHint": "Ochrona kończy się w tym dniu, aby ponownie ją przejrzeć. Pozostaw puste, aby nie wygasała.",
+        "restoreTitle": "Przywrócić {name}?",
+        "restoreMessage": "Przestrzeń robocza staje się aktywna, jej użytkownicy mogą się znów logować, a licznik nieaktywności startuje od nowa.",
+        "restoreConfirm": "Przywróć przestrzeń roboczą",
+        "restoreDone": "Przywrócono {name}.",
+        "holdOnTitle": "Nałożyć blokadę prawną na {name}?",
+        "holdOnMessage": "Gdy blokada jest włączona, przestrzeń robocza nigdy nie jest archiwizowana ani usuwana, niezależnie od terminów.",
+        "holdOnSure": "Rozumiem, że to wstrzyma całą archiwizację i usuwanie.",
+        "holdOnConfirm": "Nałóż blokadę prawną",
+        "holdOnDone": "Nałożono blokadę prawną na {name}.",
+        "holdOffTitle": "Zdjąć blokadę prawną z {name}?",
+        "holdOffMessage": "Przestrzeń robocza znów podlega swoim terminom i może zostać zarchiwizowana oraz usunięta.",
+        "holdOffSure": "Potwierdzam, że blokadę można zdjąć.",
+        "holdOffConfirm": "Zdejmij blokadę prawną",
+        "holdOffDone": "Zdjęto blokadę prawną z {name}."
       }
     }
   }

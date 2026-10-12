@@ -1,0 +1,690 @@
+{
+  "faq": {
+    "nav": {
+      "faq": "FAQ",
+      "label": "FAQセクション",
+      "tab": {
+        "faqs": "FAQ",
+        "test": "テスト",
+        "unanswered": "未回答",
+        "insights": "インサイト",
+        "settings": "設定"
+      },
+      "unansweredCount": "{count, plural, other {未回答メッセージ # 件}}"
+    },
+    "common": {
+      "dismiss": "閉じる",
+      "retry": "再試行",
+      "requestId": "リクエスト {id}",
+      "noAccessTitle": "この画面へのアクセス権がありません",
+      "noAccess": "ワークスペース管理者に、ロールへ権限 {permission} を付与するよう依頼してください。"
+    },
+    "errors": {
+      "network": "サーバーに接続できませんでした。接続を確認して、もう一度お試しください。",
+      "forbidden": "お使いのロールではこの操作はできません。",
+      "notFound": "このFAQまたはメッセージは存在しません。削除された可能性があります。",
+      "conflict": "編集中に他のユーザーがこの内容を変更しました。",
+      "duplicateQuestion": "同じ質問のFAQがすでにあります。",
+      "duplicateVariation": "このFAQにはすでにこの言い換えがあります。",
+      "limitReached": "ワークスペースのFAQ上限に達しました。不要なFAQやバリエーションを削除するか、プラットフォーム管理者に上限の引き上げを依頼してください。",
+      "flowNotFound": "選択したフローはこのワークスペースに存在しません。別のフローを選んでください。",
+      "embeddingUnavailable": "AIプロバイダーを利用できません。ワークスペースにOpenRouterキーを追加するか、プラットフォーム管理者に共有キーの有効化を依頼してから、もう一度お試しください。",
+      "engineDisabled": "FAQ回答は現在、プラットフォーム全体でオフになっています。",
+      "modelNotAllowed": "プラットフォームのマッチング用AIモデルは許可されていません。プラットフォーム管理者に問い合わせてください。",
+      "validation": "確認が必要な項目があります。",
+      "rateLimited": "リクエストが多すぎます。しばらくしてからもう一度お試しください。",
+      "unexpected": "問題が発生しました。もう一度お試しください。解決しない場合は、リクエストIDをサポートにお知らせください。",
+      "flowNodeNotFound": "選択したステップはこのフローにありません。別のステップを選ぶか、フローの先頭から開始してください。"
+    },
+    "banner": {
+      "enabledToast": "FAQ回答はオンです。",
+      "engineOff": "プラットフォームによってFAQ回答がオフにされています。再びオンになるまで、お客様にFAQの回答は届きません。",
+      "modelChanged": "このしきい値を調整した後、プラットフォームがAIモデルを変更しました。スコアが変わったため、感度を見直してください。",
+      "reviewSensitivity": "感度を確認",
+      "offTitle": "お客様向けのFAQ回答はオフです",
+      "offBody": "FAQの作成とテストはできますが、オンにするまでお客様には回答が届きません。",
+      "offNoRight": "権限 faq.settings.manage を持つ人（通常はワークスペース管理者）にオンにするよう依頼してください。",
+      "enable": "FAQ回答をオンにする"
+    },
+    "list": {
+      "title": "FAQ",
+      "subtitle": "お客様からの質問と、ボットの回答です。お客様が同じ言葉で書く必要はありません。",
+      "add": "FAQを追加",
+      "stats": {
+        "label": "FAQの合計",
+        "total": "FAQ",
+        "active": "有効",
+        "paused": "一時停止中",
+        "variations": "言い換え",
+        "pending": "インデックス中",
+        "pendingHint": "数秒で反映されます",
+        "failed": "インデックス失敗",
+        "failedHint": "要確認"
+      },
+      "failedBanner": "{count, plural, other {言い換え # 件}}のインデックスに失敗したため、まだお客様のメッセージと照合されません。",
+      "showFailed": "失敗のあるFAQを表示",
+      "search": "FAQを検索",
+      "searchPlaceholder": "質問と言い換えを検索",
+      "filter": {
+        "status": "ステータス",
+        "anyStatus": "すべてのステータス",
+        "category": "カテゴリ",
+        "anyCategory": "すべてのカテゴリ",
+        "indexing": "インデックス",
+        "anyIndexing": "すべて",
+        "pending": "インデックス中",
+        "failed": "失敗"
+      },
+      "status": {
+        "active": "有効",
+        "paused": "一時停止中"
+      },
+      "clearFilters": "フィルターをクリア",
+      "bulk": {
+        "label": "一括操作",
+        "selected": "{count, plural, other {FAQ # 件を選択中}}",
+        "pause": "一時停止",
+        "activate": "有効にする",
+        "delete": "削除",
+        "clear": "選択を解除",
+        "done": {
+          "pause": "{count, plural, other {FAQ # 件を一時停止しました}}。",
+          "activate": "{count, plural, other {FAQ # 件を有効にしました}}。",
+          "delete": "{count, plural, other {FAQ # 件を削除しました}}。"
+        }
+      },
+      "paused": "FAQを一時停止しました。",
+      "activated": "FAQを有効にしました。",
+      "deleted": "FAQを削除しました。",
+      "empty": {
+        "title": "よくある質問の答えをボットに教えましょう",
+        "body": "質問と回答を一度書くだけです。ボットはお客様が自分の言葉で書いた内容を照合し、回答するかフローを開始します。",
+        "how": "同じ意味の別の聞き方（言い換え）をいくつか追加し、お客様に公開する前にテストしましょう。",
+        "cta": "最初のFAQを追加",
+        "noRight": "FAQを追加する権限については、ワークスペース管理者に依頼してください。"
+      },
+      "noMatch": {
+        "title": "この条件に一致するFAQはありません",
+        "body": "検索条件を変えるか、フィルターをクリアしてください。"
+      },
+      "selectAll": "このページのFAQをすべて選択",
+      "selectRow": "{question}を選択",
+      "col": {
+        "question": "質問",
+        "answer": "回答",
+        "indexing": "有効な言い換え",
+        "answered": "回答数（90日間）",
+        "status": "ステータス",
+        "actions": "操作"
+      },
+      "variationCount": "{count, plural, other {言い換え # 件}}",
+      "flowMissing": "フローなし",
+      "neverAnswered": "まだありません",
+      "toggleLabel": "有効: {question}",
+      "edit": "{question}を編集",
+      "editShort": "編集",
+      "delete": "{question}を削除",
+      "deleteShort": "削除",
+      "loadMore": "さらに読み込む",
+      "loadingMore": "読み込み中",
+      "confirm": {
+        "bulkTitle": "{count, plural, other {FAQ # 件}}を削除しますか？",
+        "bulkBody": "{count, plural, other {選択したFAQとその言い換え}}は完全に削除されます。この操作は元に戻せません。",
+        "rowTitle": "このFAQを削除しますか？",
+        "rowBody": "「{question}」とそのすべての言い換えは完全に削除されます。この操作は元に戻せません。",
+        "delete": "削除",
+        "cancel": "キャンセル"
+      },
+      "indexing": {
+        "summary": "有効 {ready}、インデックス中 {pending}、失敗 {failed}",
+        "ready": "有効 {count}",
+        "pending": "インデックス中 {count}",
+        "failed": "失敗 {count}"
+      },
+      "stepMissing": "ステップなし",
+      "startsAt": "開始位置: {step}"
+    },
+    "editor": {
+      "back": "FAQに戻る",
+      "backToList": "FAQに戻る",
+      "newTitle": "新規FAQ",
+      "newSubtitle": "質問と回答を書き、お客様が聞きそうな別の言い方を追加します。",
+      "editTitle": "FAQを編集",
+      "unsaved": "未保存の変更",
+      "cancel": "キャンセル",
+      "create": "FAQを作成",
+      "save": "変更を保存",
+      "delete": "削除",
+      "created": "FAQを作成しました。",
+      "saved": "FAQを保存しました。",
+      "deleted": "FAQを削除しました。",
+      "readOnly": "このFAQは表示のみ可能で、お使いのロールでは変更できません。",
+      "faqLimit": "ワークスペースのFAQ上限（{max}件）に達しています。追加するには1件削除してください。",
+      "prefilled": "質問は、未回答のお客様メッセージから入力されました。このFAQを保存すると、そのメッセージも対応済みになります。",
+      "tryItSaveFirst": "先にFAQを保存すると、お客様のメッセージがどう一致するか試せます。",
+      "conflict": {
+        "title": "他のユーザーがこのFAQを変更しました",
+        "body": "編集内容はそのまま残っています。保持して最新版の上に保存するか、破棄して最新版を読み込めます。",
+        "keep": "自分の編集を保持",
+        "reload": "最新版を読み込む",
+        "kept": "最新版に更新しました。編集内容は保持されています。保存すると反映されます。"
+      },
+      "question": {
+        "title": "質問",
+        "hint": "あなたが書く形の質問です。最初の言い換えとしても扱われます。",
+        "label": "質問",
+        "count": "{count} / {max}"
+      },
+      "category": {
+        "label": "カテゴリ",
+        "hint": "任意です。絞り込みに役立ちます。"
+      },
+      "status": {
+        "label": "ステータス",
+        "hint": "一時停止中のFAQは回答しません。",
+        "active": "有効",
+        "paused": "一時停止中"
+      },
+      "answer": {
+        "title": "回答",
+        "hint": "このFAQが一致したときにお客様へ届く内容です。",
+        "text": "テキスト回答",
+        "flow": "フローを開始",
+        "textLabel": "回答テキスト",
+        "count": "{count} / {max} 文字",
+        "preview": "WhatsAppでの表示イメージ",
+        "previewEmpty": "ここに回答が表示されます",
+        "flowLabel": "開始するフロー",
+        "noFlow": "フローが未選択です",
+        "startsAt": "開始ステップ: {step}",
+        "stepGone": "このFAQの開始ステップが存在しないため、お客様に回答が届きません。"
+      },
+      "advanced": {
+        "title": "詳細設定: このFAQだけの感度",
+        "body": "既定ではすべてのFAQがワークスペースの感度を使います。このFAQが反応しすぎる場合は高く、反応しにくい場合は低くして、個別の値を使ってください。",
+        "custom": "このFAQに個別の感度を使う",
+        "sliderLabel": "この値以上で一致",
+        "workspace": "ワークスペースの感度は {value}% です。",
+        "following": "ワークスペースの感度（{value}%）に従っています。"
+      },
+      "problem": {
+        "question": {
+          "required": "お客様がする質問を入力してください。",
+          "tooLong": "質問は{max}文字以内で入力してください。",
+          "invalid": "この質問は無効です。"
+        },
+        "answerText": {
+          "required": "お客様に届ける回答を入力してください。",
+          "tooLong": "回答は{max}文字以内で入力してください。",
+          "invalid": "この回答は無効です。"
+        },
+        "flowId": {
+          "required": "開始するフローを選択してください。",
+          "tooLong": "開始するフローを選択してください。",
+          "invalid": "開始するフローを選択してください。"
+        },
+        "category": {
+          "required": "カテゴリを入力するか、空のままにしてください。",
+          "tooLong": "カテゴリは{max}文字以内で入力してください。",
+          "invalid": "このカテゴリは無効です。"
+        },
+        "thresholdOverride": {
+          "required": "5%〜99%の値を選んでください。",
+          "tooLong": "5%〜99%の値を選んでください。",
+          "invalid": "5%〜99%の値を選んでください。"
+        },
+        "flowNodeId": {
+          "required": "このフローのステップを選ぶか、フローの先頭を選んでください。",
+          "tooLong": "このフローのステップを選ぶか、フローの先頭を選んでください。",
+          "invalid": "このフローのステップを選ぶか、フローの先頭を選んでください。"
+        }
+      },
+      "deleteConfirm": {
+        "title": "このFAQを削除しますか？",
+        "body": "FAQとそのすべての言い換えは完全に削除されます。この操作は元に戻せません。",
+        "confirm": "削除"
+      },
+      "leave": {
+        "title": "保存せずに離れますか？",
+        "body": "このFAQへの変更は保存されていません。",
+        "leave": "離れる",
+        "stay": "編集を続ける"
+      }
+    },
+    "flowPicker": {
+      "noAccess": "ここでフローを選ぶには、フローの閲覧権限（flb.flows.read）が必要です。",
+      "missing": "このFAQが開始していたフローは存在しません。別のフローを選ばないと、このFAQは回答できません。",
+      "selected": "選択中",
+      "search": "フローを検索",
+      "searchPlaceholder": "名前でフローを検索",
+      "retry": "再試行",
+      "loading": "フローを読み込み中",
+      "noMatch": "その名前のフローはありません。",
+      "none": "フローがまだありません。先に「フロー」で作成してください。",
+      "listLabel": "フロー",
+      "state": {
+        "live": "公開済み",
+        "off": "無効",
+        "draft": "下書き"
+      },
+      "note": "フローは、下で選んだステップ、または先頭から開始します。公開済みで有効なフローのみ実行できます。"
+    },
+    "variations": {
+      "title": "質問のバリエーション",
+      "hint": "お客様が同じ質問をする別の言い方です。それぞれ意味で照合されます。",
+      "counterLabel": "言い換えの使用数: {count} / {max}",
+      "listLabel": "言い換え",
+      "questionEmpty": "ここに質問が表示されます",
+      "source": {
+        "question": "質問",
+        "manual": "手動",
+        "ai": "AI",
+        "learned": "学習済み",
+        "import": "インポート"
+      },
+      "none": "追加の言い換えはまだありません。いくつか追加するか、AIに提案してもらいましょう。",
+      "edit": "{text}を編集",
+      "remove": "{text}を削除",
+      "editLabel": "言い換えを編集",
+      "save": "保存",
+      "cancel": "キャンセル",
+      "addLabel": "新しい言い換え",
+      "addPlaceholder": "同じ質問の別の言い方",
+      "add": "追加",
+      "pasteMany": "まとめて貼り付け",
+      "full": "このFAQは言い換えの上限（{max}件）に達しています。",
+      "failedNotice": "{count, plural, other {言い換え # 件}}のインデックスに失敗しました。言い換えを編集して保存すると、再試行されます。",
+      "suggest": "AIで提案",
+      "suggestSaveFirst": "先にFAQを保存すると、AIが言い換えを提案できます。",
+      "suggesting": "AIに提案を依頼中",
+      "suggestionsReady": "{count, plural, other {提案 # 件が準備できました}}",
+      "suggestionsTitle": "提案された言い換え",
+      "suggestionsHint": "追加するまで何も保存されません。不要なものはチェックを外してください。",
+      "suggestionsNone": "AIから提案できる新しい言い換えはありませんでした。",
+      "addSelected": "選択項目を追加（{count}）",
+      "discard": "破棄",
+      "bulk": {
+        "label": "1行に1つの言い換え",
+        "placeholder": "荷物はどこですか\n注文の状況を追跡したい\n注文は発送されましたか",
+        "summary": "{count, plural, other {新しい言い換え # 件が追加されます}}",
+        "duplicates": "{count, plural, other {重複 # 件を除外しました}}",
+        "tooLong": "{count, plural, other {# 行が}}{max}文字を超えているため除外されました。",
+        "overflow": "{count, plural, other {# 行が}}言い換えの上限に収まらないため除外されました。",
+        "more": "ほか {count} 件",
+        "add": "{count, plural, other {言い換え # 件}}を追加"
+      },
+      "state": {
+        "ready": "有効",
+        "pending": "インデックス中",
+        "pendingHint": "保存しました。数秒で照合が始まります。",
+        "failed": "失敗",
+        "failedHint": "言い換えを編集して保存すると、再試行されます。",
+        "noReason": "理由は示されませんでした"
+      },
+      "confirm": {
+        "title": "この言い換えを削除しますか？",
+        "body": "「{text}」はこのFAQに届かなくなります。",
+        "remove": "削除"
+      },
+      "errors": {
+        "duplicate": "このFAQにはすでにその言い換えがあります。",
+        "tooLong": "言い換えは{max}文字以内で入力してください。",
+        "aiKeys": "AIキーを設定"
+      }
+    },
+    "tryIt": {
+      "title": "試してみる",
+      "hint": "お客様のメッセージを入力すると、どうなるか確認できます。何も送信されません。",
+      "label": "お客様のメッセージ",
+      "placeholder": "荷物はどこですか？",
+      "run": "試す"
+    },
+    "decision": {
+      "verdict": {
+        "answer": {
+          "title": "回答する",
+          "body": "FAQが十分に一致しました。お客様にはその回答が届きます（またはフローが開始されます）。"
+        },
+        "below": {
+          "title": "しきい値未満",
+          "body": "最も近いFAQのスコアが足りないため、何も送信されません。この言い換えをFAQに追加するか、感度を下げてください。"
+        },
+        "ambiguous": {
+          "title": "判別不能",
+          "body": "2つのFAQのスコアがほぼ同じだったため、ボットは推測しません。FAQの違いをはっきりさせるか、最小差を下げてください。"
+        },
+        "noFaqs": {
+          "title": "照合できるFAQがありません",
+          "body": "有効な言い換えを持つ有効なFAQがまだありません。"
+        },
+        "providerError": {
+          "title": "プロバイダーエラー",
+          "body": "AIプロバイダーに接続できなかったため、表記の一致による照合のみ行われました。"
+        },
+        "notSent": {
+          "title": "一致したが未送信",
+          "body": "FAQは一致しましたが、たとえばFAQ回答がオフだったため、回答は送信されませんでした。"
+        },
+        "vetoed": {
+          "title": "回答を保留",
+          "body": "スコアは十分でしたが、再確認で「いいえ」と判断されたため、何も送信されません。"
+        }
+      },
+      "tier": {
+        "exact": {
+          "name": "完全一致",
+          "body": "大文字小文字と空白を無視して、保存済みの言い換えと同じメッセージです。"
+        },
+        "semantic": {
+          "name": "意味での一致",
+          "body": "メッセージを有効なすべての言い換えと意味で比較したため、言葉が違っても一致することがあります。"
+        },
+        "trigram": {
+          "name": "表記による照合",
+          "body": "意味での比較ができなかったため、文字単位で比較しました。誤字は拾えますが、同義語は拾えません。"
+        }
+      },
+      "scoreLabel": "スコア {score}%、必要なスコアは {threshold}% です",
+      "score": "スコア",
+      "threshold": "必要",
+      "margin": "2位との差",
+      "marginValue": "{margin} ポイント（必要: {needed}）",
+      "note": "メモ",
+      "model": "モデル",
+      "noModel": "使用なし",
+      "latency": "時間",
+      "ms": "{ms} ミリ秒",
+      "winner": {
+        "title": "お客様に届く内容",
+        "unavailable": "このFAQを読み込めませんでした。",
+        "flow": "フロー「{name}」を開始します",
+        "flowMissing": "存在しないフローを開始します"
+      },
+      "candidates": {
+        "title": "上位の一致",
+        "matchedOn": "一致した言い換え",
+        "best": "最良",
+        "paused": "一時停止中",
+        "scoreLabel": "スコア {score}%",
+        "addVariation": "この表現を「{question}」のバリエーションとして追加",
+        "added": "追加済み",
+        "addedToast": "「{question}」の言い換えとして追加しました。",
+        "alreadyThere": "その言い換えはすでにあります。",
+        "open": "FAQを開く"
+      }
+    },
+    "playground": {
+      "title": "ボットはこれにどう答える？",
+      "subtitle": "ボットと同じ照合でお客様のメッセージを確認します。何も送信されず、インサイトにも集計されません。",
+      "label": "お客様のメッセージ",
+      "placeholder": "荷物はどこですか？",
+      "run": "実行",
+      "hint": "保存済みのFAQのみが照合されます。有効な言い換えを持つ有効なFAQが対象です。",
+      "empty": "上にメッセージを入力して実行すると、判定が表示されます。",
+      "history": {
+        "title": "このセッション",
+        "empty": "直近10件のテストがここに表示されます。"
+      }
+    },
+    "unanswered": {
+      "title": "未回答メッセージ",
+      "subtitle": "どのFAQにも回答されなかったお客様のメッセージです。ここからボットを育てましょう。",
+      "search": "未回答メッセージを検索",
+      "searchPlaceholder": "メッセージを検索",
+      "listLabel": "未回答メッセージ",
+      "emptyTitle": "対応待ちはありません",
+      "emptyBody": "お客様のメッセージにはすべて回答済みか対応済みです。新しい未回答メッセージはここに表示されます。",
+      "noMatch": "検索に一致するメッセージはありません",
+      "notKept": "メッセージ本文は保存されていません（クエリの記録がオフです）",
+      "closest": "最も近いFAQ:",
+      "allCandidates": "候補をすべて表示（{count}件）",
+      "addToFaq": "FAQに追加",
+      "createFaq": "これからFAQを作成",
+      "dismiss": "閉じる",
+      "dismissed": "メッセージを閉じました。",
+      "learned": "「{question}」に追加しました。今後は回答されます。",
+      "pickTitle": "このメッセージをどのFAQに追加しますか？",
+      "loadMore": "さらに読み込む",
+      "loadingMore": "読み込み中"
+    },
+    "picker": {
+      "close": "閉じる",
+      "search": "FAQを検索",
+      "searchPlaceholder": "FAQを検索",
+      "loading": "FAQを読み込み中",
+      "none": "FAQが見つかりません。",
+      "paused": "一時停止中",
+      "more": "さらに読み込む"
+    },
+    "log": {
+      "title": "照合ログ",
+      "hint": "FAQが確認したお客様のメッセージすべてと、回答した理由・しなかった理由です。",
+      "viewLabel": "表示",
+      "view": {
+        "all": "すべて",
+        "answered": "回答済み",
+        "unanswered": "未回答",
+        "errors": "エラー"
+      },
+      "search": "ログを検索",
+      "searchPlaceholder": "メッセージを検索",
+      "empty": "まだメッセージはありません。",
+      "col": {
+        "time": "日時",
+        "message": "メッセージ",
+        "outcome": "結果",
+        "faq": "FAQ",
+        "score": "スコア"
+      },
+      "notKept": "保存なし（{length}文字）",
+      "testRun": "（テスト）",
+      "expand": "詳細を表示",
+      "collapse": "詳細を隠す",
+      "noCandidates": "検討された候補はありません。",
+      "matchedOn": "一致した言い換え",
+      "detail": {
+        "tier": "段階",
+        "model": "モデル",
+        "latency": "時間",
+        "ms": "{ms} ミリ秒"
+      },
+      "loadMore": "さらに読み込む",
+      "loadingMore": "読み込み中",
+      "why": {
+        "answered": "スコア {score}% で「{faq}」の回答を返しました。",
+        "flowStarted": "スコア {score}% で「{faq}」のフローを開始しました。",
+        "belowThreshold": "最良の一致のスコアは {score}% で、基準の {threshold}% に届かなかったため、何も送信されませんでした。",
+        "belowThresholdNoBar": "最良の一致のスコアは {score}% で、足りなかったため、何も送信されませんでした。",
+        "lowMargin": "2つのFAQが近すぎた（{score}% と {second}%）ため、ボットは推測しませんでした。",
+        "noFaqs": "照合できる、有効な言い換えを持つ有効なFAQがありませんでした。",
+        "providerError": "AIプロバイダーでエラーが発生したため、ボットは表記による照合しかできませんでした。",
+        "notSent": "FAQは一致しましたが、回答は送信されませんでした。",
+        "tier": "{tier}の段階で判定されました。",
+        "error": "エラー: {error}",
+        "vetoed": "最も近い一致のスコアは {score}% で、しきい値の {threshold}% を上回りましたが、再確認でメッセージへの回答になっていないと判断されたため、何も送信されませんでした。",
+        "vetoedNoBar": "最も近い一致のスコアは {score}% でしたが、再確認でメッセージへの回答になっていないと判断されたため、何も送信されませんでした。"
+      },
+      "flowRun": "（フローから）"
+    },
+    "insights": {
+      "title": "FAQインサイト",
+      "subtitle": "FAQが実際のお客様のメッセージにどれだけ答えられているか、改善点はどこかを確認できます。",
+      "range": {
+        "label": "期間",
+        "days": "{days}日間"
+      },
+      "empty": {
+        "title": "メッセージはまだありません",
+        "body": "お客様からのメッセージがあり、FAQ回答がオンになると、ボットの回答頻度、効果のあるFAQ、不足している内容が表示されます。"
+      },
+      "kpi": {
+        "label": "主要な数値",
+        "messages": "確認したメッセージ",
+        "answerRate": "回答率",
+        "avgScore": "平均スコア {score}%",
+        "flows": "開始したフロー",
+        "unanswered": "未回答",
+        "toReview": "{count}件を確認",
+        "errors": "プロバイダーエラー"
+      },
+      "daily": {
+        "title": "日別のメッセージ数",
+        "hint": "過去{days}日間の回答済みと未回答"
+      },
+      "hist": {
+        "title": "メッセージのスコア分布",
+        "hint": "各バーはスコアの範囲です。破線は現在の感度を示します。",
+        "advice": "誤った回答が混ざる場合はしきい値を上げ、未回答が多すぎる場合は下げてください。",
+        "tune": "感度を変更"
+      },
+      "top": {
+        "title": "上位のFAQ",
+        "none": "まだ回答したFAQはありません。",
+        "hits": "{count, plural, other {回答 # 件}}"
+      },
+      "never": {
+        "title": "一度も一致なし",
+        "body": "過去{days}日間に誰にも使われなかったFAQです。言い換えを確認するか、削除してください。",
+        "link": "FAQを確認"
+      },
+      "chart": {
+        "answered": "回答済み",
+        "unanswered": "未回答",
+        "showTable": "表で表示",
+        "showChart": "グラフで表示",
+        "day": "日",
+        "dailyTitle": "日別のメッセージ数",
+        "dailyLabel": "日別の回答済みと未回答メッセージの棒グラフです。数値は表表示で確認できます。",
+        "dayTooltip": "{day}: 回答済み {answered}、未回答 {unanswered}",
+        "histogramTitle": "スコア分布",
+        "histogramLabel": "回答済みと未回答に分けた一致スコアのヒストグラムです。数値は表表示で確認できます。",
+        "scoreRange": "スコア",
+        "bucketTooltip": "{from}-{to}%: 回答済み {answered}、未回答 {unanswered}",
+        "thresholdMarker": "しきい値 {value}%"
+      }
+    },
+    "settings": {
+      "title": "FAQ設定",
+      "subtitle": "FAQ回答をオンにして、メッセージがどの程度一致すれば回答するかを調整します。",
+      "unsaved": "未保存の変更",
+      "discard": "破棄",
+      "save": "設定を保存",
+      "saved": "設定を保存しました。",
+      "readOnly": "この設定は閲覧のみ可能です。変更には権限 faq.settings.manage が必要で、通常はワークスペース管理者が持っています。",
+      "engineOff": "プラットフォームによってFAQ回答がオフにされています。ここでの設定は、再びオンになった時点で適用されます。",
+      "conflict": "他のユーザーがこの設定を保存しました。再読み込みして最新の内容を確認し、もう一度変更してください。",
+      "reload": "設定を再読み込み",
+      "modelChanged": {
+        "title": "感度を見直してください",
+        "body": "このしきい値を調整した後、プラットフォームがAIモデルを変更しました。スコアが変わったため、感度を見直してください。保存すると確認したことになります。"
+      },
+      "enable": {
+        "title": "FAQ回答",
+        "label": "FAQでお客様に回答する",
+        "on": "オン",
+        "off": "オフ",
+        "onBody": "お客様がメッセージを送ると、ボットはFAQと比較して最適な回答を返すか、そのフローを開始します。すでにフローやキーワードトリガーが処理したメッセージはそちらが優先されます。",
+        "offBody": "お客様にFAQの回答は届きません。FAQの作成とテストは引き続き可能です。"
+      },
+      "sens": {
+        "title": "感度",
+        "hint": "メッセージがどの程度一致する必要があるかです。スコアはモデル {model} に基づきます。",
+        "label": "一致がこの値以上のとき回答する",
+        "presets": "感度のプリセット",
+        "preset": {
+          "strict": "厳しめ",
+          "balanced": "標準",
+          "forgiving": "ゆるめ"
+        },
+        "looser": "回答が増える",
+        "stricter": "回答が減る",
+        "recommendedMark": "推奨 {value}%",
+        "explain": "{value}% の場合、最良の一致が {value}% 以上のときだけ回答します。高いほど回答は減りますが確実になり、低いほど回答は増えますが誤答の可能性も上がります。",
+        "useRecommended": "推奨値（{value}%）を使う",
+        "modelScale": "スコアは同じモデル内でのみ比較できます。プラットフォームがモデル（{model}）を変更した場合は、この値を見直してください。"
+      },
+      "margin": {
+        "title": "曖昧さの防止",
+        "hint": "ほぼ同じスコアの2つのFAQの間で、ボットが推測しないようにします。",
+        "label": "2位との最小差",
+        "off": "オフ",
+        "explain": "最良のFAQと2位の差がこの値より小さい場合、ボットは回答せず、そのメッセージを未回答として記録します。FAQの内容がほとんど重ならない場合はオフのままにしてください。"
+      },
+      "log": {
+        "title": "ログ内のお客様メッセージ",
+        "label": "お客様のメッセージを照合ログに保存する",
+        "onBody": "各メッセージの本文を90日間保存し、回答された理由・されなかった理由の確認や改善に使えます。それ以降は削除されます。",
+        "offBody": "スコアと結果のみ保存し、本文は保存しません。ボットの回答頻度は確認できますが、未回答メッセージから学ぶことはできません。"
+      },
+      "facts": {
+        "title": "モデルと上限",
+        "model": "マッチング用AIモデル",
+        "faqs": "FAQ",
+        "variations": "使用中の言い換え",
+        "perFaq": "FAQごとの言い換え上限",
+        "of": "{used} / {max}"
+      },
+      "how": {
+        "title": "照合の仕組み",
+        "exact": "完全一致: 大文字小文字と空白を無視して、メッセージが保存済みの言い換えと同じ。",
+        "semantic": "意味での一致: メッセージを有効なすべての言い換えと意味で比較するため、言葉が違っても一致することがあります。",
+        "trigram": "表記による照合: AIプロバイダーが使えない場合は文字を比較します。拾えるのは誤字のみです。",
+        "threshold": "最良のスコアを感度と比較します。感度以上ならFAQが回答し、未満ならメッセージは「未回答」に表示されます。",
+        "verify": "再確認（任意）: 感度ぎりぎりで一致した場合、小型のチャットモデルがもう一度確認できます。このモデルは回答を保留することしかできません。"
+      },
+      "who": "この設定を変更するには権限 faq.settings.manage が必要です。",
+      "leave": {
+        "title": "保存せずに離れますか？",
+        "body": "この設定への変更は保存されていません。",
+        "leave": "離れる",
+        "stay": "とどまる"
+      },
+      "verify": {
+        "title": "僅差の一致を再確認",
+        "hint": "しきい値ぎりぎりで一致した場合、小型のチャットモデルがもう一度確認します。",
+        "unavailable": "プラットフォームで再確認がオフになっているため、ここでオンにしても実行されません。プラットフォーム管理者に依頼してください。",
+        "label": "僅差の一致を再確認する",
+        "on": "オン",
+        "off": "オフ",
+        "onBody": "一致がしきい値ぎりぎりの場合、小型のチャットモデルがお客様のメッセージとFAQを読み、回答が適切かどうかを判断します。判断できるのは「いいえ」だけで、回答を新たに送ることはありません。",
+        "offBody": "しきい値に達した一致は、再確認なしですべて回答されます。",
+        "bandLabel": "僅差とみなす範囲",
+        "bandValue": "+{value}%",
+        "explainOn": "スコアが {from}% から {to}% までの一致は {model} が確認します。「いいえ」の場合は回答が送信されず、メッセージは未回答に表示されます。",
+        "explainOff": "スコアが {threshold}% 以上の一致はすべて回答されます。最も僅差の一致を再確認するには、再確認をオンにしてください。",
+        "cost": "確認のたびに、お客様のメッセージとFAQの質問がモデルに送信されます。数百トークン程度で、ぎりぎりの一致への返信が約1秒遅くなります。範囲外の一致は確認されません。確認に失敗した場合、利用できない場合、または1時間あたりの上限に達した場合は、確認なしの場合と同じく一致がそのまま採用されます。"
+      }
+    },
+    "flowNode": {
+      "label": "開始位置",
+      "start": "フローの先頭",
+      "hint": "ステップを選ぶと、フローの最初の部分を省略できます。お客様は選択したステップからフローに入ります。",
+      "loading": "このフローのステップを読み込み中",
+      "empty": "このフローには他のステップがないため、先頭から開始します。",
+      "retry": "再試行",
+      "deletedOption": "削除されたステップ（別のステップを選択）",
+      "missing": {
+        "title": "このFAQの開始ステップは削除されました",
+        "body": "そのステップはフローから削除されました。別のステップを選ぶまで、このFAQに一致したお客様には回答が届きません。下から別のステップを選ぶか、フローの先頭から開始してください。",
+        "fix": "フローの先頭から開始"
+      }
+    },
+    "verify": {
+      "title": "再確認",
+      "chip": {
+        "confirmed": "再確認: はい",
+        "vetoed": "再確認: いいえ",
+        "failed": "再確認に失敗",
+        "skipped": "再確認をスキップ"
+      },
+      "model": "確認したモデル",
+      "reason": "理由",
+      "body": {
+        "confirmed": "僅差の一致だったため、小型のチャットモデルがメッセージとFAQを読み、回答が適切であることを確認しました。",
+        "vetoed": "僅差の一致で、再確認によりこのFAQはメッセージへの回答になっていないと判断されました。回答は保留され、何も送信されず、メッセージは未回答に表示されます。",
+        "failed": "僅差の一致でしたが、確認を完了できなかったため、一致がそのまま採用され、再確認なしの場合と同じく回答が送信されました。",
+        "skipped": "この一致では再確認が実行されなかったため、一致がそのまま採用されました。"
+      }
+    }
+  }
+}

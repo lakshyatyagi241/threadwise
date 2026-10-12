@@ -140,7 +140,7 @@ export function BroadcastsScreen() {
           <p className="mt-2 max-w-xl text-[13px] text-muted-foreground">{t('intro')}</p>
         </div>
         <Link
-          href="/team-inbox"
+          href="/inbox"
           className="inline-flex h-9 shrink-0 items-center rounded-full border border-border bg-background px-4 text-xs font-medium hover:bg-muted"
         >
           {t('inbox')}

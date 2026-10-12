@@ -108,6 +108,8 @@ function detail(over: Partial<FormSubmissionDetail> = {}): FormSubmissionDetail 
     },
     error: null,
     spamScore: 0,
+    payments: [],
+    duplicatePayment: false,
     updatedAt: '2026-05-06T10:00:00.000Z',
     ...over,
   };

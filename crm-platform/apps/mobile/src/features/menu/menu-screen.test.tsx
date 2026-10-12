@@ -20,7 +20,7 @@ const frame = {
 
 async function show(permissions: Record<string, 'all' | 'team' | 'own'> = session.permissions) {
   sessionCall.mockResolvedValue({ ...session, permissions });
-  const view = renderApp(
+  const view = await renderApp(
     <SafeAreaProvider initialMetrics={frame}>
       <MenuScreen />
     </SafeAreaProvider>,
@@ -47,36 +47,36 @@ describe('MenuScreen', () => {
 
   it('opens a module the person can read', async () => {
     await show({ ...session.permissions, 'inbox.conversation.read': 'all' });
-    fireEvent.press(screen.getByRole('button', { name: 'Inbox' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Inbox' }));
     expect(mockNavigate).toHaveBeenCalledWith('/inbox');
   });
 
   it('opens the summary at the root', async () => {
     await show();
-    fireEvent.press(screen.getByRole('button', { name: 'Summary' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Summary' }));
     expect(mockNavigate).toHaveBeenCalledWith('/');
   });
 
   it('explains instead of opening a module the person cannot read', async () => {
     await show();
-    fireEvent.press(screen.getByRole('button', { name: 'Contacts' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Contacts' }));
     expect(mockNavigate).not.toHaveBeenCalled();
     expect(await screen.findByText(/You don't have access to this/)).toBeTruthy();
   });
 
   it('asks before signing out, and does not sign out on No', async () => {
     await show();
-    fireEvent.press(screen.getByRole('button', { name: 'Sign out' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Sign out' }));
     expect(await screen.findByText('Are you sure you want to sign out?')).toBeTruthy();
-    fireEvent.press(screen.getByRole('button', { name: 'No' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'No' }));
     expect(signOut).not.toHaveBeenCalled();
   });
 
   it('signs out on Yes', async () => {
     const view = await show();
-    fireEvent.press(screen.getByRole('button', { name: 'Sign out' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Sign out' }));
     await act(async () => {
-      fireEvent.press(await screen.findByRole('button', { name: 'Yes, sign out' }));
+      await fireEvent.press(await screen.findByRole('button', { name: 'Yes, sign out' }));
     });
     expect(signOut).toHaveBeenCalledWith(view.queryClient);
   });

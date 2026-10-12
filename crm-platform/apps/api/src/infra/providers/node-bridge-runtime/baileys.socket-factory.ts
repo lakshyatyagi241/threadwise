@@ -333,6 +333,17 @@ export class BaileysSocketFactory implements WaSocketFactory {
         };
       }
       case 'contact': {
+        if (command.cards?.length) {
+          return {
+            contacts: {
+              displayName:
+                command.cards.length === 1
+                  ? command.cards[0]!.name
+                  : `${command.cards.length} contacts`,
+              contacts: command.cards.map((c) => ({ displayName: c.name, vcard: c.vcard })),
+            },
+          };
+        }
         const digits = command.phone.replace(/\D+/g, '');
         const vcard =
           command.vcard ??

@@ -51,7 +51,9 @@
         "generic": "Problem: {reason}",
         "reason": {
           "crm_required_unbound": "Formularz nie zawiera właściwości wymaganej przez Twoją przestrzeń roboczą.",
-          "no_contact_point": "Dodaj pole e-mail lub telefonu powiązane z kontaktem, aby każde zgłoszenie można było przypisać do osoby."
+          "no_contact_point": "Dodaj pole e-mail lub telefonu powiązane z kontaktem, aby każde zgłoszenie można było przypisać do osoby.",
+          "payment_no_gateway": "Połącz bramkę płatności, która potrafi tworzyć linki do płatności, lub wyłącz płatności.",
+          "captcha_not_configured": "CAPTCHA jest ustawiona jako zawsze włączona, ale platforma nie ma CAPTCHA. Wybierz inne ustawienie lub poproś administratora platformy o jej dodanie."
         },
         "code": {
           "no_fields": "Dodaj co najmniej jedno pole.",
@@ -129,7 +131,14 @@
         "custom": "Własna",
         "requiredByCrm": "Wymagane",
         "inForm": "W formularzu",
-        "full": "Formularz osiągnął limit bloków."
+        "full": "Formularz osiągnął limit bloków.",
+        "section": {
+          "contact": "Kontakt",
+          "contactAddress": "Adres kontaktu",
+          "company": "Firma",
+          "companyAddress": "Adres firmy"
+        },
+        "addAddress": "Dodaj wszystkie pola adresu"
       },
       "list": {
         "title": "Pola",

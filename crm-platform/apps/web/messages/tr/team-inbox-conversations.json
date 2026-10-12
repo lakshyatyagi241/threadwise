@@ -1,7 +1,8 @@
 {
   "team-inbox-conversations": {
     "nav": {
-      "inbox": "Gelen kutusu"
+      "inbox": "Gelen kutusu",
+      "messageLogs": "Mesaj günlükleri"
     },
     "common": {
       "dismiss": "Kapat"
@@ -131,7 +132,10 @@
       "generic": "Bir sorun oluştu. Yeniden deneyin.",
       "genericWithId": "Bir sorun oluştu. Yeniden deneyin. Referans: {id}",
       "templateNotSendable": "Bu şablon bu konuşmaya gönderilemez. Başka bir şablon seçin.",
-      "groupSendUnavailable": "WhatsApp gruplarına gönderim henüz kullanılamıyor. WhatsApp Business uygulamasından yanıtlayın."
+      "groupSendUnavailable": "WhatsApp gruplarına gönderim henüz kullanılamıyor. WhatsApp Business uygulamasından yanıtlayın.",
+      "logRange": "Son bir yıl içinde, başlangıcı bitişten önce olan ve gelecekte olmayan tarihler seçin.",
+      "logBusy": "Bir dışa aktarma zaten hazırlanıyor. E-postasını bekleyin, sonra yenisini isteyin.",
+      "logNotReady": "Bu dışa aktarma hazır değil veya süresi doldu. Yeniden isteyin."
     },
     "bubble": {
       "kind": {
@@ -141,6 +145,9 @@
       },
       "template": "Şablon mesajı: {name}",
       "unavailable": "Mesaj kullanılamıyor",
+      "unsupported": "Müşteri, bu kanalın görüntüleyemediği bir şey gönderdi.",
+      "forwarded": "İletildi",
+      "referral": "Bir reklamdan veya bağlantıdan geldi",
       "sentIn": "{lang} dilinde gönderildi. Yazdığınız metni göster",
       "translatedFrom": "{lang} dilinden çevrildi. Orijinali göster",
       "bot": "Bot",
@@ -162,7 +169,39 @@
       },
       "templateCopyCode": "Kodu kopyala",
       "templateButtonUnnamed": "Düğme",
-      "templateButtonPrefix": "Düğme: "
+      "templateButtonPrefix": "Düğme: ",
+      "reply": "Yanıtla",
+      "quote": {
+        "you": "Siz",
+        "customer": "Müşteri",
+        "missing": "Orijinal mesaj",
+        "jump": "Orijinal mesaja git",
+        "replyingTo": "{name} kişisine yanıt veriliyor",
+        "kind": {
+          "text": "Mesaj",
+          "image": "Fotoğraf",
+          "video": "Video",
+          "audio": "Ses",
+          "voice": "Sesli mesaj",
+          "document": "Belge",
+          "sticker": "Çıkartma",
+          "location": "Konum",
+          "contact": "Kişi",
+          "template": "Şablon",
+          "reaction": "Tepki",
+          "interactive": "Seçim"
+        }
+      },
+      "react": {
+        "label": "Bu mesaja tepki ver",
+        "add": "{emoji} ile tepki ver",
+        "remove": "{emoji} tepkini kaldır",
+        "more": "Daha fazla emoji",
+        "takeBack": "Tepkini geri almak için dokun",
+        "takeBackLabel": "Tepkin {emoji}. Geri al",
+        "failed": "Bu tepki gönderilmedi"
+      },
+      "deliveryLog": "Teslimat günlüğü"
     },
     "media": {
       "openImage": "{name} görselini aç",
@@ -232,7 +271,86 @@
       "addNote": "Not ekle",
       "hint": "Enter gönderir. Shift+Enter yeni satır ekler.",
       "template": "Şablon gönder",
-      "groupSendUnavailable": "WhatsApp gruplarına gönderim henüz kullanılamıyor. WhatsApp Business uygulamasından yanıtlayın."
+      "groupSendUnavailable": "WhatsApp gruplarına gönderim henüz kullanılamıyor. WhatsApp Business uygulamasından yanıtlayın.",
+      "emoji": "Emoji ekle",
+      "emojiPanel": "Emoji",
+      "emojiRecent": "Son kullanılanlar",
+      "emojiGroups": "Emoji grupları",
+      "emojiGroup": {
+        "smileys": "Yüz ifadeleri",
+        "gestures": "El hareketleri",
+        "hearts": "Kalpler ve semboller",
+        "objects": "Nesneler"
+      },
+      "cancelReply": "Yanıtı iptal et",
+      "share": {
+        "open": "Konum, kişi veya düğme paylaş",
+        "title": "Paylaş",
+        "eyebrow": "Müşteriye gönder",
+        "close": "Kapat",
+        "cancel": "İptal",
+        "send": "Gönder",
+        "sending": "Gönderiliyor…",
+        "sent": "Gönderildi",
+        "windowHint": "Her serbest biçimli mesaj gibi bunlar da bir WhatsApp Cloud API numarasında açık bir 24 saatlik pencere gerektirir.",
+        "tab": {
+          "location": "Konum",
+          "contacts": "Kişi",
+          "buttons": "Düğmeler"
+        },
+        "location": {
+          "latitude": "Enlem",
+          "longitude": "Boylam",
+          "name": "Yer adı (isteğe bağlı)",
+          "address": "Adres (isteğe bağlı)",
+          "pasteHint": "Bir haritadan \"28.6139, 77.2090\" değerini buraya yapıştırabilirsiniz."
+        },
+        "contact": {
+          "card": "Kişi {n}",
+          "name": "Ad",
+          "org": "Şirket (isteğe bağlı)",
+          "phone": "Telefon",
+          "email": "E-posta",
+          "remove": "{n}. kişiyi kaldır",
+          "add": "Başka bir kişi ekle"
+        },
+        "buttons": {
+          "type": "Düğme türü",
+          "kind": {
+            "buttons": "Yanıt düğmeleri",
+            "cta_url": "Bağlantı düğmesi",
+            "list": "Liste"
+          },
+          "header": "Üst bilgi (isteğe bağlı)",
+          "body": "Mesaj",
+          "footer": "Alt bilgi (isteğe bağlı)",
+          "titles": "Düğmeler (en fazla 3)",
+          "titleN": "Düğme {n}",
+          "add": "Düğme ekle",
+          "linkText": "Düğme metni",
+          "url": "Bağlantı",
+          "listButton": "Listeyi açan düğme",
+          "section": "Bölüm {n}",
+          "sectionTitle": "Bölüm başlığı",
+          "rowTitle": "Satır {n} başlığı",
+          "rowDescription": "Satır {n} açıklaması (isteğe bağlı)",
+          "addRow": "Satır ekle",
+          "addSection": "Bölüm ekle",
+          "removeSection": "{n}. bölümü kaldır",
+          "rows": "Satırlar",
+          "rowCount": "{n} / {max} satır"
+        },
+        "problem": {
+          "required": "{label} gerekli",
+          "range": "{label} aralığın dışında",
+          "phoneOrEmail": "Bir telefon numarası veya e-posta ekleyin",
+          "phone": "Geçerli bir telefon numarası girin",
+          "email": "Geçerli bir e-posta adresi girin",
+          "duplicate": "{label} başka bir düğmeyle aynı",
+          "url": "http:// veya https:// ile başlayan bir bağlantı girin",
+          "tooManyRows": "Bir liste toplamda en fazla 10 satır içerebilir"
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Notlar ve zaman çizelgesi",
@@ -441,6 +559,80 @@
         "named_variables": "Gelen kutusunun henüz desteklemediği adlandırılmış değişkenler kullanır."
       },
       "hasMore": "İlk {count} şablon gösteriliyor. Diğerlerini bulmak için ad veya metne göre arayın."
+    },
+    "log": {
+      "title": "Teslimat günlüğü",
+      "close": "Kapat",
+      "loading": "Günlük yükleniyor",
+      "tryAgain": "Tekrar dene",
+      "statusNow": "Şimdiki durum",
+      "createdAt": "Oluşturulma",
+      "providerId": "Sağlayıcı mesaj kimliği (ID)",
+      "failedNoReason": "Bu mesaj teslim edilmedi.",
+      "expired": "Bu mesaj {days} günden eski. Günlüğü artık saklanmıyor.",
+      "empty": "Bu mesaj için günlük kaydedilmedi. Günlükler tutulmadan önce gönderilen mesajların günlüğü yoktur.",
+      "archived": "{days} günden eski kayıtlar arşivden okunur.",
+      "exportLink": "Mesaj günlüklerini dışa aktar",
+      "source": {
+        "system": "Sistemimiz",
+        "provider": "Sağlayıcı alındısı"
+      },
+      "event": {
+        "queued": "Gönderim için sıraya alındı",
+        "attempt": "Gönderim denemesi {attempt}",
+        "accepted": "Sağlayıcı tarafından kabul edildi",
+        "sentReceipt": "Sağlayıcı gönderildiğini onayladı",
+        "delivered": "Müşterinin telefonuna teslim edildi",
+        "read": "Müşteri tarafından okundu",
+        "failedReceipt": "Sağlayıcı teslim edilmediğini bildirdi",
+        "failedSend": "Gönderilemedi",
+        "retryAuto": "Otomatik olarak yeniden denenecek",
+        "retryManual": "Bir ekip arkadaşı Yeniden dene'ye bastı"
+      },
+      "notApplied": "Bu bildirim geç geldi veya önceki bir gönderime aitti. Mesajı değiştirmedi.",
+      "replayed": "Yeni istek yapılmadı: sağlayıcının önceki yanıtı yeniden kullanıldı.",
+      "resent": "Sağlayıcıya yeni bir mesaj olarak tekrar gönderildi."
+    },
+    "logs": {
+      "back": "Gelen kutusuna dön",
+      "title": "Mesaj günlükleri",
+      "intro": "Her mesaj teslimat günlüğünü saklar: gelen kutusunda {hot} gün, sonra olaydan {days} gün sonrasına kadar arşivde. Bir tarih aralığı için dışa aktarma isteyin; arka planda hazırlanır ve hazır olduğunda size e-postayla gönderilir.",
+      "requested": "Dışa aktarma istendi. Hazır olduğunda size e-posta göndereceğiz.",
+      "requestedTo": "Dışa aktarma istendi. Hazır olduğunda {email} adresine e-posta göndereceğiz.",
+      "form": {
+        "title": "Dışa aktarma iste",
+        "from": "Başlangıç",
+        "to": "Bitiş",
+        "status": "Yalnızca şu an şu durumda olan mesajlar",
+        "anyStatus": "Herhangi bir durum",
+        "hint": "Tarihler UTC cinsindendir. En fazla {days} gün geriye gidebilirsiniz. Aynı anda tek bir dışa aktarma hazırlanır.",
+        "submit": "Dışa aktarma iste",
+        "sending": "İsteniyor"
+      },
+      "problem": {
+        "order": "Başlangıç tarihi bitiş tarihinden sonra olamaz.",
+        "future": "Bitiş tarihi gelecekte olamaz.",
+        "tooOld": "Günlükler {days} gün saklanır. Daha geç bir başlangıç tarihi seçin.",
+        "invalid": "Her iki tarihi de girin."
+      },
+      "history": {
+        "title": "Dışa aktarmalarınız",
+        "loading": "Dışa aktarmalar yükleniyor",
+        "tryAgain": "Tekrar dene",
+        "empty": "Henüz dışa aktarma yok.",
+        "onlyStatus": "Yalnızca {status} durumundaki mesajlar",
+        "requestedAt": "İstenme: {date}",
+        "lines": "{count, plural, one {# satır} other {# satır}}",
+        "until": "{date} tarihine kadar kullanılabilir",
+        "download": "İndir",
+        "status": {
+          "queued": "Bekliyor",
+          "running": "Hazırlanıyor",
+          "ready": "Hazır",
+          "failed": "Başarısız",
+          "expired": "Süresi doldu"
+        }
+      }
     }
   }
 }

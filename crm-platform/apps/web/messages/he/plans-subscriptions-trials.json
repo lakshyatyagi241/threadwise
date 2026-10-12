@@ -43,7 +43,8 @@
       "ai_token_limit_monthly": "טוקנים של AI בחודש",
       "forms": "טפסי אינטרנט",
       "form_submissions_monthly": "שליחות טופס בחודש",
-      "ai_form_generations_monthly": "יצירות של בונה הטפסים באמצעות AI בחודש"
+      "ai_form_generations_monthly": "יצירות של בונה הטפסים באמצעות AI בחודש",
+      "sms_monthly": "הודעות SMS בחודש"
     },
     "features": {
       "automation": "אוטומציה",
@@ -74,7 +75,8 @@
       "forms_and_links": "טפסים וקישורים",
       "extra_channels": "Telegram, Facebook ו־Instagram",
       "form_builder": "טפסים",
-      "waba_groups": "קבוצות WhatsApp"
+      "waba_groups": "קבוצות WhatsApp",
+      "sms": "ערוץ SMS"
     },
     "limitGroups": {
       "messaging": "הודעות",
@@ -124,7 +126,8 @@
       "ai_token_limit_monthly": "טוקנים שעוזרי ה־AI משתמשים בהם בחודש הקלנדרי במפתחות של הפלטפורמה. סביבות עבודה עם מפתחות משלהן אינן מוגבלות.",
       "forms": "טפסי אינטרנט פעילים (אפליקציית טפסים). העברת טופס לארכיון מפנה את המקום שלו. 0 = ללא הגבלה.",
       "form_submissions_monthly": "שליחות טופס שהתקבלו בחודש הקלנדרי, ללא ספאם. מעבר למכסה, השליחה עדיין נשמרת לבדיקה ולא נמחקת. 0 = ללא הגבלה.",
-      "ai_form_generations_monthly": "יצירות של בונה הטפסים באמצעות AI בחודש הקלנדרי, כולל ניסיון תיקון חוזר. 0 = ללא הגבלה."
+      "ai_form_generations_monthly": "יצירות של בונה הטפסים באמצעות AI בחודש הקלנדרי, כולל ניסיון תיקון חוזר. 0 = ללא הגבלה.",
+      "sms_monthly": "הודעות SMS יוצאות שנשלחו בחודש הקלנדרי. 0 = ללא הגבלה."
     },
     "planAddons": {
       "title": "תוספים הזמינים בתוכנית שלך",

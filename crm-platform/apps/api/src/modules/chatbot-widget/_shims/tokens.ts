@@ -54,6 +54,8 @@ export interface InboxLine {
   body: string | null;
   agentId: number | null;
   sentAt: Date | null;
+  /** Reply buttons a flow bot stored with the line. */
+  buttons?: Array<{ id: string; title: string }> | null;
 }
 
 export interface WidgetForInbox {
@@ -105,6 +107,8 @@ export interface InboxGateway {
     assistantUuid: string | null,
     body: string,
   ): Promise<{ id: number; sentAt: Date }>;
+  /** The uuid of the `webchat` channel that carries a thread: the id the ingest queue names a channel by. */
+  channelUuidOf(tx: Tx, orgId: number, conversationId: number): Promise<string>;
   /** Reference rule (TW-WGT-017): any outbound line after the opening line counts as a person having taken over; see the gateway. */
   humanHasTakenOver(tx: Tx, orgId: number, conversationId: number): Promise<boolean>;
   /** Newest `limit` lines, oldest first. */

@@ -150,6 +150,8 @@ export interface BaileysCard {
  */
 export interface BaileysCatalogBridge {
   sendCarousel(input: {
+    /** The workspace that owns the sending number. Required from a worker (no request context); a request supplies it itself. */
+    orgId?: number;
     senderPhone: string;
     to: string;
     cards: readonly BaileysCard[];
@@ -157,9 +159,15 @@ export interface BaileysCatalogBridge {
     bodyText: string;
     footerText: string;
   }): Promise<SentMessage>;
-  sendText(input: { senderPhone: string; to: string; text: string }): Promise<SentMessage>;
+  sendText(input: {
+    orgId?: number;
+    senderPhone: string;
+    to: string;
+    text: string;
+  }): Promise<SentMessage>;
   /** An image by URL with a caption: the single-product share (TW-CAT-023), `POST /api/send-media-message/{senderPhone}`. */
   sendImage(input: {
+    orgId?: number;
     senderPhone: string;
     to: string;
     imageUrl: string;

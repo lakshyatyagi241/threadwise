@@ -81,6 +81,7 @@ export function DashboardScreen() {
 
   return (
     <BrandFrame
+      testID="dashboard-scroll"
       compact
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => void refresh()} />}
       header={

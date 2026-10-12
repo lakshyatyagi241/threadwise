@@ -1,0 +1,214 @@
+{
+  "sms": {
+    "common": {
+      "dismiss": "Dismiss",
+      "close": "Close",
+      "cancel": "Cancel"
+    },
+    "hub": {
+      "kicker": "Channels",
+      "title": "SMS",
+      "titleAccent": "senders",
+      "intro": "Send text messages from your own Twilio numbers and MSG91 senders. SMS here is send-only: you reach contacts from broadcasts and campaigns.",
+      "campaigns": "Campaigns",
+      "broadcasts": "Broadcasts",
+      "channels": "Channels",
+      "loadError": "Could not load your SMS numbers. Try again in a moment.",
+      "cardCaption": "Twilio · MSG91",
+      "activeCount": "{count, plural, one {# number active} other {# numbers active}}",
+      "notConnected": "Not connected",
+      "howTitle": "How it works",
+      "how": {
+        "connect": {
+          "title": "Connect a sender",
+          "body": "Add a Twilio number or an MSG91 sender. We check the credentials with the provider before saving."
+        },
+        "report": {
+          "title": "Paste the delivery-report address",
+          "body": "Add it in your MSG91 or Twilio panel so delivered and failed texts show up in your reports."
+        },
+        "send": {
+          "title": "Send broadcasts and campaigns",
+          "body": "Pick this sender when you create a broadcast or a campaign. Each recipient gets one text."
+        },
+        "billing": {
+          "title": "Billed to your SMS quota",
+          "body": "Texts count against your plan's monthly SMS quota and are never charged to the WhatsApp wallet."
+        }
+      },
+      "reportTitle": "Remember: paste this into your provider",
+      "reportBody": "Add this delivery-report address in your provider's panel so we can mark texts delivered or failed.",
+      "reportLabel": "Delivery report URL",
+      "copy": "Copy",
+      "copied": "Copied",
+      "copyFailed": "Could not copy. Select the address and copy it by hand.",
+      "connectedTitle": "Connected numbers",
+      "total": "{count} total",
+      "empty": "No SMS number connected yet.",
+      "connectFirst": "Connect your first number"
+    },
+    "card": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "rate": "Rate / segment",
+      "dltSender": "DLT sender",
+      "dltTemplate": "DLT template",
+      "alphanumeric": "Sender ID: one-way, and not accepted in every country.",
+      "activate": "Activate",
+      "deactivate": "Deactivate",
+      "remove": "Remove",
+      "removeTitle": "Remove SMS number",
+      "removeConfirm": "Remove this SMS number?",
+      "activated": "SMS number activated.",
+      "deactivated": "SMS number deactivated.",
+      "removed": "SMS number removed.",
+      "failed": "Could not update the SMS number. Try again.",
+      "changed": "This number was changed somewhere else. The list has been reloaded, try again.",
+      "notAvailable": "SMS is not available on your plan or has been switched off.",
+      "cancel": "Cancel"
+    },
+    "connect": {
+      "title": "Connect a number",
+      "intro": "Add as many as you need. Several Twilio numbers and MSG91 senders can run at once.",
+      "provider": "SMS provider",
+      "providerTwilio": "Twilio (global)",
+      "providerMsg91": "MSG91 (India / DLT)",
+      "providerHint": "Twilio for most countries; MSG91 for reliable delivery into India.",
+      "from": "From number / Sender ID",
+      "fromPlaceholder": "+17372508034",
+      "fromHint": "A number in international format (Twilio) or your registered sender (MSG91). A sender made of letters is one-way: no replies.",
+      "sid": "Twilio Account SID",
+      "sidPlaceholder": "ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "sidHint": "Twilio only. Leave blank to reuse the keys already connected for WhatsApp.",
+      "token": "Auth Token / MSG91 Auth Key",
+      "tokenHint": "Saved encrypted. For Twilio, leave blank to reuse the keys already connected for WhatsApp.",
+      "dltOptions": "MSG91 / India (DLT) options",
+      "senderId": "DLT Sender ID",
+      "senderIdPlaceholder": "ACMEIN",
+      "senderIdHint": "MSG91 only. Your 6-letter DLT-registered sender.",
+      "dltTemplate": "DLT Template ID",
+      "dltTemplateHint": "MSG91 only. The approved DLT template id used for Indian delivery.",
+      "reportBoxTitle": "MSG91 panel delivery reports",
+      "reportBoxBody": "In your MSG91 panel, paste this address as the delivery-report (DLR) URL:",
+      "rate": "Rate per segment",
+      "ratePlaceholder": "0.0075",
+      "rateHint": "For your SMS spend reporting only. Never billed to the WhatsApp wallet.",
+      "currency": "Currency",
+      "submit": "Verify + connect SMS",
+      "submitting": "Verifying…",
+      "errorTitle": "Couldn’t connect the SMS number:",
+      "providerError": "The provider said: {reason}",
+      "connected": "SMS number connected. You can start sending now.",
+      "failed": "Could not connect the SMS number. Try again.",
+      "errors": {
+        "fromRequired": "The from number field is required.",
+        "fromTooLong": "The from number must not be longer than 32 characters.",
+        "sidTooLong": "The account SID must not be longer than 64 characters.",
+        "sidShape": "That is not an Account SID. It must start with AC; an API key starting with SK will not work.",
+        "tokenRequired": "An MSG91 auth key is required.",
+        "tokenTooLong": "The auth token must not be longer than 255 characters.",
+        "senderIdTooLong": "The sender id must not be longer than 16 characters.",
+        "dltTemplateTooLong": "The DLT template id must not be longer than 64 characters.",
+        "rateInvalid": "The rate per segment must be a number, zero or more.",
+        "currencyTooLong": "The currency must not be longer than 8 characters."
+      },
+      "api": {
+        "notAvailable": "SMS is not available on your plan, or the platform has switched it off.",
+        "unavailable": "This SMS number is disconnected or has no credentials. Reconnect it first."
+      }
+    },
+    "lookup": {
+      "title": "Check a number before you text it",
+      "hint": "SMS is billed when it is sent, not when it arrives, so check that a number is a real mobile before you text it.",
+      "label": "Phone number",
+      "placeholder": "+1 555 123 4567",
+      "check": "Check number",
+      "checking": "Checking…",
+      "unreachable": "Could not reach the lookup service.",
+      "carrier": "Carrier: {carrier}.",
+      "kind": {
+        "mobile": "Mobile — can receive SMS.",
+        "landline": "Landline — cannot receive SMS. Texting it is charged and lost.",
+        "voip": "VoIP — may not receive SMS reliably.",
+        "invalid": "Not a valid number — texting it would be charged and never arrive."
+      }
+    },
+    "guide": {
+      "title": "Setup guide",
+      "twilio": {
+        "title": "Twilio (global)",
+        "p1": "Copy the Account SID (it starts with AC) and the Auth Token from the Twilio console home page. An API key starting with SK will not work.",
+        "p2": "Buy an SMS-capable number, or use your trial number, and paste it as the From number in international format.",
+        "p3": "In the Twilio number's settings, paste the delivery-report address above as the status callback URL.",
+        "p4": "Trial accounts can only text verified numbers and refuse custom text."
+      },
+      "msg91": {
+        "title": "MSG91 (India / DLT)",
+        "p1": "Indian carriers filter foreign long-code numbers, so use MSG91 for reliable delivery into India.",
+        "p2": "Paste your MSG91 Auth Key in the Auth Token field.",
+        "p3": "On the DLT portal, register a 6-letter sender id and a message template, then paste both in the DLT options.",
+        "p4": "With a DLT template id the sender uses MSG91's template route; without one it sends plain text."
+      },
+      "billing": {
+        "title": "Segments, cost and billing",
+        "p1": "A text of up to 160 plain characters is one segment (GSM-7). One emoji or non-Latin character drops the limit to 70 (UCS-2) and can triple the cost.",
+        "p2": "Longer texts are split into segments of 153 characters (67 with UCS-2), and each segment is billed.",
+        "p3": "The rate you enter is for spend reporting only. Texts are metered by your plan's monthly SMS quota, never the WhatsApp wallet.",
+        "p4": "A sender id made of letters is one-way and is not accepted in every country, for example the US and Canada."
+      }
+    },
+    "segments": {
+      "summary": "{units} characters · {segments, plural, one {# segment} other {# segments}} · {encoding}",
+      "remaining": "{remaining} left in this segment",
+      "ucs2": "This message contains characters outside the GSM alphabet (emoji or non-Latin script), so it is limited to {perSegment} characters per SMS and will be billed as {segments} messages.",
+      "gsm": "This message is {units} characters and will be billed as {segments} messages."
+    },
+    "compose": {
+      "note": "SMS sends plain text only. A header, footer, attachment, buttons and split testing are not used, so they are hidden.",
+      "bodyHint": "Keep it short: every 160 characters is another segment, and each segment is billed."
+    },
+    "chooser": {
+      "name": "SMS",
+      "hint": "Text your contacts from a Twilio number or an MSG91 sender.",
+      "cta": "Create SMS campaign"
+    },
+    "operator": {
+      "nav": {
+        "group": "Channels",
+        "item": "SMS"
+      },
+      "title": "SMS channel",
+      "eyebrow": "platform switch",
+      "superOnly": "Only a super admin can change the SMS switch. You can see its state.",
+      "loading": "Loading",
+      "retry": "Try again",
+      "status": {
+        "enabled": "Enabled",
+        "disabled": "Disabled"
+      },
+      "explanation": "Turns the SMS channel on or off for every workspace. It only shows or hides the entry points (the SMS menu, the sender pickers and the SMS template channel). Senders, templates and sends already running are never deleted or stopped.",
+      "state": {
+        "enabled": "SMS is on. Workspaces whose plan includes SMS can connect senders and send text messages from broadcasts and campaigns.",
+        "disabled": "SMS is off. Workspaces do not see the SMS menu, sender pickers or SMS templates. Turn it on when you are ready to offer the channel."
+      },
+      "enable": "Enable SMS",
+      "disable": "Disable SMS",
+      "cancel": "Cancel",
+      "enabledToast": "SMS is now enabled for the platform.",
+      "disabledToast": "SMS is now disabled for the platform.",
+      "disableDialog": {
+        "title": "Disable SMS?",
+        "body": "Every workspace stops seeing the SMS menu, sender pickers and SMS templates straight away. Nothing is deleted, and senders that exist keep working. You can turn it back on at any time.",
+        "confirm": "Disable SMS"
+      },
+      "errors": {
+        "forbidden": "You do not have permission to do that.",
+        "conflict": "Someone else changed this setting. The page was refreshed; try again.",
+        "validation": "Check the value and try again.",
+        "request": "That request could not be completed.",
+        "unexpected": "Something went wrong on our side. Try again in a moment.",
+        "network": "Could not reach the server. Check your connection."
+      }
+    }
+  }
+}

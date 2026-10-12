@@ -106,7 +106,8 @@
         "light": "Light",
         "dark": "Dark",
         "schemeHint": "The colour mode is set to Light, so there is no dark version to preview.",
-        "frameTitle": "Live preview of the form"
+        "frameTitle": "Live preview of the form",
+        "popup": "Popup"
       }
     }
   }

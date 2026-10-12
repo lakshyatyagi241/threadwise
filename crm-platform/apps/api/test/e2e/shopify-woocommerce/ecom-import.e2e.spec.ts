@@ -285,9 +285,7 @@ describe('a Shopify import (TW-ECOM-011)', () => {
     const id = await shopifyStore(t);
     shopifyData.customers = read([{ id: 1, first_name: 'A', phone: '111111' }]);
     await imports.run(t.orgId, 'shopify', id);
-    await h.owner.query(`UPDATE contact_groups SET name = 'VIPs' WHERE org_id = $1`, [
-      t.orgId,
-    ]);
+    await h.owner.query(`UPDATE contact_groups SET name = 'VIPs' WHERE org_id = $1`, [t.orgId]);
     shopifyData.customers = read([{ id: 2, first_name: 'B', phone: '222222' }]);
     await imports.run(t.orgId, 'shopify', id);
     expect(await q(`SELECT name FROM contact_groups WHERE org_id = $1`, t)).toEqual([

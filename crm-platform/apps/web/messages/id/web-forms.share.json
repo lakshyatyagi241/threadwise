@@ -253,8 +253,8 @@
           "off": "Nonaktif"
         },
         "captchaHints": {
-          "inherit": "Menggunakan pengaturan yang diterapkan workspace Anda untuk formulir publik.",
-          "on": "Pengunjung harus lolos pemeriksaan sebelum dapat mengirim.",
+          "inherit": "Menggunakan CAPTCHA yang disiapkan administrator platform Anda untuk formulir publik, jika ada.",
+          "on": "Pengunjung harus lolos pemeriksaan sebelum dapat mengirim. Memerlukan CAPTCHA yang disiapkan di platform; penerbitan ditolak tanpa itu.",
           "off": "Tanpa pemeriksaan. Mengandalkan kolom jebakan tersembunyi dan batas laju."
         },
         "retention": "Simpan jawaban selama (hari)",
@@ -271,6 +271,17 @@
           "perFormPerMinuteHint": "Pengiriman ke formulir ini dari mana saja.",
           "perContactPerHour": "Per kontak, per jam",
           "perContactPerHourHint": "Pengiriman dengan email atau nomor telepon yang sama."
+        },
+        "captchaStatus": {
+          "available": "CAPTCHA sudah disiapkan di platform ini (reCAPTCHA {version}).",
+          "none": "Tidak ada CAPTCHA yang disiapkan di platform ini, jadi tidak ada yang diperiksa di sini. Minta administrator platform Anda untuk menambahkannya, atau andalkan kolom jebakan tersembunyi dan batas laju.",
+          "noneOn": "Formulir ini diatur untuk selalu memeriksa, tetapi platform tidak memiliki CAPTCHA, sehingga tidak ada yang diperiksa dan formulir tidak dapat diterbitkan. Minta administrator platform Anda untuk menambahkannya, atau pilih pengaturan lain.",
+          "failed": "Tidak dapat memeriksa apakah CAPTCHA sudah disiapkan."
+        },
+        "caught": {
+          "blocked": "{count, plural, =0 {Kolom jebakan tersembunyi belum menghentikan bot mana pun bulan ini.} other {Kolom jebakan tersembunyi menghentikan # bot bulan ini.}}",
+          "held": "{count, plural, other {# kiriman ditahan sebagai spam.}}",
+          "review": "Tinjau"
         }
       }
     }

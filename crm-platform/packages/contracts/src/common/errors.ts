@@ -27,8 +27,10 @@ import { WADEV_ERROR_CODES } from '../whatsapp-devices-baileys/errors';
 import { AIAG_ERROR_CODES } from '../ai-agents-training/errors';
 import { EXT_ERROR_CODES } from '../chrome-extension-sheets-addon/errors';
 import { ALIB_ERROR_CODES } from '../api-library/errors';
+import { FAQ_ERROR_CODES } from '../faq-knowledge/errors';
 
 export const ERROR_CODES = {
+  ...FAQ_ERROR_CODES,
   ...ALIB_ERROR_CODES,
   ...EXT_ERROR_CODES,
   ...CPN_ERROR_CODES,
@@ -227,6 +229,16 @@ export const ERROR_CODES = {
   TG_NOTHING_TO_SEND: 'TG_NOTHING_TO_SEND',
   /** Retry: nobody failed. */
   TG_NOTHING_TO_RETRY: 'TG_NOTHING_TO_RETRY',
+
+  // SMS channel (TW-SMS)
+  /** The provider refused the credentials at connect time. */
+  SMS_CREDENTIALS_REJECTED: 'SMS_CREDENTIALS_REJECTED',
+  /** The sender is disconnected or its credentials are missing. */
+  SMS_SENDER_UNAVAILABLE: 'SMS_SENDER_UNAVAILABLE',
+  /** The workspace plan does not include SMS, or the platform switch is off. */
+  SMS_NOT_AVAILABLE: 'SMS_NOT_AVAILABLE',
+  /** The monthly SMS quota is used up. */
+  SMS_QUOTA_EXCEEDED: 'SMS_QUOTA_EXCEEDED',
 
   // Facebook channel (TW-FB)
   /** No Meta app is configured on this install, so a Page cannot be connected. */

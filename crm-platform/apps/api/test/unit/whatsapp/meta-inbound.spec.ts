@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { normaliseMetaWebhook, UNSUPPORTED_131051 } from '../../../src/infra/providers/whatsapp/meta-inbound';
+import {
+  normaliseMetaWebhook,
+  UNSUPPORTED_131051,
+} from '../../../src/infra/providers/whatsapp/meta-inbound';
 import { FX, webhookFixture } from '../../fixtures/whatsapp';
 
 const ctx = { phoneNumberId: FX.phoneNumberId };
@@ -29,7 +32,12 @@ describe('normaliseMetaWebhook: inbound messages, one fixture per type', () => {
     expect(one('image')).toMatchObject({
       kind: 'media',
       body: 'My marksheet',
-      media: { providerMediaId: '1166733224118011', mediaKind: 'image', mime: 'image/jpeg', sha256: 'a'.repeat(64) },
+      media: {
+        providerMediaId: '1166733224118011',
+        mediaKind: 'image',
+        mime: 'image/jpeg',
+        sha256: 'a'.repeat(64),
+      },
     });
   });
 
@@ -48,13 +56,22 @@ describe('normaliseMetaWebhook: inbound messages, one fixture per type', () => {
   });
 
   it('a media message with no media id cannot be fetched: it is stored as unsupported, not dropped', () => {
-    expect(one('image-no-id')).toMatchObject({ kind: 'unsupported', body: '[Image message]', meta: { rawType: 'image' } });
+    expect(one('image-no-id')).toMatchObject({
+      kind: 'unsupported',
+      body: '[Image message]',
+      meta: { rawType: 'image' },
+    });
   });
 
   it('location', () => {
     expect(one('location')).toMatchObject({
       kind: 'location',
-      location: { latitude: 37.4845, longitude: -122.1477, name: 'Meta HQ', address: '1 Hacker Way, Menlo Park' },
+      location: {
+        latitude: 37.4845,
+        longitude: -122.1477,
+        name: 'Meta HQ',
+        address: '1 Hacker Way, Menlo Park',
+      },
     });
   });
 
@@ -63,23 +80,58 @@ describe('normaliseMetaWebhook: inbound messages, one fixture per type', () => {
     expect(m.kind).toBe('contact');
     expect(m.body).toBe('Ravi Kumar');
     expect(m.meta?.contacts).toEqual([
-      { name: 'Ravi Kumar', phones: ['+91 98765 11111', '+91 22 5555 0000'], emails: ['ravi@example.test'], org: 'Example Ltd' },
+      {
+        name: 'Ravi Kumar',
+        phones: ['+91 98765 11111', '+91 22 5555 0000'],
+        emails: ['ravi@example.test'],
+        org: 'Example Ltd',
+      },
       { name: 'Meera Shah', phones: ['+91 98765 22222'], emails: [], org: null },
     ]);
   });
 
   it('reaction: set carries the emoji and the target; removed carries an empty emoji', () => {
-    expect(one('reaction-set')).toMatchObject({ kind: 'reaction', replyToProviderMessageId: 'wamid.OUT1', reactionEmoji: '\u{1F44D}' });
-    expect(one('reaction-removed')).toMatchObject({ kind: 'reaction', replyToProviderMessageId: 'wamid.OUT1', reactionEmoji: '' });
+    expect(one('reaction-set')).toMatchObject({
+      kind: 'reaction',
+      replyToProviderMessageId: 'wamid.OUT1',
+      reactionEmoji: '\u{1F44D}',
+    });
+    expect(one('reaction-removed')).toMatchObject({
+      kind: 'reaction',
+      replyToProviderMessageId: 'wamid.OUT1',
+      reactionEmoji: '',
+    });
   });
 
   it('call_permission_reply becomes a readable interactive message, not a placeholder', () => {
     const payload = {
-      entry: [{ changes: [{ field: 'messages', value: {
-        metadata: { phone_number_id: FX.phoneNumberId, display_phone_number: '15550000000' },
-        messages: [{ id: 'wamid.CP1', from: FX.customer, timestamp: '1760000000', type: 'interactive',
-          interactive: { type: 'call_permission_reply', call_permission_reply: { response: 'accept', is_permanent: true } } }],
-      } }] }],
+      entry: [
+        {
+          changes: [
+            {
+              field: 'messages',
+              value: {
+                metadata: {
+                  phone_number_id: FX.phoneNumberId,
+                  display_phone_number: '15550000000',
+                },
+                messages: [
+                  {
+                    id: 'wamid.CP1',
+                    from: FX.customer,
+                    timestamp: '1760000000',
+                    type: 'interactive',
+                    interactive: {
+                      type: 'call_permission_reply',
+                      call_permission_reply: { response: 'accept', is_permanent: true },
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      ],
     };
     const m = normaliseMetaWebhook(payload, ctx).messages[0]!;
     expect(m).toMatchObject({ kind: 'interactive', body: 'Allowed calls' });
@@ -91,7 +143,14 @@ describe('normaliseMetaWebhook: inbound messages, one fixture per type', () => {
       kind: 'interactive',
       body: 'Yes, call me',
       replyToProviderMessageId: 'wamid.OUT2',
-      meta: { interactive: { type: 'button_reply', id: 'opt_yes', title: 'Yes, call me', description: null } },
+      meta: {
+        interactive: {
+          type: 'button_reply',
+          id: 'opt_yes',
+          title: 'Yes, call me',
+          description: null,
+        },
+      },
     });
     expect(one('list-reply').meta).toEqual({
       interactive: { type: 'list_reply', id: 'row_small', title: 'Small', description: '250 ml' },
@@ -99,7 +158,10 @@ describe('normaliseMetaWebhook: inbound messages, one fixture per type', () => {
     expect(one('template-button')).toMatchObject({
       kind: 'interactive',
       body: 'Confirm',
-      meta: { interactive: { type: 'button', id: null, title: 'Confirm' }, buttonPayload: 'CONFIRM_APPT' },
+      meta: {
+        interactive: { type: 'button', id: null, title: 'Confirm' },
+        buttonPayload: 'CONFIRM_APPT',
+      },
     });
   });
 
@@ -123,17 +185,33 @@ describe('normaliseMetaWebhook: inbound messages, one fixture per type', () => {
   });
 
   it('an order is stored as an unsupported placeholder with its text and item count', () => {
-    expect(one('order')).toMatchObject({ kind: 'unsupported', body: expect.stringContaining('Two for me'), meta: { rawType: 'order', order: { catalogId: 'cat1', items: 1 } } });
+    expect(one('order')).toMatchObject({
+      kind: 'unsupported',
+      body: expect.stringContaining('Two for me'),
+      meta: { rawType: 'order', order: { catalogId: 'cat1', items: 1 } },
+    });
   });
 
   it('Meta\'s own "unsupported" (131051) gets its placeholder text; any unknown type is stored with its raw type, never dropped', () => {
-    expect(one('unsupported-131051')).toMatchObject({ kind: 'unsupported', body: UNSUPPORTED_131051, meta: { rawType: 'unsupported', providerErrors: [131051] } });
-    expect(one('unknown-type-poll')).toMatchObject({ kind: 'unsupported', body: '[Poll message]', meta: { rawType: 'poll' } });
+    expect(one('unsupported-131051')).toMatchObject({
+      kind: 'unsupported',
+      body: UNSUPPORTED_131051,
+      meta: { rawType: 'unsupported', providerErrors: [131051] },
+    });
+    expect(one('unknown-type-poll')).toMatchObject({
+      kind: 'unsupported',
+      body: '[Poll message]',
+      meta: { rawType: 'poll' },
+    });
   });
 
   it('a batch keeps every message in order', () => {
     const parsed = normaliseMetaWebhook(webhookFixture('batch'), ctx);
-    expect(parsed.messages.map((m) => m.providerMessageId)).toEqual(['wamid.B1', 'wamid.B2', 'wamid.B3']);
+    expect(parsed.messages.map((m) => m.providerMessageId)).toEqual([
+      'wamid.B1',
+      'wamid.B2',
+      'wamid.B3',
+    ]);
     expect(parsed.messages[2]!.kind).toBe('media');
   });
 });
@@ -147,7 +225,9 @@ describe('normaliseMetaWebhook: what is ignored, and why', () => {
   };
 
   it('a system message (the customer changed number) is ignored safely', () => {
-    expect(ignored('system-number-change')).toEqual([{ reason: 'system', detail: 'user_changed_number' }]);
+    expect(ignored('system-number-change')).toEqual([
+      { reason: 'system', detail: 'user_changed_number' },
+    ]);
   });
   it('a group message is not stored as a one-to-one thread', () => {
     expect(ignored('group-message')).toEqual([{ reason: 'group_message', detail: 'text' }]);
@@ -155,11 +235,15 @@ describe('normaliseMetaWebhook: what is ignored, and why', () => {
   it('a message from our own number (a business-app echo) is not a customer message', () => {
     expect(ignored('own-number-echo')).toEqual([{ reason: 'own_number_echo', detail: 'text' }]);
   });
-  it('a change that names another phone number is not this channel\'s', () => {
-    expect(ignored('other-number')).toEqual([{ reason: 'other_number', detail: '999999999999999' }]);
+  it("a change that names another phone number is not this channel's", () => {
+    expect(ignored('other-number')).toEqual([
+      { reason: 'other_number', detail: '999999999999999' },
+    ]);
   });
   it('a non-message field (template status) is ignored', () => {
-    expect(ignored('field-template-status')).toEqual([{ reason: 'field', detail: 'message_template_status_update' }]);
+    expect(ignored('field-template-status')).toEqual([
+      { reason: 'field', detail: 'message_template_status_update' },
+    ]);
   });
   it('with no channel number known, a change is not filtered by number', () => {
     expect(normaliseMetaWebhook(webhookFixture('other-number')).messages).toHaveLength(1);
@@ -170,12 +254,14 @@ describe('normaliseMetaWebhook: delivery receipts', () => {
   const receipts = (name: string) => normaliseMetaWebhook(webhookFixture(name), ctx).receipts;
 
   it('sent, delivered and read carry the provider id and time', () => {
-    expect(receipts('status-sent')).toEqual([{ providerMessageId: 'wamid.OUT1', status: 'sent', at: new Date(1760000100 * 1000) }]);
+    expect(receipts('status-sent')).toEqual([
+      { providerMessageId: 'wamid.OUT1', status: 'sent', at: new Date(1760000100 * 1000) },
+    ]);
     expect(receipts('status-delivered')[0]).toMatchObject({ status: 'delivered' });
     expect(receipts('status-read')[0]).toMatchObject({ status: 'read' });
   });
 
-  it('a failure is classified into our vocabulary and keeps Meta\'s words', () => {
+  it("a failure is classified into our vocabulary and keeps Meta's words", () => {
     const [w] = receipts('status-failed-131047');
     expect(w).toMatchObject({ status: 'failed', errorCode: 'SERVICE_WINDOW_CLOSED' });
     expect(w!.errorMessage).toContain('more than 24 hours');
@@ -197,21 +283,67 @@ describe('normaliseMetaWebhook: delivery receipts', () => {
 });
 
 describe('normaliseMetaWebhook never throws', () => {
-  it.each([null, undefined, 'x', 42, [], {}, { entry: 'no' }, { entry: [null] }, { entry: [{ changes: 'no' }] }, { entry: [{ changes: [{ value: { messages: [null, 1, 'x', {}] } }] }] }])(
-    'for %j',
-    (bad) => {
-      expect(() => normaliseMetaWebhook(bad, ctx)).not.toThrow();
-    },
-  );
+  it.each([
+    null,
+    undefined,
+    'x',
+    42,
+    [],
+    {},
+    { entry: 'no' },
+    { entry: [null] },
+    { entry: [{ changes: 'no' }] },
+    { entry: [{ changes: [{ value: { messages: [null, 1, 'x', {}] } }] }] },
+  ])('for %j', (bad) => {
+    expect(() => normaliseMetaWebhook(bad, ctx)).not.toThrow();
+  });
 
   it('a message without an id or a sender is ignored, not stored', () => {
-    const p = normaliseMetaWebhook({ entry: [{ changes: [{ value: { messages: [{ type: 'text', from: '9198' }, { id: 'a', type: 'text' }] } }] }] });
+    const p = normaliseMetaWebhook({
+      entry: [
+        {
+          changes: [
+            {
+              value: {
+                messages: [
+                  { type: 'text', from: '9198' },
+                  { id: 'a', type: 'text' },
+                ],
+              },
+            },
+          ],
+        },
+      ],
+    });
     expect(p.messages).toEqual([]);
-    expect(p.ignored).toEqual([{ reason: 'no_message_id', detail: 'text' }, { reason: 'no_sender', detail: 'text' }]);
+    expect(p.ignored).toEqual([
+      { reason: 'no_message_id', detail: 'text' },
+      { reason: 'no_sender', detail: 'text' },
+    ]);
   });
 
   it('a timestamp that is not a number falls back to now instead of an invalid date', () => {
-    const p = normaliseMetaWebhook({ entry: [{ changes: [{ value: { messages: [{ id: 'a', from: '919800000000', type: 'text', timestamp: 'x', text: { body: 'hi' } }] } }] }] });
+    const p = normaliseMetaWebhook({
+      entry: [
+        {
+          changes: [
+            {
+              value: {
+                messages: [
+                  {
+                    id: 'a',
+                    from: '919800000000',
+                    type: 'text',
+                    timestamp: 'x',
+                    text: { body: 'hi' },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      ],
+    });
     expect(Number.isNaN(p.messages[0]!.providerTimestamp.getTime())).toBe(false);
   });
 });

@@ -30,7 +30,9 @@ describe('matchesFilters', () => {
     expect(matchesFilters(summary({ status: 'open' }), f(), ME)).toBe(true);
     expect(matchesFilters(summary({ status: 'pending' }), f(), ME)).toBe(true);
     expect(matchesFilters(summary({ status: 'resolved' }), f(), ME)).toBe(false);
-    expect(matchesFilters(summary({ status: 'resolved' }), f({ status: 'resolved' }), ME)).toBe(true);
+    expect(matchesFilters(summary({ status: 'resolved' }), f({ status: 'resolved' }), ME)).toBe(
+      true,
+    );
     expect(matchesFilters(summary({ status: 'spam' }), f({ status: 'all' }), ME)).toBe(true);
   });
 
@@ -63,7 +65,11 @@ describe('matchesFilters', () => {
   });
 
   it('searches name, number and preview without caring about case', () => {
-    const row = summary({ title: 'Asha Verma', peerKey: '919876543210', preview: 'Need an INVOICE' });
+    const row = summary({
+      title: 'Asha Verma',
+      peerKey: '919876543210',
+      preview: 'Need an INVOICE',
+    });
     expect(matchesFilters(row, f({ q: 'asha' }), ME)).toBe(true);
     expect(matchesFilters(row, f({ q: '9876' }), ME)).toBe(true);
     expect(matchesFilters(row, f({ q: 'invoice' }), ME)).toBe(true);
@@ -101,7 +107,10 @@ describe('ordering', () => {
 });
 
 const loaded = (
-  rows = [summary({ id: id(1) }), summary({ id: id(2), lastMessageAt: '2026-10-02T09:00:00.000Z' })],
+  rows = [
+    summary({ id: id(1) }),
+    summary({ id: id(2), lastMessageAt: '2026-10-02T09:00:00.000Z' }),
+  ],
   hasMore = false,
 ): ListState =>
   listReducer(EMPTY_LIST, {

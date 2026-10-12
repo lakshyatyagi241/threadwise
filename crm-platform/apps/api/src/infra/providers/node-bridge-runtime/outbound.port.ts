@@ -26,7 +26,15 @@ export type SendCommand =
       name?: string;
       address?: string;
     }
-  | { type: 'contact'; to: string; name: string; phone: string; vcard?: string }
+  | {
+      type: 'contact';
+      to: string;
+      name: string;
+      phone: string;
+      vcard?: string;
+      /** Several cards in one message (the inbox's Share dialog); when set, `vcard` and `phone` are not used. */
+      cards?: { name: string; vcard: string }[];
+    }
   | { type: 'group_text'; groupJid: string; body: string; mentions?: string[] };
 
 export interface SendContext {

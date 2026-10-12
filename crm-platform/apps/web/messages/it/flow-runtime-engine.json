@@ -176,12 +176,50 @@
       "cancelBody": "L’esecuzione si ferma dove si trova. Il cliente non viene avvisato.",
       "cancelConfirm": "Annulla esecuzione",
       "cancelKeep": "Mantienila",
-      "cancelled": "Esecuzione annullata"
+      "cancelled": "Esecuzione annullata",
+      "tlTitle": "Cronologia di esecuzione",
+      "tlNodes": "Nodi eseguiti",
+      "tlErrors": "Errori",
+      "tlTime": "Tempo dei nodi",
+      "filterAll": "Tutti i passaggi",
+      "filterErrors": "Solo errori",
+      "changedTitle": "Questo flusso è stato modificato dopo l'esecuzione",
+      "changedBody": "Il registro mostra il flusso esattamente come è stato eseguito.",
+      "removed": "Rimosso dal flusso",
+      "exit": "Uscita {port}",
+      "visit": "Visita {n}",
+      "truncated": "Sono stati eseguiti più di {max} passaggi. I successivi sono contati ma non elencati.",
+      "retention": "I registri vengono eliminati {days} giorni dopo la fine di un'esecuzione.",
+      "pathTitle": "Percorso seguito",
+      "notReached": "Non raggiunti",
+      "noErrors": "Nessun errore in questa esecuzione.",
+      "factNext": "Successivo: {node}",
+      "factWaiting": "In attesa a: {node}",
+      "factDelay": "Attende {time}",
+      "factReplied": "Il cliente ha risposto: {text}",
+      "factEnded": "Terminato: {reason}",
+      "ioInput": "Input",
+      "ioOutput": "Output",
+      "ioKind": {
+        "message": "Messaggio inviato",
+        "reply": "Risposta del cliente",
+        "variable": "Variabile",
+        "request": "Richiesta",
+        "response": "Risposta",
+        "result": "Risultato"
+      }
     },
     "event": {
       "step": "Passo",
       "reply": "Risposta del cliente",
-      "end": "Fine"
+      "end": "Fine",
+      "advance": "Proseguito",
+      "wait": "In attesa di una risposta",
+      "sleep": "Ritardo",
+      "halt": "Interrotto",
+      "exec": "Eseguito",
+      "truncated": "Limite del registro raggiunto",
+      "start": "Avviato"
     },
     "subs": {
       "kicker": "Flow",
@@ -469,6 +507,13 @@
       "manyBody": "{n} contatti rientrano nel flow dall’inizio e ricevono di nuovo i suoi messaggi. L’operazione non può essere annullata.",
       "summary": "{queued} riavviate, {succeeded} completate, {failed} non riuscite, {skipped} saltate.",
       "flowInactive": "Riattiva questo flow prima di rieseguire i suoi contatti non riusciti."
+    },
+    "outcome": {
+      "ok": "OK",
+      "error": "Errore",
+      "skipped": "Saltato",
+      "waiting": "In attesa",
+      "timeout": "Tempo scaduto"
     }
   }
 }

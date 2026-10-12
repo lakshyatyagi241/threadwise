@@ -95,6 +95,7 @@ export function ContactsScreen() {
   } else {
     body = (
       <FlatList
+        testID="contacts-list"
         data={contacts}
         keyExtractor={(contact) => contact.id}
         renderItem={({ item }) => <ContactRow contact={item} onPress={open} />}

@@ -3230,7 +3230,8 @@ export default (h) => {
       {
         scenario: /^kbd\.skip-link-and-landmarks$/,
         key: 'num.main',
-        reason: 'ours wraps the shop in a main landmark (accessibility addition); Reference has none',
+        reason:
+          'ours wraps the shop in a main landmark (accessibility addition); Reference has none',
       },
 
       {

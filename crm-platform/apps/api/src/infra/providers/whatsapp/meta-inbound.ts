@@ -30,7 +30,6 @@ const str = (v: unknown): string | undefined => (typeof v === 'string' && v !== 
 const clip = (v: unknown, max: number): string | undefined => str(v)?.slice(0, max);
 const digitsOf = (v: string): string => v.replace(/\D+/g, '');
 
-
 export const UNSUPPORTED_131051 =
   "[Unsupported message - the customer sent something the WhatsApp Business API can't display]";
 
@@ -46,7 +45,8 @@ function timestampOf(v: unknown): Date {
 
 export function normaliseMetaWebhook(payload: unknown, ctx: InboundContext = {}): ParsedInbound {
   const out: ParsedInbound = { messages: [], receipts: [], ignored: [] };
-  const ignore = (reason: string, detail?: string) => out.ignored!.push({ reason, ...(detail ? { detail } : {}) });
+  const ignore = (reason: string, detail?: string) =>
+    out.ignored!.push({ reason, ...(detail ? { detail } : {}) });
 
   for (const entry of arr(dict(payload).entry)) {
     for (const change of arr(dict(entry).changes)) {
@@ -89,7 +89,11 @@ export function normaliseMetaWebhook(payload: unknown, ctx: InboundContext = {})
 
 type Skip = { ignored: string; detail?: string };
 
-function mapMessage(m: Dict, names: Map<string, string>, ownNumber: string): NormalisedInbound | Skip {
+function mapMessage(
+  m: Dict,
+  names: Map<string, string>,
+  ownNumber: string,
+): NormalisedInbound | Skip {
   const id = str(m.id);
   const type = str(m.type) ?? '';
   if (!id) return { ignored: 'no_message_id', detail: type };
@@ -138,7 +142,11 @@ function mapMessage(m: Dict, names: Map<string, string>, ownNumber: string): Nor
     const merged = { ...meta, ...extra };
     return Object.keys(merged).length ? { meta: merged } : {};
   };
-  const unsupported = (rawType: string, body: string, extra: Record<string, unknown> = {}): NormalisedInbound => ({
+  const unsupported = (
+    rawType: string,
+    body: string,
+    extra: Record<string, unknown> = {},
+  ): NormalisedInbound => ({
     ...base,
     kind: 'unsupported',
     body,
@@ -179,7 +187,8 @@ function mapMessage(m: Dict, names: Map<string, string>, ownNumber: string): Nor
       const l = dict(m.location);
       const latitude = Number(l.latitude);
       const longitude = Number(l.longitude);
-      if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return unsupported('location', '[Location message]');
+      if (!Number.isFinite(latitude) || !Number.isFinite(longitude))
+        return unsupported('location', '[Location message]');
       return {
         ...base,
         kind: 'location',
@@ -201,7 +210,8 @@ function mapMessage(m: Dict, names: Map<string, string>, ownNumber: string): Nor
           const name = dict(card.name);
           const formatted =
             clip(name.formatted_name, 200) ??
-            ([str(name.first_name), str(name.last_name)].filter(Boolean).join(' ').slice(0, 200) || null);
+            ([str(name.first_name), str(name.last_name)].filter(Boolean).join(' ').slice(0, 200) ||
+              null);
           return {
             name: formatted,
             phones: arr(card.phones)
@@ -261,7 +271,12 @@ function mapMessage(m: Dict, names: Map<string, string>, ownNumber: string): Nor
           kind: 'interactive',
           body: title,
           ...withMeta({
-            interactive: { type: 'button_reply', id: clip(r.id, 256) ?? null, title, description: null },
+            interactive: {
+              type: 'button_reply',
+              id: clip(r.id, 256) ?? null,
+              title,
+              description: null,
+            },
           }),
         };
       }
@@ -288,7 +303,10 @@ function mapMessage(m: Dict, names: Map<string, string>, ownNumber: string): Nor
           ...base,
           kind: 'interactive',
           body: flowSummary(r.response_json) ?? clip(r.body, 1000) ?? 'Form submitted',
-          ...withMeta({ flowName: clip(r.name, 200) ?? null, flowResponse: clip(r.response_json, 4000) ?? null }),
+          ...withMeta({
+            flowName: clip(r.name, 200) ?? null,
+            flowResponse: clip(r.response_json, 4000) ?? null,
+          }),
         };
       }
       if (kind === 'call_permission_reply') {
@@ -306,7 +324,12 @@ function mapMessage(m: Dict, names: Map<string, string>, ownNumber: string): Nor
           kind: 'interactive',
           body: title,
           ...withMeta({
-            interactive: { type: 'button_reply', id: null, title, description: r.is_permanent === true ? 'Permanent' : null },
+            interactive: {
+              type: 'button_reply',
+              id: null,
+              title,
+              description: r.is_permanent === true ? 'Permanent' : null,
+            },
             callPermission: {
               response: response ?? null,
               permanent: r.is_permanent === true,
@@ -315,7 +338,9 @@ function mapMessage(m: Dict, names: Map<string, string>, ownNumber: string): Nor
           }),
         };
       }
-      return unsupported('interactive', `[Interactive · ${kind ?? 'message'}]`, { interactiveType: kind ?? null });
+      return unsupported('interactive', `[Interactive · ${kind ?? 'message'}]`, {
+        interactiveType: kind ?? null,
+      });
     }
 
     case 'order': {
@@ -324,7 +349,9 @@ function mapMessage(m: Dict, names: Map<string, string>, ownNumber: string): Nor
       const lines = items
         .slice(0, 20)
         .map((i) => `${Number(i.quantity) || 1} x ${str(i.product_retailer_id) ?? 'item'}`);
-      const text = [clip(o.text, 1000), `Order · ${items.length} item(s)`, ...lines].filter(Boolean).join('\n');
+      const text = [clip(o.text, 1000), `Order · ${items.length} item(s)`, ...lines]
+        .filter(Boolean)
+        .join('\n');
       return unsupported('order', text, {
         order: { catalogId: str(o.catalog_id) ?? null, items: items.length },
       });
@@ -356,7 +383,10 @@ function flowSummary(raw: unknown): string | undefined {
     if (!isDict(parsed)) return undefined;
     const lines = Object.entries(parsed)
       .filter(([k, v]) => k !== 'flow_token' && v !== null && v !== undefined && v !== '')
-      .map(([k, v]) => `${k.replace(/_/g, ' ')}: ${typeof v === 'object' ? JSON.stringify(v) : String(v)}`);
+      .map(
+        ([k, v]) =>
+          `${k.replace(/_/g, ' ')}: ${typeof v === 'object' ? JSON.stringify(v) : String(v)}`,
+      );
     return lines.length ? lines.join('\n').slice(0, 1000) : undefined;
   } catch {
     return undefined;
@@ -372,7 +402,11 @@ function mapStatus(s: Dict): NormalisedReceipt | Skip {
   }
   if (str(s.recipient_type) === 'group') return { ignored: 'group_status', detail: status };
 
-  const receipt: NormalisedReceipt = { providerMessageId: id, status, at: timestampOf(s.timestamp) };
+  const receipt: NormalisedReceipt = {
+    providerMessageId: id,
+    status,
+    at: timestampOf(s.timestamp),
+  };
   if (status === 'failed') {
     const e = dict(arr(s.errors)[0]);
     const code = typeof e.code === 'number' ? e.code : null;

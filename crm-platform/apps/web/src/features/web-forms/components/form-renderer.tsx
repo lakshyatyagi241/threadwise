@@ -14,6 +14,7 @@ import {
 } from 'react';
 import { FORM_CSS } from '../lib/form-css';
 import { safeHtml } from '../lib/rich-text';
+import { formatMinor, paymentOf, previewAmount } from '../lib/payment';
 import { safeRedirect } from '../lib/share';
 import {
   buildPayload,
@@ -90,7 +91,11 @@ export function FormRenderer(props: FormRendererProps) {
   const [issues, setIssues] = useState<FieldIssue[]>([]);
   const [banner, setBanner] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  const [done, setDone] = useState<null | { message: string; redirect: string | null }>(null);
+  const [done, setDone] = useState<null | {
+    message: string;
+    redirect: string | null;
+    pay?: boolean;
+  }>(null);
   const [hp, setHp] = useState('');
 
   useEffect(() => {
@@ -200,6 +205,19 @@ export function FormRenderer(props: FormRendererProps) {
       outcome = { ok: false, kind: 'error' };
     }
     setBusy(false);
+    if (outcome.ok && outcome.next.type === 'pay') {
+      // The answers are saved; the form is complete only when the gateway confirms the payment, so no `complete` event and no
+      // `submitted` message to the host page yet.
+      const url = safeRedirect(outcome.next.url);
+      if (url) {
+        setDone({ message: t('payRedirecting'), redirect: url, pay: true });
+        if (props.onRedirect) props.onRedirect(url);
+        else window.location.assign(url);
+        return;
+      }
+      setBanner(t('genericError'));
+      return;
+    }
     if (outcome.ok) {
       onEvent?.('complete');
       props.onSubmitted?.();
@@ -229,7 +247,9 @@ export function FormRenderer(props: FormRendererProps) {
         ? t('rateLimited')
         : outcome.kind === 'closed'
           ? t('closed')
-          : t('genericError'),
+          : outcome.kind === 'payment_unavailable'
+            ? t('paymentUnavailable')
+            : t('genericError'),
     );
   };
 
@@ -312,12 +332,12 @@ export function FormRenderer(props: FormRendererProps) {
             <span className="wf-tick" aria-hidden="true">
               &#10003;
             </span>
-            <h2>{t('successTitle')}</h2>
+            <h2>{done.pay ? t('payTitle') : t('successTitle')}</h2>
             {done.message && <Rich html={done.message} />}
             {done.redirect && (
               <p>
                 <a href={done.redirect} rel="noopener noreferrer">
-                  {t('continue')}
+                  {done.pay ? t('payContinue') : t('continue')}
                 </a>
               </p>
             )}
@@ -328,6 +348,8 @@ export function FormRenderer(props: FormRendererProps) {
   }
 
   const current = form.steps[step] ?? form.steps[0];
+  const payment = paymentOf(form);
+  const amount = payment ? previewAmount(form, answers) : null;
   const cover = safeImageUrl(theme.coverImage);
   const logo = safeImageUrl(theme.logo);
   const shown = issues.filter(
@@ -428,6 +450,18 @@ export function FormRenderer(props: FormRendererProps) {
           )}
           {step === lastStep && props.captcha?.enabled && (
             <div className="wf-captcha">{props.captcha.widget}</div>
+          )}
+          {step === lastStep && payment && (
+            <div className="wf-pay" data-testid="form-payment-summary" aria-live="polite">
+              <span className="wf-pay-label">{t('payTotal')}</span>
+              <strong className="wf-pay-amount" dir="ltr">
+                {amount !== null
+                  ? formatMinor(amount, payment.currency, form.settings.locale)
+                  : t(payment.amountType === 'from_field' ? 'payFromChoice' : 'payEnter')}
+              </strong>
+              {payment.description && <span className="wf-pay-note">{payment.description}</span>}
+              <span className="wf-pay-note">{t('payNote')}</span>
+            </div>
           )}
           <div className="wf-actions">
             {step > 0 && (

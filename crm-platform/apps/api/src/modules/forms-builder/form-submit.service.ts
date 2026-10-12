@@ -28,6 +28,9 @@ import {
 import { coerceCustomValue, normaliseLeadEmail, pickOwner } from '../leads';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import { resolveConsent, type ConsentOutcome } from './form-consent';
+import { computeAmount } from './form-payment-rules';
+import { FormPaymentsService, type Payer } from './form-payments.service';
+import type { PaymentRow } from './form-payments.repository';
 import { runAsSystemIn } from './form-context';
 import { notFound, type FormRoute } from './form-lookup.service';
 import { hashIp, newReceiptToken } from './form-key';
@@ -51,6 +54,7 @@ import {
   type SubmissionRow,
 } from './form-submissions.repository';
 
+const NO_PAYER: Payer = { name: null, email: null, phone: null };
 const SUBMISSION_MODULE = 'web_form_submissions';
 const CONTACTS = 'contacts';
 const EVENT_MODULE = 'forms';
@@ -131,6 +135,7 @@ export class FormSubmitService {
     private readonly tags: TagsRepository,
     private readonly activities: ContactActivitiesRepository,
     private readonly entitlements: PlanEntitlementService,
+    private readonly payments: FormPaymentsService,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     config: ConfigService<Env, true>,
@@ -176,6 +181,18 @@ export class FormSubmitService {
       ...validated.issues,
       ...(consent.missing ? [{ fieldId: 'consent', code: 'required' }] : []),
     ];
+    // A form that takes payment: the SERVER works out the amount from this frozen version and the validated answers (a number the
+    // browser sent is never read), and needs a gateway that can make a link now: otherwise the form is closed, never free.
+    let gatewaySlug = '';
+    if (def.payment.enabled) {
+      if (validated.issues.length === 0) {
+        const amount = computeAmount(def, validated.values);
+        if (!amount.ok) {
+          issues.push({ fieldId: def.payment.fieldId ?? 'payment', code: 'invalid_amount' });
+        }
+      }
+      if (issues.length === 0) gatewaySlug = await this.payments.assertGateway(orgId);
+    }
     if (issues.length > 0) {
       throw new AppError(
         ERROR_CODES.FORMS_VALIDATION,
@@ -228,10 +245,23 @@ export class FormSubmitService {
     };
 
     try {
-      return await runAsSystemIn(orgId, () =>
+      const done = await runAsSystemIn(orgId, () =>
         this.db.txAs({ orgId, userId: null }, async (tx) => {
           const c = await this.subs.claim(tx, orgId, claim);
-          if (c.kind === 'repeat') return this.responseFor(def, c.row.receiptToken);
+          if (c.kind === 'repeat') {
+            // The same page load again: a payment still open gets its link back (re-made when it lapsed).
+            const open = (await this.payments.attemptsFor(tx, orgId, [c.row.id])).get(
+              c.row.id,
+            )?.[0];
+            return {
+              res: this.responseFor(def, c.row.receiptToken),
+              pay:
+                c.row.status === 'awaiting_payment' && open?.status === 'pending'
+                  ? { payment: open, payer: NO_PAYER }
+                  : null,
+              receipt: c.row.receiptToken,
+            };
+          }
           if (c.kind === 'claimed') {
             await this.audit.record(tx, {
               module: SUBMISSION_MODULE,
@@ -239,15 +269,48 @@ export class FormSubmitService {
               action: 'insert',
             });
           }
-          if (claim.status === 'spam') return this.responseFor(def, c.row.receiptToken);
+          const plain = {
+            res: this.responseFor(def, c.row.receiptToken),
+            pay: null,
+            receipt: c.row.receiptToken,
+          };
+          if (claim.status === 'spam') return plain;
           if (capReached) {
             await this.review(tx, orgId, form, c.row, 'submissions_cap');
-            return this.responseFor(def, c.row.receiptToken);
+            return plain;
           }
-          await this.processInTx(tx, orgId, form, def, c.row, validated.values, consent);
-          return this.responseFor(def, c.row.receiptToken);
+          const opened = await this.processInTx(
+            tx,
+            orgId,
+            form,
+            def,
+            c.row,
+            validated.values,
+            consent,
+            gatewaySlug,
+          );
+          return { ...plain, pay: opened };
         }),
       );
+      if (!done.pay) return done.res;
+      // After commit: the hosted link is network I/O, never inside the transaction.
+      const url =
+        done.pay.payment.linkUrl && done.pay.payment.expiresAt.getTime() > Date.now()
+          ? done.pay.payment.linkUrl
+          : await this.payments.mintLink(
+              orgId,
+              done.pay.payment.uuid,
+              form.publicKey,
+              done.receipt,
+              done.pay.payer,
+              form.name,
+            );
+      return url
+        ? {
+            submissionToken: done.receipt,
+            next: { type: 'pay', url },
+          }
+        : done.res;
     } catch (err) {
       await this.recordFailure(orgId, form, claim, err);
       throw new AppError(
@@ -283,6 +346,8 @@ export class FormSubmitService {
           marketingOptIn: sub.consent.given && def.consent.marketing,
         }
       : { stored: null, missing: false, marketingOptIn: false };
+    // A staff re-run of a form that takes payment opens its attempt as well (staff then get the link from the submission screen).
+    const gatewaySlug = def.payment.enabled ? await this.payments.assertGateway(orgId) : '';
     await this.processInTx(
       tx,
       orgId,
@@ -291,6 +356,7 @@ export class FormSubmitService {
       sub,
       sub.answers as Record<string, StoredAnswer>,
       consent,
+      gatewaySlug,
     );
     return (await this.subs.findById(tx, orgId, sub.id))!;
   }
@@ -305,19 +371,13 @@ export class FormSubmitService {
     sub: SubmissionRow,
     values: Record<string, StoredAnswer>,
     consent: ConsentOutcome,
-  ): Promise<void> {
-    const outcome = await this.writeCrm(
-      tx,
-      orgId,
-      form,
-      def,
-      sub,
-      mapAnswers(def, values),
-      consent,
-    );
+    gatewaySlug: string,
+  ): Promise<{ payment: PaymentRow; payer: Payer } | null> {
+    const mapped = mapAnswers(def, values);
+    const outcome = await this.writeCrm(tx, orgId, form, def, sub, mapped, consent);
     if (outcome.kind === 'review') {
       await this.review(tx, orgId, form, sub, outcome.reason);
-      return;
+      return null;
     }
     const contact = (await this.contactRepo.findById(tx, orgId, outcome.contactId))!;
     const recipients = await this.recipients(tx, orgId, form, contact.ownerId);
@@ -352,6 +412,25 @@ export class FormSubmitService {
         notifyEmails: recipients.emails,
       },
     });
+    const payment = await this.payments.openAttemptIn(
+      tx,
+      orgId,
+      form,
+      def,
+      sub,
+      values,
+      gatewaySlug,
+    );
+    return payment
+      ? {
+          payment,
+          payer: {
+            name: contactDisplayName(mapped.contact).name,
+            email: mapped.contact.builtin.email ?? null,
+            phone: mapped.contact.builtin.phone ?? null,
+          },
+        }
+      : null;
   }
 
   /** Stores the submission as `needs_review`: kept with its answers, shown in "Needs attention", retried after a fix. */
@@ -624,7 +703,12 @@ export class FormSubmitService {
       label: string;
       owner: number | null;
       customTypes: Map<string, string>;
-      extras: { title: string | null; address: string | null; message: string | null };
+      extras: {
+        title: string | null;
+        address: string | null;
+        message: string | null;
+        middleName: string | null;
+      };
       created: boolean;
     },
   ): Promise<void> {
@@ -636,6 +720,7 @@ export class FormSubmitService {
     if (blank(row.name) && v.name.name) patch.name = v.name.name;
     if (blank(row.firstName) && v.name.first) patch.firstName = v.name.first;
     if (blank(row.lastName) && v.name.last) patch.lastName = v.name.last;
+    if (blank(v.extras.middleName) && b.middle_name) patch.middleName = b.middle_name.slice(0, 191);
     if (blank(row.source)) patch.source = v.label;
     if (v.owner !== null && row.ownerId === null) patch.ownerId = v.owner;
     if (blank(v.extras.title) && b.title) patch.title = b.title.slice(0, 191);

@@ -424,8 +424,8 @@ Shopify / WooCommerce / Google-Sheets / ordering features (they read and write `
 - **Actors & access:** TW-CAT-001 gates.
 - **UX & screens:** `_setup.blade.php` plus `_connect-form.blade.php`. QUIRK: in the reference, `GET /catalog` throws "Undefined variable
   $engine" because the controller puts an undefined `$engine`into the view data, so the whole Setup tab is a 500 (confirmed in the
-running reference; it fails the same way with no device, with a connected device bound to the workspace, and with products and shops
-present, because the variable is undefined in the controller at`CatalogController.php:117` whatever the data). The intended screen,
+  running reference; it fails the same way with no device, with a connected device bound to the workspace, and with products and shops
+  present, because the variable is undefined in the controller at`CatalogController.php:117` whatever the data). The intended screen,
   from the view source, is:
   - Data prepared: the workspace's catalog row, shops (storefronts, newest first), the latest 50 products by updated_at desc, a status
     bucket count over all products (`meta_sync_status` null counted as "unsynced"), the health block (TW-CAT-007), collections, total

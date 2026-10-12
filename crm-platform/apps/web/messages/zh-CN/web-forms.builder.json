@@ -51,7 +51,9 @@
         "generic": "问题：{reason}",
         "reason": {
           "crm_required_unbound": "表单中缺少工作区要求的属性。",
-          "no_contact_point": "请添加与联系人关联的邮箱或电话字段，以便将每份提交与对应的人匹配。"
+          "no_contact_point": "请添加与联系人关联的邮箱或电话字段，以便将每份提交与对应的人匹配。",
+          "payment_no_gateway": "请连接可生成支付链接的支付网关，或关闭支付。",
+          "captcha_not_configured": "CAPTCHA 已设置为始终开启，但平台没有 CAPTCHA。请选择其他设置，或联系平台管理员添加。"
         },
         "code": {
           "no_fields": "请至少添加一个字段。",
@@ -129,7 +131,14 @@
         "custom": "自定义",
         "requiredByCrm": "必填",
         "inForm": "已在表单中",
-        "full": "表单已达到区块数量上限。"
+        "full": "表单已达到区块数量上限。",
+        "section": {
+          "contact": "联系人",
+          "contactAddress": "联系人地址",
+          "company": "公司",
+          "companyAddress": "公司地址"
+        },
+        "addAddress": "添加所有地址字段"
       },
       "list": {
         "title": "字段",

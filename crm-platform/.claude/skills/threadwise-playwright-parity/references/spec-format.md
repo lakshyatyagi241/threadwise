@@ -97,7 +97,7 @@ Inside `run`, record **side-neutral observations** with `c.obs` (below) and neve
 | Member                                                     | Use                                                                                                                 |
 | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | `c.side`, `c.page`, `c.context`, `c.request`, `c.rec`      | the side name, a fresh logged-in page/context, an API client for the side, the traffic recorder                     |
-| `c.goto(path \| {threadwise, ours}, {ready})`                  | navigate and wait until the app is really done (load + quiet network, tolerant of polling)                          |
+| `c.goto(path \| {threadwise, ours}, {ready})`              | navigate and wait until the app is really done (load + quiet network, tolerant of polling)                          |
 | `c.loc(spec, root?)`, `c.visible(spec)`                    | locator from a spec                                                                                                 |
 | `c.click(spec)`, `c.fill(spec, v)`, `c.press(key)`         | counted user actions (UX friction metric)                                                                           |
 | `c.afterAction({quiet})`                                   | wait for the reaction to the last click/keypress (a request, a navigation, a re-render)                             |
@@ -105,7 +105,7 @@ Inside `run`, record **side-neutral observations** with `c.obs` (below) and neve
 | `c.snap(label)`, `c.shot(label)`                           | semantic snapshot / screenshot, kept in the run directory                                                           |
 | `c.openAlso({viewport, role, loggedIn})`                   | another isolated context (mobile viewport, other role, logged out); closed for you                                  |
 | `c.failRequests(match, 500 \| 'abort' \| {delay}, {})`     | inject failures; returns an async disposer                                                                          |
-| `c.http(method, path, {data, form, multipart, anonymous})` | API call on this side (Reference gets CSRF + XHR headers on writes)                                                    |
+| `c.http(method, path, {data, form, multipart, anonymous})` | API call on this side (Reference gets CSRF + XHR headers on writes)                                                 |
 | `c.tag(label)`, `c.digits(n)`                              | test data tagged with the run id; `digits` is deterministic per run + scenario, so both apps receive the same value |
 | `c.isMine(record)`, `c.deleteOwned(path, record)`          | true / delete only when the record carries this run's tag                                                           |
 | `c.onCleanup(fn)`                                          | undo at the end of the scenario, even on failure                                                                    |
@@ -114,16 +114,16 @@ Inside `run`, record **side-neutral observations** with `c.obs` (below) and neve
 
 The prefix decides how the comparator treats a value (full table with severities: `comparison-rules.md`).
 
-| Prefix                                                | Recorded with                         | Meaning                                                                                                   |
-| ----------------------------------------------------- | ------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `flag.` `enum.` `set.` `seq.` `status.` `map.` `num.` | `o.flag/enum/list/seq/status/set/num` | must be equal on both sides                                                                               |
-| `low.`                                                | `o.set('low.x', n)`                   | lower is better: ours may be equal or lower                                                               |
-| `lowset.`                                             | `o.set('lowset.x', [...])`            | a set of problems: only problems ours has and Reference lacks count                                          |
+| Prefix                                                | Recorded with                         | Meaning                                                                                                         |
+| ----------------------------------------------------- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `flag.` `enum.` `set.` `seq.` `status.` `map.` `num.` | `o.flag/enum/list/seq/status/set/num` | must be equal on both sides                                                                                     |
+| `low.`                                                | `o.set('low.x', n)`                   | lower is better: ours may be equal or lower                                                                     |
+| `lowset.`                                             | `o.set('lowset.x', [...])`            | a set of problems: only problems ours has and Reference lacks count                                             |
 | `abs.`                                                | `o.set('abs.x', v)`                   | higher is better: ours must be at least as good as Reference (or the best value when Reference has no baseline) |
-| `sec.`                                                | `o.set('sec.x', bool)`                | `true` is a security violation: wrong on ours whatever Reference does                                        |
-| `perf.`                                               | `o.set('perf.x', ms)`                 | ours may be up to 2.5x slower and 800 ms slower                                                           |
-| `ui.`                                                 | `o.set('ui.x', v)`                    | structure: differences become **review** items, not failures                                              |
-| `info.`                                               | `o.info('x', v)`                      | recorded for the report only (copy, texts)                                                                |
+| `sec.`                                                | `o.set('sec.x', bool)`                | `true` is a security violation: wrong on ours whatever Reference does                                           |
+| `perf.`                                               | `o.set('perf.x', ms)`                 | ours may be up to 2.5x slower and 800 ms slower                                                                 |
+| `ui.`                                                 | `o.set('ui.x', v)`                    | structure: differences become **review** items, not failures                                                    |
+| `info.`                                               | `o.info('x', v)`                      | recorded for the report only (copy, texts)                                                                      |
 
 ## intended[], skip[], severity{}
 

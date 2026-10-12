@@ -7,7 +7,7 @@ import type { AddressInfo } from 'node:net';
 import { resolve } from 'node:path';
 import { Redis } from 'ioredis';
 import { io, type Socket } from 'socket.io-client';
-import type { ServerOptions } from 'socket.io';
+import type { Server, ServerOptions } from 'socket.io';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
   REALTIME_EVENT,
@@ -56,10 +56,10 @@ class TestRedisIoAdapter extends IoAdapter {
     adapterRedis.push(pub, sub);
     this.ctor = createAdapter(pub, sub);
   }
-  override createIOServer(port: number, options?: ServerOptions): unknown {
+  override createIOServer(port: number, options?: ServerOptions): Server {
     const server = super.createIOServer(port, options) as { adapter: (a: unknown) => void };
     if (this.ctor) server.adapter(this.ctor);
-    return server;
+    return server as unknown as Server;
   }
 }
 

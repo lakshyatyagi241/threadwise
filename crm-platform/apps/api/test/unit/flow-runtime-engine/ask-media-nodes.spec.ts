@@ -55,6 +55,8 @@ function runOf(graph: ReturnType<typeof builder>, over: Partial<RunState> = {}):
     triggerText: null,
     status: 'running',
     graph,
+    graphVersionId: null,
+    nodeCount: 0,
     currentNodeId: 'a',
     stepSeq: 3,
     vars: {},

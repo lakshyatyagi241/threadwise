@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import type { ResolvedSettingsTile } from '@/features/_registry/settings-types';
-import { fold, queryTokens, searchTiles, splitKeywords, type SearchableTile } from './settings-search';
+import {
+  fold,
+  queryTokens,
+  searchTiles,
+  splitKeywords,
+  type SearchableTile,
+} from './settings-search';
 
 const entry = (
   id: string,
@@ -27,7 +33,12 @@ const ids = (hits: ReturnType<typeof searchTiles>) => hits.map((h) => h.entry.ti
 
 describe('splitKeywords', () => {
   it('splits on commas, semicolons and Arabic commas and trims', () => {
-    expect(splitKeywords('vat, gst ; sales tax،ضريبة')).toEqual(['vat', 'gst', 'sales tax', 'ضريبة']);
+    expect(splitKeywords('vat, gst ; sales tax،ضريبة')).toEqual([
+      'vat',
+      'gst',
+      'sales tax',
+      'ضريبة',
+    ]);
   });
   it('gives nothing for an empty message', () => {
     expect(splitKeywords('')).toEqual([]);
@@ -52,7 +63,10 @@ describe('fold', () => {
 
 describe('searchTiles', () => {
   const entries = [
-    entry('tax', 'Tax rates', { keywords: ['vat', 'gst'], description: 'Set the taxes added to your invoices.' }),
+    entry('tax', 'Tax rates', {
+      keywords: ['vat', 'gst'],
+      description: 'Set the taxes added to your invoices.',
+    }),
     entry('biz', 'Business profile', { description: 'Your company name, address and tax number.' }),
     entry('orders', 'Order history', { keywords: ['receipts', 'tax invoices'] }),
     entry('contact-tax', 'Contact stages', { sectionTitle: 'Data and customization' }),
@@ -109,11 +123,14 @@ describe('searchTiles', () => {
     expect(ids(searchTiles([entry('a', 'الضَّرِيبَة')], 'الضريبة'))).toEqual(['a']);
   });
 
-  it('reports the label ranges to highlight, in the label\'s own characters', () => {
+  it("reports the label ranges to highlight, in the label's own characters", () => {
     const [hit] = searchTiles([entry('a', 'Tax rates')], 'tax');
     expect(hit!.ranges).toEqual([[0, 3]]);
     const [two] = searchTiles([entry('a', 'Tax rates')], 'rat tax');
-    expect(two!.ranges).toEqual([[0, 3], [4, 7]]);
+    expect(two!.ranges).toEqual([
+      [0, 3],
+      [4, 7],
+    ]);
     const [accent] = searchTiles([entry('a', 'Café stages')], 'stage');
     expect(accent!.ranges).toEqual([[5, 10]]);
   });

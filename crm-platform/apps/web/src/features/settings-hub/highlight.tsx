@@ -1,5 +1,11 @@
 /** Wraps the given half-open ranges of `text` in `<mark>`; the ranges come from `searchTiles` and never overlap. */
-export function Highlight({ text, ranges }: { text: string; ranges: ReadonlyArray<[number, number]> }) {
+export function Highlight({
+  text,
+  ranges,
+}: {
+  text: string;
+  ranges: ReadonlyArray<[number, number]>;
+}) {
   if (ranges.length === 0) return <>{text}</>;
   const parts: Array<{ text: string; hit: boolean }> = [];
   let at = 0;

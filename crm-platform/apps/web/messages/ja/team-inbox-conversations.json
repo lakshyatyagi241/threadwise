@@ -1,7 +1,8 @@
 {
   "team-inbox-conversations": {
     "nav": {
-      "inbox": "受信箱"
+      "inbox": "受信箱",
+      "messageLogs": "メッセージログ"
     },
     "common": {
       "dismiss": "閉じる"
@@ -131,7 +132,10 @@
       "generic": "問題が発生しました。もう一度お試しください。",
       "genericWithId": "問題が発生しました。もう一度お試しください。参照: {id}",
       "templateNotSendable": "そのテンプレートはこの会話には送信できません。別のテンプレートを選択してください。",
-      "groupSendUnavailable": "WhatsApp グループへの送信はまだ利用できません。WhatsApp Business アプリから返信してください。"
+      "groupSendUnavailable": "WhatsApp グループへの送信はまだ利用できません。WhatsApp Business アプリから返信してください。",
+      "logRange": "過去1年以内の日付を選択してください。開始日は終了日より前で、未来の日付は指定できません。",
+      "logBusy": "エクスポートはすでに準備中です。届くメールをお待ちのうえ、あらためてリクエストしてください。",
+      "logNotReady": "このエクスポートはまだ準備できていないか、有効期限が切れています。もう一度リクエストしてください。"
     },
     "bubble": {
       "kind": {
@@ -141,6 +145,9 @@
       },
       "template": "テンプレートメッセージ: {name}",
       "unavailable": "メッセージを表示できません",
+      "unsupported": "お客様がこのチャネルでは表示できないものを送信しました。",
+      "forwarded": "転送済み",
+      "referral": "広告またはリンクから流入",
       "sentIn": "{lang} で送信されました。入力したテキストを表示",
       "translatedFrom": "{lang} から翻訳されました。原文を表示",
       "bot": "ボット",
@@ -162,7 +169,39 @@
       },
       "templateCopyCode": "コードをコピー",
       "templateButtonUnnamed": "ボタン",
-      "templateButtonPrefix": "ボタン: "
+      "templateButtonPrefix": "ボタン: ",
+      "reply": "返信",
+      "quote": {
+        "you": "あなた",
+        "customer": "お客様",
+        "missing": "元のメッセージ",
+        "jump": "元のメッセージへ移動",
+        "replyingTo": "{name}に返信中",
+        "kind": {
+          "text": "メッセージ",
+          "image": "写真",
+          "video": "動画",
+          "audio": "音声",
+          "voice": "ボイスメッセージ",
+          "document": "ドキュメント",
+          "sticker": "スタンプ",
+          "location": "位置情報",
+          "contact": "連絡先",
+          "template": "テンプレート",
+          "reaction": "リアクション",
+          "interactive": "選択"
+        }
+      },
+      "react": {
+        "label": "このメッセージにリアクション",
+        "add": "{emoji}でリアクション",
+        "remove": "{emoji}のリアクションを削除",
+        "more": "その他の絵文字",
+        "takeBack": "タップしてリアクションを取り消す",
+        "takeBackLabel": "あなたのリアクション {emoji}。取り消す",
+        "failed": "このリアクションは送信されませんでした"
+      },
+      "deliveryLog": "配信ログ"
     },
     "media": {
       "openImage": "画像 {name} を開く",
@@ -232,7 +271,86 @@
       "addNote": "メモを追加",
       "hint": "Enterで送信、Shift+Enterで改行します。",
       "template": "テンプレートを送信",
-      "groupSendUnavailable": "WhatsApp グループへの送信はまだ利用できません。WhatsApp Business アプリから返信してください。"
+      "groupSendUnavailable": "WhatsApp グループへの送信はまだ利用できません。WhatsApp Business アプリから返信してください。",
+      "emoji": "絵文字を挿入",
+      "emojiPanel": "絵文字",
+      "emojiRecent": "最近使用した絵文字",
+      "emojiGroups": "絵文字グループ",
+      "emojiGroup": {
+        "smileys": "顔文字",
+        "gestures": "ジェスチャー",
+        "hearts": "ハートと記号",
+        "objects": "オブジェクト"
+      },
+      "cancelReply": "返信をキャンセル",
+      "share": {
+        "open": "位置情報、連絡先、ボタンを共有",
+        "title": "共有",
+        "eyebrow": "お客様に送信",
+        "close": "閉じる",
+        "cancel": "キャンセル",
+        "send": "送信",
+        "sending": "送信中…",
+        "sent": "送信済み",
+        "windowHint": "自由形式のメッセージと同様に、WhatsApp Cloud API の番号で24時間のウィンドウが開いている必要があります。",
+        "tab": {
+          "location": "位置情報",
+          "contacts": "連絡先",
+          "buttons": "ボタン"
+        },
+        "location": {
+          "latitude": "緯度",
+          "longitude": "経度",
+          "name": "場所の名前（任意）",
+          "address": "住所（任意）",
+          "pasteHint": "地図から \"28.6139, 77.2090\" をここに貼り付けられます。"
+        },
+        "contact": {
+          "card": "連絡先 {n}",
+          "name": "名前",
+          "org": "会社（任意）",
+          "phone": "電話番号",
+          "email": "メール",
+          "remove": "連絡先 {n} を削除",
+          "add": "連絡先を追加"
+        },
+        "buttons": {
+          "type": "ボタンの種類",
+          "kind": {
+            "buttons": "返信ボタン",
+            "cta_url": "リンクボタン",
+            "list": "リスト"
+          },
+          "header": "ヘッダー（任意）",
+          "body": "メッセージ",
+          "footer": "フッター（任意）",
+          "titles": "ボタン（最大3つ）",
+          "titleN": "ボタン {n}",
+          "add": "ボタンを追加",
+          "linkText": "ボタンのテキスト",
+          "url": "リンク",
+          "listButton": "リストを開くボタン",
+          "section": "セクション {n}",
+          "sectionTitle": "セクションのタイトル",
+          "rowTitle": "行 {n} のタイトル",
+          "rowDescription": "行 {n} の説明（任意）",
+          "addRow": "行を追加",
+          "addSection": "セクションを追加",
+          "removeSection": "セクション {n} を削除",
+          "rows": "行",
+          "rowCount": "{n} / {max} 行"
+        },
+        "problem": {
+          "required": "{label}は必須です",
+          "range": "{label}が範囲外です",
+          "phoneOrEmail": "電話番号またはメールを追加してください",
+          "phone": "有効な電話番号を入力してください",
+          "email": "有効なメールアドレスを入力してください",
+          "duplicate": "{label}が他のボタンと重複しています",
+          "url": "http:// または https:// で始まるリンクを入力してください",
+          "tooManyRows": "リストには合計で最大10行まで含められます"
+        }
+      }
     },
     "panel": {
       "tabsLabel": "メモとタイムライン",
@@ -441,6 +559,80 @@
         "named_variables": "名前付き変数を使用しています。受信箱ではまだサポートされていません。"
       },
       "hasMore": "最初の {count} 件のテンプレートを表示しています。他のテンプレートは名前またはテキストで検索してください。"
+    },
+    "log": {
+      "title": "配信ログ",
+      "close": "閉じる",
+      "loading": "ログを読み込み中",
+      "tryAgain": "再試行",
+      "statusNow": "現在のステータス",
+      "createdAt": "作成日時",
+      "providerId": "プロバイダーのメッセージ ID",
+      "failedNoReason": "このメッセージは配信されませんでした。",
+      "expired": "このメッセージは {days} 日より前のものです。ログは保存されていません。",
+      "empty": "このメッセージのログは記録されていません。ログの保存開始前に送信されたメッセージにはログがありません。",
+      "archived": "{days} 日より前のエントリはアーカイブから読み込まれます。",
+      "exportLink": "メッセージログをエクスポート",
+      "source": {
+        "system": "当社システム",
+        "provider": "プロバイダーからの受信通知"
+      },
+      "event": {
+        "queued": "送信待ちに追加",
+        "attempt": "送信試行 {attempt}",
+        "accepted": "プロバイダーが受理",
+        "sentReceipt": "プロバイダーが送信を確認",
+        "delivered": "お客様の端末に配信済み",
+        "read": "お客様が既読",
+        "failedReceipt": "プロバイダーが未配信と報告",
+        "failedSend": "送信できませんでした",
+        "retryAuto": "自動的に再試行されます",
+        "retryManual": "チームメンバーが再試行を押しました"
+      },
+      "notApplied": "この通知は遅れて届いたか、以前の送信に対するものです。メッセージには反映されませんでした。",
+      "replayed": "新しいリクエストは送信されず、プロバイダーの以前の応答が再利用されました。",
+      "resent": "新しいメッセージとしてプロバイダーに再送信しました。"
+    },
+    "logs": {
+      "back": "受信トレイに戻る",
+      "title": "メッセージログ",
+      "intro": "すべてのメッセージには配信ログが保存されます。受信トレイでは {hot} 日間、その後は発生から {days} 日後までアーカイブに保存されます。日付範囲を指定してエクスポートをリクエストすると、バックグラウンドで準備され、完了したらメールでお知らせします。",
+      "requested": "エクスポートをリクエストしました。準備ができたらメールでお知らせします。",
+      "requestedTo": "エクスポートをリクエストしました。準備ができたら {email} にメールでお知らせします。",
+      "form": {
+        "title": "エクスポートをリクエスト",
+        "from": "開始日",
+        "to": "終了日",
+        "status": "現在のステータスが次のメッセージのみ",
+        "anyStatus": "すべてのステータス",
+        "hint": "日付は UTC です。最大 {days} 日前までさかのぼれます。エクスポートは一度に1件ずつ準備されます。",
+        "submit": "エクスポートをリクエスト",
+        "sending": "リクエスト中"
+      },
+      "problem": {
+        "order": "開始日は終了日より後にできません。",
+        "future": "終了日は未来の日付にできません。",
+        "tooOld": "ログは {days} 日間保存されます。もっと新しい開始日を選択してください。",
+        "invalid": "両方の日付を入力してください。"
+      },
+      "history": {
+        "title": "あなたのエクスポート",
+        "loading": "エクスポートを読み込み中",
+        "tryAgain": "再試行",
+        "empty": "エクスポートはまだありません。",
+        "onlyStatus": "{status} のメッセージのみ",
+        "requestedAt": "リクエスト日時 {date}",
+        "lines": "{count, plural, other {# 行}}",
+        "until": "{date} まで利用可能",
+        "download": "ダウンロード",
+        "status": {
+          "queued": "待機中",
+          "running": "準備中",
+          "ready": "準備完了",
+          "failed": "失敗",
+          "expired": "期限切れ"
+        }
+      }
     }
   }
 }

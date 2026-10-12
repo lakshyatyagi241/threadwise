@@ -17,6 +17,8 @@ export interface PendingSend {
   clientMessageId: string;
   kind: 'text' | 'media';
   body: string;
+  /** The message this send answers (its `id`), or null. */
+  replyToMessageId?: string | null;
   /** For a media send: what the bubble shows while it goes. */
   media: { mediaId: string; name: string; mime: string; sizeBytes: number | null } | null;
   /** `sending` until the server answered; `failed` when the request itself was refused or never arrived. */
@@ -226,6 +228,38 @@ export function hasGap(held: MessageResponse[], incomingSeq: number): boolean {
   return held.length > 0 && incomingSeq > lastSeq(held) + 1;
 }
 
+// --- reactions the team sent --------------------------------------------------------------------------------------------
+
+/** What an agent put on a message: the emoji, and how far its send got (a refused one is shown as such, never hidden). */
+export interface AgentReaction {
+  emoji: string;
+  /** The reaction message's own id: Retry works on it like on any failed send. */
+  messageId: string;
+  status: MessageStatus;
+}
+
+/** A reaction we sent is stored as an outbound message of kind `reaction` (customers' reactions never are). */
+export function isAgentReaction(m: MessageResponse): boolean {
+  return m.kind === 'reaction' && m.direction === 'out';
+}
+
+/**
+ * The reaction on each message, by the message's id: the latest one sent for it wins, and an empty one (taken back) clears it.
+ * Messages are in `seq` order, so the last write is the newest.
+ */
+export function agentReactions(messages: MessageResponse[]): Map<string, AgentReaction> {
+  const out = new Map<string, AgentReaction>();
+  for (const m of messages) {
+    if (!isAgentReaction(m) || !m.replyToMessageId) continue;
+    const emoji = m.body?.trim() ?? '';
+    // A refused "take it back" leaves the reaction where it was.
+    if (emoji === '' && m.status === 'failed') continue;
+    if (emoji === '') out.delete(m.replyToMessageId);
+    else out.set(m.replyToMessageId, { emoji, messageId: m.id, status: m.status });
+  }
+  return out;
+}
+
 // --- what the thread draws ------------------------------------------------------------------------------------------------
 
 export type ThreadItem =
@@ -255,6 +289,8 @@ export function buildItems(
   const body: Array<{ at: string; item: ThreadItem }> = [];
   let n = 0;
   for (const message of messages) {
+    // An agent's reaction is drawn on the message it reacts to, not as a bubble of its own.
+    if (isAgentReaction(message)) continue;
     while (n < visibleNotes.length && visibleNotes[n]!.createdAt < message.createdAt) {
       const note = visibleNotes[n++]!;
       body.push({ at: note.createdAt, item: { kind: 'note', key: `n:${note.id}`, note } });

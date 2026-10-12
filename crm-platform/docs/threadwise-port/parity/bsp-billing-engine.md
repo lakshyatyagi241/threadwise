@@ -6,16 +6,16 @@ real Postgres and a stand-in Graph API), `test/integration/bsp-billing-engine/al
 
 ## Intended differences from Reference
 
-| #   | Area                      | Reference                                          | Here                                                                                         | Why                                           |
-| --- | ------------------------- | ----------------------------------------------- | -------------------------------------------------------------------------------------------- | --------------------------------------------- |
-| 1   | Admin identity            | Any workspace user with the admin flag          | Platform operator pool; writes need `super_admin`                                            | Separate identity pool in this platform       |
-| 2   | Status probe (TW-BSP-001) | `enabled` flag that nothing sets, schema probes | `ok`, `module`, `configured`, `graphVersion`, `allocations`                                  | Inventory port note; the schema always exists |
-| 3   | Reseller flag             | `bill_to_platform_credit` flipped without audit | Same column; the flip is audited and emits an outbox event                                   | Inventory port note (TW-BSP-011)              |
-| 4   | Revoke                    | Does not look at the workspace billing mode     | Response lists workspaces still in reseller mode                                             | Makes the double-billing QUIRK visible        |
-| 5   | Attach all                | One long synchronous loop                       | Bounded batches with limited concurrency; reports what remains                               | A Graph call can take 30 s                    |
-| 6   | Auto-attach (TW-BSP-008)  | Fired on a WABA-saved event                     | Sweep job over connected WABAs of reseller workspaces                                        | Connection module and event not built yet     |
-| 7   | Token                     | Stored in a settings row                        | Encrypted envelope in platform settings; never returned                                      | Secrets rule                                  |
-| 8   | Dashboard month           | Current month only                              | API accepts `month=YYYY-MM`; the screen shows the current month only, as Reference does         | Port note allows the API parameter            |
+| #   | Area                      | Reference                                       | Here                                                                                                   | Why                                                  |
+| --- | ------------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ---------------------------------------------------- |
+| 1   | Admin identity            | Any workspace user with the admin flag          | Platform operator pool; writes need `super_admin`                                                      | Separate identity pool in this platform              |
+| 2   | Status probe (TW-BSP-001) | `enabled` flag that nothing sets, schema probes | `ok`, `module`, `configured`, `graphVersion`, `allocations`                                            | Inventory port note; the schema always exists        |
+| 3   | Reseller flag             | `bill_to_platform_credit` flipped without audit | Same column; the flip is audited and emits an outbox event                                             | Inventory port note (TW-BSP-011)                     |
+| 4   | Revoke                    | Does not look at the workspace billing mode     | Response lists workspaces still in reseller mode                                                       | Makes the double-billing QUIRK visible               |
+| 5   | Attach all                | One long synchronous loop                       | Bounded batches with limited concurrency; reports what remains                                         | A Graph call can take 30 s                           |
+| 6   | Auto-attach (TW-BSP-008)  | Fired on a WABA-saved event                     | Sweep job over connected WABAs of reseller workspaces                                                  | Connection module and event not built yet            |
+| 7   | Token                     | Stored in a settings row                        | Encrypted envelope in platform settings; never returned                                                | Secrets rule                                         |
+| 8   | Dashboard month           | Current month only                              | API accepts `month=YYYY-MM`; the screen shows the current month only, as Reference does                | Port note allows the API parameter                   |
 | 9   | Customer billing card     | Lives on the WhatsApp devices screen            | Removed from the workspace side (commit 6ad39bd0); the mode is set by the operator and through the API | Messages are billed from the wallet and subscription |
 
 ## Blocked or not ported (recorded, not dropped)
@@ -26,7 +26,7 @@ real Postgres and a stand-in Graph API), `test/integration/bsp-billing-engine/al
 | TW-BSP-013                | blocked    | The admin workspace form (create/edit with the reseller flag) is the workspace admin domain's screen; the wallet admin workspace detail already shows and sets the mode                                                                                                                                                                |
 | TW-BSP-017                | done       | `ratesEndpoint` and the token are this domain's settings; sync/import live in WALLET (`platform-rates.service.ts` `syncMeta` reads the BSP `connection.ratesEndpoint`; live fetch falls back to the bundled card)                                                                                                                      |
 | TW-BSP-002                | done       | Billing menu entries, "Message pricing" link on the credit page, "Rates & margin" link on the P&L page, and `/admin/bsp/rate-cards` redirects to `/admin/wallet/pricing`                                                                                                                                                               |
-| TW-BSP-018, 019, 020, 021 | not ported | Docs-only or dead code in Reference (no behaviour to port)                                                                                                                                                                                                                                                                                |
+| TW-BSP-018, 019, 020, 021 | not ported | Docs-only or dead code in Reference (no behaviour to port)                                                                                                                                                                                                                                                                             |
 
 ## Screens
 
@@ -38,11 +38,11 @@ status words, revoke confirmation, and the setup-guide copy with the Meta links.
 
 Deliberate differences on these screens:
 
-| Screen                       | Reference                                                                 | Here                                 | Why                                                                           |
+| Screen                       | Reference                                                              | Here                                 | Why                                                                           |
 | ---------------------------- | ---------------------------------------------------------------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
 | Credit, step 2 currency list | Every row of the `currencies` table (most are rejected by Meta, QUIRK) | Only the six currencies Meta accepts | Fixes the QUIRK in TW-BSP-003 rule 3                                          |
 | Credit, step 1               | No base-currency field                                                 | Extra "Base currency" field          | Needed for the income figures (`bsp_base_currency`, TW-BSP-006 settings note) |
-| Credit, Graph version        | Placeholder says v25.0, code default v26.0                             | v26.0 in both                        | Reference's own inconsistency; behaviour (v26.0) kept                            |
+| Credit, Graph version        | Placeholder says v25.0, code default v26.0                             | v26.0 in both                        | Reference's own inconsistency; behaviour (v26.0) kept                         |
 | Credit, attach confirm       | Browser `confirm()`                                                    | `ConfirmDialog`                      | @crm/ui pattern                                                               |
 | Both                         | Serif display headings with an italic accent word                      | Platform page header                 | Platform design system                                                        |
 

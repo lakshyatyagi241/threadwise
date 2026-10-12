@@ -15,13 +15,13 @@ describe('Text in English', () => {
     await initI18n('en');
   });
 
-  it('shows its text exactly as given', () => {
-    render(<Text>Hello</Text>);
+  it('shows its text exactly as given', async () => {
+    await render(<Text>Hello</Text>);
     expect(screen.getByText('Hello').props.children).toBe('Hello');
   });
 
-  it('turns an overline into spaced capitals', () => {
-    render(<Text variant="overline">Operator dashboard</Text>);
+  it('turns an overline into spaced capitals', async () => {
+    await render(<Text variant="overline">Operator dashboard</Text>);
     const style = StyleSheet.flatten(screen.getByText('Operator dashboard').props.style);
     expect(style).toMatchObject({ textTransform: 'uppercase', letterSpacing: 1.2 });
   });
@@ -30,13 +30,13 @@ describe('Text in English', () => {
 describe('Text in Hindi and Marathi', () => {
   it.each(['hi', 'mr'] as const)('adds room at the end of plain text (%s)', async (language) => {
     await initI18n(language);
-    render(<Text>नमस्ते</Text>);
+    await render(<Text>नमस्ते</Text>);
     expect(screen.getByText('नमस्ते').props.children).toBe(`नमस्ते${SLACK}`);
   });
 
   it('treats a number and a run of strings and numbers as one piece of text', async () => {
     await initI18n('hi');
-    render(
+    await render(
       <>
         <Text testID="number">{42}</Text>
         <Text testID="run">
@@ -50,7 +50,7 @@ describe('Text in Hindi and Marathi', () => {
 
   it('leaves text that holds other elements, and empty text, alone', async () => {
     await initI18n('hi');
-    render(
+    await render(
       <>
         <Text testID="nested">
           नमस्ते <Text>दुनिया</Text>
@@ -64,7 +64,7 @@ describe('Text in Hindi and Marathi', () => {
 
   it('does not space out or capitalise an overline: it would pull the letters apart', async () => {
     await initI18n('hi');
-    render(<Text variant="overline">ऑपरेटर डैशबोर्ड</Text>);
+    await render(<Text variant="overline">ऑपरेटर डैशबोर्ड</Text>);
     const style = StyleSheet.flatten(screen.getByText('ऑपरेटर डैशबोर्ड').props.style);
     expect(style.textTransform).toBeUndefined();
     expect(style.letterSpacing).toBeUndefined();

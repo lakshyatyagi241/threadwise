@@ -6,8 +6,10 @@ import {
   index,
   integer,
   jsonb,
+  numeric,
   pgTable,
   primaryKey,
+  smallint,
   text,
   timestamp,
   unique,
@@ -36,8 +38,50 @@ export const organizations = pgTable('organizations', {
   settings: jsonb('settings').$type<Record<string, unknown>>().notNull().default({}),
   /** Bumped on any role/grant change — part of the RBAC cache key. */
   rolesVersion: integer('roles_version').notNull().default(1),
+  /** Inactivity lifecycle (20261116090000_org_lifecycle.sql, ADR-0028). */
+  lastActivityAt: timestamp('last_activity_at', { withTimezone: true }).notNull().defaultNow(),
+  archivedAt: timestamp('archived_at', { withTimezone: true }),
+  /** Per-workspace overrides; null = platform default (90 / 180). */
+  archiveAfterDays: integer('archive_after_days'),
+  deleteAfterDays: integer('delete_after_days'),
+  retentionExempt: boolean('retention_exempt').notNull().default(false),
+  retentionExemptReason: text('retention_exempt_reason'),
+  retentionExemptUntil: timestamp('retention_exempt_until', { withTimezone: true }),
+  retentionExemptBy: text('retention_exempt_by'),
+  retentionExemptAt: timestamp('retention_exempt_at', { withTimezone: true }),
+  legalHold: boolean('legal_hold').notNull().default(false),
+  /** Set when the owner deletes the workspace themselves (status 'deleted'); the sweep erases it after a grace period. */
+  deletedAt: timestamp('deleted_at', { withTimezone: true }),
   createdAt: createdAt(),
   updatedAt: updatedAt(),
+});
+
+/** Append-only compliance record. No FK on purpose: it outlives the workspace. */
+export const orgLifecycleLog = pgTable('org_lifecycle_log', {
+  id: bigint('id', { mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
+  orgId: bigint('org_id', { mode: 'number' }).notNull(),
+  orgUuid: uuid('org_uuid').notNull(),
+  eventType: text('event_type').notNull(),
+  stage: text('stage').$type<'archive' | 'delete'>(),
+  reminderNo: smallint('reminder_no'),
+  inactivityCycle: timestamp('inactivity_cycle', { withTimezone: true }),
+  daysInactive: integer('days_inactive'),
+  actorType: text('actor_type').notNull().default('system'),
+  actorRef: text('actor_ref'),
+  details: jsonb('details').$type<Record<string, unknown>>().notNull().default({}),
+  createdAt: createdAt(),
+});
+
+/** Object-store keys owed a purge after a workspace erasure. */
+export const storagePurgeQueue = pgTable('storage_purge_queue', {
+  id: bigint('id', { mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
+  orgId: bigint('org_id', { mode: 'number' }).notNull(),
+  orgUuid: uuid('org_uuid').notNull(),
+  storageKey: text('storage_key').notNull(),
+  attempts: integer('attempts').notNull().default(0),
+  lastError: text('last_error'),
+  purgedAt: timestamp('purged_at', { withTimezone: true }),
+  createdAt: createdAt(),
 });
 
 export const users = pgTable(
@@ -190,3 +234,28 @@ export const sequenceCounters = pgTable(
   },
   (t) => [primaryKey({ columns: [t.orgId, t.moduleKey] })],
 );
+
+/** The platform's own sales records, kept after an erasure for the tax-law period, without the buyer's identity. */
+export const financialRecordsArchive = pgTable('financial_records_archive', {
+  id: bigint('id', { mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
+  orgUuid: uuid('org_uuid').notNull(),
+  orderUuid: uuid('order_uuid').notNull(),
+  orderNumber: text('order_number').notNull(),
+  kind: text('kind'),
+  status: text('status').notNull(),
+  currency: text('currency').notNull(),
+  amount: numeric('amount', { precision: 12, scale: 2 }).notNull(),
+  discountAmount: numeric('discount_amount', { precision: 12, scale: 4 }).notNull(),
+  taxRate: numeric('tax_rate', { precision: 5, scale: 2 }).notNull(),
+  taxAmount: numeric('tax_amount', { precision: 12, scale: 4 }).notNull(),
+  totalAmount: numeric('total_amount', { precision: 12, scale: 4 }).notNull(),
+  billingCountry: text('billing_country'),
+  billingTaxId: text('billing_tax_id'),
+  gatewaySlug: text('gateway_slug'),
+  gatewayOrderId: text('gateway_order_id'),
+  gatewayPaymentId: text('gateway_payment_id'),
+  paidAt: timestamp('paid_at', { withTimezone: true }),
+  orderCreatedAt: timestamp('order_created_at', { withTimezone: true }).notNull(),
+  archivedAt: timestamp('archived_at', { withTimezone: true }).notNull().defaultNow(),
+  retainUntil: timestamp('retain_until', { withTimezone: true }).notNull(),
+});

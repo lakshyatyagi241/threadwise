@@ -65,7 +65,7 @@
     },
     "library": {
       "title": "模板库",
-      "intro": "WhatsApp 消息模板:在此编写、提交至 Meta 审核并跟踪其状态。",
+      "intro": "选择一个入门模板，或提交您自己的模板。所有模板在获得 Meta 批准之前，都必须遵守 <link>WhatsApp 的准则</link>。",
       "sync": "从 Meta 同步",
       "syncing": "同步中...",
       "syncHint": "从 Meta 获取你的模板",

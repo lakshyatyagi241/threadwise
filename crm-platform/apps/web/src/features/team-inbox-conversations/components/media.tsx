@@ -60,7 +60,12 @@ export function VideoMedia({ media }: { media: MessageMedia }) {
       className="max-h-72 w-full max-w-xs rounded-md bg-black"
     >
       <source src={media.url} type={media.mime} />
-      <a href={media.url} target="_blank" rel="noopener noreferrer" className="text-primary underline">
+      <a
+        href={media.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-primary underline"
+      >
         {media.name ?? t('video')}
       </a>
     </video>
@@ -77,7 +82,12 @@ export function AudioMedia({ media, voice }: { media: MessageMedia; voice: boole
       className="h-10 w-64 max-w-full"
     >
       <source src={media.url} type={media.mime} />
-      <a href={media.url} target="_blank" rel="noopener noreferrer" className="text-primary underline">
+      <a
+        href={media.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-primary underline"
+      >
         {media.name ?? t('audio')}
       </a>
     </audio>

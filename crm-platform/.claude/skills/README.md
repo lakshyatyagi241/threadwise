@@ -37,9 +37,9 @@ an actual Postgres connection or an actual cross-tenant request.
 
 **Deciding and verifying**
 
-| Skill                                                 | Use it when                                                                                                              |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| [pre-pr](pre-pr/)                                     | before opening a PR — runs the same checks as CI, locally                                                                |
+| Skill                                                         | Use it when                                                                                                                 |
+| ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| [pre-pr](pre-pr/)                                             | before opening a PR — runs the same checks as CI, locally                                                                   |
 | [threadwise-playwright-parity](threadwise-playwright-parity/) | **after every feature, automatically**: Playwright twin test against the running Reference, fix sub-agents for what differs |
 
 **Mobile app** (`apps/mobile`, see [docs/mobile](../../docs/mobile/README.md))

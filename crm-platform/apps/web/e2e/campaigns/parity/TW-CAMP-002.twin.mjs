@@ -102,7 +102,8 @@ export default (h) => ({
         'Nothing picked shows every campaign type; picking a Meta number (test number included) leaves only Use template; clearing the pick shows all again',
       tags: ['ours'],
       run: {
-        threadwise: async (c) => c.obs.info('n/a', 'the local Reference has no connected number to pick'),
+        threadwise: async (c) =>
+          c.obs.info('n/a', 'the local Reference has no connected number to pick'),
         ours: async (c) => {
           await c.goto('/campaigns/create', { ready: 'main' });
           const shown = async () => ({
@@ -184,7 +185,8 @@ export default (h) => ({
     {
       scenario: /^builder\.engine-gate$/,
       side: 'threadwise',
-      reason: 'the local Reference has no connected number, so its engine gate cannot be driven live',
+      reason:
+        'the local Reference has no connected number, so its engine gate cannot be driven live',
     },
   ],
   intended: [

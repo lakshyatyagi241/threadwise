@@ -17,6 +17,18 @@ import {
 /** Longest free-form text a send accepts (WhatsApp's own text limit). */
 export const MESSAGE_BODY_MAX = 4096;
 export const MESSAGE_CAPTION_MAX = 1024;
+/** WhatsApp's own limits for an interactive message. */
+export const INTERACTIVE_BODY_MAX = 1024;
+export const INTERACTIVE_HEADER_MAX = 60;
+export const INTERACTIVE_FOOTER_MAX = 60;
+export const INTERACTIVE_BUTTON_TITLE_MAX = 20;
+export const INTERACTIVE_BUTTONS_MAX = 3;
+export const CONTACT_CARDS_MAX = 10;
+export const LIST_ROWS_MAX = 10;
+export const LIST_SECTIONS_MAX = 10;
+export const LIST_ROW_TITLE_MAX = 24;
+export const LIST_ROW_DESCRIPTION_MAX = 72;
+export const LIST_SECTION_TITLE_MAX = 24;
 /** Header every message-creating request carries, next to `clientMessageId` in the body. */
 export const IDEMPOTENCY_KEY_HEADER = 'Idempotency-Key';
 
@@ -104,6 +116,26 @@ export const messageInteractiveSchema = z.object({
 });
 export type MessageInteractive = z.infer<typeof messageInteractiveSchema>;
 
+/** Buttons an agent sent (a WhatsApp interactive message): the bubble draws the text and the buttons under it. */
+export const messageSentInteractiveSchema = z.object({
+  type: z.enum(['buttons', 'cta_url', 'list']),
+  header: z.string().nullable(),
+  body: z.string(),
+  footer: z.string().nullable(),
+  /** The buttons; for a `list` the one button that opens it. */
+  buttons: z.array(z.object({ title: z.string(), url: z.string().nullable() })),
+  /** The rows of a `list`, in their sections. */
+  sections: z
+    .array(
+      z.object({
+        title: z.string().nullable(),
+        rows: z.array(z.object({ title: z.string(), description: z.string().nullable() })),
+      }),
+    )
+    .optional(),
+});
+export type MessageSentInteractive = z.infer<typeof messageSentInteractiveSchema>;
+
 /** Where a first message came from when the customer tapped an ad or a link that opens WhatsApp (Meta `referral`). */
 export const messageReferralSchema = z.object({
   sourceType: z.string().nullable(),
@@ -146,6 +178,8 @@ export const messageResponseSchema = z.object({
   contacts: z.array(messageContactCardSchema).nullable().optional(),
   interactive: messageInteractiveSchema.nullable().optional(),
   referral: messageReferralSchema.nullable().optional(),
+  /** The buttons of an interactive message an agent or flow sent (outbound only). */
+  sentInteractive: messageSentInteractiveSchema.nullable().optional(),
   /** The customer sent something the channel cannot show (a poll, an unknown type): the body says so, the bubble marks it. */
   unsupported: z.boolean().optional(),
   /** The customer forwarded this message from another chat. */
@@ -238,6 +272,109 @@ export const sendMessageSchema = z.discriminatedUnion('kind', [
     kind: z.literal('media'),
     mediaId: uuidSchema,
     caption: z.string().trim().max(MESSAGE_CAPTION_MAX).optional(),
+  }),
+  /**
+   * React to a message with an emoji (`emoji: ''` takes the reaction back). Answers like any send: a stored `queued` message of kind
+   * `reaction` that points at `targetMessageId`. It is not a reply to show in the thread (the target's bubble carries the emoji), needs
+   * an open window like any free-form message, and only on a channel whose capabilities say `reactions`.
+   */
+  z.object({
+    clientMessageId,
+    kind: z.literal('reaction'),
+    targetMessageId: uuidSchema,
+    emoji: z.string().max(16),
+  }),
+  z.object({
+    ...sendBase,
+    kind: z.literal('location'),
+    latitude: z.number().min(-90).max(90),
+    longitude: z.number().min(-180).max(180),
+    name: z.string().trim().max(255).optional(),
+    address: z.string().trim().max(500).optional(),
+  }),
+  z.object({
+    ...sendBase,
+    kind: z.literal('contacts'),
+    contacts: z
+      .array(
+        z.object({
+          name: z.string().trim().min(1).max(200),
+          phones: z.array(z.string().trim().min(3).max(32)).max(5).default([]),
+          emails: z.array(z.string().trim().email().max(254)).max(5).default([]),
+          org: z.string().trim().max(200).optional(),
+        }),
+      )
+      .min(1)
+      .max(CONTACT_CARDS_MAX),
+  }),
+  /** Reply buttons (up to three) or one button that opens a link. Needs an open window and a channel that sends them (`capabilities.media` has `interactive`). */
+  z.object({
+    ...sendBase,
+    kind: z.literal('interactive'),
+    interactive: z
+      .discriminatedUnion('type', [
+        z.object({
+          type: z.literal('buttons'),
+          body: z.string().trim().min(1).max(INTERACTIVE_BODY_MAX),
+          header: z.string().trim().max(INTERACTIVE_HEADER_MAX).optional(),
+          footer: z.string().trim().max(INTERACTIVE_FOOTER_MAX).optional(),
+          buttons: z
+            .array(z.object({ title: z.string().trim().min(1).max(INTERACTIVE_BUTTON_TITLE_MAX) }))
+            .min(1)
+            .max(INTERACTIVE_BUTTONS_MAX),
+        }),
+        z.object({
+          /** Up to ten rows in sections, opened by one button. */
+          type: z.literal('list'),
+          body: z.string().trim().min(1).max(INTERACTIVE_BODY_MAX),
+          header: z.string().trim().max(INTERACTIVE_HEADER_MAX).optional(),
+          footer: z.string().trim().max(INTERACTIVE_FOOTER_MAX).optional(),
+          button: z.string().trim().min(1).max(INTERACTIVE_BUTTON_TITLE_MAX),
+          sections: z
+            .array(
+              z.object({
+                title: z.string().trim().max(LIST_SECTION_TITLE_MAX).optional(),
+                rows: z
+                  .array(
+                    z.object({
+                      title: z.string().trim().min(1).max(LIST_ROW_TITLE_MAX),
+                      description: z.string().trim().max(LIST_ROW_DESCRIPTION_MAX).optional(),
+                    }),
+                  )
+                  .min(1)
+                  .max(LIST_ROWS_MAX),
+              }),
+            )
+            .min(1)
+            .max(LIST_SECTIONS_MAX),
+        }),
+        z.object({
+          type: z.literal('cta_url'),
+          body: z.string().trim().min(1).max(INTERACTIVE_BODY_MAX),
+          header: z.string().trim().max(INTERACTIVE_HEADER_MAX).optional(),
+          footer: z.string().trim().max(INTERACTIVE_FOOTER_MAX).optional(),
+          text: z.string().trim().min(1).max(INTERACTIVE_BUTTON_TITLE_MAX),
+          url: z
+            .string()
+            .trim()
+            .url()
+            .max(2000)
+            .refine((u) => /^https?:\/\//i.test(u), 'Use an http or https link'),
+        }),
+      ])
+      .superRefine((i, ctx) => {
+        // WhatsApp counts rows across all sections.
+        if (
+          i.type === 'list' &&
+          i.sections.reduce((n, x) => n + x.rows.length, 0) > LIST_ROWS_MAX
+        ) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'A list holds at most 10 rows in total',
+            path: ['sections'],
+          });
+        }
+      }),
   }),
   z.object({
     ...sendBase,

@@ -176,12 +176,50 @@
       "cancelBody": "Der Durchlauf stoppt an seiner aktuellen Stelle. Der Kunde wird nicht informiert.",
       "cancelConfirm": "Durchlauf abbrechen",
       "cancelKeep": "Behalten",
-      "cancelled": "Durchlauf abgebrochen"
+      "cancelled": "Durchlauf abgebrochen",
+      "tlTitle": "Ausführungsverlauf",
+      "tlNodes": "Ausgeführte Knoten",
+      "tlErrors": "Fehler",
+      "tlTime": "Knotenzeit",
+      "filterAll": "Alle Schritte",
+      "filterErrors": "Nur Fehler",
+      "changedTitle": "Dieser Flow wurde nach dem Lauf bearbeitet",
+      "changedBody": "Das Protokoll zeigt den Flow genau so, wie er lief.",
+      "removed": "Aus dem Flow entfernt",
+      "exit": "Ausgang {port}",
+      "visit": "Durchlauf {n}",
+      "truncated": "Mehr als {max} Schritte liefen. Spätere wurden gezählt, aber nicht aufgelistet.",
+      "retention": "Protokolle werden {days} Tage nach Ende eines Laufs gelöscht.",
+      "pathTitle": "Genommener Weg",
+      "notReached": "Nicht erreicht",
+      "noErrors": "Keine Fehler in diesem Lauf.",
+      "factNext": "Weiter: {node}",
+      "factWaiting": "Wartet bei: {node}",
+      "factDelay": "Wartet {time}",
+      "factReplied": "Kunde antwortete: {text}",
+      "factEnded": "Beendet: {reason}",
+      "ioInput": "Eingabe",
+      "ioOutput": "Ausgabe",
+      "ioKind": {
+        "message": "Gesendete Nachricht",
+        "reply": "Antwort des Kunden",
+        "variable": "Variable",
+        "request": "Anfrage",
+        "response": "Antwort",
+        "result": "Ergebnis"
+      }
     },
     "event": {
       "step": "Schritt",
       "reply": "Antwort des Kunden",
-      "end": "Ende"
+      "end": "Ende",
+      "advance": "Weitergeleitet",
+      "wait": "Wartet auf Antwort",
+      "sleep": "Verzögerung",
+      "halt": "Angehalten",
+      "exec": "Ausgeführt",
+      "truncated": "Protokolllimit erreicht",
+      "start": "Gestartet"
     },
     "subs": {
       "kicker": "Flow",
@@ -469,6 +507,13 @@
       "manyBody": "{n} Kontakte werden von Anfang an erneut in ihren Flow aufgenommen und erhalten dessen Nachrichten erneut. Dies kann nicht rückgängig gemacht werden.",
       "summary": "{queued} neu gestartet, {succeeded} abgeschlossen, {failed} fehlgeschlagen, {skipped} übersprungen.",
       "flowInactive": "Aktivieren Sie diesen Flow wieder, bevor Sie die fehlgeschlagenen Kontakte erneut ausführen."
+    },
+    "outcome": {
+      "ok": "OK",
+      "error": "Fehler",
+      "skipped": "Übersprungen",
+      "waiting": "Wartet",
+      "timeout": "Zeitüberschreitung"
     }
   }
 }

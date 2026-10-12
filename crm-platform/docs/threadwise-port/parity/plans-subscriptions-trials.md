@@ -8,7 +8,7 @@ Automated: `apps/api/test/unit/plans-subscriptions-trials/plan-lifecycle.spec.ts
 `apps/api/test/e2e/plans-subscriptions-trials/billing.e2e.spec.ts` (19 scenarios against real Postgres, Redis and the real app),
 `apps/web/src/features/plans-subscriptions-trials/{lib/format.test.ts,messages.test.ts}`.
 
-| Behaviour                              | Reference                                                                       | Ours                                                                                                  | Class                                                                          |
+| Behaviour                              | Reference                                                                    | Ours                                                                                                  | Class                                                                          |
 | -------------------------------------- | ---------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
 | Downgrade online                       | refused on page and at checkout                                              | allowed for Owner/Admin, immediate, keeps paid period, nothing deleted, over-cap warning              | intended (owner's instruction)                                                 |
 | Who may change plan                    | any user views; manager+ cancels; checkout any user                          | `plan.subscription.manage` (Owner, Admin) to change; view open to all                                 | intended (RBAC)                                                                |
@@ -29,7 +29,7 @@ Automated: `apps/api/test/unit/plans-subscriptions-trials/plan-lifecycle.spec.ts
 | Quota ledger (018)                     | counts per package id + end date, fails open without table                   | same period rule (quirk kept), atomic bump, check inside the creating transaction                     | same + documented; no creator yet                                              |
 | Retention wipe (023)                   | heartbeat-triggered, no audit, partial failure possible, `attributes` listed | worker cron, per-workspace transaction, audit + event, preview, field definitions kept                | intended                                                                       |
 | Plan edit clears nothing on workspaces | n/a                                                                          | operator attach: new plan clears trial, stamps period from the plan                                   | as WSP-026                                                                     |
-| Plan-gated Marketplace add-ons         | none: Reference has no plan-gated add-on visibility                             | a plan enables add-ons (`plan_visible_addons`): visible to its workspaces, usable only once bought    | intended (our addition, owner request 2026-10-05); see the section below       |
+| Plan-gated Marketplace add-ons         | none: Reference has no plan-gated add-on visibility                          | a plan enables add-ons (`plan_visible_addons`): visible to its workspaces, usable only once bought    | intended (our addition, owner request 2026-10-05); see the section below       |
 
 ## Plan-gated Marketplace add-ons (intended difference, our addition)
 

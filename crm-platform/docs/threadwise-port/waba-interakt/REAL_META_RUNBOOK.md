@@ -6,11 +6,11 @@ and a failure at a stage tells you exactly which layer to look at. Run them on a
 
 ## What you need
 
-| For | You need |
-| --- | --- |
-| Stage 1 (adapters only) | a WABA id, a phone number id, a System User token with `whatsapp_business_messaging` + `whatsapp_business_management`, a phone you can read WhatsApp on |
-| Stage 2 (full stack, manual connect) | the above, plus Docker (Postgres, Redis) |
-| Stage 3 (Embedded Signup + inbound) | the Meta app's id, secret and Embedded Signup config id; for the Interakt route also the partner key and solution id; a public HTTPS URL (tunnel) |
+| For                                  | You need                                                                                                                                                |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Stage 1 (adapters only)              | a WABA id, a phone number id, a System User token with `whatsapp_business_messaging` + `whatsapp_business_management`, a phone you can read WhatsApp on |
+| Stage 2 (full stack, manual connect) | the above, plus Docker (Postgres, Redis)                                                                                                                |
+| Stage 3 (Embedded Signup + inbound)  | the Meta app's id, secret and Embedded Signup config id; for the Interakt route also the partner key and solution id; a public HTTPS URL (tunnel)       |
 
 Use a Meta **test number** (WhatsApp > API Setup in the Meta app) if you do not want to touch a production number. A test number can only
 send to up to five phone numbers you have verified in the dashboard.
@@ -34,16 +34,16 @@ Interakt route: `export WABA_ROUTE=interakt INTERAKT_PARTNER_AUTH_KEY=<key>` ins
 
 Read the output as:
 
-| Output | Meaning |
-| --- | --- |
-| `read phone number` fails, code 190 | token wrong or expired |
-| `read phone number` fails, code 100 | wrong phone number id, or the token cannot see it |
-| `platform=ON_PREMISE` | register the number on the Cloud API in WhatsApp Manager first |
-| `create template` fails, code 100 / subcode 2388xxx | Meta rejected the payload: send me the full line |
-| `create template` fails, code 200 / 3 | the app lacks `whatsapp_business_management` Advanced Access |
-| `send hello_world` fails, 131030 | the recipient is not on the test number's allowed list |
-| `send hello_world` fails, 133010 | the number is not registered: set `WABA_PIN=<6 digits>` and rerun |
-| send passes, nothing arrives | the number is in a restricted state; check the quality and tier lines |
+| Output                                              | Meaning                                                               |
+| --------------------------------------------------- | --------------------------------------------------------------------- |
+| `read phone number` fails, code 190                 | token wrong or expired                                                |
+| `read phone number` fails, code 100                 | wrong phone number id, or the token cannot see it                     |
+| `platform=ON_PREMISE`                               | register the number on the Cloud API in WhatsApp Manager first        |
+| `create template` fails, code 100 / subcode 2388xxx | Meta rejected the payload: send me the full line                      |
+| `create template` fails, code 200 / 3               | the app lacks `whatsapp_business_management` Advanced Access          |
+| `send hello_world` fails, 131030                    | the recipient is not on the test number's allowed list                |
+| `send hello_world` fails, 133010                    | the number is not registered: set `WABA_PIN=<6 digits>` and rerun     |
+| send passes, nothing arrives                        | the number is in a restricted state; check the quality and tier lines |
 
 When this stage passes, the adapters are proven against Meta. Tell me which steps passed (and paste any failing lines with the code).
 
@@ -72,7 +72,7 @@ corepack pnpm dev            # API :3000, worker, web :3001 (see the setup skill
 
 ## Things only a real run can settle (guesses in the code)
 
-* whether Interakt accepts `verify_token` inside `webhook_configuration` (the code falls back without it on a 4xx);
-* whether Interakt signs forwarded webhooks and with which secret (the code accepts a signature or the URL key);
-* whether `GET {interakt}/{phone}?fields=...` returns every field in the health call;
-* template edit, `business_compliance_info` and header media upload on Interakt.
+- whether Interakt accepts `verify_token` inside `webhook_configuration` (the code falls back without it on a 4xx);
+- whether Interakt signs forwarded webhooks and with which secret (the code accepts a signature or the URL key);
+- whether `GET {interakt}/{phone}?fields=...` returns every field in the health call;
+- template edit, `business_compliance_info` and header media upload on Interakt.

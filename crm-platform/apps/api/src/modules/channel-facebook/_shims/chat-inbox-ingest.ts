@@ -102,8 +102,7 @@ export class ChatInboxIngest implements InboxIngest {
         sql`SELECT id, contact_id FROM conversations WHERE org_id = ${orgId} AND uuid = ${out.conversationUuid}::uuid`,
       );
       const conv = res.rows[0] as
-        | { id: number | string; contact_id: number | string | null }
-        | undefined;
+        { id: number | string; contact_id: number | string | null } | undefined;
       if (!conv) return NOT_STORED;
       const conversationId = Number(conv.id);
       let contactId = conv.contact_id === null ? null : Number(conv.contact_id);

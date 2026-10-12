@@ -35,3 +35,31 @@ export function hubAccess(
     unsuspend: held(HUB_PERMISSIONS.unsuspend),
   };
 }
+
+/** Keys of the inactivity lifecycle (ADR-0028). */
+export const RETENTION_PERMISSIONS = {
+  view: 'platform.workspace.view_all',
+  retention: 'platform.workspace.retention',
+  legalHold: 'platform.workspace.legal_hold',
+} as const;
+
+export interface RetentionAccess {
+  /** See the Retention view and the history. */
+  view: boolean;
+  /** Change timings, never delete, restore. */
+  manage: boolean;
+  /** Legal hold (Super Admin only). */
+  legalHold: boolean;
+}
+
+/** What the caller may do on the Retention view; while the map is unknown nothing is offered. The server stays the authority. */
+export function retentionAccess(
+  permissions: Readonly<Record<string, boolean>> | undefined,
+): RetentionAccess {
+  const held = (key: string) => permissions?.[key] === true;
+  return {
+    view: held(RETENTION_PERMISSIONS.view),
+    manage: held(RETENTION_PERMISSIONS.retention),
+    legalHold: held(RETENTION_PERMISSIONS.legalHold),
+  };
+}

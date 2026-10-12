@@ -8,8 +8,8 @@ const options = [
 ] as const;
 
 describe('SegmentedControl', () => {
-  it('is a group of radio buttons with the chosen one checked', () => {
-    render(
+  it('is a group of radio buttons with the chosen one checked', async () => {
+    await render(
       <SegmentedControl
         label="Date range"
         options={options}
@@ -27,8 +27,8 @@ describe('SegmentedControl', () => {
     ).toBe(false);
   });
 
-  it('uses the short label as the name when no longer name is given', () => {
-    render(
+  it('uses the short label as the name when no longer name is given', async () => {
+    await render(
       <SegmentedControl
         label="Date range"
         options={options}
@@ -39,12 +39,12 @@ describe('SegmentedControl', () => {
     expect(screen.getByRole('radio', { name: 'QTD' })).toBeTruthy();
   });
 
-  it('tells the screen which option was pressed', () => {
+  it('tells the screen which option was pressed', async () => {
     const onChange = jest.fn();
-    render(
+    await render(
       <SegmentedControl label="Date range" options={options} value="7d" onChange={onChange} />,
     );
-    fireEvent.press(screen.getByRole('radio', { name: 'Last 30 days' }));
+    await fireEvent.press(screen.getByRole('radio', { name: 'Last 30 days' }));
     expect(onChange).toHaveBeenCalledWith('30d');
   });
 });

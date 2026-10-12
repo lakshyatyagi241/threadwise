@@ -194,13 +194,11 @@ export async function runPureProbes(ctx) {
           (notes.length
             ? `. Observations: ${notes.map((n) => `${n.name}: ${n.detail}`).join(' · ')}`
             : ''),
-        evidence: failed
-          .slice(0, 6)
-          .map((f) => ({
-            file: 'tools/auth-audit/probes/pure.probe.mts',
-            line: 0,
-            text: `${f.name} — ${f.detail ?? 'failed'}`,
-          })),
+        evidence: failed.slice(0, 6).map((f) => ({
+          file: 'tools/auth-audit/probes/pure.probe.mts',
+          line: 0,
+          text: `${f.name} — ${f.detail ?? 'failed'}`,
+        })),
         data: { assertions: rows },
         confidence: 'runtime',
         recommendation:
@@ -555,13 +553,11 @@ export async function runDependencyAudit(ctx) {
         `pnpm audit --prod: ${meta.critical ?? 0} critical, ${meta.high ?? 0} high, ${meta.moderate ?? 0} moderate, ${meta.low ?? 0} low across ${j.metadata?.totalDependencies ?? '?'} packages. ` +
         `${blockers.length} high/critical advisory(ies) are in authentication-relevant packages; ${otherHigh.length} high/critical are elsewhere (${otherHigh.map((a) => a.pkg).join(', ') || 'none'}). ` +
         `Note: the repository CI runs \`pnpm audit --prod --audit-level=high\`, which fails while a high advisory is open.`,
-      evidence: list
-        .slice(0, 8)
-        .map((a) => ({
-          file: 'pnpm-lock.yaml',
-          line: 0,
-          text: `[${a.severity}] ${a.pkg} ${a.range} — ${a.title}${a.cves.length ? ` (${a.cves.join(', ')})` : ''}; fix ${a.fix}`,
-        })),
+      evidence: list.slice(0, 8).map((a) => ({
+        file: 'pnpm-lock.yaml',
+        line: 0,
+        text: `[${a.severity}] ${a.pkg} ${a.range} — ${a.title}${a.cves.length ? ` (${a.cves.join(', ')})` : ''}; fix ${a.fix}`,
+      })),
       data: { advisories: list, counts: meta },
       confidence: 'runtime',
       recommendation: list.length

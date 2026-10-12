@@ -31,7 +31,7 @@ NEXT_PUBLIC_REALTIME_URL=http://localhost:3000/realtime      # the socket addres
 | `src/app/api/v2/[...path]`                    | same-origin proxy to the API: adds the bearer token, refreshes once on 401, blocks `auth/*` and cross-origin writes |
 | `src/features/<domain>/`                      | a domain's screens' code, its `nav.ts` menu entries and its `settings.ts` Settings tiles                            |
 | `src/features/_registry/`                     | nav and Settings types and gating rules; `nav.generated.ts` and `settings.generated.ts` are built (gitignored)      |
-| `src/features/settings-hub/`                  | the Settings pages (section list, tile grid, search) and the "Back to Settings" breadcrumb                           |
+| `src/features/settings-hub/`                  | the Settings pages (section list, tile grid, search) and the "Back to Settings" breadcrumb                          |
 | `src/components/shell/`                       | the app shell (sidebar, header, theme and language switchers)                                                       |
 | `src/lib/api`, `src/lib/auth`                 | API client, error mapping, cursor-list hook; cookie and session helpers                                             |
 | `src/i18n`, `messages/<locale>/<domain>.json` | locale list (21, three RTL), message loader with English fallback; one messages file per domain                     |

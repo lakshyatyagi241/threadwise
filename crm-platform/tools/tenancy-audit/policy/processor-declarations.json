@@ -1,0 +1,6 @@
+{
+  "infra/sandbox/code-sandbox.ts": "worker_threads sandbox for flow code nodes, not a queue processor; receives no tenant data beyond the node input",
+  "modules/notifications/web-push.processor.ts": "job carries orgId+userId; WebPushDeliveryService.deliver reads and writes through db.txAs({orgId,userId}) (verified)",
+  "modules/webhook-fanout/webhook-forward.processor.ts": "platform-level inbound webhook forwarding to operator-defined targets (webhook_forward_targets is operator-only); no tenant data",
+  "modules/whatsapp-cloud-api-waba/waba-ingest.processor.ts": "org is resolved inside WabaIngestService via waba_route_lookup(phone_number_id, waba_id) then every write is db.txAs({orgId: route.orgId}) (verified); see TI-003 for the waba_id fallback"
+}

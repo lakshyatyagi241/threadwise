@@ -97,7 +97,7 @@
       },
       "sms": {
         "label": "SMS",
-        "description": "Invia e ricevi SMS con il tuo mittente.",
+        "description": "Invia SMS con il tuo numero Twilio o con il tuo mittente MSG91.",
         "keywords": "messaggio di testo, ID mittente, dlt, twilio, cellulare"
       },
       "email": {
@@ -309,6 +309,16 @@
         "label": "Assegnazione automatica",
         "description": "Assegna automaticamente le nuove conversazioni all’agente giusto, a turno o secondo regole.",
         "keywords": "instradamento, round robin, assegna, agenti, regole inbox, distribuisci, proprietario"
+      },
+      "message-logs": {
+        "label": "Registri dei messaggi",
+        "description": "Esporta il registro di consegna dei tuoi messaggi, fino a un anno indietro, come file inviato alla tua e-mail.",
+        "keywords": "esportare, registro di consegna, cronologia, archivio, csv, messaggi"
+      },
+      "web": {
+        "label": "Chat del sito web",
+        "description": "Bot creati per la chat del tuo sito web e il widget in cui viene eseguito ciascuno.",
+        "keywords": "web, sito web, widget, chatbot, incorporare, chat live"
       }
     }
   }

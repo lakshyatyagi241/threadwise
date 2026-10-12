@@ -1,0 +1,690 @@
+{
+  "faq": {
+    "nav": {
+      "faq": "FAQ",
+      "label": "Sekcje FAQ",
+      "tab": {
+        "faqs": "FAQ",
+        "test": "Test",
+        "unanswered": "Bez odpowiedzi",
+        "insights": "Statystyki",
+        "settings": "Ustawienia"
+      },
+      "unansweredCount": "{count, plural, one {# wiadomość bez odpowiedzi} few {# wiadomości bez odpowiedzi} many {# wiadomości bez odpowiedzi} other {# wiadomości bez odpowiedzi}}"
+    },
+    "common": {
+      "dismiss": "Odrzuć",
+      "retry": "Spróbuj ponownie",
+      "requestId": "Żądanie {id}",
+      "noAccessTitle": "Nie masz dostępu do tego ekranu",
+      "noAccess": "Poproś administratora przestrzeni roboczej o nadanie Twojej roli uprawnienia {permission}."
+    },
+    "errors": {
+      "network": "Nie udało się połączyć z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+      "forbidden": "Twoja rola nie ma uprawnień do tej czynności.",
+      "notFound": "To FAQ lub ta wiadomość już nie istnieje. Mogła zostać usunięta.",
+      "conflict": "Ktoś inny zmienił to w trakcie Twojej edycji.",
+      "duplicateQuestion": "Inne FAQ ma już to pytanie.",
+      "duplicateVariation": "To FAQ ma już to sformułowanie.",
+      "limitReached": "Twoja przestrzeń robocza osiągnęła limit FAQ. Usuń nieużywane FAQ lub warianty albo poproś administratora platformy o zwiększenie limitu.",
+      "flowNotFound": "Wybrany przepływ nie istnieje już w tej przestrzeni roboczej. Wybierz inny.",
+      "embeddingUnavailable": "Dostawca AI jest niedostępny. Dodaj klucz OpenRouter do przestrzeni roboczej lub poproś administratora platformy o włączenie klucza współdzielonego, a potem spróbuj ponownie.",
+      "engineDisabled": "Odpowiadanie przez FAQ jest teraz wyłączone dla całej platformy.",
+      "modelNotAllowed": "Model AI do dopasowywania używany przez platformę jest niedozwolony. Skontaktuj się z administratorem platformy.",
+      "validation": "Niektóre pola wymagają poprawy.",
+      "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
+      "unexpected": "Coś poszło nie tak. Spróbuj ponownie, a jeśli problem się powtarza, podaj pomocy technicznej identyfikator żądania.",
+      "flowNodeNotFound": "Wybranego kroku nie ma już w tym przepływie. Wybierz inny krok albo zacznij od początku przepływu."
+    },
+    "banner": {
+      "enabledToast": "Odpowiadanie przez FAQ jest włączone.",
+      "engineOff": "Platforma wyłączyła odpowiadanie przez FAQ. Klienci nie dostaną odpowiedzi z FAQ, dopóki nie zostanie ono włączone ponownie.",
+      "modelChanged": "Platforma zmieniła model AI po dostrojeniu tego progu. Wyniki się zmieniły, więc sprawdź czułość.",
+      "reviewSensitivity": "Sprawdź czułość",
+      "offTitle": "Odpowiadanie przez FAQ jest WYŁĄCZONE dla klientów",
+      "offBody": "Możesz pisać i testować FAQ, ale klienci nie dostaną odpowiedzi, dopóki tego nie włączysz.",
+      "offNoRight": "Poproś osobę z uprawnieniem faq.settings.manage (zwykle administratora przestrzeni roboczej) o włączenie.",
+      "enable": "Włącz odpowiadanie przez FAQ"
+    },
+    "list": {
+      "title": "FAQ",
+      "subtitle": "Pytania zadawane przez klientów i odpowiedzi Twojego bota. Klienci nie muszą używać dokładnie Twoich słów.",
+      "add": "Dodaj FAQ",
+      "stats": {
+        "label": "Podsumowanie FAQ",
+        "total": "FAQ",
+        "active": "Aktywne",
+        "paused": "Wstrzymane",
+        "variations": "Sformułowania",
+        "pending": "Indeksowanie",
+        "pendingHint": "Działa w kilka sekund",
+        "failed": "Indeksowanie nie powiodło się",
+        "failedHint": "Wymaga uwagi"
+      },
+      "failedBanner": "{count, plural, one {# sformułowanie nie zostało zaindeksowane} few {# sformułowania nie zostały zaindeksowane} many {# sformułowań nie zostało zaindeksowanych} other {# sformułowania nie zostało zaindeksowane}}, więc nie mogą jeszcze pasować do wiadomości klientów.",
+      "showFailed": "Pokaż FAQ z błędami",
+      "search": "Szukaj FAQ",
+      "searchPlaceholder": "Szukaj pytań i sformułowań",
+      "filter": {
+        "status": "Status",
+        "anyStatus": "Dowolny status",
+        "category": "Kategoria",
+        "anyCategory": "Dowolna kategoria",
+        "indexing": "Indeksowanie",
+        "anyIndexing": "Dowolne",
+        "pending": "W trakcie indeksowania",
+        "failed": "Niepowodzenie"
+      },
+      "status": {
+        "active": "Aktywne",
+        "paused": "Wstrzymane"
+      },
+      "clearFilters": "Wyczyść filtry",
+      "bulk": {
+        "label": "Działania zbiorcze",
+        "selected": "{count, plural, one {Wybrano # FAQ} few {Wybrano # FAQ} many {Wybrano # FAQ} other {Wybrano # FAQ}}",
+        "pause": "Wstrzymaj",
+        "activate": "Aktywuj",
+        "delete": "Usuń",
+        "clear": "Wyczyść zaznaczenie",
+        "done": {
+          "pause": "{count, plural, one {Wstrzymano # FAQ} few {Wstrzymano # FAQ} many {Wstrzymano # FAQ} other {Wstrzymano # FAQ}}.",
+          "activate": "{count, plural, one {Aktywowano # FAQ} few {Aktywowano # FAQ} many {Aktywowano # FAQ} other {Aktywowano # FAQ}}.",
+          "delete": "{count, plural, one {Usunięto # FAQ} few {Usunięto # FAQ} many {Usunięto # FAQ} other {Usunięto # FAQ}}."
+        }
+      },
+      "paused": "FAQ wstrzymane.",
+      "activated": "FAQ aktywowane.",
+      "deleted": "FAQ usunięte.",
+      "empty": {
+        "title": "Naucz bota odpowiadać na częste pytania",
+        "body": "Wpisz pytanie i odpowiedź raz. Bot dopasuje to, co piszą klienci, ich własnymi słowami, i odpowie lub uruchomi przepływ.",
+        "how": "Dodaj kilka innych sposobów zadania tego samego pytania (sformułowań) i przetestuj je, zanim zobaczą je klienci.",
+        "cta": "Dodaj pierwsze FAQ",
+        "noRight": "Poproś administratora przestrzeni roboczej o uprawnienie do dodawania FAQ."
+      },
+      "noMatch": {
+        "title": "Żadne FAQ nie pasuje do tych filtrów",
+        "body": "Spróbuj innego wyszukiwania lub wyczyść filtry."
+      },
+      "selectAll": "Zaznacz wszystkie FAQ na tej stronie",
+      "selectRow": "Zaznacz: {question}",
+      "col": {
+        "question": "Pytanie",
+        "answer": "Odpowiedź",
+        "indexing": "Aktywne sformułowania",
+        "answered": "Odpowiedzi (90 dni)",
+        "status": "Status",
+        "actions": "Działania"
+      },
+      "variationCount": "{count, plural, one {# sformułowanie} few {# sformułowania} many {# sformułowań} other {# sformułowania}}",
+      "flowMissing": "Brak przepływu",
+      "neverAnswered": "Jeszcze nie",
+      "toggleLabel": "Aktywne: {question}",
+      "edit": "Edytuj: {question}",
+      "editShort": "Edytuj",
+      "delete": "Usuń: {question}",
+      "deleteShort": "Usuń",
+      "loadMore": "Wczytaj więcej",
+      "loadingMore": "Wczytywanie",
+      "confirm": {
+        "bulkTitle": "{count, plural, one {Usunąć # FAQ?} few {Usunąć # FAQ?} many {Usunąć # FAQ?} other {Usunąć # FAQ?}}",
+        "bulkBody": "{count, plural, one {To FAQ i jego sformułowania zostaną} few {Te FAQ i ich sformułowania zostaną} many {Te FAQ i ich sformułowania zostaną} other {Te FAQ i ich sformułowania zostaną}} usunięte na stałe. Tej operacji nie można cofnąć.",
+        "rowTitle": "Usunąć to FAQ?",
+        "rowBody": "„{question}” i wszystkie jego sformułowania zostaną usunięte na stałe. Tej operacji nie można cofnąć.",
+        "delete": "Usuń",
+        "cancel": "Anuluj"
+      },
+      "indexing": {
+        "summary": "Aktywnych: {ready}, w indeksowaniu: {pending}, z błędem: {failed}",
+        "ready": "Aktywnych: {count}",
+        "pending": "W indeksowaniu: {count}",
+        "failed": "Z błędem: {count}"
+      },
+      "stepMissing": "Brak kroku",
+      "startsAt": "Start od: {step}"
+    },
+    "editor": {
+      "back": "Wróć do FAQ",
+      "backToList": "Wróć do FAQ",
+      "newTitle": "Nowe FAQ",
+      "newSubtitle": "Wpisz pytanie i odpowiedź, a potem dodaj inne sposoby, w jakie klienci mogą o to zapytać.",
+      "editTitle": "Edytuj FAQ",
+      "unsaved": "Niezapisane zmiany",
+      "cancel": "Anuluj",
+      "create": "Utwórz FAQ",
+      "save": "Zapisz zmiany",
+      "delete": "Usuń",
+      "created": "FAQ utworzone.",
+      "saved": "FAQ zapisane.",
+      "deleted": "FAQ usunięte.",
+      "readOnly": "Możesz wyświetlić to FAQ, ale Twoja rola nie może go zmieniać.",
+      "faqLimit": "Twoja przestrzeń robocza osiągnęła limit {max} FAQ. Usuń jedno, aby dodać kolejne.",
+      "prefilled": "Pytanie zostało wypełnione na podstawie wiadomości klienta bez odpowiedzi. Zapisanie tego FAQ oznacza też tę wiadomość jako obsłużoną.",
+      "tryItSaveFirst": "Najpierw zapisz FAQ, a potem sprawdzisz, jak dopasowują się do niego wiadomości klientów.",
+      "conflict": {
+        "title": "Ktoś inny zmienił to FAQ",
+        "body": "Twoje zmiany nadal tu są. Zachowaj je i zapisz ponownie na najnowszej wersji albo odrzuć je i wczytaj najnowszą wersję.",
+        "keep": "Zachowaj moje zmiany",
+        "reload": "Wczytaj najnowszą wersję",
+        "kept": "Zaktualizowano do najnowszej wersji. Twoje zmiany zostały zachowane, zapisz, aby je zastosować."
+      },
+      "question": {
+        "title": "Pytanie",
+        "hint": "Pytanie tak, jak byś je napisał(a). Liczy się też jako pierwsze sformułowanie.",
+        "label": "Pytanie",
+        "count": "{count} / {max}"
+      },
+      "category": {
+        "label": "Kategoria",
+        "hint": "Opcjonalnie. Ułatwia filtrowanie."
+      },
+      "status": {
+        "label": "Status",
+        "hint": "Wstrzymane FAQ nigdy nie odpowiadają.",
+        "active": "Aktywne",
+        "paused": "Wstrzymane"
+      },
+      "answer": {
+        "title": "Odpowiedź",
+        "hint": "Co otrzyma klient, gdy to FAQ pasuje.",
+        "text": "Odpowiedź tekstowa",
+        "flow": "Uruchom przepływ",
+        "textLabel": "Tekst odpowiedzi",
+        "count": "{count} / {max} znaków",
+        "preview": "Jak to wygląda w WhatsApp",
+        "previewEmpty": "Tutaj pojawi się Twoja odpowiedź",
+        "flowLabel": "Przepływ do uruchomienia",
+        "noFlow": "Nie wybrano przepływu",
+        "startsAt": "Start od kroku: {step}",
+        "stepGone": "Krok, od którego startuje to FAQ, już nie istnieje, więc klienci nie dostają odpowiedzi."
+      },
+      "advanced": {
+        "title": "Zaawansowane: czułość tylko dla tego FAQ",
+        "body": "Domyślnie każde FAQ używa czułości przestrzeni roboczej. Ustaw własną wartość, gdy to FAQ dopasowuje się zbyt chętnie (zwiększ) lub zbyt rzadko (zmniejsz).",
+        "custom": "Użyj własnej czułości dla tego FAQ",
+        "sliderLabel": "Dopasuj od",
+        "workspace": "Czułość przestrzeni roboczej wynosi {value}%.",
+        "following": "Zgodnie z czułością przestrzeni roboczej ({value}%)."
+      },
+      "problem": {
+        "question": {
+          "required": "Wpisz pytanie zadawane przez klientów.",
+          "tooLong": "Pytanie może mieć maksymalnie {max} znaków.",
+          "invalid": "To pytanie jest nieprawidłowe."
+        },
+        "answerText": {
+          "required": "Wpisz odpowiedź, którą powinni dostać klienci.",
+          "tooLong": "Odpowiedź może mieć maksymalnie {max} znaków.",
+          "invalid": "Ta odpowiedź jest nieprawidłowa."
+        },
+        "flowId": {
+          "required": "Wybierz przepływ do uruchomienia.",
+          "tooLong": "Wybierz przepływ do uruchomienia.",
+          "invalid": "Wybierz przepływ do uruchomienia."
+        },
+        "category": {
+          "required": "Wpisz kategorię lub zostaw pole puste.",
+          "tooLong": "Kategoria może mieć maksymalnie {max} znaków.",
+          "invalid": "Ta kategoria jest nieprawidłowa."
+        },
+        "thresholdOverride": {
+          "required": "Wybierz wartość od 5% do 99%.",
+          "tooLong": "Wybierz wartość od 5% do 99%.",
+          "invalid": "Wybierz wartość od 5% do 99%."
+        },
+        "flowNodeId": {
+          "required": "Wybierz krok tego przepływu albo początek przepływu.",
+          "tooLong": "Wybierz krok tego przepływu albo początek przepływu.",
+          "invalid": "Wybierz krok tego przepływu albo początek przepływu."
+        }
+      },
+      "deleteConfirm": {
+        "title": "Usunąć to FAQ?",
+        "body": "FAQ i wszystkie jego sformułowania zostaną usunięte na stałe. Tej operacji nie można cofnąć.",
+        "confirm": "Usuń"
+      },
+      "leave": {
+        "title": "Wyjść bez zapisywania?",
+        "body": "Zmiany w tym FAQ nie zostały zapisane.",
+        "leave": "Wyjdź",
+        "stay": "Kontynuuj edycję"
+      }
+    },
+    "flowPicker": {
+      "noAccess": "Aby wybrać tu przepływ, potrzebujesz uprawnienia do wyświetlania przepływów (flb.flows.read).",
+      "missing": "Przepływ uruchamiany przez to FAQ już nie istnieje. Wybierz inny przepływ, inaczej to FAQ nie będzie mogło odpowiadać.",
+      "selected": "Wybrano",
+      "search": "Szukaj przepływów",
+      "searchPlaceholder": "Szukaj przepływów po nazwie",
+      "retry": "Spróbuj ponownie",
+      "loading": "Wczytywanie przepływów",
+      "noMatch": "Żaden przepływ nie ma takiej nazwy.",
+      "none": "Nie masz jeszcze żadnych przepływów. Najpierw utwórz jeden w sekcji Przepływy.",
+      "listLabel": "Przepływy",
+      "state": {
+        "live": "Opublikowany",
+        "off": "Nieaktywny",
+        "draft": "Wersja robocza"
+      },
+      "note": "Przepływ startuje od kroku wybranego poniżej albo od swojego początku. Uruchomić można tylko opublikowane, aktywne przepływy."
+    },
+    "variations": {
+      "title": "Warianty pytania",
+      "hint": "Inne sposoby, w jakie klient może o to zapytać. Każdy jest dopasowywany według znaczenia.",
+      "counterLabel": "Użyto {count} z {max} sformułowań",
+      "listLabel": "Sformułowania",
+      "questionEmpty": "Tutaj pojawi się Twoje pytanie",
+      "source": {
+        "question": "Pytanie",
+        "manual": "Wpisane",
+        "ai": "AI",
+        "learned": "Wyuczone",
+        "import": "Zaimportowane"
+      },
+      "none": "Brak dodatkowych sformułowań. Dodaj kilka lub poproś AI o propozycje.",
+      "edit": "Edytuj: {text}",
+      "remove": "Usuń: {text}",
+      "editLabel": "Edytuj sformułowanie",
+      "save": "Zapisz",
+      "cancel": "Anuluj",
+      "addLabel": "Nowe sformułowanie",
+      "addPlaceholder": "Inny sposób zadania tego pytania",
+      "add": "Dodaj",
+      "pasteMany": "Wklej wiele",
+      "full": "To FAQ osiągnęło limit {max} sformułowań.",
+      "failedNotice": "{count, plural, one {# sformułowanie nie zostało zaindeksowane} few {# sformułowania nie zostały zaindeksowane} many {# sformułowań nie zostało zaindeksowanych} other {# sformułowania nie zostało zaindeksowane}}. Edytuj i zapisz sformułowanie, aby spróbować ponownie.",
+      "suggest": "Zaproponuj z AI",
+      "suggestSaveFirst": "Najpierw zapisz FAQ, a potem AI będzie mogło zaproponować sformułowania.",
+      "suggesting": "Pobieranie propozycji od AI",
+      "suggestionsReady": "{count, plural, one {# propozycja gotowa} few {# propozycje gotowe} many {# propozycji gotowych} other {# propozycji gotowych}}",
+      "suggestionsTitle": "Proponowane sformułowania",
+      "suggestionsHint": "Nic nie zostanie zapisane, dopóki ich nie dodasz. Odznacz te, których nie chcesz.",
+      "suggestionsNone": "AI nie miało nowych sformułowań do zaproponowania.",
+      "addSelected": "Dodaj zaznaczone ({count})",
+      "discard": "Odrzuć",
+      "bulk": {
+        "label": "Jedno sformułowanie w wierszu",
+        "placeholder": "Gdzie jest moja paczka\nŚledź moje zamówienie\nCzy moje zamówienie zostało wysłane",
+        "summary": "{count, plural, one {# nowe sformułowanie zostanie dodane} few {# nowe sformułowania zostaną dodane} many {# nowych sformułowań zostanie dodanych} other {# nowego sformułowania zostanie dodane}}",
+        "duplicates": "{count, plural, one {# duplikat pominięto} few {# duplikaty pominięto} many {# duplikatów pominięto} other {# duplikatu pominięto}}",
+        "tooLong": "{count, plural, one {# wiersz ma} few {# wiersze mają} many {# wierszy ma} other {# wiersza ma}} ponad {max} znaków i {count, plural, one {został pominięty} other {zostało pominiętych}}.",
+        "overflow": "{count, plural, one {# wiersz nie mieści się} few {# wiersze nie mieszczą się} many {# wierszy nie mieści się} other {# wiersza nie mieści się}} w limicie sformułowań i {count, plural, one {został pominięty} other {zostało pominiętych}}.",
+        "more": "i jeszcze {count}",
+        "add": "Dodaj {count, plural, one {# sformułowanie} few {# sformułowania} many {# sformułowań} other {# sformułowania}}"
+      },
+      "state": {
+        "ready": "Aktywne",
+        "pending": "Indeksowanie",
+        "pendingHint": "Zapisano. Zacznie pasować za kilka sekund.",
+        "failed": "Niepowodzenie",
+        "failedHint": "Edytuj i zapisz sformułowanie, aby spróbować ponownie.",
+        "noReason": "Nie podano powodu"
+      },
+      "confirm": {
+        "title": "Usunąć to sformułowanie?",
+        "body": "„{text}” nie będzie już prowadzić do tego FAQ.",
+        "remove": "Usuń"
+      },
+      "errors": {
+        "duplicate": "To FAQ ma już takie sformułowanie.",
+        "tooLong": "Sformułowanie może mieć maksymalnie {max} znaków.",
+        "aiKeys": "Skonfiguruj klucze AI"
+      }
+    },
+    "tryIt": {
+      "title": "Wypróbuj",
+      "hint": "Wpisz wiadomość klienta i zobacz, co by się stało. Nic nie zostanie wysłane.",
+      "label": "Wiadomość klienta",
+      "placeholder": "Gdzie jest moja paczka?",
+      "run": "Wypróbuj"
+    },
+    "decision": {
+      "verdict": {
+        "answer": {
+          "title": "Odpowiedziałoby",
+          "body": "Jakieś FAQ pasuje wystarczająco dobrze. Klient dostaje jego odpowiedź (lub uruchamia się jego przepływ)."
+        },
+        "below": {
+          "title": "Poniżej progu",
+          "body": "Najbliższe FAQ nie osiągnęło wystarczającego wyniku, więc nic by nie wysłano. Dodaj to sformułowanie do FAQ lub zmniejsz czułość."
+        },
+        "ambiguous": {
+          "title": "Niejednoznaczne",
+          "body": "Dwa FAQ uzyskały niemal ten sam wynik, więc bot nie zgadywałby. Bardziej zróżnicuj FAQ lub zmniejsz minimalną przewagę."
+        },
+        "noFaqs": {
+          "title": "Brak FAQ do dopasowania",
+          "body": "Nie ma jeszcze aktywnych FAQ z działającymi sformułowaniami."
+        },
+        "providerError": {
+          "title": "Błąd dostawcy",
+          "body": "Nie udało się połączyć z dostawcą AI, więc możliwe było tylko dopasowanie pisowni."
+        },
+        "notSent": {
+          "title": "Dopasowano, nie wysłano",
+          "body": "FAQ pasowało, ale odpowiedź nie została wysłana, na przykład dlatego, że odpowiadanie przez FAQ było wyłączone."
+        },
+        "vetoed": {
+          "title": "Odpowiedź wstrzymana",
+          "body": "Dopasowanie miało wystarczająco wysoki wynik, ale drugie sprawdzenie odrzuciło je, więc nic by nie wysłano."
+        }
+      },
+      "tier": {
+        "exact": {
+          "name": "Dokładne dopasowanie",
+          "body": "Wiadomość jest taka sama jak zapisane sformułowanie, z pominięciem wielkości liter i spacji."
+        },
+        "semantic": {
+          "name": "Dopasowanie według znaczenia",
+          "body": "Wiadomość porównano pod względem znaczenia z każdym aktywnym sformułowaniem, więc pasować mogą także inne słowa."
+        },
+        "trigram": {
+          "name": "Zapasowe dopasowanie pisowni",
+          "body": "Porównanie według znaczenia nie było możliwe, więc wiadomość porównano litera po literze. To wyłapuje literówki, ale nie synonimy."
+        }
+      },
+      "scoreLabel": "Wynik {score}%, wymagany próg to {threshold}%",
+      "score": "Wynik",
+      "threshold": "Wymagane",
+      "margin": "Przewaga nad drugim miejscem",
+      "marginValue": "{margin} p. proc. (wymagane {needed})",
+      "note": "Uwaga",
+      "model": "Model",
+      "noModel": "nie użyto",
+      "latency": "Czas",
+      "ms": "{ms} ms",
+      "winner": {
+        "title": "Co dostałby klient",
+        "unavailable": "Nie udało się wczytać tego FAQ.",
+        "flow": "Uruchamia przepływ {name}",
+        "flowMissing": "Uruchamia przepływ, który już nie istnieje"
+      },
+      "candidates": {
+        "title": "Najlepsze dopasowania",
+        "matchedOn": "Dopasowano do",
+        "best": "Najlepsze",
+        "paused": "Wstrzymane",
+        "scoreLabel": "Wynik {score}%",
+        "addVariation": "Dodaj tę frazę jako wariant do: {question}",
+        "added": "Dodano",
+        "addedToast": "Dodano jako sformułowanie FAQ: {question}.",
+        "alreadyThere": "To sformułowanie już tam jest.",
+        "open": "Otwórz FAQ"
+      }
+    },
+    "playground": {
+      "title": "Jak mój bot by na to odpowiedział?",
+      "subtitle": "Przepuść wiadomość klienta przez to samo dopasowywanie, którego używa Twój bot. Nic nie zostanie wysłane ani policzone w statystykach.",
+      "label": "Wiadomość klienta",
+      "placeholder": "Gdzie jest moja paczka?",
+      "run": "Uruchom",
+      "hint": "Dopasowywane są tylko zapisane FAQ. Biorą w tym udział aktywne FAQ z działającymi sformułowaniami.",
+      "empty": "Wpisz wiadomość powyżej i uruchom test, aby zobaczyć decyzję.",
+      "history": {
+        "title": "Ta sesja",
+        "empty": "Tutaj pojawi się Twoje 10 ostatnich testów."
+      }
+    },
+    "unanswered": {
+      "title": "Wiadomości bez odpowiedzi",
+      "subtitle": "Wiadomości klientów, na które żadne FAQ nie odpowiedziało. Ucz na nich bota.",
+      "search": "Szukaj wiadomości bez odpowiedzi",
+      "searchPlaceholder": "Szukaj wiadomości",
+      "listLabel": "Wiadomości bez odpowiedzi",
+      "emptyTitle": "Nic nie czeka",
+      "emptyBody": "Na każdą wiadomość klienta odpowiedziano lub została obsłużona. Nowe wiadomości bez odpowiedzi pojawią się tutaj.",
+      "noMatch": "Żadna wiadomość nie pasuje do wyszukiwania",
+      "notKept": "Treść wiadomości nie jest zapisywana (zapisywanie zapytań jest wyłączone)",
+      "closest": "Najbliższe FAQ:",
+      "allCandidates": "Zobacz wszystkich kandydatów ({count})",
+      "addToFaq": "Dodaj do FAQ",
+      "createFaq": "Utwórz FAQ na tej podstawie",
+      "dismiss": "Odrzuć",
+      "dismissed": "Wiadomość odrzucona.",
+      "learned": "Dodano do „{question}”. Od teraz na taką wiadomość będzie padać odpowiedź.",
+      "pickTitle": "Do którego FAQ dodać tę wiadomość?",
+      "loadMore": "Wczytaj więcej",
+      "loadingMore": "Wczytywanie"
+    },
+    "picker": {
+      "close": "Zamknij",
+      "search": "Szukaj FAQ",
+      "searchPlaceholder": "Szukaj FAQ",
+      "loading": "Wczytywanie FAQ",
+      "none": "Nie znaleziono FAQ.",
+      "paused": "Wstrzymane",
+      "more": "Wczytaj więcej"
+    },
+    "log": {
+      "title": "Dziennik dopasowań",
+      "hint": "Każda wiadomość klienta, którą sprawdziło FAQ, i powód, dla którego odpowiedziało lub nie.",
+      "viewLabel": "Pokaż",
+      "view": {
+        "all": "Wszystkie",
+        "answered": "Z odpowiedzią",
+        "unanswered": "Bez odpowiedzi",
+        "errors": "Błędy"
+      },
+      "search": "Szukaj w dzienniku",
+      "searchPlaceholder": "Szukaj wiadomości",
+      "empty": "Nie ma tu jeszcze wiadomości.",
+      "col": {
+        "time": "Kiedy",
+        "message": "Wiadomość",
+        "outcome": "Wynik",
+        "faq": "FAQ",
+        "score": "Wynik"
+      },
+      "notKept": "Nie zapisano ({length} znaków)",
+      "testRun": "(test)",
+      "expand": "Pokaż szczegóły",
+      "collapse": "Ukryj szczegóły",
+      "noCandidates": "Nie rozważano żadnych kandydatów.",
+      "matchedOn": "dopasowano do",
+      "detail": {
+        "tier": "Poziom",
+        "model": "Model",
+        "latency": "Czas",
+        "ms": "{ms} ms"
+      },
+      "loadMore": "Wczytaj więcej",
+      "loadingMore": "Wczytywanie",
+      "why": {
+        "answered": "Odpowiedziano z FAQ „{faq}” z wynikiem {score}%.",
+        "flowStarted": "Uruchomiono przepływ FAQ „{faq}” z wynikiem {score}%.",
+        "belowThreshold": "Najlepsze dopasowanie uzyskało {score}%, poniżej progu {threshold}%, więc nic nie wysłano.",
+        "belowThresholdNoBar": "Najlepsze dopasowanie uzyskało {score}%, co nie wystarczyło, więc nic nie wysłano.",
+        "lowMargin": "Dwa FAQ były zbyt blisko siebie ({score}% i {second}%), więc bot nie zgadywał.",
+        "noFaqs": "Brak aktywnych FAQ z działającymi sformułowaniami do dopasowania.",
+        "providerError": "Dostawca AI zawiódł, więc bot mógł dopasować tylko według pisowni.",
+        "notSent": "FAQ pasowało, ale odpowiedź nie została wysłana.",
+        "tier": "Zdecydował poziom: {tier}.",
+        "error": "Błąd: {error}",
+        "vetoed": "Najlepsze dopasowanie uzyskało {score}%, powyżej progu {threshold}%, ale drugie sprawdzenie uznało, że nie odpowiada ono na wiadomość, więc nic nie wysłano.",
+        "vetoedNoBar": "Najlepsze dopasowanie uzyskało {score}%, ale drugie sprawdzenie uznało, że nie odpowiada ono na wiadomość, więc nic nie wysłano."
+      },
+      "flowRun": "(z przepływu)"
+    },
+    "insights": {
+      "title": "Statystyki FAQ",
+      "subtitle": "Jak dobrze Twoje FAQ odpowiadają na prawdziwe wiadomości klientów i co poprawić.",
+      "range": {
+        "label": "Okres",
+        "days": "{days} dni"
+      },
+      "empty": {
+        "title": "Brak wiadomości",
+        "body": "Gdy klienci zaczną pisać, a odpowiadanie przez FAQ będzie włączone, zobaczysz, jak często bot odpowiada, które FAQ działają i czego brakuje."
+      },
+      "kpi": {
+        "label": "Kluczowe liczby",
+        "messages": "Sprawdzone wiadomości",
+        "answerRate": "Odsetek odpowiedzi",
+        "avgScore": "Średni wynik {score}%",
+        "flows": "Uruchomione przepływy",
+        "unanswered": "Bez odpowiedzi",
+        "toReview": "Do przejrzenia: {count}",
+        "errors": "Błędy dostawcy"
+      },
+      "daily": {
+        "title": "Wiadomości dziennie",
+        "hint": "Ostatnie {days} dni, z odpowiedzią i bez"
+      },
+      "hist": {
+        "title": "Jak punktowano wiadomości",
+        "hint": "Każdy słupek to przedział wyników. Linia przerywana to Twoja aktualna czułość.",
+        "advice": "Zwiększ próg, jeśli trafiają się błędne odpowiedzi, zmniejsz go, jeśli zbyt wiele wiadomości zostaje bez odpowiedzi.",
+        "tune": "Zmień czułość"
+      },
+      "top": {
+        "title": "Najlepsze FAQ",
+        "none": "Żadne FAQ jeszcze nie odpowiedziało.",
+        "hits": "{count, plural, one {# odpowiedź} few {# odpowiedzi} many {# odpowiedzi} other {# odpowiedzi}}"
+      },
+      "never": {
+        "title": "Nigdy nie dopasowano",
+        "body": "FAQ, których nikt nie wywołał w ostatnich {days} dniach. Sprawdź ich sformułowania lub usuń je.",
+        "link": "Przejrzyj FAQ"
+      },
+      "chart": {
+        "answered": "Z odpowiedzią",
+        "unanswered": "Bez odpowiedzi",
+        "showTable": "Pokaż jako tabelę",
+        "showChart": "Pokaż jako wykres",
+        "day": "Dzień",
+        "dailyTitle": "Wiadomości dziennie",
+        "dailyLabel": "Wykres słupkowy wiadomości z odpowiedzią i bez w poszczególnych dniach. Liczby znajdziesz w widoku tabeli.",
+        "dayTooltip": "{day}: z odpowiedzią {answered}, bez odpowiedzi {unanswered}",
+        "histogramTitle": "Rozkład wyników",
+        "histogramLabel": "Histogram wyników dopasowania z podziałem na wiadomości z odpowiedzią i bez. Liczby znajdziesz w widoku tabeli.",
+        "scoreRange": "Wynik",
+        "bucketTooltip": "{from}-{to}%: z odpowiedzią {answered}, bez odpowiedzi {unanswered}",
+        "thresholdMarker": "Próg {value}%"
+      }
+    },
+    "settings": {
+      "title": "Ustawienia FAQ",
+      "subtitle": "Włącz odpowiadanie przez FAQ i dostrój, jak dokładnie wiadomość musi pasować.",
+      "unsaved": "Niezapisane zmiany",
+      "discard": "Odrzuć",
+      "save": "Zapisz ustawienia",
+      "saved": "Ustawienia zapisane.",
+      "readOnly": "Możesz wyświetlać te ustawienia. Zmiana wymaga uprawnienia faq.settings.manage, które zwykle mają administratorzy przestrzeni roboczej.",
+      "engineOff": "Platforma wyłączyła odpowiadanie przez FAQ. To, co tu ustawisz, zacznie działać po jego ponownym włączeniu.",
+      "conflict": "Ktoś inny zapisał te ustawienia. Odśwież, aby zobaczyć jego wersję, a potem wprowadź zmianę ponownie.",
+      "reload": "Odśwież ustawienia",
+      "modelChanged": {
+        "title": "Sprawdź czułość",
+        "body": "Platforma zmieniła model AI po dostrojeniu tego progu. Wyniki się zmieniły, więc sprawdź czułość. Zapisanie to potwierdza."
+      },
+      "enable": {
+        "title": "Odpowiadanie przez FAQ",
+        "label": "Odpowiadaj klientom z FAQ",
+        "on": "Wł.",
+        "off": "Wył.",
+        "onBody": "Gdy klient napisze, bot porówna wiadomość z Twoimi FAQ i odpowie najlepszą odpowiedzią lub uruchomi jej przepływ. Pierwszeństwo ma przepływ lub wyzwalacz słowa kluczowego, który już przejął wiadomość.",
+        "offBody": "Klienci nie dostają odpowiedzi z FAQ. Nadal możesz pisać i testować FAQ."
+      },
+      "sens": {
+        "title": "Czułość",
+        "hint": "Jak dokładnie wiadomość musi pasować. Wyniki zależą od modelu {model}.",
+        "label": "Odpowiadaj, gdy dopasowanie wynosi co najmniej",
+        "presets": "Gotowe ustawienia czułości",
+        "preset": {
+          "strict": "Ścisła",
+          "balanced": "Zrównoważona",
+          "forgiving": "Łagodna"
+        },
+        "looser": "Więcej odpowiedzi",
+        "stricter": "Mniej odpowiedzi",
+        "recommendedMark": "zalecane {value}%",
+        "explain": "Przy {value}% wiadomość dostaje odpowiedź tylko wtedy, gdy jej najlepsze dopasowanie ma co najmniej {value}%. Wyżej oznacza mniej, ale pewniejszych odpowiedzi; niżej oznacza więcej odpowiedzi i większą szansę na błędną.",
+        "useRecommended": "Użyj zalecanej wartości ({value}%)",
+        "modelScale": "Wyniki można porównywać tylko w obrębie jednego modelu. Jeśli platforma zmieni model ({model}), sprawdź tę wartość."
+      },
+      "margin": {
+        "title": "Ochrona przed niejednoznacznością",
+        "hint": "Powstrzymuje bota przed zgadywaniem między dwoma FAQ o niemal takim samym wyniku.",
+        "label": "Minimalna przewaga nad drugim najlepszym",
+        "off": "Wył.",
+        "explain": "Gdy najlepsze FAQ wyprzedza drugie o mniej niż tę wartość, bot milczy, a wiadomość trafia do dziennika jako bez odpowiedzi. Zostaw wyłączone, jeśli Twoje FAQ rzadko się pokrywają."
+      },
+      "log": {
+        "title": "Wiadomości klientów w dzienniku",
+        "label": "Zapisuj wiadomości klientów w dzienniku dopasowań",
+        "onBody": "Treść każdej wiadomości jest przechowywana 90 dni, abyś mógł zobaczyć, dlaczego odpowiedziano lub nie, i się na tym uczyć. Potem jest usuwana.",
+        "offBody": "Zapisywane są tylko wyniki i rezultaty, nigdy treść. Nadal zobaczysz, jak często bot odpowiada, ale nie nauczysz się na wiadomościach bez odpowiedzi."
+      },
+      "facts": {
+        "title": "Model i limity",
+        "model": "Model AI do dopasowywania",
+        "faqs": "FAQ",
+        "variations": "Używane sformułowania",
+        "perFaq": "Dozwolone sformułowania na FAQ",
+        "of": "{used} z {max}"
+      },
+      "how": {
+        "title": "Jak działa dopasowywanie",
+        "exact": "Dokładne: wiadomość jest równa zapisanemu sformułowaniu, z pominięciem wielkości liter i spacji.",
+        "semantic": "Według znaczenia: wiadomość jest porównywana pod względem znaczenia z każdym aktywnym sformułowaniem, więc pasować mogą także inne słowa.",
+        "trigram": "Zapasowe według pisowni: gdy dostawca AI jest niedostępny, porównywane są litery, co wyłapuje tylko literówki.",
+        "threshold": "Najlepszy wynik jest porównywany z czułością. Powyżej niej FAQ odpowiada; poniżej wiadomość trafia na listę Bez odpowiedzi.",
+        "verify": "Drugie sprawdzenie (opcjonalne): dopasowanie, które ledwo osiągnęło czułość, może zostać dodatkowo sprawdzone przez mały model czatu, który może jedynie wstrzymać odpowiedź."
+      },
+      "who": "Zmiana tych ustawień wymaga uprawnienia faq.settings.manage.",
+      "leave": {
+        "title": "Wyjść bez zapisywania?",
+        "body": "Zmiany w tych ustawieniach nie zostały zapisane.",
+        "leave": "Wyjdź",
+        "stay": "Zostań"
+      },
+      "verify": {
+        "title": "Drugie sprawdzenie niepewnych dopasowań",
+        "hint": "Mały model czatu dodatkowo sprawdza dopasowania, które ledwo osiągnęły próg.",
+        "unavailable": "Platforma wyłączyła drugie sprawdzenie, więc nie działa ono, nawet jeśli włączysz je tutaj. Skontaktuj się z administratorem platformy.",
+        "label": "Sprawdzaj niepewne dopasowania drugą opinią",
+        "on": "Wł.",
+        "off": "Wył.",
+        "onBody": "Gdy dopasowanie ledwo przekracza próg, mały model czatu czyta wiadomość klienta i FAQ, a potem ocenia, czy odpowiedź pasuje. Może tylko odmówić: nigdy nie sprawia, że odpowiedź zostanie wysłana.",
+        "offBody": "Każde dopasowanie, które osiąga próg, dostaje odpowiedź bez ponownego sprawdzenia.",
+        "bandLabel": "Jak blisko progu dopasowanie jest niepewne",
+        "bandValue": "+{value}%",
+        "explainOn": "Dopasowania z wynikiem od {from}% do {to}% są sprawdzane przez {model}. Odpowiedź „nie” oznacza, że odpowiedź nie zostanie wysłana, a wiadomość pojawi się w zakładce Bez odpowiedzi.",
+        "explainOff": "Każde dopasowanie z wynikiem {threshold}% lub wyższym dostaje odpowiedź. Włącz drugie sprawdzenie, aby najbardziej niepewne dopasowania były dodatkowo weryfikowane.",
+        "cost": "Każde sprawdzenie wysyła do modelu wiadomość klienta i pytanie z FAQ: kilkaset tokenów, a odpowiedź na graniczne dopasowanie jest opóźniona o około sekundę. Dopasowania poza tym zakresem nigdy nie są sprawdzane. Jeśli sprawdzenie się nie powiedzie, jest niedostępne lub osiągnięto limit godzinowy, dopasowanie obowiązuje tak, jakby sprawdzenia nie było."
+      }
+    },
+    "flowNode": {
+      "label": "Zacznij od",
+      "start": "Początek przepływu",
+      "hint": "Wybierz krok, aby pominąć początek przepływu. Klienci wejdą do przepływu na wybranym kroku.",
+      "loading": "Wczytywanie kroków tego przepływu",
+      "empty": "Ten przepływ nie ma innych kroków, więc startuje od początku.",
+      "retry": "Spróbuj ponownie",
+      "deletedOption": "Usunięty krok (wybierz inny)",
+      "missing": {
+        "title": "Krok, od którego startuje to FAQ, już nie istnieje",
+        "body": "Ten krok został usunięty z przepływu. Dopóki nie wybierzesz innego kroku, klienci pasujący do tego FAQ nie dostaną odpowiedzi. Wybierz krok poniżej albo zacznij od początku przepływu.",
+        "fix": "Zacznij od początku przepływu"
+      }
+    },
+    "verify": {
+      "title": "Drugie sprawdzenie",
+      "chip": {
+        "confirmed": "Drugie sprawdzenie: tak",
+        "vetoed": "Drugie sprawdzenie: nie",
+        "failed": "Drugie sprawdzenie nie powiodło się",
+        "skipped": "Drugie sprawdzenie pominięte"
+      },
+      "model": "Sprawdził",
+      "reason": "Powód",
+      "body": {
+        "confirmed": "Dopasowanie było niepewne, więc mały model czatu przeczytał wiadomość i FAQ i potwierdził, że odpowiedź pasuje.",
+        "vetoed": "Dopasowanie było niepewne, a drugie sprawdzenie uznało, że to FAQ nie odpowiada na wiadomość. Odpowiedź została wstrzymana, nic nie wysłano, a wiadomość pojawia się w zakładce Bez odpowiedzi.",
+        "failed": "Dopasowanie było niepewne, ale sprawdzenia nie udało się dokończyć, więc dopasowanie obowiązywało, a odpowiedź wysłano tak, jakby drugiego sprawdzenia nie było.",
+        "skipped": "Drugie sprawdzenie nie zostało uruchomione dla tego dopasowania, więc obowiązywało ono bez zmian."
+      }
+    }
+  }
+}

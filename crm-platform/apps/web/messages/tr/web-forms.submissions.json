@@ -126,7 +126,9 @@
         "exporting": "Dışa aktarılıyor",
         "exportHintAttention": "Bu gruptan dışa aktarmak için tek bir durum seçin veya Tümü'nü kullanın.",
         "exportHintSearch": "Dışa aktarma arama metnini dikkate almaz.",
-        "notSpam": "Spam değil: işle"
+        "notSpam": "Spam değil: işle",
+        "newPaymentLink": "Yeni ödeme bağlantısı al",
+        "markPaid": "Ödendi olarak işaretle"
       },
       "confirmDelete": {
         "title": "Bu yanıtlar silinsin mi?",
@@ -143,7 +145,11 @@
         "deleteFailed": "Yanıtlar silinemedi. Lütfen tekrar deneyin.",
         "exported": "CSV indirildi.",
         "exportTruncated": "Dışa aktarma en yeni {max} satırda kesildi. Kalanını almak için tarihleri daraltın.",
-        "exportFailed": "Dışa aktarma oluşturulamadı. Lütfen tekrar deneyin."
+        "exportFailed": "Dışa aktarma oluşturulamadı. Lütfen tekrar deneyin.",
+        "linkReady": "Yeni bir ödeme bağlantısı hazır.",
+        "linkFailed": "Geçit bir bağlantı vermedi. Birazdan tekrar deneyin.",
+        "markedPaid": "Ödendi olarak işaretlendi.",
+        "markPaidFailed": "Bu gönderim ödendi olarak işaretlenemedi."
       },
       "state": {
         "loading": "Gönderiler yükleniyor",
@@ -164,6 +170,29 @@
       "cap": {
         "notice": "Planınızın aylık gönderim sınırına ulaşıldığı için bazı gönderiler inceleme için kaydedildi.",
         "upgrade": "Planınızı yükseltin"
+      },
+      "payments": {
+        "title": "Ödeme",
+        "status": {
+          "pending": "Ödeme bekleniyor",
+          "paid": "Ödendi",
+          "failed": "Başarısız",
+          "expired": "Süresi doldu"
+        },
+        "via": {
+          "gateway": "geçit tarafından",
+          "manual": "elle işaretlendi"
+        },
+        "gateway": "Geçit",
+        "paidAt": "Ödeme zamanı",
+        "expiresAt": "Bağlantının bitiş zamanı",
+        "reference": "Referans",
+        "duplicate": "Bu gönderim için ikinci bir ödeme geldi. Ödeme geçidinizden iade edin.",
+        "freshLink": "Yeni ödeme bağlantısı (ziyaretçiye gönderin):",
+        "copy": "Bağlantıyı kopyala",
+        "markPaidConfirm": "Bu gönderim ödendi olarak işaretlensin mi? Bunu yalnızca para geçit dışında, örneğin banka havalesi veya nakit olarak geldiyse kullanın. İşlem adınıza kaydedilir.",
+        "markPaidYes": "Evet, ödendi olarak işaretle",
+        "cancel": "İptal"
       }
     }
   }

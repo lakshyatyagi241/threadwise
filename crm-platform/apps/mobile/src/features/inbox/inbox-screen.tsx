@@ -103,6 +103,7 @@ export function InboxScreen() {
     }
     return (
       <FlatList
+        testID="inbox-list"
         accessibilityLabel={t('inbox.list.label')}
         data={rows}
         keyExtractor={(item) => item.id}

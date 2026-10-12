@@ -1,4 +1,9 @@
-import type { FlowRunEndReason, FlowRunSource, FlowRunStatus } from '@crm/contracts';
+import type {
+  FlowRunEndReason,
+  FlowRunSource,
+  FlowRunStatus,
+  FlowStepIoItem,
+} from '@crm/contracts';
 import type { RuntimeGraph } from '../graph/runtime-graph';
 import type { VariableBag } from './variables';
 
@@ -78,6 +83,10 @@ export interface RunState {
   triggerText: string | null;
   status: FlowRunStatus;
   graph: RuntimeGraph;
+  /** The stored version the run points at; null for a run that started before versions existed (its graph is on the row). */
+  graphVersionId: number | null;
+  /** How many node executions the run has logged: the log stops at a cap. */
+  nodeCount: number;
   currentNodeId: string | null;
   stepSeq: number;
   vars: VariableBag;
@@ -154,7 +163,14 @@ export type NodeResult =
   | { kind: 'park' }
   | { kind: 'end'; reason: FlowRunEndReason }
   /** Sub-flow (TW-FLR-031): replace the running graph with another flow's, keep the variables, start at its first node. */
-  | { kind: 'subflow'; flowId: number | string }
+  /** `startNodeId`: enter the flow at that node instead of its first one (the FAQ's "link to node"). `missPort`: the exit taken when the flow or node cannot be entered (default 1); `missVars`: variables set only in that case. */
+  | {
+      kind: 'subflow';
+      flowId: number | string;
+      startNodeId?: string;
+      missPort?: number;
+      missVars?: Record<string, unknown>;
+    }
   | { kind: 'halt'; reason: string }
   | { kind: 'fail'; code: string; reason: string };
 
@@ -169,6 +185,8 @@ export interface NodeContext {
   render(template: unknown): string;
   /** Adds a line to this step's entry in the run log (a skipped send, a warning). */
   note(text: string): void;
+  /** Records something the node took in (`in`) or produced (`out`) for the run log: a request, a response, a result. Optional: tests build contexts without it. */
+  io?(side: 'in' | 'out', item: FlowStepIoItem): void;
   now(): Date;
 }
 

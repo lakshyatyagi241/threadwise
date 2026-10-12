@@ -1403,7 +1403,7 @@ logic only (no unique index; add a partial unique index `WHERE status='active'` 
 
 ## Differences to decide
 
-| Id   | Reference behavior                                               | Recommendation for the port                                                           |
+| Id   | Reference behavior                                            | Recommendation for the port                                                           |
 | ---- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
 | D-01 | Wizard open to any member                                     | Require an admin permission for create/edit/delete (`storefront.manage`)              |
 | D-02 | Design page edits the first shop                              | Shop-scoped endpoints and pages (`/shops/:id/settings`)                               |

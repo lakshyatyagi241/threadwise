@@ -20,7 +20,7 @@ describe('FadeIn', () => {
   it('renders its content and plays the entrance after the given delay', async () => {
     jest.spyOn(AccessibilityInfo, 'isReduceMotionEnabled').mockResolvedValue(false);
     const started = recordAnimations();
-    render(
+    await render(
       <FadeIn delay={120}>
         <Text>Arriving</Text>
       </FadeIn>,
@@ -35,7 +35,7 @@ describe('FadeIn', () => {
   it('drops the entrance when the person asked for less motion', async () => {
     jest.spyOn(AccessibilityInfo, 'isReduceMotionEnabled').mockResolvedValue(true);
     const started = recordAnimations();
-    render(
+    await render(
       <FadeIn>
         <Text>Still</Text>
       </FadeIn>,

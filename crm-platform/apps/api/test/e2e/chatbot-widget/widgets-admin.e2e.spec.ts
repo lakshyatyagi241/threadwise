@@ -386,7 +386,7 @@ describe('update (TW-WGT-006 rules 4, 7, 8)', () => {
     t = await api.signup('wgu');
   });
 
-  it("TW-WGT-006 #5 QUIRK: an id that is not this workspace's silently creates a NEW widget, as Reference does, and the original is untouched", async () => {
+  it("TW-WGT-006 #5 (deliberate deviation from Reference, AZ-019): an id that is not this workspace's is 404 and creates nothing; the original is untouched", async () => {
     const other = await api.signup('wgu2');
     const foreign = await api.widget(other.admin, { name: 'Foreign' });
     const before = await api.count(
@@ -397,21 +397,18 @@ describe('update (TW-WGT-006 rules 4, 7, 8)', () => {
       .as(t.admin)
       .patch(`/v2/widgets/${foreign.id}`)
       .send({ ...widgetBody({ name: 'Hijack' }), rowVersion: 1 });
-    expect(res.status, JSON.stringify(res.body)).toBe(200);
-    expect(res.body.id).not.toBe(foreign.id);
-    expect(res.body.name).toBe('Hijack');
+    expect(res.status, JSON.stringify(res.body)).toBe(404);
     expect(
       await api.count(`SELECT count(*)::int AS n FROM chatbot_widgets WHERE org_id = $1`, [
         t.orgId,
       ]),
-    ).toBe(before + 1);
+    ).toBe(before);
     expect((await api.as(other.admin).get(`/v2/widgets/${foreign.id}`)).body.name).toBe('Foreign');
     const missing = await api
       .as(t.admin)
       .patch(`/v2/widgets/${crypto.randomUUID()}`)
       .send({ ...widgetBody({ name: 'From nowhere' }), rowVersion: 1 });
-    expect(missing.status).toBe(200);
-    expect(missing.body.name).toBe('From nowhere');
+    expect(missing.status).toBe(404);
   });
 
   it('TW-WGT-006 rule 6: a renamed widget keeps its slug and its token', async () => {

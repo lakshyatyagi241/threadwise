@@ -4,15 +4,15 @@ Spec: [inventory/team-chat.md](../inventory/team-chat.md). Parity and deviations
 
 ## Target
 
-| Layer            | Where                                                                                                                                                                                           |
-| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Layer            | Where                                                                                                                                                                                               |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Tables           | `team_chat_channels`, `_channel_members`, `_messages`, `_reactions`, `_invitations`, `_reads` (ported earlier, `20261001101600_tchat_threadwise_schema.sql`) and `team_chat_attachment_blobs` (new) |
-| Migrations       | `20261005100000_tchat_chat_model_fixes`, `..100100_tchat_permissions`, `..100200_tchat_message_body_trgm_idx`, `..100300_tchat_attachment_blobs`                                                |
-| Drizzle          | `packages/db/src/schema/team-chat/tables.ts`                                                                                                                                                    |
-| Contracts        | `packages/contracts/src/team-chat/chat.ts` (+ `TCHAT_*` codes in `common/errors.ts`)                                                                                                            |
-| API module       | `apps/api/src/modules/team-chat` (controller, channels / messages / invitations / presence services, access service, repository, mapper, rules)                                                 |
-| Web              | `apps/web/src/features/team-chat` (screen, sidebar, stream, composer, dialogs, side panel, members rail), route `(app)/(team-chat)/team-chat`, file proxy route                                 |
-| Messages and nav | `apps/web/messages/en/team-chat.json`, `features/team-chat/nav.ts` (Inbox group, order 30)                                                                                                      |
+| Migrations       | `20261005100000_tchat_chat_model_fixes`, `..100100_tchat_permissions`, `..100200_tchat_message_body_trgm_idx`, `..100300_tchat_attachment_blobs`                                                    |
+| Drizzle          | `packages/db/src/schema/team-chat/tables.ts`                                                                                                                                                        |
+| Contracts        | `packages/contracts/src/team-chat/chat.ts` (+ `TCHAT_*` codes in `common/errors.ts`)                                                                                                                |
+| API module       | `apps/api/src/modules/team-chat` (controller, channels / messages / invitations / presence services, access service, repository, mapper, rules)                                                     |
+| Web              | `apps/web/src/features/team-chat` (screen, sidebar, stream, composer, dialogs, side panel, members rail), route `(app)/(team-chat)/team-chat`, file proxy route                                     |
+| Messages and nav | `apps/web/messages/en/team-chat.json`, `features/team-chat/nav.ts` (Inbox group, order 30)                                                                                                          |
 
 ## Endpoints (all under `/api/v2/team-chat`, tenant scoped, RLS)
 

@@ -97,7 +97,7 @@
       },
       "sms": {
         "label": "SMS",
-        "description": "Gửi và nhận tin nhắn văn bản bằng tên người gửi của riêng bạn.",
+        "description": "Gửi tin nhắn văn bản bằng số Twilio hoặc tên người gửi MSG91 của riêng bạn.",
         "keywords": "tin nhắn văn bản, sender id, dlt, twilio, di động"
       },
       "email": {
@@ -309,6 +309,16 @@
         "label": "Tự động phân công",
         "description": "Tự động giao cuộc trò chuyện mới cho đúng nhân viên, theo lượt hoặc theo quy tắc.",
         "keywords": "định tuyến, luân phiên, phân công, nhân viên, quy tắc hộp thư, phân phối, chủ sở hữu"
+      },
+      "message-logs": {
+        "label": "Nhật ký tin nhắn",
+        "description": "Xuất nhật ký gửi của tin nhắn, lùi tối đa một năm, thành tệp được gửi đến email của bạn.",
+        "keywords": "xuất, nhật ký gửi, lịch sử, lưu trữ, csv, tin nhắn"
+      },
+      "web": {
+        "label": "Chat trên website",
+        "description": "Các bot được tạo cho chat trên website của bạn và widget mà mỗi bot chạy trong đó.",
+        "keywords": "web, website, widget, chatbot, nhúng, chat trực tuyến"
       }
     }
   }

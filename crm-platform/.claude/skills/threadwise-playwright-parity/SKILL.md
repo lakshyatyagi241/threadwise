@@ -108,7 +108,7 @@ Open `report.md`. For each row:
 | defect, behaviour really differs                  | real: goes to a fix agent                                                                                                 |
 | defect `missing` / locator not found on ours      | check with `explore ours`: really absent (build it) or wrong locator (fix the spec)                                       |
 | difference the repo decided (CONTRIBUTING, QUIRK) | `intended[]` with the reason and reference; architecture rules are matched automatically                                  |
-| ours stricter or better than Reference               | still a difference: record it as `intended` (a deliberate fix of a Reference bug) with the reason, or revert                 |
+| ours stricter or better than Reference            | still a difference: record it as `intended` (a deliberate fix of a Reference bug) with the reason, or revert              |
 | `review` structure items                          | look at `gallery.html` / `shots/` (read the PNGs); a missing element is a defect, otherwise ignore or `severity` override |
 | `spec-issue`                                      | the test is wrong: fix the spec and re-run; never touch the app                                                           |
 
@@ -144,16 +144,16 @@ Final message to the user: the verdict line, counts (same / intended / defects f
 
 ## Files
 
-| Path                                                                   | What                                                                                                          |
-| ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `scripts/parity.sh`                                                    | wrapper: ready, list, run, rerun, compare, explore, selftest                                                  |
-| `scripts/env.sh`, `scripts/bootstrap.sh`                               | bring the apps up / install the harness                                                                       |
-| `scripts/stop_gate.py`, `detect_scope.py`, `stamp.py`, `parity_lib.py` | the automatic trigger, scope detection, stamps (state in `<git-dir>/threadwise-parity/`)                          |
-| `scripts/test_scripts.py`                                              | tests for the three scripts above (throwaway git repo)                                                        |
-| `harness/run.mjs`, `compare.mjs`, `explore.mjs`                        | twin run, report rebuild, screen explorer                                                                     |
+| Path                                                                   | What                                                                                                             |
+| ---------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `scripts/parity.sh`                                                    | wrapper: ready, list, run, rerun, compare, explore, selftest                                                     |
+| `scripts/env.sh`, `scripts/bootstrap.sh`                               | bring the apps up / install the harness                                                                          |
+| `scripts/stop_gate.py`, `detect_scope.py`, `stamp.py`, `parity_lib.py` | the automatic trigger, scope detection, stamps (state in `<git-dir>/threadwise-parity/`)                         |
+| `scripts/test_scripts.py`                                              | tests for the three scripts above (throwaway git repo)                                                           |
+| `harness/run.mjs`, `compare.mjs`, `explore.mjs`                        | twin run, report rebuild, screen explorer                                                                        |
 | `harness/lib/`                                                         | sides (Reference, ours), probes (page, form, list, delete), value catalogues, comparator, intended rules, report |
-| `harness/selftest.mjs`, `lib/mutants.mjs`                              | proves the comparator: no false alarms on Reference-vs-Threadwise, every planted defect found                        |
-| `references/`                                                          | `spec-format.md`, `scenario-catalog.md`, `comparison-rules.md`, `fix-agent-brief.md`                          |
+| `harness/selftest.mjs`, `lib/mutants.mjs`                              | proves the comparator: no false alarms on Reference-vs-Threadwise, every planted defect found                    |
+| `references/`                                                          | `spec-format.md`, `scenario-catalog.md`, `comparison-rules.md`, `fix-agent-brief.md`                             |
 
 Environment overrides: `PARITY_WEB_URL`, `PARITY_API_URL`, `THREADWISE_URL`, credentials (`THREADWISE_EMAIL/PASSWORD`, `PARITY_ORG/EMAIL/PASSWORD`; defaults are the local seeded test accounts), `PARITY_DEPTH`, `PARITY_WORKERS`, `PARITY_OUT`, `PARITY_HEADED=1`, `PARITY_CONFIG=<json>`.
 

@@ -314,7 +314,8 @@ const RAW: Raw[] = [
   {
     slug: 'duitku',
     name: 'Duitku',
-    description: 'Indonesia — VA banks, QRIS, OVO, DANA, ShopeePay, retail (Alfamart/Indomaret), cards.',
+    description:
+      'Indonesia — VA banks, QRIS, OVO, DANA, ShopeePay, retail (Alfamart/Indomaret), cards.',
     regions: ['asia'],
     currencies: ['IDR'],
     fields: [t('merchant_code', 'Merchant code', true), p('api_key', 'API key', true)],
@@ -413,7 +414,8 @@ const RAW: Raw[] = [
   {
     slug: 'lemonsqueezy',
     name: 'Lemon Squeezy',
-    description: 'Merchant of record for SaaS — hosted checkout, cards, global tax + subscriptions.',
+    description:
+      'Merchant of record for SaaS — hosted checkout, cards, global tax + subscriptions.',
     regions: ['popular'],
     currencies: [],
     fields: [

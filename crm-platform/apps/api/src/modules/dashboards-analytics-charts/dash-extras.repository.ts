@@ -37,7 +37,7 @@ export class DashExtrasRepository {
     const m = (
       await tx.execute(sql`
         SELECT count(*) FILTER (WHERE m.direction = 'in')::int AS dms_in,
-               count(*) FILTER (WHERE m.direction = 'out')::int AS dms_out
+               count(*) FILTER (WHERE m.direction = 'out' AND m.kind <> 'reaction')::int AS dms_out
         FROM messages m JOIN conversations cv ON cv.org_id = m.org_id AND cv.id = m.conversation_id
           JOIN channels ch ON ch.org_id = cv.org_id AND ch.id = cv.channel_id
         WHERE m.org_id = ${orgId} AND ch.kind = 'instagram' AND m.created_at >= ${from}::timestamptz`)

@@ -126,7 +126,9 @@
         "exporting": "正在导出",
         "exportHintAttention": "请在此分组中选择单一状态进行导出，或选择“全部”。",
         "exportHintSearch": "导出时忽略搜索文本。",
-        "notSpam": "不是垃圾内容：进行处理"
+        "notSpam": "不是垃圾内容：进行处理",
+        "newPaymentLink": "获取新的支付链接",
+        "markPaid": "标记为已支付"
       },
       "confirmDelete": {
         "title": "删除这些回答？",
@@ -143,7 +145,11 @@
         "deleteFailed": "无法删除回答，请重试。",
         "exported": "CSV 已下载。",
         "exportTruncated": "导出已截断为最新的 {max} 行。请缩小日期范围以获取其余数据。",
-        "exportFailed": "无法导出，请重试。"
+        "exportFailed": "无法导出，请重试。",
+        "linkReady": "新的支付链接已就绪。",
+        "linkFailed": "网关未返回链接。请稍后再试。",
+        "markedPaid": "已标记为已支付。",
+        "markPaidFailed": "无法将此提交标记为已支付。"
       },
       "state": {
         "loading": "正在加载提交记录",
@@ -164,6 +170,29 @@
       "cap": {
         "notice": "由于已达到套餐的每月提交上限，部分提交已保存以待审核。",
         "upgrade": "升级套餐"
+      },
+      "payments": {
+        "title": "支付",
+        "status": {
+          "pending": "等待付款",
+          "paid": "已支付",
+          "failed": "失败",
+          "expired": "已过期"
+        },
+        "via": {
+          "gateway": "由网关确认",
+          "manual": "手动标记"
+        },
+        "gateway": "网关",
+        "paidAt": "支付时间",
+        "expiresAt": "链接到期时间",
+        "reference": "参考号",
+        "duplicate": "此提交收到了第二笔付款。请在您的支付网关中退款。",
+        "freshLink": "新的支付链接（请发送给访客）：",
+        "copy": "复制链接",
+        "markPaidConfirm": "将此提交标记为已支付？仅在款项通过网关以外的方式到账（如银行转账或现金）时使用。该操作将以您的名义记录。",
+        "markPaidYes": "是，标记为已支付",
+        "cancel": "取消"
       }
     }
   }

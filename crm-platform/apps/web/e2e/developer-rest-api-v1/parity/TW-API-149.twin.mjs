@@ -309,7 +309,10 @@ export default (h) => {
 
       pub('nav-links', 'group navigation lists the resource groups', ['nav'], async (c) => {
         await open(c);
-        const nav = c.loc({ threadwise: '#api-nav a', ours: 'nav a[href^="#"], aside a[href^="#"]' });
+        const nav = c.loc({
+          threadwise: '#api-nav a',
+          ours: 'nav a[href^="#"], aside a[href^="#"]',
+        });
         c.obs.set('abs.navLinks', await nav.count());
         if (await nav.count()) {
           const y0 = await c.page.evaluate(() => window.scrollY);
@@ -333,7 +336,9 @@ export default (h) => {
         c.obs.set(
           'abs.filterVisibleOnPhone',
           (await h2.page
-            .locator(c.side === 'threadwise' ? '#api-search' : 'input[type=search], [role=searchbox]')
+            .locator(
+              c.side === 'threadwise' ? '#api-search' : 'input[type=search], [role=searchbox]',
+            )
             .first()
             .isVisible()
             .catch(() => false))

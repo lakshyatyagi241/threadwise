@@ -1,7 +1,8 @@
 {
   "team-inbox-conversations": {
     "nav": {
-      "inbox": "Inbox"
+      "inbox": "Inbox",
+      "messageLogs": "Registri dei messaggi"
     },
     "common": {
       "dismiss": "Ignora"
@@ -131,7 +132,10 @@
       "generic": "Si è verificato un errore. Riprova.",
       "genericWithId": "Si è verificato un errore. Riprova. Riferimento: {id}",
       "templateNotSendable": "Questo template non può essere inviato in questa conversazione. Sceglierne un altro.",
-      "groupSendUnavailable": "L’invio ai gruppi WhatsApp non è ancora disponibile. Rispondi dall’app WhatsApp Business."
+      "groupSendUnavailable": "L’invio ai gruppi WhatsApp non è ancora disponibile. Rispondi dall’app WhatsApp Business.",
+      "logRange": "Scegli date entro l'ultimo anno, con l'inizio prima della fine e non nel futuro.",
+      "logBusy": "È già in preparazione un'esportazione. Attendi la sua e-mail, poi richiedine un'altra.",
+      "logNotReady": "Questa esportazione non è pronta oppure è scaduta. Richiedila di nuovo."
     },
     "bubble": {
       "kind": {
@@ -141,6 +145,9 @@
       },
       "template": "Messaggio template: {name}",
       "unavailable": "Messaggio non disponibile",
+      "unsupported": "Il cliente ha inviato qualcosa che questo canale non può mostrare.",
+      "forwarded": "Inoltrato",
+      "referral": "Proveniente da un annuncio o da un link",
       "sentIn": "Inviato in {lang}. Mostra il testo scritto",
       "translatedFrom": "Tradotto da {lang}. Mostra l’originale",
       "bot": "Bot",
@@ -162,7 +169,39 @@
       },
       "templateCopyCode": "Copia codice",
       "templateButtonUnnamed": "Pulsante",
-      "templateButtonPrefix": "Pulsante: "
+      "templateButtonPrefix": "Pulsante: ",
+      "reply": "Rispondi",
+      "quote": {
+        "you": "Tu",
+        "customer": "Cliente",
+        "missing": "Messaggio originale",
+        "jump": "Vai al messaggio originale",
+        "replyingTo": "In risposta a {name}",
+        "kind": {
+          "text": "Messaggio",
+          "image": "Foto",
+          "video": "Video",
+          "audio": "Audio",
+          "voice": "Messaggio vocale",
+          "document": "Documento",
+          "sticker": "Sticker",
+          "location": "Posizione",
+          "contact": "Contatto",
+          "template": "Modello",
+          "reaction": "Reazione",
+          "interactive": "Selezione"
+        }
+      },
+      "react": {
+        "label": "Reagisci a questo messaggio",
+        "add": "Reagisci con {emoji}",
+        "remove": "Rimuovi la tua reazione {emoji}",
+        "more": "Altre emoji",
+        "takeBack": "Tocca per ritirare la tua reazione",
+        "takeBackLabel": "La tua reazione {emoji}. Ritirala",
+        "failed": "Questa reazione non è stata inviata"
+      },
+      "deliveryLog": "Registro di consegna"
     },
     "media": {
       "openImage": "Apri immagine {name}",
@@ -232,7 +271,86 @@
       "addNote": "Aggiungi nota",
       "hint": "Invio per inviare. Maiusc+Invio per andare a capo.",
       "template": "Invia un template",
-      "groupSendUnavailable": "L’invio ai gruppi WhatsApp non è ancora disponibile. Rispondi dall’app WhatsApp Business."
+      "groupSendUnavailable": "L’invio ai gruppi WhatsApp non è ancora disponibile. Rispondi dall’app WhatsApp Business.",
+      "emoji": "Inserisci un'emoji",
+      "emojiPanel": "Emoji",
+      "emojiRecent": "Usate di recente",
+      "emojiGroups": "Gruppi di emoji",
+      "emojiGroup": {
+        "smileys": "Faccine",
+        "gestures": "Gesti",
+        "hearts": "Cuori e simboli",
+        "objects": "Oggetti"
+      },
+      "cancelReply": "Annulla la risposta",
+      "share": {
+        "open": "Condividi una posizione, un contatto o dei pulsanti",
+        "title": "Condividi",
+        "eyebrow": "Invia al cliente",
+        "close": "Chiudi",
+        "cancel": "Annulla",
+        "send": "Invia",
+        "sending": "Invio in corso…",
+        "sent": "Inviato",
+        "windowHint": "Come ogni messaggio libero, richiedono una finestra di 24 ore aperta su un numero WhatsApp Cloud API.",
+        "tab": {
+          "location": "Posizione",
+          "contacts": "Contatto",
+          "buttons": "Pulsanti"
+        },
+        "location": {
+          "latitude": "Latitudine",
+          "longitude": "Longitudine",
+          "name": "Nome del luogo (facoltativo)",
+          "address": "Indirizzo (facoltativo)",
+          "pasteHint": "Puoi incollare qui \"28.6139, 77.2090\" da una mappa."
+        },
+        "contact": {
+          "card": "Contatto {n}",
+          "name": "Nome",
+          "org": "Azienda (facoltativo)",
+          "phone": "Telefono",
+          "email": "Email",
+          "remove": "Rimuovi il contatto {n}",
+          "add": "Aggiungi un altro contatto"
+        },
+        "buttons": {
+          "type": "Tipo di pulsante",
+          "kind": {
+            "buttons": "Pulsanti di risposta",
+            "cta_url": "Pulsante con link",
+            "list": "Elenco"
+          },
+          "header": "Intestazione (facoltativo)",
+          "body": "Messaggio",
+          "footer": "Piè di pagina (facoltativo)",
+          "titles": "Pulsanti (fino a 3)",
+          "titleN": "Pulsante {n}",
+          "add": "Aggiungi un pulsante",
+          "linkText": "Testo del pulsante",
+          "url": "Link",
+          "listButton": "Pulsante che apre l'elenco",
+          "section": "Sezione {n}",
+          "sectionTitle": "Titolo della sezione",
+          "rowTitle": "Titolo della riga {n}",
+          "rowDescription": "Descrizione della riga {n} (facoltativa)",
+          "addRow": "Aggiungi una riga",
+          "addSection": "Aggiungi una sezione",
+          "removeSection": "Rimuovi la sezione {n}",
+          "rows": "Righe",
+          "rowCount": "{n} di {max} righe"
+        },
+        "problem": {
+          "required": "{label} è obbligatorio",
+          "range": "{label} è fuori intervallo",
+          "phoneOrEmail": "Aggiungi un numero di telefono o un'email",
+          "phone": "Inserisci un numero di telefono valido",
+          "email": "Inserisci un indirizzo email valido",
+          "duplicate": "{label} ripete un altro pulsante",
+          "url": "Inserisci un link che inizi con http:// o https://",
+          "tooManyRows": "Un elenco contiene al massimo 10 righe in totale"
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Note e cronologia",
@@ -441,6 +559,80 @@
         "named_variables": "Usa variabili con nome, che l’Inbox non supporta ancora."
       },
       "hasMore": "Vengono mostrati i primi {count} template. Cerca per nome o testo per trovare gli altri."
+    },
+    "log": {
+      "title": "Registro di consegna",
+      "close": "Chiudi",
+      "loading": "Caricamento del registro",
+      "tryAgain": "Riprova",
+      "statusNow": "Stato attuale",
+      "createdAt": "Creato",
+      "providerId": "ID del messaggio del provider",
+      "failedNoReason": "Questo messaggio non è stato consegnato.",
+      "expired": "Questo messaggio ha più di {days} giorni. Il suo registro non viene più conservato.",
+      "empty": "Nessun registro è stato salvato per questo messaggio. I messaggi inviati prima che i registri venissero conservati non ne hanno.",
+      "archived": "Le voci più vecchie di {days} giorni vengono lette dall'archivio.",
+      "exportLink": "Esporta i registri dei messaggi",
+      "source": {
+        "system": "Il nostro sistema",
+        "provider": "Ricevuta del provider"
+      },
+      "event": {
+        "queued": "In coda per l'invio",
+        "attempt": "Tentativo di invio {attempt}",
+        "accepted": "Accettato dal provider",
+        "sentReceipt": "Il provider ha confermato l'invio",
+        "delivered": "Consegnato al telefono del cliente",
+        "read": "Letto dal cliente",
+        "failedReceipt": "Il provider ha segnalato la mancata consegna",
+        "failedSend": "Impossibile inviare",
+        "retryAuto": "Verrà riprovato automaticamente",
+        "retryManual": "Un collega ha premuto Riprova"
+      },
+      "notApplied": "Questo rapporto è arrivato in ritardo o si riferisce a un invio precedente. Non ha modificato il messaggio.",
+      "replayed": "Non è stata fatta nessuna nuova richiesta: è stata riutilizzata la risposta precedente del provider.",
+      "resent": "Inviato di nuovo al provider come nuovo messaggio."
+    },
+    "logs": {
+      "back": "Torna alla posta in arrivo",
+      "title": "Registri dei messaggi",
+      "intro": "Ogni messaggio conserva il proprio registro di consegna: {hot} giorni nella posta in arrivo, poi nell'archivio fino a {days} giorni dopo l'evento. Richiedi l'esportazione di un intervallo di date; viene preparata in background e ti arriva via e-mail quando è pronta.",
+      "requested": "Esportazione richiesta. Ti invieremo un'e-mail quando sarà pronta.",
+      "requestedTo": "Esportazione richiesta. Invieremo un'e-mail a {email} quando sarà pronta.",
+      "form": {
+        "title": "Richiedi un'esportazione",
+        "from": "Da",
+        "to": "A",
+        "status": "Solo i messaggi che ora sono",
+        "anyStatus": "Qualsiasi stato",
+        "hint": "Le date sono in UTC. Puoi risalire fino a {days} giorni. Viene preparata una sola esportazione alla volta.",
+        "submit": "Richiedi esportazione",
+        "sending": "Richiesta in corso"
+      },
+      "problem": {
+        "order": "La data di inizio non può essere successiva alla data di fine.",
+        "future": "La data di fine non può essere nel futuro.",
+        "tooOld": "I registri vengono conservati per {days} giorni. Scegli una data di inizio più recente.",
+        "invalid": "Inserisci entrambe le date."
+      },
+      "history": {
+        "title": "Le tue esportazioni",
+        "loading": "Caricamento delle esportazioni",
+        "tryAgain": "Riprova",
+        "empty": "Nessuna esportazione per ora.",
+        "onlyStatus": "Solo messaggi {status}",
+        "requestedAt": "Richiesta {date}",
+        "lines": "{count, plural, one {# riga} many {# righe} other {# righe}}",
+        "until": "Disponibile fino al {date}",
+        "download": "Scarica",
+        "status": {
+          "queued": "In attesa",
+          "running": "In preparazione",
+          "ready": "Pronta",
+          "failed": "Non riuscita",
+          "expired": "Scaduta"
+        }
+      }
     }
   }
 }

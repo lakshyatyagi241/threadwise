@@ -24,6 +24,7 @@ export const SECRET_HEADERS = [
   'x-wc-webhook-signature',
   'x-razorpay-signature',
   'x-invoice-signature',
+  'x-twilio-signature',
   'x-signature',
   'stripe-signature',
 ] as const;
@@ -38,6 +39,9 @@ export const LOG_REDACT_PATHS: string[] = [
 
 const SECRET_HEADER_SET: ReadonlySet<string> = new Set(SECRET_HEADERS);
 
+/** Whether a header carries a credential or a signature. Header names are matched case-insensitively. */
+export const isSecretHeader = (name: string): boolean => SECRET_HEADER_SET.has(name.toLowerCase());
+
 /** A copy of a header map with the secret ones replaced. Header names are matched case-insensitively. */
 export function redactHeaders(
   headers: Record<string, unknown> | undefined,
@@ -46,7 +50,7 @@ export function redactHeaders(
   return Object.fromEntries(
     Object.entries(headers).map(([name, value]) => [
       name,
-      SECRET_HEADER_SET.has(name.toLowerCase()) ? '[redacted]' : value,
+      isSecretHeader(name) ? '[redacted]' : value,
     ]),
   );
 }

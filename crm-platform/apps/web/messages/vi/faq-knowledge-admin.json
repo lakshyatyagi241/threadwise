@@ -1,0 +1,188 @@
+{
+  "faq-knowledge-admin": {
+    "nav": {
+      "group": "AI",
+      "engine": "Bộ máy FAQ"
+    },
+    "common": {
+      "loading": "Đang tải",
+      "retry": "Thử lại",
+      "requestId": "Mã yêu cầu",
+      "dash": "-",
+      "cancel": "Hủy",
+      "errors": {
+        "forbidden": "Bạn không có quyền thực hiện thao tác này.",
+        "request": "Không thể hoàn tất yêu cầu đó.",
+        "unexpected": "Đã xảy ra lỗi ở phía chúng tôi. Hãy thử lại sau giây lát.",
+        "network": "Không kết nối được tới máy chủ. Kiểm tra kết nối và thử lại.",
+        "validation": "Một số giá trị không hợp lệ. Hãy kiểm tra các trường được đánh dấu.",
+        "modelNotAllowed": "Mô hình embedding đó không nằm trong danh sách cho phép. Hãy tải lại trang và chọn một mô hình trong danh sách.",
+        "notFound": "Mục đó không còn tồn tại."
+      }
+    },
+    "page": {
+      "eyebrow": "Quản trị · AI · Bộ máy FAQ",
+      "title": "Bộ máy FAQ",
+      "description": "Điều khiển cách FAQ của mọi workspace được khớp với tin nhắn khách hàng: công tắc, mô hình embedding, giới hạn và tình trạng chỉ mục.",
+      "superOnly": "Chỉ siêu quản trị viên mới xem hoặc thay đổi được bộ máy FAQ."
+    },
+    "status": {
+      "label": "Trạng thái bộ máy",
+      "engine": {
+        "title": "Bộ máy",
+        "on": "Bật",
+        "off": "Tắt",
+        "hintOn": "{count, plural, other {# workspace đã bật FAQ}}",
+        "hintOff": "Không có workspace nào đang trả lời bằng FAQ và việc chỉnh sửa bị chặn."
+      },
+      "key": {
+        "title": "Khóa OpenRouter của nền tảng",
+        "ready": "Sẵn sàng",
+        "missing": "Thiếu",
+        "explainReady": "Các workspace chưa lưu khóa OpenRouter riêng sẽ dùng khóa này để tạo và khớp vector.",
+        "explainMissing": "Các workspace chưa lưu khóa OpenRouter riêng phụ thuộc vào khóa này. Nếu thiếu, họ không thể tạo vector, và việc khớp sẽ chuyển sang độ giống về chính tả.",
+        "link": "Thêm khóa trong Khóa nhà cung cấp AI"
+      },
+      "model": {
+        "title": "Mô hình embedding đang dùng",
+        "dimensions": "{count, number} chiều",
+        "unknown": "Không nằm trong danh sách cho phép"
+      },
+      "index": {
+        "title": "Tình trạng lập chỉ mục",
+        "ready": "Sẵn sàng",
+        "waiting": "Đang chờ",
+        "failed": "Thất bại",
+        "stale": "{count, plural, other {# vector thuộc về mô hình cũ và không khớp với gì cho đến khi được tạo lại}}",
+        "totals": "{faqs, number} FAQ · {variations, number} biến thể"
+      },
+      "activity": {
+        "title": "30 ngày qua",
+        "matches": "Tin nhắn khách hàng đã kiểm tra",
+        "answered": "Đã trả lời",
+        "rate": "Tỷ lệ trả lời",
+        "tokens": "Token embedding",
+        "verified": "Lần kiểm tra lại",
+        "vetoed": "Câu trả lời bị giữ lại"
+      }
+    },
+    "settings": {
+      "title": "Cài đặt",
+      "description": "Áp dụng cho mọi workspace. Chỉ các trường bạn thay đổi mới được lưu.",
+      "engine": {
+        "label": "Bộ máy FAQ",
+        "hint": "Tắt để ngăn mọi workspace trả lời bằng FAQ. Việc chỉnh sửa bị chặn khi đang tắt."
+      },
+      "embeddingModel": {
+        "label": "Mô hình embedding",
+        "hint": "Biến mỗi câu hỏi thành các con số để tìm được cách nói tương tự.",
+        "option": "{label} · {price} mỗi triệu token · ngưỡng đề xuất {threshold}",
+        "unknownOption": "{id} (không nằm trong danh sách cho phép)",
+        "details": "{dimensions, number} chiều · {price} mỗi triệu token · ngưỡng đề xuất {threshold}",
+        "saved": "Mô hình đã lưu"
+      },
+      "generationModel": {
+        "label": "Mô hình sinh nội dung",
+        "hint": "ID mô hình OpenRouter dùng để viết gợi ý biến thể, ví dụ openai/gpt-4o-mini.",
+        "placeholder": "openai/gpt-4o-mini"
+      },
+      "threshold": {
+        "label": "Ngưỡng khớp mặc định",
+        "hint": "Tin nhắn khớp khi điểm ít nhất bằng mức này. Chỉ dùng cho các workspace chưa từng lưu ngưỡng riêng. Điểm số phụ thuộc vào mô hình embedding.",
+        "value": "{value}",
+        "follow": "Theo mô hình",
+        "followHint": "Độ nhạy mặc định là giá trị khuyến nghị của mô hình ({value}) và thay đổi khi mô hình đổi. Tắt để cố định một con số."
+      },
+      "limits": {
+        "title": "Giới hạn",
+        "maxFaqs": "Số FAQ tối đa mỗi workspace",
+        "maxVariationsPerFaq": "Số biến thể tối đa mỗi FAQ",
+        "semanticPerHour": "Số lần khớp ngữ nghĩa mỗi workspace mỗi giờ",
+        "semanticPerHourHint": "Quá mức này, workspace chuyển sang độ giống về chính tả trong phần còn lại của giờ đó. 0 nghĩa là luôn dùng độ giống về chính tả.",
+        "verifyPerHour": "Số lần kiểm tra lại mỗi workspace mỗi giờ"
+      },
+      "errors": {
+        "integer": "Hãy nhập một số nguyên.",
+        "range": "Hãy nhập giá trị từ {min} đến {max}.",
+        "modelId": "Hãy dùng ID mô hình OpenRouter như openai/gpt-4o-mini.",
+        "invalid": "Giá trị này không hợp lệ."
+      },
+      "unchanged": "Không có thay đổi để lưu.",
+      "changed": "{count, plural, other {# thay đổi sẵn sàng để lưu}}",
+      "save": "Lưu thay đổi",
+      "saving": "Đang lưu",
+      "reset": "Bỏ thay đổi",
+      "saved": "Đã lưu cài đặt.",
+      "confirm": {
+        "title": "Xem lại trước khi lưu",
+        "confirm": "Lưu thay đổi",
+        "engineOff": "Tắt bộ máy sẽ ngăn mọi workspace trả lời khách hàng bằng FAQ và chặn chỉnh sửa FAQ cho đến khi bạn bật lại.",
+        "modelChange": "Đổi mô hình embedding từ {from} sang {to} sẽ tạo lại mọi vector đã lưu. Cho đến khi hoàn tất, việc khớp chỉ dùng độ giống về chính tả. Độ nhạy mặc định sẽ theo mô hình mới (khuyến nghị {threshold}) trừ khi bạn đặt giá trị cố định. Các ngưỡng workspace đã lưu riêng có thể cần điều chỉnh lại vì điểm số thay đổi theo mô hình."
+      },
+      "verify": {
+        "title": "Kiểm tra lại các kết quả sát ngưỡng",
+        "description": "Một mô hình chat nhỏ kiểm tra lại các kết quả khớp chỉ vừa đạt mức cần đạt của workspace. Mô hình chỉ có thể giữ lại câu trả lời. Các workspace tự bật tính năng này trong phần cài đặt FAQ của mình.",
+        "enabled": {
+          "label": "Cho phép kiểm tra lại",
+          "hint": "Tắt để dừng việc kiểm tra lại cho mọi workspace, bất kể họ cài đặt thế nào."
+        },
+        "model": {
+          "label": "Mô hình kiểm tra",
+          "hint": "ID mô hình OpenRouter dùng để đánh giá các kết quả sát ngưỡng, ví dụ openai/gpt-4o-mini. Một mô hình nhỏ và nhanh là đủ."
+        },
+        "perHourHint": "Vượt quá mức này, kết quả sát ngưỡng sẽ được giữ nguyên mà không kiểm tra trong phần còn lại của giờ. Giá trị 0 nghĩa là không bao giờ kiểm tra."
+      }
+    },
+    "maintenance": {
+      "title": "Bảo trì",
+      "description": "Tạo lại embedding cho chỉ mục khi có gì đó bất thường. Công việc chạy ở nền.",
+      "progress": "Đã sẵn sàng {ready, number} / {total, number}",
+      "progressLabel": "Tiến độ lập chỉ mục",
+      "polling": "Làm mới mỗi 5 giây trong khi còn {count, number} mục đang chờ.",
+      "idle": "Không có gì đang chờ lập chỉ mục.",
+      "reindexAll": "Lập lại chỉ mục tất cả",
+      "retryFailed": "Thử lại các mục lỗi",
+      "retryFailedNone": "Không có vector lỗi để thử lại.",
+      "confirmAll": {
+        "title": "Lập lại chỉ mục tất cả?",
+        "message": "Mọi vector đã lưu sẽ được tạo lại bằng mô hình hiện tại. Việc khớp dùng độ giống về chính tả cho các dòng chưa sẵn sàng, và token embedding sẽ bị tính phí lại.",
+        "confirm": "Lập lại chỉ mục tất cả"
+      },
+      "confirmFailed": {
+        "title": "Thử lại các vector lỗi?",
+        "message": "Chỉ các vector đã bỏ cuộc mới được xếp hàng lại. Hãy kiểm tra khóa OpenRouter của nền tảng trước nếu chúng cứ tiếp tục lỗi.",
+        "confirm": "Thử lại các mục lỗi"
+      },
+      "queued": "{count, plural, =0 {Không có gì để xếp hàng.} other {Đã xếp hàng # vector.}}"
+    },
+    "workspaces": {
+      "title": "Workspace",
+      "description": "Hoạt động nhiều nhất lên đầu. Workspace đã bật xếp trước các workspace còn lại.",
+      "search": "Tìm workspace",
+      "searchPlaceholder": "Tên workspace",
+      "limit": "Dòng",
+      "limitOption": "{count, number} dòng",
+      "tableLabel": "Workspace theo hoạt động FAQ",
+      "columns": {
+        "name": "Workspace",
+        "enabled": "FAQ",
+        "faqs": "FAQ đã viết",
+        "variations": "Biến thể",
+        "indexing": "Lập chỉ mục",
+        "matches": "Lượt khớp (30 ngày)",
+        "answered": "Đã trả lời (30 ngày)"
+      },
+      "enabled": "Bật",
+      "disabled": "Tắt",
+      "upToDate": "Đã cập nhật",
+      "pending": "{count, number} đang chờ",
+      "failed": "{count, number} lỗi",
+      "answered": "{count, number} ({rate})",
+      "emptyTitle": "Chưa có workspace",
+      "emptyMessage": "Workspace sẽ hiện ở đây khi được tạo.",
+      "noMatchTitle": "Không có workspace nào khớp tìm kiếm đó",
+      "noMatchMessage": "Hãy kiểm tra chính tả hoặc xóa ô tìm kiếm.",
+      "clearSearch": "Xóa tìm kiếm"
+    }
+  }
+}

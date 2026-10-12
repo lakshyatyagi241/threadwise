@@ -7,6 +7,8 @@
 import {
   bigint,
   boolean,
+  customType,
+  date,
   foreignKey,
   index,
   integer,
@@ -50,7 +52,10 @@ export const conversations = pgTable(
     contactId: idColumn('contact_id'),
     title: text('title').notNull(),
     preview: text('preview'),
-    status: text('status').$type<(typeof CONVERSATION_STATUSES)[number]>().notNull().default('open'),
+    status: text('status')
+      .$type<(typeof CONVERSATION_STATUSES)[number]>()
+      .notNull()
+      .default('open'),
     customerLanguage: text('customer_language'),
     archived: boolean('archived').notNull().default(false),
     pinnedAt: timestamp('pinned_at', { withTimezone: true }),
@@ -222,7 +227,10 @@ export const conversationNotes = pgTable(
     userId: idColumn('user_id'),
     body: text('body').notNull(),
     /** Users mentioned, as uuid strings (tib1 migration 20261015090100: NOT NULL, always an array). */
-    mentions: jsonb('mentions').$type<string[]>().notNull().default(sql`'[]'::jsonb`),
+    mentions: jsonb('mentions')
+      .$type<string[]>()
+      .notNull()
+      .default(sql`'[]'::jsonb`),
     isPinned: boolean('is_pinned').notNull().default(false),
     editedAt: timestamp('edited_at', { withTimezone: true }),
     createdAt: createdAt(),
@@ -478,8 +486,80 @@ export const messageEvents = pgTable(
   (t) => [
     primaryKey({ columns: [t.id, t.createdAt] }),
     index('idx_message_events_message').on(t.orgId, t.messageId, t.messageCreatedAt),
+    index('idx_message_events_created').on(t.createdAt),
   ],
 );
 
 export type MessageEventsRow = typeof messageEvents.$inferSelect;
 export type NewMessageEventsRow = typeof messageEvents.$inferInsert;
+
+const bytea = customType<{ data: Buffer; driverData: Buffer }>({ dataType: () => 'bytea' });
+
+/** One gzip NDJSON object per workspace and UTC day: the message events older than the live window (20261116100000). */
+export const messageEventArchives = pgTable(
+  'message_event_archives',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    day: date('day').notNull(),
+    eventCount: integer('event_count').notNull(),
+    payloadGz: bytea('payload_gz').notNull(),
+    archivedAt: timestamp('archived_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('uq_message_event_archives_day').on(t.orgId, t.day),
+    index('idx_message_event_archives_day').on(t.day),
+  ],
+);
+
+export const MESSAGE_LOG_EXPORT_STATUSES = [
+  'queued',
+  'running',
+  'ready',
+  'failed',
+  'expired',
+] as const;
+
+/** One requested export of the message log; the file lives in `fileGz` for a week (20261116100000). */
+export const messageLogExports = pgTable(
+  'message_log_exports',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    requestedBy: idColumn('requested_by').notNull(),
+    emailedTo: text('emailed_to'),
+    rangeFrom: date('range_from').notNull(),
+    rangeTo: date('range_to').notNull(),
+    messageStatus: text('message_status'),
+    status: text('status')
+      .$type<(typeof MESSAGE_LOG_EXPORT_STATUSES)[number]>()
+      .notNull()
+      .default('queued'),
+    rowCount: integer('row_count'),
+    fileName: text('file_name'),
+    fileBytes: integer('file_bytes'),
+    fileGz: bytea('file_gz'),
+    error: text('error'),
+    requestedAt: timestamp('requested_at', { withTimezone: true }).notNull().defaultNow(),
+    startedAt: timestamp('started_at', { withTimezone: true }),
+    completedAt: timestamp('completed_at', { withTimezone: true }),
+    expiresAt: timestamp('expires_at', { withTimezone: true }),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('message_log_exports_org_id_uuid_key').on(t.orgId, t.uuid),
+    foreignKey({
+      columns: [t.orgId, t.requestedBy],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('cascade'),
+    index('idx_message_log_exports_org').on(t.orgId, t.requestedAt),
+    index('idx_message_log_exports_expiry')
+      .on(t.expiresAt)
+      .where(sql`status = 'ready'`),
+  ],
+);

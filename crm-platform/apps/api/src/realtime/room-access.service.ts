@@ -22,6 +22,13 @@ export class RoomAccessService {
     @Inject(CONVERSATION_RECORD_LOADER) private readonly loader: ConversationRecordLoader,
   ) {}
 
+  /** Whether a staff user holds a permission right now (live grants, never the audience cache): the gate of a permission room. */
+  async holds(identity: SocketIdentity, permission: string): Promise<boolean> {
+    if (identity.actorType !== 'user') return false;
+    const viewer = await this.directory.viewer(identity.orgId, identity.actorId, permission);
+    return viewer.scope !== null;
+  }
+
   async canJoin(identity: SocketIdentity, spec: RealtimeRoomSpec): Promise<boolean> {
     if (identity.actorType !== 'user') return false;
     const { orgId, actorId: userId } = identity;

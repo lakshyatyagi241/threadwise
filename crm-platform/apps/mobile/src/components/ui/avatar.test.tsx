@@ -20,15 +20,15 @@ describe('initialsOf', () => {
 });
 
 describe('Avatar', () => {
-  it('shows the initials', () => {
-    render(<Avatar name="Asha Verma" />);
+  it('shows the initials', async () => {
+    await render(<Avatar name="Asha Verma" />);
     expect(screen.getByText(/AV/, { includeHiddenElements: true })).toBeTruthy();
   });
 
-  it('keeps the same mark for the same name', () => {
-    const { toJSON, rerender } = render(<Avatar name="Asha Verma" />);
+  it('keeps the same mark for the same name', async () => {
+    const { toJSON, rerender } = await render(<Avatar name="Asha Verma" />);
     const first = JSON.stringify(toJSON());
-    rerender(<Avatar name="Asha Verma" />);
+    await rerender(<Avatar name="Asha Verma" />);
     expect(JSON.stringify(toJSON())).toBe(first);
   });
 });

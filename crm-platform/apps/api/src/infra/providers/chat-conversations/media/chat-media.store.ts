@@ -204,11 +204,16 @@ export class ChatMediaStore {
           done(null, chunk);
         },
       });
-      await pipeline(input.stream, counter, createWriteStream(spool.path, { flags: 'wx', mode: 0o600 }));
+      await pipeline(
+        input.stream,
+        counter,
+        createWriteStream(spool.path, { flags: 'wx', mode: 0o600 }),
+      );
       if (size === 0) throw reject('The uploaded file is empty.');
 
       const digest = hash.digest('hex');
-      if (input.verifySha256Hex && input.verifySha256Hex !== digest) throw new MediaIntegrityError();
+      if (input.verifySha256Hex && input.verifySha256Hex !== digest)
+        throw new MediaIntegrityError();
 
       const head = Buffer.alloc(Math.min(size, HEAD_BYTES));
       const fh = await openFile(spool.path, 'r');

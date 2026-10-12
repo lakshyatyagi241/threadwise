@@ -81,7 +81,7 @@
       },
       "sms": {
         "label": "SMS",
-        "description": "Verstuur en ontvang sms-berichten met je eigen afzender.",
+        "description": "Verstuur sms-berichten met je eigen Twilio-nummer of MSG91-afzender.",
         "keywords": "sms, afzender-id, dlt, twilio, mobiel"
       },
       "email": {
@@ -293,6 +293,16 @@
         "label": "Automatisch toewijzen",
         "description": "Wijs nieuwe gesprekken automatisch aan de juiste agent toe, op beurt of op basis van regels.",
         "keywords": "routering, round robin, toewijzen, agenten, inboxregels, verdelen, eigenaar"
+      },
+      "message-logs": {
+        "label": "Berichtlogboeken",
+        "description": "Exporteer het bezorglogboek van je berichten, tot een jaar terug, als bestand dat naar je e-mail wordt gestuurd.",
+        "keywords": "export, bezorglogboek, geschiedenis, archief, csv, berichten"
+      },
+      "web": {
+        "label": "Websitechat",
+        "description": "Bots die zijn gemaakt voor de chat op je website en de widget waarin elk daarvan draait.",
+        "keywords": "web, website, widget, chatbot, insluiten, livechat"
       }
     },
     "title": "Instellingen",

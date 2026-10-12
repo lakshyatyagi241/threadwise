@@ -38,6 +38,12 @@ export interface InboundMessage {
   contact: { name: string; phone: string | null; vcard: string } | null;
   reaction: { emoji: string; targetMessageId: string } | null;
   forwarded: { score: number } | null;
+  /** Every card of a contact or contacts-array message (`contact` stays the first one). */
+  contacts?: { name: string | null; phones: string[]; emails: string[]; org: string | null }[];
+  /** The id of the message this one answers (WhatsApp `contextInfo.stanzaId`). */
+  replyToProviderMessageId?: string | null;
+  /** A message type the inbox cannot show (a poll, a product, an order...): kept as a placeholder, never dropped. */
+  unsupported?: { rawType: string; label: string } | null;
 }
 
 /** Delivery progress of a message we sent (TW-NODE-020). */

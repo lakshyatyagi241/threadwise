@@ -4,10 +4,11 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Button, Spinner, cn } from '@crm/ui';
 import type { ConversationNote, MessageResponse } from '@crm/contracts';
-import { buildItems, lastSeq, type ThreadState } from '../lib/thread';
+import { agentReactions, buildItems, lastSeq, type ThreadState } from '../lib/thread';
 import { dayLabel } from '../lib/time';
 import { MessageBubble, NoteBubble, PendingBubble } from './message-bubble';
 import { ArrowDownIcon } from './icons';
+import { MessageLogDialog } from './message-log-dialog';
 import { useErrorText } from './parts';
 
 /** Keep following new messages only when the reader is already this close to the bottom. */
@@ -33,7 +34,13 @@ export interface MessageStreamProps {
   onSeenLatest: (seq: number) => void;
   onLoadOlder: () => void;
   onRetryMessage: (id: string) => Promise<void>;
+  /** Starts a reply to a message; absent when the person may not reply (no Reply button then). */
+  onReply?: (message: MessageResponse) => void;
+  /** Puts an emoji on a message (`''` takes it back); absent when the person or the channel cannot react. */
+  onReact?: (message: MessageResponse, emoji: string) => Promise<void>;
   canManageChannel: boolean;
+  /** The person may export the delivery log (`inbox.logs.export`): its dialog links to the export page. */
+  canExportLogs?: boolean;
   onRetryPending: (clientMessageId: string) => void;
   onDismissPending: (clientMessageId: string) => void;
   onDeleteNote: (id: string) => void;
@@ -54,6 +61,8 @@ export function MessageStream(props: MessageStreamProps) {
   const listRef = useRef<HTMLUListElement>(null);
   const stick = useRef(true);
   const [atBottom, setAtBottom] = useState(true);
+  // The message whose delivery log is open (the dialog fetches it when this is set).
+  const [logMessageId, setLogMessageId] = useState<string | null>(null);
   const [unseen, setUnseen] = useState(0);
   const [announcement, setAnnouncement] = useState('');
   const prev = useRef({ conversationId: '', lastSeq: 0, pending: 0, loaded: false });
@@ -65,6 +74,7 @@ export function MessageStream(props: MessageStreamProps) {
     [state.messages, props.notes, state.pending, state.hasMoreBefore],
   );
   const byId = useMemo(() => new Map(state.messages.map((m) => [m.id, m])), [state.messages]);
+  const reactions = useMemo(() => agentReactions(state.messages), [state.messages]);
   const newestSeq = lastSeq(state.messages);
 
   // Follow rules, applied after the list changed and before the browser paints.
@@ -184,7 +194,12 @@ export function MessageStream(props: MessageStreamProps) {
     setUnseen(0);
   };
 
-  const empty = state.loaded && !state.error && state.messages.length === 0 && state.pending.length === 0 && items.length === 0;
+  const empty =
+    state.loaded &&
+    !state.error &&
+    state.messages.length === 0 &&
+    state.pending.length === 0 &&
+    items.length === 0;
 
   return (
     <div className="relative min-h-0 flex-1">
@@ -253,8 +268,12 @@ export function MessageStream(props: MessageStreamProps) {
                     key={item.key}
                     message={item.message}
                     quoted={quotedOf(item.message, byId)}
+                    onReply={props.onReply}
+                    onReact={props.onReact}
+                    agentReaction={reactions.get(item.message.id) ?? null}
                     onRetry={props.onRetryMessage}
                     canManageChannel={props.canManageChannel}
+                    onOpenLog={setLogMessageId}
                   />
                 );
               case 'note':
@@ -281,6 +300,12 @@ export function MessageStream(props: MessageStreamProps) {
         </ul>
       </div>
 
+      <MessageLogDialog
+        messageId={logMessageId}
+        onClose={() => setLogMessageId(null)}
+        canExport={props.canExportLogs === true}
+      />
+
       <div role="status" aria-live="polite" className="sr-only" data-testid="inbox-live">
         {announcement}
       </div>
@@ -305,4 +330,3 @@ export function MessageStream(props: MessageStreamProps) {
 function quotedOf(m: MessageResponse, byId: Map<string, MessageResponse>): MessageResponse | null {
   return m.replyToMessageId ? (byId.get(m.replyToMessageId) ?? null) : null;
 }
-

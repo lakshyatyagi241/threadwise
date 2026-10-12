@@ -230,7 +230,7 @@ describe('TW-FB-002: connecting an account', () => {
     const none = await post('x'.repeat(40));
     expect(none.status).toBe(422);
     expect(none.body.code).toBe('FB_TOKEN_NOT_A_PAGE');
-    expect((await post('short')).status).toBe(400);
+    expect((await post('short')).status).toBe(422);
 
     asPage = page('P9', 'Pasted', { access_token: undefined });
     const ok = await post('t'.repeat(40));
@@ -346,7 +346,7 @@ describe('TW-FB-001, 004: the hub and managing a Page', () => {
   it('disconnect unsubscribes and removes the Page; its inbox threads stay', async () => {
     const { t, id } = await connected('fb11');
     const channel = await h.owner.query(
-      `INSERT INTO channels (org_id, kind, name, status, external_id) VALUES ($1, 'facebook', 'Shop', 'connected', 'P1') RETURNING id`,
+      `SELECT id FROM channels WHERE org_id = $1 AND kind = 'facebook' AND external_id = 'P1'`,
       [t.orgId],
     );
     await h.owner.query(

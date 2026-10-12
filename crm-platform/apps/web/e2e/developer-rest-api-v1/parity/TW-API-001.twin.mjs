@@ -47,7 +47,8 @@ export default (h) => {
   // ---------------------------------------------------------------------------------------------------------------
   // transport
   const apiBase = (c) =>
-    (c.side === 'threadwise' ? c.sideObj.baseUrl : c.sideObj.apiBase).replace(/\/$/, '') + '/api/v1';
+    (c.side === 'threadwise' ? c.sideObj.baseUrl : c.sideObj.apiBase).replace(/\/$/, '') +
+    '/api/v1';
 
   async function call(c, method, path, o = {}) {
     const headers = { Accept: 'application/json', ...(o.headers || {}) };
@@ -1830,7 +1831,8 @@ export default (h) => {
         'owner-foreign',
         null,
         (c) => ({
-          owner_user_id: c.side === 'threadwise' ? 987654321 : '00000000-0000-4000-8000-0000000000aa',
+          owner_user_id:
+            c.side === 'threadwise' ? 987654321 : '00000000-0000-4000-8000-0000000000aa',
         }),
       ],
       ['title-html', null, (c) => ({ title: `${c.tag('dh')} <script>alert(1)</script>` })],
@@ -1977,7 +1979,8 @@ export default (h) => {
           await call(c, 'PUT', `/deals/${r0.json?.data?.id}`, {
             key: await getKey(c),
             body: {
-              stage_id: c.side === 'threadwise' ? 987654321 : '00000000-0000-4000-8000-0000000000aa',
+              stage_id:
+                c.side === 'threadwise' ? 987654321 : '00000000-0000-4000-8000-0000000000aa',
             },
           }),
         );

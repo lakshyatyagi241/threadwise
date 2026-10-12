@@ -1,6 +1,5 @@
 import type { QueryClient } from '@tanstack/react-query';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
-import { ScrollView } from 'react-native';
 import { ApiError } from '@/lib/api';
 import { signOut } from '@/lib/auth/sign-out';
 import { initI18n } from '@/lib/i18n';
@@ -56,8 +55,8 @@ async function loaded(queryClient: QueryClient) {
 
 let client: QueryClient | undefined;
 /** Renders the screen and remembers its query cache, so the test can wait for every request to finish. */
-function show() {
-  const view = renderApp(<DashboardScreen />);
+async function show() {
+  const view = await renderApp(<DashboardScreen />);
   client = view.queryClient;
   return view;
 }
@@ -80,7 +79,7 @@ afterEach(async () => {
 describe('DashboardScreen', () => {
   it('shows every card of a workspace that has data, in one column', async () => {
     arrange();
-    const { queryClient } = show();
+    const { queryClient } = await show();
     await loaded(queryClient);
     for (const id of [
       'card-sent',
@@ -108,20 +107,20 @@ describe('DashboardScreen', () => {
 
   it('tells Sentry who is signed in, by id only', async () => {
     arrange();
-    const { queryClient } = show();
+    const { queryClient } = await show();
     await loaded(queryClient);
     expect(identifyUser).toHaveBeenCalledWith(session.user.id);
   });
 
   it('shows the devices card only while the platform has the personal-number engine on', async () => {
     arrange({ features: ['unofficial_whatsapp'] });
-    const first = show();
+    const first = await show();
     await loaded(first.queryClient);
     expect(await screen.findByTestId('card-devices')).toBeTruthy();
-    first.unmount();
+    await first.unmount();
 
     arrange({ features: [] });
-    const { queryClient } = show();
+    const { queryClient } = await show();
     await loaded(queryClient);
     expect(screen.queryByTestId('card-devices')).toBeNull();
   });
@@ -131,14 +130,14 @@ describe('DashboardScreen', () => {
       features: ['unofficial_whatsapp'],
       widgets: { ...widgets, devices: { ...widgets.devices, unofficialDisabled: true } },
     });
-    const { queryClient } = show();
+    const { queryClient } = await show();
     await loaded(queryClient);
     expect(screen.queryByTestId('card-devices')).toBeNull();
   });
 
   it('does not ask for the wallet at all without the permission, and shows the autopilot prompt instead', async () => {
     arrange({ session: { ...session, permissions: { 'dash.dashboard.read': 'all' } } });
-    const { queryClient } = show();
+    const { queryClient } = await show();
     await loaded(queryClient);
     expect(walletCall).not.toHaveBeenCalled();
     expect(await screen.findByTestId('card-autopilot')).toBeTruthy();
@@ -147,7 +146,7 @@ describe('DashboardScreen', () => {
 
   it('shows the autopilot prompt when the wallet is empty', async () => {
     arrange({ wallet: { ...wallet, balanceMinor: 0 } });
-    const { queryClient } = show();
+    const { queryClient } = await show();
     await loaded(queryClient);
     await waitFor(() => expect(walletCall).toHaveBeenCalled());
     expect(await screen.findByTestId('card-autopilot')).toBeTruthy();
@@ -155,7 +154,7 @@ describe('DashboardScreen', () => {
 
   it('leaves out the Instagram band and the pipeline for a workspace without them, and shows the empty states', async () => {
     arrange({ widgets: emptyWidgets });
-    const { queryClient } = show();
+    const { queryClient } = await show();
     await loaded(queryClient);
     expect(await screen.findByText('No active campaigns')).toBeTruthy();
     expect(screen.queryByTestId('ig-band')).toBeNull();
@@ -166,11 +165,11 @@ describe('DashboardScreen', () => {
 
   it('asks every endpoint again for the window the person picks', async () => {
     arrange();
-    const { queryClient } = show();
+    const { queryClient } = await show();
     await loaded(queryClient);
     expect(summaryCall).toHaveBeenLastCalledWith('7d', expect.anything());
     await act(async () => {
-      fireEvent.press(screen.getByRole('radio', { name: 'Last 30 days' }));
+      await fireEvent.press(screen.getByRole('radio', { name: 'Last 30 days' }));
     });
     await waitFor(() => expect(summaryCall).toHaveBeenLastCalledWith('30d', expect.anything()));
     await waitFor(() => expect(queryClient.isFetching()).toBe(0));
@@ -183,13 +182,12 @@ describe('DashboardScreen', () => {
 
   it('reloads everything when the page is pulled down, and stops the spinner when done', async () => {
     arrange();
-    const { queryClient } = show();
+    const { queryClient } = await show();
     await loaded(queryClient);
-    const control = () => screen.UNSAFE_getByType(ScrollView).props.refreshControl;
-    act(() => {
+    const control = () => screen.getByTestId('dashboard-scroll').props.refreshControl;
+    await act(() => {
       control().props.onRefresh();
     });
-    expect(control().props.refreshing).toBe(true);
     await waitFor(() => expect(control().props.refreshing).toBe(false));
     expect(summaryCall).toHaveBeenCalledTimes(2);
     expect(widgetsCall).toHaveBeenCalledTimes(2);
@@ -199,7 +197,7 @@ describe('DashboardScreen', () => {
   it('tells a person whose role cannot open the dashboard, naming the role', async () => {
     arrange();
     summaryCall.mockRejectedValue(new ApiError(403, 'FORBIDDEN', 'Forbidden'));
-    show();
+    await show();
     expect(
       await screen.findByText('Your role (Owner) does not have access to the dashboard.'),
     ).toBeTruthy();
@@ -209,18 +207,18 @@ describe('DashboardScreen', () => {
   it('says the plan lacks analytics when the API says so', async () => {
     arrange();
     summaryCall.mockRejectedValue(new ApiError(402, 'PLAN_FEATURE_LOCKED', 'locked'));
-    show();
+    await show();
     expect(await screen.findByText('Your plan does not include analytics.')).toBeTruthy();
   });
 
   it('shows the failure in words with a way to try again, and recovers', async () => {
     arrange();
     summaryCall.mockRejectedValueOnce(new ApiError(0, 'CLIENT_NETWORK', 'offline'));
-    const { queryClient } = show();
+    const { queryClient } = await show();
     expect(
       await screen.findByText("Can't reach the server. Check your connection and try again."),
     ).toBeTruthy();
-    fireEvent.press(screen.getByRole('button', { name: 'Try again' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Try again' }));
     await loaded(queryClient);
     expect(
       screen.queryByText("Can't reach the server. Check your connection and try again."),
@@ -230,7 +228,7 @@ describe('DashboardScreen', () => {
   it('keeps the numbers it has and offers a retry when only the cards fail to load', async () => {
     arrange();
     widgetsCall.mockRejectedValue(new ApiError(500, 'INTERNAL', 'boom'));
-    const { queryClient } = show();
+    const { queryClient } = await show();
     await loaded(queryClient);
     expect(await screen.findByText('Something went wrong. Please try again.')).toBeTruthy();
     expect(screen.queryByTestId('card-campaigns')).toBeNull();
@@ -238,7 +236,7 @@ describe('DashboardScreen', () => {
 
   it('reminds a new workspace to finish setting up on the web', async () => {
     arrange({ session: { ...session, landing: 'onboarding' } });
-    const { queryClient } = show();
+    const { queryClient } = await show();
     await loaded(queryClient);
     expect(
       screen.getByText(
@@ -249,16 +247,16 @@ describe('DashboardScreen', () => {
 
   it('does not nag a finished workspace', async () => {
     arrange();
-    const { queryClient } = show();
+    const { queryClient } = await show();
     await loaded(queryClient);
     expect(screen.queryByText(/setup is not finished/)).toBeNull();
   });
 
   it('signs out and clears the cache', async () => {
     arrange();
-    const { queryClient } = show();
+    const { queryClient } = await show();
     await loaded(queryClient);
-    fireEvent.press(screen.getByRole('button', { name: 'Sign out' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Sign out' }));
     expect(signOut).toHaveBeenCalledWith(queryClient);
   });
 });

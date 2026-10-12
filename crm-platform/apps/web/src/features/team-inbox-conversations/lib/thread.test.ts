@@ -1,10 +1,13 @@
 import { describe, expect, it } from 'vitest';
+import type { MessageResponse } from '@crm/contracts';
 import { id, message, note, outbound } from './fixtures';
 import {
   EMPTY_THREAD,
+  agentReactions,
   buildItems,
   firstSeq,
   hasGap,
+  isAgentReaction,
   lastSeq,
   mergeMessages,
   pickMessage,
@@ -231,5 +234,47 @@ describe('buildItems', () => {
     expect(withMore.some((i) => i.kind === 'note')).toBe(false);
     const complete = buildItems([message(5)], [early], [], false);
     expect(complete.some((i) => i.kind === 'note')).toBe(true);
+  });
+});
+
+describe('agent reactions', () => {
+  const target = message(1);
+  const reaction = (seq: number, emoji: string, over: Partial<MessageResponse> = {}) =>
+    outbound(seq, {
+      kind: 'reaction',
+      body: emoji === '' ? null : emoji,
+      replyToMessageId: target.id,
+      status: 'sent',
+      ...over,
+    });
+
+  it('is a reaction we sent, not one a customer sent', () => {
+    expect(isAgentReaction(reaction(2, '👍'))).toBe(true);
+    expect(isAgentReaction(message(3, { kind: 'reaction' }))).toBe(false);
+    expect(isAgentReaction(outbound(4))).toBe(false);
+  });
+
+  it('draws no bubble for it', () => {
+    const items = buildItems([target, reaction(2, '👍')], [], [], false);
+    expect(items.filter((i) => i.kind === 'message')).toHaveLength(1);
+  });
+
+  it('keeps the newest reaction per message', () => {
+    const r = agentReactions([target, reaction(2, '👍'), reaction(3, '❤️')]);
+    expect(r.get(target.id)).toMatchObject({ emoji: '❤️', status: 'sent' });
+  });
+
+  it('clears the reaction when it is taken back', () => {
+    expect(agentReactions([target, reaction(2, '👍'), reaction(3, '')]).has(target.id)).toBe(false);
+  });
+
+  it('keeps a reaction whose removal was refused', () => {
+    const r = agentReactions([target, reaction(2, '👍'), reaction(3, '', { status: 'failed' })]);
+    expect(r.get(target.id)?.emoji).toBe('👍');
+  });
+
+  it('reports a refused reaction as failed, never hides it', () => {
+    const r = agentReactions([target, reaction(2, '👍', { status: 'failed' })]);
+    expect(r.get(target.id)?.status).toBe('failed');
   });
 });

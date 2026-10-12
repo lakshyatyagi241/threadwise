@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Modal } from '@crm/ui';
+import { createPath } from '@/features/campaigns/lib/create-flow';
 import { useBroadcastChannels } from '../api/channels';
 import { PlusIcon } from './icons';
 
@@ -15,10 +16,11 @@ const CARD =
 
 /**
  * "New broadcast" (TW-BCAST-003). With only WhatsApp connected it goes straight to the WhatsApp composer; when a Telegram bot is on or
- * an Instagram account is linked it opens the channel chooser, one card per available channel, as Reference does.
+ * an Instagram account is linked or an SMS sender is on it opens the channel chooser, one card per available channel, as Reference does.
  */
 export function NewBroadcast() {
   const t = useTranslations('broadcasts.chooser');
+  const sms = useTranslations('sms.chooser');
   const channels = useBroadcastChannels();
   const [open, setOpen] = useState(false);
   const label = (
@@ -28,7 +30,7 @@ export function NewBroadcast() {
     </>
   );
 
-  if (!channels.telegram && !channels.instagram) {
+  if (!channels.telegram && !channels.instagram && !channels.sms) {
     return (
       <Link href="/campaigns/create" className={BUTTON}>
         {label}
@@ -66,6 +68,13 @@ export function NewBroadcast() {
               <div className="text-lg font-semibold">{t('instagram.name')}</div>
               <p className="mt-1.5 text-xs text-muted-foreground">{t('instagram.hint')}</p>
               <div className="mt-3 text-xs font-semibold text-brand">{t('instagram.cta')} →</div>
+            </Link>
+          )}
+          {channels.sms && (
+            <Link href={createPath({ sender: channels.sms })} className={CARD}>
+              <div className="text-lg font-semibold">{sms('name')}</div>
+              <p className="mt-1.5 text-xs text-muted-foreground">{sms('hint')}</p>
+              <div className="mt-3 text-xs font-semibold text-brand">{sms('cta')} →</div>
             </Link>
           )}
         </div>

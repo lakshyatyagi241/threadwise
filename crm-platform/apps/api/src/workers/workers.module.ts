@@ -15,6 +15,7 @@ import { CampaignsWorkerModule } from '../modules/campaigns';
 import { ChannelFacebookWorkerModule } from '../modules/channel-facebook';
 import { ChannelInstagramWorkerModule } from '../modules/channel-instagram';
 import { ShopifyWoocommerceWorkerModule } from '../modules/shopify-woocommerce';
+import { ChannelSmsWorkerModule } from '../modules/channel-sms';
 import { ChannelTelegramWorkerModule } from '../modules/channel-telegram';
 import {
   ContactImportWorkerModule,
@@ -36,6 +37,7 @@ import { NotificationsWorkerModule } from '../modules/notifications';
 import { WebhookFanoutWorkerModule } from '../modules/webhook-fanout';
 import { OutboundWebhooksWorkerModule } from '../modules/outbound-webhooks';
 import { ApiLibraryWorkerModule } from '../modules/api-library';
+import { FaqKnowledgeWorkerModule } from '../modules/faq-knowledge/faq-knowledge-worker.module';
 import { WabaWorkerModule } from '../modules/whatsapp-cloud-api-waba';
 import { AiAgentsTrainingWorkerModule } from '../modules/ai-agents-training';
 import { FlowBuilderEditorWorkerModule } from '../modules/flow-builder-editor';
@@ -44,6 +46,7 @@ import { LeadsWorkerModule } from '../modules/leads';
 import { FormsBuilderWorkerModule } from '../modules/forms-builder';
 import { ScheduledQueueWarmerWorkerModule } from '../modules/scheduled-queue-warmer';
 import { MarketplaceWorkerModule } from '../modules/marketplace';
+import { WorkspacesTeamsTenancyWorkerModule } from '../modules/workspaces-teams-tenancy';
 import { OutboxDrainService } from './outbox-drain.service';
 import { PartitionMaintenanceService } from './partition-maintenance.service';
 
@@ -80,6 +83,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     WebhookFanoutWorkerModule,
     OutboundWebhooksWorkerModule,
     ApiLibraryWorkerModule,
+    FaqKnowledgeWorkerModule,
     CallingVoiceWorkerModule,
     CatalogProductsWorkerModule,
     StorefrontBuilderWorkerModule,
@@ -89,6 +93,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     TeamInboxRoutingSlaWorkerModule,
     CampaignsWorkerModule,
     ChannelTelegramWorkerModule,
+    ChannelSmsWorkerModule,
     ChannelFacebookWorkerModule,
     ChannelInstagramWorkerModule,
     ShopifyWoocommerceWorkerModule,
@@ -102,6 +107,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     FormsBuilderWorkerModule,
     MarketplaceWorkerModule,
     PlatformSupportDeskWorkerModule,
+    WorkspacesTeamsTenancyWorkerModule,
   ],
   providers: [
     OutboxDrainService,

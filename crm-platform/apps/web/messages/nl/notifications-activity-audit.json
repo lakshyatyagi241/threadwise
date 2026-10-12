@@ -313,6 +313,14 @@
         "waba_group_suspension_cleared": {
           "label": "Groep weer actief",
           "hint": "WhatsApp heeft een geschorste groep hersteld. Alleen als je over de schorsing bent geïnformeerd."
+        },
+        "form_payment": {
+          "label": "Formulierbetaling ontvangen",
+          "hint": "Een bezoeker heeft betaald via een van je formulieren."
+        },
+        "form_payment_duplicate": {
+          "label": "Formulier twee keer betaald",
+          "hint": "Een bezoeker heeft een tweede keer betaald en de extra betaling moet worden terugbetaald."
         }
       },
       "loading": "Je voorkeuren laden",

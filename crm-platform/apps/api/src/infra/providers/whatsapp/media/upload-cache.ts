@@ -64,7 +64,8 @@ export class MemoryUploadedMediaCache implements UploadedMediaCache {
   }
 
   set(key: string, mediaId: string, ttlSeconds: number): Promise<void> {
-    if (ttlSeconds > 0) this.entries.set(key, { id: mediaId, until: Date.now() + ttlSeconds * 1000 });
+    if (ttlSeconds > 0)
+      this.entries.set(key, { id: mediaId, until: Date.now() + ttlSeconds * 1000 });
     return Promise.resolve();
   }
 

@@ -97,7 +97,7 @@
       },
       "sms": {
         "label": "SMS",
-        "description": "Envie e receba mensagens de texto com seu próprio remetente.",
+        "description": "Envie mensagens de texto com seu próprio número Twilio ou remetente MSG91.",
         "keywords": "mensagem de texto, id do remetente, dlt, twilio, celular"
       },
       "email": {
@@ -309,6 +309,16 @@
         "label": "Atribuição automática",
         "description": "Atribua novas conversas ao agente certo automaticamente, em rodízio ou por regras.",
         "keywords": "roteamento, rodízio, atribuir, agentes, regras da caixa de entrada, distribuir, responsável"
+      },
+      "message-logs": {
+        "label": "Registros de mensagens",
+        "description": "Exporte o registro de entrega das suas mensagens, até um ano atrás, como um arquivo enviado ao seu e-mail.",
+        "keywords": "exportar, registro de entrega, histórico, arquivo, csv, mensagens"
+      },
+      "web": {
+        "label": "Chat do site",
+        "description": "Bots criados para o chat do seu site e o widget em que cada um é executado.",
+        "keywords": "web, site, widget, chatbot, incorporar, chat ao vivo"
       }
     }
   }

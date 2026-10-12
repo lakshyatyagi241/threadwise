@@ -11,7 +11,8 @@ const read = (dir: string, name: string): unknown =>
 
 export const webhookFixture = (name: string) => read('webhooks', name) as Record<string, unknown>;
 export const graphFixture = (name: string) => read('graph', name) as Record<string, unknown>;
-export const graphError = (name: string) => read('graph', `error-${name}`) as { error: Record<string, unknown> };
+export const graphError = (name: string) =>
+  read('graph', `error-${name}`) as { error: Record<string, unknown> };
 
 /** The ids the fixtures use. */
 export const FX = {

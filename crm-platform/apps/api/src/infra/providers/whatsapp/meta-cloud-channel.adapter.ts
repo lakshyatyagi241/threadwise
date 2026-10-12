@@ -31,6 +31,7 @@ const META_CAPABILITIES: ChannelCapabilities = {
   windowHours: 24,
   templates: true,
   media: ['image', 'video', 'audio', 'document', 'sticker', 'location', 'contact'],
+  interactive: true,
   reactions: true,
   editDelete: false,
   receipts: ['sent', 'delivered', 'read'],

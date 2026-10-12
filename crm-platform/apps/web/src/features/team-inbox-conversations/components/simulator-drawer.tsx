@@ -77,7 +77,12 @@ export function SimulatorDrawer(props: SimulatorDrawerProps) {
         ...base,
         kind: 'location',
         text: text || undefined,
-        location: { latitude: 19.076, longitude: 72.8777, name: text.trim() || 'Mumbai', address: 'Mumbai, India' },
+        location: {
+          latitude: 19.076,
+          longitude: 72.8777,
+          name: text.trim() || 'Mumbai',
+          address: 'Mumbai, India',
+        },
         fault: dup ? 'dup' : undefined,
       };
     } else {
@@ -98,7 +103,8 @@ export function SimulatorDrawer(props: SimulatorDrawerProps) {
     const parsed = simulatorInboundSchema.safeParse(input);
     if (!parsed.success) {
       const next: Record<string, string> = {};
-      for (const issue of parsed.error.issues) next[String(issue.path[0] ?? 'form')] = issue.message;
+      for (const issue of parsed.error.issues)
+        next[String(issue.path[0] ?? 'form')] = issue.message;
       setErrors(next);
       return null;
     }
@@ -203,7 +209,12 @@ export function SimulatorDrawer(props: SimulatorDrawerProps) {
               <Field label={t('name')} htmlFor="sim-name" error={errors.name}>
                 <Input id="sim-name" value={nameValue} onChange={(e) => setName(e.target.value)} />
               </Field>
-              <Field label={t('number')} htmlFor="sim-number" error={errors.from} hint={t('numberHint')}>
+              <Field
+                label={t('number')}
+                htmlFor="sim-number"
+                error={errors.from}
+                hint={t('numberHint')}
+              >
                 <Input
                   id="sim-number"
                   inputMode="numeric"
@@ -214,7 +225,11 @@ export function SimulatorDrawer(props: SimulatorDrawerProps) {
                 />
               </Field>
               <Field label={t('kind')} htmlFor="sim-kind">
-                <Select id="sim-kind" value={kind} onChange={(e) => setKind(e.target.value as Kind)}>
+                <Select
+                  id="sim-kind"
+                  value={kind}
+                  onChange={(e) => setKind(e.target.value as Kind)}
+                >
                   {KINDS.map((k) => (
                     <option key={k} value={k}>
                       {t(`kinds.${k}`)}
@@ -233,7 +248,13 @@ export function SimulatorDrawer(props: SimulatorDrawerProps) {
                 </Field>
               )}
               <Field
-                label={kind === 'location' ? t('placeName') : kind === 'text' ? t('message') : t('caption')}
+                label={
+                  kind === 'location'
+                    ? t('placeName')
+                    : kind === 'text'
+                      ? t('message')
+                      : t('caption')
+                }
                 htmlFor="sim-text"
                 error={errors.text}
               >
@@ -252,7 +273,11 @@ export function SimulatorDrawer(props: SimulatorDrawerProps) {
                 />
               </Field>
               <div className="flex flex-wrap gap-2">
-                <Button data-testid="sim-send" disabled={busy} onClick={() => void sendAsCustomer(false)}>
+                <Button
+                  data-testid="sim-send"
+                  disabled={busy}
+                  onClick={() => void sendAsCustomer(false)}
+                >
                   {busy && <Spinner />}
                   {t('send')}
                 </Button>
@@ -334,5 +359,7 @@ function mediaKindOf(mime: string, fallback: Kind): 'image' | 'video' | 'audio' 
   if (mime.startsWith('video/')) return 'video';
   if (mime.startsWith('audio/')) return 'audio';
   if (mime) return 'document';
-  return fallback === 'image' || fallback === 'video' || fallback === 'audio' ? fallback : 'document';
+  return fallback === 'image' || fallback === 'video' || fallback === 'audio'
+    ? fallback
+    : 'document';
 }

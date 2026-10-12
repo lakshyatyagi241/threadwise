@@ -33,9 +33,32 @@
         "too_short": "Masukkan minimal {min} karakter.",
         "too_long": "Masukkan maksimal {max} karakter.",
         "pattern": "Format ini tidak sesuai dengan yang diharapkan.",
-        "invalid_option": "Pilih salah satu opsi yang tersedia."
+        "invalid_option": "Pilih salah satu opsi yang tersedia.",
+        "invalid_amount": "Masukkan jumlah dalam rentang yang diizinkan."
       },
-      "closedTitle": "Formulir ini ditutup"
+      "closedTitle": "Formulir ini ditutup",
+      "payTitle": "Satu langkah lagi",
+      "payTotal": "Jumlah yang dibayar",
+      "payFromChoice": "Jumlah bergantung pada pilihan Anda di atas.",
+      "payEnter": "Masukkan jumlah yang ingin Anda bayar di atas.",
+      "payNote": "Setelah mengirim, Anda akan menuju halaman pembayaran yang aman.",
+      "payRedirecting": "Jawaban Anda sudah disimpan. Mengarahkan Anda ke halaman pembayaran...",
+      "payContinue": "Lanjutkan ke pembayaran",
+      "paymentUnavailable": "Formulir ini belum dapat menerima pembayaran saat ini. Silakan coba lagi nanti.",
+      "payReturn": {
+        "confirmingTitle": "Mengonfirmasi pembayaran Anda",
+        "confirmingBody": "Kami menunggu konfirmasi dari penyedia pembayaran. Biasanya hanya butuh beberapa detik. Mohon jangan bayar lagi.",
+        "slowTitle": "Masih menunggu konfirmasi",
+        "slowBody": "Jika sudah membayar, konfirmasi akan segera tiba dan Anda dapat menutup halaman ini. Jika belum, kembali dan coba lagi.",
+        "paidTitle": "Pembayaran diterima",
+        "expiredTitle": "Tautan pembayaran telah kedaluwarsa",
+        "expiredBody": "Tidak ada uang yang ditarik. Minta tautan pembayaran baru kepada pengirim formulir.",
+        "failedTitle": "Pembayaran gagal",
+        "failedBody": "Tidak ada uang yang ditarik. Anda dapat mencoba lagi.",
+        "tryAgain": "Coba bayar lagi",
+        "missingTitle": "Pembayaran ini tidak ditemukan",
+        "missingBody": "Tautan mungkin salah atau sudah terlalu lama."
+      }
     }
   }
 }

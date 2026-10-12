@@ -141,3 +141,22 @@ describe('rendering for a channel', () => {
     }
   });
 });
+
+describe('rendering for the website chat widget', () => {
+  it('keeps up to three reply buttons as buttons, which the widget draws itself', () => {
+    const r = renderForChannel(
+      { kind: 'buttons', body: 'Pick', buttons: items(3) },
+      profileOf('webchat'),
+    );
+    expect(r).toMatchObject({ kind: 'interactive', interactive: { type: 'buttons' } });
+  });
+
+  it('turns a longer menu into numbered text, as the widget has no list', () => {
+    const r = renderForChannel(
+      { kind: 'buttons', body: 'Pick', buttons: items(4) },
+      profileOf('webchat'),
+    );
+    expect(r.kind).toBe('text');
+    expect(threadTextOf(r)).toContain('1. ');
+  });
+});

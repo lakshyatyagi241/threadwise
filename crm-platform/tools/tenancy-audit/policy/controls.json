@@ -1,0 +1,768 @@
+{
+  "MT-001": {
+    "title": "Inventory every tenant-owned entity",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "catalog inventory: every table classified and every tenant table has forced RLS + a policy",
+    "evidence": "static:classification"
+  },
+  "MT-002": {
+    "title": "Classify every table global/tenant/user/shared",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "catalog inventory: every table classified and every tenant table has forced RLS + a policy",
+    "evidence": "static:classification"
+  },
+  "MT-003": {
+    "title": "Document trusted tenant-context resolution",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "a documentation control: docs/architecture/tenant-context.md maps how the tenant identity is resolved and carried (HTTP, pre-tenant lookups, jobs, outbox, realtime, caches, operators); the check is that it exists and covers those paths, not that the code obeys it (the other controls test that)",
+    "evidence": "doc",
+    "doc": "docs/architecture/tenant-context.md",
+    "headings": [
+      "## 1. HTTP requests",
+      "## 2. Before a tenant exists",
+      "## 3. Background work",
+      "## 4. Realtime"
+    ]
+  },
+  "MT-004": {
+    "title": "Reject unauthorized client-supplied tenant overrides",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: field-level, idor-families",
+    "evidence": "authz",
+    "specs": ["field-level", "idor-families"]
+  },
+  "MT-005": {
+    "title": "Reject tenant-scoped requests with missing or invalid context",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "generated catalog-driven scenarios (tools/tenancy-audit/lib/db-probe.mjs), also run as apps/api/test/integration/tenancy-isolation.generated.spec.ts",
+    "evidence": "db-probe"
+  },
+  "MT-006": {
+    "title": "Separate tenant membership from global user identity",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: lifecycle",
+    "evidence": "authz",
+    "specs": ["lifecycle"]
+  },
+  "MT-007": {
+    "title": "Prevent context leakage between simultaneous requests",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: cache-and-races; executed e2e suites: tenancy-concurrency",
+    "evidence": "authz",
+    "specs": ["cache-and-races"],
+    "e2e": ["tenancy-concurrency"]
+  },
+  "MT-008": {
+    "title": "Explicit authorization for cross-tenant admin operations",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "every privileged() call-site file is on the reviewed allowlist (a new site fails); 60 files are baseline-unreviewed (TI-002)",
+    "evidence": "static:privileged"
+  },
+  "MT-009": {
+    "title": "Preserve tenant boundaries across gateway/BFF and service calls",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed e2e suites: web-proxy",
+    "evidence": "e2e",
+    "e2e": ["web-proxy"]
+  },
+  "MT-010": {
+    "title": "Enforce tenant-scoping conventions via automated architecture rules",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "every privileged() call-site file is on the reviewed allowlist (a new site fails); 60 files are baseline-unreviewed (TI-002)",
+    "evidence": "static:privileged"
+  },
+  "MT-011": {
+    "title": "Every tenant-owned record has a valid tenant association",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "generated catalog-driven scenarios (tools/tenancy-audit/lib/db-probe.mjs), also run as apps/api/test/integration/tenancy-isolation.generated.spec.ts",
+    "evidence": "db-probe"
+  },
+  "MT-012": {
+    "title": "Scope all SELECT queries",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "generated catalog-driven scenarios (tools/tenancy-audit/lib/db-probe.mjs), also run as apps/api/test/integration/tenancy-isolation.generated.spec.ts",
+    "evidence": "db-probe"
+  },
+  "MT-013": {
+    "title": "Scope UPDATE operations",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "generated catalog-driven scenarios (tools/tenancy-audit/lib/db-probe.mjs), also run as apps/api/test/integration/tenancy-isolation.generated.spec.ts",
+    "evidence": "db-probe"
+  },
+  "MT-014": {
+    "title": "Scope DELETE operations",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "generated catalog-driven scenarios (tools/tenancy-audit/lib/db-probe.mjs), also run as apps/api/test/integration/tenancy-isolation.generated.spec.ts",
+    "evidence": "db-probe"
+  },
+  "MT-015": {
+    "title": "Scope count/distinct/group/aggregate",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: idor-families",
+    "evidence": "authz",
+    "specs": ["idor-families"]
+  },
+  "MT-016": {
+    "title": "Prevent cross-tenant lookup/join leaks",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "generated catalog-driven scenarios (tools/tenancy-audit/lib/db-probe.mjs), also run as apps/api/test/integration/tenancy-isolation.generated.spec.ts",
+    "evidence": "db-probe"
+  },
+  "MT-017": {
+    "title": "Prevent unsafe raw SQL bypassing scope",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "three parts: raw SQL under a tenant transaction is covered by RLS (generated probe); raw SQL under privileged() is on the reviewed allowlist (ratchet); every file with an interpolating sql.raw() was read and is listed in policy/sql-raw-interpolation.json (a new one fails)",
+    "evidence": "static:sqlraw"
+  },
+  "MT-018": {
+    "title": "Validate tenant integrity of foreign keys",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "catalog: every foreign key between tenant tables includes org_id on both sides (a cross-tenant reference is structurally impossible); see tenant-database-query-audit.json",
+    "evidence": "catalog",
+    "catalog": ["fk"]
+  },
+  "MT-019": {
+    "title": "Tenant-aware uniqueness",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "catalog: every unique index on a tenant table that lacks org_id is classified in policy/global-unique.json (tokens, external identities, public names, partitioned PKs); a new one fails until classified",
+    "evidence": "catalog",
+    "catalog": ["unique"]
+  },
+  "MT-020": {
+    "title": "Tenant-scoped pagination and sorting",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: idor-families, route-matrix",
+    "evidence": "authz",
+    "specs": ["idor-families", "route-matrix"]
+  },
+  "MT-021": {
+    "title": "Aggregation stage ordering cannot leak",
+    "priority": "P0",
+    "status": "NOT_APPLICABLE",
+    "basis": "MongoDB aggregation pipeline stage ordering: the platform is PostgreSQL; the equivalent (aggregates under RLS) is covered by MT-015 and the generated read scenarios"
+  },
+  "MT-022": {
+    "title": "Audit transaction scope and rollback isolation",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed e2e suites: tenancy-concurrency",
+    "evidence": "e2e",
+    "e2e": ["tenancy-concurrency"]
+  },
+  "MT-023": {
+    "title": "Migrations/backfills preserve tenant ownership",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "no executed evidence in this tool yet"
+  },
+  "MT-024": {
+    "title": "Per-tenant DB connections resolve correctly (if applicable)",
+    "priority": "P0",
+    "status": "NOT_APPLICABLE",
+    "basis": "shared database: there are no per-tenant databases or connections (tenant = org_id + RLS in one database)"
+  },
+  "MT-025": {
+    "title": "Audit indexes, query plans, pool contention by tenant",
+    "priority": "P1",
+    "status": "NOT_RUN",
+    "basis": "no executed evidence in this tool yet"
+  },
+  "MT-026": {
+    "title": "Validate tenant membership on every protected operation",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: lifecycle",
+    "evidence": "authz",
+    "specs": ["lifecycle"]
+  },
+  "MT-027": {
+    "title": "Prevent cross-tenant use of session/JWT workspace claims",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: lifecycle",
+    "evidence": "authz",
+    "specs": ["lifecycle"]
+  },
+  "MT-028": {
+    "title": "Prevent tenant-switching permission inheritance",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: lifecycle",
+    "evidence": "authz",
+    "specs": ["lifecycle"]
+  },
+  "MT-029": {
+    "title": "Reject removed/suspended members",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: lifecycle",
+    "evidence": "authz",
+    "specs": ["lifecycle"]
+  },
+  "MT-030": {
+    "title": "Prevent tenant admins managing another tenant's staff",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: lifecycle",
+    "evidence": "authz",
+    "specs": ["lifecycle"]
+  },
+  "MT-031": {
+    "title": "Restrict API keys to their tenant",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: api-key-scopes",
+    "evidence": "authz",
+    "specs": ["api-key-scopes"]
+  },
+  "MT-032": {
+    "title": "Apply role/permission policies inside the tenant",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: route-matrix, lifecycle",
+    "evidence": "authz",
+    "specs": ["route-matrix", "lifecycle"]
+  },
+  "MT-033": {
+    "title": "Prevent unauthorized system-admin impersonation",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed e2e suites: impersonation",
+    "evidence": "e2e",
+    "e2e": ["impersonation"]
+  },
+  "MT-034": {
+    "title": "Invalidate access after membership/role revocation",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: lifecycle, cache-and-races",
+    "evidence": "authz",
+    "specs": ["lifecycle", "cache-and-races"]
+  },
+  "MT-035": {
+    "title": "Prevent stale authorization caches after workspace switch",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: lifecycle, cache-and-races",
+    "evidence": "authz",
+    "specs": ["lifecycle", "cache-and-races"]
+  },
+  "MT-036": {
+    "title": "Namespace tenant-scoped cache keys",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: cache-and-races",
+    "evidence": "authz",
+    "specs": ["cache-and-races"]
+  },
+  "MT-037": {
+    "title": "Prevent reading foreign cached responses",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: cache-and-races",
+    "evidence": "authz",
+    "specs": ["cache-and-races"]
+  },
+  "MT-038": {
+    "title": "Prevent overwriting another tenant's cache",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: cache-and-races",
+    "evidence": "authz",
+    "specs": ["cache-and-races"]
+  },
+  "MT-039": {
+    "title": "Scope distributed locks",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "manual read only, no executed test: every lock call site carries the org (SenderLease.key(orgId, ...), camp:run:<orgId>:<id>, the device lease takes (orgId, deviceId)); Postgres advisory locks are per org. Read, not executed."
+  },
+  "MT-040": {
+    "title": "Scope dedup and idempotency keys",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: cache-and-races",
+    "evidence": "authz",
+    "specs": ["cache-and-races"]
+  },
+  "MT-041": {
+    "title": "Scope rate-limit counters per policy",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed e2e suites: throttle-http",
+    "evidence": "e2e",
+    "e2e": ["throttle-http"]
+  },
+  "MT-042": {
+    "title": "Prevent cross-tenant pub/sub access",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: realtime",
+    "evidence": "authz",
+    "specs": ["realtime"]
+  },
+  "MT-043": {
+    "title": "Test tenant-specific cache invalidation",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: cache-and-races",
+    "evidence": "authz",
+    "specs": ["cache-and-races"]
+  },
+  "MT-044": {
+    "title": "Redis memory/eviction controls",
+    "priority": "P1",
+    "status": "FAILED",
+    "basis": "requirement not met: TI-017: docker-compose.prod.yml starts Redis with noeviction but no maxmemory (deploy/hostinger sets one)"
+  },
+  "MT-045": {
+    "title": "Redis-unavailable fallback behaviour",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed e2e suites: rate-limiter, throttle-http::Redis is down|unreachable",
+    "evidence": "e2e",
+    "e2e": ["rate-limiter", "throttle-http::Redis is down|unreachable"]
+  },
+  "MT-046": {
+    "title": "Carry tenant identity with every job",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: workers",
+    "evidence": "authz",
+    "specs": ["workers"]
+  },
+  "MT-047": {
+    "title": "Validate tenant context before processing jobs",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: workers",
+    "evidence": "authz",
+    "specs": ["workers"]
+  },
+  "MT-048": {
+    "title": "Prevent worker context reuse across tenants",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: workers",
+    "evidence": "authz",
+    "specs": ["workers"]
+  },
+  "MT-049": {
+    "title": "Prevent retry/DLQ replay under the wrong tenant",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: workers",
+    "evidence": "authz",
+    "specs": ["workers"]
+  },
+  "MT-050": {
+    "title": "Scope scheduled tasks",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "every privileged() call-site file is on the reviewed allowlist (a new site fails); 60 files are baseline-unreviewed (TI-002)",
+    "evidence": "static:privileged"
+  },
+  "MT-051": {
+    "title": "Events carry validated tenant context",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: workers",
+    "evidence": "authz",
+    "specs": ["workers"]
+  },
+  "MT-052": {
+    "title": "Prevent cross-tenant event subscriptions",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: realtime",
+    "evidence": "authz",
+    "specs": ["realtime"]
+  },
+  "MT-053": {
+    "title": "Prevent cross-tenant idempotency collisions",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: cache-and-races",
+    "evidence": "authz",
+    "specs": ["cache-and-races"]
+  },
+  "MT-054": {
+    "title": "Scope automation workflows, triggers, actions",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: idor-families",
+    "evidence": "authz",
+    "specs": ["idor-families"]
+  },
+  "MT-055": {
+    "title": "Prevent tenant credentials reused by another job",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: workers",
+    "evidence": "authz",
+    "specs": ["workers"]
+  },
+  "MT-056": {
+    "title": "Bulk jobs cannot process all tenants",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: bulk-export",
+    "evidence": "authz",
+    "specs": ["bulk-export"]
+  },
+  "MT-057": {
+    "title": "Tenant-aware queue concurrency/fairness",
+    "priority": "P1",
+    "status": "FAILED",
+    "basis": "requirement not met: TI-016: BullMQ queues have no per-tenant fairness or concurrency limit"
+  },
+  "MT-058": {
+    "title": "Correct context across retries, failures, restarts",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: workers",
+    "evidence": "authz",
+    "specs": ["workers"]
+  },
+  "MT-059": {
+    "title": "Scope attachment upload/storage ownership",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: bulk-export, idor-families",
+    "evidence": "authz",
+    "specs": ["bulk-export", "idor-families"]
+  },
+  "MT-060": {
+    "title": "Authorize before generating signed URLs",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: bulk-export, idor-families",
+    "evidence": "authz",
+    "specs": ["bulk-export", "idor-families"]
+  },
+  "MT-061": {
+    "title": "Prevent foreign attachment preview/download",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: bulk-export, idor-families",
+    "evidence": "authz",
+    "specs": ["bulk-export", "idor-families"]
+  },
+  "MT-062": {
+    "title": "Exports contain only authorized tenant data",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: bulk-export",
+    "evidence": "authz",
+    "specs": ["bulk-export"]
+  },
+  "MT-063": {
+    "title": "Prevent cross-tenant import updates/upserts",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: bulk-export",
+    "evidence": "authz",
+    "specs": ["bulk-export"]
+  },
+  "MT-064": {
+    "title": "Scope temp files and report jobs",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "no executed evidence in this tool yet"
+  },
+  "MT-065": {
+    "title": "Scope full-text search",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: idor-families",
+    "evidence": "authz",
+    "specs": ["idor-families"]
+  },
+  "MT-066": {
+    "title": "Scope autocomplete/suggestions",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "no executed evidence in this tool yet"
+  },
+  "MT-067": {
+    "title": "Prevent facet/count leaks",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: idor-families",
+    "evidence": "authz",
+    "specs": ["idor-families"]
+  },
+  "MT-068": {
+    "title": "Scope dashboards and saved reports",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: idor-families",
+    "evidence": "authz",
+    "specs": ["idor-families"]
+  },
+  "MT-069": {
+    "title": "Prevent shared CDN/browser caches exposing tenant data",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed e2e suites: tenancy-concurrency",
+    "evidence": "e2e",
+    "e2e": ["tenancy-concurrency"]
+  },
+  "MT-070": {
+    "title": "Restrict signed URLs to object, method, expiry",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: bulk-export",
+    "evidence": "authz",
+    "specs": ["bulk-export"]
+  },
+  "MT-071": {
+    "title": "Tenant-aware deletion and file retention",
+    "priority": "P1",
+    "status": "NOT_RUN",
+    "basis": "no executed evidence in this tool yet"
+  },
+  "MT-072": {
+    "title": "Contacts isolation",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: idor-families; executed e2e suites: contact-groups",
+    "evidence": "authz",
+    "specs": ["idor-families"],
+    "e2e": ["contact-groups"]
+  },
+  "MT-073": {
+    "title": "Companies isolation",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: idor-families",
+    "evidence": "authz",
+    "specs": ["idor-families"]
+  },
+  "MT-074": {
+    "title": "Inbox isolation",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: idor-families; executed e2e suites: message-send, channels",
+    "evidence": "authz",
+    "specs": ["idor-families"],
+    "e2e": ["message-send", "channels"]
+  },
+  "MT-075": {
+    "title": "WhatsApp tenant-to-WABA/number mapping",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: idor-families; executed e2e suites: waba-connect",
+    "evidence": "authz",
+    "specs": ["idor-families"],
+    "e2e": ["waba-connect"]
+  },
+  "MT-076": {
+    "title": "Broadcast isolation",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: workers, idor-families; executed e2e suites: broadcast-wizard",
+    "evidence": "authz",
+    "specs": ["workers", "idor-families"],
+    "e2e": ["broadcast-wizard"]
+  },
+  "MT-077": {
+    "title": "Bot isolation",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: idor-families; executed e2e suites: widgets-admin, widget-public",
+    "evidence": "authz",
+    "specs": ["idor-families"],
+    "e2e": ["widgets-admin", "widget-public"]
+  },
+  "MT-078": {
+    "title": "Automation isolation",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: idor-families; executed e2e suites: flows::tenant isolation",
+    "evidence": "authz",
+    "specs": ["idor-families"],
+    "e2e": ["flows::tenant isolation"]
+  },
+  "MT-079": {
+    "title": "Email/SMS/voice sender isolation",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: workers; executed e2e suites: catalog-bridge",
+    "evidence": "authz",
+    "specs": ["workers"],
+    "e2e": ["catalog-bridge"]
+  },
+  "MT-080": {
+    "title": "Webhook source-to-tenant mapping",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: workers; executed e2e suites: tenancy-regressions",
+    "evidence": "authz",
+    "specs": ["workers"],
+    "e2e": ["tenancy-regressions"]
+  },
+  "MT-081": {
+    "title": "Integration credential isolation",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: idor-families",
+    "evidence": "authz",
+    "specs": ["idor-families"]
+  },
+  "MT-082": {
+    "title": "Billing/wallet isolation",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: idor-families; executed e2e suites: invoicing",
+    "evidence": "authz",
+    "specs": ["idor-families"],
+    "e2e": ["invoicing"]
+  },
+  "MT-083": {
+    "title": "Analytics isolation",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: idor-families",
+    "evidence": "authz",
+    "specs": ["idor-families"]
+  },
+  "MT-084": {
+    "title": "Realtime/WebSocket isolation",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: realtime",
+    "evidence": "authz",
+    "specs": ["realtime"]
+  },
+  "MT-085": {
+    "title": "Public/developer API isolation",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: api-key-scopes; executed e2e suites: api-key-throttle",
+    "evidence": "authz",
+    "specs": ["api-key-scopes"],
+    "e2e": ["api-key-throttle"]
+  },
+  "MT-086": {
+    "title": "Tenant-scope knowledge base and vector retrieval",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed e2e suites: faq, ai-training",
+    "evidence": "e2e",
+    "e2e": ["faq", "ai-training"]
+  },
+  "MT-087": {
+    "title": "Prevent cross-tenant conversation memory leakage",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed e2e suites: widget-public",
+    "evidence": "e2e",
+    "e2e": ["widget-public"]
+  },
+  "MT-088": {
+    "title": "Restrict agent tool calls to tenant",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed e2e suites: ai-training",
+    "evidence": "e2e",
+    "e2e": ["ai-training"]
+  },
+  "MT-089": {
+    "title": "Prompt injection cannot override tenant context",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "no executed evidence in this tool yet"
+  },
+  "MT-090": {
+    "title": "Agent credentials and tools tenant-scoped",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed e2e suites: ai-keys",
+    "evidence": "e2e",
+    "e2e": ["ai-keys"]
+  },
+  "MT-091": {
+    "title": "No cross-tenant exposure in AI reports",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "no executed evidence in this tool yet"
+  },
+  "MT-092": {
+    "title": "Isolate agent sessions, checkpoints, retries",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "no executed evidence in this tool yet"
+  },
+  "MT-093": {
+    "title": "Per-tenant request/resource limits",
+    "priority": "P1",
+    "status": "FAILED",
+    "basis": "requirement not met: TI-015: the default request throttle is off and there is no per-workspace subject"
+  },
+  "MT-094": {
+    "title": "One tenant cannot exhaust pools/workers",
+    "priority": "P1",
+    "status": "NOT_RUN",
+    "basis": "no executed evidence in this tool yet"
+  },
+  "MT-095": {
+    "title": "Secure tenant provisioning defaults",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "no executed evidence in this tool yet"
+  },
+  "MT-096": {
+    "title": "Secure deactivation, deletion, retention",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "executed by the authz dynamic specs: cache-and-races",
+    "evidence": "authz",
+    "specs": ["cache-and-races"]
+  },
+  "MT-097": {
+    "title": "Tenant identity in migration, backup, restore",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "no executed evidence in this tool yet"
+  },
+  "MT-098": {
+    "title": "Admin tooling cannot bypass tenant scope",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "every privileged() call-site file is on the reviewed allowlist (a new site fails); 60 files are baseline-unreviewed (TI-002)",
+    "evidence": "static:privileged"
+  },
+  "MT-099": {
+    "title": "Generate cross-tenant tests when tenant code changes",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "no executed evidence in this tool yet"
+  },
+  "MT-100": {
+    "title": "Block releases on confirmed leakage",
+    "priority": "P0",
+    "status": "NOT_RUN",
+    "basis": "no executed evidence in this tool yet"
+  }
+}

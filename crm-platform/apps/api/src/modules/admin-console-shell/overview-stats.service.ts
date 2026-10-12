@@ -44,7 +44,7 @@ export class OverviewStatsService {
       broadcastsQueued: sql`SELECT count(*) FROM broadcasts WHERE org_id = ${o} AND status IN ('pending', 'processing', 'scheduled')`,
       deliveredPct: sql`SELECT CASE WHEN count(*) = 0 THEN NULL
           ELSE round(100.0 * count(*) FILTER (WHERE status IN ('delivered', 'read')) / count(*)) END
-        FROM messages WHERE org_id = ${o} AND direction = 'out' AND created_at >= now() - interval '30 days'`,
+        FROM messages WHERE org_id = ${o} AND direction = 'out' AND kind <> 'reaction' AND created_at >= now() - interval '30 days'`,
       autoReplyRules: sql`SELECT count(*) FROM keyword_replies WHERE org_id = ${o} AND status`,
       autoReplyMatchPct: sql`SELECT CASE WHEN count(*) = 0 THEN NULL
           ELSE round(100.0 * count(*) FILTER (WHERE matched_keyword_reply_id IS NOT NULL) / count(*)) END
@@ -54,10 +54,10 @@ export class OverviewStatsService {
       supportTotal: sql`SELECT count(*) FROM support_tickets WHERE org_id = ${o}`,
       supportOpen: sql`SELECT count(*) FROM support_tickets WHERE org_id = ${o} AND status NOT IN ('resolved', 'closed')`,
       messageHistory: sql`SELECT count(*) FROM messages WHERE org_id = ${o}`,
-      outbound7d: sql`SELECT count(*) FROM messages WHERE org_id = ${o} AND direction = 'out' AND ${week}`,
+      outbound7d: sql`SELECT count(*) FROM messages WHERE org_id = ${o} AND direction = 'out' AND kind <> 'reaction' AND ${week}`,
       activity24h: sql`SELECT count(*) FROM audit_log WHERE org_id = ${o} AND at >= now() - interval '24 hours'`,
       seats: sql`SELECT count(*) FROM users WHERE org_id = ${o} AND status = 'active'`,
-      messagesThisMonth: sql`SELECT count(*) FROM messages WHERE org_id = ${o} AND direction = 'out' AND ${month}`,
+      messagesThisMonth: sql`SELECT count(*) FROM messages WHERE org_id = ${o} AND direction = 'out' AND kind <> 'reaction' AND ${month}`,
       widgetsBuilt: sql`SELECT count(*) FROM chatbot_widgets WHERE org_id = ${o}`,
       widgetsLive: sql`SELECT count(*) FROM chatbot_widgets WHERE org_id = ${o} AND status = 'active'`,
       bookingTypes: sql`SELECT count(*) FROM booking_types WHERE org_id = ${o}`,

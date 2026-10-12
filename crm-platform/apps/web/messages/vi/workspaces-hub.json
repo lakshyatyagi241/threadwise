@@ -78,7 +78,8 @@
       "noMatchMessage": "Thay đổi tìm kiếm hoặc bộ lọc để xem thêm.",
       "loadMore": "Tải thêm",
       "loadingMore": "Đang tải thêm",
-      "loaded": "Hiển thị {count, plural, other {# không gian làm việc}}"
+      "loaded": "Hiển thị {count, plural, other {# không gian làm việc}}",
+      "retentionLink": "Lưu giữ"
     },
     "cell": {
       "suspended": "Đã tạm khóa",
@@ -252,6 +253,147 @@
         "text": "Ticket, cuộc trò chuyện và lịch sử hỗ trợ của không gian làm việc này.",
         "open": "Mở hồ sơ hỗ trợ",
         "openTickets": "{count, plural, other {# ticket đang mở}}"
+      }
+    },
+    "retention": {
+      "crumb": "Lưu giữ",
+      "title": "Lưu giữ workspace",
+      "subtitle": "Các workspace không hoạt động, lâu nhất xếp trước: thời điểm lưu trữ và xóa, các lời nhắc đã gửi, cùng các công cụ để bảo vệ hoặc khôi phục workspace.",
+      "backToList": "Quay lại workspace",
+      "deniedTitle": "Không có quyền truy cập",
+      "tableLabel": "Lưu giữ workspace",
+      "status": {
+        "active": "Đang hoạt động",
+        "archived": "Đã lưu trữ",
+        "suspended": "Đã tạm ngưng",
+        "deleted": "Chủ sở hữu đã xóa"
+      },
+      "filters": {
+        "label": "Bộ lọc",
+        "status": "Trạng thái",
+        "allStatuses": "Mọi trạng thái",
+        "minDays": "Số ngày không hoạt động tối thiểu",
+        "neverDeleteOnly": "Chỉ Không bao giờ xóa",
+        "clear": "Xóa bộ lọc"
+      },
+      "columns": {
+        "workspace": "Workspace",
+        "status": "Trạng thái",
+        "daysInactive": "Số ngày không hoạt động",
+        "lastActivity": "Hoạt động gần nhất",
+        "archiveOn": "Lưu trữ vào",
+        "eraseOn": "Xóa vào",
+        "reminders": "Lời nhắc đã gửi",
+        "protection": "Bảo vệ",
+        "actions": "Thao tác"
+      },
+      "remindersArchive": "Lưu trữ {n}/3",
+      "remindersErase": "Xóa {n}/3",
+      "emptyTitle": "Không có workspace để hiển thị",
+      "emptyMessage": "Workspace sẽ xuất hiện ở đây khi được tạo.",
+      "noMatchTitle": "Không có workspace phù hợp",
+      "noMatchMessage": "Thay đổi bộ lọc để xem thêm.",
+      "loadMore": "Tải thêm",
+      "loadingMore": "Đang tải thêm",
+      "loaded": "Đang hiển thị {count, plural, other {# workspace}}",
+      "badge": {
+        "neverDelete": "Không bao giờ xóa",
+        "legalHold": "Tạm giữ pháp lý",
+        "paidPlan": "Gói trả phí (được miễn)",
+        "paidPlanHint": "Workspace đang dùng gói trả phí sẽ không bao giờ bị lưu trữ vì không hoạt động.",
+        "until": "Đến {date}",
+        "indefinite": "Không hết hạn",
+        "by": "Do {who} đặt"
+      },
+      "actions": {
+        "menu": "Thao tác lưu giữ cho {name}",
+        "history": "Lịch sử",
+        "policy": "Đổi thời hạn",
+        "exemptOn": "Không bao giờ xóa",
+        "exemptOff": "Bỏ Không bao giờ xóa",
+        "restore": "Khôi phục",
+        "holdOn": "Đặt tạm giữ pháp lý",
+        "holdOff": "Gỡ tạm giữ pháp lý"
+      },
+      "event": {
+        "reminder_sent": "Đã gửi lời nhắc",
+        "archived": "Đã lưu trữ",
+        "deleted": "Đã xóa",
+        "delete_blocked": "Xóa bị chặn",
+        "restored": "Đã khôi phục",
+        "policy_changed": "Đã đổi thời hạn",
+        "exemption_set": "Đã bật Không bao giờ xóa",
+        "exemption_cleared": "Đã bỏ Không bao giờ xóa",
+        "legal_hold_set": "Đã đặt tạm giữ pháp lý",
+        "legal_hold_cleared": "Đã gỡ tạm giữ pháp lý"
+      },
+      "history": {
+        "title": "Lịch sử của {name}",
+        "emptyTitle": "Chưa có lịch sử",
+        "emptyMessage": "Lời nhắc và thay đổi sẽ xuất hiện ở đây.",
+        "stage": "Bước",
+        "stages": {
+          "archive": "Lưu trữ",
+          "delete": "Xóa"
+        },
+        "reminderNo": "lời nhắc {n}",
+        "daysInactive": "{count, plural, other {# ngày không hoạt động}}",
+        "by": "Bởi",
+        "system": "Hệ thống",
+        "reason": "Lý do"
+      },
+      "dialog": {
+        "reason": "Lý do",
+        "reasonHint": "Từ 5 đến 500 ký tự. Được lưu trong nhật ký tuân thủ.",
+        "errors": {
+          "reasonShort": "Nhập ít nhất 5 ký tự.",
+          "reasonLong": "Nhập tối đa 500 ký tự.",
+          "archiveWhole": "Nhập số ngày là số nguyên.",
+          "archiveMin": "Lưu trữ sau tối thiểu 60 ngày.",
+          "archiveMax": "Lưu trữ sau tối đa 3650 ngày.",
+          "eraseWhole": "Nhập số ngày là số nguyên.",
+          "eraseMin": "Xóa sau tối thiểu 120 ngày.",
+          "eraseMax": "Xóa sau tối đa 7300 ngày.",
+          "gap": "Thời điểm xóa phải sau lưu trữ ít nhất {days} ngày.",
+          "noChange": "Hãy thay đổi ít nhất một thời hạn.",
+          "untilPast": "Chọn một ngày trong tương lai."
+        },
+        "mode": "Nguồn thời hạn",
+        "days": "Ngày",
+        "useDefault": "Dùng mặc định của nền tảng",
+        "custom": "Số ngày tùy chỉnh",
+        "policyTitle": "Đổi thời hạn cho {name}",
+        "policyMessage": "Số ngày không hoạt động trước khi workspace bị lưu trữ và trước khi bị xóa. Các lời nhắc thay đổi theo.",
+        "archiveAfter": "Lưu trữ sau (ngày)",
+        "archiveHint": "Mặc định nền tảng {default} ngày; tối thiểu {min}.",
+        "eraseAfter": "Xóa sau (ngày)",
+        "eraseHint": "Mặc định nền tảng {default} ngày; tối thiểu {min}.",
+        "policyConfirm": "Lưu thời hạn",
+        "policyDone": "Đã lưu thời hạn cho {name}.",
+        "exemptOnTitle": "Không bao giờ xóa {name}?",
+        "exemptOnMessage": "Khi bật, workspace sẽ không bao giờ bị lưu trữ hay xóa vì không hoạt động.",
+        "exemptOnConfirm": "Bật Không bao giờ xóa",
+        "exemptOnDone": "{name} sẽ không bao giờ bị xóa.",
+        "exemptOffTitle": "Bỏ Không bao giờ xóa cho {name}?",
+        "exemptOffMessage": "Workspace lại theo thời hạn của nó và có thể bị lưu trữ và xóa.",
+        "exemptOffConfirm": "Bỏ Không bao giờ xóa",
+        "exemptOffDone": "{name} lại theo thời hạn của nó.",
+        "until": "Xem xét vào (tùy chọn)",
+        "untilHint": "Bảo vệ kết thúc vào ngày này để được xem xét lại. Để trống nếu không hết hạn.",
+        "restoreTitle": "Khôi phục {name}?",
+        "restoreMessage": "Workspace trở lại hoạt động, người dùng có thể đăng nhập lại và bộ đếm không hoạt động được tính lại từ đầu.",
+        "restoreConfirm": "Khôi phục workspace",
+        "restoreDone": "Đã khôi phục {name}.",
+        "holdOnTitle": "Đặt tạm giữ pháp lý cho {name}?",
+        "holdOnMessage": "Khi đang tạm giữ, workspace không bao giờ bị lưu trữ hay xóa, bất kể thời hạn.",
+        "holdOnSure": "Tôi hiểu điều này sẽ dừng mọi việc lưu trữ và xóa.",
+        "holdOnConfirm": "Đặt tạm giữ pháp lý",
+        "holdOnDone": "Đã đặt tạm giữ pháp lý cho {name}.",
+        "holdOffTitle": "Gỡ tạm giữ pháp lý của {name}?",
+        "holdOffMessage": "Workspace lại theo thời hạn của nó và có thể bị lưu trữ và xóa.",
+        "holdOffSure": "Tôi xác nhận có thể gỡ tạm giữ.",
+        "holdOffConfirm": "Gỡ tạm giữ pháp lý",
+        "holdOffDone": "Đã gỡ tạm giữ pháp lý của {name}."
       }
     }
   }

@@ -530,7 +530,9 @@ export class WorkspaceSettingsService {
           { path: 'confirmName', message: 'Workspace name does not match.' },
         ]);
       }
-      await tx.execute(sql`UPDATE organizations SET status = 'deleted' WHERE id = ${orgId}`);
+      await tx.execute(
+        sql`UPDATE organizations SET status = 'deleted', deleted_at = now() WHERE id = ${orgId}`,
+      );
       const ended = await tx.execute(sql`
         UPDATE auth_sessions SET revoked_at = now(), revoked_reason = 'workspace_deleted'
          WHERE org_id = ${orgId} AND revoked_at IS NULL

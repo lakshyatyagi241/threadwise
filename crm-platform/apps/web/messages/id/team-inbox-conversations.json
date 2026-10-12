@@ -1,7 +1,8 @@
 {
   "team-inbox-conversations": {
     "nav": {
-      "inbox": "Inbox"
+      "inbox": "Inbox",
+      "messageLogs": "Log pesan"
     },
     "common": {
       "dismiss": "Tutup"
@@ -131,7 +132,10 @@
       "generic": "Terjadi kesalahan. Coba lagi.",
       "genericWithId": "Terjadi kesalahan. Coba lagi. Referensi: {id}",
       "templateNotSendable": "Templat itu tidak dapat dikirim ke percakapan ini. Pilih yang lain.",
-      "groupSendUnavailable": "Pengiriman ke grup WhatsApp belum tersedia. Balas dari aplikasi WhatsApp Business."
+      "groupSendUnavailable": "Pengiriman ke grup WhatsApp belum tersedia. Balas dari aplikasi WhatsApp Business.",
+      "logRange": "Pilih tanggal dalam satu tahun terakhir, dengan tanggal mulai sebelum tanggal akhir dan tidak di masa depan.",
+      "logBusy": "Ekspor sedang disiapkan. Tunggu emailnya, lalu minta ekspor berikutnya.",
+      "logNotReady": "Ekspor ini belum siap atau sudah kedaluwarsa. Minta lagi."
     },
     "bubble": {
       "kind": {
@@ -141,6 +145,9 @@
       },
       "template": "Pesan templat: {name}",
       "unavailable": "Pesan tidak tersedia",
+      "unsupported": "Pelanggan mengirim sesuatu yang tidak dapat ditampilkan oleh kanal ini.",
+      "forwarded": "Diteruskan",
+      "referral": "Berasal dari iklan atau tautan",
       "sentIn": "Dikirim dalam {lang}. Tampilkan teks yang Anda tulis",
       "translatedFrom": "Diterjemahkan dari {lang}. Tampilkan yang asli",
       "bot": "Bot",
@@ -162,7 +169,39 @@
       },
       "templateCopyCode": "Salin kode",
       "templateButtonUnnamed": "Tombol",
-      "templateButtonPrefix": "Tombol: "
+      "templateButtonPrefix": "Tombol: ",
+      "reply": "Balas",
+      "quote": {
+        "you": "Anda",
+        "customer": "Pelanggan",
+        "missing": "Pesan asli",
+        "jump": "Buka pesan asli",
+        "replyingTo": "Membalas {name}",
+        "kind": {
+          "text": "Pesan",
+          "image": "Foto",
+          "video": "Video",
+          "audio": "Audio",
+          "voice": "Pesan suara",
+          "document": "Dokumen",
+          "sticker": "Stiker",
+          "location": "Lokasi",
+          "contact": "Kontak",
+          "template": "Templat",
+          "reaction": "Reaksi",
+          "interactive": "Pilihan"
+        }
+      },
+      "react": {
+        "label": "Beri reaksi pada pesan ini",
+        "add": "Beri reaksi {emoji}",
+        "remove": "Hapus reaksi {emoji} Anda",
+        "more": "Emoji lainnya",
+        "takeBack": "Ketuk untuk menarik reaksi Anda",
+        "takeBackLabel": "Reaksi Anda {emoji}. Tarik kembali",
+        "failed": "Reaksi ini tidak terkirim"
+      },
+      "deliveryLog": "Log pengiriman"
     },
     "media": {
       "openImage": "Buka gambar {name}",
@@ -232,7 +271,86 @@
       "addNote": "Tambahkan catatan",
       "hint": "Enter untuk mengirim. Shift+Enter untuk baris baru.",
       "template": "Kirim templat",
-      "groupSendUnavailable": "Pengiriman ke grup WhatsApp belum tersedia. Balas dari aplikasi WhatsApp Business."
+      "groupSendUnavailable": "Pengiriman ke grup WhatsApp belum tersedia. Balas dari aplikasi WhatsApp Business.",
+      "emoji": "Sisipkan emoji",
+      "emojiPanel": "Emoji",
+      "emojiRecent": "Terakhir digunakan",
+      "emojiGroups": "Grup emoji",
+      "emojiGroup": {
+        "smileys": "Smiley",
+        "gestures": "Gestur",
+        "hearts": "Hati dan simbol",
+        "objects": "Objek"
+      },
+      "cancelReply": "Batalkan balasan",
+      "share": {
+        "open": "Bagikan lokasi, kontak, atau tombol",
+        "title": "Bagikan",
+        "eyebrow": "Kirim ke pelanggan",
+        "close": "Tutup",
+        "cancel": "Batal",
+        "send": "Kirim",
+        "sending": "Mengirim…",
+        "sent": "Terkirim",
+        "windowHint": "Seperti pesan bebas lainnya, ini memerlukan jendela 24 jam yang terbuka pada nomor WhatsApp Cloud API.",
+        "tab": {
+          "location": "Lokasi",
+          "contacts": "Kontak",
+          "buttons": "Tombol"
+        },
+        "location": {
+          "latitude": "Lintang",
+          "longitude": "Bujur",
+          "name": "Nama tempat (opsional)",
+          "address": "Alamat (opsional)",
+          "pasteHint": "Anda bisa menempelkan \"28.6139, 77.2090\" dari peta di sini."
+        },
+        "contact": {
+          "card": "Kontak {n}",
+          "name": "Nama",
+          "org": "Perusahaan (opsional)",
+          "phone": "Telepon",
+          "email": "Email",
+          "remove": "Hapus kontak {n}",
+          "add": "Tambah kontak lain"
+        },
+        "buttons": {
+          "type": "Jenis tombol",
+          "kind": {
+            "buttons": "Tombol balasan",
+            "cta_url": "Tombol tautan",
+            "list": "Daftar"
+          },
+          "header": "Header (opsional)",
+          "body": "Pesan",
+          "footer": "Footer (opsional)",
+          "titles": "Tombol (maksimal 3)",
+          "titleN": "Tombol {n}",
+          "add": "Tambah tombol",
+          "linkText": "Teks tombol",
+          "url": "Tautan",
+          "listButton": "Tombol yang membuka daftar",
+          "section": "Bagian {n}",
+          "sectionTitle": "Judul bagian",
+          "rowTitle": "Judul baris {n}",
+          "rowDescription": "Deskripsi baris {n} (opsional)",
+          "addRow": "Tambah baris",
+          "addSection": "Tambah bagian",
+          "removeSection": "Hapus bagian {n}",
+          "rows": "Baris",
+          "rowCount": "{n} dari {max} baris"
+        },
+        "problem": {
+          "required": "{label} wajib diisi",
+          "range": "{label} di luar rentang",
+          "phoneOrEmail": "Tambahkan nomor telepon atau email",
+          "phone": "Masukkan nomor telepon yang valid",
+          "email": "Masukkan alamat email yang valid",
+          "duplicate": "{label} sama dengan tombol lain",
+          "url": "Masukkan tautan yang diawali http:// atau https://",
+          "tooManyRows": "Sebuah daftar memuat paling banyak 10 baris secara total"
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Catatan dan linimasa",
@@ -441,6 +559,80 @@
         "named_variables": "Menggunakan variabel bernama, yang belum didukung inbox."
       },
       "hasMore": "Menampilkan {count} templat pertama. Cari berdasarkan nama atau teks untuk menemukan lainnya."
+    },
+    "log": {
+      "title": "Log pengiriman",
+      "close": "Tutup",
+      "loading": "Memuat log",
+      "tryAgain": "Coba lagi",
+      "statusNow": "Status saat ini",
+      "createdAt": "Dibuat",
+      "providerId": "ID pesan penyedia",
+      "failedNoReason": "Pesan ini tidak terkirim.",
+      "expired": "Pesan ini lebih lama dari {days} hari. Lognya tidak lagi disimpan.",
+      "empty": "Tidak ada log yang tercatat untuk pesan ini. Pesan yang dikirim sebelum log disimpan tidak memilikinya.",
+      "archived": "Entri yang lebih lama dari {days} hari dibaca dari arsip.",
+      "exportLink": "Ekspor log pesan",
+      "source": {
+        "system": "Sistem kami",
+        "provider": "Tanda terima penyedia"
+      },
+      "event": {
+        "queued": "Masuk antrean pengiriman",
+        "attempt": "Percobaan kirim {attempt}",
+        "accepted": "Diterima oleh penyedia",
+        "sentReceipt": "Penyedia mengonfirmasi pesan terkirim",
+        "delivered": "Sampai di ponsel pelanggan",
+        "read": "Dibaca oleh pelanggan",
+        "failedReceipt": "Penyedia melaporkan pesan tidak terkirim",
+        "failedSend": "Tidak dapat dikirim",
+        "retryAuto": "Akan dicoba lagi secara otomatis",
+        "retryManual": "Rekan tim menekan Kirim ulang"
+      },
+      "notApplied": "Laporan ini datang terlambat atau untuk pengiriman sebelumnya. Laporan ini tidak mengubah pesan.",
+      "replayed": "Tidak ada permintaan baru: jawaban penyedia sebelumnya digunakan kembali.",
+      "resent": "Dikirim lagi ke penyedia sebagai pesan baru."
+    },
+    "logs": {
+      "back": "Kembali ke kotak masuk",
+      "title": "Log pesan",
+      "intro": "Setiap pesan menyimpan log pengirimannya: {hot} hari di kotak masuk, lalu di arsip hingga {days} hari setelah kejadian. Minta ekspor untuk rentang tanggal; ekspor disiapkan di latar belakang dan dikirim ke email Anda saat siap.",
+      "requested": "Ekspor diminta. Kami akan mengirim email saat siap.",
+      "requestedTo": "Ekspor diminta. Kami akan mengirim email ke {email} saat siap.",
+      "form": {
+        "title": "Minta ekspor",
+        "from": "Dari",
+        "to": "Sampai",
+        "status": "Hanya pesan yang kini berstatus",
+        "anyStatus": "Status apa pun",
+        "hint": "Tanggal dalam UTC. Anda dapat mundur hingga {days} hari. Hanya satu ekspor disiapkan dalam satu waktu.",
+        "submit": "Minta ekspor",
+        "sending": "Meminta"
+      },
+      "problem": {
+        "order": "Tanggal mulai tidak boleh setelah tanggal akhir.",
+        "future": "Tanggal akhir tidak boleh di masa depan.",
+        "tooOld": "Log disimpan selama {days} hari. Pilih tanggal mulai yang lebih baru.",
+        "invalid": "Isi kedua tanggal."
+      },
+      "history": {
+        "title": "Ekspor Anda",
+        "loading": "Memuat ekspor",
+        "tryAgain": "Coba lagi",
+        "empty": "Belum ada ekspor.",
+        "onlyStatus": "Hanya pesan {status}",
+        "requestedAt": "Diminta {date}",
+        "lines": "{count, plural, other {# baris}}",
+        "until": "Tersedia hingga {date}",
+        "download": "Unduh",
+        "status": {
+          "queued": "Menunggu",
+          "running": "Disiapkan",
+          "ready": "Siap",
+          "failed": "Gagal",
+          "expired": "Kedaluwarsa"
+        }
+      }
     }
   }
 }

@@ -176,12 +176,50 @@
       "cancelBody": "La ejecución se detiene donde está. No se avisa al cliente.",
       "cancelConfirm": "Cancelar ejecución",
       "cancelKeep": "Mantenerla",
-      "cancelled": "Ejecución cancelada"
+      "cancelled": "Ejecución cancelada",
+      "tlTitle": "Línea de tiempo de ejecución",
+      "tlNodes": "Nodos ejecutados",
+      "tlErrors": "Errores",
+      "tlTime": "Tiempo de nodos",
+      "filterAll": "Todos los pasos",
+      "filterErrors": "Solo errores",
+      "changedTitle": "Este flujo se editó después de la ejecución",
+      "changedBody": "El registro muestra el flujo tal como se ejecutó.",
+      "removed": "Eliminado del flujo",
+      "exit": "Salida {port}",
+      "visit": "Visita {n}",
+      "truncated": "Se ejecutaron más de {max} pasos. Los siguientes se contaron pero no se listan.",
+      "retention": "Los registros se eliminan {days} días después de que termina una ejecución.",
+      "pathTitle": "Camino seguido",
+      "notReached": "No alcanzados",
+      "noErrors": "Sin errores en esta ejecución.",
+      "factNext": "Siguiente: {node}",
+      "factWaiting": "Esperando en: {node}",
+      "factDelay": "Espera {time}",
+      "factReplied": "El cliente respondió: {text}",
+      "factEnded": "Terminó: {reason}",
+      "ioInput": "Entrada",
+      "ioOutput": "Salida",
+      "ioKind": {
+        "message": "Mensaje enviado",
+        "reply": "Respuesta del cliente",
+        "variable": "Variable",
+        "request": "Solicitud",
+        "response": "Respuesta",
+        "result": "Resultado"
+      }
     },
     "event": {
       "step": "Paso",
       "reply": "Respuesta del cliente",
-      "end": "Fin"
+      "end": "Fin",
+      "advance": "Avanzó",
+      "wait": "Esperando una respuesta",
+      "sleep": "Retraso",
+      "halt": "Detenido",
+      "exec": "Ejecutado",
+      "truncated": "Límite de registro alcanzado",
+      "start": "Iniciado"
     },
     "subs": {
       "kicker": "Flujo",
@@ -469,6 +507,13 @@
       "manyBody": "{n} contactos vuelven a entrar en su flujo desde el principio y reciben sus mensajes de nuevo. No se puede deshacer.",
       "summary": "{queued} reiniciadas, {succeeded} completadas, {failed} fallidas, {skipped} omitidas.",
       "flowInactive": "Vuelve a activar este flujo antes de volver a ejecutar sus contactos fallidos."
+    },
+    "outcome": {
+      "ok": "Correcto",
+      "error": "Error",
+      "skipped": "Omitido",
+      "waiting": "En espera",
+      "timeout": "Tiempo agotado"
     }
   }
 }

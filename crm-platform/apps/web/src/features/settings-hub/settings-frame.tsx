@@ -87,11 +87,7 @@ export function SettingsFrame({ children }: { children: ReactNode }) {
         <div className="min-w-0 flex-1 space-y-6">
           <SettingsSearchBox value={query} onChange={setQuery} resultsRef={resultsRef} />
           <div ref={resultsRef}>
-            {searching ? (
-              <SearchResults hits={hits} query={settled} onClear={clear} />
-            ) : (
-              children
-            )}
+            {searching ? <SearchResults hits={hits} query={settled} onClear={clear} /> : children}
           </div>
           <p role="status" className="sr-only">
             {searching ? t('settings.results.status', { count: hits.length }) : ''}

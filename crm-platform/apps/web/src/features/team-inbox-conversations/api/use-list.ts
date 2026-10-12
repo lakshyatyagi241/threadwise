@@ -4,13 +4,7 @@ import { useCallback, useEffect, useReducer, useRef } from 'react';
 import { ApiError } from '@/lib/api/errors';
 import { useRealtimeEvent, useResync } from '@/lib/realtime';
 import { errorCode } from '../lib/errors';
-import {
-  EMPTY_LIST,
-  filtersKey,
-  listReducer,
-  type ListFilters,
-  type ListState,
-} from '../lib/list';
+import { EMPTY_LIST, filtersKey, listReducer, type ListFilters, type ListState } from '../lib/list';
 import { usePublishCounts } from './counts';
 import { inboxApi } from './service';
 import type { ConversationSummary } from '@crm/contracts';
@@ -184,11 +178,14 @@ export function useConversationList(filters: ListFilters, meId: string | null): 
       dispatch({ type: 'upsert', row, filters: latest.current.filters, meId: latest.current.meId }),
     [],
   );
-  const setUnread = useCallback((id: string, unread: number) => {
+  const setUnread = useCallback(
+    (id: string, unread: number) => {
       dispatch({ type: 'unread', id, unread });
       // The tab badges follow: the server recounts after the read.
       refreshCounts();
-  }, [refreshCounts]);
+    },
+    [refreshCounts],
+  );
 
   return {
     state,

@@ -9,13 +9,17 @@ import {
   ParseUUIDPipe,
   Post,
   Query,
+  Res,
+  StreamableFile,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
+import type { Response } from 'express';
 import {
   createConversationNoteSchema,
+  createMessageLogExportSchema,
   listConversationEventsQuerySchema,
   listConversationNotesQuerySchema,
   listConversationsQuerySchema,
@@ -25,6 +29,7 @@ import {
   sendMessageSchema,
   setConversationStatusSchema,
   type CreateConversationNoteInput,
+  type CreateMessageLogExportInput,
   type ListConversationEventsQuery,
   type ListConversationNotesQuery,
   type ListConversationsQuery,
@@ -38,6 +43,7 @@ import { ActorKinds, Idempotent, RequirePermission } from '../../common/decorato
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { chatMediaConfig } from '../../infra/providers/chat-conversations/media';
 import { InboxConversationsService } from './inbox-conversations.service';
+import { InboxMessageLogService } from './inbox-message-log.service';
 import { InboxMediaService, type UploadedFile as UploadedFileShape } from './inbox-media.service';
 import { InboxNotesService } from './inbox-notes.service';
 import { InboxThreadService } from './inbox-thread.service';
@@ -65,6 +71,7 @@ export class InboxController {
     private readonly notes: InboxNotesService,
     private readonly timeline: InboxTimelineService,
     private readonly media: InboxMediaService,
+    private readonly messageLogs: InboxMessageLogService,
   ) {}
 
   // --- the list ---------------------------------------------------------------------------------------------------------------
@@ -109,6 +116,53 @@ export class InboxController {
   @ApiOperation({ summary: 'Put a failed outbound message back in the queue (202)' })
   async retry(@Param('id', ParseUUIDPipe) id: string) {
     return this.thread.retry(id);
+  }
+
+  @Get('messages/:id/log')
+  @RequirePermission('inbox.conversation.read')
+  @ApiOperation({
+    summary: 'The delivery log of one message: its status now and every event, oldest first',
+    description:
+      'Events of the last 90 days come from the live log, older ones from the archive (kept one year). Same visibility as the thread.',
+  })
+  async messageLog(@Param('id', ParseUUIDPipe) id: string) {
+    return this.messageLogs.messageLog(id);
+  }
+
+  // --- export of the message log -------------------------------------------------------------------------------------------------
+
+  @Post('message-logs/exports')
+  @Idempotent()
+  @HttpCode(HttpStatus.ACCEPTED)
+  @RequirePermission('inbox.logs.export')
+  @ApiOperation({
+    summary:
+      'Export the delivery log of a date range (up to a year back); built in the background and announced by email (202)',
+  })
+  async requestLogExport(
+    @Body(zodPipe(createMessageLogExportSchema)) body: CreateMessageLogExportInput,
+  ) {
+    return this.messageLogs.requestExport(body);
+  }
+
+  @Get('message-logs/exports')
+  @RequirePermission('inbox.logs.export')
+  @ApiOperation({ summary: 'The latest exports of the message log, newest first' })
+  async listLogExports() {
+    return this.messageLogs.listExports();
+  }
+
+  @Get('message-logs/exports/:id/download')
+  @RequirePermission('inbox.logs.export')
+  @ApiOperation({ summary: 'The finished export as CSV (kept 7 days)' })
+  async downloadLogExport(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<StreamableFile> {
+    const { stream, fileName } = await this.messageLogs.downloadExport(id);
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+    return new StreamableFile(stream);
   }
 
   // --- one conversation ----------------------------------------------------------------------------------------------------------

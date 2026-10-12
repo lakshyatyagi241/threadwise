@@ -60,7 +60,7 @@ Reference 1.7.0 vs our commit <sha>. Verified by <owner> on <date>.
 
 ## WD-<CODE>-<NNN> — <title>
 
-| #                                                                                                                        | Criterion / UX item         | Reference observed                               | Ours observed                       | Result   | Note / reason          |
+| #                                                                                                                        | Criterion / UX item         | Reference observed                            | Ours observed                       | Result   | Note / reason          |
 | ------------------------------------------------------------------------------------------------------------------------ | --------------------------- | --------------------------------------------- | ----------------------------------- | -------- | ---------------------- |
 | 1                                                                                                                        | Given ... When ... Then ... | POST x -> 302, row inserted with status=draft | POST /v2/x -> 201, row status=draft | same     |                        |
 | 2                                                                                                                        | List paginates              | page=2 shows next 15                          | cursor load-more, limit 50          | intended | cursor pagination rule |

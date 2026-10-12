@@ -144,8 +144,38 @@ export const flowRunSummarySchema = z.object({
   endedAt: z.string().nullable(),
   resumeAt: z.string().nullable(),
   steps: z.number().int(),
+  /** Node executions logged, how many of them failed, and the run's total node time (ms). */
+  nodeCount: z.number().int(),
+  errorCount: z.number().int(),
+  durationMs: z.number().int(),
 });
 export type FlowRunSummary = z.infer<typeof flowRunSummarySchema>;
+
+/** Runs, and their logs, are kept this long after they end (TW-FLR-083). */
+export const FLOW_RUN_LOG_RETENTION_DAYS = 30;
+/** Ordinary steps past this many in one run are counted but not written to the log. */
+export const FLOW_RUN_LOG_MAX_STEPS = 200;
+
+export const FLOW_STEP_OUTCOMES = ['ok', 'error', 'skipped', 'waiting', 'timeout'] as const;
+export type FlowStepOutcome = (typeof FLOW_STEP_OUTCOMES)[number];
+
+/** What a node took in or produced, as one readable line: a message sent, the customer's reply, a variable, a request or response. */
+export const FLOW_STEP_IO_KINDS = [
+  'message',
+  'reply',
+  'variable',
+  'request',
+  'response',
+  'result',
+] as const;
+export type FlowStepIoKind = (typeof FLOW_STEP_IO_KINDS)[number];
+export const flowStepIoItemSchema = z.object({
+  kind: z.enum(FLOW_STEP_IO_KINDS),
+  /** A variable's name, or the kind of message (text, buttons, image). */
+  name: z.string().nullable(),
+  value: z.string(),
+});
+export type FlowStepIoItem = z.infer<typeof flowStepIoItemSchema>;
 
 export const flowRunStepSchema = z.object({
   seq: z.number().int(),
@@ -155,6 +185,19 @@ export const flowRunStepSchema = z.object({
   detail: z.record(z.unknown()),
   error: z.string().nullable(),
   at: z.string(),
+  /** The node as it was when it ran: an edit to the flow later does not change these. Null on rows written before the log existed. */
+  nodeLabel: z.string().nullable(),
+  outcome: z.enum(FLOW_STEP_OUTCOMES).nullable(),
+  /** The exit taken (1 is the normal exit; a Condition's yes is 1 and no is 2). */
+  port: z.number().int().nullable(),
+  durationMs: z.number().int().nullable(),
+  /** Which visit of the node this was: more than 1 means a loop. */
+  attempt: z.number().int().nullable(),
+  summary: z.string().nullable(),
+  errorCode: z.string().nullable(),
+  /** What the node took in and what it produced. Values are clipped and secrets masked before they are stored. */
+  input: z.array(flowStepIoItemSchema),
+  output: z.array(flowStepIoItemSchema),
 });
 export type FlowRunStep = z.infer<typeof flowRunStepSchema>;
 
@@ -166,6 +209,18 @@ export const flowRunDetailSchema = flowRunSummarySchema.extend({
     .object({ nodeId: z.string(), kind: z.string(), expiresAt: z.string().nullable() })
     .nullable(),
   log: z.array(flowRunStepSchema),
+  /** The flow as this run walked it: its nodes and the exits between them, for the path view. Null when the run's graph is gone. */
+  graph: z
+    .object({
+      nodes: z.array(z.object({ id: z.string(), type: z.string(), label: z.string() })),
+      edges: z.array(z.object({ from: z.string(), port: z.number().int(), to: z.string() })),
+    })
+    .nullable(),
+  /** Whether the flow was edited after this run started, and which logged nodes are no longer in it. */
+  flowChanged: z.boolean(),
+  removedNodeIds: z.array(z.string()),
+  /** True when the run hit the log cap: later ordinary steps were counted but not written. */
+  logTruncated: z.boolean(),
 });
 export type FlowRunDetail = z.infer<typeof flowRunDetailSchema>;
 

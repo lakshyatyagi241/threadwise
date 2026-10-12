@@ -34,6 +34,7 @@ export interface SubmissionRow {
   userAgent: string | null;
   consent: { given: boolean; text: string; version: number; at: string } | null;
   spamScore: number;
+  duplicatePayment: boolean;
   payloadPurgedAt: Date | null;
   erasedAt: Date | null;
   createdAtIso: string;
@@ -67,6 +68,7 @@ const toRow = (r: Raw): SubmissionRow => ({
   userAgent: s(r.user_agent),
   consent: (r.consent as SubmissionRow['consent']) ?? null,
   spamScore: Number(r.spam_score),
+  duplicatePayment: r.duplicate_payment === true,
   payloadPurgedAt: d(r.payload_purged_at),
   erasedAt: d(r.erased_at),
   createdAtIso: r.created_at_iso as string,

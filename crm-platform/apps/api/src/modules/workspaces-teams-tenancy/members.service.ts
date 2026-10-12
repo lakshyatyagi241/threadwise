@@ -267,6 +267,12 @@ export class MembersService {
   // --- role ---------------------------------------------------------------------------------------------------------------------
 
   async changeRole(uuid: string, input: ChangeWspMemberRoleInput): Promise<WspMember> {
+    return this.roleRules.withDenialAudit('member.change_role', () =>
+      this.changeRoleInTx(uuid, input),
+    );
+  }
+
+  private async changeRoleInTx(uuid: string, input: ChangeWspMemberRoleInput): Promise<WspMember> {
     const ctx = RequestContextStore.require();
     const result = await this.db.tx(async (tx) => {
       const target = await this.requireMember(tx, ctx.orgId, uuid);

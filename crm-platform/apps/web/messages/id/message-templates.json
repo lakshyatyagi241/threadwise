@@ -65,7 +65,7 @@
     },
     "library": {
       "title": "Pustaka templat",
-      "intro": "Templat pesan WhatsApp: tulis, kirim ke Meta untuk ditinjau, dan pantau statusnya di sini.",
+      "intro": "Pilih templat awal atau kirim templat Anda sendiri. Semua templat harus mematuhi <link>pedoman WhatsApp</link> sebelum disetujui oleh Meta.",
       "sync": "Sinkronkan dari Meta",
       "syncing": "Menyinkronkan...",
       "syncHint": "Ambil templat Anda dari Meta",

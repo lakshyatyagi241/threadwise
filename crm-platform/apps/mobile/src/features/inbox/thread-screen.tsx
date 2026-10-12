@@ -243,6 +243,7 @@ export function ThreadScreen() {
     }
     return (
       <FlatList
+        testID="thread-list"
         inverted
         accessibilityLabel={t('inbox.thread.messages')}
         data={rows}

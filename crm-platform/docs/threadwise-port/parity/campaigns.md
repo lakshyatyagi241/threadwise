@@ -27,7 +27,7 @@ Evidence so far is automated (the screens are listed under Screens (C4); none ha
 | TW-CAMP-019                | done         | The detail read model with the Engagement tab: engagement, per-button clicks, top groups by read rate, the opt-out list, and the message-log search.                                              |
 | TW-CAMP-021, 022           | backend-done | Node callbacks and the provider receipt state machine; a webhook handler must call `CampaignReceiptsService.handle`.                                                                              |
 | TW-CAMP-023                | backend-done | Inbox bubble at send and on receipt, once per recipient.                                                                                                                                          |
-| TW-CAMP-024                | done         | `campaign.created` and `campaign.status_updated` carry Reference's webhook payloads; the bell has completed and failed.                                                                              |
+| TW-CAMP-024                | done         | `campaign.created` and `campaign.status_updated` carry Reference's webhook payloads; the bell has completed and failed.                                                                           |
 | TW-CAMP-025                | done         | Flow campaigns: the flow runtime's `CampaignFlowStarterImpl` is bound into the campaign sender in the worker (`FlowRuntimeEngineWorkerModule`); one run per recipient with the source `campaign`. |
 | TW-CAMP-026                | blocked      | Build with AI waits on ai-keys-usage-admin exporting a text-generation call.                                                                                                                      |
 | TW-CAMP-027                | blocked      | Meta click sync waits on a template-analytics call in the Cloud API client.                                                                                                                       |
@@ -35,7 +35,7 @@ Evidence so far is automated (the screens are listed under Screens (C4); none ha
 
 ## Intended differences from Reference
 
-| #   | Area                     | Reference                                                                        | Here                                                                                                                                       |
+| #   | Area                     | Reference                                                                     | Here                                                                                                                                       |
 | --- | ------------------------ | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | 1   | Access                   | Workspace admin role and plan flags                                           | Permission keys `camp.campaigns.read, create, update, control, delete, export`.                                                            |
 | 2   | Ids                      | Numeric ids in URLs and bodies                                                | Uuids.                                                                                                                                     |
@@ -76,7 +76,7 @@ entry in the Campaigns group (the planned placeholder is removed); messages `mes
 `builder-model.test.ts` cover the filters in the address, what each status allows, the request body, and what still stops a form from saving.
 The builder reuses broadcasts' audience picker, send-time overrides panel, attribute catalog and the area chart, donut and bars.
 
-| #   | Area            | Reference                                       | Here                                                                                             |
+| #   | Area            | Reference                                    | Here                                                                                             |
 | --- | --------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------ |
 | 15  | Address         | `/wa-campaigns`                              | `/campaigns` (the domain's route base).                                                          |
 | 16  | Media           | Upload an image, video or document           | A public address, until the storage service exists.                                              |
@@ -97,7 +97,7 @@ Reference's `/wa-campaigns/create` is ONE long form: name, sender, campaign type
 end date. The wizard was compared with it on these points (the reference was read from the source and the inventory; no live WhatsApp session was
 used on either side):
 
-| #   | Behaviour                                             | Reference                                                        | Wizard                                                                                          | Verdict                  |
+| #   | Behaviour                                             | Reference                                                     | Wizard                                                                                          | Verdict                  |
 | --- | ----------------------------------------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ------------------------ |
 | 1   | Steps                                                 | one form                                                      | four steps with a stepper, a saved draft and resume                                             | addition                 |
 | 2   | Template gate                                         | approved only on Cloud API; OTP refused; media check          | same rules (the classic gate is called at launch), the list only offers usable templates        | same                     |
@@ -135,7 +135,7 @@ Spec `apps/web/e2e/campaigns/parity/TW-CAMP-004.twin.mjs`, depth full, against t
 
 | Area                                                                  | Result                                                                                                                                                                                 |
 | --------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Create-screen page probes (load, accessibility, degraded, auth, perf) | same as Reference                                                                                                                                                                         |
+| Create-screen page probes (load, accessibility, degraded, auth, perf) | same as Reference                                                                                                                                                                      |
 | Segments, Tags and Groups rows and the three filters                  | present on load; empty rows say so                                                                                                                                                     |
 | Consent filter                                                        | refetches from the server (`unsubscribed=true`, 200); Clear filters restores the list                                                                                                  |
 | A segment picked as audience                                          | the chip checks, a draft saves (201); the test segment and draft are removed again                                                                                                     |

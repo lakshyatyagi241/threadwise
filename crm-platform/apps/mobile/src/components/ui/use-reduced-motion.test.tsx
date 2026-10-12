@@ -17,14 +17,14 @@ describe('useReducedMotion', () => {
       return { remove };
     }) as unknown as typeof AccessibilityInfo.addEventListener);
 
-    const { result, unmount } = renderHook(() => useReducedMotion());
+    const { result, unmount } = await renderHook(() => useReducedMotion());
     await act(async () => Promise.resolve());
     expect(result.current).toBe(true);
 
-    act(() => listener?.(false));
+    await act(() => listener?.(false));
     expect(result.current).toBe(false);
 
-    unmount();
+    await unmount();
     expect(remove).toHaveBeenCalled();
   });
 
@@ -32,7 +32,7 @@ describe('useReducedMotion', () => {
     jest
       .spyOn(AccessibilityInfo, 'isReduceMotionEnabled')
       .mockRejectedValue(new Error('not available'));
-    const { result } = renderHook(() => useReducedMotion());
+    const { result } = await renderHook(() => useReducedMotion());
     await act(async () => Promise.resolve());
     expect(result.current).toBe(false);
   });

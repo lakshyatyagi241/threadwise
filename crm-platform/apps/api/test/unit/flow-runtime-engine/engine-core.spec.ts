@@ -46,6 +46,8 @@ function newRun(b: Builder, vars: Record<string, unknown> = {}): RunState {
     triggerText: null,
     status: 'running',
     graph,
+    graphVersionId: null,
+    nodeCount: 0,
     currentNodeId: graph.nodes[0]!.id,
     stepSeq: 0,
     vars,
@@ -471,6 +473,74 @@ describe('CTA and Location', () => {
     await executeCurrent(run, deps);
     expect(calls).toBe(2);
     expect((sent[0] as { body: string }).body).toContain('https://maps.google.com/?q=1.5,2.5');
+  });
+});
+
+describe('what the run log gets from a step', () => {
+  it('lists what a node sent, as rendered for this customer', async () => {
+    const run = newRun({
+      nodes: [n('a', 'message', { text: 'Hi {{name}}' })],
+      edges: [],
+    });
+    run.vars.name = 'Asha';
+    const deps: StepDeps = {
+      send: async () => ({ ok: true }),
+      paceMs: () => 0,
+      now: () => new Date(0),
+    };
+    const out = await executeCurrent(run, deps);
+    expect(out.sent).toEqual(['text: Hi Asha']);
+  });
+
+  it('records the input read from the run and the output it produced', async () => {
+    const run = newRun({
+      nodes: [n('a', 'message', { text: 'Hi {{name}}, order {{order}}' })],
+      edges: [],
+    });
+    run.vars.name = 'Asha';
+    run.vars.order = '42';
+    const deps: StepDeps = {
+      send: async () => ({ ok: true }),
+      paceMs: () => 0,
+      now: () => new Date(0),
+    };
+    const out = await executeCurrent(run, deps);
+    expect(out.io?.in).toEqual([
+      { kind: 'variable', name: 'name', value: 'Asha' },
+      { kind: 'variable', name: 'order', value: '42' },
+    ]);
+    expect(out.io?.out).toEqual([{ kind: 'message', name: 'text', value: 'Hi Asha, order 42' }]);
+  });
+
+  it('records the variable a condition compared and the way it went', async () => {
+    const run = newRun({
+      nodes: [
+        n('c', 'condition', {
+          conditions: [{ variable: 'plan', operator: 'equals', value: 'pro' }],
+        }),
+      ],
+      edges: [],
+    });
+    run.vars.plan = 'pro';
+    const deps: StepDeps = {
+      send: async () => ({ ok: true }),
+      paceMs: () => 0,
+      now: () => new Date(0),
+    };
+    const out = await executeCurrent(run, deps);
+    expect(out.io?.in).toEqual([{ kind: 'variable', name: 'plan', value: 'pro' }]);
+    expect(out.io?.out).toEqual([{ kind: 'result', name: 'condition', value: 'true' }]);
+  });
+
+  it('says so when a send did not go out', async () => {
+    const run = newRun({ nodes: [n('a', 'message', { text: 'Hi' })], edges: [] });
+    const deps: StepDeps = {
+      send: async () => ({ ok: false, error: 'Meta said no', code: 'X', halt: false }),
+      paceMs: () => 0,
+      now: () => new Date(0),
+    };
+    const out = await executeCurrent(run, deps);
+    expect(out.sent).toEqual(['text: Hi (not sent: Meta said no)']);
   });
 });
 

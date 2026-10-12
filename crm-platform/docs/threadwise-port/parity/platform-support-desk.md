@@ -13,14 +13,14 @@ In-app Help guides: one customer guide (`support-customer`, documents `nav:suppo
 
 ## Not ported on purpose
 
-| Id          | Reason                                                                                            |
-| ----------- | ------------------------------------------------------------------------------------------------- |
+| Id          | Reason                                                                                               |
+| ----------- | ---------------------------------------------------------------------------------------------------- |
 | TW-SUPP-006 | Attachment picker is client-only in Reference (files are never uploaded or stored); nothing to port. |
 | TW-SUPP-019 | Auto-assignment and workload tracking are described in docs only; no Reference code runs.            |
-| TW-SUPP-025 | Playbook automatic triggers are described in docs only; playbooks run on demand (TW-SUPP-024).    |
+| TW-SUPP-025 | Playbook automatic triggers are described in docs only; playbooks run on demand (TW-SUPP-024).       |
 | TW-SUPP-034 | Seeded `support.*` permission keys are never enforced in Reference (dead code); operators use roles. |
 | TW-SUPP-035 | Reply-by-email, auto-close and admin alerts are advertised but missing in Reference.                 |
-| TW-SUPP-036 | Legacy support mock code (dead).                                                                  |
+| TW-SUPP-036 | Legacy support mock code (dead).                                                                     |
 
 ## Intended deviations (each has a test)
 

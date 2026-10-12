@@ -24,6 +24,7 @@ import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { assertContactScope, ContactsRepository } from '../contacts';
+import { assertOwnerWithinScope } from '../owner-scope';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
 import { PipelinesRepository, type StageRow } from '../pipelines/pipelines.repository';
 import { DealsPlan } from './deals-plan';
@@ -179,6 +180,13 @@ export class DealsService {
       const currency = input.currency ?? pipeline.currency;
       const valueMinor = parseValue(input.value ?? '0', currency);
       const ownerId = await this.resolveOwnerForCreate(tx, ctx.orgId, ctx.userId, input.ownerId);
+      if (ctx.grants) {
+        await this.assertOwnerAllowed(
+          tx,
+          ownerId,
+          this.rbac.can(ctx.grants, 'record.deals.create').scope,
+        );
+      }
 
       let contactId: number | null = null;
       let companyId: number | null = null;
@@ -301,7 +309,10 @@ export class DealsService {
           input.ownerId === null
             ? null
             : await this.requireActiveUser(tx, ctx.orgId, input.ownerId);
-        if (next !== deal.ownerId) ownerChanged = true;
+        if (next !== deal.ownerId) {
+          await this.assertOwnerAllowed(tx, next, scope);
+          ownerChanged = true;
+        }
         patch.owner_user_id = next;
       }
 
@@ -585,6 +596,22 @@ export class DealsService {
       out.companyId = id;
     }
     return out;
+  }
+
+  /** AZ-007: the record scope also bounds who a deal may be handed to (the caller, a teammate, or anyone for `all`). */
+  private async assertOwnerAllowed(
+    tx: Tx,
+    nextOwnerId: number | null,
+    scope: RecordScope,
+  ): Promise<void> {
+    const ctx = RequestContextStore.require();
+    await assertOwnerWithinScope({
+      scope,
+      actorUserId: ctx.userId,
+      nextOwnerId,
+      inActorTeam: (id) => this.repo.isOwnerInActorTeam(tx, ctx.orgId, ctx.userId!, id),
+      path: 'ownerId',
+    });
   }
 
   private async requireActiveUser(tx: Tx, orgId: number, uuid: string): Promise<number> {

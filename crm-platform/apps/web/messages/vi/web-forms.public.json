@@ -33,9 +33,32 @@
         "too_short": "Nhập tối thiểu {min} ký tự.",
         "too_long": "Nhập tối đa {max} ký tự.",
         "pattern": "Không khớp với định dạng yêu cầu.",
-        "invalid_option": "Chọn một trong các tùy chọn đã liệt kê."
+        "invalid_option": "Chọn một trong các tùy chọn đã liệt kê.",
+        "invalid_amount": "Nhập số tiền trong phạm vi cho phép."
       },
-      "closedTitle": "Biểu mẫu đã đóng"
+      "closedTitle": "Biểu mẫu đã đóng",
+      "payTitle": "Còn một bước nữa",
+      "payTotal": "Số tiền cần thanh toán",
+      "payFromChoice": "Số tiền phụ thuộc vào lựa chọn của bạn ở trên.",
+      "payEnter": "Nhập số tiền bạn muốn thanh toán ở trên.",
+      "payNote": "Sau khi gửi, bạn sẽ được chuyển đến trang thanh toán an toàn.",
+      "payRedirecting": "Câu trả lời của bạn đã được lưu. Đang chuyển bạn đến trang thanh toán...",
+      "payContinue": "Tiếp tục thanh toán",
+      "paymentUnavailable": "Biểu mẫu này hiện chưa thể nhận thanh toán. Vui lòng thử lại sau.",
+      "payReturn": {
+        "confirmingTitle": "Đang xác nhận thanh toán của bạn",
+        "confirmingBody": "Chúng tôi đang chờ nhà cung cấp thanh toán xác nhận. Thường chỉ mất vài giây. Vui lòng không thanh toán lại.",
+        "slowTitle": "Vẫn đang chờ xác nhận",
+        "slowBody": "Nếu bạn đã thanh toán, xác nhận sẽ sớm đến và bạn có thể đóng trang này. Nếu chưa, hãy quay lại và thử lại.",
+        "paidTitle": "Đã nhận thanh toán",
+        "expiredTitle": "Liên kết thanh toán đã hết hạn",
+        "expiredBody": "Chưa có khoản tiền nào bị trừ. Hãy xin người gửi biểu mẫu một liên kết thanh toán mới.",
+        "failedTitle": "Thanh toán không thành công",
+        "failedBody": "Chưa có khoản tiền nào bị trừ. Bạn có thể thử lại.",
+        "tryAgain": "Thử thanh toán lại",
+        "missingTitle": "Không tìm thấy khoản thanh toán này",
+        "missingBody": "Liên kết có thể sai hoặc đã quá cũ."
+      }
     }
   }
 }

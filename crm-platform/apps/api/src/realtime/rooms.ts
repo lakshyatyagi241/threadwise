@@ -15,7 +15,9 @@ export type RoomRef =
   | { kind: 'org' }
   | { kind: 'user'; userId: number }
   | { kind: 'conv'; id: string }
-  | { kind: 'inbox'; scope: string };
+  | { kind: 'inbox'; scope: string }
+  /** The sockets whose member holds one permission: joined by the server only, re-evaluated when grants change (AZ-016). */
+  | { kind: 'perm'; permission: string };
 
 export function roomName(orgId: number, ref: RoomRef): string {
   switch (ref.kind) {
@@ -27,6 +29,8 @@ export function roomName(orgId: number, ref: RoomRef): string {
       return `conv:${orgId}:${ref.id.toLowerCase()}`;
     case 'inbox':
       return `inbox:${orgId}:${ref.scope.toLowerCase()}`;
+    case 'perm':
+      return `perm:${orgId}:${ref.permission}`;
   }
 }
 
@@ -41,6 +45,9 @@ export function roomKeyFor(ref: RoomRef): RealtimeRoomKey {
       return `conv:${ref.id.toLowerCase()}`;
     case 'inbox':
       return `inbox:${ref.scope.toLowerCase()}`;
+    case 'perm':
+      // Not a room the client knows: its events are workspace-wide state for the members allowed to see it.
+      return 'org';
   }
 }
 

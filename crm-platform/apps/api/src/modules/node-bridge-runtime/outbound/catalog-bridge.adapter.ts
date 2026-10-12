@@ -36,17 +36,27 @@ export class NodeCatalogBridge implements BaileysCatalogBridge {
     private readonly registry: OutboundRegistry,
   ) {}
 
-  async sendText(input: { senderPhone: string; to: string; text: string }): Promise<SentMessage> {
-    return this.send(input.senderPhone, { type: 'text', to: digits(input.to), body: input.text });
+  async sendText(input: {
+    orgId?: number;
+    senderPhone: string;
+    to: string;
+    text: string;
+  }): Promise<SentMessage> {
+    return this.send(input.senderPhone, input.orgId, {
+      type: 'text',
+      to: digits(input.to),
+      body: input.text,
+    });
   }
 
   async sendImage(input: {
+    orgId?: number;
     senderPhone: string;
     to: string;
     imageUrl: string;
     caption: string;
   }): Promise<SentMessage> {
-    return this.send(input.senderPhone, {
+    return this.send(input.senderPhone, input.orgId, {
       type: 'media',
       to: digits(input.to),
       mediaUrl: input.imageUrl,
@@ -56,6 +66,7 @@ export class NodeCatalogBridge implements BaileysCatalogBridge {
   }
 
   async sendCarousel(input: {
+    orgId?: number;
     senderPhone: string;
     to: string;
     cards: readonly BaileysCard[];
@@ -69,16 +80,23 @@ export class NodeCatalogBridge implements BaileysCatalogBridge {
       .join('\n');
     let last: SentMessage = { messageId: null, raw: null };
     if (intro)
-      last = await this.sendText({ senderPhone: input.senderPhone, to: input.to, text: intro });
+      last = await this.sendText({
+        orgId: input.orgId,
+        senderPhone: input.senderPhone,
+        to: input.to,
+        text: intro,
+      });
     for (const card of input.cards) {
       last = card.image_url
         ? await this.sendImage({
+            orgId: input.orgId,
             senderPhone: input.senderPhone,
             to: input.to,
             imageUrl: card.image_url,
             caption: cardCaption(card),
           })
         : await this.sendText({
+            orgId: input.orgId,
             senderPhone: input.senderPhone,
             to: input.to,
             text: cardCaption(card),
@@ -87,16 +105,29 @@ export class NodeCatalogBridge implements BaileysCatalogBridge {
     return last;
   }
 
-  /** The connected device with this number, in the caller's workspace when there is one (the catalog is called from a request or a worker). */
-  private async send(senderPhone: string, command: SendCommand): Promise<SentMessage> {
+  /**
+   * The connected device with this number in ONE workspace: the caller's explicit orgId, else the request's. A worker has no request
+   * context, so without an explicit org the lookup used to span every workspace and picked the newest device with that number,
+   * possibly another workspace's (TI-008). No org now fails closed.
+   */
+  private async send(
+    senderPhone: string,
+    explicitOrgId: number | undefined,
+    command: SendCommand,
+  ): Promise<SentMessage> {
     const phone = digits(senderPhone);
-    const orgId = RequestContextStore.peek()?.orgId ?? null;
+    const orgId = explicitOrgId ?? RequestContextStore.peek()?.orgId ?? null;
+    if (orgId === null) {
+      throw new Error(
+        'No workspace to send from: the catalog bridge needs an orgId outside a request.',
+      );
+    }
     const device = await this.db.privileged(async (tx) => {
       const res = (await tx.execute(
         sql`SELECT org_id, id, coalesce(nullif(device_name, ''), phone_number) AS label FROM devices
              WHERE status = 'connected' AND active
                AND regexp_replace(coalesce(country_code, '') || coalesce(phone_number, ''), '[^0-9]', '', 'g') = ${phone}
-               AND (${orgId}::bigint IS NULL OR org_id = ${orgId})
+               AND org_id = ${orgId}
              ORDER BY id DESC LIMIT 1`,
       )) as unknown as {
         rows: Array<{ org_id: number | string; id: number | string; label: string | null }>;

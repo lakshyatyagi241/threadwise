@@ -8,6 +8,7 @@ import {
   type FlowType,
 } from '@crm/contracts';
 import { nodeLabelMsg } from './contract-text';
+import { minScoreOutOfRange } from './faq-node';
 import { msg, type Msg } from './msg';
 
 export interface ValidationResult {
@@ -21,6 +22,7 @@ const MODE_TYPE: Partial<Record<FlowType, FlowType>> = {
   instagram: 'instagram',
   facebook: 'facebook',
   call: 'call',
+  web: 'web',
 };
 
 /**
@@ -68,8 +70,18 @@ export function validateGraph(
       }),
     );
   }
+  // The contracts also have a line for an "API (from library)" step with no API; the popup has none for it yet.
+  for (const n of nodes) {
+    if (n.type === 'faq' && minScoreOutOfRange(n.data?.minScore))
+      items.push(msg('contracts.validation.faqMinScore', { node: nodeLabelMsg(n.type) }));
+  }
   const trig = nodes.find((n) => n.type === 'trigger');
-  if (trig && !String(trig.data?.deviceId ?? '').trim() && ctx.senderAvailable) {
+  if (
+    trig &&
+    ctx.mode !== 'web' &&
+    !String(trig.data?.deviceId ?? '').trim() &&
+    ctx.senderAvailable
+  ) {
     items.push(
       msg(
         ctx.mode === 'instagram'

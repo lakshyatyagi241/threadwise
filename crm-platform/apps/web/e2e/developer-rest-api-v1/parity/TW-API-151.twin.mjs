@@ -105,7 +105,10 @@ export default (h) => {
     }
   }
   const apiGet = async (c, key, path = '/me') => {
-    const base = (c.side === 'threadwise' ? c.sideObj.baseUrl : c.sideObj.apiBase).replace(/\/$/, '');
+    const base = (c.side === 'threadwise' ? c.sideObj.baseUrl : c.sideObj.apiBase).replace(
+      /\/$/,
+      '',
+    );
     const r = await fetch(`${base}/api/v1${path}`, {
       headers: { Authorization: `Bearer ${key}`, Accept: 'application/json' },
       redirect: 'manual',

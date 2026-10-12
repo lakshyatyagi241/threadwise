@@ -419,7 +419,10 @@ export default (h) => {
       threadwise: { role: 'button', name: /create product/i },
       ours: { role: 'button', name: /create product/i },
     },
-    cancel: { threadwise: { role: 'link', name: /cancel/i }, ours: { role: 'link', name: /cancel/i } },
+    cancel: {
+      threadwise: { role: 'link', name: /cancel/i },
+      ours: { role: 'link', name: /cancel/i },
+    },
     valid: productValid,
     tagField: ['name', 'sku'],
     fields: productFields(),
@@ -448,7 +451,10 @@ export default (h) => {
       threadwise: { role: 'button', name: /save changes/i },
       ours: { role: 'button', name: /save changes/i },
     },
-    cancel: { threadwise: { role: 'link', name: /cancel/i }, ours: { role: 'link', name: /cancel/i } },
+    cancel: {
+      threadwise: { role: 'link', name: /cancel/i },
+      ours: { role: 'link', name: /cancel/i },
+    },
     valid: productValid,
     tagField: ['name', 'sku'],
     fields: productFields({ edit: true }),
@@ -1949,7 +1955,8 @@ export default (h) => {
       {
         scenario: /^product-create\.name\.(max\+1|very-long)$/,
         key: /^(enum\.outcome|flag\.accepted|status\.submit)$/,
-        quirk: 'Reference answers HTTP 500 when two 191-character product names collide on the slug',
+        quirk:
+          'Reference answers HTTP 500 when two 191-character product names collide on the slug',
         reason:
           'The slug column is 191 characters, so the reference cannot append "-2" to a slug that long and the save fails with a database error (verified: the second product with the same 191-character name gets 500). Ours truncates the slug before the suffix and saves.',
       },
