@@ -48,6 +48,10 @@ updates:
       # module 'https-proxy-agent'"). Hold the major until the API moves to node16/bundler resolution.
       - dependency-name: 'https-proxy-agent'
         update-types: ['version-update:semver-major']
+      # socks-proxy-agent 10 has the same problem: its types sit behind `exports` only, so `tsc` fails with "Cannot find module
+      # 'socks-proxy-agent'" in the node-bridge proxy (the 10.1.0 bump in #297 was reverted in #308). Same hold as https-proxy-agent.
+      - dependency-name: 'socks-proxy-agent'
+        update-types: ['version-update:semver-major']
     commit-message:
       prefix: 'chore(deps)'
 
