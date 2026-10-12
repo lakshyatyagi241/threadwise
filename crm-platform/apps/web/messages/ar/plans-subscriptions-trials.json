@@ -67,7 +67,8 @@
       "extra_channels": "تيليجرام وفيسبوك وإنستجرام",
       "form_builder": "النماذج",
       "waba_groups": "مجموعات واتساب",
-      "sms": "قناة الرسائل النصية SMS"
+      "sms": "قناة الرسائل النصية SMS",
+      "help_agent": "المساعد الذكي"
     },
     "limitGroups": {
       "messaging": "المراسلة",

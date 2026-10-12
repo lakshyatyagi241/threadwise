@@ -553,7 +553,8 @@
             "extra_channels": "Telegram, Facebook, Instagram",
             "form_builder": "양식",
             "waba_groups": "WhatsApp 그룹",
-            "sms": "SMS"
+            "sms": "SMS",
+            "help_agent": "도움말 어시스턴트"
           },
           "cta": {
             "continueFree": "무료로 계속",

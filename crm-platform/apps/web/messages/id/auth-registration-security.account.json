@@ -553,7 +553,8 @@
             "extra_channels": "Telegram, Facebook, dan Instagram",
             "form_builder": "Formulir",
             "waba_groups": "Grup WhatsApp",
-            "sms": "SMS"
+            "sms": "SMS",
+            "help_agent": "Asisten Bantuan"
           },
           "cta": {
             "continueFree": "Lanjut gratis",

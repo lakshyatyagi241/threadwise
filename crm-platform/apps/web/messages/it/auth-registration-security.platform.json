@@ -1419,7 +1419,8 @@
             "extra_channels": "I canali Telegram, Facebook e Instagram.",
             "form_builder": "Moduli web ospitati e incorporati che creano contatti nel CRM. L'app a pagamento Moduli controlla questo interruttore.",
             "waba_groups": "Crea e gestisci gruppi WhatsApp da un numero Cloud API: link di invito, richieste di adesione, membri. Il numero deve essere un Official Business Account.",
-            "sms": "SMS solo in invio tramite Twilio o MSG91: collega i mittenti, invia broadcast e campagne SMS."
+            "sms": "SMS solo in invio tramite Twilio o MSG91: collega i mittenti, invia broadcast e campagne SMS.",
+            "help_agent": "L'assistente di aiuto nell'app: le persone chiedono un'attività con parole semplici e lui le guida o la svolge nella loro sessione, chiedendo prima di qualsiasi azione rischiosa. Consuma token AI."
           },
           "units": {
             "days": "Giorni",
@@ -1599,7 +1600,8 @@
             "extra_channels": "Canali Telegram, Facebook e Instagram",
             "form_builder": "Moduli (generatore di moduli web)",
             "waba_groups": "Gruppi WhatsApp (Cloud API)",
-            "sms": "Canale SMS"
+            "sms": "Canale SMS",
+            "help_agent": "Assistente di aiuto (AI, consuma token)"
           },
           "problems": {
             "required": "Questo campo è obbligatorio.",

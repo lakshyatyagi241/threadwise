@@ -76,7 +76,8 @@
       "extra_channels": "Telegram, Facebook ו־Instagram",
       "form_builder": "טפסים",
       "waba_groups": "קבוצות WhatsApp",
-      "sms": "ערוץ SMS"
+      "sms": "ערוץ SMS",
+      "help_agent": "עוזר העזרה"
     },
     "limitGroups": {
       "messaging": "הודעות",

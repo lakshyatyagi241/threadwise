@@ -76,7 +76,8 @@
       "extra_channels": "Telegram، Facebook اور Instagram",
       "form_builder": "فارمز",
       "waba_groups": "WhatsApp گروپس",
-      "sms": "SMS چینل"
+      "sms": "SMS چینل",
+      "help_agent": "مددگار اسسٹنٹ"
     },
     "limitGroups": {
       "messaging": "میسجنگ",

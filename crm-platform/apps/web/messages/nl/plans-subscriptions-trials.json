@@ -76,7 +76,8 @@
       "extra_channels": "Telegram, Facebook en Instagram",
       "form_builder": "Formulieren",
       "waba_groups": "WhatsApp-groepen",
-      "sms": "SMS-kanaal"
+      "sms": "SMS-kanaal",
+      "help_agent": "Hulpassistent"
     },
     "limitGroups": {
       "messaging": "Berichten",

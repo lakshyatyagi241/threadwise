@@ -149,6 +149,9 @@ export const PLAN_FEATURE_DEFS = [
   { key: 'waba_groups', group: 'messaging', default: false },
   // The SMS channel (Twilio and MSG91, send-only; TW-SMS-025). Default false: Reference's `access_sms` column default.
   { key: 'sms', group: 'messaging', default: false },
+  // The in-app assistant that guides or does a task on the person's own session (docs/specs/help-agent-assistant.md). Default false: it
+  // spends AI tokens, so the owner hands it to chosen plans; the workspace switch and the `help.agent.use` permission are separate gates.
+  { key: 'help_agent', group: 'aiCalling', default: false },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanFeatureGroup; default: boolean }>;
 
 export type PlanFeatureKey = (typeof PLAN_FEATURE_DEFS)[number]['key'];
@@ -185,6 +188,7 @@ export const PLAN_FEATURE_LABELS: Record<PlanFeatureKey, string> = {
   form_builder: 'Forms',
   waba_groups: 'WhatsApp groups',
   sms: 'SMS channel',
+  help_agent: 'Help assistant',
 };
 export const PLAN_FEATURE_KEYS = PLAN_FEATURE_DEFS.map((d) => d.key) as PlanFeatureKey[];
 
@@ -224,6 +228,7 @@ export const PLAN_CHIP_ORDER: readonly PlanFeatureKey[] = [
   'form_builder',
   'waba_groups',
   'sms',
+  'help_agent',
 ];
 export const PLAN_CHIP_MAX = 3;
 

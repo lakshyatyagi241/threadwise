@@ -76,7 +76,8 @@
       "extra_channels": "Telegram, Facebook, Instagram",
       "form_builder": "양식",
       "waba_groups": "WhatsApp 그룹",
-      "sms": "SMS 채널"
+      "sms": "SMS 채널",
+      "help_agent": "도움말 어시스턴트"
     },
     "limitGroups": {
       "messaging": "메시징",

@@ -76,7 +76,8 @@
       "extra_channels": "Telegram, Facebook dan Instagram",
       "form_builder": "Formulir",
       "waba_groups": "Grup WhatsApp",
-      "sms": "Kanal SMS"
+      "sms": "Kanal SMS",
+      "help_agent": "Asisten Bantuan"
     },
     "limitGroups": {
       "messaging": "Pesan",

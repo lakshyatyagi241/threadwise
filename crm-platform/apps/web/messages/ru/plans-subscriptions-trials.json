@@ -76,7 +76,8 @@
       "extra_channels": "Telegram, Facebook и Instagram",
       "form_builder": "Формы",
       "waba_groups": "Группы WhatsApp",
-      "sms": "Канал SMS"
+      "sms": "Канал SMS",
+      "help_agent": "Помощник"
     },
     "limitGroups": {
       "messaging": "Переписка",

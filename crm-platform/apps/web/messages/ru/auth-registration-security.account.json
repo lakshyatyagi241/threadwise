@@ -553,7 +553,8 @@
             "extra_channels": "Telegram, Facebook и Instagram",
             "form_builder": "Формы",
             "waba_groups": "Группы WhatsApp",
-            "sms": "SMS"
+            "sms": "SMS",
+            "help_agent": "Помощник"
           },
           "cta": {
             "continueFree": "Продолжить бесплатно",

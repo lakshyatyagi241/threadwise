@@ -117,6 +117,7 @@ const stored: PlanAdminItem = {
     form_builder: false,
     waba_groups: false,
     sms: false,
+    help_agent: false,
   },
   moduleFeatures: {},
   moduleLimits: {},

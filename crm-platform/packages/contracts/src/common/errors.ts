@@ -230,6 +230,20 @@ export const ERROR_CODES = {
   /** Retry: nobody failed. */
   TG_NOTHING_TO_RETRY: 'TG_NOTHING_TO_RETRY',
 
+  // Help assistant (docs/specs/help-agent-assistant.md)
+  /** The workspace switch is off, or the person may not use the assistant here (a disabled screen, a missing permission). */
+  HELP_AGENT_DISABLED: 'HELP_AGENT_DISABLED',
+  /** Too many tasks started for this person or workspace today, or too fast. */
+  HELP_AGENT_TASK_LIMIT: 'HELP_AGENT_TASK_LIMIT',
+  /** The task used its step budget, its time or its token allowance. */
+  HELP_AGENT_STEP_LIMIT: 'HELP_AGENT_STEP_LIMIT',
+  /** The task already finished or expired: start a new one. */
+  HELP_AGENT_TASK_CLOSED: 'HELP_AGENT_TASK_CLOSED',
+  /** No AI provider key is configured, or the provider failed. */
+  HELP_AGENT_PROVIDER_UNAVAILABLE: 'HELP_AGENT_PROVIDER_UNAVAILABLE',
+  /** The model request is not one the assistant sends (an unknown field, a stream, too large). */
+  HELP_AGENT_REQUEST_INVALID: 'HELP_AGENT_REQUEST_INVALID',
+
   // SMS channel (TW-SMS)
   /** The provider refused the credentials at connect time. */
   SMS_CREDENTIALS_REJECTED: 'SMS_CREDENTIALS_REJECTED',

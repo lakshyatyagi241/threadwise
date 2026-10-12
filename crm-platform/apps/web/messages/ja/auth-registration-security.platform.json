@@ -1419,7 +1419,8 @@
             "extra_channels": "Telegram、Facebook、Instagramのチャネル。",
             "form_builder": "CRMに連絡先を作成する、ホスト型および埋め込み型のウェブフォーム。このスイッチは有料のフォームアプリが管理します。",
             "waba_groups": "Cloud API番号からWhatsAppグループを作成・管理します：招待リンク、参加リクエスト、メンバー。番号は公式ビジネスアカウントである必要があります。",
-            "sms": "TwilioまたはMSG91経由の送信専用SMS：送信元を接続し、SMS一斉配信とキャンペーンを送信します。"
+            "sms": "TwilioまたはMSG91経由の送信専用SMS：送信元を接続し、SMS一斉配信とキャンペーンを送信します。",
+            "help_agent": "アプリ内のヘルプアシスタント。やりたいことを普通の言葉で伝えると、本人のセッションで案内または代行し、リスクのある操作の前には必ず確認します。AIトークンを消費します。"
           },
           "units": {
             "days": "日",
@@ -1599,7 +1600,8 @@
             "extra_channels": "Telegram、Facebook、Instagramチャネル",
             "form_builder": "フォーム（ウェブフォームビルダー）",
             "waba_groups": "WhatsAppグループ（Cloud API）",
-            "sms": "SMSチャネル"
+            "sms": "SMSチャネル",
+            "help_agent": "ヘルプアシスタント（AI、トークンを消費）"
           },
           "problems": {
             "required": "この項目は必須です。",

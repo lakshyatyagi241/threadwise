@@ -1419,7 +1419,8 @@
             "extra_channels": "Kanały Telegram, Facebook i Instagram.",
             "form_builder": "Hostowane i osadzane formularze internetowe tworzące kontakty w CRM. Ten przełącznik należy do płatnej aplikacji Formularze.",
             "waba_groups": "Tworzenie grup WhatsApp i zarządzanie nimi z numeru Cloud API: link zaproszenia, prośby o dołączenie, członkowie. Numer musi być Official Business Account.",
-            "sms": "SMS tylko do wysyłki przez Twilio lub MSG91: połącz nadawców, wysyłaj transmisje i kampanie SMS."
+            "sms": "SMS tylko do wysyłki przez Twilio lub MSG91: połącz nadawców, wysyłaj transmisje i kampanie SMS.",
+            "help_agent": "Asystent pomocy w aplikacji: użytkownicy opisują zadanie zwykłymi słowami, a asystent prowadzi ich przez nie lub wykonuje je w ich sesji, pytając o zgodę przed wszystkim, co ryzykowne. Zużywa tokeny AI."
           },
           "units": {
             "days": "Dni",
@@ -1599,7 +1600,8 @@
             "extra_channels": "Kanały Telegram, Facebook i Instagram",
             "form_builder": "Formularze (kreator formularzy internetowych)",
             "waba_groups": "Grupy WhatsApp (Cloud API)",
-            "sms": "Kanał SMS"
+            "sms": "Kanał SMS",
+            "help_agent": "Asystent pomocy (AI, zużywa tokeny)"
           },
           "problems": {
             "required": "To pole jest wymagane.",

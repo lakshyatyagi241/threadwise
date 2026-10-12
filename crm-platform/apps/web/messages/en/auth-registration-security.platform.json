@@ -1419,7 +1419,8 @@
             "extra_channels": "The Telegram, Facebook and Instagram channels.",
             "form_builder": "Hosted and embedded web forms that create contacts in the CRM. The paid Forms app owns this switch.",
             "waba_groups": "Create and manage WhatsApp groups from a Cloud API number: invite link, join requests, members. The number must be an Official Business Account.",
-            "sms": "Send-only SMS through Twilio or MSG91: connect senders, send SMS broadcasts and campaigns."
+            "sms": "Send-only SMS through Twilio or MSG91: connect senders, send SMS broadcasts and campaigns.",
+            "help_agent": "The in-app Help assistant: people ask for a task in plain words and it guides or does it on their own session, asking before anything risky. Spends AI tokens."
           },
           "units": {
             "days": "Days",
@@ -1599,7 +1600,8 @@
             "extra_channels": "Telegram, Facebook and Instagram channels",
             "form_builder": "Forms (web form builder)",
             "waba_groups": "WhatsApp groups (Cloud API)",
-            "sms": "SMS channel"
+            "sms": "SMS channel",
+            "help_agent": "Help assistant (AI, spends tokens)"
           },
           "problems": {
             "required": "This field is required.",

@@ -1419,7 +1419,8 @@
             "extra_channels": "Các kênh Telegram, Facebook và Instagram.",
             "form_builder": "Biểu mẫu web được lưu trữ và nhúng tạo liên hệ trong CRM. Ứng dụng Biểu mẫu trả phí nắm công tắc này.",
             "waba_groups": "Tạo và quản lý nhóm WhatsApp từ số Cloud API: liên kết mời, yêu cầu tham gia, thành viên. Số phải là Official Business Account.",
-            "sms": "SMS chỉ gửi qua Twilio hoặc MSG91: kết nối người gửi, gửi chiến dịch và tin nhắn hàng loạt qua SMS."
+            "sms": "SMS chỉ gửi qua Twilio hoặc MSG91: kết nối người gửi, gửi chiến dịch và tin nhắn hàng loạt qua SMS.",
+            "help_agent": "Trợ lý trợ giúp trong ứng dụng: mọi người yêu cầu một việc bằng lời đơn giản, trợ lý hướng dẫn hoặc làm giúp ngay trên phiên của họ và hỏi trước khi làm điều có rủi ro. Tốn token AI."
           },
           "units": {
             "days": "Ngày",
@@ -1599,7 +1600,8 @@
             "extra_channels": "Kênh Telegram, Facebook và Instagram",
             "form_builder": "Biểu mẫu (trình tạo biểu mẫu web)",
             "waba_groups": "Nhóm WhatsApp (Cloud API)",
-            "sms": "Kênh SMS"
+            "sms": "Kênh SMS",
+            "help_agent": "Trợ lý trợ giúp (AI, tốn token)"
           },
           "problems": {
             "required": "Trường này là bắt buộc.",

@@ -1419,7 +1419,8 @@
             "extra_channels": "Telegram, Facebook, Instagram 채널입니다.",
             "form_builder": "CRM에서 연락처를 생성하는 호스팅 및 임베드 웹 양식입니다. 유료 양식 앱이 이 스위치를 관리합니다.",
             "waba_groups": "Cloud API 번호로 WhatsApp 그룹을 만들고 관리합니다: 초대 링크, 가입 요청, 멤버. 번호는 공식 비즈니스 계정이어야 합니다.",
-            "sms": "Twilio 또는 MSG91을 통한 발송 전용 SMS: 발신자를 연결하고 SMS 브로드캐스트와 캠페인을 보냅니다."
+            "sms": "Twilio 또는 MSG91을 통한 발송 전용 SMS: 발신자를 연결하고 SMS 브로드캐스트와 캠페인을 보냅니다.",
+            "help_agent": "앱 안의 도움말 어시스턴트: 사용자가 하고 싶은 일을 평범한 말로 요청하면 본인 세션에서 안내하거나 대신 처리하며, 위험한 작업 전에는 먼저 물어봅니다. AI 토큰을 사용합니다."
           },
           "units": {
             "days": "일",
@@ -1599,7 +1600,8 @@
             "extra_channels": "Telegram, Facebook, Instagram 채널",
             "form_builder": "양식(웹 양식 빌더)",
             "waba_groups": "WhatsApp 그룹(Cloud API)",
-            "sms": "SMS 채널"
+            "sms": "SMS 채널",
+            "help_agent": "도움말 어시스턴트(AI, 토큰 사용)"
           },
           "problems": {
             "required": "필수 입력 항목입니다.",

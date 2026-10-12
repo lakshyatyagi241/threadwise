@@ -76,7 +76,8 @@
       "extra_channels": "Telegram、Facebook 和 Instagram",
       "form_builder": "表单",
       "waba_groups": "WhatsApp 群组",
-      "sms": "SMS 渠道"
+      "sms": "SMS 渠道",
+      "help_agent": "帮助助手"
     },
     "limitGroups": {
       "messaging": "消息",

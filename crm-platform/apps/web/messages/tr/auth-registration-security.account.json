@@ -553,7 +553,8 @@
             "extra_channels": "Telegram, Facebook ve Instagram",
             "form_builder": "Formlar",
             "waba_groups": "WhatsApp grupları",
-            "sms": "SMS"
+            "sms": "SMS",
+            "help_agent": "Yardım asistanı"
           },
           "cta": {
             "continueFree": "Ücretsiz devam et",

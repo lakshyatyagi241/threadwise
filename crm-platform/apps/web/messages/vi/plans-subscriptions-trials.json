@@ -76,7 +76,8 @@
       "extra_channels": "Telegram, Facebook và Instagram",
       "form_builder": "Biểu mẫu",
       "waba_groups": "Nhóm WhatsApp",
-      "sms": "Kênh SMS"
+      "sms": "Kênh SMS",
+      "help_agent": "Trợ lý trợ giúp"
     },
     "limitGroups": {
       "messaging": "Nhắn tin",

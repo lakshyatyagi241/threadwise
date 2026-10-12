@@ -1419,7 +1419,8 @@
             "extra_channels": "Die Kanäle Telegram, Facebook und Instagram.",
             "form_builder": "Gehostete und eingebettete Webformulare, die Kontakte im CRM erstellen. Die kostenpflichtige App Formulare steuert diesen Schalter.",
             "waba_groups": "WhatsApp-Gruppen von einer Cloud-API-Nummer aus erstellen und verwalten: Einladungslink, Beitrittsanfragen, Mitglieder. Die Nummer muss ein Official Business Account sein.",
-            "sms": "Reiner SMS-Versand über Twilio oder MSG91: Absender verbinden, SMS-Broadcasts und -Kampagnen senden."
+            "sms": "Reiner SMS-Versand über Twilio oder MSG91: Absender verbinden, SMS-Broadcasts und -Kampagnen senden.",
+            "help_agent": "Der Hilfe-Assistent in der App: Nutzer beschreiben eine Aufgabe in einfachen Worten, und er führt sie an oder erledigt sie in der eigenen Sitzung – bei Risiken fragt er vorher nach. Verbraucht KI-Tokens."
           },
           "units": {
             "days": "Tage",
@@ -1599,7 +1600,8 @@
             "extra_channels": "Telegram-, Facebook- und Instagram-Kanäle",
             "form_builder": "Formulare (Webformular-Builder)",
             "waba_groups": "WhatsApp-Gruppen (Cloud API)",
-            "sms": "SMS-Kanal"
+            "sms": "SMS-Kanal",
+            "help_agent": "Hilfe-Assistent (KI, verbraucht Tokens)"
           },
           "problems": {
             "required": "Dieses Feld ist erforderlich.",

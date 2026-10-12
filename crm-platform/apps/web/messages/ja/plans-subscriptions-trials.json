@@ -76,7 +76,8 @@
       "extra_channels": "Telegram、Facebook、Instagram",
       "form_builder": "フォーム",
       "waba_groups": "WhatsAppグループ",
-      "sms": "SMSチャネル"
+      "sms": "SMSチャネル",
+      "help_agent": "ヘルプアシスタント"
     },
     "limitGroups": {
       "messaging": "メッセージング",
