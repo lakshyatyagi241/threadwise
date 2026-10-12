@@ -167,3 +167,7 @@ e2e specs (the catalogue now has nine published lead sources, pull is publishabl
 | WIRE-MKT-032 | Help guides and Help coverage follow the screen: a guide hides with its screen, and the app's feature counts as that screen's feature                                                                                                                                    | `help-center/resolve.ts` (unchanged, reads the resolved menu), `help-center/coverage.ts`                                                                                               |
 
 First user: Appointments (`appointment_booking`): `features/appointments/nav.ts` and the three tiles in `settings.ts`. Spec: [menu-apps-and-integrations.md](../../specs/menu-apps-and-integrations.md).
+
+## App access requires install (2026-10-08)
+
+A first-party app's granted plan features (`grants_plan_features`) are merged into the workspace entitlements only while `workspace_app_installations.status = 'active'` for the app (`plans-subscriptions-trials/app-grants.ts`; consumers: `PlanEntitlementService.forOrg`, `AddonEntitlementService.activeGrants`, `permissions.controller.ts` lock choice, `seed-app.runner.ts` step 5). Migration `20261113090000_mkt_app_access_requires_install.sql`. Test: `apps/api/test/e2e/marketplace/app-access-requires-install.e2e.spec.ts`.

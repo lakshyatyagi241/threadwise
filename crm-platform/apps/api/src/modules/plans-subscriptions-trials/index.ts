@@ -16,6 +16,7 @@ export {
   resolveFeature,
   resolveLimit,
   appVisibleOnPlan,
+  featureLocked,
   type Entitlements,
   type VisibleApps,
   type InitialPlan,
@@ -34,6 +35,13 @@ export {
   type ResolvedDefaultPlan,
   type TrialStamp,
 } from './plan-rules';
+export {
+  grantedByPack,
+  splitAppPacks,
+  type AppPack,
+  type InstallStatus,
+  type WithheldAppFeature,
+} from './app-grants';
 export { PlansWorkerModule } from './plans-worker.module';
 export { PlanRetentionService } from './plan-retention.service';
 export {
