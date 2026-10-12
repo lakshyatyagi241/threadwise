@@ -324,6 +324,11 @@
         "label": "Web sitesi sohbeti",
         "description": "Web sitenizin sohbeti için oluşturulan botlar ve her birinin çalıştığı widget.",
         "keywords": "web, web sitesi, widget, chatbot, gömme, canlı sohbet"
+      },
+      "help-assistant": {
+        "label": "Yardım asistanı",
+        "description": "Ekibinize yol gösteren veya adımları onlar için yapan asistanı açın.",
+        "keywords": "yapay zeka, asistan, ajan, kılavuz, yardım, otomasyon"
       }
     }
   }

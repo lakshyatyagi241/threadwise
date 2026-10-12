@@ -308,6 +308,11 @@
         "label": "Websitechat",
         "description": "Bots die zijn gemaakt voor de chat op je website en de widget waarin elk daarvan draait.",
         "keywords": "web, website, widget, chatbot, insluiten, livechat"
+      },
+      "help-assistant": {
+        "label": "Hulpassistent",
+        "description": "Zet de assistent aan die je team begeleidt of de stappen voor hen uitvoert.",
+        "keywords": "ai, assistent, agent, gids, hulp, automatisering"
       }
     },
     "title": "Instellingen",

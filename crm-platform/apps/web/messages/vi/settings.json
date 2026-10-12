@@ -324,6 +324,11 @@
         "label": "Chat trên website",
         "description": "Các bot được tạo cho chat trên website của bạn và widget mà mỗi bot chạy trong đó.",
         "keywords": "web, website, widget, chatbot, nhúng, chat trực tuyến"
+      },
+      "help-assistant": {
+        "label": "Trợ lý trợ giúp",
+        "description": "Bật trợ lý hướng dẫn nhóm của bạn hoặc làm các bước giúp họ.",
+        "keywords": "ai, trợ lý, tác nhân, hướng dẫn, trợ giúp, tự động hóa"
       }
     }
   }

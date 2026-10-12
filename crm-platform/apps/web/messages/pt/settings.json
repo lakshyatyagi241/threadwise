@@ -324,6 +324,11 @@
         "label": "Chat do site",
         "description": "Bots criados para o chat do seu site e o widget em que cada um é executado.",
         "keywords": "web, site, widget, chatbot, incorporar, chat ao vivo"
+      },
+      "help-assistant": {
+        "label": "Assistente de ajuda",
+        "description": "Ative o assistente que orienta sua equipe ou faz os passos por ela.",
+        "keywords": "ia, assistente, agente, guia, ajuda, automação"
       }
     }
   }

@@ -1,0 +1,135 @@
+{
+  "help-agent": {
+    "launcher": {
+      "label": "Hỏi",
+      "shortcut": "Hỏi trợ lý (Ctrl hoặc Cmd + Shift + L)"
+    },
+    "panel": {
+      "title": "Hỏi trợ lý",
+      "subtitle": "Hãy nói bạn muốn làm gì. Tôi đọc trang này và bấm giúp bạn, và tôi hỏi trước khi lưu, gửi, xóa hoặc thanh toán bất cứ điều gì.",
+      "close": "Đóng",
+      "taskLabel": "Bạn muốn làm gì?",
+      "taskPlaceholder": "Ví dụ: thêm thẻ VIP cho một liên hệ",
+      "tooLong": "Giữ dưới {max} ký tự.",
+      "doItForMe": "Làm giúp tôi",
+      "showMe": "Chỉ cho tôi",
+      "stop": "Dừng",
+      "stopping": "Đang dừng...",
+      "newTask": "Tác vụ mới",
+      "tryAgain": "Thử lại",
+      "openGuide": "Mở hướng dẫn",
+      "showSteps": "Hiện các bước",
+      "guidesTitle": "Từ các hướng dẫn trợ giúp",
+      "examplesTitle": "Thử hỏi",
+      "disabledHere": "Trợ lý bị tắt ở màn hình này vì màn hình hiển thị tin nhắn và thông tin do khách hàng viết. Hãy mở màn hình khác để dùng."
+    },
+    "notice": {
+      "title": "Trước khi bắt đầu",
+      "sent": "Để làm một tác vụ, trợ lý gửi yêu cầu của bạn và nội dung văn bản của trang bạn đang xem tới một nhà cung cấp AI.",
+      "masked": "Số điện thoại, địa chỉ email và thông tin bí mật được ẩn trước. Tên và văn bản khác trên trang thì không.",
+      "asks": "Trợ lý dùng chính tài khoản của bạn nên chỉ làm được những gì bạn làm được. Nó hỏi bạn trước khi lưu, gửi, xóa, thanh toán, mời người khác hoặc đổi cài đặt.",
+      "limits": "Trợ lý không bao giờ nhập mật khẩu hay thông tin thẻ, không mở trang web khác, và bạn có thể dừng bất cứ lúc nào.",
+      "accept": "Tôi hiểu"
+    },
+    "status": {
+      "progress": "Bước {n}/{max}",
+      "thinking": "Đang suy nghĩ...",
+      "starting": "Đang bắt đầu..."
+    },
+    "activity": {
+      "click": "Đang bấm: {label}",
+      "type": "Đang nhập vào: {label}",
+      "select": "Đang chọn trong: {label}",
+      "blocked": "Đã bỏ qua: {label}",
+      "declined": "Bạn đã từ chối: {label}",
+      "shown": "Đang hiển thị: {label}"
+    },
+    "confirm": {
+      "title": "Cho phép việc này?",
+      "clickBody": "Trợ lý sắp bấm \"{label}\".",
+      "selectBody": "Trợ lý sắp chọn \"{detail}\" trong \"{label}\".",
+      "allow": "Cho phép một lần",
+      "deny": "Từ chối",
+      "reasons": {
+        "marked": "Đây là một trong những nút nhạy cảm nhất trong ứng dụng.",
+        "submit": "Việc này lưu hoặc gửi nội dung trên trang.",
+        "delete": "Việc này xóa, gỡ bỏ hoặc ngắt kết nối một thứ gì đó.",
+        "send": "Việc này gửi, đăng hoặc bắt đầu một thứ mà người khác sẽ thấy.",
+        "pay": "Việc này có thể tốn tiền hoặc thay đổi số tiền bạn trả.",
+        "invite": "Việc này mời một người vào không gian làm việc của bạn.",
+        "connect": "Việc này kết nối hoặc ngắt kết nối một kênh hay một ứng dụng.",
+        "access": "Việc này thay đổi ai được làm gì, hoặc một thông tin bí mật hay chi tiết thanh toán.",
+        "settings": "Việc này bật hoặc tắt một thứ gì đó.",
+        "toggle": "Công tắc này có hiệu lực ngay lập tức.",
+        "dialog": "Việc này xác nhận điều mà cửa sổ đang hỏi.",
+        "signout": "Việc này đăng xuất bạn."
+      }
+    },
+    "question": {
+      "title": "Trợ lý hỏi",
+      "answerLabel": "Câu trả lời của bạn",
+      "send": "Gửi"
+    },
+    "result": {
+      "completedTitle": "Xong",
+      "failedTitle": "Tôi không thể hoàn tất việc này",
+      "stoppedTitle": "Đã dừng",
+      "summary": "{steps, plural, other {# bước}}, {confirmed} đã cho phép, {denied} đã từ chối."
+    },
+    "stopped": {
+      "person": "Bạn đã dừng tác vụ.",
+      "budget": "Tác vụ đã đạt giới hạn số bước và đã dừng. Hãy thử một yêu cầu nhỏ hơn.",
+      "location": "Tác vụ đã dừng vì đến một màn hình mà trợ lý không được phép dùng."
+    },
+    "errors": {
+      "disabled": "Trợ lý đã bị tắt cho không gian làm việc này hoặc ở màn hình này.",
+      "planLocked": "Trợ lý không nằm trong gói của bạn.",
+      "forbidden": "Bạn không có quyền dùng trợ lý.",
+      "rateLimited": "Quá nhiều yêu cầu. Hãy đợi một lát rồi thử lại.",
+      "taskLimit": "Bạn đã bắt đầu số tác vụ tối đa được phép lúc này. Hãy thử lại sau.",
+      "stepLimit": "Tác vụ này đã dùng hết số bước. Hãy bắt đầu tác vụ mới với yêu cầu nhỏ hơn.",
+      "closed": "Tác vụ này đã kết thúc. Hãy bắt đầu tác vụ mới.",
+      "providerDown": "Dịch vụ AI không phản hồi. Hãy thử lại sau giây lát, hoặc hỏi chủ nền tảng nếu vẫn lặp lại.",
+      "monthlyLimit": "Không gian làm việc của bạn đã dùng hết hạn mức AI của tháng này.",
+      "signedOut": "Phiên của bạn đã kết thúc. Hãy đăng nhập lại.",
+      "network": "Không kết nối được máy chủ. Hãy kiểm tra kết nối và thử lại.",
+      "generic": "Đã xảy ra lỗi. Hãy thử lại.",
+      "retryIn": "Hãy thử lại sau {seconds} giây.",
+      "requestId": "Mã yêu cầu: {id}"
+    },
+    "examples": {
+      "howDo": "Làm sao để dùng {title}?",
+      "showMe": "Chỉ cho tôi nơi bắt đầu trong {title}",
+      "whereIs": "Tôi tìm {title} ở đâu?",
+      "generic1": "Làm sao để kết nối số WhatsApp của tôi?",
+      "generic2": "Tôi đổi hồ sơ doanh nghiệp ở đâu?",
+      "generic3": "Làm sao để mời một đồng nghiệp?"
+    },
+    "helpCard": {
+      "title": "Hỏi trợ lý",
+      "body": "Hãy nói bạn muốn làm gì. Trợ lý tìm đúng hướng dẫn, chỉ chỗ cần bấm, hoặc làm các bước giúp bạn và hỏi trước khi làm điều quan trọng.",
+      "button": "Mở trợ lý"
+    },
+    "settingsPage": {
+      "title": "Trợ lý trợ giúp",
+      "description": "Để nhóm của bạn nói điều họ muốn làm và để ứng dụng hướng dẫn hoặc làm các bước trên chính tài khoản của họ.",
+      "loading": "Đang tải",
+      "loadFailed": "Không tải được cài đặt.",
+      "requestId": "Mã yêu cầu: {id}",
+      "shareTitle": "Những gì được chia sẻ khi ai đó dùng",
+      "share1": "Yêu cầu người dùng đã nhập và văn bản hiển thị của trang họ đang xem được gửi tới nhà cung cấp AI mà nền tảng sử dụng.",
+      "share2": "Số điện thoại, địa chỉ email, thông tin bí mật và các trường cá nhân của biểu mẫu được ẩn trước. Tên và văn bản tự do khác trên trang thì không.",
+      "share3": "Tin nhắn của khách hàng và trò chuyện nhóm không bao giờ được đọc: trợ lý bị tắt ở các màn hình đó.",
+      "share4": "Trợ lý hoạt động với quyền của chính người đang đăng nhập và hỏi trước khi lưu, gửi, xóa, thanh toán hoặc đổi cài đặt. Chỉ lưu số lượng và kết quả của mỗi tác vụ, không bao giờ lưu nội dung yêu cầu.",
+      "optIn": "Khi bật, bạn xác nhận không gian làm việc của bạn đồng ý chia sẻ điều này với nhà cung cấp AI.",
+      "switchLabel": "Bật Trợ lý trợ giúp cho không gian làm việc này",
+      "stateOn": "Đang bật. Người có quyền sẽ thấy nút Hỏi.",
+      "stateOff": "Đang tắt. Không ai thấy trợ lý.",
+      "saveFailed": "Không lưu được cài đặt.",
+      "savedOn": "Trợ lý đang bật.",
+      "savedOff": "Trợ lý đang tắt.",
+      "whoCanUse": "Chỉ các vai trò có quyền \"Dùng Trợ lý trợ giúp\" mới thấy. Chủ sở hữu và quản trị viên có quyền này.",
+      "rolesLink": "Mở vai trò"
+    }
+  }
+}
