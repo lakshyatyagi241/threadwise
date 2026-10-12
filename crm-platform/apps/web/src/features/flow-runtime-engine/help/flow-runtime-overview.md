@@ -23,7 +23,7 @@ Each time a flow starts for a contact, it is recorded as a run. **Flow runs** sh
 
 ## Reading the execution timeline
 
-Open a run and look at **Execution timeline**. It lists every node the run executed, in order, with its result (OK, Error, Skipped, Waiting or Timed out), the exit it left by, how long it took and which visit it was when a flow loops back. Each row shows what the node sent to the customer, so you can read the conversation back. Select a node to see the time, the next step, what the customer replied and the error if it failed.
+Open a run and look at **Execution timeline**. It lists every node the run executed, in order, with its result (OK, Error, Skipped, Waiting or Timed out), the exit it left by, how long it took and which visit it was when a flow loops back. Each row shows what the node sent to the customer, so you can read the conversation back. Select a node to see its **Input** (what it read from the run, the customer's reply, a request it made) and **Output** (the full message the customer received, the variables it saved, a response, the result of a condition), plus the time, the next step and the error if it failed. Long values are shortened and passwords or tokens are hidden.
 
 - **Path taken** shows the nodes the run reached, in order, and **Not reached** shows the rest of the flow.
 - Use **Errors only** to jump to the node that failed.
