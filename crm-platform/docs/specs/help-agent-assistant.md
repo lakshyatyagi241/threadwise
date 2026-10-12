@@ -97,7 +97,7 @@ http logging does not serialize bodies; the proxy also never logs the parsed bod
 
 ### 6.1 Three switches, all must be on
 
-1. Plan feature `help_agent` (default OFF in every plan; ON for the three demo plans `starter`, `growth`, `scale` through the migration).
+1. Plan feature `help_agent` (default OFF in every plan; ON for the demo plans `growth` and `scale`, OFF for `starter` (migration `20261120090000`): owner decision 2026-10-12, because every task costs AI tokens).
 2. Workspace setting `help_agent_settings.enabled` (own table, default OFF), changed by a person holding `help.agent.manage` (Owner and
    Admin presets), with an explicit data-sharing text beside the switch. Audited.
 3. Permission `help.agent.use` (Owner and Admin presets; selectable for any role).
@@ -260,3 +260,10 @@ See the wiring map `docs/threadwise-port/wiring/help-agent.md`.
 4. The default example prompts and the first-use notice wording.
 5. Is a task sentence ever allowed to be stored for support (we decided no).
 6. Whether to ever allow the assistant on the inbox thread view (we decided no).
+
+## Owner decisions (2026-10-12)
+
+- **Plans:** Growth and Scale only; Starter off. The owner switches it per plan in the plan editor.
+- **Who pays:** the platform key, inside each plan's existing monthly AI token allowance (`AiTokenMeter.guard`); no new allowance. A workspace's own key is a later option, not built.
+- **Data notice:** the wording in `help-agent.json` (`share1` to `share4`, `optIn`) is approved as written: it says names and other free text are not masked and that only counts and outcomes are stored.
+- **Limits:** kept as built: 25 steps, 15 minutes and 200,000 tokens per task; 3 task starts a minute and 40 a day per person; 400 a day per workspace.
