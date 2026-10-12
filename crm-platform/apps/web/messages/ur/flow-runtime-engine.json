@@ -479,7 +479,12 @@
       "retention": "رن ختم ہونے کے {days} دن بعد لاگز حذف ہو جاتے ہیں۔",
       "pathTitle": "اختیار کیا گیا راستہ",
       "notReached": "نہیں پہنچے",
-      "noErrors": "اس رن میں کوئی خرابی نہیں۔"
+      "noErrors": "اس رن میں کوئی خرابی نہیں۔",
+      "factNext": "اگلا: {node}",
+      "factWaiting": "یہاں انتظار: {node}",
+      "factDelay": "{time} انتظار",
+      "factReplied": "کسٹمر نے جواب دیا: {text}",
+      "factEnded": "ختم: {reason}"
     },
     "event": {
       "step": "مرحلہ",

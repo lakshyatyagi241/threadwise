@@ -8,6 +8,7 @@ import {
   MAX_LOGGED_STEPS,
   clip,
   compactGraph,
+  describeSent,
   hashGraph,
   maskSecrets,
   nodeLabel,
@@ -49,14 +50,14 @@ describe('step log helpers', () => {
     expect(nodeLabel(null, 'Delay')).toBe('Delay');
   });
 
-  it('describes a normal step: ok, the exit taken, the node text as summary', () => {
+  it('describes a normal step: ok, the exit taken, no invented summary', () => {
     const f = stepFields(outcome(), node(), { durationMs: 12, attempt: 1 });
     expect(f).toMatchObject({
       outcome: 'ok',
       port: 2,
       durationMs: 12,
       attempt: 1,
-      summary: 'Hello there',
+      summary: null,
     });
   });
 
@@ -144,5 +145,28 @@ describe('step log helpers', () => {
       nodes: [{ id: 'n1', type: 'Message', label: 'Hi' }],
       edges: [{ from: 'n1', port: 2, to: 'n2' }],
     });
+  });
+
+  it('describes what a node sent, not the node setting', () => {
+    expect(describeSent({ kind: 'text', body: 'Hi Asha' }, { ok: true })).toBe('text: Hi Asha');
+    expect(
+      describeSent({ kind: 'media', mediaKind: 'image', url: 'https://x/y.png' }, { ok: true }),
+    ).toBe('image: https://x/y.png');
+    expect(
+      describeSent(
+        { kind: 'text', body: 'Hi' },
+        { ok: false, error: 'channel down', code: 'X', halt: true },
+      ),
+    ).toBe('text: Hi (not sent: channel down)');
+    const f = stepFields(outcome({ sent: ['text: Hi Asha'], notes: [] }), node(), {
+      durationMs: 1,
+      attempt: 1,
+    });
+    expect(f.summary).toBe('text: Hi Asha');
+  });
+
+  it('labels a Message node by the text of its first reply', () => {
+    const m = node({ props: { replies: [{ type: 'Text', data: 'We are open 9 to 5.' }] } });
+    expect(nodeLabel(m, null)).toBe('We are open 9 to 5.');
   });
 });

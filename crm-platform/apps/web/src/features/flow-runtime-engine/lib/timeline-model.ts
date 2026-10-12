@@ -72,3 +72,32 @@ export function pathOf(run: Pick<FlowRunDetail, 'graph' | 'log' | 'removedNodeId
     .map((n) => make(n.id, n.label, n.type));
   return { reached, unreached };
 }
+
+/** What a log row says beyond its summary, as facts the screen words in the viewer's language. No raw `detail` keys reach the screen. */
+export type StepFact =
+  | { kind: 'next'; node: string }
+  | { kind: 'waitingAt'; node: string }
+  | { kind: 'delay'; seconds: number }
+  | { kind: 'ended'; reason: string }
+  | { kind: 'replied'; text: string };
+
+const text = (v: unknown): string => (typeof v === 'string' ? v : '');
+
+/** The node's name for a step: the flow's current graph for the run, else what the log itself copied at run time. */
+export function nodeNames(run: Pick<FlowRunDetail, 'graph' | 'log'>): (id: string) => string {
+  const names = new Map<string, string>();
+  for (const s of run.log) if (s.nodeId && s.nodeLabel) names.set(s.nodeId, s.nodeLabel);
+  for (const n of run.graph?.nodes ?? []) if (!names.has(n.id)) names.set(n.id, n.label);
+  return (id) => names.get(id) ?? id;
+}
+
+export function stepFacts(s: FlowRunStep, nameOf: (id: string) => string): StepFact[] {
+  const d = s.detail;
+  const facts: StepFact[] = [];
+  if (s.event === 'reply' && text(d.text)) facts.push({ kind: 'replied', text: text(d.text) });
+  if (text(d.next)) facts.push({ kind: 'next', node: nameOf(text(d.next)) });
+  if (text(d.waitingOn)) facts.push({ kind: 'waitingAt', node: nameOf(text(d.waitingOn)) });
+  if (typeof d.seconds === 'number') facts.push({ kind: 'delay', seconds: d.seconds });
+  if (s.event === 'end' && text(d.reason)) facts.push({ kind: 'ended', reason: text(d.reason) });
+  return facts;
+}

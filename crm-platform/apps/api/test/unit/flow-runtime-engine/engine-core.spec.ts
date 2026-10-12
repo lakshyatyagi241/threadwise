@@ -476,6 +476,34 @@ describe('CTA and Location', () => {
   });
 });
 
+describe('what the run log gets from a step', () => {
+  it('lists what a node sent, as rendered for this customer', async () => {
+    const run = newRun({
+      nodes: [n('a', 'message', { text: 'Hi {{name}}' })],
+      edges: [],
+    });
+    run.vars.name = 'Asha';
+    const deps: StepDeps = {
+      send: async () => ({ ok: true }),
+      paceMs: () => 0,
+      now: () => new Date(0),
+    };
+    const out = await executeCurrent(run, deps);
+    expect(out.sent).toEqual(['text: Hi Asha']);
+  });
+
+  it('says so when a send did not go out', async () => {
+    const run = newRun({ nodes: [n('a', 'message', { text: 'Hi' })], edges: [] });
+    const deps: StepDeps = {
+      send: async () => ({ ok: false, error: 'Meta said no', code: 'X', halt: false }),
+      paceMs: () => 0,
+      now: () => new Date(0),
+    };
+    const out = await executeCurrent(run, deps);
+    expect(out.sent).toEqual(['text: Hi (not sent: Meta said no)']);
+  });
+});
+
 describe('decoding a customer message', () => {
   it('reads a tap, a location pin, a caption and ignores reactions', () => {
     expect(

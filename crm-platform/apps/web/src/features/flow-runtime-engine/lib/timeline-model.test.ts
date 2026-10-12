@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { FlowRunStep } from '@crm/contracts';
-import { formatMs, pathOf, timelineRows } from './timeline-model';
+import { formatMs, nodeNames, pathOf, stepFacts, timelineRows } from './timeline-model';
 
 const step = (over: Partial<FlowRunStep>): FlowRunStep => ({
   seq: 1,
@@ -74,5 +74,35 @@ describe('pathOf', () => {
       reached: [],
       unreached: [],
     });
+  });
+});
+
+describe('stepFacts', () => {
+  const names = nodeNames({
+    graph: { nodes: [{ id: 'n2', type: 'Message', label: 'Hours' }], edges: [] },
+    log: [],
+  });
+  it('words the next node by its name, never its id or raw keys', () => {
+    expect(stepFacts(step({ detail: { next: 'n2' } }), names)).toEqual([
+      { kind: 'next', node: 'Hours' },
+    ]);
+    expect(stepFacts(step({ detail: { next: 'gone' } }), names)).toEqual([
+      { kind: 'next', node: 'gone' },
+    ]);
+  });
+  it('knows replies, waits, delays and why a run ended', () => {
+    expect(stepFacts(step({ event: 'reply', detail: { text: 'yes', tap: 'b1' } }), names)).toEqual([
+      { kind: 'replied', text: 'yes' },
+    ]);
+    expect(stepFacts(step({ detail: { waitingOn: 'n2', seconds: 5 } }), names)).toEqual([
+      { kind: 'waitingAt', node: 'Hours' },
+      { kind: 'delay', seconds: 5 },
+    ]);
+    expect(
+      stepFacts(step({ event: 'end', detail: { reason: 'dead_end', status: 'completed' } }), names),
+    ).toEqual([{ kind: 'ended', reason: 'dead_end' }]);
+  });
+  it('says nothing for a step with no detail', () => {
+    expect(stepFacts(step({}), names)).toEqual([]);
   });
 });
