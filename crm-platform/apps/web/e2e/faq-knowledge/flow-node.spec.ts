@@ -12,6 +12,7 @@ import {
   seedBuilderFlow,
   seedFaq,
   simulator,
+  sql,
   tabTo,
   test,
   waitIndexed,
@@ -1041,10 +1042,11 @@ test.describe('a customer goes through a published flow with the node', () => {
     );
     expect(repliesTo(ws, from)).toEqual(['Your order ships tomorrow.', 'Answered branch']);
     // The match is in the log as a match made by a flow, and it was not sent twice.
-    const log = (await call(ws, 'GET', '/v2/faq/insights/log?view=all&limit=50')).body.data;
-    const row = log.find((r: any) => r.query === 'faqnodea where is my order');
-    expect(row).toBeDefined();
-    expect(row.outcome).toBe('answered');
+    // Flow-origin rows are kept out of the workspace's log views on purpose, so read the table.
+    const rows = sql(
+      `SELECT outcome, origin FROM faq_match_logs WHERE org_id=${ws.orgId} AND query='faqnodea where is my order' ORDER BY id`,
+    );
+    expect(rows).toEqual([['answered', 'flow']]);
   });
 
   test('a message nothing matches takes the "no match" branch and no FAQ text is sent', async () => {

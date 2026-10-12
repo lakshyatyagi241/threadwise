@@ -40,7 +40,7 @@ export function sql(query: string): string {
     'docker',
     [
       'exec',
-      'crm-postgres',
+      process.env.FAQ_PG ?? 'crm-postgres',
       'psql',
       '-U',
       'crm',

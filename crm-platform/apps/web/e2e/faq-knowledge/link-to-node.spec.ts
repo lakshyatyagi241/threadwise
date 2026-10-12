@@ -432,11 +432,10 @@ test.describe('what the list and the editor say', () => {
     const warning = page.getByText('The step this FAQ starts at is gone');
     await expect(warning).toBeVisible();
     await expect(startAt(page)).toHaveValue('b');
-    expect(await optionTexts(page)).toEqual([
-      "The flow's start",
-      'Deleted step (choose another)',
-      'Send message · #a',
-    ]);
+    // The "deleted step" option shows before the steps arrive, so wait for the list rather than reading it once.
+    await expect
+      .poll(() => optionTexts(page))
+      .toEqual(["The flow's start", 'Deleted step (choose another)', 'Send message · #a']);
 
     // Saving another change while the step is still stale is refused, naming the field, and nothing is saved.
     await page.getByLabel('Category').fill('Stale step');

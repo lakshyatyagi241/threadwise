@@ -28,7 +28,20 @@ const DB = process.env.FAQ_DB ?? 'faq_scratch';
 export function sql(statement: string): string[][] {
   const out = execFileSync(
     'docker',
-    ['exec', 'crm-postgres', 'psql', '-U', 'crm', '-d', DB, '-At', '-F', '\u001f', '-c', statement],
+    [
+      'exec',
+      process.env.FAQ_PG ?? 'crm-postgres',
+      'psql',
+      '-U',
+      'crm',
+      '-d',
+      DB,
+      '-At',
+      '-F',
+      '\u001f',
+      '-c',
+      statement,
+    ],
     { encoding: 'utf8' },
   ).trim();
   if (out === '') return [];
