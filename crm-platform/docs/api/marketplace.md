@@ -304,6 +304,8 @@ workspace pays; a pause the admin made by hand is never undone by a payment or b
 
 ### Apps that own existing plan features (first-party)
 
+**Subscribed is not enough: the app must be installed (owner decision 2026-10-08).** The plan features an app grants are merged only while the workspace has the app installed and `active` (`apps/api/src/modules/plans-subscriptions-trials/app-grants.ts`, used by `PlanEntitlementService.forOrg` and `AddonEntitlementService`, so menu, API guards, public pages and the Roles editor agree). Not installed, uninstalled, paused (`disabled`) or `killed`: the features are off; the app's own `mkt_<slug>` key stays so the workspace can still install it. A feature the workspace's PLAN carries (or an override sets) is unaffected by installation. The API answers `422 PLAN_FEATURE_LOCKED` with `reason: app_not_installed` (or `app_paused`), `app` and `installUrl`, instead of the upgrade link. The Roles editor shows the app's keys locked with the `app` badge when subscribed and not installed (`permission_defs.app_slug`, migration `20261113090000`), and open when paused. Platform-owned workspaces are never limited, as before.
+
 A feature the product already gates by plan can become a **paid first-party app** without changing a single gate. The listing declares
 `grantsPlanFeatures` (existing plan feature keys, for example a booking app granting `appointment_booking`); the add-on that sells the app
 carries them next to its own key (`features: { mkt_<slug>: true, <granted key>: true }`), and **the plans domain's one resolver**
