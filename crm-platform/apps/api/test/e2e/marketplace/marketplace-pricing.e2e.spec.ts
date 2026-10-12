@@ -1847,7 +1847,10 @@ describe('a first-party app that owns an existing plan feature (the first paid f
     // running it again finds nobody: they have a subscription now
     expect((await run({ note: 'Existing users keep it' })).body.matched).toBe(0);
 
-    // now the feature stops being a plan feature of Growth (the registry default and the plan rows are changed): they keep it, by comp
+    // Comping gives the subscription only; an admin still installs the app. They do, then the feature stops being a plan feature of
+    // Growth (the registry default and the plan rows are changed): they keep it, by comp and install
+    await installApp(E, 'booking-lite');
+    await installApp(F, 'booking-lite');
     await h.owner.query(
       `UPDATE plans SET features = '{"analytics": false}'::jsonb WHERE slug = 'growth'`,
     );
@@ -1992,7 +1995,7 @@ describe('Appointments, the first paid first-party app (seeded as a draft, price
       dryRun: false,
     });
     expect(real.body).toMatchObject({ matched: 1, comped: 1 });
-    expect(await has(H)).toBe(true);
+    expect(await has(H)).toBe(false); // comped, but an admin still has to install it
     expect(await has(I)).toBe(false);
     expect((await subOf(H, 'appointments')).source).toBe('comp');
 
@@ -2010,7 +2013,8 @@ describe('Appointments, the first paid first-party app (seeded as a draft, price
     expect(await has(I)).toBe(false); // subscribed, not installed yet
     await installApp(I, 'appointments');
     expect(await has(I)).toBe(true);
-    // H was comped as an existing user and the action installed the app for it, so it never lost booking
+    // H was comped as an existing user: access comes back when its admin installs the app
+    await installApp(H, 'appointments');
     expect(await has(H)).toBe(true);
   });
 });
