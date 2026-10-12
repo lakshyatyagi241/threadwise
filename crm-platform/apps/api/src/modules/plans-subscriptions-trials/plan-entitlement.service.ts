@@ -18,6 +18,7 @@ import { PlanStore } from './plan-store';
 import { fallsBackToFree, planStateOf } from './plan-lifecycle';
 import { toFacts, PLAN_COLUMNS, type PlanRow } from './plan-row';
 import { planKind, trialFor, type DefaultPlanStep, type TrialStamp } from './plan-rules';
+import { splitAppPacks, type AppPack, type WithheldAppFeature } from './app-grants';
 
 export interface InitialPlan extends TrialStamp {
   planSlug: string;
@@ -47,6 +48,11 @@ export interface Entitlements {
   graceDays?: number;
   /** Which paid Marketplace apps the plan makes VISIBLE (not usable: using one still needs a purchase). */
   visibleApps: VisibleApps;
+  /**
+   * Plan features that a subscribed Marketplace app would grant but does not, because the app is not installed and running in this
+   * workspace (see app-grants.ts). Not part of `planFeatures`: this only explains why a gate is closed (install the app, not upgrade).
+   */
+  appWithheld: Record<string, WithheldAppFeature>;
 }
 
 /**
@@ -76,8 +82,8 @@ interface EntitlementRow {
   plan_is_custom_quote: boolean | null;
   plan_amount: string | null;
   autopay: boolean | null;
-  /** Plan feature keys granted by the Marketplace apps the workspace has subscribed to (`{ key: true }`). */
-  app_grants: Record<string, unknown> | null;
+  /** The live app add-ons the workspace owns, each with the state of its installation (see app-grants.ts). */
+  app_packs: Array<{ slug: string; features: unknown; install: AppPack['install'] }> | null;
 }
 
 /**
@@ -155,12 +161,12 @@ export class PlanEntitlementService {
                EXISTS (SELECT 1 FROM subscriptions sb
                        WHERE sb.org_id = o.id AND sb.kind = 'plan' AND sb.plan_id = o.plan
                          AND sb.status IN ('active', 'past_due')) AS autopay,
-               (SELECT coalesce(jsonb_object_agg(f.key, true), '{}'::jsonb)
+               (SELECT coalesce(jsonb_agg(jsonb_build_object('slug', ma.slug, 'features', ap.features, 'install', wi.status)), '[]'::jsonb)
                   FROM workspace_addons wa
                   JOIN plans ap ON ap.id = wa.package_id AND ap.marketplace_app_id IS NOT NULL
-                  CROSS JOIN LATERAL jsonb_each(ap.features) AS f(key, value)
-                 WHERE wa.org_id = o.id AND wa.status = 'active' AND (wa.ends_at IS NULL OR wa.ends_at > now())
-                   AND f.value = 'true'::jsonb) AS app_grants
+                  JOIN marketplace_apps ma ON ma.id = ap.marketplace_app_id
+                  LEFT JOIN workspace_app_installations wi ON wi.org_id = wa.org_id AND wi.app_id = ap.marketplace_app_id
+                 WHERE wa.org_id = o.id AND wa.status = 'active' AND (wa.ends_at IS NULL OR wa.ends_at > now())) AS app_packs
         FROM organizations o
         LEFT JOIN org_plan_state s ON s.org_id = o.id
         LEFT JOIN plans p ON p.slug = o.plan AND p.kind = 'plan'
@@ -210,8 +216,15 @@ export class PlanEntitlementService {
     // They are merged HERE, into the one resolver every gate asks (RequirePlanFeature, the in-context guards, the entitlements the web
     // reads), so a gate needs no change to honour a subscription. The workspace's own override still wins over it (resolveFeature), and
     // it applies after a lapsed plan fell back to the free plan: it is the workspace's own purchase, not part of the plan.
-    if (row.app_grants && Object.keys(row.app_grants).length > 0)
-      planFeatures = { ...planFeatures, ...row.app_grants };
+    // Subscribing is not enough: the app must also be INSTALLED and running, or its plan features stay off (app-grants.ts). A feature the
+    // plan itself carries is not touched by this.
+    const packs = (row.app_packs ?? []).map((p) => ({
+      slug: p.slug,
+      features: p.features,
+      install: p.install ?? null,
+    }));
+    const { granted, withheld } = splitAppPacks(packs);
+    if (Object.keys(granted).length > 0) planFeatures = { ...planFeatures, ...granted };
     return {
       orgId,
       planSlug: row.plan_slug,
@@ -231,6 +244,7 @@ export class PlanEntitlementService {
         all: (row.platform_owned ?? false) || !row.plan_found,
         appIds: new Set(visibleIds),
       },
+      appWithheld: withheld,
     };
   }
 
@@ -291,16 +305,7 @@ export class PlanEntitlementService {
   /** Throws the plan-locked problem (422 PLAN_FEATURE_LOCKED) when the flag is off. */
   async assertFeature(orgId: number, key: PlanFeatureKey, message?: string): Promise<void> {
     if (await this.featureEnabled(orgId, key)) return;
-    throw new AppError(
-      ERROR_CODES.PLAN_FEATURE_LOCKED,
-      message ?? "This feature isn't available on your current plan. Upgrade to unlock it.",
-      HttpStatus.UNPROCESSABLE_ENTITY,
-      [
-        { path: 'feature', message: key },
-        { path: 'reason', message: 'feature_disabled' },
-        { path: 'upgradeUrl', message: PLAN_UPGRADE_PATH },
-      ],
-    );
+    throw featureLocked(await this.forOrg(orgId), key, message);
   }
 
   /**
@@ -326,6 +331,44 @@ export class PlanEntitlementService {
 }
 
 // --- pure resolution (exported for unit tests) ----------------------------------------------------------------
+
+/**
+ * The 422 PLAN_FEATURE_LOCKED problem for a closed feature. When the workspace subscribed to the app that grants it but has not installed
+ * it (or it is paused), the reason is `app_not_installed` / `app_paused` and the problem names the app and where to install it, so the
+ * person is not sent to upgrade a plan for something they already paid for. The code stays the same for every client.
+ */
+export function featureLocked(
+  e: Entitlements | null,
+  key: PlanFeatureKey,
+  message?: string,
+): AppError {
+  const held = e?.appWithheld[key];
+  if (held) {
+    return new AppError(
+      ERROR_CODES.PLAN_FEATURE_LOCKED,
+      held.installed
+        ? 'This app is paused in your workspace. Resume it from the Marketplace to use it.'
+        : 'Install this app from the Marketplace to use it. Your subscription is active.',
+      HttpStatus.UNPROCESSABLE_ENTITY,
+      [
+        { path: 'feature', message: key },
+        { path: 'reason', message: held.installed ? 'app_paused' : 'app_not_installed' },
+        { path: 'app', message: held.slug },
+        { path: 'installUrl', message: `/marketplace/app/${held.slug}` },
+      ],
+    );
+  }
+  return new AppError(
+    ERROR_CODES.PLAN_FEATURE_LOCKED,
+    message ?? "This feature isn't available on your current plan. Upgrade to unlock it.",
+    HttpStatus.UNPROCESSABLE_ENTITY,
+    [
+      { path: 'feature', message: key },
+      { path: 'reason', message: 'feature_disabled' },
+      { path: 'upgradeUrl', message: PLAN_UPGRADE_PATH },
+    ],
+  );
+}
 
 export function resolveFeature(e: Entitlements, key: PlanFeatureKey): boolean {
   if (e.platformOwned) return true;

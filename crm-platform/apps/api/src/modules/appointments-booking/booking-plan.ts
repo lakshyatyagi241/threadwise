@@ -1,14 +1,10 @@
 import { CanActivate, HttpStatus, Injectable } from '@nestjs/common';
-import {
-  ERROR_CODES,
-  PLAN_UPGRADE_PATH,
-  type PlanFeatureKey,
-  type PlanLimitKey,
-} from '@crm/contracts';
+import { ERROR_CODES, type PlanFeatureKey, type PlanLimitKey } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import {
   PlanEntitlementService,
+  featureLocked,
   resolveFeature,
   type Entitlements,
 } from '../plans-subscriptions-trials';
@@ -37,18 +33,17 @@ export class AppointmentPlan {
     return appointmentsEnabled(await this.entitlements.forOrg(orgId));
   }
 
-  /** 422 PLAN_FEATURE_LOCKED when the plan has no appointment booking. Reads are refused too (D-01). */
+  /**
+   * 422 PLAN_FEATURE_LOCKED when the plan has no appointment booking, or the Appointments app is subscribed but not installed
+   * (reason `app_not_installed`). Reads are refused too (D-01).
+   */
   async assertEnabled(orgId: number): Promise<void> {
-    if (await this.isEnabled(orgId)) return;
-    throw new AppError(
-      ERROR_CODES.PLAN_FEATURE_LOCKED,
+    const e = await this.entitlements.forOrg(orgId);
+    if (appointmentsEnabled(e)) return;
+    throw featureLocked(
+      e,
+      APPOINTMENT_FEATURE,
       "Your plan doesn't include appointment booking. Upgrade to unlock it.",
-      HttpStatus.UNPROCESSABLE_ENTITY,
-      [
-        { path: 'feature', message: APPOINTMENT_FEATURE },
-        { path: 'reason', message: 'feature_disabled' },
-        { path: 'upgradeUrl', message: PLAN_UPGRADE_PATH },
-      ],
     );
   }
 
