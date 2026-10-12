@@ -4,8 +4,8 @@ import { Text } from '@/components/ui/text';
 import { MIN_TOUCH_TARGET, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 
-/** The width of one icon button when the six share a line with the name. */
-const COMPACT_WIDTH = 33;
+/** The width of one icon button when the shortcuts share a line with the name: a full finger wide. */
+const COMPACT_WIDTH = MIN_TOUCH_TARGET;
 
 export interface ContactAction {
   key: string;
@@ -45,7 +45,7 @@ export function ContactActions({ actions, compact, describe }: Props) {
         >
           {compact ? (
             <View style={styles.inline}>
-              <Icon name={a.icon} size={19} color="primary" />
+              <Icon name={a.icon} size={22} color="primary" />
             </View>
           ) : (
             <>
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  // In a list row the six icons share the line with the name: each is as tall as a finger needs, and narrow so all six fit.
+  // In a list row the icons share the line with the name: each is as wide and as tall as a finger needs.
   rowCompact: { flexDirection: 'row', alignItems: 'center' },
   itemCompact: {
     width: COMPACT_WIDTH,

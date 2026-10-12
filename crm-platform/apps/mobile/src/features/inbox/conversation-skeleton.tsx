@@ -33,8 +33,8 @@ export function ConversationSkeleton() {
 const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
-    gap: spacing.md,
-    paddingVertical: 10,
+    gap: spacing.lg,
+    paddingVertical: 12,
     paddingHorizontal: spacing.md,
   },
   avatar: { width: 40, height: 40, borderRadius: 20 },

@@ -108,6 +108,9 @@ export function InboxScreen() {
         data={rows}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <ConversationRow item={item} now={now} />}
+        ItemSeparatorComponent={() => (
+          <View style={[styles.divider, { backgroundColor: colors.border }]} />
+        )}
         onEndReached={loadMore}
         onEndReachedThreshold={0.5}
         initialNumToRender={12}
@@ -144,7 +147,7 @@ export function InboxScreen() {
   };
 
   return (
-    <View style={[styles.screen, { backgroundColor: colors.background }]}>
+    <View style={[styles.screen, { backgroundColor: colors.surface }]}>
       <ScreenHeader
         actions={
           <>
@@ -209,6 +212,7 @@ export function InboxScreen() {
 const styles = StyleSheet.create({
   screen: { flex: 1 },
   pad: { padding: spacing.lg },
+  divider: { height: StyleSheet.hairlineWidth },
   search: { paddingHorizontal: spacing.lg, paddingVertical: spacing.sm },
   footer: { paddingVertical: spacing.lg },
   center: { textAlign: 'center' },

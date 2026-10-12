@@ -37,8 +37,13 @@ export const listContacts = (params: ContactListParams, signal?: AbortSignal) =>
 export const getContact = (id: string, signal?: AbortSignal) =>
   apiFetch(`/v2/contacts/${id}`, { schema: contactResponseSchema, signal });
 
-/** What the create form sends: the contract's input without the custom fields, which the app does not edit yet. */
-export type NewContact = Omit<CreateContactInput, 'customFields'>;
+/**
+ * What the create form sends: the contract's input, with `customFields` only for the properties the workspace requires (the app
+ * does not edit the others yet), and left out when there are none.
+ */
+export type NewContact = Omit<CreateContactInput, 'customFields'> & {
+  customFields?: Record<string, unknown>;
+};
 
 /**
  * Creates a contact. When the email or phone already belongs to a contact, the API answers with that one instead, so the caller

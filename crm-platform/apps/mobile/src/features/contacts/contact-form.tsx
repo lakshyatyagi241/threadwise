@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View, StyleSheet } from 'react-native';
 import { Banner } from '@/components/ui/banner';
@@ -17,6 +17,10 @@ interface Props {
   serverErrors?: Partial<Record<ContactField, string>>;
   onSubmit: (values: ContactFormValues) => void;
   onCancel?: () => void;
+  /** More inputs under the email (the workspace's required properties on a new contact). */
+  extra?: ReactNode;
+  /** Checks what `extra` holds when Save is pressed; false keeps the form from being sent. Runs even when the fields above are wrong, so every problem shows at once. */
+  beforeSubmit?: () => boolean;
 }
 
 export const EMPTY_CONTACT: ContactFormValues = { name: '', phone: '', email: '' };
@@ -33,6 +37,8 @@ export function ContactForm({
   serverErrors,
   onSubmit,
   onCancel,
+  extra,
+  beforeSubmit,
 }: Props) {
   const { t } = useTranslation();
   const [values, setValues] = useState(initial);
@@ -55,7 +61,8 @@ export function ContactForm({
       messages[field] = t(key);
     }
     setChecked(messages);
-    if (Object.keys(messages).length === 0) onSubmit(values);
+    const extraOk = beforeSubmit ? beforeSubmit() : true;
+    if (Object.keys(messages).length === 0 && extraOk) onSubmit(values);
   };
 
   const error = (field: ContactField) => checked[field] ?? serverErrors?.[field];
@@ -105,6 +112,7 @@ export function ContactForm({
         returnKeyType="done"
         onSubmitEditing={submit}
       />
+      {extra}
       <Button label={submitLabel} loading={pending} onPress={submit} />
       {onCancel ? (
         <Button variant="link" label={t('contacts.cancel')} disabled={pending} onPress={onCancel} />

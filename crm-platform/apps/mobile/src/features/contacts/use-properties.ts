@@ -7,6 +7,7 @@ import { isApiError } from '@/lib/api';
 import { messageForError } from '@/lib/api/error-message';
 import {
   listAssignees,
+  listContactFieldDependencies,
   listContactFields,
   listContactStatusOptions,
   listFieldOptions,
@@ -35,6 +36,17 @@ export const useContactFields = (enabled: boolean) =>
   useQuery({
     queryKey: fieldsKey,
     queryFn: ({ signal }) => listContactFields(signal),
+    enabled,
+    staleTime: FIVE_MINUTES,
+  });
+
+export const dependenciesKey = ['fields', 'dependencies', 'contacts'] as const;
+
+/** Which properties depend on which. No request when `enabled` is false (the person may not read properties). */
+export const useContactFieldDependencies = (enabled: boolean) =>
+  useQuery({
+    queryKey: dependenciesKey,
+    queryFn: ({ signal }) => listContactFieldDependencies(signal),
     enabled,
     staleTime: FIVE_MINUTES,
   });

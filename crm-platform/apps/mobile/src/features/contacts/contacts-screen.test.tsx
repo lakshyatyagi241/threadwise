@@ -475,48 +475,35 @@ describe('ContactsScreen', () => {
   });
 
   describe('the shortcuts on a row', () => {
-    it('shows the six shortcuts under every contact, each named after the contact', async () => {
+    it('shows only call and chat beside every contact, each named after the contact', async () => {
       sessionCall.mockResolvedValue(sessionRow);
       await show();
       await screen.findByRole('button', { name: 'Aarav Sharma' });
-      for (const action of ['Call', 'Chat', 'Email', 'SMS', 'Tasks', 'Notes']) {
+      for (const action of ['Call', 'Chat']) {
         expect(screen.getByRole('button', { name: `${action} Aarav Sharma` })).toBeTruthy();
+      }
+      for (const action of ['Email', 'SMS', 'Tasks', 'Notes']) {
+        expect(screen.queryByRole('button', { name: `${action} Aarav Sharma` })).toBeNull();
       }
     });
 
-    it('hands call, mail and text over to the phone', async () => {
+    it('hands the call over to the phone', async () => {
       sessionCall.mockResolvedValue(sessionRow);
       await show();
       await fireEvent.press(await screen.findByRole('button', { name: 'Call Aarav Sharma' }));
       expect(Linking.openURL).toHaveBeenCalledWith(`tel:${aarav.phone}`);
-      await fireEvent.press(screen.getByRole('button', { name: 'Email Aarav Sharma' }));
-      expect(Linking.openURL).toHaveBeenCalledWith(`mailto:${aarav.email}`);
-      await fireEvent.press(screen.getByRole('button', { name: 'SMS Aarav Sharma' }));
-      expect(Linking.openURL).toHaveBeenCalledWith(`sms:${aarav.phone}`);
     });
 
-    it('fades what a contact does not have: no email, no call', async () => {
+    it('fades call and chat for a contact with no number', async () => {
       sessionCall.mockResolvedValue(sessionRow);
       await show();
-      const email = await screen.findByRole('button', { name: 'Email +919800000002' });
-      expect(email.props.accessibilityState.disabled).toBe(true);
-      const call = screen.getByRole('button', { name: 'Call +919800000002' });
-      expect(call.props.accessibilityState.disabled).toBeFalsy();
-    });
-
-    it('opens the notes and the tasks of that contact', async () => {
-      sessionCall.mockResolvedValue(sessionRow);
-      await show();
-      await fireEvent.press(await screen.findByRole('button', { name: 'Notes Aarav Sharma' }));
-      expect(router.push).toHaveBeenCalledWith({
-        pathname: '/contact-notes',
-        params: { contactId: aarav.id },
-      });
-      await fireEvent.press(screen.getByRole('button', { name: 'Tasks Aarav Sharma' }));
-      expect(router.push).toHaveBeenCalledWith({
-        pathname: '/tasks',
-        params: { contactId: aarav.id },
-      });
+      const call = await screen.findByRole('button', { name: 'Call Meera Iyer' });
+      expect(call.props.accessibilityState.disabled).toBe(true);
+      expect(
+        screen.getByRole('button', { name: 'Chat Meera Iyer' }).props.accessibilityState.disabled,
+      ).toBe(true);
+      const dialable = screen.getByRole('button', { name: 'Call +919800000002' });
+      expect(dialable.props.accessibilityState.disabled).toBeFalsy();
     });
 
     it('opens the chat that exists, and says so under the row when there is none', async () => {
@@ -534,14 +521,10 @@ describe('ContactsScreen', () => {
       expect(await screen.findByText(/no conversation with this contact yet/)).toBeTruthy();
     });
 
-    it('does not offer chat or tasks to a person who may not use them', async () => {
+    it('does not offer chat to a person who may not use it', async () => {
       await show();
       const chat = await screen.findByRole('button', { name: 'Chat Aarav Sharma' });
       expect(chat.props.accessibilityState.disabled).toBe(true);
-      expect(
-        screen.getByRole('button', { name: 'Tasks Aarav Sharma' }).props.accessibilityState
-          .disabled,
-      ).toBe(true);
     });
 
     it('still opens the contact from the name, not from an icon', async () => {
@@ -550,6 +533,28 @@ describe('ContactsScreen', () => {
       expect(router.push).toHaveBeenCalledWith({
         pathname: '/contact/[id]',
         params: { id: aarav.id },
+      });
+    });
+
+    it('keeps mail, text, tasks and notes in the three dots', async () => {
+      sessionCall.mockResolvedValue(sessionRow);
+      await show();
+      await fireEvent.press(
+        await screen.findByRole('button', { name: 'More actions for Aarav Sharma' }),
+      );
+      await fireEvent.press(await screen.findByRole('button', { name: 'Email' }));
+      expect(Linking.openURL).toHaveBeenCalledWith(`mailto:${aarav.email}`);
+      await fireEvent.press(screen.getByRole('button', { name: 'SMS' }));
+      expect(Linking.openURL).toHaveBeenCalledWith(`sms:${aarav.phone}`);
+      await fireEvent.press(screen.getByRole('button', { name: 'Tasks' }));
+      expect(router.push).toHaveBeenCalledWith({
+        pathname: '/tasks',
+        params: { contactId: aarav.id },
+      });
+      await fireEvent.press(screen.getByRole('button', { name: 'Notes' }));
+      expect(router.push).toHaveBeenCalledWith({
+        pathname: '/contact-notes',
+        params: { contactId: aarav.id },
       });
     });
   });

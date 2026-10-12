@@ -1,6 +1,7 @@
 import {
   assigneeResponseSchema,
   bulkResultSchema,
+  fieldDependencyResponseSchema,
   fieldOptionResponseSchema,
   fieldResponseSchema,
   pageResponseSchema,
@@ -57,6 +58,16 @@ export const listContactFields = (signal?: AbortSignal) =>
     fieldPageSchema,
     signal,
   );
+
+const dependencyListSchema = z.array(fieldDependencyResponseSchema);
+
+/** Which property shows (and is asked for) only when another one holds a value: the rule a new contact's required properties follow. */
+export const listContactFieldDependencies = (signal?: AbortSignal) =>
+  apiFetch('/v2/fields/dependencies', {
+    query: { moduleKey: 'contacts' },
+    schema: dependencyListSchema,
+    signal,
+  });
 
 const optionListSchema = z.array(fieldOptionResponseSchema);
 

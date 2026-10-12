@@ -5,16 +5,13 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Avatar } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
+import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { MIN_TOUCH_TARGET, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
-import { Pill } from './pill';
+import { ChannelBadge } from './channel-badge';
 import { STATUS_TONE } from './status';
 import { formatConversationTime } from './time';
-
-/** Who has the conversation: the person, else the team, else the AI agent; null when nobody does. */
-export const assigneeName = (item: ConversationSummary): string | null =>
-  item.assignment.user?.name ?? item.assignment.team?.name ?? item.assignment.aiAgent?.name ?? null;
 
 interface Props {
   item: ConversationSummary;
@@ -22,14 +19,19 @@ interface Props {
   now: Date;
 }
 
-/** One conversation in the list. The whole row opens the thread. */
+/**
+ * One conversation in the list, on two lines: the avatar (with the mark of its channel on the corner), the name and the time, then
+ * the last message. A thread that is not open also says so, and an unread one has a dot and a bolder name. The whole row opens
+ * the thread.
+ */
 export const ConversationRow = memo(function ConversationRow({ item, now }: Props) {
   const { t } = useTranslation();
   const { colors } = useTheme();
   const router = useRouter();
   const unread = item.unreadCount > 0;
-  const preview = item.preview ?? t('inbox.row.noMessages');
-  const assignee = assigneeName(item);
+  // A message with no words (a photo, a file) has no preview; the thread still has something in it.
+  const media = item.preview === null && item.lastMessageAt !== null;
+  const preview = item.preview ?? (media ? t('inbox.row.media') : t('inbox.row.noMessages'));
   const label = unread
     ? t('inbox.row.labelUnread', {
         title: item.title,
@@ -43,12 +45,18 @@ export const ConversationRow = memo(function ConversationRow({ item, now }: Prop
       accessibilityRole="button"
       accessibilityLabel={label}
       onPress={() => router.push({ pathname: '/conversation/[id]', params: { id: item.id } })}
-      style={({ pressed }) => [styles.row, pressed && { backgroundColor: colors.surfaceMuted }]}
+      style={({ pressed }) => [
+        styles.row,
+        { backgroundColor: pressed ? colors.surfaceMuted : colors.surface },
+      ]}
     >
-      <Avatar name={item.title} seed={item.id} size={40} />
+      <View>
+        <Avatar name={item.title} seed={item.id} size={40} />
+        <ChannelBadge kind={item.channel.kind} ring="surface" />
+      </View>
       <View style={styles.body}>
         <View style={styles.line}>
-          <Text variant="subheading" numberOfLines={1} style={styles.grow}>
+          <Text variant="body" numberOfLines={1} style={[styles.grow, unread && styles.unreadName]}>
             {item.title}
           </Text>
           <Text variant="caption" color={unread ? 'success' : 'textMuted'}>
@@ -56,18 +64,15 @@ export const ConversationRow = memo(function ConversationRow({ item, now }: Prop
           </Text>
         </View>
         <View style={styles.line}>
+          {media ? <Icon name="attach" size={16} color="textMuted" /> : null}
           <Text variant="body" muted numberOfLines={1} style={styles.grow}>
             {preview}
           </Text>
-          {unread ? (
-            <View testID="unread-dot" style={[styles.dot, { backgroundColor: colors.success }]} />
-          ) : null}
-        </View>
-        <View style={styles.pills}>
-          {assignee ? <Pill label={assignee} icon="person-outline" /> : null}
-          <Pill label={item.channel.name} />
           {item.status !== 'open' ? (
             <Badge label={t(`inbox.status.${item.status}`)} tone={STATUS_TONE[item.status]} />
+          ) : null}
+          {unread ? (
+            <View testID="unread-dot" style={[styles.dot, { backgroundColor: colors.success }]} />
           ) : null}
         </View>
       </View>
@@ -79,13 +84,14 @@ const styles = StyleSheet.create({
   row: {
     minHeight: MIN_TOUCH_TARGET,
     flexDirection: 'row',
-    gap: spacing.md,
+    alignItems: 'center',
+    gap: spacing.lg,
     paddingVertical: 10,
     paddingHorizontal: spacing.md,
   },
-  body: { flex: 1, gap: 2 },
+  body: { flex: 1 },
   line: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   grow: { flex: 1 },
+  unreadName: { fontWeight: '700' },
   dot: { width: 8, height: 8, borderRadius: 4 },
-  pills: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: spacing.xs },
 });

@@ -35,6 +35,9 @@ const meera = summary({
   lastMessageAt: null,
 });
 
+/** The channel mark is hidden from screen readers (the row's own label speaks), so a query has to ask for it. */
+const HIDDEN = { includeHiddenElements: true };
+
 let client: QueryClient | undefined;
 async function show() {
   const view = await renderApp(<InboxScreen />);
@@ -59,19 +62,55 @@ afterEach(async () => {
 });
 
 describe('InboxScreen', () => {
-  it('lists the conversations with the unread dot, assignee, channel and status', async () => {
+  it('lists the conversations with the unread dot, a channel mark and the status', async () => {
     await show();
     const row = await screen.findByRole('button', {
       name: 'Rohan Mehta, 2 unread messages, Is my order on its way?',
     });
     expect(row).toBeTruthy();
     expect(screen.getAllByTestId('unread-dot')).toHaveLength(1);
-    expect(screen.getByText('Asha Verma')).toBeTruthy();
-    expect(screen.getAllByText('Support line')).toHaveLength(2);
+    expect(screen.getAllByTestId('channel-badge', HIDDEN)).toHaveLength(2);
     // The second row has no message yet and is pending.
     expect(screen.getByRole('button', { name: 'Meera Joshi, No messages yet' })).toBeTruthy();
     expect(screen.getByText('Pending')).toBeTruthy();
     expect(screen.getByText('No more conversations')).toBeTruthy();
+  });
+
+  it('keeps the row to two lines: the assignee and the channel name are not written out', async () => {
+    await show();
+    await screen.findByText('Rohan Mehta');
+    expect(screen.queryByText('Asha Verma')).toBeNull();
+    expect(screen.queryByText('Support line')).toBeNull();
+  });
+
+  it('marks every conversation with its channel, even a kind the app does not know', async () => {
+    const channel = (kind: string) => ({ id: rohan.channel.id, kind, name: kind });
+    listCall.mockResolvedValue(
+      list([
+        summary({ id: 'a0000000-0000-4000-8000-000000000001', channel: channel('webchat') }),
+        summary({ id: 'a0000000-0000-4000-8000-000000000002', channel: channel('instagram') }),
+        summary({ id: 'a0000000-0000-4000-8000-000000000003', channel: channel('carrier_pigeon') }),
+      ]),
+    );
+    await show();
+    await screen.findAllByText('Rohan Mehta');
+    expect(screen.getAllByTestId('channel-badge', HIDDEN)).toHaveLength(3);
+  });
+
+  it('says Media for a message with no words, and not "No messages yet"', async () => {
+    listCall.mockResolvedValue(
+      list([
+        summary({
+          id: 'b0000000-0000-4000-8000-000000000001',
+          title: 'Photo sender',
+          preview: null,
+        }),
+      ]),
+    );
+    await show();
+    expect(await screen.findByRole('button', { name: 'Photo sender, Media' })).toBeTruthy();
+    expect(screen.getByText('Media')).toBeTruthy();
+    expect(screen.queryByText('No messages yet')).toBeNull();
   });
 
   it('shows 20 placeholder rows while the first page loads', async () => {

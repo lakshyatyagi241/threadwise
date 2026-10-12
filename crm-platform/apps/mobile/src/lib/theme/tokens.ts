@@ -5,7 +5,7 @@
  * Reading guide: `border` is for dividers, `borderStrong` for the edge of a control (a field, a checkbox: 3:1 against the page, as
  * WCAG asks of anything a person must find to use), `brand*` colours are the deep band behind the logo on the sign-in and sign-up screens, `*Soft` colours are the
  * quiet backgrounds of banners, badges and selected rows (always paired with the strong colour of the same name for the text on them),
- * `success` is a change for the better, a connected thing or a finished job, `instagram` is that channel's accent, `chartSent` and `chartDelivered` are two blues far enough apart in lightness to tell apart side by side (3:1 against the card).
+ * `success` is a change for the better, a connected thing or a finished job, `instagram` and `whatsapp` are those channels' accents, `chartSent` and `chartDelivered` are two blues far enough apart in lightness to tell apart side by side (3:1 against the card).
  */
 export const palette = {
   light: {
@@ -33,6 +33,7 @@ export const palette = {
     successSoft: '#E4F4EA',
     instagram: '#A82A74',
     instagramSoft: '#FBE8F2',
+    whatsapp: '#1FA855',
     chartSent: '#1A56DB',
     chartDelivered: '#5B93F0',
     focus: '#1A73E8',
@@ -63,6 +64,7 @@ export const palette = {
     successSoft: '#16301F',
     instagram: '#F06AB0',
     instagramSoft: '#3A1A2B',
+    whatsapp: '#4CD98A',
     chartSent: '#6C9CFF',
     chartDelivered: '#B5D0FF',
     focus: '#8AB4F8',

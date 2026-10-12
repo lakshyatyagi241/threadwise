@@ -425,7 +425,8 @@
       "unread_other": "{{count}} unread messages",
       "label": "{{title}}, {{preview}}",
       "labelUnread": "{{title}}, {{unread}}, {{preview}}",
-      "assignedTo": "Assigned to {{name}}"
+      "assignedTo": "Assigned to {{name}}",
+      "media": "Media"
     },
     "time": {
       "am": "AM",
@@ -558,7 +559,12 @@
     },
     "new": {
       "title": "New contact",
-      "save": "Save contact"
+      "save": "Save contact",
+      "requiredTitle": "Required details",
+      "choose": "Choose",
+      "search": "Search",
+      "unsupported": "{{label}} is required, but it can't be filled in here yet. Add this contact on the web.",
+      "requiredMissing": "Your workspace needs more details before a contact can be saved, and this app can't show them. Ask an admin for access to contact properties, or add the contact on the web."
     },
     "edit": {
       "title": "Edit contact",
