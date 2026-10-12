@@ -199,7 +199,8 @@
         "devices": "WhatsApp 번호",
         "broadcasts": "브로드캐스트 및 캠페인",
         "team_chat": "팀 채팅",
-        "whatsapp_groups": "WhatsApp 그룹"
+        "whatsapp_groups": "WhatsApp 그룹",
+        "billing": "결제 및 구독"
       },
       "types": {
         "new_chat": {
@@ -321,6 +322,14 @@
         "form_payment_duplicate": {
           "label": "양식 중복 결제",
           "hint": "방문자가 두 번 결제했으며 추가 결제분은 환불이 필요합니다."
+        },
+        "billing_payment_failed": {
+          "label": "구독 결제 실패",
+          "hint": "갱신 결제가 완료되지 않았습니다. 확인이 필요합니다."
+        },
+        "billing_subscription_canceled": {
+          "label": "구독 취소됨",
+          "hint": "결제 제공업체가 이 워크스페이스의 구독을 종료했습니다."
         }
       },
       "loading": "환경설정을 불러오는 중",

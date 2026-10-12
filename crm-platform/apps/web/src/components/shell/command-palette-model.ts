@@ -31,6 +31,7 @@ const KEYWORDS: Record<string, string> = {
   plans: 'pricing upgrade billing subscription',
   wallet: 'balance credits top up',
   'billing-orders': 'orders invoices receipts payments history',
+  'billing-subscriptions': 'subscription renew cancel autopay razorpay failed payment charges',
 };
 
 /**

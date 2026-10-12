@@ -315,6 +315,11 @@
         "description": "Exportez le journal de livraison de vos messages, jusqu'à un an en arrière, sous forme de fichier envoyé à votre e-mail.",
         "keywords": "exporter, journal de livraison, historique, archive, csv, messages"
       },
+      "billing-subscriptions": {
+        "label": "Abonnements",
+        "description": "Ce qui se renouvelle, jusqu'à quand c'est payé, et résiliation.",
+        "keywords": "abonnement, renouvellement, renouvellement automatique, résilier, prélèvement automatique, paiement échoué, paiements"
+      },
       "web": {
         "label": "Chat du site web",
         "description": "Les bots conçus pour le chat de votre site web et le widget dans lequel chacun s’exécute.",

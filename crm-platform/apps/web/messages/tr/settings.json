@@ -315,6 +315,11 @@
         "description": "Mesajlarınızın teslimat günlüğünü bir yıla kadar geriye dönük olarak e-postanıza gönderilen bir dosya şeklinde dışa aktarın.",
         "keywords": "dışa aktarma, teslimat günlüğü, geçmiş, arşiv, csv, mesajlar"
       },
+      "billing-subscriptions": {
+        "label": "Abonelikler",
+        "description": "Nelerin yenilendiği, ne zamana kadar ödendiği ve iptal.",
+        "keywords": "abonelik, yenileme, otomatik yenileme, iptal, otomatik ödeme, başarısız ödeme, tahsilatlar"
+      },
       "web": {
         "label": "Web sitesi sohbeti",
         "description": "Web sitenizin sohbeti için oluşturulan botlar ve her birinin çalıştığı widget.",

@@ -476,3 +476,128 @@ export const saveBillingSettingsRequestSchema = billingSettingsSchema.extend({
 export type SaveBillingSettingsRequest = z.infer<typeof saveBillingSettingsRequestSchema>;
 
 export const INVOICE_LOGO_MAX_KB = 1024;
+
+// ---- subscriptions across workspaces, and refunds -----------------------------------------------------------------------
+
+export const ADMIN_SUBSCRIPTION_STATUSES = [
+  'pending',
+  'active',
+  'past_due',
+  'canceled',
+  'expired',
+] as const;
+
+export const adminSubscriptionsQuerySchema = z.object({
+  status: z.enum(['all', ...ADMIN_SUBSCRIPTION_STATUSES]).default('all'),
+  kind: z.enum(['all', 'plan', 'addon']).default('all'),
+  gateway: z.string().trim().max(60).optional(),
+  /** The workspace's name or slug, or the provider's subscription id. */
+  q: searchSchema,
+  page: pageSchema,
+});
+export type AdminSubscriptionsQuery = z.infer<typeof adminSubscriptionsQuerySchema>;
+
+export const adminSubscriptionRowSchema = z.object({
+  id: uuidSchema,
+  workspace: adminWorkspaceRefSchema,
+  kind: z.enum(['plan', 'addon']),
+  name: z.string(),
+  status: z.enum(ADMIN_SUBSCRIPTION_STATUSES),
+  gateway: z.string(),
+  gatewaySubscriptionId: z.string().nullable(),
+  currency: z.string(),
+  amount: z.string(),
+  billingCycle: z.enum(['monthly', 'yearly']),
+  currentPeriodEnd: z.string().datetime().nullable(),
+  renewalsCount: z.number().int().nonnegative(),
+  canceledAt: z.string().datetime().nullable(),
+  /** The last attempt to cancel at the provider failed or was not possible: finish it in the provider's dashboard. */
+  cancelFailed: z.boolean(),
+  createdAt: z.string().datetime(),
+});
+export type AdminSubscriptionRow = z.infer<typeof adminSubscriptionRowSchema>;
+
+export const adminSubscriptionsResponseSchema = adminPagedSchema.extend({
+  data: z.array(adminSubscriptionRowSchema),
+  kpis: z.object({
+    active: z.number().int(),
+    pastDue: z.number().int(),
+    canceled: z.number().int(),
+  }),
+});
+export type AdminSubscriptionsResponse = z.infer<typeof adminSubscriptionsResponseSchema>;
+
+export const adminCancelSubscriptionRequestSchema = z.object({
+  /** true (default): the paid cycle runs out and no further charge is made. false: end it now. */
+  atCycleEnd: z.boolean().default(true),
+});
+export type AdminCancelSubscriptionRequest = z.infer<typeof adminCancelSubscriptionRequestSchema>;
+
+export const adminCancelSubscriptionResponseSchema = z.object({
+  /** `ok`, `failed` (the local row is cancelled anyway: finish it at the provider) or `unsupported`. */
+  remote: z.enum(['ok', 'failed', 'unsupported']),
+  alreadyEnded: z.boolean(),
+});
+export type AdminCancelSubscriptionResponse = z.infer<typeof adminCancelSubscriptionResponseSchema>;
+
+export const REFUND_STATUSES = ['pending', 'processed', 'failed'] as const;
+
+/** Refund one paid order (a one-time payment). The amount is in minor units as text; omitted = the rest of what was paid. */
+export const refundRequestSchema = z.object({
+  amountMinor: z
+    .string()
+    .regex(/^[1-9][0-9]{0,14}$/, 'a whole number of minor units')
+    .optional(),
+  reason: z.string().trim().min(3).max(250),
+});
+export type RefundRequest = z.infer<typeof refundRequestSchema>;
+
+/** Refund one charge of a subscription: `paymentId` is the provider's id from the subscription's charge list. */
+export const subscriptionRefundRequestSchema = refundRequestSchema.extend({
+  paymentId: z
+    .string()
+    .trim()
+    .min(3)
+    .max(64)
+    .regex(/^[A-Za-z0-9_]+$/),
+  /** Also end the subscription now, so the refunded plan is not charged again. */
+  endSubscription: z.boolean().default(false),
+});
+export type SubscriptionRefundRequest = z.infer<typeof subscriptionRefundRequestSchema>;
+
+export const refundResponseSchema = z.object({
+  id: uuidSchema,
+  status: z.enum(REFUND_STATUSES),
+  amountMinor: z.string(),
+  currency: z.string(),
+  gatewayRefundId: z.string().nullable(),
+  /** Why the provider refused, when it did. */
+  failure: z.string().nullable(),
+});
+export type RefundResponse = z.infer<typeof refundResponseSchema>;
+
+export const refundListResponseSchema = z.object({
+  data: z.array(
+    refundResponseSchema.extend({ reason: z.string(), createdAt: z.string().datetime() }),
+  ),
+});
+export type RefundListResponse = z.infer<typeof refundListResponseSchema>;
+
+/** One charge the provider made for a subscription (the operator picks one to refund). */
+export const adminSubscriptionChargeSchema = z.object({
+  id: z.string(),
+  paymentId: z.string().nullable(),
+  amountMinor: z.string(),
+  currency: z.string(),
+  status: z.enum(['paid', 'issued', 'failed', 'cancelled', 'expired', 'other']),
+  paidAt: z.string().datetime().nullable(),
+  receiptUrl: z.string().url().nullable(),
+});
+export type AdminSubscriptionCharge = z.infer<typeof adminSubscriptionChargeSchema>;
+
+export const adminSubscriptionChargesResponseSchema = z.object({
+  data: z.array(adminSubscriptionChargeSchema),
+});
+export type AdminSubscriptionChargesResponse = z.infer<
+  typeof adminSubscriptionChargesResponseSchema
+>;

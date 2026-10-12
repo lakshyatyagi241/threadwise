@@ -93,3 +93,21 @@ export function periodEnd(iso: string, period: 'monthly' | 'yearly' | null): str
   d.setUTCDate(Math.min(day, last));
   return d.toISOString();
 }
+
+/** Minor units of a major-unit amount typed by a person ("12.50" in INR is "1250"); null when it is not a positive amount. */
+export function toMinorUnits(input: string, currency: string): string | null {
+  const text = input.trim().replace(',', '.');
+  if (!/^\d+(\.\d+)?$/.test(text)) return null;
+  let digits = 2;
+  try {
+    digits =
+      new Intl.NumberFormat('en', { style: 'currency', currency }).resolvedOptions()
+        .maximumFractionDigits ?? 2;
+  } catch {
+    // an unknown code: two decimals
+  }
+  const [whole = '0', frac = ''] = text.split('.');
+  if (frac.length > digits) return null;
+  const minor = BigInt(whole + frac.padEnd(digits, '0'));
+  return minor > 0n ? minor.toString() : null;
+}

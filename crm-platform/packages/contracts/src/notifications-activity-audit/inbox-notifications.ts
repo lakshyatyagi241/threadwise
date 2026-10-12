@@ -70,6 +70,8 @@ export const NOTIFICATION_LEGACY_TYPES = [
   'form_needs_review',
   'form_payment',
   'form_payment_duplicate',
+  'billing_payment_failed',
+  'billing_subscription_canceled',
   'sales_doc_decided',
 ] as const;
 

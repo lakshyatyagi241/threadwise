@@ -1,4 +1,8 @@
 import {
+  adminCancelSubscriptionResponseSchema,
+  adminSubscriptionChargesResponseSchema,
+  adminSubscriptionsResponseSchema,
+  refundResponseSchema,
   adminOrdersResponseSchema,
   billingAnalyticsResponseSchema,
   billingHistoryResponseSchema,
@@ -9,6 +13,10 @@ import {
   invoicesResponseSchema,
   orderActionResponseSchema,
   orderAnalyticsResponseSchema,
+  type AdminCancelSubscriptionRequest,
+  type AdminSubscriptionsQuery,
+  type RefundRequest,
+  type SubscriptionRefundRequest,
   type AdminOrdersQuery,
   type BillingAnalyticsQuery,
   type BillingHistoryQuery,
@@ -29,6 +37,8 @@ export const BILLING_KEYS = {
   history: ['operator', 'billing', 'history'] as const,
   historyAnalytics: ['operator', 'billing', 'history-analytics'] as const,
   invoices: ['operator', 'billing', 'invoices'] as const,
+  subscriptions: ['operator', 'billing', 'subscriptions'] as const,
+  subscriptionCharges: (id: string) => ['operator', 'billing', 'subscription-charges', id] as const,
   invoice: (id: string) => ['operator', 'billing', 'invoice', id] as const,
   settings: ['operator', 'billing', 'settings'] as const,
 };
@@ -66,6 +76,41 @@ export const billingApi = {
     operatorFetch(`/billing/orders/${id}/cancel`, {
       method: 'POST',
       schema: orderActionResponseSchema,
+    }),
+
+  subscriptions: (query: Partial<AdminSubscriptionsQuery>, signal?: AbortSignal) =>
+    operatorFetch('/billing/subscriptions', {
+      query: q(query),
+      schema: adminSubscriptionsResponseSchema,
+      signal,
+    }),
+  subscriptionCharges: (id: string, signal?: AbortSignal) =>
+    operatorFetch(`/billing/subscriptions/${id}/charges`, {
+      schema: adminSubscriptionChargesResponseSchema,
+      signal,
+    }),
+  cancelSubscription: (id: string, body: AdminCancelSubscriptionRequest) =>
+    operatorFetch(`/billing/subscriptions/${id}/cancel`, {
+      method: 'POST',
+      body,
+      schema: adminCancelSubscriptionResponseSchema,
+    }),
+  syncSubscription: (id: string) =>
+    operatorFetch(`/billing/subscriptions/${id}/sync`, {
+      method: 'POST',
+      schema: z.object({ outcome: z.string() }).passthrough(),
+    }),
+  refundOrder: (id: string, body: RefundRequest) =>
+    operatorFetch(`/billing/orders/${id}/refund`, {
+      method: 'POST',
+      body,
+      schema: refundResponseSchema,
+    }),
+  refundSubscription: (id: string, body: SubscriptionRefundRequest) =>
+    operatorFetch(`/billing/subscriptions/${id}/refund`, {
+      method: 'POST',
+      body,
+      schema: refundResponseSchema,
     }),
 
   history: (query: Partial<BillingHistoryQuery>, signal?: AbortSignal) =>

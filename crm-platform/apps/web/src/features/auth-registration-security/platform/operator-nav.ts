@@ -207,6 +207,12 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     groupKey: `${BSP}.groups.billing`,
   },
   {
+    id: 'subscriptions',
+    href: '/admin/subscriptions',
+    labelKey: 'platform-payment-gateways.nav.subscriptions',
+    groupKey: `${BSP}.groups.billing`,
+  },
+  {
     id: 'invoices',
     href: '/admin/invoices',
     labelKey: 'platform-payment-gateways.nav.invoices',

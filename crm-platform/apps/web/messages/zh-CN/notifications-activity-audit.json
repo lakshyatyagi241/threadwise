@@ -199,7 +199,8 @@
         "devices": "WhatsApp 号码",
         "broadcasts": "群发与营销活动",
         "team_chat": "团队聊天",
-        "whatsapp_groups": "WhatsApp 群组"
+        "whatsapp_groups": "WhatsApp 群组",
+        "billing": "账单与订阅"
       },
       "types": {
         "new_chat": {
@@ -321,6 +322,14 @@
         "form_payment_duplicate": {
           "label": "表单重复付款",
           "hint": "访客第二次付款，多付的款项需要退款。"
+        },
+        "billing_payment_failed": {
+          "label": "订阅付款失败",
+          "hint": "一笔续订扣款未成功，需要您处理。"
+        },
+        "billing_subscription_canceled": {
+          "label": "订阅已取消",
+          "hint": "您的支付服务商已终止此工作区的一项订阅。"
         }
       },
       "loading": "正在加载你的偏好设置",

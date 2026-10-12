@@ -96,6 +96,8 @@ const LOOK: Record<NotificationPrefType, Look> = {
   sales_doc_decided: look('document', 'info'),
   wallet_low_balance: look('wallet', 'danger'),
   wallet_credited: look('wallet', 'success'),
+  billing_payment_failed: look('wallet', 'danger'),
+  billing_subscription_canceled: look('wallet', 'info'),
   device_connected: look('device_on', 'success', 'device'),
   device_disconnected: look('device_off', 'danger', 'device'),
   device_logged_out: look('device_off', 'danger', 'device'),
