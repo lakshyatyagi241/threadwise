@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@crm/tax": "workspace:*",
-    "zod": "^4.6.5"
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "typescript": "^5.7.3"
