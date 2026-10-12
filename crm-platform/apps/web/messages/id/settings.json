@@ -314,6 +314,11 @@
         "label": "Log pesan",
         "description": "Ekspor log pengiriman pesan Anda, hingga satu tahun ke belakang, sebagai file yang dikirim ke email Anda.",
         "keywords": "ekspor, log pengiriman, riwayat, arsip, csv, pesan"
+      },
+      "web": {
+        "label": "Obrolan situs web",
+        "description": "Bot yang dibuat untuk obrolan situs web Anda dan widget tempat masing-masing berjalan.",
+        "keywords": "web, situs web, widget, chatbot, sematkan, obrolan langsung"
       }
     }
   }

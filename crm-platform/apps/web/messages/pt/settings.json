@@ -314,6 +314,11 @@
         "label": "Registros de mensagens",
         "description": "Exporte o registro de entrega das suas mensagens, até um ano atrás, como um arquivo enviado ao seu e-mail.",
         "keywords": "exportar, registro de entrega, histórico, arquivo, csv, mensagens"
+      },
+      "web": {
+        "label": "Chat do site",
+        "description": "Bots criados para o chat do seu site e o widget em que cada um é executado.",
+        "keywords": "web, site, widget, chatbot, incorporar, chat ao vivo"
       }
     }
   }

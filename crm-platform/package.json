@@ -65,6 +65,7 @@
   "pnpm": {
     "overrides": {
       "multer": ">=2.4.0",
+      "@nestjs/platform-socket.io>socket.io": "^4.8.4",
       "source-map-js@>=1.0.0 <1.2.2": ">=1.2.2",
       "js-yaml@>=5.0.0 <=5.4.0": ">=5.4.1"
     },

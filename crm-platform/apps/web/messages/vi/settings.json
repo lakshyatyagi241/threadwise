@@ -314,6 +314,11 @@
         "label": "Nhật ký tin nhắn",
         "description": "Xuất nhật ký gửi của tin nhắn, lùi tối đa một năm, thành tệp được gửi đến email của bạn.",
         "keywords": "xuất, nhật ký gửi, lịch sử, lưu trữ, csv, tin nhắn"
+      },
+      "web": {
+        "label": "Chat trên website",
+        "description": "Các bot được tạo cho chat trên website của bạn và widget mà mỗi bot chạy trong đó.",
+        "keywords": "web, website, widget, chatbot, nhúng, chat trực tuyến"
       }
     }
   }
