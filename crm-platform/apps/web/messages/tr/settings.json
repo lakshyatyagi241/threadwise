@@ -314,6 +314,11 @@
         "label": "Mesaj günlükleri",
         "description": "Mesajlarınızın teslimat günlüğünü bir yıla kadar geriye dönük olarak e-postanıza gönderilen bir dosya şeklinde dışa aktarın.",
         "keywords": "dışa aktarma, teslimat günlüğü, geçmiş, arşiv, csv, mesajlar"
+      },
+      "web": {
+        "label": "Web sitesi sohbeti",
+        "description": "Web sitenizin sohbeti için oluşturulan botlar ve her birinin çalıştığı widget.",
+        "keywords": "web, web sitesi, widget, chatbot, gömme, canlı sohbet"
       }
     }
   }
