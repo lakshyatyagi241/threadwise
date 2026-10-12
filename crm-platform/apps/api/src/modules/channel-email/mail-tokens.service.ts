@@ -143,7 +143,14 @@ export class MailTokens {
     const expiresAt = new Date(Date.now() + tokens.expiresInSeconds * 1000);
     const sealed = this.crypto.encrypt(tokens.accessToken);
     await this.db.txAs({ orgId, userId: null }, (tx) =>
-      this.repo.saveAccessToken(tx, orgId, mailbox.id, sealed, expiresAt),
+      this.repo.saveAccessToken(
+        tx,
+        orgId,
+        mailbox.id,
+        sealed,
+        expiresAt,
+        tokens.refreshToken ? this.crypto.encrypt(tokens.refreshToken) : null,
+      ),
     );
     return tokens.accessToken;
   }

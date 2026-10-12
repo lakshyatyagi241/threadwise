@@ -71,6 +71,8 @@ export const NOTIFICATION_LEGACY_TYPES = [
   'form_payment',
   'form_payment_duplicate',
   'sales_doc_decided',
+  /** A sent email bounced: it did not reach a recipient (TW-MAIL-032). Told to the person who wrote it. */
+  'email_bounced',
 ] as const;
 
 /** Every type a person can set preferences for. */

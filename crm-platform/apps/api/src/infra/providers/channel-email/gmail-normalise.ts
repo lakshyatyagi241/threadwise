@@ -55,5 +55,6 @@ export function normaliseGmailMessage(
     automated: parsed.automated,
     rawHeaders,
     skip: parsed.skip,
+    report: parsed.report,
   };
 }

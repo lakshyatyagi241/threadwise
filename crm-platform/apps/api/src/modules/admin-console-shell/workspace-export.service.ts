@@ -11,6 +11,7 @@ import {
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
+import { channelOwnerSql } from '../../realtime';
 import { AuthAuditService } from '../auth';
 
 const BATCH = 1_000;
@@ -130,13 +131,14 @@ export class WorkspaceExportService {
                    to_char(c.last_message_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"+00:00"') AS last_message_at,
                    to_char(c.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"+00:00"') AS created_at
               FROM conversations c LEFT JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
-             WHERE c.id > ${after} ORDER BY c.id LIMIT ${BATCH}`)
+             WHERE c.id > ${after} AND ${channelOwnerSql('c')} IS NULL ORDER BY c.id LIMIT ${BATCH}`)
           : await tx.execute(sql`
             SELECT m.id AS cursor, m.uuid::text AS id, c.uuid::text AS conversation_id, m.direction,
                    left(m.body, ${BODY_CHARS}) AS body,
                    to_char(m.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"+00:00"') AS created_at
               FROM messages m JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
-             WHERE m.id > ${after} AND m.deleted_at IS NULL ORDER BY m.id LIMIT ${BATCH}`);
+             WHERE m.id > ${after} AND m.deleted_at IS NULL AND ${channelOwnerSql('c')} IS NULL
+             ORDER BY m.id LIMIT ${BATCH}`);
     return res.rows as unknown as Array<Row & { cursor: number }>;
   }
 }

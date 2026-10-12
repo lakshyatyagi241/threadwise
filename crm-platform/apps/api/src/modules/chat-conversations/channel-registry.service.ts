@@ -12,6 +12,7 @@ import {
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
+import { MemberDirectory, PERM_CONVERSATION_READ, channelVisibleTo } from '../../realtime';
 import { AppError } from '../../common/errors/app-error';
 import type { Env } from '../../config/env.schema';
 import { DatabaseService } from '../../infra/db/database.service';
@@ -72,6 +73,7 @@ export class ChannelRegistryService {
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     private readonly realtime: ChatRealtimePublisher,
+    private readonly directory: MemberDirectory,
     @Inject(WABA_CONNECTIONS) private readonly waba: WabaConnectionsPort,
     @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
     config: ConfigService<Env, true>,
@@ -86,11 +88,15 @@ export class ChannelRegistryService {
     const orgId = RequestContextStore.orgId();
     // Personal-number channels are hidden while the platform switch is off; their rows and conversations stay (owner decision 2026-10-05).
     const unofficialOn = await this.unofficial.isEnabledFor(orgId);
+    const viewer = await this.viewerOf(orgId);
     return this.db.tx(async (tx) => {
       const rows = await this.repo.list(tx, orgId);
+      const owners = await this.repo.owners(tx, orgId);
       const data: ChannelResponse[] = [];
       for (const row of rows) {
         if (!unofficialOn && row.kind === UNOFFICIAL_ENGINE_CHANNEL_KIND) continue;
+        // Someone else's personal mailbox is not in your channel list (TW-MAIL-035).
+        if (!channelVisibleTo(viewer, owners.get(row.id) ?? null)) continue;
         const adapter = this.adapters.find(row.kind);
         if (adapter) data.push(toChannelResponse(row, adapter, this.publicBaseUrl));
       }
@@ -100,10 +106,22 @@ export class ChannelRegistryService {
 
   async get(uuid: string): Promise<ChannelResponse> {
     const orgId = RequestContextStore.orgId();
+    const viewer = await this.viewerOf(orgId);
     return this.db.tx(async (tx) => {
       const row = await this.row(tx, orgId, uuid);
+      if (!channelVisibleTo(viewer, (await this.repo.owners(tx, orgId)).get(row.id) ?? null)) {
+        throw AppError.notFound('Channel', uuid);
+      }
       return toChannelResponse(row, this.adapters.for(row.kind), this.publicBaseUrl);
     });
+  }
+
+  /** The caller as the personal-mailbox rule sees them: a person (own mailbox, admin reading right) or nobody (an API key). */
+  private async viewerOf(orgId: number): Promise<{ userId: number; readsPersonalMail: boolean }> {
+    const userId = RequestContextStore.require().userId;
+    if (!userId) return { userId: -2, readsPersonalMail: false };
+    const viewer = await this.directory.viewer(orgId, userId, PERM_CONVERSATION_READ);
+    return { userId, readsPersonalMail: viewer.readsPersonalMail === true };
   }
 
   /** The row, or a 404 that never says whether the uuid exists in another workspace. */

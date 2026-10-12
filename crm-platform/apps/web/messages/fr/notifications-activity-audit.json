@@ -298,6 +298,10 @@
           "label": "Document de vente tranché",
           "hint": "Un devis ou une facture a été accepté ou refusé."
         },
+        "email_bounced": {
+          "label": "E-mail non remis",
+          "hint": "Un e-mail que vous avez envoyé est revenu ou est retardé."
+        },
         "wallet_credited": {
           "label": "Portefeuille rechargé",
           "hint": "Le portefeuille de l’espace de travail a été crédité."

@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { sql } from 'drizzle-orm';
 import { emailMetaSchema, type EmailMeta } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
 import { DatabaseService } from '../../infra/db/database.service';
@@ -62,6 +63,29 @@ export class EmailMessageAccess {
       messageUuid: found.row.uuid,
       messageCreatedAt: found.row.createdAtText,
     };
+  }
+
+  /**
+   * The internal id of a conversation the actor may see (the composer's upload names the conversation it is for), or null: unknown,
+   * another workspace's, not visible to them, or not an email conversation. Same visibility rule as `readable`.
+   */
+  async conversationReadable(
+    conversationUuid: string,
+    actor?: { orgId: number; userId: number },
+  ): Promise<number | null> {
+    const who = actor ?? this.fromContext();
+    if (!who) return null;
+    const conv = await this.db.txAs({ orgId: who.orgId, userId: who.userId }, async (tx) => {
+      const c = await this.conversations.byUuid(tx, who.orgId, conversationUuid);
+      if (!c) return null;
+      const res = await tx.execute(
+        sql`SELECT kind FROM channels WHERE org_id = ${who.orgId} AND id = ${c.channelId}`,
+      );
+      return (res.rows[0] as { kind?: string } | undefined)?.kind === 'email' ? c : null;
+    });
+    if (!conv) return null;
+    const viewer = await this.directory.viewer(who.orgId, who.userId, PERM_CONVERSATION_READ);
+    return conversationVisible(viewer, conv) ? conv.id : null;
   }
 
   private fromContext(): { orgId: number; userId: number } | null {

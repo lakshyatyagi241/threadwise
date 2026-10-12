@@ -160,6 +160,8 @@ export interface MailOAuthGrant {
 export interface MailOAuthRefreshed {
   accessToken: string;
   expiresInSeconds: number;
+  /** A provider that rotates refresh tokens (Microsoft) answers the new one: the token service stores it in place of the old one. */
+  refreshToken?: string | null;
 }
 
 /** A provider that is connected with the account's own settings and password (IMAP/SMTP). */
@@ -214,6 +216,8 @@ export class MailDriverError extends Error {
       status?: number | null;
       /** The send is refused because the mailbox may no longer send (a missing permission): the hub should say "Reconnect". */
       needsReauth?: boolean;
+      /** How long the provider asked us to wait (`Retry-After`), in seconds. */
+      retryAfterSeconds?: number | null;
     } = {},
   ) {
     super(message);
@@ -232,6 +236,9 @@ export class MailDriverError extends Error {
   }
   get status(): number | null {
     return this.opts.status ?? null;
+  }
+  get retryAfterSeconds(): number | null {
+    return this.opts.retryAfterSeconds ?? null;
   }
   get needsReauth(): boolean {
     return this.opts.needsReauth ?? (this.kind === 'reauth' || this.kind === 'auth_failed');

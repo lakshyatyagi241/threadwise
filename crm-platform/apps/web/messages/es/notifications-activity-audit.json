@@ -298,6 +298,10 @@
           "label": "Documento de venta resuelto",
           "hint": "Se aceptó o rechazó un presupuesto o factura."
         },
+        "email_bounced": {
+          "label": "Correo no entregado",
+          "hint": "Un correo que enviaste rebotó o se retrasó."
+        },
         "wallet_credited": {
           "label": "Monedero recargado",
           "hint": "Se abonó saldo al monedero del espacio de trabajo."

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
 import type { MessageKind, MessageSenderKind, MessageStatus } from '@crm/contracts';
 import type { Tx } from '@crm/db';
+import { channelOwnerSql } from '../../realtime';
 import { STATUS_RANK_SQL, type ReceiptStatusStep } from './message-rules';
 
 /**
@@ -277,14 +278,22 @@ export class MessagesRepository {
     tx: Tx,
     orgId: number,
     key: string,
-  ): Promise<{ assigneeUserId: number | null; assigneeTeamId: number | null } | null> {
+  ): Promise<{
+    assigneeUserId: number | null;
+    assigneeTeamId: number | null;
+    channelOwnerUserId: number | null;
+  } | null> {
     const res = await tx.execute(sql`
-      SELECT c.assignee_user_id, c.assignee_team_id
+      SELECT c.assignee_user_id, c.assignee_team_id, ${channelOwnerSql('c')} AS channel_owner_user_id
       FROM messages m JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
       WHERE m.org_id = ${orgId} AND m.media_key = ${key} LIMIT 1`);
     const r = rowsOf(res)[0];
     return r
-      ? { assigneeUserId: num(r.assignee_user_id), assigneeTeamId: num(r.assignee_team_id) }
+      ? {
+          assigneeUserId: num(r.assignee_user_id),
+          assigneeTeamId: num(r.assignee_team_id),
+          channelOwnerUserId: num(r.channel_owner_user_id),
+        }
       : null;
   }
 
@@ -401,11 +410,13 @@ export class MessagesRepository {
     tx: Tx,
     orgId: number,
     ref: { id: number; createdAt: string },
-    s: { providerMessageId: string; acceptedAt: Date },
+    s: { providerMessageId: string; acceptedAt: Date; meta?: Record<string, unknown> },
   ): Promise<boolean> {
+    // `meta` is what the adapter says really went out (an email's html and attachments): merged over the queued message's own keys.
     const res = await tx.execute(sql`
       UPDATE messages SET status = 'sent', provider_message_id = ${s.providerMessageId}, provider_ts = ${s.acceptedAt}::timestamptz,
         sent_at = ${s.acceptedAt}::timestamptz, failure_code = NULL, failure_reason = NULL
+        ${s.meta ? sql`, meta = meta || ${JSON.stringify(s.meta)}::jsonb` : sql``}
       WHERE org_id = ${orgId} AND id = ${ref.id} AND created_at = ${ref.createdAt}::timestamptz
         AND direction = 'out' AND status = 'queued'
       RETURNING id`);

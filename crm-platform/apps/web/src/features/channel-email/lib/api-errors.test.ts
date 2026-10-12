@@ -10,6 +10,9 @@ describe('mail error codes', () => {
     expect(mailErrorKey(ERROR_CODES.MAIL_MAILBOX_UNAVAILABLE)).toBe('unavailable');
     expect(mailErrorKey(ERROR_CODES.MAIL_SEND_REFUSED)).toBe('sendRefused');
     expect(mailErrorKey(ERROR_CODES.MAIL_WRONG_ACCOUNT)).toBe('wrongAccount');
+    expect(mailErrorKey(ERROR_CODES.MAIL_PERSONAL_DISABLED)).toBe('personalDisabled');
+    expect(mailErrorKey(ERROR_CODES.MAIL_PERSONAL_NOT_ALLOWED)).toBe('personalNotAllowed');
+    expect(mailErrorKey(ERROR_CODES.MAIL_PROVIDER_UNSUPPORTED)).toBe('providerUnsupported');
     expect(mailErrorKey('ROW_VERSION_CONFLICT')).toBe('changed');
   });
 

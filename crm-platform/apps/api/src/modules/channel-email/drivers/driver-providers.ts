@@ -1,6 +1,16 @@
-import { GmailClient, GoogleMailOAuthClient } from '../../../infra/providers/channel-email';
+import {
+  GmailClient,
+  GoogleMailOAuthClient,
+  GraphMailClient,
+  MicrosoftMailOAuthClient,
+} from '../../../infra/providers/channel-email';
 import { GoogleMailDriver } from './google-mail.driver';
+import { ImapMailClient } from '../../../infra/providers/channel-email/imap/imap-mail.client';
+import { SmtpMailClient } from '../../../infra/providers/channel-email/imap/smtp-mail.client';
+import { ImapMailDriver } from './imap-mail.driver';
 import { MailDriverRegistry } from './mail-driver.registry';
+import { MicrosoftMailConfig } from '../microsoft-mail-config.service';
+import { MicrosoftMailDriver } from './microsoft-mail.driver';
 
 /**
  * Every provider the Email channel module registers: each mail driver and the infra clients only it needs. A driver registers itself with
@@ -15,7 +25,14 @@ export const MAIL_DRIVER_PROVIDERS = [
   GmailClient,
   GoogleMailDriver,
 
-  // microsoft (Microsoft 365 / Outlook): TW-MAIL-034 adds its client and driver here
+  // microsoft (Microsoft 365 / Outlook)
+  MicrosoftMailConfig,
+  MicrosoftMailOAuthClient,
+  GraphMailClient,
+  MicrosoftMailDriver,
 
   // imap (any IMAP/SMTP server): TW-MAIL-031 adds its clients and driver here
+  ImapMailClient,
+  SmtpMailClient,
+  ImapMailDriver,
 ];

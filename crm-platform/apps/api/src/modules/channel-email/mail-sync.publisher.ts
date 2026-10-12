@@ -31,7 +31,7 @@ export class MailSyncPublisher {
         {
           jobId,
           attempts: 3,
-          backoff: { type: 'exponential', delay: 15_000 },
+          backoff: { type: 'exponential', delay: 15_000, jitter: 0.5 },
           removeOnComplete: true,
           removeOnFail: true,
         },

@@ -104,4 +104,36 @@ describe('email message in the thread', () => {
     );
     expect(html).toContain('data-testid="email-message"');
   });
+
+  it('says who a bounced mail did not reach, with hard and soft wording', () => {
+    const hard = view(
+      meta({
+        delivery: 'bounced',
+        bounce: { kind: 'hard', reason: 'No such user', failedRecipient: 'nobody@x.io' },
+      }),
+    );
+    expect(hard).toContain('data-testid="email-bounce"');
+    expect(hard).toContain('Not delivered to nobody@x.io.');
+    expect(hard).toContain('Reason: No such user');
+    expect(hard).toContain('refused for good');
+    const soft = view(
+      meta({
+        delivery: 'bounced',
+        bounce: { kind: 'soft', reason: 'Mailbox full', failedRecipient: 'a@x.io' },
+      }),
+    );
+    expect(soft).toContain('looks temporary');
+    expect(view(meta({ delivery: 'sent' }))).not.toContain('email-bounce');
+  });
+
+  it('shows the files an outbound message carried, as download links', () => {
+    const html = view(
+      meta({
+        delivery: 'sent',
+        attachments: [{ id: 'att-1', name: 'quote.pdf', mime: 'application/pdf', size: 4096 }],
+      }),
+    );
+    expect(html).toContain('data-testid="email-attachment"');
+    expect(html).toContain('/api/v2/email/attachments/c1/m1/att-1');
+  });
 });

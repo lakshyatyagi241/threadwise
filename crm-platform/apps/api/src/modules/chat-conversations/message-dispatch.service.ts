@@ -183,6 +183,7 @@ export class MessageDispatchService {
       const moved = await this.messages.markSent(tx, orgId, ref, {
         providerMessageId: sent.providerMessageId,
         acceptedAt: sent.acceptedAt,
+        ...(sent.meta ? { meta: sent.meta } : {}),
       });
       // Idempotent: a retried attempt that finds the message already sent changes nothing.
       if (!moved) return null;

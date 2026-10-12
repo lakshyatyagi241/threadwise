@@ -7,11 +7,11 @@
       "kicker": "채널",
       "title": "이메일",
       "titleAccent": "사서함",
-      "intro": "Gmail 또는 Google Workspace 사서함을 연결하세요. 고객 이메일은 팀 수신함에 도착하며 이메일 스레드마다 하나의 대화가 만들어지고, 답장은 같은 주소로 발송됩니다.",
+      "intro": "Gmail, Microsoft 365 또는 아무 IMAP 메일함이나 연결하세요. 고객 이메일은 팀 받은편지함으로 들어오고, 이메일 스레드마다 대화 하나가 되며, 답장은 같은 주소로 발송됩니다.",
       "inbox": "수신함 열기",
       "channels": "채널",
       "loadError": "사서함을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.",
-      "cardCaption": "Gmail · Google Workspace",
+      "cardCaption": "Gmail · Microsoft 365 · IMAP",
       "connectedCount": "{count, plural, other {사서함 #개 연결됨}}",
       "notConnected": "연결되지 않음",
       "usageLabel": "사용 중인 사서함",
@@ -21,7 +21,7 @@
       "how": {
         "connect": {
           "title": "사서함 연결",
-          "body": "Google로 로그인하고 해당 주소의 메일을 읽고 보낼 수 있도록 Threadwise에 허용하세요."
+          "body": "Google 또는 Microsoft로 로그인하거나 메일 서버 설정을 입력한 다음, Threadwise가 해당 주소의 메일을 읽고 보내도록 허용하세요."
         },
         "inbox": {
           "title": "메일이 수신함에 도착",
@@ -38,7 +38,7 @@
       },
       "connectedTitle": "연결된 사서함",
       "total": "{count, plural, other {사서함 #개}}",
-      "empty": "아직 연결된 사서함이 없습니다. 아래에서 Gmail을 연결하면 수신함에서 이메일을 받을 수 있습니다.",
+      "empty": "아직 연결된 메일함이 없습니다. 아래에서 연결하면 받은편지함에서 이메일을 받을 수 있습니다.",
       "addTitle": "사서함 추가",
       "providers": {
         "google": {
@@ -54,12 +54,25 @@
           "hint": "Microsoft 회사 또는 학교 계정으로 로그인하세요."
         }
       },
-      "connectGmail": "Gmail 연결",
-      "soon": "출시 예정",
-      "notReady": "이 플랫폼에는 아직 Google 로그인이 설정되지 않았습니다. 플랫폼 관리자에게 Google 자격 증명을 추가해 달라고 요청하세요.",
+      "notReady": "{provider}은(는) 이 플랫폼에 아직 설정되지 않았습니다. 플랫폼 관리자에게 자격 증명 추가를 요청하세요.",
       "limitReached": "요금제에서 허용하는 {limit, plural, other {사서함 #개}}를 모두 사용했습니다. 사서함을 삭제하거나 관리자에게 요금제 업그레이드를 요청하세요.",
       "noPermission": "사서함은 볼 수 있지만, 연결은 관리 권한이 있는 사용자만 할 수 있습니다.",
-      "connectFailed": "Google 로그인을 시작하지 못했습니다. 다시 시도해 주세요."
+      "connectFailed": "로그인을 시작하지 못했습니다. 다시 시도하세요.",
+      "connect": {
+        "google": "Gmail 연결",
+        "microsoft": "Microsoft 365 연결",
+        "imap": "IMAP / SMTP 연결"
+      },
+      "imapConnected": "메일함이 연결되었습니다. 최근 7일간의 메일을 받은편지함으로 가져오는 중입니다.",
+      "imapReconnected": "메일함이 다시 연결되었습니다.",
+      "scope": {
+        "title": "이 메일함은 누구를 위한 것인가요?",
+        "shared": "공유",
+        "sharedHint": "support@ 같은 회사 메일함입니다. 팀 전체가 대화를 처리할 수 있습니다.",
+        "personal": "개인",
+        "personalHint": "내 전용 메일함입니다. 대화는 나만 읽을 수 있습니다.",
+        "onlyPersonal": "내 개인 메일함을 연결할 수 있습니다. 대화는 나만 읽을 수 있습니다."
+      }
     },
     "card": {
       "status": {
@@ -74,7 +87,7 @@
       "save": "저장",
       "cancel": "취소",
       "renamed": "표시 이름을 저장했습니다.",
-      "needsReauthHint": "Google에서 이 사서함을 읽도록 더 이상 허용하지 않습니다. 다시 연결하면 메일을 다시 주고받을 수 있습니다.",
+      "needsReauthHint": "제공업체가 더 이상 이 메일함을 읽도록 허용하지 않습니다. 다시 연결하면 메일을 다시 주고받을 수 있습니다.",
       "lastError": "최근 문제: {error}",
       "lastSynced": "마지막 동기화",
       "neverSynced": "아직 동기화되지 않음",
@@ -87,25 +100,49 @@
       "removeTitle": "사서함 삭제",
       "removeConfirm": "{address}을(를) 삭제하시겠습니까? 이 사서함의 대화는 읽기 전용 기록으로 수신함에 남으며, 이후 새 메일은 수신도 발송도 되지 않습니다. 같은 주소는 나중에 다시 연결할 수 있습니다.",
       "removed": "사서함을 삭제했습니다.",
-      "failed": "사서함을 업데이트하지 못했습니다. 다시 시도해 주세요."
+      "failed": "사서함을 업데이트하지 못했습니다. 다시 시도해 주세요.",
+      "provider": {
+        "google": "Gmail",
+        "microsoft": "Microsoft 365",
+        "imap": "IMAP / SMTP"
+      },
+      "scope": {
+        "shared": "공유",
+        "personal": "개인",
+        "personalOf": "개인 · {name}"
+      },
+      "push": "실시간 업데이트",
+      "pushHint": "제공업체가 알리는 즉시 새 메일이 도착합니다.",
+      "signature": "서명",
+      "signatureHint": "이 메일함에서 보내는 답장에는 해당 서명이 붙습니다.",
+      "summaryNote": "다른 사람의 개인 메일함입니다. 소유자만 읽고 관리할 수 있습니다.",
+      "sendLimit": "시간당 발송 한도",
+      "limitDefault": "플랫폼 기본값",
+      "limitPerHour": "{count, plural, other {시간당 #통}}",
+      "limitSaved": "발송 한도를 저장했습니다.",
+      "needsReauthImap": "메일 서버가 저장된 비밀번호를 거부했습니다. 다시 연결하고 비밀번호를 다시 입력하세요."
     },
     "outcome": {
       "connected": "사서함이 연결되었습니다. 최근 7일간의 메일을 수신함으로 가져오는 중입니다.",
-      "denied": "Google 로그인이 취소되어 아무것도 연결되지 않았습니다.",
-      "missing_scope": "Google에서 메일 읽기 및 발송 권한을 부여하지 않았습니다. 다시 연결하고 Google 화면에서 모든 권한을 선택하세요.",
+      "denied": "로그인이 취소되어 아무것도 연결되지 않았습니다.",
+      "missing_scope": "메일을 읽고 보낼 권한이 부여되지 않았습니다. 다시 연결하고 로그인 화면의 모든 권한을 허용하세요.",
       "limit": "요금제의 사서함 한도에 도달하여 이 사서함은 연결되지 않았습니다.",
-      "not_configured": "이 플랫폼에는 아직 Google 로그인이 설정되지 않았습니다. 플랫폼 관리자에게 문의하세요.",
-      "wrong_account": "다시 연결하려는 사서함과 다른 Google 계정으로 로그인했습니다. 같은 주소로 로그인하세요.",
+      "not_configured": "이 제공업체의 로그인은 이 플랫폼에 아직 설정되지 않았습니다. 플랫폼 관리자에게 문의하세요.",
+      "wrong_account": "다시 연결하려는 메일함과 다른 계정으로 로그인했습니다. 같은 주소로 로그인하세요.",
       "failed": "사서함을 연결하는 중 문제가 발생했습니다. 다시 시도해 주세요."
     },
     "errors": {
-      "notConfigured": "이 플랫폼에는 아직 Google 로그인이 설정되지 않았습니다. 플랫폼 관리자에게 문의하세요.",
+      "notConfigured": "이 제공업체의 로그인은 이 플랫폼에 아직 설정되지 않았습니다. 플랫폼 관리자에게 문의하세요.",
       "limit": "요금제의 사서함 한도에 도달했습니다.",
       "unavailable": "이 사서함은 연결이 끊겼거나 먼저 다시 연결해야 합니다.",
-      "sendRefused": "Google에서 이 이메일 발송을 거부했습니다. 주소와 크기를 확인한 후 다시 시도하세요.",
-      "wrongAccount": "이 사서함과 다른 Google 계정입니다. 같은 주소로 로그인하세요.",
+      "sendRefused": "메일 제공업체가 이 이메일 발송을 거부했습니다. 주소와 크기를 확인한 후 다시 시도하세요.",
+      "wrongAccount": "이 메일함과 다른 계정입니다. 같은 주소로 로그인하세요.",
       "locked": "이메일 연동은 현재 요금제에 포함되어 있지 않습니다.",
-      "changed": "이 사서함이 다른 곳에서 변경되었습니다. 목록을 다시 불러왔으니 다시 시도하세요."
+      "changed": "이 사서함이 다른 곳에서 변경되었습니다. 목록을 다시 불러왔으니 다시 시도하세요.",
+      "personalDisabled": "이 워크스페이스에서는 개인 메일함이 꺼져 있습니다.",
+      "personalNotAllowed": "개인 메일함을 연결할 권한이 없습니다.",
+      "providerUnsupported": "이 메일 제공업체는 사용할 수 없습니다.",
+      "rateLimited": "이 메일함이 발송 한도에 도달했습니다. 나중에 다시 시도하세요."
     },
     "guide": {
       "title": "설정 가이드",
@@ -125,10 +162,24 @@
       },
       "trouble": {
         "title": "문제가 있을 때",
-        "p1": "재연결 필요는 Google에서 액세스를 취소했거나 만료되었다는 뜻입니다. 재연결을 선택하고 같은 주소로 로그인하세요.",
+        "p1": "다시 연결 필요는 제공업체가 접근을 취소했거나 만료되었거나 메일 서버가 비밀번호를 거부했다는 뜻입니다. 다시 연결을 선택하세요.",
         "p2": "오류에는 최근 문제가 표시됩니다. 지금 동기화를 선택해 다시 시도하세요. 계속 실패하면 사서함을 다시 연결하세요.",
-        "p3": "플랫폼에 Google 로그인이 설정되어 있지 않거나 요금제의 사서함 한도에 도달하면 연결 버튼이 비활성화됩니다.",
+        "p3": "플랫폼에 해당 제공업체의 로그인이 설정되지 않았거나 요금제의 메일함 한도에 도달하면 연결 버튼이 비활성화됩니다.",
         "p4": "이메일 속 이미지는 대화에서 이미지 불러오기를 선택하기 전까지 숨겨집니다."
+      },
+      "other": {
+        "title": "Microsoft 365 또는 다른 메일 제공업체 연결",
+        "p1": "Microsoft 365 또는 Outlook은 Microsoft 365 연결을 선택하고 메일함을 소유한 회사 또는 학교 계정으로 로그인하세요.",
+        "p2": "그 외 제공업체는 IMAP / SMTP 연결을 선택하고 제공업체가 안내한 서버, 포트, 보안, 사용자 이름, 비밀번호를 입력하세요.",
+        "p3": "먼저 수신 서버와 발신 서버 모두에 로그인합니다. 한쪽이 거부하면 어느 쪽인지 메시지로 알려 드립니다.",
+        "p4": "일부 제공업체는 일반 비밀번호 대신 앱 비밀번호가 필요합니다. 제공업체의 보안 설정에서 만드세요."
+      },
+      "personal": {
+        "title": "개인 메일함과 공유",
+        "p1": "관리자가 이메일 공유에서 개인 메일함을 켜고 연결할 수 있는 사람을 정합니다.",
+        "p2": "메일함을 연결할 때 개인을 선택하세요. 받은편지함에서 그 대화는 나만 읽을 수 있습니다.",
+        "p3": "워크스페이스가 관리자에게 개인 메일함 읽기를 허용하지 않으면, 관리자는 내 메일함의 요약만 봅니다.",
+        "p4": "개인 메일함을 꺼도 기존 개인 메일함이 다른 사람에게 공개되는 일은 없습니다."
       }
     },
     "thread": {
@@ -145,7 +196,13 @@
       "noBody": "이 이메일에는 텍스트가 없습니다.",
       "attachments": "{count, plural, other {첨부 파일 #개}}",
       "tooLarge": "너무 커서 보관할 수 없음({size})",
-      "download": "{name} 다운로드({size})"
+      "download": "{name} 다운로드({size})",
+      "bounce": {
+        "title": "{address}(으)로 전달되지 않았습니다.",
+        "reason": "사유: {reason}",
+        "hard": "이 주소는 영구적으로 거부되었습니다. 오타가 없는지 확인한 뒤 수정한 주소로 새 이메일을 보내세요.",
+        "soft": "메일함이 가득 찬 것처럼 일시적인 문제로 보입니다. 나중에 다시 보내면 전달될 수 있으며, 주소를 수정할 수도 있습니다."
+      }
     },
     "composer": {
       "toggle": "Cc, Bcc 및 제목",
@@ -160,10 +217,174 @@
         "ccTooMany": "Cc에는 최대 20개의 주소를 입력할 수 있습니다.",
         "bccTooMany": "Bcc에는 최대 20개의 주소를 입력할 수 있습니다.",
         "subjectTooLong": "제목은 최대 998자까지 입력할 수 있습니다."
+      },
+      "editor": {
+        "toolbar": "텍스트 서식",
+        "bold": "굵게",
+        "italic": "기울임",
+        "underline": "밑줄",
+        "bulletList": "글머리 기호 목록",
+        "numberedList": "번호 목록",
+        "quote": "인용",
+        "link": "링크 추가",
+        "clear": "서식 지우기",
+        "linkAddress": "링크 주소",
+        "linkApply": "추가",
+        "linkInvalid": "웹, 이메일 또는 전화 주소를 입력하세요.",
+        "label": "이메일 답장",
+        "toPlain": "일반 텍스트로 전환",
+        "toRich": "서식 있는 텍스트로 전환",
+        "hint": "Ctrl+Enter(Mac에서는 Cmd+Enter)를 누르면 보냅니다. Enter는 줄바꿈입니다."
+      },
+      "attach": {
+        "dismiss": "닫기",
+        "list": "첨부 파일 ({count})",
+        "uploading": "{name} 업로드 중",
+        "ready": "첨부됨",
+        "failed": "업로드 실패",
+        "retry": "다시 시도",
+        "remove": "{name} 삭제",
+        "waiting": "파일 업로드가 끝나기를 기다리는 중입니다.",
+        "fixFailed": "업로드되지 않은 파일을 다시 시도하거나 삭제하세요.",
+        "refused": {
+          "empty": "{name} 파일이 비어 있어 추가되지 않았습니다.",
+          "tooLarge": "{name} 파일이 {max}보다 커서 추가되지 않았습니다.",
+          "tooMany": "이메일 하나에는 파일 {count}개만 넣을 수 있습니다. {name} 파일은 추가되지 않았습니다.",
+          "totalTooLarge": "{name} 파일을 추가하면 이메일이 너무 커져서 추가되지 않았습니다.",
+          "blocked": "{name} 파일은 이메일로 보낼 수 없는 형식이어서 추가되지 않았습니다."
+        }
+      },
+      "error": {
+        "rateLimited": "이 메일함은 시간당 발송 한도에 도달했습니다. {seconds, plural, =0 {잠시 후 다시 시도하세요.} other {#초 후에 다시 시도하세요.}}",
+        "attachmentTooLarge": "첨부하기에 너무 큰 파일이 있습니다. 파일당 최대 10MB, 전체 합계 최대 20MB입니다.",
+        "tooManyAttachments": "파일이 너무 많습니다. 이메일 하나에는 최대 10개까지 넣을 수 있습니다.",
+        "attachmentGone": "첨부 파일이 만료되었거나 삭제되었습니다. 다시 첨부하세요.",
+        "signatureGone": "선택한 서명이 더 이상 없습니다. 다른 서명을 선택하세요.",
+        "sendRefused": "메일 제공업체가 이 이메일을 거부했습니다. 주소와 크기를 확인한 뒤 다시 시도하세요.",
+        "unavailable": "이 메일함은 연결이 끊겼거나 먼저 다시 연결해야 합니다.",
+        "attachmentBlocked": "이 파일 형식은 이메일로 보낼 수 없습니다.",
+        "network": "서버에 연결할 수 없습니다. 연결 상태를 확인하고 다시 시도하세요.",
+        "generic": "이메일을 보내지 못했습니다. 다시 시도하세요.",
+        "bodyTooLong": "이 이메일은 너무 길어서 보낼 수 없습니다. 줄인 뒤 다시 시도하세요."
+      },
+      "signature": {
+        "label": "서명",
+        "auto": "기본 ({name})",
+        "autoNone": "기본 (없음)",
+        "none": "서명 없음",
+        "mine": "{name} (내 서명)",
+        "shared": "{name} (메일함)",
+        "preview": "서명 미리보기",
+        "noneShown": "서명이 추가되지 않습니다."
       }
     },
     "inbox": {
       "group": "이메일"
+    },
+    "imap": {
+      "eyebrow": "기타 메일",
+      "title": "IMAP / SMTP 메일함 연결",
+      "reconnectTitle": "IMAP / SMTP 메일함 다시 연결",
+      "close": "닫기",
+      "intro": "메일 제공업체가 이 주소에 안내한 설정을 입력하세요. 아무것도 저장하기 전에 두 서버에 모두 로그인해 확인합니다.",
+      "reconnectIntro": "비밀번호를 다시 입력하세요. 아무것도 저장하기 전에 두 서버에 모두 로그인해 확인합니다.",
+      "address": "메일함 주소",
+      "displayName": "표시 이름",
+      "preset": "메일 제공업체",
+      "presetHint": "선택하면 서버 설정이 채워집니다. 이후에도 수정할 수 있습니다.",
+      "presetCustom": "기타 (설정 직접 입력)",
+      "incoming": "수신 메일 (IMAP)",
+      "outgoing": "발신 메일 (SMTP)",
+      "host": "서버",
+      "port": "포트",
+      "securityLabel": "보안",
+      "security": {
+        "ssl": "SSL/TLS",
+        "starttls": "STARTTLS",
+        "none": "없음"
+      },
+      "username": "사용자 이름",
+      "password": "비밀번호",
+      "passwordHint": "암호화되어 저장되며 다시 표시되지 않습니다.",
+      "passwordAgain": "비밀번호를 다시 입력하세요. 표시되지 않습니다.",
+      "showPassword": "비밀번호 표시",
+      "hidePassword": "비밀번호 숨기기",
+      "sameCredentials": "발송에도 같은 사용자 이름과 비밀번호 사용",
+      "noEncryption": "이 연결은 암호화되지 않았습니다. 네트워크의 누구나 비밀번호와 메일을 읽을 수 있습니다.",
+      "verifyNote": "서버 인증서는 항상 확인됩니다.",
+      "cancel": "취소",
+      "submit": "확인 후 연결",
+      "reconnectSubmit": "확인 후 다시 연결",
+      "verifying": "확인 중",
+      "errors": {
+        "required": "필수 항목입니다.",
+        "invalid": "올바르지 않은 값입니다."
+      },
+      "failure": {
+        "imapAuth": "수신 서버(IMAP)가 사용자 이름 또는 비밀번호를 거부했습니다. 확인 후 다시 시도하세요.",
+        "smtpAuth": "발신 서버(SMTP)가 사용자 이름 또는 비밀번호를 거부했습니다. 확인 후 다시 시도하세요.",
+        "unreachable": "메일 서버에 연결할 수 없거나 인증서가 올바르지 않습니다. 서버, 포트, 보안을 확인하세요.",
+        "generic": "메일함을 연결하지 못했습니다. 다시 시도하세요."
+      }
+    },
+    "sharing": {
+      "title": "이메일 공유",
+      "intro": "사용자가 자신의 메일함을 연결할 수 있는지, 누가 볼 수 있는지 정합니다.",
+      "enabled": {
+        "title": "개인 메일함",
+        "body": "사용자가 자신의 메일함을 연결하도록 허용합니다. 대화는 본인에게만 보입니다."
+      },
+      "who": {
+        "title": "연결할 수 있는 사람",
+        "body": "개인 메일함을 관리할 권한이 있는 사람만 가능합니다.",
+        "admins": "관리자만",
+        "agents": "관리자와 상담원"
+      },
+      "admins": {
+        "title": "관리자가 개인 메일함을 읽을 수 있음",
+        "body": "관리자가 다른 사람의 개인 메일함 대화를 열 수 있습니다. 끄면 요약만 볼 수 있습니다."
+      },
+      "offNote": "개인 메일함을 끄면 연결 옵션만 숨겨집니다. 기존 개인 메일함은 계속 소유자에게만 공개됩니다.",
+      "save": "저장",
+      "reset": "변경 취소",
+      "saved": "이메일 공유를 저장했습니다.",
+      "failed": "저장하지 못했습니다. 다시 시도하세요."
+    },
+    "signatures": {
+      "title": "서명",
+      "intro": "서명은 답장 끝에 추가됩니다. 메일함마다 공용 서명을 둘 수 있고, 본인 서명도 둘 수 있으며 본인 서명이 먼저 사용됩니다.",
+      "new": "새 서명",
+      "edit": "서명 편집",
+      "scope": "소유자",
+      "scopes": {
+        "user": "나",
+        "mailbox": "메일함",
+        "userBadge": "내 서명",
+        "mailboxBadge": "메일함"
+      },
+      "mailbox": "메일함",
+      "pickMailbox": "메일함 선택",
+      "mailboxRequired": "메일함을 선택하세요.",
+      "name": "이름",
+      "nameRequired": "서명에 이름을 지정하세요.",
+      "body": "서명",
+      "bodyPlaceholder": "이름, 직함, 전화번호, 링크...",
+      "variables": "{name}, {title}, {phone}을 사용할 수 있습니다. 보내는 사람의 정보로 채워집니다.",
+      "tooLong": "서명이 너무 깁니다.",
+      "defaultUser": "내 기본 서명으로 사용",
+      "defaultMailbox": "이 메일함의 기본값으로 사용",
+      "save": "저장",
+      "cancel": "취소",
+      "loading": "서명을 불러오는 중...",
+      "loadError": "서명을 불러오지 못했습니다. 잠시 후 다시 시도하세요.",
+      "empty": "아직 서명이 없습니다.",
+      "default": "기본",
+      "editShort": "편집",
+      "delete": "삭제",
+      "confirmDelete": "영구 삭제",
+      "noPermission": "서명을 관리할 권한이 없습니다.",
+      "changed": "이 서명이 다른 곳에서 변경되었습니다. 목록을 다시 불러왔으니 다시 시도하세요.",
+      "failed": "서명을 저장하지 못했습니다. 다시 시도하세요."
     }
   }
 }

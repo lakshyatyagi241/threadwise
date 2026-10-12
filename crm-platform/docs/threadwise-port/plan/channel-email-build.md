@@ -240,3 +240,12 @@ forbidden | missing_scope | rate_limit | transient | unreachable | bad_request |
 
 Unit `test/unit/channel-email/{thread-key,mail-driver.registry,mail-connection,mail-sync.service}.spec.ts` (the sync spec runs the real `GoogleMailDriver` against a fake Gmail), integration
 `test/integration/channel-email/mail-phase2-schema.spec.ts` (RLS, composite keys, constraints, keys), e2e `test/e2e/channel-email/*` (unchanged behaviour; the cursor assertions read `sync_cursor`).
+
+### 6. TW-MAIL-027 as built (outbound attachments, signatures, rich body)
+
+- Bytes: `MailOutboundPreparer.prepare` fills `OutgoingMail.attachments[].bytes` (read from the object store, capped), `html` (sanitised composer body plus signature) and `text`; every driver reads those. Reusable contract check: `test/unit/channel-email/driver-send-contract.ts`.
+- Additive seams: `OutboundEmail.bodyHtml` / `StoredEmailReply.bodyHtml` (contract field `email.bodyHtml` was added by the web build), `SendResult.meta` (merged into the sent message's `meta` by `markSent`; kept in the dispatcher's idempotent result),
+  `MailOutboundPreparer.sent(ctx, mail, result)` now takes the sent mail and returns the `meta.email` block, `EmailMessageAccess.conversationReadable`. No migration, no other contract change.
+- Env: `MAIL_OUTBOUND_ATTACHMENT_MAX_BYTES`, `MAIL_OUTBOUND_ATTACHMENTS_TOTAL_MAX_BYTES`, `MAIL_OUTBOUND_ATTACHMENTS_MAX_COUNT`, `MAIL_OUTBOUND_ATTACHMENT_TTL_HOURS`, `MAIL_OUTBOUND_ATTACHMENT_ALLOW_MIME`, `MAIL_OUTBOUND_ATTACHMENT_DENY_MIME`.
+- Auto-Submitted for automation is set by the adapter (TW-MAIL-032), not the preparer.
+

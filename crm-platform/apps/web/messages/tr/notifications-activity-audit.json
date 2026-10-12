@@ -298,6 +298,10 @@
           "label": "Satış belgesi karara bağlandı",
           "hint": "Bir teklif veya fatura kabul edildi ya da reddedildi."
         },
+        "email_bounced": {
+          "label": "E-posta iletilemedi",
+          "hint": "Gönderdiğiniz bir e-posta geri döndü veya gecikti."
+        },
         "wallet_credited": {
           "label": "Cüzdana bakiye yüklendi",
           "hint": "Çalışma alanı cüzdanına bakiye yüklendi."

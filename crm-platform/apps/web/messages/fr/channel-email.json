@@ -7,11 +7,11 @@
       "kicker": "Canaux",
       "title": "Boîtes",
       "titleAccent": "e-mail",
-      "intro": "Connectez vos boîtes Gmail ou Google Workspace. Les e-mails de vos clients arrivent dans la boîte de réception de l’équipe, une conversation par fil d’e-mails, et vos réponses partent de la même adresse.",
+      "intro": "Connectez votre Gmail, Microsoft 365 ou n'importe quelle boîte IMAP. Les e-mails des clients arrivent dans la boîte de l'équipe, une conversation par fil, et vos réponses partent de la même adresse.",
       "inbox": "Ouvrir la boîte de réception",
       "channels": "Canaux",
       "loadError": "Impossible de charger vos boîtes e-mail. Réessayez dans un instant.",
-      "cardCaption": "Gmail · Google Workspace",
+      "cardCaption": "Gmail · Microsoft 365 · IMAP",
       "connectedCount": "{count, plural, one {# boîte e-mail connectée} other {# boîtes e-mail connectées}}",
       "notConnected": "Non connectée",
       "usageLabel": "Boîtes e-mail utilisées",
@@ -21,7 +21,7 @@
       "how": {
         "connect": {
           "title": "Connecter une boîte e-mail",
-          "body": "Connectez-vous avec Google et autorisez Threadwise à lire et à envoyer des e-mails pour cette adresse."
+          "body": "Connectez-vous avec Google ou Microsoft, ou saisissez les paramètres de votre serveur de messagerie, et autorisez Threadwise à lire et envoyer des e-mails pour cette adresse."
         },
         "inbox": {
           "title": "Les e-mails arrivent dans la boîte de réception",
@@ -38,7 +38,7 @@
       },
       "connectedTitle": "Boîtes e-mail connectées",
       "total": "{count, plural, one {# boîte e-mail} other {# boîtes e-mail}}",
-      "empty": "Aucune boîte e-mail connectée pour le moment. Connectez Gmail ci-dessous pour recevoir des e-mails dans la boîte de réception.",
+      "empty": "Aucune boîte connectée pour l'instant. Connectez-en une ci-dessous pour recevoir des e-mails dans la boîte de réception.",
       "addTitle": "Ajouter une boîte e-mail",
       "providers": {
         "google": {
@@ -54,12 +54,25 @@
           "hint": "Connectez-vous avec un compte Microsoft professionnel ou scolaire."
         }
       },
-      "connectGmail": "Connecter Gmail",
-      "soon": "Bientôt",
-      "notReady": "La connexion Google n’est pas encore configurée pour cette plateforme. Demandez à votre administrateur de la plateforme d’ajouter les identifiants Google.",
+      "notReady": "{provider} n'est pas encore configuré sur cette plateforme. Demandez à l'administrateur de la plateforme d'ajouter les identifiants.",
       "limitReached": "Vous avez utilisé toutes les {limit, plural, one {# boîte e-mail} other {# boîtes e-mail}} que votre offre autorise. Supprimez une boîte e-mail ou demandez à votre administrateur de passer à une offre supérieure.",
       "noPermission": "Vous pouvez voir les boîtes e-mail, mais seules les personnes autorisées à les gérer peuvent en connecter une.",
-      "connectFailed": "Impossible de démarrer la connexion Google. Réessayez."
+      "connectFailed": "Impossible de lancer la connexion. Réessayez.",
+      "connect": {
+        "google": "Connecter Gmail",
+        "microsoft": "Connecter Microsoft 365",
+        "imap": "Connecter IMAP / SMTP"
+      },
+      "imapConnected": "Boîte connectée. Les e-mails des 7 derniers jours sont en cours de récupération dans la boîte de réception.",
+      "imapReconnected": "Boîte reconnectée.",
+      "scope": {
+        "title": "Pour qui est cette boîte ?",
+        "shared": "Partagée",
+        "sharedHint": "Une boîte de l'entreprise, comme support@. Toute l'équipe peut traiter ses conversations.",
+        "personal": "Personnelle",
+        "personalHint": "Votre propre boîte. Vous seul pouvez lire ses conversations.",
+        "onlyPersonal": "Vous pouvez connecter votre propre boîte personnelle. Vous seul pouvez lire ses conversations."
+      }
     },
     "card": {
       "status": {
@@ -74,7 +87,7 @@
       "save": "Enregistrer",
       "cancel": "Annuler",
       "renamed": "Nom affiché enregistré.",
-      "needsReauthHint": "Google ne nous autorise plus à lire cette boîte e-mail. Reconnectez-la pour recevoir et envoyer à nouveau des e-mails.",
+      "needsReauthHint": "Le fournisseur ne nous laisse plus lire cette boîte. Reconnectez-la pour recevoir et envoyer des e-mails à nouveau.",
       "lastError": "Dernier problème : {error}",
       "lastSynced": "Dernière synchronisation",
       "neverSynced": "Pas encore synchronisée",
@@ -87,25 +100,49 @@
       "removeTitle": "Supprimer la boîte e-mail",
       "removeConfirm": "Supprimer {address} ? Ses conversations restent dans la boîte de réception en lecture seule, et plus aucun e-mail n’est reçu ni envoyé depuis cette adresse. Vous pourrez la reconnecter plus tard.",
       "removed": "Boîte e-mail supprimée.",
-      "failed": "Impossible de mettre à jour la boîte e-mail. Réessayez."
+      "failed": "Impossible de mettre à jour la boîte e-mail. Réessayez.",
+      "provider": {
+        "google": "Gmail",
+        "microsoft": "Microsoft 365",
+        "imap": "IMAP / SMTP"
+      },
+      "scope": {
+        "shared": "Partagée",
+        "personal": "Personnelle",
+        "personalOf": "Personnelle · {name}"
+      },
+      "push": "Mises à jour en direct",
+      "pushHint": "Les nouveaux e-mails arrivent dès que le fournisseur les signale.",
+      "signature": "Signature",
+      "signatureHint": "Les réponses de cette boîte reçoivent sa signature.",
+      "summaryNote": "Ceci est la boîte personnelle de quelqu'un d'autre. Seul son propriétaire peut la lire et la gérer.",
+      "sendLimit": "Limite d'envois par heure",
+      "limitDefault": "Valeur par défaut de la plateforme",
+      "limitPerHour": "{count, plural, one {# e-mail par heure} other {# e-mails par heure}}",
+      "limitSaved": "Limite d'envois enregistrée.",
+      "needsReauthImap": "Le serveur de messagerie a refusé le mot de passe enregistré. Reconnectez et saisissez à nouveau le mot de passe."
     },
     "outcome": {
       "connected": "Boîte e-mail connectée. Les e-mails des 7 derniers jours sont en cours de récupération dans la boîte de réception.",
-      "denied": "La connexion Google a été annulée, rien n’a donc été connecté.",
-      "missing_scope": "Google n’a pas accordé l’accès pour lire et envoyer des e-mails. Reconnectez-vous et cochez toutes les autorisations sur l’écran Google.",
+      "denied": "La connexion a été annulée, rien n'a donc été connecté.",
+      "missing_scope": "L'accès pour lire et envoyer des e-mails n'a pas été accordé. Reconnectez et autorisez toutes les permissions sur l'écran de connexion.",
       "limit": "La limite de boîtes e-mail de votre offre est atteinte, cette boîte e-mail n’a donc pas été connectée.",
-      "not_configured": "La connexion Google n’est pas encore configurée pour cette plateforme. Contactez votre administrateur de la plateforme.",
-      "wrong_account": "Vous vous êtes connecté avec un autre compte Google que celui de la boîte e-mail à reconnecter. Connectez-vous avec la même adresse.",
+      "not_configured": "La connexion pour ce fournisseur n'est pas encore configurée sur cette plateforme. Demandez à l'administrateur de la plateforme.",
+      "wrong_account": "Vous vous êtes connecté avec un autre compte que celui de la boîte à reconnecter. Connectez-vous avec la même adresse.",
       "failed": "Un problème est survenu lors de la connexion de la boîte e-mail. Réessayez."
     },
     "errors": {
-      "notConfigured": "La connexion Google n’est pas encore configurée pour cette plateforme. Contactez votre administrateur de la plateforme.",
+      "notConfigured": "La connexion pour ce fournisseur n'est pas encore configurée sur cette plateforme. Demandez à l'administrateur de la plateforme.",
       "limit": "La limite de boîtes e-mail de votre offre est atteinte.",
       "unavailable": "Cette boîte e-mail est déconnectée ou doit d’abord être reconnectée.",
-      "sendRefused": "Google a refusé d’envoyer cet e-mail. Vérifiez les adresses et la taille, puis réessayez.",
-      "wrongAccount": "Il s’agit d’un autre compte Google que celui de cette boîte e-mail. Connectez-vous avec la même adresse.",
+      "sendRefused": "Le fournisseur de messagerie a refusé d'envoyer cet e-mail. Vérifiez les adresses et la taille, puis réessayez.",
+      "wrongAccount": "C'est un autre compte que celui de cette boîte. Connectez-vous avec la même adresse.",
       "locked": "L'intégration e-mail ne fait pas partie de votre offre.",
-      "changed": "Cette boîte e-mail a été modifiée ailleurs. La liste a été rechargée, réessayez."
+      "changed": "Cette boîte e-mail a été modifiée ailleurs. La liste a été rechargée, réessayez.",
+      "personalDisabled": "Les boîtes personnelles sont désactivées pour cet espace de travail.",
+      "personalNotAllowed": "Vous n'êtes pas autorisé à connecter une boîte personnelle.",
+      "providerUnsupported": "Ce fournisseur de messagerie n'est pas disponible.",
+      "rateLimited": "Cette boîte a atteint sa limite d'envoi. Réessayez plus tard."
     },
     "guide": {
       "title": "Guide de configuration",
@@ -125,10 +162,24 @@
       },
       "trouble": {
         "title": "En cas de problème",
-        "p1": "Reconnexion requise signifie que Google a révoqué l’accès ou qu’il a expiré. Sélectionnez Reconnecter et connectez-vous avec la même adresse.",
+        "p1": "À reconnecter signifie que le fournisseur a révoqué ou fait expirer l'accès, ou que le serveur de messagerie a refusé le mot de passe. Sélectionnez Reconnecter.",
         "p2": "Erreur affiche le dernier problème. Sélectionnez Synchroniser maintenant pour réessayer ; si cela échoue encore, reconnectez la boîte e-mail.",
-        "p3": "Connecter est désactivé lorsque la plateforme n’a pas de connexion Google configurée ou que la limite de boîtes e-mail de votre offre est atteinte.",
+        "p3": "Connecter est désactivé quand la plateforme n'a pas de connexion configurée pour ce fournisseur ou que la limite de boîtes de votre forfait est atteinte.",
         "p4": "Les images d’un e-mail restent masquées tant que vous ne choisissez pas Charger les images dans la conversation."
+      },
+      "other": {
+        "title": "Connecter Microsoft 365 ou un autre fournisseur de messagerie",
+        "p1": "Pour Microsoft 365 ou Outlook, choisissez Connecter Microsoft 365 et connectez-vous avec le compte professionnel ou scolaire qui possède la boîte.",
+        "p2": "Pour tout autre fournisseur, choisissez Connecter IMAP / SMTP et saisissez le serveur, le port, la sécurité, le nom d'utilisateur et le mot de passe de votre fournisseur.",
+        "p3": "Nous nous connectons d'abord au serveur entrant et au serveur sortant. Si l'un refuse, le message indique lequel.",
+        "p4": "Certains fournisseurs exigent un mot de passe d'application au lieu de votre mot de passe habituel. Créez-en un dans les paramètres de sécurité de votre fournisseur."
+      },
+      "personal": {
+        "title": "Boîtes personnelles et partage",
+        "p1": "Un administrateur active les boîtes personnelles dans Partage des e-mails et choisit qui peut en connecter une.",
+        "p2": "En connectant une boîte, choisissez Personnelle. Vous seul pouvez lire ses conversations dans la boîte de réception.",
+        "p3": "Les administrateurs ne voient qu'un résumé de votre boîte, sauf si l'espace de travail leur permet de lire les boîtes personnelles.",
+        "p4": "Désactiver les boîtes personnelles n'ouvre jamais une boîte personnelle existante aux autres."
       }
     },
     "thread": {
@@ -145,7 +196,13 @@
       "noBody": "Cet e-mail ne contient pas de texte.",
       "attachments": "{count, plural, one {# pièce jointe} other {# pièces jointes}}",
       "tooLarge": "trop volumineux pour être conservé ({size})",
-      "download": "Télécharger {name} ({size})"
+      "download": "Télécharger {name} ({size})",
+      "bounce": {
+        "title": "Non distribué à {address}.",
+        "reason": "Motif : {reason}",
+        "hard": "L'adresse a été refusée définitivement. Vérifiez qu'elle ne contient pas de faute, puis envoyez un nouvel e-mail à l'adresse corrigée.",
+        "soft": "Cela semble temporaire, par exemple une boîte pleine. Un nouvel envoi plus tard peut réussir, ou modifiez l'adresse."
+      }
     },
     "composer": {
       "toggle": "Cc, Cci et objet",
@@ -160,10 +217,174 @@
         "ccTooMany": "Cc accepte au maximum 20 adresses.",
         "bccTooMany": "Cci accepte au maximum 20 adresses.",
         "subjectTooLong": "L’objet ne peut pas dépasser 998 caractères."
+      },
+      "editor": {
+        "toolbar": "Mise en forme du texte",
+        "bold": "Gras",
+        "italic": "Italique",
+        "underline": "Souligné",
+        "bulletList": "Liste à puces",
+        "numberedList": "Liste numérotée",
+        "quote": "Citation",
+        "link": "Ajouter un lien",
+        "clear": "Effacer la mise en forme",
+        "linkAddress": "Adresse du lien",
+        "linkApply": "Ajouter",
+        "linkInvalid": "Saisissez une adresse web, e-mail ou de téléphone.",
+        "label": "Réponse par e-mail",
+        "toPlain": "Passer au texte brut",
+        "toRich": "Passer au texte mis en forme",
+        "hint": "Appuyez sur Ctrl+Entrée (Cmd+Entrée sur Mac) pour envoyer. Entrée insère un saut de ligne."
+      },
+      "attach": {
+        "dismiss": "Ignorer",
+        "list": "Fichiers joints ({count})",
+        "uploading": "Envoi de {name}",
+        "ready": "Joint",
+        "failed": "Échec de l'envoi",
+        "retry": "Réessayer",
+        "remove": "Retirer {name}",
+        "waiting": "En attente de la fin de l'envoi des fichiers.",
+        "fixFailed": "Réessayez ou retirez les fichiers qui n'ont pas été envoyés.",
+        "refused": {
+          "empty": "{name} est vide et n'a pas été ajouté.",
+          "tooLarge": "{name} dépasse {max} et n'a pas été ajouté.",
+          "tooMany": "Un e-mail ne peut contenir que {count} fichiers. {name} n'a pas été ajouté.",
+          "totalTooLarge": "Avec {name}, l'e-mail serait trop volumineux et il n'a pas été ajouté.",
+          "blocked": "{name} est d'un type de fichier que l'e-mail ne peut pas transporter et n'a pas été ajouté."
+        }
+      },
+      "error": {
+        "rateLimited": "Cette boîte a atteint sa limite d'envois par heure. {seconds, plural, =0 {Réessayez dans un moment.} other {Réessayez dans # s.}}",
+        "attachmentTooLarge": "Un fichier est trop volumineux pour être joint. Chaque fichier peut peser 10 Mo au maximum et l'ensemble 20 Mo.",
+        "tooManyAttachments": "Trop de fichiers. Un e-mail en accepte 10 au maximum.",
+        "attachmentGone": "Un fichier joint a expiré ou a été supprimé. Joignez-le de nouveau.",
+        "signatureGone": "La signature choisie n'existe plus. Choisissez-en une autre.",
+        "sendRefused": "Le fournisseur de messagerie a refusé cet e-mail. Vérifiez les adresses et la taille, puis réessayez.",
+        "unavailable": "Cette boîte est déconnectée ou doit d'abord être reconnectée.",
+        "attachmentBlocked": "Ce type de fichier ne peut pas être envoyé par e-mail.",
+        "network": "Le serveur est injoignable. Vérifiez votre connexion et réessayez.",
+        "generic": "L'e-mail n'a pas pu être envoyé. Réessayez.",
+        "bodyTooLong": "Cet e-mail est trop long pour être envoyé. Raccourcissez-le et réessayez."
+      },
+      "signature": {
+        "label": "Signature",
+        "auto": "Par défaut ({name})",
+        "autoNone": "Par défaut (aucune)",
+        "none": "Aucune signature",
+        "mine": "{name} (la mienne)",
+        "shared": "{name} (boîte)",
+        "preview": "Aperçu de la signature",
+        "noneShown": "Aucune signature ne sera ajoutée."
       }
     },
     "inbox": {
       "group": "E-mail"
+    },
+    "imap": {
+      "eyebrow": "Autre messagerie",
+      "title": "Connecter une boîte IMAP / SMTP",
+      "reconnectTitle": "Reconnecter une boîte IMAP / SMTP",
+      "close": "Fermer",
+      "intro": "Saisissez les paramètres fournis par votre messagerie pour cette adresse. Nous nous connectons aux deux serveurs avant d'enregistrer quoi que ce soit.",
+      "reconnectIntro": "Saisissez à nouveau le mot de passe. Nous nous connectons aux deux serveurs avant d'enregistrer quoi que ce soit.",
+      "address": "Adresse de la boîte",
+      "displayName": "Nom affiché",
+      "preset": "Fournisseur de messagerie",
+      "presetHint": "Le choix d'un fournisseur remplit les paramètres du serveur. Vous pouvez encore les modifier.",
+      "presetCustom": "Autre (saisir les paramètres)",
+      "incoming": "Courrier entrant (IMAP)",
+      "outgoing": "Courrier sortant (SMTP)",
+      "host": "Serveur",
+      "port": "Port",
+      "securityLabel": "Sécurité",
+      "security": {
+        "ssl": "SSL/TLS",
+        "starttls": "STARTTLS",
+        "none": "Aucune"
+      },
+      "username": "Nom d'utilisateur",
+      "password": "Mot de passe",
+      "passwordHint": "Stocké chiffré et jamais affiché à nouveau.",
+      "passwordAgain": "Saisissez à nouveau le mot de passe. Il n'est jamais affiché.",
+      "showPassword": "Afficher le mot de passe",
+      "hidePassword": "Masquer le mot de passe",
+      "sameCredentials": "Utiliser les mêmes identifiants pour l'envoi",
+      "noEncryption": "Cette connexion n'est pas chiffrée. Toute personne sur le réseau pourrait lire le mot de passe et les e-mails.",
+      "verifyNote": "Le certificat du serveur est toujours vérifié.",
+      "cancel": "Annuler",
+      "submit": "Vérifier et connecter",
+      "reconnectSubmit": "Vérifier et reconnecter",
+      "verifying": "Vérification",
+      "errors": {
+        "required": "Ce champ est obligatoire.",
+        "invalid": "Cette valeur n'est pas valide."
+      },
+      "failure": {
+        "imapAuth": "Le serveur entrant (IMAP) a refusé le nom d'utilisateur ou le mot de passe. Vérifiez-les et réessayez.",
+        "smtpAuth": "Le serveur sortant (SMTP) a refusé le nom d'utilisateur ou le mot de passe. Vérifiez-les et réessayez.",
+        "unreachable": "Impossible de joindre le serveur de messagerie ou son certificat n'est pas valide. Vérifiez le serveur, le port et la sécurité.",
+        "generic": "Impossible de connecter la boîte. Réessayez."
+      }
+    },
+    "sharing": {
+      "title": "Partage des e-mails",
+      "intro": "Décidez si les personnes peuvent connecter leur propre boîte et qui peut la voir.",
+      "enabled": {
+        "title": "Boîtes personnelles",
+        "body": "Permet aux personnes de connecter leur propre boîte. Ses conversations ne sont visibles que par elles."
+      },
+      "who": {
+        "title": "Qui peut en connecter une",
+        "body": "Seules les personnes autorisées à gérer les boîtes personnelles le peuvent.",
+        "admins": "Administrateurs uniquement",
+        "agents": "Administrateurs et agents"
+      },
+      "admins": {
+        "title": "Les administrateurs peuvent lire les boîtes personnelles",
+        "body": "Les administrateurs peuvent ouvrir les conversations des boîtes personnelles des autres. Désactivé, ils ne voient qu'un résumé."
+      },
+      "offNote": "Désactiver les boîtes personnelles ne fait que masquer l'option de connexion. Les boîtes personnelles existantes restent privées pour leurs propriétaires.",
+      "save": "Enregistrer",
+      "reset": "Annuler les modifications",
+      "saved": "Partage des e-mails enregistré.",
+      "failed": "Enregistrement impossible. Réessayez."
+    },
+    "signatures": {
+      "title": "Signatures",
+      "intro": "Une signature est ajoutée à la fin de vos réponses. Chaque boîte peut avoir une signature commune et vous pouvez avoir la vôtre, utilisée en premier.",
+      "new": "Nouvelle signature",
+      "edit": "Modifier la signature",
+      "scope": "À qui elle appartient",
+      "scopes": {
+        "user": "À moi",
+        "mailbox": "À une boîte",
+        "userBadge": "La mienne",
+        "mailboxBadge": "Boîte"
+      },
+      "mailbox": "Boîte",
+      "pickMailbox": "Choisissez une boîte",
+      "mailboxRequired": "Choisissez une boîte.",
+      "name": "Nom",
+      "nameRequired": "Donnez un nom à la signature.",
+      "body": "Signature",
+      "bodyPlaceholder": "Votre nom, fonction, téléphone, liens...",
+      "variables": "Vous pouvez utiliser {name}, {title} et {phone}. Ils sont remplacés par les informations de la personne qui envoie.",
+      "tooLong": "La signature est trop longue.",
+      "defaultUser": "Utiliser comme ma signature par défaut",
+      "defaultMailbox": "Utiliser comme signature par défaut de cette boîte",
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "loading": "Chargement des signatures...",
+      "loadError": "Impossible de charger les signatures. Réessayez dans un instant.",
+      "empty": "Aucune signature pour l'instant.",
+      "default": "Par défaut",
+      "editShort": "Modifier",
+      "delete": "Supprimer",
+      "confirmDelete": "Supprimer définitivement",
+      "noPermission": "Vous n'avez pas l'autorisation de gérer les signatures.",
+      "changed": "Cette signature a été modifiée ailleurs. La liste a été rechargée, réessayez.",
+      "failed": "Impossible d'enregistrer la signature. Réessayez."
     }
   }
 }

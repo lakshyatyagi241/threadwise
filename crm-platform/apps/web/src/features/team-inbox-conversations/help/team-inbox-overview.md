@@ -5,7 +5,8 @@ summary: Read and answer customer conversations from every connected channel, as
 area: inbox
 order: 10
 documents: [nav:inbox]
-keywords: [inbox, conversations, reply, notes, assign, resolve, unread, customers, messages, 24-hour window]
+keywords:
+  [inbox, conversations, reply, notes, assign, resolve, unread, customers, messages, 24-hour window]
 ---
 
 ## What it is for

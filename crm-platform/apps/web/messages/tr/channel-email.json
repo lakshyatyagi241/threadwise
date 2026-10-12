@@ -7,11 +7,11 @@
       "kicker": "Kanallar",
       "title": "E-posta",
       "titleAccent": "posta kutuları",
-      "intro": "Gmail veya Google Workspace posta kutularınızı bağlayın. Müşteri e-postaları ekip gelen kutusuna düşer, her e-posta zinciri tek bir görüşme olur ve yanıtlarınız aynı adresten gönderilir.",
+      "intro": "Gmail, Microsoft 365 veya herhangi bir IMAP posta kutunuzu bağlayın. Müşteri e-postaları ekip gelen kutusuna düşer, her e-posta dizisi tek bir konuşmadır ve yanıtlarınız aynı adresten gider.",
       "inbox": "Gelen kutusunu aç",
       "channels": "Kanallar",
       "loadError": "Posta kutularınız yüklenemedi. Biraz sonra tekrar deneyin.",
-      "cardCaption": "Gmail · Google Workspace",
+      "cardCaption": "Gmail · Microsoft 365 · IMAP",
       "connectedCount": "{count, plural, one {# posta kutusu bağlı} other {# posta kutusu bağlı}}",
       "notConnected": "Bağlı değil",
       "usageLabel": "Kullanılan posta kutuları",
@@ -21,7 +21,7 @@
       "how": {
         "connect": {
           "title": "Posta kutusu bağlayın",
-          "body": "Google ile oturum açın ve Threadwise'ın bu adres için e-posta okumasına ve göndermesine izin verin."
+          "body": "Google veya Microsoft ile oturum açın ya da posta sunucunuzun ayarlarını girin ve Threadwise'ın bu adres için e-posta okumasına ve göndermesine izin verin."
         },
         "inbox": {
           "title": "E-postalar gelen kutusuna düşer",
@@ -38,7 +38,7 @@
       },
       "connectedTitle": "Bağlı posta kutuları",
       "total": "{count, plural, one {# posta kutusu} other {# posta kutusu}}",
-      "empty": "Henüz bağlı posta kutusu yok. Gelen kutusunda e-posta almaya başlamak için aşağıdan Gmail'i bağlayın.",
+      "empty": "Henüz bağlı posta kutusu yok. Gelen kutusunda e-posta almaya başlamak için aşağıdan bir tane bağlayın.",
       "addTitle": "Posta kutusu ekle",
       "providers": {
         "google": {
@@ -54,12 +54,25 @@
           "hint": "Microsoft iş veya okul hesabıyla oturum açın."
         }
       },
-      "connectGmail": "Gmail'i bağla",
-      "soon": "Yakında",
-      "notReady": "Bu platformda Google ile oturum açma henüz kurulmadı. Platform yöneticinizden Google kimlik bilgilerini eklemesini isteyin.",
+      "notReady": "{provider} bu platform için henüz ayarlanmadı. Platform yöneticisinden kimlik bilgilerini eklemesini isteyin.",
       "limitReached": "Planınızın izin verdiği {limit, plural, one {# posta kutusunun} other {# posta kutusunun}} tamamını kullandınız. Bir posta kutusunu kaldırın veya yöneticinizden planı yükseltmesini isteyin.",
       "noPermission": "Posta kutularını görebilirsiniz, ancak yalnızca yönetme yetkisi olanlar yeni posta kutusu bağlayabilir.",
-      "connectFailed": "Google ile oturum açma başlatılamadı. Tekrar deneyin."
+      "connectFailed": "Oturum açma başlatılamadı. Tekrar deneyin.",
+      "connect": {
+        "google": "Gmail'i bağla",
+        "microsoft": "Microsoft 365'i bağla",
+        "imap": "IMAP / SMTP bağla"
+      },
+      "imapConnected": "Posta kutusu bağlandı. Son 7 günün e-postaları gelen kutusuna getiriliyor.",
+      "imapReconnected": "Posta kutusu yeniden bağlandı.",
+      "scope": {
+        "title": "Bu posta kutusu kimin için?",
+        "shared": "Paylaşılan",
+        "sharedHint": "support@ gibi bir şirket posta kutusu. Konuşmalarını tüm ekip yürütebilir.",
+        "personal": "Kişisel",
+        "personalHint": "Kendi posta kutunuz. Konuşmalarını yalnızca siz okuyabilirsiniz.",
+        "onlyPersonal": "Kendi kişisel posta kutunuzu bağlayabilirsiniz. Konuşmalarını yalnızca siz okuyabilirsiniz."
+      }
     },
     "card": {
       "status": {
@@ -74,7 +87,7 @@
       "save": "Kaydet",
       "cancel": "İptal",
       "renamed": "Görünen ad kaydedildi.",
-      "needsReauthHint": "Google artık bu posta kutusunu okumamıza izin vermiyor. E-posta almak ve göndermek için yeniden bağlayın.",
+      "needsReauthHint": "Sağlayıcı bu posta kutusunu okumamıza artık izin vermiyor. E-posta almak ve göndermek için yeniden bağlayın.",
       "lastError": "Son sorun: {error}",
       "lastSynced": "Son eşitleme",
       "neverSynced": "Henüz eşitlenmedi",
@@ -87,25 +100,49 @@
       "removeTitle": "Posta kutusunu kaldır",
       "removeConfirm": "{address} kaldırılsın mı? Görüşmeleri salt okunur geçmiş olarak gelen kutusunda kalır ve bu adresten yeni e-posta alınmaz veya gönderilmez. Aynı adresi daha sonra yeniden bağlayabilirsiniz.",
       "removed": "Posta kutusu kaldırıldı.",
-      "failed": "Posta kutusu güncellenemedi. Tekrar deneyin."
+      "failed": "Posta kutusu güncellenemedi. Tekrar deneyin.",
+      "provider": {
+        "google": "Gmail",
+        "microsoft": "Microsoft 365",
+        "imap": "IMAP / SMTP"
+      },
+      "scope": {
+        "shared": "Paylaşılan",
+        "personal": "Kişisel",
+        "personalOf": "Kişisel · {name}"
+      },
+      "push": "Canlı güncellemeler",
+      "pushHint": "Yeni e-postalar sağlayıcı bildirir bildirmez gelir.",
+      "signature": "İmza",
+      "signatureHint": "Bu posta kutusundan giden yanıtlara onun imzası eklenir.",
+      "summaryNote": "Bu, başka birinin kişisel posta kutusu. Yalnızca sahibi okuyabilir ve yönetebilir.",
+      "sendLimit": "Saatlik gönderim sınırı",
+      "limitDefault": "Platform varsayılanı",
+      "limitPerHour": "{count, plural, one {Saatte # e-posta} other {Saatte # e-posta}}",
+      "limitSaved": "Gönderim sınırı kaydedildi.",
+      "needsReauthImap": "Posta sunucusu kayıtlı parolayı reddetti. Yeniden bağlayın ve parolayı tekrar girin."
     },
     "outcome": {
       "connected": "Posta kutusu bağlandı. Son 7 günün e-postaları gelen kutusuna alınıyor.",
-      "denied": "Google ile oturum açma iptal edildi, bu yüzden hiçbir şey bağlanmadı.",
-      "missing_scope": "Google, e-posta okuma ve gönderme erişimi vermedi. Yeniden bağlanın ve Google ekranındaki tüm izinleri işaretleyin.",
+      "denied": "Oturum açma iptal edildi, bu yüzden hiçbir şey bağlanmadı.",
+      "missing_scope": "E-posta okuma ve gönderme erişimi verilmedi. Yeniden bağlanın ve oturum açma ekranındaki tüm izinleri verin.",
       "limit": "Planınızın posta kutusu sınırına ulaşıldığı için bu posta kutusu bağlanmadı.",
-      "not_configured": "Bu platformda Google ile oturum açma henüz kurulmadı. Platform yöneticinize başvurun.",
-      "wrong_account": "Yeniden bağlanan posta kutusundan farklı bir Google hesabıyla oturum açtınız. Aynı adresle oturum açın.",
+      "not_configured": "Bu sağlayıcı için oturum açma bu platformda henüz ayarlanmadı. Platform yöneticisine sorun.",
+      "wrong_account": "Yeniden bağlanan posta kutusundan farklı bir hesapla oturum açtınız. Aynı adresle oturum açın.",
       "failed": "Posta kutusu bağlanırken bir sorun oluştu. Tekrar deneyin."
     },
     "errors": {
-      "notConfigured": "Bu platformda Google ile oturum açma henüz kurulmadı. Platform yöneticinize başvurun.",
+      "notConfigured": "Bu sağlayıcı için oturum açma bu platformda henüz ayarlanmadı. Platform yöneticisine sorun.",
       "limit": "Planınızın posta kutusu sınırına ulaşıldı.",
       "unavailable": "Bu posta kutusunun bağlantısı kesilmiş veya önce yeniden bağlanması gerekiyor.",
-      "sendRefused": "Google bu e-postayı göndermeyi reddetti. Adresleri ve boyutu kontrol edip tekrar deneyin.",
-      "wrongAccount": "Bu, posta kutusuna ait olandan farklı bir Google hesabı. Aynı adresle oturum açın.",
+      "sendRefused": "E-posta sağlayıcısı bu e-postayı göndermeyi reddetti. Adreslere ve boyuta bakıp tekrar deneyin.",
+      "wrongAccount": "Bu, bu posta kutusunun hesabından farklı bir hesap. Aynı adresle oturum açın.",
       "locked": "E-posta entegrasyonu planınıza dahil değil.",
-      "changed": "Bu posta kutusu başka bir yerde değiştirildi. Liste yeniden yüklendi, tekrar deneyin."
+      "changed": "Bu posta kutusu başka bir yerde değiştirildi. Liste yeniden yüklendi, tekrar deneyin.",
+      "personalDisabled": "Kişisel posta kutuları bu çalışma alanında kapalı.",
+      "personalNotAllowed": "Kişisel posta kutusu bağlama izniniz yok.",
+      "providerUnsupported": "Bu e-posta sağlayıcısı kullanılamıyor.",
+      "rateLimited": "Bu posta kutusu gönderim sınırına ulaştı. Daha sonra tekrar deneyin."
     },
     "guide": {
       "title": "Kurulum rehberi",
@@ -125,10 +162,24 @@
       },
       "trouble": {
         "title": "Bir şey ters görünüyorsa",
-        "p1": "Yeniden bağlanmalı, Google'ın erişimi iptal ettiği veya erişimin süresinin dolduğu anlamına gelir. Yeniden bağlan'ı seçin ve aynı adresle oturum açın.",
+        "p1": "Yeniden bağlanmalı, sağlayıcının erişimi iptal ettiği veya süresinin dolduğu ya da posta sunucusunun parolayı reddettiği anlamına gelir. Yeniden bağla'yı seçin.",
         "p2": "Hata, son sorunu gösterir. Tekrar denemek için Şimdi eşitle'yi seçin; sorun sürerse posta kutusunu yeniden bağlayın.",
-        "p3": "Platformda Google ile oturum açma kurulu değilse veya planınızın posta kutusu sınırına ulaşıldıysa Bağlan devre dışıdır.",
+        "p3": "Platformda o sağlayıcı için oturum açma ayarlanmamışsa veya planınızın posta kutusu sınırına ulaşılmışsa Bağla devre dışıdır.",
         "p4": "Bir e-postadaki görseller, görüşmede Görselleri yükle'yi seçene kadar gizli kalır."
+      },
+      "other": {
+        "title": "Microsoft 365'i veya başka bir e-posta sağlayıcısını bağlayın",
+        "p1": "Microsoft 365 veya Outlook için Microsoft 365'i bağla'yı seçin ve posta kutusunun sahibi olan iş veya okul hesabıyla oturum açın.",
+        "p2": "Diğer sağlayıcılar için IMAP / SMTP bağla'yı seçin ve sağlayıcınızın verdiği sunucu, bağlantı noktası, güvenlik, kullanıcı adı ve parolayı girin.",
+        "p3": "Önce hem gelen hem giden sunucuda oturum açarız. Biri reddederse mesaj hangisi olduğunu söyler.",
+        "p4": "Bazı sağlayıcılar normal parolanız yerine uygulama parolası ister. Sağlayıcınızın güvenlik ayarlarında bir tane oluşturun."
+      },
+      "personal": {
+        "title": "Kişisel posta kutuları ve paylaşım",
+        "p1": "Bir yönetici E-posta paylaşımı bölümünden kişisel posta kutularını açar ve kimlerin bağlayabileceğini seçer.",
+        "p2": "Bir posta kutusu bağlarken Kişisel'i seçin. Gelen kutusundaki konuşmalarını yalnızca siz okuyabilirsiniz.",
+        "p3": "Çalışma alanı yöneticilerin kişisel posta kutularını okumasına izin vermedikçe yöneticiler posta kutunuzun yalnızca özetini görür.",
+        "p4": "Kişisel posta kutularını kapatmak mevcut bir kişisel posta kutusunu asla başkalarına açmaz."
       }
     },
     "thread": {
@@ -145,7 +196,13 @@
       "noBody": "Bu e-postada metin yok.",
       "attachments": "{count, plural, one {# ek} other {# ek}}",
       "tooLarge": "saklanamayacak kadar büyük ({size})",
-      "download": "{name} dosyasını indir ({size})"
+      "download": "{name} dosyasını indir ({size})",
+      "bounce": {
+        "title": "{address} adresine teslim edilemedi.",
+        "reason": "Neden: {reason}",
+        "hard": "Adres kalıcı olarak reddedildi. Yazım hatası olup olmadığını kontrol edin ve düzeltilmiş adrese yeni bir e-posta gönderin.",
+        "soft": "Bu geçici görünüyor, örneğin dolu bir posta kutusu. Daha sonra yeniden göndermek işe yarayabilir veya adresi düzenleyin."
+      }
     },
     "composer": {
       "toggle": "Cc, Bcc ve konu",
@@ -160,10 +217,174 @@
         "ccTooMany": "Cc en fazla 20 adres alabilir.",
         "bccTooMany": "Bcc en fazla 20 adres alabilir.",
         "subjectTooLong": "Konu en fazla 998 karakter olabilir."
+      },
+      "editor": {
+        "toolbar": "Metin biçimlendirme",
+        "bold": "Kalın",
+        "italic": "İtalik",
+        "underline": "Altı çizili",
+        "bulletList": "Madde işaretli liste",
+        "numberedList": "Numaralı liste",
+        "quote": "Alıntı",
+        "link": "Bağlantı ekle",
+        "clear": "Biçimlendirmeyi temizle",
+        "linkAddress": "Bağlantı adresi",
+        "linkApply": "Ekle",
+        "linkInvalid": "Bir web, e-posta veya telefon adresi girin.",
+        "label": "E-posta yanıtı",
+        "toPlain": "Düz metne geç",
+        "toRich": "Biçimli metne geç",
+        "hint": "Göndermek için Ctrl+Enter'a (Mac'te Cmd+Enter) basın. Enter yeni satır başlatır."
+      },
+      "attach": {
+        "dismiss": "Kapat",
+        "list": "Ekli dosyalar ({count})",
+        "uploading": "{name} yükleniyor",
+        "ready": "Eklendi",
+        "failed": "Yükleme başarısız",
+        "retry": "Yeniden dene",
+        "remove": "{name} dosyasını kaldır",
+        "waiting": "Dosyaların yüklenmesi bekleniyor.",
+        "fixFailed": "Yüklenmeyen dosyaları yeniden deneyin veya kaldırın.",
+        "refused": {
+          "empty": "{name} boş ve eklenmedi.",
+          "tooLarge": "{name}, {max} boyutundan büyük ve eklenmedi.",
+          "tooMany": "Bir e-postaya yalnızca {count} dosya sığar. {name} eklenmedi.",
+          "totalTooLarge": "{name} ile e-posta çok büyük olacağı için eklenmedi.",
+          "blocked": "{name}, e-postanın taşıyamayacağı bir dosya türü ve eklenmedi."
+        }
+      },
+      "error": {
+        "rateLimited": "Bu posta kutusu saatlik gönderim sınırına ulaştı. {seconds, plural, =0 {Biraz sonra yeniden deneyin.} other {# sn sonra yeniden deneyin.}}",
+        "attachmentTooLarge": "Bir dosya eklemek için çok büyük. Her dosya en fazla 10 MB, tüm dosyalar birlikte en fazla 20 MB olabilir.",
+        "tooManyAttachments": "Çok fazla dosya. Bir e-posta en fazla 10 dosya alır.",
+        "attachmentGone": "Ekli bir dosyanın süresi doldu veya dosya kaldırıldı. Yeniden ekleyin.",
+        "signatureGone": "Seçilen imza artık yok. Başka bir tane seçin.",
+        "sendRefused": "Posta sağlayıcısı bu e-postayı reddetti. Adresleri ve boyutu kontrol edip yeniden deneyin.",
+        "unavailable": "Bu posta kutusunun bağlantısı kopuk veya önce yeniden bağlanması gerekiyor.",
+        "attachmentBlocked": "Bu dosya türü e-postayla gönderilemez.",
+        "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip yeniden deneyin.",
+        "generic": "E-posta gönderilemedi. Yeniden deneyin.",
+        "bodyTooLong": "Bu e-posta göndermek için çok uzun. Kısaltıp yeniden deneyin."
+      },
+      "signature": {
+        "label": "İmza",
+        "auto": "Varsayılan ({name})",
+        "autoNone": "Varsayılan (yok)",
+        "none": "İmza yok",
+        "mine": "{name} (benim)",
+        "shared": "{name} (posta kutusu)",
+        "preview": "İmza önizlemesi",
+        "noneShown": "İmza eklenmeyecek."
       }
     },
     "inbox": {
       "group": "E-posta"
+    },
+    "imap": {
+      "eyebrow": "Diğer posta",
+      "title": "IMAP / SMTP posta kutusu bağla",
+      "reconnectTitle": "IMAP / SMTP posta kutusunu yeniden bağla",
+      "close": "Kapat",
+      "intro": "E-posta sağlayıcınızın bu adres için verdiği ayarları girin. Bir şey kaydedilmeden önce iki sunucuda da oturum açarız.",
+      "reconnectIntro": "Parolayı tekrar girin. Bir şey kaydedilmeden önce iki sunucuda da oturum açarız.",
+      "address": "Posta kutusu adresi",
+      "displayName": "Görünen ad",
+      "preset": "E-posta sağlayıcısı",
+      "presetHint": "Birini seçmek sunucu ayarlarını doldurur. Yine de değiştirebilirsiniz.",
+      "presetCustom": "Diğer (ayarları girin)",
+      "incoming": "Gelen posta (IMAP)",
+      "outgoing": "Giden posta (SMTP)",
+      "host": "Sunucu",
+      "port": "Bağlantı noktası",
+      "securityLabel": "Güvenlik",
+      "security": {
+        "ssl": "SSL/TLS",
+        "starttls": "STARTTLS",
+        "none": "Yok"
+      },
+      "username": "Kullanıcı adı",
+      "password": "Parola",
+      "passwordHint": "Şifrelenmiş olarak saklanır ve bir daha gösterilmez.",
+      "passwordAgain": "Parolayı tekrar yazın. Hiçbir zaman gösterilmez.",
+      "showPassword": "Parolayı göster",
+      "hidePassword": "Parolayı gizle",
+      "sameCredentials": "Göndermek için aynı kullanıcı adını ve parolayı kullan",
+      "noEncryption": "Bu bağlantı şifrelenmemiş. Ağdaki herkes parolayı ve e-postaları okuyabilir.",
+      "verifyNote": "Sunucu sertifikası her zaman denetlenir.",
+      "cancel": "İptal",
+      "submit": "Doğrula ve bağla",
+      "reconnectSubmit": "Doğrula ve yeniden bağla",
+      "verifying": "Doğrulanıyor",
+      "errors": {
+        "required": "Bu alan zorunludur.",
+        "invalid": "Bu değer geçerli değil."
+      },
+      "failure": {
+        "imapAuth": "Gelen sunucu (IMAP) kullanıcı adını veya parolayı reddetti. Kontrol edip tekrar deneyin.",
+        "smtpAuth": "Giden sunucu (SMTP) kullanıcı adını veya parolayı reddetti. Kontrol edip tekrar deneyin.",
+        "unreachable": "Posta sunucusuna ulaşılamadı veya sertifikası geçerli değil. Sunucuyu, bağlantı noktasını ve güvenliği kontrol edin.",
+        "generic": "Posta kutusu bağlanamadı. Tekrar deneyin."
+      }
+    },
+    "sharing": {
+      "title": "E-posta paylaşımı",
+      "intro": "İnsanların kendi posta kutularını bağlayıp bağlayamayacağına ve kimin görebileceğine karar verin.",
+      "enabled": {
+        "title": "Kişisel posta kutuları",
+        "body": "İnsanların kendi posta kutusunu bağlamasına izin verin. Konuşmaları yalnızca onlara görünür."
+      },
+      "who": {
+        "title": "Kimler bağlayabilir",
+        "body": "Yalnızca kişisel posta kutularını yönetme izni olanlar.",
+        "admins": "Yalnızca yöneticiler",
+        "agents": "Yöneticiler ve temsilciler"
+      },
+      "admins": {
+        "title": "Yöneticiler kişisel posta kutularını okuyabilir",
+        "body": "Yöneticiler başkalarının kişisel posta kutularındaki konuşmaları açabilir. Kapalıyken yalnızca bir özet görürler."
+      },
+      "offNote": "Kişisel posta kutularını kapatmak yalnızca bağlama seçeneğini gizler. Mevcut kişisel posta kutuları sahiplerine özel kalır.",
+      "save": "Kaydet",
+      "reset": "Değişiklikleri at",
+      "saved": "E-posta paylaşımı kaydedildi.",
+      "failed": "Kaydedilemedi. Tekrar deneyin."
+    },
+    "signatures": {
+      "title": "İmzalar",
+      "intro": "İmza, yanıtlarınızın sonuna eklenir. Her posta kutusunun ortak bir imzası olabilir, sizin de kendi imzanız olabilir ve önce o kullanılır.",
+      "new": "Yeni imza",
+      "edit": "İmzayı düzenle",
+      "scope": "Kime ait",
+      "scopes": {
+        "user": "Bana",
+        "mailbox": "Bir posta kutusuna",
+        "userBadge": "Benim",
+        "mailboxBadge": "Posta kutusu"
+      },
+      "mailbox": "Posta kutusu",
+      "pickMailbox": "Bir posta kutusu seçin",
+      "mailboxRequired": "Bir posta kutusu seçin.",
+      "name": "Ad",
+      "nameRequired": "İmzaya bir ad verin.",
+      "body": "İmza",
+      "bodyPlaceholder": "Adınız, unvanınız, telefonunuz, bağlantılarınız...",
+      "variables": "{name}, {title} ve {phone} kullanabilirsiniz. Gönderen kişinin bilgileriyle doldurulurlar.",
+      "tooLong": "İmza çok uzun.",
+      "defaultUser": "Varsayılan imzam olarak kullan",
+      "defaultMailbox": "Bu posta kutusunun varsayılanı olarak kullan",
+      "save": "Kaydet",
+      "cancel": "İptal",
+      "loading": "İmzalar yükleniyor...",
+      "loadError": "İmzalar yüklenemedi. Biraz sonra yeniden deneyin.",
+      "empty": "Henüz imza yok.",
+      "default": "Varsayılan",
+      "editShort": "Düzenle",
+      "delete": "Sil",
+      "confirmDelete": "Kalıcı olarak sil",
+      "noPermission": "İmzaları yönetme izniniz yok.",
+      "changed": "Bu imza başka bir yerde değiştirildi. Liste yeniden yüklendi, yeniden deneyin.",
+      "failed": "İmza kaydedilemedi. Yeniden deneyin."
     }
   }
 }

@@ -72,6 +72,11 @@ export const mailboxResponseSchema = z.object({
   /** Conversations from this mailbox. */
   conversationCount: z.number().int(),
   rowVersion: z.number().int(),
+  /**
+   * True on another person's personal mailbox that the viewer (an admin) may see exists but not read: the row is a summary (no conversation
+   * count, no error text, no server settings, no inbox filter) and offers no actions but Disconnect. Absent / false otherwise.
+   */
+  contentHidden: z.boolean().optional(),
 });
 export type MailboxResponse = z.infer<typeof mailboxResponseSchema>;
 

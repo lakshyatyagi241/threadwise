@@ -4,6 +4,7 @@ import { sql } from 'drizzle-orm';
 import {
   GOOGLE_CALENDAR_CALLBACK_PATH,
   MAIL_GOOGLE_CALLBACK_PATH,
+  MAIL_MICROSOFT_CALLBACK_PATH,
   SET_GROUPS,
   SET_GROUP_SCHEMAS,
   SET_SECRET_FIELDS,
@@ -150,6 +151,16 @@ export class SettingsService {
           saved ||
           process.env.GOOGLE_MAIL_REDIRECT_URI?.trim() ||
           `${appUrl}${MAIL_GOOGLE_CALLBACK_PATH}`,
+      };
+    } else if (group === 'microsoftMail') {
+      // Same rule as Google: what is saved, else the environment's, else the API's own callback (MAIL_MICROSOFT_CALLBACK_PATH).
+      const saved = (await this.values('microsoftMail')).redirectUri;
+      const appUrl = this.config.get('APP_URL', { infer: true }).replace(/\/$/, '');
+      extra = {
+        redirectUri:
+          saved ||
+          process.env.MICROSOFT_MAIL_REDIRECT_URI?.trim() ||
+          `${appUrl}${MAIL_MICROSOFT_CALLBACK_PATH}`,
       };
     }
     return {

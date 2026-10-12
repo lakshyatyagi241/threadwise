@@ -142,6 +142,27 @@ export class GmailClient {
     return page.messages[0] ?? null;
   }
 
+  /**
+   * `users.watch`: asks Gmail to publish a Pub/Sub message to `topicName` when the INBOX changes. The watch lasts about 7 days
+   * (`expiration`, epoch ms) and must be renewed by calling this again; `historyId` is the mailbox's position when it was set.
+   */
+  async watch(
+    token: string,
+    input: { topicName: string },
+  ): Promise<{ historyId: string; expiration: string | null }> {
+    const body = await this.api(token, 'POST', '/users/me/watch', {
+      topicName: input.topicName,
+      labelIds: ['INBOX'],
+      labelFilterBehavior: 'INCLUDE',
+    });
+    return { historyId: str(body.historyId) ?? '', expiration: str(body.expiration) };
+  }
+
+  /** `users.stop`: withdraws the watch. Gmail answers 204 whether or not one was set. */
+  async stopWatch(token: string): Promise<void> {
+    await this.api(token, 'POST', '/users/me/stop');
+  }
+
   private api(token: string, method: string, path: string, body?: unknown): Promise<Json> {
     const env = channelEmailEnv();
     return googleSend(`${env.GMAIL_API_URL}${path}`, {

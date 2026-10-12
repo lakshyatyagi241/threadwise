@@ -17,6 +17,14 @@ export function mailErrorKey(code: string): string | null {
       return 'sendRefused';
     case ERROR_CODES.MAIL_WRONG_ACCOUNT:
       return 'wrongAccount';
+    case ERROR_CODES.MAIL_PERSONAL_DISABLED:
+      return 'personalDisabled';
+    case ERROR_CODES.MAIL_PERSONAL_NOT_ALLOWED:
+      return 'personalNotAllowed';
+    case ERROR_CODES.MAIL_PROVIDER_UNSUPPORTED:
+      return 'providerUnsupported';
+    case ERROR_CODES.MAIL_RATE_LIMITED:
+      return 'rateLimited';
     case ERROR_CODES.PLAN_FEATURE_LOCKED:
       return 'locked';
     case 'ROW_VERSION_CONFLICT':

@@ -11,6 +11,7 @@ import {
 import type { NormalisedInbound } from '../../infra/providers/chat-conversations';
 import { ExternalChannelIngest } from '../chat-conversations';
 import { MailBounceHandler } from './mail-bounce.handler';
+import { MailLimits } from './mail-limits';
 import { channelAccountOf } from './mail-channel.sync';
 import type { MailboxRow } from './mailboxes.repository';
 
@@ -46,6 +47,7 @@ export class MailIngestService {
     private readonly media: ChatMediaStore,
     private readonly ingest: ExternalChannelIngest,
     private readonly bounces: MailBounceHandler,
+    private readonly limits: MailLimits,
   ) {}
 
   async store(
@@ -57,6 +59,14 @@ export class MailIngestService {
     if (mail.skip) return 'skipped';
     // A bounce report that was applied to the reply it is about is not a customer message (TW-MAIL-032).
     if ((await this.bounces.inspect(orgId, mailbox, mail)) === 'consumed') return 'skipped';
+
+    // Flood protection: one sender address mailing this mailbox over the limit inside the window is still stored (nothing is lost), but as
+    // automated and quiet: no unread count, no alert, no listener. A live history import is not counted (it is the past, not a flood).
+    const flooded = await this.isFlood(orgId, mailbox, mail, opts.quiet);
+    if (flooded) {
+      mail = { ...mail, automated: true };
+      opts = { ...opts, quiet: true };
+    }
 
     const stored: string[] = [];
     try {
@@ -72,6 +82,21 @@ export class MailIngestService {
       await this.removeAll(orgId, stored);
       throw err;
     }
+  }
+
+  private async isFlood(
+    orgId: number,
+    mailbox: MailboxRow,
+    mail: NormalisedMail,
+    quiet: boolean,
+  ): Promise<boolean> {
+    if (quiet) return false;
+    const env = channelEmailEnv();
+    return this.limits.hitAndCheck(
+      this.limits.floodKey(orgId, mailbox.uuid, mail.from.address),
+      env.MAIL_INBOUND_FLOOD_WINDOW_S * 1000,
+      env.MAIL_INBOUND_FLOOD_MAX,
+    );
   }
 
   /** Copies each attachment into the object store, within the size caps. Whatever cannot be stored is listed as `tooLarge` (not stored). */

@@ -11,6 +11,8 @@ export interface StoredEmailReply {
   bcc: string[];
   subject?: string;
   attachmentIds?: string[];
+  /** The composer's rich-text body (raw; the email adapter sanitises it). */
+  bodyHtml?: string;
   signatureId?: string;
   signature?: boolean;
 }
@@ -52,6 +54,7 @@ export function emailEnvelopeOf(
     references,
     threadId: inbound.threadId || threadId,
     ...(reply?.attachmentIds?.length ? { attachmentIds: reply.attachmentIds } : {}),
+    ...(reply?.bodyHtml ? { bodyHtml: reply.bodyHtml } : {}),
     ...(reply?.signatureId ? { signatureId: reply.signatureId } : {}),
     ...(reply?.signature === false ? { signature: false } : {}),
     ...(sentBy ? { sentBy } : {}),
@@ -193,6 +196,7 @@ export function messageFieldsOf(content: OutboundContent): {
           extras.bcc.length > 0 ||
           extras.subject ||
           extras.attachmentIds?.length ||
+          extras.bodyHtml ||
           extras.signatureId ||
           extras.signature === false)
           ? {
@@ -200,6 +204,7 @@ export function messageFieldsOf(content: OutboundContent): {
               bcc: extras.bcc,
               ...(extras.subject ? { subject: extras.subject } : {}),
               ...(extras.attachmentIds?.length ? { attachmentIds: extras.attachmentIds } : {}),
+              ...(extras.bodyHtml ? { bodyHtml: extras.bodyHtml } : {}),
               ...(extras.signatureId ? { signatureId: extras.signatureId } : {}),
               ...(extras.signature === false ? { signature: false } : {}),
             }

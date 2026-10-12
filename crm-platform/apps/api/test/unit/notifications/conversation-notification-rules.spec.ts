@@ -29,9 +29,14 @@ const viewer = (
   scope: ConversationViewer['scope'],
   teamIds: number[] = [],
 ): ConversationViewer => ({ userId, scope, teamIds });
-const rec = (u: number | null, t: number | null = null): ConversationRecord => ({
+const rec = (
+  u: number | null,
+  t: number | null = null,
+  owner: number | null = null,
+): ConversationRecord => ({
   assigneeUserId: u,
   assigneeTeamId: t,
+  channelOwnerUserId: owner,
 });
 
 // 1 sees all and may reply; 2 sees team threads (in team 10) and may reply; 3 sees only own; 4 has no grant; 5 reads but cannot reply.

@@ -50,6 +50,8 @@ export interface ParsedEmail {
   automated: boolean;
   /** Gmail says it is a draft, spam or trash, or our own sent mail: the sync skips it. */
   skip: 'draft' | 'spam' | 'trash' | 'sent' | null;
+  /** Present on a delivery-status notification (TW-MAIL-032). */
+  report: { deliveryStatus: string | null; original: string | null } | null;
 }
 
 const headerMap = (headers: GmailHeader[] | undefined): Record<string, string> => {
@@ -78,7 +80,13 @@ interface Walk {
   text: string[];
   html: string[];
   files: InboundAttachment[];
+  /** The delivery-status part and the returned original's headers of a bounce (TW-MAIL-032). */
+  status: string[];
+  original: string[];
 }
+
+const headerLines = (headers: GmailHeader[] | undefined): string =>
+  (headers ?? []).map((h) => `${h.name}: ${h.value}`).join('\n');
 
 function walk(part: GmailPart, out: Walk, path: string): void {
   const headers = headerMap(part.headers);
@@ -91,6 +99,33 @@ function walk(part: GmailPart, out: Walk, path: string): void {
   const contentId = headers['content-id']?.trim().replace(/^<|>$/g, '') || null;
   const filename = (part.filename ?? '').trim() || disposition.params.filename || '';
 
+  // A delivery-status notification's own parts: kept for the bounce handler, never shown as text or a file.
+  if (type === 'message/delivery-status') {
+    const bytes = bodyBytes(part);
+    if (bytes) out.status.push(bytes.toString('utf8'));
+    for (const p of part.parts ?? []) {
+      const b = bodyBytes(p);
+      if (b) out.status.push(b.toString('utf8'));
+    }
+    return;
+  }
+  if (type === 'text/rfc822-headers' || type === 'message/global-headers') {
+    const bytes = bodyBytes(part);
+    if (bytes) out.original.push(bytes.toString('utf8'));
+    return;
+  }
+  if (type === 'message/rfc822' || type === 'message/global') {
+    const bytes = bodyBytes(part);
+    out.original.push(
+      [
+        headerLines(part.headers),
+        ...(part.parts ?? []).map((p) => headerLines(p.headers)),
+        bytes?.toString('utf8') ?? '',
+      ]
+        .filter(Boolean)
+        .join('\n'),
+    );
+  }
   if (part.parts?.length && type.startsWith('multipart/')) {
     part.parts.forEach((p, i) => walk(p, out, `${path}.${p.partId ?? i}`));
     return;
@@ -147,7 +182,7 @@ export function parseGmailMessage(msg: GmailMessage, mailboxAddress: string): Pa
     parseHeaderParams(headers['content-type'] ?? undefined).value ||
     (payload.mimeType ?? '').toLowerCase();
 
-  const out: Walk = { text: [], html: [], files: [] };
+  const out: Walk = { text: [], html: [], files: [], status: [], original: [] };
   walk(payload, out, payload.partId ?? '0');
 
   const html = out.html.length ? out.html.join('\n') : null;
@@ -201,5 +236,12 @@ export function parseGmailMessage(msg: GmailMessage, mailboxAddress: string): Pa
     attachments: out.files,
     automated: isAutomated({ headers, from: from.address, contentType }),
     skip,
+    report:
+      out.status.length || out.original.length
+        ? {
+            deliveryStatus: out.status.join('\n\n') || null,
+            original: out.original.join('\n') || null,
+          }
+        : null,
   };
 }

@@ -7,11 +7,11 @@
       "kicker": "Channels",
       "title": "Email",
       "titleAccent": "mailboxes",
-      "intro": "Connect your Gmail or Google Workspace mailboxes. Customer emails arrive in the team inbox, one conversation per email thread, and your replies go out from the same address.",
+      "intro": "Connect your Gmail, Microsoft 365 or any IMAP mailbox. Customer emails arrive in the team inbox, one conversation per email thread, and your replies go out from the same address.",
       "inbox": "Open inbox",
       "channels": "Channels",
       "loadError": "Could not load your mailboxes. Try again in a moment.",
-      "cardCaption": "Gmail · Google Workspace",
+      "cardCaption": "Gmail · Microsoft 365 · IMAP",
       "connectedCount": "{count, plural, one {# mailbox connected} other {# mailboxes connected}}",
       "notConnected": "Not connected",
       "usageLabel": "Mailboxes used",
@@ -21,7 +21,7 @@
       "how": {
         "connect": {
           "title": "Connect a mailbox",
-          "body": "Sign in with Google and allow Threadwise to read and send mail for that address."
+          "body": "Sign in with Google or Microsoft, or enter your mail server settings, and allow Threadwise to read and send mail for that address."
         },
         "inbox": {
           "title": "Mail arrives in the inbox",
@@ -38,7 +38,7 @@
       },
       "connectedTitle": "Connected mailboxes",
       "total": "{count, plural, one {# mailbox} other {# mailboxes}}",
-      "empty": "No mailbox connected yet. Connect Gmail below to start receiving email in the inbox.",
+      "empty": "No mailbox connected yet. Connect one below to start receiving email in the inbox.",
       "addTitle": "Add a mailbox",
       "providers": {
         "google": {
@@ -54,12 +54,25 @@
           "hint": "Sign in with a Microsoft work or school account."
         }
       },
-      "connectGmail": "Connect Gmail",
-      "soon": "Soon",
-      "notReady": "Google sign-in is not set up for this platform yet. Ask your platform administrator to add the Google credentials.",
+      "notReady": "{provider} is not set up for this platform yet. Ask your platform administrator to add the credentials.",
       "limitReached": "You have used all {limit, plural, one {# mailbox} other {# mailboxes}} your plan allows. Remove a mailbox, or ask your administrator to upgrade the plan.",
       "noPermission": "You can see the mailboxes, but only people allowed to manage them can connect one.",
-      "connectFailed": "Could not start the Google sign-in. Try again."
+      "connectFailed": "Could not start the sign-in. Try again.",
+      "connect": {
+        "google": "Connect Gmail",
+        "microsoft": "Connect Microsoft 365",
+        "imap": "Connect IMAP / SMTP"
+      },
+      "imapConnected": "Mailbox connected. Mail from the last 7 days is being fetched into the inbox.",
+      "imapReconnected": "Mailbox reconnected.",
+      "scope": {
+        "title": "Who is this mailbox for?",
+        "shared": "Shared",
+        "sharedHint": "A company mailbox such as support@. The whole team can work its conversations.",
+        "personal": "Personal",
+        "personalHint": "Your own mailbox. Only you can read its conversations.",
+        "onlyPersonal": "You can connect your own personal mailbox. Only you can read its conversations."
+      }
     },
     "card": {
       "status": {
@@ -74,7 +87,7 @@
       "save": "Save",
       "cancel": "Cancel",
       "renamed": "Display name saved.",
-      "needsReauthHint": "Google no longer lets us read this mailbox. Reconnect it to receive and send mail again.",
+      "needsReauthHint": "The provider no longer lets us read this mailbox. Reconnect it to receive and send mail again.",
       "lastError": "Last problem: {error}",
       "lastSynced": "Last synced",
       "neverSynced": "Not synced yet",
@@ -87,25 +100,49 @@
       "removeTitle": "Remove mailbox",
       "removeConfirm": "Remove {address}? Its conversations stay in the inbox as read-only history, and no new mail is received or sent from it. You can connect the same address again later.",
       "removed": "Mailbox removed.",
-      "failed": "Could not update the mailbox. Try again."
+      "failed": "Could not update the mailbox. Try again.",
+      "provider": {
+        "google": "Gmail",
+        "microsoft": "Microsoft 365",
+        "imap": "IMAP / SMTP"
+      },
+      "scope": {
+        "shared": "Shared",
+        "personal": "Personal",
+        "personalOf": "Personal · {name}"
+      },
+      "push": "Live updates",
+      "pushHint": "New mail arrives as soon as the provider announces it.",
+      "signature": "Signature",
+      "signatureHint": "Replies from this mailbox get its signature.",
+      "summaryNote": "This is someone else's personal mailbox. Only its owner can read and manage it.",
+      "sendLimit": "Send limit per hour",
+      "limitDefault": "Platform default",
+      "limitPerHour": "{count, plural, one {# email per hour} other {# emails per hour}}",
+      "limitSaved": "Send limit saved.",
+      "needsReauthImap": "The mail server refused the saved password. Reconnect and enter the password again."
     },
     "outcome": {
       "connected": "Mailbox connected. Mail from the last 7 days is being fetched into the inbox.",
-      "denied": "Google sign-in was cancelled, so nothing was connected.",
-      "missing_scope": "Google did not give access to read and send mail. Connect again and tick every permission on the Google screen.",
+      "denied": "The sign-in was cancelled, so nothing was connected.",
+      "missing_scope": "Access to read and send mail was not given. Connect again and allow every permission on the sign-in screen.",
       "limit": "Your plan's mailbox limit is reached, so this mailbox was not connected.",
-      "not_configured": "Google sign-in is not set up for this platform yet. Ask your platform administrator.",
-      "wrong_account": "You signed in with a different Google account than the mailbox being reconnected. Sign in with the same address.",
+      "not_configured": "Sign-in for this provider is not set up for this platform yet. Ask your platform administrator.",
+      "wrong_account": "You signed in with a different account than the mailbox being reconnected. Sign in with the same address.",
       "failed": "Something went wrong while connecting the mailbox. Try again."
     },
     "errors": {
-      "notConfigured": "Google sign-in is not set up for this platform yet. Ask your platform administrator.",
+      "notConfigured": "Sign-in for this provider is not set up for this platform yet. Ask your platform administrator.",
       "limit": "Your plan's mailbox limit is reached.",
       "unavailable": "This mailbox is disconnected or needs to be reconnected first.",
-      "sendRefused": "Google refused to send this email. Check the addresses and the size, then try again.",
-      "wrongAccount": "That is a different Google account than this mailbox. Sign in with the same address.",
+      "sendRefused": "The mail provider refused to send this email. Check the addresses and the size, then try again.",
+      "wrongAccount": "That is a different account than this mailbox. Sign in with the same address.",
       "locked": "The email integration is not part of your plan.",
-      "changed": "This mailbox was changed somewhere else. The list has been reloaded, try again."
+      "changed": "This mailbox was changed somewhere else. The list has been reloaded, try again.",
+      "personalDisabled": "Personal mailboxes are turned off for this workspace.",
+      "personalNotAllowed": "You are not allowed to connect a personal mailbox.",
+      "providerUnsupported": "This mail provider is not available.",
+      "rateLimited": "This mailbox reached its sending limit. Try again later."
     },
     "guide": {
       "title": "Setup guide",
@@ -125,10 +162,24 @@
       },
       "trouble": {
         "title": "If something looks wrong",
-        "p1": "Needs reconnect means Google revoked or expired the access. Select Reconnect and sign in with the same address.",
+        "p1": "Needs reconnect means the provider revoked or expired the access, or the mail server refused the password. Select Reconnect.",
         "p2": "Error shows the last problem. Select Sync now to try again; if it keeps failing, reconnect the mailbox.",
-        "p3": "Connect is disabled when the platform has no Google sign-in set up or your plan's mailbox limit is reached.",
+        "p3": "Connect is disabled when the platform has no sign-in set up for that provider or your plan's mailbox limit is reached.",
         "p4": "Images in an email stay hidden until you choose Load images in the conversation."
+      },
+      "other": {
+        "title": "Connect Microsoft 365 or another mail provider",
+        "p1": "For Microsoft 365 or Outlook, choose Connect Microsoft 365 and sign in with the work or school account that owns the mailbox.",
+        "p2": "For any other provider, choose Connect IMAP / SMTP and enter the server, port, security, user name and password from your provider.",
+        "p3": "We log in to both the incoming and the outgoing server first. If one refuses, the message says which.",
+        "p4": "Some providers need an app password instead of your normal password. Create one in your provider's security settings."
+      },
+      "personal": {
+        "title": "Personal mailboxes and sharing",
+        "p1": "An administrator turns personal mailboxes on in Email sharing and chooses who can connect one.",
+        "p2": "When you connect a mailbox, choose Personal. Only you can read its conversations in the inbox.",
+        "p3": "Admins see only a summary of your mailbox, unless the workspace lets admins read personal mailboxes.",
+        "p4": "Turning personal mailboxes off never opens an existing personal mailbox to other people."
       }
     },
     "thread": {
@@ -145,7 +196,13 @@
       "noBody": "This email has no text.",
       "attachments": "{count, plural, one {# attachment} other {# attachments}}",
       "tooLarge": "too large to keep ({size})",
-      "download": "Download {name} ({size})"
+      "download": "Download {name} ({size})",
+      "bounce": {
+        "title": "Not delivered to {address}.",
+        "reason": "Reason: {reason}",
+        "hard": "The address was refused for good. Check it for typos, then send a new email to the corrected address.",
+        "soft": "This looks temporary, such as a full mailbox. It may work if you send again later, or edit the address."
+      }
     },
     "composer": {
       "toggle": "Cc, Bcc and subject",
@@ -160,10 +217,174 @@
         "ccTooMany": "Cc takes at most 20 addresses.",
         "bccTooMany": "Bcc takes at most 20 addresses.",
         "subjectTooLong": "The subject can be at most 998 characters."
+      },
+      "editor": {
+        "toolbar": "Text formatting",
+        "bold": "Bold",
+        "italic": "Italic",
+        "underline": "Underline",
+        "bulletList": "Bulleted list",
+        "numberedList": "Numbered list",
+        "quote": "Quote",
+        "link": "Add link",
+        "clear": "Clear formatting",
+        "linkAddress": "Link address",
+        "linkApply": "Add",
+        "linkInvalid": "Enter a web, mail or phone address.",
+        "label": "Email reply",
+        "toPlain": "Switch to plain text",
+        "toRich": "Switch to formatting",
+        "hint": "Press Ctrl+Enter (Cmd+Enter on Mac) to send. Enter starts a new line."
+      },
+      "attach": {
+        "dismiss": "Dismiss",
+        "list": "Attached files ({count})",
+        "uploading": "Uploading {name}",
+        "ready": "Attached",
+        "failed": "Upload failed",
+        "retry": "Retry",
+        "remove": "Remove {name}",
+        "waiting": "Waiting for the files to finish uploading.",
+        "fixFailed": "Retry or remove the files that did not upload.",
+        "refused": {
+          "empty": "{name} is empty and was not added.",
+          "tooLarge": "{name} is larger than {max} and was not added.",
+          "tooMany": "Only {count} files fit in one email. {name} was not added.",
+          "totalTooLarge": "{name} would make the email too large and was not added.",
+          "blocked": "{name} is a file type that email cannot carry and was not added."
+        }
+      },
+      "error": {
+        "rateLimited": "This mailbox has reached its hourly sending limit. {seconds, plural, =0 {Try again in a little while.} other {Try again in # s.}}",
+        "attachmentTooLarge": "A file is too large to attach. Each file can be at most 10 MB and all files together at most 20 MB.",
+        "tooManyAttachments": "Too many files. An email takes at most 10.",
+        "attachmentGone": "An attached file expired or was removed. Attach it again.",
+        "signatureGone": "The chosen signature no longer exists. Pick another one.",
+        "sendRefused": "The mail provider refused this email. Check the addresses and the size, then try again.",
+        "unavailable": "This mailbox is disconnected or needs to be reconnected first.",
+        "attachmentBlocked": "That file type cannot be sent by email.",
+        "network": "Could not reach the server. Check your connection and try again.",
+        "generic": "The email could not be sent. Try again.",
+        "bodyTooLong": "This email is too long to send. Shorten it and try again."
+      },
+      "signature": {
+        "label": "Signature",
+        "auto": "Default ({name})",
+        "autoNone": "Default (none)",
+        "none": "No signature",
+        "mine": "{name} (mine)",
+        "shared": "{name} (mailbox)",
+        "preview": "Signature preview",
+        "noneShown": "No signature will be added."
       }
     },
     "inbox": {
       "group": "Email"
+    },
+    "imap": {
+      "eyebrow": "Other mail",
+      "title": "Connect IMAP / SMTP mailbox",
+      "reconnectTitle": "Reconnect IMAP / SMTP mailbox",
+      "close": "Close",
+      "intro": "Enter the settings your mail provider gives for this address. We log in to both servers before anything is saved.",
+      "reconnectIntro": "Enter the password again. We log in to both servers before anything is saved.",
+      "address": "Mailbox address",
+      "displayName": "Display name",
+      "preset": "Mail provider",
+      "presetHint": "Picking one fills in the server settings. You can still change them.",
+      "presetCustom": "Other (enter the settings)",
+      "incoming": "Incoming mail (IMAP)",
+      "outgoing": "Outgoing mail (SMTP)",
+      "host": "Server",
+      "port": "Port",
+      "securityLabel": "Security",
+      "security": {
+        "ssl": "SSL/TLS",
+        "starttls": "STARTTLS",
+        "none": "None"
+      },
+      "username": "User name",
+      "password": "Password",
+      "passwordHint": "Stored encrypted and never shown again.",
+      "passwordAgain": "Type the password again. It is never shown.",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "sameCredentials": "Use the same user name and password for sending",
+      "noEncryption": "This connection is not encrypted. Anyone on the network could read the password and the mail.",
+      "verifyNote": "The server certificate is always checked.",
+      "cancel": "Cancel",
+      "submit": "Verify and connect",
+      "reconnectSubmit": "Verify and reconnect",
+      "verifying": "Verifying",
+      "errors": {
+        "required": "This field is required.",
+        "invalid": "This value is not valid."
+      },
+      "failure": {
+        "imapAuth": "The incoming server (IMAP) refused the user name or password. Check them and try again.",
+        "smtpAuth": "The outgoing server (SMTP) refused the user name or password. Check them and try again.",
+        "unreachable": "Could not reach the mail server or its certificate is not valid. Check the server, port and security.",
+        "generic": "Could not connect the mailbox. Try again."
+      }
+    },
+    "sharing": {
+      "title": "Email sharing",
+      "intro": "Decide whether people can connect their own mailbox and who can see it.",
+      "enabled": {
+        "title": "Personal mailboxes",
+        "body": "Let people connect their own mailbox. Its conversations are visible only to them."
+      },
+      "who": {
+        "title": "Who can connect one",
+        "body": "Only people with permission to manage personal mailboxes can.",
+        "admins": "Admins only",
+        "agents": "Admins and agents"
+      },
+      "admins": {
+        "title": "Admins can read personal mailboxes",
+        "body": "Admins can open the conversations of other people's personal mailboxes. When off, they see only a summary."
+      },
+      "offNote": "Turning personal mailboxes off only hides the connect option. Existing personal mailboxes stay private to their owners.",
+      "save": "Save",
+      "reset": "Discard changes",
+      "saved": "Email sharing saved.",
+      "failed": "Could not save. Try again."
+    },
+    "signatures": {
+      "title": "Signatures",
+      "intro": "A signature is added at the end of your replies. Each mailbox can have a shared one, and you can keep your own, which is used first.",
+      "new": "New signature",
+      "edit": "Edit signature",
+      "scope": "Who it belongs to",
+      "scopes": {
+        "user": "Me",
+        "mailbox": "A mailbox",
+        "userBadge": "Mine",
+        "mailboxBadge": "Mailbox"
+      },
+      "mailbox": "Mailbox",
+      "pickMailbox": "Choose a mailbox",
+      "mailboxRequired": "Choose a mailbox.",
+      "name": "Name",
+      "nameRequired": "Give the signature a name.",
+      "body": "Signature",
+      "bodyPlaceholder": "Your name, role, phone, links...",
+      "variables": "You can use {name}, {title} and {phone}. They are filled in with the details of the person who sends.",
+      "tooLong": "The signature is too long.",
+      "defaultUser": "Use as my default signature",
+      "defaultMailbox": "Use as the default for this mailbox",
+      "save": "Save",
+      "cancel": "Cancel",
+      "loading": "Loading signatures...",
+      "loadError": "Could not load the signatures. Try again in a moment.",
+      "empty": "No signatures yet.",
+      "default": "Default",
+      "editShort": "Edit",
+      "delete": "Delete",
+      "confirmDelete": "Delete for good",
+      "noPermission": "You do not have permission to manage signatures.",
+      "changed": "This signature was changed somewhere else. The list has been reloaded, try again.",
+      "failed": "Could not save the signature. Try again."
     }
   }
 }

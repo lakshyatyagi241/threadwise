@@ -58,7 +58,7 @@ needs the platform's Google OAuth client and a test user (runbook) and is listed
 | TW-MAIL-024 | seam-done    | One channel per mailbox through the inbox's existing channel filter; the switcher and From selector are the web's.                                        |
 | TW-MAIL-025 | backend-done | One conversation per thread, contact by email identity.                                                                                                   |
 | TW-MAIL-026 | backend-done | Sanitised HTML, cc, headers, attachments and their download.                                                                                              |
-| TW-MAIL-027 | not built    | Rich composer, attachments out, signatures (P1, later). cc/bcc/subject extras are done.                                                                   |
+| TW-MAIL-027 | web-done     | Rich-text composer (bold, italic, underline, lists, quote, links; plain-text fallback), attachments (button, drag-drop, paste; progress, retry, remove), signature picker with preview, signatures panel on the hub, outbound attachments and bounce notice in the thread. Backend by the API build. |
 | TW-MAIL-028 | backend-done | `needs_reauth`, `error` with a reason, reconnect, Sync now.                                                                                               |
 | TW-MAIL-029 | backend-done | `GoogleMailConfig` reads the `googleMail` settings group with the env fallback; the console page is the integration packaging's.                          |
 | TW-MAIL-030 | backend-done | Keys `mail.mailboxes.read/manage`, feature `email_channel`, limit `email_mailboxes`.                                                                      |
@@ -70,3 +70,40 @@ Reference has no native email screen (it lists linked MailTrixy mailboxes in its
 - `apps/web/e2e/channel-email/hub.spec.ts` against the running stack: 5 pass (hub and usage meter, Connect Gmail with Google configured asks the API, setup guide, Soon cards for IMAP and Microsoft, `?email=denied` outcome). Two checks skip by design on any one stack (provider-not-ready needs Google unset, a connected mailbox needs a first sync). With the platform Google env set, `POST /v2/email/mailboxes/connect` returns a real `accounts.google.com` URL carrying the `gmail.readonly` and `gmail.send` scopes, offline access and the callback redirect (no sign-in was completed).
 - Ours-only page probes (`e2e/channel-email/parity/adhoc-email-hub.twin.mjs`: load, a11y, responsive, keyboard, degraded, auth, perf): 25 same, 0 blocker or major. One real defect found and fixed: the "Not connected" and "Soon" pills failed colour contrast (muted text on a muted background). Two minor findings remain and come from the shared shell, not this screen: two 19-20px links in the Settings breadcrumb (`settings-hub`) and two shell landmarks without distinct labels.
 - Inline pictures: a mail's `cid:` pictures are pointed at the attachment route in the thread frame, which may load pictures from its own origin only; remote pictures stay blocked until "Load images".
+
+## TW-MAIL-032 (bounces, loop protection, send limits)
+
+| #   | Reference                                              | Threadwise                                                                                                                                                                                         | Why                                         |
+| --- | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| 11  | No bounce handling (MailTrixy kept suppression)        | A delivery-status notification of any provider is applied to the reply it is about (`delivery: 'bounced'`, kind, reason, recipient), shown in the thread, told to the sender, and never opens a conversation. | Reference only bridges; intentional.        |
+| 12  | An auto-responder could be answered and loop           | Auto-Submitted, Precedence, X-Auto-Response-Suppress and list headers mark mail `automated`; our automated mail says `Auto-Submitted: auto-generated`.                                             | Loop protection Reference lacks.            |
+| 13  | No send limits                                         | Per-mailbox hourly cap (editable, default 100), per-recipient burst limit, inbound per-sender flood limit; a hard-bounced address is refused for 7 days.                                           | Protects the mailbox reputation and quotas. |
+
+## TW-MAIL-031 (IMAP / SMTP provider)
+
+| #   | Reference                                                          | Threadwise                                                                                                                                                              | Why                                                  |
+| --- | ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| 14  | Other mail (IMAP) existed only inside MailTrixy; Threadwise never spoke IMAP or SMTP | The platform connects any IMAP/SMTP server itself: both logins verified before saving, the failing side named, validated TLS only, SSRF-guarded, UID sync with a repair on UIDVALIDITY change. | Reference only bridges; intentional addition.        |
+
+## TW-MAIL-033 Gmail push
+
+Port-addition, no Reference counterpart (Reference bridges to MailTrixy and has no push). Same inbox result as polling, delivered within seconds; polling remains the safety net. Defects vs Reference: none; difference is intended.
+
+### TW-MAIL-027 web (composer, attachments, signatures) and TW-MAIL-032 thread display
+
+- Deviation from Reference (which only bridged to MailTrixy and had no native composer): an email reply is written in a small rich-text box built on the browser's own editing (`rich-editor.tsx`, no new dependency). Everything it produces, and everything pasted into it or shown from a signature, is rebuilt through the allow-list in `lib/rich-text.ts` (no scripts, handlers, styles, unknown tags; links only web, mail and phone). The server sanitises again.
+- The reply carries `body` (plain text derived from the HTML) and, as an additive contract field, `email.bodyHtml` (the rich body). **Seam added:** `bodyHtml` on `emailReplyExtrasSchema`.
+- Attachments upload on add (`POST /v2/email/attachments/upload`, field `conversationId` then `file`), the reply names them in `attachmentIds`; remove calls `DELETE /v2/email/attachments/:id` (best effort, files expire anyway). Client caps come from the contract; types email cannot carry are refused before upload.
+- Signatures: picker under the box (default added by the server, switch, none, preview with `{{name}}` and `{{phone}}` filled from the session; `{{title}}` is filled by the server); management panel `signatures-panel.tsx` mounted on the hub. An agent edits only their own user signatures, mailbox signatures need `mail.mailboxes.manage` (or ownership of a personal mailbox).
+- Thread: a sent message that bounced shows "Not delivered to <address>" with the reason and hard or soft wording; outbound attachments list as downloads; a refused send (`MAIL_RATE_LIMITED` with Retry-After, attachment and signature codes) shows above the composer and in the failed bubble. The bounce system line and `MAIL_RECIPIENT_BOUNCED` failure show the server's own English sentence (not translated).
+
+## Microsoft 365 / Outlook (TW-MAIL-034)
+
+| ID          | Status       | Note                                                                                                                                                                                                      |
+| ----------- | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| TW-MAIL-034 | backend-done | Microsoft Graph provider: OAuth code flow, delta sync of the Inbox, reply drafts that keep the thread, error mapping, `microsoftMail` operator settings. Deviation from Reference (intentional): Reference only bridges to MailTrixy. Verified against a local stand-in written from Microsoft's documentation; **not run against a real Entra tenant** (runbook lists what to check first). |
+
+## TW-MAIL-035 personal mailboxes (port addition)
+
+Not in Reference (deviation, intentional). Behaviour: see `docs/api/channel-email.md` "Personal mailboxes and the email sharing policy". Parity risk checked: shared mailboxes and every non-email channel behave exactly as before
+(the personal-mailbox filter is a no-op for them); the leakage matrix lives in `test/e2e/channel-email/personal-mailboxes.e2e.spec.ts`. Web (hub scope choice, Email sharing panel, summary rows) is task 7's.

@@ -298,6 +298,10 @@
           "label": "Documento de venda decidido",
           "hint": "Um orçamento ou fatura foi aceito ou recusado."
         },
+        "email_bounced": {
+          "label": "E-mail não entregue",
+          "hint": "Um e-mail que você enviou foi devolvido ou atrasou."
+        },
         "wallet_credited": {
           "label": "Carteira recarregada",
           "hint": "A carteira do espaço de trabalho recebeu um crédito."

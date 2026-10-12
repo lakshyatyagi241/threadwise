@@ -18,6 +18,7 @@
       "campaigns": "Kampanyalar",
       "googleCalendar": "Google Takvim",
       "googleMail": "Gmail",
+      "microsoftMail": "Microsoft 365",
       "flowBuilder": "Akış oluşturucu"
     },
     "hub": {
@@ -937,6 +938,9 @@
         "sections": {
           "oauth": {
             "title": "Google OAuth istemcisi"
+          },
+          "push": {
+            "title": "Gmail push (isteğe bağlı)"
           }
         },
         "fields": {
@@ -951,6 +955,49 @@
           "clientSecret": {
             "label": "İstemci gizli anahtarı",
             "hint": "Şifreli olarak saklanır, bir daha gösterilmez. Boş bırakılırsa kayıtlı olan korunur; GOOGLE_MAIL_CLIENT_SECRET yedek olarak kullanılır."
+          },
+          "redirectUri": {
+            "label": "Yönlendirme URI geçersiz kılma",
+            "hint": "Yukarıdaki adresi kullanmak için boş bırakın. İstemcideki Yetkili yönlendirme URI'lerinden biriyle birebir eşleşmelidir."
+          },
+          "pubsubTopic": {
+            "label": "Pub/Sub konusu",
+            "hint": "projects/PROJECT_ID/topics/TOPIC_ID. Bu konuda gmail-api-push@system.gserviceaccount.com hesabına Publisher rolünü verin. Boşsa GOOGLE_MAIL_PUBSUB_TOPIC kullanılır; konu yoksa posta kutuları yalnızca yoklanır."
+          },
+          "pushAudience": {
+            "label": "Push hedef kitlesi",
+            "hint": "Push aboneliğinde ayarlanan hedef kitle (audience). Boşsa GOOGLE_MAIL_PUSH_AUDIENCE, o da yoksa bu platformun push uç noktasının adresi kullanılır."
+          },
+          "pushServiceAccount": {
+            "label": "Push hizmet hesabı",
+            "hint": "Push aboneliğinin imzalarken kullandığı hizmet hesabı. Başka bir hesaptan gelen push reddedilir. Boşsa GOOGLE_MAIL_PUSH_SERVICE_ACCOUNT kullanılır."
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "Microsoft 365 e-postası",
+        "description": "Her çalışma alanının Outlook ve Microsoft 365 posta kutularını bağladığı Microsoft uygulaması.",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra uygulaması"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Çalışma alanlarının Microsoft 365 bağlamasına izin ver",
+            "hint": "Kapalı: hiçbir çalışma alanı bağlanamaz ve e-posta okunmaz ya da gönderilmez. Zaten bağlı posta kutuları korunur."
+          },
+          "clientId": {
+            "label": "Uygulama (istemci) kimliği",
+            "hint": "Microsoft Entra yönetim merkezi, Uygulama kayıtları, Genel bakış bölümünden. Boşsa MICROSOFT_MAIL_CLIENT_ID kullanılır."
+          },
+          "clientSecret": {
+            "label": "İstemci gizli anahtarı",
+            "hint": "Şifreli olarak saklanır, bir daha gösterilmez. Boş bırakılırsa kayıtlı olan korunur; MICROSOFT_MAIL_CLIENT_SECRET yedek olarak kullanılır."
+          },
+          "tenant": {
+            "label": "Kiracı",
+            "hint": "common iş, okul ve kişisel hesaplara izin verir; tek kiracılı uygulama için dizin (kiracı) kimliğini kullanın. Boşsa MICROSOFT_MAIL_TENANT, o da yoksa common kullanılır."
           },
           "redirectUri": {
             "label": "Yönlendirme URI geçersiz kılma",
@@ -1095,6 +1142,11 @@
         "title": "Gmail e-posta",
         "description": "Çalışma alanlarının Gmail posta kutularını bağlamak için kullandığı Google OAuth istemcisi.",
         "tags": "Google / OAuth / Gmail"
+      },
+      "microsoftMail": {
+        "title": "Microsoft 365 e-postası",
+        "description": "Çalışma alanlarının Outlook ve Microsoft 365 posta kutularını bağlamak için kullandığı Microsoft uygulaması.",
+        "tags": "Microsoft / OAuth / Outlook"
       },
       "flowBuilder": {
         "title": "Akış oluşturucu",
@@ -1689,6 +1741,10 @@
           "oauth": {
             "title": "Google OAuth istemcisi",
             "description": "İstemci kimliği ve gizli anahtar olmadan çalışma alanları posta kutusu bağlayamaz."
+          },
+          "push": {
+            "title": "Gmail push (isteğe bağlı)",
+            "description": "Yeni posta, bir sonraki yoklamayı beklemeden birkaç saniye içinde ekip gelen kutusuna ulaşır. Yoklama güvence olarak açık kalır."
           }
         },
         "guide": {
@@ -1705,6 +1761,42 @@
             "consent": {
               "title": "3. Onay ekranı",
               "body": "openid, email, gmail.readonly ve gmail.send kapsamlarını ekleyin. Gmail kapsamları kısıtlıdır: genel kullanım için Google'ın uygulamayı doğrulaması gerekir, Test modunda ise izin 7 gün sonra sona erer."
+            },
+            "workspaces": {
+              "title": "4. Çalışma alanları bağlanır",
+              "body": "İstemci kimliğini ve gizli anahtarı buraya yapıştırıp kaydedin. Ardından yöneticiler E-posta bölümünden bağlanır."
+            },
+            "push": {
+              "title": "5. Anında posta (isteğe bağlı)",
+              "body": "Bir Pub/Sub konusu oluşturun, gmail-api-push@system.gserviceaccount.com hesabına Publisher rolünü verin, APP_URL/v2/public/email/google/push adresine OIDC kimlik doğrulamalı bir push aboneliği ekleyin, sonra konuyu, hedef kitleyi ve hizmet hesabını buraya girin."
+            }
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "Microsoft 365 e-postası",
+        "eyebrow": "Yönetici - E-posta",
+        "description": "Tüm platform için tek bir Microsoft Entra uygulaması. Her çalışma alanı kendi posta kutularını E-posta bölümünden bağlar ve istemci kimliğini ya da gizli anahtarı hiç görmez.",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra uygulaması",
+            "description": "İstemci kimliği ve gizli anahtar olmadan çalışma alanları posta kutusu bağlayamaz."
+          }
+        },
+        "guide": {
+          "title": "Microsoft Entra'da kurun",
+          "items": {
+            "registration": {
+              "title": "1. Uygulama kaydı",
+              "body": "Microsoft Entra yönetim merkezinde bir uygulama kaydı oluşturun. Müşterilerinizin hesap türlerini seçin (iş veya okul, Outlook.com için kişisel hesaplar) ve Uygulama (istemci) kimliğini ve kiracıyı buraya kopyalayın."
+            },
+            "redirect": {
+              "title": "2. Yeniden yönlendirme URI'si ve gizli anahtar",
+              "body": "Bu sayfada gösterilen yeniden yönlendirme URI'sini Web platformu yeniden yönlendirmesi olarak ekleyin, Sertifikalar ve gizli diziler bölümünde bir istemci gizli anahtarı oluşturun ve değerini buraya yapıştırın."
+            },
+            "permissions": {
+              "title": "3. API izinleri",
+              "body": "Microsoft Graph temsilci izinlerini ekleyin: Mail.Read, Mail.Send, User.Read ve offline_access. Genel kullanım için yayımcı doğrulamasını tamamlayın; bazı kuruluşlar ayrıca yönetici onayı ister."
             },
             "workspaces": {
               "title": "4. Çalışma alanları bağlanır",
@@ -1800,6 +1892,12 @@
     "googleCallback": {
       "redirectTitle": "Yönlendirme URI'si",
       "redirectHint": "Bu adresi OAuth istemcisinde Yetkili yönlendirme URI'si olarak tam olarak kaydedin. Bir çalışma alanı yöneticisi onayladıktan sonra Google tarayıcıyı buraya yönlendirir.",
+      "copy": "Kopyala",
+      "copied": "Kopyalandı"
+    },
+    "microsoftCallback": {
+      "redirectTitle": "Yönlendirme URI'si",
+      "redirectHint": "Bu adresi uygulama kaydında tam olarak Web yeniden yönlendirme URI'si olarak kaydedin. Bir çalışma alanı yöneticisi onay verdikten sonra Microsoft tarayıcıyı buraya gönderir.",
       "copy": "Kopyala",
       "copied": "Kopyalandı"
     }

@@ -9,7 +9,7 @@ import {
 } from '@crm/contracts';
 import type { ShareInput } from '../lib/share';
 import { useRealtimeEvent, useResync, useRoom } from '@/lib/realtime';
-import { errorCode } from '../lib/errors';
+import { errorCode, retryAfterOf } from '../lib/errors';
 import {
   EMPTY_THREAD,
   firstSeq,
@@ -253,7 +253,13 @@ export function useThread(
     } catch (e) {
       const code = errorCode(e);
       if (latest.current.conversationId === id) {
-        dispatch({ type: 'sendFailed', clientMessageId: p.clientMessageId, error: code });
+        const retryAfterS = retryAfterOf(e);
+        dispatch({
+          type: 'sendFailed',
+          clientMessageId: p.clientMessageId,
+          error: code,
+          ...(retryAfterS !== undefined ? { retryAfterS } : {}),
+        });
       }
       if (code === 'SERVICE_WINDOW_CLOSED') latest.current.options.onWindowClosed();
     } finally {

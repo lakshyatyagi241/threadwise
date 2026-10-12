@@ -287,6 +287,7 @@ export class InboxConversationsService {
           rowVersion: result.row.rowVersion,
           assigneeUserId: result.row.assigneeUserId,
           assigneeTeamId: result.row.assigneeTeamId,
+          channelOwnerUserId: result.row.channelOwnerUserId,
         },
         ['status'],
       );

@@ -7,11 +7,11 @@
       "kicker": "Kanały",
       "title": "E-mail",
       "titleAccent": "skrzynki pocztowe",
-      "intro": "Połącz swoje skrzynki Gmail lub Google Workspace. E-maile od klientów trafiają do skrzynki zespołu, po jednej rozmowie na każdy wątek, a Twoje odpowiedzi wychodzą z tego samego adresu.",
+      "intro": "Połącz swój Gmail, Microsoft 365 lub dowolną skrzynkę IMAP. E-maile od klientów trafiają do skrzynki zespołu, jedna rozmowa na wątek, a Twoje odpowiedzi wychodzą z tego samego adresu.",
       "inbox": "Otwórz skrzynkę odbiorczą",
       "channels": "Kanały",
       "loadError": "Nie udało się wczytać skrzynek pocztowych. Spróbuj ponownie za chwilę.",
-      "cardCaption": "Gmail · Google Workspace",
+      "cardCaption": "Gmail · Microsoft 365 · IMAP",
       "connectedCount": "{count, plural, one {# połączona skrzynka} few {# połączone skrzynki} many {# połączonych skrzynek} other {# połączonej skrzynki}}",
       "notConnected": "Niepołączono",
       "usageLabel": "Wykorzystane skrzynki",
@@ -21,7 +21,7 @@
       "how": {
         "connect": {
           "title": "Połącz skrzynkę",
-          "body": "Zaloguj się przez Google i zezwól Threadwise na odczyt i wysyłanie poczty z tego adresu."
+          "body": "Zaloguj się przez Google lub Microsoft albo wpisz ustawienia swojego serwera poczty i pozwól Threadwise czytać i wysyłać pocztę z tego adresu."
         },
         "inbox": {
           "title": "Poczta trafia do skrzynki odbiorczej",
@@ -38,7 +38,7 @@
       },
       "connectedTitle": "Połączone skrzynki",
       "total": "{count, plural, one {# skrzynka} few {# skrzynki} many {# skrzynek} other {# skrzynki}}",
-      "empty": "Nie połączono jeszcze żadnej skrzynki. Połącz Gmail poniżej, aby zacząć odbierać e-maile w skrzynce odbiorczej.",
+      "empty": "Nie połączono jeszcze żadnej skrzynki. Połącz ją poniżej, aby odbierać pocztę w skrzynce odbiorczej.",
       "addTitle": "Dodaj skrzynkę",
       "providers": {
         "google": {
@@ -54,12 +54,25 @@
           "hint": "Zaloguj się na konto służbowe lub szkolne Microsoft."
         }
       },
-      "connectGmail": "Połącz Gmail",
-      "soon": "Wkrótce",
-      "notReady": "Logowanie przez Google nie zostało jeszcze skonfigurowane dla tej platformy. Poproś administratora platformy o dodanie danych uwierzytelniających Google.",
+      "notReady": "{provider} nie jest jeszcze skonfigurowany na tej platformie. Poproś administratora platformy o dodanie danych dostępowych.",
       "limitReached": "Wykorzystano wszystkie {limit, plural, one {# skrzynkę} few {# skrzynki} many {# skrzynek} other {# skrzynki}} dozwolone w Twoim planie. Usuń skrzynkę lub poproś administratora o zmianę planu na wyższy.",
       "noPermission": "Możesz zobaczyć skrzynki, ale połączyć nową mogą tylko osoby z uprawnieniami do zarządzania nimi.",
-      "connectFailed": "Nie udało się rozpocząć logowania przez Google. Spróbuj ponownie."
+      "connectFailed": "Nie udało się rozpocząć logowania. Spróbuj ponownie.",
+      "connect": {
+        "google": "Połącz Gmail",
+        "microsoft": "Połącz Microsoft 365",
+        "imap": "Połącz IMAP / SMTP"
+      },
+      "imapConnected": "Skrzynka połączona. Poczta z ostatnich 7 dni jest pobierana do skrzynki odbiorczej.",
+      "imapReconnected": "Skrzynka połączona ponownie.",
+      "scope": {
+        "title": "Dla kogo jest ta skrzynka?",
+        "shared": "Współdzielona",
+        "sharedHint": "Skrzynka firmowa, np. support@. Cały zespół może obsługiwać jej rozmowy.",
+        "personal": "Osobista",
+        "personalHint": "Twoja własna skrzynka. Tylko Ty możesz czytać jej rozmowy.",
+        "onlyPersonal": "Możesz połączyć własną skrzynkę osobistą. Tylko Ty możesz czytać jej rozmowy."
+      }
     },
     "card": {
       "status": {
@@ -74,7 +87,7 @@
       "save": "Zapisz",
       "cancel": "Anuluj",
       "renamed": "Zapisano nazwę wyświetlaną.",
-      "needsReauthHint": "Google nie pozwala już odczytywać tej skrzynki. Połącz ją ponownie, aby znów odbierać i wysyłać pocztę.",
+      "needsReauthHint": "Dostawca nie pozwala już czytać tej skrzynki. Połącz ją ponownie, aby znów odbierać i wysyłać pocztę.",
       "lastError": "Ostatni problem: {error}",
       "lastSynced": "Ostatnia synchronizacja",
       "neverSynced": "Jeszcze nie zsynchronizowano",
@@ -87,25 +100,49 @@
       "removeTitle": "Usuń skrzynkę",
       "removeConfirm": "Usunąć {address}? Jej rozmowy pozostaną w skrzynce odbiorczej jako historia tylko do odczytu, a nowa poczta nie będzie z niej odbierana ani wysyłana. Ten sam adres możesz połączyć ponownie później.",
       "removed": "Skrzynka została usunięta.",
-      "failed": "Nie udało się zaktualizować skrzynki. Spróbuj ponownie."
+      "failed": "Nie udało się zaktualizować skrzynki. Spróbuj ponownie.",
+      "provider": {
+        "google": "Gmail",
+        "microsoft": "Microsoft 365",
+        "imap": "IMAP / SMTP"
+      },
+      "scope": {
+        "shared": "Współdzielona",
+        "personal": "Osobista",
+        "personalOf": "Osobista · {name}"
+      },
+      "push": "Aktualizacje na żywo",
+      "pushHint": "Nowa poczta przychodzi, gdy tylko dostawca ją zgłosi.",
+      "signature": "Podpis",
+      "signatureHint": "Odpowiedzi z tej skrzynki dostają jej podpis.",
+      "summaryNote": "To osobista skrzynka kogoś innego. Tylko jej właściciel może ją czytać i nią zarządzać.",
+      "sendLimit": "Limit wysyłki na godzinę",
+      "limitDefault": "Domyślny platformy",
+      "limitPerHour": "{count, plural, one {# e-mail na godzinę} few {# e-maile na godzinę} many {# e-maili na godzinę} other {# e-maila na godzinę}}",
+      "limitSaved": "Limit wysyłki zapisany.",
+      "needsReauthImap": "Serwer poczty odrzucił zapisane hasło. Połącz ponownie i wpisz hasło jeszcze raz."
     },
     "outcome": {
       "connected": "Skrzynka połączona. Poczta z ostatnich 7 dni jest pobierana do skrzynki odbiorczej.",
-      "denied": "Logowanie przez Google zostało anulowane, więc nic nie zostało połączone.",
-      "missing_scope": "Google nie udzieliło dostępu do odczytu i wysyłania poczty. Połącz ponownie i zaznacz wszystkie uprawnienia na ekranie Google.",
+      "denied": "Logowanie zostało anulowane, więc nic nie połączono.",
+      "missing_scope": "Nie przyznano dostępu do czytania i wysyłania poczty. Połącz ponownie i zezwól na wszystkie uprawnienia na ekranie logowania.",
       "limit": "Osiągnięto limit skrzynek w Twoim planie, więc ta skrzynka nie została połączona.",
-      "not_configured": "Logowanie przez Google nie zostało jeszcze skonfigurowane dla tej platformy. Zapytaj administratora platformy.",
-      "wrong_account": "Zalogowano się na inne konto Google niż skrzynka, którą łączysz ponownie. Zaloguj się na ten sam adres.",
+      "not_configured": "Logowanie dla tego dostawcy nie jest jeszcze skonfigurowane na tej platformie. Zapytaj administratora platformy.",
+      "wrong_account": "Zalogowano na inne konto niż skrzynka, która jest łączona ponownie. Zaloguj się tym samym adresem.",
       "failed": "Podczas łączenia skrzynki coś poszło nie tak. Spróbuj ponownie."
     },
     "errors": {
-      "notConfigured": "Logowanie przez Google nie zostało jeszcze skonfigurowane dla tej platformy. Zapytaj administratora platformy.",
+      "notConfigured": "Logowanie dla tego dostawcy nie jest jeszcze skonfigurowane na tej platformie. Zapytaj administratora platformy.",
       "limit": "Osiągnięto limit skrzynek w Twoim planie.",
       "unavailable": "Ta skrzynka jest rozłączona lub najpierw trzeba ją połączyć ponownie.",
-      "sendRefused": "Google odmówiło wysłania tego e-maila. Sprawdź adresy i rozmiar, a następnie spróbuj ponownie.",
-      "wrongAccount": "To inne konto Google niż to, do którego należy skrzynka. Zaloguj się na ten sam adres.",
+      "sendRefused": "Dostawca poczty odmówił wysłania tego e-maila. Sprawdź adresy i rozmiar i spróbuj ponownie.",
+      "wrongAccount": "To inne konto niż konto tej skrzynki. Zaloguj się tym samym adresem.",
       "locked": "Integracja e-mail nie jest częścią Twojego planu.",
-      "changed": "Ta skrzynka została zmieniona w innym miejscu. Lista została wczytana ponownie, spróbuj jeszcze raz."
+      "changed": "Ta skrzynka została zmieniona w innym miejscu. Lista została wczytana ponownie, spróbuj jeszcze raz.",
+      "personalDisabled": "Skrzynki osobiste są wyłączone w tej przestrzeni roboczej.",
+      "personalNotAllowed": "Nie masz uprawnień do połączenia skrzynki osobistej.",
+      "providerUnsupported": "Ten dostawca poczty jest niedostępny.",
+      "rateLimited": "Ta skrzynka osiągnęła limit wysyłki. Spróbuj ponownie później."
     },
     "guide": {
       "title": "Przewodnik konfiguracji",
@@ -125,10 +162,24 @@
       },
       "trouble": {
         "title": "Jeśli coś wygląda nieprawidłowo",
-        "p1": "Wymaga ponownego połączenia oznacza, że Google cofnęło dostęp lub wygasł. Wybierz Połącz ponownie i zaloguj się na ten sam adres.",
+        "p1": "Wymaga ponownego połączenia oznacza, że dostawca cofnął lub unieważnił dostęp albo serwer poczty odrzucił hasło. Wybierz Połącz ponownie.",
         "p2": "Błąd pokazuje ostatni problem. Wybierz Synchronizuj teraz, aby spróbować ponownie; jeśli problem się powtarza, połącz skrzynkę ponownie.",
-        "p3": "Opcja łączenia jest wyłączona, gdy platforma nie ma skonfigurowanego logowania przez Google lub osiągnięto limit skrzynek w Twoim planie.",
+        "p3": "Przycisk Połącz jest wyłączony, gdy platforma nie ma skonfigurowanego logowania dla tego dostawcy lub osiągnięto limit skrzynek w planie.",
         "p4": "Obrazy w e-mailu pozostają ukryte, dopóki nie wybierzesz Załaduj obrazy w rozmowie."
+      },
+      "other": {
+        "title": "Połącz Microsoft 365 lub innego dostawcę poczty",
+        "p1": "Dla Microsoft 365 lub Outlooka wybierz Połącz Microsoft 365 i zaloguj się kontem służbowym lub szkolnym, do którego należy skrzynka.",
+        "p2": "Dla każdego innego dostawcy wybierz Połącz IMAP / SMTP i wpisz serwer, port, zabezpieczenia, nazwę użytkownika i hasło od dostawcy.",
+        "p3": "Najpierw logujemy się do serwera poczty przychodzącej i wychodzącej. Jeśli jeden odmówi, komunikat podaje który.",
+        "p4": "Niektórzy dostawcy wymagają hasła aplikacji zamiast zwykłego hasła. Utwórz je w ustawieniach bezpieczeństwa dostawcy."
+      },
+      "personal": {
+        "title": "Skrzynki osobiste i udostępnianie",
+        "p1": "Administrator włącza skrzynki osobiste w Udostępnianiu poczty i wybiera, kto może je łączyć.",
+        "p2": "Łącząc skrzynkę, wybierz Osobista. Tylko Ty możesz czytać jej rozmowy w skrzynce odbiorczej.",
+        "p3": "Administratorzy widzą tylko podsumowanie Twojej skrzynki, chyba że przestrzeń robocza pozwala im czytać skrzynki osobiste.",
+        "p4": "Wyłączenie skrzynek osobistych nigdy nie otwiera istniejącej skrzynki osobistej dla innych osób."
       }
     },
     "thread": {
@@ -145,7 +196,13 @@
       "noBody": "Ten e-mail nie zawiera tekstu.",
       "attachments": "{count, plural, one {# załącznik} few {# załączniki} many {# załączników} other {# załącznika}}",
       "tooLarge": "zbyt duży, aby go zachować ({size})",
-      "download": "Pobierz {name} ({size})"
+      "download": "Pobierz {name} ({size})",
+      "bounce": {
+        "title": "Nie dostarczono do {address}.",
+        "reason": "Powód: {reason}",
+        "hard": "Adres został odrzucony na stałe. Sprawdź, czy nie ma literówek, i wyślij nowy e-mail na poprawiony adres.",
+        "soft": "Wygląda to na problem tymczasowy, na przykład pełną skrzynkę. Ponowne wysłanie później może się udać albo popraw adres."
+      }
     },
     "composer": {
       "toggle": "Cc, Bcc i temat",
@@ -160,10 +217,174 @@
         "ccTooMany": "Pole Cc przyjmuje najwyżej 20 adresów.",
         "bccTooMany": "Pole Bcc przyjmuje najwyżej 20 adresów.",
         "subjectTooLong": "Temat może mieć co najwyżej 998 znaków."
+      },
+      "editor": {
+        "toolbar": "Formatowanie tekstu",
+        "bold": "Pogrubienie",
+        "italic": "Kursywa",
+        "underline": "Podkreślenie",
+        "bulletList": "Lista punktowana",
+        "numberedList": "Lista numerowana",
+        "quote": "Cytat",
+        "link": "Dodaj link",
+        "clear": "Usuń formatowanie",
+        "linkAddress": "Adres linku",
+        "linkApply": "Dodaj",
+        "linkInvalid": "Wpisz adres www, e-mail lub numer telefonu.",
+        "label": "Odpowiedź e-mail",
+        "toPlain": "Przełącz na zwykły tekst",
+        "toRich": "Przełącz na tekst z formatowaniem",
+        "hint": "Naciśnij Ctrl+Enter (Cmd+Enter na Macu), aby wysłać. Enter wstawia nowy wiersz."
+      },
+      "attach": {
+        "dismiss": "Zamknij",
+        "list": "Załączone pliki ({count})",
+        "uploading": "Przesyłanie {name}",
+        "ready": "Załączono",
+        "failed": "Przesyłanie nie powiodło się",
+        "retry": "Spróbuj ponownie",
+        "remove": "Usuń {name}",
+        "waiting": "Czekamy na zakończenie przesyłania plików.",
+        "fixFailed": "Spróbuj ponownie lub usuń pliki, które się nie przesłały.",
+        "refused": {
+          "empty": "Plik {name} jest pusty i nie został dodany.",
+          "tooLarge": "Plik {name} jest większy niż {max} i nie został dodany.",
+          "tooMany": "W jednym e-mailu mieści się tylko {count} plików. Plik {name} nie został dodany.",
+          "totalTooLarge": "Z plikiem {name} e-mail byłby za duży, więc go nie dodano.",
+          "blocked": "Plik {name} ma typ, którego e-mail nie może przenosić, i nie został dodany."
+        }
+      },
+      "error": {
+        "rateLimited": "Ta skrzynka osiągnęła godzinny limit wysyłania. {seconds, plural, =0 {Spróbuj ponownie za chwilę.} other {Spróbuj ponownie za # s.}}",
+        "attachmentTooLarge": "Plik jest za duży, aby go załączyć. Każdy plik może mieć najwyżej 10 MB, a wszystkie razem najwyżej 20 MB.",
+        "tooManyAttachments": "Za dużo plików. E-mail przyjmuje najwyżej 10.",
+        "attachmentGone": "Załącznik wygasł lub został usunięty. Załącz go ponownie.",
+        "signatureGone": "Wybrany podpis już nie istnieje. Wybierz inny.",
+        "sendRefused": "Dostawca poczty odrzucił ten e-mail. Sprawdź adresy i rozmiar, a potem spróbuj ponownie.",
+        "unavailable": "Ta skrzynka jest odłączona lub trzeba ją najpierw połączyć ponownie.",
+        "attachmentBlocked": "Tego typu pliku nie można wysłać e-mailem.",
+        "network": "Nie można połączyć się z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+        "generic": "Nie udało się wysłać e-maila. Spróbuj ponownie.",
+        "bodyTooLong": "Ten e-mail jest za długi, aby go wysłać. Skróć go i spróbuj ponownie."
+      },
+      "signature": {
+        "label": "Podpis",
+        "auto": "Domyślny ({name})",
+        "autoNone": "Domyślny (brak)",
+        "none": "Bez podpisu",
+        "mine": "{name} (mój)",
+        "shared": "{name} (skrzynka)",
+        "preview": "Podgląd podpisu",
+        "noneShown": "Żaden podpis nie zostanie dodany."
       }
     },
     "inbox": {
       "group": "E-mail"
+    },
+    "imap": {
+      "eyebrow": "Inna poczta",
+      "title": "Połącz skrzynkę IMAP / SMTP",
+      "reconnectTitle": "Połącz ponownie skrzynkę IMAP / SMTP",
+      "close": "Zamknij",
+      "intro": "Wpisz ustawienia, które Twój dostawca poczty podaje dla tego adresu. Logujemy się do obu serwerów, zanim cokolwiek zapiszemy.",
+      "reconnectIntro": "Wpisz hasło ponownie. Logujemy się do obu serwerów, zanim cokolwiek zapiszemy.",
+      "address": "Adres skrzynki",
+      "displayName": "Nazwa wyświetlana",
+      "preset": "Dostawca poczty",
+      "presetHint": "Wybór dostawcy uzupełnia ustawienia serwera. Nadal możesz je zmienić.",
+      "presetCustom": "Inny (wpisz ustawienia)",
+      "incoming": "Poczta przychodząca (IMAP)",
+      "outgoing": "Poczta wychodząca (SMTP)",
+      "host": "Serwer",
+      "port": "Port",
+      "securityLabel": "Zabezpieczenia",
+      "security": {
+        "ssl": "SSL/TLS",
+        "starttls": "STARTTLS",
+        "none": "Brak"
+      },
+      "username": "Nazwa użytkownika",
+      "password": "Hasło",
+      "passwordHint": "Przechowywane w postaci zaszyfrowanej i nigdy więcej nie pokazywane.",
+      "passwordAgain": "Wpisz hasło ponownie. Nigdy nie jest pokazywane.",
+      "showPassword": "Pokaż hasło",
+      "hidePassword": "Ukryj hasło",
+      "sameCredentials": "Użyj tej samej nazwy użytkownika i hasła do wysyłania",
+      "noEncryption": "To połączenie nie jest szyfrowane. Każdy w sieci mógłby odczytać hasło i pocztę.",
+      "verifyNote": "Certyfikat serwera jest zawsze sprawdzany.",
+      "cancel": "Anuluj",
+      "submit": "Sprawdź i połącz",
+      "reconnectSubmit": "Sprawdź i połącz ponownie",
+      "verifying": "Sprawdzanie",
+      "errors": {
+        "required": "To pole jest wymagane.",
+        "invalid": "Ta wartość jest nieprawidłowa."
+      },
+      "failure": {
+        "imapAuth": "Serwer poczty przychodzącej (IMAP) odrzucił nazwę użytkownika lub hasło. Sprawdź je i spróbuj ponownie.",
+        "smtpAuth": "Serwer poczty wychodzącej (SMTP) odrzucił nazwę użytkownika lub hasło. Sprawdź je i spróbuj ponownie.",
+        "unreachable": "Nie można połączyć się z serwerem poczty lub jego certyfikat jest nieprawidłowy. Sprawdź serwer, port i zabezpieczenia.",
+        "generic": "Nie udało się połączyć skrzynki. Spróbuj ponownie."
+      }
+    },
+    "sharing": {
+      "title": "Udostępnianie poczty",
+      "intro": "Zdecyduj, czy osoby mogą łączyć własną skrzynkę i kto może ją zobaczyć.",
+      "enabled": {
+        "title": "Skrzynki osobiste",
+        "body": "Pozwól osobom łączyć własną skrzynkę. Jej rozmowy widzą tylko one."
+      },
+      "who": {
+        "title": "Kto może połączyć skrzynkę",
+        "body": "Tylko osoby z uprawnieniem do zarządzania skrzynkami osobistymi.",
+        "admins": "Tylko administratorzy",
+        "agents": "Administratorzy i agenci"
+      },
+      "admins": {
+        "title": "Administratorzy mogą czytać skrzynki osobiste",
+        "body": "Administratorzy mogą otwierać rozmowy z osobistych skrzynek innych osób. Po wyłączeniu widzą tylko podsumowanie."
+      },
+      "offNote": "Wyłączenie skrzynek osobistych tylko ukrywa opcję łączenia. Istniejące skrzynki osobiste pozostają prywatne dla właścicieli.",
+      "save": "Zapisz",
+      "reset": "Odrzuć zmiany",
+      "saved": "Udostępnianie poczty zapisane.",
+      "failed": "Nie udało się zapisać. Spróbuj ponownie."
+    },
+    "signatures": {
+      "title": "Podpisy",
+      "intro": "Podpis jest dodawany na końcu Twoich odpowiedzi. Każda skrzynka może mieć wspólny podpis, a Ty możesz mieć własny, używany jako pierwszy.",
+      "new": "Nowy podpis",
+      "edit": "Edytuj podpis",
+      "scope": "Do kogo należy",
+      "scopes": {
+        "user": "Do mnie",
+        "mailbox": "Do skrzynki",
+        "userBadge": "Mój",
+        "mailboxBadge": "Skrzynka"
+      },
+      "mailbox": "Skrzynka",
+      "pickMailbox": "Wybierz skrzynkę",
+      "mailboxRequired": "Wybierz skrzynkę.",
+      "name": "Nazwa",
+      "nameRequired": "Nadaj podpisowi nazwę.",
+      "body": "Podpis",
+      "bodyPlaceholder": "Twoje imię i nazwisko, stanowisko, telefon, linki...",
+      "variables": "Możesz użyć {name}, {title} i {phone}. Zostaną uzupełnione danymi osoby wysyłającej.",
+      "tooLong": "Podpis jest za długi.",
+      "defaultUser": "Użyj jako mojego domyślnego podpisu",
+      "defaultMailbox": "Użyj jako domyślnego dla tej skrzynki",
+      "save": "Zapisz",
+      "cancel": "Anuluj",
+      "loading": "Wczytywanie podpisów...",
+      "loadError": "Nie udało się wczytać podpisów. Spróbuj za chwilę.",
+      "empty": "Brak podpisów.",
+      "default": "Domyślny",
+      "editShort": "Edytuj",
+      "delete": "Usuń",
+      "confirmDelete": "Usuń na stałe",
+      "noPermission": "Nie masz uprawnień do zarządzania podpisami.",
+      "changed": "Ten podpis został zmieniony gdzie indziej. Lista została wczytana ponownie, spróbuj jeszcze raz.",
+      "failed": "Nie udało się zapisać podpisu. Spróbuj ponownie."
     }
   }
 }

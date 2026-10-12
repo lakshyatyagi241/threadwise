@@ -18,6 +18,7 @@
       "campaigns": "الحملات",
       "googleCalendar": "Google Calendar",
       "googleMail": "Gmail",
+      "microsoftMail": "Microsoft 365",
       "flowBuilder": "منشئ التدفقات"
     },
     "hub": {
@@ -937,6 +938,9 @@
         "sections": {
           "oauth": {
             "title": "عميل Google OAuth"
+          },
+          "push": {
+            "title": "دفع Gmail (اختياري)"
           }
         },
         "fields": {
@@ -951,6 +955,49 @@
           "clientSecret": {
             "label": "سر العميل",
             "hint": "يُخزَّن مشفّرًا ولا يُعرض مرة أخرى. الفارغ يبقي المحفوظ؛ والبديل هو GOOGLE_MAIL_CLIENT_SECRET."
+          },
+          "redirectUri": {
+            "label": "تجاوز عنوان إعادة التوجيه",
+            "hint": "اتركه فارغًا لاستخدام العنوان أعلاه. يجب أن يطابق تمامًا عنوان إعادة توجيه مصرّحًا به في العميل."
+          },
+          "pubsubTopic": {
+            "label": "موضوع Pub/Sub",
+            "hint": "projects/PROJECT_ID/topics/TOPIC_ID. امنح gmail-api-push@system.gserviceaccount.com دور Publisher عليه. إذا تُرك فارغًا يُستخدم GOOGLE_MAIL_PUBSUB_TOPIC؛ وبدون موضوع تُفحص صناديق البريد بالاستعلام الدوري فقط."
+          },
+          "pushAudience": {
+            "label": "جمهور الدفع",
+            "hint": "الجمهور (audience) المحدد في اشتراك الدفع. إذا تُرك فارغًا يُستخدم GOOGLE_MAIL_PUSH_AUDIENCE، وإلا عنوان نقطة الدفع لهذه المنصة."
+          },
+          "pushServiceAccount": {
+            "label": "حساب خدمة الدفع",
+            "hint": "حساب الخدمة الذي يوقّع به اشتراك الدفع. يُرفض أي دفع من حساب آخر. إذا تُرك فارغًا يُستخدم GOOGLE_MAIL_PUSH_SERVICE_ACCOUNT."
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "بريد Microsoft 365",
+        "description": "تطبيق Microsoft الذي تربط عبره كل مساحة عمل صناديق بريد Outlook وMicrosoft 365 الخاصة بها.",
+        "sections": {
+          "oauth": {
+            "title": "تطبيق Microsoft Entra"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "السماح لمساحات العمل بربط Microsoft 365",
+            "hint": "متوقف: لا تستطيع أي مساحة عمل الربط ولا تُقرأ رسائل ولا تُرسل. تبقى الصناديق المتصلة."
+          },
+          "clientId": {
+            "label": "معرّف التطبيق (العميل)",
+            "hint": "من مركز إدارة Microsoft Entra، تسجيلات التطبيقات، نظرة عامة. إذا تُرك فارغًا يُستخدم MICROSOFT_MAIL_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "سر العميل",
+            "hint": "يُخزَّن مشفّرًا ولا يُعرض مرة أخرى. الفارغ يبقي المحفوظ؛ والبديل هو MICROSOFT_MAIL_CLIENT_SECRET."
+          },
+          "tenant": {
+            "label": "المستأجر",
+            "hint": "يسمح common بحسابات العمل والمدرسة والحسابات الشخصية؛ استخدم معرّف الدليل (المستأجر) لتطبيق أحادي المستأجر. إذا تُرك فارغًا يُستخدم MICROSOFT_MAIL_TENANT وإلا common."
           },
           "redirectUri": {
             "label": "تجاوز عنوان إعادة التوجيه",
@@ -1095,6 +1142,11 @@
         "title": "بريد Gmail",
         "description": "عميل OAuth من Google الذي تستخدمه مساحات العمل لربط صناديق Gmail الخاصة بها.",
         "tags": "Google / OAuth / Gmail"
+      },
+      "microsoftMail": {
+        "title": "بريد Microsoft 365",
+        "description": "تطبيق Microsoft الذي تستخدمه مساحات العمل لربط صناديق بريد Outlook وMicrosoft 365.",
+        "tags": "Microsoft / OAuth / Outlook"
       },
       "flowBuilder": {
         "title": "منشئ التدفقات",
@@ -1689,6 +1741,10 @@
           "oauth": {
             "title": "عميل Google OAuth",
             "description": "بدون معرّف العميل والسر لا تستطيع مساحات العمل ربط صندوق بريد."
+          },
+          "push": {
+            "title": "دفع Gmail (اختياري)",
+            "description": "يصل البريد الجديد إلى صندوق الفريق خلال ثوانٍ بدل انتظار الاستعلام التالي. يبقى الاستعلام الدوري يعمل كشبكة أمان."
           }
         },
         "guide": {
@@ -1705,6 +1761,42 @@
             "consent": {
               "title": "3. شاشة الموافقة",
               "body": "أضف النطاقات openid وemail وgmail.readonly وgmail.send. نطاقات Gmail مقيّدة: يجب أن تتحقق Google من التطبيق للاستخدام العام، وفي وضع الاختبار ينتهي التفويض بعد 7 أيام."
+            },
+            "workspaces": {
+              "title": "4. تربط مساحات العمل",
+              "body": "الصق معرّف العميل والسر هنا واحفظ. بعدها يربط المشرفون صناديقهم من البريد الإلكتروني."
+            },
+            "push": {
+              "title": "5. بريد فوري (اختياري)",
+              "body": "أنشئ موضوع Pub/Sub، وامنح gmail-api-push@system.gserviceaccount.com دور Publisher، وأضف اشتراك دفع إلى APP_URL/v2/public/email/google/push مع مصادقة OIDC، ثم أدخل الموضوع والجمهور وحساب الخدمة هنا."
+            }
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "بريد Microsoft 365",
+        "eyebrow": "المشرف - البريد الإلكتروني",
+        "description": "تطبيق Microsoft Entra واحد للمنصة بأكملها. تربط كل مساحة عمل صناديق بريدها من البريد ولا ترى معرّف العميل أو السر أبدًا.",
+        "sections": {
+          "oauth": {
+            "title": "تطبيق Microsoft Entra",
+            "description": "بدون معرّف العميل والسر لا تستطيع مساحات العمل ربط صندوق بريد."
+          }
+        },
+        "guide": {
+          "title": "الإعداد في Microsoft Entra",
+          "items": {
+            "registration": {
+              "title": "1. تسجيل التطبيق",
+              "body": "في مركز إدارة Microsoft Entra أنشئ تسجيل تطبيق. اختر أنواع الحسابات التي يستخدمها عملاؤك (حسابات العمل أو المدرسة، والحسابات الشخصية لـ Outlook.com) وانسخ معرّف التطبيق (العميل) والمستأجر إلى هنا."
+            },
+            "redirect": {
+              "title": "2. عنوان إعادة التوجيه والسر",
+              "body": "أضف عنوان إعادة التوجيه الظاهر في هذه الصفحة كإعادة توجيه لمنصة Web، ثم أنشئ سر عميل ضمن الشهادات والأسرار والصق قيمته هنا."
+            },
+            "permissions": {
+              "title": "3. أذونات API",
+              "body": "أضف أذونات Microsoft Graph المفوّضة Mail.Read وMail.Send وUser.Read وoffline_access. للاستخدام العام أكمل التحقق من الناشر؛ وتشترط بعض المؤسسات أيضًا موافقة المسؤول."
             },
             "workspaces": {
               "title": "4. تربط مساحات العمل",
@@ -1800,6 +1892,12 @@
     "googleCallback": {
       "redirectTitle": "عنوان إعادة التوجيه",
       "redirectHint": "سجّل هذا العنوان بالضبط كعنوان إعادة توجيه مصرّح به في عميل OAuth. إليه تحوّل Google المتصفح بعد موافقة مشرف مساحة العمل.",
+      "copy": "نسخ",
+      "copied": "تم النسخ"
+    },
+    "microsoftCallback": {
+      "redirectTitle": "عنوان إعادة التوجيه",
+      "redirectHint": "سجّل هذا العنوان كما هو تمامًا كعنوان إعادة توجيه Web في تسجيل التطبيق. إليه ترسل Microsoft المتصفح بعد موافقة مسؤول مساحة العمل.",
       "copy": "نسخ",
       "copied": "تم النسخ"
     }

@@ -298,6 +298,10 @@
           "label": "Verkaufsdokument entschieden",
           "hint": "Ein Angebot oder eine Rechnung wurde angenommen oder abgelehnt."
         },
+        "email_bounced": {
+          "label": "E-Mail nicht zugestellt",
+          "hint": "Eine von Ihnen gesendete E-Mail ist zurückgekommen oder verzögert sich."
+        },
         "wallet_credited": {
           "label": "Wallet aufgeladen",
           "hint": "Das Wallet des Workspace wurde gutgeschrieben."

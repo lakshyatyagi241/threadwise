@@ -298,6 +298,10 @@
           "label": "Verkoopdocument beslist",
           "hint": "Een offerte of factuur is geaccepteerd of afgewezen."
         },
+        "email_bounced": {
+          "label": "E-mail niet bezorgd",
+          "hint": "Een e-mail die je verstuurde is teruggekomen of vertraagd."
+        },
         "wallet_credited": {
           "label": "Wallet opgeladen",
           "hint": "Het walletsaldo van de workspace is bijgeschreven."

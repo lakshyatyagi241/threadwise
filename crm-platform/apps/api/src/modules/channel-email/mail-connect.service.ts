@@ -1,7 +1,6 @@
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
-  DEFAULT_MAIL_WORKSPACE_SETTINGS,
   ERROR_CODES,
   type ConnectImapMailboxInput,
   type MailCallbackQuery,
@@ -21,10 +20,18 @@ import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { MailDriverError } from './drivers/mail-driver';
 import { MailDriverRegistry } from './drivers/mail-driver.registry';
+import { MailAccess } from './mail-access.service';
 import { MailChannelSync } from './mail-channel.sync';
 import { publicSummaryOf, sealConnection } from './mail-connection';
 import { mailboxLimit, notConfigured } from './mail-errors';
 import { MailPlan } from './mail-plan';
+import {
+  mayAct,
+  personalConnectRefusal,
+  personalDisabled,
+  personalNotAllowed,
+  viewOf,
+} from './mail-personal-policy';
 import { deriveStateKey, newState, returnUrl, signState, verifyState } from './mail-state';
 import { MailSyncPublisher } from './mail-sync.publisher';
 import { MAIL_AUDIT_MODULE } from './mail-tokens.service';
@@ -90,6 +97,7 @@ export class MailConnectService {
     private readonly plan: MailPlan,
     private readonly channel: MailChannelSync,
     private readonly sync: MailSyncPublisher,
+    private readonly access: MailAccess,
     env: ConfigService<Env, true>,
   ) {
     this.stateKey = deriveStateKey(env.get('CREDENTIALS_ENCRYPTION_KEY', { infer: true }));
@@ -104,11 +112,11 @@ export class MailConnectService {
     let loginHint: string | null = null;
     let scope: MailScope = input.scope;
     if (input.mailboxId) {
-      const existing = await this.db.tx((tx) => this.repo.byUuid(tx, ctx.orgId, input.mailboxId!));
-      if (!existing) throw AppError.notFound('Mailbox', input.mailboxId);
+      const existing = await this.assertMayReconnect(ctx.orgId, input.mailboxId);
       loginHint = existing.address;
       scope = existing.scope;
     } else {
+      await this.assertMayConnectNew(ctx.orgId, scope);
       // Refuse early, before the person goes through the provider's screens for nothing. The callback checks again.
       const [limit, active] = await Promise.all([
         this.plan.mailboxLimit(ctx.orgId),
@@ -116,7 +124,6 @@ export class MailConnectService {
       ]);
       if (limit > 0 && active >= limit) throw mailboxLimit(limit);
     }
-    if (scope === 'personal') await this.assertPersonalAllowed(ctx.orgId);
 
     let authorizeUrl: string;
     try {
@@ -186,6 +193,11 @@ export class MailConnectService {
       if (!account.address) throw new Outcome('failed');
       account.address = account.address.trim().toLowerCase();
 
+      // The person may have lost the right (or the workspace switched personal mailboxes off) while on the provider's screens.
+      if (state.scope === 'personal' && !state.mailboxId) {
+        const refusal = await this.access.personalRefusalFor(state.orgId, state.userId);
+        if (refusal) throw new Outcome('failed');
+      }
       stored = await this.runAs(state.orgId, state.userId, `mail-connect-${state.nonce}`, () =>
         this.persist({
           orgId: state.orgId,
@@ -237,16 +249,15 @@ export class MailConnectService {
     const driver = this.drivers.password('imap');
 
     if (input.mailboxId) {
-      const target = await this.db.tx((tx) => this.repo.byUuid(tx, ctx.orgId, input.mailboxId!));
-      if (!target) throw AppError.notFound('Mailbox', input.mailboxId);
+      await this.assertMayReconnect(ctx.orgId, input.mailboxId);
     } else {
+      await this.assertMayConnectNew(ctx.orgId, input.scope);
       const [limit, active] = await Promise.all([
         this.plan.mailboxLimit(ctx.orgId),
         this.db.tx((tx) => this.repo.countActive(tx, ctx.orgId)),
       ]);
       if (limit > 0 && active >= limit) throw mailboxLimit(limit);
     }
-    if (input.scope === 'personal') await this.assertPersonalAllowed(ctx.orgId);
 
     const connection: PasswordConnection = {
       imap: { ...input.imap },
@@ -298,18 +309,42 @@ export class MailConnectService {
     return row;
   }
 
-  /** The workspace allows personal mailboxes (`mail_workspace_settings`). Who may connect one is the caller's permission check. */
-  private async assertPersonalAllowed(orgId: number): Promise<void> {
-    const settings =
-      (await this.db.tx((tx) => this.repo.workspaceSettings(tx, orgId))) ??
-      DEFAULT_MAIL_WORKSPACE_SETTINGS;
-    if (!settings.personalMailboxesEnabled) {
-      throw new AppError(
-        ERROR_CODES.MAIL_PERSONAL_DISABLED,
-        'Personal mailboxes are not enabled for this workspace.',
-        HttpStatus.UNPROCESSABLE_ENTITY,
+  /**
+   * May the caller add a NEW mailbox of this scope? A shared one needs `mail.mailboxes.manage`. A personal one needs the workspace policy to
+   * enable personal mailboxes (422 MAIL_PERSONAL_DISABLED) and the caller to be among the people it lets connect one (403
+   * MAIL_PERSONAL_NOT_ALLOWED): admins only, or any member holding `mail.mailboxes.manage_personal`.
+   */
+  private async assertMayConnectNew(orgId: number, scope: MailScope): Promise<void> {
+    const actor = this.access.actor();
+    if (scope === 'shared') {
+      if (!actor.canManageShared) throw AppError.forbidden('mail.mailboxes.manage');
+      return;
+    }
+    const policy = await this.db.tx((tx) => this.access.policy(tx, orgId));
+    const refusal = personalConnectRefusal(actor, policy);
+    if (refusal === 'disabled') throw personalDisabled();
+    if (refusal === 'not_allowed') throw personalNotAllowed();
+  }
+
+  /**
+   * May the caller renew the login of this mailbox? Shared: `mail.mailboxes.manage`. Personal: only its owner (their login is theirs; an admin
+   * cannot take it over, and does not learn it exists unless the hub already shows it to them). Reconnecting an existing personal mailbox
+   * stays possible after the policy is switched off: turning the policy off never takes a person's own mailbox away.
+   */
+  private async assertMayReconnect(orgId: number, uuid: string): Promise<MailboxRow> {
+    const actor = this.access.actor();
+    const { row, policy } = await this.db.tx(async (tx) => ({
+      row: await this.repo.byUuid(tx, orgId, uuid),
+      policy: await this.access.policy(tx, orgId),
+    }));
+    if (!row) throw AppError.notFound('Mailbox', uuid);
+    if (viewOf(actor, row, policy) === 'none') throw AppError.notFound('Mailbox', uuid);
+    if (!mayAct(actor, row, 'reconnect')) {
+      throw AppError.forbidden(
+        row.scope === 'shared' ? 'mail.mailboxes.manage' : 'mail.mailboxes.manage_personal',
       );
     }
+    return row;
   }
 
   /** The one transaction that stores a connection: checks, the row, the audit entry and the event. Throws `Outcome`. */

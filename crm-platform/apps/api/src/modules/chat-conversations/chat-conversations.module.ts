@@ -17,6 +17,7 @@ import { ConversationLifecycleService } from './conversation-lifecycle.service';
 import { CONVERSATIONS_FACADE } from './conversations.facade';
 import { ConversationsRepository } from './conversations.repository';
 import { ConversationsService } from './conversations.service';
+import { EmailDeliveryService } from './email-delivery.service';
 import { EmailMessageAccess } from './email-message-access.service';
 import { ExternalChannelIngest } from './external-channel-ingest.service';
 import { InboundMessageHooks } from './inbound-hooks';
@@ -89,6 +90,7 @@ import { WabaChannelLinkService } from './waba-channel-link.service';
     MediaFetchService,
     ConversationsService,
     EmailMessageAccess,
+    EmailDeliveryService,
     { provide: CONVERSATIONS_FACADE, useExisting: ConversationsService },
   ],
   exports: [
@@ -101,6 +103,8 @@ import { WabaChannelLinkService } from './waba-channel-link.service';
     CONVERSATIONS_FACADE,
     // The email module's door to a message's `meta.email` (attachment download): visibility-checked.
     EmailMessageAccess,
+    // Where the email module reports a bounce of a sent mail (TW-MAIL-032).
+    EmailDeliveryService,
     WabaChannelLinkService,
     WabaGroupThreadTitleService,
     // Where the flow runtime (and any later reader of inbound traffic) listens.

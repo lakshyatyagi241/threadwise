@@ -33,7 +33,7 @@ export class MailProvidersController {
   constructor(private readonly mailboxes: MailboxesService) {}
 
   @Get()
-  @RequirePermission('mail.mailboxes.read')
+  @RequirePermission('mail.mailboxes.read', 'mail.mailboxes.manage_personal')
   @ApiOperation({
     summary: 'The email providers a mailbox can be connected with',
     description:
@@ -59,11 +59,11 @@ export class MailboxesController {
   ) {}
 
   @Get()
-  @RequirePermission('mail.mailboxes.read')
+  @RequirePermission('mail.mailboxes.read', 'mail.mailboxes.manage_personal')
   @ApiOperation({
     summary: "The workspace's connected mailboxes, oldest first, with the plan limit and use",
     description:
-      'Never returns a token. `providerReady` is false while the platform operator has not entered the Google credentials.',
+      "Never returns a token. `providerReady` is false while the platform operator has not entered the Google credentials. Shared mailboxes plus your own personal ones; an admin also gets other people's personal mailboxes as summary rows (`contentHidden: true`), or in full when the workspace policy lets admins read them. Anyone else never learns they exist.",
   })
   list() {
     return this.mailboxes.list();
@@ -71,12 +71,12 @@ export class MailboxesController {
 
   @Post('connect')
   @HttpCode(HttpStatus.OK)
-  @RequirePermission('mail.mailboxes.manage')
+  @RequirePermission('mail.mailboxes.manage', 'mail.mailboxes.manage_personal')
   @ApiOperation({
     summary: 'Start connecting a mailbox by sign-in (Gmail, Microsoft 365)',
     description:
       "Returns the provider's consent URL (Gmail: gmail.readonly + gmail.send, offline access) for `provider` (default `google`), carrying a signed state good for ten minutes and bound to this workspace and admin. The browser goes there; Google then calls the public callback, which redirects back with `?email=<outcome>`. " +
-      'Send `mailboxId` to reconnect an existing mailbox. 422 MAIL_NOT_CONFIGURED without platform credentials; 422 MAIL_MAILBOX_LIMIT at the plan limit; 422 MAIL_PROVIDER_UNSUPPORTED for a provider that is not a sign-in one; 422 MAIL_PERSONAL_DISABLED for `scope: personal` while the workspace has not enabled personal mailboxes.',
+      'Send `mailboxId` to reconnect an existing mailbox. 422 MAIL_NOT_CONFIGURED without platform credentials; 422 MAIL_MAILBOX_LIMIT at the plan limit; 422 MAIL_PROVIDER_UNSUPPORTED for a provider that is not a sign-in one; 422 MAIL_PERSONAL_DISABLED for `scope: personal` while the workspace has not enabled personal mailboxes; 403 MAIL_PERSONAL_NOT_ALLOWED when the policy does not let you connect one. A shared mailbox needs `mail.mailboxes.manage`, a personal one `mail.mailboxes.manage_personal` (or admin, by the policy); only the owner can reconnect a personal mailbox.',
   })
   start(@Body(zodPipe(startMailboxConnectSchema)) body: StartMailboxConnectInput) {
     return this.connect.start(body);
@@ -84,7 +84,7 @@ export class MailboxesController {
 
   @Post('connect-imap')
   @HttpCode(HttpStatus.CREATED)
-  @RequirePermission('mail.mailboxes.manage')
+  @RequirePermission('mail.mailboxes.manage', 'mail.mailboxes.manage_personal')
   @ApiOperation({
     summary: 'Connect an IMAP/SMTP mailbox with its server settings and password',
     description:
@@ -97,7 +97,7 @@ export class MailboxesController {
 
   @Patch(':id')
   @Idempotent()
-  @RequirePermission('mail.mailboxes.manage')
+  @RequirePermission('mail.mailboxes.manage', 'mail.mailboxes.manage_personal')
   @ApiOperation({
     summary: 'Rename the mailbox (the name replies go out under)',
     description: 'Requires the `rowVersion` you read: 409 ROW_VERSION_CONFLICT otherwise.',
@@ -111,7 +111,7 @@ export class MailboxesController {
 
   @Post(':id/sync')
   @HttpCode(HttpStatus.ACCEPTED)
-  @RequirePermission('mail.mailboxes.manage')
+  @RequirePermission('mail.mailboxes.manage', 'mail.mailboxes.manage_personal')
   @ApiOperation({
     summary: 'Sync this mailbox now',
     description:
@@ -123,7 +123,7 @@ export class MailboxesController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @RequirePermission('mail.mailboxes.manage')
+  @RequirePermission('mail.mailboxes.manage', 'mail.mailboxes.manage_personal')
   @ApiOperation({
     summary: 'Disconnect the mailbox',
     description:

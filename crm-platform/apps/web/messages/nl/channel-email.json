@@ -7,11 +7,11 @@
       "kicker": "Kanalen",
       "title": "E-mail",
       "titleAccent": "mailboxen",
-      "intro": "Verbind je Gmail- of Google Workspace-mailboxen. E-mails van klanten komen binnen in de teaminbox, één gesprek per e-mailthread, en je antwoorden gaan uit via hetzelfde adres.",
+      "intro": "Koppel je Gmail, Microsoft 365 of een andere IMAP-mailbox. E-mails van klanten komen binnen in de teaminbox, één gesprek per e-mailthread, en je antwoorden gaan vanaf hetzelfde adres uit.",
       "inbox": "Inbox openen",
       "channels": "Kanalen",
       "loadError": "Je mailboxen konden niet worden geladen. Probeer het zo meteen opnieuw.",
-      "cardCaption": "Gmail · Google Workspace",
+      "cardCaption": "Gmail · Microsoft 365 · IMAP",
       "connectedCount": "{count, plural, one {# mailbox verbonden} other {# mailboxen verbonden}}",
       "notConnected": "Niet verbonden",
       "usageLabel": "Gebruikte mailboxen",
@@ -21,7 +21,7 @@
       "how": {
         "connect": {
           "title": "Een mailbox verbinden",
-          "body": "Log in met Google en geef Threadwise toestemming om e-mail van dat adres te lezen en te verzenden."
+          "body": "Meld je aan met Google of Microsoft, of vul de instellingen van je mailserver in, en geef Threadwise toestemming om e-mail van dat adres te lezen en te versturen."
         },
         "inbox": {
           "title": "E-mail komt binnen in de inbox",
@@ -38,7 +38,7 @@
       },
       "connectedTitle": "Verbonden mailboxen",
       "total": "{count, plural, one {# mailbox} other {# mailboxen}}",
-      "empty": "Nog geen mailbox verbonden. Verbind hieronder Gmail om e-mail in de inbox te ontvangen.",
+      "empty": "Nog geen mailbox gekoppeld. Koppel hieronder een mailbox om e-mail in de inbox te ontvangen.",
       "addTitle": "Een mailbox toevoegen",
       "providers": {
         "google": {
@@ -54,12 +54,25 @@
           "hint": "Log in met een Microsoft-werk- of schoolaccount."
         }
       },
-      "connectGmail": "Gmail verbinden",
-      "soon": "Binnenkort",
-      "notReady": "Inloggen met Google is voor dit platform nog niet ingesteld. Vraag je platformbeheerder om de Google-inloggegevens toe te voegen.",
+      "notReady": "{provider} is nog niet ingesteld voor dit platform. Vraag de platformbeheerder om de inloggegevens toe te voegen.",
       "limitReached": "Je hebt alle {limit, plural, one {# mailbox} other {# mailboxen}} gebruikt die je abonnement toestaat. Verwijder een mailbox of vraag je beheerder om het abonnement te upgraden.",
       "noPermission": "Je kunt de mailboxen zien, maar alleen mensen met beheerrechten kunnen er een verbinden.",
-      "connectFailed": "Inloggen met Google kon niet worden gestart. Probeer het opnieuw."
+      "connectFailed": "Kon het aanmelden niet starten. Probeer het opnieuw.",
+      "connect": {
+        "google": "Gmail koppelen",
+        "microsoft": "Microsoft 365 koppelen",
+        "imap": "IMAP / SMTP koppelen"
+      },
+      "imapConnected": "Mailbox gekoppeld. E-mail van de afgelopen 7 dagen wordt in de inbox opgehaald.",
+      "imapReconnected": "Mailbox opnieuw gekoppeld.",
+      "scope": {
+        "title": "Voor wie is deze mailbox?",
+        "shared": "Gedeeld",
+        "sharedHint": "Een bedrijfsmailbox zoals support@. Het hele team kan de gesprekken behandelen.",
+        "personal": "Persoonlijk",
+        "personalHint": "Je eigen mailbox. Alleen jij kunt de gesprekken lezen.",
+        "onlyPersonal": "Je kunt je eigen persoonlijke mailbox koppelen. Alleen jij kunt de gesprekken lezen."
+      }
     },
     "card": {
       "status": {
@@ -74,7 +87,7 @@
       "save": "Opslaan",
       "cancel": "Annuleren",
       "renamed": "Weergavenaam opgeslagen.",
-      "needsReauthHint": "Google staat niet meer toe dat we deze mailbox lezen. Verbind hem opnieuw om weer e-mail te ontvangen en te verzenden.",
+      "needsReauthHint": "De provider laat ons deze mailbox niet meer lezen. Koppel hem opnieuw om weer e-mail te ontvangen en te versturen.",
       "lastError": "Laatste probleem: {error}",
       "lastSynced": "Laatst gesynchroniseerd",
       "neverSynced": "Nog niet gesynchroniseerd",
@@ -87,25 +100,49 @@
       "removeTitle": "Mailbox verwijderen",
       "removeConfirm": "{address} verwijderen? De gesprekken blijven als alleen-lezen geschiedenis in de inbox staan en er wordt geen nieuwe e-mail meer mee ontvangen of verzonden. Je kunt hetzelfde adres later opnieuw verbinden.",
       "removed": "Mailbox verwijderd.",
-      "failed": "De mailbox kon niet worden bijgewerkt. Probeer het opnieuw."
+      "failed": "De mailbox kon niet worden bijgewerkt. Probeer het opnieuw.",
+      "provider": {
+        "google": "Gmail",
+        "microsoft": "Microsoft 365",
+        "imap": "IMAP / SMTP"
+      },
+      "scope": {
+        "shared": "Gedeeld",
+        "personal": "Persoonlijk",
+        "personalOf": "Persoonlijk · {name}"
+      },
+      "push": "Live-updates",
+      "pushHint": "Nieuwe e-mail komt binnen zodra de provider dit meldt.",
+      "signature": "Handtekening",
+      "signatureHint": "Antwoorden vanuit deze mailbox krijgen de handtekening ervan.",
+      "summaryNote": "Dit is de persoonlijke mailbox van iemand anders. Alleen de eigenaar kan hem lezen en beheren.",
+      "sendLimit": "Verzendlimiet per uur",
+      "limitDefault": "Platformstandaard",
+      "limitPerHour": "{count, plural, one {# e-mail per uur} other {# e-mails per uur}}",
+      "limitSaved": "Verzendlimiet opgeslagen.",
+      "needsReauthImap": "De mailserver weigerde het opgeslagen wachtwoord. Koppel opnieuw en voer het wachtwoord nogmaals in."
     },
     "outcome": {
       "connected": "Mailbox verbonden. E-mail van de afgelopen 7 dagen wordt in de inbox opgehaald.",
-      "denied": "Inloggen met Google is geannuleerd, dus er is niets verbonden.",
-      "missing_scope": "Google heeft geen toegang gegeven om e-mail te lezen en te verzenden. Verbind opnieuw en vink alle machtigingen op het Google-scherm aan.",
+      "denied": "Het aanmelden is geannuleerd, dus er is niets gekoppeld.",
+      "missing_scope": "Er is geen toegang gegeven om e-mail te lezen en te versturen. Koppel opnieuw en sta alle rechten toe op het aanmeldscherm.",
       "limit": "De mailboxlimiet van je abonnement is bereikt, dus deze mailbox is niet verbonden.",
-      "not_configured": "Inloggen met Google is voor dit platform nog niet ingesteld. Vraag het aan je platformbeheerder.",
-      "wrong_account": "Je hebt ingelogd met een ander Google-account dan de mailbox die je opnieuw verbindt. Log in met hetzelfde adres.",
+      "not_configured": "Aanmelden voor deze provider is nog niet ingesteld voor dit platform. Vraag het aan de platformbeheerder.",
+      "wrong_account": "Je hebt je aangemeld met een ander account dan de mailbox die opnieuw wordt gekoppeld. Meld je aan met hetzelfde adres.",
       "failed": "Er is iets misgegaan bij het verbinden van de mailbox. Probeer het opnieuw."
     },
     "errors": {
-      "notConfigured": "Inloggen met Google is voor dit platform nog niet ingesteld. Vraag het aan je platformbeheerder.",
+      "notConfigured": "Aanmelden voor deze provider is nog niet ingesteld voor dit platform. Vraag het aan de platformbeheerder.",
       "limit": "De mailboxlimiet van je abonnement is bereikt.",
       "unavailable": "Deze mailbox is niet verbonden of moet eerst opnieuw worden verbonden.",
-      "sendRefused": "Google weigerde deze e-mail te verzenden. Controleer de adressen en de grootte en probeer het opnieuw.",
-      "wrongAccount": "Dat is een ander Google-account dan deze mailbox. Log in met hetzelfde adres.",
+      "sendRefused": "De e-mailprovider weigerde deze e-mail te versturen. Controleer de adressen en de grootte en probeer het opnieuw.",
+      "wrongAccount": "Dat is een ander account dan dat van deze mailbox. Meld je aan met hetzelfde adres.",
       "locked": "De e-mailintegratie maakt geen deel uit van je abonnement.",
-      "changed": "Deze mailbox is elders gewijzigd. De lijst is opnieuw geladen, probeer het opnieuw."
+      "changed": "Deze mailbox is elders gewijzigd. De lijst is opnieuw geladen, probeer het opnieuw.",
+      "personalDisabled": "Persoonlijke mailboxen zijn uitgeschakeld voor deze werkruimte.",
+      "personalNotAllowed": "Je mag geen persoonlijke mailbox koppelen.",
+      "providerUnsupported": "Deze e-mailprovider is niet beschikbaar.",
+      "rateLimited": "Deze mailbox heeft zijn verzendlimiet bereikt. Probeer het later opnieuw."
     },
     "guide": {
       "title": "Installatiegids",
@@ -125,10 +162,24 @@
       },
       "trouble": {
         "title": "Als er iets niet klopt",
-        "p1": "Opnieuw verbinden nodig betekent dat Google de toegang heeft ingetrokken of dat die is verlopen. Kies Opnieuw verbinden en log in met hetzelfde adres.",
+        "p1": "Opnieuw koppelen nodig betekent dat de provider de toegang introk of liet verlopen, of dat de mailserver het wachtwoord weigerde. Kies Opnieuw koppelen.",
         "p2": "Fout toont het laatste probleem. Kies Nu synchroniseren om het opnieuw te proberen; blijft het mislukken, verbind de mailbox dan opnieuw.",
-        "p3": "Verbinden is uitgeschakeld als het platform geen Google-login heeft ingesteld of de mailboxlimiet van je abonnement is bereikt.",
+        "p3": "Koppelen is uitgeschakeld als het platform voor die provider geen aanmelding heeft ingesteld of de mailboxlimiet van je abonnement is bereikt.",
         "p4": "Afbeeldingen in een e-mail blijven verborgen tot je in het gesprek Afbeeldingen laden kiest."
+      },
+      "other": {
+        "title": "Microsoft 365 of een andere e-mailprovider koppelen",
+        "p1": "Kies voor Microsoft 365 of Outlook Microsoft 365 koppelen en meld je aan met het werk- of schoolaccount dat de mailbox bezit.",
+        "p2": "Kies voor elke andere provider IMAP / SMTP koppelen en vul server, poort, beveiliging, gebruikersnaam en wachtwoord van je provider in.",
+        "p3": "We melden ons eerst aan bij de inkomende en de uitgaande server. Weigert er een, dan zegt de melding welke.",
+        "p4": "Sommige providers vragen een app-wachtwoord in plaats van je gewone wachtwoord. Maak er een in de beveiligingsinstellingen van je provider."
+      },
+      "personal": {
+        "title": "Persoonlijke mailboxen en delen",
+        "p1": "Een beheerder zet persoonlijke mailboxen aan onder E-mail delen en kiest wie er een mag koppelen.",
+        "p2": "Kies bij het koppelen van een mailbox Persoonlijk. Alleen jij kunt de gesprekken in de inbox lezen.",
+        "p3": "Beheerders zien alleen een samenvatting van je mailbox, tenzij de werkruimte hen persoonlijke mailboxen laat lezen.",
+        "p4": "Persoonlijke mailboxen uitschakelen opent een bestaande persoonlijke mailbox nooit voor anderen."
       }
     },
     "thread": {
@@ -145,7 +196,13 @@
       "noBody": "Deze e-mail bevat geen tekst.",
       "attachments": "{count, plural, one {# bijlage} other {# bijlagen}}",
       "tooLarge": "te groot om te bewaren ({size})",
-      "download": "{name} downloaden ({size})"
+      "download": "{name} downloaden ({size})",
+      "bounce": {
+        "title": "Niet bezorgd bij {address}.",
+        "reason": "Reden: {reason}",
+        "hard": "Het adres is definitief geweigerd. Controleer op typefouten en stuur een nieuwe e-mail naar het gecorrigeerde adres.",
+        "soft": "Dit lijkt tijdelijk, bijvoorbeeld een volle mailbox. Later opnieuw verzenden kan werken, of pas het adres aan."
+      }
     },
     "composer": {
       "toggle": "Cc, Bcc en onderwerp",
@@ -160,10 +217,174 @@
         "ccTooMany": "Cc accepteert maximaal 20 adressen.",
         "bccTooMany": "Bcc accepteert maximaal 20 adressen.",
         "subjectTooLong": "Het onderwerp mag maximaal 998 tekens lang zijn."
+      },
+      "editor": {
+        "toolbar": "Tekstopmaak",
+        "bold": "Vet",
+        "italic": "Cursief",
+        "underline": "Onderstreept",
+        "bulletList": "Lijst met opsommingstekens",
+        "numberedList": "Genummerde lijst",
+        "quote": "Citaat",
+        "link": "Link toevoegen",
+        "clear": "Opmaak wissen",
+        "linkAddress": "Linkadres",
+        "linkApply": "Toevoegen",
+        "linkInvalid": "Voer een web-, e-mail- of telefoonadres in.",
+        "label": "E-mailantwoord",
+        "toPlain": "Overschakelen naar platte tekst",
+        "toRich": "Overschakelen naar opmaak",
+        "hint": "Druk op Ctrl+Enter (Cmd+Enter op Mac) om te verzenden. Enter begint een nieuwe regel."
+      },
+      "attach": {
+        "dismiss": "Sluiten",
+        "list": "Bijgevoegde bestanden ({count})",
+        "uploading": "{name} wordt geüpload",
+        "ready": "Bijgevoegd",
+        "failed": "Upload mislukt",
+        "retry": "Opnieuw proberen",
+        "remove": "{name} verwijderen",
+        "waiting": "Wachten tot de bestanden zijn geüpload.",
+        "fixFailed": "Probeer opnieuw of verwijder de bestanden die niet zijn geüpload.",
+        "refused": {
+          "empty": "{name} is leeg en is niet toegevoegd.",
+          "tooLarge": "{name} is groter dan {max} en is niet toegevoegd.",
+          "tooMany": "In één e-mail passen maar {count} bestanden. {name} is niet toegevoegd.",
+          "totalTooLarge": "Met {name} wordt de e-mail te groot, daarom is het niet toegevoegd.",
+          "blocked": "{name} is een bestandstype dat e-mail niet kan verzenden en is niet toegevoegd."
+        }
+      },
+      "error": {
+        "rateLimited": "Deze mailbox heeft de verzendlimiet per uur bereikt. {seconds, plural, =0 {Probeer het straks opnieuw.} other {Probeer het over # s opnieuw.}}",
+        "attachmentTooLarge": "Een bestand is te groot om bij te voegen. Elk bestand mag maximaal 10 MB zijn en alle bestanden samen maximaal 20 MB.",
+        "tooManyAttachments": "Te veel bestanden. Een e-mail neemt er maximaal 10 aan.",
+        "attachmentGone": "Een bijlage is verlopen of verwijderd. Voeg het opnieuw toe.",
+        "signatureGone": "De gekozen handtekening bestaat niet meer. Kies een andere.",
+        "sendRefused": "De mailprovider heeft deze e-mail geweigerd. Controleer de adressen en de grootte en probeer het opnieuw.",
+        "unavailable": "Deze mailbox is losgekoppeld of moet eerst opnieuw worden gekoppeld.",
+        "attachmentBlocked": "Dat bestandstype kan niet per e-mail worden verzonden.",
+        "network": "De server is niet bereikbaar. Controleer je verbinding en probeer het opnieuw.",
+        "generic": "De e-mail kon niet worden verzonden. Probeer het opnieuw.",
+        "bodyTooLong": "Deze e-mail is te lang om te verzenden. Kort hem in en probeer het opnieuw."
+      },
+      "signature": {
+        "label": "Handtekening",
+        "auto": "Standaard ({name})",
+        "autoNone": "Standaard (geen)",
+        "none": "Geen handtekening",
+        "mine": "{name} (van mij)",
+        "shared": "{name} (mailbox)",
+        "preview": "Voorbeeld van de handtekening",
+        "noneShown": "Er wordt geen handtekening toegevoegd."
       }
     },
     "inbox": {
       "group": "E-mail"
+    },
+    "imap": {
+      "eyebrow": "Andere e-mail",
+      "title": "IMAP- / SMTP-mailbox koppelen",
+      "reconnectTitle": "IMAP- / SMTP-mailbox opnieuw koppelen",
+      "close": "Sluiten",
+      "intro": "Voer de instellingen in die je e-mailprovider voor dit adres geeft. We melden ons bij beide servers aan voordat er iets wordt opgeslagen.",
+      "reconnectIntro": "Voer het wachtwoord opnieuw in. We melden ons bij beide servers aan voordat er iets wordt opgeslagen.",
+      "address": "Mailboxadres",
+      "displayName": "Weergavenaam",
+      "preset": "E-mailprovider",
+      "presetHint": "Een keuze vult de serverinstellingen in. Je kunt ze nog wijzigen.",
+      "presetCustom": "Andere (instellingen invoeren)",
+      "incoming": "Inkomende e-mail (IMAP)",
+      "outgoing": "Uitgaande e-mail (SMTP)",
+      "host": "Server",
+      "port": "Poort",
+      "securityLabel": "Beveiliging",
+      "security": {
+        "ssl": "SSL/TLS",
+        "starttls": "STARTTLS",
+        "none": "Geen"
+      },
+      "username": "Gebruikersnaam",
+      "password": "Wachtwoord",
+      "passwordHint": "Versleuteld opgeslagen en nooit meer getoond.",
+      "passwordAgain": "Typ het wachtwoord opnieuw. Het wordt nooit getoond.",
+      "showPassword": "Wachtwoord tonen",
+      "hidePassword": "Wachtwoord verbergen",
+      "sameCredentials": "Dezelfde gebruikersnaam en hetzelfde wachtwoord gebruiken voor verzenden",
+      "noEncryption": "Deze verbinding is niet versleuteld. Iedereen op het netwerk kan het wachtwoord en de e-mail lezen.",
+      "verifyNote": "Het servercertificaat wordt altijd gecontroleerd.",
+      "cancel": "Annuleren",
+      "submit": "Controleren en koppelen",
+      "reconnectSubmit": "Controleren en opnieuw koppelen",
+      "verifying": "Controleren",
+      "errors": {
+        "required": "Dit veld is verplicht.",
+        "invalid": "Deze waarde is ongeldig."
+      },
+      "failure": {
+        "imapAuth": "De inkomende server (IMAP) weigerde de gebruikersnaam of het wachtwoord. Controleer ze en probeer het opnieuw.",
+        "smtpAuth": "De uitgaande server (SMTP) weigerde de gebruikersnaam of het wachtwoord. Controleer ze en probeer het opnieuw.",
+        "unreachable": "De mailserver is niet bereikbaar of het certificaat is ongeldig. Controleer server, poort en beveiliging.",
+        "generic": "Kon de mailbox niet koppelen. Probeer het opnieuw."
+      }
+    },
+    "sharing": {
+      "title": "E-mail delen",
+      "intro": "Bepaal of mensen hun eigen mailbox mogen koppelen en wie die kan zien.",
+      "enabled": {
+        "title": "Persoonlijke mailboxen",
+        "body": "Laat mensen hun eigen mailbox koppelen. De gesprekken zijn alleen voor hen zichtbaar."
+      },
+      "who": {
+        "title": "Wie er een mag koppelen",
+        "body": "Alleen mensen met toestemming om persoonlijke mailboxen te beheren.",
+        "admins": "Alleen beheerders",
+        "agents": "Beheerders en agenten"
+      },
+      "admins": {
+        "title": "Beheerders mogen persoonlijke mailboxen lezen",
+        "body": "Beheerders kunnen de gesprekken van persoonlijke mailboxen van anderen openen. Uitgeschakeld zien ze alleen een samenvatting."
+      },
+      "offNote": "Persoonlijke mailboxen uitschakelen verbergt alleen de koppeloptie. Bestaande persoonlijke mailboxen blijven privé voor hun eigenaren.",
+      "save": "Opslaan",
+      "reset": "Wijzigingen negeren",
+      "saved": "E-mail delen opgeslagen.",
+      "failed": "Opslaan mislukt. Probeer het opnieuw."
+    },
+    "signatures": {
+      "title": "Handtekeningen",
+      "intro": "Een handtekening wordt onderaan je antwoorden toegevoegd. Elke mailbox kan een gedeelde hebben en jij kunt je eigen hebben, die eerst wordt gebruikt.",
+      "new": "Nieuwe handtekening",
+      "edit": "Handtekening bewerken",
+      "scope": "Van wie",
+      "scopes": {
+        "user": "Van mij",
+        "mailbox": "Van een mailbox",
+        "userBadge": "Van mij",
+        "mailboxBadge": "Mailbox"
+      },
+      "mailbox": "Mailbox",
+      "pickMailbox": "Kies een mailbox",
+      "mailboxRequired": "Kies een mailbox.",
+      "name": "Naam",
+      "nameRequired": "Geef de handtekening een naam.",
+      "body": "Handtekening",
+      "bodyPlaceholder": "Je naam, functie, telefoon, links...",
+      "variables": "Je kunt {name}, {title} en {phone} gebruiken. Ze worden gevuld met de gegevens van de afzender.",
+      "tooLong": "De handtekening is te lang.",
+      "defaultUser": "Gebruiken als mijn standaardhandtekening",
+      "defaultMailbox": "Gebruiken als standaard voor deze mailbox",
+      "save": "Opslaan",
+      "cancel": "Annuleren",
+      "loading": "Handtekeningen laden...",
+      "loadError": "De handtekeningen konden niet worden geladen. Probeer het zo opnieuw.",
+      "empty": "Nog geen handtekeningen.",
+      "default": "Standaard",
+      "editShort": "Bewerken",
+      "delete": "Verwijderen",
+      "confirmDelete": "Definitief verwijderen",
+      "noPermission": "Je hebt geen toestemming om handtekeningen te beheren.",
+      "changed": "Deze handtekening is elders gewijzigd. De lijst is opnieuw geladen, probeer het opnieuw.",
+      "failed": "De handtekening kon niet worden opgeslagen. Probeer het opnieuw."
     }
   }
 }

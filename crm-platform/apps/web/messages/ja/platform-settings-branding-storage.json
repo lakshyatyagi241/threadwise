@@ -18,6 +18,7 @@
       "campaigns": "キャンペーン",
       "googleCalendar": "Google カレンダー",
       "googleMail": "Gmail",
+      "microsoftMail": "Microsoft 365",
       "flowBuilder": "フロービルダー"
     },
     "hub": {
@@ -937,6 +938,9 @@
         "sections": {
           "oauth": {
             "title": "Google OAuth クライアント"
+          },
+          "push": {
+            "title": "Gmailプッシュ（任意）"
           }
         },
         "fields": {
@@ -951,6 +955,49 @@
           "clientSecret": {
             "label": "クライアントシークレット",
             "hint": "暗号化して保存され、再表示されません。空欄の場合は保存済みの値を維持します。GOOGLE_MAIL_CLIENT_SECRET が代替として使われます。"
+          },
+          "redirectUri": {
+            "label": "リダイレクト URI の上書き",
+            "hint": "空欄の場合は上記のアドレスを使用します。クライアントの承認済みリダイレクト URI と完全に一致させる必要があります。"
+          },
+          "pubsubTopic": {
+            "label": "Pub/Subトピック",
+            "hint": "projects/PROJECT_ID/topics/TOPIC_ID。このトピックで gmail-api-push@system.gserviceaccount.com にPublisherロールを付与します。空の場合は GOOGLE_MAIL_PUBSUB_TOPIC を使い、トピックがなければメールボックスはポーリングのみです。"
+          },
+          "pushAudience": {
+            "label": "プッシュのオーディエンス",
+            "hint": "プッシュサブスクリプションに設定したオーディエンス。空の場合は GOOGLE_MAIL_PUSH_AUDIENCE、なければこのプラットフォームのプッシュエンドポイントのアドレスを使います。"
+          },
+          "pushServiceAccount": {
+            "label": "プッシュのサービスアカウント",
+            "hint": "プッシュサブスクリプションが署名に使うサービスアカウント。他のアカウントからのプッシュは拒否されます。空の場合は GOOGLE_MAIL_PUSH_SERVICE_ACCOUNT を使います。"
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "Microsoft 365メール",
+        "description": "各ワークスペースがOutlookとMicrosoft 365のメールボックスを接続するMicrosoftアプリです。",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entraアプリ"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "ワークスペースによるMicrosoft 365接続を許可",
+            "hint": "オフ:どのワークスペースも接続できず、メールの読み取りと送信も行われません。接続済みのメールボックスは保持されます。"
+          },
+          "clientId": {
+            "label": "アプリケーション(クライアント)ID",
+            "hint": "Microsoft Entra管理センターの「アプリの登録」の概要から取得します。空欄の場合は MICROSOFT_MAIL_CLIENT_ID を使用します。"
+          },
+          "clientSecret": {
+            "label": "クライアントシークレット",
+            "hint": "暗号化して保存され、再表示されません。空欄の場合は保存済みの値を維持します。MICROSOFT_MAIL_CLIENT_SECRET が代替として使われます。"
+          },
+          "tenant": {
+            "label": "テナント",
+            "hint": "common は職場・学校アカウントと個人アカウントを許可します。単一テナントのアプリではディレクトリ(テナント)IDを指定します。空欄の場合は MICROSOFT_MAIL_TENANT、なければ common を使用します。"
           },
           "redirectUri": {
             "label": "リダイレクト URI の上書き",
@@ -1095,6 +1142,11 @@
         "title": "Gmailメール",
         "description": "ワークスペースがGmailメールボックスを接続するために使うGoogle OAuthクライアントです。",
         "tags": "Google / OAuth / Gmail"
+      },
+      "microsoftMail": {
+        "title": "Microsoft 365メール",
+        "description": "ワークスペースがOutlookとMicrosoft 365のメールボックスを接続するために使うMicrosoftアプリです。",
+        "tags": "Microsoft / OAuth / Outlook"
       },
       "flowBuilder": {
         "title": "フロービルダー",
@@ -1689,6 +1741,10 @@
           "oauth": {
             "title": "Google OAuth クライアント",
             "description": "クライアントIDとシークレットがないと、ワークスペースはメールボックスを接続できません。"
+          },
+          "push": {
+            "title": "Gmailプッシュ（任意）",
+            "description": "新着メールは次のポーリングを待たずに数秒でチームの受信トレイに届きます。ポーリングは予備として動き続けます。"
           }
         },
         "guide": {
@@ -1705,6 +1761,42 @@
             "consent": {
               "title": "3. 同意画面",
               "body": "openid、email、gmail.readonly、gmail.sendのスコープを追加します。Gmailのスコープは制限付きで、一般利用にはGoogleによるアプリの確認が必要です。テスト中は付与が7日で失効します。"
+            },
+            "workspaces": {
+              "title": "4. ワークスペースの接続",
+              "body": "クライアントIDとシークレットをここに貼り付けて保存します。その後、管理者がメールから接続します。"
+            },
+            "push": {
+              "title": "5. 即時受信（任意）",
+              "body": "Pub/Subトピックを作成し、gmail-api-push@system.gserviceaccount.com にPublisherロールを付与し、OIDC認証付きのプッシュサブスクリプションを APP_URL/v2/public/email/google/push に追加してから、トピック、オーディエンス、サービスアカウントをここに入力します。"
+            }
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "Microsoft 365メール",
+        "eyebrow": "管理 - メール",
+        "description": "プラットフォーム全体で1つのMicrosoft Entraアプリを使います。各ワークスペースはメールから自分のメールボックスを接続し、クライアントIDやシークレットは表示されません。",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entraアプリ",
+            "description": "クライアントIDとシークレットがないと、ワークスペースはメールボックスを接続できません。"
+          }
+        },
+        "guide": {
+          "title": "Microsoft Entraで設定する",
+          "items": {
+            "registration": {
+              "title": "1. アプリの登録",
+              "body": "Microsoft Entra管理センターでアプリの登録を作成します。お客様が使うアカウントの種類(職場または学校、Outlook.com向けの個人アカウント)を選び、アプリケーション(クライアント)IDとテナントをここにコピーします。"
+            },
+            "redirect": {
+              "title": "2. リダイレクトURIとシークレット",
+              "body": "このページに表示されているリダイレクトURIをWebプラットフォームのリダイレクトとして追加し、「証明書とシークレット」でクライアントシークレットを作成して、その値をここに貼り付けます。"
+            },
+            "permissions": {
+              "title": "3. APIのアクセス許可",
+              "body": "Microsoft Graphの委任されたアクセス許可 Mail.Read、Mail.Send、User.Read、offline_access を追加します。一般利用にはパブリッシャーの確認を完了してください。組織によっては管理者の同意も必要です。"
             },
             "workspaces": {
               "title": "4. ワークスペースの接続",
@@ -1800,6 +1892,12 @@
     "googleCallback": {
       "redirectTitle": "Redirect URI",
       "redirectHint": "このアドレスを OAuth クライアントの承認済みリダイレクト URI として正確に登録してください。ワークスペースの管理者が同意した後、Google がブラウザをこのアドレスに戻します。",
+      "copy": "コピー",
+      "copied": "コピーしました"
+    },
+    "microsoftCallback": {
+      "redirectTitle": "Redirect URI",
+      "redirectHint": "このアドレスをアプリの登録にWebのリダイレクトURIとして正確に登録してください。ワークスペースの管理者が同意した後、Microsoftがブラウザをこのアドレスに戻します。",
       "copy": "コピー",
       "copied": "コピーしました"
     }

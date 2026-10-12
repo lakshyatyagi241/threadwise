@@ -95,12 +95,13 @@ describe('patch body', () => {
     expect(Object.keys(p.values)).toEqual(['appName']);
   });
 
-  it('only mail, storage, whatsapp, googleCalendar and googleMail have secrets', () => {
+  it('only mail, storage, whatsapp, googleCalendar, googleMail and microsoftMail have secrets', () => {
     const withSecrets = SET_GROUPS.filter((g) => SET_SECRET_FIELDS[g].length > 0);
     expect(withSecrets.sort()).toEqual([
       'googleCalendar',
       'googleMail',
       'mail',
+      'microsoftMail',
       'storage',
       'whatsapp',
     ]);

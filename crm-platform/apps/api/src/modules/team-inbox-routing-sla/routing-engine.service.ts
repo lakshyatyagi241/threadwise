@@ -90,6 +90,8 @@ export class RoutingEngine {
       }
       if (
         facts.archived ||
+        // A personal mailbox's mail is its owner's: routing never hands it to the workspace (TW-MAIL-035).
+        locked.channelOwnerUserId !== null ||
         locked.assigneeUserId !== null ||
         locked.assigneeTeamId !== null ||
         locked.assigneeAgentId !== null

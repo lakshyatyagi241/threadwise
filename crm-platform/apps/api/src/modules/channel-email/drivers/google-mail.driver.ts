@@ -25,6 +25,8 @@ import {
   type MailCursor,
   type MailDriverContext,
   type MailHealthResult,
+  type MailPushState,
+  type MailPushSupport,
   type MailOAuthGrant,
   type MailOAuthRefreshed,
   type MailSendResult,
@@ -66,6 +68,50 @@ export class GoogleMailDriver implements OAuthMailDriver, OnModuleInit {
 
   onModuleInit(): void {
     this.registry.register(this);
+  }
+
+  // --- push (TW-MAIL-033) --------------------------------------------------------------------------------------------------------
+
+  private pushSupport: MailPushSupport | null = null;
+
+  /** Gmail push through Pub/Sub: `users.watch` on the INBOX, renewed before its 7 days run out; `users.stop` withdraws it. */
+  get push(): MailPushSupport {
+    this.pushSupport ??= {
+      available: async () => (await this.config.push()) !== null,
+      start: async (ctx): Promise<MailPushState | null> => {
+        const cfg = await this.config.push();
+        if (!cfg) return null;
+        try {
+          const watch = await this.gmail.watch(token(ctx), { topicName: cfg.topic });
+          const expiresMs = Number(watch.expiration);
+          return {
+            kind: 'gmail-watch',
+            id: null,
+            historyId: watch.historyId,
+            // Gmail answers the expiry in epoch ms; without one assume the documented 7 days, less a day.
+            expiresAt: new Date(
+              Number.isFinite(expiresMs) && expiresMs > 0 ? expiresMs : Date.now() + 6 * 86_400_000,
+            ).toISOString(),
+          };
+        } catch (err) {
+          throw this.fail(err, 'sync');
+        }
+      },
+      stop: async (ctx) => {
+        try {
+          await this.gmail.stopWatch(token(ctx));
+        } catch (err) {
+          // Gone already (revoked grant, deleted mailbox) is the state we want.
+          if (
+            err instanceof GoogleMailError &&
+            (err.kind === 'not_found' || err.kind === 'invalid_grant')
+          )
+            return;
+          throw this.fail(err, 'sync');
+        }
+      },
+    };
+    return this.pushSupport;
   }
 
   async readiness(): Promise<{ ready: boolean; notReadyReason: string | null }> {

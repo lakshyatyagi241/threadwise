@@ -14,9 +14,17 @@ import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { isOAuthDriver } from './drivers/mail-driver';
 import { MailDriverRegistry } from './drivers/mail-driver.registry';
+import { MailAccess } from './mail-access.service';
 import { MailChannelSync } from './mail-channel.sync';
 import { mailboxUnavailable } from './mail-errors';
 import { MailPlan } from './mail-plan';
+import {
+  mayAct,
+  viewOf,
+  type MailActor,
+  type MailboxAction,
+  type MailboxView,
+} from './mail-personal-policy';
 import { MailSyncPublisher } from './mail-sync.publisher';
 import { MAIL_AUDIT_MODULE, MailTokens } from './mail-tokens.service';
 import { MailboxesRepository, type MailboxListRow, type MailboxRow } from './mailboxes.repository';
@@ -51,6 +59,24 @@ export function toMailboxResponse(
   };
 }
 
+/**
+ * What an admin sees of another person's personal mailbox when the policy does not let admins read it: that it exists, whose it is, its
+ * provider, status and that it counts toward the plan, and nothing about its mail (no conversation count, no error text, no server settings, no inbox filter).
+ */
+export function toMailboxSummary(response: MailboxResponse): MailboxResponse {
+  return {
+    ...response,
+    hasSignature: false,
+    pushActive: false,
+    imap: null,
+    channelId: null,
+    lastError: null,
+    lastSyncedAt: null,
+    conversationCount: 0,
+    contentHidden: true,
+  };
+}
+
 /** The workspace's mailboxes: list, rename, sync now, disconnect (TW-MAIL-019, 023, 028). Connecting is `MailConnectService`. */
 @Injectable()
 export class MailboxesService {
@@ -67,6 +93,7 @@ export class MailboxesService {
     private readonly plan: MailPlan,
     private readonly channel: MailChannelSync,
     private readonly sync: MailSyncPublisher,
+    private readonly access: MailAccess,
   ) {}
 
   async list(): Promise<MailboxListResponse> {
@@ -74,14 +101,26 @@ export class MailboxesService {
     // `providerReady` keeps its Gmail-era meaning for the existing hub: the first sign-in provider (Google) has its platform credentials.
     // `GET /v2/email/providers` is the full per-provider answer.
     const firstOAuth = this.drivers.list().find(isOAuthDriver);
-    const [rows, limit, ready] = await Promise.all([
-      this.db.tx((tx) => this.repo.list(tx, orgId)),
+    const actor = this.access.actor();
+    const [{ rows, policy }, limit, ready] = await Promise.all([
+      this.db.tx(async (tx) => ({
+        rows: await this.repo.list(tx, orgId),
+        policy: await this.access.policy(tx, orgId),
+      })),
       this.plan.mailboxLimit(orgId),
       firstOAuth ? firstOAuth.readiness().then((r) => r.ready) : Promise.resolve(false),
     ]);
+    // An agent sees the shared mailboxes and their own personal ones; an admin also sees the others as summary rows (or in full when the policy lets
+    // admins read personal mail). `used` counts every held mailbox, seen or not: it is the plan's number, not a list length.
+    const data = rows.flatMap((r) => {
+      const view = viewOf(actor, r, policy);
+      if (view === 'none') return [];
+      const response = toMailboxResponse(r, r);
+      return [view === 'summary' ? toMailboxSummary(response) : response];
+    });
     // A disconnected mailbox is history, not a mailbox the workspace holds: it is listed (its conversations are still there) but not counted.
     return {
-      data: rows.map((r) => toMailboxResponse(r, r)),
+      data,
       limit,
       used: rows.filter((r) => r.status !== 'disconnected').length,
       providerReady: ready,
@@ -108,18 +147,46 @@ export class MailboxesService {
   /** One mailbox as the hub shows it. */
   async get(uuid: string): Promise<MailboxResponse> {
     const { orgId } = RequestContextStore.require();
+    const actor = this.access.actor();
     return this.db.tx(async (tx) => {
       const row = await this.repo.byUuid(tx, orgId, uuid);
       if (!row) throw AppError.notFound('Mailbox', uuid);
-      return this.respond(tx, orgId, row);
+      const view = viewOf(actor, row, await this.access.policy(tx, orgId));
+      // Someone else's personal mailbox is not confirmed to exist.
+      if (view === 'none') throw AppError.notFound('Mailbox', uuid);
+      const response = await this.respond(tx, orgId, row);
+      return view === 'summary' ? toMailboxSummary(response) : response;
     });
+  }
+
+  /**
+   * The mailbox, if the caller may do `action` to it. A mailbox the caller may not even see is a 404 (it is not confirmed to exist); one they
+   * see but may not act on is a 403 (`mail.mailboxes.manage` for a shared one, ownership for a personal one).
+   */
+  private async guarded(
+    tx: Parameters<MailboxesRepository['countActive']>[0],
+    orgId: number,
+    uuid: string,
+    action: MailboxAction,
+    actor: MailActor,
+  ): Promise<MailboxRow> {
+    const row = await this.repo.byUuid(tx, orgId, uuid);
+    if (!row) throw AppError.notFound('Mailbox', uuid);
+    const view: MailboxView = viewOf(actor, row, await this.access.policy(tx, orgId));
+    if (view === 'none') throw AppError.notFound('Mailbox', uuid);
+    if (!mayAct(actor, row, action)) {
+      throw AppError.forbidden(
+        row.scope === 'shared' ? 'mail.mailboxes.manage' : 'mail.mailboxes.manage_personal',
+      );
+    }
+    return row;
   }
 
   async rename(uuid: string, input: UpdateMailboxInput): Promise<MailboxResponse> {
     const { orgId } = RequestContextStore.require();
+    const actor = this.access.actor();
     return this.db.tx(async (tx) => {
-      const before = await this.repo.byUuid(tx, orgId, uuid);
-      if (!before) throw AppError.notFound('Mailbox', uuid);
+      const before = await this.guarded(tx, orgId, uuid, 'rename', actor);
       const after = await this.repo.rename(
         tx,
         orgId,
@@ -151,8 +218,8 @@ export class MailboxesService {
   /** Asks for a sync now (the sweep runs every minute anyway). The job runs in the worker; the answer is the mailbox as it stands. */
   async syncNow(uuid: string): Promise<MailboxResponse> {
     const { orgId } = RequestContextStore.require();
-    const row = await this.db.tx((tx) => this.repo.byUuid(tx, orgId, uuid));
-    if (!row) throw AppError.notFound('Mailbox', uuid);
+    const actor = this.access.actor();
+    const row = await this.db.tx((tx) => this.guarded(tx, orgId, uuid, 'sync', actor));
     if (row.status === 'disconnected' || row.status === 'needs_reauth') {
       throw mailboxUnavailable(
         row.status === 'needs_reauth'
@@ -170,8 +237,8 @@ export class MailboxesService {
    */
   async disconnect(uuid: string): Promise<void> {
     const ctx = RequestContextStore.require();
-    const row = await this.db.tx((tx) => this.repo.byUuid(tx, ctx.orgId, uuid));
-    if (!row) throw AppError.notFound('Mailbox', uuid);
+    const actor = this.access.actor();
+    const row = await this.db.tx((tx) => this.guarded(tx, ctx.orgId, uuid, 'disconnect', actor));
     if (row.status === 'disconnected') return;
     const driver = this.drivers.find(row.provider);
     if (driver?.push && row.pushState) {

@@ -126,3 +126,16 @@ checklist as the first real acceptance run and report anything that differs.
 | Google page says `access_blocked` / "app not verified"         | the app is in Testing and the person is not a test user, or it is unverified past the 100-user cap               |
 | A mailbox shows **Needs reconnecting** a week after connecting | the consent screen is still in Testing: Google ends grants after 7 days                                          |
 | Publishing is refused with `price_not_set`                     | do section 1 first                                                                                               |
+
+## Bounces and send limits
+
+Nothing to configure: bounce detection runs for every connected mailbox. Optional environment (all have defaults): `MAIL_SEND_LIMIT_PER_HOUR` (100, the cap of a
+mailbox with no limit of its own; a manager sets one per mailbox in the hub), `MAIL_RECIPIENT_BURST_MAX` / `MAIL_RECIPIENT_BURST_WINDOW_S` (5 per 60 s),
+`MAIL_INBOUND_FLOOD_MAX` / `MAIL_INBOUND_FLOOD_WINDOW_S` (30 per 600 s), `MAIL_BOUNCE_BLOCK_DAYS` (7). The counters live in Redis (`mail:rl:*`, `mail:rr:*`,
+`mail:fl:*`, `mail:bounced:*`); deleting a key lifts that limit at once (for example `DEL mail:bounced:<orgId>:<address>` when a customer fixed their mailbox).
+
+| What you see                                         | Cause and fix                                                                                                      |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| A reply failed with `MAIL_RATE_LIMITED`              | the mailbox's hourly cap: raise it in the hub (Email, the mailbox card) or wait for the time in the message         |
+| A reply failed with `MAIL_RECIPIENT_BOUNCED`         | that address hard-bounced in the last days: correct the address, or `DEL` its Redis flag if the problem was fixed   |
+| Mail from one sender stops alerting                  | the flood limit: stored as automated and quiet; raise `MAIL_INBOUND_FLOOD_MAX` if that sender is legitimate        |

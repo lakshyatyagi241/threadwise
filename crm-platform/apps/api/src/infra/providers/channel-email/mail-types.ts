@@ -82,6 +82,17 @@ export interface NormalisedMail {
   rawHeaders: Record<string, string>;
   /** Set when the message must be counted but not stored. A driver should drop what it can before returning, but may leave this to the ingest. */
   skip: MailSkipReason | null;
+  /**
+   * The machine-readable parts of a delivery-status notification (TW-MAIL-032), when the driver could read them: the text of the
+   * `message/delivery-status` part and the headers of the returned original. Optional: a driver that leaves it out is still understood
+   * from the readable body and `rawHeaders` (see `detectBounce`).
+   */
+  report?: MailReport | null;
+}
+
+export interface MailReport {
+  deliveryStatus: string | null;
+  original: string | null;
 }
 
 /** A file that goes out with a reply. The adapter resolves `objectKey` into `bytes` before it calls the driver, so a driver reads `bytes`. */

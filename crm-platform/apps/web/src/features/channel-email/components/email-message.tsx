@@ -5,6 +5,7 @@ import { useRef, useState } from 'react';
 import { cn } from '@crm/ui';
 import type { EmailAttachment, EmailMeta } from '@crm/contracts';
 import { attachmentUrl } from '../api/mailboxes';
+import { deliveryView } from '../lib/bounce-view';
 import {
   buildSrcDoc,
   formatAddress,
@@ -48,6 +49,7 @@ export function EmailMessageBody({
   const [images, setImages] = useState(false);
   const remote = email.html ? hasRemoteImages(email.html) : false;
   const files = listedAttachments(email.attachments);
+  const delivery = deliveryView(email);
   const frame = useRef<HTMLIFrameElement>(null);
   const [height, setHeight] = useState(120);
 
@@ -109,6 +111,21 @@ export function EmailMessageBody({
           </p>
         )}
       </div>
+
+      {delivery.state === 'bounced' && (
+        <div
+          role="alert"
+          data-testid="email-bounce"
+          data-kind={delivery.kind}
+          className="rounded-md border border-danger/40 bg-danger/10 px-2.5 py-1.5 text-xs text-danger"
+        >
+          <p dir="auto" className="break-words font-medium">
+            {t('bounce.title', { address: delivery.address })}
+            {delivery.reason ? ` ${t('bounce.reason', { reason: delivery.reason })}` : ''}
+          </p>
+          <p className="mt-0.5 text-danger/90">{t(`bounce.${delivery.kind}`)}</p>
+        </div>
+      )}
 
       {email.html ? (
         <>

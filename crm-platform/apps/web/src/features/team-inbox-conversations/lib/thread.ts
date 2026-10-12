@@ -28,6 +28,8 @@ export interface PendingSend {
   status: 'sending' | 'failed';
   /** An error code the screen turns into a sentence. */
   error: string | null;
+  /** Seconds to wait before trying again, when the refusal said so (an email rate limit). */
+  retryAfterS?: number;
   createdAt: string;
 }
 
@@ -66,7 +68,7 @@ export type ThreadAction =
       at: string;
     }
   | { type: 'send'; pending: PendingSend }
-  | { type: 'sendFailed'; clientMessageId: string; error: string }
+  | { type: 'sendFailed'; clientMessageId: string; error: string; retryAfterS?: number }
   | { type: 'sendRetry'; clientMessageId: string }
   | { type: 'dismiss'; clientMessageId: string };
 
@@ -195,7 +197,12 @@ export function threadReducer(state: ThreadState, action: ThreadAction): ThreadS
         ...state,
         pending: state.pending.map((p) =>
           p.clientMessageId === action.clientMessageId
-            ? { ...p, status: 'failed', error: action.error }
+            ? {
+                ...p,
+                status: 'failed',
+                error: action.error,
+                ...(action.retryAfterS !== undefined ? { retryAfterS: action.retryAfterS } : {}),
+              }
             : p,
         ),
       };

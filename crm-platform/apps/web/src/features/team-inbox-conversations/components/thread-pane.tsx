@@ -14,6 +14,7 @@ import {
   defaultReplySubject,
   latestEmailSubject,
 } from '@/features/channel-email/lib/composer-extras';
+import { emailSendProblem } from '@/features/channel-email/lib/composer-errors';
 import { ReconnectBanner } from '@/features/channel-whatsapp-cloud';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { CallButton } from '@/features/calling-voice';
@@ -311,8 +312,16 @@ export function ThreadPane(props: ThreadPaneProps) {
         replyDisabled={replyDisabled}
         canReply={props.can.reply}
         canNote={props.can.note}
-        canAttach={!isEmail && (detail?.capabilities.media.length ?? 0) > 0}
-        email={isEmail ? { defaultSubject: defaultReplySubject(emailSubject) } : undefined}
+        canAttach={isEmail ? props.can.reply : (detail?.capabilities.media.length ?? 0) > 0}
+        email={
+          isEmail
+            ? {
+                defaultSubject: defaultReplySubject(emailSubject),
+                channelId: detail?.channel.id,
+                sendProblem: emailSendProblem(thread.state.pending),
+              }
+            : undefined
+        }
         groupSendBlocked={groupThread}
         attachments={
           detail

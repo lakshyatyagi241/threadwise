@@ -18,6 +18,7 @@
       "campaigns": "مہمات",
       "googleCalendar": "Google Calendar",
       "googleMail": "Gmail",
+      "microsoftMail": "Microsoft 365",
       "flowBuilder": "فلو بلڈر"
     },
     "hub": {
@@ -937,6 +938,9 @@
         "sections": {
           "oauth": {
             "title": "Google OAuth کلائنٹ"
+          },
+          "push": {
+            "title": "Gmail پش (اختیاری)"
           }
         },
         "fields": {
@@ -951,6 +955,49 @@
           "clientSecret": {
             "label": "کلائنٹ سیکرٹ",
             "hint": "خفیہ کاری کے ساتھ محفوظ، دوبارہ نہیں دکھایا جاتا۔ خالی ہو تو محفوظ شدہ قدر رہتی ہے؛ GOOGLE_MAIL_CLIENT_SECRET متبادل ہے۔"
+          },
+          "redirectUri": {
+            "label": "Redirect URI کی تبدیلی",
+            "hint": "اوپر کا پتہ استعمال کرنے کے لیے خالی چھوڑیں۔ یہ کلائنٹ پر موجود Authorised redirect URI سے بالکل مماثل ہونا چاہیے۔"
+          },
+          "pubsubTopic": {
+            "label": "Pub/Sub ٹاپک",
+            "hint": "projects/PROJECT_ID/topics/TOPIC_ID۔ اس پر gmail-api-push@system.gserviceaccount.com کو Publisher کا کردار دیں۔ خالی ہو تو GOOGLE_MAIL_PUBSUB_TOPIC استعمال ہوتا ہے؛ ٹاپک نہ ہو تو میل باکس صرف پولنگ سے چیک ہوتے ہیں۔"
+          },
+          "pushAudience": {
+            "label": "پش آڈیئنس",
+            "hint": "پش سبسکرپشن پر مقرر کردہ آڈیئنس۔ خالی ہو تو GOOGLE_MAIL_PUSH_AUDIENCE استعمال ہوتا ہے، ورنہ اس پلیٹ فارم کے پش اینڈ پوائنٹ کا پتہ۔"
+          },
+          "pushServiceAccount": {
+            "label": "پش سروس اکاؤنٹ",
+            "hint": "وہ سروس اکاؤنٹ جس سے پش سبسکرپشن دستخط کرتی ہے۔ کسی اور اکاؤنٹ کا پش مسترد کر دیا جاتا ہے۔ خالی ہو تو GOOGLE_MAIL_PUSH_SERVICE_ACCOUNT استعمال ہوتا ہے۔"
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "Microsoft 365 ای میل",
+        "description": "وہ Microsoft ایپ جس کے ذریعے ہر ورک اسپیس اپنے Outlook اور Microsoft 365 میل باکس جوڑتا ہے۔",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra ایپ"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "ورک اسپیس کو Microsoft 365 جوڑنے کی اجازت دیں",
+            "hint": "بند: کوئی ورک اسپیس نہیں جوڑ سکتا اور کوئی میل پڑھی یا بھیجی نہیں جاتی۔ پہلے سے جُڑے میل باکس محفوظ رہتے ہیں۔"
+          },
+          "clientId": {
+            "label": "ایپلیکیشن (کلائنٹ) آئی ڈی",
+            "hint": "Microsoft Entra ایڈمن سینٹر، ایپ رجسٹریشنز، اوورویو سے۔ خالی ہو تو MICROSOFT_MAIL_CLIENT_ID استعمال ہوتا ہے۔"
+          },
+          "clientSecret": {
+            "label": "کلائنٹ سیکرٹ",
+            "hint": "خفیہ کاری کے ساتھ محفوظ، دوبارہ نہیں دکھایا جاتا۔ خالی ہو تو محفوظ شدہ قدر رہتی ہے؛ MICROSOFT_MAIL_CLIENT_SECRET متبادل ہے۔"
+          },
+          "tenant": {
+            "label": "ٹیننٹ",
+            "hint": "common کام، اسکول اور ذاتی اکاؤنٹس کی اجازت دیتا ہے؛ سنگل ٹیننٹ ایپ کے لیے ڈائریکٹری (ٹیننٹ) آئی ڈی استعمال کریں۔ خالی ہو تو MICROSOFT_MAIL_TENANT، ورنہ common۔"
           },
           "redirectUri": {
             "label": "Redirect URI کی تبدیلی",
@@ -1095,6 +1142,11 @@
         "title": "Gmail ای میل",
         "description": "وہ Google OAuth کلائنٹ جس سے ورک اسپیس اپنے Gmail میل باکس جوڑتے ہیں۔",
         "tags": "Google / OAuth / Gmail"
+      },
+      "microsoftMail": {
+        "title": "Microsoft 365 ای میل",
+        "description": "وہ Microsoft ایپ جس سے ورک اسپیس اپنے Outlook اور Microsoft 365 میل باکس جوڑتے ہیں۔",
+        "tags": "Microsoft / OAuth / Outlook"
       },
       "flowBuilder": {
         "title": "فلو بلڈر",
@@ -1689,6 +1741,10 @@
           "oauth": {
             "title": "Google OAuth کلائنٹ",
             "description": "کلائنٹ آئی ڈی اور سیکرٹ کے بغیر ورک اسپیس میل باکس نہیں جوڑ سکتے۔"
+          },
+          "push": {
+            "title": "Gmail پش (اختیاری)",
+            "description": "نئی میل اگلی پولنگ کا انتظار کیے بغیر چند سیکنڈ میں ٹیم ان باکس تک پہنچتی ہے۔ پولنگ حفاظتی سہارے کے طور پر چلتی رہتی ہے۔"
           }
         },
         "guide": {
@@ -1705,6 +1761,42 @@
             "consent": {
               "title": "3. رضامندی کی اسکرین",
               "body": "openid، email، gmail.readonly اور gmail.send اسکوپس شامل کریں۔ Gmail اسکوپس محدود ہیں: عام استعمال کے لیے Google کو ایپ کی تصدیق کرنی ہوگی، اور ٹیسٹنگ موڈ میں اجازت 7 دن بعد ختم ہو جاتی ہے۔"
+            },
+            "workspaces": {
+              "title": "4. ورک اسپیسز منسلک کریں",
+              "body": "کلائنٹ آئی ڈی اور سیکرٹ یہاں پیسٹ کر کے محفوظ کریں۔ اس کے بعد ایڈمن ای میل سے جوڑتے ہیں۔"
+            },
+            "push": {
+              "title": "5. فوری میل (اختیاری)",
+              "body": "ایک Pub/Sub ٹاپک بنائیں، gmail-api-push@system.gserviceaccount.com کو Publisher کا کردار دیں، OIDC تصدیق کے ساتھ APP_URL/v2/public/email/google/push پر پش سبسکرپشن شامل کریں، پھر ٹاپک، آڈیئنس اور سروس اکاؤنٹ یہاں درج کریں۔"
+            }
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "Microsoft 365 ای میل",
+        "eyebrow": "ایڈمن - ای میل",
+        "description": "پورے پلیٹ فارم کے لیے ایک Microsoft Entra ایپ۔ ہر ورک اسپیس ای میل سے اپنے میل باکس جوڑتا ہے اور کلائنٹ آئی ڈی یا سیکرٹ کبھی نہیں دیکھتا۔",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra ایپ",
+            "description": "کلائنٹ آئی ڈی اور سیکرٹ کے بغیر ورک اسپیس میل باکس نہیں جوڑ سکتے۔"
+          }
+        },
+        "guide": {
+          "title": "Microsoft Entra میں سیٹ اپ کریں",
+          "items": {
+            "registration": {
+              "title": "1. ایپ رجسٹریشن",
+              "body": "Microsoft Entra ایڈمن سینٹر میں ایپ رجسٹریشن بنائیں۔ اپنے صارفین کے اکاؤنٹ کی اقسام چنیں (کام یا اسکول، اور Outlook.com کے لیے ذاتی اکاؤنٹس) اور ایپلیکیشن (کلائنٹ) آئی ڈی اور ٹیننٹ یہاں کاپی کریں۔"
+            },
+            "redirect": {
+              "title": "2. ری ڈائریکٹ URI اور سیکرٹ",
+              "body": "اس صفحے پر دکھایا گیا ری ڈائریکٹ URI Web پلیٹ فارم ری ڈائریکٹ کے طور پر شامل کریں، پھر سرٹیفکیٹس اور سیکرٹس میں کلائنٹ سیکرٹ بنائیں اور اس کی ویلیو یہاں پیسٹ کریں۔"
+            },
+            "permissions": {
+              "title": "3. API اجازتیں",
+              "body": "Microsoft Graph کی ڈیلیگیٹڈ اجازتیں Mail.Read، Mail.Send، User.Read اور offline_access شامل کریں۔ عام استعمال کے لیے پبلشر کی تصدیق مکمل کریں؛ کچھ ادارے ایڈمن کی منظوری بھی مانگتے ہیں۔"
             },
             "workspaces": {
               "title": "4. ورک اسپیسز منسلک کریں",
@@ -1800,6 +1892,12 @@
     "googleCallback": {
       "redirectTitle": "Redirect URI",
       "redirectHint": "یہ بالکل یہی پتہ OAuth کلائنٹ پر Authorised redirect URI کے طور پر رجسٹر کریں۔ ورک اسپیس ایڈمن کی رضامندی کے بعد Google براؤزر کو یہیں بھیجتا ہے۔",
+      "copy": "کاپی کریں",
+      "copied": "کاپی ہو گیا"
+    },
+    "microsoftCallback": {
+      "redirectTitle": "Redirect URI",
+      "redirectHint": "اس پتے کو ایپ رجسٹریشن میں بالکل اسی طرح Web ری ڈائریکٹ URI کے طور پر درج کریں۔ ورک اسپیس ایڈمن کی منظوری کے بعد Microsoft براؤزر کو یہیں بھیجتا ہے۔",
       "copy": "کاپی کریں",
       "copied": "کاپی ہو گیا"
     }

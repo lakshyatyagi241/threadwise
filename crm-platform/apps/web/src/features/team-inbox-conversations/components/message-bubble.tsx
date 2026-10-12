@@ -12,6 +12,7 @@ import {
   mediaView,
 } from '@/features/channel-whatsapp-cloud';
 import { EmailMessageBody } from '@/features/channel-email/components/email-message';
+import { composerErrorKey } from '@/features/channel-email/lib/composer-errors';
 import { isRetryableSend } from '../lib/errors';
 import type { AgentReaction, PendingSend } from '../lib/thread';
 import { clockTime, fullStamp, humanSize } from '../lib/time';
@@ -492,8 +493,10 @@ export interface PendingBubbleProps {
 export function PendingBubble({ pending: p, progress, onRetry, onDismiss }: PendingBubbleProps) {
   const t = useTranslations('team-inbox-conversations.bubble');
   const errorText = useErrorText();
+  const mailError = useTranslations('email.composer.error');
   const locale = useLocale();
   const failed = p.status === 'failed';
+  const mailKey = p.error ? composerErrorKey(p.error) : null;
   return (
     <li
       data-testid="inbox-pending"
@@ -534,7 +537,11 @@ export function PendingBubble({ pending: p, progress, onRetry, onDismiss }: Pend
         </div>
         {failed && (
           <div className="mt-0.5 flex flex-wrap items-center justify-end gap-2 px-1 text-xs text-danger">
-            <span role="alert">{errorText(p.error ?? 'NETWORK')}</span>
+            <span role="alert">
+              {mailKey
+                ? mailError(mailKey, { seconds: p.retryAfterS ?? 0 })
+                : errorText(p.error ?? 'NETWORK')}
+            </span>
             {isRetryableSend(p.error ?? 'NETWORK') && (
               <button
                 type="button"

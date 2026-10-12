@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { DashWidgets } from '@crm/contracts';
 import type { Tx } from '@crm/db';
+import { channelOwnerSql } from '../../realtime';
 
 type Raw = Record<string, unknown>;
 const n = (v: unknown): number => Number(v ?? 0);
@@ -159,13 +160,13 @@ export class DashWidgetsRepository {
   async inbox(tx: Tx, orgId: number): Promise<DashWidgets['inbox']> {
     const c = (
       await tx.execute(sql`
-        SELECT count(*)::int AS unread, min(last_message_at) AS oldest
-        FROM conversations WHERE org_id = ${orgId} AND NOT archived AND unread_count > 0`)
+        SELECT count(*)::int AS unread, min(c.last_message_at) AS oldest
+        FROM conversations c WHERE c.org_id = ${orgId} AND NOT c.archived AND c.unread_count > 0 AND ${channelOwnerSql('c')} IS NULL`)
     ).rows[0] as Raw;
     const rows = await tx.execute(sql`
-      SELECT uuid, coalesce(title, peer_name, '+' || peer_key) AS title, last_message_at, coalesce(preview, '') AS preview, unread_count
-      FROM conversations WHERE org_id = ${orgId} AND NOT archived
-      ORDER BY last_message_at DESC NULLS LAST LIMIT 3`);
+      SELECT c.uuid, coalesce(c.title, c.peer_name, '+' || c.peer_key) AS title, c.last_message_at, coalesce(c.preview, '') AS preview, c.unread_count
+      FROM conversations c WHERE c.org_id = ${orgId} AND NOT c.archived AND ${channelOwnerSql('c')} IS NULL
+      ORDER BY c.last_message_at DESC NULLS LAST LIMIT 3`);
     return {
       unread: n(c.unread),
       oldestUnreadAt: iso(c.oldest),

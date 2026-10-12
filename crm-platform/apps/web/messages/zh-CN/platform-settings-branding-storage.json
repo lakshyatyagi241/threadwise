@@ -18,6 +18,7 @@
       "campaigns": "营销活动",
       "googleCalendar": "Google 日历",
       "googleMail": "Gmail",
+      "microsoftMail": "Microsoft 365",
       "flowBuilder": "流程构建器"
     },
     "hub": {
@@ -937,6 +938,9 @@
         "sections": {
           "oauth": {
             "title": "Google OAuth 客户端"
+          },
+          "push": {
+            "title": "Gmail 推送（可选）"
           }
         },
         "fields": {
@@ -951,6 +955,49 @@
           "clientSecret": {
             "label": "客户端密钥",
             "hint": "加密存储，不会再次显示。留空则保留已保存的密钥；GOOGLE_MAIL_CLIENT_SECRET 为备用。"
+          },
+          "redirectUri": {
+            "label": "重定向 URI 覆盖",
+            "hint": "留空则使用上方地址。必须与客户端上的已授权重定向 URI 完全一致。"
+          },
+          "pubsubTopic": {
+            "label": "Pub/Sub 主题",
+            "hint": "projects/PROJECT_ID/topics/TOPIC_ID。在该主题上为 gmail-api-push@system.gserviceaccount.com 授予 Publisher 角色。留空则使用 GOOGLE_MAIL_PUBSUB_TOPIC；没有主题时邮箱只会被轮询。"
+          },
+          "pushAudience": {
+            "label": "推送受众（Audience）",
+            "hint": "推送订阅上设置的受众。留空则使用 GOOGLE_MAIL_PUSH_AUDIENCE，否则使用本平台推送端点的地址。"
+          },
+          "pushServiceAccount": {
+            "label": "推送服务账号",
+            "hint": "推送订阅用于签名的服务账号。来自其他账号的推送会被拒绝。留空则使用 GOOGLE_MAIL_PUSH_SERVICE_ACCOUNT。"
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "Microsoft 365 邮件",
+        "description": "每个工作区用来连接其 Outlook 和 Microsoft 365 邮箱的 Microsoft 应用。",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra 应用"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "允许工作区连接 Microsoft 365",
+            "hint": "关闭:任何工作区都无法连接,也不会读取或发送邮件。已连接的邮箱会保留。"
+          },
+          "clientId": {
+            "label": "应用程序(客户端)ID",
+            "hint": "来自 Microsoft Entra 管理中心的“应用注册”概述页。留空则使用 MICROSOFT_MAIL_CLIENT_ID。"
+          },
+          "clientSecret": {
+            "label": "客户端密钥",
+            "hint": "加密存储，不会再次显示。留空则保留已保存的密钥；MICROSOFT_MAIL_CLIENT_SECRET 为备用。"
+          },
+          "tenant": {
+            "label": "租户",
+            "hint": "common 允许工作、学校和个人账户;单租户应用请使用目录(租户)ID。留空则使用 MICROSOFT_MAIL_TENANT,否则使用 common。"
           },
           "redirectUri": {
             "label": "重定向 URI 覆盖",
@@ -1095,6 +1142,11 @@
         "title": "Gmail 邮件",
         "description": "工作区用来连接各自 Gmail 邮箱的 Google OAuth 客户端。",
         "tags": "Google / OAuth / Gmail"
+      },
+      "microsoftMail": {
+        "title": "Microsoft 365 邮件",
+        "description": "工作区用来连接其 Outlook 和 Microsoft 365 邮箱的 Microsoft 应用。",
+        "tags": "Microsoft / OAuth / Outlook"
       },
       "flowBuilder": {
         "title": "流程构建器",
@@ -1689,6 +1741,10 @@
           "oauth": {
             "title": "Google OAuth 客户端",
             "description": "没有客户端 ID 和密钥,工作区无法连接邮箱。"
+          },
+          "push": {
+            "title": "Gmail 推送（可选）",
+            "description": "新邮件会在几秒内到达团队收件箱，无需等待下一次轮询。轮询仍会保留，作为兜底。"
           }
         },
         "guide": {
@@ -1705,6 +1761,42 @@
             "consent": {
               "title": "3. 同意屏幕",
               "body": "添加 openid、email、gmail.readonly 和 gmail.send 范围。Gmail 范围属于受限范围:正式使用前 Google 须验证该应用,测试模式下授权 7 天后失效。"
+            },
+            "workspaces": {
+              "title": "4. 工作区连接",
+              "body": "在此粘贴客户端 ID 和密钥并保存。之后管理员即可在“电子邮件”中连接。"
+            },
+            "push": {
+              "title": "5. 即时收信（可选）",
+              "body": "创建一个 Pub/Sub 主题，为 gmail-api-push@system.gserviceaccount.com 授予 Publisher 角色，在 APP_URL/v2/public/email/google/push 添加启用 OIDC 认证的推送订阅，然后在此填写主题、受众和服务账号。"
+            }
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "Microsoft 365 邮件",
+        "eyebrow": "管理 - 电子邮件",
+        "description": "整个平台使用一个 Microsoft Entra 应用。每个工作区在“邮件”中连接自己的邮箱,看不到客户端 ID 和密码。",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra 应用",
+            "description": "没有客户端 ID 和密钥,工作区无法连接邮箱。"
+          }
+        },
+        "guide": {
+          "title": "在 Microsoft Entra 中设置",
+          "items": {
+            "registration": {
+              "title": "1. 应用注册",
+              "body": "在 Microsoft Entra 管理中心创建应用注册。选择客户使用的账户类型(工作或学校账户,以及 Outlook.com 的个人账户),并把应用程序(客户端)ID 和租户复制到这里。"
+            },
+            "redirect": {
+              "title": "2. 重定向 URI 与密码",
+              "body": "把本页显示的重定向 URI 添加为 Web 平台重定向,然后在“证书和密码”中创建客户端密码,并把它的值粘贴到这里。"
+            },
+            "permissions": {
+              "title": "3. API 权限",
+              "body": "添加 Microsoft Graph 委托权限 Mail.Read、Mail.Send、User.Read 和 offline_access。若要面向所有用户使用,请完成发布者验证;部分组织还要求管理员同意。"
             },
             "workspaces": {
               "title": "4. 工作区连接",
@@ -1800,6 +1892,12 @@
     "googleCallback": {
       "redirectTitle": "重定向 URI",
       "redirectHint": "请将此确切地址注册为 OAuth 客户端上的已授权重定向 URI。工作区管理员同意后，Google 会将浏览器跳转至此地址。",
+      "copy": "复制",
+      "copied": "已复制"
+    },
+    "microsoftCallback": {
+      "redirectTitle": "重定向 URI",
+      "redirectHint": "请把此地址原样注册为应用注册中的 Web 重定向 URI。工作区管理员同意后,Microsoft 会把浏览器送回这个地址。",
       "copy": "复制",
       "copied": "已复制"
     }

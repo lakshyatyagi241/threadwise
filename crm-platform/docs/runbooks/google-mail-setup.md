@@ -79,3 +79,28 @@ choose a test user, tick both permissions, and the mailbox appears as connected;
   A flood of mailboxes on one project is the first thing to watch (`rateLimitExceeded` shows up as "Google is limiting requests right now" on the hub and is retried).
 - The sync is a worker job (queue `mail-sync`); if mail stops arriving for every workspace, check the worker is running and Redis is reachable, then
   `GET /v2/email/mailboxes` for the `lastError` of one mailbox.
+
+## 7. Instant mail with Gmail push (optional, TW-MAIL-033)
+
+Without this the mailboxes are polled every minute. With it Gmail tells us about new mail through Google Pub/Sub and the mailbox is synced within seconds; a
+mailbox with a live watch is still polled as a safety net, at least every 10 minutes (`MAIL_PUSH_RECONCILE_MINUTES`, 1 to 10).
+
+1. In the same Google Cloud project, enable the **Cloud Pub/Sub API** and create a topic, for example `gmail-push`. Its full name is `projects/<project>/topics/gmail-push`.
+2. On the topic, Permissions, add the principal `gmail-api-push@system.gserviceaccount.com` with the role **Pub/Sub Publisher**. Gmail cannot publish without it.
+3. Create (or reuse) a service account, for example `gmail-push@<project>.iam.gserviceaccount.com`. It only signs the push requests; it needs no roles.
+4. Create a **push subscription** on the topic: delivery type Push, endpoint URL `<APP_URL>/v2/public/email/google/push`, tick **Enable authentication**, pick that service
+   account, and set **Audience** to the same endpoint URL (or any string you then enter as the audience in the console). Acknowledgement deadline 10 seconds is plenty.
+5. In the operator console, Gmail email, section **Gmail push**: enter the topic, the audience (empty means the endpoint URL above) and the service account.
+   Environment fallback for each empty field: `GOOGLE_MAIL_PUBSUB_TOPIC`, `GOOGLE_MAIL_PUSH_AUDIENCE`, `GOOGLE_MAIL_PUSH_SERVICE_ACCOUNT`.
+
+What happens next: the worker sets a Gmail `watch` on each connected mailbox's INBOX within two minutes (mailboxes connected later get theirs the same way) and the hub shows
+**push active**. A watch lasts about 7 days; the worker renews it when less than `MAIL_PUSH_RENEW_BEFORE_HOURS` (24) remain. A watch is withdrawn on disconnect, when the
+mailbox needs reconnecting, when push is switched off here, or when renewal kept failing until it ran out; the mailbox is then simply polled again.
+
+The endpoint accepts only requests carrying Google's OIDC token for that audience and that service account (RS256, Google's published keys, issuer, expiry,
+`email_verified`); anything else gets 401 with no body. A valid notification is answered 204 at once, also for an unknown address or an already-seen history id.
+
+Troubleshooting: no "push active" -> topic or service account empty, Gmail client off, or `gmail-api-push@system.gserviceaccount.com` missing as Publisher (the watch
+call fails and the worker log says "gmail watch could not be started or renewed"). Push active but mail waits minutes -> the subscription is not delivering: check the
+subscription's push errors in Google Cloud (a 401 means audience or service account differ from the console), and that the endpoint is reachable from the internet over https.
+Not run against live Google in this repository: verify once on a real project.

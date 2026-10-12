@@ -53,6 +53,8 @@ export interface DispatchResult {
   acceptedAt: Date;
   /** What a simulated provider will report later (empty for a real one, which uses its webhook). See `scheduleReceipts`. */
   plannedReceipts: PlannedReceipt[];
+  /** What the adapter asked to record on the message's `meta` (see `SendResult.meta`). */
+  meta?: Record<string, unknown>;
   /** True when this key had already been sent: the stored answer is returned and the provider is not called again. */
   replayed: boolean;
 }
@@ -163,6 +165,7 @@ export class ChannelDispatcher {
         providerMessageId: sent.providerMessageId,
         acceptedAt: sent.acceptedAt,
         plannedReceipts: sent.plannedReceipts ?? [],
+        ...(sent.meta ? { meta: sent.meta } : {}),
       };
       await this.redisCall(() =>
         this.redis.set(
@@ -324,11 +327,13 @@ export class ChannelDispatcher {
         providerMessageId: string;
         acceptedAt: string;
         plannedReceipts?: PlannedReceipt[];
+        meta?: Record<string, unknown>;
       };
       return {
         providerMessageId: v.providerMessageId,
         acceptedAt: new Date(v.acceptedAt),
         plannedReceipts: v.plannedReceipts ?? [],
+        ...(v.meta ? { meta: v.meta } : {}),
       };
     } catch {
       return null;

@@ -82,6 +82,8 @@ export const outboundEmailSchema = z.object({
   signature: z.boolean().optional(),
   /** The user who wrote the reply (internal id), for their default signature; null for a bot or flow. */
   sentBy: z.number().int().nullable().optional(),
+  /** The composer's rich-text body (raw: the email adapter sanitises it before it goes out); the envelope `body` is its plain text. */
+  bodyHtml: z.string().max(200_000).optional(),
 });
 export type OutboundEmail = z.infer<typeof outboundEmailSchema>;
 export const OUTBOUND_CAPTION_MAX = 1024;
@@ -277,6 +279,11 @@ export interface SendResult {
   acceptedAt: Date;
   /** Only the simulator fills this; the dispatcher turns it into delayed receipt jobs. */
   plannedReceipts?: PlannedReceipt[];
+  /**
+   * Keys to merge into the stored message's `meta` when it is marked sent (an email reply records what really went out: its HTML,
+   * its attachments, the recipients). Plain JSON; kept with the idempotent result so a replay records the same.
+   */
+  meta?: Record<string, unknown>;
 }
 
 /**

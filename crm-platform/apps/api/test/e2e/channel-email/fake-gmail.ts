@@ -50,6 +50,10 @@ export interface Delivery {
   labels?: string[];
   headers?: Array<[string, string]>;
   attachments?: FakeAttachment[];
+  /** Extra top-level parts after the body (a delivery-status report's `message/delivery-status`, `text/rfc822-headers`). */
+  extraParts?: GmailPart[];
+  /** Replaces the top-level `Content-Type` header (default `multipart/mixed`). */
+  contentType?: string;
   /** Epoch ms; default now. */
   at?: number;
 }
@@ -115,6 +119,10 @@ export class FakeGmail {
   revoked: string[] = [];
   mailboxes = new Map<string, Mailbox>();
   sent: SentMail[] = [];
+  /** Gmail watches set through users.watch, by account. */
+  watches = new Map<string, { topicName: string; expiration: number }>();
+  /** How long a watch the fake grants lasts (Gmail: about 7 days). */
+  watchTtlMs = 7 * 86_400_000;
   private failures: Failure[] = [];
   private seq = 0;
 
@@ -276,6 +284,7 @@ export class FakeGmail {
           : { size: a.data.length, attachmentId: attId },
       });
     });
+    parts.push(...(d.extraParts ?? []));
     const messageId = d.messageId ?? `${id}@sender.example`;
     const message: GmailMessage = {
       id,
@@ -297,7 +306,7 @@ export class FakeGmail {
           ...(d.inReplyTo ? [{ name: 'In-Reply-To', value: `<${d.inReplyTo}>` }] : []),
           ...(d.references ? [{ name: 'References', value: d.references }] : []),
           { name: 'Date', value: new Date(d.at ?? Date.now()).toUTCString() },
-          { name: 'Content-Type', value: 'multipart/mixed' },
+          { name: 'Content-Type', value: d.contentType ?? 'multipart/mixed' },
           ...(d.headers ?? []).map(([name, value]) => ({ name, value })),
         ],
         body: { size: 0 },
@@ -394,6 +403,19 @@ export class FakeGmail {
           historyId: String(mb.historyId),
         },
       };
+    }
+    if (api === '/users/me/watch' && method === 'POST') {
+      // users.watch: the answer carries the mailbox's current history id and when the watch ends (epoch ms).
+      const expiration = Date.now() + this.watchTtlMs;
+      this.watches.set(live.account.email, { topicName: String(body.topicName), expiration });
+      return {
+        status: 200,
+        body: { historyId: String(mb.historyId), expiration: String(expiration) },
+      };
+    }
+    if (api === '/users/me/stop' && method === 'POST') {
+      this.watches.delete(live.account.email);
+      return { status: 204, body: undefined };
     }
     if (api === '/users/me/history' && method === 'GET') return this.historyList(mb, url);
     if (api === '/users/me/messages' && method === 'GET') return this.messagesList(mb, url);

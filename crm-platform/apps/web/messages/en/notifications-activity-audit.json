@@ -306,6 +306,10 @@
           "label": "Sales document decided",
           "hint": "A quote or invoice was accepted or declined."
         },
+        "email_bounced": {
+          "label": "Email not delivered",
+          "hint": "A reply you sent by email bounced or was delayed."
+        },
         "wallet_credited": {
           "label": "Wallet topped up",
           "hint": "The workspace wallet was credited."

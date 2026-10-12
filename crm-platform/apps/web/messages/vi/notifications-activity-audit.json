@@ -298,6 +298,10 @@
           "label": "Chứng từ bán hàng đã có quyết định",
           "hint": "Một báo giá hoặc hóa đơn đã được chấp nhận hoặc từ chối."
         },
+        "email_bounced": {
+          "label": "Email chưa được gửi tới",
+          "hint": "Một email bạn đã gửi bị trả lại hoặc bị chậm."
+        },
         "wallet_credited": {
           "label": "Ví đã nạp tiền",
           "hint": "Ví của không gian làm việc đã được cộng tiền."

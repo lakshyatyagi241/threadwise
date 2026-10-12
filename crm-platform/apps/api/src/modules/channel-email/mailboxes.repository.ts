@@ -242,10 +242,13 @@ export class MailboxesRepository {
     id: number,
     accessTokenEnc: string,
     expiresAt: Date,
+    /** A rotated refresh token (Microsoft) replaces the stored one; null keeps it. */
+    refreshTokenEnc: string | null = null,
   ): Promise<void> {
     await tx.execute(sql`
       UPDATE mail_mailboxes
-         SET access_token_enc = ${accessTokenEnc}, access_token_expires_at = ${expiresAt.toISOString()}::timestamptz
+         SET access_token_enc = ${accessTokenEnc}, access_token_expires_at = ${expiresAt.toISOString()}::timestamptz,
+             refresh_token_enc = COALESCE(${refreshTokenEnc}, refresh_token_enc)
        WHERE org_id = ${orgId} AND id = ${id}`);
   }
 

@@ -30,6 +30,7 @@ No SECURITY DEFINER lookup: the public callback carries workspace and admin in i
 | Setting                                                                    | Where                                 | Reader                                  |
 | -------------------------------------------------------------------------- | ------------------------------------- | --------------------------------------- |
 | `googleMail` `{enabled, clientId, redirectUri}` + secret `clientSecret`    | platform settings (operator console)  | `GoogleMailConfig` (env fallback below) |
+| `microsoftMail` `{enabled, clientId, tenant, redirectUri}` + secret `clientSecret` | platform settings (operator console) | `MicrosoftMailConfig` (env `MICROSOFT_MAIL_*` fallback) |
 | `GOOGLE_MAIL_CLIENT_ID/SECRET/REDIRECT_URI`                                | environment                           | `GoogleMailConfig` fallback             |
 | `GOOGLE_OAUTH_*`, `GMAIL_API_URL`, `GOOGLE_MAIL_HTTP_TIMEOUT_MS`, `MAIL_*` | `config/domains/channel-email.env.ts` | provider clients, sync, ingest          |
 | plan feature `email_channel`, limit `email_mailboxes`                      | plan catalogue                        | `@RequirePlanFeature`, `MailPlan`       |
@@ -60,3 +61,57 @@ no tenant, no secret of its own.
   `EmailMessageAccess.readable` (attachment visibility).
 - infra/queue: the `MAIL_SYNC` queue. tools/auth-audit: the callback in `public-routes.json`.
 - Marketplace app `email` and the `googleMail` settings group are the integration packaging's (a Marketplace integration, Settings > Integrations tile gated by `mail.mailboxes.read` + plan feature `email_channel`, hidden `/email` nav entry for the plan paywall).
+
+## TW-MAIL-032 wiring (bounces and limits)
+
+- Ingest: `MailIngestService.store` -> `MailBounceHandler.inspect` (`infra/providers/channel-email/bounce-detect.ts` is the pure detector; Gmail fills `NormalisedMail.report`
+  with the delivery-status part and the returned headers, other drivers may leave it out) -> `EmailDeliveryService.recordBounce` in `chat-conversations` (marks `meta.email.delivery/bounce`,
+  system line `meta.event = 'email_bounce'`, outbox `email.message_bounced`, realtime) -> `EmailBounceNotificationConsumer` (notifications, type `email_bounced`, legacy type list).
+- Send: `EmailChannelAdapter.send` -> `MailSendGuard.assertAllowed/recordSent` (`MailLimits`, Redis). Env `MAIL_SEND_LIMIT_PER_HOUR`, `MAIL_RECIPIENT_BURST_*`, `MAIL_INBOUND_FLOOD_*`, `MAIL_BOUNCE_BLOCK_DAYS`.
+- Redis keys: `mail:rl:<org>:<mailbox>`, `mail:rr:<org>:<mailbox>:<address>`, `mail:fl:<org>:<mailbox>:<sender>`, `mail:bounced:<org>:<address>`.
+- Web (task 8 owns the thread rendering): reads `meta.email.delivery`, `meta.email.bounce`, system line `meta.event = 'email_bounce'`, failure code `MAIL_RATE_LIMITED` / `MAIL_RECIPIENT_BOUNCED`.
+
+## TW-MAIL-031 wiring (IMAP / SMTP)
+
+- Route: `POST /v2/email/mailboxes/connect-imap` -> `MailConnectService.connectWithPassword` -> `MailDriverRegistry.password('imap')` -> `ImapMailDriver.verify` (IMAP login + INBOX, then SMTP login) -> `persist` (limit, personal rule, audit, outbox) -> `MailChannelSync` + first `MAIL_SYNC` job.
+- Driver: `modules/channel-email/drivers/imap-mail.driver.ts` (registered in the `imap` block of `driver-providers.ts`); infra `infra/providers/channel-email/imap/` (`host-guard.ts` SSRF, `imap-mail.client.ts` imapflow, `smtp-mail.client.ts` nodemailer, `imap-normalise.ts` mailparser -> `NormalisedMail`).
+- Credentials: `mail_mailboxes.connection_enc` (sealed `{ v:1, login: { imap, smtp } }`), `connection_public` summary; cursor in `sync_cursor`. `MailTokens.withAccess` hands the driver `{ kind: 'password', connection }`.
+- Env: `MAIL_IMAP_ALLOW_PRIVATE_HOSTS`, `MAIL_IMAP_TIMEOUT_MS`, `MAIL_IMAP_MAX_MESSAGE_BYTES` (`config/domains/channel-email.env.ts`). Dependencies added to `apps/api`: `imapflow`, `mailparser`, `@types/mailparser`.
+
+## TW-MAIL-033 Gmail push (built)
+
+Intentional deviation from Reference (Reference only bridges to MailTrixy; no push). Route `POST /v2/public/email/google/push` (public, OIDC-verified; added to
+`tools/auth-audit/baseline/public-routes.json`). Code: `modules/channel-email/mail-push.{controller,service,repository,sweep}.ts`, `mail-push-rules.ts`,
+`infra/providers/channel-email/google-oidc.verifier.ts`, `GoogleMailDriver.push`, `GmailClient.watch/stopWatch`, `GoogleMailConfig.push()`, `MailSyncSweep` reconcile skip.
+Tables: `mail_mailboxes.push_state` (no migration; the cross-workspace address lookup runs privileged). Settings: `googleMail.pubsubTopic|pushAudience|pushServiceAccount`
+(operator console, 21 locales). Tests: `test/unit/channel-email/google-oidc.verifier.spec.ts`, `mail-push-rules.spec.ts`, `test/e2e/channel-email/mail-push.e2e.spec.ts`.
+
+## TW-MAIL-027 backend wiring (attachments, signatures, rich body)
+
+Files `apps/api/src/modules/channel-email/{mail-outbound.preparer,mail-outbound-attachments.{controller,service,repository,sweep},mail-signatures.{controller,service,repository},mail-attachment-scanner,mail-outbound-errors}.ts`,
+`infra/providers/channel-email/outbound-html.ts`, `EmailMessageAccess.conversationReadable` (upload visibility). Tables `mail_outbound_attachments`, `mail_signatures` (RLS, Phase A). Flow: composer upload -> staged row + object
+store key -> reply `email.{attachmentIds, bodyHtml, signatureId, signature}` -> stored in `messages.meta.emailReply` -> `OutboundEmail` -> `MailOutboundPreparer.prepare` (sanitise, signature, bytes) -> driver -> `sent()` marks files used and
+returns the `meta.email` block (`SendResult.meta`, merged by `MessagesRepository.markSent`) -> thread shows the files and the existing attachment route serves them. Env: `MAIL_OUTBOUND_ATTACHMENT_*`, `MAIL_OUTBOUND_ATTACHMENTS_*`.
+Deviation from Reference (which only bridges to MailTrixy): native outbound files, signatures and a rich body. Runbook: staged files live in the object store under `chat/<org>/...`; the worker sweep removes expired ones; for malware scanning implement `MailAttachmentScanner`.
+
+## TW-MAIL-027 web wiring (composer)
+
+- Files: `apps/web/src/features/channel-email/{components/{rich-editor,attachment-tray,signature-picker,signatures-panel,composer-notes}.tsx, lib/{rich-text,staged-attachments,use-staged-attachments,signature-view,composer-errors,bounce-view}.ts, api/composer.ts}`; used by `team-inbox-conversations/components/{composer,thread-pane,message-bubble}.tsx` and mounted on the hub (`SignaturesPanel`).
+- Calls: `POST /v2/email/attachments/upload`, `DELETE /v2/email/attachments/:id`, `GET/POST/PATCH/DELETE /v2/email/signatures`, reply `POST /v2/inbox/conversations/:id/messages` with `email.{bodyHtml, attachmentIds, signatureId, signature}`; reads `meta.email.{attachments, delivery, bounce}`.
+- Permissions: `mail.signatures.manage` (panel), `mail.mailboxes.manage` (shared signatures), `inbox.conversation.reply` (composer).
+
+## Microsoft 365 / Outlook (TW-MAIL-034)
+
+`drivers/microsoft-mail.driver.ts` (`MicrosoftMailDriver`, OAuth) + `infra/providers/channel-email/{microsoft-mail-oauth.client,graph-mail.client,graph-normalise,microsoft-http,microsoft-mail.errors}.ts`;
+platform credentials `MicrosoftMailConfig`; callback `GET /v2/public/email/microsoft/callback` (`MailCallbackController`, shared `MailConnectService.callback`); settings group `microsoftMail`
+(contracts `groups.ts`, web `fields.ts` slug `microsoft-mail`, console keywords and layout, 21 locales). Seams touched: `MailOAuthRefreshed.refreshToken` (rotation, stored by `MailTokens`
+through `MailboxesRepository.saveAccessToken`), `MailDriverError.retryAfterSeconds`. Runbook: `docs/runbooks/microsoft-mail-setup.md`.
+
+## TW-MAIL-035 wiring (personal mailboxes, sharing policy, visibility)
+
+Files `apps/api/src/modules/channel-email/{mail-settings.{controller,service,repository},mail-access.service,mail-personal-policy}.ts`; `realtime/audience/{channel-owner,conversation-visibility,member-directory.service,conversation-record.loader}.ts`;
+`team-inbox-conversations/{visibility-sql,inbox-access.service,conversations.repository}.ts`; `chat-conversations/{conversations.repository,messages.repository,channel-registry.service,channels.repository}.ts`;
+`team-inbox-routing-sla/{assignment.service,routing-engine.service}.ts`; `notifications/{conversation-notification.consumer,waiting-nudge.service}.ts`; `dashboards-analytics-charts/{dash-widgets,dash-panels}.repository.ts`;
+`developer-rest-api-v1/resources/messaging/messaging.repository.ts`; `admin-console-shell/workspace-export.service.ts`. Tables `mail_workspace_settings`, `mail_mailboxes.scope/owner_user_id` (Phase A, no new migration). Permissions
+`mail.mailboxes.manage_personal`, `mail.settings.manage`. Contract addition: optional `MailboxResponse.contentHidden`. Every consumer of "who may see a conversation" now takes the channel owner (required field).
+Deviation from Reference: Reference has no personal mailboxes. Runbook: if a workspace asks "why can't I see my teammate's email", it is by design; an admin only reads personal mail when the Email sharing policy says so.

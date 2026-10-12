@@ -378,6 +378,25 @@ export const googleMailSettingsSchema = z.object({
   clientId: text(200),
   /** The redirect URI registered on that client. Empty: `<APP_URL>/v2/public/email/google/callback`. */
   redirectUri: url(300),
+  /** Gmail push (TW-MAIL-033): the Pub/Sub topic the watch publishes to, `projects/<project>/topics/<topic>`. Empty: `GOOGLE_MAIL_PUBSUB_TOPIC`; no topic means polling only. */
+  pubsubTopic: text(300),
+  /** The audience the push subscription's OIDC token is minted for. Empty: `GOOGLE_MAIL_PUSH_AUDIENCE`, else the push endpoint's own address. */
+  pushAudience: text(500),
+  /** The service account the push subscription signs its token as. Empty: `GOOGLE_MAIL_PUSH_SERVICE_ACCOUNT`; without it every push is refused. */
+  pushServiceAccount: email(300),
+});
+
+// --- The Email channel's Microsoft 365 / Outlook provider: the Microsoft Entra app every workspace connects its mailboxes through (TW-MAIL-034).
+// Mirrors googleMail, plus the tenant the sign-in authority points at ------------------------------------------------------------------
+export const microsoftMailSettingsSchema = z.object({
+  /** The master switch. Off: no workspace can connect a Microsoft mailbox, and none is read or sent from (what is stored is kept). */
+  enabled: flag(true),
+  /** The application (client) id of the Entra app registration. Empty: the `MICROSOFT_MAIL_CLIENT_ID` environment value applies. */
+  clientId: text(200),
+  /** `common` (work, school and personal accounts), `organizations`, `consumers`, or one directory (tenant) id. Empty: `MICROSOFT_MAIL_TENANT`, else `common`. */
+  tenant: text(100),
+  /** The redirect URI registered on that app. Empty: `<APP_URL>/v2/public/email/microsoft/callback`. */
+  redirectUri: url(300),
 });
 
 // --- Flow builder: which builder(s) every workspace is offered (an addition beyond Reference) ---------------------------------------
@@ -404,6 +423,7 @@ export const SET_GROUP_SCHEMAS = {
   campaigns: campaignsSettingsSchema,
   googleCalendar: googleCalendarSettingsSchema,
   googleMail: googleMailSettingsSchema,
+  microsoftMail: microsoftMailSettingsSchema,
   flowBuilder: flowBuilderSettingsSchema,
 } as const;
 export type SetGroup = keyof typeof SET_GROUP_SCHEMAS;
@@ -430,6 +450,8 @@ export const SET_SECRET_FIELDS = {
   googleCalendar: ['clientSecret'],
   /** The Gmail OAuth client secret: sent to Google when a code is exchanged or a token refreshed, never returned. */
   googleMail: ['clientSecret'],
+  /** The Entra app's client secret: sent to Microsoft when a code is exchanged or a token refreshed, never returned. */
+  microsoftMail: ['clientSecret'],
   flowBuilder: [],
 } as const satisfies Record<SetGroup, readonly string[]>;
 

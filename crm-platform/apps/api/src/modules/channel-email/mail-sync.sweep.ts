@@ -2,7 +2,9 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Interval } from '@nestjs/schedule';
 import { DatabaseService } from '../../infra/db/database.service';
 import { MailDriverRegistry } from './drivers/mail-driver.registry';
+import { channelEmailEnv } from '../../config/domains/channel-email.env';
 import { MailPlan } from './mail-plan';
+import { MailPushRepository } from './mail-push.repository';
 import { ERROR_BACKOFF_MINUTES } from './mail-sync-rules';
 import { MailSyncPublisher } from './mail-sync.publisher';
 import { MailboxesRepository } from './mailboxes.repository';
@@ -25,6 +27,7 @@ export class MailSyncSweep {
     private readonly plan: MailPlan,
     private readonly drivers: MailDriverRegistry,
     private readonly publisher: MailSyncPublisher,
+    private readonly pushRepo: MailPushRepository,
   ) {}
 
   @Interval(MAIL_SWEEP_INTERVAL_MS)
@@ -47,10 +50,17 @@ export class MailSyncSweep {
     const due = await this.db.privileged((tx) =>
       this.repo.dueEverywhere(tx, ERROR_BACKOFF_MINUTES),
     );
+    // A mailbox with a live Gmail watch is told about new mail by Pub/Sub; polling only reconciles it every few minutes (TW-MAIL-033).
+    const pushed = await this.db
+      .privileged((tx) =>
+        this.pushRepo.freshlySyncedWithPush(tx, channelEmailEnv().MAIL_PUSH_RECONCILE_MINUTES),
+      )
+      .catch(() => new Set<string>());
     const entitled = new Map<number, boolean>();
     let queued = 0;
     for (const { orgId, uuid, provider } of due) {
       if (!ready.has(provider)) continue;
+      if (pushed.has(uuid)) continue;
       let ok = entitled.get(orgId);
       if (ok === undefined) {
         ok = await this.plan.isEnabled(orgId).catch(() => false);

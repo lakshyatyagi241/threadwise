@@ -126,7 +126,8 @@ export class EmailChannelAdapter implements ChannelAdapter {
             false,
           );
         }
-        await this.guard.assertAllowed(channel.orgId, mailbox);
+        const everyone = [...to, ...cc, ...bcc];
+        await this.guard.assertAllowed(channel.orgId, mailbox, everyone);
         const draft: OutgoingMail = {
           messageId: replyMessageId(envelope.clientReference, mailbox.address),
           from: { name: mailbox.displayName, address: mailbox.address },
@@ -135,21 +136,29 @@ export class EmailChannelAdapter implements ChannelAdapter {
           bcc,
           subject: email.subject,
           text: envelope.body,
-          html: null,
+          html: null, // the preparer fills it (rich body, signature)
           inReplyTo: email.inReplyTo,
           references: email.references,
           threadKey: email.threadId,
           attachments: [],
-          headers: {},
+          // Mail an automation wrote (a bot, a flow: no sending person) says so, so the other side never auto-answers it (loop protection).
+          headers: email.sentBy ? {} : { 'Auto-Submitted': 'auto-generated' },
           attempt: envelope.attempt,
         };
         const mail = await this.preparer.prepare({ orgId: channel.orgId, mailbox, email }, draft);
         const sent = await this.drivers
           .get(mailbox.provider)
           .send({ orgId: channel.orgId, mailbox, access }, mail);
-        await this.guard.recordSent(channel.orgId, mailbox);
-        await this.preparer.sent({ orgId: channel.orgId, mailbox, email });
-        return { providerMessageId: sent.providerMessageId, acceptedAt: new Date() };
+        await this.guard.recordSent(channel.orgId, mailbox, everyone);
+        const meta = await this.preparer.sent({ orgId: channel.orgId, mailbox, email }, mail, {
+          providerMessageId: sent.providerMessageId,
+          threadKey: sent.threadKey ?? null,
+        });
+        return {
+          providerMessageId: sent.providerMessageId,
+          acceptedAt: new Date(),
+          ...(meta ? { meta } : {}),
+        };
       });
     } catch (err) {
       throw this.asChannelError(err);

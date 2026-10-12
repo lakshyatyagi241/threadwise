@@ -168,7 +168,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-MAIL-024 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
 | TW-MAIL-025 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
 | TW-MAIL-026 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
-| TW-MAIL-027 | in-progress |  | composer cc/bcc/subject built; outbound attachments, signatures and rich text not built |
+| TW-MAIL-027 | done |  | backend built and tested against a fake Gmail (upload, signatures, rich body, files in the thread); web by task 8; no live provider run |
 | TW-MAIL-028 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
 | TW-MAIL-029 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
 | TW-MAIL-030 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |

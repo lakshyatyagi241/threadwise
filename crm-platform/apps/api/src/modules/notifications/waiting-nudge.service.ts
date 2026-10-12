@@ -8,7 +8,7 @@ import {
   type WaitingConfig,
 } from '../../config/domains/notifications.env';
 import { DatabaseService } from '../../infra/db/database.service';
-import { MemberDirectory, PERM_CONVERSATION_READ } from '../../realtime';
+import { MemberDirectory, PERM_CONVERSATION_READ, channelOwnerSql } from '../../realtime';
 import { PERM_CONVERSATION_REPLY, senderName } from './conversation-notification.consumer';
 import {
   capRecipients,
@@ -51,6 +51,7 @@ interface FactsRow {
   peer_name: string | null;
   peer_key: string;
   channel_kind: string;
+  channel_owner_user_id: string | number | null;
   message_uuid: string | null;
   message_body: string | null;
   nudged: boolean;
@@ -228,7 +229,15 @@ export class WaitingNudgeService {
         }
 
         const capped = capRecipients(
-          recipientsForWaiting({ assigneeUserId: null, assigneeTeamId: null }, readers, repliers),
+          recipientsForWaiting(
+            {
+              assigneeUserId: null,
+              assigneeTeamId: null,
+              channelOwnerUserId: num(r.channel_owner_user_id),
+            },
+            readers,
+            repliers,
+          ),
           notifyConfig().maxRecipients,
         );
         if (capped.truncated) {
@@ -288,7 +297,7 @@ export class WaitingNudgeService {
     const res = await tx.execute(sql`
       SELECT c.id, c.uuid, c.status, c.archived, c.muted_at, c.assignee_user_id, c.assignee_team_id, c.assignee_agent_id,
              c.waiting_since, c.last_inbound_at, c.unread_count, c.title, c.peer_name, c.peer_key,
-             ch.kind AS channel_kind, m.uuid AS message_uuid, m.preview AS message_body,
+             ch.kind AS channel_kind, ${channelOwnerSql('c')} AS channel_owner_user_id, m.uuid AS message_uuid, m.preview AS message_body,
              EXISTS (
                SELECT 1 FROM inbox_notifications n
                WHERE n.org_id = c.org_id AND n.type = 'chat_waiting' AND n.subject_uuid = c.uuid
