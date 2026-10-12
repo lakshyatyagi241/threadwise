@@ -10,7 +10,7 @@ keywords: [api key, developers, token, bearer, rest, curl, revoke, integration, 
 
 ## What it is for
 
-A REST API key lets your own software, such as a website, a CRM or an automation, call the product's REST API: send messages, manage contacts, templates, broadcasts and more. Open **Settings**, then **REST API**, to manage it.
+A REST API key lets your own software, such as a website, a CRM or an automation, call the product's REST API: send messages, manage contacts, templates, broadcasts and more. Open **Marketplace**, select the **Add-ons** tab and open **REST API**, to manage it.
 
 ## Create a key
 

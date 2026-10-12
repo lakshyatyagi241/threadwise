@@ -335,6 +335,7 @@
     "noResults": {
       "title": "Geen instellingen komen overeen met “{query}”",
       "message": "Controleer de spelling of probeer een breder woord, zoals “btw”, “team” of “WhatsApp”."
-    }
+    },
+    "backToMarketplace": "Terug naar Marketplace"
   }
 }

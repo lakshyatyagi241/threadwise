@@ -14,7 +14,7 @@ The Translation page holds the workspace-wide translation settings: whether auto
 
 ## How to use it
 
-1. Open **Marketplace**, stay on the **Integrations** tab, then select **Translation** under **Integrations and developer**. You can also go to `/i18n/translation`.
+1. Open **Marketplace**, select the **Add-ons** tab and open **Translation**. You can also go to `/i18n/translation`.
 2. Read the three steps at the top. They explain the idea: customers write in any language, your team replies in the team language, and each side reads in its own.
 3. Look at the **Translation engine** card. It names the engine in use, which is the free engine unless the platform has set up another one. You do not enter any keys here, because translation is configured once for the whole platform.
 4. Look at the **This month** card. It shows the characters translated and the number of messages.

@@ -335,6 +335,7 @@
         "description": "Włącz asystenta, który prowadzi Twój zespół lub wykonuje kroki za niego.",
         "keywords": "ai, asystent, agent, przewodnik, pomoc, automatyzacja"
       }
-    }
+    },
+    "backToMarketplace": "Wróć do Marketplace"
   }
 }

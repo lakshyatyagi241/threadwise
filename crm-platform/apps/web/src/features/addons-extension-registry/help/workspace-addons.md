@@ -14,7 +14,7 @@ Add-ons are extra feature packs you buy on top of your current plan, without cha
 
 ## How to use it
 
-1. Open **Marketplace**, stay on the **Integrations** tab, then select **Add-ons** under **Integrations and developer**. You can also go straight to `/addons`.
+1. Open **Marketplace**, select the **Add-ons** tab and open **Add-ons**. You can also go straight to `/addons`.
 2. Look at **Your add-ons** at the top, if it is shown. Each row names a pack you own and says when it ends, or **Lifetime** when it never ends. A pack you own is marked **Active**.
 3. Browse the cards under **Add-ons**. Each card shows the name, a short subtitle, the price with its period (a number of days, weeks, months or years, or **one-time**), and a tick list of what the pack gives you.
 4. Select **Add to plan** on the pack you want. This opens the checkout for that pack, where you pay.

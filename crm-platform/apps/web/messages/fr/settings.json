@@ -335,6 +335,7 @@
         "description": "Activez l’assistant qui guide votre équipe ou réalise les étapes à sa place.",
         "keywords": "ia, assistant, agent, guide, aide, automatisation"
       }
-    }
+    },
+    "backToMarketplace": "Retour au Marketplace"
   }
 }
