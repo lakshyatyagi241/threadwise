@@ -1,0 +1,248 @@
+{
+  "lead-scoring": {
+    "common": {
+      "dismiss": "Fermer",
+      "retry": "Réessayer",
+      "requestId": "Requête {id}",
+      "noAccessTitle": "Vous n'avez pas accès à cet écran",
+      "noAccess": "Demandez à un administrateur de l'espace de travail d'accorder à votre rôle la permission {permission}."
+    },
+    "badge": {
+      "none": "Aucun score de lead",
+      "aria": "Score du lead {score} sur 100, {band}, {source}",
+      "titleAi": "Évalué par l'IA",
+      "titleAiOn": "Évalué par l'IA le {date}",
+      "titleManual": "Saisi par une personne",
+      "band": {
+        "cold": "Froid",
+        "warm": "Tiède",
+        "hot": "Chaud"
+      },
+      "source": {
+        "ai": "évalué par l'IA",
+        "manual": "saisi par une personne"
+      }
+    },
+    "card": {
+      "title": "Score du lead",
+      "band": {
+        "cold": "Lead froid",
+        "warm": "Lead tiède",
+        "hot": "Lead chaud"
+      },
+      "sourceAi": "IA",
+      "sourceManual": "Manuel",
+      "score": "Évaluer avec l'IA",
+      "rescore": "Réévaluer",
+      "scoring": "Évaluation en cours...",
+      "scoringSlow": "Interrogation de l'IA. Cela peut prendre quelques secondes.",
+      "neverScored": "Ce contact n'a pas encore été évalué.",
+      "scoredBy": "Évalué par l'IA le {date} avec {model}.",
+      "scoredOn": "Évalué par l'IA le {date}.",
+      "scoredByAi": "Évalué par l'IA.",
+      "reasons": "Pourquoi ce score",
+      "manualWhy": "Une personne a saisi ce score, l'IA ne le modifiera donc pas. Pour que l'IA évalue ce contact, modifiez le contact et effacez le score du lead.",
+      "manualNote": "Une personne a saisi ce score, l'IA ne le modifie donc pas.",
+      "lastRun": "Score attribué : {score}. Coût {cost}, {tokens} jetons.",
+      "showHistory": "Afficher l'historique d'évaluation",
+      "hideHistory": "Masquer l'historique d'évaluation",
+      "historyLoading": "Chargement de l'historique...",
+      "historyFailed": "Impossible de charger l'historique.",
+      "historyEmpty": "Aucune tentative d'évaluation pour ce contact pour l'instant.",
+      "historyCaption": "Tentatives d'évaluation pour ce contact, les plus récentes en premier",
+      "historyMore": "Charger plus"
+    },
+    "errors": {
+      "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+      "forbidden": "Votre rôle ne le permet pas.",
+      "notFound": "Ce contact ou cet enregistrement n'existe plus.",
+      "conflict": "Quelqu'un a modifié cet élément en même temps. Il a été rechargé.",
+      "platformDisabled": "Le scoring des leads par IA est actuellement désactivé pour toute la plateforme.",
+      "notEnabled": "Le scoring des leads par IA n'est pas activé pour cet espace de travail.",
+      "noKey": "Aucune clé IA n'est disponible pour cet espace de travail.",
+      "providerFailed": "Le fournisseur d'IA n'a pas donné de réponse exploitable. Réessayez dans un instant.",
+      "manualScore": "Ce contact a un score saisi par une personne.",
+      "planLimit": "Le quota d'IA de votre forfait est épuisé.",
+      "rateLimited": "Trop de requêtes. Patientez un instant et réessayez.",
+      "validation": "Certaines valeurs ne sont pas valides.",
+      "unexpected": "Un problème est survenu. Réessayez."
+    },
+    "scoreErrors": {
+      "network": "Impossible de joindre le serveur, le contact n'a donc pas été évalué. Vérifiez votre connexion et réessayez.",
+      "forbidden": "Votre rôle n'est pas autorisé à évaluer des contacts.",
+      "notFound": "Ce contact n'existe plus.",
+      "conflict": "Quelqu'un a modifié ce contact en même temps. Il a été rechargé ; réessayez.",
+      "platformDisabled": "Le scoring des leads par IA est actuellement désactivé pour toute la plateforme. Rien ne peut être évalué tant que l'opérateur de la plateforme ne le réactive pas.",
+      "notEnabled": "Le scoring des leads par IA n'est pas activé pour cet espace de travail. Il reste désactivé tant que vous ne le choisissez pas, car des informations sur les contacts sont envoyées à un fournisseur d'IA.",
+      "noKey": "Aucune clé OpenRouter n'est configurée pour cet espace de travail. Ajoutez-en une dans Clés IA, ou demandez à votre administrateur de la plateforme d'activer la clé partagée.",
+      "providerFailed": "Le fournisseur d'IA n'a pas donné de réponse exploitable, aucun score n'a donc été enregistré. Réessayez dans un instant.",
+      "manualScore": "Ce contact a un score saisi par une personne, que l'IA n'écrase jamais. Modifiez d'abord le contact et effacez le score du lead si vous voulez que l'IA l'évalue.",
+      "planLimit": "Le quota d'IA de votre forfait est épuisé, le contact n'a donc pas été évalué. Réessayez plus tard ou ajoutez votre propre clé OpenRouter.",
+      "rateLimited": "Trop de requêtes. Patientez un instant et réessayez.",
+      "validation": "La requête n'était pas valide.",
+      "unexpected": "Un problème est survenu et le contact n'a pas été évalué. Réessayez.",
+      "openSettings": "Ouvrir les paramètres du scoring des leads par IA",
+      "openKeys": "Ouvrir les clés IA"
+    },
+    "field": {
+      "label": "Score du lead",
+      "placeholder": "0 à 100",
+      "hint": "Saisir un score en fait le vôtre : l'IA cesse de le modifier. Effacez-le pour rendre le contact à l'IA.",
+      "invalid": "Saisissez un nombre entier de 0 à 100, ou laissez le champ vide."
+    },
+    "runs": {
+      "col": {
+        "when": "Quand",
+        "contact": "Contact",
+        "result": "Résultat",
+        "score": "Score",
+        "trigger": "Déclencheur",
+        "tokens": "Jetons",
+        "cost": "Coût",
+        "key": "Clé"
+      },
+      "unnamed": "Contact sans nom",
+      "deletedContact": "Contact supprimé",
+      "status": {
+        "ok": "Évalué",
+        "kept": "Non enregistré",
+        "failed": "Échec",
+        "skipped": "Ignoré"
+      },
+      "keptNote": "L'IA a répondu, mais entre-temps une personne a saisi un score, il n'a donc pas été enregistré.",
+      "reason": {
+        "no_key": "Aucune clé IA n'était disponible.",
+        "token_allowance": "Le quota d'IA du forfait était épuisé.",
+        "hourly_limit": "La limite horaire de la clé partagée a été atteinte.",
+        "manual_score": "Le contact a un score saisi par une personne.",
+        "platform_off": "Le scoring des leads par IA était désactivé pour la plateforme.",
+        "not_enabled": "Le scoring des leads par IA était désactivé pour cet espace de travail.",
+        "auth": "Le fournisseur d'IA a refusé la clé.",
+        "rate_limited": "Le fournisseur d'IA était occupé.",
+        "provider": "Le fournisseur d'IA a renvoyé une erreur.",
+        "timeout": "Le fournisseur d'IA a mis trop de temps.",
+        "bad_response": "L'IA a répondu autre chose qu'un score.",
+        "other": "La tentative ne s'est pas terminée."
+      },
+      "trigger": {
+        "created": "Contact créé",
+        "updated": "Contact modifié",
+        "manual": "Bouton d'évaluation",
+        "backfill": "Évaluer les contacts non évalués"
+      },
+      "tokensDetail": "{prompt} en entrée, {completion} en sortie",
+      "costSource": {
+        "vendor": "Coût indiqué par OpenRouter",
+        "estimate": "Estimé d'après les jetons et le tarif public"
+      },
+      "billed": {
+        "admin": "Clé de la plateforme",
+        "workspace": "Votre clé"
+      }
+    },
+    "log": {
+      "title": "Journal d'évaluation",
+      "hint": "Chaque tentative d'évaluation, les plus récentes en premier, avec jetons et coût.",
+      "filter": "Afficher les tentatives avec ce résultat",
+      "all": "Tous les résultats",
+      "status": {
+        "ok": "Évalué",
+        "kept": "Non enregistré",
+        "failed": "Échec",
+        "skipped": "Ignoré"
+      },
+      "refresh": "Actualiser",
+      "emptyTitle": "Aucune tentative d'évaluation pour l'instant",
+      "emptyBody": "Les tentatives apparaissent ici une fois le scoring des leads par IA activé et un contact évalué.",
+      "emptyFilteredTitle": "Aucune tentative avec ce résultat",
+      "emptyFilteredBody": "Choisissez un autre résultat ou affichez tous les résultats.",
+      "caption": "Tentatives d'évaluation, les plus récentes en premier",
+      "loadMore": "Charger plus"
+    },
+    "settings": {
+      "title": "Scoring des leads par IA",
+      "subtitle": "Attribuez à chaque contact un score de 0 à 100 indiquant sa probabilité d'achat, et suivez ce que cela coûte.",
+      "discard": "Annuler les modifications",
+      "save": "Enregistrer",
+      "saved": "Paramètres enregistrés.",
+      "readOnly": "Vous pouvez voir ces paramètres mais pas les modifier. Demandez la permission lsc.settings.manage à un administrateur de l'espace de travail.",
+      "conflict": "Quelqu'un d'autre a modifié ces paramètres avant vous. Ils ont été rechargés : vous voyez la version enregistrée. Refaites votre modification.",
+      "conflictOk": "Compris",
+      "enable": {
+        "title": "Activer le scoring des leads par IA",
+        "hint": "Désactivé tant que vous ne le choisissez pas, car des informations sur vos contacts sont envoyées à un fournisseur d'IA.",
+        "label": "Scoring des leads par IA",
+        "on": "Activé",
+        "off": "Désactivé",
+        "what": "Lorsqu'il est activé, un modèle d'IA lit une courte description anonyme d'un contact et répond par un score et ses raisons. Le score est écrit dans le score du lead du contact."
+      },
+      "sent": {
+        "title": "Ce qui est envoyé à l'IA",
+        "stage": "L'étape et le statut du contact",
+        "source": "L'origine du contact",
+        "tags": "Les noms des tags",
+        "deals": "Le nombre d'affaires ouvertes, gagnées et perdues",
+        "activity": "La date de la dernière activité du contact",
+        "company": "Le nom de l'entreprise"
+      },
+      "notSent": {
+        "title": "Ce qui n'est jamais envoyé",
+        "name": "Le nom du contact",
+        "email": "L'adresse e-mail",
+        "phone": "Le numéro de téléphone"
+      },
+      "manualRule": "Un score saisi par une personne n'est jamais écrasé. L'IA ne remplit que les scores vides et actualise ceux qu'elle a elle-même écrits.",
+      "auto": {
+        "label": "Évaluer automatiquement quand les contacts changent",
+        "onBody": "Un contact est évalué à sa création, puis de nouveau quand ses détails changent.",
+        "offBody": "Les contacts ne sont évalués que lorsque vous utilisez le bouton Évaluer avec l'IA ou que vous évaluez les contacts non évalués ci-dessous."
+      },
+      "confirm": {
+        "title": "Envoyer des informations anonymisées sur les contacts à un fournisseur d'IA ?",
+        "body": "Une fois activé, de courtes descriptions de vos contacts (étape, origine, tags, nombre d'affaires, activité et nom de l'entreprise) sont envoyées à un fournisseur d'IA via OpenRouter. Les noms, adresses e-mail et numéros de téléphone ne sont jamais envoyés. Vous pouvez le désactiver à tout moment.",
+        "yes": "Activer",
+        "no": "Annuler"
+      },
+      "banner": {
+        "platformOff": "Le scoring des leads par IA est désactivé pour toute la plateforme. Rien n'est évalué, quels que soient les réglages ici, tant que l'opérateur de la plateforme ne le réactive pas.",
+        "noKey": "Aucune clé OpenRouter n'est disponible, rien ne peut donc être évalué. Ajoutez votre propre clé dans Clés IA, ou demandez à votre administrateur de la plateforme d'activer la clé partagée.",
+        "openKeys": "Ouvrir les clés IA",
+        "off": "Le scoring des leads par IA est désactivé pour cet espace de travail. Rien n'est envoyé à un fournisseur d'IA.",
+        "ready": "Prêt. Les contacts sont évalués avec {model} en utilisant {key}.",
+        "keyWorkspace": "la clé OpenRouter propre à votre espace de travail",
+        "keyAdmin": "la clé OpenRouter partagée de la plateforme"
+      },
+      "backfill": {
+        "title": "Évaluer les contacts existants",
+        "hint": "Met en file d'attente les contacts sans score, jusqu'à {limit} à la fois. Ils sont évalués en arrière-plan.",
+        "eligible": "Contacts que l'IA peut évaluer",
+        "scored": "Évalués par l'IA",
+        "waiting": "En attente d'un score",
+        "eligibleNote": "Les contacts avec un score saisi par une personne sont exclus : l'IA ne les modifie jamais.",
+        "button": "Évaluer maintenant les contacts non évalués",
+        "noRight": "Votre rôle n'autorise pas l'évaluation de contacts. Il faut la permission lsc.contacts.score.",
+        "notReady": "Activez le scoring des leads par IA et vérifiez qu'une clé est disponible pour évaluer des contacts.",
+        "queued": "{count, plural, one {# contact est en file d'attente} other {# contacts sont en file d'attente}} et sera évalué en arrière-plan. Rechargez le journal dans une minute pour voir les résultats.",
+        "nothingToScore": "Il n'y a aucun contact non évalué à mettre en file d'attente."
+      },
+      "cost": {
+        "title": "30 derniers jours",
+        "hint": "Ce que le scoring a fait et coûté au cours des 30 derniers jours.",
+        "scores": "Contacts évalués",
+        "tokens": "Jetons utilisés",
+        "total": "Coût total",
+        "average": "Moyenne par score",
+        "averageHint": "Coût total divisé par le nombre de contacts évalués",
+        "model": "Modèle",
+        "payer": "Qui paie",
+        "payerBy": {
+          "workspace": "Votre propre clé OpenRouter, facturée par OpenRouter",
+          "admin": "La clé OpenRouter partagée de la plateforme",
+          "none": "Aucune clé disponible pour l'instant"
+        },
+        "failed": "Tentatives échouées",
+        "platformPart": "Sur le total, avec la clé de la plateforme"
+      }
+    }
+  }
+}

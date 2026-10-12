@@ -170,7 +170,8 @@
       "import": "Importieren",
       "columns": "Spalten",
       "addColumnField": "Benutzerdefiniertes Feld als Spalte hinzufügen",
-      "kanbanView": "Board-Ansicht (nach Phase)"
+      "kanbanView": "Board-Ansicht (nach Phase)",
+      "colLeadScore": "Lead-Score"
     },
     "bulk": {
       "label": "Aktionen für die ausgewählten Kontakte",

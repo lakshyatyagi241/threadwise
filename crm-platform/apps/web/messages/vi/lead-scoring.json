@@ -1,0 +1,248 @@
+{
+  "lead-scoring": {
+    "common": {
+      "dismiss": "Đóng",
+      "retry": "Thử lại",
+      "requestId": "Yêu cầu {id}",
+      "noAccessTitle": "Bạn không có quyền truy cập màn hình này",
+      "noAccess": "Hãy nhờ quản trị viên không gian làm việc cấp quyền {permission} cho vai trò của bạn."
+    },
+    "badge": {
+      "none": "Chưa có điểm khách hàng tiềm năng",
+      "aria": "Điểm khách hàng tiềm năng {score} trên 100, {band}, {source}",
+      "titleAi": "Do AI chấm điểm",
+      "titleAiOn": "Do AI chấm điểm vào {date}",
+      "titleManual": "Do một người nhập",
+      "band": {
+        "cold": "Lạnh",
+        "warm": "Ấm",
+        "hot": "Nóng"
+      },
+      "source": {
+        "ai": "do AI chấm điểm",
+        "manual": "do một người nhập"
+      }
+    },
+    "card": {
+      "title": "Điểm khách hàng tiềm năng",
+      "band": {
+        "cold": "Khách hàng tiềm năng lạnh",
+        "warm": "Khách hàng tiềm năng ấm",
+        "hot": "Khách hàng tiềm năng nóng"
+      },
+      "sourceAi": "AI",
+      "sourceManual": "Thủ công",
+      "score": "Chấm điểm bằng AI",
+      "rescore": "Chấm lại",
+      "scoring": "Đang chấm điểm...",
+      "scoringSlow": "Đang hỏi AI. Việc này có thể mất vài giây.",
+      "neverScored": "Liên hệ này chưa được chấm điểm.",
+      "scoredBy": "Do AI chấm điểm vào {date} bằng {model}.",
+      "scoredOn": "Do AI chấm điểm vào {date}.",
+      "scoredByAi": "Do AI chấm điểm.",
+      "reasons": "Lý do có điểm này",
+      "manualWhy": "Điểm này do một người nhập nên AI sẽ không thay đổi. Để AI chấm điểm liên hệ này, hãy sửa liên hệ và xóa điểm khách hàng tiềm năng.",
+      "manualNote": "Điểm này do một người nhập nên AI không thay đổi.",
+      "lastRun": "Đã chấm {score}. Chi phí {cost}, {tokens} token.",
+      "showHistory": "Hiện lịch sử chấm điểm",
+      "hideHistory": "Ẩn lịch sử chấm điểm",
+      "historyLoading": "Đang tải lịch sử...",
+      "historyFailed": "Không thể tải lịch sử.",
+      "historyEmpty": "Liên hệ này chưa có lần chấm điểm nào.",
+      "historyCaption": "Các lần chấm điểm của liên hệ này, mới nhất trước",
+      "historyMore": "Tải thêm"
+    },
+    "errors": {
+      "network": "Không thể kết nối tới máy chủ. Hãy kiểm tra kết nối và thử lại.",
+      "forbidden": "Vai trò của bạn không được phép thực hiện việc này.",
+      "notFound": "Liên hệ hoặc bản ghi đó không còn tồn tại.",
+      "conflict": "Có người đã thay đổi mục này cùng lúc. Dữ liệu đã được tải lại.",
+      "platformDisabled": "Chấm điểm khách hàng tiềm năng bằng AI hiện đang tắt cho toàn nền tảng.",
+      "notEnabled": "Chấm điểm khách hàng tiềm năng bằng AI chưa được bật cho không gian làm việc này.",
+      "noKey": "Không có khóa AI nào cho không gian làm việc này.",
+      "providerFailed": "Nhà cung cấp AI không đưa ra câu trả lời dùng được. Hãy thử lại sau giây lát.",
+      "manualScore": "Liên hệ này có điểm do một người nhập.",
+      "planLimit": "Hạn mức AI của gói bạn đã dùng hết.",
+      "rateLimited": "Quá nhiều yêu cầu. Hãy đợi giây lát rồi thử lại.",
+      "validation": "Một số giá trị không hợp lệ.",
+      "unexpected": "Đã xảy ra lỗi. Hãy thử lại."
+    },
+    "scoreErrors": {
+      "network": "Không thể kết nối tới máy chủ nên liên hệ chưa được chấm điểm. Hãy kiểm tra kết nối và thử lại.",
+      "forbidden": "Vai trò của bạn không được phép chấm điểm liên hệ.",
+      "notFound": "Liên hệ này không còn tồn tại.",
+      "conflict": "Có người đã thay đổi liên hệ này cùng lúc. Dữ liệu đã được tải lại; hãy thử lại.",
+      "platformDisabled": "Chấm điểm khách hàng tiềm năng bằng AI hiện đang tắt cho toàn nền tảng. Không thể chấm điểm cho đến khi nhà vận hành nền tảng bật lại.",
+      "notEnabled": "Chấm điểm khách hàng tiềm năng bằng AI chưa được bật cho không gian làm việc này. Tính năng này tắt cho đến khi bạn chọn bật, vì thông tin liên hệ được gửi tới nhà cung cấp AI.",
+      "noKey": "Chưa thiết lập khóa OpenRouter cho không gian làm việc này. Hãy thêm một khóa trong Khóa AI, hoặc nhờ quản trị viên nền tảng bật khóa dùng chung.",
+      "providerFailed": "Nhà cung cấp AI không đưa ra câu trả lời dùng được nên chưa lưu điểm nào. Hãy thử lại sau giây lát.",
+      "manualScore": "Liên hệ này có điểm do một người nhập và AI không bao giờ ghi đè. Hãy sửa liên hệ và xóa điểm khách hàng tiềm năng trước nếu muốn AI chấm điểm.",
+      "planLimit": "Hạn mức AI của gói bạn đã dùng hết nên liên hệ chưa được chấm điểm. Hãy thử lại sau hoặc thêm khóa OpenRouter của riêng bạn.",
+      "rateLimited": "Quá nhiều yêu cầu. Hãy đợi giây lát rồi thử lại.",
+      "validation": "Yêu cầu không hợp lệ.",
+      "unexpected": "Đã xảy ra lỗi và liên hệ chưa được chấm điểm. Hãy thử lại.",
+      "openSettings": "Mở cài đặt chấm điểm khách hàng tiềm năng bằng AI",
+      "openKeys": "Mở khóa AI"
+    },
+    "field": {
+      "label": "Điểm khách hàng tiềm năng",
+      "placeholder": "0 đến 100",
+      "hint": "Khi bạn nhập điểm, điểm đó thuộc về bạn: AI sẽ không thay đổi nữa. Xóa điểm để trả liên hệ lại cho AI.",
+      "invalid": "Nhập một số nguyên từ 0 đến 100, hoặc để trống."
+    },
+    "runs": {
+      "col": {
+        "when": "Thời gian",
+        "contact": "Liên hệ",
+        "result": "Kết quả",
+        "score": "Điểm",
+        "trigger": "Nguồn kích hoạt",
+        "tokens": "Token",
+        "cost": "Chi phí",
+        "key": "Khóa"
+      },
+      "unnamed": "Liên hệ chưa đặt tên",
+      "deletedContact": "Liên hệ đã xóa",
+      "status": {
+        "ok": "Đã chấm điểm",
+        "kept": "Chưa lưu",
+        "failed": "Thất bại",
+        "skipped": "Đã bỏ qua"
+      },
+      "keptNote": "AI đã trả lời, nhưng trong lúc đó có người nhập điểm nên điểm của AI không được lưu.",
+      "reason": {
+        "no_key": "Không có khóa AI nào.",
+        "token_allowance": "Hạn mức AI của gói đã dùng hết.",
+        "hourly_limit": "Đã đạt giới hạn theo giờ của khóa dùng chung.",
+        "manual_score": "Liên hệ có điểm do một người nhập.",
+        "platform_off": "Chấm điểm khách hàng tiềm năng bằng AI đã bị tắt cho nền tảng.",
+        "not_enabled": "Chấm điểm khách hàng tiềm năng bằng AI đang tắt cho không gian làm việc này.",
+        "auth": "Nhà cung cấp AI đã từ chối khóa.",
+        "rate_limited": "Nhà cung cấp AI đang bận.",
+        "provider": "Nhà cung cấp AI trả về lỗi.",
+        "timeout": "Nhà cung cấp AI phản hồi quá lâu.",
+        "bad_response": "AI trả lời bằng nội dung không phải điểm.",
+        "other": "Lần thử chưa hoàn tất."
+      },
+      "trigger": {
+        "created": "Liên hệ được tạo",
+        "updated": "Liên hệ thay đổi",
+        "manual": "Nút chấm điểm",
+        "backfill": "Chấm điểm các liên hệ chưa có điểm"
+      },
+      "tokensDetail": "{prompt} vào, {completion} ra",
+      "costSource": {
+        "vendor": "Chi phí do OpenRouter báo cáo",
+        "estimate": "Ước tính từ số token và giá niêm yết"
+      },
+      "billed": {
+        "admin": "Khóa nền tảng",
+        "workspace": "Khóa của bạn"
+      }
+    },
+    "log": {
+      "title": "Nhật ký chấm điểm",
+      "hint": "Mọi lần chấm điểm, mới nhất trước, kèm token và chi phí.",
+      "filter": "Hiện các lần thử có kết quả này",
+      "all": "Tất cả kết quả",
+      "status": {
+        "ok": "Đã chấm điểm",
+        "kept": "Chưa lưu",
+        "failed": "Thất bại",
+        "skipped": "Đã bỏ qua"
+      },
+      "refresh": "Làm mới",
+      "emptyTitle": "Chưa có lần chấm điểm nào",
+      "emptyBody": "Các lần thử sẽ hiện ở đây khi chấm điểm khách hàng tiềm năng bằng AI được bật và một liên hệ được chấm điểm.",
+      "emptyFilteredTitle": "Không có lần thử nào với kết quả này",
+      "emptyFilteredBody": "Hãy chọn kết quả khác, hoặc hiện tất cả kết quả.",
+      "caption": "Các lần chấm điểm, mới nhất trước",
+      "loadMore": "Tải thêm"
+    },
+    "settings": {
+      "title": "Chấm điểm khách hàng tiềm năng bằng AI",
+      "subtitle": "Cho mỗi liên hệ một điểm từ 0 đến 100 cho biết khả năng mua hàng của họ, và xem chi phí.",
+      "discard": "Hủy bỏ",
+      "save": "Lưu",
+      "saved": "Đã lưu cài đặt.",
+      "readOnly": "Bạn có thể xem các cài đặt này nhưng không thể thay đổi. Hãy nhờ quản trị viên không gian làm việc cấp quyền lsc.settings.manage.",
+      "conflict": "Có người khác đã thay đổi các cài đặt này trước. Dữ liệu đã được tải lại nên bạn đang xem phiên bản đã lưu. Hãy thực hiện lại thay đổi của bạn.",
+      "conflictOk": "Đã hiểu",
+      "enable": {
+        "title": "Bật chấm điểm khách hàng tiềm năng bằng AI",
+        "hint": "Tắt cho đến khi bạn chọn bật, vì thông tin về các liên hệ được gửi tới nhà cung cấp AI.",
+        "label": "Chấm điểm khách hàng tiềm năng bằng AI",
+        "on": "Bật",
+        "off": "Tắt",
+        "what": "Khi bật, một mô hình AI đọc mô tả ngắn, ẩn danh về liên hệ và trả lời bằng một điểm cùng lý do. Điểm được ghi vào điểm khách hàng tiềm năng của liên hệ."
+      },
+      "sent": {
+        "title": "Những gì được gửi tới AI",
+        "stage": "Giai đoạn và trạng thái của liên hệ",
+        "source": "Liên hệ đến từ đâu",
+        "tags": "Tên thẻ",
+        "deals": "Số giao dịch đang mở, đã thắng và đã thua",
+        "activity": "Liên hệ hoạt động gần đây đến mức nào",
+        "company": "Tên công ty"
+      },
+      "notSent": {
+        "title": "Những gì không bao giờ được gửi",
+        "name": "Tên của liên hệ",
+        "email": "Địa chỉ email",
+        "phone": "Số điện thoại"
+      },
+      "manualRule": "Điểm do một người nhập không bao giờ bị ghi đè. AI chỉ điền các điểm còn trống và làm mới những điểm do chính nó ghi.",
+      "auto": {
+        "label": "Tự động chấm điểm khi liên hệ thay đổi",
+        "onBody": "Liên hệ được chấm điểm khi được tạo và chấm lại khi thông tin thay đổi.",
+        "offBody": "Liên hệ chỉ được chấm điểm khi bạn dùng nút Chấm điểm bằng AI hoặc chấm điểm các liên hệ chưa có điểm bên dưới."
+      },
+      "confirm": {
+        "title": "Gửi thông tin liên hệ đã ẩn danh tới nhà cung cấp AI?",
+        "body": "Sau khi bật, các mô tả ngắn về liên hệ của bạn (giai đoạn, nguồn, thẻ, số giao dịch, hoạt động và tên công ty) được gửi tới nhà cung cấp AI qua OpenRouter. Tên, địa chỉ email và số điện thoại không bao giờ được gửi. Bạn có thể tắt bất cứ lúc nào.",
+        "yes": "Bật",
+        "no": "Hủy"
+      },
+      "banner": {
+        "platformOff": "Chấm điểm khách hàng tiềm năng bằng AI đang tắt cho toàn nền tảng. Dù cài đặt ở đây thế nào, sẽ không có gì được chấm điểm cho đến khi nhà vận hành nền tảng bật lại.",
+        "noKey": "Không có khóa OpenRouter nào, nên không thể chấm điểm. Hãy thêm khóa của riêng bạn trong Khóa AI, hoặc nhờ quản trị viên nền tảng bật khóa dùng chung.",
+        "openKeys": "Mở khóa AI",
+        "off": "Chấm điểm khách hàng tiềm năng bằng AI đang tắt cho không gian làm việc này. Không có gì được gửi tới nhà cung cấp AI.",
+        "ready": "Sẵn sàng. Liên hệ được chấm điểm bằng {model} với {key}.",
+        "keyWorkspace": "khóa OpenRouter riêng của không gian làm việc của bạn",
+        "keyAdmin": "khóa OpenRouter dùng chung của nền tảng"
+      },
+      "backfill": {
+        "title": "Chấm điểm các liên hệ bạn đã có",
+        "hint": "Xếp hàng các liên hệ chưa có điểm, tối đa {limit} mỗi lần. Chúng được chấm điểm ở chế độ nền.",
+        "eligible": "Liên hệ AI có thể chấm điểm",
+        "scored": "Đã được AI chấm điểm",
+        "waiting": "Đang chờ chấm điểm",
+        "eligibleNote": "Các liên hệ có điểm do một người nhập sẽ bị loại ra: AI không bao giờ thay đổi chúng.",
+        "button": "Chấm điểm các liên hệ chưa có điểm ngay",
+        "noRight": "Vai trò của bạn không được phép chấm điểm liên hệ. Cần quyền lsc.contacts.score.",
+        "notReady": "Hãy bật chấm điểm khách hàng tiềm năng bằng AI và đảm bảo có khóa để chấm điểm liên hệ.",
+        "queued": "{count, plural, other {Đã xếp hàng # liên hệ}} và sẽ được chấm điểm ở chế độ nền. Hãy tải lại nhật ký sau một phút để xem kết quả.",
+        "nothingToScore": "Không có liên hệ chưa chấm điểm nào để xếp hàng."
+      },
+      "cost": {
+        "title": "30 ngày qua",
+        "hint": "Việc chấm điểm đã làm và chi phí trong 30 ngày qua.",
+        "scores": "Liên hệ đã chấm điểm",
+        "tokens": "Token đã dùng",
+        "total": "Tổng chi phí",
+        "average": "Trung bình mỗi lần chấm",
+        "averageHint": "Tổng chi phí chia cho số liên hệ đã chấm điểm",
+        "model": "Mô hình",
+        "payer": "Ai thanh toán",
+        "payerBy": {
+          "workspace": "Khóa OpenRouter của riêng bạn, OpenRouter tính phí cho bạn",
+          "admin": "Khóa OpenRouter dùng chung của nền tảng",
+          "none": "Chưa có khóa nào"
+        },
+        "failed": "Lần thử thất bại",
+        "platformPart": "Trong tổng số, phần dùng khóa của nền tảng"
+      }
+    }
+  }
+}

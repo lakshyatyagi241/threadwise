@@ -39,6 +39,7 @@ export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
       'plan-analytics',
       'platform-analytics',
       'ai-dashboard',
+      'lead-scoring',
       'system-health',
     ],
   },

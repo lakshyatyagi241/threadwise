@@ -68,6 +68,8 @@ export const QUEUES = {
   MAIL_SYNC: 'mail-sync',
   /** One job per requested export of the message delivery log: reads up to a year of events (live and archived) into a CSV and mails the requester. Own queue: a year-long export must not hold a send or a receipt. */
   MSG_LOG_EXPORT: 'msg-log-export',
+  /** One job per contact to score with AI (LSC): the vendor call and the score write. Own queue: a slow AI vendor must not hold any other job. */
+  LSC_SCORE: 'lsc-score',
 } as const;
 
 export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];

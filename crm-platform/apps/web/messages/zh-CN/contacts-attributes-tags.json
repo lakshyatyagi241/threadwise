@@ -170,7 +170,8 @@
       "import": "导入",
       "columns": "列",
       "addColumnField": "将自定义字段添加为列",
-      "kanbanView": "看板视图（按阶段）"
+      "kanbanView": "看板视图（按阶段）",
+      "colLeadScore": "线索评分"
     },
     "bulk": {
       "label": "所选联系人的操作",

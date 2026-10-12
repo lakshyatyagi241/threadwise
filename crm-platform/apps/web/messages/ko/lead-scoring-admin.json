@@ -1,0 +1,217 @@
+{
+  "lead-scoring-admin": {
+    "nav": {
+      "group": "AI",
+      "scoring": "AI 리드 스코어링"
+    },
+    "common": {
+      "loading": "불러오는 중",
+      "retry": "다시 시도",
+      "requestId": "요청 ID",
+      "dash": "-",
+      "cancel": "취소",
+      "errors": {
+        "forbidden": "이 작업을 수행할 권한이 없습니다.",
+        "request": "요청을 완료할 수 없습니다.",
+        "unexpected": "서버에 문제가 발생했습니다. 잠시 후 다시 시도하세요.",
+        "network": "서버에 연결할 수 없습니다. 연결 상태를 확인하고 다시 시도하세요.",
+        "validation": "올바르지 않은 값이 있습니다. 강조 표시된 필드를 확인하세요.",
+        "notFound": "해당 항목이 더 이상 존재하지 않습니다."
+      }
+    },
+    "page": {
+      "eyebrow": "관리자 · AI · 리드 스코어링",
+      "title": "AI 리드 스코어링",
+      "description": "워크스페이스가 AI 모델로 연락처에 점수를 매길 수 있는지, 어떤 모델을 쓰는지, 한도, 비용을 관리합니다.",
+      "superOnly": "슈퍼 관리자만 AI 리드 스코어링을 보거나 변경할 수 있습니다."
+    },
+    "status": {
+      "label": "리드 스코어링 상태",
+      "switch": {
+        "title": "플랫폼 스위치",
+        "on": "켜짐",
+        "off": "꺼짐",
+        "hintOn": "참여를 선택한 워크스페이스는 연락처에 점수를 매길 수 있습니다.",
+        "hintOff": "워크스페이스 자체 설정과 관계없이 어떤 워크스페이스도 연락처에 점수를 매길 수 없습니다."
+      },
+      "model": {
+        "title": "모델",
+        "custom": "목록에 없이 직접 입력한 모델입니다."
+      },
+      "key": {
+        "title": "플랫폼 OpenRouter 키",
+        "ready": "준비됨",
+        "missing": "없음",
+        "explainReady": "자체 OpenRouter 키가 없는 워크스페이스는 이 키로 점수가 매겨지며, 그 비용은 귀하가 부담합니다.",
+        "explainMissing": "플랫폼 키가 없으면 자체 OpenRouter 키를 저장한 워크스페이스만 연락처에 점수를 매길 수 있습니다.",
+        "link": "AI 키 열기"
+      },
+      "reach": {
+        "title": "도달 범위",
+        "workspaces": "참여 중인 워크스페이스",
+        "contacts": "점수가 매겨진 연락처"
+      }
+    },
+    "settings": {
+      "title": "설정",
+      "description": "변경 사항은 모든 워크스페이스에 한꺼번에 적용됩니다. 변경한 필드만 저장됩니다.",
+      "enabled": {
+        "label": "AI 리드 스코어링",
+        "hint": "기본값은 꺼짐입니다. 켜면 참여를 선택한 워크스페이스가 익명화된 연락처 정보를 OpenRouter로 보내 0에서 100 사이의 점수를 받습니다. 모든 스코어링을 중지하려면 끄세요."
+      },
+      "model": {
+        "label": "모델",
+        "hint": "가격은 OpenRouter 목록 기준 100만 토큰당 미국 달러입니다.",
+        "option": "{label} · {input} in / {output} out",
+        "other": "다른 OpenRouter 모델 ID",
+        "details": "입력 토큰 100만 개당 {input}, 출력 토큰 100만 개당 {output}.",
+        "customLabel": "OpenRouter 모델 ID",
+        "customHint": "구조화된 출력을 지원하는 모든 OpenRouter 모델 ID.",
+        "placeholder": "openai/gpt-6-luna"
+      },
+      "limits": {
+        "title": "한도",
+        "scoresPerHour": "워크스페이스당 시간당 점수 수",
+        "scoresPerHourHint": "플랫폼 키를 사용하는 워크스페이스의 비용 제한입니다. 0은 제한 없음을 뜻합니다.",
+        "retentionDays": "로그 보관 기간(일)",
+        "retentionDaysHint": "오래된 실행 기록과 비용 내역은 삭제됩니다. 7일에서 730일."
+      },
+      "saving": "저장 중",
+      "save": "변경 사항 저장",
+      "reset": "변경 사항 취소",
+      "changed": "{count, plural, other {저장할 변경 사항 #개}}",
+      "unchanged": "저장할 변경 사항이 없습니다.",
+      "saved": "리드 스코어링 설정을 저장했습니다.",
+      "errors": {
+        "range": "{min}에서 {max} 사이의 값을 입력하세요.",
+        "integer": "정수를 입력하세요.",
+        "modelId": "openai/gpt-6-luna와 같은 OpenRouter 모델 ID를 사용하세요.",
+        "invalid": "올바르지 않은 값입니다."
+      },
+      "confirm": {
+        "title": "변경 확인",
+        "turnOn": "참여를 선택한 워크스페이스가 익명화된 연락처 정보를 OpenRouter로 보내고 플랫폼 키의 크레딧을 사용할 수 있게 됩니다.",
+        "turnOff": "모든 워크스페이스의 AI 리드 스코어링이 중지됩니다. 이미 저장된 점수는 유지됩니다.",
+        "confirm": "변경 사항 저장"
+      }
+    },
+    "cost": {
+      "title": "스코어링 비용",
+      "description": "스코어링 로그의 합계이며, 미국 달러 기준입니다.",
+      "last24h": "최근 24시간",
+      "last30d": "최근 30일",
+      "scores": "기록된 점수",
+      "failed": "실패한 실행",
+      "tokens": "토큰",
+      "tokensSplit": "입력 / 출력 토큰",
+      "total": "총 비용",
+      "average": "점수당 평균",
+      "platform": "플랫폼 키로 결제",
+      "footnote": "비용은 OpenRouter가 보고한 금액이며, 보고된 금액이 없으면 토큰 수로 계산한 추정치입니다. 워크스페이스 자체 키로 청구된 실행은 총계에 포함되지만 플랫폼 부담분에는 포함되지 않습니다."
+    },
+    "workspaces": {
+      "title": "워크스페이스",
+      "description": "AI 리드 스코어링을 사용하는 곳과 최근 30일간 발생한 비용을 높은 순으로 보여줍니다.",
+      "search": "워크스페이스 검색",
+      "searchPlaceholder": "워크스페이스 이름",
+      "limit": "행 수",
+      "limitOption": "{count}행",
+      "noMatchTitle": "일치하는 워크스페이스 없음",
+      "noMatchMessage": "다른 이름으로 시도하세요.",
+      "clearSearch": "검색 지우기",
+      "emptyTitle": "아직 워크스페이스가 없습니다",
+      "emptyMessage": "워크스페이스가 생기면 여기에 표시됩니다.",
+      "tableLabel": "스코어링 비용별 워크스페이스",
+      "columns": {
+        "name": "워크스페이스",
+        "enabled": "스코어링",
+        "contacts": "점수가 매겨진 연락처",
+        "scores": "점수 수, 30일",
+        "cost": "비용, 30일"
+      },
+      "enabled": "켜짐",
+      "disabled": "꺼짐"
+    },
+    "runs": {
+      "title": "스코어링 로그",
+      "description": "모든 워크스페이스의 스코어링 시도를 최신순으로 보여주며, 토큰, 비용, 결제 주체를 포함합니다.",
+      "refresh": "새로고침",
+      "filters": {
+        "status": "상태",
+        "anyStatus": "모든 상태",
+        "workspace": "워크스페이스",
+        "anyWorkspace": "모든 워크스페이스",
+        "clear": "필터 지우기"
+      },
+      "status": {
+        "ok": "점수 부여됨",
+        "kept": "유지됨",
+        "failed": "실패",
+        "skipped": "건너뜀"
+      },
+      "trigger": {
+        "created": "연락처 생성",
+        "updated": "연락처 수정",
+        "manual": "점수 버튼",
+        "backfill": "일괄 처리"
+      },
+      "scoreWas": "{score} (이전 {previous})",
+      "tokensTitle": "입력 {input}, 출력 {output}",
+      "costSource": {
+        "vendor": "보고됨",
+        "estimate": "추정",
+        "none": "호출 없음"
+      },
+      "costSourceHelp": {
+        "vendor": "이 호출에 대해 OpenRouter가 보고한 비용입니다.",
+        "estimate": "보고된 비용이 없어 토큰 수에 모델의 정가를 곱한 값입니다.",
+        "none": "호출이 이루어지지 않아 청구된 금액이 없습니다."
+      },
+      "paidBy": {
+        "admin": "플랫폼",
+        "workspace": "워크스페이스",
+        "none": "없음"
+      },
+      "duration": {
+        "ms": "{value} ms",
+        "s": "{value} s"
+      },
+      "reason": {
+        "platform_off": "플랫폼 스위치가 꺼져 있음",
+        "not_enabled": "워크스페이스가 참여하지 않음",
+        "contact_gone": "연락처가 삭제됨",
+        "manual_score": "연락처에 직접 입력한 점수가 있음",
+        "no_key": "OpenRouter 키 없음",
+        "token_allowance": "토큰 허용량 소진",
+        "hourly_limit": "시간당 한도 도달",
+        "auth": "OpenRouter가 키를 거부함",
+        "rate_limited": "OpenRouter 요청 한도",
+        "provider": "OpenRouter 오류",
+        "timeout": "OpenRouter 시간 초과",
+        "bad_response": "응답이 올바른 점수가 아님"
+      },
+      "noMatchTitle": "일치하는 실행 없음",
+      "noMatchMessage": "이 필터와 일치하는 스코어링 실행이 없습니다.",
+      "emptyTitle": "아직 실행 기록이 없습니다",
+      "emptyMessage": "워크스페이스가 연락처에 점수를 매기면 여기에 표시됩니다.",
+      "tableLabel": "스코어링 실행",
+      "columns": {
+        "time": "시간",
+        "workspace": "워크스페이스",
+        "contact": "연락처",
+        "trigger": "트리거",
+        "status": "상태",
+        "score": "점수",
+        "model": "모델",
+        "tokens": "토큰",
+        "cost": "비용",
+        "paidBy": "결제 주체",
+        "duration": "소요 시간",
+        "error": "사유"
+      },
+      "costLegend": "비용 앞의 ~는 OpenRouter가 보고한 금액이 아니라 토큰 수로 계산한 추정치임을 나타냅니다.",
+      "loadMore": "더 보기",
+      "loadingMore": "불러오는 중"
+    }
+  }
+}

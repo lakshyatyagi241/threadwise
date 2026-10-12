@@ -325,6 +325,11 @@
         "description": "Bot yang dibuat untuk obrolan situs web Anda dan widget tempat masing-masing berjalan.",
         "keywords": "web, situs web, widget, chatbot, sematkan, obrolan langsung"
       },
+      "lead-scoring": {
+        "label": "Penilaian prospek dengan AI",
+        "description": "Beri skor setiap kontak dengan AI, pilih data yang dikirim, dan lihat biayanya.",
+        "keywords": "skor prospek, penilaian, ai, panas, hangat, dingin, openrouter, biaya, kualifikasi"
+      },
       "help-assistant": {
         "label": "Asisten Bantuan",
         "description": "Aktifkan asisten yang memandu tim Anda atau mengerjakan langkahnya untuk mereka.",

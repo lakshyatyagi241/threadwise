@@ -1,0 +1,62 @@
+---
+id: lead-scoring
+title: AI lead scoring
+summary: Give every contact a score from 0 to 100 with AI, see why, and keep track of what it costs.
+area: automation
+order: 8
+documents: [tile:lead-scoring]
+keywords: [lead score, scoring, ai, hot, warm, cold, openrouter, tokens, cost, backfill, manual score, privacy]
+---
+
+## What it is for
+
+AI lead scoring gives each contact a number from 0 to 100 that says how promising the contact looks. The number is written to the contact's **Lead score**, so it shows in the contact list, on the board and on the contact's page. Scores are grouped by colour and name: **Cold** below 34, **Warm** from 34 to 66 and **Hot** from 67. The number is always printed too, and a small sparkle marks a score the AI wrote.
+
+Scoring is **off** until you switch it on, because it sends facts about your contacts to an AI provider.
+
+## What is sent
+
+Only a short, anonymous description of the contact goes to the AI: its stage and status, where it came from, its tag names, how many deals are open, won and lost, how recently it was active, and the company name. The contact's **name, email address and phone number are never sent**.
+
+## Turn it on
+
+1. Open **Settings**, then **AI lead scoring** under Automation.
+2. Switch on **AI lead scoring** and select **Save**. You are asked to confirm once, because this is where contact facts start going to an AI provider.
+3. Decide on **Score automatically when contacts change**. When it is on, a contact is scored when it is created and again when its details change. When it is off, contacts are scored only with the button on the contact's page or with **Score unscored contacts now**.
+
+The banner at the top of the screen tells you where you stand. Scoring needs the platform switch to be on and an OpenRouter key: your own key from **AI keys**, or the platform's shared key when your workspace has none. Without a key the banner says so and links to **AI keys**.
+
+Seeing the screen needs the permission **lsc.runs.read**. Changing the switches needs **lsc.settings.manage**.
+
+## Score one contact
+
+Open a contact. The **Lead score** card shows the number, who set it, the date and model, and the reasons the AI gave. Select **Score with AI** (or **Re-score** when the contact already has an AI score). It takes a few seconds, and when it finishes the card shows what that run cost. This button needs **lsc.contacts.score**.
+
+If something stops it, the card says exactly what: scoring is off for the workspace (with a link to the settings), no key is available, the provider did not give a usable answer, the plan's AI allowance is used up, or the contact has a score a person typed.
+
+## A score you typed is yours
+
+You can type a score yourself in the contact's edit form. A typed score is **Manual**: the AI never overwrites it, and the Score with AI button is disabled with an explanation. To hand the contact back to the AI, edit the contact and clear the lead score. Saving the form without touching the score leaves an AI score as it is.
+
+## Score the contacts you already have
+
+**Score unscored contacts now** queues contacts that have no score, up to 500 at a time, and scores them in the background. The screen tells you how many were queued; select it again to queue the next batch. It needs **lsc.contacts.score**.
+
+## Cost and the log
+
+A score costs a fraction of a cent. The **Last 30 days** card shows the contacts scored, the tokens used, the total cost in US dollars, the average per score and which key pays for it. A cost smaller than a hundredth of a cent is shown as less than $0.0001, never as zero.
+
+The **Scoring log** lists every attempt, newest first, with the result, the score change, what triggered it, the tokens and the cost. Results are:
+
+- **Scored**: a score was written.
+- **Not saved**: the AI answered, but a person typed a score in the meantime, so it was kept.
+- **Failed**: the provider did not give a usable answer. A failed answer can still have cost something.
+- **Skipped**: nothing was sent, for example because no key was available.
+
+Use the filter to show one kind of result and **Load more** to go further back. Each contact's own history is under **Show scoring history** on its Lead score card.
+
+## If something looks wrong
+
+- **Nothing is scored.** Check the banner on the AI lead scoring screen: the platform switch, your own switch and the key must all be in place.
+- **A contact will not score.** Open it: a **Manual** label means a person typed the score.
+- **A cost shows with a tilde.** The figure is an estimate from the tokens and the list price, not the amount OpenRouter reported.

@@ -1,0 +1,217 @@
+{
+  "lead-scoring-admin": {
+    "nav": {
+      "group": "AI",
+      "scoring": "AI 线索评分"
+    },
+    "common": {
+      "loading": "加载中",
+      "retry": "重试",
+      "requestId": "请求 ID",
+      "dash": "-",
+      "cancel": "取消",
+      "errors": {
+        "forbidden": "你没有执行此操作的权限。",
+        "request": "无法完成该请求。",
+        "unexpected": "我们这边出了问题，请稍后再试。",
+        "network": "无法连接到服务器。请检查网络连接后重试。",
+        "validation": "部分值无效。请检查高亮的字段。",
+        "notFound": "该项目已不存在。"
+      }
+    },
+    "page": {
+      "eyebrow": "管理 · AI · 线索评分",
+      "title": "AI 线索评分",
+      "description": "控制工作区能否用 AI 模型为联系人评分、使用哪个模型、限额以及费用。",
+      "superOnly": "只有超级管理员可以查看或更改 AI 线索评分。"
+    },
+    "status": {
+      "label": "线索评分状态",
+      "switch": {
+        "title": "平台开关",
+        "on": "开",
+        "off": "关",
+        "hintOn": "已选择加入的工作区可以为其联系人评分。",
+        "hintOff": "无论工作区自身如何设置，所有工作区都不能为联系人评分。"
+      },
+      "model": {
+        "title": "模型",
+        "custom": "手动输入的模型，不在列表中。"
+      },
+      "key": {
+        "title": "平台 OpenRouter 密钥",
+        "ready": "就绪",
+        "missing": "缺失",
+        "explainReady": "没有自己 OpenRouter 密钥的工作区将使用此密钥评分，这些评分的费用由你承担。",
+        "explainMissing": "没有平台密钥时，只有保存了自己 OpenRouter 密钥的工作区才能为联系人评分。",
+        "link": "打开 AI 密钥"
+      },
+      "reach": {
+        "title": "覆盖范围",
+        "workspaces": "已加入的工作区",
+        "contacts": "已评分的联系人"
+      }
+    },
+    "settings": {
+      "title": "设置",
+      "description": "更改会同时应用于所有工作区。只保存你修改过的字段。",
+      "enabled": {
+        "label": "AI 线索评分",
+        "hint": "默认关闭。开启后，已选择加入的工作区会把匿名化的联系人信息发送到 OpenRouter，获得 0 到 100 的评分。关闭可停止所有评分。"
+      },
+      "model": {
+        "label": "模型",
+        "hint": "价格为每百万 token 的美元价格，来自 OpenRouter 的列表。",
+        "option": "{label} · {input} in / {output} out",
+        "other": "其他 OpenRouter 模型 ID",
+        "details": "每百万输入 token {input}，每百万输出 token {output}。",
+        "customLabel": "OpenRouter 模型 ID",
+        "customHint": "OpenRouter 上任何支持结构化输出的模型 ID。",
+        "placeholder": "openai/gpt-6-luna"
+      },
+      "limits": {
+        "title": "限额",
+        "scoresPerHour": "每个工作区每小时评分数",
+        "scoresPerHourHint": "针对使用平台密钥的工作区的成本保护。0 表示不限制。",
+        "retentionDays": "日志保留天数",
+        "retentionDaysHint": "较早的运行记录及其费用历史会被删除。7 到 730 天。"
+      },
+      "saving": "正在保存",
+      "save": "保存更改",
+      "reset": "放弃更改",
+      "changed": "{count, plural, other {# 项更改待保存}}",
+      "unchanged": "没有需要保存的更改。",
+      "saved": "线索评分设置已保存。",
+      "errors": {
+        "range": "请输入 {min} 到 {max} 之间的值。",
+        "integer": "请输入整数。",
+        "modelId": "请使用 OpenRouter 模型 ID，例如 openai/gpt-6-luna。",
+        "invalid": "此值无效。"
+      },
+      "confirm": {
+        "title": "确认更改",
+        "turnOn": "这将允许已选择加入的工作区把匿名化的联系人信息发送到 OpenRouter，并消耗你的平台密钥额度。",
+        "turnOff": "这将停止所有工作区的 AI 线索评分。已保存的评分会保留。",
+        "confirm": "保存更改"
+      }
+    },
+    "cost": {
+      "title": "评分费用",
+      "description": "来自评分日志的合计，单位为美元。",
+      "last24h": "过去 24 小时",
+      "last30d": "过去 30 天",
+      "scores": "已写入的评分",
+      "failed": "失败的运行",
+      "tokens": "Token",
+      "tokensSplit": "输入 / 输出 token",
+      "total": "总费用",
+      "average": "每次评分平均费用",
+      "platform": "由平台密钥支付",
+      "footnote": "费用为 OpenRouter 报告的金额；未报告时，则按 token 数量估算。计入工作区自有密钥的运行包含在总计中，但不属于平台承担的部分。"
+    },
+    "workspaces": {
+      "title": "工作区",
+      "description": "谁在使用 AI 线索评分，以及过去 30 天的费用，按从高到低排序。",
+      "search": "搜索工作区",
+      "searchPlaceholder": "工作区名称",
+      "limit": "行数",
+      "limitOption": "{count} 行",
+      "noMatchTitle": "没有匹配的工作区",
+      "noMatchMessage": "试试其他名称。",
+      "clearSearch": "清除搜索",
+      "emptyTitle": "还没有工作区",
+      "emptyMessage": "工作区创建后会显示在这里。",
+      "tableLabel": "按评分费用排列的工作区",
+      "columns": {
+        "name": "工作区",
+        "enabled": "评分",
+        "contacts": "已评分的联系人",
+        "scores": "评分数，30 天",
+        "cost": "费用，30 天"
+      },
+      "enabled": "开",
+      "disabled": "关"
+    },
+    "runs": {
+      "title": "评分日志",
+      "description": "所有工作区的每次评分尝试，最新的在前，含 token、费用和付费方。",
+      "refresh": "刷新",
+      "filters": {
+        "status": "状态",
+        "anyStatus": "任意状态",
+        "workspace": "工作区",
+        "anyWorkspace": "所有工作区",
+        "clear": "清除筛选"
+      },
+      "status": {
+        "ok": "已评分",
+        "kept": "已保留",
+        "failed": "失败",
+        "skipped": "已跳过"
+      },
+      "trigger": {
+        "created": "联系人已创建",
+        "updated": "联系人已更新",
+        "manual": "评分按钮",
+        "backfill": "补评"
+      },
+      "scoreWas": "{score}（原为 {previous}）",
+      "tokensTitle": "输入 {input}，输出 {output}",
+      "costSource": {
+        "vendor": "已报告",
+        "estimate": "估算",
+        "none": "未调用"
+      },
+      "costSourceHelp": {
+        "vendor": "OpenRouter 为这次调用报告的费用。",
+        "estimate": "未报告费用，因此按 token 数量乘以模型标价计算。",
+        "none": "没有发起调用，因此没有产生费用。"
+      },
+      "paidBy": {
+        "admin": "平台",
+        "workspace": "工作区",
+        "none": "无"
+      },
+      "duration": {
+        "ms": "{value} ms",
+        "s": "{value} s"
+      },
+      "reason": {
+        "platform_off": "平台开关已关闭",
+        "not_enabled": "工作区未选择加入",
+        "contact_gone": "联系人已被删除",
+        "manual_score": "联系人有手动输入的评分",
+        "no_key": "没有 OpenRouter 密钥",
+        "token_allowance": "Token 额度已用完",
+        "hourly_limit": "已达每小时限额",
+        "auth": "OpenRouter 拒绝了密钥",
+        "rate_limited": "OpenRouter 速率限制",
+        "provider": "OpenRouter 错误",
+        "timeout": "OpenRouter 超时",
+        "bad_response": "返回的不是有效评分"
+      },
+      "noMatchTitle": "没有匹配的运行",
+      "noMatchMessage": "没有符合这些筛选条件的评分运行。",
+      "emptyTitle": "还没有运行记录",
+      "emptyMessage": "工作区为联系人评分后，运行记录会显示在这里。",
+      "tableLabel": "评分运行",
+      "columns": {
+        "time": "时间",
+        "workspace": "工作区",
+        "contact": "联系人",
+        "trigger": "触发方式",
+        "status": "状态",
+        "score": "评分",
+        "model": "模型",
+        "tokens": "Token",
+        "cost": "费用",
+        "paidBy": "付费方",
+        "duration": "耗时",
+        "error": "原因"
+      },
+      "costLegend": "费用前的 ~ 表示按 token 数量估算，而非 OpenRouter 报告的金额。",
+      "loadMore": "加载更多",
+      "loadingMore": "加载中"
+    }
+  }
+}
