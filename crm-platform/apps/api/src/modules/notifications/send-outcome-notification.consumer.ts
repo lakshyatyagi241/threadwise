@@ -89,23 +89,31 @@ export class SendOutcomeNotificationConsumer implements OutboxSubscriber, OnModu
 
       const reason = str(event.payload.reason) ?? str(event.payload.failureReason);
       const copy = outcomeCopy(kind, type, facts.name, { ...facts, reason });
-      return this.fanout.write(tx, event.orgId, type, userIds, () => ({
-        title: copy.title,
-        body: copy.body,
+      // One unread row per record and outcome: a campaign that finishes again before the bell was read updates the row (newest counts,
+      // moved to the top) instead of stacking a copy. Once read, the next finish writes a fresh row.
+      return this.fanout.writeCollapsing(tx, event.orgId, type, userIds, () => ({
         link: LINK[kind](uuid),
-        data: {
-          kind,
-          id: uuid,
-          name: facts.name,
-          status,
-          total: facts.total,
-          sent: facts.sent,
-          failed: facts.failed,
-          reason: reason ? reason.slice(0, 200) : null,
-        },
         dedupeKey: sendOutcomeKey(kind, uuid, status, event.id),
+        collapseKey: `send:${kind}:${uuid}:${type}`,
+        adds: 1,
+        eventId: Number(event.id),
         subjectKind: SUBJECT_KIND[kind],
         subjectUuid: uuid,
+        build: (count) => ({
+          title: copy.title,
+          body: copy.body,
+          data: {
+            kind,
+            id: uuid,
+            name: facts.name,
+            status,
+            total: facts.total,
+            sent: facts.sent,
+            failed: facts.failed,
+            reason: reason ? reason.slice(0, 200) : null,
+            runs: count,
+          },
+        }),
       }));
     });
     await this.fanout.publish(event.orgId, pending);
