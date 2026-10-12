@@ -80,14 +80,12 @@ describe('help agent: the vendor adapter', () => {
   };
 
   it('posts the OpenAI shape with the key in the header, and returns only the fields the library reads', async () => {
-    const fetchMock = vi
-      .spyOn(globalThis, 'fetch')
-      .mockResolvedValue(
-        new Response(JSON.stringify(vendorJson), {
-          status: 200,
-          headers: { 'content-type': 'application/json' },
-        }),
-      );
+    const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue(
+      new Response(JSON.stringify(vendorJson), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      }),
+    );
     const adapter = new HttpHelpAgentLlmAdapter(
       readHelpAgentEnv({ HELP_AGENT_BASE_URL: 'http://127.0.0.1:9/v1/' }),
     );
