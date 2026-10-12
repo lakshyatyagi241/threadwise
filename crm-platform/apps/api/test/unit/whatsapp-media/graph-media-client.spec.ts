@@ -3,6 +3,7 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import {
   GraphMediaClient,
   classifyGraphFailure,
+  downloadHeadersFor,
   graphFailureOf,
 } from '../../../src/infra/providers/whatsapp/media/graph-media.client';
 import {
@@ -257,6 +258,37 @@ describe('download: GET <url>', () => {
     );
     expect(e.code).toBe(MEDIA_FAILURE.URL_REJECTED);
     expect(e.message).toMatch(/non-public address/);
+  });
+});
+
+describe('downloadHeadersFor', () => {
+  const partnerHeaders = { 'x-access-token': BSP_TOKEN };
+  const bearerHeaders = { Authorization: `Bearer ${TOKEN}` };
+
+  it("an Interakt-route number sends the business token as Bearer to Meta's file host, not the partner key", () => {
+    const h = downloadHeadersFor(
+      'lookaside.fbsbx.com',
+      bspProfile(),
+      partnerHeaders,
+      bearerHeaders,
+    );
+    expect(h).toEqual(bearerHeaders);
+  });
+
+  it("the partner key still goes to the provider's own host, and nothing goes to another host", () => {
+    const own = new URL(bspProfile().baseUrl).hostname;
+    expect(downloadHeadersFor(own, bspProfile(), partnerHeaders, bearerHeaders)).toEqual(
+      partnerHeaders,
+    );
+    expect(
+      downloadHeadersFor('cdn.example.com', bspProfile(), partnerHeaders, bearerHeaders),
+    ).toEqual({});
+  });
+
+  it('without a business token, Meta file host gets nothing on a BSP route', () => {
+    expect(downloadHeadersFor('lookaside.fbsbx.com', bspProfile(), partnerHeaders, null)).toEqual(
+      {},
+    );
   });
 });
 
