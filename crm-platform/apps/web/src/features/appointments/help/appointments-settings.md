@@ -14,7 +14,7 @@ Appointment settings holds what every booking in your workspace shares: the Goog
 
 ## How to use it
 
-1. Open **Settings**, then **Appointment settings**, or **Google Calendar** under **Integrations**. Both open this screen.
+1. Open **Settings**, then **Appointment settings**, or open **Google Calendar** on the **Add-ons** tab of the **Marketplace**. Both open this screen.
 2. To connect Google Calendar, select **Connect Google Calendar**. Google asks you to choose an account and allow calendar access. You come back here with the result.
 3. Once connected, select **Choose calendar** to pick the calendar confirmed bookings are written to.
 4. Set the **Time zone** and the **Business hours** for each day. Switch a day off to close it, or add intervals for a break.

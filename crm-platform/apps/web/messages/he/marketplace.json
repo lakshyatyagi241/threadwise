@@ -10,7 +10,8 @@
       "install": "התקנה · Marketplace",
       "installed": "מותקן · Marketplace",
       "manage": "נהל אפליקציה · Marketplace",
-      "requests": "בקשות · Marketplace"
+      "requests": "בקשות · Marketplace",
+      "addons": "תוספים · Marketplace"
     },
     "common": {
       "dismiss": "סגור",
@@ -124,7 +125,8 @@
       "moreLabel": "מותקנות ובקשות",
       "tabs": {
         "mini_app": "מיני אפליקציות",
-        "integration": "אינטגרציות"
+        "integration": "אינטגרציות",
+        "addon": "תוספים"
       },
       "installed": "מותקנות",
       "installedLimit": "מותקנות ({installed} מתוך {limit})",
@@ -865,6 +867,15 @@
       },
       "working": "מעבד...",
       "noCheckout": "התשלום לא זמין לאפליקציה הזו כרגע. נסה שוב בעוד רגע."
+    },
+    "tools": {
+      "open": "פתיחה",
+      "empty": {
+        "title": "אין תוספים זמינים",
+        "message": "התוספים הכלולים בתפקיד ובתוכנית שלכם יופיעו כאן."
+      },
+      "soon": "בקרוב",
+      "upgrade": "שדרוג"
     }
   }
 }

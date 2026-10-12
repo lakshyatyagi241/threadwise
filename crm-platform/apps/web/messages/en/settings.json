@@ -335,6 +335,7 @@
         "description": "Score every contact with AI, choose what is sent, and see what it costs.",
         "keywords": "lead score, scoring, ai, hot, warm, cold, openrouter, cost, qualify"
       }
-    }
+    },
+    "backToMarketplace": "Back to Marketplace"
   }
 }

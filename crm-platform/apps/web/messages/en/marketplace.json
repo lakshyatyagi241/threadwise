@@ -10,7 +10,8 @@
       "install": "Install · Marketplace",
       "installed": "Installed · Marketplace",
       "manage": "Manage app · Marketplace",
-      "requests": "Requests · Marketplace"
+      "requests": "Requests · Marketplace",
+      "addons": "Add-ons · Marketplace"
     },
     "common": {
       "dismiss": "Dismiss",
@@ -124,7 +125,8 @@
       "moreLabel": "Installed and requests",
       "tabs": {
         "mini_app": "Mini apps",
-        "integration": "Integrations"
+        "integration": "Integrations",
+        "addon": "Add-ons"
       },
       "installed": "Installed",
       "installedLimit": "Installed ({installed} of {limit})",
@@ -865,6 +867,15 @@
       },
       "working": "Working",
       "noCheckout": "Checkout is not available for this app right now. Try again in a moment."
+    },
+    "tools": {
+      "open": "Open",
+      "empty": {
+        "title": "No add-ons available",
+        "message": "The add-ons your role and plan include will appear here."
+      },
+      "soon": "Soon",
+      "upgrade": "Upgrade"
     }
   }
 }

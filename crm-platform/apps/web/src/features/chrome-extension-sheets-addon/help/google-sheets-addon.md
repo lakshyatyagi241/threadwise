@@ -14,7 +14,7 @@ The Google Sheets add-on adds a **CRM** menu to a spreadsheet. From it you can p
 
 ## How to use it
 
-1. Open **Settings**, then **Integrations**, and select **Google Sheets add-on**. If the page says the add-on is not installed, an administrator must install it from the Marketplace first.
+1. Open **Marketplace**, stay on the **Integrations** tab and open **Google Sheets add-on**. If the page says the add-on is not installed, an administrator must install it from the Marketplace first.
 2. Select **Generate key**. Copy the key straight away: it is shown once and cannot be shown again.
 3. Download the six files. In a spreadsheet open **Extensions**, then **Apps Script**, and paste the files in as the page describes. **Code.gs** already points at this workspace.
 4. Reload the spreadsheet. In the **CRM** menu choose **Settings**, paste your key and select **Save and check**. The check shows who you are, your workspace and what your role can do.
