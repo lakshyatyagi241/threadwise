@@ -2,32 +2,35 @@ import { UNOFFICIAL_WHATSAPP_FEATURE_KEY } from '@crm/contracts';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import {
   fetchEntitlements,
+  fetchInboxCounts,
+  fetchNewContacts,
   fetchSummary,
+  fetchTaskCounts,
   fetchThroughput,
   fetchWalletSummary,
   fetchWidgets,
 } from './api';
-import type { Range } from './ranges';
+import type { DashWindow } from './ranges';
 
-// The previous window stays on screen while a new one loads, so switching 7d -> 30d never blanks the cards.
-export const useSummary = (range: Range) =>
+// The previous window stays on screen while a new one loads, so changing the dates never blanks the cards.
+export const useSummary = (win: DashWindow) =>
   useQuery({
-    queryKey: ['dash', 'summary', range],
-    queryFn: ({ signal }) => fetchSummary(range, signal),
+    queryKey: ['dash', 'summary', win.from, win.to],
+    queryFn: ({ signal }) => fetchSummary(win, signal),
     placeholderData: keepPreviousData,
   });
 
-export const useThroughput = (range: Range) =>
+export const useThroughput = (win: DashWindow) =>
   useQuery({
-    queryKey: ['dash', 'throughput', range],
-    queryFn: ({ signal }) => fetchThroughput(range, signal),
+    queryKey: ['dash', 'throughput', win.from, win.to],
+    queryFn: ({ signal }) => fetchThroughput(win, signal),
     placeholderData: keepPreviousData,
   });
 
-export const useWidgets = (range: Range) =>
+export const useWidgets = (win: DashWindow) =>
   useQuery({
-    queryKey: ['dash', 'widgets', range],
-    queryFn: ({ signal }) => fetchWidgets(range, signal),
+    queryKey: ['dash', 'widgets', win.from, win.to],
+    queryFn: ({ signal }) => fetchWidgets(win, signal),
     placeholderData: keepPreviousData,
   });
 
@@ -52,3 +55,31 @@ export function useUnofficialWhatsapp(): boolean {
   });
   return entitlements.data?.features.includes(UNOFFICIAL_WHATSAPP_FEATURE_KEY) ?? false;
 }
+
+/** Contacts created in the window. No request for a person who may not read contacts. */
+export const useNewContacts = (win: DashWindow, allowed: boolean) =>
+  useQuery({
+    queryKey: ['dash', 'new-contacts', win.from, win.to],
+    queryFn: ({ signal }) => fetchNewContacts(win, signal),
+    enabled: allowed,
+    placeholderData: keepPreviousData,
+  });
+
+/** Open tasks. No request without the task permission; a plan without tasks answers with an error the card shows as a dash. */
+export const useTaskCounts = (allowed: boolean) =>
+  useQuery({
+    queryKey: ['dash', 'task-counts'],
+    queryFn: ({ signal }) => fetchTaskCounts(signal),
+    enabled: allowed,
+    staleTime: 30_000,
+    retry: false,
+  });
+
+/** The live inbox counts. No request without the inbox permission. */
+export const useInboxCounts = (allowed: boolean) =>
+  useQuery({
+    queryKey: ['dash', 'inbox-counts'],
+    queryFn: ({ signal }) => fetchInboxCounts(signal),
+    enabled: allowed,
+    staleTime: 15_000,
+  });

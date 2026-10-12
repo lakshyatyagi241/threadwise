@@ -211,14 +211,14 @@ describe('ThroughputPanel', () => {
   it('shows the peak, the legend with totals, the chart and the four figures', async () => {
     await renderApp(
       <ThroughputPanel
-        range="7d"
+        rangeName="7 Oct – 12 Oct 2026"
         summary={summary}
         throughput={throughput}
         failed={false}
         timezone="UTC"
       />,
     );
-    expect(screen.getByText('Outbound, delivered and failed, daily, last 7 days')).toBeTruthy();
+    expect(screen.getByText('Per day · 7 Oct – 12 Oct 2026')).toBeTruthy();
     expect(screen.getByText('Peak hour Oct 7 · 87 messages')).toBeTruthy();
     expect(screen.getByText('Sent 1.3k')).toBeTruthy();
     expect(screen.getByText('Delivered 1.2k')).toBeTruthy();
@@ -235,7 +235,7 @@ describe('ThroughputPanel', () => {
   it('labels an hourly chart by the hour', async () => {
     await renderApp(
       <ThroughputPanel
-        range="24h"
+        rangeName="12 Oct 2026"
         summary={summary}
         throughput={{
           ...throughput,
@@ -257,7 +257,7 @@ describe('ThroughputPanel', () => {
   it('shows a spinner while loading and a message when the request failed', async () => {
     const { rerender } = await renderApp(
       <ThroughputPanel
-        range="7d"
+        rangeName="7 Oct – 12 Oct 2026"
         summary={undefined}
         throughput={undefined}
         failed={false}
@@ -267,7 +267,7 @@ describe('ThroughputPanel', () => {
     expect(screen.getByLabelText('Loading…')).toBeTruthy();
     await rerender(
       <ThroughputPanel
-        range="7d"
+        rangeName="7 Oct – 12 Oct 2026"
         summary={undefined}
         throughput={undefined}
         failed

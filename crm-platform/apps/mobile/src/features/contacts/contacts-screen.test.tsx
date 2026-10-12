@@ -1,5 +1,6 @@
 import type { QueryClient } from '@tanstack/react-query';
 import { act, fireEvent, screen, waitFor, within } from '@testing-library/react-native';
+import * as Linking from 'expo-linking';
 import { useRouter } from 'expo-router';
 import { ApiError } from '@/lib/api';
 import { fetchSession } from '@/lib/session/api';
@@ -17,11 +18,14 @@ import {
 import { renderApp } from '@/test/render';
 import { reachEnd } from '@/test/scroll';
 import * as api from './api';
+import { findConversationId } from './chat-api';
 import { listContactViews } from './views-api';
 import { ContactsScreen } from './contacts-screen';
 
 jest.mock('./api');
 jest.mock('./views-api');
+jest.mock('./chat-api');
+jest.mock('expo-linking', () => ({ openURL: jest.fn() }));
 jest.mock('@/lib/session/api');
 jest.mock('expo-router', () => ({ useRouter: jest.fn() }));
 
@@ -29,6 +33,15 @@ const sessionCall = jest.mocked(fetchSession);
 const listCall = jest.mocked(api.listContacts);
 const deleteCall = jest.mocked(api.deleteContact);
 const viewsCall = jest.mocked(listContactViews);
+const chatCall = jest.mocked(findConversationId);
+const sessionRow = {
+  ...sessionFull,
+  permissions: {
+    ...sessionFull.permissions,
+    'inbox.conversation.read': 'all',
+    'record.tasks.read': 'all',
+  },
+} as typeof sessionFull;
 const sessionAll = {
   ...sessionFull,
   permissions: { ...sessionFull.permissions, 'record.contacts.delete': 'all' },
@@ -65,11 +78,10 @@ describe('ContactsScreen', () => {
   it('lists the contacts with a name, a line under it and the first tag', async () => {
     await show();
     const row = await screen.findByRole('button', { name: 'Aarav Sharma' });
-    expect(within(row).getByText('+919812345678')).toBeTruthy();
-    expect(within(row).getByText('VIP')).toBeTruthy();
+    expect(within(row).getByText('+919812345678 · VIP')).toBeTruthy();
     // Without a name the phone is the name; with only first and last name those are joined.
     const phoneRow = screen.getByRole('button', { name: '+919800000002' });
-    expect(within(phoneRow).queryByText('VIP')).toBeNull();
+    expect(within(phoneRow).queryByText(/VIP/)).toBeNull();
     const emailRow = screen.getByRole('button', { name: 'Meera Iyer' });
     expect(within(emailRow).getByText('meera@example.test')).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Contact view: All contacts' })).toBeTruthy();
@@ -459,6 +471,86 @@ describe('ContactsScreen', () => {
       await fireEvent.press(await screen.findByRole('button', { name: 'Close views' }));
       await waitFor(() => expect(screen.queryByRole('header', { name: 'Views' })).toBeNull());
       expect(screen.getByRole('button', { name: 'Contact view: All contacts' })).toBeTruthy();
+    });
+  });
+
+  describe('the shortcuts on a row', () => {
+    it('shows the six shortcuts under every contact, each named after the contact', async () => {
+      sessionCall.mockResolvedValue(sessionRow);
+      await show();
+      await screen.findByRole('button', { name: 'Aarav Sharma' });
+      for (const action of ['Call', 'Chat', 'Email', 'SMS', 'Tasks', 'Notes']) {
+        expect(screen.getByRole('button', { name: `${action} Aarav Sharma` })).toBeTruthy();
+      }
+    });
+
+    it('hands call, mail and text over to the phone', async () => {
+      sessionCall.mockResolvedValue(sessionRow);
+      await show();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Call Aarav Sharma' }));
+      expect(Linking.openURL).toHaveBeenCalledWith(`tel:${aarav.phone}`);
+      await fireEvent.press(screen.getByRole('button', { name: 'Email Aarav Sharma' }));
+      expect(Linking.openURL).toHaveBeenCalledWith(`mailto:${aarav.email}`);
+      await fireEvent.press(screen.getByRole('button', { name: 'SMS Aarav Sharma' }));
+      expect(Linking.openURL).toHaveBeenCalledWith(`sms:${aarav.phone}`);
+    });
+
+    it('fades what a contact does not have: no email, no call', async () => {
+      sessionCall.mockResolvedValue(sessionRow);
+      await show();
+      const email = await screen.findByRole('button', { name: 'Email +919800000002' });
+      expect(email.props.accessibilityState.disabled).toBe(true);
+      const call = screen.getByRole('button', { name: 'Call +919800000002' });
+      expect(call.props.accessibilityState.disabled).toBeFalsy();
+    });
+
+    it('opens the notes and the tasks of that contact', async () => {
+      sessionCall.mockResolvedValue(sessionRow);
+      await show();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Notes Aarav Sharma' }));
+      expect(router.push).toHaveBeenCalledWith({
+        pathname: '/contact-notes',
+        params: { contactId: aarav.id },
+      });
+      await fireEvent.press(screen.getByRole('button', { name: 'Tasks Aarav Sharma' }));
+      expect(router.push).toHaveBeenCalledWith({
+        pathname: '/tasks',
+        params: { contactId: aarav.id },
+      });
+    });
+
+    it('opens the chat that exists, and says so under the row when there is none', async () => {
+      sessionCall.mockResolvedValue(sessionRow);
+      chatCall.mockResolvedValueOnce('thread-1').mockResolvedValueOnce(null);
+      await show();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Chat Aarav Sharma' }));
+      await waitFor(() =>
+        expect(router.push).toHaveBeenCalledWith({
+          pathname: '/conversation/[id]',
+          params: { id: 'thread-1' },
+        }),
+      );
+      await fireEvent.press(screen.getByRole('button', { name: 'Chat Aarav Sharma' }));
+      expect(await screen.findByText(/no conversation with this contact yet/)).toBeTruthy();
+    });
+
+    it('does not offer chat or tasks to a person who may not use them', async () => {
+      await show();
+      const chat = await screen.findByRole('button', { name: 'Chat Aarav Sharma' });
+      expect(chat.props.accessibilityState.disabled).toBe(true);
+      expect(
+        screen.getByRole('button', { name: 'Tasks Aarav Sharma' }).props.accessibilityState
+          .disabled,
+      ).toBe(true);
+    });
+
+    it('still opens the contact from the name, not from an icon', async () => {
+      await show();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Aarav Sharma' }));
+      expect(router.push).toHaveBeenCalledWith({
+        pathname: '/contact/[id]',
+        params: { id: aarav.id },
+      });
     });
   });
 });

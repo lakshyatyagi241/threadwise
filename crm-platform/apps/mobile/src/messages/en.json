@@ -196,7 +196,8 @@
       "avgHour": "Average per hour",
       "replies": "Replies",
       "replyRate": "Reply rate",
-      "summary": "{{sent}} sent, {{delivered}} delivered and {{failed}} failed in this period."
+      "summary": "{{sent}} sent, {{delivered}} delivered and {{failed}} failed in this period.",
+      "subtitleCustom": "Per day · {{range}}"
     },
     "inbox": {
       "title": "Live inbox",
@@ -615,7 +616,8 @@
       "add": "Add tag"
     },
     "row": {
-      "more": "More actions for {{name}}"
+      "more": "More actions for {{name}}",
+      "actionFor": "{{action}} {{name}}"
     },
     "sheet": {
       "close": "Close"
@@ -933,6 +935,65 @@
       "lostReason": "Lost reason",
       "otherReason": "Other",
       "otherLabel": "Describe the reason"
+    }
+  },
+  "summary": {
+    "contacts": "Contacts",
+    "contactsNote": "Added in this period",
+    "tasks": "Tasks",
+    "tasksNote": "Open now",
+    "messages": "Messages",
+    "sentNote": "Sent",
+    "receivedNote": "Received",
+    "conversations": "Conversations",
+    "conversationsNote": "Open and pending, right now",
+    "status": {
+      "all": "Active",
+      "mine": "Mine",
+      "unassigned": "Unassigned",
+      "assigned": "Assigned",
+      "unread": "Unread",
+      "archived": "Archived"
+    },
+    "allMessages": {
+      "title": "All messages",
+      "sent": "Sent",
+      "delivered": "Delivered",
+      "received": "Received",
+      "read": "Read",
+      "failed": "Failed"
+    },
+    "moreTitle": "More from your workspace"
+  },
+  "dashDate": {
+    "title": "Search by calendar",
+    "close": "Close calendar",
+    "apply": "Apply",
+    "reset": "Reset",
+    "presets": "Quick ranges",
+    "pill": {
+      "label": "Date range: {{from}} to {{to}}",
+      "hint": "Opens the calendar to change the dates"
+    },
+    "selection": {
+      "label": "{{from}} to {{to}}",
+      "pickFirst": "Pick the first day",
+      "pickLast": "Pick the last day"
+    },
+    "preset": {
+      "last7": "Last 7 days",
+      "last30": "Last 30 days",
+      "last90": "Last 90 days",
+      "yesterday": "Yesterday",
+      "today": "Today"
+    },
+    "calendar": {
+      "previousMonth": "Previous month",
+      "nextMonth": "Next month",
+      "start": "Start of range",
+      "end": "End of range",
+      "inRange": "In range",
+      "today": "Today"
     }
   }
 }

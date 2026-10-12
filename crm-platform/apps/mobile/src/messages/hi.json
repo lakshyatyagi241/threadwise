@@ -196,7 +196,8 @@
       "avgHour": "प्रति घंटा औसत",
       "replies": "जवाब",
       "replyRate": "जवाब दर",
-      "summary": "इस अवधि में {{sent}} भेजे गए, {{delivered}} डिलीवर हुए और {{failed}} विफल रहे।"
+      "summary": "इस अवधि में {{sent}} भेजे गए, {{delivered}} डिलीवर हुए और {{failed}} विफल रहे।",
+      "subtitleCustom": "प्रतिदिन · {{range}}"
     },
     "inbox": {
       "title": "लाइव इनबॉक्स",
@@ -615,7 +616,8 @@
       "add": "टैग जोड़ें"
     },
     "row": {
-      "more": "{{name}} के लिए और विकल्प"
+      "more": "{{name}} के लिए और विकल्प",
+      "actionFor": "{{action}}: {{name}}"
     },
     "sheet": {
       "close": "बंद करें"
@@ -933,6 +935,65 @@
       "lostReason": "खोने का कारण",
       "otherReason": "अन्य",
       "otherLabel": "कारण लिखें"
+    }
+  },
+  "summary": {
+    "contacts": "संपर्क",
+    "contactsNote": "इस अवधि में जोड़े गए",
+    "tasks": "कार्य",
+    "tasksNote": "अभी खुले",
+    "messages": "संदेश",
+    "sentNote": "भेजे गए",
+    "receivedNote": "प्राप्त",
+    "conversations": "बातचीत",
+    "conversationsNote": "अभी खुली और लंबित",
+    "status": {
+      "all": "सक्रिय",
+      "mine": "मेरी",
+      "unassigned": "असाइन नहीं",
+      "assigned": "असाइन की गई",
+      "unread": "अपठित",
+      "archived": "संग्रहीत"
+    },
+    "allMessages": {
+      "title": "सभी संदेश",
+      "sent": "भेजे गए",
+      "delivered": "पहुँचे",
+      "received": "प्राप्त",
+      "read": "पढ़े गए",
+      "failed": "विफल"
+    },
+    "moreTitle": "आपके वर्कस्पेस से और"
+  },
+  "dashDate": {
+    "title": "कैलेंडर से खोजें",
+    "close": "कैलेंडर बंद करें",
+    "apply": "लागू करें",
+    "reset": "रीसेट करें",
+    "presets": "त्वरित अवधि",
+    "pill": {
+      "label": "तारीख सीमा: {{from}} से {{to}}",
+      "hint": "तारीखें बदलने के लिए कैलेंडर खोलता है"
+    },
+    "selection": {
+      "label": "{{from}} से {{to}}",
+      "pickFirst": "पहला दिन चुनें",
+      "pickLast": "आख़िरी दिन चुनें"
+    },
+    "preset": {
+      "last7": "पिछले 7 दिन",
+      "last30": "पिछले 30 दिन",
+      "last90": "पिछले 90 दिन",
+      "yesterday": "बीता हुआ कल",
+      "today": "आज"
+    },
+    "calendar": {
+      "previousMonth": "पिछला महीना",
+      "nextMonth": "अगला महीना",
+      "start": "सीमा का पहला दिन",
+      "end": "सीमा का आख़िरी दिन",
+      "inRange": "सीमा के भीतर",
+      "today": "आज"
     }
   }
 }

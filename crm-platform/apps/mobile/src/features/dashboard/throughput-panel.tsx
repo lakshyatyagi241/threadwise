@@ -8,11 +8,11 @@ import { Text } from '@/components/ui/text';
 import { compact } from '@/lib/format/numbers';
 import { radius, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
-import type { Range } from './ranges';
 import { bucketLabel } from './format';
 
 interface Props {
-  range: Range;
+  /** The window as a person reads it ("13 Sep – 12 Oct 2026"). */
+  rangeName: string;
   summary: DashSummaryResponse | undefined;
   throughput: DashThroughputResponse | undefined;
   /** The throughput request failed and there is nothing to show yet. */
@@ -21,7 +21,7 @@ interface Props {
 }
 
 /** The message throughput chart (TW-DASH-010): outbound, delivered and failed per hour or per day, with the peak and the four totals. */
-export function ThroughputPanel({ range, summary, throughput, failed, timezone }: Props) {
+export function ThroughputPanel({ rangeName, summary, throughput, failed, timezone }: Props) {
   const { t, i18n } = useTranslation();
   const { colors } = useTheme();
   const locale = i18n.language;
@@ -46,7 +46,7 @@ export function ThroughputPanel({ range, summary, throughput, failed, timezone }
   return (
     <Panel
       title={t('dashboard.throughput.title')}
-      subtitle={t(`dashboard.throughput.subtitle.${range}`)}
+      subtitle={t('dashboard.throughput.subtitleCustom', { range: rangeName })}
     >
       {throughput ? (
         <View style={styles.stack}>

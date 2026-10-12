@@ -4,6 +4,9 @@ import { Text } from '@/components/ui/text';
 import { MIN_TOUCH_TARGET, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 
+/** The width of one icon button when the six share a line with the name. */
+const COMPACT_WIDTH = 33;
+
 export interface ContactAction {
   key: string;
   icon: IconName;
@@ -15,27 +18,45 @@ export interface ContactAction {
   onPress: () => void;
 }
 
+interface Props {
+  actions: readonly ContactAction[];
+  /**
+   * Icons only, for a row of a list: the name a screen reader reads comes from `describe` (so a list of contacts does not say
+   * "Call" thirty times but "Call Aarav Sharma").
+   */
+  compact?: boolean;
+  describe?: (label: string) => string;
+}
+
 /** The round shortcuts under a contact's name: call, chat, mail, text, tasks, notes. Each one says what it does underneath. */
-export function ContactActions({ actions }: { actions: readonly ContactAction[] }) {
+export function ContactActions({ actions, compact, describe }: Props) {
   const { colors } = useTheme();
   return (
-    <View style={styles.row}>
+    <View style={compact ? styles.rowCompact : styles.row}>
       {actions.map((a) => (
         <Pressable
           key={a.key}
           accessibilityRole="button"
-          accessibilityLabel={a.label}
+          accessibilityLabel={describe ? describe(a.label) : a.label}
           accessibilityState={{ disabled: a.disabled, busy: a.busy }}
           disabled={a.disabled || a.busy}
           onPress={a.onPress}
-          style={[styles.item, a.disabled && styles.faded]}
+          style={[compact ? styles.itemCompact : styles.item, a.disabled && styles.faded]}
         >
-          <View style={[styles.circle, { backgroundColor: colors.primarySoft }]}>
-            <Icon name={a.icon} size={22} color="primary" />
-          </View>
-          <Text variant="caption" muted numberOfLines={1}>
-            {a.label}
-          </Text>
+          {compact ? (
+            <View style={styles.inline}>
+              <Icon name={a.icon} size={19} color="primary" />
+            </View>
+          ) : (
+            <>
+              <View style={[styles.circle, { backgroundColor: colors.primarySoft }]}>
+                <Icon name={a.icon} size={22} color="primary" />
+              </View>
+              <Text variant="caption" muted numberOfLines={1}>
+                {a.label}
+              </Text>
+            </>
+          )}
         </Pressable>
       ))}
     </View>
@@ -52,5 +73,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  // In a list row the six icons share the line with the name: each is as tall as a finger needs, and narrow so all six fit.
+  rowCompact: { flexDirection: 'row', alignItems: 'center' },
+  itemCompact: {
+    width: COMPACT_WIDTH,
+    height: MIN_TOUCH_TARGET,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  inline: { alignItems: 'center', justifyContent: 'center' },
   faded: { opacity: 0.4 },
 });

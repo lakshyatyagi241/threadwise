@@ -196,7 +196,8 @@
       "avgHour": "प्रति तास सरासरी",
       "replies": "उत्तरे",
       "replyRate": "उत्तर दर",
-      "summary": "या कालावधीत {{sent}} पाठवले, {{delivered}} डिलिव्हर झाले आणि {{failed}} अयशस्वी झाले."
+      "summary": "या कालावधीत {{sent}} पाठवले, {{delivered}} डिलिव्हर झाले आणि {{failed}} अयशस्वी झाले.",
+      "subtitleCustom": "दररोज · {{range}}"
     },
     "inbox": {
       "title": "लाइव्ह इनबॉक्स",
@@ -615,7 +616,8 @@
       "add": "टॅग जोडा"
     },
     "row": {
-      "more": "{{name}} साठी अधिक पर्याय"
+      "more": "{{name}} साठी अधिक पर्याय",
+      "actionFor": "{{action}}: {{name}}"
     },
     "sheet": {
       "close": "बंद करा"
@@ -933,6 +935,65 @@
       "lostReason": "गमावण्याचे कारण",
       "otherReason": "इतर",
       "otherLabel": "कारण लिहा"
+    }
+  },
+  "summary": {
+    "contacts": "संपर्क",
+    "contactsNote": "या कालावधीत जोडलेले",
+    "tasks": "कामे",
+    "tasksNote": "आत्ता खुली",
+    "messages": "संदेश",
+    "sentNote": "पाठवलेले",
+    "receivedNote": "मिळालेले",
+    "conversations": "संभाषणे",
+    "conversationsNote": "आत्ता खुली आणि प्रलंबित",
+    "status": {
+      "all": "सक्रिय",
+      "mine": "माझी",
+      "unassigned": "नेमलेली नाहीत",
+      "assigned": "नेमलेली",
+      "unread": "न वाचलेली",
+      "archived": "संग्रहित"
+    },
+    "allMessages": {
+      "title": "सर्व संदेश",
+      "sent": "पाठवलेले",
+      "delivered": "पोहोचलेले",
+      "received": "मिळालेले",
+      "read": "वाचलेले",
+      "failed": "अयशस्वी"
+    },
+    "moreTitle": "तुमच्या वर्कस्पेसमधून आणखी"
+  },
+  "dashDate": {
+    "title": "कॅलेंडरवरून शोधा",
+    "close": "कॅलेंडर बंद करा",
+    "apply": "लागू करा",
+    "reset": "रीसेट करा",
+    "presets": "झटपट कालावधी",
+    "pill": {
+      "label": "तारखेची मर्यादा: {{from}} ते {{to}}",
+      "hint": "तारखा बदलण्यासाठी कॅलेंडर उघडते"
+    },
+    "selection": {
+      "label": "{{from}} ते {{to}}",
+      "pickFirst": "पहिला दिवस निवडा",
+      "pickLast": "शेवटचा दिवस निवडा"
+    },
+    "preset": {
+      "last7": "गेले 7 दिवस",
+      "last30": "गेले 30 दिवस",
+      "last90": "गेले 90 दिवस",
+      "yesterday": "काल",
+      "today": "आज"
+    },
+    "calendar": {
+      "previousMonth": "मागील महिना",
+      "nextMonth": "पुढील महिना",
+      "start": "मर्यादेचा पहिला दिवस",
+      "end": "मर्यादेचा शेवटचा दिवस",
+      "inRange": "मर्यादेत",
+      "today": "आज"
     }
   }
 }

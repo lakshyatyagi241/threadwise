@@ -16,11 +16,13 @@ import {
 import { renderApp } from '@/test/render';
 import * as api from './api';
 import { DashboardScreen } from './dashboard-screen';
+import { presetRange, todayIn } from './date-range';
 
 jest.mock('./api');
 jest.mock('@/lib/session/api');
 jest.mock('@/lib/auth/sign-out', () => ({ signOut: jest.fn() }));
 jest.mock('@/lib/observability/sentry', () => ({ identifyUser: jest.fn() }));
+jest.mock('expo-router', () => ({ useRouter: () => ({ navigate: jest.fn(), push: jest.fn() }) }));
 
 const sessionCall = jest.mocked(fetchSession);
 const summaryCall = jest.mocked(api.fetchSummary);
@@ -28,6 +30,20 @@ const throughputCall = jest.mocked(api.fetchThroughput);
 const widgetsCall = jest.mocked(api.fetchWidgets);
 const walletCall = jest.mocked(api.fetchWalletSummary);
 const entitlementsCall = jest.mocked(api.fetchEntitlements);
+const newContactsCall = jest.mocked(api.fetchNewContacts);
+const taskCountsCall = jest.mocked(api.fetchTaskCounts);
+const inboxCountsCall = jest.mocked(api.fetchInboxCounts);
+
+/** A signed-in person who may read contacts, tasks and the inbox, so every card of the summary has something to show. */
+const sessionAll = {
+  ...session,
+  permissions: {
+    ...session.permissions,
+    'record.contacts.read': 'all',
+    'record.tasks.read': 'all',
+    'inbox.conversation.read': 'all',
+  },
+} as typeof session;
 
 /** What the API answers; each test changes only what it is about. */
 function arrange(
@@ -44,12 +60,23 @@ function arrange(
   widgetsCall.mockResolvedValue(over.widgets ?? widgets);
   walletCall.mockResolvedValue(over.wallet ?? wallet);
   entitlementsCall.mockResolvedValue({ features: over.features ?? [] });
+  newContactsCall.mockResolvedValue(42);
+  taskCountsCall.mockResolvedValue({
+    overdue: 1,
+    today: 2,
+    upcoming: 3,
+    noDate: 4,
+    open: 10,
+    done: 5,
+    mine: { open: 6, overdue: 1 },
+  });
+  inboxCountsCall.mockResolvedValue({ all: 9, mine: 4, unassigned: 3, unread: 2, archived: 1 });
 }
 
 /** Waits until the numbers are on screen and every request has finished, so no update lands after the test. */
 async function loaded(queryClient: QueryClient) {
-  await screen.findByText('1,250');
-  await screen.findByRole('header', { name: /Good (morning|afternoon|evening), Asha Verma\./ });
+  await screen.findByTestId('card-sent');
+  await screen.findByTestId('engagement-funnel');
   await waitFor(() => expect(queryClient.isFetching()).toBe(0));
 }
 
@@ -99,10 +126,62 @@ describe('DashboardScreen', () => {
       expect(await screen.findByTestId(id)).toBeTruthy();
     }
     expect(screen.queryByTestId('card-autopilot')).toBeNull();
+    expect(screen.getByRole('header', { name: 'Summary' })).toBeTruthy();
     expect(
-      screen.getByRole('header', { name: /Good (morning|afternoon|evening), Asha Verma\./ }),
+      screen.getByRole('button', { name: /^Date range: \d{4}-\d{2}-\d{2} to \d{4}-\d{2}-\d{2}/ }),
     ).toBeTruthy();
-    expect(screen.getByLabelText('Date range')).toBeTruthy();
+  });
+
+  it('opens on the last 30 days, asking every endpoint for those two days', async () => {
+    arrange();
+    const { queryClient } = await show();
+    await loaded(queryClient);
+    const win = presetRange('last30', todayIn(session.org.timezone ?? undefined));
+    expect(summaryCall).toHaveBeenLastCalledWith(win, expect.anything());
+    expect(throughputCall).toHaveBeenLastCalledWith(win, expect.anything());
+    expect(widgetsCall).toHaveBeenLastCalledWith(win, expect.anything());
+  });
+
+  describe('the cards in the style of the reference app', () => {
+    it('shows new contacts, open tasks, messages and the live conversation counts', async () => {
+      arrange({ session: sessionAll });
+      const { queryClient } = await show();
+      await loaded(queryClient);
+      expect(await screen.findByLabelText('Contacts Added in this period: 42')).toBeTruthy();
+      expect(screen.getByLabelText('Tasks Open now: 10')).toBeTruthy();
+      expect(screen.getByLabelText('Messages Sent: 1,250')).toBeTruthy();
+      expect(screen.getByRole('header', { name: 'Conversations' })).toBeTruthy();
+      expect(screen.getByLabelText('Active: 9')).toBeTruthy();
+      expect(screen.getByLabelText('Mine: 4')).toBeTruthy();
+      expect(screen.getByLabelText('Unassigned: 3')).toBeTruthy();
+      expect(screen.getByLabelText('Assigned: 6')).toBeTruthy();
+      expect(screen.getByLabelText('Unread: 2')).toBeTruthy();
+      expect(screen.getByLabelText('Archived: 1')).toBeTruthy();
+      expect(screen.getByRole('header', { name: 'All messages' })).toBeTruthy();
+      expect(screen.getByLabelText('Failed: 20')).toBeTruthy();
+      expect(screen.getAllByLabelText(/^Delivered: /).length).toBeGreaterThan(0);
+    });
+
+    it('asks for no contacts, tasks or inbox numbers without the permission, and shows a dash', async () => {
+      arrange();
+      const { queryClient } = await show();
+      await loaded(queryClient);
+      expect(newContactsCall).not.toHaveBeenCalled();
+      expect(taskCountsCall).not.toHaveBeenCalled();
+      expect(inboxCountsCall).not.toHaveBeenCalled();
+      expect(screen.getByLabelText('Contacts Added in this period: —')).toBeTruthy();
+      expect(screen.getByLabelText('Tasks Open now: —')).toBeTruthy();
+      expect(screen.queryByRole('header', { name: 'Conversations' })).toBeNull();
+    });
+
+    it('shows a dash for tasks when the plan has none, and keeps everything else', async () => {
+      arrange({ session: sessionAll });
+      taskCountsCall.mockRejectedValue(new ApiError(422, 'PLAN_FEATURE_LOCKED', 'locked'));
+      const { queryClient } = await show();
+      await loaded(queryClient);
+      expect(await screen.findByLabelText('Tasks Open now: —')).toBeTruthy();
+      expect(screen.getByLabelText('Contacts Added in this period: 42')).toBeTruthy();
+    });
   });
 
   it('tells Sentry who is signed in, by id only', async () => {
@@ -163,21 +242,23 @@ describe('DashboardScreen', () => {
     expect(screen.getByText('No flows yet.')).toBeTruthy();
   });
 
-  it('asks every endpoint again for the window the person picks', async () => {
+  it('asks every endpoint again for the days the person picks in the calendar sheet', async () => {
     arrange();
     const { queryClient } = await show();
     await loaded(queryClient);
-    expect(summaryCall).toHaveBeenLastCalledWith('7d', expect.anything());
-    await act(async () => {
-      await fireEvent.press(screen.getByRole('radio', { name: 'Last 30 days' }));
-    });
-    await waitFor(() => expect(summaryCall).toHaveBeenLastCalledWith('30d', expect.anything()));
+    const today = todayIn(session.org.timezone ?? undefined);
+    await fireEvent.press(screen.getByRole('button', { name: /^Date range:/ }));
+    expect(await screen.findByText('Search by calendar')).toBeTruthy();
+    await fireEvent.press(screen.getByRole('radio', { name: 'Last 7 days' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Apply' }));
+    const win = presetRange('last7', today);
+    await waitFor(() => expect(summaryCall).toHaveBeenLastCalledWith(win, expect.anything()));
     await waitFor(() => expect(queryClient.isFetching()).toBe(0));
-    expect(throughputCall).toHaveBeenLastCalledWith('30d', expect.anything());
-    expect(widgetsCall).toHaveBeenLastCalledWith('30d', expect.anything());
+    expect(throughputCall).toHaveBeenLastCalledWith(win, expect.anything());
+    expect(widgetsCall).toHaveBeenLastCalledWith(win, expect.anything());
     expect(
-      screen.getByRole('radio', { name: 'Last 30 days' }).props.accessibilityState.checked,
-    ).toBe(true);
+      screen.getByRole('button', { name: new RegExp(`^Date range: ${win.from} to ${win.to}`) }),
+    ).toBeTruthy();
   });
 
   it('reloads everything when the page is pulled down, and stops the spinner when done', async () => {
@@ -252,11 +333,11 @@ describe('DashboardScreen', () => {
     expect(screen.queryByText(/setup is not finished/)).toBeNull();
   });
 
-  it('signs out and clears the cache', async () => {
+  it('has no sign-out button: signing out is in the Menu tab', async () => {
     arrange();
     const { queryClient } = await show();
     await loaded(queryClient);
-    await fireEvent.press(screen.getByRole('button', { name: 'Sign out' }));
-    expect(signOut).toHaveBeenCalledWith(queryClient);
+    expect(screen.queryByRole('button', { name: 'Sign out' })).toBeNull();
+    expect(signOut).not.toHaveBeenCalled();
   });
 });
