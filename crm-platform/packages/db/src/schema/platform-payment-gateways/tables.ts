@@ -5,6 +5,7 @@
 import {
   bigint,
   boolean,
+  check,
   customType,
   integer,
   foreignKey,
@@ -26,7 +27,7 @@ import { companies, contacts } from '../crm';
 import { deals } from '../deals-pipelines/tables';
 import { organizations, users } from '../foundation';
 import { invoices } from '../invoicing/tables';
-import { packages } from '../plans-subscriptions-trials/tables';
+import { packages, subscriptions } from '../plans-subscriptions-trials/tables';
 
 const bytea = customType<{ data: Buffer; driverData: Buffer }>({ dataType: () => 'bytea' });
 
@@ -313,3 +314,62 @@ export const orderProofBlobs = pgTable(
 
 export type OrderProofBlobsRow = typeof orderProofBlobs.$inferSelect;
 export type NewOrderProofBlobsRow = typeof orderProofBlobs.$inferInsert;
+
+/** A refund through the payment provider (migrations/20261118090000_paygw_refunds.sql). Written `pending` BEFORE the provider is asked. */
+export const orderRefunds = pgTable(
+  'order_refunds',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    orderId: idColumn('order_id'),
+    subscriptionId: idColumn('subscription_id'),
+    gateway: text('gateway').notNull(),
+    gatewayPaymentId: text('gateway_payment_id').notNull(),
+    gatewayRefundId: text('gateway_refund_id'),
+    amountMinor: bigint('amount_minor', { mode: 'bigint' }).notNull(),
+    currency: text('currency').notNull(),
+    status: text('status').notNull().default('pending'),
+    reason: text('reason').notNull(),
+    failure: text('failure'),
+    createdBy: idColumn('created_by'),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('order_refunds_org_id_uuid_key').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'order_refunds_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_order_refunds_order',
+      columns: [t.orgId, t.orderId],
+      foreignColumns: [orders.orgId, orders.id],
+    }),
+    foreignKey({
+      name: 'fk_order_refunds_subscription',
+      columns: [t.orgId, t.subscriptionId],
+      foreignColumns: [subscriptions.orgId, subscriptions.id],
+    }),
+    check(
+      'chk_order_refunds_target',
+      sql`${t.orderId} is not null or ${t.subscriptionId} is not null`,
+    ),
+    check('chk_order_refunds_amount', sql`${t.amountMinor} > 0`),
+    check('chk_order_refunds_currency', sql`${t.currency} ~ '^[A-Z]{3}$'`),
+    check('chk_order_refunds_status', sql`${t.status} in ('pending', 'processed', 'failed')`),
+    index('idx_order_refunds_payment').on(t.orgId, t.gateway, t.gatewayPaymentId),
+    index('idx_order_refunds_order')
+      .on(t.orgId, t.orderId)
+      .where(sql`${t.orderId} is not null`),
+    index('idx_order_refunds_subscription')
+      .on(t.orgId, t.subscriptionId)
+      .where(sql`${t.subscriptionId} is not null`),
+  ],
+);
+
+export type OrderRefundsRow = typeof orderRefunds.$inferSelect;

@@ -298,6 +298,16 @@
         "label": "Berichtlogboeken",
         "description": "Exporteer het bezorglogboek van je berichten, tot een jaar terug, als bestand dat naar je e-mail wordt gestuurd.",
         "keywords": "export, bezorglogboek, geschiedenis, archief, csv, berichten"
+      },
+      "billing-subscriptions": {
+        "label": "Abonnementen",
+        "description": "Wat wordt verlengd, tot wanneer het betaald is, en annuleren.",
+        "keywords": "abonnement, verlengen, automatisch verlengen, annuleren, automatische betaling, mislukte betaling, afschrijvingen"
+      },
+      "web": {
+        "label": "Website-chat",
+        "description": "Bots gebouwd voor de chat op je website en de widget waarin elk draait.",
+        "keywords": "web, website, widget, chatbot, insluiten, livechat"
       }
     },
     "title": "Instellingen",

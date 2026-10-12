@@ -314,6 +314,16 @@
         "label": "Registri dei messaggi",
         "description": "Esporta il registro di consegna dei tuoi messaggi, fino a un anno indietro, come file inviato alla tua e-mail.",
         "keywords": "esportare, registro di consegna, cronologia, archivio, csv, messaggi"
+      },
+      "billing-subscriptions": {
+        "label": "Abbonamenti",
+        "description": "Cosa si rinnova, fino a quando è pagato e annullamento.",
+        "keywords": "abbonamento, rinnovo, rinnovo automatico, annulla, addebito automatico, pagamento non riuscito, addebiti"
+      },
+      "web": {
+        "label": "Chat del sito web",
+        "description": "I bot creati per la chat del tuo sito web e il widget in cui ciascuno viene eseguito.",
+        "keywords": "web, sito web, widget, chatbot, incorpora, chat dal vivo"
       }
     }
   }

@@ -199,7 +199,8 @@
         "devices": "Numéros WhatsApp",
         "broadcasts": "Diffusions et campagnes",
         "team_chat": "Team chat",
-        "whatsapp_groups": "Groupes WhatsApp"
+        "whatsapp_groups": "Groupes WhatsApp",
+        "billing": "Facturation et abonnements"
       },
       "types": {
         "new_chat": {
@@ -321,6 +322,14 @@
         "form_payment_duplicate": {
           "label": "Formulaire payé deux fois",
           "hint": "Un visiteur a payé une seconde fois et le paiement en trop doit être remboursé."
+        },
+        "billing_payment_failed": {
+          "label": "Échec du paiement de l'abonnement",
+          "hint": "Un prélèvement de renouvellement n'a pas abouti et nécessite votre attention."
+        },
+        "billing_subscription_canceled": {
+          "label": "Abonnement résilié",
+          "hint": "Votre prestataire de paiement a mis fin à un abonnement de cet espace de travail."
         }
       },
       "loading": "Chargement de vos préférences",

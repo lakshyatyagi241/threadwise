@@ -314,6 +314,16 @@
         "label": "Nachrichtenprotokolle",
         "description": "Exportieren Sie das Zustellprotokoll Ihrer Nachrichten bis zu einem Jahr rückwirkend als Datei, die an Ihre E-Mail-Adresse gesendet wird.",
         "keywords": "Export, Zustellprotokoll, Verlauf, Archiv, CSV, Nachrichten"
+      },
+      "billing-subscriptions": {
+        "label": "Abonnements",
+        "description": "Was sich verlängert, bis wann bezahlt ist, und Kündigung.",
+        "keywords": "Abonnement, Verlängerung, automatische Verlängerung, kündigen, Lastschrift, fehlgeschlagene Zahlung, Zahlungen"
+      },
+      "web": {
+        "label": "Website-Chat",
+        "description": "Bots für Ihren Website-Chat und das Widget, in dem jeder läuft.",
+        "keywords": "Web, Website, Widget, Chatbot, einbetten, Live-Chat"
       }
     }
   }

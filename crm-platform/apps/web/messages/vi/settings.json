@@ -314,6 +314,16 @@
         "label": "Nhật ký tin nhắn",
         "description": "Xuất nhật ký gửi của tin nhắn, lùi tối đa một năm, thành tệp được gửi đến email của bạn.",
         "keywords": "xuất, nhật ký gửi, lịch sử, lưu trữ, csv, tin nhắn"
+      },
+      "billing-subscriptions": {
+        "label": "Gói đăng ký",
+        "description": "Gói nào sẽ gia hạn, đã trả đến khi nào và hủy gói.",
+        "keywords": "gói đăng ký, gia hạn, tự động gia hạn, hủy, tự động thanh toán, thanh toán thất bại, các khoản thu"
+      },
+      "web": {
+        "label": "Trò chuyện trên website",
+        "description": "Các bot được xây dựng cho trò chuyện trên website của bạn và widget mà mỗi bot chạy trong đó.",
+        "keywords": "web, website, widget, chatbot, nhúng, trò chuyện trực tiếp"
       }
     }
   }

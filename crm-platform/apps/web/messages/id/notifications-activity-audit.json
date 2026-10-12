@@ -199,7 +199,8 @@
         "devices": "Nomor WhatsApp",
         "broadcasts": "Broadcast dan kampanye",
         "team_chat": "Team chat",
-        "whatsapp_groups": "Grup WhatsApp"
+        "whatsapp_groups": "Grup WhatsApp",
+        "billing": "Penagihan dan langganan"
       },
       "types": {
         "new_chat": {
@@ -321,6 +322,14 @@
         "form_payment_duplicate": {
           "label": "Formulir dibayar dua kali",
           "hint": "Pengunjung membayar untuk kedua kalinya dan kelebihan pembayaran perlu dikembalikan."
+        },
+        "billing_payment_failed": {
+          "label": "Pembayaran langganan gagal",
+          "hint": "Penagihan perpanjangan tidak berhasil dan perlu Anda tangani."
+        },
+        "billing_subscription_canceled": {
+          "label": "Langganan dibatalkan",
+          "hint": "Penyedia pembayaran Anda mengakhiri langganan ruang kerja ini."
         }
       },
       "loading": "Memuat preferensi Anda",

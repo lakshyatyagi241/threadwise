@@ -6,7 +6,8 @@
       "orders": "Historique des commandes",
       "billingHistory": "Historique de facturation",
       "invoices": "Factures",
-      "billingSettings": "Paramètres de facturation"
+      "billingSettings": "Paramètres de facturation",
+      "subscriptions": "Abonnements"
     },
     "admin": {
       "title": "Passerelles de paiement",
@@ -299,7 +300,8 @@
           "markPaid": "Marquer comme payée",
           "cancelOrder": "Annuler",
           "approve": "Approuver",
-          "reject": "Rejeter"
+          "reject": "Rejeter",
+          "refund": "Remboursement"
         },
         "confirm": {
           "approveTitle": "Marquer cette commande comme payée ?",
@@ -673,6 +675,79 @@
           "faqsHint": "Éléments en accordéon affichés sous les forfaits.",
           "configured": "{count} configuré(s)."
         }
+      },
+      "subscriptions": {
+        "title": "Abonnements",
+        "eyebrow": "Facturation",
+        "titleFirst": "Plateforme",
+        "titleSecond": "abonnements",
+        "description": "Abonnements aux forfaits et aux add-ons gérés auprès d'un prestataire de paiement, pour tous les espaces de travail. Mettez-en un fin, actualisez-le depuis le prestataire ou remboursez un paiement.",
+        "kpi": {
+          "active": "Actif",
+          "pastDue": "Paiement échoué",
+          "canceled": "Résilié"
+        },
+        "statusFilter": "Statut de l'abonnement",
+        "statuses": {
+          "all": "Tous",
+          "active": "Actif",
+          "past_due": "Paiement échoué",
+          "pending": "En attente",
+          "canceled": "Résilié",
+          "expired": "Expiré"
+        },
+        "kind": {
+          "plan": "Forfait",
+          "addon": "Add-on"
+        },
+        "search": "Rechercher un espace de travail ou un identifiant prestataire",
+        "noun": "abonnements",
+        "empty": "Aucun abonnement correspondant.",
+        "col": {
+          "workspace": "Espace de travail",
+          "item": "Élément",
+          "price": "Prix",
+          "paidUntil": "Payé jusqu'au",
+          "status": "Statut",
+          "provider": "Prestataire",
+          "actions": "Actions"
+        },
+        "cancelFailed": "Échec de la résiliation chez le prestataire",
+        "cancelFailedHint": "L'enregistrement local est terminé, mais le prestataire n'a pas confirmé la résiliation. Terminez l'opération dans le tableau de bord du prestataire pour arrêter les prélèvements.",
+        "actions": {
+          "sync": "Actualiser",
+          "refund": "Rembourser",
+          "endAtCycle": "Terminer en fin de cycle",
+          "endNow": "Terminer maintenant"
+        },
+        "confirm": {
+          "title": "Mettre fin à cet abonnement ?",
+          "atCycle": "{name} conserve l'accès jusqu'à la fin du cycle payé et ne sera plus prélevé.",
+          "now": "Mettre fin maintenant à l'abonnement de {name} chez le prestataire. Aucun autre prélèvement ne sera effectué."
+        },
+        "ended": "Abonnement terminé chez le prestataire.",
+        "endedLocalOnly": "Terminé ici, mais le prestataire n'a pas confirmé la résiliation. Terminez l'opération dans le tableau de bord du prestataire.",
+        "endedUnsupported": "Terminé ici. Ce prestataire ne peut pas être résilié depuis ici.",
+        "alreadyEnded": "Il était déjà terminé.",
+        "synced": "Vérifié auprès du prestataire : {outcome}."
+      },
+      "refund": {
+        "title": "Rembourser {label}",
+        "intro": "Le remboursement est envoyé au prestataire de paiement et retourne sur le moyen de paiement d'origine de l'acheteur.",
+        "charge": "Paiement à rembourser",
+        "pickCharge": "Choisir un paiement réglé",
+        "loadingCharges": "Chargement des paiements",
+        "chargesFailed": "Impossible de demander au prestataire de paiement les paiements de cet abonnement.",
+        "noPaidCharges": "Le prestataire ne liste aucun paiement réglé pour cet abonnement.",
+        "amount": "Montant ({currency})",
+        "amountHint": "Laissez vide pour rembourser tout ce qui n'a pas encore été remboursé.",
+        "reason": "Motif",
+        "endSubscription": "Mettre aussi fin à l'abonnement maintenant pour éviter tout nouveau prélèvement",
+        "submit": "Rembourser",
+        "processed": "{amount} remboursé.",
+        "pending": "Remboursement envoyé. Le prestataire le traite.",
+        "failed": "Le prestataire a refusé le remboursement.",
+        "badAmount": "Saisissez le montant sous forme de nombre, par exemple 12.50."
       }
     },
     "offline": {
@@ -711,6 +786,74 @@
       "rejected": "Ce type de fichier n’est pas autorisé. Utilisez un fichier JPG, PNG, WEBP ou PDF.",
       "closed": "La preuve de paiement ne peut plus être envoyée pour cette commande.",
       "failed": "Impossible de téléverser le fichier. Réessayez."
+    },
+    "subscriptions": {
+      "title": "Abonnements",
+      "subtitle": "Vos abonnements aux forfaits et aux add-ons chez le prestataire de paiement : ce qui se renouvelle, jusqu'à quand vous êtes payé et ce qui a été prélevé.",
+      "loading": "Chargement des abonnements",
+      "loadFailed": "Impossible de charger vos abonnements. Réessayez dans un instant.",
+      "emptyTitle": "Aucun abonnement pour le moment",
+      "emptyMessage": "Lorsque vous payez un forfait ou un add-on avec renouvellement automatique, il apparaît ici.",
+      "browsePlans": "Voir les forfaits",
+      "failedBanner": "Le dernier paiement pour {names} a échoué. Votre accès continue pour l'instant pendant que le prestataire réessaie ; mettez à jour votre moyen de paiement auprès de votre banque ou du prestataire pour ne pas le perdre.",
+      "paymentFailed": "Le dernier paiement a échoué. Le prestataire réessaie.",
+      "kind": {
+        "plan": "Forfait",
+        "addon": "Add-on"
+      },
+      "status": {
+        "active": "Actif",
+        "past_due": "Paiement échoué",
+        "pending": "En attente de paiement",
+        "canceled": "Résilié",
+        "expired": "Expiré"
+      },
+      "cycle": {
+        "monthly": "mois",
+        "yearly": "an"
+      },
+      "price": "{amount} par {cycle}",
+      "renewsOn": "Renouvellement le {date}",
+      "endsOn": "Payé jusqu'au {date}. Il ne sera pas renouvelé.",
+      "endedOn": "Terminé le {date}",
+      "refreshFromProvider": "Actualiser depuis le prestataire",
+      "showCharges": "Afficher les paiements",
+      "hideCharges": "Masquer les paiements",
+      "cancel": "Résilier l'abonnement",
+      "confirmTitle": "Résilier {name} ?",
+      "confirmBody": "Vous conservez l'accès jusqu'au {date}. Ensuite, il ne sera plus renouvelé et vous ne serez plus prélevé.",
+      "confirmBodyNoDate": "Il ne sera pas renouvelé et vous ne serez plus prélevé.",
+      "confirm": "Résilier l'abonnement",
+      "keep": "Le garder",
+      "cancelDone": "Résilié. Votre période payée continue et plus rien ne sera prélevé.",
+      "cancelFailed": "Impossible de résilier cet abonnement. Réessayez ou contactez le support.",
+      "forbidden": "Vous n'avez pas l'autorisation de gérer les abonnements.",
+      "sync": {
+        "up_to_date": "Déjà à jour avec le prestataire de paiement.",
+        "renewed": "Mis à jour : le prestataire avait un renouvellement plus récent.",
+        "gateway_canceled": "Le prestataire indique que cet abonnement est résilié.",
+        "gateway_expired": "Le prestataire indique que cet abonnement est terminé.",
+        "unknown": "Vérifié auprès du prestataire de paiement.",
+        "failed": "Impossible de joindre le prestataire de paiement. Réessayez dans un instant."
+      },
+      "chargesFailed": "Impossible de charger les paiements.",
+      "chargesFromOrders": "Le prestataire de paiement est injoignable ; ce sont donc vos commandes payées qui s'affichent.",
+      "noCharges": "Aucun paiement pour le moment.",
+      "col": {
+        "date": "Date",
+        "amount": "Montant",
+        "status": "Statut",
+        "receipt": "Reçu"
+      },
+      "chargeStatus": {
+        "paid": "Payé",
+        "issued": "En attente de paiement",
+        "failed": "Échoué",
+        "cancelled": "Résilié",
+        "expired": "Expiré",
+        "other": "Autre"
+      },
+      "openReceipt": "Ouvrir le reçu"
     }
   }
 }

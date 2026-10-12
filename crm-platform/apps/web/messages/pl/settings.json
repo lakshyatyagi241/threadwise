@@ -314,6 +314,16 @@
         "label": "Dzienniki wiadomości",
         "description": "Wyeksportuj dziennik dostarczania swoich wiadomości do roku wstecz jako plik wysłany na Twój e-mail.",
         "keywords": "eksport, dziennik dostarczania, historia, archiwum, csv, wiadomości"
+      },
+      "billing-subscriptions": {
+        "label": "Subskrypcje",
+        "description": "Co się odnawia, do kiedy jest opłacone, oraz anulowanie.",
+        "keywords": "subskrypcja, odnowienie, automatyczne odnawianie, anulowanie, automatyczna płatność, nieudana płatność, opłaty"
+      },
+      "web": {
+        "label": "Czat na stronie",
+        "description": "Boty zbudowane dla czatu na Twojej stronie i widżet, w którym każdy działa.",
+        "keywords": "web, strona, widżet, chatbot, osadzanie, czat na żywo"
       }
     }
   }

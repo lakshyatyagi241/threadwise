@@ -6,7 +6,8 @@
       "orders": "Bestellverlauf",
       "billingHistory": "Abrechnungsverlauf",
       "invoices": "Rechnungen",
-      "billingSettings": "Abrechnungseinstellungen"
+      "billingSettings": "Abrechnungseinstellungen",
+      "subscriptions": "Abonnements"
     },
     "admin": {
       "title": "Zahlungsanbieter",
@@ -299,7 +300,8 @@
           "markPaid": "Als bezahlt markieren",
           "cancelOrder": "Stornieren",
           "approve": "Freigeben",
-          "reject": "Ablehnen"
+          "reject": "Ablehnen",
+          "refund": "Erstattung"
         },
         "confirm": {
           "approveTitle": "Diese Bestellung als bezahlt markieren?",
@@ -673,6 +675,79 @@
           "faqsHint": "Akkordeon-Einträge, die unter den Tarifen angezeigt werden.",
           "configured": "{count} konfiguriert."
         }
+      },
+      "subscriptions": {
+        "title": "Abonnements",
+        "eyebrow": "Abrechnung",
+        "titleFirst": "Plattform",
+        "titleSecond": "Abonnements",
+        "description": "Plan- und Add-on-Abonnements bei einem Zahlungsanbieter, über alle Arbeitsbereiche hinweg. Beenden, beim Anbieter aktualisieren oder eine Zahlung erstatten.",
+        "kpi": {
+          "active": "Aktiv",
+          "pastDue": "Zahlung fehlgeschlagen",
+          "canceled": "Gekündigt"
+        },
+        "statusFilter": "Abonnementstatus",
+        "statuses": {
+          "all": "Alle",
+          "active": "Aktiv",
+          "past_due": "Zahlung fehlgeschlagen",
+          "pending": "Ausstehend",
+          "canceled": "Gekündigt",
+          "expired": "Abgelaufen"
+        },
+        "kind": {
+          "plan": "Plan",
+          "addon": "Add-on"
+        },
+        "search": "Arbeitsbereich oder Anbieter-ID suchen",
+        "noun": "Abonnements",
+        "empty": "Keine passenden Abonnements.",
+        "col": {
+          "workspace": "Arbeitsbereich",
+          "item": "Artikel",
+          "price": "Preis",
+          "paidUntil": "Bezahlt bis",
+          "status": "Status",
+          "provider": "Anbieter",
+          "actions": "Aktionen"
+        },
+        "cancelFailed": "Kündigung beim Anbieter fehlgeschlagen",
+        "cancelFailedHint": "Der lokale Eintrag ist beendet, aber der Anbieter hat die Kündigung nicht bestätigt. Schließen Sie sie im Dashboard des Anbieters ab, damit nicht weiter abgebucht wird.",
+        "actions": {
+          "sync": "Aktualisieren",
+          "refund": "Erstatten",
+          "endAtCycle": "Zum Zyklusende beenden",
+          "endNow": "Jetzt beenden"
+        },
+        "confirm": {
+          "title": "Dieses Abonnement beenden?",
+          "atCycle": "{name} behält den Zugriff bis zum Ende des bezahlten Zyklus und wird nicht erneut belastet.",
+          "now": "Das Abonnement von {name} jetzt beim Anbieter beenden. Es erfolgt keine weitere Belastung."
+        },
+        "ended": "Abonnement beim Anbieter beendet.",
+        "endedLocalOnly": "Hier beendet, aber der Anbieter hat die Kündigung nicht bestätigt. Schließen Sie sie im Dashboard des Anbieters ab.",
+        "endedUnsupported": "Hier beendet. Dieser Anbieter kann von hier aus nicht gekündigt werden.",
+        "alreadyEnded": "Es war bereits beendet.",
+        "synced": "Beim Anbieter geprüft: {outcome}."
+      },
+      "refund": {
+        "title": "{label} erstatten",
+        "intro": "Die Erstattung wird an den Zahlungsanbieter gesendet und geht an die ursprüngliche Zahlungsmethode des Käufers zurück.",
+        "charge": "Zu erstattende Zahlung",
+        "pickCharge": "Bezahlte Zahlung auswählen",
+        "loadingCharges": "Zahlungen werden geladen",
+        "chargesFailed": "Der Zahlungsanbieter konnte nicht nach den Zahlungen dieses Abonnements gefragt werden.",
+        "noPaidCharges": "Der Anbieter listet keine bezahlte Zahlung für dieses Abonnement auf.",
+        "amount": "Betrag ({currency})",
+        "amountHint": "Leer lassen, um alles noch nicht Erstattete zu erstatten.",
+        "reason": "Grund",
+        "endSubscription": "Abonnement auch jetzt beenden, damit nicht erneut abgebucht wird",
+        "submit": "Erstatten",
+        "processed": "{amount} erstattet.",
+        "pending": "Erstattung gesendet. Der Anbieter bearbeitet sie.",
+        "failed": "Der Anbieter hat die Erstattung abgelehnt.",
+        "badAmount": "Geben Sie den Betrag als Zahl ein, zum Beispiel 12.50."
       }
     },
     "offline": {
@@ -711,6 +786,74 @@
       "rejected": "Dieser Dateityp ist nicht erlaubt. Verwenden Sie JPG, PNG, WEBP oder PDF.",
       "closed": "Für diese Bestellung kann kein Zahlungsnachweis mehr eingereicht werden.",
       "failed": "Datei konnte nicht hochgeladen werden. Versuchen Sie es erneut."
+    },
+    "subscriptions": {
+      "title": "Abonnements",
+      "subtitle": "Ihre Plan- und Add-on-Abonnements beim Zahlungsanbieter: was sich verlängert, bis wann Sie bezahlt haben und was abgebucht wurde.",
+      "loading": "Abonnements werden geladen",
+      "loadFailed": "Ihre Abonnements konnten nicht geladen werden. Versuchen Sie es gleich noch einmal.",
+      "emptyTitle": "Noch keine Abonnements",
+      "emptyMessage": "Wenn Sie einen Plan oder ein Add-on mit automatischer Verlängerung bezahlen, erscheint er hier.",
+      "browsePlans": "Pläne ansehen",
+      "failedBanner": "Die letzte Zahlung für {names} ist fehlgeschlagen. Ihr Zugriff bleibt vorerst bestehen, während der Anbieter es erneut versucht. Aktualisieren Sie Ihre Zahlungsmethode bei Ihrer Bank oder beim Anbieter, um den Zugriff nicht zu verlieren.",
+      "paymentFailed": "Die letzte Zahlung ist fehlgeschlagen. Der Anbieter versucht es erneut.",
+      "kind": {
+        "plan": "Plan",
+        "addon": "Add-on"
+      },
+      "status": {
+        "active": "Aktiv",
+        "past_due": "Zahlung fehlgeschlagen",
+        "pending": "Wartet auf Zahlung",
+        "canceled": "Gekündigt",
+        "expired": "Abgelaufen"
+      },
+      "cycle": {
+        "monthly": "Monat",
+        "yearly": "Jahr"
+      },
+      "price": "{amount} pro {cycle}",
+      "renewsOn": "Verlängert sich am {date}",
+      "endsOn": "Bezahlt bis {date}. Keine Verlängerung.",
+      "endedOn": "Beendet am {date}",
+      "refreshFromProvider": "Vom Anbieter aktualisieren",
+      "showCharges": "Zahlungen anzeigen",
+      "hideCharges": "Zahlungen ausblenden",
+      "cancel": "Abonnement kündigen",
+      "confirmTitle": "{name} kündigen?",
+      "confirmBody": "Sie behalten den Zugriff bis {date}. Danach verlängert es sich nicht und Sie werden nicht erneut belastet.",
+      "confirmBodyNoDate": "Es verlängert sich nicht und Sie werden nicht erneut belastet.",
+      "confirm": "Abonnement kündigen",
+      "keep": "Behalten",
+      "cancelDone": "Gekündigt. Ihr bezahlter Zeitraum läuft weiter und es wird nichts mehr abgebucht.",
+      "cancelFailed": "Dieses Abonnement konnte nicht gekündigt werden. Versuchen Sie es erneut oder kontaktieren Sie den Support.",
+      "forbidden": "Sie haben keine Berechtigung, Abonnements zu verwalten.",
+      "sync": {
+        "up_to_date": "Bereits auf dem Stand des Zahlungsanbieters.",
+        "renewed": "Aktualisiert: Der Anbieter hatte eine neuere Verlängerung.",
+        "gateway_canceled": "Der Anbieter zeigt dieses Abonnement als gekündigt an.",
+        "gateway_expired": "Der Anbieter zeigt dieses Abonnement als beendet an.",
+        "unknown": "Beim Zahlungsanbieter geprüft.",
+        "failed": "Der Zahlungsanbieter war nicht erreichbar. Versuchen Sie es gleich noch einmal."
+      },
+      "chargesFailed": "Die Zahlungen konnten nicht geladen werden.",
+      "chargesFromOrders": "Der Zahlungsanbieter war nicht erreichbar, daher werden stattdessen Ihre bezahlten Bestellungen angezeigt.",
+      "noCharges": "Noch keine Zahlungen.",
+      "col": {
+        "date": "Datum",
+        "amount": "Betrag",
+        "status": "Status",
+        "receipt": "Beleg"
+      },
+      "chargeStatus": {
+        "paid": "Bezahlt",
+        "issued": "Zahlung ausstehend",
+        "failed": "Fehlgeschlagen",
+        "cancelled": "Gekündigt",
+        "expired": "Abgelaufen",
+        "other": "Sonstige"
+      },
+      "openReceipt": "Beleg öffnen"
     }
   }
 }

@@ -314,6 +314,16 @@
         "label": "Registros de mensagens",
         "description": "Exporte o registro de entrega das suas mensagens, até um ano atrás, como um arquivo enviado ao seu e-mail.",
         "keywords": "exportar, registro de entrega, histórico, arquivo, csv, mensagens"
+      },
+      "billing-subscriptions": {
+        "label": "Assinaturas",
+        "description": "O que renova, até quando está pago e cancelamento.",
+        "keywords": "assinatura, renovar, renovação automática, cancelar, débito automático, pagamento falhou, cobranças"
+      },
+      "web": {
+        "label": "Chat do site",
+        "description": "Bots criados para o chat do seu site e o widget em que cada um funciona.",
+        "keywords": "web, site, widget, chatbot, incorporar, chat ao vivo"
       }
     }
   }

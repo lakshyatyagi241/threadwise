@@ -199,7 +199,8 @@
         "devices": "WhatsApp numbers",
         "broadcasts": "Broadcasts and campaigns",
         "team_chat": "Team chat",
-        "whatsapp_groups": "WhatsApp groups"
+        "whatsapp_groups": "WhatsApp groups",
+        "billing": "Billing and subscriptions"
       },
       "types": {
         "new_chat": {
@@ -321,6 +322,14 @@
         "waba_group_suspension_cleared": {
           "label": "Group active again",
           "hint": "WhatsApp restored a group it had suspended. Only if you were told about the suspension."
+        },
+        "billing_payment_failed": {
+          "label": "Subscription payment failed",
+          "hint": "A renewal charge did not go through and needs your attention."
+        },
+        "billing_subscription_canceled": {
+          "label": "Subscription cancelled",
+          "hint": "Your payment provider ended a subscription of this workspace."
         }
       },
       "loading": "Loading your preferences",

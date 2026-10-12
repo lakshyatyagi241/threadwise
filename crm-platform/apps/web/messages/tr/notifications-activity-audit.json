@@ -199,7 +199,8 @@
         "devices": "WhatsApp numaraları",
         "broadcasts": "Toplu gönderimler ve kampanyalar",
         "team_chat": "Ekip sohbeti",
-        "whatsapp_groups": "WhatsApp grupları"
+        "whatsapp_groups": "WhatsApp grupları",
+        "billing": "Faturalama ve abonelikler"
       },
       "types": {
         "new_chat": {
@@ -321,6 +322,14 @@
         "form_payment_duplicate": {
           "label": "Form iki kez ödendi",
           "hint": "Bir ziyaretçi ikinci kez ödeme yaptı ve fazla ödemenin iade edilmesi gerekiyor."
+        },
+        "billing_payment_failed": {
+          "label": "Abonelik ödemesi başarısız",
+          "hint": "Bir yenileme tahsilatı gerçekleşmedi ve ilgilenmeniz gerekiyor."
+        },
+        "billing_subscription_canceled": {
+          "label": "Abonelik iptal edildi",
+          "hint": "Ödeme sağlayıcınız bu çalışma alanının bir aboneliğini sonlandırdı."
         }
       },
       "loading": "Tercihleriniz yükleniyor",

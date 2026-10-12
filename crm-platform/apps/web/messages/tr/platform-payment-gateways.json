@@ -6,7 +6,8 @@
       "orders": "Sipariş geçmişi",
       "billingHistory": "Faturalandırma geçmişi",
       "invoices": "Faturalar",
-      "billingSettings": "Faturalandırma ayarları"
+      "billingSettings": "Faturalandırma ayarları",
+      "subscriptions": "Abonelikler"
     },
     "admin": {
       "title": "Ödeme geçitleri",
@@ -299,7 +300,8 @@
           "markPaid": "Ödendi olarak işaretle",
           "cancelOrder": "İptal",
           "approve": "Onayla",
-          "reject": "Reddet"
+          "reject": "Reddet",
+          "refund": "İade"
         },
         "confirm": {
           "approveTitle": "Bu sipariş ödendi olarak işaretlensin mi?",
@@ -673,6 +675,79 @@
           "faqsHint": "Planların altında gösterilen açılır öğeler.",
           "configured": "{count} yapılandırıldı."
         }
+      },
+      "subscriptions": {
+        "title": "Abonelikler",
+        "eyebrow": "Faturalama",
+        "titleFirst": "Platform",
+        "titleSecond": "abonelik",
+        "description": "Tüm çalışma alanlarında, bir ödeme sağlayıcısında tutulan plan ve eklenti abonelikleri. Birini sonlandırın, sağlayıcıdan yenileyin veya bir tahsilatı iade edin.",
+        "kpi": {
+          "active": "Etkin",
+          "pastDue": "Ödeme başarısız",
+          "canceled": "İptal edildi"
+        },
+        "statusFilter": "Abonelik durumu",
+        "statuses": {
+          "all": "Tümü",
+          "active": "Etkin",
+          "past_due": "Ödeme başarısız",
+          "pending": "Beklemede",
+          "canceled": "İptal edildi",
+          "expired": "Süresi doldu"
+        },
+        "kind": {
+          "plan": "Plan",
+          "addon": "Eklenti"
+        },
+        "search": "Çalışma alanı veya sağlayıcı kimliği ara",
+        "noun": "abonelik",
+        "empty": "Eşleşen abonelik yok.",
+        "col": {
+          "workspace": "Çalışma alanı",
+          "item": "Öğe",
+          "price": "Fiyat",
+          "paidUntil": "Ödenen son tarih",
+          "status": "Durum",
+          "provider": "Sağlayıcı",
+          "actions": "İşlemler"
+        },
+        "cancelFailed": "Sağlayıcıda iptal başarısız",
+        "cancelFailedHint": "Yerel kayıt sonlandırıldı ancak sağlayıcı iptali onaylamadı. Tahsilatın durması için sağlayıcının panelinde işlemi tamamlayın.",
+        "actions": {
+          "sync": "Yenile",
+          "refund": "İade",
+          "endAtCycle": "Dönem sonunda sonlandır",
+          "endNow": "Şimdi sonlandır"
+        },
+        "confirm": {
+          "title": "Bu abonelik sonlandırılsın mı?",
+          "atCycle": "{name}, ödenen dönemin sonuna kadar erişimini korur ve tekrar ücretlendirilmez.",
+          "now": "{name} aboneliğini sağlayıcıda şimdi sonlandırın. Başka bir tahsilat yapılmaz."
+        },
+        "ended": "Abonelik sağlayıcıda sonlandırıldı.",
+        "endedLocalOnly": "Burada sonlandırıldı ancak sağlayıcı iptali onaylamadı. Sağlayıcının panelinde işlemi tamamlayın.",
+        "endedUnsupported": "Burada sonlandırıldı. Bu sağlayıcı buradan iptal edilemez.",
+        "alreadyEnded": "Zaten sonlandırılmıştı.",
+        "synced": "Sağlayıcıyla kontrol edildi: {outcome}."
+      },
+      "refund": {
+        "title": "İade: {label}",
+        "intro": "İade, ödeme sağlayıcısına gönderilir ve alıcının özgün ödeme yöntemine geri aktarılır.",
+        "charge": "İade edilecek tahsilat",
+        "pickCharge": "Ödenmiş bir tahsilat seçin",
+        "loadingCharges": "Tahsilatlar yükleniyor",
+        "chargesFailed": "Ödeme sağlayıcısından bu aboneliğin tahsilatları alınamadı.",
+        "noPaidCharges": "Sağlayıcı bu abonelik için ödenmiş bir tahsilat listelemiyor.",
+        "amount": "Tutar ({currency})",
+        "amountHint": "Henüz iade edilmemiş her şeyi iade etmek için boş bırakın.",
+        "reason": "Neden",
+        "endSubscription": "Tekrar ücretlendirilmemesi için aboneliği de şimdi sonlandır",
+        "submit": "İade",
+        "processed": "{amount} iade edildi.",
+        "pending": "İade gönderildi. Sağlayıcı işleme alıyor.",
+        "failed": "Sağlayıcı iadeyi reddetti.",
+        "badAmount": "Tutarı sayı olarak girin, örneğin 12.50."
       }
     },
     "offline": {
@@ -711,6 +786,74 @@
       "rejected": "Bu dosya türüne izin verilmiyor. JPG, PNG, WEBP veya PDF kullanın.",
       "closed": "Bu sipariş için artık ödeme kanıtı gönderilemez.",
       "failed": "Dosya yüklenemedi. Tekrar deneyin."
+    },
+    "subscriptions": {
+      "title": "Abonelikler",
+      "subtitle": "Ödeme sağlayıcısındaki plan ve eklenti abonelikleriniz: nelerin yenilendiği, ne zamana kadar ödendiği ve neler tahsil edildiği.",
+      "loading": "Abonelikler yükleniyor",
+      "loadFailed": "Abonelikleriniz yüklenemedi. Biraz sonra tekrar deneyin.",
+      "emptyTitle": "Henüz abonelik yok",
+      "emptyMessage": "Bir plan veya eklenti için otomatik yenilemeyle ödeme yaptığınızda burada görünür.",
+      "browsePlans": "Planlara göz at",
+      "failedBanner": "{names} için son ödeme başarısız oldu. Sağlayıcı yeniden denerken erişiminiz şimdilik devam ediyor; erişimi kaybetmemek için ödeme yönteminizi bankanız veya sağlayıcı üzerinden güncelleyin.",
+      "paymentFailed": "Son ödeme başarısız oldu. Sağlayıcı yeniden deniyor.",
+      "kind": {
+        "plan": "Plan",
+        "addon": "Eklenti"
+      },
+      "status": {
+        "active": "Etkin",
+        "past_due": "Ödeme başarısız",
+        "pending": "Ödeme bekleniyor",
+        "canceled": "İptal edildi",
+        "expired": "Süresi doldu"
+      },
+      "cycle": {
+        "monthly": "ay",
+        "yearly": "yıl"
+      },
+      "price": "{cycle} başına {amount}",
+      "renewsOn": "{date} tarihinde yenilenir",
+      "endsOn": "{date} tarihine kadar ödendi. Yenilenmeyecek.",
+      "endedOn": "{date} tarihinde sona erdi",
+      "refreshFromProvider": "Sağlayıcıdan yenile",
+      "showCharges": "Tahsilatları göster",
+      "hideCharges": "Tahsilatları gizle",
+      "cancel": "Aboneliği iptal et",
+      "confirmTitle": "{name} iptal edilsin mi?",
+      "confirmBody": "{date} tarihine kadar erişiminiz devam eder. Bundan sonra yenilenmez ve tekrar ücretlendirilmezsiniz.",
+      "confirmBodyNoDate": "Yenilenmez ve tekrar ücretlendirilmezsiniz.",
+      "confirm": "Aboneliği iptal et",
+      "keep": "Vazgeç",
+      "cancelDone": "İptal edildi. Ödenmiş döneminiz sürer ve başka bir tahsilat yapılmaz.",
+      "cancelFailed": "Bu abonelik iptal edilemedi. Tekrar deneyin veya destekle iletişime geçin.",
+      "forbidden": "Abonelikleri yönetme izniniz yok.",
+      "sync": {
+        "up_to_date": "Ödeme sağlayıcısıyla zaten güncel.",
+        "renewed": "Güncellendi: sağlayıcıda daha yeni bir yenileme vardı.",
+        "gateway_canceled": "Sağlayıcı bu aboneliği iptal edilmiş olarak gösteriyor.",
+        "gateway_expired": "Sağlayıcı bu aboneliği sona ermiş olarak gösteriyor.",
+        "unknown": "Ödeme sağlayıcısıyla kontrol edildi.",
+        "failed": "Ödeme sağlayıcısına ulaşılamadı. Biraz sonra tekrar deneyin."
+      },
+      "chargesFailed": "Tahsilatlar yüklenemedi.",
+      "chargesFromOrders": "Ödeme sağlayıcısına ulaşılamadı, bu nedenle bunun yerine ödenmiş siparişleriniz gösteriliyor.",
+      "noCharges": "Henüz tahsilat yok.",
+      "col": {
+        "date": "Tarih",
+        "amount": "Tutar",
+        "status": "Durum",
+        "receipt": "Makbuz"
+      },
+      "chargeStatus": {
+        "paid": "Ödendi",
+        "issued": "Ödeme bekleniyor",
+        "failed": "Başarısız",
+        "cancelled": "İptal edildi",
+        "expired": "Süresi doldu",
+        "other": "Diğer"
+      },
+      "openReceipt": "Makbuzu aç"
     }
   }
 }

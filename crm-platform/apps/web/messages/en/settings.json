@@ -180,6 +180,11 @@
         "description": "Your plan and wallet purchases, with receipts.",
         "keywords": "payments, receipts, invoices, purchases, orders"
       },
+      "billing-subscriptions": {
+        "label": "Subscriptions",
+        "description": "What renews, when it is paid until, and cancel.",
+        "keywords": "subscription, renew, auto-renew, cancel, autopay, failed payment, charges"
+      },
       "account": {
         "label": "Account",
         "description": "Your name, email, password and language.",
