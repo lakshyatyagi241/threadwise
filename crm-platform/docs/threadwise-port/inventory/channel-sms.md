@@ -80,7 +80,7 @@ build and carry no acceptance criteria.
 
 ## Features
 
-### TW-SMS-001 - SMS hub page: connected numbers, status, lookup tool, setup guide
+### TW-SMS-001 — SMS hub page: connected numbers, status, lookup tool, setup guide
 
 - **Status:** implemented
 - **Priority:** P0
@@ -117,7 +117,7 @@ build and carry no acceptance criteria.
 - **Source refs:** `app/Http/Controllers/Sms/SmsSettingsController.php`, `resources/views/user/sms/index.blade.php`, `resources/js/charts/user-sms.js`, `routes/sms.php`.
 - **Port notes:** home `apps/web/src/features/channel-sms/` and `apps/web/src/app/(app)/(channel-sms)/`; API `apps/api/src/modules/channel-sms/`. Add real permission keys (Reference has none). No inbound URL on screen.
 
-### TW-SMS-002 - Connect an SMS sender (Twilio or MSG91 form, validation, upsert)
+### TW-SMS-002 — Connect an SMS sender (Twilio or MSG91 form, validation, upsert)
 
 - **Status:** implemented
 - **Priority:** P0
@@ -167,7 +167,7 @@ build and carry no acceptance criteria.
 - **Source refs:** `app/Http/Controllers/WaConnectController.php` (`saveSms`), `resources/views/user/devices/_sms_form.blade.php`, `app/Models/WaProviderConfig.php`, `app/Services/Sms/SmsSender.php`, `app/Services/PlanLimitGuard.php`, `routes/web.php`.
 - **Port notes:** no SMS table exists in this repo. Create `sms_senders` (RLS, composite org key; see Data model) instead of reusing a WhatsApp provider table, and keep the same `device_limit` accounting by counting SMS senders alongside the other channel numbers (read it from the plan service). Encrypt the secret fields with the app's crypto service. Verification runs through a provider adapter under `apps/api/src/infra/providers/channel-sms/` so tests use a fake. Reference has no permission keys here; add `sms.sender.manage`.
 
-### TW-SMS-003 - Twilio credential check and reuse of the workspace's Twilio keys
+### TW-SMS-003 — Twilio credential check and reuse of the workspace's Twilio keys
 
 - **Status:** implemented
 - **Priority:** P0
@@ -197,7 +197,7 @@ build and carry no acceptance criteria.
 - **Source refs:** `app/Services/Sms/Transports/TwilioTransport.php` (`verify`), `app/Services/Sms/SmsClient.php` (`verify`), `app/Http/Controllers/WaConnectController.php`.
 - **Port notes:** put the reuse behind the whatsapp provider-config service from the Twilio WhatsApp domain; if that domain's table is not yet present, ship the explicit-credentials path first and mark the reuse as `blocked on` that domain.
 
-### TW-SMS-004 - MSG91 auth key check
+### TW-SMS-004 — MSG91 auth key check
 
 - **Status:** implemented
 - **Priority:** P0
@@ -225,7 +225,7 @@ build and carry no acceptance criteria.
 - **Source refs:** `app/Services/Sms/Transports/Msg91Transport.php` (`verify`), `app/Services/Sms/SmsClient.php`.
 - **Port notes:** substring matching on the body is brittle; keep it as the documented behaviour but isolate it in the adapter so it can be tightened when a live MSG91 account is available (Reference's own comment says it was never verified against a live account).
 
-### TW-SMS-005 - India DLT fields: sender id, DLT template id, flow versus plain mode
+### TW-SMS-005 — India DLT fields: sender id, DLT template id, flow versus plain mode
 
 - **Status:** implemented
 - **Priority:** P0
@@ -254,7 +254,7 @@ build and carry no acceptance criteria.
 - **Source refs:** `app/Services/Sms/SmsSender.php`, `app/Services/Sms/Transports/Msg91Transport.php`, `resources/views/user/devices/_sms_form.blade.php`, `resources/views/user/sms/index.blade.php`, `app/Http/Controllers/WaConnectController.php`.
 - **Port notes:** columns `sender_id varchar(16)` and `dlt_template_id varchar(64)` on `sms_senders`. If the owner approves an entity id, add `dlt_entity_id varchar(64)` as an additive column.
 
-### TW-SMS-006 - Activate or deactivate a sender
+### TW-SMS-006 — Activate or deactivate a sender
 
 - **Status:** implemented
 - **Priority:** P0
@@ -287,7 +287,7 @@ build and carry no acceptance criteria.
 - **Source refs:** `app/Http/Controllers/Sms/SmsSettingsController.php`, `routes/sms.php`.
 - **Port notes:** use an explicit boolean or status column on `sms_senders`; keep the not-found behaviour tenant-safe via RLS.
 
-### TW-SMS-007 - Remove a sender
+### TW-SMS-007 — Remove a sender
 
 - **Status:** implemented
 - **Priority:** P0
@@ -318,7 +318,7 @@ build and carry no acceptance criteria.
 - **Source refs:** `app/Http/Controllers/Sms/SmsSettingsController.php`, `resources/views/user/devices/_channel_rows.blade.php`.
 - **Port notes:** decide soft delete versus hard delete (the message log in TW-SMS-029 should keep the sender label as text). Whether to keep the silent fallback is a decision for the reviewer; Reference keeps it.
 
-### TW-SMS-008 - Number lookup: mobile, landline or invalid (Twilio Lookup)
+### TW-SMS-008 — Number lookup: mobile, landline or invalid (Twilio Lookup)
 
 - **Status:** implemented
 - **Priority:** P1
@@ -358,7 +358,7 @@ build and carry no acceptance criteria.
 - **Source refs:** `app/Services/Sms/SmsLookup.php`, `app/Http/Controllers/Sms/SmsSettingsController.php` (`lookup`), `resources/js/charts/user-sms.js`, `resources/views/user/sms/index.blade.php`.
 - **Port notes:** scope the cache key by workspace (and provider) in the port, and pick the first connected TWILIO sender rather than the first sender; both are intentional improvements to record as differences. A lookup is a paid call: consider a per-workspace rate limit.
 
-### TW-SMS-009 - Segment and encoding calculation (GSM-7 versus UCS-2)
+### TW-SMS-009 — Segment and encoding calculation (GSM-7 versus UCS-2)
 
 - **Status:** partial
 - **Priority:** P0
@@ -393,7 +393,7 @@ build and carry no acceptance criteria.
 - **Source refs:** `app/Services/Sms/SmsSegments.php`, `app/Services/Sms/Transports/TwilioTransport.php`, `app/Services/Sms/Transports/Msg91Transport.php`.
 - **Port notes:** put it in `packages/contracts/src/channel-sms/segments.ts` as a pure function so the API and the web composer share one implementation (the shared package is the rule for shapes that cross the network). Property-test the table. Decide whether to count UTF-16 code units for UCS-2 (the correct wire behaviour) or keep Reference's code-point count; record it as a difference if changed.
 
-### TW-SMS-010 - Provider seam: sendable check, phone normalisation, never-throw contract
+### TW-SMS-010 — Provider seam: sendable check, phone normalisation, never-throw contract
 
 - **Status:** implemented
 - **Priority:** P0
@@ -426,7 +426,7 @@ build and carry no acceptance criteria.
 - **Source refs:** `app/Services/Sms/SmsClient.php`, `app/Services/Sms/SmsSender.php`, `app/Services/Sms/Contracts/SmsTransport.php`, `app/Services/Sms/Transports/*.php`.
 - **Port notes:** define a `SmsProvider` port in `apps/api/src/infra/providers/channel-sms/` with `send(sender, to, body)` returning a discriminated result, plus `TwilioSmsProvider` and `Msg91SmsProvider` adapters and a fake for tests; register in the global providers module as the provider-adapter skill requires.
 
-### TW-SMS-011 - Send one SMS through Twilio
+### TW-SMS-011 — Send one SMS through Twilio
 
 - **Status:** implemented
 - **Priority:** P0
@@ -456,7 +456,7 @@ build and carry no acceptance criteria.
 - **Source refs:** `app/Services/Sms/Transports/TwilioTransport.php`, `app/Services/Sms/SmsSegments.php`.
 - **Port notes:** build the callback URL from a configured public base URL (`apps/api/src/config/domains/channel-sms.env.ts`). Consider a signed or tokenised callback path (see TW-SMS-022). Store the Twilio `sid` as `provider_message_id` (indexed).
 
-### TW-SMS-012 - Send one SMS through MSG91 (DLT flow route or plain route)
+### TW-SMS-012 — Send one SMS through MSG91 (DLT flow route or plain route)
 
 - **Status:** implemented
 - **Priority:** P0
@@ -489,7 +489,7 @@ build and carry no acceptance criteria.
 - **Source refs:** `app/Services/Sms/Transports/Msg91Transport.php`.
 - **Port notes:** keep both routes. Capture the raw MSG91 response in a debug log (redacted) because the shapes are unverified. Consider MSG91's batching later, not now.
 
-### TW-SMS-013 - Provider error translation into operator messages
+### TW-SMS-013 — Provider error translation into operator messages
 
 - **Status:** implemented
 - **Priority:** P1
@@ -526,7 +526,7 @@ build and carry no acceptance criteria.
 - **Source refs:** `app/Services/Sms/Transports/TwilioTransport.php` (`explain`), `app/Services/Sms/Transports/Msg91Transport.php` (`explain`).
 - **Port notes:** keep codes in the message log (`error_code`) as well as the text so reports can group failures; Reference stores text only.
 
-### TW-SMS-014 - Merge variables ({{token}}) in SMS bodies
+### TW-SMS-014 — Merge variables ({{token}}) in SMS bodies
 
 - **Status:** partial
 - **Priority:** P0
@@ -559,7 +559,7 @@ build and carry no acceptance criteria.
 - **Source refs:** `app/Services/TemplateOverrideResolver.php` (`TOKEN_RE`, `ALIASES`, `lookup`, `normalizeKey`, `workspaceAttributes`), `app/Services/Sms/SmsBroadcastRunner.php`, `app/Services/Sms/SmsCampaignRunner.php`, `app/Http/Controllers/WaCampaignsController.php` (`normalizeCustomMessage`), `app/Http/Controllers/TemplatesController.php` (`normalizePlaceholders`).
 - **Port notes:** one shared resolver in the contacts or templates domain; SMS must call the slot-map aware path. Segment cost depends on the resolved text, so measure after substitution.
 
-### TW-SMS-015 - SMS templates: local plain-text messages
+### TW-SMS-015 — SMS templates: local plain-text messages
 
 - **Status:** implemented
 - **Priority:** P0
@@ -587,7 +587,7 @@ build and carry no acceptance criteria.
 - **Source refs:** `app/Http/Controllers/TemplatesController.php` (channel availability and `store`, `validateTemplate`), `resources/views/user/templates/create.blade.php`.
 - **Port notes:** message-templates owns the table; this domain contributes the `sms` channel value, its availability rule, and a segment counter in the editor. Record any needed extension in that domain's inventory rather than editing it here.
 
-### TW-SMS-016 - SMS broadcast: chooser card, composer, audience, sender fan-out
+### TW-SMS-016 — SMS broadcast: chooser card, composer, audience, sender fan-out
 
 - **Status:** implemented
 - **Priority:** P0
@@ -629,7 +629,7 @@ build and carry no acceptance criteria.
 - **Source refs:** `app/Http/Controllers/BroadcastsController.php` (`create`, `store`), `resources/views/user/broadcasts/index.blade.php`, `resources/views/user/broadcasts/create.blade.php`, `resources/js/charts/user-broadcasts-create.js`.
 - **Port notes:** the broadcasts module owns the composer, the recipient table and the split algorithm; add an `sms` channel option with its own sender list and a message input with a live segment counter. Enforce `access_sms` on these routes in the port (the channel is paid) and record it as a difference.
 
-### TW-SMS-017 - SMS broadcast runner: sequential send, counters, status
+### TW-SMS-017 — SMS broadcast runner: sequential send, counters, status
 
 - **Status:** implemented
 - **Priority:** P0
@@ -665,7 +665,7 @@ build and carry no acceptance criteria.
 - **Source refs:** `app/Services/Sms/SmsBroadcastRunner.php`, `app/Http/Controllers/BroadcastsController.php` (`dispatchToBridge`).
 - **Port notes:** home `apps/api/src/modules/channel-sms/broadcast-run/` plus a worker processor (worker-job skill); never run it in the API process. Recompute the counters from the recipient rows (like campaigns do) so retries are correct. Persist segments and cost per message (TW-SMS-029).
 
-### TW-SMS-018 - SMS campaign builder: chooser card, fields kept and fields ignored
+### TW-SMS-018 — SMS campaign builder: chooser card, fields kept and fields ignored
 
 - **Status:** partial
 - **Priority:** P0
@@ -705,7 +705,7 @@ build and carry no acceptance criteria.
 - **Source refs:** `app/Http/Controllers/WaCampaignsController.php` (`create`, `store`, `edit`, `normalizeCustomMessage`), `resources/views/user/wa-campaigns/index.blade.php`, `resources/views/user/wa-campaigns/create.blade.php`.
 - **Port notes:** the campaigns module owns the wizard and the recipient table; this domain adds the `sms` channel, its sender list, a plain textarea with the segment counter and the hidden-fields rule. Hide, do not offer, the controls SMS ignores. Enforce `access_sms` at the module boundary.
 
-### TW-SMS-019 - SMS campaign runner: sequential send, per-recipient rows, KPI recompute
+### TW-SMS-019 — SMS campaign runner: sequential send, per-recipient rows, KPI recompute
 
 - **Status:** implemented
 - **Priority:** P0
@@ -737,7 +737,7 @@ build and carry no acceptance criteria.
 - **Source refs:** `app/Services/Sms/SmsCampaignRunner.php`, `app/Http/Controllers/WaCampaignsController.php` (`runCampaignNowPaced`, `dispatchCampaignNow`, `fireScheduledCampaign`), `app/Models/WpCampaign.php` (`recomputeAggregates`).
 - **Port notes:** the campaigns module owns the status machine; plug SMS in as a channel adapter instead of an "intercept at the top of the loop". Make the send idempotent per (campaign, contact, cadence) so a restart cannot double-send and double-charge the provider.
 
-### TW-SMS-020 - Scheduling and recurrence for SMS sends
+### TW-SMS-020 — Scheduling and recurrence for SMS sends
 
 - **Status:** partial
 - **Priority:** P0
@@ -765,7 +765,7 @@ build and carry no acceptance criteria.
 - **Source refs:** `app/Services/CampaignScheduleSweeper.php`, `app/Http/Controllers/WaCampaignsController.php` (`fireScheduledCampaign`), `app/Http/Controllers/BroadcastsController.php` (`store`, `dispatchToBridge`), `app/Models/WpCampaign.php`.
 - **Port notes:** shared with the scheduled-queue-warmer, campaigns and broadcasts domains; record the SMS-specific differences (schedule honoured for broadcasts, recurring idempotency) there.
 
-### TW-SMS-021 - Retries and resume: broadcast sweeper, manual retry, stalled campaign rescue
+### TW-SMS-021 — Retries and resume: broadcast sweeper, manual retry, stalled campaign rescue
 
 - **Status:** partial
 - **Priority:** P1
@@ -801,7 +801,7 @@ build and carry no acceptance criteria.
 - **Source refs:** `app/Services/BroadcastSweeper.php`, `app/Services/CampaignScheduleSweeper.php`, `app/Services/RetryPolicy.php`, `app/Http/Controllers/BroadcastsController.php` (`retryFailed`, `redispatchFailed`).
 - **Port notes:** decide, with the reviewer, to skip retrying permanent failures (use the error code from TW-SMS-013) and to add provider-level retry for transient errors with backoff and an idempotency key.
 
-### TW-SMS-022 - Delivery status callback and status mapping (Twilio and MSG91 DLR)
+### TW-SMS-022 — Delivery status callback and status mapping (Twilio and MSG91 DLR)
 
 - **Status:** implemented
 - **Priority:** P0
@@ -843,7 +843,7 @@ build and carry no acceptance criteria.
 - **Source refs:** `app/Http/Controllers/Sms/SmsStatusController.php`, `routes/sms.php`, `bootstrap/app.php` (CSRF exemption of `api/sms/*`).
 - **Port notes:** public route in `apps/api/src/modules/channel-sms/webhooks/` (webhook-handler skill): verify, normalise, then update through the outbox so analytics refresh asynchronously. Look up the record by `(provider, provider_message_id)` with an index; the tenant is derived from the record, not the request.
 
-### TW-SMS-023 - Delivery roll-up into campaign analytics (and the broadcast gap)
+### TW-SMS-023 — Delivery roll-up into campaign analytics (and the broadcast gap)
 
 - **Status:** partial
 - **Priority:** P1
@@ -868,7 +868,7 @@ build and carry no acceptance criteria.
 - **Source refs:** `app/Http/Controllers/Sms/SmsStatusController.php`, `app/Models/WpCampaign.php`.
 - **Port notes:** one recipient-status writer shared by both composers: the status callback resolves the message record and updates whichever parent it belongs to.
 
-### TW-SMS-024 - Opt-out suppression on the send side
+### TW-SMS-024 — Opt-out suppression on the send side
 
 - **Status:** partial
 - **Priority:** P0
@@ -897,7 +897,7 @@ build and carry no acceptance criteria.
 - **Source refs:** `app/Http/Controllers/BroadcastsController.php` (`store`), `app/Services/Sms/SmsCampaignRunner.php` (`recipients`), `app/Services/Inbox/OptOutService.php` (dropped part), `app/Services/Sms/Transports/TwilioTransport.php`.
 - **Port notes:** use the contacts domain's suppression query, not a copy. If the reviewer approves flagging on 21610, do it through the contacts service with a reason `provider_stop`.
 
-### TW-SMS-025 - Plan gate `access_sms` and the platform switch `sms_enabled`
+### TW-SMS-025 — Plan gate `access_sms` and the platform switch `sms_enabled`
 
 - **Status:** implemented
 - **Priority:** P0
@@ -927,7 +927,7 @@ build and carry no acceptance criteria.
 - **Source refs:** `routes/sms.php`, `app/Http/Middleware/EnforcePlanFeature.php`, `app/Services/PlanLimitGuard.php`, `app/Models/Package.php`, `app/Http/Controllers/AdminPagesController.php`, `resources/views/admin/settings/channel-setting.blade.php`, `resources/views/admin/packages/create.blade.php`, `database/migrations/2026_08_16_000700_add_sms_plan_columns_to_packages.php`.
 - **Port notes:** the plan columns already exist here (`plans.access_sms`, `plans.sms_monthly_limit` in the plans schema); use `PlanEntitlementService` and read the `sms_enabled` platform setting from the settings domain. Mark any missing flag `blocked on PLAN`.
 
-### TW-SMS-026 - Monthly SMS quota (`sms_monthly_limit`)
+### TW-SMS-026 — Monthly SMS quota (`sms_monthly_limit`)
 
 - **Status:** implemented
 - **Priority:** P0
@@ -956,7 +956,7 @@ build and carry no acceptance criteria.
 - **Source refs:** `app/Services/Sms/SmsBroadcastRunner.php` (`monthlyOutbound`), `app/Services/Sms/SmsCampaignRunner.php`, `app/Services/PlanLimitGuard.php`, `app/Exceptions/PlanLimitReachedException.php`.
 - **Port notes:** count from the new message log with an index on (org, created_at); use `PlanEntitlementService` and an atomic per-recipient reserve so the cap cannot be overshot. Show a usage meter on the hub.
 
-### TW-SMS-027 - Rate per segment, cost figure and the no-wallet rule
+### TW-SMS-027 — Rate per segment, cost figure and the no-wallet rule
 
 - **Status:** partial
 - **Priority:** P2
@@ -983,7 +983,7 @@ build and carry no acceptance criteria.
 - **Source refs:** `app/Services/Sms/SmsBroadcastRunner.php`, `app/Services/Sms/SmsSender.php`, `app/Http/Controllers/WaConnectController.php`, `resources/views/user/sms/index.blade.php`.
 - **Port notes:** store `segments` and `cost_minor` per message and total them on the broadcast and campaign summary; that gives the owner a real spend figure (an additive improvement, recorded as a difference). Keep SMS out of the wallet; exempt SMS from the wallet precheck.
 
-### TW-SMS-028 - Entry points: menu, More tile, add-channel card, Channels table rows
+### TW-SMS-028 — Entry points: menu, More tile, add-channel card, Channels table rows
 
 - **Status:** implemented
 - **Priority:** P1
@@ -1008,7 +1008,7 @@ build and carry no acceptance criteria.
 - **Source refs:** `app/Support/UserNav.php`, `resources/views/user/more/index.blade.php`, `resources/views/user/devices/index.blade.php`, `resources/views/user/devices/_channel_rows.blade.php`, `app/Http/Controllers/DevicesController.php`.
 - **Port notes:** the menu item comes from the feature's `nav.ts` (group `channels`); add the plan feature key to it so it hides without `access_sms` (a deliberate fix).
 
-### TW-SMS-029 - Outbound SMS record (what Reference stores per sent message)
+### TW-SMS-029 — Outbound SMS record (what Reference stores per sent message)
 
 - **Status:** partial
 - **Priority:** P0
@@ -1035,7 +1035,7 @@ build and carry no acceptance criteria.
 - **Source refs:** `app/Services/Sms/SmsBroadcastRunner.php` (`mirrorToInbox`), `app/Services/Sms/SmsCampaignRunner.php`, `app/Models/InboxMessage.php`, `app/Models/Conversation.php`.
 - **Port notes:** new table in `packages/db/migrations/??????????????_sms_*.sql` with RLS, composite keys and monthly partitioning (high volume, append-mostly); the `add-migration` skill applies.
 
-### TW-SMS-030 - Sender resolution at send time and in the pickers
+### TW-SMS-030 — Sender resolution at send time and in the pickers
 
 - **Status:** implemented
 - **Priority:** P0

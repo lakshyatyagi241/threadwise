@@ -72,8 +72,11 @@ test.describe('SMS hub', () => {
     page.on('request', (r) => {
       if (r.url().includes('/sms/lookup')) called = true;
     });
+    // The shell has its own status regions, so look only inside the lookup card.
+    const card = page.locator('div', { has: page.locator('#sms-lookup') }).last();
     await page.getByRole('button', { name: 'Check number' }).click();
-    await expect(page.getByRole('status')).toHaveCount(0);
+    await page.waitForTimeout(500);
+    await expect(card.getByRole('status')).toHaveCount(0);
     expect(called).toBe(false);
   });
 
@@ -96,8 +99,12 @@ test.describe('SMS in the campaign builder', () => {
 
     await page.goto(`/campaigns/create?sender=${encodeURIComponent(sender!.senderKey)}`);
     await hydrated(page);
+    const cookieBar = page.getByTestId('cookie-bar');
+    if (await cookieBar.isVisible().catch(() => false)) {
+      await cookieBar.getByRole('button', { name: 'Decline' }).click();
+    }
     await page.getByLabel('Campaign name').fill('E2E SMS');
-    await page.getByRole('button', { name: /next/i }).click();
+    await page.getByRole('button', { name: 'Next', exact: true }).click();
 
     const body1 = page.locator('#camp-message');
     await body1.fill('a'.repeat(161));

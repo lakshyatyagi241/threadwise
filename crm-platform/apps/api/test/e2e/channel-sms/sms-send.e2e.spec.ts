@@ -227,6 +227,13 @@ describe('TW-SMS-016, 030: the SMS composer', () => {
     expect(sms.body.templates.map((x: { name: string }) => x.name)).toEqual(['sms_offer']);
     expect(sms.body.templates[0].engine).toBe('sms');
 
+    // The campaign builder takes the same scope (TW-SMS-018): the SMS number is offered with ?channel=sms and never without it.
+    const builderSms = await api.as(a.t.admin).get('/v2/campaigns/builder?channel=sms');
+    expect(builderSms.status, JSON.stringify(builderSms.body)).toBe(200);
+    expect(builderSms.body.senders.map((x: { key: string }) => x.key)).toEqual([a.key]);
+    const builderWa = await api.as(a.t.admin).get('/v2/campaigns/builder');
+    expect(builderWa.body.senders.map((s: { engine: string }) => s.engine)).not.toContain('sms');
+
     const wa = await api.as(a.t.admin).get('/v2/broadcasts/compose');
     expect(wa.body.senders.map((s: { engine: string }) => s.engine)).not.toContain('sms');
     expect(wa.body.templates.map((x: { name: string }) => x.name)).not.toContain('sms_offer');

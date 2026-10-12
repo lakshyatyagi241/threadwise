@@ -1,8 +1,10 @@
 import { Controller, Get, Header, Param, ParseUUIDPipe, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
+  broadcastComposeQuerySchema,
   listCampaignsQuerySchema,
   listRecipientsQuerySchema,
+  type BroadcastComposeQuery,
   type ListCampaignsQuery,
   type ListRecipientsQuery,
 } from '@crm/contracts';
@@ -32,8 +34,8 @@ export class CampaignsReadController {
   @Get('builder')
   @RequirePermission('camp.campaigns.read')
   @ApiOperation({ summary: 'Senders, templates, groups, tags and flows for the builder' })
-  builder() {
-    return this.read.builder();
+  builder(@Query(zodPipe(broadcastComposeQuerySchema)) query: BroadcastComposeQuery) {
+    return this.read.builder(query);
   }
 
   @Get('sample-csv')
