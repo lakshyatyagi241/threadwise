@@ -197,7 +197,17 @@
       "factWaiting": "等待于：{node}",
       "factDelay": "等待 {time}",
       "factReplied": "客户回复：{text}",
-      "factEnded": "已结束：{reason}"
+      "factEnded": "已结束：{reason}",
+      "ioInput": "输入",
+      "ioOutput": "输出",
+      "ioKind": {
+        "message": "已发送消息",
+        "reply": "客户回复",
+        "variable": "变量",
+        "request": "请求",
+        "response": "响应",
+        "result": "结果"
+      }
     },
     "event": {
       "step": "步骤",

@@ -159,6 +159,24 @@ export const FLOW_RUN_LOG_MAX_STEPS = 200;
 export const FLOW_STEP_OUTCOMES = ['ok', 'error', 'skipped', 'waiting', 'timeout'] as const;
 export type FlowStepOutcome = (typeof FLOW_STEP_OUTCOMES)[number];
 
+/** What a node took in or produced, as one readable line: a message sent, the customer's reply, a variable, a request or response. */
+export const FLOW_STEP_IO_KINDS = [
+  'message',
+  'reply',
+  'variable',
+  'request',
+  'response',
+  'result',
+] as const;
+export type FlowStepIoKind = (typeof FLOW_STEP_IO_KINDS)[number];
+export const flowStepIoItemSchema = z.object({
+  kind: z.enum(FLOW_STEP_IO_KINDS),
+  /** A variable's name, or the kind of message (text, buttons, image). */
+  name: z.string().nullable(),
+  value: z.string(),
+});
+export type FlowStepIoItem = z.infer<typeof flowStepIoItemSchema>;
+
 export const flowRunStepSchema = z.object({
   seq: z.number().int(),
   nodeId: z.string().nullable(),
@@ -177,6 +195,9 @@ export const flowRunStepSchema = z.object({
   attempt: z.number().int().nullable(),
   summary: z.string().nullable(),
   errorCode: z.string().nullable(),
+  /** What the node took in and what it produced. Values are clipped and secrets masked before they are stored. */
+  input: z.array(flowStepIoItemSchema),
+  output: z.array(flowStepIoItemSchema),
 });
 export type FlowRunStep = z.infer<typeof flowRunStepSchema>;
 

@@ -197,7 +197,17 @@
       "factWaiting": "Bekleme noktası: {node}",
       "factDelay": "{time} bekler",
       "factReplied": "Müşteri yanıtladı: {text}",
-      "factEnded": "Sona erdi: {reason}"
+      "factEnded": "Sona erdi: {reason}",
+      "ioInput": "Girdi",
+      "ioOutput": "Çıktı",
+      "ioKind": {
+        "message": "Gönderilen mesaj",
+        "reply": "Müşteri yanıtı",
+        "variable": "Değişken",
+        "request": "İstek",
+        "response": "Yanıt",
+        "result": "Sonuç"
+      }
     },
     "event": {
       "step": "Adım",

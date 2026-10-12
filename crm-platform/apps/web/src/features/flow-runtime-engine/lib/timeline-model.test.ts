@@ -17,6 +17,8 @@ const step = (over: Partial<FlowRunStep>): FlowRunStep => ({
   attempt: 1,
   summary: null,
   errorCode: null,
+  input: [],
+  output: [],
   ...over,
 });
 

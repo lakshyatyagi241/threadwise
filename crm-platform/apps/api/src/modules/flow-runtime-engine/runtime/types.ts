@@ -1,4 +1,9 @@
-import type { FlowRunEndReason, FlowRunSource, FlowRunStatus } from '@crm/contracts';
+import type {
+  FlowRunEndReason,
+  FlowRunSource,
+  FlowRunStatus,
+  FlowStepIoItem,
+} from '@crm/contracts';
 import type { RuntimeGraph } from '../graph/runtime-graph';
 import type { VariableBag } from './variables';
 
@@ -180,6 +185,8 @@ export interface NodeContext {
   render(template: unknown): string;
   /** Adds a line to this step's entry in the run log (a skipped send, a warning). */
   note(text: string): void;
+  /** Records something the node took in (`in`) or produced (`out`) for the run log: a request, a response, a result. Optional: tests build contexts without it. */
+  io?(side: 'in' | 'out', item: FlowStepIoItem): void;
   now(): Date;
 }
 

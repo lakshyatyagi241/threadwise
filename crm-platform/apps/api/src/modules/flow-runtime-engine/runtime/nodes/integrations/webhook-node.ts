@@ -94,6 +94,7 @@ export async function runWebhook(ctx: NodeContext, safeFetch: SafeFetch): Promis
     headers['Content-Length'] = String(Buffer.byteLength(payload ?? ''));
   }
 
+  ctx.io?.('in', { kind: 'request', name: method, value: payload ? `${url}\n${payload}` : url });
   try {
     const res = await safeFetch.request(url, {
       method,
@@ -102,6 +103,7 @@ export async function runWebhook(ctx: NodeContext, safeFetch: SafeFetch): Promis
       timeoutMs: TIMEOUT_MS,
       maxBytes: MAX_BYTES,
     });
+    ctx.io?.('out', { kind: 'response', name: `HTTP ${res.status}`, value: res.text });
     if (res.status < 200 || res.status >= 300) {
       ctx.note(`webhook ${method} answered HTTP ${res.status}: ${res.text.slice(0, 200)}`);
       ctx.run.vars[saveAs] = '';

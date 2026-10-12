@@ -1,4 +1,9 @@
-import { FLOW_MAX_NODE_VISITS, type FlowRunEndReason, type FlowRunStatus } from '@crm/contracts';
+import {
+  FLOW_MAX_NODE_VISITS,
+  type FlowRunEndReason,
+  type FlowRunStatus,
+  type FlowStepIoItem,
+} from '@crm/contracts';
 import { edgeFrom, nodeById } from '../graph/runtime-graph';
 import { CORE_EXECUTORS } from './nodes';
 import { propertyToSave, routeReply } from './reply-router';
@@ -11,7 +16,7 @@ import type {
   RunState,
   SendOutcome,
 } from './types';
-import { describeSent } from './step-log';
+import { describeSent, finishIo, newIo, outboundWords, tagsRead, varsChanged } from './step-log';
 import { interpolate } from './variables';
 
 /** Where a run goes after one step. The engine persists it; nothing here touches the database, the clock (but `now`) or a queue. */
@@ -55,6 +60,8 @@ export interface StepOutcome {
   notes: string[];
   /** One line per message this step sent to the customer, for the run log. */
   sent?: string[];
+  /** What the node took in and produced, for the run log. */
+  io?: { in: FlowStepIoItem[]; out: FlowStepIoItem[] };
   /** A contact property to write after the step commits ("also save to a contact attribute"); the engine does it. */
   saveProperty?: { key: string; value: string };
 }
@@ -183,6 +190,8 @@ export async function executeCurrent(run: RunState, deps: StepDeps): Promise<Ste
 
   let sends = 0;
   const sent: string[] = [];
+  const io = newIo();
+  const before = { ...run.vars };
   const ctx: NodeContext = {
     run,
     node,
@@ -190,19 +199,27 @@ export async function executeCurrent(run: RunState, deps: StepDeps): Promise<Ste
     send: async (message) => {
       const out = await deps.send(run, message, sends++);
       sent.push(describeSent(message, out));
+      io.out.push({ kind: 'message', name: message.kind, value: outboundWords(message) });
       return out;
     },
-    render: (t) => interpolate(t, run.vars),
+    render: (t) => {
+      io.in.push(...tagsRead(t, run.vars));
+      return interpolate(t, run.vars);
+    },
+    io: (side, item) => io[side].push(item),
     note: (text) => notes.push(text),
     now: deps.now,
   };
   const result = await executor.execute(ctx);
+  io.out.push(...varsChanged(before, run.vars));
+  const recorded = finishIo(io);
   return {
     transition: transitionOf(run, node.id, result, deps),
     nodeId: node.id,
     nodeType: node.type,
     notes,
     sent,
+    ...(recorded ? { io: recorded } : {}),
   };
 }
 
