@@ -139,6 +139,10 @@
       "logNotReady": "Esta exportação não está pronta ou expirou. Solicite-a novamente.",
       "groupSuspended": "A Meta suspendeu este grupo, então ele não pode receber mensagens até que a Meta o libere.",
       "walletEmpty": "Sua carteira de mensagens não cobre esta mensagem de grupo (uma cobrança por membro). Recarregue e tente novamente.",
+      "groupLeft": "Este número saiu do grupo, por isso não pode mais enviar mensagens nele.",
+      "groupAnnounceOnly": "Somente admins podem enviar mensagens neste grupo, e este número não é admin.",
+      "groupRateLimited": "Mensagens de grupo demais deste número em pouco tempo. Aguarde um minuto e tente novamente.",
+      "groupUnavailable": "O WhatsApp não aceitou esta mensagem de grupo. Tente novamente em alguns minutos.",
       "savedReplyGone": "Esta resposta salva não existe mais.",
       "savedReplyChannel": "Esta resposta salva não se destina a este tipo de canal.",
       "shortcutTaken": "Outra resposta salva já usa esse atalho."
@@ -642,6 +646,24 @@
           "failed": "Falhou",
           "expired": "Expirada"
         }
+      }
+    },
+    "groupThread": {
+      "openGroup": "Abrir grupo",
+      "readOnly": {
+        "left": {
+          "title": "Este número saiu do grupo",
+          "message": "A conversa foi mantida como estava. Você pode lê-la e adicionar notas internas, mas não pode enviar mensagens."
+        },
+        "announceOnly": {
+          "title": "Somente admins podem enviar neste grupo",
+          "message": "Este número não é admin do grupo, por isso o WhatsApp não entregaria a mensagem. Você ainda pode adicionar notas internas."
+        }
+      },
+      "mention": {
+        "label": "Participantes do grupo",
+        "loading": "Procurando participantes",
+        "none": "Nenhum participante corresponde"
       }
     },
     "savedReplies": {

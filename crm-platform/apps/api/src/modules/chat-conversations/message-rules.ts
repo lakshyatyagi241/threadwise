@@ -115,6 +115,7 @@ const CHANNEL_META_KEYS = [
   'referral',
   'rawType',
   'forwarded',
+  'mentions',
   'referredProduct',
   'buttonPayload',
   'flowName',

@@ -3,7 +3,7 @@
  * the tests are written against it, and only the Baileys adapter knows the library. A fake implements it in the tests.
  */
 
-import type { GroupSnapshot, ReceiptUpdate } from './inbound.port';
+import type { GroupEvent, GroupSnapshot, ReceiptUpdate } from './inbound.port';
 import type { Normalized } from './inbound-normalizer';
 import type { MessageAction, SendCommand, SendContext, SendOutcome } from './outbound.port';
 
@@ -24,8 +24,13 @@ export type SocketEvent =
     }
   /** Delivery progress of a message we sent (TW-NODE-020). */
   | { type: 'receipt'; receipt: ReceiptUpdate }
-  /** The groups this account is in changed (TW-NODE-021). */
-  | { type: 'groups'; groups: GroupSnapshot[] };
+  /**
+   * The groups this account is in changed (TW-NODE-021). `complete` (default true): the list is every group the account is in, so a group
+   * missing from it was left; false: only these groups were re-read (after one change), nothing is implied about the others.
+   */
+  | { type: 'groups'; groups: GroupSnapshot[]; complete?: boolean }
+  /** One change in one group, as it happens (subject, settings, members, a join request). Debounce is the consumer's business. */
+  | { type: 'group_event'; event: GroupEvent };
 
 export interface WaSocket {
   /** One listener per socket. Events from a socket that has been ended are not delivered. */
@@ -44,10 +49,15 @@ export interface WaSocket {
   groups(action: GroupAction): Promise<GroupResult>;
 }
 
+/**
+ * Group directory and management on a device's number. Every `groupJid` is the bare id or `...@g.us`; every participant is a phone number
+ * (digits) or a WhatsApp id (`...@s.whatsapp.net`, `...@lid`, kept as given). The API enforces the admin and limit rules before it asks.
+ */
 export type GroupAction =
   | { type: 'list' }
   | { type: 'metadata'; groupJid: string }
-  | { type: 'create'; subject: string; participants: string[] }
+  /** `description` is set by a second best-effort call; the result's `descriptionSet` says whether it worked. */
+  | { type: 'create'; subject: string; participants: string[]; description?: string }
   | {
       type: 'participants';
       groupJid: string;
@@ -61,11 +71,75 @@ export type GroupAction =
       groupJid: string;
       setting: 'announcement' | 'not_announcement' | 'locked' | 'unlocked';
     }
+  | { type: 'member_add_mode'; groupJid: string; mode: 'all_member_add' | 'admin_add' }
+  | { type: 'join_approval'; groupJid: string; enabled: boolean }
+  /** Pending join requests (the recovery path when the event was missed). */
+  | { type: 'join_requests'; groupJid: string }
+  /** `participants` are the `jid` of the requests. */
+  | {
+      type: 'join_request_update';
+      groupJid: string;
+      participants: string[];
+      action: 'approve' | 'reject';
+    }
   | { type: 'leave'; groupJid: string }
-  | { type: 'invite'; groupJid: string };
+  /** Reads the current invite code (admin only). */
+  | { type: 'invite'; groupJid: string }
+  /** Makes the old invite code stop working and returns a new one. */
+  | { type: 'revoke_invite'; groupJid: string }
+  /**
+   * The group picture. The image travels as `data` in this process, or as `bufferKey` (Redis) between processes; `remove: true` takes the
+   * picture away. JPEG or PNG, at most 5 MB (the API checks).
+   */
+  | { type: 'picture'; groupJid: string; data?: Buffer; bufferKey?: string; remove?: boolean }
+  /** What an invite link points at, without joining. `code` is the bare code (`inviteCodeOf`). */
+  | { type: 'get_invite_info'; code: string }
+  /** Joins by invite link. The highest ban-risk action: has its own cap. */
+  | { type: 'accept_invite'; code: string };
 
+/** WhatsApp's answer for one person: its status code (`200` done, `403`, `404`, `408`, `409`, `419`...), as a string, with their id. */
+export interface GroupParticipantStatus {
+  jid: string;
+  status: string;
+}
+
+/** One person waiting to be let in. `phone` is digits. */
+export interface GroupJoinRequestSnapshot {
+  jid: string;
+  phone: string | null;
+  lid: string | null;
+  name: string | null;
+  /** ISO time. */
+  requestedAt: string | null;
+}
+
+/** What an invite code points at (`get_invite_info`). */
+export interface GroupInviteInfo {
+  groupId: string;
+  subject: string | null;
+  description: string | null;
+  size: number | null;
+  /** Joining needs an admin's approval: it becomes a request. */
+  joinApproval: boolean;
+}
+
+/**
+ * The answer of a group action, which crosses Redis as JSON. Tell them apart with `in`:
+ * `list` -> `{ groups }`; `metadata` -> `{ group }`; `create` -> `{ group, participants, descriptionSet }`;
+ * `participants` and `join_request_update` -> `{ participants }` (one status per person asked); `join_requests` -> `{ requests }`;
+ * `invite` and `revoke_invite` -> `{ code }`; `get_invite_info` -> `{ invite }`; `accept_invite` -> `{ joined }`;
+ * everything else (`subject`, `description`, `settings`, `member_add_mode`, `join_approval`, `picture`, `leave`) -> `{ ok: true }`.
+ */
 export type GroupResult =
-  { groups: GroupSnapshot[] } | { group: GroupSnapshot } | { code: string } | { ok: true };
+  | { groups: GroupSnapshot[] }
+  | { group: GroupSnapshot; participants?: GroupParticipantStatus[]; descriptionSet?: boolean }
+  | { code: string }
+  | { participants: GroupParticipantStatus[] }
+  | { requests: GroupJoinRequestSnapshot[] }
+  | { invite: GroupInviteInfo }
+  /** `groupId` null: no id came back, which means the group wants approval and the request was sent. */
+  | { joined: { groupId: string | null; requested: boolean } }
+  | { ok: true };
 
 /** How to reach WhatsApp for one device: directly, or through its own proxy (TW-NODE-013). */
 export interface ProxySettings {

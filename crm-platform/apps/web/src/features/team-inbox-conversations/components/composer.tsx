@@ -17,6 +17,7 @@ import {
   MESSAGE_BODY_MAX,
   NOTE_BODY_MAX,
   type MessageResponse,
+  type WaGroupMention,
 } from '@crm/contracts';
 import {
   AttachmentHints,
@@ -49,8 +50,16 @@ import {
   type SignatureChoice,
 } from '@/features/channel-email/lib/signature-view';
 import { useStagedAttachments } from '@/features/channel-email/lib/use-staged-attachments';
+import {
+  activeMention,
+  insertMention,
+  prepareMentions,
+  type MentionMember,
+  type PickedMention,
+} from '../lib/mentions';
 import { humanSize } from '../lib/time';
 import { insertReply } from '../lib/saved-replies';
+import { MentionList, useMentionSearch } from './mention-picker';
 import {
   CloseIcon,
   FileIcon,
@@ -81,6 +90,9 @@ export interface AttachmentRules {
   /** The channel's media capability. */
   allowed: readonly string[];
 }
+
+/** Stands in for the member search when a thread has none (the hook is always called; it asks nothing for a `null` query). */
+const NO_SEARCH = async (): Promise<MentionMember[]> => [];
 
 /** Drafts survive switching to another conversation and back (not a reload): the first thing an agent expects. */
 const DRAFTS = new Map<string, string>();
@@ -132,8 +144,18 @@ export interface ComposerProps {
     /** The last email send that was refused, shown above the box (a rate limit says when to try again). */
     sendProblem?: { code: string; retryAfterS?: number } | null;
   };
+  /**
+   * A group of a personal (linked) number: typing `@` opens a list of its members (`search` asks the API by name or number) and a
+   * picked member is sent as a mention. Left out everywhere else, so no other thread ever opens a member list.
+   */
+  groupMentions?: { search: (q: string) => Promise<MentionMember[]> };
   /** Reading only: neither tab can write. */
-  onSend: (draft: { body: string; file: File | null; email?: EmailReplyExtras }) => void;
+  onSend: (draft: {
+    body: string;
+    file: File | null;
+    email?: EmailReplyExtras;
+    mentions?: WaGroupMention[];
+  }) => void;
   /** The message the next send answers (shown above the box); the screen clears it after a send. */
   replyTo?: MessageResponse | null;
   onCancelReply?: () => void;
@@ -181,6 +203,11 @@ export function Composer(props: ComposerProps) {
   useEffect(() => {
     textRef.current = text;
   });
+  // @mentions (personal-number groups): the member picked for each `@Name` in the box, and the `@` the caret is in right now.
+  const [picked, setPicked] = useState<PickedMention[]>([]);
+  const [mention, setMention] = useState<{ start: number; query: string } | null>(null);
+  const [mentionIndex, setMentionIndex] = useState(0);
+  const mentionSearch = props.groupMentions?.search;
   const limited =
     props.attachments && hasWhatsappLimits(props.attachments.channelKind)
       ? props.attachments
@@ -202,6 +229,8 @@ export function Composer(props: ComposerProps) {
     setSignature(AUTO_SIGNATURE);
     setBodyTooLong(false);
     setUnfilled([]);
+    setPicked([]);
+    setMention(null);
   }
 
   const richEmail = props.email !== undefined && mode === 'reply' && rich;
@@ -247,6 +276,13 @@ export function Composer(props: ComposerProps) {
   const trimmed = text.trim();
   const emailBlocked = isEmail && !isNote && (staged.uploading || staged.failed);
   const emailBodyBlank = richEmail ? isBlankHtml(html) : trimmed.length === 0;
+  const mentionOn =
+    mentionSearch !== undefined && !isNote && !disabled && !isEmail && !groupBlocked;
+  const found = useMentionSearch(
+    mentionSearch ?? NO_SEARCH,
+    mentionOn && mention ? mention.query : null,
+  );
+  const mentionOpen = mentionOn && mention !== null;
   const canSubmit =
     !disabled &&
     !savingNote &&
@@ -311,11 +347,17 @@ export function Composer(props: ComposerProps) {
         ...signatureExtras(signature),
       };
     }
+    // A mention rides only with text: a file's caption keeps the `@Name` as typed.
+    const mentioned =
+      mentionOn && !file && picked.length > 0 ? prepareMentions(body, picked) : null;
     props.onSend({
-      body,
+      body: mentioned ? mentioned.body : body,
       file: isEmail ? null : file,
       ...(emailExtras ? { email: emailExtras } : {}),
+      ...(mentioned && mentioned.mentions.length > 0 ? { mentions: mentioned.mentions } : {}),
     });
+    setPicked([]);
+    setMention(null);
     setExtras(EMPTY_EXTRAS);
     setExtrasTried(false);
     setUnfilled([]);
@@ -350,9 +392,56 @@ export function Composer(props: ComposerProps) {
 
   const hasFiles = (e: DragEvent) => Array.from(e.dataTransfer.types).includes('Files');
 
+  /** Where the caret is decides whether the member list is open: right after an `@` typed at the start or after a space. */
+  function syncMention(el: HTMLTextAreaElement) {
+    if (!mentionOn) return;
+    const next = activeMention(el.value, el.selectionStart ?? el.value.length);
+    if (next === null) {
+      if (mention !== null) setMention(null);
+    } else if (!mention || mention.start !== next.start || mention.query !== next.query) {
+      setMention(next);
+      setMentionIndex(0);
+    }
+  }
+
+  function pickMention(member: MentionMember) {
+    const el = area.current;
+    if (!mention || !el) return;
+    const caret = el.selectionStart ?? text.length;
+    const done = insertMention(text, mention.start, caret, member);
+    change(done.text);
+    setPicked((cur) => [...cur.filter((p) => p.jid !== done.picked.jid), done.picked]);
+    setMention(null);
+    requestAnimationFrame(() => {
+      el.focus();
+      el.setSelectionRange(done.caret, done.caret);
+    });
+  }
+
   function onKey(e: KeyboardEvent<HTMLTextAreaElement>) {
     // An open saved-reply list owns the arrows, Enter, Tab and Escape.
     if (pickerRef.current?.keyDown(e)) return;
+    if (mentionOpen && !e.nativeEvent.isComposing) {
+      const list = found.items;
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        if (list.length > 0) {
+          e.preventDefault();
+          const step = e.key === 'ArrowDown' ? 1 : -1;
+          setMentionIndex((i) => (i + step + list.length) % list.length);
+        }
+        return;
+      }
+      if ((e.key === 'Enter' || e.key === 'Tab') && list.length > 0 && !e.shiftKey) {
+        e.preventDefault();
+        pickMention(list[Math.min(mentionIndex, list.length - 1)]!);
+        return;
+      }
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        setMention(null);
+        return;
+      }
+    }
     if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
       e.preventDefault();
       void submit();
@@ -416,6 +505,14 @@ export function Composer(props: ComposerProps) {
           : undefined
       }
     >
+      {mentionOpen && (
+        <MentionList
+          items={found.items}
+          loading={found.loading}
+          active={Math.min(mentionIndex, Math.max(0, found.items.length - 1))}
+          onPick={pickMention}
+        />
+      )}
       <div role="tablist" aria-label={t('modeLabel')} className="flex items-center gap-1 px-3 pt-2">
         {(['reply', 'note'] as const).map((m) => (
           <button
@@ -693,20 +790,21 @@ export function Composer(props: ComposerProps) {
             }
             onChange={(e) => {
               change(e.target.value);
+              syncMention(e.target);
               if (showSavedReplies) {
                 pickerRef.current?.textChanged(e.target.value, e.target.selectionStart);
               }
             }}
             // The caret moved without typing (arrows, a click): a `/query` it left stops being a query.
-            onSelect={
-              showSavedReplies
-                ? (e) =>
-                    pickerRef.current?.textChanged(
-                      e.currentTarget.value,
-                      e.currentTarget.selectionStart,
-                    )
-                : undefined
-            }
+            onSelect={(e) => {
+              syncMention(e.currentTarget);
+              if (showSavedReplies) {
+                pickerRef.current?.textChanged(
+                  e.currentTarget.value,
+                  e.currentTarget.selectionStart,
+                );
+              }
+            }}
             onKeyDown={onKey}
             role={showSavedReplies && picker.open ? 'combobox' : undefined}
             aria-expanded={showSavedReplies && picker.open ? true : undefined}

@@ -90,6 +90,9 @@ export const NOTIFICATION_CATALOG: Record<NotificationPrefType, NotificationCata
     sound: false,
     push: false,
   },
+  // Groups of a personal number: quiet defaults like the official ones. A removal is news to read, not an emergency; push stays off.
+  device_group_join_request: { group: 'whatsapp_groups', toast: true, sound: false, push: false },
+  device_group_removed: { group: 'whatsapp_groups', toast: true, sound: false, push: false },
 };
 
 export const notificationPrefTypeSchema = z.enum(NOTIFICATION_PREF_TYPES);
@@ -242,3 +245,18 @@ export const wabaGroupNotificationDataSchema = z.object({
   count: z.number().int().min(1).optional(),
 });
 export type WabaGroupNotificationData = z.infer<typeof wabaGroupNotificationDataSchema>;
+
+/**
+ * `device_group_join_request`, `device_group_removed`. Never a member's number, never the invite code: a join request is a count, a group is
+ * named by its subject. `deviceId` is the number the group belongs to (the Groups tab's `?device=`).
+ */
+export const deviceGroupNotificationDataSchema = z.object({
+  /** `wa_device_groups.uuid`. */
+  groupId: uuidSchema,
+  /** `devices.uuid`. */
+  deviceId: uuidSchema.optional(),
+  groupName: z.string().nullable().optional(),
+  /** Join requests only: how many people the row stands for. */
+  count: z.number().int().min(1).optional(),
+});
+export type DeviceGroupNotificationData = z.infer<typeof deviceGroupNotificationDataSchema>;

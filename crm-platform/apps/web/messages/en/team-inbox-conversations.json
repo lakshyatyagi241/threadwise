@@ -138,6 +138,10 @@
       "logBusy": "An export is already being prepared. Wait for its email, then request another.",
       "logNotReady": "This export is not ready, or it has expired. Request it again.",
       "groupSuspended": "Meta suspended this group, so it cannot be messaged until Meta clears it.",
+      "groupLeft": "This number left the group, so it can no longer send messages there.",
+      "groupAnnounceOnly": "Only admins can send messages in this group, and this number is not an admin.",
+      "groupRateLimited": "Too many group messages from this number in a short time. Wait a minute, then try again.",
+      "groupUnavailable": "WhatsApp did not accept this group message. Try again in a few minutes.",
       "walletEmpty": "Your message wallet cannot cover this group message (one charge per member). Top up and try again.",
       "savedReplyGone": "This saved reply no longer exists.",
       "savedReplyChannel": "This saved reply is not meant for this kind of channel.",
@@ -261,6 +265,24 @@
       "attachment": "an attachment",
       "jumpLatest": "Jump to latest",
       "jumpLatestNew": "{count, plural, one {# new message} other {# new messages}}"
+    },
+    "groupThread": {
+      "openGroup": "Open group",
+      "readOnly": {
+        "left": {
+          "title": "This number left the group",
+          "message": "The conversation is kept as it was. You can read it and add internal notes, but you cannot send messages."
+        },
+        "announceOnly": {
+          "title": "Only admins can send in this group",
+          "message": "This number is not an admin of the group, so WhatsApp would not deliver a message. You can still add internal notes."
+        }
+      },
+      "mention": {
+        "label": "Group members",
+        "loading": "Looking for members",
+        "none": "No member matches"
+      }
     },
     "composer": {
       "modeLabel": "Message type",

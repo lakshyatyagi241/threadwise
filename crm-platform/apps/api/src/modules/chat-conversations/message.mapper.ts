@@ -113,14 +113,32 @@ function referralOf(row: MessageRow): MessageResponse['referral'] {
 function groupAuthorOf(row: MessageRow): MessageResponse['group'] {
   const g = row.meta.group as Record<string, unknown> | undefined;
   if (!g || typeof g !== 'object' || row.direction !== 'in') return undefined;
-  return { participant: str(g.participant), senderName: str(g.senderName) };
+  const lid = str(g.senderLid);
+  return {
+    participant: str(g.participant),
+    senderName: str(g.senderName),
+    ...(lid ? { senderLid: lid } : {}),
+  };
+}
+
+/** The members @mentioned in a message (`meta.mentions`: inbound from WhatsApp, outbound from the composer). */
+function mentionsOf(row: MessageRow): MessageResponse['mentions'] {
+  const list = row.meta.mentions;
+  if (!Array.isArray(list)) return undefined;
+  const out = list
+    .filter((x): x is Record<string, unknown> => typeof x === 'object' && x !== null)
+    .map((x) => ({ jid: str(x.jid), name: str(x.name) }))
+    .filter((x): x is { jid: string; name: string | null } => x.jid !== null)
+    .map((x) => ({ jid: x.jid, ...(x.name ? { name: x.name } : {}) }));
+  return out.length > 0 ? out : undefined;
 }
 
 /** The tally of a message sent to a WhatsApp group (`meta.group_delivery`, folded from Meta's per-member statuses). */
 function groupDeliveryOf(row: MessageRow): MessageResponse['groupDelivery'] {
   const d = row.meta.group_delivery as Record<string, unknown> | undefined;
   if (!d || typeof d !== 'object' || row.direction !== 'out') return undefined;
-  const n = (v: unknown) => (typeof v === 'number' && Number.isFinite(v) && v >= 0 ? Math.floor(v) : 0);
+  const n = (v: unknown) =>
+    typeof v === 'number' && Number.isFinite(v) && v >= 0 ? Math.floor(v) : 0;
   return { deliveredTo: n(d.delivered_to), billable: n(d.billable_count), free: n(d.free_count) };
 }
 
@@ -236,6 +254,7 @@ export function toMessageResponse(row: MessageRow, link: MediaLinker): MessageRe
     forwarded: row.meta.forwarded === true ? true : undefined,
     referral: referralOf(row),
     group: groupAuthorOf(row),
+    mentions: mentionsOf(row),
     groupDelivery: groupDeliveryOf(row),
     sentInteractive: sentInteractiveOf(row),
     email: emailOf(row),

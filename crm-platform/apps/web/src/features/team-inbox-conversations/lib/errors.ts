@@ -22,6 +22,10 @@ export const ERROR_KINDS = [
   'templateNotSendable',
   'groupSendUnavailable',
   'groupSuspended',
+  'groupLeft',
+  'groupAnnounceOnly',
+  'groupRateLimited',
+  'groupUnavailable',
   'walletEmpty',
   'logRange',
   'logBusy',
@@ -59,6 +63,14 @@ const BY_CODE: Record<string, ErrorKind> = {
   CHANNEL_CAPABILITY_UNSUPPORTED: 'unsupported',
   WABA_GROUP_SEND_UNAVAILABLE: 'groupSendUnavailable',
   WABA_GROUP_SUSPENDED: 'groupSuspended',
+  // Groups of a personal (linked) number.
+  WA_GROUP_LEFT: 'groupLeft',
+  WA_GROUP_ANNOUNCE_ONLY: 'groupAnnounceOnly',
+  WA_GROUP_RATE_LIMITED: 'groupRateLimited',
+  WA_GROUP_DEVICE_NOT_READY: 'channelDisconnected',
+  WA_GROUP_NOT_FOUND: 'groupUnavailable',
+  WA_GROUP_UNAVAILABLE: 'groupUnavailable',
+  WA_GROUP_NOT_ADMIN: 'groupAnnounceOnly',
   WALLET_EMPTY: 'walletEmpty',
   MESSAGE_LOG_EXPORT_RANGE_INVALID: 'logRange',
   MESSAGE_LOG_EXPORT_IN_PROGRESS: 'logBusy',
@@ -89,7 +101,9 @@ export function errorKind(code: string): ErrorKind {
 /** Seconds the server asked to wait before trying again (`Retry-After`, or the problem's `retryAfterSeconds`), when it said. */
 export function retryAfterOf(e: unknown): number | undefined {
   if (!(e instanceof ApiError)) return undefined;
-  const n = Number(e.fieldErrors.find((f) => f.path === 'retryAfterSeconds')?.message);
+  const n = Number(
+    e.fieldErrors.find((f) => f.path === 'retryAfterSeconds' || f.path === 'retryAfterS')?.message,
+  );
   return Number.isFinite(n) && n > 0 ? Math.ceil(n) : undefined;
 }
 
@@ -103,5 +117,11 @@ export function requestIdOf(e: unknown): string | undefined {
  * refused for a reason that will not change by itself (window closed, plan cap, disconnected channel) is not.
  */
 export function isRetryableSend(code: string): boolean {
-  return errorKind(code) === 'network' || errorKind(code) === 'generic' || code === 'RATE_LIMITED';
+  return (
+    errorKind(code) === 'network' ||
+    errorKind(code) === 'generic' ||
+    code === 'RATE_LIMITED' ||
+    // Our own throttle on a group send lifts by itself: trying again later is the right move.
+    code === 'WA_GROUP_RATE_LIMITED'
+  );
 }

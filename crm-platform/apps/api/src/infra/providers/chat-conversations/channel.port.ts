@@ -95,6 +95,13 @@ export const outboundEnvelopeSchema = z.discriminatedUnion('kind', [
     body: z.string().min(1).max(OUTBOUND_TEXT_MAX_EMAIL),
     /** Ask the provider to render a link preview (WhatsApp `preview_url`). */
     previewUrl: z.boolean().optional(),
+    /** Personal-number group threads only: the members @mentioned in the body (`jid` as in the group's roster). Ignored elsewhere. */
+    mentions: z
+      .array(
+        z.object({ jid: z.string().trim().min(1).max(128), name: z.string().max(200).optional() }),
+      )
+      .max(50)
+      .optional(),
     /** Email channels only (refused for any other kind by the dispatcher). */
     email: outboundEmailSchema.optional(),
   }),
@@ -371,7 +378,12 @@ export interface NormalisedInbound {
    * The message came from a group, not from one person: `peerKey` is the group's id, the thread is the group and has no contact,
    * and `participant` says who wrote it. Storage only: nothing may auto-reply to a group (a big group would bill per member).
    */
-  group?: { title?: string; participant: string; participantName?: string };
+  group?: {
+    title?: string;
+    participant: string;
+    participantName?: string;
+    participantLid?: string;
+  };
   /**
    * Imported history (WhatsApp Business app coexistence): stored quietly and backdated to when it was really sent, with no unread,
    * no reopening, no contact creation and no realtime alert. `direction` is who wrote it.

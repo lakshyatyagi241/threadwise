@@ -139,6 +139,10 @@
       "logNotReady": "Ekspor ini belum siap atau sudah kedaluwarsa. Minta lagi.",
       "groupSuspended": "Meta menangguhkan grup ini, sehingga tidak dapat dikirimi pesan sampai Meta memulihkannya.",
       "walletEmpty": "Dompet pesan Anda tidak cukup untuk pesan grup ini (satu tagihan per anggota). Isi saldo lalu coba lagi.",
+      "groupLeft": "Nomor ini sudah keluar dari grup, jadi tidak dapat lagi mengirim pesan di sana.",
+      "groupAnnounceOnly": "Hanya admin yang dapat mengirim pesan di grup ini, dan nomor ini bukan admin.",
+      "groupRateLimited": "Terlalu banyak pesan grup dari nomor ini dalam waktu singkat. Tunggu semenit, lalu coba lagi.",
+      "groupUnavailable": "WhatsApp tidak menerima pesan grup ini. Coba lagi dalam beberapa menit.",
       "savedReplyGone": "Balasan tersimpan ini sudah tidak ada.",
       "savedReplyChannel": "Balasan tersimpan ini tidak ditujukan untuk jenis kanal ini.",
       "shortcutTaken": "Balasan tersimpan lain sudah memakai pintasan itu."
@@ -642,6 +646,24 @@
           "failed": "Gagal",
           "expired": "Kedaluwarsa"
         }
+      }
+    },
+    "groupThread": {
+      "openGroup": "Buka grup",
+      "readOnly": {
+        "left": {
+          "title": "Nomor ini keluar dari grup",
+          "message": "Percakapan disimpan apa adanya. Anda dapat membacanya dan menambah catatan internal, tetapi tidak dapat mengirim pesan."
+        },
+        "announceOnly": {
+          "title": "Hanya admin yang dapat mengirim di grup ini",
+          "message": "Nomor ini bukan admin grup, jadi WhatsApp tidak akan mengirimkan pesan. Anda tetap dapat menambah catatan internal."
+        }
+      },
+      "mention": {
+        "label": "Anggota grup",
+        "loading": "Mencari anggota",
+        "none": "Tidak ada anggota yang cocok"
       }
     },
     "savedReplies": {

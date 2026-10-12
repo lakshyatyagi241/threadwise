@@ -8,7 +8,11 @@ import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import type { ChannelRuntime } from '../../infra/providers/chat-conversations';
-import { groupIdOf, isGroupPeer } from '../../infra/providers/whatsapp/group-peer';
+import {
+  groupIdOf,
+  isGroupPeer,
+  personalGroupSendBlock,
+} from '../../infra/providers/whatsapp/group-peer';
 import { QUEUES } from '../../infra/queue/queues';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import { WalletGateService } from '../wallet-message-billing';
@@ -118,7 +122,17 @@ export class OutboundService {
           [{ path: 'email', message: 'only an email conversation takes these' }],
         );
       }
-      const fields = messageFieldsOf(input.content);
+      // @mentions exist only in a personal number's group thread; anywhere else they are dropped, not stored.
+      let content = input.content;
+      if (
+        content.kind === 'text' &&
+        content.mentions &&
+        !(channel.kind === 'whatsapp_qr' && isGroupPeer(conv.peerKey))
+      ) {
+        const { mentions: _dropped, ...rest } = content;
+        content = rest;
+      }
+      const fields = messageFieldsOf(content);
       const replyTo = input.replyToMessageId
         ? await this.replyTarget(tx, orgId, conv, input.replyToMessageId)
         : null;
@@ -395,6 +409,11 @@ export class OutboundService {
     runtime: ChannelRuntime,
     peerKey: string,
   ): Promise<void> {
+    if (runtime.kind === 'whatsapp_qr' && isGroupPeer(peerKey)) {
+      // A personal number's group: no wallet (one send is one message, D9), but the number must still be in it and allowed to write.
+      await this.assertPersonalGroupSendable(tx, orgId, runtime, peerKey);
+      return;
+    }
     if (runtime.kind !== 'whatsapp_cloud' || !isGroupPeer(peerKey)) return;
     const found = await tx.execute(
       sql`SELECT suspended, participant_count FROM waba_groups
@@ -413,6 +432,36 @@ export class OutboundService {
       source: 'group_message',
       recipients: Math.max(1, Number(row?.participant_count ?? 0)),
     });
+  }
+
+  /** A group on a linked personal number: left (read-only thread) or announce-only without admin rights refuse before anything is stored. */
+  private async assertPersonalGroupSendable(
+    tx: Tx,
+    orgId: number,
+    runtime: ChannelRuntime,
+    peerKey: string,
+  ): Promise<void> {
+    if (!runtime.externalId) return;
+    const found = await tx.execute(
+      sql`SELECT g.left_at, g.announce, g.is_admin
+            FROM wa_device_groups g JOIN devices d ON d.org_id = g.org_id AND d.id = g.device_id
+           WHERE g.org_id = ${orgId} AND d.uuid = ${runtime.externalId}::uuid
+             AND g.group_jid = ${groupIdOf(peerKey)} LIMIT 1`,
+    );
+    const row = found.rows[0] as
+      { left_at: Date | string | null; announce: boolean; is_admin: boolean } | undefined;
+    const block = personalGroupSendBlock(
+      row ? { leftAt: row.left_at, announce: row.announce, isAdmin: row.is_admin } : null,
+    );
+    if (block) {
+      throw new AppError(
+        block.code === 'WA_GROUP_LEFT'
+          ? ERROR_CODES.WA_GROUP_LEFT
+          : ERROR_CODES.WA_GROUP_ANNOUNCE_ONLY,
+        block.message,
+        block.code === 'WA_GROUP_LEFT' ? HttpStatus.CONFLICT : HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
   }
 
   private keyReused(): AppError {

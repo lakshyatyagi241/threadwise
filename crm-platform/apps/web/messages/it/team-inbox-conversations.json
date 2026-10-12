@@ -139,6 +139,10 @@
       "logNotReady": "Questa esportazione non è pronta oppure è scaduta. Richiedila di nuovo.",
       "groupSuspended": "Meta ha sospeso questo gruppo, quindi non è possibile scrivergli finché Meta non lo ripristina.",
       "walletEmpty": "Il tuo portafoglio messaggi non copre questo messaggio di gruppo (un addebito per membro). Ricaricalo e riprova.",
+      "groupLeft": "Questo numero ha lasciato il gruppo, quindi non può più inviare messaggi lì.",
+      "groupAnnounceOnly": "Solo gli admin possono inviare messaggi in questo gruppo, e questo numero non è admin.",
+      "groupRateLimited": "Troppi messaggi di gruppo da questo numero in poco tempo. Attendi un minuto, poi riprova.",
+      "groupUnavailable": "WhatsApp non ha accettato questo messaggio di gruppo. Riprova tra qualche minuto.",
       "savedReplyGone": "Questa risposta salvata non esiste più.",
       "savedReplyChannel": "Questa risposta salvata non è prevista per questo tipo di canale.",
       "shortcutTaken": "Un'altra risposta salvata usa già questa scorciatoia."
@@ -642,6 +646,24 @@
           "failed": "Non riuscita",
           "expired": "Scaduta"
         }
+      }
+    },
+    "groupThread": {
+      "openGroup": "Apri gruppo",
+      "readOnly": {
+        "left": {
+          "title": "Questo numero ha lasciato il gruppo",
+          "message": "La conversazione resta com'era. Puoi leggerla e aggiungere note interne, ma non puoi inviare messaggi."
+        },
+        "announceOnly": {
+          "title": "Solo gli admin possono inviare in questo gruppo",
+          "message": "Questo numero non è admin del gruppo, quindi WhatsApp non consegnerebbe un messaggio. Puoi comunque aggiungere note interne."
+        }
+      },
+      "mention": {
+        "label": "Partecipanti del gruppo",
+        "loading": "Ricerca di partecipanti",
+        "none": "Nessun partecipante corrisponde"
       }
     },
     "savedReplies": {

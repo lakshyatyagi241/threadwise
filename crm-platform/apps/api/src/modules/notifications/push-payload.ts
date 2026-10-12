@@ -72,6 +72,9 @@ const GROUP_TYPES = new Set([
   'waba_group_join_request',
   'waba_group_suspended',
   'waba_group_suspension_cleared',
+  // The groups of a personal number: the same rule (push is off by default; when a person turns it on it carries the kind of event only).
+  'device_group_join_request',
+  'device_group_removed',
 ]);
 
 function groupPushText(row: Pick<NotificationRow, 'type' | 'title' | 'data' | 'eventCount'>): {
@@ -82,13 +85,15 @@ function groupPushText(row: Pick<NotificationRow, 'type' | 'title' | 'data' | 'e
   const name = str(data.groupName);
   const count = row.eventCount > 1 ? row.eventCount : 0;
   const body =
-    row.type === 'waba_group_join_request'
+    row.type === 'waba_group_join_request' || row.type === 'device_group_join_request'
       ? count
         ? `${count} join requests`
         : 'Join request'
-      : row.type === 'waba_group_suspended'
-        ? 'Group suspended'
-        : 'Group active again';
+      : row.type === 'device_group_removed'
+        ? 'Removed from group'
+        : row.type === 'waba_group_suspended'
+          ? 'Group suspended'
+          : 'Group active again';
   return { title: clip(name ?? 'WhatsApp group'), body };
 }
 

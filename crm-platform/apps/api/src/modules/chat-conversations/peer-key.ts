@@ -5,6 +5,10 @@ const PHONE_KINDS = new Set(['simulator', 'whatsapp_cloud', 'whatsapp_qr']);
 
 const PEER_KEY_MAX = 128;
 
+/** A WhatsApp group thread is keyed `g:<group id>`; the id is an opaque token, never a phone number. */
+export const GROUP_KEY_PREFIX = 'g:';
+export const isGroupKey = (key: string): boolean => key.startsWith(GROUP_KEY_PREFIX);
+
 export const isPhoneChannel = (kind: string): boolean => PHONE_KINDS.has(kind);
 
 /**
@@ -23,6 +27,13 @@ export function normalizePeerKey(kind: string, raw: string | null | undefined): 
   if (text === '') return null;
 
   if (isPhoneChannel(kind)) {
+    // A group id must never go through the phone canonicaliser (it would strip it to digits and could land on a person's thread).
+    if (isGroupKey(text)) {
+      const id = text.slice(GROUP_KEY_PREFIX.length).trim();
+      return id !== '' && GROUP_KEY_PREFIX.length + id.length <= PEER_KEY_MAX
+        ? `${GROUP_KEY_PREFIX}${id}`
+        : null;
+    }
     // A jid is "<user>[:<device>]@<server>"; only the user part is the number.
     const user = (text.split('@')[0] ?? '').split(':')[0] ?? '';
     const canonical = canonicalizePhone({ number: user });
@@ -41,7 +52,7 @@ export function identityOfPeer(
   kind: string,
   peerKey: string,
 ): { kind: 'phone'; value: string } | null {
-  if (!isPhoneChannel(kind)) return null;
+  if (!isPhoneChannel(kind) || isGroupKey(peerKey)) return null;
   const canonical = canonicalizePhone({ number: `+${peerKey}` });
   return canonical ? { kind: 'phone', value: canonical.e164 } : null;
 }
@@ -54,5 +65,6 @@ export function defaultTitle(kind: string, peerKey: string, peerName: string | n
   const name = peerName?.trim();
   if (name) return name.slice(0, 200);
   if (kind === 'email') return NO_SUBJECT_TITLE;
+  if (isPhoneChannel(kind) && isGroupKey(peerKey)) return 'WhatsApp group';
   return isPhoneChannel(kind) ? `+${peerKey}` : peerKey;
 }

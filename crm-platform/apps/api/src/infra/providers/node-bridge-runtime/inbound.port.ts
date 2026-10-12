@@ -42,6 +42,8 @@ export interface InboundMessage {
   contacts?: { name: string | null; phones: string[]; emails: string[]; org: string | null }[];
   /** The id of the message this one answers (WhatsApp `contextInfo.stanzaId`). */
   replyToProviderMessageId?: string | null;
+  /** Group messages: the ids WhatsApp lists as @mentioned (`contextInfo.mentionedJid`). */
+  mentionedJids?: string[];
   /** A message type the inbox cannot show (a poll, a product, an order...): kept as a placeholder, never dropped. */
   unsupported?: { rawType: string; label: string } | null;
 }
@@ -54,9 +56,79 @@ export interface ReceiptUpdate {
   ack: number;
 }
 
+/** One member of a group as the socket reports it. `phone` is digits (no `+`); a member WhatsApp addresses only by an anonymous id has none. */
+export interface GroupParticipantSnapshot {
+  /** WhatsApp's id for the member, as the group lists it (`...@s.whatsapp.net` or `...@lid`). What a mention or an admin action takes. */
+  jid: string;
+  phone: string | null;
+  /** The anonymous id's user part (digits), when known. */
+  lid: string | null;
+  /** The member's own profile name (or the one saved on our phone), when WhatsApp gave one. */
+  name: string | null;
+  admin: 'superadmin' | 'admin' | null;
+}
+
+/**
+ * A group as the socket last read it. Crosses Redis as JSON between the worker and the API: only strings, numbers, booleans and arrays.
+ * `jid` is WhatsApp's full id (`...@g.us`); `groupId` is the BARE id the platform stores and uses in the thread key `g:<groupId>`.
+ */
 export interface GroupSnapshot {
   jid: string;
+  groupId: string;
   subject: string | null;
   description: string | null;
   size: number | null;
+  /** Is OUR number an admin (or the owner) of the group. */
+  isAdmin: boolean;
+  /** Only admins may send. */
+  announce: boolean;
+  /** Only admins may edit the group info. */
+  restrict: boolean;
+  /** New members need an admin's approval. */
+  joinApproval: boolean;
+  memberAddMode: 'all_member_add' | 'admin_add';
+  /** The owner's id, when WhatsApp gave one. */
+  owner: string | null;
+  /** When the group was created (ISO). */
+  creation: string | null;
+  addressingMode: 'pn' | 'lid' | null;
+  /** The invite code, only when WhatsApp sent it (we are admin). A bearer secret: never log it. */
+  inviteCode: string | null;
+  /** The roster, capped at 1024 members (`size` stays the true count). */
+  participants: GroupParticipantSnapshot[];
 }
+
+/** What a group's metadata changed to. Only the fields WhatsApp sent are set. */
+export interface GroupPatch {
+  subject?: string;
+  description?: string;
+  announce?: boolean;
+  restrict?: boolean;
+  joinApproval?: boolean;
+  memberAddMode?: 'all_member_add' | 'admin_add';
+}
+
+/**
+ * A change in one group (`groups.update`, `group-participants.update`, `group.join-request`), delivered as it happens so the directory
+ * can update one row and notify. `author` is the id of whoever did it (null when WhatsApp did not say). All ids are WhatsApp ids.
+ */
+export type GroupEvent =
+  | { kind: 'update'; groupId: string; author: string | null; patch: GroupPatch }
+  | {
+      kind: 'participants';
+      groupId: string;
+      author: string | null;
+      action: 'add' | 'remove' | 'promote' | 'demote' | 'modify';
+      participants: string[];
+      /** OUR number is one of `participants` (we were added, removed, promoted or demoted). */
+      selfAffected: boolean;
+    }
+  | {
+      kind: 'join_request';
+      groupId: string;
+      /** Who asked (or whose request was handled). */
+      participant: string;
+      author: string | null;
+      action: 'created' | 'revoked' | 'rejected';
+      method: string | null;
+    };

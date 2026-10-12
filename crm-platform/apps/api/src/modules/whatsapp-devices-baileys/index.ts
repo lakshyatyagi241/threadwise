@@ -6,3 +6,4 @@ export {
   PAIRING_STARTS_PER_ORG_PER_DAY,
   DEVICE_CREATES_PER_ORG_PER_HOUR,
 } from './device-rules';
+export { WhatsappDevicesBaileysWorkerModule } from './device-groups-worker.module';

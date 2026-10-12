@@ -139,6 +139,10 @@
       "logNotReady": "Bản xuất này chưa sẵn sàng hoặc đã hết hạn. Hãy yêu cầu lại.",
       "groupSuspended": "Meta đã tạm ngưng nhóm này nên không thể nhắn tin cho nhóm cho đến khi Meta gỡ bỏ.",
       "walletEmpty": "Ví tin nhắn của bạn không đủ cho tin nhắn nhóm này (tính phí cho mỗi thành viên). Hãy nạp tiền rồi thử lại.",
+      "groupLeft": "Số này đã rời nhóm nên không thể gửi tin nhắn ở đó nữa.",
+      "groupAnnounceOnly": "Chỉ quản trị viên mới có thể gửi tin nhắn trong nhóm này, và số này không phải quản trị viên.",
+      "groupRateLimited": "Số này đã gửi quá nhiều tin nhắn nhóm trong thời gian ngắn. Hãy chờ một phút rồi thử lại.",
+      "groupUnavailable": "WhatsApp không chấp nhận tin nhắn nhóm này. Hãy thử lại sau vài phút.",
       "savedReplyGone": "Trả lời nhanh này không còn tồn tại.",
       "savedReplyChannel": "Trả lời nhanh này không dành cho loại kênh này.",
       "shortcutTaken": "Một trả lời nhanh khác đã dùng phím tắt đó."
@@ -642,6 +646,24 @@
           "failed": "Thất bại",
           "expired": "Hết hạn"
         }
+      }
+    },
+    "groupThread": {
+      "openGroup": "Mở nhóm",
+      "readOnly": {
+        "left": {
+          "title": "Số này đã rời nhóm",
+          "message": "Cuộc trò chuyện được giữ nguyên. Bạn có thể đọc và thêm ghi chú nội bộ nhưng không thể gửi tin nhắn."
+        },
+        "announceOnly": {
+          "title": "Chỉ quản trị viên mới có thể gửi trong nhóm này",
+          "message": "Số này không phải quản trị viên của nhóm nên WhatsApp sẽ không chuyển tin nhắn. Bạn vẫn có thể thêm ghi chú nội bộ."
+        }
+      },
+      "mention": {
+        "label": "Thành viên nhóm",
+        "loading": "Đang tìm thành viên",
+        "none": "Không có thành viên nào phù hợp"
       }
     },
     "savedReplies": {

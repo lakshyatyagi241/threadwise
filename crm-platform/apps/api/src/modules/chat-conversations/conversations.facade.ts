@@ -30,6 +30,8 @@ export interface RecordOutboundInput {
   /** The peer on the channel; the thread is found or created from (channel, peer). */
   peerKey: string;
   contactId?: string;
+  /** The title of the thread when this call creates it (a group's subject); ignored for a thread that exists. */
+  threadTitle?: string;
   /** What produced the message: broadcast, appointment, flow, auto_reply, ... (the thread shows where it came from). */
   source: string;
   body: string;
@@ -97,7 +99,13 @@ export type OutboundInteractive =
 
 export type OutboundContent =
   /** `email`: cc, bcc and a subject override; accepted only for a conversation on an email channel. */
-  | { kind: 'text'; body: string; email?: EmailReplyExtras }
+  | {
+      kind: 'text';
+      body: string;
+      email?: EmailReplyExtras;
+      /** Personal-number group threads only: the members @mentioned in the body. Dropped for any other thread. */
+      mentions?: { jid: string; name?: string | undefined }[];
+    }
   | { kind: 'media'; media: OutboundMediaRef; caption?: string }
   /** An emoji on the message `EnqueueOutboundInput.replyToMessageId` names; an empty emoji removes the reaction. */
   | { kind: 'reaction'; emoji: string }

@@ -5,7 +5,12 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { ConfirmDialog, cn, useToast } from '@crm/ui';
-import { uuidSchema, type EmailReplyExtras, type MessageResponse } from '@crm/contracts';
+import {
+  uuidSchema,
+  type EmailReplyExtras,
+  type MessageResponse,
+  type WaGroupMention,
+} from '@crm/contracts';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { ApiError } from '@/lib/api/errors';
 import { useRealtimeEvent } from '@/lib/realtime';
@@ -316,8 +321,10 @@ export function InboxScreen() {
       file: File | null;
       replyToMessageId?: string | null;
       email?: EmailReplyExtras;
+      mentions?: WaGroupMention[];
     }) => {
       // A group thread on a channel that cannot send to a group is never sent to (the composer is off; this is the belt to that braces).
+      // A personal-number group is not one of them; its own refusals (left, admins only) come from the API.
       if (isGroupSendBlocked(detail.detail?.peerKey, detail.detail?.channel.kind)) return;
       // The simulator's one-shot fault goes in as a prefix on the text (or the caption of a file).
       const body = withFault(draft.body, fault);
@@ -327,6 +334,7 @@ export function InboxScreen() {
         file: draft.file,
         replyToMessageId: draft.replyToMessageId,
         ...(draft.email ? { email: draft.email } : {}),
+        ...(draft.mentions ? { mentions: draft.mentions } : {}),
       });
     },
     [fault, thread, detail.detail?.peerKey, detail.detail?.channel.kind],

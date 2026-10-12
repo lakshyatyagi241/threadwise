@@ -149,6 +149,16 @@
         "title": "عادت «{name}» إلى العمل",
         "titleNoName": "عادت مجموعة واتساب إلى العمل",
         "body": "أعادت واتساب هذه المجموعة. يمكنك مراسلتها من جديد."
+      },
+      "device_group_join_request": {
+        "title": "{count, plural, one {شخص يريد الانضمام إلى {name}} two {شخصان يريدان الانضمام إلى {name}} few {# أشخاص يريدون الانضمام إلى {name}} many {# شخصًا يريدون الانضمام إلى {name}} other {# شخص يريدون الانضمام إلى {name}}}",
+        "titleNoName": "{count, plural, one {شخص يريد الانضمام إلى مجموعة WhatsApp} two {شخصان يريدان الانضمام إلى مجموعة WhatsApp} few {# أشخاص يريدون الانضمام إلى مجموعة WhatsApp} many {# شخصًا يريدون الانضمام إلى مجموعة WhatsApp} other {# شخص يريدون الانضمام إلى مجموعة WhatsApp}}",
+        "body": "افتح المجموعات للموافقة أو الرفض."
+      },
+      "device_group_removed": {
+        "title": "تمت إزالة رقمك من {name}",
+        "titleNoName": "تمت إزالة رقمك من مجموعة WhatsApp",
+        "body": "أزال شخص ما رقمك الشخصي من هذه المجموعة. تم الاحتفاظ بالمجموعة هنا للقراءة فقط."
       }
     },
     "live": {
@@ -177,7 +187,9 @@
         "teamchat_message": "رسالة مباشرة جديدة",
         "waba_group_join_request": "طلب انضمام إلى مجموعة",
         "waba_group_suspended": "تم تعليق مجموعة واتساب",
-        "waba_group_suspension_cleared": "عادت مجموعة واتساب إلى العمل"
+        "waba_group_suspension_cleared": "عادت مجموعة واتساب إلى العمل",
+        "device_group_join_request": "طلب الانضمام إلى مجموعة",
+        "device_group_removed": "تمت الإزالة من مجموعة WhatsApp"
       }
     },
     "prefs": {
@@ -334,6 +346,14 @@
         "billing_subscription_canceled": {
           "label": "تم إلغاء الاشتراك",
           "hint": "أنهى مزوّد الدفع لديك أحد اشتراكات مساحة العمل هذه."
+        },
+        "device_group_join_request": {
+          "label": "طلب الانضمام إلى مجموعة رقم شخصي",
+          "hint": "يطلب أشخاص الانضمام إلى مجموعة لرقم WhatsApp شخصي تديره. كل عشرة طلبات تشكل صفًا واحدًا."
+        },
+        "device_group_removed": {
+          "label": "تمت الإزالة من مجموعة رقم شخصي",
+          "hint": "أزال شخص ما أحد أرقام WhatsApp الشخصية لديك من مجموعة. قد يكون ذلك علامة على أنه تم الإبلاغ عن الرقم."
         }
       },
       "loading": "جارٍ تحميل تفضيلاتك",

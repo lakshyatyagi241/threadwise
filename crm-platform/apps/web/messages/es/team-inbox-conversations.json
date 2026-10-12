@@ -139,6 +139,10 @@
       "logNotReady": "Esta exportación no está lista o ha caducado. Solicítala de nuevo.",
       "groupSuspended": "Meta suspendió este grupo, por lo que no se le pueden enviar mensajes hasta que Meta lo restablezca.",
       "walletEmpty": "Tu monedero de mensajes no cubre este mensaje de grupo (un cargo por miembro). Recarga e inténtalo de nuevo.",
+      "groupLeft": "Este número salió del grupo, por lo que ya no puede enviar mensajes allí.",
+      "groupAnnounceOnly": "Solo los administradores pueden enviar mensajes en este grupo y este número no es administrador.",
+      "groupRateLimited": "Demasiados mensajes de grupo desde este número en poco tiempo. Espera un minuto e inténtalo de nuevo.",
+      "groupUnavailable": "WhatsApp no aceptó este mensaje de grupo. Inténtalo de nuevo en unos minutos.",
       "savedReplyGone": "Esta respuesta guardada ya no existe.",
       "savedReplyChannel": "Esta respuesta guardada no está pensada para este tipo de canal.",
       "shortcutTaken": "Otra respuesta guardada ya usa ese atajo."
@@ -642,6 +646,24 @@
           "failed": "Fallida",
           "expired": "Caducada"
         }
+      }
+    },
+    "groupThread": {
+      "openGroup": "Abrir grupo",
+      "readOnly": {
+        "left": {
+          "title": "Este número salió del grupo",
+          "message": "La conversación se conserva tal como estaba. Puedes leerla y añadir notas internas, pero no puedes enviar mensajes."
+        },
+        "announceOnly": {
+          "title": "Solo los administradores pueden enviar en este grupo",
+          "message": "Este número no es administrador del grupo, por lo que WhatsApp no entregaría un mensaje. Aún puedes añadir notas internas."
+        }
+      },
+      "mention": {
+        "label": "Miembros del grupo",
+        "loading": "Buscando miembros",
+        "none": "Ningún miembro coincide"
       }
     },
     "savedReplies": {

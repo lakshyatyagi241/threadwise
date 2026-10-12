@@ -12,6 +12,8 @@ export interface ErrorText {
   /** The stable code, to branch on. */
   code?: string;
   retryAfterS?: number;
+  /** The throttle that refused a group action (`WA_GROUP_RATE_LIMITED`). */
+  scope?: string;
   /** Starting again with `relink: true` would be accepted. */
   relinkable: boolean;
 }
@@ -28,6 +30,7 @@ export function useErrorText(): (e: unknown) => ErrorText {
       plan: d.plan,
       code: d.code,
       retryAfterS: d.retryAfterS,
+      scope: d.scope,
       relinkable: d.relinkable === true,
     };
   };
