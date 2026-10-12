@@ -101,7 +101,12 @@ export class InboxThreadService {
     const content = await this.db.tx(async (tx): Promise<OutboundContent> => {
       await this.assertCanReply(tx, ctx, uuid);
       if (input.kind === 'text') {
-        return { kind: 'text', body: input.body, ...(input.email ? { email: input.email } : {}) };
+        return {
+          kind: 'text',
+          body: input.body,
+          ...(input.email ? { email: input.email } : {}),
+          ...(input.mentions?.length ? { mentions: input.mentions } : {}),
+        };
       }
       if (input.kind === 'reaction') return { kind: 'reaction', emoji: input.emoji };
       if (input.kind === 'location') {

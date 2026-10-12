@@ -1,0 +1,302 @@
+{
+  "whatsapp-devices-baileys": {
+    "nav": {
+      "groups": "Groepen van persoonlijke nummers"
+    },
+    "area": {
+      "groups": "Groepen"
+    },
+    "errors": {
+      "WA_GROUP_NOT_ADMIN": "Dit nummer is geen beheerder van de groep, dus WhatsApp heeft de wijziging geweigerd.",
+      "WA_GROUP_NOT_FOUND": "Deze groep is niet gevonden voor dit nummer. Mogelijk is hij verwijderd.",
+      "WA_GROUP_DEVICE_NOT_READY": "Dit nummer is nu niet verbonden. Verbind het of wacht even en probeer het opnieuw.",
+      "WA_GROUP_RATE_LIMITED": "Te veel groepsacties met dit nummer. Wacht even voordat je het opnieuw probeert.",
+      "WA_GROUP_RATE_LIMITED_ops_minute": "Te veel groepsacties met dit nummer in de afgelopen minuut. Wacht even voordat je het opnieuw probeert.",
+      "WA_GROUP_RATE_LIMITED_ops_day": "Dit nummer heeft de limiet van groepsacties voor vandaag bereikt. Probeer het morgen opnieuw.",
+      "WA_GROUP_RATE_LIMITED_creates_day": "Dit nummer heeft de limiet van nieuwe groepen voor vandaag bereikt. Probeer het morgen opnieuw.",
+      "WA_GROUP_RATE_LIMITED_join_link_day": "Dit nummer heeft de limiet van deelnames via uitnodigingslink voor vandaag bereikt. Probeer het morgen opnieuw.",
+      "WA_GROUP_RATE_LIMITED_cooldown": "WhatsApp heeft dit nummer afgeremd, dus groepsacties zijn een tijdje gepauzeerd om het te beschermen.",
+      "WA_GROUP_LIMIT_REACHED": "WhatsApp meldt dat de groep vol is of dat dit nummer niet in meer groepen kan zitten.",
+      "WA_GROUP_LEFT": "Dit nummer heeft de groep verlaten, dus de groep is alleen-lezen.",
+      "WA_GROUP_INVALID_NUMBER": "Een van de telefoonnummers is ongeldig of is dit nummer zelf.",
+      "WA_GROUP_JOIN_LINK_INVALID": "Deze uitnodigingslink is ongeldig, is ingetrokken of de groep bestaat niet meer.",
+      "WA_GROUP_JOIN_BY_LINK_DISABLED": "Deelnemen aan groepen via een uitnodigingslink is uitgeschakeld op dit platform.",
+      "WA_GROUP_ANNOUNCE_ONLY": "Alleen beheerders kunnen berichten sturen in deze groep en dit nummer is geen beheerder.",
+      "WA_GROUP_UNAVAILABLE": "WhatsApp heeft het verzoek niet geaccepteerd. Probeer het over een paar minuten opnieuw."
+    },
+    "groups": {
+      "eyebrow": "Onofficiële WhatsApp API / Groepen",
+      "headingA": "Groepen van je",
+      "headingB": "persoonlijke nummers",
+      "intro": "De groepen waarin elk gekoppeld nummer zit. Maak een groep, voeg mensen toe of verwijder ze, keur deelnameverzoeken goed, deel de uitnodigingslink en verlaat groepen. Berichten in een groep verschijnen ook in de gedeelde inbox.",
+      "loading": "Laden",
+      "loadFailed": "Je nummers konden niet worden geladen.",
+      "retry": "Opnieuw proberen",
+      "close": "Sluiten",
+      "cancel": "Annuleren",
+      "loadMore": "Meer laden",
+      "loadingMore": "Laden",
+      "untitled": "Naamloze groep",
+      "memberCount": "{count, plural, =0 {Geen leden} one {# lid} other {# leden}}",
+      "membersButton": "Leden",
+      "editButton": "Bewerken",
+      "leave": "Verlaten",
+      "openChat": "Chat openen",
+      "leftOn": "Dit nummer heeft de groep verlaten op {date}. De groep wordt hier alleen-lezen bewaard.",
+      "leftNote": "Dit nummer heeft de groep verlaten. De groep wordt hier alleen-lezen bewaard.",
+      "badge": {
+        "admin": "Je bent beheerder",
+        "notAdmin": "Geen beheerder",
+        "left": "Verlaten",
+        "announce": "Alleen beheerders sturen",
+        "restrict": "Beheerders bewerken info",
+        "approval": "Goedkeuring om deel te nemen",
+        "requests": "{count, plural, one {# verzoek} other {# verzoeken}}"
+      },
+      "blocked": {
+        "left": "Dit nummer heeft de groep verlaten.",
+        "offline": "Dit nummer is offline: verbind het om de groep te wijzigen.",
+        "notAdmin": "Dit nummer is hier geen beheerder: je kunt de groep lezen, maar niet wijzigen."
+      },
+      "kpi": {
+        "groups": "Groepen",
+        "groupsSub": "Dit nummer zit in",
+        "members": "Leden",
+        "membersSub": "In alle groepen",
+        "admin": "Als beheerder",
+        "adminSub": "Groepen die je kunt beheren",
+        "joinRequests": "Wachten om deel te nemen",
+        "joinRequestsSub": "Verzoeken om te beantwoorden",
+        "left": "Verlaten",
+        "leftSub": "Alleen-lezen bewaard"
+      },
+      "list": {
+        "title": "Groepen",
+        "search": "Zoeken op naam",
+        "statusLabel": "Tonen",
+        "statusAll": "Alle groepen",
+        "statusActive": "Actief",
+        "statusLeft": "Verlaten",
+        "empty": "Nog geen groepen. Maak er een, of voeg dit nummer op je telefoon toe aan een groep en die verschijnt hier.",
+        "noMatch": "Geen groep gevonden.",
+        "sync": "Vernieuwen vanuit WhatsApp",
+        "syncing": "Vernieuwen",
+        "synced": "{count, plural, one {# groep gelezen uit WhatsApp.} other {# groepen gelezen uit WhatsApp.}}",
+        "syncThrottled": "De lijst is net vernieuwd. Wacht een minuut voordat je opnieuw vernieuwt."
+      },
+      "rail": {
+        "title": "Nummers",
+        "noNumber": "Nog geen persoonlijk nummer.",
+        "online": "Online",
+        "offline": "Offline",
+        "notAdminHint": "{count, plural, one {Dit nummer is geen beheerder in # groep: je kunt hem lezen, maar niet wijzigen.} other {Dit nummer is geen beheerder in # groepen: je kunt ze lezen, maar niet wijzigen.}}",
+        "limitsTitle": "Resterende groepsacties",
+        "limitMinute": "Deze minuut",
+        "limitDay": "Vandaag",
+        "limitCreates": "Nieuwe groepen vandaag",
+        "limitJoins": "Deelnames via link vandaag",
+        "perCall": "Maximaal {count, plural, one {# persoon} other {# personen}} per toevoeging of verwijdering.",
+        "howTitle": "Hoe groepen hier werken",
+        "howRisk": "Groepen worden beheerd via de onofficiële verbinding. WhatsApp let goed op groepsacties, daarom heeft elk nummer limieten ter bescherming, en die gelden ook voor jou.",
+        "howAdmin": "Alleen een beheerder van een groep kan die wijzigen. Als dit nummer geen beheerder is, kun je de groep lezen en erin chatten, meer niet.",
+        "howInbox": "Wat leden schrijven verschijnt in de gedeelde inbox. Antwoorden gaan vanaf dit nummer de deur uit en tellen als één bericht."
+      },
+      "state": {
+        "noDevice": {
+          "title": "Geen persoonlijk nummer verbonden",
+          "message": "Groepen horen bij een persoonlijk WhatsApp-nummer. Verbind eerst een nummer.",
+          "connect": "Nummer verbinden"
+        },
+        "gateOff": {
+          "title": "Niet beschikbaar voor deze werkruimte",
+          "message": "De onofficiële WhatsApp-verbinding is niet meer ingeschakeld voor deze werkruimte, dus groepen kunnen niet worden gebruikt."
+        },
+        "denied": {
+          "title": "Je kunt geen groepen zien",
+          "message": "Je rol omvat niet het lezen van groepen van persoonlijke nummers. Vraag het aan een beheerder van je werkruimte."
+        },
+        "offline": {
+          "not_connected": {
+            "title": "Dit nummer is offline",
+            "message": "De onderstaande groepen staan zoals ze het laatst zijn opgeslagen. Verbind het nummer om ze te wijzigen."
+          },
+          "worker_unavailable": {
+            "title": "De verbindingsservice is bezet",
+            "message": "Het nummer is gekoppeld, maar niets houdt de sessie nu vast. De onderstaande groepen staan zoals ze het laatst zijn opgeslagen. Probeer het over een paar minuten opnieuw."
+          },
+          "open": "Dit nummer openen"
+        },
+        "rateLimited": {
+          "title": "Groepsacties zijn gepauzeerd",
+          "message": "Om dit nummer te beschermen tegen WhatsApp-limieten wachten nieuwe groepsacties.",
+          "countdown": "Probeer het opnieuw over {time}"
+        }
+      },
+      "create": {
+        "open": "Groep maken",
+        "title": "Groep maken",
+        "risk": "Groepen maken en mensen toevoegen zijn de acties waar WhatsApp het meest op let. Voeg alleen mensen toe die je kennen en verwachten toegevoegd te worden, en maak per dag weinig groepen. WhatsApp kan dit nummer beperken.",
+        "subject": "Groepsnaam",
+        "subjectHint": "Maximaal 60 tekens.",
+        "numbers": "Toe te voegen mensen",
+        "numbersHint": "Telefoonnummers met landcode, één per regel of gescheiden door komma's. Voorlopig maximaal {max}; je kunt er later meer toevoegen.",
+        "numbersPlaceholder": "+919876543210\n+14155550123",
+        "description": "Beschrijving (optioneel)",
+        "descriptionHint": "Maximaal {max} tekens.",
+        "counted": "{count} van {max} nummers",
+        "duplicates": "{count, plural, one {# dubbel genegeerd} other {# dubbele genegeerd}}",
+        "invalid": "Geen telefoonnummer: {numbers}",
+        "selfIgnored": "Dit nummer wordt door WhatsApp zelf toegevoegd en is uit de lijst weggelaten.",
+        "overCap": "Voeg maximaal {max} nummers tegelijk toe.",
+        "readNotice": "Lees de volledige risicomelding",
+        "acknowledge": "Ik begrijp dat het maken van een groep en het toevoegen van mensen ertoe kan leiden dat WhatsApp dit nummer beperkt.",
+        "offlineHint": "Verbind dit nummer om een groep te maken.",
+        "submit": "Groep maken",
+        "submitting": "Maken",
+        "created": "Groep gemaakt: {name}",
+        "resultSummary": "{ok, plural, =0 {Niemand is toegevoegd.} one {# persoon is toegevoegd.} other {# personen zijn toegevoegd.}} {failed, plural, =0 {} one {# kon niet worden toegevoegd.} other {# konden niet worden toegevoegd.}}",
+        "descriptionNotSet": "De groep bestaat, maar WhatsApp heeft de beschrijving niet geaccepteerd. Bewerk de groep om het opnieuw te proberen."
+      },
+      "outcome": {
+        "someone": "Een lid",
+        "done": "Klaar",
+        "already_member": "Zit al in de groep.",
+        "not_member": "Zit niet in de groep.",
+        "not_on_whatsapp": "Dit nummer staat niet op WhatsApp.",
+        "privacy_blocked": "Door hun privacyinstellingen kan dit nummer hen niet toevoegen. Stuur ze in plaats daarvan de uitnodigingslink.",
+        "not_allowed": "WhatsApp staat dit niet toe voor deze persoon.",
+        "group_full": "De groep is vol.",
+        "failed": "WhatsApp heeft deze niet geaccepteerd."
+      },
+      "edit": {
+        "title": "Groep bewerken",
+        "saved": "Groep bijgewerkt.",
+        "saving": "Opslaan",
+        "save": "Opslaan",
+        "choosePicture": "Afbeelding kiezen",
+        "pictureHint": "JPEG of PNG, maximaal {mb} MB.",
+        "pictureType": "Gebruik een JPEG- of PNG-afbeelding.",
+        "pictureSize": "De afbeelding is groter dan {mb} MB.",
+        "subject": "Groepsnaam",
+        "description": "Beschrijving",
+        "settings": "Instellingen",
+        "announce": "Alleen beheerders kunnen berichten sturen",
+        "announceHint": "Leden kunnen lezen maar niet schrijven.",
+        "restrict": "Alleen beheerders kunnen groepsinfo bewerken",
+        "restrictHint": "Naam, beschrijving en afbeelding.",
+        "approval": "Beheerders keuren nieuwe leden goed",
+        "approvalHint": "Mensen die de uitnodigingslink gebruiken wachten op goedkeuring.",
+        "addMode": "Alleen beheerders kunnen leden toevoegen",
+        "addModeHint": "Andere leden kunnen geen mensen toevoegen.",
+        "offline": "Dit nummer is offline, dus er kan niets worden opgeslagen.",
+        "removePicture": "Afbeelding verwijderen",
+        "keepPicture": "Afbeelding behouden"
+      },
+      "members": {
+        "title": "Leden van {name}",
+        "readOnly": {
+          "left": "Dit nummer heeft de groep verlaten: de lijst staat zoals laatst opgeslagen en kan niet worden gewijzigd.",
+          "offline": "Dit nummer is offline: de lijst staat zoals laatst opgeslagen.",
+          "notAdmin": "Dit nummer is geen beheerder: je kunt de lijst lezen, maar niet wijzigen."
+        },
+        "held": "Groepsacties zijn even gepauzeerd. Probeer het opnieuw wanneer het aftellen klaar is.",
+        "add": {
+          "label": "Mensen toevoegen",
+          "hint": "Telefoonnummers met landcode, één per regel of gescheiden door komma's. Maximaal {max} tegelijk.",
+          "placeholder": "+919876543210",
+          "counted": "{count} van {max} nummers",
+          "invalid": "Geen telefoonnummer: {numbers}",
+          "overCap": "Voeg maximaal {max} tegelijk toe.",
+          "risk": "Mensen toevoegen die je niet kennen is een veelvoorkomende reden dat WhatsApp een nummer beperkt.",
+          "adding": "Toevoegen",
+          "submit": "Toevoegen"
+        },
+        "done": {
+          "add": "{count, plural, one {# persoon toegevoegd.} other {# personen toegevoegd.}}",
+          "remove": "{count, plural, one {# persoon verwijderd.} other {# personen verwijderd.}}",
+          "promote": "{count, plural, one {# persoon is nu beheerder.} other {# personen zijn nu beheerder.}}",
+          "demote": "{count, plural, one {# persoon is geen beheerder meer.} other {# personen zijn geen beheerder meer.}}"
+        },
+        "result": "{ok, plural, =0 {Niemand is gewijzigd.} one {# persoon is gewijzigd.} other {# personen zijn gewijzigd.}} {failed, plural, =0 {} one {# niet.} other {# niet.}}",
+        "search": "Leden zoeken",
+        "searchPlaceholder": "Naam of nummer",
+        "total": "{count, plural, one {# lid} other {# leden}}",
+        "noAccess": "Je hebt geen toestemming om de leden te zien.",
+        "loading": "Leden laden",
+        "noMatch": "Geen lid gevonden.",
+        "empty": "Nog geen leden opgeslagen.",
+        "member": "Lid",
+        "noNumber": "WhatsApp toont het nummer van dit lid niet.",
+        "you": "Dit nummer",
+        "owner": "Eigenaar",
+        "admin": "Beheerder",
+        "promote": "Beheerder maken",
+        "demote": "Beheerder verwijderen",
+        "remove": "Verwijderen",
+        "selected": "{count, plural, =0 {Niemand geselecteerd} one {# geselecteerd} other {# geselecteerd}}",
+        "limit": "Maximaal {max} tegelijk",
+        "removeConfirm": "{count, plural, one {# persoon uit deze groep verwijderen?} other {# personen uit deze groep verwijderen?}}"
+      },
+      "requests": {
+        "readOnly": {
+          "left": "Dit nummer heeft de groep verlaten.",
+          "offline": "Dit nummer is offline: verbind het om te antwoorden.",
+          "notAdmin": "Dit nummer is geen beheerder, dus kan deze verzoeken niet beantwoorden."
+        },
+        "hidden": "{count, plural, one {# persoon wacht om deel te nemen.} other {# personen wachten om deel te nemen.}}",
+        "title": "{count, plural, one {# persoon wacht om deel te nemen} other {# personen wachten om deel te nemen}}",
+        "working": "…",
+        "approveAll": "Alles goedkeuren",
+        "rejectAll": "Alles afwijzen",
+        "loading": "Verzoeken laden",
+        "none": "Geen verzoeken om te tonen.",
+        "someone": "Iemand",
+        "approve": "Goedkeuren",
+        "reject": "Afwijzen",
+        "approved": "{count, plural, one {# persoon goedgekeurd.} other {# personen goedgekeurd.}}",
+        "rejected": "{count, plural, one {# verzoek afgewezen.} other {# verzoeken afgewezen.}}",
+        "someFailed": "{ok} gelukt, {failed} niet gelukt:"
+      },
+      "link": {
+        "show": "Uitnodigingslink",
+        "hide": "Uitnodigingslink verbergen",
+        "loading": "Link laden",
+        "label": "Uitnodigingslink",
+        "copy": "Kopiëren",
+        "copied": "Gekopieerd",
+        "copyFailed": "De link kon niet worden gekopieerd. Selecteer hem en kopieer hem handmatig.",
+        "newLink": "Nieuwe link",
+        "reset": "Er is een nieuwe uitnodigingslink gemaakt. De oude werkt niet meer.",
+        "confirmTitle": "Een nieuwe uitnodigingslink maken?",
+        "confirmMessage": "De oude link werkt meteen niet meer. Wie hem heeft, kan er niet meer mee deelnemen.",
+        "confirmButton": "Nieuwe link maken"
+      },
+      "join": {
+        "open": "Deelnemen via uitnodigingslink",
+        "title": "Deelnemen aan een groep via uitnodigingslink",
+        "risk": "Deelnemen aan groepen via links is de actie waarvoor WhatsApp nummers het vaakst beperkt. Dit nummer kan dit maar een paar keer per dag. Neem alleen deel aan groepen die je kent.",
+        "invite": "Uitnodigingslink",
+        "inviteHint": "Een chat.whatsapp.com-link, of alleen de code.",
+        "invalid": "Dit is geen WhatsApp-uitnodigingslink of -code.",
+        "lookUp": "Opzoeken",
+        "lookingUp": "Opzoeken",
+        "submit": "Deelnemen",
+        "joining": "Deelnemen",
+        "joined": "Je bent lid van de groep geworden. Hij verschijnt over een paar seconden in de lijst.",
+        "requested": "Verzoek verstuurd. Een beheerder van de groep moet het goedkeuren.",
+        "alreadyMember": "Dit nummer zit al in deze groep.",
+        "approvalRequired": "Een beheerder moet de deelname goedkeuren.",
+        "acknowledge": "Ik begrijp dat deelnemen aan groepen via een link ertoe kan leiden dat WhatsApp dit nummer beperkt.",
+        "offline": "Verbind dit nummer om deel te nemen aan een groep."
+      },
+      "confirm": {
+        "leaveTitle": "Deze groep verlaten?",
+        "leaveMessage": "Dit nummer verlaat {name}. Je kunt hier niet opnieuw deelnemen zonder uitnodiging. De groep en de berichten blijven alleen-lezen in de inbox staan.",
+        "leaveConfirm": "Groep verlaten"
+      },
+      "notice": {
+        "left": "Dit nummer heeft de groep verlaten."
+      }
+    }
+  }
+}

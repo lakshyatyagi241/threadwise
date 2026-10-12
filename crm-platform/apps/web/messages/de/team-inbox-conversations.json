@@ -137,7 +137,11 @@
       "logBusy": "Ein Export wird bereits vorbereitet. Warten Sie auf die E-Mail dazu und fordern Sie dann einen weiteren an.",
       "logNotReady": "Dieser Export ist nicht bereit oder abgelaufen. Fordern Sie ihn erneut an.",
       "groupSuspended": "Meta hat diese Gruppe gesperrt. Sie kann erst wieder angeschrieben werden, wenn Meta die Sperre aufhebt.",
-      "walletEmpty": "Dein Nachrichten-Guthaben reicht für diese Gruppennachricht nicht aus (eine Gebühr pro Mitglied). Lade es auf und versuche es erneut."
+      "walletEmpty": "Dein Nachrichten-Guthaben reicht für diese Gruppennachricht nicht aus (eine Gebühr pro Mitglied). Lade es auf und versuche es erneut.",
+      "groupLeft": "Diese Nummer hat die Gruppe verlassen und kann dort keine Nachrichten mehr senden.",
+      "groupAnnounceOnly": "Nur Admins dürfen in dieser Gruppe Nachrichten senden, und diese Nummer ist kein Admin.",
+      "groupRateLimited": "Zu viele Gruppennachrichten von dieser Nummer in kurzer Zeit. Warten Sie eine Minute und versuchen Sie es dann erneut.",
+      "groupUnavailable": "WhatsApp hat diese Gruppennachricht nicht akzeptiert. Versuchen Sie es in einigen Minuten erneut."
     },
     "bubble": {
       "kind": {
@@ -636,6 +640,24 @@
           "failed": "Fehlgeschlagen",
           "expired": "Abgelaufen"
         }
+      }
+    },
+    "groupThread": {
+      "openGroup": "Gruppe öffnen",
+      "readOnly": {
+        "left": {
+          "title": "Diese Nummer hat die Gruppe verlassen",
+          "message": "Die Unterhaltung bleibt unverändert erhalten. Sie können sie lesen und interne Notizen hinzufügen, aber keine Nachrichten senden."
+        },
+        "announceOnly": {
+          "title": "Nur Admins dürfen in dieser Gruppe senden",
+          "message": "Diese Nummer ist kein Admin der Gruppe, daher würde WhatsApp keine Nachricht zustellen. Interne Notizen können Sie weiterhin hinzufügen."
+        }
+      },
+      "mention": {
+        "label": "Gruppenmitglieder",
+        "loading": "Mitglieder werden gesucht",
+        "none": "Kein Mitglied passt"
       }
     }
   }

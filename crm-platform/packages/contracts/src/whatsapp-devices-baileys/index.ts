@@ -4,4 +4,5 @@
  */
 export * from './devices';
 export * from './errors';
+export * from './groups';
 export * from './notice';

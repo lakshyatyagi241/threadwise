@@ -24,3 +24,12 @@ bridge's own, with no version prefix.
 | GET    | `/api/whatsapp-message-settings` | `{ success: true, msg_gap, batches_gap, bw_msg_gap, enable_batches: 0 \| 1 }` (the bridge's wire format) |
 
 Audit events: `platform.node_bridge_updated`, `platform.node_pacing_updated` (changed field names only, never values).
+
+## Group directory consumers (personal numbers)
+
+The runtime hands what a socket reads about its groups to `InboundRouter.groups(orgId, deviceId, groups, { complete })` and `InboundRouter.groupEvent(...)`. The directory sink
+(`DeviceGroupsSink`, `apps/api/src/modules/whatsapp-devices-baileys/`, registered by `WhatsappDevicesBaileysWorkerModule`) is the consumer: it writes `wa_device_groups` (a
+`complete` read prunes the groups that vanished by setting `left_at`; a partial one never does), keeps the legacy `wa_groups` and `wa_group_members` filled for the storefront's
+ordering codes, and writes the outbox events. A workspace off the unofficial allow-list is skipped. `DeviceGroupsSweepService` re-reads the whole list of a connected number
+every `WA_GROUPS_SWEEP_HOURS` (default 6) through `DeviceControlService.groupAction`, so the ban-safety limiter applies. `DeviceControlService.hasOwner(orgId, deviceId)` says
+whether a worker holds the session (the Groups tab's `worker_unavailable` state). Management routes: [whatsapp-devices-baileys.md](whatsapp-devices-baileys.md#groups-of-a-personal-number-v2devicesidgroups).

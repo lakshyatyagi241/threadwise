@@ -137,7 +137,11 @@
       "logBusy": "Bir dışa aktarma zaten hazırlanıyor. E-postasını bekleyin, sonra yenisini isteyin.",
       "logNotReady": "Bu dışa aktarma hazır değil veya süresi doldu. Yeniden isteyin.",
       "groupSuspended": "Meta bu grubu askıya aldı; Meta kaldırana kadar gruba mesaj gönderilemez.",
-      "walletEmpty": "Mesaj cüzdanınız bu grup mesajını karşılayamıyor (üye başına bir ücret). Bakiye yükleyip tekrar deneyin."
+      "walletEmpty": "Mesaj cüzdanınız bu grup mesajını karşılayamıyor (üye başına bir ücret). Bakiye yükleyip tekrar deneyin.",
+      "groupLeft": "Bu numara gruptan ayrıldığı için artık orada mesaj gönderemez.",
+      "groupAnnounceOnly": "Bu grupta yalnızca yöneticiler mesaj gönderebilir ve bu numara yönetici değil.",
+      "groupRateLimited": "Bu numaradan kısa sürede çok fazla grup mesajı gönderildi. Bir dakika bekleyip tekrar deneyin.",
+      "groupUnavailable": "WhatsApp bu grup mesajını kabul etmedi. Birkaç dakika sonra tekrar deneyin."
     },
     "bubble": {
       "kind": {
@@ -636,6 +640,24 @@
           "failed": "Başarısız",
           "expired": "Süresi doldu"
         }
+      }
+    },
+    "groupThread": {
+      "openGroup": "Grubu aç",
+      "readOnly": {
+        "left": {
+          "title": "Bu numara gruptan ayrıldı",
+          "message": "Sohbet olduğu gibi saklanır. Okuyabilir ve iç not ekleyebilirsiniz ama mesaj gönderemezsiniz."
+        },
+        "announceOnly": {
+          "title": "Bu grupta yalnızca yöneticiler mesaj gönderebilir",
+          "message": "Bu numara grubun yöneticisi olmadığı için WhatsApp mesajı iletmez. Yine de iç not ekleyebilirsiniz."
+        }
+      },
+      "mention": {
+        "label": "Grup üyeleri",
+        "loading": "Üyeler aranıyor",
+        "none": "Eşleşen üye yok"
       }
     }
   }

@@ -9,7 +9,7 @@ import { HELP_AGENT_MAX_STEPS } from '@crm/contracts';
  */
 const helpAgentEnvSchema = z.object({
   /** The vendor the assistant calls. Must speak the OpenAI chat-completions dialect with tool calls. */
-  HELP_AGENT_PROVIDER: z.enum(['openai', 'mistral', 'deepseek', 'groq']).default('openai'),
+  HELP_AGENT_PROVIDER: z.enum(['openai', 'openrouter', 'mistral', 'deepseek', 'groq']).default('openai'),
   /** The model. Empty = the default model of the platform's key row for the vendor. */
   HELP_AGENT_MODEL: z.string().trim().max(120).default(''),
   /** Replaces the vendor's base URL (a gateway, or a stub in tests). */

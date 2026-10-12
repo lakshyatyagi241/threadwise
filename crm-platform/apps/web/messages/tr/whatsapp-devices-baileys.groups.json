@@ -1,0 +1,302 @@
+{
+  "whatsapp-devices-baileys": {
+    "nav": {
+      "groups": "Kişisel numara grupları"
+    },
+    "area": {
+      "groups": "Gruplar"
+    },
+    "errors": {
+      "WA_GROUP_NOT_ADMIN": "Bu numara grubun yöneticisi olmadığı için WhatsApp değişikliği reddetti.",
+      "WA_GROUP_NOT_FOUND": "Bu grup, bu numara için bulunamadı. Silinmiş olabilir.",
+      "WA_GROUP_DEVICE_NOT_READY": "Bu numara şu anda bağlı değil. Numarayı bağlayın veya biraz bekleyip tekrar deneyin.",
+      "WA_GROUP_RATE_LIMITED": "Bu numarada çok fazla grup işlemi yapıldı. Tekrar denemeden önce biraz bekleyin.",
+      "WA_GROUP_RATE_LIMITED_ops_minute": "Bu numarada son dakikada çok fazla grup işlemi yapıldı. Tekrar denemeden önce biraz bekleyin.",
+      "WA_GROUP_RATE_LIMITED_ops_day": "Bu numara bugünkü grup işlemi sınırına ulaştı. Yarın tekrar deneyin.",
+      "WA_GROUP_RATE_LIMITED_creates_day": "Bu numara bugünkü yeni grup sınırına ulaştı. Yarın tekrar deneyin.",
+      "WA_GROUP_RATE_LIMITED_join_link_day": "Bu numara bugünkü davet bağlantısıyla katılma sınırına ulaştı. Yarın tekrar deneyin.",
+      "WA_GROUP_RATE_LIMITED_cooldown": "WhatsApp bu numarayı kısıtladı, bu yüzden numarayı korumak için grup işlemleri bir süre duraklatıldı.",
+      "WA_GROUP_LIMIT_REACHED": "WhatsApp, grubun dolu olduğunu veya bu numaranın daha fazla grupta olamayacağını bildiriyor.",
+      "WA_GROUP_LEFT": "Bu numara gruptan ayrıldığı için grup salt okunurdur.",
+      "WA_GROUP_INVALID_NUMBER": "Telefon numaralarından biri geçerli değil veya bu numaranın kendisi.",
+      "WA_GROUP_JOIN_LINK_INVALID": "Bu davet bağlantısı geçerli değil, iptal edilmiş veya grup artık mevcut değil.",
+      "WA_GROUP_JOIN_BY_LINK_DISABLED": "Davet bağlantısıyla gruplara katılma bu platformda kapalı.",
+      "WA_GROUP_ANNOUNCE_ONLY": "Bu grupta yalnızca yöneticiler mesaj gönderebilir ve bu numara yönetici değil.",
+      "WA_GROUP_UNAVAILABLE": "WhatsApp isteği kabul etmedi. Birkaç dakika sonra tekrar deneyin."
+    },
+    "groups": {
+      "eyebrow": "Resmi olmayan WhatsApp API / Gruplar",
+      "headingA": "Gruplar:",
+      "headingB": "kişisel numaralarınız",
+      "intro": "Bağlı her numaranın içinde olduğu gruplar. Grup oluşturun, kişi ekleyin veya çıkarın, katılmak isteyenleri onaylayın, davet bağlantısını paylaşın ve gruptan ayrılın. Bir gruptaki mesajlar ortak gelen kutusunda da görünür.",
+      "loading": "Yükleniyor",
+      "loadFailed": "Numaralarınız yüklenemedi.",
+      "retry": "Tekrar dene",
+      "close": "Kapat",
+      "cancel": "İptal",
+      "loadMore": "Daha fazla yükle",
+      "loadingMore": "Yükleniyor",
+      "untitled": "Adsız grup",
+      "memberCount": "{count, plural, =0 {Üye yok} one {# üye} other {# üye}}",
+      "membersButton": "Üyeler",
+      "editButton": "Düzenle",
+      "leave": "Ayrıl",
+      "openChat": "Sohbeti aç",
+      "leftOn": "Bu numara gruptan {date} tarihinde ayrıldı. Burada salt okunur olarak saklanıyor.",
+      "leftNote": "Bu numara gruptan ayrıldı. Burada salt okunur olarak saklanıyor.",
+      "badge": {
+        "admin": "Yöneticisiniz",
+        "notAdmin": "Yönetici değil",
+        "left": "Ayrıldı",
+        "announce": "Yalnızca yöneticiler gönderir",
+        "restrict": "Yalnızca yöneticiler bilgiyi düzenler",
+        "approval": "Katılmak için onay",
+        "requests": "{count, plural, one {# istek} other {# istek}}"
+      },
+      "blocked": {
+        "left": "Bu numara gruptan ayrıldı.",
+        "offline": "Bu numara çevrimdışı: grubu değiştirmek için bağlayın.",
+        "notAdmin": "Bu numara burada yönetici değil: grubu okuyabilir, değiştiremezsiniz."
+      },
+      "kpi": {
+        "groups": "Gruplar",
+        "groupsSub": "Bu numaranın içinde olduğu",
+        "members": "Üyeler",
+        "membersSub": "Tüm gruplarda",
+        "admin": "Yönetici olarak",
+        "adminSub": "Yönetebileceğiniz gruplar",
+        "joinRequests": "Katılmayı bekleyen",
+        "joinRequestsSub": "Yanıtlanacak istekler",
+        "left": "Ayrıldı",
+        "leftSub": "Salt okunur saklanan"
+      },
+      "list": {
+        "title": "Gruplar",
+        "search": "Ada göre ara",
+        "statusLabel": "Göster",
+        "statusAll": "Tüm gruplar",
+        "statusActive": "Etkin",
+        "statusLeft": "Ayrıldı",
+        "empty": "Henüz grup yok. Bir grup oluşturun veya telefonunuzdan bu numarayı bir gruba ekleyin, burada görünecektir.",
+        "noMatch": "Eşleşen grup yok.",
+        "sync": "WhatsApp üzerinden yenile",
+        "syncing": "Yenileniyor",
+        "synced": "{count, plural, one {WhatsApp üzerinden # grup okundu.} other {WhatsApp üzerinden # grup okundu.}}",
+        "syncThrottled": "Liste az önce yenilendi. Tekrar yenilemeden önce bir dakika bekleyin."
+      },
+      "rail": {
+        "title": "Numaralar",
+        "noNumber": "Henüz kişisel numara yok.",
+        "online": "Çevrimiçi",
+        "offline": "Çevrimdışı",
+        "notAdminHint": "{count, plural, one {Bu numara # grupta yönetici değil: grubu okuyabilir, değiştiremezsiniz.} other {Bu numara # grupta yönetici değil: grupları okuyabilir, değiştiremezsiniz.}}",
+        "limitsTitle": "Kalan grup işlemleri",
+        "limitMinute": "Bu dakika",
+        "limitDay": "Bugün",
+        "limitCreates": "Bugün yeni gruplar",
+        "limitJoins": "Bugün bağlantıyla katılımlar",
+        "perCall": "Her ekleme veya çıkarmada en fazla {count, plural, one {# kişi} other {# kişi}}.",
+        "howTitle": "Gruplar burada nasıl çalışır",
+        "howRisk": "Gruplar, resmi olmayan bağlantı üzerinden yönetilir. WhatsApp grup işlemlerini yakından izler, bu yüzden her numaranın onu korumak için sınırları vardır ve bunlar sizin için de geçerlidir.",
+        "howAdmin": "Bir grubu yalnızca grup yöneticisi değiştirebilir. Bu numara yönetici değilse grubu okuyabilir ve içinde sohbet edebilirsiniz, başka bir şey yapamazsınız.",
+        "howInbox": "Üyelerin yazdıkları ortak gelen kutusunda görünür. Yanıtlar bu numaradan gider ve bir mesaj sayılır."
+      },
+      "state": {
+        "noDevice": {
+          "title": "Bağlı kişisel numara yok",
+          "message": "Gruplar bir kişisel WhatsApp numarasına aittir. Önce bir numara bağlayın.",
+          "connect": "Numara bağla"
+        },
+        "gateOff": {
+          "title": "Bu çalışma alanı için kullanılamıyor",
+          "message": "Resmi olmayan WhatsApp bağlantısı bu çalışma alanı için artık etkin değil, bu yüzden gruplar kullanılamaz."
+        },
+        "denied": {
+          "title": "Grupları göremezsiniz",
+          "message": "Rolünüz kişisel numara gruplarını okumayı içermiyor. Çalışma alanınızın yöneticisine sorun."
+        },
+        "offline": {
+          "not_connected": {
+            "title": "Bu numara çevrimdışı",
+            "message": "Aşağıdaki gruplar en son kaydedildiği gibidir. Değiştirmek için numarayı bağlayın."
+          },
+          "worker_unavailable": {
+            "title": "Bağlantı hizmeti meşgul",
+            "message": "Numara bağlı ama şu anda oturumunu tutan bir şey yok. Aşağıdaki gruplar en son kaydedildiği gibidir. Birkaç dakika sonra tekrar deneyin."
+          },
+          "open": "Bu numarayı aç"
+        },
+        "rateLimited": {
+          "title": "Grup işlemleri duraklatıldı",
+          "message": "Bu numarayı WhatsApp sınırlarından korumak için yeni grup işlemleri bekletiliyor.",
+          "countdown": "{time} sonra tekrar deneyin"
+        }
+      },
+      "create": {
+        "open": "Grup oluştur",
+        "title": "Grup oluştur",
+        "risk": "Grup oluşturmak ve kişi eklemek WhatsApp'ın en çok izlediği işlemlerdir. Yalnızca sizi tanıyan ve eklenmeyi bekleyen kişileri ekleyin ve günde az grup oluşturun. WhatsApp bu numarayı kısıtlayabilir.",
+        "subject": "Grup adı",
+        "subjectHint": "En fazla 60 karakter.",
+        "numbers": "Eklenecek kişiler",
+        "numbersHint": "Ülke kodlu telefon numaraları, her satıra bir tane veya virgülle ayrılmış. Şimdilik en fazla {max}; daha sonra daha fazla ekleyebilirsiniz.",
+        "numbersPlaceholder": "+919876543210\n+14155550123",
+        "description": "Açıklama (isteğe bağlı)",
+        "descriptionHint": "En fazla {max} karakter.",
+        "counted": "{count} / {max} numara",
+        "duplicates": "{count, plural, one {# tekrar yoksayıldı} other {# tekrar yoksayıldı}}",
+        "invalid": "Telefon numarası değil: {numbers}",
+        "selfIgnored": "Bu numara WhatsApp tarafından eklenir ve listeden çıkarıldı.",
+        "overCap": "Bir seferde en fazla {max} numara ekleyin.",
+        "readNotice": "Risk bildiriminin tamamını okuyun",
+        "acknowledge": "Grup oluşturmanın ve kişi eklemenin bu numaranın WhatsApp tarafından kısıtlanmasına yol açabileceğini anlıyorum.",
+        "offlineHint": "Grup oluşturmak için bu numarayı bağlayın.",
+        "submit": "Grubu oluştur",
+        "submitting": "Oluşturuluyor",
+        "created": "Grup oluşturuldu: {name}",
+        "resultSummary": "{ok, plural, =0 {Kimse eklenmedi.} one {# kişi eklendi.} other {# kişi eklendi.}} {failed, plural, =0 {} one {# kişi eklenemedi.} other {# kişi eklenemedi.}}",
+        "descriptionNotSet": "Grup oluşturuldu ama WhatsApp açıklamayı kabul etmedi. Tekrar denemek için grubu düzenleyin."
+      },
+      "outcome": {
+        "someone": "Bir üye",
+        "done": "Tamam",
+        "already_member": "Zaten grupta.",
+        "not_member": "Grupta değil.",
+        "not_on_whatsapp": "Bu numara WhatsApp'ta değil.",
+        "privacy_blocked": "Gizlilik ayarları bu numaranın onları eklemesine izin vermiyor. Bunun yerine onlara davet bağlantısını gönderin.",
+        "not_allowed": "WhatsApp bu kişi için buna izin vermiyor.",
+        "group_full": "Grup dolu.",
+        "failed": "WhatsApp bunu kabul etmedi."
+      },
+      "edit": {
+        "title": "Grubu düzenle",
+        "saved": "Grup güncellendi.",
+        "saving": "Kaydediliyor",
+        "save": "Kaydet",
+        "choosePicture": "Fotoğraf seç",
+        "pictureHint": "JPEG veya PNG, en fazla {mb} MB.",
+        "pictureType": "JPEG veya PNG fotoğraf kullanın.",
+        "pictureSize": "Fotoğraf {mb} MB sınırını aşıyor.",
+        "subject": "Grup adı",
+        "description": "Açıklama",
+        "settings": "Ayarlar",
+        "announce": "Yalnızca yöneticiler mesaj gönderebilir",
+        "announceHint": "Üyeler okuyabilir ama yazamaz.",
+        "restrict": "Yalnızca yöneticiler grup bilgisini düzenleyebilir",
+        "restrictHint": "Ad, açıklama ve fotoğraf.",
+        "approval": "Yöneticiler yeni üyeleri onaylar",
+        "approvalHint": "Davet bağlantısını kullananlar onay bekler.",
+        "addMode": "Yalnızca yöneticiler üye ekleyebilir",
+        "addModeHint": "Diğer üyeler kişi ekleyemez.",
+        "offline": "Bu numara çevrimdışı, bu yüzden hiçbir şey kaydedilemez.",
+        "removePicture": "Fotoğrafı kaldır",
+        "keepPicture": "Fotoğrafı koru"
+      },
+      "members": {
+        "title": "{name} üyeleri",
+        "readOnly": {
+          "left": "Bu numara gruptan ayrıldı: liste en son kaydedildiği gibidir ve değiştirilemez.",
+          "offline": "Bu numara çevrimdışı: liste en son kaydedildiği gibidir.",
+          "notAdmin": "Bu numara yönetici değil: listeyi okuyabilir, değiştiremezsiniz."
+        },
+        "held": "Grup işlemleri kısa süre duraklatıldı. Geri sayım bitince tekrar deneyin.",
+        "add": {
+          "label": "Kişi ekle",
+          "hint": "Ülke kodlu telefon numaraları, her satıra bir tane veya virgülle ayrılmış. Bir seferde en fazla {max}.",
+          "placeholder": "+919876543210",
+          "counted": "{count} / {max} numara",
+          "invalid": "Telefon numarası değil: {numbers}",
+          "overCap": "Bir seferde en fazla {max} ekleyin.",
+          "risk": "Sizi tanımayan kişileri eklemek, WhatsApp'ın bir numarayı kısıtlamasının yaygın bir nedenidir.",
+          "adding": "Ekleniyor",
+          "submit": "Ekle"
+        },
+        "done": {
+          "add": "{count, plural, one {# kişi eklendi.} other {# kişi eklendi.}}",
+          "remove": "{count, plural, one {# kişi çıkarıldı.} other {# kişi çıkarıldı.}}",
+          "promote": "{count, plural, one {# kişi artık yönetici.} other {# kişi artık yönetici.}}",
+          "demote": "{count, plural, one {# kişi artık yönetici değil.} other {# kişi artık yönetici değil.}}"
+        },
+        "result": "{ok, plural, =0 {Kimse değiştirilmedi.} one {# kişi değiştirildi.} other {# kişi değiştirildi.}} {failed, plural, =0 {} one {# kişi değiştirilemedi.} other {# kişi değiştirilemedi.}}",
+        "search": "Üyeleri ara",
+        "searchPlaceholder": "Ad veya numara",
+        "total": "{count, plural, one {# üye} other {# üye}}",
+        "noAccess": "Üyeleri görme izniniz yok.",
+        "loading": "Üyeler yükleniyor",
+        "noMatch": "Eşleşen üye yok.",
+        "empty": "Henüz kaydedilmiş üye yok.",
+        "member": "Üye",
+        "noNumber": "WhatsApp bu üyenin numarasını göstermiyor.",
+        "you": "Bu numara",
+        "owner": "Sahip",
+        "admin": "Yönetici",
+        "promote": "Yönetici yap",
+        "demote": "Yöneticiliği kaldır",
+        "remove": "Çıkar",
+        "selected": "{count, plural, =0 {Kimse seçilmedi} one {# seçildi} other {# seçildi}}",
+        "limit": "Bir seferde en fazla {max}",
+        "removeConfirm": "{count, plural, one {# kişi bu gruptan çıkarılsın mı?} other {# kişi bu gruptan çıkarılsın mı?}}"
+      },
+      "requests": {
+        "readOnly": {
+          "left": "Bu numara gruptan ayrıldı.",
+          "offline": "Bu numara çevrimdışı: yanıtlamak için bağlayın.",
+          "notAdmin": "Bu numara yönetici değil, bu yüzden bu istekleri yanıtlayamaz."
+        },
+        "hidden": "{count, plural, one {# kişi katılmayı bekliyor.} other {# kişi katılmayı bekliyor.}}",
+        "title": "{count, plural, one {Katılmayı bekleyen # kişi} other {Katılmayı bekleyen # kişi}}",
+        "working": "…",
+        "approveAll": "Tümünü onayla",
+        "rejectAll": "Tümünü reddet",
+        "loading": "İstekler yükleniyor",
+        "none": "Gösterilecek istek yok.",
+        "someone": "Biri",
+        "approve": "Onayla",
+        "reject": "Reddet",
+        "approved": "{count, plural, one {# kişi onaylandı.} other {# kişi onaylandı.}}",
+        "rejected": "{count, plural, one {# istek reddedildi.} other {# istek reddedildi.}}",
+        "someFailed": "{ok} tamamlandı, {failed} tamamlanamadı:"
+      },
+      "link": {
+        "show": "Davet bağlantısı",
+        "hide": "Davet bağlantısını gizle",
+        "loading": "Bağlantı yükleniyor",
+        "label": "Davet bağlantısı",
+        "copy": "Kopyala",
+        "copied": "Kopyalandı",
+        "copyFailed": "Bağlantı kopyalanamadı. Seçip elle kopyalayın.",
+        "newLink": "Yeni bağlantı",
+        "reset": "Yeni bir davet bağlantısı oluşturuldu. Eskisi artık çalışmıyor.",
+        "confirmTitle": "Yeni davet bağlantısı oluşturulsun mu?",
+        "confirmMessage": "Eski bağlantı hemen çalışmayı bırakır. Bağlantıya sahip olanlar onunla katılamaz.",
+        "confirmButton": "Yeni bağlantı oluştur"
+      },
+      "join": {
+        "open": "Davet bağlantısıyla katıl",
+        "title": "Davet bağlantısıyla gruba katıl",
+        "risk": "Bağlantıdan gruplara katılmak, WhatsApp'ın numaraları en sık kısıtladığı işlemdir. Bu numara bunu günde yalnızca birkaç kez yapabilir. Yalnızca tanıdığınız gruplara katılın.",
+        "invite": "Davet bağlantısı",
+        "inviteHint": "Bir chat.whatsapp.com bağlantısı veya yalnızca kodu.",
+        "invalid": "Bu bir WhatsApp davet bağlantısı veya kodu değil.",
+        "lookUp": "Ara",
+        "lookingUp": "Aranıyor",
+        "submit": "Katıl",
+        "joining": "Katılınıyor",
+        "joined": "Gruba katılındı. Birkaç saniye içinde listede görünür.",
+        "requested": "İstek gönderildi. Grubun bir yöneticisinin onaylaması gerekiyor.",
+        "alreadyMember": "Bu numara zaten bu grupta.",
+        "approvalRequired": "Katılmayı bir yöneticinin onaylaması gerekiyor.",
+        "acknowledge": "Bağlantıyla gruplara katılmanın bu numaranın WhatsApp tarafından kısıtlanmasına yol açabileceğini anlıyorum.",
+        "offline": "Gruba katılmak için bu numarayı bağlayın."
+      },
+      "confirm": {
+        "leaveTitle": "Bu gruptan ayrılınsın mı?",
+        "leaveMessage": "Bu numara {name} grubundan ayrılacak. Davet olmadan buradan tekrar katılamazsınız. Grup ve mesajları gelen kutusunda salt okunur olarak kalır.",
+        "leaveConfirm": "Gruptan ayrıl"
+      },
+      "notice": {
+        "left": "Bu numara gruptan ayrıldı."
+      }
+    }
+  }
+}

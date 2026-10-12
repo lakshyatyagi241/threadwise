@@ -15,9 +15,9 @@ import {
   type WindowInfo,
 } from '../../infra/providers/chat-conversations';
 import {
-  GROUP_SEND_UNAVAILABLE_MESSAGE,
   isGroupPeer,
   isGroupSendKind,
+  isPersonalGroupSendKind,
 } from '../../infra/providers/whatsapp/group-peer';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
 import {
@@ -59,9 +59,6 @@ export interface DispatchResult {
   /** True when this key had already been sent: the stored answer is returned and the provider is not called again. */
   replayed: boolean;
 }
-
-/** Channels that build a phone number from the thread key and cannot address a group: a group key must never reach them. `whatsapp_cloud` addresses groups itself. */
-const GROUP_SEND_CHANNEL_KINDS: ReadonlySet<string> = new Set(['whatsapp_qr']);
 
 const RESULT_TTL_SECONDS = 24 * 3600;
 /**
@@ -227,17 +224,24 @@ export class ChannelDispatcher {
     lastInboundAt: Date | null,
     now: Date = new Date(),
   ): WindowInfo {
-    // A WhatsApp group thread (`g:<group id>`) has no phone number to send to. A channel that can only send to a number refuses before
-    // anything is stored or queued, and again in the worker (WABA_GROUP_SEND_UNAVAILABLE). The Cloud API channel addresses the group
-    // itself, but only with the kinds Meta accepts on a group.
-    if (GROUP_SEND_CHANNEL_KINDS.has(channel.kind) && isGroupPeer(envelope.to)) {
+    // A WhatsApp group thread (`g:<group id>`) is addressed by its id, never by a phone number. The Cloud API channel and a personal
+    // number (`whatsapp_qr`, over the linked device) each carry only the kinds WhatsApp accepts in a group.
+    if (
+      channel.kind === 'whatsapp_qr' &&
+      isGroupPeer(envelope.to) &&
+      !isPersonalGroupSendKind(envelope.kind)
+    ) {
       throw new AppError(
-        ERROR_CODES.WABA_GROUP_SEND_UNAVAILABLE,
-        GROUP_SEND_UNAVAILABLE_MESSAGE,
+        ERROR_CODES.CHANNEL_CAPABILITY_UNSUPPORTED,
+        `A WhatsApp group cannot receive a ${envelope.kind} message`,
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
-    if (channel.kind === 'whatsapp_cloud' && isGroupPeer(envelope.to) && !isGroupSendKind(envelope.kind)) {
+    if (
+      channel.kind === 'whatsapp_cloud' &&
+      isGroupPeer(envelope.to) &&
+      !isGroupSendKind(envelope.kind)
+    ) {
       throw new AppError(
         ERROR_CODES.CHANNEL_CAPABILITY_UNSUPPORTED,
         `A WhatsApp group cannot receive a ${envelope.kind} message`,

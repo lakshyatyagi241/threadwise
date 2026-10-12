@@ -137,7 +137,11 @@
       "logBusy": "Eksport jest już przygotowywany. Poczekaj na e-mail z nim, a potem zamów kolejny.",
       "logNotReady": "Ten eksport nie jest gotowy lub wygasł. Zamów go ponownie.",
       "groupSuspended": "Meta zawiesiła tę grupę, więc nie można do niej pisać, dopóki Meta jej nie przywróci.",
-      "walletEmpty": "Portfel wiadomości nie pokrywa tej wiadomości grupowej (jedna opłata za każdego członka). Doładuj go i spróbuj ponownie."
+      "walletEmpty": "Portfel wiadomości nie pokrywa tej wiadomości grupowej (jedna opłata za każdego członka). Doładuj go i spróbuj ponownie.",
+      "groupLeft": "Ten numer opuścił grupę, więc nie może już wysyłać tam wiadomości.",
+      "groupAnnounceOnly": "Tylko administratorzy mogą wysyłać wiadomości w tej grupie, a ten numer nie jest administratorem.",
+      "groupRateLimited": "Zbyt wiele wiadomości grupowych z tego numeru w krótkim czasie. Poczekaj minutę i spróbuj ponownie.",
+      "groupUnavailable": "WhatsApp nie przyjął tej wiadomości grupowej. Spróbuj ponownie za kilka minut."
     },
     "bubble": {
       "kind": {
@@ -636,6 +640,24 @@
           "failed": "Niepowodzenie",
           "expired": "Wygasł"
         }
+      }
+    },
+    "groupThread": {
+      "openGroup": "Otwórz grupę",
+      "readOnly": {
+        "left": {
+          "title": "Ten numer opuścił grupę",
+          "message": "Rozmowa została zachowana w dotychczasowej postaci. Możesz ją czytać i dodawać notatki wewnętrzne, ale nie możesz wysyłać wiadomości."
+        },
+        "announceOnly": {
+          "title": "Tylko administratorzy mogą pisać w tej grupie",
+          "message": "Ten numer nie jest administratorem grupy, więc WhatsApp nie dostarczyłby wiadomości. Nadal możesz dodawać notatki wewnętrzne."
+        }
+      },
+      "mention": {
+        "label": "Członkowie grupy",
+        "loading": "Szukanie członków",
+        "none": "Żaden członek nie pasuje"
       }
     }
   }

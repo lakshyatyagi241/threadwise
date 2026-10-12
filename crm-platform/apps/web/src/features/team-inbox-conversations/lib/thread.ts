@@ -4,6 +4,7 @@ import {
   type EmailReplyExtras,
   type MessageResponse,
   type MessageStatus,
+  type WaGroupMention,
 } from '@crm/contracts';
 import { dayKey } from './time';
 
@@ -22,6 +23,8 @@ export interface PendingSend {
   replyToMessageId?: string | null;
   /** Email conversations: cc, bcc and subject of the reply, kept so a retry sends them again. */
   email?: EmailReplyExtras;
+  /** Personal-number group text: the members @mentioned in `body` (kept so a retry sends them again). */
+  mentions?: WaGroupMention[];
   /** For a media send: what the bubble shows while it goes. */
   media: { mediaId: string; name: string; mime: string; sizeBytes: number | null } | null;
   /** `sending` until the server answered; `failed` when the request itself was refused or never arrived. */

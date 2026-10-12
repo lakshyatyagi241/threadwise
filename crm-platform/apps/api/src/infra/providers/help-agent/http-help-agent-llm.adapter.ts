@@ -12,6 +12,7 @@ export const HELP_AGENT_ENV = Symbol('HELP_AGENT_ENV');
 /** Vendors that speak the OpenAI chat-completions dialect with tool calls. */
 const BASE_URLS: Record<string, string> = {
   openai: 'https://api.openai.com/v1',
+  openrouter: 'https://openrouter.ai/api/v1',
   mistral: 'https://api.mistral.ai/v1',
   deepseek: 'https://api.deepseek.com/v1',
   groq: 'https://api.groq.com/openai/v1',

@@ -60,7 +60,8 @@ export interface TypeMeta {
     | 'campaign'
     | 'scheduled_message'
     | 'team_chat_channel'
-    | 'waba_group';
+    | 'waba_group'
+    | 'device_group';
 }
 
 type Look = Pick<TypeMeta, 'icon' | 'tone' | 'subject'>;
@@ -113,6 +114,8 @@ const LOOK: Record<NotificationPrefType, Look> = {
   waba_group_join_request: look('group', 'info', 'waba_group'),
   waba_group_suspended: look('group', 'danger', 'waba_group'),
   waba_group_suspension_cleared: look('group', 'success', 'waba_group'),
+  device_group_join_request: look('group', 'info', 'device_group'),
+  device_group_removed: look('group', 'danger', 'device_group'),
 };
 
 export const TYPE_CATALOGUE: Readonly<Record<string, TypeMeta>> = Object.fromEntries(
@@ -213,6 +216,11 @@ export function notificationHref(n: LinkSource): string | null {
     case 'waba_group': {
       const conn = id(d.connectionId);
       return conn ? `/waba-groups?account=${conn}` : '/waba-groups';
+    }
+    case 'device_group': {
+      // The Groups tab of the personal numbers: `?device=` selects the number the group belongs to.
+      const dev = id(d.deviceId);
+      return dev ? `/devices/groups?device=${dev}` : '/devices/groups';
     }
     default:
       return null;

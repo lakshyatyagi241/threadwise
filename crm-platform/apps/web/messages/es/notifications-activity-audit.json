@@ -149,6 +149,16 @@
         "title": "{name} vuelve a estar activo",
         "titleNoName": "Un grupo de WhatsApp vuelve a estar activo",
         "body": "WhatsApp restableció este grupo. Puedes volver a enviarle mensajes."
+      },
+      "device_group_join_request": {
+        "title": "{count, plural, one {Alguien quiere unirse a {name}} many {# personas quieren unirse a {name}} other {# personas quieren unirse a {name}}}",
+        "titleNoName": "{count, plural, one {Alguien quiere unirse a un grupo de WhatsApp} many {# personas quieren unirse a un grupo de WhatsApp} other {# personas quieren unirse a un grupo de WhatsApp}}",
+        "body": "Abre Grupos para aprobar o rechazar."
+      },
+      "device_group_removed": {
+        "title": "Tu número fue eliminado de {name}",
+        "titleNoName": "Tu número fue eliminado de un grupo de WhatsApp",
+        "body": "Alguien eliminó tu número personal de este grupo. El grupo se conserva aquí, de solo lectura."
       }
     },
     "live": {
@@ -177,7 +187,9 @@
         "teamchat_message": "Nuevo mensaje directo",
         "waba_group_join_request": "Solicitud para unirse a un grupo",
         "waba_group_suspended": "Grupo de WhatsApp suspendido",
-        "waba_group_suspension_cleared": "Grupo de WhatsApp activo de nuevo"
+        "waba_group_suspension_cleared": "Grupo de WhatsApp activo de nuevo",
+        "device_group_join_request": "Solicitud para unirse a un grupo",
+        "device_group_removed": "Eliminado de un grupo de WhatsApp"
       }
     },
     "prefs": {
@@ -334,6 +346,14 @@
         "billing_subscription_canceled": {
           "label": "Suscripción cancelada",
           "hint": "Tu proveedor de pagos finalizó una suscripción de este espacio de trabajo."
+        },
+        "device_group_join_request": {
+          "label": "Solicitud para unirse a un grupo de número personal",
+          "hint": "Alguien pide unirse a un grupo de un número personal de WhatsApp que gestionas. Diez solicitudes forman una fila."
+        },
+        "device_group_removed": {
+          "label": "Eliminado de un grupo de número personal",
+          "hint": "Alguien eliminó uno de tus números personales de WhatsApp de un grupo. Puede ser señal de que el número fue denunciado."
         }
       },
       "loading": "Cargando tus preferencias",

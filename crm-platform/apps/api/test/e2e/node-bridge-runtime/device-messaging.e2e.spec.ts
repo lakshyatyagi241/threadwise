@@ -3,6 +3,7 @@ import type { AddressInfo } from 'node:net';
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
 import { CryptoService } from '../../../src/common/crypto/crypto.service';
 import { RequestContextStore } from '../../../src/common/context/request-context';
+import type { GroupAction } from '../../../src/infra/providers/node-bridge-runtime/socket.port';
 import { UnsupportedSendError } from '../../../src/infra/providers/node-bridge-runtime/outbound.port';
 import type { Normalized } from '../../../src/infra/providers/node-bridge-runtime/inbound-normalizer';
 import { BroadcastReceiptsService } from '../../../src/modules/broadcasts';
@@ -15,7 +16,13 @@ import {
 } from '../../../src/modules/node-bridge-runtime/runtime/routers';
 import { ScheduledReceiptsService } from '../../../src/modules/scheduled-queue-warmer/scheduled-receipts.service';
 import { Api, startHarness, type Harness, type Tenant } from '../contacts-attributes-tags/support';
-import { rig, worker as buildWorker, type FakeSocket, type Rig } from './support';
+import {
+  fakeGroupSnapshot,
+  rig,
+  worker as buildWorker,
+  type FakeSocket,
+  type Rig,
+} from './support';
 
 /**
  * Sending, receiving and receipts through the unofficial engine and Twilio (TW-NODE-016 to 025, 027): real Postgres and Redis,
@@ -229,11 +236,21 @@ describe('changing a message already sent (TW-NODE-025)', () => {
 });
 
 describe('groups (TW-NODE-021)', () => {
+  /** The limiter's numbers as the test found them; every test that tightens them puts them back. */
+  let saved: ReturnType<typeof snapshotLimits> | null = null;
+  const snapshotLimits = () => ({ ...r.control.groupLimiter.limits });
+  const limits = (over: Partial<ReturnType<typeof snapshotLimits>>) => {
+    saved ??= snapshotLimits();
+    Object.assign(r.control.groupLimiter.limits, over);
+  };
+  afterEach(() => {
+    if (saved) Object.assign(r.control.groupLimiter.limits, saved);
+    saved = null;
+  });
+
   it('management commands go to the owning socket and the answer comes back', async () => {
     const d = await connected('groups');
-    d.socket.groupResult = {
-      group: { jid: '1203@g.us', subject: 'Team', description: null, size: 2 },
-    };
+    d.socket.groupResult = { group: fakeGroupSnapshot({ subject: 'Team' }) };
     r.control.local = null;
     const res = await r.control.groupAction(d.t.orgId, d.deviceId, {
       type: 'create',
@@ -243,7 +260,7 @@ describe('groups (TW-NODE-021)', () => {
     expect(res).toEqual({
       ok: true,
       status: 'group',
-      result: { group: { jid: '1203@g.us', subject: 'Team', description: null, size: 2 } },
+      result: { group: fakeGroupSnapshot({ subject: 'Team' }) },
     });
     expect(d.socket.groupCalls).toEqual([
       { type: 'create', subject: 'Team', participants: ['919800000001'] },
@@ -260,20 +277,222 @@ describe('groups (TW-NODE-021)', () => {
     });
   });
 
-  it('a change to the groups reaches every consumer', async () => {
+  it('a change to the groups reaches every consumer, with whether the list is complete', async () => {
     const inbound = new InboundRouter(r.redis);
-    const seen: string[][] = [];
+    const seen: Array<[string[], boolean]> = [];
     inbound.register({
       message: async () => undefined,
-      groups: async (_c, g) => void seen.push(g.map((x) => x.jid)),
+      groups: async (_c, g, o) => void seen.push([g.map((x) => x.jid), o.complete]),
     });
     const d = await connected('groupsync', { inbound });
+    d.socket.emit({ type: 'groups', groups: [fakeGroupSnapshot({ groupId: '1' })] });
     d.socket.emit({
       type: 'groups',
-      groups: [{ jid: '1@g.us', subject: 'A', description: null, size: 3 }],
+      groups: [fakeGroupSnapshot({ groupId: '2' })],
+      complete: false,
     });
     await settle();
-    expect(seen).toEqual([['1@g.us']]);
+    expect(seen).toEqual([
+      [['1@g.us'], true],
+      [['2@g.us'], false],
+    ]);
+  });
+
+  it('a group event reaches every consumer with the device it came from', async () => {
+    const inbound = new InboundRouter(r.redis);
+    const seen: unknown[] = [];
+    inbound.register({
+      message: async () => undefined,
+      groupEvent: async (c, e) => void seen.push([c.deviceId, e]),
+    });
+    const d = await connected('groupevent', { inbound });
+    const event = {
+      kind: 'join_request',
+      groupId: '120363000000000001',
+      participant: '777@lid',
+      author: null,
+      action: 'created',
+      method: 'invite_link',
+    } as const;
+    d.socket.emit({ type: 'group_event', event });
+    await settle();
+    expect(seen).toEqual([[d.deviceId, event]]);
+  });
+
+  it('every group action runs the unofficial gate first', async () => {
+    const d = await connected('groupgate');
+    // with the shared gate refusing, no call reaches the socket
+    const gate = (
+      r.control as unknown as { unofficial: { assertEnabledFor: (o: number) => Promise<void> } }
+    ).unofficial;
+    const original = gate.assertEnabledFor.bind(gate);
+    gate.assertEnabledFor = async () => {
+      throw new Error('WA_UNOFFICIAL_DISABLED');
+    };
+    try {
+      await expect(r.control.groupAction(d.t.orgId, d.deviceId, { type: 'list' })).rejects.toThrow(
+        'WA_UNOFFICIAL_DISABLED',
+      );
+    } finally {
+      gate.assertEnabledFor = original;
+    }
+    expect(d.socket.groupCalls).toEqual([]);
+  });
+
+  it('the per-minute budget is enforced on the local path and on the Redis path, before the socket is touched', async () => {
+    const d = await connected('limit-min');
+    limits({ opsPerMinute: 2 });
+    for (let i = 0; i < 2; i++) {
+      expect((await r.control.groupAction(d.t.orgId, d.deviceId, { type: 'list' })).ok).toBe(true);
+    }
+    const local = await r.control.groupAction(d.t.orgId, d.deviceId, { type: 'list' });
+    expect(local).toMatchObject({ ok: false, status: 'rate_limited', scope: 'ops_minute' });
+    expect((local as { retryAfterSeconds: number }).retryAfterSeconds).toBeGreaterThan(0);
+    r.control.local = null;
+    expect(await r.control.groupAction(d.t.orgId, d.deviceId, { type: 'list' })).toMatchObject({
+      ok: false,
+      status: 'rate_limited',
+      scope: 'ops_minute',
+    });
+    expect(d.socket.groupCalls).toHaveLength(2);
+  });
+
+  it('creating is capped per day and a link join has its own cap, both off the same counters on either path', async () => {
+    const d = await connected('limit-day');
+    limits({ createsPerDay: 1, joinByLinkPerDay: 1, joinByLinkEnabled: true });
+    const create: GroupAction = { type: 'create', subject: 'A', participants: ['919800000001'] };
+    expect((await r.control.groupAction(d.t.orgId, d.deviceId, create)).ok).toBe(true);
+    r.control.local = null;
+    expect(await r.control.groupAction(d.t.orgId, d.deviceId, create)).toMatchObject({
+      status: 'rate_limited',
+      scope: 'creates_day',
+    });
+    const join = { type: 'accept_invite', code: 'AbCdEf1234567890abcdef' } as const;
+    expect((await r.control.groupAction(d.t.orgId, d.deviceId, join)).ok).toBe(true);
+    expect(await r.control.groupAction(d.t.orgId, d.deviceId, join)).toMatchObject({
+      status: 'rate_limited',
+      scope: 'join_link_day',
+    });
+    // a plain read is not held up by the create and join caps
+    expect((await r.control.groupAction(d.t.orgId, d.deviceId, { type: 'list' })).ok).toBe(true);
+  });
+
+  it('joining by link is refused unless the platform turns it on, and so is previewing a link', async () => {
+    const d = await connected('join-off');
+    limits({ joinByLinkEnabled: false });
+    for (const action of [
+      { type: 'accept_invite', code: 'AbCdEf1234567890abcdef' },
+      { type: 'get_invite_info', code: 'AbCdEf1234567890abcdef' },
+    ] as const) {
+      expect(await r.control.groupAction(d.t.orgId, d.deviceId, action)).toMatchObject({
+        ok: false,
+        status: 'disabled',
+      });
+    }
+    expect(d.socket.groupCalls).toEqual([]);
+  });
+
+  it('more than 20 people in one call never reaches WhatsApp', async () => {
+    const d = await connected('too-many');
+    const res = await r.control.groupAction(d.t.orgId, d.deviceId, {
+      type: 'participants',
+      groupJid: '1203',
+      participants: Array.from({ length: 21 }, (_, i) => `91980000${1000 + i}`),
+      change: 'add',
+    });
+    expect(res).toMatchObject({ ok: false, status: 'error' });
+    expect(d.socket.groupCalls).toEqual([]);
+  });
+
+  it('a refusal that looks like a ban signal starts the cooldown; a plain "not admin" does not', async () => {
+    const d = await connected('cooldown');
+    const refuse = (message: string, data: number) =>
+      Object.assign(new Error(message), { isBoom: true, data });
+    d.socket.groupReplies.subject = refuse('not-authorized', 401);
+    const notAdmin = await r.control.groupAction(d.t.orgId, d.deviceId, {
+      type: 'subject',
+      groupJid: '1203',
+      subject: 'X',
+    });
+    expect(notAdmin).toMatchObject({ ok: false, status: 'group_failed', reason: 'not_admin' });
+    expect(await r.control.groupLimiter.cooldownRemaining(d.t.orgId, d.deviceId)).toBe(0);
+
+    d.socket.groupReplies.subject = refuse('forbidden', 403);
+    const forbidden = await r.control.groupAction(d.t.orgId, d.deviceId, {
+      type: 'subject',
+      groupJid: '1203',
+      subject: 'X',
+    });
+    expect(forbidden).toMatchObject({ ok: false, status: 'group_failed', reason: 'forbidden' });
+    expect(await r.control.groupLimiter.cooldownRemaining(d.t.orgId, d.deviceId)).toBeGreaterThan(
+      0,
+    );
+
+    const calls = d.socket.groupCalls.length;
+    expect(await r.control.groupAction(d.t.orgId, d.deviceId, { type: 'list' })).toMatchObject({
+      ok: false,
+      status: 'rate_limited',
+      scope: 'cooldown',
+    });
+    r.control.local = null;
+    expect(await r.control.groupAction(d.t.orgId, d.deviceId, { type: 'list' })).toMatchObject({
+      status: 'rate_limited',
+      scope: 'cooldown',
+    });
+    expect(d.socket.groupCalls).toHaveLength(calls);
+    // another number is not resting
+    const other = await connected('cooldown-other');
+    expect((await r.control.groupAction(other.t.orgId, other.deviceId, { type: 'list' })).ok).toBe(
+      true,
+    );
+  });
+
+  it('a WhatsApp rate limit is classified and also starts the cooldown; a crash is a plain error', async () => {
+    const d = await connected('classify');
+    d.socket.groupReplies.list = Object.assign(new Error('rate-overlimit'), {
+      isBoom: true,
+      data: 429,
+    });
+    expect(await r.control.groupAction(d.t.orgId, d.deviceId, { type: 'list' })).toMatchObject({
+      reason: 'whatsapp_rate_limited',
+    });
+    expect(await r.control.groupLimiter.cooldownRemaining(d.t.orgId, d.deviceId)).toBeGreaterThan(
+      0,
+    );
+    const e = await connected('classify-crash');
+    e.socket.groupReplies.list = new TypeError('boom');
+    expect(await r.control.groupAction(e.t.orgId, e.deviceId, { type: 'list' })).toMatchObject({
+      ok: false,
+      status: 'error',
+    });
+    expect(await r.control.groupLimiter.cooldownRemaining(e.t.orgId, e.deviceId)).toBe(0);
+  });
+
+  it('a group picture crosses processes through Redis and arrives as bytes', async () => {
+    const d = await connected('picture');
+    r.control.local = null;
+    const data = Buffer.from([0xff, 0xd8, 0xff, 0x01]);
+    const res = await r.control.groupAction(d.t.orgId, d.deviceId, {
+      type: 'picture',
+      groupJid: '1203',
+      data,
+    });
+    expect(res.ok).toBe(true);
+    const call = d.socket.groupCalls[0] as { type: string; data?: Buffer; bufferKey?: string };
+    expect(call.type).toBe('picture');
+    expect(Buffer.from(call.data!).equals(data)).toBe(true);
+    expect(call.bufferKey).toBeUndefined();
+  });
+
+  it('state: what is left of the limits, without counting', async () => {
+    const d = await connected('peek');
+    limits({ opsPerMinute: 5 });
+    await r.control.groupAction(d.t.orgId, d.deviceId, { type: 'list' });
+    const view = await r.control.groupLimiter.peek(d.t.orgId, d.deviceId);
+    expect(view.opsPerMinute).toMatchObject({ limit: 5, remaining: 4 });
+    expect((await r.control.groupLimiter.peek(d.t.orgId, d.deviceId)).opsPerMinute.remaining).toBe(
+      4,
+    );
   });
 });
 

@@ -149,6 +149,16 @@
         "title": "{name} กลับมาใช้งานได้อีกครั้ง",
         "titleNoName": "กลุ่ม WhatsApp กลับมาใช้งานได้อีกครั้ง",
         "body": "WhatsApp กู้คืนกลุ่มนี้แล้ว คุณส่งข้อความไปยังกลุ่มได้อีกครั้ง"
+      },
+      "device_group_join_request": {
+        "title": "{count, plural, other {# คนต้องการเข้าร่วม {name}}}",
+        "titleNoName": "{count, plural, other {# คนต้องการเข้าร่วมกลุ่ม WhatsApp}}",
+        "body": "เปิดกลุ่มเพื่ออนุมัติหรือปฏิเสธ"
+      },
+      "device_group_removed": {
+        "title": "หมายเลขของคุณถูกลบออกจาก {name}",
+        "titleNoName": "หมายเลขของคุณถูกลบออกจากกลุ่ม WhatsApp",
+        "body": "มีคนลบหมายเลขส่วนตัวของคุณออกจากกลุ่มนี้ เก็บกลุ่มไว้ที่นี่ในโหมดอ่านอย่างเดียว"
       }
     },
     "live": {
@@ -177,7 +187,9 @@
         "teamchat_message": "ข้อความส่วนตัวใหม่",
         "waba_group_join_request": "คำขอเข้าร่วมกลุ่ม",
         "waba_group_suspended": "ระงับกลุ่ม WhatsApp",
-        "waba_group_suspension_cleared": "กลุ่ม WhatsApp กลับมาใช้งานได้อีกครั้ง"
+        "waba_group_suspension_cleared": "กลุ่ม WhatsApp กลับมาใช้งานได้อีกครั้ง",
+        "device_group_join_request": "คำขอเข้าร่วมกลุ่ม",
+        "device_group_removed": "ถูกลบออกจากกลุ่ม WhatsApp"
       }
     },
     "prefs": {
@@ -334,6 +346,14 @@
         "billing_subscription_canceled": {
           "label": "ยกเลิกการสมัครใช้งานแล้ว",
           "hint": "ผู้ให้บริการชำระเงินของคุณสิ้นสุดการสมัครใช้งานของเวิร์กสเปซนี้แล้ว"
+        },
+        "device_group_join_request": {
+          "label": "คำขอเข้าร่วมกลุ่มของหมายเลขส่วนตัว",
+          "hint": "มีคนขอเข้าร่วมกลุ่มของหมายเลข WhatsApp ส่วนตัวที่คุณจัดการ คำขอสิบรายการรวมเป็นหนึ่งแถว"
+        },
+        "device_group_removed": {
+          "label": "ถูกลบออกจากกลุ่มของหมายเลขส่วนตัว",
+          "hint": "มีคนลบหมายเลข WhatsApp ส่วนตัวของคุณหนึ่งหมายเลขออกจากกลุ่ม อาจเป็นสัญญาณว่าหมายเลขถูกรายงาน"
         }
       },
       "loading": "กำลังโหลดการตั้งค่าของคุณ",

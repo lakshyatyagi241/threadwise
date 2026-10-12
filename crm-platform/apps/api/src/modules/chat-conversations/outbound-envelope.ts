@@ -65,6 +65,22 @@ export function emailEnvelopeOf(
 export const threadIdOfPeerKey = (peerKey: string): string =>
   peerKey.startsWith('t:') ? peerKey.slice(2) : peerKey;
 
+/** The @mentions kept on a queued text message (`messages.meta.mentions`), so a retry mentions the same members. */
+function mentionsOfMeta(
+  meta: Record<string, unknown>,
+): { jid: string; name?: string }[] | undefined {
+  if (!Array.isArray(meta.mentions)) return undefined;
+  const out = meta.mentions
+    .filter(
+      (m): m is { jid: string; name?: string } => typeof (m as { jid?: unknown })?.jid === 'string',
+    )
+    .map((m) => ({
+      jid: m.jid,
+      ...(typeof m.name === 'string' && m.name ? { name: m.name } : {}),
+    }));
+  return out.length > 0 ? out : undefined;
+}
+
 export function envelopeOf(
   row: Pick<
     MessageRow,
@@ -96,7 +112,13 @@ export function envelopeOf(
   };
   switch (row.kind) {
     case 'text':
-      return { ...common, kind: 'text', body: row.body ?? '', ...(email ? { email } : {}) };
+      return {
+        ...common,
+        kind: 'text',
+        body: row.body ?? '',
+        ...(email ? { email } : {}),
+        ...(mentionsOfMeta(row.meta) ? { mentions: mentionsOfMeta(row.meta) } : {}),
+      };
     case 'image':
     case 'video':
     case 'audio':
@@ -213,7 +235,17 @@ export function messageFieldsOf(content: OutboundContent): {
         kind: 'text',
         body: content.body,
         media: null,
-        meta: emailReply ? { emailReply } : {},
+        meta: {
+          ...(emailReply ? { emailReply } : {}),
+          ...(content.mentions?.length
+            ? {
+                mentions: content.mentions.map((m) => ({
+                  jid: m.jid,
+                  ...(m.name ? { name: m.name } : {}),
+                })),
+              }
+            : {}),
+        },
         templateId: null,
       };
     }

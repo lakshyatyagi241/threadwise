@@ -40,3 +40,5 @@ export {
   type RecordBounceOutcome,
 } from './email-delivery.service';
 export { MESSAGE_LOG_FACADE, type MessageLogFacade } from './message-log.facade';
+export { PersonalGroupThreadReader } from './personal-group-thread.reader';
+export { DeviceGroupThreadTitleService } from './device-group-thread-title.service';

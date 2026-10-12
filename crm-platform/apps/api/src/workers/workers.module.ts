@@ -42,6 +42,7 @@ import { FaqKnowledgeWorkerModule } from '../modules/faq-knowledge/faq-knowledge
 import { LeadScoringWorkerModule } from '../modules/lead-scoring/lead-scoring-worker.module';
 import { ContactConsentWorkerModule } from '../modules/contact-consent/contact-consent-worker.module';
 import { WabaWorkerModule } from '../modules/whatsapp-cloud-api-waba';
+import { WhatsappDevicesBaileysWorkerModule } from '../modules/whatsapp-devices-baileys';
 import { AiAgentsTrainingWorkerModule } from '../modules/ai-agents-training';
 import { FlowBuilderEditorWorkerModule } from '../modules/flow-builder-editor';
 import { FlowRuntimeEngineWorkerModule } from '../modules/flow-runtime-engine';
@@ -108,6 +109,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     AiAgentsTrainingWorkerModule,
     FlowRuntimeEngineWorkerModule,
     NodeBridgeRuntimeWorkerModule,
+    WhatsappDevicesBaileysWorkerModule,
     NodeCatalogBridgeModule,
     LeadsWorkerModule,
     FormsBuilderWorkerModule,

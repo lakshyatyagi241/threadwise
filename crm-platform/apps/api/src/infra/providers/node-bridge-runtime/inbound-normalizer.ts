@@ -242,9 +242,14 @@ export function normalizeMessage(
   const replyTo = Object.values(content)
     .map((v) => (v as { contextInfo?: Record<string, any> } | null)?.contextInfo?.stanzaId)
     .find((v) => typeof v === 'string' && v !== '');
+  const mentioned = Object.values(content)
+    .map((v) => (v as { contextInfo?: Record<string, any> } | null)?.contextInfo?.mentionedJid)
+    .find((v) => Array.isArray(v) && v.length > 0) as unknown[] | undefined;
+  const mentionedJids = (mentioned ?? []).filter((j): j is string => typeof j === 'string');
   return wrap(
     {
       ...base(msg, id, chat, fromMe, participant, timestamp),
+      ...(mentionedJids.length ? { mentionedJids } : {}),
       text: shown,
       media,
       location,

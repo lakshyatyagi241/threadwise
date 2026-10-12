@@ -149,6 +149,16 @@
         "title": "{name} ist wieder aktiv",
         "titleNoName": "Eine WhatsApp-Gruppe ist wieder aktiv",
         "body": "WhatsApp hat diese Gruppe wiederhergestellt. Sie können ihr wieder Nachrichten senden."
+      },
+      "device_group_join_request": {
+        "title": "{count, plural, one {Jemand möchte {name} beitreten} other {# Personen möchten {name} beitreten}}",
+        "titleNoName": "{count, plural, one {Jemand möchte einer WhatsApp-Gruppe beitreten} other {# Personen möchten einer WhatsApp-Gruppe beitreten}}",
+        "body": "Öffnen Sie Gruppen, um zu genehmigen oder abzulehnen."
+      },
+      "device_group_removed": {
+        "title": "Ihre Nummer wurde aus {name} entfernt",
+        "titleNoName": "Ihre Nummer wurde aus einer WhatsApp-Gruppe entfernt",
+        "body": "Jemand hat Ihre persönliche Nummer aus dieser Gruppe entfernt. Die Gruppe wird hier schreibgeschützt aufbewahrt."
       }
     },
     "live": {
@@ -177,7 +187,9 @@
         "teamchat_message": "Neue Direktnachricht",
         "waba_group_join_request": "Anfrage zum Beitritt zu einer Gruppe",
         "waba_group_suspended": "WhatsApp-Gruppe gesperrt",
-        "waba_group_suspension_cleared": "WhatsApp-Gruppe wieder aktiv"
+        "waba_group_suspension_cleared": "WhatsApp-Gruppe wieder aktiv",
+        "device_group_join_request": "Beitrittsanfrage für eine Gruppe",
+        "device_group_removed": "Aus einer WhatsApp-Gruppe entfernt"
       }
     },
     "prefs": {
@@ -334,6 +346,14 @@
         "billing_subscription_canceled": {
           "label": "Abonnement gekündigt",
           "hint": "Ihr Zahlungsanbieter hat ein Abonnement dieses Arbeitsbereichs beendet."
+        },
+        "device_group_join_request": {
+          "label": "Beitrittsanfrage für eine Gruppe persönlicher Nummern",
+          "hint": "Personen möchten einer Gruppe einer persönlichen WhatsApp-Nummer beitreten, die Sie verwalten. Zehn Anfragen ergeben eine Zeile."
+        },
+        "device_group_removed": {
+          "label": "Aus einer Gruppe persönlicher Nummern entfernt",
+          "hint": "Jemand hat eine Ihrer persönlichen WhatsApp-Nummern aus einer Gruppe entfernt. Das kann ein Zeichen dafür sein, dass die Nummer gemeldet wurde."
         }
       },
       "loading": "Ihre Einstellungen werden geladen",
