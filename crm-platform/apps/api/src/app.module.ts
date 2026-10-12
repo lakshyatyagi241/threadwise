@@ -78,6 +78,7 @@ import { OutboundWebhooksModule } from './modules/outbound-webhooks';
 import { ApiLibraryModule } from './modules/api-library';
 import { FaqKnowledgeModule } from './modules/faq-knowledge';
 import { LeadScoringModule } from './modules/lead-scoring';
+import { ContactConsentModule } from './modules/contact-consent';
 import { MessageTemplatesModule } from './modules/message-templates';
 import { WabaModule } from './modules/whatsapp-cloud-api-waba';
 import { WhatsappDevicesBaileysModule } from './modules/whatsapp-devices-baileys';
@@ -229,6 +230,7 @@ import { HealthModule } from './health/health.module';
     ApiLibraryModule,
     FaqKnowledgeModule,
     LeadScoringModule,
+    ContactConsentModule,
     WabaModule,
     WhatsAppProviderAdminModule,
     MessageTemplatesModule,
