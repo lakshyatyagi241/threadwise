@@ -32,7 +32,8 @@ function ToolCard({ tile }: { tile: ResolvedSettingsTile }) {
           <SettingsIcon name={tile.icon} className="size-6" />
         </span>
         <div className="min-w-0 flex-1">
-          <h3 className="truncate text-base font-semibold">
+          {/* h2, not h3: on the Add-ons tab nothing sits above the cards but the page title (h1). */}
+          <h2 className="truncate text-base font-semibold">
             {soon ? (
               label
             ) : (
@@ -43,7 +44,7 @@ function ToolCard({ tile }: { tile: ResolvedSettingsTile }) {
                 {label}
               </Link>
             )}
-          </h3>
+          </h2>
         </div>
         {soon ? (
           <Badge tone="neutral">{tm('tools.soon')}</Badge>
@@ -80,19 +81,13 @@ export function ToolCards({ tab, showEmpty = false }: { tab: ToolTab; showEmpty?
   }
   return (
     <section
-      aria-labelledby={`mkt-tools-${tab}-title`}
+      aria-label={t(tab === 'addons' ? 'header.tabs.addon' : 'header.tabs.integration')}
       data-testid={`mkt-tools-${tab}`}
-      className="space-y-3"
+      className="grid auto-rows-fr gap-3 sm:grid-cols-2 xl:grid-cols-3"
     >
-      {/* The cards are h3: this keeps the heading levels in order (the page title is the h1). */}
-      <h2 id={`mkt-tools-${tab}-title`} className="sr-only">
-        {t(tab === 'addons' ? 'header.tabs.addon' : 'header.tabs.integration')}
-      </h2>
-      <div className="grid auto-rows-fr gap-3 sm:grid-cols-2 xl:grid-cols-3">
-        {tiles.map((tile) => (
-          <ToolCard key={tile.id} tile={tile} />
-        ))}
-      </div>
+      {tiles.map((tile) => (
+        <ToolCard key={tile.id} tile={tile} />
+      ))}
     </section>
   );
 }

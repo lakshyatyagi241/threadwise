@@ -161,9 +161,11 @@ export default (h) => ({
         await card.waitFor({ timeout: 8000 }).catch(() => {});
         c.obs.flag('card.present', (await card.count()) > 0);
         if (await card.count()) {
+          await c.page.waitForTimeout(1500); // let the page hydrate before clicking
           const before = c.page.url();
-          await card.click();
-          await c.page.waitForURL((u) => u.href !== before, { timeout: 10000 }).catch(() => {});
+          // noWaitAfter: a dev server compiles the target on first visit, which can take longer than the click's own wait.
+          await card.click({ noWaitAfter: true });
+          await c.page.waitForURL((u) => u.href !== before, { timeout: 70000 }).catch(() => {});
           await c.page.waitForLoadState('load');
           await c.page.waitForTimeout(1200);
           c.obs.flag('left.addons.tab', !/\/marketplace\/addons$/.test(c.page.url()));
