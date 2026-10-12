@@ -21,7 +21,7 @@ import { Text } from '@/components/ui/text';
 import { TextField } from '@/components/ui/text-field';
 import { messageForError } from '@/lib/api/error-message';
 import { can, useSession } from '@/lib/session/use-session';
-import { spacing } from '@/lib/theme/tokens';
+import { MIN_TOUCH_TARGET, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 import type { ContactFilters } from './api';
 import { ContactActionsSheet } from './contact-actions-sheet';
@@ -31,6 +31,8 @@ import { ContactSkeleton } from './contact-skeleton';
 import { FilterModal } from './filter-modal';
 import { NO_FILTERS, activeFilterCount, cleanFilters } from './filters';
 import { useContactList, useDebounced, useDeleteContact } from './use-contacts';
+import { ViewsDrawer } from './views-drawer';
+import { ALL_CONTACTS, isAllContacts, viewFilters, type ChosenView } from './views';
 
 /** How long the search waits for the person to stop typing before it asks the API. */
 export const SEARCH_DEBOUNCE_MS = 300;
@@ -55,13 +57,21 @@ export function ContactsScreen() {
   const [searchText, setSearchText] = useState('');
   const [filters, setFilters] = useState<ContactFilters>(NO_FILTERS);
   const [filterOpen, setFilterOpen] = useState(false);
+  const [view, setView] = useState<ChosenView>(ALL_CONTACTS);
+  const [viewsOpen, setViewsOpen] = useState(false);
+  const viewName = view.kind === 'custom' ? view.name : t(`contacts.views.system.${view.id}`);
   const [refreshing, setRefreshing] = useState(false);
 
   const q = useDebounced(searchText.trim(), SEARCH_DEBOUNCE_MS);
-  const queryFilters = useMemo(() => cleanFilters({ ...filters, q }), [filters, q]);
+  const userId = session.data?.user.id;
+  const queryFilters = useMemo(
+    () => cleanFilters({ ...viewFilters(view, userId), ...cleanFilters(filters), q }),
+    [view, userId, filters, q],
+  );
   const list = useContactList(queryFilters, allowed);
   const contacts = useMemo(() => list.data?.pages.flatMap((page) => page.data) ?? [], [list.data]);
-  const narrowed = activeFilterCount(filters) > 0 || queryFilters.q !== undefined;
+  const narrowed =
+    activeFilterCount(filters) > 0 || queryFilters.q !== undefined || !isAllContacts(view);
 
   const [sheetFor, setSheetFor] = useState<ContactResponse | null>(null);
   const [deleting, setDeleting] = useState<ContactResponse | null>(null);
@@ -151,9 +161,18 @@ export function ContactsScreen() {
           </>
         }
       >
-        <Text variant="heading" accessibilityRole="header">
-          {t('contacts.title')}
-        </Text>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={t('contacts.views.open', { name: viewName })}
+          accessibilityState={{ expanded: viewsOpen }}
+          onPress={() => setViewsOpen(true)}
+          style={styles.viewTitle}
+        >
+          <Text variant="heading" numberOfLines={1} style={styles.viewName}>
+            {viewName}
+          </Text>
+          <Icon name="chevron-down" size={16} color="textMuted" />
+        </Pressable>
       </ScreenHeader>
 
       {searchOpen ? (
@@ -200,6 +219,18 @@ export function ContactsScreen() {
           }}
         />
       ) : null}
+      {viewsOpen ? (
+        <ViewsDrawer
+          chosen={view}
+          canReadSaved={can(session.data, 'record.contact-views.read')}
+          onClose={() => setViewsOpen(false)}
+          onChoose={(next) => {
+            setView(next);
+            setViewsOpen(false);
+          }}
+        />
+      ) : null}
+
       <ContactActionsSheet
         contact={sheetFor}
         onClose={() => setSheetFor(null)}
@@ -252,6 +283,14 @@ function ErrorCard({ error, onRetry }: { error: unknown; onRetry: () => void }) 
 }
 
 const styles = StyleSheet.create({
+  viewTitle: {
+    minHeight: MIN_TOUCH_TARGET,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    alignSelf: 'flex-start',
+  },
+  viewName: { flexShrink: 1 },
   fill: { flex: 1 },
   search: { paddingHorizontal: spacing.lg, paddingVertical: spacing.sm },
   error: { padding: spacing.lg },

@@ -22,6 +22,7 @@ import {
   type ContactFilters,
   type NewContact,
 } from './api';
+import { listContactViews } from './views-api';
 
 /** Rows asked for at a time; the list asks for the next page when the person scrolls to the end. */
 export const PAGE_SIZE = 50;
@@ -161,3 +162,14 @@ export function useDeleteContact(id: string) {
     },
   });
 }
+
+export const contactViewsKey = [...contactsKey, 'views'] as const;
+
+/** The saved views of the workspace, for the picker. Slow to change, so a minute is fresh enough. */
+export const useContactViews = (enabled: boolean) =>
+  useQuery({
+    queryKey: contactViewsKey,
+    queryFn: ({ signal }) => listContactViews(signal),
+    enabled,
+    staleTime: 60_000,
+  });

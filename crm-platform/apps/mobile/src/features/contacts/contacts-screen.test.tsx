@@ -17,15 +17,18 @@ import {
 import { renderApp } from '@/test/render';
 import { reachEnd } from '@/test/scroll';
 import * as api from './api';
+import { listContactViews } from './views-api';
 import { ContactsScreen } from './contacts-screen';
 
 jest.mock('./api');
+jest.mock('./views-api');
 jest.mock('@/lib/session/api');
 jest.mock('expo-router', () => ({ useRouter: jest.fn() }));
 
 const sessionCall = jest.mocked(fetchSession);
 const listCall = jest.mocked(api.listContacts);
 const deleteCall = jest.mocked(api.deleteContact);
+const viewsCall = jest.mocked(listContactViews);
 const sessionAll = {
   ...sessionFull,
   permissions: { ...sessionFull.permissions, 'record.contacts.delete': 'all' },
@@ -49,6 +52,7 @@ beforeEach(() => {
   jest.mocked(useRouter).mockReturnValue(router as unknown as ReturnType<typeof useRouter>);
   sessionCall.mockResolvedValue(sessionFull);
   listCall.mockResolvedValue(page(contacts));
+  viewsCall.mockResolvedValue({ data: [], page: { nextCursor: null, hasMore: false, limit: 200 } });
 });
 afterEach(async () => {
   if (client) {
@@ -68,7 +72,7 @@ describe('ContactsScreen', () => {
     expect(within(phoneRow).queryByText('VIP')).toBeNull();
     const emailRow = screen.getByRole('button', { name: 'Meera Iyer' });
     expect(within(emailRow).getByText('meera@example.test')).toBeTruthy();
-    expect(screen.getByRole('header', { name: 'Contacts' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Contact view: All contacts' })).toBeTruthy();
     expect(listCall).toHaveBeenCalledWith({ limit: 50, cursor: undefined }, expect.anything());
   });
 
@@ -324,6 +328,137 @@ describe('ContactsScreen', () => {
       await fireEvent.press(await screen.findByRole('button', { name: 'Delete contact' }));
       await fireEvent.press(await screen.findByRole('button', { name: 'Delete' }));
       expect(await screen.findByText(/Can't reach the server/)).toBeTruthy();
+    });
+  });
+
+  describe('the view picker', () => {
+    const savedView = {
+      id: '77777777-7777-4777-8777-777777777777',
+      name: 'Pune leads',
+      filter: { op: 'and', conditions: [{ field: 'city', operator: 'eq', value: 'Pune' }] },
+      position: 0,
+      isShared: true,
+      createdBy: null,
+      isFavorite: false,
+      rowVersion: 1,
+      createdAt: '2026-10-01T00:00:00.000Z',
+      updatedAt: '2026-10-01T00:00:00.000Z',
+    };
+    const sessionViews = {
+      ...sessionFull,
+      permissions: { ...sessionFull.permissions, 'record.contact-views.read': 'all' },
+    } as typeof sessionFull;
+    const openPicker = async () =>
+      await fireEvent.press(
+        await screen.findByRole('button', { name: 'Contact view: All contacts' }),
+      );
+
+    it('starts on All contacts and lists the built-in views', async () => {
+      await show();
+      await openPicker();
+      expect(await screen.findByRole('header', { name: 'Views' })).toBeTruthy();
+      for (const name of ['All contacts', 'My contacts', 'Recently created']) {
+        expect(screen.getByRole('button', { name })).toBeTruthy();
+      }
+      expect(
+        screen.getByRole('button', { name: 'All contacts' }).props.accessibilityState.selected,
+      ).toBe(true);
+    });
+
+    it('shows My contacts: only the ones the signed-in person owns', async () => {
+      await show();
+      await openPicker();
+      await fireEvent.press(await screen.findByRole('button', { name: 'My contacts' }));
+      await waitFor(() =>
+        expect(listCall).toHaveBeenLastCalledWith(
+          expect.objectContaining({ ownerId: sessionFull.user.id }),
+          expect.anything(),
+        ),
+      );
+      expect(screen.getByRole('button', { name: 'Contact view: My contacts' })).toBeTruthy();
+    });
+
+    it('shows the contacts opted out of marketing', async () => {
+      await show();
+      await openPicker();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Opted out of marketing' }));
+      await waitFor(() =>
+        expect(listCall).toHaveBeenLastCalledWith(
+          expect.objectContaining({ unsubscribed: true }),
+          expect.anything(),
+        ),
+      );
+    });
+
+    it('looks back a week for Recently created', async () => {
+      await show();
+      await openPicker();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Recently created' }));
+      await waitFor(() =>
+        expect(listCall).toHaveBeenLastCalledWith(
+          expect.objectContaining({ createdFrom: expect.stringMatching(/^\d{4}-\d{2}-\d{2}$/) }),
+          expect.anything(),
+        ),
+      );
+    });
+
+    it('lists the saved views and applies one as rules text', async () => {
+      sessionCall.mockResolvedValue(sessionViews);
+      viewsCall.mockResolvedValue({
+        data: [savedView],
+        page: { nextCursor: null, hasMore: false, limit: 200 },
+      });
+      await show();
+      await openPicker();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Pune leads' }));
+      await waitFor(() =>
+        expect(listCall).toHaveBeenLastCalledWith(
+          expect.objectContaining({ rules: JSON.stringify(savedView.filter) }),
+          expect.anything(),
+        ),
+      );
+      expect(screen.getByRole('button', { name: 'Contact view: Pune leads' })).toBeTruthy();
+    });
+
+    it('asks for no saved views from a person who may not read them', async () => {
+      await show();
+      await openPicker();
+      await screen.findByRole('header', { name: 'Views' });
+      expect(viewsCall).not.toHaveBeenCalled();
+      expect(screen.queryByText('Custom views')).toBeNull();
+    });
+
+    it('narrows the views by what is typed, and says when none match', async () => {
+      sessionCall.mockResolvedValue(sessionViews);
+      viewsCall.mockResolvedValue({
+        data: [savedView],
+        page: { nextCursor: null, hasMore: false, limit: 200 },
+      });
+      await show();
+      await openPicker();
+      await screen.findByRole('button', { name: 'Pune leads' });
+      await fireEvent.changeText(screen.getByLabelText('Search views'), 'pune');
+      expect(screen.queryByRole('button', { name: 'My contacts' })).toBeNull();
+      expect(screen.getByRole('button', { name: 'Pune leads' })).toBeTruthy();
+      await fireEvent.changeText(screen.getByLabelText('Search views'), 'zzz');
+      expect(await screen.findByText('No views available')).toBeTruthy();
+    });
+
+    it('says when the saved views could not be loaded, and still offers the built-in ones', async () => {
+      sessionCall.mockResolvedValue(sessionViews);
+      viewsCall.mockRejectedValue(new ApiError(0, 'CLIENT_NETWORK', 'x'));
+      await show();
+      await openPicker();
+      expect(await screen.findByText("Saved views couldn't be loaded.")).toBeTruthy();
+      expect(screen.getByRole('button', { name: 'My contacts' })).toBeTruthy();
+    });
+
+    it('closes without changing the view', async () => {
+      await show();
+      await openPicker();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Close views' }));
+      await waitFor(() => expect(screen.queryByRole('header', { name: 'Views' })).toBeNull());
+      expect(screen.getByRole('button', { name: 'Contact view: All contacts' })).toBeTruthy();
     });
   });
 });

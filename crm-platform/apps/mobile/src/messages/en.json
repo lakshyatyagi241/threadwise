@@ -619,6 +619,23 @@
     },
     "sheet": {
       "close": "Close"
+    },
+    "views": {
+      "open": "Contact view: {{name}}",
+      "title": "Views",
+      "close": "Close views",
+      "searchLabel": "Search views",
+      "searchPlaceholder": "Search for views",
+      "systemTitle": "System default views",
+      "customTitle": "Custom views",
+      "none": "No views available",
+      "failed": "Saved views couldn't be loaded.",
+      "system": {
+        "all": "All contacts",
+        "mine": "My contacts",
+        "recent": "Recently created",
+        "optedOut": "Opted out of marketing"
+      }
     }
   },
   "tasks": {
