@@ -20,6 +20,8 @@ import type { SeedAppConfig } from './seed-app.config';
  *                                                                       OperatorPricingService.grandfather / .comp
  *   3. approve the first version and publish the listing                 OperatorCatalogueService.approve / .publish
  *   4. where the plan -> add-on visibility table exists, enable the add-on on every active plan
+ *   5. install the app in every workspace comped for it (a subscription alone turns nothing on: the app must be installed too, so a
+ *      seeded demo that only comped would show a locked menu); the same thing the install button does, without the consent screen
  *
  * Comp comes before publish on purpose: the comp reads what each workspace has now (docs/api/marketplace.md, "Appointments is the first
  * paid first-party app").
@@ -257,6 +259,9 @@ export async function runSeedApp(
       // --- 4. plan visibility (only where the table exists) ----------------------------------------------------------------------------
       await planVisibility();
 
+      // --- 5. install in the comped workspaces ------------------------------------------------------------------------------------------
+      await installComped();
+
       const afterDetail = dry ? detail : await load();
       return {
         actions,
@@ -322,6 +327,42 @@ export async function runSeedApp(
           notes.push(
             `comp: ${already} workspace(s) already have a subscription to the app; left as is`,
           );
+      }
+
+      async function installComped(): Promise<void> {
+        const waiting = await store.tx(async (tx) => {
+          const res = await tx.execute(sql`
+            SELECT s.org_id FROM marketplace_subscriptions s JOIN marketplace_apps a ON a.id = s.app_id
+            WHERE a.slug = ${APP_SLUG} AND s.status = 'active' AND s.source = 'comp' AND NOT s.cancel_at_period_end
+              AND NOT EXISTS (SELECT 1 FROM workspace_app_installations i WHERE i.org_id = s.org_id AND i.app_id = s.app_id)`);
+          return (res.rows as Raw[]).map((r) => Number(r.org_id));
+        });
+        if (waiting.length === 0) {
+          notes.push(
+            'install: every comped workspace already has the app installed; nothing to do',
+          );
+          return;
+        }
+        if (!dry) {
+          await store.tx(async (tx) => {
+            await tx.execute(sql`SELECT set_config('app.privileged', 'on', true)`);
+            await tx.execute(sql`
+              WITH v AS (
+                SELECT a.id AS app_id, ver.id AS version_id, ver.scopes
+                FROM marketplace_apps a JOIN marketplace_app_versions ver ON ver.app_id = a.id
+                WHERE a.slug = ${APP_SLUG}
+                ORDER BY (ver.status = 'published') DESC, ver.id DESC LIMIT 1),
+              made AS (
+                INSERT INTO workspace_app_installations (org_id, app_id, installed_version_id, status, granted_scopes)
+                SELECT o, v.app_id, v.version_id, 'active', v.scopes
+                FROM unnest(${`{${waiting.join(',')}}`}::bigint[]) AS o, v
+                ON CONFLICT (org_id, app_id) DO NOTHING
+                RETURNING org_id, id, app_id, installed_version_id, granted_scopes)
+              INSERT INTO marketplace_consents (org_id, installation_id, app_id, version_id, action, scopes, previous_scopes)
+              SELECT org_id, id, app_id, installed_version_id, 'install', granted_scopes, '{}'::text[] FROM made`);
+          });
+        }
+        actions.push(would(`install the app in ${waiting.length} comped workspace(s)`));
       }
 
       async function planVisibility(): Promise<void> {
