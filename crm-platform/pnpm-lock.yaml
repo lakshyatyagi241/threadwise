@@ -173,8 +173,8 @@ importers:
         specifier: ^3.6.7
         version: 3.6.7
       zod:
-        specifier: ^3.24.1
-        version: 3.25.76
+        specifier: ^4.6.5
+        version: 4.6.6
     devDependencies:
       '@nestjs/cli':
         specifier: ^11.0.2
@@ -342,8 +342,8 @@ importers:
         specifier: 0.10.1
         version: 0.10.1(@babel/core@7.29.7)(@react-native/metro-config@0.86.3(@babel/core@7.29.7))(react-native@0.86.3(@babel/core@7.29.7)(@react-native/jest-preset@0.86.3(@babel/core@7.29.7)(react@19.3.0))(@react-native/metro-config@0.86.3(@babel/core@7.29.7))(@types/react@19.3.0)(react@19.3.0))(react@19.3.0)
       zod:
-        specifier: ^3.24.1
-        version: 3.25.76
+        specifier: ^4.6.5
+        version: 4.6.6
     devDependencies:
       '@react-native/jest-preset':
         specifier: ^0.86.3
@@ -433,8 +433,8 @@ importers:
         specifier: ^4.8.1
         version: 4.8.4
       zod:
-        specifier: ^3.24.1
-        version: 3.25.76
+        specifier: ^4.6.5
+        version: 4.6.6
     devDependencies:
       '@playwright/test':
         specifier: ^1.64.0
@@ -469,8 +469,8 @@ importers:
         specifier: workspace:*
         version: link:../tax
       zod:
-        specifier: ^3.24.1
-        version: 3.25.76
+        specifier: ^4.6.5
+        version: 4.6.6
     devDependencies:
       typescript:
         specifier: ^5.7.3
@@ -10147,6 +10147,9 @@ packages:
   zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
+  zod@4.6.6:
+    resolution: {integrity: sha512-4UmzQUF5fxvfcYHlbjBmejU+w+hbDnWFx4aS8kBx7nPBHcO2SqPbpAG8snbdg+Xse4pRefR98hgjFgIMCI/UhA==}
+
 snapshots:
 
   '@alloc/quick-lru@5.3.0': {}
@@ -15912,8 +15915,8 @@ snapshots:
       '@babel/parser': 7.29.8
       eslint: 9.39.5(jiti@2.7.0)
       hermes-parser: 0.25.1
-      zod: 3.25.76
-      zod-validation-error: 4.0.2(zod@3.25.76)
+      zod: 4.6.6
+      zod-validation-error: 4.0.2(zod@4.6.6)
     transitivePeerDependencies:
       - supports-color
 
@@ -21025,8 +21028,10 @@ snapshots:
       compress-commons: 6.0.2
       readable-stream: 4.7.0
 
-  zod-validation-error@4.0.2(zod@3.25.76):
+  zod-validation-error@4.0.2(zod@4.6.6):
     dependencies:
-      zod: 3.25.76
+      zod: 4.6.6
 
   zod@3.25.76: {}
+
+  zod@4.6.6: {}
