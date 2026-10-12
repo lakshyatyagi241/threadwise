@@ -113,6 +113,14 @@ export const savedReplies = pgTable(
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
+    // 20261121090000_tib1_saved_replies_library.sql
+    createdBy: idColumn('created_by'),
+    language: text('language'),
+    channelKinds: text('channel_kinds')
+      .array()
+      .notNull()
+      .default(sql`'{}'::text[]`),
+    lastUsedAt: timestamp('last_used_at', { withTimezone: true }),
   },
   (t) => [
     primaryKey({ columns: [t.orgId, t.id] }),
@@ -126,7 +134,28 @@ export const savedReplies = pgTable(
       name: 'fk_saved_replies_user_id',
       columns: [t.orgId, t.userId],
       foreignColumns: [users.orgId, users.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_saved_replies_created_by',
+      columns: [t.orgId, t.createdBy],
+      foreignColumns: [users.orgId, users.id],
     }).onDelete('set null'),
+    check(
+      'chk_saved_replies_shortcut',
+      sql`${t.shortcut} = lower(${t.shortcut}) AND char_length(${t.shortcut}) BETWEEN 1 AND 64 AND ${t.shortcut} !~ '[[:space:]/]'`,
+    ),
+    check('chk_saved_replies_title', sql`char_length(btrim(${t.title})) BETWEEN 1 AND 128`),
+    check('chk_saved_replies_body', sql`char_length(btrim(${t.body})) BETWEEN 1 AND 4000`),
+    check(
+      'chk_saved_replies_category',
+      sql`${t.category} IS NULL OR char_length(${t.category}) BETWEEN 1 AND 64`,
+    ),
+    check(
+      'chk_saved_replies_language',
+      sql`${t.language} IS NULL OR char_length(${t.language}) BETWEEN 2 AND 16`,
+    ),
+    check('chk_saved_replies_channel_kinds', sql`cardinality(${t.channelKinds}) <= 20`),
+    index('idx_saved_replies_usage').on(t.orgId, t.usedCount.desc(), t.id),
     index('idx_saved_replies_shortcut').on(t.orgId, t.shortcut),
     index('idx_saved_replies_user_id').on(t.orgId, t.userId),
     // NULLS NOT DISTINCT: one shared (ownerless) reply per shortcut. Drizzle cannot express it; the SQL migration is the truth.

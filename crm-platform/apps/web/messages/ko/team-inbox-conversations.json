@@ -2,7 +2,8 @@
   "team-inbox-conversations": {
     "nav": {
       "inbox": "수신함",
-      "messageLogs": "메시지 로그"
+      "messageLogs": "메시지 로그",
+      "savedReplies": "저장된 답변"
     },
     "common": {
       "dismiss": "닫기"
@@ -141,7 +142,10 @@
       "groupLeft": "이 번호는 그룹을 나갔으므로 더 이상 그곳에 메시지를 보낼 수 없습니다.",
       "groupAnnounceOnly": "이 그룹에서는 관리자만 메시지를 보낼 수 있으며, 이 번호는 관리자가 아닙니다.",
       "groupRateLimited": "짧은 시간 동안 이 번호에서 보낸 그룹 메시지가 너무 많습니다. 1분 후에 다시 시도해 주세요.",
-      "groupUnavailable": "WhatsApp이 이 그룹 메시지를 수락하지 않았습니다. 몇 분 후에 다시 시도해 주세요."
+      "groupUnavailable": "WhatsApp이 이 그룹 메시지를 수락하지 않았습니다. 몇 분 후에 다시 시도해 주세요.",
+      "savedReplyGone": "이 저장된 답변은 더 이상 존재하지 않습니다.",
+      "savedReplyChannel": "이 저장된 답변은 이 유형의 채널용이 아닙니다.",
+      "shortcutTaken": "다른 저장된 답변이 이미 해당 단축키를 사용하고 있습니다."
     },
     "bubble": {
       "kind": {
@@ -358,7 +362,9 @@
           "url": "http:// 또는 https://로 시작하는 링크를 입력하세요",
           "tooManyRows": "목록에는 총 10개까지만 행을 넣을 수 있습니다"
         }
-      }
+      },
+      "savedReplies": "저장된 답변",
+      "savedReplyIssues": "채워지지 않고 그대로 남음 ({count}개): {list}. 보내기 전에 수정하세요."
     },
     "panel": {
       "tabsLabel": "메모 및 타임라인",
@@ -658,6 +664,159 @@
         "label": "그룹 멤버",
         "loading": "멤버 찾는 중",
         "none": "일치하는 멤버가 없습니다"
+      }
+    },
+    "savedReplies": {
+      "channelKind": {
+        "simulator": "시뮬레이터(테스트)",
+        "whatsapp_cloud": "WhatsApp Cloud API",
+        "whatsapp_qr": "WhatsApp (QR)",
+        "webchat": "웹사이트 채팅",
+        "telegram": "Telegram",
+        "facebook": "Facebook Messenger",
+        "instagram": "Instagram",
+        "email": "이메일"
+      },
+      "variableGroup": {
+        "contact": "연락처",
+        "agent": "나",
+        "workspace": "워크스페이스",
+        "conversation": "대화"
+      },
+      "variable": {
+        "first_name": "연락처의 이름",
+        "last_name": "연락처의 성",
+        "name": "연락처의 전체 이름",
+        "email": "연락처의 이메일",
+        "phone": "연락처의 전화번호",
+        "agent_name": "내 전체 이름",
+        "agent_first_name": "내 이름",
+        "workspace_name": "워크스페이스 이름",
+        "company_name": "회사 이름",
+        "today": "오늘 날짜",
+        "device_name": "채널 이름",
+        "device_phone": "채널 전화번호"
+      },
+      "picker": {
+        "title": "저장된 답변",
+        "close": "저장된 답변 닫기",
+        "searchLabel": "저장된 답변 검색",
+        "searchPlaceholder": "단축키, 제목 또는 텍스트로 검색",
+        "listLabel": "저장된 답변",
+        "loading": "저장된 답변 불러오는 중",
+        "loadFailed": "저장된 답변을 불러오지 못했습니다.",
+        "retry": "다시 시도",
+        "empty": "아직 저장된 답변이 없습니다.",
+        "emptyForChannel": "이 채널용 저장된 답변이 없습니다.",
+        "createFirst": "첫 답변 만들기",
+        "noMatch": "\"{q}\"와(과) 일치하는 저장된 답변이 없습니다.",
+        "mine": "내 답변",
+        "hint": "화살표 키로 이동, Enter로 삽입, Esc로 닫기.",
+        "manage": "저장된 답변 관리",
+        "tooLong": "이 답변은 이 채널의 메시지 길이 제한을 초과하여 삽입되지 않았습니다."
+      },
+      "screen": {
+        "back": "설정",
+        "title": "저장된 답변",
+        "subtitle": "팀이 답장에 삽입하는 재사용 가능한 답변입니다. 대화에서 /를 입력하면 찾을 수 있습니다.",
+        "create": "새 저장된 답변",
+        "noAccess": "저장된 답변을 관리할 권한이 없습니다.",
+        "meter": "저장된 답변 {limit}개 중 {used}개 사용 중",
+        "meterLabel": "요금제에서 사용한 저장된 답변",
+        "meterNote": "공유 답변과 개인 답변 모두 한도에 포함됩니다.",
+        "atLimit": "요금제의 저장된 답변 한도({limit}개)에 도달했습니다. 하나를 삭제하거나 업그레이드하여 더 추가하세요.",
+        "nearLimit": "요금제의 저장된 답변 한도({limit}개)에 가까워졌습니다.",
+        "upgrade": "요금제 보기",
+        "tabsLabel": "표시",
+        "tab": {
+          "all": "전체 ({count})",
+          "shared": "공유 ({count})",
+          "mine": "내 답변 ({count})"
+        },
+        "categoryFilter": "카테고리로 필터링",
+        "allCategories": "모든 카테고리",
+        "searchLabel": "저장된 답변 검색",
+        "searchPlaceholder": "단축키, 제목 또는 텍스트로 검색",
+        "howItWorks": "받은 편지함에서 메시지 입력란에 /를 입력하거나 저장된 답변 버튼을 사용하세요. '{{first_name}}' 같은 변수는 텍스트가 입력란에 들어가기 전에 대화 내용으로 채워집니다. 상담원이 보내기를 누르기 전에는 아무것도 전송되지 않습니다.",
+        "loading": "저장된 답변 불러오는 중",
+        "loadFailed": "저장된 답변을 불러오지 못했습니다.",
+        "retry": "다시 시도",
+        "loadMore": "더 불러오기",
+        "list": "저장된 답변",
+        "emptyTitle": "아직 저장된 답변이 없습니다",
+        "empty": "팀이 반복해서 하는 답변을 작성해 두고 키 하나로 삽입하세요.",
+        "noMatchTitle": "결과 없음",
+        "noMatch": "\"{q}\"와(과) 일치하는 저장된 답변이 없습니다.",
+        "noMatchCategory": "이 카테고리에는 저장된 답변이 없습니다.",
+        "scope": {
+          "shared": "공유",
+          "mine": "내 답변"
+        },
+        "allChannels": "모든 채널",
+        "neverUsed": "아직 사용 안 함",
+        "used": "{count, plural, other {#회}} 사용됨",
+        "lastUsed": "마지막 사용 {when}",
+        "createdBy": "작성자: {name}",
+        "readOnly": "저장된 답변을 관리하는 사람만 공유 답변을 변경할 수 있습니다.",
+        "edit": "수정",
+        "duplicate": "복제",
+        "delete": "삭제",
+        "cancel": "취소",
+        "deleteTitle": "이 저장된 답변을 삭제할까요?",
+        "deleteShared": "/{shortcut}이(가) 워크스페이스의 모든 사람에게서 제거됩니다.",
+        "deleteMine": "/{shortcut}이(가) 내 답변에서 제거됩니다.",
+        "deleted": "저장된 답변을 삭제했습니다.",
+        "duplicated": "저장된 답변을 복제했습니다.",
+        "created": "저장된 답변 /{shortcut}을(를) 만들었습니다.",
+        "saved": "저장된 답변을 업데이트했습니다."
+      },
+      "form": {
+        "eyebrow": "저장된 답변",
+        "titleNew": "새 저장된 답변",
+        "titleEdit": "저장된 답변 수정",
+        "close": "닫기",
+        "cancel": "취소",
+        "save": "저장",
+        "saving": "저장 중…",
+        "shortcut": "단축키",
+        "shortcutPlaceholder": "감사합니다",
+        "shortcutHint": "영문자, 숫자, 밑줄, 최대 {max}자.",
+        "shortcutStored": "상담원이 /{shortcut} 입력",
+        "shortcutEmpty": "영문자, 숫자 또는 밑줄로 된 단축키를 입력하세요.",
+        "shortcutTaken": "/{shortcut}은(는) 다른 답변에서 이미 사용 중입니다. 다른 단축키를 선택하세요.",
+        "title": "제목",
+        "titlePlaceholder": "문의해 주셔서 감사합니다",
+        "titleEmpty": "제목을 입력하세요.",
+        "titleLong": "제목은 최대 {max}자까지 가능합니다.",
+        "body": "텍스트",
+        "bodyHint": "일반 텍스트입니다. WhatsApp처럼 *굵게*와 _기울임_을 사용할 수 있습니다.",
+        "bodyPlaceholder": "안녕하세요 '{{first_name}}'님, 문의해 주셔서 감사합니다. 무엇을 도와드릴까요?",
+        "bodyEmpty": "답변 텍스트를 입력하세요.",
+        "bodyLong": "텍스트는 최대 {max}자까지 가능합니다.",
+        "count": "{n} / {max}",
+        "variables": "변수 삽입",
+        "variablesHint": "하나를 클릭하면 커서 위치에 추가됩니다. 채울 수 없는 변수는 그대로 남아 상담원이 볼 수 있습니다.",
+        "preview": "미리보기",
+        "previewHint": "샘플 고객 데이터 사용.",
+        "previewEmpty": "텍스트를 입력하면 표시되는 모습을 볼 수 있습니다.",
+        "previewIssues": "미리보기에서 채워지지 않음: {list}. 답변을 사용할 때 연락처에 해당 속성이 있으면 채워지고, 그 외에는 그대로 남습니다.",
+        "category": "카테고리(선택)",
+        "categoryPlaceholder": "인사, 결제, 지원",
+        "language": "언어(선택)",
+        "languageHint": "en 또는 pt-BR 같은 코드이며, 참고용입니다.",
+        "languageFormat": "en 또는 pt-BR 같은 언어 코드를 사용하세요.",
+        "channels": "이 채널에서만",
+        "channelsHint": "모두 선택 해제하면 모든 채널에서 사용할 수 있습니다.",
+        "scope": "사용 가능한 사람",
+        "scopeOption": {
+          "shared": "워크스페이스의 모든 사람",
+          "mine": "나만"
+        },
+        "scopeLocked": "저장한 후에는 답변을 공유와 개인 사이에서 변경할 수 없습니다.",
+        "planLimit": "요금제의 저장된 답변 한도에 도달했습니다.",
+        "upgrade": "요금제 보기",
+        "conflict": "다른 사람이 먼저 이 답변을 변경했습니다. 이 창을 닫고 다시 여세요.",
+        "invalid": "입력한 내용 중 일부가 올바르지 않습니다."
       }
     }
   }

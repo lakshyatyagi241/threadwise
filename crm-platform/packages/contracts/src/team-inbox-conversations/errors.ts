@@ -16,4 +16,12 @@ export const INBOX_ERROR_CODES = {
   INBOX_TEMPLATE_NOT_SENDABLE: 'INBOX_TEMPLATE_NOT_SENDABLE',
   /** Only the author of a note, or someone who may assign conversations (a manager), deletes it. */
   INBOX_NOTE_NOT_DELETABLE: 'INBOX_NOTE_NOT_DELETABLE',
+  /** No such saved reply, or a personal one of somebody else (the two are the same answer). */
+  SAVED_REPLY_NOT_FOUND: 'SAVED_REPLY_NOT_FOUND',
+  /** The shortcut is already taken by another reply of the same owner (a shared reply, or the same person's personal one). */
+  SAVED_REPLY_SHORTCUT_TAKEN: 'SAVED_REPLY_SHORTCUT_TAKEN',
+  /** A shared reply needs `inbox.savedreply.manage` to be changed or deleted, a personal one is only its owner's. */
+  SAVED_REPLY_NOT_EDITABLE: 'SAVED_REPLY_NOT_EDITABLE',
+  /** The reply is restricted to other channel kinds than the conversation's (the picker does not offer it there). */
+  SAVED_REPLY_CHANNEL_MISMATCH: 'SAVED_REPLY_CHANNEL_MISMATCH',
 } as const;

@@ -2,7 +2,8 @@
   "team-inbox-conversations": {
     "nav": {
       "inbox": "Skrzynka odbiorcza",
-      "messageLogs": "Dzienniki wiadomości"
+      "messageLogs": "Dzienniki wiadomości",
+      "savedReplies": "Szablony odpowiedzi"
     },
     "common": {
       "dismiss": "Odrzuć"
@@ -141,7 +142,10 @@
       "groupLeft": "Ten numer opuścił grupę, więc nie może już wysyłać tam wiadomości.",
       "groupAnnounceOnly": "Tylko administratorzy mogą wysyłać wiadomości w tej grupie, a ten numer nie jest administratorem.",
       "groupRateLimited": "Zbyt wiele wiadomości grupowych z tego numeru w krótkim czasie. Poczekaj minutę i spróbuj ponownie.",
-      "groupUnavailable": "WhatsApp nie przyjął tej wiadomości grupowej. Spróbuj ponownie za kilka minut."
+      "groupUnavailable": "WhatsApp nie przyjął tej wiadomości grupowej. Spróbuj ponownie za kilka minut.",
+      "savedReplyGone": "Ten szablon odpowiedzi już nie istnieje.",
+      "savedReplyChannel": "Ten szablon odpowiedzi nie jest przeznaczony dla tego rodzaju kanału.",
+      "shortcutTaken": "Inny szablon odpowiedzi używa już tego skrótu."
     },
     "bubble": {
       "kind": {
@@ -358,7 +362,9 @@
           "url": "Wpisz link zaczynający się od http:// lub https://",
           "tooManyRows": "Lista może zawierać łącznie co najwyżej 10 wierszy"
         }
-      }
+      },
+      "savedReplies": "Szablony odpowiedzi",
+      "savedReplyIssues": "Nie uzupełniono i pozostawiono bez zmian ({count}): {list}. Popraw przed wysłaniem."
     },
     "panel": {
       "tabsLabel": "Notatki i oś czasu",
@@ -658,6 +664,159 @@
         "label": "Członkowie grupy",
         "loading": "Szukanie członków",
         "none": "Żaden członek nie pasuje"
+      }
+    },
+    "savedReplies": {
+      "channelKind": {
+        "simulator": "Symulator (testy)",
+        "whatsapp_cloud": "WhatsApp Cloud API",
+        "whatsapp_qr": "WhatsApp (QR)",
+        "webchat": "Czat na stronie",
+        "telegram": "Telegram",
+        "facebook": "Facebook Messenger",
+        "instagram": "Instagram",
+        "email": "E-mail"
+      },
+      "variableGroup": {
+        "contact": "Kontakt",
+        "agent": "Ty",
+        "workspace": "Przestrzeń robocza",
+        "conversation": "Rozmowa"
+      },
+      "variable": {
+        "first_name": "Imię kontaktu",
+        "last_name": "Nazwisko kontaktu",
+        "name": "Pełne imię i nazwisko kontaktu",
+        "email": "E-mail kontaktu",
+        "phone": "Numer telefonu kontaktu",
+        "agent_name": "Twoje imię i nazwisko",
+        "agent_first_name": "Twoje imię",
+        "workspace_name": "Nazwa przestrzeni roboczej",
+        "company_name": "Nazwa firmy",
+        "today": "Dzisiejsza data",
+        "device_name": "Nazwa kanału",
+        "device_phone": "Numer telefonu kanału"
+      },
+      "picker": {
+        "title": "Szablony odpowiedzi",
+        "close": "Zamknij szablony odpowiedzi",
+        "searchLabel": "Szukaj szablonów odpowiedzi",
+        "searchPlaceholder": "Szukaj według skrótu, tytułu lub tekstu",
+        "listLabel": "Szablony odpowiedzi",
+        "loading": "Wczytywanie szablonów odpowiedzi",
+        "loadFailed": "Nie udało się wczytać szablonów odpowiedzi.",
+        "retry": "Spróbuj ponownie",
+        "empty": "Nie ma jeszcze szablonów odpowiedzi.",
+        "emptyForChannel": "Żaden szablon odpowiedzi nie jest przeznaczony dla tego kanału.",
+        "createFirst": "Utwórz pierwszy",
+        "noMatch": "Żaden szablon odpowiedzi nie pasuje do \"{q}\".",
+        "mine": "Moje",
+        "hint": "Strzałki przesuwają, Enter wstawia, Esc zamyka.",
+        "manage": "Zarządzaj szablonami odpowiedzi",
+        "tooLong": "Ta odpowiedź jest za długa jak na limit wiadomości tego kanału, więc nie została wstawiona."
+      },
+      "screen": {
+        "back": "Ustawienia",
+        "title": "Szablony odpowiedzi",
+        "subtitle": "Gotowe odpowiedzi, które zespół wstawia do wiadomości. Wpisz / w rozmowie, aby jakąś znaleźć.",
+        "create": "Nowy szablon odpowiedzi",
+        "noAccess": "Nie masz uprawnień do zarządzania szablonami odpowiedzi.",
+        "meter": "Wykorzystano {used} z {limit} szablonów odpowiedzi",
+        "meterLabel": "Szablony odpowiedzi wykorzystane w Twoim planie",
+        "meterNote": "Do limitu wliczają się zarówno odpowiedzi wspólne, jak i osobiste.",
+        "atLimit": "Osiągnięto limit {limit} szablonów odpowiedzi w Twoim planie. Usuń jeden lub zmień plan, aby dodać więcej.",
+        "nearLimit": "Zbliżasz się do limitu {limit} szablonów odpowiedzi w Twoim planie.",
+        "upgrade": "Zobacz plany",
+        "tabsLabel": "Pokaż",
+        "tab": {
+          "all": "Wszystkie ({count})",
+          "shared": "Wspólne ({count})",
+          "mine": "Moje ({count})"
+        },
+        "categoryFilter": "Filtruj według kategorii",
+        "allCategories": "Wszystkie kategorie",
+        "searchLabel": "Szukaj szablonów odpowiedzi",
+        "searchPlaceholder": "Szukaj według skrótu, tytułu lub tekstu",
+        "howItWorks": "W skrzynce odbiorczej wpisz / w polu wiadomości lub użyj przycisku Szablony odpowiedzi. Zmienne takie jak '{{first_name}}' są uzupełniane z rozmowy, zanim tekst trafi do pola. Nic nie zostanie wysłane, dopóki agent nie naciśnie Wyślij.",
+        "loading": "Wczytywanie szablonów odpowiedzi",
+        "loadFailed": "Nie udało się wczytać szablonów odpowiedzi.",
+        "retry": "Spróbuj ponownie",
+        "loadMore": "Wczytaj więcej",
+        "list": "Szablony odpowiedzi",
+        "emptyTitle": "Nie ma jeszcze szablonów odpowiedzi",
+        "empty": "Zapisz odpowiedzi, których Twój zespół udziela raz za razem, i wstawiaj je jednym skrótem.",
+        "noMatchTitle": "Nic nie znaleziono",
+        "noMatch": "Żaden szablon odpowiedzi nie pasuje do \"{q}\".",
+        "noMatchCategory": "Brak szablonów odpowiedzi w tej kategorii.",
+        "scope": {
+          "shared": "Wspólne",
+          "mine": "Moje"
+        },
+        "allChannels": "Wszystkie kanały",
+        "neverUsed": "Jeszcze nieużywany",
+        "used": "{count, plural, one {Użyto # raz} few {Użyto # razy} many {Użyto # razy} other {Użyto # razy}}",
+        "lastUsed": "Ostatnio użyto {when}",
+        "createdBy": "Utworzył(a): {name}",
+        "readOnly": "Tylko osoby zarządzające szablonami odpowiedzi mogą zmienić wspólną odpowiedź.",
+        "edit": "Edytuj",
+        "duplicate": "Duplikuj",
+        "delete": "Usuń",
+        "cancel": "Anuluj",
+        "deleteTitle": "Usunąć ten szablon odpowiedzi?",
+        "deleteShared": "/{shortcut} zostanie usunięty dla wszystkich w przestrzeni roboczej.",
+        "deleteMine": "/{shortcut} zostanie usunięty z Twoich odpowiedzi.",
+        "deleted": "Szablon odpowiedzi usunięty.",
+        "duplicated": "Szablon odpowiedzi zduplikowany.",
+        "created": "Utworzono szablon odpowiedzi /{shortcut}.",
+        "saved": "Szablon odpowiedzi zaktualizowany."
+      },
+      "form": {
+        "eyebrow": "Szablon odpowiedzi",
+        "titleNew": "Nowy szablon odpowiedzi",
+        "titleEdit": "Edytuj szablon odpowiedzi",
+        "close": "Zamknij",
+        "cancel": "Anuluj",
+        "save": "Zapisz",
+        "saving": "Zapisywanie…",
+        "shortcut": "Skrót",
+        "shortcutPlaceholder": "dzieki",
+        "shortcutHint": "Litery, cyfry i podkreślenia, do {max} znaków.",
+        "shortcutStored": "Agenci wpisują /{shortcut}",
+        "shortcutEmpty": "Wpisz skrót złożony z liter, cyfr lub podkreśleń.",
+        "shortcutTaken": "/{shortcut} jest już używany przez inną odpowiedź. Wybierz inny skrót.",
+        "title": "Tytuł",
+        "titlePlaceholder": "Dziękujemy za kontakt",
+        "titleEmpty": "Wpisz tytuł.",
+        "titleLong": "Tytuł może mieć co najwyżej {max} znaków.",
+        "body": "Tekst",
+        "bodyHint": "Zwykły tekst. Użyj *pogrubienia* i _kursywy_ jak w WhatsApp.",
+        "bodyPlaceholder": "Cześć '{{first_name}}', dziękujemy za kontakt. W czym możemy pomóc?",
+        "bodyEmpty": "Wpisz treść odpowiedzi.",
+        "bodyLong": "Tekst może mieć co najwyżej {max} znaków.",
+        "count": "{n} z {max}",
+        "variables": "Wstaw zmienną",
+        "variablesHint": "Kliknij jedną, aby dodać ją w miejscu kursora. Zmienna, której nie można uzupełnić, pozostaje bez zmian, aby agent ją zobaczył.",
+        "preview": "Podgląd",
+        "previewHint": "Na przykładowych danych klienta.",
+        "previewEmpty": "Wpisz tekst, aby zobaczyć, jak będzie wyglądał.",
+        "previewIssues": "Nie uzupełniono w podglądzie: {list}. Gdy odpowiedź jest używana, atrybuty kontaktu są uzupełniane, jeśli kontakt je ma; reszta pozostaje bez zmian.",
+        "category": "Kategoria (opcjonalnie)",
+        "categoryPlaceholder": "Powitania, płatności, wsparcie",
+        "language": "Język (opcjonalnie)",
+        "languageHint": "Kod, taki jak en lub pt-BR, jako Twoja własna notatka.",
+        "languageFormat": "Użyj kodu języka, takiego jak en lub pt-BR.",
+        "channels": "Tylko w tych kanałach",
+        "channelsHint": "Pozostaw wszystko niezaznaczone, aby oferować w każdym kanale.",
+        "scope": "Kto może używać",
+        "scopeOption": {
+          "shared": "Wszyscy w przestrzeni roboczej",
+          "mine": "Tylko ja"
+        },
+        "scopeLocked": "Po zapisaniu odpowiedzi nie można zmienić jej z wspólnej na osobistą ani odwrotnie.",
+        "planLimit": "Osiągnięto limit szablonów odpowiedzi w Twoim planie.",
+        "upgrade": "Zobacz plany",
+        "conflict": "Ktoś inny zmienił tę odpowiedź wcześniej. Zamknij to okno i otwórz je ponownie.",
+        "invalid": "Część wprowadzonych danych jest nieprawidłowa."
       }
     }
   }

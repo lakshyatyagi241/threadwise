@@ -370,3 +370,9 @@ Reference has a per-contact `is_unsubscribed` flag, a manual toggle, a REST fiel
 | Hooks                            | Registration order                                                                                                                                                             | `InboundMessageListener` gains `first` (run before the others) and a result `halt` (listeners that answer the customer are skipped; routing and translation still run)                                                                                                       | decision |
 
 Open follow-ups are BL-103 in [backlog.md](../../backlog.md).
+
+## Saved replies library (TW-TIB1-024)
+
+Reference has a flat list of quick replies with two variables. Ours is a library: server-filled variables from the open conversation (contact, agent, workspace,
+channel), an optional channel restriction and language, a duplicate action, a category filter, a plan meter with an upgrade link, and a keyboard-driven
+picker. The rules that differ from Reference are listed one by one in [team-inbox-conversations.md](team-inbox-conversations.md#saved-replies-tw-tib1-024).

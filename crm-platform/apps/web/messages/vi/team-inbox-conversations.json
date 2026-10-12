@@ -2,7 +2,8 @@
   "team-inbox-conversations": {
     "nav": {
       "inbox": "Hộp thư",
-      "messageLogs": "Nhật ký tin nhắn"
+      "messageLogs": "Nhật ký tin nhắn",
+      "savedReplies": "Trả lời nhanh"
     },
     "common": {
       "dismiss": "Bỏ qua"
@@ -141,7 +142,10 @@
       "groupLeft": "Số này đã rời nhóm nên không thể gửi tin nhắn ở đó nữa.",
       "groupAnnounceOnly": "Chỉ quản trị viên mới có thể gửi tin nhắn trong nhóm này, và số này không phải quản trị viên.",
       "groupRateLimited": "Số này đã gửi quá nhiều tin nhắn nhóm trong thời gian ngắn. Hãy chờ một phút rồi thử lại.",
-      "groupUnavailable": "WhatsApp không chấp nhận tin nhắn nhóm này. Hãy thử lại sau vài phút."
+      "groupUnavailable": "WhatsApp không chấp nhận tin nhắn nhóm này. Hãy thử lại sau vài phút.",
+      "savedReplyGone": "Trả lời nhanh này không còn tồn tại.",
+      "savedReplyChannel": "Trả lời nhanh này không dành cho loại kênh này.",
+      "shortcutTaken": "Một trả lời nhanh khác đã dùng phím tắt đó."
     },
     "bubble": {
       "kind": {
@@ -358,7 +362,9 @@
           "url": "Nhập liên kết bắt đầu bằng http:// hoặc https://",
           "tooManyRows": "Một danh sách có tối đa 10 dòng trong tổng số"
         }
-      }
+      },
+      "savedReplies": "Trả lời nhanh",
+      "savedReplyIssues": "Chưa điền và giữ nguyên như đã viết ({count}): {list}. Hãy sửa trước khi gửi."
     },
     "panel": {
       "tabsLabel": "Ghi chú và dòng thời gian",
@@ -658,6 +664,159 @@
         "label": "Thành viên nhóm",
         "loading": "Đang tìm thành viên",
         "none": "Không có thành viên nào phù hợp"
+      }
+    },
+    "savedReplies": {
+      "channelKind": {
+        "simulator": "Trình mô phỏng (thử nghiệm)",
+        "whatsapp_cloud": "WhatsApp Cloud API",
+        "whatsapp_qr": "WhatsApp (QR)",
+        "webchat": "Chat trên website",
+        "telegram": "Telegram",
+        "facebook": "Facebook Messenger",
+        "instagram": "Instagram",
+        "email": "Email"
+      },
+      "variableGroup": {
+        "contact": "Liên hệ",
+        "agent": "Bạn",
+        "workspace": "Không gian làm việc",
+        "conversation": "Cuộc trò chuyện"
+      },
+      "variable": {
+        "first_name": "Tên của liên hệ",
+        "last_name": "Họ của liên hệ",
+        "name": "Họ tên đầy đủ của liên hệ",
+        "email": "Email của liên hệ",
+        "phone": "Số điện thoại của liên hệ",
+        "agent_name": "Họ tên đầy đủ của bạn",
+        "agent_first_name": "Tên của bạn",
+        "workspace_name": "Tên không gian làm việc",
+        "company_name": "Tên công ty",
+        "today": "Ngày hôm nay",
+        "device_name": "Tên của kênh",
+        "device_phone": "Số điện thoại của kênh"
+      },
+      "picker": {
+        "title": "Trả lời nhanh",
+        "close": "Đóng trả lời nhanh",
+        "searchLabel": "Tìm trả lời nhanh",
+        "searchPlaceholder": "Tìm theo phím tắt, tiêu đề hoặc nội dung",
+        "listLabel": "Trả lời nhanh",
+        "loading": "Đang tải trả lời nhanh",
+        "loadFailed": "Không thể tải trả lời nhanh.",
+        "retry": "Thử lại",
+        "empty": "Chưa có trả lời nhanh nào.",
+        "emptyForChannel": "Không có trả lời nhanh nào dành cho kênh này.",
+        "createFirst": "Tạo cái đầu tiên",
+        "noMatch": "Không có trả lời nhanh nào khớp với \"{q}\".",
+        "mine": "Của tôi",
+        "hint": "Phím mũi tên để di chuyển, Enter để chèn, Esc để đóng.",
+        "manage": "Quản lý trả lời nhanh",
+        "tooLong": "Câu trả lời đó quá dài so với giới hạn tin nhắn của kênh này nên chưa được chèn."
+      },
+      "screen": {
+        "back": "Cài đặt",
+        "title": "Trả lời nhanh",
+        "subtitle": "Các câu trả lời dùng lại mà nhóm của bạn chèn vào tin trả lời. Gõ / trong cuộc trò chuyện để tìm.",
+        "create": "Trả lời nhanh mới",
+        "noAccess": "Bạn không có quyền quản lý trả lời nhanh.",
+        "meter": "Đã dùng {used}/{limit} trả lời nhanh",
+        "meterLabel": "Trả lời nhanh đã dùng theo gói của bạn",
+        "meterNote": "Cả câu trả lời dùng chung và cá nhân đều được tính vào giới hạn.",
+        "atLimit": "Bạn đã đạt giới hạn {limit} trả lời nhanh của gói. Hãy xóa một cái hoặc nâng cấp để thêm.",
+        "nearLimit": "Bạn sắp đạt giới hạn {limit} trả lời nhanh của gói.",
+        "upgrade": "Xem các gói",
+        "tabsLabel": "Hiển thị",
+        "tab": {
+          "all": "Tất cả ({count})",
+          "shared": "Dùng chung ({count})",
+          "mine": "Của tôi ({count})"
+        },
+        "categoryFilter": "Lọc theo danh mục",
+        "allCategories": "Tất cả danh mục",
+        "searchLabel": "Tìm trả lời nhanh",
+        "searchPlaceholder": "Tìm theo phím tắt, tiêu đề hoặc nội dung",
+        "howItWorks": "Trong hộp thư đến, gõ / vào ô tin nhắn hoặc dùng nút Trả lời nhanh. Các biến như '{{first_name}}' được điền từ cuộc trò chuyện trước khi nội dung vào ô tin nhắn. Không có gì được gửi cho đến khi nhân viên bấm Gửi.",
+        "loading": "Đang tải trả lời nhanh",
+        "loadFailed": "Không thể tải trả lời nhanh.",
+        "retry": "Thử lại",
+        "loadMore": "Tải thêm",
+        "list": "Trả lời nhanh",
+        "emptyTitle": "Chưa có trả lời nhanh nào",
+        "empty": "Viết những câu trả lời nhóm của bạn hay dùng, rồi chèn chỉ bằng một lần bấm phím.",
+        "noMatchTitle": "Không tìm thấy gì",
+        "noMatch": "Không có trả lời nhanh nào khớp với \"{q}\".",
+        "noMatchCategory": "Không có trả lời nhanh nào trong danh mục này.",
+        "scope": {
+          "shared": "Dùng chung",
+          "mine": "Của tôi"
+        },
+        "allChannels": "Tất cả kênh",
+        "neverUsed": "Chưa được dùng",
+        "used": "{count, plural, other {Đã dùng # lần}}",
+        "lastUsed": "Dùng lần cuối {when}",
+        "createdBy": "Tạo bởi {name}",
+        "readOnly": "Chỉ những người quản lý trả lời nhanh mới có thể thay đổi câu trả lời dùng chung.",
+        "edit": "Sửa",
+        "duplicate": "Nhân bản",
+        "delete": "Xóa",
+        "cancel": "Hủy",
+        "deleteTitle": "Xóa trả lời nhanh này?",
+        "deleteShared": "/{shortcut} sẽ bị xóa với mọi người trong không gian làm việc.",
+        "deleteMine": "/{shortcut} sẽ bị xóa khỏi các câu trả lời của bạn.",
+        "deleted": "Đã xóa trả lời nhanh.",
+        "duplicated": "Đã nhân bản trả lời nhanh.",
+        "created": "Đã tạo trả lời nhanh /{shortcut}.",
+        "saved": "Đã cập nhật trả lời nhanh."
+      },
+      "form": {
+        "eyebrow": "Trả lời nhanh",
+        "titleNew": "Trả lời nhanh mới",
+        "titleEdit": "Sửa trả lời nhanh",
+        "close": "Đóng",
+        "cancel": "Hủy",
+        "save": "Lưu",
+        "saving": "Đang lưu…",
+        "shortcut": "Phím tắt",
+        "shortcutPlaceholder": "camon",
+        "shortcutHint": "Chữ cái, số và dấu gạch dưới, tối đa {max} ký tự.",
+        "shortcutStored": "Nhân viên gõ /{shortcut}",
+        "shortcutEmpty": "Nhập phím tắt gồm chữ cái, số hoặc dấu gạch dưới.",
+        "shortcutTaken": "/{shortcut} đã được một câu trả lời khác dùng. Hãy chọn phím tắt khác.",
+        "title": "Tiêu đề",
+        "titlePlaceholder": "Cảm ơn bạn đã liên hệ",
+        "titleEmpty": "Nhập tiêu đề.",
+        "titleLong": "Tiêu đề tối đa {max} ký tự.",
+        "body": "Nội dung",
+        "bodyHint": "Văn bản thuần. Dùng *đậm* và _nghiêng_ như trong WhatsApp.",
+        "bodyPlaceholder": "Chào '{{first_name}}', cảm ơn bạn đã liên hệ. Chúng tôi có thể giúp gì cho bạn?",
+        "bodyEmpty": "Nhập nội dung câu trả lời.",
+        "bodyLong": "Nội dung tối đa {max} ký tự.",
+        "count": "{n}/{max}",
+        "variables": "Chèn biến",
+        "variablesHint": "Bấm vào một biến để thêm vào vị trí con trỏ. Biến không thể điền sẽ giữ nguyên như đã viết để nhân viên nhìn thấy.",
+        "preview": "Xem trước",
+        "previewHint": "Với dữ liệu khách hàng mẫu.",
+        "previewEmpty": "Nhập nội dung để xem hiển thị ra sao.",
+        "previewIssues": "Chưa điền trong bản xem trước: {list}. Khi dùng câu trả lời, các thuộc tính liên hệ của bạn sẽ được điền nếu liên hệ có; phần còn lại giữ nguyên như đã viết.",
+        "category": "Danh mục (không bắt buộc)",
+        "categoryPlaceholder": "Chào hỏi, thanh toán, hỗ trợ",
+        "language": "Ngôn ngữ (không bắt buộc)",
+        "languageHint": "Mã như en hoặc pt-BR, để bạn tham khảo.",
+        "languageFormat": "Hãy dùng mã ngôn ngữ như en hoặc pt-BR.",
+        "channels": "Chỉ trên các kênh này",
+        "channelsHint": "Để trống tất cả để hiển thị trên mọi kênh.",
+        "scope": "Ai có thể dùng",
+        "scopeOption": {
+          "shared": "Mọi người trong không gian làm việc",
+          "mine": "Chỉ mình tôi"
+        },
+        "scopeLocked": "Sau khi lưu, không thể đổi câu trả lời giữa dùng chung và cá nhân.",
+        "planLimit": "Bạn đã đạt giới hạn trả lời nhanh của gói.",
+        "upgrade": "Xem các gói",
+        "conflict": "Người khác đã thay đổi câu trả lời này trước. Hãy đóng cửa sổ này và mở lại.",
+        "invalid": "Một số nội dung bạn nhập không hợp lệ."
       }
     }
   }

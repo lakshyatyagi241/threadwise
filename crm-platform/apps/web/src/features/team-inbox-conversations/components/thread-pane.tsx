@@ -379,6 +379,7 @@ export function ThreadPane(props: ThreadPaneProps) {
             ? { channelKind: detail.channel.kind, allowed: detail.capabilities.media }
             : undefined
         }
+        savedReplies={props.can.reply ? { channelKind: detail?.channel.kind } : undefined}
         canTemplate={canTemplate}
         onTemplate={() => setTemplatesOpen(true)}
         canShare={shareKinds.length > 0}
