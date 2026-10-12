@@ -323,7 +323,7 @@
       "web": {
         "label": "Chat del sitio web",
         "description": "Bots creados para el chat de tu sitio web y el widget en el que se ejecuta cada uno.",
-        "keywords": "web, sitio web, widget, chatbot, insertar, chat en vivo"
+        "keywords": "web, sitio web, widget, chatbot, incrustar, chat en vivo"
       }
     }
   }

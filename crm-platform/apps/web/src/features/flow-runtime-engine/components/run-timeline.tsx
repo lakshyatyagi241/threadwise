@@ -7,6 +7,7 @@ import {
   FLOW_RUN_LOG_RETENTION_DAYS,
   type FlowRunDetail,
   type FlowRunStep,
+  type FlowStepIoItem,
 } from '@crm/contracts';
 import {
   formatMs,
@@ -38,6 +39,30 @@ function Stat({ label, value, tone }: { label: string; value: string | number; t
     <div className="min-w-0">
       <div className={KICKER}>{label}</div>
       <div className={`mt-1 text-2xl tabular-nums ${tone ?? ''}`}>{value}</div>
+    </div>
+  );
+}
+
+/** What a node took in or produced: the message as the customer read it, the reply, a variable, a request or response. */
+function IoBlock({ title, items }: { title: string; items: FlowStepIoItem[] }) {
+  const t = useTranslations('flr');
+  if (items.length === 0) return null;
+  return (
+    <div className="rounded-lg border border-border bg-background px-3 py-2">
+      <div className={`mb-1.5 ${KICKER}`}>{title}</div>
+      <dl className="space-y-1.5">
+        {items.map((i, n) => (
+          <div key={`${i.kind}-${i.name ?? ''}-${n}`} className="min-w-0">
+            <dt className="text-[11px] text-muted-foreground">
+              {t(`run.ioKind.${i.kind}`)}
+              {i.name ? ` · ${i.name}` : ''}
+            </dt>
+            <dd className="whitespace-pre-wrap break-words font-mono text-[12px]">
+              {i.value === '' ? t('common.noValue') : i.value}
+            </dd>
+          </div>
+        ))}
+      </dl>
     </div>
   );
 }
@@ -115,6 +140,8 @@ function StepRow({
           </div>
           {s.summary && <p className="break-words">{s.summary}</p>}
           {s.error && <p className="break-words text-danger">{s.error}</p>}
+          <IoBlock title={t('run.ioInput')} items={s.input} />
+          <IoBlock title={t('run.ioOutput')} items={s.output} />
           {facts.map((f) => (
             <p key={f.kind} className="break-words text-muted-foreground">
               {factText(f)}

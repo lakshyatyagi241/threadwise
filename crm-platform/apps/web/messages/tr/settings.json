@@ -322,8 +322,8 @@
       },
       "web": {
         "label": "Web sitesi sohbeti",
-        "description": "Web sitesi sohbetiniz için oluşturulan botlar ve her birinin çalıştığı widget.",
-        "keywords": "web, web sitesi, widget, sohbet botu, gömme, canlı sohbet"
+        "description": "Web sitenizin sohbeti için oluşturulan botlar ve her birinin çalıştığı widget.",
+        "keywords": "web, web sitesi, widget, chatbot, gömme, canlı sohbet"
       }
     }
   }

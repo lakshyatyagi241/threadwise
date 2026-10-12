@@ -25,7 +25,7 @@
     "toast": {
       "noPhone": "Ten kontakt nie ma numeru telefonu.",
       "noNumber": "Połączenia nie są włączone dla żadnego numeru WABA.",
-      "alreadyPermitted": "Ten kontakt już zezwala na połączenia - rozpoczynanie połączenia...",
+      "alreadyPermitted": "Ten kontakt już zezwala na połączenia. Kliknij Zadzwoń, aby rozpocząć połączenie.",
       "permissionSent": "Wysłano prośbę o zgodę. W WhatsApp zobaczy opcje Akceptuj/Odrzuć - spróbuj zadzwonić ponownie po jego odpowiedzi.",
       "permissionFailed": "Nie udało się wysłać prośby o zgodę: {message}",
       "startFailed": "Nie udało się rozpocząć połączenia: {message}",

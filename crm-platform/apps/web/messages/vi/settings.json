@@ -321,9 +321,9 @@
         "keywords": "gói đăng ký, gia hạn, tự động gia hạn, hủy, tự động thanh toán, thanh toán thất bại, các khoản thu"
       },
       "web": {
-        "label": "Trò chuyện trên website",
-        "description": "Các bot được xây dựng cho trò chuyện trên website của bạn và widget mà mỗi bot chạy trong đó.",
-        "keywords": "web, website, widget, chatbot, nhúng, trò chuyện trực tiếp"
+        "label": "Chat trên website",
+        "description": "Các bot được tạo cho chat trên website của bạn và widget mà mỗi bot chạy trong đó.",
+        "keywords": "web, website, widget, chatbot, nhúng, chat trực tuyến"
       }
     }
   }

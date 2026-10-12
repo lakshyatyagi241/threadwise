@@ -1,7 +1,7 @@
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import { createAdapter } from '@socket.io/redis-adapter';
 import { Redis } from 'ioredis';
-import type { Server, ServerOptions } from 'socket.io';
+import type { ServerOptions } from 'socket.io';
 
 /**
  * socket.io across multiple processes.
@@ -19,8 +19,10 @@ export class RedisIoAdapter extends IoAdapter {
     this.adapterConstructor = createAdapter(pubClient, subClient);
   }
 
-  override createIOServer(port: number, options?: ServerOptions): Server {
-    const server = super.createIOServer(port, options);
+  override createIOServer(port: number, options?: ServerOptions): unknown {
+    const server = super.createIOServer(port, options) as {
+      adapter: (adapter: unknown) => void;
+    };
     if (this.adapterConstructor) {
       server.adapter(this.adapterConstructor);
     }

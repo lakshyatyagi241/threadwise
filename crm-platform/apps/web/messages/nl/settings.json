@@ -305,8 +305,8 @@
         "keywords": "abonnement, verlengen, automatisch verlengen, annuleren, automatische betaling, mislukte betaling, afschrijvingen"
       },
       "web": {
-        "label": "Website-chat",
-        "description": "Bots gebouwd voor de chat op je website en de widget waarin elk draait.",
+        "label": "Websitechat",
+        "description": "Bots die zijn gemaakt voor de chat op je website en de widget waarin elk daarvan draait.",
         "keywords": "web, website, widget, chatbot, insluiten, livechat"
       }
     },

@@ -17,7 +17,7 @@ Calling lets your team place and answer WhatsApp voice calls from the browser. Y
 1. Open **Settings**, then **Calling** under Channels. Each of your WhatsApp numbers has a card with its connection status.
 2. Select **Enable calling** on the number you want. WhatsApp is asked first, which can take a few seconds, and the card changes only after WhatsApp accepts. If it refuses, the full reason is shown on the card.
 3. Open a chat on that number in the inbox and select **Call**. The button is hidden if the contact has no phone number.
-4. If there is no confirmed calling permission for the contact, a window offers two choices. **Call anyway** works if they already tapped Allow in WhatsApp. **Ask permission** sends them a request and places no call. Try again after they answer.
+4. If there is no confirmed calling permission for the contact, a window offers two choices. **Call anyway** works if they already tapped Allow in WhatsApp. **Ask permission** sends them a request and places no call, even if they already allow calls (then you just press Call). Try again after they answer.
 5. While a call is live, a panel shows the call length with **Mute**, **End** and **Record**. An incoming call shows a popup with **Accept** and **Decline**.
 
 ## Options and settings

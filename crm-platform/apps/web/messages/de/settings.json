@@ -322,8 +322,8 @@
       },
       "web": {
         "label": "Website-Chat",
-        "description": "Bots für Ihren Website-Chat und das Widget, in dem jeder läuft.",
-        "keywords": "Web, Website, Widget, Chatbot, einbetten, Live-Chat"
+        "description": "Bots für den Chat Ihrer Website und das Widget, in dem jeder davon läuft.",
+        "keywords": "Web, Website, Widget, Chatbot, Einbetten, Live-Chat"
       }
     }
   }

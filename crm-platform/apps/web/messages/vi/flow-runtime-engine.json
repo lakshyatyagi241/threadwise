@@ -197,7 +197,17 @@
       "factWaiting": "Đang chờ tại: {node}",
       "factDelay": "Chờ {time}",
       "factReplied": "Khách hàng trả lời: {text}",
-      "factEnded": "Kết thúc: {reason}"
+      "factEnded": "Kết thúc: {reason}",
+      "ioInput": "Đầu vào",
+      "ioOutput": "Đầu ra",
+      "ioKind": {
+        "message": "Tin nhắn đã gửi",
+        "reply": "Phản hồi của khách",
+        "variable": "Biến",
+        "request": "Yêu cầu",
+        "response": "Phản hồi",
+        "result": "Kết quả"
+      }
     },
     "event": {
       "step": "Bước",

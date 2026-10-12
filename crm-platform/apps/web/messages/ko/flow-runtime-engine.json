@@ -197,7 +197,17 @@
       "factWaiting": "대기 위치: {node}",
       "factDelay": "{time} 대기",
       "factReplied": "고객 답장: {text}",
-      "factEnded": "종료: {reason}"
+      "factEnded": "종료: {reason}",
+      "ioInput": "입력",
+      "ioOutput": "출력",
+      "ioKind": {
+        "message": "보낸 메시지",
+        "reply": "고객 답장",
+        "variable": "변수",
+        "request": "요청",
+        "response": "응답",
+        "result": "결과"
+      }
     },
     "event": {
       "step": "단계",

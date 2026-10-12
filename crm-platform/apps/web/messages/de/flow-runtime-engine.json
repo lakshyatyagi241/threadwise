@@ -197,7 +197,17 @@
       "factWaiting": "Wartet bei: {node}",
       "factDelay": "Wartet {time}",
       "factReplied": "Kunde antwortete: {text}",
-      "factEnded": "Beendet: {reason}"
+      "factEnded": "Beendet: {reason}",
+      "ioInput": "Eingabe",
+      "ioOutput": "Ausgabe",
+      "ioKind": {
+        "message": "Gesendete Nachricht",
+        "reply": "Antwort des Kunden",
+        "variable": "Variable",
+        "request": "Anfrage",
+        "response": "Antwort",
+        "result": "Ergebnis"
+      }
     },
     "event": {
       "step": "Schritt",

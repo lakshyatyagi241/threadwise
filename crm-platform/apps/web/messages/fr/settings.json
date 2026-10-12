@@ -322,7 +322,7 @@
       },
       "web": {
         "label": "Chat du site web",
-        "description": "Les bots créés pour le chat de votre site web et le widget dans lequel chacun s'exécute.",
+        "description": "Les bots conçus pour le chat de votre site web et le widget dans lequel chacun s’exécute.",
         "keywords": "web, site web, widget, chatbot, intégrer, chat en direct"
       }
     }
