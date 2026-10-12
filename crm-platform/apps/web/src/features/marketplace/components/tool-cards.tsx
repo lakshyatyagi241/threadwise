@@ -33,18 +33,8 @@ function ToolCard({ tile }: { tile: ResolvedSettingsTile }) {
         </span>
         <div className="min-w-0 flex-1">
           {/* h2, not h3: on the Add-ons tab nothing sits above the cards but the page title (h1). */}
-          <h2 className="truncate text-base font-semibold">
-            {soon ? (
-              label
-            ) : (
-              <Link
-                href={tile.href}
-                className="block truncate py-0.5 hover:underline focus-visible:underline"
-              >
-                {label}
-              </Link>
-            )}
-          </h2>
+          {/* The title is plain text: the Open button below is the one link to the screen (two links to one place is one tab stop too many). */}
+          <h2 className="truncate text-base font-semibold">{label}</h2>
         </div>
         {soon ? (
           <Badge tone="neutral">{tm('tools.soon')}</Badge>
