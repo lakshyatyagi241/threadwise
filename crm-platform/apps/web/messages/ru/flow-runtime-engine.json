@@ -192,7 +192,12 @@
       "retention": "Журналы удаляются через {days} дн. после завершения запуска.",
       "pathTitle": "Пройденный путь",
       "notReached": "Не достигнуты",
-      "noErrors": "В этом запуске нет ошибок."
+      "noErrors": "В этом запуске нет ошибок.",
+      "factNext": "Далее: {node}",
+      "factWaiting": "Ожидание на: {node}",
+      "factDelay": "Ожидание {time}",
+      "factReplied": "Клиент ответил: {text}",
+      "factEnded": "Завершено: {reason}"
     },
     "event": {
       "step": "Шаг",

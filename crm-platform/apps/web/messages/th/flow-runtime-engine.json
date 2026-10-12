@@ -192,7 +192,12 @@
       "retention": "บันทึกจะถูกลบ {days} วันหลังการรันสิ้นสุด",
       "pathTitle": "เส้นทางที่ผ่าน",
       "notReached": "ยังไปไม่ถึง",
-      "noErrors": "ไม่มีข้อผิดพลาดในการรันนี้"
+      "noErrors": "ไม่มีข้อผิดพลาดในการรันนี้",
+      "factNext": "ถัดไป: {node}",
+      "factWaiting": "รออยู่ที่: {node}",
+      "factDelay": "รอ {time}",
+      "factReplied": "ลูกค้าตอบกลับ: {text}",
+      "factEnded": "สิ้นสุด: {reason}"
     },
     "event": {
       "step": "ขั้นตอน",

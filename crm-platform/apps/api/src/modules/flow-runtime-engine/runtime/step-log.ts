@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { FLOW_RUN_LOG_MAX_STEPS } from '@crm/contracts';
 import type { RuntimeGraph, RuntimeNode } from '../graph/runtime-graph';
 import type { StepOutcome } from './engine-core';
+import type { OutboundMessage, SendOutcome } from './types';
 
 /**
  * What one node execution leaves in the run log (TW-FLR-054, 083). Pure: no database, no clock.
@@ -31,6 +32,18 @@ export function maskSecrets(text: string): string {
     .replace(SECRET, (_m, head: string) => `${head}***`);
 }
 
+/** Text of a Message or Sequence node lives in its replies. */
+function firstReplyText(node: RuntimeNode): string {
+  const replies = node.props.replies;
+  if (!Array.isArray(replies)) return '';
+  for (const r of replies) {
+    const d = (r as { type?: unknown; data?: unknown } | null)?.data;
+    if ((r as { type?: unknown })?.type === 'Text' && typeof d === 'string' && d.trim() !== '')
+      return d;
+  }
+  return '';
+}
+
 const TEXT_KEYS = [
   'text',
   'body',
@@ -45,6 +58,8 @@ const TEXT_KEYS = [
 /** The setting that tells nodes of one type apart in a log: what a message says, what a question asks. */
 function mainText(node: RuntimeNode | null): string {
   if (!node) return '';
+  const reply = firstReplyText(node);
+  if (reply) return reply;
   for (const k of TEXT_KEYS) {
     const v = node.props[k];
     if (typeof v === 'string' && v.trim() !== '') return v;
@@ -58,6 +73,35 @@ export function nodeLabel(node: RuntimeNode | null, fallbackType: string | null)
   const text = mainText(node);
   if (text) return clip(text, 40);
   return node?.type ?? fallbackType ?? '';
+}
+
+const SENT_MAX = 120;
+
+/** One line for a message that went to the customer: its kind and the words, never a variable dump. */
+export function describeSent(message: OutboundMessage, outcome: SendOutcome): string {
+  const words = (m: OutboundMessage): string => {
+    switch (m.kind) {
+      case 'text':
+        return m.body;
+      case 'media':
+        return m.caption ? `${m.mediaKind}: ${m.caption}` : `${m.mediaKind}: ${m.url}`;
+      case 'buttons':
+      case 'list':
+      case 'location_request':
+      case 'form':
+        return m.body;
+      case 'cta_url':
+        return `${m.body} (${m.text})`;
+      case 'location':
+        return m.name ?? m.address ?? 'location';
+      case 'template':
+        return m.text || m.name;
+    }
+  };
+  const body = clip(maskSecrets(words(message)), SENT_MAX);
+  // A media line already starts with its kind (image, video...).
+  const line = message.kind === 'media' ? body : `${message.kind}: ${body}`;
+  return outcome.ok ? line : `${line} (not sent: ${clip(outcome.error, 80)})`;
 }
 
 export interface StepFields {
@@ -86,13 +130,9 @@ export function stepFields(
   else if (t.t === 'wait' || t.t === 'sleep') kind = 'waiting';
   else if (outcome.notes.some((n) => n.startsWith('no executor'))) kind = 'skipped';
 
-  const bits = outcome.notes.map((n) => n);
+  const bits = [...(outcome.sent ?? []), ...outcome.notes];
   if (t.t === 'halt') bits.push(t.reason);
   if (t.t === 'end' && t.status === 'failed' && t.failureReason) bits.push(t.failureReason);
-  if (bits.length === 0) {
-    const text = mainText(node);
-    if (text) bits.push(text);
-  }
   const summary = bits.length > 0 ? clip(maskSecrets(bits.join('; ')), SUMMARY_MAX) : null;
   const label = nodeLabel(node, outcome.nodeType);
 
