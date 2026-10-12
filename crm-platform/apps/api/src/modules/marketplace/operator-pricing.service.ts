@@ -484,19 +484,6 @@ export class OperatorPricingService {
             note: input.note,
             operatorId,
           });
-          // These workspaces already use the feature, so they keep using it: the app is installed for them too (a subscription alone no
-          // longer turns an app's features on; a new customer installs from the Marketplace). Same rows the install button writes.
-          await tx.execute(sql`
-            WITH v AS (
-              SELECT ver.id AS version_id, ver.scopes FROM marketplace_app_versions ver WHERE ver.app_id = ${app.row.id}
-              ORDER BY (ver.status = 'published') DESC, ver.id DESC LIMIT 1),
-            made AS (
-              INSERT INTO workspace_app_installations (org_id, app_id, installed_version_id, status, granted_scopes)
-              SELECT ${o.id}, ${app.row.id}, v.version_id, 'active', v.scopes FROM v
-              ON CONFLICT (org_id, app_id) DO NOTHING
-              RETURNING org_id, id, app_id, installed_version_id, granted_scopes)
-            INSERT INTO marketplace_consents (org_id, installation_id, app_id, version_id, action, scopes, previous_scopes)
-            SELECT org_id, id, app_id, installed_version_id, 'install', granted_scopes, '{}'::text[] FROM made`);
           return true;
         });
         if (done) comped += 1;
