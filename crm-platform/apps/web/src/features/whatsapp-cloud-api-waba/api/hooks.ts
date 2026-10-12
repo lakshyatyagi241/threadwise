@@ -1,6 +1,7 @@
 'use client';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { invalidateSenderLists } from '@/lib/sender-lists';
 import { wabaApi } from './service';
 
 export const KEYS = {
@@ -46,7 +47,11 @@ function useAction<TVars, TOut>(fn: (vars: TVars) => Promise<TOut>) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: fn,
-    onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.all }),
+    onSuccess: () => {
+      // The campaign screens' "Send from" lists follow the numbers.
+      void invalidateSenderLists(qc);
+      return qc.invalidateQueries({ queryKey: KEYS.all });
+    },
   });
 }
 

@@ -10,7 +10,8 @@
       "install": "Installeren · Marketplace",
       "installed": "Geïnstalleerd · Marketplace",
       "manage": "App beheren · Marketplace",
-      "requests": "Verzoeken · Marketplace"
+      "requests": "Verzoeken · Marketplace",
+      "addons": "Add-ons · Marketplace"
     },
     "common": {
       "dismiss": "Sluiten",
@@ -124,7 +125,8 @@
       "moreLabel": "Geïnstalleerd en verzoeken",
       "tabs": {
         "mini_app": "Mini apps",
-        "integration": "Integraties"
+        "integration": "Integraties",
+        "addon": "Add-ons"
       },
       "installed": "Geïnstalleerd",
       "installedLimit": "Geïnstalleerd ({installed} van {limit})",
@@ -865,6 +867,15 @@
       },
       "working": "Bezig",
       "noCheckout": "Betalen is voor deze app nu niet beschikbaar. Probeer het zo meteen opnieuw."
+    },
+    "tools": {
+      "open": "Openen",
+      "empty": {
+        "title": "Geen add-ons beschikbaar",
+        "message": "De add-ons die je rol en abonnement bevatten, verschijnen hier."
+      },
+      "soon": "Binnenkort",
+      "upgrade": "Upgraden"
     }
   }
 }

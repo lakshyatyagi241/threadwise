@@ -2,7 +2,8 @@
   "team-inbox-conversations": {
     "nav": {
       "inbox": "收件箱",
-      "messageLogs": "消息日志"
+      "messageLogs": "消息日志",
+      "savedReplies": "快捷回复"
     },
     "common": {
       "dismiss": "关闭"
@@ -141,7 +142,10 @@
       "groupLeft": "此号码已退出该群组，因此无法再在其中发送消息。",
       "groupAnnounceOnly": "此群组仅管理员可以发送消息，而此号码不是管理员。",
       "groupRateLimited": "此号码在短时间内发送的群组消息过多。请等待一分钟后重试。",
-      "groupUnavailable": "WhatsApp 未接受此群组消息。请几分钟后重试。"
+      "groupUnavailable": "WhatsApp 未接受此群组消息。请几分钟后重试。",
+      "savedReplyGone": "此快捷回复已不存在。",
+      "savedReplyChannel": "此快捷回复不适用于这类渠道。",
+      "shortcutTaken": "另一条快捷回复已使用该快捷方式。"
     },
     "bubble": {
       "kind": {
@@ -358,7 +362,9 @@
           "url": "请输入以 http:// 或 https:// 开头的链接",
           "tooManyRows": "一个列表总共最多包含 10 行"
         }
-      }
+      },
+      "savedReplies": "快捷回复",
+      "savedReplyIssues": "未填写并保持原样（{count}）：{list}。请在发送前修正。"
     },
     "panel": {
       "tabsLabel": "备注与时间线",
@@ -658,6 +664,159 @@
         "label": "群组成员",
         "loading": "正在查找成员",
         "none": "没有匹配的成员"
+      }
+    },
+    "savedReplies": {
+      "channelKind": {
+        "simulator": "模拟器（测试）",
+        "whatsapp_cloud": "WhatsApp Cloud API",
+        "whatsapp_qr": "WhatsApp（QR）",
+        "webchat": "网站聊天",
+        "telegram": "Telegram",
+        "facebook": "Facebook Messenger",
+        "instagram": "Instagram",
+        "email": "电子邮件"
+      },
+      "variableGroup": {
+        "contact": "联系人",
+        "agent": "你",
+        "workspace": "工作区",
+        "conversation": "会话"
+      },
+      "variable": {
+        "first_name": "联系人的名",
+        "last_name": "联系人的姓",
+        "name": "联系人的全名",
+        "email": "联系人的电子邮件",
+        "phone": "联系人的电话号码",
+        "agent_name": "你的全名",
+        "agent_first_name": "你的名",
+        "workspace_name": "工作区名称",
+        "company_name": "公司名称",
+        "today": "今天的日期",
+        "device_name": "渠道名称",
+        "device_phone": "渠道的电话号码"
+      },
+      "picker": {
+        "title": "快捷回复",
+        "close": "关闭快捷回复",
+        "searchLabel": "搜索快捷回复",
+        "searchPlaceholder": "按快捷方式、标题或文本搜索",
+        "listLabel": "快捷回复",
+        "loading": "正在加载快捷回复",
+        "loadFailed": "无法加载快捷回复。",
+        "retry": "重试",
+        "empty": "还没有快捷回复。",
+        "emptyForChannel": "没有适用于此渠道的快捷回复。",
+        "createFirst": "创建第一条",
+        "noMatch": "没有与“{q}”匹配的快捷回复。",
+        "mine": "我的",
+        "hint": "方向键移动，Enter 插入，Esc 关闭。",
+        "manage": "管理快捷回复",
+        "tooLong": "该回复超出此渠道的消息长度限制，因此未插入。"
+      },
+      "screen": {
+        "back": "设置",
+        "title": "快捷回复",
+        "subtitle": "团队可插入回复中的可复用答复。在会话中输入 / 即可查找。",
+        "create": "新建快捷回复",
+        "noAccess": "你没有管理快捷回复的权限。",
+        "meter": "已使用 {used} / {limit} 条快捷回复",
+        "meterLabel": "你的套餐已使用的快捷回复",
+        "meterNote": "共享回复和个人回复都计入上限。",
+        "atLimit": "你已达到套餐的 {limit} 条快捷回复上限。请删除一条或升级以添加更多。",
+        "nearLimit": "你已接近套餐的 {limit} 条快捷回复上限。",
+        "upgrade": "查看套餐",
+        "tabsLabel": "显示",
+        "tab": {
+          "all": "全部（{count}）",
+          "shared": "共享（{count}）",
+          "mine": "我的（{count}）"
+        },
+        "categoryFilter": "按分类筛选",
+        "allCategories": "所有分类",
+        "searchLabel": "搜索快捷回复",
+        "searchPlaceholder": "按快捷方式、标题或文本搜索",
+        "howItWorks": "在收件箱中，在消息框输入 / 或使用“快捷回复”按钮。像 '{{first_name}}' 这样的变量会在文本进入输入框之前，根据会话内容填充。在客服点击发送之前不会发送任何内容。",
+        "loading": "正在加载快捷回复",
+        "loadFailed": "无法加载快捷回复。",
+        "retry": "重试",
+        "loadMore": "加载更多",
+        "list": "快捷回复",
+        "emptyTitle": "还没有快捷回复",
+        "empty": "写下团队反复给出的答复，然后一键插入。",
+        "noMatchTitle": "未找到任何内容",
+        "noMatch": "没有与“{q}”匹配的快捷回复。",
+        "noMatchCategory": "此分类中没有快捷回复。",
+        "scope": {
+          "shared": "共享",
+          "mine": "我的"
+        },
+        "allChannels": "所有渠道",
+        "neverUsed": "尚未使用",
+        "used": "已使用 {count, plural, other {# 次}}",
+        "lastUsed": "上次使用 {when}",
+        "createdBy": "创建者：{name}",
+        "readOnly": "只有管理快捷回复的人才能更改共享回复。",
+        "edit": "编辑",
+        "duplicate": "复制",
+        "delete": "删除",
+        "cancel": "取消",
+        "deleteTitle": "删除此快捷回复？",
+        "deleteShared": "/{shortcut} 将对工作区中的所有人移除。",
+        "deleteMine": "/{shortcut} 将从你的回复中移除。",
+        "deleted": "快捷回复已删除。",
+        "duplicated": "快捷回复已复制。",
+        "created": "快捷回复 /{shortcut} 已创建。",
+        "saved": "快捷回复已更新。"
+      },
+      "form": {
+        "eyebrow": "快捷回复",
+        "titleNew": "新建快捷回复",
+        "titleEdit": "编辑快捷回复",
+        "close": "关闭",
+        "cancel": "取消",
+        "save": "保存",
+        "saving": "正在保存…",
+        "shortcut": "快捷方式",
+        "shortcutPlaceholder": "谢谢",
+        "shortcutHint": "字母、数字和下划线，最多 {max} 个字符。",
+        "shortcutStored": "客服输入 /{shortcut}",
+        "shortcutEmpty": "请输入由字母、数字或下划线组成的快捷方式。",
+        "shortcutTaken": "/{shortcut} 已被另一条回复使用。请选择其他快捷方式。",
+        "title": "标题",
+        "titlePlaceholder": "感谢您联系我们",
+        "titleEmpty": "请输入标题。",
+        "titleLong": "标题最多可有 {max} 个字符。",
+        "body": "文本",
+        "bodyHint": "纯文本。可像在 WhatsApp 中一样使用 *粗体* 和 _斜体_。",
+        "bodyPlaceholder": "您好 '{{first_name}}'，感谢您联系我们。请问有什么可以帮您？",
+        "bodyEmpty": "请输入回复的文本。",
+        "bodyLong": "文本最多可有 {max} 个字符。",
+        "count": "{n} / {max}",
+        "variables": "插入变量",
+        "variablesHint": "点击其中一个即可在光标处添加。无法填充的变量会保持原样，以便客服看到。",
+        "preview": "预览",
+        "previewHint": "使用示例客户数据。",
+        "previewEmpty": "输入文本以查看显示效果。",
+        "previewIssues": "预览中未填充：{list}。使用回复时，如果联系人有相应属性则会填充；其余内容保持原样。",
+        "category": "分类（可选）",
+        "categoryPlaceholder": "问候、账单、支持",
+        "language": "语言（可选）",
+        "languageHint": "如 en 或 pt-BR 的代码，仅供你自己参考。",
+        "languageFormat": "请使用 en 或 pt-BR 这样的语言代码。",
+        "channels": "仅限这些渠道",
+        "channelsHint": "全部不勾选则在所有渠道提供。",
+        "scope": "谁可以使用",
+        "scopeOption": {
+          "shared": "工作区中的所有人",
+          "mine": "仅我自己"
+        },
+        "scopeLocked": "回复保存后，不能在共享和个人之间切换。",
+        "planLimit": "你已达到套餐的快捷回复上限。",
+        "upgrade": "查看套餐",
+        "conflict": "有人先更改了此回复。请关闭此窗口并重新打开。",
+        "invalid": "你输入的部分内容无效。"
       }
     }
   }

@@ -227,8 +227,6 @@
         "senderHint": "Si lo dejas en el valor predeterminado, la campaña sale por el motor principal de tu espacio de trabajo.",
         "defaultSender": "Remitente predeterminado",
         "nameHint": "Etiqueta interna para los informes y el historial de la cola.",
-        "noSenders": "No hay remitentes conectados.",
-        "connectOne": "Conectar uno →",
         "type": "Tipo de campaña",
         "types": {
           "custom": {
@@ -897,8 +895,7 @@
         "previewEmpty": "Elige una plantilla para ver cómo se ve el mensaje.",
         "senderLabel": "Enviar desde",
         "senderHint": "El número de WhatsApp desde el que se envía esta difusión.",
-        "pickSender": "Elige un número",
-        "noSenders": "No hay ningún número de WhatsApp conectado. Conecta uno primero."
+        "pickSender": "Elige un número"
       },
       "audience": {
         "selectionTitle": "Elegidos en el Centro de contactos",
@@ -932,6 +929,7 @@
         "optedOut": "Con baja voluntaria",
         "invalidNumbers": "Números no válidos",
         "alwaysSkipped": "Los contactos con baja voluntaria y los números no válidos siempre se omiten.",
+        "noConsent": "Sin consentimiento registrado (omitido)",
         "willBeMessaged": "Recibirán el mensaje",
         "about": "unos {count}",
         "approximate": "Es una estimación: la audiencia es demasiado grande para contarla con exactitud a tiempo.",
@@ -1403,6 +1401,41 @@
         "runs": "Ejecuciones",
         "noRuns": "Aún no ha empezado ninguna ejecución.",
         "cancel": "Cancelar serie"
+      }
+    },
+    "senderEmpty": {
+      "loading": "Cargando tus números…",
+      "none": {
+        "title": "No hay ningún número de WhatsApp conectado",
+        "body": "Conecta un número de WhatsApp Business para elegir desde qué número se envía esta campaña.",
+        "action": "Conectar un número de WhatsApp"
+      },
+      "sms": {
+        "none": {
+          "title": "No hay ningún remitente SMS conectado",
+          "body": "Conecta un remitente SMS para elegir desde qué remitente se envía esta campaña.",
+          "action": "Conectar un remitente SMS"
+        }
+      },
+      "pending": {
+        "title": "{count, plural, one {# número aún se está conectando} other {# números aún se están conectando}}",
+        "body": "Un número puede enviar campañas cuando termina su conexión. Abre su estado para completar la configuración.",
+        "action": "Revisar el estado del número"
+      },
+      "error": {
+        "title": "{count, plural, one {Falló la conexión de # número} other {Falló la conexión de # números}}",
+        "body": "Vuelve a conectar el número desde su página de estado y aparecerá aquí.",
+        "action": "Arreglar la conexión"
+      },
+      "disconnected": {
+        "title": "{count, plural, one {# número está desconectado} other {# números están desconectados}}",
+        "body": "Vuelve a conectarlo para enviar campañas desde él. Los números conectados aparecen aquí.",
+        "action": "Reconectar un número"
+      },
+      "personal_off": {
+        "title": "Los números personales están desactivados en este espacio de trabajo",
+        "body": "{count, plural, one {Tu número personal (QR) no puede} other {Tus # números personales (QR) no pueden}} enviar campañas mientras esto esté desactivado. Un administrador de la plataforma puede activarlo para este espacio de trabajo, o puedes conectar un número oficial de WhatsApp Business.",
+        "action": "Conectar un número oficial"
       }
     }
   }

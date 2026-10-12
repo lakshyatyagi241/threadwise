@@ -6,3 +6,4 @@ export { InboxScreen } from './components/inbox-screen';
 export { ChannelsList, ChannelsScreen } from './components/channels-list';
 export { InboxNavCounts } from './api/counts';
 export { MessageLogsScreen } from './components/message-logs-screen';
+export { SavedRepliesScreen } from './components/saved-replies-screen';

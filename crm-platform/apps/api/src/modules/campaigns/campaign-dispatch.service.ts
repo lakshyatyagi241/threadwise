@@ -1,10 +1,11 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import {
   UNOFFICIAL_ENGINE,
   UNOFFICIAL_WHATSAPP_GATE,
   type UnofficialWhatsappGate,
 } from '../auth/unofficial-whatsapp.port';
 import { CryptoService } from '../../common/crypto/crypto.service';
+import { ConsentPolicyService } from '../contact-consent';
 import { DatabaseService } from '../../infra/db/database.service';
 import { MergeTagService, resolveToken, type MergeContext } from '../crm';
 import {
@@ -119,6 +120,7 @@ export class CampaignDispatchService {
     @Inject(CAMPAIGN_BILLING) private readonly billing: CampaignBilling,
     @Inject(CAMPAIGN_FLOW_STARTER) private readonly flows: CampaignFlowStarter,
     @Inject(CAMPAIGN_SETTINGS) private readonly settingsSource: CampaignSettingsSource,
+    @Optional() private readonly consentPolicy?: ConsentPolicyService,
   ) {}
 
   async run(orgId: number, campaignId: number): Promise<CampaignRunResult> {
@@ -147,7 +149,12 @@ export class CampaignDispatchService {
         return null;
       await this.repo.touch(t, orgId, campaignId);
       const settings = await this.settingsSource.get(t, orgId);
-      await this.repo.screenRecipients(t, orgId, campaignId);
+      await this.repo.screenRecipients(
+        t,
+        orgId,
+        campaignId,
+        (await this.consentPolicy?.requiresConsent(orgId)) ?? false,
+      );
       return { c, settings };
     });
     if (!prep) return 'skipped';

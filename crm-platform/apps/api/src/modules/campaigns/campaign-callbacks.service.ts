@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { DatabaseService } from '../../infra/db/database.service';
 import { CampaignEvents, asSystem } from './campaign-events';
+import { ContactConsentService } from '../contact-consent';
 import { CampaignMirrorService } from './campaign-mirror.service';
 import { CampaignsRepository } from './campaigns.repository';
 
@@ -23,6 +24,7 @@ export class CampaignCallbacksService {
     private readonly repo: CampaignsRepository,
     private readonly events: CampaignEvents,
     private readonly mirror: CampaignMirrorService,
+    private readonly consent: ContactConsentService,
   ) {}
 
   /** A transaction for one tenant, run as the system: a report has no user, and the outbox takes its tenant from the context. */
@@ -164,6 +166,16 @@ export class CampaignCallbacksService {
       await this.repo.markUnsubscribed(tx, at.orgId, row.id);
       if (row.contactId !== null) {
         const changed = await this.repo.optOutContact(tx, at.orgId, row.contactId);
+        // The ledger keeps the proof: the engine detected a STOP keyword. One event per campaign and contact, so a repeated report
+        // adds nothing. The flag is already set above; the ledger does not announce `contact.opt_in` again.
+        await this.consent.recordInTx(tx, at.orgId, {
+          contactId: row.contactId,
+          channel: 'whatsapp',
+          action: 'withdrawn',
+          source: 'keyword',
+          evidence: { reference: `campaign:${input.campaignId}` },
+          idempotencyKey: `keyword:campaign:${input.campaignId}:${row.contactId}`,
+        });
         if (changed) {
           await this.events.optedOut(
             tx,

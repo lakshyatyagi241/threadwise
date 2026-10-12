@@ -30,6 +30,9 @@ export const ERROR_KINDS = [
   'logRange',
   'logBusy',
   'logNotReady',
+  'savedReplyGone',
+  'savedReplyChannel',
+  'shortcutTaken',
   'network',
   'generic',
 ] as const;
@@ -74,6 +77,10 @@ const BY_CODE: Record<string, ErrorKind> = {
   MESSAGE_LOG_EXPORT_NOT_FOUND: 'notFound',
   MESSAGE_LOG_EXPORT_NOT_READY: 'logNotReady',
   UNSUPPORTED_MEDIA_TYPE: 'unsupported',
+  SAVED_REPLY_NOT_FOUND: 'savedReplyGone',
+  SAVED_REPLY_NOT_EDITABLE: 'forbidden',
+  SAVED_REPLY_CHANNEL_MISMATCH: 'savedReplyChannel',
+  SAVED_REPLY_SHORTCUT_TAKEN: 'shortcutTaken',
   NETWORK: 'network',
 };
 

@@ -8,7 +8,7 @@ import { cn } from '@crm/ui';
 import { defaultSection, toSettingsSections } from '@/features/_registry/settings-resolve';
 import { isSettingsSection } from '@/features/_registry/settings-types';
 import { SearchResults } from './search-results';
-import { useSettingsTiles } from './settings-context';
+import { useSettingsPageTiles } from './settings-context';
 import { searchTiles } from './settings-search';
 import { SettingsSearchBox } from './settings-search-box';
 import { useSearchableTiles } from './use-tile-copy';
@@ -23,7 +23,7 @@ const DEBOUNCE_MS = 150;
  */
 export function SettingsFrame({ children }: { children: ReactNode }) {
   const t = useTranslations();
-  const tiles = useSettingsTiles();
+  const tiles = useSettingsPageTiles();
   const sections = useMemo(() => toSettingsSections(tiles), [tiles]);
   const entries = useSearchableTiles(tiles);
   const segment = useSelectedLayoutSegment();
@@ -62,11 +62,7 @@ export function SettingsFrame({ children }: { children: ReactNode }) {
                 <li key={section} className="shrink-0 lg:shrink">
                   <Link
                     ref={section === activeSection ? activeLink : undefined}
-                    href={
-                      section === 'integrations'
-                        ? '/marketplace/integrations'
-                        : `/settings/${section}`
-                    }
+                    href={`/settings/${section}`}
                     onClick={clear}
                     aria-current={active ? 'page' : undefined}
                     className={cn(

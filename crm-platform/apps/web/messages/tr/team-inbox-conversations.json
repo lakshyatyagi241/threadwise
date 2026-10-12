@@ -2,7 +2,8 @@
   "team-inbox-conversations": {
     "nav": {
       "inbox": "Gelen kutusu",
-      "messageLogs": "Mesaj günlükleri"
+      "messageLogs": "Mesaj günlükleri",
+      "savedReplies": "Hazır yanıtlar"
     },
     "common": {
       "dismiss": "Kapat"
@@ -141,7 +142,10 @@
       "groupLeft": "Bu numara gruptan ayrıldığı için artık orada mesaj gönderemez.",
       "groupAnnounceOnly": "Bu grupta yalnızca yöneticiler mesaj gönderebilir ve bu numara yönetici değil.",
       "groupRateLimited": "Bu numaradan kısa sürede çok fazla grup mesajı gönderildi. Bir dakika bekleyip tekrar deneyin.",
-      "groupUnavailable": "WhatsApp bu grup mesajını kabul etmedi. Birkaç dakika sonra tekrar deneyin."
+      "groupUnavailable": "WhatsApp bu grup mesajını kabul etmedi. Birkaç dakika sonra tekrar deneyin.",
+      "savedReplyGone": "Bu hazır yanıt artık mevcut değil.",
+      "savedReplyChannel": "Bu hazır yanıt bu tür bir kanal için uygun değil.",
+      "shortcutTaken": "Başka bir hazır yanıt zaten bu kısayolu kullanıyor."
     },
     "bubble": {
       "kind": {
@@ -358,7 +362,9 @@
           "url": "http:// veya https:// ile başlayan bir bağlantı girin",
           "tooManyRows": "Bir liste toplamda en fazla 10 satır içerebilir"
         }
-      }
+      },
+      "savedReplies": "Hazır yanıtlar",
+      "savedReplyIssues": "Doldurulmadı ve olduğu gibi bırakıldı ({count}): {list}. Göndermeden önce düzeltin."
     },
     "panel": {
       "tabsLabel": "Notlar ve zaman çizelgesi",
@@ -658,6 +664,159 @@
         "label": "Grup üyeleri",
         "loading": "Üyeler aranıyor",
         "none": "Eşleşen üye yok"
+      }
+    },
+    "savedReplies": {
+      "channelKind": {
+        "simulator": "Simülatör (test)",
+        "whatsapp_cloud": "WhatsApp Cloud API",
+        "whatsapp_qr": "WhatsApp (QR)",
+        "webchat": "Web sitesi sohbeti",
+        "telegram": "Telegram",
+        "facebook": "Facebook Messenger",
+        "instagram": "Instagram",
+        "email": "E-posta"
+      },
+      "variableGroup": {
+        "contact": "Kişi",
+        "agent": "Siz",
+        "workspace": "Çalışma alanı",
+        "conversation": "Konuşma"
+      },
+      "variable": {
+        "first_name": "Kişinin adı",
+        "last_name": "Kişinin soyadı",
+        "name": "Kişinin tam adı",
+        "email": "Kişinin e-postası",
+        "phone": "Kişinin telefon numarası",
+        "agent_name": "Tam adınız",
+        "agent_first_name": "Adınız",
+        "workspace_name": "Çalışma alanı adı",
+        "company_name": "Şirket adı",
+        "today": "Bugünün tarihi",
+        "device_name": "Kanalın adı",
+        "device_phone": "Kanalın telefon numarası"
+      },
+      "picker": {
+        "title": "Hazır yanıtlar",
+        "close": "Hazır yanıtları kapat",
+        "searchLabel": "Hazır yanıtlarda ara",
+        "searchPlaceholder": "Kısayol, başlık veya metne göre ara",
+        "listLabel": "Hazır yanıtlar",
+        "loading": "Hazır yanıtlar yükleniyor",
+        "loadFailed": "Hazır yanıtlar yüklenemedi.",
+        "retry": "Tekrar dene",
+        "empty": "Henüz hazır yanıt yok.",
+        "emptyForChannel": "Bu kanal için uygun hazır yanıt yok.",
+        "createFirst": "İlkini oluştur",
+        "noMatch": "\"{q}\" ile eşleşen hazır yanıt yok.",
+        "mine": "Benim",
+        "hint": "Ok tuşları gezinir, Enter ekler, Esc kapatır.",
+        "manage": "Hazır yanıtları yönet",
+        "tooLong": "Bu yanıt, bu kanalın mesaj sınırı için çok uzun olduğundan eklenmedi."
+      },
+      "screen": {
+        "back": "Ayarlar",
+        "title": "Hazır yanıtlar",
+        "subtitle": "Ekibinizin yanıtlara eklediği yeniden kullanılabilir cevaplar. Bir tanesini bulmak için konuşmada / yazın.",
+        "create": "Yeni hazır yanıt",
+        "noAccess": "Hazır yanıtları yönetme izniniz yok.",
+        "meter": "{limit} hazır yanıttan {used} tanesi kullanıldı",
+        "meterLabel": "Planınızda kullanılan hazır yanıtlar",
+        "meterNote": "Paylaşılan ve kişisel yanıtların ikisi de sınıra dahildir.",
+        "atLimit": "Planınızın {limit} hazır yanıt sınırına ulaştınız. Daha fazla eklemek için birini silin veya planınızı yükseltin.",
+        "nearLimit": "Planınızın {limit} hazır yanıt sınırına yaklaştınız.",
+        "upgrade": "Planları gör",
+        "tabsLabel": "Göster",
+        "tab": {
+          "all": "Tümü ({count})",
+          "shared": "Paylaşılan ({count})",
+          "mine": "Benim ({count})"
+        },
+        "categoryFilter": "Kategoriye göre filtrele",
+        "allCategories": "Tüm kategoriler",
+        "searchLabel": "Hazır yanıtlarda ara",
+        "searchPlaceholder": "Kısayol, başlık veya metne göre ara",
+        "howItWorks": "Gelen kutusunda mesaj kutusuna / yazın veya Hazır yanıtlar düğmesini kullanın. '{{first_name}}' gibi değişkenler, metin kutuya gelmeden önce konuşmadan doldurulur. Temsilci Gönder'e basana kadar hiçbir şey gönderilmez.",
+        "loading": "Hazır yanıtlar yükleniyor",
+        "loadFailed": "Hazır yanıtlar yüklenemedi.",
+        "retry": "Tekrar dene",
+        "loadMore": "Daha fazla yükle",
+        "list": "Hazır yanıtlar",
+        "emptyTitle": "Henüz hazır yanıt yok",
+        "empty": "Ekibinizin sık verdiği yanıtları yazın, sonra tek tuşla ekleyin.",
+        "noMatchTitle": "Hiçbir şey bulunamadı",
+        "noMatch": "\"{q}\" ile eşleşen hazır yanıt yok.",
+        "noMatchCategory": "Bu kategoride hazır yanıt yok.",
+        "scope": {
+          "shared": "Paylaşılan",
+          "mine": "Benim"
+        },
+        "allChannels": "Tüm kanallar",
+        "neverUsed": "Henüz kullanılmadı",
+        "used": "{count, plural, one {# kez} other {# kez}} kullanıldı",
+        "lastUsed": "Son kullanım: {when}",
+        "createdBy": "Oluşturan: {name}",
+        "readOnly": "Paylaşılan bir yanıtı yalnızca hazır yanıtları yönetenler değiştirebilir.",
+        "edit": "Düzenle",
+        "duplicate": "Çoğalt",
+        "delete": "Sil",
+        "cancel": "İptal",
+        "deleteTitle": "Bu hazır yanıt silinsin mi?",
+        "deleteShared": "/{shortcut}, çalışma alanındaki herkes için kaldırılacak.",
+        "deleteMine": "/{shortcut}, yanıtlarınızdan kaldırılacak.",
+        "deleted": "Hazır yanıt silindi.",
+        "duplicated": "Hazır yanıt çoğaltıldı.",
+        "created": "/{shortcut} hazır yanıtı oluşturuldu.",
+        "saved": "Hazır yanıt güncellendi."
+      },
+      "form": {
+        "eyebrow": "Hazır yanıt",
+        "titleNew": "Yeni hazır yanıt",
+        "titleEdit": "Hazır yanıtı düzenle",
+        "close": "Kapat",
+        "cancel": "İptal",
+        "save": "Kaydet",
+        "saving": "Kaydediliyor…",
+        "shortcut": "Kısayol",
+        "shortcutPlaceholder": "tesekkurler",
+        "shortcutHint": "Harf, rakam ve alt çizgi, en fazla {max} karakter.",
+        "shortcutStored": "Temsilciler /{shortcut} yazar",
+        "shortcutEmpty": "Harf, rakam veya alt çizgiden oluşan bir kısayol girin.",
+        "shortcutTaken": "/{shortcut} başka bir yanıt tarafından zaten kullanılıyor. Farklı bir kısayol seçin.",
+        "title": "Başlık",
+        "titlePlaceholder": "Bize ulaştığınız için teşekkürler",
+        "titleEmpty": "Bir başlık girin.",
+        "titleLong": "Başlık en fazla {max} karakter olabilir.",
+        "body": "Metin",
+        "bodyHint": "Düz metin. WhatsApp'taki gibi *kalın* ve _italik_ kullanın.",
+        "bodyPlaceholder": "Merhaba '{{first_name}}', bize ulaştığınız için teşekkürler. Size nasıl yardımcı olabiliriz?",
+        "bodyEmpty": "Yanıtın metnini girin.",
+        "bodyLong": "Metin en fazla {max} karakter olabilir.",
+        "count": "{n} / {max}",
+        "variables": "Değişken ekle",
+        "variablesHint": "İmleç konumuna eklemek için birine tıklayın. Doldurulamayan bir değişken olduğu gibi kalır, böylece temsilci görür.",
+        "preview": "Önizleme",
+        "previewHint": "Örnek müşteri verileriyle.",
+        "previewEmpty": "Nasıl görüneceğini görmek için metni yazın.",
+        "previewIssues": "Önizlemede doldurulmadı: {list}. Bir yanıt kullanıldığında, kişinin öznitelikleri varsa doldurulur; diğerleri olduğu gibi kalır.",
+        "category": "Kategori (isteğe bağlı)",
+        "categoryPlaceholder": "Karşılama, faturalama, destek",
+        "language": "Dil (isteğe bağlı)",
+        "languageHint": "en veya pt-BR gibi bir kod, kendi referansınız için.",
+        "languageFormat": "en veya pt-BR gibi bir dil kodu kullanın.",
+        "channels": "Yalnızca bu kanallarda",
+        "channelsHint": "Her kanalda sunmak için hepsini işaretsiz bırakın.",
+        "scope": "Kimler kullanabilir",
+        "scopeOption": {
+          "shared": "Çalışma alanındaki herkes",
+          "mine": "Yalnızca ben"
+        },
+        "scopeLocked": "Bir yanıt kaydedildikten sonra paylaşılan ve kişisel arasında değiştirilemez.",
+        "planLimit": "Planınızın hazır yanıt sınırına ulaştınız.",
+        "upgrade": "Planları gör",
+        "conflict": "Bu yanıtı başka biri önce değiştirdi. Bu pencereyi kapatıp yeniden açın.",
+        "invalid": "Girdiklerinizin bir kısmı geçerli değil."
       }
     }
   }

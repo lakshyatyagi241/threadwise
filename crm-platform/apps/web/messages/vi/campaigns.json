@@ -227,8 +227,6 @@
         "senderHint": "Nếu để mặc định, chiến dịch sẽ được gửi qua công cụ chính của không gian làm việc của bạn.",
         "defaultSender": "Người gửi mặc định",
         "nameHint": "Nhãn nội bộ cho báo cáo và lịch sử hàng đợi.",
-        "noSenders": "Chưa có người gửi nào được kết nối.",
-        "connectOne": "Kết nối một số →",
         "type": "Loại chiến dịch",
         "types": {
           "custom": {
@@ -897,8 +895,7 @@
         "previewEmpty": "Chọn một mẫu để xem tin nhắn trông như thế nào.",
         "senderLabel": "Gửi từ",
         "senderHint": "Số WhatsApp dùng để gửi đợt gửi hàng loạt này.",
-        "pickSender": "Chọn một số",
-        "noSenders": "Chưa có số WhatsApp nào được kết nối. Hãy kết nối một số trước."
+        "pickSender": "Chọn một số"
       },
       "audience": {
         "selectionTitle": "Đã chọn trong Trung tâm liên hệ",
@@ -932,6 +929,7 @@
         "optedOut": "Đã hủy nhận tin",
         "invalidNumbers": "Số không hợp lệ",
         "alwaysSkipped": "Các liên hệ đã hủy nhận tin và số không hợp lệ luôn bị bỏ qua.",
+        "noConsent": "Chưa ghi nhận sự đồng ý (bị bỏ qua)",
         "willBeMessaged": "Sẽ được nhắn tin",
         "about": "khoảng {count}",
         "approximate": "Đây là ước tính: đối tượng quá lớn nên không thể đếm chính xác kịp thời.",
@@ -1403,6 +1401,41 @@
         "runs": "Lần chạy",
         "noRuns": "Chưa có lần chạy nào bắt đầu.",
         "cancel": "Hủy chuỗi"
+      }
+    },
+    "senderEmpty": {
+      "loading": "Đang tải các số của bạn…",
+      "none": {
+        "title": "Chưa kết nối số WhatsApp nào",
+        "body": "Kết nối số WhatsApp Business để chọn số gửi chiến dịch này.",
+        "action": "Kết nối số WhatsApp"
+      },
+      "sms": {
+        "none": {
+          "title": "Chưa kết nối người gửi SMS nào",
+          "body": "Kết nối người gửi SMS để chọn người gửi chiến dịch này.",
+          "action": "Kết nối người gửi SMS"
+        }
+      },
+      "pending": {
+        "title": "{count} số vẫn đang kết nối",
+        "body": "Số có thể gửi chiến dịch khi kết nối hoàn tất. Mở trạng thái của số để hoàn tất thiết lập.",
+        "action": "Kiểm tra trạng thái của số"
+      },
+      "error": {
+        "title": "Kết nối của {count} số không thành công",
+        "body": "Kết nối lại số từ trang trạng thái và số sẽ hiện ở đây.",
+        "action": "Sửa kết nối"
+      },
+      "disconnected": {
+        "title": "{count} số đã ngắt kết nối",
+        "body": "Kết nối lại để gửi chiến dịch từ số đó. Các số đã kết nối hiện ở đây.",
+        "action": "Kết nối lại số"
+      },
+      "personal_off": {
+        "title": "Số cá nhân đang tắt cho không gian làm việc này",
+        "body": "Khi tính năng này tắt, {count} số cá nhân (QR) không thể gửi chiến dịch. Quản trị viên nền tảng có thể bật cho không gian làm việc này, hoặc bạn có thể kết nối số WhatsApp Business chính thức.",
+        "action": "Kết nối số chính thức"
       }
     }
   }

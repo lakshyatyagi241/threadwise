@@ -1,0 +1,175 @@
+{
+  "contact-consent": {
+    "common": {
+      "dismiss": "关闭",
+      "retry": "重试",
+      "loading": "加载中..."
+    },
+    "errors": {
+      "network": "无法连接到服务器。请检查网络后重试。",
+      "forbidden": "你没有执行此操作的权限。",
+      "notFound": "该联系人已不存在。",
+      "conflict": "你编辑期间其他人已修改此内容。请刷新后重试。",
+      "noteRequired": "记录同意前，请说明联系人同意的原因（对方说了或签署了什么，以及在哪里）。",
+      "settingsInvalid": "关键词至少需要包含一个字母或数字；开启检测时，至少要保留一个 STOP 关键词。",
+      "rateLimited": "请求过于频繁。请稍候再试。",
+      "validation": "部分内容无效。请检查表单后重试。",
+      "unexpected": "出了点问题。请重试。"
+    },
+    "settings": {
+      "title": "同意与 STOP 回复",
+      "subtitle": "设置让联系人退订或重新订阅的词语、我们的回复、营销消息的退订提示行，以及营销是否需要已记录的同意。",
+      "exportProof": "导出同意凭证 (CSV)",
+      "discard": "放弃更改",
+      "save": "保存更改",
+      "saved": "同意设置已保存。",
+      "conflict": "其他人已先保存了这些设置。表单现在显示的是已存储的内容。",
+      "conflictOk": "确定",
+      "problems": {
+        "noOptOutWord": "请至少添加一个 STOP 关键词，或关闭检测。",
+        "badLang": "语言代码形如 en、ar 或 pt-BR。"
+      }
+    },
+    "policy": {
+      "title": "营销策略",
+      "requireConsent": "发送营销消息需要已记录的同意",
+      "requireConsentHint": "关闭：营销消息发送给所有未退订的联系人。开启：仅发送给有已记录同意的联系人。活动和群发受众会显示被跳过的人数。",
+      "withdrawnAlways": "无论此开关如何设置，已退订的联系人始终会被跳过。"
+    },
+    "detect": {
+      "title": "STOP 和 START 回复",
+      "enabled": "检测 STOP 和 START 回复",
+      "enabledHint": "当联系人只发送下列某个词时，将在该渠道退订或重新订阅。",
+      "autoReply": "发送确认回复",
+      "autoReplyHint": "在 24 小时窗口内发送的简短自由文本回复，每次变更只发送一次。它不是营销活动，也不计入营销。",
+      "rule": "整条消息必须恰好是关键词：大写字母、空格、标点、表情符号和阿拉伯语变音符号会被忽略。“Please stop sending me invoices”或“don't stop”不会匹配，因此不会误退订任何人。"
+    },
+    "lang": {
+      "groupLabel": "{lang} 的词语和回复",
+      "title": "语言",
+      "remove": "移除语言",
+      "optOutWords": "STOP 关键词（退订）",
+      "optInWords": "START 关键词（重新订阅）",
+      "wordsHint": "每行一个。",
+      "optOutReply": "STOP 后的回复",
+      "optInReply": "START 后的回复",
+      "replyHint": "可以用 '{{name}}' 代表联系人的名字。说明如何重新订阅。",
+      "footer": "营销消息的退订提示行",
+      "footerHint": "添加在营销文本下方。告诉对方应发送哪个词。",
+      "add": "添加语言",
+      "addHint": "语言代码，如 fr 或 pt-BR。",
+      "invalid": "请使用 fr 或 pt-BR 这样的代码。",
+      "addButton": "添加"
+    },
+    "footer": {
+      "title": "退订提示行",
+      "intro": "群发和活动编辑器可在营销文本下方添加这一行，让收件人知道可以回复 STOP。已审核的模板不会被修改：请把这一行写进模板本身。",
+      "defaultOn": "营销文本没有退订提示行时提醒",
+      "defaultOnHint": "编辑器会显示警告和一键添加按钮。",
+      "noneSet": "所有语言都未设置退订提示行。",
+      "previewLabel": "收件人看到的内容",
+      "sample": "春季特卖今天开始。本周欢迎光临。"
+    },
+    "test": {
+      "title": "测试消息",
+      "intro": "输入联系人可能发送的内容，查看会发生什么。不会更改或发送任何内容。即使尚未保存，也会使用上面的词语。",
+      "label": "联系人发来的消息",
+      "run": "测试",
+      "failed": "测试无法运行。请重试。",
+      "outcome": {
+        "opts_out": "这会让该联系人退订营销消息。",
+        "opts_in": "这会让该联系人重新订阅。",
+        "no_match": "不会发生任何事：该消息不是关键词。",
+        "detection_off": "不会发生任何事：检测已关闭。"
+      },
+      "matched": "匹配到关键词“{keyword}”（{lang}）。",
+      "replyLabel": "联系人将收到",
+      "noReply": "不会发送回复。"
+    },
+    "card": {
+      "title": "同意",
+      "status": {
+        "optedOut": "已退订",
+        "subscribed": "已订阅",
+        "none": "无同意记录"
+      },
+      "export": "导出凭证 (CSV)",
+      "markSubscribed": "标记为已订阅",
+      "markUnsubscribed": "标记为已退订",
+      "loading": "正在加载同意信息...",
+      "noneRecorded": "该联系人没有同意记录。营销发送遵循工作区策略。",
+      "perChannel": "按渠道的同意情况",
+      "timeline": "同意历史",
+      "channel": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "telegram": "Telegram",
+        "email": "邮件",
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "webchat": "网页聊天"
+      },
+      "state": {
+        "granted": "已订阅",
+        "withdrawn": "已退订"
+      },
+      "action": {
+        "granted": "已订阅",
+        "withdrawn": "已退订"
+      },
+      "source": {
+        "form": "表单",
+        "keyword": "关键词回复",
+        "manual": "人工记录",
+        "import": "导入",
+        "api": "API",
+        "flow": "流程",
+        "inbound_message": "消息",
+        "contact_request": "联系请求",
+        "legacy": "同意历史之前"
+      },
+      "by": "由 {name}",
+      "evidence": {
+        "consentText": "显示的文本",
+        "consentVersion": "版本",
+        "consentHash": "哈希",
+        "formId": "表单",
+        "submissionId": "提交",
+        "messageId": "消息",
+        "keyword": "关键词",
+        "fileName": "文件",
+        "apiKeyId": "API 密钥",
+        "flowId": "流程",
+        "reference": "参考"
+      },
+      "dialog": {
+        "titleGranted": "标记为已订阅",
+        "titleWithdrawn": "标记为已退订",
+        "introGranted": "记录该联系人同意接收营销消息。原因将作为凭证保存。",
+        "introWithdrawn": "记录该联系人不再希望接收营销消息。所有活动和群发都会跳过此联系人。",
+        "channel": "渠道",
+        "noteRequired": "原因？（必填）",
+        "noteOptional": "备注（可选）",
+        "noteHint": "例如：在柜台签署了纸质表单，或在 3 月 3 日通过邮件同意。",
+        "confirm": "保存",
+        "cancel": "取消",
+        "close": "关闭",
+        "savedGranted": "已标记为已订阅。",
+        "savedWithdrawn": "已标记为已退订。"
+      }
+    },
+    "composer": {
+      "add": "添加退订提示行",
+      "missing": "这条营销消息没有告诉对方如何退订。请添加类似“回复 STOP 退订”的一行。",
+      "addButton": "添加该行",
+      "templateHint": "模板在审核后即固定。若要告知对方可以退订，请在模板本身中加入类似“{line}”的一行。",
+      "footerSuggestion": "营销模板推荐文案:“{line}”",
+      "footerUse": "用作页脚"
+    },
+    "import": {
+      "legend": "同意",
+      "label": "我已获得向这些联系人发送消息的同意",
+      "hint": "勾选后，文件中的所有联系人都会被记录为已同意接收营销信息，并以文件名作为凭证。未勾选时，导入不会记录任何同意。已退订的联系人将保持退订状态。"
+    }
+  }
+}

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
+import { OptOutTemplateHint } from '@/features/contact-consent';
 import { Alert, Button, Field, Input, Select, Spinner, EmptyState, useToast } from '@crm/ui';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { ApiError } from '@/lib/api/errors';
@@ -251,6 +252,7 @@ export function ComposeScreen() {
                   </Select>
                 </Field>
               </div>
+              {template && <OptOutTemplateHint />}
               {template && (
                 <OverridesPanel
                   key={template.id}

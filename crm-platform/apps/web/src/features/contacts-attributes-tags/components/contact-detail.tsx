@@ -12,6 +12,7 @@ import { AGENT_IGNORE } from '@/lib/agent-marks';
 import { LinkedAppointments } from '@/features/appointments';
 import { ContactAttributionCard } from '@/features/lead-sources';
 import { CompanyLink } from '@/features/companies';
+import { ConsentCard } from '@/features/contact-consent';
 import { ChatInsightCard, ScoreCard } from '@/features/lead-scoring';
 import { LinkedSalesDocs } from '@/features/sales-docs';
 import { LinkedInvoices } from '@/features/invoicing';
@@ -295,6 +296,15 @@ export function ContactDetail({ id }: { id: string }) {
           <LinkedSalesDocs kind="contact" id={id} />
           <LinkedAppointments contactId={id} />
           <ContactAttributionCard contactId={id} />
+          <ConsentCard
+            contactId={id}
+            onChanged={() =>
+              Promise.all([
+                invalidateContacts(qc),
+                qc.invalidateQueries({ queryKey: KEYS.contact(id) }),
+              ])
+            }
+          />
           <Timeline id={id} />
         </div>
         <aside className="h-max space-y-4 rounded-md border border-border bg-background p-4">

@@ -1,0 +1,175 @@
+{
+  "contact-consent": {
+    "common": {
+      "dismiss": "Fermer",
+      "retry": "Réessayer",
+      "loading": "Chargement..."
+    },
+    "errors": {
+      "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+      "forbidden": "Vous n'avez pas l'autorisation d'effectuer cette action.",
+      "notFound": "Ce contact n'existe plus.",
+      "conflict": "Quelqu'un d'autre a modifié cet élément pendant votre édition. Rechargez la page et réessayez.",
+      "noteRequired": "Indiquez pourquoi le contact a donné son accord (ce qu'il a dit ou signé, et où) avant d'enregistrer le consentement.",
+      "settingsInvalid": "Un mot-clé doit contenir au moins une lettre ou un chiffre, et au moins un mot-clé STOP doit rester tant que la détection est activée.",
+      "rateLimited": "Trop de requêtes. Patientez un instant et réessayez.",
+      "validation": "Certaines valeurs ne sont pas valides. Vérifiez le formulaire et réessayez.",
+      "unexpected": "Une erreur s'est produite. Réessayez."
+    },
+    "settings": {
+      "title": "Consentement et réponses STOP",
+      "subtitle": "Choisissez les mots qui désinscrivent ou réinscrivent un contact, notre réponse, la ligne de désinscription des messages marketing et si le marketing exige un consentement enregistré.",
+      "exportProof": "Exporter les preuves de consentement (CSV)",
+      "discard": "Annuler les modifications",
+      "save": "Enregistrer les modifications",
+      "saved": "Paramètres de consentement enregistrés.",
+      "conflict": "Quelqu'un d'autre a enregistré ces paramètres avant vous. Le formulaire affiche les valeurs actuelles.",
+      "conflictOk": "OK",
+      "problems": {
+        "noOptOutWord": "Ajoutez au moins un mot-clé STOP ou désactivez la détection.",
+        "badLang": "Un code de langue ressemble à en, ar ou pt-BR."
+      }
+    },
+    "policy": {
+      "title": "Politique marketing",
+      "requireConsent": "Exiger un consentement enregistré pour les envois marketing",
+      "requireConsentHint": "Désactivé : le marketing est envoyé à tous les contacts qui ne se sont pas désinscrits. Activé : uniquement aux contacts ayant un consentement enregistré. Les audiences des campagnes et des diffusions indiquent combien ont été ignorés.",
+      "withdrawnAlways": "Les contacts désinscrits sont toujours ignorés, quel que soit ce réglage."
+    },
+    "detect": {
+      "title": "Réponses STOP et START",
+      "enabled": "Détecter les réponses STOP et START",
+      "enabledHint": "Lorsqu'un contact envoie uniquement l'un des mots ci-dessous, il est désinscrit ou réinscrit sur ce canal.",
+      "autoReply": "Envoyer une réponse de confirmation",
+      "autoReplyHint": "Une courte réponse en texte libre dans la fenêtre de 24 heures, envoyée une seule fois par changement. Ce n'est pas une campagne et elle ne compte pas comme du marketing.",
+      "rule": "Le message entier doit être le mot-clé : majuscules, espaces, ponctuation, emoji et signes diacritiques arabes sont ignorés. \"Please stop sending me invoices\" ou \"don't stop\" ne correspondent pas, donc personne n'est désinscrit par erreur."
+    },
+    "lang": {
+      "groupLabel": "Mots et réponses pour {lang}",
+      "title": "Langue",
+      "remove": "Supprimer la langue",
+      "optOutWords": "Mots-clés STOP (désinscription)",
+      "optInWords": "Mots-clés START (réinscription)",
+      "wordsHint": "Un par ligne.",
+      "optOutReply": "Réponse après STOP",
+      "optInReply": "Réponse après START",
+      "replyHint": "Vous pouvez utiliser '{{name}}' pour le prénom du contact. Indiquez comment se réinscrire.",
+      "footer": "Ligne de désinscription des messages marketing",
+      "footerHint": "Ajoutée sous les textes marketing. Indiquez le mot à envoyer.",
+      "add": "Ajouter une langue",
+      "addHint": "Un code de langue tel que fr ou pt-BR.",
+      "invalid": "Utilisez un code tel que fr ou pt-BR.",
+      "addButton": "Ajouter"
+    },
+    "footer": {
+      "title": "La ligne de désinscription",
+      "intro": "Les éditeurs de diffusions et de campagnes peuvent ajouter cette ligne sous les textes marketing pour que les destinataires sachent qu'ils peuvent répondre STOP. Les modèles approuvés ne sont jamais modifiés : placez la ligne dans le modèle lui-même.",
+      "defaultOn": "Avertir si un texte marketing n'a pas de ligne de désinscription",
+      "defaultOnHint": "L'éditeur affiche un avertissement et un bouton pour l'ajouter en un clic.",
+      "noneSet": "Aucune ligne de désinscription n'est définie pour aucune langue.",
+      "previewLabel": "Ce que voit le destinataire",
+      "sample": "Nos soldes de printemps commencent aujourd'hui. Passez nous voir cette semaine."
+    },
+    "test": {
+      "title": "Tester un message",
+      "intro": "Saisissez ce qu'un contact pourrait envoyer et voyez ce qui se passerait. Rien n'est modifié ni envoyé. Les mots ci-dessus sont utilisés, même avant l'enregistrement.",
+      "label": "Message d'un contact",
+      "run": "Tester",
+      "failed": "Le test n'a pas pu être exécuté. Réessayez.",
+      "outcome": {
+        "opts_out": "Cela désinscrit le contact du marketing.",
+        "opts_in": "Cela réinscrit le contact.",
+        "no_match": "Rien ne se passe : le message n'est pas un mot-clé.",
+        "detection_off": "Rien ne se passe : la détection est désactivée."
+      },
+      "matched": "Correspond au mot-clé \"{keyword}\" ({lang}).",
+      "replyLabel": "Le contact reçoit",
+      "noReply": "Aucune réponse n'est envoyée."
+    },
+    "card": {
+      "title": "Consentement",
+      "status": {
+        "optedOut": "Désinscrit",
+        "subscribed": "Inscrit",
+        "none": "Aucun consentement enregistré"
+      },
+      "export": "Exporter les preuves (CSV)",
+      "markSubscribed": "Marquer comme inscrit",
+      "markUnsubscribed": "Marquer comme désinscrit",
+      "loading": "Chargement du consentement...",
+      "noneRecorded": "Aucun consentement enregistré pour ce contact. Les envois marketing suivent la politique de votre espace de travail.",
+      "perChannel": "Consentement par canal",
+      "timeline": "Historique du consentement",
+      "channel": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "telegram": "Telegram",
+        "email": "E-mail",
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "webchat": "Chat web"
+      },
+      "state": {
+        "granted": "inscrit",
+        "withdrawn": "désinscrit"
+      },
+      "action": {
+        "granted": "Inscrit",
+        "withdrawn": "Désinscrit"
+      },
+      "source": {
+        "form": "Formulaire",
+        "keyword": "Réponse par mot-clé",
+        "manual": "Enregistré par une personne",
+        "import": "Import",
+        "api": "API",
+        "flow": "Flux",
+        "inbound_message": "Message",
+        "contact_request": "Demande de contact",
+        "legacy": "Avant l'historique du consentement"
+      },
+      "by": "par {name}",
+      "evidence": {
+        "consentText": "Texte affiché",
+        "consentVersion": "Version",
+        "consentHash": "Empreinte",
+        "formId": "Formulaire",
+        "submissionId": "Envoi",
+        "messageId": "Message",
+        "keyword": "Mot-clé",
+        "fileName": "Fichier",
+        "apiKeyId": "Clé API",
+        "flowId": "Flux",
+        "reference": "Référence"
+      },
+      "dialog": {
+        "titleGranted": "Marquer comme inscrit",
+        "titleWithdrawn": "Marquer comme désinscrit",
+        "introGranted": "Enregistrez que ce contact a accepté de recevoir des messages marketing. Le motif est conservé comme preuve.",
+        "introWithdrawn": "Enregistrez que ce contact ne souhaite plus recevoir de messages marketing. Il sera ignoré par toutes les campagnes et diffusions.",
+        "channel": "Canal",
+        "noteRequired": "Pourquoi ? (obligatoire)",
+        "noteOptional": "Note (facultatif)",
+        "noteHint": "Par exemple : a signé le formulaire papier au comptoir, ou a accepté par e-mail le 3 mars.",
+        "confirm": "Enregistrer",
+        "cancel": "Annuler",
+        "close": "Fermer",
+        "savedGranted": "Marqué comme inscrit.",
+        "savedWithdrawn": "Marqué comme désinscrit."
+      }
+    },
+    "composer": {
+      "add": "Ajouter la ligne de désinscription",
+      "missing": "Ce message marketing n'explique pas comment se désinscrire. Ajoutez une ligne telle que \"Répondez STOP pour vous désinscrire\".",
+      "addButton": "Ajouter la ligne",
+      "templateHint": "Les modèles sont figés par leur approbation. Pour indiquer comment se désinscrire, incluez une ligne telle que \"{line}\" dans le modèle lui-même.",
+      "footerSuggestion": "Suggéré pour un modèle marketing : « {line} »",
+      "footerUse": "L’utiliser comme pied de page"
+    },
+    "import": {
+      "legend": "Consentement",
+      "label": "J'ai le consentement pour envoyer des messages à ces contacts",
+      "hint": "Si la case est cochée, tous les contacts du fichier sont enregistrés comme ayant accepté le marketing, avec le nom du fichier comme preuve. Si elle est décochée, l'import n'enregistre aucun consentement. Les contacts qui se sont désinscrits le restent."
+    }
+  }
+}

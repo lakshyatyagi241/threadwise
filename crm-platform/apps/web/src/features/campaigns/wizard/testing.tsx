@@ -163,6 +163,7 @@ export const sources = (): WizardAudienceSources => ({
 export const count = (over: Partial<WizardAudienceCount> = {}): WizardAudienceCount => ({
   matching: 1000,
   newContacts: 0,
+  noConsent: 0,
   optedOut: 30,
   invalidNumber: 20,
   recipients: 950,

@@ -10,12 +10,12 @@ keywords: [marketplace, apps, mini apps, integrations, install, uninstall, permi
 
 ## What it is for
 
-The Marketplace is where you add mini apps and connect outside services to your workspace. It has two tabs, **Mini apps** and **Integrations**, a list of what you have **Installed**, and a way to ask for something missing.
+The Marketplace is where you add mini apps and connect outside services to your workspace. It has three tabs, **Mini apps**, **Integrations** and **Add-ons**, a list of what you have **Installed**, and a way to ask for something missing.
 
 ## How to use it
 
 1. Open **Marketplace** from the menu. It opens on the **Integrations** tab.
-2. With no filter set, the **Integrations** tab starts with an **Integrations and developer** block of tools you may use, such as REST API, Webhooks, Google Calendar, Add-ons, Shopify and WooCommerce. Select one to open it. The block hides when you search or filter. Plan and role decide which tiles you see, and the same tiles are still found by Settings search.
+2. Besides apps, the **Integrations** tab starts with cards for the services you can connect to your workspace: **Shopify**, **WooCommerce**, **Google Sheets add-on** and **Email**. The **Add-ons** tab has cards for **Google Calendar**, **REST API**, **Webhooks**, **Geta publishing**, **Translation** and **Add-ons**. Select **Open** on a card to go to that screen. Your role and plan decide which cards you see, and the cards on the Integrations tab hide while you search or filter.
 3. Find an app with the search box, the categories on the left, the **All**, **Available add-ons** and **Installed** buttons, and **Sort by** (**Featured**, **Most installed**, **Newest** or **Name**). With no filter set, shelves show **Featured**, **Popular** and **New** apps.
 4. Select a card to read the app page, including **What it can access** (each permission has a risk level), **What you will need to set up** and **Your data**.
 5. Select **Install**. Step one is **Permissions**: read the list and tick the box that allows them. Step two is **Set up**, where you fill in the fields the app needs. Keys are stored sealed and cannot be read back. Step three confirms the install.

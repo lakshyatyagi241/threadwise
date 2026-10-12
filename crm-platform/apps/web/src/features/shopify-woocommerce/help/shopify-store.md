@@ -14,7 +14,7 @@ The Shopify screen connects your Shopify store to this workspace. Once connected
 
 ## How to use it
 
-1. Open **Settings**, then **Integrations**, and select **Shopify**. If no store is connected, the connect page opens.
+1. Open **Marketplace**, stay on the **Integrations** tab and open **Shopify**. If no store is connected, the connect page opens.
 2. Enter your store handle, for example **my-store**, or paste the full store address. The **.myshopify.com** part is added for you.
 3. Select **Continue to Shopify**. Shopify asks you to approve the access the app needs. You come back here with the result.
 4. Once connected, use the tabs on the left: **Overview**, **Orders**, **Products**, **Send Offer**, **Customers**, **Automations**, **Analytics**, **Invoices**, **Activity** and **Settings**.

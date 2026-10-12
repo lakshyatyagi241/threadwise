@@ -334,7 +334,13 @@
         "label": "Asystent pomocy",
         "description": "Włącz asystenta, który prowadzi Twój zespół lub wykonuje kroki za niego.",
         "keywords": "ai, asystent, agent, przewodnik, pomoc, automatyzacja"
+      },
+      "consent": {
+        "label": "Zgody i odpowiedzi STOP",
+        "description": "Wybierz słowa STOP i START, odpowiedzi potwierdzające, linijkę rezygnacji oraz to, czy marketing wymaga zapisanej zgody.",
+        "keywords": "zgoda, wypisanie, ponowny zapis, rezygnacja, stop, start, rodo, zgodność, prywatność, marketing"
       }
-    }
+    },
+    "backToMarketplace": "Wróć do Marketplace"
   }
 }

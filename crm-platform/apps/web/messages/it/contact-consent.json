@@ -1,0 +1,175 @@
+{
+  "contact-consent": {
+    "common": {
+      "dismiss": "Chiudi",
+      "retry": "Riprova",
+      "loading": "Caricamento..."
+    },
+    "errors": {
+      "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
+      "forbidden": "Non hai il permesso di eseguire questa azione.",
+      "notFound": "Questo contatto non esiste più.",
+      "conflict": "Qualcun altro ha modificato questo elemento mentre lo stavi modificando. Ricarica e riprova.",
+      "noteRequired": "Indica perché il contatto ha acconsentito (cosa ha detto o firmato, e dove) prima di registrare il consenso.",
+      "settingsInvalid": "Una parola chiave deve contenere almeno una lettera o una cifra e, finché il rilevamento è attivo, deve restare almeno una parola chiave STOP.",
+      "rateLimited": "Troppe richieste. Attendi un momento e riprova.",
+      "validation": "Alcuni valori non sono validi. Controlla il modulo e riprova.",
+      "unexpected": "Qualcosa è andato storto. Riprova."
+    },
+    "settings": {
+      "title": "Consenso e risposte STOP",
+      "subtitle": "Scegli le parole che disiscrivono o reiscrivono un contatto, cosa rispondiamo, la riga di disiscrizione per i messaggi marketing e se il marketing richiede un consenso registrato.",
+      "exportProof": "Esporta le prove di consenso (CSV)",
+      "discard": "Annulla modifiche",
+      "save": "Salva modifiche",
+      "saved": "Impostazioni di consenso salvate.",
+      "conflict": "Qualcun altro ha salvato prima queste impostazioni. Il modulo mostra ora i valori salvati.",
+      "conflictOk": "OK",
+      "problems": {
+        "noOptOutWord": "Aggiungi almeno una parola chiave STOP oppure disattiva il rilevamento.",
+        "badLang": "Un codice lingua è del tipo en, ar o pt-BR."
+      }
+    },
+    "policy": {
+      "title": "Policy marketing",
+      "requireConsent": "Richiedi un consenso registrato per gli invii marketing",
+      "requireConsentHint": "Disattivato: il marketing va a ogni contatto che non si è disiscritto. Attivato: solo ai contatti con un consenso registrato. I pubblici di campagne e broadcast mostrano quanti sono stati saltati.",
+      "withdrawnAlways": "I contatti che si sono disiscritti vengono sempre saltati, qualunque sia questa impostazione."
+    },
+    "detect": {
+      "title": "Risposte STOP e START",
+      "enabled": "Rileva le risposte STOP e START",
+      "enabledHint": "Quando un contatto invia soltanto una delle parole qui sotto, viene disiscritto o reiscritto su quel canale.",
+      "autoReply": "Invia una risposta di conferma",
+      "autoReplyHint": "Una breve risposta in testo libero entro la finestra di 24 ore, inviata una sola volta per ogni cambio. Non è una campagna e non conta come marketing.",
+      "rule": "L'intero messaggio deve essere la parola chiave: maiuscole, spazi, punteggiatura, emoji e segni diacritici arabi vengono ignorati. \"Please stop sending me invoices\" o \"don't stop\" non corrispondono, quindi nessuno viene disiscritto per errore."
+    },
+    "lang": {
+      "groupLabel": "Parole e risposte per {lang}",
+      "title": "Lingua",
+      "remove": "Rimuovi lingua",
+      "optOutWords": "Parole chiave STOP (disiscrizione)",
+      "optInWords": "Parole chiave START (reiscrizione)",
+      "wordsHint": "Una per riga.",
+      "optOutReply": "Risposta dopo STOP",
+      "optInReply": "Risposta dopo START",
+      "replyHint": "Puoi usare '{{name}}' per il nome del contatto. Spiega come riattivare.",
+      "footer": "Riga di disiscrizione per i messaggi marketing",
+      "footerHint": "Aggiunta sotto i testi marketing. Indica la parola da inviare.",
+      "add": "Aggiungi una lingua",
+      "addHint": "Un codice lingua come fr o pt-BR.",
+      "invalid": "Usa un codice come fr o pt-BR.",
+      "addButton": "Aggiungi"
+    },
+    "footer": {
+      "title": "La riga di disiscrizione",
+      "intro": "I compositori di broadcast e campagne possono aggiungere questa riga sotto i testi marketing così i destinatari sanno che possono rispondere STOP. I template approvati non vengono mai modificati: inserisci la riga nel template stesso.",
+      "defaultOn": "Avvisa se un testo marketing non ha la riga di disiscrizione",
+      "defaultOnHint": "Il compositore mostra un avviso e un pulsante per aggiungerla con un clic.",
+      "noneSet": "Nessuna riga di disiscrizione è impostata per alcuna lingua.",
+      "previewLabel": "Cosa vede il destinatario",
+      "sample": "I saldi di primavera iniziano oggi. Passa a trovarci questa settimana."
+    },
+    "test": {
+      "title": "Prova un messaggio",
+      "intro": "Scrivi cosa potrebbe inviare un contatto e vedi cosa succederebbe. Non viene modificato né inviato nulla. Usa le parole qui sopra, anche prima di salvare.",
+      "label": "Messaggio di un contatto",
+      "run": "Prova",
+      "failed": "Impossibile eseguire la prova. Riprova.",
+      "outcome": {
+        "opts_out": "Questo disiscrive il contatto dal marketing.",
+        "opts_in": "Questo reiscrive il contatto.",
+        "no_match": "Non succede nulla: il messaggio non è una parola chiave.",
+        "detection_off": "Non succede nulla: il rilevamento è disattivato."
+      },
+      "matched": "Corrisponde alla parola chiave \"{keyword}\" ({lang}).",
+      "replyLabel": "Il contatto riceve",
+      "noReply": "Non viene inviata alcuna risposta."
+    },
+    "card": {
+      "title": "Consenso",
+      "status": {
+        "optedOut": "Disiscritto",
+        "subscribed": "Iscritto",
+        "none": "Nessun consenso registrato"
+      },
+      "export": "Esporta prove (CSV)",
+      "markSubscribed": "Segna come iscritto",
+      "markUnsubscribed": "Segna come disiscritto",
+      "loading": "Caricamento del consenso...",
+      "noneRecorded": "Nessun consenso registrato per questo contatto. Gli invii marketing seguono la policy del tuo spazio di lavoro.",
+      "perChannel": "Consenso per canale",
+      "timeline": "Cronologia del consenso",
+      "channel": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "telegram": "Telegram",
+        "email": "Email",
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "webchat": "Chat web"
+      },
+      "state": {
+        "granted": "iscritto",
+        "withdrawn": "disiscritto"
+      },
+      "action": {
+        "granted": "Iscritto",
+        "withdrawn": "Disiscritto"
+      },
+      "source": {
+        "form": "Modulo",
+        "keyword": "Risposta con parola chiave",
+        "manual": "Registrato da una persona",
+        "import": "Importazione",
+        "api": "API",
+        "flow": "Flusso",
+        "inbound_message": "Messaggio",
+        "contact_request": "Richiesta di contatto",
+        "legacy": "Prima della cronologia del consenso"
+      },
+      "by": "da {name}",
+      "evidence": {
+        "consentText": "Testo mostrato",
+        "consentVersion": "Versione",
+        "consentHash": "Hash",
+        "formId": "Modulo",
+        "submissionId": "Invio",
+        "messageId": "Messaggio",
+        "keyword": "Parola chiave",
+        "fileName": "File",
+        "apiKeyId": "Chiave API",
+        "flowId": "Flusso",
+        "reference": "Riferimento"
+      },
+      "dialog": {
+        "titleGranted": "Segna come iscritto",
+        "titleWithdrawn": "Segna come disiscritto",
+        "introGranted": "Registra che questo contatto ha accettato di ricevere messaggi marketing. Il motivo viene conservato come prova.",
+        "introWithdrawn": "Registra che questo contatto non vuole più ricevere messaggi marketing. Verrà saltato da ogni campagna e broadcast.",
+        "channel": "Canale",
+        "noteRequired": "Perché? (obbligatorio)",
+        "noteOptional": "Nota (facoltativa)",
+        "noteHint": "Ad esempio: ha firmato il modulo cartaceo al banco, oppure ha accettato via email il 3 marzo.",
+        "confirm": "Salva",
+        "cancel": "Annulla",
+        "close": "Chiudi",
+        "savedGranted": "Segnato come iscritto.",
+        "savedWithdrawn": "Segnato come disiscritto."
+      }
+    },
+    "composer": {
+      "add": "Aggiungi la riga di disiscrizione",
+      "missing": "Questo messaggio marketing non spiega come disiscriversi. Aggiungi una riga come \"Rispondi STOP per disiscriverti\".",
+      "addButton": "Aggiungi la riga",
+      "templateHint": "I template sono bloccati dall'approvazione. Per spiegare come disiscriversi, inserisci una riga come \"{line}\" nel template stesso.",
+      "footerSuggestion": "Suggerito per un modello di marketing: «{line}»",
+      "footerUse": "Usalo come piè di pagina"
+    },
+    "import": {
+      "legend": "Consenso",
+      "label": "Ho il consenso per inviare messaggi a questi contatti",
+      "hint": "Se selezionata, tutti i contatti del file vengono registrati come consenzienti al marketing, con il nome del file come prova. Se non selezionata, l'importazione non registra alcun consenso. I contatti che hanno annullato l'iscrizione restano esclusi."
+    }
+  }
+}

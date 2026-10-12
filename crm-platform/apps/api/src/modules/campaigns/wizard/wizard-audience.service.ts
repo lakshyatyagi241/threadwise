@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Optional } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import type {
@@ -20,6 +20,7 @@ import {
   segmentContactsWhere,
   whereOf,
 } from '../../crm';
+import { ConsentPolicyService, hasGrantedConsentSql } from '../../contact-consent';
 import { countryOfPhone } from '../../wallet-message-billing';
 import { WizardCsvService } from './wizard-csv.service';
 import { csvContactsWhere, csvNewRowsWhere } from './wizard-csv-sql';
@@ -84,6 +85,7 @@ export class WizardAudienceService {
     private readonly csv: WizardCsvService,
     private readonly resolver: ContactResolverService,
     private readonly quota: ContactQuotaService,
+    @Optional() private readonly consentPolicy?: ConsentPolicyService,
   ) {}
 
   async where(tx: Tx, orgId: number, audience: WizardAudience): Promise<AudienceWhere> {
@@ -185,6 +187,8 @@ export class WizardAudienceService {
   async count(tx: Tx, orgId: number, audience: WizardAudience): Promise<WizardAudienceCount> {
     const { where, invalid, csvUploadId } = await this.where(tx, orgId, audience);
     const fresh = await this.newCsvNumbers(tx, orgId, csvUploadId);
+    // With the workspace switch ON, a contact with no recorded consent is counted apart and not among the recipients.
+    const requireConsent = (await this.consentPolicy?.requiresConsent(orgId)) ?? false;
     // The count runs in a savepoint: a cancelled statement aborts only that, and the timeout is undone with it.
     const before = (await tx.execute(sql`SELECT current_setting('statement_timeout') AS v`))
       .rows[0] as {
@@ -200,12 +204,14 @@ export class WizardAudienceService {
             SELECT count(*)::int AS matching,
                    count(*) FILTER (WHERE contacts.is_unsubscribed)::int AS opted_out,
                    count(*) FILTER (WHERE NOT contacts.is_unsubscribed AND NOT ${VALID_NUMBER})::int AS invalid_number,
-                   count(*) FILTER (WHERE ${ELIGIBLE})::int AS recipients
+                   count(*) FILTER (WHERE ${ELIGIBLE} AND ${requireConsent ? sql`NOT ${hasGrantedConsentSql('contacts')}` : sql`false`})::int AS no_consent,
+                   count(*) FILTER (WHERE ${ELIGIBLE} AND ${requireConsent ? hasGrantedConsentSql('contacts') : sql`true`})::int AS recipients
             FROM contacts WHERE ${where}`)
         ).rows[0] as {
           matching: number;
           opted_out: number;
           invalid_number: number;
+          no_consent: number;
           recipients: number;
         };
         const byPrefix = (
@@ -221,6 +227,7 @@ export class WizardAudienceService {
         matching: Number(out.totals.matching) + fresh.total,
         optedOut: Number(out.totals.opted_out),
         invalidNumber: Number(out.totals.invalid_number),
+        noConsent: Number(out.totals.no_consent),
         recipients: Number(out.totals.recipients) + fresh.total,
         newContacts: fresh.total,
         approximate: false,
@@ -234,6 +241,7 @@ export class WizardAudienceService {
         matching: estimate + fresh.total,
         optedOut: 0,
         invalidNumber: 0,
+        noConsent: 0,
         recipients: estimate + fresh.total,
         newContacts: fresh.total,
         approximate: true,
