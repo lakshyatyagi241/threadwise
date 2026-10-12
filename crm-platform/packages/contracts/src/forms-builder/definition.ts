@@ -72,15 +72,40 @@ export const FORM_BIND_OBJECTS = ['contact', 'company'] as const;
 export const formBindObjectSchema = z.enum(FORM_BIND_OBJECTS);
 export type FormBindObject = z.infer<typeof formBindObjectSchema>;
 
+/**
+ * An address typed as separate fields. The CRM keeps one address line per contact and company, so the parts are joined into it when
+ * the submission is written (`composeAddress`); a field bound to the whole `address` wins over the parts.
+ */
+export const FORM_ADDRESS_PARTS = [
+  'address_line',
+  'address_city',
+  'address_state',
+  'address_postal_code',
+  'address_country',
+] as const;
+export type FormAddressPart = (typeof FORM_ADDRESS_PARTS)[number];
+
+/** "Street, City, State Postal, Country": empty parts drop out with their separators. Null when nothing was given. */
+export function composeAddress(parts: Partial<Record<FormAddressPart, string | undefined>>): string | null {
+  const t = (k: FormAddressPart): string => (parts[k] ?? '').trim();
+  const region = [t('address_state'), t('address_postal_code')].filter(Boolean).join(' ');
+  const out = [t('address_line'), t('address_city'), region, t('address_country')]
+    .filter(Boolean)
+    .join(', ');
+  return out === '' ? null : out;
+}
+
 /** Contact properties a field may be bound to without a registry entry (columns of the contact). */
 export const CONTACT_BUILTIN_PROPERTIES = [
   'name',
   'first_name',
+  'middle_name',
   'last_name',
   'email',
   'phone',
   'title',
   'address',
+  ...FORM_ADDRESS_PARTS,
   'message',
 ] as const;
 export type ContactBuiltinProperty = (typeof CONTACT_BUILTIN_PROPERTIES)[number];
@@ -94,6 +119,7 @@ export const COMPANY_BUILTIN_PROPERTIES = [
   'industry',
   'size_range',
   'address',
+  ...FORM_ADDRESS_PARTS,
   'notes',
 ] as const;
 export type CompanyBuiltinProperty = (typeof COMPANY_BUILTIN_PROPERTIES)[number];

@@ -131,7 +131,14 @@
         "custom": "מותאם אישית",
         "requiredByCrm": "חובה",
         "inForm": "בטופס",
-        "full": "הטופס הגיע למגבלת הבלוקים שלו."
+        "full": "הטופס הגיע למגבלת הבלוקים שלו.",
+        "section": {
+          "contact": "איש קשר",
+          "contactAddress": "כתובת איש קשר",
+          "company": "חברה",
+          "companyAddress": "כתובת החברה"
+        },
+        "addAddress": "הוסף את כל שדות הכתובת"
       },
       "list": {
         "title": "שדות",

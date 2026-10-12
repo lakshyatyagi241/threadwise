@@ -131,7 +131,14 @@
         "custom": "カスタム",
         "requiredByCrm": "必須",
         "inForm": "フォーム内",
-        "full": "このフォームのブロック数の上限に達しました。"
+        "full": "このフォームのブロック数の上限に達しました。",
+        "section": {
+          "contact": "コンタクト",
+          "contactAddress": "コンタクトの住所",
+          "company": "会社",
+          "companyAddress": "会社の住所"
+        },
+        "addAddress": "住所項目をすべて追加"
       },
       "list": {
         "title": "フィールド",

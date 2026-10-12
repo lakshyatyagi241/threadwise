@@ -131,7 +131,14 @@
         "custom": "Własna",
         "requiredByCrm": "Wymagane",
         "inForm": "W formularzu",
-        "full": "Formularz osiągnął limit bloków."
+        "full": "Formularz osiągnął limit bloków.",
+        "section": {
+          "contact": "Kontakt",
+          "contactAddress": "Adres kontaktu",
+          "company": "Firma",
+          "companyAddress": "Adres firmy"
+        },
+        "addAddress": "Dodaj wszystkie pola adresu"
       },
       "list": {
         "title": "Pola",

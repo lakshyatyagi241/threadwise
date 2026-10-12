@@ -131,7 +131,14 @@
         "custom": "Personnalisée",
         "requiredByCrm": "Obligatoire",
         "inForm": "Dans le formulaire",
-        "full": "Le formulaire a atteint sa limite de blocs."
+        "full": "Le formulaire a atteint sa limite de blocs.",
+        "section": {
+          "contact": "Contact",
+          "contactAddress": "Adresse du contact",
+          "company": "Entreprise",
+          "companyAddress": "Adresse de l'entreprise"
+        },
+        "addAddress": "Ajouter tous les champs d'adresse"
       },
       "list": {
         "title": "Champs",

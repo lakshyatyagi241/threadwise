@@ -1,3 +1,4 @@
+import { FORM_ADDRESS_PARTS } from '@crm/contracts';
 import { FORM_FIELD_KINDS, type CrmProperty, type FieldBlock, type FieldKind } from './types';
 
 /** The kinds the palette offers as plain "new field" buttons, in the order a person looks for them. `hidden` has its own group. */
@@ -72,6 +73,66 @@ export function groupProperties(
         ),
     }))
     .filter((g) => g.items.length > 0);
+}
+
+/** The palette's sections: each object's own properties, then its address (the whole line and its parts). */
+export type PropertySectionId = 'contact' | 'contactAddress' | 'company' | 'companyAddress';
+export interface PropertySection {
+  id: PropertySectionId;
+  object: CrmProperty['object'];
+  address: boolean;
+  items: CrmProperty[];
+}
+
+/** An address property of the built-in columns: the whole `address` line, or one of its parts. Custom properties never count. */
+export const isAddressProperty = (p: Pick<CrmProperty, 'property' | 'source'>): boolean =>
+  p.source === 'builtin' && (p.property === 'address' || p.property.startsWith('address_'));
+
+const PART_ORDER: readonly string[] = [...FORM_ADDRESS_PARTS, 'address'];
+
+/** The palette's list: search-filtered and sectioned Contact, Contact address, Company, Company address. Parts keep their natural order. */
+export function sectionProperties(
+  properties: readonly CrmProperty[],
+  query: string,
+): PropertySection[] {
+  const words = query.toLowerCase().split(/\s+/).filter(Boolean);
+  const match = (p: CrmProperty) => {
+    const hay = `${p.label} ${p.property}`.toLowerCase();
+    return words.every((w) => hay.includes(w));
+  };
+  const out: PropertySection[] = [];
+  for (const object of ['contact', 'company'] as const) {
+    const mine = properties.filter((p) => p.object === object && match(p));
+    const plain = mine
+      .filter((p) => !isAddressProperty(p))
+      .sort(
+        (a, b) =>
+          Number(b.requiredByWorkspace) - Number(a.requiredByWorkspace) ||
+          a.label.localeCompare(b.label),
+      );
+    const address = mine
+      .filter(isAddressProperty)
+      .sort((a, b) => PART_ORDER.indexOf(a.property) - PART_ORDER.indexOf(b.property));
+    if (plain.length > 0) out.push({ id: object, object, address: false, items: plain });
+    if (address.length > 0)
+      out.push({
+        id: object === 'contact' ? 'contactAddress' : 'companyAddress',
+        object,
+        address: true,
+        items: address,
+      });
+  }
+  return out;
+}
+
+/** The address parts of a section that are not on the form yet: what "add all address fields" adds (never the whole line). */
+export function missingAddressParts(
+  section: PropertySection,
+  used: (p: CrmProperty) => boolean,
+): CrmProperty[] {
+  return section.items.filter(
+    (p) => (FORM_ADDRESS_PARTS as readonly string[]).includes(p.property) && !used(p),
+  );
 }
 
 export function findProperty(

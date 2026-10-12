@@ -305,3 +305,10 @@ whether the platform has a provider (`GET /forms/meta/protection`) and warns whe
 
 **Notification links.** Every in-app notification and notification email links to `/forms/<formId>/submissions?submission=<submissionId>`; the screen
 opens that submission even when it is not in the first page of the list.
+
+**Mapping to CRM properties.** `GET /v2/forms/meta/properties?object=contact|company` lists the built-in columns plus the workspace's writable custom
+properties. Contact built-ins: `name`, `first_name`, `middle_name`, `last_name`, `email`, `phone`, `title`, `address` ("Full address"), the address parts
+`address_line`, `address_city`, `address_state`, `address_postal_code`, `address_country`, and `message`. Company built-ins: `name`, `domain`, `email`, `phone`,
+`industry`, `size_range`, `address` and the same five address parts, `notes`. The CRM keeps ONE address line per contact and company, so the parts are
+joined (`composeAddress`: `street, city, state postal, country`, empty parts skipped) when the submission is mapped, and a field bound to the whole
+`address` wins over the parts. The address, like every other built-in, fills blanks only on a returning contact. `middle_name` is contact only.

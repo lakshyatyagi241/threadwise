@@ -401,13 +401,26 @@ export class FormsRepository {
     tx: Tx,
     orgId: number,
     id: number,
-  ): Promise<{ title: string | null; address: string | null; message: string | null }> {
+  ): Promise<{
+    title: string | null;
+    address: string | null;
+    message: string | null;
+    middleName: string | null;
+  }> {
     const res = await tx.execute(
-      sql`SELECT title, address, message FROM contacts WHERE org_id = ${orgId} AND id = ${id}`,
+      sql`SELECT title, address, message, middle_name FROM contacts WHERE org_id = ${orgId} AND id = ${id}`,
     );
     const r = res.rows[0] as
-      { title: string | null; address: string | null; message: string | null } | undefined;
-    return r ?? { title: null, address: null, message: null };
+      | {
+          title: string | null;
+          address: string | null;
+          message: string | null;
+          middle_name: string | null;
+        }
+      | undefined;
+    return r
+      ? { title: r.title, address: r.address, message: r.message, middleName: r.middle_name }
+      : { title: null, address: null, message: null, middleName: null };
   }
 
   /** One attribution touch for a contact: where a submission came from (platform `form`). Append-only, like the lead pipeline's. */
