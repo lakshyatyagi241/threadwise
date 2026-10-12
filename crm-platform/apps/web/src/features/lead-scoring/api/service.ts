@@ -1,6 +1,11 @@
 import { z } from 'zod';
 import type {
   LscBackfillResult,
+  LscInsight,
+  LscSuggestionDecisionInput,
+  LscSuggestionDecisionResult,
+  LscSuggestionsQuery,
+  LscSuggestionsResponse,
   LscRunsQuery,
   LscRunsResponse,
   LscScoreResult,
@@ -26,6 +31,9 @@ const settings = shape<LscSettings>('enabled', 'platformEnabled', 'keySource', '
 const runs = shape<LscRunsResponse>('data', 'page');
 const scored = shape<LscScoreResult>('contactId', 'score', 'costUsd');
 const backfilled = shape<LscBackfillResult>('queued');
+const insight = shape<LscInsight>('active', 'digest', 'suggestion');
+const suggestions = shape<LscSuggestionsResponse>('data', 'page');
+const decided = shape<LscSuggestionDecisionResult>('done', 'failed');
 
 const BASE = '/lead-scoring';
 const enc = encodeURIComponent;
@@ -43,4 +51,14 @@ export const lscApi = {
   /** Queues contacts that have no score yet; they are scored in the background. */
   backfill: (limit: number) =>
     apiFetch(`${BASE}/backfill`, { method: 'POST', body: { limit }, schema: backfilled }),
+  /** The latest reading of a contact's conversation and the stage move waiting for a decision. */
+  insight: (contactId: string, signal?: AbortSignal) =>
+    apiFetch(`${BASE}/contacts/${enc(contactId)}/insight`, { schema: insight, signal }),
+  /** Reads the contact's conversation now; the call waits for the AI provider, so it takes seconds. */
+  digest: (contactId: string) =>
+    apiFetch(`${BASE}/contacts/${enc(contactId)}/digest`, { method: 'POST', schema: insight }),
+  suggestions: (query: Partial<LscSuggestionsQuery>, signal?: AbortSignal) =>
+    apiFetch(`${BASE}/suggestions`, { query, schema: suggestions, signal }),
+  decide: (input: LscSuggestionDecisionInput) =>
+    apiFetch(`${BASE}/suggestions/decide`, { method: 'POST', body: input, schema: decided }),
 };

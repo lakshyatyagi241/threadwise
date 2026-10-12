@@ -39,6 +39,15 @@ const facts: ScoringFacts = {
   dealsWon: 0,
   dealsLost: 0,
   openDealValue: 5000,
+  daysInStage: 9,
+  engagement: {
+    broadcastsReceived30d: 4,
+    broadcastsRead30d: 3,
+    linksClicked30d: 1,
+    messagesFromContact7d: 6,
+    hoursSinceLastInbound: 2,
+    avgReplyMinutes30d: 45,
+  },
 };
 
 describe('parseScore', () => {
@@ -112,6 +121,17 @@ describe('what is sent to the vendor', () => {
     expect(all).not.toMatch(/@/);
     expect(p.user).toContain('"dealsOpen":1');
     expect(Object.keys(facts)).not.toEqual(expect.arrayContaining(['name', 'email', 'phone']));
+  });
+  it('carries the engagement signals as numbers only, and tells the model how to read them', () => {
+    const p = scoringPrompt(facts);
+    expect(p.user).toContain(
+      '"engagement":{"broadcastsReceived30d":4,"broadcastsRead30d":3,"linksClicked30d":1,"messagesFromContact7d":6,"hoursSinceLastInbound":2,"avgReplyMinutes30d":45}',
+    );
+    expect(p.user).toContain('"daysInStage":9');
+    expect(p.system).toContain('"engagement" object');
+    for (const v of Object.values(facts.engagement)) {
+      expect(v === null || typeof v === 'number').toBe(true);
+    }
   });
   it('classifies the email without sending it', () => {
     expect(emailKind('a@gmail.com')).toBe('free');

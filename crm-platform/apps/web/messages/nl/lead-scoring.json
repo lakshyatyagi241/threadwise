@@ -65,7 +65,10 @@
       "planLimit": "Het AI-tegoed van je abonnement is op.",
       "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
       "validation": "Sommige waarden zijn ongeldig.",
-      "unexpected": "Er ging iets mis. Probeer het opnieuw."
+      "unexpected": "Er ging iets mis. Probeer het opnieuw.",
+      "chatUnavailable": "Het lezen van gesprekken is niet beschikbaar voor deze werkruimte.",
+      "notEnoughChat": "Dit contact heeft nog niet genoeg geschreven om gelezen te worden.",
+      "suggestionGone": "Die suggestie is al beoordeeld of vervangen."
     },
     "scoreErrors": {
       "network": "De server was niet bereikbaar, dus het contact is niet gescoord. Controleer je verbinding en probeer het opnieuw.",
@@ -82,7 +85,10 @@
       "validation": "Het verzoek was ongeldig.",
       "unexpected": "Er ging iets mis en het contact is niet gescoord. Probeer het opnieuw.",
       "openSettings": "Instellingen voor AI-leadscoring openen",
-      "openKeys": "AI-sleutels openen"
+      "openKeys": "AI-sleutels openen",
+      "chatUnavailable": "Het lezen van gesprekken is niet ingeschakeld voor deze werkruimte. Het is een pilotfunctie die moet worden ingeschakeld in de instellingen voor AI-leadscoring.",
+      "notEnoughChat": "Dit contact heeft nog niet genoeg geschreven: alleen begroetingen, emoji of automatische antwoorden. Probeer het opnieuw zodra er meer is geschreven.",
+      "suggestionGone": "Die suggestie was al beoordeeld of vervangen door een nieuwere, dus er is niets gewijzigd."
     },
     "field": {
       "label": "Leadscore",
@@ -128,7 +134,8 @@
         "created": "Contact aangemaakt",
         "updated": "Contact gewijzigd",
         "manual": "Scoreknop",
-        "backfill": "Ongescoorde contacten scoren"
+        "backfill": "Ongescoorde contacten scoren",
+        "chat": "Gesprek viel stil"
       },
       "tokensDetail": "{prompt} in, {completion} uit",
       "costSource": {
@@ -183,13 +190,16 @@
         "tags": "Namen van tags",
         "deals": "Hoeveel deals open, gewonnen en verloren zijn",
         "activity": "Hoe recent het contact actief was",
-        "company": "De bedrijfsnaam"
+        "company": "De bedrijfsnaam",
+        "engagement": "Hoe het contact onlangs heeft gereageerd: aantal berichten, geopende broadcasts en aangeklikte links, en hoe snel het antwoordt (alleen cijfers)"
       },
       "notSent": {
         "title": "Wat nooit wordt gestuurd",
         "name": "De naam van het contact",
         "email": "Het e-mailadres",
-        "phone": "Het telefoonnummer"
+        "phone": "Het telefoonnummer",
+        "messages": "De tekst van elk bericht",
+        "messagesChat": "De tekst van berichten, tenzij je het lezen van gesprekken inschakelt (hieronder)"
       },
       "manualRule": "Een score die een persoon heeft ingevoerd wordt nooit overschreven. De AI vult alleen lege scores in en ververst de scores die hij zelf heeft geschreven.",
       "auto": {
@@ -199,7 +209,7 @@
       },
       "confirm": {
         "title": "Geanonimiseerde contactgegevens naar een AI-provider sturen?",
-        "body": "Zodra dit aan staat, worden korte beschrijvingen van je contacten (fase, bron, tags, aantal deals, activiteit en bedrijfsnaam) via OpenRouter naar een AI-provider gestuurd. Namen, e-mailadressen en telefoonnummers worden nooit verstuurd. Je kunt het op elk moment uitschakelen.",
+        "body": "Zodra dit aan staat, worden korte beschrijvingen van uw contacten (fase, bron, tags, aantal deals, activiteit, betrokkenheidscijfers zoals berichten, geopende broadcasts en aangeklikte links, en bedrijfsnaam) via OpenRouter naar een AI-aanbieder gestuurd. Namen, e-mailadressen, telefoonnummers en berichtteksten worden nooit verzonden. U kunt dit op elk moment uitzetten.",
         "yes": "Inschakelen",
         "no": "Annuleren"
       },
@@ -242,7 +252,94 @@
         },
         "failed": "Mislukte pogingen",
         "platformPart": "Hiervan op de sleutel van het platform"
+      },
+      "chat": {
+        "title": "Gesprekken lezen (pilot)",
+        "hint": "Uit tot je het kiest, omdat de recente berichten van een contact naar een AI-provider worden gestuurd, waarbij persoonsgegevens gedeeltelijk worden gemaskeerd.",
+        "label": "Het gesprek van een contact lezen wanneer het stilvalt",
+        "onBody": "Ongeveer 12 minuten nadat een contact stopt met schrijven, leest de AI de recente berichten en noteert wat het contact zoekt. Ook geeft de AI de score.",
+        "offBody": "Gesprekken worden niet gelezen. Scores gebruiken alleen contactgegevens en betrokkenheidscijfers.",
+        "needsScoring": "Schakel eerst AI-leadscoring in.",
+        "stageLabel": "Levenscyclusfasen voorstellen",
+        "stageBody": "Als uit het gesprek duidelijk blijkt dat een contact verder is gegaan, stelt de AI de volgende fase voor. Een persoon accepteert of wijst het af; er verandert niets vanzelf, en de fasen Gewonnen en Verloren worden nooit voorgesteld.",
+        "masked": {
+          "title": "Hoe persoonsgegevens worden gemaskeerd",
+          "phone": "Van telefoonnummers blijven alleen het eerste en de laatste twee cijfers staan (+91 ***** ***10)",
+          "email": "Van e-mailadressen blijven de eerste letter en het domein staan (p***@acme.io)",
+          "card": "Van kaart-, Aadhaar- en PAN-nummers blijven alleen het eerste en laatste teken staan",
+          "name": "Van de naam van het contact en een naam die iemand over zichzelf geeft, blijven alleen de eerste en laatste letter staan"
+        },
+        "rules": {
+          "title": "Wat wordt gelezen en wat niet",
+          "quiet": "Alleen gesprekken die zijn stilgevallen, en alleen de laatste twee weken",
+          "enough": "Contacten die alleen op knoppen tikten, worden gekoppeld via een zinnentabel, zonder AI-aanroep",
+          "person": "Een score of fase die een persoon heeft ingesteld, wordt nooit overschreven",
+          "closing": "Bots, verwijderde berichten, groepschats en automatische antwoorden blijven buiten beschouwing"
+        },
+        "confirm": {
+          "title": "Gemaskeerde gesprekken naar een AI-provider sturen?",
+          "body": "Zodra dit aanstaat, worden de recente berichten van een contact via OpenRouter naar een AI-provider gestuurd nadat het gesprek is stilgevallen. Telefoonnummers, e-mailadressen, kaartnummers en namen worden eerst gedeeltelijk gemaskeerd, zodat wat wordt verstuurd niet kan worden gebruikt om de persoon te bereiken. Je kunt dit op elk moment uitzetten.",
+          "yes": "Inschakelen",
+          "no": "Annuleren"
+        }
       }
+    },
+    "insight": {
+      "title": "Gesprek lezen",
+      "empty": "Nog niet gelezen. Een gesprek wordt ongeveer 12 minuten nadat het contact stopt met schrijven gelezen, of je kunt het nu lezen.",
+      "analyze": "Chat lezen",
+      "analyzing": "Lezen...",
+      "analyzingSlow": "De AI wordt gevraagd. Dit kan een paar seconden duren.",
+      "sourceAi": "Gelezen door AI",
+      "sourceRules": "Gekoppeld via knoptikken",
+      "signals": "Wat het contact liet blijken",
+      "signal": {
+        "askedPrice": "Vroeg naar de prijs",
+        "readyToBuy": "Klaar om te kopen",
+        "objection": "Twijfel of bezwaar",
+        "urgent": "Dringend"
+      },
+      "readOn": "Gelezen op {date} uit {count, plural, one {# bericht} other {# berichten}}.",
+      "privacy": "Namen, telefoonnummers en e-mailadressen in de chat worden gedeeltelijk gemaskeerd voordat er iets naar de AI wordt gestuurd.",
+      "intent": {
+        "ready_to_buy": "Klaar om te kopen",
+        "asking_price": "Vraagt naar de prijs",
+        "comparing": "Vergelijkt opties",
+        "registering": "Registreert zich",
+        "needs_support": "Heeft ondersteuning nodig",
+        "post_purchase": "Nazorg of service",
+        "browsing": "Kijkt alleen rond",
+        "not_interested": "Niet geïnteresseerd",
+        "other": "Geen duidelijke intentie"
+      },
+      "suggestion": {
+        "title": "Voorgestelde fase",
+        "move": "Verplaats van {from} naar {to}",
+        "confidence": "{percent}% zeker",
+        "accept": "Accepteren",
+        "dismiss": "Afwijzen",
+        "accepted": "Fase gewijzigd naar {stage}.",
+        "dismissed": "Suggestie afgewezen.",
+        "noRight": "Je hebt geen toestemming om suggesties te accepteren of af te wijzen.",
+        "couldNot": "De suggestie kon niet worden toegepast. Mogelijk is er al over beslist."
+      }
+    },
+    "suggestions": {
+      "title": "Fasesuggesties",
+      "hint": "Verplaatsingen die de AI voorstelt na het lezen van gesprekken. Er verandert niets totdat je accepteert.",
+      "empty": "Er staan geen suggesties te wachten.",
+      "unnamed": "Naamloos contact",
+      "move": "Verplaats van {from} naar {to}",
+      "confidence": "{percent}% zeker",
+      "accept": "Accepteren",
+      "dismiss": "Afwijzen",
+      "acceptConfident": "Accepteer de {count} boven {percent}%",
+      "dismissAll": "Alles afwijzen",
+      "more": "Meer laden",
+      "doneAccept": "{count, plural, one {# fase gewijzigd.} other {# fasen gewijzigd.}}",
+      "doneDismiss": "{count, plural, one {# suggestie afgewezen.} other {# suggesties afgewezen.}}",
+      "noRight": "Je kunt de suggesties zien maar er niet over beslissen: daarvoor is de toestemming lsc.stage.review nodig.",
+      "couldNot": "{count, plural, one {# suggestie kon niet worden toegepast.} other {# suggesties konden niet worden toegepast.}}"
     }
   }
 }

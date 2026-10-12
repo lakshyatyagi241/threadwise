@@ -65,7 +65,10 @@
       "planLimit": "Planınızın yapay zeka hakkı tükendi.",
       "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
       "validation": "Bazı değerler geçerli değil.",
-      "unexpected": "Bir şeyler ters gitti. Tekrar deneyin."
+      "unexpected": "Bir şeyler ters gitti. Tekrar deneyin.",
+      "chatUnavailable": "Görüşmeleri okuma özelliği bu çalışma alanında kullanılamıyor.",
+      "notEnoughChat": "Bu kişi henüz okunacak kadar yazmadı.",
+      "suggestionGone": "Bu öneri zaten karara bağlanmış veya yenisiyle değiştirilmiş."
     },
     "scoreErrors": {
       "network": "Sunucuya ulaşılamadı, bu yüzden kişi puanlanmadı. Bağlantınızı kontrol edip tekrar deneyin.",
@@ -82,7 +85,10 @@
       "validation": "İstek geçerli değildi.",
       "unexpected": "Bir şeyler ters gitti ve kişi puanlanmadı. Tekrar deneyin.",
       "openSettings": "Yapay zeka ile potansiyel müşteri puanlama ayarlarını aç",
-      "openKeys": "Yapay zeka anahtarlarını aç"
+      "openKeys": "Yapay zeka anahtarlarını aç",
+      "chatUnavailable": "Görüşmeleri okuma özelliği bu çalışma alanında açık değil. Pilot bir özelliktir ve AI potansiyel müşteri puanlama ayarlarından açılması gerekir.",
+      "notEnoughChat": "Bu kişi henüz yeterince yazmadı: yalnızca selamlaşma, emoji veya otomatik yanıtlar var. Daha fazla yazdıktan sonra tekrar deneyin.",
+      "suggestionGone": "Bu öneri zaten karara bağlanmış veya daha yeni bir öneriyle değiştirilmiş, bu yüzden hiçbir şey değiştirilmedi."
     },
     "field": {
       "label": "Potansiyel müşteri puanı",
@@ -128,7 +134,8 @@
         "created": "Kişi oluşturuldu",
         "updated": "Kişi değiştirildi",
         "manual": "Puanla düğmesi",
-        "backfill": "Puanlanmamış kişileri puanla"
+        "backfill": "Puanlanmamış kişileri puanla",
+        "chat": "Görüşme sessizleşti"
       },
       "tokensDetail": "{prompt} giriş, {completion} çıkış",
       "costSource": {
@@ -183,13 +190,16 @@
         "tags": "Etiket adları",
         "deals": "Kaç fırsatın açık, kazanılmış ve kaybedilmiş olduğu",
         "activity": "Kişinin ne kadar yakın zamanda etkin olduğu",
-        "company": "Şirket adı"
+        "company": "Şirket adı",
+        "engagement": "Kişinin son zamanlardaki etkileşimi: mesaj sayısı, açtığı toplu gönderiler, tıkladığı bağlantılar ve yanıt verme hızı (yalnızca sayılar)"
       },
       "notSent": {
         "title": "Asla gönderilmeyenler",
         "name": "Kişinin adı",
         "email": "E-posta adresi",
-        "phone": "Telefon numarası"
+        "phone": "Telefon numarası",
+        "messages": "Herhangi bir mesajın metni",
+        "messagesChat": "Herhangi bir mesajın metni, aşağıdaki görüşmeleri okuma özelliğini açmadığınız sürece"
       },
       "manualRule": "Bir kişinin yazdığı puanın üzerine asla yazılmaz. Yapay zeka yalnızca boş puanları doldurur ve kendi yazdıklarını yeniler.",
       "auto": {
@@ -199,7 +209,7 @@
       },
       "confirm": {
         "title": "Anonimleştirilmiş kişi bilgileri bir yapay zeka sağlayıcısına gönderilsin mi?",
-        "body": "Açıldığında, kişilerinizin kısa tanımları (aşama, kaynak, etiketler, fırsat sayıları, etkinlik ve şirket adı) OpenRouter üzerinden bir yapay zeka sağlayıcısına gönderilir. Adlar, e-posta adresleri ve telefon numaraları asla gönderilmez. İstediğiniz zaman kapatabilirsiniz.",
+        "body": "Açıldığında, kişilerinizin kısa açıklamaları (aşama, kaynak, etiketler, anlaşma sayıları, etkinlik, mesajlar, açılan toplu gönderiler ve tıklanan bağlantılar gibi etkileşim sayıları ve şirket adı) OpenRouter aracılığıyla bir yapay zekâ sağlayıcısına gönderilir. Adlar, e-posta adresleri, telefon numaraları ve mesaj metinleri asla gönderilmez. İstediğiniz zaman kapatabilirsiniz.",
         "yes": "Aç",
         "no": "İptal"
       },
@@ -242,7 +252,94 @@
         },
         "failed": "Başarısız denemeler",
         "platformPart": "Toplamın platform anahtarına ait kısmı"
+      },
+      "chat": {
+        "title": "Görüşmeleri oku (pilot)",
+        "hint": "Siz seçene kadar kapalıdır, çünkü kişinin son mesajları kişisel bilgileri kısmen maskelenerek bir AI sağlayıcısına gönderilir.",
+        "label": "Görüşme sessizleştiğinde kişinin görüşmesini oku",
+        "onBody": "Kişi yazmayı bıraktıktan yaklaşık 12 dakika sonra AI son mesajları okur ve kişinin ne aradığını not eder. Puanı da o verir.",
+        "offBody": "Görüşmeler okunmaz. Puanlar yalnızca kişi bilgilerini ve etkileşim verilerini kullanır.",
+        "needsScoring": "Önce AI potansiyel müşteri puanlamayı açın.",
+        "stageLabel": "Yaşam döngüsü aşamalarını öner",
+        "stageBody": "Görüşme bir kişinin ilerlediğini açıkça gösterdiğinde AI sonraki aşamayı önerir. Bir kişi bunu kabul eder veya reddeder; hiçbir şey kendiliğinden taşınmaz ve Kazanıldı ile Kaybedildi aşamaları asla önerilmez.",
+        "masked": {
+          "title": "Kişisel veriler nasıl maskelenir",
+          "phone": "Telefon numaralarında yalnızca ilk ve son iki hane kalır (+91 ***** ***10)",
+          "email": "E-posta adreslerinde ilk harf ve alan adı kalır (p***@acme.io)",
+          "card": "Kart, Aadhaar ve PAN numaralarında yalnızca ilk ve son karakterler kalır",
+          "name": "Kişinin adında ve birinin kendisi hakkında verdiği adda yalnızca ilk ve son harf kalır"
+        },
+        "rules": {
+          "title": "Neler okunur, neler okunmaz",
+          "quiet": "Yalnızca sessizleşmiş görüşmeler ve yalnızca son iki hafta",
+          "enough": "Yalnızca düğmelere dokunan kişiler bir ifade tablosuyla eşleştirilir, AI çağrısı yapılmaz",
+          "person": "Bir kişinin belirlediği puan veya aşama asla üzerine yazılmaz",
+          "closing": "Botlar, silinmiş mesajlar, grup sohbetleri ve otomatik yanıtlar dışarıda bırakılır"
+        },
+        "confirm": {
+          "title": "Maskelenmiş görüşmeler bir AI sağlayıcısına gönderilsin mi?",
+          "body": "Açıldığında, görüşme sessizleştikten sonra kişinin son mesajları OpenRouter üzerinden bir AI sağlayıcısına gönderilir. Telefon numaraları, e-postalar, kart numaraları ve adlar önce kısmen maskelenir; böylece gönderilenler kişiye ulaşmak için kullanılamaz. İstediğiniz zaman kapatabilirsiniz.",
+          "yes": "Aç",
+          "no": "İptal"
+        }
       }
+    },
+    "insight": {
+      "title": "Görüşme okuma",
+      "empty": "Henüz okunmadı. Bir görüşme, kişi yazmayı bıraktıktan yaklaşık 12 dakika sonra okunur veya şimdi okuyabilirsiniz.",
+      "analyze": "Görüşmeyi oku",
+      "analyzing": "Okunuyor...",
+      "analyzingSlow": "AI'a soruluyor. Bu birkaç saniye sürebilir.",
+      "sourceAi": "AI tarafından okundu",
+      "sourceRules": "Düğme dokunuşlarından eşleştirildi",
+      "signals": "Kişinin verdiği sinyaller",
+      "signal": {
+        "askedPrice": "Fiyat sordu",
+        "readyToBuy": "Satın almaya hazır",
+        "objection": "Tereddüt veya itiraz",
+        "urgent": "Acil"
+      },
+      "readOn": "{date} tarihinde {count, plural, one {# mesajdan} other {# mesajdan}} okundu.",
+      "privacy": "Görüşmedeki adlar, telefon numaraları ve e-postalar AI'a herhangi bir şey gönderilmeden önce kısmen maskelenir.",
+      "intent": {
+        "ready_to_buy": "Satın almaya hazır",
+        "asking_price": "Fiyat soruyor",
+        "comparing": "Seçenekleri karşılaştırıyor",
+        "registering": "Kayıt oluyor",
+        "needs_support": "Destek gerekiyor",
+        "post_purchase": "Satış sonrası veya servis",
+        "browsing": "Sadece göz atıyor",
+        "not_interested": "İlgilenmiyor",
+        "other": "Net bir niyet yok"
+      },
+      "suggestion": {
+        "title": "Önerilen aşama",
+        "move": "{from} aşamasından {to} aşamasına taşı",
+        "confidence": "%{percent} emin",
+        "accept": "Kabul et",
+        "dismiss": "Reddet",
+        "accepted": "Aşama {stage} olarak değiştirildi.",
+        "dismissed": "Öneri reddedildi.",
+        "noRight": "Önerileri kabul etme veya reddetme yetkiniz yok.",
+        "couldNot": "Öneri uygulanamadı. Zaten karara bağlanmış olabilir."
+      }
+    },
+    "suggestions": {
+      "title": "Aşama önerileri",
+      "hint": "AI'ın görüşmeleri okuduktan sonra önerdiği taşımalar. Siz kabul edene kadar hiçbir şey değişmez.",
+      "empty": "Bekleyen öneri yok.",
+      "unnamed": "Adsız kişi",
+      "move": "{from} aşamasından {to} aşamasına taşı",
+      "confidence": "%{percent} emin",
+      "accept": "Kabul et",
+      "dismiss": "Reddet",
+      "acceptConfident": "%{percent} üzerindeki {count} öneriyi kabul et",
+      "dismissAll": "Tümünü reddet",
+      "more": "Daha fazla yükle",
+      "doneAccept": "{count, plural, one {# aşama değiştirildi.} other {# aşama değiştirildi.}}",
+      "doneDismiss": "{count, plural, one {# öneri reddedildi.} other {# öneri reddedildi.}}",
+      "noRight": "Önerileri görebilirsiniz ancak karara bağlayamazsınız: bunun için lsc.stage.review yetkisi gerekir.",
+      "couldNot": "{count, plural, one {# öneri uygulanamadı.} other {# öneri uygulanamadı.}}"
     }
   }
 }

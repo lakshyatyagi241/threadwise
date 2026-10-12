@@ -102,7 +102,7 @@ export const contacts = pgTable(
     emailSubscriptionStatus: text('email_subscription_status'),
     emailConfirmed: boolean('email_confirmed').notNull().default(false),
     faxNumber: text('fax_number'),
-    /** Bumped on note/activity/meeting write. Backs the list 'Last Activity' column. */
+    /** Bumped on note/activity/meeting/file write, a form submit, an order, a customer message and a staff reply. Backs the list 'Last Activity' column. A bump alone does not move row_version (contacts_touch). */
     lastActivityAt: timestamp('last_activity_at', { withTimezone: true }),
 
     data: dataJsonb(),

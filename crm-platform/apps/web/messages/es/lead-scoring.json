@@ -65,7 +65,10 @@
       "planLimit": "Se ha agotado la cuota de IA de tu plan.",
       "rateLimited": "Demasiadas solicitudes. Espera un momento e inténtalo de nuevo.",
       "validation": "Algunos valores no son válidos.",
-      "unexpected": "Algo salió mal. Inténtalo de nuevo."
+      "unexpected": "Algo salió mal. Inténtalo de nuevo.",
+      "chatUnavailable": "La lectura de conversaciones no está disponible para este espacio de trabajo.",
+      "notEnoughChat": "Este contacto aún no ha escrito lo suficiente para poder leerlo.",
+      "suggestionGone": "Esa sugerencia ya fue resuelta o reemplazada."
     },
     "scoreErrors": {
       "network": "No se pudo contactar con el servidor, así que el contacto no se puntuó. Revisa tu conexión e inténtalo de nuevo.",
@@ -82,7 +85,10 @@
       "validation": "La solicitud no era válida.",
       "unexpected": "Algo salió mal y el contacto no se puntuó. Inténtalo de nuevo.",
       "openSettings": "Abrir ajustes de puntuación de leads con IA",
-      "openKeys": "Abrir claves de IA"
+      "openKeys": "Abrir claves de IA",
+      "chatUnavailable": "La lectura de conversaciones no está activada para este espacio de trabajo. Es una función piloto que debe activarse en los ajustes de puntuación de leads con IA.",
+      "notEnoughChat": "Este contacto aún no ha escrito lo suficiente: solo saludos, emojis o respuestas automáticas. Inténtalo de nuevo cuando escriba más.",
+      "suggestionGone": "Esa sugerencia ya fue resuelta o reemplazada por una más reciente, así que no se cambió nada."
     },
     "field": {
       "label": "Puntuación del lead",
@@ -128,7 +134,8 @@
         "created": "Contacto creado",
         "updated": "Contacto modificado",
         "manual": "Botón de puntuar",
-        "backfill": "Puntuar contactos sin puntuación"
+        "backfill": "Puntuar contactos sin puntuación",
+        "chat": "El chat quedó en silencio"
       },
       "tokensDetail": "{prompt} de entrada, {completion} de salida",
       "costSource": {
@@ -183,13 +190,16 @@
         "tags": "Los nombres de las etiquetas",
         "deals": "Cuántos negocios hay abiertos, ganados y perdidos",
         "activity": "Qué tan reciente fue la actividad del contacto",
-        "company": "El nombre de la empresa"
+        "company": "El nombre de la empresa",
+        "engagement": "Cómo ha interactuado el contacto últimamente: número de sus mensajes, difusiones abiertas y enlaces pulsados, y lo rápido que responde (solo números)"
       },
       "notSent": {
         "title": "Qué no se envía nunca",
         "name": "El nombre del contacto",
         "email": "La dirección de correo electrónico",
-        "phone": "El número de teléfono"
+        "phone": "El número de teléfono",
+        "messages": "El texto de cualquier mensaje",
+        "messagesChat": "El texto de cualquier mensaje, a menos que actives la lectura de conversaciones (abajo)"
       },
       "manualRule": "Una puntuación escrita por una persona nunca se sobrescribe. La IA solo rellena las puntuaciones vacías y actualiza las que ella misma escribió.",
       "auto": {
@@ -199,7 +209,7 @@
       },
       "confirm": {
         "title": "¿Enviar datos anonimizados de contactos a un proveedor de IA?",
-        "body": "Una vez activada, se envían descripciones breves de tus contactos (etapa, origen, etiquetas, número de negocios, actividad y nombre de la empresa) a un proveedor de IA a través de OpenRouter. Nunca se envían nombres, direcciones de correo ni números de teléfono. Puedes desactivarla en cualquier momento.",
+        "body": "Una vez activado, se envían a un proveedor de IA a través de OpenRouter descripciones breves de tus contactos (etapa, origen, etiquetas, número de negocios, actividad, datos de interacción como mensajes, difusiones abiertas y enlaces pulsados, y nombre de la empresa). Nunca se envían nombres, correos electrónicos, números de teléfono ni el texto de los mensajes. Puedes desactivarlo en cualquier momento.",
         "yes": "Activar",
         "no": "Cancelar"
       },
@@ -242,7 +252,94 @@
         },
         "failed": "Intentos fallidos",
         "platformPart": "Del total, con la clave de la plataforma"
+      },
+      "chat": {
+        "title": "Leer conversaciones (piloto)",
+        "hint": "Desactivado hasta que lo elijas, porque los mensajes recientes de un contacto se envían a un proveedor de IA, con los datos personales parcialmente enmascarados.",
+        "label": "Leer la conversación de un contacto cuando queda en silencio",
+        "onBody": "Unos 12 minutos después de que un contacto deja de escribir, la IA lee los mensajes recientes y anota lo que busca el contacto. También calcula la puntuación.",
+        "offBody": "Las conversaciones no se leen. Las puntuaciones usan solo datos del contacto y cifras de interacción.",
+        "needsScoring": "Activa primero la puntuación de leads con IA.",
+        "stageLabel": "Sugerir etapas del ciclo de vida",
+        "stageBody": "Cuando la conversación muestra claramente que un contacto ha avanzado, la IA sugiere la siguiente etapa. Una persona la acepta o la descarta; nada se mueve por sí solo, y las etapas Ganado y Perdido nunca se sugieren.",
+        "masked": {
+          "title": "Cómo se enmascaran los datos personales",
+          "phone": "Los números de teléfono conservan solo el primer dígito y los dos últimos (+91 ***** ***10)",
+          "email": "Los correos electrónicos conservan la primera letra y el dominio (p***@acme.io)",
+          "card": "Los números de tarjeta, Aadhaar y PAN conservan solo su primer y último carácter",
+          "name": "El nombre del contacto, y un nombre que alguien da sobre sí mismo, conservan solo la primera y la última letra"
+        },
+        "rules": {
+          "title": "Qué se lee y qué no",
+          "quiet": "Solo los chats que han quedado en silencio, y solo las dos últimas semanas",
+          "enough": "Los contactos que solo tocaron botones se clasifican con una tabla de frases, sin llamada a la IA",
+          "person": "Una puntuación o etapa definida por una persona nunca se sobrescribe",
+          "closing": "Se excluyen bots, mensajes eliminados, chats de grupo y respuestas automáticas"
+        },
+        "confirm": {
+          "title": "¿Enviar conversaciones enmascaradas a un proveedor de IA?",
+          "body": "Una vez activado, los mensajes recientes de un contacto se envían a un proveedor de IA a través de OpenRouter cuando el chat queda en silencio. Antes se enmascaran parcialmente los teléfonos, correos, números de tarjeta y nombres, de modo que lo enviado no sirve para contactar a la persona. Puedes desactivarlo en cualquier momento.",
+          "yes": "Activar",
+          "no": "Cancelar"
+        }
       }
+    },
+    "insight": {
+      "title": "Lectura de la conversación",
+      "empty": "Aún no se ha leído. Un chat se lee unos 12 minutos después de que el contacto deja de escribir, o puedes leerlo ahora.",
+      "analyze": "Leer chat",
+      "analyzing": "Leyendo...",
+      "analyzingSlow": "Consultando a la IA. Esto puede tardar unos segundos.",
+      "sourceAi": "Leído por IA",
+      "sourceRules": "Clasificado por toques de botón",
+      "signals": "Lo que el contacto señaló",
+      "signal": {
+        "askedPrice": "Preguntó por el precio",
+        "readyToBuy": "Listo para comprar",
+        "objection": "Duda u objeción",
+        "urgent": "Urgente"
+      },
+      "readOn": "Leído el {date} a partir de {count, plural, one {# mensaje} other {# mensajes}}.",
+      "privacy": "Los nombres, teléfonos y correos del chat se enmascaran parcialmente antes de enviar nada a la IA.",
+      "intent": {
+        "ready_to_buy": "Listo para comprar",
+        "asking_price": "Pregunta por el precio",
+        "comparing": "Comparando opciones",
+        "registering": "Registrándose",
+        "needs_support": "Necesita soporte",
+        "post_purchase": "Posventa o servicio",
+        "browsing": "Solo mirando",
+        "not_interested": "No interesado",
+        "other": "Sin intención clara"
+      },
+      "suggestion": {
+        "title": "Etapa sugerida",
+        "move": "Mover de {from} a {to}",
+        "confidence": "{percent}% de certeza",
+        "accept": "Aceptar",
+        "dismiss": "Descartar",
+        "accepted": "Etapa cambiada a {stage}.",
+        "dismissed": "Sugerencia descartada.",
+        "noRight": "No tienes permiso para aceptar o descartar sugerencias.",
+        "couldNot": "No se pudo aplicar la sugerencia. Puede que ya se haya resuelto."
+      }
+    },
+    "suggestions": {
+      "title": "Sugerencias de etapa",
+      "hint": "Cambios que sugiere la IA tras leer las conversaciones. No cambia nada hasta que aceptes.",
+      "empty": "No hay sugerencias pendientes.",
+      "unnamed": "Contacto sin nombre",
+      "move": "Mover de {from} a {to}",
+      "confidence": "{percent}% de certeza",
+      "accept": "Aceptar",
+      "dismiss": "Descartar",
+      "acceptConfident": "Aceptar las {count} por encima del {percent}%",
+      "dismissAll": "Descartar todas",
+      "more": "Cargar más",
+      "doneAccept": "{count, plural, one {# etapa cambiada.} other {# etapas cambiadas.}}",
+      "doneDismiss": "{count, plural, one {# sugerencia descartada.} other {# sugerencias descartadas.}}",
+      "noRight": "Puedes ver las sugerencias pero no resolverlas: eso requiere el permiso lsc.stage.review.",
+      "couldNot": "{count, plural, one {# sugerencia no se pudo aplicar.} other {# sugerencias no se pudieron aplicar.}}"
     }
   }
 }

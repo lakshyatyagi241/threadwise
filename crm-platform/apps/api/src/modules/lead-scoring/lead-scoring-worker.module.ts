@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { LeadScoringConsumer } from './lead-scoring.consumer';
 import { LeadScoringModule } from './lead-scoring.module';
+import { LeadChatDigestSweeper } from './lead-chat-digest.sweeper';
 import { LeadScoringProcessor } from './lead-scoring.processor';
 import { LeadScoringRetentionService } from './lead-scoring-retention.service';
 
@@ -10,6 +11,11 @@ import { LeadScoringRetentionService } from './lead-scoring-retention.service';
  */
 @Module({
   imports: [LeadScoringModule],
-  providers: [LeadScoringProcessor, LeadScoringConsumer, LeadScoringRetentionService],
+  providers: [
+    LeadScoringProcessor,
+    LeadScoringConsumer,
+    LeadScoringRetentionService,
+    LeadChatDigestSweeper,
+  ],
 })
 export class LeadScoringWorkerModule {}

@@ -12,7 +12,7 @@ import { AGENT_IGNORE } from '@/lib/agent-marks';
 import { LinkedAppointments } from '@/features/appointments';
 import { ContactAttributionCard } from '@/features/lead-sources';
 import { CompanyLink } from '@/features/companies';
-import { ScoreCard } from '@/features/lead-scoring';
+import { ChatInsightCard, ScoreCard } from '@/features/lead-scoring';
 import { LinkedSalesDocs } from '@/features/sales-docs';
 import { LinkedInvoices } from '@/features/invoicing';
 import { LinkedTasks } from '@/features/tasks';
@@ -267,6 +267,17 @@ export function ContactDetail({ id }: { id: string }) {
           contact={c}
           className="col-span-2"
           onScored={() =>
+            Promise.all([
+              invalidateContacts(qc),
+              qc.invalidateQueries({ queryKey: KEYS.contact(id) }),
+            ])
+          }
+        />
+        {/* Only present in a workspace that has the chat reading on; every other workspace sees the page as before. */}
+        <ChatInsightCard
+          contactId={id}
+          className="col-span-2"
+          onChanged={() =>
             Promise.all([
               invalidateContacts(qc),
               qc.invalidateQueries({ queryKey: KEYS.contact(id) }),

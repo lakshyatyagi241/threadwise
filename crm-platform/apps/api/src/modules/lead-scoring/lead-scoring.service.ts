@@ -25,6 +25,8 @@ import {
 import { QUEUES } from '../../infra/queue/queues';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { AiKeyResolver, AiTokenMeter } from '../ai-keys-usage-admin';
+import { LeadChatDigestRepository } from './lead-chat-digest.repository';
+import { isChatDigestPilot } from './lead-chat-digest.rules';
 import { LeadScoringConfigService } from './lead-scoring-config.service';
 import { LeadScoringRepository, type RunWrite } from './lead-scoring.repository';
 import {
@@ -80,6 +82,7 @@ export class LeadScoringService {
   constructor(
     private readonly db: DatabaseService,
     private readonly repo: LeadScoringRepository,
+    private readonly chat: LeadChatDigestRepository,
     private readonly config: LeadScoringConfigService,
     private readonly keys: AiKeyResolver,
     private readonly meter: AiTokenMeter,
@@ -371,15 +374,21 @@ export class LeadScoringService {
   async getSettings(): Promise<LscSettings> {
     const orgId = RequestContextStore.orgId();
     const cfg = await this.config.get();
-    const { row, counts, totals } = await this.db.tx(async (tx) => ({
+    const { row, counts, totals, slug, pending } = await this.db.tx(async (tx) => ({
       row: await this.repo.getSettings(tx, orgId),
       counts: await this.repo.counts(tx, orgId),
       totals: await this.repo.totals(tx, orgId, 'month'),
+      slug: await this.chat.orgSlug(tx, orgId),
+      pending: await this.chat.pendingCount(tx, orgId),
     }));
     const key = await this.keys.resolve(orgId, AI_PROVIDER);
     return {
       enabled: row?.enabled ?? false,
       autoScore: row?.autoScore ?? true,
+      chatDigest: row?.chatDigest ?? false,
+      stageSuggestions: row?.stageSuggestions ?? false,
+      chatDigestAvailable: isChatDigestPilot(slug),
+      pendingSuggestions: pending,
       platformEnabled: cfg.platformEnabled,
       model: cfg.model,
       keySource: key.key ? key.source : 'none',
@@ -399,16 +408,37 @@ export class LeadScoringService {
         throw AppError.rowVersionConflict('Lead scoring settings');
       if (!before && input.rowVersion !== undefined)
         throw AppError.rowVersionConflict('Lead scoring settings');
+      const chatDigest = input.chatDigest ?? before?.chatDigest ?? false;
       const next = {
         enabled: input.enabled,
         autoScore: input.autoScore ?? before?.autoScore ?? true,
+        chatDigest,
+        // A stage is suggested from a reading of the chat, so it cannot be on without it.
+        stageSuggestions:
+          chatDigest && (input.stageSuggestions ?? before?.stageSuggestions ?? false),
       };
+      // Reading conversations sends masked chat text to the vendor, which is only offered to the pilot workspaces.
+      const turningOn =
+        (next.chatDigest && !before?.chatDigest) ||
+        (next.stageSuggestions && !before?.stageSuggestions);
+      if (turningOn && !isChatDigestPilot(await this.chat.orgSlug(tx, orgId))) {
+        throw new AppError(
+          ERROR_CODES.LSC_CHAT_DIGEST_UNAVAILABLE,
+          'Reading conversations is not available to this workspace yet.',
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        );
+      }
       if (!(await this.repo.saveSettings(tx, orgId, next, input.rowVersion))) {
         throw AppError.rowVersionConflict('Lead scoring settings');
       }
-      const was = { enabled: before?.enabled ?? false, autoScore: before?.autoScore ?? true };
+      const was = {
+        enabled: before?.enabled ?? false,
+        autoScore: before?.autoScore ?? true,
+        chatDigest: before?.chatDigest ?? false,
+        stageSuggestions: before?.stageSuggestions ?? false,
+      };
       const delta: Record<string, { old: unknown; new: unknown }> = {};
-      for (const k of ['enabled', 'autoScore'] as const) {
+      for (const k of ['enabled', 'autoScore', 'chatDigest', 'stageSuggestions'] as const) {
         if (was[k] !== next[k]) delta[k] = { old: was[k], new: next[k] };
       }
       await this.audit.record(tx, {

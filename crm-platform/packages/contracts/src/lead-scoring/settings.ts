@@ -6,6 +6,10 @@ export const updateLscSettingsSchema = z.object({
   enabled: z.boolean(),
   /** Score a contact when it is created or its details change. Off: only the backfill and the Score button. */
   autoScore: z.boolean().optional(),
+  /** Read a contact's conversation (masked) when it goes quiet, for the intent and the score. Pilot workspaces only. */
+  chatDigest: z.boolean().optional(),
+  /** Let the chat reading suggest a lifecycle stage for a person to accept. Needs `chatDigest`. */
+  stageSuggestions: z.boolean().optional(),
   /** Absent on the first save (no row yet). */
   rowVersion: z.number().int().positive().optional(),
 });
@@ -14,6 +18,12 @@ export type UpdateLscSettingsInput = z.infer<typeof updateLscSettingsSchema>;
 export interface LscSettings {
   enabled: boolean;
   autoScore: boolean;
+  chatDigest: boolean;
+  stageSuggestions: boolean;
+  /** Is reading conversations offered to this workspace at all (a pilot feature); when false the two switches above are ignored. */
+  chatDigestAvailable: boolean;
+  /** Stage suggestions waiting for a decision. */
+  pendingSuggestions: number;
   /** The platform switch: when false nothing is scored whatever `enabled` says. */
   platformEnabled: boolean;
   model: string;

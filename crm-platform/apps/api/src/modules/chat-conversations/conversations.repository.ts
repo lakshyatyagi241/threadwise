@@ -202,6 +202,25 @@ export class ConversationsRepository {
   }
 
   /**
+   * The contact on a thread was just heard from, or answered by a person: stamps `contacts.last_activity_at` (the list's "Last Activity"
+   * column, the segment filter and the lead scorer's recency fact). Raw SQL on purpose: it is a stamp, not an edit, so it emits no
+   * `contact.updated` (which would queue a score per message) and the contacts touch trigger leaves `row_version` alone for it. Moves
+   * forward only, and at most once a minute per contact, so a burst of messages is one write on the contact row.
+   */
+  async touchContactActivity(
+    tx: Tx,
+    orgId: number,
+    contactId: number | null,
+    at: Date | string,
+  ): Promise<void> {
+    if (contactId === null) return;
+    await tx.execute(sql`
+      UPDATE contacts SET last_activity_at = ${at}::timestamptz
+      WHERE org_id = ${orgId} AND id = ${contactId}
+        AND (last_activity_at IS NULL OR last_activity_at < ${at}::timestamptz - interval '1 minute')`);
+  }
+
+  /**
    * An inbound message lands on its thread: the next `seq`, the latest-message pointers, the activity stamps, one more unread, the
    * window and the wait. The caller holds the row lock. Returns the row as it is after, and whether it was reopened (and from what).
    *
@@ -251,6 +270,7 @@ export class ConversationsRepository {
           WHERE org_id = ${orgId} AND id = ${id}
           RETURNING ${COLUMNS}`);
     const row = toConversationRow(rowsOf(res)[0]!);
+    if (t.active) await this.touchContactActivity(tx, orgId, row.contactId, t.arrivedAt);
     const reopened = t.active && ['resolved', 'closed', 'snoozed'].includes(previous);
     return { row, reopenedFrom: reopened ? previous : null };
   }
@@ -341,7 +361,9 @@ export class ConversationsRepository {
         }
       WHERE org_id = ${orgId} AND id = ${id}
       RETURNING ${COLUMNS}`);
-    return { row: toConversationRow(rowsOf(res)[0]!), firstResponse };
+    const row = toConversationRow(rowsOf(res)[0]!);
+    if (t.humanReply) await this.touchContactActivity(tx, orgId, row.contactId, t.at);
+    return { row, firstResponse };
   }
 
   /** Unread becomes the number of customer messages after `seq` (so a message that arrived while the agent read stays unread). */

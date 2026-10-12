@@ -34,6 +34,29 @@ export interface ScoringFacts {
   dealsLost: number;
   /** Open pipeline in the deals' own currency units (minor units / 100), summed across currencies: a hint, not an accounting figure. */
   openDealValue: number;
+  /** Days since the contact entered its current lifecycle stage (since it was created when no stage date was ever stamped). */
+  daysInStage: number;
+  /** Engagement signals: counts and durations from broadcasts, link clicks and the chat. */
+  engagement: EngagementFacts;
+}
+
+/**
+ * How the contact has behaved lately, as numbers only: no message text, no template text, no link, no identifier. That is why adding
+ * them does not change what the workspace agreed to send to the vendor.
+ */
+export interface EngagementFacts {
+  /** Broadcast messages that reached the provider in the last 30 days. */
+  broadcastsReceived30d: number;
+  /** Of those, how many the contact opened (read receipt). */
+  broadcastsRead30d: number;
+  /** Tracked links the contact clicked in the last 30 days (distinct links, not clicks). */
+  linksClicked30d: number;
+  /** Messages the contact itself sent in the last 7 days (no bots, no staff, no imported history). */
+  messagesFromContact7d: number;
+  /** Hours since the contact last wrote to us on any thread; null when it never has. */
+  hoursSinceLastInbound: number | null;
+  /** Average minutes the contact took to answer something we sent, over the last 30 days; null when it never answered. */
+  avgReplyMinutes30d: number | null;
 }
 
 const FREE_MAIL = new Set([
@@ -89,6 +112,8 @@ export const SYSTEM_PROMPT = [
   'Use only the facts you are given; they are anonymised on purpose. Do not guess who the person is.',
   'Guidance: a won deal, an open deal with value, recent activity, a business email, a known company and a confirmed channel raise the score;',
   'an unsubscribed contact, a lost deal with nothing open, a long silence, or almost no information lower it. A contact with almost no facts is low, not zero.',
+  'The "engagement" object is behaviour: messages the contact sent lately, a short time since its last message, quick replies, broadcasts it opened and links it clicked are strong positive signals,',
+  'and broadcasts received but never opened, or a long time since its last message, are weak negative ones. Zeros there mean no recorded contact, not a bad contact; weigh them lightly when the rest of the facts are strong.',
   'Answer with one JSON object and nothing else: {"score": <integer 0-100>, "reasons": [<up to 4 short strings, each under 120 characters, the strongest signals first>]}.',
 ].join(' ');
 
@@ -104,27 +129,31 @@ export interface ParsedScore {
   reasons: string[];
 }
 
-/**
- * Reads the model's answer. Tolerates a code fence around the JSON and a score given as a string or a decimal; refuses anything that
- * is not a finite number, because writing a guessed score into a CRM is worse than writing none. The score is rounded and clamped.
- */
-export function parseScore(text: string): ParsedScore | null {
+/** The JSON object in a model's answer: plain, in a code fence, or inside chatter. Null when there is none. */
+export function extractJsonObject(text: string): unknown {
   let body = text.trim();
   const fenced = /^```(?:json)?\s*([\s\S]*?)\s*```$/i.exec(body);
   if (fenced) body = fenced[1]!.trim();
-  let json: unknown;
   try {
-    json = JSON.parse(body);
+    return JSON.parse(body);
   } catch {
     const start = body.indexOf('{');
     const end = body.lastIndexOf('}');
     if (start < 0 || end <= start) return null;
     try {
-      json = JSON.parse(body.slice(start, end + 1));
+      return JSON.parse(body.slice(start, end + 1));
     } catch {
       return null;
     }
   }
+}
+
+/**
+ * Reads the model's answer. Tolerates a code fence around the JSON and a score given as a string or a decimal; refuses anything that
+ * is not a finite number, because writing a guessed score into a CRM is worse than writing none. The score is rounded and clamped.
+ */
+export function parseScore(text: string): ParsedScore | null {
+  const json = extractJsonObject(text);
   if (!json || typeof json !== 'object') return null;
   const raw = (json as { score?: unknown }).score;
   const n = typeof raw === 'string' ? Number(raw.trim()) : raw;

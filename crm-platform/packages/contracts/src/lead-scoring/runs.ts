@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const LSC_RUN_STATUSES = ['ok', 'kept', 'failed', 'skipped'] as const;
 export type LscRunStatus = (typeof LSC_RUN_STATUSES)[number];
-export const LSC_RUN_TRIGGERS = ['created', 'updated', 'manual', 'backfill'] as const;
+export const LSC_RUN_TRIGGERS = ['created', 'updated', 'manual', 'backfill', 'chat'] as const;
 export type LscRunTrigger = (typeof LSC_RUN_TRIGGERS)[number];
 
 export const lscRunsQuerySchema = z.object({

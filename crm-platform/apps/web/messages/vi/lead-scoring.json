@@ -65,7 +65,10 @@
       "planLimit": "Hạn mức AI của gói bạn đã dùng hết.",
       "rateLimited": "Quá nhiều yêu cầu. Hãy đợi giây lát rồi thử lại.",
       "validation": "Một số giá trị không hợp lệ.",
-      "unexpected": "Đã xảy ra lỗi. Hãy thử lại."
+      "unexpected": "Đã xảy ra lỗi. Hãy thử lại.",
+      "chatUnavailable": "Không gian làm việc này không có tính năng đọc hội thoại.",
+      "notEnoughChat": "Liên hệ này chưa nhắn đủ nhiều để có thể đọc.",
+      "suggestionGone": "Đề xuất đó đã được xử lý hoặc đã bị thay thế."
     },
     "scoreErrors": {
       "network": "Không thể kết nối tới máy chủ nên liên hệ chưa được chấm điểm. Hãy kiểm tra kết nối và thử lại.",
@@ -82,7 +85,10 @@
       "validation": "Yêu cầu không hợp lệ.",
       "unexpected": "Đã xảy ra lỗi và liên hệ chưa được chấm điểm. Hãy thử lại.",
       "openSettings": "Mở cài đặt chấm điểm khách hàng tiềm năng bằng AI",
-      "openKeys": "Mở khóa AI"
+      "openKeys": "Mở khóa AI",
+      "chatUnavailable": "Tính năng đọc hội thoại chưa được bật cho không gian làm việc này. Đây là tính năng thử nghiệm cần được bật trong phần cài đặt chấm điểm khách hàng tiềm năng bằng AI.",
+      "notEnoughChat": "Liên hệ này chưa nhắn đủ nhiều: chỉ có lời chào, biểu tượng cảm xúc hoặc tin trả lời tự động. Hãy thử lại sau khi họ nhắn thêm.",
+      "suggestionGone": "Đề xuất đó đã được xử lý hoặc đã bị thay bằng đề xuất mới hơn, nên không có gì thay đổi."
     },
     "field": {
       "label": "Điểm khách hàng tiềm năng",
@@ -128,7 +134,8 @@
         "created": "Liên hệ được tạo",
         "updated": "Liên hệ thay đổi",
         "manual": "Nút chấm điểm",
-        "backfill": "Chấm điểm các liên hệ chưa có điểm"
+        "backfill": "Chấm điểm các liên hệ chưa có điểm",
+        "chat": "Cuộc trò chuyện đã im ắng"
       },
       "tokensDetail": "{prompt} vào, {completion} ra",
       "costSource": {
@@ -183,13 +190,16 @@
         "tags": "Tên thẻ",
         "deals": "Số giao dịch đang mở, đã thắng và đã thua",
         "activity": "Liên hệ hoạt động gần đây đến mức nào",
-        "company": "Tên công ty"
+        "company": "Tên công ty",
+        "engagement": "Mức độ tương tác gần đây của liên hệ: số tin nhắn của họ, số tin phát sóng đã mở, số liên kết đã nhấp và tốc độ phản hồi (chỉ là con số)"
       },
       "notSent": {
         "title": "Những gì không bao giờ được gửi",
         "name": "Tên của liên hệ",
         "email": "Địa chỉ email",
-        "phone": "Số điện thoại"
+        "phone": "Số điện thoại",
+        "messages": "Nội dung của bất kỳ tin nhắn nào",
+        "messagesChat": "Nội dung của bất kỳ tin nhắn nào, trừ khi bạn bật tính năng đọc hội thoại (bên dưới)"
       },
       "manualRule": "Điểm do một người nhập không bao giờ bị ghi đè. AI chỉ điền các điểm còn trống và làm mới những điểm do chính nó ghi.",
       "auto": {
@@ -199,7 +209,7 @@
       },
       "confirm": {
         "title": "Gửi thông tin liên hệ đã ẩn danh tới nhà cung cấp AI?",
-        "body": "Sau khi bật, các mô tả ngắn về liên hệ của bạn (giai đoạn, nguồn, thẻ, số giao dịch, hoạt động và tên công ty) được gửi tới nhà cung cấp AI qua OpenRouter. Tên, địa chỉ email và số điện thoại không bao giờ được gửi. Bạn có thể tắt bất cứ lúc nào.",
+        "body": "Khi bật, các mô tả ngắn về liên hệ của bạn (giai đoạn, nguồn, thẻ, số giao dịch, hoạt động, các con số tương tác như tin nhắn, tin phát sóng đã mở và liên kết đã nhấp, cùng tên công ty) sẽ được gửi đến nhà cung cấp AI thông qua OpenRouter. Tên, địa chỉ email, số điện thoại và nội dung tin nhắn không bao giờ được gửi. Bạn có thể tắt bất cứ lúc nào.",
         "yes": "Bật",
         "no": "Hủy"
       },
@@ -242,7 +252,94 @@
         },
         "failed": "Lần thử thất bại",
         "platformPart": "Trong tổng số, phần dùng khóa của nền tảng"
+      },
+      "chat": {
+        "title": "Đọc hội thoại (thử nghiệm)",
+        "hint": "Tắt cho đến khi bạn chọn bật, vì các tin nhắn gần đây của liên hệ sẽ được gửi đến nhà cung cấp AI, với thông tin cá nhân được che một phần.",
+        "label": "Đọc hội thoại của liên hệ khi cuộc trò chuyện im ắng",
+        "onBody": "Khoảng 12 phút sau khi liên hệ ngừng nhắn, AI sẽ đọc các tin nhắn gần đây và ghi chú điều liên hệ đang tìm kiếm. AI cũng đưa ra điểm số.",
+        "offBody": "Hội thoại không được đọc. Điểm số chỉ dùng thông tin liên hệ và số liệu tương tác.",
+        "needsScoring": "Hãy bật chấm điểm khách hàng tiềm năng bằng AI trước.",
+        "stageLabel": "Đề xuất giai đoạn vòng đời",
+        "stageBody": "Khi hội thoại cho thấy rõ liên hệ đã tiến triển, AI sẽ đề xuất giai đoạn tiếp theo. Một người sẽ chấp nhận hoặc bỏ qua; không có gì tự động chuyển, và các giai đoạn Thắng và Thua không bao giờ được đề xuất.",
+        "masked": {
+          "title": "Cách che dữ liệu cá nhân",
+          "phone": "Số điện thoại chỉ giữ lại chữ số đầu và hai chữ số cuối (+91 ***** ***10)",
+          "email": "Địa chỉ email chỉ giữ lại chữ cái đầu và tên miền (p***@acme.io)",
+          "card": "Số thẻ, Aadhaar và PAN chỉ giữ lại ký tự đầu và cuối",
+          "name": "Tên của liên hệ, và tên mà ai đó tự giới thiệu, chỉ giữ lại chữ cái đầu và cuối"
+        },
+        "rules": {
+          "title": "Những gì được đọc và không được đọc",
+          "quiet": "Chỉ các cuộc trò chuyện đã im ắng, và chỉ trong hai tuần gần nhất",
+          "enough": "Liên hệ chỉ bấm nút sẽ được đối chiếu bằng bảng cụm từ, không gọi AI",
+          "person": "Điểm số hoặc giai đoạn do một người đặt sẽ không bao giờ bị ghi đè",
+          "closing": "Bot, tin nhắn đã xóa, trò chuyện nhóm và tin trả lời tự động đều bị loại ra"
+        },
+        "confirm": {
+          "title": "Gửi hội thoại đã che đến nhà cung cấp AI?",
+          "body": "Sau khi bật, các tin nhắn gần đây của liên hệ sẽ được gửi đến nhà cung cấp AI qua OpenRouter khi cuộc trò chuyện im ắng. Số điện thoại, email, số thẻ và tên được che một phần trước, nên dữ liệu gửi đi không thể dùng để liên lạc với người đó. Bạn có thể tắt bất cứ lúc nào.",
+          "yes": "Bật",
+          "no": "Hủy"
+        }
       }
+    },
+    "insight": {
+      "title": "Đọc hội thoại",
+      "empty": "Chưa được đọc. Cuộc trò chuyện được đọc khoảng 12 phút sau khi liên hệ ngừng nhắn, hoặc bạn có thể đọc ngay bây giờ.",
+      "analyze": "Đọc cuộc trò chuyện",
+      "analyzing": "Đang đọc...",
+      "analyzingSlow": "Đang hỏi AI. Việc này có thể mất vài giây.",
+      "sourceAi": "Do AI đọc",
+      "sourceRules": "Đối chiếu từ các lần bấm nút",
+      "signals": "Tín hiệu từ liên hệ",
+      "signal": {
+        "askedPrice": "Hỏi về giá",
+        "readyToBuy": "Sẵn sàng mua",
+        "objection": "Do dự hoặc phản đối",
+        "urgent": "Khẩn cấp"
+      },
+      "readOn": "Đọc vào {date} từ {count, plural, other {# tin nhắn}}.",
+      "privacy": "Tên, số điện thoại và email trong cuộc trò chuyện được che một phần trước khi gửi bất cứ thứ gì đến AI.",
+      "intent": {
+        "ready_to_buy": "Sẵn sàng mua",
+        "asking_price": "Hỏi về giá",
+        "comparing": "Đang so sánh các lựa chọn",
+        "registering": "Đang đăng ký",
+        "needs_support": "Cần hỗ trợ",
+        "post_purchase": "Hậu mãi hoặc dịch vụ",
+        "browsing": "Chỉ xem qua",
+        "not_interested": "Không quan tâm",
+        "other": "Không có ý định rõ ràng"
+      },
+      "suggestion": {
+        "title": "Giai đoạn được đề xuất",
+        "move": "Chuyển từ {from} sang {to}",
+        "confidence": "Chắc chắn {percent}%",
+        "accept": "Chấp nhận",
+        "dismiss": "Bỏ qua",
+        "accepted": "Đã đổi giai đoạn thành {stage}.",
+        "dismissed": "Đã bỏ qua đề xuất.",
+        "noRight": "Bạn không có quyền chấp nhận hoặc bỏ qua đề xuất.",
+        "couldNot": "Không thể áp dụng đề xuất. Có thể nó đã được xử lý rồi."
+      }
+    },
+    "suggestions": {
+      "title": "Đề xuất giai đoạn",
+      "hint": "Các thay đổi AI đề xuất sau khi đọc hội thoại. Không có gì thay đổi cho đến khi bạn chấp nhận.",
+      "empty": "Không có đề xuất nào đang chờ.",
+      "unnamed": "Liên hệ chưa có tên",
+      "move": "Chuyển từ {from} sang {to}",
+      "confidence": "Chắc chắn {percent}%",
+      "accept": "Chấp nhận",
+      "dismiss": "Bỏ qua",
+      "acceptConfident": "Chấp nhận {count} đề xuất trên {percent}%",
+      "dismissAll": "Bỏ qua tất cả",
+      "more": "Tải thêm",
+      "doneAccept": "{count, plural, other {Đã đổi # giai đoạn.}}",
+      "doneDismiss": "{count, plural, other {Đã bỏ qua # đề xuất.}}",
+      "noRight": "Bạn có thể xem các đề xuất nhưng không thể quyết định: cần có quyền lsc.stage.review.",
+      "couldNot": "{count, plural, other {Không thể áp dụng # đề xuất.}}"
     }
   }
 }

@@ -12,4 +12,10 @@ export const LSC_ERROR_CODES = {
   LSC_PROVIDER_FAILED: 'LSC_PROVIDER_FAILED',
   /** The contact has a score a person typed, so the scorer never overwrites it. 409. */
   LSC_MANUAL_SCORE: 'LSC_MANUAL_SCORE',
+  /** Reading conversations is not available to this workspace (a pilot feature) or it has not switched it on. 422. */
+  LSC_CHAT_DIGEST_UNAVAILABLE: 'LSC_CHAT_DIGEST_UNAVAILABLE',
+  /** The contact has not said enough for the chat to be read yet (no messages, or only greetings and button taps). 422. */
+  LSC_NOT_ENOUGH_CHAT: 'LSC_NOT_ENOUGH_CHAT',
+  /** The stage suggestion was already decided, replaced or has expired. 409. */
+  LSC_SUGGESTION_GONE: 'LSC_SUGGESTION_GONE',
 } as const;

@@ -3,6 +3,9 @@ import { LEAD_SCORING_AI_PORT } from '../../infra/providers/lead-scoring/lead-sc
 import { FixtureLeadScoringAiAdapter } from '../../infra/providers/lead-scoring/fixture-lead-scoring-ai.adapter';
 import { OpenRouterLeadScoringAiAdapter } from '../../infra/providers/lead-scoring/openrouter-lead-scoring-ai.adapter';
 import { AiKeysUsageAdminModule } from '../ai-keys-usage-admin';
+import { CrmModule } from '../crm';
+import { LeadChatDigestRepository } from './lead-chat-digest.repository';
+import { LeadChatDigestService } from './lead-chat-digest.service';
 import { LeadScoringPlatformController } from './lead-scoring-platform.controller';
 import { LeadScoringPlatformService } from './lead-scoring-platform.service';
 import { LeadScoringConfigService } from './lead-scoring-config.service';
@@ -32,15 +35,22 @@ export const leadScoringAiProvider = {
  * consumer, log retention) are in LeadScoringWorkerModule. Registered in app.module.ts.
  */
 @Module({
-  imports: [AiKeysUsageAdminModule],
+  imports: [AiKeysUsageAdminModule, CrmModule],
   controllers: [LeadScoringController, LeadScoringPlatformController],
   providers: [
     leadScoringAiProvider,
     LeadScoringConfigService,
     LeadScoringRepository,
+    LeadChatDigestRepository,
+    LeadChatDigestService,
     LeadScoringService,
     LeadScoringPlatformService,
   ],
-  exports: [LeadScoringService, LeadScoringConfigService, LeadScoringRepository],
+  exports: [
+    LeadScoringService,
+    LeadChatDigestService,
+    LeadScoringConfigService,
+    LeadScoringRepository,
+  ],
 })
 export class LeadScoringModule {}
