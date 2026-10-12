@@ -309,6 +309,11 @@
         "label": "Attribution automatique",
         "description": "Attribuez automatiquement les nouvelles conversations au bon agent, à tour de rôle ou selon des règles.",
         "keywords": "routage, tourniquet, attribuer, agents, règles de boîte, répartir, propriétaire"
+      },
+      "message-logs": {
+        "label": "Journaux des messages",
+        "description": "Exportez le journal de livraison de vos messages, jusqu'à un an en arrière, sous forme de fichier envoyé à votre e-mail.",
+        "keywords": "exporter, journal de livraison, historique, archive, csv, messages"
       }
     }
   }

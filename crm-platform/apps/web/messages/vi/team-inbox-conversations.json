@@ -1,7 +1,8 @@
 {
   "team-inbox-conversations": {
     "nav": {
-      "inbox": "Hộp thư"
+      "inbox": "Hộp thư",
+      "messageLogs": "Nhật ký tin nhắn"
     },
     "common": {
       "dismiss": "Bỏ qua"
@@ -131,7 +132,10 @@
       "generic": "Đã xảy ra lỗi. Thử lại.",
       "genericWithId": "Đã xảy ra lỗi. Thử lại. Mã tham chiếu: {id}",
       "templateNotSendable": "Mẫu này không thể gửi vào cuộc trò chuyện này. Chọn mẫu khác.",
-      "groupSendUnavailable": "Hiện chưa hỗ trợ gửi tin đến nhóm WhatsApp. Hãy trả lời từ ứng dụng WhatsApp Business."
+      "groupSendUnavailable": "Hiện chưa hỗ trợ gửi tin đến nhóm WhatsApp. Hãy trả lời từ ứng dụng WhatsApp Business.",
+      "logRange": "Chọn ngày trong vòng một năm qua, ngày bắt đầu phải trước ngày kết thúc và không ở tương lai.",
+      "logBusy": "Một bản xuất đang được chuẩn bị. Hãy chờ email của bản đó rồi mới yêu cầu bản khác.",
+      "logNotReady": "Bản xuất này chưa sẵn sàng hoặc đã hết hạn. Hãy yêu cầu lại."
     },
     "bubble": {
       "kind": {
@@ -196,7 +200,8 @@
         "takeBack": "Nhấn để thu hồi cảm xúc của bạn",
         "takeBackLabel": "Cảm xúc của bạn {emoji}. Thu hồi",
         "failed": "Chưa gửi được cảm xúc này"
-      }
+      },
+      "deliveryLog": "Nhật ký gửi"
     },
     "media": {
       "openImage": "Mở hình ảnh {name}",
@@ -554,6 +559,80 @@
         "named_variables": "Dùng biến có tên, hiện hộp thư chưa hỗ trợ."
       },
       "hasMore": "Đang hiển thị {count} mẫu đầu tiên. Tìm theo tên hoặc nội dung để xem các mẫu khác."
+    },
+    "log": {
+      "title": "Nhật ký gửi",
+      "close": "Đóng",
+      "loading": "Đang tải nhật ký",
+      "tryAgain": "Thử lại",
+      "statusNow": "Trạng thái hiện tại",
+      "createdAt": "Thời điểm tạo",
+      "providerId": "ID tin nhắn của nhà cung cấp",
+      "failedNoReason": "Tin nhắn này chưa được gửi đến nơi.",
+      "expired": "Tin nhắn này đã quá {days} ngày. Nhật ký của nó không còn được lưu.",
+      "empty": "Không có nhật ký nào được ghi cho tin nhắn này. Các tin nhắn gửi trước khi bắt đầu lưu nhật ký sẽ không có.",
+      "archived": "Các mục cũ hơn {days} ngày được đọc từ kho lưu trữ.",
+      "exportLink": "Xuất nhật ký tin nhắn",
+      "source": {
+        "system": "Hệ thống của chúng tôi",
+        "provider": "Biên nhận từ nhà cung cấp"
+      },
+      "event": {
+        "queued": "Đã xếp hàng chờ gửi",
+        "attempt": "Lần gửi thứ {attempt}",
+        "accepted": "Nhà cung cấp đã tiếp nhận",
+        "sentReceipt": "Nhà cung cấp xác nhận đã gửi",
+        "delivered": "Đã đến điện thoại của khách hàng",
+        "read": "Khách hàng đã đọc",
+        "failedReceipt": "Nhà cung cấp báo chưa gửi đến nơi",
+        "failedSend": "Không thể gửi",
+        "retryAuto": "Sẽ tự động thử lại",
+        "retryManual": "Một đồng nghiệp đã nhấn Thử lại"
+      },
+      "notApplied": "Báo cáo này đến muộn hoặc thuộc về lần gửi trước đó. Nó không làm thay đổi tin nhắn.",
+      "replayed": "Không có yêu cầu mới nào được gửi: đã dùng lại phản hồi trước đó của nhà cung cấp.",
+      "resent": "Đã gửi lại cho nhà cung cấp dưới dạng tin nhắn mới."
+    },
+    "logs": {
+      "back": "Quay lại hộp thư",
+      "title": "Nhật ký tin nhắn",
+      "intro": "Mỗi tin nhắn đều có nhật ký gửi: {hot} ngày trong hộp thư, sau đó nằm trong kho lưu trữ đến {days} ngày kể từ khi sự việc xảy ra. Hãy yêu cầu xuất theo khoảng ngày; bản xuất được chuẩn bị ở chế độ nền và gửi đến email của bạn khi sẵn sàng.",
+      "requested": "Đã yêu cầu xuất. Chúng tôi sẽ gửi email cho bạn khi bản xuất sẵn sàng.",
+      "requestedTo": "Đã yêu cầu xuất. Chúng tôi sẽ gửi email đến {email} khi bản xuất sẵn sàng.",
+      "form": {
+        "title": "Yêu cầu xuất",
+        "from": "Từ",
+        "to": "Đến",
+        "status": "Chỉ tin nhắn hiện có trạng thái",
+        "anyStatus": "Mọi trạng thái",
+        "hint": "Ngày tính theo UTC. Bạn có thể lùi lại tối đa {days} ngày. Mỗi lần chỉ chuẩn bị một bản xuất.",
+        "submit": "Yêu cầu xuất",
+        "sending": "Đang yêu cầu"
+      },
+      "problem": {
+        "order": "Ngày bắt đầu không được sau ngày kết thúc.",
+        "future": "Ngày kết thúc không được ở tương lai.",
+        "tooOld": "Nhật ký được lưu trong {days} ngày. Hãy chọn ngày bắt đầu muộn hơn.",
+        "invalid": "Hãy nhập cả hai ngày."
+      },
+      "history": {
+        "title": "Các bản xuất của bạn",
+        "loading": "Đang tải các bản xuất",
+        "tryAgain": "Thử lại",
+        "empty": "Chưa có bản xuất nào.",
+        "onlyStatus": "Chỉ tin nhắn {status}",
+        "requestedAt": "Yêu cầu lúc {date}",
+        "lines": "{count, plural, other {# dòng}}",
+        "until": "Có sẵn đến {date}",
+        "download": "Tải xuống",
+        "status": {
+          "queued": "Đang chờ",
+          "running": "Đang chuẩn bị",
+          "ready": "Sẵn sàng",
+          "failed": "Thất bại",
+          "expired": "Hết hạn"
+        }
+      }
     }
   }
 }

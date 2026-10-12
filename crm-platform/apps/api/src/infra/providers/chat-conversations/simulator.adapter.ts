@@ -32,10 +32,12 @@ import {
  *   /flaky  a retryable error on the first two attempts, success on the third: the queue's backoff and retry path.
  *   /slow   the provider takes `slowMs` (10 s) to answer: timeouts and the in-flight state.
  *   /ooo    the receipts arrive out of order (read, then delivered, then sent): the status must never move backwards.
+ *   /bounce the provider ACCEPTS the message (a message id comes back) and then reports it failed in a receipt, as Meta does with
+ *           error 131049 (ECOSYSTEM_ENGAGEMENT_BLOCKED): the message ends `failed` after having been `sent`, and every Retry is a new send.
  */
-export type SimulatorFault = 'fail' | 'flaky' | 'slow' | 'ooo';
+export type SimulatorFault = 'fail' | 'flaky' | 'slow' | 'ooo' | 'bounce';
 
-const OUTBOUND_FAULT = /^\/(fail|flaky|slow|ooo)(?:\s|$)/i;
+const OUTBOUND_FAULT = /^\/(fail|flaky|slow|ooo|bounce)(?:\s|$)/i;
 const INBOUND_DUP = /^\/dup(?:\s+|$)/i;
 
 export function outboundFault(text: string | undefined): SimulatorFault | null {
@@ -176,6 +178,23 @@ export class SimulatorAdapter implements ChannelAdapter {
     }
     if (fault === 'slow') await sleep(this.slowMs);
 
+    if (fault === 'bounce') {
+      // A new id every time: for the provider each send of a Retry is a new message.
+      return {
+        providerMessageId: `sim.${randomUUID().replace(/-/g, '').slice(0, 24)}`,
+        acceptedAt: new Date(),
+        plannedReceipts: [
+          { status: 'sent', delayMs: 0 },
+          {
+            status: 'failed',
+            delayMs: 100,
+            errorCode: 'ECOSYSTEM_ENGAGEMENT_BLOCKED',
+            errorMessage:
+              'The simulated provider did not deliver this message to keep the customer experience healthy. (#131049)',
+          },
+        ],
+      };
+    }
     // Derived from the client reference, so a repeated send of one message gets the same id, like a provider that dedupes.
     const providerMessageId = `sim.${createHash('sha1').update(`${channel.uuid}:${envelope.clientReference}`).digest('hex').slice(0, 24)}`;
     return {

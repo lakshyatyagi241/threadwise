@@ -1,7 +1,8 @@
 {
   "team-inbox-conversations": {
     "nav": {
-      "inbox": "Caixa de entrada"
+      "inbox": "Caixa de entrada",
+      "messageLogs": "Registros de mensagens"
     },
     "common": {
       "dismiss": "Dispensar"
@@ -131,7 +132,10 @@
       "generic": "Algo deu errado. Tente novamente.",
       "genericWithId": "Algo deu errado. Tente novamente. Referência: {id}",
       "templateNotSendable": "Este modelo não pode ser enviado nesta conversa. Escolha outro.",
-      "groupSendUnavailable": "O envio para grupos do WhatsApp ainda não está disponível. Responda pelo aplicativo WhatsApp Business."
+      "groupSendUnavailable": "O envio para grupos do WhatsApp ainda não está disponível. Responda pelo aplicativo WhatsApp Business.",
+      "logRange": "Escolha datas dentro do último ano, com o início antes do fim e sem datas futuras.",
+      "logBusy": "Uma exportação já está sendo preparada. Aguarde o e-mail dela e depois solicite outra.",
+      "logNotReady": "Esta exportação não está pronta ou expirou. Solicite-a novamente."
     },
     "bubble": {
       "kind": {
@@ -196,7 +200,8 @@
         "takeBack": "Toque para desfazer sua reação",
         "takeBackLabel": "Sua reação {emoji}. Desfazer",
         "failed": "Esta reação não foi enviada"
-      }
+      },
+      "deliveryLog": "Registro de entrega"
     },
     "media": {
       "openImage": "Abrir imagem {name}",
@@ -554,6 +559,80 @@
         "named_variables": "Usa variáveis nomeadas, que a caixa de entrada ainda não suporta."
       },
       "hasMore": "Mostrando os primeiros {count} modelos. Pesquise por nome ou texto para encontrar os demais."
+    },
+    "log": {
+      "title": "Registro de entrega",
+      "close": "Fechar",
+      "loading": "Carregando o registro",
+      "tryAgain": "Tentar novamente",
+      "statusNow": "Status atual",
+      "createdAt": "Criado",
+      "providerId": "ID da mensagem do provedor",
+      "failedNoReason": "Esta mensagem não foi entregue.",
+      "expired": "Esta mensagem tem mais de {days} dias. O registro dela não é mais mantido.",
+      "empty": "Nenhum registro foi gravado para esta mensagem. Mensagens enviadas antes de os registros serem mantidos não têm nenhum.",
+      "archived": "As entradas com mais de {days} dias são lidas do arquivo.",
+      "exportLink": "Exportar registros de mensagens",
+      "source": {
+        "system": "Nosso sistema",
+        "provider": "Recibo do provedor"
+      },
+      "event": {
+        "queued": "Na fila para envio",
+        "attempt": "Tentativa de envio {attempt}",
+        "accepted": "Aceita pelo provedor",
+        "sentReceipt": "O provedor confirmou o envio",
+        "delivered": "Entregue ao celular do cliente",
+        "read": "Lida pelo cliente",
+        "failedReceipt": "O provedor informou que não foi entregue",
+        "failedSend": "Não foi possível enviar",
+        "retryAuto": "Será tentado novamente de forma automática",
+        "retryManual": "Um colega pressionou Tentar novamente"
+      },
+      "notApplied": "Este relatório chegou atrasado ou refere-se a um envio anterior. Ele não alterou a mensagem.",
+      "replayed": "Nenhuma nova solicitação foi feita: a resposta anterior do provedor foi reutilizada.",
+      "resent": "Enviada novamente ao provedor como uma nova mensagem."
+    },
+    "logs": {
+      "back": "Voltar para a caixa de entrada",
+      "title": "Registros de mensagens",
+      "intro": "Cada mensagem mantém seu registro de entrega: {hot} dias na caixa de entrada e depois no arquivo até {days} dias após ocorrer. Solicite a exportação de um intervalo de datas; ela é preparada em segundo plano e enviada por e-mail quando estiver pronta.",
+      "requested": "Exportação solicitada. Enviaremos um e-mail quando estiver pronta.",
+      "requestedTo": "Exportação solicitada. Enviaremos um e-mail para {email} quando estiver pronta.",
+      "form": {
+        "title": "Solicitar uma exportação",
+        "from": "De",
+        "to": "Até",
+        "status": "Somente mensagens que agora estão",
+        "anyStatus": "Qualquer status",
+        "hint": "As datas estão em UTC. Você pode voltar até {days} dias. Uma exportação é preparada por vez.",
+        "submit": "Solicitar exportação",
+        "sending": "Solicitando"
+      },
+      "problem": {
+        "order": "A data de início não pode ser posterior à data de fim.",
+        "future": "A data de fim não pode estar no futuro.",
+        "tooOld": "Os registros são mantidos por {days} dias. Escolha uma data de início mais recente.",
+        "invalid": "Informe as duas datas."
+      },
+      "history": {
+        "title": "Suas exportações",
+        "loading": "Carregando exportações",
+        "tryAgain": "Tentar novamente",
+        "empty": "Nenhuma exportação ainda.",
+        "onlyStatus": "Somente mensagens {status}",
+        "requestedAt": "Solicitada {date}",
+        "lines": "{count, plural, one {# linha} many {# linhas} other {# linhas}}",
+        "until": "Disponível até {date}",
+        "download": "Baixar",
+        "status": {
+          "queued": "Aguardando",
+          "running": "Preparando",
+          "ready": "Pronta",
+          "failed": "Falhou",
+          "expired": "Expirada"
+        }
+      }
     }
   }
 }

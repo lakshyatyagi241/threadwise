@@ -309,6 +309,11 @@
         "label": "Asignación automática",
         "description": "Asigna las conversaciones nuevas al agente adecuado automáticamente, por turnos o según reglas.",
         "keywords": "enrutamiento, round robin, asignar, agentes, reglas de la bandeja, distribuir, responsable"
+      },
+      "message-logs": {
+        "label": "Registros de mensajes",
+        "description": "Exporta el registro de entrega de tus mensajes, hasta un año atrás, como un archivo enviado a tu correo.",
+        "keywords": "exportar, registro de entrega, historial, archivo, csv, mensajes"
       }
     }
   }
