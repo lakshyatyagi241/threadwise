@@ -1,4 +1,5 @@
 import type {
+  InboxContactSummary,
   InboxConversationDetail,
   ConversationNote,
   ConversationSummary,
@@ -36,6 +37,30 @@ export function summary(over: Partial<ConversationSummary> = {}): ConversationSu
     createdAt: '2026-10-01T10:00:00.000Z',
     updatedAt: '2026-10-02T10:00:00.000Z',
     rowVersion: 1,
+    ...over,
+  };
+}
+
+/** The linked contact as the side panel shows it, never scored unless a test says so. */
+export function contactSummary(over: Partial<InboxContactSummary> = {}): InboxContactSummary {
+  return {
+    id: uuid(700),
+    displayId: null,
+    name: 'Asha Verma',
+    email: 'asha@example.test',
+    phone: '+919876543210',
+    lifecycleStage: 'lead',
+    status: null,
+    ownerName: null,
+    source: null,
+    isUnsubscribed: false,
+    whatsappSubscriptionStatus: null,
+    leadScore: null,
+    leadScoreSource: null,
+    leadScoreReasons: null,
+    leadScoredAt: null,
+    leadScoreModel: null,
+    createdAt: '2026-10-01T10:00:00.000Z',
     ...over,
   };
 }

@@ -437,6 +437,32 @@ describe('the conversation header', () => {
     expect(JSON.stringify(d)).not.toMatch(/"id":\d+/);
   });
 
+  it('carries the contact lead score, who set it and why, so the side panel can show it (empty until the contact is scored)', async () => {
+    const unscored = await api.as(t.admin).get(`/v2/inbox/conversations/${conv.uuid}`);
+    expect(unscored.body.contactSummary).toMatchObject({
+      leadScore: null,
+      leadScoreSource: null,
+      leadScoreReasons: null,
+      leadScoredAt: null,
+      leadScoreModel: null,
+    });
+    await h.owner.query(
+      `UPDATE contacts SET lead_score = 81, lead_score_source = 'ai', lead_score_reasons = '["Asked about price"]'::jsonb,
+         lead_scored_at = now(), lead_score_model = 'openai/gpt-6-luna-pro' WHERE uuid = $1`,
+      [contactUuid],
+    );
+    const scored = await api.as(t.admin).get(`/v2/inbox/conversations/${conv.uuid}`);
+    expect(scored.body.contactSummary).toMatchObject({
+      leadScore: 81,
+      leadScoreSource: 'ai',
+      leadScoreReasons: ['Asked about price'],
+      leadScoreModel: 'openai/gpt-6-luna-pro',
+    });
+    expect(new Date(scored.body.contactSummary.leadScoredAt).getTime()).toBeGreaterThan(
+      Date.now() - 60_000,
+    );
+  });
+
   it('a caller who may not read contacts (an agent without that right) gets the conversation without the contact summary', async () => {
     const res = await api.as(agent.token).get(`/v2/inbox/conversations/${conv.uuid}`);
     expect(res.status).toBe(200);

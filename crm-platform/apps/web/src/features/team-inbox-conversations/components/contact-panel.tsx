@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { Badge, Button, Select, Spinner, Tabs, Textarea, cn } from '@crm/ui';
 import {
   NOTE_BODY_MAX,
@@ -11,8 +12,9 @@ import {
   type InboxConversationDetail,
 } from '@crm/contracts';
 import { LinkedAppointments } from '@/features/appointments';
+import { ChatInsightCard, ScoreCard } from '@/features/lead-scoring';
 import { LinkedTasks } from '@/features/tasks';
-import { useAssignees, useTimeline } from '../api/hooks';
+import { KEYS, useAssignees, useTimeline } from '../api/hooks';
 import { eventLabel } from '../lib/timeline';
 import { fullStamp, listTime } from '../lib/time';
 import { CheckCircleIcon, ExternalIcon, NoteIcon, TrashIcon, UserPlusIcon } from './icons';
@@ -39,9 +41,9 @@ export interface ContactPanelProps {
 }
 
 /**
- * The right pane: who the customer is (the contact summary, linked to their record), who has the conversation, their other
- * conversations, and tabs for the internal notes and the timeline. The tasks and bookings of that contact are the same panels
- * the contact page shows.
+ * The right pane: who the customer is (the contact summary, linked to their record), the contact's AI lead score and what the AI
+ * made of the chat, who has the conversation, their other conversations, and tabs for the internal notes and the timeline. The
+ * score, the tasks and the bookings of that contact are the same panels the contact page shows.
  */
 export function ContactPanel(props: ContactPanelProps) {
   const t = useTranslations('team-inbox-conversations.panel');
@@ -51,6 +53,8 @@ export function ContactPanel(props: ContactPanelProps) {
   return (
     <div className="space-y-4 p-4" data-testid="inbox-contact-panel">
       <ContactSummary detail={detail} contactId={contactId} />
+
+      <LeadScoreSection detail={detail} contactId={contactId} />
 
       <AssigneeSection {...props} />
 
@@ -151,6 +155,30 @@ function ContactSummary({
         </dl>
       )}
     </section>
+  );
+}
+
+/**
+ * The contact's lead score (with the Score with AI button, the reasons and the history) and, in a workspace that reads
+ * conversations, what the AI made of this chat. Only for a caller who may read the contact: the summary is empty for anyone else, so
+ * the section is too. A new score or a decided suggestion refreshes the conversation, so the summary above and the score agree.
+ */
+function LeadScoreSection({
+  detail,
+  contactId,
+}: {
+  detail: InboxConversationDetail;
+  contactId: string | null;
+}) {
+  const qc = useQueryClient();
+  const summary = detail.contactSummary;
+  if (!contactId || !summary) return null;
+  const refresh = () => qc.invalidateQueries({ queryKey: KEYS.conversation(detail.id) });
+  return (
+    <div className="space-y-3" data-testid="inbox-lead-score">
+      <ScoreCard contactId={contactId} contact={summary} onScored={refresh} />
+      <ChatInsightCard contactId={contactId} onChanged={refresh} />
+    </div>
   );
 }
 
