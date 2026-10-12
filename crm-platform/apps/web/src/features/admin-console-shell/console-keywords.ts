@@ -96,6 +96,8 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
   'ai-keys': 'ai keys api keys openai anthropic gemini llm provider token voice',
   'faq-engine':
     'faq faqs knowledge base questions answers embedding embeddings vector semantic matching openrouter threshold reindex',
+  'lead-scoring':
+    'ai lead scoring score leads contacts openrouter model cost spend usd tokens runs log opt in',
   'settings-privacy': 'privacy gdpr ada cookies consent accessibility data protection',
   'settings-analytics': 'analytics google analytics tag manager pixel tracking facebook',
   'settings-custom': 'custom code css javascript scripts head body snippet',

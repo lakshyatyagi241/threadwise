@@ -593,6 +593,7 @@
             "form_builder": "Forms",
             "waba_groups": "WhatsApp groups",
             "sms": "SMS",
+            "help_agent": "Help assistant",
             "email_channel": "Email (Gmail) channel"
           },
           "cta": {

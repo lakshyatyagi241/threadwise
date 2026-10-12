@@ -164,7 +164,12 @@
       "messaging": "메시징 플로우",
       "messagingNote": "WhatsApp, Instagram, Facebook. 트리거 노드에서 채널을 전환하세요",
       "call": "통화",
-      "callNote": "AI 음성 IVR. 말하기, 듣기, 전환"
+      "callNote": "AI 음성 IVR. 말하기, 듣기, 전환",
+      "subtitleSimple": "모든 구성 요소가 모든 채널에서 작동하는 것은 아니므로 각 봇은 하나의 채널용으로 만들어집니다.",
+      "whatsapp": "WhatsApp",
+      "whatsappNote": "연결된 WhatsApp 번호로 고객에게 답변합니다",
+      "web": "웹사이트 채팅",
+      "webNote": "웹사이트에 추가하는 채팅 위젯"
     },
     "rename": {
       "title": "플로우 이름 변경",
@@ -553,8 +558,8 @@
           "faqAllFaqs": "모든 FAQ",
           "faqCategory": "FAQ: {name}",
           "faqScore": "최소 점수 {score}",
-          "faqWorkspaceScore": "워크스페이스 점수",
-          "faqNotSent": "전송 안 함"
+          "faqNotSent": "전송 안 함",
+          "faqWorkspaceScore": "플로우 점수"
         },
         "overlays": {
           "startPinned": "시작 지점입니다(클릭하면 해제)",
@@ -1790,28 +1795,22 @@
         },
         "faq": {
           "intro": {
-            "body": "메시지를 의미 기준으로 FAQ와 대조해 답변합니다. FAQ가 답변하면 <mono>답변함</mono> 출구로, 그렇지 않으면 <mono>일치 없음</mono> 출구로 나갑니다.",
-            "sub": "FAQ 자동 답변을 켜지 않아도 작동합니다. <link>FAQ 관리</link>"
+            "body": "메시지를 의미로 이 플로우의 FAQ와 매칭해 답변합니다. FAQ가 답변하면 <mono>답변됨</mono>으로, 그렇지 않으면 <mono>일치 없음</mono>으로 나갑니다.",
+            "sub": "이 플로우의 FAQ 자동 답변을 켜지 않아도 작동합니다. <link>이 플로우의 FAQ 관리</link>"
           },
           "exitsLabel": "출구",
           "exitMatchedName": "답변함",
           "exitMatched": "FAQ가 답변함: 해당 텍스트가 전송되었거나(전송이 꺼져 있지 않은 경우), 해당 플로가 넘겨받았으며 돌아오지 않습니다.",
           "exitNoMatchName": "일치 없음",
           "exitNoMatch": "충분히 가까운 FAQ가 없었거나, 플랫폼에서 FAQ 답변이 꺼져 있거나, 연결된 플로 또는 단계가 없어졌거나, 메시지가 비어 있었습니다.",
-          "noFaqs": "아직 FAQ가 없어서 이 단계는 항상 일치 없음 출구로 나갑니다. <link>첫 FAQ 추가</link>",
           "query": "대조할 메시지",
           "queryHint": "기본값은 고객의 마지막 메시지입니다. 질문 단계에서 저장한 변수(예: <mono>{variable}</mono>)도 사용할 수 있습니다. /를 입력하면 변수를 삽입할 수 있습니다.",
           "category": "이 FAQ만 사용",
           "allFaqs": "모든 FAQ",
           "loadingCategories": "카테고리 불러오는 중…",
           "categoryGone": "{name} (사용하는 FAQ 없음)",
-          "categoryHint": "이 카테고리의 FAQ만 답변할 수 있습니다. 카테고리는 내 FAQ에서 가져옵니다.",
-          "categoriesFailed": "FAQ 카테고리를 불러오지 못했습니다.",
           "retry": "다시 시도",
           "minScore": "최소 점수",
-          "useWorkspaceScore": "워크스페이스 설정 사용",
-          "minScoreHint": "이 단계에만 워크스페이스 점수를 대체하며, {min}부터 {max}까지 입력할 수 있습니다. 점수는 플랫폼의 임베딩 모델에 따라 달라지므로 숫자를 정하기 전에 <link>FAQ 테스트</link>에서 메시지를 시험해 보세요.",
-          "minScoreInvalid": "{min}부터 {max} 사이의 숫자를 입력하거나 워크스페이스 설정을 사용하세요.",
           "sendAnswer": "고객에게 답변 전송",
           "sendAnswerToggle": "일치하는 텍스트 답변을 메시지로 전송",
           "sendAnswerOnHint": "일치하는 텍스트 FAQ가 고객에게 전송됩니다. 플로를 시작하는 FAQ는 해당 플로에서 계속됩니다.",
@@ -1824,7 +1823,14 @@
             "question": "일치한 FAQ의 질문",
             "score": "일치도",
             "id": "일치한 FAQ의 ID"
-          }
+          },
+          "noFaqs": "이 플로우에는 아직 FAQ가 없어 이 단계는 항상 일치 없음으로 나갑니다. <link>이 플로우의 첫 FAQ 추가</link>",
+          "useWorkspaceScore": "이 플로우의 설정 사용",
+          "minScoreInvalid": "{min}에서 {max} 사이의 숫자를 입력하거나 이 플로우의 설정을 사용하세요.",
+          "saveFlowFirst": "먼저 플로우를 저장하세요. FAQ는 간단 빌더의 FAQ 탭에서 편집하며, 이 단계는 그 FAQ에서 답변합니다.",
+          "categoryHint": "이 카테고리의 FAQ만 답변할 수 있습니다. 카테고리는 이 플로우의 FAQ에서 가져옵니다.",
+          "categoriesFailed": "이 플로우의 FAQ 카테고리를 불러오지 못했습니다.",
+          "minScoreHint": "이 단계에 한해 이 플로우의 점수를 {min}에서 {max} 범위로 대체합니다. 점수는 플랫폼의 임베딩 모델에 따라 달라지므로 숫자를 정하기 전에 이 플로우의 <link>FAQ 테스트</link>에서 메시지를 시험해 보세요."
         }
       },
       "attrPicker": {
@@ -1885,6 +1891,16 @@
           "sampleName": "테스트 장소",
           "sampleAddress": "1 MG Road, Bengaluru"
         }
+      },
+      "webBot": {
+        "aria": "플로우 섹션",
+        "faqs": "FAQ",
+        "saveFirst": "먼저 플로우를 저장하세요.",
+        "build": "만들기",
+        "customize": "사용자 지정",
+        "install": "설치",
+        "needsCustomizing": "위젯이 아직 기본 모양을 사용하고 있습니다. 사용자 지정을 여세요.",
+        "customizeFirst": "게시하기 전에 채팅 위젯을 사용자 지정하고 한 번 저장하세요."
       }
     },
     "contracts": {
@@ -2212,7 +2228,8 @@
         "line": "LINE",
         "wechat": "WeChat",
         "viber": "Viber",
-        "email": "이메일"
+        "email": "이메일",
+        "web": "웹사이트 채팅"
       },
       "dateFormats": {
         "ddDmmDyyyy": "DD-MM-YYYY",
@@ -2307,7 +2324,7 @@
         "noSenderInstagram": "트리거 노드에 Instagram 계정이 선택되어 있지 않습니다 — 트리거 단계에서 계정을 선택하세요.",
         "noSenderFacebook": "트리거 노드에 Facebook 페이지가 선택되어 있지 않습니다 — 트리거 단계에서 페이지를 선택하세요.",
         "noSenderNumber": "트리거 노드에 번호가 선택되어 있지 않습니다 — 트리거 단계에서 번호를 선택하세요.",
-        "faqMinScore": "\"{node}\"의 최소 점수가 0.05~0.99 범위를 벗어났습니다. 수정하거나 비워 두어 워크스페이스 설정을 사용하세요."
+        "faqMinScore": "\"{node}\"의 최소 점수가 0.05~0.99 범위를 벗어났습니다. 수정하거나 비워 두어 플로우 설정을 사용하세요."
       }
     },
     "simpleModel": {
@@ -2443,7 +2460,7 @@
         "rowTitle": "{stage} 단계: 모든 항목에 {max}자 이하의 제목이 필요합니다.",
         "rowDescriptionTooLong": "{stage} 단계: 항목 설명이 {max}자를 넘습니다.",
         "variableUsed": "{stage} 단계: “{name}”은(는) 이미 {other} 단계에서 사용 중입니다. 각 답변마다 고유한 이름을 지정하세요.",
-        "faqMinScore": "{stage}단계: 최소 점수는 0.05~0.99여야 합니다. 또는 워크스페이스 설정을 사용하세요."
+        "faqMinScore": "{stage}단계: 최소 점수는 0.05~0.99여야 합니다. 또는 플로우 설정을 사용하세요."
       },
       "faqSummary": "{hasCategory, select, true {내 FAQ에서 · {category}} other {내 FAQ에서}}"
     },

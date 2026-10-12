@@ -1,0 +1,135 @@
+{
+  "help-agent": {
+    "launcher": {
+      "label": "Vraag",
+      "shortcut": "Vraag het de assistent (Ctrl of Cmd + Shift + L)"
+    },
+    "panel": {
+      "title": "Vraag het de assistent",
+      "subtitle": "Zeg wat je wilt doen. Ik lees deze pagina en klik voor je, en ik vraag het eerst voordat iets wordt opgeslagen, verzonden, verwijderd of betaald.",
+      "close": "Sluiten",
+      "taskLabel": "Wat wil je doen?",
+      "taskPlaceholder": "Bijvoorbeeld: voeg de tag VIP toe aan een contact",
+      "tooLong": "Maximaal {max} tekens.",
+      "doItForMe": "Doe het voor mij",
+      "showMe": "Laat het me zien",
+      "stop": "Stoppen",
+      "stopping": "Bezig met stoppen...",
+      "newTask": "Nieuwe taak",
+      "tryAgain": "Opnieuw proberen",
+      "openGuide": "Gids openen",
+      "showSteps": "Stappen tonen",
+      "guidesTitle": "Uit de Help-gidsen",
+      "examplesTitle": "Probeer te vragen",
+      "disabledHere": "De assistent staat uit op dit scherm, omdat het berichten en gegevens van klanten toont. Open een ander scherm om hem te gebruiken."
+    },
+    "notice": {
+      "title": "Voordat je begint",
+      "sent": "Om een taak uit te voeren, stuurt de assistent je verzoek en de tekst van de pagina waarop je zit naar een AI-aanbieder.",
+      "masked": "Telefoonnummers, e-mailadressen en geheimen worden eerst verborgen. Namen en andere tekst op de pagina niet.",
+      "asks": "Hij gebruikt je eigen account, dus hij kan alleen doen wat jij kunt doen. Hij vraagt het je voordat hij iets opslaat, verstuurt, verwijdert, betaalt, mensen uitnodigt of instellingen wijzigt.",
+      "limits": "Hij typt nooit wachtwoorden of kaartgegevens, opent nooit andere websites, en je kunt hem op elk moment stoppen.",
+      "accept": "Ik begrijp het"
+    },
+    "status": {
+      "progress": "Stap {n} van {max}",
+      "thinking": "Aan het nadenken...",
+      "starting": "Bezig met starten..."
+    },
+    "activity": {
+      "click": "Klikken op: {label}",
+      "type": "Typen in: {label}",
+      "select": "Kiezen in: {label}",
+      "blocked": "Overgeslagen: {label}",
+      "declined": "Je hebt geweigerd: {label}",
+      "shown": "Tonen: {label}"
+    },
+    "confirm": {
+      "title": "Toestaan?",
+      "clickBody": "De assistent staat op het punt te klikken op \"{label}\".",
+      "selectBody": "De assistent staat op het punt \"{detail}\" te kiezen in \"{label}\".",
+      "allow": "Eenmaal toestaan",
+      "deny": "Weigeren",
+      "reasons": {
+        "marked": "Dit is een van de gevoeligste knoppen in de app.",
+        "submit": "Dit slaat op of verzendt wat op de pagina staat.",
+        "delete": "Dit verwijdert, haalt weg of ontkoppelt iets.",
+        "send": "Dit verstuurt, publiceert of start iets wat anderen zien.",
+        "pay": "Dit kan geld kosten of veranderen wat je betaalt.",
+        "invite": "Dit nodigt iemand uit voor je werkruimte.",
+        "connect": "Dit koppelt of ontkoppelt een kanaal of een app.",
+        "access": "Dit wijzigt wie wat mag doen, of een geheim of factuurgegeven.",
+        "settings": "Dit zet iets aan of uit.",
+        "toggle": "Deze schakelaar werkt direct.",
+        "dialog": "Dit bevestigt wat het venster vraagt.",
+        "signout": "Dit logt je uit."
+      }
+    },
+    "question": {
+      "title": "De assistent vraagt",
+      "answerLabel": "Jouw antwoord",
+      "send": "Verzenden"
+    },
+    "result": {
+      "completedTitle": "Klaar",
+      "failedTitle": "Ik kon dit niet afmaken",
+      "stoppedTitle": "Gestopt",
+      "summary": "{steps, plural, one {# stap} other {# stappen}}, {confirmed} toegestaan, {denied} geweigerd."
+    },
+    "stopped": {
+      "person": "Je hebt de taak gestopt.",
+      "budget": "De taak heeft de staplimiet bereikt en is gestopt. Probeer een kleiner verzoek.",
+      "location": "De taak is gestopt omdat hij op een scherm kwam dat de assistent niet mag gebruiken."
+    },
+    "errors": {
+      "disabled": "De assistent staat uit voor deze werkruimte of op dit scherm.",
+      "planLocked": "De assistent maakt geen deel uit van je abonnement.",
+      "forbidden": "Je hebt geen toestemming om de assistent te gebruiken.",
+      "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
+      "taskLimit": "Je hebt voorlopig het maximale aantal toegestane taken gestart. Probeer het later opnieuw.",
+      "stepLimit": "Deze taak heeft zijn stappen opgebruikt. Start een nieuwe met een kleiner verzoek.",
+      "closed": "Deze taak is beëindigd. Start een nieuwe.",
+      "providerDown": "De AI-dienst reageerde niet. Probeer het zo opnieuw, of vraag het de platformeigenaar als het blijft gebeuren.",
+      "monthlyLimit": "Je werkruimte heeft het AI-tegoed van deze maand opgebruikt.",
+      "signedOut": "Je sessie is beëindigd. Log opnieuw in.",
+      "network": "Kon de server niet bereiken. Controleer je verbinding en probeer het opnieuw.",
+      "generic": "Er ging iets mis. Probeer het opnieuw.",
+      "retryIn": "Probeer het over {seconds} seconden opnieuw.",
+      "requestId": "Verzoek-ID: {id}"
+    },
+    "examples": {
+      "howDo": "Hoe gebruik ik {title}?",
+      "showMe": "Laat me zien waar ik moet beginnen in {title}",
+      "whereIs": "Waar vind ik {title}?",
+      "generic1": "Hoe koppel ik mijn WhatsApp-nummer?",
+      "generic2": "Waar wijzig ik mijn bedrijfsprofiel?",
+      "generic3": "Hoe nodig ik een teamgenoot uit?"
+    },
+    "helpCard": {
+      "title": "Vraag het de assistent",
+      "body": "Vertel wat je wilt doen. De assistent vindt de juiste gids, laat zien waar je moet klikken, of voert de stappen voor je uit en vraagt eerst toestemming bij alles wat belangrijk is.",
+      "button": "Assistent openen"
+    },
+    "settingsPage": {
+      "title": "Hulpassistent",
+      "description": "Laat je team vragen wat ze willen doen, en laat de app hen begeleiden of de stappen op hun eigen account uitvoeren.",
+      "loading": "Laden",
+      "loadFailed": "De instelling kon niet worden geladen.",
+      "requestId": "Verzoek-ID: {id}",
+      "shareTitle": "Wat wordt gedeeld als iemand de assistent gebruikt",
+      "share1": "Het verzoek dat de persoon typte en de zichtbare tekst van de pagina waarop hij zit, worden gestuurd naar de AI-aanbieder die het platform gebruikt.",
+      "share2": "Telefoonnummers, e-mailadressen, geheimen en de persoonlijke velden van formulieren worden eerst verborgen. Namen en andere vrije tekst op een pagina niet.",
+      "share3": "Klantberichten en teamchat worden nooit gelezen: de assistent staat op die schermen uit.",
+      "share4": "De assistent handelt met de eigen rechten van de ingelogde persoon en vraagt eerst toestemming voordat hij iets opslaat, verstuurt, verwijdert, betaalt of instellingen wijzigt. Alleen aantallen en het resultaat van elke taak worden bewaard, nooit de tekst van het verzoek.",
+      "optIn": "Door dit aan te zetten bevestig je dat je werkruimte ermee akkoord gaat dit met de AI-aanbieder te delen.",
+      "switchLabel": "Hulpassistent aanzetten voor deze werkruimte",
+      "stateOn": "Aan. Mensen met de toestemming zien de knop Vraag.",
+      "stateOff": "Uit. Niemand ziet de assistent.",
+      "saveFailed": "De instelling kon niet worden opgeslagen.",
+      "savedOn": "De assistent staat aan.",
+      "savedOff": "De assistent staat uit.",
+      "whoCanUse": "Alleen rollen met de toestemming \"De Hulpassistent gebruiken\" zien hem. Eigenaren en beheerders hebben die.",
+      "rolesLink": "Rollen openen"
+    }
+  }
+}

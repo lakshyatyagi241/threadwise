@@ -308,6 +308,16 @@
         "label": "Websitechat",
         "description": "Bots die zijn gemaakt voor de chat op je website en de widget waarin elk daarvan draait.",
         "keywords": "web, website, widget, chatbot, insluiten, livechat"
+      },
+      "lead-scoring": {
+        "label": "AI-leadscoring",
+        "description": "Score elk contact met AI, kies wat er wordt gestuurd en zie wat het kost.",
+        "keywords": "leadscore, scoren, scoring, ai, heet, warm, koud, openrouter, kosten, kwalificeren"
+      },
+      "help-assistant": {
+        "label": "Hulpassistent",
+        "description": "Zet de assistent aan die je team begeleidt of de stappen voor hen uitvoert.",
+        "keywords": "ai, assistent, agent, gids, hulp, automatisering"
       }
     },
     "title": "Instellingen",

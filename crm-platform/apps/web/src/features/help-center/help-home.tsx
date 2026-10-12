@@ -1,4 +1,5 @@
 import { useTranslations } from 'next-intl';
+import type { ReactNode } from 'react';
 import { EmptyState } from '@crm/ui';
 import { HelpFrame, HelpHeader, HelpRail } from './help-frame';
 import { HelpSearch } from './help-search';
@@ -19,7 +20,16 @@ const isArea = (v: string | undefined): v is HelpArea => HELP_AREAS.some((a) => 
  * `/help`: the header, the category rail (one row per area that has guides, with its count), the search card with the popular
  * guides, then the guides as cards. `area` is the rail's choice (`?area=`); an unknown or empty area shows every guide.
  */
-export function HelpHome({ entries, area }: { entries: readonly HelpIndexEntry[]; area?: string }) {
+export function HelpHome({
+  entries,
+  area,
+  assistant,
+}: {
+  entries: readonly HelpIndexEntry[];
+  area?: string;
+  /** The "Ask the assistant" card, offered above the guides when the assistant is on for this person. */
+  assistant?: ReactNode;
+}) {
   const t = useTranslations('help');
   const rail = HELP_AREAS.map((a) => ({
     area: a,
@@ -40,7 +50,10 @@ export function HelpHome({ entries, area }: { entries: readonly HelpIndexEntry[]
         {entries.length === 0 ? (
           <EmptyState title={t('none.title')} message={t('none.message')} />
         ) : (
-          <HelpSearch entries={entries} active={active} popular={popular} />
+          <>
+            {assistant}
+            <HelpSearch entries={entries} active={active} popular={popular} />
+          </>
         )}
       </HelpFrame>
     </>

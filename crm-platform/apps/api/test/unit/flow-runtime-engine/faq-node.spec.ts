@@ -28,7 +28,7 @@ function ctxOf(data: Record<string, unknown>, send: SendOutcome = { ok: true }) 
   const sent: unknown[] = [];
   const notes: string[] = [];
   const ctx = {
-    run: { orgId: 7, conversationId: 3, channelId: 5, vars },
+    run: { orgId: 7, flowId: 41, conversationId: 3, channelId: 5, vars },
     node: { id: 'f', type: 'Faq', props: { data } },
     stepKey: 'flow:1:0:f',
     send: vi.fn(async (m: unknown) => {
@@ -43,11 +43,16 @@ function ctxOf(data: Record<string, unknown>, send: SendOutcome = { ok: true }) 
   return { ctx, vars, sent, notes };
 }
 
-const deps = (a: FlowFaqAnswer | Error): FaqNodeDeps & { calls: unknown[] } => {
+const deps = (
+  a: FlowFaqAnswer | Error,
+): FaqNodeDeps & { calls: unknown[]; scopes: Array<[number, number]> } => {
   const calls: unknown[] = [];
+  const scopes: Array<[number, number]> = [];
   return {
     calls,
-    answer: async (_org, input) => {
+    scopes,
+    answer: async (org, flowId, input) => {
+      scopes.push([org, flowId]);
       calls.push(input);
       if (a instanceof Error) throw a;
       return a;
@@ -66,6 +71,8 @@ describe('runFaq: the "Answer from FAQ" node', () => {
     const r = await runFaq(ctx, d);
     expect(r).toEqual({ kind: 'advance', port: 1, branch: true });
     expect(sent).toEqual([{ kind: 'text', body: 'Ships in 2 days.' }]);
+    // The node asks for the FAQs of the flow the run is in, never the workspace's.
+    expect(d.scopes[0]).toEqual([7, 41]);
     expect(d.calls[0]).toEqual({
       query: 'order status',
       category: null,

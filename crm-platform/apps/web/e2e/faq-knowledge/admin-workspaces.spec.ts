@@ -1,5 +1,15 @@
 import { expect, test, type Page } from '@playwright/test';
-import { LAUNCH, openFaq, poolWorkspace, signInOperator, sql, sqlNum } from './admin-support';
+import {
+  cleanupTag,
+  LAUNCH,
+  openFaq,
+  poolWorkspace,
+  runTag,
+  signInOperator,
+  sql,
+  sqlNum,
+  waitReady,
+} from './admin-support';
 
 test.use({ launchOptions: LAUNCH });
 test.setTimeout(240_000);
@@ -15,22 +25,25 @@ interface Row {
   answered: number;
 }
 
-/** The documented ordering (switched on first, then most variations, then oldest), straight from the tables. */
+/**
+ * The documented ordering (switched on first, then most variations, then oldest), straight from the tables. FAQs belong to flows, so
+ * a workspace's numbers add up over its flows and it counts as switched on when any of its flows is.
+ */
 function dbRows(limit: number, search = ''): Row[] {
   const like = search
     ? `'%${search.replace(/[\\%_]/g, (m) => `\\${m}`).replace(/'/g, "''")}%'`
     : null;
   const out = sql(`
-    SELECT o.name || '|' || COALESCE(s.enabled,false) || '|' ||
+    SELECT o.name || '|' || EXISTS (SELECT 1 FROM faq_settings s WHERE s.org_id=o.id AND s.enabled) || '|' ||
       (SELECT count(*) FROM faqs f WHERE f.org_id=o.id) || '|' ||
       (SELECT count(*) FROM faq_variations v WHERE v.org_id=o.id) || '|' ||
       (SELECT count(*) FROM faq_variations v WHERE v.org_id=o.id AND v.embed_state='pending') || '|' ||
       (SELECT count(*) FROM faq_variations v WHERE v.org_id=o.id AND v.embed_state='failed') || '|' ||
       (SELECT count(*) FROM faq_match_logs l WHERE l.org_id=o.id AND l.origin='inbound' AND l.created_at >= now() - interval '30 days') || '|' ||
       (SELECT count(*) FROM faq_match_logs l WHERE l.org_id=o.id AND l.origin='inbound' AND l.outcome IN ('answered','flow_started') AND l.created_at >= now() - interval '30 days')
-    FROM organizations o LEFT JOIN faq_settings s ON s.org_id=o.id
+    FROM organizations o
     WHERE ${like ? `o.name ILIKE ${like}` : 'true'}
-    ORDER BY COALESCE(s.enabled,false) DESC, (SELECT count(*) FROM faq_variations v WHERE v.org_id=o.id) DESC, o.id
+    ORDER BY EXISTS (SELECT 1 FROM faq_settings s WHERE s.org_id=o.id AND s.enabled) DESC, (SELECT count(*) FROM faq_variations v WHERE v.org_id=o.id) DESC, o.id
     LIMIT ${limit}`);
   return out
     .split('\n')
@@ -84,6 +97,53 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.describe('workspaces table', () => {
+  test("a workspace's numbers add up over its flows, and it is switched on when any flow is", async ({
+    page,
+  }) => {
+    const ws = await poolWorkspace('B');
+    const TAG = runTag('pwadmflows');
+    const second = ws.newFlow(`${TAG} second flow`);
+    try {
+      await ws.disable();
+      await ws.disable(second);
+      await ws.faq(`${TAG} first flow question`, [`${TAG} first phrase`]);
+      await ws.faq(
+        `${TAG} second flow question`,
+        [`${TAG} second phrase`, `${TAG} third phrase`],
+        'Answer',
+        second,
+      );
+      await waitReady(ws);
+      // Both flows have FAQs, none is switched on: the workspace is off and still counts everything it has.
+      await openFaq(page);
+      await search(page).fill(ws.name);
+      await expect.poll(async () => (await uiRows(page)).map((r) => r.name)).toEqual([ws.name]);
+      let row = (await uiRows(page))[0]!;
+      expect(row).toEqual(dbRows(1, ws.name)[0]);
+      expect(row.enabled).toBe(false);
+      const perFlow = sql(
+        `SELECT count(*) FROM faqs WHERE org_id=${ws.orgId} AND owner_flow_id IN (SELECT id FROM flows WHERE org_id=${ws.orgId} AND uuid IN ('${ws.flowUuid}','${second}'))`,
+      );
+      expect(row.faqs).toBe(Number(perFlow));
+      expect(row.faqs).toBeGreaterThanOrEqual(2);
+
+      // One flow of the two switched on is enough for the workspace to be on; the numbers do not change.
+      await ws.enable(0.5, second);
+      await page.reload();
+      await search(page).fill(ws.name);
+      await expect.poll(async () => (await uiRows(page)).map((r) => r.name)).toEqual([ws.name]);
+      await expect.poll(async () => (await uiRows(page))[0]?.enabled).toBe(true);
+      row = (await uiRows(page))[0]!;
+      expect(row).toEqual(dbRows(1, ws.name)[0]);
+      expect(row.faqs).toBe(Number(perFlow));
+    } finally {
+      await ws.disable(second).catch(() => undefined);
+      cleanupTag(TAG);
+      // The extra flow goes too (its FAQs and settings go with it).
+      sql(`DELETE FROM flows WHERE org_id=${ws.orgId} AND uuid='${second}'`);
+    }
+  });
+
   test('lists workspaces in the documented order with numbers that match the database', async ({
     page,
   }) => {

@@ -80,7 +80,7 @@ describe('FlowNodeSelect', () => {
   it('is labelled, so the keyboard and screen readers reach it by name', async () => {
     await mount();
     const label = host.querySelector(`label[for="${select().id}"]`);
-    expect(label?.textContent).toBe('Start at');
+    expect(label?.textContent).toBe('Go to');
   });
   it('the fix button for a gone step starts at the flow start and moves focus to the select', async () => {
     vi.useFakeTimers({ toFake: ['requestAnimationFrame'] });
@@ -88,7 +88,7 @@ describe('FlowNodeSelect', () => {
       value: 'n-old',
       saved: { flowId: FLOW, flowNodeId: 'n-old', flowNodeLabel: null },
     });
-    expect(host.textContent).toContain('The step this FAQ starts at is gone');
+    expect(host.textContent).toContain('The step this FAQ goes to is gone');
     const fix = [...host.querySelectorAll('button')].find(
       (b) => b.textContent === "Start at the flow's start",
     )!;

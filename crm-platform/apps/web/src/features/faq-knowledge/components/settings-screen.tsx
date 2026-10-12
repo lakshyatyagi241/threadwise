@@ -22,12 +22,13 @@ import {
   type SettingsForm,
 } from '../lib/settings-model';
 import { FaqIcon } from './icons';
+import { useFaqFlow } from './faq-flow';
 import { LoadError, NoAccess, PageHeader, SectionCard, SkeletonRows } from './parts';
 import { useLeaveGuard } from './use-leave-guard';
 
 const PRESET_IDS: readonly PresetId[] = ['strict', 'balanced', 'forgiving'];
 
-/** `/faq/settings`: the workspace switch and the two matching knobs, with the facts that explain them. */
+/** The flow's FAQ settings: its switch, the two matching knobs and the second check, with the facts that explain them. */
 export function SettingsScreen() {
   const canRead = useCan('faq.entries.read');
   const q = useFaqSettings(canRead);
@@ -43,6 +44,7 @@ export function SettingsScreen() {
 
 function SettingsBody({ settings }: { settings: FaqSettings }) {
   const t = useTranslations('faq.settings');
+  const { flowId, flowName } = useFaqFlow();
   const { toast } = useToast();
   const qc = useQueryClient();
   const canManage = useCan('faq.settings.manage');
@@ -62,9 +64,9 @@ function SettingsBody({ settings }: { settings: FaqSettings }) {
   // A double click must send one request: `isPending` only turns true after the next render.
   const saving = useRef(false);
   const save = useMutation({
-    mutationFn: () => faqApi.saveSettings(toSettingsInput(form, settings)),
+    mutationFn: () => faqApi.saveSettings(flowId, toSettingsInput(form, settings)),
     onSuccess: (saved) => {
-      qc.setQueryData(KEYS.settings, saved);
+      qc.setQueryData(KEYS.settings(flowId), saved);
       toast(t('saved'));
     },
     onError: setError,
@@ -73,9 +75,9 @@ function SettingsBody({ settings }: { settings: FaqSettings }) {
     },
   });
   const reload = useMutation({
-    mutationFn: () => faqApi.settings(),
+    mutationFn: () => faqApi.settings(flowId),
     onSuccess: (fresh) => {
-      qc.setQueryData(KEYS.settings, fresh);
+      qc.setQueryData(KEYS.settings(flowId), fresh);
       setError(null);
     },
     onError: setError,
@@ -93,7 +95,7 @@ function SettingsBody({ settings }: { settings: FaqSettings }) {
       <PageHeader
         icon={<FaqIcon className="size-5" />}
         title={t('title')}
-        subtitle={t('subtitle')}
+        subtitle={t('subtitle', { flow: flowName })}
         status={
           dirty ? (
             <span className="text-xs font-medium text-warning" role="status">

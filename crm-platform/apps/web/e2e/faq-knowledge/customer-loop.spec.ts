@@ -3,20 +3,21 @@ import {
   customerSays,
   expect,
   go,
-  login,
   logCount,
+  login,
   newWorkspace,
   open,
+  openFaqs,
   putSettings,
   repliesTo,
   seedFaq,
   seedFlow,
+  type Sim,
   simulator,
   sql,
+  type State,
   test,
   waitIndexed,
-  type Sim,
-  type State,
   type Workspace,
 } from './support';
 
@@ -114,8 +115,8 @@ test('with answering off nothing is sent; switching it on answers the next messa
   expect(logCount(quiet)).toBe(0);
 
   const { page } = await open(browser, quietState, watch);
-  await go(page, '/faq');
-  await expect(page.getByText('FAQ answering is OFF for customers')).toBeVisible();
+  await openFaqs(page, quiet);
+  await expect(page.getByText('FAQ answering is OFF for this flow')).toBeVisible();
   await page.getByRole('button', { name: 'Turn on FAQ answering' }).click();
   await expect(page.getByText('FAQ answering is on.')).toBeVisible();
 

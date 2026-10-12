@@ -33,6 +33,7 @@ describe('columns', () => {
       'groups',
       'stage',
       'status',
+      'leadScore',
       'language',
       'memo',
       'createdOn',
@@ -49,6 +50,7 @@ describe('columns', () => {
       'tags',
       'stage',
       'status',
+      'leadScore',
       'createdOn',
     ]);
     expect(defaultColumns([])).toEqual([
@@ -58,6 +60,7 @@ describe('columns', () => {
       'tags',
       'stage',
       'status',
+      'leadScore',
       'createdOn',
     ]);
   });
@@ -159,6 +162,7 @@ describe('sortKeyOf', () => {
     expect(sortKeyOf('attr:order_count')).toBe('attr:order_count');
     expect(sortKeyOf('tags')).toBeNull();
     expect(sortKeyOf('groups')).toBeNull();
+    expect(sortKeyOf('leadScore')).toBeNull();
     expect(sortKeyOf('attr:Has Space' as ColumnId)).toBeNull();
   });
 });

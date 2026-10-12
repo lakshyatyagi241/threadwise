@@ -1420,6 +1420,7 @@
             "form_builder": "Formulaires web hébergés et intégrés qui créent des contacts dans le CRM. L’application payante Formulaires gère cet interrupteur.",
             "waba_groups": "Créer et gérer des groupes WhatsApp depuis un numéro de l’API Cloud : lien d’invitation, demandes d’adhésion, membres. Le numéro doit être un compte d’entreprise officiel.",
             "sms": "SMS en envoi uniquement via Twilio ou MSG91 : connectez des expéditeurs, envoyez des diffusions et campagnes SMS.",
+            "help_agent": "L’assistant d’aide intégré à l’app : les utilisateurs demandent une tâche avec leurs mots et il les guide ou la réalise dans leur propre session, en demandant avant toute action sensible. Consomme des jetons d’IA.",
             "email_channel": "Connectez des boîtes Gmail et Google Workspace à la boîte de réception d'équipe. L'application payante E-mail contrôle cet interrupteur."
           },
           "units": {
@@ -1602,6 +1603,7 @@
             "form_builder": "Formulaires (créateur de formulaires web)",
             "waba_groups": "Groupes WhatsApp (API Cloud)",
             "sms": "Canal SMS",
+            "help_agent": "Assistant d’aide (IA, consomme des jetons)",
             "email_channel": "Canal e-mail (Gmail)"
           },
           "problems": {

@@ -1,0 +1,217 @@
+{
+  "lead-scoring-admin": {
+    "nav": {
+      "group": "AI",
+      "scoring": "Penilaian lead AI"
+    },
+    "common": {
+      "loading": "Memuat",
+      "retry": "Coba lagi",
+      "requestId": "ID permintaan",
+      "dash": "-",
+      "cancel": "Batal",
+      "errors": {
+        "forbidden": "Anda tidak punya izin untuk melakukan ini.",
+        "request": "Permintaan tidak dapat diselesaikan.",
+        "unexpected": "Terjadi kesalahan di sisi kami. Coba lagi sebentar lagi.",
+        "network": "Tidak dapat terhubung ke server. Periksa koneksi Anda dan coba lagi.",
+        "validation": "Beberapa nilai tidak valid. Periksa kolom yang disorot.",
+        "notFound": "Item itu sudah tidak ada."
+      }
+    },
+    "page": {
+      "eyebrow": "Admin · AI · Penilaian lead",
+      "title": "Penilaian lead AI",
+      "description": "Mengatur apakah workspace dapat menilai kontaknya dengan model AI, model mana yang dipakai, batasannya, dan biayanya.",
+      "superOnly": "Hanya super admin yang dapat melihat atau mengubah penilaian lead AI."
+    },
+    "status": {
+      "label": "Status penilaian lead",
+      "switch": {
+        "title": "Sakelar platform",
+        "on": "Aktif",
+        "off": "Nonaktif",
+        "hintOn": "Workspace yang ikut serta dapat menilai kontaknya.",
+        "hintOff": "Tidak ada workspace yang dapat menilai kontak, apa pun pengaturannya sendiri."
+      },
+      "model": {
+        "title": "Model",
+        "custom": "Model yang diketik manual, tidak ada dalam daftar."
+      },
+      "key": {
+        "title": "Kunci OpenRouter platform",
+        "ready": "Siap",
+        "missing": "Tidak ada",
+        "explainReady": "Workspace tanpa kunci OpenRouter sendiri dinilai dengan kunci ini, dan Anda yang membayar penilaian tersebut.",
+        "explainMissing": "Tanpa kunci platform, hanya workspace yang menyimpan kunci OpenRouter sendiri yang dapat menilai kontak.",
+        "link": "Buka kunci AI"
+      },
+      "reach": {
+        "title": "Jangkauan",
+        "workspaces": "Workspace yang ikut serta",
+        "contacts": "Kontak yang dinilai"
+      }
+    },
+    "settings": {
+      "title": "Pengaturan",
+      "description": "Perubahan berlaku untuk semua workspace sekaligus. Hanya kolom yang Anda ubah yang disimpan.",
+      "enabled": {
+        "label": "Penilaian lead AI",
+        "hint": "Nonaktif secara default. Saat aktif, workspace yang ikut serta mengirim data kontak yang dianonimkan ke OpenRouter untuk mendapat skor 0 sampai 100. Matikan untuk menghentikan semua penilaian."
+      },
+      "model": {
+        "label": "Model",
+        "hint": "Harga dalam dolar AS per juta token, dari daftar OpenRouter.",
+        "option": "{label} · {input} masuk / {output} keluar",
+        "other": "ID model OpenRouter lainnya",
+        "details": "{input} per juta token masukan, {output} per juta token keluaran.",
+        "customLabel": "ID model OpenRouter",
+        "customHint": "ID model apa pun dari OpenRouter yang mendukung keluaran terstruktur.",
+        "placeholder": "openai/gpt-6-luna"
+      },
+      "limits": {
+        "title": "Batasan",
+        "scoresPerHour": "Skor per workspace per jam",
+        "scoresPerHourHint": "Pengaman biaya untuk workspace yang memakai kunci platform. 0 berarti tanpa batas.",
+        "retentionDays": "Simpan log selama (hari)",
+        "retentionDaysHint": "Eksekusi lama beserta riwayat biayanya dihapus. 7 sampai 730 hari."
+      },
+      "saving": "Menyimpan",
+      "save": "Simpan perubahan",
+      "reset": "Buang perubahan",
+      "changed": "{count, plural, other {# perubahan siap disimpan}}",
+      "unchanged": "Tidak ada perubahan untuk disimpan.",
+      "saved": "Pengaturan penilaian lead disimpan.",
+      "errors": {
+        "range": "Masukkan nilai antara {min} dan {max}.",
+        "integer": "Masukkan bilangan bulat.",
+        "modelId": "Gunakan ID model OpenRouter seperti openai/gpt-6-luna.",
+        "invalid": "Nilai ini tidak valid."
+      },
+      "confirm": {
+        "title": "Konfirmasi perubahan",
+        "turnOn": "Ini memungkinkan workspace yang ikut serta mengirim data kontak yang dianonimkan ke OpenRouter dan memakai kredit kunci platform Anda.",
+        "turnOff": "Ini menghentikan semua penilaian lead AI untuk setiap workspace. Skor yang sudah tersimpan tetap ada.",
+        "confirm": "Simpan perubahan"
+      }
+    },
+    "cost": {
+      "title": "Biaya penilaian",
+      "description": "Total dari log penilaian, dalam dolar AS.",
+      "last24h": "24 jam terakhir",
+      "last30d": "30 hari terakhir",
+      "scores": "Skor tertulis",
+      "failed": "Eksekusi gagal",
+      "tokens": "Token",
+      "tokensSplit": "Token masukan / keluaran",
+      "total": "Total biaya",
+      "average": "Rata-rata per skor",
+      "platform": "Dibayar oleh kunci platform",
+      "footnote": "Biaya adalah jumlah yang dilaporkan OpenRouter, atau perkiraan dari jumlah token jika tidak ada laporan. Eksekusi yang ditagih ke kunci milik workspace termasuk dalam total tetapi bukan bagian platform."
+    },
+    "workspaces": {
+      "title": "Workspace",
+      "description": "Siapa yang memakai penilaian lead AI dan berapa biayanya selama 30 hari terakhir, dari yang tertinggi.",
+      "search": "Cari workspace",
+      "searchPlaceholder": "Nama workspace",
+      "limit": "Baris",
+      "limitOption": "{count} baris",
+      "noMatchTitle": "Tidak ada workspace yang cocok",
+      "noMatchMessage": "Coba nama lain.",
+      "clearSearch": "Hapus pencarian",
+      "emptyTitle": "Belum ada workspace",
+      "emptyMessage": "Workspace muncul di sini setelah dibuat.",
+      "tableLabel": "Workspace menurut biaya penilaian",
+      "columns": {
+        "name": "Workspace",
+        "enabled": "Penilaian",
+        "contacts": "Kontak yang dinilai",
+        "scores": "Skor, 30 hari",
+        "cost": "Biaya, 30 hari"
+      },
+      "enabled": "Aktif",
+      "disabled": "Nonaktif"
+    },
+    "runs": {
+      "title": "Log penilaian",
+      "description": "Setiap upaya penilaian di semua workspace, terbaru lebih dulu, lengkap dengan token, biaya, dan siapa yang membayar.",
+      "refresh": "Segarkan",
+      "filters": {
+        "status": "Status",
+        "anyStatus": "Status apa pun",
+        "workspace": "Workspace",
+        "anyWorkspace": "Semua workspace",
+        "clear": "Hapus filter"
+      },
+      "status": {
+        "ok": "Dinilai",
+        "kept": "Dipertahankan",
+        "failed": "Gagal",
+        "skipped": "Dilewati"
+      },
+      "trigger": {
+        "created": "Kontak dibuat",
+        "updated": "Kontak diperbarui",
+        "manual": "Tombol Nilai",
+        "backfill": "Pengisian ulang"
+      },
+      "scoreWas": "{score} (sebelumnya {previous})",
+      "tokensTitle": "{input} masukan, {output} keluaran",
+      "costSource": {
+        "vendor": "Dilaporkan",
+        "estimate": "Perkiraan",
+        "none": "Tanpa panggilan"
+      },
+      "costSourceHelp": {
+        "vendor": "Biaya yang dilaporkan OpenRouter untuk panggilan ini.",
+        "estimate": "Tidak ada biaya yang dilaporkan, jadi ini adalah jumlah token dikali harga daftar model.",
+        "none": "Tidak ada panggilan yang dilakukan, jadi tidak ada yang ditagih."
+      },
+      "paidBy": {
+        "admin": "Platform",
+        "workspace": "Workspace",
+        "none": "Tidak ada"
+      },
+      "duration": {
+        "ms": "{value} ms",
+        "s": "{value} s"
+      },
+      "reason": {
+        "platform_off": "Sakelar platform nonaktif",
+        "not_enabled": "Workspace belum ikut serta",
+        "contact_gone": "Kontak telah dihapus",
+        "manual_score": "Kontak memiliki skor yang diketik manual",
+        "no_key": "Tidak ada kunci OpenRouter",
+        "token_allowance": "Jatah token habis",
+        "hourly_limit": "Batas per jam tercapai",
+        "auth": "OpenRouter menolak kunci",
+        "rate_limited": "Batas laju OpenRouter",
+        "provider": "Kesalahan OpenRouter",
+        "timeout": "OpenRouter kehabisan waktu",
+        "bad_response": "Jawaban bukan skor yang valid"
+      },
+      "noMatchTitle": "Tidak ada eksekusi yang cocok",
+      "noMatchMessage": "Tidak ada eksekusi penilaian yang cocok dengan filter ini.",
+      "emptyTitle": "Belum ada eksekusi",
+      "emptyMessage": "Eksekusi muncul di sini setelah workspace menilai kontak.",
+      "tableLabel": "Eksekusi penilaian",
+      "columns": {
+        "time": "Waktu",
+        "workspace": "Workspace",
+        "contact": "Kontak",
+        "trigger": "Pemicu",
+        "status": "Status",
+        "score": "Skor",
+        "model": "Model",
+        "tokens": "Token",
+        "cost": "Biaya",
+        "paidBy": "Dibayar oleh",
+        "duration": "Durasi",
+        "error": "Alasan"
+      },
+      "costLegend": "Tanda ~ sebelum biaya menandai perkiraan dari jumlah token, bukan jumlah yang dilaporkan OpenRouter.",
+      "loadMore": "Muat lebih banyak",
+      "loadingMore": "Memuat"
+    }
+  }
+}

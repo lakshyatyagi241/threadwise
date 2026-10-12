@@ -27,6 +27,7 @@ import {
   useToast,
 } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { AGENT_IGNORE, AGENT_PII } from '@/lib/agent-marks';
 import { ApiError } from '@/lib/api/errors';
 import {
   KEYS,
@@ -508,7 +509,7 @@ function Preview({ s }: { s: FormSubmissionSummary }) {
   const t = useTranslations('web-forms.submissions');
   const { name, email, phone } = s.preview;
   return (
-    <span className="block min-w-0 text-start">
+    <span {...AGENT_PII} className="block min-w-0 text-start">
       {name ? (
         <span className="block truncate font-medium" dir="auto">
           {name}
@@ -1013,7 +1014,7 @@ export function SubmissionDrawer({
                 {d.answers.length === 0 ? (
                   <p className="text-sm text-muted-foreground">{t('drawer.noAnswers')}</p>
                 ) : (
-                  <dl className="space-y-3" data-testid="answers">
+                  <dl {...AGENT_IGNORE} className="space-y-3" data-testid="answers">
                     {d.answers.map((a) => {
                       const v = answerView(a.value);
                       return (

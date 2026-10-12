@@ -1,0 +1,248 @@
+{
+  "lead-scoring": {
+    "common": {
+      "dismiss": "Dispensar",
+      "retry": "Tentar novamente",
+      "requestId": "Solicitação {id}",
+      "noAccessTitle": "Você não tem acesso a esta tela",
+      "noAccess": "Peça a um administrador do espaço de trabalho para dar ao seu perfil a permissão {permission}."
+    },
+    "badge": {
+      "none": "Sem pontuação de lead",
+      "aria": "Pontuação de lead {score} de 100, {band}, {source}",
+      "titleAi": "Pontuado por IA",
+      "titleAiOn": "Pontuado por IA em {date}",
+      "titleManual": "Informado por uma pessoa",
+      "band": {
+        "cold": "Frio",
+        "warm": "Morno",
+        "hot": "Quente"
+      },
+      "source": {
+        "ai": "pontuado por IA",
+        "manual": "informado por uma pessoa"
+      }
+    },
+    "card": {
+      "title": "Pontuação do lead",
+      "band": {
+        "cold": "Lead frio",
+        "warm": "Lead morno",
+        "hot": "Lead quente"
+      },
+      "sourceAi": "IA",
+      "sourceManual": "Manual",
+      "score": "Pontuar com IA",
+      "rescore": "Pontuar de novo",
+      "scoring": "Pontuando...",
+      "scoringSlow": "Consultando a IA. Isso pode levar alguns segundos.",
+      "neverScored": "Este contato ainda não foi pontuado.",
+      "scoredBy": "Pontuado por IA em {date} com {model}.",
+      "scoredOn": "Pontuado por IA em {date}.",
+      "scoredByAi": "Pontuado por IA.",
+      "reasons": "Por que esta pontuação",
+      "manualWhy": "Uma pessoa digitou esta pontuação, então a IA não vai alterá-la. Para que a IA pontue este contato, edite o contato e apague a pontuação do lead.",
+      "manualNote": "Uma pessoa digitou esta pontuação, então a IA não a altera.",
+      "lastRun": "Pontuação {score}. Custo {cost}, {tokens} tokens.",
+      "showHistory": "Mostrar histórico de pontuação",
+      "hideHistory": "Ocultar histórico de pontuação",
+      "historyLoading": "Carregando o histórico...",
+      "historyFailed": "Não foi possível carregar o histórico.",
+      "historyEmpty": "Ainda não há tentativas de pontuação para este contato.",
+      "historyCaption": "Tentativas de pontuação deste contato, da mais recente para a mais antiga",
+      "historyMore": "Carregar mais"
+    },
+    "errors": {
+      "network": "Não foi possível acessar o servidor. Verifique sua conexão e tente novamente.",
+      "forbidden": "Seu perfil não permite isso.",
+      "notFound": "Esse contato ou registro não existe mais.",
+      "conflict": "Alguém alterou isto ao mesmo tempo. A página foi recarregada.",
+      "platformDisabled": "A pontuação de leads com IA está desativada em toda a plataforma no momento.",
+      "notEnabled": "A pontuação de leads com IA não está ativada neste espaço de trabalho.",
+      "noKey": "Nenhuma chave de IA está disponível para este espaço de trabalho.",
+      "providerFailed": "O provedor de IA não deu uma resposta utilizável. Tente novamente em instantes.",
+      "manualScore": "Este contato tem uma pontuação digitada por uma pessoa.",
+      "planLimit": "A cota de IA do seu plano acabou.",
+      "rateLimited": "Muitas solicitações. Aguarde um momento e tente novamente.",
+      "validation": "Alguns valores não são válidos.",
+      "unexpected": "Algo deu errado. Tente novamente."
+    },
+    "scoreErrors": {
+      "network": "Não foi possível acessar o servidor, então o contato não foi pontuado. Verifique sua conexão e tente novamente.",
+      "forbidden": "Seu perfil não tem permissão para pontuar contatos.",
+      "notFound": "Este contato não existe mais.",
+      "conflict": "Alguém alterou este contato ao mesmo tempo. Ele foi recarregado; tente novamente.",
+      "platformDisabled": "A pontuação de leads com IA está desativada em toda a plataforma no momento. Nada pode ser pontuado até que o operador da plataforma a reative.",
+      "notEnabled": "A pontuação de leads com IA não está ativada neste espaço de trabalho. Ela fica desativada até você decidir, porque dados dos contatos são enviados a um provedor de IA.",
+      "noKey": "Nenhuma chave do OpenRouter está configurada para este espaço de trabalho. Adicione uma em Chaves de IA ou peça ao administrador da plataforma para ativar a chave compartilhada.",
+      "providerFailed": "O provedor de IA não deu uma resposta utilizável, então nenhuma pontuação foi salva. Tente novamente em instantes.",
+      "manualScore": "Este contato tem uma pontuação digitada por uma pessoa, e a IA nunca a sobrescreve. Edite o contato e apague a pontuação do lead antes, se quiser que a IA o pontue.",
+      "planLimit": "A cota de IA do seu plano acabou, então o contato não foi pontuado. Tente mais tarde ou adicione sua própria chave do OpenRouter.",
+      "rateLimited": "Muitas solicitações. Aguarde um momento e tente novamente.",
+      "validation": "A solicitação não era válida.",
+      "unexpected": "Algo deu errado e o contato não foi pontuado. Tente novamente.",
+      "openSettings": "Abrir configurações de pontuação de leads com IA",
+      "openKeys": "Abrir chaves de IA"
+    },
+    "field": {
+      "label": "Pontuação do lead",
+      "placeholder": "De 0 a 100",
+      "hint": "Ao digitar uma pontuação, ela passa a ser sua: a IA deixa de alterá-la. Apague-a para devolver o contato à IA.",
+      "invalid": "Informe um número inteiro de 0 a 100 ou deixe vazio."
+    },
+    "runs": {
+      "col": {
+        "when": "Quando",
+        "contact": "Contato",
+        "result": "Resultado",
+        "score": "Pontuação",
+        "trigger": "Origem",
+        "tokens": "Tokens",
+        "cost": "Custo",
+        "key": "Chave"
+      },
+      "unnamed": "Contato sem nome",
+      "deletedContact": "Contato excluído",
+      "status": {
+        "ok": "Pontuado",
+        "kept": "Não salvo",
+        "failed": "Falhou",
+        "skipped": "Ignorado"
+      },
+      "keptNote": "A IA respondeu, mas nesse meio-tempo uma pessoa digitou uma pontuação, então ela não foi salva.",
+      "reason": {
+        "no_key": "Nenhuma chave de IA estava disponível.",
+        "token_allowance": "A cota de IA do plano acabou.",
+        "hourly_limit": "O limite por hora da chave compartilhada foi atingido.",
+        "manual_score": "O contato tem uma pontuação digitada por uma pessoa.",
+        "platform_off": "A pontuação de leads com IA estava desativada na plataforma.",
+        "not_enabled": "A pontuação de leads com IA estava desativada neste espaço de trabalho.",
+        "auth": "O provedor de IA recusou a chave.",
+        "rate_limited": "O provedor de IA estava ocupado.",
+        "provider": "O provedor de IA retornou um erro.",
+        "timeout": "O provedor de IA demorou demais.",
+        "bad_response": "A IA respondeu com algo que não era uma pontuação.",
+        "other": "A tentativa não foi concluída."
+      },
+      "trigger": {
+        "created": "Contato criado",
+        "updated": "Contato alterado",
+        "manual": "Botão de pontuar",
+        "backfill": "Pontuar contatos sem pontuação"
+      },
+      "tokensDetail": "{prompt} de entrada, {completion} de saída",
+      "costSource": {
+        "vendor": "O custo informado pelo OpenRouter",
+        "estimate": "Estimado a partir dos tokens e do preço de tabela"
+      },
+      "billed": {
+        "admin": "Chave da plataforma",
+        "workspace": "Sua chave"
+      }
+    },
+    "log": {
+      "title": "Registro de pontuação",
+      "hint": "Todas as tentativas de pontuação, da mais recente para a mais antiga, com tokens e custo.",
+      "filter": "Mostrar tentativas com este resultado",
+      "all": "Todos os resultados",
+      "status": {
+        "ok": "Pontuado",
+        "kept": "Não salvo",
+        "failed": "Falhou",
+        "skipped": "Ignorado"
+      },
+      "refresh": "Atualizar",
+      "emptyTitle": "Ainda não há tentativas de pontuação",
+      "emptyBody": "As tentativas aparecem aqui quando a pontuação de leads com IA está ativada e um contato é pontuado.",
+      "emptyFilteredTitle": "Nenhuma tentativa com este resultado",
+      "emptyFilteredBody": "Escolha outro resultado ou mostre todos.",
+      "caption": "Tentativas de pontuação, da mais recente para a mais antiga",
+      "loadMore": "Carregar mais"
+    },
+    "settings": {
+      "title": "Pontuação de leads com IA",
+      "subtitle": "Dê a cada contato uma pontuação de 0 a 100 que indica a probabilidade de compra e veja quanto isso custa.",
+      "discard": "Descartar",
+      "save": "Salvar",
+      "saved": "Configurações salvas.",
+      "readOnly": "Você pode ver estas configurações, mas não alterá-las. Peça a um administrador do espaço de trabalho a permissão lsc.settings.manage.",
+      "conflict": "Outra pessoa alterou estas configurações antes. Elas foram recarregadas, então você vê a versão salva. Faça sua alteração novamente.",
+      "conflictOk": "Entendi",
+      "enable": {
+        "title": "Ativar a pontuação de leads com IA",
+        "hint": "Desativada até você decidir, porque dados sobre seus contatos são enviados a um provedor de IA.",
+        "label": "Pontuação de leads com IA",
+        "on": "Ativada",
+        "off": "Desativada",
+        "what": "Quando ativada, um modelo de IA lê uma descrição curta e anônima de um contato e responde com uma pontuação e os motivos. A pontuação é gravada na pontuação do lead do contato."
+      },
+      "sent": {
+        "title": "O que é enviado à IA",
+        "stage": "A etapa e o status do contato",
+        "source": "De onde o contato veio",
+        "tags": "Os nomes das etiquetas",
+        "deals": "Quantos negócios estão abertos, ganhos e perdidos",
+        "activity": "Há quanto tempo o contato esteve ativo",
+        "company": "O nome da empresa"
+      },
+      "notSent": {
+        "title": "O que nunca é enviado",
+        "name": "O nome do contato",
+        "email": "O endereço de e-mail",
+        "phone": "O número de telefone"
+      },
+      "manualRule": "Uma pontuação digitada por uma pessoa nunca é sobrescrita. A IA só preenche pontuações vazias e atualiza as que ela mesma gravou.",
+      "auto": {
+        "label": "Pontuar automaticamente quando os contatos mudarem",
+        "onBody": "Um contato é pontuado quando é criado e de novo quando seus dados mudam.",
+        "offBody": "Os contatos só são pontuados quando você usa o botão Pontuar com IA ou pontua os contatos sem pontuação abaixo."
+      },
+      "confirm": {
+        "title": "Enviar dados anonimizados dos contatos a um provedor de IA?",
+        "body": "Depois de ativada, descrições curtas dos seus contatos (etapa, origem, etiquetas, número de negócios, atividade e nome da empresa) são enviadas a um provedor de IA por meio do OpenRouter. Nomes, e-mails e telefones nunca são enviados. Você pode desativar a qualquer momento.",
+        "yes": "Ativar",
+        "no": "Cancelar"
+      },
+      "banner": {
+        "platformOff": "A pontuação de leads com IA está desativada em toda a plataforma. Nada é pontuado, seja qual for a configuração aqui, até que o operador da plataforma a reative.",
+        "noKey": "Nenhuma chave do OpenRouter está disponível, então nada pode ser pontuado. Adicione sua própria chave em Chaves de IA ou peça ao administrador da plataforma para ativar a chave compartilhada.",
+        "openKeys": "Abrir chaves de IA",
+        "off": "A pontuação de leads com IA está desativada neste espaço de trabalho. Nada é enviado a um provedor de IA.",
+        "ready": "Pronto. Os contatos são pontuados com {model} usando {key}.",
+        "keyWorkspace": "a chave própria do OpenRouter do seu espaço de trabalho",
+        "keyAdmin": "a chave compartilhada do OpenRouter da plataforma"
+      },
+      "backfill": {
+        "title": "Pontue os contatos que você já tem",
+        "hint": "Coloca na fila contatos que ainda não têm pontuação, até {limit} por vez. Eles são pontuados em segundo plano.",
+        "eligible": "Contatos que a IA pode pontuar",
+        "scored": "Pontuados pela IA",
+        "waiting": "Aguardando pontuação",
+        "eligibleNote": "Contatos com pontuação digitada por uma pessoa ficam de fora: a IA nunca os altera.",
+        "button": "Pontuar agora os contatos sem pontuação",
+        "noRight": "Seu perfil não permite pontuar contatos. É preciso a permissão lsc.contacts.score.",
+        "notReady": "Ative a pontuação de leads com IA e verifique se há uma chave disponível para pontuar contatos.",
+        "queued": "{count, plural, one {# contato está na fila e será pontuado} many {# de contatos estão na fila e serão pontuados} other {# contatos estão na fila e serão pontuados}} em segundo plano. Recarregue o registro em um minuto para ver os resultados.",
+        "nothingToScore": "Não há contatos sem pontuação para colocar na fila."
+      },
+      "cost": {
+        "title": "Últimos 30 dias",
+        "hint": "O que a pontuação fez e quanto custou nos últimos 30 dias.",
+        "scores": "Contatos pontuados",
+        "tokens": "Tokens usados",
+        "total": "Custo total",
+        "average": "Média por pontuação",
+        "averageHint": "Custo total dividido pelos contatos pontuados",
+        "model": "Modelo",
+        "payer": "Quem paga",
+        "payerBy": {
+          "workspace": "Sua própria chave do OpenRouter, cobrada de você pelo OpenRouter",
+          "admin": "A chave compartilhada do OpenRouter da plataforma",
+          "none": "Nenhuma chave disponível ainda"
+        },
+        "failed": "Tentativas com falha",
+        "platformPart": "Do total, na chave da plataforma"
+      }
+    }
+  }
+}

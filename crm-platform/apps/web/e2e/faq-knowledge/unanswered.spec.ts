@@ -3,19 +3,21 @@ import {
   customerSays,
   entries,
   expect,
-  go,
-  login,
+  faqBase,
   logCount,
+  login,
   newWorkspace,
   open,
+  openFaqs,
   putSettings,
+  reloadFaqs,
   repliesTo,
   seedFaq,
+  type Sim,
   simulator,
+  type State,
   test,
   waitIndexed,
-  type Sim,
-  type State,
   type Workspace,
 } from './support';
 import type { Page } from '@playwright/test';
@@ -64,7 +66,7 @@ test('an unanswered message appears with its closest FAQ, and teaching it makes 
   expect(repliesTo(ws, from)).toEqual([]);
 
   const { page } = await open(browser, state, watch);
-  await go(page, '/faq/unanswered');
+  await openFaqs(page, ws, 'unanswered');
   const item = row(page, text);
   await expect(item).toBeVisible();
   await expect(item).toContainText('Closest FAQ:');
@@ -90,7 +92,7 @@ test('an unanswered message appears with its closest FAQ, and teaching it makes 
   ).toBeVisible();
   await expect(row(page, text)).toHaveCount(0);
   const faq = (await entries(ws)).data.find((e: any) => e.question === 'Where is my order?');
-  const full = (await call(ws, 'GET', `/v2/faq/entries/${faq.id}`)).body;
+  const full = (await call(ws, 'GET', `${faqBase(ws)}/entries/${faq.id}`)).body;
   expect(full.variations.find((v: any) => v.text === text)?.source).toBe('learned');
 
   // Once indexed (or at once, as an exact phrase) the same words get the FAQ's answer.
@@ -100,7 +102,7 @@ test('an unanswered message appears with its closest FAQ, and teaching it makes 
     .poll(() => repliesTo(ws, again), { timeout: 30_000 })
     .toEqual(['Your order ships tomorrow.']);
   // The earlier unanswered rows with the same text are all resolved.
-  await page.reload();
+  await reloadFaqs(page);
   await expect(row(page, text)).toHaveCount(0);
 });
 
@@ -112,10 +114,10 @@ test('"Create FAQ from this" fills the editor, and saving resolves the message',
   await customerSays(ws, sim, text, customer());
   await arrives(ws, text);
   const { page } = await open(browser, state, watch);
-  await go(page, '/faq/unanswered');
+  await openFaqs(page, ws, 'unanswered');
   await row(page, text).getByRole('button', { name: 'Create FAQ from this' }).click();
 
-  await expect(page).toHaveURL(/\/faq\/new/);
+  await expect(page).toHaveURL(/[?&]view=new/);
   await expect(
     page.getByText('The question was filled in from an unanswered customer message.', {
       exact: false,
@@ -126,10 +128,10 @@ test('"Create FAQ from this" fills the editor, and saving resolves the message',
   await page.getByRole('button', { name: 'Create FAQ' }).click();
   await expect(page.getByText('FAQ created.')).toBeVisible();
 
-  await page.goto('/faq/unanswered');
+  await openFaqs(page, ws, 'unanswered');
   await expect(page.getByRole('heading', { name: 'Unanswered messages', level: 1 })).toBeVisible();
   await expect(row(page, text)).toHaveCount(0);
-  const log = (await call(ws, 'GET', '/v2/faq/insights/log?view=unanswered&limit=100')).body;
+  const log = (await call(ws, 'GET', `${faqBase(ws)}/insights/log?view=unanswered&limit=100`)).body;
   expect(log.data.map((r: any) => r.query)).not.toContain(text);
 });
 
@@ -138,12 +140,12 @@ test('Dismiss removes the message and it stays gone after a reload', async ({ br
   await customerSays(ws, sim, text, customer());
   await arrives(ws, text);
   const { page } = await open(browser, state, watch);
-  await go(page, '/faq/unanswered');
+  await openFaqs(page, ws, 'unanswered');
   await expect(row(page, text)).toBeVisible();
   await row(page, text).getByRole('button', { name: 'Dismiss' }).click();
   await expect(page.getByText('Message dismissed.')).toBeVisible();
   await expect(row(page, text)).toHaveCount(0);
-  await page.reload();
+  await reloadFaqs(page);
   await expect(page.getByRole('heading', { name: 'Unanswered messages', level: 1 })).toBeVisible();
   await expect(row(page, text)).toHaveCount(0);
 });
@@ -159,14 +161,14 @@ test('the search box narrows the list, and an empty list says nothing is waiting
   await waitIndexed(own);
   await putSettings(own, { enabled: true, threshold: 0.9 });
   const { page } = await open(browser, ownState, watch);
-  await go(page, '/faq/unanswered');
+  await openFaqs(page, own, 'unanswered');
   await expect(page.getByText('Nothing waiting')).toBeVisible();
 
   for (const t of ['alpha unique words', 'beta unique words']) {
     await customerSays(own, ownSim, t, customer());
     await arrives(own, t);
   }
-  await page.reload();
+  await reloadFaqs(page);
   await expect(list(page).getByRole('listitem')).toHaveCount(2);
   await page.getByRole('searchbox', { name: 'Search unanswered messages' }).fill('BETA');
   await expect(list(page).getByRole('listitem')).toHaveCount(1);
@@ -193,7 +195,7 @@ test('with customer messages not kept, the text is hidden and teaching is not of
     .toBeGreaterThan(0);
 
   const { page } = await open(browser, ownState, watch);
-  await go(page, '/faq/unanswered');
+  await openFaqs(page, own, 'unanswered');
   await expect(page.getByText('Message text not kept (query logging is off)')).toBeVisible();
   await expect(page.getByText(secret)).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Add to an FAQ' })).toHaveCount(0);
@@ -201,14 +203,16 @@ test('with customer messages not kept, the text is hidden and teaching is not of
   await expect(page.getByRole('button', { name: 'Dismiss' })).toBeVisible();
 
   // The insights log keeps the score and the length, never the words.
-  await go(page, '/faq/insights');
+  await openFaqs(page, own, 'insights');
   await expect(page.getByText(secret)).toHaveCount(0);
   await expect(page.getByText(`Not kept (${secret.length} characters)`)).toBeVisible();
-  const log = (await call(own, 'GET', '/v2/faq/insights/log?view=all')).body;
+  const log = (await call(own, 'GET', `${faqBase(own)}/insights/log?view=all`)).body;
   expect(JSON.stringify(log)).not.toContain('secret account');
   // The API refuses to learn from it as well.
   const id = log.data[0].id;
   const faq = (await entries(own)).data[0];
-  const learn = await call(own, 'POST', `/v2/faq/insights/log/${id}/learn`, { faqId: faq.id });
+  const learn = await call(own, 'POST', `${faqBase(own)}/insights/log/${id}/learn`, {
+    faqId: faq.id,
+  });
   expect(learn.status).toBeGreaterThanOrEqual(400);
 });

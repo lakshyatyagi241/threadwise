@@ -51,6 +51,9 @@ const row = (over: Partial<RowView> = {}): RowView => ({
   attributes: [{ key: 'order_id', label: 'Order Id', text: 'A12', full: 'Order Id: A12' }],
   custom: { order_id: 'A12' },
   createdAt: '2026-03-05T12:00:00.000Z',
+  leadScore: null,
+  leadScoreSource: null,
+  leadScoredAt: null,
   ...over,
 });
 

@@ -1420,6 +1420,7 @@
             "form_builder": "Formulários web hospedados e incorporados que criam contatos no CRM. O app pago de Formulários controla esta chave.",
             "waba_groups": "Crie e gerencie grupos do WhatsApp a partir de um número da API em nuvem: link de convite, solicitações de entrada, membros. O número deve ser uma Conta Comercial Oficial.",
             "sms": "SMS somente de envio via Twilio ou MSG91: conecte remetentes e envie transmissões e campanhas por SMS.",
+            "help_agent": "O Assistente de ajuda do app: as pessoas pedem uma tarefa com palavras simples e ele orienta ou executa na própria sessão delas, perguntando antes de qualquer ação arriscada. Gasta tokens de IA.",
             "email_channel": "Conecte caixas do Gmail e do Google Workspace à caixa de entrada da equipe. O app pago E-mail controla este botão."
           },
           "units": {
@@ -1602,6 +1603,7 @@
             "form_builder": "Formulários (construtor de formulários web)",
             "waba_groups": "Grupos do WhatsApp (API em nuvem)",
             "sms": "Canal SMS",
+            "help_agent": "Assistente de ajuda (IA, gasta tokens)",
             "email_channel": "Canal de e-mail (Gmail)"
           },
           "problems": {

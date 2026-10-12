@@ -170,7 +170,8 @@
       "import": "Importuj",
       "columns": "Kolumny",
       "addColumnField": "Dodaj pole niestandardowe jako kolumnę",
-      "kanbanView": "Widok tablicy (według etapu)"
+      "kanbanView": "Widok tablicy (według etapu)",
+      "colLeadScore": "Ocena leada"
     },
     "bulk": {
       "label": "Działania dla wybranych kontaktów",

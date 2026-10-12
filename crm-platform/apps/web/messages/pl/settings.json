@@ -324,6 +324,16 @@
         "label": "Czat na stronie",
         "description": "Boty stworzone dla czatu na Twojej stronie internetowej i widżet, w którym każdy z nich działa.",
         "keywords": "web, strona internetowa, widżet, chatbot, osadzanie, czat na żywo"
+      },
+      "lead-scoring": {
+        "label": "Ocenianie leadów przez AI",
+        "description": "Oceniaj każdy kontakt przez AI, wybierz, co jest wysyłane, i sprawdź, ile to kosztuje.",
+        "keywords": "lead, ocena leada, ocenianie, ai, gorący, ciepły, zimny, openrouter, koszt, kwalifikacja"
+      },
+      "help-assistant": {
+        "label": "Asystent pomocy",
+        "description": "Włącz asystenta, który prowadzi Twój zespół lub wykonuje kroki za niego.",
+        "keywords": "ai, asystent, agent, przewodnik, pomoc, automatyzacja"
       }
     }
   }

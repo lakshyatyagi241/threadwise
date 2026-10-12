@@ -28,7 +28,7 @@ let ws: Workspace;
 function dbNumbers() {
   const model = LARGE;
   return {
-    enabled: sqlNum(`SELECT count(*) FROM faq_settings WHERE enabled`),
+    enabled: sqlNum(`SELECT count(DISTINCT org_id) FROM faq_settings WHERE enabled`),
     faqs: sqlNum(`SELECT count(*) FROM faqs`),
     variations: sqlNum(`SELECT count(*) FROM faq_variations`),
     ready: sqlNum(
@@ -203,7 +203,7 @@ test.describe('platform FAQ engine: overview numbers', () => {
   test('the engine card counts workspaces that switched FAQs on', async ({ page }) => {
     await signInOperator(page);
     await openFaq(page);
-    const n = sqlNum(`SELECT count(*) FROM faq_settings WHERE enabled`);
+    const n = sqlNum(`SELECT count(DISTINCT org_id) FROM faq_settings WHERE enabled`);
     expect(n).toBeGreaterThanOrEqual(1);
     await expect(
       page.getByText(

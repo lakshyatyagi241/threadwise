@@ -1,17 +1,19 @@
 import {
+  entries,
   expect,
+  getSettings,
   go,
   login,
   newWorkspace,
   open,
+  openFaqs,
   phrasingBox,
   questionBox,
-  entries,
+  reloadFaqs,
   seedFaq,
-  getSettings,
+  type State,
   test,
   waitIndexed,
-  type State,
   type Workspace,
 } from './support';
 
@@ -33,7 +35,7 @@ test('the empty list explains the feature, and the banner switches answering on'
   watch,
 }) => {
   const { page } = await open(browser, state, watch);
-  await go(page, '/faq');
+  await openFaqs(page, ws);
 
   await expect(page.getByRole('heading', { name: 'FAQs', level: 1 })).toBeVisible();
   await expect(page.getByText('Teach your bot the answers to common questions')).toBeVisible();
@@ -42,18 +44,18 @@ test('the empty list explains the feature, and the banner switches answering on'
   // No toolbar to filter an empty list.
   await expect(page.getByLabel('Search FAQs')).toHaveCount(0);
 
-  // Answering is off for every workspace until the owner switches it on, and the banner says so on this very screen.
-  await expect(page.getByText('FAQ answering is OFF for customers')).toBeVisible();
+  // Answering is off for every flow until someone switches it on, and the banner says so on this very screen.
+  await expect(page.getByText('FAQ answering is OFF for this flow')).toBeVisible();
   expect((await getSettings(ws)).enabled).toBe(false);
   await page.getByRole('button', { name: 'Turn on FAQ answering' }).click();
   await expect(page.getByText('FAQ answering is on.')).toBeVisible();
-  await expect(page.getByText('FAQ answering is OFF for customers')).toHaveCount(0);
+  await expect(page.getByText('FAQ answering is OFF for this flow')).toHaveCount(0);
   await expect.poll(async () => (await getSettings(ws)).enabled).toBe(true);
 
   // It survives a reload (the banner reads the saved setting).
-  await page.reload();
+  await reloadFaqs(page);
   await expect(page.getByRole('heading', { name: 'FAQs', level: 1 })).toBeVisible();
-  await expect(page.getByText('FAQ answering is OFF for customers')).toHaveCount(0);
+  await expect(page.getByText('FAQ answering is OFF for this flow')).toHaveCount(0);
 });
 
 test('create a FAQ: Enter and Add and Paste many each add phrasings without submitting the form', async ({
@@ -61,9 +63,9 @@ test('create a FAQ: Enter and Add and Paste many each add phrasings without subm
   watch,
 }) => {
   const { page } = await open(browser, state, watch);
-  await go(page, '/faq');
+  await openFaqs(page, ws);
   await page.getByRole('link', { name: 'Add your first FAQ' }).click();
-  await expect(page).toHaveURL(/\/faq\/new$/);
+  await expect(page).toHaveURL(/[?&]view=new$/);
   await expect(page.getByRole('heading', { name: 'New FAQ', level: 1 })).toBeVisible();
 
   await questionBox(page).fill('Where is my order?');
@@ -79,7 +81,7 @@ test('create a FAQ: Enter and Add and Paste many each add phrasings without subm
   await add.press('Enter');
   await expect(phrasings.getByText('order status please')).toBeVisible();
   await expect(add).toHaveValue('');
-  await expect(page).toHaveURL(/\/faq\/new$/);
+  await expect(page).toHaveURL(/[?&]view=new$/);
   await expect(page.getByText('FAQ created.')).toHaveCount(0);
   // No validation errors appeared (the form was not submitted), and the field is ready for the next phrasing.
   await expect(page.locator('[aria-invalid="true"]')).toHaveCount(0);
@@ -89,7 +91,7 @@ test('create a FAQ: Enter and Add and Paste many each add phrasings without subm
   await add.fill('where is my package');
   await page.getByRole('button', { name: 'Add', exact: true }).click();
   await expect(phrasings.getByText('where is my package')).toBeVisible();
-  await expect(page).toHaveURL(/\/faq\/new$/);
+  await expect(page).toHaveURL(/[?&]view=new$/);
 
   // 3) Paste many: duplicates (of the question, of an existing phrasing, repeated lines) are counted and left out.
   await page.getByRole('button', { name: 'Paste many' }).click();
@@ -110,7 +112,7 @@ test('create a FAQ: Enter and Add and Paste many each add phrasings without subm
   await page.getByRole('button', { name: 'Add 2 phrasings' }).click();
   await expect(phrasings.getByText('track my parcel')).toBeVisible();
   await expect(phrasings.getByText('has my order shipped')).toBeVisible();
-  await expect(page).toHaveURL(/\/faq\/new$/);
+  await expect(page).toHaveURL(/[?&]view=new$/);
   // Question + 4 phrasings.
   await expect(page.getByLabel(/^5 of \d+ phrasings used$/)).toBeVisible();
 
@@ -122,7 +124,7 @@ test('create a FAQ: Enter and Add and Paste many each add phrasings without subm
   // Save.
   await page.getByRole('button', { name: 'Create FAQ' }).click();
   await expect(page.getByText('FAQ created.')).toBeVisible();
-  await expect(page).toHaveURL(/\/faq\/[0-9a-f-]{36}$/);
+  await expect(page).toHaveURL(/[?&]view=[0-9a-f-]{36}$/);
   await expect(page.getByRole('heading', { name: 'Edit FAQ', level: 1 })).toBeVisible();
 
   const saved = (await entries(ws)).data.find((e: any) => e.question === 'Where is my order?');
@@ -151,7 +153,7 @@ test('the list shows a FAQ with its phrasing count, live bar and answer preview'
   });
   await waitIndexed(ws);
   const { page } = await open(browser, state, watch);
-  await go(page, '/faq');
+  await openFaqs(page, ws);
   const row = page.getByRole('row').filter({ hasText: 'Where do I find my invoice?' });
   await expect(row).toBeVisible();
   await expect(row.getByText('5 phrasings')).toBeVisible();

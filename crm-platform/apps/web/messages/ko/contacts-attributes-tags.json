@@ -170,7 +170,8 @@
       "import": "가져오기",
       "columns": "열",
       "addColumnField": "사용자 지정 필드를 열로 추가",
-      "kanbanView": "보드 보기(단계별)"
+      "kanbanView": "보드 보기(단계별)",
+      "colLeadScore": "리드 점수"
     },
     "bulk": {
       "label": "선택한 연락처에 대한 작업",

@@ -8,13 +8,17 @@ import { Button, Spinner } from '@crm/ui';
 import { faqApi } from '../api/service';
 import { errorKey } from '../lib/errors';
 import { DecisionView } from './decision-view';
+import { useFaqFlow } from './faq-flow';
 import { LoadError, SectionCard } from './parts';
 
 /** "Try it" in the editor: what would the bot do with this message right now? Saved FAQs only (unsaved edits are not matched). */
 export function TryIt() {
   const t = useTranslations('faq.tryIt');
+  const { flowId } = useFaqFlow();
   const [text, setText] = useState('');
-  const run = useMutation({ mutationFn: (q: string) => faqApi.test(q).then((d) => ({ q, d })) });
+  const run = useMutation({
+    mutationFn: (q: string) => faqApi.test(flowId, q).then((d) => ({ q, d })),
+  });
   const submit = () => {
     const q = text.trim();
     if (q && !run.isPending) run.mutate(q);

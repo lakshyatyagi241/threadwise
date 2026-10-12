@@ -17,6 +17,8 @@ const text = (v: unknown): string | null => (v === null || v === undefined ? nul
 const date = (v: unknown): Date => new Date(v as string);
 
 export interface LogWrite {
+  /** The flow the decision belongs to (internal id). */
+  flowId: number;
   origin: 'inbound' | 'test' | 'flow';
   conversationId: number | null;
   channelId: number | null;
@@ -85,9 +87,10 @@ const likeOf = (s: string): string => `%${s.replace(/[\\%_]/g, (m) => `\\${m}`)}
 export class FaqLogRepository {
   // --- settings -----------------------------------------------------------------------------------------------------
 
-  async getSettings(tx: Tx, orgId: number): Promise<SettingsRow | null> {
+  async getSettings(tx: Tx, orgId: number, flowId: number): Promise<SettingsRow | null> {
     const res = await tx.execute(sql`
-      SELECT enabled, threshold, min_margin, log_queries, verify_mode, verify_band, tuned_model, row_version, updated_at FROM faq_settings WHERE org_id = ${orgId}`);
+      SELECT enabled, threshold, min_margin, log_queries, verify_mode, verify_band, tuned_model, row_version, updated_at
+      FROM faq_settings WHERE org_id = ${orgId} AND flow_id = ${flowId}`);
     const r = (res.rows as Raw[])[0];
     return r
       ? {
@@ -108,6 +111,7 @@ export class FaqLogRepository {
   async saveSettings(
     tx: Tx,
     orgId: number,
+    flowId: number,
     w: {
       enabled: boolean;
       threshold: number;
@@ -121,15 +125,15 @@ export class FaqLogRepository {
   ): Promise<boolean> {
     if (rowVersion === undefined) {
       const res = await tx.execute(sql`
-        INSERT INTO faq_settings (org_id, enabled, threshold, min_margin, log_queries, verify_mode, verify_band, tuned_model)
-        VALUES (${orgId}, ${w.enabled}, ${w.threshold}, ${w.minMargin}, ${w.logQueries}, ${w.verifyMode}, ${w.verifyBand}, ${w.tunedModel})
-        ON CONFLICT (org_id) DO NOTHING RETURNING org_id`);
+        INSERT INTO faq_settings (org_id, flow_id, enabled, threshold, min_margin, log_queries, verify_mode, verify_band, tuned_model)
+        VALUES (${orgId}, ${flowId}, ${w.enabled}, ${w.threshold}, ${w.minMargin}, ${w.logQueries}, ${w.verifyMode}, ${w.verifyBand}, ${w.tunedModel})
+        ON CONFLICT (org_id, flow_id) DO NOTHING RETURNING org_id`);
       return res.rows.length > 0;
     }
     const res = await tx.execute(sql`
       UPDATE faq_settings SET enabled = ${w.enabled}, threshold = ${w.threshold}, min_margin = ${w.minMargin},
         log_queries = ${w.logQueries}, verify_mode = ${w.verifyMode}, verify_band = ${w.verifyBand}, tuned_model = ${w.tunedModel}
-      WHERE org_id = ${orgId} AND row_version = ${rowVersion} RETURNING org_id`);
+      WHERE org_id = ${orgId} AND flow_id = ${flowId} AND row_version = ${rowVersion} RETURNING org_id`);
     return res.rows.length > 0;
   }
 
@@ -137,10 +141,10 @@ export class FaqLogRepository {
 
   async insert(tx: Tx, orgId: number, w: LogWrite): Promise<number> {
     const res = await tx.execute(sql`
-      INSERT INTO faq_match_logs (org_id, origin, conversation_id, channel_id, query, query_length, outcome, tier, matched_faq_id,
+      INSERT INTO faq_match_logs (org_id, flow_id, origin, conversation_id, channel_id, query, query_length, outcome, tier, matched_faq_id,
                                   score, second_score, matched_text, candidates, embedding_model, latency_ms, error,
                                   verify_verdict, verify_model, verify_reason)
-      VALUES (${orgId}, ${w.origin}, ${w.conversationId}, ${w.channelId}, ${w.query}, ${w.queryLength}, ${w.outcome}, ${w.tier},
+      VALUES (${orgId}, ${w.flowId}, ${w.origin}, ${w.conversationId}, ${w.channelId}, ${w.query}, ${w.queryLength}, ${w.outcome}, ${w.tier},
               ${w.matchedFaqId}, ${w.score}, ${w.secondScore}, ${w.matchedText}, ${JSON.stringify(w.candidates)}::jsonb,
               ${w.embeddingModel}, ${w.latencyMs}, ${w.error}, ${w.verify?.verdict ?? null}, ${w.verify?.model ?? null},
               ${w.verify?.reason ?? null})
@@ -183,8 +187,12 @@ export class FaqLogRepository {
     l.score, l.second_score, l.matched_text, l.candidates, l.embedding_model, l.latency_ms, l.error,
     l.verify_verdict, l.verify_model, l.verify_reason, l.resolved_at`;
 
-  async list(tx: Tx, orgId: number, f: LogFilter): Promise<LogRow[]> {
-    const where: SQL[] = [sql`l.org_id = ${orgId}`, sql`l.origin = 'inbound'`];
+  async list(tx: Tx, orgId: number, flowId: number, f: LogFilter): Promise<LogRow[]> {
+    const where: SQL[] = [
+      sql`l.org_id = ${orgId}`,
+      sql`l.flow_id = ${flowId}`,
+      sql`l.origin = 'inbound'`,
+    ];
     if (f.afterId !== null) where.push(sql`l.id < ${f.afterId}`);
     if (f.view === 'answered') where.push(sql`l.outcome IN ('answered', 'flow_started')`);
     if (f.view === 'unanswered') {
@@ -203,15 +211,17 @@ export class FaqLogRepository {
     return (res.rows as Raw[]).map((r) => this.toLog(r));
   }
 
+  /** A log row of this flow; one of another flow reads as missing. */
   async findByUuid(
     tx: Tx,
     orgId: number,
+    flowId: number,
     uuid: string,
   ): Promise<(LogRow & { internalId: number }) | null> {
     const res = await tx.execute(sql`
       SELECT ${FaqLogRepository.LOG_COLS} FROM faq_match_logs l
       LEFT JOIN faqs f ON f.org_id = l.org_id AND f.id = l.matched_faq_id
-      WHERE l.org_id = ${orgId} AND l.uuid = ${uuid}`);
+      WHERE l.org_id = ${orgId} AND l.flow_id = ${flowId} AND l.uuid = ${uuid}`);
     const r = (res.rows as Raw[])[0];
     return r ? { ...this.toLog(r), internalId: num(r.id) } : null;
   }
@@ -223,10 +233,10 @@ export class FaqLogRepository {
   }
 
   /** The unanswered messages that equal this text (case-insensitive): resolved together, so the list does not repeat what was fixed. */
-  async resolveSameQuery(tx: Tx, orgId: number, query: string): Promise<number> {
+  async resolveSameQuery(tx: Tx, orgId: number, flowId: number, query: string): Promise<number> {
     const res = await tx.execute(sql`
       UPDATE faq_match_logs SET resolved_at = now()
-      WHERE org_id = ${orgId} AND origin = 'inbound' AND resolved_at IS NULL
+      WHERE org_id = ${orgId} AND flow_id = ${flowId} AND origin = 'inbound' AND resolved_at IS NULL
         AND outcome IN ('below_threshold', 'low_margin', 'no_faqs') AND lower(btrim(query)) = lower(btrim(${query}))
       RETURNING id`);
     return res.rows.length;
@@ -243,8 +253,8 @@ export class FaqLogRepository {
 
   // --- insights -----------------------------------------------------------------------------------------------------
 
-  async insights(tx: Tx, orgId: number, days: number): Promise<FaqInsights> {
-    const win = sql`l.org_id = ${orgId} AND l.origin = 'inbound' AND l.created_at >= now() - make_interval(days => ${days})`;
+  async insights(tx: Tx, orgId: number, flowId: number, days: number): Promise<FaqInsights> {
+    const win = sql`l.org_id = ${orgId} AND l.flow_id = ${flowId} AND l.origin = 'inbound' AND l.created_at >= now() - make_interval(days => ${days})`;
     const totals = (
       await tx.execute(sql`
         SELECT count(*) AS messages,
@@ -279,14 +289,14 @@ export class FaqLogRepository {
     ).rows as Raw[];
     const never = (
       await tx.execute(sql`
-        SELECT count(*) AS n FROM faqs f WHERE f.org_id = ${orgId} AND f.status = 'active' AND NOT EXISTS (
+        SELECT count(*) AS n FROM faqs f WHERE f.org_id = ${orgId} AND f.owner_flow_id = ${flowId} AND f.status = 'active' AND NOT EXISTS (
           SELECT 1 FROM faq_match_logs l WHERE l.org_id = f.org_id AND l.matched_faq_id = f.id AND l.origin = 'inbound'
             AND l.outcome IN ('answered', 'flow_started') AND l.created_at >= now() - make_interval(days => ${days}))`)
     ).rows[0] as Raw;
     const unresolved = (
       await tx.execute(sql`
         SELECT count(*) AS n FROM faq_match_logs l
-        WHERE l.org_id = ${orgId} AND l.origin = 'inbound' AND l.outcome IN ('below_threshold', 'low_margin', 'no_faqs') AND l.resolved_at IS NULL`)
+        WHERE l.org_id = ${orgId} AND l.flow_id = ${flowId} AND l.origin = 'inbound' AND l.outcome IN ('below_threshold', 'low_margin', 'no_faqs') AND l.resolved_at IS NULL`)
     ).rows[0] as Raw;
 
     const messages = num(totals.messages);

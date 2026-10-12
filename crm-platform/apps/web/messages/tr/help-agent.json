@@ -1,0 +1,135 @@
+{
+  "help-agent": {
+    "launcher": {
+      "label": "Sor",
+      "shortcut": "Asistana sor (Ctrl veya Cmd + Shift + L)"
+    },
+    "panel": {
+      "title": "Asistana sor",
+      "subtitle": "Ne yapmak istediğinizi yazın. Bu sayfayı okurum, sizin yerinize tıklarım; kaydetme, gönderme, silme ve ödeme öncesinde size sorarım.",
+      "close": "Kapat",
+      "taskLabel": "Ne yapmak istiyorsunuz?",
+      "taskPlaceholder": "Örneğin: bir kişiye VIP etiketi ekle",
+      "tooLong": "En fazla {max} karakter olsun.",
+      "doItForMe": "Benim yerime yap",
+      "showMe": "Bana göster",
+      "stop": "Durdur",
+      "stopping": "Durduruluyor...",
+      "newTask": "Yeni görev",
+      "tryAgain": "Tekrar dene",
+      "openGuide": "Kılavuzu aç",
+      "showSteps": "Adımları göster",
+      "guidesTitle": "Yardım kılavuzlarından",
+      "examplesTitle": "Şunu sormayı deneyin",
+      "disabledHere": "Bu ekran müşterilerin yazdığı mesajları ve ayrıntıları gösterdiği için asistan burada kapalı. Kullanmak için başka bir ekrana geçin."
+    },
+    "notice": {
+      "title": "Başlamadan önce",
+      "sent": "Bir görevi yapmak için asistan, isteğinizi ve bulunduğunuz sayfanın metnini bir yapay zeka sağlayıcısına gönderir.",
+      "masked": "Telefon numaraları, e-posta adresleri ve gizli bilgiler önce gizlenir. Sayfadaki adlar ve diğer metinler gizlenmez.",
+      "asks": "Kendi hesabınızı kullanır, bu yüzden yalnızca sizin yapabildiklerinizi yapabilir. Kaydetme, gönderme, silme, ödeme, kişi davet etme veya ayar değiştirme öncesinde size sorar.",
+      "limits": "Asla parola veya kart bilgisi yazmaz, başka web sitelerini açmaz ve istediğiniz an durdurabilirsiniz.",
+      "accept": "Anladım"
+    },
+    "status": {
+      "progress": "Adım {n} / {max}",
+      "thinking": "Düşünüyor...",
+      "starting": "Başlıyor..."
+    },
+    "activity": {
+      "click": "Tıklanıyor: {label}",
+      "type": "Yazılıyor: {label}",
+      "select": "Seçiliyor: {label}",
+      "blocked": "Atlandı: {label}",
+      "declined": "Reddettiniz: {label}",
+      "shown": "Gösteriliyor: {label}"
+    },
+    "confirm": {
+      "title": "Buna izin verilsin mi?",
+      "clickBody": "Asistan \"{label}\" düğmesine tıklamak üzere.",
+      "selectBody": "Asistan \"{label}\" alanında \"{detail}\" seçeneğini seçmek üzere.",
+      "allow": "Bir kez izin ver",
+      "deny": "Reddet",
+      "reasons": {
+        "marked": "Bu, uygulamadaki en hassas düğmelerden biridir.",
+        "submit": "Bu, sayfadakileri kaydeder veya gönderir.",
+        "delete": "Bu, bir şeyi siler, kaldırır veya bağlantısını keser.",
+        "send": "Bu, başkalarının göreceği bir şeyi gönderir, yayınlar veya başlatır.",
+        "pay": "Bu, para harcayabilir veya ödediğiniz tutarı değiştirebilir.",
+        "invite": "Bu, çalışma alanınıza birini davet eder.",
+        "connect": "Bu, bir kanalı veya uygulamayı bağlar ya da bağlantısını keser.",
+        "access": "Bu, kimin neyi yapabileceğini veya bir gizli bilgiyi ya da fatura ayrıntısını değiştirir.",
+        "settings": "Bu, bir şeyi açar veya kapatır.",
+        "toggle": "Bu anahtar hemen etkili olur.",
+        "dialog": "Bu, pencerenin sorduğu şeyi onaylar.",
+        "signout": "Bu, oturumunuzu kapatır."
+      }
+    },
+    "question": {
+      "title": "Asistan soruyor",
+      "answerLabel": "Yanıtınız",
+      "send": "Gönder"
+    },
+    "result": {
+      "completedTitle": "Bitti",
+      "failedTitle": "Bunu tamamlayamadım",
+      "stoppedTitle": "Durduruldu",
+      "summary": "{steps, plural, one {# adım} other {# adım}}, {confirmed} izin verildi, {denied} reddedildi."
+    },
+    "stopped": {
+      "person": "Görevi durdurdunuz.",
+      "budget": "Görev adım sınırına ulaştı ve durdu. Daha küçük bir istek deneyin.",
+      "location": "Görev, asistanın kullanmasına izin verilmeyen bir ekrana ulaştığı için durdu."
+    },
+    "errors": {
+      "disabled": "Asistan bu çalışma alanı için veya bu ekranda kapalı.",
+      "planLocked": "Asistan planınızın kapsamında değil.",
+      "forbidden": "Asistanı kullanma izniniz yok.",
+      "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
+      "taskLimit": "Şimdilik izin verilen en fazla görevi başlattınız. Daha sonra tekrar deneyin.",
+      "stepLimit": "Bu görev adımlarını tüketti. Daha küçük bir istekle yenisini başlatın.",
+      "closed": "Bu görev sona erdi. Yenisini başlatın.",
+      "providerDown": "Yapay zeka hizmeti yanıt vermedi. Biraz sonra tekrar deneyin; sürerse platform sahibine sorun.",
+      "monthlyLimit": "Çalışma alanınız bu ayki yapay zeka hakkını kullandı.",
+      "signedOut": "Oturumunuz sona erdi. Tekrar giriş yapın.",
+      "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+      "generic": "Bir şeyler ters gitti. Tekrar deneyin.",
+      "retryIn": "{seconds} saniye sonra tekrar deneyin.",
+      "requestId": "İstek kimliği: {id}"
+    },
+    "examples": {
+      "howDo": "{title} nasıl kullanılır?",
+      "showMe": "{title} içinde nereden başlayacağımı göster",
+      "whereIs": "{title} nerede?",
+      "generic1": "WhatsApp numaramı nasıl bağlarım?",
+      "generic2": "İşletme profilimi nereden değiştiririm?",
+      "generic3": "Bir ekip arkadaşını nasıl davet ederim?"
+    },
+    "helpCard": {
+      "title": "Asistana sor",
+      "body": "Ne yapmak istediğinizi söyleyin. Doğru kılavuzu bulur, nereye tıklayacağınızı gösterir veya adımları sizin yerinize yapar; önemli bir şeyden önce sorar.",
+      "button": "Asistanı aç"
+    },
+    "settingsPage": {
+      "title": "Yardım asistanı",
+      "description": "Ekibiniz yapmak istediğini yazsın; uygulama onlara yol göstersin veya adımları kendi hesaplarında yapsın.",
+      "loading": "Yükleniyor",
+      "loadFailed": "Ayar yüklenemedi.",
+      "requestId": "İstek kimliği: {id}",
+      "shareTitle": "Biri kullandığında neler paylaşılır",
+      "share1": "Kişinin yazdığı istek ve bulunduğu sayfanın görünen metni, platformun kullandığı yapay zeka sağlayıcısına gönderilir.",
+      "share2": "Telefon numaraları, e-posta adresleri, gizli bilgiler ve formların kişisel alanları önce gizlenir. Sayfadaki adlar ve diğer serbest metinler gizlenmez.",
+      "share3": "Müşteri mesajları ve ekip sohbeti asla okunmaz: asistan bu ekranlarda kapalıdır.",
+      "share4": "Asistan, giriş yapan kişinin kendi izinleriyle çalışır ve kaydetme, gönderme, silme, ödeme veya ayar değiştirme öncesinde sorar. Yalnızca sayılar ve her görevin sonucu saklanır, istek metni asla saklanmaz.",
+      "optIn": "Açarak, çalışma alanınızın bunu yapay zeka sağlayıcısıyla paylaşmayı kabul ettiğini onaylarsınız.",
+      "switchLabel": "Bu çalışma alanı için Yardım asistanını aç",
+      "stateOn": "Açık. İzni olanlar Sor düğmesini görür.",
+      "stateOff": "Kapalı. Kimse asistanı görmez.",
+      "saveFailed": "Ayar kaydedilemedi.",
+      "savedOn": "Asistan açık.",
+      "savedOff": "Asistan kapalı.",
+      "whoCanUse": "Yalnızca \"Yardım asistanını kullan\" iznine sahip roller bunu görür. Sahiplerde ve yöneticilerde bu izin vardır.",
+      "rolesLink": "Rolleri aç"
+    }
+  }
+}

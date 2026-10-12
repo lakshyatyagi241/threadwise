@@ -11,6 +11,7 @@ export const FIXED_COLUMN_IDS = [
   'groups',
   'stage',
   'status',
+  'leadScore',
   'language',
   'memo',
   'createdOn',
@@ -29,6 +30,7 @@ export const DEFAULT_FIXED: readonly FixedColumnId[] = [
   'tags',
   'stage',
   'status',
+  'leadScore',
   'createdOn',
 ];
 
@@ -62,6 +64,7 @@ const FIXED_LABEL: Record<FixedColumnId, string> = {
   groups: 'colGroups',
   stage: 'colStage',
   status: 'colStatus',
+  leadScore: 'colLeadScore',
   language: 'colLanguage',
   memo: 'colMemo',
   createdOn: 'colCreatedOn',
@@ -86,6 +89,7 @@ export function allColumns(attributes: readonly AttributeColumn[]): ColumnDef[] 
     fixed('groups'),
     fixed('stage'),
     fixed('status'),
+    fixed('leadScore'),
     fixed('language'),
     fixed('memo'),
     fixed('createdOn'),
@@ -168,8 +172,10 @@ export function nudgeColumn(visible: readonly ColumnId[], id: ColumnId, step: -1
 export function sortKeyOf(id: ColumnId): string | null {
   if (isAttrId(id)) return /^attr:[a-z0-9_]{1,64}$/.test(id) ? id : null;
   switch (id) {
+    // Many values per contact, or (lead score) not orderable by the API yet.
     case 'tags':
     case 'groups':
+    case 'leadScore':
       return null;
     case 'createdOn':
       return 'createdAt';

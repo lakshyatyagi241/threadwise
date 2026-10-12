@@ -1,7 +1,6 @@
 {
   "faq": {
     "nav": {
-      "faq": "FAQ's",
       "label": "FAQ-secties",
       "tab": {
         "faqs": "FAQ's",
@@ -13,7 +12,6 @@
       "unansweredCount": "{count, plural, one {# onbeantwoord bericht} other {# onbeantwoorde berichten}}"
     },
     "common": {
-      "dismiss": "Sluiten",
       "retry": "Opnieuw proberen",
       "requestId": "Verzoek {id}",
       "noAccessTitle": "Je hebt geen toegang tot dit scherm",
@@ -26,7 +24,6 @@
       "conflict": "Iemand anders heeft dit gewijzigd terwijl je het bewerkte.",
       "duplicateQuestion": "Een andere FAQ heeft deze vraag al.",
       "duplicateVariation": "Deze FAQ heeft deze formulering al.",
-      "limitReached": "Je workspace heeft de FAQ-limiet bereikt. Verwijder ongebruikte FAQ's of varianten, of vraag je platformbeheerder de limiet te verhogen.",
       "flowNotFound": "De gekozen flow bestaat niet meer in deze workspace. Kies een andere.",
       "embeddingUnavailable": "De AI-provider is niet beschikbaar. Voeg een OpenRouter-sleutel toe aan je workspace of vraag je platformbeheerder de gedeelde sleutel in te schakelen en probeer het dan opnieuw.",
       "engineDisabled": "FAQ-antwoorden zijn op dit moment voor het hele platform uitgeschakeld.",
@@ -34,21 +31,21 @@
       "validation": "Sommige velden vragen aandacht.",
       "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
       "unexpected": "Er ging iets mis. Probeer het opnieuw en deel de verzoek-id met support als het blijft gebeuren.",
-      "flowNodeNotFound": "De gekozen stap staat niet meer in deze flow. Kies een andere stap of begin bij het begin van de flow."
+      "flowNodeNotFound": "De gekozen stap staat niet meer in deze flow. Kies een andere stap of begin bij het begin van de flow.",
+      "limitReached": "Deze flow heeft de FAQ-limiet bereikt. Verwijder ongebruikte FAQs of variaties, of vraag je platformbeheerder de limiet te verhogen."
     },
     "banner": {
       "enabledToast": "FAQ-antwoorden staan aan.",
       "engineOff": "FAQ-antwoorden zijn door het platform uitgeschakeld. Klanten krijgen geen FAQ-antwoorden totdat ze weer zijn ingeschakeld.",
       "modelChanged": "Het platform heeft het AI-model gewijzigd nadat je deze drempel afstelde. De scores zijn verschoven, controleer dus je gevoeligheid.",
       "reviewSensitivity": "Gevoeligheid controleren",
-      "offTitle": "FAQ-antwoorden staan UIT voor klanten",
-      "offBody": "Je kunt FAQ's schrijven en testen, maar klanten krijgen pas antwoorden als je dit inschakelt.",
       "offNoRight": "Vraag iemand met de machtiging faq.settings.manage (meestal een workspace-beheerder) om dit in te schakelen.",
-      "enable": "FAQ-antwoorden inschakelen"
+      "enable": "FAQ-antwoorden inschakelen",
+      "offTitle": "FAQ-beantwoording staat UIT voor deze flow",
+      "offBody": "Je kunt de FAQs van deze flow schrijven en testen, maar klanten krijgen pas antwoorden als je dit inschakelt."
     },
     "list": {
       "title": "FAQ's",
-      "subtitle": "Vragen die je klanten stellen en wat je bot antwoordt. Klanten hoeven niet je exacte woorden te gebruiken.",
       "add": "FAQ toevoegen",
       "stats": {
         "label": "FAQ-totalen",
@@ -98,10 +95,10 @@
       "deleted": "FAQ verwijderd.",
       "empty": {
         "title": "Leer je bot de antwoorden op veelgestelde vragen",
-        "body": "Schrijf een vraag en het antwoord één keer op. Je bot herkent wat klanten in hun eigen woorden schrijven en antwoordt met het antwoord of start een flow.",
         "how": "Voeg een paar andere manieren toe om hetzelfde te vragen (formuleringen) en test het voordat klanten het zien.",
         "cta": "Voeg je eerste FAQ toe",
-        "noRight": "Vraag een workspace-beheerder om de machtiging om FAQ's toe te voegen."
+        "noRight": "Vraag een workspace-beheerder om de machtiging om FAQ's toe te voegen.",
+        "body": "Schrijf een vraag en het antwoord één keer. Je bot herkent wat klanten in hun eigen woorden schrijven en antwoordt of stuurt ze naar een stap van een flow."
       },
       "noMatch": {
         "title": "Geen FAQ komt overeen met deze filters",
@@ -142,7 +139,9 @@
         "failed": "{count} mislukt"
       },
       "stepMissing": "Stap ontbreekt",
-      "startsAt": "Begint bij: {step}"
+      "subtitle": "Vragen die klanten stellen in {flow} en wat de bot antwoordt. Deze FAQs beantwoorden alleen binnen deze flow.",
+      "thisFlow": "Deze flow",
+      "startsAt": "Gaat naar: {step}"
     },
     "editor": {
       "back": "Terug naar FAQ's",
@@ -159,7 +158,6 @@
       "saved": "FAQ opgeslagen.",
       "deleted": "FAQ verwijderd.",
       "readOnly": "Je kunt deze FAQ bekijken, maar je rol mag hem niet wijzigen.",
-      "faqLimit": "Je workspace heeft de limiet van {max} FAQ's bereikt. Verwijder er een om een nieuwe toe te voegen.",
       "prefilled": "De vraag is overgenomen uit een onbeantwoord klantbericht. Door deze FAQ op te slaan wordt dat bericht ook als afgehandeld gemarkeerd.",
       "tryItSaveFirst": "Sla de FAQ eerst op. Daarna kun je testen hoe klantberichten hiermee overeenkomen.",
       "conflict": {
@@ -189,23 +187,30 @@
         "title": "Antwoord",
         "hint": "Wat de klant krijgt als deze FAQ overeenkomt.",
         "text": "Tekstantwoord",
-        "flow": "Een flow starten",
         "textLabel": "Antwoordtekst",
         "count": "{count} / {max} tekens",
         "preview": "Zo ziet het eruit in WhatsApp",
         "previewEmpty": "Je antwoord verschijnt hier",
-        "flowLabel": "Te starten flow",
         "noFlow": "Geen flow gekozen",
-        "startsAt": "Begint bij stap: {step}",
-        "stepGone": "De stap waarmee deze FAQ begint bestaat niet meer, dus klanten krijgen geen antwoord."
+        "flow": "Ga naar een stap",
+        "flowLabel": "Waarheen",
+        "startsAt": "Gaat naar stap: {step}",
+        "stepGone": "De stap waar deze FAQ naartoe gaat bestaat niet meer, dus klanten krijgen geen antwoord.",
+        "thisFlowNamed": "Een stap van deze flow ({name})",
+        "target": {
+          "here": "Een stap van deze flow",
+          "hereHint": "De klant gaat verder binnen {name}. Dit is de gebruikelijke keuze.",
+          "other": "Een stap van een andere flow",
+          "otherHint": "Draag het gesprek over aan een andere flow."
+        }
       },
       "advanced": {
         "title": "Geavanceerd: gevoeligheid alleen voor deze FAQ",
-        "body": "Standaard gebruikt elke FAQ de gevoeligheid van de workspace. Gebruik een eigen waarde als deze FAQ te snel (verhoog de waarde) of te zelden (verlaag de waarde) overeenkomt.",
         "custom": "Eigen gevoeligheid gebruiken voor deze FAQ",
         "sliderLabel": "Overeenkomst vanaf",
-        "workspace": "De gevoeligheid van de workspace is {value}%.",
-        "following": "Volgt de gevoeligheid van de workspace ({value}%)."
+        "body": "Standaard gebruikt elke FAQ de gevoeligheid van deze flow. Gebruik een eigen waarde als deze te vaak (verhoog) of te zelden (verlaag) overeenkomt.",
+        "workspace": "De gevoeligheid van deze flow is {value}%.",
+        "following": "Volgt de gevoeligheid van deze flow ({value}%)."
       },
       "problem": {
         "question": {
@@ -219,9 +224,9 @@
           "invalid": "Dit antwoord is niet geldig."
         },
         "flowId": {
-          "required": "Kies de flow die moet starten.",
-          "tooLong": "Kies de flow die moet starten.",
-          "invalid": "Kies de flow die moet starten."
+          "required": "Kies de flow waarnaartoe gegaan wordt.",
+          "tooLong": "Kies de flow waarnaartoe gegaan wordt.",
+          "invalid": "Kies de flow waarnaartoe gegaan wordt."
         },
         "category": {
           "required": "Schrijf een categorie of laat het veld leeg.",
@@ -249,11 +254,11 @@
         "body": "Je wijzigingen aan deze FAQ zijn niet opgeslagen.",
         "leave": "Verlaten",
         "stay": "Verder bewerken"
-      }
+      },
+      "faqLimit": "Deze flow heeft de limiet van {max} FAQs bereikt. Verwijder er een om een nieuwe toe te voegen."
     },
     "flowPicker": {
       "noAccess": "Je hebt de machtiging om flows te bekijken (flb.flows.read) nodig om hier een flow te kiezen.",
-      "missing": "De flow die door deze FAQ werd gestart, bestaat niet meer. Kies een andere flow, anders kan deze FAQ niet antwoorden.",
       "selected": "Gekozen",
       "search": "Flows zoeken",
       "searchPlaceholder": "Flows zoeken op naam",
@@ -267,7 +272,9 @@
         "off": "Inactief",
         "draft": "Concept"
       },
-      "note": "De flow begint bij de stap die je hieronder kiest, of bij het begin. Alleen gepubliceerde, actieve flows kunnen draaien."
+      "missing": "De flow waar deze FAQ naartoe gaat bestaat niet meer. Kies een andere flow, anders kan deze FAQ niet antwoorden.",
+      "noOthers": "Er is geen andere flow in deze werkruimte.",
+      "note": "De klant gaat verder bij de stap die je hieronder kiest, of aan het begin van de flow. Alleen gepubliceerde, actieve flows kunnen draaien."
     },
     "variations": {
       "title": "Vraagvarianten",
@@ -343,7 +350,7 @@
       "verdict": {
         "answer": {
           "title": "Zou antwoorden",
-          "body": "Een FAQ kwam goed genoeg overeen. De klant krijgt het antwoord (of de flow start)."
+          "body": "Een FAQ kwam goed genoeg overeen. De klant krijgt het antwoord of wordt naar de stap gestuurd waar de FAQ naar verwijst."
         },
         "below": {
           "title": "Onder de drempel",
@@ -397,8 +404,8 @@
       "winner": {
         "title": "Wat de klant zou krijgen",
         "unavailable": "Deze FAQ kon niet worden geladen.",
-        "flow": "Start de flow {name}",
-        "flowMissing": "Start een flow die niet meer bestaat"
+        "flow": "Gaat naar een stap van {name}",
+        "flowMissing": "Gaat naar een flow die niet meer bestaat"
       },
       "candidates": {
         "title": "Beste overeenkomsten",
@@ -415,16 +422,16 @@
     },
     "playground": {
       "title": "Hoe zou mijn bot dit beantwoorden?",
-      "subtitle": "Laat een klantbericht door dezelfde matching lopen die je bot gebruikt. Er wordt niets verstuurd en niets meegeteld in de inzichten.",
       "label": "Klantbericht",
       "placeholder": "Waar is mijn pakket?",
       "run": "Uitvoeren",
-      "hint": "Alleen opgeslagen FAQ's worden vergeleken. Actieve FAQ's met live formuleringen doen mee.",
       "empty": "Typ hierboven een bericht en voer het uit om de beslissing te zien.",
       "history": {
         "title": "Deze sessie",
         "empty": "Je laatste 10 tests verschijnen hier."
-      }
+      },
+      "subtitle": "Laat een klantbericht door de matching van {flow} lopen. Er wordt niets verzonden en niets meegeteld in de inzichten.",
+      "hint": "Alleen de opgeslagen FAQs van deze flow worden vergeleken. Actieve FAQs met actieve formuleringen doen mee."
     },
     "unanswered": {
       "title": "Onbeantwoorde berichten",
@@ -492,7 +499,6 @@
       "loadingMore": "Laden",
       "why": {
         "answered": "Beantwoord met \"{faq}\" met {score}%.",
-        "flowStarted": "De flow van \"{faq}\" gestart met {score}%.",
         "belowThreshold": "De beste overeenkomst scoorde {score}%, onder de drempel van {threshold}%, dus er is niets verstuurd.",
         "belowThresholdNoBar": "De beste overeenkomst scoorde {score}%, wat niet genoeg was, dus er is niets verstuurd.",
         "lowMargin": "Twee FAQ's lagen te dicht bij elkaar ({score}% en {second}%), dus de bot heeft niet gegokt.",
@@ -502,7 +508,8 @@
         "tier": "Beslist door het niveau {tier}.",
         "error": "Fout: {error}",
         "vetoed": "De beste overeenkomst scoorde {score}%, boven de drempel van {threshold}%, maar de tweede controle oordeelde dat het geen antwoord op het bericht is, dus er is niets verstuurd.",
-        "vetoedNoBar": "De beste overeenkomst scoorde {score}%, maar de tweede controle oordeelde dat het geen antwoord op het bericht is, dus er is niets verstuurd."
+        "vetoedNoBar": "De beste overeenkomst scoorde {score}%, maar de tweede controle oordeelde dat het geen antwoord op het bericht is, dus er is niets verstuurd.",
+        "flowStarted": "Klant naar de stap van \"{faq}\" gestuurd met {score}%."
       },
       "flowRun": "(vanuit een flow)"
     },
@@ -565,7 +572,6 @@
     },
     "settings": {
       "title": "FAQ-instellingen",
-      "subtitle": "Schakel FAQ-antwoorden in en stel af hoe nauw een bericht moet overeenkomen.",
       "unsaved": "Niet-opgeslagen wijzigingen",
       "discard": "Verwerpen",
       "save": "Instellingen opslaan",
@@ -580,11 +586,11 @@
       },
       "enable": {
         "title": "FAQ-antwoorden",
-        "label": "Klanten beantwoorden met FAQ's",
         "on": "Aan",
         "off": "Uit",
-        "onBody": "Als een klant een bericht stuurt, vergelijkt de bot het met je FAQ's en antwoordt met het beste antwoord of start de bijbehorende flow. Een flow of trefwoordtrigger die het bericht al oppakte, heeft voorrang.",
-        "offBody": "Klanten krijgen geen FAQ-antwoorden. Je kunt FAQ's nog wel schrijven en testen."
+        "label": "Beantwoord klanten met de FAQs van deze flow",
+        "onBody": "Zolang deze flow live is, wordt een klantbericht dat door geen trefwoordtrigger of lopende flow is opgepakt, vergeleken met de FAQs van deze flow. De bot antwoordt met het beste antwoord of stuurt de klant naar de stap waar de FAQ naar verwijst.",
+        "offBody": "De FAQs van deze flow beantwoorden geen klanten. Je kunt ze nog wel schrijven en testen."
       },
       "sens": {
         "title": "Gevoeligheid",
@@ -653,21 +659,23 @@
         "explainOn": "Overeenkomsten met een score van {from}% tot {to}% worden gecontroleerd door {model}. Bij \"nee\" wordt er geen antwoord verstuurd en verschijnt het bericht onder Onbeantwoord.",
         "explainOff": "Elke overeenkomst met een score van {threshold}% of hoger wordt beantwoord. Zet de tweede controle aan om de twijfelgevallen te laten controleren.",
         "cost": "Elke controle stuurt het bericht van de klant en de vraag van de FAQ naar het model: een paar honderd tokens, en het kost ongeveer een seconde extra bij een grensgeval. Overeenkomsten buiten het bereik worden nooit gecontroleerd. Als de controle mislukt, niet beschikbaar is of de limiet per uur is bereikt, blijft de overeenkomst gelden alsof er geen controle was."
-      }
+      },
+      "subtitle": "Schakel FAQ-beantwoording in voor {flow} en stel af hoe nauw een bericht moet overeenkomen."
     },
     "flowNode": {
-      "label": "Beginnen bij",
       "start": "Het begin van de flow",
-      "hint": "Kies een stap om het begin van de flow over te slaan. Klanten stappen in de flow in bij de stap die je kiest.",
       "loading": "Stappen van deze flow laden",
       "empty": "Deze flow heeft geen andere stappen, dus hij begint bij het begin.",
       "retry": "Opnieuw proberen",
       "deletedOption": "Verwijderde stap (kies een andere)",
       "missing": {
-        "title": "De stap waarmee deze FAQ begint bestaat niet meer",
         "body": "Die stap is uit de flow verwijderd. Totdat je een andere stap kiest, krijgen klanten die bij deze FAQ passen geen antwoord. Kies hieronder een stap of begin bij het begin van de flow.",
-        "fix": "Beginnen bij het begin van de flow"
-      }
+        "fix": "Beginnen bij het begin van de flow",
+        "title": "De stap waar deze FAQ naartoe gaat is verdwenen"
+      },
+      "label": "Ga naar",
+      "hint": "Kies een stap om het begin van de flow over te slaan. Klanten gaan verder bij de stap die je kiest.",
+      "hintOwn": "Kies een stap van deze flow. Stappen die je sinds het laatste opslaan hebt toegevoegd, verschijnen na het opslaan van de flow."
     },
     "verify": {
       "title": "Tweede controle",
@@ -684,6 +692,14 @@
         "vetoed": "De overeenkomst was een twijfelgeval en de tweede controle oordeelde dat deze FAQ geen antwoord op het bericht is. Het antwoord is achtergehouden, er is niets verstuurd en het bericht verschijnt onder Onbeantwoord.",
         "failed": "De overeenkomst was een twijfelgeval, maar de controle kon niet worden afgerond. De overeenkomst bleef dus gelden en het antwoord is verstuurd alsof er geen tweede controle was.",
         "skipped": "De tweede controle is voor deze overeenkomst niet uitgevoerd, dus de overeenkomst bleef gelden zoals ze was."
+      }
+    },
+    "panel": {
+      "leave": {
+        "title": "De FAQs verlaten zonder op te slaan?",
+        "body": "Je hebt niet-opgeslagen wijzigingen in de FAQs. Als je dit tabblad verlaat, gaan ze verloren.",
+        "leave": "Verlaten",
+        "stay": "Blijven bewerken"
       }
     }
   }

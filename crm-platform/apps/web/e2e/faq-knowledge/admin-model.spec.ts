@@ -15,6 +15,7 @@ import {
   sqlNum,
   statNum,
   waitNoPending,
+  faqUrl,
 } from './admin-support';
 
 test.use({ launchOptions: LAUNCH });
@@ -225,18 +226,20 @@ test.describe('embedding model change', () => {
     try {
       // B never saved its settings: no row, so its threshold is the platform default.
       expect(sqlNum(`SELECT count(*) FROM faq_settings WHERE org_id=${fresh.orgId}`)).toBe(0);
-      const before = (await tuned.call('GET', '/faq/settings')).body;
+      const before = (await tuned.call('GET', `/faq/flows/${tuned.flowUuid}/settings`)).body;
       expect(before).toMatchObject({
         modelChanged: false,
         threshold: 0.6,
         recommendedThreshold: 0.5,
         tunedForModel: LARGE,
       });
-      expect((await fresh.call('GET', '/faq/settings')).body).toMatchObject({
-        modelChanged: false,
-        threshold: 0.5,
-        isDefault: true,
-      });
+      expect((await fresh.call('GET', `/faq/flows/${fresh.flowUuid}/settings`)).body).toMatchObject(
+        {
+          modelChanged: false,
+          threshold: 0.5,
+          isDefault: true,
+        },
+      );
 
       await signInOperator(page);
       await openFaq(page);
@@ -245,14 +248,14 @@ test.describe('embedding model change', () => {
       await dialog(page).getByRole('button', { name: 'Save changes' }).click();
       await expect(page.getByText('Settings saved.')).toBeVisible();
 
-      const a = (await tuned.call('GET', '/faq/settings')).body;
+      const a = (await tuned.call('GET', `/faq/flows/${tuned.flowUuid}/settings`)).body;
       expect(a).toMatchObject({
         modelChanged: true,
         threshold: 0.6,
         recommendedThreshold: 0.72,
         embeddingModel: GEMINI,
       });
-      const b = (await fresh.call('GET', '/faq/settings')).body;
+      const b = (await fresh.call('GET', `/faq/flows/${fresh.flowUuid}/settings`)).body;
       expect(b).toMatchObject({
         modelChanged: false,
         threshold: 0.72,
@@ -261,12 +264,12 @@ test.describe('embedding model change', () => {
       });
 
       await signInWorkspace(wsPage, tuned);
-      await wsPage.goto('/faq', { timeout: 120_000 });
+      await wsPage.goto(faqUrl(tuned), { timeout: 120_000 });
       await expect(
         wsPage.getByText('The platform changed the AI model after you tuned this threshold.'),
       ).toBeVisible({ timeout: 60_000 });
       await wsPage.getByRole('link', { name: 'Review sensitivity' }).click();
-      await expect(wsPage).toHaveURL(/\/faq\/settings/);
+      await expect(wsPage).toHaveURL(/[?&]view=settings/);
       await expect(wsPage.getByText('Review your sensitivity', { exact: true })).toBeVisible();
     } finally {
       await op.setConfig({ embeddingModel: LARGE }).catch(() => undefined);
@@ -275,6 +278,8 @@ test.describe('embedding model change', () => {
     }
     await waitNoPending();
     // Back on the original model the tuned workspace's note disappears again once it saves (its tuning matches the model).
-    expect((await tuned.call('GET', '/faq/settings')).body.embeddingModel).toBe(LARGE);
+    expect(
+      (await tuned.call('GET', `/faq/flows/${tuned.flowUuid}/settings`)).body.embeddingModel,
+    ).toBe(LARGE);
   });
 });

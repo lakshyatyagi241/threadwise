@@ -78,6 +78,7 @@
       "form_builder": "Formulieren",
       "waba_groups": "WhatsApp-groepen",
       "sms": "SMS-kanaal",
+      "help_agent": "Hulpassistent",
       "email_channel": "E-mailkanaal (Gmail)"
     },
     "limitGroups": {

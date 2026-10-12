@@ -8,9 +8,11 @@ import { useFormatter, useTranslations } from 'next-intl';
 import { contactActivityResponseSchema } from '@crm/contracts';
 import { Badge, Button, ConfirmDialog, EmptyState, Spinner, StatTile, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { AGENT_IGNORE } from '@/lib/agent-marks';
 import { LinkedAppointments } from '@/features/appointments';
 import { ContactAttributionCard } from '@/features/lead-sources';
 import { CompanyLink } from '@/features/companies';
+import { ScoreCard } from '@/features/lead-scoring';
 import { LinkedSalesDocs } from '@/features/sales-docs';
 import { LinkedInvoices } from '@/features/invoicing';
 import { LinkedTasks } from '@/features/tasks';
@@ -259,14 +261,20 @@ export function ContactDetail({ id }: { id: string }) {
         </div>
       </div>
 
-      <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
-        <StatTile label={t('leadScore')} value={c.leadScore ?? '—'} />
-        <StatTile label={t('lastActivity')} value={<DateText value={c.lastActivityAt} />} />
-        <StatTile
-          label={t('created')}
-          value={<DateText value={c.createdAt} />}
-          className="col-span-2 sm:col-span-1"
+      <div className="mb-6 grid grid-cols-2 gap-3">
+        <ScoreCard
+          contactId={id}
+          contact={c}
+          className="col-span-2"
+          onScored={() =>
+            Promise.all([
+              invalidateContacts(qc),
+              qc.invalidateQueries({ queryKey: KEYS.contact(id) }),
+            ])
+          }
         />
+        <StatTile label={t('lastActivity')} value={<DateText value={c.lastActivityAt} />} />
+        <StatTile label={t('created')} value={<DateText value={c.createdAt} />} />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
@@ -397,7 +405,10 @@ function Timeline({ id }: { id: string }) {
       ) : list.items.length === 0 ? (
         <p className="py-6 text-center text-sm text-muted-foreground">{t('noActivity')}</p>
       ) : (
-        <ol className="relative space-y-5 ps-6 before:absolute before:inset-y-1 before:start-[9px] before:w-px before:bg-border">
+        <ol
+          {...AGENT_IGNORE}
+          className="relative space-y-5 ps-6 before:absolute before:inset-y-1 before:start-[9px] before:w-px before:bg-border"
+        >
           {list.items.map((a) => (
             <li key={a.id} className="relative">
               <span className="absolute -start-6 top-1 size-[18px] rounded-full border border-border bg-background" />

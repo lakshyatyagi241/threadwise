@@ -42,6 +42,7 @@ import { ChannelInstagramModule } from './modules/channel-instagram';
 import { ShopifyWoocommerceModule } from './modules/shopify-woocommerce';
 import { ChannelEmailModule } from './modules/channel-email';
 import { ChannelSmsModule } from './modules/channel-sms';
+import { HelpAgentModule } from './modules/help-agent';
 import { ChannelTelegramModule } from './modules/channel-telegram';
 import { AiAgentsTrainingModule } from './modules/ai-agents-training';
 import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
@@ -76,6 +77,7 @@ import { WebhookFanoutModule } from './modules/webhook-fanout';
 import { OutboundWebhooksModule } from './modules/outbound-webhooks';
 import { ApiLibraryModule } from './modules/api-library';
 import { FaqKnowledgeModule } from './modules/faq-knowledge';
+import { LeadScoringModule } from './modules/lead-scoring';
 import { MessageTemplatesModule } from './modules/message-templates';
 import { WabaModule } from './modules/whatsapp-cloud-api-waba';
 import { WhatsappDevicesBaileysModule } from './modules/whatsapp-devices-baileys';
@@ -208,6 +210,7 @@ import { HealthModule } from './health/health.module';
     CallingVoiceModule,
     ChannelTelegramModule,
     ChannelSmsModule,
+    HelpAgentModule,
     ChannelEmailModule,
     ChannelFacebookModule,
     ChannelInstagramModule,
@@ -225,6 +228,7 @@ import { HealthModule } from './health/health.module';
     OutboundWebhooksModule,
     ApiLibraryModule,
     FaqKnowledgeModule,
+    LeadScoringModule,
     WabaModule,
     WhatsAppProviderAdminModule,
     MessageTemplatesModule,

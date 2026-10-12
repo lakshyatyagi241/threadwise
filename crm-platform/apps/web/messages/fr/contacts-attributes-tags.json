@@ -170,7 +170,8 @@
       "import": "Importer",
       "columns": "Colonnes",
       "addColumnField": "Ajouter un champ personnalisé comme colonne",
-      "kanbanView": "Vue tableau (par étape)"
+      "kanbanView": "Vue tableau (par étape)",
+      "colLeadScore": "Score du lead"
     },
     "bulk": {
       "label": "Actions pour les contacts sélectionnés",

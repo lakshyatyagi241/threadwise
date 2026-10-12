@@ -78,6 +78,7 @@
       "form_builder": "フォーム",
       "waba_groups": "WhatsAppグループ",
       "sms": "SMSチャネル",
+      "help_agent": "ヘルプアシスタント",
       "email_channel": "メール(Gmail)チャネル"
     },
     "limitGroups": {

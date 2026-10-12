@@ -1,8 +1,7 @@
 import { createHash } from 'node:crypto';
 import { FLOW_RUN_LOG_MAX_STEPS, type FlowStepIoItem } from '@crm/contracts';
 import type { RuntimeGraph, RuntimeNode } from '../graph/runtime-graph';
-import type { StepOutcome } from './engine-core';
-import type { OutboundMessage, SendOutcome } from './types';
+import type { OutboundMessage, SendOutcome, StepOutcome } from './types';
 
 /**
  * What one node execution leaves in the run log (TW-FLR-054, 083). Pure: no database, no clock.

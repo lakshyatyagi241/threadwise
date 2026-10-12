@@ -344,6 +344,25 @@ export class FlowTriggerService {
     return hit;
   }
 
+  // --- the customer's live run ------------------------------------------------------------------------------------------------
+
+  /**
+   * The flow a customer is in right now on a channel (internal id), or null. For a listener that runs after the runtime and must
+   * prefer the flow the customer is already talking to (the FAQ answering, ADR-0021 addendum 2). Same statuses as the run store's own
+   * live lookup.
+   */
+  async liveFlowId(orgId: number, channelId: number, peerKey: string): Promise<number | null> {
+    return this.db.txAs({ orgId }, async (tx) => {
+      const res = (await tx.execute(sql`
+        SELECT flow_id FROM flow_runs
+        WHERE org_id = ${orgId} AND channel_id = ${channelId} AND peer_key = ${peerKey}
+          AND status IN ('running', 'waiting', 'sleeping', 'halted')
+        LIMIT 1`)) as unknown as Rows;
+      const r = res.rows[0];
+      return r ? Number(r.flow_id) : null;
+    });
+  }
+
   // --- shared ----------------------------------------------------------------------------------------------------------------
 
   private async enrolLive(

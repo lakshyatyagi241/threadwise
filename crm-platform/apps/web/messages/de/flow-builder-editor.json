@@ -164,7 +164,12 @@
       "messaging": "Nachrichten-Flow",
       "messagingNote": "WhatsApp, Instagram oder Facebook: Kanal im Auslöser-Knoten wechseln",
       "call": "Anruf",
-      "callNote": "KI-Sprach-IVR: sagen, zuhören, weiterleiten"
+      "callNote": "KI-Sprach-IVR: sagen, zuhören, weiterleiten",
+      "subtitleSimple": "Jeder Bot wird für einen Kanal erstellt, weil nicht jede Komponente auf jedem Kanal funktioniert.",
+      "whatsapp": "WhatsApp",
+      "whatsappNote": "Antwortet Kunden über eine verbundene WhatsApp-Nummer",
+      "web": "Website-Chat",
+      "webNote": "Ein Chat-Widget, das Sie in Ihre Website einbinden"
     },
     "rename": {
       "title": "Flow umbenennen",
@@ -553,8 +558,8 @@
           "faqAllFaqs": "Alle FAQs",
           "faqCategory": "FAQ-Kategorie: {name}",
           "faqScore": "Mindestscore {score}",
-          "faqWorkspaceScore": "Workspace-Score",
-          "faqNotSent": "nicht gesendet"
+          "faqNotSent": "nicht gesendet",
+          "faqWorkspaceScore": "Flow-Score"
         },
         "overlays": {
           "startPinned": "Dies ist der Startpunkt (zum Lösen anklicken)",
@@ -1790,28 +1795,22 @@
         },
         "faq": {
           "intro": {
-            "body": "Gleicht eine Nachricht inhaltlich mit Ihren FAQs ab und beantwortet sie. Der Ausgang <mono>Beantwortet</mono> wird genutzt, wenn eine FAQ geantwortet hat, sonst <mono>Kein Treffer</mono>.",
-            "sub": "Funktioniert auch ohne eingeschaltete automatische FAQ-Antwort. <link>FAQs verwalten</link>"
+            "body": "Gleicht eine Nachricht inhaltlich mit den FAQs dieses Flows ab und beantwortet sie. Verlässt den Schritt über <mono>beantwortet</mono>, wenn eine FAQ geantwortet hat, sonst über <mono>kein Treffer</mono>.",
+            "sub": "Funktioniert auch ohne eingeschaltete automatische FAQ-Antworten für diesen Flow. <link>FAQs dieses Flows verwalten</link>"
           },
           "exitsLabel": "Ausgänge",
           "exitMatchedName": "Beantwortet",
           "exitMatched": "eine FAQ hat geantwortet: Ihr Text wurde gesendet (außer das Senden ist aus), oder ihr Flow hat übernommen und kehrt nicht zurück.",
           "exitNoMatchName": "Kein Treffer",
           "exitNoMatch": "nichts war nah genug, die automatische FAQ-Antwort ist für die Plattform ausgeschaltet, der verknüpfte Flow oder Schritt existiert nicht mehr, oder die Nachricht war leer.",
-          "noFaqs": "Sie haben noch keine FAQs, daher verlässt dieser Schritt immer den Ausgang „Kein Treffer“. <link>Erste FAQ hinzufügen</link>",
           "query": "Zu prüfende Nachricht",
           "queryHint": "Standardmäßig die letzte Nachricht des Kunden. Eine von einem Frage-Schritt gespeicherte Variable funktioniert ebenfalls, zum Beispiel <mono>{variable}</mono>. Mit / fügen Sie eine ein.",
           "category": "Nur diese FAQs",
           "allFaqs": "Alle FAQs",
           "loadingCategories": "Kategorien werden geladen …",
           "categoryGone": "{name} (keine FAQ nutzt sie)",
-          "categoryHint": "Nur FAQs dieser Kategorie können antworten. Die Kategorien stammen aus Ihren FAQs.",
-          "categoriesFailed": "Ihre FAQ-Kategorien konnten nicht geladen werden.",
           "retry": "Erneut versuchen",
           "minScore": "Mindestscore",
-          "useWorkspaceScore": "Workspace-Einstellung verwenden",
-          "minScoreHint": "Ersetzt den Workspace-Score nur für diesen Schritt, von {min} bis {max}. Die Scores hängen vom Embedding-Modell der Plattform ab. Testen Sie daher eine Nachricht im <link>FAQ-Test</link>, bevor Sie eine Zahl wählen.",
-          "minScoreInvalid": "Geben Sie eine Zahl von {min} bis {max} ein, oder verwenden Sie die Workspace-Einstellung.",
           "sendAnswer": "Antwort an den Kunden senden",
           "sendAnswerToggle": "Passende Textantwort als Nachricht senden",
           "sendAnswerOnHint": "Eine passende Text-FAQ wird an den Kunden gesendet. Eine FAQ, die einen Flow startet, wird in diesem Flow fortgesetzt.",
@@ -1824,7 +1823,14 @@
             "question": "die Frage der passenden FAQ",
             "score": "wie gut der Treffer war",
             "id": "die ID der passenden FAQ"
-          }
+          },
+          "noFaqs": "Dieser Flow hat noch keine FAQs, daher verlässt dieser Schritt immer über kein Treffer. <link>Erste FAQ dieses Flows hinzufügen</link>",
+          "useWorkspaceScore": "Einstellung dieses Flows verwenden",
+          "minScoreInvalid": "Geben Sie eine Zahl von {min} bis {max} ein oder verwenden Sie die Einstellung dieses Flows.",
+          "saveFlowFirst": "Speichern Sie zuerst den Flow. Seine FAQs bearbeiten Sie im Tab FAQs des einfachen Builders, und dieser Schritt antwortet aus ihnen.",
+          "categoryHint": "Nur FAQs dieser Kategorie können antworten. Die Kategorien stammen aus den FAQs dieses Flows.",
+          "categoriesFailed": "Die FAQ-Kategorien dieses Flows konnten nicht geladen werden.",
+          "minScoreHint": "Ersetzt den Score dieses Flows nur für diesen Schritt, von {min} bis {max}. Scores hängen vom Embedding-Modell der Plattform ab. Probieren Sie daher eine Nachricht im <link>FAQ-Test</link> dieses Flows aus, bevor Sie eine Zahl wählen."
         }
       },
       "attrPicker": {
@@ -1885,6 +1891,16 @@
           "sampleName": "Testort",
           "sampleAddress": "1 MG Road, Bengaluru"
         }
+      },
+      "webBot": {
+        "aria": "Flow-Bereiche",
+        "faqs": "FAQs",
+        "saveFirst": "Speichern Sie zuerst den Flow.",
+        "build": "Erstellen",
+        "customize": "Anpassen",
+        "install": "Installieren",
+        "needsCustomizing": "Das Widget verwendet noch das Standarddesign. Öffnen Sie „Anpassen“.",
+        "customizeFirst": "Passen Sie Ihr Chat-Widget an und speichern Sie es einmal, bevor Sie veröffentlichen."
       }
     },
     "contracts": {
@@ -2212,7 +2228,8 @@
         "line": "LINE",
         "wechat": "WeChat",
         "viber": "Viber",
-        "email": "E-Mail"
+        "email": "E-Mail",
+        "web": "Website-Chat"
       },
       "dateFormats": {
         "ddDmmDyyyy": "DD-MM-YYYY",
@@ -2307,7 +2324,7 @@
         "noSenderInstagram": "Der Auslöser-Knoten hat kein Instagram-Konto ausgewählt. Wählen Sie eines im Auslöser-Schritt.",
         "noSenderFacebook": "Der Auslöser-Knoten hat keine Facebook-Seite ausgewählt. Wählen Sie eine im Auslöser-Schritt.",
         "noSenderNumber": "Der Auslöser-Knoten hat keine Nummer ausgewählt. Wählen Sie eine im Auslöser-Schritt.",
-        "faqMinScore": "„{node}“ hat einen Mindestscore außerhalb von 0.05 bis 0.99. Korrigieren Sie ihn, oder lassen Sie das Feld leer, um die Workspace-Einstellung zu verwenden."
+        "faqMinScore": "„{node}“ hat einen Mindestscore außerhalb von 0.05 bis 0.99. Korrigieren Sie ihn, oder lassen Sie das Feld leer, um die Einstellung des Flows zu verwenden."
       }
     },
     "simpleModel": {
@@ -2443,7 +2460,7 @@
         "rowTitle": "Schritt {stage}: Jede Zeile braucht einen Titel mit bis zu {max} Zeichen.",
         "rowDescriptionTooLong": "Schritt {stage}: Eine Zeilenbeschreibung ist länger als {max} Zeichen.",
         "variableUsed": "Schritt {stage}: „{name}“ wird bereits von Schritt {other} verwendet. Geben Sie jeder Antwort einen eigenen Namen.",
-        "faqMinScore": "Schritt {stage}: Der Mindestscore muss zwischen 0.05 und 0.99 liegen, oder verwenden Sie die Workspace-Einstellung."
+        "faqMinScore": "Schritt {stage}: Der Mindestscore muss zwischen 0.05 und 0.99 liegen, oder verwenden Sie die Einstellung des Flows."
       },
       "faqSummary": "{hasCategory, select, true {Aus Ihren FAQs · {category}} other {Aus Ihren FAQs}}"
     },

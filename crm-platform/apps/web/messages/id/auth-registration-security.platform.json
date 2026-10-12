@@ -1420,6 +1420,7 @@
             "form_builder": "Formulir web yang di-host dan disematkan yang membuat kontak di CRM. Aplikasi Formulir berbayar memegang sakelar ini.",
             "waba_groups": "Buat dan kelola grup WhatsApp dari nomor Cloud API: tautan undangan, permintaan bergabung, anggota. Nomor harus berupa Official Business Account.",
             "sms": "SMS khusus kirim lewat Twilio atau MSG91: hubungkan pengirim, kirim siaran dan kampanye SMS.",
+            "help_agent": "Asisten Bantuan dalam aplikasi: pengguna meminta tugas dengan kata-kata biasa, lalu asisten memandu atau mengerjakannya di sesi mereka sendiri dan bertanya dulu sebelum hal berisiko. Memakai token AI.",
             "email_channel": "Hubungkan kotak surat Gmail dan Google Workspace ke kotak masuk tim. Aplikasi Email berbayar mengendalikan sakelar ini."
           },
           "units": {
@@ -1602,6 +1603,7 @@
             "form_builder": "Formulir (pembuat formulir web)",
             "waba_groups": "Grup WhatsApp (Cloud API)",
             "sms": "Kanal SMS",
+            "help_agent": "Asisten Bantuan (AI, memakai token)",
             "email_channel": "Kanal email (Gmail)"
           },
           "problems": {

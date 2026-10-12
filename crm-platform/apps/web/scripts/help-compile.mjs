@@ -74,7 +74,21 @@ function splitFrontmatter(text, where) {
 }
 
 /** The frontmatter subset: scalars, `[a, b]` lists, and one nested map (`gates:` with indented `key: value` lines). */
-function parseFront(lines, where) {
+function parseFront(rawLines, where) {
+  // A list may wrap over several lines (prettier does that to a long `keywords: [...]`): join it back into one line first.
+  const lines = [];
+  for (let i = 0; i < rawLines.length; i++) {
+    let line = rawLines[i];
+    const opens =
+      /^[A-Za-z]+:\s*(\[[^\]]*)?$/.test(line) &&
+      (line.includes('[') || /^\s+\[/.test(rawLines[i + 1] ?? ''));
+    if (opens) {
+      while (!line.includes(']') && i + 1 < rawLines.length) line += ' ' + rawLines[++i].trim();
+      if (!line.includes(']')) fail(where, 'a list is not closed with ]');
+      line = line.replace(/^([A-Za-z]+):\s*/, '$1: ').replace(/,\s*\]$/, ']');
+    }
+    lines.push(line);
+  }
   const out = {};
   let map = null;
   for (const raw of lines) {
