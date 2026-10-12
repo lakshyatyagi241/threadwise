@@ -207,7 +207,9 @@
         "request": "Solicitud",
         "response": "Respuesta",
         "result": "Resultado"
-      }
+      },
+      "factMenuKept": "No hay siguiente paso. Las opciones de {node} siguen activas.",
+      "factAnswered": "Respondió tras {time}"
     },
     "event": {
       "step": "Paso",
@@ -513,7 +515,9 @@
       "error": "Error",
       "skipped": "Omitido",
       "waiting": "En espera",
-      "timeout": "Tiempo agotado"
+      "timeout": "Tiempo agotado",
+      "answered": "Respondido",
+      "gaveUp": "Sin respuesta"
     }
   }
 }

@@ -10,6 +10,7 @@ import {
   isAnimatedWebp,
   isOggOpus,
   isSafeMediaId,
+  privateLinkHost,
   sha256HexFrom,
   type WaMediaKind,
 } from '../../../src/infra/providers/whatsapp/media/whatsapp-media-rules';
@@ -203,5 +204,31 @@ describe('isSafeMediaId: the id goes into a url path', () => {
     for (const bad of ['', '../x', '12/34', '12?x=1', '12#', '12 34', 'a'.repeat(129), '%2e%2e']) {
       expect(isSafeMediaId(bad)).toBe(false);
     }
+  });
+});
+
+describe('privateLinkHost: a link the provider can never fetch', () => {
+  it.each([
+    'http://localhost:9000/b/k',
+    'http://127.0.0.1:9000/b/k',
+    'http://minio:9000/b/k',
+    'http://10.0.3.4/b/k',
+    'http://172.20.0.2:9000/b/k',
+    'http://192.168.1.10/b/k',
+    'http://storage.internal/b/k',
+    'http://nas.local/b/k',
+    'http://[::1]:9000/b/k',
+    'not a url',
+  ])('%s is private', (url) => {
+    expect(privateLinkHost(url)).not.toBeNull();
+  });
+
+  it.each([
+    'https://bucket.s3.amazonaws.com/k?sig=1',
+    'https://cdn.example.com/k',
+    'http://203.0.113.9:9000/b/k',
+    'https://172.32.0.1/k',
+  ])('%s may be public', (url) => {
+    expect(privateLinkHost(url)).toBeNull();
   });
 });
