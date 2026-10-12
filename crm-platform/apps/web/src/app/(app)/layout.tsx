@@ -8,6 +8,7 @@ import { WorkspaceSwitcher } from '@/features/auth-registration-security/account
 import { ImpersonationBanner } from '@/features/workspaces-teams-tenancy';
 import { PlanPaywall } from '@/features/plans-subscriptions-trials/components/plan-paywall';
 import { TrialBar } from '@/features/plans-subscriptions-trials/components/trial-bar';
+import { BackgroundErrorBanner } from '@/components/shell/background-error-banner';
 import { fetchEnabledFeatures } from '@/features/plans-subscriptions-trials/server';
 import { fetchConnectedChannels } from '@/features/whatsapp-cloud-api-waba/server';
 import { HelpProvider } from '@/features/help-center';
@@ -94,6 +95,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
                   {/* An operator acting as the owner (TW-WSP-033): non-dismissible, first thing under the top bar. */}
                   <ImpersonationBanner key="impersonation" />
                   <TrialBar />
+                  <BackgroundErrorBanner key="background-error" />
                   <AccountBanners key="banners" />
                 </>
               }

@@ -46,6 +46,7 @@ export function SettingsFrame({ children }: { children: ReactNode }) {
   const activeLink = useRef<HTMLAnchorElement>(null);
   // On a phone the sections are a scrolling strip: keep the open one in view (a deep link may land past the edge).
   useEffect(() => {
+    if (window.matchMedia('(min-width: 1024px)').matches) return;
     activeLink.current?.scrollIntoView({ inline: 'center', block: 'nearest' });
   }, [activeSection]);
 
@@ -61,7 +62,11 @@ export function SettingsFrame({ children }: { children: ReactNode }) {
                 <li key={section} className="shrink-0 lg:shrink">
                   <Link
                     ref={section === activeSection ? activeLink : undefined}
-                    href={`/settings/${section}`}
+                    href={
+                      section === 'integrations'
+                        ? '/marketplace/integrations'
+                        : `/settings/${section}`
+                    }
                     onClick={clear}
                     aria-current={active ? 'page' : undefined}
                     className={cn(
@@ -74,7 +79,12 @@ export function SettingsFrame({ children }: { children: ReactNode }) {
                     <span className="block whitespace-nowrap text-sm font-semibold lg:whitespace-normal">
                       {t(`settings.sections.${section}.title`)}
                     </span>
-                    <span className="mt-0.5 hidden text-xs leading-snug text-muted-foreground lg:block">
+                    <span
+                      className={cn(
+                        'mt-0.5 hidden text-xs leading-snug lg:block',
+                        active ? 'text-foreground/80' : 'text-muted-foreground',
+                      )}
+                    >
                       {t(`settings.sections.${section}.description`)}
                     </span>
                   </Link>

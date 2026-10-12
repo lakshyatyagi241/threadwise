@@ -103,33 +103,35 @@ export function ErrorPanel({
   const te = useTranslations('marketplace.errors');
   const e = mktError(error);
   return (
-    <EmptyState
-      title={title ?? t('errorTitle')}
-      message={
-        <>
-          {errorMessage(te, e, error)}
-          {e.requestId && (
-            <span className="mt-1 block font-mono text-[11px]">
-              {t('requestId')}: {e.requestId}
-            </span>
-          )}
-        </>
-      }
-      actions={
-        <>
-          {isPlanGate(e) && e.upgradeHref && (
-            <Link href={e.upgradeHref} className={LINK_BUTTON_PRIMARY}>
-              {t('upgrade')}
-            </Link>
-          )}
-          {onRetry && isRetryable(e) && (
-            <Button variant="secondary" onClick={onRetry}>
-              {t('retry')}
-            </Button>
-          )}
-        </>
-      }
-    />
+    <div role="alert">
+      <EmptyState
+        title={title ?? t('errorTitle')}
+        message={
+          <>
+            {errorMessage(te, e, error)}
+            {e.requestId && (
+              <span className="mt-1 block font-mono text-[11px]">
+                {t('requestId')}: {e.requestId}
+              </span>
+            )}
+          </>
+        }
+        actions={
+          <>
+            {isPlanGate(e) && e.upgradeHref && (
+              <Link href={e.upgradeHref} className={LINK_BUTTON_PRIMARY}>
+                {t('upgrade')}
+              </Link>
+            )}
+            {onRetry && isRetryable(e) && (
+              <Button variant="secondary" onClick={onRetry}>
+                {t('retry')}
+              </Button>
+            )}
+          </>
+        }
+      />
+    </div>
   );
 }
 
@@ -175,7 +177,7 @@ export function AppLogo({
     <span
       aria-hidden="true"
       className={cn(
-        'flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-md border border-border bg-muted text-sm font-semibold text-muted-foreground',
+        'flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-md border border-border bg-muted text-sm font-semibold text-foreground/80',
         className,
       )}
     >

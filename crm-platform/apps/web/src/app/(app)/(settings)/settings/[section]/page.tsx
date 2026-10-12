@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { SETTINGS_SECTIONS, isSettingsSection } from '@/features/_registry/settings-types';
 import { SectionPanel } from '@/features/settings-hub/section-panel';
@@ -29,5 +29,7 @@ export default async function SettingsSectionPage({
 }) {
   const { section } = await params;
   if (!isSettingsSection(section)) notFound();
+  // Integrations and developer tools now live in the Marketplace (Integrations tab).
+  if (section === 'integrations') redirect('/marketplace/integrations');
   return <SectionPanel section={section} />;
 }
