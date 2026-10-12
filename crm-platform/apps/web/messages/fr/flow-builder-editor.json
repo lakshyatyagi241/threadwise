@@ -164,7 +164,12 @@
       "messaging": "Flux de messagerie",
       "messagingNote": "WhatsApp, Instagram ou Facebook : changez de canal sur le nœud Déclencheur",
       "call": "Appel",
-      "callNote": "SVI vocal IA : dire, écouter, transférer"
+      "callNote": "SVI vocal IA : dire, écouter, transférer",
+      "subtitleSimple": "Chaque bot est conçu pour un seul canal, car tous les composants ne fonctionnent pas sur tous les canaux.",
+      "whatsapp": "WhatsApp",
+      "whatsappNote": "Répond aux clients sur un numéro WhatsApp connecté",
+      "web": "Chat du site web",
+      "webNote": "Un widget de chat que vous ajoutez à votre site web"
     },
     "rename": {
       "title": "Renommer le flux",
@@ -553,8 +558,8 @@
           "faqAllFaqs": "Toutes les FAQ",
           "faqCategory": "FAQ : {name}",
           "faqScore": "score min. {score}",
-          "faqWorkspaceScore": "score de l'espace de travail",
-          "faqNotSent": "non envoyée"
+          "faqNotSent": "non envoyée",
+          "faqWorkspaceScore": "score du flux"
         },
         "overlays": {
           "startPinned": "Ceci est le point de départ (cliquez pour le retirer)",
@@ -1790,28 +1795,22 @@
         },
         "faq": {
           "intro": {
-            "body": "Compare un message à vos FAQ selon le sens et y répond. Elle sort par <mono>Répondu</mono> quand une FAQ a répondu, et par <mono>Aucune correspondance</mono> sinon.",
-            "sub": "Fonctionne même sans activer la réponse automatique par FAQ. <link>Gérer vos FAQ</link>"
+            "body": "Compare un message aux FAQ de ce flux selon le sens et y répond. Sort par <mono>répondu</mono> quand une FAQ a répondu, et par <mono>aucune correspondance</mono> sinon.",
+            "sub": "Fonctionne sans activer la réponse FAQ automatique de ce flux. <link>Gérer les FAQ de ce flux</link>"
           },
           "exitsLabel": "Sorties",
           "exitMatchedName": "Répondu",
           "exitMatched": "une FAQ a répondu : son texte a été envoyé (sauf si l'envoi est désactivé), ou son flux a pris le relais et ne revient pas.",
           "exitNoMatchName": "Aucune correspondance",
           "exitNoMatch": "rien n'était assez proche, la réponse automatique par FAQ est désactivée pour la plateforme, le flux ou l'étape lié n'existe plus, ou le message était vide.",
-          "noFaqs": "Vous n'avez encore aucune FAQ, donc cette étape sort toujours par « Aucune correspondance ». <link>Ajouter votre première FAQ</link>",
           "query": "Message à comparer",
           "queryHint": "Par défaut, le dernier message du client. Une variable enregistrée par une étape Question fonctionne aussi, par exemple <mono>{variable}</mono>. Tapez / pour en insérer une.",
           "category": "Uniquement ces FAQ",
           "allFaqs": "Toutes les FAQ",
           "loadingCategories": "Chargement des catégories…",
           "categoryGone": "{name} (aucune FAQ ne l'utilise)",
-          "categoryHint": "Seules les FAQ de cette catégorie peuvent répondre. Les catégories proviennent de vos FAQ.",
-          "categoriesFailed": "Impossible de charger vos catégories de FAQ.",
           "retry": "Réessayer",
           "minScore": "Score minimum",
-          "useWorkspaceScore": "Utiliser le réglage de l'espace de travail",
-          "minScoreHint": "Remplace le score de l'espace de travail pour cette étape uniquement, de {min} à {max}. Les scores dépendent du modèle d'embedding de la plateforme : essayez un message dans le <link>test FAQ</link> avant de choisir une valeur.",
-          "minScoreInvalid": "Saisissez un nombre de {min} à {max}, ou utilisez le réglage de l'espace de travail.",
           "sendAnswer": "Envoyer la réponse au client",
           "sendAnswerToggle": "Envoyer la réponse texte trouvée comme message",
           "sendAnswerOnHint": "Une FAQ texte correspondante est envoyée au client. Une FAQ qui lance un flux se poursuit dans ce flux.",
@@ -1824,7 +1823,14 @@
             "question": "la question de la FAQ trouvée",
             "score": "la proximité de la correspondance",
             "id": "l'identifiant de la FAQ trouvée"
-          }
+          },
+          "noFaqs": "Ce flux n’a pas encore de FAQ, donc cette étape sort toujours par aucune correspondance. <link>Ajouter la première FAQ de ce flux</link>",
+          "useWorkspaceScore": "Utiliser le réglage de ce flux",
+          "minScoreInvalid": "Saisissez un nombre de {min} à {max}, ou utilisez le réglage de ce flux.",
+          "saveFlowFirst": "Enregistrez d’abord le flux. Ses FAQ se modifient dans l’onglet FAQ du constructeur simple, et cette étape répond à partir d’elles.",
+          "categoryHint": "Seules les FAQ de cette catégorie peuvent répondre. Les catégories proviennent des FAQ de ce flux.",
+          "categoriesFailed": "Impossible de charger les catégories de FAQ de ce flux.",
+          "minScoreHint": "Remplace le score de ce flux pour cette étape uniquement, de {min} à {max}. Les scores dépendent du modèle d’embedding de la plateforme : essayez un message dans le <link>test FAQ</link> de ce flux avant de choisir un nombre."
         }
       },
       "attrPicker": {
@@ -1885,6 +1891,16 @@
           "sampleName": "Lieu de test",
           "sampleAddress": "1 MG Road, Bengaluru"
         }
+      },
+      "webBot": {
+        "aria": "Sections du flux",
+        "faqs": "FAQ",
+        "saveFirst": "Enregistrez d’abord le flux.",
+        "build": "Créer",
+        "customize": "Personnaliser",
+        "install": "Installer",
+        "needsCustomizing": "Le widget utilise encore l’apparence par défaut. Ouvrez Personnaliser.",
+        "customizeFirst": "Personnalisez votre widget de chat et enregistrez-le une fois avant de publier."
       }
     },
     "contracts": {
@@ -2212,7 +2228,8 @@
         "line": "LINE",
         "wechat": "WeChat",
         "viber": "Viber",
-        "email": "E-mail"
+        "email": "E-mail",
+        "web": "Chat du site web"
       },
       "dateFormats": {
         "ddDmmDyyyy": "JJ-MM-AAAA",
@@ -2307,7 +2324,7 @@
         "noSenderInstagram": "Le nœud Déclencheur n’a aucun compte Instagram sélectionné : choisissez-en un à l’étape Déclencheur.",
         "noSenderFacebook": "Le nœud Déclencheur n’a aucune Page Facebook sélectionnée : choisissez-en une à l’étape Déclencheur.",
         "noSenderNumber": "Le nœud Déclencheur n’a aucun numéro sélectionné : choisissez-en un à l’étape Déclencheur.",
-        "faqMinScore": "« {node} » a un score minimum hors de la plage 0.05 à 0.99. Corrigez-le ou laissez-le vide pour utiliser le réglage de l'espace de travail."
+        "faqMinScore": "« {node} » a un score minimum hors de la plage 0.05 à 0.99. Corrigez-le ou laissez-le vide pour utiliser le réglage du flux."
       }
     },
     "simpleModel": {
@@ -2443,7 +2460,7 @@
         "rowTitle": "Étape {stage} : chaque ligne a besoin d’un titre de {max} caractères maximum.",
         "rowDescriptionTooLong": "Étape {stage} : une description de ligne dépasse {max} caractères.",
         "variableUsed": "Étape {stage} : « {name} » est déjà utilisé par l’étape {other} ; donnez un nom distinct à chaque réponse.",
-        "faqMinScore": "Étape {stage} : le score minimum doit être compris entre 0.05 et 0.99, ou utilisez le réglage de l'espace de travail."
+        "faqMinScore": "Étape {stage} : le score minimum doit être compris entre 0.05 et 0.99, ou utilisez le réglage du flux."
       },
       "faqSummary": "{hasCategory, select, true {Depuis vos FAQ · {category}} other {Depuis vos FAQ}}"
     },

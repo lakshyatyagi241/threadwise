@@ -18,6 +18,7 @@ import {
 import {
   call,
   closeCall,
+  faqBase,
   getSettings,
   newWorkspace,
   putSettings,
@@ -53,7 +54,7 @@ test.describe('the fields', () => {
     await openFaq(page);
     await expect(legend(page)).toBeVisible();
     await expect(
-      legend(page).getByText(/double-checks matches that only just reached a workspace's bar/),
+      legend(page).getByText(/double-checks matches that only just reached a flow's bar/),
     ).toBeVisible();
     await expect(field.verifySwitch(page)).toBeChecked();
     await expect(field.verifyModel(page)).toHaveValue(DEFAULTS.verifyModel);
@@ -346,19 +347,19 @@ test.describe('what it does to workspaces', () => {
       // Two confirmed close calls and one veto: each message is made a close call first.
       await closeCall(ws, 'refund');
       for (let i = 0; i < 2; i++) {
-        const r = await call(ws, 'POST', '/v2/faq/test', { query: 'refund' });
+        const r = await call(ws, 'POST', `${faqBase(ws)}/test`, { query: 'refund' });
         expect(r.body.verify.verdict).toBe('confirmed');
       }
       await closeCall(ws, 'refund [[reject]]');
       expect(
-        (await call(ws, 'POST', '/v2/faq/test', { query: 'refund [[reject]]' })).body.verify
+        (await call(ws, 'POST', `${faqBase(ws)}/test`, { query: 'refund [[reject]]' })).body.verify
           .verdict,
       ).toBe('rejected');
       // A failed check is not counted: nothing was judged.
       await closeCall(ws, 'refund [[judge-fail]]');
       expect(
-        (await call(ws, 'POST', '/v2/faq/test', { query: 'refund [[judge-fail]]' })).body.verify
-          .verdict,
+        (await call(ws, 'POST', `${faqBase(ws)}/test`, { query: 'refund [[judge-fail]]' })).body
+          .verify.verdict,
       ).toBe('error');
       const now = (await op.overview()).stats;
       expect(now.verified30d - was.verified30d).toBe(3);

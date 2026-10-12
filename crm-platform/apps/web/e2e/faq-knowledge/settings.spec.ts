@@ -1,25 +1,27 @@
 import {
   call,
   expect,
+  faqBase,
   getSettings,
-  go,
   login,
   newWorkspace,
   open,
+  openFaqs,
   operator,
   putSettings,
+  reloadFaqs,
   seedFaq,
+  type State,
   test,
   waitIndexed,
   waitReindexed,
-  type State,
   type Workspace,
 } from './support';
 import type { Page } from '@playwright/test';
 
-/** `/faq/settings`: the switch, sensitivity, ambiguity guard and logging, versioned saves, and the facts beside them. */
+/** A flow's FAQ settings (`?tab=faqs&view=settings`): the switch, sensitivity, ambiguity guard and logging, versioned saves, and the facts beside them. */
 const answerSwitch = (page: Page) =>
-  page.getByRole('switch', { name: 'Answer customers with FAQs' });
+  page.getByRole('switch', { name: "Answer customers with this flow's FAQs" });
 const keepSwitch = (page: Page) =>
   page.getByRole('switch', { name: 'Keep customer messages in the match log' });
 const sens = (page: Page) =>
@@ -43,17 +45,17 @@ test('the answering switch: save is off until something changes, Discard undoes,
 }) => {
   const { ws, state } = await fresh(browser, 'setswitch');
   const { page } = await open(browser, state, watch);
-  await go(page, '/faq/settings');
+  await openFaqs(page, ws, 'settings');
   await expect(answerSwitch(page)).not.toBeChecked();
   await expect(save(page)).toBeDisabled();
   await expect(discard(page)).toBeDisabled();
-  await expect(page.getByText('Unsaved changes')).toHaveCount(0);
+  await expect(page.getByText('Unsaved changes', { exact: true })).toHaveCount(0);
   // The settings screen does not repeat the state banner.
-  await expect(page.getByText('FAQ answering is OFF for customers')).toHaveCount(0);
+  await expect(page.getByText('FAQ answering is OFF for this flow')).toHaveCount(0);
 
   await answerSwitch(page).click();
   await expect(answerSwitch(page)).toBeChecked();
-  await expect(page.getByText('Unsaved changes')).toBeVisible();
+  await expect(page.getByText('Unsaved changes', { exact: true })).toBeVisible();
   await expect(save(page)).toBeEnabled();
   await discard(page).click();
   await expect(answerSwitch(page)).not.toBeChecked();
@@ -65,7 +67,7 @@ test('the answering switch: save is off until something changes, Discard undoes,
   await expect(page.getByText('Settings saved.')).toBeVisible();
   await expect(save(page)).toBeDisabled();
   await expect.poll(async () => (await getSettings(ws)).enabled).toBe(true);
-  await page.reload();
+  await reloadFaqs(page);
   await expect(answerSwitch(page)).toBeChecked();
   await expect(page.getByText('On', { exact: true })).toBeVisible();
 
@@ -82,7 +84,7 @@ test('the sensitivity slider works by keyboard and presets, and a preset names i
 }) => {
   const { ws, state } = await fresh(browser, 'setsens');
   const { page } = await open(browser, state, watch);
-  await go(page, '/faq/settings');
+  await openFaqs(page, ws, 'settings');
   const slider = sens(page);
   await expect(slider).toBeVisible();
   const rec = Math.round((await getSettings(ws)).recommendedThreshold * 100);
@@ -133,14 +135,14 @@ test('the sensitivity slider works by keyboard and presets, and a preset names i
   await save(page).click();
   await expect(page.getByText('Settings saved.')).toBeVisible();
   await expect.poll(async () => Math.round((await getSettings(ws)).threshold * 100)).toBe(strict);
-  await page.reload();
+  await reloadFaqs(page);
   await expect(sens(page)).toHaveAttribute('aria-valuetext', `${strict}%`);
 });
 
 test('the minimum lead and the log switch are saved', async ({ browser, watch }) => {
   const { ws, state } = await fresh(browser, 'setmargin');
   const { page } = await open(browser, state, watch);
-  await go(page, '/faq/settings');
+  await openFaqs(page, ws, 'settings');
   await expect(margin(page)).toHaveAttribute('aria-valuetext', 'Off');
   await margin(page).focus();
   for (let i = 0; i < 10; i++) await margin(page).press('ArrowRight');
@@ -161,7 +163,7 @@ test('the minimum lead and the log switch are saved', async ({ browser, watch })
   await expect(page.getByText('Settings saved.')).toBeVisible();
   await expect.poll(async () => (await getSettings(ws)).minMargin).toBe(0.15);
   expect((await getSettings(ws)).logQueries).toBe(false);
-  await page.reload();
+  await reloadFaqs(page);
   await expect(margin(page)).toHaveAttribute('aria-valuetext', '15%');
   await expect(keepSwitch(page)).not.toBeChecked();
 });
@@ -174,8 +176,8 @@ test('two people saving: the second sees the conflict and reloads the other vers
   const { ws, state } = await fresh(browser, 'setconflict', true);
   const one = await open(browser, state, watch);
   const two = await open(browser, state, watch);
-  await go(one.page, '/faq/settings');
-  await go(two.page, '/faq/settings');
+  await openFaqs(one.page, ws, 'settings');
+  await openFaqs(two.page, ws, 'settings');
 
   await answerSwitch(one.page).click();
   await save(one.page).click();
@@ -203,14 +205,14 @@ test('two people saving: the second sees the conflict and reloads the other vers
   expect(await getSettings(ws)).toMatchObject({ enabled: true, logQueries: false });
 });
 
-test('limits and usage describe the workspace', async ({ browser, watch }) => {
+test('limits and usage describe the flow', async ({ browser, watch }) => {
   const { ws, state } = await fresh(browser, 'setfacts');
   await seedFaq(ws, { question: 'Fact one', variations: ['fact uno', 'fact eins'] });
   await seedFaq(ws, { question: 'Fact two', variations: ['fact dos'] });
   const s = await getSettings(ws);
   expect(s.usage).toEqual({ faqs: 2, variations: 5 });
   const { page } = await open(browser, state, watch);
-  await go(page, '/faq/settings');
+  await openFaqs(page, ws, 'settings');
   const facts = page.getByRole('region', { name: 'Model and limits' });
   await expect(facts).toContainText(s.embeddingModel);
   await expect(facts.getByText(`2 of ${s.limits.maxFaqs}`)).toBeVisible();
@@ -227,7 +229,7 @@ test('limits and usage describe the workspace', async ({ browser, watch }) => {
 });
 
 test.describe('platform changes', () => {
-  test('a changed embedding model shows the review banner until the workspace saves', async ({
+  test('a changed embedding model shows the review banner until the settings are saved', async ({
     browser,
     watch,
   }) => {
@@ -250,12 +252,12 @@ test.describe('platform changes', () => {
 
       const { page } = await open(browser, state, watch);
       // The banner is on every FAQ screen except settings, and links to it.
-      await go(page, '/faq');
+      await openFaqs(page, ws);
       await expect(
         page.getByText('The platform changed the AI model after you tuned this threshold.'),
       ).toBeVisible();
       await page.getByRole('link', { name: 'Review sensitivity' }).click();
-      await expect(page).toHaveURL(/\/faq\/settings$/);
+      await expect(page).toHaveURL(/[?&]view=settings$/);
       await expect(page.getByText('Review your sensitivity', { exact: true })).toBeVisible();
       await expect(page.getByText(`Scores belong to the model ${next.id}.`)).toBeVisible();
       await expect(
@@ -275,7 +277,7 @@ test.describe('platform changes', () => {
       await expect(page.getByText('Settings saved.')).toBeVisible();
       await expect(page.getByText('Review your sensitivity', { exact: true })).toHaveCount(0);
       expect((await getSettings(ws)).modelChanged).toBe(false);
-      await go(page, '/faq');
+      await openFaqs(page, ws);
       await expect(
         page.getByText('The platform changed the AI model after you tuned this threshold.'),
       ).toHaveCount(0);
@@ -286,7 +288,7 @@ test.describe('platform changes', () => {
     }
   });
 
-  test('platform limits are shown: a full workspace cannot add FAQs and a full FAQ cannot add phrasings', async ({
+  test('platform limits are shown: a full flow cannot add FAQs and a full FAQ cannot add phrasings', async ({
     browser,
     watch,
   }) => {
@@ -303,13 +305,13 @@ test.describe('platform changes', () => {
     try {
       await op.patch({ maxFaqs: 2, maxVariationsPerFaq: 3 });
       const { page } = await open(browser, state, watch);
-      await go(page, '/faq/new');
+      await openFaqs(page, ws, 'new');
       await expect(
-        page.getByText('Your workspace is at its limit of 2 FAQs. Delete one to add another.'),
+        page.getByText('This flow is at its limit of 2 FAQs. Delete one to add another.'),
       ).toBeVisible();
       await expect(page.getByRole('button', { name: 'Create FAQ' })).toBeDisabled();
 
-      await go(page, `/faq/${faq.id}`);
+      await openFaqs(page, ws, faq.id);
       await expect(page.getByLabel('2 of 3 phrasings used')).toBeVisible();
       await page.getByRole('textbox', { name: 'New phrasing' }).fill('limit three');
       await page.getByRole('textbox', { name: 'New phrasing' }).press('Enter');
@@ -318,7 +320,7 @@ test.describe('platform changes', () => {
       await expect(page.getByRole('textbox', { name: 'New phrasing' })).toHaveCount(0);
       await expect(page.getByRole('button', { name: 'Suggest with AI' })).toBeDisabled();
 
-      await go(page, '/faq/settings');
+      await openFaqs(page, ws, 'settings');
       await expect(page.getByText('2 of 2')).toBeVisible();
       await expect(
         page
@@ -343,25 +345,25 @@ test.describe('platform changes', () => {
     try {
       await op.patch({ engineEnabled: false });
       const { page } = await open(browser, state, watch);
-      await go(page, '/faq');
+      await openFaqs(page, ws);
       await expect(
         page.getByText(/FAQ answering has been switched off by the platform/),
       ).toBeVisible();
-      await go(page, '/faq/settings');
+      await openFaqs(page, ws, 'settings');
       await expect(
         page.getByText(
           /FAQ answering is switched off by the platform\. Whatever you set here applies once it is back on\./,
         ),
       ).toBeVisible();
-      await go(page, '/faq/new');
+      await openFaqs(page, ws, 'new');
       await page.getByRole('textbox', { name: 'Question', exact: true }).fill('Blocked while off');
       await page.getByLabel('Answer text').fill('Blocked.');
       await page.getByRole('button', { name: 'Create FAQ' }).click();
       await expect(
         page.getByText('FAQ answering is switched off for the whole platform right now.'),
       ).toBeVisible();
-      await expect(page).toHaveURL(/\/faq\/new$/);
-      expect((await call(ws, 'GET', '/v2/faq/entries')).body.data).toHaveLength(0);
+      await expect(page).toHaveURL(/[?&]view=new$/);
+      expect((await call(ws, 'GET', `${faqBase(ws)}/entries`)).body.data).toHaveLength(0);
     } finally {
       await op.patch({ engineEnabled: true });
       await op.dispose();

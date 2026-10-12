@@ -113,6 +113,64 @@ export const toCandidates = (ranked: readonly Scored[]): FaqCandidate[] =>
     status: r.status,
   }));
 
+// --- which flows answer a message --------------------------------------------------------------------------------------
+
+/** What decides whether a flow is bound to a channel: the same two columns the keyword trigger reads. */
+export interface FlowBinding {
+  id: number;
+  triggerChannelId: number | null;
+  provider: string;
+}
+
+/**
+ * The flows (already published, active, with the switch on and an active FAQ) that sit on the channel a message came in on. The same
+ * predicate as the keyword trigger: a flow tied to a channel answers there only; a flow tied to none answers on every channel of its
+ * engine's kinds. The customer's live run's flow, when it is one of them, comes first; the rest by ascending id.
+ */
+export function candidateFlows(
+  flows: readonly FlowBinding[],
+  channel: { channelId: number; channelKind: string },
+  kindsOfProvider: Readonly<Record<string, readonly string[]>>,
+  liveFlowId: number | null,
+): number[] {
+  const fits = flows.filter((f) =>
+    f.triggerChannelId !== null
+      ? f.triggerChannelId === channel.channelId
+      : (kindsOfProvider[f.provider] ?? []).includes(channel.channelKind),
+  );
+  const ids = [...new Set(fits.map((f) => f.id))].sort((a, b) => a - b);
+  return liveFlowId !== null && ids.includes(liveFlowId)
+    ? [liveFlowId, ...ids.filter((i) => i !== liveFlowId)]
+    : ids;
+}
+
+export interface FlowAttempt {
+  flowId: number;
+  outcome: FaqMatchOutcome;
+  score: number | null;
+}
+
+/**
+ * The attempt that speaks for the message. The best score among the flows that ANSWERED wins; when none answered, the highest scoring
+ * attempt (so the log says how close the nearest flow came). A tie goes to the customer's live run's flow, then to the lowest flow id.
+ * Scores are compared at the four decimals the screens show.
+ */
+export function pickAttempt<T extends FlowAttempt>(
+  attempts: readonly T[],
+  liveFlowId: number | null,
+): T | null {
+  if (attempts.length === 0) return null;
+  const answered = attempts.filter((a) => a.outcome === 'answered');
+  const pool = answered.length > 0 ? answered : attempts;
+  const score = (a: T): number => (a.score === null ? -1 : round4(a.score));
+  return [...pool].sort(
+    (a, b) =>
+      score(b) - score(a) ||
+      Number(b.flowId === liveFlowId) - Number(a.flowId === liveFlowId) ||
+      a.flowId - b.flowId,
+  )[0]!;
+}
+
 // --- variation generation ------------------------------------------------------------------------------------------
 
 export function suggestionPrompt(

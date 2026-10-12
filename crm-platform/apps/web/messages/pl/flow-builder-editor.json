@@ -164,7 +164,12 @@
       "messaging": "Przepływ wiadomości",
       "messagingNote": "WhatsApp, Instagram lub Facebook — zmień kanał w węźle Wyzwalacz",
       "call": "Połączenie",
-      "callNote": "Głosowe IVR z AI — mów, słuchaj, przekieruj"
+      "callNote": "Głosowe IVR z AI — mów, słuchaj, przekieruj",
+      "subtitleSimple": "Każdy bot jest tworzony dla jednego kanału, ponieważ nie wszystkie komponenty działają w każdym kanale.",
+      "whatsapp": "WhatsApp",
+      "whatsappNote": "Odpowiada klientom na podłączonym numerze WhatsApp",
+      "web": "Czat na stronie",
+      "webNote": "Widżet czatu, który dodajesz do swojej strony"
     },
     "rename": {
       "title": "Zmień nazwę przepływu",
@@ -553,8 +558,8 @@
           "faqAllFaqs": "Wszystkie FAQ",
           "faqCategory": "FAQ: {name}",
           "faqScore": "min. wynik {score}",
-          "faqWorkspaceScore": "wynik obszaru roboczego",
-          "faqNotSent": "nie wysłano"
+          "faqNotSent": "nie wysłano",
+          "faqWorkspaceScore": "wynik przepływu"
         },
         "overlays": {
           "startPinned": "To jest punkt startowy (kliknij, aby odpiąć)",
@@ -1790,28 +1795,22 @@
         },
         "faq": {
           "intro": {
-            "body": "Dopasowuje wiadomość do Twoich FAQ według znaczenia i odpowiada. Wychodzi przez <mono>odpowiedziano</mono>, gdy FAQ odpowiedziało, a w przeciwnym razie przez <mono>brak dopasowania</mono>.",
-            "sub": "Działa bez włączania automatycznego odpowiadania z FAQ. <link>Zarządzaj swoimi FAQ</link>"
+            "body": "Dopasowuje wiadomość do FAQ tego przepływu według znaczenia i odpowiada. Wychodzi przez <mono>answered</mono>, gdy FAQ odpowiedziało, a w przeciwnym razie przez <mono>no match</mono>.",
+            "sub": "Działa bez włączania automatycznego odpowiadania na FAQ w tym przepływie. <link>Zarządzaj FAQ tego przepływu</link>"
           },
           "exitsLabel": "Wyjścia",
           "exitMatchedName": "Odpowiedziano",
           "exitMatched": "FAQ odpowiedziało: jego tekst został wysłany (chyba że wysyłanie jest wyłączone) albo jego przepływ przejął obsługę i nie wraca.",
           "exitNoMatchName": "Brak dopasowania",
           "exitNoMatch": "nic nie było wystarczająco zbliżone, automatyczne odpowiadanie z FAQ jest wyłączone dla platformy, powiązany przepływ lub krok nie istnieje albo wiadomość była pusta.",
-          "noFaqs": "Nie masz jeszcze żadnych FAQ, więc ten krok zawsze wychodzi przez brak dopasowania. <link>Dodaj pierwsze FAQ</link>",
           "query": "Wiadomość do dopasowania",
           "queryHint": "Domyślnie ostatnia wiadomość klienta. Działa też zmienna zapisana przez krok Pytanie, na przykład <mono>{variable}</mono>. Wpisz /, aby ją wstawić.",
           "category": "Tylko te FAQ",
           "allFaqs": "Wszystkie FAQ",
           "loadingCategories": "Ładowanie kategorii…",
           "categoryGone": "{name} (żadne FAQ jej nie używa)",
-          "categoryHint": "Odpowiadać mogą tylko FAQ z tej kategorii. Kategorie pochodzą z Twoich FAQ.",
-          "categoriesFailed": "Nie udało się wczytać kategorii FAQ.",
           "retry": "Spróbuj ponownie",
           "minScore": "Minimalny wynik",
-          "useWorkspaceScore": "Użyj ustawienia obszaru roboczego",
-          "minScoreHint": "Zastępuje wynik obszaru roboczego tylko dla tego kroku, w zakresie od {min} do {max}. Wyniki zależą od modelu embeddingów platformy, więc przed wyborem liczby wypróbuj wiadomość w <link>teście FAQ</link>.",
-          "minScoreInvalid": "Wpisz liczbę od {min} do {max} albo użyj ustawienia obszaru roboczego.",
           "sendAnswer": "Wyślij odpowiedź klientowi",
           "sendAnswerToggle": "Wyślij pasującą odpowiedź tekstową jako wiadomość",
           "sendAnswerOnHint": "Pasujące FAQ z tekstem jest wysyłane klientowi. FAQ uruchamiające przepływ kontynuuje w tym przepływie.",
@@ -1824,7 +1823,14 @@
             "question": "pytanie dopasowanego FAQ",
             "score": "jak bliskie było dopasowanie",
             "id": "id dopasowanego FAQ"
-          }
+          },
+          "noFaqs": "Ten przepływ nie ma jeszcze FAQ, więc ten krok zawsze kończy się wyjściem no match. <link>Dodaj pierwsze FAQ tego przepływu</link>",
+          "useWorkspaceScore": "Użyj ustawienia tego przepływu",
+          "minScoreInvalid": "Wpisz liczbę od {min} do {max} lub użyj ustawienia tego przepływu.",
+          "saveFlowFirst": "Najpierw zapisz przepływ. Jego FAQ edytuje się na karcie FAQ w prostym kreatorze, a ten krok odpowiada na ich podstawie.",
+          "categoryHint": "Odpowiadać mogą tylko FAQ z tej kategorii. Kategorie pochodzą z FAQ tego przepływu.",
+          "categoriesFailed": "Nie udało się wczytać kategorii FAQ tego przepływu.",
+          "minScoreHint": "Zastępuje wynik tego przepływu tylko dla tego kroku, od {min} do {max}. Wyniki zależą od modelu embeddingów platformy, więc przed wybraniem liczby wypróbuj wiadomość w <link>teście FAQ</link> tego przepływu."
         }
       },
       "attrPicker": {
@@ -1885,6 +1891,16 @@
           "sampleName": "Miejsce testowe",
           "sampleAddress": "1 MG Road, Bengaluru"
         }
+      },
+      "webBot": {
+        "aria": "Sekcje przepływu",
+        "faqs": "FAQ",
+        "saveFirst": "Najpierw zapisz przepływ.",
+        "build": "Twórz",
+        "customize": "Dostosuj",
+        "install": "Zainstaluj",
+        "needsCustomizing": "Widżet nadal używa domyślnego wyglądu. Otwórz Dostosuj.",
+        "customizeFirst": "Dostosuj widżet czatu i zapisz go raz przed publikacją."
       }
     },
     "contracts": {
@@ -2212,7 +2228,8 @@
         "line": "LINE",
         "wechat": "WeChat",
         "viber": "Viber",
-        "email": "E-mail"
+        "email": "E-mail",
+        "web": "Czat na stronie"
       },
       "dateFormats": {
         "ddDmmDyyyy": "DD-MM-YYYY",
@@ -2307,7 +2324,7 @@
         "noSenderInstagram": "Węzeł Wyzwalacz nie ma wybranego konta Instagram — wybierz je w kroku Wyzwalacz.",
         "noSenderFacebook": "Węzeł Wyzwalacz nie ma wybranej strony Facebook — wybierz ją w kroku Wyzwalacz.",
         "noSenderNumber": "Węzeł Wyzwalacz nie ma wybranego numeru — wybierz go w kroku Wyzwalacz.",
-        "faqMinScore": "\"{node}\" ma minimalny wynik spoza zakresu od 0.05 do 0.99 — popraw go lub zostaw puste, aby użyć ustawienia obszaru roboczego."
+        "faqMinScore": "\"{node}\" ma minimalny wynik spoza zakresu od 0.05 do 0.99 — popraw go lub zostaw puste, aby użyć ustawienia przepływu."
       }
     },
     "simpleModel": {
@@ -2443,7 +2460,7 @@
         "rowTitle": "Krok {stage}: każdy wiersz wymaga tytułu do {max} znaków.",
         "rowDescriptionTooLong": "Krok {stage}: opis wiersza jest dłuższy niż {max} znaków.",
         "variableUsed": "Krok {stage}: „{name}” jest już używane przez krok {other}; nadaj każdej odpowiedzi osobną nazwę.",
-        "faqMinScore": "Krok {stage}: minimalny wynik musi mieścić się w zakresie od 0.05 do 0.99 albo użyj ustawienia obszaru roboczego."
+        "faqMinScore": "Krok {stage}: minimalny wynik musi mieścić się w zakresie od 0.05 do 0.99 albo użyj ustawienia przepływu."
       },
       "faqSummary": "{hasCategory, select, true {Z Twoich FAQ · {category}} other {Z Twoich FAQ}}"
     },

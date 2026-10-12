@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { FaqLogItem } from '@crm/contracts';
 import { Badge, Button, Modal, Spinner } from '@crm/ui';
 import { useFaqList } from '../api/hooks';
@@ -95,6 +95,13 @@ export function FaqPickerModal({
   const [search, setSearch] = useState('');
   const debounced = useDebounced(search);
   const list = useFaqList(EMPTY_FILTERS, debounced, open);
+  const searchRef = useRef<HTMLInputElement>(null);
+  // The dialog moves focus to its Close button when it opens, after `autoFocus` ran: ask again once it is on screen.
+  useEffect(() => {
+    if (!open) return;
+    const id = requestAnimationFrame(() => searchRef.current?.focus());
+    return () => cancelAnimationFrame(id);
+  }, [open]);
   return (
     <Modal open={open} onClose={onClose} title={title} size="md" closeLabel={t('close')}>
       <div className="space-y-3">
@@ -105,6 +112,7 @@ export function FaqPickerModal({
           <SearchIcon className="pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input
             id="faq-picker-search"
+            ref={searchRef}
             type="search"
             autoFocus
             value={search}

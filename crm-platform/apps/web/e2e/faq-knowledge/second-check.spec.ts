@@ -3,23 +3,25 @@ import {
   closeCall,
   customerAsks,
   expect,
+  faqBase,
   getSettings,
-  go,
   login,
   member,
   newWorkspace,
   open,
+  openFaqs,
   operator,
   putSettings,
+  reloadFaqs,
   repliesTo,
   seedFaq,
+  type Sim,
   simulator,
   sqlOne,
+  type State,
   tabTo,
   test,
   waitIndexed,
-  type Sim,
-  type State,
   type Workspace,
 } from './support';
 import type { Page } from '@playwright/test';
@@ -61,7 +63,7 @@ async function restorePlatform() {
 const arrange = closeCall;
 
 const testQuery = async (w: Workspace, query: string) =>
-  (await call(w, 'POST', '/v2/faq/test', { query })).body;
+  (await call(w, 'POST', `${faqBase(w)}/test`, { query })).body;
 
 async function fresh(browser: import('@playwright/test').Browser, label: string) {
   const ws = await newWorkspace(label);
@@ -94,7 +96,7 @@ test.describe('the settings card', () => {
   }) => {
     const { ws, state } = await fresh(browser, 'scdefault');
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq/settings');
+    await openFaqs(page, ws, 'settings');
     await expect(page.getByRole('heading', { name: 'Second check for close calls' })).toBeVisible();
     await expect(verifySwitch(page)).not.toBeChecked();
     await expect(verifySwitch(page)).toBeEnabled();
@@ -127,10 +129,10 @@ test.describe('the settings card', () => {
   }) => {
     const { ws, state } = await fresh(browser, 'scon');
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq/settings');
+    await openFaqs(page, ws, 'settings');
     await verifySwitch(page).click();
     await expect(verifySwitch(page)).toBeChecked();
-    await expect(page.getByText('Unsaved changes')).toBeVisible();
+    await expect(page.getByText('Unsaved changes', { exact: true })).toBeVisible();
     await expect(save(page)).toBeEnabled();
     await expect(card(page).getByText('On', { exact: true })).toBeVisible();
     await expect(card(page).getByText(/it never makes an answer happen\./)).toBeVisible();
@@ -144,7 +146,7 @@ test.describe('the settings card', () => {
     await expect(page.getByText('Settings saved.')).toBeVisible();
     await expect(save(page)).toBeDisabled();
     await expect.poll(async () => (await getSettings(ws)).verifyMode).toBe('borderline');
-    await page.reload();
+    await reloadFaqs(page);
     await expect(verifySwitch(page)).toBeChecked();
     await expect(band(page)).toHaveAttribute('aria-valuetext', '+10%');
 
@@ -161,7 +163,7 @@ test.describe('the settings card', () => {
   }) => {
     const { ws, state } = await fresh(browser, 'scband');
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq/settings');
+    await openFaqs(page, ws, 'settings');
     await verifySwitch(page).click();
     await band(page).focus();
     await band(page).press('Home');
@@ -205,7 +207,7 @@ test.describe('the settings card', () => {
         return [s.verifyMode, s.verifyBand, s.threshold];
       })
       .toEqual(['borderline', 0.07, 0.05]);
-    await page.reload();
+    await reloadFaqs(page);
     await expect(band(page)).toHaveAttribute('aria-valuetext', '+7%');
     await expect(sentence(page)).toContainText('from 5% up to 12%');
   });
@@ -216,22 +218,22 @@ test.describe('the settings card', () => {
   }) => {
     const { ws, state } = await fresh(browser, 'scdirty');
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq/settings');
+    await openFaqs(page, ws, 'settings');
     await verifySwitch(page).click();
     await band(page).focus();
     await band(page).press('End');
-    await expect(page.getByText('Unsaved changes')).toBeVisible();
+    await expect(page.getByText('Unsaved changes', { exact: true })).toBeVisible();
     await discard(page).click();
     await expect(verifySwitch(page)).not.toBeChecked();
     await expect(band(page)).toHaveAttribute('aria-valuetext', '+10%');
-    await expect(page.getByText('Unsaved changes')).toHaveCount(0);
+    await expect(page.getByText('Unsaved changes', { exact: true })).toHaveCount(0);
     await expect(save(page)).toBeDisabled();
 
     // Changing the band alone is a change; putting it back is not.
     await band(page).press('ArrowRight');
-    await expect(page.getByText('Unsaved changes')).toBeVisible();
+    await expect(page.getByText('Unsaved changes', { exact: true })).toBeVisible();
     await band(page).press('ArrowLeft');
-    await expect(page.getByText('Unsaved changes')).toHaveCount(0);
+    await expect(page.getByText('Unsaved changes', { exact: true })).toHaveCount(0);
 
     await verifySwitch(page).click();
     await page
@@ -241,7 +243,7 @@ test.describe('the settings card', () => {
     const dialog = page.getByRole('dialog', { name: 'Leave without saving?' });
     await expect(dialog).toBeVisible();
     await dialog.getByRole('button', { name: 'Stay' }).click();
-    await expect(page).toHaveURL(/\/faq\/settings$/);
+    await expect(page).toHaveURL(/[?&]view=settings$/);
     await expect(verifySwitch(page)).toBeChecked();
 
     // The browser's own prompt guards a reload.
@@ -261,7 +263,7 @@ test.describe('the settings card', () => {
       .getByRole('dialog', { name: 'Leave without saving?' })
       .getByRole('button', { name: 'Leave' })
       .click();
-    await expect(page).toHaveURL(/\/faq\/test$/);
+    await expect(page).toHaveURL(/[?&]view=test$/);
     expect((await getSettings(ws)).verifyMode).toBe('off');
   });
 
@@ -273,8 +275,8 @@ test.describe('the settings card', () => {
     const { ws, state } = await fresh(browser, 'scconflict');
     const one = await open(browser, state, watch);
     const two = await open(browser, state, watch);
-    await go(one.page, '/faq/settings');
-    await go(two.page, '/faq/settings');
+    await openFaqs(one.page, ws, 'settings');
+    await openFaqs(two.page, ws, 'settings');
 
     await verifySwitch(one.page).click();
     await save(one.page).click();
@@ -305,14 +307,14 @@ test.describe('the settings card', () => {
     const { page } = await open(browser, state, watch);
     const puts: string[] = [];
     page.on('request', (r) => {
-      if (r.method() === 'PUT' && /\/faq\/settings$/.test(new URL(r.url()).pathname))
+      if (r.method() === 'PUT' && /\/faq\/flows\/[^/]+\/settings$/.test(new URL(r.url()).pathname))
         puts.push(r.url());
     });
-    await page.route(/\/faq\/settings$/, async (route) => {
+    await page.route(/\/faq\/flows\/[^/]+\/settings$/, async (route) => {
       if (route.request().method() === 'PUT') await new Promise((r) => setTimeout(r, 1000));
       await route.continue();
     });
-    await go(page, '/faq/settings');
+    await openFaqs(page, ws, 'settings');
     await verifySwitch(page).click();
     await save(page).dblclick();
     await expect(page.getByText('Settings saved.')).toBeVisible();
@@ -328,22 +330,22 @@ test.describe('the settings card', () => {
   }) => {
     const { ws } = await fresh(browser, 'screader');
     await putSettings(ws, { verifyMode: 'borderline', verifyBand: 0.2 });
-    const reader = await member(ws, 'reader', ['faq.entries.read']);
+    const reader = await member(ws, 'reader', ['faq.entries.read', 'flb.flows.read']);
     const readerState = await login(browser, reader.email);
     const { page } = await open(browser, readerState, watch);
-    await go(page, '/faq/settings');
+    await openFaqs(page, ws, 'settings');
     await expect(verifySwitch(page)).toBeChecked();
     await expect(verifySwitch(page)).toBeDisabled();
     await expect(band(page)).toBeDisabled();
     await expect(band(page)).toHaveAttribute('aria-valuetext', '+20%');
     await expect(save(page)).toHaveCount(0);
     await expect(
-      page.getByText(/Changing them needs the permission faq.settings.manage/),
+      page.getByText(/Changing these settings needs the permission faq.settings.manage/),
     ).toBeVisible();
     const refused = await call(
       ws,
       'PUT',
-      '/v2/faq/settings',
+      `${faqBase(ws)}/settings`,
       { enabled: true, threshold: 0.5, minMargin: 0, logQueries: true, verifyMode: 'off' },
       reader.token,
     );
@@ -356,7 +358,7 @@ test.describe('the settings card', () => {
     await putSettings(ws, {});
     const cur = await getSettings(ws);
     const put = (patch: object) =>
-      call(ws, 'PUT', '/v2/faq/settings', {
+      call(ws, 'PUT', `${faqBase(ws)}/settings`, {
         enabled: cur.enabled,
         threshold: cur.threshold,
         minMargin: cur.minMargin,
@@ -386,7 +388,7 @@ test.describe('when the platform switches the check off', () => {
       await op.patch({ verifyEnabled: false });
       await expect.poll(async () => (await getSettings(ws)).verifyAvailable).toBe(false);
       const { page } = await open(browser, state, watch);
-      await go(page, '/faq/settings');
+      await openFaqs(page, ws, 'settings');
       await expect(
         card(page).getByText(/The platform has switched the second check off/),
       ).toBeVisible();
@@ -397,7 +399,7 @@ test.describe('when the platform switches the check off', () => {
       await expect(page.getByText(/^Second check \(optional\)/)).toHaveCount(0);
 
       // A close call is then not checked, and the playground says why.
-      await go(page, '/faq/test');
+      await openFaqs(page, ws, 'test');
       await ask(page, 'refund');
       await expect(page.getByText('Would answer', { exact: true }).first()).toBeVisible();
       await expect(verifyGroup(page).getByText('Second check skipped')).toBeVisible();
@@ -421,7 +423,7 @@ test.describe('when the platform switches the check off', () => {
       await op.patch({ verifyModel: long });
       await expect.poll(async () => (await getSettings(ws)).verifyModel).toBe(long);
       const { page } = await open(browser, state, watch, { viewport: { width: 375, height: 800 } });
-      await go(page, '/faq/settings');
+      await openFaqs(page, ws, 'settings');
       await expect(sentence(page)).toContainText(`are checked by ${long}.`);
       expect(
         await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
@@ -449,7 +451,7 @@ test.describe('the playground and "Try it" show the second check', () => {
     const { score, threshold } = await arrange(ws, 'refund');
     expect(score - threshold).toBeLessThan(0.1);
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq/test');
+    await openFaqs(page, ws, 'test');
     await ask(page, 'refund');
     await expect(page.getByText('Would answer', { exact: true }).first()).toBeVisible();
     await expect(verifyGroup(page)).toBeVisible();
@@ -468,7 +470,7 @@ test.describe('the playground and "Try it" show the second check', () => {
   }) => {
     await arrange(ws, 'refund [[reject]]');
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq/test');
+    await openFaqs(page, ws, 'test');
     await ask(page, 'refund [[reject]]');
     await expect(page.getByText('Answer withheld', { exact: true }).first()).toBeVisible();
     await expect(page.getByText('Would answer', { exact: true })).toHaveCount(0);
@@ -479,7 +481,7 @@ test.describe('the playground and "Try it" show the second check', () => {
     // The numbers still say the score was enough: the veto is the only thing that held it back.
     await expect(page.getByText('50%').first()).toBeVisible();
     // A decision from the playground is a test: it never reaches the insights.
-    const summary = (await call(ws, 'GET', '/v2/faq/insights/summary?days=30')).body;
+    const summary = (await call(ws, 'GET', `${faqBase(ws)}/insights/summary?days=30`)).body;
     expect(summary.totals.messages).toBe(0);
     const stored = (await testQuery(ws, 'refund [[reject]]')).verify;
     expect(stored).toMatchObject({ verdict: 'rejected', model: MODEL });
@@ -491,7 +493,7 @@ test.describe('the playground and "Try it" show the second check', () => {
   }) => {
     await arrange(ws, 'refund [[judge-fail]]');
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq/test');
+    await openFaqs(page, ws, 'test');
     await ask(page, 'refund [[judge-fail]]');
     await expect(page.getByText('Would answer', { exact: true }).first()).toBeVisible();
     await expect(verifyGroup(page).getByText('Second check failed')).toBeVisible();
@@ -507,7 +509,7 @@ test.describe('the playground and "Try it" show the second check', () => {
   }) => {
     await arrange(ws, 'refund [[judge-garbage]]');
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq/test');
+    await openFaqs(page, ws, 'test');
     await ask(page, 'refund [[judge-garbage]]');
     await expect(page.getByText('Would answer', { exact: true }).first()).toBeVisible();
     await expect(verifyGroup(page).getByText('Second check failed')).toBeVisible();
@@ -528,7 +530,7 @@ test.describe('the playground and "Try it" show the second check', () => {
         .poll(async () => (await testQuery(ws, 'refund')).verify?.verdict, { timeout: 30_000 })
         .toBe('skipped');
       const { page } = await open(browser, state, watch);
-      await go(page, '/faq/test');
+      await openFaqs(page, ws, 'test');
       await ask(page, 'refund');
       await expect(page.getByText('Would answer', { exact: true }).first()).toBeVisible();
       await expect(verifyGroup(page).getByText('Second check skipped')).toBeVisible();
@@ -550,11 +552,11 @@ test.describe('the playground and "Try it" show the second check', () => {
   }) => {
     const { score } = await arrange(ws, 'refund');
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq/test');
+    await openFaqs(page, ws, 'test');
 
     // Far above the bar (more than a band): answered with no second look.
     await putSettings(ws, { threshold: Math.round((score - 0.3) * 100) / 100 });
-    await page.reload();
+    await reloadFaqs(page);
     await ask(page, 'refund');
     await expect(page.getByText('Would answer', { exact: true }).first()).toBeVisible();
     await expect(verifyGroup(page)).toHaveCount(0);
@@ -591,11 +593,11 @@ test.describe('the playground and "Try it" show the second check', () => {
 
   test('"Try it" in the FAQ editor shows the same chip and reason', async ({ browser, watch }) => {
     await arrange(ws, 'refund [[reject]]');
-    const faq = (await call(ws, 'GET', '/v2/faq/entries?limit=10')).body.data.find(
+    const faq = (await call(ws, 'GET', `${faqBase(ws)}/entries?limit=10`)).body.data.find(
       (e: any) => e.question === QUESTION,
     );
     const { page } = await open(browser, state, watch);
-    await go(page, `/faq/${faq.id}`);
+    await openFaqs(page, ws, faq.id);
     await page.locator('#faq-tryit-input').fill('refund [[reject]]');
     await page.locator('#faq-tryit-input').press('Enter');
     await expect(page.getByText('Answer withheld', { exact: true }).first()).toBeVisible();
@@ -614,7 +616,7 @@ test.describe('the playground and "Try it" show the second check', () => {
   }) => {
     await arrange(ws, 'refund [[reject]]');
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq/test');
+    await openFaqs(page, ws, 'test');
     await ask(page, 'refund [[reject]]');
     const group = verifyGroup(page);
     await expect(group).toBeVisible();
@@ -669,7 +671,7 @@ test.describe('a customer on the simulator', () => {
     expect(repliesTo(ws, from)).toEqual([]);
 
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq/unanswered');
+    await openFaqs(page, ws, 'unanswered');
     const row = page
       .getByRole('list', { name: 'Unanswered messages' })
       .getByRole('listitem')
@@ -683,13 +685,13 @@ test.describe('a customer on the simulator', () => {
     await expect(row).toContainText(QUESTION);
 
     // The match log in Insights says "Answer withheld" for the same message.
-    await go(page, '/faq/insights');
+    await openFaqs(page, ws, 'insights');
     const logRow = page.getByRole('row').filter({ hasText: 'refund [[reject]]' });
     await expect(logRow).toBeVisible();
     await expect(logRow.getByText('Answer withheld')).toBeVisible();
 
     // Teaching it: the message becomes a phrasing, and the next customer gets the answer with no check at all (an exact phrase).
-    await go(page, '/faq/unanswered');
+    await openFaqs(page, ws, 'unanswered');
     await row.getByRole('button', { name: 'Add to an FAQ' }).click();
     const dialog = page.getByRole('dialog', { name: 'Add this message to which FAQ?' });
     await dialog.getByRole('searchbox', { name: 'Search FAQs' }).fill('refund');
@@ -698,10 +700,10 @@ test.describe('a customer on the simulator', () => {
       page.getByText(`Added to "${QUESTION}". It will be answered from now on.`),
     ).toBeVisible();
     await expect(row).toHaveCount(0);
-    const entry = (await call(ws, 'GET', '/v2/faq/entries?limit=10')).body.data.find(
+    const entry = (await call(ws, 'GET', `${faqBase(ws)}/entries?limit=10`)).body.data.find(
       (e: any) => e.question === QUESTION,
     );
-    const full = (await call(ws, 'GET', `/v2/faq/entries/${entry.id}`)).body;
+    const full = (await call(ws, 'GET', `${faqBase(ws)}/entries/${entry.id}`)).body;
     expect(full.variations.find((v: any) => v.text === 'refund [[reject]]')?.source).toBe(
       'learned',
     );
@@ -784,7 +786,7 @@ test.describe('looks and layout', () => {
     const { ws, state } = await fresh(browser, 'scdark');
     await putSettings(ws, { verifyMode: 'borderline' });
     const { page } = await open(browser, state, watch, { colorScheme: 'dark', theme: 'dark' });
-    await go(page, '/faq/settings');
+    await openFaqs(page, ws, 'settings');
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
     await expect(verifySwitch(page)).toBeChecked();
     await expect(sentence(page)).toBeVisible();
@@ -814,9 +816,9 @@ test.describe('looks and layout', () => {
     browser,
     watch,
   }) => {
-    const { state } = await fresh(browser, 'scrtl');
+    const { ws, state } = await fresh(browser, 'scrtl');
     const { page } = await open(browser, state, watch, { locale: 'ar' });
-    await go(page, '/faq/settings');
+    await openFaqs(page, ws, 'settings');
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
     const sw = page.locator('#faq-verify');
     const slider = page.locator('#faq-verify-band');
@@ -839,9 +841,9 @@ test.describe('looks and layout', () => {
     browser,
     watch,
   }) => {
-    const { state } = await fresh(browser, 'scphone');
+    const { ws, state } = await fresh(browser, 'scphone');
     const { page } = await open(browser, state, watch, { viewport: { width: 375, height: 800 } });
-    await go(page, '/faq/settings');
+    await openFaqs(page, ws, 'settings');
     await verifySwitch(page).scrollIntoViewIfNeeded();
     await verifySwitch(page).click();
     await expect(verifySwitch(page)).toBeChecked();
@@ -860,9 +862,9 @@ test.describe('looks and layout', () => {
     browser,
     watch,
   }) => {
-    const { state } = await fresh(browser, 'sckeys');
+    const { ws, state } = await fresh(browser, 'sckeys');
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq/settings');
+    await openFaqs(page, ws, 'settings');
     await tabTo(page, verifySwitch(page), 80);
     await expect(verifySwitch(page)).toBeFocused();
     await page.keyboard.press('Space');

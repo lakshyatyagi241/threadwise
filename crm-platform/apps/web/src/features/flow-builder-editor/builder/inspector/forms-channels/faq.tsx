@@ -1,6 +1,8 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import type { ReactNode } from 'react';
+import { faqHref } from '@/features/faq-knowledge/lib/links';
 import { useFaqSummary } from '../../../api/hooks';
 import {
   FAQ_DEFAULT_QUERY,
@@ -19,14 +21,21 @@ import { ExtLink, Intro, Mono } from './shared';
 const NS = 'flb.builder.formsChannels.faq';
 
 /**
- * "Answer from FAQ": matches a message against the workspace's FAQs by meaning (ADR-0021). Leaves by `matched` when an FAQ answered
+ * "Answer from FAQ": matches a message against THIS flow's FAQs by meaning (ADR-0021). The FAQs are edited in the flow's Simple
+ * builder, on its FAQs tab; this form only links there. Leaves by `matched` when an FAQ answered
  * and by `no_match` otherwise (nothing close, the FAQ engine off, a linked flow or step gone, an empty message). The result is saved
  * as `<save>.answer`, `.question`, `.score`, `.id` and `.matched`.
  */
 function Body(p: FormProps) {
   const t = useTranslations(NS);
   const { data: d, set } = p;
-  const summary = useFaqSummary();
+  const flowId = p.env.flowId;
+  const summary = useFaqSummary(flowId);
+  // Links into the flow's FAQs tab. A flow that has not been saved has none yet: the text stays, without the link.
+  const faqLink = (view?: 'new' | 'test') =>
+    function FaqLink(c: ReactNode) {
+      return flowId ? <ExtLink href={faqHref(flowId, view)}>{c}</ExtLink> : <>{c}</>;
+    };
   const categories = summary.data?.categories ?? [];
   const category = String(d.category ?? '');
   const own = hasOwnMinScore(d.minScore);
@@ -50,7 +59,7 @@ function Body(p: FormProps) {
     <>
       <Intro
         sub={t.rich('intro.sub', {
-          link: (c) => <ExtLink href="/faq">{c}</ExtLink>,
+          link: faqLink(),
         })}
       >
         {t.rich('intro.body', { mono: (c) => <Mono>{c}</Mono> })}
@@ -71,10 +80,10 @@ function Body(p: FormProps) {
         </li>
       </ul>
 
-      {summary.isSuccess && summary.data.total === 0 ? (
-        <Notice tone="info">
-          {t.rich('noFaqs', { link: (c) => <ExtLink href="/faq/new">{c}</ExtLink> })}
-        </Notice>
+      {flowId === null ? (
+        <Notice tone="info">{t('saveFlowFirst')}</Notice>
+      ) : summary.isSuccess && summary.data.total === 0 ? (
+        <Notice tone="info">{t.rich('noFaqs', { link: faqLink('new') })}</Notice>
       ) : null}
 
       <Field
@@ -125,7 +134,7 @@ function Body(p: FormProps) {
         hint={t.rich('minScoreHint', {
           min: FAQ_MIN_SCORE.min,
           max: FAQ_MIN_SCORE.max,
-          link: (c) => <ExtLink href="/faq/test">{c}</ExtLink>,
+          link: faqLink('test'),
         })}
       >
         <Check

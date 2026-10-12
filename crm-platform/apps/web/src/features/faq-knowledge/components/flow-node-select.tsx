@@ -9,12 +9,13 @@ import { errorKey } from '../lib/errors';
 import { stepIsMissing, stepOptions, stepSelectValue } from '../lib/model';
 
 /**
- * "Start at": where in the chosen flow the FAQ enters it. The first choice is the flow's own start (sent as no step); the rest are the
+ * "Go to": where in the target flow the FAQ sends the customer. The first choice is the flow's own start (sent as no step); the rest are the
  * flow's steps, named as the flow editor names them. A step that was deleted from the flow is called out with a way to fix it,
  * because until it is fixed customers get no answer from this FAQ.
  */
 export function FlowNodeSelect({
   flowId,
+  own,
   value,
   saved,
   invalid,
@@ -22,6 +23,8 @@ export function FlowNodeSelect({
   onChange,
 }: {
   flowId: string;
+  /** The flow is the one the FAQ belongs to: its steps are the saved ones, so say so. */
+  own?: boolean;
   value: string | null;
   /** The entry as saved, when there is one: a step it holds that has no name is already known to be gone. */
   saved: Pick<FaqEntry, 'flowId' | 'flowNodeId' | 'flowNodeLabel'> | null;
@@ -66,7 +69,7 @@ export function FlowNodeSelect({
           label={t('label')}
           htmlFor={`${id}-select`}
           error={error}
-          hint={nodes.isPending ? t('loading') : t('hint')}
+          hint={nodes.isPending ? t('loading') : own ? t('hintOwn') : t('hint')}
         >
           <Select
             id={`${id}-select`}

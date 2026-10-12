@@ -4,24 +4,27 @@ import {
   deleteFlow,
   entries,
   expect,
-  go,
+  faqBase,
   login,
   member,
   newWorkspace,
   open,
+  openFaqs,
   putSettings,
   questionBox,
+  reloadFaqs,
   repliesTo,
   seedFaq,
   seedStepsFlow,
   setFlowNodes,
+  type Sim,
   simulator,
   sqlOne,
+  type State,
   tabTo,
   test,
+  viewOf,
   waitIndexed,
-  type Sim,
-  type State,
   type Workspace,
 } from './support';
 import type { Page } from '@playwright/test';
@@ -43,14 +46,14 @@ test.beforeAll(async ({ browser }) => {
   state = await login(browser, ws.email);
 });
 
-const entry = async (id: string) => (await call(ws, 'GET', `/v2/faq/entries/${id}`)).body;
+const entry = async (id: string) => (await call(ws, 'GET', `${faqBase(ws)}/entries/${id}`)).body;
 /** The update call as the editor makes it: the whole entry again, with these fields changed. */
 const patchEntry = async (id: string, changes: Record<string, unknown>, as?: string) => {
   const cur = await entry(id);
   return call(
     ws,
     'PATCH',
-    `/v2/faq/entries/${id}`,
+    `${faqBase(ws)}/entries/${id}`,
     {
       question: cur.question,
       answerType: cur.answerType,
@@ -65,17 +68,19 @@ const patchEntry = async (id: string, changes: Record<string, unknown>, as?: str
     as,
   );
 };
-const startAt = (page: Page) => page.getByLabel('Start at', { exact: true });
+const startAt = (page: Page) => page.getByLabel('Go to', { exact: true });
 const optionTexts = (page: Page) =>
   startAt(page)
     .locator('option')
     .evaluateAll((os) => os.map((o) => o.textContent ?? ''));
-const flowTab = (page: Page) => page.getByRole('tab', { name: 'Start a flow' });
+const flowTab = (page: Page) => page.getByRole('tab', { name: 'Go to a step' });
 const save = (page: Page) => page.getByRole('button', { name: 'Save changes' });
 
 /** The flow chooser of the editor: open the flow tab and click the flow of that name. */
 async function pickFlow(page: Page, name: string) {
   await flowTab(page).click();
+  // The usual target is a step of this very flow; these scenarios hand the customer to ANOTHER flow.
+  await page.getByRole('radio', { name: /A step of another flow/ }).check();
   await page.getByRole('searchbox', { name: 'Search flows' }).fill(name);
   await page
     .getByRole('option', { name: new RegExp(name) })
@@ -105,7 +110,7 @@ function seedNamedFlow(name: string, labels: Array<[string, string]>): string {
   )!;
 }
 
-test.describe('the "Start at" picker', () => {
+test.describe('the "Go to" picker', () => {
   test('lists the flow start and every step, and creating the FAQ saves the chosen step', async ({
     browser,
     watch,
@@ -113,10 +118,13 @@ test.describe('the "Start at" picker', () => {
     const t = tag();
     const flowId = seedStepsFlow(ws, `${t} flow`);
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq/new');
-    // Nothing to start at before a flow is chosen.
+    await openFaqs(page, ws, 'new');
+    // The default target is a step of THIS flow, so its own steps are offered at once (the trigger is the flow's start).
     await flowTab(page).click();
-    await expect(startAt(page)).toHaveCount(0);
+    await expect(startAt(page)).toBeVisible();
+    await expect(startAt(page)).toBeEnabled();
+    expect(await optionTexts(page)).toEqual(["The flow's start", 'Send message · #a']);
+    await expect(page.getByText('Choose a step of this flow.', { exact: false })).toBeVisible();
 
     await questionBox(page).fill(`${t} question`);
     await pickFlow(page, `${t} flow`);
@@ -139,8 +147,8 @@ test.describe('the "Start at" picker', () => {
     await expect(startAt(page)).toHaveValue('b');
     await page.getByRole('button', { name: 'Create FAQ' }).click();
     await expect(page.getByText('FAQ created.')).toBeVisible();
-    await page.waitForURL(/\/faq\/[0-9a-f-]{36}$/);
-    const id = page.url().split('/').pop()!;
+    await page.waitForURL(/[?&]view=[0-9a-f-]{36}$/);
+    const id = viewOf(page)!;
     expect(await entry(id)).toMatchObject({
       answerType: 'flow',
       flowId,
@@ -149,7 +157,7 @@ test.describe('the "Start at" picker', () => {
     });
 
     // It is still chosen after a reload, and the select is clean.
-    await page.reload();
+    await reloadFaqs(page);
     await expect(flowTab(page)).toHaveAttribute('aria-selected', 'true');
     await expect(startAt(page)).toHaveValue('b');
     await expect(save(page)).toBeDisabled();
@@ -161,14 +169,14 @@ test.describe('the "Start at" picker', () => {
     const faq = await seedFaq(ws, { question: `${t} q`, flowId, flowNodeId: 'b' });
     expect(faq.flowNodeId).toBe('b');
     const { page } = await open(browser, state, watch);
-    await go(page, `/faq/${faq.id}`);
+    await openFaqs(page, ws, faq.id);
     await expect(startAt(page)).toHaveValue('b');
     await startAt(page).selectOption({ label: "The flow's start" });
-    await expect(page.getByText('Unsaved changes')).toBeVisible();
+    await expect(page.getByText('Unsaved changes', { exact: true })).toBeVisible();
     await save(page).click();
     await expect(page.getByText('FAQ saved.')).toBeVisible();
     expect(await entry(faq.id)).toMatchObject({ flowId, flowNodeId: null, flowNodeLabel: null });
-    await page.reload();
+    await reloadFaqs(page);
     await expect(startAt(page)).toHaveValue('');
   });
 
@@ -184,7 +192,7 @@ test.describe('the "Start at" picker', () => {
     ]);
     const faq = await seedFaq(ws, { question: `${t} q`, flowId: one, flowNodeId: 'b' });
     const { page } = await open(browser, state, watch);
-    await go(page, `/faq/${faq.id}`);
+    await openFaqs(page, ws, faq.id);
     await expect(startAt(page)).toHaveValue('b');
 
     // The same flow chosen again: the step stays.
@@ -226,7 +234,7 @@ test.describe('the "Start at" picker', () => {
     const flowId = seedStepsFlow(ws, `${t} flow`);
     const faq = await seedFaq(ws, { question: `${t} q`, flowId, flowNodeId: 'b' });
     const { page } = await open(browser, state, watch);
-    await go(page, `/faq/${faq.id}`);
+    await openFaqs(page, ws, faq.id);
     await expect(startAt(page)).toHaveValue('b');
     await page.getByRole('tab', { name: 'Text answer' }).click();
     await page.getByLabel('Answer text').fill('Just text now.');
@@ -240,7 +248,7 @@ test.describe('the "Start at" picker', () => {
       answerText: 'Just text now.',
     });
     // Going back to a flow later (a fresh load of the saved FAQ) does not bring the old step back.
-    await page.reload();
+    await reloadFaqs(page);
     await expect(page.getByLabel('Answer text')).toHaveValue('Just text now.');
     await pickFlow(page, `${t} flow`);
     await expect(startAt(page)).toBeEnabled();
@@ -251,14 +259,14 @@ test.describe('the "Start at" picker', () => {
     const t = tag();
     const flowId = seedNamedFlow(`${t} bare`, []);
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq/new');
+    await openFaqs(page, ws, 'new');
     await pickFlow(page, `${t} bare`);
     await expect(startAt(page)).toBeEnabled();
     await expect(
       page.getByText('This flow has no other steps, so it starts at its beginning.'),
     ).toBeVisible();
     expect(await optionTexts(page)).toEqual(["The flow's start"]);
-    expect((await call(ws, 'GET', `/v2/faq/flows/${flowId}/nodes`)).body.data).toEqual([
+    expect((await call(ws, 'GET', `/v2/faq/flow-nodes/${flowId}`)).body.data).toEqual([
       { id: 't', type: 'trigger', label: '' },
     ]);
   });
@@ -267,12 +275,16 @@ test.describe('the "Start at" picker', () => {
     const t = tag();
     const flowId = seedStepsFlow(ws, `${t} flow`);
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq/new');
+    await openFaqs(page, ws, 'new');
     const kb = page.keyboard;
     await tabTo(page, questionBox(page));
     await kb.type(`${t} keyboard question`);
     await flowTab(page).focus();
     await kb.press('Enter');
+    // The kind of target is a radio group: Tab reaches it, the arrow key moves from "this flow" to "another flow".
+    await tabTo(page, page.getByRole('radio', { name: /A step of this flow/ }));
+    await kb.press('ArrowDown');
+    await expect(page.getByRole('radio', { name: /A step of another flow/ })).toBeChecked();
     await tabTo(page, page.getByRole('searchbox', { name: 'Search flows' }));
     await kb.type(`${t} flow`);
     await tabTo(
@@ -312,7 +324,7 @@ test.describe('the "Start at" picker', () => {
       alerts++;
       void d.dismiss();
     });
-    await go(page, '/faq/new');
+    await openFaqs(page, ws, 'new');
     await questionBox(page).fill(`${t} odd question`);
     await pickFlow(page, `${t} odd`);
     await expect(startAt(page)).toBeEnabled();
@@ -333,10 +345,10 @@ test.describe('the "Start at" picker', () => {
     await page.getByRole('button', { name: 'Create FAQ' }).click();
     await expect(page.getByText('FAQ created.')).toBeVisible();
     const made = (await entries(ws)).data.find((e: any) => e.question === `${t} odd question`);
-    await page.goto('/faq');
+    await openFaqs(page, ws);
     await page.getByLabel('Search FAQs').fill(`${t} odd question`);
     const row = page.locator('tbody tr').filter({ hasText: `${t} odd question` });
-    await expect(row.getByText(/^Starts at: Very long step name/)).toBeVisible();
+    await expect(row.getByText(/^Goes to: Very long step name/)).toBeVisible();
     expect(
       await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
       'the long step name must not widen the list',
@@ -344,10 +356,10 @@ test.describe('the "Start at" picker', () => {
 
     // The hostile name as the saved step.
     expect((await patchEntry(made.id, { flowNodeId: 'h1' })).status).toBe(200);
-    await page.reload();
+    await reloadFaqs(page);
     await page.getByLabel('Search FAQs').fill(`${t} odd question`);
-    await expect(row.getByText(`Starts at: ${hostile}`, { exact: false })).toBeVisible();
-    await page.goto(`/faq/${made.id}`);
+    await expect(row.getByText(`Goes to: ${hostile}`, { exact: false })).toBeVisible();
+    await openFaqs(page, ws, made.id);
     await expect(startAt(page)).toHaveValue('h1');
     expect(await page.evaluate(() => (window as any).__xss)).toBeUndefined();
     expect(await page.locator('img[src="x"]').count()).toBe(0);
@@ -357,7 +369,7 @@ test.describe('the "Start at" picker', () => {
 });
 
 test.describe('what the list and the editor say', () => {
-  test('the list shows "Starts at" for a linked FAQ and nothing for one without a step', async ({
+  test('the list shows "Goes to" for a linked FAQ and nothing for one without a step', async ({
     browser,
     watch,
   }) => {
@@ -366,14 +378,14 @@ test.describe('what the list and the editor say', () => {
     await seedFaq(ws, { question: `${t} with step`, flowId, flowNodeId: 'b' });
     await seedFaq(ws, { question: `${t} plain`, flowId });
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq');
+    await openFaqs(page, ws);
     await page.getByLabel('Search FAQs').fill(t);
     const withStep = page.locator('tbody tr').filter({ hasText: `${t} with step` });
     const plain = page.locator('tbody tr').filter({ hasText: `${t} plain` });
     await expect(withStep).toContainText(`${t} flow`);
-    await expect(withStep.getByText('Starts at: Second')).toBeVisible();
+    await expect(withStep.getByText('Goes to: Second')).toBeVisible();
     await expect(plain).toContainText(`${t} flow`);
-    await expect(plain.getByText(/Starts at:/)).toHaveCount(0);
+    await expect(plain.getByText(/Goes to:/)).toHaveCount(0);
     await expect(plain.getByText('Step missing')).toHaveCount(0);
   });
 
@@ -387,20 +399,20 @@ test.describe('what the list and the editor say', () => {
     const atTrigger = await seedFaq(ws, { question: `${t} trigger`, flowId, flowNodeId: 't' });
     expect(noName.flowNodeLabel).toBe('message');
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq');
+    await openFaqs(page, ws);
     await page.getByLabel('Search FAQs').fill(t);
     await expect(
       page
         .locator('tbody tr')
         .filter({ hasText: `${t} no name` })
-        .getByText('Starts at: Send message'),
+        .getByText('Goes to: Send message'),
     ).toBeVisible();
-    await go(page, `/faq/${noName.id}`);
+    await openFaqs(page, ws, noName.id);
     await expect(startAt(page)).toHaveValue('a');
     // The start node is "The flow's start" in the select, whichever way the FAQ was linked.
-    await go(page, `/faq/${atTrigger.id}`);
+    await openFaqs(page, ws, atTrigger.id);
     await expect(startAt(page)).toHaveValue('');
-    await expect(page.getByText('The step this FAQ starts at is gone')).toHaveCount(0);
+    await expect(page.getByText('The step this FAQ goes to is gone')).toHaveCount(0);
   });
 
   test('a step deleted from the flow: warning, "Step missing", a refused save and the one-click fix', async ({
@@ -412,24 +424,24 @@ test.describe('what the list and the editor say', () => {
     const flowId = seedStepsFlow(ws, `${t} flow`);
     const faq = await seedFaq(ws, { question: `${t} doomed step`, flowId, flowNodeId: 'b' });
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq');
+    await openFaqs(page, ws);
     await page.getByLabel('Search FAQs').fill(`${t} doomed`);
     const row = page.locator('tbody tr').filter({ hasText: `${t} doomed step` });
-    await expect(row.getByText('Starts at: Second')).toBeVisible();
+    await expect(row.getByText('Goes to: Second')).toBeVisible();
 
     // The author deletes the step from the flow.
     setFlowNodes(ws, flowId, [
       { id: 't', type: 'trigger' },
       { id: 'a', type: 'message', data: { text: 'Intro step' } },
     ]);
-    await page.reload();
+    await reloadFaqs(page);
     await page.getByLabel('Search FAQs').fill(`${t} doomed`);
     await expect(row.getByText('Step missing')).toBeVisible();
-    await expect(row.getByText(/Starts at:/)).toHaveCount(0);
+    await expect(row.getByText(/Goes to:/)).toHaveCount(0);
     expect((await entry(faq.id)).flowNodeLabel).toBeNull();
 
-    await page.goto(`/faq/${faq.id}`);
-    const warning = page.getByText('The step this FAQ starts at is gone');
+    await openFaqs(page, ws, faq.id);
+    const warning = page.getByText('The step this FAQ goes to is gone');
     await expect(warning).toBeVisible();
     await expect(startAt(page)).toHaveValue('b');
     // The "deleted step" option shows before the steps arrive, so wait for the list rather than reading it once.
@@ -458,7 +470,7 @@ test.describe('what the list and the editor say', () => {
     await save(page).click();
     await expect(page.getByText('FAQ saved.')).toBeVisible();
     expect(await entry(faq.id)).toMatchObject({ flowNodeId: null, category: 'Stale step' });
-    await page.goto('/faq');
+    await openFaqs(page, ws);
     await page.getByLabel('Search FAQs').fill(`${t} doomed`);
     await expect(row).toBeVisible();
     await expect(row.getByText('Step missing')).toHaveCount(0);
@@ -476,10 +488,10 @@ test.describe('what the list and the editor say', () => {
       { id: 'a', type: 'message', data: { label: 'Only left', text: 'x' } },
     ]);
     const { page } = await open(browser, state, watch);
-    await go(page, `/faq/${faq.id}`);
-    await expect(page.getByText('The step this FAQ starts at is gone')).toBeVisible();
+    await openFaqs(page, ws, faq.id);
+    await expect(page.getByText('The step this FAQ goes to is gone')).toBeVisible();
     await startAt(page).selectOption({ label: 'Send message · Only left' });
-    await expect(page.getByText('The step this FAQ starts at is gone')).toHaveCount(0);
+    await expect(page.getByText('The step this FAQ goes to is gone')).toHaveCount(0);
     await save(page).click();
     await expect(page.getByText('FAQ saved.')).toBeVisible();
     expect(await entry(faq.id)).toMatchObject({ flowNodeId: 'a', flowNodeLabel: 'Only left' });
@@ -494,7 +506,7 @@ test.describe('what the list and the editor say', () => {
     const flowId = seedStepsFlow(ws, `${t} flow`);
     const faq = await seedFaq(ws, { question: `${t} gone while open`, flowId, flowNodeId: 'b' });
     const { page } = await open(browser, state, watch);
-    await go(page, `/faq/${faq.id}`);
+    await openFaqs(page, ws, faq.id);
     await expect(startAt(page)).toHaveValue('b');
     deleteFlow(ws, flowId);
     await page.getByLabel('Category').fill('Too late');
@@ -513,13 +525,15 @@ test.describe('what the list and the editor say', () => {
     const faq = await seedFaq(ws, { question: `${t} flowgone`, flowId, flowNodeId: 'b' });
     deleteFlow(ws, flowId);
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq');
+    await openFaqs(page, ws);
     await page.getByLabel('Search FAQs').fill(`${t} flowgone`);
     const row = page.locator('tbody tr').filter({ hasText: `${t} flowgone` });
     await expect(row.getByText('Flow missing')).toBeVisible();
-    await expect(row.getByText(/Step missing|Starts at/)).toHaveCount(0);
-    await go(page, `/faq/${faq.id}`);
-    await expect(page.getByText(/The flow this FAQ started no longer exists/)).toBeVisible();
+    await expect(row.getByText(/Step missing|Goes to/)).toHaveCount(0);
+    await openFaqs(page, ws, faq.id);
+    // (App defect D1, see the report: the target flow is cleared when it is deleted, and the editor opens on "a step of this flow"
+    // without this warning. Soft, so the rest of the scenario is still judged.)
+    await expect.soft(page.getByText(/The flow this FAQ goes to no longer exists/)).toBeVisible();
     await expect(startAt(page)).toHaveCount(0);
   });
 });
@@ -533,11 +547,11 @@ test.describe('editing safely', () => {
     const flowId = seedStepsFlow(ws, `${t} flow`);
     const faq = await seedFaq(ws, { question: `${t} guard`, flowId });
     const { page } = await open(browser, state, watch);
-    await go(page, `/faq/${faq.id}`);
+    await openFaqs(page, ws, faq.id);
     await expect(startAt(page)).toBeEnabled();
-    await expect(page.getByText('Unsaved changes')).toHaveCount(0);
+    await expect(page.getByText('Unsaved changes', { exact: true })).toHaveCount(0);
     await startAt(page).selectOption('b');
-    await expect(page.getByText('Unsaved changes')).toBeVisible();
+    await expect(page.getByText('Unsaved changes', { exact: true })).toBeVisible();
     await page.getByRole('link', { name: 'Back to FAQs' }).click();
     const dialog = page.getByRole('dialog', { name: 'Leave without saving?' });
     await expect(dialog).toBeVisible();
@@ -545,7 +559,7 @@ test.describe('editing safely', () => {
     await expect(startAt(page)).toHaveValue('b');
     // Putting it back is no change at all.
     await startAt(page).selectOption({ label: "The flow's start" });
-    await expect(page.getByText('Unsaved changes')).toHaveCount(0);
+    await expect(page.getByText('Unsaved changes', { exact: true })).toHaveCount(0);
     await startAt(page).selectOption('b');
 
     // The browser's own prompt guards a reload.
@@ -561,9 +575,9 @@ test.describe('editing safely', () => {
 
     await save(page).click();
     await expect(page.getByText('FAQ saved.')).toBeVisible();
-    await expect(page.getByText('Unsaved changes')).toHaveCount(0);
+    await expect(page.getByText('Unsaved changes', { exact: true })).toHaveCount(0);
     await page.getByRole('link', { name: 'Back to FAQs' }).click();
-    await expect(page).toHaveURL(/\/faq$/);
+    await expect(page).toHaveURL(/\?tab=faqs$/);
   });
 
   test('two people: the stale save is refused and keeping the edits applies the step on top of the latest', async ({
@@ -576,8 +590,8 @@ test.describe('editing safely', () => {
     const faq = await seedFaq(ws, { question: `${t} conflict`, flowId });
     const one = await open(browser, state, watch);
     const two = await open(browser, state, watch);
-    await go(one.page, `/faq/${faq.id}`);
-    await go(two.page, `/faq/${faq.id}`);
+    await openFaqs(one.page, ws, faq.id);
+    await openFaqs(two.page, ws, faq.id);
     await expect(startAt(two.page)).toBeEnabled();
 
     await one.page.getByLabel('Category').fill('From the first');
@@ -590,6 +604,11 @@ test.describe('editing safely', () => {
     await expect(startAt(two.page)).toHaveValue('b');
     expect((await entry(faq.id)).flowNodeId).toBeNull();
     await two.page.getByRole('button', { name: 'Keep my edits' }).click();
+    // Wait for the latest version to arrive (saving before it does is a second conflict).
+    await expect(
+      two.page.getByText('Updated to the latest version. Your edits are kept; save to apply them.'),
+    ).toBeVisible();
+    await expect(two.page.getByText('Someone else changed this FAQ')).toHaveCount(0);
     await expect(startAt(two.page)).toHaveValue('b');
     await save(two.page).click();
     await expect(two.page.getByText('FAQ saved.')).toBeVisible();
@@ -603,21 +622,21 @@ test.describe('editing safely', () => {
     const { page } = await open(browser, state, watch);
     const posts: string[] = [];
     page.on('request', (r) => {
-      if (r.method() === 'POST' && /\/faq\/entries$/.test(new URL(r.url()).pathname))
+      if (r.method() === 'POST' && /\/faq\/flows\/[^/]+\/entries$/.test(new URL(r.url()).pathname))
         posts.push(r.url());
     });
-    await page.route(/\/faq\/entries$/, async (route) => {
+    await page.route(/\/faq\/flows\/[^/]+\/entries$/, async (route) => {
       if (route.request().method() === 'POST') await new Promise((r) => setTimeout(r, 1000));
       await route.continue();
     });
-    await go(page, '/faq/new');
+    await openFaqs(page, ws, 'new');
     await questionBox(page).fill(`${t} double`);
     await pickFlow(page, `${t} flow`);
     await expect(startAt(page)).toBeEnabled();
     await startAt(page).selectOption('b');
     await page.getByRole('button', { name: 'Create FAQ' }).dblclick();
     await expect(page.getByText('FAQ created.')).toBeVisible();
-    await page.waitForURL(/\/faq\/[0-9a-f-]{36}$/);
+    await page.waitForURL(/[?&]view=[0-9a-f-]{36}$/);
     expect(posts).toHaveLength(1);
     const made = (await entries(ws)).data.filter((e: any) => e.question === `${t} double`);
     expect(made).toHaveLength(1);
@@ -631,12 +650,12 @@ test.describe('editing safely', () => {
     const faq = await seedFaq(ws, { question: `${t} retry`, flowId, flowNodeId: 'b' });
     const { page } = await open(browser, state, watch);
     let failing = true;
-    await page.route(/\/faq\/flows\/[0-9a-f-]{36}\/nodes/, async (route) => {
+    await page.route(/\/faq\/flow-nodes\/[0-9a-f-]{36}/, async (route) => {
       if (failing)
         await route.fulfill({ status: 500, contentType: 'application/json', body: '{}' });
       else await route.continue();
     });
-    await go(page, `/faq/${faq.id}`);
+    await openFaqs(page, ws, faq.id);
     await expect(page.getByRole('alert').filter({ hasText: 'Try again' })).toBeVisible({
       timeout: 30_000,
     });
@@ -652,20 +671,20 @@ test.describe('API rules', () => {
   test('a flow of another workspace is refused by the steps list and by saving', async () => {
     const other = await newWorkspace('linkother');
     const foreign = seedOtherFlow(other);
-    const refused = await call(ws, 'GET', `/v2/faq/flows/${foreign}/nodes`);
+    const refused = await call(ws, 'GET', `/v2/faq/flow-nodes/${foreign}`);
     expect(refused.status).toBe(422);
     expect(refused.body.code ?? refused.body.type).toMatch(/FLOW_NOT_FOUND|flow-not-found/i);
     // Its steps never leak into the answer.
     expect(JSON.stringify(refused.body)).not.toContain('Foreign step');
     // A flow that does not exist at all behaves the same; a malformed id is a bad request.
     expect(
-      (await call(ws, 'GET', '/v2/faq/flows/00000000-0000-4000-8000-000000000000/nodes')).status,
+      (await call(ws, 'GET', '/v2/faq/flow-nodes/00000000-0000-4000-8000-000000000000')).status,
     ).toBe(422);
-    expect((await call(ws, 'GET', '/v2/faq/flows/not-a-uuid/nodes')).status).toBe(400);
+    expect((await call(ws, 'GET', '/v2/faq/flow-nodes/not-a-uuid')).status).toBe(400);
     // The foreign workspace itself can read them.
-    expect((await call(other, 'GET', `/v2/faq/flows/${foreign}/nodes`)).body.data).toHaveLength(2);
+    expect((await call(other, 'GET', `/v2/faq/flow-nodes/${foreign}`)).body.data).toHaveLength(2);
 
-    const create = await call(ws, 'POST', '/v2/faq/entries', {
+    const create = await call(ws, 'POST', `${faqBase(ws)}/entries`, {
       question: 'Foreign flow FAQ',
       answerType: 'flow',
       flowId: foreign,
@@ -681,7 +700,7 @@ test.describe('API rules', () => {
   test('a step that is not in the flow is refused with the field named, on create and on update', async () => {
     const t = tag();
     const flowId = seedStepsFlow(ws, `${t} flow`);
-    const bad = await call(ws, 'POST', '/v2/faq/entries', {
+    const bad = await call(ws, 'POST', `${faqBase(ws)}/entries`, {
       question: `${t} bad step`,
       answerType: 'flow',
       flowId,
@@ -695,7 +714,7 @@ test.describe('API rules', () => {
     expect(JSON.stringify(upd.body)).toContain('flowNodeId');
     expect((await entry(faq.id)).flowNodeId).toBeNull();
     // A step with a text answer is not a thing: it is dropped, not kept.
-    const text = await call(ws, 'POST', '/v2/faq/entries', {
+    const text = await call(ws, 'POST', `${faqBase(ws)}/entries`, {
       question: `${t} text with step`,
       answerType: 'text',
       answerText: 'Hi',
@@ -711,18 +730,18 @@ test.describe('who may change it', () => {
     const flowId = seedStepsFlow(ws, `${t} flow`);
     const withStep = await seedFaq(ws, { question: `${t} ro step`, flowId, flowNodeId: 'b' });
     const gone = await seedFaq(ws, { question: `${t} ro gone`, flowId, flowNodeId: 'a' });
-    const reader = await member(ws, 'reader', ['faq.entries.read']);
+    const reader = await member(ws, 'reader', ['faq.entries.read', 'flb.flows.read']);
     const readerState = await login(browser, reader.email);
     const { page } = await open(browser, readerState, watch);
-    await go(page, `/faq/${withStep.id}`);
-    await expect(page.getByText('Starts at step: Second')).toBeVisible();
+    await openFaqs(page, ws, withStep.id);
+    await expect(page.getByText('Goes to step: Second')).toBeVisible();
     await expect(startAt(page)).toHaveCount(0);
     await expect(page.getByRole('button', { name: 'Save changes' })).toHaveCount(0);
 
     setFlowNodes(ws, flowId, [{ id: 't', type: 'trigger' }]);
-    await go(page, `/faq/${gone.id}`);
+    await openFaqs(page, ws, gone.id);
     await expect(
-      page.getByText('The step this FAQ starts at no longer exists, so customers get no answer.'),
+      page.getByText('The step this FAQ goes to no longer exists, so customers get no answer.'),
     ).toBeVisible();
     await expect(startAt(page)).toHaveCount(0);
     // The API refuses what the screen does not offer.
@@ -730,7 +749,7 @@ test.describe('who may change it', () => {
     expect(nope.status).toBe(403);
     // Reading the steps is allowed with the read permission.
     expect(
-      (await call(ws, 'GET', `/v2/faq/flows/${flowId}/nodes`, undefined, reader.token)).status,
+      (await call(ws, 'GET', `/v2/faq/flow-nodes/${flowId}`, undefined, reader.token)).status,
     ).toBe(200);
   });
 });
@@ -748,7 +767,7 @@ test.describe('looks and layout', () => {
     const t = tag();
     const faq = await linked(t);
     const { page } = await open(browser, state, watch, { colorScheme: 'dark', theme: 'dark' });
-    await go(page, `/faq/${faq.id}`);
+    await openFaqs(page, ws, faq.id);
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
     await expect(startAt(page)).toHaveValue('b');
     const colours = await startAt(page).evaluate((el) => {
@@ -767,8 +786,8 @@ test.describe('looks and layout', () => {
       sqlOne(`SELECT uuid FROM flows WHERE org_id=${ws.orgId} AND flow_name='${t} flow'`)!,
       [{ id: 't', type: 'trigger' }],
     );
-    await page.reload();
-    await expect(page.getByText('The step this FAQ starts at is gone')).toBeVisible();
+    await reloadFaqs(page);
+    await expect(page.getByText('The step this FAQ goes to is gone')).toBeVisible();
     await expect(page.getByRole('button', { name: "Start at the flow's start" })).toBeVisible();
   });
 
@@ -776,13 +795,13 @@ test.describe('looks and layout', () => {
     const t = tag();
     const faq = await linked(t);
     const { page } = await open(browser, state, watch, { locale: 'ar' });
-    await go(page, `/faq/${faq.id}`);
+    await openFaqs(page, ws, faq.id);
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
     const select = page.locator('#faq-flow-node select');
     await expect(select).toBeVisible();
     await expect(select).toHaveValue('b');
     // The label is translated (not the English one) and it names the select.
-    await expect(page.getByLabel('Start at', { exact: true })).toHaveCount(0);
+    await expect(page.getByLabel('Go to', { exact: true })).toHaveCount(0);
     expect(await select.evaluate((el) => (el as HTMLSelectElement).labels?.length ?? 0)).toBe(1);
     expect(await select.evaluate((el) => getComputedStyle(el).direction)).toBe('rtl');
     expect(
@@ -796,7 +815,7 @@ test.describe('looks and layout', () => {
     const t = tag();
     const faq = await linked(t);
     const { page } = await open(browser, state, watch, { viewport: { width: 375, height: 700 } });
-    await go(page, `/faq/${faq.id}`);
+    await openFaqs(page, ws, faq.id);
     await expect(startAt(page)).toHaveValue('b');
     const box = await startAt(page).boundingBox();
     expect(box!.x).toBeGreaterThanOrEqual(0);
@@ -806,7 +825,7 @@ test.describe('looks and layout', () => {
     ).toBe(true);
     await startAt(page).scrollIntoViewIfNeeded();
     await startAt(page).selectOption('a');
-    await expect(page.getByText('Unsaved changes')).toBeVisible();
+    await expect(page.getByText('Unsaved changes', { exact: true })).toBeVisible();
   });
 });
 
@@ -893,12 +912,13 @@ test.describe('the customer journey', () => {
     );
     expect(error ?? '').not.toBe('');
 
-    const errors = (await call(cws, 'GET', '/v2/faq/insights/log?view=errors&limit=50')).body;
+    const errors = (await call(cws, 'GET', `${faqBase(cws)}/insights/log?view=errors&limit=50`))
+      .body;
     expect(errors.data.map((r: any) => r.query)).toContain('take me to the hole');
 
     const cstate = await login(browser, cws.email);
     const { page } = await open(browser, cstate, watch);
-    await go(page, '/faq/insights');
+    await openFaqs(page, cws, 'insights');
     await page.getByRole('group', { name: 'Show' }).getByRole('button', { name: 'Errors' }).click();
     const row = page.getByRole('row').filter({ hasText: 'take me to the hole' });
     await expect(row).toBeVisible();

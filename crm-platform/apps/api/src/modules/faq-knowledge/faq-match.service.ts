@@ -64,13 +64,14 @@ export class FaqMatchService {
 
   async match(
     orgId: number,
+    flowId: number,
     raw: string,
     preloaded?: EffectiveSettings,
     opts: MatchOptions = {},
   ): Promise<MatchResult> {
     const started = Date.now();
     const query = queryText(raw);
-    const base0 = preloaded ?? (await this.settings.effective(orgId));
+    const base0 = preloaded ?? (await this.settings.effective(orgId, flowId));
     const s = opts.threshold != null ? { ...base0, threshold: opts.threshold } : base0;
     const category = opts.category?.trim() ? opts.category.trim() : null;
     const cfg = await this.config.get();
@@ -105,7 +106,7 @@ export class FaqMatchService {
         exact: opts.exact,
       });
       // A vendor failure that the trigram tier could not make up for is reported as such, not as "no match".
-      // `decide` says no_faqs for an empty list; here the workspace is known to have active FAQs (checked above), so an empty list
+      // `decide` says no_faqs for an empty list; here the flow is known to have active FAQs (checked above), so an empty list
       // means nothing was similar enough, which is below_threshold.
       const settled: FaqMatchOutcome = d.outcome === 'no_faqs' ? 'below_threshold' : d.outcome;
       let outcome: FaqMatchOutcome = errored && settled !== 'answered' ? 'provider_error' : settled;
@@ -146,10 +147,9 @@ export class FaqMatchService {
     };
 
     const active = await this.db.txAs({ orgId, userId: null }, (tx) =>
-      this.repo.activeFaqCount(tx, orgId),
+      this.repo.activeFaqCount(tx, orgId, flowId),
     );
-    if (active === 0)
-      return base({ outcome: 'no_faqs', note: 'This workspace has no active FAQs.' });
+    if (active === 0) return base({ outcome: 'no_faqs', note: 'This flow has no active FAQs.' });
     if (!isMatchable(query)) {
       return base({
         outcome: 'below_threshold',
@@ -159,7 +159,7 @@ export class FaqMatchService {
 
     const exact = bestPerFaq(
       await this.db.txAs({ orgId, userId: null }, (tx) =>
-        this.repo.exact(tx, orgId, query, category),
+        this.repo.exact(tx, orgId, flowId, query, category),
       ),
     );
     if (exact.length > 0)
@@ -168,7 +168,7 @@ export class FaqMatchService {
     let note: string | null = null;
     let errored = false;
     const ready = await this.db.txAs({ orgId, userId: null }, (tx) =>
-      this.repo.readyVariationCount(tx, orgId, model),
+      this.repo.readyVariationCount(tx, orgId, flowId, model),
     );
     if (ready === 0) {
       note = 'No variation has its vector yet (still indexing), so spelling similarity was used.';
@@ -178,7 +178,7 @@ export class FaqMatchService {
       try {
         const { vector } = await this.embeddings.embedQuery(orgId, query);
         const rows = await this.db.txAs({ orgId, userId: null }, (tx) =>
-          this.repo.vector(tx, orgId, model, toVectorLiteral(vector), category),
+          this.repo.vector(tx, orgId, flowId, model, toVectorLiteral(vector), category),
         );
         return await finish(
           bestPerFaq(rows),
@@ -200,7 +200,7 @@ export class FaqMatchService {
 
     const tri = bestPerFaq(
       await this.db.txAs({ orgId, userId: null }, (tx) =>
-        this.repo.trigram(tx, orgId, query, category),
+        this.repo.trigram(tx, orgId, flowId, query, category),
       ),
     );
     return await finish(tri, 'trigram', { threshold: TRIGRAM_MIN, exact: false }, note, errored);

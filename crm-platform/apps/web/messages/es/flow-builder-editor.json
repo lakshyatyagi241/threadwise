@@ -164,7 +164,12 @@
       "messaging": "Flujo de mensajería",
       "messagingNote": "WhatsApp, Instagram o Facebook: cambia de canal en el nodo Disparador",
       "call": "Llamada",
-      "callNote": "IVR de voz con IA: decir, escuchar, transferir"
+      "callNote": "IVR de voz con IA: decir, escuchar, transferir",
+      "subtitleSimple": "Cada bot se crea para un solo canal, porque no todos los componentes funcionan en todos los canales.",
+      "whatsapp": "WhatsApp",
+      "whatsappNote": "Responde a los clientes en un número de WhatsApp conectado",
+      "web": "Chat web",
+      "webNote": "Un widget de chat que añades a tu sitio web"
     },
     "rename": {
       "title": "Renombrar flujo",
@@ -553,8 +558,8 @@
           "faqAllFaqs": "Todas las FAQ",
           "faqCategory": "FAQ: {name}",
           "faqScore": "puntuación mín. {score}",
-          "faqWorkspaceScore": "puntuación del espacio de trabajo",
-          "faqNotSent": "no se envía"
+          "faqNotSent": "no se envía",
+          "faqWorkspaceScore": "puntuación del flujo"
         },
         "overlays": {
           "startPinned": "Este es el punto de inicio (clic para desfijar)",
@@ -1790,28 +1795,22 @@
         },
         "faq": {
           "intro": {
-            "body": "Compara un mensaje con tus FAQ por significado y lo responde. Sale por <mono>respondida</mono> cuando una FAQ respondió, y por <mono>sin coincidencia</mono> en caso contrario.",
-            "sub": "Funciona sin activar las respuestas automáticas con FAQ. <link>Gestionar tus FAQ</link>"
+            "body": "Compara un mensaje con las FAQ de este flujo por significado y lo responde. Sale por <mono>respondida</mono> cuando una FAQ respondió, y por <mono>sin coincidencia</mono> en caso contrario.",
+            "sub": "Funciona sin activar la respuesta automática de FAQ de este flujo. <link>Gestionar las FAQ de este flujo</link>"
           },
           "exitsLabel": "Salidas",
           "exitMatchedName": "Respondida",
           "exitMatched": "una FAQ respondió: se envió su texto (salvo que el envío esté desactivado), o su flujo tomó el control y no regresa.",
           "exitNoMatchName": "Sin coincidencia",
           "exitNoMatch": "nada fue lo bastante parecido, las respuestas con FAQ están desactivadas en la plataforma, el flujo o paso vinculado ya no existe, o el mensaje estaba vacío.",
-          "noFaqs": "Aún no tienes FAQ, así que este paso siempre sale por sin coincidencia. <link>Agrega tu primera FAQ</link>",
           "query": "Mensaje a comparar",
           "queryHint": "Por defecto es el último mensaje del cliente. También sirve una variable guardada por un paso de Pregunta, por ejemplo <mono>{variable}</mono>. Escribe / para insertar una.",
           "category": "Solo estas FAQ",
           "allFaqs": "Todas las FAQ",
           "loadingCategories": "Cargando categorías…",
           "categoryGone": "{name} (ninguna FAQ la usa)",
-          "categoryHint": "Solo pueden responder las FAQ de esta categoría. Las categorías provienen de tus FAQ.",
-          "categoriesFailed": "No se pudieron cargar las categorías de tus FAQ.",
           "retry": "Reintentar",
           "minScore": "Puntuación mínima",
-          "useWorkspaceScore": "Usar la configuración del espacio de trabajo",
-          "minScoreHint": "Reemplaza la puntuación del espacio de trabajo solo en este paso, de {min} a {max}. Las puntuaciones dependen del modelo de embeddings de la plataforma, así que prueba un mensaje en <link>Prueba de FAQ</link> antes de elegir un número.",
-          "minScoreInvalid": "Ingresa un número de {min} a {max}, o usa la configuración del espacio de trabajo.",
           "sendAnswer": "Enviar la respuesta al cliente",
           "sendAnswerToggle": "Enviar como mensaje la respuesta de texto coincidente",
           "sendAnswerOnHint": "Se envía al cliente la FAQ de texto coincidente. Una FAQ que inicia un flujo continúa en ese flujo.",
@@ -1824,7 +1823,14 @@
             "question": "la pregunta de la FAQ coincidente",
             "score": "qué tan cercana fue la coincidencia",
             "id": "el id de la FAQ coincidente"
-          }
+          },
+          "noFaqs": "Este flujo aún no tiene FAQ, así que este paso siempre sale por sin coincidencia. <link>Añadir la primera FAQ de este flujo</link>",
+          "useWorkspaceScore": "Usar el ajuste de este flujo",
+          "minScoreInvalid": "Introduce un número de {min} a {max}, o usa el ajuste de este flujo.",
+          "saveFlowFirst": "Guarda primero el flujo. Sus FAQ se editan en la pestaña FAQ del constructor simple, y este paso responde a partir de ellas.",
+          "categoryHint": "Solo pueden responder las FAQ de esta categoría. Las categorías provienen de las FAQ de este flujo.",
+          "categoriesFailed": "No se pudieron cargar las categorías de FAQ de este flujo.",
+          "minScoreHint": "Sustituye la puntuación de este flujo solo para este paso, de {min} a {max}. Las puntuaciones dependen del modelo de embeddings de la plataforma, así que prueba un mensaje en la <link>prueba de FAQ</link> de este flujo antes de elegir un número."
         }
       },
       "attrPicker": {
@@ -1885,6 +1891,16 @@
           "sampleName": "Lugar de prueba",
           "sampleAddress": "1 MG Road, Bengaluru"
         }
+      },
+      "webBot": {
+        "aria": "Secciones del flujo",
+        "faqs": "FAQ",
+        "saveFirst": "Guarda primero el flujo.",
+        "build": "Crear",
+        "customize": "Personalizar",
+        "install": "Instalar",
+        "needsCustomizing": "El widget todavía usa el aspecto predeterminado. Abre Personalizar.",
+        "customizeFirst": "Personaliza tu widget de chat y guárdalo una vez antes de publicar."
       }
     },
     "contracts": {
@@ -2212,7 +2228,8 @@
         "line": "LINE",
         "wechat": "WeChat",
         "viber": "Viber",
-        "email": "Correo"
+        "email": "Correo",
+        "web": "Chat web"
       },
       "dateFormats": {
         "ddDmmDyyyy": "DD-MM-AAAA",
@@ -2307,7 +2324,7 @@
         "noSenderInstagram": "El nodo Disparador no tiene ninguna cuenta de Instagram seleccionada: elige una en el paso Disparador.",
         "noSenderFacebook": "El nodo Disparador no tiene ninguna página de Facebook seleccionada: elige una en el paso Disparador.",
         "noSenderNumber": "El nodo Disparador no tiene ningún número seleccionado: elige uno en el paso Disparador.",
-        "faqMinScore": "“{node}” tiene una puntuación mínima fuera del rango de 0.05 a 0.99. Corrígela o déjala en blanco para usar la configuración del espacio de trabajo."
+        "faqMinScore": "“{node}” tiene una puntuación mínima fuera del rango de 0.05 a 0.99. Corrígela o déjala en blanco para usar la configuración del flujo."
       }
     },
     "simpleModel": {
@@ -2443,7 +2460,7 @@
         "rowTitle": "Paso {stage}: todas las filas necesitan un título de hasta {max} caracteres.",
         "rowDescriptionTooLong": "Paso {stage}: la descripción de una fila supera los {max} caracteres.",
         "variableUsed": "Paso {stage}: el paso {other} ya usa «{name}»; da a cada respuesta su propio nombre.",
-        "faqMinScore": "Paso {stage}: la puntuación mínima debe estar entre 0.05 y 0.99, o usa la configuración del espacio de trabajo."
+        "faqMinScore": "Paso {stage}: la puntuación mínima debe estar entre 0.05 y 0.99, o usa la configuración del flujo."
       },
       "faqSummary": "{hasCategory, select, true {De tus FAQ · {category}} other {De tus FAQ}}"
     },

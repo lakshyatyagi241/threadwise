@@ -22,6 +22,9 @@ import {
  * phrasings with typos and romanised Hindi, 30 off-topic messages). The bars below are looser than the offline evaluation's results so
  * a vendor-side wobble does not fail the build, and tight enough that a broken pipeline (wrong column type, truncated vectors, a
  * reversed distance operator) cannot pass.
+ *
+ * FAQs belong to a flow (ADR-0021 addendum 2): the whole dataset lives in the one flow `FaqApi.signup` gives the workspace, so every
+ * call below is that flow's.
  */
 const KEY = process.env.FAQ_LIVE_OPENROUTER_KEY;
 
@@ -161,7 +164,10 @@ describe.skipIf(!KEY)('live OpenRouter', () => {
           const d = await ask(q);
           if (d.verify) tally[d.verify.verdict] = (tally[d.verify.verdict] ?? 0) + 1;
           const right = d.candidates[0]?.faqId === entries.get(fa.id)!.id;
-          if (d.outcome === 'answered') right ? answeredRight++ : answeredWrong++;
+          if (d.outcome === 'answered') {
+            if (right) answeredRight++;
+            else answeredWrong++;
+          }
           if (d.verify?.verdict === 'rejected' && right) {
             vetoedRight++;
             vetoes.push(`${q} -> ${d.candidates[0]?.question} (${d.score}): ${d.verify.reason}`);

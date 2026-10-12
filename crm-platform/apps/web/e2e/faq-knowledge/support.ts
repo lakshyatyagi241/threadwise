@@ -12,7 +12,8 @@ import {
 } from '@playwright/test';
 
 /**
- * Shared helpers for the FAQ workspace specs. They drive the running local stack (web :3201, API :3200, worker, the offline AI
+ * Shared helpers for the FAQ specs. FAQs belong to a flow: every workspace made here also gets a default published, active flow
+ * (`ws.flowUuid`), and every FAQ helper takes the flow (a uuid) as an optional last argument, defaulting to that one. They drive the running local stack (web :3201, API :3200, worker, the offline AI
  * fixture) and arrange state through the API and the SCRATCH database `faq_scratch` only. Every workspace is tagged with a per-run
  * tag, and nothing outside such a workspace is ever touched.
  */
@@ -62,6 +63,9 @@ export interface Workspace {
   password: string;
   token: string;
   tokenAt: number;
+  /** The workspace's default flow (published, active, on the simulator engine): the one the FAQ helpers use unless told another. */
+  flowUuid: string;
+  flowId: number;
 }
 
 let counter = 0;
@@ -70,8 +74,14 @@ const ip = () =>
   `10.${Math.floor(Math.random() * 250)}.${Math.floor(Math.random() * 250)}.${Math.floor(Math.random() * 250)}`;
 const uniq = () => `${RUN}${(counter++).toString(36)}${Math.random().toString(36).slice(2, 5)}`;
 
-/** A fresh workspace with onboarding done. Its admin holds every FAQ permission. */
-export async function newWorkspace(label: string): Promise<Workspace> {
+/**
+ * A fresh workspace with onboarding done. Its admin holds every FAQ permission. It edits flows in the Simple builder (where the FAQs
+ * tab is) unless `builder: 'advanced'` asks for the canvas: the builder is a choice of the whole workspace.
+ */
+export async function newWorkspace(
+  label: string,
+  opts: { builder?: 'simple' | 'advanced' } = {},
+): Promise<Workspace> {
   const tag = `${label}${uniq()}`.replace(/[^a-z0-9]/gi, '').toLowerCase();
   const email = `${tag}@example.test`;
   const res = await fetch(`${API}/v2/auth/signup`, {
@@ -91,7 +101,7 @@ export async function newWorkspace(label: string): Promise<Workspace> {
     `UPDATE organizations SET settings = settings || '{"onboardingStep":"done"}'::jsonb WHERE slug='${body.orgSlug}'`,
   );
   const orgId = Number(sqlOne(`SELECT id FROM organizations WHERE slug='${body.orgSlug}'`));
-  return {
+  const ws: Workspace = {
     slug: body.orgSlug,
     orgId,
     email,
@@ -99,8 +109,35 @@ export async function newWorkspace(label: string): Promise<Workspace> {
     password: PASSWORD,
     token: body.tokens.accessToken,
     tokenAt: Date.now(),
+    flowUuid: '',
+    flowId: 0,
   };
+  // Every FAQ belongs to a flow, so a workspace starts with one: published, active, a welcome message after the trigger, tied to no
+  // channel and no keyword (it answers only through its FAQs). It opens in the Simple builder.
+  ws.flowUuid = seedBuilderFlow(
+    ws,
+    'Main flow',
+    [
+      { id: 't', type: 'trigger' },
+      { id: 'a', type: 'message', data: { text: 'Welcome' } },
+    ],
+    [['t', 'out', 'a']],
+  );
+  ws.flowId = flowIdOf(ws, ws.flowUuid);
+  // FAQs are edited in the Simple builder: the workspace opens flows there (a new workspace opens them in the Advanced one) and its
+  // plan has the automation feature the flow screens need.
+  enableAutomation(ws);
+  const mode = await call(ws, 'PUT', '/v2/flows/builder-mode', { mode: opts.builder ?? 'simple' });
+  expect(mode.status, JSON.stringify(mode.body)).toBe(200);
+  return ws;
 }
+
+/** The numeric id of a flow (what the match log and the SQL checks use) from its uuid. */
+export const flowIdOf = (ws: Workspace, uuid: string): number =>
+  Number(sqlOne(`SELECT id FROM flows WHERE org_id=${ws.orgId} AND uuid='${uuid}'`));
+
+/** The API path prefix of a flow's FAQs. `flow` is a flow uuid; the workspace's default flow when left out. */
+export const faqBase = (ws: Workspace, flow: string = ws.flowUuid) => `/v2/faq/flows/${flow}`;
 
 /** The workspace admin's access token, renewed when it is close to its 15 minute life. */
 export async function tokenOf(ws: Workspace): Promise<string> {
@@ -130,27 +167,42 @@ export async function call<T = any>(
   body?: unknown,
   as?: string,
 ): Promise<ApiResult<T>> {
-  const res = await fetch(`${API}${path}`, {
-    method,
-    headers: {
-      authorization: `Bearer ${as ?? (await tokenOf(ws))}`,
-      'content-type': 'application/json',
-      'idempotency-key': randomUUID(),
-      'x-forwarded-for': ip(),
-    },
-    body: body === undefined ? undefined : JSON.stringify(body),
-    // A request that never answers must fail the test with a clear error instead of hanging it until the test timeout.
-    signal: AbortSignal.timeout(60_000),
-  });
+  // One key per call, kept across the retry: a connection the server closed while idle is sent again without doing the work twice.
+  const key = randomUUID();
+  const headers = {
+    authorization: `Bearer ${as ?? (await tokenOf(ws))}`,
+    'content-type': 'application/json',
+    'idempotency-key': key,
+    'x-forwarded-for': ip(),
+  };
+  let res!: Awaited<ReturnType<typeof fetch>>;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      res = await fetch(`${API}${path}`, {
+        method,
+        headers,
+        body: body === undefined ? undefined : JSON.stringify(body),
+        // A request that never answers must fail the test with a clear error instead of hanging it until the test timeout.
+        signal: AbortSignal.timeout(60_000),
+      });
+      break;
+    } catch (e) {
+      if (attempt === 3 || !/fetch failed/.test(String(e))) throw e;
+      await new Promise((r) => setTimeout(r, 500 * attempt));
+    }
+  }
   const text = await res.text();
   return { status: res.status, body: (text ? JSON.parse(text) : undefined) as T };
 }
 
 export interface FaqSeed {
   question: string;
+  /** The flow that owns the FAQ (uuid); the workspace's default flow when left out. */
+  owner?: string;
   answerText?: string;
+  /** The flow the FAQ sends the customer to (the answer target), when the answer is "go to a step". */
   flowId?: string;
-  /** Start the flow at this step (the editor's node id). */
+  /** Go to this step of the target flow (the editor's node id). */
   flowNodeId?: string;
   category?: string;
   status?: 'active' | 'paused';
@@ -160,7 +212,7 @@ export interface FaqSeed {
 
 /** Creates a FAQ through the API; returns its entry. */
 export async function seedFaq(ws: Workspace, f: FaqSeed): Promise<any> {
-  const r = await call(ws, 'POST', '/v2/faq/entries', {
+  const r = await call(ws, 'POST', `${faqBase(ws, f.owner)}/entries`, {
     question: f.question,
     answerType: f.flowId ? 'flow' : 'text',
     answerText: f.flowId ? undefined : (f.answerText ?? `Answer to ${f.question}`),
@@ -175,7 +227,7 @@ export async function seedFaq(ws: Workspace, f: FaqSeed): Promise<any> {
   return r.body;
 }
 
-/** Waits until the worker has embedded every variation of the workspace (or `failed`). */
+/** Waits until the worker has embedded every variation of the workspace (every flow; or `failed`). */
 export async function waitIndexed(ws: Workspace, timeout = 45_000) {
   await expect
     .poll(
@@ -191,8 +243,8 @@ export async function waitIndexed(ws: Workspace, timeout = 45_000) {
     .toBe('0');
 }
 
-export async function getSettings(ws: Workspace) {
-  return (await call(ws, 'GET', '/v2/faq/settings')).body;
+export async function getSettings(ws: Workspace, flow?: string) {
+  return (await call(ws, 'GET', `${faqBase(ws, flow)}/settings`)).body;
 }
 
 export async function putSettings(
@@ -205,9 +257,10 @@ export async function putSettings(
     verifyMode: 'off' | 'borderline';
     verifyBand: number;
   }>,
+  flow?: string,
 ) {
-  const cur = await getSettings(ws);
-  const r = await call(ws, 'PUT', '/v2/faq/settings', {
+  const cur = await getSettings(ws, flow);
+  const r = await call(ws, 'PUT', `${faqBase(ws, flow)}/settings`, {
     enabled: cur.enabled,
     threshold: cur.threshold,
     minMargin: cur.minMargin,
@@ -223,21 +276,21 @@ export async function putSettings(
  * Makes `query` a close call for the second check: reads its meaning score with the check off, then saves a bar just under that
  * score with the check on and a band of `bandPoints`, so the score is inside [bar, bar + band). Returns the score and the bar.
  */
-export async function closeCall(ws: Workspace, query: string, bandPoints = 0.1) {
-  await putSettings(ws, { verifyMode: 'off' });
-  const probe = (await call(ws, 'POST', '/v2/faq/test', { query })).body;
+export async function closeCall(ws: Workspace, query: string, bandPoints = 0.1, flow?: string) {
+  await putSettings(ws, { verifyMode: 'off' }, flow);
+  const probe = (await call(ws, 'POST', `${faqBase(ws, flow)}/test`, { query })).body;
   expect(probe.tier, `"${query}" must be a meaning match`).toBe('semantic');
   const score = probe.score as number;
   const threshold = Math.round((Math.floor(score * 100 + 1e-6) / 100 - 0.01) * 100) / 100;
-  await putSettings(ws, { threshold, verifyMode: 'borderline', verifyBand: bandPoints });
+  await putSettings(ws, { threshold, verifyMode: 'borderline', verifyBand: bandPoints }, flow);
   return { score, threshold };
 }
 
-export async function entries(ws: Workspace, query = ''): Promise<any> {
-  return (await call(ws, 'GET', `/v2/faq/entries?limit=100${query}`)).body;
+export async function entries(ws: Workspace, query = '', flow?: string): Promise<any> {
+  return (await call(ws, 'GET', `${faqBase(ws, flow)}/entries?limit=100${query}`)).body;
 }
 
-/** A published, active flow that sends one message (the shape the API tests use). */
+/** A published, active flow that sends one message (the shape the API tests use): an answer target, or a second flow. */
 export function seedFlow(ws: Workspace, name: string, text = 'Hello from the flow'): string {
   const graph = {
     flowNodes: [
@@ -357,10 +410,13 @@ export function flowGraph(ws: Workspace, uuid: string): any {
   );
 }
 
-/** The plan flag the flow builder needs to create and edit flows (a new workspace starts on a plan without it). */
+/**
+ * The plan flag the flow builder needs to create and edit flows (a new workspace starts on a plan without it), and room for more than
+ * the one flow a trial plan allows (a workspace here has several flows, each with its own FAQs).
+ */
 export function enableAutomation(ws: Workspace) {
   sql(
-    `UPDATE org_plan_state SET overrides = overrides || '{"features":{"automation":true}}'::jsonb WHERE org_id=${ws.orgId}`,
+    `UPDATE org_plan_state SET overrides = overrides || '{"features":{"automation":true},"limits":{"flows":-1}}'::jsonb WHERE org_id=${ws.orgId}`,
   );
 }
 
@@ -420,13 +476,29 @@ export interface Sim {
   from: string;
 }
 
-export async function simulator(ws: Workspace): Promise<Sim> {
+export async function simulator(ws: Workspace, name = 'Simulator'): Promise<Sim> {
   const r = await call(ws, 'POST', '/v2/channels/simulator', {
-    name: 'Simulator',
+    name,
     settings: { simulator: { latencyMs: { sent: 0, delivered: 150, read: 400 } } },
   });
   expect(r.status, JSON.stringify(r.body)).toBeLessThan(300);
   return { channelId: r.body.id, from: `9197${String(Date.now()).slice(-8)}` };
+}
+
+/** Ties a flow to one channel (what the flow's trigger "on this number" does): the flow answers only there. */
+export function bindFlow(ws: Workspace, flowUuid: string, sim: Sim) {
+  sql(
+    `UPDATE flows SET trigger_channel_id = (SELECT id FROM channels WHERE org_id=${ws.orgId} AND uuid='${sim.channelId}')
+     WHERE org_id=${ws.orgId} AND uuid='${flowUuid}'`,
+  );
+}
+
+/** The match-log rows of one flow, newest first: `[query, outcome, origin]` (the log is per flow). */
+export function logRowsOf(ws: Workspace, flowUuid: string): string[][] {
+  return sql(
+    `SELECT query, outcome, origin FROM faq_match_logs
+     WHERE org_id=${ws.orgId} AND flow_id=(SELECT id FROM flows WHERE org_id=${ws.orgId} AND uuid='${flowUuid}') ORDER BY id DESC`,
+  );
 }
 
 export async function customerSays(ws: Workspace, sim: Sim, text: string, from = sim.from) {
@@ -535,6 +607,8 @@ export class Watch {
     // environment's doing, not the page's, so it and the script-load error it causes are not counted.
     let networkChanged = false;
     const add = (text: string) => {
+      // A QUIC handshake failure on a page load is the browser's network stack, not the page.
+      if (/ERR_QUIC_PROTOCOL_ERROR/.test(text)) return;
       if (/ERR_NETWORK_CHANGED/.test(text)) {
         networkChanged = true;
         return;
@@ -556,7 +630,16 @@ export class Watch {
   }
 }
 
-export const test = base.extend<{ watch: Watch }>({
+export const test = base.extend<{ watch: Watch; roomy: void }>({
+  // The builder holds a whole flow editor around the FAQ screens, and the dev server compiles it on first use: every test gets a
+  // longer budget than Playwright's 30 seconds (a test can still set its own).
+  roomy: [
+    async ({}, use, info: TestInfo) => {
+      info.setTimeout(Math.max(info.timeout, 120_000));
+      await use();
+    },
+    { auto: true },
+  ],
   watch: async ({}, use, info: TestInfo) => {
     const w = new Watch();
     await use(w);
@@ -646,9 +729,48 @@ export async function go(page: Page, path: string) {
   await hydrated(page);
 }
 
-/** Switch FAQ answering on or off through the API, as the workspace admin. */
-export async function answering(ws: Workspace, on: boolean) {
-  return putSettings(ws, { enabled: on });
+/** Switch one flow's FAQ answering on or off through the API, as the workspace admin (the default flow unless told another). */
+export async function answering(ws: Workspace, on: boolean, flow?: string) {
+  return putSettings(ws, { enabled: on }, flow);
+}
+
+/** `/flows/simple/<flow>?tab=faqs&view=...`: one screen of a flow's FAQs. `target` is a Workspace (its default flow) or a flow uuid. */
+export function faqUrl(target: Workspace | string, view?: string): string {
+  const uuid = typeof target === 'string' ? target : target.flowUuid;
+  return `/flows/simple/${uuid}?tab=faqs${view ? `&view=${view}` : ''}`;
+}
+
+/** The FAQs tab of the Simple builder: a locator for the panel the FAQ screens live in (the builder around it is another screen). */
+export const faqPanel = (page: Page) => page.locator('#web-bot-panel-faqs');
+
+/** Reloads the page and waits for the FAQs tab to be back (the whole builder loads again, which is slower than a screen did). */
+export async function reloadFaqs(page: Page) {
+  await page.reload({ timeout: 120_000 });
+  await expect(faqPanel(page).getByRole('navigation').first()).toBeVisible({ timeout: 60_000 });
+  await hydrated(page);
+}
+
+/** The `view` of the address: the id of the FAQ the editor shows (or `new`, `test`, ...). Null on the list. */
+export const viewOf = (page: Page): string | null => new URL(page.url()).searchParams.get('view');
+
+/**
+ * Opens a screen of a flow's FAQs and waits until the panel is on screen and React has attached. The dev server compiles the
+ * builder on its first visit, so one reload is tried before giving up.
+ */
+export async function openFaqs(page: Page, target: Workspace | string, view?: string) {
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      await page.goto(faqUrl(target, view), { timeout: 120_000 });
+      // (Found by its place in the tab, not by name: the name is translated.)
+      await expect(faqPanel(page).getByRole('navigation').first()).toBeVisible({
+        timeout: 60_000,
+      });
+      break;
+    } catch (e) {
+      if (attempt === 2) throw e;
+    }
+  }
+  await hydrated(page);
 }
 
 export const toast = (page: Page, text: string | RegExp) =>

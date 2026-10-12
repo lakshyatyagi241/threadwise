@@ -571,28 +571,22 @@
         },
         "faq": {
           "intro": {
-            "body": "Vergelijkt een bericht op betekenis met je FAQ's en beantwoordt het. De stap verlaat via <mono>beantwoord</mono> als een FAQ heeft geantwoord, anders via <mono>geen match</mono>.",
-            "sub": "Werkt ook zonder dat automatisch FAQ-beantwoorden aan staat. <link>Beheer je FAQ's</link>"
+            "body": "Vergelijkt een bericht op betekenis met de FAQs van deze flow en beantwoordt het. Het verlaat de stap via <mono>answered</mono> als een FAQ antwoordde, en anders via <mono>no match</mono>.",
+            "sub": "Werkt ook zonder dat automatische FAQ-beantwoording van deze flow aan staat. <link>FAQs van deze flow beheren</link>"
           },
           "exitsLabel": "Uitgangen",
           "exitMatchedName": "Beantwoord",
           "exitMatched": "een FAQ heeft geantwoord: de tekst is verzonden (tenzij verzenden uit staat), of de flow van de FAQ heeft het overgenomen en komt niet terug.",
           "exitNoMatchName": "Geen match",
           "exitNoMatch": "niets kwam dichtbij genoeg, FAQ-beantwoorden is voor het platform uitgeschakeld, de gekoppelde flow of stap bestaat niet meer, of het bericht was leeg.",
-          "noFaqs": "Je hebt nog geen FAQ's, dus deze stap verlaat altijd via geen match. <link>Voeg je eerste FAQ toe</link>",
           "query": "Bericht om te vergelijken",
           "queryHint": "Standaard het laatste bericht van de klant. Een variabele die een Vraag-stap heeft opgeslagen werkt ook, bijvoorbeeld <mono>{variable}</mono>. Typ / om er een in te voegen.",
           "category": "Alleen deze FAQ's",
           "allFaqs": "Alle FAQ's",
           "loadingCategories": "Categorieën laden…",
           "categoryGone": "{name} (geen FAQ gebruikt deze)",
-          "categoryHint": "Alleen FAQ's uit deze categorie kunnen antwoorden. De categorieën komen uit je FAQ's.",
-          "categoriesFailed": "Je FAQ-categorieën konden niet worden geladen.",
           "retry": "Opnieuw proberen",
           "minScore": "Minimale score",
-          "useWorkspaceScore": "Werkruimte-instelling gebruiken",
-          "minScoreHint": "Vervangt de werkruimtescore alleen voor deze stap, van {min} tot {max}. Scores hangen af van het embeddingmodel van het platform, dus probeer een bericht in <link>FAQ-test</link> voordat je een getal kiest.",
-          "minScoreInvalid": "Voer een getal in van {min} tot {max}, of gebruik de werkruimte-instelling.",
           "sendAnswer": "Antwoord naar de klant sturen",
           "sendAnswerToggle": "Een passend tekstantwoord als bericht sturen",
           "sendAnswerOnHint": "Een passende tekst-FAQ wordt naar de klant gestuurd. Een FAQ die een flow start, gaat verder in die flow.",
@@ -605,7 +599,14 @@
             "question": "de vraag van de FAQ die overeenkwam",
             "score": "hoe goed de match was",
             "id": "de ID van de FAQ die overeenkwam"
-          }
+          },
+          "noFaqs": "Deze flow heeft nog geen FAQs, dus deze stap verlaat altijd via no match. <link>Voeg de eerste FAQ van deze flow toe</link>",
+          "useWorkspaceScore": "Instelling van deze flow gebruiken",
+          "minScoreInvalid": "Voer een getal in van {min} tot {max}, of gebruik de instelling van deze flow.",
+          "saveFlowFirst": "Sla eerst de flow op. De FAQs ervan bewerk je op het tabblad FAQs van de eenvoudige builder, en deze stap antwoordt daaruit.",
+          "categoryHint": "Alleen FAQs van deze categorie kunnen antwoorden. De categorieën komen uit de FAQs van deze flow.",
+          "categoriesFailed": "De FAQ-categorieën van deze flow konden niet worden geladen.",
+          "minScoreHint": "Vervangt de score van deze flow alleen voor deze stap, van {min} tot {max}. Scores hangen af van het embeddingmodel van het platform, dus probeer een bericht op de <link>FAQ-test</link> van deze flow voordat je een getal kiest."
         }
       },
       "attrPicker": {
@@ -936,8 +937,8 @@
           "faqAllFaqs": "Alle FAQ's",
           "faqCategory": "FAQ's: {name}",
           "faqScore": "min. score {score}",
-          "faqWorkspaceScore": "werkruimtescore",
-          "faqNotSent": "niet verzonden"
+          "faqNotSent": "niet verzonden",
+          "faqWorkspaceScore": "flowscore"
         },
         "overlays": {
           "startPinned": "Dit is het startpunt (klik om los te maken)",
@@ -1748,6 +1749,16 @@
             "updatedNote": "Wordt elke keer geactiveerd wanneer een persoon of import een contact wijzigt. Een wijziging door een andere flow start deze niet."
           }
         }
+      },
+      "webBot": {
+        "aria": "Flow-secties",
+        "faqs": "FAQs",
+        "saveFirst": "Sla eerst de flow op.",
+        "build": "Bouwen",
+        "customize": "Aanpassen",
+        "install": "Installeren",
+        "needsCustomizing": "De widget gebruikt nog de standaardlook. Open Aanpassen.",
+        "customizeFirst": "Pas je chatwidget aan en sla hem één keer op voordat je publiceert."
       }
     },
     "contracts": {
@@ -2075,7 +2086,8 @@
         "line": "LINE",
         "wechat": "WeChat",
         "viber": "Viber",
-        "email": "E-mail"
+        "email": "E-mail",
+        "web": "Websitechat"
       },
       "dateFormats": {
         "ddDmmDyyyy": "DD-MM-YYYY",
@@ -2170,7 +2182,7 @@
         "noSenderInstagram": "De Trigger-node heeft geen Instagram-account geselecteerd — kies er een in de triggerstap.",
         "noSenderFacebook": "De Trigger-node heeft geen Facebook-pagina geselecteerd — kies er een in de triggerstap.",
         "noSenderNumber": "De Trigger-node heeft geen nummer geselecteerd — kies er een in de triggerstap.",
-        "faqMinScore": "\"{node}\" heeft een minimumscore buiten 0.05 tot 0.99 — corrigeer dit of laat het leeg om de werkruimte-instelling te gebruiken."
+        "faqMinScore": "\"{node}\" heeft een minimumscore buiten 0.05 tot 0.99 — corrigeer dit of laat het leeg om de instelling van de flow te gebruiken."
       }
     },
     "simpleModel": {
@@ -2306,7 +2318,7 @@
         "rowTitle": "Stap {stage}: elke rij heeft een titel nodig van maximaal {max} tekens.",
         "rowDescriptionTooLong": "Stap {stage}: een rijbeschrijving is langer dan {max} tekens.",
         "variableUsed": "Stap {stage}: “{name}” wordt al gebruikt door stap {other}; geef elk antwoord een eigen naam.",
-        "faqMinScore": "Stap {stage}: de minimumscore moet tussen 0.05 en 0.99 liggen, of gebruik de werkruimte-instelling."
+        "faqMinScore": "Stap {stage}: de minimumscore moet tussen 0.05 en 0.99 liggen, of gebruik de instelling van de flow."
       },
       "faqSummary": "{hasCategory, select, true {Uit je FAQ's · {category}} other {Uit je FAQ's}}"
     },
@@ -2328,7 +2340,12 @@
       "messaging": "Berichtenflow",
       "messagingNote": "WhatsApp, Instagram of Facebook — wissel van kanaal op de Trigger-node",
       "call": "Bellen",
-      "callNote": "AI-spraak-IVR — zeggen, luisteren, doorverbinden"
+      "callNote": "AI-spraak-IVR — zeggen, luisteren, doorverbinden",
+      "subtitleSimple": "Elke bot wordt voor één kanaal gebouwd, omdat niet elk onderdeel op elk kanaal werkt.",
+      "whatsapp": "WhatsApp",
+      "whatsappNote": "Beantwoordt klanten via een gekoppeld WhatsApp-nummer",
+      "web": "Websitechat",
+      "webNote": "Een chatwidget die je aan je website toevoegt"
     },
     "rename": {
       "title": "Flow hernoemen",
