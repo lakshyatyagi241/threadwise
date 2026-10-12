@@ -11,7 +11,7 @@ import { usageView } from '../lib/manage';
 import { ChevronLeftIcon, flip } from './icons';
 import { TEXT_LINK } from './ui';
 
-export type HeaderSection = 'apps' | 'integrations' | 'installed' | 'requests';
+export type HeaderSection = 'apps' | 'integrations' | 'addons' | 'installed' | 'requests';
 
 /** "Installed (3 of 10)": the usage of the plan's installed-apps cap, as the installed list reports it. Says nothing until it is known. */
 export function InstalledLinkLabel() {
@@ -66,6 +66,13 @@ export function MarketplaceHeader({ section }: { section: HeaderSection }) {
               </Link>
             );
           })}
+          <Link
+            href={mktRoutes.addons}
+            aria-current={section === 'addons' ? 'page' : undefined}
+            className={tabClass(section === 'addons')}
+          >
+            {t('tabs.addon')}
+          </Link>
         </nav>
         <nav
           aria-label={t('moreLabel')}

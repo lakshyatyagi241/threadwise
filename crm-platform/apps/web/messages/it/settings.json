@@ -335,6 +335,7 @@
         "description": "Attiva l'assistente che guida il tuo team o svolge i passaggi al posto suo.",
         "keywords": "ai, assistente, agente, guida, aiuto, automazione"
       }
-    }
+    },
+    "backToMarketplace": "Torna al Marketplace"
   }
 }

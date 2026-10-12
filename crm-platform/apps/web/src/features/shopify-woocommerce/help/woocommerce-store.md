@@ -15,7 +15,7 @@ The WooCommerce screen connects your WordPress store to this workspace. After co
 ## How to use it
 
 1. In your WooCommerce admin, go to **WooCommerce, Settings, Advanced, REST API**. Select **Add key**, give it a description such as CRM, pick a user with administrator rights and set **Permissions** to Read/Write. Select **Generate API key** and keep both keys.
-2. Open **Settings**, then **Integrations**, and select **WooCommerce**. If no store is connected, the connect page opens.
+2. Open **Marketplace**, stay on the **Integrations** tab and open **WooCommerce**. If no store is connected, the connect page opens.
 3. Enter your **Store URL**, which must start with https, then paste the **Consumer Key** and **Consumer Secret**.
 4. Select **Test connection**. It checks the keys and saves nothing.
 5. Select **Connect store**. The keys are saved, and the webhooks are registered on your store.

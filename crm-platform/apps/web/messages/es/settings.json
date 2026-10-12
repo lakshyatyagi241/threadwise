@@ -335,6 +335,7 @@
         "description": "Activa el asistente que guía a tu equipo o hace los pasos por ellos.",
         "keywords": "ia, asistente, agente, guía, ayuda, automatización"
       }
-    }
+    },
+    "backToMarketplace": "Volver al Marketplace"
   }
 }

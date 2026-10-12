@@ -10,7 +10,8 @@
       "install": "ติดตั้ง · Marketplace",
       "installed": "ติดตั้งแล้ว · Marketplace",
       "manage": "จัดการแอป · Marketplace",
-      "requests": "คำขอ · Marketplace"
+      "requests": "คำขอ · Marketplace",
+      "addons": "ส่วนเสริม · Marketplace"
     },
     "common": {
       "dismiss": "ปิด",
@@ -124,7 +125,8 @@
       "moreLabel": "ติดตั้งแล้วและคำขอ",
       "tabs": {
         "mini_app": "มินิแอป",
-        "integration": "การเชื่อมต่อ"
+        "integration": "การเชื่อมต่อ",
+        "addon": "ส่วนเสริม"
       },
       "installed": "ติดตั้งแล้ว",
       "installedLimit": "ติดตั้งแล้ว ({installed} จาก {limit})",
@@ -865,6 +867,15 @@
       },
       "working": "กำลังดำเนินการ",
       "noCheckout": "ตอนนี้ยังไม่สามารถชำระเงินสำหรับแอปนี้ได้ ลองอีกครั้งในอีกสักครู่"
+    },
+    "tools": {
+      "open": "เปิด",
+      "empty": {
+        "title": "ไม่มีส่วนเสริมที่ใช้ได้",
+        "message": "ส่วนเสริมที่รวมอยู่ในบทบาทและแพ็กเกจของคุณจะแสดงที่นี่"
+      },
+      "soon": "เร็วๆ นี้",
+      "upgrade": "อัปเกรด"
     }
   }
 }
