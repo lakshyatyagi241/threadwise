@@ -1,11 +1,17 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import type { Redis } from 'ioredis';
-import type { FaqMatchDecision, FaqMatchOutcome, FaqMatchTier } from '@crm/contracts';
+import type {
+  FaqMatchDecision,
+  FaqMatchOutcome,
+  FaqMatchTier,
+  FaqVerifyInfo,
+} from '@crm/contracts';
 import { DatabaseService } from '../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
 import { FaqConfigService } from './faq-config.service';
 import { FaqEmbeddingService, FaqUnavailableError } from './faq-embedding.service';
 import { FaqSettingsService, type EffectiveSettings } from './faq-settings.service';
+import { FaqVerifyService } from './faq-verify.service';
 import { FaqRepository } from './faq.repository';
 import {
   TRIGRAM_MIN,
@@ -27,6 +33,13 @@ export interface MatchResult extends FaqMatchDecision {
   query: string;
 }
 
+/** Per-call narrowing: the Flow "FAQ" node may match one category and bring its own bar. */
+export interface MatchOptions {
+  category?: string | null;
+  /** Replaces the workspace threshold for this call only. */
+  threshold?: number | null;
+}
+
 /** One workspace's counter of semantic matches this hour (the abuse and cost guard). */
 const hourBucket = (): string => new Date().toISOString().slice(0, 13);
 
@@ -45,13 +58,21 @@ export class FaqMatchService {
     private readonly settings: FaqSettingsService,
     private readonly config: FaqConfigService,
     private readonly embeddings: FaqEmbeddingService,
+    private readonly verifier: FaqVerifyService,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
   ) {}
 
-  async match(orgId: number, raw: string, preloaded?: EffectiveSettings): Promise<MatchResult> {
+  async match(
+    orgId: number,
+    raw: string,
+    preloaded?: EffectiveSettings,
+    opts: MatchOptions = {},
+  ): Promise<MatchResult> {
     const started = Date.now();
     const query = queryText(raw);
-    const s = preloaded ?? (await this.settings.effective(orgId));
+    const base0 = preloaded ?? (await this.settings.effective(orgId));
+    const s = opts.threshold != null ? { ...base0, threshold: opts.threshold } : base0;
+    const category = opts.category?.trim() ? opts.category.trim() : null;
     const cfg = await this.config.get();
     const model = cfg.embeddingModel;
     const base = (partial: Partial<MatchResult> & Pick<MatchResult, 'outcome'>): MatchResult => ({
@@ -65,18 +86,19 @@ export class FaqMatchService {
       embeddingModel: model,
       latencyMs: Date.now() - started,
       note: null,
+      verify: null,
       winnerId: null,
       winnerText: null,
       query,
       ...partial,
     });
-    const finish = (
+    const finish = async (
       ranked: Scored[],
       tier: FaqMatchTier,
       opts: { threshold: number; exact: boolean },
       note: string | null,
       errored: boolean,
-    ): MatchResult => {
+    ): Promise<MatchResult> => {
       const d = decide(ranked, {
         threshold: opts.threshold,
         minMargin: s.minMargin,
@@ -86,19 +108,40 @@ export class FaqMatchService {
       // `decide` says no_faqs for an empty list; here the workspace is known to have active FAQs (checked above), so an empty list
       // means nothing was similar enough, which is below_threshold.
       const settled: FaqMatchOutcome = d.outcome === 'no_faqs' ? 'below_threshold' : d.outcome;
-      const outcome: FaqMatchOutcome =
-        errored && settled !== 'answered' ? 'provider_error' : settled;
+      let outcome: FaqMatchOutcome = errored && settled !== 'answered' ? 'provider_error' : settled;
+      let verify: FaqVerifyInfo | null = null;
+      let finalNote = note;
+      // The borderline check only looks at a semantic answer that just cleared the bar, and can only take it back.
+      if (tier === 'semantic' && d.outcome === 'answered' && d.winner) {
+        verify = await this.verifier.check({
+          orgId,
+          mode: s.verifyMode,
+          band: s.verifyBand,
+          threshold: d.threshold,
+          score: d.winner.score,
+          message: query,
+          faqQuestion: d.winner.question,
+          matchedText: d.winner.text,
+          runnerUpQuestion: ranked.find((r) => r.faqId !== d.winner!.faqId)?.question ?? null,
+        });
+        if (verify?.verdict === 'rejected') {
+          outcome = 'below_threshold';
+          finalNote = `A second check judged that this FAQ does not answer the message${verify.reason ? `: ${verify.reason}` : '.'}`;
+        }
+      }
+      const answered = outcome === 'answered';
       return base({
         outcome,
         tier,
-        faqId: d.outcome === 'answered' ? d.winner!.faqUuid : null,
-        winnerId: d.outcome === 'answered' ? d.winner!.faqId : null,
-        winnerText: d.outcome === 'answered' ? d.winner!.text : null,
+        faqId: answered ? d.winner!.faqUuid : null,
+        winnerId: answered ? d.winner!.faqId : null,
+        winnerText: answered ? d.winner!.text : null,
         score: d.winner ? round4(d.winner.score) : null,
         secondScore: d.secondScore === null ? null : round4(d.secondScore),
         threshold: d.threshold,
         candidates: toCandidates(ranked),
-        note,
+        note: finalNote,
+        verify,
       });
     };
 
@@ -115,10 +158,12 @@ export class FaqMatchService {
     }
 
     const exact = bestPerFaq(
-      await this.db.txAs({ orgId, userId: null }, (tx) => this.repo.exact(tx, orgId, query)),
+      await this.db.txAs({ orgId, userId: null }, (tx) =>
+        this.repo.exact(tx, orgId, query, category),
+      ),
     );
     if (exact.length > 0)
-      return finish(exact, 'exact', { threshold: s.threshold, exact: true }, null, false);
+      return await finish(exact, 'exact', { threshold: s.threshold, exact: true }, null, false);
 
     let note: string | null = null;
     let errored = false;
@@ -133,9 +178,9 @@ export class FaqMatchService {
       try {
         const { vector } = await this.embeddings.embedQuery(orgId, query);
         const rows = await this.db.txAs({ orgId, userId: null }, (tx) =>
-          this.repo.vector(tx, orgId, model, toVectorLiteral(vector)),
+          this.repo.vector(tx, orgId, model, toVectorLiteral(vector), category),
         );
-        return finish(
+        return await finish(
           bestPerFaq(rows),
           'semantic',
           { threshold: s.threshold, exact: false },
@@ -154,9 +199,11 @@ export class FaqMatchService {
     }
 
     const tri = bestPerFaq(
-      await this.db.txAs({ orgId, userId: null }, (tx) => this.repo.trigram(tx, orgId, query)),
+      await this.db.txAs({ orgId, userId: null }, (tx) =>
+        this.repo.trigram(tx, orgId, query, category),
+      ),
     );
-    return finish(tri, 'trigram', { threshold: TRIGRAM_MIN, exact: false }, note, errored);
+    return await finish(tri, 'trigram', { threshold: TRIGRAM_MIN, exact: false }, note, errored);
   }
 
   /** True once this workspace used its semantic matches for the hour. A counter that is down never blocks a customer. */

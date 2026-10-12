@@ -21,6 +21,9 @@ let h: Harness;
 let api: Api;
 
 const handed: Array<{ kind: string; ctx: Record<string, unknown> }> = [];
+/** One webhook reaches every workspace that connected this Page id, so a test reads only its own workspace's hand-offs. */
+const mine = (t: { orgId: number }) =>
+  handed.filter((x) => (x.ctx as { orgId?: number }).orgId === t.orgId);
 let consume = false;
 const sent: Array<{ method: string; args: unknown[] }> = [];
 let override: Partial<FacebookPageApi> = {};
@@ -308,8 +311,8 @@ describe('TW-FB-007, 008: a Messenger message', () => {
     const t = await api.signup('fi11');
     await connect(t);
     await post(dm('m1', 'hello'));
-    expect(handed.map((x) => x.kind)).toEqual(['flow', 'automate']);
-    expect(handed[0]!.ctx).toMatchObject({
+    expect(mine(t).map((x) => x.kind)).toEqual(['flow', 'automate']);
+    expect(mine(t)[0]!.ctx).toMatchObject({
       pageId: '100',
       psid: '555',
       text: 'hello',
@@ -320,7 +323,7 @@ describe('TW-FB-007, 008: a Messenger message', () => {
     handed.length = 0;
     consume = true;
     await post(dm('m2', 'order'));
-    expect(handed.map((x) => x.kind)).toEqual(['flow']);
+    expect(mine(t).map((x) => x.kind)).toEqual(['flow']);
   });
 
   it('a button tap goes to the flow runtime and is never stored', async () => {
@@ -333,8 +336,8 @@ describe('TW-FB-007, 008: a Messenger message', () => {
         ],
       }),
     );
-    expect(handed).toHaveLength(1);
-    expect(handed[0]).toMatchObject({
+    expect(mine(t)).toHaveLength(1);
+    expect(mine(t)[0]).toMatchObject({
       kind: 'postback',
       ctx: { psid: '555', text: 'GET_STARTED', conversationId: null },
     });

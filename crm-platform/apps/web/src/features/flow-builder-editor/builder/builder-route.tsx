@@ -8,6 +8,7 @@ import { useCan } from '@/features/auth-registration-security/shared/session-con
 import { flowsApi } from '../api/flows';
 import { FLB_KEYS } from '../api/hooks';
 import { FLASH_KEY } from '../components/flows-screen';
+import { newHref } from '../lib/builder-mode';
 import { BuilderScreen } from './builder-screen';
 
 /**
@@ -31,8 +32,13 @@ export function BuilderRoute({ flowId }: { flowId?: string }) {
   // Reference sends an agent or viewer to the team inbox instead of leaving them on a dead end.
   useEffect(() => {
     if (!allowed) router.replace('/inbox');
-    else if (toSimple) router.replace(flowId ? `/flows/simple/${flowId}` : '/flows/simple');
-  }, [allowed, toSimple, flowId, router]);
+    else if (toSimple)
+      router.replace(
+        flowId
+          ? `/flows/simple/${flowId}`
+          : newHref('simple', params.get('type') === 'web' ? 'web' : 'chat'),
+      );
+  }, [allowed, toSimple, flowId, router, params]);
   useEffect(() => {
     try {
       const m = sessionStorage.getItem(FLASH_KEY);

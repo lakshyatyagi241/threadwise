@@ -106,7 +106,8 @@
         "light": "Clair",
         "dark": "Sombre",
         "schemeHint": "Le mode couleur est réglé sur Clair : il n’existe donc pas de version sombre à afficher.",
-        "frameTitle": "Aperçu en direct du formulaire"
+        "frameTitle": "Aperçu en direct du formulaire",
+        "popup": "Pop-up"
       }
     }
   }

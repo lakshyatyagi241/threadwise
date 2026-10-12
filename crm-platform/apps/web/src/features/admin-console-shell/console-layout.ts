@@ -91,6 +91,7 @@ export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
       'wap-providers',
       'wap-switch',
       'node-bridge',
+      'sms-channel',
       'webhook-forwarding',
       'settings-whatsapp',
       'settings-catalog',

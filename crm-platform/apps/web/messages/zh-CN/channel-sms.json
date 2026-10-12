@@ -1,0 +1,214 @@
+{
+  "sms": {
+    "common": {
+      "dismiss": "忽略",
+      "close": "关闭",
+      "cancel": "取消"
+    },
+    "hub": {
+      "kicker": "渠道",
+      "title": "SMS",
+      "titleAccent": "发送方",
+      "intro": "使用您自己的 Twilio 号码和 MSG91 发送方发送短信。这里的 SMS 仅支持发送：您通过群发和营销活动联系客户。",
+      "campaigns": "营销活动",
+      "broadcasts": "群发",
+      "channels": "渠道",
+      "loadError": "无法加载您的 SMS 号码。请稍后重试。",
+      "cardCaption": "Twilio · MSG91",
+      "activeCount": "{count, plural, other {# 个号码已启用}}",
+      "notConnected": "未连接",
+      "howTitle": "使用方式",
+      "how": {
+        "connect": {
+          "title": "连接发送方",
+          "body": "添加 Twilio 号码或 MSG91 发送方。保存前我们会向服务商验证凭据。"
+        },
+        "report": {
+          "title": "粘贴送达报告地址",
+          "body": "将其添加到您的 MSG91 或 Twilio 面板，已送达和发送失败的短信就会显示在您的报告中。"
+        },
+        "send": {
+          "title": "发送群发和营销活动",
+          "body": "创建群发或营销活动时选择此发送方。每位收件人会收到一条短信。"
+        },
+        "billing": {
+          "title": "计入您的 SMS 配额",
+          "body": "短信计入您套餐的每月 SMS 配额，绝不会从 WhatsApp 钱包扣费。"
+        }
+      },
+      "reportTitle": "请记得：将此地址粘贴到您的服务商",
+      "reportBody": "请将此送达报告地址添加到服务商面板，以便我们将短信标记为已送达或失败。",
+      "reportLabel": "送达报告 URL",
+      "copy": "复制",
+      "copied": "已复制",
+      "copyFailed": "无法复制。请选中该地址并手动复制。",
+      "connectedTitle": "已连接的号码",
+      "total": "共 {count} 个",
+      "empty": "尚未连接 SMS 号码。",
+      "connectFirst": "连接您的第一个号码"
+    },
+    "card": {
+      "active": "已启用",
+      "inactive": "未启用",
+      "rate": "单价 / 分段",
+      "dltSender": "DLT 发送方",
+      "dltTemplate": "DLT 模板",
+      "alphanumeric": "发送方 ID：单向，且并非所有国家都支持。",
+      "activate": "启用",
+      "deactivate": "停用",
+      "remove": "移除",
+      "removeTitle": "移除 SMS 号码",
+      "removeConfirm": "要移除此 SMS 号码吗？",
+      "activated": "SMS 号码已启用。",
+      "deactivated": "SMS 号码已停用。",
+      "removed": "SMS 号码已移除。",
+      "failed": "无法更新 SMS 号码。请重试。",
+      "changed": "此号码已在其他地方被修改。列表已重新加载，请重试。",
+      "notAvailable": "您的套餐不支持 SMS，或 SMS 已被关闭。",
+      "cancel": "取消"
+    },
+    "connect": {
+      "title": "连接号码",
+      "intro": "可按需添加多个。多个 Twilio 号码和 MSG91 发送方可同时运行。",
+      "provider": "SMS 服务商",
+      "providerTwilio": "Twilio（全球）",
+      "providerMsg91": "MSG91（印度 / DLT）",
+      "providerHint": "大多数国家使用 Twilio；发送至印度请使用 MSG91 以确保可靠送达。",
+      "from": "发送号码 / 发送方 ID",
+      "fromPlaceholder": "+17372508034",
+      "fromHint": "国际格式的号码（Twilio）或您已注册的发送方（MSG91）。由字母组成的发送方为单向，无法接收回复。",
+      "sid": "Twilio 账户 SID",
+      "sidPlaceholder": "ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "sidHint": "仅限 Twilio。留空则沿用已为 WhatsApp 连接的密钥。",
+      "token": "Auth Token / MSG91 Auth Key",
+      "tokenHint": "加密保存。使用 Twilio 时，留空则沿用已为 WhatsApp 连接的密钥。",
+      "dltOptions": "MSG91 / 印度（DLT）选项",
+      "senderId": "DLT 发送方 ID",
+      "senderIdPlaceholder": "ACMEIN",
+      "senderIdHint": "仅限 MSG91。您在 DLT 注册的 6 位字母发送方。",
+      "dltTemplate": "DLT 模板 ID",
+      "dltTemplateHint": "仅限 MSG91。用于印度送达的已审批 DLT 模板 ID。",
+      "reportBoxTitle": "MSG91 面板送达报告",
+      "reportBoxBody": "请在 MSG91 面板中，将此地址粘贴为送达报告（DLR）URL：",
+      "rate": "每分段单价",
+      "ratePlaceholder": "0.0075",
+      "rateHint": "仅用于 SMS 支出报告。绝不会从 WhatsApp 钱包扣费。",
+      "currency": "币种",
+      "submit": "验证并连接 SMS",
+      "submitting": "正在验证…",
+      "errorTitle": "无法连接 SMS 号码：",
+      "providerError": "服务商返回：{reason}",
+      "connected": "SMS 号码已连接。您现在可以开始发送。",
+      "failed": "无法连接 SMS 号码。请重试。",
+      "errors": {
+        "fromRequired": "发送号码为必填项。",
+        "fromTooLong": "发送号码不能超过 32 个字符。",
+        "sidTooLong": "账户 SID 不能超过 64 个字符。",
+        "sidShape": "这不是账户 SID。它必须以 AC 开头；以 SK 开头的 API 密钥无法使用。",
+        "tokenRequired": "需要 MSG91 Auth Key。",
+        "tokenTooLong": "Auth Token 不能超过 255 个字符。",
+        "senderIdTooLong": "发送方 ID 不能超过 16 个字符。",
+        "dltTemplateTooLong": "DLT 模板 ID 不能超过 64 个字符。",
+        "rateInvalid": "每分段单价必须是大于或等于零的数字。",
+        "currencyTooLong": "币种不能超过 8 个字符。"
+      },
+      "api": {
+        "notAvailable": "您的套餐不支持 SMS，或平台已将其关闭。",
+        "unavailable": "此 SMS 号码已断开连接或没有凭据。请先重新连接。"
+      }
+    },
+    "lookup": {
+      "title": "发送短信前先检查号码",
+      "hint": "SMS 按发送计费，而不是按送达计费，因此发送前请确认该号码是真实的手机号。",
+      "label": "电话号码",
+      "placeholder": "+1 555 123 4567",
+      "check": "检查号码",
+      "checking": "正在检查…",
+      "unreachable": "无法连接查询服务。",
+      "carrier": "运营商：{carrier}。",
+      "kind": {
+        "mobile": "手机 — 可以接收 SMS。",
+        "landline": "座机 — 无法接收 SMS。发送会被计费且无法送达。",
+        "voip": "VoIP — 可能无法稳定接收 SMS。",
+        "invalid": "无效号码 — 发送会被计费且永远无法送达。"
+      }
+    },
+    "guide": {
+      "title": "设置指南",
+      "twilio": {
+        "title": "Twilio（全球）",
+        "p1": "从 Twilio 控制台首页复制账户 SID（以 AC 开头）和 Auth Token。以 SK 开头的 API 密钥无法使用。",
+        "p2": "购买支持 SMS 的号码，或使用试用号码，并以国际格式粘贴为发送号码。",
+        "p3": "在 Twilio 号码设置中，将上方的送达报告地址粘贴为状态回调 URL。",
+        "p4": "试用账户只能向已验证的号码发送短信，且不支持自定义文本。"
+      },
+      "msg91": {
+        "title": "MSG91（印度 / DLT）",
+        "p1": "印度运营商会过滤国外长号码，因此发送至印度请使用 MSG91 以确保可靠送达。",
+        "p2": "将您的 MSG91 Auth Key 粘贴到 Auth Token 字段。",
+        "p3": "在 DLT 门户中注册 6 位字母的发送方 ID 和消息模板，然后将两者粘贴到 DLT 选项中。",
+        "p4": "有 DLT 模板 ID 时，发送方走 MSG91 的模板通道；没有则发送纯文本。"
+      },
+      "billing": {
+        "title": "分段、费用与计费",
+        "p1": "最多 160 个普通字符的短信为一个分段（GSM-7）。一个表情符号或非拉丁字符会使上限降至 70（UCS-2），费用可能增至三倍。",
+        "p2": "较长的短信会拆分为每段 153 个字符（UCS-2 为 67 个），每个分段都会计费。",
+        "p3": "您输入的单价仅用于支出报告。短信按您套餐的每月 SMS 配额计量，绝不使用 WhatsApp 钱包。",
+        "p4": "由字母组成的发送方 ID 为单向，且并非所有国家都支持，例如美国和加拿大。"
+      }
+    },
+    "segments": {
+      "summary": "{units} 个字符 · {segments, plural, other {# 个分段}} · {encoding}",
+      "remaining": "此分段还剩 {remaining} 个字符",
+      "ucs2": "此消息包含 GSM 字符集之外的字符（表情符号或非拉丁文字），因此每条 SMS 限 {perSegment} 个字符，并将按 {segments} 条消息计费。",
+      "gsm": "此消息共 {units} 个字符，将按 {segments} 条消息计费。"
+    },
+    "compose": {
+      "note": "SMS 仅发送纯文本。页眉、页脚、附件、按钮和拆分测试均不适用，因此已隐藏。",
+      "bodyHint": "请保持简短：每 160 个字符会增加一个分段，每个分段都会计费。"
+    },
+    "chooser": {
+      "name": "SMS",
+      "hint": "通过 Twilio 号码或 MSG91 发送方向您的联系人发送短信。",
+      "cta": "创建 SMS 营销活动"
+    },
+    "operator": {
+      "nav": {
+        "group": "渠道",
+        "item": "SMS"
+      },
+      "title": "短信渠道",
+      "eyebrow": "平台开关",
+      "superOnly": "只有超级管理员可以更改短信开关。你可以查看它的状态。",
+      "loading": "加载中",
+      "retry": "重试",
+      "status": {
+        "enabled": "已启用",
+        "disabled": "已停用"
+      },
+      "explanation": "为所有工作区开启或关闭短信渠道。它只显示或隐藏入口(短信菜单、发件人选择器和短信模板渠道),已有的发件人、模板和正在进行的发送都不会被删除或中止。",
+      "state": {
+        "enabled": "短信已开启。套餐包含短信的工作区可以连接发件人,并通过群发和营销活动发送文本消息。",
+        "disabled": "短信已关闭。工作区看不到短信菜单、发件人选择器或短信模板。准备好提供该渠道时再开启。"
+      },
+      "enable": "启用短信",
+      "disable": "停用短信",
+      "cancel": "取消",
+      "enabledToast": "平台已启用短信。",
+      "disabledToast": "平台已停用短信。",
+      "disableDialog": {
+        "title": "停用短信?",
+        "body": "所有工作区将立即看不到短信菜单、发件人选择器和短信模板。不会删除任何内容,现有发件人仍可正常使用。你可以随时重新开启。",
+        "confirm": "停用短信"
+      },
+      "errors": {
+        "forbidden": "你没有权限执行此操作。",
+        "conflict": "其他人已更改此设置。页面已刷新,请重试。",
+        "validation": "请检查该值后重试。",
+        "request": "无法完成该请求。",
+        "unexpected": "我们这边出了点问题,请稍后重试。",
+        "network": "无法连接到服务器,请检查你的网络连接。"
+      }
+    }
+  }
+}

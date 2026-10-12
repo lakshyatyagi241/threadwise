@@ -97,7 +97,7 @@
       },
       "sms": {
         "label": "SMS",
-        "description": "Send and receive text messages with your own sender.",
+        "description": "Send text messages with your own Twilio number or MSG91 sender.",
         "keywords": "text message, sender id, dlt, twilio, mobile"
       },
       "email": {
@@ -314,6 +314,11 @@
         "label": "Message logs",
         "description": "Export the delivery log of your messages, up to a year back, as a file sent to your email.",
         "keywords": "export, delivery log, history, archive, csv, messages"
+      },
+      "web": {
+        "label": "Website chat",
+        "description": "Bots built for your website chat and the widget each one runs in.",
+        "keywords": "web, website, widget, chatbot, embed, live chat"
       }
     }
   }

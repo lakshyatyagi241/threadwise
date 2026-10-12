@@ -7,7 +7,7 @@ order: 17
 documents: []
 gates:
   planFeature: form_builder
-keywords: [share, embed, iframe, script, qr code, allowed websites, domains, rotate key, public link]
+keywords: [share, embed, iframe, qr code, allowed websites, popup, modal, delay, scroll, trigger]
 ---
 
 ## What it is for
@@ -21,6 +21,19 @@ The **Share** tab gives a published form its public address and the code to put 
 3. To print or show the form, download the **QR code** as a PNG or SVG. Scans carry a tracking tag so you can tell them apart in the submission details.
 4. To put the form on your site, copy one of the two snippets under **Put the form on your website**: the script, which also sizes itself to the form, or the plain iframe.
 5. Under **Allowed websites**, add the website where you embed the form, for example https://example.com. A wildcard works for one level of subdomain, for example https://*.example.com.
+
+## Show the form as a popup
+
+Instead of placing the form in the page, you can open it in a popup. Under **Show as a popup**, choose when it opens, then copy the **Popup code** and paste it into your website, usually just before the closing body tag.
+
+- **After a delay**: opens a set number of seconds after the page loads.
+- **When the visitor scrolls down**: opens once they have scrolled the percentage of the page you set.
+- **When the visitor scrolls back up**: opens when they have read down the page and then scroll back up, a sign they may be leaving.
+- **When someone clicks a button**: opens only from a button or link that carries the **button code** (`data-forms-open`), or from your own script with `FormsPopup["<key>"].open()`. The button code works with every trigger.
+
+**Where it appears** is the centre of the screen with the page dimmed, or a corner card that leaves the page undimmed. On a phone it always rises from the bottom as a full-width sheet. **Show again after** sets how many days pass before the same visitor sees it again; 0 shows it every visit. Once someone sends the form, it never opens for them again. Visitors can close it with the close button, the Escape key, or by clicking outside it.
+
+The options are written into the code you copy, so after changing them copy the code again. The website still needs to be on the **Allowed websites** list below. To see how the popup looks before you publish it, open **Design** or **Preview** and choose **Popup**.
 
 ## Allowed websites
 

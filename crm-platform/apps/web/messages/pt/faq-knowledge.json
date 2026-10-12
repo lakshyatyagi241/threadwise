@@ -33,7 +33,8 @@
       "modelNotAllowed": "O modelo de IA da plataforma para correspondência não é permitido. Fale com o administrador da plataforma.",
       "validation": "Alguns campos precisam de atenção.",
       "rateLimited": "Muitas solicitações. Aguarde um momento e tente novamente.",
-      "unexpected": "Algo deu errado. Tente novamente e informe o ID da solicitação ao suporte se o problema continuar."
+      "unexpected": "Algo deu errado. Tente novamente e informe o ID da solicitação ao suporte se o problema continuar.",
+      "flowNodeNotFound": "A etapa escolhida não está mais neste fluxo. Escolha outra etapa ou comece pelo início do fluxo."
     },
     "banner": {
       "enabledToast": "As respostas por FAQ estão ativadas.",
@@ -139,7 +140,9 @@
         "ready": "{count} ativas",
         "pending": "{count} indexando",
         "failed": "{count} com falha"
-      }
+      },
+      "stepMissing": "Etapa ausente",
+      "startsAt": "Começa em: {step}"
     },
     "editor": {
       "back": "Voltar para FAQs",
@@ -192,7 +195,9 @@
         "preview": "Como fica no WhatsApp",
         "previewEmpty": "Sua resposta aparece aqui",
         "flowLabel": "Fluxo a iniciar",
-        "noFlow": "Nenhum fluxo escolhido"
+        "noFlow": "Nenhum fluxo escolhido",
+        "startsAt": "Começa na etapa: {step}",
+        "stepGone": "A etapa em que esta FAQ começa não existe mais, então os clientes não recebem resposta."
       },
       "advanced": {
         "title": "Avançado: sensibilidade só para esta FAQ",
@@ -227,6 +232,11 @@
           "required": "Escolha um valor entre 5% e 99%.",
           "tooLong": "Escolha um valor entre 5% e 99%.",
           "invalid": "Escolha um valor entre 5% e 99%."
+        },
+        "flowNodeId": {
+          "required": "Escolha uma etapa deste fluxo ou o início do fluxo.",
+          "tooLong": "Escolha uma etapa deste fluxo ou o início do fluxo.",
+          "invalid": "Escolha uma etapa deste fluxo ou o início do fluxo."
         }
       },
       "deleteConfirm": {
@@ -257,7 +267,7 @@
         "off": "Inativo",
         "draft": "Rascunho"
       },
-      "note": "O fluxo começa pelo seu gatilho. Só fluxos publicados e ativos podem ser executados."
+      "note": "O fluxo começa na etapa que você escolher abaixo ou no início dele. Somente fluxos publicados e ativos podem ser executados."
     },
     "variations": {
       "title": "Variações da pergunta",
@@ -354,6 +364,10 @@
         "notSent": {
           "title": "Correspondeu, não enviada",
           "body": "Uma FAQ correspondeu, mas a resposta não foi enviada, por exemplo porque as respostas por FAQ estavam desativadas."
+        },
+        "vetoed": {
+          "title": "Resposta retida",
+          "body": "A correspondência teve pontuação suficiente, mas a segunda verificação disse não, então nada seria enviado."
         }
       },
       "tier": {
@@ -486,8 +500,11 @@
         "providerError": "O provedor de IA falhou, então o bot só pôde comparar pela grafia.",
         "notSent": "Uma FAQ correspondeu, mas a resposta não foi enviada.",
         "tier": "Decidido pelo nível {tier}.",
-        "error": "Erro: {error}"
-      }
+        "error": "Erro: {error}",
+        "vetoed": "A melhor correspondência teve pontuação de {score}%, acima do limite de {threshold}%, mas a segunda verificação disse que ela não responde à mensagem, então nada foi enviado.",
+        "vetoedNoBar": "A melhor correspondência teve pontuação de {score}%, mas a segunda verificação disse que ela não responde à mensagem, então nada foi enviado."
+      },
+      "flowRun": "(de um fluxo)"
     },
     "insights": {
       "title": "Análises das FAQs",
@@ -612,7 +629,8 @@
         "exact": "Exata: a mensagem é igual a uma formulação salva, ignorando maiúsculas e espaços.",
         "semantic": "Significado: a mensagem é comparada pelo significado com cada formulação ativa, então palavras diferentes podem corresponder.",
         "trigram": "Alternativa por grafia: se o provedor de IA estiver indisponível, as letras são comparadas, o que pega apenas erros de digitação.",
-        "threshold": "A melhor pontuação é comparada com a sensibilidade. Acima dela, a FAQ responde; abaixo, a mensagem aparece em Sem resposta."
+        "threshold": "A melhor pontuação é comparada com a sensibilidade. Acima dela, a FAQ responde; abaixo, a mensagem aparece em Sem resposta.",
+        "verify": "Segunda verificação (opcional): uma correspondência que mal atingiu a sensibilidade pode ser conferida por um modelo de chat pequeno, que só pode reter uma resposta."
       },
       "who": "Alterar estas configurações exige a permissão faq.settings.manage.",
       "leave": {
@@ -620,6 +638,52 @@
         "body": "Suas alterações nestas configurações não foram salvas.",
         "leave": "Sair",
         "stay": "Ficar"
+      },
+      "verify": {
+        "title": "Segunda verificação para casos duvidosos",
+        "hint": "Um modelo de chat pequeno confere as correspondências que mal atingiram o limite.",
+        "unavailable": "A plataforma desativou a segunda verificação, então ela não é executada mesmo que você a ative aqui. Fale com o administrador da plataforma.",
+        "label": "Conferir casos duvidosos com uma segunda opinião",
+        "on": "Ativada",
+        "off": "Desativada",
+        "onBody": "Quando uma correspondência mal passa do limite, um modelo de chat pequeno lê a mensagem do cliente e a FAQ e diz se a resposta serve. Ele só pode dizer não: nunca faz uma resposta ser enviada.",
+        "offBody": "Toda correspondência que atinge o limite é respondida sem uma segunda conferência.",
+        "bandLabel": "Quão próximo conta como caso duvidoso",
+        "bandValue": "+{value}%",
+        "explainOn": "As correspondências com pontuação de {from}% até {to}% são conferidas por {model}. Um \"não\" significa que nenhuma resposta é enviada e a mensagem aparece em Sem resposta.",
+        "explainOff": "Toda correspondência com pontuação de {threshold}% ou mais é respondida. Ative a segunda verificação para que os casos mais duvidosos sejam conferidos.",
+        "cost": "Cada verificação envia ao modelo a mensagem do cliente e a pergunta da FAQ: algumas centenas de tokens, e acrescenta cerca de um segundo a uma resposta no limite. Correspondências fora da faixa nunca são conferidas. Se a verificação falhar, não estiver disponível ou o limite por hora for atingido, a correspondência vale como se não houvesse verificação."
+      }
+    },
+    "flowNode": {
+      "label": "Começar em",
+      "start": "O início do fluxo",
+      "hint": "Escolha uma etapa para pular o começo do fluxo. Os clientes entram no fluxo na etapa que você escolher.",
+      "loading": "Carregando as etapas deste fluxo",
+      "empty": "Este fluxo não tem outras etapas, então ele começa pelo início.",
+      "retry": "Tentar novamente",
+      "deletedOption": "Etapa excluída (escolha outra)",
+      "missing": {
+        "title": "A etapa em que esta FAQ começa não existe mais",
+        "body": "Essa etapa foi excluída do fluxo. Até você escolher outra etapa, os clientes que correspondem a esta FAQ não recebem resposta. Escolha uma etapa abaixo ou comece pelo início do fluxo.",
+        "fix": "Começar pelo início do fluxo"
+      }
+    },
+    "verify": {
+      "title": "Segunda verificação",
+      "chip": {
+        "confirmed": "Segunda verificação: sim",
+        "vetoed": "Segunda verificação: não",
+        "failed": "Segunda verificação falhou",
+        "skipped": "Segunda verificação ignorada"
+      },
+      "model": "Conferido por",
+      "reason": "Motivo",
+      "body": {
+        "confirmed": "A correspondência era um caso duvidoso, então um modelo de chat pequeno leu a mensagem e a FAQ e concordou que a resposta serve.",
+        "vetoed": "A correspondência era um caso duvidoso e a segunda verificação disse que esta FAQ não responde à mensagem. A resposta foi retida, nada foi enviado e a mensagem aparece em Sem resposta.",
+        "failed": "A correspondência era um caso duvidoso, mas a verificação não pôde ser concluída, então a correspondência valeu e a resposta foi enviada como se não houvesse segunda verificação.",
+        "skipped": "A segunda verificação não foi executada para esta correspondência, então ela valeu como estava."
       }
     }
   }

@@ -1418,7 +1418,8 @@
             "forms_and_links": "Formulários de captação de leads e links compartilháveis.",
             "extra_channels": "Os canais Telegram, Facebook e Instagram.",
             "form_builder": "Formulários web hospedados e incorporados que criam contatos no CRM. O app pago de Formulários controla esta chave.",
-            "waba_groups": "Crie e gerencie grupos do WhatsApp a partir de um número da API em nuvem: link de convite, solicitações de entrada, membros. O número deve ser uma Conta Comercial Oficial."
+            "waba_groups": "Crie e gerencie grupos do WhatsApp a partir de um número da API em nuvem: link de convite, solicitações de entrada, membros. O número deve ser uma Conta Comercial Oficial.",
+            "sms": "SMS somente de envio via Twilio ou MSG91: conecte remetentes e envie transmissões e campanhas por SMS."
           },
           "units": {
             "days": "Dias",
@@ -1559,7 +1560,8 @@
             "ai_token_limit_monthly": "Tokens de IA por mês (chaves da plataforma)",
             "forms": "Formulários web",
             "form_submissions_monthly": "Envios de formulário por mês",
-            "ai_form_generations_monthly": "Gerações do construtor de formulários com IA por mês"
+            "ai_form_generations_monthly": "Gerações do construtor de formulários com IA por mês",
+            "sms_monthly": "SMS por mês"
           },
           "featureGroups": {
             "messaging": "Mensagens",
@@ -1596,7 +1598,8 @@
             "forms_and_links": "Formulários, links de clique para conversar e grupos",
             "extra_channels": "Canais Telegram, Facebook e Instagram",
             "form_builder": "Formulários (construtor de formulários web)",
-            "waba_groups": "Grupos do WhatsApp (API em nuvem)"
+            "waba_groups": "Grupos do WhatsApp (API em nuvem)",
+            "sms": "Canal SMS"
           },
           "problems": {
             "required": "Este campo é obrigatório.",
@@ -1648,7 +1651,8 @@
             "ai_token_limit_monthly": "Tokens que os assistentes de IA usam no mês civil com as chaves da plataforma. Espaços de trabalho com chaves próprias não têm limite.",
             "forms": "Formulários web ativos (app Formulários). Arquivar um formulário libera a vaga. 0 = ilimitado.",
             "form_submissions_monthly": "Envios de formulário aceitos no mês civil, exceto spam. Acima do limite, o envio ainda é salvo para revisão, nunca descartado. 0 = ilimitado.",
-            "ai_form_generations_monthly": "Gerações do construtor de formulários com IA no mês civil, incluindo nova tentativa de correção. 0 = ilimitado."
+            "ai_form_generations_monthly": "Gerações do construtor de formulários com IA no mês civil, incluindo nova tentativa de correção. 0 = ilimitado.",
+            "sms_monthly": "Mensagens SMS enviadas no mês civil. 0 = ilimitado."
           }
         }
       },

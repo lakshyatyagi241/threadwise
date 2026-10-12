@@ -549,7 +549,12 @@
           "cardGallery": "Galeri kartu",
           "cardCount": "{count} kartu",
           "payLink": "Tautan bayar",
-          "invoice": "Faktur"
+          "invoice": "Faktur",
+          "faqAllFaqs": "Semua FAQ",
+          "faqCategory": "FAQ: {name}",
+          "faqScore": "skor min. {score}",
+          "faqWorkspaceScore": "skor workspace",
+          "faqNotSent": "tidak dikirim"
         },
         "overlays": {
           "startPinned": "Ini adalah titik awal (klik untuk lepas pin)",
@@ -704,9 +709,11 @@
           "groups": {
             "send": "Kirim",
             "ask": "Tanya pelanggan",
-            "handoff": "Serahkan"
+            "handoff": "Serahkan",
+            "answer": "Jawaban"
           },
-          "blockedTitle": "Tombol dan daftar mengakhiri alur, sehingga hanya boleh di posisi terakhir."
+          "blockedTitle": "Tombol dan daftar mengakhiri alur, sehingga hanya boleh di posisi terakhir.",
+          "blockedTitleFaq": "Jawab dari FAQ punya dua jalur keluar, jadi hanya bisa di posisi terakhir."
         },
         "card": {
           "branchLabel": "{title} → {target}",
@@ -715,7 +722,11 @@
           "moveUp": "Pindah ke atas",
           "moveDown": "Pindah ke bawah",
           "duplicate": "Duplikat",
-          "deleteStep": "Hapus langkah"
+          "deleteStep": "Hapus langkah",
+          "faqExits": {
+            "matched": "Terjawab",
+            "no_match": "Tidak cocok"
+          }
         },
         "editors": {
           "linkLabel": "Tujuan",
@@ -831,8 +842,19 @@
           "cta": {
             "buttonText": "Teks tombol",
             "opens": "Membuka (tautan)"
+          },
+          "faq": {
+            "exits": {
+              "matched": "Jika FAQ menjawab, lanjut ke",
+              "no_match": "Jika tidak ada FAQ yang menjawab, lanjut ke"
+            },
+            "exitsHint": {
+              "matched": "Saat itu jawaban teks sudah terkirim. FAQ yang memulai alur akan melanjutkan di alur tersebut.",
+              "no_match": "Tidak ada yang cukup mirip, atau penjawab FAQ otomatis dinonaktifkan."
+            }
           }
-        }
+        },
+        "faqEnds": "Langkah ini mengakhiri bagian ini: apa yang dikirim berikutnya bergantung pada apakah FAQ menjawab."
       },
       "formsCore": {
         "helpers": {
@@ -1765,6 +1787,44 @@
           "afterSending": "Setelah dikirim",
           "afterSendingHint": "Aktif: alur dijeda di sini dan hanya lanjut ke \"out\" setelah pelanggan membayar (jumlah diterima sebagai {paidAmount} {paidCurrency}). Nonaktif: invoice dikirim dan alur langsung dilanjutkan.",
           "waitUntilPaid": "Tunggu hingga dibayar, lalu lanjutkan"
+        },
+        "faq": {
+          "intro": {
+            "body": "Mencocokkan pesan dengan FAQ Anda berdasarkan makna lalu menjawabnya. Keluar lewat <mono>terjawab</mono> jika FAQ menjawab, dan lewat <mono>tidak cocok</mono> jika tidak.",
+            "sub": "Berfungsi tanpa mengaktifkan jawaban FAQ otomatis. <link>Kelola FAQ Anda</link>"
+          },
+          "exitsLabel": "Jalur keluar",
+          "exitMatchedName": "Terjawab",
+          "exitMatched": "FAQ menjawab: teksnya dikirim (kecuali pengiriman dimatikan), atau alurnya mengambil alih dan tidak kembali.",
+          "exitNoMatchName": "Tidak cocok",
+          "exitNoMatch": "tidak ada yang cukup mirip, jawaban FAQ otomatis dimatikan untuk platform, alur atau langkah yang ditautkan sudah tidak ada, atau pesannya kosong.",
+          "noFaqs": "Anda belum punya FAQ, jadi langkah ini selalu keluar lewat tidak cocok. <link>Tambahkan FAQ pertama Anda</link>",
+          "query": "Pesan yang dicocokkan",
+          "queryHint": "Secara default berupa pesan terakhir pelanggan. Variabel yang disimpan langkah Pertanyaan juga bisa dipakai, misalnya <mono>{variable}</mono>. Ketik / untuk menyisipkan.",
+          "category": "Hanya FAQ ini",
+          "allFaqs": "Semua FAQ",
+          "loadingCategories": "Memuat kategori…",
+          "categoryGone": "{name} (tidak ada FAQ yang memakainya)",
+          "categoryHint": "Hanya FAQ dari kategori ini yang dapat menjawab. Kategori diambil dari FAQ Anda.",
+          "categoriesFailed": "Kategori FAQ Anda tidak dapat dimuat.",
+          "retry": "Coba lagi",
+          "minScore": "Skor minimum",
+          "useWorkspaceScore": "Gunakan pengaturan workspace",
+          "minScoreHint": "Menggantikan skor workspace hanya untuk langkah ini, dari {min} sampai {max}. Skor bergantung pada model embedding platform, jadi coba sebuah pesan di <link>Uji FAQ</link> sebelum memilih angka.",
+          "minScoreInvalid": "Masukkan angka dari {min} sampai {max}, atau gunakan pengaturan workspace.",
+          "sendAnswer": "Kirim jawaban ke pelanggan",
+          "sendAnswerToggle": "Kirim jawaban teks yang cocok sebagai pesan",
+          "sendAnswerOnHint": "FAQ teks yang cocok dikirim ke pelanggan. FAQ yang memulai alur akan melanjutkan di alur tersebut.",
+          "sendAnswerOffHint": "Tidak ada yang dikirim: jawaban hanya disimpan di variabel di bawah, sehingga langkah berikutnya bisa menyusun balasan sendiri. FAQ yang memulai alur tetap melanjutkan di alur tersebut.",
+          "save": "Simpan hasil sebagai",
+          "saveHint": "Nama tempat hasil disimpan. Langkah berikutnya membacanya seperti yang ditampilkan di bawah.",
+          "variables": {
+            "answer": "teks jawaban",
+            "matched": "ya atau tidak",
+            "question": "pertanyaan dari FAQ yang cocok",
+            "score": "seberapa dekat kecocokannya",
+            "id": "id FAQ yang cocok"
+          }
         }
       },
       "attrPicker": {
@@ -2100,6 +2160,10 @@
         "api_library": {
           "label": "API (dari pustaka)",
           "description": "Panggil API tersimpan dari Pustaka API"
+        },
+        "faq": {
+          "label": "Jawab dari FAQ",
+          "description": "Cocokkan pesan dengan FAQ Anda"
         }
       },
       "groups": {
@@ -2242,7 +2306,8 @@
         "wrongChannel": "\"{node}\" tidak berfungsi pada {channel} — hapus atau ubah kembali kanal di node Pemicu.",
         "noSenderInstagram": "Node Pemicu belum memilih akun Instagram — pilih salah satu pada langkah Pemicu.",
         "noSenderFacebook": "Node Pemicu belum memilih Halaman Facebook — pilih salah satu pada langkah Pemicu.",
-        "noSenderNumber": "Node Pemicu belum memilih nomor — pilih salah satu pada langkah Pemicu."
+        "noSenderNumber": "Node Pemicu belum memilih nomor — pilih salah satu pada langkah Pemicu.",
+        "faqMinScore": "\"{node}\" memiliki skor minimum di luar 0.05 sampai 0.99 — perbaiki atau kosongkan untuk memakai pengaturan workspace."
       }
     },
     "simpleModel": {
@@ -2321,6 +2386,10 @@
         "askLocation": {
           "label": "Lokasi mereka",
           "help": "Tunggu pelanggan membagikan lokasi"
+        },
+        "faq": {
+          "label": "Jawab dari FAQ",
+          "help": "Cocokkan pesan pelanggan dengan FAQ Anda. Mengakhiri alur ini: satu jalur keluar jika FAQ menjawab, satu lagi jika tidak"
         }
       },
       "typeLabel": {
@@ -2335,7 +2404,8 @@
         "location": "Lokasi",
         "template": "Templat",
         "cta": "Tombol tautan",
-        "assign": "Tugaskan ke agen"
+        "assign": "Tugaskan ke agen",
+        "faq": "Jawab dari FAQ"
       },
       "stepLabel": {
         "questionOf": "Pertanyaan · {kind}"
@@ -2372,8 +2442,10 @@
         "addRow": "Langkah {stage}: tambahkan minimal satu baris.",
         "rowTitle": "Langkah {stage}: setiap baris memerlukan judul maksimal {max} karakter.",
         "rowDescriptionTooLong": "Langkah {stage}: deskripsi baris lebih panjang dari {max} karakter.",
-        "variableUsed": "Langkah {stage}: \"{name}\" sudah dipakai oleh langkah {other}; beri setiap jawaban nama sendiri."
-      }
+        "variableUsed": "Langkah {stage}: \"{name}\" sudah dipakai oleh langkah {other}; beri setiap jawaban nama sendiri.",
+        "faqMinScore": "Langkah {stage}: skor minimum harus dari 0.05 sampai 0.99, atau gunakan pengaturan workspace."
+      },
+      "faqSummary": "{hasCategory, select, true {Dari FAQ Anda · {category}} other {Dari FAQ Anda}}"
     },
     "waboImport": {
       "notes": {
@@ -2480,7 +2552,9 @@
       "optionNotConnected": "Port \"{port}\" (opsi {n}) tidak terhubung — berhenti.",
       "buttonNotConnected": "Tombol \"{label}\" tidak terhubung — berhenti.",
       "simPurchase": "Simulasi pembelian: {name} → port \"purchased\"",
-      "simAbandon": "Simulasi ditinggalkan → port \"abandoned\""
+      "simAbandon": "Simulasi ditinggalkan → port \"abandoned\"",
+      "faqAnswered": "(simulasi) Jawab dari FAQ untuk \"{query}\": chat uji tidak mencari di FAQ Anda, jadi tidak ada yang dikirim dan {ref} tetap kosong. Mengambil jalur \"terjawab\".",
+      "faqNoMatch": "(simulasi) Jawab dari FAQ untuk \"{query}\": chat uji tidak mencari di FAQ Anda, dan jalur \"terjawab\" tidak terhubung, jadi mengambil \"tidak cocok\". {ref} tetap kosong."
     }
   }
 }

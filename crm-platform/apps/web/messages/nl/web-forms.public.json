@@ -33,9 +33,32 @@
         "too_short": "Voer minimaal {min} tekens in.",
         "too_long": "Voer maximaal {max} tekens in.",
         "pattern": "Dit voldoet niet aan het verwachte formaat.",
-        "invalid_option": "Kies een van de vermelde opties."
+        "invalid_option": "Kies een van de vermelde opties.",
+        "invalid_amount": "Vul een bedrag in binnen het toegestane bereik."
       },
-      "closedTitle": "Dit formulier is gesloten"
+      "closedTitle": "Dit formulier is gesloten",
+      "payTitle": "Nog één stap",
+      "payTotal": "Te betalen bedrag",
+      "payFromChoice": "Het bedrag hangt af van uw keuze hierboven.",
+      "payEnter": "Vul hierboven het bedrag in dat u wilt betalen.",
+      "payNote": "Na het verzenden gaat u naar een beveiligde betaalpagina.",
+      "payRedirecting": "Uw antwoorden zijn opgeslagen. U wordt doorgestuurd naar de betaalpagina...",
+      "payContinue": "Doorgaan naar betaling",
+      "paymentUnavailable": "Dit formulier kan op dit moment geen betalingen aannemen. Probeer het later opnieuw.",
+      "payReturn": {
+        "confirmingTitle": "Uw betaling wordt bevestigd",
+        "confirmingBody": "We wachten op bevestiging van de betaalprovider. Dit duurt meestal een paar seconden. Betaal niet opnieuw.",
+        "slowTitle": "Nog steeds wachten op bevestiging",
+        "slowBody": "Als u hebt betaald, komt de bevestiging zo meteen binnen en kunt u deze pagina sluiten. Als u niet hebt betaald, ga dan terug en probeer het opnieuw.",
+        "paidTitle": "Betaling ontvangen",
+        "expiredTitle": "De betaallink is verlopen",
+        "expiredBody": "Er is geen geld afgeschreven. Vraag de afzender van het formulier om een nieuwe betaallink.",
+        "failedTitle": "De betaling is niet gelukt",
+        "failedBody": "Er is geen geld afgeschreven. U kunt het opnieuw proberen.",
+        "tryAgain": "Opnieuw proberen te betalen",
+        "missingTitle": "We konden deze betaling niet vinden",
+        "missingBody": "De link is mogelijk onjuist of te oud."
+      }
     }
   }
 }

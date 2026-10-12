@@ -7,7 +7,7 @@
  * The visual side (icon, colour chip) is the web feature's; this file is data and pure functions only.
  */
 
-/** The ten channels a flow can run on. `chat` is WhatsApp (any engine). */
+/** The eleven channels a flow can run on. `chat` is WhatsApp (any engine); `web` is the website chat widget. */
 export const FLOW_TYPES = [
   'chat',
   'call',
@@ -19,6 +19,7 @@ export const FLOW_TYPES = [
   'wechat',
   'viber',
   'email',
+  'web',
 ] as const;
 export type FlowType = (typeof FLOW_TYPES)[number];
 
@@ -34,7 +35,7 @@ export const SOCIAL_FLOW_TYPES = [
   'email',
 ] as const satisfies readonly FlowType[];
 
-/** Channels a Trigger node can switch to (everything except `call`, which is a distinct builder). */
+/** Channels a Trigger node can switch to (everything except `call` and `web`, which are chosen when the bot is created and stay). */
 export const MESSAGING_FLOW_TYPES = [
   'chat',
   ...SOCIAL_FLOW_TYPES,
@@ -51,6 +52,7 @@ export const FLOW_TYPE_LABELS: Record<FlowType, string> = {
   wechat: 'WeChat',
   viber: 'Viber',
   email: 'Email',
+  web: 'Website chat',
 };
 
 export const FLB_NODE_GROUPS = [
@@ -90,6 +92,8 @@ export interface FlbNodeTypeDef {
 
 const ALL = FLOW_TYPES;
 const SOCIAL_AND_CHAT = ['chat', ...SOCIAL_FLOW_TYPES] as const;
+/** What the website chat widget renders today: plain text, tap-to-pick replies, a question and the AI reply. Media, lists and carousels wait for the widget to render them. */
+const WEB_CAPABLE = [...SOCIAL_AND_CHAT, 'web'] as const;
 const CHAT = ['chat'] as const;
 const CALL = ['call'] as const;
 
@@ -105,15 +109,15 @@ const def = (
 /** Insertion order is the palette order within a group. */
 export const FLB_NODE_TYPE_LIST: readonly FlbNodeTypeDef[] = [
   def('trigger', 'Trigger', 'Start', 'Where the flow starts', ALL, { singleton: true }),
-  def('message', 'Send message', 'Send', 'Plain text message', SOCIAL_AND_CHAT),
+  def('message', 'Send message', 'Send', 'Plain text message', WEB_CAPABLE),
   def('template', 'Send template', 'Send', 'Approved template'),
   def('media', 'Send media', 'Send', 'Image, video, doc, audio', SOCIAL_AND_CHAT),
   def('notify_number', 'Copy to number', 'Send', 'Send a copy to a fixed number'),
   def('wa_to_instagram', 'Hand off to Instagram', 'Engage', 'Send the user an Instagram DM link'),
   def('sequence', 'Send sequence', 'Send', 'Stack text + media in one node'),
-  def('buttons', 'Quick replies', 'Send', 'Tap-to-pick reply buttons', SOCIAL_AND_CHAT),
+  def('buttons', 'Quick replies', 'Send', 'Tap-to-pick reply buttons', WEB_CAPABLE),
   def('list', 'List message', 'Send', 'Interactive list picker'),
-  def('ask', 'Ask question', 'Listen', 'Save user reply to a var', SOCIAL_AND_CHAT),
+  def('ask', 'Ask question', 'Listen', 'Save user reply to a var', WEB_CAPABLE),
   // Not Reference nodes: an addition the project owner asked for (TW-FLB-081, 082). WhatsApp only: they wait for a media / location message.
   def('ask_file', 'Ask for file / image', 'Listen', 'Wait for a photo, document, video or audio'),
   def('ask_location', 'Ask for location', 'Listen', 'Wait for the customer to share a location'),
@@ -123,7 +127,9 @@ export const FLB_NODE_TYPE_LIST: readonly FlbNodeTypeDef[] = [
   // NOT instagram: the JS sandbox is node:vm and the Instagram runner is not the Node VM.
   def('code', 'Run code (JS)', 'Logic', 'Sandboxed JavaScript transform', ['chat', 'call']),
   def('mysql', 'MySQL Query', 'Logic', 'Run a read-only SQL query'),
-  def('ai', 'AI assistant', 'AI', 'Reply with ChatGPT or Gemini', SOCIAL_AND_CHAT),
+  def('ai', 'AI assistant', 'AI', 'Reply with ChatGPT or Gemini', WEB_CAPABLE),
+  // Not a Reference node: the FAQ knowledge base (ADR-0021) as a step. Matches by meaning, answers or branches.
+  def('faq', 'Answer from FAQ', 'AI', 'Match a message to your FAQs', SOCIAL_AND_CHAT),
   def('tag', 'Tag contact', 'Contact', 'Add or remove a tag'),
   def('assign', 'Assign agent', 'Contact', 'Hand off to a human'),
   def('subflow', 'Run sub-flow', 'Logic', 'Call another flow'),
@@ -597,6 +603,14 @@ export function flbDefaultNodeData(type: string): FlbNodeData {
       };
     case 'api_library':
       return { apiId: '', apiName: '', inputs: [], save: 'api_response' };
+    case 'faq':
+      return {
+        query: '{{user_message}}',
+        category: '',
+        minScore: null,
+        sendAnswer: true,
+        save: 'faq',
+      };
     case 'google_sheets':
       return {
         mode: 'write',
@@ -922,6 +936,8 @@ export function flbPortsFor(
       return out('submitted');
     case 'api_library':
       return yesNo(['success', 'success'], ['error', 'error']);
+    case 'faq':
+      return yesNo(['matched', 'answered'], ['no_match', 'no match']);
     case 'google_sheets':
       return out(d.mode === 'read' ? 'row loaded' : 'row written');
     case 'google_docs':
@@ -952,6 +968,7 @@ const HANDLE_PORT: Record<string, Record<string, number>> = {
   google_form: { submitted: 1, timeout: 2 },
   deal: { created: 1, error: 2 },
   api_library: { success: 1, error: 2 },
+  faq: { matched: 1, no_match: 2 },
   in_list: { yes: 1, no: 2 },
   in_segment: { yes: 1, no: 2 },
   wa_session: { yes: 1, no: 2 },

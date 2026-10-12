@@ -6,12 +6,15 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import type { FlbBuilderContext, FlowDetail } from '@crm/contracts';
 import { Badge, Button, ConfirmDialog, Field, Input, Select, useToast } from '@crm/ui';
+import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { useFlowWidget } from '@/features/chatbot-widget/api/widgets';
 import { ApiError } from '@/lib/api/errors';
 import { flowsApi } from '../../api/flows';
 import { FLB_KEYS, useBuilderContext } from '../../api/hooks';
 import {
   BRANCHING,
-  STEP_KINDS,
+  FIXED_EXITS,
+  stepKindsFor,
   stepLabel,
   addJourney,
   allSteps,
@@ -41,6 +44,7 @@ import {
 import { applyImport, importToSimple } from '../../lib/simple-import';
 import { msg, useFlb, useMsg, type Msg } from '../../lib/msg';
 import { BuilderFonts } from '../builder-fonts';
+import { WebBotPanels, WebBotTabs, useInitialTab, type WebBotTab } from '../web-bot-tabs';
 import { LinkSelect, NEW_JOURNEY, StepEditor } from './step-editors';
 import '../builder.css';
 
@@ -54,7 +58,14 @@ const str = (v: unknown): string => (typeof v === 'string' ? v : v == null ? '' 
  * steps one under another, grouped in flows ("journeys") like the console's bot builder; a button or list row leads to any step.
  * It saves the same graph the Advanced canvas does, through the same API, so a flow runs the same and opens in either builder.
  */
-export function SimpleScreen({ flowId: initialFlowId }: { flowId?: string }) {
+export function SimpleScreen({
+  flowId: initialFlowId,
+  channel = 'chat',
+}: {
+  flowId?: string;
+  /** The channel a new bot is built for (an opened bot keeps its own). */
+  channel?: 'chat' | 'web';
+}) {
   const t = useTranslations('flb.builder.simple');
   const flowQuery = useQuery({
     queryKey: initialFlowId ? FLB_KEYS.flow(initialFlowId) : ['flb', 'flow', 'new'],
@@ -82,6 +93,7 @@ export function SimpleScreen({ flowId: initialFlowId }: { flowId?: string }) {
     <SimpleInner
       key={initialFlowId ?? 'new'}
       initial={flowQuery.data ?? null}
+      newChannel={channel}
       ctx={ctx}
       advancedAllowed={overview.data?.builderMode !== 'simple'}
     />
@@ -90,9 +102,11 @@ export function SimpleScreen({ flowId: initialFlowId }: { flowId?: string }) {
 
 function SimpleInner({
   initial,
+  newChannel,
   ctx,
   advancedAllowed,
 }: {
+  newChannel: 'chat' | 'web';
   initial: FlowDetail | null;
   ctx: FlbBuilderContext;
   advancedAllowed: boolean;
@@ -100,21 +114,30 @@ function SimpleInner({
   const t = useTranslations('flb.builder.simple');
   const m = useMsg();
   const { toast } = useToast();
+  // A bot is built for one channel, chosen when it is created; it never changes afterwards.
+  const channel: 'chat' | 'web' = initial
+    ? initial.flowType === 'web'
+      ? 'web'
+      : 'chat'
+    : newChannel;
   const parsed = useMemo(() => {
     if (!initial) {
       const d = emptyDoc();
-      // One connected number: pick it for them.
-      const only = ctx.senders.chat.length === 1 ? ctx.senders.chat[0]! : null;
+      // One connected number: pick it for them (a website chat bot has no number).
+      const only =
+        channel === 'chat' && ctx.senders.chat.length === 1 ? ctx.senders.chat[0]! : null;
       if (only) d.trigger.data.deviceId = only.key;
+      // A visitor opening the chat starts the bot, so a website bot begins on any first message.
+      if (channel === 'web') d.trigger.data.keywordMode = 'any';
       return { ok: true as const, doc: d };
     }
-    if (initial.flowType !== 'chat')
+    if (initial.flowType !== 'chat' && initial.flowType !== 'web')
       return {
         ok: false as const,
         reasons: [msg('builder.simple.needsAdvanced.otherType', { type: initial.flowType })],
       };
     return toSimple(initial.graph);
-  }, [initial, ctx.senders.chat]);
+  }, [initial, channel, ctx.senders.chat]);
 
   if (!parsed.ok) {
     return (
@@ -156,6 +179,7 @@ function SimpleInner({
     <Editor
       initialDoc={parsed.doc}
       initial={initial}
+      channel={channel}
       ctx={ctx}
       advancedAllowed={advancedAllowed}
       toast={toast}
@@ -166,17 +190,20 @@ function SimpleInner({
 function Editor({
   initialDoc,
   initial,
+  channel,
   ctx,
   advancedAllowed,
   toast,
 }: {
   initialDoc: SimpleDoc;
   initial: FlowDetail | null;
+  channel: 'chat' | 'web';
   ctx: FlbBuilderContext;
   advancedAllowed: boolean;
   toast: (m: string, tone?: 'success' | 'danger' | 'info') => number;
 }) {
   const t = useTranslations('flb.builder.simple');
+  const tw = useTranslations('flb.builder.webBot');
   const tCommon = useTranslations('flb.common');
   const m = useMsg();
   const tf = useFlb();
@@ -188,6 +215,14 @@ function Editor({
   const [published, setPublished] = useState(initial?.isPublished ?? false);
   const [dirty, setDirty] = useState(!initial);
   const [busy, setBusy] = useState(false);
+  // A website chat bot has Customize and Install beside Build; the others only build.
+  const initialTab = useInitialTab(!!initial);
+  const [tab, setTab] = useState<WebBotTab>(initialTab);
+  // Another channel has no tabs, whatever the link asked for.
+  const shownTab: WebBotTab = channel === 'web' ? tab : 'build';
+  const canEditFlow = useCan('flb.flows.update');
+  const widgetQuery = useFlowWidget(channel === 'web' ? flowId : null);
+  const needsCustomizing = channel === 'web' && !!flowId && widgetQuery.data?.widget === null;
   const [gi, setGi] = useState(0);
   const [query, setQuery] = useState('');
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -207,7 +242,7 @@ function Editor({
     setDirty(true);
   }, []);
 
-  const senderRequired = ctx.senders.chat.length > 0;
+  const senderRequired = channel === 'chat' && ctx.senders.chat.length > 0;
   // What stops a publish.
   const found = useMemo(() => problems(doc, { senderRequired }), [doc, senderRequired]);
   // Parts nothing leads to: they would never run, but they harm nothing, so they only warn (an imported flow has many).
@@ -330,7 +365,7 @@ function Editor({
     return {
       name: name.trim() || defaultName,
       category: initial?.category ?? null,
-      flowType: 'chat' as const,
+      flowType: channel,
       graph: {
         flowNodes: g.flowNodes as unknown as Array<Record<string, unknown>>,
         flowEdges: g.flowEdges.map(({ id, source, sourceHandle, target }) => ({
@@ -380,6 +415,18 @@ function Editor({
     setBusy(true);
     try {
       const saved = dirty || !flowId ? await persist() : null;
+      if (channel === 'web') {
+        // A website bot goes live with the look its owner chose, so Customize has to be saved once first.
+        // A bot saved just now has no widget yet; for a saved one, ask if the page has not loaded the answer.
+        const widget = !flowId
+          ? null
+          : ((widgetQuery.data ?? (await widgetQuery.refetch()).data)?.widget ?? null);
+        if (!widget) {
+          setTab('customize');
+          toast(tw('customizeFirst'), 'danger');
+          return;
+        }
+      }
       const pub = await flowsApi.publish(saved?.id ?? flowId!);
       setRowVersion(pub.rowVersion);
       setPublished(true);
@@ -486,6 +533,15 @@ function Editor({
         </div>
       </header>
 
+      {channel === 'web' ? (
+        <WebBotTabs
+          tab={shownTab}
+          onTab={setTab}
+          saved={!!flowId}
+          needsCustomizing={needsCustomizing}
+        />
+      ) : null}
+
       {importFailed.length > 0 ? (
         <div
           role="alert"
@@ -575,7 +631,7 @@ function Editor({
         </div>
       ) : null}
 
-      <div className="flex min-h-0 flex-1">
+      <div className={`flex min-h-0 flex-1 ${shownTab === 'build' ? '' : 'hidden'}`}>
         <aside className="hidden w-72 shrink-0 flex-col border-r border-border bg-background md:flex">
           <div className="flex items-center justify-between px-4 pt-3">
             <span className="text-[15px] font-semibold">{t('flows')}</span>
@@ -720,6 +776,7 @@ function Editor({
               <TriggerCard
                 doc={doc}
                 ctx={ctx}
+                channel={channel}
                 set={setTrigger}
                 bad={showProblems && found.some((p) => p.stepId === null)}
               />
@@ -737,6 +794,7 @@ function Editor({
                     </p>
                   ) : null}
                   <AddMenu
+                    channel={channel}
                     onPick={(k) => add(ci, 0, k)}
                     atEnd={journey.steps.length === 0}
                     hint={journey.steps.length === 0 ? t('addFirstStep') : undefined}
@@ -764,11 +822,14 @@ function Editor({
                       />
                       {BRANCHING.has(s.type) ? (
                         <p className="my-3 text-center text-[11.5px] text-muted-foreground">
-                          {t('branchingEnds', { kind: s.type === 'list' ? 'list' : 'buttons' })}
+                          {s.type === 'faq'
+                            ? t('faqEnds')
+                            : t('branchingEnds', { kind: s.type === 'list' ? 'list' : 'buttons' })}
                         </p>
                       ) : (
                         <>
                           <AddMenu
+                            channel={channel}
                             onPick={(k) => add(ci, si + 1, k)}
                             atEnd={si === journey.steps.length - 1}
                           />
@@ -812,6 +873,16 @@ function Editor({
         }}
       />
 
+      {channel === 'web' && flowId ? (
+        <WebBotPanels
+          tab={shownTab}
+          flowId={flowId}
+          flowName={name}
+          published={published}
+          canEdit={canEditFlow}
+        />
+      ) : null}
+
       <ConfirmDialog
         open={confirmDelete !== null}
         title={t('confirmDelete.title')}
@@ -836,11 +907,13 @@ function Editor({
 function TriggerCard({
   doc,
   ctx,
+  channel,
   set,
   bad,
 }: {
   doc: SimpleDoc;
   ctx: FlbBuilderContext;
+  channel: 'chat' | 'web';
   set: (patch: Record<string, unknown>) => void;
   bad: boolean;
 }) {
@@ -885,31 +958,35 @@ function TriggerCard({
           ) : null}
         </div>
       )}
-      <Field
-        className="mt-3"
-        label={t('whatsappNumber')}
-        hint={ctx.senders.chat.length === 0 ? t('noNumberHint') : undefined}
-      >
-        <Select value={str(d.deviceId)} onChange={(e) => set({ deviceId: e.target.value })}>
-          <option value="">{t('chooseNumber')}</option>
-          {ctx.senders.chat.map((s) => (
-            <option key={s.key} value={s.key}>
-              {s.label}
-              {s.phone ? ` · ${s.phone}` : ''}
-            </option>
-          ))}
-        </Select>
-      </Field>
+      {channel === 'web' ? null : (
+        <Field
+          className="mt-3"
+          label={t('whatsappNumber')}
+          hint={ctx.senders.chat.length === 0 ? t('noNumberHint') : undefined}
+        >
+          <Select value={str(d.deviceId)} onChange={(e) => set({ deviceId: e.target.value })}>
+            <option value="">{t('chooseNumber')}</option>
+            {ctx.senders.chat.map((s) => (
+              <option key={s.key} value={s.key}>
+                {s.label}
+                {s.phone ? ` · ${s.phone}` : ''}
+              </option>
+            ))}
+          </Select>
+        </Field>
+      )}
     </section>
   );
 }
 
 function AddMenu({
   onPick,
+  channel,
   atEnd,
   hint,
 }: {
   onPick: (k: StepKind) => void;
+  channel: 'chat' | 'web';
   atEnd: boolean;
   hint?: string;
 }) {
@@ -938,32 +1015,38 @@ function AddMenu({
           role="menu"
           className="absolute top-12 z-20 max-h-[70vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-border bg-background p-2 shadow-xl"
         >
-          {(['send', 'ask', 'handoff'] as const).map((group) => (
+          {(['send', 'ask', 'answer', 'handoff'] as const).map((group) => (
             <div key={group} className="mb-1 last:mb-0">
               <div className="px-2.5 pt-1.5 pb-1 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
                 {t(`groups.${group}`)}
               </div>
               <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
-                {STEP_KINDS.filter((k) => k.group === group).map((k) => {
-                  const blocked = BRANCHING.has(k.type) && !atEnd;
-                  return (
-                    <button
-                      key={k.key}
-                      type="button"
-                      role="menuitem"
-                      disabled={blocked}
-                      title={blocked ? t('blockedTitle') : undefined}
-                      onClick={() => {
-                        setOpen(false);
-                        onPick(k);
-                      }}
-                      className="rounded-xl p-2.5 text-left hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
-                    >
-                      <div className="text-[13px] font-semibold">{m(k.label)}</div>
-                      <div className="text-[11.5px] text-muted-foreground">{m(k.help)}</div>
-                    </button>
-                  );
-                })}
+                {stepKindsFor(channel)
+                  .filter((k) => k.group === group)
+                  .map((k) => {
+                    const blocked = BRANCHING.has(k.type) && !atEnd;
+                    return (
+                      <button
+                        key={k.key}
+                        type="button"
+                        role="menuitem"
+                        disabled={blocked}
+                        title={
+                          blocked
+                            ? t(k.type === 'faq' ? 'blockedTitleFaq' : 'blockedTitle')
+                            : undefined
+                        }
+                        onClick={() => {
+                          setOpen(false);
+                          onPick(k);
+                        }}
+                        className="rounded-xl p-2.5 text-left hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
+                      >
+                        <div className="text-[13px] font-semibold">{m(k.label)}</div>
+                        <div className="text-[11.5px] text-muted-foreground">{m(k.help)}</div>
+                      </button>
+                    );
+                  })}
               </div>
             </div>
           ))}
@@ -1001,13 +1084,21 @@ function StepCard(p: {
     }
     return null;
   };
-  const labels: string[] = BRANCHING.has(s.type)
-    ? (Array.isArray(s.data.options) ? s.data.options : []).map((o: unknown, i: number) => {
-        const label = typeof o === 'string' ? o : str((o as Record<string, unknown>).title);
-        const to = stageOf(s.links[i] ?? null);
-        return t('branchLabel', { title: label || `#${i + 1}`, target: to ?? t('ends') });
-      })
-    : [];
+  const fixed = FIXED_EXITS[s.type];
+  const labels: string[] = fixed
+    ? fixed.map((handle, i) =>
+        t('branchLabel', {
+          title: t(`faqExits.${handle}`),
+          target: stageOf(s.links[i] ?? null) ?? t('ends'),
+        }),
+      )
+    : BRANCHING.has(s.type)
+      ? (Array.isArray(s.data.options) ? s.data.options : []).map((o: unknown, i: number) => {
+          const label = typeof o === 'string' ? o : str((o as Record<string, unknown>).title);
+          const to = stageOf(s.links[i] ?? null);
+          return t('branchLabel', { title: label || `#${i + 1}`, target: to ?? t('ends') });
+        })
+      : [];
   return (
     <section
       id={`step-${s.id}`}

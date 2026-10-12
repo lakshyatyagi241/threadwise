@@ -33,7 +33,8 @@
       "modelNotAllowed": "Model embedding platform tidak diizinkan. Hubungi admin platform.",
       "validation": "Beberapa kolom perlu diperiksa.",
       "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
-      "unexpected": "Terjadi kesalahan. Coba lagi, dan bagikan ID permintaan ke tim dukungan jika masalah berlanjut."
+      "unexpected": "Terjadi kesalahan. Coba lagi, dan bagikan ID permintaan ke tim dukungan jika masalah berlanjut.",
+      "flowNodeNotFound": "Langkah yang dipilih sudah tidak ada di alur ini. Pilih langkah lain, atau mulai dari awal alur."
     },
     "banner": {
       "enabledToast": "Jawaban FAQ aktif.",
@@ -139,7 +140,9 @@
         "ready": "{count} aktif",
         "pending": "{count} diindeks",
         "failed": "{count} gagal"
-      }
+      },
+      "stepMissing": "Langkah hilang",
+      "startsAt": "Dimulai dari: {step}"
     },
     "editor": {
       "back": "Kembali ke FAQ",
@@ -192,7 +195,9 @@
         "preview": "Tampilan di WhatsApp",
         "previewEmpty": "Jawaban Anda muncul di sini",
         "flowLabel": "Alur yang dimulai",
-        "noFlow": "Belum ada alur dipilih"
+        "noFlow": "Belum ada alur dipilih",
+        "startsAt": "Dimulai dari langkah: {step}",
+        "stepGone": "Langkah tempat FAQ ini dimulai sudah tidak ada, sehingga pelanggan tidak mendapat jawaban."
       },
       "advanced": {
         "title": "Lanjutan: kepekaan khusus untuk FAQ ini",
@@ -227,6 +232,11 @@
           "required": "Pilih nilai antara 5% dan 99%.",
           "tooLong": "Pilih nilai antara 5% dan 99%.",
           "invalid": "Pilih nilai antara 5% dan 99%."
+        },
+        "flowNodeId": {
+          "required": "Pilih salah satu langkah dari alur ini, atau awal alur.",
+          "tooLong": "Pilih salah satu langkah dari alur ini, atau awal alur.",
+          "invalid": "Pilih salah satu langkah dari alur ini, atau awal alur."
         }
       },
       "deleteConfirm": {
@@ -257,7 +267,7 @@
         "off": "Nonaktif",
         "draft": "Draf"
       },
-      "note": "Alur dimulai dari pemicunya. Hanya alur yang dipublikasikan dan aktif yang dapat berjalan."
+      "note": "Alur dimulai dari langkah yang Anda pilih di bawah, atau dari awalnya. Hanya alur yang dipublikasikan dan aktif yang dapat berjalan."
     },
     "variations": {
       "title": "Variasi pertanyaan",
@@ -354,6 +364,10 @@
         "notSent": {
           "title": "Cocok, tidak terkirim",
           "body": "FAQ cocok tetapi jawaban tidak dikirim, misalnya karena jawaban FAQ sedang nonaktif."
+        },
+        "vetoed": {
+          "title": "Jawaban ditahan",
+          "body": "Skor kecocokan cukup tinggi, tetapi pemeriksaan kedua menolaknya, sehingga tidak ada yang akan dikirim."
         }
       },
       "tier": {
@@ -486,8 +500,11 @@
         "providerError": "Penyedia AI gagal, jadi bot hanya bisa mencocokkan berdasarkan ejaan.",
         "notSent": "FAQ cocok tetapi jawaban tidak dikirim.",
         "tier": "Diputuskan oleh tingkat {tier}.",
-        "error": "Kesalahan: {error}"
-      }
+        "error": "Kesalahan: {error}",
+        "vetoed": "Kecocokan terbaik mendapat skor {score}%, di atas ambang batas {threshold}%, tetapi pemeriksaan kedua menilai FAQ itu tidak menjawab pesan, sehingga tidak ada yang dikirim.",
+        "vetoedNoBar": "Kecocokan terbaik mendapat skor {score}%, tetapi pemeriksaan kedua menilai FAQ itu tidak menjawab pesan, sehingga tidak ada yang dikirim."
+      },
+      "flowRun": "(dari sebuah alur)"
     },
     "insights": {
       "title": "Wawasan FAQ",
@@ -612,7 +629,8 @@
         "exact": "Persis: pesan sama dengan variasi yang tersimpan, tanpa memperhatikan huruf besar-kecil dan spasi.",
         "semantic": "Makna: pesan dibandingkan maknanya dengan setiap variasi aktif, sehingga kata yang berbeda bisa cocok.",
         "trigram": "Cadangan ejaan: jika penyedia AI tidak tersedia, huruf dibandingkan, yang hanya menangkap salah ketik.",
-        "threshold": "Skor terbaik dibandingkan dengan kepekaan. Di atasnya, FAQ menjawab; di bawahnya, pesan masuk daftar Belum terjawab."
+        "threshold": "Skor terbaik dibandingkan dengan kepekaan. Di atasnya, FAQ menjawab; di bawahnya, pesan masuk daftar Belum terjawab.",
+        "verify": "Pemeriksaan kedua (opsional): kecocokan yang baru saja mencapai kepekaan dapat diperiksa ulang oleh model obrolan kecil, yang hanya bisa menahan jawaban."
       },
       "who": "Mengubah pengaturan ini memerlukan izin faq.settings.manage.",
       "leave": {
@@ -620,6 +638,52 @@
         "body": "Perubahan pada pengaturan ini belum disimpan.",
         "leave": "Keluar",
         "stay": "Tetap di sini"
+      },
+      "verify": {
+        "title": "Pemeriksaan kedua untuk kecocokan tipis",
+        "hint": "Model obrolan kecil memeriksa ulang kecocokan yang baru saja mencapai ambang batas.",
+        "unavailable": "Platform telah mematikan pemeriksaan kedua, sehingga tidak berjalan meskipun Anda mengaktifkannya di sini. Hubungi admin platform Anda.",
+        "label": "Periksa kecocokan tipis dengan pemeriksaan kedua",
+        "on": "Aktif",
+        "off": "Nonaktif",
+        "onBody": "Saat kecocokan baru saja melewati ambang batas, model obrolan kecil membaca pesan pelanggan dan FAQ, lalu menilai apakah jawabannya sesuai. Model hanya bisa menolak: ia tidak pernah membuat jawaban terkirim.",
+        "offBody": "Setiap kecocokan yang mencapai ambang batas dijawab tanpa pemeriksaan ulang.",
+        "bandLabel": "Seberapa tipis yang dianggap kecocokan tipis",
+        "bandValue": "+{value}%",
+        "explainOn": "Kecocokan dengan skor {from}% hingga {to}% diperiksa oleh {model}. Jika hasilnya \"tidak\", tidak ada jawaban yang dikirim dan pesan muncul di Belum terjawab.",
+        "explainOff": "Setiap kecocokan dengan skor {threshold}% atau lebih dijawab. Aktifkan pemeriksaan kedua agar kecocokan yang paling tipis diperiksa ulang.",
+        "cost": "Setiap pemeriksaan mengirim pesan pelanggan dan pertanyaan FAQ ke model: beberapa ratus token, dan menambah sekitar satu detik pada balasan yang tipis. Kecocokan di luar rentang tidak pernah diperiksa. Jika pemeriksaan gagal, tidak tersedia, atau batas per jam tercapai, kecocokan tetap berlaku seolah tidak ada pemeriksaan."
+      }
+    },
+    "flowNode": {
+      "label": "Mulai dari",
+      "start": "Awal alur",
+      "hint": "Pilih langkah untuk melewati bagian awal alur. Pelanggan masuk ke alur pada langkah yang Anda pilih.",
+      "loading": "Memuat langkah alur ini",
+      "empty": "Alur ini tidak punya langkah lain, jadi dimulai dari awal.",
+      "retry": "Coba lagi",
+      "deletedOption": "Langkah dihapus (pilih yang lain)",
+      "missing": {
+        "title": "Langkah tempat FAQ ini dimulai sudah hilang",
+        "body": "Langkah itu telah dihapus dari alur. Sampai Anda memilih langkah lain, pelanggan yang cocok dengan FAQ ini tidak mendapat jawaban. Pilih langkah di bawah, atau mulai dari awal alur.",
+        "fix": "Mulai dari awal alur"
+      }
+    },
+    "verify": {
+      "title": "Pemeriksaan kedua",
+      "chip": {
+        "confirmed": "Pemeriksaan kedua: ya",
+        "vetoed": "Pemeriksaan kedua: tidak",
+        "failed": "Pemeriksaan kedua gagal",
+        "skipped": "Pemeriksaan kedua dilewati"
+      },
+      "model": "Diperiksa oleh",
+      "reason": "Alasan",
+      "body": {
+        "confirmed": "Kecocokan ini tipis, jadi model obrolan kecil membaca pesan dan FAQ, lalu setuju bahwa jawabannya sesuai.",
+        "vetoed": "Kecocokan ini tipis dan pemeriksaan kedua menilai FAQ ini tidak menjawab pesan. Jawaban ditahan, tidak ada yang dikirim, dan pesan muncul di Belum terjawab.",
+        "failed": "Kecocokan ini tipis, tetapi pemeriksaan tidak dapat selesai, sehingga kecocokan tetap berlaku dan jawaban dikirim seolah tidak ada pemeriksaan kedua.",
+        "skipped": "Pemeriksaan kedua tidak berjalan untuk kecocokan ini, jadi kecocokan tetap berlaku apa adanya."
       }
     }
   }

@@ -245,7 +245,7 @@ export class FlowsService {
         graph,
         category: input.category?.trim() || null,
         flowType,
-        ...(await this.triggerColumns(tx, ctx.orgId, graph, flowType)),
+        ...(await this.triggerColumns(tx, ctx.orgId, graph, flowType, row.id)),
       };
       const ok = await this.repo.update(tx, ctx.orgId, row.id, input.rowVersion, update);
       if (!ok) throw AppError.rowVersionConflict('Flow');
@@ -440,7 +440,19 @@ export class FlowsService {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const row = await this.lock(tx, ctx.orgId, uuid);
+      // A website chat bot goes live with the look its owner chose, never with the untouched default.
+      if (
+        published &&
+        row.flowType === 'web' &&
+        !(await this.repo.hasCustomizedWidget(tx, ctx.orgId, row.id))
+      ) {
+        throw AppError.validation('Customize your chat widget before publishing this bot.', [
+          { path: 'widget', message: 'Open the Customize tab and save it once.' },
+        ]);
+      }
       await this.repo.setPublished(tx, ctx.orgId, row.id, published);
+      if (published && row.flowType === 'web')
+        await this.repo.tieToWidgetChannel(tx, ctx.orgId, row.id);
       await this.audit.record(tx, {
         module: FLOW_MODULE,
         recordId: row.id,
@@ -532,6 +544,8 @@ export class FlowsService {
     orgId: number,
     graph: FlowGraph,
     flowType: string,
+    /** The flow being saved, when it exists: a website chat bot is tied to its own widget's channel. */
+    flowId?: number,
   ): Promise<TriggerColumns> {
     const t = flbExtractTrigger(graph);
     // Reference raised this only from the keyword-rule sync: keyword triggers on a WhatsApp-style flow (it skipped Instagram,
@@ -569,6 +583,13 @@ export class FlowsService {
       // runtime then matches by the `provider` stamp (every connected channel of that engine), as for a flow with no sender.
       triggerChannelId = await this.repo.resolveChannel(tx, orgId, t.engine, t.senderRef);
     }
+    // A website chat bot has no number: it listens on the channel of its own widget (the engine `webchat`), never on every widget
+    // of the workspace. Before the widget exists it has no channel yet, and publishing ties it once the widget is saved.
+    if (flowType === 'web') {
+      triggerDeviceId = null;
+      triggerChannelId =
+        flowId === undefined ? null : await this.repo.webWidgetChannelId(tx, orgId, flowId);
+    }
     return {
       triggerKind: t.kind,
       triggerValue,
@@ -576,7 +597,7 @@ export class FlowsService {
       triggerDeviceId,
       triggerChannelId,
       triggerConfig: t.config,
-      provider: t.engine,
+      provider: flowType === 'web' ? 'webchat' : t.engine,
     };
   }
 }

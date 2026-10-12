@@ -313,6 +313,14 @@
         "waba_group_suspension_cleared": {
           "label": "그룹 재활성화",
           "hint": "WhatsApp이 정지했던 그룹을 복구했습니다. 정지 사실을 알림 받은 경우에만 표시됩니다."
+        },
+        "form_payment": {
+          "label": "양식 결제 수신",
+          "hint": "방문자가 양식 중 하나에서 결제했습니다."
+        },
+        "form_payment_duplicate": {
+          "label": "양식 중복 결제",
+          "hint": "방문자가 두 번 결제했으며 추가 결제분은 환불이 필요합니다."
         }
       },
       "loading": "환경설정을 불러오는 중",

@@ -97,7 +97,7 @@
       },
       "sms": {
         "label": "SMS",
-        "description": "Envie e receba mensagens de texto com seu próprio remetente.",
+        "description": "Envie mensagens de texto com seu próprio número Twilio ou remetente MSG91.",
         "keywords": "mensagem de texto, id do remetente, dlt, twilio, celular"
       },
       "email": {

@@ -10,6 +10,11 @@ export interface WidgetRow {
   assistantId: number | null;
   assistantUuid: string | null;
   assistantName: string | null;
+  /** The flow bot that owns this widget (null for a plain chat widget). */
+  flowId: number | null;
+  flowUuid: string | null;
+  /** When the owner first saved Customize; null keeps the reminder on. */
+  customizedAt: Date | null;
   name: string;
   slug: string;
   embedToken: string;
@@ -79,10 +84,24 @@ export interface WidgetWrite {
   launcher?: WidgetLauncher;
 }
 
+/** One website chat bot with the widget it owns, as the Web channel list reads it. */
+export interface WebBotRow {
+  flowUuid: string;
+  name: string;
+  isPublished: boolean;
+  isActive: boolean;
+  updatedAt: Date;
+  widgetUuid: string | null;
+  headerTitle: string | null;
+  widgetStatus: string | null;
+  customizedAt: Date | null;
+}
+
 type Raw = Record<string, unknown>;
 
 const COLUMNS = sql`
-  w.id, w.uuid, w.user_id, w.assistant_id, a.uuid AS assistant_uuid, a.name AS assistant_name, w.name, w.slug,
+  w.id, w.uuid, w.user_id, w.assistant_id, a.uuid AS assistant_uuid, a.name AS assistant_name,
+  w.flow_id, f.uuid AS flow_uuid, w.customized_at, w.name, w.slug,
   w.embed_token, w.mode, w.target_whatsapp_cc, w.target_whatsapp_number, w.prefilled_message, w.position,
   w.button_color, w.button_image_url, w.header_title, w.header_bg, w.header_text_color, w.welcome_message,
   w.message_bubble_color, w.message_text_color, w.body_bg_kind, w.body_bg_color, w.body_bg_image_url, w.auto_open,
@@ -91,7 +110,8 @@ const COLUMNS = sql`
 
 const FROM = sql`
   chatbot_widgets w
-  LEFT JOIN ai_chat_assistants a ON a.org_id = w.org_id AND a.id = w.assistant_id`;
+  LEFT JOIN ai_chat_assistants a ON a.org_id = w.org_id AND a.id = w.assistant_id
+  LEFT JOIN flows f ON f.org_id = w.org_id AND f.id = w.flow_id`;
 
 const num = (v: unknown): number => Number(v);
 const numOrNull = (v: unknown): number | null => (v === null || v === undefined ? null : Number(v));
@@ -103,6 +123,9 @@ const toRow = (r: Raw): WidgetRow => ({
   assistantId: numOrNull(r.assistant_id),
   assistantUuid: (r.assistant_uuid as string | null) ?? null,
   assistantName: (r.assistant_name as string | null) ?? null,
+  flowId: numOrNull(r.flow_id),
+  flowUuid: (r.flow_uuid as string | null) ?? null,
+  customizedAt: r.customized_at ? new Date(r.customized_at as string) : null,
   name: r.name as string,
   slug: r.slug as string,
   embedToken: r.embed_token as string,
@@ -153,7 +176,7 @@ export class WidgetsRepository {
       SELECT ${COLUMNS},
              (SELECT count(*) FROM chatbot_widget_visitors v WHERE v.org_id = w.org_id AND v.widget_id = w.id) AS visitors
       FROM ${FROM}
-      WHERE w.org_id = ${orgId}
+      WHERE w.org_id = ${orgId} AND w.flow_id IS NULL
         AND (${f.afterId}::bigint IS NULL OR w.id < ${f.afterId}::bigint)
       ORDER BY w.id DESC
       LIMIT ${f.limit + 1}`);
@@ -163,8 +186,8 @@ export class WidgetsRepository {
   /** Workspace-wide numbers for the stat cards; they ignore the list filter. */
   async stats(tx: Tx, orgId: number): Promise<{ total: number; active: number; visitors: number }> {
     const res = await tx.execute(sql`
-      SELECT (SELECT count(*) FROM chatbot_widgets WHERE org_id = ${orgId}) AS total,
-             (SELECT count(*) FROM chatbot_widgets WHERE org_id = ${orgId} AND status = 'active') AS active,
+      SELECT (SELECT count(*) FROM chatbot_widgets WHERE org_id = ${orgId} AND flow_id IS NULL) AS total,
+             (SELECT count(*) FROM chatbot_widgets WHERE org_id = ${orgId} AND flow_id IS NULL AND status = 'active') AS active,
              (SELECT count(*) FROM chatbot_widget_visitors WHERE org_id = ${orgId}) AS visitors`);
     const r = res.rows[0] as Raw;
     return { total: num(r.total), active: num(r.active), visitors: num(r.visitors) };
@@ -175,6 +198,79 @@ export class WidgetsRepository {
       SELECT ${COLUMNS} FROM ${FROM} WHERE w.org_id = ${orgId} AND w.uuid = ${uuid}`);
     const r = res.rows[0] as Raw | undefined;
     return r ? toRow(r) : undefined;
+  }
+
+  /**
+   * The inbox channel (kind `webchat`, keyed by the widget's uuid) a flow bot's widget talks through. Made when the widget is, so the
+   * flow can be tied to it before any visitor writes; the visitor path finds the same row.
+   */
+  async ensureWebchatChannel(
+    tx: Tx,
+    orgId: number,
+    widgetUuid: string,
+    name: string,
+    userId: number | null,
+  ): Promise<number> {
+    const res = await tx.execute(sql`
+      INSERT INTO channels (org_id, kind, name, status, external_id, created_by)
+      VALUES (${orgId}, 'webchat', ${name}, 'connected', ${widgetUuid}, ${userId})
+      ON CONFLICT (org_id, kind, external_id) DO UPDATE SET name = EXCLUDED.name
+      RETURNING id`);
+    return num((res.rows[0] as Raw).id);
+  }
+
+  /** The website chat bots of the workspace with the widget each owns, newest first (Settings > Channels > Web). */
+  async webBots(
+    tx: Tx,
+    orgId: number,
+    limit: number,
+  ): Promise<{ rows: WebBotRow[]; total: number }> {
+    const res = await tx.execute(sql`
+      SELECT f.uuid AS flow_uuid, f.flow_name, f.is_published, f.is_active, f.updated_at,
+             w.uuid AS widget_uuid, w.header_title, w.status AS widget_status, w.customized_at
+      FROM flows f
+      LEFT JOIN chatbot_widgets w ON w.org_id = f.org_id AND w.flow_id = f.id
+      WHERE f.org_id = ${orgId} AND f.flow_type = 'web'
+      ORDER BY f.id DESC
+      LIMIT ${limit}`);
+    const count = await tx.execute(sql`
+      SELECT count(*) AS n FROM flows WHERE org_id = ${orgId} AND flow_type = 'web'`);
+    return {
+      rows: (res.rows as Raw[]).map((r) => ({
+        flowUuid: r.flow_uuid as string,
+        name: r.flow_name as string,
+        isPublished: r.is_published === true,
+        isActive: r.is_active === true,
+        updatedAt: new Date(r.updated_at as string),
+        widgetUuid: (r.widget_uuid as string | null) ?? null,
+        headerTitle: (r.header_title as string | null) ?? null,
+        widgetStatus: (r.widget_status as string | null) ?? null,
+        customizedAt: r.customized_at ? new Date(r.customized_at as string) : null,
+      })),
+      total: num((count.rows[0] as Raw).n),
+    };
+  }
+
+  /** The widget a flow bot owns, if its owner has saved Customize. */
+  async findByFlowId(tx: Tx, orgId: number, flowId: number): Promise<WidgetRow | undefined> {
+    const res = await tx.execute(sql`
+      SELECT ${COLUMNS} FROM ${FROM} WHERE w.org_id = ${orgId} AND w.flow_id = ${flowId}`);
+    const r = res.rows[0] as Raw | undefined;
+    return r ? toRow(r) : undefined;
+  }
+
+  /** A flow by its public id: just what the widget needs (its name and the channel it was built for). */
+  async findFlow(
+    tx: Tx,
+    orgId: number,
+    uuid: string,
+  ): Promise<{ id: number; name: string; flowType: string } | undefined> {
+    const res = await tx.execute(sql`
+      SELECT id, flow_name, flow_type FROM flows WHERE org_id = ${orgId} AND uuid = ${uuid}`);
+    const r = res.rows[0] as Raw | undefined;
+    return r
+      ? { id: num(r.id), name: r.flow_name as string, flowType: r.flow_type as string }
+      : undefined;
   }
 
   async findById(tx: Tx, orgId: number, id: number): Promise<WidgetRow | undefined> {
@@ -218,6 +314,8 @@ export class WidgetsRepository {
     embedToken: string,
     w: WidgetWrite,
     status = 'active',
+    /** A flow bot's widget: the flow it belongs to. Saving it counts as the first Customize. */
+    flowId: number | null = null,
   ): Promise<number> {
     const res = await tx.execute(sql`
       INSERT INTO chatbot_widgets (
@@ -225,7 +323,7 @@ export class WidgetsRepository {
         prefilled_message, position, button_color, button_image_url, header_title, header_bg, header_text_color,
         welcome_message, message_bubble_color, message_text_color, body_bg_kind, body_bg_color, body_bg_image_url,
         auto_open, button_label, action_button_bg, action_button_text_color, collect_name, collect_email, collect_phone,
-        status, allowed_domains, launcher)
+        status, allowed_domains, launcher, flow_id, customized_at)
       VALUES (
         ${orgId}, ${userId}, ${w.assistantId}, ${w.name}, ${slug}, ${embedToken}, ${w.mode}, ${w.targetWhatsappCc},
         ${w.targetWhatsappNumber}, ${w.prefilledMessage}, ${w.position}, ${w.buttonColor}, ${w.buttonImageUrl},
@@ -234,7 +332,8 @@ export class WidgetsRepository {
         ${w.buttonLabel}, ${w.actionButtonBg}, ${w.actionButtonTextColor}, ${w.collectName ?? true},
         ${w.collectEmail ?? false}, ${w.collectPhone ?? false}, ${status},
         ${w.allowedDomains === undefined ? null : JSON.stringify(w.allowedDomains)}::jsonb,
-        ${JSON.stringify(w.launcher ?? {})}::jsonb)
+        ${JSON.stringify(w.launcher ?? {})}::jsonb, ${flowId},
+        ${flowId === null ? null : sql`now()`})
       RETURNING id`);
     return num((res.rows[0] as Raw).id);
   }
@@ -266,7 +365,8 @@ export class WidgetsRepository {
         collect_email = COALESCE(${w.collectEmail ?? null}::boolean, collect_email),
         collect_phone = COALESCE(${w.collectPhone ?? null}::boolean, collect_phone),
         allowed_domains = COALESCE(${w.allowedDomains === undefined ? null : JSON.stringify(w.allowedDomains)}::jsonb, allowed_domains),
-        launcher = COALESCE(${w.launcher === undefined ? null : JSON.stringify(w.launcher)}::jsonb, launcher)
+        launcher = COALESCE(${w.launcher === undefined ? null : JSON.stringify(w.launcher)}::jsonb, launcher),
+        customized_at = CASE WHEN flow_id IS NOT NULL THEN COALESCE(customized_at, now()) ELSE customized_at END
       WHERE org_id = ${orgId} AND id = ${id} AND row_version = ${rowVersion}
       RETURNING id`);
     return res.rows.length > 0;

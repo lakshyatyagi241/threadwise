@@ -6,6 +6,7 @@ import type {
   FaqBulkResult,
   FaqEntry,
   FaqEntryListResponse,
+  FaqFlowNodesResponse,
   FaqGenerateResult,
   FaqInsights,
   FaqLogResponse,
@@ -46,6 +47,7 @@ const decision = shape<FaqMatchDecision>('outcome', 'candidates', 'threshold');
 const insights = shape<FaqInsights>('totals', 'daily', 'scoreHistogram');
 const logPage = shape<FaqLogResponse>('data', 'page');
 const settings = shape<FaqSettings>('enabled', 'threshold', 'limits', 'usage');
+const flowNodes = shape<FaqFlowNodesResponse>('data');
 const bulk = shape<FaqBulkResult>('affected');
 const generated = shape<FaqGenerateResult>('suggestions');
 const learned = shape<{ added: boolean }>('added');
@@ -89,6 +91,10 @@ export const faqApi = {
     }),
   removeVariation: (id: string, variationId: string) =>
     apiFetch(`${BASE}/entries/${enc(id)}/variations/${enc(variationId)}`, { method: 'DELETE' }),
+
+  /** The steps of one of the workspace's flows (for the "Start at" picker); 422 FAQ_FLOW_NOT_FOUND for a foreign flow. */
+  flowNodes: (flowId: string, signal?: AbortSignal) =>
+    apiFetch(`${BASE}/flows/${enc(flowId)}/nodes`, { schema: flowNodes, signal }),
 
   test: (query: string) =>
     apiFetch(`${BASE}/test`, { method: 'POST', body: { query }, schema: decision }),

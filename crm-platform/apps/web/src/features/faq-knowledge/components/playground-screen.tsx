@@ -8,7 +8,7 @@ import { FAQ_LIMITS } from '@crm/contracts';
 import { Badge, Button, Spinner, cn } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { faqApi } from '../api/service';
-import { pushHistory, verdictOf, verdictTone } from '../lib/decision';
+import { pushHistory, verdictTone, verdictWithCheck } from '../lib/decision';
 import { errorKey } from '../lib/errors';
 import { DecisionView } from './decision-view';
 import { FaqIcon } from './icons';
@@ -94,7 +94,7 @@ export function PlaygroundScreen() {
           ) : (
             <ul className="space-y-1">
               {history.map((h) => {
-                const v = verdictOf(h.decision.outcome);
+                const v = verdictWithCheck(h.decision);
                 return (
                   <li key={h.query}>
                     <button

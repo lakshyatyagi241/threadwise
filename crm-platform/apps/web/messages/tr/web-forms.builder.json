@@ -51,7 +51,9 @@
         "generic": "Sorun: {reason}",
         "reason": {
           "crm_required_unbound": "Çalışma alanınızın zorunlu tuttuğu bir özellik forma eklenmemiş.",
-          "no_contact_point": "Her yanıtın bir kişiyle eşleştirilebilmesi için kişiye bağlı bir e-posta veya telefon alanı ekleyin."
+          "no_contact_point": "Her yanıtın bir kişiyle eşleştirilebilmesi için kişiye bağlı bir e-posta veya telefon alanı ekleyin.",
+          "payment_no_gateway": "Ödeme bağlantısı oluşturabilen bir ödeme geçidi bağlayın veya ödemeyi kapatın.",
+          "captcha_not_configured": "CAPTCHA her zaman açık olarak ayarlı, ancak platformda CAPTCHA yok. Başka bir ayar seçin veya platform yöneticinizden bir tane eklemesini isteyin."
         },
         "code": {
           "no_fields": "En az bir alan ekleyin.",

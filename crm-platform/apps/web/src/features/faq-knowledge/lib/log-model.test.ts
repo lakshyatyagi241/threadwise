@@ -51,3 +51,19 @@ describe('log helpers', () => {
     expect(thresholdPosition(1.4)).toBe(100);
   });
 });
+
+describe('whyKey and the second check', () => {
+  const verify = (verdict: 'confirmed' | 'rejected' | 'error' | 'skipped') => ({
+    verdict,
+    model: 'm',
+    reason: null,
+  });
+  it('explains a veto in its own words, not as "below the bar"', () => {
+    expect(whyKey({ outcome: 'below_threshold', verify: verify('rejected') })).toBe('vetoed');
+    expect(whyKey({ outcome: 'below_threshold', verify: verify('skipped') })).toBe(
+      'belowThreshold',
+    );
+    expect(whyKey({ outcome: 'below_threshold' })).toBe('belowThreshold');
+    expect(whyKey({ outcome: 'answered', verify: verify('error') })).toBe('answered');
+  });
+});

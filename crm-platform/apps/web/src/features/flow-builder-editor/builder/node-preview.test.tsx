@@ -46,3 +46,50 @@ describe('Condition card', () => {
     expect(condCardText('short')).toBe('short');
   });
 });
+
+describe('Answer from FAQ card', () => {
+  const faqCard = (data: Record<string, unknown>) =>
+    renderIntl(
+      <NodePreview
+        node={{ id: 'n', type: 'faq', x: 0, y: 0, data } as FlowNode}
+        ctx={{} as FlbBuilderContext}
+      />,
+    );
+
+  it('shows the defaults for a fresh node', () => {
+    const html = faqCard({
+      query: '{{user_message}}',
+      category: '',
+      minScore: null,
+      sendAnswer: true,
+      save: 'faq',
+    });
+    expect(html).toContain('{{user_message}}');
+    expect(html).toContain('All FAQs');
+    expect(html).toContain('workspace score');
+    expect(html).not.toContain('not sent');
+    expect(html).toContain('{{faq}}');
+  });
+
+  it('shows the category, its own score, that nothing is sent, and the variable it saves as', () => {
+    const html = faqCard({
+      query: '{{answer}}',
+      category: 'Billing',
+      minScore: 0.62,
+      sendAnswer: false,
+      save: 'kb',
+    });
+    expect(html).toContain('{{answer}}');
+    expect(html).toContain('FAQs: Billing');
+    expect(html).toContain('min score 0.62');
+    expect(html).not.toContain('workspace score');
+    expect(html).toContain('not sent');
+    expect(html).toContain('{{kb}}');
+  });
+
+  it('copes with a node with no data at all', () => {
+    const html = faqCard({});
+    expect(html).toContain('{{user_message}}');
+    expect(html).toContain('{{faq}}');
+  });
+});

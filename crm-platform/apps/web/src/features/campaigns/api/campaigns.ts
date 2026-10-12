@@ -52,11 +52,15 @@ export function useCampaignList(state: ListState) {
   });
 }
 
-export function useBuilder() {
+/** `channel: 'sms'` lists the SMS senders and templates instead of the WhatsApp ones (TW-SMS-018). */
+export function useBuilder(channel?: 'sms') {
   return useQuery({
-    queryKey: KEYS.builder,
+    queryKey: channel ? ([...KEYS.builder, channel] as const) : KEYS.builder,
     queryFn: ({ signal }) =>
-      apiFetch('/campaigns/builder', { schema: campaignBuilderSchema, signal }),
+      apiFetch(channel ? `/campaigns/builder?channel=${channel}` : '/campaigns/builder', {
+        schema: campaignBuilderSchema,
+        signal,
+      }),
     retry: false,
   });
 }

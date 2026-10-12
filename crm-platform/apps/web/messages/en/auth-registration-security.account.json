@@ -590,7 +590,8 @@
             "forms_and_links": "Forms and links",
             "extra_channels": "Telegram, Facebook and Instagram",
             "form_builder": "Forms",
-            "waba_groups": "WhatsApp groups"
+            "waba_groups": "WhatsApp groups",
+            "sms": "SMS"
           },
           "cta": {
             "continueFree": "Continue free",

@@ -97,7 +97,7 @@
       },
       "sms": {
         "label": "SMS",
-        "description": "자체 발신자 번호로 문자 메시지를 보내고 받으세요.",
+        "description": "보유한 Twilio 번호나 MSG91 발신자로 문자 메시지를 보내세요.",
         "keywords": "문자 메시지, 발신자 ID, dlt, twilio, 모바일"
       },
       "email": {

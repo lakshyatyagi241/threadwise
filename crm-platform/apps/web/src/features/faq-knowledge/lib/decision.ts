@@ -1,7 +1,13 @@
-import type { FaqMatchDecision, FaqMatchOutcome, FaqMatchTier } from '@crm/contracts';
+import type {
+  FaqMatchDecision,
+  FaqMatchOutcome,
+  FaqMatchTier,
+  FaqVerifyInfo,
+} from '@crm/contracts';
 
-/** The six things a decision can come to, as the screens name them. */
-export type Verdict = 'answer' | 'below' | 'ambiguous' | 'noFaqs' | 'providerError' | 'notSent';
+/** The things a decision can come to, as the screens name them. `vetoed` is a match the second check held back. */
+export type Verdict =
+  'answer' | 'below' | 'ambiguous' | 'noFaqs' | 'providerError' | 'notSent' | 'vetoed';
 
 export function verdictOf(outcome: FaqMatchOutcome): Verdict {
   switch (outcome) {
@@ -20,6 +26,48 @@ export function verdictOf(outcome: FaqMatchOutcome): Verdict {
       return 'notSent';
   }
 }
+
+/** A "no" from the second check turns the outcome into `below_threshold` although the score cleared the bar. */
+export const isVetoed = (d: { verify?: FaqVerifyInfo | null }): boolean =>
+  d.verify?.verdict === 'rejected';
+
+/** `verdictOf` that knows about the second check: a vetoed match is not "below threshold", its score was enough. */
+export function verdictWithCheck(d: {
+  outcome: FaqMatchOutcome;
+  verify?: FaqVerifyInfo | null;
+}): Verdict {
+  const v = verdictOf(d.outcome);
+  return v === 'below' && isVetoed(d) ? 'vetoed' : v;
+}
+
+export type VerifyKind = 'confirmed' | 'vetoed' | 'failed' | 'skipped';
+
+/** The chip's name for a check result: `rejected` is shown as a veto and `error` as a failed check whose match stood. */
+export function verifyKind(v: FaqVerifyInfo): VerifyKind {
+  switch (v.verdict) {
+    case 'confirmed':
+      return 'confirmed';
+    case 'rejected':
+      return 'vetoed';
+    case 'error':
+      return 'failed';
+    case 'skipped':
+      return 'skipped';
+  }
+}
+
+export const verifyTone = (k: VerifyKind): 'success' | 'warning' | 'danger' | 'neutral' =>
+  k === 'confirmed'
+    ? 'success'
+    : k === 'vetoed'
+      ? 'warning'
+      : k === 'failed'
+        ? 'danger'
+        : 'neutral';
+
+/** Where a log row came from, when it is not a customer's message. */
+export const originKey = (origin: 'inbound' | 'test' | 'flow'): 'testRun' | 'flowRun' | null =>
+  origin === 'test' ? 'testRun' : origin === 'flow' ? 'flowRun' : null;
 
 export const verdictTone = (v: Verdict): 'success' | 'warning' | 'danger' | 'neutral' =>
   v === 'answer'

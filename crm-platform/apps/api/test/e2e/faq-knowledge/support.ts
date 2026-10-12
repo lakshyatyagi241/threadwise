@@ -43,7 +43,8 @@ export async function startPipeline(opts: { live?: boolean } = {}): Promise<Pipe
       (await import('../../../src/modules/chat-conversations/chat-conversations-worker.module'))
         .ChatConversationsWorkerModule,
       (await import('../../../src/modules/flow-runtime-engine')).FlowRuntimeEngineWorkerModule,
-      (await import('../../../src/modules/faq-knowledge')).FaqKnowledgeWorkerModule,
+      (await import('../../../src/modules/faq-knowledge/faq-knowledge-worker.module'))
+        .FaqKnowledgeWorkerModule,
     ],
   });
   await h.app.listen(0, '127.0.0.1');

@@ -107,7 +107,8 @@ export class BroadcastsActionsService {
 
       await this.sendPolicy.screenBulk(ctx.orgId, '', { source: 'broadcast' });
       try {
-        await this.wallet.precheck(ctx.orgId, failed);
+        // SMS is never charged to the wallet (TW-SMS-027).
+        if (row.provider !== 'sms') await this.wallet.precheck(ctx.orgId, failed);
       } catch (err) {
         if (err instanceof AppError) throw err;
         throw refuse(

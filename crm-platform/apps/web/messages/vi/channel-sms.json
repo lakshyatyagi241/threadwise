@@ -1,0 +1,214 @@
+{
+  "sms": {
+    "common": {
+      "dismiss": "Bỏ qua",
+      "close": "Đóng",
+      "cancel": "Hủy"
+    },
+    "hub": {
+      "kicker": "Kênh",
+      "title": "SMS",
+      "titleAccent": "người gửi",
+      "intro": "Gửi tin nhắn văn bản từ số Twilio và tên người gửi MSG91 của riêng bạn. SMS ở đây chỉ để gửi đi: bạn tiếp cận liên hệ qua gửi hàng loạt và chiến dịch.",
+      "campaigns": "Chiến dịch",
+      "broadcasts": "Gửi hàng loạt",
+      "channels": "Kênh",
+      "loadError": "Không tải được số SMS của bạn. Vui lòng thử lại sau giây lát.",
+      "cardCaption": "Twilio · MSG91",
+      "activeCount": "{count, plural, other {# số đang hoạt động}}",
+      "notConnected": "Chưa kết nối",
+      "howTitle": "Cách hoạt động",
+      "how": {
+        "connect": {
+          "title": "Kết nối người gửi",
+          "body": "Thêm số Twilio hoặc người gửi MSG91. Chúng tôi kiểm tra thông tin xác thực với nhà cung cấp trước khi lưu."
+        },
+        "report": {
+          "title": "Dán địa chỉ báo cáo gửi tin",
+          "body": "Thêm địa chỉ này vào bảng điều khiển MSG91 hoặc Twilio để tin nhắn đã gửi và thất bại hiển thị trong báo cáo của bạn."
+        },
+        "send": {
+          "title": "Gửi hàng loạt và chiến dịch",
+          "body": "Chọn người gửi này khi tạo đợt gửi hàng loạt hoặc chiến dịch. Mỗi người nhận nhận một tin nhắn."
+        },
+        "billing": {
+          "title": "Tính vào hạn mức SMS của bạn",
+          "body": "Tin nhắn được tính vào hạn mức SMS hằng tháng của gói và không bao giờ bị trừ vào ví WhatsApp."
+        }
+      },
+      "reportTitle": "Nhớ: dán địa chỉ này vào nhà cung cấp của bạn",
+      "reportBody": "Thêm địa chỉ báo cáo gửi tin này vào bảng điều khiển của nhà cung cấp để chúng tôi đánh dấu tin nhắn đã gửi hoặc thất bại.",
+      "reportLabel": "URL báo cáo gửi tin",
+      "copy": "Sao chép",
+      "copied": "Đã sao chép",
+      "copyFailed": "Không thể sao chép. Hãy chọn địa chỉ và sao chép thủ công.",
+      "connectedTitle": "Số đã kết nối",
+      "total": "Tổng {count}",
+      "empty": "Chưa kết nối số SMS nào.",
+      "connectFirst": "Kết nối số đầu tiên của bạn"
+    },
+    "card": {
+      "active": "Đang hoạt động",
+      "inactive": "Không hoạt động",
+      "rate": "Giá / phân đoạn",
+      "dltSender": "Người gửi DLT",
+      "dltTemplate": "Mẫu DLT",
+      "alphanumeric": "Sender ID: một chiều và không được chấp nhận ở mọi quốc gia.",
+      "activate": "Kích hoạt",
+      "deactivate": "Vô hiệu hóa",
+      "remove": "Xóa",
+      "removeTitle": "Xóa số SMS",
+      "removeConfirm": "Xóa số SMS này?",
+      "activated": "Đã kích hoạt số SMS.",
+      "deactivated": "Đã vô hiệu hóa số SMS.",
+      "removed": "Đã xóa số SMS.",
+      "failed": "Không thể cập nhật số SMS. Vui lòng thử lại.",
+      "changed": "Số này đã được thay đổi ở nơi khác. Danh sách đã được tải lại, hãy thử lại.",
+      "notAvailable": "SMS không có sẵn trong gói của bạn hoặc đã bị tắt.",
+      "cancel": "Hủy"
+    },
+    "connect": {
+      "title": "Kết nối một số",
+      "intro": "Thêm bao nhiêu tùy ý. Nhiều số Twilio và người gửi MSG91 có thể chạy cùng lúc.",
+      "provider": "Nhà cung cấp SMS",
+      "providerTwilio": "Twilio (toàn cầu)",
+      "providerMsg91": "MSG91 (Ấn Độ / DLT)",
+      "providerHint": "Twilio cho hầu hết các quốc gia; MSG91 để gửi ổn định vào Ấn Độ.",
+      "from": "Số gửi / Sender ID",
+      "fromPlaceholder": "+17372508034",
+      "fromHint": "Số ở định dạng quốc tế (Twilio) hoặc tên người gửi đã đăng ký (MSG91). Người gửi bằng chữ cái là một chiều: không nhận được phản hồi.",
+      "sid": "Account SID của Twilio",
+      "sidPlaceholder": "ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "sidHint": "Chỉ dành cho Twilio. Để trống để dùng lại khóa đã kết nối cho WhatsApp.",
+      "token": "Auth Token / Auth Key MSG91",
+      "tokenHint": "Được lưu mã hóa. Với Twilio, để trống để dùng lại khóa đã kết nối cho WhatsApp.",
+      "dltOptions": "Tùy chọn MSG91 / Ấn Độ (DLT)",
+      "senderId": "Sender ID DLT",
+      "senderIdPlaceholder": "ACMEIN",
+      "senderIdHint": "Chỉ dành cho MSG91. Tên người gửi gồm 6 chữ cái đã đăng ký DLT của bạn.",
+      "dltTemplate": "ID mẫu DLT",
+      "dltTemplateHint": "Chỉ dành cho MSG91. ID mẫu DLT đã được duyệt dùng để gửi vào Ấn Độ.",
+      "reportBoxTitle": "Báo cáo gửi tin trong bảng điều khiển MSG91",
+      "reportBoxBody": "Trong bảng điều khiển MSG91, dán địa chỉ này làm URL báo cáo gửi tin (DLR):",
+      "rate": "Giá mỗi phân đoạn",
+      "ratePlaceholder": "0.0075",
+      "rateHint": "Chỉ dùng cho báo cáo chi tiêu SMS của bạn. Không bao giờ bị trừ vào ví WhatsApp.",
+      "currency": "Tiền tệ",
+      "submit": "Xác minh + kết nối SMS",
+      "submitting": "Đang xác minh…",
+      "errorTitle": "Không thể kết nối số SMS:",
+      "providerError": "Nhà cung cấp cho biết: {reason}",
+      "connected": "Đã kết nối số SMS. Bạn có thể bắt đầu gửi ngay.",
+      "failed": "Không thể kết nối số SMS. Vui lòng thử lại.",
+      "errors": {
+        "fromRequired": "Trường số gửi là bắt buộc.",
+        "fromTooLong": "Số gửi không được dài quá 32 ký tự.",
+        "sidTooLong": "SID tài khoản không được dài quá 64 ký tự.",
+        "sidShape": "Đó không phải là Account SID. Nó phải bắt đầu bằng AC; khóa API bắt đầu bằng SK sẽ không hoạt động.",
+        "tokenRequired": "Cần có Auth Key của MSG91.",
+        "tokenTooLong": "Auth token không được dài quá 255 ký tự.",
+        "senderIdTooLong": "Sender ID không được dài quá 16 ký tự.",
+        "dltTemplateTooLong": "ID mẫu DLT không được dài quá 64 ký tự.",
+        "rateInvalid": "Giá mỗi phân đoạn phải là một số, từ 0 trở lên.",
+        "currencyTooLong": "Tiền tệ không được dài quá 8 ký tự."
+      },
+      "api": {
+        "notAvailable": "SMS không có sẵn trong gói của bạn, hoặc nền tảng đã tắt tính năng này.",
+        "unavailable": "Số SMS này đã bị ngắt kết nối hoặc không có thông tin xác thực. Hãy kết nối lại trước."
+      }
+    },
+    "lookup": {
+      "title": "Kiểm tra số trước khi nhắn tin",
+      "hint": "SMS bị tính phí khi gửi đi, không phải khi đến nơi, vì vậy hãy kiểm tra số đó có phải di động thật không trước khi nhắn tin.",
+      "label": "Số điện thoại",
+      "placeholder": "+1 555 123 4567",
+      "check": "Kiểm tra số",
+      "checking": "Đang kiểm tra…",
+      "unreachable": "Không thể kết nối đến dịch vụ tra cứu.",
+      "carrier": "Nhà mạng: {carrier}.",
+      "kind": {
+        "mobile": "Di động — có thể nhận SMS.",
+        "landline": "Điện thoại bàn — không thể nhận SMS. Nhắn tin đến số này vẫn bị tính phí và bị mất.",
+        "voip": "VoIP — có thể không nhận SMS ổn định.",
+        "invalid": "Số không hợp lệ — nhắn tin đến số này sẽ bị tính phí và không bao giờ đến nơi."
+      }
+    },
+    "guide": {
+      "title": "Hướng dẫn thiết lập",
+      "twilio": {
+        "title": "Twilio (toàn cầu)",
+        "p1": "Sao chép Account SID (bắt đầu bằng AC) và Auth Token từ trang chủ bảng điều khiển Twilio. Khóa API bắt đầu bằng SK sẽ không hoạt động.",
+        "p2": "Mua một số hỗ trợ SMS, hoặc dùng số dùng thử của bạn, rồi dán làm số gửi theo định dạng quốc tế.",
+        "p3": "Trong cài đặt số của Twilio, dán địa chỉ báo cáo gửi tin ở trên làm URL status callback.",
+        "p4": "Tài khoản dùng thử chỉ có thể nhắn đến các số đã xác minh và từ chối nội dung tùy chỉnh."
+      },
+      "msg91": {
+        "title": "MSG91 (Ấn Độ / DLT)",
+        "p1": "Các nhà mạng Ấn Độ lọc số long code nước ngoài, vì vậy hãy dùng MSG91 để gửi ổn định vào Ấn Độ.",
+        "p2": "Dán Auth Key MSG91 của bạn vào trường Auth Token.",
+        "p3": "Trên cổng DLT, đăng ký sender ID 6 chữ cái và một mẫu tin nhắn, rồi dán cả hai vào tùy chọn DLT.",
+        "p4": "Với ID mẫu DLT, người gửi dùng tuyến mẫu của MSG91; không có thì tin được gửi dưới dạng văn bản thuần."
+      },
+      "billing": {
+        "title": "Phân đoạn, chi phí và thanh toán",
+        "p1": "Tin nhắn tối đa 160 ký tự thường là một phân đoạn (GSM-7). Một biểu tượng cảm xúc hoặc ký tự không phải Latin sẽ hạ giới hạn xuống 70 (UCS-2) và có thể làm chi phí tăng gấp ba.",
+        "p2": "Tin dài hơn được chia thành các phân đoạn 153 ký tự (67 với UCS-2), và mỗi phân đoạn đều bị tính phí.",
+        "p3": "Giá bạn nhập chỉ dùng cho báo cáo chi tiêu. Tin nhắn được tính vào hạn mức SMS hằng tháng của gói, không bao giờ vào ví WhatsApp.",
+        "p4": "Sender ID bằng chữ cái là một chiều và không được chấp nhận ở mọi quốc gia, ví dụ Hoa Kỳ và Canada."
+      }
+    },
+    "segments": {
+      "summary": "{units} ký tự · {segments, plural, other {# phân đoạn}} · {encoding}",
+      "remaining": "Còn {remaining} trong phân đoạn này",
+      "ucs2": "Tin nhắn này chứa ký tự ngoài bảng chữ cái GSM (biểu tượng cảm xúc hoặc chữ không phải Latin), nên bị giới hạn {perSegment} ký tự mỗi SMS và sẽ bị tính phí như {segments} tin nhắn.",
+      "gsm": "Tin nhắn này dài {units} ký tự và sẽ bị tính phí như {segments} tin nhắn."
+    },
+    "compose": {
+      "note": "SMS chỉ gửi văn bản thuần. Tiêu đề, chân trang, tệp đính kèm, nút bấm và thử nghiệm A/B không được dùng nên đã bị ẩn.",
+      "bodyHint": "Hãy viết ngắn gọn: cứ mỗi 160 ký tự là thêm một phân đoạn, và mỗi phân đoạn đều bị tính phí."
+    },
+    "chooser": {
+      "name": "SMS",
+      "hint": "Nhắn tin cho liên hệ từ số Twilio hoặc người gửi MSG91.",
+      "cta": "Tạo chiến dịch SMS"
+    },
+    "operator": {
+      "nav": {
+        "group": "Kênh",
+        "item": "SMS"
+      },
+      "title": "Kênh SMS",
+      "eyebrow": "công tắc nền tảng",
+      "superOnly": "Chỉ siêu quản trị viên mới có thể đổi công tắc SMS. Bạn có thể xem trạng thái của nó.",
+      "loading": "Đang tải",
+      "retry": "Thử lại",
+      "status": {
+        "enabled": "Đã bật",
+        "disabled": "Đã tắt"
+      },
+      "explanation": "Bật hoặc tắt kênh SMS cho mọi không gian làm việc. Công tắc chỉ hiện hoặc ẩn các điểm truy cập (menu SMS, bộ chọn người gửi và kênh mẫu SMS). Người gửi, mẫu và các lượt gửi đang chạy không bao giờ bị xóa hay dừng.",
+      "state": {
+        "enabled": "SMS đang bật. Các không gian làm việc có gói bao gồm SMS có thể kết nối người gửi và gửi tin nhắn văn bản từ các đợt phát và chiến dịch.",
+        "disabled": "SMS đang tắt. Các không gian làm việc không thấy menu SMS, bộ chọn người gửi hay mẫu SMS. Hãy bật khi bạn sẵn sàng cung cấp kênh này."
+      },
+      "enable": "Bật SMS",
+      "disable": "Tắt SMS",
+      "cancel": "Hủy",
+      "enabledToast": "SMS hiện đã được bật cho nền tảng.",
+      "disabledToast": "SMS hiện đã được tắt cho nền tảng.",
+      "disableDialog": {
+        "title": "Tắt SMS?",
+        "body": "Mọi không gian làm việc sẽ không còn thấy menu SMS, bộ chọn người gửi và mẫu SMS ngay lập tức. Không có gì bị xóa và các người gửi hiện có vẫn hoạt động. Bạn có thể bật lại bất cứ lúc nào.",
+        "confirm": "Tắt SMS"
+      },
+      "errors": {
+        "forbidden": "Bạn không có quyền thực hiện việc này.",
+        "conflict": "Có người khác đã thay đổi cài đặt này. Trang đã được làm mới; hãy thử lại.",
+        "validation": "Kiểm tra giá trị rồi thử lại.",
+        "request": "Không thể hoàn tất yêu cầu đó.",
+        "unexpected": "Đã xảy ra sự cố từ phía chúng tôi. Hãy thử lại sau giây lát.",
+        "network": "Không thể kết nối tới máy chủ. Hãy kiểm tra kết nối của bạn."
+      }
+    }
+  }
+}

@@ -10,6 +10,7 @@ import {
   CfTransferForm,
 } from './call';
 import { ApiLibraryForm } from './api-library';
+import { FaqForm } from './faq';
 import { ShopifyForm, WhatsappShopForm, WoocommerceForm } from './commerce';
 import { ChatbotForm, SubflowForm } from './engage';
 import { AiCallForm, BookAppointmentForm, DealForm, GoogleMeetForm, WaFormForm } from './crm';
@@ -59,6 +60,7 @@ export const CHANNEL_FORMS: Record<string, FormComponent> = {
   google_meet: GoogleMeetForm,
   wa_form: WaFormForm,
   api_library: ApiLibraryForm,
+  faq: FaqForm,
   google_sheets: GoogleSheetsForm,
   google_docs: GoogleDocsForm,
   google_form: GoogleFormForm,

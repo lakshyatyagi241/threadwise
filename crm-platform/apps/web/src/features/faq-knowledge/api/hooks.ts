@@ -21,6 +21,7 @@ export const KEYS = {
   summaries: ['faq', 'summary'] as const,
   log: ['faq', 'log'] as const,
   flows: (q: string) => ['faq', 'flows', q] as const,
+  flowNodes: (flowId: string) => ['faq', 'flow-nodes', flowId] as const,
 };
 
 /** After any change to FAQs or their variations: lists, counts, the open entry and the unanswered badge are stale. */
@@ -107,6 +108,17 @@ export function useFlowOptions(search: string, enabled: boolean) {
     placeholderData: keepPreviousData,
     queryFn: ({ signal }) =>
       flowsApi.list({ q: search || undefined, limit: 50, status: 'all', category: 'all' }, signal),
+  });
+}
+
+/** The steps of the chosen flow, for the "Start at" select. Re-read when the screen regains focus: the flow may have been edited meanwhile. */
+export function useFlowNodes(flowId: string | null, enabled: boolean) {
+  return useQuery({
+    queryKey: KEYS.flowNodes(flowId ?? ''),
+    enabled: enabled && flowId !== null,
+    retry: false,
+    staleTime: 15_000,
+    queryFn: ({ signal }) => faqApi.flowNodes(flowId!, signal),
   });
 }
 

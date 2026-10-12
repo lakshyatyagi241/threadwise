@@ -1,0 +1,214 @@
+{
+  "sms": {
+    "common": {
+      "dismiss": "Tutup",
+      "close": "Tutup",
+      "cancel": "Batal"
+    },
+    "hub": {
+      "kicker": "Kanal",
+      "title": "SMS",
+      "titleAccent": "pengirim",
+      "intro": "Kirim pesan teks dari nomor Twilio dan pengirim MSG91 Anda sendiri. SMS di sini hanya untuk mengirim: Anda menjangkau kontak lewat siaran dan kampanye.",
+      "campaigns": "Kampanye",
+      "broadcasts": "Siaran",
+      "channels": "Kanal",
+      "loadError": "Nomor SMS Anda tidak dapat dimuat. Coba lagi sebentar lagi.",
+      "cardCaption": "Twilio · MSG91",
+      "activeCount": "{count, plural, other {# nomor aktif}}",
+      "notConnected": "Belum terhubung",
+      "howTitle": "Cara kerjanya",
+      "how": {
+        "connect": {
+          "title": "Hubungkan pengirim",
+          "body": "Tambahkan nomor Twilio atau pengirim MSG91. Kami memeriksa kredensial ke penyedia sebelum menyimpan."
+        },
+        "report": {
+          "title": "Tempel alamat laporan pengiriman",
+          "body": "Tambahkan di panel MSG91 atau Twilio Anda agar pesan yang terkirim dan gagal muncul di laporan Anda."
+        },
+        "send": {
+          "title": "Kirim siaran dan kampanye",
+          "body": "Pilih pengirim ini saat membuat siaran atau kampanye. Setiap penerima mendapat satu pesan teks."
+        },
+        "billing": {
+          "title": "Ditagihkan ke kuota SMS Anda",
+          "body": "Pesan teks dihitung dari kuota SMS bulanan paket Anda dan tidak pernah dibebankan ke dompet WhatsApp."
+        }
+      },
+      "reportTitle": "Ingat: tempel ini ke penyedia Anda",
+      "reportBody": "Tambahkan alamat laporan pengiriman ini di panel penyedia Anda agar kami dapat menandai pesan sebagai terkirim atau gagal.",
+      "reportLabel": "URL laporan pengiriman",
+      "copy": "Salin",
+      "copied": "Tersalin",
+      "copyFailed": "Tidak dapat menyalin. Pilih alamat lalu salin secara manual.",
+      "connectedTitle": "Nomor terhubung",
+      "total": "{count} total",
+      "empty": "Belum ada nomor SMS yang terhubung.",
+      "connectFirst": "Hubungkan nomor pertama Anda"
+    },
+    "card": {
+      "active": "Aktif",
+      "inactive": "Nonaktif",
+      "rate": "Tarif / segmen",
+      "dltSender": "Pengirim DLT",
+      "dltTemplate": "Templat DLT",
+      "alphanumeric": "Sender ID: satu arah, dan tidak diterima di semua negara.",
+      "activate": "Aktifkan",
+      "deactivate": "Nonaktifkan",
+      "remove": "Hapus",
+      "removeTitle": "Hapus nomor SMS",
+      "removeConfirm": "Hapus nomor SMS ini?",
+      "activated": "Nomor SMS diaktifkan.",
+      "deactivated": "Nomor SMS dinonaktifkan.",
+      "removed": "Nomor SMS dihapus.",
+      "failed": "Nomor SMS tidak dapat diperbarui. Coba lagi.",
+      "changed": "Nomor ini diubah di tempat lain. Daftar telah dimuat ulang, coba lagi.",
+      "notAvailable": "SMS tidak tersedia di paket Anda atau telah dimatikan.",
+      "cancel": "Batal"
+    },
+    "connect": {
+      "title": "Hubungkan nomor",
+      "intro": "Tambahkan sebanyak yang Anda perlukan. Beberapa nomor Twilio dan pengirim MSG91 dapat berjalan bersamaan.",
+      "provider": "Penyedia SMS",
+      "providerTwilio": "Twilio (global)",
+      "providerMsg91": "MSG91 (India / DLT)",
+      "providerHint": "Twilio untuk sebagian besar negara; MSG91 untuk pengiriman andal ke India.",
+      "from": "Nomor pengirim / Sender ID",
+      "fromPlaceholder": "+17372508034",
+      "fromHint": "Nomor dalam format internasional (Twilio) atau pengirim terdaftar Anda (MSG91). Pengirim berupa huruf bersifat satu arah: tanpa balasan.",
+      "sid": "Account SID Twilio",
+      "sidPlaceholder": "ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "sidHint": "Hanya untuk Twilio. Kosongkan untuk memakai kunci yang sudah terhubung untuk WhatsApp.",
+      "token": "Auth Token / Auth Key MSG91",
+      "tokenHint": "Disimpan terenkripsi. Untuk Twilio, kosongkan untuk memakai kunci yang sudah terhubung untuk WhatsApp.",
+      "dltOptions": "Opsi MSG91 / India (DLT)",
+      "senderId": "Sender ID DLT",
+      "senderIdPlaceholder": "ACMEIN",
+      "senderIdHint": "Hanya untuk MSG91. Pengirim terdaftar DLT Anda yang terdiri dari 6 huruf.",
+      "dltTemplate": "ID Templat DLT",
+      "dltTemplateHint": "Hanya untuk MSG91. ID templat DLT yang disetujui untuk pengiriman ke India.",
+      "reportBoxTitle": "Laporan pengiriman panel MSG91",
+      "reportBoxBody": "Di panel MSG91 Anda, tempel alamat ini sebagai URL laporan pengiriman (DLR):",
+      "rate": "Tarif per segmen",
+      "ratePlaceholder": "0.0075",
+      "rateHint": "Hanya untuk pelaporan pengeluaran SMS Anda. Tidak pernah ditagihkan ke dompet WhatsApp.",
+      "currency": "Mata uang",
+      "submit": "Verifikasi + hubungkan SMS",
+      "submitting": "Memverifikasi…",
+      "errorTitle": "Nomor SMS tidak dapat dihubungkan:",
+      "providerError": "Penyedia menyatakan: {reason}",
+      "connected": "Nomor SMS terhubung. Anda dapat mulai mengirim sekarang.",
+      "failed": "Nomor SMS tidak dapat dihubungkan. Coba lagi.",
+      "errors": {
+        "fromRequired": "Kolom nomor pengirim wajib diisi.",
+        "fromTooLong": "Nomor pengirim tidak boleh lebih dari 32 karakter.",
+        "sidTooLong": "SID akun tidak boleh lebih dari 64 karakter.",
+        "sidShape": "Itu bukan Account SID. Harus diawali AC; kunci API yang diawali SK tidak akan berfungsi.",
+        "tokenRequired": "Auth key MSG91 wajib diisi.",
+        "tokenTooLong": "Auth token tidak boleh lebih dari 255 karakter.",
+        "senderIdTooLong": "Sender ID tidak boleh lebih dari 16 karakter.",
+        "dltTemplateTooLong": "ID templat DLT tidak boleh lebih dari 64 karakter.",
+        "rateInvalid": "Tarif per segmen harus berupa angka, nol atau lebih.",
+        "currencyTooLong": "Mata uang tidak boleh lebih dari 8 karakter."
+      },
+      "api": {
+        "notAvailable": "SMS tidak tersedia di paket Anda, atau platform telah mematikannya.",
+        "unavailable": "Nomor SMS ini terputus atau tidak memiliki kredensial. Hubungkan kembali terlebih dahulu."
+      }
+    },
+    "lookup": {
+      "title": "Periksa nomor sebelum mengirim SMS",
+      "hint": "SMS ditagih saat dikirim, bukan saat sampai, jadi pastikan nomor tersebut adalah ponsel yang asli sebelum mengirim pesan.",
+      "label": "Nomor telepon",
+      "placeholder": "+1 555 123 4567",
+      "check": "Periksa nomor",
+      "checking": "Memeriksa…",
+      "unreachable": "Layanan pencarian tidak dapat dijangkau.",
+      "carrier": "Operator: {carrier}.",
+      "kind": {
+        "mobile": "Seluler — dapat menerima SMS.",
+        "landline": "Telepon rumah — tidak dapat menerima SMS. Mengirim SMS ke nomor ini tetap ditagih dan hilang.",
+        "voip": "VoIP — mungkin tidak menerima SMS dengan andal.",
+        "invalid": "Nomor tidak valid — mengirim SMS ke nomor ini akan ditagih dan tidak pernah sampai."
+      }
+    },
+    "guide": {
+      "title": "Panduan penyiapan",
+      "twilio": {
+        "title": "Twilio (global)",
+        "p1": "Salin Account SID (diawali AC) dan Auth Token dari halaman beranda konsol Twilio. Kunci API yang diawali SK tidak akan berfungsi.",
+        "p2": "Beli nomor yang mendukung SMS, atau gunakan nomor percobaan Anda, lalu tempel sebagai nomor pengirim dalam format internasional.",
+        "p3": "Di pengaturan nomor Twilio, tempel alamat laporan pengiriman di atas sebagai URL status callback.",
+        "p4": "Akun percobaan hanya dapat mengirim SMS ke nomor terverifikasi dan menolak teks kustom."
+      },
+      "msg91": {
+        "title": "MSG91 (India / DLT)",
+        "p1": "Operator di India menyaring nomor long code asing, jadi gunakan MSG91 untuk pengiriman andal ke India.",
+        "p2": "Tempel Auth Key MSG91 Anda di kolom Auth Token.",
+        "p3": "Di portal DLT, daftarkan sender ID 6 huruf dan templat pesan, lalu tempel keduanya di opsi DLT.",
+        "p4": "Dengan ID templat DLT, pengirim memakai jalur templat MSG91; tanpa itu pesan dikirim sebagai teks biasa."
+      },
+      "billing": {
+        "title": "Segmen, biaya, dan penagihan",
+        "p1": "Pesan hingga 160 karakter biasa adalah satu segmen (GSM-7). Satu emoji atau karakter non-Latin menurunkan batas menjadi 70 (UCS-2) dan dapat melipatgandakan biaya hingga tiga kali.",
+        "p2": "Pesan yang lebih panjang dipecah menjadi segmen berisi 153 karakter (67 dengan UCS-2), dan setiap segmen ditagih.",
+        "p3": "Tarif yang Anda masukkan hanya untuk pelaporan pengeluaran. Pesan dihitung dari kuota SMS bulanan paket Anda, tidak pernah dari dompet WhatsApp.",
+        "p4": "Sender ID berupa huruf bersifat satu arah dan tidak diterima di semua negara, misalnya AS dan Kanada."
+      }
+    },
+    "segments": {
+      "summary": "{units} karakter · {segments, plural, other {# segmen}} · {encoding}",
+      "remaining": "{remaining} tersisa di segmen ini",
+      "ucs2": "Pesan ini berisi karakter di luar alfabet GSM (emoji atau aksara non-Latin), sehingga dibatasi {perSegment} karakter per SMS dan akan ditagih sebagai {segments} pesan.",
+      "gsm": "Pesan ini {units} karakter dan akan ditagih sebagai {segments} pesan."
+    },
+    "compose": {
+      "note": "SMS hanya mengirim teks biasa. Header, footer, lampiran, tombol, dan uji A/B tidak digunakan, jadi disembunyikan.",
+      "bodyHint": "Buat singkat: setiap 160 karakter adalah segmen tambahan, dan setiap segmen ditagih."
+    },
+    "chooser": {
+      "name": "SMS",
+      "hint": "Kirim SMS ke kontak Anda dari nomor Twilio atau pengirim MSG91.",
+      "cta": "Buat kampanye SMS"
+    },
+    "operator": {
+      "nav": {
+        "group": "Kanal",
+        "item": "SMS"
+      },
+      "title": "Kanal SMS",
+      "eyebrow": "sakelar platform",
+      "superOnly": "Hanya super admin yang dapat mengubah sakelar SMS. Anda dapat melihat statusnya.",
+      "loading": "Memuat",
+      "retry": "Coba lagi",
+      "status": {
+        "enabled": "Aktif",
+        "disabled": "Nonaktif"
+      },
+      "explanation": "Mengaktifkan atau menonaktifkan kanal SMS untuk semua ruang kerja. Ini hanya menampilkan atau menyembunyikan titik masuk (menu SMS, pemilih pengirim, dan kanal templat SMS). Pengirim, templat, dan pengiriman yang sedang berjalan tidak pernah dihapus atau dihentikan.",
+      "state": {
+        "enabled": "SMS aktif. Ruang kerja yang paketnya mencakup SMS dapat menghubungkan pengirim dan mengirim pesan teks dari siaran dan kampanye.",
+        "disabled": "SMS nonaktif. Ruang kerja tidak melihat menu SMS, pemilih pengirim, atau templat SMS. Aktifkan saat Anda siap menawarkan kanal ini."
+      },
+      "enable": "Aktifkan SMS",
+      "disable": "Nonaktifkan SMS",
+      "cancel": "Batal",
+      "enabledToast": "SMS kini diaktifkan untuk platform.",
+      "disabledToast": "SMS kini dinonaktifkan untuk platform.",
+      "disableDialog": {
+        "title": "Nonaktifkan SMS?",
+        "body": "Semua ruang kerja langsung tidak lagi melihat menu SMS, pemilih pengirim, dan templat SMS. Tidak ada yang dihapus, dan pengirim yang ada tetap berfungsi. Anda dapat mengaktifkannya kembali kapan saja.",
+        "confirm": "Nonaktifkan SMS"
+      },
+      "errors": {
+        "forbidden": "Anda tidak memiliki izin untuk melakukannya.",
+        "conflict": "Orang lain telah mengubah pengaturan ini. Halaman telah dimuat ulang; coba lagi.",
+        "validation": "Periksa nilainya lalu coba lagi.",
+        "request": "Permintaan tersebut tidak dapat diselesaikan.",
+        "unexpected": "Terjadi masalah di sisi kami. Coba lagi sebentar lagi.",
+        "network": "Tidak dapat menjangkau server. Periksa koneksi Anda."
+      }
+    }
+  }
+}

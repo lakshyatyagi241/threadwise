@@ -29,6 +29,7 @@ import type { Env } from '../../config/env.schema';
 import { buildEmbedScript, EMBED_NOT_FOUND_SCRIPT } from './embed-script';
 import { FormLookupService } from './form-lookup.service';
 import { FormPublicService, isNotFound } from './form-public.service';
+import { FormPaymentsService } from './form-payments.service';
 import { FormSubmitService, type PublicRequestMeta } from './form-submit.service';
 
 /** The browser may call these routes from an allowed origin; the answer says which one, and varies on it. */
@@ -64,6 +65,7 @@ export class PublicFormsController {
     private readonly lookup: FormLookupService,
     private readonly pub: FormPublicService,
     private readonly submitService: FormSubmitService,
+    private readonly payments: FormPaymentsService,
   ) {}
 
   @Get(':publicKey')
@@ -114,6 +116,27 @@ export class PublicFormsController {
     } catch (err) {
       if (!isNotFound(err)) throw err;
     }
+  }
+
+  @Get(':publicKey/submissions/:token')
+  @Header('Cache-Control', 'no-store')
+  @Header('X-Robots-Tag', 'noindex, nofollow')
+  @ApiOperation({
+    summary: "Where a submission's payment stands",
+    description:
+      "For the page the visitor returns to from the gateway. `payment` is `awaiting_payment` until the gateway's verified notification arrives (the redirect back is never proof), then `paid` with the form's thank-you in `next`. The token is the receipt `submit` returned; 404 for any other.",
+  })
+  async submissionStatus(
+    @Param('publicKey') key: string,
+    @Param('token') token: string,
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const { route, allowOrigin } = await this.lookup.open(key, metaOf(req), {
+      requirePublished: false,
+    });
+    applyCors(res, allowOrigin);
+    return this.payments.publicStatus(route, token);
   }
 
   @Post(':publicKey/submit')

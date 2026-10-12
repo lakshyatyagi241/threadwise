@@ -126,7 +126,9 @@
         "exporting": "Exportando",
         "exportHintAttention": "Elige un único estado para exportar de este grupo, o usa Todos.",
         "exportHintSearch": "La exportación ignora el texto de búsqueda.",
-        "notSpam": "No es spam: procesar"
+        "notSpam": "No es spam: procesar",
+        "newPaymentLink": "Obtener un nuevo enlace de pago",
+        "markPaid": "Marcar como pagado"
       },
       "confirmDelete": {
         "title": "¿Eliminar estas respuestas?",
@@ -143,7 +145,11 @@
         "deleteFailed": "No se pudieron eliminar las respuestas. Inténtalo de nuevo.",
         "exported": "El CSV se descargó.",
         "exportTruncated": "La exportación se cortó en las {max} filas más recientes. Acota las fechas para obtener el resto.",
-        "exportFailed": "No se pudo generar la exportación. Inténtalo de nuevo."
+        "exportFailed": "No se pudo generar la exportación. Inténtalo de nuevo.",
+        "linkReady": "El nuevo enlace de pago está listo.",
+        "linkFailed": "La pasarela no devolvió un enlace. Inténtalo de nuevo en un momento.",
+        "markedPaid": "Marcado como pagado.",
+        "markPaidFailed": "No se pudo marcar este envío como pagado."
       },
       "state": {
         "loading": "Cargando envíos",
@@ -164,6 +170,29 @@
       "cap": {
         "notice": "Algunos envíos se guardaron para revisión porque se alcanzó el límite mensual de envíos de tu plan.",
         "upgrade": "Mejorar tu plan"
+      },
+      "payments": {
+        "title": "Pago",
+        "status": {
+          "pending": "Pendiente de pago",
+          "paid": "Pagado",
+          "failed": "Fallido",
+          "expired": "Caducado"
+        },
+        "via": {
+          "gateway": "por la pasarela",
+          "manual": "marcado manualmente"
+        },
+        "gateway": "Pasarela",
+        "paidAt": "Pagado",
+        "expiresAt": "El enlace caduca",
+        "reference": "Referencia",
+        "duplicate": "Llegó un segundo pago para este envío. Reembólsalo desde tu pasarela de pago.",
+        "freshLink": "Nuevo enlace de pago (envíaselo al visitante):",
+        "copy": "Copiar enlace",
+        "markPaidConfirm": "¿Marcar este envío como pagado? Úsalo solo cuando el dinero llegó fuera de la pasarela, como una transferencia bancaria o efectivo. Se registra a tu nombre.",
+        "markPaidYes": "Sí, marcar como pagado",
+        "cancel": "Cancelar"
       }
     }
   }

@@ -51,7 +51,9 @@
         "generic": "Problema: {reason}",
         "reason": {
           "crm_required_unbound": "Falta una propiedad que tu espacio de trabajo exige en el formulario.",
-          "no_contact_point": "Añade un campo de correo o teléfono vinculado al contacto, para poder asociar cada envío a una persona."
+          "no_contact_point": "Añade un campo de correo o teléfono vinculado al contacto, para poder asociar cada envío a una persona.",
+          "payment_no_gateway": "Conecta una pasarela de pago que pueda crear enlaces de pago, o desactiva el pago.",
+          "captcha_not_configured": "El CAPTCHA está en «siempre activado», pero la plataforma no tiene CAPTCHA. Elige otra opción o pide a tu administrador que añada uno."
         },
         "code": {
           "no_fields": "Añade al menos un campo.",

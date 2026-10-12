@@ -242,7 +242,7 @@ describe('run a flow on a thread (TW-IG-012)', () => {
       .set(bearer(viewer.token))
       .send({ flowId: 5 });
     expect(denied.status).toBe(403);
-    expect((await run(t, id, 0)).status).toBe(400);
-    expect((await run(t, id, 'abc')).status).toBe(400);
+    expect((await run(t, id, 0)).status).toBe(422);
+    expect((await run(t, id, 'abc')).status).toBe(422);
   });
 });

@@ -5,7 +5,7 @@
 # The public/realtime URLs are read at runtime (API_URL, REALTIME_URL), so one image serves any host.
 
 FROM node:25-alpine AS base
-RUN corepack enable pnpm
+RUN npm install -g --force corepack && corepack enable pnpm
 WORKDIR /app
 
 FROM base AS deps

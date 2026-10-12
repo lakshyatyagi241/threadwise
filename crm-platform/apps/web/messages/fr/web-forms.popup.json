@@ -1,0 +1,42 @@
+{
+  "web-forms": {
+    "popup": {
+      "title": "Afficher en pop-up",
+      "description": "Ouvrez le formulaire dans un pop-up sur votre propre site plutôt que de l'intégrer à la page. Choisissez quand il s'ouvre, puis copiez le code.",
+      "trigger": "Ouvrir le pop-up",
+      "triggers": {
+        "delay": "Après un délai",
+        "scroll_down": "Quand le visiteur fait défiler vers le bas",
+        "scroll_up": "Quand le visiteur remonte dans la page",
+        "click": "Quand quelqu'un clique sur un bouton"
+      },
+      "triggerHints": {
+        "delay": "S'ouvre après un délai défini une fois la page chargée.",
+        "scroll_down": "S'ouvre dès que le visiteur a fait défiler la page jusqu'à ce point.",
+        "scroll_up": "S'ouvre quand le visiteur a lu la page vers le bas puis remonte, signe qu'il s'apprête peut-être à partir.",
+        "click": "S'ouvre uniquement lorsque quelqu'un clique sur un bouton ou un lien contenant le code ci-dessous."
+      },
+      "delay": "Secondes avant l'ouverture",
+      "delayHint": "De {min} à {max}.",
+      "scroll": "Position dans la page (pourcentage)",
+      "scrollHint": "De {min} à {max}.",
+      "position": "Emplacement",
+      "positions": {
+        "center": "Centre de l'écran, page assombrie",
+        "bottom_right": "Coin inférieur, page non assombrie"
+      },
+      "days": "Réafficher après (jours)",
+      "daysHint": "0 l'affiche à chaque visite. Dès que quelqu'un envoie le formulaire, il ne le revoit plus jamais.",
+      "note": "Ajoutez d'abord votre site dans « Sites autorisés » ci-dessous, sinon le pop-up restera vide.",
+      "code": {
+        "title": "Code du pop-up",
+        "description": "Collez-le à l'endroit où le pop-up doit se charger, généralement juste avant la balise de fermeture body."
+      },
+      "button": {
+        "title": "Un bouton pour l'ouvrir",
+        "description": "Ajoutez-le à n'importe quelle page pour que les visiteurs ouvrent eux-mêmes le pop-up. Fonctionne avec tous les déclencheurs."
+      },
+      "copy": "Copier le code"
+    }
+  }
+}

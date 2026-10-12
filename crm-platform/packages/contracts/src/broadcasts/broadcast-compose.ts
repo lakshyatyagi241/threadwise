@@ -6,6 +6,13 @@ import { uuidSchema } from '../common/ids';
  * from. The audience comes from the contacts, groups and tags endpoints.
  */
 
+/**
+ * `channel=sms` scopes the composer to the SMS channel (TW-SMS-016): only SMS senders and SMS templates, and only while the platform
+ * switch is on. Without it the composer is the WhatsApp one and never lists an SMS sender.
+ */
+export const broadcastComposeQuerySchema = z.object({ channel: z.enum(['sms']).optional() });
+export type BroadcastComposeQuery = z.infer<typeof broadcastComposeQuerySchema>;
+
 export const composeTemplateSchema = z.object({
   id: uuidSchema,
   name: z.string(),

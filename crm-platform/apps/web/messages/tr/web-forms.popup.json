@@ -1,0 +1,42 @@
+{
+  "web-forms": {
+    "popup": {
+      "title": "Açılır pencere olarak göster",
+      "description": "Formu sayfaya yerleştirmek yerine kendi web sitenizde açılır pencerede açın. Ne zaman açılacağını seçin, ardından kodu kopyalayın.",
+      "trigger": "Açılır pencereyi aç",
+      "triggers": {
+        "delay": "Bir gecikmeden sonra",
+        "scroll_down": "Ziyaretçi aşağı kaydırdığında",
+        "scroll_up": "Ziyaretçi yukarı geri kaydırdığında",
+        "click": "Biri bir düğmeye tıkladığında"
+      },
+      "triggerHints": {
+        "delay": "Sayfa yüklendikten belirlenen süre sonra açılır.",
+        "scroll_down": "Ziyaretçi sayfayı bu kadar aşağı kaydırdığında açılır.",
+        "scroll_up": "Ziyaretçi sayfayı aşağı doğru okuyup sonra yukarı kaydırdığında açılır; bu, sayfadan ayrılmak üzere olduğunu gösterebilir.",
+        "click": "Yalnızca biri aşağıdaki kodu taşıyan bir düğmeye veya bağlantıya tıkladığında açılır."
+      },
+      "delay": "Açılmadan önceki saniye",
+      "delayHint": "{min} ile {max} arasında.",
+      "scroll": "Sayfada ne kadar aşağıda (yüzde)",
+      "scrollHint": "{min} ile {max} arasında.",
+      "position": "Nerede görünsün",
+      "positions": {
+        "center": "Ekranın ortası, sayfa karartılır",
+        "bottom_right": "Alt köşe, sayfa karartılmaz"
+      },
+      "days": "Şu kadar gün sonra tekrar göster",
+      "daysHint": "0, her ziyarette gösterir. Biri formu gönderdikten sonra ona bir daha gösterilmez.",
+      "note": "Önce web sitenizi aşağıdaki İzin verilen web siteleri bölümüne ekleyin, yoksa açılır pencere boş kalır.",
+      "code": {
+        "title": "Açılır pencere kodu",
+        "description": "Açılır pencerenin yükleneceği yere yapıştırın, genellikle kapanış body etiketinden hemen önce."
+      },
+      "button": {
+        "title": "Açan bir düğme",
+        "description": "İnsanların açılır pencereyi kendilerinin açabilmesi için bunu herhangi bir sayfaya ekleyin. Tüm tetikleyicilerle çalışır."
+      },
+      "copy": "Kodu kopyala"
+    }
+  }
+}

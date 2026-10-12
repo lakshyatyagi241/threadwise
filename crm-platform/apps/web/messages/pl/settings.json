@@ -97,7 +97,7 @@
       },
       "sms": {
         "label": "SMS",
-        "description": "Wysyłaj i odbieraj SMS-y z własnego nadawcy.",
+        "description": "Wysyłaj SMS-y z własnego numeru Twilio lub nadawcy MSG91.",
         "keywords": "wiadomość tekstowa, identyfikator nadawcy, dlt, twilio, komórka"
       },
       "email": {

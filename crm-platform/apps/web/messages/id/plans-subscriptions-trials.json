@@ -43,7 +43,8 @@
       "ai_token_limit_monthly": "Token AI per bulan",
       "forms": "Formulir web",
       "form_submissions_monthly": "Pengiriman formulir per bulan",
-      "ai_form_generations_monthly": "Pembuatan formulir AI per bulan"
+      "ai_form_generations_monthly": "Pembuatan formulir AI per bulan",
+      "sms_monthly": "SMS per bulan"
     },
     "features": {
       "automation": "Otomatisasi",
@@ -74,7 +75,8 @@
       "forms_and_links": "Formulir dan tautan",
       "extra_channels": "Telegram, Facebook dan Instagram",
       "form_builder": "Formulir",
-      "waba_groups": "Grup WhatsApp"
+      "waba_groups": "Grup WhatsApp",
+      "sms": "Kanal SMS"
     },
     "limitGroups": {
       "messaging": "Pesan",
@@ -124,7 +126,8 @@
       "ai_token_limit_monthly": "Token yang dipakai asisten AI dalam bulan kalender dengan kunci platform. Workspace yang memakai kuncinya sendiri tidak dibatasi.",
       "forms": "Formulir web aktif (aplikasi Formulir). Mengarsipkan formulir akan membebaskan tempatnya. 0 = tanpa batas.",
       "form_submissions_monthly": "Pengiriman formulir yang diterima dalam bulan kalender, tidak termasuk spam. Melebihi batas, pengiriman tetap disimpan untuk ditinjau, tidak pernah dibuang. 0 = tanpa batas.",
-      "ai_form_generations_monthly": "Pembuatan formulir AI dalam bulan kalender, termasuk percobaan ulang perbaikan. 0 = tanpa batas."
+      "ai_form_generations_monthly": "Pembuatan formulir AI dalam bulan kalender, termasuk percobaan ulang perbaikan. 0 = tanpa batas.",
+      "sms_monthly": "Pesan SMS keluar yang dikirim dalam bulan kalender. 0 = tanpa batas."
     },
     "planAddons": {
       "title": "Add-on yang tersedia di paket Anda",

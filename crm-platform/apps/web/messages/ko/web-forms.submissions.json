@@ -126,7 +126,9 @@
         "exporting": "내보내는 중",
         "exportHintAttention": "이 그룹에서 내보낼 상태를 하나 선택하거나 전체를 사용하세요.",
         "exportHintSearch": "내보내기는 검색어를 무시합니다.",
-        "notSpam": "스팸 아님: 처리"
+        "notSpam": "스팸 아님: 처리",
+        "newPaymentLink": "새 결제 링크 받기",
+        "markPaid": "결제 완료로 표시"
       },
       "confirmDelete": {
         "title": "이 답변을 삭제하시겠습니까?",
@@ -143,7 +145,11 @@
         "deleteFailed": "답변을 삭제하지 못했습니다. 다시 시도하세요.",
         "exported": "CSV를 다운로드했습니다.",
         "exportTruncated": "내보내기는 최신 {max}개 행까지만 포함되었습니다. 나머지를 받으려면 날짜 범위를 좁히세요.",
-        "exportFailed": "내보내기를 생성하지 못했습니다. 다시 시도하세요."
+        "exportFailed": "내보내기를 생성하지 못했습니다. 다시 시도하세요.",
+        "linkReady": "새 결제 링크가 준비되었습니다.",
+        "linkFailed": "게이트웨이가 링크를 제공하지 않았습니다. 잠시 후 다시 시도하세요.",
+        "markedPaid": "결제 완료로 표시했습니다.",
+        "markPaidFailed": "이 제출을 결제 완료로 표시하지 못했습니다."
       },
       "state": {
         "loading": "제출 불러오는 중",
@@ -164,6 +170,29 @@
       "cap": {
         "notice": "요금제의 월간 제출 한도에 도달하여 일부 제출은 검토용으로 저장되었습니다.",
         "upgrade": "요금제 업그레이드"
+      },
+      "payments": {
+        "title": "결제",
+        "status": {
+          "pending": "결제 대기 중",
+          "paid": "결제 완료",
+          "failed": "실패",
+          "expired": "만료됨"
+        },
+        "via": {
+          "gateway": "게이트웨이 처리",
+          "manual": "수동 표시"
+        },
+        "gateway": "게이트웨이",
+        "paidAt": "결제 시각",
+        "expiresAt": "링크 만료",
+        "reference": "참조",
+        "duplicate": "이 제출에 대해 두 번째 결제가 들어왔습니다. 결제 게이트웨이에서 환불하세요.",
+        "freshLink": "새 결제 링크(방문자에게 보내 주세요):",
+        "copy": "링크 복사",
+        "markPaidConfirm": "이 제출을 결제 완료로 표시할까요? 계좌 이체나 현금처럼 게이트웨이 밖에서 입금된 경우에만 사용하세요. 내 이름으로 기록됩니다.",
+        "markPaidYes": "예, 결제 완료로 표시",
+        "cancel": "취소"
       }
     }
   }

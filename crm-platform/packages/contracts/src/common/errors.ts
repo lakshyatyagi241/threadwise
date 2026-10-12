@@ -230,6 +230,16 @@ export const ERROR_CODES = {
   /** Retry: nobody failed. */
   TG_NOTHING_TO_RETRY: 'TG_NOTHING_TO_RETRY',
 
+  // SMS channel (TW-SMS)
+  /** The provider refused the credentials at connect time. */
+  SMS_CREDENTIALS_REJECTED: 'SMS_CREDENTIALS_REJECTED',
+  /** The sender is disconnected or its credentials are missing. */
+  SMS_SENDER_UNAVAILABLE: 'SMS_SENDER_UNAVAILABLE',
+  /** The workspace plan does not include SMS, or the platform switch is off. */
+  SMS_NOT_AVAILABLE: 'SMS_NOT_AVAILABLE',
+  /** The monthly SMS quota is used up. */
+  SMS_QUOTA_EXCEEDED: 'SMS_QUOTA_EXCEEDED',
+
   // Facebook channel (TW-FB)
   /** No Meta app is configured on this install, so a Page cannot be connected. */
   FB_NOT_CONFIGURED: 'FB_NOT_CONFIGURED',

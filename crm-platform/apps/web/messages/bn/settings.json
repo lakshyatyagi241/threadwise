@@ -97,7 +97,7 @@
       },
       "sms": {
         "label": "SMS",
-        "description": "নিজের সেন্ডার দিয়ে টেক্সট মেসেজ পাঠান ও গ্রহণ করুন।",
+        "description": "নিজের Twilio নম্বর বা MSG91 সেন্ডার দিয়ে টেক্সট মেসেজ পাঠান।",
         "keywords": "text message, sender id, dlt, twilio, মোবাইল"
       },
       "email": {

@@ -16,8 +16,8 @@ REPO = os.path.abspath(os.path.join(HERE, "..", "..", "..", ".."))
 BASE = os.path.join(REPO, "docs", "threadwise-port")
 INV, TRK = os.path.join(BASE, "inventory"), os.path.join(BASE, "tracker")
 STATUSES = ["todo", "in-progress", "backend-done", "frontend-done", "done", "verified", "blocked", "wontfix"]
-FEATURE_RE = re.compile(r"^### (WD-[A-Z0-9]+-\d{3}) — (.+)$", re.M)
-ROW_RE = re.compile(r"^\| (WD-[A-Z0-9]+-\d{3}) \| ([a-z-]+) \| (.*?) \| (.*?) \|$", re.M)
+FEATURE_RE = re.compile(r"^### ((?:WD|TW)-[A-Z0-9]+-\d{3}) — (.+)$", re.M)
+ROW_RE = re.compile(r"^\| ((?:WD|TW)-[A-Z0-9]+-\d{3}) \| ([a-z-]+) \| (.*?) \| (.*?) \|$", re.M)
 DOM_RE = re.compile(r"^## ([a-z0-9-]+) \(", re.M)
 
 

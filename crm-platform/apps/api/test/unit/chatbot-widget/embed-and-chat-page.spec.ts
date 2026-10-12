@@ -188,3 +188,18 @@ describe('chat page (TW-WGT-009)', () => {
     expect(page).toContain("'wsnap_vid_' + TOKEN");
   });
 });
+
+describe('the chat page for a flow bot', () => {
+  const page = renderChatPage({ uuid: widget.uuid, token: 'TOKEN', name: 'Acme' });
+
+  it('draws reply buttons from the poll and sends a tap with its id', () => {
+    expect(page).toContain('.chip');
+    expect(page).toContain('payload.tap_id = tapId');
+    expect(page).toContain('send(btn.title, btn.id)');
+  });
+
+  it('retires old buttons when any new line appears, and looks often for a while after the visitor writes', () => {
+    expect(page).toContain('clearChips();');
+    expect(page).toContain('function burstPoll()');
+  });
+});

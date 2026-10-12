@@ -10,4 +10,13 @@ export const settings = [
     order: 30,
     gates: { permission: 'wgt.widgets.read' },
   }),
+  // Website chat bots built in the flow builder, beside the other channels (their widgets are listed here, not edited).
+  settingsTile({
+    id: 'web',
+    section: 'channels',
+    href: '/channels/web',
+    icon: 'globe',
+    order: 25,
+    gates: { permission: 'flb.flows.read' },
+  }),
 ];

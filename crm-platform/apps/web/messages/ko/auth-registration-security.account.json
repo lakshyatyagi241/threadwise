@@ -551,7 +551,8 @@
             "forms_and_links": "양식 및 링크",
             "extra_channels": "Telegram, Facebook, Instagram",
             "form_builder": "양식",
-            "waba_groups": "WhatsApp 그룹"
+            "waba_groups": "WhatsApp 그룹",
+            "sms": "SMS"
           },
           "cta": {
             "continueFree": "무료로 계속",

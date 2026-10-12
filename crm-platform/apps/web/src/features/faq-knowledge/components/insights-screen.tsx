@@ -10,7 +10,8 @@ import { errorKey } from '../lib/errors';
 import { LOG_VIEWS, type LogView } from '../lib/log-model';
 import { DailyChart, ScoreHistogram } from './charts';
 import { ChevronIcon, FaqIcon, SearchIcon } from './icons';
-import { CandidateList, OutcomeBadge, WhyText } from './log-parts';
+import { CandidateList, OriginTag, OutcomeBadge, WhyText } from './log-parts';
+import { VerifyChip, VerifyDetail } from './verify-parts';
 import {
   CARD,
   LoadError,
@@ -285,12 +286,13 @@ function MatchLog() {
                             {t('notKept', { length: row.queryLength })}
                           </span>
                         )}
-                        {row.origin === 'test' && (
-                          <span className="ms-2 text-xs text-muted-foreground">{t('testRun')}</span>
-                        )}
+                        <OriginTag origin={row.origin} />
                       </td>
                       <td className="py-2 pe-3">
-                        <OutcomeBadge outcome={row.outcome} />
+                        <div className="flex flex-wrap items-center gap-1">
+                          <OutcomeBadge outcome={row.outcome} verify={row.verify} />
+                          {row.verify && <VerifyChip verify={row.verify} />}
+                        </div>
                       </td>
                       <td className="max-w-xs py-2 pe-3">
                         {row.faqQuestion ?? <span className="text-muted-foreground">-</span>}
@@ -304,6 +306,7 @@ function MatchLog() {
                         <td />
                         <td colSpan={5} className="space-y-3 pb-4">
                           <WhyText row={row} threshold={settings.data?.threshold} />
+                          {row.verify && <VerifyDetail verify={row.verify} />}
                           <CandidateList row={row} />
                           <dl className="flex flex-wrap gap-x-6 gap-y-1 text-xs text-muted-foreground">
                             {row.tier && (

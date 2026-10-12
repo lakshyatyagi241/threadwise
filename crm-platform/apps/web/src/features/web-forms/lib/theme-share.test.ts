@@ -60,7 +60,7 @@ describe('theme tokens', () => {
       shadow: 'none',
     });
     expect(vars['--f-radius']).toBe('999px');
-    expect(vars['--f-gap']).toBe('26px');
+    expect(vars['--f-gap']).toBe('22px');
     expect(vars['--f-scale']).toBe('1.2');
     expect(vars['--f-max']).toBe('700px');
     expect(vars['--f-shadow']).toBe('none');

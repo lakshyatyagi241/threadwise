@@ -3,6 +3,9 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import {
   formDetailSchema,
+  formPaymentGatewaySchema,
+  formProtectionSchema,
+  formPaymentLinkResultSchema,
   formPropertyListSchema,
   formSubmissionDetailSchema,
   formSubmissionListSchema,
@@ -15,6 +18,9 @@ import {
   type ExportFormSubmissionsInput,
   type FormBindObject,
   type FormDetail,
+  type FormPaymentGateway,
+  type FormProtection,
+  type FormPaymentLinkResult,
   type FormProperty,
   type FormSubmissionDetail,
   type FormSubmissionList,
@@ -41,6 +47,8 @@ export const KEYS = {
   one: (id: string) => ['web-forms', 'one', id] as const,
   versions: (id: string) => ['web-forms', 'versions', id] as const,
   templates: ['web-forms', 'templates'] as const,
+  paymentGateway: ['web-forms', 'payment-gateway'] as const,
+  protection: ['web-forms', 'protection'] as const,
   properties: (object: FormBindObject) => ['web-forms', 'properties', object] as const,
   submissions: (id: string, f: object) => ['web-forms', 'submissions', id, f] as const,
   submission: (id: string, sid: string) => ['web-forms', 'submission', id, sid] as const,
@@ -104,6 +112,24 @@ export function useFormTemplates() {
       apiFetch('/forms/templates', { schema: formTemplateListSchema, signal }),
     select: (r): FormTemplate[] => r.data,
     staleTime: 5 * 60_000,
+  });
+}
+
+/** Whether the workspace can take payment on a form, and on which gateway (the payment gateways screen sets it). */
+export function useFormPaymentGateway() {
+  return useQuery<FormPaymentGateway>({
+    queryKey: KEYS.paymentGateway,
+    queryFn: () => apiFetch('/forms/meta/payment-gateway', { schema: formPaymentGatewaySchema }),
+    staleTime: 30_000,
+  });
+}
+
+/** What keeps spam out right now: is the platform's CAPTCHA set up, what the hidden trap caught, how many submissions are held as spam. */
+export function useFormProtection() {
+  return useQuery<FormProtection>({
+    queryKey: KEYS.protection,
+    queryFn: () => apiFetch('/forms/meta/protection', { schema: formProtectionSchema }),
+    staleTime: 30_000,
   });
 }
 
@@ -200,6 +226,26 @@ export const retrySubmission = (
   submissionId: string,
 ): Promise<FormSubmissionSummary> =>
   apiFetch(`/forms/${formId}/submissions/${submissionId}/retry`, {
+    method: 'POST',
+    schema: retryFormSubmissionResultSchema,
+  });
+
+/** A fresh hosted payment link for a submission awaiting payment; `url` is null when the gateway refused. */
+export const newPaymentLink = (
+  formId: string,
+  submissionId: string,
+): Promise<FormPaymentLinkResult> =>
+  apiFetch(`/forms/${formId}/submissions/${submissionId}/payment-link`, {
+    method: 'POST',
+    schema: formPaymentLinkResultSchema,
+  });
+
+/** Money arrived outside the gateway (a transfer, cash): the submission becomes paid; the audit names the person. */
+export const markSubmissionPaid = (
+  formId: string,
+  submissionId: string,
+): Promise<FormSubmissionSummary> =>
+  apiFetch(`/forms/${formId}/submissions/${submissionId}/mark-paid`, {
     method: 'POST',
     schema: retryFormSubmissionResultSchema,
   });

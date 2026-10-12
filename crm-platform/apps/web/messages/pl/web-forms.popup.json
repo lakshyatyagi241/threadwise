@@ -1,0 +1,42 @@
+{
+  "web-forms": {
+    "popup": {
+      "title": "Pokaż jako wyskakujące okno",
+      "description": "Otwieraj formularz w wyskakującym oknie na swojej stronie zamiast umieszczać go na stronie. Wybierz, kiedy ma się otwierać, i skopiuj kod.",
+      "trigger": "Otwórz okno",
+      "triggers": {
+        "delay": "Po opóźnieniu",
+        "scroll_down": "Gdy odwiedzający przewinie w dół",
+        "scroll_up": "Gdy odwiedzający przewinie z powrotem w górę",
+        "click": "Gdy ktoś kliknie przycisk"
+      },
+      "triggerHints": {
+        "delay": "Otwiera się po ustawionym czasie od załadowania strony.",
+        "scroll_down": "Otwiera się, gdy odwiedzający przewinie stronę tak daleko w dół.",
+        "scroll_up": "Otwiera się, gdy odwiedzający przeczyta stronę do dołu, a potem przewinie w górę, co może oznaczać, że zaraz wyjdzie.",
+        "click": "Otwiera się tylko po kliknięciu przycisku lub linku z kodem pokazanym poniżej."
+      },
+      "delay": "Sekundy do otwarcia",
+      "delayHint": "Od {min} do {max}.",
+      "scroll": "Jak daleko w dół strony (procent)",
+      "scrollHint": "Od {min} do {max}.",
+      "position": "Gdzie się pojawia",
+      "positions": {
+        "center": "Środek ekranu, ze ściemnieniem strony",
+        "bottom_right": "Dolny róg, bez ściemniania strony"
+      },
+      "days": "Pokaż ponownie po (dni)",
+      "daysHint": "0 oznacza pokazywanie przy każdej wizycie. Gdy ktoś wyśle formularz, nigdy więcej mu się nie pokaże.",
+      "note": "Najpierw dodaj swoją stronę do Dozwolonych stron poniżej, inaczej okno pozostanie puste.",
+      "code": {
+        "title": "Kod wyskakującego okna",
+        "description": "Wklej to tam, gdzie okno ma się ładować, zwykle tuż przed zamykającym znacznikiem body."
+      },
+      "button": {
+        "title": "Przycisk, który je otwiera",
+        "description": "Dodaj to na dowolnej stronie, aby użytkownicy mogli sami otworzyć okno. Działa z każdym wyzwalaczem."
+      },
+      "copy": "Kopiuj kod"
+    }
+  }
+}

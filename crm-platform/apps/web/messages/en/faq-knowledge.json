@@ -33,7 +33,8 @@
       "modelNotAllowed": "The platform's embedding model is not allowed. Ask your platform admin.",
       "validation": "Some fields need attention.",
       "rateLimited": "Too many requests. Wait a moment and try again.",
-      "unexpected": "Something went wrong. Try again, and share the request id with support if it keeps happening."
+      "unexpected": "Something went wrong. Try again, and share the request id with support if it keeps happening.",
+      "flowNodeNotFound": "The chosen step is no longer in this flow. Pick another step, or start at the flow's start."
     },
     "banner": {
       "enabledToast": "FAQ answering is on.",
@@ -139,7 +140,9 @@
         "ready": "{count} live",
         "pending": "{count} indexing",
         "failed": "{count} failed"
-      }
+      },
+      "stepMissing": "Step missing",
+      "startsAt": "Starts at: {step}"
     },
     "editor": {
       "back": "Back to FAQs",
@@ -192,7 +195,9 @@
         "preview": "How it looks in WhatsApp",
         "previewEmpty": "Your answer appears here",
         "flowLabel": "Flow to start",
-        "noFlow": "No flow chosen"
+        "noFlow": "No flow chosen",
+        "startsAt": "Starts at step: {step}",
+        "stepGone": "The step this FAQ starts at no longer exists, so customers get no answer."
       },
       "advanced": {
         "title": "Advanced: sensitivity for this FAQ only",
@@ -227,6 +232,11 @@
           "required": "Choose a value between 5% and 99%.",
           "tooLong": "Choose a value between 5% and 99%.",
           "invalid": "Choose a value between 5% and 99%."
+        },
+        "flowNodeId": {
+          "required": "Choose a step of this flow, or the flow's start.",
+          "tooLong": "Choose a step of this flow, or the flow's start.",
+          "invalid": "Choose a step of this flow, or the flow's start."
         }
       },
       "deleteConfirm": {
@@ -257,7 +267,7 @@
         "off": "Inactive",
         "draft": "Draft"
       },
-      "note": "The flow starts from its trigger. Only published, active flows can run."
+      "note": "The flow starts at the step you choose below, or at its start. Only published, active flows can run."
     },
     "variations": {
       "title": "Question variations",
@@ -354,6 +364,10 @@
         "notSent": {
           "title": "Matched, not sent",
           "body": "A FAQ matched but the answer was not sent, for example because FAQ answering was off."
+        },
+        "vetoed": {
+          "title": "Answer withheld",
+          "body": "The match scored high enough, but the second check said no, so nothing would be sent."
         }
       },
       "tier": {
@@ -486,8 +500,11 @@
         "providerError": "The AI provider failed, so the bot could only match by spelling.",
         "notSent": "A FAQ matched but the answer was not sent.",
         "tier": "Decided by the {tier} tier.",
-        "error": "Error: {error}"
-      }
+        "error": "Error: {error}",
+        "vetoed": "The best match scored {score}%, above the {threshold}% bar, but the second check said it does not answer the message, so nothing was sent.",
+        "vetoedNoBar": "The best match scored {score}%, but the second check said it does not answer the message, so nothing was sent."
+      },
+      "flowRun": "(from a flow)"
     },
     "insights": {
       "title": "FAQ insights",
@@ -612,7 +629,8 @@
         "exact": "Exact: the message equals a saved phrasing, ignoring case and spacing.",
         "semantic": "Meaning: the message is compared by meaning with every live phrasing, so different words can match.",
         "trigram": "Spelling fallback: if the AI provider is unavailable, letters are compared instead, which catches typos only.",
-        "threshold": "The best score is compared with the sensitivity. Above it, the FAQ answers; below it, the message is listed under Unanswered."
+        "threshold": "The best score is compared with the sensitivity. Above it, the FAQ answers; below it, the message is listed under Unanswered.",
+        "verify": "Second check (optional): a match that only just reached the sensitivity can be double-checked by a small chat model, which can only withhold an answer."
       },
       "who": "Changing these settings needs the permission faq.settings.manage.",
       "leave": {
@@ -620,6 +638,52 @@
         "body": "Your changes to these settings are not saved.",
         "leave": "Leave",
         "stay": "Stay"
+      },
+      "verify": {
+        "title": "Second check for close calls",
+        "hint": "A small chat model double-checks matches that only just reached the bar.",
+        "unavailable": "The platform has switched the second check off, so it does not run even if you turn it on here. Ask your platform admin.",
+        "label": "Check close calls with a second opinion",
+        "on": "On",
+        "off": "Off",
+        "onBody": "When a match only just clears the bar, a small chat model reads the customer's message and the FAQ and says whether the answer fits. It can only say no: it never makes an answer happen.",
+        "offBody": "Every match that reaches the bar is answered without a second look.",
+        "bandLabel": "How close counts as a close call",
+        "bandValue": "+{value}%",
+        "explainOn": "Matches scoring from {from}% up to {to}% are checked by {model}. A \"no\" means no answer is sent and the message appears under Unanswered.",
+        "explainOff": "Every match scoring {threshold}% or more is answered. Turn the second check on to have the closest calls double-checked.",
+        "cost": "Each check sends the customer's message and the FAQ's question to the model: a few hundred tokens, and it adds about a second to a borderline reply. Matches outside the band are never checked. If the check fails, is not available or the hourly limit is reached, the match stands as if there were no check."
+      }
+    },
+    "flowNode": {
+      "label": "Start at",
+      "start": "The flow's start",
+      "hint": "Choose a step to skip the beginning of the flow. Customers enter the flow at the step you pick.",
+      "loading": "Loading the steps of this flow",
+      "empty": "This flow has no other steps, so it starts at its beginning.",
+      "retry": "Try again",
+      "deletedOption": "Deleted step (choose another)",
+      "missing": {
+        "title": "The step this FAQ starts at is gone",
+        "body": "That step was deleted from the flow. Until you choose another step, customers who match this FAQ get no answer. Pick a step below, or start at the flow's start.",
+        "fix": "Start at the flow's start"
+      }
+    },
+    "verify": {
+      "title": "Second check",
+      "chip": {
+        "confirmed": "Second check: yes",
+        "vetoed": "Second check: no",
+        "failed": "Second check failed",
+        "skipped": "Second check skipped"
+      },
+      "model": "Checked by",
+      "reason": "Reason",
+      "body": {
+        "confirmed": "The match was a close call, so a small chat model read the message and the FAQ and agreed the answer fits.",
+        "vetoed": "The match was a close call and the second check said this FAQ does not answer the message. The answer was withheld, nothing was sent, and the message appears under Unanswered.",
+        "failed": "The match was a close call, but the check could not finish, so the match stood and the answer was sent as if there were no second check.",
+        "skipped": "The second check did not run for this match, so the match stood as it was."
       }
     }
   }

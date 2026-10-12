@@ -19,6 +19,7 @@ import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { SendPolicyService } from '../auth';
+import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import {
   SENDER_DIRECTORY,
   TEMPLATE_DIRECTORY,
@@ -88,6 +89,7 @@ export class CampaignsService {
     @Inject(TEMPLATE_DIRECTORY) private readonly templates: TemplateDirectory,
     @Inject(CAMPAIGN_PLAN_GATE) private readonly plan: CampaignPlanGate,
     @Inject(WALLET_GATE) private readonly wallet: WalletGate,
+    private readonly entitlements: PlanEntitlementService,
   ) {}
 
   async create(input: CreateCampaignInput): Promise<{ campaign: Campaign; message: string }> {
@@ -108,12 +110,14 @@ export class CampaignsService {
           'Pick at least one contact, group, tag or number to send to.',
         );
       }
+      const resolved = await this.resolve(tx, orgId, input);
+      // SMS is a paid channel of its own (TW-SMS-018): Reference only checked `campaign` here, and the owner wants `sms` enforced.
+      if (resolved.provider === 'sms') await this.entitlements.assertFeature(orgId, 'sms');
       // A launch needs a funded wallet (TW-WALLET-013), checked before the campaign or any recipient row exists. A draft launches
-      // nothing, so it is not checked until it is started.
-      if (status !== 'draft') {
+      // nothing, so it is not checked until it is started. SMS is never charged to the wallet (TW-SMS-027), so it is not checked either.
+      if (status !== 'draft' && resolved.provider !== 'sms') {
         await this.wallet.precheck(orgId, contactIds.length, { source: 'campaign' });
       }
-      const resolved = await this.resolve(tx, orgId, input);
       const id = await this.repo.insert(tx, orgId, {
         ...form,
         ...resolved,
@@ -380,7 +384,7 @@ export class CampaignsService {
 
     const m = this.media(input);
     // Cloud API and Twilio cannot carry inline buttons on a custom send, so they are dropped rather than stored and shipped.
-    const noButtons = provider === 'twilio' || provider === 'waba';
+    const noButtons = provider === 'twilio' || provider === 'waba' || provider === 'sms';
     return {
       provider,
       deviceId,

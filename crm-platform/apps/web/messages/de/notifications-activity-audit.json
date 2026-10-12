@@ -313,6 +313,14 @@
         "waba_group_suspension_cleared": {
           "label": "Gruppe wieder aktiv",
           "hint": "WhatsApp hat eine zuvor gesperrte Gruppe wiederhergestellt. Nur, wenn Sie über die Sperre informiert wurden."
+        },
+        "form_payment": {
+          "label": "Formularzahlung eingegangen",
+          "hint": "Ein Besucher hat über eines Ihrer Formulare bezahlt."
+        },
+        "form_payment_duplicate": {
+          "label": "Formular doppelt bezahlt",
+          "hint": "Ein Besucher hat ein zweites Mal bezahlt und die zusätzliche Zahlung muss erstattet werden."
         }
       },
       "loading": "Ihre Einstellungen werden geladen",

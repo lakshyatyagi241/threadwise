@@ -210,7 +210,7 @@ describe('TW-FB-012: the audience and the draft', () => {
     expect(gone.body.code).toBe('FB_PAGE_UNAVAILABLE');
     expect(
       (await post(t, 'broadcasts', { name: 'x', pageId: page.uuid, body: 'x', psids: [] })).status,
-    ).toBe(400);
+    ).toBe(422);
   });
 
   it('a Facebook template fills an empty body and carries its buttons; another channel’s or an unknown template is ignored', async () => {

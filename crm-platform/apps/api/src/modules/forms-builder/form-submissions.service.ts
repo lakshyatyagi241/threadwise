@@ -22,6 +22,7 @@ import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { ContactsRepository } from '../crm';
 import { buildCsv } from './form-csv';
 import { asText, type StoredAnswer } from './form-rules';
+import { FormPaymentsService, toAttempt } from './form-payments.service';
 import { FormSubmitService } from './form-submit.service';
 import { toSubmissionDetail, toSubmissionSummary } from './forms.mapper';
 import { FormsRepository, type FormRow } from './forms.repository';
@@ -56,6 +57,7 @@ export class FormSubmissionsService {
     private readonly forms: FormsRepository,
     private readonly subs: FormSubmissionsRepository,
     private readonly submit: FormSubmitService,
+    private readonly payments: FormPaymentsService,
     private readonly contacts: ContactsRepository,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
@@ -99,7 +101,60 @@ export class FormSubmissionsService {
         delta: { answers: { old: null, new: 'opened' } },
       });
       const defs = await this.definitions(tx, ctx.orgId, [row]);
-      return toSubmissionDetail(row, defs.get(row.versionId) ?? null);
+      const attempts = (await this.payments.attemptsFor(tx, ctx.orgId, [row.id])).get(row.id) ?? [];
+      return toSubmissionDetail(
+        row,
+        defs.get(row.versionId) ?? null,
+        attempts.map((a) => toAttempt(a)),
+      );
+    });
+  }
+
+  /**
+   * A fresh payment link for a submission still awaiting payment (the first one failed or lapsed). Opens a new attempt (the amount is
+   * worked out again from the version the visitor saw), expires the old pending one, and mints the link after commit.
+   */
+  async newPaymentLink(
+    formUuid: string,
+    uuid: string,
+    scope: RecordScope,
+  ): Promise<{ url: string | null }> {
+    const ctx = RequestContextStore.require();
+    const { form, row, payment } = await this.db.tx(async (tx) => {
+      const found = await this.mustSubmission(tx, ctx.orgId, formUuid, uuid, scope, true);
+      const created = await this.payments.newAttemptIn(tx, ctx.orgId, found.form, found.row);
+      await this.audit.record(tx, {
+        module: SUBMISSION_MODULE,
+        recordId: found.row.id,
+        action: 'update',
+        delta: { paymentLink: { old: null, new: created.reference } },
+      });
+      return { ...found, payment: created };
+    });
+    const url = await this.payments.mintLink(
+      ctx.orgId,
+      payment.uuid,
+      form.publicKey,
+      row.receiptToken,
+      { name: row.contactName, email: null, phone: null },
+      form.name,
+    );
+    return { url };
+  }
+
+  /** "Mark as paid": money that arrived outside the gateway (a bank transfer, cash). Audited; the trail names the person. */
+  async markPaid(
+    formUuid: string,
+    uuid: string,
+    scope: RecordScope,
+  ): Promise<FormSubmissionSummary> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const { form, row } = await this.mustSubmission(tx, ctx.orgId, formUuid, uuid, scope, true);
+      await this.payments.markPaidManuallyIn(tx, ctx.orgId, form, row);
+      const after = (await this.subs.findById(tx, ctx.orgId, row.id))!;
+      const defs = await this.definitions(tx, ctx.orgId, [after]);
+      return toSubmissionSummary(after, defs.get(after.versionId) ?? null);
     });
   }
 

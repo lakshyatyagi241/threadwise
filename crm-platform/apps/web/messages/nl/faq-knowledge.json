@@ -33,7 +33,8 @@
       "modelNotAllowed": "Het embedding-model van het platform is niet toegestaan. Vraag het aan je platformbeheerder.",
       "validation": "Sommige velden vragen aandacht.",
       "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
-      "unexpected": "Er ging iets mis. Probeer het opnieuw en deel de verzoek-id met support als het blijft gebeuren."
+      "unexpected": "Er ging iets mis. Probeer het opnieuw en deel de verzoek-id met support als het blijft gebeuren.",
+      "flowNodeNotFound": "De gekozen stap staat niet meer in deze flow. Kies een andere stap of begin bij het begin van de flow."
     },
     "banner": {
       "enabledToast": "FAQ-antwoorden staan aan.",
@@ -139,7 +140,9 @@
         "ready": "{count} live",
         "pending": "{count} indexeren",
         "failed": "{count} mislukt"
-      }
+      },
+      "stepMissing": "Stap ontbreekt",
+      "startsAt": "Begint bij: {step}"
     },
     "editor": {
       "back": "Terug naar FAQ's",
@@ -192,7 +195,9 @@
         "preview": "Zo ziet het eruit in WhatsApp",
         "previewEmpty": "Je antwoord verschijnt hier",
         "flowLabel": "Te starten flow",
-        "noFlow": "Geen flow gekozen"
+        "noFlow": "Geen flow gekozen",
+        "startsAt": "Begint bij stap: {step}",
+        "stepGone": "De stap waarmee deze FAQ begint bestaat niet meer, dus klanten krijgen geen antwoord."
       },
       "advanced": {
         "title": "Geavanceerd: gevoeligheid alleen voor deze FAQ",
@@ -227,6 +232,11 @@
           "required": "Kies een waarde tussen 5% en 99%.",
           "tooLong": "Kies een waarde tussen 5% en 99%.",
           "invalid": "Kies een waarde tussen 5% en 99%."
+        },
+        "flowNodeId": {
+          "required": "Kies een stap van deze flow of het begin van de flow.",
+          "tooLong": "Kies een stap van deze flow of het begin van de flow.",
+          "invalid": "Kies een stap van deze flow of het begin van de flow."
         }
       },
       "deleteConfirm": {
@@ -257,7 +267,7 @@
         "off": "Inactief",
         "draft": "Concept"
       },
-      "note": "De flow start vanaf de trigger. Alleen gepubliceerde, actieve flows kunnen draaien."
+      "note": "De flow begint bij de stap die je hieronder kiest, of bij het begin. Alleen gepubliceerde, actieve flows kunnen draaien."
     },
     "variations": {
       "title": "Vraagvarianten",
@@ -354,6 +364,10 @@
         "notSent": {
           "title": "Overeenkomst, niet verstuurd",
           "body": "Een FAQ kwam overeen, maar het antwoord is niet verstuurd, bijvoorbeeld omdat FAQ-antwoorden uitstonden."
+        },
+        "vetoed": {
+          "title": "Antwoord achtergehouden",
+          "body": "De overeenkomst scoorde hoog genoeg, maar de tweede controle zei nee, dus er zou niets worden verstuurd."
         }
       },
       "tier": {
@@ -486,8 +500,11 @@
         "providerError": "De AI-provider is uitgevallen, dus de bot kon alleen op spelling vergelijken.",
         "notSent": "Een FAQ kwam overeen, maar het antwoord is niet verstuurd.",
         "tier": "Beslist door het niveau {tier}.",
-        "error": "Fout: {error}"
-      }
+        "error": "Fout: {error}",
+        "vetoed": "De beste overeenkomst scoorde {score}%, boven de drempel van {threshold}%, maar de tweede controle oordeelde dat het geen antwoord op het bericht is, dus er is niets verstuurd.",
+        "vetoedNoBar": "De beste overeenkomst scoorde {score}%, maar de tweede controle oordeelde dat het geen antwoord op het bericht is, dus er is niets verstuurd."
+      },
+      "flowRun": "(vanuit een flow)"
     },
     "insights": {
       "title": "FAQ-inzichten",
@@ -612,7 +629,8 @@
         "exact": "Exact: het bericht is gelijk aan een opgeslagen formulering, ongeacht hoofdletters en spaties.",
         "semantic": "Betekenis: het bericht wordt op betekenis vergeleken met elke live formulering, dus andere woorden kunnen overeenkomen.",
         "trigram": "Terugval op spelling: als de AI-provider niet beschikbaar is, worden letters vergeleken, wat alleen typefouten opvangt.",
-        "threshold": "De beste score wordt vergeleken met de gevoeligheid. Erboven antwoordt de FAQ; eronder komt het bericht bij Onbeantwoord te staan."
+        "threshold": "De beste score wordt vergeleken met de gevoeligheid. Erboven antwoordt de FAQ; eronder komt het bericht bij Onbeantwoord te staan.",
+        "verify": "Tweede controle (optioneel): een overeenkomst die de gevoeligheid net haalt, kan door een klein chatmodel worden gecontroleerd. Dat model kan een antwoord alleen tegenhouden."
       },
       "who": "Voor het wijzigen van deze instellingen is de machtiging faq.settings.manage nodig.",
       "leave": {
@@ -620,6 +638,52 @@
         "body": "Je wijzigingen aan deze instellingen zijn niet opgeslagen.",
         "leave": "Verlaten",
         "stay": "Blijven"
+      },
+      "verify": {
+        "title": "Tweede controle bij twijfelgevallen",
+        "hint": "Een klein chatmodel controleert overeenkomsten die de drempel net halen.",
+        "unavailable": "Het platform heeft de tweede controle uitgeschakeld, dus ze draait niet, ook niet als je haar hier aanzet. Vraag het aan je platformbeheerder.",
+        "label": "Twijfelgevallen laten controleren door een tweede mening",
+        "on": "Aan",
+        "off": "Uit",
+        "onBody": "Als een overeenkomst de drempel net haalt, leest een klein chatmodel het bericht van de klant en de FAQ en beoordeelt het of het antwoord past. Het kan alleen nee zeggen: het zorgt er nooit voor dat er een antwoord komt.",
+        "offBody": "Elke overeenkomst die de drempel haalt, wordt beantwoord zonder tweede controle.",
+        "bandLabel": "Wanneer telt iets als twijfelgeval",
+        "bandValue": "+{value}%",
+        "explainOn": "Overeenkomsten met een score van {from}% tot {to}% worden gecontroleerd door {model}. Bij \"nee\" wordt er geen antwoord verstuurd en verschijnt het bericht onder Onbeantwoord.",
+        "explainOff": "Elke overeenkomst met een score van {threshold}% of hoger wordt beantwoord. Zet de tweede controle aan om de twijfelgevallen te laten controleren.",
+        "cost": "Elke controle stuurt het bericht van de klant en de vraag van de FAQ naar het model: een paar honderd tokens, en het kost ongeveer een seconde extra bij een grensgeval. Overeenkomsten buiten het bereik worden nooit gecontroleerd. Als de controle mislukt, niet beschikbaar is of de limiet per uur is bereikt, blijft de overeenkomst gelden alsof er geen controle was."
+      }
+    },
+    "flowNode": {
+      "label": "Beginnen bij",
+      "start": "Het begin van de flow",
+      "hint": "Kies een stap om het begin van de flow over te slaan. Klanten stappen in de flow in bij de stap die je kiest.",
+      "loading": "Stappen van deze flow laden",
+      "empty": "Deze flow heeft geen andere stappen, dus hij begint bij het begin.",
+      "retry": "Opnieuw proberen",
+      "deletedOption": "Verwijderde stap (kies een andere)",
+      "missing": {
+        "title": "De stap waarmee deze FAQ begint bestaat niet meer",
+        "body": "Die stap is uit de flow verwijderd. Totdat je een andere stap kiest, krijgen klanten die bij deze FAQ passen geen antwoord. Kies hieronder een stap of begin bij het begin van de flow.",
+        "fix": "Beginnen bij het begin van de flow"
+      }
+    },
+    "verify": {
+      "title": "Tweede controle",
+      "chip": {
+        "confirmed": "Tweede controle: ja",
+        "vetoed": "Tweede controle: nee",
+        "failed": "Tweede controle mislukt",
+        "skipped": "Tweede controle overgeslagen"
+      },
+      "model": "Gecontroleerd door",
+      "reason": "Reden",
+      "body": {
+        "confirmed": "De overeenkomst was een twijfelgeval, dus een klein chatmodel las het bericht en de FAQ en vond dat het antwoord past.",
+        "vetoed": "De overeenkomst was een twijfelgeval en de tweede controle oordeelde dat deze FAQ geen antwoord op het bericht is. Het antwoord is achtergehouden, er is niets verstuurd en het bericht verschijnt onder Onbeantwoord.",
+        "failed": "De overeenkomst was een twijfelgeval, maar de controle kon niet worden afgerond. De overeenkomst bleef dus gelden en het antwoord is verstuurd alsof er geen tweede controle was.",
+        "skipped": "De tweede controle is voor deze overeenkomst niet uitgevoerd, dus de overeenkomst bleef gelden zoals ze was."
       }
     }
   }

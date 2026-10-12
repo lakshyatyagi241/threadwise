@@ -181,8 +181,8 @@ describe('Get Started and the greeting', () => {
     const res = await put(t, p.uuid, 'greeting', { greeting: 'Hello' });
     expect(res.status).toBe(422);
     expect(res.body.code).toBe('FB_SETUP_UNSUPPORTED');
-    expect(res.body.message).toMatch(/Use Ice breakers instead/);
-    expect(res.body.message).not.toMatch(/rejected the change/);
+    expect(res.body.detail).toMatch(/Use Ice breakers instead/);
+    expect(res.body.detail).not.toMatch(/rejected the change/);
   });
 
   it('removing a greeting Facebook no longer stores is a success; a real failure is not swallowed', async () => {
@@ -194,7 +194,7 @@ describe('Get Started and the greeting', () => {
     const real = await del(t, p.uuid, 'greeting');
     expect(real.status).toBe(422);
     expect(real.body.code).toBe('FB_SETUP_REJECTED');
-    expect(real.body.message).toBe('Facebook rejected the change: Error validating access token');
+    expect(real.body.detail).toBe('Facebook rejected the change: Error validating access token');
   });
 });
 
@@ -255,7 +255,7 @@ describe('the persistent menu and ice breakers', () => {
     const res = await put(t, p.uuid, 'menu', { items: [{ title: 'Talk', type: 'postback' }] });
     expect(res.status).toBe(422);
     expect(res.body.code).toBe('FB_SETUP_REJECTED');
-    expect(res.body.message).toBe('Facebook rejected the change: Invalid menu');
+    expect(res.body.detail).toBe('Facebook rejected the change: Invalid menu');
   });
 
   it('ice breakers keep four, cut questions, name blank payloads; none removes them all', async () => {

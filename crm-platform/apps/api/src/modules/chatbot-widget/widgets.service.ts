@@ -4,9 +4,14 @@ import {
   ERROR_CODES,
   PLAN_UPGRADE_PATH,
   createWidgetSchema,
+  flowWidgetSaveSchema,
   listWidgetsQuerySchema,
   updateWidgetSchema,
   type CreateWidgetInput,
+  type FlowWidgetResponse,
+  type WebBotItem,
+  type WebBotsResponse,
+  type FlowWidgetSaveInput,
   type ListWidgetsResponse,
   type RotateWidgetTokenResponse,
   type Widget,
@@ -58,6 +63,9 @@ const parse = <T>(
  * Every write is one transaction that also writes its audit row and its outbox event. Reference wrote neither; the port does
  * because both are repository rules and a token rotation in particular is something an owner must be able to trace.
  */
+/** The Web channel list shows the newest bots; `total` says when there are more. */
+const WEB_BOTS_LIMIT = 200;
+
 @Injectable()
 export class WidgetsService {
   constructor(
@@ -346,6 +354,131 @@ export class WidgetsService {
       await this.repo.delete(tx, orgId, current.id);
       await this.record(tx, current, 'delete', 'widget.deleted');
     });
+  }
+
+  /** The flow a widget belongs to: it must exist in this workspace and be a website chat bot. */
+  private async requireWebFlow(tx: Tx, orgId: number, flowUuid: string) {
+    const flow = await this.repo.findFlow(tx, orgId, flowUuid);
+    if (!flow) throw AppError.notFound('Flow', flowUuid);
+    if (flow.flowType !== 'web')
+      throw AppError.validation('Only a website chat bot has a widget.', [
+        { path: 'flowId', message: 'This bot is not built for website chat.' },
+      ]);
+    return flow;
+  }
+
+  /** What a flow bot's Customize tab saves: the look only. The bot answers, so no assistant and no WhatsApp target. */
+  private flowWrite(name: string, input: FlowWidgetSaveInput): WidgetWrite {
+    return this.toWrite(
+      {
+        ...input,
+        name,
+        mode: 'ai',
+        assistantId: null,
+        targetWhatsappCc: null,
+        targetWhatsappNumber: null,
+      },
+      null,
+    );
+  }
+
+  /** The workspace's website chat bots for Settings > Channels > Web, each with its widget and one state word. */
+  async webBots(): Promise<WebBotsResponse> {
+    const orgId = RequestContextStore.orgId();
+    const { rows, total } = await this.db.tx((tx) => this.repo.webBots(tx, orgId, WEB_BOTS_LIMIT));
+    return {
+      total,
+      data: rows.map((r): WebBotItem => {
+        const widget =
+          r.widgetUuid && r.widgetStatus
+            ? {
+                id: r.widgetUuid,
+                headerTitle: r.headerTitle ?? '',
+                status: r.widgetStatus as 'active' | 'paused',
+                customizedAt: r.customizedAt ? r.customizedAt.toISOString() : null,
+              }
+            : null;
+        const state: WebBotItem['state'] = !widget?.customizedAt
+          ? 'needs_customizing'
+          : !r.isPublished
+            ? 'draft'
+            : widget.status === 'paused' || !r.isActive
+              ? 'paused'
+              : 'live';
+        return {
+          flowId: r.flowUuid,
+          name: r.name,
+          state,
+          isPublished: r.isPublished,
+          widget,
+          updatedAt: r.updatedAt.toISOString(),
+        };
+      }),
+    };
+  }
+
+  /** The widget of a flow bot; `widget` is null until its owner has saved Customize once. */
+  async getForFlow(flowUuid: string): Promise<FlowWidgetResponse> {
+    const orgId = RequestContextStore.orgId();
+    const row = await this.db.tx(async (tx) => {
+      const flow = await this.requireWebFlow(tx, orgId, flowUuid);
+      return this.repo.findByFlowId(tx, orgId, flow.id);
+    });
+    return { widget: row ? toWidget(row, this.publicBase) : null };
+  }
+
+  /**
+   * Saves the Customize tab. The first save creates the widget (named after the bot, with a fresh embed token) and counts as
+   * the first customization; later saves must carry the row version they were read at.
+   */
+  async saveForFlow(flowUuid: string, body: unknown): Promise<Widget> {
+    const ctx = RequestContextStore.require();
+    const orgId = ctx.orgId;
+    await this.assertPlan(orgId);
+    const input = parse(flowWidgetSaveSchema, body);
+    const row = await this.db.tx(async (tx) => {
+      const flow = await this.requireWebFlow(tx, orgId, flowUuid);
+      const current = await this.repo.findByFlowId(tx, orgId, flow.id);
+      if (!current) {
+        await this.planUsage.assertCanAdd(orgId, 'chatbot_widgets');
+        const base = slugBase(flow.name);
+        await this.repo.lockSlugs(tx, orgId);
+        const slug = uniqueSlug(base, await this.repo.slugsLike(tx, orgId, base, null));
+        const id = await this.repo.insert(
+          tx,
+          orgId,
+          ctx.userId,
+          slug,
+          freshToken(),
+          this.flowWrite(flow.name, input),
+          'active',
+          flow.id,
+        );
+        const created = (await this.repo.findById(tx, orgId, id))!;
+        // The bot answers through this channel, so it exists before the first visitor.
+        await this.repo.ensureWebchatChannel(tx, orgId, created.uuid, flow.name, ctx.userId);
+        await this.record(tx, created, 'insert', 'widget.created', undefined, {
+          flowId: flowUuid,
+        });
+        return created;
+      }
+      if (input.rowVersion === undefined) throw AppError.rowVersionConflict('Widget');
+      const ok = await this.repo.update(
+        tx,
+        orgId,
+        current.id,
+        current.slug,
+        this.flowWrite(current.name, input),
+        input.rowVersion,
+      );
+      if (!ok) throw AppError.rowVersionConflict('Widget');
+      const saved = (await this.repo.findById(tx, orgId, current.id))!;
+      await this.record(tx, saved, 'update', 'widget.updated', diff(current, saved), {
+        flowId: flowUuid,
+      });
+      return saved;
+    });
+    return toWidget(row, this.publicBase);
   }
 
   private async record(

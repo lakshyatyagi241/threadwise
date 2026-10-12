@@ -8,6 +8,7 @@ import { useCan } from '@/features/auth-registration-security/shared/session-con
 import { offerSenders } from '@/lib/unofficial-whatsapp';
 import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { createPath, flowFor } from '../lib/create-flow';
+import { engineOf } from '../lib/engine-gate';
 import { useWizardDraft, useWizardSenders } from '../wizard/api/wizard';
 import { ErrorBlock, Skeleton } from '../wizard/components/parts';
 import { LaunchedNotice } from '../wizard/components/wizard-screen';
@@ -71,8 +72,11 @@ export function CreateScreen({
   const guidedKeys = new Set(senders.filter((s) => s.guided).map((s) => s.key));
   const initial =
     senders.find((s) => s.isDefault && s.guided) ?? senders.find((s) => s.isDefault) ?? senders[0];
+  // An SMS number is not in the WhatsApp number list (it has its own card, TW-SMS-018): its key comes from the address.
   const key =
-    state.key && senders.some((s) => s.key === state.key) ? state.key : (initial?.key ?? '');
+    state.key && (engineOf(state.key) === 'sms' || senders.some((s) => s.key === state.key))
+      ? state.key
+      : (initial?.key ?? '');
 
   if (state.draft) {
     return <Resume draftId={state.draft} senders={senders} onClassic={open} />;

@@ -97,7 +97,7 @@
       },
       "sms": {
         "label": "SMS",
-        "description": "שלח וקבל הודעות טקסט עם השולח שלך.",
+        "description": "שלחו הודעות טקסט עם מספר Twilio משלכם או שולח MSG91.",
         "keywords": "הודעת טקסט, מזהה שולח, dlt, twilio, נייד"
       },
       "email": {

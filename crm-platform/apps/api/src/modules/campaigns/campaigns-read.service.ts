@@ -4,6 +4,7 @@ import {
   RECIPIENT_PAGE_SIZE,
   TEXT_FILTER_TYPES,
   type CampaignBuilder,
+  type BroadcastComposeQuery,
   type CampaignConfig,
   type CampaignDetail,
   type CampaignListResponse,
@@ -156,9 +157,10 @@ export class CampaignsReadService {
     c.completedAt = c.completedAt ?? new Date();
   }
 
-  async builder(): Promise<CampaignBuilder> {
+  /** `channel=sms` scopes the senders and templates to the SMS channel, as on the broadcast composer (TW-SMS-018). */
+  async builder(query: BroadcastComposeQuery = {}): Promise<CampaignBuilder> {
     const { orgId } = RequestContextStore.require();
-    const base = await this.compose.compose();
+    const base = await this.compose.compose(query);
     return this.db.tx(async (tx) => ({
       senders: base.senders,
       templates: base.templates,

@@ -97,7 +97,7 @@
       },
       "sms": {
         "label": "SMS",
-        "description": "使用您自己的发送方发送和接收短信。",
+        "description": "使用您自己的 Twilio 号码或 MSG91 发送方发送短信。",
         "keywords": "短信, 发送方 ID, dlt, twilio, 手机"
       },
       "email": {

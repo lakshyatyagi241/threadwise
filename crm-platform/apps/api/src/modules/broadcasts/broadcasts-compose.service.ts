@@ -1,8 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
-import type { BroadcastCompose, ComposeSender, ComposeTemplate } from '@crm/contracts';
+import type {
+  BroadcastCompose,
+  BroadcastComposeQuery,
+  ComposeSender,
+  ComposeTemplate,
+} from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
 import { DatabaseService } from '../../infra/db/database.service';
+import { PlatformSettingsService } from '../auth';
 import {
   UNOFFICIAL_WHATSAPP_GATE,
   type UnofficialWhatsappGate,
@@ -14,6 +20,7 @@ const ENGINE_LABEL: Record<string, string> = {
   baileys: 'Unofficial API',
   waba: 'Meta',
   twilio: 'Twilio',
+  sms: 'SMS',
 };
 const WA_CATEGORIES = new Set(['marketing', 'utility', 'authentication']);
 
@@ -32,7 +39,7 @@ export function templateEngine(r: {
   meta_template_id: string | null;
   provider_config_id: number | string | null;
 }): string {
-  if (r.channel && ['baileys', 'waba', 'twilio'].includes(r.channel)) return r.channel;
+  if (r.channel && ['baileys', 'waba', 'twilio', 'sms'].includes(r.channel)) return r.channel;
   if (r.twilio_content_sid) return 'twilio';
   if (r.meta_template_id || r.provider_config_id) return 'waba';
   return 'baileys';
@@ -73,7 +80,8 @@ interface SenderRaw {
  * Templates follow Reference's `approved` scope: on a Meta (WABA) workspace only those Meta approved (a Meta id and status
  * APPROVED, not paused); on any other engine the locally approved or public ones. A template tied to a WABA number that is no
  * longer connected is hidden. Senders are the connected numbers of every engine except SMS (that channel has its own card),
- * default engine first.
+ * default engine first. `channel=sms` is that card (TW-SMS-016): the SMS senders and the SMS templates only, and nothing at all
+ * while the platform switch `sms_enabled` is off.
  */
 @Injectable()
 export class BroadcastsComposeService {
@@ -81,10 +89,12 @@ export class BroadcastsComposeService {
     private readonly db: DatabaseService,
     @Inject(TEMPLATE_DIRECTORY) private readonly templates: TemplateDirectory,
     @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
+    private readonly settings: PlatformSettingsService,
   ) {}
 
-  async compose(): Promise<BroadcastCompose> {
+  async compose(query: BroadcastComposeQuery = {}): Promise<BroadcastCompose> {
     const { orgId } = RequestContextStore.require();
+    if (query.channel === 'sms') return this.composeSms(orgId);
     // Personal numbers are not offered, and `baileys` is not the default engine, while the platform switch is off or the workspace is not allowed.
     const unofficialOn = await this.unofficial.isEnabledFor(orgId);
     return this.db.tx(async (tx) => {
@@ -111,6 +121,7 @@ export class BroadcastsComposeService {
         LEFT JOIN wa_provider_configs c ON c.org_id = t.org_id AND c.id = t.provider_config_id
         WHERE t.org_id = ${orgId} AND ${approved}
           AND (t.provider_config_id IS NULL OR c.status = 'connected')
+          AND coalesce(t.channel, 'waba') <> 'sms'
         ORDER BY t.id DESC`);
 
       const snd = await tx.execute(sql`
@@ -153,6 +164,56 @@ export class BroadcastsComposeService {
           isDefault: r.engine === defaultEngine,
         })),
         twilioEnabled: twilio.rows.length > 0,
+      };
+    });
+  }
+
+  /** The SMS card's composer: plain-text SMS templates (approved on save) and the connected SMS senders, oldest first. */
+  private async composeSms(orgId: number): Promise<BroadcastCompose> {
+    const on = await this.settings.get<unknown>('sms_enabled');
+    if (!(on === true || on === 1 || on === '1' || on === 'true')) {
+      return { templates: [], senders: [], twilioEnabled: false };
+    }
+    return this.db.tx(async (tx) => {
+      const tpl = await tx.execute(sql`
+        SELECT t.uuid, t.template_name, t.header, t.template_body, t.footer, t.category, t.meta_category, t.template_type,
+               t.language, t.buttons, t.variable_map, t.attachment_type, t.attachment_file, t.twilio_content_sid, t.meta_template_id,
+               t.provider_config_id, t.channel, NULL AS sender_label
+        FROM wa_templates t
+        WHERE t.org_id = ${orgId} AND t.channel = 'sms' AND t.status IN ('approved', 'public')
+        ORDER BY t.id DESC`);
+      const snd = await tx.execute(sql`
+        SELECT uuid, provider AS engine, coalesce(nullif(display_label, ''), phone_number) AS label, NULL AS country_code, phone_number
+        FROM wa_provider_configs WHERE org_id = ${orgId} AND provider = 'sms' AND status = 'connected'
+        ORDER BY id`);
+      return {
+        templates: (tpl.rows as unknown as TemplateRaw[]).map((r): ComposeTemplate => ({
+          id: r.uuid,
+          name: r.template_name,
+          header: r.header,
+          body: r.template_body,
+          footer: r.footer,
+          category: effectiveCategory(r.meta_category, r.category),
+          type: r.template_type,
+          engine: 'sms',
+          language: r.language,
+          buttons: [],
+          variableMap: r.variable_map ?? {},
+          attachmentType: null,
+          attachmentUrl: null,
+          senderLabel: null,
+          twilioReady: false,
+        })),
+        // The From value is shown as typed: an alphanumeric id is not a number and must not be dressed as one.
+        senders: (snd.rows as unknown as SenderRaw[]).map((r): ComposeSender => ({
+          key: `sms:${r.uuid}`,
+          label: r.label ?? '',
+          phone: r.phone_number ?? '',
+          engine: 'sms',
+          engineLabel: ENGINE_LABEL.sms!,
+          isDefault: true,
+        })),
+        twilioEnabled: false,
       };
     });
   }

@@ -126,7 +126,9 @@
         "exporting": "Exporting",
         "exportHintAttention": "Pick a single status to export from this group, or use All.",
         "exportHintSearch": "The export ignores the search text.",
-        "notSpam": "Not spam: process it"
+        "notSpam": "Not spam: process it",
+        "newPaymentLink": "Get a new payment link",
+        "markPaid": "Mark as paid"
       },
       "confirmDelete": {
         "title": "Delete these answers?",
@@ -143,7 +145,11 @@
         "deleteFailed": "The answers could not be deleted. Please try again.",
         "exported": "The CSV was downloaded.",
         "exportTruncated": "The export was cut at the newest {max} rows. Narrow the dates to get the rest.",
-        "exportFailed": "The export could not be made. Please try again."
+        "exportFailed": "The export could not be made. Please try again.",
+        "linkReady": "A new payment link is ready.",
+        "linkFailed": "The gateway did not give a link. Try again in a moment.",
+        "markedPaid": "Marked as paid.",
+        "markPaidFailed": "Could not mark this submission as paid."
       },
       "state": {
         "loading": "Loading submissions",
@@ -164,6 +170,29 @@
       "cap": {
         "notice": "Some submissions were saved for review because your plan's monthly submission limit was reached.",
         "upgrade": "Upgrade your plan"
+      },
+      "payments": {
+        "title": "Payment",
+        "status": {
+          "pending": "Awaiting payment",
+          "paid": "Paid",
+          "failed": "Failed",
+          "expired": "Expired"
+        },
+        "via": {
+          "gateway": "by the gateway",
+          "manual": "marked by hand"
+        },
+        "gateway": "Gateway",
+        "paidAt": "Paid",
+        "expiresAt": "Link expires",
+        "reference": "Reference",
+        "duplicate": "A second payment arrived for this submission. Refund it from your payment gateway.",
+        "freshLink": "New payment link (send it to the visitor):",
+        "copy": "Copy link",
+        "markPaidConfirm": "Mark this submission as paid? Use this only when the money arrived outside the gateway, such as a bank transfer or cash. It is recorded under your name.",
+        "markPaidYes": "Yes, mark as paid",
+        "cancel": "Cancel"
       }
     }
   }

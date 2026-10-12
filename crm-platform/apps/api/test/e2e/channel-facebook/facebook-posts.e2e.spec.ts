@@ -136,11 +136,11 @@ describe('TW-FB-016: making a post', () => {
     const empty = await make(t, page, { message: '' });
     expect(empty.status).toBe(422);
     expect(empty.body.code).toBe('FB_POST_INVALID');
-    expect(empty.body.message).toBe('Write something, add a link, or attach a photo.');
+    expect(empty.body.detail).toBe('Write something, add a link, or attach a photo.');
     const both = await make(t, page, { photoUrls: ['https://x/a.jpg'], link: 'https://x.test' });
-    expect(both.body.message).toBe('A post can have photos or a link, not both. Remove one.');
+    expect(both.body.detail).toBe('A post can have photos or a link, not both. Remove one.');
     const http = await make(t, page, { videoUrl: 'http://x/v.mp4' });
-    expect(http.body.message).toBe('The video URL must be a public HTTPS link.');
+    expect(http.body.detail).toBe('The video URL must be a public HTTPS link.');
     const dead = await connectPage(t, 'P2', 'expired');
     const gone = await make(t, dead);
     expect(gone.body.code).toBe('FB_PAGE_UNAVAILABLE');
@@ -191,9 +191,9 @@ describe('TW-FB-016: making a post', () => {
     const soon = await make(t, page, { scheduledAt: inMin(9) });
     expect(soon.status).toBe(422);
     expect(soon.body.code).toBe('FB_SCHEDULE_INVALID');
-    expect(soon.body.message).toBe('Scheduled time must be at least 10 minutes from now.');
+    expect(soon.body.detail).toBe('Scheduled time must be at least 10 minutes from now.');
     const far = await make(t, page, { scheduledAt: inMin(75 * 24 * 60 + 1) });
-    expect(far.body.message).toBe('Scheduled time cannot be more than 75 days out.');
+    expect(far.body.detail).toBe('Scheduled time cannot be more than 75 days out.');
     expect(await rows(t)).toHaveLength(1);
   });
 
@@ -243,7 +243,10 @@ describe('TW-FB-017: retry, list and delete', () => {
       .post(`/v2/facebook/posts/${failedVideo.body.id}/publish`)
       .set(bearer(t.admin))
       .set('idempotency-key', randomUUID());
-    expect(calls[1]).toEqual({ method: 'postVideo', args: ['https://x/v.mp4', '', null] });
+    expect(calls[1]).toEqual({
+      method: 'postVideo',
+      args: ['https://x/v.mp4', 'Hello world', null],
+    });
 
     calls.length = 0;
     const again = await api

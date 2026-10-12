@@ -97,7 +97,7 @@
       },
       "sms": {
         "label": "SMS",
-        "description": "Kendi gönderen adınızla kısa mesaj gönderin ve alın.",
+        "description": "Kendi Twilio numaranız veya MSG91 göndereninizle kısa mesaj gönderin.",
         "keywords": "kısa mesaj, gönderen kimliği, dlt, twilio, mobil"
       },
       "email": {

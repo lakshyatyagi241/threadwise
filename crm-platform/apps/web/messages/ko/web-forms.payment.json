@@ -1,0 +1,58 @@
+{
+  "web-forms": {
+    "payment": {
+      "title": "결제",
+      "description": "양식을 제출한 방문자에게 결제 게이트웨이에서 요금을 청구합니다. 게이트웨이가 확인한 경우에만 결제 완료로 처리됩니다.",
+      "enabled": "결제 받기",
+      "enabledHint": "답변이 저장되면 방문자는 게이트웨이의 결제 페이지로 이동합니다.",
+      "gateway": {
+        "checking": "결제 게이트웨이를 확인하는 중...",
+        "failed": "결제 게이트웨이를 확인하지 못했습니다. 잠시 후 다시 시도하세요.",
+        "ready": "결제는 {name}({mode})(으)로 전달됩니다.",
+        "mode": {
+          "test": "테스트 모드",
+          "live": "라이브 모드"
+        },
+        "none": "연결된 결제 게이트웨이가 없어 이 양식은 아직 결제를 받을 수 없습니다.",
+        "noLink": "{name}은(는) 호스팅 결제 링크를 만들 수 없어 양식에 사용할 수 없습니다. Razorpay 또는 Stripe를 연결하세요.",
+        "open": "결제 게이트웨이 열기"
+      },
+      "amountType": "금액 설정 방식",
+      "amountTypes": {
+        "fixed": "고정 가격",
+        "from_field": "선택 필드에서 가져오기",
+        "pay_what_you_want": "방문자가 금액 입력"
+      },
+      "amountTypeHints": {
+        "fixed": "모든 방문자가 같은 가격을 결제합니다.",
+        "from_field": "드롭다운 또는 라디오 필드의 각 옵션에 고유한 가격이 있습니다.",
+        "pay_what_you_want": "기부나 팁에 적합합니다. 최소 및 최대 금액을 직접 설정합니다."
+      },
+      "currency": "통화",
+      "currencyHint": "INR, USD처럼 세 글자로 입력하세요. 게이트웨이에서 지원해야 합니다.",
+      "amount": "가격",
+      "amountHint": "{currency} 기준이며 말하는 대로 입력하세요. 예: 499.00",
+      "fieldChoice": "선택 필드",
+      "fieldNumber": "금액 필드",
+      "fieldNone": "필드 선택",
+      "noChoiceFields": "먼저 양식에 드롭다운 또는 라디오 필드를 추가하세요.",
+      "noNumberFields": "먼저 양식에 숫자 또는 통화 필드를 추가하세요.",
+      "optionPrices": "옵션별 가격",
+      "optionPrice": "“{label}” 가격",
+      "min": "최소 금액",
+      "minHint": "이보다 낮은 금액은 거부됩니다.",
+      "max": "최대 금액(선택)",
+      "maxHint": "상한을 두지 않으려면 비워 두세요.",
+      "descriptionLabel": "결제 페이지에 표시할 내용",
+      "descriptionHint": "결제 대상 등 결제자에게 보여 줄 짧은 안내입니다.",
+      "issues": {
+        "amountRequired": "가격을 입력하세요.",
+        "fieldRequired": "금액을 가져올 필드를 선택하세요.",
+        "fieldNotRequired": "모든 방문자가 금액을 입력하도록 이 필드를 필수로 설정하세요.",
+        "optionsNeedAmounts": "모든 옵션에 가격을 지정하세요.",
+        "minRequired": "최소 금액을 입력하세요.",
+        "minAboveMax": "최소 금액은 최대 금액보다 클 수 없습니다."
+      }
+    }
+  }
+}

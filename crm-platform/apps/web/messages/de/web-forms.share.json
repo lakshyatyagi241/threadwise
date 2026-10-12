@@ -253,8 +253,8 @@
           "off": "Aus"
         },
         "captchaHints": {
-          "inherit": "Verwendet die Einstellung Ihres Arbeitsbereichs für öffentliche Formulare.",
-          "on": "Besucher müssen die Prüfung bestehen, bevor sie absenden können.",
+          "inherit": "Verwendet das CAPTCHA, das Ihr Plattformadministrator für öffentliche Formulare eingerichtet hat, falls vorhanden.",
+          "on": "Besucher müssen die Prüfung bestehen, bevor sie absenden können. Erfordert ein auf der Plattform eingerichtetes CAPTCHA; ohne eines wird die Veröffentlichung abgelehnt.",
           "off": "Keine Prüfung. Verlassen Sie sich auf das versteckte Fallen-Feld und die Ratenbegrenzungen."
         },
         "retention": "Antworten aufbewahren für (Tage)",
@@ -271,6 +271,17 @@
           "perFormPerMinuteHint": "Übermittlungen an dieses Formular von überall.",
           "perContactPerHour": "Pro Kontakt, pro Stunde",
           "perContactPerHourHint": "Übermittlungen mit derselben E-Mail-Adresse oder Telefonnummer."
+        },
+        "captchaStatus": {
+          "available": "Auf dieser Plattform ist ein CAPTCHA eingerichtet (reCAPTCHA {version}).",
+          "none": "Auf dieser Plattform ist kein CAPTCHA eingerichtet, daher wird hier nichts geprüft. Bitten Sie Ihren Plattformadministrator, eines hinzuzufügen, oder verlassen Sie sich auf das versteckte Fallenfeld und die Ratenbegrenzungen.",
+          "noneOn": "Dieses Formular ist auf „immer prüfen“ gesetzt, aber die Plattform hat kein CAPTCHA, daher prüft es nichts und kann nicht veröffentlicht werden. Bitten Sie Ihren Plattformadministrator, eines hinzuzufügen, oder wählen Sie eine andere Einstellung.",
+          "failed": "Es konnte nicht geprüft werden, ob ein CAPTCHA eingerichtet ist."
+        },
+        "caught": {
+          "blocked": "{count, plural, =0 {Das versteckte Fallenfeld hat diesen Monat keine Bots gestoppt.} one {Das versteckte Fallenfeld hat diesen Monat 1 Bot gestoppt.} other {Das versteckte Fallenfeld hat diesen Monat # Bots gestoppt.}}",
+          "held": "{count, plural, one {1 Einsendung wird als Spam zurückgehalten.} other {# Einsendungen werden als Spam zurückgehalten.}}",
+          "review": "Prüfen"
         }
       }
     }

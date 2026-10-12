@@ -240,7 +240,7 @@
   {
     "id": "TI-018",
     "severity": "Medium",
-    "status": "decision-needed",
+    "status": "fixed",
     "releaseBlocking": false,
     "title": "apps/api pins @nestjs/testing ^12 next to @nestjs/common ^11, so every e2e spec fails at import on a fresh install",
     "resource": "apps/api/package.json devDependencies (a dependency bump on main)",
@@ -248,8 +248,8 @@
     "affectedTenants": "none; it removes the executed evidence: all e2e specs (including the authz dynamic suite) error with \"Cannot find module .../@nestjs/common/internal\"",
     "exploitability": "n/a (test tooling). A tenancy or authorization regression would not be caught by e2e while this stands.",
     "reproduction": "fresh clone, pnpm install --frozen-lockfile, build the workspace packages, run any apps/api e2e spec",
-    "fix": "Owner decision: pin @nestjs/testing to the 11.x line that matches @nestjs/common/@nestjs/core (what the audit runs used locally, uncommitted), or move the whole Nest stack to 12. Not committed here because it is a dependency change outside this audit.",
-    "regressionTest": "any e2e spec boots again; tenancy-audit nightly depends on it"
+    "fix": "Fixed on main by b36a4a5f5 (fix(deps): pin @nestjs/testing to ^11.2.5 and group Nest framework bumps): the lockfile resolves @nestjs/testing 11.2.7 next to @nestjs/common 11.2.5, and Dependabot now moves the Nest framework packages together. Verified 2026-10-11 from a clean install of main: an API e2e spec boots and passes without any local pin, so the nightly tenancy-audit job can run.",
+    "regressionTest": "any e2e spec boots again (tenancy-regressions.e2e.spec.ts 2/2 on a clean install of main)"
   },
   {
     "id": "TI-019",
