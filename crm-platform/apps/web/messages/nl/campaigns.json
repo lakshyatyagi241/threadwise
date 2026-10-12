@@ -929,6 +929,7 @@
         "optedOut": "Afgemeld",
         "invalidNumbers": "Ongeldige nummers",
         "alwaysSkipped": "Afgemelde contacten en ongeldige nummers worden altijd overgeslagen.",
+        "noConsent": "Geen toestemming vastgelegd (overgeslagen)",
         "willBeMessaged": "Krijgen een bericht",
         "about": "ongeveer {count}",
         "approximate": "Dit is een schatting: de doelgroep is te groot om op tijd exact te tellen.",

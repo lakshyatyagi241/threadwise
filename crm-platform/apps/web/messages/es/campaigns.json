@@ -929,6 +929,7 @@
         "optedOut": "Con baja voluntaria",
         "invalidNumbers": "Números no válidos",
         "alwaysSkipped": "Los contactos con baja voluntaria y los números no válidos siempre se omiten.",
+        "noConsent": "Sin consentimiento registrado (omitido)",
         "willBeMessaged": "Recibirán el mensaje",
         "about": "unos {count}",
         "approximate": "Es una estimación: la audiencia es demasiado grande para contarla con exactitud a tiempo.",

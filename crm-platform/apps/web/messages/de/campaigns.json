@@ -929,6 +929,7 @@
         "optedOut": "Abgemeldet",
         "invalidNumbers": "Ungültige Nummern",
         "alwaysSkipped": "Abgemeldete Kontakte und ungültige Nummern werden immer übersprungen.",
+        "noConsent": "Keine Einwilligung erfasst (übersprungen)",
         "willBeMessaged": "Werden angeschrieben",
         "about": "etwa {count}",
         "approximate": "Dies ist eine Schätzung: Die Zielgruppe ist zu groß, um rechtzeitig exakt gezählt zu werden.",

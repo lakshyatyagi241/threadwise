@@ -35,6 +35,7 @@ import { planStatus } from './contact-status-stage';
 import { assertFormFieldLimits } from './form-field-limits';
 import { applyPropertyPlan, planPropertyChanges } from './contact-property-values';
 import { missingRequired, requiredPropertiesError } from './required-properties';
+import { ContactConsentService } from '../../contact-consent';
 import { ContactQuotaService } from './contact-quota.service';
 import { assertContactScope } from './contact-scope';
 import { assertOwnerWithinScope } from '../owner-scope';
@@ -121,6 +122,7 @@ export class ContactsService {
     private readonly displayIds: DisplayIdService,
     private readonly rbac: RbacService,
     private readonly quota: ContactQuotaService,
+    private readonly consent: ContactConsentService,
   ) {}
 
   async list(query: ListContactsQuery, scope: RecordScope): Promise<ContactListResponse> {
@@ -341,6 +343,18 @@ export class ContactsService {
         recordId: created.id,
         action: 'insert',
       });
+      // A contact created already opted out leaves its proof in the consent ledger (it is never invented for the other case).
+      if (input.isUnsubscribed === true) {
+        await this.consent.recordInTx(tx, ctx.orgId, {
+          contactId: created.id,
+          channel: 'whatsapp',
+          action: 'withdrawn',
+          source: ctx.actorType === 'api_key' ? 'api' : 'manual',
+          actorUserId: ctx.userId,
+          note: 'Created as unsubscribed',
+          idempotencyKey: `create:${created.uuid}`,
+        });
+      }
 
       // Same transaction as the insert — see OutboxService for why that is
       // not negotiable.
@@ -741,6 +755,20 @@ export class ContactsService {
       }
       if (phone && phone !== existing.phone) {
         await this.repo.addIdentity(tx, ctx.orgId, existing.id, 'phone', phone);
+      }
+
+      // The toggle on the contact form / REST API keeps working as before; the ledger records who changed it (a grant here has no
+      // required reason: the Consent card on the profile asks for one).
+      if (values.isUnsubscribed !== undefined) {
+        await this.consent.recordInTx(tx, ctx.orgId, {
+          contactId: existing.id,
+          channel: 'whatsapp',
+          action: values.isUnsubscribed ? 'withdrawn' : 'granted',
+          source: ctx.actorType === 'api_key' ? 'api' : 'manual',
+          actorUserId: ctx.userId,
+          note: 'Changed on the contact record',
+          idempotencyKey: `edit:${existing.uuid}:${existing.rowVersion}`,
+        });
       }
 
       const after = await this.repo.findById(tx, ctx.orgId, existing.id);

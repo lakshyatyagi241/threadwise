@@ -334,6 +334,11 @@
         "label": "Asisten Bantuan",
         "description": "Aktifkan asisten yang memandu tim Anda atau mengerjakan langkahnya untuk mereka.",
         "keywords": "ai, asisten, agen, panduan, bantuan, otomatisasi"
+      },
+      "consent": {
+        "label": "Persetujuan dan balasan STOP",
+        "description": "Pilih kata STOP dan START, balasan konfirmasi, baris berhenti berlangganan, dan apakah pemasaran memerlukan persetujuan yang tercatat.",
+        "keywords": "persetujuan, berhenti berlangganan, berlangganan kembali, unsubscribe, stop, start, gdpr, kepatuhan, privasi, pemasaran"
       }
     },
     "backToMarketplace": "Kembali ke Marketplace"

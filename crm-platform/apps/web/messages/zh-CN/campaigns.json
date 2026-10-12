@@ -929,6 +929,7 @@
         "optedOut": "已退订",
         "invalidNumbers": "无效号码",
         "alwaysSkipped": "已退订的联系人和无效号码始终会被跳过。",
+        "noConsent": "无同意记录（已跳过）",
         "willBeMessaged": "将收到消息",
         "about": "约 {count}",
         "approximate": "这是估算值：受众规模过大，无法及时精确统计。",

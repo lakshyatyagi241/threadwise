@@ -929,6 +929,7 @@
         "optedOut": "Cancelaram a inscrição",
         "invalidNumbers": "Números inválidos",
         "alwaysSkipped": "Contatos que cancelaram a inscrição e números inválidos são sempre ignorados.",
+        "noConsent": "Sem consentimento registrado (ignorado)",
         "willBeMessaged": "Receberão mensagem",
         "about": "cerca de {count}",
         "approximate": "Esta é uma estimativa: o público é grande demais para ser contado com exatidão a tempo.",

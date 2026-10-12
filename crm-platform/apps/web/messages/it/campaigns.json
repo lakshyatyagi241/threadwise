@@ -929,6 +929,7 @@
         "optedOut": "Disiscritti",
         "invalidNumbers": "Numeri non validi",
         "alwaysSkipped": "I contatti disiscritti e i numeri non validi vengono sempre saltati.",
+        "noConsent": "Nessun consenso registrato (saltato)",
         "willBeMessaged": "Riceveranno il messaggio",
         "about": "circa {count}",
         "approximate": "È una stima: il pubblico è troppo grande per essere contato con precisione in tempo utile.",

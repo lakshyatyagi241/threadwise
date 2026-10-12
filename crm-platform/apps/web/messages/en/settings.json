@@ -334,6 +334,11 @@
         "label": "AI lead scoring",
         "description": "Score every contact with AI, choose what is sent, and see what it costs.",
         "keywords": "lead score, scoring, ai, hot, warm, cold, openrouter, cost, qualify"
+      },
+      "consent": {
+        "label": "Consent and STOP replies",
+        "description": "Choose the STOP and START words, the confirmation replies, the opt-out line and whether marketing needs recorded consent.",
+        "keywords": "consent, opt out, opt in, unsubscribe, stop, start, gdpr, compliance, privacy, marketing"
       }
     },
     "backToMarketplace": "Back to Marketplace"

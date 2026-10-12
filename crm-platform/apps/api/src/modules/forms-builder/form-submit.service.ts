@@ -27,6 +27,8 @@ import {
 } from '../crm';
 import { coerceCustomValue, normaliseLeadEmail, pickOwner } from '../leads';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
+import { createHash } from 'node:crypto';
+import { ContactConsentService } from '../contact-consent';
 import { resolveConsent, type ConsentOutcome } from './form-consent';
 import { computeAmount } from './form-payment-rules';
 import { FormPaymentsService, type Payer } from './form-payments.service';
@@ -138,6 +140,7 @@ export class FormSubmitService {
     private readonly payments: FormPaymentsService,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
+    private readonly consentLedger: ContactConsentService,
     config: ConfigService<Env, true>,
   ) {
     this.ipSecret = `forms-ip:${config.get('JWT_ACCESS_SECRET', { infer: true })}`;
@@ -898,6 +901,30 @@ export class FormSubmitService {
   ): Promise<void> {
     const row = (await this.contactRepo.findById(tx, orgId, contactId))!;
     if (row.isUnsubscribed) return;
+    // The consent ledger keeps the proof: the exact line the visitor ticked (text cut to 300 characters plus the hash of the whole
+    // text and its version), the form and the submission. Never the visitor's IP. A form cannot override a STOP (respectWithdrawn).
+    const given = sub.consent;
+    for (const channel of [
+      ...(phone ? (['whatsapp'] as const) : []),
+      ...(email ? (['email'] as const) : []),
+    ]) {
+      await this.consentLedger.recordInTx(tx, orgId, {
+        contactId,
+        channel,
+        action: 'granted',
+        source: 'form',
+        evidence: {
+          consentText: given?.text.slice(0, 300),
+          consentVersion: given ? String(given.version) : undefined,
+          consentHash: given ? createHash('sha256').update(given.text).digest('hex') : undefined,
+          formId: form.uuid,
+          submissionId: sub.uuid,
+        },
+        occurredAt: given ? new Date(given.at) : undefined,
+        idempotencyKey: `form:${sub.uuid}:${channel}`,
+        respectWithdrawn: true,
+      });
+    }
     const patch: Record<string, unknown> = {};
     if (email && !row.emailSubscriptionStatus) patch.emailSubscriptionStatus = 'subscribed';
     if (phone && !row.whatsappSubscriptionStatus) patch.whatsappSubscriptionStatus = 'subscribed';

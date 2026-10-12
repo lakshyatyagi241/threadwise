@@ -929,6 +929,7 @@
         "optedOut": "Đã hủy nhận tin",
         "invalidNumbers": "Số không hợp lệ",
         "alwaysSkipped": "Các liên hệ đã hủy nhận tin và số không hợp lệ luôn bị bỏ qua.",
+        "noConsent": "Chưa ghi nhận sự đồng ý (bị bỏ qua)",
         "willBeMessaged": "Sẽ được nhắn tin",
         "about": "khoảng {count}",
         "approximate": "Đây là ước tính: đối tượng quá lớn nên không thể đếm chính xác kịp thời.",

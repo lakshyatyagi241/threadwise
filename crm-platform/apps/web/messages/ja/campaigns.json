@@ -929,6 +929,7 @@
         "optedOut": "配信停止",
         "invalidNumbers": "無効な番号",
         "alwaysSkipped": "配信停止した連絡先と無効な番号は常にスキップされます。",
+        "noConsent": "同意の記録なし（スキップ）",
         "willBeMessaged": "送信対象",
         "about": "約{count}件",
         "approximate": "これは推定値です。対象が大きすぎて、時間内に正確に集計できませんでした。",

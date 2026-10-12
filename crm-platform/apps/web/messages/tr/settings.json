@@ -334,6 +334,11 @@
         "label": "Yardım asistanı",
         "description": "Ekibinize yol gösteren veya adımları onlar için yapan asistanı açın.",
         "keywords": "yapay zeka, asistan, ajan, kılavuz, yardım, otomasyon"
+      },
+      "consent": {
+        "label": "Onay ve STOP yanıtları",
+        "description": "STOP ve START kelimelerini, onay yanıtlarını, abonelikten çıkma satırını ve pazarlamanın kayıtlı onay gerektirip gerektirmediğini seçin.",
+        "keywords": "onay, abonelikten çıkma, abone olma, aboneliği iptal, stop, start, kvkk, gdpr, uyumluluk, gizlilik, pazarlama"
       }
     },
     "backToMarketplace": "Marketplace'e dön"

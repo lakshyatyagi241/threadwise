@@ -334,6 +334,11 @@
         "label": "Assistente de ajuda",
         "description": "Ative o assistente que orienta sua equipe ou faz os passos por ela.",
         "keywords": "ia, assistente, agente, guia, ajuda, automação"
+      },
+      "consent": {
+        "label": "Consentimento e respostas STOP",
+        "description": "Escolha as palavras STOP e START, as respostas de confirmação, a linha de cancelamento e se o marketing exige consentimento registrado.",
+        "keywords": "consentimento, cancelar inscrição, reativar inscrição, descadastrar, stop, start, lgpd, gdpr, conformidade, privacidade, marketing"
       }
     },
     "backToMarketplace": "Voltar ao Marketplace"

@@ -334,6 +334,11 @@
         "label": "도움말 어시스턴트",
         "description": "팀을 안내하거나 단계를 대신 처리하는 어시스턴트를 켭니다.",
         "keywords": "ai, 어시스턴트, 에이전트, 가이드, 도움말, 자동화"
+      },
+      "consent": {
+        "label": "수신 동의 및 STOP 답장",
+        "description": "STOP 및 START 단어, 확인 답장, 수신 거부 문구, 마케팅에 기록된 동의가 필요한지 여부를 설정하세요.",
+        "keywords": "수신 동의, 수신 거부, 다시 수신, 구독 취소, stop, start, gdpr, 규정 준수, 개인정보, 마케팅"
       }
     },
     "backToMarketplace": "마켓플레이스로 돌아가기"

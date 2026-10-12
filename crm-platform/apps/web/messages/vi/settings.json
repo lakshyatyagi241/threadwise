@@ -334,6 +334,11 @@
         "label": "Trợ lý trợ giúp",
         "description": "Bật trợ lý hướng dẫn nhóm của bạn hoặc làm các bước giúp họ.",
         "keywords": "ai, trợ lý, tác nhân, hướng dẫn, trợ giúp, tự động hóa"
+      },
+      "consent": {
+        "label": "Đồng ý nhận tin và phản hồi STOP",
+        "description": "Chọn từ khóa STOP và START, phản hồi xác nhận, dòng từ chối và việc marketing có cần sự đồng ý đã ghi nhận hay không.",
+        "keywords": "đồng ý, từ chối, đăng ký lại, hủy đăng ký, stop, start, gdpr, tuân thủ, quyền riêng tư, marketing"
       }
     },
     "backToMarketplace": "Quay lại Marketplace"
