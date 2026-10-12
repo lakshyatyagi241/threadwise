@@ -28,6 +28,7 @@ import {
 import { isPlanGate, mktError } from '../lib/errors';
 import { AppCard } from './app-card';
 import { CategoryList, RequestBox, Shelves } from './browse-parts';
+import { DeveloperTiles } from './developer-tiles';
 import { SearchIcon } from './icons';
 import { MarketplaceHeader } from './marketplace-header';
 import { ErrorPanel, LoadingBlock, PAGE, TEXT_LINK } from './ui';
@@ -180,6 +181,8 @@ export function BrowsePage({ kind }: { kind: MarketAppKind }) {
               </Link>
             </Alert>
           )}
+
+          {kind === 'integration' && showShelves(filters) && <DeveloperTiles />}
 
           {showShelves(filters) && <Shelves kind={kind} />}
 

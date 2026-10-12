@@ -61,7 +61,9 @@ export function SettingsFrame({ children }: { children: ReactNode }) {
                 <li key={section} className="shrink-0 lg:shrink">
                   <Link
                     ref={section === activeSection ? activeLink : undefined}
-                    href={`/settings/${section}`}
+                    href={
+                      section === 'integrations' ? '/marketplace/integrations' : `/settings/${section}`
+                    }
                     onClick={clear}
                     aria-current={active ? 'page' : undefined}
                     className={cn(
