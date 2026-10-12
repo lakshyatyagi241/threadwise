@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useId, useState, type ReactNode } from 'react';
 import { FORM_CAPTCHA_MODES, lifecycleStageSchema } from '@crm/contracts';
@@ -40,6 +41,7 @@ import {
 } from '../lib/settings-model';
 import type { Definition, FormCaptchaMode } from '../lib/types';
 import type { BuilderTabProps } from './builder-types';
+import { useFormProtection } from '../api/forms';
 import { useFormUsers } from './forms-users';
 import { PaymentPanel } from './payment-panel';
 
@@ -343,6 +345,7 @@ export function SettingsTab(props: BuilderTabProps) {
   const { form, draft, setDraft, live, patchLive, name, setName, canEdit } = props;
   const t = useTranslations('web-forms.settings');
   const users = useFormUsers();
+  const protection = useFormProtection();
   const disabled = !canEdit;
   const published = form.publishedVersion !== null;
   const saved = form.draft;
@@ -837,6 +840,42 @@ export function SettingsTab(props: BuilderTabProps) {
             </Select>
           )}
         </FieldBox>
+        {protection.isError && <Alert tone="warning">{t('protection.captchaStatus.failed')}</Alert>}
+        {protection.data &&
+          (protection.data.captcha.available ? (
+            <p className={HINT} data-testid="captcha-status">
+              {t('protection.captchaStatus.available', {
+                version: protection.data.captcha.version ?? '',
+              })}
+            </p>
+          ) : (
+            <Alert
+              tone={live.captchaMode === 'on' ? 'warning' : 'info'}
+              data-testid="captcha-status"
+            >
+              {live.captchaMode === 'on'
+                ? t('protection.captchaStatus.noneOn')
+                : t('protection.captchaStatus.none')}
+            </Alert>
+          ))}
+        {protection.data && (
+          <div className="space-y-1" data-testid="spam-caught">
+            <p className={HINT}>
+              {t('protection.caught.blocked', { count: protection.data.blockedThisMonth })}
+            </p>
+            {protection.data.heldAsSpam > 0 && (
+              <p className={HINT}>
+                {t('protection.caught.held', { count: protection.data.heldAsSpam })}{' '}
+                <Link
+                  href={`/forms/${form.id}/submissions?tab=spam`}
+                  className="underline focus-visible:ring-2 focus-visible:ring-primary"
+                >
+                  {t('protection.caught.review')}
+                </Link>
+              </p>
+            )}
+          </div>
+        )}
 
         <div className="space-y-2">
           <NumberSetting

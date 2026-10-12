@@ -7,20 +7,7 @@ order: 16
 documents: []
 gates:
   planFeature: form_builder
-keywords:
-  [
-    form builder,
-    fields,
-    crm mapping,
-    custom fields,
-    hidden fields,
-    utm,
-    consent,
-    theme,
-    design,
-    publish,
-    versions,
-  ]
+keywords: [form builder, fields, crm mapping, custom fields, hidden fields, utm, consent, theme]
 ---
 
 ## What it is for
@@ -51,6 +38,13 @@ Pick one of eight themes, then change colours, corner shape, spacing, font, font
 ## What happens next
 
 Set the submit button text, the thank-you message or a redirect address (https only), an optional consent box, the company match rule, tags and lifecycle stage added to every contact, who owns the contact (nobody, one person or in turn), who is notified, and the protection settings: the hidden spam trap, CAPTCHA, how long answers are kept, and rate limits.
+
+### Spam protection and notifications
+
+- **Hidden trap field**: a field people never see. A bot that fills it gets a normal-looking thank-you, nothing is stored, and it is counted under Protection ("stopped N bots this month").
+- **CAPTCHA**: the CAPTCHA provider belongs to your platform administrator, not to your workspace. **Follow the platform setting** checks visitors when the platform has one. **Always on** needs one: without it the form checks nothing, a warning says so, and publishing is refused. **Off** skips the check for this form. The section always says whether the platform has a CAPTCHA.
+- **Spam bin**: a submission that looks like spam is kept, not deleted, and is not notified. Protection shows how many are held, with a link to the **Spam** tab, where **Not spam: process it** creates the contact and sends the usual notification.
+- **Notifications**: the contact's owner and the people you list get an in-app notification for every submission, and the email addresses you list get an email. Selecting the notification opens that exact submission, with the consent wording and time the visitor agreed to.
 
 ## Save, publish and versions
 

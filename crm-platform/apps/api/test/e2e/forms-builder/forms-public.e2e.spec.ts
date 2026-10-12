@@ -164,8 +164,8 @@ describe('the published definition (GET /v2/public/forms/:key)', () => {
   });
 
   it('a form with a CAPTCHA on and a configured provider says so, with the PUBLIC site key only', async () => {
-    const form = await live({ settings: { captchaMode: 'on' } });
     const settings = h.app.get(AuthSettingsService);
+    // "Always on" can only be published while the platform has a provider (see forms-post-submit), so the provider exists from the start.
     const spy = vi.spyOn(settings, 'captchaConfig').mockResolvedValue({
       version: 'v2',
       siteKey: 'site-key-1',
@@ -173,6 +173,7 @@ describe('the published definition (GET /v2/public/forms/:key)', () => {
       threshold: 0.5,
     });
     try {
+      const form = await live({ settings: { captchaMode: 'on' } });
       const body = (await api.publicGet(form.publicKey)).body;
       expect(body.captcha).toEqual({ required: true, version: 'v2', siteKey: 'site-key-1' });
       expect(JSON.stringify(body)).not.toContain('very-secret');

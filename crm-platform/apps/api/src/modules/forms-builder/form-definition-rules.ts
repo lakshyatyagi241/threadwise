@@ -30,6 +30,8 @@ export interface PublishContext {
   stageUsable: (stage: string) => boolean;
   /** The workspace has a gateway that can make a hosted payment link. Absent = not checked. */
   paymentGatewayReady?: boolean;
+  /** The form is set to "always on" CAPTCHA and the platform has no provider: the setting would silently do nothing. Absent = not checked. */
+  captchaMissing?: boolean;
 }
 
 const TEXTLIKE: readonly FormFieldKind[] = ['short_text', 'long_text', 'dropdown', 'radio'];
@@ -123,6 +125,9 @@ export function publishProblems(def: FormDefinition, ctx: PublishContext): FormP
   const stage = def.after.lifecycleStage;
   if (stage && !ctx.stageUsable(stage))
     out.push(problem('after.lifecycleStage', 'lifecycle_stage_unknown'));
+
+  if (ctx.captchaMissing === true)
+    out.push(problem('settings.captchaMode', 'captcha_not_configured'));
 
   if (def.payment.enabled && ctx.paymentGatewayReady === false) {
     out.push(problem('payment', 'payment_no_gateway'));

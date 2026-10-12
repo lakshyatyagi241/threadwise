@@ -58,6 +58,7 @@ import {
   type SubmissionView,
 } from '../lib/submission-model';
 
+const UUID_PARAM = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const UPDATE_PERM = 'record.form-submissions.update';
 const DELETE_PERM = 'record.form-submissions.delete';
 const EXPORT_PERM = 'record.form-submissions.export';
@@ -110,7 +111,15 @@ export function SubmissionsScreen({ formId }: { formId: string }) {
 
   const [openId, setOpenId] = useState<string | null>(null);
   const opener = useRef<HTMLElement | null>(null);
-  const open = openId ? (rows.find((r) => r.id === openId) ?? null) : null;
+  // A notification links here with `?submission=<id>`: open that submission, even when it is not in the first page of the list (a
+  // detail carries everything a list row does, so it stands in for the row).
+  const linked = params.get('submission');
+  useEffect(() => {
+    if (linked && UUID_PARAM.test(linked)) setOpenId(linked);
+  }, [linked]);
+  const listed = openId ? (rows.find((r) => r.id === openId) ?? null) : null;
+  const fetched = useSubmission(formId, openId && !listed ? openId : null);
+  const open = listed ?? (openId ? (fetched.data ?? null) : null);
 
   const [exporting, setExporting] = useState(false);
   const exportBody = exportInput(view);

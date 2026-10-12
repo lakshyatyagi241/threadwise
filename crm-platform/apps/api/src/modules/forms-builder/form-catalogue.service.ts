@@ -4,6 +4,7 @@ import type {
   FormBindObject,
   FormFieldKind,
   FormPaymentGateway,
+  FormProtection,
   FormProperty,
   FormPropertyList,
   FormTemplateList,
@@ -14,6 +15,7 @@ import {
   WorkspaceGatewayResolver,
   supportsPaymentLinks,
 } from '../checkout-orders-merchant-payments';
+import { CaptchaService } from '../auth';
 import { ContactsRepository } from '../crm';
 import { FORM_TEMPLATES } from './form-templates';
 import { FormsRepository } from './forms.repository';
@@ -82,6 +84,7 @@ export class FormCatalogueService {
     private readonly repo: FormsRepository,
     private readonly contacts: ContactsRepository,
     private readonly gateways: WorkspaceGatewayResolver,
+    private readonly captcha: CaptchaService,
   ) {}
 
   async properties(object: FormBindObject): Promise<FormPropertyList> {
@@ -136,6 +139,17 @@ export class FormCatalogueService {
       name: gw.name,
       mode: gw.mode,
       reason: ready ? null : 'no_link_support',
+    };
+  }
+
+  /** What protects the workspace's forms right now: whether the platform has a CAPTCHA provider, and what the silent protections caught. */
+  async protection(): Promise<FormProtection> {
+    const ctx = RequestContextStore.require();
+    const config = await this.captcha.publicConfig();
+    const counts = await this.db.tx((tx) => this.repo.protectionCounts(tx, ctx.orgId, new Date()));
+    return {
+      captcha: { available: config !== null, version: config?.version ?? null },
+      ...counts,
     };
   }
 
