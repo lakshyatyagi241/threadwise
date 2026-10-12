@@ -343,3 +343,9 @@ Reference has no assistant. Requested by the project owner on 12 Oct 2026; built
 | What is stored         | n/a       | One row per task (counts, outcome, tokens, route path, locale) and one audit event. Never the task text, the page text or a model answer                                                                                                | decision |
 | Model vendors          | n/a       | OpenAI-compatible vendors only (openai, mistral, deepseek, groq). Anthropic and Gemini need a tool-call adapter: not built                                                                                                              | decision |
 | The library            | n/a       | `@page-agent/core` and `@page-agent/page-controller` 1.12.4 (MIT), headless, loaded on first use. Our own panel instead of the shipped one (not themable, no RTL, no confirmation card). Notice in `THIRD_PARTY_NOTICES.md`             | decision |
+
+## Saved replies library (TW-TIB1-024)
+
+Reference has a flat list of quick replies with two variables. Ours is a library: server-filled variables from the open conversation (contact, agent, workspace,
+channel), an optional channel restriction and language, a duplicate action, a category filter, a plan meter with an upgrade link, and a keyboard-driven
+picker. The rules that differ from Reference are listed one by one in [team-inbox-conversations.md](team-inbox-conversations.md#saved-replies-tw-tib1-024).
