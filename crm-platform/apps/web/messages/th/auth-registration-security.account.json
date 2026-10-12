@@ -551,7 +551,8 @@
             "forms_and_links": "แบบฟอร์มและลิงก์",
             "extra_channels": "Telegram, Facebook และ Instagram",
             "form_builder": "แบบฟอร์ม",
-            "waba_groups": "กลุ่ม WhatsApp"
+            "waba_groups": "กลุ่ม WhatsApp",
+            "sms": "SMS"
           },
           "cta": {
             "continueFree": "ใช้ฟรีต่อ",

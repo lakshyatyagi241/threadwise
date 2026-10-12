@@ -1418,7 +1418,8 @@
             "forms_and_links": "Lead capture forms and shareable links.",
             "extra_channels": "The Telegram, Facebook and Instagram channels.",
             "form_builder": "Hosted and embedded web forms that create contacts in the CRM. The paid Forms app owns this switch.",
-            "waba_groups": "Create and manage WhatsApp groups from a Cloud API number: invite link, join requests, members. The number must be an Official Business Account."
+            "waba_groups": "Create and manage WhatsApp groups from a Cloud API number: invite link, join requests, members. The number must be an Official Business Account.",
+            "sms": "Send-only SMS through Twilio or MSG91: connect senders, send SMS broadcasts and campaigns."
           },
           "units": {
             "days": "Days",
@@ -1559,7 +1560,8 @@
             "ai_token_limit_monthly": "AI tokens per month (platform keys)",
             "forms": "Web forms",
             "form_submissions_monthly": "Form submissions per month",
-            "ai_form_generations_monthly": "AI form builder generations per month"
+            "ai_form_generations_monthly": "AI form builder generations per month",
+            "sms_monthly": "SMS per month"
           },
           "featureGroups": {
             "messaging": "Messaging",
@@ -1596,7 +1598,8 @@
             "forms_and_links": "Forms, click-to-chat links and groups",
             "extra_channels": "Telegram, Facebook and Instagram channels",
             "form_builder": "Forms (web form builder)",
-            "waba_groups": "WhatsApp groups (Cloud API)"
+            "waba_groups": "WhatsApp groups (Cloud API)",
+            "sms": "SMS channel"
           },
           "problems": {
             "required": "This field is required.",
@@ -1648,7 +1651,8 @@
             "ai_token_limit_monthly": "Tokens the AI assistants use in the calendar month on the platform's keys. Workspaces on their own keys are not capped.",
             "forms": "Active web forms (Forms app). Archiving a form frees its place. 0 = unlimited.",
             "form_submissions_monthly": "Form submissions accepted in the calendar month, spam excluded. Over the cap a submission is still saved for review, never dropped. 0 = unlimited.",
-            "ai_form_generations_monthly": "AI form builder generations in the calendar month, a repair retry included. 0 = unlimited."
+            "ai_form_generations_monthly": "AI form builder generations in the calendar month, a repair retry included. 0 = unlimited.",
+            "sms_monthly": "Outbound SMS messages sent in the calendar month. 0 = unlimited."
           }
         }
       },

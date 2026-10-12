@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Field, Input, Select, Switch } from '@crm/ui';
 import type { ComposeSender } from '@crm/contracts';
 import { editorType, type BuilderForm } from '../../lib/builder-model';
-import { kindsFor } from '../../lib/engine-gate';
+import { isSmsEngine, kindsFor } from '../../lib/engine-gate';
 import { BubbleIcon, ChoiceCard, FlowIcon, LabelRow, StepCard, TemplateIcon } from './parts';
 
 /** Step 1 (TW-CAMP-003): the name, the sender, what kind of campaign it is, and whether to split-test it. */
@@ -53,12 +53,15 @@ export function StepSetup({
         onSelect={(type) => patch({ type })}
       />
 
-      <AbToggle
-        checked={form.abTesting}
-        split={form.abSplit}
-        onChecked={(abTesting) => patch({ abTesting })}
-        onSplit={(abSplit) => patch({ abSplit })}
-      />
+      {/* The SMS runner sends one text to everyone, so a split test would do nothing: it is not offered. */}
+      {!isSmsEngine(engine) && (
+        <AbToggle
+          checked={form.abTesting}
+          split={form.abSplit}
+          onChecked={(abTesting) => patch({ abTesting })}
+          onSplit={(abSplit) => patch({ abSplit })}
+        />
+      )}
     </StepCard>
   );
 }

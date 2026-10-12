@@ -551,7 +551,8 @@
             "forms_and_links": "טפסים וקישורים",
             "extra_channels": "Telegram, Facebook ו-Instagram",
             "form_builder": "טפסים",
-            "waba_groups": "קבוצות WhatsApp"
+            "waba_groups": "קבוצות WhatsApp",
+            "sms": "SMS"
           },
           "cta": {
             "continueFree": "המשך בחינם",

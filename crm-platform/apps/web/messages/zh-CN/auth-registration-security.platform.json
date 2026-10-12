@@ -1418,7 +1418,8 @@
             "forms_and_links": "线索收集表单和可分享的链接。",
             "extra_channels": "Telegram、Facebook 和 Instagram 渠道。",
             "form_builder": "托管和嵌入式网页表单，可在 CRM 中创建联系人。此开关由付费的表单应用掌管。",
-            "waba_groups": "通过 Cloud API 号码创建和管理 WhatsApp 群组：邀请链接、加入请求、成员。该号码必须是官方商业账号。"
+            "waba_groups": "通过 Cloud API 号码创建和管理 WhatsApp 群组：邀请链接、加入请求、成员。该号码必须是官方商业账号。",
+            "sms": "通过 Twilio 或 MSG91 发送的仅发送短信：连接发送方，发送短信群发和营销活动。"
           },
           "units": {
             "days": "天",
@@ -1559,7 +1560,8 @@
             "ai_token_limit_monthly": "每月 AI 令牌数（平台密钥）",
             "forms": "网页表单",
             "form_submissions_monthly": "每月表单提交数",
-            "ai_form_generations_monthly": "每月 AI 表单构建器生成次数"
+            "ai_form_generations_monthly": "每月 AI 表单构建器生成次数",
+            "sms_monthly": "每月短信数"
           },
           "featureGroups": {
             "messaging": "消息",
@@ -1596,7 +1598,8 @@
             "forms_and_links": "表单、点击聊天链接和群组",
             "extra_channels": "Telegram、Facebook 和 Instagram 渠道",
             "form_builder": "表单（网页表单构建器）",
-            "waba_groups": "WhatsApp 群组（Cloud API）"
+            "waba_groups": "WhatsApp 群组（Cloud API）",
+            "sms": "SMS 渠道"
           },
           "problems": {
             "required": "此字段为必填项。",
@@ -1648,7 +1651,8 @@
             "ai_token_limit_monthly": "AI 助手在日历月内使用平台密钥消耗的令牌数。使用自有密钥的工作区不受限制。",
             "forms": "有效的网页表单（表单应用）。归档表单即可释放其名额。0 = 不限。",
             "form_submissions_monthly": "日历月内接受的表单提交数，不含垃圾信息。超出上限后，提交仍会保存以供审核，不会被丢弃。0 = 不限。",
-            "ai_form_generations_monthly": "日历月内 AI 表单构建器的生成次数，包括修复重试。0 = 不限。"
+            "ai_form_generations_monthly": "日历月内 AI 表单构建器的生成次数，包括修复重试。0 = 不限。",
+            "sms_monthly": "自然月内发出的短信条数。0 = 不限。"
           }
         }
       },

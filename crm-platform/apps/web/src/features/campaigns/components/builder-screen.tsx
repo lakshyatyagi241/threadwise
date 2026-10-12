@@ -83,7 +83,8 @@ export function BuilderScreen({
 }) {
   const t = useTranslations('campaigns.builder');
   const config = useCampaignConfig(id);
-  const builder = useBuilder();
+  const smsChannel = engineOf(initialSenderKey ?? config.data?.senderKey ?? '') === 'sms';
+  const builder = useBuilder(smsChannel ? 'sms' : undefined);
   const session = useSession();
   const zone = session.org.timezone ?? 'UTC';
 

@@ -97,7 +97,7 @@
       },
       "sms": {
         "label": "SMS",
-        "description": "Invia e ricevi SMS con il tuo mittente.",
+        "description": "Invia SMS con il tuo numero Twilio o con il tuo mittente MSG91.",
         "keywords": "messaggio di testo, ID mittente, dlt, twilio, cellulare"
       },
       "email": {

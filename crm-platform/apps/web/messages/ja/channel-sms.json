@@ -1,0 +1,214 @@
+{
+  "sms": {
+    "common": {
+      "dismiss": "閉じる",
+      "close": "閉じる",
+      "cancel": "キャンセル"
+    },
+    "hub": {
+      "kicker": "チャネル",
+      "title": "SMS",
+      "titleAccent": "送信元",
+      "intro": "ご自身のTwilio番号やMSG91送信元からテキストメッセージを送信できます。ここでのSMSは送信専用です。連絡先へは一斉配信やキャンペーンから送信します。",
+      "campaigns": "キャンペーン",
+      "broadcasts": "一斉配信",
+      "channels": "チャネル",
+      "loadError": "SMS番号を読み込めませんでした。しばらくしてからもう一度お試しください。",
+      "cardCaption": "Twilio · MSG91",
+      "activeCount": "{count, plural, other {# 件の番号が有効}}",
+      "notConnected": "未接続",
+      "howTitle": "ご利用の流れ",
+      "how": {
+        "connect": {
+          "title": "送信元を接続",
+          "body": "Twilio番号またはMSG91送信元を追加します。保存前にプロバイダーで認証情報を確認します。"
+        },
+        "report": {
+          "title": "配信レポートのアドレスを貼り付け",
+          "body": "MSG91またはTwilioの管理画面に追加すると、配信済み・失敗したメッセージがレポートに表示されます。"
+        },
+        "send": {
+          "title": "一斉配信とキャンペーンを送信",
+          "body": "一斉配信やキャンペーンの作成時にこの送信元を選択します。受信者ごとに1通送信されます。"
+        },
+        "billing": {
+          "title": "SMSクォータに課金",
+          "body": "メッセージはプランの月間SMSクォータに計上され、WhatsAppウォレットには課金されません。"
+        }
+      },
+      "reportTitle": "ご注意：これをプロバイダーに貼り付けてください",
+      "reportBody": "プロバイダーの管理画面にこの配信レポートのアドレスを追加すると、メッセージの配信済み・失敗を記録できます。",
+      "reportLabel": "配信レポートURL",
+      "copy": "コピー",
+      "copied": "コピーしました",
+      "copyFailed": "コピーできませんでした。アドレスを選択して手動でコピーしてください。",
+      "connectedTitle": "接続済みの番号",
+      "total": "合計 {count} 件",
+      "empty": "SMS番号がまだ接続されていません。",
+      "connectFirst": "最初の番号を接続"
+    },
+    "card": {
+      "active": "有効",
+      "inactive": "無効",
+      "rate": "料金 / セグメント",
+      "dltSender": "DLT送信元",
+      "dltTemplate": "DLTテンプレート",
+      "alphanumeric": "Sender ID：一方向で、すべての国で使えるわけではありません。",
+      "activate": "有効にする",
+      "deactivate": "無効にする",
+      "remove": "削除",
+      "removeTitle": "SMS番号を削除",
+      "removeConfirm": "このSMS番号を削除しますか？",
+      "activated": "SMS番号を有効にしました。",
+      "deactivated": "SMS番号を無効にしました。",
+      "removed": "SMS番号を削除しました。",
+      "failed": "SMS番号を更新できませんでした。もう一度お試しください。",
+      "changed": "この番号は別の場所で変更されました。一覧を再読み込みしたので、もう一度お試しください。",
+      "notAvailable": "SMSはご利用のプランでは使えないか、オフになっています。",
+      "cancel": "キャンセル"
+    },
+    "connect": {
+      "title": "番号を接続",
+      "intro": "必要な数だけ追加できます。複数のTwilio番号とMSG91送信元を同時に使用できます。",
+      "provider": "SMSプロバイダー",
+      "providerTwilio": "Twilio（グローバル）",
+      "providerMsg91": "MSG91（インド / DLT）",
+      "providerHint": "ほとんどの国にはTwilio、インドへの確実な配信にはMSG91をご利用ください。",
+      "from": "送信元番号 / Sender ID",
+      "fromPlaceholder": "+17372508034",
+      "fromHint": "国際形式の番号（Twilio）または登録済みの送信元（MSG91）。文字だけの送信元は一方向で、返信はできません。",
+      "sid": "Twilio Account SID",
+      "sidPlaceholder": "ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "sidHint": "Twilioのみ。空欄にすると、WhatsApp用に接続済みのキーを再利用します。",
+      "token": "Auth Token / MSG91 Auth Key",
+      "tokenHint": "暗号化して保存されます。Twilioの場合、空欄にするとWhatsApp用に接続済みのキーを再利用します。",
+      "dltOptions": "MSG91 / インド（DLT）オプション",
+      "senderId": "DLT Sender ID",
+      "senderIdPlaceholder": "ACMEIN",
+      "senderIdHint": "MSG91のみ。DLTに登録した6文字の送信元です。",
+      "dltTemplate": "DLTテンプレートID",
+      "dltTemplateHint": "MSG91のみ。インド向け配信に使う、承認済みのDLTテンプレートIDです。",
+      "reportBoxTitle": "MSG91管理画面の配信レポート",
+      "reportBoxBody": "MSG91の管理画面で、このアドレスを配信レポート（DLR）URLとして貼り付けてください。",
+      "rate": "セグメントあたりの料金",
+      "ratePlaceholder": "0.0075",
+      "rateHint": "SMS費用のレポート専用です。WhatsAppウォレットには課金されません。",
+      "currency": "通貨",
+      "submit": "確認してSMSを接続",
+      "submitting": "確認中…",
+      "errorTitle": "SMS番号を接続できませんでした：",
+      "providerError": "プロバイダーからの応答：{reason}",
+      "connected": "SMS番号を接続しました。送信を開始できます。",
+      "failed": "SMS番号を接続できませんでした。もう一度お試しください。",
+      "errors": {
+        "fromRequired": "送信元番号は必須です。",
+        "fromTooLong": "送信元番号は32文字以内で入力してください。",
+        "sidTooLong": "Account SIDは64文字以内で入力してください。",
+        "sidShape": "Account SIDではありません。ACで始まる必要があり、SKで始まるAPIキーは使えません。",
+        "tokenRequired": "MSG91 Auth Keyが必要です。",
+        "tokenTooLong": "Auth Tokenは255文字以内で入力してください。",
+        "senderIdTooLong": "Sender IDは16文字以内で入力してください。",
+        "dltTemplateTooLong": "DLTテンプレートIDは64文字以内で入力してください。",
+        "rateInvalid": "セグメントあたりの料金は0以上の数値で入力してください。",
+        "currencyTooLong": "通貨は8文字以内で入力してください。"
+      },
+      "api": {
+        "notAvailable": "SMSはご利用のプランでは使えないか、プラットフォームでオフになっています。",
+        "unavailable": "このSMS番号は接続が切れているか、認証情報がありません。先に再接続してください。"
+      }
+    },
+    "lookup": {
+      "title": "送信前に番号を確認",
+      "hint": "SMSは到着時ではなく送信時に課金されます。送信する前に、実在する携帯番号かどうかを確認してください。",
+      "label": "電話番号",
+      "placeholder": "+1 555 123 4567",
+      "check": "番号を確認",
+      "checking": "確認中…",
+      "unreachable": "照会サービスに接続できませんでした。",
+      "carrier": "キャリア：{carrier}。",
+      "kind": {
+        "mobile": "携帯電話 — SMSを受信できます。",
+        "landline": "固定電話 — SMSを受信できません。送信しても課金され、届きません。",
+        "voip": "VoIP — SMSを確実に受信できない場合があります。",
+        "invalid": "無効な番号 — 送信しても課金され、届きません。"
+      }
+    },
+    "guide": {
+      "title": "セットアップガイド",
+      "twilio": {
+        "title": "Twilio（グローバル）",
+        "p1": "TwilioコンソールのホームでAccount SID（ACで始まります）とAuth Tokenをコピーします。SKで始まるAPIキーは使えません。",
+        "p2": "SMS対応の番号を購入するかトライアル番号を使用し、国際形式で送信元番号として貼り付けます。",
+        "p3": "Twilio番号の設定で、上記の配信レポートのアドレスをステータスコールバックURLとして貼り付けます。",
+        "p4": "トライアルアカウントでは、確認済みの番号にしか送信できず、カスタムテキストは使えません。"
+      },
+      "msg91": {
+        "title": "MSG91（インド / DLT）",
+        "p1": "インドの通信事業者は海外のロングコード番号をフィルタリングするため、インドへの確実な配信にはMSG91をご利用ください。",
+        "p2": "MSG91のAuth KeyをAuth Tokenの欄に貼り付けます。",
+        "p3": "DLTポータルで6文字のSender IDとメッセージテンプレートを登録し、両方をDLTオプションに貼り付けます。",
+        "p4": "DLTテンプレートIDがある場合はMSG91のテンプレートルートで送信し、ない場合はプレーンテキストで送信します。"
+      },
+      "billing": {
+        "title": "セグメント、費用、課金",
+        "p1": "半角160文字までのメッセージは1セグメント（GSM-7）です。絵文字や非ラテン文字が1つでも含まれると上限が70文字（UCS-2）になり、費用が3倍になることがあります。",
+        "p2": "それより長いメッセージは153文字（UCS-2では67文字）のセグメントに分割され、セグメントごとに課金されます。",
+        "p3": "入力した料金は費用レポート専用です。メッセージはプランの月間SMSクォータで計測され、WhatsAppウォレットには課金されません。",
+        "p4": "文字だけのSender IDは一方向で、米国やカナダなど一部の国では使えません。"
+      }
+    },
+    "segments": {
+      "summary": "{units} 文字 · {segments, plural, other {# セグメント}} · {encoding}",
+      "remaining": "このセグメントの残り {remaining} 文字",
+      "ucs2": "このメッセージにはGSM文字セット外の文字（絵文字や非ラテン文字）が含まれているため、1通あたり{perSegment}文字までとなり、{segments}通分として課金されます。",
+      "gsm": "このメッセージは{units}文字で、{segments}通分として課金されます。"
+    },
+    "compose": {
+      "note": "SMSはプレーンテキストのみ送信します。ヘッダー、フッター、添付ファイル、ボタン、分割テストは使用しないため非表示です。",
+      "bodyHint": "短くまとめましょう。160文字ごとに1セグメント増え、セグメントごとに課金されます。"
+    },
+    "chooser": {
+      "name": "SMS",
+      "hint": "Twilio番号またはMSG91送信元から連絡先にメッセージを送ります。",
+      "cta": "SMSキャンペーンを作成"
+    },
+    "operator": {
+      "nav": {
+        "group": "チャネル",
+        "item": "SMS"
+      },
+      "title": "SMSチャネル",
+      "eyebrow": "プラットフォームスイッチ",
+      "superOnly": "SMSスイッチを変更できるのはスーパー管理者のみです。状態は確認できます。",
+      "loading": "読み込み中",
+      "retry": "再試行",
+      "status": {
+        "enabled": "有効",
+        "disabled": "無効"
+      },
+      "explanation": "すべてのワークスペースでSMSチャネルをオンまたはオフにします。表示・非表示になるのは入口(SMSメニュー、送信元の選択、SMSテンプレートのチャネル)だけで、送信元、テンプレート、実行中の送信が削除・停止されることはありません。",
+      "state": {
+        "enabled": "SMSはオンです。プランにSMSが含まれるワークスペースは、送信元を接続し、ブロードキャストやキャンペーンからテキストメッセージを送信できます。",
+        "disabled": "SMSはオフです。ワークスペースにはSMSメニュー、送信元の選択、SMSテンプレートが表示されません。チャネルを提供する準備ができたらオンにしてください。"
+      },
+      "enable": "SMSを有効にする",
+      "disable": "SMSを無効にする",
+      "cancel": "キャンセル",
+      "enabledToast": "プラットフォームでSMSを有効にしました。",
+      "disabledToast": "プラットフォームでSMSを無効にしました。",
+      "disableDialog": {
+        "title": "SMSを無効にしますか?",
+        "body": "すべてのワークスペースで、SMSメニュー、送信元の選択、SMSテンプレートがただちに表示されなくなります。何も削除されず、既存の送信元は引き続き動作します。いつでも再度オンにできます。",
+        "confirm": "SMSを無効にする"
+      },
+      "errors": {
+        "forbidden": "この操作を行う権限がありません。",
+        "conflict": "他のユーザーがこの設定を変更しました。ページを更新しました。もう一度お試しください。",
+        "validation": "値を確認して、もう一度お試しください。",
+        "request": "このリクエストを完了できませんでした。",
+        "unexpected": "こちら側で問題が発生しました。しばらくしてからもう一度お試しください。",
+        "network": "サーバーに接続できません。接続を確認してください。"
+      }
+    }
+  }
+}

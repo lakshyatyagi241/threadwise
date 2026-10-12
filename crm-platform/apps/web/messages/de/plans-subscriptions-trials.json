@@ -43,7 +43,8 @@
       "ai_token_limit_monthly": "KI-Token pro Monat",
       "forms": "Webformulare",
       "form_submissions_monthly": "Formular-Einreichungen pro Monat",
-      "ai_form_generations_monthly": "KI-Formulareditor-Generierungen pro Monat"
+      "ai_form_generations_monthly": "KI-Formulareditor-Generierungen pro Monat",
+      "sms_monthly": "SMS pro Monat"
     },
     "features": {
       "automation": "Automatisierung",
@@ -74,7 +75,8 @@
       "forms_and_links": "Formulare und Links",
       "extra_channels": "Telegram, Facebook und Instagram",
       "form_builder": "Formulare",
-      "waba_groups": "WhatsApp-Gruppen"
+      "waba_groups": "WhatsApp-Gruppen",
+      "sms": "SMS-Kanal"
     },
     "limitGroups": {
       "messaging": "Nachrichten",
@@ -124,7 +126,8 @@
       "ai_token_limit_monthly": "Im Kalendermonat von den KI-Assistenten über die Schlüssel der Plattform verbrauchte Token. Workspaces mit eigenen Schlüsseln sind nicht begrenzt.",
       "forms": "Aktive Webformulare (App Formulare). Beim Archivieren eines Formulars wird sein Platz wieder frei. 0 = unbegrenzt.",
       "form_submissions_monthly": "Im Kalendermonat angenommene Formular-Einreichungen, Spam ausgenommen. Über dem Limit wird eine Einreichung trotzdem zur Prüfung gespeichert und nie verworfen. 0 = unbegrenzt.",
-      "ai_form_generations_monthly": "KI-Formulareditor-Generierungen im Kalendermonat, einschließlich Reparaturwiederholungen. 0 = unbegrenzt."
+      "ai_form_generations_monthly": "KI-Formulareditor-Generierungen im Kalendermonat, einschließlich Reparaturwiederholungen. 0 = unbegrenzt.",
+      "sms_monthly": "Im Kalendermonat gesendete ausgehende SMS-Nachrichten. 0 = unbegrenzt."
     },
     "planAddons": {
       "title": "Add-ons in Ihrem Tarif verfügbar",

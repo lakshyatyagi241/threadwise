@@ -8,7 +8,7 @@ import { listScenarios, deleteScenarios } from './probes/list.mjs';
 import { casesFor } from './values.mjs';
 import { pick } from './util.mjs';
 
-const FEATURE_RE = /^(WD-[A-Z0-9]+-\d{3}|adhoc:[a-z0-9-]+)$/;
+const FEATURE_RE = /^((?:WD|TW)-[A-Z0-9]+-\d{3}|adhoc:[a-z0-9-]+)$/;
 const SIDES = ['threadwise', 'ours'];
 const hasBoth = (x) =>
   x != null &&

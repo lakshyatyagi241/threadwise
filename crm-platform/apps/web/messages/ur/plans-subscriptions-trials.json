@@ -43,7 +43,8 @@
       "ai_token_limit_monthly": "فی مہینہ AI ٹوکنز",
       "forms": "ویب فارمز",
       "form_submissions_monthly": "فی مہینہ فارم جمع کرائیں",
-      "ai_form_generations_monthly": "فی مہینہ AI فارم بلڈر جنریشنز"
+      "ai_form_generations_monthly": "فی مہینہ AI فارم بلڈر جنریشنز",
+      "sms_monthly": "ماہانہ SMS"
     },
     "features": {
       "automation": "آٹومیشن",
@@ -74,7 +75,8 @@
       "forms_and_links": "فارمز اور لنکس",
       "extra_channels": "Telegram، Facebook اور Instagram",
       "form_builder": "فارمز",
-      "waba_groups": "WhatsApp گروپس"
+      "waba_groups": "WhatsApp گروپس",
+      "sms": "SMS چینل"
     },
     "limitGroups": {
       "messaging": "میسجنگ",
@@ -124,7 +126,8 @@
       "ai_token_limit_monthly": "کیلنڈر مہینے میں پلیٹ فارم کی کیز پر AI اسسٹنٹس کے استعمال کردہ ٹوکنز۔ اپنی کیز پر چلنے والے ورک اسپیسز پر حد نہیں ہے۔",
       "forms": "فعال ویب فارمز (فارمز ایپ)۔ فارم آرکائیو کرنے سے اس کی جگہ خالی ہو جاتی ہے۔ 0 = غیر محدود۔",
       "form_submissions_monthly": "کیلنڈر مہینے میں قبول کی گئی فارم جمع کرانے کی درخواستیں، اسپیم کے علاوہ۔ حد سے زیادہ ہونے پر جمع کرانا جائزے کے لیے پھر بھی محفوظ ہوتا ہے، کبھی ضائع نہیں ہوتا۔ 0 = غیر محدود۔",
-      "ai_form_generations_monthly": "کیلنڈر مہینے میں AI فارم بلڈر کی جنریشنز، جن میں مرمت کی دوبارہ کوشش بھی شامل ہے۔ 0 = غیر محدود۔"
+      "ai_form_generations_monthly": "کیلنڈر مہینے میں AI فارم بلڈر کی جنریشنز، جن میں مرمت کی دوبارہ کوشش بھی شامل ہے۔ 0 = غیر محدود۔",
+      "sms_monthly": "کیلنڈر مہینے میں بھیجے گئے آؤٹ باؤنڈ SMS پیغامات۔ 0 = لامحدود۔"
     },
     "planAddons": {
       "title": "آپ کے پلان پر دستیاب ایڈ آنز",
