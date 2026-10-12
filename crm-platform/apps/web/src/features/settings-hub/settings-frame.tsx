@@ -46,6 +46,7 @@ export function SettingsFrame({ children }: { children: ReactNode }) {
   const activeLink = useRef<HTMLAnchorElement>(null);
   // On a phone the sections are a scrolling strip: keep the open one in view (a deep link may land past the edge).
   useEffect(() => {
+    if (window.matchMedia('(min-width: 1024px)').matches) return;
     activeLink.current?.scrollIntoView({ inline: 'center', block: 'nearest' });
   }, [activeSection]);
 

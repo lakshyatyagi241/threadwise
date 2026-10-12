@@ -11,6 +11,7 @@ import { useCursorList } from '@/lib/api/use-cursor-list';
 import { fetchCategories, mktKeys } from '../api';
 import {
   AVAILABILITY_VIEWS,
+  BROWSE_RETRY,
   SEARCH_MAX,
   SORT_OPTIONS,
   availabilityPatch,
@@ -74,12 +75,14 @@ export function BrowsePage({ kind }: { kind: MarketAppKind }) {
     queryKey: mktKeys.categories(kind),
     queryFn: ({ signal }) => fetchCategories(kind, signal),
     staleTime: 60_000,
+    ...BROWSE_RETRY,
   });
   const list = useCursorList(
     mktKeys.apps(kind),
     '/marketplace/apps',
     marketAppCardSchema,
     listQuery(kind, filters),
+    BROWSE_RETRY,
   );
 
   // The whole Marketplace is behind a plan feature: one clear panel instead of two failed regions.
