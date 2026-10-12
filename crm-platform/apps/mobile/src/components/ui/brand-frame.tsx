@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import {
   I18nManager,
   KeyboardAvoidingView,
-  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -46,10 +45,7 @@ export function BrandFrame({ header, compact, onBack, refreshControl, children }
   return (
     <View style={[styles.root, { backgroundColor: colors.background }]}>
       <StatusBar style="light" />
-      <KeyboardAvoidingView
-        style={styles.root}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      >
+      <KeyboardAvoidingView style={styles.root} behavior="padding">
         <ScrollView
           contentContainerStyle={styles.scroll}
           keyboardShouldPersistTaps="handled"

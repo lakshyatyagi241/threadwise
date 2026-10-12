@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'react-native';
+import { KeyboardAvoidingView, ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
@@ -12,10 +12,7 @@ export function Screen({ children }: { children: ReactNode }) {
   const { colors } = useTheme();
   return (
     <SafeAreaView style={[styles.fill, { backgroundColor: colors.background }]}>
-      <KeyboardAvoidingView
-        style={styles.fill}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      >
+      <KeyboardAvoidingView style={styles.fill} behavior="padding">
         <ScrollView
           contentContainerStyle={styles.content}
           keyboardShouldPersistTaps="handled"

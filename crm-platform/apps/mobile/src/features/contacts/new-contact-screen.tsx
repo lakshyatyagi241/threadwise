@@ -1,7 +1,7 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, ScrollView, StyleSheet, View } from 'react-native';
 import { EmptyState } from '@/components/ui/empty-state';
 import { can, useSession } from '@/lib/session/use-session';
 import { spacing } from '@/lib/theme/tokens';
@@ -37,10 +37,7 @@ export function NewContactScreen() {
           hint={t('contacts.denied.createHint')}
         />
       ) : (
-        <KeyboardAvoidingView
-          style={styles.fill}
-          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        >
+        <KeyboardAvoidingView style={styles.fill} behavior="padding">
           <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
             <ContactForm
               initial={EMPTY_CONTACT}

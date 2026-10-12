@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
-  Platform,
   ScrollView,
   StyleSheet,
   View,
@@ -127,10 +126,7 @@ export function ContactDetailScreen() {
     );
   } else if (editing) {
     body = (
-      <KeyboardAvoidingView
-        style={styles.fill}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      >
+      <KeyboardAvoidingView style={styles.fill} behavior="padding">
         <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
           {notice ? <Banner tone="warning" message={notice} /> : null}
           {/* Keyed by the version, so a reload after a conflict shows the other person's values. */}
