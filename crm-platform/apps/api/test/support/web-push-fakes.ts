@@ -47,7 +47,10 @@ export function useVapidEnv(): () => void {
   const ecdh = createECDH('prime256v1');
   ecdh.generateKeys();
   process.env.VAPID_PUBLIC_KEY = ecdh.getPublicKey().toString('base64url');
-  process.env.VAPID_PRIVATE_KEY = ecdh.getPrivateKey().toString('base64url');
+  // `getPrivateKey()` drops leading zero bytes (about 1 draw in 256), and the config wants exactly 32 bytes (43 characters).
+  const privateKey = Buffer.alloc(32);
+  ecdh.getPrivateKey().copy(privateKey, 32 - ecdh.getPrivateKey().length);
+  process.env.VAPID_PRIVATE_KEY = privateKey.toString('base64url');
   process.env.VAPID_SUBJECT = 'mailto:test@example.test';
   return () => {
     keys.forEach((k, i) => {
