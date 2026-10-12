@@ -343,6 +343,31 @@
       "morning": "सुप्रभात.",
       "afternoon": "नमस्कार.",
       "evening": "शुभ संध्या."
+    },
+    "views": {
+      "label": "डॅशबोर्ड दृश्य",
+      "summary": "सारांश",
+      "agent": "एजंट",
+      "bot": "बॉट"
+    },
+    "agents": {
+      "title": "एजंटची कामगिरी",
+      "conversations": "संभाषणे",
+      "resolved": "सोडवलेली",
+      "firstReply": "पहिले उत्तर",
+      "resolution": "निराकरण",
+      "csat": "रेटिंग",
+      "minutes": "{{value}} मिनिटे",
+      "hours": "{{value}} तास",
+      "days": "{{value}} दिवस",
+      "empty": "या कालावधीत कोणालाही संभाषण दिले गेले नाही.",
+      "noAccess": "तुमच्या भूमिकेला ({{role}}) एजंट अ‍ॅनालिटिक्सचा प्रवेश नाही."
+    },
+    "bots": {
+      "activeFlows": "सक्रिय फ्लो",
+      "ofTotal": "एकूण {{total}} फ्लोपैकी",
+      "subscribers": "सबस्क्रायबर",
+      "subscribersNote": "सर्व फ्लोमध्ये"
     }
   },
   "tabs": {

@@ -1,4 +1,5 @@
 import {
+  analyticsPanelsSchema,
   dashSummaryResponseSchema,
   inboxCountsSchema,
   taskCountsResponseSchema,
@@ -30,6 +31,18 @@ export const fetchWidgets = (win: DashWindow, signal?: AbortSignal) =>
   apiFetch('/v2/dashboard/widgets', {
     query: windowQuery(win),
     schema: dashWidgetsSchema,
+    signal,
+  });
+
+/**
+ * The people of the workspace for a window, one row each: conversations they were given, how many they resolved, how fast they
+ * answered and resolved, and the customers' rating (TW-DASH-030, the web analytics page's team panel). It is a panel of the
+ * analytics API, so it needs `dash.analytics.read` and a plan with analytics.
+ */
+export const fetchTeamPanel = (win: DashWindow, signal?: AbortSignal) =>
+  apiFetch('/v2/analytics/panels', {
+    query: windowQuery(win),
+    schema: analyticsPanelsSchema,
     signal,
   });
 

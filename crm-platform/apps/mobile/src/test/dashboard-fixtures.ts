@@ -1,4 +1,5 @@
 import type {
+  AnalyticsPanels,
   DashSummaryResponse,
   DashThroughputResponse,
   DashWidgets,
@@ -264,6 +265,39 @@ export const emptyWidgets: DashWidgets = {
   flows: { total: 0, active: 0, subscribers: 0, recent: [] },
   integrations: { connected: 0, total: 4, rows: [] },
   activity: [],
+};
+
+/** The analytics team panel: two people with answers and ratings, one who has had no conversation answered or rated yet. */
+export const teamPanel: AnalyticsPanels = {
+  devices: { total: 0, online: 0, rows: [] },
+  templates: [],
+  contacts: [],
+  team: [
+    {
+      userUuid: 'b1111111-1111-4111-8111-111111111111',
+      name: 'Asha Verma',
+      email: 'asha@example.test',
+      conversations: 40,
+      resolved: 32,
+      avgFirstResponseMin: 12,
+      avgResolutionMin: 210,
+      csatAvg: 4.6,
+      csatCount: 9,
+    },
+    {
+      userUuid: 'b2222222-2222-4222-8222-222222222222',
+      name: 'Rohan Mehta',
+      email: 'rohan@example.test',
+      conversations: 10,
+      resolved: 3,
+      avgFirstResponseMin: null,
+      avgResolutionMin: null,
+      csatAvg: null,
+      csatCount: 0,
+    },
+  ],
+  geo: [],
+  events: [],
 };
 
 export const wallet: WalletSummary = {

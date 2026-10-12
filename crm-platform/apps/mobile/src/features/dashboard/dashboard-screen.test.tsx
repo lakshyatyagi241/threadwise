@@ -9,6 +9,7 @@ import {
   emptyWidgets,
   session,
   summary,
+  teamPanel,
   throughput,
   wallet,
   widgets,
@@ -28,6 +29,7 @@ const sessionCall = jest.mocked(fetchSession);
 const summaryCall = jest.mocked(api.fetchSummary);
 const throughputCall = jest.mocked(api.fetchThroughput);
 const widgetsCall = jest.mocked(api.fetchWidgets);
+const teamCall = jest.mocked(api.fetchTeamPanel);
 const walletCall = jest.mocked(api.fetchWalletSummary);
 const entitlementsCall = jest.mocked(api.fetchEntitlements);
 const newContactsCall = jest.mocked(api.fetchNewContacts);
@@ -126,7 +128,8 @@ describe('DashboardScreen', () => {
       expect(await screen.findByTestId(id)).toBeTruthy();
     }
     expect(screen.queryByTestId('card-autopilot')).toBeNull();
-    expect(screen.getByRole('header', { name: 'Summary' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Dashboard view' })).toBeTruthy();
+    expect(screen.getByText('Summary')).toBeTruthy();
     expect(
       screen.getByRole('button', { name: /^Date range: \d{4}-\d{2}-\d{2} to \d{4}-\d{2}-\d{2}/ }),
     ).toBeTruthy();
@@ -339,5 +342,114 @@ describe('DashboardScreen', () => {
     await loaded(queryClient);
     expect(screen.queryByRole('button', { name: 'Sign out' })).toBeNull();
     expect(signOut).not.toHaveBeenCalled();
+  });
+
+  describe('the view dropdown at the top', () => {
+    const sessionAnalytics = {
+      ...session,
+      permissions: { ...session.permissions, 'dash.analytics.read': 'all' },
+    } as typeof session;
+
+    const open = async () => {
+      await fireEvent.press(await screen.findByRole('button', { name: 'Dashboard view' }));
+    };
+    const pick = async (label: string) => {
+      await open();
+      await fireEvent.press(await screen.findByRole('menuitem', { name: label }));
+    };
+
+    it('offers Summary, Agent and Bot, and starts on Summary', async () => {
+      arrange();
+      const { queryClient } = await show();
+      await loaded(queryClient);
+      await open();
+      for (const label of ['Summary', 'Agent', 'Bot']) {
+        expect(screen.getByRole('menuitem', { name: label })).toBeTruthy();
+      }
+      expect(
+        screen.getByRole('menuitem', { name: 'Summary' }).props.accessibilityState.selected,
+      ).toBe(true);
+      // Nothing for the other views is asked for until one is opened.
+      expect(teamCall).not.toHaveBeenCalled();
+    });
+
+    it('shows how each person of the team did, in the Agent view', async () => {
+      arrange({ session: sessionAnalytics });
+      teamCall.mockResolvedValue(teamPanel);
+      const { queryClient } = await show();
+      await loaded(queryClient);
+      await pick('Agent');
+      expect(await screen.findByText('Asha Verma')).toBeTruthy();
+      expect(screen.getByText('asha@example.test')).toBeTruthy();
+      expect(screen.getByText('Rohan Mehta')).toBeTruthy();
+      // Totals of the team: 40 + 10 conversations, 32 + 3 resolved.
+      expect(screen.getByLabelText(/^Conversations .*: 50$/)).toBeTruthy();
+      expect(screen.getByLabelText(/^Resolved .*: 35$/)).toBeTruthy();
+      expect(screen.getByText('12 min')).toBeTruthy();
+      expect(screen.getByText('3.5 h')).toBeTruthy();
+      expect(screen.getByText('4.6 (9)')).toBeTruthy();
+      // Nobody answered or was rated yet: dashes, not zeros.
+      expect(screen.getAllByText('—').length).toBeGreaterThanOrEqual(3);
+      expect(teamCall).toHaveBeenCalledWith(
+        expect.objectContaining({ from: expect.any(String) }),
+        expect.anything(),
+      );
+      expect(screen.queryByTestId('card-sent')).toBeNull();
+    });
+
+    it('says so when nobody was given a conversation in the period', async () => {
+      arrange({ session: sessionAnalytics });
+      teamCall.mockResolvedValue({ ...teamPanel, team: [] });
+      const { queryClient } = await show();
+      await loaded(queryClient);
+      await pick('Agent');
+      expect(
+        await screen.findByText('No conversation was given to anyone in this period.'),
+      ).toBeTruthy();
+    });
+
+    it('asks nothing of the API from a person who may not read analytics', async () => {
+      arrange();
+      const { queryClient } = await show();
+      await loaded(queryClient);
+      await pick('Agent');
+      expect(
+        await screen.findByText('Your role (Owner) does not have access to agent analytics.'),
+      ).toBeTruthy();
+      expect(teamCall).not.toHaveBeenCalled();
+    });
+
+    it('says when the plan has no analytics', async () => {
+      arrange({ session: sessionAnalytics });
+      teamCall.mockRejectedValue(new ApiError(403, 'PLAN_FEATURE_LOCKED', 'no'));
+      const { queryClient } = await show();
+      await loaded(queryClient);
+      await pick('Agent');
+      expect(await screen.findByText('Your plan does not include analytics.')).toBeTruthy();
+    });
+
+    it('shows the automation flows in the Bot view, without the date pill', async () => {
+      arrange();
+      const { queryClient } = await show();
+      await loaded(queryClient);
+      await pick('Bot');
+      expect(await screen.findByText('Order follow-up')).toBeTruthy();
+      expect(screen.getByText('Win-back')).toBeTruthy();
+      expect(screen.getByLabelText('Active flows of 5 flows: 3')).toBeTruthy();
+      expect(screen.getByLabelText('Subscribers in all flows: 1,200')).toBeTruthy();
+      expect(screen.queryByRole('button', { name: /^Date range/ })).toBeNull();
+      expect(screen.queryByTestId('card-sent')).toBeNull();
+    });
+
+    it('goes back to the summary cards', async () => {
+      arrange();
+      const { queryClient } = await show();
+      await loaded(queryClient);
+      await pick('Bot');
+      await screen.findByText('Order follow-up');
+      await pick('Summary');
+      expect(await screen.findByTestId('card-sent')).toBeTruthy();
+      expect(screen.getByRole('button', { name: /^Date range/ })).toBeTruthy();
+    });
   });
 });

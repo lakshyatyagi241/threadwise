@@ -6,6 +6,7 @@ import {
   fetchNewContacts,
   fetchSummary,
   fetchTaskCounts,
+  fetchTeamPanel,
   fetchThroughput,
   fetchWalletSummary,
   fetchWidgets,
@@ -32,6 +33,17 @@ export const useWidgets = (win: DashWindow) =>
     queryKey: ['dash', 'widgets', win.from, win.to],
     queryFn: ({ signal }) => fetchWidgets(win, signal),
     placeholderData: keepPreviousData,
+  });
+
+/** The people panel of the Agent view. Only asked for while that view is open and the person may read analytics. */
+export const useTeamPanel = (win: DashWindow, enabled: boolean) =>
+  useQuery({
+    queryKey: ['dash', 'team', win.from, win.to],
+    queryFn: ({ signal }) => fetchTeamPanel(win, signal),
+    enabled,
+    placeholderData: keepPreviousData,
+    // A plan without analytics answers 403 every time: say so at once instead of trying again.
+    retry: false,
   });
 
 /** The wallet balance. No request at all for a person without the permission (`enabled: false`). */

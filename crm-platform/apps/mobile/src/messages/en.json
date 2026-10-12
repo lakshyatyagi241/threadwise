@@ -343,6 +343,31 @@
       "morning": "Good morning.",
       "afternoon": "Good afternoon.",
       "evening": "Good evening."
+    },
+    "views": {
+      "label": "Dashboard view",
+      "summary": "Summary",
+      "agent": "Agent",
+      "bot": "Bot"
+    },
+    "agents": {
+      "title": "Agent performance",
+      "conversations": "Conversations",
+      "resolved": "Resolved",
+      "firstReply": "First reply",
+      "resolution": "Resolution",
+      "csat": "Rating",
+      "minutes": "{{value}} min",
+      "hours": "{{value}} h",
+      "days": "{{value}} d",
+      "empty": "No conversation was given to anyone in this period.",
+      "noAccess": "Your role ({{role}}) does not have access to agent analytics."
+    },
+    "bots": {
+      "activeFlows": "Active flows",
+      "ofTotal": "of {{total}} flows",
+      "subscribers": "Subscribers",
+      "subscribersNote": "in all flows"
     }
   },
   "tabs": {

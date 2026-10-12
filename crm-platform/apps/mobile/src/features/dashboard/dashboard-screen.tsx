@@ -6,6 +6,7 @@ import { Banner } from '@/components/ui/banner';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { FadeIn } from '@/components/ui/fade-in';
+import { MenuTitle } from '@/components/ui/menu-title';
 import { ScreenHeader } from '@/components/ui/screen-header';
 import { Text } from '@/components/ui/text';
 import { messageForError } from '@/lib/api/error-message';
@@ -14,8 +15,11 @@ import { identifyUser } from '@/lib/observability/sentry';
 import { can, useSession } from '@/lib/session/use-session';
 import { spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
+import { AgentView } from './agent-view';
+import { BotView } from './bot-view';
 import { CampaignsCard, TemplatesCard } from './campaign-cards';
 import { DevicesCard, InstagramBand, IntegrationsCard } from './channel-cards';
+import { DASH_VIEWS, type DashView } from './dash-views';
 import { DEFAULT_PRESET, presetRange, todayIn, type DateRange } from './date-range';
 import { DateRangePill, DateRangeSheet } from './date-range-sheet';
 import { isForbidden, isPlanLocked } from './format';
@@ -39,6 +43,7 @@ import {
   useNewContacts,
   useSummary,
   useTaskCounts,
+  useTeamPanel,
   useThroughput,
   useUnofficialWhatsapp,
   useWalletSummary,
@@ -49,7 +54,8 @@ import {
 const DASH = '—';
 
 /**
- * The Summary tab: a title and a date pill, then the cards. The pill opens a calendar sheet (quick choices or two days); one window
+ * The dashboard tab: a dropdown at the top (Summary, Agent, Bot) that picks the view, a date pill, then the cards. Summary is the
+ * set of cards below; Agent is how each person of the team did in the window; Bot is the automation flows. The pill opens a calendar sheet (quick choices or two days); one window
  * drives every card, and pulling down refreshes all of them. The first cards follow the reference app: new contacts and open
  * tasks, messages sent and received, the live conversation counts, and every message figure. The CRM's own cards (read rate,
  * wallet, pipeline, campaigns, templates, the inbox, flows, the funnel, activity) follow, unchanged. Cards that depend on the plan or
@@ -65,6 +71,7 @@ export function DashboardScreen() {
   const today = useMemo(() => todayIn(timezone, now), [timezone, now]);
   const [picked, setPicked] = useState<DateRange | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [view, setView] = useState<DashView>('summary');
   const win = useMemo(() => picked ?? presetRange(DEFAULT_PRESET, today), [picked, today]);
 
   const canContacts = can(session.data, 'record.contacts.read');
@@ -74,6 +81,9 @@ export function DashboardScreen() {
   const throughput = useThroughput(win);
   const widgets = useWidgets(win);
   const newContacts = useNewContacts(win, canContacts);
+  const canAnalytics = can(session.data, 'dash.analytics.read');
+  // The people panel is only asked for while the Agent view is open.
+  const team = useTeamPanel(win, canAnalytics && view === 'agent');
   const taskCounts = useTaskCounts(canTasks);
   const inboxCounts = useInboxCounts(canInbox);
   const wallet = useWalletSummary(can(session.data, 'wallet.balance.read'));
@@ -93,6 +103,7 @@ export function DashboardScreen() {
       widgets.refetch(),
       wallet.refetch(),
       session.refetch(),
+      ...(canAnalytics && view === 'agent' ? [team.refetch()] : []),
       ...(canContacts ? [newContacts.refetch()] : []),
       ...(canTasks ? [taskCounts.refetch()] : []),
       ...(canInbox ? [inboxCounts.refetch()] : []),
@@ -109,6 +120,7 @@ export function DashboardScreen() {
   const funded = wallet.data !== undefined && wallet.data.balanceMinor > 0;
   const n = (value: number | undefined) =>
     value === undefined ? DASH : formatCount(value, i18n.language);
+  const viewOptions = DASH_VIEWS.map((value) => ({ value, label: t(`dashboard.views.${value}`) }));
 
   const counts = inboxCounts.data;
   const statusItems: GridItem[] = [
@@ -189,24 +201,39 @@ export function DashboardScreen() {
   return (
     <View style={[styles.fill, { backgroundColor: colors.background }]}>
       <ScreenHeader>
-        <Text variant="heading" accessibilityRole="header">
-          {t('tabs.summary')}
-        </Text>
+        <MenuTitle
+          label={t('dashboard.views.label')}
+          options={viewOptions}
+          value={view}
+          onChange={setView}
+        />
       </ScreenHeader>
       <ScrollView
         testID="dashboard-scroll"
         contentContainerStyle={styles.content}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => void refresh()} />}
       >
-        <FadeIn>
-          <DateRangePill range={win} onPress={() => setSheetOpen(true)} />
-        </FadeIn>
+        {view !== 'bot' ? (
+          <FadeIn>
+            <DateRangePill range={win} onPress={() => setSheetOpen(true)} />
+          </FadeIn>
+        ) : null}
 
         {session.data?.landing === 'onboarding' ? (
           <Banner tone="info" message={t('dashboard.setupBanner')} />
         ) : null}
 
-        {forbidden ? (
+        {view === 'agent' ? (
+          <AgentView
+            query={team}
+            allowed={canAnalytics}
+            role={role}
+            rangeName={rangeName}
+            onRetry={() => void team.refetch()}
+          />
+        ) : view === 'bot' ? (
+          <BotView query={widgets} onRetry={() => void widgets.refetch()} />
+        ) : forbidden ? (
           <Card>
             <Text accessibilityRole="alert">{t('dashboard.error.forbidden', { role })}</Text>
           </Card>

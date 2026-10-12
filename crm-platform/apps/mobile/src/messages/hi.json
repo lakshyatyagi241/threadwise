@@ -343,6 +343,31 @@
       "morning": "सुप्रभात।",
       "afternoon": "नमस्कार।",
       "evening": "शुभ संध्या।"
+    },
+    "views": {
+      "label": "डैशबोर्ड दृश्य",
+      "summary": "सारांश",
+      "agent": "एजेंट",
+      "bot": "बॉट"
+    },
+    "agents": {
+      "title": "एजेंट का प्रदर्शन",
+      "conversations": "बातचीत",
+      "resolved": "हल की गई",
+      "firstReply": "पहला जवाब",
+      "resolution": "समाधान",
+      "csat": "रेटिंग",
+      "minutes": "{{value}} मिनट",
+      "hours": "{{value}} घंटे",
+      "days": "{{value}} दिन",
+      "empty": "इस अवधि में किसी को कोई बातचीत नहीं सौंपी गई।",
+      "noAccess": "आपकी भूमिका ({{role}}) को एजेंट एनालिटिक्स की पहुँच नहीं है।"
+    },
+    "bots": {
+      "activeFlows": "सक्रिय फ़्लो",
+      "ofTotal": "कुल {{total}} फ़्लो में से",
+      "subscribers": "सब्सक्राइबर",
+      "subscribersNote": "सभी फ़्लो में"
     }
   },
   "tabs": {

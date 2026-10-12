@@ -83,7 +83,14 @@ export function InboxCard({ data, now }: { data: DashWidgets['inbox']; now: Date
 }
 
 /** Automation flows (TW-DASH-017): the counters and the six latest flows. (The web also has a promo card to generate a flow from a sentence: it needs the flow builder.) */
-export function FlowsCard({ data }: { data: DashWidgets['flows'] }) {
+export function FlowsCard({
+  data,
+  showStats = true,
+}: {
+  data: DashWidgets['flows'];
+  /** The three figures at the top; the Bot view shows them as big cards above and leaves them out here. */
+  showStats?: boolean;
+}) {
   const { t } = useTranslation();
   const { colors } = useTheme();
   const stats = [
@@ -100,16 +107,18 @@ export function FlowsCard({ data }: { data: DashWidgets['flows'] }) {
         subscribers: data.subscribers,
       })}
     >
-      <View style={styles.stats}>
-        {stats.map(([key, value]) => (
-          <View key={key} style={[styles.stat, { backgroundColor: colors.surfaceMuted }]}>
-            <Text variant="caption" muted>
-              {t(key)}
-            </Text>
-            <Text variant="subheading">{compact(value)}</Text>
-          </View>
-        ))}
-      </View>
+      {showStats ? (
+        <View style={styles.stats}>
+          {stats.map(([key, value]) => (
+            <View key={key} style={[styles.stat, { backgroundColor: colors.surfaceMuted }]}>
+              <Text variant="caption" muted>
+                {t(key)}
+              </Text>
+              <Text variant="subheading">{compact(value)}</Text>
+            </View>
+          ))}
+        </View>
+      ) : null}
       {data.recent.length === 0 ? (
         <Text variant="caption" muted>
           {t('dashboard.flows.empty')}

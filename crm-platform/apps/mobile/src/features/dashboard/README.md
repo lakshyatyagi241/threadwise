@@ -13,12 +13,27 @@ All through `apiFetch`, parsed with the shared contracts in `packages/contracts/
 | `GET /v2/dashboard/summary`    | greeting line, sent and read-rate cards, sparkline, funnel (`dash.dashboard.read`)                 |
 | `GET /v2/dashboard/throughput` | the chart, the peak badge, the four figures under it                                               |
 | `GET /v2/dashboard/widgets`    | contacts, campaigns, devices, templates, inbox, pipeline, Instagram, flows, activity, integrations |
+| `GET /v2/analytics/panels`     | the Agent view's team list; only asked for while that view is open, with `dash.analytics.read`     |
 | `GET /v2/wallet/summary`       | the wallet card; only asked for with `wallet.balance.read`                                         |
 | `GET /v2/billing/entitlements` | whether the personal-number engine is on (decides if the Devices card exists)                      |
 | `GET /v2/auth/session`         | name, workspace time zone, role, permissions, `landing` (`@/lib/session`)                          |
 
 The window (24 hours, 7 days, 30 days, quarter to date) is one piece of state; it is sent to the first three calls. Pulling the page
 down refreshes all of them. The previous window stays on screen while a new one loads.
+
+## The three views (the dropdown at the top)
+
+The title is a dropdown, like the inbox's: **Summary** (the cards above), **Agent** and **Bot**. They come from the phone design; the
+web has no pages with those names, so each shows what the API already has:
+
+- **Agent**: the team panel of the analytics API (`team` of `GET /v2/analytics/panels`), the same rows as the web analytics page: per
+  person the conversations given, how many were resolved, average first reply and resolution time, and the customers' rating, with the
+  team totals above. It uses the date pill. Without `dash.analytics.read` it says so and asks for nothing; a plan without analytics
+  answers 403 `PLAN_FEATURE_LOCKED` and the view says that.
+- **Bot**: the automation flows (`flows` of `GET /v2/dashboard/widgets`, which ignores the date window, so this view has no date
+  pill): flows running, people in them, and the latest flows.
+- The API has no counts of "conversations handled by a bot" against "by an agent", so those two figures of the phone design are not
+  shown; adding them needs an API route first (owner decision).
 
 ## What the phone does differently (on purpose)
 
