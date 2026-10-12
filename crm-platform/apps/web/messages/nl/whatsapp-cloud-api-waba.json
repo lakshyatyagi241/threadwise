@@ -34,7 +34,8 @@
         "registered": "\"{name}\" geregistreerd op de Cloud API.",
         "disconnected": "\"{name}\" losgekoppeld.",
         "removed": "\"{name}\" verwijderd.",
-        "warningsTitle": "Gekoppeld, maar controleer dit:"
+        "warningsTitle": "Gekoppeld, maar controleer dit:",
+        "verified": "\"{name}\" is geverifieerd."
       },
       "notReady": {
         "title": "Embedded Signup is niet ingesteld",
@@ -81,7 +82,8 @@
         "register": "Registreren",
         "meta": "Meta",
         "disconnect": "Loskoppelen",
-        "remove": "Verwijderen"
+        "remove": "Verwijderen",
+        "verify": "Nummer verifiëren"
       },
       "confirm": {
         "fixInboundTitle": "Inkomend repareren?",
@@ -100,6 +102,17 @@
         "pin": "Pincode tweestapsverificatie (optioneel)",
         "pinError": "De pincode bestaat uit 6 cijfers",
         "submit": "Registreren"
+      },
+      "verifyDialog": {
+        "title": "Dit nummer verifiëren",
+        "message": "Meta stuurt een code van 6 cijfers naar {phone}. Kies hoe je die wilt ontvangen.",
+        "enterCode": "Voer de code van 6 cijfers in die Meta naar {phone} heeft gestuurd.",
+        "sendSms": "Code sturen via sms",
+        "sendVoice": "Code sturen via een oproep",
+        "code": "Verificatiecode",
+        "codeError": "De code bestaat uit 6 cijfers",
+        "submit": "Verifiëren",
+        "resend": "Nieuwe code sturen"
       }
     },
     "connect": {

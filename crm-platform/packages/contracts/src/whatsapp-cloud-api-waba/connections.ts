@@ -152,6 +152,20 @@ export const registerNumberInputSchema = z.object({
 });
 export type RegisterNumberInput = z.infer<typeof registerNumberInputSchema>;
 
+export const requestVerificationCodeInputSchema = z.object({
+  /** How Meta delivers the 6-digit ownership code to the number. */
+  method: z.enum(['SMS', 'VOICE']).default('SMS'),
+});
+export type RequestVerificationCodeInput = z.infer<typeof requestVerificationCodeInputSchema>;
+
+export const verifyCodeInputSchema = z.object({
+  code: z
+    .string()
+    .trim()
+    .regex(/^\d{6}$/, 'the code is 6 digits'),
+});
+export type VerifyCodeInput = z.infer<typeof verifyCodeInputSchema>;
+
 export const setTokenInputSchema = z.object({
   accessToken: z.string().trim().min(WABA_TOKEN_MIN).max(WABA_TOKEN_MAX),
 });
