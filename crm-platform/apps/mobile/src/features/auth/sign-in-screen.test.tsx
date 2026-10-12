@@ -26,16 +26,17 @@ const authenticated = {
   },
 };
 
-const renderScreen = () =>
-  render(
+const renderScreen = async () =>
+  await render(
     <I18nextProvider i18n={i18n}>
       <SignInScreen />
     </I18nextProvider>,
   );
 
-const fill = (label: string, value: string) =>
-  fireEvent.changeText(screen.getByLabelText(label), value);
-const press = (label: string) => fireEvent.press(screen.getByRole('button', { name: label }));
+const fill = async (label: string, value: string) =>
+  await fireEvent.changeText(screen.getByLabelText(label), value);
+const press = async (label: string) =>
+  await fireEvent.press(screen.getByRole('button', { name: label }));
 
 beforeAll(async () => {
   await initI18n('en');
@@ -47,9 +48,9 @@ beforeEach(() => {
 
 describe('SignInScreen', () => {
   it('validates the fields before calling the API', async () => {
-    renderScreen();
-    fill('Email', 'not-an-email');
-    press('Sign in');
+    await renderScreen();
+    await fill('Email', 'not-an-email');
+    await press('Sign in');
     expect(await screen.findByText('Enter a valid email address.')).toBeTruthy();
     expect(screen.getByText('Enter your password.')).toBeTruthy();
     expect(signInWithPassword).not.toHaveBeenCalled();
@@ -57,10 +58,10 @@ describe('SignInScreen', () => {
 
   it('signs in with the typed credentials and keeps the session', async () => {
     signInWithPassword.mockResolvedValue(authenticated);
-    renderScreen();
-    fill('Email', ' person@example.com ');
-    fill('Password', 'correct horse');
-    press('Sign in');
+    await renderScreen();
+    await fill('Email', ' person@example.com ');
+    await fill('Password', 'correct horse');
+    await press('Sign in');
     await waitFor(() => expect(getSnapshot().status).toBe('signedIn'));
     expect(signInWithPassword).toHaveBeenCalledWith({
       email: 'person@example.com',
@@ -73,20 +74,20 @@ describe('SignInScreen', () => {
     signInWithPassword.mockRejectedValue(
       new ApiError(401, 'AUTH_INVALID_CREDENTIALS', 'whatever the server said'),
     );
-    renderScreen();
-    fill('Email', 'person@example.com');
-    fill('Password', 'nope');
-    press('Sign in');
+    await renderScreen();
+    await fill('Email', 'person@example.com');
+    await fill('Password', 'nope');
+    await press('Sign in');
     expect(await screen.findByText('The email or password is incorrect.')).toBeTruthy();
     expect(getSnapshot().status).not.toBe('signedIn');
   });
 
   it('shows the offline message when the server cannot be reached', async () => {
     signInWithPassword.mockRejectedValue(new ApiError(0, 'CLIENT_NETWORK', 'x'));
-    renderScreen();
-    fill('Email', 'person@example.com');
-    fill('Password', 'x');
-    press('Sign in');
+    await renderScreen();
+    await fill('Email', 'person@example.com');
+    await fill('Password', 'x');
+    await press('Sign in');
     expect(await screen.findByText(/Can't reach the server/)).toBeTruthy();
   });
 
@@ -97,13 +98,13 @@ describe('SignInScreen', () => {
       expiresInSeconds: 300,
     });
     signInWithMfa.mockResolvedValue(authenticated);
-    renderScreen();
-    fill('Email', 'person@example.com');
-    fill('Password', 'correct horse');
-    press('Sign in');
+    await renderScreen();
+    await fill('Email', 'person@example.com');
+    await fill('Password', 'correct horse');
+    await press('Sign in');
     expect(await screen.findByText('Two-step verification')).toBeTruthy();
-    fill('Verification code', '123456');
-    press('Verify');
+    await fill('Verification code', '123456');
+    await press('Verify');
     await waitFor(() => expect(getSnapshot().status).toBe('signedIn'));
     expect(signInWithMfa).toHaveBeenCalledWith({ challengeToken: 'challenge-1', code: '123456' });
   });
@@ -115,13 +116,13 @@ describe('SignInScreen', () => {
       expiresInSeconds: 300,
     });
     signInWithMfa.mockRejectedValue(new ApiError(401, 'AUTH_MFA_CHALLENGE_EXPIRED', 'x'));
-    renderScreen();
-    fill('Email', 'person@example.com');
-    fill('Password', 'correct horse');
-    press('Sign in');
+    await renderScreen();
+    await fill('Email', 'person@example.com');
+    await fill('Password', 'correct horse');
+    await press('Sign in');
     await screen.findByText('Two-step verification');
-    fill('Verification code', '123456');
-    press('Verify');
+    await fill('Verification code', '123456');
+    await press('Verify');
     expect(await screen.findByText('The sign-in expired. Please start again.')).toBeTruthy();
     expect(screen.getByLabelText('Password')).toBeTruthy();
   });
@@ -137,12 +138,12 @@ describe('SignInScreen', () => {
       ],
     });
     signInToWorkspace.mockResolvedValue(authenticated);
-    renderScreen();
-    fill('Email', 'person@example.com');
-    fill('Password', 'correct horse');
-    press('Sign in');
+    await renderScreen();
+    await fill('Email', 'person@example.com');
+    await fill('Password', 'correct horse');
+    await press('Sign in');
     expect(await screen.findByText('Choose a workspace')).toBeTruthy();
-    press('Globex');
+    await press('Globex');
     await waitFor(() => expect(getSnapshot().status).toBe('signedIn'));
     expect(signInToWorkspace).toHaveBeenCalledWith({
       selectionToken: 'select-1',

@@ -39,3 +39,4 @@ export {
   type RecordBounceInput,
   type RecordBounceOutcome,
 } from './email-delivery.service';
+export { MESSAGE_LOG_FACADE, type MessageLogFacade } from './message-log.facade';

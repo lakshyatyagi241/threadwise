@@ -115,6 +115,15 @@ export class FaqController {
     return this.faqs.update(id, body);
   }
 
+  @Get('flows/:flowId/nodes')
+  @RequirePermission('faq.entries.read')
+  @ApiOperation({
+    summary: 'The steps of one of the workspace\'s flows, for the "start at this step" picker',
+  })
+  flowNodes(@Param('flowId', ParseUUIDPipe) flowId: string) {
+    return this.faqs.flowNodes(flowId);
+  }
+
   @Delete('entries/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @RequirePermission('faq.entries.delete')

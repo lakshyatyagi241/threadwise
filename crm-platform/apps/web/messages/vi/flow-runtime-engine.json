@@ -192,7 +192,22 @@
       "retention": "Nhật ký bị xóa {days} ngày sau khi lần chạy kết thúc.",
       "pathTitle": "Đường đã đi",
       "notReached": "Chưa tới",
-      "noErrors": "Không có lỗi trong lần chạy này."
+      "noErrors": "Không có lỗi trong lần chạy này.",
+      "factNext": "Tiếp theo: {node}",
+      "factWaiting": "Đang chờ tại: {node}",
+      "factDelay": "Chờ {time}",
+      "factReplied": "Khách hàng trả lời: {text}",
+      "factEnded": "Kết thúc: {reason}",
+      "ioInput": "Đầu vào",
+      "ioOutput": "Đầu ra",
+      "ioKind": {
+        "message": "Tin nhắn đã gửi",
+        "reply": "Phản hồi của khách",
+        "variable": "Biến",
+        "request": "Yêu cầu",
+        "response": "Phản hồi",
+        "result": "Kết quả"
+      }
     },
     "event": {
       "step": "Bước",

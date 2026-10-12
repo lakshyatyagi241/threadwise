@@ -192,7 +192,22 @@
       "retention": "Protokolle werden {days} Tage nach Ende eines Laufs gelöscht.",
       "pathTitle": "Genommener Weg",
       "notReached": "Nicht erreicht",
-      "noErrors": "Keine Fehler in diesem Lauf."
+      "noErrors": "Keine Fehler in diesem Lauf.",
+      "factNext": "Weiter: {node}",
+      "factWaiting": "Wartet bei: {node}",
+      "factDelay": "Wartet {time}",
+      "factReplied": "Kunde antwortete: {text}",
+      "factEnded": "Beendet: {reason}",
+      "ioInput": "Eingabe",
+      "ioOutput": "Ausgabe",
+      "ioKind": {
+        "message": "Gesendete Nachricht",
+        "reply": "Antwort des Kunden",
+        "variable": "Variable",
+        "request": "Anfrage",
+        "response": "Antwort",
+        "result": "Ergebnis"
+      }
     },
     "event": {
       "step": "Schritt",

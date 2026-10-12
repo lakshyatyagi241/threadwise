@@ -361,12 +361,29 @@ export class MessagesRepository {
     tx: Tx,
     orgId: number,
     ref: { id: number; createdAt: string },
-    r: { status: ReceiptStatusStep; at: Date; errorCode?: string; errorMessage?: string },
+    r: {
+      status: ReceiptStatusStep;
+      at: Date;
+      errorCode?: string;
+      errorMessage?: string;
+      /** The provider id the receipt is about. A message the agent retried has a new one; a late receipt of the old one must not touch it. */
+      providerMessageId?: string;
+    },
   ): Promise<ReceiptOutcome> {
     const where = sql`org_id = ${orgId} AND id = ${ref.id} AND created_at = ${ref.createdAt}::timestamptz AND direction = 'out'`;
 
-    const exists = await tx.execute(sql`SELECT status FROM messages WHERE ${where}`);
-    if (rowsOf(exists).length === 0) return 'missing';
+    const exists = await tx.execute(
+      sql`SELECT status, provider_message_id FROM messages WHERE ${where}`,
+    );
+    const current = rowsOf(exists)[0];
+    if (!current) return 'missing';
+    if (
+      r.providerMessageId !== undefined &&
+      current.provider_message_id !== null &&
+      current.provider_message_id !== r.providerMessageId
+    ) {
+      return 'ignored';
+    }
 
     let advanced: Raw[];
     if (r.status === 'failed') {

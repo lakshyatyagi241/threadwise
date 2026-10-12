@@ -367,7 +367,8 @@
         "failed": "Nie udało się przełączyć przestrzeni roboczych. Spróbuj ponownie.",
         "notAvailable": "Nie możesz przełączyć się na tę przestrzeń roboczą.",
         "rateLimited": "Zbyt wiele prób. Poczekaj chwilę i spróbuj ponownie.",
-        "rateLimitedWait": "Zbyt wiele prób. Spróbuj ponownie za {seconds, plural, one {# sekundę} few {# sekundy} many {# sekund} other {# sekundy}}."
+        "rateLimitedWait": "Zbyt wiele prób. Spróbuj ponownie za {seconds, plural, one {# sekundę} few {# sekundy} many {# sekund} other {# sekundy}}.",
+        "unverified": "Zweryfikuj swój e-mail w tym obszarze roboczym, aby się do niego przełączyć."
       },
       "mfaChallenge": {
         "title": "Potwierdź, że to Ty",

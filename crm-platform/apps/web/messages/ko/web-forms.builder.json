@@ -131,7 +131,14 @@
         "custom": "커스텀",
         "requiredByCrm": "필수",
         "inForm": "양식에 있음",
-        "full": "양식의 블록 한도에 도달했습니다."
+        "full": "양식의 블록 한도에 도달했습니다.",
+        "section": {
+          "contact": "연락처",
+          "contactAddress": "연락처 주소",
+          "company": "회사",
+          "companyAddress": "회사 주소"
+        },
+        "addAddress": "모든 주소 필드 추가"
       },
       "list": {
         "title": "필드",

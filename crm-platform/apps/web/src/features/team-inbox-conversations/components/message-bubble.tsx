@@ -20,6 +20,7 @@ import {
   AlertIcon,
   FileIcon,
   LinkIcon,
+  ListIcon,
   MenuIcon,
   NoteIcon,
   ReplyIcon,
@@ -288,6 +289,8 @@ export interface MessageBubbleProps {
   onRetry: (messageId: string) => Promise<void>;
   /** The person may open the channel settings, so a failure that the channel causes links there. */
   canManageChannel?: boolean;
+  /** Opens the message's delivery log (every step it went through). Offered on a message we sent. */
+  onOpenLog?: (messageId: string) => void;
 }
 
 /**
@@ -302,6 +305,7 @@ export const MessageBubble = memo(function MessageBubble({
   agentReaction = null,
   onRetry,
   canManageChannel = false,
+  onOpenLog,
 }: MessageBubbleProps) {
   const t = useTranslations('team-inbox-conversations.bubble');
   const locale = useLocale();
@@ -439,6 +443,18 @@ export const MessageBubble = memo(function MessageBubble({
               className={cn('-top-10', out ? 'end-0' : 'start-0')}
             />
           )}
+          {out && onOpenLog && (
+            <button
+              type="button"
+              data-testid="inbox-message-log"
+              aria-label={t('deliveryLog')}
+              title={t('deliveryLog')}
+              onClick={() => onOpenLog(m.id)}
+              className="flex size-7 shrink-0 items-center justify-center rounded-full text-muted-foreground opacity-0 hover:bg-muted hover:text-foreground focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-primary group-hover/row:opacity-100"
+            >
+              <ListIcon width={14} height={14} />
+            </button>
+          )}
           {onReply && (
             <button
               type="button"
@@ -475,6 +491,16 @@ export const MessageBubble = memo(function MessageBubble({
             >
               {t('retry')}
             </button>
+            {onOpenLog && (
+              <button
+                type="button"
+                data-testid="inbox-failure-log"
+                onClick={() => onOpenLog(m.id)}
+                className="rounded font-medium underline underline-offset-2 hover:no-underline focus-visible:ring-2 focus-visible:ring-danger"
+              >
+                {t('deliveryLog')}
+              </button>
+            )}
           </div>
         )}
       </div>

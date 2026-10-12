@@ -310,6 +310,11 @@
         "description": "Give new conversations to the right agent automatically, in turn or by rules.",
         "keywords": "routing, round robin, assign, agents, inbox rules, distribute, owner"
       },
+      "message-logs": {
+        "label": "Message logs",
+        "description": "Export the delivery log of your messages, up to a year back, as a file sent to your email.",
+        "keywords": "export, delivery log, history, archive, csv, messages"
+      },
       "web": {
         "label": "Website chat",
         "description": "Bots built for your website chat and the widget each one runs in.",

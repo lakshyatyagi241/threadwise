@@ -14,7 +14,8 @@ import { errorKey } from '../lib/errors';
 import { withoutLog } from '../lib/log-model';
 import { writePrefill } from '../lib/prefill';
 import { FaqIcon, SearchIcon } from './icons';
-import { CandidateList, FaqPickerModal, WhyText } from './log-parts';
+import { CandidateList, FaqPickerModal, OriginTag, WhyText } from './log-parts';
+import { VerifyDetail } from './verify-parts';
 import {
   CARD,
   LoadError,
@@ -146,12 +147,14 @@ export function UnansweredScreen() {
                     {row.query ?? (
                       <span className="italic text-muted-foreground">{t('notKept')}</span>
                     )}
+                    <OriginTag origin={row.origin} />
                   </p>
                   <span className="text-xs text-muted-foreground">
                     <RelativeTime iso={row.createdAt} />
                   </span>
                 </div>
                 <WhyText row={row} threshold={settings.data?.threshold} />
+                {row.verify && <VerifyDetail verify={row.verify} />}
                 {best ? (
                   <p className="text-sm">
                     <span className="text-muted-foreground">{t('closest')} </span>

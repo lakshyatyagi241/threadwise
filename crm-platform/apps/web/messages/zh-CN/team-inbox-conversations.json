@@ -1,7 +1,8 @@
 {
   "team-inbox-conversations": {
     "nav": {
-      "inbox": "收件箱"
+      "inbox": "收件箱",
+      "messageLogs": "消息日志"
     },
     "common": {
       "dismiss": "关闭"
@@ -131,7 +132,10 @@
       "generic": "出错了，请重试。",
       "genericWithId": "出错了，请重试。参考编号：{id}",
       "templateNotSendable": "此模板无法发送到该会话。请选择其他模板。",
-      "groupSendUnavailable": "暂不支持发送到 WhatsApp 群组。请使用 WhatsApp Business 应用回复。"
+      "groupSendUnavailable": "暂不支持发送到 WhatsApp 群组。请使用 WhatsApp Business 应用回复。",
+      "logRange": "请选择最近一年内的日期，开始日期须早于结束日期，且不能是未来日期。",
+      "logBusy": "已有一个导出正在准备中。请等待收到邮件后再发起新的导出。",
+      "logNotReady": "此导出尚未就绪或已过期。请重新发起导出。"
     },
     "bubble": {
       "kind": {
@@ -196,7 +200,8 @@
         "takeBack": "点按以撤回你的回应",
         "takeBackLabel": "你的回应 {emoji}。撤回",
         "failed": "此回应未发送"
-      }
+      },
+      "deliveryLog": "投递日志"
     },
     "media": {
       "openImage": "打开图片 {name}",
@@ -554,6 +559,80 @@
         "named_variables": "使用了收件箱暂不支持的命名变量。"
       },
       "hasMore": "显示前 {count} 个模板。按名称或文本搜索以查找其他模板。"
+    },
+    "log": {
+      "title": "投递日志",
+      "close": "关闭",
+      "loading": "正在加载日志",
+      "tryAgain": "重试",
+      "statusNow": "当前状态",
+      "createdAt": "创建时间",
+      "providerId": "服务商消息 ID",
+      "failedNoReason": "此消息未能送达。",
+      "expired": "此消息已超过 {days} 天，其日志不再保留。",
+      "empty": "此消息没有记录日志。在开始保留日志之前发送的消息没有日志。",
+      "archived": "超过 {days} 天的记录将从归档中读取。",
+      "exportLink": "导出消息日志",
+      "source": {
+        "system": "本系统",
+        "provider": "服务商回执"
+      },
+      "event": {
+        "queued": "已加入发送队列",
+        "attempt": "第 {attempt} 次发送尝试",
+        "accepted": "服务商已接收",
+        "sentReceipt": "服务商确认已发送",
+        "delivered": "已送达客户手机",
+        "read": "客户已读",
+        "failedReceipt": "服务商报告未送达",
+        "failedSend": "无法发送",
+        "retryAuto": "将自动重试",
+        "retryManual": "团队成员点击了重试"
+      },
+      "notApplied": "此报告到达较晚，或对应的是更早的一次发送，未对消息产生任何更改。",
+      "replayed": "未发出新请求，已复用服务商之前的响应。",
+      "resent": "已作为新消息再次发送给服务商。"
+    },
+    "logs": {
+      "back": "返回收件箱",
+      "title": "消息日志",
+      "intro": "每条消息都会保留其投递日志：在收件箱中保留 {hot} 天，之后在归档中保留至事件发生后 {days} 天。您可以按日期范围发起导出，系统会在后台准备，完成后通过电子邮件通知您。",
+      "requested": "已发起导出。准备就绪后我们会发邮件通知您。",
+      "requestedTo": "已发起导出。准备就绪后我们会发邮件至 {email}。",
+      "form": {
+        "title": "发起导出",
+        "from": "开始",
+        "to": "结束",
+        "status": "仅限当前状态为以下的消息",
+        "anyStatus": "任意状态",
+        "hint": "日期为 UTC 时间。最多可回溯 {days} 天。一次只会准备一个导出。",
+        "submit": "发起导出",
+        "sending": "正在发起"
+      },
+      "problem": {
+        "order": "开始日期不能晚于结束日期。",
+        "future": "结束日期不能是未来日期。",
+        "tooOld": "日志保留 {days} 天。请选择更晚的开始日期。",
+        "invalid": "请输入两个日期。"
+      },
+      "history": {
+        "title": "您的导出",
+        "loading": "正在加载导出记录",
+        "tryAgain": "重试",
+        "empty": "暂无导出记录。",
+        "onlyStatus": "仅限{status}的消息",
+        "requestedAt": "发起于 {date}",
+        "lines": "{count, plural, other {# 行}}",
+        "until": "可用至 {date}",
+        "download": "下载",
+        "status": {
+          "queued": "等待中",
+          "running": "准备中",
+          "ready": "已就绪",
+          "failed": "失败",
+          "expired": "已过期"
+        }
+      }
     }
   }
 }

@@ -33,7 +33,8 @@
       "modelNotAllowed": "Platformun gömme modeline izin verilmiyor. Platform yöneticisine başvurun.",
       "validation": "Bazı alanlar düzeltme gerektiriyor.",
       "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
-      "unexpected": "Bir şeyler ters gitti. Tekrar deneyin; sorun sürerse istek kimliğini destekle paylaşın."
+      "unexpected": "Bir şeyler ters gitti. Tekrar deneyin; sorun sürerse istek kimliğini destekle paylaşın.",
+      "flowNodeNotFound": "Seçilen adım artık bu akışta yok. Başka bir adım seçin veya akışın başından başlatın."
     },
     "banner": {
       "enabledToast": "SSS yanıtlama açık.",
@@ -139,7 +140,9 @@
         "ready": "{count} yayında",
         "pending": "{count} dizinleniyor",
         "failed": "{count} başarısız"
-      }
+      },
+      "stepMissing": "Adım yok",
+      "startsAt": "Başlangıç adımı: {step}"
     },
     "editor": {
       "back": "SSS listesine dön",
@@ -192,7 +195,9 @@
         "preview": "WhatsApp içinde görünümü",
         "previewEmpty": "Yanıtınız burada görünür",
         "flowLabel": "Başlatılacak akış",
-        "noFlow": "Akış seçilmedi"
+        "noFlow": "Akış seçilmedi",
+        "startsAt": "Başlangıç adımı: {step}",
+        "stepGone": "Bu SSS öğesinin başladığı adım artık yok, bu yüzden müşteriler yanıt alamaz."
       },
       "advanced": {
         "title": "Gelişmiş: yalnızca bu SSS için hassasiyet",
@@ -227,6 +232,11 @@
           "required": "%5 ile %99 arasında bir değer seçin.",
           "tooLong": "%5 ile %99 arasında bir değer seçin.",
           "invalid": "%5 ile %99 arasında bir değer seçin."
+        },
+        "flowNodeId": {
+          "required": "Bu akışın bir adımını veya akışın başlangıcını seçin.",
+          "tooLong": "Bu akışın bir adımını veya akışın başlangıcını seçin.",
+          "invalid": "Bu akışın bir adımını veya akışın başlangıcını seçin."
         }
       },
       "deleteConfirm": {
@@ -257,7 +267,7 @@
         "off": "Etkin değil",
         "draft": "Taslak"
       },
-      "note": "Akış, tetikleyicisinden başlar. Yalnızca yayınlanmış ve etkin akışlar çalışabilir."
+      "note": "Akış, aşağıda seçtiğiniz adımdan veya başlangıcından başlar. Yalnızca yayınlanmış ve etkin akışlar çalışabilir."
     },
     "variations": {
       "title": "Soru varyasyonları",
@@ -354,6 +364,10 @@
         "notSent": {
           "title": "Eşleşti, gönderilmedi",
           "body": "Bir SSS eşleşti ama yanıt gönderilmedi; örneğin SSS yanıtlama kapalıydı."
+        },
+        "vetoed": {
+          "title": "Yanıt tutuldu",
+          "body": "Eşleşme yeterince yüksek skor aldı, ancak ikinci kontrol \"hayır\" dedi, bu yüzden hiçbir şey gönderilmezdi."
         }
       },
       "tier": {
@@ -486,8 +500,11 @@
         "providerError": "Yapay zeka sağlayıcısı başarısız oldu, bu yüzden bot yalnızca yazıma göre eşleştirebildi.",
         "notSent": "Bir SSS eşleşti ama yanıt gönderilmedi.",
         "tier": "Kararı {tier} katmanı verdi.",
-        "error": "Hata: {error}"
-      }
+        "error": "Hata: {error}",
+        "vetoed": "En iyi eşleşme %{score} skor aldı ve %{threshold} eşiğini aştı, ancak ikinci kontrol bunun mesajı yanıtlamadığını söyledi, bu yüzden hiçbir şey gönderilmedi.",
+        "vetoedNoBar": "En iyi eşleşme %{score} skor aldı, ancak ikinci kontrol bunun mesajı yanıtlamadığını söyledi, bu yüzden hiçbir şey gönderilmedi."
+      },
+      "flowRun": "(bir akıştan)"
     },
     "insights": {
       "title": "SSS analizleri",
@@ -612,7 +629,8 @@
         "exact": "Tam: mesaj, büyük/küçük harf ve boşluklar yok sayılarak kayıtlı bir ifadeyle aynıdır.",
         "semantic": "Anlam: mesaj, tüm yayındaki ifadelerle anlamına göre karşılaştırılır; bu yüzden farklı sözcükler eşleşebilir.",
         "trigram": "Yazım yedeği: yapay zeka sağlayıcısı kullanılamıyorsa harfler karşılaştırılır; bu yalnızca yazım hatalarını yakalar.",
-        "threshold": "En iyi skor hassasiyetle karşılaştırılır. Üstündeyse SSS yanıtlar; altındaysa mesaj Yanıtsız altında listelenir."
+        "threshold": "En iyi skor hassasiyetle karşılaştırılır. Üstündeyse SSS yanıtlar; altındaysa mesaj Yanıtsız altında listelenir.",
+        "verify": "İkinci kontrol (isteğe bağlı): hassasiyete yeni ulaşan bir eşleşme, küçük bir sohbet modeli tarafından yeniden kontrol edilebilir. Model yalnızca yanıtı tutabilir."
       },
       "who": "Bu ayarları değiştirmek faq.settings.manage iznini gerektirir.",
       "leave": {
@@ -620,6 +638,52 @@
         "body": "Bu ayarlardaki değişiklikleriniz kaydedilmedi.",
         "leave": "Çık",
         "stay": "Kal"
+      },
+      "verify": {
+        "title": "Sınırdaki eşleşmeler için ikinci kontrol",
+        "hint": "Küçük bir sohbet modeli, eşiğe yeni ulaşan eşleşmeleri yeniden kontrol eder.",
+        "unavailable": "İkinci kontrol platform tarafından kapatıldı, bu yüzden burada açsanız bile çalışmaz. Platform yöneticinize danışın.",
+        "label": "Sınırdaki eşleşmeleri ikinci görüşle kontrol et",
+        "on": "Açık",
+        "off": "Kapalı",
+        "onBody": "Bir eşleşme eşiği ancak geçtiğinde, küçük bir sohbet modeli müşterinin mesajını ve SSS öğesini okuyup yanıtın uygun olup olmadığını söyler. Yalnızca \"hayır\" diyebilir: hiçbir zaman yanıt gönderilmesini sağlamaz.",
+        "offBody": "Eşiğe ulaşan her eşleşme ikinci bir kontrol olmadan yanıtlanır.",
+        "bandLabel": "Hangi aralık sınırdaki eşleşme sayılır",
+        "bandValue": "+{value}%",
+        "explainOn": "%{from} ile %{to} arasında skor alan eşleşmeler {model} tarafından kontrol edilir. \"Hayır\" yanıtı, hiçbir yanıtın gönderilmeyeceği ve mesajın Yanıtsız altında görüneceği anlamına gelir.",
+        "explainOff": "%{threshold} veya üzeri skor alan her eşleşme yanıtlanır. En sınırdaki eşleşmelerin yeniden kontrol edilmesi için ikinci kontrolü açın.",
+        "cost": "Her kontrol, müşterinin mesajını ve SSS öğesinin sorusunu modele gönderir: birkaç yüz token tutar ve sınırdaki bir yanıta yaklaşık bir saniye ekler. Aralığın dışındaki eşleşmeler hiçbir zaman kontrol edilmez. Kontrol başarısız olursa, kullanılamazsa veya saatlik sınıra ulaşılırsa eşleşme, kontrol yokmuş gibi geçerli kalır."
+      }
+    },
+    "flowNode": {
+      "label": "Başlangıç noktası",
+      "start": "Akışın başlangıcı",
+      "hint": "Akışın başlangıcını atlamak için bir adım seçin. Müşteriler akışa seçtiğiniz adımdan girer.",
+      "loading": "Bu akışın adımları yükleniyor",
+      "empty": "Bu akışta başka adım yok, bu yüzden başından başlar.",
+      "retry": "Tekrar dene",
+      "deletedOption": "Silinmiş adım (başka bir tane seçin)",
+      "missing": {
+        "title": "Bu SSS öğesinin başladığı adım silinmiş",
+        "body": "Bu adım akıştan silindi. Başka bir adım seçene kadar bu SSS öğesiyle eşleşen müşteriler yanıt almaz. Aşağıdan bir adım seçin veya akışın başlangıcından başlatın.",
+        "fix": "Akışın başından başlat"
+      }
+    },
+    "verify": {
+      "title": "İkinci kontrol",
+      "chip": {
+        "confirmed": "İkinci kontrol: evet",
+        "vetoed": "İkinci kontrol: hayır",
+        "failed": "İkinci kontrol başarısız",
+        "skipped": "İkinci kontrol atlandı"
+      },
+      "model": "Kontrol eden",
+      "reason": "Gerekçe",
+      "body": {
+        "confirmed": "Eşleşme sınırdaydı, bu yüzden küçük bir sohbet modeli mesajı ve SSS öğesini okudu ve yanıtın uygun olduğunu onayladı.",
+        "vetoed": "Eşleşme sınırdaydı ve ikinci kontrol bu SSS öğesinin mesajı yanıtlamadığını söyledi. Yanıt tutuldu, hiçbir şey gönderilmedi ve mesaj Yanıtsız altında görünüyor.",
+        "failed": "Eşleşme sınırdaydı, ancak kontrol tamamlanamadı; bu yüzden eşleşme geçerli kaldı ve yanıt, ikinci kontrol yokmuş gibi gönderildi.",
+        "skipped": "İkinci kontrol bu eşleşme için çalışmadı, bu yüzden eşleşme olduğu gibi kaldı."
       }
     }
   }

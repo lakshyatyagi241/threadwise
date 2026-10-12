@@ -1,6 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
-import type { FaqCandidate, FaqInsights, FaqMatchOutcome, FaqMatchTier } from '@crm/contracts';
+import type {
+  FaqCandidate,
+  FaqInsights,
+  FaqMatchOutcome,
+  FaqMatchTier,
+  FaqVerifyInfo,
+  FaqVerifyMode,
+} from '@crm/contracts';
 import type { Tx } from '@crm/db';
 
 type Raw = Record<string, unknown>;
@@ -10,7 +17,7 @@ const text = (v: unknown): string | null => (v === null || v === undefined ? nul
 const date = (v: unknown): Date => new Date(v as string);
 
 export interface LogWrite {
-  origin: 'inbound' | 'test';
+  origin: 'inbound' | 'test' | 'flow';
   conversationId: number | null;
   channelId: number | null;
   /** Null when the workspace does not keep customer text. */
@@ -26,13 +33,14 @@ export interface LogWrite {
   embeddingModel: string | null;
   latencyMs: number | null;
   error: string | null;
+  verify: FaqVerifyInfo | null;
 }
 
 export interface LogRow {
   id: number;
   uuid: string;
   createdAt: Date;
-  origin: 'inbound' | 'test';
+  origin: 'inbound' | 'test' | 'flow';
   query: string | null;
   queryLength: number;
   outcome: FaqMatchOutcome;
@@ -46,6 +54,7 @@ export interface LogRow {
   embeddingModel: string | null;
   latencyMs: number | null;
   error: string | null;
+  verify: FaqVerifyInfo | null;
   resolved: boolean;
 }
 
@@ -62,6 +71,8 @@ export interface SettingsRow {
   threshold: number;
   minMargin: number;
   logQueries: boolean;
+  verifyMode: FaqVerifyMode;
+  verifyBand: number;
   tunedModel: string | null;
   rowVersion: number;
   updatedAt: Date;
@@ -76,7 +87,7 @@ export class FaqLogRepository {
 
   async getSettings(tx: Tx, orgId: number): Promise<SettingsRow | null> {
     const res = await tx.execute(sql`
-      SELECT enabled, threshold, min_margin, log_queries, tuned_model, row_version, updated_at FROM faq_settings WHERE org_id = ${orgId}`);
+      SELECT enabled, threshold, min_margin, log_queries, verify_mode, verify_band, tuned_model, row_version, updated_at FROM faq_settings WHERE org_id = ${orgId}`);
     const r = (res.rows as Raw[])[0];
     return r
       ? {
@@ -84,6 +95,8 @@ export class FaqLogRepository {
           threshold: num(r.threshold),
           minMargin: num(r.min_margin),
           logQueries: r.log_queries as boolean,
+          verifyMode: r.verify_mode as FaqVerifyMode,
+          verifyBand: num(r.verify_band),
           tunedModel: text(r.tuned_model),
           rowVersion: num(r.row_version),
           updatedAt: date(r.updated_at),
@@ -100,20 +113,22 @@ export class FaqLogRepository {
       threshold: number;
       minMargin: number;
       logQueries: boolean;
+      verifyMode: FaqVerifyMode;
+      verifyBand: number;
       tunedModel: string;
     },
     rowVersion: number | undefined,
   ): Promise<boolean> {
     if (rowVersion === undefined) {
       const res = await tx.execute(sql`
-        INSERT INTO faq_settings (org_id, enabled, threshold, min_margin, log_queries, tuned_model)
-        VALUES (${orgId}, ${w.enabled}, ${w.threshold}, ${w.minMargin}, ${w.logQueries}, ${w.tunedModel})
+        INSERT INTO faq_settings (org_id, enabled, threshold, min_margin, log_queries, verify_mode, verify_band, tuned_model)
+        VALUES (${orgId}, ${w.enabled}, ${w.threshold}, ${w.minMargin}, ${w.logQueries}, ${w.verifyMode}, ${w.verifyBand}, ${w.tunedModel})
         ON CONFLICT (org_id) DO NOTHING RETURNING org_id`);
       return res.rows.length > 0;
     }
     const res = await tx.execute(sql`
       UPDATE faq_settings SET enabled = ${w.enabled}, threshold = ${w.threshold}, min_margin = ${w.minMargin},
-        log_queries = ${w.logQueries}, tuned_model = ${w.tunedModel}
+        log_queries = ${w.logQueries}, verify_mode = ${w.verifyMode}, verify_band = ${w.verifyBand}, tuned_model = ${w.tunedModel}
       WHERE org_id = ${orgId} AND row_version = ${rowVersion} RETURNING org_id`);
     return res.rows.length > 0;
   }
@@ -123,10 +138,12 @@ export class FaqLogRepository {
   async insert(tx: Tx, orgId: number, w: LogWrite): Promise<number> {
     const res = await tx.execute(sql`
       INSERT INTO faq_match_logs (org_id, origin, conversation_id, channel_id, query, query_length, outcome, tier, matched_faq_id,
-                                  score, second_score, matched_text, candidates, embedding_model, latency_ms, error)
+                                  score, second_score, matched_text, candidates, embedding_model, latency_ms, error,
+                                  verify_verdict, verify_model, verify_reason)
       VALUES (${orgId}, ${w.origin}, ${w.conversationId}, ${w.channelId}, ${w.query}, ${w.queryLength}, ${w.outcome}, ${w.tier},
               ${w.matchedFaqId}, ${w.score}, ${w.secondScore}, ${w.matchedText}, ${JSON.stringify(w.candidates)}::jsonb,
-              ${w.embeddingModel}, ${w.latencyMs}, ${w.error})
+              ${w.embeddingModel}, ${w.latencyMs}, ${w.error}, ${w.verify?.verdict ?? null}, ${w.verify?.model ?? null},
+              ${w.verify?.reason ?? null})
       RETURNING id`);
     return num((res.rows[0] as Raw).id);
   }
@@ -136,7 +153,7 @@ export class FaqLogRepository {
       id: num(r.id),
       uuid: r.uuid as string,
       createdAt: date(r.created_at),
-      origin: r.origin as 'inbound' | 'test',
+      origin: r.origin as 'inbound' | 'test' | 'flow',
       query: text(r.query),
       queryLength: num(r.query_length),
       outcome: r.outcome as FaqMatchOutcome,
@@ -150,13 +167,21 @@ export class FaqLogRepository {
       embeddingModel: text(r.embedding_model),
       latencyMs: numOrNull(r.latency_ms),
       error: text(r.error),
+      verify: r.verify_verdict
+        ? {
+            verdict: r.verify_verdict as FaqVerifyInfo['verdict'],
+            model: text(r.verify_model),
+            reason: text(r.verify_reason),
+          }
+        : null,
       resolved: r.resolved_at !== null && r.resolved_at !== undefined,
     };
   }
 
   private static readonly LOG_COLS = sql`
     l.id, l.uuid, l.created_at, l.origin, l.query, l.query_length, l.outcome, l.tier, f.uuid AS faq_uuid, f.question AS faq_question,
-    l.score, l.second_score, l.matched_text, l.candidates, l.embedding_model, l.latency_ms, l.error, l.resolved_at`;
+    l.score, l.second_score, l.matched_text, l.candidates, l.embedding_model, l.latency_ms, l.error,
+    l.verify_verdict, l.verify_model, l.verify_reason, l.resolved_at`;
 
   async list(tx: Tx, orgId: number, f: LogFilter): Promise<LogRow[]> {
     const where: SQL[] = [sql`l.org_id = ${orgId}`, sql`l.origin = 'inbound'`];

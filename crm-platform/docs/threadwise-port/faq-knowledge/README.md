@@ -29,15 +29,17 @@ FAQ edit -> faqs / faq_variations (embed_state = pending)
 Platform operator -> /v2/platform/faq  (engine switch, model, limits, re-index)  -> platform_settings 'faq.config'
 ```
 
-| Part                               | Where                                                                                                                                            |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Tables                             | `faq_settings` (one row per workspace), `faqs`, `faq_variations` (text + `halfvec(3072)`), `faq_match_logs`                                      |
-| Matching rules (pure, unit-tested) | `faq.rules.ts`                                                                                                                                   |
-| AI port and adapters               | `infra/providers/faq-knowledge/`: `OpenRouterFaqAiAdapter`, `FixtureFaqAiAdapter` (tests, `FAQ_AI_DRIVER=fixture`, refused in production)        |
-| Key, cap and ledger                | `AiKeyResolver`, `AiTokenMeter` (AIADM); no key in the environment                                                                               |
-| Worker                             | `FaqKnowledgeWorkerModule`: embed queue, inbound listener, 90 day log sweep                                                                      |
-| Web (workspace)                    | `apps/web/src/features/faq-knowledge/`, routes `/faq`, `/faq/new`, `/faq/[id]`, `/faq/test`, `/faq/unanswered`, `/faq/insights`, `/faq/settings` |
-| Web (platform)                     | `apps/web/src/features/faq-knowledge/platform/`, route `/admin/faq`                                                                              |
+| Part                               | Where                                                                                                                                                             |
+| ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Tables                             | `faq_settings` (one row per workspace), `faqs`, `faq_variations` (text + `halfvec(3072)`), `faq_match_logs`                                                       |
+| Matching rules (pure, unit-tested) | `faq.rules.ts`                                                                                                                                                    |
+| AI port and adapters               | `infra/providers/faq-knowledge/`: `OpenRouterFaqAiAdapter`, `FixtureFaqAiAdapter` (tests, `FAQ_AI_DRIVER=fixture`, refused in production)                         |
+| Key, cap and ledger                | `AiKeyResolver`, `AiTokenMeter` (AIADM); no key in the environment                                                                                                |
+| Flow step                          | builder node `faq` ("Answer from FAQ"): `FaqFlowService`, runtime `faq-node.ts`; exits matched / no match; logs `origin: flow`                                    |
+| Borderline check                   | `FaqVerifyService`: a small chat model can veto a match inside `[bar, bar + band)`; settings `verify_mode`, `verify_band`; platform `verifyEnabled/Model/PerHour` |
+| Worker                             | `FaqKnowledgeWorkerModule`: embed queue, inbound listener, 90 day log sweep                                                                                       |
+| Web (workspace)                    | `apps/web/src/features/faq-knowledge/`, routes `/faq`, `/faq/new`, `/faq/[id]`, `/faq/test`, `/faq/unanswered`, `/faq/insights`, `/faq/settings`                  |
+| Web (platform)                     | `apps/web/src/features/faq-knowledge/platform/`, route `/admin/faq`                                                                                               |
 
 ## Design points worth knowing before changing anything
 
@@ -73,10 +75,8 @@ save an OpenRouter key under Admin, AI keys.
 
 ## Not done on purpose (follow-ups)
 
-- **Start the flow at a chosen node** (Geta's "link to node"): needs a start-node parameter on `FlowLaunchService`, which belongs to the flow
-  runtime. The FAQ starts the flow from its trigger, and the editor says so.
-- **Ordering against Reference keyword auto-replies.** The inbound pipeline has no keyword-reply listener yet; when it does, it must register
-  before this one (it is an `after` listener) so an owner's explicit keyword rule beats a meaning match.
+- **Ordering against keyword rules.** Flow keyword triggers and waiting runs already run before the FAQ (pinned by an e2e test). If a separate
+  keyword auto-reply listener is ever added to the inbox it must register before this one (it is an `after` listener).
 - **Plan gating.** No plan feature fits; add `faq_knowledge` to the plan catalogue if the commercial plans should gate it (the platform switch and
   the per-workspace switch exist already).
 - **Importing Geta's FAQs and variations** (ADR-0015): a one-off script reading Geta's `bot_workspace` and `faq_variations` and calling the create

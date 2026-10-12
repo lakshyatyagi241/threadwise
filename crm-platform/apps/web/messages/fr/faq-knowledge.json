@@ -33,7 +33,8 @@
       "modelNotAllowed": "Le modèle d’IA de la plateforme n’est pas autorisé. Contactez l’administrateur de la plateforme.",
       "validation": "Certains champs demandent votre attention.",
       "rateLimited": "Trop de requêtes. Patientez un instant et réessayez.",
-      "unexpected": "Une erreur s’est produite. Réessayez et communiquez l’identifiant de requête au support si le problème persiste."
+      "unexpected": "Une erreur s’est produite. Réessayez et communiquez l’identifiant de requête au support si le problème persiste.",
+      "flowNodeNotFound": "L’étape choisie ne fait plus partie de ce flux. Choisissez une autre étape ou démarrez au début du flux."
     },
     "banner": {
       "enabledToast": "Les réponses FAQ sont activées.",
@@ -139,7 +140,9 @@
         "ready": "{count} actives",
         "pending": "{count} en indexation",
         "failed": "{count} en échec"
-      }
+      },
+      "stepMissing": "Étape manquante",
+      "startsAt": "Démarre à : {step}"
     },
     "editor": {
       "back": "Retour aux FAQ",
@@ -192,7 +195,9 @@
         "preview": "Aperçu dans WhatsApp",
         "previewEmpty": "Votre réponse s’affiche ici",
         "flowLabel": "Flux à lancer",
-        "noFlow": "Aucun flux choisi"
+        "noFlow": "Aucun flux choisi",
+        "startsAt": "Démarre à l’étape : {step}",
+        "stepGone": "L’étape de départ de cette FAQ n’existe plus : les clients ne recevront aucune réponse."
       },
       "advanced": {
         "title": "Avancé : sensibilité pour cette FAQ uniquement",
@@ -227,6 +232,11 @@
           "required": "Choisissez une valeur entre 5 % et 99 %.",
           "tooLong": "Choisissez une valeur entre 5 % et 99 %.",
           "invalid": "Choisissez une valeur entre 5 % et 99 %."
+        },
+        "flowNodeId": {
+          "required": "Choisissez une étape de ce flux ou le début du flux.",
+          "tooLong": "Choisissez une étape de ce flux ou le début du flux.",
+          "invalid": "Choisissez une étape de ce flux ou le début du flux."
         }
       },
       "deleteConfirm": {
@@ -257,7 +267,7 @@
         "off": "Inactif",
         "draft": "Brouillon"
       },
-      "note": "Le flux démarre à partir de son déclencheur. Seuls les flux publiés et actifs peuvent s’exécuter."
+      "note": "Le flux démarre à l’étape choisie ci-dessous ou à son début. Seuls les flux publiés et actifs peuvent s’exécuter."
     },
     "variations": {
       "title": "Variantes de la question",
@@ -354,6 +364,10 @@
         "notSent": {
           "title": "Correspondance, non envoyée",
           "body": "Une FAQ correspondait mais la réponse n’a pas été envoyée, par exemple parce que les réponses FAQ étaient désactivées."
+        },
+        "vetoed": {
+          "title": "Réponse retenue",
+          "body": "Le score de correspondance était suffisant, mais la seconde vérification a dit non : rien ne serait envoyé."
         }
       },
       "tier": {
@@ -486,8 +500,11 @@
         "providerError": "Le fournisseur d’IA a échoué, le bot n’a donc pu comparer que l’orthographe.",
         "notSent": "Une FAQ correspondait mais la réponse n’a pas été envoyée.",
         "tier": "Décidé par le niveau {tier}.",
-        "error": "Erreur : {error}"
-      }
+        "error": "Erreur : {error}",
+        "vetoed": "La meilleure correspondance a obtenu {score} %, au-dessus du seuil de {threshold} %, mais la seconde vérification a jugé qu’elle ne répond pas au message : rien n’a été envoyé.",
+        "vetoedNoBar": "La meilleure correspondance a obtenu {score} %, mais la seconde vérification a jugé qu’elle ne répond pas au message : rien n’a été envoyé."
+      },
+      "flowRun": "(depuis un flux)"
     },
     "insights": {
       "title": "Statistiques des FAQ",
@@ -612,7 +629,8 @@
         "exact": "Exacte : le message est identique à une formulation enregistrée, sans tenir compte de la casse ni des espaces.",
         "semantic": "Par le sens : le message est comparé par le sens à chaque formulation active, des mots différents peuvent donc correspondre.",
         "trigram": "Repli orthographique : si le fournisseur d’IA est indisponible, les lettres sont comparées, ce qui ne détecte que les fautes de frappe.",
-        "threshold": "Le meilleur score est comparé à la sensibilité. Au-dessus, la FAQ répond ; en dessous, le message est listé dans Sans réponse."
+        "threshold": "Le meilleur score est comparé à la sensibilité. Au-dessus, la FAQ répond ; en dessous, le message est listé dans Sans réponse.",
+        "verify": "Seconde vérification (facultative) : une correspondance qui atteint tout juste la sensibilité peut être revérifiée par un petit modèle de chat, qui peut uniquement retenir une réponse."
       },
       "who": "La modification de ces paramètres nécessite la permission faq.settings.manage.",
       "leave": {
@@ -620,6 +638,52 @@
         "body": "Vos modifications de ces paramètres ne sont pas enregistrées.",
         "leave": "Quitter",
         "stay": "Rester"
+      },
+      "verify": {
+        "title": "Seconde vérification des cas limites",
+        "hint": "Un petit modèle de chat revérifie les correspondances qui atteignent tout juste le seuil.",
+        "unavailable": "La plateforme a désactivé la seconde vérification : elle ne s’exécute pas, même si vous l’activez ici. Contactez l’administrateur de votre plateforme.",
+        "label": "Revérifier les cas limites avec un second avis",
+        "on": "Activée",
+        "off": "Désactivée",
+        "onBody": "Quand une correspondance atteint tout juste le seuil, un petit modèle de chat lit le message du client et la FAQ, puis dit si la réponse convient. Il ne peut que dire non : il ne déclenche jamais une réponse.",
+        "offBody": "Toute correspondance qui atteint le seuil reçoit une réponse sans second contrôle.",
+        "bandLabel": "À partir de quand une correspondance est un cas limite",
+        "bandValue": "+{value}%",
+        "explainOn": "Les correspondances dont le score va de {from} % à {to} % sont vérifiées par {model}. Un « non » signifie qu’aucune réponse n’est envoyée et que le message apparaît dans Sans réponse.",
+        "explainOff": "Toute correspondance dont le score atteint {threshold} % ou plus reçoit une réponse. Activez la seconde vérification pour revérifier les cas les plus limites.",
+        "cost": "Chaque vérification envoie le message du client et la question de la FAQ au modèle : quelques centaines de jetons, et environ une seconde de plus pour une réponse limite. Les correspondances hors de cette plage ne sont jamais vérifiées. Si la vérification échoue, n’est pas disponible ou si la limite horaire est atteinte, la correspondance est conservée comme s’il n’y avait pas de vérification."
+      }
+    },
+    "flowNode": {
+      "label": "Démarrer à",
+      "start": "Le début du flux",
+      "hint": "Choisissez une étape pour sauter le début du flux. Les clients entrent dans le flux à l’étape que vous sélectionnez.",
+      "loading": "Chargement des étapes de ce flux",
+      "empty": "Ce flux n’a pas d’autres étapes : il démarre donc depuis son début.",
+      "retry": "Réessayer",
+      "deletedOption": "Étape supprimée (choisissez-en une autre)",
+      "missing": {
+        "title": "L’étape de départ de cette FAQ n’existe plus",
+        "body": "Cette étape a été supprimée du flux. Tant que vous n’en choisissez pas une autre, les clients qui correspondent à cette FAQ ne reçoivent aucune réponse. Sélectionnez une étape ci-dessous ou démarrez au début du flux.",
+        "fix": "Démarrer au début du flux"
+      }
+    },
+    "verify": {
+      "title": "Seconde vérification",
+      "chip": {
+        "confirmed": "Seconde vérification : oui",
+        "vetoed": "Seconde vérification : non",
+        "failed": "Seconde vérification échouée",
+        "skipped": "Seconde vérification ignorée"
+      },
+      "model": "Vérifié par",
+      "reason": "Motif",
+      "body": {
+        "confirmed": "La correspondance était un cas limite : un petit modèle de chat a lu le message et la FAQ, et a confirmé que la réponse convient.",
+        "vetoed": "La correspondance était un cas limite et la seconde vérification a jugé que cette FAQ ne répond pas au message. La réponse a été retenue, rien n’a été envoyé et le message apparaît dans Sans réponse.",
+        "failed": "La correspondance était un cas limite, mais la vérification n’a pas pu aboutir : la correspondance a été conservée et la réponse envoyée comme s’il n’y avait pas de seconde vérification.",
+        "skipped": "La seconde vérification ne s’est pas exécutée pour cette correspondance, qui a donc été conservée telle quelle."
       }
     }
   }

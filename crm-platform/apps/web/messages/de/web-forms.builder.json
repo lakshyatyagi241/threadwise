@@ -131,7 +131,14 @@
         "custom": "Benutzerdefiniert",
         "requiredByCrm": "Pflichtfeld",
         "inForm": "Im Formular",
-        "full": "Das Formular hat die Grenze an Blöcken erreicht."
+        "full": "Das Formular hat die Grenze an Blöcken erreicht.",
+        "section": {
+          "contact": "Kontakt",
+          "contactAddress": "Kontaktadresse",
+          "company": "Unternehmen",
+          "companyAddress": "Unternehmensadresse"
+        },
+        "addAddress": "Alle Adressfelder hinzufügen"
       },
       "list": {
         "title": "Felder",

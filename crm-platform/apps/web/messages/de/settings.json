@@ -309,6 +309,16 @@
         "label": "Automatische Zuweisung",
         "description": "Weisen Sie neue Unterhaltungen automatisch dem richtigen Agenten zu, reihum oder nach Regeln.",
         "keywords": "routing, round robin, zuweisen, agenten, posteingangsregeln, verteilen, eigentümer"
+      },
+      "message-logs": {
+        "label": "Nachrichtenprotokolle",
+        "description": "Exportieren Sie das Zustellprotokoll Ihrer Nachrichten bis zu einem Jahr rückwirkend als Datei, die an Ihre E-Mail-Adresse gesendet wird.",
+        "keywords": "Export, Zustellprotokoll, Verlauf, Archiv, CSV, Nachrichten"
+      },
+      "web": {
+        "label": "Website-Chat",
+        "description": "Bots für den Chat Ihrer Website und das Widget, in dem jeder davon läuft.",
+        "keywords": "Web, Website, Widget, Chatbot, Einbetten, Live-Chat"
       }
     }
   }

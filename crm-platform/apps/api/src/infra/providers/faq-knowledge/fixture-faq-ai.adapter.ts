@@ -5,6 +5,7 @@ import {
   type FaqAiPort,
   type FaqEmbedRequest,
   type FaqEmbedResult,
+  type FaqJudgeRequest,
   type FaqSuggestRequest,
   type FaqSuggestResult,
 } from './faq-ai.port';
@@ -83,6 +84,26 @@ export class FixtureFaqAiAdapter implements FaqAiPort {
     ];
     const text = JSON.stringify({ variations: all.slice(0, req.count) });
     return { text, promptTokens: 40, completionTokens: 60 };
+  }
+
+  /**
+   * Test hooks on the customer message in the prompt: `[[reject]]` is judged "does not answer", `[[judge-fail]]` throws a provider
+   * error, `[[judge-garbage]]` answers text that is not JSON. Anything else is confirmed.
+   */
+  async judge(req: FaqJudgeRequest): Promise<FaqSuggestResult> {
+    if (req.user.includes('[[judge-fail]]'))
+      throw new FaqAiError('provider', 'fixture judge failure');
+    if (req.user.includes('[[judge-garbage]]'))
+      return { text: 'maybe?', promptTokens: 30, completionTokens: 2 };
+    const answers = !req.user.includes('[[reject]]');
+    return {
+      text: JSON.stringify({
+        answers,
+        reason: answers ? 'Same request as the FAQ.' : 'A different request from the FAQ.',
+      }),
+      promptTokens: 30,
+      completionTokens: 12,
+    };
   }
 
   private vector(text: string, dims: number): number[] {

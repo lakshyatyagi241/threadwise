@@ -192,7 +192,22 @@
       "retention": "Les journaux sont supprimés {days} jours après la fin d'une exécution.",
       "pathTitle": "Chemin suivi",
       "notReached": "Non atteints",
-      "noErrors": "Aucune erreur dans cette exécution."
+      "noErrors": "Aucune erreur dans cette exécution.",
+      "factNext": "Suivant : {node}",
+      "factWaiting": "En attente à : {node}",
+      "factDelay": "Attend {time}",
+      "factReplied": "Le client a répondu : {text}",
+      "factEnded": "Terminé : {reason}",
+      "ioInput": "Entrée",
+      "ioOutput": "Sortie",
+      "ioKind": {
+        "message": "Message envoyé",
+        "reply": "Réponse du client",
+        "variable": "Variable",
+        "request": "Requête",
+        "response": "Réponse",
+        "result": "Résultat"
+      }
     },
     "event": {
       "step": "Étape",

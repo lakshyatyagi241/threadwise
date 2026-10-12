@@ -25,7 +25,7 @@
     "toast": {
       "noPhone": "Nessun numero di telefono per questo contatto.",
       "noNumber": "Le chiamate non sono abilitate su nessun numero WABA.",
-      "alreadyPermitted": "Questo contatto consente già le chiamate: avvio della chiamata in corso...",
+      "alreadyPermitted": "Questo contatto consente già le chiamate. Premi Chiama per avviare la chiamata.",
       "permissionSent": "Richiesta di autorizzazione inviata. Vedrà Accetta/Rifiuta in WhatsApp: riprova a chiamare dopo la sua risposta.",
       "permissionFailed": "Impossibile inviare la richiesta di autorizzazione: {message}",
       "startFailed": "Impossibile avviare la chiamata: {message}",

@@ -61,7 +61,9 @@
         "matches": "Mensagens de clientes verificadas",
         "answered": "Respondidas",
         "rate": "Taxa de resposta",
-        "tokens": "Tokens de embedding"
+        "tokens": "Tokens de embedding",
+        "verified": "Segundas verificações",
+        "vetoed": "Respostas retidas"
       }
     },
     "settings": {
@@ -96,7 +98,8 @@
         "maxFaqs": "Máximo de FAQs por workspace",
         "maxVariationsPerFaq": "Máximo de variações por FAQ",
         "semanticPerHour": "Correspondências semânticas por workspace por hora",
-        "semanticPerHourHint": "Acima disso, o workspace recorre à similaridade de grafia pelo resto da hora. 0 significa sempre similaridade de grafia."
+        "semanticPerHourHint": "Acima disso, o workspace recorre à similaridade de grafia pelo resto da hora. 0 significa sempre similaridade de grafia.",
+        "verifyPerHour": "Segundas verificações por workspace por hora"
       },
       "errors": {
         "integer": "Digite um número inteiro.",
@@ -115,6 +118,19 @@
         "confirm": "Salvar alterações",
         "engineOff": "Desativar o mecanismo impede que todos os workspaces respondam aos clientes por FAQ e bloqueia as edições de FAQ até você reativá-lo.",
         "modelChange": "Trocar o modelo de IA de {from} para {to} recria todos os vetores armazenados. Até isso terminar, a correspondência usa apenas similaridade de grafia. A sensibilidade padrão seguirá o novo modelo (recomendado {threshold}), a menos que você defina um valor fixo. Limites de workspaces salvos individualmente podem precisar de novo ajuste, pois as pontuações mudam com o modelo."
+      },
+      "verify": {
+        "title": "Segunda verificação para casos duvidosos",
+        "description": "Um modelo de chat pequeno confere as correspondências que mal atingiram o limite de um workspace. Ele só pode reter uma resposta. Os workspaces a ativam nas próprias configurações de FAQ.",
+        "enabled": {
+          "label": "Permitir a segunda verificação",
+          "hint": "Desative para interromper a verificação em todos os workspaces, independentemente do que eles definirem."
+        },
+        "model": {
+          "label": "Modelo de verificação",
+          "hint": "O ID do modelo do OpenRouter que avalia os casos duvidosos, por exemplo openai/gpt-4o-mini. Um modelo pequeno e rápido basta."
+        },
+        "perHourHint": "Depois disso, um caso duvidoso vale sem verificação pelo resto da hora. 0 significa nunca verificar."
       }
     },
     "maintenance": {

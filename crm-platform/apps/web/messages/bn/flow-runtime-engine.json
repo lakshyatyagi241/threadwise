@@ -192,7 +192,22 @@
       "retention": "রান শেষের {days} দিন পরে লগ মুছে ফেলা হয়।",
       "pathTitle": "অনুসৃত পথ",
       "notReached": "পৌঁছানো হয়নি",
-      "noErrors": "এই রানে কোনো ত্রুটি নেই।"
+      "noErrors": "এই রানে কোনো ত্রুটি নেই।",
+      "factNext": "পরবর্তী: {node}",
+      "factWaiting": "অপেক্ষা করছে: {node}",
+      "factDelay": "{time} অপেক্ষা",
+      "factReplied": "গ্রাহক উত্তর দিয়েছেন: {text}",
+      "factEnded": "শেষ: {reason}",
+      "ioInput": "ইনপুট",
+      "ioOutput": "আউটপুট",
+      "ioKind": {
+        "message": "পাঠানো বার্তা",
+        "reply": "গ্রাহকের উত্তর",
+        "variable": "ভেরিয়েবল",
+        "request": "অনুরোধ",
+        "response": "প্রতিক্রিয়া",
+        "result": "ফলাফল"
+      }
     },
     "event": {
       "step": "ধাপ",

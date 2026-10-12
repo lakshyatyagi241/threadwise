@@ -25,7 +25,7 @@
     "toast": {
       "noPhone": "この連絡先には電話番号がありません。",
       "noNumber": "どのWABA番号でも通話が有効になっていません。",
-      "alreadyPermitted": "この連絡先はすでに通話を許可しています。通話を開始しています...",
+      "alreadyPermitted": "この連絡先はすでに通話を許可しています。「発信」を押して通話を開始してください。",
       "permissionSent": "許可リクエストを送信しました。相手のWhatsAppに「承認/拒否」が表示されます。相手が応答したら、もう一度通話してください。",
       "permissionFailed": "許可リクエストを送信できませんでした: {message}",
       "startFailed": "通話を開始できませんでした: {message}",

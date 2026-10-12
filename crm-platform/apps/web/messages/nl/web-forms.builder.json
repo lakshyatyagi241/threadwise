@@ -131,7 +131,14 @@
         "custom": "Aangepast",
         "requiredByCrm": "Verplicht",
         "inForm": "In formulier",
-        "full": "Het formulier heeft zijn limiet aan blokken bereikt."
+        "full": "Het formulier heeft zijn limiet aan blokken bereikt.",
+        "section": {
+          "contact": "Contact",
+          "contactAddress": "Adres van contact",
+          "company": "Bedrijf",
+          "companyAddress": "Adres van bedrijf"
+        },
+        "addAddress": "Alle adresvelden toevoegen"
       },
       "list": {
         "title": "Velden",

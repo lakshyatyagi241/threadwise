@@ -1,10 +1,12 @@
 import {
   FAQ_LIMITS,
+  FLB_NODE_TYPES,
   createFaqEntrySchema,
   updateFaqEntrySchema,
   type CreateFaqEntryInput,
   type FaqAnswerType,
   type FaqEntry,
+  type FaqFlowNode,
   type FaqStatus,
   type UpdateFaqEntryInput,
 } from '@crm/contracts';
@@ -17,13 +19,16 @@ export interface FaqDraft {
   flowId: string | null;
   /** Only for display of a picked flow that is not in the picker's loaded page. */
   flowName: string | null;
+  /** The step the flow starts at; null means the flow's own start. Kept only with a flow answer. */
+  flowNodeId: string | null;
   category: string;
   status: FaqStatus;
   /** Null: follow the workspace sensitivity. */
   thresholdOverride: number | null;
 }
 
-export type DraftField = 'question' | 'answerText' | 'flowId' | 'category' | 'thresholdOverride';
+export type DraftField =
+  'question' | 'answerText' | 'flowId' | 'flowNodeId' | 'category' | 'thresholdOverride';
 export type FieldProblem = 'required' | 'tooLong' | 'invalid';
 export type DraftProblems = Partial<Record<DraftField, FieldProblem>>;
 
@@ -33,6 +38,7 @@ export const emptyDraft = (prefill?: { question?: string }): FaqDraft => ({
   answerText: '',
   flowId: null,
   flowName: null,
+  flowNodeId: null,
   category: '',
   status: 'active',
   thresholdOverride: null,
@@ -44,6 +50,7 @@ export const draftFromEntry = (e: FaqEntry): FaqDraft => ({
   answerText: e.answerText ?? '',
   flowId: e.flowId,
   flowName: e.flowName,
+  flowNodeId: e.flowNodeId,
   category: e.category ?? '',
   status: e.status,
   thresholdOverride: e.thresholdOverride,
@@ -55,6 +62,7 @@ export function isDirty(a: FaqDraft, b: FaqDraft): boolean {
     a.answerType !== b.answerType ||
     a.answerText !== b.answerText ||
     a.flowId !== b.flowId ||
+    a.flowNodeId !== b.flowNodeId ||
     a.category !== b.category ||
     a.status !== b.status ||
     a.thresholdOverride !== b.thresholdOverride
@@ -67,6 +75,8 @@ function answerFields(d: FaqDraft) {
     answerType: d.answerType,
     answerText: d.answerType === 'text' ? d.answerText : null,
     flowId: d.answerType === 'flow' ? d.flowId : null,
+    // A step belongs to a flow answer only; without a flow chosen there is nothing to start at.
+    flowNodeId: d.answerType === 'flow' && d.flowId ? d.flowNodeId : null,
   };
 }
 
@@ -82,6 +92,7 @@ const FIELDS: readonly DraftField[] = [
   'question',
   'answerText',
   'flowId',
+  'flowNodeId',
   'category',
   'thresholdOverride',
 ];
@@ -140,6 +151,70 @@ export function mapServerProblems(errors: Array<{ path: string; message: string 
     else other.push(e.message);
   }
   return { fields, other };
+}
+
+// --- the step a flow answer starts at ---------------------------------------------------------------------------------------
+
+/** The flow editor's start node: picking it means "no step", the flow's own start. */
+const START_TYPE = 'trigger';
+
+export interface StepOption {
+  /** Empty string is the flow's start (sent as no step). */
+  value: string;
+  label: string;
+  start: boolean;
+}
+
+/** The name of a node type as the flow editor shows it; an unknown type is shown as it is. */
+export const stepTypeName = (type: string): string => FLB_NODE_TYPES[type]?.label ?? type;
+
+/** The name a saved step carries in an FAQ (the API falls back to the raw type id when the author left it blank). */
+export const stepDisplayName = (label: string): string => FLB_NODE_TYPES[label]?.label ?? label;
+
+const idHint = (id: string): string => `#${id.length > 8 ? id.slice(0, 6) : id}`;
+
+/** `<type name> · <what the author called it, or a short id>`. */
+export function stepOptionLabel(n: Pick<FaqFlowNode, 'id' | 'type' | 'label'>): string {
+  const name = n.label.trim();
+  return `${stepTypeName(n.type)} · ${name === '' ? idHint(n.id) : name}`;
+}
+
+/**
+ * The picker's choices after the flow's start (that one is the caller's, because its text is translated). The trigger is the start
+ * itself, so it is not listed twice.
+ */
+export function stepOptions(nodes: readonly FaqFlowNode[]): StepOption[] {
+  return nodes
+    .filter((n) => n.type !== START_TYPE)
+    .map((n) => ({ value: n.id, label: stepOptionLabel(n), start: false }));
+}
+
+/** What the select shows for the saved step: the trigger's id counts as the start, since that is where it starts anyway. */
+export function stepSelectValue(
+  flowNodeId: string | null,
+  nodes: readonly FaqFlowNode[] | undefined,
+): string {
+  if (!flowNodeId) return '';
+  return nodes?.some((n) => n.id === flowNodeId && n.type === START_TYPE) ? '' : flowNodeId;
+}
+
+/**
+ * The chosen step is gone from the flow. From the saved entry that is `flowNodeLabel === null` with an id set (the same test the list
+ * uses); in the editor it is also true once the flow's steps are loaded and the id is not among them.
+ */
+export function stepIsMissing(
+  draft: Pick<FaqDraft, 'answerType' | 'flowId' | 'flowNodeId'>,
+  saved: Pick<FaqEntry, 'flowId' | 'flowNodeId' | 'flowNodeLabel'> | null,
+  nodes: readonly FaqFlowNode[] | undefined,
+): boolean {
+  if (draft.answerType !== 'flow' || !draft.flowId || !draft.flowNodeId) return false;
+  if (nodes) return !nodes.some((n) => n.id === draft.flowNodeId);
+  return (
+    saved !== null &&
+    saved.flowId === draft.flowId &&
+    saved.flowNodeId === draft.flowNodeId &&
+    saved.flowNodeLabel === null
+  );
 }
 
 // --- variations ---------------------------------------------------------------------------------------------------------

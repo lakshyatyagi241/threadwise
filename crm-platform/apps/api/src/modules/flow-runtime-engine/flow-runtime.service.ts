@@ -40,7 +40,7 @@ import { FlowEngine } from './runtime/engine.service';
 import { FlowRunPublisher } from './runtime/flow-run.publisher';
 import { FlowLaunchService } from './runtime/launch.service';
 import { RunRepository } from './runtime/run.repository';
-import { compactGraph, hashGraph } from './runtime/step-log';
+import { compactGraph, hashGraph, splitIo } from './runtime/step-log';
 import { SubscriberRepository } from './runtime/subscriber.repository';
 import { likePattern, windowOf } from './flow-runtime.window';
 
@@ -780,7 +780,7 @@ export class FlowRuntimeService {
           nodeId: (s.node_id as string | null) ?? null,
           nodeType: (s.node_type as string | null) ?? null,
           event: String(s.event),
-          detail: (s.detail ?? {}) as Record<string, unknown>,
+          ...splitIo((s.detail ?? {}) as Record<string, unknown>),
           error: (s.error as string | null) ?? null,
           at: iso(s.created_at)!,
           nodeLabel: (s.node_label as string | null) ?? null,

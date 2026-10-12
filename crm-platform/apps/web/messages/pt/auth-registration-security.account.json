@@ -367,7 +367,8 @@
         "failed": "Não foi possível trocar de espaço de trabalho. Tente novamente.",
         "notAvailable": "Você não pode mudar para esse espaço de trabalho.",
         "rateLimited": "Muitas tentativas. Aguarde um momento e tente novamente.",
-        "rateLimitedWait": "Muitas tentativas. Tente novamente em {seconds, plural, one {# segundo} other {# segundos}}."
+        "rateLimitedWait": "Muitas tentativas. Tente novamente em {seconds, plural, one {# segundo} other {# segundos}}.",
+        "unverified": "Confirme seu e-mail neste espaço de trabalho para poder mudar para ele."
       },
       "mfaChallenge": {
         "title": "Confirme que é você",

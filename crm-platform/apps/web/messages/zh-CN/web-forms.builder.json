@@ -131,7 +131,14 @@
         "custom": "自定义",
         "requiredByCrm": "必填",
         "inForm": "已在表单中",
-        "full": "表单已达到区块数量上限。"
+        "full": "表单已达到区块数量上限。",
+        "section": {
+          "contact": "联系人",
+          "contactAddress": "联系人地址",
+          "company": "公司",
+          "companyAddress": "公司地址"
+        },
+        "addAddress": "添加所有地址字段"
       },
       "list": {
         "title": "字段",

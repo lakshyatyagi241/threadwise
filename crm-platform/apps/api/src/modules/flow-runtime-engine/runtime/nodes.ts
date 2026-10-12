@@ -291,6 +291,13 @@ const condition: NodeExecutor = {
             arr(p.conditions) as Parameters<typeof evaluateConditions>[1],
             arr(p.logicOperators),
           );
+    // What was compared: each rule's variable as it stood, then which way it went.
+    for (const rule of arr(p.conditions)) {
+      const name = String(obj(rule).variable ?? '').replace(/^@/, '');
+      if (name && ctx.run.vars[name] !== undefined)
+        ctx.io?.('in', { kind: 'variable', name, value: String(ctx.run.vars[name]) });
+    }
+    ctx.io?.('out', { kind: 'result', name: 'condition', value: met ? 'true' : 'false' });
     ctx.note(met ? 'condition true' : 'condition false');
     return { kind: 'advance', port: met ? 1 : 2, branch: true };
   },

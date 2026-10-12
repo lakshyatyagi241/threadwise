@@ -367,7 +367,8 @@
         "failed": "Impossibile cambiare workspace. Riprova.",
         "notAvailable": "Non puoi passare a questo workspace.",
         "rateLimited": "Troppi tentativi. Attendi un momento e riprova.",
-        "rateLimitedWait": "Troppi tentativi. Riprova tra {seconds, plural, one {# secondo} other {# secondi}}."
+        "rateLimitedWait": "Troppi tentativi. Riprova tra {seconds, plural, one {# secondo} other {# secondi}}.",
+        "unverified": "Verifica la tua email in questo spazio di lavoro per poter passare a esso."
       },
       "mfaChallenge": {
         "title": "Conferma la tua identità",

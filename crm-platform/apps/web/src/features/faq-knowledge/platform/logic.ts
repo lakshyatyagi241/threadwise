@@ -18,6 +18,9 @@ export const FIELD_KEYS: readonly FieldKey[] = [
   'maxFaqs',
   'maxVariationsPerFaq',
   'semanticPerHour',
+  'verifyEnabled',
+  'verifyModel',
+  'verifyPerHour',
 ];
 
 /** The form's working copy. Numbers the operator types stay text until they are validated. */
@@ -31,6 +34,9 @@ export interface ConfigDraft {
   maxFaqs: string;
   maxVariationsPerFaq: string;
   semanticPerHour: string;
+  verifyEnabled: boolean;
+  verifyModel: string;
+  verifyPerHour: string;
 }
 
 export const THRESHOLD_MIN = FAQ_LIMITS.thresholdMin;
@@ -41,6 +47,7 @@ export const LIMIT_RANGES = {
   maxFaqs: { min: 1, max: 20_000 },
   maxVariationsPerFaq: { min: 1, max: 500 },
   semanticPerHour: { min: 0, max: 100_000 },
+  verifyPerHour: { min: 0, max: 100_000 },
 } as const;
 
 export function draftFromConfig(config: FaqPlatformConfig): ConfigDraft {
@@ -53,6 +60,9 @@ export function draftFromConfig(config: FaqPlatformConfig): ConfigDraft {
     maxFaqs: String(config.maxFaqs),
     maxVariationsPerFaq: String(config.maxVariationsPerFaq),
     semanticPerHour: String(config.semanticPerHour),
+    verifyEnabled: config.verifyEnabled,
+    verifyModel: config.verifyModel,
+    verifyPerHour: String(config.verifyPerHour),
   };
 }
 
@@ -69,7 +79,7 @@ export type DiffResult =
   | { ok: true; body: UpdateFaqPlatformConfigInput; changed: FieldKey[] }
   | { ok: false; errors: FieldErrors; changed: FieldKey[] };
 
-const INT_FIELDS = ['maxFaqs', 'maxVariationsPerFaq', 'semanticPerHour'] as const;
+const INT_FIELDS = ['maxFaqs', 'maxVariationsPerFaq', 'semanticPerHour', 'verifyPerHour'] as const;
 
 /**
  * The PATCH body for what the operator changed, or the field problems. Only changed fields are sent (the API takes a partial body
@@ -92,6 +102,15 @@ export function diffConfig(saved: FaqPlatformConfig, draft: ConfigDraft): DiffRe
   if (model !== saved.generationModel) {
     body.generationModel = model;
     changed.push('generationModel');
+  }
+  if (draft.verifyEnabled !== saved.verifyEnabled) {
+    body.verifyEnabled = draft.verifyEnabled;
+    changed.push('verifyEnabled');
+  }
+  const verifyModel = draft.verifyModel.trim();
+  if (verifyModel !== saved.verifyModel) {
+    body.verifyModel = verifyModel;
+    changed.push('verifyModel');
   }
   if (draft.followModel) {
     // Handing the default back to the model: nothing to send unless a fixed number is saved now.
@@ -128,11 +147,16 @@ export function diffConfig(saved: FaqPlatformConfig, draft: ConfigDraft): DiffRe
 }
 
 function problemOf(key: FieldKey, code: string): FieldProblem {
-  if (key === 'generationModel') return { kind: 'modelId' };
+  if (key === 'generationModel' || key === 'verifyModel') return { kind: 'modelId' };
   if (key === 'defaultThreshold') {
     return { kind: 'range', min: THRESHOLD_MIN, max: THRESHOLD_MAX };
   }
-  if (key === 'maxFaqs' || key === 'maxVariationsPerFaq' || key === 'semanticPerHour') {
+  if (
+    key === 'maxFaqs' ||
+    key === 'maxVariationsPerFaq' ||
+    key === 'semanticPerHour' ||
+    key === 'verifyPerHour'
+  ) {
     return code === 'too_small' || code === 'too_big'
       ? { kind: 'range', ...LIMIT_RANGES[key] }
       : { kind: 'integer' };

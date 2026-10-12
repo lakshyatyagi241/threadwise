@@ -17,6 +17,7 @@ describe('errorKey', () => {
     [err(409, ERROR_CODES.FAQ_DUPLICATE_QUESTION), 'duplicateQuestion'],
     [err(422, ERROR_CODES.FAQ_LIMIT_REACHED), 'limitReached'],
     [err(422, ERROR_CODES.FAQ_FLOW_NOT_FOUND), 'flowNotFound'],
+    [err(422, ERROR_CODES.FAQ_FLOW_NODE_NOT_FOUND), 'flowNodeNotFound'],
     [err(422, ERROR_CODES.FAQ_EMBEDDING_UNAVAILABLE), 'embeddingUnavailable'],
     [err(502, ERROR_CODES.FAQ_EMBEDDING_UNAVAILABLE), 'embeddingUnavailable'],
     [err(422, ERROR_CODES.FAQ_ENGINE_DISABLED), 'engineDisabled'],

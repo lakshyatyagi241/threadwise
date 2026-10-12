@@ -25,7 +25,7 @@
     "toast": {
       "noPhone": "Kontak ini tidak memiliki nomor telepon.",
       "noNumber": "Panggilan tidak diaktifkan pada nomor WABA mana pun.",
-      "alreadyPermitted": "Kontak ini sudah mengizinkan panggilan - memulai panggilan...",
+      "alreadyPermitted": "Kontak ini sudah mengizinkan panggilan. Tekan Panggil untuk memulai panggilan.",
       "permissionSent": "Permintaan izin terkirim. Mereka akan melihat Terima/Tolak di WhatsApp - coba Panggil lagi setelah mereka merespons.",
       "permissionFailed": "Tidak dapat mengirim permintaan izin: {message}",
       "startFailed": "Tidak dapat memulai panggilan: {message}",

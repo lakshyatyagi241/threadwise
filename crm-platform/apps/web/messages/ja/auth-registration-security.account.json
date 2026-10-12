@@ -367,7 +367,8 @@
         "failed": "ワークスペースを切り替えられませんでした。もう一度お試しください。",
         "notAvailable": "そのワークスペースには切り替えられません。",
         "rateLimited": "試行回数が多すぎます。しばらくしてからもう一度お試しください。",
-        "rateLimitedWait": "試行回数が多すぎます。{seconds, plural, other {#秒}}後にもう一度お試しください。"
+        "rateLimitedWait": "試行回数が多すぎます。{seconds, plural, other {#秒}}後にもう一度お試しください。",
+        "unverified": "このワークスペースに切り替えるには、先にこのワークスペースでメールアドレスを確認してください。"
       },
       "mfaChallenge": {
         "title": "本人確認",

@@ -26,6 +26,10 @@ import { InboundTranslationListener } from './inbound-translation.listener';
 import { MediaFetchPublisher } from './media-fetch.publisher';
 import { MediaFetchService } from './media-fetch.service';
 import { MessageDispatchService } from './message-dispatch.service';
+import { MESSAGE_LOG_FACADE } from './message-log.facade';
+import { MessageLogExportPublisher } from './message-log-export.publisher';
+import { MessageLogRepository } from './message-log.repository';
+import { MessageLogService } from './message-log.service';
 import { MessageViewService } from './message-view.service';
 import { MessagesRepository } from './messages.repository';
 import { OutboundService } from './outbound.service';
@@ -92,6 +96,10 @@ import { WabaChannelLinkService } from './waba-channel-link.service';
     EmailMessageAccess,
     EmailDeliveryService,
     { provide: CONVERSATIONS_FACADE, useExisting: ConversationsService },
+    MessageLogRepository,
+    MessageLogExportPublisher,
+    MessageLogService,
+    { provide: MESSAGE_LOG_FACADE, useExisting: MessageLogService },
   ],
   exports: [
     ChannelAdapterRegistry,
@@ -105,6 +113,8 @@ import { WabaChannelLinkService } from './waba-channel-link.service';
     EmailMessageAccess,
     // Where the email module reports a bounce of a sent mail (TW-MAIL-032).
     EmailDeliveryService,
+    MESSAGE_LOG_FACADE,
+    MessageLogRepository,
     WabaChannelLinkService,
     WabaGroupThreadTitleService,
     // Where the flow runtime (and any later reader of inbound traffic) listens.

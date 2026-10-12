@@ -35,6 +35,16 @@ export interface FaqCandidate {
   status: 'active' | 'paused';
 }
 
+/** The second opinion on a borderline match. `rejected` turned an answer into a silent miss; `error` leaves the match standing. */
+export const FAQ_VERIFY_VERDICTS = ['confirmed', 'rejected', 'error', 'skipped'] as const;
+export type FaqVerifyVerdict = (typeof FAQ_VERIFY_VERDICTS)[number];
+export interface FaqVerifyInfo {
+  verdict: FaqVerifyVerdict;
+  model: string | null;
+  /** One short sentence from the model, or why the check did not run. */
+  reason: string | null;
+}
+
 export interface FaqMatchDecision {
   outcome: FaqMatchOutcome;
   tier: FaqMatchTier | null;
@@ -51,6 +61,8 @@ export interface FaqMatchDecision {
   latencyMs: number;
   /** Why the semantic tier was skipped (no key, provider down, nothing indexed yet). */
   note: string | null;
+  /** Set when the borderline check looked at this match. */
+  verify: FaqVerifyInfo | null;
 }
 
 export const listFaqLogQuerySchema = paginationQuerySchema.extend({
@@ -76,7 +88,8 @@ export type FaqInsightsQuery = z.infer<typeof faqInsightsQuerySchema>;
 export interface FaqLogItem {
   id: string;
   createdAt: string;
-  origin: 'inbound' | 'test';
+  /** `flow` is a match the Flow "FAQ" node ran. */
+  origin: 'inbound' | 'test' | 'flow';
   /** Null when the workspace does not keep customer text (or the row came from before it was switched off). */
   query: string | null;
   queryLength: number;
@@ -91,6 +104,7 @@ export interface FaqLogItem {
   embeddingModel: string | null;
   latencyMs: number | null;
   error: string | null;
+  verify: FaqVerifyInfo | null;
   resolved: boolean;
 }
 

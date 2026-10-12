@@ -6,6 +6,7 @@ import {
   type CreateFaqEntryInput,
   type FaqBulkResult,
   type FaqEntry,
+  type FaqFlowNodesResponse,
   type FaqEntryListResponse,
   type FaqVariation,
   type ListFaqEntriesQuery,
@@ -83,6 +84,20 @@ export class FaqService {
     }));
     const { items, page } = buildPage(rows, query.limit);
     return { data: items.map(toSummary), page, stats };
+  }
+
+  /** The steps of a flow of this workspace; 422 when the flow is not one of its flows. */
+  async flowNodes(flowUuid: string): Promise<FaqFlowNodesResponse> {
+    const orgId = RequestContextStore.orgId();
+    const nodes = await this.db.tx((tx) => this.repo.flowNodes(tx, orgId, flowUuid));
+    if (nodes === null) {
+      throw new AppError(
+        ERROR_CODES.FAQ_FLOW_NOT_FOUND,
+        'That flow is not in this workspace.',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+    return { data: nodes };
   }
 
   async get(uuid: string): Promise<FaqEntry> {
@@ -344,6 +359,7 @@ export class FaqService {
       answerType: 'text' | 'flow';
       answerText?: string | null;
       flowId?: string | null;
+      flowNodeId?: string | null;
       category?: string | null;
       status?: 'active' | 'paused';
       thresholdOverride?: number | null;
@@ -361,12 +377,24 @@ export class FaqService {
         );
       }
       flowId = flow.id;
+      if (i.flowNodeId) {
+        const nodes = await this.repo.flowNodes(tx, orgId, i.flowId!);
+        if (!nodes?.some((n) => n.id === i.flowNodeId)) {
+          throw new AppError(
+            ERROR_CODES.FAQ_FLOW_NODE_NOT_FOUND,
+            'That step is not in the flow.',
+            HttpStatus.UNPROCESSABLE_ENTITY,
+            [{ path: 'flowNodeId', message: 'Pick a step that is in this flow.' }],
+          );
+        }
+      }
     }
     return {
       question: tidy(i.question),
       answerType: i.answerType,
       answerText: i.answerType === 'text' ? (i.answerText ?? '').trim() : null,
       flowId,
+      flowNodeId: i.answerType === 'flow' && i.flowNodeId ? i.flowNodeId : null,
       category: i.category ? tidy(i.category) : null,
       status: i.status ?? 'active',
       thresholdOverride: i.thresholdOverride ?? null,
@@ -408,6 +436,7 @@ function diff(
     'status',
     'thresholdOverride',
     'flowId',
+    'flowNodeId',
   ] as const) {
     if (a[k] !== b[k]) out[k] = { old: a[k], new: b[k] };
   }

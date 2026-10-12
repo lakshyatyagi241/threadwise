@@ -66,6 +66,8 @@ export const QUEUES = {
   WEB_PUSH: 'web-push',
   /** One job per connected Gmail mailbox (TW-MAIL-021): reads what arrived since the last sync and stores it in the inbox. Own queue: a slow Google must not hold any other job. */
   MAIL_SYNC: 'mail-sync',
+  /** One job per requested export of the message delivery log: reads up to a year of events (live and archived) into a CSV and mails the requester. Own queue: a year-long export must not hold a send or a receipt. */
+  MSG_LOG_EXPORT: 'msg-log-export',
 } as const;
 
 export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];

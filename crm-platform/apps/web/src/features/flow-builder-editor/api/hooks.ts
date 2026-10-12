@@ -2,6 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import type { FlbBuilderContext, FlbCommerceProductsQuery } from '@crm/contracts';
+import { faqForFlowApi } from './faq';
 import { flowsApi } from './flows';
 
 export const EMPTY_CONTEXT: FlbBuilderContext = {
@@ -75,5 +76,19 @@ export function useGoogleFiles(kind: 'sheets' | 'docs' | 'forms') {
     queryKey: ['flb', 'google', kind],
     queryFn: ({ signal }) => flowsApi.googleFiles(kind, signal),
     retry: false,
+  });
+}
+
+/**
+ * The workspace's FAQ categories and how many FAQs it has, for the "Answer from FAQ" node. Read through the FAQ list (`limit=1`)
+ * whose `stats` carry both. Needs `faq.entries.read`: without it the query fails and the form keeps what the node already holds.
+ */
+export function useFaqSummary() {
+  return useQuery({
+    queryKey: ['flb', 'faq-summary'],
+    queryFn: ({ signal }) => faqForFlowApi.summary(signal),
+    retry: false,
+    staleTime: 30_000,
+    select: (r) => ({ categories: r.stats.categories, total: r.stats.total }),
   });
 }

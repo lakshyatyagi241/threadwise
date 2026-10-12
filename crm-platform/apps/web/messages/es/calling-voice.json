@@ -25,7 +25,7 @@
     "toast": {
       "noPhone": "Este contacto no tiene número de teléfono.",
       "noNumber": "Las llamadas no están activadas en ningún número de WABA.",
-      "alreadyPermitted": "Este contacto ya permite llamadas: iniciando la llamada...",
+      "alreadyPermitted": "Este contacto ya permite llamadas. Pulsa Llamar para iniciar la llamada.",
       "permissionSent": "Solicitud de permiso enviada. Verá Aceptar/Rechazar en WhatsApp; vuelve a intentar Llamar cuando responda.",
       "permissionFailed": "No se pudo enviar la solicitud de permiso: {message}",
       "startFailed": "No se pudo iniciar la llamada: {message}",

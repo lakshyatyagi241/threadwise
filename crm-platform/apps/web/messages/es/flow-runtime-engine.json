@@ -192,7 +192,22 @@
       "retention": "Los registros se eliminan {days} días después de que termina una ejecución.",
       "pathTitle": "Camino seguido",
       "notReached": "No alcanzados",
-      "noErrors": "Sin errores en esta ejecución."
+      "noErrors": "Sin errores en esta ejecución.",
+      "factNext": "Siguiente: {node}",
+      "factWaiting": "Esperando en: {node}",
+      "factDelay": "Espera {time}",
+      "factReplied": "El cliente respondió: {text}",
+      "factEnded": "Terminó: {reason}",
+      "ioInput": "Entrada",
+      "ioOutput": "Salida",
+      "ioKind": {
+        "message": "Mensaje enviado",
+        "reply": "Respuesta del cliente",
+        "variable": "Variable",
+        "request": "Solicitud",
+        "response": "Respuesta",
+        "result": "Resultado"
+      }
     },
     "event": {
       "step": "Paso",

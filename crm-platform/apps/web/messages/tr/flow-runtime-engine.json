@@ -192,7 +192,22 @@
       "retention": "Günlükler, bir çalıştırma bittikten {days} gün sonra silinir.",
       "pathTitle": "İzlenen yol",
       "notReached": "Ulaşılmadı",
-      "noErrors": "Bu çalıştırmada hata yok."
+      "noErrors": "Bu çalıştırmada hata yok.",
+      "factNext": "Sonraki: {node}",
+      "factWaiting": "Bekleme noktası: {node}",
+      "factDelay": "{time} bekler",
+      "factReplied": "Müşteri yanıtladı: {text}",
+      "factEnded": "Sona erdi: {reason}",
+      "ioInput": "Girdi",
+      "ioOutput": "Çıktı",
+      "ioKind": {
+        "message": "Gönderilen mesaj",
+        "reply": "Müşteri yanıtı",
+        "variable": "Değişken",
+        "request": "İstek",
+        "response": "Yanıt",
+        "result": "Sonuç"
+      }
     },
     "event": {
       "step": "Adım",

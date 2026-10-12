@@ -133,6 +133,14 @@ export function StatusStrip({ overview }: { overview: FaqPlatformOverview }) {
             <dt className="text-xs text-muted-foreground">{t('activity.tokens')}</dt>
             <dd className="text-lg font-semibold tabular-nums">{n(stats.embeddingTokens30d)}</dd>
           </div>
+          <div>
+            <dt className="text-xs text-muted-foreground">{t('activity.verified')}</dt>
+            <dd className="text-lg font-semibold tabular-nums">{n(stats.verified30d)}</dd>
+          </div>
+          <div>
+            <dt className="text-xs text-muted-foreground">{t('activity.vetoed')}</dt>
+            <dd className="text-lg font-semibold tabular-nums">{n(stats.vetoed30d)}</dd>
+          </div>
         </dl>
       </StatusCard>
     </section>

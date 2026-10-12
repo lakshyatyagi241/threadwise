@@ -21,9 +21,11 @@ import { FlowSender, HALT_RETRY_MS } from './flow-sender.service';
 import { RunRepository, type RunPatch } from './run.repository';
 import {
   MAX_LOGGED_STEPS,
+  finishIo,
   nodeLabel,
   shouldLog,
   stepFields,
+  varsChanged,
   type StepOutcomeKind,
 } from './step-log';
 import { SubscriberRepository } from './subscriber.repository';
@@ -129,7 +131,15 @@ export class FlowEngine {
       // Read before a Sub-flow swaps the graph: the log keeps the node that ran, not one of the new flow.
       node = outcome.nodeId ? nodeById(state.graph, outcome.nodeId) : null;
       if (outcome.transition.t === 'subflow') {
-        outcome = await this.enterSubflow(orgId, state, outcome, outcome.transition.flowId);
+        outcome = await this.enterSubflow(
+          orgId,
+          state,
+          outcome,
+          outcome.transition.flowId,
+          outcome.transition.startNodeId,
+          outcome.transition.missPort ?? 1,
+          outcome.transition.missVars,
+        );
       }
     }
 
@@ -158,13 +168,26 @@ export class FlowEngine {
     state: RunState,
     outcome: StepOutcome,
     flowId: number | string,
+    startNodeId?: string,
+    missPort = 1,
+    missVars?: Record<string, unknown>,
   ): Promise<StepOutcome> {
     const nodeId = state.currentNodeId ?? '';
-    const pass = (note: string): StepOutcome => ({
-      ...outcome,
-      transition: advanceFrom(state, nodeId, 1, false, profileOf(state.channelKind ?? '').paceMs),
-      notes: [...outcome.notes, note],
-    });
+    // `missPort` is the exit a caller wants when the flow cannot be entered: 1 for a Sub-flow node, `no_match` for the FAQ node.
+    const pass = (note: string, port = missPort): StepOutcome => {
+      if (missVars) Object.assign(state.vars, missVars);
+      return {
+        ...outcome,
+        transition: advanceFrom(
+          state,
+          nodeId,
+          port,
+          false,
+          profileOf(state.channelKind ?? '').paceMs,
+        ),
+        notes: [...outcome.notes, note],
+      };
+    };
     const depth = Number(state.vars[SUBFLOW_DEPTH_VAR] ?? 0) || 0;
     if (depth >= MAX_SUBFLOW_DEPTH) {
       return {
@@ -184,7 +207,10 @@ export class FlowEngine {
       return pass(`sub-flow ${flowId} is not live (publish it and switch it on): moved on`);
     }
     const graph = compileGraph(flow.data);
-    const first = graph.nodes[0];
+    if (startNodeId !== undefined && !nodeById(graph, startNodeId)) {
+      return pass(`sub-flow ${flowId} has no step ${startNodeId} (it was deleted): moved on`);
+    }
+    const first = startNodeId !== undefined ? nodeById(graph, startNodeId) : graph.nodes[0];
     if (!first || !nodeById(graph, first.id)) {
       return {
         ...outcome,
@@ -210,15 +236,29 @@ export class FlowEngine {
     const result = await this.db.txAs({ orgId }, async (tx) => {
       const state = await this.runs.byId(tx, orgId, runId, true);
       if (!state || state.status !== 'waiting' || !state.wait) return 'not_waiting' as const;
+      const before = { ...state.vars };
       const outcome =
         state.wait.kind === 'Custom'
           ? await applyCustomReply(state, reply, this.deps())
           : applyReply(state, reply);
       if (outcome.transition.t === 'none') return 'ignored' as const;
+      // The reply row: what the customer sent in, and what the answer saved.
+      const recorded = finishIo({
+        in: [
+          {
+            kind: 'reply',
+            name: reply.id || null,
+            value:
+              reply.text || (reply.kind === 'external' ? JSON.stringify(reply.data ?? {}) : ''),
+          },
+        ],
+        out: varsChanged(before, state.vars),
+      });
       const detail = {
         text: reply.text.slice(0, 200),
         ...(reply.id ? { tap: reply.id } : {}),
         ...(reply.kind === 'external' ? { external: true } : {}),
+        ...(recorded ? { io: recorded } : {}),
       };
       const committed = await this.commit(tx, state, outcome, state.stepSeq, 'reply', detail, {
         durationMs: null,
@@ -486,6 +526,7 @@ export class FlowEngine {
     }
     const detail: Record<string, unknown> = {};
     if (outcome.notes.length > 0) detail.notes = outcome.notes;
+    if (outcome.io) detail.io = outcome.io;
     if (t.t === 'goto') detail.next = t.nodeId;
     if (t.t === 'goto' && t.subflowId !== undefined) detail.flow_id = t.subflowId;
     if (t.t === 'wait') detail.waitingOn = t.wait.nodeId;

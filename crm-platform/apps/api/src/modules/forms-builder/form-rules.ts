@@ -1,7 +1,12 @@
 import {
+  COMPANY_BUILTIN_PROPERTIES,
+  CONTACT_BUILTIN_PROPERTIES,
+  FORM_ADDRESS_PARTS,
   canonicalizeLocalPhone,
+  composeAddress,
   formFields,
   parseDateValue,
+  type FormAddressPart,
   type FormDefinition,
   type FormFieldBlock,
 } from '@crm/contracts';
@@ -243,26 +248,8 @@ export interface MappedSubmission {
 }
 
 /** The names a form's contact built-ins can take; any other property key is a custom property of the registry. */
-const CONTACT_BUILTINS: ReadonlySet<string> = new Set([
-  'name',
-  'first_name',
-  'last_name',
-  'email',
-  'phone',
-  'title',
-  'address',
-  'message',
-]);
-const COMPANY_BUILTINS: ReadonlySet<string> = new Set([
-  'name',
-  'domain',
-  'email',
-  'phone',
-  'industry',
-  'size_range',
-  'address',
-  'notes',
-]);
+const CONTACT_BUILTINS: ReadonlySet<string> = new Set(CONTACT_BUILTIN_PROPERTIES);
+const COMPANY_BUILTINS: ReadonlySet<string> = new Set(COMPANY_BUILTIN_PROPERTIES);
 
 /** Which of an object's property names are columns rather than registry keys. */
 export const isBuiltinProperty = (object: 'contact' | 'company', property: string): boolean =>
@@ -285,6 +272,16 @@ export function mapAnswers(
     if (text === '') continue;
     if (isBuiltinProperty(f.bind.object, f.bind.property)) target.builtin[f.bind.property] = text;
     else target.custom[f.bind.property] = text;
+  }
+  // Address parts become the one address line the CRM keeps; a field bound to the whole address wins over the parts.
+  for (const target of [out.contact, out.company]) {
+    const parts: Partial<Record<FormAddressPart, string>> = {};
+    for (const part of FORM_ADDRESS_PARTS) {
+      if (target.builtin[part] !== undefined) parts[part] = target.builtin[part];
+      delete target.builtin[part];
+    }
+    const joined = composeAddress(parts);
+    if (joined !== null && target.builtin.address === undefined) target.builtin.address = joined;
   }
   return out;
 }

@@ -10,6 +10,7 @@ import { InboxAccess } from './inbox-access.service';
 import { InboxConversationsService } from './inbox-conversations.service';
 import { InboxController } from './inbox.controller';
 import { InboxMediaService } from './inbox-media.service';
+import { InboxMessageLogService } from './inbox-message-log.service';
 import { InboxNotesService } from './inbox-notes.service';
 import { InboxRealtimePublisher } from './inbox-realtime.publisher';
 import { InboxThreadService } from './inbox-thread.service';
@@ -44,6 +45,7 @@ import { NotesRepository } from './notes.repository';
     InboxNotesService,
     InboxTimelineService,
     InboxMediaService,
+    InboxMessageLogService,
   ],
   exports: [
     ConversationsRepository,

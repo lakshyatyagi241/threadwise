@@ -192,7 +192,22 @@
       "retention": "Logs are deleted {days} days after a run ends.",
       "pathTitle": "Path taken",
       "notReached": "Not reached",
-      "noErrors": "No errors in this run."
+      "noErrors": "No errors in this run.",
+      "factNext": "Next: {node}",
+      "factWaiting": "Waiting at: {node}",
+      "factDelay": "Waits {time}",
+      "factReplied": "Customer replied: {text}",
+      "factEnded": "Ended: {reason}",
+      "ioInput": "Input",
+      "ioOutput": "Output",
+      "ioKind": {
+        "message": "Message sent",
+        "reply": "Customer reply",
+        "variable": "Variable",
+        "request": "Request",
+        "response": "Response",
+        "result": "Result"
+      }
     },
     "event": {
       "step": "Step",

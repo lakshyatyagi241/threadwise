@@ -192,7 +192,22 @@
       "retention": "Dzienniki są usuwane {days} dni po zakończeniu uruchomienia.",
       "pathTitle": "Przebyta ścieżka",
       "notReached": "Nieosiągnięte",
-      "noErrors": "Brak błędów w tym uruchomieniu."
+      "noErrors": "Brak błędów w tym uruchomieniu.",
+      "factNext": "Dalej: {node}",
+      "factWaiting": "Oczekuje w: {node}",
+      "factDelay": "Czeka {time}",
+      "factReplied": "Klient odpowiedział: {text}",
+      "factEnded": "Zakończono: {reason}",
+      "ioInput": "Wejście",
+      "ioOutput": "Wyjście",
+      "ioKind": {
+        "message": "Wysłana wiadomość",
+        "reply": "Odpowiedź klienta",
+        "variable": "Zmienna",
+        "request": "Żądanie",
+        "response": "Odpowiedź",
+        "result": "Wynik"
+      }
     },
     "event": {
       "step": "Krok",

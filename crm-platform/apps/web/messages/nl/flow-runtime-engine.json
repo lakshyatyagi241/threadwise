@@ -192,7 +192,22 @@
       "retention": "Logboeken worden {days} dagen na het einde van een run verwijderd.",
       "pathTitle": "Gevolgde route",
       "notReached": "Niet bereikt",
-      "noErrors": "Geen fouten in deze run."
+      "noErrors": "Geen fouten in deze run.",
+      "factNext": "Volgende: {node}",
+      "factWaiting": "Wacht bij: {node}",
+      "factDelay": "Wacht {time}",
+      "factReplied": "Klant antwoordde: {text}",
+      "factEnded": "Beëindigd: {reason}",
+      "ioInput": "Invoer",
+      "ioOutput": "Uitvoer",
+      "ioKind": {
+        "message": "Verzonden bericht",
+        "reply": "Antwoord van klant",
+        "variable": "Variabele",
+        "request": "Verzoek",
+        "response": "Antwoord",
+        "result": "Resultaat"
+      }
     },
     "event": {
       "step": "Stap",

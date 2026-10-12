@@ -281,11 +281,25 @@ export class OutboundService {
         manual: true,
         by: ctx.userId,
         generation: requeued.generation,
+        // The provider had accepted the message once and then reported a failure: this Retry sends it again, as a new message there.
+        ...(row.providerMessageId ? { previousProviderMessageId: row.providerMessageId } : {}),
+        ...(row.failureCode ? { previousFailureCode: row.failureCode } : {}),
       });
       const after = (await this.messages.byId(tx, orgId, ref.id, ref.createdAt))!;
-      return { row: after, conv, generation: requeued.generation };
+      return {
+        row: after,
+        conv,
+        generation: requeued.generation,
+        runtime,
+        acceptedBefore: row.providerMessageId !== null,
+      };
     });
 
+    // The provider accepted the first send and then reported a failure (a receipt): its stored answer would make the worker "send" by
+    // replaying that answer and put the message back to `sent` with the failure wiped. Forget it so the retry really goes out.
+    if (done.acceptedBefore) {
+      await this.dispatcher.forget(done.runtime, done.row.clientMessageId ?? done.row.uuid);
+    }
     await this.enqueueJob(orgId, done.row.uuid, done.generation);
     await this.realtime.messageStatus(
       orgId,

@@ -12,6 +12,8 @@ updates:
     groups:
       # The Nest framework packages share one major version; @nestjs/testing must match @nestjs/common or
       # test suites fail with "Cannot find module .../@nestjs/common/internal". They move together, majors included.
+      # swagger, config and schedule peer-depend on the same Nest major (a lagging @nestjs/swagger fails with
+      # "Cannot find module .../@nestjs/common/interfaces.js"), so they ride in the same PR.
       # Listed first: a dependency lands in the first group it matches.
       nestjs-framework:
         patterns:
@@ -20,6 +22,9 @@ updates:
           - '@nestjs/testing'
           - '@nestjs/platform-*'
           - '@nestjs/websockets'
+          - '@nestjs/swagger'
+          - '@nestjs/config'
+          - '@nestjs/schedule'
       minor-and-patch:
         update-types: [minor, patch]
     ignore:
