@@ -8,6 +8,7 @@ import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { Spinner, cn } from '@crm/ui';
 import { useNavCollapsed } from '@/components/shell/nav-context';
 import { ChevronsUpDownIcon } from '@/components/shell/nav-icons';
+import { BACKGROUND_META } from '@/lib/api/background';
 import { ApiError } from '@/lib/api/errors';
 import { retryAfterSeconds } from '../shared/error-utils';
 import { showFlash } from '../shared/flash';
@@ -52,6 +53,7 @@ export function WorkspaceSwitcher() {
   const list = useQuery({
     queryKey: keys.workspaces,
     queryFn: authApi.workspaces,
+    meta: BACKGROUND_META,
     staleTime: 60_000,
     retry: false,
   });
