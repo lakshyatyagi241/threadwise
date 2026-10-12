@@ -230,6 +230,18 @@ export const ERROR_CODES = {
   /** Retry: nobody failed. */
   TG_NOTHING_TO_RETRY: 'TG_NOTHING_TO_RETRY',
 
+  // Email channel (TW-MAIL)
+  /** The platform operator has not entered the Google credentials. */
+  MAIL_NOT_CONFIGURED: 'MAIL_NOT_CONFIGURED',
+  /** The workspace is at its mailbox limit. */
+  MAIL_MAILBOX_LIMIT: 'MAIL_MAILBOX_LIMIT',
+  /** The mailbox is disconnected or needs reconnecting, so it cannot send or sync. */
+  MAIL_MAILBOX_UNAVAILABLE: 'MAIL_MAILBOX_UNAVAILABLE',
+  /** Google refused a send (address, size, quota). */
+  MAIL_SEND_REFUSED: 'MAIL_SEND_REFUSED',
+  /** The signed-in Google account is not the mailbox being reconnected. */
+  MAIL_WRONG_ACCOUNT: 'MAIL_WRONG_ACCOUNT',
+
   // SMS channel (TW-SMS)
   /** The provider refused the credentials at connect time. */
   SMS_CREDENTIALS_REJECTED: 'SMS_CREDENTIALS_REJECTED',
