@@ -25,7 +25,7 @@ export interface EffectiveSettings {
 
 export const SETTINGS_MODULE_KEY = 'faq_settings';
 
-/** The workspace's switch and matching knobs; a workspace that never saved runs on the platform defaults, switched off. */
+/** One flow's switch and matching knobs; a flow that never saved runs on the platform defaults, switched off. */
 @Injectable()
 export class FaqSettingsService {
   constructor(
@@ -40,13 +40,14 @@ export class FaqSettingsService {
   /** What the matcher and the inbound listener use: the saved row, else defaults. Works with or without a request context. */
   async effective(
     orgId: number,
+    flowId: number,
     tx?: Tx,
     opts: { fresh?: boolean } = {},
   ): Promise<EffectiveSettings & { engineEnabled: boolean }> {
     const cfg = opts.fresh ? await this.config.getFresh() : await this.config.get();
     const row = tx
-      ? await this.logs.getSettings(tx, orgId)
-      : await this.db.txAs({ orgId, userId: null }, (t) => this.logs.getSettings(t, orgId));
+      ? await this.logs.getSettings(tx, orgId, flowId)
+      : await this.db.txAs({ orgId, userId: null }, (t) => this.logs.getSettings(t, orgId, flowId));
     return {
       engineEnabled: cfg.engineEnabled,
       enabled: row?.enabled ?? false,
@@ -58,13 +59,16 @@ export class FaqSettingsService {
     };
   }
 
-  async get(): Promise<FaqSettings> {
+  async get(flowUuid: string): Promise<FaqSettings> {
     const orgId = RequestContextStore.orgId();
     const cfg = await this.config.get();
-    const { row, usage } = await this.db.tx(async (tx) => ({
-      row: await this.logs.getSettings(tx, orgId),
-      usage: await this.faqs.usage(tx, orgId),
-    }));
+    const { row, usage } = await this.db.tx(async (tx) => {
+      const flow = await this.faqs.requireFlow(tx, orgId, flowUuid);
+      return {
+        row: await this.logs.getSettings(tx, orgId, flow.id),
+        usage: await this.faqs.usage(tx, orgId, flow.id),
+      };
+    });
     return {
       enabled: row?.enabled ?? false,
       threshold: row?.threshold ?? cfg.defaultThreshold,
@@ -79,7 +83,7 @@ export class FaqSettingsService {
       embeddingModel: cfg.embeddingModel,
       recommendedThreshold: faqRecommendedThreshold(cfg.embeddingModel),
       tunedForModel: row?.tunedModel ?? null,
-      // Only a workspace that saved has a number tuned for some model; one that never saved follows the platform default.
+      // Only a flow that saved has a number tuned for some model; one that never saved follows the platform default.
       modelChanged: row !== null && row.tunedModel !== cfg.embeddingModel,
       limits: { maxFaqs: cfg.maxFaqs, maxVariationsPerFaq: cfg.maxVariationsPerFaq },
       usage,
@@ -88,11 +92,12 @@ export class FaqSettingsService {
     };
   }
 
-  async update(input: UpdateFaqSettingsInput): Promise<FaqSettings> {
+  async update(flowUuid: string, input: UpdateFaqSettingsInput): Promise<FaqSettings> {
     const orgId = RequestContextStore.orgId();
     const cfg = await this.config.get();
     await this.db.tx(async (tx) => {
-      const before = await this.logs.getSettings(tx, orgId);
+      const flow = await this.faqs.requireFlow(tx, orgId, flowUuid);
+      const before = await this.logs.getSettings(tx, orgId, flow.id);
       // The first save has no version; once a row exists a save without one is a stale form (it never read the row).
       if (before && input.rowVersion === undefined)
         throw AppError.rowVersionConflict('FAQ settings');
@@ -101,6 +106,7 @@ export class FaqSettingsService {
       const ok = await this.logs.saveSettings(
         tx,
         orgId,
+        flow.id,
         {
           enabled: input.enabled,
           threshold: input.threshold,
@@ -133,17 +139,17 @@ export class FaqSettingsService {
       }
       await this.audit.record(tx, {
         module: SETTINGS_MODULE_KEY,
-        recordId: orgId,
+        recordId: flow.id,
         action: before ? 'update' : 'insert',
         delta: Object.keys(delta).length ? delta : undefined,
       });
       await this.outbox.emit(tx, {
         aggregateModule: SETTINGS_MODULE_KEY,
-        aggregateId: orgId,
+        aggregateId: flow.id,
         eventType: 'faq.settings_changed',
-        payload: { enabled: input.enabled },
+        payload: { flowId: flowUuid, enabled: input.enabled },
       });
     });
-    return this.get();
+    return this.get(flowUuid);
   }
 }

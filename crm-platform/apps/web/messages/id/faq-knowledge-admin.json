@@ -88,18 +88,18 @@
       },
       "threshold": {
         "label": "Ambang batas kecocokan default",
-        "hint": "Pesan cocok bila skornya minimal sebesar ini. Hanya dipakai workspace yang belum pernah menyimpan ambang batasnya sendiri. Skor bergantung pada model embedding.",
         "value": "{value}",
         "follow": "Ikuti model",
-        "followHint": "Kepekaan default adalah nilai yang disarankan model ({value}) dan berubah saat model berubah. Matikan untuk menetapkan angka."
+        "followHint": "Kepekaan default adalah nilai yang disarankan model ({value}) dan berubah saat model berubah. Matikan untuk menetapkan angka.",
+        "hint": "Pesan dianggap cocok jika skornya minimal sebesar ini. Hanya dipakai alur yang belum pernah menyimpan ambang batasnya sendiri. Skor bergantung pada model embedding."
       },
       "limits": {
         "title": "Batas",
-        "maxFaqs": "Maksimum FAQ per workspace",
         "maxVariationsPerFaq": "Maksimum variasi per FAQ",
         "semanticPerHour": "Kecocokan semantik per workspace per jam",
         "semanticPerHourHint": "Setelah ini, workspace beralih ke kemiripan ejaan selama sisa jam itu. 0 berarti selalu kemiripan ejaan.",
-        "verifyPerHour": "Pemeriksaan kedua per workspace per jam"
+        "verifyPerHour": "Pemeriksaan kedua per workspace per jam",
+        "maxFaqs": "Maksimum FAQ per alur"
       },
       "errors": {
         "integer": "Masukkan bilangan bulat.",
@@ -117,11 +117,10 @@
         "title": "Tinjau sebelum menyimpan",
         "confirm": "Simpan perubahan",
         "engineOff": "Mematikan mesin menghentikan semua workspace menjawab pelanggan dari FAQ dan memblokir pengeditan FAQ sampai Anda mengaktifkannya kembali.",
-        "modelChange": "Mengubah model embedding dari {from} ke {to} membuat ulang setiap vektor yang tersimpan. Sampai selesai, pencocokan hanya memakai kemiripan ejaan. Kepekaan default akan mengikuti model baru (disarankan {threshold}) kecuali Anda menetapkan nilai tetap. Ambang batas workspace yang disimpan sendiri mungkin perlu disetel ulang karena skor berubah sesuai model."
+        "modelChange": "Mengganti model embedding dari {from} ke {to} membuat ulang semua vektor tersimpan. Sampai selesai, pencocokan hanya memakai kemiripan ejaan. Sensitivitas default akan mengikuti model baru (disarankan {threshold}) kecuali Anda menetapkan nilai tetap. Ambang batas yang disimpan alur sendiri mungkin perlu disetel ulang karena skor berubah seiring model."
       },
       "verify": {
         "title": "Pemeriksaan kedua untuk kecocokan tipis",
-        "description": "Model obrolan kecil memeriksa ulang kecocokan yang baru saja mencapai ambang batas workspace. Model hanya bisa menahan jawaban. Workspace mengaktifkannya sendiri di pengaturan FAQ mereka.",
         "enabled": {
           "label": "Izinkan pemeriksaan kedua",
           "hint": "Matikan untuk menghentikan pemeriksaan di semua workspace, apa pun pengaturan mereka."
@@ -130,7 +129,8 @@
           "label": "Model pemeriksa",
           "hint": "ID model OpenRouter yang menilai kecocokan tipis, misalnya openai/gpt-4o-mini. Model kecil dan cepat sudah cukup."
         },
-        "perHourHint": "Setelah batas ini, kecocokan tipis berlaku tanpa diperiksa selama sisa jam itu. 0 berarti tidak pernah diperiksa."
+        "perHourHint": "Setelah batas ini, kecocokan tipis berlaku tanpa diperiksa selama sisa jam itu. 0 berarti tidak pernah diperiksa.",
+        "description": "Model obrolan kecil memeriksa ulang kecocokan yang baru saja mencapai batas sebuah alur. Model ini hanya dapat menahan jawaban. Alur mengaktifkannya di pengaturan FAQ masing-masing."
       }
     },
     "maintenance": {

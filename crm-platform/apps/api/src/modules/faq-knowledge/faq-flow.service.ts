@@ -24,7 +24,7 @@ export type FlowFaqAnswer =
 export interface FlowFaqInput {
   query: string;
   category: string | null;
-  /** Replaces the workspace threshold for this node. */
+  /** Replaces the flow's threshold for this node. */
   minScore: number | null;
   conversationId: number | null;
   channelId: number | null;
@@ -35,8 +35,8 @@ export interface FlowFaqInput {
  * already holds the customer's text. It never sends and never starts a flow (the node does, so the run, its pacing and its log stay
  * the runtime's); it writes one `origin: flow` log row so the match is as visible as any other.
  *
- * A node placed in a flow is an explicit choice, so it runs whether or not the workspace switched the automatic answering on; it
- * does not run when the platform operator switched the whole engine off.
+ * It matches the FAQs of the flow the run is in (`flowId`). A node placed in a flow is an explicit choice, so it runs whether or not
+ * that flow's switch for automatic answering is on; it does not run when the platform operator switched the whole engine off.
  */
 @Injectable()
 export class FaqFlowService {
@@ -50,15 +50,15 @@ export class FaqFlowService {
     private readonly logs: FaqLogRepository,
   ) {}
 
-  async answer(orgId: number, i: FlowFaqInput): Promise<FlowFaqAnswer> {
-    const s = await this.settings.effective(orgId, undefined, { fresh: true });
+  async answer(orgId: number, flowId: number, i: FlowFaqInput): Promise<FlowFaqAnswer> {
+    const s = await this.settings.effective(orgId, flowId, undefined, { fresh: true });
     if (!s.engineEnabled) {
       return { status: 'unavailable', reason: 'FAQ answering is switched off for the platform.' };
     }
     if (i.query.trim() === '')
       return { status: 'no_match', score: null, reason: 'The message to match is empty.' };
 
-    const result = await this.matcher.match(orgId, i.query, s, {
+    const result = await this.matcher.match(orgId, flowId, i.query, s, {
       category: i.category,
       threshold: i.minScore,
     });
@@ -72,6 +72,7 @@ export class FaqFlowService {
     await this.db
       .txAs({ orgId, userId: null }, (tx) =>
         this.logs.insert(tx, orgId, {
+          flowId,
           origin: 'flow',
           conversationId: i.conversationId,
           channelId: i.channelId,

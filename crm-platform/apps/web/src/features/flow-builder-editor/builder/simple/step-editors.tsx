@@ -27,6 +27,7 @@ import {
   minScoreOutOfRange,
 } from '../../lib/faq-node';
 import { useFaqSummary } from '../../api/hooks';
+import { faqHref } from '@/features/faq-knowledge/lib/links';
 import { renderMsg, useFlb } from '../../lib/msg';
 import { usePickerFeed } from '@/features/contacts-attributes-tags';
 import { Field, Input, Select, Textarea } from '@crm/ui';
@@ -98,6 +99,8 @@ interface EditorProps {
   step: SimpleStep;
   doc: SimpleDoc;
   ctx: FlbBuilderContext;
+  /** The saved flow (null before the first save): the FAQ step answers from this flow's FAQs. */
+  flowId: string | null;
   /** Merge keys into the step's data. */
   set: (patch: Record<string, unknown>) => void;
   /** Point button / row `i` at a step (or `null` to end, or NEW_JOURNEY). */
@@ -627,11 +630,11 @@ function VarField({
  * "Answer from FAQ": the same settings as the Advanced form, and one "where it leads" for each of its two exits (an FAQ answered / no
  * FAQ answered). Like buttons and lists it ends its part of the flow: a flow FAQ continues in its own flow and does not come back.
  */
-function FaqEditor({ step, doc, set, link }: EditorProps) {
+function FaqEditor({ step, doc, flowId, set, link }: EditorProps) {
   // The settings read the Advanced form's texts (one translation each); only the two "where it leads" lines are Simple's own.
   const t = useTranslations('flb.builder.formsChannels.faq');
   const ts = useTranslations('flb.builder.simple.editors.faq');
-  const summary = useFaqSummary();
+  const summary = useFaqSummary(flowId);
   const categories = summary.data?.categories ?? [];
   const category = str(step.data.category);
   const own = hasOwnMinScore(step.data.minScore);
@@ -639,20 +642,32 @@ function FaqEditor({ step, doc, set, link }: EditorProps) {
   const send = step.data.sendAnswer !== false;
   const save = faqSaveName(step.data.save);
   const code = (c: ReactNode) => <code className="font-mono">{c}</code>;
-  const page = (href: string) =>
+  // Links into this flow's FAQs tab (a new tab, so the flow being edited stays open). Before the first save there is none.
+  const page = (view: 'new' | 'test') =>
     function PageLink(c: ReactNode) {
-      return (
-        <a href={href} target="_blank" rel="noreferrer" className="text-brand underline">
+      return flowId ? (
+        <a
+          href={faqHref(flowId, view)}
+          target="_blank"
+          rel="noreferrer"
+          className="text-brand underline"
+        >
           {c}
         </a>
+      ) : (
+        <>{c}</>
       );
     };
   return (
     <div className="space-y-3">
       <p className="text-[12px] text-muted-foreground">{t.rich('intro.body', { mono: code })}</p>
-      {summary.isSuccess && summary.data.total === 0 ? (
+      {flowId === null ? (
         <p role="note" className="rounded-xl bg-muted p-2.5 text-[12px]">
-          {t.rich('noFaqs', { link: page('/faq/new') })}
+          {t('saveFlowFirst')}
+        </p>
+      ) : summary.isSuccess && summary.data.total === 0 ? (
+        <p role="note" className="rounded-xl bg-muted p-2.5 text-[12px]">
+          {t.rich('noFaqs', { link: page('new') })}
         </p>
       ) : null}
       <Field label={t('query')} hint={t.rich('queryHint', { mono: code, variable: '{{answer}}' })}>
@@ -686,7 +701,7 @@ function FaqEditor({ step, doc, set, link }: EditorProps) {
       </Field>
       <Field
         label={t('minScore')}
-        hint={t.rich('minScoreHint', { ...FAQ_MIN_SCORE, link: page('/faq/test') })}
+        hint={t.rich('minScoreHint', { ...FAQ_MIN_SCORE, link: page('test') })}
       >
         <label className="flex items-center gap-2 text-[13px]">
           <input

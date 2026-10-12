@@ -11,6 +11,7 @@ import { faqApi } from '../api/service';
 import { pushHistory, verdictTone, verdictWithCheck } from '../lib/decision';
 import { errorKey } from '../lib/errors';
 import { DecisionView } from './decision-view';
+import { useFaqFlow } from './faq-flow';
 import { FaqIcon } from './icons';
 import { CARD, LoadError, NoAccess, PageHeader } from './parts';
 
@@ -19,17 +20,18 @@ interface Run {
   decision: FaqMatchDecision;
 }
 
-/** `/faq/test`: type what a customer might write and see, in numbers and words, what the bot would do. Nothing is sent or counted. */
+/** The flow's Test tab: type what a customer might write and see, in numbers and words, what the bot would do. Nothing is sent or counted. */
 export function PlaygroundScreen() {
   const t = useTranslations('faq.playground');
   const td = useTranslations('faq.decision');
+  const { flowId, flowName } = useFaqFlow();
   const canRead = useCan('faq.entries.read');
   const [text, setText] = useState('');
   const [history, setHistory] = useState<Run[]>([]);
   const [current, setCurrent] = useState<Run | null>(null);
   const run = useMutation({
     mutationFn: (query: string) =>
-      faqApi.test(query).then((decision): Run => ({ query, decision })),
+      faqApi.test(flowId, query).then((decision): Run => ({ query, decision })),
     onSuccess: (r) => {
       setCurrent(r);
       setHistory((h) => pushHistory(h, r));
@@ -49,7 +51,7 @@ export function PlaygroundScreen() {
       <PageHeader
         icon={<FaqIcon className="size-5" />}
         title={t('title')}
-        subtitle={t('subtitle')}
+        subtitle={t('subtitle', { flow: flowName })}
       />
 
       <form onSubmit={submit} className={cn(CARD, 'space-y-3 p-4')}>

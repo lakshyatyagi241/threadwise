@@ -88,18 +88,18 @@
       },
       "threshold": {
         "label": "Umbral de coincidencia predeterminado",
-        "hint": "Un mensaje coincide cuando su puntuación es al menos esta. Solo lo usan los espacios de trabajo que nunca guardaron su propio umbral. Las puntuaciones dependen del modelo de IA.",
         "value": "{value}",
         "follow": "Seguir el modelo",
-        "followHint": "La sensibilidad predeterminada es el valor recomendado del modelo ({value}) y cambia cuando cambia el modelo. Desactiva para fijar un número."
+        "followHint": "La sensibilidad predeterminada es el valor recomendado del modelo ({value}) y cambia cuando cambia el modelo. Desactiva para fijar un número.",
+        "hint": "Un mensaje coincide cuando su puntuación es al menos esta. Solo lo usan los flujos que nunca guardaron su propio umbral. Las puntuaciones dependen del modelo de embeddings."
       },
       "limits": {
         "title": "Límites",
-        "maxFaqs": "Máximo de preguntas frecuentes por espacio de trabajo",
         "maxVariationsPerFaq": "Máximo de variantes por pregunta frecuente",
         "semanticPerHour": "Coincidencias por significado por espacio de trabajo y hora",
         "semanticPerHourHint": "Superado este límite, el espacio de trabajo recurre a la similitud ortográfica durante el resto de la hora. 0 significa siempre similitud ortográfica.",
-        "verifyPerHour": "Segundas revisiones por espacio de trabajo por hora"
+        "verifyPerHour": "Segundas revisiones por espacio de trabajo por hora",
+        "maxFaqs": "Máximo de FAQ por flujo"
       },
       "errors": {
         "integer": "Introduce un número entero.",
@@ -117,11 +117,10 @@
         "title": "Revisa antes de guardar",
         "confirm": "Guardar cambios",
         "engineOff": "Si desactivas el motor, ningún espacio de trabajo responderá a los clientes con preguntas frecuentes y se bloquearán las ediciones hasta que lo vuelvas a activar.",
-        "modelChange": "Cambiar el modelo de IA de {from} a {to} hace que se vuelvan a generar todos los vectores guardados. Hasta que termine, las coincidencias usan solo similitud ortográfica. La sensibilidad predeterminada seguirá al nuevo modelo (recomendado {threshold}) a menos que fijes un valor. Los umbrales que los espacios de trabajo guardaron por su cuenta pueden requerir un nuevo ajuste, porque las puntuaciones cambian con el modelo."
+        "modelChange": "Cambiar el modelo de embeddings de {from} a {to} vuelve a generar todos los vectores almacenados. Hasta que termine, la coincidencia usa solo similitud ortográfica. La sensibilidad por defecto seguirá al nuevo modelo (recomendado {threshold}) salvo que fijes un valor. Los umbrales que los flujos guardaron por su cuenta pueden necesitar reajuste porque las puntuaciones cambian con el modelo."
       },
       "verify": {
         "title": "Segunda revisión para casos dudosos",
-        "description": "Un modelo de chat pequeño vuelve a comprobar las coincidencias que apenas alcanzaron el umbral de un espacio de trabajo. Solo puede retener una respuesta. Cada espacio de trabajo la activa en sus propios ajustes de preguntas frecuentes.",
         "enabled": {
           "label": "Permitir la segunda revisión",
           "hint": "Desactívala para detener la revisión en todos los espacios de trabajo, sea cual sea su configuración."
@@ -130,7 +129,8 @@
           "label": "Modelo de revisión",
           "hint": "El id del modelo de OpenRouter que evalúa los casos dudosos, por ejemplo openai/gpt-4o-mini. Basta con un modelo pequeño y rápido."
         },
-        "perHourHint": "Pasado este límite, un caso dudoso se mantiene sin revisar durante el resto de la hora. 0 significa no revisar nunca."
+        "perHourHint": "Pasado este límite, un caso dudoso se mantiene sin revisar durante el resto de la hora. 0 significa no revisar nunca.",
+        "description": "Un modelo de chat pequeño revisa de nuevo las coincidencias que apenas alcanzaron el umbral de un flujo. Solo puede retener una respuesta. Los flujos lo activan en sus propios ajustes de FAQ."
       }
     },
     "maintenance": {

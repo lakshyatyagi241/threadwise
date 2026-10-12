@@ -88,18 +88,18 @@
       },
       "threshold": {
         "label": "Seuil de correspondance par défaut",
-        "hint": "Un message correspond lorsque son score atteint au moins cette valeur. Utilisé uniquement par les espaces de travail qui n’ont jamais enregistré leur propre seuil. Les scores dépendent du modèle d’IA.",
         "value": "{value}",
         "follow": "Suivre le modèle",
-        "followHint": "La sensibilité par défaut est la valeur recommandée du modèle ({value}) et change avec le modèle. Désactivez pour fixer un nombre."
+        "followHint": "La sensibilité par défaut est la valeur recommandée du modèle ({value}) et change avec le modèle. Désactivez pour fixer un nombre.",
+        "hint": "Un message correspond quand son score atteint au moins cette valeur. Utilisé uniquement par les flux qui n’ont jamais enregistré leur propre seuil. Les scores dépendent du modèle d’embedding."
       },
       "limits": {
         "title": "Limites",
-        "maxFaqs": "Nombre maximal de FAQ par espace de travail",
         "maxVariationsPerFaq": "Nombre maximal de variantes par FAQ",
         "semanticPerHour": "Correspondances par le sens par espace de travail et par heure",
         "semanticPerHourHint": "Au-delà, un espace de travail se rabat sur la similarité orthographique pour le reste de l’heure. 0 signifie toujours la similarité orthographique.",
-        "verifyPerHour": "Secondes vérifications par espace de travail et par heure"
+        "verifyPerHour": "Secondes vérifications par espace de travail et par heure",
+        "maxFaqs": "Nombre maximal de FAQ par flux"
       },
       "errors": {
         "integer": "Saisissez un nombre entier.",
@@ -117,11 +117,10 @@
         "title": "Vérifier avant d’enregistrer",
         "confirm": "Enregistrer les modifications",
         "engineOff": "Désactiver le moteur empêche tous les espaces de travail de répondre aux clients avec des FAQ et bloque les modifications de FAQ jusqu’à sa réactivation.",
-        "modelChange": "Passer du modèle {from} au modèle {to} recrée tous les vecteurs enregistrés. Tant que ce n’est pas terminé, la correspondance n’utilise que la similarité orthographique. La sensibilité par défaut suivra le nouveau modèle (recommandé : {threshold}) sauf si vous fixez une valeur. Les seuils enregistrés séparément par les espaces de travail devront peut-être être réajustés, car les scores changent avec le modèle."
+        "modelChange": "Passer le modèle d’embedding de {from} à {to} régénère tous les vecteurs stockés. Tant que ce n’est pas terminé, la correspondance repose uniquement sur la similarité orthographique. La sensibilité par défaut suivra le nouveau modèle (recommandé : {threshold}) sauf si vous fixez une valeur. Les seuils que des flux ont enregistrés eux-mêmes devront peut-être être réajustés, car les scores changent avec le modèle."
       },
       "verify": {
         "title": "Seconde vérification des cas limites",
-        "description": "Un petit modèle de chat revérifie les correspondances qui atteignent tout juste le seuil d’un espace de travail. Il peut uniquement retenir une réponse. Chaque espace de travail l’active dans ses propres paramètres FAQ.",
         "enabled": {
           "label": "Autoriser la seconde vérification",
           "hint": "Désactivez-la pour arrêter la vérification dans tous les espaces de travail, quel que soit leur réglage."
@@ -130,7 +129,8 @@
           "label": "Modèle de vérification",
           "hint": "L’identifiant du modèle OpenRouter qui juge les cas limites, par exemple openai/gpt-4o-mini. Un modèle petit et rapide suffit."
         },
-        "perHourHint": "Au-delà, un cas limite est conservé sans vérification jusqu’à la fin de l’heure. 0 signifie ne jamais vérifier."
+        "perHourHint": "Au-delà, un cas limite est conservé sans vérification jusqu’à la fin de l’heure. 0 signifie ne jamais vérifier.",
+        "description": "Un petit modèle de chat revérifie les correspondances qui atteignent tout juste le seuil d’un flux. Il peut uniquement retenir une réponse. Les flux l’activent dans leurs propres réglages FAQ."
       }
     },
     "maintenance": {

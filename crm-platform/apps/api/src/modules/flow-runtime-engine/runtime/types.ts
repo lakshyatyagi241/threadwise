@@ -219,3 +219,52 @@ export interface InboundReply {
   /** A stored link to the customer's file, set when the wait accepts media. */
   mediaUrl?: string;
 }
+
+/** Where a run goes after one step. The engine persists it; nothing here touches the database, the clock (but `now`) or a queue. */
+export type Transition =
+  /** Run `nodeId` next, after `delayMs` (the humanising pause on a plain move; 0 on a routed choice). */
+  | {
+      t: 'goto';
+      nodeId: string;
+      delayMs: number;
+      /** The exit it left by: the run log shows the branch a Condition took. */
+      port?: number;
+      /** A sub-flow swapped `run.graph` for this flow's: the engine persists the new graph and logs the flow id. */
+      subflowId?: number;
+    }
+  /** The node asked to run another flow in this run: the engine resolves it (it needs the database) and turns this into a `goto`. */
+  | {
+      t: 'subflow';
+      flowId: number | string;
+      startNodeId?: string;
+      missPort?: number;
+      missVars?: Record<string, unknown>;
+    }
+  | { t: 'wait'; wait: NonNullable<RunState['wait']> }
+  | { t: 'sleep'; seconds: number }
+  | {
+      t: 'end';
+      status: Extract<FlowRunStatus, 'completed' | 'failed'>;
+      reason: FlowRunEndReason;
+      failureCode?: string;
+      failureReason?: string;
+    }
+  | { t: 'halt'; reason: string }
+  /** The reply was not an answer: nothing changes. */
+  | { t: 'none' };
+
+export interface StepOutcome {
+  transition: Transition;
+  /** The node that ran, for the run log. */
+  nodeId: string | null;
+  nodeType: string | null;
+  notes: string[];
+  /** One line per message this step sent to the customer, for the run log. */
+  sent?: string[];
+  /** A message of this step did not go out, though the run went on (a media link the provider refused). */
+  sendFailed?: boolean;
+  /** What the node took in and produced, for the run log. */
+  io?: { in: FlowStepIoItem[]; out: FlowStepIoItem[] };
+  /** A contact property to write after the step commits ("also save to a contact attribute"); the engine does it. */
+  saveProperty?: { key: string; value: string };
+}

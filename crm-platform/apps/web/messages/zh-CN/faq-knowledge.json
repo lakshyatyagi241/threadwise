@@ -1,7 +1,6 @@
 {
   "faq": {
     "nav": {
-      "faq": "FAQ",
       "label": "FAQ 分组",
       "tab": {
         "faqs": "FAQ",
@@ -13,7 +12,6 @@
       "unansweredCount": "{count, plural, other {# 条未回答的消息}}"
     },
     "common": {
-      "dismiss": "忽略",
       "retry": "重试",
       "requestId": "请求 {id}",
       "noAccessTitle": "你无权访问此页面",
@@ -26,7 +24,6 @@
       "conflict": "你编辑期间，其他人修改了此内容。",
       "duplicateQuestion": "已有另一个 FAQ 使用了这个问题。",
       "duplicateVariation": "此 FAQ 已包含这种问法。",
-      "limitReached": "你的工作区已达到 FAQ 数量上限。请删除不用的 FAQ 或问法，或联系平台管理员提高上限。",
       "flowNotFound": "所选流程在此工作区中已不存在，请选择其他流程。",
       "embeddingUnavailable": "AI 服务商不可用。请为工作区添加 OpenRouter 密钥，或联系平台管理员启用共享密钥，然后重试。",
       "engineDisabled": "平台目前已关闭全局 FAQ 自动回答。",
@@ -34,21 +31,21 @@
       "validation": "部分字段需要修改。",
       "rateLimited": "请求过于频繁。请稍候再试。",
       "unexpected": "出了点问题。请重试；如果问题持续出现，请把请求 ID 发给支持团队。",
-      "flowNodeNotFound": "所选步骤已不在此流程中。请选择其他步骤，或从流程的开头开始。"
+      "flowNodeNotFound": "所选步骤已不在此流程中。请选择其他步骤，或从流程的开头开始。",
+      "limitReached": "此流程已达到 FAQ 上限。请删除未使用的 FAQ 或变体，或请平台管理员提高上限。"
     },
     "banner": {
       "enabledToast": "FAQ 自动回答已开启。",
       "engineOff": "平台已关闭 FAQ 自动回答。在重新开启之前，客户收不到 FAQ 回答。",
       "modelChanged": "你调整此阈值后，平台更换了 AI 模型。得分已发生变化，请重新检查灵敏度。",
       "reviewSensitivity": "检查灵敏度",
-      "offTitle": "面向客户的 FAQ 自动回答已关闭",
-      "offBody": "你可以编写和测试 FAQ，但开启之前客户不会收到回答。",
       "offNoRight": "请让拥有 faq.settings.manage 权限的人（通常是工作区管理员）开启。",
-      "enable": "开启 FAQ 自动回答"
+      "enable": "开启 FAQ 自动回答",
+      "offTitle": "此流程的 FAQ 应答已关闭",
+      "offBody": "你可以编写和测试此流程的 FAQ，但在你开启之前，客户不会收到回答。"
     },
     "list": {
       "title": "FAQ",
-      "subtitle": "客户常问的问题，以及机器人的回答。客户不必使用完全相同的措辞。",
       "add": "添加 FAQ",
       "stats": {
         "label": "FAQ 统计",
@@ -98,10 +95,10 @@
       "deleted": "FAQ 已删除。",
       "empty": {
         "title": "教机器人回答常见问题",
-        "body": "写下一个问题和它的答案即可。机器人会匹配客户用自己的话写的内容，并回复答案或启动流程。",
         "how": "再添加几种相同问题的不同问法，并在客户看到之前先测试一下。",
         "cta": "添加第一个 FAQ",
-        "noRight": "请让工作区管理员授予你添加 FAQ 的权限。"
+        "noRight": "请让工作区管理员授予你添加 FAQ 的权限。",
+        "body": "只需写一次问题和答案。机器人会匹配客户用自己的话写下的内容，并回复答案或将其转到流程的某个步骤。"
       },
       "noMatch": {
         "title": "没有符合筛选条件的 FAQ",
@@ -142,7 +139,9 @@
         "failed": "{count} 条失败"
       },
       "stepMissing": "步骤丢失",
-      "startsAt": "起始步骤：{step}"
+      "subtitle": "客户在 {flow} 中提出的问题以及机器人的回答。这些 FAQ 仅在此流程内应答。",
+      "thisFlow": "此流程",
+      "startsAt": "转到：{step}"
     },
     "editor": {
       "back": "返回 FAQ 列表",
@@ -159,7 +158,6 @@
       "saved": "FAQ 已保存。",
       "deleted": "FAQ 已删除。",
       "readOnly": "你可以查看此 FAQ，但你的角色无权修改。",
-      "faqLimit": "你的工作区已达到 {max} 个 FAQ 的上限。请先删除一个再添加。",
       "prefilled": "问题内容来自一条未回答的客户消息。保存此 FAQ 后，该消息也会标记为已处理。",
       "tryItSaveFirst": "请先保存 FAQ，然后即可试试客户消息如何匹配它。",
       "conflict": {
@@ -189,23 +187,30 @@
         "title": "答案",
         "hint": "此 FAQ 匹配成功时，客户收到的内容。",
         "text": "文字回答",
-        "flow": "启动流程",
         "textLabel": "回答内容",
         "count": "{count} / {max} 个字符",
         "preview": "在 WhatsApp 中的效果",
         "previewEmpty": "你的回答会显示在这里",
-        "flowLabel": "要启动的流程",
         "noFlow": "未选择流程",
-        "startsAt": "从此步骤开始：{step}",
-        "stepGone": "此 FAQ 的起始步骤已不存在，因此客户收不到回答。"
+        "flow": "转到某个步骤",
+        "flowLabel": "转到哪里",
+        "startsAt": "转到步骤：{step}",
+        "stepGone": "此 FAQ 指向的步骤已不存在，因此客户收不到回答。",
+        "thisFlowNamed": "此流程的某个步骤（{name}）",
+        "target": {
+          "here": "此流程的某个步骤",
+          "hereHint": "客户在 {name} 内继续。这是常用选择。",
+          "other": "其他流程的某个步骤",
+          "otherHint": "将对话转交给另一个流程。"
+        }
       },
       "advanced": {
         "title": "高级：仅针对此 FAQ 的灵敏度",
-        "body": "默认情况下，所有 FAQ 都使用工作区灵敏度。如果此 FAQ 太容易匹配，请调高；如果太难匹配，请调低。",
         "custom": "为此 FAQ 使用自定义灵敏度",
         "sliderLabel": "匹配分数不低于",
-        "workspace": "工作区灵敏度为 {value}%。",
-        "following": "沿用工作区灵敏度（{value}%）。"
+        "body": "默认情况下，每条 FAQ 使用此流程的灵敏度。如果某条 FAQ 匹配过于频繁（调高）或过少（调低），请使用自定义值。",
+        "workspace": "此流程的灵敏度为 {value}%。",
+        "following": "沿用此流程的灵敏度（{value}%）。"
       },
       "problem": {
         "question": {
@@ -219,9 +224,9 @@
           "invalid": "此回答无效。"
         },
         "flowId": {
-          "required": "请选择要启动的流程。",
-          "tooLong": "请选择要启动的流程。",
-          "invalid": "请选择要启动的流程。"
+          "required": "选择要转到的流程。",
+          "tooLong": "选择要转到的流程。",
+          "invalid": "选择要转到的流程。"
         },
         "category": {
           "required": "请填写分类或留空。",
@@ -249,11 +254,11 @@
         "body": "你对此 FAQ 的更改尚未保存。",
         "leave": "离开",
         "stay": "继续编辑"
-      }
+      },
+      "faqLimit": "此流程已达到 {max} 条 FAQ 的上限。请先删除一条再添加。"
     },
     "flowPicker": {
       "noAccess": "你需要查看流程的权限（flb.flows.read）才能在此选择流程。",
-      "missing": "此 FAQ 启动的流程已不存在。请选择其他流程，否则此 FAQ 无法回答。",
       "selected": "已选择",
       "search": "搜索流程",
       "searchPlaceholder": "按名称搜索流程",
@@ -267,7 +272,9 @@
         "off": "未启用",
         "draft": "草稿"
       },
-      "note": "流程从你在下方选择的步骤开始，或从其开头开始。只有已发布且已启用的流程才能运行。"
+      "missing": "此 FAQ 指向的流程已不存在。请选择其他流程，否则此 FAQ 无法应答。",
+      "noOthers": "此工作区中没有其他流程。",
+      "note": "客户将从你在下方选择的步骤或流程的开头继续。只有已发布且处于启用状态的流程才能运行。"
     },
     "variations": {
       "title": "问法变体",
@@ -343,7 +350,7 @@
       "verdict": {
         "answer": {
           "title": "会回答",
-          "body": "有 FAQ 足够匹配。客户会收到它的回答（或启动它的流程）。"
+          "body": "有一条 FAQ 匹配得足够好。客户会收到其答案，或被转到它指向的步骤。"
         },
         "below": {
           "title": "低于阈值",
@@ -397,8 +404,8 @@
       "winner": {
         "title": "客户会收到的内容",
         "unavailable": "无法加载此 FAQ。",
-        "flow": "启动流程 {name}",
-        "flowMissing": "启动的流程已不存在"
+        "flow": "转到 {name} 的某个步骤",
+        "flowMissing": "转到一个已不存在的流程"
       },
       "candidates": {
         "title": "最佳匹配",
@@ -415,16 +422,16 @@
     },
     "playground": {
       "title": "我的机器人会怎么回答？",
-      "subtitle": "让一条客户消息走一遍机器人实际使用的匹配流程。不会发送任何内容，也不会计入数据洞察。",
       "label": "客户消息",
       "placeholder": "我的包裹在哪里？",
       "run": "运行",
-      "hint": "只会匹配已保存的 FAQ，参与匹配的是带有生效问法的启用 FAQ。",
       "empty": "在上方输入消息并运行，即可查看判定结果。",
       "history": {
         "title": "本次会话",
         "empty": "这里会显示你最近 10 次测试。"
-      }
+      },
+      "subtitle": "让一条客户消息经过 {flow} 使用的匹配机制。不会发送任何内容，也不会计入数据洞察。",
+      "hint": "仅匹配此流程已保存的 FAQ。带有启用表述的启用 FAQ 才会参与。"
     },
     "unanswered": {
       "title": "未回答的消息",
@@ -492,7 +499,6 @@
       "loadingMore": "加载中",
       "why": {
         "answered": "以“{faq}”回答，得分 {score}%。",
-        "flowStarted": "启动了“{faq}”的流程，得分 {score}%。",
         "belowThreshold": "最佳匹配得分 {score}%，低于 {threshold}% 的要求，因此未发送。",
         "belowThresholdNoBar": "最佳匹配得分 {score}%，不够高，因此未发送。",
         "lowMargin": "两个 FAQ 太接近（{score}% 和 {second}%），机器人没有贸然猜测。",
@@ -502,7 +508,8 @@
         "tier": "由{tier}层判定。",
         "error": "错误：{error}",
         "vetoed": "最佳匹配得分 {score}%，高于 {threshold}% 的阈值，但二次核对认为它没有回答该消息，因此未发送任何内容。",
-        "vetoedNoBar": "最佳匹配得分 {score}%，但二次核对认为它没有回答该消息，因此未发送任何内容。"
+        "vetoedNoBar": "最佳匹配得分 {score}%，但二次核对认为它没有回答该消息，因此未发送任何内容。",
+        "flowStarted": "已将客户转到“{faq}”的步骤，匹配度 {score}%。"
       },
       "flowRun": "（来自流程）"
     },
@@ -565,7 +572,6 @@
     },
     "settings": {
       "title": "FAQ 设置",
-      "subtitle": "开启 FAQ 自动回答，并调整消息需要多接近才算匹配。",
       "unsaved": "有未保存的更改",
       "discard": "放弃",
       "save": "保存设置",
@@ -580,11 +586,11 @@
       },
       "enable": {
         "title": "FAQ 自动回答",
-        "label": "用 FAQ 回答客户",
         "on": "开",
         "off": "关",
-        "onBody": "客户发来消息时，机器人会将消息与你的 FAQ 比较，回复最佳答案或启动其流程。如果已有流程或关键词触发器处理了该消息，则以它们为准。",
-        "offBody": "客户收不到 FAQ 回答。你仍可编写和测试 FAQ。"
+        "label": "使用此流程的 FAQ 回答客户",
+        "onBody": "此流程上线期间，未被任何关键词触发器或运行中流程处理的客户消息，会与此流程的 FAQ 进行比较。机器人会回复最佳答案，或将客户转到 FAQ 指向的步骤。",
+        "offBody": "此流程的 FAQ 不会回答客户。你仍可编写和测试它们。"
       },
       "sens": {
         "title": "灵敏度",
@@ -653,21 +659,23 @@
         "explainOn": "得分在 {from}% 到 {to}% 之间的匹配会由 {model} 核对。若结果为“否”，则不会发送回答，该消息会显示在“未回答”中。",
         "explainOff": "得分达到 {threshold}% 及以上的匹配都会回答。开启二次核对，可让最接近阈值的匹配再核对一次。",
         "cost": "每次核对都会把客户的消息和 FAQ 的问题发送给模型：约几百个 token，并会让临界回复多花约一秒。不在该范围内的匹配不会被核对。如果核对失败、不可用或达到每小时上限，则按没有核对的情况处理，匹配照常生效。"
-      }
+      },
+      "subtitle": "为 {flow} 开启 FAQ 应答，并调整消息需要多接近才算匹配。"
     },
     "flowNode": {
-      "label": "起始步骤",
       "start": "流程的开头",
-      "hint": "选择一个步骤即可跳过流程的开头部分。客户会从你选择的步骤进入流程。",
       "loading": "正在加载此流程的步骤",
       "empty": "此流程没有其他步骤，因此从开头开始。",
       "retry": "重试",
       "deletedOption": "步骤已删除（请另选）",
       "missing": {
-        "title": "此 FAQ 的起始步骤已不存在",
         "body": "该步骤已从流程中删除。在你选择其他步骤之前，匹配此 FAQ 的客户收不到回答。请在下方选择一个步骤，或从流程的开头开始。",
-        "fix": "从流程的开头开始"
-      }
+        "fix": "从流程的开头开始",
+        "title": "此 FAQ 指向的步骤已不存在"
+      },
+      "label": "转到",
+      "hint": "选择一个步骤以跳过流程的开头。客户将从你选择的步骤继续。",
+      "hintOwn": "选择此流程的一个步骤。自上次保存以来新增的步骤，会在保存流程后出现。"
     },
     "verify": {
       "title": "二次核对",
@@ -684,6 +692,14 @@
         "vetoed": "该匹配属于临界情况，二次核对认为此 FAQ 没有回答该消息。回答已被拦截，未发送任何内容，该消息会显示在“未回答”中。",
         "failed": "该匹配属于临界情况，但核对未能完成，因此匹配照常生效，回答按没有二次核对的情况发送。",
         "skipped": "此匹配没有进行二次核对，因此匹配保持原样。"
+      }
+    },
+    "panel": {
+      "leave": {
+        "title": "不保存就离开 FAQ？",
+        "body": "FAQ 中有未保存的更改。如果离开此标签页，更改将丢失。",
+        "leave": "离开",
+        "stay": "继续编辑"
       }
     }
   }

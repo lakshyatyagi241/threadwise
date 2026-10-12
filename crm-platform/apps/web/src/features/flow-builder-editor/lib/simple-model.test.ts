@@ -619,7 +619,7 @@ describe('the Answer from FAQ step in the Simple builder', () => {
         .map((p) => en(p.message));
     };
     expect(make({ minScore: 1.4 })).toEqual([
-      'Step 1.1: the minimum score must be from 0.05 to 0.99, or use the workspace setting.',
+      "Step 1.1: the minimum score must be from 0.05 to 0.99, or use the flow's setting.",
     ]);
     expect(make({ minScore: 0.01 })).toHaveLength(1);
     expect(make({ minScore: 0.5 })).toEqual([]);

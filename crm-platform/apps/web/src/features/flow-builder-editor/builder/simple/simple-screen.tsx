@@ -44,7 +44,9 @@ import {
 import { applyImport, importToSimple } from '../../lib/simple-import';
 import { msg, useFlb, useMsg, type Msg } from '../../lib/msg';
 import { BuilderFonts } from '../builder-fonts';
-import { WebBotPanels, WebBotTabs, useInitialTab, type WebBotTab } from '../web-bot-tabs';
+import { FaqLeaveConfirm } from '@/features/faq-knowledge/components/faq-leave-confirm';
+import { FaqPanel } from '@/features/faq-knowledge/components/faq-panel';
+import { BuilderTabs, WebBotPanels, useBuilderTab, type BuilderTab } from '../web-bot-tabs';
 import { LinkSelect, NEW_JOURNEY, StepEditor } from './step-editors';
 import '../builder.css';
 
@@ -215,11 +217,24 @@ function Editor({
   const [published, setPublished] = useState(initial?.isPublished ?? false);
   const [dirty, setDirty] = useState(!initial);
   const [busy, setBusy] = useState(false);
-  // A website chat bot has Customize and Install beside Build; the others only build.
-  const initialTab = useInitialTab(!!initial);
-  const [tab, setTab] = useState<WebBotTab>(initialTab);
-  // Another channel has no tabs, whatever the link asked for.
-  const shownTab: WebBotTab = channel === 'web' ? tab : 'build';
+  // Every saved flow has FAQs beside Build (for a person who may read them); a website chat bot also has Customize and Install.
+  const canFaqs = useCan('faq.entries.read');
+  const tabSet = useMemo(() => ({ faqs: canFaqs, web: channel === 'web' }), [canFaqs, channel]);
+  const [tab, setTab] = useBuilderTab(!!flowId, tabSet);
+  // A tab this flow does not offer (FAQs before the first save, Customize on a chat flow) is never shown, whatever the link asked for.
+  const shownTab: BuilderTab =
+    tab === 'faqs' ? (flowId && canFaqs ? 'faqs' : 'build') : channel === 'web' ? tab : 'build';
+  // The FAQs panel tells us when one of its screens holds unsaved edits: leaving the tab asks first. The flow's own unsaved
+  // edits are untouched by a tab change (the Build page stays mounted underneath).
+  const faqDirty = useRef(false);
+  const [leaveTo, setLeaveTo] = useState<BuilderTab | null>(null);
+  const onFaqDirty = useCallback((d: boolean) => {
+    faqDirty.current = d;
+  }, []);
+  const requestTab = (next: BuilderTab) => {
+    if (shownTab === 'faqs' && next !== 'faqs' && faqDirty.current) setLeaveTo(next);
+    else setTab(next);
+  };
   const canEditFlow = useCan('flb.flows.update');
   const widgetQuery = useFlowWidget(channel === 'web' ? flowId : null);
   const needsCustomizing = channel === 'web' && !!flowId && widgetQuery.data?.widget === null;
@@ -533,14 +548,14 @@ function Editor({
         </div>
       </header>
 
-      {channel === 'web' ? (
-        <WebBotTabs
-          tab={shownTab}
-          onTab={setTab}
-          saved={!!flowId}
-          needsCustomizing={needsCustomizing}
-        />
-      ) : null}
+      <BuilderTabs
+        tab={shownTab}
+        onTab={requestTab}
+        saved={!!flowId}
+        needsCustomizing={needsCustomizing}
+        faqs={canFaqs}
+        web={channel === 'web'}
+      />
 
       {importFailed.length > 0 ? (
         <div
@@ -805,6 +820,7 @@ function Editor({
                         step={s}
                         doc={doc}
                         ctx={ctx}
+                        flowId={flowId}
                         stage={stageIn(doc, ci, si)}
                         active={activeId === s.id}
                         bad={badSteps.has(s.id)}
@@ -870,6 +886,31 @@ function Editor({
         onConfirm={() => {
           if (pendingImport) finishImport(pendingImport);
           setPendingImport(null);
+        }}
+      />
+
+      {flowId && canFaqs ? (
+        <div
+          role="tabpanel"
+          id="web-bot-panel-faqs"
+          aria-labelledby="web-bot-tab-faqs"
+          className={`min-h-0 flex-1 overflow-y-auto bg-background ${shownTab === 'faqs' ? '' : 'hidden'}`}
+        >
+          {shownTab === 'faqs' ? (
+            <div className="mx-auto w-full max-w-6xl p-4 sm:p-6">
+              <FaqPanel flowId={flowId} flowName={name} onDirtyChange={onFaqDirty} />
+            </div>
+          ) : null}
+        </div>
+      ) : null}
+      <FaqLeaveConfirm
+        open={leaveTo !== null}
+        onStay={() => setLeaveTo(null)}
+        onLeave={() => {
+          const next = leaveTo;
+          setLeaveTo(null);
+          faqDirty.current = false;
+          if (next) setTab(next);
         }}
       />
 
@@ -1060,6 +1101,8 @@ function StepCard(p: {
   step: SimpleStep;
   doc: SimpleDoc;
   ctx: FlbBuilderContext;
+  /** The saved flow (null before the first save): the FAQ step reads this flow's FAQs. */
+  flowId: string | null;
   stage: string;
   active: boolean;
   bad: boolean;
@@ -1151,7 +1194,14 @@ function StepCard(p: {
       ) : null}
       {p.active ? (
         <div className="border-t border-border p-4">
-          <StepEditor step={s} doc={p.doc} ctx={p.ctx} set={p.onSet} link={p.onLink} />
+          <StepEditor
+            step={s}
+            doc={p.doc}
+            ctx={p.ctx}
+            flowId={p.flowId}
+            set={p.onSet}
+            link={p.onLink}
+          />
         </div>
       ) : null}
     </section>

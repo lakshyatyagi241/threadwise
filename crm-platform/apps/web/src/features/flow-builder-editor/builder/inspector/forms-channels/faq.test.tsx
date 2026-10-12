@@ -13,6 +13,8 @@ import type { FormProps } from '../types';
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
 const faq = vi.hoisted(() => ({
+  flowIds: [] as Array<string | null>,
+  flowId: 'f1' as string | null,
   state: {
     isPending: false,
     isError: false,
@@ -23,7 +25,10 @@ const faq = vi.hoisted(() => ({
 }));
 vi.mock('../../../api/hooks', async (orig) => ({
   ...(await orig<typeof import('../../../api/hooks')>()),
-  useFaqSummary: () => faq.state,
+  useFaqSummary: (flowId: string | null) => {
+    faq.flowIds.push(flowId);
+    return flowId === null ? { ...faq.state, isPending: false } : faq.state;
+  },
 }));
 // The text field offers the workspace's merge tags: no request is made in a unit test.
 vi.mock('@/features/contacts-attributes-tags', () => ({
@@ -57,7 +62,7 @@ function Harness({ initial }: { initial: Record<string, unknown> }) {
       toast: () => undefined,
       uploadMedia: async () => ({ url: '', filename: '' }),
       nodes: [],
-      flowId: null,
+      flowId: faq.flowId,
     },
   };
   return <>{Form(props)}</>;
@@ -93,6 +98,8 @@ const field = (label: string) =>
 
 beforeEach(() => {
   writes.length = 0;
+  faq.flowIds.length = 0;
+  faq.flowId = 'f1';
   faq.state = {
     isPending: false,
     isError: false,
@@ -110,6 +117,25 @@ afterEach(async () => {
 });
 
 describe('Answer from FAQ form', () => {
+  it('reads and links the FAQs of the flow the node sits in', async () => {
+    await mount();
+    expect(faq.flowIds.every((id) => id === 'f1')).toBe(true);
+    expect(host.querySelector('a[href="/flows/simple/f1?tab=faqs"]')?.textContent).toBe(
+      "Manage this flow's FAQs",
+    );
+    expect(host.textContent).toContain("categories come from this flow's FAQs");
+  });
+
+  it('before the first save there are no FAQs to read: it says so and links nowhere', async () => {
+    faq.flowId = null;
+    await mount();
+    expect(faq.flowIds.every((id) => id === null)).toBe(true);
+    expect(host.textContent).toContain('Save the flow first.');
+    expect(host.querySelector('a[href*="tab=faqs"]')).toBeNull();
+    expect(host.textContent).toContain("Manage this flow's FAQs");
+    expect(host.textContent).not.toContain('Loading categories');
+  });
+
   it('is registered, and its defaults are the data the contract expects', () => {
     expect(NODE_FORMS.faq).toBeDefined();
     expect(flbDefaultNodeData('faq')).toEqual({
@@ -127,7 +153,7 @@ describe('Answer from FAQ form', () => {
     expect(field('Message to match').value).toBe('{{user_message}}');
     expect(field('Only these FAQs').value).toBe('');
     expect(host.textContent).toContain('All FAQs');
-    expect(checkbox('Use the workspace setting').checked).toBe(true);
+    expect(checkbox("Use this flow's setting").checked).toBe(true);
     expect(host.querySelector('input[type="number"]')).toBeNull();
     expect(checkbox('Send a matching text answer').checked).toBe(true);
     expect(field('Save the result as').value).toBe('faq');
@@ -195,7 +221,7 @@ describe('Answer from FAQ form', () => {
         refetch,
       };
       await mount();
-      expect(host.textContent).toContain('Your FAQ categories could not be loaded.');
+      expect(host.textContent).toContain("This flow's FAQ categories could not be loaded.");
       await click([...host.querySelectorAll('button')].find((b) => b.textContent === 'Try again')!);
       expect(refetch).toHaveBeenCalledTimes(1);
       // The rest of the form still works.
@@ -207,7 +233,7 @@ describe('Answer from FAQ form', () => {
   describe('minimum score', () => {
     it('turning the workspace setting off starts a score the author can edit', async () => {
       await mount();
-      await click(checkbox('Use the workspace setting'));
+      await click(checkbox("Use this flow's setting"));
       expect(writes).toContainEqual(['minScore', 0.5]);
       const input = host.querySelector('input[type="number"]') as HTMLInputElement;
       expect(input.min).toBe('0.05');
@@ -220,8 +246,8 @@ describe('Answer from FAQ form', () => {
 
     it('turning it back on writes null again', async () => {
       await mount({ ...flbDefaultNodeData('faq'), minScore: 0.6 });
-      expect(checkbox('Use the workspace setting').checked).toBe(false);
-      await click(checkbox('Use the workspace setting'));
+      expect(checkbox("Use this flow's setting").checked).toBe(false);
+      await click(checkbox("Use this flow's setting"));
       expect(writes.at(-1)).toEqual(['minScore', null]);
       expect(host.querySelector('input[type="number"]')).toBeNull();
     });
@@ -230,7 +256,7 @@ describe('Answer from FAQ form', () => {
       await mount({ ...flbDefaultNodeData('faq'), minScore: value });
       const alert = host.querySelector('[role="alert"]')!;
       expect(alert.textContent).toBe(
-        'Enter a number from 0.05 to 0.99, or use the workspace setting.',
+        "Enter a number from 0.05 to 0.99, or use this flow's setting.",
       );
       expect(host.querySelector('input[type="number"]')!.getAttribute('aria-invalid')).toBe('true');
     });
@@ -250,7 +276,7 @@ describe('Answer from FAQ form', () => {
 
     it('points at the FAQ test page and says scores depend on the embedding model', async () => {
       await mount();
-      expect(host.querySelector('a[href="/faq/test"]')).not.toBeNull();
+      expect(host.querySelector('a[href="/flows/simple/f1?tab=faqs&view=test"]')).not.toBeNull();
       expect(host.textContent).toContain("platform's embedding model");
     });
   });
@@ -270,12 +296,12 @@ describe('Answer from FAQ form', () => {
     expect(checkbox('Send a matching text answer').checked).toBe(true);
   });
 
-  describe('workspace with no FAQs yet', () => {
+  describe('flow with no FAQs yet', () => {
     it('shows a hint with a link to add one, and the form stays usable', async () => {
       faq.state = { ...faq.state, data: { categories: [], total: 0 } };
       await mount();
-      const hint = host.querySelector('a[href="/faq/new"]')!;
-      expect(hint.textContent).toBe('Add your first FAQ');
+      const hint = host.querySelector('a[href="/flows/simple/f1?tab=faqs&view=new"]')!;
+      expect(hint.textContent).toBe('Add the first FAQ of this flow');
       expect(host.textContent).toContain('always leaves by no match');
       await setValue(field('Message to match'), 'hi');
       expect(writes).toContainEqual(['query', 'hi']);
@@ -283,13 +309,13 @@ describe('Answer from FAQ form', () => {
 
     it('shows no hint when there are FAQs, while loading, or when the list failed', async () => {
       await mount();
-      expect(host.querySelector('a[href="/faq/new"]')).toBeNull();
+      expect(host.querySelector('a[href="/flows/simple/f1?tab=faqs&view=new"]')).toBeNull();
       faq.state = { ...faq.state, isPending: true, isSuccess: false, data: undefined as never };
       await mount();
-      expect(host.querySelector('a[href="/faq/new"]')).toBeNull();
+      expect(host.querySelector('a[href="/flows/simple/f1?tab=faqs&view=new"]')).toBeNull();
       faq.state = { ...faq.state, isPending: false, isError: true, data: undefined as never };
       await mount();
-      expect(host.querySelector('a[href="/faq/new"]')).toBeNull();
+      expect(host.querySelector('a[href="/flows/simple/f1?tab=faqs&view=new"]')).toBeNull();
     });
   });
 });

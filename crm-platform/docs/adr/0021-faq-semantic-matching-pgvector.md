@@ -71,3 +71,13 @@ Decided with the project owner after the first release.
    module imports the flow runtime, so exporting it would be a cycle; `WorkersModule` imports it from its file.
 4. **Keyword rules first.** Unchanged and now pinned by an end-to-end test: flow keyword triggers and waiting runs take a message before
    the FAQ sees it.
+
+## Addendum 2 (2026-10-12): FAQs belong to a flow
+
+Decided with the project owner after seeing the workspace-level screens: the FAQ is a bot's knowledge, as in Geta, not a workspace module.
+
+1. **Ownership.** `faqs.owner_flow_id` (NOT NULL, `ON DELETE CASCADE`), `faq_settings` keyed `(org_id, flow_id)`, `faq_match_logs.flow_id`. The question is unique within a flow. `faqs.flow_id` stays and means the flow a `flow` answer starts (default: the owner, "go to a step of this flow"). Migration `20261118090000_faq_per_flow.sql` deletes existing rows: the feature was new and off by default, nothing was in production.
+2. **Where it answers.** The inbound listener stays an `after` listener (keyword flows and waiting runs still win). The candidates are the published, active flows whose own switch is on, with at least one active FAQ, bound to the message's channel by the keyword trigger's rule; the live run's flow first; each candidate matches with its own settings; the best answered score wins (ties: live run's flow, lowest id); one log row. A flow's FAQs never answer for another flow. Rejected: one FAQ pool shared by all flows of a channel (that is the workspace module again) and "FAQs only through the FAQ step" (the owner wants the Geta fallback behaviour).
+3. **Where it is edited.** Inside the Simple builder, as the FAQs tab of every saved flow (list, editor, Try it, Test, Unanswered, Insights, Settings). The `/faq/*` screens and the menu entry are gone (`/faq` redirects to `/flows`). The Advanced builder has no FAQs tab; the FAQ step's inspector links to it. Platform controls (`/admin/faq`) stay, with limits now per flow and workspace counts aggregated over their flows.
+4. **The FAQ step** matches the FAQs of the flow the run is in.
+5. **Route shape.** `/v2/faq/flows/:flowId/...` for everything the screens use, `/v2/faq/flow-nodes/:flowId` for the steps of an answer-target flow; the unscoped routes were removed without aliases.

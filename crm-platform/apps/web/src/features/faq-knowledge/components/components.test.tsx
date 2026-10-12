@@ -28,8 +28,8 @@ vi.mock('next/navigation', () => ({
 vi.mock('../api/hooks', () => ({
   KEYS: {
     all: ['faq'],
-    settings: ['faq', 'settings'],
-    log: ['faq', 'log'],
+    settings: (f: string) => ['faq', 'settings', f],
+    log: (f: string) => ['faq', 'log', f],
     entry: (id: string) => ['faq', id],
     flowNodes: (id: string) => ['faq', 'flow-nodes', id],
   },
@@ -45,6 +45,7 @@ vi.mock('../api/hooks', () => ({
 }));
 
 import { DecisionView } from './decision-view';
+import { FaqFlowProvider } from './faq-flow';
 import { FaqEditorScreen } from './editor-screen';
 import { InsightsScreen } from './insights-screen';
 import { FaqListScreen } from './list-screen';
@@ -54,6 +55,7 @@ import { UnansweredScreen } from './unanswered-screen';
 const en = JSON.parse(
   readFileSync(join(process.cwd(), 'messages', 'en', 'faq-knowledge.json'), 'utf8'),
 ) as Record<string, unknown>;
+const THIS_FLOW = '00000000-0000-4000-8000-0000000000aa';
 const html = (el: ReactElement) =>
   renderToStaticMarkup(
     <NextIntlClientProvider
@@ -65,7 +67,11 @@ const html = (el: ReactElement) =>
       }}
     >
       <QueryClientProvider client={new QueryClient()}>
-        <ToastProvider dismissLabel="Dismiss">{el}</ToastProvider>
+        <ToastProvider dismissLabel="Dismiss">
+          <FaqFlowProvider flowId={THIS_FLOW} flowName="Support bot">
+            {el}
+          </FaqFlowProvider>
+        </ToastProvider>
       </QueryClientProvider>
     </NextIntlClientProvider>,
   );
@@ -220,12 +226,12 @@ describe('FaqListScreen', () => {
       { ...stats, total: 3 },
     );
     const out = html(<FaqListScreen />);
-    expect(out).toContain('Starts at: Send message');
+    expect(out).toContain('Goes to: Send message');
     expect(out).toContain('Step missing');
     // The flow itself is fine, so only the step is flagged and the flow name stays visible.
     expect(out).not.toContain('Flow missing');
     expect(out.match(/Refunds/g)).toHaveLength(3);
-    expect(out.match(/Starts at:/g)).toHaveLength(1);
+    expect(out.match(/Goes to:/g)).toHaveLength(1);
   });
   it('hides row delete without the delete permission', () => {
     state.perms.delete('faq.entries.delete');
@@ -676,7 +682,7 @@ describe('FaqEditorScreen', () => {
     const out = html(<FaqEditorScreen />);
     expect(out).toContain('Question variations');
     expect(out).toContain('Text answer');
-    expect(out).toContain('Start a flow');
+    expect(out).toContain('Go to a step');
     expect(out).toContain('1 / 60');
     expect(out).toContain('0 / 4096 characters');
     expect(out).toContain('Suggest with AI');
@@ -784,13 +790,13 @@ describe('FaqEditorScreen: where a flow answer starts', () => {
   it('lists the flow start first, then the steps by type and name, never the trigger twice', () => {
     state.entry = flowEntry({ flowNodeId: 'n-msg', flowNodeLabel: 'Welcome' });
     const out = render();
-    expect(out).toContain('Start at');
+    expect(out).toContain('Go to');
     expect(out).toContain("The flow's start");
     expect(out).toContain('Send message · Welcome');
     expect(out).toContain('Ask question · #n-ask');
     expect(out).not.toContain('Trigger ·');
     expect(out).toMatch(/<option value="n-msg" selected="">/);
-    expect(out).not.toContain('The step this FAQ starts at is gone');
+    expect(out).not.toContain('The step this FAQ goes to is gone');
   });
   it('selects the flow start when no step was chosen', () => {
     state.entry = flowEntry();
@@ -827,7 +833,7 @@ describe('FaqEditorScreen: where a flow answer starts', () => {
   it('warns, with the way to fix it, when the chosen step was deleted from the flow', () => {
     state.entry = flowEntry({ flowNodeId: 'n-old', flowNodeLabel: null });
     const out = render();
-    expect(out).toContain('The step this FAQ starts at is gone');
+    expect(out).toContain('The step this FAQ goes to is gone');
     expect(out).toContain('customers who match this FAQ get no answer');
     expect(out).toContain("Start at the flow's start");
     expect(out).toContain('Deleted step (choose another)');
@@ -836,12 +842,12 @@ describe('FaqEditorScreen: where a flow answer starts', () => {
   it('warns from the saved entry alone while the steps are still loading', () => {
     state.nodes = ok(undefined, { isPending: true, data: undefined });
     state.entry = flowEntry({ flowNodeId: 'n-old', flowNodeLabel: null });
-    expect(render()).toContain('The step this FAQ starts at is gone');
+    expect(render()).toContain('The step this FAQ goes to is gone');
   });
   it('does not offer steps for a flow that no longer exists', () => {
     state.entry = flowEntry({ flowName: null, flowNodeId: 'n-old' });
     const out = render();
-    expect(out).toContain('The flow this FAQ started no longer exists');
+    expect(out).toContain('The flow this FAQ goes to no longer exists');
     expect(out).not.toContain('Loading the steps');
     expect(selectTag(out)).toBe('');
   });
@@ -849,7 +855,7 @@ describe('FaqEditorScreen: where a flow answer starts', () => {
     state.perms.delete('faq.entries.update');
     state.entry = flowEntry({ flowNodeId: 'n-msg', flowNodeLabel: 'message' });
     let out = render();
-    expect(out).toContain('Starts at step: Send message');
+    expect(out).toContain('Goes to step: Send message');
     expect(out).not.toContain('Loading the steps');
     state.entry = flowEntry({ flowNodeId: 'n-old', flowNodeLabel: null });
     out = render();

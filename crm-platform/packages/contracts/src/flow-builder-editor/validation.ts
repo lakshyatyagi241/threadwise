@@ -116,7 +116,7 @@ export function flbValidateGraph(
     if (Number.isFinite(v) && v >= 0.05 && v <= 0.99) continue;
     bad.add(n.id);
     items.push(
-      '"Answer from FAQ" has a minimum score outside 0.05 to 0.99 — fix it or leave it blank to use the workspace setting.',
+      '"Answer from FAQ" has a minimum score outside 0.05 to 0.99 — fix it or leave it blank to use the flow\'s setting.',
     );
   }
 

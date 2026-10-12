@@ -15,7 +15,7 @@ export interface FaqNodeDeps {
 
 /**
  * "Answer from FAQ" node (ADR-0021 addendum): matches a message of the run (by default the customer's last one, `{{user_message}}`;
- * a variable a Question node saved works too) against the workspace's FAQs by meaning, and either answers or lets the flow branch.
+ * a variable a Question node saved works too) against the FAQs of the flow the run is in by meaning, and either answers or lets the flow branch.
  *
  * A match by `matched` (1): a text FAQ is sent to the customer unless the node's "send the answer" is off; a flow FAQ enters its flow,
  * at the FAQ's chosen step when it has one (the run continues in that flow and does not come back). A flow that is gone, not live, or
@@ -45,7 +45,7 @@ export async function runFaq(ctx: NodeContext, deps: FaqNodeDeps): Promise<NodeR
   const minScore = minRaw === null || minRaw === undefined || minRaw === '' ? null : Number(minRaw);
   let out: FlowFaqAnswer;
   try {
-    out = await deps.answer(run.orgId, {
+    out = await deps.answer(run.orgId, run.flowId, {
       query,
       category: str(d.category).trim() || null,
       minScore: minScore !== null && Number.isFinite(minScore) ? minScore : null,
@@ -101,6 +101,6 @@ export class FaqNodes implements NodeExecutor {
   constructor(private readonly faq: FaqFlowService) {}
 
   execute(ctx: NodeContext): Promise<NodeResult> {
-    return runFaq(ctx, { answer: (orgId, input) => this.faq.answer(orgId, input) });
+    return runFaq(ctx, { answer: (orgId, flowId, input) => this.faq.answer(orgId, flowId, input) });
   }
 }
