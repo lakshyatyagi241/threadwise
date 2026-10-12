@@ -12,8 +12,21 @@ Errors are `application/problem+json` with a stable `code` and a `requestId`; th
    the Score button answers 422 with the code that says which, and background work does nothing (or logs a `skipped` row when it is a
    problem the workspace should see: no key, token allowance, hourly limit).
 2. **What the model sees is anonymised**: stage, status, source, channel, title, language, country, whether an email and phone exist, a
-   business/free email kind, company name, tags, up to 15 short custom properties, days since created and last activity, deal counts and
-   open deal value. Never the name, email address, phone number or message text.
+   business/free email kind, company name, tags, up to 15 short custom properties, days since created, in the current stage and since
+   last activity, deal counts and open deal value, and an `engagement` object of plain numbers (below). Never the name, email address,
+   phone number or message text.
+
+   `engagement` is counted in SQL, so no text reaches the vendor: `broadcastsReceived30d` and `broadcastsRead30d` (the sent and read
+   receipts of both bulk senders: `broadcast_contacts` and the WhatsApp campaigns' `wp_campaign_contacts`, which migrated Reference
+   workspaces use), `linksClicked30d` (tracked links clicked: `wa_link_clicks` plus campaign clicks),
+   `messagesFromContact7d` (messages the contact itself sent; bots, staff, reactions, deleted messages and group threads are left out),
+   `hoursSinceLastInbound` (newest inbound on any thread of the contact) and `avgReplyMinutes30d` (the mean time the
+   contact took to answer the message right before its own, when that was ours and under a week earlier). A message is dated by when it
+   was said (`provider_ts`, else the row time), so an old history import is left out by its date and a migrated workspace, where every
+   message is flagged as history but dated truly, still counts. A contact with nothing behind
+   it gets zeros and nulls, which the prompt tells the model to weigh lightly. `contact.last_activity_at` (and so `daysSinceActivity`)
+   now also moves on a customer message and on a staff reply; see [contacts-attributes-tags.md](contacts-attributes-tags.md).
+
 3. **The scorer never overwrites a person's score.** A score typed (or imported, or created with the contact) has `leadScoreSource:
 "manual"` and is left alone; a contact with no score, or one the scorer wrote (`"ai"`), is scored. Typing a score over an AI score
    takes it over and drops the AI's reasons; clearing a typed score (`leadScore: null`) hands the contact back to the scorer. The write
@@ -34,6 +47,7 @@ Errors are `application/problem+json` with a stable `code` and a `requestId`; th
 | `lsc.runs.read`       | the settings read, the scoring log and its cost | Owner, Admin, Manager |
 | `lsc.contacts.score`  | Score one contact now, the backfill             | Owner, Admin, Manager |
 | `lsc.settings.manage` | the workspace switch                            | Owner, Admin          |
+| `lsc.stage.review`    | accept or dismiss AI-suggested stages           | Owner, Admin, Manager |
 
 A contact's own `leadScore`, `leadScoreSource`, `leadScoreReasons`, `leadScoredAt` and `leadScoreModel` come with the contact (any role
 that can read contacts).
@@ -51,6 +65,55 @@ that can read contacts).
 Errors of the Score button and the backfill: `422 LSC_PLATFORM_DISABLED`, `422 LSC_NOT_ENABLED`, `422 LSC_NO_KEY`, `422 PLAN_LIMIT_REACHED`
 (monthly token allowance on the platform key, or the operator's per-hour limit), `409 LSC_MANUAL_SCORE`, `422 LSC_PROVIDER_FAILED` (key
 refused) or `502 LSC_PROVIDER_FAILED` (vendor down or not a score). A contact that is not in the workspace is `404`.
+
+## Reading conversations (pilot): the chat digest and stage suggestions
+
+A second part of lead scoring, **offered to the pilot workspaces only** (`CHAT_DIGEST_PILOT_SLUGS` in `lead-chat-digest.rules.ts`; today
+`demo-interakt`). It sends the **masked** recent messages of a contact to the AI vendor, which the rest of lead scoring never does, so it
+has its own opt-in on top of the scoring switch. Another workspace gets `422 LSC_CHAT_DIGEST_UNAVAILABLE` when it tries to switch it on or
+to read a chat, and `chatDigestAvailable: false` in its settings.
+
+**When a chat is read.** A sweeper (worker, every 3 minutes) queues each contact whose last customer message is older than 12 minutes
+(and under 14 days) and newer than the last reading. Idle time is the only trigger: conversation status, resolve and first-response are
+not used. The "Read chat" button reads now.
+
+**Who reads it** (`planChat`). The messages are the contact's text in its threads, the last 30 within 14 days, dated by when they were said.
+Reactions, media, deleted messages, bots, group threads (`@g.us` or group data on the message) and other businesses' away messages are left
+out. Then: a **model** reads it when the contact said three real messages, or one long (40 letters) free-text message; the **phrase table**
+classifies it with no call (cost 0, `source: "rules"`) when the contact only tapped buttons or keywords it knows ("view warranty slip",
+"register ry26", "buy a watch or clock"); **nobody** reads a chat of greetings, emoji and thanks (`422 LSC_NOT_ENOUGH_CHAT` on the button).
+A short phrase the table classifies counts as a tap, not as a real message.
+
+**What is masked** (`maskPii`, before anything leaves, partly): phone, card and Aadhaar numbers keep the first and last two digits
+(`+91 ***** ***10`); emails keep the first letter and the domain (`p***@acme.io`); PAN keeps its first two and last characters; a link keeps
+its page but loses the query string and fragment; the contact's own name (and its parts), and a name someone gives about themselves ("my
+name is ..."), keep the first and last letter. The model's own words (summary, reasons) are masked again before they are stored.
+
+**One call answers everything.** The prompt carries the anonymised scoring facts (with the engagement numbers), the workspace's lifecycle
+stages and the fenced chat (`<chat>...</chat>`, declared to the model as data it must never obey). It returns `{score, reasons, intent,
+signals, summary, suggestedStage, confidence, evidence}`. The score is written the usual way (a score a person typed is never replaced),
+the reading is stored in `lead_chat_digests` with its tokens and cost, and a row in `lead_scoring_runs` (`trigger: "chat"`, or `manual`
+for the button) keeps the cost on the same ledger and counts against the same allowance and hourly limit.
+
+**Stage suggestions** (`stageSuggestions`, needs `chatDigest`). A suggestion is made only when the stage is one the model was offered
+(never the contact's own, never a Won or Lost stage, which need a lost reason), the confidence is at least 0.6, and the contact's stage did
+not move in the last 3 days. A contact has one open suggestion: a newer one replaces it, and one that no longer starts from the contact's
+stage is superseded. Nothing moves by itself. **Accepting** changes the stage through `ContactsService.update` as the person who accepted
+(they need `lsc.stage.review` and the right to edit that contact), so the status is kept valid for the new stage, the audit trail and the
+`contact.stage_changed` event are the ordinary ones. Open suggestions expire after 30 days; readings and decided suggestions follow the
+log's retention.
+
+| Method and path                            | Key                  | What                                                                                                                                                                             |
+| ------------------------------------------ | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /lead-scoring/contacts/:uuid/insight` | `lsc.runs.read`      | `{active, digest, suggestion}`: the latest reading and the open suggestion; `active` is false unless the pilot is on for the workspace                                           |
+| `POST /lead-scoring/contacts/:uuid/digest` | `lsc.contacts.score` | reads the chat now (waits for the vendor) and answers like `insight`. `422 LSC_CHAT_DIGEST_UNAVAILABLE`, `422 LSC_NOT_ENOUGH_CHAT`, and the usual `LSC_*` / `PLAN_LIMIT_REACHED` |
+| `GET /lead-scoring/suggestions`            | `lsc.runs.read`      | cursor pages, newest first; `?status=pending\|accepted\|dismissed\|superseded\|expired` (default pending), `?limit=`                                                             |
+| `POST /lead-scoring/suggestions/decide`    | `lsc.stage.review`   | `{action: "accept"\|"dismiss", ids: [uuid]}` (up to 100) -> `{done, failed: [{id, code}]}`; each one is decided on its own                                                       |
+
+`PATCH /lead-scoring/settings` also takes `chatDigest` and `stageSuggestions` (the second is forced off while the first is off), and the
+settings read returns them with `chatDigestAvailable` and `pendingSuggestions`. The new key `lsc.stage.review` is held by Owner, Admin and
+Manager. Tables: `lead_chat_digests`, `lifecycle_stage_suggestions` (migration `20261121090100_lsc_chat_digest`); the demo workspace is
+switched on by that migration.
 
 ## Operator routes (`/platform/lead-scoring`, super admin only, reads included)
 

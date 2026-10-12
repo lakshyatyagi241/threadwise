@@ -9,18 +9,21 @@ import {
   customFacts,
   usdString,
 } from './lead-scoring.rules';
-import type { ScoringFacts } from './lead-scoring.rules';
+import type { EngagementFacts, ScoringFacts } from './lead-scoring.rules';
 
 type Raw = Record<string, unknown>;
 const num = (v: unknown): number => Number(v);
 const str = (v: unknown): string | null => (v === null || v === undefined ? null : String(v));
 const DAY_MS = 86_400_000;
+const HOUR_MS = 3_600_000;
 /** A raw `execute` hands timestamps back as text; the screens and the cursor want a Date. */
 const date = (v: unknown): Date => (v instanceof Date ? v : new Date(String(v)));
 
 export interface SettingsRow {
   enabled: boolean;
   autoScore: boolean;
+  chatDigest: boolean;
+  stageSuggestions: boolean;
   rowVersion: number;
   updatedAt: Date;
 }
@@ -79,13 +82,15 @@ export class LeadScoringRepository {
 
   async getSettings(tx: Tx, orgId: number): Promise<SettingsRow | null> {
     const res = await tx.execute(
-      sql`SELECT enabled, auto_score, row_version, updated_at FROM lead_scoring_settings WHERE org_id = ${orgId}`,
+      sql`SELECT enabled, auto_score, chat_digest, stage_suggestions, row_version, updated_at FROM lead_scoring_settings WHERE org_id = ${orgId}`,
     );
     const r = res.rows[0] as Raw | undefined;
     if (!r) return null;
     return {
       enabled: r.enabled as boolean,
       autoScore: r.auto_score as boolean,
+      chatDigest: r.chat_digest as boolean,
+      stageSuggestions: r.stage_suggestions as boolean,
       rowVersion: num(r.row_version),
       updatedAt: date(r.updated_at),
     };
@@ -95,17 +100,19 @@ export class LeadScoringRepository {
   async saveSettings(
     tx: Tx,
     orgId: number,
-    w: { enabled: boolean; autoScore: boolean },
+    w: { enabled: boolean; autoScore: boolean; chatDigest: boolean; stageSuggestions: boolean },
     rowVersion: number | undefined,
   ): Promise<boolean> {
     if (rowVersion === undefined) {
       const res = await tx.execute(sql`
-        INSERT INTO lead_scoring_settings (org_id, enabled, auto_score) VALUES (${orgId}, ${w.enabled}, ${w.autoScore})
+        INSERT INTO lead_scoring_settings (org_id, enabled, auto_score, chat_digest, stage_suggestions)
+        VALUES (${orgId}, ${w.enabled}, ${w.autoScore}, ${w.chatDigest}, ${w.stageSuggestions})
         ON CONFLICT (org_id) DO NOTHING RETURNING org_id`);
       return res.rows.length > 0;
     }
     const res = await tx.execute(sql`
-      UPDATE lead_scoring_settings SET enabled = ${w.enabled}, auto_score = ${w.autoScore}
+      UPDATE lead_scoring_settings SET enabled = ${w.enabled}, auto_score = ${w.autoScore},
+             chat_digest = ${w.chatDigest}, stage_suggestions = ${w.stageSuggestions}
       WHERE org_id = ${orgId} AND row_version = ${rowVersion} RETURNING org_id`);
     return res.rows.length > 0;
   }
@@ -129,7 +136,7 @@ export class LeadScoringRepository {
     const res = await tx.execute(sql`
       SELECT c.id, c.uuid, c.name, c.lead_score, c.lead_score_source, c.lifecycle_stage, c.status, c.source, c.channel, c.title,
              c.language, c.country_code, c.email, c.phone, c.email_confirmed, c.is_unsubscribed, c.data, c.created_at,
-             c.last_activity_at, co.name AS company_name,
+             c.last_activity_at, c.lifecycle_stage_date, co.name AS company_name,
              COALESCE((SELECT array_agg(t.name::text ORDER BY t.name)
                          FROM contact_tags ct JOIN tags t ON t.org_id = ct.org_id AND t.id = ct.tag_id
                         WHERE ct.org_id = c.org_id AND ct.contact_id = c.id), '{}') AS tags,
@@ -147,6 +154,7 @@ export class LeadScoringRepository {
     const days = (d: unknown): number =>
       Math.max(0, Math.floor((now - date(d).getTime()) / DAY_MS));
     const email = str(r.email);
+    const engagement = await this.engagementFor(tx, orgId, contactId);
     return {
       id: num(r.id),
       uuid: String(r.uuid),
@@ -175,7 +183,84 @@ export class LeadScoringRepository {
         dealsWon: num(r.deals_won),
         dealsLost: num(r.deals_lost),
         openDealValue: Math.round(num(r.open_value_minor) / 100),
+        daysInStage: days(r.lifecycle_stage_date ?? r.created_at),
+        engagement,
       },
+    };
+  }
+
+  /**
+   * How the contact has behaved lately: counts and durations only, all computed here so the model never sees a message. Windows are
+   * short on purpose (7 and 30 days): they keep the statements on the recent partitions of `messages` and make the facts mean "now".
+   *
+   * Threads are found through `conversations.contact_id`; a group thread has no contact, so a group's chatter never lands on a member.
+   * A message is dated by when it was said (`provider_ts`, else the row time), never by when it was stored: a history import is stamped
+   * with the import time but carries the real one, and a migrated workspace has every message flagged as history yet dated truly. So
+   * history is counted when it is recent and ignored when it is old, with no flag test. Reactions and deleted messages are left out.
+   * The reply time pairs each message from the contact with the message right before it on the same thread, when that one was ours
+   * and at most a week earlier: a reply to a broadcast counts, a message that opens a conversation does not.
+   *
+   * "Broadcasts" are both senders of bulk messages: the broadcasts module (`broadcast_contacts`) and the WhatsApp campaigns module
+   * (`wp_campaign_contacts`, what migrated Reference workspaces use). Link clicks are the tracked links of either.
+   */
+  private async engagementFor(tx: Tx, orgId: number, contactId: number): Promise<EngagementFacts> {
+    const counts = await tx.execute(sql`
+      SELECT
+        (SELECT count(*) FROM broadcast_contacts bc
+          WHERE bc.org_id = ${orgId} AND bc.contact_id = ${contactId}
+            AND bc.status IN ('sent', 'delivered', 'read') AND bc.sent_at >= now() - interval '30 days')
+        + (SELECT count(*) FROM wp_campaign_contacts w
+          WHERE w.org_id = ${orgId} AND w.contact_id = ${contactId}
+            AND w.sent_at >= now() - interval '30 days') AS broadcasts_received,
+        (SELECT count(*) FROM broadcast_contacts bc
+          WHERE bc.org_id = ${orgId} AND bc.contact_id = ${contactId}
+            AND bc.read_at >= now() - interval '30 days')
+        + (SELECT count(*) FROM wp_campaign_contacts w
+          WHERE w.org_id = ${orgId} AND w.contact_id = ${contactId}
+            AND w.read_at >= now() - interval '30 days') AS broadcasts_read,
+        (SELECT count(*) FROM wa_link_clicks l
+          WHERE l.org_id = ${orgId} AND l.contact_id = ${contactId}
+            AND l.clicks > 0 AND l.last_click_at >= now() - interval '30 days')
+        + (SELECT count(*) FROM wp_campaign_contacts w
+          WHERE w.org_id = ${orgId} AND w.contact_id = ${contactId}
+            AND w.clicked AND w.clicked_at >= now() - interval '30 days') AS links_clicked,
+        (SELECT count(*) FROM messages m
+           JOIN conversations cv ON cv.org_id = m.org_id AND cv.id = m.conversation_id
+          WHERE cv.org_id = ${orgId} AND cv.contact_id = ${contactId} AND m.org_id = ${orgId}
+            AND m.created_at >= now() - interval '7 days'
+            AND COALESCE(m.provider_ts, m.created_at) >= now() - interval '7 days'
+            AND m.direction = 'in' AND m.sender_kind = 'customer' AND m.kind <> 'reaction' AND m.deleted_at IS NULL) AS messages_from_contact,
+        (SELECT max(cv.last_inbound_at) FROM conversations cv
+          WHERE cv.org_id = ${orgId} AND cv.contact_id = ${contactId}) AS last_inbound_at`);
+    const latency = await tx.execute(sql`
+      WITH thread AS (
+        SELECT m.direction, COALESCE(m.provider_ts, m.created_at) AS at,
+               LAG(m.direction) OVER w AS prev_direction, LAG(COALESCE(m.provider_ts, m.created_at)) OVER w AS prev_at
+          FROM messages m
+          JOIN conversations cv ON cv.org_id = m.org_id AND cv.id = m.conversation_id
+         WHERE cv.org_id = ${orgId} AND cv.contact_id = ${contactId} AND m.org_id = ${orgId}
+           AND m.created_at >= now() - interval '30 days'
+           AND COALESCE(m.provider_ts, m.created_at) >= now() - interval '30 days'
+           AND m.kind <> 'reaction' AND m.deleted_at IS NULL
+        WINDOW w AS (PARTITION BY m.conversation_id ORDER BY m.seq)
+      )
+      SELECT avg(extract(epoch FROM at - prev_at)) / 60 AS avg_reply_minutes
+        FROM thread
+       WHERE direction = 'in' AND prev_direction = 'out' AND at - prev_at < interval '7 days'`);
+    const c = (counts.rows[0] ?? {}) as Raw;
+    const avg = (latency.rows[0] as Raw | undefined)?.avg_reply_minutes;
+    return {
+      broadcastsReceived30d: num(c.broadcasts_received ?? 0),
+      broadcastsRead30d: num(c.broadcasts_read ?? 0),
+      linksClicked30d: num(c.links_clicked ?? 0),
+      messagesFromContact7d: num(c.messages_from_contact ?? 0),
+      hoursSinceLastInbound: c.last_inbound_at
+        ? Math.max(0, Math.floor((Date.now() - date(c.last_inbound_at).getTime()) / HOUR_MS))
+        : null,
+      avgReplyMinutes30d:
+        avg === null || avg === undefined || !Number.isFinite(Number(avg))
+          ? null
+          : Math.round(Number(avg)),
     };
   }
 

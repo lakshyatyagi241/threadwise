@@ -3,3 +3,4 @@ export * from './errors';
 export * from './platform';
 export * from './settings';
 export * from './runs';
+export * from './digest';

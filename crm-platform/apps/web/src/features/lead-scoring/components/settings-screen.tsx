@@ -27,6 +27,7 @@ import {
   SparkleIcon,
 } from './parts';
 import { RunsLog } from './runs-log';
+import { SuggestionsPanel } from './suggestions-panel';
 
 /** Contacts one "Score unscored contacts now" queues; the rest wait for the next click. */
 export const BACKFILL_LIMIT = 500;
@@ -86,7 +87,7 @@ function SettingsBody({
   const baseline = formFromSettings(settings);
   const [form, setForm] = useState<SettingsForm>(baseline);
   const [error, setError] = useState<unknown>(null);
-  const [confirming, setConfirming] = useState(false);
+  const [confirming, setConfirming] = useState<null | 'enable' | 'chat'>(null);
   const dirty = settingsDirty(form, baseline);
   const disabled = !canManage;
   const state = readiness(settings);
@@ -114,8 +115,14 @@ function SettingsBody({
     setError(null);
     save.mutate();
   };
-  // Turning it on sends contact facts to an AI vendor, so that save asks first.
-  const requestSave = () => (form.enabled && !settings.enabled ? setConfirming(true) : send());
+  // Turning scoring on sends contact facts to an AI vendor, and turning the chat reading on sends masked conversation text, so each
+  // of those saves asks first (the second question only after the first was answered).
+  const chatNewlyOn = settings.chatDigestAvailable && form.chatDigest && !settings.chatDigest;
+  const requestSave = () => {
+    if (form.enabled && !settings.enabled) setConfirming('enable');
+    else if (chatNewlyOn) setConfirming('chat');
+    else send();
+  };
 
   return (
     <section className="space-y-4">
@@ -166,7 +173,9 @@ function SettingsBody({
           <div>
             <h3 className="font-medium">{t('sent.title')}</h3>
             <ul className="mt-1 list-disc space-y-0.5 ps-5 text-muted-foreground">
-              {(['stage', 'source', 'tags', 'deals', 'activity', 'company'] as const).map((k) => (
+              {(
+                ['stage', 'source', 'tags', 'deals', 'activity', 'engagement', 'company'] as const
+              ).map((k) => (
                 <li key={k}>{t(`sent.${k}`)}</li>
               ))}
             </ul>
@@ -174,7 +183,14 @@ function SettingsBody({
           <div>
             <h3 className="font-medium">{t('notSent.title')}</h3>
             <ul className="mt-1 list-disc space-y-0.5 ps-5 text-muted-foreground">
-              {(['name', 'email', 'phone'] as const).map((k) => (
+              {(
+                [
+                  'name',
+                  'email',
+                  'phone',
+                  settings.chatDigestAvailable ? 'messagesChat' : 'messages',
+                ] as const
+              ).map((k) => (
                 <li key={k}>{t(`notSent.${k}`)}</li>
               ))}
             </ul>
@@ -200,24 +216,117 @@ function SettingsBody({
         </div>
       </SectionCard>
 
+      {settings.chatDigestAvailable && (
+        <ChatCard form={form} setForm={setForm} disabled={disabled} />
+      )}
+      {settings.chatDigestAvailable && settings.chatDigest && settings.stageSuggestions && (
+        <SuggestionsPanel />
+      )}
+
       <BackfillCard settings={settings} ready={state === 'ready'} />
       <CostCard settings={settings} />
       <RunsLog enabled />
 
       <ConfirmDialog
-        open={confirming}
+        open={confirming === 'enable'}
         title={t('confirm.title')}
         message={t('confirm.body')}
         confirmLabel={t('confirm.yes')}
         cancelLabel={t('confirm.no')}
         busy={save.isPending}
-        onClose={() => setConfirming(false)}
+        onClose={() => setConfirming(null)}
         onConfirm={() => {
-          setConfirming(false);
+          if (chatNewlyOn) setConfirming('chat');
+          else {
+            setConfirming(null);
+            send();
+          }
+        }}
+      />
+      <ConfirmDialog
+        open={confirming === 'chat'}
+        title={t('chat.confirm.title')}
+        message={t('chat.confirm.body')}
+        confirmLabel={t('chat.confirm.yes')}
+        cancelLabel={t('chat.confirm.no')}
+        busy={save.isPending}
+        onClose={() => setConfirming(null)}
+        onConfirm={() => {
+          setConfirming(null);
           send();
         }}
       />
     </section>
+  );
+}
+
+/** Reading conversations (a pilot): the two switches and exactly how personal data is treated before anything is sent. */
+function ChatCard({
+  form,
+  setForm,
+  disabled,
+}: {
+  form: SettingsForm;
+  setForm: (fn: (f: SettingsForm) => SettingsForm) => void;
+  disabled: boolean;
+}) {
+  const t = useTranslations('lead-scoring.settings.chat');
+  return (
+    <SectionCard id="lsc-chat" title={t('title')} hint={t('hint')}>
+      <div className="flex items-start gap-3">
+        <Switch
+          id="lsc-chat-digest"
+          checked={form.chatDigest}
+          disabled={disabled || !form.enabled}
+          label={t('label')}
+          onCheckedChange={(v) =>
+            setForm((f) => ({ ...f, chatDigest: v, stageSuggestions: v && f.stageSuggestions }))
+          }
+        />
+        <div className="min-w-0 text-sm">
+          <label htmlFor="lsc-chat-digest" className="font-medium">
+            {t('label')}
+          </label>
+          <p className="mt-1 text-muted-foreground">
+            {form.chatDigest ? t('onBody') : t('offBody')}
+          </p>
+          {!form.enabled && <p className="mt-1 text-muted-foreground">{t('needsScoring')}</p>}
+        </div>
+      </div>
+      <div className="flex items-start gap-3 border-t border-border pt-4">
+        <Switch
+          id="lsc-stage-suggestions"
+          checked={form.stageSuggestions}
+          disabled={disabled || !form.chatDigest}
+          label={t('stageLabel')}
+          onCheckedChange={(v) => setForm((f) => ({ ...f, stageSuggestions: v }))}
+        />
+        <div className="min-w-0 text-sm">
+          <label htmlFor="lsc-stage-suggestions" className="font-medium">
+            {t('stageLabel')}
+          </label>
+          <p className="mt-1 text-muted-foreground">{t('stageBody')}</p>
+        </div>
+      </div>
+      <div className="grid gap-4 border-t border-border pt-4 text-sm sm:grid-cols-2">
+        <div>
+          <h3 className="font-medium">{t('masked.title')}</h3>
+          <ul className="mt-1 list-disc space-y-0.5 ps-5 text-muted-foreground">
+            {(['phone', 'email', 'card', 'name'] as const).map((k) => (
+              <li key={k}>{t(`masked.${k}`)}</li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h3 className="font-medium">{t('rules.title')}</h3>
+          <ul className="mt-1 list-disc space-y-0.5 ps-5 text-muted-foreground">
+            {(['quiet', 'enough', 'person', 'closing'] as const).map((k) => (
+              <li key={k}>{t(`rules.${k}`)}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </SectionCard>
   );
 }
 

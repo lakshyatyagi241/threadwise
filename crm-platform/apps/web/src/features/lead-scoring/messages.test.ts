@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-import { LSC_RUN_STATUSES, LSC_RUN_TRIGGERS } from '@crm/contracts';
+import { LSC_INTENTS, LSC_RUN_STATUSES, LSC_RUN_TRIGGERS } from '@crm/contracts';
 import { describe, expect, it } from 'vitest';
 import { ERROR_KEYS } from './lib/errors';
 import { RUN_REASONS } from './lib/runs-model';
@@ -68,6 +68,10 @@ const DYNAMIC = [
   `${ROOT}.log.status.`,
   `${ROOT}.settings.sent.`,
   `${ROOT}.settings.notSent.`,
+  `${ROOT}.settings.chat.masked.`,
+  `${ROOT}.settings.chat.rules.`,
+  `${ROOT}.insight.intent.`,
+  `${ROOT}.insight.signal.`,
   `${ROOT}.settings.cost.payerBy.`,
   `${ROOT}.settings.banner.key`,
   `${ROOT}.settings.backfill.noRight`,
@@ -111,7 +115,11 @@ describe('lead-scoring messages', () => {
       ...['stage', 'source', 'tags', 'deals', 'activity', 'company'].map(
         (k) => `settings.sent.${k}`,
       ),
-      ...['name', 'email', 'phone'].map((k) => `settings.notSent.${k}`),
+      ...['name', 'email', 'phone', 'messages', 'messagesChat'].map((k) => `settings.notSent.${k}`),
+      ...['phone', 'email', 'card', 'name'].map((k) => `settings.chat.masked.${k}`),
+      ...['quiet', 'enough', 'person', 'closing'].map((k) => `settings.chat.rules.${k}`),
+      ...LSC_INTENTS.map((k) => `insight.intent.${k}`),
+      ...['askedPrice', 'readyToBuy', 'objection', 'urgent'].map((k) => `insight.signal.${k}`),
       ...['workspace', 'admin', 'none'].map((k) => `settings.cost.payerBy.${k}`),
       ...['keyWorkspace', 'keyAdmin'].map((k) => `settings.banner.${k}`),
       ...['noRight', 'notReady'].map((k) => `settings.backfill.${k}`),

@@ -5,6 +5,7 @@ import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { LeadScoringAiError } from '../../infra/providers/lead-scoring/lead-scoring-ai.port';
 import { QUEUES } from '../../infra/queue/queues';
+import { LeadChatDigestService, type LeadDigestJob } from './lead-chat-digest.service';
 import { LeadScoringService, type LeadScoreJob } from './lead-scoring.service';
 
 /**
@@ -17,11 +18,14 @@ import { LeadScoringService, type LeadScoreJob } from './lead-scoring.service';
 export class LeadScoringProcessor extends WorkerHost {
   private readonly logger = new Logger(LeadScoringProcessor.name);
 
-  constructor(private readonly scoring: LeadScoringService) {
+  constructor(
+    private readonly scoring: LeadScoringService,
+    private readonly digests: LeadChatDigestService,
+  ) {
     super();
   }
 
-  async process(job: Job<LeadScoreJob>): Promise<void> {
+  async process(job: Job<LeadScoreJob | LeadDigestJob>): Promise<void> {
     const { orgId, contactId, trigger } = job.data;
     await RequestContextStore.run(
       {
@@ -33,7 +37,18 @@ export class LeadScoringProcessor extends WorkerHost {
       },
       async () => {
         try {
-          const out = await this.scoring.score(orgId, contactId, trigger);
+          if (job.name === 'digest') {
+            const read = await this.digests.digest(orgId, contactId, 'chat');
+            if (read.status === 'skipped') {
+              this.logger.debug({ orgId, contactId, reason: read.reason }, 'chat digest skipped');
+            }
+            return;
+          }
+          const out = await this.scoring.score(
+            orgId,
+            contactId,
+            trigger as LeadScoreJob['trigger'],
+          );
           if (out.status === 'skipped') {
             this.logger.debug({ orgId, contactId, reason: out.reason }, 'lead scoring skipped');
           }

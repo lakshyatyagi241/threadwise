@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { DatabaseService } from '../../infra/db/database.service';
+import { LeadChatDigestService } from './lead-chat-digest.service';
 import { LeadScoringConfigService } from './lead-scoring-config.service';
 import { LeadScoringRepository } from './lead-scoring.repository';
 
@@ -14,6 +15,7 @@ export class LeadScoringRetentionService {
     private readonly db: DatabaseService,
     private readonly repo: LeadScoringRepository,
     private readonly config: LeadScoringConfigService,
+    private readonly digests: LeadChatDigestService,
   ) {}
 
   @Cron('41 3 * * *')
@@ -32,6 +34,8 @@ export class LeadScoringRetentionService {
 
   async sweep(): Promise<number> {
     const { retentionDays } = await this.config.getFresh();
-    return this.db.privileged((tx) => this.repo.deleteOlderThan(tx, retentionDays));
+    const runs = await this.db.privileged((tx) => this.repo.deleteOlderThan(tx, retentionDays));
+    // The conversation readings and the stage suggestions follow the same retention (and open suggestions expire).
+    return runs + (await this.digests.sweepOld(retentionDays));
   }
 }

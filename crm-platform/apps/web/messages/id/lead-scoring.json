@@ -65,7 +65,10 @@
       "planLimit": "Kuota AI paket Anda sudah habis.",
       "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
       "validation": "Beberapa nilai tidak valid.",
-      "unexpected": "Terjadi kesalahan. Coba lagi."
+      "unexpected": "Terjadi kesalahan. Coba lagi.",
+      "chatUnavailable": "Pembacaan percakapan tidak tersedia untuk ruang kerja ini.",
+      "notEnoughChat": "Kontak ini belum menulis cukup banyak untuk dibaca.",
+      "suggestionGone": "Saran itu sudah diputuskan atau digantikan."
     },
     "scoreErrors": {
       "network": "Server tidak dapat dijangkau, jadi kontak tidak diberi skor. Periksa koneksi Anda dan coba lagi.",
@@ -82,7 +85,10 @@
       "validation": "Permintaan tidak valid.",
       "unexpected": "Terjadi kesalahan dan kontak tidak diberi skor. Coba lagi.",
       "openSettings": "Buka pengaturan penilaian prospek dengan AI",
-      "openKeys": "Buka kunci AI"
+      "openKeys": "Buka kunci AI",
+      "chatUnavailable": "Pembacaan percakapan belum diaktifkan untuk ruang kerja ini. Ini adalah fitur percontohan yang perlu diaktifkan di pengaturan penilaian prospek AI.",
+      "notEnoughChat": "Kontak ini belum menulis cukup banyak: hanya sapaan, emoji, atau balasan otomatis. Coba lagi setelah kontak menulis lebih banyak.",
+      "suggestionGone": "Saran itu sudah diputuskan atau digantikan oleh saran yang lebih baru, sehingga tidak ada yang diubah."
     },
     "field": {
       "label": "Skor prospek",
@@ -128,7 +134,8 @@
         "created": "Kontak dibuat",
         "updated": "Kontak diubah",
         "manual": "Tombol skor",
-        "backfill": "Beri skor kontak yang belum dinilai"
+        "backfill": "Beri skor kontak yang belum dinilai",
+        "chat": "Obrolan menjadi sepi"
       },
       "tokensDetail": "{prompt} masuk, {completion} keluar",
       "costSource": {
@@ -183,13 +190,16 @@
         "tags": "Nama tag",
         "deals": "Jumlah deal yang terbuka, menang, dan kalah",
         "activity": "Seberapa baru kontak aktif",
-        "company": "Nama perusahaan"
+        "company": "Nama perusahaan",
+        "engagement": "Seberapa aktif kontak berinteraksi akhir-akhir ini: jumlah pesannya, siaran yang dibuka, tautan yang diklik, dan seberapa cepat ia membalas (hanya angka)"
       },
       "notSent": {
         "title": "Apa yang tidak pernah dikirim",
         "name": "Nama kontak",
         "email": "Alamat email",
-        "phone": "Nomor telepon"
+        "phone": "Nomor telepon",
+        "messages": "Teks pesan apa pun",
+        "messagesChat": "Isi pesan apa pun, kecuali Anda mengaktifkan pembacaan percakapan (di bawah)"
       },
       "manualRule": "Skor yang diketik seseorang tidak pernah ditimpa. AI hanya mengisi skor yang kosong dan memperbarui skor yang ditulisnya sendiri.",
       "auto": {
@@ -199,7 +209,7 @@
       },
       "confirm": {
         "title": "Kirim data kontak yang dianonimkan ke penyedia AI?",
-        "body": "Setelah diaktifkan, deskripsi singkat kontak Anda (tahap, sumber, tag, jumlah deal, aktivitas, dan nama perusahaan) dikirim ke penyedia AI melalui OpenRouter. Nama, alamat email, dan nomor telepon tidak pernah dikirim. Anda dapat menonaktifkannya kapan saja.",
+        "body": "Setelah diaktifkan, deskripsi singkat kontak Anda (tahap, sumber, tag, jumlah transaksi, aktivitas, angka keterlibatan seperti pesan, siaran yang dibuka dan tautan yang diklik, serta nama perusahaan) dikirim ke penyedia AI melalui OpenRouter. Nama, alamat email, nomor telepon, dan teks pesan tidak pernah dikirim. Anda dapat menonaktifkannya kapan saja.",
         "yes": "Aktifkan",
         "no": "Batal"
       },
@@ -242,7 +252,94 @@
         },
         "failed": "Percobaan gagal",
         "platformPart": "Dari total, yang memakai kunci platform"
+      },
+      "chat": {
+        "title": "Baca percakapan (percontohan)",
+        "hint": "Nonaktif sampai Anda memilihnya, karena pesan terbaru kontak dikirim ke penyedia AI dengan data pribadi yang disamarkan sebagian.",
+        "label": "Baca percakapan kontak saat obrolan menjadi sepi",
+        "onBody": "Sekitar 12 menit setelah kontak berhenti menulis, AI membaca pesan terbaru dan mencatat apa yang diinginkan kontak. AI juga memberikan skornya.",
+        "offBody": "Percakapan tidak dibaca. Skor hanya menggunakan data kontak dan angka interaksi.",
+        "needsScoring": "Aktifkan penilaian prospek AI terlebih dahulu.",
+        "stageLabel": "Sarankan tahap siklus hidup",
+        "stageBody": "Ketika percakapan dengan jelas menunjukkan bahwa kontak sudah maju, AI menyarankan tahap berikutnya. Seseorang menerima atau menolaknya; tidak ada yang berpindah sendiri, dan tahap Menang dan Kalah tidak pernah disarankan.",
+        "masked": {
+          "title": "Cara data pribadi disamarkan",
+          "phone": "Nomor telepon hanya menyisakan digit pertama dan dua digit terakhir (+91 ***** ***10)",
+          "email": "Alamat email hanya menyisakan huruf pertama dan domain (p***@acme.io)",
+          "card": "Nomor kartu, Aadhaar, dan PAN hanya menyisakan karakter pertama dan terakhir",
+          "name": "Nama kontak, dan nama yang disebutkan seseorang tentang dirinya, hanya menyisakan huruf pertama dan terakhir"
+        },
+        "rules": {
+          "title": "Apa yang dibaca, dan apa yang tidak",
+          "quiet": "Hanya obrolan yang sudah sepi, dan hanya dua minggu terakhir",
+          "enough": "Kontak yang hanya menekan tombol dicocokkan dengan tabel frasa, tanpa panggilan AI",
+          "person": "Skor atau tahap yang ditetapkan seseorang tidak pernah ditimpa",
+          "closing": "Bot, pesan yang dihapus, obrolan grup, dan balasan otomatis tidak disertakan"
+        },
+        "confirm": {
+          "title": "Kirim percakapan yang disamarkan ke penyedia AI?",
+          "body": "Setelah diaktifkan, pesan terbaru kontak dikirim ke penyedia AI melalui OpenRouter setelah obrolan menjadi sepi. Nomor telepon, email, nomor kartu, dan nama disamarkan sebagian terlebih dahulu, sehingga data yang dikirim tidak dapat digunakan untuk menghubungi orangnya. Anda dapat menonaktifkannya kapan saja.",
+          "yes": "Aktifkan",
+          "no": "Batal"
+        }
       }
+    },
+    "insight": {
+      "title": "Pembacaan percakapan",
+      "empty": "Belum dibaca. Obrolan dibaca sekitar 12 menit setelah kontak berhenti menulis, atau Anda dapat membacanya sekarang.",
+      "analyze": "Baca obrolan",
+      "analyzing": "Membaca...",
+      "analyzingSlow": "Menanyakan ke AI. Ini bisa memakan waktu beberapa detik.",
+      "sourceAi": "Dibaca oleh AI",
+      "sourceRules": "Dicocokkan dari ketukan tombol",
+      "signals": "Sinyal dari kontak",
+      "signal": {
+        "askedPrice": "Menanyakan harga",
+        "readyToBuy": "Siap membeli",
+        "objection": "Keraguan atau keberatan",
+        "urgent": "Mendesak"
+      },
+      "readOn": "Dibaca pada {date} dari {count, plural, other {# pesan}}.",
+      "privacy": "Nama, nomor telepon, dan email dalam obrolan disamarkan sebagian sebelum apa pun dikirim ke AI.",
+      "intent": {
+        "ready_to_buy": "Siap membeli",
+        "asking_price": "Menanyakan harga",
+        "comparing": "Membandingkan pilihan",
+        "registering": "Mendaftar",
+        "needs_support": "Butuh dukungan",
+        "post_purchase": "Purnajual atau layanan",
+        "browsing": "Hanya melihat-lihat",
+        "not_interested": "Tidak tertarik",
+        "other": "Tidak ada niat yang jelas"
+      },
+      "suggestion": {
+        "title": "Tahap yang disarankan",
+        "move": "Pindah dari {from} ke {to}",
+        "confidence": "Yakin {percent}%",
+        "accept": "Terima",
+        "dismiss": "Tolak",
+        "accepted": "Tahap diubah menjadi {stage}.",
+        "dismissed": "Saran ditolak.",
+        "noRight": "Anda tidak memiliki izin untuk menerima atau menolak saran.",
+        "couldNot": "Saran tidak dapat diterapkan. Mungkin sudah diputuskan sebelumnya."
+      }
+    },
+    "suggestions": {
+      "title": "Saran tahap",
+      "hint": "Perpindahan yang disarankan AI setelah membaca percakapan. Tidak ada yang berubah sampai Anda menerimanya.",
+      "empty": "Tidak ada saran yang menunggu.",
+      "unnamed": "Kontak tanpa nama",
+      "move": "Pindah dari {from} ke {to}",
+      "confidence": "Yakin {percent}%",
+      "accept": "Terima",
+      "dismiss": "Tolak",
+      "acceptConfident": "Terima {count} saran di atas {percent}%",
+      "dismissAll": "Tolak semua",
+      "more": "Muat lebih banyak",
+      "doneAccept": "{count, plural, other {# tahap diubah.}}",
+      "doneDismiss": "{count, plural, other {# saran ditolak.}}",
+      "noRight": "Anda dapat melihat saran tetapi tidak dapat memutuskannya: itu memerlukan izin lsc.stage.review.",
+      "couldNot": "{count, plural, other {# saran tidak dapat diterapkan.}}"
     }
   }
 }

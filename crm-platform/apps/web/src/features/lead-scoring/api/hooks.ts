@@ -1,13 +1,20 @@
 'use client';
 
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import type { LscRunStatus, LscRunsResponse } from '@crm/contracts';
+import type {
+  LscRunStatus,
+  LscRunsResponse,
+  LscSuggestionDecisionInput,
+  LscSuggestionsResponse,
+} from '@crm/contracts';
 import { lscApi } from './service';
 
 export const KEYS = {
   all: ['lead-scoring'] as const,
   settings: ['lead-scoring', 'settings'] as const,
   runs: ['lead-scoring', 'runs'] as const,
+  insight: (contactId: string) => ['lead-scoring', 'insight', contactId] as const,
+  suggestions: ['lead-scoring', 'suggestions'] as const,
 };
 
 export const RUNS_PAGE_SIZE = 25;
@@ -63,5 +70,61 @@ export function useBackfill() {
   return useMutation({
     mutationFn: (limit: number) => lscApi.backfill(limit),
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.all }),
+  });
+}
+
+/** The reading of a contact's conversation. `enabled` is the right to read the log; the answer says whether the reading is active. */
+export function useLscInsight(contactId: string, enabled: boolean) {
+  return useQuery({
+    queryKey: KEYS.insight(contactId),
+    enabled,
+    retry: false,
+    staleTime: 15_000,
+    queryFn: ({ signal }) => lscApi.insight(contactId, signal),
+  });
+}
+
+/** Reads the contact's conversation now. Afterwards the log, the counts and the suggestions are stale. */
+export function useDigestContact(contactId: string, onRead?: () => void | Promise<unknown>) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () => lscApi.digest(contactId),
+    onSettled: () => qc.invalidateQueries({ queryKey: KEYS.all }),
+    onSuccess: async (fresh) => {
+      qc.setQueryData(KEYS.insight(contactId), fresh);
+      await onRead?.();
+    },
+  });
+}
+
+export const SUGGESTIONS_PAGE_SIZE = 25;
+
+/** The stage suggestions waiting for a decision, in cursor pages. */
+export function useLscSuggestions(enabled: boolean, limit = SUGGESTIONS_PAGE_SIZE) {
+  const q = useInfiniteQuery({
+    queryKey: [...KEYS.suggestions, limit],
+    enabled,
+    retry: false,
+    initialPageParam: undefined as string | undefined,
+    queryFn: ({ pageParam, signal }) =>
+      lscApi.suggestions({ status: 'pending', limit, cursor: pageParam }, signal),
+    getNextPageParam: (last: LscSuggestionsResponse) =>
+      last.page.hasMore ? (last.page.nextCursor ?? undefined) : undefined,
+  });
+  return { ...q, items: q.data?.pages.flatMap((p) => p.data) ?? [] };
+}
+
+/**
+ * Accepts or dismisses suggestions. Accepting changes contacts, so `onDecided` lets the caller refresh them (this feature does not
+ * know the contacts screens' query keys).
+ */
+export function useDecideSuggestions(onDecided?: () => void | Promise<unknown>) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: LscSuggestionDecisionInput) => lscApi.decide(input),
+    onSettled: () => qc.invalidateQueries({ queryKey: KEYS.all }),
+    onSuccess: async () => {
+      await onDecided?.();
+    },
   });
 }

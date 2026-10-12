@@ -65,7 +65,10 @@
       "planLimit": "您套餐的 AI 额度已用完。",
       "rateLimited": "请求过多。请稍等片刻后重试。",
       "validation": "部分值无效。",
-      "unexpected": "出了点问题。请重试。"
+      "unexpected": "出了点问题。请重试。",
+      "chatUnavailable": "此工作区无法读取对话。",
+      "notEnoughChat": "该联系人说的话还不够多，无法解读。",
+      "suggestionGone": "该建议已被处理或已被取代。"
     },
     "scoreErrors": {
       "network": "无法连接到服务器，因此未对联系人评分。请检查网络连接后重试。",
@@ -82,7 +85,10 @@
       "validation": "请求无效。",
       "unexpected": "出了点问题，联系人未被评分。请重试。",
       "openSettings": "打开 AI 线索评分设置",
-      "openKeys": "打开 AI 密钥"
+      "openKeys": "打开 AI 密钥",
+      "chatUnavailable": "此工作区尚未开启读取对话功能。这是一项试点功能，需要在 AI 线索评分设置中开启。",
+      "notEnoughChat": "该联系人说的话还不够多：只有问候语、表情符号或自动回复。请等对方多发一些消息后再试。",
+      "suggestionGone": "该建议已被处理，或已被更新的建议取代，因此未做任何更改。"
     },
     "field": {
       "label": "线索评分",
@@ -128,7 +134,8 @@
         "created": "联系人已创建",
         "updated": "联系人已更改",
         "manual": "评分按钮",
-        "backfill": "为未评分联系人评分"
+        "backfill": "为未评分联系人评分",
+        "chat": "对话进入沉默"
       },
       "tokensDetail": "输入 {prompt}，输出 {completion}",
       "costSource": {
@@ -183,13 +190,16 @@
         "tags": "标签名称",
         "deals": "进行中、已赢得和已输掉的交易数量",
         "activity": "联系人最近的活跃时间",
-        "company": "公司名称"
+        "company": "公司名称",
+        "engagement": "联系人近期的互动情况：其消息数量、打开的群发数量、点击的链接数量以及回复速度（仅数字）"
       },
       "notSent": {
         "title": "绝不发送的内容",
         "name": "联系人的姓名",
         "email": "电子邮件地址",
-        "phone": "电话号码"
+        "phone": "电话号码",
+        "messages": "任何消息的文本",
+        "messagesChat": "任何消息的文本，除非您开启读取对话功能（见下方）"
       },
       "manualRule": "人工填写的评分绝不会被覆盖。AI 只会填写空白评分，并刷新由它自己写入的评分。",
       "auto": {
@@ -199,7 +209,7 @@
       },
       "confirm": {
         "title": "向 AI 提供商发送匿名化的联系人信息？",
-        "body": "开启后，联系人的简短描述（阶段、来源、标签、交易数量、活跃情况和公司名称）将通过 OpenRouter 发送给 AI 提供商。姓名、电子邮件地址和电话号码绝不会发送。您可以随时关闭。",
+        "body": "开启后，您联系人的简短描述（阶段、来源、标签、交易数量、活动、消息、已打开的群发和已点击链接等互动数据，以及公司名称）将通过 OpenRouter 发送给 AI 提供商。姓名、电子邮件地址、电话号码和消息文本绝不会被发送。您可以随时关闭。",
         "yes": "开启",
         "no": "取消"
       },
@@ -242,7 +252,94 @@
         },
         "failed": "失败的尝试",
         "platformPart": "总费用中使用平台密钥的部分"
+      },
+      "chat": {
+        "title": "读取对话（试点）",
+        "hint": "在您选择开启之前保持关闭，因为联系人的近期消息会发送给 AI 服务提供商，其中的个人信息会被部分遮蔽。",
+        "label": "联系人对话进入沉默后读取该对话",
+        "onBody": "联系人停止发消息约 12 分钟后，AI 会读取近期消息，并记录该联系人的需求，同时给出评分。",
+        "offBody": "不读取对话。评分仅使用联系人资料和互动数据。",
+        "needsScoring": "请先开启 AI 线索评分。",
+        "stageLabel": "建议生命周期阶段",
+        "stageBody": "当对话明确表明联系人已进入下一步时，AI 会建议下一个阶段。由人工接受或忽略；不会自动变更，也不会建议“赢单”和“丢单”阶段。",
+        "masked": {
+          "title": "个人数据如何被遮蔽",
+          "phone": "电话号码只保留前面和最后两位数字（+91 ***** ***10）",
+          "email": "电子邮箱只保留首字母和域名（p***@acme.io）",
+          "card": "银行卡、Aadhaar 和 PAN 号码只保留首尾字符",
+          "name": "联系人的姓名，以及对方自称的姓名，只保留首尾字母"
+        },
+        "rules": {
+          "title": "读取哪些内容，不读取哪些内容",
+          "quiet": "只读取已进入沉默的对话，且仅限最近两周",
+          "enough": "只点击按钮的联系人通过短语表匹配，不调用 AI",
+          "person": "人工设置的评分或阶段永远不会被覆盖",
+          "closing": "机器人、已删除的消息、群聊和自动回复不会被读取"
+        },
+        "confirm": {
+          "title": "要将已遮蔽的对话发送给 AI 服务提供商吗？",
+          "body": "开启后，对话进入沉默时，联系人的近期消息会通过 OpenRouter 发送给 AI 服务提供商。电话号码、邮箱、银行卡号和姓名会先被部分遮蔽，因此发送的内容无法用来联系到本人。您可以随时关闭。",
+          "yes": "开启",
+          "no": "取消"
+        }
       }
+    },
+    "insight": {
+      "title": "对话解读",
+      "empty": "尚未解读。联系人停止发消息约 12 分钟后会自动解读对话，您也可以立即解读。",
+      "analyze": "读取对话",
+      "analyzing": "正在读取...",
+      "analyzingSlow": "正在询问 AI，可能需要几秒钟。",
+      "sourceAi": "由 AI 解读",
+      "sourceRules": "根据按钮点击匹配",
+      "signals": "联系人透露的信号",
+      "signal": {
+        "askedPrice": "询问了价格",
+        "readyToBuy": "准备购买",
+        "objection": "犹豫或异议",
+        "urgent": "紧急"
+      },
+      "readOn": "于 {date} 根据 {count, plural, other {# 条消息}}解读。",
+      "privacy": "在向 AI 发送任何内容之前，对话中的姓名、电话号码和邮箱都会被部分遮蔽。",
+      "intent": {
+        "ready_to_buy": "准备购买",
+        "asking_price": "询问价格",
+        "comparing": "比较方案",
+        "registering": "正在注册",
+        "needs_support": "需要支持",
+        "post_purchase": "售后或服务",
+        "browsing": "随便看看",
+        "not_interested": "不感兴趣",
+        "other": "意向不明确"
+      },
+      "suggestion": {
+        "title": "建议的阶段",
+        "move": "从{from}移至{to}",
+        "confidence": "把握度 {percent}%",
+        "accept": "接受",
+        "dismiss": "忽略",
+        "accepted": "阶段已更改为{stage}。",
+        "dismissed": "建议已忽略。",
+        "noRight": "您没有接受或忽略建议的权限。",
+        "couldNot": "无法应用该建议，它可能已被处理。"
+      }
+    },
+    "suggestions": {
+      "title": "阶段建议",
+      "hint": "AI 在读取对话后建议的阶段变更。在您接受之前不会有任何更改。",
+      "empty": "没有待处理的建议。",
+      "unnamed": "未命名联系人",
+      "move": "从{from}移至{to}",
+      "confidence": "把握度 {percent}%",
+      "accept": "接受",
+      "dismiss": "忽略",
+      "acceptConfident": "接受把握度高于 {percent}% 的 {count} 条",
+      "dismissAll": "全部忽略",
+      "more": "加载更多",
+      "doneAccept": "{count, plural, other {已更改 # 个阶段。}}",
+      "doneDismiss": "{count, plural, other {已忽略 # 条建议。}}",
+      "noRight": "您可以查看建议但无法处理：需要 lsc.stage.review 权限。",
+      "couldNot": "{count, plural, other {# 条建议无法应用。}}"
     }
   }
 }

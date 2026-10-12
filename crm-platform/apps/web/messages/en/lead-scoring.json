@@ -65,7 +65,10 @@
       "planLimit": "The AI allowance of your plan is used up.",
       "rateLimited": "Too many requests. Wait a moment and try again.",
       "validation": "Some of the values are not valid.",
-      "unexpected": "Something went wrong. Try again."
+      "unexpected": "Something went wrong. Try again.",
+      "chatUnavailable": "Reading conversations is not available to this workspace.",
+      "notEnoughChat": "This contact has not said enough yet to be read.",
+      "suggestionGone": "That suggestion was already decided or replaced."
     },
     "scoreErrors": {
       "network": "The server could not be reached, so the contact was not scored. Check your connection and try again.",
@@ -82,7 +85,10 @@
       "validation": "The request was not valid.",
       "unexpected": "Something went wrong and the contact was not scored. Try again.",
       "openSettings": "Open AI lead scoring settings",
-      "openKeys": "Open AI keys"
+      "openKeys": "Open AI keys",
+      "chatUnavailable": "Reading conversations is not switched on for this workspace. It is a pilot feature that needs to be switched on in the AI lead scoring settings.",
+      "notEnoughChat": "This contact has not said enough yet: only greetings, emoji or automatic replies. Try again after it writes more.",
+      "suggestionGone": "That suggestion was already decided or replaced by a newer one, so nothing was changed."
     },
     "field": {
       "label": "Lead score",
@@ -128,7 +134,8 @@
         "created": "Contact created",
         "updated": "Contact changed",
         "manual": "Score button",
-        "backfill": "Score unscored contacts"
+        "backfill": "Score unscored contacts",
+        "chat": "Chat went quiet"
       },
       "tokensDetail": "{prompt} in, {completion} out",
       "costSource": {
@@ -183,13 +190,16 @@
         "tags": "Tag names",
         "deals": "How many deals are open, won and lost",
         "activity": "How recently the contact was active",
+        "engagement": "How the contact has engaged lately: counts of its messages, broadcasts opened and links clicked, and how fast it replies (numbers only)",
         "company": "The company name"
       },
       "notSent": {
         "title": "What is never sent",
         "name": "The contact's name",
         "email": "The email address",
-        "phone": "The phone number"
+        "phone": "The phone number",
+        "messages": "The text of any message",
+        "messagesChat": "The text of any message, unless you switch on reading conversations (below)"
       },
       "manualRule": "A score a person typed is never overwritten. The AI only fills empty scores and refreshes the ones it wrote itself.",
       "auto": {
@@ -199,7 +209,7 @@
       },
       "confirm": {
         "title": "Send anonymised contact facts to an AI provider?",
-        "body": "Once on, short descriptions of your contacts (stage, source, tags, deal counts, activity and company name) are sent to an AI provider through OpenRouter. Names, email addresses and phone numbers are never sent. You can turn it off at any time.",
+        "body": "Once on, short descriptions of your contacts (stage, source, tags, deal counts, activity, engagement counts such as messages, opened broadcasts and clicked links, and company name) are sent to an AI provider through OpenRouter. Names, email addresses, phone numbers and message text are never sent. You can turn it off at any time.",
         "yes": "Turn on",
         "no": "Cancel"
       },
@@ -242,7 +252,94 @@
         },
         "failed": "Failed attempts",
         "platformPart": "Of the total, on the platform's key"
+      },
+      "chat": {
+        "title": "Read conversations (pilot)",
+        "hint": "Off until you choose, because the recent messages of a contact are sent to an AI provider, with personal details partly masked.",
+        "label": "Read a contact’s conversation when it goes quiet",
+        "onBody": "About 12 minutes after a contact stops writing, the AI reads the recent messages and notes what the contact is after. It also gives the score.",
+        "offBody": "Conversations are not read. Scores use contact facts and engagement numbers only.",
+        "needsScoring": "Switch AI lead scoring on first.",
+        "stageLabel": "Suggest lifecycle stages",
+        "stageBody": "When the conversation clearly shows a contact has moved on, the AI suggests the next stage. A person accepts or dismisses it; nothing moves by itself, and Won and Lost stages are never suggested.",
+        "masked": {
+          "title": "How personal data is masked",
+          "phone": "Phone numbers keep only the first and last two digits (+91 ***** ***10)",
+          "email": "Email addresses keep the first letter and the domain (p***@acme.io)",
+          "card": "Card, Aadhaar and PAN numbers keep only their first and last characters",
+          "name": "The contact’s name, and a name someone gives about themselves, keep only the first and last letter"
+        },
+        "rules": {
+          "title": "What is read, and what is not",
+          "quiet": "Only chats that have gone quiet, and only the last two weeks",
+          "enough": "Contacts who only tapped buttons are matched by a phrase table, with no AI call",
+          "person": "A score or stage a person set is never overwritten",
+          "closing": "Bots, deleted messages, group chats and automatic replies are left out"
+        },
+        "confirm": {
+          "title": "Send masked conversations to an AI provider?",
+          "body": "Once on, the recent messages of a contact are sent to an AI provider through OpenRouter after the chat goes quiet. Phone numbers, emails, card numbers and names are partly masked first, so what is sent cannot be used to reach the person. You can turn it off at any time.",
+          "yes": "Turn on",
+          "no": "Cancel"
+        }
       }
+    },
+    "insight": {
+      "title": "Conversation reading",
+      "empty": "Not read yet. A chat is read about 12 minutes after the contact stops writing, or you can read it now.",
+      "analyze": "Read chat",
+      "analyzing": "Reading...",
+      "analyzingSlow": "Asking the AI. This can take a few seconds.",
+      "sourceAi": "Read by AI",
+      "sourceRules": "Matched from button taps",
+      "signals": "What the contact signalled",
+      "signal": {
+        "askedPrice": "Asked about price",
+        "readyToBuy": "Ready to buy",
+        "objection": "Hesitation or objection",
+        "urgent": "Urgent"
+      },
+      "readOn": "Read on {date} from {count, plural, one {# message} other {# messages}}.",
+      "privacy": "Names, phone numbers and emails in the chat are partly masked before anything is sent to the AI.",
+      "intent": {
+        "ready_to_buy": "Ready to buy",
+        "asking_price": "Asking about price",
+        "comparing": "Comparing options",
+        "registering": "Registering",
+        "needs_support": "Needs support",
+        "post_purchase": "After-sales or service",
+        "browsing": "Just browsing",
+        "not_interested": "Not interested",
+        "other": "No clear intent"
+      },
+      "suggestion": {
+        "title": "Suggested stage",
+        "move": "Move from {from} to {to}",
+        "confidence": "{percent}% sure",
+        "accept": "Accept",
+        "dismiss": "Dismiss",
+        "accepted": "Stage changed to {stage}.",
+        "dismissed": "Suggestion dismissed.",
+        "noRight": "You do not have the permission to accept or dismiss suggestions.",
+        "couldNot": "The suggestion could not be applied. It may have been decided already."
+      }
+    },
+    "suggestions": {
+      "title": "Stage suggestions",
+      "hint": "Moves the AI suggests after reading conversations. Nothing changes until you accept.",
+      "empty": "No suggestions are waiting.",
+      "unnamed": "Unnamed contact",
+      "move": "Move from {from} to {to}",
+      "confidence": "{percent}% sure",
+      "accept": "Accept",
+      "dismiss": "Dismiss",
+      "acceptConfident": "Accept the {count} above {percent}%",
+      "dismissAll": "Dismiss all",
+      "more": "Load more",
+      "doneAccept": "{count, plural, one {# stage changed.} other {# stages changed.}}",
+      "doneDismiss": "{count, plural, one {# suggestion dismissed.} other {# suggestions dismissed.}}",
+      "noRight": "You can see the suggestions but not decide them: that needs the permission lsc.stage.review.",
+      "couldNot": "{count, plural, one {# suggestion could not be applied.} other {# suggestions could not be applied.}}"
     }
   }
 }

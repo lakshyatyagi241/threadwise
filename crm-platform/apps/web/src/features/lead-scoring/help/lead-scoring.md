@@ -5,7 +5,21 @@ summary: Give every contact a score from 0 to 100 with AI, see why, and keep tra
 area: automation
 order: 8
 documents: [tile:lead-scoring]
-keywords: [lead score, scoring, ai, hot, warm, cold, openrouter, tokens, cost, backfill, manual score, privacy]
+keywords:
+  [
+    lead score,
+    scoring,
+    ai,
+    hot,
+    warm,
+    cold,
+    openrouter,
+    tokens,
+    cost,
+    backfill,
+    manual score,
+    privacy,
+  ]
 ---
 
 ## What it is for
@@ -16,7 +30,9 @@ Scoring is **off** until you switch it on, because it sends facts about your con
 
 ## What is sent
 
-Only a short, anonymous description of the contact goes to the AI: its stage and status, where it came from, its tag names, how many deals are open, won and lost, how recently it was active, and the company name. The contact's **name, email address and phone number are never sent**.
+Only a short, anonymous description of the contact goes to the AI: its stage and status, where it came from, its tag names, how many deals are open, won and lost, how recently it was active, how long it has been in its current stage, and the company name. It also includes how the contact has engaged lately, as plain numbers: how many messages it sent in the last 7 days, how long ago it last wrote to you, how fast it usually replies, and how many of your broadcasts and campaigns it received and opened, and links it clicked, in the last 30 days. The contact's **name, email address and phone number are never sent**, and neither is the text of any message, unless your workspace is in the pilot of reading conversations (see below) and you switched that on.
+
+A contact's last activity now also moves when the contact writes to you or one of your team replies in the Inbox, so a contact that is chatting with you no longer looks silent.
 
 ## Turn it on
 
@@ -33,6 +49,16 @@ Seeing the screen needs the permission **lsc.runs.read**. Changing the switches 
 Open a contact. The **Lead score** card shows the number, who set it, the date and model, and the reasons the AI gave. Select **Score with AI** (or **Re-score** when the contact already has an AI score). It takes a few seconds, and when it finishes the card shows what that run cost. This button needs **lsc.contacts.score**.
 
 If something stops it, the card says exactly what: scoring is off for the workspace (with a link to the settings), no key is available, the provider did not give a usable answer, the plan's AI allowance is used up, or the contact has a score a person typed.
+
+## Read conversations (pilot)
+
+A few workspaces can also let the AI **read a contact's chat**. It is a pilot: you only see it in **Settings, AI lead scoring** when your workspace has been included, and it is off until you switch it on. Switching it on asks you to confirm, because the recent messages of a contact are then sent to the AI provider.
+
+- **When.** About 12 minutes after a contact stops writing, the AI reads the last two weeks of that chat. **Read chat** on the contact's page reads it right away.
+- **What is hidden first.** Phone numbers keep only their first and last two digits, emails keep the first letter and the domain, card and ID numbers keep only their ends, and the contact's name keeps only its first and last letter. Bots, deleted messages, group chats and other businesses' automatic replies are left out.
+- **What you get.** On the contact's page, a **Conversation reading** card shows what the contact is after (for example *Ready to buy* or *Asking about price*), a few signals, and a short summary. The score is updated from the same reading, unless a person typed it.
+- **Button taps.** A contact that only tapped menu buttons or keywords the system knows (such as *view warranty slip*) is understood without calling the AI at all.
+- **Suggested stages.** When the chat clearly shows a contact has moved on, the card suggests the next lifecycle stage with how sure the AI is. You choose **Accept** or **Dismiss**; nothing moves by itself. Won and Lost stages are never suggested. All waiting suggestions are listed under **Stage suggestions** on the settings screen, where you can accept every confident one at once. Accepting needs the permission **lsc.stage.review** and the right to edit the contact, and it changes the stage like any other edit.
 
 ## A score you typed is yours
 

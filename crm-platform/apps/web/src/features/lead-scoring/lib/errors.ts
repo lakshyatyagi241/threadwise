@@ -12,6 +12,9 @@ export type ErrorKey =
   | 'noKey'
   | 'providerFailed'
   | 'manualScore'
+  | 'chatUnavailable'
+  | 'notEnoughChat'
+  | 'suggestionGone'
   | 'planLimit'
   | 'rateLimited'
   | 'validation'
@@ -27,6 +30,9 @@ export const ERROR_KEYS: readonly ErrorKey[] = [
   'noKey',
   'providerFailed',
   'manualScore',
+  'chatUnavailable',
+  'notEnoughChat',
+  'suggestionGone',
   'planLimit',
   'rateLimited',
   'validation',
@@ -47,6 +53,12 @@ export function errorKey(error: unknown): ErrorKey {
       return 'providerFailed';
     case ERROR_CODES.LSC_MANUAL_SCORE:
       return 'manualScore';
+    case ERROR_CODES.LSC_CHAT_DIGEST_UNAVAILABLE:
+      return 'chatUnavailable';
+    case ERROR_CODES.LSC_NOT_ENOUGH_CHAT:
+      return 'notEnoughChat';
+    case ERROR_CODES.LSC_SUGGESTION_GONE:
+      return 'suggestionGone';
     case ERROR_CODES.PLAN_LIMIT_REACHED:
       return 'planLimit';
     case ERROR_CODES.ROW_VERSION_CONFLICT:

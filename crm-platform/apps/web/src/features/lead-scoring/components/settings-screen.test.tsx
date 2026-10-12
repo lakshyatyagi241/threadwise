@@ -10,6 +10,8 @@ const state = vi.hoisted(() => ({
   settings: {} as Record<string, unknown>,
   runs: {} as Record<string, unknown>,
   backfill: {} as Record<string, unknown>,
+  suggestions: {} as Record<string, unknown>,
+  decide: {} as Record<string, unknown>,
   save: vi.fn(),
   backfillMutate: vi.fn(),
 }));
@@ -25,6 +27,8 @@ vi.mock('../api/hooks', () => ({
   useLscSettings: () => state.settings,
   useLscRuns: () => state.runs,
   useBackfill: () => state.backfill,
+  useLscSuggestions: () => state.suggestions,
+  useDecideSuggestions: () => state.decide,
 }));
 vi.mock('../api/service', () => ({ lscApi: { saveSettings: (i: unknown) => state.save(i) } }));
 
@@ -33,6 +37,10 @@ import { SettingsScreen } from './settings-screen';
 const settings = (over: Partial<LscSettings> = {}): LscSettings => ({
   enabled: false,
   autoScore: false,
+  chatDigest: false,
+  stageSuggestions: false,
+  chatDigestAvailable: false,
+  pendingSuggestions: 0,
   platformEnabled: true,
   model: 'openai/gpt-4o-mini',
   keySource: 'admin',
@@ -76,6 +84,17 @@ beforeEach(() => {
     refetch: vi.fn(),
   };
   state.save = vi.fn().mockResolvedValue(settings({ enabled: true, rowVersion: 1 }));
+  state.suggestions = {
+    isPending: false,
+    isError: false,
+    isSuccess: true,
+    items: [],
+    hasNextPage: false,
+    isFetchingNextPage: false,
+    fetchNextPage: vi.fn(),
+    refetch: vi.fn(),
+  };
+  state.decide = { mutate: vi.fn(), isPending: false, isError: false, isSuccess: false };
   state.backfillMutate = vi.fn();
   state.backfill = {
     mutate: state.backfillMutate,
@@ -124,9 +143,10 @@ describe('what is sent', () => {
   it('lists the anonymised facts and says name, email and phone never leave', async () => {
     const host = await show();
     const t = host.textContent ?? '';
-    for (const k of ['stage', 'source', 'tags', 'deals', 'activity', 'company'])
+    for (const k of ['stage', 'source', 'tags', 'deals', 'activity', 'engagement', 'company'])
       expect(t).toContain(text(`settings.sent.${k}`));
-    for (const k of ['name', 'email', 'phone']) expect(t).toContain(text(`settings.notSent.${k}`));
+    for (const k of ['name', 'email', 'phone', 'messages'])
+      expect(t).toContain(text(`settings.notSent.${k}`));
     expect(t).toContain(text('settings.manualRule'));
   });
 });
@@ -144,6 +164,8 @@ describe('saving', () => {
     expect(state.save).toHaveBeenCalledTimes(1);
     const body = state.save.mock.calls[0]![0] as Record<string, unknown>;
     expect(body).toEqual({ enabled: true, autoScore: false });
+    // A workspace that is not in the pilot never sends the conversation switches.
+    expect('chatDigest' in body).toBe(false);
     expect('rowVersion' in body).toBe(false);
   });
 
@@ -281,5 +303,108 @@ describe('cost summary', () => {
     const host = await show();
     const tile = byText(host, 'div', text('settings.cost.average')).parentElement!;
     expect(tile.textContent).toContain('—');
+  });
+});
+
+describe('reading conversations (a pilot)', () => {
+  const pilot = (over: Partial<LscSettings> = {}) =>
+    ok(
+      settings({
+        enabled: true,
+        autoScore: true,
+        chatDigestAvailable: true,
+        rowVersion: 2,
+        ...over,
+      }),
+    );
+
+  it('is not even shown to a workspace outside the pilot, and says plainly that no message text is sent', async () => {
+    const host = await show();
+    expect(host.querySelector('#lsc-chat-digest')).toBeNull();
+    expect(host.textContent).toContain(text('settings.notSent.messages'));
+    expect(host.textContent).not.toContain(text('settings.chat.title'));
+  });
+
+  it('shows the two switches and how data is masked, and drops the "never sent" claim for messages', async () => {
+    state.settings = pilot();
+    const host = await show();
+    expect(sw(host, 'lsc-chat-digest').getAttribute('aria-checked')).toBe('false');
+    // Stage suggestions need the chat reading.
+    expect(sw(host, 'lsc-stage-suggestions').disabled).toBe(true);
+    for (const k of ['phone', 'email', 'card', 'name'])
+      expect(host.textContent).toContain(text(`settings.chat.masked.${k}`));
+    expect(host.textContent).toContain(text('settings.notSent.messagesChat'));
+    // The plain "never sent" line is replaced, not repeated next to the one that mentions the pilot.
+    expect([...host.querySelectorAll('li')].map((li) => li.textContent)).not.toContain(
+      text('settings.notSent.messages'),
+    );
+  });
+
+  it('asks before the first conversation is sent, and saves both switches with the version it read', async () => {
+    state.settings = pilot();
+    state.save = vi.fn().mockResolvedValue(settings({ rowVersion: 3 }));
+    const host = await show();
+    await click(sw(host, 'lsc-chat-digest'));
+    await click(sw(host, 'lsc-stage-suggestions'));
+    await click(saveButton(host));
+    expect(state.save).not.toHaveBeenCalled();
+    expect(document.body.textContent).toContain(text('settings.chat.confirm.title'));
+    const open = document.querySelector<HTMLElement>('dialog[open]')!;
+    await click(byText(open, 'button', text('settings.chat.confirm.yes')));
+    expect(state.save).toHaveBeenCalledWith({
+      enabled: true,
+      autoScore: true,
+      chatDigest: true,
+      stageSuggestions: true,
+      rowVersion: 2,
+    });
+  });
+
+  it('turning it off needs no question, and takes the stage suggestions with it', async () => {
+    state.settings = pilot({ chatDigest: true, stageSuggestions: true });
+    const host = await show();
+    await click(sw(host, 'lsc-chat-digest'));
+    expect(sw(host, 'lsc-stage-suggestions').getAttribute('aria-checked')).toBe('false');
+    await click(saveButton(host));
+    expect(state.save).toHaveBeenCalledWith({
+      enabled: true,
+      autoScore: true,
+      chatDigest: false,
+      stageSuggestions: false,
+      rowVersion: 2,
+    });
+  });
+
+  it('lists the waiting stage suggestions and decides them', async () => {
+    state.settings = pilot({ chatDigest: true, stageSuggestions: true, pendingSuggestions: 1 });
+    const mutate = vi.fn();
+    state.decide = { mutate, isPending: false, isError: false, isSuccess: false };
+    state.perms.add('lsc.stage.review');
+    state.suggestions = {
+      ...(state.suggestions as object),
+      items: [
+        {
+          id: 's1',
+          contactId: 'c1',
+          contactName: 'Priya',
+          fromStage: 'lead',
+          fromStageLabel: 'Lead',
+          toStage: 'qualified',
+          toStageLabel: 'Qualified',
+          confidence: 0.9,
+          reasons: ['Wants to buy today'],
+          status: 'pending',
+          createdAt: '2026-10-12T10:00:00.000Z',
+          decidedAt: null,
+        },
+      ],
+    };
+    const host = await show();
+    expect(host.textContent).toContain('Priya');
+    expect(host.textContent).toContain('Move from Lead to Qualified');
+    await click(byText(host, 'li button', text('suggestions.accept')));
+    expect(mutate).toHaveBeenCalledWith({ action: 'accept', ids: ['s1'] }, expect.anything());
+    await click(byText(host, 'button', 'Accept the 1 above 85%'));
+    expect(mutate).toHaveBeenLastCalledWith({ action: 'accept', ids: ['s1'] }, expect.anything());
   });
 });

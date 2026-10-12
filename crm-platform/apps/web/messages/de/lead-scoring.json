@@ -65,7 +65,10 @@
       "planLimit": "Das KI-Kontingent Ihres Tarifs ist aufgebraucht.",
       "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
       "validation": "Einige Werte sind ungültig.",
-      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es erneut."
+      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es erneut.",
+      "chatUnavailable": "Das Lesen von Unterhaltungen ist für diesen Arbeitsbereich nicht verfügbar.",
+      "notEnoughChat": "Dieser Kontakt hat noch nicht genug geschrieben, um ausgewertet zu werden.",
+      "suggestionGone": "Dieser Vorschlag wurde bereits entschieden oder ersetzt."
     },
     "scoreErrors": {
       "network": "Der Server war nicht erreichbar, daher wurde der Kontakt nicht bewertet. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
@@ -82,7 +85,10 @@
       "validation": "Die Anfrage war ungültig.",
       "unexpected": "Etwas ist schiefgelaufen und der Kontakt wurde nicht bewertet. Versuchen Sie es erneut.",
       "openSettings": "Einstellungen für KI-Lead-Scoring öffnen",
-      "openKeys": "KI-Schlüssel öffnen"
+      "openKeys": "KI-Schlüssel öffnen",
+      "chatUnavailable": "Das Lesen von Unterhaltungen ist für diesen Arbeitsbereich nicht aktiviert. Es ist eine Pilotfunktion, die in den Einstellungen für das KI-Lead-Scoring aktiviert werden muss.",
+      "notEnoughChat": "Dieser Kontakt hat noch nicht genug geschrieben: nur Begrüßungen, Emojis oder automatische Antworten. Versuchen Sie es erneut, sobald er mehr geschrieben hat.",
+      "suggestionGone": "Dieser Vorschlag wurde bereits entschieden oder durch einen neueren ersetzt, daher wurde nichts geändert."
     },
     "field": {
       "label": "Lead-Score",
@@ -128,7 +134,8 @@
         "created": "Kontakt erstellt",
         "updated": "Kontakt geändert",
         "manual": "Bewerten-Schaltfläche",
-        "backfill": "Unbewertete Kontakte bewerten"
+        "backfill": "Unbewertete Kontakte bewerten",
+        "chat": "Chat verstummt"
       },
       "tokensDetail": "{prompt} Eingabe, {completion} Ausgabe",
       "costSource": {
@@ -183,13 +190,16 @@
         "tags": "Tag-Namen",
         "deals": "Wie viele Deals offen, gewonnen und verloren sind",
         "activity": "Wie kürzlich der Kontakt aktiv war",
-        "company": "Der Firmenname"
+        "company": "Der Firmenname",
+        "engagement": "Wie der Kontakt zuletzt interagiert hat: Anzahl seiner Nachrichten, geöffneten Broadcasts und angeklickten Links sowie seine Antwortgeschwindigkeit (nur Zahlen)"
       },
       "notSent": {
         "title": "Was nie gesendet wird",
         "name": "Der Name des Kontakts",
         "email": "Die E-Mail-Adresse",
-        "phone": "Die Telefonnummer"
+        "phone": "Die Telefonnummer",
+        "messages": "Der Text jeder Nachricht",
+        "messagesChat": "Der Text von Nachrichten, es sei denn, Sie aktivieren das Lesen von Unterhaltungen (unten)"
       },
       "manualRule": "Ein von einer Person eingegebener Score wird nie überschrieben. Die KI füllt nur leere Scores und aktualisiert die, die sie selbst geschrieben hat.",
       "auto": {
@@ -199,7 +209,7 @@
       },
       "confirm": {
         "title": "Anonymisierte Kontaktinformationen an einen KI-Anbieter senden?",
-        "body": "Sobald eingeschaltet, werden kurze Beschreibungen Ihrer Kontakte (Phase, Quelle, Tags, Deal-Anzahlen, Aktivität und Firmenname) über OpenRouter an einen KI-Anbieter gesendet. Namen, E-Mail-Adressen und Telefonnummern werden nie gesendet. Sie können es jederzeit ausschalten.",
+        "body": "Nach dem Einschalten werden kurze Beschreibungen Ihrer Kontakte (Phase, Quelle, Tags, Anzahl der Deals, Aktivität, Interaktionszahlen wie Nachrichten, geöffnete Broadcasts und angeklickte Links sowie Firmenname) über OpenRouter an einen KI-Anbieter gesendet. Namen, E-Mail-Adressen, Telefonnummern und Nachrichtentexte werden nie gesendet. Sie können dies jederzeit ausschalten.",
         "yes": "Einschalten",
         "no": "Abbrechen"
       },
@@ -242,7 +252,94 @@
         },
         "failed": "Fehlgeschlagene Versuche",
         "platformPart": "Davon über den Plattform-Schlüssel"
+      },
+      "chat": {
+        "title": "Unterhaltungen lesen (Pilot)",
+        "hint": "Standardmäßig aus, da die letzten Nachrichten eines Kontakts mit teilweise maskierten persönlichen Daten an einen KI-Anbieter gesendet werden.",
+        "label": "Unterhaltung eines Kontakts lesen, wenn sie verstummt",
+        "onBody": "Etwa 12 Minuten, nachdem ein Kontakt nicht mehr schreibt, liest die KI die letzten Nachrichten und notiert, was der Kontakt möchte. Außerdem vergibt sie den Score.",
+        "offBody": "Unterhaltungen werden nicht gelesen. Scores basieren nur auf Kontaktdaten und Interaktionswerten.",
+        "needsScoring": "Aktivieren Sie zuerst das KI-Lead-Scoring.",
+        "stageLabel": "Lebenszyklusphasen vorschlagen",
+        "stageBody": "Wenn die Unterhaltung eindeutig zeigt, dass ein Kontakt weitergekommen ist, schlägt die KI die nächste Phase vor. Eine Person akzeptiert oder verwirft den Vorschlag; nichts wird automatisch verschoben, und die Phasen Gewonnen und Verloren werden nie vorgeschlagen.",
+        "masked": {
+          "title": "So werden persönliche Daten maskiert",
+          "phone": "Bei Telefonnummern bleiben nur die ersten Ziffern und die letzten zwei Ziffern erhalten (+91 ***** ***10)",
+          "email": "Bei E-Mail-Adressen bleiben der erste Buchstabe und die Domain erhalten (p***@acme.io)",
+          "card": "Bei Karten-, Aadhaar- und PAN-Nummern bleiben nur das erste und das letzte Zeichen erhalten",
+          "name": "Beim Namen des Kontakts und bei einem Namen, den jemand über sich selbst nennt, bleiben nur der erste und der letzte Buchstabe erhalten"
+        },
+        "rules": {
+          "title": "Was gelesen wird und was nicht",
+          "quiet": "Nur verstummte Chats und nur die letzten zwei Wochen",
+          "enough": "Kontakte, die nur Schaltflächen angetippt haben, werden über eine Phrasentabelle zugeordnet, ohne KI-Aufruf",
+          "person": "Ein von einer Person gesetzter Score oder eine gesetzte Phase wird nie überschrieben",
+          "closing": "Bots, gelöschte Nachrichten, Gruppenchats und automatische Antworten werden ausgelassen"
+        },
+        "confirm": {
+          "title": "Maskierte Unterhaltungen an einen KI-Anbieter senden?",
+          "body": "Sobald die Funktion aktiv ist, werden die letzten Nachrichten eines Kontakts nach dem Verstummen des Chats über OpenRouter an einen KI-Anbieter gesendet. Telefonnummern, E-Mail-Adressen, Kartennummern und Namen werden vorher teilweise maskiert, sodass die gesendeten Daten nicht verwendet werden können, um die Person zu erreichen. Sie können die Funktion jederzeit ausschalten.",
+          "yes": "Aktivieren",
+          "no": "Abbrechen"
+        }
       }
+    },
+    "insight": {
+      "title": "Unterhaltungsanalyse",
+      "empty": "Noch nicht gelesen. Ein Chat wird etwa 12 Minuten nach der letzten Nachricht des Kontakts gelesen, oder Sie lesen ihn jetzt.",
+      "analyze": "Chat lesen",
+      "analyzing": "Wird gelesen...",
+      "analyzingSlow": "Die KI wird gefragt. Das kann einige Sekunden dauern.",
+      "sourceAi": "Von der KI gelesen",
+      "sourceRules": "Aus Schaltflächen-Antippen abgeleitet",
+      "signals": "Signale des Kontakts",
+      "signal": {
+        "askedPrice": "Hat nach dem Preis gefragt",
+        "readyToBuy": "Kaufbereit",
+        "objection": "Zögern oder Einwand",
+        "urgent": "Dringend"
+      },
+      "readOn": "Gelesen am {date} anhand von {count, plural, one {# Nachricht} other {# Nachrichten}}.",
+      "privacy": "Namen, Telefonnummern und E-Mail-Adressen im Chat werden teilweise maskiert, bevor etwas an die KI gesendet wird.",
+      "intent": {
+        "ready_to_buy": "Kaufbereit",
+        "asking_price": "Fragt nach dem Preis",
+        "comparing": "Vergleicht Optionen",
+        "registering": "Registriert sich",
+        "needs_support": "Braucht Support",
+        "post_purchase": "After-Sales oder Service",
+        "browsing": "Schaut sich nur um",
+        "not_interested": "Nicht interessiert",
+        "other": "Keine klare Absicht"
+      },
+      "suggestion": {
+        "title": "Vorgeschlagene Phase",
+        "move": "Von {from} nach {to} verschieben",
+        "confidence": "{percent} % sicher",
+        "accept": "Akzeptieren",
+        "dismiss": "Verwerfen",
+        "accepted": "Phase auf {stage} geändert.",
+        "dismissed": "Vorschlag verworfen.",
+        "noRight": "Sie haben keine Berechtigung, Vorschläge zu akzeptieren oder zu verwerfen.",
+        "couldNot": "Der Vorschlag konnte nicht angewendet werden. Möglicherweise wurde er bereits entschieden."
+      }
+    },
+    "suggestions": {
+      "title": "Phasenvorschläge",
+      "hint": "Verschiebungen, die die KI nach dem Lesen von Unterhaltungen vorschlägt. Nichts ändert sich, bis Sie akzeptieren.",
+      "empty": "Keine Vorschläge offen.",
+      "unnamed": "Kontakt ohne Namen",
+      "move": "Von {from} nach {to} verschieben",
+      "confidence": "{percent} % sicher",
+      "accept": "Akzeptieren",
+      "dismiss": "Verwerfen",
+      "acceptConfident": "Die {count} über {percent} % akzeptieren",
+      "dismissAll": "Alle verwerfen",
+      "more": "Mehr laden",
+      "doneAccept": "{count, plural, one {# Phase geändert.} other {# Phasen geändert.}}",
+      "doneDismiss": "{count, plural, one {# Vorschlag verworfen.} other {# Vorschläge verworfen.}}",
+      "noRight": "Sie können die Vorschläge sehen, aber nicht darüber entscheiden: Dafür ist die Berechtigung lsc.stage.review erforderlich.",
+      "couldNot": "{count, plural, one {# Vorschlag konnte nicht angewendet werden.} other {# Vorschläge konnten nicht angewendet werden.}}"
     }
   }
 }
