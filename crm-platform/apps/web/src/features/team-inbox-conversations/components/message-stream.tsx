@@ -8,6 +8,7 @@ import { agentReactions, buildItems, lastSeq, type ThreadState } from '../lib/th
 import { dayLabel } from '../lib/time';
 import { MessageBubble, NoteBubble, PendingBubble } from './message-bubble';
 import { ArrowDownIcon } from './icons';
+import { MessageLogDialog } from './message-log-dialog';
 import { useErrorText } from './parts';
 
 /** Keep following new messages only when the reader is already this close to the bottom. */
@@ -38,6 +39,8 @@ export interface MessageStreamProps {
   /** Puts an emoji on a message (`''` takes it back); absent when the person or the channel cannot react. */
   onReact?: (message: MessageResponse, emoji: string) => Promise<void>;
   canManageChannel: boolean;
+  /** The person may export the delivery log (`inbox.logs.export`): its dialog links to the export page. */
+  canExportLogs?: boolean;
   onRetryPending: (clientMessageId: string) => void;
   onDismissPending: (clientMessageId: string) => void;
   onDeleteNote: (id: string) => void;
@@ -58,6 +61,8 @@ export function MessageStream(props: MessageStreamProps) {
   const listRef = useRef<HTMLUListElement>(null);
   const stick = useRef(true);
   const [atBottom, setAtBottom] = useState(true);
+  // The message whose delivery log is open (the dialog fetches it when this is set).
+  const [logMessageId, setLogMessageId] = useState<string | null>(null);
   const [unseen, setUnseen] = useState(0);
   const [announcement, setAnnouncement] = useState('');
   const prev = useRef({ conversationId: '', lastSeq: 0, pending: 0, loaded: false });
@@ -268,6 +273,7 @@ export function MessageStream(props: MessageStreamProps) {
                     agentReaction={reactions.get(item.message.id) ?? null}
                     onRetry={props.onRetryMessage}
                     canManageChannel={props.canManageChannel}
+                    onOpenLog={setLogMessageId}
                   />
                 );
               case 'note':
@@ -293,6 +299,12 @@ export function MessageStream(props: MessageStreamProps) {
           })}
         </ul>
       </div>
+
+      <MessageLogDialog
+        messageId={logMessageId}
+        onClose={() => setLogMessageId(null)}
+        canExport={props.canExportLogs === true}
+      />
 
       <div role="status" aria-live="polite" className="sr-only" data-testid="inbox-live">
         {announcement}

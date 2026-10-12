@@ -1,7 +1,8 @@
 {
   "team-inbox-conversations": {
     "nav": {
-      "inbox": "Inbox"
+      "inbox": "Inbox",
+      "messageLogs": "Berichtlogboeken"
     },
     "common": {
       "dismiss": "Sluiten"
@@ -131,7 +132,10 @@
       "generic": "Er ging iets mis. Probeer het opnieuw.",
       "genericWithId": "Er ging iets mis. Probeer het opnieuw. Referentie: {id}",
       "templateNotSendable": "Dat sjabloon kan niet in dit gesprek worden verzonden. Kies een ander.",
-      "groupSendUnavailable": "Verzenden naar WhatsApp-groepen is nog niet beschikbaar. Antwoord via de WhatsApp Business-app."
+      "groupSendUnavailable": "Verzenden naar WhatsApp-groepen is nog niet beschikbaar. Antwoord via de WhatsApp Business-app.",
+      "logRange": "Kies datums binnen het afgelopen jaar, waarbij de start voor het einde ligt en niet in de toekomst.",
+      "logBusy": "Er wordt al een export voorbereid. Wacht op de e-mail ervan en vraag daarna een nieuwe aan.",
+      "logNotReady": "Deze export is niet gereed of is verlopen. Vraag hem opnieuw aan."
     },
     "bubble": {
       "kind": {
@@ -196,7 +200,8 @@
         "takeBack": "Tik om je reactie in te trekken",
         "takeBackLabel": "Jouw reactie {emoji}. Intrekken",
         "failed": "Deze reactie is niet verzonden"
-      }
+      },
+      "deliveryLog": "Bezorglogboek"
     },
     "media": {
       "openImage": "Afbeelding {name} openen",
@@ -554,6 +559,80 @@
         "named_variables": "Gebruikt benoemde variabelen, die de inbox nog niet ondersteunt."
       },
       "hasMore": "De eerste {count} sjablonen worden getoond. Zoek op naam of tekst om de andere te vinden."
+    },
+    "log": {
+      "title": "Bezorglogboek",
+      "close": "Sluiten",
+      "loading": "Logboek laden",
+      "tryAgain": "Opnieuw proberen",
+      "statusNow": "Huidige status",
+      "createdAt": "Aangemaakt",
+      "providerId": "Bericht-ID van de provider",
+      "failedNoReason": "Dit bericht is niet bezorgd.",
+      "expired": "Dit bericht is ouder dan {days} dagen. Het logboek ervan wordt niet meer bewaard.",
+      "empty": "Voor dit bericht is geen logboek vastgelegd. Berichten die zijn verzonden voordat logboeken werden bijgehouden, hebben er geen.",
+      "archived": "Vermeldingen ouder dan {days} dagen worden uit het archief gelezen.",
+      "exportLink": "Berichtlogboeken exporteren",
+      "source": {
+        "system": "Ons systeem",
+        "provider": "Ontvangstbevestiging van de provider"
+      },
+      "event": {
+        "queued": "In de wachtrij om te verzenden",
+        "attempt": "Verzendpoging {attempt}",
+        "accepted": "Geaccepteerd door de provider",
+        "sentReceipt": "Provider heeft bevestigd dat het is verzonden",
+        "delivered": "Bezorgd op de telefoon van de klant",
+        "read": "Gelezen door de klant",
+        "failedReceipt": "Provider meldde het als niet bezorgd",
+        "failedSend": "Kon niet worden verzonden",
+        "retryAuto": "Wordt automatisch opnieuw geprobeerd",
+        "retryManual": "Een teamlid heeft op Opnieuw proberen gedrukt"
+      },
+      "notApplied": "Deze melding kwam te laat of hoorde bij een eerdere verzending. Het bericht is niet gewijzigd.",
+      "replayed": "Er is geen nieuw verzoek gedaan: het eerdere antwoord van de provider is hergebruikt.",
+      "resent": "Opnieuw als nieuw bericht naar de provider verzonden."
+    },
+    "logs": {
+      "back": "Terug naar de inbox",
+      "title": "Berichtlogboeken",
+      "intro": "Elk bericht bewaart zijn bezorglogboek: {hot} dagen in de inbox, daarna in het archief tot {days} dagen nadat het gebeurde. Vraag een export aan voor een periode; die wordt op de achtergrond voorbereid en naar je gemaild zodra hij gereed is.",
+      "requested": "Export aangevraagd. We mailen je zodra hij gereed is.",
+      "requestedTo": "Export aangevraagd. We mailen {email} zodra hij gereed is.",
+      "form": {
+        "title": "Export aanvragen",
+        "from": "Van",
+        "to": "Tot",
+        "status": "Alleen berichten die nu de status hebben",
+        "anyStatus": "Elke status",
+        "hint": "Datums zijn in UTC. Je kunt tot {days} dagen teruggaan. Er wordt telkens één export voorbereid.",
+        "submit": "Export aanvragen",
+        "sending": "Aanvragen"
+      },
+      "problem": {
+        "order": "De startdatum mag niet na de einddatum liggen.",
+        "future": "De einddatum mag niet in de toekomst liggen.",
+        "tooOld": "Logboeken worden {days} dagen bewaard. Kies een latere startdatum.",
+        "invalid": "Vul beide datums in."
+      },
+      "history": {
+        "title": "Je exports",
+        "loading": "Exports laden",
+        "tryAgain": "Opnieuw proberen",
+        "empty": "Nog geen exports.",
+        "onlyStatus": "Alleen berichten met status {status}",
+        "requestedAt": "Aangevraagd {date}",
+        "lines": "{count, plural, one {# regel} other {# regels}}",
+        "until": "Beschikbaar tot {date}",
+        "download": "Downloaden",
+        "status": {
+          "queued": "Wachtend",
+          "running": "Wordt voorbereid",
+          "ready": "Gereed",
+          "failed": "Mislukt",
+          "expired": "Verlopen"
+        }
+      }
     }
   }
 }

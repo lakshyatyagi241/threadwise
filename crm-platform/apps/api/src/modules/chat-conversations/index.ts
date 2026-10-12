@@ -31,3 +31,4 @@ export {
   type InboundMessageListener,
   type InboundStoredEvent,
 } from './inbound-hooks';
+export { MESSAGE_LOG_FACADE, type MessageLogFacade } from './message-log.facade';

@@ -293,6 +293,11 @@
         "label": "Automatisch toewijzen",
         "description": "Wijs nieuwe gesprekken automatisch aan de juiste agent toe, op beurt of op basis van regels.",
         "keywords": "routering, round robin, toewijzen, agenten, inboxregels, verdelen, eigenaar"
+      },
+      "message-logs": {
+        "label": "Berichtlogboeken",
+        "description": "Exporteer het bezorglogboek van je berichten, tot een jaar terug, als bestand dat naar je e-mail wordt gestuurd.",
+        "keywords": "export, bezorglogboek, geschiedenis, archief, csv, berichten"
       }
     },
     "title": "Instellingen",

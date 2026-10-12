@@ -1,7 +1,8 @@
 {
   "team-inbox-conversations": {
     "nav": {
-      "inbox": "Boîte de réception"
+      "inbox": "Boîte de réception",
+      "messageLogs": "Journaux des messages"
     },
     "common": {
       "dismiss": "Ignorer"
@@ -131,7 +132,10 @@
       "generic": "Une erreur s’est produite. Réessayez.",
       "genericWithId": "Une erreur s’est produite. Réessayez. Référence : {id}",
       "templateNotSendable": "Ce modèle ne peut pas être envoyé dans cette conversation. Choisissez-en un autre.",
-      "groupSendUnavailable": "L’envoi vers les groupes WhatsApp n’est pas encore disponible. Répondez depuis l’application WhatsApp Business."
+      "groupSendUnavailable": "L’envoi vers les groupes WhatsApp n’est pas encore disponible. Répondez depuis l’application WhatsApp Business.",
+      "logRange": "Choisissez des dates dans la dernière année, avec un début antérieur à la fin et pas dans le futur.",
+      "logBusy": "Un export est déjà en cours de préparation. Attendez son e-mail, puis demandez-en un autre.",
+      "logNotReady": "Cet export n'est pas prêt ou a expiré. Demandez-le à nouveau."
     },
     "bubble": {
       "kind": {
@@ -196,7 +200,8 @@
         "takeBack": "Appuyez pour retirer votre réaction",
         "takeBackLabel": "Votre réaction {emoji}. La retirer",
         "failed": "Cette réaction n'a pas été envoyée"
-      }
+      },
+      "deliveryLog": "Journal de livraison"
     },
     "media": {
       "openImage": "Ouvrir l’image {name}",
@@ -554,6 +559,80 @@
         "named_variables": "Utilise des variables nommées, non encore prises en charge par la boîte de réception."
       },
       "hasMore": "Affichage des {count} premiers modèles. Recherchez par nom ou texte pour trouver les autres."
+    },
+    "log": {
+      "title": "Journal de livraison",
+      "close": "Fermer",
+      "loading": "Chargement du journal",
+      "tryAgain": "Réessayer",
+      "statusNow": "Statut actuel",
+      "createdAt": "Créé",
+      "providerId": "ID du message du fournisseur",
+      "failedNoReason": "Ce message n'a pas été livré.",
+      "expired": "Ce message date de plus de {days} jours. Son journal n'est plus conservé.",
+      "empty": "Aucun journal n'a été enregistré pour ce message. Les messages envoyés avant la conservation des journaux n'en ont pas.",
+      "archived": "Les entrées de plus de {days} jours sont lues depuis l'archive.",
+      "exportLink": "Exporter les journaux des messages",
+      "source": {
+        "system": "Notre système",
+        "provider": "Accusé du fournisseur"
+      },
+      "event": {
+        "queued": "En file d'attente pour envoi",
+        "attempt": "Tentative d'envoi {attempt}",
+        "accepted": "Accepté par le fournisseur",
+        "sentReceipt": "Le fournisseur a confirmé l'envoi",
+        "delivered": "Livré sur le téléphone du client",
+        "read": "Lu par le client",
+        "failedReceipt": "Le fournisseur a signalé une non-livraison",
+        "failedSend": "Envoi impossible",
+        "retryAuto": "Nouvelle tentative automatique prévue",
+        "retryManual": "Un collègue a appuyé sur Réessayer"
+      },
+      "notApplied": "Ce rapport est arrivé en retard ou concerne un envoi précédent. Il n'a pas modifié le message.",
+      "replayed": "Aucune nouvelle requête n'a été faite : la réponse précédente du fournisseur a été réutilisée.",
+      "resent": "Renvoyé au fournisseur comme un nouveau message."
+    },
+    "logs": {
+      "back": "Retour à la boîte de réception",
+      "title": "Journaux des messages",
+      "intro": "Chaque message conserve son journal de livraison : {hot} jours dans la boîte de réception, puis dans l'archive jusqu'à {days} jours après les faits. Demandez l'export d'une plage de dates ; il est préparé en arrière-plan et envoyé par e-mail dès qu'il est prêt.",
+      "requested": "Export demandé. Nous vous enverrons un e-mail lorsqu'il sera prêt.",
+      "requestedTo": "Export demandé. Nous enverrons un e-mail à {email} lorsqu'il sera prêt.",
+      "form": {
+        "title": "Demander un export",
+        "from": "Du",
+        "to": "Au",
+        "status": "Uniquement les messages actuellement",
+        "anyStatus": "Tous les statuts",
+        "hint": "Les dates sont en UTC. Vous pouvez remonter jusqu'à {days} jours. Un seul export est préparé à la fois.",
+        "submit": "Demander l'export",
+        "sending": "Demande en cours"
+      },
+      "problem": {
+        "order": "La date de début ne doit pas être postérieure à la date de fin.",
+        "future": "La date de fin ne peut pas être dans le futur.",
+        "tooOld": "Les journaux sont conservés {days} jours. Choisissez une date de début plus récente.",
+        "invalid": "Saisissez les deux dates."
+      },
+      "history": {
+        "title": "Vos exports",
+        "loading": "Chargement des exports",
+        "tryAgain": "Réessayer",
+        "empty": "Aucun export pour le moment.",
+        "onlyStatus": "Uniquement les messages {status}",
+        "requestedAt": "Demandé {date}",
+        "lines": "{count, plural, one {# ligne} many {# lignes} other {# lignes}}",
+        "until": "Disponible jusqu'au {date}",
+        "download": "Télécharger",
+        "status": {
+          "queued": "En attente",
+          "running": "En préparation",
+          "ready": "Prêt",
+          "failed": "Échec",
+          "expired": "Expiré"
+        }
+      }
     }
   }
 }

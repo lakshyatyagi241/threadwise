@@ -234,6 +234,7 @@ export interface PlannedReceipt {
   status: ReceiptStatus;
   delayMs: number;
   errorCode?: string;
+  errorMessage?: string;
 }
 
 export interface SendResult {
