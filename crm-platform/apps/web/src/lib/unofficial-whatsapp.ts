@@ -52,6 +52,26 @@ interface SenderLike {
 const senderIsUnofficial = (s: SenderLike): boolean =>
   s.engine != null ? isUnofficialEngine(s.engine) : isUnofficialSenderKey(s.key);
 
+/**
+ * What the entitlement call has said about the switch: `pending` while it loads, `unknown` when it failed, else `on` or `off`.
+ * Screens whose sender list already comes filtered by the server (campaigns) wait on `pending` instead of reading it as off, and
+ * trust the server's list on `unknown`.
+ */
+export type UnofficialState = 'on' | 'off' | 'pending' | 'unknown';
+
+/**
+ * The senders a campaign screen may offer, or `undefined` while the answer is still pending (show a skeleton, not an empty list).
+ * `off` hides the unofficial ones; `on` and `unknown` keep the list as the server filtered it (the server never lists a personal number
+ * while the engine is off for the workspace, and refuses one on submit).
+ */
+export function offerSendersFor<T extends SenderLike>(
+  senders: readonly T[] | undefined,
+  state: UnofficialState,
+): T[] | undefined {
+  if (!senders || state === 'pending') return undefined;
+  return state === 'off' ? senders.filter((s) => !senderIsUnofficial(s)) : [...senders];
+}
+
 /** The senders a create/schedule form may offer: the unofficial ones only while the switch is on. */
 export function offerSenders<T extends SenderLike>(senders: readonly T[], enabled: boolean): T[] {
   return enabled ? [...senders] : senders.filter((s) => !senderIsUnofficial(s));

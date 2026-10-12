@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
 import { senderKeySchema } from '../broadcasts/broadcast';
+import { senderHiddenSchema } from '../broadcasts/broadcast-compose';
 import { segmentRulesSchema } from '../segments/rules';
 import { contactSelectionSchema } from '../contacts-attributes-tags/contact-filter';
 import { CAMPAIGN_STATUSES, campaignCountsSchema } from './campaign';
@@ -361,7 +362,9 @@ export const wizardAudienceCountSchema = z.object({
   optedOut: z.number().int(),
   /** Of those, never messaged: no usable WhatsApp number. */
   invalidNumber: z.number().int(),
-  /** Who will be messaged: matching minus the two above. */
+  /** Of those, never messaged: the workspace requires a recorded consent and there is none. 0 while that switch is off. */
+  noConsent: z.number().int().default(0),
+  /** Who will be messaged: matching minus the three above. */
   recipients: z.number().int(),
   /** Of the recipients, numbers from the CSV that are not contacts yet (they are created when the broadcast is launched). */
   newContacts: z.number().int().default(0),
@@ -943,5 +946,9 @@ export const wizardSenderSchema = z.object({
   guided: z.boolean(),
 });
 export type WizardSender = z.infer<typeof wizardSenderSchema>;
-export const wizardSendersResponseSchema = z.object({ data: z.array(wizardSenderSchema) });
+export const wizardSendersResponseSchema = z.object({
+  data: z.array(wizardSenderSchema),
+  /** The numbers the workspace has that are not in `data`, by engine and reason, so an empty or short list can say why. */
+  hidden: z.array(senderHiddenSchema),
+});
 export type WizardSendersResponse = z.infer<typeof wizardSendersResponseSchema>;

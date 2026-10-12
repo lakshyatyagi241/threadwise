@@ -145,6 +145,12 @@ export const contactImportOptionsSchema = z.object({
    * automations; on, it is the caller's explicit choice.
    */
   triggerAutomations: queryBoolean().default(false),
+  /**
+   * The person importing confirms "I have consent to message these contacts". Every contact in the file then gets a `granted`
+   * marketing event in the consent ledger (source `import`, the file name as evidence). Off by default: an import without the
+   * confirmation records NO consent, and a contact that opted out is never turned back on by a file.
+   */
+  consentConfirmed: queryBoolean().default(false),
 });
 export type ContactImportOptions = z.infer<typeof contactImportOptionsSchema>;
 

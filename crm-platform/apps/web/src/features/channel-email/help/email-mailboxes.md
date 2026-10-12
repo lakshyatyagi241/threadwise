@@ -14,7 +14,7 @@ Email mailboxes connects the addresses your customers write to, such as support@
 
 ## How to use it
 
-1. Open **Settings**, then **Email** under **Integrations**.
+1. Open **Marketplace**, stay on the **Integrations** tab and open **Email**.
 2. Under **Add a mailbox**, choose how to connect. If personal mailboxes are on and you may connect one, first choose **Shared** or **Personal**.
    - **Connect Gmail** or **Connect Microsoft 365**: sign in with the account that owns the mailbox and allow reading and sending mail. Both are needed.
    - **Connect IMAP / SMTP**: pick your mail provider from the list, or fill in the incoming (IMAP) and outgoing (SMTP) server, port, security, user name and password. Select **Use the same user name and password for sending** when both servers share the login, then select **Verify and connect**. We log in to both servers first, and if one refuses the message says which. The password is stored encrypted and never shown again.

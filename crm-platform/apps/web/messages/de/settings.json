@@ -334,7 +334,13 @@
         "label": "Hilfe-Assistent",
         "description": "Schalten Sie den Assistenten ein, der Ihr Team anleitet oder die Schritte für es erledigt.",
         "keywords": "ki, assistent, agent, anleitung, hilfe, automatisierung"
+      },
+      "consent": {
+        "label": "Einwilligung und STOP-Antworten",
+        "description": "Legen Sie die STOP- und START-Wörter, die Bestätigungsantworten, die Abmeldezeile und die Einwilligungspflicht für Marketing fest.",
+        "keywords": "einwilligung, abmeldung, anmeldung, abmelden, stop, start, dsgvo, compliance, datenschutz, marketing"
       }
-    }
+    },
+    "backToMarketplace": "Zurück zum Marketplace"
   }
 }

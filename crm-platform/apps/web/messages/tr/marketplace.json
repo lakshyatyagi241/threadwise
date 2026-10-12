@@ -10,7 +10,8 @@
       "install": "Yükle · Pazar yeri",
       "installed": "Yüklü · Pazar yeri",
       "manage": "Uygulamayı yönet · Pazar yeri",
-      "requests": "İstekler · Pazar yeri"
+      "requests": "İstekler · Pazar yeri",
+      "addons": "Eklentiler · Pazar yeri"
     },
     "common": {
       "dismiss": "Kapat",
@@ -124,7 +125,8 @@
       "moreLabel": "Kurulu ve istekler",
       "tabs": {
         "mini_app": "Mini uygulamalar",
-        "integration": "Entegrasyonlar"
+        "integration": "Entegrasyonlar",
+        "addon": "Eklentiler"
       },
       "installed": "Kurulu",
       "installedLimit": "Kurulu ({installed} / {limit})",
@@ -865,6 +867,15 @@
       },
       "working": "Çalışıyor",
       "noCheckout": "Bu uygulama için ödeme şu anda kullanılamıyor. Biraz sonra tekrar deneyin."
+    },
+    "tools": {
+      "open": "Aç",
+      "empty": {
+        "title": "Kullanılabilir eklenti yok",
+        "message": "Rolünüzün ve planınızın içerdiği eklentiler burada görünür."
+      },
+      "soon": "Yakında",
+      "upgrade": "Yükselt"
     }
   }
 }

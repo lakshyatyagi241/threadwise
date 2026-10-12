@@ -1,0 +1,175 @@
+{
+  "contact-consent": {
+    "common": {
+      "dismiss": "Kapat",
+      "retry": "Tekrar dene",
+      "loading": "Yükleniyor..."
+    },
+    "errors": {
+      "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+      "forbidden": "Bunu yapma yetkiniz yok.",
+      "notFound": "Bu kişi artık mevcut değil.",
+      "conflict": "Siz düzenlerken başka biri bunu değiştirdi. Sayfayı yenileyip tekrar deneyin.",
+      "noteRequired": "Onayı kaydetmeden önce kişinin neden kabul ettiğini belirtin (ne söyledi veya imzaladı ve nerede).",
+      "settingsInvalid": "Bir anahtar kelime en az bir harf veya rakam içermelidir; algılama açıkken en az bir STOP anahtar kelimesi kalmalıdır.",
+      "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
+      "validation": "Bazı değerler geçerli değil. Formu kontrol edip tekrar deneyin.",
+      "unexpected": "Bir şeyler ters gitti. Tekrar deneyin."
+    },
+    "settings": {
+      "title": "Onay ve STOP yanıtları",
+      "subtitle": "Bir kişiyi abonelikten çıkaran veya geri alan kelimeleri, vereceğimiz yanıtı, pazarlama mesajları için abonelikten çıkma satırını ve pazarlamanın kayıtlı onay gerektirip gerektirmediğini seçin.",
+      "exportProof": "Onay kanıtını dışa aktar (CSV)",
+      "discard": "Değişiklikleri at",
+      "save": "Değişiklikleri kaydet",
+      "saved": "Onay ayarları kaydedildi.",
+      "conflict": "Bu ayarları başka biri önce kaydetti. Form artık kayıtlı olanı gösteriyor.",
+      "conflictOk": "Tamam",
+      "problems": {
+        "noOptOutWord": "En az bir STOP anahtar kelimesi ekleyin veya algılamayı kapatın.",
+        "badLang": "Dil kodu en, ar veya pt-BR gibi görünür."
+      }
+    },
+    "policy": {
+      "title": "Pazarlama politikası",
+      "requireConsent": "Pazarlama gönderimleri için kayıtlı onay iste",
+      "requireConsentHint": "Kapalı: pazarlama, abonelikten çıkmamış her kişiye gider. Açık: yalnızca kayıtlı onayı olan kişilere gider. Kampanya ve toplu gönderim kitleleri kaç kişinin atlandığını gösterir.",
+      "withdrawnAlways": "Abonelikten çıkan kişiler, bu anahtar ne olursa olsun her zaman atlanır."
+    },
+    "detect": {
+      "title": "STOP ve START yanıtları",
+      "enabled": "STOP ve START yanıtlarını algıla",
+      "enabledHint": "Bir kişi yalnızca aşağıdaki kelimelerden birini gönderirse, o kanalda abonelikten çıkar veya geri abone olur.",
+      "autoReply": "Onay yanıtı gönder",
+      "autoReplyHint": "24 saatlik pencere içinde, her değişiklik için bir kez gönderilen kısa serbest metin yanıtı. Kampanya değildir ve pazarlama sayılmaz.",
+      "rule": "Mesajın tamamı anahtar kelime olmalıdır: büyük harfler, boşluklar, noktalama, emoji ve Arapça harekeler yok sayılır. \"Please stop sending me invoices\" veya \"don't stop\" eşleşmez, böylece kimse yanlışlıkla abonelikten çıkarılmaz."
+    },
+    "lang": {
+      "groupLabel": "{lang} için kelimeler ve yanıtlar",
+      "title": "Dil",
+      "remove": "Dili kaldır",
+      "optOutWords": "STOP anahtar kelimeleri (abonelikten çık)",
+      "optInWords": "START anahtar kelimeleri (geri abone ol)",
+      "wordsHint": "Her satıra bir tane.",
+      "optOutReply": "STOP sonrası yanıt",
+      "optInReply": "START sonrası yanıt",
+      "replyHint": "Kişinin adı için '{{name}}' kullanabilirsiniz. Nasıl geri dönüleceğini belirtin.",
+      "footer": "Pazarlama mesajları için abonelikten çıkma satırı",
+      "footerHint": "Pazarlama metinlerinin altına eklenir. Gönderilecek kelimeyi belirtin.",
+      "add": "Dil ekle",
+      "addHint": "fr veya pt-BR gibi bir dil kodu.",
+      "invalid": "fr veya pt-BR gibi bir kod kullanın.",
+      "addButton": "Ekle"
+    },
+    "footer": {
+      "title": "Abonelikten çıkma satırı",
+      "intro": "Toplu gönderim ve kampanya düzenleyicileri, alıcılar STOP yazabileceklerini bilsin diye bu satırı pazarlama metinlerinin altına ekleyebilir. Onaylı şablonlar asla değiştirilmez: satırı şablonun kendisine ekleyin.",
+      "defaultOn": "Pazarlama metninde abonelikten çıkma satırı yoksa uyar",
+      "defaultOnHint": "Düzenleyici bir uyarı ve eklemek için tek tıklık bir düğme gösterir.",
+      "noneSet": "Hiçbir dil için abonelikten çıkma satırı ayarlanmadı.",
+      "previewLabel": "Alıcının gördüğü",
+      "sample": "İlkbahar indirimimiz bugün başlıyor. Bu hafta bizi ziyaret edin."
+    },
+    "test": {
+      "title": "Mesajı test et",
+      "intro": "Bir kişinin gönderebileceği metni yazın ve ne olacağını görün. Hiçbir şey değiştirilmez veya gönderilmez. Kaydetmeden önce bile yukarıdaki kelimeleri kullanır.",
+      "label": "Kişiden gelen mesaj",
+      "run": "Test et",
+      "failed": "Test çalıştırılamadı. Tekrar deneyin.",
+      "outcome": {
+        "opts_out": "Bu, kişiyi pazarlamadan çıkarır.",
+        "opts_in": "Bu, kişiyi yeniden abone yapar.",
+        "no_match": "Hiçbir şey olmaz: mesaj bir anahtar kelime değil.",
+        "detection_off": "Hiçbir şey olmaz: algılama kapalı."
+      },
+      "matched": "\"{keyword}\" anahtar kelimesiyle eşleşti ({lang}).",
+      "replyLabel": "Kişi şunu alır",
+      "noReply": "Yanıt gönderilmez."
+    },
+    "card": {
+      "title": "Onay",
+      "status": {
+        "optedOut": "Abonelikten çıktı",
+        "subscribed": "Abone",
+        "none": "Kayıtlı onay yok"
+      },
+      "export": "Kanıtı dışa aktar (CSV)",
+      "markSubscribed": "Abone olarak işaretle",
+      "markUnsubscribed": "Abonelikten çıkmış olarak işaretle",
+      "loading": "Onay yükleniyor...",
+      "noneRecorded": "Bu kişi için kayıtlı onay yok. Pazarlama gönderimleri çalışma alanı politikanızı izler.",
+      "perChannel": "Kanala göre onay",
+      "timeline": "Onay geçmişi",
+      "channel": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "telegram": "Telegram",
+        "email": "E-posta",
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "webchat": "Web sohbeti"
+      },
+      "state": {
+        "granted": "abone",
+        "withdrawn": "abonelikten çıktı"
+      },
+      "action": {
+        "granted": "Abone",
+        "withdrawn": "Abonelikten çıktı"
+      },
+      "source": {
+        "form": "Form",
+        "keyword": "Anahtar kelime yanıtı",
+        "manual": "Bir kişi tarafından kaydedildi",
+        "import": "İçe aktarma",
+        "api": "API",
+        "flow": "Akış",
+        "inbound_message": "Mesaj",
+        "contact_request": "İletişim isteği",
+        "legacy": "Onay geçmişinden önce"
+      },
+      "by": "{name} tarafından",
+      "evidence": {
+        "consentText": "Gösterilen metin",
+        "consentVersion": "Sürüm",
+        "consentHash": "Karma",
+        "formId": "Form",
+        "submissionId": "Gönderim",
+        "messageId": "Mesaj",
+        "keyword": "Anahtar kelime",
+        "fileName": "Dosya",
+        "apiKeyId": "API anahtarı",
+        "flowId": "Akış",
+        "reference": "Referans"
+      },
+      "dialog": {
+        "titleGranted": "Abone olarak işaretle",
+        "titleWithdrawn": "Abonelikten çıkmış olarak işaretle",
+        "introGranted": "Bu kişinin pazarlama mesajları almayı kabul ettiğini kaydedin. Neden kanıt olarak saklanır.",
+        "introWithdrawn": "Bu kişinin artık pazarlama mesajları istemediğini kaydedin. Tüm kampanya ve toplu gönderimlerde atlanır.",
+        "channel": "Kanal",
+        "noteRequired": "Neden? (zorunlu)",
+        "noteOptional": "Not (isteğe bağlı)",
+        "noteHint": "Örneğin: tezgahta kâğıt formu imzaladı veya 3 Mart'ta e-postayla kabul etti.",
+        "confirm": "Kaydet",
+        "cancel": "İptal",
+        "close": "Kapat",
+        "savedGranted": "Abone olarak işaretlendi.",
+        "savedWithdrawn": "Abonelikten çıkmış olarak işaretlendi."
+      }
+    },
+    "composer": {
+      "add": "Abonelikten çıkma satırını ekle",
+      "missing": "Bu pazarlama mesajı, kişilere nasıl abonelikten çıkacaklarını söylemiyor. \"Abonelikten çıkmak için STOP yazın\" gibi bir satır ekleyin.",
+      "addButton": "Satırı ekle",
+      "templateHint": "Şablonlar onaylandıktan sonra sabittir. Kişilere abonelikten çıkabileceklerini söylemek için şablonun kendisine \"{line}\" gibi bir satır ekleyin.",
+      "footerSuggestion": "Pazarlama şablonu için önerilen: \"{line}\"",
+      "footerUse": "Alt bilgi olarak kullan"
+    },
+    "import": {
+      "legend": "İzin",
+      "label": "Bu kişilere mesaj gönderme iznim var",
+      "hint": "İşaretlenirse, dosyadaki tüm kişiler pazarlamayı kabul etmiş olarak kaydedilir ve kanıt olarak dosya adı saklanır. İşaretlenmezse, içe aktarma herhangi bir izin kaydetmez. Abonelikten çıkan kişiler çıkmış olarak kalır."
+    }
+  }
+}

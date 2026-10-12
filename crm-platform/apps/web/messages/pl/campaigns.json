@@ -227,8 +227,6 @@
         "senderHint": "Przy ustawieniu domyślnym kampania zostanie wysłana głównym silnikiem Twojej przestrzeni roboczej.",
         "defaultSender": "Domyślny nadawca",
         "nameHint": "Etykieta wewnętrzna do raportów i historii kolejki.",
-        "noSenders": "Brak połączonych nadawców.",
-        "connectOne": "Połącz jednego →",
         "type": "Typ kampanii",
         "types": {
           "custom": {
@@ -897,8 +895,7 @@
         "previewEmpty": "Wybierz szablon, aby zobaczyć, jak wygląda wiadomość.",
         "senderLabel": "Wyślij z",
         "senderHint": "Numer WhatsApp, z którego wysyłana jest ta wiadomość masowa.",
-        "pickSender": "Wybierz numer",
-        "noSenders": "Żaden numer WhatsApp nie jest połączony. Najpierw połącz numer."
+        "pickSender": "Wybierz numer"
       },
       "audience": {
         "selectionTitle": "Wybrane w Centrum kontaktów",
@@ -932,6 +929,7 @@
         "optedOut": "Zrezygnowali",
         "invalidNumbers": "Nieprawidłowe numery",
         "alwaysSkipped": "Kontakty, które zrezygnowały, i nieprawidłowe numery są zawsze pomijane.",
+        "noConsent": "Brak zapisanej zgody (pominięto)",
         "willBeMessaged": "Otrzymają wiadomość",
         "about": "około {count}",
         "approximate": "To jest szacunek: grupa odbiorców jest zbyt duża, aby policzyć ją dokładnie na czas.",
@@ -1403,6 +1401,41 @@
         "runs": "Uruchomienia",
         "noRuns": "Żadne uruchomienie jeszcze się nie rozpoczęło.",
         "cancel": "Anuluj serię"
+      }
+    },
+    "senderEmpty": {
+      "loading": "Wczytywanie Twoich numerów…",
+      "none": {
+        "title": "Brak połączonego numeru WhatsApp",
+        "body": "Połącz numer WhatsApp Business, aby wybrać, z którego numeru wysyłana jest ta kampania.",
+        "action": "Połącz numer WhatsApp"
+      },
+      "sms": {
+        "none": {
+          "title": "Brak połączonego nadawcy SMS",
+          "body": "Połącz nadawcę SMS, aby wybrać, od którego nadawcy wysyłana jest ta kampania.",
+          "action": "Połącz nadawcę SMS"
+        }
+      },
+      "pending": {
+        "title": "Numery, których łączenie trwa: {count}",
+        "body": "Numer może wysyłać kampanie po zakończeniu łączenia. Otwórz jego status, aby dokończyć konfigurację.",
+        "action": "Sprawdź status numeru"
+      },
+      "error": {
+        "title": "Numery, których połączenie się nie powiodło: {count}",
+        "body": "Połącz numer ponownie na jego stronie statusu, a pojawi się tutaj.",
+        "action": "Napraw połączenie"
+      },
+      "disconnected": {
+        "title": "Numery, które zostały rozłączone: {count}",
+        "body": "Połącz numer ponownie, aby wysyłać z niego kampanie. Połączone numery pojawiają się tutaj.",
+        "action": "Połącz numer ponownie"
+      },
+      "personal_off": {
+        "title": "Numery osobiste są wyłączone w tym obszarze roboczym",
+        "body": "Dopóki ta opcja jest wyłączona, numery osobiste (QR) w liczbie {count} nie mogą wysyłać kampanii. Administrator platformy może ją włączyć dla tego obszaru roboczego albo możesz połączyć oficjalny numer WhatsApp Business.",
+        "action": "Połącz oficjalny numer"
       }
     }
   }

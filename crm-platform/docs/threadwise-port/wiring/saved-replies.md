@@ -24,15 +24,15 @@ Reference calls them "Quick replies" in the UI and `SavedReply` in code (`refere
 | Rail button + modal "Quick Replies": list with edit, delete, "Add reply", count badge; form shortcut, title, body, category, "Personal" | Settings screen `/inbox/saved-replies` (tabs, search, category filter, plan meter, form with preview and variable chips); the count is in the tabs       |
 | Create gated by `savedreply.manage` and the plan cap on all rows                                                                        | same (`inbox.savedreply.manage`, `saved_replies` limit)                                                                                                  |
 | Update and delete: any member for shared (quirk), owner or manage for personal                                                          | shared needs the manage right, personal is the owner's (recorded as `intended`)                                                                          |
-| AI agent `use_saved_replies`: the 15 most used shared replies go into the system prompt                                                 | **Not built** here: BL-104. `ai_agents.use_saved_replies` exists; the consumer must read shared replies (never personal) by `used_count`                 |
+| AI agent `use_saved_replies`: the 15 most used shared replies go into the system prompt                                                 | **Not built** here: BL-105. `ai_agents.use_saved_replies` exists; the consumer must read shared replies (never personal) by `used_count`                 |
 | Routing rule auto-reply expands `{{device_phone}}` / `{{device_name}}` like the picker                                                  | Not part of this feature (routing has no reply action here); the same two variables exist in the catalogue                                               |
 | Package form field `saved_replies_limit`; workspace wipe lists `saved_replies`; demo seeder                                             | plan editor already has the limit; retention lists the table; no seeder                                                                                  |
 | Permission `savedreply.manage` held by Owner, Admin, Manager                                                                            | `inbox.savedreply.manage`, granted to the same presets in 20261013100000_rbac_workspace_presets.sql; the AWAITING line in `key-coverage.spec.ts` is gone |
 
 ## Not built, recorded
 
-- BL-104 AI agent consumer of the shared replies (`use_saved_replies`).
-- BL-105 email composer (TW-MAIL-027): the rich editor has no picker yet. `SavedReplyPicker` takes the insert as a callback
+- BL-105 AI agent consumer of the shared replies (`use_saved_replies`).
+- BL-106 email composer (TW-MAIL-027): the rich editor has no picker yet. `SavedReplyPicker` takes the insert as a callback
   (`onInsert(text, range)`), so the email editor only needs to supply its own insert.
-- BL-106 import and export of saved replies (Reference has neither).
+- BL-107 import and export of saved replies (Reference has neither).
 - Reference's `attachments` column is unused there and here.
