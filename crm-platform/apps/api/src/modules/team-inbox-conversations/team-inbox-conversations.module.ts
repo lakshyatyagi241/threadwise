@@ -4,6 +4,7 @@ import { ChatConversationsModule } from '../chat-conversations';
 import { CrmModule } from '../crm';
 import { MessageTemplatesModule } from '../message-templates';
 import { NotificationsModule } from '../notifications';
+import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { ConversationEventsRepository } from './conversation-events.repository';
 import { ConversationsRepository } from './conversations.repository';
 import { InboxAccess } from './inbox-access.service';
@@ -17,6 +18,9 @@ import { InboxThreadService } from './inbox-thread.service';
 import { InboxTimelineService } from './inbox-timeline.service';
 import { MediaUploadsRepository } from './media-uploads.repository';
 import { NotesRepository } from './notes.repository';
+import { SavedRepliesController } from './saved-replies/saved-replies.controller';
+import { SavedRepliesRepository } from './saved-replies/saved-replies.repository';
+import { SavedRepliesService } from './saved-replies/saved-replies.service';
 
 /**
  * Team inbox, conversations (TIB1): the agent-facing API over the conversation core. It reads the list and the header itself (the
@@ -31,8 +35,9 @@ import { NotesRepository } from './notes.repository';
     CrmModule,
     MessageTemplatesModule,
     NotificationsModule,
+    PlansCoreModule,
   ],
-  controllers: [InboxController],
+  controllers: [InboxController, SavedRepliesController],
   providers: [
     ConversationsRepository,
     ConversationEventsRepository,
@@ -46,6 +51,8 @@ import { NotesRepository } from './notes.repository';
     InboxTimelineService,
     InboxMediaService,
     InboxMessageLogService,
+    SavedRepliesRepository,
+    SavedRepliesService,
   ],
   exports: [
     ConversationsRepository,
