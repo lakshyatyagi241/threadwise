@@ -192,7 +192,12 @@
       "retention": "ログは実行終了の {days} 日後に削除されます。",
       "pathTitle": "たどった経路",
       "notReached": "未到達",
-      "noErrors": "この実行にエラーはありません。"
+      "noErrors": "この実行にエラーはありません。",
+      "factNext": "次: {node}",
+      "factWaiting": "待機中: {node}",
+      "factDelay": "{time} 待機",
+      "factReplied": "顧客の返信: {text}",
+      "factEnded": "終了: {reason}"
     },
     "event": {
       "step": "ステップ",

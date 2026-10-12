@@ -192,7 +192,12 @@
       "retention": "تُحذف السجلات بعد {days} يومًا من انتهاء التشغيل.",
       "pathTitle": "المسار المتّبع",
       "notReached": "لم يتم الوصول إليها",
-      "noErrors": "لا أخطاء في هذا التشغيل."
+      "noErrors": "لا أخطاء في هذا التشغيل.",
+      "factNext": "التالي: {node}",
+      "factWaiting": "في انتظار: {node}",
+      "factDelay": "ينتظر {time}",
+      "factReplied": "ردّ العميل: {text}",
+      "factEnded": "انتهى: {reason}"
     },
     "event": {
       "step": "الخطوة",

@@ -11,6 +11,7 @@ import type {
   RunState,
   SendOutcome,
 } from './types';
+import { describeSent } from './step-log';
 import { interpolate } from './variables';
 
 /** Where a run goes after one step. The engine persists it; nothing here touches the database, the clock (but `now`) or a queue. */
@@ -52,6 +53,8 @@ export interface StepOutcome {
   nodeId: string | null;
   nodeType: string | null;
   notes: string[];
+  /** One line per message this step sent to the customer, for the run log. */
+  sent?: string[];
   /** A contact property to write after the step commits ("also save to a contact attribute"); the engine does it. */
   saveProperty?: { key: string; value: string };
 }
@@ -179,11 +182,16 @@ export async function executeCurrent(run: RunState, deps: StepDeps): Promise<Ste
   }
 
   let sends = 0;
+  const sent: string[] = [];
   const ctx: NodeContext = {
     run,
     node,
     stepKey: `flow:${run.uuid}:${run.stepSeq}:${node.id}`,
-    send: (message) => deps.send(run, message, sends++),
+    send: async (message) => {
+      const out = await deps.send(run, message, sends++);
+      sent.push(describeSent(message, out));
+      return out;
+    },
     render: (t) => interpolate(t, run.vars),
     note: (text) => notes.push(text),
     now: deps.now,
@@ -194,6 +202,7 @@ export async function executeCurrent(run: RunState, deps: StepDeps): Promise<Ste
     nodeId: node.id,
     nodeType: node.type,
     notes,
+    sent,
   };
 }
 

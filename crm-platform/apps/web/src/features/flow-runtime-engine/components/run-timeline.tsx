@@ -8,9 +8,11 @@ import {
   type FlowRunDetail,
   type FlowRunStep,
 } from '@crm/contracts';
-import { detailPairs } from '../lib/model';
 import {
   formatMs,
+  nodeNames,
+  stepFacts,
+  type StepFact,
   outcomeTone,
   pathOf,
   timelineRows,
@@ -40,47 +42,83 @@ function Stat({ label, value, tone }: { label: string; value: string | number; t
   );
 }
 
-function StepRow({ s, removed }: { s: FlowRunStep; removed: boolean }) {
+function StepRow({
+  s,
+  removed,
+  nameOf,
+}: {
+  s: FlowRunStep;
+  removed: boolean;
+  nameOf: (id: string) => string;
+}) {
   const t = useTranslations('flr');
   const when = useDateTime();
   const tone = outcomeTone(s.outcome);
-  const title = s.nodeLabel ?? s.nodeId ?? t(`event.${s.event}`);
-  const pairs = detailPairs(s.detail);
+  const title = s.nodeLabel ?? (s.nodeId ? nameOf(s.nodeId) : t(`event.${s.event}`));
+  const facts = stepFacts(s, nameOf);
+  const factText = (f: StepFact): string => {
+    switch (f.kind) {
+      case 'next':
+        return t('run.factNext', { node: f.node });
+      case 'waitingAt':
+        return t('run.factWaiting', { node: f.node });
+      case 'delay':
+        return t('run.factDelay', { time: formatMs(f.seconds * 1000) });
+      case 'replied':
+        return t('run.factReplied', { text: f.text });
+      case 'ended':
+        return t('run.factEnded', {
+          reason: t.has(`endReason.${f.reason}`) ? t(`endReason.${f.reason}`) : f.reason,
+        });
+    }
+  };
   return (
     <li className="relative pl-7">
       <span aria-hidden className={`absolute left-0 top-3 h-3 w-3 rounded-full ${DOT[tone]}`} />
       <details className="group rounded-xl border border-border bg-background open:bg-muted/40">
-        <summary className="flex cursor-pointer list-none flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2.5">
-          <span className="min-w-0 break-words text-sm font-semibold">{title}</span>
-          {s.nodeType && (
-            <span className="font-mono text-[11px] text-muted-foreground">{s.nodeType}</span>
-          )}
-          {removed && (
-            <span className="rounded-full border border-border px-2 py-0.5 text-[10.5px] text-warning">
-              {t('run.removed')}
+        <summary className="cursor-pointer list-none px-4 py-2.5">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            <span className="min-w-0 break-words text-sm font-semibold">{title}</span>
+            {s.nodeType && (
+              <span className="font-mono text-[11px] text-muted-foreground">{s.nodeType}</span>
+            )}
+            {removed && (
+              <span className="rounded-full border border-border px-2 py-0.5 text-[10.5px] text-warning">
+                {t('run.removed')}
+              </span>
+            )}
+            <span className="ml-auto flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+              {s.outcome && (
+                <span className={`font-semibold ${TEXT[tone]}`}>{t(`outcome.${s.outcome}`)}</span>
+              )}
+              {s.port !== null && <span>{t('run.exit', { port: s.port })}</span>}
+              {s.attempt !== null && s.attempt > 1 && (
+                <span>{t('run.visit', { n: s.attempt })}</span>
+              )}
+              {s.durationMs !== null && (
+                <span className="tabular-nums">{formatMs(s.durationMs)}</span>
+              )}
             </span>
+          </div>
+          {(s.summary ?? facts[0]) && (
+            <p className="mt-1 line-clamp-1 break-words text-xs text-muted-foreground group-open:hidden">
+              {s.summary ?? factText(facts[0]!)}
+            </p>
           )}
-          <span className="ml-auto flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-            {s.outcome && (
-              <span className={`font-semibold ${TEXT[tone]}`}>{t(`outcome.${s.outcome}`)}</span>
-            )}
-            {s.port !== null && <span>{t('run.exit', { port: s.port })}</span>}
-            {s.attempt !== null && s.attempt > 1 && <span>{t('run.visit', { n: s.attempt })}</span>}
-            {s.durationMs !== null && (
-              <span className="tabular-nums">{formatMs(s.durationMs)}</span>
-            )}
-          </span>
         </summary>
         <div className="space-y-1.5 border-t border-border px-4 py-3 text-[12.5px]">
           <div className="text-muted-foreground">
-            {when(s.at)} · {t.has(`event.${s.event}`) ? t(`event.${s.event}`) : s.event}
+            {when(s.at)}
+            {s.nodeLabel || s.nodeId
+              ? ` · ${t.has(`event.${s.event}`) ? t(`event.${s.event}`) : s.event}`
+              : ''}
           </div>
           {s.summary && <p className="break-words">{s.summary}</p>}
           {s.error && <p className="break-words text-danger">{s.error}</p>}
-          {pairs.map(([k, v]) => (
-            <div key={k} className="break-words">
-              <span className="text-muted-foreground">{k}:</span> {v}
-            </div>
+          {facts.map((f) => (
+            <p key={f.kind} className="break-words text-muted-foreground">
+              {factText(f)}
+            </p>
           ))}
         </div>
       </details>
@@ -98,6 +136,7 @@ export function RunTimeline({ run }: { run: FlowRunDetail }) {
   const rows = timelineRows(run.log, filter);
   const removed = new Set(run.removedNodeIds);
   const path = pathOf(run);
+  const nameOf = nodeNames(run);
 
   return (
     <section className={`${CARD} mb-5 overflow-hidden`}>
@@ -192,6 +231,7 @@ export function RunTimeline({ run }: { run: FlowRunDetail }) {
               key={`${s.seq}-${s.event}-${s.at}`}
               s={s}
               removed={!!s.nodeId && removed.has(s.nodeId)}
+              nameOf={nameOf}
             />
           ))}
         </ol>
