@@ -128,6 +128,94 @@ describe.skipIf(!KEY)('live OpenRouter', () => {
     expect(negativeAnswered).toBeLessThanOrEqual(3);
   }, 300_000);
 
+  it('the borderline check with a real model: the known off-topic leak is withheld and right answers survive', async () => {
+    const f = api.faq(t.admin);
+    const cur = (await f.settings()).body;
+    const on = await f.saveSettings({
+      enabled: true,
+      threshold: 0.5,
+      minMargin: 0,
+      logQueries: true,
+      verifyMode: 'borderline',
+      verifyBand: 0.15,
+      rowVersion: cur.rowVersion,
+    });
+    expect(on.status, JSON.stringify(on.body)).toBe(200);
+    try {
+      const ask = async (
+        q: string,
+      ): Promise<DecisionJson & { verify: { verdict: string; reason: string | null } | null }> => {
+        const res = await f.test(q);
+        expect(res.status, JSON.stringify(res.body)).toBe(200);
+        return res.body;
+      };
+      const tally: Record<string, number> = { confirmed: 0, rejected: 0, error: 0, skipped: 0 };
+      let answeredRight = 0;
+      let answeredWrong = 0;
+      let vetoedRight = 0;
+      const vetoes: string[] = [];
+      let positives = 0;
+      for (const fa of data.faqs) {
+        for (const q of fa.tests) {
+          positives++;
+          const d = await ask(q);
+          if (d.verify) tally[d.verify.verdict] = (tally[d.verify.verdict] ?? 0) + 1;
+          const right = d.candidates[0]?.faqId === entries.get(fa.id)!.id;
+          if (d.outcome === 'answered') right ? answeredRight++ : answeredWrong++;
+          if (d.verify?.verdict === 'rejected' && right) {
+            vetoedRight++;
+            vetoes.push(`${q} -> ${d.candidates[0]?.question} (${d.score}): ${d.verify.reason}`);
+          }
+        }
+      }
+      let negativeAnswered = 0;
+      const leaks: string[] = [];
+      for (const q of data.negatives) {
+        const d = await ask(q);
+        if (d.verify) tally[d.verify.verdict] = (tally[d.verify.verdict] ?? 0) + 1;
+        if (d.outcome === 'answered') {
+          negativeAnswered++;
+          leaks.push(`${q} -> ${d.candidates[0]?.question} (${d.score})`);
+        }
+      }
+      const pizza = await ask('send me a pizza');
+      console.log(
+        `[live] with the check: answered right ${answeredRight}/${positives}, wrong ${answeredWrong}, right answers vetoed ${vetoedRight}, off-topic answered ${negativeAnswered}/${data.negatives.length}; verdicts ${JSON.stringify(tally)}`,
+      );
+      console.log(
+        `[live] "send me a pizza": ${pizza.outcome}, best ${pizza.candidates[0]?.question} (${pizza.score}), verify ${JSON.stringify(pizza.verify)}`,
+      );
+      if (vetoes.length) console.log('[live] right answers vetoed:', vetoes);
+      if (leaks.length) console.log('[live] off-topic still answered:', leaks);
+      // The check only ever removes answers, so it cannot make precision worse; it must remove the leak without costing real answers.
+      expect(answeredWrong).toBe(0);
+      expect(negativeAnswered).toBeLessThanOrEqual(1);
+      expect(pizza.outcome).not.toBe('answered');
+      expect(vetoedRight).toBeLessThanOrEqual(Math.ceil(positives * 0.1));
+      expect(tally.error).toBe(0);
+      expect((tally.confirmed ?? 0) + (tally.rejected ?? 0)).toBeGreaterThan(0);
+      const ledger = await p.h.owner.query(
+        `SELECT count(*) AS calls, sum(prompt_tokens) AS p, sum(completion_tokens) AS c FROM ai_token_usage
+       WHERE org_id = $1 AND model = 'openai/gpt-4o-mini' AND completion_tokens > 0`,
+        [t.orgId],
+      );
+      expect(Number(ledger.rows[0].calls)).toBeGreaterThan(0);
+      console.log(
+        `[live] check cost: ${ledger.rows[0].calls} calls, ${ledger.rows[0].p} prompt + ${ledger.rows[0].c} completion tokens`,
+      );
+    } finally {
+      const after = (await f.settings()).body;
+      await f.saveSettings({
+        enabled: true,
+        threshold: 0.5,
+        minMargin: 0,
+        logQueries: true,
+        verifyMode: 'off',
+        rowVersion: after.rowVersion,
+      });
+    }
+  }, 600_000);
+
   it('serves a repeated message from the query cache without paying for it twice', async () => {
     const q = 'is it possible to cancel the thing i bought this morning';
     await api.faq(t.admin).test(q);

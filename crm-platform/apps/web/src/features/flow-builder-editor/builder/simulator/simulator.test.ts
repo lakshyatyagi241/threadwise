@@ -774,3 +774,51 @@ describe('Ask for file / image and Ask for location in the test runner (TW-FLB-0
     expect(h.texts().filter((t) => t === 'Use the + menu')).toHaveLength(1);
   });
 });
+
+describe('simulator: Answer from FAQ', () => {
+  const run = async (faqData: Record<string, unknown>, handles: string[]) => {
+    const nodes = [
+      node('t', 'trigger'),
+      node('f', 'faq', faqData),
+      node('yes', 'message', { text: 'ANSWERED PATH' }),
+      node('no', 'message', { text: 'NO MATCH PATH' }),
+    ];
+    const edges = [
+      edge('t', 'out', 'f'),
+      ...(handles.includes('matched') ? [edge('f', 'matched', 'yes')] : []),
+      ...(handles.includes('no_match') ? [edge('f', 'no_match', 'no')] : []),
+    ];
+    const h = harness(nodes, edges);
+    h.sim.start();
+    h.sim.send('hello');
+    await h.settle();
+    return h;
+  };
+
+  it('does not look anything up, sends nothing, says it is simulated and takes the answered exit', async () => {
+    const h = await run({ query: '{{user_message}}', save: 'kb' }, ['matched', 'no_match']);
+    const texts = h.texts();
+    const line = texts.find((t) => t.startsWith('(simulated) Answer from FAQ'))!;
+    expect(line).toContain('does not look up your FAQs');
+    expect(line).toContain('nothing is sent');
+    expect(line).toContain('{{kb}} stays empty');
+    expect(line).toContain('"answered" exit');
+    expect(texts).toContain('ANSWERED PATH');
+    expect(texts).not.toContain('NO MATCH PATH');
+    // No FAQ answer is made up: the only bot text is the flow's own next message.
+    expect(h.log.filter((e) => e.kind === 'bot').map((e) => e.text)).toEqual(['ANSWERED PATH']);
+  });
+
+  it('takes no match when only that exit is connected, and says why', async () => {
+    const h = await run({}, ['no_match']);
+    const line = h.texts().find((t) => t.startsWith('(simulated) Answer from FAQ'))!;
+    expect(line).toContain('not connected, so taking "no match"');
+    expect(line).toContain('{{faq}} stays empty');
+    expect(h.texts()).toContain('NO MATCH PATH');
+  });
+
+  it('stops with the usual note when neither exit is connected', async () => {
+    const h = await run({}, []);
+    expect(h.texts().some((t) => t.includes('No path forward (port "matched")'))).toBe(true);
+  });
+});

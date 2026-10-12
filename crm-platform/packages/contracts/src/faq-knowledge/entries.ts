@@ -28,12 +28,17 @@ export const FAQ_LIMITS = {
   /** Rows a bulk action takes. */
   bulkMax: 200,
   searchLength: 200,
+  /** The borderline band the screens offer for the LLM check. */
+  verifyBandMin: 0.01,
+  verifyBandMax: 0.3,
   /** The threshold the screens offer. */
   thresholdMin: 0.05,
   thresholdMax: 0.99,
   marginMax: 0.5,
   /** A message longer than this is cut before it is embedded. */
   queryMax: 1000,
+  /** The editor's node id inside a flow (a uuid or a short generated id). */
+  flowNodeId: 120,
 } as const;
 
 const blankToNull = (v: unknown) => (typeof v === 'string' && v.trim() === '' ? null : v);
@@ -61,6 +66,10 @@ const answerFields = {
     .optional(),
   /** The flow to start, when `answerType` is `flow`. */
   flowId: uuidSchema.nullable().optional(),
+  /** Start the flow at this node (Geta's "link to node") instead of at its trigger. Only with a flow answer. */
+  flowNodeId: z
+    .preprocess(blankToNull, z.string().max(FAQ_LIMITS.flowNodeId).nullable())
+    .optional(),
 };
 
 /** A text answer needs its text, a flow answer needs its flow. */
@@ -164,6 +173,10 @@ export interface FaqEntrySummary {
   answerPreview: string | null;
   flowId: string | null;
   flowName: string | null;
+  /** The node the flow starts at; null means the flow's own start. */
+  flowNodeId: string | null;
+  /** The node's name as the editor shows it, null when the node no longer exists in the flow (the editor warns). */
+  flowNodeLabel: string | null;
   category: string | null;
   status: FaqStatus;
   thresholdOverride: number | null;
@@ -203,6 +216,18 @@ export interface FaqEntryListResponse {
 
 export interface FaqBulkResult {
   affected: number;
+}
+
+/** The steps of a flow, for the "start at" picker of an FAQ that answers with a flow. */
+export interface FaqFlowNode {
+  id: string;
+  /** The editor's node type (`message`, `ask`, ...); the screen shows the catalogue name. */
+  type: string;
+  /** What the author called the step; blank when they did not. */
+  label: string;
+}
+export interface FaqFlowNodesResponse {
+  data: FaqFlowNode[];
 }
 
 export interface FaqGenerateResult {

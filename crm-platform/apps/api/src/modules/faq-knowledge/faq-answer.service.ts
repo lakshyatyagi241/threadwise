@@ -58,7 +58,7 @@ export class FaqAnswerService {
           outcome = 'not_sent';
           error = 'The flow this FAQ starts no longer exists.';
         } else {
-          const started = await this.startFlow(e, answer.flowId, body);
+          const started = await this.startFlow(e, answer.flowId, body, answer.flowNodeId);
           outcome = started.ok ? 'flow_started' : 'not_sent';
           error = started.ok ? null : started.error;
           consumed = started.ok;
@@ -96,6 +96,7 @@ export class FaqAnswerService {
       embeddingModel: result.embeddingModel,
       latencyMs: result.latencyMs,
       error: error ?? (outcome === 'provider_error' ? result.note : null),
+      verify: result.verify,
     };
     await this.db
       .txAs({ orgId: e.orgId, userId: null }, (tx) => this.logs.insert(tx, e.orgId, write))
@@ -137,10 +138,12 @@ export class FaqAnswerService {
     e: InboundStoredEvent,
     flowId: number,
     typed: string,
+    startNodeId: string | null,
   ): Promise<{ ok: true } | { ok: false; error: string }> {
     try {
       const out = await this.launch.start(e.orgId, {
         flowId,
+        startNodeId,
         contactId: e.contactId,
         channelId: e.channelId,
         peerKey: e.peerKey,

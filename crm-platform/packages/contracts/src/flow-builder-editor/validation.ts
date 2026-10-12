@@ -108,6 +108,18 @@ export function flbValidateGraph(
     items.push('"API (from library)" has no API selected — pick one of your saved APIs.');
   }
 
+  for (const n of nodes) {
+    if (n.type !== 'faq') continue;
+    const min = n.data?.minScore;
+    if (min === null || min === undefined || min === '') continue;
+    const v = Number(min);
+    if (Number.isFinite(v) && v >= 0.05 && v <= 0.99) continue;
+    bad.add(n.id);
+    items.push(
+      '"Answer from FAQ" has a minimum score outside 0.05 to 0.99 — fix it or leave it blank to use the workspace setting.',
+    );
+  }
+
   const trig = nodes.find((n) => n.type === 'trigger');
   // A website chat bot is reached through its widget, so it has no number to pick.
   if (trig && ctx.mode !== 'web' && !String(trig.data?.deviceId ?? '').trim()) {

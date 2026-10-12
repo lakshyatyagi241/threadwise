@@ -155,6 +155,23 @@ describe('the pre-save check lists the same problems as the contracts, in the ca
       ],
     ],
     [
+      'Answer from FAQ with a minimum score outside 0.05 to 0.99',
+      [
+        [
+          node('t', 'trigger', { data: { deviceId: 'd' } }),
+          node('f', 'faq', { data: { minScore: 1.5 } }),
+          node('g', 'faq', { data: { minScore: 0.4 } }),
+          node('h', 'faq', { data: { minScore: null } }),
+        ],
+        [
+          { source: 't', target: 'f' },
+          { source: 'f', target: 'g' },
+          { source: 'g', target: 'h' },
+        ],
+        { mode: 'chat', senderAvailable: true },
+      ],
+    ],
+    [
       'no sender but none to pick',
       [[node('t', 'trigger', { data: {} })], [], { mode: 'call', senderAvailable: false }],
     ],

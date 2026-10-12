@@ -11,6 +11,7 @@ export type ErrorKey =
   | 'duplicateVariation'
   | 'limitReached'
   | 'flowNotFound'
+  | 'flowNodeNotFound'
   | 'embeddingUnavailable'
   | 'engineDisabled'
   | 'modelNotAllowed'
@@ -30,6 +31,8 @@ export function errorKey(error: unknown): ErrorKey {
       return 'limitReached';
     case ERROR_CODES.FAQ_FLOW_NOT_FOUND:
       return 'flowNotFound';
+    case ERROR_CODES.FAQ_FLOW_NODE_NOT_FOUND:
+      return 'flowNodeNotFound';
     case ERROR_CODES.FAQ_EMBEDDING_UNAVAILABLE:
       return 'embeddingUnavailable';
     case ERROR_CODES.FAQ_ENGINE_DISABLED:

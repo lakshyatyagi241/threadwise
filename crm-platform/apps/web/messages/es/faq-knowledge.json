@@ -33,7 +33,8 @@
       "modelNotAllowed": "El modelo de IA para coincidencias de la plataforma no está permitido. Consulta a tu administrador de plataforma.",
       "validation": "Algunos campos requieren atención.",
       "rateLimited": "Demasiadas solicitudes. Espera un momento e inténtalo de nuevo.",
-      "unexpected": "Algo salió mal. Inténtalo de nuevo y comparte el id de solicitud con soporte si el problema continúa."
+      "unexpected": "Algo salió mal. Inténtalo de nuevo y comparte el id de solicitud con soporte si el problema continúa.",
+      "flowNodeNotFound": "El paso elegido ya no está en este flujo. Elige otro paso o empieza desde el inicio del flujo."
     },
     "banner": {
       "enabledToast": "Las respuestas con preguntas frecuentes están activadas.",
@@ -139,7 +140,9 @@
         "ready": "{count} activas",
         "pending": "{count} indexando",
         "failed": "{count} con errores"
-      }
+      },
+      "stepMissing": "Falta el paso",
+      "startsAt": "Empieza en: {step}"
     },
     "editor": {
       "back": "Volver a preguntas frecuentes",
@@ -192,7 +195,9 @@
         "preview": "Así se ve en WhatsApp",
         "previewEmpty": "Tu respuesta aparece aquí",
         "flowLabel": "Flujo a iniciar",
-        "noFlow": "Ningún flujo elegido"
+        "noFlow": "Ningún flujo elegido",
+        "startsAt": "Empieza en el paso: {step}",
+        "stepGone": "El paso donde empieza esta pregunta frecuente ya no existe, así que los clientes no reciben respuesta."
       },
       "advanced": {
         "title": "Avanzado: sensibilidad solo para esta pregunta frecuente",
@@ -227,6 +232,11 @@
           "required": "Elige un valor entre 5 % y 99 %.",
           "tooLong": "Elige un valor entre 5 % y 99 %.",
           "invalid": "Elige un valor entre 5 % y 99 %."
+        },
+        "flowNodeId": {
+          "required": "Elige un paso de este flujo o el inicio del flujo.",
+          "tooLong": "Elige un paso de este flujo o el inicio del flujo.",
+          "invalid": "Elige un paso de este flujo o el inicio del flujo."
         }
       },
       "deleteConfirm": {
@@ -257,7 +267,7 @@
         "off": "Inactivo",
         "draft": "Borrador"
       },
-      "note": "El flujo comienza desde su activador. Solo se pueden ejecutar flujos publicados y activos."
+      "note": "El flujo empieza en el paso que elijas abajo o en su inicio. Solo se pueden ejecutar flujos publicados y activos."
     },
     "variations": {
       "title": "Variantes de la pregunta",
@@ -354,6 +364,10 @@
         "notSent": {
           "title": "Coincidió, no enviado",
           "body": "Una pregunta frecuente coincidió, pero no se envió la respuesta; por ejemplo, porque las respuestas con preguntas frecuentes estaban desactivadas."
+        },
+        "vetoed": {
+          "title": "Respuesta retenida",
+          "body": "La coincidencia obtuvo una puntuación suficiente, pero la segunda revisión dijo que no, así que no se enviaría nada."
         }
       },
       "tier": {
@@ -486,8 +500,11 @@
         "providerError": "El proveedor de IA falló, así que el bot solo pudo comparar por ortografía.",
         "notSent": "Una pregunta frecuente coincidió, pero no se envió la respuesta.",
         "tier": "Decidido por el nivel {tier}.",
-        "error": "Error: {error}"
-      }
+        "error": "Error: {error}",
+        "vetoed": "La mejor coincidencia obtuvo {score} %, por encima del umbral de {threshold} %, pero la segunda revisión dijo que no responde al mensaje, así que no se envió nada.",
+        "vetoedNoBar": "La mejor coincidencia obtuvo {score} %, pero la segunda revisión dijo que no responde al mensaje, así que no se envió nada."
+      },
+      "flowRun": "(desde un flujo)"
     },
     "insights": {
       "title": "Estadísticas de preguntas frecuentes",
@@ -612,7 +629,8 @@
         "exact": "Exacta: el mensaje es igual a una formulación guardada, sin distinguir mayúsculas ni espacios.",
         "semantic": "Por significado: el mensaje se compara por significado con todas las formulaciones activas, así que palabras distintas pueden coincidir.",
         "trigram": "Alternativa por ortografía: si el proveedor de IA no está disponible, se comparan las letras, lo que solo detecta errores de escritura.",
-        "threshold": "La mejor puntuación se compara con la sensibilidad. Si la supera, la pregunta frecuente responde; si no, el mensaje aparece en Sin respuesta."
+        "threshold": "La mejor puntuación se compara con la sensibilidad. Si la supera, la pregunta frecuente responde; si no, el mensaje aparece en Sin respuesta.",
+        "verify": "Segunda revisión (opcional): un modelo de chat pequeño puede volver a comprobar una coincidencia que apenas alcanzó la sensibilidad, y solo puede retener una respuesta."
       },
       "who": "Cambiar estos ajustes requiere el permiso faq.settings.manage.",
       "leave": {
@@ -620,6 +638,52 @@
         "body": "Los cambios en estos ajustes no se han guardado.",
         "leave": "Salir",
         "stay": "Quedarme"
+      },
+      "verify": {
+        "title": "Segunda revisión para casos dudosos",
+        "hint": "Un modelo de chat pequeño vuelve a comprobar las coincidencias que apenas alcanzaron el umbral.",
+        "unavailable": "La plataforma desactivó la segunda revisión, así que no se ejecuta aunque la actives aquí. Consulta a tu administrador de plataforma.",
+        "label": "Comprobar los casos dudosos con una segunda opinión",
+        "on": "Activada",
+        "off": "Desactivada",
+        "onBody": "Cuando una coincidencia apenas supera el umbral, un modelo de chat pequeño lee el mensaje del cliente y la pregunta frecuente, y dice si la respuesta encaja. Solo puede decir que no: nunca hace que se envíe una respuesta.",
+        "offBody": "Toda coincidencia que alcanza el umbral se responde sin una segunda revisión.",
+        "bandLabel": "Qué tan cerca cuenta como caso dudoso",
+        "bandValue": "+{value}%",
+        "explainOn": "Las coincidencias con una puntuación de {from} % a {to} % las revisa {model}. Un \"no\" significa que no se envía respuesta y el mensaje aparece en Sin respuesta.",
+        "explainOff": "Toda coincidencia con una puntuación de {threshold} % o más se responde. Activa la segunda revisión para que se vuelvan a comprobar los casos más dudosos.",
+        "cost": "Cada revisión envía al modelo el mensaje del cliente y la pregunta de la pregunta frecuente: unos cientos de tokens, y añade alrededor de un segundo a una respuesta dudosa. Las coincidencias fuera del rango nunca se revisan. Si la revisión falla, no está disponible o se alcanza el límite por hora, la coincidencia se mantiene como si no hubiera revisión."
+      }
+    },
+    "flowNode": {
+      "label": "Empezar en",
+      "start": "El inicio del flujo",
+      "hint": "Elige un paso para saltarte el comienzo del flujo. Los clientes entran al flujo en el paso que elijas.",
+      "loading": "Cargando los pasos de este flujo",
+      "empty": "Este flujo no tiene otros pasos, así que empieza desde el principio.",
+      "retry": "Reintentar",
+      "deletedOption": "Paso eliminado (elige otro)",
+      "missing": {
+        "title": "Ya no existe el paso donde empieza esta pregunta frecuente",
+        "body": "Ese paso se eliminó del flujo. Hasta que elijas otro paso, los clientes que coincidan con esta pregunta frecuente no recibirán respuesta. Elige un paso abajo o empieza desde el inicio del flujo.",
+        "fix": "Empezar desde el inicio del flujo"
+      }
+    },
+    "verify": {
+      "title": "Segunda revisión",
+      "chip": {
+        "confirmed": "Segunda revisión: sí",
+        "vetoed": "Segunda revisión: no",
+        "failed": "Segunda revisión fallida",
+        "skipped": "Segunda revisión omitida"
+      },
+      "model": "Revisado por",
+      "reason": "Motivo",
+      "body": {
+        "confirmed": "La coincidencia era un caso dudoso, así que un modelo de chat pequeño leyó el mensaje y la pregunta frecuente, y confirmó que la respuesta encaja.",
+        "vetoed": "La coincidencia era un caso dudoso y la segunda revisión dijo que esta pregunta frecuente no responde al mensaje. Se retuvo la respuesta, no se envió nada y el mensaje aparece en Sin respuesta.",
+        "failed": "La coincidencia era un caso dudoso, pero la revisión no pudo terminar, así que la coincidencia se mantuvo y la respuesta se envió como si no hubiera segunda revisión.",
+        "skipped": "La segunda revisión no se ejecutó para esta coincidencia, así que la coincidencia se mantuvo tal cual."
       }
     }
   }

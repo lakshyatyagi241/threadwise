@@ -51,6 +51,10 @@ export class FaqPlatformService {
             (SELECT count(*) FROM faq_match_logs WHERE origin = 'inbound' AND created_at >= now() - interval '30 days') AS matches,
             (SELECT count(*) FROM faq_match_logs WHERE origin = 'inbound' AND outcome IN ('answered', 'flow_started')
                AND created_at >= now() - interval '30 days') AS answered,
+            (SELECT count(*) FROM faq_match_logs WHERE verify_verdict IN ('confirmed', 'rejected')
+               AND created_at >= now() - interval '30 days') AS verified,
+            (SELECT count(*) FROM faq_match_logs WHERE verify_verdict = 'rejected'
+               AND created_at >= now() - interval '30 days') AS vetoed,
             (SELECT COALESCE(sum(total_tokens), 0) FROM ai_token_usage WHERE provider = 'openrouter'
                AND model IN (${sql.join(
                  ids.map((i) => sql`${i}`),
@@ -68,6 +72,8 @@ export class FaqPlatformService {
         matches30d: num(r.matches),
         answered30d: num(r.answered),
         embeddingTokens30d: num(r.tokens),
+        verified30d: num(r.verified),
+        vetoed30d: num(r.vetoed),
       };
     });
     const platformKey = await this.keys.resolve(null, 'openrouter');

@@ -21,6 +21,7 @@ import { useCan } from '@/features/auth-registration-security/shared/session-con
 import { refreshFaqs, useFaqList } from '../api/hooks';
 import { faqApi } from '../api/service';
 import { errorKey } from '../lib/errors';
+import { stepDisplayName } from '../lib/model';
 import {
   EMPTY_FILTERS,
   bulkAllowed,
@@ -28,6 +29,7 @@ import {
   hasFilters,
   indexingShares,
   pruneSelection,
+  stepMissing,
   toggleAll,
   type BulkAction,
   type ListFilters,
@@ -482,6 +484,7 @@ export function FaqRow({
 }) {
   const t = useTranslations('faq.list');
   const missing = flowMissing(row);
+  const stepGone = stepMissing(row);
   return (
     <tr className={cn('align-top', selected && 'bg-primary/5')}>
       <td className="ps-4 pt-3.5">
@@ -517,10 +520,27 @@ export function FaqRow({
             {t('flowMissing')}
           </Badge>
         ) : (
-          <span className="inline-flex items-center gap-1.5">
-            <FlowIcon className="text-muted-foreground" />
-            <span className="line-clamp-2">{row.flowName}</span>
-          </span>
+          <div className="space-y-1">
+            <span className="inline-flex items-center gap-1.5">
+              <FlowIcon className="text-muted-foreground" />
+              <span className="line-clamp-2">{row.flowName}</span>
+            </span>
+            {stepGone ? (
+              <div>
+                <Badge tone="danger" className="gap-1">
+                  <WarnIcon className="size-3" />
+                  {t('stepMissing')}
+                </Badge>
+              </div>
+            ) : (
+              row.flowNodeId &&
+              row.flowNodeLabel && (
+                <p className="text-xs text-muted-foreground">
+                  {t('startsAt', { step: stepDisplayName(row.flowNodeLabel) })}
+                </p>
+              )
+            )}
+          </div>
         )}
       </td>
       <td className="px-3 py-3">

@@ -579,6 +579,8 @@ describe('flbToRuntimeData: the contract', () => {
         'deal',
         // not Reference: the API Library node (docs/api/api-library.md)
         'api_library',
+        // not Reference: the FAQ node (ADR-0021 addendum)
+        'faq',
         'cf_say',
         'cf_listen',
         'cf_ai',

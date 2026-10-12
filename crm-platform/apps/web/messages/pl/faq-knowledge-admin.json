@@ -61,7 +61,9 @@
         "matches": "Sprawdzone wiadomości klientów",
         "answered": "Z odpowiedzią",
         "rate": "Odsetek odpowiedzi",
-        "tokens": "Tokeny do dopasowywania"
+        "tokens": "Tokeny do dopasowywania",
+        "verified": "Drugie sprawdzenia",
+        "vetoed": "Wstrzymane odpowiedzi"
       }
     },
     "settings": {
@@ -96,7 +98,8 @@
         "maxFaqs": "Maksymalna liczba FAQ na przestrzeń roboczą",
         "maxVariationsPerFaq": "Maksymalna liczba wariantów na FAQ",
         "semanticPerHour": "Dopasowania semantyczne na przestrzeń roboczą na godzinę",
-        "semanticPerHourHint": "Po przekroczeniu przestrzeń robocza wraca do podobieństwa pisowni do końca godziny. 0 oznacza zawsze podobieństwo pisowni."
+        "semanticPerHourHint": "Po przekroczeniu przestrzeń robocza wraca do podobieństwa pisowni do końca godziny. 0 oznacza zawsze podobieństwo pisowni.",
+        "verifyPerHour": "Drugie sprawdzenia na przestrzeń roboczą na godzinę"
       },
       "errors": {
         "integer": "Wpisz liczbę całkowitą.",
@@ -115,6 +118,19 @@
         "confirm": "Zapisz zmiany",
         "engineOff": "Wyłączenie silnika sprawia, że żadna przestrzeń robocza nie odpowiada klientom z FAQ, a edycje FAQ są blokowane, dopóki go nie włączysz.",
         "modelChange": "Zmiana modelu AI do dopasowywania z {from} na {to} powoduje ponowne utworzenie wszystkich zapisanych wektorów. Do czasu zakończenia dopasowywanie korzysta tylko z podobieństwa pisowni. Domyślna czułość będzie podążać za nowym modelem (zalecane {threshold}), chyba że ustawisz stałą wartość. Progi przestrzeni roboczych zapisane osobno mogą wymagać ponownego dostrojenia, bo wyniki zależą od modelu."
+      },
+      "verify": {
+        "title": "Drugie sprawdzenie niepewnych dopasowań",
+        "description": "Mały model czatu dodatkowo sprawdza dopasowania, które ledwo osiągnęły próg przestrzeni roboczej. Może tylko wstrzymać odpowiedź. Przestrzenie robocze włączają tę funkcję we własnych ustawieniach FAQ.",
+        "enabled": {
+          "label": "Zezwalaj na drugie sprawdzenie",
+          "hint": "Wyłącz, aby zatrzymać sprawdzanie we wszystkich przestrzeniach roboczych, niezależnie od ich ustawień."
+        },
+        "model": {
+          "label": "Model sprawdzający",
+          "hint": "Identyfikator modelu OpenRouter, który ocenia niepewne dopasowania, na przykład openai/gpt-4o-mini. Wystarczy mały, szybki model."
+        },
+        "perHourHint": "Po przekroczeniu tego limitu niepewne dopasowanie obowiązuje bez sprawdzenia do końca godziny. 0 oznacza, że nigdy nie sprawdzaj."
       }
     },
     "maintenance": {

@@ -48,6 +48,9 @@ export class FaqConfigService {
       maxFaqs: doc.maxFaqs ?? d.maxFaqs,
       maxVariationsPerFaq: doc.maxVariationsPerFaq ?? d.maxVariationsPerFaq,
       semanticPerHour: doc.semanticPerHour ?? d.semanticPerHour,
+      verifyEnabled: doc.verifyEnabled ?? d.verifyEnabled,
+      verifyModel: doc.verifyModel ?? d.verifyModel,
+      verifyPerHour: doc.verifyPerHour ?? d.verifyPerHour,
       allowedModels: FAQ_EMBEDDING_MODELS,
     };
   }

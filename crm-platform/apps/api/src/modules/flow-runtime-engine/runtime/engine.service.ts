@@ -129,7 +129,15 @@ export class FlowEngine {
       // Read before a Sub-flow swaps the graph: the log keeps the node that ran, not one of the new flow.
       node = outcome.nodeId ? nodeById(state.graph, outcome.nodeId) : null;
       if (outcome.transition.t === 'subflow') {
-        outcome = await this.enterSubflow(orgId, state, outcome, outcome.transition.flowId);
+        outcome = await this.enterSubflow(
+          orgId,
+          state,
+          outcome,
+          outcome.transition.flowId,
+          outcome.transition.startNodeId,
+          outcome.transition.missPort ?? 1,
+          outcome.transition.missVars,
+        );
       }
     }
 
@@ -158,13 +166,26 @@ export class FlowEngine {
     state: RunState,
     outcome: StepOutcome,
     flowId: number | string,
+    startNodeId?: string,
+    missPort = 1,
+    missVars?: Record<string, unknown>,
   ): Promise<StepOutcome> {
     const nodeId = state.currentNodeId ?? '';
-    const pass = (note: string): StepOutcome => ({
-      ...outcome,
-      transition: advanceFrom(state, nodeId, 1, false, profileOf(state.channelKind ?? '').paceMs),
-      notes: [...outcome.notes, note],
-    });
+    // `missPort` is the exit a caller wants when the flow cannot be entered: 1 for a Sub-flow node, `no_match` for the FAQ node.
+    const pass = (note: string, port = missPort): StepOutcome => {
+      if (missVars) Object.assign(state.vars, missVars);
+      return {
+        ...outcome,
+        transition: advanceFrom(
+          state,
+          nodeId,
+          port,
+          false,
+          profileOf(state.channelKind ?? '').paceMs,
+        ),
+        notes: [...outcome.notes, note],
+      };
+    };
     const depth = Number(state.vars[SUBFLOW_DEPTH_VAR] ?? 0) || 0;
     if (depth >= MAX_SUBFLOW_DEPTH) {
       return {
@@ -184,7 +205,10 @@ export class FlowEngine {
       return pass(`sub-flow ${flowId} is not live (publish it and switch it on): moved on`);
     }
     const graph = compileGraph(flow.data);
-    const first = graph.nodes[0];
+    if (startNodeId !== undefined && !nodeById(graph, startNodeId)) {
+      return pass(`sub-flow ${flowId} has no step ${startNodeId} (it was deleted): moved on`);
+    }
+    const first = startNodeId !== undefined ? nodeById(graph, startNodeId) : graph.nodes[0];
     if (!first || !nodeById(graph, first.id)) {
       return {
         ...outcome,

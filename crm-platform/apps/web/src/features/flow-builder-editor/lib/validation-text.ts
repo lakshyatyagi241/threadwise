@@ -8,6 +8,7 @@ import {
   type FlowType,
 } from '@crm/contracts';
 import { nodeLabelMsg } from './contract-text';
+import { minScoreOutOfRange } from './faq-node';
 import { msg, type Msg } from './msg';
 
 export interface ValidationResult {
@@ -68,6 +69,11 @@ export function validateGraph(
         channel: msg(`contracts.flowTypes.${MODE_TYPE[ctx.mode] ?? 'chat'}`),
       }),
     );
+  }
+  // The contracts also have a line for an "API (from library)" step with no API; the popup has none for it yet.
+  for (const n of nodes) {
+    if (n.type === 'faq' && minScoreOutOfRange(n.data?.minScore))
+      items.push(msg('contracts.validation.faqMinScore', { node: nodeLabelMsg(n.type) }));
   }
   const trig = nodes.find((n) => n.type === 'trigger');
   if (

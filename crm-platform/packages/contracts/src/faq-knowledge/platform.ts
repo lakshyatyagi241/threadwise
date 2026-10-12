@@ -49,6 +49,10 @@ export const FAQ_PLATFORM_DEFAULTS = {
   maxVariationsPerFaq: 60,
   /** Semantic matches one workspace may run an hour; past it the matcher uses trigram only (an abuse and cost guard). */
   semanticPerHour: 600,
+  verifyEnabled: true,
+  verifyModel: FAQ_DEFAULT_GENERATION_MODEL,
+  /** Borderline checks one workspace may run an hour; past it a borderline match stands unchecked (a cost guard). */
+  verifyPerHour: 300,
 } as const;
 
 export const updateFaqPlatformConfigSchema = z
@@ -70,6 +74,14 @@ export const updateFaqPlatformConfigSchema = z
     maxFaqs: z.number().int().min(1).max(20_000),
     maxVariationsPerFaq: z.number().int().min(1).max(500),
     semanticPerHour: z.number().int().min(0).max(100_000),
+    verifyEnabled: z.boolean(),
+    verifyModel: z
+      .string()
+      .trim()
+      .min(3)
+      .max(120)
+      .regex(/^[A-Za-z0-9._:/-]+$/, 'Use an OpenRouter model id such as openai/gpt-4o-mini.'),
+    verifyPerHour: z.number().int().min(0).max(100_000),
   })
   .partial()
   .refine((v) => Object.keys(v).length > 0, { message: 'Nothing to change.' });
@@ -98,6 +110,9 @@ export interface FaqPlatformConfig {
   maxFaqs: number;
   maxVariationsPerFaq: number;
   semanticPerHour: number;
+  verifyEnabled: boolean;
+  verifyModel: string;
+  verifyPerHour: number;
   allowedModels: ReadonlyArray<{
     id: string;
     label: string;
@@ -124,6 +139,9 @@ export interface FaqPlatformOverview {
     matches30d: number;
     answered30d: number;
     embeddingTokens30d: number;
+    /** Borderline checks in the last 30 days, and how many of them vetoed an answer. */
+    verified30d: number;
+    vetoed30d: number;
   };
 }
 

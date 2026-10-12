@@ -549,7 +549,12 @@
           "cardGallery": "カードギャラリー",
           "cardCount": "カード{count}枚",
           "payLink": "支払いリンク",
-          "invoice": "請求書"
+          "invoice": "請求書",
+          "faqAllFaqs": "すべてのFAQ",
+          "faqCategory": "FAQ: {name}",
+          "faqScore": "最小スコア {score}",
+          "faqWorkspaceScore": "ワークスペースのスコア",
+          "faqNotSent": "送信しない"
         },
         "overlays": {
           "startPinned": "これが開始点です(クリックで固定を解除)",
@@ -704,9 +709,11 @@
           "groups": {
             "send": "送信",
             "ask": "顧客に質問",
-            "handoff": "引き継ぎ"
+            "handoff": "引き継ぎ",
+            "answer": "回答"
           },
-          "blockedTitle": "ボタンとリストはフローを終了させるため、最後にのみ置けます。"
+          "blockedTitle": "ボタンとリストはフローを終了させるため、最後にのみ置けます。",
+          "blockedTitleFaq": "「FAQから回答」には出口が2つあるため、最後にのみ配置できます。"
         },
         "card": {
           "branchLabel": "{title} → {target}",
@@ -715,7 +722,11 @@
           "moveUp": "上へ移動",
           "moveDown": "下へ移動",
           "duplicate": "複製",
-          "deleteStep": "ステップを削除"
+          "deleteStep": "ステップを削除",
+          "faqExits": {
+            "matched": "回答済み",
+            "no_match": "一致なし"
+          }
         },
         "editors": {
           "linkLabel": "この後の移動先",
@@ -831,8 +842,19 @@
           "cta": {
             "buttonText": "ボタンのテキスト",
             "opens": "開く(リンク)"
+          },
+          "faq": {
+            "exits": {
+              "matched": "FAQが回答した場合の移動先",
+              "no_match": "どのFAQも回答しなかった場合の移動先"
+            },
+            "exitsHint": {
+              "matched": "この時点でテキストの回答は送信済みです。フローを開始するFAQは、そのフローで続行されます。",
+              "no_match": "十分に近いFAQがなかったか、FAQの自動回答がオフになっています。"
+            }
           }
-        }
+        },
+        "faqEnds": "このステップでこの部分は終了します。次に送信される内容は、FAQが回答したかどうかで変わります。"
       },
       "formsCore": {
         "helpers": {
@@ -1765,6 +1787,44 @@
           "afterSending": "送信後",
           "afterSendingHint": "オン: 顧客が支払うまでフローはここで一時停止し、「out」ポートにのみ進みます（支払額は{paidAmount} {paidCurrency}として届きます）。オフ: 請求書を送信後、フローはすぐに進みます。",
           "waitUntilPaid": "支払い完了まで待ってから続行"
+        },
+        "faq": {
+          "intro": {
+            "body": "メッセージを意味に基づいてFAQと照合し、回答します。FAQが回答した場合は<mono>回答済み</mono>から、それ以外は<mono>一致なし</mono>から抜けます。",
+            "sub": "FAQの自動回答をオンにしなくても動作します。<link>FAQを管理</link>"
+          },
+          "exitsLabel": "出口",
+          "exitMatchedName": "回答済み",
+          "exitMatched": "FAQが回答しました。そのテキストが送信されたか(送信がオフの場合を除く)、そのフローが引き継がれ、元には戻りません。",
+          "exitNoMatchName": "一致なし",
+          "exitNoMatch": "十分に近いFAQがない、プラットフォームでFAQの自動回答がオフ、リンク先のフローまたはステップが存在しない、またはメッセージが空でした。",
+          "noFaqs": "FAQがまだないため、このステップは常に「一致なし」から抜けます。<link>最初のFAQを追加</link>",
+          "query": "照合するメッセージ",
+          "queryHint": "既定ではお客様の最後のメッセージです。質問ステップで保存した変数(例: <mono>{variable}</mono>)も使えます。/ を入力すると挿入できます。",
+          "category": "これらのFAQのみ",
+          "allFaqs": "すべてのFAQ",
+          "loadingCategories": "カテゴリを読み込み中…",
+          "categoryGone": "{name}(使用しているFAQなし)",
+          "categoryHint": "このカテゴリのFAQのみが回答できます。カテゴリはFAQから取得されます。",
+          "categoriesFailed": "FAQカテゴリを読み込めませんでした。",
+          "retry": "再試行",
+          "minScore": "最小スコア",
+          "useWorkspaceScore": "ワークスペースの設定を使用",
+          "minScoreHint": "このステップに限り、ワークスペースのスコアを {min} から {max} の範囲で置き換えます。スコアはプラットフォームの埋め込みモデルによって変わるため、数値を決める前に<link>FAQテスト</link>でメッセージを試してください。",
+          "minScoreInvalid": "{min} から {max} の数値を入力するか、ワークスペースの設定を使用してください。",
+          "sendAnswer": "お客様に回答を送信",
+          "sendAnswerToggle": "一致したテキスト回答をメッセージとして送信",
+          "sendAnswerOnHint": "一致したテキストFAQがお客様に送信されます。フローを開始するFAQは、そのフローで続行されます。",
+          "sendAnswerOffHint": "何も送信されません。回答は下の変数に保存されるだけなので、後のステップで返信文を自由に作成できます。フローを開始するFAQは、引き続きそのフローで続行されます。",
+          "save": "結果の保存名",
+          "saveHint": "結果を保存する名前です。後のステップでは下の形式で参照します。",
+          "variables": {
+            "answer": "回答テキスト",
+            "matched": "はい または いいえ",
+            "question": "一致したFAQの質問",
+            "score": "一致の近さ",
+            "id": "一致したFAQのID"
+          }
         }
       },
       "attrPicker": {
@@ -2100,6 +2160,10 @@
         "api_library": {
           "label": "API（ライブラリから）",
           "description": "API ライブラリから保存済みの API を呼び出す"
+        },
+        "faq": {
+          "label": "FAQから回答",
+          "description": "メッセージをFAQと照合"
         }
       },
       "groups": {
@@ -2242,7 +2306,8 @@
         "wrongChannel": "「{node}」は{channel}では動作しません。削除するか、トリガーノードでチャンネルを切り替えてください。",
         "noSenderInstagram": "トリガーノードにInstagramアカウントが選択されていません。トリガーの手順で選択してください。",
         "noSenderFacebook": "トリガーノードにFacebookページが選択されていません。トリガーの手順で選択してください。",
-        "noSenderNumber": "トリガーノードに番号が選択されていません。トリガーの手順で選択してください。"
+        "noSenderNumber": "トリガーノードに番号が選択されていません。トリガーの手順で選択してください。",
+        "faqMinScore": "「{node}」の最小スコアが0.05~0.99の範囲外です。修正するか、空欄にしてワークスペースの設定を使用してください。"
       }
     },
     "simpleModel": {
@@ -2321,6 +2386,10 @@
         "askLocation": {
           "label": "位置情報",
           "help": "顧客の位置情報の共有を待機"
+        },
+        "faq": {
+          "label": "FAQから回答",
+          "help": "お客様のメッセージをFAQと照合します。このフローを終了します。FAQが回答した場合と回答しなかった場合で出口が分かれます"
         }
       },
       "typeLabel": {
@@ -2335,7 +2404,8 @@
         "location": "位置情報",
         "template": "テンプレート",
         "cta": "リンクボタン",
-        "assign": "担当者に割り当て"
+        "assign": "担当者に割り当て",
+        "faq": "FAQから回答"
       },
       "stepLabel": {
         "questionOf": "質問 · {kind}"
@@ -2372,8 +2442,10 @@
         "addRow": "ステップ {stage}: 行を1つ以上追加してください。",
         "rowTitle": "ステップ {stage}: すべての行に{max}文字以内のタイトルが必要です。",
         "rowDescriptionTooLong": "ステップ {stage}: 行の説明が{max}文字を超えています。",
-        "variableUsed": "ステップ {stage}: 「{name}」はステップ {other} で既に使用されています。回答ごとに別の名前を付けてください。"
-      }
+        "variableUsed": "ステップ {stage}: 「{name}」はステップ {other} で既に使用されています。回答ごとに別の名前を付けてください。",
+        "faqMinScore": "ステップ {stage}: 最小スコアは0.05~0.99にするか、ワークスペースの設定を使用してください。"
+      },
+      "faqSummary": "{hasCategory, select, true {FAQから · {category}} other {FAQから}}"
     },
     "waboImport": {
       "notes": {
@@ -2480,7 +2552,9 @@
       "optionNotConnected": "ポート「{port}」（選択肢 {n}）が接続されていません。終了します。",
       "buttonNotConnected": "ボタン「{label}」が接続されていません。終了します。",
       "simPurchase": "購入をシミュレート: {name} → 「purchased」ポート",
-      "simAbandon": "カゴ落ちをシミュレート → 「abandoned」ポート"
+      "simAbandon": "カゴ落ちをシミュレート → 「abandoned」ポート",
+      "faqAnswered": "(シミュレーション) 「{query}」のFAQから回答: テストチャットではFAQを検索しないため、何も送信されず、{ref} は空のままです。「回答済み」の出口に進みます。",
+      "faqNoMatch": "(シミュレーション) 「{query}」のFAQから回答: テストチャットではFAQを検索せず、「回答済み」の出口も接続されていないため、「一致なし」に進みます。{ref} は空のままです。"
     }
   }
 }

@@ -26,7 +26,13 @@ export type Transition =
       subflowId?: number;
     }
   /** The node asked to run another flow in this run: the engine resolves it (it needs the database) and turns this into a `goto`. */
-  | { t: 'subflow'; flowId: number | string }
+  | {
+      t: 'subflow';
+      flowId: number | string;
+      startNodeId?: string;
+      missPort?: number;
+      missVars?: Record<string, unknown>;
+    }
   | { t: 'wait'; wait: NonNullable<RunState['wait']> }
   | { t: 'sleep'; seconds: number }
   | {
@@ -113,7 +119,13 @@ function transitionOf(run: RunState, nodeId: string, r: NodeResult, deps: StepDe
     case 'end':
       return { t: 'end', status: 'completed', reason: r.reason };
     case 'subflow':
-      return { t: 'subflow', flowId: r.flowId };
+      return {
+        t: 'subflow',
+        flowId: r.flowId,
+        startNodeId: r.startNodeId,
+        missPort: r.missPort,
+        missVars: r.missVars,
+      };
     case 'halt':
       return { t: 'halt', reason: r.reason };
     case 'fail':
