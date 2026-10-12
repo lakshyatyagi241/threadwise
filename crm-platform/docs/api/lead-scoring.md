@@ -50,7 +50,8 @@ Errors are `application/problem+json` with a stable `code` and a `requestId`; th
 | `lsc.stage.review`    | accept or dismiss AI-suggested stages           | Owner, Admin, Manager |
 
 A contact's own `leadScore`, `leadScoreSource`, `leadScoreReasons`, `leadScoredAt` and `leadScoreModel` come with the contact (any role
-that can read contacts).
+that can read contacts), and with the `contactSummary` of `GET /inbox/conversations/:id`, which the Inbox side panel shows as the same score
+card (the summary is null for a caller who may not read contacts, so there is no score either).
 
 ## Workspace routes
 

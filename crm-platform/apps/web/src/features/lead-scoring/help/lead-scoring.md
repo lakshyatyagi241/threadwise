@@ -46,7 +46,7 @@ Seeing the screen needs the permission **lsc.runs.read**. Changing the switches 
 
 ## Score one contact
 
-Open a contact. The **Lead score** card shows the number, who set it, the date and model, and the reasons the AI gave. Select **Score with AI** (or **Re-score** when the contact already has an AI score). It takes a few seconds, and when it finishes the card shows what that run cost. This button needs **lsc.contacts.score**.
+Open a contact, or open a conversation in the **Inbox**: the contact panel on the right shows the same **Lead score** card, so you can see how promising the person you are chatting with looks, and re-score them, without leaving the thread. The **Lead score** card shows the number, who set it, the date and model, and the reasons the AI gave. Select **Score with AI** (or **Re-score** when the contact already has an AI score). It takes a few seconds, and when it finishes the card shows what that run cost. This button needs **lsc.contacts.score**.
 
 If something stops it, the card says exactly what: scoring is off for the workspace (with a link to the settings), no key is available, the provider did not give a usable answer, the plan's AI allowance is used up, or the contact has a score a person typed.
 

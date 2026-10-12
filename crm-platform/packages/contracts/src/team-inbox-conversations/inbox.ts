@@ -60,6 +60,12 @@ export const inboxContactSummarySchema = z.object({
   source: z.string().nullable(),
   isUnsubscribed: z.boolean(),
   whatsappSubscriptionStatus: z.string().nullable(),
+  /** AI lead scoring: the contact's score and who set it, the same fields the contact page reads (null: never scored). */
+  leadScore: z.number().int().min(0).max(100).nullable(),
+  leadScoreSource: z.string().nullable(),
+  leadScoreReasons: z.array(z.string()).nullable(),
+  leadScoredAt: z.string().datetime().nullable(),
+  leadScoreModel: z.string().nullable(),
   createdAt: z.string().datetime(),
 });
 export type InboxContactSummary = z.infer<typeof inboxContactSummarySchema>;
