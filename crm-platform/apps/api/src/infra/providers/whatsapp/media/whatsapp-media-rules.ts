@@ -51,7 +51,41 @@ export const WA_UPLOAD_REFUSAL = {
   NOT_FOUND: 'WA_MEDIA_NOT_FOUND',
   /** The provider has no upload endpoint and the store cannot make a temporary link to the file. */
   UPLOAD_UNSUPPORTED: 'WA_MEDIA_UPLOAD_UNSUPPORTED',
+  /** The store's temporary link points at a private address (localhost, a LAN IP, a container name): the provider can never fetch it. */
+  LINK_NOT_PUBLIC: 'WA_MEDIA_LINK_NOT_PUBLIC',
 } as const;
+
+/**
+ * The host of a link a provider could never reach from the internet, or null when it may be public. A provider that takes files by link
+ * (Interakt has no upload endpoint) fetches it from its own servers, so a link on localhost, a private network, a `.local` name or a
+ * single-label name (a container such as `minio`) always fails there with "not a valid URI", far from the cause.
+ */
+export function privateLinkHost(link: string): string | null {
+  let host: string;
+  try {
+    host = new URL(link).hostname.toLowerCase().replace(/^\[|\]$/g, '');
+  } catch {
+    return link;
+  }
+  if (host === 'localhost' || host === '::1' || host.endsWith('.localhost')) return host;
+  if (/\.(local|internal|lan|home|corp)$/.test(host)) return host;
+  const v4 = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/.exec(host);
+  if (v4) {
+    const [a, b] = [Number(v4[1]), Number(v4[2])];
+    const priv =
+      a === 10 ||
+      a === 127 ||
+      a === 0 ||
+      (a === 169 && b === 254) ||
+      (a === 172 && b >= 16 && b <= 31) ||
+      (a === 192 && b === 168) ||
+      (a === 100 && b >= 64 && b <= 127);
+    return priv ? host : null;
+  }
+  if (/^(fc|fd|fe80)/.test(host) && host.includes(':')) return host;
+  // A name with no dot is a container or LAN host, never a public one.
+  return host.includes('.') || host.includes(':') ? null : host;
+}
 export type WaUploadRefusalCode = (typeof WA_UPLOAD_REFUSAL)[keyof typeof WA_UPLOAD_REFUSAL];
 
 export class WaMediaRefusal extends Error {

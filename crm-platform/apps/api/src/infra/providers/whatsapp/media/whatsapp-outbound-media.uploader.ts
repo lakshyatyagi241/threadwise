@@ -26,6 +26,7 @@ import {
   WaMediaRefusal,
   baseMime,
   classifyForUpload,
+  privateLinkHost,
 } from './whatsapp-media-rules';
 import { whatsappMediaConfig } from './whatsapp-media.config';
 
@@ -90,6 +91,15 @@ export class WhatsappOutboundMediaUploader implements OutboundMediaUploader {
         throw new ChannelError(
           WA_UPLOAD_REFUSAL.UPLOAD_UNSUPPORTED,
           'This WhatsApp provider cannot take file uploads, and file storage cannot make a temporary link for it. Connect object storage or use another provider.',
+          false,
+        );
+      }
+      const privateHost = privateLinkHost(link.url);
+      if (privateHost) {
+        // Say what is wrong where it can be fixed: the provider would only answer "not a valid URI".
+        throw new ChannelError(
+          WA_UPLOAD_REFUSAL.LINK_NOT_PUBLIC,
+          `File storage makes links on a private address (${privateHost}), so this WhatsApp provider cannot fetch them. Point the storage endpoint (or its CDN URL) at a public address.`,
           false,
         );
       }
