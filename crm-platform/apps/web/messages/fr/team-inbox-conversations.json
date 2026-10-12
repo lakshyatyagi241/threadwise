@@ -2,7 +2,8 @@
   "team-inbox-conversations": {
     "nav": {
       "inbox": "Boîte de réception",
-      "messageLogs": "Journaux des messages"
+      "messageLogs": "Journaux des messages",
+      "savedReplies": "Réponses enregistrées"
     },
     "common": {
       "dismiss": "Ignorer"
@@ -137,7 +138,10 @@
       "logBusy": "Un export est déjà en cours de préparation. Attendez son e-mail, puis demandez-en un autre.",
       "logNotReady": "Cet export n'est pas prêt ou a expiré. Demandez-le à nouveau.",
       "groupSuspended": "Meta a suspendu ce groupe : il ne peut plus recevoir de messages tant que Meta ne l'a pas rétabli.",
-      "walletEmpty": "Votre portefeuille de messages ne couvre pas ce message de groupe (un débit par membre). Rechargez-le et réessayez."
+      "walletEmpty": "Votre portefeuille de messages ne couvre pas ce message de groupe (un débit par membre). Rechargez-le et réessayez.",
+      "savedReplyGone": "Cette réponse enregistrée n'existe plus.",
+      "savedReplyChannel": "Cette réponse enregistrée n'est pas prévue pour ce type de canal.",
+      "shortcutTaken": "Une autre réponse enregistrée utilise déjà ce raccourci."
     },
     "bubble": {
       "kind": {
@@ -354,7 +358,9 @@
           "url": "Saisissez un lien commençant par http:// ou https://",
           "tooManyRows": "Une liste contient au maximum 10 lignes au total"
         }
-      }
+      },
+      "savedReplies": "Réponses enregistrées",
+      "savedReplyIssues": "Non renseignées et laissées telles quelles ({count}) : {list}. À corriger avant l'envoi."
     },
     "panel": {
       "tabsLabel": "Notes et historique",
@@ -636,6 +642,159 @@
           "failed": "Échec",
           "expired": "Expiré"
         }
+      }
+    },
+    "savedReplies": {
+      "channelKind": {
+        "simulator": "Simulateur (test)",
+        "whatsapp_cloud": "WhatsApp Cloud API",
+        "whatsapp_qr": "WhatsApp (QR)",
+        "webchat": "Chat du site web",
+        "telegram": "Telegram",
+        "facebook": "Facebook Messenger",
+        "instagram": "Instagram",
+        "email": "E-mail"
+      },
+      "variableGroup": {
+        "contact": "Contact",
+        "agent": "Vous",
+        "workspace": "Espace de travail",
+        "conversation": "Conversation"
+      },
+      "variable": {
+        "first_name": "Prénom du contact",
+        "last_name": "Nom du contact",
+        "name": "Nom complet du contact",
+        "email": "E-mail du contact",
+        "phone": "Numéro de téléphone du contact",
+        "agent_name": "Votre nom complet",
+        "agent_first_name": "Votre prénom",
+        "workspace_name": "Nom de l'espace de travail",
+        "company_name": "Nom de l'entreprise",
+        "today": "Date du jour",
+        "device_name": "Nom du canal",
+        "device_phone": "Numéro de téléphone du canal"
+      },
+      "picker": {
+        "title": "Réponses enregistrées",
+        "close": "Fermer les réponses enregistrées",
+        "searchLabel": "Rechercher des réponses enregistrées",
+        "searchPlaceholder": "Rechercher par raccourci, titre ou texte",
+        "listLabel": "Réponses enregistrées",
+        "loading": "Chargement des réponses enregistrées",
+        "loadFailed": "Impossible de charger les réponses enregistrées.",
+        "retry": "Réessayer",
+        "empty": "Aucune réponse enregistrée pour le moment.",
+        "emptyForChannel": "Aucune réponse enregistrée n'est prévue pour ce canal.",
+        "createFirst": "Créer la première",
+        "noMatch": "Aucune réponse enregistrée ne correspond à « {q} ».",
+        "mine": "Les miennes",
+        "hint": "Les flèches déplacent, Entrée insère, Échap ferme.",
+        "manage": "Gérer les réponses enregistrées",
+        "tooLong": "Cette réponse est trop longue pour la limite de message de ce canal ; elle n'a donc pas été insérée."
+      },
+      "screen": {
+        "back": "Paramètres",
+        "title": "Réponses enregistrées",
+        "subtitle": "Des réponses réutilisables que votre équipe insère dans une réponse. Tapez / dans une conversation pour en trouver une.",
+        "create": "Nouvelle réponse enregistrée",
+        "noAccess": "Vous n'avez pas l'autorisation de gérer les réponses enregistrées.",
+        "meter": "{used} réponses enregistrées utilisées sur {limit}",
+        "meterLabel": "Réponses enregistrées utilisées avec votre forfait",
+        "meterNote": "Les réponses partagées et personnelles comptent toutes dans la limite.",
+        "atLimit": "Vous avez atteint la limite de {limit} réponses enregistrées de votre forfait. Supprimez-en une ou passez à une offre supérieure pour en ajouter.",
+        "nearLimit": "Vous approchez de la limite de {limit} réponses enregistrées de votre forfait.",
+        "upgrade": "Voir les forfaits",
+        "tabsLabel": "Afficher",
+        "tab": {
+          "all": "Toutes ({count})",
+          "shared": "Partagées ({count})",
+          "mine": "Les miennes ({count})"
+        },
+        "categoryFilter": "Filtrer par catégorie",
+        "allCategories": "Toutes les catégories",
+        "searchLabel": "Rechercher des réponses enregistrées",
+        "searchPlaceholder": "Rechercher par raccourci, titre ou texte",
+        "howItWorks": "Dans la boîte de réception, tapez / dans la zone de message ou utilisez le bouton Réponses enregistrées. Les variables comme '{{first_name}}' sont renseignées à partir de la conversation avant que le texte n'arrive dans la zone. Rien n'est envoyé tant que l'agent n'appuie pas sur Envoyer.",
+        "loading": "Chargement des réponses enregistrées",
+        "loadFailed": "Impossible de charger les réponses enregistrées.",
+        "retry": "Réessayer",
+        "loadMore": "Charger plus",
+        "list": "Réponses enregistrées",
+        "emptyTitle": "Aucune réponse enregistrée pour le moment",
+        "empty": "Rédigez les réponses que votre équipe donne sans cesse, puis insérez-les d'une seule touche.",
+        "noMatchTitle": "Aucun résultat",
+        "noMatch": "Aucune réponse enregistrée ne correspond à « {q} ».",
+        "noMatchCategory": "Aucune réponse enregistrée dans cette catégorie.",
+        "scope": {
+          "shared": "Partagée",
+          "mine": "Personnelle"
+        },
+        "allChannels": "Tous les canaux",
+        "neverUsed": "Pas encore utilisée",
+        "used": "Utilisée {count, plural, one {# fois} other {# fois}}",
+        "lastUsed": "Dernière utilisation {when}",
+        "createdBy": "Créée par {name}",
+        "readOnly": "Seules les personnes qui gèrent les réponses enregistrées peuvent modifier une réponse partagée.",
+        "edit": "Modifier",
+        "duplicate": "Dupliquer",
+        "delete": "Supprimer",
+        "cancel": "Annuler",
+        "deleteTitle": "Supprimer cette réponse enregistrée ?",
+        "deleteShared": "/{shortcut} sera supprimé pour tout le monde dans l'espace de travail.",
+        "deleteMine": "/{shortcut} sera retiré de vos réponses.",
+        "deleted": "Réponse enregistrée supprimée.",
+        "duplicated": "Réponse enregistrée dupliquée.",
+        "created": "Réponse enregistrée /{shortcut} créée.",
+        "saved": "Réponse enregistrée mise à jour."
+      },
+      "form": {
+        "eyebrow": "Réponse enregistrée",
+        "titleNew": "Nouvelle réponse enregistrée",
+        "titleEdit": "Modifier la réponse enregistrée",
+        "close": "Fermer",
+        "cancel": "Annuler",
+        "save": "Enregistrer",
+        "saving": "Enregistrement…",
+        "shortcut": "Raccourci",
+        "shortcutPlaceholder": "merci",
+        "shortcutHint": "Lettres, chiffres et tirets bas, jusqu'à {max} caractères.",
+        "shortcutStored": "Les agents tapent /{shortcut}",
+        "shortcutEmpty": "Saisissez un raccourci composé de lettres, de chiffres ou de tirets bas.",
+        "shortcutTaken": "/{shortcut} est déjà utilisé par une autre réponse. Choisissez un autre raccourci.",
+        "title": "Titre",
+        "titlePlaceholder": "Merci de nous avoir contactés",
+        "titleEmpty": "Saisissez un titre.",
+        "titleLong": "Le titre peut contenir au maximum {max} caractères.",
+        "body": "Texte",
+        "bodyHint": "Texte brut. Utilisez *gras* et _italique_ comme dans WhatsApp.",
+        "bodyPlaceholder": "Bonjour '{{first_name}}', merci de nous avoir contactés. Comment pouvons-nous vous aider ?",
+        "bodyEmpty": "Saisissez le texte de la réponse.",
+        "bodyLong": "Le texte peut contenir au maximum {max} caractères.",
+        "count": "{n} sur {max}",
+        "variables": "Insérer une variable",
+        "variablesHint": "Cliquez sur l'une d'elles pour l'ajouter au curseur. Une variable qui ne peut pas être renseignée reste telle quelle, afin que l'agent la voie.",
+        "preview": "Aperçu",
+        "previewHint": "Avec des données client d'exemple.",
+        "previewEmpty": "Saisissez le texte pour voir son rendu.",
+        "previewIssues": "Non renseignées dans l'aperçu : {list}. Lorsqu'une réponse est utilisée, les attributs de votre contact sont renseignés s'il les possède ; tout le reste reste tel quel.",
+        "category": "Catégorie (facultatif)",
+        "categoryPlaceholder": "Salutations, facturation, assistance",
+        "language": "Langue (facultatif)",
+        "languageHint": "Un code tel que en ou pt-BR, pour votre propre référence.",
+        "languageFormat": "Utilisez un code de langue tel que en ou pt-BR.",
+        "channels": "Uniquement sur ces canaux",
+        "channelsHint": "Laissez tout décoché pour la proposer sur tous les canaux.",
+        "scope": "Qui peut l'utiliser",
+        "scopeOption": {
+          "shared": "Tout le monde dans l'espace de travail",
+          "mine": "Moi uniquement"
+        },
+        "scopeLocked": "Une réponse ne peut pas passer de partagée à personnelle, ni l'inverse, une fois enregistrée.",
+        "planLimit": "Vous avez atteint la limite de réponses enregistrées de votre forfait.",
+        "upgrade": "Voir les forfaits",
+        "conflict": "Quelqu'un d'autre a modifié cette réponse en premier. Fermez cette fenêtre et rouvrez-la.",
+        "invalid": "Certaines informations saisies ne sont pas valides."
       }
     }
   }

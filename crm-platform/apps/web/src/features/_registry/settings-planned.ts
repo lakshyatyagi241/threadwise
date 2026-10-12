@@ -30,7 +30,6 @@ export const PLANNED_SETTINGS: readonly SettingsTile[] = [
 
   // Data and customization
   tile('data', 'tags', '/tags', 'tag', 40),
-  tile('data', 'saved-replies', '/saved-replies', 'reply', 50),
 
   // Automation and AI
   tile('automation', 'auto-reply', '/auto-reply', 'reply', 20),

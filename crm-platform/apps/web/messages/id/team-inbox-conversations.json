@@ -2,7 +2,8 @@
   "team-inbox-conversations": {
     "nav": {
       "inbox": "Inbox",
-      "messageLogs": "Log pesan"
+      "messageLogs": "Log pesan",
+      "savedReplies": "Balasan tersimpan"
     },
     "common": {
       "dismiss": "Tutup"
@@ -137,7 +138,10 @@
       "logBusy": "Ekspor sedang disiapkan. Tunggu emailnya, lalu minta ekspor berikutnya.",
       "logNotReady": "Ekspor ini belum siap atau sudah kedaluwarsa. Minta lagi.",
       "groupSuspended": "Meta menangguhkan grup ini, sehingga tidak dapat dikirimi pesan sampai Meta memulihkannya.",
-      "walletEmpty": "Dompet pesan Anda tidak cukup untuk pesan grup ini (satu tagihan per anggota). Isi saldo lalu coba lagi."
+      "walletEmpty": "Dompet pesan Anda tidak cukup untuk pesan grup ini (satu tagihan per anggota). Isi saldo lalu coba lagi.",
+      "savedReplyGone": "Balasan tersimpan ini sudah tidak ada.",
+      "savedReplyChannel": "Balasan tersimpan ini tidak ditujukan untuk jenis kanal ini.",
+      "shortcutTaken": "Balasan tersimpan lain sudah memakai pintasan itu."
     },
     "bubble": {
       "kind": {
@@ -354,7 +358,9 @@
           "url": "Masukkan tautan yang diawali http:// atau https://",
           "tooManyRows": "Sebuah daftar memuat paling banyak 10 baris secara total"
         }
-      }
+      },
+      "savedReplies": "Balasan tersimpan",
+      "savedReplyIssues": "Tidak terisi dan dibiarkan apa adanya ({count}): {list}. Perbaiki sebelum mengirim."
     },
     "panel": {
       "tabsLabel": "Catatan dan linimasa",
@@ -636,6 +642,159 @@
           "failed": "Gagal",
           "expired": "Kedaluwarsa"
         }
+      }
+    },
+    "savedReplies": {
+      "channelKind": {
+        "simulator": "Simulator (pengujian)",
+        "whatsapp_cloud": "WhatsApp Cloud API",
+        "whatsapp_qr": "WhatsApp (QR)",
+        "webchat": "Obrolan situs web",
+        "telegram": "Telegram",
+        "facebook": "Facebook Messenger",
+        "instagram": "Instagram",
+        "email": "Email"
+      },
+      "variableGroup": {
+        "contact": "Kontak",
+        "agent": "Anda",
+        "workspace": "Ruang kerja",
+        "conversation": "Percakapan"
+      },
+      "variable": {
+        "first_name": "Nama depan kontak",
+        "last_name": "Nama belakang kontak",
+        "name": "Nama lengkap kontak",
+        "email": "Email kontak",
+        "phone": "Nomor telepon kontak",
+        "agent_name": "Nama lengkap Anda",
+        "agent_first_name": "Nama depan Anda",
+        "workspace_name": "Nama ruang kerja",
+        "company_name": "Nama perusahaan",
+        "today": "Tanggal hari ini",
+        "device_name": "Nama kanal",
+        "device_phone": "Nomor telepon kanal"
+      },
+      "picker": {
+        "title": "Balasan tersimpan",
+        "close": "Tutup balasan tersimpan",
+        "searchLabel": "Cari balasan tersimpan",
+        "searchPlaceholder": "Cari berdasarkan pintasan, judul, atau teks",
+        "listLabel": "Balasan tersimpan",
+        "loading": "Memuat balasan tersimpan",
+        "loadFailed": "Balasan tersimpan tidak dapat dimuat.",
+        "retry": "Coba lagi",
+        "empty": "Belum ada balasan tersimpan.",
+        "emptyForChannel": "Tidak ada balasan tersimpan untuk kanal ini.",
+        "createFirst": "Buat yang pertama",
+        "noMatch": "Tidak ada balasan tersimpan yang cocok dengan \"{q}\".",
+        "mine": "Milik saya",
+        "hint": "Tombol panah untuk berpindah, Enter untuk menyisipkan, Esc untuk menutup.",
+        "manage": "Kelola balasan tersimpan",
+        "tooLong": "Balasan itu terlalu panjang untuk batas pesan kanal ini, sehingga tidak disisipkan."
+      },
+      "screen": {
+        "back": "Pengaturan",
+        "title": "Balasan tersimpan",
+        "subtitle": "Jawaban yang dapat dipakai ulang oleh tim Anda dalam balasan. Ketik / di percakapan untuk menemukannya.",
+        "create": "Balasan tersimpan baru",
+        "noAccess": "Anda tidak memiliki izin untuk mengelola balasan tersimpan.",
+        "meter": "{used} dari {limit} balasan tersimpan terpakai",
+        "meterLabel": "Balasan tersimpan yang terpakai di paket Anda",
+        "meterNote": "Balasan bersama dan pribadi sama-sama dihitung dalam batas.",
+        "atLimit": "Anda telah mencapai batas {limit} balasan tersimpan di paket Anda. Hapus satu atau tingkatkan paket untuk menambah lagi.",
+        "nearLimit": "Anda hampir mencapai batas {limit} balasan tersimpan di paket Anda.",
+        "upgrade": "Lihat paket",
+        "tabsLabel": "Tampilkan",
+        "tab": {
+          "all": "Semua ({count})",
+          "shared": "Bersama ({count})",
+          "mine": "Milik saya ({count})"
+        },
+        "categoryFilter": "Filter berdasarkan kategori",
+        "allCategories": "Semua kategori",
+        "searchLabel": "Cari balasan tersimpan",
+        "searchPlaceholder": "Cari berdasarkan pintasan, judul, atau teks",
+        "howItWorks": "Di kotak masuk, ketik / di kolom pesan atau pakai tombol Balasan tersimpan. Variabel seperti '{{first_name}}' diisi dari percakapan sebelum teks masuk ke kolom pesan. Tidak ada yang terkirim sampai agen menekan Kirim.",
+        "loading": "Memuat balasan tersimpan",
+        "loadFailed": "Balasan tersimpan tidak dapat dimuat.",
+        "retry": "Coba lagi",
+        "loadMore": "Muat lebih banyak",
+        "list": "Balasan tersimpan",
+        "emptyTitle": "Belum ada balasan tersimpan",
+        "empty": "Tulis jawaban yang sering diberikan tim Anda, lalu sisipkan dengan satu ketukan tombol.",
+        "noMatchTitle": "Tidak ditemukan",
+        "noMatch": "Tidak ada balasan tersimpan yang cocok dengan \"{q}\".",
+        "noMatchCategory": "Tidak ada balasan tersimpan di kategori ini.",
+        "scope": {
+          "shared": "Bersama",
+          "mine": "Milik saya"
+        },
+        "allChannels": "Semua kanal",
+        "neverUsed": "Belum pernah dipakai",
+        "used": "{count, plural, other {Dipakai # kali}}",
+        "lastUsed": "Terakhir dipakai {when}",
+        "createdBy": "Dibuat oleh {name}",
+        "readOnly": "Hanya orang yang mengelola balasan tersimpan yang dapat mengubah balasan bersama.",
+        "edit": "Edit",
+        "duplicate": "Duplikat",
+        "delete": "Hapus",
+        "cancel": "Batal",
+        "deleteTitle": "Hapus balasan tersimpan ini?",
+        "deleteShared": "/{shortcut} akan dihapus untuk semua orang di ruang kerja.",
+        "deleteMine": "/{shortcut} akan dihapus dari balasan Anda.",
+        "deleted": "Balasan tersimpan dihapus.",
+        "duplicated": "Balasan tersimpan diduplikasi.",
+        "created": "Balasan tersimpan /{shortcut} dibuat.",
+        "saved": "Balasan tersimpan diperbarui."
+      },
+      "form": {
+        "eyebrow": "Balasan tersimpan",
+        "titleNew": "Balasan tersimpan baru",
+        "titleEdit": "Edit balasan tersimpan",
+        "close": "Tutup",
+        "cancel": "Batal",
+        "save": "Simpan",
+        "saving": "Menyimpan…",
+        "shortcut": "Pintasan",
+        "shortcutPlaceholder": "terimakasih",
+        "shortcutHint": "Huruf, angka, dan garis bawah, maksimal {max} karakter.",
+        "shortcutStored": "Agen mengetik /{shortcut}",
+        "shortcutEmpty": "Masukkan pintasan berisi huruf, angka, atau garis bawah.",
+        "shortcutTaken": "/{shortcut} sudah dipakai balasan lain. Pilih pintasan yang berbeda.",
+        "title": "Judul",
+        "titlePlaceholder": "Terima kasih telah menghubungi kami",
+        "titleEmpty": "Masukkan judul.",
+        "titleLong": "Judul maksimal {max} karakter.",
+        "body": "Teks",
+        "bodyHint": "Teks biasa. Gunakan *tebal* dan _miring_ seperti di WhatsApp.",
+        "bodyPlaceholder": "Halo '{{first_name}}', terima kasih telah menghubungi kami. Ada yang bisa kami bantu?",
+        "bodyEmpty": "Masukkan teks balasan.",
+        "bodyLong": "Teks maksimal {max} karakter.",
+        "count": "{n} dari {max}",
+        "variables": "Sisipkan variabel",
+        "variablesHint": "Klik salah satu untuk menambahkannya di posisi kursor. Variabel yang tidak dapat diisi tetap seperti tertulis, sehingga agen melihatnya.",
+        "preview": "Pratinjau",
+        "previewHint": "Dengan data pelanggan contoh.",
+        "previewEmpty": "Ketik teks untuk melihat tampilannya.",
+        "previewIssues": "Tidak terisi di pratinjau: {list}. Saat balasan dipakai, atribut kontak Anda diisi jika kontak memilikinya; yang lain tetap seperti tertulis.",
+        "category": "Kategori (opsional)",
+        "categoryPlaceholder": "Sapaan, tagihan, dukungan",
+        "language": "Bahasa (opsional)",
+        "languageHint": "Kode seperti en atau pt-BR, sebagai referensi Anda sendiri.",
+        "languageFormat": "Gunakan kode bahasa seperti en atau pt-BR.",
+        "channels": "Hanya di kanal ini",
+        "channelsHint": "Biarkan semua tidak dicentang untuk menawarkannya di setiap kanal.",
+        "scope": "Siapa yang dapat memakai",
+        "scopeOption": {
+          "shared": "Semua orang di ruang kerja",
+          "mine": "Hanya saya"
+        },
+        "scopeLocked": "Balasan tidak dapat diubah antara bersama dan pribadi setelah disimpan.",
+        "planLimit": "Anda telah mencapai batas balasan tersimpan di paket Anda.",
+        "upgrade": "Lihat paket",
+        "conflict": "Orang lain mengubah balasan ini lebih dulu. Tutup jendela ini dan buka kembali.",
+        "invalid": "Sebagian isian Anda tidak valid."
       }
     }
   }

@@ -2,7 +2,8 @@
   "team-inbox-conversations": {
     "nav": {
       "inbox": "受信箱",
-      "messageLogs": "メッセージログ"
+      "messageLogs": "メッセージログ",
+      "savedReplies": "返信テンプレート"
     },
     "common": {
       "dismiss": "閉じる"
@@ -137,7 +138,10 @@
       "logBusy": "エクスポートはすでに準備中です。届くメールをお待ちのうえ、あらためてリクエストしてください。",
       "logNotReady": "このエクスポートはまだ準備できていないか、有効期限が切れています。もう一度リクエストしてください。",
       "groupSuspended": "Metaがこのグループを停止したため、解除されるまでメッセージを送信できません。",
-      "walletEmpty": "メッセージウォレットの残高がこのグループメッセージ（メンバーごとに課金）に足りません。チャージしてもう一度お試しください。"
+      "walletEmpty": "メッセージウォレットの残高がこのグループメッセージ（メンバーごとに課金）に足りません。チャージしてもう一度お試しください。",
+      "savedReplyGone": "この返信テンプレートは存在しなくなりました。",
+      "savedReplyChannel": "この返信テンプレートは、この種類のチャネル向けではありません。",
+      "shortcutTaken": "そのショートカットは別の返信テンプレートで既に使われています。"
     },
     "bubble": {
       "kind": {
@@ -354,7 +358,9 @@
           "url": "http:// または https:// で始まるリンクを入力してください",
           "tooManyRows": "リストには合計で最大10行まで含められます"
         }
-      }
+      },
+      "savedReplies": "返信テンプレート",
+      "savedReplyIssues": "未入力のまま残りました（{count}件）：{list}。送信前に修正してください。"
     },
     "panel": {
       "tabsLabel": "メモとタイムライン",
@@ -636,6 +642,159 @@
           "failed": "失敗",
           "expired": "期限切れ"
         }
+      }
+    },
+    "savedReplies": {
+      "channelKind": {
+        "simulator": "シミュレーター（テスト）",
+        "whatsapp_cloud": "WhatsApp Cloud API",
+        "whatsapp_qr": "WhatsApp（QR）",
+        "webchat": "ウェブサイトチャット",
+        "telegram": "Telegram",
+        "facebook": "Facebook Messenger",
+        "instagram": "Instagram",
+        "email": "メール"
+      },
+      "variableGroup": {
+        "contact": "連絡先",
+        "agent": "あなた",
+        "workspace": "ワークスペース",
+        "conversation": "会話"
+      },
+      "variable": {
+        "first_name": "連絡先の名",
+        "last_name": "連絡先の姓",
+        "name": "連絡先のフルネーム",
+        "email": "連絡先のメールアドレス",
+        "phone": "連絡先の電話番号",
+        "agent_name": "あなたのフルネーム",
+        "agent_first_name": "あなたの名",
+        "workspace_name": "ワークスペース名",
+        "company_name": "会社名",
+        "today": "今日の日付",
+        "device_name": "チャネル名",
+        "device_phone": "チャネルの電話番号"
+      },
+      "picker": {
+        "title": "返信テンプレート",
+        "close": "返信テンプレートを閉じる",
+        "searchLabel": "返信テンプレートを検索",
+        "searchPlaceholder": "ショートカット、タイトル、テキストで検索",
+        "listLabel": "返信テンプレート",
+        "loading": "返信テンプレートを読み込み中",
+        "loadFailed": "返信テンプレートを読み込めませんでした。",
+        "retry": "再試行",
+        "empty": "返信テンプレートはまだありません。",
+        "emptyForChannel": "このチャネル向けの返信テンプレートはありません。",
+        "createFirst": "最初のテンプレートを作成",
+        "noMatch": "「{q}」に一致する返信テンプレートはありません。",
+        "mine": "自分用",
+        "hint": "矢印キーで移動、Enterで挿入、Escで閉じます。",
+        "manage": "返信テンプレートを管理",
+        "tooLong": "この返信はこのチャネルのメッセージ上限を超えるため、挿入されませんでした。"
+      },
+      "screen": {
+        "back": "設定",
+        "title": "返信テンプレート",
+        "subtitle": "チームが返信に挿入できる再利用可能な回答です。会話で / を入力して探せます。",
+        "create": "新しい返信テンプレート",
+        "noAccess": "返信テンプレートを管理する権限がありません。",
+        "meter": "返信テンプレート {used} / {limit} 件を使用中",
+        "meterLabel": "プランで使用中の返信テンプレート",
+        "meterNote": "共有の返信も個人用の返信も上限に含まれます。",
+        "atLimit": "プランの上限である返信テンプレート{limit}件に達しました。1件削除するか、アップグレードして追加してください。",
+        "nearLimit": "プランの上限である返信テンプレート{limit}件に近づいています。",
+        "upgrade": "プランを見る",
+        "tabsLabel": "表示",
+        "tab": {
+          "all": "すべて（{count}）",
+          "shared": "共有（{count}）",
+          "mine": "自分用（{count}）"
+        },
+        "categoryFilter": "カテゴリで絞り込む",
+        "allCategories": "すべてのカテゴリ",
+        "searchLabel": "返信テンプレートを検索",
+        "searchPlaceholder": "ショートカット、タイトル、テキストで検索",
+        "howItWorks": "受信トレイでは、メッセージ欄に / を入力するか、返信テンプレートボタンを使います。'{{first_name}}' のような変数は、テキストが入力欄に届く前に会話の内容で置き換えられます。担当者が送信を押すまで何も送信されません。",
+        "loading": "返信テンプレートを読み込み中",
+        "loadFailed": "返信テンプレートを読み込めませんでした。",
+        "retry": "再試行",
+        "loadMore": "さらに読み込む",
+        "list": "返信テンプレート",
+        "emptyTitle": "返信テンプレートはまだありません",
+        "empty": "チームが何度も返す回答を書いておけば、キー1つで挿入できます。",
+        "noMatchTitle": "見つかりませんでした",
+        "noMatch": "「{q}」に一致する返信テンプレートはありません。",
+        "noMatchCategory": "このカテゴリには返信テンプレートがありません。",
+        "scope": {
+          "shared": "共有",
+          "mine": "自分用"
+        },
+        "allChannels": "すべてのチャネル",
+        "neverUsed": "未使用",
+        "used": "{count, plural, other {#回}}使用",
+        "lastUsed": "最終使用 {when}",
+        "createdBy": "作成者：{name}",
+        "readOnly": "共有の返信を変更できるのは、返信テンプレートを管理する人だけです。",
+        "edit": "編集",
+        "duplicate": "複製",
+        "delete": "削除",
+        "cancel": "キャンセル",
+        "deleteTitle": "この返信テンプレートを削除しますか？",
+        "deleteShared": "/{shortcut} はワークスペースの全員から削除されます。",
+        "deleteMine": "/{shortcut} はあなたの返信から削除されます。",
+        "deleted": "返信テンプレートを削除しました。",
+        "duplicated": "返信テンプレートを複製しました。",
+        "created": "返信テンプレート /{shortcut} を作成しました。",
+        "saved": "返信テンプレートを更新しました。"
+      },
+      "form": {
+        "eyebrow": "返信テンプレート",
+        "titleNew": "新しい返信テンプレート",
+        "titleEdit": "返信テンプレートを編集",
+        "close": "閉じる",
+        "cancel": "キャンセル",
+        "save": "保存",
+        "saving": "保存中…",
+        "shortcut": "ショートカット",
+        "shortcutPlaceholder": "ありがとう",
+        "shortcutHint": "英数字とアンダースコア、最大{max}文字。",
+        "shortcutStored": "担当者は /{shortcut} と入力",
+        "shortcutEmpty": "英数字またはアンダースコアでショートカットを入力してください。",
+        "shortcutTaken": "/{shortcut} は別の返信で既に使われています。別のショートカットを選んでください。",
+        "title": "タイトル",
+        "titlePlaceholder": "お問い合わせありがとうございます",
+        "titleEmpty": "タイトルを入力してください。",
+        "titleLong": "タイトルは最大{max}文字までです。",
+        "body": "テキスト",
+        "bodyHint": "プレーンテキスト。WhatsAppと同様に *太字* や _斜体_ が使えます。",
+        "bodyPlaceholder": "こんにちは '{{first_name}}' さん、お問い合わせありがとうございます。どのようなご用件でしょうか？",
+        "bodyEmpty": "返信のテキストを入力してください。",
+        "bodyLong": "テキストは最大{max}文字までです。",
+        "count": "{n} / {max}",
+        "variables": "変数を挿入",
+        "variablesHint": "クリックするとカーソル位置に追加されます。入力できない変数はそのまま残るので、担当者が気づけます。",
+        "preview": "プレビュー",
+        "previewHint": "サンプルの顧客データを使用。",
+        "previewEmpty": "テキストを入力すると表示を確認できます。",
+        "previewIssues": "プレビューで未入力：{list}。返信を使用するとき、連絡先に属性があれば置き換えられ、それ以外はそのまま残ります。",
+        "category": "カテゴリ（任意）",
+        "categoryPlaceholder": "あいさつ、請求、サポート",
+        "language": "言語（任意）",
+        "languageHint": "en や pt-BR などのコード。ご自身の参照用です。",
+        "languageFormat": "en や pt-BR などの言語コードを使用してください。",
+        "channels": "これらのチャネルのみ",
+        "channelsHint": "すべて未選択のままにすると、全チャネルで利用できます。",
+        "scope": "利用できる人",
+        "scopeOption": {
+          "shared": "ワークスペースの全員",
+          "mine": "自分のみ"
+        },
+        "scopeLocked": "保存後は、共有と個人用を切り替えることはできません。",
+        "planLimit": "プランの返信テンプレート上限に達しました。",
+        "upgrade": "プランを見る",
+        "conflict": "他の人が先にこの返信を変更しました。このウィンドウを閉じて、もう一度開いてください。",
+        "invalid": "入力内容の一部が正しくありません。"
       }
     }
   }

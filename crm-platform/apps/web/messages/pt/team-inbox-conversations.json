@@ -2,7 +2,8 @@
   "team-inbox-conversations": {
     "nav": {
       "inbox": "Caixa de entrada",
-      "messageLogs": "Registros de mensagens"
+      "messageLogs": "Registros de mensagens",
+      "savedReplies": "Respostas salvas"
     },
     "common": {
       "dismiss": "Dispensar"
@@ -137,7 +138,10 @@
       "logBusy": "Uma exportação já está sendo preparada. Aguarde o e-mail dela e depois solicite outra.",
       "logNotReady": "Esta exportação não está pronta ou expirou. Solicite-a novamente.",
       "groupSuspended": "A Meta suspendeu este grupo, então ele não pode receber mensagens até que a Meta o libere.",
-      "walletEmpty": "Sua carteira de mensagens não cobre esta mensagem de grupo (uma cobrança por membro). Recarregue e tente novamente."
+      "walletEmpty": "Sua carteira de mensagens não cobre esta mensagem de grupo (uma cobrança por membro). Recarregue e tente novamente.",
+      "savedReplyGone": "Esta resposta salva não existe mais.",
+      "savedReplyChannel": "Esta resposta salva não se destina a este tipo de canal.",
+      "shortcutTaken": "Outra resposta salva já usa esse atalho."
     },
     "bubble": {
       "kind": {
@@ -354,7 +358,9 @@
           "url": "Informe um link que comece com http:// ou https://",
           "tooManyRows": "Uma lista aceita no máximo 10 linhas no total"
         }
-      }
+      },
+      "savedReplies": "Respostas salvas",
+      "savedReplyIssues": "Não preenchidas e mantidas como escritas ({count}): {list}. Corrija antes de enviar."
     },
     "panel": {
       "tabsLabel": "Notas e linha do tempo",
@@ -636,6 +642,159 @@
           "failed": "Falhou",
           "expired": "Expirada"
         }
+      }
+    },
+    "savedReplies": {
+      "channelKind": {
+        "simulator": "Simulador (testes)",
+        "whatsapp_cloud": "WhatsApp Cloud API",
+        "whatsapp_qr": "WhatsApp (QR)",
+        "webchat": "Chat do site",
+        "telegram": "Telegram",
+        "facebook": "Facebook Messenger",
+        "instagram": "Instagram",
+        "email": "E-mail"
+      },
+      "variableGroup": {
+        "contact": "Contato",
+        "agent": "Você",
+        "workspace": "Espaço de trabalho",
+        "conversation": "Conversa"
+      },
+      "variable": {
+        "first_name": "Primeiro nome do contato",
+        "last_name": "Sobrenome do contato",
+        "name": "Nome completo do contato",
+        "email": "E-mail do contato",
+        "phone": "Telefone do contato",
+        "agent_name": "Seu nome completo",
+        "agent_first_name": "Seu primeiro nome",
+        "workspace_name": "Nome do espaço de trabalho",
+        "company_name": "Nome da empresa",
+        "today": "Data de hoje",
+        "device_name": "Nome do canal",
+        "device_phone": "Número de telefone do canal"
+      },
+      "picker": {
+        "title": "Respostas salvas",
+        "close": "Fechar respostas salvas",
+        "searchLabel": "Pesquisar respostas salvas",
+        "searchPlaceholder": "Pesquisar por atalho, título ou texto",
+        "listLabel": "Respostas salvas",
+        "loading": "Carregando respostas salvas",
+        "loadFailed": "Não foi possível carregar as respostas salvas.",
+        "retry": "Tentar novamente",
+        "empty": "Ainda não há respostas salvas.",
+        "emptyForChannel": "Nenhuma resposta salva se destina a este canal.",
+        "createFirst": "Criar a primeira",
+        "noMatch": "Nenhuma resposta salva corresponde a \"{q}\".",
+        "mine": "Minhas",
+        "hint": "As setas movem, Enter insere, Esc fecha.",
+        "manage": "Gerenciar respostas salvas",
+        "tooLong": "Essa resposta é longa demais para o limite de mensagem deste canal, por isso não foi inserida."
+      },
+      "screen": {
+        "back": "Configurações",
+        "title": "Respostas salvas",
+        "subtitle": "Respostas reutilizáveis que sua equipe insere em uma resposta. Digite / em uma conversa para encontrar uma.",
+        "create": "Nova resposta salva",
+        "noAccess": "Você não tem permissão para gerenciar respostas salvas.",
+        "meter": "{used} de {limit} respostas salvas usadas",
+        "meterLabel": "Respostas salvas usadas no seu plano",
+        "meterNote": "Respostas compartilhadas e pessoais contam para o limite.",
+        "atLimit": "Você atingiu o limite de {limit} respostas salvas do seu plano. Exclua uma ou faça upgrade para adicionar mais.",
+        "nearLimit": "Você está perto do limite de {limit} respostas salvas do seu plano.",
+        "upgrade": "Ver planos",
+        "tabsLabel": "Mostrar",
+        "tab": {
+          "all": "Todas ({count})",
+          "shared": "Compartilhadas ({count})",
+          "mine": "Minhas ({count})"
+        },
+        "categoryFilter": "Filtrar por categoria",
+        "allCategories": "Todas as categorias",
+        "searchLabel": "Pesquisar respostas salvas",
+        "searchPlaceholder": "Pesquisar por atalho, título ou texto",
+        "howItWorks": "Na caixa de entrada, digite / na caixa de mensagem ou use o botão Respostas salvas. Variáveis como '{{first_name}}' são preenchidas com os dados da conversa antes de o texto chegar à caixa. Nada é enviado até o atendente pressionar Enviar.",
+        "loading": "Carregando respostas salvas",
+        "loadFailed": "Não foi possível carregar as respostas salvas.",
+        "retry": "Tentar novamente",
+        "loadMore": "Carregar mais",
+        "list": "Respostas salvas",
+        "emptyTitle": "Ainda não há respostas salvas",
+        "empty": "Escreva as respostas que sua equipe dá repetidamente e insira-as com um único toque de tecla.",
+        "noMatchTitle": "Nada encontrado",
+        "noMatch": "Nenhuma resposta salva corresponde a \"{q}\".",
+        "noMatchCategory": "Nenhuma resposta salva nesta categoria.",
+        "scope": {
+          "shared": "Compartilhada",
+          "mine": "Minha"
+        },
+        "allChannels": "Todos os canais",
+        "neverUsed": "Ainda não usada",
+        "used": "Usada {count, plural, one {# vez} other {# vezes}}",
+        "lastUsed": "Último uso {when}",
+        "createdBy": "Criada por {name}",
+        "readOnly": "Somente quem gerencia respostas salvas pode alterar uma resposta compartilhada.",
+        "edit": "Editar",
+        "duplicate": "Duplicar",
+        "delete": "Excluir",
+        "cancel": "Cancelar",
+        "deleteTitle": "Excluir esta resposta salva?",
+        "deleteShared": "/{shortcut} será removido para todos no espaço de trabalho.",
+        "deleteMine": "/{shortcut} será removido das suas respostas.",
+        "deleted": "Resposta salva excluída.",
+        "duplicated": "Resposta salva duplicada.",
+        "created": "Resposta salva /{shortcut} criada.",
+        "saved": "Resposta salva atualizada."
+      },
+      "form": {
+        "eyebrow": "Resposta salva",
+        "titleNew": "Nova resposta salva",
+        "titleEdit": "Editar resposta salva",
+        "close": "Fechar",
+        "cancel": "Cancelar",
+        "save": "Salvar",
+        "saving": "Salvando…",
+        "shortcut": "Atalho",
+        "shortcutPlaceholder": "obrigado",
+        "shortcutHint": "Letras, números e sublinhados, até {max} caracteres.",
+        "shortcutStored": "Os atendentes digitam /{shortcut}",
+        "shortcutEmpty": "Informe um atalho com letras, números ou sublinhados.",
+        "shortcutTaken": "/{shortcut} já é usado por outra resposta. Escolha um atalho diferente.",
+        "title": "Título",
+        "titlePlaceholder": "Obrigado por entrar em contato",
+        "titleEmpty": "Informe um título.",
+        "titleLong": "O título pode ter no máximo {max} caracteres.",
+        "body": "Texto",
+        "bodyHint": "Texto simples. Use *negrito* e _itálico_ como no WhatsApp.",
+        "bodyPlaceholder": "Olá '{{first_name}}', obrigado por entrar em contato. Como podemos ajudar?",
+        "bodyEmpty": "Informe o texto da resposta.",
+        "bodyLong": "O texto pode ter no máximo {max} caracteres.",
+        "count": "{n} de {max}",
+        "variables": "Inserir uma variável",
+        "variablesHint": "Clique em uma para adicioná-la no cursor. Uma variável que não puder ser preenchida permanece como escrita, para que o atendente a veja.",
+        "preview": "Pré-visualização",
+        "previewHint": "Com dados de cliente de exemplo.",
+        "previewEmpty": "Digite o texto para ver como ficará.",
+        "previewIssues": "Não preenchidas na pré-visualização: {list}. Quando uma resposta é usada, os atributos do seu contato são preenchidos se ele os tiver; o restante permanece como escrito.",
+        "category": "Categoria (opcional)",
+        "categoryPlaceholder": "Saudações, cobrança, suporte",
+        "language": "Idioma (opcional)",
+        "languageHint": "Um código como en ou pt-BR, para sua própria referência.",
+        "languageFormat": "Use um código de idioma como en ou pt-BR.",
+        "channels": "Somente nestes canais",
+        "channelsHint": "Deixe tudo desmarcado para oferecê-la em todos os canais.",
+        "scope": "Quem pode usar",
+        "scopeOption": {
+          "shared": "Todos no espaço de trabalho",
+          "mine": "Somente eu"
+        },
+        "scopeLocked": "Uma resposta não pode mudar entre compartilhada e pessoal depois de salva.",
+        "planLimit": "Você atingiu o limite de respostas salvas do seu plano.",
+        "upgrade": "Ver planos",
+        "conflict": "Outra pessoa alterou esta resposta primeiro. Feche esta janela e abra-a novamente.",
+        "invalid": "Parte do que você informou não é válida."
       }
     }
   }

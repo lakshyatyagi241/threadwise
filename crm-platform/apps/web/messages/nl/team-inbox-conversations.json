@@ -2,7 +2,8 @@
   "team-inbox-conversations": {
     "nav": {
       "inbox": "Inbox",
-      "messageLogs": "Berichtlogboeken"
+      "messageLogs": "Berichtlogboeken",
+      "savedReplies": "Opgeslagen antwoorden"
     },
     "common": {
       "dismiss": "Sluiten"
@@ -137,7 +138,10 @@
       "logBusy": "Er wordt al een export voorbereid. Wacht op de e-mail ervan en vraag daarna een nieuwe aan.",
       "logNotReady": "Deze export is niet gereed of is verlopen. Vraag hem opnieuw aan.",
       "groupSuspended": "Meta heeft deze groep opgeschort, dus er kunnen geen berichten naartoe worden gestuurd totdat Meta dit opheft.",
-      "walletEmpty": "Je berichtenportemonnee dekt dit groepsbericht niet (één kost per lid). Waardeer op en probeer het opnieuw."
+      "walletEmpty": "Je berichtenportemonnee dekt dit groepsbericht niet (één kost per lid). Waardeer op en probeer het opnieuw.",
+      "savedReplyGone": "Dit opgeslagen antwoord bestaat niet meer.",
+      "savedReplyChannel": "Dit opgeslagen antwoord is niet bedoeld voor dit soort kanaal.",
+      "shortcutTaken": "Een ander opgeslagen antwoord gebruikt die sneltoets al."
     },
     "bubble": {
       "kind": {
@@ -354,7 +358,9 @@
           "url": "Voer een link in die begint met http:// of https://",
           "tooManyRows": "Een lijst bevat in totaal maximaal 10 rijen"
         }
-      }
+      },
+      "savedReplies": "Opgeslagen antwoorden",
+      "savedReplyIssues": "Niet ingevuld en gelaten zoals geschreven ({count}): {list}. Los dit op voordat u verzendt."
     },
     "panel": {
       "tabsLabel": "Notities en tijdlijn",
@@ -636,6 +642,159 @@
           "failed": "Mislukt",
           "expired": "Verlopen"
         }
+      }
+    },
+    "savedReplies": {
+      "channelKind": {
+        "simulator": "Simulator (testen)",
+        "whatsapp_cloud": "WhatsApp Cloud API",
+        "whatsapp_qr": "WhatsApp (QR)",
+        "webchat": "Websitechat",
+        "telegram": "Telegram",
+        "facebook": "Facebook Messenger",
+        "instagram": "Instagram",
+        "email": "E-mail"
+      },
+      "variableGroup": {
+        "contact": "Contact",
+        "agent": "U",
+        "workspace": "Werkruimte",
+        "conversation": "Gesprek"
+      },
+      "variable": {
+        "first_name": "Voornaam van het contact",
+        "last_name": "Achternaam van het contact",
+        "name": "Volledige naam van het contact",
+        "email": "E-mailadres van het contact",
+        "phone": "Telefoonnummer van het contact",
+        "agent_name": "Uw volledige naam",
+        "agent_first_name": "Uw voornaam",
+        "workspace_name": "Naam van de werkruimte",
+        "company_name": "Bedrijfsnaam",
+        "today": "De datum van vandaag",
+        "device_name": "Naam van het kanaal",
+        "device_phone": "Telefoonnummer van het kanaal"
+      },
+      "picker": {
+        "title": "Opgeslagen antwoorden",
+        "close": "Opgeslagen antwoorden sluiten",
+        "searchLabel": "Opgeslagen antwoorden zoeken",
+        "searchPlaceholder": "Zoek op sneltoets, titel of tekst",
+        "listLabel": "Opgeslagen antwoorden",
+        "loading": "Opgeslagen antwoorden laden",
+        "loadFailed": "Opgeslagen antwoorden konden niet worden geladen.",
+        "retry": "Opnieuw proberen",
+        "empty": "Er zijn nog geen opgeslagen antwoorden.",
+        "emptyForChannel": "Geen opgeslagen antwoord is bedoeld voor dit kanaal.",
+        "createFirst": "Maak het eerste aan",
+        "noMatch": "Geen opgeslagen antwoord komt overeen met \"{q}\".",
+        "mine": "Van mij",
+        "hint": "Pijltjestoetsen verplaatsen, Enter voegt in, Esc sluit.",
+        "manage": "Opgeslagen antwoorden beheren",
+        "tooLong": "Dat antwoord is te lang voor de berichtlimiet van dit kanaal en is daarom niet ingevoegd."
+      },
+      "screen": {
+        "back": "Instellingen",
+        "title": "Opgeslagen antwoorden",
+        "subtitle": "Herbruikbare antwoorden die uw team in een reactie invoegt. Typ / in een gesprek om er een te vinden.",
+        "create": "Nieuw opgeslagen antwoord",
+        "noAccess": "U hebt geen toestemming om opgeslagen antwoorden te beheren.",
+        "meter": "{used} van {limit} opgeslagen antwoorden gebruikt",
+        "meterLabel": "Opgeslagen antwoorden gebruikt in uw abonnement",
+        "meterNote": "Gedeelde en persoonlijke antwoorden tellen beide mee voor de limiet.",
+        "atLimit": "U hebt de limiet van {limit} opgeslagen antwoorden van uw abonnement bereikt. Verwijder er een of upgrade om meer toe te voegen.",
+        "nearLimit": "U nadert de limiet van {limit} opgeslagen antwoorden van uw abonnement.",
+        "upgrade": "Abonnementen bekijken",
+        "tabsLabel": "Tonen",
+        "tab": {
+          "all": "Alle ({count})",
+          "shared": "Gedeeld ({count})",
+          "mine": "Van mij ({count})"
+        },
+        "categoryFilter": "Filteren op categorie",
+        "allCategories": "Alle categorieën",
+        "searchLabel": "Opgeslagen antwoorden zoeken",
+        "searchPlaceholder": "Zoek op sneltoets, titel of tekst",
+        "howItWorks": "Typ in de inbox / in het berichtvak of gebruik de knop Opgeslagen antwoorden. Variabelen zoals '{{first_name}}' worden uit het gesprek ingevuld voordat de tekst in het vak komt. Er wordt niets verzonden totdat de medewerker op Verzenden drukt.",
+        "loading": "Opgeslagen antwoorden laden",
+        "loadFailed": "Opgeslagen antwoorden konden niet worden geladen.",
+        "retry": "Opnieuw proberen",
+        "loadMore": "Meer laden",
+        "list": "Opgeslagen antwoorden",
+        "emptyTitle": "Nog geen opgeslagen antwoorden",
+        "empty": "Schrijf de antwoorden die uw team steeds opnieuw geeft en voeg ze in met één toetsaanslag.",
+        "noMatchTitle": "Niets gevonden",
+        "noMatch": "Geen opgeslagen antwoord komt overeen met \"{q}\".",
+        "noMatchCategory": "Geen opgeslagen antwoord in deze categorie.",
+        "scope": {
+          "shared": "Gedeeld",
+          "mine": "Van mij"
+        },
+        "allChannels": "Alle kanalen",
+        "neverUsed": "Nog niet gebruikt",
+        "used": "{count, plural, one {# keer gebruikt} other {# keer gebruikt}}",
+        "lastUsed": "Laatst gebruikt {when}",
+        "createdBy": "Gemaakt door {name}",
+        "readOnly": "Alleen mensen die opgeslagen antwoorden beheren kunnen een gedeeld antwoord wijzigen.",
+        "edit": "Bewerken",
+        "duplicate": "Dupliceren",
+        "delete": "Verwijderen",
+        "cancel": "Annuleren",
+        "deleteTitle": "Dit opgeslagen antwoord verwijderen?",
+        "deleteShared": "/{shortcut} wordt voor iedereen in de werkruimte verwijderd.",
+        "deleteMine": "/{shortcut} wordt uit uw antwoorden verwijderd.",
+        "deleted": "Opgeslagen antwoord verwijderd.",
+        "duplicated": "Opgeslagen antwoord gedupliceerd.",
+        "created": "Opgeslagen antwoord /{shortcut} aangemaakt.",
+        "saved": "Opgeslagen antwoord bijgewerkt."
+      },
+      "form": {
+        "eyebrow": "Opgeslagen antwoord",
+        "titleNew": "Nieuw opgeslagen antwoord",
+        "titleEdit": "Opgeslagen antwoord bewerken",
+        "close": "Sluiten",
+        "cancel": "Annuleren",
+        "save": "Opslaan",
+        "saving": "Opslaan…",
+        "shortcut": "Sneltoets",
+        "shortcutPlaceholder": "bedankt",
+        "shortcutHint": "Letters, cijfers en underscores, maximaal {max} tekens.",
+        "shortcutStored": "Medewerkers typen /{shortcut}",
+        "shortcutEmpty": "Voer een sneltoets in met letters, cijfers of underscores.",
+        "shortcutTaken": "/{shortcut} wordt al door een ander antwoord gebruikt. Kies een andere sneltoets.",
+        "title": "Titel",
+        "titlePlaceholder": "Bedankt voor uw bericht",
+        "titleEmpty": "Voer een titel in.",
+        "titleLong": "De titel mag maximaal {max} tekens bevatten.",
+        "body": "Tekst",
+        "bodyHint": "Platte tekst. Gebruik *vet* en _cursief_ zoals in WhatsApp.",
+        "bodyPlaceholder": "Hallo '{{first_name}}', bedankt voor uw bericht. Waarmee kunnen we u helpen?",
+        "bodyEmpty": "Voer de tekst van het antwoord in.",
+        "bodyLong": "De tekst mag maximaal {max} tekens bevatten.",
+        "count": "{n} van {max}",
+        "variables": "Variabele invoegen",
+        "variablesHint": "Klik er een aan om hem op de cursor toe te voegen. Een variabele die niet kan worden ingevuld blijft staan zoals geschreven, zodat de medewerker het ziet.",
+        "preview": "Voorbeeld",
+        "previewHint": "Met voorbeeldklantgegevens.",
+        "previewEmpty": "Typ de tekst om te zien hoe het eruit komt te zien.",
+        "previewIssues": "Niet ingevuld in het voorbeeld: {list}. Wanneer een antwoord wordt gebruikt, worden de contactkenmerken ingevuld als het contact ze heeft; al het andere blijft staan zoals geschreven.",
+        "category": "Categorie (optioneel)",
+        "categoryPlaceholder": "Begroetingen, facturering, support",
+        "language": "Taal (optioneel)",
+        "languageHint": "Een code zoals en of pt-BR, voor uw eigen referentie.",
+        "languageFormat": "Gebruik een taalcode zoals en of pt-BR.",
+        "channels": "Alleen op deze kanalen",
+        "channelsHint": "Laat alles uitgevinkt om het op elk kanaal aan te bieden.",
+        "scope": "Wie het kan gebruiken",
+        "scopeOption": {
+          "shared": "Iedereen in de werkruimte",
+          "mine": "Alleen ik"
+        },
+        "scopeLocked": "Een antwoord kan na het opslaan niet meer wisselen tussen gedeeld en persoonlijk.",
+        "planLimit": "U hebt de limiet van opgeslagen antwoorden van uw abonnement bereikt.",
+        "upgrade": "Abonnementen bekijken",
+        "conflict": "Iemand anders heeft dit antwoord eerder gewijzigd. Sluit dit venster en open het opnieuw.",
+        "invalid": "Een deel van wat u hebt ingevoerd is ongeldig."
       }
     }
   }

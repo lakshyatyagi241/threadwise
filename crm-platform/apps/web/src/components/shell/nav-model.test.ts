@@ -122,6 +122,7 @@ describe('the real menu', () => {
     expect(ids('inbox')).toEqual([
       'inbox',
       'inbox-message-logs',
+      'inbox-saved-replies',
       'quick-chat',
       'call-logs',
       'team-chat',

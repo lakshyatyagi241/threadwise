@@ -2,7 +2,8 @@
   "team-inbox-conversations": {
     "nav": {
       "inbox": "Posteingang",
-      "messageLogs": "Nachrichtenprotokolle"
+      "messageLogs": "Nachrichtenprotokolle",
+      "savedReplies": "Gespeicherte Antworten"
     },
     "common": {
       "dismiss": "Ausblenden"
@@ -137,7 +138,10 @@
       "logBusy": "Ein Export wird bereits vorbereitet. Warten Sie auf die E-Mail dazu und fordern Sie dann einen weiteren an.",
       "logNotReady": "Dieser Export ist nicht bereit oder abgelaufen. Fordern Sie ihn erneut an.",
       "groupSuspended": "Meta hat diese Gruppe gesperrt. Sie kann erst wieder angeschrieben werden, wenn Meta die Sperre aufhebt.",
-      "walletEmpty": "Dein Nachrichten-Guthaben reicht für diese Gruppennachricht nicht aus (eine Gebühr pro Mitglied). Lade es auf und versuche es erneut."
+      "walletEmpty": "Dein Nachrichten-Guthaben reicht für diese Gruppennachricht nicht aus (eine Gebühr pro Mitglied). Lade es auf und versuche es erneut.",
+      "savedReplyGone": "Diese gespeicherte Antwort existiert nicht mehr.",
+      "savedReplyChannel": "Diese gespeicherte Antwort ist nicht für diese Art von Kanal gedacht.",
+      "shortcutTaken": "Eine andere gespeicherte Antwort verwendet dieses Kürzel bereits."
     },
     "bubble": {
       "kind": {
@@ -354,7 +358,9 @@
           "url": "Geben Sie einen Link ein, der mit http:// oder https:// beginnt",
           "tooManyRows": "Eine Liste enthält insgesamt höchstens 10 Zeilen"
         }
-      }
+      },
+      "savedReplies": "Gespeicherte Antworten",
+      "savedReplyIssues": "Nicht ausgefüllt und unverändert belassen ({count}): {list}. Vor dem Senden korrigieren."
     },
     "panel": {
       "tabsLabel": "Notizen und Verlauf",
@@ -636,6 +642,159 @@
           "failed": "Fehlgeschlagen",
           "expired": "Abgelaufen"
         }
+      }
+    },
+    "savedReplies": {
+      "channelKind": {
+        "simulator": "Simulator (Test)",
+        "whatsapp_cloud": "WhatsApp Cloud API",
+        "whatsapp_qr": "WhatsApp (QR)",
+        "webchat": "Website-Chat",
+        "telegram": "Telegram",
+        "facebook": "Facebook Messenger",
+        "instagram": "Instagram",
+        "email": "E-Mail"
+      },
+      "variableGroup": {
+        "contact": "Kontakt",
+        "agent": "Sie",
+        "workspace": "Workspace",
+        "conversation": "Unterhaltung"
+      },
+      "variable": {
+        "first_name": "Vorname des Kontakts",
+        "last_name": "Nachname des Kontakts",
+        "name": "Vollständiger Name des Kontakts",
+        "email": "E-Mail des Kontakts",
+        "phone": "Telefonnummer des Kontakts",
+        "agent_name": "Ihr vollständiger Name",
+        "agent_first_name": "Ihr Vorname",
+        "workspace_name": "Name des Workspace",
+        "company_name": "Firmenname",
+        "today": "Heutiges Datum",
+        "device_name": "Name des Kanals",
+        "device_phone": "Telefonnummer des Kanals"
+      },
+      "picker": {
+        "title": "Gespeicherte Antworten",
+        "close": "Gespeicherte Antworten schließen",
+        "searchLabel": "Gespeicherte Antworten durchsuchen",
+        "searchPlaceholder": "Nach Kürzel, Titel oder Text suchen",
+        "listLabel": "Gespeicherte Antworten",
+        "loading": "Gespeicherte Antworten werden geladen",
+        "loadFailed": "Gespeicherte Antworten konnten nicht geladen werden.",
+        "retry": "Erneut versuchen",
+        "empty": "Es gibt noch keine gespeicherten Antworten.",
+        "emptyForChannel": "Keine gespeicherte Antwort ist für diesen Kanal gedacht.",
+        "createFirst": "Die erste erstellen",
+        "noMatch": "Keine gespeicherte Antwort passt zu „{q}“.",
+        "mine": "Meine",
+        "hint": "Pfeiltasten navigieren, Enter fügt ein, Esc schließt.",
+        "manage": "Gespeicherte Antworten verwalten",
+        "tooLong": "Diese Antwort ist zu lang für das Nachrichtenlimit dieses Kanals und wurde daher nicht eingefügt."
+      },
+      "screen": {
+        "back": "Einstellungen",
+        "title": "Gespeicherte Antworten",
+        "subtitle": "Wiederverwendbare Antworten, die Ihr Team in eine Antwort einfügt. Geben Sie in einer Unterhaltung / ein, um eine zu finden.",
+        "create": "Neue gespeicherte Antwort",
+        "noAccess": "Sie haben keine Berechtigung, gespeicherte Antworten zu verwalten.",
+        "meter": "{used} von {limit} gespeicherten Antworten verwendet",
+        "meterLabel": "In Ihrem Tarif verwendete gespeicherte Antworten",
+        "meterNote": "Geteilte und persönliche Antworten zählen beide zum Limit.",
+        "atLimit": "Sie haben das Limit Ihres Tarifs von {limit} gespeicherten Antworten erreicht. Löschen Sie eine oder wechseln Sie zu einem höheren Tarif.",
+        "nearLimit": "Sie nähern sich dem Limit Ihres Tarifs von {limit} gespeicherten Antworten.",
+        "upgrade": "Tarife ansehen",
+        "tabsLabel": "Anzeigen",
+        "tab": {
+          "all": "Alle ({count})",
+          "shared": "Geteilt ({count})",
+          "mine": "Meine ({count})"
+        },
+        "categoryFilter": "Nach Kategorie filtern",
+        "allCategories": "Alle Kategorien",
+        "searchLabel": "Gespeicherte Antworten durchsuchen",
+        "searchPlaceholder": "Nach Kürzel, Titel oder Text suchen",
+        "howItWorks": "Geben Sie im Posteingang / ins Nachrichtenfeld ein oder nutzen Sie die Schaltfläche Gespeicherte Antworten. Variablen wie '{{first_name}}' werden aus der Unterhaltung befüllt, bevor der Text im Feld erscheint. Es wird nichts gesendet, bis der Mitarbeiter auf Senden klickt.",
+        "loading": "Gespeicherte Antworten werden geladen",
+        "loadFailed": "Gespeicherte Antworten konnten nicht geladen werden.",
+        "retry": "Erneut versuchen",
+        "loadMore": "Mehr laden",
+        "list": "Gespeicherte Antworten",
+        "emptyTitle": "Noch keine gespeicherten Antworten",
+        "empty": "Schreiben Sie die Antworten, die Ihr Team immer wieder gibt, und fügen Sie sie mit einem Tastendruck ein.",
+        "noMatchTitle": "Nichts gefunden",
+        "noMatch": "Keine gespeicherte Antwort passt zu „{q}“.",
+        "noMatchCategory": "Keine gespeicherte Antwort in dieser Kategorie.",
+        "scope": {
+          "shared": "Geteilt",
+          "mine": "Meine"
+        },
+        "allChannels": "Alle Kanäle",
+        "neverUsed": "Noch nicht verwendet",
+        "used": "{count, plural, one {# Mal} other {# Mal}} verwendet",
+        "lastUsed": "Zuletzt verwendet {when}",
+        "createdBy": "Erstellt von {name}",
+        "readOnly": "Nur Personen, die gespeicherte Antworten verwalten, können eine geteilte Antwort ändern.",
+        "edit": "Bearbeiten",
+        "duplicate": "Duplizieren",
+        "delete": "Löschen",
+        "cancel": "Abbrechen",
+        "deleteTitle": "Diese gespeicherte Antwort löschen?",
+        "deleteShared": "/{shortcut} wird für alle im Workspace entfernt.",
+        "deleteMine": "/{shortcut} wird aus Ihren Antworten entfernt.",
+        "deleted": "Gespeicherte Antwort gelöscht.",
+        "duplicated": "Gespeicherte Antwort dupliziert.",
+        "created": "Gespeicherte Antwort /{shortcut} erstellt.",
+        "saved": "Gespeicherte Antwort aktualisiert."
+      },
+      "form": {
+        "eyebrow": "Gespeicherte Antwort",
+        "titleNew": "Neue gespeicherte Antwort",
+        "titleEdit": "Gespeicherte Antwort bearbeiten",
+        "close": "Schließen",
+        "cancel": "Abbrechen",
+        "save": "Speichern",
+        "saving": "Wird gespeichert…",
+        "shortcut": "Kürzel",
+        "shortcutPlaceholder": "danke",
+        "shortcutHint": "Buchstaben, Zahlen und Unterstriche, bis zu {max} Zeichen.",
+        "shortcutStored": "Mitarbeiter geben /{shortcut} ein",
+        "shortcutEmpty": "Geben Sie ein Kürzel aus Buchstaben, Zahlen oder Unterstrichen ein.",
+        "shortcutTaken": "/{shortcut} wird bereits von einer anderen Antwort verwendet. Wählen Sie ein anderes Kürzel.",
+        "title": "Titel",
+        "titlePlaceholder": "Danke für Ihre Nachricht",
+        "titleEmpty": "Geben Sie einen Titel ein.",
+        "titleLong": "Der Titel darf höchstens {max} Zeichen lang sein.",
+        "body": "Text",
+        "bodyHint": "Reiner Text. Verwenden Sie *fett* und _kursiv_ wie in WhatsApp.",
+        "bodyPlaceholder": "Hallo '{{first_name}}', danke für Ihre Nachricht. Wie können wir helfen?",
+        "bodyEmpty": "Geben Sie den Text der Antwort ein.",
+        "bodyLong": "Der Text darf höchstens {max} Zeichen lang sein.",
+        "count": "{n} von {max}",
+        "variables": "Variable einfügen",
+        "variablesHint": "Klicken Sie auf eine, um sie an der Cursorposition einzufügen. Eine Variable, die nicht befüllt werden kann, bleibt unverändert, damit der Mitarbeiter sie sieht.",
+        "preview": "Vorschau",
+        "previewHint": "Mit Beispieldaten eines Kunden.",
+        "previewEmpty": "Geben Sie den Text ein, um die Darstellung zu sehen.",
+        "previewIssues": "In der Vorschau nicht ausgefüllt: {list}. Wenn eine Antwort verwendet wird, werden die Attribute Ihres Kontakts eingesetzt, sofern vorhanden; alles andere bleibt unverändert.",
+        "category": "Kategorie (optional)",
+        "categoryPlaceholder": "Begrüßung, Abrechnung, Support",
+        "language": "Sprache (optional)",
+        "languageHint": "Ein Code wie en oder pt-BR, zu Ihrer eigenen Orientierung.",
+        "languageFormat": "Verwenden Sie einen Sprachcode wie en oder pt-BR.",
+        "channels": "Nur in diesen Kanälen",
+        "channelsHint": "Lassen Sie alle abgewählt, um sie in jedem Kanal anzubieten.",
+        "scope": "Wer darf sie verwenden",
+        "scopeOption": {
+          "shared": "Alle im Workspace",
+          "mine": "Nur ich"
+        },
+        "scopeLocked": "Eine Antwort kann nach dem Speichern nicht mehr zwischen geteilt und persönlich wechseln.",
+        "planLimit": "Sie haben das Limit Ihres Tarifs für gespeicherte Antworten erreicht.",
+        "upgrade": "Tarife ansehen",
+        "conflict": "Jemand anderes hat diese Antwort zuerst geändert. Schließen Sie dieses Fenster und öffnen Sie es erneut.",
+        "invalid": "Einige Ihrer Eingaben sind ungültig."
       }
     }
   }

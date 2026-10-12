@@ -50,10 +50,12 @@ import {
 } from '@/features/channel-email/lib/signature-view';
 import { useStagedAttachments } from '@/features/channel-email/lib/use-staged-attachments';
 import { humanSize } from '../lib/time';
+import { insertReply } from '../lib/saved-replies';
 import {
   CloseIcon,
   FileIcon,
   PaperclipIcon,
+  SavedReplyIcon,
   SendIcon,
   ShareIcon,
   SmileIcon,
@@ -61,6 +63,11 @@ import {
 } from './icons';
 import { EmojiPicker } from './emoji-picker';
 import { QuotePreview } from './quote-preview';
+import {
+  SavedReplyPicker,
+  type PickerState,
+  type SavedReplyPickerHandle,
+} from './saved-reply-picker';
 
 /** The longest rich-text body the reply takes (the contract's cap on `bodyHtml`). */
 const EMAIL_HTML_LIMIT = EMAIL_HTML_MAX * 2;
@@ -110,6 +117,11 @@ export interface ComposerProps {
   /** The type and size rules of the channel, so a file WhatsApp would refuse is turned away before it is uploaded. */
   attachments?: AttachmentRules;
   /**
+   * The agent may reply: the saved-reply picker is offered (the "Saved replies" button and `/` in the box). `channelKind` leaves out the
+   * replies that are restricted to other channels. Left out, the box has no picker.
+   */
+  savedReplies?: { channelKind?: string };
+  /**
    * An email conversation: the box adds Cc, Bcc and a subject, takes a long body and drops what email cannot carry (emoji). The
    * subject placeholder is `Re: <subject>` of the thread.
    */
@@ -151,12 +163,24 @@ export function Composer(props: ComposerProps) {
   const [signature, setSignature] = useState<SignatureChoice>(AUTO_SIGNATURE);
   const [dragging, setDragging] = useState(false);
   const [bodyTooLong, setBodyTooLong] = useState(false);
+  const [picker, setPicker] = useState<PickerState>({
+    open: false,
+    listId: '',
+    activeId: undefined,
+  });
+  const [unfilled, setUnfilled] = useState<string[]>([]);
+  const pickerRef = useRef<SavedReplyPickerHandle>(null);
   const staged = useStagedAttachments(conversationId);
   const editor = useRef<RichEditorHandle>(null);
   const area = useRef<HTMLTextAreaElement>(null);
   const input = useRef<HTMLInputElement>(null);
   const hintId = useId();
   const attachmentError = useAttachmentError();
+  // The newest text, for an insert that finishes after a round trip to the server.
+  const textRef = useRef(text);
+  useEffect(() => {
+    textRef.current = text;
+  });
   const limited =
     props.attachments && hasWhatsappLimits(props.attachments.channelKind)
       ? props.attachments
@@ -177,6 +201,7 @@ export function Composer(props: ComposerProps) {
     setEditorKey((k) => k + 1);
     setSignature(AUTO_SIGNATURE);
     setBodyTooLong(false);
+    setUnfilled([]);
   }
 
   const richEmail = props.email !== undefined && mode === 'reply' && rich;
@@ -214,6 +239,10 @@ export function Composer(props: ComposerProps) {
   const groupBlocked = !isNote && props.groupSendBlocked === true;
   const disabled = isNote ? !props.canNote : props.replyDisabled || !props.canReply || groupBlocked;
   const isEmail = props.email !== undefined;
+  // The picker types into the plain box: the rich email editor does not have it yet.
+  const showSavedReplies =
+    props.savedReplies !== undefined && !isNote && !groupBlocked && !richEmail;
+  const stillUnfilled = unfilled.filter((token) => text.includes(token));
   const max = isNote ? NOTE_BODY_MAX : isEmail ? EMAIL_BODY_MAX : MESSAGE_BODY_MAX;
   const trimmed = text.trim();
   const emailBlocked = isEmail && !isNote && (staged.uploading || staged.failed);
@@ -229,6 +258,23 @@ export function Composer(props: ComposerProps) {
     setText(value);
     if (value) DRAFTS.set(conversationId, value);
     else DRAFTS.delete(conversationId);
+  }
+
+  /** Puts a filled-in saved reply in the box (never sends it): in place of the typed `/query`, or at the caret. False when it does not fit. */
+  function insertSavedReply(reply: string, range: { start: number; end: number } | null): boolean {
+    const el = area.current;
+    const at = range ?? {
+      start: el?.selectionStart ?? textRef.current.length,
+      end: el?.selectionEnd ?? textRef.current.length,
+    };
+    const done = insertReply(textRef.current, at, reply, max);
+    if (!done) return false;
+    change(done.text);
+    requestAnimationFrame(() => {
+      el?.focus();
+      el?.setSelectionRange(done.caret, done.caret);
+    });
+    return true;
   }
 
   async function submit() {
@@ -272,6 +318,8 @@ export function Composer(props: ComposerProps) {
     });
     setExtras(EMPTY_EXTRAS);
     setExtrasTried(false);
+    setUnfilled([]);
+    pickerRef.current?.close();
     if (isEmail) {
       HTML_DRAFTS.delete(conversationId);
       setHtml('');
@@ -303,6 +351,8 @@ export function Composer(props: ComposerProps) {
   const hasFiles = (e: DragEvent) => Array.from(e.dataTransfer.types).includes('Files');
 
   function onKey(e: KeyboardEvent<HTMLTextAreaElement>) {
+    // An open saved-reply list owns the arrows, Enter, Tab and Escape.
+    if (pickerRef.current?.keyDown(e)) return;
     if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
       e.preventDefault();
       void submit();
@@ -436,6 +486,15 @@ export function Composer(props: ComposerProps) {
           {fileError}
         </p>
       )}
+      {!isNote && stillUnfilled.length > 0 && (
+        <p
+          role="status"
+          data-testid="inbox-saved-reply-notice"
+          className="mx-3 mt-1 text-xs text-warning"
+        >
+          {t('savedReplyIssues', { count: stillUnfilled.length, list: stillUnfilled.join(', ') })}
+        </p>
+      )}
 
       {isEmail && !isNote && !groupBlocked && (
         <AttachmentTray
@@ -459,7 +518,19 @@ export function Composer(props: ComposerProps) {
         />
       )}
 
-      <div className="flex items-end gap-2 p-3">
+      <div className="relative flex items-end gap-2 p-3">
+        {showSavedReplies && (
+          <SavedReplyPicker
+            key={conversationId}
+            conversationId={conversationId}
+            channelKind={props.savedReplies?.channelKind}
+            handleRef={pickerRef}
+            onInsert={insertSavedReply}
+            onIssues={(issues) => setUnfilled(issues.map((i) => i.token))}
+            onClosed={() => area.current?.focus()}
+            onState={setPicker}
+          />
+        )}
         {!isNote && !groupBlocked && props.canTemplate && props.onTemplate && (
           <button
             type="button"
@@ -537,6 +608,22 @@ export function Composer(props: ComposerProps) {
             </button>
           </>
         )}
+        {showSavedReplies && (
+          <button
+            type="button"
+            title={t('savedReplies')}
+            aria-label={t('savedReplies')}
+            aria-haspopup="listbox"
+            aria-expanded={picker.open}
+            aria-controls={picker.open ? picker.listId : undefined}
+            data-testid="inbox-saved-replies-button"
+            disabled={disabled}
+            onClick={() => pickerRef.current?.toggle()}
+            className="flex size-10 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
+          >
+            <SavedReplyIcon />
+          </button>
+        )}
         {!groupBlocked && !isEmail && (
           <>
             <button
@@ -604,8 +691,28 @@ export function Composer(props: ComposerProps) {
                   ? t('notePlaceholder')
                   : t('replyPlaceholder')
             }
-            onChange={(e) => change(e.target.value)}
+            onChange={(e) => {
+              change(e.target.value);
+              if (showSavedReplies) {
+                pickerRef.current?.textChanged(e.target.value, e.target.selectionStart);
+              }
+            }}
+            // The caret moved without typing (arrows, a click): a `/query` it left stops being a query.
+            onSelect={
+              showSavedReplies
+                ? (e) =>
+                    pickerRef.current?.textChanged(
+                      e.currentTarget.value,
+                      e.currentTarget.selectionStart,
+                    )
+                : undefined
+            }
             onKeyDown={onKey}
+            role={showSavedReplies && picker.open ? 'combobox' : undefined}
+            aria-expanded={showSavedReplies && picker.open ? true : undefined}
+            aria-controls={showSavedReplies && picker.open ? picker.listId : undefined}
+            aria-activedescendant={showSavedReplies && picker.open ? picker.activeId : undefined}
+            aria-autocomplete={showSavedReplies && picker.open ? 'list' : undefined}
             className={cn(
               'max-h-36 min-h-10 w-full flex-1 resize-none rounded-md border bg-background px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:bg-muted disabled:opacity-70',
               isNote ? 'border-warning/50 bg-warning/5' : 'border-border',
