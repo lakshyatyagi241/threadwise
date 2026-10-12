@@ -136,6 +136,17 @@ const orderRow = async (number: string) =>
     plan_slug: string;
   }>(`SELECT * FROM orders WHERE order_number = $1`, [number]);
 
+/** A subscription alone no longer turns an app's plan features on: the workspace installs the app too (owner decision 2026-10-08). */
+async function installApp(t: Tenant, slug: string): Promise<void> {
+  await h.owner.query(
+    `INSERT INTO workspace_app_installations (org_id, app_id, installed_version_id, status)
+     SELECT $1, a.id, v.id, 'active' FROM marketplace_apps a JOIN marketplace_app_versions v ON v.app_id = a.id
+      WHERE a.slug = $2 ORDER BY v.id DESC LIMIT 1
+     ON CONFLICT (org_id, app_id) DO NOTHING`,
+    [t.orgId, slug],
+  );
+}
+
 /** Places an order for the app's add-on through the real checkout, then the buyer returns and Stripe confirms. Returns the order number. */
 async function pay(t: Tenant, packSlug: string): Promise<string> {
   mockProviders();
@@ -391,7 +402,7 @@ describe('the operator decides what an app costs', () => {
     // only the seeded Appointments listing is paid (draft, price unset)
     expect(
       (await ops().get('/apps?pricing=paid')).body.data.map((a: { slug: string }) => a.slug),
-    ).toEqual(['appointments']);
+    ).toEqual(['forms', 'appointments']);
     const cardFree = await detail(A, 'quote-pro');
     expect(cardFree.pricing).toMatchObject({
       model: 'free',
@@ -546,7 +557,7 @@ describe('the operator decides what an app costs', () => {
     // the filter follows
     expect(
       (await ops().get('/apps?pricing=paid')).body.data.map((a: { slug: string }) => a.slug),
-    ).toEqual(['quote-pro', 'appointments']);
+    ).toEqual(['quote-pro', 'forms', 'appointments']);
     expect(
       (await ops().get('/apps?pricing=free&limit=100')).body.data.map(
         (a: { slug: string }) => a.slug,
@@ -1760,6 +1771,11 @@ describe('a first-party app that owns an existing plan feature (the first paid f
 
     await pay(G, (await packOf('booking-lite')).slug);
     expect((await detail(G, 'booking-lite')).pricing.access).toBe('entitled');
+    // subscribed but not installed: still closed, and the answer says to install the app
+    const notInstalled = await analytics(G);
+    expect(notInstalled.status).toBe(422);
+    expect(JSON.stringify(notInstalled.body)).toContain('app_not_installed');
+    await installApp(G, 'booking-lite');
     const open = await analytics(G);
     expect(open.status, JSON.stringify(open.body)).toBe(200);
 
@@ -1991,6 +2007,10 @@ describe('Appointments, the first paid first-party app (seeded as a draft, price
     expect((await detail(H, 'appointments')).pricing.access).toBe('entitled');
     // I pays and the existing appointment gates (the plan resolver) open
     await pay(I, (await packOf('appointments')).slug);
+    expect(await has(I)).toBe(false); // subscribed, not installed yet
+    await installApp(I, 'appointments');
     expect(await has(I)).toBe(true);
+    // H was comped as an existing user and the action installed the app for it, so it never lost booking
+    expect(await has(H)).toBe(true);
   });
 });
