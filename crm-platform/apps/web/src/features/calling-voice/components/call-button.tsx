@@ -79,7 +79,10 @@ export function CallButton({ conversationId, displayName, contactId }: CallButto
     try {
       const r = await requestPermission({ numberId: e.numberId, to });
       // Ask permission never places a call: when Meta says the customer already allows calls, the operator presses Call.
-      toast(t(r.alreadyPermitted ? 'toast.alreadyPermitted' : 'toast.permissionSent'), 'success');
+      toast(
+        r.alreadyPermitted ? t('toast.alreadyPermitted') : t('toast.permissionSent'),
+        'success',
+      );
       void qc.invalidateQueries({ queryKey: KEYS.eligibility(conversationId) });
     } catch (err) {
       toast(t('toast.permissionFailed', { message: errorText(err) }), 'danger');
