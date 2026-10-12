@@ -8,6 +8,7 @@
     "dashboard.integrations.name.shopify",
     "dashboard.integrations.name.woocommerce",
     "dashboard.range.short.qtd",
+    "menu.profileLabel",
     "signUp.orgNamePlaceholder",
     "signUp.orgSlugPlaceholder"
   ],
@@ -20,6 +21,7 @@
     "dashboard.integrations.name.shopify",
     "dashboard.integrations.name.woocommerce",
     "dashboard.range.short.qtd",
+    "menu.profileLabel",
     "signUp.orgNamePlaceholder",
     "signUp.orgSlugPlaceholder"
   ]

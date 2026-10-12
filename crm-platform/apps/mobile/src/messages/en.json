@@ -343,5 +343,252 @@
       "afternoon": "Good afternoon.",
       "evening": "Good evening."
     }
+  },
+  "tabs": {
+    "summary": "Summary",
+    "inbox": "Inbox",
+    "contacts": "Contacts",
+    "menu": "Menu"
+  },
+  "menu": {
+    "title": "Account",
+    "profileLabel": "{{name}}, {{email}}",
+    "workspace": "Workspace",
+    "summary": "Summary",
+    "inbox": "Inbox",
+    "contacts": "Contacts",
+    "noAccess": "You don't have access to this. Ask your workspace admin to unlock it.",
+    "appName": "CRM Platform",
+    "version": "Version {{version}}",
+    "signOutTitle": "Sign out",
+    "signOutConfirm": "Are you sure you want to sign out?",
+    "signOutNo": "No",
+    "signOutYes": "Yes, sign out"
+  },
+  "inbox": {
+    "tabs": {
+      "label": "Inbox view",
+      "all": "All",
+      "mine": "Mine",
+      "unassigned": "Unassigned",
+      "unread": "Unread"
+    },
+    "search": {
+      "open": "Search conversations",
+      "close": "Close search",
+      "label": "Search",
+      "placeholder": "Name, number or message"
+    },
+    "filter": {
+      "open": "Filter by status",
+      "sheet": "Conversation status",
+      "close": "Close",
+      "applied": "Applied filters",
+      "clearAll": "Clear all",
+      "remove": "Remove filter: {{name}}",
+      "statusChip": "Status: {{name}}",
+      "searchChip": "Search: {{q}}"
+    },
+    "statusFilter": {
+      "default": "Open & pending",
+      "open": "Open",
+      "pending": "Pending",
+      "snoozed": "Snoozed",
+      "resolved": "Resolved",
+      "closed": "Closed",
+      "all": "All statuses"
+    },
+    "status": {
+      "open": "Open",
+      "pending": "Pending",
+      "snoozed": "Snoozed",
+      "resolved": "Resolved",
+      "closed": "Closed",
+      "spam": "Spam"
+    },
+    "list": {
+      "label": "Conversations",
+      "emptyTitle": "No conversations",
+      "emptyHint": "Messages from your customers will show up here.",
+      "emptyFilteredHint": "Nothing matches these filters. Try clearing them.",
+      "noMore": "No more conversations",
+      "loadingMore": "Loading more conversations",
+      "noAccessTitle": "No access to the inbox",
+      "noAccessBody": "Your role cannot read conversations. Ask a workspace admin to change this."
+    },
+    "row": {
+      "noMessages": "No messages yet",
+      "unread_one": "{{count}} unread message",
+      "unread_other": "{{count}} unread messages",
+      "label": "{{title}}, {{preview}}",
+      "labelUnread": "{{title}}, {{unread}}, {{preview}}",
+      "assignedTo": "Assigned to {{name}}"
+    },
+    "time": {
+      "am": "AM",
+      "pm": "PM",
+      "yesterday": "Yesterday"
+    },
+    "thread": {
+      "messages": "Messages",
+      "loadingOlder": "Loading earlier messages",
+      "emptyTitle": "No messages yet",
+      "emptyHint": "Messages in this conversation will show up here.",
+      "noAccessTitle": "No access to this conversation",
+      "noAccessBody": "Your role cannot read conversations.",
+      "resolve": "Resolve",
+      "reopen": "Reopen",
+      "windowClosed": "The 24-hour reply window is closed. Send a template instead.",
+      "conflict": "Someone else changed this conversation. The latest version is loaded, please try again.",
+      "statusInvalid": "This conversation can't be moved to that status."
+    },
+    "message": {
+      "labelIn": "Received: {{text}}, {{time}}",
+      "labelOut": "Sent by you: {{text}}, {{time}}, {{status}}",
+      "deleted": "This message was deleted",
+      "retry": "Retry sending"
+    },
+    "kind": {
+      "text": "Message",
+      "image": "Photo",
+      "video": "Video",
+      "audio": "Audio",
+      "voice": "Voice message",
+      "document": "Document",
+      "sticker": "Sticker",
+      "location": "Location",
+      "contact": "Contact",
+      "template": "Template",
+      "reaction": "Reaction",
+      "interactive": "Interactive message",
+      "system": "System message"
+    },
+    "delivery": {
+      "queued": "Sending",
+      "sent": "Sent",
+      "delivered": "Delivered",
+      "read": "Read",
+      "failed": "Not sent",
+      "received": "Received"
+    },
+    "composer": {
+      "label": "Message",
+      "placeholder": "Type a message",
+      "closedPlaceholder": "Replies are paused",
+      "send": "Send",
+      "tooLong": "Messages can be up to {{max}} characters."
+    },
+    "errors": {
+      "channelDisconnected": "This channel is disconnected. Reconnect it on the web, then try again.",
+      "planLimit": "Your plan's message limit has been reached.",
+      "forbidden": "You don't have permission to do that.",
+      "notFound": "This conversation is no longer available."
+    }
+  },
+  "contacts": {
+    "title": "Contacts",
+    "unknown": "Unknown",
+    "add": "Add contact",
+    "cancel": "Cancel",
+    "yes": "Yes",
+    "no": "No",
+    "denied": {
+      "title": "You can't view contacts",
+      "hint": "Ask a workspace admin to give your role access to contacts.",
+      "createTitle": "You can't add contacts",
+      "createHint": "Ask a workspace admin to let your role add contacts."
+    },
+    "empty": {
+      "title": "No contacts",
+      "hint": "Tap the + button to add your first contact.",
+      "filteredTitle": "No matching contacts",
+      "filteredHint": "Try a different search or clear the filters."
+    },
+    "search": {
+      "open": "Search contacts",
+      "close": "Close search",
+      "label": "Search",
+      "placeholder": "Name, phone or email"
+    },
+    "filter": {
+      "open": "Filter contacts",
+      "title": "Filter",
+      "stage": "Lifecycle stage",
+      "any": "Any",
+      "marketing": "Marketing messages",
+      "marketingOptions": {
+        "all": "All",
+        "subscribed": "Subscribed",
+        "unsubscribed": "Opted out"
+      },
+      "source": "Source",
+      "sourceHint": "Where the contact came from, such as import or api.",
+      "clear": "Clear all",
+      "apply": "Apply"
+    },
+    "stage": {
+      "new": "New",
+      "contacted": "Contacted",
+      "qualified": "Qualified",
+      "application_started": "Application started",
+      "application_submitted": "Application submitted",
+      "interview_scheduled": "Interview scheduled",
+      "offer_received": "Offer received",
+      "admission_confirmed": "Admission confirmed",
+      "enrolled": "Enrolled",
+      "lost": "Lost"
+    },
+    "subscription": {
+      "subscribed": "Subscribed",
+      "unsubscribed": "Unsubscribed",
+      "pending": "Pending"
+    },
+    "form": {
+      "name": "Name",
+      "phone": "Phone",
+      "phoneHint": "With the country code, for example +919876543210.",
+      "email": "Email",
+      "needPhoneOrEmail": "Enter a phone number or an email address.",
+      "phoneInvalid": "Enter the phone number with the country code, for example +919876543210.",
+      "emailInvalid": "Enter a valid email address.",
+      "nameInvalid": "Enter a name of up to 255 characters."
+    },
+    "new": {
+      "title": "New contact",
+      "save": "Save contact"
+    },
+    "edit": {
+      "title": "Edit contact",
+      "open": "Edit contact",
+      "save": "Save changes",
+      "conflict": "This contact was changed by someone else. Review and save again."
+    },
+    "detail": {
+      "title": "Contact",
+      "notFound": "This contact no longer exists.",
+      "phone": "Phone",
+      "email": "Email",
+      "call": "Call {{phone}}",
+      "mail": "Write to {{email}}",
+      "stage": "Lifecycle stage",
+      "status": "Status",
+      "source": "Source",
+      "whatsapp": "WhatsApp subscription",
+      "marketing": "Marketing messages",
+      "optedOut": "Opted out",
+      "optedIn": "Can receive",
+      "lastActivity": "Last activity",
+      "noActivity": "No activity yet",
+      "created": "Added on",
+      "customFields": "Custom fields"
+    },
+    "tags": {
+      "title": "Tags",
+      "none": "No tags yet.",
+      "remove": "Remove tag {{name}}",
+      "addLabel": "Add a tag",
+      "addPlaceholder": "Tag name",
+      "add": "Add tag"
+    }
   }
 }

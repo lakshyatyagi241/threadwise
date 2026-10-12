@@ -36,6 +36,7 @@ export const palette = {
     chartSent: '#1A56DB',
     chartDelivered: '#5B93F0',
     focus: '#1A73E8',
+    scrim: 'rgba(0, 0, 0, 0.4)',
   },
   dark: {
     background: '#0C1220',
@@ -65,6 +66,7 @@ export const palette = {
     chartSent: '#6C9CFF',
     chartDelivered: '#B5D0FF',
     focus: '#8AB4F8',
+    scrim: 'rgba(0, 0, 0, 0.6)',
   },
 } as const;
 

@@ -49,6 +49,15 @@ jest.mock('expo-application', () => ({
   nativeBuildVersion: '45',
 }));
 
+// The icon fonts are loaded as assets, which have no registry under Node. An icon is a hidden, empty view here; the control around it
+// carries the name a test looks for.
+jest.mock('@expo/vector-icons', () => {
+  const { createElement } = require('react');
+  const { View } = require('react-native');
+  const icon = () => createElement(View);
+  return { Ionicons: icon, MaterialIcons: icon, MaterialCommunityIcons: icon };
+});
+
 jest.mock('expo-localization', () => ({
   getLocales: jest.fn(() => [{ languageTag: 'en-US', textDirection: 'ltr' }]),
 }));
