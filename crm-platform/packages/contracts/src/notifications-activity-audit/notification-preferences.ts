@@ -77,7 +77,7 @@ export const NOTIFICATION_CATALOG: Record<NotificationPrefType, NotificationCata
   // BL-099: quiet defaults, like the devices and the sends. Someone waiting to join is a task for the admins, not an emergency, and a
   // suspension is news to read; a person who wants the OS notification turns the push on.
   // TW-MAIL-032: a reply that did not reach someone. Quiet like the send outcomes; the push stays on (the sender wants to fix the address).
-  email_bounced: { group: 'conversations', toast: true, sound: false, push: true },
+  email_bounced: { group: 'conversations', toast: true, sound: false, push: false },
   waba_group_join_request: { group: 'whatsapp_groups', toast: true, sound: false, push: false },
   waba_group_suspended: { group: 'whatsapp_groups', toast: true, sound: false, push: false },
   waba_group_suspension_cleared: {

@@ -9,7 +9,7 @@ Spec: `inventory/channel-email.md` (TW-MAIL-019..030 are what this build deliver
 Gmail / Google Workspace only (OAuth popup, Gmail API). Several mailboxes per workspace (plan limit `email_mailboxes`, default 3). Each mailbox is one inbox
 channel (`kind='email'`, one per mailbox) so the inbox shows several inboxes through its existing channel list/filter. Shipped as a paid first-party Marketplace
 **integration** (kind `integration`, category Messaging and email, connector type `client`; the Forms billing model; decision changed from "add-on" by the owner after the first build, migration `20261119120000_mkt_email_integration`): plan feature `email_channel` (default false), listing slug `email`.
-NOT in this build: IMAP/SMTP (TW-MAIL-031), Microsoft (034), personal mailboxes (035), Gmail push (033), outbound attachments, signatures, MailTrixy bridge.
+Built in a second pass on the same driver port (see 'Phase 2 seams (as built)'): IMAP/SMTP (031), Microsoft 365 (034), Gmail push (033), personal mailboxes (035), outbound attachments, signatures and rich composer (027), bounces and rate limits (032). NOT built: the MailTrixy bridge (Reference only).
 
 ## Decisions
 
@@ -248,4 +248,3 @@ Unit `test/unit/channel-email/{thread-key,mail-driver.registry,mail-connection,m
   `MailOutboundPreparer.sent(ctx, mail, result)` now takes the sent mail and returns the `meta.email` block, `EmailMessageAccess.conversationReadable`. No migration, no other contract change.
 - Env: `MAIL_OUTBOUND_ATTACHMENT_MAX_BYTES`, `MAIL_OUTBOUND_ATTACHMENTS_TOTAL_MAX_BYTES`, `MAIL_OUTBOUND_ATTACHMENTS_MAX_COUNT`, `MAIL_OUTBOUND_ATTACHMENT_TTL_HOURS`, `MAIL_OUTBOUND_ATTACHMENT_ALLOW_MIME`, `MAIL_OUTBOUND_ATTACHMENT_DENY_MIME`.
 - Auto-Submitted for automation is set by the adapter (TW-MAIL-032), not the preparer.
-

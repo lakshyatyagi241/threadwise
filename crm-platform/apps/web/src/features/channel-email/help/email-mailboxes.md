@@ -1,33 +1,11 @@
 ---
 id: email-mailboxes
 title: Email mailboxes
-summary: Connect Gmail, Microsoft 365 or IMAP mailboxes (shared or personal), see their health, set a send limit, reconnect or remove one, and read and answer customer email in the team inbox.
+summary: Connect Gmail, Microsoft 365 or IMAP mailboxes, shared or personal, check their health, and answer customer email in the team inbox.
 area: settings
 order: 70
 documents: [nav:email, tile:email]
-keywords:
-  [
-    email,
-    gmail,
-    google workspace,
-    microsoft 365,
-    outlook,
-    imap,
-    smtp,
-    personal mailbox,
-    email sharing,
-    mailbox,
-    shared inbox,
-    support email,
-    cc,
-    bcc,
-    reconnect,
-    sync,
-    attachments,
-    signature,
-    rich text,
-    bounce,
-  ]
+keywords: [email, gmail, google workspace, microsoft 365, outlook, imap, smtp, personal mailbox, email sharing, mailbox, shared inbox, support email, cc, bcc, reconnect, sync, attachments, signature, rich text, bounce]
 ---
 
 ## What it is for

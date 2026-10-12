@@ -41,11 +41,19 @@ beforeAll(async () => {
   p = await startPipeline();
   p.h.app.get(ChannelAdapterRegistry).register(adapter);
   t = await p.api.signup('mail');
-  const res = await p.h.owner.query(
-    `INSERT INTO channels (org_id, kind, name, status, display_address, settings)
-     VALUES ($1, 'email', 'Support mailbox', 'connected', 'support@shop.test', '{"metered": false}'::jsonb)
-     RETURNING id, uuid`,
+  // An email channel belongs to a mailbox (channels.external_id = the mailbox uuid); a channel with no mailbox row is treated as
+  // someone's personal one and fails closed (TW-MAIL-035), so the fixture is a real shared mailbox.
+  const mb = await p.h.owner.query(
+    `INSERT INTO mail_mailboxes (org_id, address, display_name, status, scope)
+     VALUES ($1, 'support@shop.test', 'Support mailbox', 'connected', 'shared')
+     RETURNING uuid`,
     [t.orgId],
+  );
+  const res = await p.h.owner.query(
+    `INSERT INTO channels (org_id, kind, name, status, display_address, external_id, settings)
+     VALUES ($1, 'email', 'Support mailbox', 'connected', 'support@shop.test', $2, '{"metered": false}'::jsonb)
+     RETURNING id, uuid`,
+    [t.orgId, mb.rows[0].uuid as string],
   );
   channelId = Number(res.rows[0].id);
   channelUuid = res.rows[0].uuid as string;

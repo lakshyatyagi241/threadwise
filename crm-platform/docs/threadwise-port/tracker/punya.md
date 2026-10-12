@@ -168,12 +168,12 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-MAIL-024 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
 | TW-MAIL-025 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
 | TW-MAIL-026 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
-| TW-MAIL-027 | done |  | backend built and tested against a fake Gmail (upload, signatures, rich body, files in the thread); web by task 8; no live provider run |
+| TW-MAIL-027 | done |  | built and tested against fakes (GreenMail for IMAP); no live Google/Microsoft/IMAP run |
 | TW-MAIL-028 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
 | TW-MAIL-029 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
 | TW-MAIL-030 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
-| TW-MAIL-031 | todo |  | IMAP/SMTP provider not built (Gmail first) |
-| TW-MAIL-032 | in-progress |  | automated mail is stored flagged and skips listeners; bounce detection and per-sender rate limits not built |
-| TW-MAIL-033 | todo |  | Gmail push (Pub/Sub) not built; polling every 60 s |
-| TW-MAIL-034 | todo |  | Microsoft 365 not built |
-| TW-MAIL-035 | todo |  | personal mailboxes not built (needs the channel-owner visibility rule) |
+| TW-MAIL-031 | done |  | built and tested against fakes (GreenMail for IMAP); no live Google/Microsoft/IMAP run |
+| TW-MAIL-032 | done |  | built and tested against fakes (GreenMail for IMAP); no live Google/Microsoft/IMAP run |
+| TW-MAIL-033 | done |  | built and tested against fakes (GreenMail for IMAP); no live Google/Microsoft/IMAP run |
+| TW-MAIL-034 | done |  | built and tested against fakes (GreenMail for IMAP); no live Google/Microsoft/IMAP run |
+| TW-MAIL-035 | done |  | built and tested against fakes (GreenMail for IMAP); no live Google/Microsoft/IMAP run |
