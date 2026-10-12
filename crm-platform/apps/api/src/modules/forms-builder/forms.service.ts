@@ -26,7 +26,7 @@ import type { Env } from '../../config/env.schema';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
-import { HtmlSanitizerService } from '../auth';
+import { CaptchaService, HtmlSanitizerService } from '../auth';
 import {
   WorkspaceGatewayResolver,
   supportsPaymentLinks,
@@ -90,6 +90,7 @@ export class FormsService {
     private readonly sanitizer: HtmlSanitizerService,
     private readonly contacts: ContactsRepository,
     private readonly gateways: WorkspaceGatewayResolver,
+    private readonly captcha: CaptchaService,
     config: ConfigService<Env, true>,
   ) {
     this.bases = {
@@ -260,7 +261,10 @@ export class FormsService {
       if (form.rowVersion !== input.rowVersion) throw AppError.rowVersionConflict('Form');
 
       const def = readDefinition(form.draftDefinition);
-      const problems = publishProblems(def, await this.publishContext(tx, ctx.orgId, def));
+      const problems = publishProblems(
+        def,
+        await this.publishContext(tx, ctx.orgId, def, form.captchaMode),
+      );
       if (problems.length > 0) {
         throw new AppError(
           ERROR_CODES.FORMS_PUBLISH_INVALID,
@@ -576,6 +580,7 @@ export class FormsService {
     tx: Tx,
     orgId: number,
     def: FormDefinition,
+    captchaMode: string,
   ): Promise<PublishContext> {
     const [contactProps, companyProps, rules] = await Promise.all([
       this.repo.registryProperties(tx, orgId, 'contacts'),
@@ -586,7 +591,11 @@ export class FormsService {
     const stageOk = stage ? await this.repo.stageUsable(tx, orgId, stage) : true;
     // Only asked when the form takes payment: a form without it never depends on the gateway.
     const gateway = def.payment.enabled ? await this.gateways.resolve(orgId, null, { tx }) : null;
+    // "Always on" needs a provider; asked only then, so a form that does not rely on it never waits for the settings lookup.
+    const captchaMissing =
+      captchaMode === 'on' ? (await this.captcha.publicConfig()) === null : undefined;
     return {
+      captchaMissing,
       paymentGatewayReady: def.payment.enabled
         ? gateway !== null && supportsPaymentLinks(gateway.slug)
         : undefined,

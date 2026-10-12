@@ -253,8 +253,8 @@
           "off": "关闭"
         },
         "captchaHints": {
-          "inherit": "使用您的工作区为公开表单设置的内容。",
-          "on": "访客必须通过验证后才能提交。",
+          "inherit": "使用平台管理员为公开表单设置的 CAPTCHA（如果有）。",
+          "on": "访客必须通过验证才能提交。需要平台已设置 CAPTCHA，否则无法发布。",
           "off": "不进行验证。依赖隐藏陷阱字段和速率限制。"
         },
         "retention": "保留回答（天）",
@@ -271,6 +271,17 @@
           "perFormPerMinuteHint": "来自任何来源、提交到此表单的数量。",
           "perContactPerHour": "每个联系人、每小时",
           "perContactPerHourHint": "使用相同电子邮件或电话号码的提交。"
+        },
+        "captchaStatus": {
+          "available": "此平台已设置 CAPTCHA（reCAPTCHA {version}）。",
+          "none": "此平台未设置 CAPTCHA，因此这里不会进行任何验证。请联系平台管理员添加，或依靠隐藏的陷阱字段和频率限制。",
+          "noneOn": "此表单已设置为始终验证，但平台没有 CAPTCHA，因此不会验证任何内容，也无法发布。请联系平台管理员添加，或选择其他设置。",
+          "failed": "无法检查是否已设置 CAPTCHA。"
+        },
+        "caught": {
+          "blocked": "{count, plural, =0 {本月隐藏的陷阱字段尚未拦截任何机器人。} other {本月隐藏的陷阱字段已拦截 # 个机器人。}}",
+          "held": "{count, plural, other {有 # 条提交被作为垃圾信息扣留。}}",
+          "review": "查看"
         }
       }
     }

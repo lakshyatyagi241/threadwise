@@ -253,8 +253,8 @@
           "off": "Disattivo"
         },
         "captchaHints": {
-          "inherit": "Usa ciò che il tuo workspace ha impostato per i moduli pubblici.",
-          "on": "I visitatori devono superare la verifica prima di poter inviare.",
+          "inherit": "Usa il CAPTCHA configurato dall'amministratore della piattaforma per i moduli pubblici, se presente.",
+          "on": "I visitatori devono superare il controllo prima di poter inviare il modulo. Richiede un CAPTCHA configurato sulla piattaforma; senza, la pubblicazione viene rifiutata.",
           "off": "Nessuna verifica. Affidati al campo trappola nascosto e ai limiti di frequenza."
         },
         "retention": "Conserva le risposte per (giorni)",
@@ -271,6 +271,17 @@
           "perFormPerMinuteHint": "Invii a questo modulo da qualsiasi luogo.",
           "perContactPerHour": "Per contatto, all’ora",
           "perContactPerHourHint": "Invii con lo stesso indirizzo email o numero di telefono."
+        },
+        "captchaStatus": {
+          "available": "Su questa piattaforma è configurato un CAPTCHA (reCAPTCHA {version}).",
+          "none": "Su questa piattaforma non è configurato alcun CAPTCHA, quindi qui non viene controllato nulla. Chiedi all'amministratore della piattaforma di aggiungerne uno, oppure affidati al campo trappola nascosto e ai limiti di frequenza.",
+          "noneOn": "Questo modulo è impostato per controllare sempre, ma la piattaforma non ha un CAPTCHA, quindi non controlla nulla e non può essere pubblicato. Chiedi all'amministratore della piattaforma di aggiungerne uno, oppure scegli un'altra impostazione.",
+          "failed": "Impossibile verificare se è configurato un CAPTCHA."
+        },
+        "caught": {
+          "blocked": "{count, plural, =0 {Il campo trappola nascosto non ha bloccato nessun bot questo mese.} one {Il campo trappola nascosto ha bloccato 1 bot questo mese.} many {Il campo trappola nascosto ha bloccato # di bot questo mese.} other {Il campo trappola nascosto ha bloccato # bot questo mese.}}",
+          "held": "{count, plural, one {1 invio è trattenuto come spam.} many {# di invii sono trattenuti come spam.} other {# invii sono trattenuti come spam.}}",
+          "review": "Rivedili"
         }
       }
     }
