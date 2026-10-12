@@ -367,7 +367,13 @@ describe('the borderline check: a second opinion that can only take an answer ba
     const peer = nextPeer();
     await say(peer, 'refund');
     expect(await untilSent(p, t, ch, peer, 1)).toEqual(['Refunds take 5 days.']);
-    const log = (await api.faq(t.admin).log('?view=answered')).body.data[0];
+    // The listener writes the log row right after it queues the reply, so wait for the row rather than reading it once.
+    const log = await until('answered log row', async () => {
+      const rows = (await api.faq(t.admin).log('?view=answered')).body.data as Array<
+        Record<string, unknown>
+      >;
+      return rows[0];
+    });
     expect(log.verify).toMatchObject({ verdict: 'confirmed' });
   });
 
