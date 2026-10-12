@@ -324,6 +324,11 @@
         "label": "Chat trên website",
         "description": "Các bot được tạo cho chat trên website của bạn và widget mà mỗi bot chạy trong đó.",
         "keywords": "web, website, widget, chatbot, nhúng, chat trực tuyến"
+      },
+      "lead-scoring": {
+        "label": "Chấm điểm khách hàng tiềm năng bằng AI",
+        "description": "Chấm điểm mọi liên hệ bằng AI, chọn dữ liệu được gửi đi và xem chi phí.",
+        "keywords": "điểm khách hàng tiềm năng, chấm điểm, ai, nóng, ấm, lạnh, openrouter, chi phí, đánh giá"
       }
     }
   }

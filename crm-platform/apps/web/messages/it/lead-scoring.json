@@ -1,0 +1,248 @@
+{
+  "lead-scoring": {
+    "common": {
+      "dismiss": "Chiudi",
+      "retry": "Riprova",
+      "requestId": "Richiesta {id}",
+      "noAccessTitle": "Non hai accesso a questa schermata",
+      "noAccess": "Chiedi a un amministratore dello spazio di lavoro di assegnare al tuo ruolo il permesso {permission}."
+    },
+    "badge": {
+      "none": "Nessun punteggio lead",
+      "aria": "Punteggio lead {score} su 100, {band}, {source}",
+      "titleAi": "Valutato dall'IA",
+      "titleAiOn": "Valutato dall'IA il {date}",
+      "titleManual": "Inserito da una persona",
+      "band": {
+        "cold": "Freddo",
+        "warm": "Tiepido",
+        "hot": "Caldo"
+      },
+      "source": {
+        "ai": "valutato dall'IA",
+        "manual": "inserito da una persona"
+      }
+    },
+    "card": {
+      "title": "Punteggio lead",
+      "band": {
+        "cold": "Lead freddo",
+        "warm": "Lead tiepido",
+        "hot": "Lead caldo"
+      },
+      "sourceAi": "IA",
+      "sourceManual": "Manuale",
+      "score": "Valuta con l'IA",
+      "rescore": "Rivaluta",
+      "scoring": "Valutazione in corso...",
+      "scoringSlow": "Sto interpellando l'IA. Potrebbero volerci alcuni secondi.",
+      "neverScored": "Questo contatto non è ancora stato valutato.",
+      "scoredBy": "Valutato dall'IA il {date} con {model}.",
+      "scoredOn": "Valutato dall'IA il {date}.",
+      "scoredByAi": "Valutato dall'IA.",
+      "reasons": "Perché questo punteggio",
+      "manualWhy": "Una persona ha inserito questo punteggio, quindi l'IA non lo modificherà. Per far valutare il contatto all'IA, modifica il contatto e cancella il punteggio lead.",
+      "manualNote": "Una persona ha inserito questo punteggio, quindi l'IA non lo modifica.",
+      "lastRun": "Punteggio {score}. Costo {cost}, {tokens} token.",
+      "showHistory": "Mostra cronologia delle valutazioni",
+      "hideHistory": "Nascondi cronologia delle valutazioni",
+      "historyLoading": "Caricamento della cronologia...",
+      "historyFailed": "Impossibile caricare la cronologia.",
+      "historyEmpty": "Nessun tentativo di valutazione per questo contatto finora.",
+      "historyCaption": "Tentativi di valutazione per questo contatto, dal più recente",
+      "historyMore": "Carica altro"
+    },
+    "errors": {
+      "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
+      "forbidden": "Il tuo ruolo non lo consente.",
+      "notFound": "Quel contatto o record non esiste più.",
+      "conflict": "Qualcuno ha modificato questo elemento contemporaneamente. È stato ricaricato.",
+      "platformDisabled": "Il lead scoring con IA è attualmente disattivato per l'intera piattaforma.",
+      "notEnabled": "Il lead scoring con IA non è attivo per questo spazio di lavoro.",
+      "noKey": "Nessuna chiave IA è disponibile per questo spazio di lavoro.",
+      "providerFailed": "Il provider IA non ha fornito una risposta utilizzabile. Riprova tra un attimo.",
+      "manualScore": "Questo contatto ha un punteggio inserito da una persona.",
+      "planLimit": "La quota IA del tuo piano è esaurita.",
+      "rateLimited": "Troppe richieste. Attendi un momento e riprova.",
+      "validation": "Alcuni valori non sono validi.",
+      "unexpected": "Qualcosa è andato storto. Riprova."
+    },
+    "scoreErrors": {
+      "network": "Impossibile raggiungere il server, quindi il contatto non è stato valutato. Controlla la connessione e riprova.",
+      "forbidden": "Il tuo ruolo non può valutare i contatti.",
+      "notFound": "Questo contatto non esiste più.",
+      "conflict": "Qualcuno ha modificato questo contatto contemporaneamente. È stato ricaricato; riprova.",
+      "platformDisabled": "Il lead scoring con IA è attualmente disattivato per l'intera piattaforma. Non si può valutare nulla finché l'operatore della piattaforma non lo riattiva.",
+      "notEnabled": "Il lead scoring con IA non è attivo per questo spazio di lavoro. Resta disattivato finché non lo scegli, perché le informazioni sui contatti vengono inviate a un provider IA.",
+      "noKey": "Nessuna chiave OpenRouter è configurata per questo spazio di lavoro. Aggiungine una in Chiavi IA, oppure chiedi all'amministratore della piattaforma di abilitare la chiave condivisa.",
+      "providerFailed": "Il provider IA non ha fornito una risposta utilizzabile, quindi nessun punteggio è stato salvato. Riprova tra un attimo.",
+      "manualScore": "Questo contatto ha un punteggio inserito da una persona, che l'IA non sovrascrive mai. Se vuoi che lo valuti l'IA, modifica prima il contatto e cancella il punteggio lead.",
+      "planLimit": "La quota IA del tuo piano è esaurita, quindi il contatto non è stato valutato. Riprova più tardi o aggiungi la tua chiave OpenRouter.",
+      "rateLimited": "Troppe richieste. Attendi un momento e riprova.",
+      "validation": "La richiesta non era valida.",
+      "unexpected": "Qualcosa è andato storto e il contatto non è stato valutato. Riprova.",
+      "openSettings": "Apri le impostazioni del lead scoring con IA",
+      "openKeys": "Apri le chiavi IA"
+    },
+    "field": {
+      "label": "Punteggio lead",
+      "placeholder": "Da 0 a 100",
+      "hint": "Inserendo un punteggio lo rendi tuo: l'IA smette di modificarlo. Cancellalo per riaffidare il contatto all'IA.",
+      "invalid": "Inserisci un numero intero da 0 a 100, oppure lascia vuoto."
+    },
+    "runs": {
+      "col": {
+        "when": "Quando",
+        "contact": "Contatto",
+        "result": "Risultato",
+        "score": "Punteggio",
+        "trigger": "Origine",
+        "tokens": "Token",
+        "cost": "Costo",
+        "key": "Chiave"
+      },
+      "unnamed": "Contatto senza nome",
+      "deletedContact": "Contatto eliminato",
+      "status": {
+        "ok": "Valutato",
+        "kept": "Non salvato",
+        "failed": "Non riuscito",
+        "skipped": "Saltato"
+      },
+      "keptNote": "L'IA ha risposto, ma nel frattempo una persona ha inserito un punteggio, quindi non è stato salvato.",
+      "reason": {
+        "no_key": "Nessuna chiave IA era disponibile.",
+        "token_allowance": "La quota IA del piano era esaurita.",
+        "hourly_limit": "Il limite orario della chiave condivisa è stato raggiunto.",
+        "manual_score": "Il contatto ha un punteggio inserito da una persona.",
+        "platform_off": "Il lead scoring con IA era disattivato per la piattaforma.",
+        "not_enabled": "Il lead scoring con IA era disattivato per questo spazio di lavoro.",
+        "auth": "Il provider IA ha rifiutato la chiave.",
+        "rate_limited": "Il provider IA era occupato.",
+        "provider": "Il provider IA ha restituito un errore.",
+        "timeout": "Il provider IA ha impiegato troppo tempo.",
+        "bad_response": "L'IA ha risposto con qualcosa che non era un punteggio.",
+        "other": "Il tentativo non è stato completato."
+      },
+      "trigger": {
+        "created": "Contatto creato",
+        "updated": "Contatto modificato",
+        "manual": "Pulsante di valutazione",
+        "backfill": "Valuta i contatti senza punteggio"
+      },
+      "tokensDetail": "{prompt} in ingresso, {completion} in uscita",
+      "costSource": {
+        "vendor": "Il costo riportato da OpenRouter",
+        "estimate": "Stimato dai token e dal prezzo di listino"
+      },
+      "billed": {
+        "admin": "Chiave della piattaforma",
+        "workspace": "La tua chiave"
+      }
+    },
+    "log": {
+      "title": "Registro delle valutazioni",
+      "hint": "Ogni tentativo di valutazione, dal più recente, con token e costo.",
+      "filter": "Mostra i tentativi con questo risultato",
+      "all": "Tutti i risultati",
+      "status": {
+        "ok": "Valutato",
+        "kept": "Non salvato",
+        "failed": "Non riuscito",
+        "skipped": "Saltato"
+      },
+      "refresh": "Aggiorna",
+      "emptyTitle": "Ancora nessun tentativo di valutazione",
+      "emptyBody": "I tentativi compaiono qui quando il lead scoring con IA è attivo e un contatto viene valutato.",
+      "emptyFilteredTitle": "Nessun tentativo con questo risultato",
+      "emptyFilteredBody": "Scegli un altro risultato o mostra tutti i risultati.",
+      "caption": "Tentativi di valutazione, dal più recente",
+      "loadMore": "Carica altro"
+    },
+    "settings": {
+      "title": "Lead scoring con IA",
+      "subtitle": "Assegna a ogni contatto un punteggio da 0 a 100 che indica quanto è probabile che acquisti, e controlla quanto costa.",
+      "discard": "Annulla modifiche",
+      "save": "Salva",
+      "saved": "Impostazioni salvate.",
+      "readOnly": "Puoi vedere queste impostazioni ma non modificarle. Chiedi a un amministratore dello spazio di lavoro il permesso lsc.settings.manage.",
+      "conflict": "Qualcun altro ha modificato prima queste impostazioni. Sono state ricaricate, quindi vedi la versione salvata. Rifai la tua modifica.",
+      "conflictOk": "Ho capito",
+      "enable": {
+        "title": "Attiva il lead scoring con IA",
+        "hint": "Disattivato finché non lo scegli, perché le informazioni sui tuoi contatti vengono inviate a un provider IA.",
+        "label": "Lead scoring con IA",
+        "on": "Attivo",
+        "off": "Disattivato",
+        "what": "Quando è attivo, un modello IA legge una breve descrizione anonima di un contatto e risponde con un punteggio e le relative motivazioni. Il punteggio viene scritto nel punteggio lead del contatto."
+      },
+      "sent": {
+        "title": "Cosa viene inviato all'IA",
+        "stage": "La fase e lo stato del contatto",
+        "source": "Da dove proviene il contatto",
+        "tags": "I nomi dei tag",
+        "deals": "Quante trattative sono aperte, vinte e perse",
+        "activity": "Quanto di recente il contatto è stato attivo",
+        "company": "Il nome dell'azienda"
+      },
+      "notSent": {
+        "title": "Cosa non viene mai inviato",
+        "name": "Il nome del contatto",
+        "email": "L'indirizzo e-mail",
+        "phone": "Il numero di telefono"
+      },
+      "manualRule": "Un punteggio inserito da una persona non viene mai sovrascritto. L'IA compila solo i punteggi vuoti e aggiorna quelli che ha scritto lei stessa.",
+      "auto": {
+        "label": "Valuta automaticamente quando i contatti cambiano",
+        "onBody": "Un contatto viene valutato quando è creato e di nuovo quando i suoi dettagli cambiano.",
+        "offBody": "I contatti vengono valutati solo quando usi il pulsante Valuta con l'IA o valuti i contatti senza punteggio qui sotto."
+      },
+      "confirm": {
+        "title": "Inviare informazioni anonimizzate sui contatti a un provider IA?",
+        "body": "Una volta attivo, brevi descrizioni dei tuoi contatti (fase, origine, tag, numero di trattative, attività e nome dell'azienda) vengono inviate a un provider IA tramite OpenRouter. Nomi, indirizzi e-mail e numeri di telefono non vengono mai inviati. Puoi disattivarlo in qualsiasi momento.",
+        "yes": "Attiva",
+        "no": "Annulla"
+      },
+      "banner": {
+        "platformOff": "Il lead scoring con IA è disattivato per l'intera piattaforma. Nulla viene valutato, qualunque cosa sia impostata qui, finché l'operatore della piattaforma non lo riattiva.",
+        "noKey": "Nessuna chiave OpenRouter è disponibile, quindi non si può valutare nulla. Aggiungi la tua chiave in Chiavi IA, oppure chiedi all'amministratore della piattaforma di abilitare la chiave condivisa.",
+        "openKeys": "Apri le chiavi IA",
+        "off": "Il lead scoring con IA è disattivato per questo spazio di lavoro. Nulla viene inviato a un provider IA.",
+        "ready": "Pronto. I contatti vengono valutati con {model} usando {key}.",
+        "keyWorkspace": "la chiave OpenRouter propria del tuo spazio di lavoro",
+        "keyAdmin": "la chiave OpenRouter condivisa della piattaforma"
+      },
+      "backfill": {
+        "title": "Valuta i contatti che hai già",
+        "hint": "Mette in coda i contatti ancora senza punteggio, fino a {limit} alla volta. Vengono valutati in background.",
+        "eligible": "Contatti che l'IA può valutare",
+        "scored": "Valutati dall'IA",
+        "waiting": "In attesa di un punteggio",
+        "eligibleNote": "I contatti con un punteggio inserito da una persona sono esclusi: l'IA non li modifica mai.",
+        "button": "Valuta ora i contatti senza punteggio",
+        "noRight": "Il tuo ruolo non consente di valutare i contatti. Serve il permesso lsc.contacts.score.",
+        "notReady": "Attiva il lead scoring con IA e assicurati che sia disponibile una chiave per valutare i contatti.",
+        "queued": "{count, plural, one {# contatto è in coda} other {# contatti sono in coda}} e verrà valutato in background. Ricarica il registro tra un minuto per vedere i risultati.",
+        "nothingToScore": "Non ci sono contatti senza punteggio da mettere in coda."
+      },
+      "cost": {
+        "title": "Ultimi 30 giorni",
+        "hint": "Cosa ha fatto e quanto è costato lo scoring negli ultimi 30 giorni.",
+        "scores": "Contatti valutati",
+        "tokens": "Token usati",
+        "total": "Costo totale",
+        "average": "Media per punteggio",
+        "averageHint": "Costo totale diviso per i contatti valutati",
+        "model": "Modello",
+        "payer": "Chi paga",
+        "payerBy": {
+          "workspace": "La tua chiave OpenRouter, fatturata a te da OpenRouter",
+          "admin": "La chiave OpenRouter condivisa della piattaforma",
+          "none": "Nessuna chiave disponibile per ora"
+        },
+        "failed": "Tentativi non riusciti",
+        "platformPart": "Del totale, con la chiave della piattaforma"
+      }
+    }
+  }
+}

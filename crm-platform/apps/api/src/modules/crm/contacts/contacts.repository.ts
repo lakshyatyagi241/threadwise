@@ -55,6 +55,10 @@ export interface ContactRow {
   wonAt: Date | null;
   lostAt: Date | null;
   leadScore: number | null;
+  leadScoreSource: string | null;
+  leadScoreReasons: string[] | null;
+  leadScoredAt: Date | null;
+  leadScoreModel: string | null;
   whatsappSubscriptionStatus: string | null;
   smsSubscriptionStatus: string | null;
   emailSubscriptionStatus: string | null;
@@ -169,6 +173,10 @@ export class ContactsRepository {
       wonAt: contacts.wonAt,
       lostAt: contacts.lostAt,
       leadScore: contacts.leadScore,
+      leadScoreSource: contacts.leadScoreSource,
+      leadScoreReasons: contacts.leadScoreReasons,
+      leadScoredAt: contacts.leadScoredAt,
+      leadScoreModel: contacts.leadScoreModel,
       whatsappSubscriptionStatus: contacts.whatsappSubscriptionStatus,
       smsSubscriptionStatus: contacts.smsSubscriptionStatus,
       emailSubscriptionStatus: contacts.emailSubscriptionStatus,
@@ -456,6 +464,8 @@ export class ContactsRepository {
         wonAt: values.wonAt ?? null,
         lostAt: values.lostAt ?? null,
         leadScore: values.leadScore ?? null,
+        // A score given with the contact was typed by a person (or imported): the AI scorer never overwrites it.
+        leadScoreSource: values.leadScore == null ? null : 'manual',
         whatsappSubscriptionStatus: values.whatsappSubscriptionStatus ?? null,
         smsSubscriptionStatus: values.smsSubscriptionStatus ?? null,
         emailSubscriptionStatus: values.emailSubscriptionStatus ?? null,

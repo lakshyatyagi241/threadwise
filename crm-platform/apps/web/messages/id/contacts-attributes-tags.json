@@ -170,7 +170,8 @@
       "import": "Impor",
       "columns": "Kolom",
       "addColumnField": "Tambah kolom kustom sebagai kolom tabel",
-      "kanbanView": "Tampilan papan (berdasarkan tahap)"
+      "kanbanView": "Tampilan papan (berdasarkan tahap)",
+      "colLeadScore": "Skor prospek"
     },
     "bulk": {
       "label": "Tindakan untuk kontak terpilih",

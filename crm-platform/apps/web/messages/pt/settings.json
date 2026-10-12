@@ -324,6 +324,11 @@
         "label": "Chat do site",
         "description": "Bots criados para o chat do seu site e o widget em que cada um é executado.",
         "keywords": "web, site, widget, chatbot, incorporar, chat ao vivo"
+      },
+      "lead-scoring": {
+        "label": "Pontuação de leads com IA",
+        "description": "Pontue cada contato com IA, escolha o que é enviado e veja quanto custa.",
+        "keywords": "pontuação de lead, pontuação, ia, quente, morno, frio, openrouter, custo, qualificar"
       }
     }
   }

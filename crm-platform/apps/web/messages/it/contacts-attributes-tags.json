@@ -170,7 +170,8 @@
       "import": "Importa",
       "columns": "Colonne",
       "addColumnField": "Aggiungi un campo personalizzato come colonna",
-      "kanbanView": "Vista board (per fase)"
+      "kanbanView": "Vista board (per fase)",
+      "colLeadScore": "Punteggio lead"
     },
     "bulk": {
       "label": "Azioni per i contatti selezionati",

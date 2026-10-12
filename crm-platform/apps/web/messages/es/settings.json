@@ -324,6 +324,11 @@
         "label": "Chat del sitio web",
         "description": "Bots creados para el chat de tu sitio web y el widget en el que se ejecuta cada uno.",
         "keywords": "web, sitio web, widget, chatbot, incrustar, chat en vivo"
+      },
+      "lead-scoring": {
+        "label": "Puntuación de leads con IA",
+        "description": "Puntúa cada contacto con IA, elige qué se envía y consulta cuánto cuesta.",
+        "keywords": "puntuación de lead, puntuación, ia, caliente, templado, frío, openrouter, coste, calificar"
       }
     }
   }

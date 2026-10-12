@@ -39,6 +39,7 @@ import { WebhookFanoutWorkerModule } from '../modules/webhook-fanout';
 import { OutboundWebhooksWorkerModule } from '../modules/outbound-webhooks';
 import { ApiLibraryWorkerModule } from '../modules/api-library';
 import { FaqKnowledgeWorkerModule } from '../modules/faq-knowledge/faq-knowledge-worker.module';
+import { LeadScoringWorkerModule } from '../modules/lead-scoring/lead-scoring-worker.module';
 import { WabaWorkerModule } from '../modules/whatsapp-cloud-api-waba';
 import { AiAgentsTrainingWorkerModule } from '../modules/ai-agents-training';
 import { FlowBuilderEditorWorkerModule } from '../modules/flow-builder-editor';
@@ -85,6 +86,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     OutboundWebhooksWorkerModule,
     ApiLibraryWorkerModule,
     FaqKnowledgeWorkerModule,
+    LeadScoringWorkerModule,
     CallingVoiceWorkerModule,
     CatalogProductsWorkerModule,
     StorefrontBuilderWorkerModule,

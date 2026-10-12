@@ -3,6 +3,7 @@ import {
   boolean,
   index,
   integer,
+  jsonb,
   pgTable,
   primaryKey,
   text,
@@ -89,6 +90,12 @@ export const contacts = pgTable(
     wonAt: timestamp('won_at', { withTimezone: true }),
     lostAt: timestamp('lost_at', { withTimezone: true }),
     leadScore: integer('lead_score'),
+    /** Who set the score: 'manual' (a person), 'ai' (the lead scorer), null on a score typed before the scorer existed (= manual). */
+    leadScoreSource: text('lead_score_source'),
+    /** For an AI score: the short reasons the model gave. */
+    leadScoreReasons: jsonb('lead_score_reasons').$type<string[] | null>(),
+    leadScoredAt: timestamp('lead_scored_at', { withTimezone: true }),
+    leadScoreModel: text('lead_score_model'),
     /** Enum values are org-configurable via status_options, not a fixed set here. */
     whatsappSubscriptionStatus: text('whatsapp_subscription_status'),
     smsSubscriptionStatus: text('sms_subscription_status'),

@@ -170,7 +170,8 @@
       "import": "Importeren",
       "columns": "Kolommen",
       "addColumnField": "Een aangepast veld als kolom toevoegen",
-      "kanbanView": "Bordweergave (per fase)"
+      "kanbanView": "Bordweergave (per fase)",
+      "colLeadScore": "Leadscore"
     },
     "bulk": {
       "label": "Acties voor de geselecteerde contacten",

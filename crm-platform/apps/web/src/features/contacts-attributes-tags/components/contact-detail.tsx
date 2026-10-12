@@ -11,6 +11,7 @@ import { useCan } from '@/features/auth-registration-security/shared/session-con
 import { LinkedAppointments } from '@/features/appointments';
 import { ContactAttributionCard } from '@/features/lead-sources';
 import { CompanyLink } from '@/features/companies';
+import { ScoreCard } from '@/features/lead-scoring';
 import { LinkedSalesDocs } from '@/features/sales-docs';
 import { LinkedInvoices } from '@/features/invoicing';
 import { LinkedTasks } from '@/features/tasks';
@@ -259,14 +260,20 @@ export function ContactDetail({ id }: { id: string }) {
         </div>
       </div>
 
-      <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
-        <StatTile label={t('leadScore')} value={c.leadScore ?? '—'} />
-        <StatTile label={t('lastActivity')} value={<DateText value={c.lastActivityAt} />} />
-        <StatTile
-          label={t('created')}
-          value={<DateText value={c.createdAt} />}
-          className="col-span-2 sm:col-span-1"
+      <div className="mb-6 grid grid-cols-2 gap-3">
+        <ScoreCard
+          contactId={id}
+          contact={c}
+          className="col-span-2"
+          onScored={() =>
+            Promise.all([
+              invalidateContacts(qc),
+              qc.invalidateQueries({ queryKey: KEYS.contact(id) }),
+            ])
+          }
         />
+        <StatTile label={t('lastActivity')} value={<DateText value={c.lastActivityAt} />} />
+        <StatTile label={t('created')} value={<DateText value={c.createdAt} />} />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">

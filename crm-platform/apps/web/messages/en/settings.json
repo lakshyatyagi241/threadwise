@@ -324,6 +324,11 @@
         "label": "Website chat",
         "description": "Bots built for your website chat and the widget each one runs in.",
         "keywords": "web, website, widget, chatbot, embed, live chat"
+      },
+      "lead-scoring": {
+        "label": "AI lead scoring",
+        "description": "Score every contact with AI, choose what is sent, and see what it costs.",
+        "keywords": "lead score, scoring, ai, hot, warm, cold, openrouter, cost, qualify"
       }
     }
   }

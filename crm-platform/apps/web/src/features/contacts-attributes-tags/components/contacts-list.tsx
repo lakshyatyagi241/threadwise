@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { Fragment, useState, type ReactNode } from 'react';
 import { MenuItem, MenuSeparator, cn } from '@crm/ui';
+import { ScoreBadge, SparkleIcon } from '@/features/lead-scoring';
 import { isAttrId, sortKeyOf, type ColumnDef, type ColumnId } from '../lib/columns';
 import { formatDateTime } from '../lib/format';
 import type { Choice } from '../lib/option-sets';
@@ -80,6 +81,7 @@ const WIDTH: Record<string, number> = {
   tags: 240,
   groups: 220,
   stage: 180,
+  leadScore: 130,
   language: 130,
   memo: 220,
   createdOn: 190,
@@ -109,6 +111,8 @@ function HeaderIcon({ id }: { id: ColumnId }) {
       return <FlagIcon className={cls} />;
     case 'status':
       return <FlagIcon className={cls} />;
+    case 'leadScore':
+      return <SparkleIcon className={cls} />;
     case 'language':
       return <GlobeIcon className={cls} />;
     case 'memo':
@@ -442,6 +446,16 @@ function Cell({
       return <StatusCell row={row} h={h} showStatus={false} />;
     case 'status':
       return row.status ? <StatusChip value={h.statusLabel(row.status)} /> : <Dash />;
+    case 'leadScore':
+      return row.leadScore === null ? (
+        <Dash />
+      ) : (
+        <ScoreBadge
+          score={row.leadScore}
+          source={row.leadScoreSource}
+          scoredAt={row.leadScoredAt}
+        />
+      );
     case 'language':
       return row.language ? <OutlineTag value={row.language} /> : <Dash />;
     case 'memo':

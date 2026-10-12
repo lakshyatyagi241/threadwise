@@ -1,0 +1,248 @@
+{
+  "lead-scoring": {
+    "common": {
+      "dismiss": "닫기",
+      "retry": "다시 시도",
+      "requestId": "요청 {id}",
+      "noAccessTitle": "이 화면에 접근할 수 없습니다",
+      "noAccess": "워크스페이스 관리자에게 내 역할에 {permission} 권한을 부여해 달라고 요청하세요."
+    },
+    "badge": {
+      "none": "리드 점수 없음",
+      "aria": "리드 점수 100점 만점에 {score}점, {band}, {source}",
+      "titleAi": "AI가 점수 산정",
+      "titleAiOn": "{date}에 AI가 점수 산정",
+      "titleManual": "사람이 입력",
+      "band": {
+        "cold": "콜드",
+        "warm": "웜",
+        "hot": "핫"
+      },
+      "source": {
+        "ai": "AI가 점수를 산정함",
+        "manual": "사람이 입력함"
+      }
+    },
+    "card": {
+      "title": "리드 점수",
+      "band": {
+        "cold": "콜드 리드",
+        "warm": "웜 리드",
+        "hot": "핫 리드"
+      },
+      "sourceAi": "AI",
+      "sourceManual": "수동",
+      "score": "AI로 점수 매기기",
+      "rescore": "다시 점수 매기기",
+      "scoring": "점수 산정 중...",
+      "scoringSlow": "AI에 문의하는 중입니다. 몇 초 걸릴 수 있습니다.",
+      "neverScored": "이 연락처는 아직 점수가 매겨지지 않았습니다.",
+      "scoredBy": "{date}에 {model}로 AI가 점수를 산정했습니다.",
+      "scoredOn": "{date}에 AI가 점수를 산정했습니다.",
+      "scoredByAi": "AI가 점수를 산정했습니다.",
+      "reasons": "이 점수의 이유",
+      "manualWhy": "사람이 이 점수를 입력했으므로 AI가 변경하지 않습니다. AI가 이 연락처의 점수를 매기게 하려면 연락처를 편집하여 리드 점수를 지우세요.",
+      "manualNote": "사람이 이 점수를 입력했으므로 AI가 변경하지 않습니다.",
+      "lastRun": "점수 {score}. 비용 {cost}, 토큰 {tokens}개.",
+      "showHistory": "점수 산정 기록 보기",
+      "hideHistory": "점수 산정 기록 숨기기",
+      "historyLoading": "기록을 불러오는 중...",
+      "historyFailed": "기록을 불러올 수 없습니다.",
+      "historyEmpty": "이 연락처에 대한 점수 산정 시도가 아직 없습니다.",
+      "historyCaption": "이 연락처의 점수 산정 시도, 최신순",
+      "historyMore": "더 불러오기"
+    },
+    "errors": {
+      "network": "서버에 연결할 수 없습니다. 연결을 확인하고 다시 시도하세요.",
+      "forbidden": "내 역할로는 허용되지 않습니다.",
+      "notFound": "해당 연락처 또는 레코드가 더 이상 존재하지 않습니다.",
+      "conflict": "다른 사람이 동시에 이 항목을 변경했습니다. 다시 불러왔습니다.",
+      "platformDisabled": "AI 리드 스코어링이 현재 플랫폼 전체에서 꺼져 있습니다.",
+      "notEnabled": "이 워크스페이스에서는 AI 리드 스코어링이 켜져 있지 않습니다.",
+      "noKey": "이 워크스페이스에서 사용할 수 있는 AI 키가 없습니다.",
+      "providerFailed": "AI 제공업체가 사용할 수 있는 답변을 주지 않았습니다. 잠시 후 다시 시도하세요.",
+      "manualScore": "이 연락처에는 사람이 입력한 점수가 있습니다.",
+      "planLimit": "요금제의 AI 사용량을 모두 소진했습니다.",
+      "rateLimited": "요청이 너무 많습니다. 잠시 기다린 후 다시 시도하세요.",
+      "validation": "일부 값이 올바르지 않습니다.",
+      "unexpected": "문제가 발생했습니다. 다시 시도하세요."
+    },
+    "scoreErrors": {
+      "network": "서버에 연결할 수 없어 연락처에 점수가 매겨지지 않았습니다. 연결을 확인하고 다시 시도하세요.",
+      "forbidden": "내 역할로는 연락처에 점수를 매길 수 없습니다.",
+      "notFound": "이 연락처는 더 이상 존재하지 않습니다.",
+      "conflict": "다른 사람이 동시에 이 연락처를 변경했습니다. 다시 불러왔으니 다시 시도하세요.",
+      "platformDisabled": "AI 리드 스코어링이 현재 플랫폼 전체에서 꺼져 있습니다. 플랫폼 운영자가 다시 켤 때까지 점수를 매길 수 없습니다.",
+      "notEnabled": "이 워크스페이스에서는 AI 리드 스코어링이 켜져 있지 않습니다. 연락처 정보가 AI 제공업체로 전송되므로 직접 선택하기 전까지는 꺼져 있습니다.",
+      "noKey": "이 워크스페이스에 설정된 OpenRouter 키가 없습니다. AI 키에서 추가하거나 플랫폼 관리자에게 공유 키를 활성화해 달라고 요청하세요.",
+      "providerFailed": "AI 제공업체가 사용할 수 있는 답변을 주지 않아 점수가 저장되지 않았습니다. 잠시 후 다시 시도하세요.",
+      "manualScore": "이 연락처에는 사람이 입력한 점수가 있으며 AI는 이를 덮어쓰지 않습니다. AI가 점수를 매기게 하려면 먼저 연락처를 편집하여 리드 점수를 지우세요.",
+      "planLimit": "요금제의 AI 사용량을 모두 소진하여 연락처에 점수가 매겨지지 않았습니다. 나중에 다시 시도하거나 직접 OpenRouter 키를 추가하세요.",
+      "rateLimited": "요청이 너무 많습니다. 잠시 기다린 후 다시 시도하세요.",
+      "validation": "요청이 올바르지 않습니다.",
+      "unexpected": "문제가 발생하여 연락처에 점수가 매겨지지 않았습니다. 다시 시도하세요.",
+      "openSettings": "AI 리드 스코어링 설정 열기",
+      "openKeys": "AI 키 열기"
+    },
+    "field": {
+      "label": "리드 점수",
+      "placeholder": "0~100",
+      "hint": "점수를 입력하면 내 점수가 되어 AI가 더 이상 변경하지 않습니다. 지우면 연락처를 다시 AI에 맡깁니다.",
+      "invalid": "0에서 100 사이의 정수를 입력하거나 비워 두세요."
+    },
+    "runs": {
+      "col": {
+        "when": "시각",
+        "contact": "연락처",
+        "result": "결과",
+        "score": "점수",
+        "trigger": "계기",
+        "tokens": "토큰",
+        "cost": "비용",
+        "key": "키"
+      },
+      "unnamed": "이름 없는 연락처",
+      "deletedContact": "삭제된 연락처",
+      "status": {
+        "ok": "점수 산정됨",
+        "kept": "저장 안 됨",
+        "failed": "실패",
+        "skipped": "건너뜀"
+      },
+      "keptNote": "AI가 답변했지만 그사이 사람이 점수를 입력하여 저장되지 않았습니다.",
+      "reason": {
+        "no_key": "사용할 수 있는 AI 키가 없었습니다.",
+        "token_allowance": "요금제의 AI 사용량을 모두 소진했습니다.",
+        "hourly_limit": "공유 키의 시간당 한도에 도달했습니다.",
+        "manual_score": "연락처에 사람이 입력한 점수가 있습니다.",
+        "platform_off": "플랫폼에서 AI 리드 스코어링이 꺼져 있었습니다.",
+        "not_enabled": "이 워크스페이스에서 AI 리드 스코어링이 꺼져 있었습니다.",
+        "auth": "AI 제공업체가 키를 거부했습니다.",
+        "rate_limited": "AI 제공업체가 바빴습니다.",
+        "provider": "AI 제공업체가 오류를 반환했습니다.",
+        "timeout": "AI 제공업체의 응답이 너무 오래 걸렸습니다.",
+        "bad_response": "AI가 점수가 아닌 내용으로 답변했습니다.",
+        "other": "시도가 완료되지 않았습니다."
+      },
+      "trigger": {
+        "created": "연락처 생성",
+        "updated": "연락처 변경",
+        "manual": "점수 버튼",
+        "backfill": "점수 없는 연락처 점수 매기기"
+      },
+      "tokensDetail": "입력 {prompt}, 출력 {completion}",
+      "costSource": {
+        "vendor": "OpenRouter가 보고한 비용",
+        "estimate": "토큰 수와 정가로 추정한 값"
+      },
+      "billed": {
+        "admin": "플랫폼 키",
+        "workspace": "내 키"
+      }
+    },
+    "log": {
+      "title": "점수 산정 로그",
+      "hint": "모든 점수 산정 시도를 최신순으로, 토큰과 비용과 함께 보여 줍니다.",
+      "filter": "이 결과의 시도 보기",
+      "all": "모든 결과",
+      "status": {
+        "ok": "점수 산정됨",
+        "kept": "저장 안 됨",
+        "failed": "실패",
+        "skipped": "건너뜀"
+      },
+      "refresh": "새로고침",
+      "emptyTitle": "아직 점수 산정 시도가 없습니다",
+      "emptyBody": "AI 리드 스코어링이 켜져 있고 연락처에 점수가 매겨지면 시도가 여기에 표시됩니다.",
+      "emptyFilteredTitle": "이 결과의 시도가 없습니다",
+      "emptyFilteredBody": "다른 결과를 선택하거나 모든 결과를 표시하세요.",
+      "caption": "점수 산정 시도, 최신순",
+      "loadMore": "더 불러오기"
+    },
+    "settings": {
+      "title": "AI 리드 스코어링",
+      "subtitle": "모든 연락처에 구매 가능성을 나타내는 0~100점의 점수를 매기고, 비용을 확인하세요.",
+      "discard": "취소",
+      "save": "저장",
+      "saved": "설정을 저장했습니다.",
+      "readOnly": "이 설정을 볼 수는 있지만 변경할 수는 없습니다. 워크스페이스 관리자에게 lsc.settings.manage 권한을 요청하세요.",
+      "conflict": "다른 사람이 먼저 이 설정을 변경했습니다. 다시 불러왔으므로 저장된 버전이 표시됩니다. 변경을 다시 진행하세요.",
+      "conflictOk": "확인",
+      "enable": {
+        "title": "AI 리드 스코어링 켜기",
+        "hint": "연락처에 대한 정보가 AI 제공업체로 전송되므로 직접 선택하기 전까지는 꺼져 있습니다.",
+        "label": "AI 리드 스코어링",
+        "on": "켜짐",
+        "off": "꺼짐",
+        "what": "켜면 AI 모델이 연락처에 대한 짧은 익명 설명을 읽고 점수와 그 이유를 답합니다. 점수는 연락처의 리드 점수에 기록됩니다."
+      },
+      "sent": {
+        "title": "AI에 전송되는 내용",
+        "stage": "연락처의 단계와 상태",
+        "source": "연락처의 유입 경로",
+        "tags": "태그 이름",
+        "deals": "진행 중, 성사, 실패한 딜의 수",
+        "activity": "연락처가 얼마나 최근에 활동했는지",
+        "company": "회사 이름"
+      },
+      "notSent": {
+        "title": "절대 전송되지 않는 내용",
+        "name": "연락처 이름",
+        "email": "이메일 주소",
+        "phone": "전화번호"
+      },
+      "manualRule": "사람이 입력한 점수는 절대 덮어쓰지 않습니다. AI는 비어 있는 점수를 채우고 자신이 기록한 점수만 갱신합니다.",
+      "auto": {
+        "label": "연락처가 변경되면 자동으로 점수 매기기",
+        "onBody": "연락처는 생성될 때 점수가 매겨지고, 세부 정보가 변경되면 다시 매겨집니다.",
+        "offBody": "연락처는 AI로 점수 매기기 버튼을 사용하거나 아래에서 점수 없는 연락처에 점수를 매길 때만 점수가 매겨집니다."
+      },
+      "confirm": {
+        "title": "익명 처리된 연락처 정보를 AI 제공업체로 보낼까요?",
+        "body": "켜면 연락처에 대한 짧은 설명(단계, 유입 경로, 태그, 딜 수, 활동, 회사 이름)이 OpenRouter를 통해 AI 제공업체로 전송됩니다. 이름, 이메일 주소, 전화번호는 절대 전송되지 않습니다. 언제든지 끌 수 있습니다.",
+        "yes": "켜기",
+        "no": "취소"
+      },
+      "banner": {
+        "platformOff": "AI 리드 스코어링이 플랫폼 전체에서 꺼져 있습니다. 여기서 어떻게 설정하든 플랫폼 운영자가 다시 켤 때까지 점수가 매겨지지 않습니다.",
+        "noKey": "사용할 수 있는 OpenRouter 키가 없어 점수를 매길 수 없습니다. AI 키에서 직접 키를 추가하거나 플랫폼 관리자에게 공유 키를 활성화해 달라고 요청하세요.",
+        "openKeys": "AI 키 열기",
+        "off": "이 워크스페이스에서는 AI 리드 스코어링이 꺼져 있습니다. AI 제공업체로 아무것도 전송되지 않습니다.",
+        "ready": "준비되었습니다. 연락처는 {model}로, {key}를 사용하여 점수가 매겨집니다.",
+        "keyWorkspace": "워크스페이스 자체의 OpenRouter 키",
+        "keyAdmin": "플랫폼의 공유 OpenRouter 키"
+      },
+      "backfill": {
+        "title": "기존 연락처에 점수 매기기",
+        "hint": "아직 점수가 없는 연락처를 한 번에 최대 {limit}개까지 대기열에 넣습니다. 백그라운드에서 점수가 매겨집니다.",
+        "eligible": "AI가 점수를 매길 수 있는 연락처",
+        "scored": "AI가 점수를 매긴 연락처",
+        "waiting": "점수 대기 중",
+        "eligibleNote": "사람이 입력한 점수가 있는 연락처는 제외됩니다. AI는 이를 변경하지 않습니다.",
+        "button": "점수 없는 연락처에 지금 점수 매기기",
+        "noRight": "내 역할로는 연락처에 점수를 매길 수 없습니다. lsc.contacts.score 권한이 필요합니다.",
+        "notReady": "연락처에 점수를 매기려면 AI 리드 스코어링을 켜고 사용할 수 있는 키가 있는지 확인하세요.",
+        "queued": "{count, plural, other {연락처 #개}}가 대기열에 들어갔으며 백그라운드에서 점수가 매겨집니다. 결과를 보려면 1분 후 로그를 다시 불러오세요.",
+        "nothingToScore": "대기열에 넣을 점수 없는 연락처가 없습니다."
+      },
+      "cost": {
+        "title": "최근 30일",
+        "hint": "최근 30일 동안의 점수 산정 실적과 비용입니다.",
+        "scores": "점수를 매긴 연락처",
+        "tokens": "사용한 토큰",
+        "total": "총 비용",
+        "average": "점수당 평균",
+        "averageHint": "총 비용 ÷ 점수를 매긴 연락처 수",
+        "model": "모델",
+        "payer": "비용 부담",
+        "payerBy": {
+          "workspace": "내 OpenRouter 키, OpenRouter가 직접 청구",
+          "admin": "플랫폼의 공유 OpenRouter 키",
+          "none": "아직 사용할 수 있는 키가 없습니다"
+        },
+        "failed": "실패한 시도",
+        "platformPart": "총액 중 플랫폼 키로 처리된 금액"
+      }
+    }
+  }
+}

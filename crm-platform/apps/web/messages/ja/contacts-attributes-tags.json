@@ -170,7 +170,8 @@
       "import": "インポート",
       "columns": "列",
       "addColumnField": "カスタムフィールドを列として追加",
-      "kanbanView": "ボード表示(ステージ別)"
+      "kanbanView": "ボード表示(ステージ別)",
+      "colLeadScore": "リードスコア"
     },
     "bulk": {
       "label": "選択した連絡先の操作",

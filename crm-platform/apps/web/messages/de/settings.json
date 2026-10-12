@@ -324,6 +324,11 @@
         "label": "Website-Chat",
         "description": "Bots für den Chat Ihrer Website und das Widget, in dem jeder davon läuft.",
         "keywords": "Web, Website, Widget, Chatbot, Einbetten, Live-Chat"
+      },
+      "lead-scoring": {
+        "label": "KI-Lead-Scoring",
+        "description": "Bewerten Sie jeden Kontakt mit KI, legen Sie fest, was gesendet wird, und sehen Sie die Kosten.",
+        "keywords": "lead-score, scoring, bewertung, ki, heiß, warm, kalt, openrouter, kosten, qualifizieren"
       }
     }
   }

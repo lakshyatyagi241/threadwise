@@ -170,7 +170,8 @@
       "import": "Nhập",
       "columns": "Cột",
       "addColumnField": "Thêm trường tùy chỉnh làm cột",
-      "kanbanView": "Chế độ bảng (theo giai đoạn)"
+      "kanbanView": "Chế độ bảng (theo giai đoạn)",
+      "colLeadScore": "Điểm khách hàng tiềm năng"
     },
     "bulk": {
       "label": "Thao tác cho các liên hệ đã chọn",

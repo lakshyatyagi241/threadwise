@@ -633,7 +633,15 @@ export class ContactsService {
       if (phone !== undefined) values.phone = phone;
       if (input.lostReason !== undefined) values.lostReason = input.lostReason;
       if (input.otherLostReason !== undefined) values.otherLostReason = input.otherLostReason;
-      if (input.leadScore !== undefined) values.leadScore = input.leadScore;
+      if (input.leadScore !== undefined) {
+        values.leadScore = input.leadScore;
+        // A score a person types (or clears) takes the AI's explanation with it: the number is theirs now, and clearing it hands the
+        // contact back to the AI scorer.
+        values.leadScoreSource = input.leadScore === null ? null : 'manual';
+        values.leadScoreReasons = null;
+        values.leadScoredAt = null;
+        values.leadScoreModel = null;
+      }
       if (input.whatsappSubscriptionStatus !== undefined) {
         values.whatsappSubscriptionStatus = input.whatsappSubscriptionStatus;
       }

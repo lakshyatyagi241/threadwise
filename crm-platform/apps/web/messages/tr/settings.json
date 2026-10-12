@@ -324,6 +324,11 @@
         "label": "Web sitesi sohbeti",
         "description": "Web sitenizin sohbeti için oluşturulan botlar ve her birinin çalıştığı widget.",
         "keywords": "web, web sitesi, widget, chatbot, gömme, canlı sohbet"
+      },
+      "lead-scoring": {
+        "label": "Yapay zeka ile potansiyel müşteri puanlama",
+        "description": "Her kişiyi yapay zeka ile puanlayın, nelerin gönderileceğini seçin ve maliyeti görün.",
+        "keywords": "potansiyel müşteri puanı, puanlama, yapay zeka, ai, sıcak, ılık, soğuk, openrouter, maliyet, nitelendirme"
       }
     }
   }

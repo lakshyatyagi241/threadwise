@@ -170,7 +170,8 @@
       "import": "İçe aktar",
       "columns": "Sütunlar",
       "addColumnField": "Özel bir alanı sütun olarak ekle",
-      "kanbanView": "Pano görünümü (aşamaya göre)"
+      "kanbanView": "Pano görünümü (aşamaya göre)",
+      "colLeadScore": "Potansiyel müşteri puanı"
     },
     "bulk": {
       "label": "Seçilen kişiler için işlemler",

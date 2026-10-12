@@ -170,7 +170,8 @@
       "import": "Importar",
       "columns": "Colunas",
       "addColumnField": "Adicionar um campo personalizado como coluna",
-      "kanbanView": "Visualização em quadro (por estágio)"
+      "kanbanView": "Visualização em quadro (por estágio)",
+      "colLeadScore": "Pontuação do lead"
     },
     "bulk": {
       "label": "Ações para os contatos selecionados",

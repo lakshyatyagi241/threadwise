@@ -42,6 +42,12 @@ export const contactResponseSchema = z.object({
   wonAt: z.string().datetime().nullable(),
   lostAt: z.string().datetime().nullable(),
   leadScore: z.number().int().nullable(),
+  /** Who set the score: a person ('manual', or null on a score typed before AI scoring existed) or the AI lead scorer ('ai'). */
+  leadScoreSource: z.enum(['manual', 'ai']).nullable(),
+  /** For an AI score: the short reasons the model gave. */
+  leadScoreReasons: z.array(z.string()).nullable(),
+  leadScoredAt: z.string().datetime().nullable(),
+  leadScoreModel: z.string().nullable(),
   /** Values are org-configurable via status_options, not a fixed enum here. */
   whatsappSubscriptionStatus: z.string().nullable(),
   smsSubscriptionStatus: z.string().nullable(),
