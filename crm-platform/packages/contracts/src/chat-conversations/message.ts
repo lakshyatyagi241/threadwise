@@ -2,6 +2,10 @@ import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
 import { emailMetaSchema, emailReplyExtrasSchema } from '../channel-email/email-meta';
 import {
+  WA_DEVICE_GROUP_MENTIONS_MAX,
+  waGroupMentionSchema,
+} from '../whatsapp-devices-baileys/groups';
+import {
   messageDirectionSchema,
   messageKindSchema,
   messageSenderKindSchema,
@@ -159,6 +163,12 @@ export type MessageReferral = z.infer<typeof messageReferralSchema>;
 export const messageGroupAuthorSchema = z.object({
   participant: z.string().nullable(),
   senderName: z.string().nullable(),
+  /**
+   * Personal-number groups (additive): the speaker's anonymous WhatsApp id when `participant` has no phone (a LID-only member), and
+   * whether the speaker is an admin of the group at the time of the last roster sync. Absent on the official (Cloud API) groups.
+   */
+  senderLid: z.string().nullable().optional(),
+  senderIsAdmin: z.boolean().nullable().optional(),
 });
 export type MessageGroupAuthor = z.infer<typeof messageGroupAuthorSchema>;
 
@@ -210,6 +220,8 @@ export const messageResponseSchema = z.object({
   unsupported: z.boolean().optional(),
   /** A message a member posted in a WhatsApp group (inbound only). */
   group: messageGroupAuthorSchema.nullable().optional(),
+  /** Members @mentioned in this message (personal-number groups, both directions); `jid` as in the group's participants list. */
+  mentions: z.array(waGroupMentionSchema).optional(),
   /** The delivery tally of a message sent to a WhatsApp group (outbound only), once Meta has reported any member. */
   groupDelivery: messageGroupDeliverySchema.nullable().optional(),
   /** The customer forwarded this message from another chat. */
@@ -296,6 +308,8 @@ export const sendMessageSchema = z.discriminatedUnion('kind', [
     ...sendBase,
     kind: z.literal('text'),
     body: z.string().trim().min(1).max(MESSAGE_BODY_MAX_EMAIL),
+    /** Personal-number (`whatsapp_qr`) group threads only: members @mentioned in the body (their `jid` from the group's participants). Ignored elsewhere. */
+    mentions: z.array(waGroupMentionSchema).max(WA_DEVICE_GROUP_MENTIONS_MAX).optional(),
     /** Email channel only: cc, bcc and a subject override for the reply (TW-MAIL-022). */
     email: emailReplyExtrasSchema.optional(),
   }),

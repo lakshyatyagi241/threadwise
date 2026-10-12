@@ -137,7 +137,11 @@
       "logBusy": "已有一个导出正在准备中。请等待收到邮件后再发起新的导出。",
       "logNotReady": "此导出尚未就绪或已过期。请重新发起导出。",
       "groupSuspended": "Meta 已暂停此群组，在 Meta 解除之前无法向其发送消息。",
-      "walletEmpty": "消息钱包余额不足以支付此群消息（每位成员收取一次费用）。请充值后重试。"
+      "walletEmpty": "消息钱包余额不足以支付此群消息（每位成员收取一次费用）。请充值后重试。",
+      "groupLeft": "此号码已退出该群组，因此无法再在其中发送消息。",
+      "groupAnnounceOnly": "此群组仅管理员可以发送消息，而此号码不是管理员。",
+      "groupRateLimited": "此号码在短时间内发送的群组消息过多。请等待一分钟后重试。",
+      "groupUnavailable": "WhatsApp 未接受此群组消息。请几分钟后重试。"
     },
     "bubble": {
       "kind": {
@@ -636,6 +640,24 @@
           "failed": "失败",
           "expired": "已过期"
         }
+      }
+    },
+    "groupThread": {
+      "openGroup": "打开群组",
+      "readOnly": {
+        "left": {
+          "title": "此号码已退出该群组",
+          "message": "对话将保持原样。您可以阅读并添加内部备注，但无法发送消息。"
+        },
+        "announceOnly": {
+          "title": "此群组仅管理员可以发送",
+          "message": "此号码不是该群组的管理员，因此 WhatsApp 不会送达消息。您仍可添加内部备注。"
+        }
+      },
+      "mention": {
+        "label": "群组成员",
+        "loading": "正在查找成员",
+        "none": "没有匹配的成员"
       }
     }
   }

@@ -149,6 +149,16 @@
         "title": "{name} è di nuovo attivo",
         "titleNoName": "Un gruppo WhatsApp è di nuovo attivo",
         "body": "WhatsApp ha ripristinato questo gruppo. Puoi di nuovo inviarvi messaggi."
+      },
+      "device_group_join_request": {
+        "title": "{count, plural, one {Qualcuno vuole entrare in {name}} other {# persone vogliono entrare in {name}}}",
+        "titleNoName": "{count, plural, one {Qualcuno vuole entrare in un gruppo WhatsApp} other {# persone vogliono entrare in un gruppo WhatsApp}}",
+        "body": "Apri Gruppi per approvare o rifiutare."
+      },
+      "device_group_removed": {
+        "title": "Il tuo numero è stato rimosso da {name}",
+        "titleNoName": "Il tuo numero è stato rimosso da un gruppo WhatsApp",
+        "body": "Qualcuno ha rimosso il tuo numero personale da questo gruppo. Il gruppo resta qui, in sola lettura."
       }
     },
     "live": {
@@ -177,7 +187,9 @@
         "teamchat_message": "Nuovo messaggio diretto",
         "waba_group_join_request": "Richiesta di accesso a un gruppo",
         "waba_group_suspended": "Gruppo WhatsApp sospeso",
-        "waba_group_suspension_cleared": "Gruppo WhatsApp di nuovo attivo"
+        "waba_group_suspension_cleared": "Gruppo WhatsApp di nuovo attivo",
+        "device_group_join_request": "Richiesta di ingresso in un gruppo",
+        "device_group_removed": "Rimosso da un gruppo WhatsApp"
       }
     },
     "prefs": {
@@ -334,6 +346,14 @@
         "billing_subscription_canceled": {
           "label": "Abbonamento annullato",
           "hint": "Il tuo fornitore di pagamenti ha terminato un abbonamento di questo spazio di lavoro."
+        },
+        "device_group_join_request": {
+          "label": "Richiesta di ingresso in un gruppo di numeri personali",
+          "hint": "Alcune persone chiedono di entrare in un gruppo di un numero WhatsApp personale che gestisci. Dieci richieste formano una riga."
+        },
+        "device_group_removed": {
+          "label": "Rimosso da un gruppo di numeri personali",
+          "hint": "Qualcuno ha rimosso uno dei tuoi numeri WhatsApp personali da un gruppo. Può essere un segnale che il numero è stato segnalato."
         }
       },
       "loading": "Caricamento delle tue preferenze",

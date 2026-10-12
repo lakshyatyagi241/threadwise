@@ -149,6 +149,16 @@
         "title": "{name}が再び有効になりました",
         "titleNoName": "WhatsAppグループが再び有効になりました",
         "body": "WhatsAppによってこのグループが復旧されました。再びメッセージを送信できます。"
+      },
+      "device_group_join_request": {
+        "title": "{count, plural, other {#人が{name}への参加を希望しています}}",
+        "titleNoName": "{count, plural, other {#人がWhatsAppグループへの参加を希望しています}}",
+        "body": "グループを開いて承認または拒否してください。"
+      },
+      "device_group_removed": {
+        "title": "あなたの番号が{name}から削除されました",
+        "titleNoName": "あなたの番号がWhatsAppグループから削除されました",
+        "body": "誰かがこのグループからあなたの個人番号を削除しました。グループは読み取り専用でここに保存されています。"
       }
     },
     "live": {
@@ -177,7 +187,9 @@
         "teamchat_message": "新しいダイレクトメッセージ",
         "waba_group_join_request": "グループへの参加リクエスト",
         "waba_group_suspended": "WhatsAppグループ停止",
-        "waba_group_suspension_cleared": "WhatsAppグループ再開"
+        "waba_group_suspension_cleared": "WhatsAppグループ再開",
+        "device_group_join_request": "グループへの参加リクエスト",
+        "device_group_removed": "WhatsAppグループから削除されました"
       }
     },
     "prefs": {
@@ -334,6 +346,14 @@
         "billing_subscription_canceled": {
           "label": "サブスクリプションがキャンセルされました",
           "hint": "決済プロバイダーがこのワークスペースのサブスクリプションを終了しました。"
+        },
+        "device_group_join_request": {
+          "label": "個人番号グループへの参加リクエスト",
+          "hint": "あなたが管理している個人WhatsApp番号のグループに、参加を希望する人がいます。10件のリクエストで1行にまとめられます。"
+        },
+        "device_group_removed": {
+          "label": "個人番号グループから削除されました",
+          "hint": "誰かがあなたの個人WhatsApp番号をグループから削除しました。番号が通報された兆候の可能性があります。"
         }
       },
       "loading": "設定を読み込み中",

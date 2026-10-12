@@ -6,6 +6,7 @@ import {
   type EmailReplyExtras,
   type MessageResponse,
   type SendMessageInput,
+  type WaGroupMention,
 } from '@crm/contracts';
 import type { ShareInput } from '../lib/share';
 import { useRealtimeEvent, useResync, useRoom } from '@/lib/realtime';
@@ -36,6 +37,8 @@ export interface SendDraft {
   replyToMessageId?: string | null;
   /** Email conversations: cc, bcc and subject of the reply. */
   email?: EmailReplyExtras;
+  /** Personal-number group threads: the members @mentioned in the text (never sent with a file). */
+  mentions?: WaGroupMention[];
 }
 
 export interface Thread {
@@ -246,6 +249,7 @@ export function useThread(
               body: p.body,
               ...(p.replyToMessageId ? { replyToMessageId: p.replyToMessageId } : {}),
               ...(p.email ? { email: p.email } : {}),
+              ...(p.mentions && p.mentions.length > 0 ? { mentions: p.mentions } : {}),
             });
       files.current.delete(p.clientMessageId);
       if (latest.current.conversationId === id) dispatch({ type: 'merge', messages: [message] });
@@ -281,6 +285,9 @@ export function useThread(
         body,
         replyToMessageId: draft.replyToMessageId ?? null,
         ...(draft.email ? { email: draft.email } : {}),
+        ...(!draft.file && draft.mentions && draft.mentions.length > 0
+          ? { mentions: draft.mentions }
+          : {}),
         media: draft.file
           ? {
               mediaId: '',

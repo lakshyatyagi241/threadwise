@@ -1,7 +1,8 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useEffect, useRef, useState, type Ref } from 'react';
+import Link from 'next/link';
+import { useCallback, useEffect, useRef, useState, type Ref } from 'react';
 import { Badge, Button, EmptyState, Spinner, cn } from '@crm/ui';
 import type {
   ChannelResponse,
@@ -9,6 +10,7 @@ import type {
   ConversationNote,
   InboxConversationDetail,
   MessageResponse,
+  WaGroupMention,
 } from '@crm/contracts';
 import {
   defaultReplySubject,
@@ -20,7 +22,14 @@ import { useCan } from '@/features/auth-registration-security/shared/session-con
 import { CallButton } from '@/features/calling-voice';
 import { useRealtimeEvent } from '@/lib/realtime';
 import type { Thread } from '../api/use-thread';
-import { isGroupSendBlocked, isGroupThread } from '../lib/group-thread';
+import { inboxApi } from '../api/service';
+import {
+  isGroupLimited,
+  isGroupSendBlocked,
+  isPersonalGroupThread,
+  personalGroupBlock,
+} from '../lib/group-thread';
+import type { MentionMember } from '../lib/mentions';
 import { computeWindow, formatWindowLeft, type WindowView } from '../lib/window';
 import { Composer, type ComposerHandle, type ComposerMode } from './composer';
 import { ShareDialog, type ShareKind } from './share-dialog';
@@ -52,6 +61,7 @@ export interface ThreadPaneProps {
     file: File | null;
     replyToMessageId?: string | null;
     email?: EmailReplyExtras;
+    mentions?: WaGroupMention[];
   }) => void;
   /** Puts an emoji on a message (`''` takes it back); the screen shows the refusal. */
   onReact: (message: MessageResponse, emoji: string) => Promise<void>;
@@ -74,8 +84,10 @@ export interface ThreadPaneProps {
  */
 export function ThreadPane(props: ThreadPaneProps) {
   const t = useTranslations('team-inbox-conversations.thread');
+  const tg = useTranslations('team-inbox-conversations.groupThread');
   const canManageChannels = useCan('inbox.channel.manage');
   const canExportLogs = useCan('inbox.logs.export');
+  const canOpenGroups = useCan('wa.groups.read');
   const { detail, thread } = props;
   const [templatesOpen, setTemplatesOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
@@ -84,6 +96,17 @@ export function ThreadPane(props: ThreadPaneProps) {
     null,
   );
   const replyTo = reply && reply.conversationId === props.conversationId ? reply.message : null;
+
+  // A group of a personal (linked) number reads its members from the group directory for the @mention picker.
+  const personalGroup = isPersonalGroupThread(detail?.peerKey, detail?.channel.kind);
+  const groupBlock = personalGroup ? personalGroupBlock(detail?.personalGroup) : null;
+  const mentionsOn = personalGroup && props.can.reply && groupBlock === null;
+  const conversationId = props.conversationId;
+  const searchMembers = useCallback(
+    async (q: string): Promise<MentionMember[]> =>
+      (await inboxApi.groupMembers(conversationId, q)).members,
+    [conversationId],
+  );
 
   if (props.notFound) {
     return (
@@ -110,9 +133,10 @@ export function ThreadPane(props: ThreadPaneProps) {
     : null;
   const channelDown = props.channel !== undefined && props.channel.status !== 'connected';
   const windowClosed = win?.state === 'closed';
-  const groupThread = isGroupThread(detail?.peerKey);
+  // The Cloud API takes only text and files into a group; a personal number takes everything a person can send there.
+  const groupLimited = isGroupLimited(detail?.peerKey, detail?.channel.kind);
   const groupSendBlocked = isGroupSendBlocked(detail?.peerKey, detail?.channel.kind);
-  const replyDisabled = windowClosed || channelDown;
+  const replyDisabled = windowClosed || channelDown || groupBlock !== null;
   // A template needs no open window, only a working channel that sends templates and the right to reply.
   const canTemplate =
     Boolean(detail?.capabilities.templates) &&
@@ -123,7 +147,7 @@ export function ThreadPane(props: ThreadPaneProps) {
     props.mode === 'reply';
   // A place, contact cards and buttons are free-form messages: they need the window like text does (the composer disables the button).
   const shareKinds: ShareKind[] =
-    detail && props.can.reply && !channelDown && !groupThread && props.mode === 'reply'
+    detail && props.can.reply && !channelDown && !groupLimited && props.mode === 'reply'
       ? [
           ...(detail.capabilities.media.includes('location') ? (['location'] as const) : []),
           ...(detail.capabilities.media.includes('contact') ? (['contacts'] as const) : []),
@@ -166,6 +190,15 @@ export function ThreadPane(props: ThreadPaneProps) {
                 </span>
                 <ChannelTag decorative kind={detail.channel.kind} name={detail.channel.name} />
                 <span className="truncate">{detail.channel.name}</span>
+                {personalGroup && canOpenGroups && (
+                  <Link
+                    href="/devices/groups"
+                    data-testid="inbox-open-group"
+                    className="text-primary underline-offset-2 hover:underline focus-visible:ring-2 focus-visible:ring-primary"
+                  >
+                    {tg('openGroup')}
+                  </Link>
+                )}
                 <TypingLine conversationId={detail.id} />
               </p>
             </div>
@@ -247,7 +280,7 @@ export function ThreadPane(props: ThreadPaneProps) {
         onLoadOlder={() => void thread.loadOlder()}
         onRetryMessage={props.onRetryMessage}
         onReply={
-          props.can.reply && !replyDisabled && !groupThread
+          props.can.reply && !replyDisabled && !groupLimited
             ? (message) => {
                 setReply({ conversationId: props.conversationId, message });
                 props.onMode('reply');
@@ -255,7 +288,7 @@ export function ThreadPane(props: ThreadPaneProps) {
             : undefined
         }
         onReact={
-          props.can.reply && !replyDisabled && !groupThread && detail?.capabilities.reactions
+          props.can.reply && !replyDisabled && !groupLimited && detail?.capabilities.reactions
             ? props.onReact
             : undefined
         }
@@ -273,7 +306,7 @@ export function ThreadPane(props: ThreadPaneProps) {
       {win &&
         windowClosed &&
         !channelDown &&
-        !groupThread &&
+        !groupLimited &&
         props.can.reply &&
         props.mode === 'reply' && (
           <div
@@ -299,6 +332,20 @@ export function ThreadPane(props: ThreadPaneProps) {
             </div>
           </div>
         )}
+      {groupBlock !== null && props.can.reply && props.mode === 'reply' && (
+        <div
+          role="status"
+          data-testid="inbox-group-readonly"
+          data-reason={groupBlock}
+          className="flex items-start gap-2 border-t border-border bg-muted/50 px-4 py-2.5 text-sm"
+        >
+          <AlertIcon className="mt-0.5 shrink-0 text-muted-foreground" />
+          <div>
+            <p className="font-medium">{tg(`readOnly.${groupBlock}.title`)}</p>
+            <p className="text-xs text-muted-foreground">{tg(`readOnly.${groupBlock}.message`)}</p>
+          </div>
+        </div>
+      )}
       {!props.can.reply && props.mode === 'reply' && (
         <p
           role="status"
@@ -326,6 +373,7 @@ export function ThreadPane(props: ThreadPaneProps) {
             : undefined
         }
         groupSendBlocked={groupSendBlocked}
+        groupMentions={mentionsOn ? { search: searchMembers } : undefined}
         attachments={
           detail
             ? { channelKind: detail.channel.kind, allowed: detail.capabilities.media }

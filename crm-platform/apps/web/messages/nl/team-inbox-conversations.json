@@ -137,7 +137,11 @@
       "logBusy": "Er wordt al een export voorbereid. Wacht op de e-mail ervan en vraag daarna een nieuwe aan.",
       "logNotReady": "Deze export is niet gereed of is verlopen. Vraag hem opnieuw aan.",
       "groupSuspended": "Meta heeft deze groep opgeschort, dus er kunnen geen berichten naartoe worden gestuurd totdat Meta dit opheft.",
-      "walletEmpty": "Je berichtenportemonnee dekt dit groepsbericht niet (één kost per lid). Waardeer op en probeer het opnieuw."
+      "walletEmpty": "Je berichtenportemonnee dekt dit groepsbericht niet (één kost per lid). Waardeer op en probeer het opnieuw.",
+      "groupLeft": "Dit nummer heeft de groep verlaten, dus kan er geen berichten meer sturen.",
+      "groupAnnounceOnly": "Alleen beheerders kunnen berichten sturen in deze groep en dit nummer is geen beheerder.",
+      "groupRateLimited": "Te veel groepsberichten van dit nummer in korte tijd. Wacht een minuut en probeer het opnieuw.",
+      "groupUnavailable": "WhatsApp heeft dit groepsbericht niet geaccepteerd. Probeer het over een paar minuten opnieuw."
     },
     "bubble": {
       "kind": {
@@ -636,6 +640,24 @@
           "failed": "Mislukt",
           "expired": "Verlopen"
         }
+      }
+    },
+    "groupThread": {
+      "openGroup": "Groep openen",
+      "readOnly": {
+        "left": {
+          "title": "Dit nummer heeft de groep verlaten",
+          "message": "Het gesprek blijft zoals het was. Je kunt het lezen en interne notities toevoegen, maar je kunt geen berichten sturen."
+        },
+        "announceOnly": {
+          "title": "Alleen beheerders kunnen in deze groep sturen",
+          "message": "Dit nummer is geen beheerder van de groep, dus WhatsApp zou een bericht niet bezorgen. Je kunt nog wel interne notities toevoegen."
+        }
+      },
+      "mention": {
+        "label": "Groepsleden",
+        "loading": "Leden zoeken",
+        "none": "Geen lid gevonden"
       }
     }
   }

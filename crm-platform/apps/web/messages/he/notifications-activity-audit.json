@@ -149,6 +149,16 @@
         "title": "{name} פעילה שוב",
         "titleNoName": "קבוצת WhatsApp פעילה שוב",
         "body": "WhatsApp שחזרה את הקבוצה הזו. אפשר לשלוח לה הודעות שוב."
+      },
+      "device_group_join_request": {
+        "title": "{count, plural, one {מישהו רוצה להצטרף ל-{name}} two {# אנשים רוצים להצטרף ל-{name}} other {# אנשים רוצים להצטרף ל-{name}}}",
+        "titleNoName": "{count, plural, one {מישהו רוצה להצטרף לקבוצת WhatsApp} two {# אנשים רוצים להצטרף לקבוצת WhatsApp} other {# אנשים רוצים להצטרף לקבוצת WhatsApp}}",
+        "body": "פתחו את קבוצות כדי לאשר או לדחות."
+      },
+      "device_group_removed": {
+        "title": "המספר שלכם הוסר מ-{name}",
+        "titleNoName": "המספר שלכם הוסר מקבוצת WhatsApp",
+        "body": "מישהו הסיר את המספר האישי שלכם מהקבוצה הזו. הקבוצה נשמרת כאן לקריאה בלבד."
       }
     },
     "live": {
@@ -177,7 +187,9 @@
         "teamchat_message": "הודעה פרטית חדשה",
         "waba_group_join_request": "בקשה להצטרף לקבוצה",
         "waba_group_suspended": "קבוצת WhatsApp הושעתה",
-        "waba_group_suspension_cleared": "קבוצת WhatsApp פעילה שוב"
+        "waba_group_suspension_cleared": "קבוצת WhatsApp פעילה שוב",
+        "device_group_join_request": "בקשה להצטרף לקבוצה",
+        "device_group_removed": "הוסרתם מקבוצת WhatsApp"
       }
     },
     "prefs": {
@@ -334,6 +346,14 @@
         "billing_subscription_canceled": {
           "label": "המנוי בוטל",
           "hint": "ספק התשלומים שלך סיים מנוי של סביבת עבודה זו."
+        },
+        "device_group_join_request": {
+          "label": "בקשה להצטרף לקבוצה של מספר אישי",
+          "hint": "אנשים מבקשים להצטרף לקבוצה של מספר WhatsApp אישי שאתם מנהלים. עשר בקשות הופכות לשורה אחת."
+        },
+        "device_group_removed": {
+          "label": "הוסרתם מקבוצה של מספר אישי",
+          "hint": "מישהו הסיר אחד ממספרי ה-WhatsApp האישיים שלכם מקבוצה. זה יכול להיות סימן שהמספר דווח."
         }
       },
       "loading": "טוען את ההעדפות שלך",

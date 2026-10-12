@@ -1,0 +1,302 @@
+{
+  "whatsapp-devices-baileys": {
+    "nav": {
+      "groups": "개인 번호 그룹"
+    },
+    "area": {
+      "groups": "그룹"
+    },
+    "errors": {
+      "WA_GROUP_NOT_ADMIN": "이 번호는 그룹 관리자가 아니어서 WhatsApp이 변경을 거부했습니다.",
+      "WA_GROUP_NOT_FOUND": "이 번호에서 해당 그룹을 찾을 수 없습니다. 삭제되었을 수 있습니다.",
+      "WA_GROUP_DEVICE_NOT_READY": "이 번호는 현재 연결되어 있지 않습니다. 번호를 연결하거나 잠시 기다린 후 다시 시도해 주세요.",
+      "WA_GROUP_RATE_LIMITED": "이 번호의 그룹 작업이 너무 많습니다. 잠시 기다린 후 다시 시도해 주세요.",
+      "WA_GROUP_RATE_LIMITED_ops_minute": "최근 1분 동안 이 번호의 그룹 작업이 너무 많습니다. 잠시 기다린 후 다시 시도해 주세요.",
+      "WA_GROUP_RATE_LIMITED_ops_day": "이 번호는 오늘의 그룹 작업 한도에 도달했습니다. 내일 다시 시도해 주세요.",
+      "WA_GROUP_RATE_LIMITED_creates_day": "이 번호는 오늘의 새 그룹 생성 한도에 도달했습니다. 내일 다시 시도해 주세요.",
+      "WA_GROUP_RATE_LIMITED_join_link_day": "이 번호는 오늘의 초대 링크 참여 한도에 도달했습니다. 내일 다시 시도해 주세요.",
+      "WA_GROUP_RATE_LIMITED_cooldown": "WhatsApp이 이 번호를 제한하여, 번호 보호를 위해 한동안 그룹 작업이 일시 중지됩니다.",
+      "WA_GROUP_LIMIT_REACHED": "WhatsApp에서 그룹이 가득 찼거나 이 번호가 더 많은 그룹에 참여할 수 없다고 합니다.",
+      "WA_GROUP_LEFT": "이 번호가 그룹을 나갔으므로 그룹은 읽기 전용입니다.",
+      "WA_GROUP_INVALID_NUMBER": "전화번호 중 하나가 올바르지 않거나 이 번호 자신입니다.",
+      "WA_GROUP_JOIN_LINK_INVALID": "이 초대 링크가 올바르지 않거나 취소되었거나 그룹이 더 이상 존재하지 않습니다.",
+      "WA_GROUP_JOIN_BY_LINK_DISABLED": "이 플랫폼에서는 초대 링크로 그룹에 참여하는 기능이 꺼져 있습니다.",
+      "WA_GROUP_ANNOUNCE_ONLY": "이 그룹에서는 관리자만 메시지를 보낼 수 있으며, 이 번호는 관리자가 아닙니다.",
+      "WA_GROUP_UNAVAILABLE": "WhatsApp이 요청을 수락하지 않았습니다. 몇 분 후에 다시 시도해 주세요."
+    },
+    "groups": {
+      "eyebrow": "비공식 WhatsApp API / 그룹",
+      "headingA": "내",
+      "headingB": "개인 번호 그룹",
+      "intro": "연결된 각 번호가 속한 그룹입니다. 그룹을 만들고, 사람을 추가하거나 내보내고, 참여 요청을 승인하고, 초대 링크를 공유하고, 그룹을 나갈 수 있습니다. 그룹의 메시지는 공유 인박스에도 표시됩니다.",
+      "loading": "로딩 중",
+      "loadFailed": "번호를 불러올 수 없습니다.",
+      "retry": "다시 시도",
+      "close": "닫기",
+      "cancel": "취소",
+      "loadMore": "더 보기",
+      "loadingMore": "로딩 중",
+      "untitled": "이름 없는 그룹",
+      "memberCount": "{count, plural, =0 {멤버 없음} other {멤버 #명}}",
+      "membersButton": "멤버",
+      "editButton": "편집",
+      "leave": "나가기",
+      "openChat": "채팅 열기",
+      "leftOn": "이 번호는 {date}에 그룹을 나갔습니다. 읽기 전용으로 이곳에 보관됩니다.",
+      "leftNote": "이 번호는 그룹을 나갔습니다. 읽기 전용으로 이곳에 보관됩니다.",
+      "badge": {
+        "admin": "관리자입니다",
+        "notAdmin": "관리자 아님",
+        "left": "나감",
+        "announce": "관리자만 전송",
+        "restrict": "관리자만 정보 편집",
+        "approval": "참여 승인 필요",
+        "requests": "{count, plural, other {요청 #건}}"
+      },
+      "blocked": {
+        "left": "이 번호는 그룹을 나갔습니다.",
+        "offline": "이 번호는 오프라인입니다. 그룹을 변경하려면 번호를 연결하세요.",
+        "notAdmin": "이 번호는 여기서 관리자가 아닙니다. 그룹을 읽을 수는 있지만 변경할 수는 없습니다."
+      },
+      "kpi": {
+        "groups": "그룹",
+        "groupsSub": "이 번호가 속한 그룹",
+        "members": "멤버",
+        "membersSub": "전체 그룹 합계",
+        "admin": "관리자로 참여",
+        "adminSub": "관리할 수 있는 그룹",
+        "joinRequests": "참여 대기",
+        "joinRequestsSub": "응답할 요청",
+        "left": "나감",
+        "leftSub": "읽기 전용으로 보관"
+      },
+      "list": {
+        "title": "그룹",
+        "search": "이름으로 검색",
+        "statusLabel": "보기",
+        "statusAll": "모든 그룹",
+        "statusActive": "활성",
+        "statusLeft": "나감",
+        "empty": "아직 그룹이 없습니다. 그룹을 만들거나, 휴대폰에서 이 번호를 그룹에 추가하면 여기에 표시됩니다.",
+        "noMatch": "일치하는 그룹이 없습니다.",
+        "sync": "WhatsApp에서 새로 고침",
+        "syncing": "새로 고치는 중",
+        "synced": "{count, plural, other {WhatsApp에서 그룹 #개를 불러왔습니다.}}",
+        "syncThrottled": "목록을 방금 새로 고쳤습니다. 1분 후에 다시 새로 고쳐 주세요."
+      },
+      "rail": {
+        "title": "번호",
+        "noNumber": "아직 개인 번호가 없습니다.",
+        "online": "온라인",
+        "offline": "오프라인",
+        "notAdminHint": "{count, plural, other {이 번호는 그룹 #개에서 관리자가 아닙니다. 읽을 수는 있지만 변경할 수는 없습니다.}}",
+        "limitsTitle": "남은 그룹 작업",
+        "limitMinute": "이번 1분",
+        "limitDay": "오늘",
+        "limitCreates": "오늘 새 그룹",
+        "limitJoins": "오늘 링크로 참여",
+        "perCall": "추가 또는 내보내기 1회당 최대 {count, plural, other {#명}}입니다.",
+        "howTitle": "그룹 작동 방식",
+        "howRisk": "그룹은 비공식 연결을 통해 관리됩니다. WhatsApp은 그룹 작업을 면밀히 감시하므로 각 번호에는 보호를 위한 한도가 있으며, 여러분에게도 동일하게 적용됩니다.",
+        "howAdmin": "그룹 관리자만 그룹을 변경할 수 있습니다. 이 번호가 관리자가 아니면 그룹을 읽고 대화할 수만 있습니다.",
+        "howInbox": "멤버가 쓴 내용은 공유 인박스에 표시됩니다. 답장은 이 번호에서 전송되며 메시지 1건으로 계산됩니다."
+      },
+      "state": {
+        "noDevice": {
+          "title": "연결된 개인 번호 없음",
+          "message": "그룹은 개인 WhatsApp 번호에 속합니다. 먼저 번호를 연결하세요.",
+          "connect": "번호 연결"
+        },
+        "gateOff": {
+          "title": "이 워크스페이스에서 사용할 수 없음",
+          "message": "이 워크스페이스에서 비공식 WhatsApp 연결이 더 이상 활성화되어 있지 않아 그룹을 사용할 수 없습니다."
+        },
+        "denied": {
+          "title": "그룹을 볼 수 없습니다",
+          "message": "회원님의 역할에는 개인 번호 그룹 읽기 권한이 없습니다. 워크스페이스 관리자에게 문의하세요."
+        },
+        "offline": {
+          "not_connected": {
+            "title": "이 번호는 오프라인입니다",
+            "message": "아래 그룹은 마지막으로 저장된 상태입니다. 변경하려면 번호를 연결하세요."
+          },
+          "worker_unavailable": {
+            "title": "연결 서비스가 바쁩니다",
+            "message": "번호는 연결되어 있지만 현재 세션을 유지하는 곳이 없습니다. 아래 그룹은 마지막으로 저장된 상태입니다. 몇 분 후에 다시 시도해 주세요."
+          },
+          "open": "이 번호 열기"
+        },
+        "rateLimited": {
+          "title": "그룹 작업이 일시 중지되었습니다",
+          "message": "이 번호를 WhatsApp 제한으로부터 보호하기 위해 새 그룹 작업이 대기합니다.",
+          "countdown": "{time} 후에 다시 시도하세요"
+        }
+      },
+      "create": {
+        "open": "그룹 만들기",
+        "title": "그룹 만들기",
+        "risk": "그룹을 만들고 사람을 추가하는 것은 WhatsApp이 가장 면밀히 감시하는 작업입니다. 회원님을 알고 추가되는 것을 예상하는 사람만 추가하고, 하루에 만드는 그룹 수를 적게 유지하세요. WhatsApp이 이 번호를 제한할 수 있습니다.",
+        "subject": "그룹 이름",
+        "subjectHint": "최대 60자입니다.",
+        "numbers": "추가할 사람",
+        "numbersHint": "국가 번호를 포함한 전화번호를 한 줄에 하나씩 또는 쉼표로 구분해 입력하세요. 현재는 최대 {max}개이며, 나중에 더 추가할 수 있습니다.",
+        "numbersPlaceholder": "+919876543210\n+14155550123",
+        "description": "설명(선택 사항)",
+        "descriptionHint": "최대 {max}자입니다.",
+        "counted": "{count}/{max}개 번호",
+        "duplicates": "{count, plural, other {중복 #건 무시됨}}",
+        "invalid": "전화번호가 아님: {numbers}",
+        "selfIgnored": "이 번호는 WhatsApp이 직접 추가하므로 목록에서 제외되었습니다.",
+        "overCap": "한 번에 최대 {max}개까지 추가할 수 있습니다.",
+        "readNotice": "위험 안내 전체 읽기",
+        "acknowledge": "그룹을 만들고 사람을 추가하면 WhatsApp이 이 번호를 제한할 수 있음을 이해합니다.",
+        "offlineHint": "그룹을 만들려면 이 번호를 연결하세요.",
+        "submit": "그룹 만들기",
+        "submitting": "만드는 중",
+        "created": "그룹을 만들었습니다: {name}",
+        "resultSummary": "{ok, plural, =0 {추가된 사람이 없습니다.} other {#명을 추가했습니다.}} {failed, plural, =0 {} other {#명은 추가하지 못했습니다.}}",
+        "descriptionNotSet": "그룹은 만들어졌지만 WhatsApp이 설명을 수락하지 않았습니다. 그룹을 편집하여 다시 시도하세요."
+      },
+      "outcome": {
+        "someone": "멤버",
+        "done": "완료",
+        "already_member": "이미 그룹에 있습니다.",
+        "not_member": "그룹에 없습니다.",
+        "not_on_whatsapp": "이 번호는 WhatsApp을 사용하지 않습니다.",
+        "privacy_blocked": "개인정보 설정 때문에 이 번호로 추가할 수 없습니다. 대신 초대 링크를 보내세요.",
+        "not_allowed": "WhatsApp에서 이 사람에 대해 허용하지 않습니다.",
+        "group_full": "그룹이 가득 찼습니다.",
+        "failed": "WhatsApp이 이 항목을 수락하지 않았습니다."
+      },
+      "edit": {
+        "title": "그룹 편집",
+        "saved": "그룹이 업데이트되었습니다.",
+        "saving": "저장 중",
+        "save": "저장",
+        "choosePicture": "사진 선택",
+        "pictureHint": "JPEG 또는 PNG, 최대 {mb}MB.",
+        "pictureType": "JPEG 또는 PNG 사진을 사용하세요.",
+        "pictureSize": "사진이 {mb}MB를 초과합니다.",
+        "subject": "그룹 이름",
+        "description": "설명",
+        "settings": "설정",
+        "announce": "관리자만 메시지 전송 가능",
+        "announceHint": "멤버는 읽을 수만 있고 쓸 수 없습니다.",
+        "restrict": "관리자만 그룹 정보 편집 가능",
+        "restrictHint": "이름, 설명, 사진.",
+        "approval": "관리자가 새 멤버 승인",
+        "approvalHint": "초대 링크를 사용하는 사람은 승인을 기다립니다.",
+        "addMode": "관리자만 멤버 추가 가능",
+        "addModeHint": "다른 멤버는 사람을 추가할 수 없습니다.",
+        "offline": "이 번호는 오프라인이므로 아무것도 저장할 수 없습니다.",
+        "removePicture": "사진 삭제",
+        "keepPicture": "사진 유지"
+      },
+      "members": {
+        "title": "{name} 멤버",
+        "readOnly": {
+          "left": "이 번호는 그룹을 나갔습니다. 목록은 마지막으로 저장된 상태이며 변경할 수 없습니다.",
+          "offline": "이 번호는 오프라인입니다. 목록은 마지막으로 저장된 상태입니다.",
+          "notAdmin": "이 번호는 관리자가 아닙니다. 목록을 읽을 수는 있지만 변경할 수는 없습니다."
+        },
+        "held": "그룹 작업이 잠시 일시 중지되었습니다. 카운트다운이 끝나면 다시 시도하세요.",
+        "add": {
+          "label": "참가자 추가",
+          "hint": "국가 번호를 포함한 전화번호를 한 줄에 하나씩 또는 쉼표로 구분해 입력하세요. 한 번에 최대 {max}개입니다.",
+          "placeholder": "+919876543210",
+          "counted": "{count}/{max}개 번호",
+          "invalid": "전화번호가 아님: {numbers}",
+          "overCap": "한 번에 최대 {max}개까지 추가할 수 있습니다.",
+          "risk": "회원님을 모르는 사람을 추가하는 것은 WhatsApp이 번호를 제한하는 흔한 이유입니다.",
+          "adding": "추가하는 중",
+          "submit": "추가"
+        },
+        "done": {
+          "add": "{count, plural, other {#명을 추가했습니다.}}",
+          "remove": "{count, plural, other {#명을 내보냈습니다.}}",
+          "promote": "{count, plural, other {#명이 이제 관리자입니다.}}",
+          "demote": "{count, plural, other {#명이 더 이상 관리자가 아닙니다.}}"
+        },
+        "result": "{ok, plural, =0 {변경된 사람이 없습니다.} other {#명을 변경했습니다.}} {failed, plural, =0 {} other {#명은 변경하지 못했습니다.}}",
+        "search": "멤버 검색",
+        "searchPlaceholder": "이름 또는 번호",
+        "total": "{count, plural, other {멤버 #명}}",
+        "noAccess": "멤버를 볼 권한이 없습니다.",
+        "loading": "멤버 불러오는 중",
+        "noMatch": "일치하는 멤버가 없습니다.",
+        "empty": "저장된 멤버가 아직 없습니다.",
+        "member": "멤버",
+        "noNumber": "WhatsApp에서 이 멤버의 번호를 표시하지 않습니다.",
+        "you": "이 번호",
+        "owner": "소유자",
+        "admin": "관리자",
+        "promote": "관리자로 지정",
+        "demote": "관리자 해제",
+        "remove": "내보내기",
+        "selected": "{count, plural, =0 {선택 없음} other {#명 선택됨}}",
+        "limit": "한 번에 최대 {max}명",
+        "removeConfirm": "{count, plural, other {이 그룹에서 #명을 내보낼까요?}}"
+      },
+      "requests": {
+        "readOnly": {
+          "left": "이 번호는 그룹을 나갔습니다.",
+          "offline": "이 번호는 오프라인입니다. 응답하려면 번호를 연결하세요.",
+          "notAdmin": "이 번호는 관리자가 아니므로 이 요청에 응답할 수 없습니다."
+        },
+        "hidden": "{count, plural, other {#명이 참여를 기다리고 있습니다.}}",
+        "title": "{count, plural, other {참여 대기 중 #명}}",
+        "working": "…",
+        "approveAll": "모두 승인",
+        "rejectAll": "모두 거절",
+        "loading": "요청 불러오는 중",
+        "none": "표시할 요청이 없습니다.",
+        "someone": "누군가",
+        "approve": "승인",
+        "reject": "거절",
+        "approved": "{count, plural, other {#명을 승인했습니다.}}",
+        "rejected": "{count, plural, other {요청 #건을 거절했습니다.}}",
+        "someFailed": "{ok}건 완료, {failed}건 실패:"
+      },
+      "link": {
+        "show": "초대 링크",
+        "hide": "초대 링크 숨기기",
+        "loading": "링크 불러오는 중",
+        "label": "초대 링크",
+        "copy": "복사",
+        "copied": "복사됨",
+        "copyFailed": "링크를 복사할 수 없습니다. 선택하여 직접 복사하세요.",
+        "newLink": "새 링크",
+        "reset": "새 초대 링크가 만들어졌습니다. 이전 링크는 더 이상 작동하지 않습니다.",
+        "confirmTitle": "새 초대 링크를 만들까요?",
+        "confirmMessage": "이전 링크는 즉시 작동하지 않게 됩니다. 링크를 가진 사람은 더 이상 이 링크로 참여할 수 없습니다.",
+        "confirmButton": "새 링크 만들기"
+      },
+      "join": {
+        "open": "초대 링크로 참여",
+        "title": "초대 링크로 그룹에 참여",
+        "risk": "링크로 그룹에 참여하는 것은 WhatsApp이 번호를 가장 자주 제한하는 작업입니다. 이 번호는 하루에 몇 번만 참여할 수 있습니다. 아는 그룹에만 참여하세요.",
+        "invite": "초대 링크",
+        "inviteHint": "chat.whatsapp.com 링크 또는 코드만 입력하세요.",
+        "invalid": "WhatsApp 초대 링크 또는 코드가 아닙니다.",
+        "lookUp": "조회",
+        "lookingUp": "조회하는 중",
+        "submit": "참여",
+        "joining": "참여하는 중",
+        "joined": "그룹에 참여했습니다. 몇 초 후 목록에 표시됩니다.",
+        "requested": "요청을 보냈습니다. 그룹 관리자가 승인해야 합니다.",
+        "alreadyMember": "이 번호는 이미 이 그룹에 있습니다.",
+        "approvalRequired": "관리자가 참여를 승인해야 합니다.",
+        "acknowledge": "링크로 그룹에 참여하면 WhatsApp이 이 번호를 제한할 수 있음을 이해합니다.",
+        "offline": "그룹에 참여하려면 이 번호를 연결하세요."
+      },
+      "confirm": {
+        "leaveTitle": "이 그룹을 나갈까요?",
+        "leaveMessage": "이 번호가 {name} 그룹을 나갑니다. 초대 없이는 여기서 다시 참여할 수 없습니다. 그룹과 메시지는 읽기 전용으로 인박스에 남습니다.",
+        "leaveConfirm": "그룹 나가기"
+      },
+      "notice": {
+        "left": "이 번호는 그룹을 나갔습니다."
+      }
+    }
+  }
+}

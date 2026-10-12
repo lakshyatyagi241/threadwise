@@ -1,0 +1,302 @@
+{
+  "whatsapp-devices-baileys": {
+    "nav": {
+      "groups": "Gruppen persönlicher Nummern"
+    },
+    "area": {
+      "groups": "Gruppen"
+    },
+    "errors": {
+      "WA_GROUP_NOT_ADMIN": "Diese Nummer ist kein Admin der Gruppe, daher hat WhatsApp die Änderung abgelehnt.",
+      "WA_GROUP_NOT_FOUND": "Diese Gruppe wurde für diese Nummer nicht gefunden. Möglicherweise wurde sie gelöscht.",
+      "WA_GROUP_DEVICE_NOT_READY": "Diese Nummer ist gerade nicht verbunden. Verbinden Sie sie oder warten Sie einen Moment und versuchen Sie es erneut.",
+      "WA_GROUP_RATE_LIMITED": "Zu viele Gruppenaktionen mit dieser Nummer. Warten Sie einen Moment, bevor Sie es erneut versuchen.",
+      "WA_GROUP_RATE_LIMITED_ops_minute": "Zu viele Gruppenaktionen mit dieser Nummer in der letzten Minute. Warten Sie einen Moment, bevor Sie es erneut versuchen.",
+      "WA_GROUP_RATE_LIMITED_ops_day": "Diese Nummer hat das heutige Limit für Gruppenaktionen erreicht. Versuchen Sie es morgen erneut.",
+      "WA_GROUP_RATE_LIMITED_creates_day": "Diese Nummer hat das heutige Limit für neue Gruppen erreicht. Versuchen Sie es morgen erneut.",
+      "WA_GROUP_RATE_LIMITED_join_link_day": "Diese Nummer hat das heutige Limit für Beitritte per Einladungslink erreicht. Versuchen Sie es morgen erneut.",
+      "WA_GROUP_RATE_LIMITED_cooldown": "WhatsApp hat diese Nummer gebremst, daher sind Gruppenaktionen zu ihrem Schutz für eine Weile pausiert.",
+      "WA_GROUP_LIMIT_REACHED": "WhatsApp meldet, dass die Gruppe voll ist oder diese Nummer in keiner weiteren Gruppe sein kann.",
+      "WA_GROUP_LEFT": "Diese Nummer hat die Gruppe verlassen, daher ist die Gruppe schreibgeschützt.",
+      "WA_GROUP_INVALID_NUMBER": "Eine der Telefonnummern ist ungültig oder es ist diese Nummer selbst.",
+      "WA_GROUP_JOIN_LINK_INVALID": "Dieser Einladungslink ist ungültig, wurde zurückgesetzt oder die Gruppe existiert nicht mehr.",
+      "WA_GROUP_JOIN_BY_LINK_DISABLED": "Der Beitritt zu Gruppen per Einladungslink ist auf dieser Plattform deaktiviert.",
+      "WA_GROUP_ANNOUNCE_ONLY": "Nur Admins dürfen in dieser Gruppe Nachrichten senden, und diese Nummer ist kein Admin.",
+      "WA_GROUP_UNAVAILABLE": "WhatsApp hat die Anfrage nicht akzeptiert. Versuchen Sie es in einigen Minuten erneut."
+    },
+    "groups": {
+      "eyebrow": "Inoffizielle WhatsApp-API / Gruppen",
+      "headingA": "Gruppen Ihrer",
+      "headingB": "persönlichen Nummern",
+      "intro": "Die Gruppen, in denen jede verknüpfte Nummer Mitglied ist. Erstellen Sie eine Gruppe, fügen Sie Personen hinzu oder entfernen Sie sie, genehmigen Sie Beitrittsanfragen, teilen Sie den Einladungslink und verlassen Sie Gruppen. Nachrichten einer Gruppe erscheinen auch im gemeinsamen Posteingang.",
+      "loading": "Wird geladen",
+      "loadFailed": "Ihre Nummern konnten nicht geladen werden.",
+      "retry": "Erneut versuchen",
+      "close": "Schließen",
+      "cancel": "Abbrechen",
+      "loadMore": "Mehr laden",
+      "loadingMore": "Wird geladen",
+      "untitled": "Gruppe ohne Namen",
+      "memberCount": "{count, plural, =0 {Keine Mitglieder} one {# Mitglied} other {# Mitglieder}}",
+      "membersButton": "Mitglieder",
+      "editButton": "Bearbeiten",
+      "leave": "Verlassen",
+      "openChat": "Chat öffnen",
+      "leftOn": "Diese Nummer hat die Gruppe am {date} verlassen. Sie wird hier schreibgeschützt aufbewahrt.",
+      "leftNote": "Diese Nummer hat die Gruppe verlassen. Sie wird hier schreibgeschützt aufbewahrt.",
+      "badge": {
+        "admin": "Sie sind Admin",
+        "notAdmin": "Kein Admin",
+        "left": "Verlassen",
+        "announce": "Nur Admins senden",
+        "restrict": "Admins bearbeiten Infos",
+        "approval": "Beitritt mit Genehmigung",
+        "requests": "{count, plural, one {# Anfrage} other {# Anfragen}}"
+      },
+      "blocked": {
+        "left": "Diese Nummer hat die Gruppe verlassen.",
+        "offline": "Diese Nummer ist offline: Verbinden Sie sie, um die Gruppe zu ändern.",
+        "notAdmin": "Diese Nummer ist hier kein Admin: Sie können die Gruppe lesen, aber nicht ändern."
+      },
+      "kpi": {
+        "groups": "Gruppen",
+        "groupsSub": "Diese Nummer ist in",
+        "members": "Mitglieder",
+        "membersSub": "In allen Gruppen",
+        "admin": "Als Admin",
+        "adminSub": "Gruppen, die Sie verwalten können",
+        "joinRequests": "Warten auf Beitritt",
+        "joinRequestsSub": "Offene Anfragen",
+        "left": "Verlassen",
+        "leftSub": "Schreibgeschützt aufbewahrt"
+      },
+      "list": {
+        "title": "Gruppen",
+        "search": "Nach Name suchen",
+        "statusLabel": "Anzeigen",
+        "statusAll": "Alle Gruppen",
+        "statusActive": "Aktiv",
+        "statusLeft": "Verlassen",
+        "empty": "Noch keine Gruppen. Erstellen Sie eine oder fügen Sie diese Nummer auf Ihrem Telefon zu einer Gruppe hinzu, dann erscheint sie hier.",
+        "noMatch": "Keine Gruppe passt.",
+        "sync": "Von WhatsApp aktualisieren",
+        "syncing": "Wird aktualisiert",
+        "synced": "{count, plural, one {# Gruppe von WhatsApp gelesen.} other {# Gruppen von WhatsApp gelesen.}}",
+        "syncThrottled": "Die Liste wurde gerade aktualisiert. Warten Sie eine Minute, bevor Sie sie erneut aktualisieren."
+      },
+      "rail": {
+        "title": "Nummern",
+        "noNumber": "Noch keine persönliche Nummer.",
+        "online": "Online",
+        "offline": "Offline",
+        "notAdminHint": "{count, plural, one {Diese Nummer ist in # Gruppe kein Admin: Sie können sie lesen, aber nicht ändern.} other {Diese Nummer ist in # Gruppen kein Admin: Sie können sie lesen, aber nicht ändern.}}",
+        "limitsTitle": "Verbleibende Gruppenaktionen",
+        "limitMinute": "Diese Minute",
+        "limitDay": "Heute",
+        "limitCreates": "Neue Gruppen heute",
+        "limitJoins": "Beitritte per Link heute",
+        "perCall": "Höchstens {count, plural, one {# Person} other {# Personen}} pro Hinzufügen oder Entfernen.",
+        "howTitle": "So funktionieren Gruppen hier",
+        "howRisk": "Gruppen werden über die inoffizielle Verbindung verwaltet. WhatsApp beobachtet Gruppenaktionen genau, daher hat jede Nummer zu ihrem Schutz Limits, die auch für Sie gelten.",
+        "howAdmin": "Nur ein Admin einer Gruppe kann sie ändern. Ist diese Nummer kein Admin, können Sie die Gruppe lesen und darin chatten, mehr nicht.",
+        "howInbox": "Was Mitglieder schreiben, erscheint im gemeinsamen Posteingang. Antworten werden von dieser Nummer gesendet und zählen als eine Nachricht."
+      },
+      "state": {
+        "noDevice": {
+          "title": "Keine persönliche Nummer verbunden",
+          "message": "Gruppen gehören zu einer persönlichen WhatsApp-Nummer. Verbinden Sie zuerst eine.",
+          "connect": "Nummer verbinden"
+        },
+        "gateOff": {
+          "title": "Für diesen Arbeitsbereich nicht verfügbar",
+          "message": "Die inoffizielle WhatsApp-Verbindung ist für diesen Arbeitsbereich nicht mehr aktiviert, daher können Gruppen nicht verwendet werden."
+        },
+        "denied": {
+          "title": "Sie können keine Gruppen sehen",
+          "message": "Ihre Rolle umfasst nicht das Lesen von Gruppen persönlicher Nummern. Fragen Sie einen Admin Ihres Arbeitsbereichs."
+        },
+        "offline": {
+          "not_connected": {
+            "title": "Diese Nummer ist offline",
+            "message": "Die Gruppen unten entsprechen dem letzten gespeicherten Stand. Verbinden Sie die Nummer, um sie zu ändern."
+          },
+          "worker_unavailable": {
+            "title": "Der Verbindungsdienst ist ausgelastet",
+            "message": "Die Nummer ist verknüpft, aber gerade hält keine Instanz ihre Sitzung. Die Gruppen unten entsprechen dem letzten gespeicherten Stand. Versuchen Sie es in einigen Minuten erneut."
+          },
+          "open": "Diese Nummer öffnen"
+        },
+        "rateLimited": {
+          "title": "Gruppenaktionen sind pausiert",
+          "message": "Zum Schutz dieser Nummer vor WhatsApp-Limits warten neue Gruppenaktionen.",
+          "countdown": "Erneut versuchen in {time}"
+        }
+      },
+      "create": {
+        "open": "Gruppe erstellen",
+        "title": "Gruppe erstellen",
+        "risk": "Gruppen erstellen und Personen hinzufügen sind die Aktionen, die WhatsApp am genauesten beobachtet. Fügen Sie nur Personen hinzu, die Sie kennen und die damit rechnen, und erstellen Sie nur wenige Gruppen pro Tag. WhatsApp kann diese Nummer einschränken.",
+        "subject": "Gruppenname",
+        "subjectHint": "Bis zu 60 Zeichen.",
+        "numbers": "Hinzuzufügende Personen",
+        "numbersHint": "Telefonnummern mit Ländervorwahl, eine pro Zeile oder durch Kommas getrennt. Vorerst bis zu {max}; weitere können Sie später hinzufügen.",
+        "numbersPlaceholder": "+919876543210\n+14155550123",
+        "description": "Beschreibung (optional)",
+        "descriptionHint": "Bis zu {max} Zeichen.",
+        "counted": "{count} von {max} Nummern",
+        "duplicates": "{count, plural, one {# Duplikat ignoriert} other {# Duplikate ignoriert}}",
+        "invalid": "Keine Telefonnummer: {numbers}",
+        "selfIgnored": "Diese Nummer wird von WhatsApp selbst hinzugefügt und wurde aus der Liste entfernt.",
+        "overCap": "Fügen Sie höchstens {max} Nummern auf einmal hinzu.",
+        "readNotice": "Den vollständigen Risikohinweis lesen",
+        "acknowledge": "Ich verstehe, dass das Erstellen einer Gruppe und das Hinzufügen von Personen dazu führen können, dass WhatsApp diese Nummer einschränkt.",
+        "offlineHint": "Verbinden Sie diese Nummer, um eine Gruppe zu erstellen.",
+        "submit": "Gruppe erstellen",
+        "submitting": "Wird erstellt",
+        "created": "Gruppe erstellt: {name}",
+        "resultSummary": "{ok, plural, =0 {Niemand wurde hinzugefügt.} one {# Person wurde hinzugefügt.} other {# Personen wurden hinzugefügt.}} {failed, plural, =0 {} one {# konnte nicht hinzugefügt werden.} other {# konnten nicht hinzugefügt werden.}}",
+        "descriptionNotSet": "Die Gruppe existiert, aber WhatsApp hat die Beschreibung nicht akzeptiert. Bearbeiten Sie die Gruppe, um es erneut zu versuchen."
+      },
+      "outcome": {
+        "someone": "Ein Mitglied",
+        "done": "Fertig",
+        "already_member": "Bereits in der Gruppe.",
+        "not_member": "Nicht in der Gruppe.",
+        "not_on_whatsapp": "Diese Nummer ist nicht bei WhatsApp.",
+        "privacy_blocked": "Wegen ihrer Datenschutzeinstellungen kann diese Nummer sie nicht hinzufügen. Senden Sie ihnen stattdessen den Einladungslink.",
+        "not_allowed": "WhatsApp erlaubt dies für diese Person nicht.",
+        "group_full": "Die Gruppe ist voll.",
+        "failed": "WhatsApp hat diese Person nicht akzeptiert."
+      },
+      "edit": {
+        "title": "Gruppe bearbeiten",
+        "saved": "Gruppe aktualisiert.",
+        "saving": "Wird gespeichert",
+        "save": "Speichern",
+        "choosePicture": "Bild auswählen",
+        "pictureHint": "JPEG oder PNG, bis zu {mb} MB.",
+        "pictureType": "Verwenden Sie ein JPEG- oder PNG-Bild.",
+        "pictureSize": "Das Bild ist größer als {mb} MB.",
+        "subject": "Gruppenname",
+        "description": "Beschreibung",
+        "settings": "Einstellungen",
+        "announce": "Nur Admins dürfen Nachrichten senden",
+        "announceHint": "Mitglieder können lesen, aber nicht schreiben.",
+        "restrict": "Nur Admins dürfen Gruppeninfos bearbeiten",
+        "restrictHint": "Name, Beschreibung und Bild.",
+        "approval": "Admins genehmigen neue Mitglieder",
+        "approvalHint": "Personen, die den Einladungslink nutzen, warten auf Genehmigung.",
+        "addMode": "Nur Admins dürfen Mitglieder hinzufügen",
+        "addModeHint": "Andere Mitglieder können keine Personen hinzufügen.",
+        "offline": "Diese Nummer ist offline, daher kann nichts gespeichert werden.",
+        "removePicture": "Bild entfernen",
+        "keepPicture": "Bild behalten"
+      },
+      "members": {
+        "title": "Mitglieder von {name}",
+        "readOnly": {
+          "left": "Diese Nummer hat die Gruppe verlassen: Die Liste entspricht dem letzten gespeicherten Stand und kann nicht geändert werden.",
+          "offline": "Diese Nummer ist offline: Die Liste entspricht dem letzten gespeicherten Stand.",
+          "notAdmin": "Diese Nummer ist kein Admin: Sie können die Liste lesen, aber nicht ändern."
+        },
+        "held": "Gruppenaktionen sind kurz pausiert. Versuchen Sie es erneut, wenn der Countdown abgelaufen ist.",
+        "add": {
+          "label": "Personen hinzufügen",
+          "hint": "Telefonnummern mit Ländervorwahl, eine pro Zeile oder durch Kommas getrennt. Höchstens {max} auf einmal.",
+          "placeholder": "+919876543210",
+          "counted": "{count} von {max} Nummern",
+          "invalid": "Keine Telefonnummer: {numbers}",
+          "overCap": "Fügen Sie höchstens {max} auf einmal hinzu.",
+          "risk": "Das Hinzufügen von Personen, die Sie nicht kennen, ist ein häufiger Grund, warum WhatsApp eine Nummer einschränkt.",
+          "adding": "Wird hinzugefügt",
+          "submit": "Hinzufügen"
+        },
+        "done": {
+          "add": "{count, plural, one {# Person hinzugefügt.} other {# Personen hinzugefügt.}}",
+          "remove": "{count, plural, one {# Person entfernt.} other {# Personen entfernt.}}",
+          "promote": "{count, plural, one {# Person ist jetzt Admin.} other {# Personen sind jetzt Admins.}}",
+          "demote": "{count, plural, one {# Person ist kein Admin mehr.} other {# Personen sind keine Admins mehr.}}"
+        },
+        "result": "{ok, plural, =0 {Niemand wurde geändert.} one {# Person wurde geändert.} other {# Personen wurden geändert.}} {failed, plural, =0 {} one {# nicht.} other {# nicht.}}",
+        "search": "Mitglieder suchen",
+        "searchPlaceholder": "Name oder Nummer",
+        "total": "{count, plural, one {# Mitglied} other {# Mitglieder}}",
+        "noAccess": "Sie haben keine Berechtigung, die Mitglieder zu sehen.",
+        "loading": "Mitglieder werden geladen",
+        "noMatch": "Kein Mitglied passt.",
+        "empty": "Noch keine Mitglieder gespeichert.",
+        "member": "Mitglied",
+        "noNumber": "WhatsApp zeigt die Nummer dieses Mitglieds nicht an.",
+        "you": "Diese Nummer",
+        "owner": "Inhaber",
+        "admin": "Admin",
+        "promote": "Zum Admin machen",
+        "demote": "Admin entfernen",
+        "remove": "Entfernen",
+        "selected": "{count, plural, =0 {Niemand ausgewählt} one {# ausgewählt} other {# ausgewählt}}",
+        "limit": "Höchstens {max} auf einmal",
+        "removeConfirm": "{count, plural, one {# Person aus dieser Gruppe entfernen?} other {# Personen aus dieser Gruppe entfernen?}}"
+      },
+      "requests": {
+        "readOnly": {
+          "left": "Diese Nummer hat die Gruppe verlassen.",
+          "offline": "Diese Nummer ist offline: Verbinden Sie sie, um zu antworten.",
+          "notAdmin": "Diese Nummer ist kein Admin und kann diese Anfragen daher nicht beantworten."
+        },
+        "hidden": "{count, plural, one {# Person wartet auf den Beitritt.} other {# Personen warten auf den Beitritt.}}",
+        "title": "{count, plural, one {# Person wartet auf den Beitritt} other {# Personen warten auf den Beitritt}}",
+        "working": "…",
+        "approveAll": "Alle genehmigen",
+        "rejectAll": "Alle ablehnen",
+        "loading": "Anfragen werden geladen",
+        "none": "Keine Anfragen anzuzeigen.",
+        "someone": "Jemand",
+        "approve": "Genehmigen",
+        "reject": "Ablehnen",
+        "approved": "{count, plural, one {# Person genehmigt.} other {# Personen genehmigt.}}",
+        "rejected": "{count, plural, one {# Anfrage abgelehnt.} other {# Anfragen abgelehnt.}}",
+        "someFailed": "{ok} erledigt, {failed} nicht erledigt:"
+      },
+      "link": {
+        "show": "Einladungslink",
+        "hide": "Einladungslink ausblenden",
+        "loading": "Link wird geladen",
+        "label": "Einladungslink",
+        "copy": "Kopieren",
+        "copied": "Kopiert",
+        "copyFailed": "Der Link konnte nicht kopiert werden. Markieren Sie ihn und kopieren Sie ihn von Hand.",
+        "newLink": "Neuer Link",
+        "reset": "Ein neuer Einladungslink wurde erstellt. Der alte funktioniert nicht mehr.",
+        "confirmTitle": "Neuen Einladungslink erstellen?",
+        "confirmMessage": "Der alte Link funktioniert sofort nicht mehr. Wer ihn hat, kann damit nicht mehr beitreten.",
+        "confirmButton": "Neuen Link erstellen"
+      },
+      "join": {
+        "open": "Per Einladungslink beitreten",
+        "title": "Einer Gruppe per Einladungslink beitreten",
+        "risk": "Der Beitritt zu Gruppen über Links ist die Aktion, wegen der WhatsApp am häufigsten Nummern einschränkt. Diese Nummer kann das nur wenige Male pro Tag tun. Treten Sie nur Gruppen bei, die Sie kennen.",
+        "invite": "Einladungslink",
+        "inviteHint": "Ein chat.whatsapp.com-Link oder nur dessen Code.",
+        "invalid": "Das ist kein WhatsApp-Einladungslink oder -Code.",
+        "lookUp": "Nachschlagen",
+        "lookingUp": "Wird nachgeschlagen",
+        "submit": "Beitreten",
+        "joining": "Wird beigetreten",
+        "joined": "Der Gruppe beigetreten. Sie erscheint in wenigen Sekunden in der Liste.",
+        "requested": "Anfrage gesendet. Ein Admin der Gruppe muss sie genehmigen.",
+        "alreadyMember": "Diese Nummer ist bereits in dieser Gruppe.",
+        "approvalRequired": "Ein Admin muss den Beitritt genehmigen.",
+        "acknowledge": "Ich verstehe, dass der Beitritt zu Gruppen per Link dazu führen kann, dass WhatsApp diese Nummer einschränkt.",
+        "offline": "Verbinden Sie diese Nummer, um einer Gruppe beizutreten."
+      },
+      "confirm": {
+        "leaveTitle": "Diese Gruppe verlassen?",
+        "leaveMessage": "Diese Nummer verlässt {name}. Ohne Einladung können Sie von hier aus nicht wieder beitreten. Die Gruppe und ihre Nachrichten bleiben schreibgeschützt im Posteingang.",
+        "leaveConfirm": "Gruppe verlassen"
+      },
+      "notice": {
+        "left": "Diese Nummer hat die Gruppe verlassen."
+      }
+    }
+  }
+}

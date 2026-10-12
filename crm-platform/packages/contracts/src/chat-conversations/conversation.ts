@@ -130,6 +130,52 @@ export const serviceWindowSchema = z.object({
 });
 export type ServiceWindow = z.infer<typeof serviceWindowSchema>;
 
+/**
+ * A thread of a WhatsApp group on a personal (linked) number: what the composer needs to know before it lets anyone write.
+ * `left`: the number left or was removed, so the thread is read-only (sends are refused with `WA_GROUP_LEFT`). `announceOnly`: only admins
+ * may write and this number is not one (`WA_GROUP_ANNOUNCE_ONLY`). `canSend` is false when either is true. `announce` and `isAdmin` are the
+ * two facts behind `announceOnly`, from the last directory sync.
+ */
+export const conversationPersonalGroupSchema = z.object({
+  /** The group's bare WhatsApp id (the part after `g:` in `peerKey`). */
+  groupId: z.string(),
+  left: z.boolean(),
+  announce: z.boolean(),
+  isAdmin: z.boolean(),
+  announceOnly: z.boolean(),
+  canSend: z.boolean(),
+  /** Members at the last sync (0 until the directory has read the group). */
+  memberCount: z.number().int().nonnegative(),
+});
+export type ConversationPersonalGroup = z.infer<typeof conversationPersonalGroupSchema>;
+
+/** One member offered by the composer's @mention picker (`GET /inbox/conversations/:id/group-members`). */
+export const conversationGroupMemberSchema = z.object({
+  /** WhatsApp's id for the member: what `mentions[].jid` of a send takes (may be a `...@lid` id). */
+  jid: z.string(),
+  name: z.string().nullable(),
+  /** E.164 (`+digits`); null for a member WhatsApp shows only by an anonymous id. */
+  phone: z.string().nullable(),
+  admin: z.enum(['admin', 'superadmin']).nullable(),
+});
+export type ConversationGroupMember = z.infer<typeof conversationGroupMemberSchema>;
+
+export const listConversationGroupMembersQuerySchema = z.object({
+  /** Matches a name or the digits of a number. */
+  q: z.string().trim().max(100).optional(),
+  limit: z.coerce.number().int().min(1).max(200).default(50),
+});
+export type ListConversationGroupMembersQuery = z.infer<
+  typeof listConversationGroupMembersQuerySchema
+>;
+
+export const conversationGroupMembersSchema = z.object({
+  members: z.array(conversationGroupMemberSchema),
+  /** Every member of the group, whatever the filter. */
+  total: z.number().int().nonnegative(),
+});
+export type ConversationGroupMembers = z.infer<typeof conversationGroupMembersSchema>;
+
 export const conversationDetailSchema = conversationSummarySchema.extend({
   /** What the channel can do, so the composer offers only what will be accepted. */
   capabilities: channelCapabilitiesSchema,
@@ -139,6 +185,8 @@ export const conversationDetailSchema = conversationSummarySchema.extend({
   waitingSince: z.string().datetime().nullable(),
   firstResponseAt: z.string().datetime().nullable(),
   resolvedAt: z.string().datetime().nullable(),
+  /** Set only for a thread of a group on a personal number (peer key `g:<id>` on a `whatsapp_qr` channel). */
+  personalGroup: conversationPersonalGroupSchema.nullable().optional(),
   /** Placeholder for the SLA domain: the due times of the current turn. */
   sla: z.object({
     firstResponseDueAt: z.string().datetime().nullable(),

@@ -16,6 +16,7 @@ import {
   channelListResponseSchema,
   channelResponseSchema,
   conversationEventListResponseSchema,
+  conversationGroupMembersSchema,
   conversationListResponseSchema,
   conversationNoteSchema,
   conversationSummarySchema,
@@ -95,6 +96,13 @@ export const inboxApi = {
       body: input,
       schema: messageResponseSchema,
       idempotencyKey: input.clientMessageId,
+    }),
+  /** The members of a personal-number group thread, for the composer's @mention picker (read from the directory; `q` is a name or number). */
+  groupMembers: (conversationId: string, q: string, signal?: AbortSignal) =>
+    apiFetch(`/inbox/conversations/${conversationId}/group-members`, {
+      query: { q: q || undefined, limit: 20 },
+      schema: conversationGroupMembersSchema,
+      signal,
     }),
   /** The approved templates the conversation's WhatsApp number can send (the picker of the composer). */
   templates: (conversationId: string, q: string, signal?: AbortSignal) =>
