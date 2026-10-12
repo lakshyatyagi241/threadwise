@@ -104,7 +104,7 @@
       "unavailable": "Dieses Postfach ist getrennt oder muss zuerst erneut verbunden werden.",
       "sendRefused": "Google hat das Senden dieser E-Mail abgelehnt. Prüfen Sie die Adressen und die Größe und versuchen Sie es erneut.",
       "wrongAccount": "Das ist ein anderes Google-Konto als das dieses Postfachs. Melden Sie sich mit derselben Adresse an.",
-      "locked": "Das E-Mail-Add-on ist nicht Teil Ihres Tarifs.",
+      "locked": "Die E-Mail-Integration ist nicht Teil Ihres Tarifs.",
       "changed": "Dieses Postfach wurde an anderer Stelle geändert. Die Liste wurde neu geladen, versuchen Sie es erneut."
     },
     "guide": {

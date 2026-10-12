@@ -1,4 +1,5 @@
 import type { GoogleMailError } from '../../infra/providers/channel-email';
+import type { MailDriverError } from './drivers/mail-driver';
 
 /**
  * The pure decisions of a mailbox sync (TW-MAIL-021), apart from the I/O so they can be tested to the corner.
@@ -82,3 +83,9 @@ export function planFailure(err: GoogleMailError): FailurePlan {
 
 /** The sweeper picks a mailbox in `error` again only after this long, so a broken one is not hammered every minute. */
 export const ERROR_BACKOFF_MINUTES = 5;
+
+/** What a driver's failure means for the mailbox row and for the job (the driver already wrote the words): outages retry, refusals do not. */
+export const planDriverFailure = (err: MailDriverError): FailurePlan => ({
+  message: err.message,
+  retry: err.retryable,
+});

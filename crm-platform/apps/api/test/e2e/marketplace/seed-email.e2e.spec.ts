@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { recipeSchema, validateMarketManifest } from '@crm/contracts';
 import { PlanEntitlementService } from '../../../src/modules/plans-subscriptions-trials';
 import { runSeedEmail } from '../../../src/modules/marketplace/cli/seed-email.runner';
 import { parseArgs } from '../../../src/modules/marketplace/cli/seed-email.args';
@@ -85,6 +86,8 @@ describe('seed:email on a fresh database', () => {
   it('the migration seeded the draft listing, its version, the scopes and the plan defaults', async () => {
     const app = await one<{
       kind: string;
+      connector_type: string | null;
+      category: string;
       first_party: boolean;
       pricing_model: string;
       purchasable: boolean;
@@ -92,10 +95,13 @@ describe('seed:email on a fresh database', () => {
       grandfather_existing: boolean;
       name: string;
     }>(
-      `SELECT kind, first_party, pricing_model, purchasable, grants_plan_features, grandfather_existing, name FROM marketplace_apps WHERE slug = 'email'`,
+      `SELECT a.kind, a.connector_type, c.kind || '/' || c.slug AS category, a.first_party, a.pricing_model, a.purchasable, a.grants_plan_features, a.grandfather_existing, a.name
+         FROM marketplace_apps a JOIN marketplace_categories c ON c.id = a.category_id WHERE a.slug = 'email'`,
     );
     expect(app).toMatchObject({
-      kind: 'mini_app',
+      kind: 'integration',
+      connector_type: 'client',
+      category: 'integration/messaging-and-email',
       first_party: true,
       pricing_model: 'paid_monthly',
       purchasable: true,
@@ -105,12 +111,22 @@ describe('seed:email on a fresh database', () => {
     });
     const v = (
       await h.owner.query(
-        `SELECT version, status, scopes FROM marketplace_app_versions WHERE app_id = (SELECT id FROM marketplace_apps WHERE slug = 'email')`,
+        `SELECT version, status, scopes, manifest, recipe FROM marketplace_app_versions WHERE app_id = (SELECT id FROM marketplace_apps WHERE slug = 'email')`,
       )
     ).rows;
     expect(v).toHaveLength(1);
     expect(v[0]).toMatchObject({ version: '1.0.0', status: 'draft' });
     expect(v[0].scopes).toEqual(['email.read', 'email.write']);
+    expect(v[0].manifest).toMatchObject({
+      kind: 'integration',
+      category: 'messaging-and-email',
+      connector: { type: 'client' },
+      surfaces: [],
+    });
+    expect(v[0].recipe).toMatchObject({ connector: { type: 'client' } });
+    // the stored documents are valid for the new kind
+    expect(validateMarketManifest(v[0].manifest).ok).toBe(true);
+    expect(recipeSchema.safeParse(v[0].recipe).success).toBe(true);
 
     // A fresh database has no plan rows, so the migration's two UPDATEs run here against a plan row of this test.
     await h.owner.query(
@@ -127,6 +143,46 @@ describe('seed:email on a fresh database', () => {
     expect(plan.features).toMatchObject({ analytics: true, email_channel: false });
     expect(plan.limits).toMatchObject({ users: 3, email_mailboxes: 3 });
     await h.owner.query(`DELETE FROM plans WHERE slug = 'email_seed_test'`);
+  });
+
+  it('the integration migration is idempotent: re-running it changes nothing, and converts a mini app listing in place', async () => {
+    const sqlText = readFileSync(
+      resolve(
+        __dirname,
+        '../../../../../packages/db/migrations/20261119120000_mkt_email_integration.sql',
+      ),
+      'utf8',
+    );
+    const snapshot = () =>
+      one<{ a: string; v: string; n: string }>(
+        `SELECT (SELECT row_to_json(a)::text FROM (SELECT kind, category_id, connector_type, tagline, listing, status, row_version FROM marketplace_apps WHERE slug = 'email') a) AS a,
+                (SELECT string_agg(manifest::text || coalesce(recipe::text, ''), '|' ORDER BY id) FROM marketplace_app_versions WHERE app_id = (SELECT id FROM marketplace_apps WHERE slug = 'email')) AS v,
+                (SELECT count(*) FROM marketplace_apps WHERE slug = 'email') AS n`,
+      );
+    const before = await snapshot();
+    await h.owner.query(sqlText);
+    expect(await snapshot()).toEqual(before);
+
+    // put the listing back the way 20261118100100 left it, then run the migration again: it is converted in place
+    await h.owner.query(`
+      UPDATE marketplace_apps SET kind = 'mini_app', connector_type = NULL,
+        category_id = (SELECT id FROM marketplace_categories WHERE kind = 'mini_app' AND slug = 'inbox-and-chat'),
+        listing = '{"longDescription":"Connect one or more Gmail or Google Workspace mailboxes with a sign-in popup. Old text."}'::jsonb
+      WHERE slug = 'email'`);
+    await h.owner.query(`
+      UPDATE marketplace_app_versions SET recipe = NULL,
+        manifest = jsonb_set(jsonb_set(manifest, '{kind}', '"mini_app"'), '{surfaces}', '[{"type":"settings_page","key":"email","label":"Email"}]')
+                   - 'connector'
+      WHERE app_id = (SELECT id FROM marketplace_apps WHERE slug = 'email')`);
+    await h.owner.query(sqlText);
+    const after = await snapshot();
+    expect(Number(after.n)).toBe(1);
+    expect(after.a).toContain('"kind":"integration"');
+    expect(after.a).toContain('"connector_type":"client"');
+    expect(after.a).toContain('from Settings > Integrations');
+    expect(after.v).toContain('"kind": "integration"');
+    // the operator's own price and status survive
+    expect(await listing()).toMatchObject({ status: 'draft', price_amount: null });
   });
 
   it('--dry-run reports the plan and writes nothing', async () => {

@@ -18,7 +18,7 @@ Plan: [plan/channel-email-build.md](../plan/channel-email-build.md). Inventory: 
 
 ## Tables read or written
 
-`mail_mailboxes` (owned; RLS enabled + forced; sealed tokens, `history_id`, `last_error`, `channel_uuid` -> `channels (org_id, uuid)`),
+`mail_mailboxes` (owned; RLS enabled + forced; sealed tokens, `sync_cursor` (jsonb; Gmail `{historyId}`), `connection_enc`, `push_state`, `last_error`, `channel_uuid` -> `channels (org_id, uuid)`),
 `channels` (kind `email`, through `ExternalChannelIngest.sync`; external id = mailbox uuid), `conversations` / `messages` / `message_ledger` (through
 `ExternalChannelIngest.inbound`; ledger key = Gmail message id), `contacts` (linked by email identity through the same call), `audit_log` (module
 `mail_mailboxes`), `event_outbox`, `org_plan_state` / `plans` (feature `email_channel`, limit `email_mailboxes`), `platform_settings` (group
@@ -39,7 +39,7 @@ No SECURITY DEFINER lookup: the public callback carries workspace and admin in i
 Queue `mail-sync` (`QUEUES.MAIL_SYNC`): one job per mailbox, job id `mail-sync-<mailbox uuid>` (never queued twice), 3 attempts with 15 s exponential
 backoff, removed on completion. Producers: `MailSyncPublisher` (the sweep, the connect callback, Sync now). Consumer: `MailSyncProcessor`
 (concurrency 4), registered only by `ChannelEmailWorkerModule` (imported by `WorkersModule`). `MailSyncSweep` runs every 60 s in the worker: connected
-mailboxes (and `error` ones after 5 minutes) of workspaces that own `email_channel`, and only while the platform has a Google client.
+mailboxes (and `error` ones after 5 minutes) of workspaces that own `email_channel`, and only for providers the platform has set up (`MailDriverRegistry`, see "Phase 2 seams" in plan/channel-email-build.md).
 
 ## Outbox events emitted
 
@@ -59,4 +59,4 @@ no tenant, no secret of its own.
   `contactIdentity` / `meta.email` / `history`, `outboundEnvelope.email` (`to`, `cc`, `bcc`, `subject`, `inReplyTo`, `references`, `threadId`),
   `EmailMessageAccess.readable` (attachment visibility).
 - infra/queue: the `MAIL_SYNC` queue. tools/auth-audit: the callback in `public-routes.json`.
-- Marketplace app `email` and the `googleMail` settings group are the add-on packaging's.
+- Marketplace app `email` and the `googleMail` settings group are the integration packaging's (a Marketplace integration, Settings > Integrations tile gated by `mail.mailboxes.read` + plan feature `email_channel`, hidden `/email` nav entry for the plan paywall).

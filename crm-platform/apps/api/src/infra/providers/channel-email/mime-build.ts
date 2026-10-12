@@ -14,6 +14,10 @@ export interface OutboundMime {
   inReplyTo: string | null;
   /** The thread's Message-IDs oldest first, without brackets. */
   references: string[];
+  /** The HTML body (signature already merged). Absent = the escaped text with `<br>`. */
+  html?: string | null;
+  /** Files that go out with the mail. */
+  attachments?: Array<{ name: string; mime: string; bytes: Buffer }>;
   /** Headers that mark the mail as ours, for a retried send to find it again. */
   headers?: Record<string, string>;
 }
@@ -45,11 +49,20 @@ export function buildMime(input: OutboundMime): Promise<Buffer> {
     bcc: input.bcc.map(oneLine),
     subject: oneLine(input.subject),
     text: input.text,
-    html: textToHtml(input.text),
+    html: input.html ?? textToHtml(input.text),
     messageId: bracket(input.messageId),
     ...(input.inReplyTo ? { inReplyTo: bracket(input.inReplyTo) } : {}),
     ...(references.length ? { references: references.map(bracket) } : {}),
     headers: input.headers ?? {},
+    ...(input.attachments?.length
+      ? {
+          attachments: input.attachments.map((a) => ({
+            filename: oneLine(a.name),
+            content: a.bytes,
+            contentType: a.mime,
+          })),
+        }
+      : {}),
     textEncoding: 'quoted-printable',
   });
   const mail = composer.compile();

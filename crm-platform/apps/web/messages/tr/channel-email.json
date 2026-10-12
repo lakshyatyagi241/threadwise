@@ -104,7 +104,7 @@
       "unavailable": "Bu posta kutusunun bağlantısı kesilmiş veya önce yeniden bağlanması gerekiyor.",
       "sendRefused": "Google bu e-postayı göndermeyi reddetti. Adresleri ve boyutu kontrol edip tekrar deneyin.",
       "wrongAccount": "Bu, posta kutusuna ait olandan farklı bir Google hesabı. Aynı adresle oturum açın.",
-      "locked": "E-posta eklentisi planınıza dahil değil.",
+      "locked": "E-posta entegrasyonu planınıza dahil değil.",
       "changed": "Bu posta kutusu başka bir yerde değiştirildi. Liste yeniden yüklendi, tekrar deneyin."
     },
     "guide": {

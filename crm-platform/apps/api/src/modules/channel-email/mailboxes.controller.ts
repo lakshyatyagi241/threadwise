@@ -12,8 +12,10 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
+  connectImapMailboxSchema,
   startMailboxConnectSchema,
   updateMailboxSchema,
+  type ConnectImapMailboxInput,
   type StartMailboxConnectInput,
   type UpdateMailboxInput,
 } from '@crm/contracts';
@@ -23,8 +25,27 @@ import { RequirePlanFeature } from '../plans-subscriptions-trials';
 import { MailConnectService } from './mail-connect.service';
 import { MailboxesService } from './mailboxes.service';
 
+@ApiTags('email')
+@ActorKinds('user')
+@RequirePlanFeature('email_channel')
+@Controller({ path: 'email/providers', version: '2' })
+export class MailProvidersController {
+  constructor(private readonly mailboxes: MailboxesService) {}
+
+  @Get()
+  @RequirePermission('mail.mailboxes.read')
+  @ApiOperation({
+    summary: 'The email providers a mailbox can be connected with',
+    description:
+      'Each provider with how it is connected (`oauth` = sign-in popup, `password` = server settings and password) and whether the platform has set it up (`ready`, with the reason when not).',
+  })
+  list() {
+    return this.mailboxes.providers();
+  }
+}
+
 /**
- * Gmail mailboxes of the workspace (TW-MAIL-019 to 023, 028). The whole channel is the `email_channel` plan feature, reads included.
+ * Mailboxes of the workspace (TW-MAIL-019 to 023, 028). The whole channel is the `email_channel` plan feature, reads included.
  * Completing a connection is the public callback (`MailCallbackController`).
  */
 @ApiTags('email')
@@ -52,13 +73,26 @@ export class MailboxesController {
   @HttpCode(HttpStatus.OK)
   @RequirePermission('mail.mailboxes.manage')
   @ApiOperation({
-    summary: 'Start connecting a Gmail mailbox',
+    summary: 'Start connecting a mailbox by sign-in (Gmail, Microsoft 365)',
     description:
-      "Returns Google's consent URL (gmail.readonly + gmail.send, offline access) carrying a signed state good for ten minutes and bound to this workspace and admin. The browser goes there; Google then calls the public callback, which redirects back with `?email=<outcome>`. " +
-      'Send `mailboxId` to reconnect an existing mailbox. 422 MAIL_NOT_CONFIGURED without platform credentials; 422 MAIL_MAILBOX_LIMIT at the plan limit.',
+      "Returns the provider's consent URL (Gmail: gmail.readonly + gmail.send, offline access) for `provider` (default `google`), carrying a signed state good for ten minutes and bound to this workspace and admin. The browser goes there; Google then calls the public callback, which redirects back with `?email=<outcome>`. " +
+      'Send `mailboxId` to reconnect an existing mailbox. 422 MAIL_NOT_CONFIGURED without platform credentials; 422 MAIL_MAILBOX_LIMIT at the plan limit; 422 MAIL_PROVIDER_UNSUPPORTED for a provider that is not a sign-in one; 422 MAIL_PERSONAL_DISABLED for `scope: personal` while the workspace has not enabled personal mailboxes.',
   })
   start(@Body(zodPipe(startMailboxConnectSchema)) body: StartMailboxConnectInput) {
     return this.connect.start(body);
+  }
+
+  @Post('connect-imap')
+  @HttpCode(HttpStatus.CREATED)
+  @RequirePermission('mail.mailboxes.manage')
+  @ApiOperation({
+    summary: 'Connect an IMAP/SMTP mailbox with its server settings and password',
+    description:
+      'Both logins are verified before anything is stored: 422 MAIL_IMAP_AUTH_FAILED / MAIL_SMTP_AUTH_FAILED for a refused password, 422 MAIL_IMAP_CONNECT_FAILED for a server that cannot be reached, 422 MAIL_PROVIDER_UNSUPPORTED while the IMAP provider is not installed. The password is sealed and never returned. Send `mailboxId` to renew the login of an existing IMAP mailbox.',
+  })
+  async connectImap(@Body(zodPipe(connectImapMailboxSchema)) body: ConnectImapMailboxInput) {
+    const row = await this.connect.connectWithPassword(body);
+    return this.mailboxes.get(row.uuid);
   }
 
   @Patch(':id')

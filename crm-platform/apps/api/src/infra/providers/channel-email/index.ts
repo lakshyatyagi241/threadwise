@@ -7,3 +7,6 @@ export * from './mime-build';
 export * from './mime-words';
 export * from './html-sanitize';
 export * from './automated';
+export * from './mail-types';
+export * from './thread-key';
+export * from './gmail-normalise';

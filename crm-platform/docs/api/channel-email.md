@@ -1,7 +1,7 @@
 # Email channel API (Gmail)
 
 Everything is under `/v2`, signed in as a user. A mailbox is addressed by its uuid. No response ever carries a token, a scope list or the sync
-cursor. The Email channel is the paid add-on **Email (Gmail)** (plan feature `email_channel`, limit `email_mailboxes`); the platform operator
+cursor. Email is the paid first-party Marketplace **integration** **Email (Gmail)** (kind `integration`, category Messaging and email; plan feature `email_channel`, limit `email_mailboxes`; its tile is in Settings > Integrations); the platform operator
 gives the platform a Google OAuth client first ([runbooks/google-mail-setup.md](../runbooks/google-mail-setup.md)).
 
 Gates, in this order on every mailbox route: sign-in, the permission, the plan feature `email_channel` (422 `PLAN_FEATURE_LOCKED` on every route,
@@ -9,14 +9,16 @@ reads included), then the body is validated. The public OAuth callback and the a
 
 ## Mailboxes (TW-MAIL-019 to 023, 028)
 
-| Method and path                     | Permission              | What it does                                                                                          |
-| ----------------------------------- | ----------------------- | ----------------------------------------------------------------------------------------------------- |
-| `GET /email/mailboxes`              | `mail.mailboxes.read`   | The workspace's mailboxes (disconnected ones included), the plan limit, use and `providerReady`       |
-| `POST /email/mailboxes/connect`     | `mail.mailboxes.manage` | Start the Google consent. Returns `{ authorizeUrl }`. 200                                             |
-| `GET /public/email/google/callback` | public (signed state)   | Google's redirect. Always a 302 to the web app with `?email=<outcome>`                                |
-| `PATCH /email/mailboxes/:id`        | `mail.mailboxes.manage` | Rename `{ displayName, rowVersion }`; 409 `ROW_VERSION_CONFLICT` on a stale version                   |
-| `POST /email/mailboxes/:id/sync`    | `mail.mailboxes.manage` | Queue a sync now. 202 with the mailbox. 409 `MAIL_MAILBOX_UNAVAILABLE` if disconnected / needs reauth |
-| `DELETE /email/mailboxes/:id`       | `mail.mailboxes.manage` | Disconnect (revoke at Google, wipe tokens, keep the conversations). 204, idempotent                   |
+| Method and path                      | Permission              | What it does                                                                                                |
+| ------------------------------------ | ----------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `GET /email/mailboxes`               | `mail.mailboxes.read`   | The workspace's mailboxes (disconnected ones included), the plan limit, use and `providerReady`             |
+| `GET /email/providers`               | `mail.mailboxes.read`   | The providers a mailbox can be connected with: `[{ provider, label, kind, ready, notReadyReason }]`         |
+| `POST /email/mailboxes/connect`      | `mail.mailboxes.manage` | Start a sign-in consent (`provider`, default `google`; `scope` `shared`/`personal`). `{ authorizeUrl }`     |
+| `POST /email/mailboxes/connect-imap` | `mail.mailboxes.manage` | Connect an IMAP/SMTP mailbox by settings and password (verified first; the password is never returned). 201 |
+| `GET /public/email/google/callback`  | public (signed state)   | Google's redirect. Always a 302 to the web app with `?email=<outcome>`                                      |
+| `PATCH /email/mailboxes/:id`         | `mail.mailboxes.manage` | Rename `{ displayName, sendLimitPerHour?, rowVersion }`; 409 `ROW_VERSION_CONFLICT` on a stale version      |
+| `POST /email/mailboxes/:id/sync`     | `mail.mailboxes.manage` | Queue a sync now. 202 with the mailbox. 409 `MAIL_MAILBOX_UNAVAILABLE` if disconnected / needs reauth       |
+| `DELETE /email/mailboxes/:id`        | `mail.mailboxes.manage` | Disconnect (revoke at Google, wipe tokens, keep the conversations). 204, idempotent                         |
 
 Idempotency-Key is required on `PATCH` and `DELETE`.
 
@@ -29,6 +31,13 @@ Idempotency-Key is required on `PATCH` and `DELETE`.
   "address": "support@acme.com",
   "displayName": "Acme Support",
   "status": "connected",
+  "scope": "shared",
+  "ownerUserId": null,
+  "ownerName": null,
+  "hasSignature": false,
+  "pushActive": false,
+  "sendLimitPerHour": null,
+  "imap": null,
   "channelId": "7a6b0a3e-1d6e-4f4f-9f7a-5e1b2a9c4d22",
   "connectedAt": "2026-10-12T09:30:00.000Z",
   "lastSyncedAt": "2026-10-12T09:41:03.000Z",
@@ -79,15 +88,15 @@ POST /v2/email/mailboxes/connect
 only that Google account is accepted). The browser opens `authorizeUrl` in a popup; Google then calls the callback, which redirects to
 `<web>/<returnTo>?email=<outcome>`:
 
-| Outcome          | Meaning                                                                                                   |
-| ---------------- | --------------------------------------------------------------------------------------------------------- |
-| `connected`      | Stored (new mailbox or the same address reconnected). The first sync is queued.                           |
-| `denied`         | The person pressed Cancel on Google's screen.                                                             |
-| `missing_scope`  | They unticked read or send access. The grant is withdrawn, nothing stored.                                |
-| `limit`          | The plan's mailbox limit is reached. The grant is withdrawn.                                              |
-| `not_configured` | The platform has no Google client (switched off meanwhile).                                               |
-| `wrong_account`  | Reconnecting a mailbox but signed in with another Google account. Nothing changes.                        |
-| `failed`         | Anything else: a state that does not verify or has expired (10 minutes), no refresh token, add-on lapsed. |
+| Outcome          | Meaning                                                                                                        |
+| ---------------- | -------------------------------------------------------------------------------------------------------------- |
+| `connected`      | Stored (new mailbox or the same address reconnected). The first sync is queued.                                |
+| `denied`         | The person pressed Cancel on Google's screen.                                                                  |
+| `missing_scope`  | They unticked read or send access. The grant is withdrawn, nothing stored.                                     |
+| `limit`          | The plan's mailbox limit is reached. The grant is withdrawn.                                                   |
+| `not_configured` | The platform has no Google client (switched off meanwhile).                                                    |
+| `wrong_account`  | Reconnecting a mailbox but signed in with another Google account. Nothing changes.                             |
+| `failed`         | Anything else: a state that does not verify or has expired (10 minutes), no refresh token, integration lapsed. |
 
 Errors of the start route: 422 `MAIL_NOT_CONFIGURED`, 422 `MAIL_MAILBOX_LIMIT`, 404 for a `mailboxId` of another workspace.
 
@@ -112,7 +121,7 @@ GET /v2/email/attachments/:conversationId/:messageId/:attachmentId
 ```
 
 Permission `inbox.conversation.read` plus the inbox's own visibility rule for the conversation. The message must be in that conversation and the
-attachment must be listed in its `meta.email.attachments` (the id is never trusted as a key). Every refusal is the same 404; a lapsed add-on does
+attachment must be listed in its `meta.email.attachments` (the id is never trusted as a key). Every refusal is the same 404; a lapsed integration does
 not close it (what arrived stays readable). Served with `X-Content-Type-Options: nosniff`, `Content-Security-Policy: default-src 'none'; sandbox`,
 `Cross-Origin-Resource-Policy: same-origin`, `Cache-Control: private, max-age=300`, range requests supported. Images the HTML refers to
 (`<img src="cid:<attachment id>">`) are served `inline`, everything else as a download.

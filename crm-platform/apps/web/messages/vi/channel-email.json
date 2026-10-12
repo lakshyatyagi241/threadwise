@@ -104,7 +104,7 @@
       "unavailable": "Hộp thư này đã bị ngắt kết nối hoặc cần được kết nối lại trước.",
       "sendRefused": "Google từ chối gửi email này. Hãy kiểm tra địa chỉ và dung lượng rồi thử lại.",
       "wrongAccount": "Đó là tài khoản Google khác với hộp thư này. Hãy đăng nhập bằng đúng địa chỉ đó.",
-      "locked": "Tiện ích email không có trong gói của bạn.",
+      "locked": "Tích hợp email không có trong gói của bạn.",
       "changed": "Hộp thư này đã được thay đổi ở nơi khác. Danh sách đã được tải lại, hãy thử lại."
     },
     "guide": {

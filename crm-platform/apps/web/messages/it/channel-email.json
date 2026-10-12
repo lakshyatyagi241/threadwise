@@ -104,7 +104,7 @@
       "unavailable": "Questa casella è scollegata o deve prima essere ricollegata.",
       "sendRefused": "Google ha rifiutato di inviare questa email. Controlla gli indirizzi e la dimensione, poi riprova.",
       "wrongAccount": "Questo è un account Google diverso da quello di questa casella. Accedi con lo stesso indirizzo.",
-      "locked": "Il componente aggiuntivo email non è incluso nel tuo piano.",
+      "locked": "L'integrazione email non è inclusa nel tuo piano.",
       "changed": "Questa casella è stata modificata altrove. L’elenco è stato ricaricato, riprova."
     },
     "guide": {

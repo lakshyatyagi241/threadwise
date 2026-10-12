@@ -104,7 +104,7 @@
       "unavailable": "This mailbox is disconnected or needs to be reconnected first.",
       "sendRefused": "Google refused to send this email. Check the addresses and the size, then try again.",
       "wrongAccount": "That is a different Google account than this mailbox. Sign in with the same address.",
-      "locked": "The email add-on is not part of your plan.",
+      "locked": "The email integration is not part of your plan.",
       "changed": "This mailbox was changed somewhere else. The list has been reloaded, try again."
     },
     "guide": {

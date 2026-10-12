@@ -60,7 +60,7 @@ needs the platform's Google OAuth client and a test user (runbook) and is listed
 | TW-MAIL-026 | backend-done | Sanitised HTML, cc, headers, attachments and their download.                                                                                              |
 | TW-MAIL-027 | not built    | Rich composer, attachments out, signatures (P1, later). cc/bcc/subject extras are done.                                                                   |
 | TW-MAIL-028 | backend-done | `needs_reauth`, `error` with a reason, reconnect, Sync now.                                                                                               |
-| TW-MAIL-029 | backend-done | `GoogleMailConfig` reads the `googleMail` settings group with the env fallback; the console page is the add-on packaging's.                               |
+| TW-MAIL-029 | backend-done | `GoogleMailConfig` reads the `googleMail` settings group with the env fallback; the console page is the integration packaging's.                          |
 | TW-MAIL-030 | backend-done | Keys `mail.mailboxes.read/manage`, feature `email_channel`, limit `email_mailboxes`.                                                                      |
 
 ## Browser checks (Playwright), `/email` hub

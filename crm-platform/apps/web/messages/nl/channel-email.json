@@ -104,7 +104,7 @@
       "unavailable": "Deze mailbox is niet verbonden of moet eerst opnieuw worden verbonden.",
       "sendRefused": "Google weigerde deze e-mail te verzenden. Controleer de adressen en de grootte en probeer het opnieuw.",
       "wrongAccount": "Dat is een ander Google-account dan deze mailbox. Log in met hetzelfde adres.",
-      "locked": "De e-mailmodule maakt geen deel uit van je abonnement.",
+      "locked": "De e-mailintegratie maakt geen deel uit van je abonnement.",
       "changed": "Deze mailbox is elders gewijzigd. De lijst is opnieuw geladen, probeer het opnieuw."
     },
     "guide": {

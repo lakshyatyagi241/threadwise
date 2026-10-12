@@ -104,7 +104,7 @@
       "unavailable": "Este buzón está desconectado o primero debe reconectarse.",
       "sendRefused": "Google rechazó el envío de este correo. Revisa las direcciones y el tamaño e inténtalo de nuevo.",
       "wrongAccount": "Esa es una cuenta de Google distinta a la de este buzón. Inicia sesión con la misma dirección.",
-      "locked": "El complemento de correo no forma parte de tu plan.",
+      "locked": "La integración de correo no forma parte de tu plan.",
       "changed": "Este buzón se modificó en otro lugar. Se recargó la lista, inténtalo de nuevo."
     },
     "guide": {

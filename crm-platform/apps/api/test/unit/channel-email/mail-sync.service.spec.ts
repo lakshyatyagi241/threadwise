@@ -4,7 +4,11 @@ import {
   type GmailHistoryPage,
   type GmailListPage,
   type GmailMessage,
+  type NormalisedMail,
 } from '../../../src/infra/providers/channel-email';
+import { MailDriverError } from '../../../src/modules/channel-email/drivers/mail-driver';
+import { MailDriverRegistry } from '../../../src/modules/channel-email/drivers/mail-driver.registry';
+import { GoogleMailDriver } from '../../../src/modules/channel-email/drivers/google-mail.driver';
 import { MailboxUnavailableError } from '../../../src/modules/channel-email/mail-errors';
 import { MailSyncService } from '../../../src/modules/channel-email/mail-sync.service';
 import type { MailboxRow } from '../../../src/modules/channel-email/mailboxes.repository';
@@ -23,7 +27,11 @@ const mailbox = (over: Partial<MailboxRow> = {}): MailboxRow => ({
   accessTokenEnc: null,
   accessTokenExpiresAt: null,
   scopes: null,
-  historyId: null,
+  connectionEnc: null,
+  connectionPublic: null,
+  syncCursor: null,
+  pushState: null,
+  sendLimitPerHour: null,
   lastSyncedAt: null,
   lastError: null,
   connectedBy: null,
@@ -34,7 +42,7 @@ const mailbox = (over: Partial<MailboxRow> = {}): MailboxRow => ({
 });
 
 interface Saved {
-  historyId: string | null;
+  cursor: Record<string, unknown> | null;
   syncedAt: Date | null;
   error: string | null;
   status?: string;
@@ -75,6 +83,8 @@ function rig(row: MailboxRow, opts: { featureOn?: boolean } = {}) {
       return { id, threadId: `t-${id}` };
     },
   };
+  const registry = new MailDriverRegistry();
+  new GoogleMailDriver(gmail as never, {} as never, {} as never, registry).onModuleInit();
   const svc = new MailSyncService(
     { txAs: async (_t: unknown, fn: (tx: object) => unknown) => fn({}) } as never,
     {
@@ -84,20 +94,15 @@ function rig(row: MailboxRow, opts: { featureOn?: boolean } = {}) {
     } as never,
     {
       load: async () => row,
-      withToken: async (_o: number, _u: string, fn: (t: string, r: MailboxRow) => unknown) =>
-        fn('tok', row),
+      withAccess: async (_o: number, _u: string, fn: (a: unknown, r: MailboxRow) => unknown) =>
+        fn({ kind: 'oauth', accessToken: 'tok' }, row),
+      markNeedsReauth: async () => undefined,
     } as never,
-    gmail as never,
+    registry,
     {
-      store: async (
-        _o: number,
-        _m: unknown,
-        _t: string,
-        raw: GmailMessage,
-        o: { quiet: boolean },
-      ) => {
-        if (state.failIngest.has(raw.id)) throw new Error('boom');
-        ingested.push({ id: raw.id, quiet: o.quiet });
+      store: async (_o: number, _m: unknown, mail: NormalisedMail, o: { quiet: boolean }) => {
+        if (state.failIngest.has(mail.providerMessageId)) throw new Error('boom');
+        ingested.push({ id: mail.providerMessageId, quiet: o.quiet });
         return 'stored' as const;
       },
     } as never,
@@ -140,7 +145,11 @@ describe('TW-MAIL-021: the first sync is a quiet backfill', () => {
       { id: 'b', quiet: true },
       { id: 'c', quiet: true },
     ]);
-    expect(r.saves.at(-1)).toMatchObject({ historyId: '900', error: null, status: 'connected' });
+    expect(r.saves.at(-1)).toMatchObject({
+      cursor: { historyId: '900' },
+      error: null,
+      status: 'connected',
+    });
     expect(r.saves.at(-1)!.syncedAt).toBeInstanceOf(Date);
   });
 
@@ -151,13 +160,13 @@ describe('TW-MAIL-021: the first sync is a quiet backfill', () => {
     const res = await r.svc.sync(1, 'mb-uuid');
     expect(res).toMatchObject({ stored: 2, leftover: true });
     expect(r.ingested.map((i) => i.id)).toEqual(['a', 'b']);
-    expect(r.saves.at(-1)!.historyId).toBeNull();
+    expect(r.saves.at(-1)!.cursor).toBeNull();
   });
 });
 
 describe('TW-MAIL-021: incremental sync from the history cursor', () => {
   it('stores what was added as live mail and moves the cursor to the mailbox history id', async () => {
-    const r = rig(mailbox({ historyId: '500' }));
+    const r = rig(mailbox({ syncCursor: { historyId: '500' } }));
     r.state.historyPages = [
       { added: added(['x', 'y']), historyId: '610', lastRecordId: '609', nextPageToken: null },
     ];
@@ -168,12 +177,12 @@ describe('TW-MAIL-021: incremental sync from the history cursor', () => {
       { id: 'x', quiet: false },
       { id: 'y', quiet: false },
     ]);
-    expect(r.saves.at(-1)!.historyId).toBe('610');
+    expect(r.saves.at(-1)!.cursor).toEqual({ historyId: '610' });
   });
 
   it('follows every page, and a stopped-early run resumes after the last record it read', async () => {
     process.env.MAIL_SYNC_MAX_PAGES = '2';
-    const r = rig(mailbox({ historyId: '500' }));
+    const r = rig(mailbox({ syncCursor: { historyId: '500' } }));
     r.state.historyPages = [
       { added: added(['a']), historyId: '700', lastRecordId: '520', nextPageToken: 'n1' },
       { added: added(['b']), historyId: '700', lastRecordId: '540', nextPageToken: 'n2' },
@@ -181,11 +190,11 @@ describe('TW-MAIL-021: incremental sync from the history cursor', () => {
     const res = await r.svc.sync(1, 'mb-uuid');
     expect(res).toMatchObject({ stored: 2, leftover: false });
     expect(r.state.historyCalls.map((c) => c.pageToken)).toEqual([null, 'n1']);
-    expect(r.saves.at(-1)!.historyId).toBe('540');
+    expect(r.saves.at(-1)!.cursor).toEqual({ historyId: '540' });
   });
 
   it('a message already stored is not downloaded again (a redelivery or an overlapping run)', async () => {
-    const r = rig(mailbox({ historyId: '500' }));
+    const r = rig(mailbox({ syncCursor: { historyId: '500' } }));
     r.stored.add('x');
     r.state.historyPages = [
       { added: added(['x', 'y']), historyId: '610', lastRecordId: '609', nextPageToken: null },
@@ -196,7 +205,7 @@ describe('TW-MAIL-021: incremental sync from the history cursor', () => {
   });
 
   it('the same id twice in one run is handled once; spam and drafts are never downloaded', async () => {
-    const r = rig(mailbox({ historyId: '500' }));
+    const r = rig(mailbox({ syncCursor: { historyId: '500' } }));
     r.state.historyPages = [
       {
         added: [
@@ -216,21 +225,21 @@ describe('TW-MAIL-021: incremental sync from the history cursor', () => {
   });
 
   it('a cursor Gmail no longer keeps (404) is repaired: the last days are re-read quietly and a new cursor taken', async () => {
-    const r = rig(mailbox({ historyId: '5' }));
+    const r = rig(mailbox({ syncCursor: { historyId: '5' } }));
     r.state.historyPages = [new GoogleMailError('not_found', 404, 'notFound')];
     r.state.listPages = [page(['b', 'a'])];
     const res = await r.svc.sync(1, 'mb-uuid');
     expect(res).toMatchObject({ mode: 'repair', stored: 2 });
     expect(r.ingested.every((i) => i.quiet)).toBe(true);
-    expect(r.saves.at(-1)!.historyId).toBe('900');
+    expect(r.saves.at(-1)!.cursor).toEqual({ historyId: '900' });
   });
 });
 
 describe('TW-MAIL-028: failures are recorded, not lost', () => {
   it('an outage is recorded on the mailbox and rethrown so the queue retries with backoff', async () => {
-    const r = rig(mailbox({ historyId: '500' }));
+    const r = rig(mailbox({ syncCursor: { historyId: '500' } }));
     r.state.historyPages = [new GoogleMailError('server', 503, 'backendError')];
-    await expect(r.svc.sync(1, 'mb-uuid')).rejects.toBeInstanceOf(GoogleMailError);
+    await expect(r.svc.sync(1, 'mb-uuid')).rejects.toBeInstanceOf(MailDriverError);
     expect(r.saves.at(-1)).toMatchObject({
       status: 'error',
       error: 'Google did not answer. Syncing will retry shortly.',
@@ -238,7 +247,7 @@ describe('TW-MAIL-028: failures are recorded, not lost', () => {
   });
 
   it('a refusal that retrying cannot fix is recorded and the job ends (no retry storm)', async () => {
-    const r = rig(mailbox({ historyId: '500' }));
+    const r = rig(mailbox({ syncCursor: { historyId: '500' } }));
     r.state.historyPages = [new GoogleMailError('forbidden', 403, 'insufficientPermissions')];
     const res = await r.svc.sync(1, 'mb-uuid');
     expect(res.status).toBe('synced');
@@ -247,7 +256,7 @@ describe('TW-MAIL-028: failures are recorded, not lost', () => {
   });
 
   it('a mail that cannot be stored is counted and skipped; the cursor still advances', async () => {
-    const r = rig(mailbox({ historyId: '500' }));
+    const r = rig(mailbox({ syncCursor: { historyId: '500' } }));
     r.state.failIngest.add('bad');
     r.state.historyPages = [
       { added: added(['bad', 'good']), historyId: '610', lastRecordId: '609', nextPageToken: null },
@@ -255,14 +264,14 @@ describe('TW-MAIL-028: failures are recorded, not lost', () => {
     const res = await r.svc.sync(1, 'mb-uuid');
     expect(res).toMatchObject({ stored: 1, failed: 1 });
     expect(r.saves.at(-1)).toMatchObject({
-      historyId: '610',
+      cursor: { historyId: '610' },
       error: '1 message could not be stored and were skipped.',
       status: 'connected',
     });
   });
 
   it('a message deleted since it was listed is simply gone', async () => {
-    const r = rig(mailbox({ historyId: '500' }));
+    const r = rig(mailbox({ syncCursor: { historyId: '500' } }));
     r.state.getMessageError = new GoogleMailError('not_found', 404, 'notFound');
     r.state.historyPages = [
       { added: added(['gone']), historyId: '610', lastRecordId: '609', nextPageToken: null },
@@ -273,7 +282,7 @@ describe('TW-MAIL-028: failures are recorded, not lost', () => {
 
 describe('TW-MAIL-030: nothing is synced when it should not be', () => {
   it('a workspace without the add-on is not synced and nothing is written', async () => {
-    const r = rig(mailbox({ historyId: '500' }), { featureOn: false });
+    const r = rig(mailbox({ syncCursor: { historyId: '500' } }), { featureOn: false });
     expect(await r.svc.sync(1, 'mb-uuid')).toEqual({ status: 'skipped', reason: 'feature_off' });
     expect(r.saves).toHaveLength(0);
     expect(r.state.historyCalls).toHaveLength(0);
@@ -291,8 +300,8 @@ describe('TW-MAIL-030: nothing is synced when it should not be', () => {
   });
 
   it('a mailbox that became unusable mid-run (refresh refused) ends the run quietly', async () => {
-    const r = rig(mailbox({ historyId: '500' }));
-    (r.svc as unknown as { tokens: { withToken: () => never } }).tokens.withToken = () => {
+    const r = rig(mailbox({ syncCursor: { historyId: '500' } }));
+    (r.svc as unknown as { tokens: { withAccess: () => never } }).tokens.withAccess = () => {
       throw new MailboxUnavailableError('needs_reauth');
     };
     expect(await r.svc.sync(1, 'mb-uuid')).toEqual({ status: 'skipped', reason: 'needs_reauth' });

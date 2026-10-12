@@ -4,8 +4,8 @@ For the platform operator. Once per platform (not per workspace): every workspac
 one client. Without it, a workspace's Email hub says Google is not set up for this platform and Connect answers `MAIL_NOT_CONFIGURED`.
 
 This is a **different client from Google Calendar's** ([google-calendar-setup.md](google-calendar-setup.md)) on purpose: the Gmail scopes are
-**restricted** and the client needs Google's verification, which a calendar-only client does not. Selling the add-on (price, publish) is in
-[email-addon-operator-setup.md](email-addon-operator-setup.md); what the product does with the connection is in
+**restricted** and the client needs Google's verification, which a calendar-only client does not. Selling the integration (price, publish) is in
+[email-integration-operator-setup.md](email-integration-operator-setup.md); what the product does with the connection is in
 [docs/api/channel-email.md](../api/channel-email.md).
 
 ## 1. Google Cloud project and API
@@ -64,7 +64,7 @@ or in the environment (used for any field the console leaves empty): `GOOGLE_MAI
 `GOOGLE_OAUTH_AUTH_URL`, `GOOGLE_OAUTH_TOKEN_URL`, `GOOGLE_OAUTH_REVOKE_URL`, `GOOGLE_USERINFO_URL` and `GMAIL_API_URL` default to Google's own addresses and
 exist so a test can aim the app at a stand-in.
 
-Check: sign in to a workspace that owns the Email add-on, open the Email hub, the "not set up" notice is gone (`providerReady: true`), press **Connect**,
+Check: sign in to a workspace that owns the Email integration, open the Email hub (Settings, Integrations, Email), the "not set up" notice is gone (`providerReady: true`), press **Connect**,
 choose a test user, tick both permissions, and the mailbox appears as connected; its mail arrives within a minute.
 
 ## 6. Operating it

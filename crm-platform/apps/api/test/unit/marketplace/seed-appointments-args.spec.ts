@@ -241,7 +241,7 @@ describe('seed:email arguments and config', () => {
       feature: 'email_channel',
       grandfatherExisting: false,
       version: '1.0.0',
-      migration: '20261118100100_mkt_email_app',
+      migration: '20261119120000_mkt_email_integration',
     });
     expect(usage(EMAIL_CONFIG)).toMatch(/seed:email/);
     expect(parseEmailArgs(['--all-workspaces']).kind).toBe('error');

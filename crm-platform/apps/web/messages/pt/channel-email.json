@@ -104,7 +104,7 @@
       "unavailable": "Esta caixa de e-mail está desconectada ou precisa ser reconectada primeiro.",
       "sendRefused": "O Google recusou o envio deste e-mail. Verifique os endereços e o tamanho e tente novamente.",
       "wrongAccount": "Essa é uma conta do Google diferente da desta caixa de e-mail. Entre com o mesmo endereço.",
-      "locked": "O complemento de e-mail não faz parte do seu plano.",
+      "locked": "A integração de e-mail não faz parte do seu plano.",
       "changed": "Esta caixa de e-mail foi alterada em outro lugar. A lista foi recarregada, tente novamente."
     },
     "guide": {

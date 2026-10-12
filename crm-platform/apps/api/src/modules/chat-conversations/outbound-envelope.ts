@@ -10,6 +10,9 @@ export interface StoredEmailReply {
   cc: string[];
   bcc: string[];
   subject?: string;
+  attachmentIds?: string[];
+  signatureId?: string;
+  signature?: boolean;
 }
 
 const REFERENCES_MAX = 100;
@@ -31,6 +34,8 @@ export function emailEnvelopeOf(
   inbound: Pick<EmailMeta, 'subject' | 'from' | 'messageId' | 'references' | 'threadId'> | null,
   reply: Partial<StoredEmailReply> | null | undefined,
   threadId: string,
+  /** The user who wrote the reply (for their signature); omitted for a bot. */
+  sentBy?: number | null,
 ): OutboundEmail | null {
   if (!inbound) return null;
   const chain = [...inbound.references, inbound.messageId].filter(
@@ -46,6 +51,10 @@ export function emailEnvelopeOf(
     inReplyTo: inbound.messageId || null,
     references,
     threadId: inbound.threadId || threadId,
+    ...(reply?.attachmentIds?.length ? { attachmentIds: reply.attachmentIds } : {}),
+    ...(reply?.signatureId ? { signatureId: reply.signatureId } : {}),
+    ...(reply?.signature === false ? { signature: false } : {}),
+    ...(sentBy ? { sentBy } : {}),
   };
 }
 
@@ -179,11 +188,20 @@ export function messageFieldsOf(content: OutboundContent): {
     case 'text': {
       const extras = content.email;
       const emailReply: StoredEmailReply | null =
-        extras && (extras.cc.length > 0 || extras.bcc.length > 0 || extras.subject)
+        extras &&
+        (extras.cc.length > 0 ||
+          extras.bcc.length > 0 ||
+          extras.subject ||
+          extras.attachmentIds?.length ||
+          extras.signatureId ||
+          extras.signature === false)
           ? {
               cc: extras.cc,
               bcc: extras.bcc,
               ...(extras.subject ? { subject: extras.subject } : {}),
+              ...(extras.attachmentIds?.length ? { attachmentIds: extras.attachmentIds } : {}),
+              ...(extras.signatureId ? { signatureId: extras.signatureId } : {}),
+              ...(extras.signature === false ? { signature: false } : {}),
             }
           : null;
       return {

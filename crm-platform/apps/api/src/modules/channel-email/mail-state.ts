@@ -1,7 +1,8 @@
 import { createHmac, hkdfSync, randomBytes, timingSafeEqual } from 'node:crypto';
+import type { MailProvider, MailScope } from '@crm/contracts';
 
 /**
- * The OAuth `state` of the Google mail consent round trip (TW-MAIL-020). The callback is a public route with no session, so the state IS the
+ * The OAuth `state` of the mail consent round trip of any sign-in provider (TW-MAIL-020). The callback is a public route with no session, so the state IS the
  * session: a signed, short-lived token that names the workspace, the admin who pressed Connect and, for a reconnect, the mailbox. A callback
  * whose state does not verify is refused before any call to Google.
  *
@@ -21,6 +22,10 @@ export interface MailState {
   returnTo: string;
   /** The mailbox being reconnected, when the admin pressed Reconnect on one. */
   mailboxId: string | null;
+  /** Which provider's consent this state was minted for; the callback refuses another's. */
+  provider: MailProvider;
+  /** `personal`: the mailbox will belong to `userId`. */
+  scope: MailScope;
   nonce: string;
   /** Epoch milliseconds. */
   expiresAt: number;
@@ -39,7 +44,14 @@ const b64 = (b: Buffer | string) => Buffer.from(b).toString('base64url');
 const mac = (payload: string, key: Buffer) => createHmac('sha256', key).update(payload).digest();
 
 export function newState(
-  input: { orgId: number; userId: number | null; returnTo: string; mailboxId?: string | null },
+  input: {
+    orgId: number;
+    userId: number | null;
+    returnTo: string;
+    mailboxId?: string | null;
+    provider?: MailProvider;
+    scope?: MailScope;
+  },
   nowMs: number,
 ): MailState {
   return {
@@ -47,6 +59,8 @@ export function newState(
     userId: input.userId,
     returnTo: input.returnTo,
     mailboxId: input.mailboxId ?? null,
+    provider: input.provider ?? 'google',
+    scope: input.scope ?? 'shared',
     nonce: randomBytes(12).toString('base64url'),
     expiresAt: nowMs + STATE_TTL_SECONDS * 1000,
   };
@@ -60,6 +74,8 @@ export function signState(state: MailState, key: Buffer): string {
       u: state.userId,
       r: state.returnTo,
       m: state.mailboxId,
+      pv: state.provider,
+      sc: state.scope,
       n: state.nonce,
       e: state.expiresAt,
     }),
@@ -93,6 +109,8 @@ export function verifyState(token: string, key: Buffer, nowMs: number): StateChe
     (body.u !== null && typeof body.u !== 'number') ||
     typeof body.r !== 'string' ||
     (body.m !== null && typeof body.m !== 'string') ||
+    (body.pv !== undefined && !['google', 'microsoft', 'imap'].includes(body.pv as string)) ||
+    (body.sc !== undefined && body.sc !== 'shared' && body.sc !== 'personal') ||
     typeof body.n !== 'string' ||
     typeof body.e !== 'number'
   ) {
@@ -106,6 +124,9 @@ export function verifyState(token: string, key: Buffer, nowMs: number): StateChe
       userId: body.u as number | null,
       returnTo: body.r,
       mailboxId: body.m as string | null,
+      // A state minted before providers existed has neither: it is a Google, shared one.
+      provider: (body.pv as MailProvider | undefined) ?? 'google',
+      scope: (body.sc as MailScope | undefined) ?? 'shared',
       nonce: body.n,
       expiresAt: body.e,
     },

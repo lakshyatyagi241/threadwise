@@ -3,16 +3,14 @@ import { emailMetaSchema, type EmailMeta } from '@crm/contracts';
 import { channelEmailEnv } from '../../config/domains/channel-email.env';
 import { ChatMediaStore, displayName } from '../../infra/providers/chat-conversations/media';
 import {
-  GmailClient,
   htmlToText,
-  parseGmailMessage,
   sanitizeEmailHtml,
-  type GmailMessage,
-  type InboundAttachment,
-  type ParsedEmail,
+  type NormalisedAttachment,
+  type NormalisedMail,
 } from '../../infra/providers/channel-email';
 import type { NormalisedInbound } from '../../infra/providers/chat-conversations';
 import { ExternalChannelIngest } from '../chat-conversations';
+import { MailBounceHandler } from './mail-bounce.handler';
 import { channelAccountOf } from './mail-channel.sync';
 import type { MailboxRow } from './mailboxes.repository';
 
@@ -32,9 +30,9 @@ export const keyOfAttachmentId = (id: string): string =>
   Buffer.from(id, 'base64url').toString('utf8');
 
 /**
- * One Gmail message becomes one inbox message (TW-MAIL-021, 025, 026): parsed, its files copied to the object store, its HTML sanitised,
- * and handed to the inbox core through `ExternalChannelIngest.inbound`, on the conversation of its Gmail thread (`peerKey` = `t:<threadId>`)
- * with the sender linked as the contact by email address.
+ * One normalised mail (any provider) becomes one inbox message (TW-MAIL-021, 025, 026): its files copied to the object store, its HTML
+ * sanitised, and handed to the inbox core through `ExternalChannelIngest.inbound`, on the conversation of its thread (`peerKey` =
+ * `t:<threadKey>`) with the sender linked as the contact by email address.
  *
  * Files are stored BEFORE the message (their keys go into the message's `meta.email`), so a message the inbox then refuses as a duplicate
  * or drops has its files removed again. Redelivery is harmless: the caller skips a Gmail id already in the ledger before downloading, and
@@ -45,25 +43,25 @@ export class MailIngestService {
   private readonly logger = new Logger(MailIngestService.name);
 
   constructor(
-    private readonly gmail: GmailClient,
     private readonly media: ChatMediaStore,
     private readonly ingest: ExternalChannelIngest,
+    private readonly bounces: MailBounceHandler,
   ) {}
 
   async store(
     orgId: number,
     mailbox: MailboxRow,
-    token: string,
-    raw: GmailMessage,
+    mail: NormalisedMail,
     opts: { quiet: boolean },
   ): Promise<StoredMailOutcome> {
-    const parsed = parseGmailMessage(raw, mailbox.address);
-    if (parsed.skip) return 'skipped';
+    if (mail.skip) return 'skipped';
+    // A bounce report that was applied to the reply it is about is not a customer message (TW-MAIL-032).
+    if ((await this.bounces.inspect(orgId, mailbox, mail)) === 'consumed') return 'skipped';
 
     const stored: string[] = [];
     try {
-      const files = await this.storeFiles(orgId, token, parsed, stored);
-      const message = this.normalise(parsed, files, opts.quiet);
+      const files = await this.storeFiles(orgId, mail, stored);
+      const message = this.normalise(mail, files, opts.quiet);
       const outcome = await this.ingest.inbound(orgId, channelAccountOf(mailbox), message);
       if (outcome.outcome === 'duplicate' || outcome.outcome === 'dropped') {
         await this.removeAll(orgId, stored);
@@ -79,8 +77,7 @@ export class MailIngestService {
   /** Copies each attachment into the object store, within the size caps. Whatever cannot be stored is listed as `tooLarge` (not stored). */
   private async storeFiles(
     orgId: number,
-    token: string,
-    parsed: ParsedEmail,
+    parsed: NormalisedMail,
     storedKeys: string[],
   ): Promise<{ attachments: EmailMeta['attachments']; cid: Map<string, string> }> {
     const env = channelEmailEnv();
@@ -104,7 +101,7 @@ export class MailIngestService {
         continue;
       }
       try {
-        const bytes = await this.bytesOf(token, parsed.providerMessageId, file);
+        const bytes = await this.bytesOf(file);
         if (bytes.length === 0 || bytes.length > env.MAIL_ATTACHMENT_MAX_BYTES) {
           notStored();
           continue;
@@ -127,7 +124,7 @@ export class MailIngestService {
         attachments.push({ ...base, mime: saved.mime, size: saved.size, id, tooLarge: false });
         if (file.contentId) cid.set(file.contentId, id);
       } catch (err) {
-        // A file the upload policy refuses (an executable), or one Google would not hand over: the mail is kept, the file is noted as not stored.
+        // A file the upload policy refuses (an executable), or one the provider would not hand over: the mail is kept, the file is noted as not stored.
         this.logger.debug(
           { orgId, name: file.name, err: (err as Error).message },
           'mail attachment not stored',
@@ -138,18 +135,14 @@ export class MailIngestService {
     return { attachments, cid };
   }
 
-  private async bytesOf(
-    token: string,
-    messageId: string,
-    file: InboundAttachment,
-  ): Promise<Buffer> {
+  private async bytesOf(file: NormalisedAttachment): Promise<Buffer> {
     if (file.data) return file.data;
-    if (!file.attachmentId) return Buffer.alloc(0);
-    return this.gmail.getAttachment(token, messageId, file.attachmentId);
+    if (!file.fetch) return Buffer.alloc(0);
+    return file.fetch();
   }
 
   private normalise(
-    parsed: ParsedEmail,
+    parsed: NormalisedMail,
     files: { attachments: EmailMeta['attachments']; cid: Map<string, string> },
     quiet: boolean,
   ): NormalisedInbound {
@@ -182,13 +175,13 @@ export class MailIngestService {
       references: parsed.references.slice(-100),
       html,
       htmlTruncated,
-      threadId: parsed.threadId,
+      threadId: parsed.threadKey,
       attachments: files.attachments,
       automated: parsed.automated,
     });
     return {
       providerMessageId: parsed.providerMessageId,
-      peerKey: `t:${parsed.threadId}`,
+      peerKey: `t:${parsed.threadKey}`,
       peerName: parsed.from.name || parsed.from.address,
       kind: 'text',
       body,

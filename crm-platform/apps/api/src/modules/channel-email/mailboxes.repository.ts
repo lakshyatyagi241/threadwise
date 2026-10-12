@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
-import type { MailboxStatus } from '@crm/contracts';
+import type { MailProvider, MailScope, MailWorkspaceSettings, MailboxStatus } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 
 type Raw = Record<string, unknown>;
@@ -11,19 +11,27 @@ const d = (v: unknown): Date | null =>
 export interface MailboxRow {
   id: number;
   uuid: string;
-  provider: 'google';
+  provider: MailProvider;
   address: string;
   accountSub: string | null;
   displayName: string;
   status: MailboxStatus;
-  scope: 'shared' | 'personal';
+  scope: MailScope;
   ownerUserId: number | null;
   /** Sealed with the credentials key: only the token service opens these. */
   refreshTokenEnc: string | null;
   accessTokenEnc: string | null;
   accessTokenExpiresAt: Date | null;
   scopes: string | null;
-  historyId: string | null;
+  /** Sealed JSON (credentials key): IMAP/SMTP settings and password, or an OAuth provider's extras. Only the token service opens it. */
+  connectionEnc: string | null;
+  /** The non-secret summary of the connection (host, port, security, user name). */
+  connectionPublic: Record<string, unknown> | null;
+  /** Provider-defined sync position; null until the first sync. */
+  syncCursor: Record<string, unknown> | null;
+  /** A Gmail watch / Graph subscription; null = polling only. */
+  pushState: Record<string, unknown> | null;
+  sendLimitPerHour: number | null;
   lastSyncedAt: Date | null;
   lastError: string | null;
   connectedBy: number | null;
@@ -32,22 +40,41 @@ export interface MailboxRow {
   rowVersion: number;
 }
 
+const j = (v: unknown): Record<string, unknown> | null =>
+  v === null || v === undefined
+    ? null
+    : typeof v === 'string'
+      ? (JSON.parse(v) as Record<string, unknown>)
+      : (v as Record<string, unknown>);
+
+/** A mailbox row as the hub lists it: the row, who owns it (a personal one), whether it has a signature, and how many conversations it fed. */
+export interface MailboxListRow extends MailboxRow {
+  ownerUuid: string | null;
+  ownerName: string | null;
+  hasSignature: boolean;
+  conversationCount: number;
+}
+
 function toRow(r: Raw): MailboxRow {
   return {
     id: Number(r.id),
     uuid: r.uuid as string,
-    provider: r.provider as 'google',
+    provider: r.provider as MailProvider,
     address: r.address as string,
     accountSub: s(r.account_sub),
     displayName: r.display_name as string,
     status: r.status as MailboxStatus,
-    scope: r.scope as 'shared' | 'personal',
+    scope: r.scope as MailScope,
     ownerUserId: r.owner_user_id === null ? null : Number(r.owner_user_id),
     refreshTokenEnc: s(r.refresh_token_enc),
     accessTokenEnc: s(r.access_token_enc),
     accessTokenExpiresAt: d(r.access_token_expires_at),
     scopes: s(r.scopes),
-    historyId: s(r.history_id),
+    connectionEnc: s(r.connection_enc),
+    connectionPublic: j(r.connection_public),
+    syncCursor: j(r.sync_cursor),
+    pushState: j(r.push_state),
+    sendLimitPerHour: r.send_limit_per_hour === null ? null : Number(r.send_limit_per_hour),
     lastSyncedAt: d(r.last_synced_at),
     lastError: s(r.last_error),
     connectedBy: r.connected_by === null ? null : Number(r.connected_by),
@@ -58,13 +85,21 @@ function toRow(r: Raw): MailboxRow {
 }
 
 export interface ConnectInput {
+  provider: MailProvider;
+  scope: MailScope;
+  /** The owner of a personal mailbox; null on a shared one. */
+  ownerUserId: number | null;
   address: string;
   accountSub: string | null;
   displayName: string;
-  refreshTokenEnc: string;
-  accessTokenEnc: string;
-  accessTokenExpiresAt: Date;
-  scopes: string;
+  /** OAuth providers: the sealed refresh token and cached access token. Null for a password provider. */
+  refreshTokenEnc: string | null;
+  accessTokenEnc: string | null;
+  accessTokenExpiresAt: Date | null;
+  scopes: string | null;
+  /** The sealed connection (IMAP/SMTP settings and password; or OAuth extras) and its public summary. */
+  connectionEnc: string | null;
+  connectionPublic: Record<string, unknown> | null;
   connectedBy: number | null;
 }
 
@@ -73,15 +108,23 @@ const rows = (res: { rows: unknown[] }) => res.rows as Raw[];
 /** The workspace's connected Gmail mailboxes (`mail_mailboxes`). Every method takes the transaction the caller already opened for the tenant. */
 @Injectable()
 export class MailboxesRepository {
-  async list(tx: Tx, orgId: number): Promise<Array<MailboxRow & { conversationCount: number }>> {
+  async list(tx: Tx, orgId: number): Promise<MailboxListRow[]> {
     const res = await tx.execute(sql`
-      SELECT m.*,
+      SELECT m.*, u.uuid AS owner_uuid, u.full_name AS owner_name,
+             EXISTS (SELECT 1 FROM mail_signatures sg WHERE sg.org_id = m.org_id AND sg.mailbox_id = m.id) AS has_signature,
              (SELECT count(*) FROM conversations c JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
                WHERE ch.org_id = m.org_id AND ch.uuid = m.channel_uuid)::int AS conversation_count
         FROM mail_mailboxes m
+        LEFT JOIN users u ON u.org_id = m.org_id AND u.id = m.owner_user_id
        WHERE m.org_id = ${orgId}
        ORDER BY m.created_at, m.id`);
-    return rows(res).map((r) => ({ ...toRow(r), conversationCount: Number(r.conversation_count) }));
+    return rows(res).map((r) => ({
+      ...toRow(r),
+      ownerUuid: s(r.owner_uuid),
+      ownerName: s(r.owner_name),
+      hasSignature: r.has_signature === true,
+      conversationCount: Number(r.conversation_count),
+    }));
   }
 
   async byUuid(
@@ -108,6 +151,22 @@ export class MailboxesRepository {
     return row ? toRow(row) : undefined;
   }
 
+  /** The workspace's personal-mailbox policy, or undefined while it never saved one (the contract's defaults apply). */
+  async workspaceSettings(tx: Tx, orgId: number): Promise<MailWorkspaceSettings | undefined> {
+    const res = await tx.execute(sql`
+      SELECT personal_mailboxes_enabled, who_may_connect_personal, admins_can_read_personal, row_version
+        FROM mail_workspace_settings WHERE org_id = ${orgId}`);
+    const r = rows(res)[0];
+    if (!r) return undefined;
+    return {
+      personalMailboxesEnabled: r.personal_mailboxes_enabled === true,
+      whoMayConnectPersonal:
+        r.who_may_connect_personal as MailWorkspaceSettings['whoMayConnectPersonal'],
+      adminsCanReadPersonal: r.admins_can_read_personal === true,
+      rowVersion: Number(r.row_version),
+    };
+  }
+
   /** The mailbox an inbox channel belongs to (its channel's external id is the mailbox uuid). */
   async byChannelExternalId(
     tx: Tx,
@@ -127,10 +186,11 @@ export class MailboxesRepository {
   async insert(tx: Tx, orgId: number, c: ConnectInput): Promise<MailboxRow> {
     const res = await tx.execute(sql`
       INSERT INTO mail_mailboxes
-        (org_id, address, account_sub, display_name, status, refresh_token_enc, access_token_enc, access_token_expires_at,
-         scopes, connected_by, connected_at)
-      VALUES (${orgId}, ${c.address}::citext, ${c.accountSub}, ${c.displayName}, 'connected', ${c.refreshTokenEnc}, ${c.accessTokenEnc},
-              ${c.accessTokenExpiresAt.toISOString()}::timestamptz, ${c.scopes}, ${c.connectedBy}, now())
+        (org_id, provider, scope, owner_user_id, address, account_sub, display_name, status, refresh_token_enc, access_token_enc,
+         access_token_expires_at, scopes, connection_enc, connection_public, connected_by, connected_at)
+      VALUES (${orgId}, ${c.provider}, ${c.scope}, ${c.ownerUserId}, ${c.address}::citext, ${c.accountSub}, ${c.displayName}, 'connected',
+              ${c.refreshTokenEnc}, ${c.accessTokenEnc}, ${c.accessTokenExpiresAt ? c.accessTokenExpiresAt.toISOString() : null}::timestamptz,
+              ${c.scopes}, ${c.connectionEnc}, ${c.connectionPublic ? JSON.stringify(c.connectionPublic) : null}::jsonb, ${c.connectedBy}, now())
       RETURNING *`);
     return toRow(rows(res)[0]!);
   }
@@ -139,25 +199,31 @@ export class MailboxesRepository {
   async reconnect(tx: Tx, orgId: number, id: number, c: ConnectInput): Promise<MailboxRow> {
     const res = await tx.execute(sql`
       UPDATE mail_mailboxes
-         SET account_sub = ${c.accountSub}, status = 'connected', last_error = NULL,
+         SET provider = ${c.provider}, scope = ${c.scope}, owner_user_id = ${c.ownerUserId},
+             sync_cursor = CASE WHEN provider = ${c.provider} THEN sync_cursor ELSE NULL END,
+             account_sub = ${c.accountSub}, status = 'connected', last_error = NULL,
              refresh_token_enc = ${c.refreshTokenEnc}, access_token_enc = ${c.accessTokenEnc},
-             access_token_expires_at = ${c.accessTokenExpiresAt.toISOString()}::timestamptz,
-             scopes = ${c.scopes}, connected_by = ${c.connectedBy}, connected_at = now()
+             access_token_expires_at = ${c.accessTokenExpiresAt ? c.accessTokenExpiresAt.toISOString() : null}::timestamptz,
+             scopes = ${c.scopes}, connection_enc = ${c.connectionEnc},
+             connection_public = ${c.connectionPublic ? JSON.stringify(c.connectionPublic) : null}::jsonb,
+             connected_by = ${c.connectedBy}, connected_at = now()
        WHERE org_id = ${orgId} AND id = ${id}
        RETURNING *`);
     return toRow(rows(res)[0]!);
   }
 
-  /** Renames under the optimistic lock; undefined when the version moved. */
+  /** Renames (and, when `sendLimit` is given, sets the hourly cap, null = platform default) under the optimistic lock; undefined when the version moved. */
   async rename(
     tx: Tx,
     orgId: number,
     id: number,
     rowVersion: number,
     displayName: string,
+    sendLimit?: number | null,
   ): Promise<MailboxRow | undefined> {
     const res = await tx.execute(sql`
       UPDATE mail_mailboxes SET display_name = ${displayName}
+             ${sendLimit === undefined ? sql`` : sql`, send_limit_per_hour = ${sendLimit}`}
        WHERE org_id = ${orgId} AND id = ${id} AND row_version = ${rowVersion}
        RETURNING *`);
     const row = rows(res)[0];
@@ -199,7 +265,8 @@ export class MailboxesRepository {
     orgId: number,
     id: number,
     input: {
-      historyId: string | null;
+      /** The new sync position; null leaves the stored one alone. */
+      cursor: Record<string, unknown> | null;
       syncedAt: Date | null;
       error: string | null;
       status?: 'connected' | 'error';
@@ -207,18 +274,31 @@ export class MailboxesRepository {
   ): Promise<void> {
     await tx.execute(sql`
       UPDATE mail_mailboxes
-         SET history_id = coalesce(${input.historyId}, history_id),
+         SET sync_cursor = coalesce(${input.cursor ? JSON.stringify(input.cursor) : null}::jsonb, sync_cursor),
              last_synced_at = coalesce(${input.syncedAt ? input.syncedAt.toISOString() : null}::timestamptz, last_synced_at),
              last_error = ${input.error ? input.error.slice(0, 300) : null},
              status = CASE WHEN status IN ('connected', 'error') THEN ${input.status ?? 'connected'} ELSE status END
        WHERE org_id = ${orgId} AND id = ${id} AND status <> 'disconnected'`);
   }
 
-  /** The mailbox is no longer connected: tokens are wiped, the row and its conversations stay so a reconnect reattaches. */
+  /** Writes (or, with null, clears) the push registration of a mailbox (a Gmail watch, a Graph subscription). */
+  async savePushState(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    state: Record<string, unknown> | null,
+  ): Promise<void> {
+    await tx.execute(sql`
+      UPDATE mail_mailboxes SET push_state = ${state ? JSON.stringify(state) : null}::jsonb
+       WHERE org_id = ${orgId} AND id = ${id}`);
+  }
+
+  /** The mailbox is no longer connected: tokens, credentials and push are wiped, the row and its conversations stay so a reconnect reattaches. */
   async disconnect(tx: Tx, orgId: number, id: number): Promise<void> {
     await tx.execute(sql`
       UPDATE mail_mailboxes
-         SET status = 'disconnected', last_error = NULL, refresh_token_enc = NULL, access_token_enc = NULL, access_token_expires_at = NULL
+         SET status = 'disconnected', last_error = NULL, refresh_token_enc = NULL, access_token_enc = NULL, access_token_expires_at = NULL,
+             connection_enc = NULL, push_state = NULL
        WHERE org_id = ${orgId} AND id = ${id}`);
   }
 
@@ -229,13 +309,17 @@ export class MailboxesRepository {
   async dueEverywhere(
     tx: Tx,
     errorBackoffMinutes: number,
-  ): Promise<Array<{ orgId: number; uuid: string }>> {
+  ): Promise<Array<{ orgId: number; uuid: string; provider: MailProvider }>> {
     const res = await tx.execute(sql`
-      SELECT org_id, uuid FROM mail_mailboxes
+      SELECT org_id, uuid, provider FROM mail_mailboxes
        WHERE status = 'connected'
           OR (status = 'error' AND updated_at < now() - make_interval(mins => ${errorBackoffMinutes}))
        ORDER BY org_id, id`);
-    return rows(res).map((r) => ({ orgId: Number(r.org_id), uuid: r.uuid as string }));
+    return rows(res).map((r) => ({
+      orgId: Number(r.org_id),
+      uuid: r.uuid as string,
+      provider: r.provider as MailProvider,
+    }));
   }
 
   /** Whether this provider message id is already stored on the mailbox's channel (a redelivery: nothing to download again). */
@@ -250,5 +334,39 @@ export class MailboxesRepository {
        WHERE l.org_id = ${orgId} AND ch.uuid = ${channelUuid}::uuid AND l.kind = 'provider_id' AND l.key = ${providerMessageId}
        LIMIT 1`);
     return rows(res).length > 0;
+  }
+
+  /**
+   * The thread key already stored for each of these RFC 5322 Message-IDs (without brackets, any case) on the mailbox's channel, looking
+   * back 90 days. Only for header-based thread resolution when a reply names its parent but no `References`: a rare path, so it is a plain
+   * query with no index of its own. At most 50 ids.
+   */
+  async threadKeysOf(
+    tx: Tx,
+    orgId: number,
+    channelUuid: string,
+    messageIds: string[],
+  ): Promise<Map<string, string>> {
+    const ids = [...new Set(messageIds.map((i) => i.replace(/^<|>$/g, '').toLowerCase()))].slice(
+      0,
+      50,
+    );
+    const out = new Map<string, string>();
+    if (ids.length === 0) return out;
+    const res = await tx.execute(sql`
+      SELECT DISTINCT lower(m.meta->'email'->>'messageId') AS message_id, m.meta->'email'->>'threadId' AS thread_id
+        FROM messages m
+        JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
+        JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
+       WHERE m.org_id = ${orgId} AND ch.uuid = ${channelUuid}::uuid
+         AND m.created_at > now() - interval '90 days'
+         AND lower(m.meta->'email'->>'messageId') IN (${sql.join(
+           ids.map((i) => sql`${i}`),
+           sql`, `,
+         )})`);
+    for (const r of rows(res)) {
+      if (r.message_id && r.thread_id) out.set(r.message_id as string, r.thread_id as string);
+    }
+    return out;
   }
 }

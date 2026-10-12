@@ -59,43 +59,43 @@ auth domains, and is unrelated to the email channel.
 
 ## Feature index
 
-| Id          | Feature                                                                            | Status         | Priority | Effort | Depends on                           |
-| ----------- | ---------------------------------------------------------------------------------- | -------------- | -------- | ------ | ------------------------------------ |
-| TW-MAIL-001 | Email rows in the Channels table (mailbox list, status, last synced)               | implemented    | P0       | M      | TW-MAIL-003                          |
-| TW-MAIL-002 | "Add an email account" modal and the available-mailbox picker                      | implemented    | P0       | M      | TW-MAIL-018                          |
-| TW-MAIL-003 | Link a mailbox (mirror row, ownership check, one workspace per mailbox, backfill)  | implemented    | P0       | L      | TW-MAIL-002, TW-MAIL-004             |
-| TW-MAIL-004 | Sync a mailbox on demand (pull, resume cursor, full re-pull)                       | implemented    | P0       | M      | TW-MAIL-007                          |
-| TW-MAIL-005 | Unlink a mailbox                                                                   | implemented    | P0       | S      | TW-MAIL-003                          |
-| TW-MAIL-006 | Inbound push endpoint (shared secret, acknowledge unlinked accounts)               | implemented    | P0       | M      | TW-MAIL-007                          |
-| TW-MAIL-007 | Inbound ingest: thread, message, contact, preview, unread, realtime event          | implemented    | P0       | L      | TW-MAIL-003                          |
-| TW-MAIL-008 | Email in the inbox UI: channel badge, rail and tab filter, mail-style bubble       | implemented    | P0       | M      | TW-MAIL-007                          |
-| TW-MAIL-009 | Reply from the inbox through the mailbox                                           | implemented    | P0       | M      | TW-MAIL-007, TW-MAIL-018             |
-| TW-MAIL-010 | Reply on a campaign-mirrored thread (one-off send)                                 | implemented    | P1       | S      | TW-MAIL-009, TW-MAIL-014             |
-| TW-MAIL-011 | Automation chain on inbound mail: flow, routing, AI agent, keyword reply           | implemented    | P0       | M      | TW-MAIL-007                          |
-| TW-MAIL-012 | Email flows: binding to a mailbox, Node runtime, numbered choices, quote stripping | implemented    | P1       | L      | TW-MAIL-011, flow-runtime-engine     |
-| TW-MAIL-013 | Email flow callbacks: flow-send, flow-node (AI, webhook), flow-log                 | implemented    | P1       | M      | TW-MAIL-012                          |
-| TW-MAIL-014 | Email campaigns: sender, subject, personalisation, pacing, plan cap, inbox mirror  | implemented    | P1       | L      | TW-MAIL-003, campaigns              |
-| TW-MAIL-015 | Mailbox-scoped auto-reply rules and sender pickers                                 | implemented    | P1       | S      | TW-MAIL-003, auto-reply-keywords     |
-| TW-MAIL-016 | Gates: platform switch, plan flag, monthly cap, visibility rule                    | partial        | P0       | M      | plans-subscriptions-trials           |
-| TW-MAIL-017 | Admin enablement: Email channel toggle and bridge connection status                | implemented    | P0       | S      | TW-ADD-019                           |
-| TW-MAIL-018 | Bridge client contract (the MailTrixy API surface Reference calls and exposes)     | implemented    | P0       | M      | none                                 |
-| TW-MAIL-019 | Mailbox model and native Settings > Channels > Email hub                           | port-addition  | P0       | L      | TW-MAIL-030                          |
-| TW-MAIL-020 | Connect Google (Gmail) by OAuth                                                    | port-addition  | P0       | L      | TW-MAIL-019, TW-MAIL-029             |
-| TW-MAIL-021 | Gmail inbound sync: backfill, incremental, repair                                  | port-addition  | P0       | XL     | TW-MAIL-020, TW-MAIL-025, TW-MAIL-026 |
-| TW-MAIL-022 | Gmail outbound: reply and new message with correct threading                       | port-addition  | P0       | L      | TW-MAIL-020, TW-MAIL-025             |
-| TW-MAIL-023 | Several mailboxes per workspace (limit of 2 to 3, per-mailbox defaults)            | port-addition  | P0       | M      | TW-MAIL-019, TW-MAIL-030             |
-| TW-MAIL-024 | Multi-inbox view in the inbox: mailbox switcher, filter, counts, From selector     | port-addition  | P0       | L      | TW-MAIL-023, team-inbox-conversations |
-| TW-MAIL-025 | One conversation per email thread, contact linked by email identity                | port-addition  | P0       | L      | TW-MAIL-007                          |
-| TW-MAIL-026 | Rich inbound message: sanitised HTML, cc, headers, attachments                     | port-addition  | P0       | L      | TW-MAIL-025                          |
-| TW-MAIL-027 | Composer: rich text, cc/bcc, attachments, signature, saved replies                 | port-addition  | P1       | L      | TW-MAIL-022, TW-MAIL-026             |
-| TW-MAIL-028 | Mailbox health: sync status, last error, needs-reauth, reconnect, retry            | port-addition  | P0       | M      | TW-MAIL-021, TW-MAIL-022             |
-| TW-MAIL-029 | Operator console: Email providers (Google credentials, enable, test)               | port-addition  | P0       | M      | platform-settings-branding-storage   |
-| TW-MAIL-030 | Permissions, plan feature and the mailbox limit key                                | port-addition  | P0       | S      | roles-permissions, plans-subscriptions-trials |
-| TW-MAIL-031 | Generic IMAP/SMTP mailbox ("Other mail")                                           | port-addition  | P1       | XL     | TW-MAIL-019, TW-MAIL-026             |
-| TW-MAIL-032 | Loop, bounce and auto-responder protection                                         | port-addition  | P1       | M      | TW-MAIL-021, TW-MAIL-011             |
-| TW-MAIL-033 | Gmail push notifications (Pub/Sub watch) instead of polling                        | port-addition  | P2       | L      | TW-MAIL-021                          |
-| TW-MAIL-034 | Microsoft 365 / Outlook by OAuth                                                   | port-addition  | P2       | XL     | TW-MAIL-019, TW-MAIL-029             |
-| TW-MAIL-035 | Personal mailboxes and the channel-owner visibility rule                           | port-addition  | P2       | L      | TW-MAIL-023, team-inbox-conversations |
+| Id          | Feature                                                                            | Status        | Priority | Effort | Depends on                                    |
+| ----------- | ---------------------------------------------------------------------------------- | ------------- | -------- | ------ | --------------------------------------------- |
+| TW-MAIL-001 | Email rows in the Channels table (mailbox list, status, last synced)               | implemented   | P0       | M      | TW-MAIL-003                                   |
+| TW-MAIL-002 | "Add an email account" modal and the available-mailbox picker                      | implemented   | P0       | M      | TW-MAIL-018                                   |
+| TW-MAIL-003 | Link a mailbox (mirror row, ownership check, one workspace per mailbox, backfill)  | implemented   | P0       | L      | TW-MAIL-002, TW-MAIL-004                      |
+| TW-MAIL-004 | Sync a mailbox on demand (pull, resume cursor, full re-pull)                       | implemented   | P0       | M      | TW-MAIL-007                                   |
+| TW-MAIL-005 | Unlink a mailbox                                                                   | implemented   | P0       | S      | TW-MAIL-003                                   |
+| TW-MAIL-006 | Inbound push endpoint (shared secret, acknowledge unlinked accounts)               | implemented   | P0       | M      | TW-MAIL-007                                   |
+| TW-MAIL-007 | Inbound ingest: thread, message, contact, preview, unread, realtime event          | implemented   | P0       | L      | TW-MAIL-003                                   |
+| TW-MAIL-008 | Email in the inbox UI: channel badge, rail and tab filter, mail-style bubble       | implemented   | P0       | M      | TW-MAIL-007                                   |
+| TW-MAIL-009 | Reply from the inbox through the mailbox                                           | implemented   | P0       | M      | TW-MAIL-007, TW-MAIL-018                      |
+| TW-MAIL-010 | Reply on a campaign-mirrored thread (one-off send)                                 | implemented   | P1       | S      | TW-MAIL-009, TW-MAIL-014                      |
+| TW-MAIL-011 | Automation chain on inbound mail: flow, routing, AI agent, keyword reply           | implemented   | P0       | M      | TW-MAIL-007                                   |
+| TW-MAIL-012 | Email flows: binding to a mailbox, Node runtime, numbered choices, quote stripping | implemented   | P1       | L      | TW-MAIL-011, flow-runtime-engine              |
+| TW-MAIL-013 | Email flow callbacks: flow-send, flow-node (AI, webhook), flow-log                 | implemented   | P1       | M      | TW-MAIL-012                                   |
+| TW-MAIL-014 | Email campaigns: sender, subject, personalisation, pacing, plan cap, inbox mirror  | implemented   | P1       | L      | TW-MAIL-003, campaigns                        |
+| TW-MAIL-015 | Mailbox-scoped auto-reply rules and sender pickers                                 | implemented   | P1       | S      | TW-MAIL-003, auto-reply-keywords              |
+| TW-MAIL-016 | Gates: platform switch, plan flag, monthly cap, visibility rule                    | partial       | P0       | M      | plans-subscriptions-trials                    |
+| TW-MAIL-017 | Admin enablement: Email channel toggle and bridge connection status                | implemented   | P0       | S      | TW-ADD-019                                    |
+| TW-MAIL-018 | Bridge client contract (the MailTrixy API surface Reference calls and exposes)     | implemented   | P0       | M      | none                                          |
+| TW-MAIL-019 | Mailbox model and native Settings > Integrations > Email hub                       | port-addition | P0       | L      | TW-MAIL-030                                   |
+| TW-MAIL-020 | Connect Google (Gmail) by OAuth                                                    | port-addition | P0       | L      | TW-MAIL-019, TW-MAIL-029                      |
+| TW-MAIL-021 | Gmail inbound sync: backfill, incremental, repair                                  | port-addition | P0       | XL     | TW-MAIL-020, TW-MAIL-025, TW-MAIL-026         |
+| TW-MAIL-022 | Gmail outbound: reply and new message with correct threading                       | port-addition | P0       | L      | TW-MAIL-020, TW-MAIL-025                      |
+| TW-MAIL-023 | Several mailboxes per workspace (limit of 2 to 3, per-mailbox defaults)            | port-addition | P0       | M      | TW-MAIL-019, TW-MAIL-030                      |
+| TW-MAIL-024 | Multi-inbox view in the inbox: mailbox switcher, filter, counts, From selector     | port-addition | P0       | L      | TW-MAIL-023, team-inbox-conversations         |
+| TW-MAIL-025 | One conversation per email thread, contact linked by email identity                | port-addition | P0       | L      | TW-MAIL-007                                   |
+| TW-MAIL-026 | Rich inbound message: sanitised HTML, cc, headers, attachments                     | port-addition | P0       | L      | TW-MAIL-025                                   |
+| TW-MAIL-027 | Composer: rich text, cc/bcc, attachments, signature, saved replies                 | port-addition | P1       | L      | TW-MAIL-022, TW-MAIL-026                      |
+| TW-MAIL-028 | Mailbox health: sync status, last error, needs-reauth, reconnect, retry            | port-addition | P0       | M      | TW-MAIL-021, TW-MAIL-022                      |
+| TW-MAIL-029 | Operator console: Email providers (Google credentials, enable, test)               | port-addition | P0       | M      | platform-settings-branding-storage            |
+| TW-MAIL-030 | Permissions, plan feature and the mailbox limit key                                | port-addition | P0       | S      | roles-permissions, plans-subscriptions-trials |
+| TW-MAIL-031 | Generic IMAP/SMTP mailbox ("Other mail")                                           | port-addition | P1       | XL     | TW-MAIL-019, TW-MAIL-026                      |
+| TW-MAIL-032 | Loop, bounce and auto-responder protection                                         | port-addition | P1       | M      | TW-MAIL-021, TW-MAIL-011                      |
+| TW-MAIL-033 | Gmail push notifications (Pub/Sub watch) instead of polling                        | port-addition | P2       | L      | TW-MAIL-021                                   |
+| TW-MAIL-034 | Microsoft 365 / Outlook by OAuth                                                   | port-addition | P2       | XL     | TW-MAIL-019, TW-MAIL-029                      |
+| TW-MAIL-035 | Personal mailboxes and the channel-owner visibility rule                           | port-addition | P2       | L      | TW-MAIL-023, team-inbox-conversations         |
 
 ## Features
 
@@ -110,9 +110,9 @@ auth domains, and is unrelated to the email channel.
 - **UX & screens:** `resources/views/user/devices/_channel_rows.blade.php` (email block) and `resources/views/user/devices/index.blade.php`. Row columns: name (mailbox display name, else the address) with a small mail icon and the label "Email" plus the capitalised provider ("Email · Gmail"); address in monospace; two dash placeholders for columns that do not apply to email; "Last synced" shown as a relative time of `synced_at` or "live" when empty; a status pill "Connected" (green) or "Inactive" (grey, any status other than `connected`, case-insensitive); two icon buttons: Sync ("fetch mail for this account") and Unlink (confirm: unlink the account, its messages stop arriving, the mailbox itself is not deleted). Rows are ordered by address ascending. The table auto-refreshes every 15 seconds from the same server payload, so the email list must be computed in the controller, not only in the view.
 - **Endpoints:**
 
-| Method uri   | Route name         | Controller@action      | Middleware                                    | Request fields | Response                                    |
-| ------------ | ------------------ | ---------------------- | --------------------------------------------- | -------------- | ------------------------------------------- |
-| GET devices  | user.devices.index | DevicesController@index | web, auth, workspace.role:admin (shared page) | none           | the hub view with `hasEmail`, `emailAccounts` |
+| Method uri  | Route name         | Controller@action       | Middleware                                    | Request fields | Response                                      |
+| ----------- | ------------------ | ----------------------- | --------------------------------------------- | -------------- | --------------------------------------------- |
+| GET devices | user.devices.index | DevicesController@index | web, auth, workspace.role:admin (shared page) | none           | the hub view with `hasEmail`, `emailAccounts` |
 
 - **Data:** reads `workspace_email_accounts` of the active workspace ordered by `email`; reads `system_settings` `email_enabled`, `mailtrixy_url`, `mailtrixy_secret` (only to test presence).
 - **Rules & edge cases:**
@@ -128,7 +128,7 @@ auth domains, and is unrelated to the email channel.
   - Given `email_enabled` off, When the page opens, Then no email row and no Email add-card is shown.
   - Given the 15 s refresh fires, When the table is re-rendered, Then the email rows are still present.
 - **Source refs:** `resources/views/user/devices/_channel_rows.blade.php`, `resources/views/user/devices/index.blade.php`, `app/Http/Controllers/DevicesController.php` (index, around the `hasEmail` block), `app/Models/WorkspaceEmailAccount.php`.
-- **Port notes:** the Devices hub is owned by whatsapp-devices-baileys; this domain exports a "channel rows" provider for kind `email` (address, provider label, last sync, status, actions). Port addition `TW-MAIL-019` adds the dedicated Settings > Channels > Email screen; keep a Reference-style row in the hub as well so the Reference flow still exists. Add the health columns of `TW-MAIL-028` here (a status the Reference row lacks).
+- **Port notes:** the Devices hub is owned by whatsapp-devices-baileys; this domain exports a "channel rows" provider for kind `email` (address, provider label, last sync, status, actions). Port addition `TW-MAIL-019` adds the dedicated Settings > Integrations > Email screen; keep a Reference-style row in the hub as well so the Reference flow still exists. Add the health columns of `TW-MAIL-028` here (a status the Reference row lacks).
 
 ### TW-MAIL-002 — "Add an email account" modal and the available-mailbox picker
 
@@ -141,9 +141,9 @@ auth domains, and is unrelated to the email channel.
 - **UX & screens:** card "Email" in the add-channel chooser (button with `data-email-connect`); modal `#email-connect-modal` titled "Add an email account". Top section "Linked" (only when the workspace has rows): each row shows name, address, a re-link ("refresh") form and an Unlink form with a confirm that names the engine brand. Below, the "available" list is fetched on open: states Loading ("Checking for mailboxes"), Empty ("No unlinked mailboxes found. Connect the mailbox on the engine first, then it appears here."), Error ("Could not load email accounts."), or a list of rows (name, address, provider, a Link button). Success toast "Email account linked." Script: `resources/js/app.js` (`initEmailConnect`).
 - **Endpoints:**
 
-| Method uri                | Route name                 | Controller@action               | Middleware               | Request fields | Response                                                                                          |
-| ------------------------- | -------------------------- | ------------------------------- | ------------------------ | -------------- | ------------------------------------------------------------------------------------------------- |
-| GET devices/email/available | user.devices.email.available | DevicesController@emailAvailable | web, auth, workspace.role:admin | none     | JSON `{ok, accounts:[{id, mtx_workspace_id, email, name, provider, status}]}`; 422 with `{ok:false, accounts:[], error}` when no workspace or bridge not configured |
+| Method uri                  | Route name                   | Controller@action                | Middleware                      | Request fields | Response                                                                                                                                                            |
+| --------------------------- | ---------------------------- | -------------------------------- | ------------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET devices/email/available | user.devices.email.available | DevicesController@emailAvailable | web, auth, workspace.role:admin | none           | JSON `{ok, accounts:[{id, mtx_workspace_id, email, name, provider, status}]}`; 422 with `{ok:false, accounts:[], error}` when no workspace or bridge not configured |
 
 - **Data:** reads all `workspace_email_accounts.mailtrixy_account_id` (every workspace, to hide taken mailboxes); calls the bridge `accounts` list.
 - **Rules & edge cases:**
@@ -172,8 +172,8 @@ auth domains, and is unrelated to the email channel.
 - **UX & screens:** the Link button in the modal (`TW-MAIL-002`) posts JSON; the per-row refresh posts a normal form and redirects back. Flash "Email account <address> linked." or "... linked: N message(s) imported." (status), or an error flash on the `email` field.
 - **Endpoints:**
 
-| Method uri         | Route name              | Controller@action            | Middleware                      | Request fields                                                                                                | Response                                                         |
-| ------------------ | ----------------------- | ---------------------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| Method uri              | Route name              | Controller@action           | Middleware                      | Request fields                                                                                                                                    | Response                                                   |
+| ----------------------- | ----------------------- | --------------------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
 | POST devices/email/link | user.devices.email.link | DevicesController@emailLink | web, auth, workspace.role:admin | `account_id` required integer; `mtx_workspace_id` nullable integer; `email` nullable max 190; `name` nullable max 190; `provider` nullable max 64 | JSON `{ok, account, imported}` or redirect back with flash |
 
 - **Data:** upserts `workspace_email_accounts` on (`workspace_id`, `mailtrixy_account_id`): sets `mtx_workspace_id`, `email`, `name`, `provider`, `status = connected`, `synced_at = now`; then runs a full sync (`TW-MAIL-004`) which writes conversations, messages and `mtx_last_message_id`.
@@ -207,8 +207,8 @@ auth domains, and is unrelated to the email channel.
 - **UX & screens:** the circular-arrow icon on the row (`TW-MAIL-001`). Flash on success "N new message(s) imported from <address>." or "No new mail for <address>."; error "Could not sync <address> right now."; "Email account not found." for an unknown or foreign row.
 - **Endpoints:**
 
-| Method uri             | Route name              | Controller@action            | Middleware                      | Request fields           | Response                                                     |
-| ---------------------- | ----------------------- | ---------------------------- | ------------------------------- | ------------------------ | ------------------------------------------------------------ |
+| Method uri                   | Route name              | Controller@action           | Middleware                      | Request fields                        | Response                                                                                             |
+| ---------------------------- | ----------------------- | --------------------------- | ------------------------------- | ------------------------------------- | ---------------------------------------------------------------------------------------------------- |
 | POST devices/email/{id}/sync | user.devices.email.sync | DevicesController@emailSync | web, auth, workspace.role:admin | `id` numeric; `full` boolean optional | JSON `{ok, imported, message}` (or 422 `{ok:false, error, detail}`, 404) or redirect back with flash |
 
 - **Data:** reads and writes `workspace_email_accounts.mtx_last_message_id` (highest engine message id already imported) and `synced_at`; writes conversations and messages through the ingest.
@@ -241,8 +241,8 @@ auth domains, and is unrelated to the email channel.
 - **UX & screens:** trash icon on the row and Unlink in the modal, both with a confirm. Flash "Email account unlinked."
 - **Endpoints:**
 
-| Method uri                | Route name               | Controller@action             | Middleware                      | Request fields | Response                           |
-| ------------------------- | ------------------------ | ----------------------------- | ------------------------------- | -------------- | ---------------------------------- |
+| Method uri                       | Route name                | Controller@action             | Middleware                      | Request fields | Response                            |
+| -------------------------------- | ------------------------- | ----------------------------- | ------------------------------- | -------------- | ----------------------------------- |
 | DELETE devices/email/{id}/unlink | user.devices.email.unlink | DevicesController@emailUnlink | web, auth, workspace.role:admin | `id` numeric   | redirect back with the status flash |
 
 - **Data:** hard-deletes the `workspace_email_accounts` row scoped to the active workspace. Conversations and messages are kept.
@@ -274,8 +274,8 @@ auth domains, and is unrelated to the email channel.
 - **UX & screens:** none.
 - **Endpoints:**
 
-| Method uri              | Route name        | Controller@action                  | Middleware | Request fields                                                                                                  | Response                                                                        |
-| ----------------------- | ----------------- | ---------------------------------- | ---------- | --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| Method uri                 | Route name        | Controller@action                     | Middleware | Request fields                                                                                                                                                              | Response                                                                                                                                                                                                   |
+| -------------------------- | ----------------- | ------------------------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | POST api/mailtrixy/inbound | mailtrixy.inbound | Api\MailtrixyInboundController@ingest | api        | `event` required `message`; `mtx_workspace_id` nullable int; `account` required array; `conversation` nullable array; `message` required array. Header `X-Mailtrixy-Secret` | `{ok:true, message_id, conversation_id}`, `{ok:true, ignored:'unlinked_account'}`, `{ok:true, received}` for a non-message, 401 `{ok:false, error:'unauthorized'}`, 500 `{ok:false, error:'store_failed'}` |
 
 - **Data:** writes `system_settings` `mailtrixy_connected = 1` and `mailtrixy_last_inbound = now` on every authenticated push; reads `workspace_email_accounts` where `status = connected`.
@@ -482,11 +482,11 @@ auth domains, and is unrelated to the email channel.
 - **UX & screens:** none.
 - **Endpoints:**
 
-| Method uri          | Route name | Controller@action                              | Middleware | Request fields                                                            | Response                                   |
-| ------------------- | ---------- | ---------------------------------------------- | ---------- | ------------------------------------------------------------------------- | ------------------------------------------ |
-| POST api/email/flow-send | none   | Mailtrixy\EmailFlowNodeController@send | api        | `accountId`, `conversationId` (numeric), `kind` text/menu/media, `text`, `options[]`, `mediaUrl` | `{ok, message_id, error}`                  |
-| POST api/email/flow-node | none   | Mailtrixy\EmailFlowNodeController@node | api        | `action` or `type` ai/email_ai/webhook, `node`, `vars`, `workspaceId`      | `{ok, type, reply?/vars?}`                 |
-| POST api/email/flow-log  | none   | Mailtrixy\EmailFlowNodeController@log  | api        | `accountId`, `conversationId`, `body` or `text`, `source`                  | `{ok:true}`                                |
+| Method uri               | Route name | Controller@action                      | Middleware | Request fields                                                                                   | Response                   |
+| ------------------------ | ---------- | -------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------ | -------------------------- |
+| POST api/email/flow-send | none       | Mailtrixy\EmailFlowNodeController@send | api        | `accountId`, `conversationId` (numeric), `kind` text/menu/media, `text`, `options[]`, `mediaUrl` | `{ok, message_id, error}`  |
+| POST api/email/flow-node | none       | Mailtrixy\EmailFlowNodeController@node | api        | `action` or `type` ai/email_ai/webhook, `node`, `vars`, `workspaceId`                            | `{ok, type, reply?/vars?}` |
+| POST api/email/flow-log  | none       | Mailtrixy\EmailFlowNodeController@log  | api        | `accountId`, `conversationId`, `body` or `text`, `source`                                        | `{ok:true}`                |
 
 - **Data:** writes outbound `inbox_messages` (meta `email.source = flow`, engine ids) and conversation preview and `last_outbound_at` through a mirror helper.
 - **Rules & edge cases:**
@@ -626,13 +626,13 @@ auth domains, and is unrelated to the email channel.
 - **UX & screens:** none.
 - **Endpoints (Threadwise calls MailTrixy, base URL from settings, 15 s timeout, JSON):**
 
-| Call                                  | Purpose                                                              | Request                                         | Response                                                       |
-| ------------------------------------- | -------------------------------------------------------------------- | ----------------------------------------------- | -------------------------------------------------------------- |
-| GET /api/threadwise/handshake         | prove reachability and secret match                                  | none                                            | `{ok:true, service:'mailtrixy', brand}`; success is 2xx and `ok === true` or `service === 'mailtrixy'` |
-| GET /api/threadwise/accounts          | list mailboxes (owner-scoped by email)                               | `owner_email?`                                  | `{ok, accounts:[{id, workspace_id, email, name, provider, status}]}`; any failure degrades to an empty list |
-| GET /api/threadwise/messages          | pull a page of inbound mail, oldest first, in push shape             | `account_id`, `owner_email?`, `after_id?`, `limit` (50) | `{ok, messages[], next_after_id}`                              |
-| POST /api/threadwise/reply            | reply on an engine conversation (engine performs SMTP, keeps threading) | `conversation_id`, `text?`, `html?`          | `{ok, message_id, delivery_status}` or `{ok:false, error}`     |
-| POST /api/threadwise/send             | one-off send from an account                                         | `account_id`, `to`, `subject`, `html`, `text?`  | `{ok, message_id?}`                                            |
+| Call                          | Purpose                                                                 | Request                                                 | Response                                                                                                    |
+| ----------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| GET /api/threadwise/handshake | prove reachability and secret match                                     | none                                                    | `{ok:true, service:'mailtrixy', brand}`; success is 2xx and `ok === true` or `service === 'mailtrixy'`      |
+| GET /api/threadwise/accounts  | list mailboxes (owner-scoped by email)                                  | `owner_email?`                                          | `{ok, accounts:[{id, workspace_id, email, name, provider, status}]}`; any failure degrades to an empty list |
+| GET /api/threadwise/messages  | pull a page of inbound mail, oldest first, in push shape                | `account_id`, `owner_email?`, `after_id?`, `limit` (50) | `{ok, messages[], next_after_id}`                                                                           |
+| POST /api/threadwise/reply    | reply on an engine conversation (engine performs SMTP, keeps threading) | `conversation_id`, `text?`, `html?`                     | `{ok, message_id, delivery_status}` or `{ok:false, error}`                                                  |
+| POST /api/threadwise/send     | one-off send from an account                                            | `account_id`, `to`, `subject`, `html`, `text?`          | `{ok, message_id?}`                                                                                         |
 
 Inbound push payload (MailTrixy calls Threadwise): `{event:'message', mtx_workspace_id, account{id, workspace_id, email, name}, conversation{id, subject}, message{id, direction in|out, from_email, from_name, to_email, subject, text, html, at}}` to `POST /api/mailtrixy/inbound` (`TW-MAIL-006`).
 
@@ -651,15 +651,15 @@ Inbound push payload (MailTrixy calls Threadwise): `{event:'message', mtx_worksp
 - **Source refs:** `app/Services/Mailtrixy/MailtrixyClient.php`, `app/Support/fc_helpers.php` (`mailtrixy_brand_name`), `Documentation/pages/channels/email.html`.
 - **Port notes:** do not build a MailTrixy client unless the owner decides to keep the bridge (Open questions 1). The behaviors it provides (mailbox auth, sync, send, threading) are what `TW-MAIL-020` to `TW-MAIL-022` build natively.
 
-### TW-MAIL-019 — Mailbox model and native Settings > Channels > Email hub
+### TW-MAIL-019 — Mailbox model and native Settings > Integrations > Email hub
 
 - **Status:** port-addition
 - **Priority:** P0
 - **Effort:** L
 - **Depends on:** TW-MAIL-030
-- **Summary:** A first-class mailbox record owned by the workspace and a Settings > Channels > Email screen where an admin connects, lists, renames, pauses and disconnects mailboxes. This replaces the mirror row and the Devices-only surface while the Reference rows (`TW-MAIL-001`) stay available.
+- **Summary:** A first-class mailbox record owned by the workspace and a Settings > Integrations > Email screen where an admin connects, lists, renames, pauses and disconnects mailboxes. This replaces the mirror row and the Devices-only surface while the Reference rows (`TW-MAIL-001`) stay available.
 - **Actors & access:** workspace admin with `mail.mailboxes.manage`; read-only list for `mail.mailboxes.read`. Gated by `channel_email` (plan) and the platform switch.
-- **UX & screens:** Settings > Channels > Email replaces the "Soon" tile. Tab **Connect**: provider cards (Google live, "Other mail" and Microsoft shown as coming until built, each with a status pill); tab **Organization emails**: list of mailboxes (address, display name, provider, status, last sync, unread count, default assignee/team, color dot, actions Sync now, Pause or Resume, Reconnect, Disconnect); a per-mailbox drawer to edit display name, color, default assignee and team (`TW-MAIL-023`) and signature (`TW-MAIL-027`). Later tabs: Signatures and templates, Health (`TW-MAIL-028`). When a provider is not enabled by the operator the card says "Ask your platform administrator" instead of a broken button.
+- **UX & screens:** Settings > Integrations > Email replaces the "Soon" tile. Tab **Connect**: provider cards (Google live, "Other mail" and Microsoft shown as coming until built, each with a status pill); tab **Organization emails**: list of mailboxes (address, display name, provider, status, last sync, unread count, default assignee/team, color dot, actions Sync now, Pause or Resume, Reconnect, Disconnect); a per-mailbox drawer to edit display name, color, default assignee and team (`TW-MAIL-023`) and signature (`TW-MAIL-027`). Later tabs: Signatures and templates, Health (`TW-MAIL-028`). When a provider is not enabled by the operator the card says "Ask your platform administrator" instead of a broken button.
 - **Endpoints (proposed, final names at build):** `GET /v2/email/mailboxes`, `GET /v2/email/mailboxes/:id`, `PATCH /v2/email/mailboxes/:id` (name, color, default assignee, default team, signature, paused; optimistic version), `DELETE /v2/email/mailboxes/:id` (disconnect), `POST /v2/email/mailboxes/:id/sync`, `GET /v2/email/providers` (what is connectable).
 - **Data:** table `mailboxes` (see Data model): provider, address, display name, scope, status, sealed credentials, sync cursor, defaults.
 - **Rules & edge cases:**
@@ -971,7 +971,7 @@ Inbound push payload (MailTrixy calls Threadwise): `{event:'message', mtx_worksp
 - **Depends on:** roles-permissions, plans-subscriptions-trials
 - **Summary:** Reference gates everything with a workspace role (admin) and the plan flag `access_email`. The port adds proper permission keys and a mailbox-count limit.
 - **Actors & access:** owners and admins by default.
-- **UX & screens:** upgrade lock on Connect at the limit; Settings tile hidden without the read permission or the plan feature; the Help guide is gated the same way.
+- **UX & screens:** upgrade lock on Connect at the limit; Email is a Marketplace integration: the Settings > Integrations tile is hidden without the read permission and shown locked (upgrade mark) without the plan feature or Marketplace subscription, and `/email` shows the plan paywall; the Help guide is gated the same way (nav and tile entries).
 - **Endpoints:** all `/v2/email/*` routes carry the keys.
 - **Data:** permission keys `mail.mailboxes.read`, `mail.mailboxes.manage` (admin role granted by migration, per the `rbac-permission` skill); replies reuse `inbox.conversation.reply`; plan feature `channel_email` (maps Reference `access_email`) and numeric limit `email_mailboxes`; keep `email_monthly_limit` for campaign sends.
 - **Rules & edge cases:**
@@ -1198,7 +1198,11 @@ Quirks and gaps found in Reference (kept in the inventory so nothing is "fixed" 
     "TW-MAIL-004": ["POST devices/email/{id}/sync"],
     "TW-MAIL-005": ["DELETE devices/email/{id}/unlink"],
     "TW-MAIL-006": ["POST api/mailtrixy/inbound"],
-    "TW-MAIL-013": ["POST api/email/flow-send", "POST api/email/flow-node", "POST api/email/flow-log"],
+    "TW-MAIL-013": [
+      "POST api/email/flow-send",
+      "POST api/email/flow-node",
+      "POST api/email/flow-log"
+    ],
     "TW-MAIL-017": [
       "POST admin/extensions/mailtrixy/connect",
       "POST admin/extensions/mailtrixy/disconnect"

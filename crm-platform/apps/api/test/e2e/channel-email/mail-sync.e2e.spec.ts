@@ -135,8 +135,8 @@ describe('TW-MAIL-021: the first sync is a quiet backfill', () => {
     // No contact is created for imported history.
     expect(convs.every((c) => c.contact_id === null)).toBe(true);
     const row = await mailboxRow();
-    cursorAfterBackfill = String(row.history_id);
-    expect(row.history_id).not.toBeNull();
+    cursorAfterBackfill = String((row.sync_cursor as { historyId?: string } | null)?.historyId);
+    expect(row.sync_cursor).not.toBeNull();
     expect(row.last_error).toBeNull();
     const res = await as().get('/v2/email/mailboxes');
     expect(res.body.data[0]).toMatchObject({ status: 'connected', conversationCount: 2 });
@@ -232,10 +232,10 @@ describe('TW-MAIL-025, 026: live mail', () => {
     const before = (await messagesOf(conv!.id)).length;
     const fetched = getCount();
     // Rewind the cursor to just after the backfill: Gmail lists them again.
-    await rig.p.h.owner.query(`UPDATE mail_mailboxes SET history_id = $2 WHERE org_id = $1`, [
-      t.orgId,
-      cursorAfterBackfill,
-    ]);
+    await rig.p.h.owner.query(
+      `UPDATE mail_mailboxes SET sync_cursor = jsonb_build_object('historyId', $2::text) WHERE org_id = $1`,
+      [t.orgId, cursorAfterBackfill],
+    );
     const res = await sync();
     expect(res).toMatchObject({ status: 'synced', stored: 0 });
     expect((res as { duplicates: number }).duplicates).toBeGreaterThanOrEqual(3);

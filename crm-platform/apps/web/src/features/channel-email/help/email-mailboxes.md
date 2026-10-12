@@ -4,8 +4,21 @@ title: Email mailboxes
 summary: Connect Gmail or Google Workspace mailboxes, see their health, reconnect or remove one, and read and answer customer email in the team inbox.
 area: settings
 order: 70
-documents: [tile:email]
-keywords: [email, gmail, google workspace, mailbox, shared inbox, support email, cc, bcc, reconnect, sync, attachments]
+documents: [nav:email, tile:email]
+keywords:
+  [
+    email,
+    gmail,
+    google workspace,
+    mailbox,
+    shared inbox,
+    support email,
+    cc,
+    bcc,
+    reconnect,
+    sync,
+    attachments,
+  ]
 ---
 
 ## What it is for
@@ -14,7 +27,7 @@ Email mailboxes connects the Gmail or Google Workspace addresses your customers 
 
 ## How to use it
 
-1. Open **Settings**, then **Email** under **Channels**.
+1. Open **Settings**, then **Email** under **Integrations**.
 2. Under **Add a mailbox**, select **Connect Gmail** and sign in with the Google account that owns the mailbox.
 3. On the Google screen, allow reading and sending mail. Both are needed.
 4. You come back to the Email screen with a confirmation. The last 7 days of mail are fetched into the inbox without notifying anyone, and new mail is checked every minute after that.
@@ -37,7 +50,7 @@ Email mailboxes connects the Gmail or Google Workspace addresses your customers 
 
 ## Plan and access
 
-You need the permission to view mailboxes to open the screen, and the manage permission to connect, rename, sync, reconnect or remove one. Replying in the inbox needs the usual reply permission. Email is an add-on: without it the entry in Settings is hidden and the screen is closed. If the add-on lapses, existing mail stays visible but sending and syncing stop.
+You need the permission to view mailboxes to open the screen, and the manage permission to connect, rename, sync, reconnect or remove one. Replying in the inbox needs the usual reply permission. Email is an integration that comes with a plan or is subscribed to from the Marketplace. Without it the **Email** tile in Settings shows an upgrade mark and the screen asks you to upgrade. If the integration lapses, existing mail stays visible but sending and syncing stop.
 
 ## If something looks wrong
 

@@ -1,36 +1,46 @@
 import { Module, type OnModuleInit } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
-import { GmailClient, GoogleMailOAuthClient } from '../../infra/providers/channel-email';
+import { MAIL_DRIVER_PROVIDERS } from './drivers/driver-providers';
+import { MailDriverRegistry } from './drivers/mail-driver.registry';
 import { ChannelAdapterRegistry, ChatConversationsModule } from '../chat-conversations';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { EmailAttachmentsController } from './email-attachments.controller';
 import { EmailChannelAdapter } from './email-channel.adapter';
+import { MailBounceHandler } from './mail-bounce.handler';
 import { MailCallbackController } from './mail-callback.controller';
 import { MailChannelSync } from './mail-channel.sync';
 import { GoogleMailConfig } from './mail-config.service';
 import { MailConnectService } from './mail-connect.service';
 import { MailIngestService } from './mail-ingest.service';
+import { MailOutboundPreparer } from './mail-outbound.preparer';
 import { MailPlan } from './mail-plan';
+import { MailSendGuard } from './mail-send.guard';
+import { MAIL_EXTRA_CONTROLLERS, MAIL_EXTRA_EXPORTS, MAIL_EXTRA_PROVIDERS } from './module-parts';
 import { MailSyncPublisher } from './mail-sync.publisher';
 import { MailSyncService } from './mail-sync.service';
 import { MailTokens } from './mail-tokens.service';
-import { MailboxesController } from './mailboxes.controller';
+import { MailboxesController, MailProvidersController } from './mailboxes.controller';
 import { MailboxesRepository } from './mailboxes.repository';
 import { MailboxesService } from './mailboxes.service';
 
 /**
- * The Email channel (MAIL): Gmail mailboxes connected to the team inbox, several per workspace, one inbox channel (kind `email`) each.
- * Connect by Google OAuth, sync with the Gmail API, reply through it. Imported by the API (the hub's routes, the OAuth callback, the
+ * The Email channel (MAIL): mailboxes connected to the team inbox, several per workspace, one inbox channel (kind `email`) each. Every
+ * provider is a `MailDriver` registered in `drivers/driver-providers.ts`; connect, sync and reply go through the `MailDriverRegistry`. Imported by the API (the hub's routes, the OAuth callback, the
  * attachment download) and by the worker (through ChannelEmailWorkerModule: the sync job, and the adapter the send pipeline needs).
  */
 @Module({
   imports: [ChatConversationsModule, PlatformSettingsModule, PlansCoreModule],
-  controllers: [MailboxesController, MailCallbackController, EmailAttachmentsController],
+  controllers: [
+    MailboxesController,
+    MailProvidersController,
+    MailCallbackController,
+    EmailAttachmentsController,
+    ...MAIL_EXTRA_CONTROLLERS,
+  ],
   providers: [
     CryptoService,
-    GoogleMailOAuthClient,
-    GmailClient,
+    ...MAIL_DRIVER_PROVIDERS,
     GoogleMailConfig,
     MailPlan,
     MailboxesRepository,
@@ -42,6 +52,10 @@ import { MailboxesService } from './mailboxes.service';
     MailIngestService,
     MailSyncService,
     EmailChannelAdapter,
+    MailOutboundPreparer,
+    MailSendGuard,
+    MailBounceHandler,
+    ...MAIL_EXTRA_PROVIDERS,
   ],
   // The worker module's sweep and processor are built from these.
   exports: [
@@ -52,6 +66,8 @@ import { MailboxesService } from './mailboxes.service';
     MailboxesRepository,
     GoogleMailConfig,
     MailSyncPublisher,
+    MailDriverRegistry,
+    ...MAIL_EXTRA_EXPORTS,
   ],
 })
 export class ChannelEmailModule implements OnModuleInit {

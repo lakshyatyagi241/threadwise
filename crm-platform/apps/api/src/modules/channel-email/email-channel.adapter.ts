@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import type { ChannelCapabilities, ChannelHealth } from '@crm/contracts';
-import { GmailClient, GoogleMailError, buildMime } from '../../infra/providers/channel-email';
+import type { OutgoingMail } from '../../infra/providers/channel-email';
 import {
   ChannelError,
   windowFromLastInbound,
@@ -12,9 +12,13 @@ import {
   type SendResult,
   type WindowInfo,
 } from '../../infra/providers/chat-conversations/channel.port';
+import { MailDriverError } from './drivers/mail-driver';
+import { MailDriverRegistry } from './drivers/mail-driver.registry';
 import { recipientsOf, replyMessageId } from './email-send-rules';
 import { MailboxUnavailableError } from './mail-errors';
+import { MailOutboundPreparer } from './mail-outbound.preparer';
 import { MailPlan } from './mail-plan';
+import { MailSendGuard } from './mail-send.guard';
 import { MailTokens } from './mail-tokens.service';
 
 /**
@@ -32,9 +36,9 @@ const CAPABILITIES: ChannelCapabilities = {
 };
 
 /**
- * A Gmail mailbox as an inbox channel (kind `email`, one per mailbox, its external id the mailbox uuid). A reply goes out through Gmail's
- * `users.messages.send` as an RFC 5322 message with `In-Reply-To`, `References` and the thread id, under the mailbox's own address and
- * name. Inbound does not come through a channel webhook but through the mailbox sync job, so `verifyInbound` is false and `parseInbound`
+ * A mailbox of any provider as an inbox channel (kind `email`, one per mailbox, its external id the mailbox uuid). A reply goes out through
+ * the mailbox's driver (`MailDriver.send`) as an RFC 5322 message with `In-Reply-To`, `References` and the thread key, under the mailbox's
+ * own address and name. Inbound does not come through a channel webhook but through the mailbox sync job, so `verifyInbound` is false and `parseInbound`
  * empty.
  *
  * Never throws anything but `ChannelError`: a refused or unreachable Google, a mailbox that needs reconnecting and a workspace that lost
@@ -51,8 +55,10 @@ export class EmailChannelAdapter implements ChannelAdapter {
 
   constructor(
     private readonly tokens: MailTokens,
-    private readonly gmail: GmailClient,
+    private readonly drivers: MailDriverRegistry,
     private readonly plan: MailPlan,
+    private readonly preparer: MailOutboundPreparer,
+    private readonly guard: MailSendGuard,
   ) {}
 
   externalIdOf(): string | null {
@@ -111,13 +117,7 @@ export class EmailChannelAdapter implements ChannelAdapter {
       );
     }
     try {
-      return await this.tokens.withToken(channel.orgId, mailboxUuid, async (token, mailbox) => {
-        const messageId = replyMessageId(envelope.clientReference, mailbox.address);
-        // A retry: an earlier try may have reached Gmail and lost the answer. The same Message-ID finds it.
-        if (envelope.attempt > 1) {
-          const found = await this.gmail.findByMessageId(token, messageId).catch(() => null);
-          if (found) return { providerMessageId: found.id, acceptedAt: new Date() };
-        }
+      return await this.tokens.withAccess(channel.orgId, mailboxUuid, async (access, mailbox) => {
         const { to, cc, bcc } = recipientsOf(email, mailbox.address);
         if (to.length === 0) {
           throw new ChannelError(
@@ -126,19 +126,30 @@ export class EmailChannelAdapter implements ChannelAdapter {
             false,
           );
         }
-        const raw = await buildMime({
+        await this.guard.assertAllowed(channel.orgId, mailbox);
+        const draft: OutgoingMail = {
+          messageId: replyMessageId(envelope.clientReference, mailbox.address),
           from: { name: mailbox.displayName, address: mailbox.address },
           to,
           cc,
           bcc,
           subject: email.subject,
           text: envelope.body,
-          messageId,
+          html: null,
           inReplyTo: email.inReplyTo,
           references: email.references,
-        });
-        const sent = await this.gmail.sendMessage(token, { raw, threadId: email.threadId });
-        return { providerMessageId: sent.id, acceptedAt: new Date() };
+          threadKey: email.threadId,
+          attachments: [],
+          headers: {},
+          attempt: envelope.attempt,
+        };
+        const mail = await this.preparer.prepare({ orgId: channel.orgId, mailbox, email }, draft);
+        const sent = await this.drivers
+          .get(mailbox.provider)
+          .send({ orgId: channel.orgId, mailbox, access }, mail);
+        await this.guard.recordSent(channel.orgId, mailbox);
+        await this.preparer.sent({ orgId: channel.orgId, mailbox, email });
+        return { providerMessageId: sent.providerMessageId, acceptedAt: new Date() };
       });
     } catch (err) {
       throw this.asChannelError(err);
@@ -167,11 +178,11 @@ export class EmailChannelAdapter implements ChannelAdapter {
     });
     if (!mailboxUuid) return down('MAIL_NO_MAILBOX', 'This channel has no mailbox', null, false);
     try {
-      const profile = await this.tokens.withToken(channel.orgId, mailboxUuid, (token) =>
-        this.gmail.getProfile(token),
+      const result = await this.tokens.withAccess(channel.orgId, mailboxUuid, (access, mailbox) =>
+        this.drivers.get(mailbox.provider).health({ orgId: channel.orgId, mailbox, access }),
       );
       return {
-        health: this.health(at, true, 'healthy', [], null, null, profile.emailAddress),
+        health: this.health(at, true, 'healthy', [], null, null, result.displayName),
         needsReauth: false,
         providerFault: false,
       };
@@ -180,14 +191,21 @@ export class EmailChannelAdapter implements ChannelAdapter {
         return down(
           err.reason === 'needs_reauth' ? 'TOKEN_INVALID' : 'MAIL_MAILBOX_UNAVAILABLE',
           err.reason === 'needs_reauth'
-            ? 'Google no longer allows access: reconnect the mailbox'
+            ? 'The provider no longer allows access: reconnect the mailbox'
             : 'The mailbox is not connected',
           null,
           err.reason === 'needs_reauth',
         );
       }
-      if (err instanceof GoogleMailError) {
-        return down('MAIL_PROVIDER_UNREACHABLE', 'Google did not answer', `${err.kind}`, false);
+      if (err instanceof MailDriverError) {
+        return down(
+          err.needsReauth ? 'TOKEN_INVALID' : 'MAIL_PROVIDER_UNREACHABLE',
+          err.needsReauth
+            ? 'The provider no longer allows access: reconnect the mailbox'
+            : 'The mail provider did not answer',
+          `${err.kind}`,
+          err.needsReauth,
+        );
       }
       throw new ChannelError('MAIL_HEALTH_FAILED', 'The mailbox could not be checked.', true);
     }
@@ -222,7 +240,7 @@ export class EmailChannelAdapter implements ChannelAdapter {
     };
   }
 
-  /** Everything the send can throw, in the dispatcher's vocabulary. Never Google's own text. */
+  /** Everything the send can throw, in the dispatcher's vocabulary. Never the provider's own text (the driver already wrote ours). */
   private asChannelError(err: unknown): ChannelError {
     if (err instanceof ChannelError) return err;
     if (err instanceof MailboxUnavailableError) {
@@ -238,28 +256,16 @@ export class EmailChannelAdapter implements ChannelAdapter {
         { needsReauth: reauth },
       );
     }
-    if (err instanceof GoogleMailError) {
+    if (err instanceof MailDriverError) {
       if (err.retryable) {
-        return new ChannelError(
-          'MAIL_SEND_FAILED',
-          'Google did not accept the reply yet. It will be tried again.',
-          true,
-          {
-            providerCode: err.reason || null,
-          },
-        );
+        return new ChannelError('MAIL_SEND_FAILED', err.message, true, {
+          providerCode: err.providerCode || null,
+        });
       }
-      const needsReauth = err.kind === 'forbidden' && err.reason === 'insufficientPermissions';
-      return new ChannelError(
-        'MAIL_SEND_REFUSED',
-        err.kind === 'too_large'
-          ? 'The reply is too large for Gmail to send.'
-          : needsReauth
-            ? 'This mailbox may no longer send mail. Reconnect it.'
-            : 'Google refused to send this reply.',
-        false,
-        { needsReauth, providerCode: err.reason || null },
-      );
+      return new ChannelError('MAIL_SEND_REFUSED', err.message, false, {
+        needsReauth: err.needsReauth,
+        providerCode: err.providerCode || null,
+      });
     }
     return new ChannelError('MAIL_SEND_FAILED', 'The reply could not be sent.', true);
   }

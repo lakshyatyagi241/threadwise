@@ -72,8 +72,16 @@ export const outboundEmailSchema = z.object({
   inReplyTo: z.string().max(998).nullable(),
   /** The References chain, oldest first, ending with `inReplyTo`. */
   references: z.array(z.string().max(998)).max(100).default([]),
-  /** The provider's thread id (Gmail threadId): the reply is sent inside it. */
+  /** The provider's thread key (Gmail threadId, a header-derived key): the reply is sent inside it. */
   threadId: z.string().max(128),
+  /** Staged composer uploads (`mail_outbound_attachments.uuid`) sent with this reply (TW-MAIL-027). */
+  attachmentIds: z.array(z.string().uuid()).max(10).optional(),
+  /** A specific signature to append (`mail_signatures.uuid`); absent = the default for the sender and mailbox. */
+  signatureId: z.string().uuid().optional(),
+  /** `false`: no signature at all. */
+  signature: z.boolean().optional(),
+  /** The user who wrote the reply (internal id), for their default signature; null for a bot or flow. */
+  sentBy: z.number().int().nullable().optional(),
 });
 export type OutboundEmail = z.infer<typeof outboundEmailSchema>;
 export const OUTBOUND_CAPTION_MAX = 1024;

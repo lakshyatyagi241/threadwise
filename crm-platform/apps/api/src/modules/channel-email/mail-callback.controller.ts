@@ -7,18 +7,18 @@ import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { MailConnectService } from './mail-connect.service';
 
 /**
- * Where Google sends the browser after the consent screen (TW-MAIL-020). Unauthenticated by design (it is a browser redirect from Google,
+ * Where a provider sends the browser after the consent screen (TW-MAIL-020, 034). Unauthenticated by design (it is a browser redirect from Google,
  * with no token): the signed `state` that `POST /email/mailboxes/connect` issued is the credential, and is checked before anything else
  * happens. Always answers with a redirect to the web app, never with Google's data; the code in the address is kept out of caches and
  * referrers.
  */
 @ApiTags('email')
 @Public()
-@Controller({ path: 'public/email/google', version: '2' })
+@Controller({ path: 'public/email', version: '2' })
 export class MailCallbackController {
   constructor(private readonly connect: MailConnectService) {}
 
-  @Get('callback')
+  @Get('google/callback')
   @Header('Cache-Control', 'no-store')
   @Header('Referrer-Policy', 'no-referrer')
   @Header('X-Robots-Tag', 'noindex, nofollow')
@@ -31,6 +31,22 @@ export class MailCallbackController {
     @Query(zodPipe(mailCallbackQuerySchema)) query: MailCallbackQuery,
     @Res() res: Response,
   ): Promise<void> {
-    res.redirect(302, await this.connect.callback(query));
+    res.redirect(302, await this.connect.callback(query, 'google'));
+  }
+
+  /** The same round trip for Microsoft 365 (TW-MAIL-034): answers `failed` until a Microsoft driver is registered. */
+  @Get('microsoft/callback')
+  @Header('Cache-Control', 'no-store')
+  @Header('Referrer-Policy', 'no-referrer')
+  @Header('X-Robots-Tag', 'noindex, nofollow')
+  @ApiOperation({
+    summary: "Microsoft's redirect after consent",
+    description: 'Same contract as the Google callback.',
+  })
+  async microsoftCallback(
+    @Query(zodPipe(mailCallbackQuerySchema)) query: MailCallbackQuery,
+    @Res() res: Response,
+  ): Promise<void> {
+    res.redirect(302, await this.connect.callback(query, 'microsoft'));
   }
 }

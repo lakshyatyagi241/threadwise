@@ -145,6 +145,7 @@ export class MessageDispatchService {
               (await this.messages.latestInboundEmailMeta(tx, orgId, conv.id)) as EmailMeta | null,
               row.meta.emailReply as Partial<StoredEmailReply> | undefined,
               threadIdOfPeerKey(conv.peerKey),
+              row.senderKind === 'agent' ? row.senderUserId : null,
             )
           : null;
       const envelope = envelopeOf(

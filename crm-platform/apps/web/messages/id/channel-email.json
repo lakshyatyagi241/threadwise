@@ -104,7 +104,7 @@
       "unavailable": "Kotak surat ini terputus atau perlu dihubungkan ulang terlebih dahulu.",
       "sendRefused": "Google menolak mengirim email ini. Periksa alamat dan ukurannya, lalu coba lagi.",
       "wrongAccount": "Itu akun Google yang berbeda dari kotak surat ini. Masuk dengan alamat yang sama.",
-      "locked": "Add-on email tidak termasuk dalam paket Anda.",
+      "locked": "Integrasi email tidak termasuk dalam paket Anda.",
       "changed": "Kotak surat ini diubah di tempat lain. Daftar telah dimuat ulang, coba lagi."
     },
     "guide": {

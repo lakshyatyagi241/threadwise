@@ -68,5 +68,5 @@ Operator console, `platform.market.pricing` and `platform.market.review` permiss
 3. **Versions**: approve `1.0.0`, then **Publish**.
 4. If your build has plan visibility: **Plans**, edit each plan, enable the app's add-on.
 
-Forms in full: [forms-app-operator-setup.md](forms-app-operator-setup.md). Email (Gmail), including the Google credentials the seed does not set up: [email-addon-operator-setup.md](email-addon-operator-setup.md). Appointments: [dev-seed-appointments-app.md](dev-seed-appointments-app.md),
+Forms in full: [forms-app-operator-setup.md](forms-app-operator-setup.md). Email (Gmail), including the Google credentials the seed does not set up: [email-integration-operator-setup.md](email-integration-operator-setup.md). Appointments: [dev-seed-appointments-app.md](dev-seed-appointments-app.md),
 and [../api/marketplace.md](../api/marketplace.md) for the reasoning.

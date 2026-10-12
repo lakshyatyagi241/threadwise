@@ -104,7 +104,7 @@
       "unavailable": "Ta skrzynka jest rozłączona lub najpierw trzeba ją połączyć ponownie.",
       "sendRefused": "Google odmówiło wysłania tego e-maila. Sprawdź adresy i rozmiar, a następnie spróbuj ponownie.",
       "wrongAccount": "To inne konto Google niż to, do którego należy skrzynka. Zaloguj się na ten sam adres.",
-      "locked": "Dodatek e-mail nie jest częścią Twojego planu.",
+      "locked": "Integracja e-mail nie jest częścią Twojego planu.",
       "changed": "Ta skrzynka została zmieniona w innym miejscu. Lista została wczytana ponownie, spróbuj jeszcze raz."
     },
     "guide": {

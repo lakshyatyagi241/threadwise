@@ -1,16 +1,18 @@
 import { settingsTile } from '../_registry/settings-types';
 
 /**
- * Email is a channel: it is connected and managed from Settings > Channels. It is a paid first-party Marketplace add-on (plan
- * feature `email_channel`), so the `app` gate removes the tile and closes `/email` for a workspace that has not bought it.
+ * Email (Gmail) is an integration: it is connected and managed from Settings > Integrations, with the workspace's other connections
+ * (the Shopify and WooCommerce precedent). It is a paid first-party Marketplace integration that grants the plan feature
+ * `email_channel`. A missing permission hides the tile; a plan or Marketplace subscription without the feature keeps it visible and
+ * locked so it can upsell, and `/email` shows the plan paywall (see `nav.ts`).
  */
 export const settings = [
   settingsTile({
     id: 'email',
-    section: 'channels',
+    section: 'integrations',
     href: '/email',
     icon: 'mail',
     order: 70,
-    gates: { permission: 'mail.mailboxes.read', app: 'email_channel' },
+    gates: { permission: 'mail.mailboxes.read', planFeature: 'email_channel' },
   }),
 ];

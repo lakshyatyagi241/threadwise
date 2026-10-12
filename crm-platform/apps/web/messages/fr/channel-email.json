@@ -104,7 +104,7 @@
       "unavailable": "Cette boîte e-mail est déconnectée ou doit d’abord être reconnectée.",
       "sendRefused": "Google a refusé d’envoyer cet e-mail. Vérifiez les adresses et la taille, puis réessayez.",
       "wrongAccount": "Il s’agit d’un autre compte Google que celui de cette boîte e-mail. Connectez-vous avec la même adresse.",
-      "locked": "Le module e-mail ne fait pas partie de votre offre.",
+      "locked": "L'intégration e-mail ne fait pas partie de votre offre.",
       "changed": "Cette boîte e-mail a été modifiée ailleurs. La liste a été rechargée, réessayez."
     },
     "guide": {

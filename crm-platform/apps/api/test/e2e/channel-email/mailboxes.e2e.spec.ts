@@ -308,7 +308,7 @@ describe('TW-MAIL-019, 028: list, rename, sync, disconnect', () => {
       if (!synced) await new Promise((r) => setTimeout(r, 100));
     }
     expect(synced).not.toBeNull();
-    expect((await rowsOf(a.orgId)).find((r) => r.address === ANA)!.history_id).not.toBeNull();
+    expect((await rowsOf(a.orgId)).find((r) => r.address === ANA)!.sync_cursor).not.toBeNull();
   });
 
   it('disconnect revokes at Google, wipes the tokens, keeps the row and its channel (read-only), and is idempotent', async () => {

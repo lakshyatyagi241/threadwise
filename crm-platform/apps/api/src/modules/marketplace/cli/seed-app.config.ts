@@ -59,12 +59,13 @@ export const EMAIL_CONFIG: SeedAppConfig = {
   slug: 'email',
   label: 'Email (Gmail)',
   command: 'seed:email',
-  // The operator prices the add-on in the console; this is only the local-development default (about 6 USD a month). No trial by default.
+  // The operator prices the listing in the console; this is only the local-development default (about 6 USD a month). No trial by default.
   defaultPrice: '499',
   defaultCurrency: 'INR',
   feature: 'email_channel',
   version: '1.0.0',
   grandfatherExisting: false,
   usageNoun: 'mailboxes',
-  migration: '20261118100100_mkt_email_app',
+  // Seeded as a mini app by ..._mkt_email_app and converted to an integration (category Messaging and email) by ..._mkt_email_integration.
+  migration: '20261119120000_mkt_email_integration',
 };
