@@ -367,7 +367,8 @@
         "failed": "Der Workspace konnte nicht gewechselt werden. Bitte versuchen Sie es erneut.",
         "notAvailable": "Sie können nicht zu diesem Workspace wechseln.",
         "rateLimited": "Zu viele Versuche. Bitte warten Sie einen Moment und versuchen Sie es erneut.",
-        "rateLimitedWait": "Zu viele Versuche. Versuchen Sie es in {seconds, plural, one {# Sekunde} other {# Sekunden}} erneut."
+        "rateLimitedWait": "Zu viele Versuche. Versuchen Sie es in {seconds, plural, one {# Sekunde} other {# Sekunden}} erneut.",
+        "unverified": "Bestätigen Sie Ihre E-Mail-Adresse in diesem Arbeitsbereich, um dorthin zu wechseln."
       },
       "mfaChallenge": {
         "title": "Bestätigen Sie, dass Sie es sind",

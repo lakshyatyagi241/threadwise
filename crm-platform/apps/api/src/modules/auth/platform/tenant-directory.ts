@@ -92,6 +92,27 @@ export class TenantDirectory {
     });
   }
 
+  /**
+   * Every active organization holding an active user with this email, with whether the address is verified
+   * there. For the workspace menu: unverified ones are shown but cannot be switched to.
+   */
+  async orgsForEmailWithVerification(
+    email: string,
+  ): Promise<Array<{ slug: string; name: string; verified: boolean }>> {
+    return this.db.privileged(async (tx) => {
+      const res = await tx.execute(sql`
+        SELECT o.slug, o.name, (s.email_verified_at IS NOT NULL) AS verified
+        FROM users u
+        JOIN organizations o ON o.id = u.org_id
+        LEFT JOIN user_security s ON s.org_id = u.org_id AND s.user_id = u.id
+        WHERE u.email = ${email} AND u.status = 'active' AND o.status = 'active'
+        ORDER BY o.name, o.id
+        LIMIT 50
+      `);
+      return res.rows as unknown as Array<{ slug: string; name: string; verified: boolean }>;
+    });
+  }
+
   /** Active organizations holding an active user with this email (login without a workspace). Capped: nobody has more. */
   async activeOrgsForEmail(email: string): Promise<OrgRef[]> {
     return this.db.privileged(async (tx) => {

@@ -367,7 +367,8 @@
         "failed": "Không thể chuyển không gian làm việc. Vui lòng thử lại.",
         "notAvailable": "Bạn không thể chuyển sang không gian làm việc đó.",
         "rateLimited": "Quá nhiều lần thử. Vui lòng đợi một lát rồi thử lại.",
-        "rateLimitedWait": "Quá nhiều lần thử. Hãy thử lại sau {seconds, plural, other {# giây}}."
+        "rateLimitedWait": "Quá nhiều lần thử. Hãy thử lại sau {seconds, plural, other {# giây}}.",
+        "unverified": "Hãy xác minh email của bạn trong không gian làm việc này để chuyển sang đó."
       },
       "mfaChallenge": {
         "title": "Xác nhận là bạn",
