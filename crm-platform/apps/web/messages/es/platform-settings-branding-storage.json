@@ -17,6 +17,8 @@
       "whatsapp": "WhatsApp (WABA)",
       "campaigns": "Campañas",
       "googleCalendar": "Google Calendar",
+      "googleMail": "Gmail",
+      "microsoftMail": "Microsoft 365",
       "flowBuilder": "Editor de flujos"
     },
     "hub": {
@@ -930,6 +932,79 @@
           }
         }
       },
+      "googleMail": {
+        "title": "Correo Gmail",
+        "description": "El cliente OAuth de Google con el que cada espacio de trabajo conecta sus buzones.",
+        "sections": {
+          "oauth": {
+            "title": "Cliente OAuth de Google"
+          },
+          "push": {
+            "title": "Gmail push (opcional)"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Permitir que los espacios de trabajo conecten Gmail",
+            "hint": "Desactivado: ningún espacio de trabajo puede conectar y no se lee ni se envía correo. Los buzones ya conectados se conservan."
+          },
+          "clientId": {
+            "label": "ID de cliente",
+            "hint": "Desde Google Cloud, Credenciales, ID de cliente OAuth 2.0 (aplicación web). Si está vacío se usa GOOGLE_MAIL_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Secreto de cliente",
+            "hint": "Se guarda cifrado y no se vuelve a mostrar. Si está vacío se conserva el guardado; GOOGLE_MAIL_CLIENT_SECRET es la alternativa."
+          },
+          "redirectUri": {
+            "label": "Sustituir URI de redirección",
+            "hint": "Déjalo vacío para usar la dirección de arriba. Debe coincidir exactamente con un URI de redirección autorizado en el cliente."
+          },
+          "pubsubTopic": {
+            "label": "Tema de Pub/Sub",
+            "hint": "projects/PROJECT_ID/topics/TOPIC_ID. Dale a gmail-api-push@system.gserviceaccount.com el rol de Publisher en él. Vacío usa GOOGLE_MAIL_PUBSUB_TOPIC; sin tema, los buzones solo se consultan periódicamente."
+          },
+          "pushAudience": {
+            "label": "Audiencia del push",
+            "hint": "La audiencia definida en la suscripción push. Vacío usa GOOGLE_MAIL_PUSH_AUDIENCE; si no, la dirección del endpoint push de esta plataforma."
+          },
+          "pushServiceAccount": {
+            "label": "Cuenta de servicio del push",
+            "hint": "La cuenta de servicio con la que firma la suscripción push. Un push de cualquier otra cuenta se rechaza. Vacío usa GOOGLE_MAIL_PUSH_SERVICE_ACCOUNT."
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "Correo de Microsoft 365",
+        "description": "La aplicación de Microsoft con la que cada espacio de trabajo conecta sus buzones de Outlook y Microsoft 365.",
+        "sections": {
+          "oauth": {
+            "title": "Aplicación de Microsoft Entra"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Permitir que los espacios de trabajo conecten Microsoft 365",
+            "hint": "Desactivado: ningún espacio de trabajo puede conectar y no se lee ni se envía correo. Los buzones ya conectados se conservan."
+          },
+          "clientId": {
+            "label": "ID de aplicación (cliente)",
+            "hint": "Del centro de administración de Microsoft Entra, Registros de aplicaciones, Información general. Vacío usa MICROSOFT_MAIL_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Secreto de cliente",
+            "hint": "Se guarda cifrado y no se vuelve a mostrar. Si está vacío se conserva el guardado; MICROSOFT_MAIL_CLIENT_SECRET es la alternativa."
+          },
+          "tenant": {
+            "label": "Inquilino",
+            "hint": "common admite cuentas de trabajo, escolares y personales; use un ID de directorio (inquilino) para una aplicación de un solo inquilino. Vacío usa MICROSOFT_MAIL_TENANT y, si no, common."
+          },
+          "redirectUri": {
+            "label": "Sustituir URI de redirección",
+            "hint": "Déjalo vacío para usar la dirección de arriba. Debe coincidir exactamente con un URI de redirección autorizado en el cliente."
+          }
+        }
+      },
       "flowBuilder": {
         "title": "Editor de flujos",
         "description": "Qué editores de flujos se ofrecen a los espacios de trabajo.",
@@ -1062,6 +1137,16 @@
         "title": "Google Calendar",
         "description": "El cliente OAuth de Google que usan los espacios de trabajo para conectar su calendario y gestionar citas y horas ocupadas.",
         "tags": "Google / OAuth / Calendar"
+      },
+      "googleMail": {
+        "title": "Correo Gmail",
+        "description": "El cliente OAuth de Google que usan los espacios de trabajo para conectar sus buzones de Gmail.",
+        "tags": "Google / OAuth / Gmail"
+      },
+      "microsoftMail": {
+        "title": "Correo de Microsoft 365",
+        "description": "La aplicación de Microsoft con la que los espacios de trabajo conectan sus buzones de Outlook y Microsoft 365.",
+        "tags": "Microsoft / OAuth / Outlook"
       },
       "flowBuilder": {
         "title": "Editor de flujos",
@@ -1648,6 +1733,78 @@
           }
         }
       },
+      "googleMail": {
+        "title": "Correo Gmail",
+        "eyebrow": "Admin - Correo",
+        "description": "Un único cliente OAuth de Google Cloud para toda la plataforma, distinto del de Google Calendar. Cada espacio de trabajo conecta sus propios buzones desde Correo y nunca ve el ID de cliente ni el secreto.",
+        "sections": {
+          "oauth": {
+            "title": "Cliente OAuth de Google",
+            "description": "Sin ID de cliente y secreto, los espacios de trabajo no pueden conectar un buzón."
+          },
+          "push": {
+            "title": "Gmail push (opcional)",
+            "description": "El correo nuevo llega a la bandeja del equipo en segundos, sin esperar a la siguiente consulta. La consulta periódica sigue activa como respaldo."
+          }
+        },
+        "guide": {
+          "title": "Configurarlo en Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. Proyecto y API",
+              "body": "En Google Cloud Console crea un proyecto y activa la API de Gmail."
+            },
+            "redirect": {
+              "title": "2. Cliente OAuth",
+              "body": "Crea un ID de cliente OAuth 2.0 de tipo aplicación web y añade el URI de redirección que aparece en esta página en URI de redirección autorizados."
+            },
+            "consent": {
+              "title": "3. Pantalla de consentimiento",
+              "body": "Añade los permisos openid, email, gmail.readonly y gmail.send. Los permisos de Gmail son restringidos: Google debe verificar la app para uso general y, en modo de pruebas, la autorización termina a los 7 días."
+            },
+            "workspaces": {
+              "title": "4. Los espacios de trabajo se conectan",
+              "body": "Pega aquí el ID de cliente y el secreto y guarda. Los administradores conectan después desde Correo."
+            },
+            "push": {
+              "title": "5. Correo instantáneo (opcional)",
+              "body": "Crea un tema de Pub/Sub, dale a gmail-api-push@system.gserviceaccount.com el rol de Publisher, añade una suscripción push a APP_URL/v2/public/email/google/push con autenticación OIDC y escribe aquí el tema, la audiencia y la cuenta de servicio."
+            }
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "Correo de Microsoft 365",
+        "eyebrow": "Admin - Correo",
+        "description": "Una sola aplicación de Microsoft Entra para toda la plataforma. Cada espacio de trabajo conecta sus propios buzones desde Correo y nunca ve el ID ni el secreto del cliente.",
+        "sections": {
+          "oauth": {
+            "title": "Aplicación de Microsoft Entra",
+            "description": "Sin ID de cliente y secreto, los espacios de trabajo no pueden conectar un buzón."
+          }
+        },
+        "guide": {
+          "title": "Configúrelo en Microsoft Entra",
+          "items": {
+            "registration": {
+              "title": "1. Registro de la aplicación",
+              "body": "En el centro de administración de Microsoft Entra cree un registro de aplicación. Elija los tipos de cuenta que usan sus clientes (trabajo o escuela, y cuentas personales para Outlook.com) y copie aquí el ID de aplicación (cliente) y el inquilino."
+            },
+            "redirect": {
+              "title": "2. URI de redirección y secreto",
+              "body": "Añada el URI de redirección que se muestra en esta página como redirección de la plataforma Web y cree un secreto de cliente en Certificados y secretos; pegue aquí su valor."
+            },
+            "permissions": {
+              "title": "3. Permisos de API",
+              "body": "Añada los permisos delegados de Microsoft Graph Mail.Read, Mail.Send, User.Read y offline_access. Para uso general complete la verificación del editor; algunas organizaciones también exigen el consentimiento de un administrador."
+            },
+            "workspaces": {
+              "title": "4. Los espacios de trabajo se conectan",
+              "body": "Pega aquí el ID de cliente y el secreto y guarda. Los administradores conectan después desde Correo."
+            }
+          }
+        }
+      },
       "flowBuilder": {
         "title": "Editor de flujos",
         "eyebrow": "Admin - Automatización",
@@ -1735,6 +1892,12 @@
     "googleCallback": {
       "redirectTitle": "URI de redirección",
       "redirectHint": "Registra esta dirección exacta como URI de redirección autorizado en el cliente OAuth. Es a donde envía Google el navegador después de que un administrador del espacio de trabajo acepte.",
+      "copy": "Copiar",
+      "copied": "Copiado"
+    },
+    "microsoftCallback": {
+      "redirectTitle": "URI de redirección",
+      "redirectHint": "Registre exactamente esta dirección como URI de redirección Web en el registro de la aplicación. Es donde Microsoft envía el navegador después de que un administrador del espacio de trabajo acepta.",
       "copy": "Copiar",
       "copied": "Copiado"
     }

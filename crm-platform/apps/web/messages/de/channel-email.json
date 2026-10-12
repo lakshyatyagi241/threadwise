@@ -1,0 +1,390 @@
+{
+  "email": {
+    "common": {
+      "dismiss": "Schließen"
+    },
+    "hub": {
+      "kicker": "Kanäle",
+      "title": "E-Mail",
+      "titleAccent": "Postfächer",
+      "intro": "Verbinden Sie Ihr Gmail, Microsoft 365 oder ein beliebiges IMAP-Postfach. Kunden-E-Mails landen im Team-Posteingang, eine Unterhaltung pro E-Mail-Verlauf, und Ihre Antworten gehen von derselben Adresse ab.",
+      "inbox": "Posteingang öffnen",
+      "channels": "Kanäle",
+      "loadError": "Ihre Postfächer konnten nicht geladen werden. Versuchen Sie es gleich noch einmal.",
+      "cardCaption": "Gmail · Microsoft 365 · IMAP",
+      "connectedCount": "{count, plural, one {# Postfach verbunden} other {# Postfächer verbunden}}",
+      "notConnected": "Nicht verbunden",
+      "usageLabel": "Genutzte Postfächer",
+      "usage": "{used} von {limit} Postfächern",
+      "usageUnlimited": "{used, plural, one {# Postfach} other {# Postfächer}}, kein Limit",
+      "howTitle": "So funktioniert es",
+      "how": {
+        "connect": {
+          "title": "Postfach verbinden",
+          "body": "Melden Sie sich mit Google oder Microsoft an oder geben Sie die Einstellungen Ihres Mailservers ein, und erlauben Sie Threadwise, E-Mails dieser Adresse zu lesen und zu senden."
+        },
+        "inbox": {
+          "title": "E-Mails landen im Posteingang",
+          "body": "Neue E-Mails werden jede Minute abgerufen. Jeder E-Mail-Thread wird zu einer Unterhaltung, und jedes Postfach ist ein eigener Posteingang."
+        },
+        "reply": {
+          "title": "Aus dem Posteingang antworten",
+          "body": "Ihre Antwort geht vom Postfach aus im selben Thread raus, auf Wunsch mit Cc und Bcc."
+        },
+        "limit": {
+          "title": "Postfächer richten sich nach Ihrem Tarif",
+          "body": "Ihr Tarif legt fest, wie viele Postfächer Sie verbinden können. E-Mails zählen nicht auf Ihr Nachrichtenkontingent."
+        }
+      },
+      "connectedTitle": "Verbundene Postfächer",
+      "total": "{count, plural, one {# Postfach} other {# Postfächer}}",
+      "empty": "Noch kein Postfach verbunden. Verbinden Sie unten eines, um E-Mails im Posteingang zu empfangen.",
+      "addTitle": "Postfach hinzufügen",
+      "providers": {
+        "google": {
+          "name": "Gmail / Google Workspace",
+          "hint": "Melden Sie sich mit dem Google-Konto an, dem das Postfach gehört, zum Beispiel support@yourcompany.com."
+        },
+        "imap": {
+          "name": "Andere E-Mail-Anbieter (IMAP / SMTP)",
+          "hint": "Jeder andere E-Mail-Anbieter mit Benutzername und Passwort."
+        },
+        "microsoft": {
+          "name": "Microsoft 365 / Outlook",
+          "hint": "Melden Sie sich mit einem Microsoft-Geschäfts- oder Schulkonto an."
+        }
+      },
+      "notReady": "{provider} ist für diese Plattform noch nicht eingerichtet. Bitten Sie den Plattformadministrator, die Zugangsdaten zu hinterlegen.",
+      "limitReached": "Sie haben alle {limit, plural, one {# Postfach} other {# Postfächer}} Ihres Tarifs belegt. Entfernen Sie ein Postfach oder bitten Sie Ihren Administrator, den Tarif zu erweitern.",
+      "noPermission": "Sie können die Postfächer sehen, aber nur Personen mit Verwaltungsrechten können eines verbinden.",
+      "connectFailed": "Die Anmeldung konnte nicht gestartet werden. Versuchen Sie es erneut.",
+      "connect": {
+        "google": "Gmail verbinden",
+        "microsoft": "Microsoft 365 verbinden",
+        "imap": "IMAP / SMTP verbinden"
+      },
+      "imapConnected": "Postfach verbunden. E-Mails der letzten 7 Tage werden in den Posteingang geladen.",
+      "imapReconnected": "Postfach erneut verbunden.",
+      "scope": {
+        "title": "Für wen ist dieses Postfach?",
+        "shared": "Gemeinsam",
+        "sharedHint": "Ein Firmenpostfach wie support@. Das ganze Team kann seine Unterhaltungen bearbeiten.",
+        "personal": "Persönlich",
+        "personalHint": "Ihr eigenes Postfach. Nur Sie können seine Unterhaltungen lesen.",
+        "onlyPersonal": "Sie können Ihr eigenes persönliches Postfach verbinden. Nur Sie können seine Unterhaltungen lesen."
+      }
+    },
+    "card": {
+      "status": {
+        "connected": "Verbunden",
+        "needs_reauth": "Erneut verbinden",
+        "error": "Fehler",
+        "disconnected": "Getrennt"
+      },
+      "sendsAs": "Antworten gehen raus als",
+      "displayName": "Anzeigename",
+      "edit": "Bearbeiten",
+      "save": "Speichern",
+      "cancel": "Abbrechen",
+      "renamed": "Anzeigename gespeichert.",
+      "needsReauthHint": "Der Anbieter lässt uns dieses Postfach nicht mehr lesen. Verbinden Sie es erneut, um wieder E-Mails zu empfangen und zu senden.",
+      "lastError": "Letztes Problem: {error}",
+      "lastSynced": "Zuletzt synchronisiert",
+      "neverSynced": "Noch nicht synchronisiert",
+      "conversations": "Unterhaltungen",
+      "openInbox": "Im Posteingang öffnen",
+      "sync": "Jetzt synchronisieren",
+      "syncStarted": "Synchronisierung gestartet. Neue E-Mails erscheinen gleich im Posteingang.",
+      "reconnect": "Erneut verbinden",
+      "remove": "Entfernen",
+      "removeTitle": "Postfach entfernen",
+      "removeConfirm": "{address} entfernen? Die Unterhaltungen bleiben als schreibgeschützter Verlauf im Posteingang erhalten, und es werden keine neuen E-Mails mehr empfangen oder gesendet. Sie können dieselbe Adresse später erneut verbinden.",
+      "removed": "Postfach entfernt.",
+      "failed": "Das Postfach konnte nicht aktualisiert werden. Versuchen Sie es erneut.",
+      "provider": {
+        "google": "Gmail",
+        "microsoft": "Microsoft 365",
+        "imap": "IMAP / SMTP"
+      },
+      "scope": {
+        "shared": "Gemeinsam",
+        "personal": "Persönlich",
+        "personalOf": "Persönlich · {name}"
+      },
+      "push": "Live-Updates",
+      "pushHint": "Neue E-Mails kommen an, sobald der Anbieter sie meldet.",
+      "signature": "Signatur",
+      "signatureHint": "Antworten aus diesem Postfach erhalten dessen Signatur.",
+      "summaryNote": "Dies ist das persönliche Postfach einer anderen Person. Nur der Besitzer kann es lesen und verwalten.",
+      "sendLimit": "Sendelimit pro Stunde",
+      "limitDefault": "Plattform-Standard",
+      "limitPerHour": "{count, plural, one {# E-Mail pro Stunde} other {# E-Mails pro Stunde}}",
+      "limitSaved": "Sendelimit gespeichert.",
+      "needsReauthImap": "Der Mailserver hat das gespeicherte Passwort abgelehnt. Verbinden Sie erneut und geben Sie das Passwort noch einmal ein."
+    },
+    "outcome": {
+      "connected": "Postfach verbunden. E-Mails der letzten 7 Tage werden in den Posteingang abgerufen.",
+      "denied": "Die Anmeldung wurde abgebrochen, daher wurde nichts verbunden.",
+      "missing_scope": "Der Zugriff zum Lesen und Senden von E-Mails wurde nicht erteilt. Verbinden Sie erneut und erlauben Sie auf dem Anmeldebildschirm alle Berechtigungen.",
+      "limit": "Das Postfachlimit Ihres Tarifs ist erreicht, daher wurde dieses Postfach nicht verbunden.",
+      "not_configured": "Die Anmeldung für diesen Anbieter ist für diese Plattform noch nicht eingerichtet. Fragen Sie den Plattformadministrator.",
+      "wrong_account": "Sie haben sich mit einem anderen Konto angemeldet als dem des Postfachs, das erneut verbunden wird. Melden Sie sich mit derselben Adresse an.",
+      "failed": "Beim Verbinden des Postfachs ist etwas schiefgelaufen. Versuchen Sie es erneut."
+    },
+    "errors": {
+      "notConfigured": "Die Anmeldung für diesen Anbieter ist für diese Plattform noch nicht eingerichtet. Fragen Sie den Plattformadministrator.",
+      "limit": "Das Postfachlimit Ihres Tarifs ist erreicht.",
+      "unavailable": "Dieses Postfach ist getrennt oder muss zuerst erneut verbunden werden.",
+      "sendRefused": "Der E-Mail-Anbieter hat das Senden dieser E-Mail abgelehnt. Prüfen Sie Adressen und Größe und versuchen Sie es erneut.",
+      "wrongAccount": "Das ist ein anderes Konto als das dieses Postfachs. Melden Sie sich mit derselben Adresse an.",
+      "locked": "Die E-Mail-Integration ist nicht Teil Ihres Tarifs.",
+      "changed": "Dieses Postfach wurde an anderer Stelle geändert. Die Liste wurde neu geladen, versuchen Sie es erneut.",
+      "personalDisabled": "Persönliche Postfächer sind für diesen Arbeitsbereich ausgeschaltet.",
+      "personalNotAllowed": "Sie dürfen kein persönliches Postfach verbinden.",
+      "providerUnsupported": "Dieser E-Mail-Anbieter ist nicht verfügbar.",
+      "rateLimited": "Dieses Postfach hat sein Sendelimit erreicht. Versuchen Sie es später erneut."
+    },
+    "guide": {
+      "title": "Einrichtungsanleitung",
+      "google": {
+        "title": "Gmail oder Google Workspace verbinden",
+        "p1": "Wählen Sie „Gmail verbinden“ und melden Sie sich mit dem Konto an, dem das Postfach gehört, etwa eine gemeinsame support@- oder sales@-Adresse.",
+        "p2": "Erlauben Sie auf der Google-Seite das Lesen und Senden von E-Mails. Ohne beides können E-Mails weder empfangen noch gesendet werden.",
+        "p3": "Sie werden hierher zurückgeleitet, und die E-Mails der ersten 7 Tage werden in den Posteingang abgerufen, ohne dass jemand benachrichtigt wird.",
+        "p4": "Weitere Postfächer fügen Sie auf dieselbe Weise hinzu, bis zur Anzahl, die Ihr Tarif erlaubt. Jedes erscheint als eigener Posteingang."
+      },
+      "consent": {
+        "title": "Was wir lesen und senden",
+        "p1": "Wir lesen die E-Mails in Ihrem Posteingang, um sie im Team-Posteingang anzuzeigen. Spam, Papierkorb und Entwürfe werden übersprungen.",
+        "p2": "E-Mails, die wir selbst von Ihrem Konto aus an anderer Stelle gesendet haben, werden nicht in den Posteingang kopiert.",
+        "p3": "Automatische Antworten, Unzustellbarkeitsmeldungen und Mailinglisten-E-Mails werden gespeichert und als „Automatisch“ markiert.",
+        "p4": "Wenn Sie ein Postfach entfernen, werden Lesen und Senden beendet. Die bisherigen Unterhaltungen bleiben als schreibgeschützter Verlauf erhalten."
+      },
+      "trouble": {
+        "title": "Wenn etwas nicht stimmt",
+        "p1": "Erneut verbinden nötig bedeutet, dass der Anbieter den Zugriff widerrufen hat oder er abgelaufen ist, oder dass der Mailserver das Passwort abgelehnt hat. Wählen Sie Erneut verbinden.",
+        "p2": "„Fehler“ zeigt das letzte Problem an. Wählen Sie „Jetzt synchronisieren“, um es erneut zu versuchen; schlägt es weiter fehl, verbinden Sie das Postfach erneut.",
+        "p3": "Verbinden ist deaktiviert, wenn für den Anbieter keine Anmeldung eingerichtet ist oder das Postfachlimit Ihres Tarifs erreicht ist.",
+        "p4": "Bilder in einer E-Mail bleiben ausgeblendet, bis Sie in der Unterhaltung „Bilder laden“ wählen."
+      },
+      "other": {
+        "title": "Microsoft 365 oder einen anderen E-Mail-Anbieter verbinden",
+        "p1": "Wählen Sie für Microsoft 365 oder Outlook Microsoft 365 verbinden und melden Sie sich mit dem Geschäfts- oder Schulkonto an, dem das Postfach gehört.",
+        "p2": "Wählen Sie bei jedem anderen Anbieter IMAP / SMTP verbinden und geben Sie Server, Port, Sicherheit, Benutzername und Passwort Ihres Anbieters ein.",
+        "p3": "Wir melden uns zuerst am Eingangs- und am Ausgangsserver an. Lehnt einer ab, nennt die Meldung welcher.",
+        "p4": "Manche Anbieter verlangen ein App-Passwort statt Ihres normalen Passworts. Erstellen Sie eines in den Sicherheitseinstellungen Ihres Anbieters."
+      },
+      "personal": {
+        "title": "Persönliche Postfächer und Freigabe",
+        "p1": "Ein Administrator schaltet persönliche Postfächer unter E-Mail-Freigabe ein und legt fest, wer eines verbinden darf.",
+        "p2": "Wählen Sie beim Verbinden eines Postfachs Persönlich. Nur Sie können seine Unterhaltungen im Posteingang lesen.",
+        "p3": "Administratoren sehen nur eine Zusammenfassung Ihres Postfachs, außer der Arbeitsbereich erlaubt ihnen, persönliche Postfächer zu lesen.",
+        "p4": "Das Ausschalten persönlicher Postfächer öffnet ein bestehendes persönliches Postfach nie für andere."
+      }
+    },
+    "thread": {
+      "noSubject": "(kein Betreff)",
+      "automated": "Automatisch",
+      "from": "Von",
+      "to": "An",
+      "cc": "Cc",
+      "date": "Datum",
+      "imagesBlocked": "Bilder aus dem Internet werden nicht angezeigt.",
+      "loadImages": "Bilder laden",
+      "frameTitle": "E-Mail: {subject}",
+      "truncated": "Diese E-Mail war lang, daher wird nur der erste Teil angezeigt.",
+      "noBody": "Diese E-Mail enthält keinen Text.",
+      "attachments": "{count, plural, one {# Anhang} other {# Anhänge}}",
+      "tooLarge": "zu groß zum Speichern ({size})",
+      "download": "{name} herunterladen ({size})",
+      "bounce": {
+        "title": "Nicht zugestellt an {address}.",
+        "reason": "Grund: {reason}",
+        "hard": "Die Adresse wurde endgültig abgelehnt. Prüfe sie auf Tippfehler und sende eine neue E-Mail an die korrigierte Adresse.",
+        "soft": "Das wirkt vorübergehend, zum Beispiel ein volles Postfach. Ein späterer neuer Versuch kann klappen, oder ändere die Adresse."
+      }
+    },
+    "composer": {
+      "toggle": "Cc, Bcc und Betreff",
+      "cc": "Cc",
+      "bcc": "Bcc",
+      "subject": "Betreff",
+      "subjectPlaceholder": "Betreff",
+      "addressesPlaceholder": "name@example.com, other@example.com",
+      "problem": {
+        "ccInvalid": "Diese Cc-Adressen sind ungültig: {list}",
+        "bccInvalid": "Diese Bcc-Adressen sind ungültig: {list}",
+        "ccTooMany": "Cc nimmt höchstens 20 Adressen an.",
+        "bccTooMany": "Bcc nimmt höchstens 20 Adressen an.",
+        "subjectTooLong": "Der Betreff darf höchstens 998 Zeichen lang sein."
+      },
+      "editor": {
+        "toolbar": "Textformatierung",
+        "bold": "Fett",
+        "italic": "Kursiv",
+        "underline": "Unterstrichen",
+        "bulletList": "Aufzählung",
+        "numberedList": "Nummerierte Liste",
+        "quote": "Zitat",
+        "link": "Link hinzufügen",
+        "clear": "Formatierung entfernen",
+        "linkAddress": "Linkadresse",
+        "linkApply": "Hinzufügen",
+        "linkInvalid": "Gib eine Web-, E-Mail- oder Telefonadresse ein.",
+        "label": "E-Mail-Antwort",
+        "toPlain": "Zu reinem Text wechseln",
+        "toRich": "Zu formatiertem Text wechseln",
+        "hint": "Mit Strg+Eingabe (Cmd+Eingabe auf dem Mac) senden. Eingabe beginnt eine neue Zeile."
+      },
+      "attach": {
+        "dismiss": "Schließen",
+        "list": "Angehängte Dateien ({count})",
+        "uploading": "{name} wird hochgeladen",
+        "ready": "Angehängt",
+        "failed": "Upload fehlgeschlagen",
+        "retry": "Erneut versuchen",
+        "remove": "{name} entfernen",
+        "waiting": "Warten, bis die Dateien hochgeladen sind.",
+        "fixFailed": "Versuche es erneut oder entferne die Dateien, die nicht hochgeladen wurden.",
+        "refused": {
+          "empty": "{name} ist leer und wurde nicht hinzugefügt.",
+          "tooLarge": "{name} ist größer als {max} und wurde nicht hinzugefügt.",
+          "tooMany": "In eine E-Mail passen nur {count} Dateien. {name} wurde nicht hinzugefügt.",
+          "totalTooLarge": "Mit {name} wäre die E-Mail zu groß, deshalb wurde es nicht hinzugefügt.",
+          "blocked": "{name} ist ein Dateityp, den E-Mail nicht transportieren kann, und wurde nicht hinzugefügt."
+        }
+      },
+      "error": {
+        "rateLimited": "Dieses Postfach hat sein Sendelimit pro Stunde erreicht. {seconds, plural, =0 {Versuche es in Kürze erneut.} other {Versuche es in # s erneut.}}",
+        "attachmentTooLarge": "Eine Datei ist zu groß zum Anhängen. Jede Datei darf höchstens 10 MB groß sein, alle zusammen höchstens 20 MB.",
+        "tooManyAttachments": "Zu viele Dateien. Eine E-Mail nimmt höchstens 10 auf.",
+        "attachmentGone": "Ein Anhang ist abgelaufen oder wurde entfernt. Hänge ihn erneut an.",
+        "signatureGone": "Die gewählte Signatur gibt es nicht mehr. Wähle eine andere.",
+        "sendRefused": "Der Mailanbieter hat diese E-Mail abgelehnt. Prüfe die Adressen und die Größe und versuche es erneut.",
+        "unavailable": "Dieses Postfach ist getrennt oder muss zuerst neu verbunden werden.",
+        "attachmentBlocked": "Dieser Dateityp kann nicht per E-Mail gesendet werden.",
+        "network": "Der Server ist nicht erreichbar. Prüfe deine Verbindung und versuche es erneut.",
+        "generic": "Die E-Mail konnte nicht gesendet werden. Versuche es erneut.",
+        "bodyTooLong": "Diese E-Mail ist zu lang zum Senden. Kürze sie und versuche es erneut."
+      },
+      "signature": {
+        "label": "Signatur",
+        "auto": "Standard ({name})",
+        "autoNone": "Standard (keine)",
+        "none": "Keine Signatur",
+        "mine": "{name} (meine)",
+        "shared": "{name} (Postfach)",
+        "preview": "Vorschau der Signatur",
+        "noneShown": "Es wird keine Signatur hinzugefügt."
+      }
+    },
+    "inbox": {
+      "group": "E-Mail"
+    },
+    "imap": {
+      "eyebrow": "Andere E-Mail",
+      "title": "IMAP- / SMTP-Postfach verbinden",
+      "reconnectTitle": "IMAP- / SMTP-Postfach erneut verbinden",
+      "close": "Schließen",
+      "intro": "Geben Sie die Einstellungen ein, die Ihr E-Mail-Anbieter für diese Adresse nennt. Wir melden uns an beiden Servern an, bevor etwas gespeichert wird.",
+      "reconnectIntro": "Geben Sie das Passwort erneut ein. Wir melden uns an beiden Servern an, bevor etwas gespeichert wird.",
+      "address": "Postfachadresse",
+      "displayName": "Anzeigename",
+      "preset": "E-Mail-Anbieter",
+      "presetHint": "Die Auswahl füllt die Servereinstellungen aus. Sie können sie weiterhin ändern.",
+      "presetCustom": "Andere (Einstellungen eingeben)",
+      "incoming": "Posteingang (IMAP)",
+      "outgoing": "Postausgang (SMTP)",
+      "host": "Server",
+      "port": "Port",
+      "securityLabel": "Sicherheit",
+      "security": {
+        "ssl": "SSL/TLS",
+        "starttls": "STARTTLS",
+        "none": "Keine"
+      },
+      "username": "Benutzername",
+      "password": "Passwort",
+      "passwordHint": "Wird verschlüsselt gespeichert und nie wieder angezeigt.",
+      "passwordAgain": "Geben Sie das Passwort erneut ein. Es wird nie angezeigt.",
+      "showPassword": "Passwort anzeigen",
+      "hidePassword": "Passwort verbergen",
+      "sameCredentials": "Denselben Benutzernamen und dasselbe Passwort zum Senden verwenden",
+      "noEncryption": "Diese Verbindung ist nicht verschlüsselt. Jeder im Netzwerk könnte das Passwort und die E-Mails lesen.",
+      "verifyNote": "Das Serverzertifikat wird immer geprüft.",
+      "cancel": "Abbrechen",
+      "submit": "Prüfen und verbinden",
+      "reconnectSubmit": "Prüfen und erneut verbinden",
+      "verifying": "Wird geprüft",
+      "errors": {
+        "required": "Dieses Feld ist erforderlich.",
+        "invalid": "Dieser Wert ist ungültig."
+      },
+      "failure": {
+        "imapAuth": "Der Posteingangsserver (IMAP) hat Benutzername oder Passwort abgelehnt. Prüfen Sie beides und versuchen Sie es erneut.",
+        "smtpAuth": "Der Postausgangsserver (SMTP) hat Benutzername oder Passwort abgelehnt. Prüfen Sie beides und versuchen Sie es erneut.",
+        "unreachable": "Der Mailserver ist nicht erreichbar oder sein Zertifikat ist ungültig. Prüfen Sie Server, Port und Sicherheit.",
+        "generic": "Das Postfach konnte nicht verbunden werden. Versuchen Sie es erneut."
+      }
+    },
+    "sharing": {
+      "title": "E-Mail-Freigabe",
+      "intro": "Legen Sie fest, ob Personen ihr eigenes Postfach verbinden dürfen und wer es sehen kann.",
+      "enabled": {
+        "title": "Persönliche Postfächer",
+        "body": "Personen dürfen ihr eigenes Postfach verbinden. Seine Unterhaltungen sind nur für sie sichtbar."
+      },
+      "who": {
+        "title": "Wer eines verbinden darf",
+        "body": "Nur Personen mit der Berechtigung, persönliche Postfächer zu verwalten.",
+        "admins": "Nur Administratoren",
+        "agents": "Administratoren und Agenten"
+      },
+      "admins": {
+        "title": "Administratoren dürfen persönliche Postfächer lesen",
+        "body": "Administratoren können die Unterhaltungen persönlicher Postfächer anderer öffnen. Ist die Option aus, sehen sie nur eine Zusammenfassung."
+      },
+      "offNote": "Das Ausschalten persönlicher Postfächer blendet nur die Verbindungsoption aus. Bestehende persönliche Postfächer bleiben für ihre Besitzer privat.",
+      "save": "Speichern",
+      "reset": "Änderungen verwerfen",
+      "saved": "E-Mail-Freigabe gespeichert.",
+      "failed": "Speichern nicht möglich. Versuchen Sie es erneut."
+    },
+    "signatures": {
+      "title": "Signaturen",
+      "intro": "Eine Signatur wird ans Ende deiner Antworten gesetzt. Jedes Postfach kann eine gemeinsame haben, und du kannst eine eigene führen, die zuerst verwendet wird.",
+      "new": "Neue Signatur",
+      "edit": "Signatur bearbeiten",
+      "scope": "Wem sie gehört",
+      "scopes": {
+        "user": "Mir",
+        "mailbox": "Einem Postfach",
+        "userBadge": "Meine",
+        "mailboxBadge": "Postfach"
+      },
+      "mailbox": "Postfach",
+      "pickMailbox": "Postfach wählen",
+      "mailboxRequired": "Wähle ein Postfach.",
+      "name": "Name",
+      "nameRequired": "Gib der Signatur einen Namen.",
+      "body": "Signatur",
+      "bodyPlaceholder": "Dein Name, deine Rolle, Telefon, Links...",
+      "variables": "Du kannst {name}, {title} und {phone} verwenden. Sie werden mit den Angaben der sendenden Person gefüllt.",
+      "tooLong": "Die Signatur ist zu lang.",
+      "defaultUser": "Als meine Standardsignatur verwenden",
+      "defaultMailbox": "Als Standard für dieses Postfach verwenden",
+      "save": "Speichern",
+      "cancel": "Abbrechen",
+      "loading": "Signaturen werden geladen...",
+      "loadError": "Die Signaturen konnten nicht geladen werden. Versuche es gleich noch einmal.",
+      "empty": "Noch keine Signaturen.",
+      "default": "Standard",
+      "editShort": "Bearbeiten",
+      "delete": "Löschen",
+      "confirmDelete": "Endgültig löschen",
+      "noPermission": "Du hast keine Berechtigung, Signaturen zu verwalten.",
+      "changed": "Diese Signatur wurde woanders geändert. Die Liste wurde neu geladen, versuche es erneut.",
+      "failed": "Die Signatur konnte nicht gespeichert werden. Versuche es erneut."
+    }
+  }
+}

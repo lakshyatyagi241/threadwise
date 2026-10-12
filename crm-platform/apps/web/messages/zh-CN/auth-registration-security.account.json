@@ -553,7 +553,8 @@
             "extra_channels": "Telegram、Facebook 和 Instagram",
             "form_builder": "表单",
             "waba_groups": "WhatsApp 群组",
-            "sms": "SMS"
+            "sms": "SMS",
+            "email_channel": "电子邮件(Gmail)渠道"
           },
           "cta": {
             "continueFree": "继续免费使用",

@@ -100,7 +100,9 @@ export class InboxThreadService {
     let claimed: { id: number; fresh: boolean } | null = null;
     const content = await this.db.tx(async (tx): Promise<OutboundContent> => {
       await this.assertCanReply(tx, ctx, uuid);
-      if (input.kind === 'text') return { kind: 'text', body: input.body };
+      if (input.kind === 'text') {
+        return { kind: 'text', body: input.body, ...(input.email ? { email: input.email } : {}) };
+      }
       if (input.kind === 'reaction') return { kind: 'reaction', emoji: input.emoji };
       if (input.kind === 'location') {
         const { latitude, longitude, name, address } = input;

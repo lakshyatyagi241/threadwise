@@ -146,6 +146,8 @@ export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
       'settings-mail',
       'settings-campaigns',
       'settings-google-calendar',
+      'settings-google-mail',
+      'settings-microsoft-mail',
       'settings-flow-builder',
       'ai-keys',
       'faq-engine',

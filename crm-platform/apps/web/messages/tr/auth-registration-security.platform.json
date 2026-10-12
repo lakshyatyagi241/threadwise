@@ -1419,7 +1419,8 @@
             "extra_channels": "Telegram, Facebook ve Instagram kanalları.",
             "form_builder": "CRM'de kişi oluşturan barındırılan ve gömülü web formları. Bu anahtar ücretli Formlar uygulamasına aittir.",
             "waba_groups": "Bir Cloud API numarasından WhatsApp grupları oluşturun ve yönetin: davet bağlantısı, katılma istekleri, üyeler. Numara Resmi İşletme Hesabı olmalıdır.",
-            "sms": "Twilio veya MSG91 üzerinden yalnızca gönderim yapan SMS: gönderenleri bağlayın, SMS yayınları ve kampanyaları gönderin."
+            "sms": "Twilio veya MSG91 üzerinden yalnızca gönderim yapan SMS: gönderenleri bağlayın, SMS yayınları ve kampanyaları gönderin.",
+            "email_channel": "Gmail ve Google Workspace posta kutularını ekip gelen kutusuna bağlayın. Bu anahtarı ücretli E-posta uygulaması yönetir."
           },
           "units": {
             "days": "Gün",
@@ -1561,7 +1562,8 @@
             "forms": "Web formları",
             "form_submissions_monthly": "Aylık form gönderimleri",
             "ai_form_generations_monthly": "Aylık yapay zeka form oluşturucu üretimleri",
-            "sms_monthly": "Aylık SMS"
+            "sms_monthly": "Aylık SMS",
+            "email_mailboxes": "E-posta kutuları"
           },
           "featureGroups": {
             "messaging": "Mesajlaşma",
@@ -1599,7 +1601,8 @@
             "extra_channels": "Telegram, Facebook ve Instagram kanalları",
             "form_builder": "Formlar (web formu oluşturucu)",
             "waba_groups": "WhatsApp grupları (Cloud API)",
-            "sms": "SMS kanalı"
+            "sms": "SMS kanalı",
+            "email_channel": "E-posta (Gmail) kanalı"
           },
           "problems": {
             "required": "Bu alan zorunludur.",
@@ -1652,7 +1655,8 @@
             "forms": "Etkin web formları (Formlar uygulaması). Bir formu arşivlemek yerini serbest bırakır. 0 = sınırsız.",
             "form_submissions_monthly": "Takvim ayında kabul edilen form gönderimleri, spam hariç. Sınır aşıldığında gönderim yine de inceleme için kaydedilir, asla atılmaz. 0 = sınırsız.",
             "ai_form_generations_monthly": "Takvim ayındaki yapay zeka form oluşturucu üretimleri, onarım yeniden denemesi dahil. 0 = sınırsız.",
-            "sms_monthly": "Takvim ayında gönderilen giden SMS mesajları. 0 = sınırsız."
+            "sms_monthly": "Takvim ayında gönderilen giden SMS mesajları. 0 = sınırsız.",
+            "email_mailboxes": "Bağlı Gmail posta kutuları (bağlantısı kesilen kutu yerini boşaltır). 0 = sınırsız."
           }
         }
       },

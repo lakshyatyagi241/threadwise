@@ -44,7 +44,8 @@
       "forms": "Moduli web",
       "form_submissions_monthly": "Invii dei moduli al mese",
       "ai_form_generations_monthly": "Generazioni del costruttore moduli AI al mese",
-      "sms_monthly": "SMS al mese"
+      "sms_monthly": "SMS al mese",
+      "email_mailboxes": "Caselle e-mail"
     },
     "features": {
       "automation": "Automazione",
@@ -76,7 +77,8 @@
       "extra_channels": "Telegram, Facebook e Instagram",
       "form_builder": "Moduli",
       "waba_groups": "Gruppi WhatsApp",
-      "sms": "Canale SMS"
+      "sms": "Canale SMS",
+      "email_channel": "Canale e-mail (Gmail)"
     },
     "limitGroups": {
       "messaging": "Messaggistica",
@@ -127,7 +129,8 @@
       "forms": "Moduli web attivi (app Moduli). Archiviare un modulo libera il posto. 0 = illimitato.",
       "form_submissions_monthly": "Invii dei moduli accettati nel mese di calendario, esclusi gli spam. Oltre il limite un invio viene comunque salvato per la revisione, senza mai essere scartato. 0 = illimitato.",
       "ai_form_generations_monthly": "Generazioni del costruttore moduli AI nel mese di calendario, compresi i tentativi di correzione. 0 = illimitato.",
-      "sms_monthly": "Messaggi SMS in uscita inviati nel mese di calendario. 0 = illimitato."
+      "sms_monthly": "Messaggi SMS in uscita inviati nel mese di calendario. 0 = illimitato.",
+      "email_mailboxes": "Caselle Gmail collegate (una scollegata libera il suo posto). 0 = illimitato."
     },
     "planAddons": {
       "title": "Add-on disponibili nel tuo piano",

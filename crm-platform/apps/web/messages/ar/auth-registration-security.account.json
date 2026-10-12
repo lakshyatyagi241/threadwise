@@ -553,7 +553,8 @@
             "extra_channels": "تيليجرام وفيسبوك وإنستغرام",
             "form_builder": "النماذج",
             "waba_groups": "مجموعات واتساب",
-            "sms": "SMS"
+            "sms": "SMS",
+            "email_channel": "قناة البريد الإلكتروني (Gmail)"
           },
           "cta": {
             "continueFree": "المتابعة مجانًا",

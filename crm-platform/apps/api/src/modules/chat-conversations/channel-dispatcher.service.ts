@@ -7,6 +7,7 @@ import {
   ChannelError,
   envelopeText,
   outboundEnvelopeSchema,
+  outboundTextMaxFor,
   type ChannelAdapter,
   type ChannelRuntime,
   type OutboundEnvelope,
@@ -53,6 +54,8 @@ export interface DispatchResult {
   acceptedAt: Date;
   /** What a simulated provider will report later (empty for a real one, which uses its webhook). See `scheduleReceipts`. */
   plannedReceipts: PlannedReceipt[];
+  /** What the adapter asked to record on the message's `meta` (see `SendResult.meta`). */
+  meta?: Record<string, unknown>;
   /** True when this key had already been sent: the stored answer is returned and the provider is not called again. */
   replayed: boolean;
 }
@@ -125,6 +128,14 @@ export class ChannelDispatcher {
     const envelope = this.parse(req.envelope);
     const adapter = this.adapters.for(req.channel.kind);
     this.assertChannelCan(adapter, req.channel, envelope, req.lastInboundAt, now);
+    // An email reply is sent inside a customer's thread: with no mail to answer there is nobody to send to.
+    if (req.channel.kind === 'email' && envelope.kind === 'text' && !envelope.email) {
+      throw new AppError(
+        ERROR_CODES.VALIDATION_FAILED,
+        'There is no email in this conversation to reply to',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
 
     await this.guard.beforeSend({
       orgId: req.channel.orgId,
@@ -155,6 +166,7 @@ export class ChannelDispatcher {
         providerMessageId: sent.providerMessageId,
         acceptedAt: sent.acceptedAt,
         plannedReceipts: sent.plannedReceipts ?? [],
+        ...(sent.meta ? { meta: sent.meta } : {}),
       };
       await this.redisCall(() =>
         this.redis.set(
@@ -247,6 +259,16 @@ export class ChannelDispatcher {
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     };
+    if (envelope.kind === 'text') {
+      // The envelope schema carries the largest limit (email's); every other kind keeps WhatsApp's.
+      const max = outboundTextMaxFor(channel.kind);
+      if (envelope.body.length > max) {
+        throw AppError.validation('Outbound message failed validation', [
+          { path: 'body', message: `at most ${max} characters on this channel` },
+        ]);
+      }
+      if (envelope.email && channel.kind !== 'email') unsupported('cc, bcc or a subject');
+    }
     if (envelope.kind === 'template' && !caps.templates) unsupported('templates');
     if (envelope.kind === 'reaction' && !caps.reactions) unsupported('reactions');
     if (envelope.kind === 'media' && !caps.media.includes(envelope.media.mediaKind)) {
@@ -325,11 +347,13 @@ export class ChannelDispatcher {
         providerMessageId: string;
         acceptedAt: string;
         plannedReceipts?: PlannedReceipt[];
+        meta?: Record<string, unknown>;
       };
       return {
         providerMessageId: v.providerMessageId,
         acceptedAt: new Date(v.acceptedAt),
         plannedReceipts: v.plannedReceipts ?? [],
+        ...(v.meta ? { meta: v.meta } : {}),
       };
     } catch {
       return null;

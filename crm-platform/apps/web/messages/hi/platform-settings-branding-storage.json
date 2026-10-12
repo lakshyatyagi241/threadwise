@@ -17,6 +17,8 @@
       "whatsapp": "WhatsApp (WABA)",
       "campaigns": "अभियान",
       "googleCalendar": "Google कैलेंडर",
+      "googleMail": "Gmail",
+      "microsoftMail": "Microsoft 365",
       "flowBuilder": "फ़्लो बिल्डर"
     },
     "hub": {
@@ -930,6 +932,79 @@
           }
         }
       },
+      "googleMail": {
+        "title": "Gmail ईमेल",
+        "description": "वह Google OAuth क्लाइंट जिससे हर वर्कस्पेस अपने मेलबॉक्स जोड़ता है।",
+        "sections": {
+          "oauth": {
+            "title": "Google OAuth क्लाइंट"
+          },
+          "push": {
+            "title": "Gmail पुश (वैकल्पिक)"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "वर्कस्पेस को Gmail जोड़ने दें",
+            "hint": "बंद: कोई वर्कस्पेस नहीं जोड़ सकता, और कोई मेल पढ़ा या भेजा नहीं जाता। पहले से जुड़े मेलबॉक्स सुरक्षित रहते हैं।"
+          },
+          "clientId": {
+            "label": "क्लाइंट ID",
+            "hint": "Google Cloud में Credentials, OAuth 2.0 Client ID (Web application) से। खाली होने पर GOOGLE_MAIL_CLIENT_ID इस्तेमाल होता है।"
+          },
+          "clientSecret": {
+            "label": "क्लाइंट सीक्रेट",
+            "hint": "एन्क्रिप्टेड रूप में सहेजा जाता है, फिर कभी नहीं दिखता। खाली रखने पर सहेजा हुआ रहता है; GOOGLE_MAIL_CLIENT_SECRET विकल्प है।"
+          },
+          "redirectUri": {
+            "label": "रीडायरेक्ट URI ओवरराइड",
+            "hint": "ऊपर का पता इस्तेमाल करने के लिए खाली छोड़ें। यह क्लाइंट पर Authorised redirect URI से बिल्कुल मेल खाना चाहिए।"
+          },
+          "pubsubTopic": {
+            "label": "Pub/Sub टॉपिक",
+            "hint": "projects/PROJECT_ID/topics/TOPIC_ID। इस पर gmail-api-push@system.gserviceaccount.com को Publisher भूमिका दें। खाली होने पर GOOGLE_MAIL_PUBSUB_TOPIC लागू होता है; टॉपिक न हो तो मेलबॉक्स केवल पोलिंग से जाँचे जाते हैं।"
+          },
+          "pushAudience": {
+            "label": "पुश ऑडियंस",
+            "hint": "पुश सब्सक्रिप्शन पर सेट की गई ऑडियंस। खाली होने पर GOOGLE_MAIL_PUSH_AUDIENCE लागू होता है, अन्यथा इस प्लेटफ़ॉर्म के पुश एंडपॉइंट का पता।"
+          },
+          "pushServiceAccount": {
+            "label": "पुश सर्विस अकाउंट",
+            "hint": "वह सर्विस अकाउंट जिससे पुश सब्सक्रिप्शन हस्ताक्षर करता है। किसी अन्य अकाउंट का पुश अस्वीकार किया जाता है। खाली होने पर GOOGLE_MAIL_PUSH_SERVICE_ACCOUNT लागू होता है।"
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "Microsoft 365 ईमेल",
+        "description": "वह Microsoft ऐप जिससे हर वर्कस्पेस अपने Outlook और Microsoft 365 मेलबॉक्स जोड़ता है।",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra ऐप"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "वर्कस्पेस को Microsoft 365 जोड़ने दें",
+            "hint": "बंद: कोई वर्कस्पेस नहीं जोड़ सकता, और कोई मेल पढ़ा या भेजा नहीं जाता। पहले से जुड़े मेलबॉक्स सुरक्षित रहते हैं।"
+          },
+          "clientId": {
+            "label": "एप्लिकेशन (क्लाइंट) आईडी",
+            "hint": "Microsoft Entra एडमिन सेंटर, ऐप पंजीकरण, अवलोकन से। खाली होने पर MICROSOFT_MAIL_CLIENT_ID इस्तेमाल होता है।"
+          },
+          "clientSecret": {
+            "label": "क्लाइंट सीक्रेट",
+            "hint": "एन्क्रिप्टेड रूप में सहेजा जाता है, फिर कभी नहीं दिखता। खाली रखने पर सहेजा हुआ रहता है; MICROSOFT_MAIL_CLIENT_SECRET विकल्प है।"
+          },
+          "tenant": {
+            "label": "टेनेंट",
+            "hint": "common कार्य, स्कूल और व्यक्तिगत खातों की अनुमति देता है; एकल-टेनेंट ऐप के लिए डायरेक्टरी (टेनेंट) आईडी इस्तेमाल करें। खाली होने पर MICROSOFT_MAIL_TENANT, वह भी न हो तो common।"
+          },
+          "redirectUri": {
+            "label": "रीडायरेक्ट URI ओवरराइड",
+            "hint": "ऊपर का पता इस्तेमाल करने के लिए खाली छोड़ें। यह क्लाइंट पर Authorised redirect URI से बिल्कुल मेल खाना चाहिए।"
+          }
+        }
+      },
       "flowBuilder": {
         "title": "फ़्लो बिल्डर",
         "description": "कौन से फ़्लो बिल्डर वर्कस्पेस को दिए जाते हैं।",
@@ -1062,6 +1137,16 @@
         "title": "Google कैलेंडर",
         "description": "Google OAuth क्लाइंट, जिससे वर्कस्पेस बुकिंग और व्यस्त समय के लिए अपना कैलेंडर कनेक्ट करते हैं।",
         "tags": "Google / OAuth / कैलेंडर"
+      },
+      "googleMail": {
+        "title": "Gmail ईमेल",
+        "description": "वह Google OAuth क्लाइंट जिससे वर्कस्पेस अपने Gmail मेलबॉक्स जोड़ते हैं।",
+        "tags": "Google / OAuth / Gmail"
+      },
+      "microsoftMail": {
+        "title": "Microsoft 365 ईमेल",
+        "description": "वह Microsoft ऐप जिससे वर्कस्पेस अपने Outlook और Microsoft 365 मेलबॉक्स जोड़ते हैं।",
+        "tags": "Microsoft / OAuth / Outlook"
       },
       "flowBuilder": {
         "title": "फ़्लो बिल्डर",
@@ -1648,6 +1733,78 @@
           }
         }
       },
+      "googleMail": {
+        "title": "Gmail ईमेल",
+        "eyebrow": "एडमिन - ईमेल",
+        "description": "पूरे प्लेटफ़ॉर्म के लिए एक Google Cloud OAuth क्लाइंट, जो Google Calendar से अलग है। हर वर्कस्पेस ईमेल से अपने मेलबॉक्स जोड़ता है और उसे क्लाइंट आईडी या सीक्रेट कभी नहीं दिखता।",
+        "sections": {
+          "oauth": {
+            "title": "Google OAuth क्लाइंट",
+            "description": "क्लाइंट आईडी और सीक्रेट के बिना वर्कस्पेस मेलबॉक्स नहीं जोड़ सकते।"
+          },
+          "push": {
+            "title": "Gmail पुश (वैकल्पिक)",
+            "description": "नया मेल अगली पोलिंग का इंतज़ार किए बिना कुछ ही सेकंड में टीम इनबॉक्स में पहुँचता है। पोलिंग सुरक्षा के तौर पर चालू रहती है।"
+          }
+        },
+        "guide": {
+          "title": "Google Cloud में सेट करें",
+          "items": {
+            "project": {
+              "title": "1. प्रोजेक्ट और API",
+              "body": "Google Cloud Console में एक प्रोजेक्ट बनाएँ और Gmail API चालू करें।"
+            },
+            "redirect": {
+              "title": "2. OAuth क्लाइंट",
+              "body": "Web application प्रकार का OAuth 2.0 Client ID बनाएँ और इस पेज पर दिखाया गया redirect URI Authorised redirect URIs में जोड़ें।"
+            },
+            "consent": {
+              "title": "3. कंसेंट स्क्रीन",
+              "body": "openid, email, gmail.readonly और gmail.send स्कोप जोड़ें। Gmail स्कोप प्रतिबंधित हैं: सामान्य उपयोग के लिए Google को ऐप सत्यापित करना होगा, और टेस्टिंग मोड में अनुमति 7 दिन बाद समाप्त हो जाती है।"
+            },
+            "workspaces": {
+              "title": "4. वर्कस्पेस कनेक्ट करें",
+              "body": "क्लाइंट आईडी और सीक्रेट यहाँ चिपकाकर सेव करें। इसके बाद एडमिन ईमेल से मेलबॉक्स जोड़ते हैं।"
+            },
+            "push": {
+              "title": "5. तुरंत मेल (वैकल्पिक)",
+              "body": "एक Pub/Sub टॉपिक बनाएँ, gmail-api-push@system.gserviceaccount.com को Publisher भूमिका दें, OIDC प्रमाणीकरण के साथ APP_URL/v2/public/email/google/push पर पुश सब्सक्रिप्शन जोड़ें, फिर टॉपिक, ऑडियंस और सर्विस अकाउंट यहाँ दर्ज करें।"
+            }
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "Microsoft 365 ईमेल",
+        "eyebrow": "एडमिन - ईमेल",
+        "description": "पूरे प्लेटफ़ॉर्म के लिए एक Microsoft Entra ऐप। हर वर्कस्पेस ईमेल से अपने मेलबॉक्स जोड़ता है और क्लाइंट आईडी या सीक्रेट कभी नहीं देखता।",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra ऐप",
+            "description": "क्लाइंट आईडी और सीक्रेट के बिना वर्कस्पेस मेलबॉक्स नहीं जोड़ सकते।"
+          }
+        },
+        "guide": {
+          "title": "Microsoft Entra में सेट करें",
+          "items": {
+            "registration": {
+              "title": "1. ऐप पंजीकरण",
+              "body": "Microsoft Entra एडमिन सेंटर में ऐप पंजीकरण बनाएँ। अपने ग्राहकों के खाता प्रकार चुनें (कार्य या स्कूल, और Outlook.com के लिए व्यक्तिगत खाते) और एप्लिकेशन (क्लाइंट) आईडी तथा टेनेंट यहाँ कॉपी करें।"
+            },
+            "redirect": {
+              "title": "2. रीडायरेक्ट URI और सीक्रेट",
+              "body": "इस पेज पर दिखाए गए रीडायरेक्ट URI को Web प्लेटफ़ॉर्म रीडायरेक्ट के रूप में जोड़ें, फिर प्रमाणपत्र और सीक्रेट में क्लाइंट सीक्रेट बनाएँ और उसका मान यहाँ चिपकाएँ।"
+            },
+            "permissions": {
+              "title": "3. API अनुमतियाँ",
+              "body": "Microsoft Graph की डेलीगेटेड अनुमतियाँ Mail.Read, Mail.Send, User.Read और offline_access जोड़ें। सामान्य उपयोग के लिए प्रकाशक सत्यापन पूरा करें; कुछ संगठन व्यवस्थापक की सहमति भी माँगते हैं।"
+            },
+            "workspaces": {
+              "title": "4. वर्कस्पेस कनेक्ट करें",
+              "body": "क्लाइंट आईडी और सीक्रेट यहाँ चिपकाकर सेव करें। इसके बाद एडमिन ईमेल से मेलबॉक्स जोड़ते हैं।"
+            }
+          }
+        }
+      },
       "flowBuilder": {
         "title": "फ़्लो बिल्डर",
         "eyebrow": "एडमिन - ऑटोमेशन",
@@ -1735,6 +1892,12 @@
     "googleCallback": {
       "redirectTitle": "Redirect URI",
       "redirectHint": "यह सटीक पता OAuth क्लाइंट पर Authorised redirect URI के रूप में दर्ज करें। वर्कस्पेस एडमिन सहमति देने के बाद Google ब्राउज़र को यहीं भेजता है।",
+      "copy": "कॉपी करें",
+      "copied": "कॉपी हो गया"
+    },
+    "microsoftCallback": {
+      "redirectTitle": "Redirect URI",
+      "redirectHint": "इस पते को ऐप पंजीकरण में ठीक इसी रूप में Web रीडायरेक्ट URI के रूप में दर्ज करें। वर्कस्पेस एडमिन की सहमति के बाद Microsoft ब्राउज़र को यहीं भेजता है।",
       "copy": "कॉपी करें",
       "copied": "कॉपी हो गया"
     }

@@ -10,9 +10,17 @@ export { MemberDirectory } from './audience/member-directory.service';
 export {
   PERM_CONVERSATION_READ,
   conversationVisible,
+  PERSONAL_OWNER_GONE,
   type ConversationRecord,
   type ConversationViewer,
 } from './audience/conversation-visibility';
+export {
+  PERM_MAIL_SETTINGS_MANAGE,
+  adminsCanReadPersonal,
+  channelOwnerSql,
+  channelRowOwnerSql,
+  channelVisibleTo,
+} from './audience/channel-owner';
 export {
   CONVERSATION_RECORD_LOADER,
   type ConversationRecordLoader,

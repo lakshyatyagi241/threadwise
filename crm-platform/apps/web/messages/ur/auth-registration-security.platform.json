@@ -1419,7 +1419,8 @@
             "extra_channels": "Telegram، Facebook اور Instagram چینلز۔",
             "form_builder": "ہوسٹڈ اور ایمبیڈڈ ویب فارمز جو CRM میں رابطے بناتے ہیں۔ یہ سوئچ ادا شدہ Forms ایپ کے پاس ہے۔",
             "waba_groups": "Cloud API نمبر سے WhatsApp گروپس بنائیں اور منظم کریں: دعوتی لنک، شمولیت کی درخواستیں، اراکین۔ نمبر کا Official Business Account ہونا ضروری ہے۔",
-            "sms": "Twilio یا MSG91 کے ذریعے صرف بھیجنے والا SMS: بھیجنے والے جوڑیں، SMS براڈکاسٹ اور مہمات بھیجیں۔"
+            "sms": "Twilio یا MSG91 کے ذریعے صرف بھیجنے والا SMS: بھیجنے والے جوڑیں، SMS براڈکاسٹ اور مہمات بھیجیں۔",
+            "email_channel": "Gmail اور Google Workspace میل باکس کو ٹیم ان باکس سے جوڑیں۔ یہ سوئچ ادائیگی والی ای میل ایپ کے تحت ہے۔"
           },
           "units": {
             "days": "دن",
@@ -1561,7 +1562,8 @@
             "forms": "ویب فارمز",
             "form_submissions_monthly": "ماہانہ فارم جمع کرائیاں",
             "ai_form_generations_monthly": "ماہانہ AI فارم بلڈر جنریشنز",
-            "sms_monthly": "ماہانہ SMS"
+            "sms_monthly": "ماہانہ SMS",
+            "email_mailboxes": "ای میل میل باکس"
           },
           "featureGroups": {
             "messaging": "میسجنگ",
@@ -1599,7 +1601,8 @@
             "extra_channels": "Telegram، Facebook اور Instagram چینلز",
             "form_builder": "فارمز (ویب فارم بلڈر)",
             "waba_groups": "WhatsApp گروپس (Cloud API)",
-            "sms": "SMS چینل"
+            "sms": "SMS چینل",
+            "email_channel": "ای میل (Gmail) چینل"
           },
           "problems": {
             "required": "یہ خانہ ضروری ہے۔",
@@ -1652,7 +1655,8 @@
             "forms": "فعال ویب فارمز (Forms ایپ)۔ فارم آرکائیو کرنے سے اس کی جگہ خالی ہو جاتی ہے۔ 0 = لامحدود۔",
             "form_submissions_monthly": "کیلنڈر ماہ میں قبول کی گئی فارم جمع کرائیاں، اسپام کے علاوہ۔ حد سے اوپر بھی جمع کرائی جائزے کے لیے محفوظ ہوتی ہے، کبھی ضائع نہیں ہوتی۔ 0 = لامحدود۔",
             "ai_form_generations_monthly": "کیلنڈر ماہ میں AI فارم بلڈر جنریشنز، مرمت کی دوبارہ کوشش سمیت۔ 0 = لامحدود۔",
-            "sms_monthly": "کیلنڈر مہینے میں بھیجے گئے آؤٹ باؤنڈ SMS پیغامات۔ 0 = لامحدود۔"
+            "sms_monthly": "کیلنڈر مہینے میں بھیجے گئے آؤٹ باؤنڈ SMS پیغامات۔ 0 = لامحدود۔",
+            "email_mailboxes": "جُڑے ہوئے Gmail میل باکس (منقطع میل باکس اپنی جگہ خالی کر دیتا ہے)۔ 0 = لامحدود۔"
           }
         }
       },

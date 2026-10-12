@@ -553,7 +553,8 @@
             "extra_channels": "Telegram, Facebook và Instagram",
             "form_builder": "Biểu mẫu",
             "waba_groups": "Nhóm WhatsApp",
-            "sms": "SMS"
+            "sms": "SMS",
+            "email_channel": "Kênh email (Gmail)"
           },
           "cta": {
             "continueFree": "Tiếp tục miễn phí",

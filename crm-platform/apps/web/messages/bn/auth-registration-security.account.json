@@ -553,7 +553,8 @@
             "extra_channels": "Telegram, Facebook ও Instagram",
             "form_builder": "ফর্ম",
             "waba_groups": "WhatsApp গ্রুপ",
-            "sms": "SMS"
+            "sms": "SMS",
+            "email_channel": "ইমেল (Gmail) চ্যানেল"
           },
           "cta": {
             "continueFree": "ফ্রি-তে চালিয়ে যান",

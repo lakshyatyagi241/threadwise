@@ -553,7 +553,8 @@
             "extra_channels": "Telegram, Facebook e Instagram",
             "form_builder": "Formulários",
             "waba_groups": "Grupos do WhatsApp",
-            "sms": "SMS"
+            "sms": "SMS",
+            "email_channel": "Canal de e-mail (Gmail)"
           },
           "cta": {
             "continueFree": "Continuar grátis",

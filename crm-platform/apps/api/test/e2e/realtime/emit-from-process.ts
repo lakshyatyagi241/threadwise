@@ -19,7 +19,12 @@ import { RealtimeEmitter } from '../../../src/realtime/realtime-emitter.service'
 
 interface Input {
   orgId: number;
-  conversation: { uuid: string; assigneeUserId: number | null; assigneeTeamId: number | null };
+  conversation: {
+    uuid: string;
+    assigneeUserId: number | null;
+    assigneeTeamId: number | null;
+    channelOwnerUserId: number | null;
+  };
   excludeUserIds?: number[];
   messageId: string;
 }

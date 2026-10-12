@@ -28,7 +28,8 @@
     "operator:create": "tsx src/modules/auth/cli/create-operator.ts",
     "auto-reply:translate-existing": "node dist/src/modules/localization-translation/cli/translate-existing.js",
     "seed:appointments": "node dist/src/modules/marketplace/cli/seed-appointments.js",
-    "seed:forms": "node dist/src/modules/marketplace/cli/seed-forms.js"
+    "seed:forms": "node dist/src/modules/marketplace/cli/seed-forms.js",
+    "seed:email": "node dist/src/modules/marketplace/cli/seed-email.js"
   },
   "dependencies": {
     "@clerk/backend": "^3.23.0",
@@ -56,7 +57,9 @@
     "drizzle-orm": "^0.45.4",
     "express": "^5.2.1",
     "https-proxy-agent": "7.0.6",
+    "imapflow": "^2.4.0",
     "ioredis": "^6.0.0",
+    "mailparser": "^3.9.38",
     "nestjs-pino": "^5.3.0",
     "nodemailer": "^10.0.15",
     "pg": "^8.23.1",
@@ -78,6 +81,7 @@
     "@swc/core": "^1.16.13",
     "@testcontainers/postgresql": "^12.2.0",
     "@types/express": "^5.0.0",
+    "@types/mailparser": "^3.9.0",
     "@types/multer": "^2.3.0",
     "@types/node": "^26.6.4",
     "@types/nodemailer": "^8.0.2",

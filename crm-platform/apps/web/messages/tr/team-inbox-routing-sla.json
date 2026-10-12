@@ -10,7 +10,8 @@
       "webchat": "Web sitesi sohbeti",
       "telegram": "Telegram",
       "facebook": "Facebook Messenger",
-      "instagram": "Instagram"
+      "instagram": "Instagram",
+      "email": "E-posta (Gmail)"
     },
     "page": {
       "back": "Otomasyon ve yapay zekâ",

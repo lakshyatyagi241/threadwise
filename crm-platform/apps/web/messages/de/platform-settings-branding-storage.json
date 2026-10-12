@@ -17,6 +17,8 @@
       "whatsapp": "WhatsApp (WABA)",
       "campaigns": "Kampagnen",
       "googleCalendar": "Google Kalender",
+      "googleMail": "Gmail",
+      "microsoftMail": "Microsoft 365",
       "flowBuilder": "Flow-Builder"
     },
     "hub": {
@@ -930,6 +932,79 @@
           }
         }
       },
+      "googleMail": {
+        "title": "Gmail-E-Mail",
+        "description": "Der Google-OAuth-Client, über den jeder Arbeitsbereich seine Postfächer verbindet.",
+        "sections": {
+          "oauth": {
+            "title": "Google-OAuth-Client"
+          },
+          "push": {
+            "title": "Gmail-Push (optional)"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Arbeitsbereichen das Verbinden von Gmail erlauben",
+            "hint": "Aus: Kein Arbeitsbereich kann verbinden, und es wird keine E-Mail gelesen oder gesendet. Bereits verbundene Postfächer bleiben erhalten."
+          },
+          "clientId": {
+            "label": "Client-ID",
+            "hint": "Aus der Google Cloud, Anmeldedaten, OAuth-2.0-Client-ID (Webanwendung). Leer verwendet GOOGLE_MAIL_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Client-Geheimnis",
+            "hint": "Verschlüsselt gespeichert und nie wieder angezeigt. Leer behält den gespeicherten Wert; GOOGLE_MAIL_CLIENT_SECRET ist der Ausweichwert."
+          },
+          "redirectUri": {
+            "label": "Überschreibung der Weiterleitungs-URI",
+            "hint": "Leer lassen, um die oben genannte Adresse zu verwenden. Sie muss exakt einer autorisierten Weiterleitungs-URI des Clients entsprechen."
+          },
+          "pubsubTopic": {
+            "label": "Pub/Sub-Thema",
+            "hint": "projects/PROJECT_ID/topics/TOPIC_ID. Geben Sie gmail-api-push@system.gserviceaccount.com darauf die Rolle Publisher. Leer verwendet GOOGLE_MAIL_PUBSUB_TOPIC; ohne Thema werden Postfächer nur abgefragt."
+          },
+          "pushAudience": {
+            "label": "Push-Zielgruppe",
+            "hint": "Die Zielgruppe (Audience) der Push-Subscription. Leer verwendet GOOGLE_MAIL_PUSH_AUDIENCE, sonst die Adresse des Push-Endpunkts dieser Plattform."
+          },
+          "pushServiceAccount": {
+            "label": "Push-Dienstkonto",
+            "hint": "Das Dienstkonto, mit dem die Push-Subscription signiert. Ein Push von einem anderen Konto wird abgelehnt. Leer verwendet GOOGLE_MAIL_PUSH_SERVICE_ACCOUNT."
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "Microsoft-365-E-Mail",
+        "description": "Die Microsoft-App, über die jeder Arbeitsbereich seine Outlook- und Microsoft-365-Postfächer verbindet.",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft-Entra-App"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Arbeitsbereichen das Verbinden von Microsoft 365 erlauben",
+            "hint": "Aus: Kein Arbeitsbereich kann verbinden, und es wird keine E-Mail gelesen oder gesendet. Bereits verbundene Postfächer bleiben erhalten."
+          },
+          "clientId": {
+            "label": "Anwendungs-ID (Client)",
+            "hint": "Aus dem Microsoft-Entra-Admin-Center, App-Registrierungen, Übersicht. Leer verwendet MICROSOFT_MAIL_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Client-Geheimnis",
+            "hint": "Verschlüsselt gespeichert und nie wieder angezeigt. Leer behält den gespeicherten Wert; MICROSOFT_MAIL_CLIENT_SECRET ist der Ausweichwert."
+          },
+          "tenant": {
+            "label": "Mandant",
+            "hint": "common erlaubt Geschäfts-, Schul- und persönliche Konten; für eine App mit nur einem Mandanten die Verzeichnis-ID (Mandanten-ID) eintragen. Leer verwendet MICROSOFT_MAIL_TENANT, sonst common."
+          },
+          "redirectUri": {
+            "label": "Überschreibung der Weiterleitungs-URI",
+            "hint": "Leer lassen, um die oben genannte Adresse zu verwenden. Sie muss exakt einer autorisierten Weiterleitungs-URI des Clients entsprechen."
+          }
+        }
+      },
       "flowBuilder": {
         "title": "Flow-Builder",
         "description": "Welche Flow-Builder den Workspaces angeboten werden.",
@@ -1062,6 +1137,16 @@
         "title": "Google Kalender",
         "description": "Der Google-OAuth-Client, den Workspaces zum Verbinden ihres Kalenders für Buchungen und belegte Zeiten verwenden.",
         "tags": "Google / OAuth / Kalender"
+      },
+      "googleMail": {
+        "title": "Gmail-E-Mail",
+        "description": "Der Google-OAuth-Client, über den Arbeitsbereiche ihre Gmail-Postfächer verbinden.",
+        "tags": "Google / OAuth / Gmail"
+      },
+      "microsoftMail": {
+        "title": "Microsoft-365-E-Mail",
+        "description": "Die Microsoft-App, über die Arbeitsbereiche ihre Outlook- und Microsoft-365-Postfächer verbinden.",
+        "tags": "Microsoft / OAuth / Outlook"
       },
       "flowBuilder": {
         "title": "Flow-Builder",
@@ -1648,6 +1733,78 @@
           }
         }
       },
+      "googleMail": {
+        "title": "Gmail-E-Mail",
+        "eyebrow": "Admin - E-Mail",
+        "description": "Ein Google-Cloud-OAuth-Client für die ganze Plattform, getrennt von Google Kalender. Jeder Arbeitsbereich verbindet seine eigenen Postfächer unter E-Mail und sieht Client-ID und Secret nie.",
+        "sections": {
+          "oauth": {
+            "title": "Google-OAuth-Client",
+            "description": "Ohne Client-ID und Secret können Arbeitsbereiche kein Postfach verbinden."
+          },
+          "push": {
+            "title": "Gmail-Push (optional)",
+            "description": "Neue Mails erreichen den Team-Posteingang in Sekunden statt erst bei der nächsten Abfrage. Die regelmäßige Abfrage bleibt als Sicherheitsnetz aktiv."
+          }
+        },
+        "guide": {
+          "title": "In Google Cloud einrichten",
+          "items": {
+            "project": {
+              "title": "1. Projekt und API",
+              "body": "Erstellen Sie in der Google Cloud Console ein Projekt und aktivieren Sie die Gmail API."
+            },
+            "redirect": {
+              "title": "2. OAuth-Client",
+              "body": "Erstellen Sie eine OAuth-2.0-Client-ID vom Typ Webanwendung und fügen Sie die auf dieser Seite angezeigte Weiterleitungs-URI unter Autorisierte Weiterleitungs-URIs hinzu."
+            },
+            "consent": {
+              "title": "3. Zustimmungsbildschirm",
+              "body": "Fügen Sie die Bereiche openid, email, gmail.readonly und gmail.send hinzu. Die Gmail-Bereiche sind eingeschränkt: Google muss die App für die allgemeine Nutzung prüfen, und im Testmodus endet eine Freigabe nach 7 Tagen."
+            },
+            "workspaces": {
+              "title": "4. Workspaces verbinden sich",
+              "body": "Fügen Sie Client-ID und Secret hier ein und speichern Sie. Danach verbinden Admins unter E-Mail."
+            },
+            "push": {
+              "title": "5. Sofortige Zustellung (optional)",
+              "body": "Legen Sie ein Pub/Sub-Thema an, geben Sie gmail-api-push@system.gserviceaccount.com die Rolle Publisher, fügen Sie eine Push-Subscription auf APP_URL/v2/public/email/google/push mit OIDC-Authentifizierung hinzu und tragen Sie hier Thema, Zielgruppe und Dienstkonto ein."
+            }
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "Microsoft-365-E-Mail",
+        "eyebrow": "Admin - E-Mail",
+        "description": "Eine Microsoft-Entra-App für die ganze Plattform. Jeder Arbeitsbereich verbindet seine eigenen Postfächer unter E-Mail und sieht Client-ID und Secret nie.",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft-Entra-App",
+            "description": "Ohne Client-ID und Secret können Arbeitsbereiche kein Postfach verbinden."
+          }
+        },
+        "guide": {
+          "title": "In Microsoft Entra einrichten",
+          "items": {
+            "registration": {
+              "title": "1. App-Registrierung",
+              "body": "Erstellen Sie im Microsoft-Entra-Admin-Center eine App-Registrierung. Wählen Sie die Kontotypen Ihrer Kunden (Geschäfts- oder Schulkonten und persönliche Konten für Outlook.com) und kopieren Sie Anwendungs-ID (Client) und Mandant hierher."
+            },
+            "redirect": {
+              "title": "2. Umleitungs-URI und Secret",
+              "body": "Fügen Sie die auf dieser Seite angezeigte Umleitungs-URI als Umleitung der Plattform Web hinzu, erstellen Sie unter Zertifikate und Geheimnisse einen geheimen Clientschlüssel und fügen Sie dessen Wert hier ein."
+            },
+            "permissions": {
+              "title": "3. API-Berechtigungen",
+              "body": "Fügen Sie die delegierten Microsoft-Graph-Berechtigungen Mail.Read, Mail.Send, User.Read und offline_access hinzu. Für die allgemeine Nutzung ist die Herausgeberüberprüfung nötig; manche Organisationen verlangen zusätzlich die Zustimmung eines Admins."
+            },
+            "workspaces": {
+              "title": "4. Workspaces verbinden sich",
+              "body": "Fügen Sie Client-ID und Secret hier ein und speichern Sie. Danach verbinden Admins unter E-Mail."
+            }
+          }
+        }
+      },
       "flowBuilder": {
         "title": "Flow-Builder",
         "eyebrow": "Admin – Automatisierung",
@@ -1735,6 +1892,12 @@
     "googleCallback": {
       "redirectTitle": "Weiterleitungs-URI",
       "redirectHint": "Tragen Sie genau diese Adresse als autorisierte Weiterleitungs-URI im OAuth-Client ein. Dorthin sendet Google den Browser, nachdem ein Workspace-Admin zugestimmt hat.",
+      "copy": "Kopieren",
+      "copied": "Kopiert"
+    },
+    "microsoftCallback": {
+      "redirectTitle": "Weiterleitungs-URI",
+      "redirectHint": "Tragen Sie genau diese Adresse als Web-Umleitungs-URI in der App-Registrierung ein. Dorthin sendet Microsoft den Browser, nachdem ein Workspace-Admin zugestimmt hat.",
       "copy": "Kopieren",
       "copied": "Kopiert"
     }

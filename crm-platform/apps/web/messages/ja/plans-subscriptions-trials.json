@@ -44,7 +44,8 @@
       "forms": "Webフォーム",
       "form_submissions_monthly": "月ごとのフォーム送信数",
       "ai_form_generations_monthly": "月ごとのAIフォームビルダー生成数",
-      "sms_monthly": "月間SMS数"
+      "sms_monthly": "月間SMS数",
+      "email_mailboxes": "メールボックス数"
     },
     "features": {
       "automation": "自動化",
@@ -76,7 +77,8 @@
       "extra_channels": "Telegram、Facebook、Instagram",
       "form_builder": "フォーム",
       "waba_groups": "WhatsAppグループ",
-      "sms": "SMSチャネル"
+      "sms": "SMSチャネル",
+      "email_channel": "メール(Gmail)チャネル"
     },
     "limitGroups": {
       "messaging": "メッセージング",
@@ -127,7 +129,8 @@
       "forms": "有効なWebフォーム（フォームアプリ）の数です。フォームをアーカイブすると枠が空きます。0は無制限です。",
       "form_submissions_monthly": "暦月内に受け付けたフォーム送信数です（スパムを除く）。上限を超えても送信内容は確認用に保存され、破棄されることはありません。0は無制限です。",
       "ai_form_generations_monthly": "暦月内のAIフォームビルダーの生成回数です（修復の再試行を含む）。0は無制限です。",
-      "sms_monthly": "暦月に送信した発信SMSメッセージ数。0 = 無制限。"
+      "sms_monthly": "暦月に送信した発信SMSメッセージ数。0 = 無制限。",
+      "email_mailboxes": "接続済みのGmailメールボックス(接続解除すると枠が空きます)。0 = 無制限。"
     },
     "planAddons": {
       "title": "お使いのプランで利用できるアドオン",

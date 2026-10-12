@@ -10,7 +10,8 @@
       "webchat": "Chat trên website",
       "telegram": "Telegram",
       "facebook": "Facebook Messenger",
-      "instagram": "Instagram"
+      "instagram": "Instagram",
+      "email": "Email (Gmail)"
     },
     "page": {
       "back": "Tự động hóa và AI",

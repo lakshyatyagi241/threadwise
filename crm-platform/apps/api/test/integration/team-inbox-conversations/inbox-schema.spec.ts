@@ -385,21 +385,54 @@ describe('team inbox storage: isolation, constraints and the visibility rule', (
         id: number;
         assigneeUserId: number | null;
         assigneeTeamId: number | null;
+        channelOwnerUserId: number | null;
       }> = [];
-      let n = 100;
-      for (const s of SHAPES) {
-        const assigneeUserId = s.user ? users[s.user] : null;
-        const assigneeTeamId = s.team ? teams[s.team] : null;
-        const id = Number(
+      // The channel a conversation is on decides the personal-mailbox part of the rule (TW-MAIL-035): a shared channel, a personal
+      // mailbox of each user, and an email channel whose mailbox row is gone (owner -1).
+      const emailChannel = async (
+        name: string,
+        mailbox: { scope: string; owner: number | null } | null,
+      ) => {
+        const uuid = (await one(`SELECT gen_random_uuid() AS u`)).u as string;
+        if (mailbox) {
+          await one(
+            `INSERT INTO mail_mailboxes (org_id, uuid, provider, address, display_name, scope, owner_user_id)
+             VALUES ($1,$2,'imap',$3::citext,$3::text,$4,$5) RETURNING id`,
+            [orgA, uuid, `${name}@a.test`, mailbox.scope, mailbox.owner],
+          );
+        }
+        return Number(
           (
             await one(
-              `INSERT INTO conversations (org_id, channel_id, peer_key, title, assignee_user_id, assignee_team_id)
-               VALUES ($1,$2,$3,'t',$4,$5) RETURNING id`,
-              [orgA, chanA, `v${(n += 1)}`, assigneeUserId, assigneeTeamId],
+              `INSERT INTO channels (org_id, kind, name, external_id) VALUES ($1,'email',$2,$3) RETURNING id`,
+              [orgA, name, uuid],
             )
           ).id,
         );
-        rows.push({ id, assigneeUserId, assigneeTeamId });
+      };
+      const channels: Array<{ id: number; owner: number | null }> = [
+        { id: chanA, owner: null },
+        { id: await emailChannel('shared', { scope: 'shared', owner: null }), owner: null },
+        { id: await emailChannel('pa', { scope: 'personal', owner: userA }), owner: userA },
+        { id: await emailChannel('pa2', { scope: 'personal', owner: userA2 }), owner: userA2 },
+        { id: await emailChannel('gone', null), owner: -1 },
+      ];
+      let n = 100;
+      for (const ch of channels) {
+        for (const s of SHAPES) {
+          const assigneeUserId = s.user ? users[s.user] : null;
+          const assigneeTeamId = s.team ? teams[s.team] : null;
+          const id = Number(
+            (
+              await one(
+                `INSERT INTO conversations (org_id, channel_id, peer_key, title, assignee_user_id, assignee_team_id)
+               VALUES ($1,$2,$3,'t',$4,$5) RETURNING id`,
+                [orgA, ch.id, `v${(n += 1)}`, assigneeUserId, assigneeTeamId],
+              )
+            ).id,
+          );
+          rows.push({ id, assigneeUserId, assigneeTeamId, channelOwnerUserId: ch.owner });
+        }
       }
       const mine = rows.map((r) => r.id);
 
@@ -407,11 +440,13 @@ describe('team inbox storage: isolation, constraints and the visibility rule', (
       for (const userId of [userA, userA2, 999999]) {
         for (const teamIds of [[], [team1], [team2], [team1, team2]]) {
           for (const scope of [null, 'all', 'team', 'own'] as const) {
-            viewers.push({ userId, scope, teamIds });
+            for (const readsPersonalMail of [false, true]) {
+              viewers.push({ userId, scope, teamIds, readsPersonalMail });
+            }
           }
         }
       }
-      expect(viewers.length).toBe(48);
+      expect(viewers.length).toBe(96);
 
       for (const viewer of viewers) {
         const q = dialect.sqlToQuery(

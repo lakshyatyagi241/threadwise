@@ -11,6 +11,8 @@ import {
   MediaStateNote,
   mediaView,
 } from '@/features/channel-whatsapp-cloud';
+import { EmailMessageBody } from '@/features/channel-email/components/email-message';
+import { composerErrorKey } from '@/features/channel-email/lib/composer-errors';
 import { isRetryableSend } from '../lib/errors';
 import type { AgentReaction, PendingSend } from '../lib/thread';
 import { clockTime, fullStamp, humanSize } from '../lib/time';
@@ -89,6 +91,19 @@ function MessageBody({
       default:
         visual = <DocumentMedia media={media} />;
     }
+  }
+
+  // An email carries its own header, HTML body and files (TW-MAIL-026); the frame and the lists are the email feature's.
+  if (m.email) {
+    return (
+      <EmailMessageBody
+        email={m.email}
+        conversationId={m.conversationId}
+        messageId={m.id}
+        body={m.body}
+        date={m.providerAt ?? m.createdAt}
+      />
+    );
   }
 
   const referral =
@@ -347,6 +362,7 @@ export const MessageBubble = memo(function MessageBubble({
           <div
             className={cn(
               BUBBLE,
+              m.email && 'w-full sm:max-w-[90%]',
               out
                 ? 'rounded-ee-md border border-primary/25 bg-primary/15 text-foreground'
                 : 'rounded-es-md border border-border bg-background',
@@ -526,8 +542,10 @@ export interface PendingBubbleProps {
 export function PendingBubble({ pending: p, progress, onRetry, onDismiss }: PendingBubbleProps) {
   const t = useTranslations('team-inbox-conversations.bubble');
   const errorText = useErrorText();
+  const mailError = useTranslations('email.composer.error');
   const locale = useLocale();
   const failed = p.status === 'failed';
+  const mailKey = p.error ? composerErrorKey(p.error) : null;
   return (
     <li
       data-testid="inbox-pending"
@@ -568,7 +586,11 @@ export function PendingBubble({ pending: p, progress, onRetry, onDismiss }: Pend
         </div>
         {failed && (
           <div className="mt-0.5 flex flex-wrap items-center justify-end gap-2 px-1 text-xs text-danger">
-            <span role="alert">{errorText(p.error ?? 'NETWORK')}</span>
+            <span role="alert">
+              {mailKey
+                ? mailError(mailKey, { seconds: p.retryAfterS ?? 0 })
+                : errorText(p.error ?? 'NETWORK')}
+            </span>
             {isRetryableSend(p.error ?? 'NETWORK') && (
               <button
                 type="button"

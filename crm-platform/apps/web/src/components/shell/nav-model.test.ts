@@ -117,6 +117,8 @@ describe('the real menu', () => {
   it('orders Platform, Inbox & Chat and CRM as specified', () => {
     expect(ids('overview')).toEqual(['dashboard', 'analytics', 'notifications']);
     // `inbox-message-logs` is registered (its gate closes the route) but `menuItems` hides it: the Inbox entry and a Settings tile reach it.
+    // `email` is registered with `inMenu: false` (its tile is in Settings > Integrations), so `menuItems` does not draw it; it stays
+    // registered for the plan paywall on /email.
     expect(ids('inbox')).toEqual([
       'inbox',
       'inbox-message-logs',
@@ -124,6 +126,7 @@ describe('the real menu', () => {
       'call-logs',
       'team-chat',
       'devices',
+      'email',
     ]);
     expect(ids('audience')).toEqual([
       'contacts',

@@ -86,8 +86,8 @@
       },
       "email": {
         "label": "E-mail",
-        "description": "Verbind een mailbox om e-mail te verzenden en ontvangen in de inbox.",
-        "keywords": "mailbox, smtp, imap, gmail, outlook, afzender"
+        "description": "Verbind Gmail- of Google Workspace-mailboxen zodat je team klant-e-mail in de gedeelde inbox kan lezen en beantwoorden.",
+        "keywords": "mailbox, gmail, google workspace, gedeelde inbox, support-e-mail, outlook, imap"
       },
       "line": {
         "label": "LINE",

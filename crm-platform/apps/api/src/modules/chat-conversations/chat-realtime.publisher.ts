@@ -133,6 +133,7 @@ export class ChatRealtimePublisher {
     const people = await this.audience.forConversation(orgId, {
       assigneeUserId: conv.assigneeUserId,
       assigneeTeamId: conv.assigneeTeamId,
+      channelOwnerUserId: conv.channelOwnerUserId,
     });
     await this.emitter.emitToUsers(orgId, people, REALTIME_EVENT.conversationUpsert, {
       conversationId: conv.uuid,

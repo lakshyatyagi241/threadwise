@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { DatabaseService } from '../../infra/db/database.service';
+import { channelOwnerSql } from './channel-owner';
 import type { ConversationRecord } from './conversation-visibility';
 
 /** How the gateway learns who a conversation is assigned to when a socket asks to open its room. */
@@ -12,7 +13,7 @@ export interface ConversationRecordLoader {
 }
 
 /**
- * Reads the two columns visibility depends on straight from `conversations`, under the caller's tenant (row-level security
+ * Reads the columns visibility depends on straight from `conversations`, under the caller's tenant (row-level security
  * applies). It is a plain read because the realtime layer must not depend on the chat module that owns the table; a domain that
  * needs a richer rule binds its own loader to `CONVERSATION_RECORD_LOADER`.
  */
@@ -27,18 +28,24 @@ export class DbConversationRecordLoader implements ConversationRecordLoader {
   ): Promise<ConversationRecord | null> {
     const res = await this.db.txAs({ orgId, userId }, async (tx) =>
       tx.execute(sql`
-        SELECT assignee_user_id, assignee_team_id
-        FROM conversations
-        WHERE org_id = ${orgId} AND uuid = ${conversationUuid}::uuid
+        SELECT c.assignee_user_id, c.assignee_team_id, ${channelOwnerSql('c')} AS channel_owner_user_id
+        FROM conversations c
+        WHERE c.org_id = ${orgId} AND c.uuid = ${conversationUuid}::uuid
       `),
     );
     const row = res.rows[0] as
-      | { assignee_user_id: string | number | null; assignee_team_id: string | number | null }
+      | {
+          assignee_user_id: string | number | null;
+          assignee_team_id: string | number | null;
+          channel_owner_user_id: string | number | null;
+        }
       | undefined;
     if (!row) return null;
     return {
       assigneeUserId: row.assignee_user_id === null ? null : Number(row.assignee_user_id),
       assigneeTeamId: row.assignee_team_id === null ? null : Number(row.assignee_team_id),
+      channelOwnerUserId:
+        row.channel_owner_user_id === null ? null : Number(row.channel_owner_user_id),
     };
   }
 }

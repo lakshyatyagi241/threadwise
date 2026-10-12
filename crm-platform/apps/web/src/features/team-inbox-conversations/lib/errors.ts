@@ -79,6 +79,13 @@ export function errorKind(code: string): ErrorKind {
   return BY_CODE[code] ?? 'generic';
 }
 
+/** Seconds the server asked to wait before trying again (`Retry-After`, or the problem's `retryAfterSeconds`), when it said. */
+export function retryAfterOf(e: unknown): number | undefined {
+  if (!(e instanceof ApiError)) return undefined;
+  const n = Number(e.fieldErrors.find((f) => f.path === 'retryAfterSeconds')?.message);
+  return Number.isFinite(n) && n > 0 ? Math.ceil(n) : undefined;
+}
+
 /** The request id of an API error, shown beside a generic failure so support can find it in the logs. */
 export function requestIdOf(e: unknown): string | undefined {
   return e instanceof ApiError ? e.requestId : undefined;

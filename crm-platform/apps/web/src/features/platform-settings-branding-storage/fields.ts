@@ -49,7 +49,13 @@ export interface FieldSpec {
 
 /** A block that is not a plain list of fields. */
 export type CustomSection =
-  'brandAssets' | 'signupLink' | 'seoPreview' | 'teamInboxApp' | 'wabaCallback' | 'googleCallback';
+  | 'brandAssets'
+  | 'signupLink'
+  | 'seoPreview'
+  | 'teamInboxApp'
+  | 'wabaCallback'
+  | 'googleCallback'
+  | 'microsoftCallback';
 
 export interface SectionSpec {
   id: string;
@@ -508,6 +514,53 @@ export const GROUP_SPECS: GroupSpec[] = [
     ],
   },
   {
+    id: 'googleMail',
+    group: 'googleMail',
+    slug: 'google-mail',
+    guide: ['project', 'redirect', 'consent', 'workspaces', 'push'],
+    sections: [
+      {
+        id: 'oauth',
+        eyebrow: 'google-oauth',
+        custom: 'googleCallback',
+        fields: [
+          f('enabled', 'toggle'),
+          ...halves(f('clientId', 'text', { mono: true }), f('clientSecret', 'secret')),
+          f('redirectUri', 'url', { mono: true }),
+        ],
+      },
+      {
+        id: 'push',
+        eyebrow: 'gmail-push',
+        fields: [
+          f('pubsubTopic', 'text', { mono: true }),
+          ...halves(
+            f('pushAudience', 'text', { mono: true }),
+            f('pushServiceAccount', 'text', { mono: true }),
+          ),
+        ],
+      },
+    ],
+  },
+  {
+    id: 'microsoftMail',
+    group: 'microsoftMail',
+    slug: 'microsoft-mail',
+    guide: ['registration', 'redirect', 'permissions', 'workspaces'],
+    sections: [
+      {
+        id: 'oauth',
+        eyebrow: 'microsoft-oauth',
+        custom: 'microsoftCallback',
+        fields: [
+          f('enabled', 'toggle'),
+          ...halves(f('clientId', 'text', { mono: true }), f('clientSecret', 'secret')),
+          ...halves(f('tenant', 'text', { mono: true }), f('redirectUri', 'url', { mono: true })),
+        ],
+      },
+    ],
+  },
+  {
     id: 'whatsapp',
     group: 'whatsapp',
     slug: 'whatsapp',
@@ -594,4 +647,6 @@ export const HUB_ORDER = [
   'campaigns',
   'flowBuilder',
   'googleCalendar',
+  'googleMail',
+  'microsoftMail',
 ] as const;

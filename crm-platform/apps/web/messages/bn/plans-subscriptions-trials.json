@@ -44,7 +44,8 @@
       "forms": "ওয়েব ফর্ম",
       "form_submissions_monthly": "মাসে ফর্ম জমা",
       "ai_form_generations_monthly": "মাসে AI ফর্ম বিল্ডার জেনারেশন",
-      "sms_monthly": "মাসে SMS"
+      "sms_monthly": "মাসে SMS",
+      "email_mailboxes": "ইমেল মেলবক্স"
     },
     "features": {
       "automation": "অটোমেশন",
@@ -76,7 +77,8 @@
       "extra_channels": "Telegram, Facebook ও Instagram",
       "form_builder": "ফর্ম",
       "waba_groups": "WhatsApp গ্রুপ",
-      "sms": "SMS চ্যানেল"
+      "sms": "SMS চ্যানেল",
+      "email_channel": "ইমেল (Gmail) চ্যানেল"
     },
     "limitGroups": {
       "messaging": "মেসেজিং",
@@ -127,7 +129,8 @@
       "forms": "সক্রিয় ওয়েব ফর্ম (ফর্ম অ্যাপ)। একটি ফর্ম আর্কাইভ করলে তার জায়গা খালি হবে। 0 = সীমাহীন।",
       "form_submissions_monthly": "ক্যালেন্ডার মাসে গৃহীত ফর্ম জমা, স্প্যাম বাদে। সীমা ছাড়ালেও জমা পর্যালোচনার জন্য সংরক্ষিত হয়, কখনো বাদ যায় না। 0 = সীমাহীন।",
       "ai_form_generations_monthly": "ক্যালেন্ডার মাসে AI ফর্ম বিল্ডারের জেনারেশন, মেরামতের পুনরায় চেষ্টাসহ। 0 = সীমাহীন।",
-      "sms_monthly": "ক্যালেন্ডার মাসে পাঠানো আউটবাউন্ড SMS বার্তা। 0 = সীমাহীন।"
+      "sms_monthly": "ক্যালেন্ডার মাসে পাঠানো আউটবাউন্ড SMS বার্তা। 0 = সীমাহীন।",
+      "email_mailboxes": "সংযুক্ত Gmail মেলবক্স (সংযোগ বিচ্ছিন্ন মেলবক্স তার জায়গা খালি করে)। 0 = সীমাহীন।"
     },
     "planAddons": {
       "title": "আপনার প্ল্যানে উপলব্ধ অ্যাড-অন",
