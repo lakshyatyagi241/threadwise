@@ -62,6 +62,10 @@ export function useBuilder(channel?: 'sms') {
         signal,
       }),
     retry: false,
+    // The numbers come and go (a number connected a moment ago, one that just disconnected): read them again on every visit and when
+    // the window regains focus, so the "Send from" list is never a minute behind.
+    refetchOnMount: 'always',
+    refetchOnWindowFocus: true,
   });
 }
 

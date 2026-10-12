@@ -5,7 +5,7 @@ summary: Choose the WhatsApp number, then send a template or a message to contac
 area: campaigns
 order: 20
 documents: [nav:campaigns]
-keywords: [campaign, broadcast, create, number, sender, verified, meta, cloud api, guided, wizard, template, audience, contacts, groups, segments, csv, filter, schedule, recurring, retries, test, variables, credit]
+keywords: [campaign, broadcast, create, number, sender, empty, personal number, pending, verified, meta, cloud api, guided, wizard, template, audience, contacts, groups, segments, csv, filter, schedule, recurring, retries, test, variables, credit]
 ---
 
 ## What it is for
@@ -23,6 +23,17 @@ Campaigns have one place to start: **Create campaign** on the Campaigns screen (
 If your default number is a verified Meta number, the builder opens with the guided steps already in place.
 
 You can change the number at any time, and your campaign name comes along. When only the name was filled in, the steps simply change. Otherwise you are asked first, because the other steps start fresh: a guided campaign is saved as a draft in the Campaigns list before you leave, but the classic form is not saved, so use **Save draft** there if you want to keep it.
+
+## When the Send from list is empty
+
+The list only holds numbers that can send right now, and an empty list says why instead of leaving a blank select:
+
+- **No WhatsApp number is connected.** Open **Connect a WhatsApp number** to add one on the WhatsApp numbers screen.
+- **A number is still connecting, or its connection failed.** The message counts them. Open the number's status to finish the setup or reconnect it. It appears in the list once it is connected.
+- **A number is disconnected.** Reconnect it. A personal number has its own screen, and the message links to it.
+- **Personal numbers are turned off for this workspace.** Personal (QR) numbers only send while the platform has them on and your workspace is allowed to use them. A platform administrator turns that on for the workspace; until then, connect an official WhatsApp Business number.
+
+The list loads while the page opens, and it refreshes when you come back to the page or the window regains focus, so a number you just connected shows up without reloading. You need the permission to create campaigns to see the list at all.
 
 ## The guided steps
 

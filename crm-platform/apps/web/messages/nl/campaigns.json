@@ -227,8 +227,6 @@
         "senderHint": "Op standaard laten staan, gaat de campagne via de hoofdengine van je workspace.",
         "defaultSender": "Standaardafzender",
         "nameHint": "Interne naam voor rapporten en wachtrijgeschiedenis.",
-        "noSenders": "Geen gekoppelde afzenders.",
-        "connectOne": "Koppel er een →",
         "type": "Campagnetype",
         "types": {
           "custom": {
@@ -897,8 +895,7 @@
         "previewEmpty": "Kies een sjabloon om te zien hoe het bericht eruitziet.",
         "senderLabel": "Verzenden vanaf",
         "senderHint": "Het WhatsApp-nummer waarvanaf deze broadcast wordt verzonden.",
-        "pickSender": "Kies een nummer",
-        "noSenders": "Er is geen WhatsApp-nummer verbonden. Verbind er eerst een."
+        "pickSender": "Kies een nummer"
       },
       "audience": {
         "selectionTitle": "Gekozen in de Contact Hub",
@@ -1403,6 +1400,41 @@
         "runs": "Uitvoeringen",
         "noRuns": "Er is nog geen uitvoering gestart.",
         "cancel": "Reeks annuleren"
+      }
+    },
+    "senderEmpty": {
+      "loading": "Je nummers worden geladen…",
+      "none": {
+        "title": "Er is geen WhatsApp-nummer gekoppeld",
+        "body": "Koppel een WhatsApp Business-nummer om te kiezen van welk nummer deze campagne wordt verzonden.",
+        "action": "WhatsApp-nummer koppelen"
+      },
+      "sms": {
+        "none": {
+          "title": "Er is geen sms-afzender gekoppeld",
+          "body": "Koppel een sms-afzender om te kiezen van welke afzender deze campagne wordt verzonden.",
+          "action": "Sms-afzender koppelen"
+        }
+      },
+      "pending": {
+        "title": "{count, plural, one {# nummer wordt nog gekoppeld} other {# nummers worden nog gekoppeld}}",
+        "body": "Een nummer kan campagnes verzenden zodra de koppeling is voltooid. Open de status om de installatie af te ronden.",
+        "action": "Status van het nummer bekijken"
+      },
+      "error": {
+        "title": "{count, plural, one {De koppeling van # nummer is mislukt} other {De koppeling van # nummers is mislukt}}",
+        "body": "Koppel het nummer opnieuw via de statuspagina, dan verschijnt het hier.",
+        "action": "Koppeling herstellen"
+      },
+      "disconnected": {
+        "title": "{count, plural, one {# nummer is losgekoppeld} other {# nummers zijn losgekoppeld}}",
+        "body": "Koppel het opnieuw om er campagnes mee te verzenden. Gekoppelde nummers verschijnen hier.",
+        "action": "Nummer opnieuw koppelen"
+      },
+      "personal_off": {
+        "title": "Persoonlijke nummers staan uit voor deze werkruimte",
+        "body": "{count, plural, one {Je persoonlijke (QR-)nummer kan} other {Je # persoonlijke (QR-)nummers kunnen}} geen campagnes verzenden zolang dit uitstaat. Een platformbeheerder kan dit voor deze werkruimte inschakelen, of je koppelt een officieel WhatsApp Business-nummer.",
+        "action": "Officieel nummer koppelen"
       }
     }
   }

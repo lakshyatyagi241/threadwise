@@ -181,6 +181,25 @@ describe('TW-BCAST-004..006: compose data', () => {
     expect(res.body.twilioEnabled).toBe(true);
   });
 
+  it('numbers left out of the list are counted by engine and reason, with nothing identifying', async () => {
+    const t = await api.signup('c9');
+    await device(t, 'Gone', 'disconnected');
+    await device(t, 'Inactive', 'connected', false);
+    await config(t, 'waba', 'pending', 'P1');
+    await config(t, 'waba', 'failed', 'F1');
+    await config(t, 'twilio', 'disconnected', 'T1');
+    await config(t, 'sms', 'pending', 'S1');
+    const live = await config(t, 'waba', 'connected', 'Live');
+    const res = await get(t);
+    expect(res.body.senders.map((s: { key: string }) => s.key)).toEqual([`waba:${live.uuid}`]);
+    expect(res.body.hidden).toEqual([
+      { engine: 'baileys', reason: 'not_connected', count: 2 },
+      { engine: 'twilio', reason: 'not_connected', count: 1 },
+      { engine: 'waba', reason: 'error', count: 1 },
+      { engine: 'waba', reason: 'pending', count: 1 },
+    ]);
+  });
+
   it('a tenant sees only its own templates and numbers', async () => {
     const a = await api.signup('c5');
     const b = await api.signup('c6');
@@ -189,6 +208,7 @@ describe('TW-BCAST-004..006: compose data', () => {
     const res = await get(b);
     expect(res.body.templates).toEqual([]);
     expect(res.body.senders).toEqual([]);
+    expect(res.body.hidden).toEqual([]);
     expect(res.body.twilioEnabled).toBe(false);
   });
 
