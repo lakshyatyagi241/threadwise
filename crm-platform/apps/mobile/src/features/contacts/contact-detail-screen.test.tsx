@@ -14,12 +14,26 @@ import {
 } from '@/test/contacts-fixtures';
 import { renderApp } from '@/test/render';
 import * as api from './api';
+import { findConversationId } from './chat-api';
 import { ContactDetailScreen } from './contact-detail-screen';
 
 jest.mock('./api');
+jest.mock('./chat-api');
+// The tabs and the lifecycle card have their own tests; here each is a marker, so this file is about the frame around them.
+jest.mock('./about-tab', () => ({ AboutTab: () => mockMarker('about tab') }));
+jest.mock('./activity-tab', () => ({ ActivityTab: () => mockMarker('activity tab') }));
+jest.mock('./files-tab', () => ({ FilesTab: () => mockMarker('files tab') }));
+jest.mock('./lifecycle-card', () => ({ LifecycleCard: () => mockMarker('lifecycle card') }));
 jest.mock('@/lib/session/api');
 jest.mock('expo-router', () => ({ useRouter: jest.fn(), useLocalSearchParams: jest.fn() }));
 jest.mock('expo-linking', () => ({ openURL: jest.fn() }));
+
+/** A stand-in for a part of the page: one line of text that says which part is on screen. */
+function mockMarker(label: string) {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { Text } = require('@/components/ui/text');
+  return <Text>{label}</Text>;
+}
 
 const sessionCall = jest.mocked(fetchSession);
 const getCall = jest.mocked(api.getContact);
@@ -27,6 +41,17 @@ const tagsCall = jest.mocked(api.getContactTags);
 const updateCall = jest.mocked(api.updateContact);
 const attachCall = jest.mocked(api.attachContactTag);
 const detachCall = jest.mocked(api.detachContactTag);
+const chatCall = jest.mocked(findConversationId);
+const deleteCall = jest.mocked(api.deleteContact);
+const sessionAll = {
+  ...sessionFull,
+  permissions: {
+    ...sessionFull.permissions,
+    'record.contacts.delete': 'all',
+    'inbox.conversation.read': 'all',
+    'record.tasks.read': 'all',
+  },
+} as typeof sessionFull;
 const router = { push: jest.fn(), replace: jest.fn(), back: jest.fn(), canGoBack: jest.fn() };
 
 const settled = (queryClient: QueryClient) =>
@@ -57,26 +82,23 @@ afterEach(async () => {
 });
 
 describe('ContactDetailScreen', () => {
-  it('shows who the contact is and where they stand', async () => {
+  it('shows who the contact is, their tags, and the parts of the page', async () => {
     await show();
     expect(await screen.findByRole('header', { name: 'Aarav Sharma' })).toBeTruthy();
     expect(getCall).toHaveBeenCalledWith(aarav.id, expect.anything());
-    expect(screen.getByText('Qualified')).toBeTruthy();
-    expect(screen.getByText('Open')).toBeTruthy();
-    expect(screen.getByText('import')).toBeTruthy();
-    expect(screen.getByText('Subscribed')).toBeTruthy();
-    expect(screen.getByText('Can receive')).toBeTruthy();
-    expect(screen.getByText('Pune')).toBeTruthy();
-    expect(screen.getByText('Yes')).toBeTruthy();
     expect(await screen.findByText('VIP')).toBeTruthy();
+    expect(screen.getByText('lifecycle card')).toBeTruthy();
+    expect(screen.getByText('about tab')).toBeTruthy();
   });
 
-  it('opens the dialler and the mail app from the phone and the email', async () => {
+  it('switches between the About, Activity and Files tabs', async () => {
     await show();
-    await fireEvent.press(await screen.findByRole('link', { name: 'Call +919812345678' }));
-    expect(Linking.openURL).toHaveBeenCalledWith('tel:+919812345678');
-    await fireEvent.press(screen.getByRole('link', { name: 'Write to aarav@example.test' }));
-    expect(Linking.openURL).toHaveBeenCalledWith('mailto:aarav@example.test');
+    await screen.findByText('about tab');
+    await fireEvent.press(screen.getByRole('radio', { name: 'Activity' }));
+    expect(screen.getByText('activity tab')).toBeTruthy();
+    expect(screen.queryByText('about tab')).toBeNull();
+    await fireEvent.press(screen.getByRole('radio', { name: 'Files' }));
+    expect(screen.getByText('files tab')).toBeTruthy();
   });
 
   it('leaves out what the contact does not have', async () => {
@@ -84,10 +106,120 @@ describe('ContactDetailScreen', () => {
     tagsCall.mockResolvedValue([]);
     jest.mocked(useLocalSearchParams).mockReturnValue({ id: phoneOnly.id });
     await show();
-    expect(await screen.findByRole('link', { name: 'Call +919800000002' })).toBeTruthy();
-    expect(screen.queryByText('Email')).toBeNull();
-    expect(screen.queryByText('Custom fields')).toBeNull();
     expect(await screen.findByText('No tags yet.')).toBeTruthy();
+    const email = screen.getByRole('button', { name: 'Email' });
+    expect(email.props.accessibilityState.disabled).toBe(true);
+    await fireEvent.press(email);
+    expect(Linking.openURL).not.toHaveBeenCalled();
+  });
+
+  describe('shortcuts', () => {
+    it('hands call, mail and text over to the phone', async () => {
+      sessionCall.mockResolvedValue(sessionAll);
+      await show();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Call' }));
+      expect(Linking.openURL).toHaveBeenCalledWith('tel:+919812345678');
+      await fireEvent.press(screen.getByRole('button', { name: 'Email' }));
+      expect(Linking.openURL).toHaveBeenCalledWith('mailto:aarav@example.test');
+      await fireEvent.press(screen.getByRole('button', { name: 'SMS' }));
+      expect(Linking.openURL).toHaveBeenCalledWith('sms:+919812345678');
+    });
+
+    it('opens the notes and the tasks of the contact', async () => {
+      sessionCall.mockResolvedValue(sessionAll);
+      await show();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Notes' }));
+      expect(router.push).toHaveBeenCalledWith({
+        pathname: '/contact-notes',
+        params: { contactId: aarav.id },
+      });
+      await fireEvent.press(screen.getByRole('button', { name: 'Tasks' }));
+      expect(router.push).toHaveBeenCalledWith({
+        pathname: '/tasks',
+        params: { contactId: aarav.id },
+      });
+    });
+
+    it('fades the tasks shortcut for a person who may not read tasks', async () => {
+      await show();
+      const tasks = await screen.findByRole('button', { name: 'Tasks' });
+      expect(tasks.props.accessibilityState.disabled).toBe(true);
+    });
+
+    it('opens the existing chat with the contact', async () => {
+      sessionCall.mockResolvedValue(sessionAll);
+      chatCall.mockResolvedValue('thread-1');
+      await show();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Chat' }));
+      await waitFor(() =>
+        expect(router.push).toHaveBeenCalledWith({
+          pathname: '/conversation/[id]',
+          params: { id: 'thread-1' },
+        }),
+      );
+      expect(chatCall).toHaveBeenCalledWith({ id: aarav.id, phone: aarav.phone });
+    });
+
+    it('says so when there is no chat with the contact yet', async () => {
+      sessionCall.mockResolvedValue(sessionAll);
+      chatCall.mockResolvedValue(null);
+      await show();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Chat' }));
+      expect(await screen.findByText(/no conversation with this contact yet/)).toBeTruthy();
+      expect(router.push).not.toHaveBeenCalled();
+    });
+
+    it('shows why the chat could not be looked up', async () => {
+      sessionCall.mockResolvedValue(sessionAll);
+      chatCall.mockRejectedValue(new ApiError(0, 'CLIENT_NETWORK', 'x'));
+      await show();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Chat' }));
+      expect(await screen.findByText(/Can't reach the server/)).toBeTruthy();
+    });
+
+    it('does not offer the chat to a person who may not read the inbox', async () => {
+      await show();
+      const chat = await screen.findByRole('button', { name: 'Chat' });
+      expect(chat.props.accessibilityState.disabled).toBe(true);
+    });
+  });
+
+  describe('deleting', () => {
+    it('asks first, then deletes and goes back to the list', async () => {
+      sessionCall.mockResolvedValue(sessionAll);
+      deleteCall.mockResolvedValue(undefined);
+      await show();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Delete contact' }));
+      expect(await screen.findByText('Delete Aarav Sharma? This cannot be undone.')).toBeTruthy();
+      expect(deleteCall).not.toHaveBeenCalled();
+      await fireEvent.press(screen.getByRole('button', { name: 'Delete' }));
+      await waitFor(() => expect(router.replace).toHaveBeenCalledWith('/contacts'));
+      expect(deleteCall).toHaveBeenCalledWith(aarav.id);
+    });
+
+    it('does nothing when the person cancels', async () => {
+      sessionCall.mockResolvedValue(sessionAll);
+      await show();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Delete contact' }));
+      await fireEvent.press(await screen.findByRole('button', { name: 'Cancel' }));
+      expect(deleteCall).not.toHaveBeenCalled();
+    });
+
+    it('shows why a delete failed and stays on the contact', async () => {
+      sessionCall.mockResolvedValue(sessionAll);
+      deleteCall.mockRejectedValue(new ApiError(403, 'FORBIDDEN', 'no'));
+      await show();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Delete contact' }));
+      await fireEvent.press(await screen.findByRole('button', { name: 'Delete' }));
+      expect(await screen.findByRole('header', { name: 'Aarav Sharma' })).toBeTruthy();
+      expect(router.replace).not.toHaveBeenCalled();
+    });
+
+    it('is not offered to a person who may not delete contacts', async () => {
+      await show();
+      await screen.findByRole('header', { name: 'Aarav Sharma' });
+      expect(screen.queryByRole('button', { name: 'Delete contact' })).toBeNull();
+    });
   });
 
   it('goes back, to the list when there is nowhere to go back to', async () => {

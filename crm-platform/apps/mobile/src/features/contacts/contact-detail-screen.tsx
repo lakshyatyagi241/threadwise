@@ -1,6 +1,5 @@
 import { ERROR_CODES, type ContactResponse, type UpdateContactInput } from '@crm/contracts';
 import { useQueryClient } from '@tanstack/react-query';
-import * as Linking from 'expo-linking';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -12,32 +11,38 @@ import {
   View,
 } from 'react-native';
 import { Avatar } from '@/components/ui/avatar';
-import { Badge, type BadgeTone } from '@/components/ui/badge';
 import { Banner } from '@/components/ui/banner';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { EmptyState } from '@/components/ui/empty-state';
 import { HeaderIconButton } from '@/components/ui/screen-header';
+import { SegmentedControl } from '@/components/ui/segmented-control';
 import { Text } from '@/components/ui/text';
 import { isApiError } from '@/lib/api';
 import { messageForError } from '@/lib/api/error-message';
 import { can, useSession } from '@/lib/session/use-session';
 import { spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
+import { AboutTab } from './about-tab';
+import { ActivityTab } from './activity-tab';
+import { ContactActions } from './contact-actions';
 import { ContactForm, valuesOf } from './contact-form';
-import {
-  contactLine,
-  customValueText,
-  displayName,
-  formatDate,
-  formatMoment,
-} from './contact-display';
+import { contactLine, displayName } from './contact-display';
 import { describeContactFailure } from './contact-errors';
 import { ContactTags } from './contact-tags';
 import { normalisePhone, type ContactFormValues } from './contact-validation';
-import { InfoRow } from './info-row';
-import { StackHeader } from './stack-header';
-import { contactKey, useContact, useContactTags, useUpdateContact } from './use-contacts';
+import { FilesTab } from './files-tab';
+import { LifecycleCard } from './lifecycle-card';
+import { useContactActions } from './use-contact-actions';
+import { StackHeader } from '@/components/ui/stack-header';
+import {
+  contactKey,
+  useContact,
+  useContactTags,
+  useDeleteContact,
+  useUpdateContact,
+} from './use-contacts';
 
 /** The fields the form changed, as the API's update body: an emptied field is sent as null, an untouched one is left out. */
 function changesOf(
@@ -55,23 +60,17 @@ function changesOf(
   };
 }
 
-function subscriptionTone(status: string): BadgeTone {
-  if (status === 'subscribed') return 'success';
-  if (status === 'unsubscribed') return 'danger';
-  return 'neutral';
-}
-
 /**
  * One contact (WD-CON-007): who they are, how to reach them (phone and email open the dialler and the mail app), where they
  * stand, their tags and custom fields. People who may update contacts can edit the name, phone and email in the same form that
  * creates one, and add or remove tags. A save made on a stale copy is refused by the API; the screen reloads the contact and says so.
  */
 export function ContactDetailScreen() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const router = useRouter();
   const queryClient = useQueryClient();
-  const params = useLocalSearchParams<{ id?: string | string[] }>();
+  const params = useLocalSearchParams<{ id?: string | string[]; edit?: string }>();
   const id = (Array.isArray(params.id) ? params.id[0] : params.id) ?? '';
   const session = useSession();
   const canRead = can(session.data, 'record.contacts.read');
@@ -79,7 +78,12 @@ export function ContactDetailScreen() {
   const contact = useContact(id, canRead);
   const tags = useContactTags(id, canRead);
   const update = useUpdateContact(id);
-  const [editing, setEditing] = useState(false);
+  const remove = useDeleteContact(id);
+  const canDelete = can(session.data, 'record.contacts.delete');
+  const [tab, setTab] = useState<'about' | 'activity' | 'files'>('about');
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const [removeError, setRemoveError] = useState<string | null>(null);
+  const [editing, setEditing] = useState(params.edit === '1');
   const [notice, setNotice] = useState<string | null>(null);
   const [failure, setFailure] = useState<ReturnType<typeof describeContactFailure> | null>(null);
 
@@ -91,7 +95,22 @@ export function ContactDetailScreen() {
   };
 
   const data = contact.data;
+  const actions = useContactActions(data ?? null, setNotice);
   const sessionReady = session.data !== undefined;
+
+  const confirmDelete = () => {
+    setRemoveError(null);
+    remove.mutate(undefined, {
+      onSuccess: () => {
+        setConfirmingDelete(false);
+        router.replace('/contacts');
+      },
+      onError: (error) => {
+        setConfirmingDelete(false);
+        setRemoveError(messageForError(error, t));
+      },
+    });
+  };
 
   let body;
   if (!sessionReady) {
@@ -169,16 +188,8 @@ export function ContactDetailScreen() {
   } else {
     const name = displayName(data, t);
     const line = contactLine(data);
-    const locale = i18n.language;
-    const custom = Object.entries(data.customFields)
-      .map(
-        ([key, value]) =>
-          [key, customValueText(value, t('contacts.yes'), t('contacts.no'))] as const,
-      )
-      .filter((entry): entry is readonly [string, string] => entry[1] !== null);
-    const whatsapp = data.whatsappSubscriptionStatus;
     body = (
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
         <View style={styles.hero}>
           <Avatar name={name} size={72} />
           <Text variant="title" accessibilityRole="header" style={styles.center}>
@@ -191,73 +202,28 @@ export function ContactDetailScreen() {
           ) : null}
         </View>
 
-        {data.phone || data.email ? (
-          <Card>
-            <InfoRow
-              label={t('contacts.detail.phone')}
-              value={data.phone}
-              linkLabel={t('contacts.detail.call', { phone: data.phone })}
-              onPress={() => void Linking.openURL(`tel:${data.phone}`)}
-            />
-            <InfoRow
-              label={t('contacts.detail.email')}
-              value={data.email}
-              linkLabel={t('contacts.detail.mail', { email: data.email })}
-              onPress={() => void Linking.openURL(`mailto:${data.email}`)}
-            />
-          </Card>
-        ) : null}
+        {notice ? <Banner tone="warning" message={notice} /> : null}
+        {removeError ? <Banner tone="danger" message={removeError} /> : null}
 
-        <Card>
-          <InfoRow
-            label={t('contacts.detail.stage')}
-            value={
-              data.lifecycleStage
-                ? t(`contacts.stage.${data.lifecycleStage}`, { defaultValue: data.lifecycleStage })
-                : null
-            }
-          />
-          <InfoRow label={t('contacts.detail.status')} value={data.status} />
-          <InfoRow label={t('contacts.detail.source')} value={data.source} />
-          <InfoRow label={t('contacts.detail.whatsapp')}>
-            {whatsapp ? (
-              <Badge
-                tone={subscriptionTone(whatsapp)}
-                label={t(`contacts.subscription.${whatsapp}`, { defaultValue: whatsapp })}
-              />
-            ) : null}
-          </InfoRow>
-          <InfoRow label={t('contacts.detail.marketing')}>
-            <Badge
-              tone={data.isUnsubscribed ? 'danger' : 'success'}
-              label={
-                data.isUnsubscribed ? t('contacts.detail.optedOut') : t('contacts.detail.optedIn')
-              }
-            />
-          </InfoRow>
-        </Card>
+        <ContactActions actions={actions} />
 
-        <Card>
-          <InfoRow
-            label={t('contacts.detail.lastActivity')}
-            value={formatMoment(data.lastActivityAt, locale) ?? t('contacts.detail.noActivity')}
-          />
-          <InfoRow
-            label={t('contacts.detail.created')}
-            value={formatDate(data.createdAt, locale)}
-          />
-        </Card>
+        <LifecycleCard contact={data} />
 
         <ContactTags contactId={data.id} tags={tags.data ?? []} editable={canUpdate} />
 
-        {custom.length > 0 ? (
-          <Card>
-            <Text variant="subheading">{t('contacts.detail.customFields')}</Text>
-            {custom.map(([key, value]) => (
-              <InfoRow key={key} label={key} value={value} />
-            ))}
-          </Card>
-        ) : null}
+        <SegmentedControl
+          label={t('contacts.detail.tabsLabel')}
+          options={[
+            { value: 'about', label: t('contacts.detail.tabs.about') },
+            { value: 'activity', label: t('contacts.detail.tabs.activity') },
+            { value: 'files', label: t('contacts.detail.tabs.files') },
+          ]}
+          value={tab}
+          onChange={setTab}
+        />
+        {tab === 'about' ? <AboutTab contact={data} /> : null}
+        {tab === 'activity' ? <ActivityTab contactId={data.id} canUpdate={canUpdate} /> : null}
+        {tab === 'files' ? <FilesTab contactId={data.id} canUpdate={canUpdate} /> : null}
       </ScrollView>
     );
   }
@@ -268,16 +234,37 @@ export function ContactDetailScreen() {
         title={editing ? t('contacts.edit.title') : t('contacts.detail.title')}
         onBack={editing ? stopEditing : goBack}
         actions={
-          canUpdate && data && !editing ? (
-            <HeaderIconButton
-              icon="create-outline"
-              label={t('contacts.edit.open')}
-              onPress={() => setEditing(true)}
-            />
+          data && !editing ? (
+            <>
+              {canUpdate ? (
+                <HeaderIconButton
+                  icon="create-outline"
+                  label={t('contacts.edit.open')}
+                  onPress={() => setEditing(true)}
+                />
+              ) : null}
+              {canDelete ? (
+                <HeaderIconButton
+                  icon="trash-outline"
+                  label={t('contacts.detail.delete.open')}
+                  onPress={() => setConfirmingDelete(true)}
+                />
+              ) : null}
+            </>
           ) : null
         }
       />
       {body}
+      <ConfirmDialog
+        visible={confirmingDelete}
+        title={t('contacts.detail.delete.title')}
+        message={t('contacts.detail.delete.message', { name: data ? displayName(data, t) : '' })}
+        confirmLabel={t('contacts.detail.delete.confirm')}
+        cancelLabel={t('contacts.detail.delete.cancel')}
+        pending={remove.isPending}
+        onConfirm={confirmDelete}
+        onCancel={() => setConfirmingDelete(false)}
+      />
     </View>
   );
 }

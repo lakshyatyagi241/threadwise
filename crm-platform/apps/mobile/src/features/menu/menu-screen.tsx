@@ -17,7 +17,7 @@ import { useTheme } from '@/lib/theme/use-theme';
 
 /** A row the person can open. A module they cannot read stays in the list, faded, and explains itself when pressed. */
 interface Destination {
-  key: 'summary' | 'inbox' | 'contacts';
+  key: 'summary' | 'inbox' | 'contacts' | 'tasks' | 'addTask';
   icon: IconName;
   href: Href;
   permission: string;
@@ -36,6 +36,13 @@ const DESTINATIONS: readonly Destination[] = [
     icon: 'people-outline',
     href: '/contacts',
     permission: 'record.contacts.read',
+  },
+  { key: 'tasks', icon: 'checkbox-outline', href: '/tasks', permission: 'record.tasks.read' },
+  {
+    key: 'addTask',
+    icon: 'add-circle-outline',
+    href: '/task-form',
+    permission: 'record.tasks.create',
   },
 ];
 

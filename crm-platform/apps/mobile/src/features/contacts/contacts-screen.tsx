@@ -1,3 +1,4 @@
+import type { ContactResponse } from '@crm/contracts';
 import { useRouter } from 'expo-router';
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +10,9 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import { Banner } from '@/components/ui/banner';
 import { Card } from '@/components/ui/card';
+import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/ui/empty-state';
 import { Icon } from '@/components/ui/icon';
@@ -21,11 +24,13 @@ import { can, useSession } from '@/lib/session/use-session';
 import { spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 import type { ContactFilters } from './api';
+import { ContactActionsSheet } from './contact-actions-sheet';
+import { displayName } from './contact-display';
 import { ContactRow } from './contact-row';
 import { ContactSkeleton } from './contact-skeleton';
 import { FilterModal } from './filter-modal';
 import { NO_FILTERS, activeFilterCount, cleanFilters } from './filters';
-import { useContactList, useDebounced } from './use-contacts';
+import { useContactList, useDebounced, useDeleteContact } from './use-contacts';
 
 /** How long the search waits for the person to stop typing before it asks the API. */
 export const SEARCH_DEBOUNCE_MS = 300;
@@ -57,6 +62,11 @@ export function ContactsScreen() {
   const list = useContactList(queryFilters, allowed);
   const contacts = useMemo(() => list.data?.pages.flatMap((page) => page.data) ?? [], [list.data]);
   const narrowed = activeFilterCount(filters) > 0 || queryFilters.q !== undefined;
+
+  const [sheetFor, setSheetFor] = useState<ContactResponse | null>(null);
+  const [deleting, setDeleting] = useState<ContactResponse | null>(null);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const remove = useDeleteContact(deleting?.id ?? '');
 
   const open = useCallback(
     (id: string) => router.push({ pathname: '/contact/[id]', params: { id } }),
@@ -98,7 +108,7 @@ export function ContactsScreen() {
         testID="contacts-list"
         data={contacts}
         keyExtractor={(contact) => contact.id}
-        renderItem={({ item }) => <ContactRow contact={item} onPress={open} />}
+        renderItem={({ item }) => <ContactRow contact={item} onPress={open} onMore={setSheetFor} />}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => void refresh()} />}
         onEndReachedThreshold={0.5}
         onEndReached={() => {
@@ -161,6 +171,12 @@ export function ContactsScreen() {
         </View>
       ) : null}
 
+      {deleteError ? (
+        <View style={styles.search}>
+          <Banner tone="danger" message={deleteError} />
+        </View>
+      ) : null}
+
       <View style={styles.fill}>{body}</View>
 
       {allowed && canCreate ? (
@@ -184,6 +200,39 @@ export function ContactsScreen() {
           }}
         />
       ) : null}
+      <ContactActionsSheet
+        contact={sheetFor}
+        onClose={() => setSheetFor(null)}
+        onEdit={(contact) => {
+          setSheetFor(null);
+          router.push({ pathname: '/contact/[id]', params: { id: contact.id, edit: '1' } });
+        }}
+        onDelete={(contact) => {
+          setSheetFor(null);
+          setDeleteError(null);
+          setDeleting(contact);
+        }}
+      />
+      <ConfirmDialog
+        visible={deleting !== null}
+        title={t('contacts.detail.delete.title')}
+        message={t('contacts.detail.delete.message', {
+          name: deleting ? displayName(deleting, t) : '',
+        })}
+        confirmLabel={t('contacts.detail.delete.confirm')}
+        cancelLabel={t('contacts.detail.delete.cancel')}
+        pending={remove.isPending}
+        onCancel={() => setDeleting(null)}
+        onConfirm={() =>
+          remove.mutate(undefined, {
+            onSuccess: () => setDeleting(null),
+            onError: (error) => {
+              setDeleting(null);
+              setDeleteError(messageForError(error, t));
+            },
+          })
+        }
+      />
     </View>
   );
 }

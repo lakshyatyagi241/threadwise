@@ -77,3 +77,6 @@ export const attachContactTag = (id: string, name: string, idempotencyKey?: stri
 
 export const detachContactTag = (id: string, tagId: string) =>
   apiFetch(`/v2/contacts/${id}/tags/${tagId}`, { method: 'DELETE' });
+
+/** Deletes the contact for good (the API does a hard delete). A contact outside the person's scope answers 404. */
+export const deleteContact = (id: string) => apiFetch(`/v2/contacts/${id}`, { method: 'DELETE' });

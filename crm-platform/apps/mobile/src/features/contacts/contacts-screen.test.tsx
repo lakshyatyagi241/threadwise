@@ -25,6 +25,11 @@ jest.mock('expo-router', () => ({ useRouter: jest.fn() }));
 
 const sessionCall = jest.mocked(fetchSession);
 const listCall = jest.mocked(api.listContacts);
+const deleteCall = jest.mocked(api.deleteContact);
+const sessionAll = {
+  ...sessionFull,
+  permissions: { ...sessionFull.permissions, 'record.contacts.delete': 'all' },
+} as typeof sessionFull;
 const router = { push: jest.fn(), replace: jest.fn(), back: jest.fn(), canGoBack: jest.fn() };
 
 let client: QueryClient | undefined;
@@ -254,5 +259,71 @@ describe('ContactsScreen', () => {
     await show();
     const row = await screen.findByRole('button', { name: 'Meera Iyer' });
     expect(row.props.accessibilityHint).toBe('meera@example.test');
+  });
+
+  describe('the three dots on a row', () => {
+    it('opens the shortcuts for that contact, and edit and delete for a person who may', async () => {
+      sessionCall.mockResolvedValue(sessionAll);
+      await show();
+      await fireEvent.press(
+        await screen.findByRole('button', { name: 'More actions for Aarav Sharma' }),
+      );
+      expect(await screen.findByRole('header', { name: 'Aarav Sharma' })).toBeTruthy();
+      expect(screen.getByRole('button', { name: 'Call' })).toBeTruthy();
+      expect(screen.getByRole('button', { name: 'Notes' })).toBeTruthy();
+      expect(screen.getByRole('button', { name: 'Edit contact' })).toBeTruthy();
+      expect(screen.getByRole('button', { name: 'Delete contact' })).toBeTruthy();
+    });
+
+    it('offers no edit or delete to a person who may only read', async () => {
+      sessionCall.mockResolvedValue(sessionReadOnly);
+      await show();
+      await fireEvent.press(
+        await screen.findByRole('button', { name: 'More actions for Aarav Sharma' }),
+      );
+      expect(await screen.findByRole('button', { name: 'Call' })).toBeTruthy();
+      expect(screen.queryByRole('button', { name: 'Edit contact' })).toBeNull();
+      expect(screen.queryByRole('button', { name: 'Delete contact' })).toBeNull();
+    });
+
+    it('opens the contact ready to edit', async () => {
+      sessionCall.mockResolvedValue(sessionAll);
+      await show();
+      await fireEvent.press(
+        await screen.findByRole('button', { name: 'More actions for Aarav Sharma' }),
+      );
+      await fireEvent.press(await screen.findByRole('button', { name: 'Edit contact' }));
+      expect(router.push).toHaveBeenCalledWith({
+        pathname: '/contact/[id]',
+        params: { id: aarav.id, edit: '1' },
+      });
+    });
+
+    it('asks first, deletes, and reloads the list', async () => {
+      sessionCall.mockResolvedValue(sessionAll);
+      deleteCall.mockResolvedValue(undefined);
+      await show();
+      await fireEvent.press(
+        await screen.findByRole('button', { name: 'More actions for Aarav Sharma' }),
+      );
+      await fireEvent.press(await screen.findByRole('button', { name: 'Delete contact' }));
+      expect(await screen.findByText('Delete Aarav Sharma? This cannot be undone.')).toBeTruthy();
+      expect(deleteCall).not.toHaveBeenCalled();
+      await fireEvent.press(screen.getByRole('button', { name: 'Delete' }));
+      await waitFor(() => expect(deleteCall).toHaveBeenCalledWith(aarav.id));
+      await waitFor(() => expect(listCall).toHaveBeenCalledTimes(2));
+    });
+
+    it('says why a delete failed', async () => {
+      sessionCall.mockResolvedValue(sessionAll);
+      deleteCall.mockRejectedValue(new ApiError(0, 'CLIENT_NETWORK', 'x'));
+      await show();
+      await fireEvent.press(
+        await screen.findByRole('button', { name: 'More actions for Aarav Sharma' }),
+      );
+      await fireEvent.press(await screen.findByRole('button', { name: 'Delete contact' }));
+      await fireEvent.press(await screen.findByRole('button', { name: 'Delete' }));
+      expect(await screen.findByText(/Can't reach the server/)).toBeTruthy();
+    });
   });
 });

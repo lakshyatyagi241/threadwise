@@ -51,6 +51,18 @@ describe('MenuScreen', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/inbox');
   });
 
+  it('opens the task list and the new-task form for a person who may', async () => {
+    await show({
+      ...session.permissions,
+      'record.tasks.read': 'all',
+      'record.tasks.create': 'all',
+    });
+    await fireEvent.press(screen.getByRole('button', { name: 'My tasks' }));
+    expect(mockNavigate).toHaveBeenCalledWith('/tasks');
+    await fireEvent.press(screen.getByRole('button', { name: 'Add task' }));
+    expect(mockNavigate).toHaveBeenCalledWith('/task-form');
+  });
+
   it('opens the summary at the root', async () => {
     await show();
     await fireEvent.press(screen.getByRole('button', { name: 'Summary' }));

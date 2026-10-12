@@ -5,6 +5,7 @@ import { jsonResponse, mockFetch, TOKEN_PAIR } from '@/test/fetch-mock';
 import {
   attachContactTag,
   createContact,
+  deleteContact,
   detachContactTag,
   getContact,
   getContactTags,
@@ -104,5 +105,12 @@ describe('contacts api', () => {
     expect(http.calls[0]?.body).toEqual({ name: 'VIP' });
     expect(http.calls[1]?.init.method).toBe('DELETE');
     expect(new URL(http.calls[1]!.url).pathname).toBe(`/v2/contacts/${aarav.id}/tags/${vipTag.id}`);
+  });
+
+  it('deletes a contact with a DELETE on its own path', async () => {
+    const http = mockFetch(jsonResponse(204));
+    await deleteContact(aarav.id);
+    expect(http.calls[0]?.init.method).toBe('DELETE');
+    expect(new URL(http.calls[0]!.url).pathname).toBe(`/v2/contacts/${aarav.id}`);
   });
 });

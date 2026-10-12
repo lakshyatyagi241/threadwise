@@ -9,7 +9,7 @@ import { useTheme } from '@/lib/theme/use-theme';
 import { ContactForm, EMPTY_CONTACT } from './contact-form';
 import { describeContactFailure, type ContactFailure } from './contact-errors';
 import { normalisePhone } from './contact-validation';
-import { StackHeader } from './stack-header';
+import { StackHeader } from '@/components/ui/stack-header';
 import { useCreateContact } from './use-contacts';
 
 /**

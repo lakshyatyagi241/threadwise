@@ -13,6 +13,7 @@ import { isApiError } from '@/lib/api';
 import {
   attachContactTag,
   createContact,
+  deleteContact,
   detachContactTag,
   getContact,
   getContactTags,
@@ -144,6 +145,18 @@ export function useDetachTag(id: string) {
     mutationFn: (tagId: string) => detachContactTag(id, tagId),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: contactTagsKey(id) });
+      void queryClient.invalidateQueries({ queryKey: [...contactsKey, 'list'] });
+    },
+  });
+}
+
+export function useDeleteContact(id: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    gcTime: NO_KEEP,
+    mutationFn: () => deleteContact(id),
+    onSuccess: () => {
+      queryClient.removeQueries({ queryKey: contactKey(id) });
       void queryClient.invalidateQueries({ queryKey: [...contactsKey, 'list'] });
     },
   });

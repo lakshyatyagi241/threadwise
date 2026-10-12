@@ -363,7 +363,9 @@
     "signOutTitle": "Sign out",
     "signOutConfirm": "Are you sure you want to sign out?",
     "signOutNo": "No",
-    "signOutYes": "Yes, sign out"
+    "signOutYes": "Yes, sign out",
+    "tasks": "My tasks",
+    "addTask": "Add task"
   },
   "inbox": {
     "tabs": {
@@ -580,7 +582,29 @@
       "lastActivity": "Last activity",
       "noActivity": "No activity yet",
       "created": "Added on",
-      "customFields": "Custom fields"
+      "customFields": "Custom fields",
+      "actions": {
+        "call": "Call",
+        "chat": "Chat",
+        "email": "Email",
+        "sms": "SMS",
+        "tasks": "Tasks",
+        "notes": "Notes"
+      },
+      "tabsLabel": "Contact sections",
+      "tabs": {
+        "about": "About",
+        "activity": "Activity",
+        "files": "Files"
+      },
+      "delete": {
+        "open": "Delete contact",
+        "title": "Delete contact",
+        "message": "Delete {{name}}? This cannot be undone.",
+        "confirm": "Delete",
+        "cancel": "Cancel"
+      },
+      "chatNone": "There is no conversation with this contact yet. Starting a new chat from here is not available yet."
     },
     "tags": {
       "title": "Tags",
@@ -589,6 +613,309 @@
       "addLabel": "Add a tag",
       "addPlaceholder": "Tag name",
       "add": "Add tag"
+    },
+    "row": {
+      "more": "More actions for {{name}}"
+    },
+    "sheet": {
+      "close": "Close"
+    }
+  },
+  "tasks": {
+    "title": "Tasks",
+    "add": "Add task",
+    "cancel": "Cancel",
+    "unknownContact": "Unnamed contact",
+    "notFound": "This task no longer exists.",
+    "priority": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    },
+    "status": {
+      "open": "Open",
+      "done": "Done",
+      "overdue": "Overdue"
+    },
+    "denied": {
+      "title": "You can't see tasks",
+      "hint": "Ask your workspace admin to give you access to tasks.",
+      "createTitle": "You can't add tasks",
+      "createHint": "Ask your workspace admin to let you add tasks.",
+      "editTitle": "You can't edit tasks",
+      "editHint": "Ask your workspace admin to let you edit tasks."
+    },
+    "planLocked": {
+      "title": "Tasks are not included in this plan.",
+      "hint": "Ask your workspace admin to upgrade the plan."
+    },
+    "empty": {
+      "title": "No tasks found.",
+      "hint": "Tasks you add show up here.",
+      "filteredHint": "Try a different filter or search."
+    },
+    "search": {
+      "open": "Search tasks",
+      "close": "Close search",
+      "label": "Search",
+      "placeholder": "Search by title"
+    },
+    "filter": {
+      "open": "Filter tasks",
+      "title": "Filter tasks",
+      "clear": "Clear all",
+      "apply": "Apply",
+      "group": {
+        "status": "Status",
+        "priority": "Priority",
+        "due": "Due",
+        "owner": "Owner"
+      },
+      "status": {
+        "open": "Open",
+        "done": "Done",
+        "all": "All"
+      },
+      "due": {
+        "overdue": "Overdue",
+        "today": "Today",
+        "upcoming": "Upcoming",
+        "none": "No date"
+      },
+      "owner": {
+        "mine": "Mine",
+        "unassigned": "Unassigned",
+        "all": "All"
+      }
+    },
+    "list": {
+      "conflict": "This task was changed by someone else. The list has been refreshed."
+    },
+    "row": {
+      "markDone": "Mark {{title}} as done",
+      "reopen": "Reopen {{title}}",
+      "more": "More actions for {{title}}",
+      "due": "Due {{when}}",
+      "unassigned": "Unassigned"
+    },
+    "actions": {
+      "edit": "Edit task",
+      "delete": "Delete task"
+    },
+    "delete": {
+      "title": "Delete task",
+      "message": "Are you sure you want to delete this task?",
+      "confirm": "Delete"
+    },
+    "details": {
+      "title": "Task details",
+      "edit": "Edit task",
+      "delete": "Delete task",
+      "description": "Description",
+      "priority": "Priority",
+      "status": "Status",
+      "owner": "Owner",
+      "relatedTo": "Related to",
+      "noDescription": "No description",
+      "noDue": "No due date",
+      "unassigned": "Unassigned",
+      "noContact": "None",
+      "openContact": "Open {{name}}",
+      "markComplete": "Mark as complete",
+      "reopen": "Reopen",
+      "conflict": "This task was changed by someone else. It has been reloaded."
+    },
+    "form": {
+      "addTitle": "Add task",
+      "editTitle": "Edit task",
+      "save": "Save task",
+      "saving": "Saving…",
+      "title": "Task title",
+      "description": "Task description",
+      "priority": "Priority",
+      "date": "Date (YYYY-MM-DD)",
+      "dateHint": "Leave the date and time empty for no due date. For example 2026-10-31.",
+      "time": "Time (HH:mm)",
+      "timeHint": "24-hour clock, for example 14:30.",
+      "owner": "Owner",
+      "ownerPick": "Choose an owner",
+      "ownerMe": "Me",
+      "ownerNone": "Unassigned",
+      "ownerLoading": "Loading your team…",
+      "ownerFailed": "Couldn't load your team.",
+      "contact": "Contact",
+      "contactLinkOptional": "Link contact (optional)",
+      "contactNone": "No contact",
+      "contactPick": "Choose a contact",
+      "contactSearchLabel": "Search contacts",
+      "contactSearchPlaceholder": "Name, email or phone",
+      "contactEmpty": "No contacts found.",
+      "contactFailed": "Couldn't load contacts.",
+      "conflict": "This task was changed by someone else. Review and save again.",
+      "errors": {
+        "titleRequired": "Enter a task title.",
+        "titleTooLong": "The title can be at most 255 characters.",
+        "titleNeedsLetter": "The title must contain at least one letter.",
+        "notesTooLong": "The description can be at most 5000 characters.",
+        "dateInvalid": "Enter the date as YYYY-MM-DD, for example 2026-10-31.",
+        "timeInvalid": "Enter the time as HH:mm on a 24-hour clock, for example 14:30.",
+        "dateNeeded": "Enter the date as well.",
+        "timeNeeded": "Enter the time as well.",
+        "dueInvalid": "This due date and time can't be used.",
+        "assigneeInvalid": "That person can't be given tasks. Choose another owner.",
+        "contactInvalid": "This contact can't be linked."
+      }
+    }
+  },
+  "contactNotes": {
+    "title": "Notes",
+    "cancel": "Cancel",
+    "loadMore": "Load more",
+    "deleteConfirm": "Delete",
+    "contactMissing": "This contact no longer exists.",
+    "add": "Add note",
+    "edited": "Edited",
+    "denied": {
+      "title": "You can't view notes",
+      "hint": "Ask a workspace admin to give your role access to contacts.",
+      "updateTitle": "You can't change notes",
+      "updateHint": "Ask a workspace admin to let your role edit contacts."
+    },
+    "empty": {
+      "title": "No notes available.",
+      "hint": "Tap the + button to add the first note."
+    },
+    "menu": {
+      "open": "Actions for the note from {{date}}",
+      "edit": "Edit note",
+      "delete": "Delete note"
+    },
+    "delete": {
+      "title": "Delete note",
+      "message": "Are you sure you want to delete this note?"
+    },
+    "form": {
+      "addTitle": "Add note",
+      "editTitle": "Update note",
+      "label": "Note",
+      "placeholder": "Write your note here...",
+      "required": "Write a note before saving.",
+      "invalid": "Enter a note of up to 400 characters.",
+      "counterLabel": "{{used}} of {{max}} characters used",
+      "save": "Save note",
+      "saving": "Saving note",
+      "conflict": "This note was changed by someone else. Review and save again.",
+      "missing": "This note no longer exists."
+    },
+    "activity": {
+      "notes": "Notes",
+      "tasks": "Tasks",
+      "timeline": "Timeline",
+      "empty": "No activity yet.",
+      "add": "Add activity",
+      "types": {
+        "note": "Note",
+        "call": "Call",
+        "email": "Email",
+        "meeting": "Meeting",
+        "task": "Task"
+      },
+      "source": {
+        "system": "System",
+        "bot": "Bot"
+      },
+      "form": {
+        "title": "Add activity",
+        "type": "Type",
+        "typeHint": "For example note, call, email or meeting.",
+        "name": "Title",
+        "details": "Details",
+        "save": "Save activity",
+        "typeInvalid": "Enter a type of up to 100 characters.",
+        "titleInvalid": "Enter a title of up to 255 characters.",
+        "detailsInvalid": "Details can be up to 10,000 characters."
+      }
+    },
+    "files": {
+      "empty": "No files available.",
+      "delete": "Delete file {{name}}",
+      "deleteTitle": "Delete file",
+      "deleteMessage": "Are you sure you want to delete this file?"
+    }
+  },
+  "contactProps": {
+    "title": "Contact information",
+    "showEmpty": "Show empty fields",
+    "footer": "You can customize the properties you see here from your web app.",
+    "close": "Close",
+    "save": "Save",
+    "clear": "Clear",
+    "yes": "Yes",
+    "no": "No",
+    "rowHint": "Opens the editor",
+    "locked": "You can't edit {{label}}",
+    "webOnly": "{{label}} can only be edited from the web app.",
+    "masked": "Hidden",
+    "fields": {
+      "email": "Email",
+      "phone": "Phone",
+      "owner": "Contact owner",
+      "name": "Name",
+      "source": "Source",
+      "whatsapp": "WhatsApp subscription",
+      "marketing": "Marketing opt-out",
+      "leadScore": "Lead score",
+      "created": "Created",
+      "lastActivity": "Last activity"
+    },
+    "subscription": {
+      "subscribed": "Subscribed",
+      "unsubscribed": "Unsubscribed",
+      "pending": "Pending"
+    },
+    "editor": {
+      "title": "Edit {{label}}",
+      "date": "Date",
+      "dateHint": "Year-month-day, for example 2026-10-12.",
+      "time": "Time",
+      "timeHint": "24-hour time, for example 14:30.",
+      "phoneHint": "With the country code, for example +919876543210.",
+      "noOptions": "There are no options to choose from."
+    },
+    "error": {
+      "required": "{{label}} is required.",
+      "name": "Enter a name of up to 255 characters.",
+      "email": "Enter a valid email address.",
+      "phone": "Enter the phone number with the country code, for example +919876543210.",
+      "needPhoneOrEmail": "A contact needs a phone number or an email address.",
+      "text": "Enter up to {{max}} characters.",
+      "number": "Enter a number.",
+      "whole": "Enter a whole number.",
+      "range": "Enter a number from 0 to {{max}}.",
+      "url": "Enter a link that starts with http:// or https://",
+      "date": "Enter a valid date as YYYY-MM-DD.",
+      "time": "Enter a valid time as HH:mm.",
+      "option": "Choose one of the options.",
+      "invalid": "That value isn't accepted. Check it and try again.",
+      "notEditable": "This property can't be edited.",
+      "requiredMissing": "A required property has no value. Fill it in before saving.",
+      "conflict": "This contact was changed by someone else. Review and save again.",
+      "lostReasonRequired": "Say why this contact was lost.",
+      "statusMismatch": "That status doesn't belong to this lifecycle stage."
+    },
+    "owner": {
+      "title": "Assign to",
+      "unassigned": "Unassigned",
+      "none": "There is no one to assign this contact to.",
+      "failed": "Couldn't change the owner. Try again."
+    },
+    "lifecycle": {
+      "stage": "Lifecycle stage",
+      "status": "Status",
+      "change": "Change lifecycle stage",
+      "lostReason": "Lost reason",
+      "otherReason": "Other",
+      "otherLabel": "Describe the reason"
     }
   }
 }
