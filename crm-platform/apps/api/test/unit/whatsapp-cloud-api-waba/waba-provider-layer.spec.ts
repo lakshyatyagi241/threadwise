@@ -323,6 +323,25 @@ describe('WabaAdminClient onboarding calls', () => {
     });
   });
 
+  it('asks Meta to send, then confirm, the ownership code of a phone', async () => {
+    const { calls, admin } = make([
+      [200, { success: true }],
+      [200, { success: true }],
+    ]);
+    const conn = {
+      provider: 'meta',
+      accessToken: 'tok',
+      wabaId: 'W1',
+      phoneNumberId: 'P1',
+    } as never;
+    await admin.requestVerificationCode(conn, 'VOICE', 'en_US');
+    await admin.verifyCode(conn, '123456');
+    expect(new URL(calls[0]!.url).pathname).toBe('/v25.0/P1/request_code');
+    expect(calls[0]!.json).toEqual({ code_method: 'VOICE', language: 'en_US' });
+    expect(new URL(calls[1]!.url).pathname).toBe('/v25.0/P1/verify_code');
+    expect(calls[1]!.json).toEqual({ code: '123456' });
+  });
+
   it('does not fail the connect when Interakt registration fails', async () => {
     const { admin } = make([[500, { error: { message: 'down' } }]]);
     expect(await admin.registerWithInterakt('W1', null)).toBe(false);

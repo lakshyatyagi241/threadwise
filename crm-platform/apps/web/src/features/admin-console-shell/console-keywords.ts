@@ -24,6 +24,8 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
 
   'billing-history': 'billing transactions payments history paid',
   'order-history': 'orders purchases checkout history',
+  subscriptions:
+    'subscriptions razorpay recurring renewals autopay cancel refund past due failed payment',
   invoices: 'invoice receipts pdf tax bills paid',
   'payment-gateways': 'stripe razorpay paypal paystack gateway payments cards checkout keys',
   'checkout-settings':

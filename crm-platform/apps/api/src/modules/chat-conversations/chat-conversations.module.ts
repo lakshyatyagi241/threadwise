@@ -32,6 +32,7 @@ import { MessageLogRepository } from './message-log.repository';
 import { MessageLogService } from './message-log.service';
 import { MessageViewService } from './message-view.service';
 import { MessagesRepository } from './messages.repository';
+import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { OutboundService } from './outbound.service';
 import { DeliveryReporter } from './delivery-reporter';
 import { ReceiptsService } from './receipts.service';
@@ -56,7 +57,13 @@ import { WabaChannelLinkService } from './waba-channel-link.service';
  * door are global.
  */
 @Module({
-  imports: [ChatChannelProvidersModule, PlansCoreModule, CrmModule, LocalizationTranslationModule],
+  imports: [
+    ChatChannelProvidersModule,
+    PlansCoreModule,
+    CrmModule,
+    LocalizationTranslationModule,
+    WalletMessageBillingModule,
+  ],
   controllers: [
     ChannelsController,
     SimulatorController,

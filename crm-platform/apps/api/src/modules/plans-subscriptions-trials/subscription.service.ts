@@ -2,15 +2,22 @@ import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import {
   ERROR_CODES,
+  currencyExponent,
+  minorToMajor,
   type BillingSubscription,
   type CancelSubscriptionResponse,
+  type SubscriptionCharge,
+  type SubscriptionChargesResponse,
+  type SubscriptionItem,
+  type SubscriptionListResponse,
+  type SyncSubscriptionResponse,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
-import { GatewayService } from '../platform-payment-gateways';
+import { GatewayService, SubscriptionReconcilerService } from '../platform-payment-gateways';
 
 interface SubRow {
   id: string | number;
@@ -38,7 +45,141 @@ export class SubscriptionService {
     private readonly db: DatabaseService,
     private readonly gateways: GatewayService,
     private readonly outbox: OutboxService,
+    private readonly reconciler: SubscriptionReconcilerService,
   ) {}
+
+  // ---- managing subscriptions (the workspace's own: RLS on `subscriptions`) -------------------------------------------
+
+  /** Every subscription of the workspace, newest first: its plan and each add-on, renewing or not. */
+  async list(): Promise<SubscriptionListResponse> {
+    const ctx = RequestContextStore.require();
+    const rows = await this.db.txAs({ orgId: ctx.orgId, userId: ctx.userId }, async (tx) => {
+      const res = await tx.execute(
+        sql`${SELECT_ITEM} WHERE s.org_id = ${ctx.orgId} ORDER BY s.created_at DESC, s.id DESC LIMIT 50`,
+      );
+      return res.rows as unknown as ItemRow[];
+    });
+    return { data: rows.map(toItem) };
+  }
+
+  /**
+   * What the provider charged this subscription, cycle by cycle, with its own receipt page. When the provider cannot be asked (no
+   * such call, or it is down) the workspace's own paid orders for the plan are shown instead, and the response says so.
+   */
+  async charges(uuid: string): Promise<SubscriptionChargesResponse> {
+    const ctx = RequestContextStore.require();
+    const sub = await this.mine(uuid);
+    if (sub.gateway_subscription_id) {
+      const live = await this.chargesFromProvider(sub);
+      if (live) return { source: 'provider', data: live };
+    }
+    const orders = await this.db.txAs({ orgId: ctx.orgId, userId: ctx.userId }, async (tx) => {
+      const res = await tx.execute(sql`
+        SELECT order_number, total_amount::text AS total, currency, paid_at, created_at FROM orders
+        WHERE org_id = ${ctx.orgId} AND status = 'paid' AND plan_slug = ${sub.plan_id}
+        ORDER BY paid_at DESC NULLS LAST, id DESC LIMIT 24`);
+      return res.rows as Array<Record<string, string | null>>;
+    });
+    return {
+      source: 'orders',
+      data: orders.map((o) => ({
+        id: String(o.order_number),
+        amount: Number(o.total).toFixed(currencyExponent(String(o.currency))),
+        currency: String(o.currency),
+        status: 'paid' as const,
+        issuedAt: iso(o.created_at),
+        paidAt: iso(o.paid_at),
+        receiptUrl: null,
+      })),
+    };
+  }
+
+  /** "Refresh from the provider": the same poll the worker does, now, for one subscription. */
+  async sync(uuid: string): Promise<SyncSubscriptionResponse> {
+    const ctx = RequestContextStore.require();
+    const sub = await this.mine(uuid);
+    const outcome = await this.reconciler.syncNow(ctx.orgId, Number(sub.id));
+    const fresh = await this.mine(uuid);
+    return { outcome, subscription: toItem(fresh) };
+  }
+
+  /** Stop one subscription (plan or add-on) from renewing; the paid period keeps running. */
+  async cancelById(uuid: string): Promise<CancelSubscriptionResponse> {
+    const sub = await this.mine(uuid);
+    if (sub.status !== 'active' && sub.status !== 'past_due') {
+      throw new AppError(
+        ERROR_CODES.PLAN_NO_SUBSCRIPTION,
+        'No active subscription to cancel.',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+    const addonUuid = sub.kind === 'addon' ? await this.addonUuidOf(sub) : null;
+    return this.cancelRow(
+      {
+        id: sub.id,
+        gateway: sub.gateway,
+        gateway_subscription_id: sub.gateway_subscription_id,
+        gateway_customer_id: sub.gateway_customer_id,
+        gateway_plan_id: sub.gateway_plan_id,
+        status: sub.status,
+        current_period_end: sub.current_period_end
+          ? new Date(sub.current_period_end).toISOString()
+          : null,
+      },
+      addonUuid,
+    );
+  }
+
+  private async mine(uuid: string): Promise<ItemRow> {
+    const ctx = RequestContextStore.require();
+    const row = await this.db.txAs({ orgId: ctx.orgId, userId: ctx.userId }, async (tx) => {
+      const res = await tx.execute(
+        sql`${SELECT_ITEM} WHERE s.org_id = ${ctx.orgId} AND s.uuid = ${uuid}::uuid`,
+      );
+      return (res.rows[0] as unknown as ItemRow | undefined) ?? null;
+    });
+    if (!row) throw AppError.notFound('Subscription', uuid);
+    return row;
+  }
+
+  private async addonUuidOf(sub: ItemRow): Promise<string | null> {
+    const ctx = RequestContextStore.require();
+    const row = await this.db.txAs({ orgId: ctx.orgId, userId: ctx.userId }, async (tx) => {
+      const res = await tx.execute(sql`
+        SELECT a.uuid FROM workspace_addons a
+        JOIN subscriptions s ON s.org_id = a.org_id AND s.workspace_addon_id = a.id
+        WHERE s.org_id = ${ctx.orgId} AND s.id = ${sub.id}`);
+      return res.rows[0] as { uuid: string } | undefined;
+    });
+    return row?.uuid ?? null;
+  }
+
+  private async chargesFromProvider(sub: ItemRow): Promise<SubscriptionCharge[] | null> {
+    try {
+      const gateway = await this.gateways.bySlug(sub.gateway);
+      const driver = gateway ? this.gateways.driverFor(gateway) : null;
+      if (!driver?.listSubscriptionCharges || !sub.gateway_subscription_id) return null;
+      const list = await driver.listSubscriptionCharges({
+        gatewaySubscriptionId: sub.gateway_subscription_id,
+        gatewayCustomerId: sub.gateway_customer_id,
+        gatewayPlanId: sub.gateway_plan_id,
+      });
+      if (list === null) return null;
+      return list.map((c) => ({
+        id: c.id,
+        amount: minorToMajor(c.amountMinor, c.currency),
+        currency: c.currency,
+        status: c.status,
+        issuedAt: c.issuedAt,
+        paidAt: c.paidAt,
+        // Only an https page is ever linked: the address comes from a provider's answer.
+        receiptUrl: c.receiptUrl && /^https:\/\//i.test(c.receiptUrl) ? c.receiptUrl : null,
+      }));
+    } catch (err) {
+      this.logger.warn({ err, gateway: sub.gateway }, 'listing the provider charges failed');
+      return null;
+    }
+  }
 
   /** The latest active or past-due subscription, or null. A `pending` row (first charge unconfirmed) is not renewing yet. */
   async current(orgId: number): Promise<BillingSubscription | null> {
@@ -160,4 +301,54 @@ export class SubscriptionService {
       return { result: 'failed', reason: 'exception' };
     }
   }
+}
+
+const SELECT_ITEM = sql`
+  SELECT s.id, s.uuid, s.kind, s.plan_id, s.status, s.amount::text AS amount, s.currency, s.billing_cycle, s.gateway,
+         s.gateway_subscription_id, s.gateway_customer_id, s.gateway_plan_id, s.current_period_end, s.renewals_count,
+         s.canceled_at, s.created_at, s.meta, COALESCE(p.name, s.plan_id, '') AS item_name
+  FROM subscriptions s LEFT JOIN plans p ON p.slug = s.plan_id`;
+
+interface ItemRow {
+  id: string | number;
+  uuid: string;
+  kind: 'plan' | 'addon';
+  plan_id: string | null;
+  status: SubscriptionItem['status'] & ('active' | 'past_due' | 'pending' | 'canceled' | 'expired');
+  amount: string;
+  currency: string;
+  billing_cycle: string;
+  gateway: string;
+  gateway_subscription_id: string | null;
+  gateway_customer_id: string | null;
+  gateway_plan_id: string | null;
+  current_period_end: string | Date | null;
+  renewals_count: number | string;
+  canceled_at: string | Date | null;
+  created_at: string | Date;
+  meta: { cancel?: unknown } | null;
+  item_name: string;
+}
+
+const iso = (v: unknown): string | null => (v ? new Date(v as string).toISOString() : null);
+
+function toItem(r: ItemRow): SubscriptionItem {
+  const renewing = r.status === 'active' || r.status === 'past_due';
+  return {
+    id: r.uuid,
+    kind: r.kind === 'addon' ? 'addon' : 'plan',
+    name: r.item_name,
+    planSlug: r.plan_id,
+    status: r.status,
+    amount: Number(r.amount).toFixed(currencyExponent(r.currency)),
+    currency: r.currency,
+    billingCycle: r.billing_cycle === 'yearly' ? 'yearly' : 'monthly',
+    gateway: r.gateway,
+    currentPeriodEnd: iso(r.current_period_end),
+    renewalsCount: Number(r.renewals_count),
+    autoRenew: renewing && !r.meta?.cancel,
+    paymentFailed: r.status === 'past_due',
+    canceledAt: iso(r.canceled_at),
+    createdAt: iso(r.created_at) as string,
+  };
 }

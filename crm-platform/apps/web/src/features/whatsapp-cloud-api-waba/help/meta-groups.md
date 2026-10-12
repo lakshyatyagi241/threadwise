@@ -59,4 +59,6 @@ Groups need a plan that includes WhatsApp groups. Seeing groups and their invite
 - **The invite link never appears.** WhatsApp sends it in a message to this workspace. Select **Refresh** on the group. If it still does not appear, the group may have failed to create: the row then shows the reason from WhatsApp.
 - **Too many group operations.** WhatsApp or this workspace limits how fast one number can change groups. Wait a minute and try again.
 - **A limit was reached.** WhatsApp limits how many groups a number can create. Delete one you no longer need.
-- **I cannot reply to a group from the inbox yet.** Group messages arrive in the inbox, but sending a reply to a group from the inbox is not available yet. Reply from the WhatsApp Business app.
+- **What can I send to a group from the inbox?** Text, files and templates. Reactions, places, contact cards and buttons are not available in a group. A group that Meta suspended cannot be messaged until Meta clears it.
+- **What does a group message cost?** Every message is charged once per member who receives it, from your workspace's own message wallet. Before sending, the inbox checks that the wallet can cover one message to every member; if it cannot, the message is not sent and you are asked to top up. Members Meta marks as free are not charged. Under each message you sent, the inbox shows how many members it reached and how many were billed or free.
+- **Who wrote a message in the group?** Each message from a member shows the member's name (when WhatsApp gives one) and number above it.

@@ -199,7 +199,8 @@
         "devices": "WhatsApp-Nummern",
         "broadcasts": "Broadcasts und Kampagnen",
         "team_chat": "Team-Chat",
-        "whatsapp_groups": "WhatsApp-Gruppen"
+        "whatsapp_groups": "WhatsApp-Gruppen",
+        "billing": "Abrechnung und Abonnements"
       },
       "types": {
         "new_chat": {
@@ -325,6 +326,14 @@
         "form_payment_duplicate": {
           "label": "Formular doppelt bezahlt",
           "hint": "Ein Besucher hat ein zweites Mal bezahlt und die zusätzliche Zahlung muss erstattet werden."
+        },
+        "billing_payment_failed": {
+          "label": "Zahlung für Abonnement fehlgeschlagen",
+          "hint": "Eine Verlängerungsbuchung ist nicht durchgegangen und erfordert Ihre Aufmerksamkeit."
+        },
+        "billing_subscription_canceled": {
+          "label": "Abonnement gekündigt",
+          "hint": "Ihr Zahlungsanbieter hat ein Abonnement dieses Arbeitsbereichs beendet."
         }
       },
       "loading": "Ihre Einstellungen werden geladen",

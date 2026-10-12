@@ -199,7 +199,8 @@
         "devices": "מספרי WhatsApp",
         "broadcasts": "שידורים וקמפיינים",
         "team_chat": "צ׳אט צוות",
-        "whatsapp_groups": "קבוצות WhatsApp"
+        "whatsapp_groups": "קבוצות WhatsApp",
+        "billing": "חיוב ומנויים"
       },
       "types": {
         "new_chat": {
@@ -325,6 +326,14 @@
         "form_payment_duplicate": {
           "label": "טופס שולם פעמיים",
           "hint": "מבקר שילם פעם שנייה ויש להחזיר את התשלום העודף."
+        },
+        "billing_payment_failed": {
+          "label": "תשלום המנוי נכשל",
+          "hint": "חיוב חידוש לא הושלם ודורש את תשומת לבך."
+        },
+        "billing_subscription_canceled": {
+          "label": "המנוי בוטל",
+          "hint": "ספק התשלומים שלך סיים מנוי של סביבת עבודה זו."
         }
       },
       "loading": "טוען את ההעדפות שלך",

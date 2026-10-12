@@ -17,3 +17,21 @@ export function assertNotGroupPeer(to: string): void {
   if (isGroupPeer(to))
     throw new ChannelError(GROUP_SEND_UNAVAILABLE, GROUP_SEND_UNAVAILABLE_MESSAGE, false);
 }
+
+/** The kinds Meta accepts on a group (docs/specs/waba-groups-management.md 3 and 11): text, files and templates; no reaction, interactive, place or contact card. */
+const GROUP_SEND_KINDS: ReadonlySet<string> = new Set(['text', 'media', 'template']);
+
+export const isGroupSendKind = (kind: string): boolean => GROUP_SEND_KINDS.has(kind);
+
+/** The group id of a `g:<group id>` thread key, verbatim: Meta wants it untouched (no digit stripping, no case change). */
+export const groupIdOf = (to: string): string => to.trimStart().slice(2);
+
+/** Throws the non-retryable `CHANNEL_CAPABILITY_UNSUPPORTED` for a kind a group cannot carry. */
+export function assertGroupSendKind(kind: string): void {
+  if (!isGroupSendKind(kind))
+    throw new ChannelError(
+      'CHANNEL_CAPABILITY_UNSUPPORTED',
+      `A WhatsApp group cannot receive a ${kind} message`,
+      false,
+    );
+}

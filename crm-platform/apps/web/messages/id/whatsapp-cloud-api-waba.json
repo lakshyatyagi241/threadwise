@@ -34,7 +34,8 @@
         "registered": "\"{name}\" didaftarkan di Cloud API.",
         "disconnected": "\"{name}\" diputus.",
         "removed": "\"{name}\" dihapus.",
-        "warningsTitle": "Terhubung, tetapi periksa ini:"
+        "warningsTitle": "Terhubung, tetapi periksa ini:",
+        "verified": "\"{name}\" terverifikasi."
       },
       "notReady": {
         "title": "Embedded Signup belum dikonfigurasi",
@@ -81,7 +82,8 @@
         "register": "Daftarkan",
         "meta": "Meta",
         "disconnect": "Putuskan",
-        "remove": "Hapus"
+        "remove": "Hapus",
+        "verify": "Verifikasi nomor"
       },
       "confirm": {
         "fixInboundTitle": "Perbaiki pesan masuk?",
@@ -100,6 +102,17 @@
         "pin": "PIN dua langkah (opsional)",
         "pinError": "PIN terdiri dari 6 digit",
         "submit": "Daftarkan"
+      },
+      "verifyDialog": {
+        "title": "Verifikasi nomor ini",
+        "message": "Meta akan mengirim kode 6 digit ke {phone}. Pilih cara menerimanya.",
+        "enterCode": "Masukkan kode 6 digit yang dikirim Meta ke {phone}.",
+        "sendSms": "Kirim kode lewat SMS",
+        "sendVoice": "Kirim kode lewat panggilan",
+        "code": "Kode verifikasi",
+        "codeError": "Kode terdiri dari 6 digit",
+        "submit": "Verifikasi",
+        "resend": "Kirim kode baru"
       }
     },
     "connect": {

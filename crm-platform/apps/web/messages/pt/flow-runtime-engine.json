@@ -207,7 +207,9 @@
         "request": "Requisição",
         "response": "Resposta",
         "result": "Resultado"
-      }
+      },
+      "factMenuKept": "Não há próxima etapa aqui. As opções de {node} continuam ativas.",
+      "factAnswered": "Respondido após {time}"
     },
     "event": {
       "step": "Etapa",
@@ -513,7 +515,9 @@
       "error": "Erro",
       "skipped": "Ignorado",
       "waiting": "Aguardando",
-      "timeout": "Tempo esgotado"
+      "timeout": "Tempo esgotado",
+      "answered": "Respondido",
+      "gaveUp": "Sem resposta"
     }
   }
 }

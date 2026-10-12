@@ -1,4 +1,4 @@
-import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import {
   ERROR_CODES,
@@ -40,6 +40,7 @@ import {
 import { PlanStore } from './plan-store';
 import { visibleAddonsByPlan, visibleAddonsForApps } from './plan-visible-addons';
 import { PlanUsageService } from './plan-usage.service';
+import { SubscriptionCancelService } from '../platform-payment-gateways';
 import { SubscriptionService } from './subscription.service';
 
 /**
@@ -52,12 +53,15 @@ import { SubscriptionService } from './subscription.service';
  */
 @Injectable()
 export class BillingService {
+  private readonly logger = new Logger(BillingService.name);
+
   constructor(
     private readonly db: DatabaseService,
     private readonly store: PlanStore,
     private readonly catalog: PlanCatalogService,
     private readonly entitlements: PlanEntitlementService,
     private readonly usage: PlanUsageService,
+    private readonly cancel: SubscriptionCancelService,
     private readonly outbox: OutboxService,
     private readonly settings: PlatformSettingsService,
     private readonly subscriptions: SubscriptionService,
@@ -305,6 +309,14 @@ export class BillingService {
         planEndsAt: planEndsAt ? new Date(planEndsAt) : null,
       };
     });
+
+    // The plan the workspace was renewing is gone: its subscription must not charge the old price again (and, on its next renewal,
+    // put the old plan back). The paid period it already bought keeps running. After commit, and never fatal.
+    try {
+      await this.cancel.endPlanSubscriptions(orgId, { atCycleEnd: true, reason: 'downgrade' });
+    } catch (err) {
+      this.logger.error({ err, orgId }, 'ending the old plan subscription failed');
+    }
 
     const after = await this.mustResolve(orgId);
     const meters = await this.usage.meters(after);

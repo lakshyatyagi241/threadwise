@@ -7,13 +7,18 @@ import { Badge, Button, Card } from '@crm/ui';
 import { cardTitle, isOnPremise, metaManagerUrl, qualityTone, tierLabel } from '../lib/display';
 import { InboundBadge } from './inbound-badge';
 
-export type CardAction = 'setPrimary' | 'fixInbound' | 'register' | 'disconnect' | 'remove';
+export type CardAction =
+  'setPrimary' | 'fixInbound' | 'register' | 'verify' | 'disconnect' | 'remove';
 
 interface Props {
   conn: WabaConnection;
   busy: boolean;
   onAction: (action: CardAction, conn: WabaConnection) => void;
 }
+
+/** Meta reports the number's ownership code as not confirmed (never entered, or expired). */
+const needsVerification = (c: WabaConnection) =>
+  ['NOT_VERIFIED', 'EXPIRED'].includes(c.codeVerificationStatus?.toUpperCase() ?? '');
 
 /** One connected number (TW-WABA-004): identity, quality, tier, state, inbound badge and the per-number actions. */
 export function NumberCard({ conn, busy, onAction }: Props) {
@@ -112,6 +117,7 @@ export function NumberCard({ conn, busy, onAction }: Props) {
           {t('action.health')}
         </Link>
         {connected && act('fixInbound', t('action.fixInbound'))}
+        {connected && needsVerification(conn) && act('verify', t('action.verify'))}
         {!conn.coexistence && act('register', t('action.register'))}
         {conn.wabaId && (
           <a

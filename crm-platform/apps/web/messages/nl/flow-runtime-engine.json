@@ -207,7 +207,9 @@
         "request": "Verzoek",
         "response": "Antwoord",
         "result": "Resultaat"
-      }
+      },
+      "factMenuKept": "Hier is geen volgende stap. De opties van {node} blijven actief.",
+      "factAnswered": "Beantwoord na {time}"
     },
     "event": {
       "step": "Stap",
@@ -513,7 +515,9 @@
       "error": "Fout",
       "skipped": "Overgeslagen",
       "waiting": "Wacht",
-      "timeout": "Time-out"
+      "timeout": "Time-out",
+      "answered": "Beantwoord",
+      "gaveUp": "Geen antwoord"
     }
   }
 }

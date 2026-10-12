@@ -78,6 +78,11 @@
       "payments": "付款"
     },
     "help": "帮助",
-    "unreadCount": "{count, plural, other {# 条未读}}"
+    "unreadCount": "{count, plural, other {# 条未读}}",
+    "backgroundError": {
+      "message": "部分实时数据（如通知、余额或收件箱数量）无法刷新，您看到的内容可能已过时。",
+      "retry": "重试",
+      "dismiss": "关闭"
+    }
   }
 }

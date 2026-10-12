@@ -155,6 +155,21 @@ export const messageReferralSchema = z.object({
 });
 export type MessageReferral = z.infer<typeof messageReferralSchema>;
 
+/** Who wrote an inbound message in a WhatsApp group: the member's name when WhatsApp gave one, and their number or id. */
+export const messageGroupAuthorSchema = z.object({
+  participant: z.string().nullable(),
+  senderName: z.string().nullable(),
+});
+export type MessageGroupAuthor = z.infer<typeof messageGroupAuthorSchema>;
+
+/** What Meta reported for a message sent to a group: how many members it reached, and how many of those were billed or free. */
+export const messageGroupDeliverySchema = z.object({
+  deliveredTo: z.number().int().nonnegative(),
+  billable: z.number().int().nonnegative(),
+  free: z.number().int().nonnegative(),
+});
+export type MessageGroupDelivery = z.infer<typeof messageGroupDeliverySchema>;
+
 /**
  * `pending`: the message is stored and its file is still being copied from the provider (a background job, with retries): show a
  * placeholder, the file arrives by a later `inbox.message.new` for the same message. `ready`: the file is stored. `failed`: the
@@ -193,6 +208,10 @@ export const messageResponseSchema = z.object({
   email: emailMetaSchema.nullable().optional(),
   /** The customer sent something the channel cannot show (a poll, an unknown type): the body says so, the bubble marks it. */
   unsupported: z.boolean().optional(),
+  /** A message a member posted in a WhatsApp group (inbound only). */
+  group: messageGroupAuthorSchema.nullable().optional(),
+  /** The delivery tally of a message sent to a WhatsApp group (outbound only), once Meta has reported any member. */
+  groupDelivery: messageGroupDeliverySchema.nullable().optional(),
   /** The customer forwarded this message from another chat. */
   forwarded: z.boolean().optional(),
   /** Set for an inbound media message: whether its file could be stored. */

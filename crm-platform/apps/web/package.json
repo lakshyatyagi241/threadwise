@@ -16,7 +16,7 @@
     "@crm/contracts": "workspace:*",
     "@crm/tax": "workspace:*",
     "@crm/ui": "workspace:*",
-    "@sentry/nextjs": "^11.5.0",
+    "@sentry/nextjs": "^11.6.0",
     "@simplewebauthn/browser": "14.0.0",
     "@tanstack/react-query": "^5.104.1",
     "flag-icons": "^7.5.0",
@@ -29,7 +29,7 @@
     "react-dom": "^19.3.0",
     "server-only": "^0.0.1",
     "socket.io-client": "^4.8.1",
-    "zod": "^3.24.1"
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@playwright/test": "^1.64.0",

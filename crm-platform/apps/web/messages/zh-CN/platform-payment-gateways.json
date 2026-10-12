@@ -6,7 +6,8 @@
       "orders": "订单记录",
       "billingHistory": "账单记录",
       "invoices": "发票",
-      "billingSettings": "账单设置"
+      "billingSettings": "账单设置",
+      "subscriptions": "订阅"
     },
     "admin": {
       "title": "支付网关",
@@ -299,7 +300,8 @@
           "markPaid": "标记为已付款",
           "cancelOrder": "取消",
           "approve": "批准",
-          "reject": "拒绝"
+          "reject": "拒绝",
+          "refund": "退款"
         },
         "confirm": {
           "approveTitle": "将此订单标记为已付款？",
@@ -673,6 +675,79 @@
           "faqsHint": "显示在套餐下方的折叠项。",
           "configured": "已配置 {count} 项。"
         }
+      },
+      "subscriptions": {
+        "title": "订阅",
+        "eyebrow": "账单",
+        "titleFirst": "平台",
+        "titleSecond": "订阅",
+        "description": "通过支付服务商持有的套餐和附加组件订阅，涵盖所有工作区。可终止订阅、从服务商刷新状态或对某笔扣款退款。",
+        "kpi": {
+          "active": "有效",
+          "pastDue": "付款失败",
+          "canceled": "已取消"
+        },
+        "statusFilter": "订阅状态",
+        "statuses": {
+          "all": "全部",
+          "active": "有效",
+          "past_due": "付款失败",
+          "pending": "待处理",
+          "canceled": "已取消",
+          "expired": "已过期"
+        },
+        "kind": {
+          "plan": "套餐",
+          "addon": "附加组件"
+        },
+        "search": "搜索工作区或服务商 ID",
+        "noun": "订阅",
+        "empty": "没有匹配的订阅。",
+        "col": {
+          "workspace": "工作区",
+          "item": "项目",
+          "price": "价格",
+          "paidUntil": "已付至",
+          "status": "状态",
+          "provider": "服务商",
+          "actions": "操作"
+        },
+        "cancelFailed": "服务商取消失败",
+        "cancelFailedHint": "本地记录已终止，但服务商未确认取消。请在服务商后台完成取消，以停止继续扣款。",
+        "actions": {
+          "sync": "刷新",
+          "refund": "退款",
+          "endAtCycle": "周期结束时终止",
+          "endNow": "立即终止"
+        },
+        "confirm": {
+          "title": "终止此订阅？",
+          "atCycle": "{name} 可使用至已付周期结束，之后不会再扣款。",
+          "now": "立即在服务商处终止 {name} 的订阅，不会再产生扣款。"
+        },
+        "ended": "订阅已在服务商处终止。",
+        "endedLocalOnly": "已在此处终止，但服务商未确认取消。请在服务商后台完成取消。",
+        "endedUnsupported": "已在此处终止。此服务商无法从这里取消。",
+        "alreadyEnded": "该订阅已终止。",
+        "synced": "已向服务商核实：{outcome}。"
+      },
+      "refund": {
+        "title": "退款 {label}",
+        "intro": "退款将发送给支付服务商，并退回买家的原支付方式。",
+        "charge": "要退款的扣款",
+        "pickCharge": "选择一笔已付款项",
+        "loadingCharges": "正在加载扣款记录",
+        "chargesFailed": "无法向支付服务商查询此订阅的扣款记录。",
+        "noPaidCharges": "服务商没有列出此订阅的已付款项。",
+        "amount": "金额（{currency}）",
+        "amountHint": "留空则退还所有尚未退款的金额。",
+        "reason": "原因",
+        "endSubscription": "同时立即终止订阅，避免再次扣款",
+        "submit": "退款",
+        "processed": "已退款 {amount}。",
+        "pending": "退款已发送，服务商正在处理。",
+        "failed": "服务商拒绝了此次退款。",
+        "badAmount": "请输入数字金额，例如 12.50。"
       }
     },
     "offline": {
@@ -711,6 +786,74 @@
       "rejected": "不允许该文件类型。请使用 JPG、PNG、WEBP 或 PDF。",
       "closed": "该订单已无法再提交付款凭证。",
       "failed": "无法上传文件，请重试。"
+    },
+    "subscriptions": {
+      "title": "订阅",
+      "subtitle": "您通过支付服务商开通的套餐和附加组件订阅：续订内容、已付至何时以及扣款记录。",
+      "loading": "正在加载订阅",
+      "loadFailed": "无法加载您的订阅。请稍后重试。",
+      "emptyTitle": "暂无订阅",
+      "emptyMessage": "当您以自动续订方式购买套餐或附加组件后，它会显示在这里。",
+      "browsePlans": "浏览套餐",
+      "failedBanner": "{names} 的最近一次付款失败。服务商重试期间，您暂时仍可继续使用；请向银行或服务商更新您的支付方式，以免失去访问权限。",
+      "paymentFailed": "最近一次付款失败。服务商正在重试。",
+      "kind": {
+        "plan": "套餐",
+        "addon": "附加组件"
+      },
+      "status": {
+        "active": "有效",
+        "past_due": "付款失败",
+        "pending": "等待付款",
+        "canceled": "已取消",
+        "expired": "已过期"
+      },
+      "cycle": {
+        "monthly": "月",
+        "yearly": "年"
+      },
+      "price": "每{cycle} {amount}",
+      "renewsOn": "将于 {date} 续订",
+      "endsOn": "已付至 {date}。不会续订。",
+      "endedOn": "已于 {date} 结束",
+      "refreshFromProvider": "从服务商刷新",
+      "showCharges": "显示扣款记录",
+      "hideCharges": "隐藏扣款记录",
+      "cancel": "取消订阅",
+      "confirmTitle": "取消 {name}？",
+      "confirmBody": "您可使用至 {date}。之后不会续订，也不会再向您扣款。",
+      "confirmBodyNoDate": "不会续订，也不会再向您扣款。",
+      "confirm": "取消订阅",
+      "keep": "保留",
+      "cancelDone": "已取消。您的已付期限继续有效，不会再产生任何扣款。",
+      "cancelFailed": "无法取消此订阅。请重试或联系支持团队。",
+      "forbidden": "您没有管理订阅的权限。",
+      "sync": {
+        "up_to_date": "已与支付服务商同步，无需更新。",
+        "renewed": "已更新：服务商有较新的续订记录。",
+        "gateway_canceled": "服务商显示此订阅已取消。",
+        "gateway_expired": "服务商显示此订阅已结束。",
+        "unknown": "已向支付服务商核实。",
+        "failed": "无法连接支付服务商。请稍后重试。"
+      },
+      "chargesFailed": "无法加载扣款记录。",
+      "chargesFromOrders": "无法连接支付服务商，因此这里改为显示您的已付订单。",
+      "noCharges": "暂无扣款记录。",
+      "col": {
+        "date": "日期",
+        "amount": "金额",
+        "status": "状态",
+        "receipt": "收据"
+      },
+      "chargeStatus": {
+        "paid": "已付款",
+        "issued": "等待付款",
+        "failed": "失败",
+        "cancelled": "已取消",
+        "expired": "已过期",
+        "other": "其他"
+      },
+      "openReceipt": "打开收据"
     }
   }
 }

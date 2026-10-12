@@ -24,6 +24,7 @@ export const NOTIFICATION_GROUPS = [
   'leads',
   'documents',
   'wallet',
+  'billing',
   'devices',
   'broadcasts',
   'team_chat',
@@ -63,6 +64,9 @@ export const NOTIFICATION_CATALOG: Record<NotificationPrefType, NotificationCata
   sales_doc_decided: { group: 'documents', toast: true, sound: false, push: false },
   wallet_low_balance: { group: 'wallet', toast: true, sound: false, push: false },
   wallet_credited: { group: 'wallet', toast: true, sound: false, push: false },
+  // A failed subscription payment is something a person must act on, so it also reaches their devices.
+  billing_payment_failed: { group: 'billing', toast: true, sound: false, push: true },
+  billing_subscription_canceled: { group: 'billing', toast: true, sound: false, push: false },
   device_connected: { group: 'devices', toast: true, sound: false, push: false },
   device_disconnected: { group: 'devices', toast: true, sound: false, push: false },
   device_logged_out: { group: 'devices', toast: true, sound: false, push: false },

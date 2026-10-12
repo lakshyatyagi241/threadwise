@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useMemo, type ReactNode } from 'react';
 import type { InboxCounts } from '@crm/contracts';
 import { NavCountsContext } from '@/components/shell/nav-badges';
+import { BACKGROUND_META } from '@/lib/api/background';
 import { useRealtimeStatus } from '@/lib/realtime';
 import { inboxApi } from './service';
 
@@ -32,6 +33,7 @@ export function useInboxUnreadCount(enabled: boolean): number | null {
   const query = useQuery({
     queryKey: INBOX_COUNTS_KEY,
     queryFn: ({ signal }) => inboxApi.counts(signal),
+    meta: BACKGROUND_META,
     enabled,
     // Only while the tab is in front (and safe to evaluate on the server, where there is no document).
     refetchInterval: () =>

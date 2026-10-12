@@ -315,6 +315,11 @@
         "description": "Ekspor log pengiriman pesan Anda, hingga satu tahun ke belakang, sebagai file yang dikirim ke email Anda.",
         "keywords": "ekspor, log pengiriman, riwayat, arsip, csv, pesan"
       },
+      "billing-subscriptions": {
+        "label": "Langganan",
+        "description": "Apa yang diperpanjang, dibayar hingga kapan, dan pembatalan.",
+        "keywords": "langganan, perpanjangan, perpanjangan otomatis, batalkan, autodebet, pembayaran gagal, tagihan"
+      },
       "web": {
         "label": "Obrolan situs web",
         "description": "Bot yang dibuat untuk obrolan situs web Anda dan widget tempat masing-masing berjalan.",

@@ -34,7 +34,8 @@
         "registered": "\"{name}\" کو Cloud API پر رجسٹر کر دیا گیا۔",
         "disconnected": "\"{name}\" کا کنکشن ختم کر دیا گیا۔",
         "removed": "\"{name}\" ہٹا دیا گیا۔",
-        "warningsTitle": "منسلک ہو گیا، لیکن یہ چیک کریں:"
+        "warningsTitle": "منسلک ہو گیا، لیکن یہ چیک کریں:",
+        "verified": "\"{name}\" کی تصدیق ہو گئی۔"
       },
       "notReady": {
         "title": "Embedded Signup ترتیب نہیں دیا گیا",
@@ -81,7 +82,8 @@
         "register": "رجسٹر کریں",
         "meta": "Meta",
         "disconnect": "منقطع کریں",
-        "remove": "ہٹائیں"
+        "remove": "ہٹائیں",
+        "verify": "نمبر کی تصدیق کریں"
       },
       "confirm": {
         "fixInboundTitle": "ان باؤنڈ ٹھیک کریں؟",
@@ -100,6 +102,17 @@
         "pin": "دو مرحلہ PIN (اختیاری)",
         "pinError": "PIN 6 ہندسوں کا ہوتا ہے",
         "submit": "رجسٹر کریں"
+      },
+      "verifyDialog": {
+        "title": "اس نمبر کی تصدیق کریں",
+        "message": "Meta {phone} پر 6 ہندسوں کا کوڈ بھیجے گا۔ منتخب کریں کہ اسے کیسے وصول کرنا ہے۔",
+        "enterCode": "Meta نے {phone} پر جو 6 ہندسوں کا کوڈ بھیجا ہے وہ درج کریں۔",
+        "sendSms": "SMS کے ذریعے کوڈ بھیجیں",
+        "sendVoice": "کال کے ذریعے کوڈ بھیجیں",
+        "code": "تصدیقی کوڈ",
+        "codeError": "کوڈ 6 ہندسوں کا ہوتا ہے",
+        "submit": "تصدیق کریں",
+        "resend": "نیا کوڈ بھیجیں"
       }
     },
     "connect": {

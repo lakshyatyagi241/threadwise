@@ -17,6 +17,7 @@ import {
 import {
   GROUP_SEND_UNAVAILABLE_MESSAGE,
   isGroupPeer,
+  isGroupSendKind,
 } from '../../infra/providers/whatsapp/group-peer';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
 import {
@@ -59,8 +60,8 @@ export interface DispatchResult {
   replayed: boolean;
 }
 
-/** Channels that send to a phone number built from the thread key: a group key must never reach them. */
-const GROUP_SEND_CHANNEL_KINDS: ReadonlySet<string> = new Set(['whatsapp_cloud', 'whatsapp_qr']);
+/** Channels that build a phone number from the thread key and cannot address a group: a group key must never reach them. `whatsapp_cloud` addresses groups itself. */
+const GROUP_SEND_CHANNEL_KINDS: ReadonlySet<string> = new Set(['whatsapp_qr']);
 
 const RESULT_TTL_SECONDS = 24 * 3600;
 /**
@@ -226,12 +227,20 @@ export class ChannelDispatcher {
     lastInboundAt: Date | null,
     now: Date = new Date(),
   ): WindowInfo {
-    // A WhatsApp group thread (`g:<group id>`) has no phone number to send to: refuse before anything is stored or queued, and again in
-    // the worker, so no path (an old queued message, a flow, a retry) can reach the individual-send code (WABA_GROUP_SEND_UNAVAILABLE).
+    // A WhatsApp group thread (`g:<group id>`) has no phone number to send to. A channel that can only send to a number refuses before
+    // anything is stored or queued, and again in the worker (WABA_GROUP_SEND_UNAVAILABLE). The Cloud API channel addresses the group
+    // itself, but only with the kinds Meta accepts on a group.
     if (GROUP_SEND_CHANNEL_KINDS.has(channel.kind) && isGroupPeer(envelope.to)) {
       throw new AppError(
         ERROR_CODES.WABA_GROUP_SEND_UNAVAILABLE,
         GROUP_SEND_UNAVAILABLE_MESSAGE,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+    if (channel.kind === 'whatsapp_cloud' && isGroupPeer(envelope.to) && !isGroupSendKind(envelope.kind)) {
+      throw new AppError(
+        ERROR_CODES.CHANNEL_CAPABILITY_UNSUPPORTED,
+        `A WhatsApp group cannot receive a ${envelope.kind} message`,
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }

@@ -1,5 +1,8 @@
 import {
   paygwGatewayItemSchema,
+  subscriptionChargesResponseSchema,
+  subscriptionListResponseSchema,
+  syncSubscriptionResponseSchema,
   paygwGatewayListResponseSchema,
   paygwBuyerInvoiceSchema,
   paygwOrdersResponseSchema,
@@ -12,6 +15,7 @@ import {
   type SetPaygwGatewayActiveRequest,
   type UpdatePaygwGatewayRequest,
 } from '@crm/contracts';
+import { z } from 'zod';
 import { apiFetch } from '@/lib/api/client';
 import { toApiError } from '@/lib/api/errors';
 import { operatorFetch } from '@/features/auth-registration-security/platform/operator-fetch';
@@ -76,6 +80,28 @@ export const fetchOrders = (cursor?: string, signal?: AbortSignal) =>
     query: { limit: 25, cursor },
     schema: paygwOrdersResponseSchema,
     signal,
+  });
+
+/** The workspace's subscriptions: list, what the provider charged, a refresh from the provider, and cancel (TW-PAYGW-060). */
+export const SUBSCRIPTIONS_KEY = ['billing', 'subscriptions'] as const;
+export const subscriptionChargesKey = (id: string) =>
+  ['billing', 'subscriptions', id, 'charges'] as const;
+export const fetchSubscriptions = (signal?: AbortSignal) =>
+  apiFetch('/billing/subscriptions', { schema: subscriptionListResponseSchema, signal });
+export const fetchSubscriptionCharges = (id: string, signal?: AbortSignal) =>
+  apiFetch(`/billing/subscriptions/${encodeURIComponent(id)}/charges`, {
+    schema: subscriptionChargesResponseSchema,
+    signal,
+  });
+export const syncSubscription = (id: string) =>
+  apiFetch(`/billing/subscriptions/${encodeURIComponent(id)}/sync`, {
+    method: 'POST',
+    schema: syncSubscriptionResponseSchema,
+  });
+export const cancelSubscription = (id: string) =>
+  apiFetch(`/billing/subscriptions/${encodeURIComponent(id)}/cancel`, {
+    method: 'POST',
+    schema: z.object({ status: z.string(), remote: z.string().optional() }).passthrough(),
   });
 
 export const orderInvoiceKey = (id: string) => ['billing', 'orders', id, 'invoice'] as const;

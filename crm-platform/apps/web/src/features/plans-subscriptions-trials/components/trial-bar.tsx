@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { useQuery } from '@tanstack/react-query';
+import { BACKGROUND_META } from '@/lib/api/background';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
 import { BILLING_KEYS, fetchBillingStatus } from '../api';
 import { CancelRenewal } from './cancel-renewal';
@@ -22,6 +23,7 @@ export function TrialBar() {
   const q = useQuery({
     queryKey: BILLING_KEYS.status,
     queryFn: ({ signal }) => fetchBillingStatus(signal),
+    meta: BACKGROUND_META,
     staleTime: 60_000,
     refetchOnWindowFocus: true,
   });

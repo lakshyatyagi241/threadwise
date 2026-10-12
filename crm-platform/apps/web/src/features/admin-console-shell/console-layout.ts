@@ -50,7 +50,14 @@ export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
   {
     id: 'billing',
     icon: 'payment',
-    tabs: ['billing-history', 'order-history', 'invoices', 'payment-gateways', 'checkout-settings'],
+    tabs: [
+      'billing-history',
+      'order-history',
+      'subscriptions',
+      'invoices',
+      'payment-gateways',
+      'checkout-settings',
+    ],
   },
   {
     id: 'messaging',

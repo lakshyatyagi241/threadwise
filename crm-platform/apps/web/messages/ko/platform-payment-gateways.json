@@ -6,7 +6,8 @@
       "orders": "주문 내역",
       "billingHistory": "결제 내역",
       "invoices": "인보이스",
-      "billingSettings": "결제 설정"
+      "billingSettings": "결제 설정",
+      "subscriptions": "구독"
     },
     "admin": {
       "title": "결제 게이트웨이",
@@ -299,7 +300,8 @@
           "markPaid": "결제 완료 처리",
           "cancelOrder": "취소",
           "approve": "승인",
-          "reject": "거부"
+          "reject": "거부",
+          "refund": "환불"
         },
         "confirm": {
           "approveTitle": "이 주문을 결제 완료로 처리하시겠습니까?",
@@ -673,6 +675,79 @@
           "faqsHint": "요금제 아래에 표시되는 아코디언 항목입니다.",
           "configured": "{count}개 설정됨."
         }
+      },
+      "subscriptions": {
+        "title": "구독",
+        "eyebrow": "결제",
+        "titleFirst": "플랫폼",
+        "titleSecond": "구독",
+        "description": "모든 워크스페이스의 결제 제공업체에서 관리되는 플랜 및 애드온 구독입니다. 구독을 종료하거나, 제공업체에서 새로 고치거나, 결제를 환불할 수 있습니다.",
+        "kpi": {
+          "active": "활성",
+          "pastDue": "결제 실패",
+          "canceled": "취소됨"
+        },
+        "statusFilter": "구독 상태",
+        "statuses": {
+          "all": "전체",
+          "active": "활성",
+          "past_due": "결제 실패",
+          "pending": "대기 중",
+          "canceled": "취소됨",
+          "expired": "만료됨"
+        },
+        "kind": {
+          "plan": "플랜",
+          "addon": "애드온"
+        },
+        "search": "워크스페이스 또는 제공업체 ID 검색",
+        "noun": "구독",
+        "empty": "일치하는 구독이 없습니다.",
+        "col": {
+          "workspace": "워크스페이스",
+          "item": "항목",
+          "price": "가격",
+          "paidUntil": "결제 완료 기간",
+          "status": "상태",
+          "provider": "제공업체",
+          "actions": "작업"
+        },
+        "cancelFailed": "제공업체 취소 실패",
+        "cancelFailedHint": "로컬 기록은 종료되었지만 제공업체가 취소를 확인하지 않았습니다. 더 이상 결제되지 않도록 제공업체 대시보드에서 마무리하세요.",
+        "actions": {
+          "sync": "새로 고침",
+          "refund": "환불",
+          "endAtCycle": "주기 종료 시 종료",
+          "endNow": "지금 종료"
+        },
+        "confirm": {
+          "title": "이 구독을 종료하시겠습니까?",
+          "atCycle": "{name}은(는) 결제된 주기가 끝날 때까지 이용할 수 있으며 다시 청구되지 않습니다.",
+          "now": "제공업체에서 {name}의 구독을 지금 종료합니다. 추가 청구는 없습니다."
+        },
+        "ended": "제공업체에서 구독이 종료되었습니다.",
+        "endedLocalOnly": "여기서는 종료되었지만 제공업체가 취소를 확인하지 않았습니다. 제공업체 대시보드에서 마무리하세요.",
+        "endedUnsupported": "여기서는 종료되었습니다. 이 제공업체는 여기서 취소할 수 없습니다.",
+        "alreadyEnded": "이미 종료되었습니다.",
+        "synced": "제공업체에서 확인함: {outcome}."
+      },
+      "refund": {
+        "title": "{label} 환불",
+        "intro": "환불은 결제 제공업체로 전송되며 구매자의 원래 결제 수단으로 돌아갑니다.",
+        "charge": "환불할 결제",
+        "pickCharge": "결제 완료된 항목 선택",
+        "loadingCharges": "결제 내역 불러오는 중",
+        "chargesFailed": "결제 제공업체에서 이 구독의 결제 내역을 가져오지 못했습니다.",
+        "noPaidCharges": "제공업체에 이 구독의 결제 완료 내역이 없습니다.",
+        "amount": "금액({currency})",
+        "amountHint": "비워 두면 아직 환불되지 않은 전액을 환불합니다.",
+        "reason": "사유",
+        "endSubscription": "다시 청구되지 않도록 구독도 지금 종료",
+        "submit": "환불",
+        "processed": "{amount}을(를) 환불했습니다.",
+        "pending": "환불을 전송했습니다. 제공업체가 처리 중입니다.",
+        "failed": "제공업체가 환불을 거부했습니다.",
+        "badAmount": "금액을 숫자로 입력하세요. 예: 12.50."
       }
     },
     "offline": {
@@ -711,6 +786,74 @@
       "rejected": "허용되지 않는 파일 형식입니다. JPG, PNG, WEBP 또는 PDF를 사용해 주세요.",
       "closed": "이 주문은 더 이상 결제 증빙을 제출할 수 없습니다.",
       "failed": "파일을 업로드하지 못했습니다. 다시 시도해 주세요."
+    },
+    "subscriptions": {
+      "title": "구독",
+      "subtitle": "결제 제공업체의 플랜 및 애드온 구독: 갱신 항목, 결제 완료 기간, 청구 내역을 확인하세요.",
+      "loading": "구독 불러오는 중",
+      "loadFailed": "구독을 불러오지 못했습니다. 잠시 후 다시 시도하세요.",
+      "emptyTitle": "아직 구독이 없습니다",
+      "emptyMessage": "자동 갱신으로 플랜 또는 애드온을 결제하면 여기에 표시됩니다.",
+      "browsePlans": "플랜 둘러보기",
+      "failedBanner": "{names}의 최근 결제에 실패했습니다. 제공업체가 재시도하는 동안 접근은 일시적으로 유지됩니다. 접근을 잃지 않으려면 은행 또는 제공업체에서 결제 수단을 업데이트하세요.",
+      "paymentFailed": "최근 결제에 실패했습니다. 제공업체가 재시도 중입니다.",
+      "kind": {
+        "plan": "플랜",
+        "addon": "애드온"
+      },
+      "status": {
+        "active": "활성",
+        "past_due": "결제 실패",
+        "pending": "결제 대기 중",
+        "canceled": "취소됨",
+        "expired": "만료됨"
+      },
+      "cycle": {
+        "monthly": "월",
+        "yearly": "년"
+      },
+      "price": "{cycle}당 {amount}",
+      "renewsOn": "{date}에 갱신",
+      "endsOn": "{date}까지 결제됨. 갱신되지 않습니다.",
+      "endedOn": "{date}에 종료됨",
+      "refreshFromProvider": "제공업체에서 새로 고침",
+      "showCharges": "결제 내역 보기",
+      "hideCharges": "결제 내역 숨기기",
+      "cancel": "구독 취소",
+      "confirmTitle": "{name}을(를) 취소하시겠습니까?",
+      "confirmBody": "{date}까지 이용할 수 있습니다. 이후에는 갱신되지 않으며 다시 청구되지 않습니다.",
+      "confirmBodyNoDate": "갱신되지 않으며 다시 청구되지 않습니다.",
+      "confirm": "구독 취소",
+      "keep": "유지",
+      "cancelDone": "취소되었습니다. 결제된 기간은 계속되며 추가 청구는 없습니다.",
+      "cancelFailed": "이 구독을 취소하지 못했습니다. 다시 시도하거나 지원팀에 문의하세요.",
+      "forbidden": "구독을 관리할 권한이 없습니다.",
+      "sync": {
+        "up_to_date": "이미 결제 제공업체와 동기화되어 있습니다.",
+        "renewed": "업데이트됨: 제공업체에 더 최신 갱신 내역이 있었습니다.",
+        "gateway_canceled": "제공업체에서 이 구독이 취소됨으로 표시됩니다.",
+        "gateway_expired": "제공업체에서 이 구독이 종료됨으로 표시됩니다.",
+        "unknown": "결제 제공업체에서 확인했습니다.",
+        "failed": "결제 제공업체에 연결하지 못했습니다. 잠시 후 다시 시도하세요."
+      },
+      "chargesFailed": "결제 내역을 불러오지 못했습니다.",
+      "chargesFromOrders": "결제 제공업체에 연결할 수 없어 대신 결제 완료된 주문을 표시합니다.",
+      "noCharges": "아직 결제 내역이 없습니다.",
+      "col": {
+        "date": "날짜",
+        "amount": "금액",
+        "status": "상태",
+        "receipt": "영수증"
+      },
+      "chargeStatus": {
+        "paid": "결제 완료",
+        "issued": "결제 대기 중",
+        "failed": "실패",
+        "cancelled": "취소됨",
+        "expired": "만료됨",
+        "other": "기타"
+      },
+      "openReceipt": "영수증 열기"
     }
   }
 }
