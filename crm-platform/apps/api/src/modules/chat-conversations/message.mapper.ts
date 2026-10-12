@@ -109,6 +109,21 @@ function referralOf(row: MessageRow): MessageResponse['referral'] {
   };
 }
 
+/** The member who posted in a WhatsApp group (`meta.group`, set by the inbound ingest). */
+function groupAuthorOf(row: MessageRow): MessageResponse['group'] {
+  const g = row.meta.group as Record<string, unknown> | undefined;
+  if (!g || typeof g !== 'object' || row.direction !== 'in') return undefined;
+  return { participant: str(g.participant), senderName: str(g.senderName) };
+}
+
+/** The tally of a message sent to a WhatsApp group (`meta.group_delivery`, folded from Meta's per-member statuses). */
+function groupDeliveryOf(row: MessageRow): MessageResponse['groupDelivery'] {
+  const d = row.meta.group_delivery as Record<string, unknown> | undefined;
+  if (!d || typeof d !== 'object' || row.direction !== 'out') return undefined;
+  const n = (v: unknown) => (typeof v === 'number' && Number.isFinite(v) && v >= 0 ? Math.floor(v) : 0);
+  return { deliveredTo: n(d.delivered_to), billable: n(d.billable_count), free: n(d.free_count) };
+}
+
 const humanType = (t: string): string => {
   const s = t.replace(/_/g, ' ');
   return s.charAt(0).toUpperCase() + s.slice(1);
@@ -213,6 +228,8 @@ export function toMessageResponse(row: MessageRow, link: MediaLinker): MessageRe
     interactive: legacy?.interactive ?? interactiveOf(row),
     forwarded: row.meta.forwarded === true ? true : undefined,
     referral: referralOf(row),
+    group: groupAuthorOf(row),
+    groupDelivery: groupDeliveryOf(row),
     sentInteractive: sentInteractiveOf(row),
     unsupported:
       row.meta.unsupported === true &&

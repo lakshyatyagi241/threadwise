@@ -135,7 +135,9 @@
       "groupSendUnavailable": "WhatsApp グループへの送信はまだ利用できません。WhatsApp Business アプリから返信してください。",
       "logRange": "過去1年以内の日付を選択してください。開始日は終了日より前で、未来の日付は指定できません。",
       "logBusy": "エクスポートはすでに準備中です。届くメールをお待ちのうえ、あらためてリクエストしてください。",
-      "logNotReady": "このエクスポートはまだ準備できていないか、有効期限が切れています。もう一度リクエストしてください。"
+      "logNotReady": "このエクスポートはまだ準備できていないか、有効期限が切れています。もう一度リクエストしてください。",
+      "groupSuspended": "Metaがこのグループを停止したため、解除されるまでメッセージを送信できません。",
+      "walletEmpty": "メッセージウォレットの残高がこのグループメッセージ（メンバーごとに課金）に足りません。チャージしてもう一度お試しください。"
     },
     "bubble": {
       "kind": {
@@ -201,7 +203,9 @@
         "takeBackLabel": "あなたのリアクション {emoji}。取り消す",
         "failed": "このリアクションは送信されませんでした"
       },
-      "deliveryLog": "配信ログ"
+      "deliveryLog": "配信ログ",
+      "groupMember": "グループメンバー",
+      "groupTally": "{delivered, plural, other {#人のメンバー}}に配信済み: 課金 {billable}、無料 {free}"
     },
     "media": {
       "openImage": "画像 {name} を開く",

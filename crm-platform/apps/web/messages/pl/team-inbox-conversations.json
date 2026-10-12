@@ -135,7 +135,9 @@
       "groupSendUnavailable": "Wysyłanie do grup WhatsApp nie jest jeszcze dostępne. Odpowiedz w aplikacji WhatsApp Business.",
       "logRange": "Wybierz daty z ostatniego roku, przy czym początek musi być przed końcem i nie może być w przyszłości.",
       "logBusy": "Eksport jest już przygotowywany. Poczekaj na e-mail z nim, a potem zamów kolejny.",
-      "logNotReady": "Ten eksport nie jest gotowy lub wygasł. Zamów go ponownie."
+      "logNotReady": "Ten eksport nie jest gotowy lub wygasł. Zamów go ponownie.",
+      "groupSuspended": "Meta zawiesiła tę grupę, więc nie można do niej pisać, dopóki Meta jej nie przywróci.",
+      "walletEmpty": "Portfel wiadomości nie pokrywa tej wiadomości grupowej (jedna opłata za każdego członka). Doładuj go i spróbuj ponownie."
     },
     "bubble": {
       "kind": {
@@ -201,7 +203,9 @@
         "takeBackLabel": "Twoja reakcja {emoji}. Cofnij",
         "failed": "Ta reakcja nie została wysłana"
       },
-      "deliveryLog": "Dziennik dostarczania"
+      "deliveryLog": "Dziennik dostarczania",
+      "groupMember": "Członek grupy",
+      "groupTally": "Dostarczono do {delivered, plural, one {# członka} few {# członków} many {# członków} other {# członka}}: płatnych {billable}, bezpłatnych {free}"
     },
     "media": {
       "openImage": "Otwórz obraz {name}",

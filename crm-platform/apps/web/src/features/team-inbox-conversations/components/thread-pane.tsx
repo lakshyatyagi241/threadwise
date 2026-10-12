@@ -14,7 +14,7 @@ import { useCan } from '@/features/auth-registration-security/shared/session-con
 import { CallButton } from '@/features/calling-voice';
 import { useRealtimeEvent } from '@/lib/realtime';
 import type { Thread } from '../api/use-thread';
-import { isGroupThread } from '../lib/group-thread';
+import { isGroupSendBlocked, isGroupThread } from '../lib/group-thread';
 import { computeWindow, formatWindowLeft, type WindowView } from '../lib/window';
 import { Composer, type ComposerHandle, type ComposerMode } from './composer';
 import { ShareDialog, type ShareKind } from './share-dialog';
@@ -100,13 +100,14 @@ export function ThreadPane(props: ThreadPaneProps) {
   const channelDown = props.channel !== undefined && props.channel.status !== 'connected';
   const windowClosed = win?.state === 'closed';
   const groupThread = isGroupThread(detail?.peerKey);
+  const groupSendBlocked = isGroupSendBlocked(detail?.peerKey, detail?.channel.kind);
   const replyDisabled = windowClosed || channelDown;
   // A template needs no open window, only a working channel that sends templates and the right to reply.
   const canTemplate =
     Boolean(detail?.capabilities.templates) &&
     props.can.reply &&
     !channelDown &&
-    !groupThread &&
+    !groupSendBlocked &&
     props.mode === 'reply';
   // A place, contact cards and buttons are free-form messages: they need the window like text does (the composer disables the button).
   const shareKinds: ShareKind[] =
@@ -300,7 +301,7 @@ export function ThreadPane(props: ThreadPaneProps) {
         canReply={props.can.reply}
         canNote={props.can.note}
         canAttach={(detail?.capabilities.media.length ?? 0) > 0}
-        groupSendBlocked={groupThread}
+        groupSendBlocked={groupSendBlocked}
         attachments={
           detail
             ? { channelKind: detail.channel.kind, allowed: detail.capabilities.media }

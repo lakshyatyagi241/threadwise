@@ -1,5 +1,5 @@
 import { ChannelError, type OutboundEnvelope } from '../chat-conversations/channel.port';
-import { assertNotGroupPeer } from './group-peer';
+import { assertGroupSendKind, assertNotGroupPeer, groupIdOf, isGroupPeer } from './group-peer';
 import { META_FAILURE } from './meta-errors';
 import { whatsappMediaMessage, type PreparedWhatsappMedia } from './media';
 
@@ -127,11 +127,17 @@ export function buildMessageBody(
   envelope: OutboundEnvelope,
   media?: PreparedWhatsappMedia,
 ): MetaMessageBody {
-  const base = {
-    messaging_product: 'whatsapp',
-    recipient_type: 'individual',
-    to: metaRecipient(envelope.to),
-  };
+  // A `g:<group id>` thread goes to the group itself: the id verbatim and `recipient_type: 'group'`. Never through `metaRecipient`,
+  // which would strip it to digits and address a stranger.
+  const group = isGroupPeer(envelope.to);
+  if (group) assertGroupSendKind(envelope.kind);
+  const base = group
+    ? { messaging_product: 'whatsapp', recipient_type: 'group', to: groupIdOf(envelope.to) }
+    : {
+        messaging_product: 'whatsapp',
+        recipient_type: 'individual',
+        to: metaRecipient(envelope.to),
+      };
   const context =
     envelope.replyToProviderMessageId && envelope.kind !== 'reaction'
       ? { context: { message_id: envelope.replyToProviderMessageId } }

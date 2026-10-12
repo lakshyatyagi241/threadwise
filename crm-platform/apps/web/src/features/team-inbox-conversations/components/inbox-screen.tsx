@@ -16,7 +16,7 @@ import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { inboxApi } from '../api/service';
 import { useThread } from '../api/use-thread';
 import { useConversationList } from '../api/use-list';
-import { isGroupThread } from '../lib/group-thread';
+import { isGroupSendBlocked } from '../lib/group-thread';
 import { DEFAULT_FILTERS, type ListFilters } from '../lib/list';
 import { isTypingTarget, shortcutAction } from '../lib/shortcuts';
 import type { ComposerHandle, ComposerMode } from './composer';
@@ -306,14 +306,14 @@ export function InboxScreen() {
 
   const onSend = useCallback(
     (draft: { body: string; file: File | null; replyToMessageId?: string | null }) => {
-      // A group thread cannot be replied to yet (the composer is off; this is the belt to that braces).
-      if (isGroupThread(detail.detail?.peerKey)) return;
+      // A group thread on a channel that cannot send to a group is never sent to (the composer is off; this is the belt to that braces).
+      if (isGroupSendBlocked(detail.detail?.peerKey, detail.detail?.channel.kind)) return;
       // The simulator's one-shot fault goes in as a prefix on the text (or the caption of a file).
       const body = withFault(draft.body, fault);
       if (fault !== 'none') setFault('none');
       thread.send({ body, file: draft.file, replyToMessageId: draft.replyToMessageId });
     },
-    [fault, thread, detail.detail?.peerKey],
+    [fault, thread, detail.detail?.peerKey, detail.detail?.channel.kind],
   );
 
   // --- presence ---
