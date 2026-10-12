@@ -39,7 +39,10 @@ export default (h) => ({
       run: async (c) => {
         await c.goto('/marketplace/integrations?q=zzzz', { ready: 'main' });
         await c.page.waitForTimeout(800);
-        c.obs.flag('block.visible', await c.page.locator('[data-testid="mkt-dev-tools"]').isVisible());
+        c.obs.flag(
+          'block.visible',
+          await c.page.locator('[data-testid="mkt-dev-tools"]').isVisible(),
+        );
       },
     },
     {
@@ -48,7 +51,10 @@ export default (h) => ({
       run: async (c) => {
         await c.goto('/marketplace/apps', { ready: 'main' });
         await c.page.waitForTimeout(800);
-        c.obs.flag('block.visible', await c.page.locator('[data-testid="mkt-dev-tools"]').isVisible());
+        c.obs.flag(
+          'block.visible',
+          await c.page.locator('[data-testid="mkt-dev-tools"]').isVisible(),
+        );
       },
     },
     {
@@ -86,7 +92,10 @@ export default (h) => ({
           await tile.click();
           await c.page.waitForURL((u) => u.href !== before, { timeout: 10000 }).catch(() => {});
           await c.page.waitForLoadState('load');
-          c.obs.flag('tile.left-marketplace-list', !/\/marketplace\/integrations$/.test(c.page.url()));
+          c.obs.flag(
+            'tile.left-marketplace-list',
+            !/\/marketplace\/integrations$/.test(c.page.url()),
+          );
           c.obs.flag('tile.no5xx', true);
         }
       },

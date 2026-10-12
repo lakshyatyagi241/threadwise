@@ -62,7 +62,9 @@ export function SettingsFrame({ children }: { children: ReactNode }) {
                   <Link
                     ref={section === activeSection ? activeLink : undefined}
                     href={
-                      section === 'integrations' ? '/marketplace/integrations' : `/settings/${section}`
+                      section === 'integrations'
+                        ? '/marketplace/integrations'
+                        : `/settings/${section}`
                     }
                     onClick={clear}
                     aria-current={active ? 'page' : undefined}
@@ -76,7 +78,12 @@ export function SettingsFrame({ children }: { children: ReactNode }) {
                     <span className="block whitespace-nowrap text-sm font-semibold lg:whitespace-normal">
                       {t(`settings.sections.${section}.title`)}
                     </span>
-                    <span className="mt-0.5 hidden text-xs leading-snug text-muted-foreground lg:block">
+                    <span
+                      className={cn(
+                        'mt-0.5 hidden text-xs leading-snug lg:block',
+                        active ? 'text-foreground/80' : 'text-muted-foreground',
+                      )}
+                    >
                       {t(`settings.sections.${section}.description`)}
                     </span>
                   </Link>
