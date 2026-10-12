@@ -160,12 +160,16 @@ describe('ContactDetailScreen', () => {
       expect(chatCall).toHaveBeenCalledWith({ id: aarav.id, phone: aarav.phone });
     });
 
-    it('says so when there is no chat with the contact yet', async () => {
+    it('opens WhatsApp with the contact when there is no chat yet, as the web does', async () => {
       sessionCall.mockResolvedValue(sessionAll);
       chatCall.mockResolvedValue(null);
       await show();
       await fireEvent.press(await screen.findByRole('button', { name: 'Chat' }));
-      expect(await screen.findByText(/no conversation with this contact yet/)).toBeTruthy();
+      await waitFor(() =>
+        expect(Linking.openURL).toHaveBeenCalledWith(
+          `https://wa.me/${aarav.phone!.replace(/\D/g, '')}`,
+        ),
+      );
       expect(router.push).not.toHaveBeenCalled();
     });
 
@@ -175,12 +179,18 @@ describe('ContactDetailScreen', () => {
       await show();
       await fireEvent.press(await screen.findByRole('button', { name: 'Chat' }));
       expect(await screen.findByText(/Can't reach the server/)).toBeTruthy();
+      expect(Linking.openURL).not.toHaveBeenCalled();
     });
 
-    it('does not offer the chat to a person who may not read the inbox', async () => {
+    it('goes straight to WhatsApp for a person who may not read the inbox', async () => {
       await show();
       const chat = await screen.findByRole('button', { name: 'Chat' });
-      expect(chat.props.accessibilityState.disabled).toBe(true);
+      expect(chat.props.accessibilityState.disabled).toBeFalsy();
+      await fireEvent.press(chat);
+      expect(chatCall).not.toHaveBeenCalled();
+      expect(Linking.openURL).toHaveBeenCalledWith(
+        `https://wa.me/${aarav.phone!.replace(/\D/g, '')}`,
+      );
     });
   });
 

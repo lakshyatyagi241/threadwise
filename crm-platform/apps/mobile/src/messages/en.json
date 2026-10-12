@@ -610,8 +610,7 @@
         "message": "Delete {{name}}? This cannot be undone.",
         "confirm": "Delete",
         "cancel": "Cancel"
-      },
-      "chatNone": "There is no conversation with this contact yet. Starting a new chat from here is not available yet."
+      }
     },
     "tags": {
       "title": "Tags",

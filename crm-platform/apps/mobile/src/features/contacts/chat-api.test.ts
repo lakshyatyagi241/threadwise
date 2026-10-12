@@ -42,6 +42,42 @@ describe('findConversationId', () => {
     );
   });
 
+  it('finds a WhatsApp thread with exactly this number even when it is not linked to the contact', async () => {
+    mockFetch(
+      jsonResponse(
+        200,
+        list([
+          summary({
+            id: '55555555-5555-4555-8555-555555555555',
+            peerKey: '919812345678',
+            contact: null,
+          }),
+        ]),
+      ),
+    );
+    await expect(findConversationId({ id: CONTACT_ID, phone: '+91 98123 45678' })).resolves.toBe(
+      '55555555-5555-4555-8555-555555555555',
+    );
+  });
+
+  it('does not take a thread from another channel just because its key looks like the number', async () => {
+    mockFetch(
+      jsonResponse(
+        200,
+        list([
+          summary({
+            peerKey: '919812345678',
+            channel: { id: '66666666-6666-4666-8666-666666666666', kind: 'webchat', name: 'Web' },
+            contact: null,
+          }),
+        ]),
+      ),
+    );
+    await expect(
+      findConversationId({ id: CONTACT_ID, phone: '+919812345678' }),
+    ).resolves.toBeNull();
+  });
+
   it('returns null when the contact has no thread yet', async () => {
     mockFetch(jsonResponse(200, list([summary({ contact: { id: OTHER_ID, name: 'Someone' } })])));
     await expect(

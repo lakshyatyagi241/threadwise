@@ -506,7 +506,7 @@ describe('ContactsScreen', () => {
       expect(dialable.props.accessibilityState.disabled).toBeFalsy();
     });
 
-    it('opens the chat that exists, and says so under the row when there is none', async () => {
+    it('opens the chat that exists, and WhatsApp when there is none', async () => {
       sessionCall.mockResolvedValue(sessionRow);
       chatCall.mockResolvedValueOnce('thread-1').mockResolvedValueOnce(null);
       await show();
@@ -517,14 +517,33 @@ describe('ContactsScreen', () => {
           params: { id: 'thread-1' },
         }),
       );
+      expect(Linking.openURL).not.toHaveBeenCalled();
       await fireEvent.press(screen.getByRole('button', { name: 'Chat Aarav Sharma' }));
-      expect(await screen.findByText(/no conversation with this contact yet/)).toBeTruthy();
+      await waitFor(() =>
+        expect(Linking.openURL).toHaveBeenCalledWith(
+          `https://wa.me/${aarav.phone!.replace(/\D/g, '')}`,
+        ),
+      );
     });
 
-    it('does not offer chat to a person who may not use it', async () => {
+    it('says why the chat could not be looked up, under the row', async () => {
+      sessionCall.mockResolvedValue(sessionRow);
+      chatCall.mockRejectedValue(new ApiError(0, 'CLIENT_NETWORK', 'x'));
+      await show();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Chat Aarav Sharma' }));
+      expect(await screen.findByText(/Can't reach the server/)).toBeTruthy();
+      expect(Linking.openURL).not.toHaveBeenCalled();
+    });
+
+    it('goes straight to WhatsApp for a person who may not read the inbox', async () => {
       await show();
       const chat = await screen.findByRole('button', { name: 'Chat Aarav Sharma' });
-      expect(chat.props.accessibilityState.disabled).toBe(true);
+      expect(chat.props.accessibilityState.disabled).toBeFalsy();
+      await fireEvent.press(chat);
+      expect(chatCall).not.toHaveBeenCalled();
+      expect(Linking.openURL).toHaveBeenCalledWith(
+        `https://wa.me/${aarav.phone!.replace(/\D/g, '')}`,
+      );
     });
 
     it('still opens the contact from the name, not from an icon', async () => {

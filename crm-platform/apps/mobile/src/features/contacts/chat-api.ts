@@ -7,7 +7,9 @@ const MIN_DIGITS = 3;
 /**
  * The inbox thread that already exists for this contact, or null. There is no staff route that opens a thread for a contact (the
  * API can only do that for its developer API), so a chat is found by searching the inbox for the contact's number and keeping the
- * thread that belongs to this contact. A contact who was never written to or never wrote has no thread, and this says so.
+ * thread that belongs to this contact: the one linked to the contact, else a WhatsApp thread with exactly that number (a thread
+ * can exist before it is linked to a contact record). A contact who was never written to or never wrote has no thread, and this
+ * says so.
  */
 export async function findConversationId(
   contact: { id: string; phone: string | null },
@@ -20,5 +22,11 @@ export async function findConversationId(
     schema: conversationListResponseSchema,
     signal,
   });
-  return page.data.find((thread) => thread.contact?.id === contact.id)?.id ?? null;
+  const mine =
+    page.data.find((thread) => thread.contact?.id === contact.id) ??
+    page.data.find(
+      (thread) =>
+        thread.channel.kind.startsWith('whatsapp') && thread.peerKey.replace(/\D/g, '') === digits,
+    );
+  return mine?.id ?? null;
 }
