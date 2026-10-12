@@ -382,7 +382,7 @@ describe('ChannelDispatcher.send: the worker side', () => {
   });
 });
 
-describe('ChannelDispatcher: a WhatsApp group thread is never sent to (WABA_GROUP_SEND_UNAVAILABLE)', () => {
+describe('ChannelDispatcher: a WhatsApp group thread (g:<group id>)', () => {
   const GROUP = 'g:Y2FwaV9ncm91cDoxMjM0NTY3ODkwMTIzNDU2';
   const send = vi.fn(async () => ({ providerMessageId: 'wamid.1', acceptedAt: new Date() }));
   const whatsapp = {
@@ -407,43 +407,58 @@ describe('ChannelDispatcher: a WhatsApp group thread is never sent to (WABA_GROU
     kind,
     ...extra,
   });
-  const kinds = [
+  const allowed = [
     to('text', { body: 'hi' }),
     to('media', { media: { key: 'k', mediaKind: 'image', mime: 'image/jpeg' } }),
     to('template', { template: { name: 't', language: 'en', variables: {} } }),
+  ];
+  const refused = [
     to('reaction', { reaction: { providerMessageId: 'wamid.1', emoji: '👍' } }),
     to('interactive', { interactive: { type: 'location_request', body: 'Where?' } }),
   ];
 
-  it.each(kinds.map((e) => [e.kind, e] as const))(
-    'refuses a %s at enqueue with a 422 and at send time, never calling the adapter',
+  it.each(allowed.map((e) => [e.kind, e] as const))(
+    'a %s is accepted on the Cloud API channel',
+    async (_k, envelope) => {
+      const { dispatcher } = build(whatsapp);
+      const q = await dispatcher.assertCanQueue({ channel: wa(), envelope, lastInboundAt: recent });
+      expect(q.window.open).toBe(true);
+    },
+  );
+
+  it.each(refused.map((e) => [e.kind, e] as const))(
+    'a %s is refused at enqueue with a 422 and at send time, never calling the adapter',
     async (_k, envelope) => {
       const { dispatcher, guard } = build(whatsapp);
       const queue = await dispatcher
         .assertCanQueue({ channel: wa(), envelope, lastInboundAt: recent })
         .catch((e: unknown) => e as AppError);
       expect(queue).toBeInstanceOf(AppError);
-      expect((queue as AppError).code).toBe('WABA_GROUP_SEND_UNAVAILABLE');
+      expect((queue as AppError).code).toBe('CHANNEL_CAPABILITY_UNSUPPORTED');
       expect((queue as AppError).getStatus()).toBe(422);
       const sent = await dispatcher
         .send({ channel: wa(), envelope, lastInboundAt: recent })
         .catch((e: unknown) => e as AppError);
-      expect((sent as AppError).code).toBe('WABA_GROUP_SEND_UNAVAILABLE');
+      expect((sent as AppError).code).toBe('CHANNEL_CAPABILITY_UNSUPPORTED');
       expect(send).not.toHaveBeenCalled();
       expect(guard.beforeSend).not.toHaveBeenCalled();
     },
   );
 
-  it('refuses even when the window is closed or the channel is not connected: the group reason comes first and is not retryable', async () => {
-    const { dispatcher } = build(whatsapp);
-    const r = await code(
-      dispatcher.assertCanQueue({
-        channel: { ...wa(), status: 'disconnected' },
-        envelope: to('text', { body: 'hi' }),
-        lastInboundAt: null,
-      }),
-    );
-    expect(r).toBe('WABA_GROUP_SEND_UNAVAILABLE');
+  it('a number-only channel (the unofficial QR engine) still refuses every group send with WABA_GROUP_SEND_UNAVAILABLE', async () => {
+    const qr = { ...(whatsapp as object), kind: 'whatsapp_qr' } as unknown as ChannelAdapter;
+    const { dispatcher } = build(qr);
+    for (const envelope of [...allowed, ...refused]) {
+      const r = await code(
+        dispatcher.assertCanQueue({
+          channel: channel({ kind: 'whatsapp_qr', settings: { metered: false } as ChannelSettings }),
+          envelope,
+          lastInboundAt: recent,
+        }),
+      );
+      expect(r).toBe('WABA_GROUP_SEND_UNAVAILABLE');
+    }
+    expect(send).not.toHaveBeenCalled();
   });
 
   it('a normal phone thread on the same channel still sends through the adapter once', async () => {

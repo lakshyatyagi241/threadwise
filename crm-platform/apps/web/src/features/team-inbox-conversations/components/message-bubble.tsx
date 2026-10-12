@@ -356,6 +356,20 @@ export const MessageBubble = memo(function MessageBubble({
             {out && sender && (
               <p className="mb-0.5 text-[11px] font-medium text-muted-foreground">{sender}</p>
             )}
+            {!out && m.group && (
+              <p
+                dir="auto"
+                data-testid="inbox-group-author"
+                className="mb-0.5 text-[11px] font-medium text-primary"
+              >
+                {m.group.senderName ?? m.group.participant ?? t('groupMember')}
+                {m.group.senderName && m.group.participant && (
+                  <span className="ms-1 font-normal text-muted-foreground" dir="ltr">
+                    {m.group.participant}
+                  </span>
+                )}
+              </p>
+            )}
             {m.forwarded && (
               <p
                 data-testid="inbox-forwarded"
@@ -458,6 +472,15 @@ export const MessageBubble = memo(function MessageBubble({
             {clockTime(m.createdAt, locale)}
           </time>
           {out && <Ticks status={m.status} />}
+          {out && m.groupDelivery && m.groupDelivery.deliveredTo > 0 && (
+            <span data-testid="inbox-group-tally">
+              {t('groupTally', {
+                delivered: m.groupDelivery.deliveredTo,
+                billable: m.groupDelivery.billable,
+                free: m.groupDelivery.free,
+              })}
+            </span>
+          )}
         </div>
         {failed && (
           <div className="mt-0.5 flex flex-wrap items-center justify-end gap-2 px-1 text-xs text-danger">
