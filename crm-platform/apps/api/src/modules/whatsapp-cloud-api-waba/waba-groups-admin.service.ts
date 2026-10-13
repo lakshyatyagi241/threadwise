@@ -37,6 +37,7 @@ import { WabaConnectService } from './waba-connect.service';
 import { WabaConnectionsRepository } from './waba-connections.repository';
 import { emitGroupEvents, GROUP_EVENTS, groupEventsFor } from './waba-group-events';
 import { toGroupDto } from './waba-groups.mapper';
+import { wabaGroupsEligibleKey } from '../../infra/providers/whatsapp/group-peer';
 import { factsOf, WabaGroupsRepository, type WabaGroupRow } from './waba-groups.repository';
 
 const MODULE = 'waba_groups';
@@ -54,8 +55,7 @@ interface Number_ {
   officialBusinessAccount: boolean | null;
 }
 
-const eligibleKey = (orgId: number, configId: number) =>
-  `waba:groups:eligible:${orgId}:${configId}`;
+const eligibleKey = wabaGroupsEligibleKey;
 const asApiError = (e: unknown): WabaApiError =>
   e instanceof WabaApiError ? e : WabaApiError.network(e);
 const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));

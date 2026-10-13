@@ -98,7 +98,7 @@ describe('OutboundService.assertGroupSendable for a personal number', () => {
   });
 
   it('a group the directory has not read yet is not refused', async () => {
-    await expect(build(undefined).run()).resolves.toBeUndefined();
+    await expect(build(undefined).run()).resolves.toBeNull();
   });
 });
 

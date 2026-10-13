@@ -30,6 +30,7 @@ import {
   CONVERSATIONS_FACADE,
   ChannelRegistryService,
   ChannelsFacade,
+  CloudGroupThreadReader,
   PersonalGroupThreadReader,
   type ConversationsFacade,
 } from '../chat-conversations';
@@ -88,6 +89,7 @@ export class InboxConversationsService {
     @Inject(CONVERSATIONS_FACADE) private readonly conversations: ConversationsFacade,
     private readonly notifications: NotificationsService,
     private readonly personalGroups: PersonalGroupThreadReader,
+    private readonly cloudGroups: CloudGroupThreadReader,
   ) {}
 
   async list(query: ListConversationsQuery): Promise<ConversationListResponse> {
@@ -162,19 +164,26 @@ export class InboxConversationsService {
       if (!row) throw conversationNotFound();
       this.access.assertVisible(viewer, row);
 
-      const [{ capabilities, window }, contactSummary, past, personalGroup] = await Promise.all([
-        this.channelState(tx, ctx.orgId, row),
-        this.contactSummary(tx, ctx, row),
-        row.contactId === null
-          ? Promise.resolve([])
-          : this.repo.pastConversations(tx, ctx.orgId, viewer, row.contactId, row.id),
-        this.personalGroups.stateOf(
-          tx,
-          ctx.orgId,
-          { id: row.channelId, kind: row.channelKind },
-          row.peerKey,
-        ),
-      ]);
+      const [{ capabilities, window }, contactSummary, past, personalGroup, cloudGroup] =
+        await Promise.all([
+          this.channelState(tx, ctx.orgId, row),
+          this.contactSummary(tx, ctx, row),
+          row.contactId === null
+            ? Promise.resolve([])
+            : this.repo.pastConversations(tx, ctx.orgId, viewer, row.contactId, row.id),
+          this.personalGroups.stateOf(
+            tx,
+            ctx.orgId,
+            { id: row.channelId, kind: row.channelKind },
+            row.peerKey,
+          ),
+          this.cloudGroups.stateOf(
+            tx,
+            ctx.orgId,
+            { id: row.channelId, kind: row.channelKind },
+            row.peerKey,
+          ),
+        ]);
 
       const base: ConversationDetail = {
         ...toConversationSummary(row),
@@ -185,6 +194,7 @@ export class InboxConversationsService {
         firstResponseAt: iso(row.firstResponseAt),
         resolvedAt: iso(row.resolvedAt),
         ...(personalGroup ? { personalGroup } : {}),
+        ...(cloudGroup ? { cloudGroup } : {}),
         sla: {
           firstResponseDueAt: iso(row.slaFirstResponseDue),
           resolutionDueAt: iso(row.slaResolutionDue),

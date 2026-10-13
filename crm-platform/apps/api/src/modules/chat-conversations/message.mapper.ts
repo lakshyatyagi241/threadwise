@@ -133,13 +133,36 @@ function mentionsOf(row: MessageRow): MessageResponse['mentions'] {
   return out.length > 0 ? out : undefined;
 }
 
-/** The tally of a message sent to a WhatsApp group (`meta.group_delivery`, folded from Meta's per-member statuses). */
+/**
+ * The tally of a message sent to a WhatsApp group, rolled up from the per-member statuses Meta reported (`meta.group_delivery`, folded
+ * by `applyGroupDelivery`): who it reached (delivered or read), who read it, who it failed for. `members` is the size of the group when the
+ * message was queued (`meta.group_members`; 0 when it was not known). A member's status only moves forward, so a retried webhook cannot
+ * inflate a count; a member Meta has not reported on is in none of them.
+ */
 function groupDeliveryOf(row: MessageRow): MessageResponse['groupDelivery'] {
   const d = row.meta.group_delivery as Record<string, unknown> | undefined;
   if (!d || typeof d !== 'object' || row.direction !== 'out') return undefined;
   const n = (v: unknown) =>
     typeof v === 'number' && Number.isFinite(v) && v >= 0 ? Math.floor(v) : 0;
-  return { deliveredTo: n(d.delivered_to), billable: n(d.billable_count), free: n(d.free_count) };
+  const people =
+    d.participants && typeof d.participants === 'object'
+      ? Object.values(d.participants as Record<string, { status?: unknown }>)
+      : [];
+  const status = (p: { status?: unknown } | null) =>
+    typeof p?.status === 'string' ? p.status : '';
+  const read = people.filter((p) => status(p) === 'read').length;
+  const delivered = people.filter((p) => status(p) === 'delivered').length + read;
+  const failed = people.filter((p) => status(p) === 'failed').length;
+  const hasPeople = people.length > 0;
+  return {
+    members: n(row.meta.group_members),
+    // Older rows carry only the counters (no per-member map): those counted every member Meta had reported on.
+    deliveredTo: hasPeople ? delivered : n(d.delivered_to),
+    readBy: read,
+    failed,
+    billable: n(d.billable_count),
+    free: n(d.free_count),
+  };
 }
 
 const humanType = (t: string): string => {
