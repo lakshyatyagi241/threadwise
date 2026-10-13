@@ -3,7 +3,8 @@
     "nav": {
       "title": "Bellen",
       "description": "Schakel WhatsApp-bellen per nummer in of uit.",
-      "keywords": "bellen, gesprekken, spraak, telefoon, whatsapp bellen, belknop"
+      "keywords": "bellen, gesprekken, spraak, telefoon, whatsapp bellen, belknop",
+      "callLogs": "Gespreksoverzicht"
     },
     "common": {
       "dismiss": "Sluiten"
@@ -86,7 +87,9 @@
       "FORBIDDEN": "Je hebt geen toestemming om bellen te gebruiken.",
       "PLAN_FEATURE_LOCKED": "Je abonnement bevat geen WhatsApp-bellen.",
       "NETWORK": "Netwerkfout - probeer het opnieuw.",
-      "UNEXPECTED": "Er is iets misgegaan. Probeer het opnieuw."
+      "UNEXPECTED": "Er is iets misgegaan. Probeer het opnieuw.",
+      "CALL_PLAYBACK_LINK_INVALID": "Deze opnamelink is verlopen. Druk opnieuw op afspelen om een nieuwe te krijgen.",
+      "CALL_RANGE_INVALID": "Deze datums kloppen niet: het begin mag niet na het einde liggen, een bereik mag maximaal een jaar beslaan en de tijdzone moet bestaan."
     },
     "settings": {
       "title": "Bellen",

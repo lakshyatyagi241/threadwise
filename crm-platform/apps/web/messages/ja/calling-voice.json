@@ -3,7 +3,8 @@
     "nav": {
       "title": "通話",
       "description": "番号ごとにWhatsApp通話のオン/オフを切り替えます。",
-      "keywords": "通話, 電話, 音声, 電話番号, whatsapp通話, 通話ボタン, call, calls, voice, phone, whatsapp calling, call button"
+      "keywords": "通話, 電話, 音声, 電話番号, whatsapp通話, 通話ボタン, call, calls, voice, phone, whatsapp calling, call button",
+      "callLogs": "通話ログ"
     },
     "common": {
       "dismiss": "閉じる"
@@ -86,7 +87,9 @@
       "FORBIDDEN": "通話機能を使用する権限がありません。",
       "PLAN_FEATURE_LOCKED": "お使いのプランにはWhatsApp通話が含まれていません。",
       "NETWORK": "ネットワークエラーです。もう一度お試しください。",
-      "UNEXPECTED": "問題が発生しました。もう一度お試しください。"
+      "UNEXPECTED": "問題が発生しました。もう一度お試しください。",
+      "CALL_PLAYBACK_LINK_INVALID": "この録音リンクの有効期限が切れました。もう一度再生を押して新しいリンクを取得してください。",
+      "CALL_RANGE_INVALID": "日付が正しくありません。開始日は終了日より後にできず、期間は最大1年で、タイムゾーンは実在するものを指定してください。"
     },
     "settings": {
       "title": "通話",
