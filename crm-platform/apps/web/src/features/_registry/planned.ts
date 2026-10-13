@@ -92,14 +92,6 @@ export const PLANNED_NAV: readonly NavItem[] = [
     order: 20,
     icon: 'clock',
   },
-  {
-    id: 'history',
-    group: 'campaigns',
-    labelKey: L('history'),
-    href: '/message-history',
-    order: 40,
-    icon: 'history',
-  },
 
   // Automation (Appointments is a real screen in features/appointments)
   {
