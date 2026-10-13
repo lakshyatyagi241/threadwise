@@ -124,7 +124,6 @@
       "columnsSelectAll": "Select All",
       "dragToReorder": "Drag to re-order columns",
       "removeColumn": "Remove {name}",
-      "columnsClose": "Close",
       "columnsSave": "Save",
       "colContactName": "Contactnaam",
       "colPhone": "Telefoonnummer",
@@ -1285,11 +1284,14 @@
         "title": "Selecteer een weergave",
         "create": "Nieuwe weergave maken",
         "search": "Weergaven zoeken...",
-        "chipAll": "Alle",
-        "chipPinned": "Op tabbladen",
-        "chipShared": "Gedeeld",
         "empty": "Geen weergaven gevonden",
-        "pinned": "Op tabbladen"
+        "pinned": "Op tabbladen",
+        "favorites": "Favorieten",
+        "defaultFilters": "Standaardfilters",
+        "createdViews": "Gemaakte weergaven",
+        "addView": "Weergave toevoegen",
+        "markFavorite": "Markeren als favoriet",
+        "unmarkFavorite": "Verwijderen uit favorieten"
       },
       "menu": {
         "rename": "Weergave hernoemen",

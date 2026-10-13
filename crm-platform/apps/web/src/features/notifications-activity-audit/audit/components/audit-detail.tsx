@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import type { AuditDeltaValue } from '@crm/contracts';
 import { Alert, Badge, Spinner } from '@crm/ui';
 import { useAuditEntry } from '../api/hooks';
@@ -17,6 +17,7 @@ import { ActorCell, useAuditWords } from './audit-labels';
 export function AuditDetail({ id }: { id: string }) {
   const t = useTranslations('audit-log');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const words = useAuditWords();
   const q = useAuditEntry(id);
 
@@ -62,7 +63,7 @@ export function AuditDetail({ id }: { id: string }) {
         <dt className="text-muted-foreground">{t('detail.when')}</dt>
         <dd>
           <time dateTime={e.at}>
-            {when.toLocaleString(locale, { dateStyle: 'full', timeStyle: 'long' })}
+            {when.toLocaleString(locale, { dateStyle: 'full', timeStyle: 'long', timeZone })}
           </time>
         </dd>
         <dt className="text-muted-foreground">{t('detail.who')}</dt>

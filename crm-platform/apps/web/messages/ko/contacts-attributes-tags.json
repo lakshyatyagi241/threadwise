@@ -124,7 +124,6 @@
       "columnsSelectAll": "Select All",
       "dragToReorder": "Drag to re-order columns",
       "removeColumn": "Remove {name}",
-      "columnsClose": "Close",
       "columnsSave": "Save",
       "colContactName": "연락처 이름",
       "colPhone": "전화번호",
@@ -1285,11 +1284,14 @@
         "title": "보기 선택",
         "create": "새 보기 만들기",
         "search": "보기 검색...",
-        "chipAll": "전체",
-        "chipPinned": "탭에 표시",
-        "chipShared": "공유됨",
         "empty": "보기를 찾을 수 없습니다",
-        "pinned": "탭에 표시"
+        "pinned": "탭에 표시",
+        "favorites": "즐겨찾기",
+        "defaultFilters": "기본 필터",
+        "createdViews": "만든 보기",
+        "addView": "보기 추가",
+        "markFavorite": "즐겨찾기로 표시",
+        "unmarkFavorite": "즐겨찾기에서 제거"
       },
       "menu": {
         "rename": "보기 이름 바꾸기",

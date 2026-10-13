@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import type { ComposeTemplate } from '@crm/contracts';
 import { previewOf } from '../lib/compose-model';
 
@@ -15,8 +15,14 @@ export function ComposePreview({
   later: boolean;
 }) {
   const t = useTranslations('broadcasts.compose');
+  const locale = useLocale();
+  const timeZone = useTimeZone();
   const p = template ? previewOf(template) : null;
-  const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const time = new Date().toLocaleTimeString(locale, {
+    hour: '2-digit',
+    minute: '2-digit',
+    timeZone,
+  });
   return (
     <div className="sticky top-[92px] rounded-2xl border border-border bg-background p-4 shadow-sm">
       <div className="mb-3 flex items-center justify-between">

@@ -124,7 +124,6 @@
       "columnsSelectAll": "Select All",
       "dragToReorder": "Drag to re-order columns",
       "removeColumn": "Remove {name}",
-      "columnsClose": "Close",
       "columnsSave": "Save",
       "colContactName": "رابطے کا نام",
       "colPhone": "فون نمبر",
@@ -1285,11 +1284,14 @@
         "title": "ویو منتخب کریں",
         "create": "نیا ویو بنائیں",
         "search": "ویوز تلاش کریں...",
-        "chipAll": "سب",
-        "chipPinned": "ٹیبز پر",
-        "chipShared": "مشترکہ",
         "empty": "کوئی ویو نہیں ملا",
-        "pinned": "ٹیبز پر"
+        "pinned": "ٹیبز پر",
+        "favorites": "پسندیدہ",
+        "defaultFilters": "ڈیفالٹ فلٹرز",
+        "createdViews": "بنائے گئے ویوز",
+        "addView": "ویو شامل کریں",
+        "markFavorite": "پسندیدہ کے طور پر نشان زد کریں",
+        "unmarkFavorite": "پسندیدہ سے ہٹائیں"
       },
       "menu": {
         "rename": "ویو کا نام تبدیل کریں",

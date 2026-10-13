@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import {
   AUDIT_LOG_EXPORT_TTL_DAYS,
@@ -28,6 +28,7 @@ const TONE: Record<AuditLogExportStatus, 'neutral' | 'success' | 'warning' | 'da
 export function AuditExports({ filters }: { filters: AuditLogFilters }) {
   const t = useTranslations('audit-log');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const list = useAuditExports(true);
   const request = useRequestExport();
   const [requested, setRequested] = useState(false);
@@ -35,7 +36,9 @@ export function AuditExports({ filters }: { filters: AuditLogFilters }) {
   const exports = list.data?.data ?? [];
   const busy = exports.some((e) => e.status === 'queued' || e.status === 'running');
   const when = (iso: string | null) =>
-    iso ? new Date(iso).toLocaleString(locale, { dateStyle: 'medium', timeStyle: 'short' }) : '';
+    iso
+      ? new Date(iso).toLocaleString(locale, { dateStyle: 'medium', timeStyle: 'short', timeZone })
+      : '';
 
   return (
     <section

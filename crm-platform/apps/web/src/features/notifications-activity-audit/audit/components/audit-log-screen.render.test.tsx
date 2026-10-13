@@ -40,6 +40,7 @@ vi.mock('next/link', () => ({
 }));
 vi.mock('@/features/auth-registration-security/shared/session-context', () => ({
   useCan: (k: string) => state.can[k] === true,
+  useSession: () => ({ effectiveTimezone: 'Asia/Kolkata' }),
 }));
 vi.mock('../api/hooks', () => ({
   useAuditEntries: (filters: unknown) => {
@@ -178,10 +179,7 @@ describe('the table', () => {
     expect(row.querySelector('a')?.getAttribute('href')).toBe('/contacts/abc');
     expect(row.querySelector('time')?.getAttribute('datetime')).toBe('2026-10-13T09:30:00.000Z');
     expect(m.host.textContent).toContain(
-      text('audit-log.table.zone').replace(
-        '{zone}',
-        Intl.DateTimeFormat().resolvedOptions().timeZone,
-      ),
+      text('audit-log.table.zone').replace('{zone}', 'Asia/Kolkata'),
     );
   });
 

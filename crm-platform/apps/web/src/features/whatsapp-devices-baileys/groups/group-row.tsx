@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import type { WaDeviceGroup } from '@crm/contracts';
 import { Badge, Button, ConfirmDialog } from '@crm/ui';
@@ -32,6 +32,7 @@ const TONE = {
 export function GroupRow({ group }: { group: WaDeviceGroup }) {
   const t = useTranslations('whatsapp-devices-baileys.groups');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const { device, online, perms, waitSeconds, notify, fail } = useGroupsCtx();
   const access = rowAccess(group, perms, online);
   const leave = useLeaveWaGroup(device.id);
@@ -42,7 +43,7 @@ export function GroupRow({ group }: { group: WaDeviceGroup }) {
   const names = group.participantsPreview
     .map((p) => p.name?.trim())
     .filter((n): n is string => Boolean(n));
-  const leftAt = formatWhen(group.leftAt, locale);
+  const leftAt = formatWhen(group.leftAt, locale, timeZone);
 
   return (
     <div className="border-b border-border px-5 py-4 last:border-0" data-group-row={group.id}>

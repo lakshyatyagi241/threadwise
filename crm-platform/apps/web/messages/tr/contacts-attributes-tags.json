@@ -124,7 +124,6 @@
       "columnsSelectAll": "Select All",
       "dragToReorder": "Drag to re-order columns",
       "removeColumn": "Remove {name}",
-      "columnsClose": "Close",
       "columnsSave": "Save",
       "colContactName": "Kişi adı",
       "colPhone": "Telefon numarası",
@@ -1285,11 +1284,14 @@
         "title": "Görünüm seçin",
         "create": "Yeni görünüm oluştur",
         "search": "Görünümlerde ara...",
-        "chipAll": "Tümü",
-        "chipPinned": "Sekmelerde",
-        "chipShared": "Paylaşılan",
         "empty": "Görünüm bulunamadı",
-        "pinned": "Sekmelerde"
+        "pinned": "Sekmelerde",
+        "favorites": "Favoriler",
+        "defaultFilters": "Varsayılan filtreler",
+        "createdViews": "Oluşturulan görünümler",
+        "addView": "Görünüm ekle",
+        "markFavorite": "Favori olarak işaretle",
+        "unmarkFavorite": "Favorilerden kaldır"
       },
       "menu": {
         "rename": "Görünümü yeniden adlandır",

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import {
   Alert,
   Badge,
@@ -517,6 +517,7 @@ function VersionsList({
   onRestore: (n: number) => void;
 }) {
   const t = useTranslations('web-forms.builder');
+  const timeZone = useTimeZone();
   const versions = useFormVersions(formId, true);
   if (versions.isPending) {
     return (
@@ -528,7 +529,11 @@ function VersionsList({
   if (versions.isError) return <Alert tone="danger">{t('versionsFailed')}</Alert>;
   if (versions.data.length === 0)
     return <p className="text-sm text-muted-foreground">{t('versionsEmpty')}</p>;
-  const fmt = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' });
+  const fmt = new Intl.DateTimeFormat(locale, {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+    timeZone,
+  });
   return (
     <ul className="divide-y divide-border">
       {versions.data.map((v) => (

@@ -124,7 +124,6 @@
       "columnsSelectAll": "Select All",
       "dragToReorder": "Drag to re-order columns",
       "removeColumn": "Remove {name}",
-      "columnsClose": "Close",
       "columnsSave": "Save",
       "colContactName": "Contact Name",
       "colPhone": "Phone Number",
@@ -1291,9 +1290,6 @@
         "title": "Select a view",
         "create": "Create new view",
         "search": "Search views...",
-        "chipAll": "All",
-        "chipPinned": "On tabs",
-        "chipShared": "Shared",
         "empty": "No views found",
         "pinned": "On tabs"
       },

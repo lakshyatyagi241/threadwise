@@ -1,14 +1,14 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import type { WalletTransaction } from '@crm/contracts';
 import { cn } from '@crm/ui';
 import { humanizeSource } from '../../lib/billing-variant';
 import { TONE_CLASS, directionTone, formatMinor, formatMovement } from '../../lib/money';
 import { TypePill } from './type-pill';
 
-export const formatWhen = (iso: string, locale: string): string =>
-  new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }).format(
+export const formatWhen = (iso: string, locale: string, timeZone?: string): string =>
+  new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short', timeZone }).format(
     new Date(iso),
   );
 
@@ -24,6 +24,7 @@ export function ActivityTable({
 }) {
   const t = useTranslations('wallet-message-billing.activity');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   return (
     <div className="overflow-x-auto">
       <table className="w-full min-w-[34rem] text-sm" aria-label={label}>
@@ -61,7 +62,7 @@ export function ActivityTable({
                 <TypePill type={r.type} />
               </td>
               <td className="whitespace-nowrap px-2 py-2 text-muted-foreground">
-                {formatWhen(r.createdAt, locale)}
+                {formatWhen(r.createdAt, locale, timeZone)}
               </td>
               <td
                 className={cn(

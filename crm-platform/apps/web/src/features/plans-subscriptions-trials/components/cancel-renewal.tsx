@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { BillingSubscription } from '@crm/contracts';
 import { Alert, Button, ConfirmDialog } from '@crm/ui';
@@ -26,6 +26,7 @@ export function CancelRenewal({
 }) {
   const t = useTranslations(NS);
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -53,7 +54,9 @@ export function CancelRenewal({
 
   if (done) return compact ? null : <Alert tone="success">{t('cancelled')}</Alert>;
   const date = subscription.renewsAt
-    ? new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(new Date(subscription.renewsAt))
+    ? new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeZone }).format(
+        new Date(subscription.renewsAt),
+      )
     : null;
   return (
     <div className="flex flex-wrap items-center gap-3 text-sm" data-testid="auto-renew">

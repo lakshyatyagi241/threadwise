@@ -89,21 +89,37 @@ export const reference = (uuid: string) => `BR-${uuid.slice(0, 8).toUpperCase()}
 /** Only a broadcast that has not started, or that failed, can be deleted. */
 export const canDelete = (status: string) => status === 'scheduled' || status === 'failed';
 
-const sameDay = (a: Date, b: Date) =>
-  a.getFullYear() === b.getFullYear() &&
-  a.getMonth() === b.getMonth() &&
-  a.getDate() === b.getDate();
+/** The calendar day and the clock of an instant in `timeZone` (left out: the browser's zone). */
+function zoned(d: Date, timeZone?: string) {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: 'h23',
+    timeZone,
+  }).formatToParts(d);
+  const get = (type: string) => parts.find((p) => p.type === type)?.value ?? '';
+  return {
+    day: `${get('year')}-${get('month')}-${get('day')}`,
+    month: get('month'),
+    dd: get('day'),
+    hm: `${get('hour')}:${get('minute')}`,
+  };
+}
 
-const hm = (d: Date) =>
-  `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
-
-/** "Today, 14:30" or "Oct 02, 14:30"; null when there is no schedule. */
-export function scheduleText(iso: string | null, now: Date, today: string): string | null {
+/** "Today, 14:30" or "Oct 02, 14:30" in `timeZone` (the person's display zone); null when there is no schedule. */
+export function scheduleText(
+  iso: string | null,
+  now: Date,
+  today: string,
+  timeZone?: string,
+): string | null {
   if (!iso) return null;
-  const d = new Date(iso);
-  if (sameDay(d, now)) return `${today}, ${hm(d)}`;
-  const month = d.toLocaleString('en', { month: 'short' });
-  return `${month} ${String(d.getDate()).padStart(2, '0')}, ${hm(d)}`;
+  const at = zoned(new Date(iso), timeZone);
+  if (at.day === zoned(now, timeZone).day) return `${today}, ${at.hm}`;
+  return `${at.month} ${at.dd}, ${at.hm}`;
 }
 
 /** The one-decimal percentages the tiles show, from the summary's numbers. */

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import type { StoreCoupon } from '@crm/contracts';
 import { EmptyState } from '@crm/ui';
 import { useCouponUsages } from '../api/hooks';
@@ -21,6 +21,7 @@ export function CouponUsagesDrawer({
   const t = useTranslations('checkout-orders-merchant-payments.coupons');
   const tc = useTranslations('checkout-orders-merchant-payments.common');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const usages = useCouponUsages(coupon?.id ?? null);
 
   return (
@@ -71,7 +72,7 @@ export function CouponUsagesDrawer({
                       {formatMoney(u.totalMinor, u.currencyCode, locale)}
                     </span>
                   </span>
-                  <span>{formatWhen(u.createdAt, locale)}</span>
+                  <span>{formatWhen(u.createdAt, locale, timeZone)}</span>
                 </div>
               </li>
             ))}

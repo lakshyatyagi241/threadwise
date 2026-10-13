@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
+import { useSession } from '@/features/auth-registration-security/shared/session-context';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { Alert, Spinner, cn } from '@crm/ui';
@@ -46,7 +47,8 @@ export function InsightsScreen() {
   const router = useRouter();
   const pathname = usePathname();
   const search = useSearchParams();
-  const tz = useMemo(() => Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC', []);
+  const { effectiveTimezone } = useSession();
+  const tz = effectiveTimezone || 'UTC';
   const q = useInsights(search.get('page') ?? undefined, tz);
   const [avatarBroken, setAvatarBroken] = useState(false);
   const d = q.data;

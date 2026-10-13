@@ -1,11 +1,11 @@
 'use client';
 
 import { useQueryClient } from '@tanstack/react-query';
-import { useTranslations } from 'next-intl';
+import { useTimeZone, useTranslations } from 'next-intl';
 import { useState, type ReactNode } from 'react';
 import { Alert, Button, ConfirmDialog, Field, Input, Modal, Select, useToast } from '@crm/ui';
 import { refresh, scheduleApi, type ScheduleAction } from '../api/schedules';
-import { browserTimezone, localDateTime, timezoneList } from '../lib/time';
+import { localDateTime, timezoneList } from '../lib/time';
 import { useErrorText } from './use-error-text';
 
 export interface Target {
@@ -103,7 +103,8 @@ function RetryModal({
 }) {
   const t = useTranslations('scheduled-queue-warmer.retry');
   const errorText = useErrorText();
-  const [tz, setTz] = useState(browserTimezone);
+  const displayZone = useTimeZone() || 'UTC';
+  const [tz, setTz] = useState(displayZone);
   const [init] = useState(() => localDateTime(Date.now() + 10 * 60_000, tz));
   const [date, setDate] = useState(init.date);
   const [time, setTime] = useState(init.time);

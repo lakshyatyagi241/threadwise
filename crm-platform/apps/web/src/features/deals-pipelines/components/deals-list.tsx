@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { Button, EmptyState, Spinner } from '@crm/ui';
 import { useDealsList } from '../api/hooks';
 import type { Pipeline } from '../api/schemas';
@@ -21,6 +21,7 @@ export function DealsList({
 }) {
   const t = useTranslations('deals-pipelines.list');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const list = useDealsList({
     ...filterQuery(filters),
     pipelineId: pipeline.id,
@@ -110,7 +111,7 @@ export function DealsList({
                     )}
                   </td>
                   <td className="px-4 py-3 tabular-nums text-muted-foreground">
-                    {formatDay(d.expectedCloseDate, locale) || '—'}
+                    {formatDay(d.expectedCloseDate, locale, timeZone) || '—'}
                   </td>
                   <td className="px-4 py-3">
                     <StatusChip status={d.status} />
