@@ -5,6 +5,7 @@
  */
 export * from './errors';
 export * from './inbox';
+export * from './labels';
 export * from './saved-replies';
 export * from './templates';
 export * from './triage';

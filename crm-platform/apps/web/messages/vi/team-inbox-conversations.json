@@ -27,7 +27,9 @@
       "shortcuts": "Phím tắt: j và k để di chuyển trong danh sách, e để giải quyết, / để tìm kiếm.",
       "teamChanged": "Đã cập nhật nhóm.",
       "priorityChanged": "Đã cập nhật mức ưu tiên",
-      "snoozed": "Đã tạm ẩn cuộc trò chuyện"
+      "snoozed": "Đã tạm ẩn cuộc trò chuyện",
+      "labelAdded": "Đã thêm nhãn",
+      "labelRemoved": "Đã gỡ nhãn"
     },
     "list": {
       "title": "Hộp thư",
@@ -849,12 +851,52 @@
         "nothingChanged": "Không có gì cần thay đổi: các cuộc trò chuyện đã chọn đều đã được cập nhật.",
         "partial": "Đã cập nhật {done}, {unchanged} đã ở trạng thái mới nhất, không thể thay đổi {failed}. Các mục thất bại vẫn được chọn.",
         "allFailed": "Không thể thay đổi {count, plural, one {# cuộc trò chuyện nào} other {# cuộc trò chuyện nào}}."
-      }
+      },
+      "label": "Nhãn",
+      "labelAdd": "Thêm nhãn",
+      "labelRemove": "Gỡ nhãn"
     },
     "triage": {
       "priority": "Ưu tiên",
       "snooze": "Tạm ẩn",
       "wake": "Hiện lại ngay"
+    },
+    "labels": {
+      "label": "Nhãn",
+      "loading": "Đang tải nhãn…",
+      "loadFailed": "Không thể tải nhãn.",
+      "none": "Chưa có nhãn nào.",
+      "newLabel": "Nhãn mới",
+      "add": "Thêm",
+      "filter": "Nhãn",
+      "filterActive": "{count, plural, one {# nhãn} other {# nhãn}}",
+      "clearFilter": "Xóa bộ lọc nhãn",
+      "screen": {
+        "back": "Quay lại hộp thư",
+        "title": "Nhãn",
+        "intro": "Nhãn gắn thẻ cho cuộc trò chuyện để nhóm của bạn sắp xếp và lọc. Đây là các thẻ giống như dùng cho danh bạ.",
+        "newTitle": "Nhãn mới",
+        "editTitle": "Sửa nhãn",
+        "name": "Tên",
+        "color": "Màu",
+        "colorInvalid": "Dùng mã màu hex như #075E54 hoặc tên màu.",
+        "description": "Mô tả (không bắt buộc)",
+        "create": "Tạo nhãn",
+        "save": "Lưu thay đổi",
+        "cancel": "Hủy",
+        "edit": "Sửa",
+        "delete": "Xóa",
+        "inUse": "{count, plural, one {# cuộc trò chuyện} other {# cuộc trò chuyện}}",
+        "emptyTitle": "Chưa có nhãn nào",
+        "emptyMessage": "Hãy tạo nhãn đầu tiên ở phía trên, rồi gắn vào các cuộc trò chuyện từ hộp thư.",
+        "deleteTitle": "Xóa nhãn này?",
+        "deleteMessage": "\"{name}\" đang được dùng cho {count, plural, one {# cuộc trò chuyện} other {# cuộc trò chuyện}}. Xóa sẽ gỡ nhãn khỏi các cuộc trò chuyện đó và khỏi mọi danh bạ đang mang nhãn này. Không thể hoàn tác.",
+        "nameTaken": "Đã có nhãn với tên này.",
+        "conflict": "Người khác đã thay đổi nhãn này trước. Danh sách đã được tải lại.",
+        "saved": "Đã lưu nhãn",
+        "created": "Đã tạo nhãn",
+        "deleted": "Đã xóa nhãn"
+      }
     }
   }
 }

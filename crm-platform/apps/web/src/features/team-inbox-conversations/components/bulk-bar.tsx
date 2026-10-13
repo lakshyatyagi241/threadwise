@@ -7,7 +7,7 @@ import {
   type BulkConversationAction,
   type ConversationPriority,
 } from '@crm/contracts';
-import { useAssignees } from '../api/hooks';
+import { useAssignees, useLabels } from '../api/hooks';
 import { SNOOZE_PRESETS, snoozeUntil, type SnoozePreset } from '../lib/selection';
 
 export interface BulkBarProps {
@@ -22,6 +22,7 @@ export interface BulkBarProps {
     assignSelf: boolean;
     priority: boolean;
     snooze: boolean;
+    tag: boolean;
   };
   meId: string;
   onSelectAll: () => void;
@@ -39,6 +40,7 @@ export function BulkBar(props: BulkBarProps) {
   const tp = useTranslations('team-inbox-conversations.list');
   const { can } = props;
   const assignees = useAssignees(can.assign || can.assignSelf);
+  const labels = useLabels(can.tag);
   const disabled = props.busy || props.count === 0;
 
   const pick = (value: string, run: (value: string) => void) => {
@@ -193,6 +195,37 @@ export function BulkBar(props: BulkBarProps) {
                 {t(`snoozePreset.${p}`)}
               </option>
             ))}
+          </Select>
+        )}
+        {can.tag && (labels.data?.data.length ?? 0) > 0 && (
+          <Select
+            aria-label={t('label')}
+            data-testid="inbox-bulk-label"
+            value=""
+            disabled={disabled}
+            className="h-8 w-auto text-xs"
+            onChange={(e) =>
+              pick(e.target.value, (v) => {
+                const [mode, tagId] = v.split(':') as ['add' | 'remove', string];
+                props.onRun({ type: 'label', mode, tagId: tagId! });
+              })
+            }
+          >
+            <option value="">{t('label')}</option>
+            <optgroup label={t('labelAdd')}>
+              {labels.data?.data.map((l) => (
+                <option key={`a${l.id}`} value={`add:${l.id}`}>
+                  {l.name}
+                </option>
+              ))}
+            </optgroup>
+            <optgroup label={t('labelRemove')}>
+              {labels.data?.data.map((l) => (
+                <option key={`r${l.id}`} value={`remove:${l.id}`}>
+                  {l.name}
+                </option>
+              ))}
+            </optgroup>
           </Select>
         )}
         {props.busy && <Spinner />}

@@ -7,6 +7,7 @@ import type { ConversationSummary } from '@crm/contracts';
 import { badgeText } from '../lib/list';
 import { fullStamp, listTime } from '../lib/time';
 import { formatWindowLeft, rowWindowChip } from '../lib/window';
+import { LabelChip } from './label-chip';
 import { Avatar, ChannelTag } from './parts';
 import { PinIcon } from './icons';
 
@@ -145,6 +146,12 @@ export const ConversationRow = memo(function ConversationRow({
               >
                 {row.channel.name}
               </span>
+            )}
+            {row.labels.slice(0, 2).map((l) => (
+              <LabelChip key={l.id} label={l} />
+            ))}
+            {row.labels.length > 2 && (
+              <span className="text-[10px] text-muted-foreground">+{row.labels.length - 2}</span>
             )}
             {chip && (
               <span

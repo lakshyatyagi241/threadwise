@@ -27,7 +27,9 @@
       "shortcuts": "Shortcuts: j and k move through the list, e resolves, / searches.",
       "teamChanged": "Team updated.",
       "priorityChanged": "Priority updated",
-      "snoozed": "Conversation snoozed"
+      "snoozed": "Conversation snoozed",
+      "labelAdded": "Label added",
+      "labelRemoved": "Label removed"
     },
     "list": {
       "title": "Inbox",
@@ -854,6 +856,46 @@
         "nothingChanged": "Nothing to change: the selected conversations are already up to date.",
         "partial": "{done} updated, {unchanged} already up to date, {failed} could not be changed. The ones that failed stay selected.",
         "allFailed": "None of the {count, plural, one {# conversation} other {# conversations}} could be changed."
+      },
+      "label": "Label",
+      "labelAdd": "Add label",
+      "labelRemove": "Remove label"
+    },
+    "labels": {
+      "label": "Label",
+      "loading": "Loading labels…",
+      "loadFailed": "Could not load the labels.",
+      "none": "No labels yet.",
+      "newLabel": "New label",
+      "add": "Add",
+      "filter": "Labels",
+      "filterActive": "{count, plural, one {# label} other {# labels}}",
+      "clearFilter": "Clear label filter",
+      "screen": {
+        "back": "Back to the inbox",
+        "title": "Labels",
+        "intro": "Labels tag conversations so your team can sort and filter them. They are the same tags used on contacts.",
+        "newTitle": "New label",
+        "editTitle": "Edit label",
+        "name": "Name",
+        "color": "Color",
+        "colorInvalid": "Use a hex color such as #075E54 or a color name.",
+        "description": "Description (optional)",
+        "create": "Create label",
+        "save": "Save changes",
+        "cancel": "Cancel",
+        "edit": "Edit",
+        "delete": "Delete",
+        "inUse": "{count, plural, one {# conversation} other {# conversations}}",
+        "emptyTitle": "No labels yet",
+        "emptyMessage": "Create your first label above, then put it on conversations from the inbox.",
+        "deleteTitle": "Delete this label?",
+        "deleteMessage": "\"{name}\" is on {count, plural, one {# conversation} other {# conversations}}. Deleting it removes it from them and from any contacts that carry it. This cannot be undone.",
+        "nameTaken": "A label with that name already exists.",
+        "conflict": "Someone else changed this label first. The list was reloaded.",
+        "saved": "Label saved",
+        "created": "Label created",
+        "deleted": "Label deleted"
       }
     }
   }

@@ -55,6 +55,8 @@ export const bulkConversationActionSchema = z.discriminatedUnion('type', [
   z.object({ type: z.literal('mark_read') }),
   z.object({ type: z.literal('priority'), priority: conversationPrioritySchema }),
   z.object({ type: z.literal('snooze'), until: snoozeUntilSchema }),
+  /** Add or take off one label (by id) on every conversation. */
+  z.object({ type: z.literal('label'), mode: z.enum(['add', 'remove']), tagId: uuidSchema }),
 ]);
 export type BulkConversationAction = z.infer<typeof bulkConversationActionSchema>;
 

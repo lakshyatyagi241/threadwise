@@ -27,7 +27,9 @@
       "shortcuts": "Atajos: j y k recorren la lista, e resuelve, / busca.",
       "teamChanged": "Equipo actualizado.",
       "priorityChanged": "Prioridad actualizada",
-      "snoozed": "Conversación pospuesta"
+      "snoozed": "Conversación pospuesta",
+      "labelAdded": "Etiqueta añadida",
+      "labelRemoved": "Etiqueta quitada"
     },
     "list": {
       "title": "Bandeja de entrada",
@@ -849,12 +851,52 @@
         "nothingChanged": "Nada que cambiar: las conversaciones seleccionadas ya están al día.",
         "partial": "{done} actualizadas, {unchanged} ya estaban al día, {failed} no se pudieron cambiar. Las que fallaron siguen seleccionadas.",
         "allFailed": "No se pudo cambiar ninguna de {count, plural, one {la # conversación} other {las # conversaciones}}."
-      }
+      },
+      "label": "Etiqueta",
+      "labelAdd": "Añadir etiqueta",
+      "labelRemove": "Quitar etiqueta"
     },
     "triage": {
       "priority": "Prioridad",
       "snooze": "Posponer",
       "wake": "Reactivar ahora"
+    },
+    "labels": {
+      "label": "Etiqueta",
+      "loading": "Cargando etiquetas…",
+      "loadFailed": "No se pudieron cargar las etiquetas.",
+      "none": "Aún no hay etiquetas.",
+      "newLabel": "Nueva etiqueta",
+      "add": "Añadir",
+      "filter": "Etiquetas",
+      "filterActive": "{count, plural, one {# etiqueta} other {# etiquetas}}",
+      "clearFilter": "Borrar filtro de etiquetas",
+      "screen": {
+        "back": "Volver a la bandeja",
+        "title": "Etiquetas",
+        "intro": "Las etiquetas marcan las conversaciones para que tu equipo pueda ordenarlas y filtrarlas. Son las mismas que se usan en los contactos.",
+        "newTitle": "Nueva etiqueta",
+        "editTitle": "Editar etiqueta",
+        "name": "Nombre",
+        "color": "Color",
+        "colorInvalid": "Usa un color hexadecimal como #075E54 o un nombre de color.",
+        "description": "Descripción (opcional)",
+        "create": "Crear etiqueta",
+        "save": "Guardar cambios",
+        "cancel": "Cancelar",
+        "edit": "Editar",
+        "delete": "Eliminar",
+        "inUse": "{count, plural, one {# conversación} other {# conversaciones}}",
+        "emptyTitle": "Aún no hay etiquetas",
+        "emptyMessage": "Crea tu primera etiqueta arriba y luego ponla en las conversaciones desde la bandeja.",
+        "deleteTitle": "¿Eliminar esta etiqueta?",
+        "deleteMessage": "\"{name}\" está en {count, plural, one {# conversación} other {# conversaciones}}. Al eliminarla se quita de ellas y de los contactos que la tengan. Esta acción no se puede deshacer.",
+        "nameTaken": "Ya existe una etiqueta con ese nombre.",
+        "conflict": "Otra persona cambió esta etiqueta primero. Se recargó la lista.",
+        "saved": "Etiqueta guardada",
+        "created": "Etiqueta creada",
+        "deleted": "Etiqueta eliminada"
+      }
     }
   }
 }

@@ -5,6 +5,10 @@
  * CHANNEL_DISCONNECTED keep their existing names.
  */
 export const INBOX_ERROR_CODES = {
+  /** No such label in this workspace (a label of another workspace is the same answer). */
+  INBOX_LABEL_NOT_FOUND: 'INBOX_LABEL_NOT_FOUND',
+  /** Naming a label that does not exist yet creates it, which needs `inbox.tag.manage`. */
+  INBOX_LABEL_CREATE_FORBIDDEN: 'INBOX_LABEL_CREATE_FORBIDDEN',
   /** No such note on this conversation (a note of another conversation or workspace is the same answer). */
   CONVERSATION_NOTE_NOT_FOUND: 'CONVERSATION_NOTE_NOT_FOUND',
   /** A template send was asked for, and the template library (TPL) is not part of this deployment yet. */

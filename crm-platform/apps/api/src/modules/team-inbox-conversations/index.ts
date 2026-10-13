@@ -7,6 +7,7 @@ export {
   TeamInboxConversationsWorkerModule,
 } from './team-inbox-conversations.module';
 export { InboxTriageService } from './inbox-triage.service';
+export { InboxLabelsService } from './inbox-labels.service';
 export {
   InboxAccess,
   PERM as INBOX_PERMISSION,

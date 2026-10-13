@@ -27,7 +27,9 @@
       "shortcuts": "Sneltoetsen: j en k bewegen door de lijst, e lost op, / zoekt.",
       "teamChanged": "Team bijgewerkt.",
       "priorityChanged": "Prioriteit bijgewerkt",
-      "snoozed": "Gesprek uitgesteld"
+      "snoozed": "Gesprek uitgesteld",
+      "labelAdded": "Label toegevoegd",
+      "labelRemoved": "Label verwijderd"
     },
     "list": {
       "title": "Inbox",
@@ -849,12 +851,52 @@
         "nothingChanged": "Niets te wijzigen: de geselecteerde gesprekken zijn al up-to-date.",
         "partial": "{done} bijgewerkt, {unchanged} al up-to-date, {failed} konden niet worden gewijzigd. De mislukte blijven geselecteerd.",
         "allFailed": "Geen van de {count, plural, one {# gesprek} other {# gesprekken}} kon worden gewijzigd."
-      }
+      },
+      "label": "Label",
+      "labelAdd": "Label toevoegen",
+      "labelRemove": "Label verwijderen"
     },
     "triage": {
       "priority": "Prioriteit",
       "snooze": "Uitstellen",
       "wake": "Nu terugzetten"
+    },
+    "labels": {
+      "label": "Label",
+      "loading": "Labels laden…",
+      "loadFailed": "De labels konden niet worden geladen.",
+      "none": "Nog geen labels.",
+      "newLabel": "Nieuw label",
+      "add": "Toevoegen",
+      "filter": "Labels",
+      "filterActive": "{count, plural, one {# label} other {# labels}}",
+      "clearFilter": "Labelfilter wissen",
+      "screen": {
+        "back": "Terug naar de inbox",
+        "title": "Labels",
+        "intro": "Met labels markeer je gesprekken zodat je team ze kan sorteren en filteren. Het zijn dezelfde tags als bij contacten.",
+        "newTitle": "Nieuw label",
+        "editTitle": "Label bewerken",
+        "name": "Naam",
+        "color": "Kleur",
+        "colorInvalid": "Gebruik een hexkleur zoals #075E54 of een kleurnaam.",
+        "description": "Beschrijving (optioneel)",
+        "create": "Label aanmaken",
+        "save": "Wijzigingen opslaan",
+        "cancel": "Annuleren",
+        "edit": "Bewerken",
+        "delete": "Verwijderen",
+        "inUse": "{count, plural, one {# gesprek} other {# gesprekken}}",
+        "emptyTitle": "Nog geen labels",
+        "emptyMessage": "Maak hierboven je eerste label aan en zet het vervolgens op gesprekken vanuit de inbox.",
+        "deleteTitle": "Dit label verwijderen?",
+        "deleteMessage": "\"{name}\" staat op {count, plural, one {# gesprek} other {# gesprekken}}. Als je het verwijdert, wordt het van die gesprekken en van alle contacten met dit label gehaald. Dit kan niet ongedaan worden gemaakt.",
+        "nameTaken": "Er bestaat al een label met die naam.",
+        "conflict": "Iemand anders heeft dit label eerder gewijzigd. De lijst is opnieuw geladen.",
+        "saved": "Label opgeslagen",
+        "created": "Label aangemaakt",
+        "deleted": "Label verwijderd"
+      }
     }
   }
 }

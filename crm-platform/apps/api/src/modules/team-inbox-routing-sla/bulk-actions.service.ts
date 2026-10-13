@@ -14,6 +14,7 @@ import {
   INBOX_PERMISSION as PERM,
   InboxAccess,
   InboxConversationsService,
+  InboxLabelsService,
   InboxTriageService,
 } from '../team-inbox-conversations';
 import { AssignmentService } from './assignment.service';
@@ -25,6 +26,7 @@ const UNDERLYING: Record<BulkConversationAction['type'], readonly string[]> = {
   mark_read: [PERM.read],
   priority: [PERM.priority],
   snooze: [PERM.snooze],
+  label: [PERM.tag],
 };
 
 /**
@@ -52,6 +54,7 @@ export class BulkActionsService {
     private readonly audit: AuditService,
     private readonly conversations: InboxConversationsService,
     private readonly triage: InboxTriageService,
+    private readonly labels: InboxLabelsService,
     private readonly assignment: AssignmentService,
   ) {}
 
@@ -141,6 +144,13 @@ export class BulkActionsService {
       }
       case 'snooze': {
         const after = await this.triage.snooze(id, { until: action.until, rowVersion });
+        return after.rowVersion === rowVersion ? 'unchanged' : 'done';
+      }
+      case 'label': {
+        const after =
+          action.mode === 'add'
+            ? await this.labels.apply(id, { tagId: action.tagId })
+            : await this.labels.withdraw(id, action.tagId);
         return after.rowVersion === rowVersion ? 'unchanged' : 'done';
       }
       case 'mark_read': {

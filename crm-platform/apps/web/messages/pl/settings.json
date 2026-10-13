@@ -339,6 +339,11 @@
         "label": "Zgody i odpowiedzi STOP",
         "description": "Wybierz słowa STOP i START, odpowiedzi potwierdzające, linijkę rezygnacji oraz to, czy marketing wymaga zapisanej zgody.",
         "keywords": "zgoda, wypisanie, ponowny zapis, rezygnacja, stop, start, rodo, zgodność, prywatność, marketing"
+      },
+      "inbox-labels": {
+        "label": "Etykiety",
+        "description": "Twórz etykiety, którymi zespół oznacza rozmowy i filtruje skrzynkę.",
+        "keywords": "tagi, etykiety, kategorie, porządkuj, filtr"
       }
     },
     "backToMarketplace": "Wróć do Marketplace"

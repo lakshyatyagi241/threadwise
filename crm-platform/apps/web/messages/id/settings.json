@@ -339,6 +339,11 @@
         "label": "Persetujuan dan balasan STOP",
         "description": "Pilih kata STOP dan START, balasan konfirmasi, baris berhenti berlangganan, dan apakah pemasaran memerlukan persetujuan yang tercatat.",
         "keywords": "persetujuan, berhenti berlangganan, berlangganan kembali, unsubscribe, stop, start, gdpr, kepatuhan, privasi, pemasaran"
+      },
+      "inbox-labels": {
+        "label": "Label",
+        "description": "Buat label yang dipasang tim Anda pada percakapan dan digunakan untuk memfilter kotak masuk.",
+        "keywords": "tag, label, kategori, atur, filter"
       }
     },
     "backToMarketplace": "Kembali ke Marketplace"

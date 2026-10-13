@@ -55,6 +55,14 @@ export type MarkConversationReadInput = z.infer<typeof markConversationReadSchem
 
 // --- list ---------------------------------------------------------------------------------------------------------------
 
+/** A workspace label on a conversation, as the list and the thread show it. */
+export const conversationLabelSchema = z.object({
+  id: uuidSchema,
+  name: z.string(),
+  color: z.string().nullable(),
+});
+export type ConversationLabel = z.infer<typeof conversationLabelSchema>;
+
 export const conversationSummarySchema = z.object({
   id: uuidSchema,
   channel: conversationChannelSchema,
@@ -75,6 +83,8 @@ export const conversationSummarySchema = z.object({
   contact: conversationContactSchema.nullable(),
   assignment: conversationAssignmentSchema,
   snoozedUntil: z.string().datetime().nullable(),
+  /** Labels on the thread, by name. */
+  labels: z.array(conversationLabelSchema),
   lastMessageAt: z.string().datetime().nullable(),
   lastInboundAt: z.string().datetime().nullable(),
   lastOutboundAt: z.string().datetime().nullable(),
@@ -93,6 +103,12 @@ export const listConversationsQuerySchema = paginationQuerySchema.extend({
   /** Omitted: the open and pending threads (Reference's default view). `all` removes the filter. */
   status: z.union([conversationStatusSchema, z.literal('all')]).optional(),
   channelId: uuidSchema.optional(),
+  /** Comma-separated label ids (a query string): threads that carry ANY of them. */
+  labels: z
+    .string()
+    .optional()
+    .transform((v) => (v ? v.split(',').map((x) => x.trim()).filter(Boolean) : []))
+    .pipe(z.array(uuidSchema).max(20)),
   /** Contact name, peer name or number, or a word of the preview. */
   q: z.string().trim().min(1).max(200).optional(),
   /** The archive view: every archived thread, whatever the tab or status. A query string, so `false` must mean false (`z.coerce.boolean` reads any non-empty string as true). */

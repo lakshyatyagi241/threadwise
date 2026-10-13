@@ -339,6 +339,11 @@
         "label": "Consentimento e respostas STOP",
         "description": "Escolha as palavras STOP e START, as respostas de confirmação, a linha de cancelamento e se o marketing exige consentimento registrado.",
         "keywords": "consentimento, cancelar inscrição, reativar inscrição, descadastrar, stop, start, lgpd, gdpr, conformidade, privacidade, marketing"
+      },
+      "inbox-labels": {
+        "label": "Etiquetas",
+        "description": "Crie as etiquetas que sua equipe coloca nas conversas e usa para filtrar a caixa de entrada.",
+        "keywords": "tags, etiquetas, categorias, organizar, filtrar"
       }
     },
     "backToMarketplace": "Voltar ao Marketplace"

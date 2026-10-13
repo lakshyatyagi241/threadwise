@@ -11,6 +11,20 @@ import { summary } from '../lib/fixtures';
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
 vi.mock('../api/hooks', () => ({
+  useLabels: () => ({
+    data: {
+      data: [
+        {
+          id: 'l-1',
+          name: 'VIP',
+          color: '#5B3D8A',
+          description: null,
+          conversationCount: 2,
+          rowVersion: 1,
+        },
+      ],
+    },
+  }),
   useAssignees: () => ({
     data: {
       users: [
@@ -75,7 +89,7 @@ const props = (over: Partial<BulkBarProps> = {}): BulkBarProps => ({
   inView: 30,
   allInViewSelected: false,
   busy: false,
-  can: { resolve: true, assign: true, assignSelf: true, priority: true, snooze: true },
+  can: { resolve: true, assign: true, assignSelf: true, priority: true, snooze: true, tag: true },
   meId: 'u-me',
   onSelectAll: vi.fn(),
   onClear: vi.fn(),
@@ -154,9 +168,27 @@ describe('the bulk bar', () => {
     expect(Date.parse(snooze.until)).toBeGreaterThan(Date.now() + 3_000_000);
   });
 
+  it('adds or removes a label on the whole selection', () => {
+    const p = props();
+    render(<BulkBar {...p} />);
+    choose('inbox-bulk-label', 'add:l-1');
+    choose('inbox-bulk-label', 'remove:l-1');
+    expect((p.onRun as ReturnType<typeof vi.fn>).mock.calls.map((c) => c[0])).toEqual([
+      { type: 'label', mode: 'add', tagId: 'l-1' },
+      { type: 'label', mode: 'remove', tagId: 'l-1' },
+    ]);
+  });
+
   it('shows only what the caller may do: a claim-only agent has no resolve, priority or snooze, and can only assign to self', () => {
     const p = props({
-      can: { resolve: false, assign: false, assignSelf: true, priority: false, snooze: false },
+      can: {
+        resolve: false,
+        assign: false,
+        assignSelf: true,
+        priority: false,
+        snooze: false,
+        tag: false,
+      },
     });
     render(<BulkBar {...p} />);
     expect(host.querySelector('[data-testid="inbox-bulk-resolve"]')).toBeNull();

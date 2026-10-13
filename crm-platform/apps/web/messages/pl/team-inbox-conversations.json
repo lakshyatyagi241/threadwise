@@ -27,7 +27,9 @@
       "shortcuts": "Skróty: j i k przechodzą po liście, e kończy rozmowę, / wyszukuje.",
       "teamChanged": "Zespół zaktualizowany.",
       "priorityChanged": "Zaktualizowano priorytet",
-      "snoozed": "Rozmowa została odłożona"
+      "snoozed": "Rozmowa została odłożona",
+      "labelAdded": "Dodano etykietę",
+      "labelRemoved": "Usunięto etykietę"
     },
     "list": {
       "title": "Skrzynka odbiorcza",
@@ -849,12 +851,52 @@
         "nothingChanged": "Nic do zmiany: wybrane rozmowy są już aktualne.",
         "partial": "Zaktualizowano: {done}, już aktualne: {unchanged}, nie udało się zmienić: {failed}. Te, które się nie udały, pozostają zaznaczone.",
         "allFailed": "Nie udało się zmienić żadnej z {count, plural, one {# rozmowy} few {# rozmów} many {# rozmów} other {# rozmów}}."
-      }
+      },
+      "label": "Etykieta",
+      "labelAdd": "Dodaj etykietę",
+      "labelRemove": "Usuń etykietę"
     },
     "triage": {
       "priority": "Priorytet",
       "snooze": "Odłóż",
       "wake": "Przywróć teraz"
+    },
+    "labels": {
+      "label": "Etykieta",
+      "loading": "Ładowanie etykiet…",
+      "loadFailed": "Nie udało się załadować etykiet.",
+      "none": "Brak etykiet.",
+      "newLabel": "Nowa etykieta",
+      "add": "Dodaj",
+      "filter": "Etykiety",
+      "filterActive": "{count, plural, one {# etykieta} few {# etykiety} many {# etykiet} other {# etykiety}}",
+      "clearFilter": "Wyczyść filtr etykiet",
+      "screen": {
+        "back": "Wróć do skrzynki",
+        "title": "Etykiety",
+        "intro": "Etykiety oznaczają rozmowy, aby zespół mógł je sortować i filtrować. Są to te same tagi, które są używane przy kontaktach.",
+        "newTitle": "Nowa etykieta",
+        "editTitle": "Edytuj etykietę",
+        "name": "Nazwa",
+        "color": "Kolor",
+        "colorInvalid": "Użyj koloru szesnastkowego, np. #075E54, lub nazwy koloru.",
+        "description": "Opis (opcjonalnie)",
+        "create": "Utwórz etykietę",
+        "save": "Zapisz zmiany",
+        "cancel": "Anuluj",
+        "edit": "Edytuj",
+        "delete": "Usuń",
+        "inUse": "{count, plural, one {# rozmowa} few {# rozmowy} many {# rozmów} other {# rozmowy}}",
+        "emptyTitle": "Brak etykiet",
+        "emptyMessage": "Utwórz pierwszą etykietę powyżej, a następnie dodawaj ją do rozmów ze skrzynki.",
+        "deleteTitle": "Usunąć tę etykietę?",
+        "deleteMessage": "\"{name}\" jest użyta w liczbie rozmów: {count, plural, one {# rozmowa} few {# rozmowy} many {# rozmów} other {# rozmowy}}. Usunięcie zdejmie ją z tych rozmów i ze wszystkich kontaktów, które ją mają. Tej operacji nie można cofnąć.",
+        "nameTaken": "Etykieta o tej nazwie już istnieje.",
+        "conflict": "Ktoś inny zmienił tę etykietę wcześniej. Lista została przeładowana.",
+        "saved": "Zapisano etykietę",
+        "created": "Utworzono etykietę",
+        "deleted": "Usunięto etykietę"
+      }
     }
   }
 }

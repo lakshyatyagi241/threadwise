@@ -339,6 +339,11 @@
         "label": "Đồng ý nhận tin và phản hồi STOP",
         "description": "Chọn từ khóa STOP và START, phản hồi xác nhận, dòng từ chối và việc marketing có cần sự đồng ý đã ghi nhận hay không.",
         "keywords": "đồng ý, từ chối, đăng ký lại, hủy đăng ký, stop, start, gdpr, tuân thủ, quyền riêng tư, marketing"
+      },
+      "inbox-labels": {
+        "label": "Nhãn",
+        "description": "Tạo các nhãn mà nhóm của bạn gắn vào cuộc trò chuyện và dùng để lọc hộp thư.",
+        "keywords": "thẻ, nhãn, danh mục, sắp xếp, lọc"
       }
     },
     "backToMarketplace": "Quay lại Marketplace"

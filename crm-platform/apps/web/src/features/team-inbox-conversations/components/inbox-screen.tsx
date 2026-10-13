@@ -25,7 +25,7 @@ import { inboxApi } from '../api/service';
 import { useThread } from '../api/use-thread';
 import { useConversationList } from '../api/use-list';
 import { isGroupSendBlocked } from '../lib/group-thread';
-import { DEFAULT_FILTERS, filtersKey, type ListFilters } from '../lib/list';
+import { DEFAULT_FILTERS, filtersKey, labelsFromParam, type ListFilters } from '../lib/list';
 import { isTypingTarget, shortcutAction } from '../lib/shortcuts';
 import type { ComposerHandle, ComposerMode } from './composer';
 import { ContactPanel } from './contact-panel';
@@ -35,6 +35,14 @@ import { InboxIcon } from './icons';
 import { Drawer, useErrorText } from './parts';
 import { SimulatorDrawer, withFault, type SendFault } from './simulator-drawer';
 import { ThreadPane } from './thread-pane';
+
+/** The current query string with one parameter set (or removed with null), so opening a thread keeps the label filter. */
+function withParam(key: string, value: string | null): string {
+  const next = new URLSearchParams(window.location.search);
+  if (value === null) next.delete(key);
+  else next.set(key, value);
+  return next.toString();
+}
 
 /** The three panes sit side by side from here; below it the contact panel is a slide-over. */
 const XL_QUERY = '(min-width: 1280px)';
@@ -78,6 +86,8 @@ export function InboxScreen() {
     bulk: useCan('inbox.conversation.bulk'),
     priority: useCan('inbox.conversation.priority'),
     snooze: useCan('inbox.conversation.snooze'),
+    tag: useCan('inbox.conversation.tag'),
+    tagManage: useCan('inbox.tag.manage'),
     manageChannels: useCan('inbox.channel.manage'),
   };
 
@@ -88,13 +98,26 @@ export function InboxScreen() {
   // `/inbox?channel=<id>` (the "Open in inbox" link of a mailbox, TW-MAIL-024) starts filtered by that channel.
   const [filters, setFilters] = useState<ListFilters>(() => {
     const channel = params.get('channel');
-    return channel && /^[0-9a-f-]{36}$/i.test(channel)
-      ? { ...DEFAULT_FILTERS, channelId: channel }
-      : DEFAULT_FILTERS;
+    // `/inbox?labels=<id>,<id>`: the label filter lives in the address, so a filtered view can be shared or reloaded.
+    const labels = labelsFromParam(params.get('labels'));
+    return {
+      ...DEFAULT_FILTERS,
+      labels,
+      ...(channel && /^[0-9a-f-]{36}$/i.test(channel) ? { channelId: channel } : {}),
+    };
   });
   const patchFilters = useCallback(
-    (patch: Partial<ListFilters>) => setFilters((f) => ({ ...f, ...patch })),
-    [],
+    (patch: Partial<ListFilters>) => {
+      setFilters((f) => ({ ...f, ...patch }));
+      if (patch.labels) {
+        const next = new URLSearchParams(window.location.search);
+        if (patch.labels.length > 0) next.set('labels', patch.labels.join(','));
+        else next.delete('labels');
+        const qs = next.toString();
+        router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+      }
+    },
+    [router, pathname],
   );
   const list = useConversationList(filters, meId);
   const bulk = useBulkSelection(list.state.rows, filtersKey(filters), list.refresh);
@@ -143,12 +166,18 @@ export function InboxScreen() {
   const open = useCallback(
     (id: string, opts?: { focus?: boolean }) => {
       focusNext.current = opts?.focus ?? true;
-      router.push(`${pathname}?c=${id}`, { scroll: false });
+      router.push(`${pathname}?${withParam('c', id)}`, { scroll: false });
     },
     [router, pathname],
   );
   const back = useCallback(() => {
-    router.replace(pathname, { scroll: false });
+    router.replace(
+      (() => {
+        const qs = withParam('c', null);
+        return qs ? `${pathname}?${qs}` : pathname;
+      })(),
+      { scroll: false },
+    );
   }, [router, pathname]);
 
   // Another conversation: the composer goes back to a reply and the slide-over closes.
@@ -303,6 +332,35 @@ export function InboxScreen() {
     setTriaging(false);
     if (ok) toast(t('reopened'));
   }, [detail.detail, can.resolve, guarded, toast, t]);
+
+  const [labelling, setLabelling] = useState(false);
+  const applyLabel = useCallback(
+    async (input: { tagId: string } | { name: string }) => {
+      const d = detail.detail;
+      if (!d || !can.tag) return;
+      setLabelling(true);
+      const ok = await guarded(async () => {
+        list.placeRow(await inboxApi.applyLabel(d.id, input));
+        if ('name' in input) await qc.invalidateQueries({ queryKey: KEYS.labels });
+      });
+      setLabelling(false);
+      if (ok) toast(t('labelAdded'));
+    },
+    [detail.detail, can.tag, guarded, list, qc, toast, t],
+  );
+  const withdrawLabel = useCallback(
+    async (tagId: string) => {
+      const d = detail.detail;
+      if (!d || !can.tag) return;
+      setLabelling(true);
+      const ok = await guarded(async () => {
+        list.placeRow(await inboxApi.withdrawLabel(d.id, tagId));
+      });
+      setLabelling(false);
+      if (ok) toast(t('labelRemoved'));
+    },
+    [detail.detail, can.tag, guarded, list, toast, t],
+  );
 
   const addNote = useCallback(
     async (body: string) => {
@@ -509,6 +567,7 @@ export function InboxScreen() {
                           assignSelf: can.assignSelf,
                           priority: can.priority,
                           snooze: can.snooze,
+                          tag: can.tag,
                         }}
                         meId={meId}
                         onSelectAll={bulk.selectAll}
@@ -545,6 +604,16 @@ export function InboxScreen() {
                 priority: can.priority,
                 snooze: can.snooze,
               }}
+              labels={
+                can.tag
+                  ? {
+                      busy: labelling,
+                      canCreate: can.tagManage,
+                      onApply: (input) => void applyLabel(input),
+                      onWithdraw: (tagId) => void withdrawLabel(tagId),
+                    }
+                  : undefined
+              }
               triage={{
                 busy: triaging,
                 onPriority: (p) => void setPriority(p),

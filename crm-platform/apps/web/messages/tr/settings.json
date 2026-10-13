@@ -339,6 +339,11 @@
         "label": "Onay ve STOP yanıtları",
         "description": "STOP ve START kelimelerini, onay yanıtlarını, abonelikten çıkma satırını ve pazarlamanın kayıtlı onay gerektirip gerektirmediğini seçin.",
         "keywords": "onay, abonelikten çıkma, abone olma, aboneliği iptal, stop, start, kvkk, gdpr, uyumluluk, gizlilik, pazarlama"
+      },
+      "inbox-labels": {
+        "label": "Etiketler",
+        "description": "Ekibinizin sohbetlere eklediği ve gelen kutusunu filtrelediği etiketleri oluşturun.",
+        "keywords": "etiketler, işaretler, kategoriler, düzenle, filtre"
       }
     },
     "backToMarketplace": "Marketplace'e dön"

@@ -59,6 +59,8 @@ export interface InboxConversationRow {
   slaFirstResponseDue: string | null;
   slaResolutionDue: string | null;
   slaBreached: boolean;
+  /** Labels on the thread, by name. */
+  labels: Array<{ id: string; name: string; color: string | null }>;
 }
 
 /** What a mutation locks and checks: the columns visibility, state rules and optimistic locking need, nothing joined. */
@@ -81,6 +83,8 @@ export interface ListFilter {
   /** `undefined`: the open and pending threads. `'all'`: no filter. */
   status?: string;
   channelId?: number;
+  /** Label uuids: threads that carry any of them. */
+  labelIds?: string[];
   q?: string;
   archived: boolean;
   limit: number;
@@ -131,7 +135,10 @@ const SELECT_COLUMNS = sql.raw(`
   ${ts('c.created_at')} AS created_at, ${ts('c.updated_at')} AS updated_at, c.row_version,
   c.customer_language, ${ts('c.waiting_since')} AS waiting_since, ${ts('c.first_response_at')} AS first_response_at,
   ${ts('c.resolved_at')} AS resolved_at, ${ts('c.sla_first_response_due')} AS sla_first_response_due,
-  ${ts('c.sla_resolution_due')} AS sla_resolution_due, c.sla_breached`);
+  ${ts('c.sla_resolution_due')} AS sla_resolution_due, c.sla_breached,
+  COALESCE((SELECT json_agg(json_build_object('id', lt.uuid, 'name', lt.name::text, 'color', lt.color) ORDER BY lt.name)
+            FROM conversation_tag lx JOIN tags lt ON lt.org_id = lx.org_id AND lt.id = lx.tag_id
+            WHERE lx.org_id = c.org_id AND lx.conversation_id = c.id), '[]'::json) AS labels`);
 
 const SELECT_ROW = sql`${SELECT_COLUMNS}, ${channelOwnerSql('c')} AS channel_owner_user_id`;
 
@@ -194,6 +201,7 @@ function toRow(r: Raw): InboxConversationRow {
     slaFirstResponseDue: str(r.sla_first_response_due),
     slaResolutionDue: str(r.sla_resolution_due),
     slaBreached: r.sla_breached === true,
+    labels: (r.labels as InboxConversationRow['labels'] | null) ?? [],
   };
 }
 
@@ -249,6 +257,13 @@ export class ConversationsRepository {
       if (tab) where.push(tab);
     }
     if (f.channelId !== undefined) where.push(sql`c.channel_id = ${f.channelId}`);
+    if (f.labelIds && f.labelIds.length > 0) {
+      where.push(sql`EXISTS (SELECT 1 FROM conversation_tag fx JOIN tags ft ON ft.org_id = fx.org_id AND ft.id = fx.tag_id
+        WHERE fx.org_id = c.org_id AND fx.conversation_id = c.id AND ft.uuid IN (${sql.join(
+          f.labelIds.map((u) => sql`${u}::uuid`),
+          sql`, `,
+        )}))`);
+    }
     if (f.q) where.push(this.searchCondition(f.q));
     if (f.cursor) where.push(this.cursorCondition(f.cursor));
 

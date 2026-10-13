@@ -27,7 +27,9 @@
       "shortcuts": "Pintasan: j dan k untuk bergerak dalam daftar, e untuk menyelesaikan, / untuk mencari.",
       "teamChanged": "Tim diperbarui.",
       "priorityChanged": "Prioritas diperbarui",
-      "snoozed": "Percakapan ditunda"
+      "snoozed": "Percakapan ditunda",
+      "labelAdded": "Label ditambahkan",
+      "labelRemoved": "Label dihapus"
     },
     "list": {
       "title": "Inbox",
@@ -849,12 +851,52 @@
         "nothingChanged": "Tidak ada yang perlu diubah: percakapan yang dipilih sudah yang terbaru.",
         "partial": "{done} diperbarui, {unchanged} sudah yang terbaru, {failed} tidak dapat diubah. Yang gagal tetap terpilih.",
         "allFailed": "Tidak ada dari {count, plural, one {# percakapan} other {# percakapan}} yang dapat diubah."
-      }
+      },
+      "label": "Label",
+      "labelAdd": "Tambah label",
+      "labelRemove": "Hapus label"
     },
     "triage": {
       "priority": "Prioritas",
       "snooze": "Tunda",
       "wake": "Aktifkan sekarang"
+    },
+    "labels": {
+      "label": "Label",
+      "loading": "Memuat label…",
+      "loadFailed": "Tidak dapat memuat label.",
+      "none": "Belum ada label.",
+      "newLabel": "Label baru",
+      "add": "Tambah",
+      "filter": "Label",
+      "filterActive": "{count, plural, one {# label} other {# label}}",
+      "clearFilter": "Hapus filter label",
+      "screen": {
+        "back": "Kembali ke kotak masuk",
+        "title": "Label",
+        "intro": "Label menandai percakapan agar tim Anda dapat mengurutkan dan memfilternya. Label ini sama dengan yang digunakan pada kontak.",
+        "newTitle": "Label baru",
+        "editTitle": "Edit label",
+        "name": "Nama",
+        "color": "Warna",
+        "colorInvalid": "Gunakan warna hex seperti #075E54 atau nama warna.",
+        "description": "Deskripsi (opsional)",
+        "create": "Buat label",
+        "save": "Simpan perubahan",
+        "cancel": "Batal",
+        "edit": "Edit",
+        "delete": "Hapus",
+        "inUse": "{count, plural, one {# percakapan} other {# percakapan}}",
+        "emptyTitle": "Belum ada label",
+        "emptyMessage": "Buat label pertama Anda di atas, lalu pasang pada percakapan dari kotak masuk.",
+        "deleteTitle": "Hapus label ini?",
+        "deleteMessage": "\"{name}\" dipakai pada {count, plural, one {# percakapan} other {# percakapan}}. Menghapusnya akan melepasnya dari percakapan tersebut dan dari kontak mana pun yang memilikinya. Tindakan ini tidak dapat dibatalkan.",
+        "nameTaken": "Label dengan nama itu sudah ada.",
+        "conflict": "Orang lain mengubah label ini lebih dulu. Daftar telah dimuat ulang.",
+        "saved": "Label disimpan",
+        "created": "Label dibuat",
+        "deleted": "Label dihapus"
+      }
     }
   }
 }

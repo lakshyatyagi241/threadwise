@@ -339,6 +339,11 @@
         "label": "同意与 STOP 回复",
         "description": "设置 STOP 和 START 词语、确认回复、退订提示行，以及营销是否需要已记录的同意。",
         "keywords": "同意, 退订, 重新订阅, 取消订阅, stop, start, gdpr, 合规, 隐私, 营销"
+      },
+      "inbox-labels": {
+        "label": "标签",
+        "description": "创建团队用于标记会话并筛选收件箱的标签。",
+        "keywords": "标记, 标签, 分类, 整理, 筛选"
       }
     },
     "backToMarketplace": "返回应用市场"

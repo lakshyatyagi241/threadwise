@@ -35,6 +35,8 @@ import type { SnoozePreset } from '../lib/selection';
 import { computeWindow, formatWindowLeft, type WindowView } from '../lib/window';
 import { Composer, type ComposerHandle, type ComposerMode } from './composer';
 import { ShareDialog, type ShareKind } from './share-dialog';
+import { LabelChip } from './label-chip';
+import { LabelMenu } from './label-menu';
 import { TemplatePicker } from './template-picker';
 import { TriageMenu } from './triage-menu';
 import { AlertIcon, BackIcon, CheckCircleIcon, ClockIcon, PanelIcon } from './icons';
@@ -90,6 +92,13 @@ export interface ThreadPaneProps {
     onPriority: (priority: ConversationPriority) => void;
     onSnooze: (preset: SnoozePreset) => void;
     onWake: () => void;
+  };
+  /** Labels of the open conversation: present when the caller may put labels on threads. */
+  labels?: {
+    busy: boolean;
+    canCreate: boolean;
+    onApply: (input: { tagId: string } | { name: string }) => void;
+    onWithdraw: (tagId: string) => void;
   };
   onRetryDetail: () => void;
 }
@@ -218,6 +227,13 @@ export function ThreadPane(props: ThreadPaneProps) {
                 )}
                 <TypingLine conversationId={detail.id} />
               </p>
+              {detail.labels.length > 0 && (
+                <div className="mt-1 flex flex-wrap gap-1" data-testid="inbox-thread-labels">
+                  {detail.labels.map((l) => (
+                    <LabelChip key={l.id} label={l} />
+                  ))}
+                </div>
+              )}
             </div>
           </>
         ) : (
@@ -251,6 +267,15 @@ export function ThreadPane(props: ThreadPaneProps) {
             >
               {t('assignToMe')}
             </Button>
+          )}
+          {detail && props.labels && (
+            <LabelMenu
+              applied={detail.labels}
+              busy={props.labels.busy}
+              canCreate={props.labels.canCreate}
+              onApply={props.labels.onApply}
+              onWithdraw={props.labels.onWithdraw}
+            />
           )}
           {detail && props.triage && (
             <TriageMenu

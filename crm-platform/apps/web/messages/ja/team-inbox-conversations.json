@@ -27,7 +27,9 @@
       "shortcuts": "ショートカット: j と k でリストを移動、e で解決、/ で検索。",
       "teamChanged": "チームを更新しました。",
       "priorityChanged": "優先度を更新しました",
-      "snoozed": "会話をスヌーズしました"
+      "snoozed": "会話をスヌーズしました",
+      "labelAdded": "ラベルを追加しました",
+      "labelRemoved": "ラベルを外しました"
     },
     "list": {
       "title": "受信箱",
@@ -849,12 +851,52 @@
         "nothingChanged": "変更はありません。選択した会話はすでに最新です。",
         "partial": "{done}件を更新、{unchanged}件はすでに最新、{failed}件は変更できませんでした。失敗した会話は選択されたままです。",
         "allFailed": "{count, plural, one {#件の会話} other {#件の会話}}のいずれも変更できませんでした。"
-      }
+      },
+      "label": "ラベル",
+      "labelAdd": "ラベルを追加",
+      "labelRemove": "ラベルを外す"
     },
     "triage": {
       "priority": "優先度",
       "snooze": "スヌーズ",
       "wake": "今すぐ再開"
+    },
+    "labels": {
+      "label": "ラベル",
+      "loading": "ラベルを読み込み中…",
+      "loadFailed": "ラベルを読み込めませんでした。",
+      "none": "ラベルはまだありません。",
+      "newLabel": "新しいラベル",
+      "add": "追加",
+      "filter": "ラベル",
+      "filterActive": "{count, plural, one {#件のラベル} other {#件のラベル}}",
+      "clearFilter": "ラベルの絞り込みを解除",
+      "screen": {
+        "back": "受信トレイに戻る",
+        "title": "ラベル",
+        "intro": "ラベルは会話にタグを付け、チームで並べ替えや絞り込みができるようにします。連絡先で使うタグと同じものです。",
+        "newTitle": "新しいラベル",
+        "editTitle": "ラベルを編集",
+        "name": "名前",
+        "color": "色",
+        "colorInvalid": "#075E54 のような16進数カラーか色名を指定してください。",
+        "description": "説明（任意）",
+        "create": "ラベルを作成",
+        "save": "変更を保存",
+        "cancel": "キャンセル",
+        "edit": "編集",
+        "delete": "削除",
+        "inUse": "{count, plural, one {#件の会話} other {#件の会話}}",
+        "emptyTitle": "ラベルはまだありません",
+        "emptyMessage": "上で最初のラベルを作成し、受信トレイから会話に付けましょう。",
+        "deleteTitle": "このラベルを削除しますか？",
+        "deleteMessage": "\"{name}\" は{count, plural, one {#件の会話} other {#件の会話}}に付いています。削除すると、それらの会話とこのラベルを持つ連絡先から外れます。この操作は元に戻せません。",
+        "nameTaken": "同じ名前のラベルがすでにあります。",
+        "conflict": "ほかのユーザーが先にこのラベルを変更しました。一覧を再読み込みしました。",
+        "saved": "ラベルを保存しました",
+        "created": "ラベルを作成しました",
+        "deleted": "ラベルを削除しました"
+      }
     }
   }
 }

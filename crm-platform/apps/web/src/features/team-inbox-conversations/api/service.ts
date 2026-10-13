@@ -1,5 +1,8 @@
 import type {
+  ApplyConversationLabelInput,
   AssignConversationInput,
+  CreateInboxLabelInput,
+  UpdateInboxLabelInput,
   BulkConversationsInput,
   CreateConversationNoteInput,
   CreateMessageLogExportInput,
@@ -16,6 +19,8 @@ import { toApiError } from '@/lib/api/errors';
 import { listQuery, type ListFilters } from '../lib/list';
 import {
   bulkConversationsResponseSchema,
+  inboxLabelListSchema,
+  inboxLabelSchema,
   channelListResponseSchema,
   channelResponseSchema,
   conversationEventListResponseSchema,
@@ -145,6 +150,24 @@ export const inboxApi = {
     apiFetch(`/inbox/conversations/${conversationId}/snooze`, {
       method: 'POST',
       body: { rowVersion, until },
+      schema: conversationSummarySchema,
+    }),
+  labels: (signal?: AbortSignal) =>
+    apiFetch('/inbox/labels', { schema: inboxLabelListSchema, signal }),
+  createLabel: (input: CreateInboxLabelInput) =>
+    apiFetch('/inbox/labels', { method: 'POST', body: input, schema: inboxLabelSchema }),
+  updateLabel: (id: string, input: UpdateInboxLabelInput) =>
+    apiFetch(`/inbox/labels/${id}`, { method: 'PATCH', body: input, schema: inboxLabelSchema }),
+  deleteLabel: (id: string) => apiFetch(`/inbox/labels/${id}`, { method: 'DELETE' }),
+  applyLabel: (conversationId: string, input: ApplyConversationLabelInput) =>
+    apiFetch(`/inbox/conversations/${conversationId}/labels`, {
+      method: 'POST',
+      body: input,
+      schema: conversationSummarySchema,
+    }),
+  withdrawLabel: (conversationId: string, tagId: string) =>
+    apiFetch(`/inbox/conversations/${conversationId}/labels/${tagId}`, {
+      method: 'DELETE',
       schema: conversationSummarySchema,
     }),
   /** One action on up to 200 conversations; the answer names each one's outcome. */

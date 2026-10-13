@@ -28,6 +28,7 @@ import {
 } from '../lib/list';
 import type { Selection } from '../lib/selection';
 import { ConversationRow } from './conversation-row';
+import { LabelFilter } from './label-filter';
 import { FlaskIcon, RefreshIcon, SearchIcon } from './icons';
 import { useErrorText } from './parts';
 
@@ -150,6 +151,7 @@ export function ConversationList(props: ConversationListProps) {
             ))}
             <option value="all">{t('statusAll')}</option>
           </Select>
+          <LabelFilter value={filters.labels} onChange={(labels) => props.onFilters({ labels })} />
           {showChannel && (
             <Select
               aria-label={t('channelFilter')}

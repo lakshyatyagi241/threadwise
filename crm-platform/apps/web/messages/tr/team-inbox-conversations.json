@@ -27,7 +27,9 @@
       "shortcuts": "Kısayollar: listede gezinmek için j ve k, çözmek için e, aramak için / kullanın.",
       "teamChanged": "Ekip güncellendi.",
       "priorityChanged": "Öncelik güncellendi",
-      "snoozed": "Konuşma ertelendi"
+      "snoozed": "Konuşma ertelendi",
+      "labelAdded": "Etiket eklendi",
+      "labelRemoved": "Etiket kaldırıldı"
     },
     "list": {
       "title": "Gelen kutusu",
@@ -849,12 +851,52 @@
         "nothingChanged": "Değiştirilecek bir şey yok: seçilen konuşmalar zaten güncel.",
         "partial": "{done} güncellendi, {unchanged} zaten güncel, {failed} değiştirilemedi. Başarısız olanlar seçili kalır.",
         "allFailed": "{count, plural, one {# konuşma} other {# konuşma}} değiştirilemedi."
-      }
+      },
+      "label": "Etiket",
+      "labelAdd": "Etiket ekle",
+      "labelRemove": "Etiketi kaldır"
     },
     "triage": {
       "priority": "Öncelik",
       "snooze": "Ertele",
       "wake": "Şimdi göster"
+    },
+    "labels": {
+      "label": "Etiket",
+      "loading": "Etiketler yükleniyor…",
+      "loadFailed": "Etiketler yüklenemedi.",
+      "none": "Henüz etiket yok.",
+      "newLabel": "Yeni etiket",
+      "add": "Ekle",
+      "filter": "Etiketler",
+      "filterActive": "{count, plural, one {# etiket} other {# etiket}}",
+      "clearFilter": "Etiket filtresini temizle",
+      "screen": {
+        "back": "Gelen kutusuna dön",
+        "title": "Etiketler",
+        "intro": "Etiketler, ekibinizin sohbetleri sıralayıp filtreleyebilmesi için onları işaretler. Kişilerde kullanılan etiketlerle aynıdır.",
+        "newTitle": "Yeni etiket",
+        "editTitle": "Etiketi düzenle",
+        "name": "Ad",
+        "color": "Renk",
+        "colorInvalid": "#075E54 gibi bir onaltılık renk ya da renk adı kullanın.",
+        "description": "Açıklama (isteğe bağlı)",
+        "create": "Etiket oluştur",
+        "save": "Değişiklikleri kaydet",
+        "cancel": "İptal",
+        "edit": "Düzenle",
+        "delete": "Sil",
+        "inUse": "{count, plural, one {# sohbet} other {# sohbet}}",
+        "emptyTitle": "Henüz etiket yok",
+        "emptyMessage": "Yukarıdan ilk etiketinizi oluşturun, ardından gelen kutusundan sohbetlere ekleyin.",
+        "deleteTitle": "Bu etiket silinsin mi?",
+        "deleteMessage": "\"{name}\" etiketi {count, plural, one {# sohbette} other {# sohbette}} kullanılıyor. Silerseniz bu sohbetlerden ve etiketi taşıyan tüm kişilerden kaldırılır. Bu işlem geri alınamaz.",
+        "nameTaken": "Bu ada sahip bir etiket zaten var.",
+        "conflict": "Bu etiketi başka biri önce değiştirdi. Liste yeniden yüklendi.",
+        "saved": "Etiket kaydedildi",
+        "created": "Etiket oluşturuldu",
+        "deleted": "Etiket silindi"
+      }
     }
   }
 }

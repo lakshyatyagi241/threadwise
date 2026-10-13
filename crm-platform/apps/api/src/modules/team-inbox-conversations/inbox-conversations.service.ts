@@ -113,6 +113,7 @@ export class InboxConversationsService {
         tab: query.tab,
         status: query.status,
         channelId,
+        labelIds: query.labels,
         q: query.q,
         archived: query.archived,
         limit: query.limit,
