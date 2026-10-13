@@ -36,7 +36,7 @@ export function useUpdateProfile() {
 }
 
 /**
- * Saves the light/dark choice to the account. The session in the cache changes at once, so the screen switches the moment the row
+ * Saves the Appearance choice (light, dark or the phone's own setting) to the account. The session in the cache changes at once, so the screen switches the moment the row
  * is pressed; if the server refuses, the old theme comes back and the caller shows why.
  */
 export function useSetMode() {

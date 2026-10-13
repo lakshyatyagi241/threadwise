@@ -34,7 +34,10 @@ const themeInCache = (client: QueryClient) =>
   client.getQueryData<SessionResponse>(sessionKey)?.user.theme;
 
 let client: QueryClient | undefined;
-async function show() {
+async function show(theme: SessionResponse['user']['theme'] = 'paper') {
+  // The screen asks for the session itself, so the server (the mock) must hold the same account the test starts from.
+  const account = { ...session, user: { ...session.user, theme } };
+  sessionCall.mockResolvedValue(account);
   const view = await renderApp(
     <SafeAreaProvider initialMetrics={frame}>
       <AppearanceScreen />
@@ -42,7 +45,7 @@ async function show() {
   );
   client = view.queryClient;
   // The Menu has loaded the session before anyone gets here.
-  client.setQueryData(sessionKey, session);
+  client.setQueryData(sessionKey, account);
   return view;
 }
 
@@ -62,24 +65,29 @@ afterEach(async () => {
   }
 });
 
+const checked = (name: string) =>
+  screen.getByRole('radio', { name }).props.accessibilityState.checked;
+
 describe('AppearanceScreen', () => {
-  it('offers Light mode and Dark mode, ticking the one the app is using', async () => {
+  it('offers Light mode, Dark mode and Use device settings, which is ticked for an account that never chose', async () => {
     await show();
-    expect(screen.getByRole('radio', { name: 'Light mode' }).props.accessibilityState.checked).toBe(
-      true,
-    );
-    expect(screen.getByRole('radio', { name: 'Dark mode' }).props.accessibilityState.checked).toBe(
-      false,
-    );
+    expect(checked('Light mode')).toBe(false);
+    expect(checked('Dark mode')).toBe(false);
+    expect(checked('Use device settings')).toBe(true);
     expect(screen.getByText('Saved to your account.')).toBeTruthy();
   });
 
-  it('ticks Dark when the app is dark, whoever chose it', async () => {
-    mockScheme = 'dark';
-    await show();
-    expect(screen.getByRole('radio', { name: 'Dark mode' }).props.accessibilityState.checked).toBe(
-      true,
-    );
+  it('ticks Dark when the account is on dark', async () => {
+    await show('dark');
+    expect(checked('Dark mode')).toBe(true);
+    expect(checked('Light mode')).toBe(false);
+    expect(checked('Use device settings')).toBe(false);
+  });
+
+  it('ticks Light when the account is on bright', async () => {
+    await show('bright');
+    expect(checked('Light mode')).toBe(true);
+    expect(checked('Use device settings')).toBe(false);
   });
 
   it('saves the choice to the account and switches the app at once, before the server answers', async () => {
@@ -91,21 +99,40 @@ describe('AppearanceScreen', () => {
       expect(updateCall).toHaveBeenCalledWith({ theme: 'dark' }, expect.any(String)),
     );
     expect(themeInCache(view.queryClient)).toBe('dark');
+    expect(checked('Dark mode')).toBe(true);
     await act(async () => answer({} as never));
   });
 
   it('saves Light as the bright theme', async () => {
-    mockScheme = 'dark';
     updateCall.mockResolvedValue({} as never);
-    await show();
+    await show('dark');
     await fireEvent.press(screen.getByRole('radio', { name: 'Light mode' }));
     await waitFor(() =>
       expect(updateCall).toHaveBeenCalledWith({ theme: 'bright' }, expect.any(String)),
     );
   });
 
-  it('does nothing when the mode already in use is pressed', async () => {
+  it('saves Use device settings as the paper theme, which gives the choice back to the phone', async () => {
+    let answer: (profile: never) => void = () => undefined;
+    updateCall.mockReturnValue(new Promise((resolve) => (answer = resolve)));
+    const view = await show('dark');
+    await fireEvent.press(screen.getByRole('radio', { name: 'Use device settings' }));
+    await waitFor(() =>
+      expect(updateCall).toHaveBeenCalledWith({ theme: 'paper' }, expect.any(String)),
+    );
+    expect(themeInCache(view.queryClient)).toBe('paper');
+    expect(checked('Use device settings')).toBe(true);
+    await act(async () => answer({} as never));
+  });
+
+  it('does nothing when the choice already saved is pressed', async () => {
     await show();
+    await fireEvent.press(screen.getByRole('radio', { name: 'Use device settings' }));
+    expect(updateCall).not.toHaveBeenCalled();
+  });
+
+  it('does nothing when Light is pressed on an account already on bright', async () => {
+    await show('bright');
     await fireEvent.press(screen.getByRole('radio', { name: 'Light mode' }));
     expect(updateCall).not.toHaveBeenCalled();
   });
@@ -116,5 +143,6 @@ describe('AppearanceScreen', () => {
     await fireEvent.press(screen.getByRole('radio', { name: 'Dark mode' }));
     expect(await screen.findByText("Couldn't save your choice. Try again.")).toBeTruthy();
     await waitFor(() => expect(themeInCache(view.queryClient)).toBe('paper'));
+    expect(checked('Use device settings')).toBe(true);
   });
 });

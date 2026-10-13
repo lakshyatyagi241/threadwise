@@ -371,7 +371,7 @@
     }
   },
   "tabs": {
-    "summary": "Summary",
+    "dashboard": "Dashboard",
     "inbox": "Inbox",
     "contacts": "Contacts",
     "menu": "Menu"
@@ -426,6 +426,7 @@
       "title": "Appearance",
       "light": "Light mode",
       "dark": "Dark mode",
+      "device": "Use device settings",
       "hint": "Saved to your account.",
       "failed": "Couldn't save your choice. Try again."
     }

@@ -16,6 +16,7 @@ import { signOut } from '@/lib/auth/sign-out';
 import { can, useSession } from '@/lib/session/use-session';
 import { MIN_TOUCH_TARGET, radius, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
+import { modeOf } from './appearance';
 import { usePrivacyLink } from './use-privacy-link';
 import { useUpdateCheck, type UpdateState } from './use-update-check';
 
@@ -40,7 +41,7 @@ type Group = 'dashboard' | 'contacts';
  */
 export function MenuScreen() {
   const { t } = useTranslation();
-  const { colors, scheme } = useTheme();
+  const { colors } = useTheme();
   const router = useRouter();
   const queryClient = useQueryClient();
   const session = useSession();
@@ -212,7 +213,7 @@ export function MenuScreen() {
           <Row
             icon="contrast-outline"
             label={t('menu.appearance.title')}
-            hint={t(`menu.appearance.${scheme}`)}
+            hint={t(`menu.appearance.${modeOf(user?.theme)}`)}
             onPress={() => router.navigate('/appearance')}
           />
           <Row

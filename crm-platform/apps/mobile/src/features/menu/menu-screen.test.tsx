@@ -37,8 +37,11 @@ const links = (privacy: string) =>
     ReturnType<typeof fetchLegalLinks>
   >;
 
-async function show(permissions: Record<string, 'all' | 'team' | 'own'> = session.permissions) {
-  sessionCall.mockResolvedValue({ ...session, permissions });
+async function show(
+  permissions: Record<string, 'all' | 'team' | 'own'> = session.permissions,
+  theme: (typeof session)['user']['theme'] = 'paper',
+) {
+  sessionCall.mockResolvedValue({ ...session, permissions, user: { ...session.user, theme } });
   const view = await renderApp(
     <SafeAreaProvider initialMetrics={frame}>
       <MenuScreen />
@@ -159,11 +162,19 @@ describe('MenuScreen', () => {
       expect(mockNavigate).toHaveBeenCalledWith('/profile');
     });
 
-    it('opens Appearance, and says which mode the app is in', async () => {
+    it('opens Appearance, and says what is chosen: the phone, for an account that never chose', async () => {
       await show();
-      expect(screen.getByText('Light mode')).toBeTruthy();
+      expect(screen.getByText('Use device settings')).toBeTruthy();
       await press('Appearance');
       expect(mockNavigate).toHaveBeenCalledWith('/appearance');
+    });
+
+    it.each([
+      ['bright', 'Light mode'],
+      ['dark', 'Dark mode'],
+    ] as const)('says "%s" accounts are in %s', async (theme, label) => {
+      await show(session.permissions, theme);
+      expect(screen.getByText(label)).toBeTruthy();
     });
 
     it("opens this app's settings on the phone for the device permissions", async () => {

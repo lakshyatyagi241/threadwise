@@ -13,7 +13,7 @@ interface TabSpec {
   name: string;
   icon: IconName;
   iconFocused: IconName;
-  label: 'summary' | 'inbox' | 'contacts' | 'menu';
+  label: 'dashboard' | 'inbox' | 'contacts' | 'menu';
   /** The permission that unlocks the tab; the menu is for everyone. */
   permission?: string;
 }
@@ -23,7 +23,7 @@ const TABS: readonly TabSpec[] = [
     name: 'index',
     icon: 'grid-outline',
     iconFocused: 'grid',
-    label: 'summary',
+    label: 'dashboard',
     permission: 'dash.dashboard.read',
   },
   {

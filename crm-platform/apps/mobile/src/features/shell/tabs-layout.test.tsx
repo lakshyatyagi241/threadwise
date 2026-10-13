@@ -35,7 +35,7 @@ const structure = {
 };
 
 const showing = () => MARKERS.filter((m) => screen.queryByText(m)).join();
-const tab = (name: 'Summary' | 'Inbox' | 'Contacts' | 'Menu') =>
+const tab = (name: 'Dashboard' | 'Inbox' | 'Contacts' | 'Menu') =>
   fireEvent.press(screen.getByLabelText(name));
 /** What the phone's Back button does: the router goes back when it can; when it cannot, Android leaves the app. */
 const back = async () => {
@@ -67,7 +67,7 @@ describe('the tabs and the Back button', () => {
     await renderRouter(structure, { initialUrl: '/' });
     await tab('Menu');
     // The Dashboard is the first tab: it used to be the one place Back could not return from.
-    await tab('Summary');
+    await tab('Dashboard');
     expect(showing()).toBe('DASHBOARD');
     expect(await back()).toBe('MENU');
     expect(await back()).toBe('DASHBOARD');

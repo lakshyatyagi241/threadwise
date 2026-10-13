@@ -6,30 +6,35 @@ import { Banner } from '@/components/ui/banner';
 import { Icon, type IconName } from '@/components/ui/icon';
 import { StackHeader } from '@/components/ui/stack-header';
 import { Text } from '@/components/ui/text';
+import { useSession } from '@/lib/session/use-session';
 import { MIN_TOUCH_TARGET, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
-import type { Mode } from './appearance';
+import { modeOf, type Mode } from './appearance';
 import { useSetMode } from './use-profile';
 
 const MODES: readonly { mode: Mode; icon: IconName }[] = [
   { mode: 'light', icon: 'sunny-outline' },
   { mode: 'dark', icon: 'moon-outline' },
+  { mode: 'device', icon: 'phone-portrait-outline' },
 ];
 
 /**
- * Appearance: Light mode or Dark. The choice is saved to the account, so it survives a restart and a new phone; the screen
- * changes the moment a row is pressed. The tick shows what the app is using now, whether the person chose it or the phone did.
+ * Appearance: Light mode, Dark mode, or Use device settings (follow the phone's own light/dark setting, which is also what a new
+ * account does). The choice is saved to the account, so it survives a restart and a new phone; the screen changes the moment a
+ * row is pressed. The tick shows what is saved on the account.
  */
 export function AppearanceScreen() {
   const { t } = useTranslation();
-  const { colors, scheme } = useTheme();
+  const { colors } = useTheme();
   const router = useRouter();
+  const session = useSession();
   const setMode = useSetMode();
   const [failed, setFailed] = useState(false);
+  const current = modeOf(session.data?.user.theme);
 
   const back = () => (router.canGoBack() ? router.back() : router.replace('/menu'));
   const choose = (mode: Mode) => {
-    if (mode === scheme) return;
+    if (mode === current) return;
     setFailed(false);
     setMode.mutate(mode, { onError: () => setFailed(true) });
   };
@@ -44,7 +49,7 @@ export function AppearanceScreen() {
       ) : null}
       <View accessibilityRole="radiogroup">
         {MODES.map(({ mode, icon }) => {
-          const selected = mode === scheme;
+          const selected = mode === current;
           return (
             <Pressable
               key={mode}
