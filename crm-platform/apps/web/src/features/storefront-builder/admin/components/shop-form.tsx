@@ -278,7 +278,7 @@ export function ShopForm({
           {noDevices ? (
             <div className="rounded-lg border border-border bg-muted/50 px-4 py-3 text-sm">
               {t('device.none')}{' '}
-              <Link href="/channels" className="font-semibold text-primary hover:underline">
+              <Link href="/channels/whatsapp" className="font-semibold text-primary hover:underline">
                 {t('device.pair')}
               </Link>
             </div>

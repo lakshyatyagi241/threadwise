@@ -102,7 +102,8 @@
         "added": "{name} se añadió al espacio de trabajo.",
         "rolesUpdated": "Roles actualizados para {name}.",
         "deactivated": "{name} se desactivó.",
-        "reactivated": "{name} se reactivó."
+        "reactivated": "{name} se reactivó.",
+        "invited": "Invitación enviada a {name}."
       },
       "deactivate": {
         "action": "Desactivar",
@@ -123,7 +124,13 @@
         "passwordShort": "La contraseña debe tener al menos 8 caracteres.",
         "generate": "Generar",
         "role": "Rol",
-        "submit": "Añadir miembro"
+        "submit": "Añadir miembro",
+        "inviteHint": "Les enviamos por correo un enlace para que definan su propia contraseña. El enlace funciona una vez y caduca en unos días.",
+        "submitInvite": "Enviar invitación",
+        "linkNotSent": "No se pudo enviar el correo a {email}. Copia este enlace y entrégalo; no se volverá a mostrar.",
+        "copyLink": "Copiar enlace",
+        "copied": "Copiado",
+        "done": "Listo"
       },
       "changeRole": {
         "title": "Cambiar roles de {name}",

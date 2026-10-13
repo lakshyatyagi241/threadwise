@@ -14,7 +14,9 @@
       "settingsInvalid": "Từ khóa cần ít nhất một chữ cái hoặc chữ số, và phải còn ít nhất một từ khóa STOP khi bật tính năng nhận diện.",
       "rateLimited": "Quá nhiều yêu cầu. Vui lòng đợi một lát rồi thử lại.",
       "validation": "Một số giá trị không hợp lệ. Hãy kiểm tra biểu mẫu và thử lại.",
-      "unexpected": "Đã xảy ra lỗi. Hãy thử lại."
+      "unexpected": "Đã xảy ra lỗi. Hãy thử lại.",
+      "exportInProgress": "Tệp bằng chứng đang được chuẩn bị. Hãy đợi hoàn tất rồi thử lại.",
+      "exportNotReady": "Tệp đó chưa sẵn sàng hoặc đã hết hạn. Hãy chuẩn bị tệp mới."
     },
     "settings": {
       "title": "Đồng ý nhận tin và phản hồi STOP",
@@ -169,7 +171,35 @@
     "import": {
       "legend": "Sự đồng ý",
       "label": "Tôi có sự đồng ý để nhắn tin cho các liên hệ này",
-      "hint": "Nếu được chọn, mọi liên hệ trong tệp sẽ được ghi nhận là đã đồng ý nhận tiếp thị, với tên tệp làm bằng chứng. Nếu không chọn, quá trình nhập không ghi nhận sự đồng ý nào. Các liên hệ đã từ chối nhận tin vẫn giữ trạng thái từ chối."
+      "hint": "Nếu được chọn, mọi liên hệ trong tệp sẽ được ghi nhận là đã đồng ý nhận tiếp thị, với tên tệp làm bằng chứng. Nếu không chọn, quá trình nhập không ghi nhận sự đồng ý nào. Các liên hệ đã từ chối nhận tin vẫn giữ trạng thái từ chối.",
+      "hintColumn": "Cột được ánh xạ tới sự đồng ý tiếp thị sẽ quyết định ai được ghi nhận: chỉ những hàng ghi có mới được ghi nhận sự đồng ý, với tên tệp làm bằng chứng. Không, ô trống hoặc từ không xác định sẽ không ghi nhận gì. Các liên hệ đã hủy đăng ký vẫn ở trạng thái đã hủy.",
+      "columnSummary": "{granted} hàng ghi có và sẽ được ghi nhận. {notGranted} ghi không hoặc để trống và không có bản ghi đồng ý nào.",
+      "unrecognised": "{count, plural, one {# hàng có} other {# hàng có}} giá trị đồng ý không phải có hoặc không ({values}). {count, plural, one {Giá trị này} other {Các giá trị này}} được coi là không được đồng ý. Hãy dùng yes / no, true / false hoặc 1 / 0.",
+      "columnIgnored": "Cột đồng ý sẽ không có tác dụng cho đến khi bạn chọn ô ở trên."
+    },
+    "systemLine": {
+      "withdrawn": "Liên hệ đã trả lời {keyword}: đã hủy đăng ký tiếp thị",
+      "granted": "Liên hệ đã trả lời {keyword}: đã đăng ký lại tiếp thị"
+    },
+    "proof": {
+      "title": "Tệp bằng chứng đã chuẩn bị",
+      "prepare": "Chuẩn bị tệp bằng chứng đầy đủ",
+      "preparing": "Đang chuẩn bị tệp bằng chứng",
+      "largeHint": "Sổ ghi có hơn {max} sự kiện nên tệp được chuẩn bị ở chế độ nền",
+      "large": "Sổ ghi có hơn {max} sự kiện, nhiều hơn mức có thể tải trực tiếp. Hãy chuẩn bị tệp đầy đủ: tệp được tạo ở chế độ nền và bạn sẽ nhận email khi sẵn sàng.",
+      "none": "Chưa có tệp nào được chuẩn bị.",
+      "keptFor": "Tệp đã chuẩn bị có thể tải xuống trong {days} ngày, sau đó sẽ bị xóa. Chỉ chuẩn bị một tệp tại một thời điểm.",
+      "rows": "{count, plural, one {# sự kiện} other {# sự kiện}}",
+      "expires": "có đến {date}",
+      "download": "Tải CSV",
+      "failed": "Không thể tạo tệp. Hãy chuẩn bị lại.",
+      "status": {
+        "queued": "Đang chờ",
+        "running": "Đang tạo",
+        "ready": "Sẵn sàng",
+        "failed": "Lỗi",
+        "expired": "Đã hết hạn"
+      }
     }
   }
 }

@@ -3,7 +3,8 @@
     "nav": {
       "title": "Połączenia",
       "description": "Włącz lub wyłącz połączenia WhatsApp dla każdego numeru.",
-      "keywords": "połączenie, połączenia, głos, telefon, połączenia whatsapp, przycisk połączenia"
+      "keywords": "połączenie, połączenia, głos, telefon, połączenia whatsapp, przycisk połączenia",
+      "callLogs": "Rejestr połączeń"
     },
     "common": {
       "dismiss": "Zamknij"
@@ -86,7 +87,9 @@
       "FORBIDDEN": "Nie masz uprawnień do korzystania z połączeń.",
       "PLAN_FEATURE_LOCKED": "Twój plan nie obejmuje połączeń WhatsApp.",
       "NETWORK": "Błąd sieci - spróbuj ponownie.",
-      "UNEXPECTED": "Coś poszło nie tak. Spróbuj ponownie."
+      "UNEXPECTED": "Coś poszło nie tak. Spróbuj ponownie.",
+      "CALL_PLAYBACK_LINK_INVALID": "Link do nagrania wygasł. Naciśnij odtwarzanie ponownie, aby uzyskać nowy.",
+      "CALL_RANGE_INVALID": "Te daty są nieprawidłowe: początek nie może być po końcu, zakres może obejmować najwyżej rok, a strefa czasowa musi istnieć."
     },
     "settings": {
       "title": "Połączenia",

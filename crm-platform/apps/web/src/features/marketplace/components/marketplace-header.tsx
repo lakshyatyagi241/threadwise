@@ -45,8 +45,9 @@ export function MarketplaceHeader({ section }: { section: HeaderSection }) {
         ? 'border-primary text-foreground'
         : 'border-transparent text-muted-foreground hover:text-foreground',
     );
+  // Sticky under the 56px top bar; the bleed (-mx / px) lets its background cover the page padding while the cards scroll beneath it.
   return (
-    <header className="space-y-3">
+    <header className="sticky top-14 z-[35] -mx-4 -mt-4 space-y-3 bg-background px-4 pt-4 md:-mx-6 md:-mt-6 md:px-6 md:pt-6">
       <div>
         <h1 className="text-2xl font-semibold">{t('title')}</h1>
         <p className="mt-1 text-sm text-muted-foreground">{t('subtitle')}</p>

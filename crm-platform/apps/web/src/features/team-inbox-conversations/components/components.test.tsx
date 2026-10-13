@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { NextIntlClientProvider } from 'next-intl';
 import type { ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -24,9 +25,11 @@ const messagesAr = JSON.parse(
 
 const html = (el: ReactElement) =>
   renderToStaticMarkup(
-    <NextIntlClientProvider locale="en" messages={messages} timeZone="UTC">
-      {el}
-    </NextIntlClientProvider>,
+    <QueryClientProvider client={new QueryClient()}>
+      <NextIntlClientProvider locale="en" messages={messages} timeZone="UTC">
+        {el}
+      </NextIntlClientProvider>
+    </QueryClientProvider>,
   );
 
 /** The attribute, not the `disabled:` utility classes every textarea carries. */
@@ -116,10 +119,8 @@ describe('MessageBubble', () => {
     expect(out).toContain('aria-label="Read"');
   });
 
-  it("names the member who wrote in a WhatsApp group, with their number", () => {
-    const out = bubble(
-      message(3, { group: { participant: '919900000001', senderName: 'Asha' } }),
-    );
+  it('names the member who wrote in a WhatsApp group, with their number', () => {
+    const out = bubble(message(3, { group: { participant: '919900000001', senderName: 'Asha' } }));
     expect(out).toContain('data-testid="inbox-group-author"');
     expect(out).toContain('Asha');
     expect(out).toContain('919900000001');
@@ -134,16 +135,87 @@ describe('MessageBubble', () => {
     );
   });
 
-  it('shows the delivery tally of a message sent to a group, and nothing before Meta reports', () => {
+  it('shows the delivery tally of a message sent to a group: reached of the group size, read, failed, billing split', () => {
     const out = bubble(
-      outbound(4, { status: 'delivered', groupDelivery: { deliveredTo: 4, billable: 3, free: 1 } }),
+      outbound(4, {
+        status: 'delivered',
+        groupDelivery: { members: 8, deliveredTo: 5, readBy: 2, failed: 1, billable: 4, free: 1 },
+      }),
     );
     expect(out).toContain('data-testid="inbox-group-tally"');
-    expect(out).toContain('Delivered to 4 members: 3 billed, 1 free');
+    expect(out).toContain('Delivered to 5 of 8, read by 2, 1 failed');
+    expect(out).toContain('data-testid="inbox-group-billing"');
+    expect(out).toContain('4 billed, 1 free');
+  });
+
+  it('leaves out "read by" and "failed" when nobody read it or it failed for nobody', () => {
+    const out = bubble(
+      outbound(4, {
+        status: 'delivered',
+        groupDelivery: { members: 8, deliveredTo: 5, readBy: 0, failed: 0, billable: 5, free: 0 },
+      }),
+    );
+    expect(out).toContain('Delivered to 5 of 8');
+    expect(out).not.toContain('read by');
+    expect(out).not.toContain('failed');
+  });
+
+  it('drops "of N" when the group size was not known, or has shrunk below the count reached', () => {
+    const unknown = bubble(
+      outbound(4, { groupDelivery: { members: 0, deliveredTo: 3, billable: 3, free: 0 } }),
+    );
+    expect(unknown).toContain('Delivered to 3 members');
+    expect(unknown).not.toContain(' of ');
+    const one = bubble(
+      outbound(4, { groupDelivery: { members: 0, deliveredTo: 1, billable: 1, free: 0 } }),
+    );
+    expect(one).toContain('Delivered to 1 member');
+    const shrunk = bubble(
+      outbound(4, {
+        groupDelivery: { members: 2, deliveredTo: 3, readBy: 1, billable: 3, free: 0 },
+      }),
+    );
+    expect(shrunk).toContain('Delivered to 3 members, read by 1');
+  });
+
+  it('shows a tally for a message that has only failed so far, and nothing before Meta reports', () => {
+    expect(
+      bubble(
+        outbound(4, {
+          groupDelivery: { members: 8, deliveredTo: 0, failed: 2, billable: 2, free: 0 },
+        }),
+      ),
+    ).toContain('Delivered to 0 of 8, 2 failed');
     expect(
       bubble(outbound(4, { groupDelivery: { deliveredTo: 0, billable: 0, free: 0 } })),
     ).not.toContain('inbox-group-tally');
     expect(bubble(outbound(4))).not.toContain('inbox-group-tally');
+  });
+
+  it('renders the tally in Arabic (RTL copy) without losing a number', () => {
+    const out = renderToStaticMarkup(
+      <NextIntlClientProvider locale="ar" messages={messagesAr} timeZone="UTC">
+        <ul>
+          <MessageBubble
+            message={outbound(4, {
+              status: 'delivered',
+              groupDelivery: {
+                members: 8,
+                deliveredTo: 5,
+                readBy: 2,
+                failed: 0,
+                billable: 4,
+                free: 1,
+              },
+            })}
+            quoted={null}
+            onRetry={asyncNoop}
+          />
+        </ul>
+      </NextIntlClientProvider>,
+    );
+    expect(out).toContain('تم التسليم إلى 5 من 8، قرأها 2');
+    expect(out).toContain('4 مدفوعة، 1 مجانية');
   });
 
   it('shows the failure reason with a Retry button for a failed message', () => {

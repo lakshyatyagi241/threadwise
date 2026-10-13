@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect, useRef, useSyncExternalStore } from 'react';
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { useTranslations } from 'next-intl';
+import ViewWeekOutlinedIcon from '@mui/icons-material/ViewWeekOutlined';
 import {
   Button,
   Input,
   Menu,
-  MenuCheckboxItem,
   MenuItem,
   MenuLabel,
   MenuRadioItem,
@@ -20,6 +20,7 @@ import type { ContactGroup, ContactStats } from '../api/schemas';
 import type { ColumnDef, ColumnId } from '../lib/columns';
 import type { Choice } from '../lib/option-sets';
 import { AdvancedFilter } from '@/features/segments';
+import { ColumnsModal } from './columns-modal';
 import { BulkPickers, type BulkPicker, type TagChoice } from './bulk-bar';
 import {
   ChevronDownIcon,
@@ -31,7 +32,6 @@ import {
   RefreshIcon,
   SearchIcon,
   SendIcon,
-  SettingsIcon,
   UploadIcon,
   UsersPlusIcon,
 } from './icons';
@@ -110,8 +110,10 @@ export interface ContactsToolbarProps {
   onTagApply: (action: 'add' | 'remove', choice: TagChoice) => Promise<boolean>;
 
   allColumns: readonly ColumnDef[];
-  visibleIds: ReadonlySet<ColumnId>;
-  onColumn: (id: ColumnId, on: boolean) => void;
+  /** The columns drawn now, in order. */
+  columnIds: readonly ColumnId[];
+  /** Save from the columns dialog: the chosen columns in their chosen order. */
+  onApplyColumns: (ids: ColumnId[]) => void;
   onResetColumns: () => void;
   /** Opens the bulk Update dialog for the selected contacts. */
   onUpdateSelected: () => void;
@@ -147,6 +149,9 @@ function useShortcutLabel() {
  */
 export function ContactsToolbar(p: ContactsToolbarProps) {
   const t = useTranslations('contacts-attributes-tags.list');
+  const [columnsOpen, setColumnsOpen] = useState(false);
+  // The panel closes on a press outside it, the button included; this stops that press from reopening it.
+  const wasOpen = useRef(false);
   const tb = useTranslations('contacts-attributes-tags.bulk');
   // A viewer can do none of these: an empty dropdown would only be a button that opens nothing.
   const hasMoreActions = Object.values(p.can).some(Boolean);
@@ -392,39 +397,27 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
         )}
 
         <div className="ms-auto flex items-center gap-2">
-          <Menu
-            label={t('modifyColumns')}
-            align="end"
-            triggerClassName={trigger}
-            triggerProps={{ title: t('modifyColumns') }}
-            trigger={
-              <>
-                <SettingsIcon className="size-4 text-muted-foreground" />
-                {t('columns')}
-              </>
-            }
-          >
-            {p.allColumns.map((c) => {
-              const locked = c.id === 'name';
-              return (
-                <MenuCheckboxItem
-                  key={c.id}
-                  checked={p.visibleIds.has(c.id)}
-                  disabled={locked}
-                  onCheckedChange={(on) => p.onColumn(c.id, on)}
-                >
-                  {'key' in c.label ? t(c.label.key) : c.label.text}
-                </MenuCheckboxItem>
-              );
-            })}
-            <MenuSeparator />
-            {p.onAddColumnField && (
-              <MenuItem onSelect={p.onAddColumnField}>{t('addColumnField')}</MenuItem>
-            )}
-            <MenuItem keepOpen onSelect={p.onResetColumns}>
-              {t('resetColumns')}
-            </MenuItem>
-          </Menu>
+          <div className="relative">
+            <button
+              type="button"
+              onPointerDown={() => (wasOpen.current = columnsOpen)}
+              onClick={() => setColumnsOpen(!wasOpen.current)}
+              title={t('columns')}
+              aria-label={t('columns')}
+              className={iconBtn}
+            >
+              <ViewWeekOutlinedIcon fontSize="small" />
+            </button>
+            <ColumnsModal
+              open={columnsOpen}
+              allColumns={p.allColumns}
+              current={p.columnIds}
+              onSave={p.onApplyColumns}
+              onReset={p.onResetColumns}
+              onAddField={p.onAddColumnField}
+              onClose={() => setColumnsOpen(false)}
+            />
+          </div>
           <button
             type="button"
             onClick={p.onRefresh}

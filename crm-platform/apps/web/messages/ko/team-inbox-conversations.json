@@ -25,7 +25,11 @@
       "pickTitle": "대화 선택",
       "pickMessage": "목록에서 대화를 선택하여 읽고 답장하세요. 새 메시지는 자동으로 여기에 표시됩니다.",
       "shortcuts": "단축키: j와 k로 목록 이동, e로 완료 처리, /로 검색",
-      "teamChanged": "팀이 업데이트되었습니다."
+      "teamChanged": "팀이 업데이트되었습니다.",
+      "priorityChanged": "우선순위가 업데이트되었습니다",
+      "snoozed": "대화를 일시 중지했습니다",
+      "labelAdded": "라벨을 추가했습니다",
+      "labelRemoved": "라벨을 제거했습니다"
     },
     "list": {
       "title": "수신함",
@@ -101,7 +105,9 @@
           "title": "모든 대화를 확인했습니다",
           "message": "고객의 새 메시지가 있는 대화가 여기에 표시됩니다."
         }
-      }
+      },
+      "select": "선택",
+      "selectDone": "완료"
     },
     "status": {
       "received": "수신됨",
@@ -139,13 +145,15 @@
       "logNotReady": "이 내보내기는 아직 준비되지 않았거나 만료되었습니다. 다시 요청하세요.",
       "groupSuspended": "Meta가 이 그룹을 정지했으므로 Meta가 해제할 때까지 메시지를 보낼 수 없습니다.",
       "walletEmpty": "메시지 지갑 잔액이 이 그룹 메시지(멤버당 1회 과금)를 감당할 수 없습니다. 충전한 후 다시 시도하세요.",
+      "groupPlanLocked": "현재 요금제에는 WhatsApp 그룹이 포함되어 있지 않아 이 그룹에 메시지를 보낼 수 없습니다. 관리자에게 요금제 업그레이드를 요청하세요.",
       "groupLeft": "이 번호는 그룹을 나갔으므로 더 이상 그곳에 메시지를 보낼 수 없습니다.",
       "groupAnnounceOnly": "이 그룹에서는 관리자만 메시지를 보낼 수 있으며, 이 번호는 관리자가 아닙니다.",
       "groupRateLimited": "짧은 시간 동안 이 번호에서 보낸 그룹 메시지가 너무 많습니다. 1분 후에 다시 시도해 주세요.",
       "groupUnavailable": "WhatsApp이 이 그룹 메시지를 수락하지 않았습니다. 몇 분 후에 다시 시도해 주세요.",
       "savedReplyGone": "이 저장된 답변은 더 이상 존재하지 않습니다.",
       "savedReplyChannel": "이 저장된 답변은 이 유형의 채널용이 아닙니다.",
-      "shortcutTaken": "다른 저장된 답변이 이미 해당 단축키를 사용하고 있습니다."
+      "shortcutTaken": "다른 저장된 답변이 이미 해당 단축키를 사용하고 있습니다.",
+      "importInvalid": "이 파일은 저장된 답장으로 읽을 수 없습니다. 첫 행에 title, shortcut, body 열이 있어야 하며, 최대 1,000행까지 가능합니다."
     },
     "bubble": {
       "kind": {
@@ -213,7 +221,9 @@
       },
       "deliveryLog": "전송 로그",
       "groupMember": "그룹 멤버",
-      "groupTally": "{delivered, plural, other {#명의 멤버}}에게 전달됨: 과금 {billable}, 무료 {free}"
+      "groupTally": "{members}명 중 {delivered}명에게 전달됨{read, plural, =0 {} other {, #명 읽음}}{failed, plural, =0 {} other {, #건 실패}}",
+      "groupTallyNoTotal": "{delivered, plural, other {#명의 멤버}}에게 전달됨{read, plural, =0 {} other {, #명 읽음}}{failed, plural, =0 {} other {, #건 실패}}",
+      "groupTallyBilled": "과금 {billable}, 무료 {free}"
     },
     "media": {
       "openImage": "이미지 {name} 열기",
@@ -664,6 +674,26 @@
         "label": "그룹 멤버",
         "loading": "멤버 찾는 중",
         "none": "일치하는 멤버가 없습니다"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta가 이 그룹을 정지했습니다",
+          "message": "WhatsApp은 정지된 그룹에 메시지를 전달하지 않습니다. Meta가 해제할 때까지 대화를 읽고 내부 메모를 추가할 수 있습니다."
+        },
+        "plan": {
+          "title": "현재 요금제에는 WhatsApp 그룹이 포함되어 있지 않습니다",
+          "message": "이 대화를 읽고 내부 메모를 추가할 수는 있지만, 그룹에 보내려면 그룹이 포함된 요금제가 필요합니다. 관리자에게 업그레이드를 요청하세요."
+        },
+        "ineligible": {
+          "title": "이 번호는 WhatsApp 그룹을 사용할 수 없습니다",
+          "message": "마지막 확인에서 Meta가 이 번호의 그룹을 허용하지 않았습니다(공식 비즈니스 계정이 필요합니다). 대화를 읽고 내부 메모를 추가할 수 있습니다. 다시 확인하려면 Meta 그룹을 여세요."
+        }
+      },
+      "cost": {
+        "members": "이 메시지는 {count, plural, other {#명의 멤버}}에게 전달됩니다. 예상 비용 {cost}: WhatsApp은 메시지를 받은 멤버마다 요금을 부과합니다.",
+        "membersNoEstimate": "이 메시지는 {count, plural, other {#명의 멤버}}에게 전달됩니다. WhatsApp은 메시지를 받은 멤버마다 요금을 부과합니다.",
+        "sizeUnknown": "멤버 수를 아직 알 수 없습니다. WhatsApp은 이 메시지를 받은 멤버마다 요금을 부과합니다.",
+        "walletShort": "지갑 잔액이 이 메시지에 부족할 수 있습니다. 보내기 전에 충전하세요."
       }
     },
     "savedReplies": {
@@ -817,6 +847,122 @@
         "upgrade": "요금제 보기",
         "conflict": "다른 사람이 먼저 이 답변을 변경했습니다. 이 창을 닫고 다시 여세요.",
         "invalid": "입력한 내용 중 일부가 올바르지 않습니다."
+      },
+      "transfer": {
+        "export": "CSV 내보내기",
+        "import": "CSV 가져오기",
+        "title": "저장된 답장 가져오기",
+        "intro": "title, shortcut, body 열이 있는 CSV를 업로드하세요. 원하면 category, language, channel 열도 추가할 수 있습니다(channel은 |로 구분하며, 비워 두면 모든 채널에 적용됩니다). 최대 1,000행, {maxKb} KB까지 가능합니다. 가져온 답장은 팀 전체와 공유됩니다. 내보내기 파일도 같은 열을 사용합니다.",
+        "file": "CSV 파일",
+        "tooBig": "파일이 너무 큽니다.",
+        "duplicates": "공유 답장이 이미 같은 shortcut을 사용하는 경우",
+        "policy": {
+          "skip": "기존 답장 유지",
+          "overwrite": "텍스트 바꾸기"
+        },
+        "policyHint": {
+          "skip": "해당 행은 건너뛰고 답장은 그대로 둡니다.",
+          "overwrite": "제목, 텍스트, 카테고리, 언어, 채널이 교체됩니다. 사용 횟수는 유지됩니다."
+        },
+        "check": "파일 확인",
+        "go": "가져오기 ({count})",
+        "cancel": "취소",
+        "summary": "생성 {create}개, 교체 {update}개, 건너뜀 {skip}개, 문제 {invalid}개. 아직 아무것도 저장되지 않았습니다.",
+        "plan": "현재 요금제: 답장 {limit}개 중 {used}개 사용 중.",
+        "row": "{line}행: /{shortcut}",
+        "truncated": "문제가 있거나 변경되는 행 중 처음 몇 개만 표시됩니다.",
+        "done": "가져옴: {created}개 생성, {updated}개 교체.",
+        "issue": {
+          "update": "교체됩니다",
+          "skip": "건너뜀",
+          "invalid": "문제 있음",
+          "duplicate": "shortcut이 이미 사용 중이라 건너뜀",
+          "missing_shortcut": "shortcut 없음",
+          "shortcut_invalid": "shortcut에 사용할 수 있는 문자나 숫자가 없습니다",
+          "missing_title": "제목 없음",
+          "title_too_long": "제목이 너무 깁니다",
+          "missing_body": "텍스트 없음",
+          "body_too_long": "텍스트가 너무 깁니다",
+          "control_characters": "제어 문자가 포함되어 있습니다",
+          "category_too_long": "카테고리가 너무 깁니다",
+          "language_invalid": "언어가 en 또는 pt-BR 같은 코드 형식이 아닙니다",
+          "channel_unknown": "알 수 없는 채널",
+          "duplicate_in_file": "같은 shortcut이 파일 앞부분에 이미 있습니다",
+          "plan_limit_reached": "요금제 한도를 초과했습니다"
+        }
+      }
+    },
+    "bulk": {
+      "barLabel": "일괄 작업",
+      "selected": "{count, plural, one {대화 #개 선택됨} other {대화 #개 선택됨}}",
+      "selectAllInView": "표시된 {count}개 모두 선택",
+      "done": "완료",
+      "markRead": "읽음으로 표시",
+      "resolve": "해결됨으로 표시",
+      "close": "닫기",
+      "reopen": "다시 열기",
+      "assign": "배정",
+      "assignToMe": "나에게 배정",
+      "unassign": "배정 해제",
+      "removeTeam": "팀 제거",
+      "priority": "우선순위",
+      "snooze": "다시 알림",
+      "snoozePreset": {
+        "oneHour": "1시간",
+        "threeHours": "3시간",
+        "tomorrow": "내일 오전 9:00",
+        "nextWeek": "다음 주 월요일 오전 9:00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {대화 #개를 업데이트했습니다} other {대화 #개를 업데이트했습니다}}.",
+        "nothingChanged": "변경할 내용이 없습니다. 선택한 대화는 이미 최신 상태입니다.",
+        "partial": "{done}개 업데이트됨, {unchanged}개는 이미 최신 상태, {failed}개는 변경할 수 없습니다. 실패한 항목은 선택된 상태로 유지됩니다.",
+        "allFailed": "{count, plural, one {대화 #개를} other {대화 #개를}} 변경할 수 없습니다."
+      },
+      "label": "라벨",
+      "labelAdd": "라벨 추가",
+      "labelRemove": "라벨 제거"
+    },
+    "triage": {
+      "priority": "우선순위",
+      "snooze": "다시 알림",
+      "wake": "지금 다시 표시"
+    },
+    "labels": {
+      "label": "라벨",
+      "loading": "라벨을 불러오는 중…",
+      "loadFailed": "라벨을 불러오지 못했습니다.",
+      "none": "아직 라벨이 없습니다.",
+      "newLabel": "새 라벨",
+      "add": "추가",
+      "filter": "라벨",
+      "filterActive": "{count, plural, one {라벨 #개} other {라벨 #개}}",
+      "clearFilter": "라벨 필터 지우기",
+      "screen": {
+        "back": "받은편지함으로 돌아가기",
+        "title": "라벨",
+        "intro": "라벨은 대화에 태그를 붙여 팀이 정렬하고 필터링할 수 있게 해 줍니다. 연락처에 쓰는 태그와 같습니다.",
+        "newTitle": "새 라벨",
+        "editTitle": "라벨 수정",
+        "name": "이름",
+        "color": "색상",
+        "colorInvalid": "#075E54 같은 16진수 색상 또는 색상 이름을 사용하세요.",
+        "description": "설명 (선택 사항)",
+        "create": "라벨 만들기",
+        "save": "변경 사항 저장",
+        "cancel": "취소",
+        "edit": "수정",
+        "delete": "삭제",
+        "inUse": "{count, plural, one {대화 #개} other {대화 #개}}",
+        "emptyTitle": "아직 라벨이 없습니다",
+        "emptyMessage": "위에서 첫 라벨을 만든 다음 받은편지함에서 대화에 붙여 보세요.",
+        "deleteTitle": "이 라벨을 삭제할까요?",
+        "deleteMessage": "\"{name}\" 라벨이 {count, plural, one {대화 #개} other {대화 #개}}에 붙어 있습니다. 삭제하면 해당 대화와 이 라벨을 가진 연락처에서 모두 제거됩니다. 이 작업은 되돌릴 수 없습니다.",
+        "nameTaken": "같은 이름의 라벨이 이미 있습니다.",
+        "conflict": "다른 사람이 먼저 이 라벨을 변경했습니다. 목록을 다시 불러왔습니다.",
+        "saved": "라벨을 저장했습니다",
+        "created": "라벨을 만들었습니다",
+        "deleted": "라벨을 삭제했습니다"
       }
     }
   }

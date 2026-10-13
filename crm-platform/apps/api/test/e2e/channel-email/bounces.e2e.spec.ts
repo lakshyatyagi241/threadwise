@@ -394,7 +394,7 @@ describe('TW-MAIL-032: send limits', () => {
     // An hour later (the recorded sends age out of the window) the mailbox sends again.
     const redis = rig.p.h.app.get<Redis>(REDIS_CLIENT);
     const key = `mail:rl:${t.orgId}:${owners.get(ADDR2)!.uuid}`;
-    const members = await redis.zrange(key, 0, -1);
+    const members = await redis.zrange(key, 0, '-1');
     for (const m of members) await redis.zadd(key, Date.now() - 3_700_000, m);
     await expect(
       adapter.send(runtime(ADDR2), envelope('rl-4', 'r5@example.org')),

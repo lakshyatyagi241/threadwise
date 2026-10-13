@@ -148,7 +148,10 @@
         "required": "Da spuntare per inviare",
         "requiredHint": "Disattiva se il consenso è facoltativo.",
         "marketing": "Adesione al marketing",
-        "marketingHint": "Spuntando la casella il consenso al marketing viene registrato sul contatto. Una casella non spuntata non iscrive mai nessuno."
+        "marketingHint": "Spuntando la casella il consenso al marketing viene registrato sul contatto. Una casella non spuntata non iscrive mai nessuno.",
+        "whatsappHint": "Invierai messaggi a questi contatti su WhatsApp? Usa un testo che lo dica e spieghi come annullare l'iscrizione. La casella spuntata viene conservata come prova, con questo testo esatto e la sua versione.",
+        "whatsappInsert": "Usa il testo di adesione WhatsApp",
+        "whatsappWording": "Accetto di ricevere aggiornamenti e offerte su WhatsApp. Posso rispondere STOP in qualsiasi momento per annullare l'iscrizione."
       },
       "crm": {
         "title": "Nel CRM",

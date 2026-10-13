@@ -14,7 +14,9 @@
       "settingsInvalid": "Słowo kluczowe musi zawierać co najmniej jedną literę lub cyfrę, a przy włączonym wykrywaniu musi zostać co najmniej jedno słowo STOP.",
       "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
       "validation": "Niektóre wartości są nieprawidłowe. Sprawdź formularz i spróbuj ponownie.",
-      "unexpected": "Coś poszło nie tak. Spróbuj ponownie."
+      "unexpected": "Coś poszło nie tak. Spróbuj ponownie.",
+      "exportInProgress": "Plik dowodowy jest już przygotowywany. Poczekaj, aż zostanie gotowy, a następnie spróbuj ponownie.",
+      "exportNotReady": "Ten plik nie jest gotowy lub wygasł. Przygotuj nowy."
     },
     "settings": {
       "title": "Zgody i odpowiedzi STOP",
@@ -169,7 +171,35 @@
     "import": {
       "legend": "Zgoda",
       "label": "Mam zgodę na wysyłanie wiadomości do tych kontaktów",
-      "hint": "Po zaznaczeniu wszystkie kontakty z pliku są zapisywane jako zgadzające się na marketing, a nazwa pliku służy jako dowód. Bez zaznaczenia import nie zapisuje żadnej zgody. Kontakty, które zrezygnowały, pozostają wypisane."
+      "hint": "Po zaznaczeniu wszystkie kontakty z pliku są zapisywane jako zgadzające się na marketing, a nazwa pliku służy jako dowód. Bez zaznaczenia import nie zapisuje żadnej zgody. Kontakty, które zrezygnowały, pozostają wypisane.",
+      "hintColumn": "Kolumna przypisana do zgody marketingowej decyduje, kto zostanie zapisany: tylko wiersze z odpowiedzią tak otrzymują zgodę, z nazwą pliku jako dowodem. Odpowiedź nie, pusta komórka lub nieznane słowo nie zapisuje niczego. Kontakty, które zrezygnowały, pozostają wypisane.",
+      "columnSummary": "{granted} wierszy ma odpowiedź tak i zostanie zapisanych. {notGranted} ma odpowiedź nie lub jest pustych i nie otrzyma rekordu zgody.",
+      "unrecognised": "{count, plural, one {# wiersz ma} other {# wierszy ma}} wartość zgody, która nie jest tak ani nie ({values}). {count, plural, one {Jest ona traktowana} other {Są one traktowane}} jako niewyrażona. Użyj tak / nie, true / false lub 1 / 0.",
+      "columnIgnored": "Kolumna zgody nie działa, dopóki nie zaznaczysz pola powyżej."
+    },
+    "systemLine": {
+      "withdrawn": "Kontakt odpowiedział {keyword}: wypisany z marketingu",
+      "granted": "Kontakt odpowiedział {keyword}: ponownie zapisany do marketingu"
+    },
+    "proof": {
+      "title": "Przygotowane pliki dowodowe",
+      "prepare": "Przygotuj pełny plik dowodowy",
+      "preparing": "Przygotowywanie pliku dowodowego",
+      "largeHint": "Dziennik ma więcej niż {max} zdarzeń, dlatego plik jest przygotowywany w tle",
+      "large": "Dziennik zawiera więcej niż {max} zdarzeń, czyli więcej, niż mieści bezpośrednie pobieranie. Przygotuj pełny plik: jest budowany w tle, a gdy będzie gotowy, otrzymasz e-mail.",
+      "none": "Nie ma jeszcze przygotowanych plików.",
+      "keptFor": "Przygotowany plik można pobrać przez {days} dni, potem zostaje usunięty. Naraz przygotowywany jest tylko jeden plik.",
+      "rows": "{count, plural, one {# zdarzenie} other {# zdarzeń}}",
+      "expires": "dostępny do {date}",
+      "download": "Pobierz CSV",
+      "failed": "Nie udało się utworzyć pliku. Przygotuj go ponownie.",
+      "status": {
+        "queued": "Oczekuje",
+        "running": "Tworzenie",
+        "ready": "Gotowy",
+        "failed": "Niepowodzenie",
+        "expired": "Wygasł"
+      }
     }
   }
 }

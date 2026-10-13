@@ -121,6 +121,12 @@
       "selectedActionsNone": "चुने हुए संपर्क (पहले पंक्तियां चुनें)",
       "modifyColumns": "कॉलम बदलें",
       "resetColumns": "डिफ़ॉल्ट पर रीसेट करें",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "संपर्क का नाम",
       "colPhone": "फ़ोन नंबर",
       "colEmailId": "ईमेल ID",
@@ -407,7 +413,8 @@
         "address": "पता",
         "memo": "मेमो",
         "status": "स्थिति",
-        "source": "स्रोत"
+        "source": "स्रोत",
+        "consent": "मार्केटिंग सहमति (हाँ / नहीं)"
       },
       "notInFile": "फ़ाइल में नहीं",
       "columnN": "कॉलम {n}",
@@ -1175,7 +1182,7 @@
       },
       "exports": {
         "title": "एक्सपोर्ट",
-        "hint": "हब से किए गए संपर्क एक्सपोर्ट, सबसे नए पहले। डाउनलोड की गई फ़ाइल सहेजकर नहीं रखी जाती।",
+        "hint": "हब से संपर्कों के एक्सपोर्ट, सबसे नए पहले। हर फ़ाइल 30 दिन रखी जाती है ताकि आप और एक्सपोर्ट की अनुमति वाले साथी उसे दोबारा डाउनलोड कर सकें।",
         "empty": "अभी कोई एक्सपोर्ट नहीं।",
         "by": "किसके द्वारा",
         "rows": "संपर्क",
@@ -1184,7 +1191,11 @@
         "selections": {
           "ids": "चयनित संपर्क",
           "filter": "मेल खाने वाले सभी"
-        }
+        },
+        "download": "डाउनलोड",
+        "noFile": "सहेजी नहीं गई",
+        "keptUntil": "{date} तक रखी जाएगी",
+        "downloadFailed": "फ़ाइल डाउनलोड नहीं हो सकी। हो सकता है उसकी अवधि समाप्त हो गई हो।"
       }
     }
   }

@@ -63,3 +63,7 @@ Changing a form needs permission to update forms. Without it every control is re
 
 - **Someone else changed this form.** A save is refused when the form was changed elsewhere after you opened it. Reload and make your change again.
 - **The CRM property list is empty.** It could not be loaded. You can still add plain fields.
+
+## WhatsApp opt-in wording
+
+If the form will lead to WhatsApp messages, switch on **Marketing opt-in** in the consent settings and press **Use the WhatsApp opt-in wording**. It fills the consent text with a ready sentence that says the visitor agrees to updates and offers on WhatsApp and can reply STOP at any time. You can edit it. The wording and its version are stored with every submission as proof, and replying STOP later opts the contact out.

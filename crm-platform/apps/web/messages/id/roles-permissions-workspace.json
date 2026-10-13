@@ -102,7 +102,8 @@
         "added": "{name} ditambahkan ke workspace.",
         "rolesUpdated": "Peran {name} diperbarui.",
         "deactivated": "{name} dinonaktifkan.",
-        "reactivated": "{name} diaktifkan kembali."
+        "reactivated": "{name} diaktifkan kembali.",
+        "invited": "Undangan dikirim ke {name}."
       },
       "deactivate": {
         "action": "Nonaktifkan",
@@ -123,7 +124,13 @@
         "passwordShort": "Kata sandi harus minimal 8 karakter.",
         "generate": "Buat",
         "role": "Peran",
-        "submit": "Tambahkan anggota"
+        "submit": "Tambahkan anggota",
+        "inviteHint": "Kami mengirim tautan lewat email agar mereka menetapkan kata sandi sendiri. Tautan hanya berlaku sekali dan kedaluwarsa dalam beberapa hari.",
+        "submitInvite": "Kirim undangan",
+        "linkNotSent": "Email ke {email} tidak dapat dikirim. Salin tautan ini dan berikan kepada mereka; tautan tidak akan ditampilkan lagi.",
+        "copyLink": "Salin tautan",
+        "copied": "Disalin",
+        "done": "Selesai"
       },
       "changeRole": {
         "title": "Ubah peran {name}",

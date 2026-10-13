@@ -82,6 +82,10 @@ export class ConsentKeywordListener implements InboundMessageListener, OnModuleI
         ),
     );
 
+    // The thread says what happened, to agents only (no assignment, no notification, no unread): a system line next to the STOP.
+    if (outcome.recorded && outcome.stateChanged) {
+      await this.systemLine(e, m.action === 'opt_out' ? 'withdrawn' : 'granted', m.keyword);
+    }
     // One confirmation, only when the state really changed: a repeated STOP (or a flood of them) is not answered again.
     if (outcome.recorded && outcome.stateChanged && s.autoReplyEnabled) {
       const template = pickByLang(m.action === 'opt_out' ? s.optOutReply : s.optInReply, m.lang);
@@ -90,6 +94,45 @@ export class ConsentKeywordListener implements InboundMessageListener, OnModuleI
     }
     // A keyword is never also an input for a flow, the FAQ or an AI agent.
     return { consumed: true, halt: true };
+  }
+
+  /**
+   * "Contact replied STOP: unsubscribed from marketing". A `system` line on the customer's side (like the call bubbles): it touches
+   * only the thread's last-message preview and sequence, never `unread_count`, the wait clock, assignment or notifications. The
+   * provider id `consent:<message uuid>` makes a redelivered STOP write one line. A failure is logged: the ledger already holds the fact.
+   */
+  private async systemLine(
+    e: InboundStoredEvent,
+    action: 'withdrawn' | 'granted',
+    keyword: string,
+  ): Promise<void> {
+    try {
+      await RequestContextStore.run(
+        {
+          requestId: `consent-line-${e.messageUuid}`,
+          orgId: e.orgId,
+          actorType: 'system',
+          actorId: null,
+          userId: null,
+        },
+        () =>
+          this.conversations.recordOutbound({
+            channelId: e.channelUuid,
+            peerKey: e.peerKey,
+            source: 'consent',
+            kind: 'system',
+            direction: 'in',
+            body: consentLineBody(action, keyword),
+            providerMessageId: `consent:${e.messageUuid}`,
+            meta: { event: 'consent', consentAction: action, consentKeyword: keyword.slice(0, 40) },
+          }),
+      );
+    } catch (err) {
+      this.logger.warn(
+        { orgId: e.orgId, err: err instanceof Error ? err.message : String(err) },
+        'consent system line could not be written',
+      );
+    }
   }
 
   private async reply(e: InboundStoredEvent, body: string): Promise<void> {
@@ -119,6 +162,14 @@ export class ConsentKeywordListener implements InboundMessageListener, OnModuleI
       );
     }
   }
+}
+
+/** The English text of the line (exports, old clients); the web app words it in the reader's language from `systemEvent`. */
+export function consentLineBody(action: 'withdrawn' | 'granted', keyword: string): string {
+  const word = keyword.trim().toUpperCase().slice(0, 40);
+  return action === 'withdrawn'
+    ? `Contact replied ${word}: unsubscribed from marketing`
+    : `Contact replied ${word}: resubscribed to marketing`;
 }
 
 /** A stable uuid-shaped id from a string (the outbound path wants a uuid as the client's message id). */

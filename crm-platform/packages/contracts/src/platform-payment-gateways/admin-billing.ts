@@ -32,7 +32,26 @@ export type AdminWorkspaceRef = z.infer<typeof adminWorkspaceRefSchema>;
 
 // ---- order history (037, 038, 039, 040) -----------------------------------------------------------------------------------
 
-export const orderWindowSchema = z.enum(['90d', 'this_year', 'all']);
+/** A calendar day (YYYY-MM-DD), the bounds of a `custom` window. */
+const windowDaySchema = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/)
+  .refine((v) => !Number.isNaN(Date.parse(`${v}T00:00:00Z`)), 'Not a real date.');
+const CUSTOM_WINDOW_MAX_DAYS = 365 * 5;
+/** `custom` needs both days, `from` not after `to`, and at most five years between them (the same reach as "all time"). */
+const customWindowRule = (v: { window: string; from?: string; to?: string }) =>
+  v.window !== 'custom' ||
+  (v.from !== undefined &&
+    v.to !== undefined &&
+    v.from <= v.to &&
+    (Date.parse(`${v.to}T00:00:00Z`) - Date.parse(`${v.from}T00:00:00Z`)) / 86_400_000 <=
+      CUSTOM_WINDOW_MAX_DAYS);
+const customWindowMessage = {
+  message: 'A custom window needs a valid from and to day.',
+  path: ['from'],
+};
+
+export const orderWindowSchema = z.enum(['90d', 'this_year', 'all', 'custom']);
 export type OrderWindow = z.infer<typeof orderWindowSchema>;
 
 /** A real order type, derived from the workspace's previous paid plan (Reference's pills and badges disagreed). */
@@ -57,12 +76,16 @@ export const orderTypeFilterSchema = z.enum([
 ]);
 export type OrderTypeFilter = z.infer<typeof orderTypeFilterSchema>;
 
-export const adminOrdersQuerySchema = z.object({
-  window: orderWindowSchema.default('90d'),
-  type: orderTypeFilterSchema.default('all'),
-  q: searchSchema,
-  page: pageSchema,
-});
+export const adminOrdersQuerySchema = z
+  .object({
+    window: orderWindowSchema.default('90d'),
+    from: windowDaySchema.optional(),
+    to: windowDaySchema.optional(),
+    type: orderTypeFilterSchema.default('all'),
+    q: searchSchema,
+    page: pageSchema,
+  })
+  .refine(customWindowRule, customWindowMessage);
 export type AdminOrdersQuery = z.infer<typeof adminOrdersQuerySchema>;
 
 export const adminOrderRowSchema = z.object({
@@ -132,19 +155,23 @@ export type OrderActionResponse = z.infer<typeof orderActionResponseSchema>;
 
 // ---- billing history (041, 042) -------------------------------------------------------------------------------------------
 
-export const billingWindowSchema = z.enum(['7d', '30d', '90d', '1y', 'all']);
+export const billingWindowSchema = z.enum(['7d', '30d', '90d', '1y', 'all', 'custom']);
 export type BillingWindow = z.infer<typeof billingWindowSchema>;
 
 export const billingStatusFilterSchema = z.enum(['all', 'paid', 'failed', 'refunded', 'pending']);
 export type BillingStatusFilter = z.infer<typeof billingStatusFilterSchema>;
 
-export const billingHistoryQuerySchema = z.object({
-  window: billingWindowSchema.default('90d'),
-  status: billingStatusFilterSchema.default('all'),
-  gateway: z.string().trim().max(60).optional(),
-  q: searchSchema,
-  page: pageSchema,
-});
+export const billingHistoryQuerySchema = z
+  .object({
+    window: billingWindowSchema.default('90d'),
+    from: windowDaySchema.optional(),
+    to: windowDaySchema.optional(),
+    status: billingStatusFilterSchema.default('all'),
+    gateway: z.string().trim().max(60).optional(),
+    q: searchSchema,
+    page: pageSchema,
+  })
+  .refine(customWindowRule, customWindowMessage);
 export type BillingHistoryQuery = z.infer<typeof billingHistoryQuerySchema>;
 
 export const trendSchema = z.object({
@@ -189,7 +216,13 @@ export const billingHistoryResponseSchema = adminPagedSchema.extend({
 });
 export type BillingHistoryResponse = z.infer<typeof billingHistoryResponseSchema>;
 
-export const billingAnalyticsQuerySchema = z.object({ window: billingWindowSchema.default('90d') });
+export const billingAnalyticsQuerySchema = z
+  .object({
+    window: billingWindowSchema.default('90d'),
+    from: windowDaySchema.optional(),
+    to: windowDaySchema.optional(),
+  })
+  .refine(customWindowRule, customWindowMessage);
 export type BillingAnalyticsQuery = z.infer<typeof billingAnalyticsQuerySchema>;
 
 export const billingAnalyticsResponseSchema = z.object({
@@ -222,7 +255,13 @@ export const billingAnalyticsResponseSchema = z.object({
 });
 export type BillingAnalyticsResponse = z.infer<typeof billingAnalyticsResponseSchema>;
 
-export const orderAnalyticsQuerySchema = z.object({ window: orderWindowSchema.default('90d') });
+export const orderAnalyticsQuerySchema = z
+  .object({
+    window: orderWindowSchema.default('90d'),
+    from: windowDaySchema.optional(),
+    to: windowDaySchema.optional(),
+  })
+  .refine(customWindowRule, customWindowMessage);
 export type OrderAnalyticsQuery = z.infer<typeof orderAnalyticsQuerySchema>;
 
 export const orderAnalyticsResponseSchema = z.object({

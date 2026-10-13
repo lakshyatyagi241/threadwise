@@ -174,7 +174,7 @@ export class OutboundService {
         lastInboundAt: conv.lastInboundAt,
         source: 'inbox',
       };
-      await this.assertGroupSendable(tx, orgId, runtime, conv.peerKey);
+      const groupMembers = await this.assertGroupSendable(tx, orgId, runtime, conv.peerKey);
       await this.dispatcher.assertCanQueue(request, {
         monthlyUsed: await this.monthlyUsed(tx, orgId, runtime),
       });
@@ -224,7 +224,8 @@ export class OutboundService {
         clientMessageId: input.clientMessageId,
         replyToMessageUuid: replyTo?.uuid ?? null,
         templateId: fields.templateId,
-        meta: fields.meta,
+        // A message to a Cloud API group remembers how many people it was addressed to, for the "delivered to X of N" tally.
+        meta: groupMembers === null ? fields.meta : { ...fields.meta, group_members: groupMembers },
       });
       await this.messages.insertEvent(
         tx,
@@ -398,23 +399,26 @@ export class OutboundService {
   }
 
   /**
-   * A Cloud API group (`g:<group id>`): refuse before anything is stored or queued when Meta suspended it (D10), or when the
-   * workspace's own wallet cannot cover one message to every member (D8). A group send is billed once per member, so the launch gate
-   * is asked for `participant_count` recipients (at least one: the count is 0 until Meta's lifecycle webhook fills it). The gate is
-   * per workspace, passes platform-owned workspaces and a plan's free allowance, and fails open if the billing lookup itself fails.
+   * A Cloud API group (`g:<group id>`): refuse before anything is stored or queued when the plan has no Groups (`waba_groups`,
+   * 422 PLAN_FEATURE_LOCKED, the same gate as the management routes), when Meta suspended the group (D10), or when the workspace's own
+   * wallet cannot cover one message to every member (D8). A group send is billed once per member, so the launch gate is asked for
+   * `participant_count` recipients (at least one: the count is 0 until Meta's lifecycle webhook fills it). The gate is per workspace,
+   * passes platform-owned workspaces and a plan's free allowance, and fails open if the billing lookup itself fails.
+   * Returns the member count the message is addressed to (null for any thread that is not a Cloud API group).
    */
   private async assertGroupSendable(
     tx: Tx,
     orgId: number,
     runtime: ChannelRuntime,
     peerKey: string,
-  ): Promise<void> {
+  ): Promise<number | null> {
     if (runtime.kind === 'whatsapp_qr' && isGroupPeer(peerKey)) {
       // A personal number's group: no wallet (one send is one message, D9), but the number must still be in it and allowed to write.
       await this.assertPersonalGroupSendable(tx, orgId, runtime, peerKey);
-      return;
+      return null;
     }
-    if (runtime.kind !== 'whatsapp_cloud' || !isGroupPeer(peerKey)) return;
+    if (runtime.kind !== 'whatsapp_cloud' || !isGroupPeer(peerKey)) return null;
+    await this.plans.assertFeature(orgId, 'waba_groups');
     const found = await tx.execute(
       sql`SELECT suspended, participant_count FROM waba_groups
            WHERE org_id = ${orgId} AND group_id = ${groupIdOf(peerKey)} LIMIT 1`,
@@ -427,11 +431,13 @@ export class OutboundService {
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
+    const members = Math.max(0, Number(row?.participant_count ?? 0));
     await this.wallet.assertCanLaunch({
       orgId,
       source: 'group_message',
-      recipients: Math.max(1, Number(row?.participant_count ?? 0)),
+      recipients: Math.max(1, members),
     });
+    return members;
   }
 
   /** A group on a linked personal number: left (read-only thread) or announce-only without admin rights refuse before anything is stored. */

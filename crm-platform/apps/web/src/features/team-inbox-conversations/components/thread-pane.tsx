@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState, type Ref } from 'react';
 import { Badge, Button, EmptyState, Spinner, cn } from '@crm/ui';
 import type {
+  ConversationPriority,
   ChannelResponse,
   EmailReplyExtras,
   ConversationNote,
@@ -24,16 +25,22 @@ import { useRealtimeEvent } from '@/lib/realtime';
 import type { Thread } from '../api/use-thread';
 import { inboxApi } from '../api/service';
 import {
+  cloudGroupBlock,
   isGroupLimited,
   isGroupSendBlocked,
   isPersonalGroupThread,
   personalGroupBlock,
 } from '../lib/group-thread';
 import type { MentionMember } from '../lib/mentions';
+import type { SnoozePreset } from '../lib/selection';
 import { computeWindow, formatWindowLeft, type WindowView } from '../lib/window';
 import { Composer, type ComposerHandle, type ComposerMode } from './composer';
+import { GroupCostLine } from './group-cost-line';
 import { ShareDialog, type ShareKind } from './share-dialog';
+import { LabelChip } from './label-chip';
+import { LabelMenu } from './label-menu';
 import { TemplatePicker } from './template-picker';
+import { TriageMenu } from './triage-menu';
 import { AlertIcon, BackIcon, CheckCircleIcon, ClockIcon, PanelIcon } from './icons';
 import { MessageStream } from './message-stream';
 import { Avatar, ChannelTag } from './parts';
@@ -48,7 +55,14 @@ export interface ThreadPaneProps {
   notes: ConversationNote[];
   channel: ChannelResponse | undefined;
   nowMs: number;
-  can: { reply: boolean; note: boolean; resolve: boolean; assignSelf: boolean };
+  can: {
+    reply: boolean;
+    note: boolean;
+    resolve: boolean;
+    assignSelf: boolean;
+    priority?: boolean;
+    snooze?: boolean;
+  };
   mode: ComposerMode;
   onMode: (mode: ComposerMode) => void;
   composerRef: Ref<ComposerHandle>;
@@ -74,6 +88,20 @@ export interface ThreadPaneProps {
   onRetryMessage: (messageId: string) => Promise<void>;
   resolving: boolean;
   onAssignSelf: () => void;
+  /** Priority, snooze and wake-up of the open conversation (the screen runs the call and shows the refusal). */
+  triage?: {
+    busy: boolean;
+    onPriority: (priority: ConversationPriority) => void;
+    onSnooze: (preset: SnoozePreset) => void;
+    onWake: () => void;
+  };
+  /** Labels of the open conversation: present when the caller may put labels on threads. */
+  labels?: {
+    busy: boolean;
+    canCreate: boolean;
+    onApply: (input: { tagId: string } | { name: string }) => void;
+    onWithdraw: (tagId: string) => void;
+  };
   onRetryDetail: () => void;
 }
 
@@ -135,7 +163,10 @@ export function ThreadPane(props: ThreadPaneProps) {
   const windowClosed = win?.state === 'closed';
   // The Cloud API takes only text and files into a group; a personal number takes everything a person can send there.
   const groupLimited = isGroupLimited(detail?.peerKey, detail?.channel.kind);
-  const groupSendBlocked = isGroupSendBlocked(detail?.peerKey, detail?.channel.kind);
+  // A Cloud API group the composer is off for: Meta suspended it, the plan has no Groups, or the number was refused for Groups.
+  const cloudBlock = cloudGroupBlock(detail?.cloudGroup);
+  const groupSendBlocked =
+    isGroupSendBlocked(detail?.peerKey, detail?.channel.kind) || cloudBlock !== null;
   const replyDisabled = windowClosed || channelDown || groupBlock !== null;
   // A template needs no open window, only a working channel that sends templates and the right to reply.
   const canTemplate =
@@ -201,6 +232,13 @@ export function ThreadPane(props: ThreadPaneProps) {
                 )}
                 <TypingLine conversationId={detail.id} />
               </p>
+              {detail.labels.length > 0 && (
+                <div className="mt-1 flex flex-wrap gap-1" data-testid="inbox-thread-labels">
+                  {detail.labels.map((l) => (
+                    <LabelChip key={l.id} label={l} />
+                  ))}
+                </div>
+              )}
             </div>
           </>
         ) : (
@@ -234,6 +272,28 @@ export function ThreadPane(props: ThreadPaneProps) {
             >
               {t('assignToMe')}
             </Button>
+          )}
+          {detail && props.labels && (
+            <LabelMenu
+              applied={detail.labels}
+              busy={props.labels.busy}
+              canCreate={props.labels.canCreate}
+              onApply={props.labels.onApply}
+              onWithdraw={props.labels.onWithdraw}
+            />
+          )}
+          {detail && props.triage && (
+            <TriageMenu
+              priority={detail.priority}
+              snoozed={detail.status === 'snoozed'}
+              canPriority={props.can.priority ?? false}
+              canSnooze={props.can.snooze ?? false}
+              canWake={props.can.resolve}
+              busy={props.triage.busy}
+              onPriority={props.triage.onPriority}
+              onSnooze={props.triage.onSnooze}
+              onWake={props.triage.onWake}
+            />
           )}
           {detail && props.can.resolve && (
             <Button
@@ -346,6 +406,27 @@ export function ThreadPane(props: ThreadPaneProps) {
           </div>
         </div>
       )}
+      {cloudBlock !== null && props.can.reply && props.mode === 'reply' && (
+        <div
+          role="status"
+          data-testid="inbox-group-cloud-block"
+          data-reason={cloudBlock}
+          className="flex items-start gap-2 border-t border-border bg-muted/50 px-4 py-2.5 text-sm"
+        >
+          <AlertIcon className="mt-0.5 shrink-0 text-muted-foreground" />
+          <div>
+            <p className="font-medium">{tg(`cloudBlock.${cloudBlock}.title`)}</p>
+            <p className="text-xs text-muted-foreground">
+              {tg(`cloudBlock.${cloudBlock}.message`)}
+            </p>
+          </div>
+        </div>
+      )}
+      {detail?.cloudGroup &&
+        cloudBlock === null &&
+        props.can.reply &&
+        props.mode === 'reply' &&
+        !channelDown && <GroupCostLine group={detail.cloudGroup} />}
       {!props.can.reply && props.mode === 'reply' && (
         <p
           role="status"
@@ -373,6 +454,7 @@ export function ThreadPane(props: ThreadPaneProps) {
             : undefined
         }
         groupSendBlocked={groupSendBlocked}
+        groupBlockedHint={cloudBlock ? tg(`cloudBlock.${cloudBlock}.title`) : undefined}
         groupMentions={mentionsOn ? { search: searchMembers } : undefined}
         attachments={
           detail

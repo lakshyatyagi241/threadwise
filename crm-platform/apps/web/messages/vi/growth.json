@@ -1,0 +1,434 @@
+{
+  "growth": {
+    "common": {
+      "dismiss": "Bỏ qua",
+      "retry": "Thử lại",
+      "requestId": "Yêu cầu {id}",
+      "noAccessTitle": "Bạn không thể mở màn hình này",
+      "noAccess": "Hãy yêu cầu quản trị viên cấp quyền “{permission}”."
+    },
+    "errors": {
+      "network": "Không thể kết nối với máy chủ. Hãy kiểm tra kết nối rồi thử lại.",
+      "forbidden": "Vai trò của bạn không được phép thực hiện việc này.",
+      "notAvailable": "Chương trình thí điểm tăng trưởng không khả dụng cho không gian làm việc này.",
+      "featureOff": "Phần này của chương trình thí điểm tăng trưởng đang tắt. Hãy bật trong Điều khiển.",
+      "actionGone": "Đã có người quyết định mục này.",
+      "assistantFailed": "Trợ lý không thể đưa ra gợi ý. Hãy đảm bảo bạn có đối tượng và mẫu tin nhắn đã được duyệt, rồi thử lại.",
+      "undoRefused": "Không thể hoàn tác thay đổi này nữa: liên hệ đã chuyển sang bước khác, hoặc thay đổi đã được hoàn tác.",
+      "conflict": "Đã có người lưu các cài đặt này trước. Phiên bản mới nhất đã được tải.",
+      "notFound": "Mục này không còn tồn tại.",
+      "validation": "Một số giá trị không hợp lệ. Hãy kiểm tra rồi thử lại.",
+      "rateLimited": "Quá nhiều yêu cầu. Hãy đợi một lát rồi thử lại.",
+      "unexpected": "Đã xảy ra lỗi. Hãy thử lại và báo cho bộ phận hỗ trợ nếu lỗi vẫn tiếp diễn."
+    },
+    "page": {
+      "title": "Tăng trưởng",
+      "subtitle": "Những gì các chiến dịch và cuộc trò chuyện cho bạn biết, được chuyển thành việc nhóm của bạn có thể hành động. Không có nội dung nào ở đây tự động nhắn tin cho liên hệ.",
+      "notAvailableTitle": "Không nằm trong chương trình thí điểm",
+      "notAvailable": "Chương trình thí điểm tăng trưởng chỉ được bật cho một số không gian làm việc được chọn. Không gian của bạn chưa nằm trong số đó.",
+      "tabs": {
+        "inbox": "Hộp thư đến",
+        "audiences": "Đối tượng",
+        "campaigns": "Chiến dịch",
+        "insights": "Thông tin chi tiết",
+        "autoStage": "Tự động đổi giai đoạn",
+        "assistant": "Trợ lý gửi hàng loạt",
+        "controls": "Điều khiển"
+      }
+    },
+    "digest": {
+      "title": "Hôm nay",
+      "quiet": "Hiện không có gì cần bạn chú ý.",
+      "highlights": {
+        "hotLeads": "{count, plural, other {# khách hàng tiềm năng nóng sẵn sàng mua}}",
+        "unanswered": "{count, plural, other {# câu hỏi mua hàng chưa được trả lời}}",
+        "optOuts": "{count, plural, other {# liên hệ yêu cầu ngừng nhận tin}}",
+        "suggestionsPending": "{count, plural, other {# thay đổi giai đoạn đang chờ quyết định}}",
+        "campaignReplies": "{count, plural, other {# liên hệ đã nhắn lại trong vòng một ngày sau chiến dịch}}",
+        "lapsed": "{count, plural, other {# khách hàng đã im lặng}}"
+      }
+    },
+    "inbox": {
+      "title": "Hộp thư tăng trưởng",
+      "hint": "Những việc đáng xem. Chấp nhận sẽ thực hiện việc tương ứng với loại đó; bỏ qua chỉ đóng mục lại.",
+      "filter": "Hiển thị",
+      "all": "Tất cả ({count})",
+      "empty": "Không có gì đang chờ. Các mục mới sẽ xuất hiện ở đây khi các cuộc trò chuyện được đọc và các kiểm tra hằng ngày chạy.",
+      "more": "Hiển thị thêm",
+      "doneAccept": "{count, plural, other {# mục đã xong}}",
+      "doneDismiss": "{count, plural, other {# mục đã bỏ qua}}",
+      "someFailed": "{count, plural, other {# mục không thể hoàn tất}}",
+      "openContact": "Mở liên hệ",
+      "someone": "Một liên hệ",
+      "dismiss": "Bỏ qua",
+      "types": {
+        "hot_lead": "Khách tiềm năng nóng",
+        "unanswered_intent": "Chưa trả lời",
+        "registration_issue": "Sự cố đăng ký",
+        "purchase_route": "Chuyển cho một người",
+        "opt_out": "Yêu cầu ngừng nhận tin",
+        "lapsed": "Đã im lặng",
+        "service_due": "Đến hạn bảo dưỡng",
+        "status_reply": "Trạng thái đơn hàng"
+      },
+      "titles": {
+        "hot_lead": "{name} sẵn sàng mua",
+        "unanswered_intent": "{name} đã hỏi về việc mua hàng và chưa ai trả lời",
+        "registration_issue": "{name} báo có sự cố với đăng ký của họ",
+        "purchase_route": "Giao {name} cho {user}",
+        "opt_out": "{name} yêu cầu ngừng nhận tin",
+        "lapsed": "{name} đã im lặng",
+        "service_due": "{name}: {rule} đã đến hạn",
+        "status_reply": "{name} hỏi về đơn hàng của họ"
+      },
+      "accept": {
+        "hot_lead": "Đánh dấu đã xử lý",
+        "unanswered_intent": "Đánh dấu đã xử lý",
+        "registration_issue": "Đánh dấu đã xử lý",
+        "purchase_route": "Phân công cuộc trò chuyện",
+        "opt_out": "Ghi nhận yêu cầu ngừng nhận tin",
+        "lapsed": "Xong",
+        "service_due": "Xong",
+        "status_reply": "Xong"
+      },
+      "facts": {
+        "routeOwner": "{name} phụ trách liên hệ này.",
+        "routeLeastBusy": "{name} có ít cuộc trò chuyện đang mở nhất.",
+        "lapsedDays": "Không có lượt mở hoặc tin nhắn nào trong {count, plural, other {# ngày}}.",
+        "issue": {
+          "missing_confirmation": "Không nhận được xác nhận.",
+          "payment_problem": "Báo có sự cố thanh toán.",
+          "wrong_info": "Nói rằng một số thông tin bị sai."
+        }
+      }
+    },
+    "audiences": {
+      "title": "Đối tượng",
+      "hint": "Các nhóm liên hệ được xác định từ những gì họ thực sự đã làm. Đồng bộ để điền vào một nhóm liên hệ mà bạn có thể gửi chiến dịch tới.",
+      "empty": "Chưa có đối tượng nào. Hãy bật một phần trong Điều khiển.",
+      "synced": "“{name}” hiện có {count, plural, other {# liên hệ}}.",
+      "lastSync": "Nhóm “{name}”, đồng bộ lần cuối {when}.",
+      "notSynced": "Nhóm “{name}” sẽ được tạo ở lần đồng bộ đầu tiên.",
+      "sync": "Đồng bộ vào nhóm",
+      "resync": "Đồng bộ lại",
+      "errors": {
+        "forbidden": "Vai trò của bạn không được phép đồng bộ đối tượng.",
+        "failed": "Không thể đồng bộ đối tượng. Hãy thử lại."
+      },
+      "kinds": {
+        "engaged": {
+          "label": "Tương tác nhiều",
+          "description": "Đã mở nhiều chiến dịch gần đây."
+        },
+        "silent": {
+          "label": "Im lặng",
+          "description": "Đã nhận chiến dịch nhưng không mở chiến dịch nào."
+        },
+        "lapsed": {
+          "label": "Đã rời bỏ",
+          "description": "Khách hàng không có lượt mở hoặc tin nhắn nào trong thời gian dài."
+        },
+        "hot_chat": {
+          "label": "Nóng trong trò chuyện",
+          "description": "Liên hệ mà phân tích cuộc trò chuyện mới nhất cho thấy họ sẵn sàng mua."
+        },
+        "high_propensity": {
+          "label": "Có khả năng chuyển đổi",
+          "description": "Một phần mười hàng đầu theo mô hình chuyển đổi."
+        },
+        "service_due": {
+          "label": "Đến hạn bảo dưỡng",
+          "description": "Liên hệ đã đến ngày bảo dưỡng."
+        }
+      }
+    },
+    "campaigns": {
+      "title": "Phản hồi chiến dịch",
+      "hint": "Các liên hệ đã nhắn lại trong vòng 24 và 72 giờ sau khi gửi, tính từ hộp thư đến.",
+      "stamp": "Ghi nhận phản hồi ngay",
+      "stamped": "{count, plural, other {Đã ghi nhận # phản hồi}}.",
+      "stampFailed": "Không thể ghi nhận phản hồi. Hãy thử lại.",
+      "empty": "Chưa có chiến dịch nào được gửi.",
+      "totals": {
+        "sent": "Đã gửi",
+        "read": "Đã đọc",
+        "replied24h": "Phản hồi trong 24 giờ",
+        "replied72h": "Phản hồi trong 72 giờ"
+      },
+      "cols": {
+        "campaign": "Chiến dịch",
+        "sent": "Đã gửi",
+        "read": "Đã đọc",
+        "replied24h": "24 giờ",
+        "replied72h": "72 giờ",
+        "replyRate": "Tỷ lệ phản hồi"
+      }
+    },
+    "insights": {
+      "sendTimes": {
+        "title": "Thời điểm gửi tốt nhất",
+        "hint": "Thời điểm liên hệ của bạn đọc chiến dịch và nhắn tin cho bạn, theo múi giờ của không gian làm việc.",
+        "empty": "Chưa đủ hoạt động để kết luận.",
+        "best": "Khung giờ tốt nhất: {hours} ({zone}).",
+        "quiet": "Khung giờ vắng nhất: {hours}.",
+        "chart": "Hoạt động theo giờ trong ngày",
+        "sample": "Dựa trên {count, plural, other {# sự kiện}}."
+      },
+      "propensity": {
+        "title": "Mô hình chuyển đổi",
+        "hint": "Học từ những liên hệ đã trở thành khách hàng xem hành vi nào đi cùng với việc chuyển đổi, rồi chấm điểm cho tất cả mọi người.",
+        "recompute": "Học lại ngay",
+        "done": "Mô hình đã được cập nhật.",
+        "failed": "Không thể cập nhật mô hình. Hãy thử lại.",
+        "contacts": "Liên hệ đã chấm điểm",
+        "converted": "Đã chuyển đổi",
+        "auc": "Mức độ xếp hạng chính xác",
+        "capture": "Chuyển đổi trong một phần mười hàng đầu",
+        "captureHint": "Xếp hạng ngẫu nhiên sẽ đạt 10%",
+        "none": "Chưa đo",
+        "trained": "Mô hình đã học từ các liên hệ đã chuyển đổi của bạn.",
+        "notTrained": "Chưa có đủ liên hệ chuyển đổi để học, nên đang dùng trọng số cố định.",
+        "computedAt": "Cập nhật {when}.",
+        "drivers": "Yếu tố tác động đến điểm",
+        "features": {
+          "campaigns_opened_30d": "Chiến dịch đã mở (30 ngày)",
+          "campaigns_received_30d": "Chiến dịch đã nhận (30 ngày)",
+          "messages_from_contact_30d": "Tin nhắn họ đã viết (30 ngày)",
+          "links_clicked_30d": "Liên kết đã nhấp (30 ngày)",
+          "groups": "Các nhóm họ tham gia",
+          "has_email": "Có địa chỉ email",
+          "chat_messages_total": "Tin nhắn trong cuộc trò chuyện",
+          "age_days": "Số ngày kể từ khi được thêm"
+        }
+      },
+      "quality": {
+        "title": "Hiệu quả hoạt động",
+        "hint": "Các gợi ý có được dùng hay không, điểm khách tiềm năng phân biệt các liên hệ đã chuyển đổi tốt đến đâu, và chi phí AI, trong 30 ngày qua.",
+        "none": "Chưa đo",
+        "scoreAuc": "Chất lượng điểm khách tiềm năng",
+        "scoreAucHint": "{scored} đã chấm điểm, {converted} đã chuyển đổi",
+        "calls": "Lượt gọi AI",
+        "cost": "Chi phí AI",
+        "autoApplied": "Tự động thay đổi",
+        "undone": "{count} đã hoàn tác",
+        "suggestions": {
+          "chat": "Gợi ý giai đoạn từ cuộc trò chuyện",
+          "engagement": "Gợi ý giai đoạn từ chiến dịch"
+        },
+        "suggestionLine": "{accepted} đã chấp nhận, {dismissed} đã bỏ qua, {pending} đang chờ.",
+        "cols": {
+          "type": "Mục trong hộp thư",
+          "done": "Đã xong",
+          "dismissed": "Đã bỏ qua",
+          "open": "Đang mở"
+        },
+        "actionTypes": {
+          "hot_lead": "Khách tiềm năng nóng",
+          "unanswered_intent": "Chưa trả lời",
+          "registration_issue": "Sự cố đăng ký",
+          "purchase_route": "Chuyển cho một người",
+          "opt_out": "Yêu cầu ngừng nhận tin",
+          "lapsed": "Đã im lặng",
+          "service_due": "Đến hạn bảo dưỡng",
+          "status_reply": "Trạng thái đơn hàng"
+        }
+      },
+      "enrichment": {
+        "title": "Thông tin công ty",
+        "hint": "Tra cứu thông tin công ty cho các liên hệ có địa chỉ email doanh nghiệp và hiển thị trên liên hệ.",
+        "run": "Tra cứu lô tiếp theo",
+        "asked": "{count, plural, other {Đã tra cứu # liên hệ}}.",
+        "failed": "Tra cứu thất bại. Hãy thử lại.",
+        "status": "{provider}: tìm thấy {found}, không tìm thấy {notFound}, thất bại {failed}.",
+        "notConfigured": "Chưa kết nối dịch vụ tra cứu nào trên máy chủ, nên công tắc này chưa có tác dụng."
+      }
+    },
+    "autoStage": {
+      "title": "Tự động đổi giai đoạn",
+      "hint": "Chỉ áp dụng cho những nhận định mà AI rất chắc chắn, tối đa theo giới hạn hằng ngày. Mỗi thay đổi đều có thể hoàn lại miễn là chưa ai chuyển liên hệ kể từ đó.",
+      "today": "Hôm nay đã dùng {done} trên {cap}.",
+      "empty": "Chưa có gì được thay đổi tự động.",
+      "contact": "Một liên hệ",
+      "moved": "Đã chuyển từ {from} sang {to}.",
+      "confidence": "Chắc chắn {percent}%",
+      "undone": "Đã hoàn lại",
+      "undo": "Hoàn lại",
+      "undoDone": "Liên hệ đã trở về như trước.",
+      "undoRefused": "Không thể hoàn tác thay đổi này nữa: liên hệ đã chuyển sang bước khác.",
+      "undoFailed": "Không thể hoàn tác thay đổi. Hãy thử lại."
+    },
+    "assistant": {
+      "title": "Trợ lý gửi hàng loạt",
+      "hint": "Hãy nói bạn muốn đạt được điều gì. Trợ lý sẽ gợi ý một đối tượng và một mẫu tin nhắn đã duyệt của bạn, có cân nhắc số phản hồi thực tế mà mỗi mẫu nhận được. Trợ lý không gửi hay tạo bất cứ thứ gì.",
+      "goal": "Bạn muốn đạt được điều gì?",
+      "goalHint": "Ví dụ: nhắc tất cả người đã đăng ký về sự kiện vào thứ Bảy.",
+      "placeholder": "Nhắc các liên hệ đã đăng ký về sự kiện vào thứ Bảy",
+      "ask": "Gợi ý chiến dịch",
+      "audience": "Đối tượng",
+      "audienceValue": "{name} ({count} liên hệ)",
+      "template": "Mẫu tin nhắn",
+      "replyRate": "{percent} phản hồi trong vòng một ngày",
+      "sendAt": "Gửi vào khoảng",
+      "considered": "Được chọn từ {audiences, plural, other {# đối tượng}} và {templates, plural, other {# mẫu tin nhắn}}."
+    },
+    "controls": {
+      "readOnly": "Bạn có thể xem các cài đặt này nhưng không thể thay đổi.",
+      "saved": "Đã lưu cài đặt.",
+      "discard": "Hủy thay đổi",
+      "save": "Lưu",
+      "problem": {
+        "numbers": "Một trong các số nằm ngoài phạm vi. Hãy kiểm tra các ngưỡng.",
+        "serviceRules": "Quy tắc bảo dưỡng ở dòng {line} không đúng dạng: nhãn | thuộc tính ngày | số ngày sau | số ngày trước.",
+        "customPhrases": "Cụm từ ở dòng {line} không đúng dạng: cụm từ = ý định."
+      },
+      "groups": {
+        "measure": {
+          "title": "Đo lường",
+          "hint": "Các phép đo chỉ để xem. Không thay đổi bất cứ điều gì."
+        },
+        "audiences": {
+          "title": "Đối tượng và giai đoạn",
+          "hint": "Xác định nên liên hệ với ai, và gợi ý thay đổi giai đoạn dựa trên cách liên hệ phản ứng với chiến dịch."
+        },
+        "chats": {
+          "title": "Đọc cuộc trò chuyện",
+          "hint": "Dùng phần đọc cuộc trò chuyện của tính năng chấm điểm khách tiềm năng bằng AI, nên cần bật tính năng đó. Dữ liệu cá nhân được che một phần trước khi cuộc trò chuyện được đọc."
+        },
+        "assist": {
+          "title": "Trợ lý",
+          "hint": "Hỗ trợ đưa ra quyết định. Không có gì được gửi đến liên hệ."
+        }
+      },
+      "features": {
+        "campaign_response": {
+          "label": "Phản hồi chiến dịch thực tế",
+          "hint": "Đếm các liên hệ đã nhắn lại sau chiến dịch và chỉnh lại số liệu phản hồi."
+        },
+        "send_times": {
+          "label": "Thời điểm gửi tốt nhất",
+          "hint": "Hiển thị các khung giờ liên hệ của bạn đọc và nhắn tin."
+        },
+        "propensity": {
+          "label": "Mô hình chuyển đổi",
+          "hint": "Chấm điểm từng liên hệ theo khả năng chuyển đổi."
+        },
+        "quality": {
+          "label": "Bảng chất lượng",
+          "hint": "Hiển thị tần suất các gợi ý được dùng và chi phí AI."
+        },
+        "daily_digest": {
+          "label": "Tóm tắt hằng ngày",
+          "hint": "Bản tóm tắt ngắn về không gian làm việc ở đầu màn hình này."
+        },
+        "engagement_audiences": {
+          "label": "Đối tượng theo mức tương tác",
+          "hint": "Các liên hệ tương tác nhiều, im lặng và đã rời bỏ, sẵn sàng để gửi chiến dịch."
+        },
+        "engagement_stage_rules": {
+          "label": "Gợi ý giai đoạn từ chiến dịch",
+          "hint": "Gợi ý chuyển liên hệ sang bước tiếp theo khi họ liên tục mở chiến dịch."
+        },
+        "service_rules": {
+          "label": "Nhắc bảo dưỡng và theo dõi",
+          "hint": "Tìm các liên hệ đến hạn theo ngày bảo dưỡng hoặc ngày mua, dùng quy tắc của riêng bạn."
+        },
+        "enrichment": {
+          "label": "Thông tin công ty",
+          "hint": "Tra cứu thông tin công ty cho các liên hệ có địa chỉ email doanh nghiệp."
+        },
+        "intent_fields": {
+          "label": "Ý định trò chuyện trên liên hệ",
+          "hint": "Ghi nội dung cuộc trò chuyện vào thuộc tính “Ý định AI”, để một luồng có thể phản ứng với nó."
+        },
+        "language_detect": {
+          "label": "Ngôn ngữ trò chuyện",
+          "hint": "Ghi chú ngôn ngữ của từng cuộc trò chuyện."
+        },
+        "auto_notes": {
+          "label": "Ghi chú tóm tắt cuộc trò chuyện",
+          "hint": "Thêm bản tóm tắt ngắn của cuộc trò chuyện vào liên hệ dưới dạng ghi chú."
+        },
+        "hot_lead_alerts": {
+          "label": "Cảnh báo khách tiềm năng nóng",
+          "hint": "Tạo cảnh báo và thông báo cho người phụ trách khi một liên hệ rõ ràng sẵn sàng mua."
+        },
+        "unanswered_watch": {
+          "label": "Câu hỏi mua hàng chưa được trả lời",
+          "hint": "Gắn cờ các câu hỏi về mua hàng hoặc giá mà chưa ai trả lời."
+        },
+        "handover_summary": {
+          "label": "Tóm tắt khi bàn giao",
+          "hint": "Khi một cuộc trò chuyện được giao cho một người, đặt bản tóm tắt của nó ở đầu."
+        },
+        "purchase_routing": {
+          "label": "Chuyển người mua cho một người",
+          "hint": "Gợi ý ai nên tiếp nhận cuộc trò chuyện khi liên hệ muốn mua."
+        },
+        "registration_check": {
+          "label": "Sự cố đăng ký",
+          "hint": "Gắn cờ các liên hệ nói rằng đã thanh toán hoặc đăng ký nhưng không nhận được xác nhận."
+        },
+        "status_reply": {
+          "label": "Trạng thái đơn hàng và sửa chữa",
+          "hint": "Chuẩn bị trạng thái của đơn hàng hoặc việc sửa chữa khi khách hàng hỏi."
+        },
+        "optout_detection": {
+          "label": "Yêu cầu ngừng nhận tin",
+          "hint": "Gắn cờ các liên hệ yêu cầu ngừng nhận tin; chấp nhận sẽ ghi nhận vào sổ đồng ý."
+        },
+        "broadcast_assistant": {
+          "label": "Trợ lý gửi hàng loạt",
+          "hint": "Gợi ý đối tượng và mẫu tin nhắn cho một mục tiêu."
+        },
+        "auto_stage": {
+          "label": "Tự động đổi giai đoạn",
+          "hint": "Chuyển liên hệ sang bước tiếp theo khi AI rất chắc chắn, tối đa theo giới hạn hằng ngày, có thể hoàn tác."
+        }
+      },
+      "thresholds": {
+        "title": "Ngưỡng",
+        "hint": "Các con số mà những phần ở trên sử dụng.",
+        "hotLeadConfidence": "Độ tin cậy khách tiềm năng nóng",
+        "hotLeadConfidenceHint": "Mức độ chắc chắn mà phần đọc cần đạt, từ 0,5 đến 1.",
+        "unansweredHours": "Số giờ trước khi một câu hỏi bị coi là chưa trả lời",
+        "unansweredHoursHint": "Từ 1 đến 168.",
+        "lapsedDays": "Số ngày trước khi một khách hàng bị coi là đã rời bỏ",
+        "lapsedDaysHint": "Từ 7 đến 730.",
+        "engagedOpens": "Số chiến dịch đã mở để được coi là tương tác nhiều",
+        "engagedOpensHint": "Trong vòng 30 ngày.",
+        "stageMinOpens": "Số chiến dịch đã mở để gợi ý đổi giai đoạn",
+        "stageWindowDays": "Số ngày xem lại cho việc đó",
+        "autoMinConfidence": "Độ tin cậy cho thay đổi tự động",
+        "autoMinConfidenceHint": "Từ 0,8 đến 1.",
+        "autoDailyCap": "Số thay đổi tự động mỗi ngày",
+        "autoDailyCapHint": "Giới hạn cho toàn bộ không gian làm việc.",
+        "requireGroup": "Chỉ gợi ý đổi giai đoạn cho các liên hệ đang thuộc một nhóm"
+      },
+      "rules": {
+        "title": "Quy tắc và từ ngữ của riêng bạn",
+        "hint": "Mỗi dòng một mục.",
+        "statusFields": "Thuộc tính trạng thái",
+        "statusFieldsHint": "Các thuộc tính liên hệ lưu trạng thái đơn hàng hoặc sửa chữa, chẳng hạn repair_status.",
+        "serviceRules": "Quy tắc bảo dưỡng",
+        "serviceRulesHint": "Nhãn | thuộc tính ngày | số ngày sau | số ngày trước (tùy chọn).",
+        "serviceRulesExample": "Thay pin | purchase_date | 700 | 760",
+        "customPhrases": "Nút bấm và từ khóa",
+        "customPhrasesHint": "Cụm từ = ý định. Các ý định: {intents}.",
+        "customPhrasesExample": "Xem phiếu bảo hành = post_purchase",
+        "extraMaskTerms": "Từ luôn được ẩn",
+        "extraMaskTermsHint": "Thương hiệu, địa chỉ hoặc tên không bao giờ được gửi cho AI."
+      },
+      "confirmEnrich": {
+        "title": "Tra cứu thông tin công ty?",
+        "body": "Để tìm thông tin công ty, địa chỉ email doanh nghiệp của liên hệ sẽ được gửi đến dịch vụ tra cứu. Địa chỉ email cá nhân không được gửi.",
+        "yes": "Bật",
+        "no": "Để sau"
+      }
+    },
+    "contactCard": {
+      "title": "Tăng trưởng",
+      "propensity": "Khả năng chuyển đổi: {score} trên 100.",
+      "computedAt": "Cập nhật {when}."
+    }
+  }
+}

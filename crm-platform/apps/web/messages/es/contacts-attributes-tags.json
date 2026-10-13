@@ -121,6 +121,12 @@
       "selectedActionsNone": "Contactos seleccionados (selecciona filas primero)",
       "modifyColumns": "Modificar columnas",
       "resetColumns": "Restablecer valores predeterminados",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "Nombre del contacto",
       "colPhone": "Número de teléfono",
       "colEmailId": "Correo electrónico",
@@ -407,7 +413,8 @@
         "address": "Dirección",
         "memo": "Nota",
         "status": "Estado",
-        "source": "Origen"
+        "source": "Origen",
+        "consent": "Consentimiento de marketing (sí / no)"
       },
       "notInFile": "No está en el archivo",
       "columnN": "Columna {n}",
@@ -1175,7 +1182,7 @@
       },
       "exports": {
         "title": "Exportaciones",
-        "hint": "Exportaciones de contactos desde el Hub, de la más reciente a la más antigua. El archivo descargado no se conserva.",
+        "hint": "Exportaciones de contactos desde el Hub, las más recientes primero. Cada archivo se conserva 30 días para que tú y tus compañeros con permiso de exportar podáis descargarlo de nuevo.",
         "empty": "Aún no hay exportaciones.",
         "by": "Por",
         "rows": "Contactos",
@@ -1184,7 +1191,11 @@
         "selections": {
           "ids": "Contactos marcados",
           "filter": "Todo lo que coincide"
-        }
+        },
+        "download": "Descargar",
+        "noFile": "No guardado",
+        "keptUntil": "Se conserva hasta el {date}",
+        "downloadFailed": "No se pudo descargar el archivo. Puede que haya caducado."
       }
     }
   }

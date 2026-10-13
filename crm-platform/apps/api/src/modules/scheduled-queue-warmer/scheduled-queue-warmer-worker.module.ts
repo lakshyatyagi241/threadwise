@@ -3,6 +3,7 @@ import { BroadcastReceiptsService, BroadcastsModule } from '../broadcasts';
 import { CampaignReceiptsService, CampaignsModule } from '../campaigns';
 import { CrmModule } from '../crm';
 import { NodeBridgeRuntimeModule, ReceiptRouter } from '../node-bridge-runtime';
+import { WabaReceiptRegistry } from '../whatsapp-cloud-api-waba';
 import { ScheduledQueueWarmerModule } from './scheduled-queue-warmer.module';
 import { ScheduledDueService } from './scheduled-due.service';
 import { ScheduledRunProcessor } from './scheduled-run.processor';
@@ -35,12 +36,18 @@ export class ScheduledQueueWarmerWorkerModule implements OnModuleInit {
     private readonly campaigns: CampaignReceiptsService,
     private readonly broadcasts: BroadcastReceiptsService,
     private readonly scheduled: ScheduledReceiptsService,
+    private readonly waba: WabaReceiptRegistry,
   ) {}
 
-  /** Delivery reports from the unofficial engine go to the campaign, broadcast or scheduled recipient that owns the message id. */
+  /**
+   * Delivery reports from the unofficial engine go to the campaign, broadcast or scheduled recipient that owns the message id. A Cloud
+   * API status that the broadcasts did not claim is offered to the scheduled messages next, so a scheduled send reaches `delivered`,
+   * `read` or `failed` and the wallet charges or refunds it.
+   */
   onModuleInit(): void {
     this.router.register((r) => this.campaigns.handle(r));
     this.router.register((r) => this.broadcasts.handle(r));
     this.router.register((r) => this.scheduled.handle(r));
+    this.waba.register((r) => this.scheduled.handleReceipt(r));
   }
 }

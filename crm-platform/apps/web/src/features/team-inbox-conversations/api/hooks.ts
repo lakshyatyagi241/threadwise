@@ -13,6 +13,7 @@ export const KEYS = {
   notes: (id: string) => ['inbox', 'notes', id] as const,
   events: (id: string) => ['inbox', 'events', id] as const,
   assignees: ['inbox', 'assignees'] as const,
+  labels: ['inbox', 'labels'] as const,
   channels: ['inbox', 'channels'] as const,
   templates: (id: string, q: string) => ['inbox', 'templates', id, q] as const,
 };
@@ -35,6 +36,18 @@ export function useConversationTemplates(conversationId: string, enabled: boolea
   return useQuery({
     queryKey: KEYS.templates(conversationId, q),
     queryFn: ({ signal }) => inboxApi.templates(conversationId, q, signal),
+    enabled,
+    staleTime: 60_000,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
+  });
+}
+
+/** The workspace label library (the picker, the list filter, the bulk bar, the settings screen). */
+export function useLabels(enabled = true) {
+  return useQuery({
+    queryKey: KEYS.labels,
+    queryFn: ({ signal }) => inboxApi.labels(signal),
     enabled,
     staleTime: 60_000,
     retry: transientRetry,

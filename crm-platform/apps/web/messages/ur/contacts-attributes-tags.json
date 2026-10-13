@@ -121,6 +121,12 @@
       "selectedActionsNone": "منتخب رابطے (پہلے قطاریں منتخب کریں)",
       "modifyColumns": "کالمز میں ترمیم کریں",
       "resetColumns": "ڈیفالٹ پر ری سیٹ کریں",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "رابطے کا نام",
       "colPhone": "فون نمبر",
       "colEmailId": "ای میل ID",
@@ -407,7 +413,8 @@
         "address": "ایڈریس",
         "memo": "میمو",
         "status": "حالت",
-        "source": "ماخذ"
+        "source": "ماخذ",
+        "consent": "مارکیٹنگ رضامندی (ہاں / نہیں)"
       },
       "notInFile": "فائل میں نہیں",
       "columnN": "کالم {n}",
@@ -1175,7 +1182,7 @@
       },
       "exports": {
         "title": "برآمدات",
-        "hint": "Hub سے رابطوں کی برآمدات، نئی پہلے۔ ڈاؤن لوڈ شدہ فائل محفوظ نہیں رکھی جاتی۔",
+        "hint": "ہب سے رابطوں کی برآمدات، نئی پہلے۔ ہر فائل 30 دن رکھی جاتی ہے تاکہ آپ اور برآمد کی اجازت رکھنے والے ساتھی اسے دوبارہ ڈاؤن لوڈ کر سکیں۔",
         "empty": "ابھی کوئی برآمد نہیں۔",
         "by": "کس نے",
         "rows": "رابطے",
@@ -1184,7 +1191,11 @@
         "selections": {
           "ids": "منتخب رابطے",
           "filter": "ملنے والے تمام"
-        }
+        },
+        "download": "ڈاؤن لوڈ",
+        "noFile": "محفوظ نہیں",
+        "keptUntil": "{date} تک محفوظ",
+        "downloadFailed": "فائل ڈاؤن لوڈ نہیں ہو سکی۔ ممکن ہے اس کی مدت ختم ہو چکی ہو۔"
       }
     }
   }

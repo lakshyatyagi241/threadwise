@@ -5,6 +5,7 @@ import { OpenRouterLeadScoringAiAdapter } from '../../infra/providers/lead-scori
 import { AiKeysUsageAdminModule } from '../ai-keys-usage-admin';
 import { CrmModule } from '../crm';
 import { WalletMessageBillingModule } from '../wallet-message-billing';
+import { ChatDigestListeners } from './lead-chat-digest.listeners';
 import { LeadChatDigestRepository } from './lead-chat-digest.repository';
 import { LeadChatDigestService } from './lead-chat-digest.service';
 import { LeadScoringPlatformController } from './lead-scoring-platform.controller';
@@ -42,13 +43,17 @@ export const leadScoringAiProvider = {
     leadScoringAiProvider,
     LeadScoringConfigService,
     LeadScoringRepository,
+    ChatDigestListeners,
     LeadChatDigestRepository,
     LeadChatDigestService,
     LeadScoringService,
     LeadScoringPlatformService,
   ],
   exports: [
+    LEAD_SCORING_AI_PORT,
     LeadScoringService,
+    ChatDigestListeners,
+    LeadChatDigestRepository,
     LeadChatDigestService,
     LeadScoringConfigService,
     LeadScoringRepository,

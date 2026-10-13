@@ -25,7 +25,11 @@
       "pickTitle": "Bir konuşma seçin",
       "pickMessage": "Okumak ve yanıtlamak için listeden bir konuşma seçin. Yeni mesajlar otomatik olarak burada görünür.",
       "shortcuts": "Kısayollar: listede gezinmek için j ve k, çözmek için e, aramak için / kullanın.",
-      "teamChanged": "Ekip güncellendi."
+      "teamChanged": "Ekip güncellendi.",
+      "priorityChanged": "Öncelik güncellendi",
+      "snoozed": "Konuşma ertelendi",
+      "labelAdded": "Etiket eklendi",
+      "labelRemoved": "Etiket kaldırıldı"
     },
     "list": {
       "title": "Gelen kutusu",
@@ -101,7 +105,9 @@
           "title": "Her şey güncel",
           "message": "Müşterilerden yeni mesaj alan konuşmalar burada listelenir."
         }
-      }
+      },
+      "select": "Seç",
+      "selectDone": "Bitti"
     },
     "status": {
       "received": "Alındı",
@@ -139,13 +145,15 @@
       "logNotReady": "Bu dışa aktarma hazır değil veya süresi doldu. Yeniden isteyin.",
       "groupSuspended": "Meta bu grubu askıya aldı; Meta kaldırana kadar gruba mesaj gönderilemez.",
       "walletEmpty": "Mesaj cüzdanınız bu grup mesajını karşılayamıyor (üye başına bir ücret). Bakiye yükleyip tekrar deneyin.",
+      "groupPlanLocked": "Planınız WhatsApp gruplarını içermiyor, bu nedenle bu gruba mesaj gönderilemez. Bir yöneticiden planı yükseltmesini isteyin.",
       "groupLeft": "Bu numara gruptan ayrıldığı için artık orada mesaj gönderemez.",
       "groupAnnounceOnly": "Bu grupta yalnızca yöneticiler mesaj gönderebilir ve bu numara yönetici değil.",
       "groupRateLimited": "Bu numaradan kısa sürede çok fazla grup mesajı gönderildi. Bir dakika bekleyip tekrar deneyin.",
       "groupUnavailable": "WhatsApp bu grup mesajını kabul etmedi. Birkaç dakika sonra tekrar deneyin.",
       "savedReplyGone": "Bu hazır yanıt artık mevcut değil.",
       "savedReplyChannel": "Bu hazır yanıt bu tür bir kanal için uygun değil.",
-      "shortcutTaken": "Başka bir hazır yanıt zaten bu kısayolu kullanıyor."
+      "shortcutTaken": "Başka bir hazır yanıt zaten bu kısayolu kullanıyor.",
+      "importInvalid": "Bu dosya kayıtlı yanıt olarak okunamıyor. İlk satırda title, shortcut ve body sütunları olmalı ve en fazla 1.000 satır bulunmalıdır."
     },
     "bubble": {
       "kind": {
@@ -213,7 +221,9 @@
       },
       "deliveryLog": "Teslimat günlüğü",
       "groupMember": "Grup üyesi",
-      "groupTally": "{delivered, plural, other {# üyeye}} iletildi: {billable} ücretli, {free} ücretsiz"
+      "groupTally": "{members} kişiden {delivered} kişiye iletildi{read, plural, =0 {} other {, # kişi okudu}}{failed, plural, =0 {} other {, # başarısız}}",
+      "groupTallyNoTotal": "{delivered, plural, one {# üyeye} other {# üyeye}} iletildi{read, plural, =0 {} other {, # kişi okudu}}{failed, plural, =0 {} other {, # başarısız}}",
+      "groupTallyBilled": "{billable} ücretlendirildi, {free} ücretsiz"
     },
     "media": {
       "openImage": "{name} görselini aç",
@@ -664,6 +674,26 @@
         "label": "Grup üyeleri",
         "loading": "Üyeler aranıyor",
         "none": "Eşleşen üye yok"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta bu grubu askıya aldı",
+          "message": "WhatsApp, askıya alınmış bir gruba mesaj iletmez. Meta askıyı kaldırana kadar konuşmayı okuyabilir ve dahili not ekleyebilirsiniz."
+        },
+        "plan": {
+          "title": "Planınız WhatsApp gruplarını içermiyor",
+          "message": "Bu konuşmayı okuyabilir ve dahili not ekleyebilirsiniz, ancak gruba göndermek için gruplu bir plan gerekir. Bir yöneticiden yükseltme isteyin."
+        },
+        "ineligible": {
+          "title": "Bu numara WhatsApp gruplarını kullanamaz",
+          "message": "Son kontrolde Meta bu numarada gruplara izin vermedi (resmi işletme hesabı gerekir). Konuşmayı okuyabilir ve dahili not ekleyebilirsiniz. Yeniden kontrol etmek için Meta Grupları'nı açın."
+        }
+      },
+      "cost": {
+        "members": "Bu mesaj {count, plural, one {# üyeye} other {# üyeye}} gidecek. Tahmini maliyet {cost}: WhatsApp, mesajı alan her üye için ücret alır.",
+        "membersNoEstimate": "Bu mesaj {count, plural, one {# üyeye} other {# üyeye}} gidecek. WhatsApp, mesajı alan her üye için ücret alır.",
+        "sizeUnknown": "Üye sayısı henüz bilinmiyor. WhatsApp, bu mesajı alan her üye için ücret alır.",
+        "walletShort": "Cüzdan bakiyeniz bu mesaj için yetmeyebilir. Göndermeden önce bakiye yükleyin."
       }
     },
     "savedReplies": {
@@ -817,6 +847,122 @@
         "upgrade": "Planları gör",
         "conflict": "Bu yanıtı başka biri önce değiştirdi. Bu pencereyi kapatıp yeniden açın.",
         "invalid": "Girdiklerinizin bir kısmı geçerli değil."
+      },
+      "transfer": {
+        "export": "CSV dışa aktar",
+        "import": "CSV içe aktar",
+        "title": "Kayıtlı yanıtları içe aktar",
+        "intro": "title, shortcut, body sütunlarını ve isterseniz category, language ve channel sütunlarını içeren bir CSV yükleyin (kanal türleri | ile ayrılır, tüm kanallar için boş bırakın). En fazla 1.000 satır ve {maxKb} KB. İçe aktarılan yanıtlar tüm ekiple paylaşılır. Dışa aktarma aynı sütunlara sahiptir.",
+        "file": "CSV dosyası",
+        "tooBig": "Bu dosya çok büyük.",
+        "duplicates": "Paylaşılan bir yanıt zaten bu kısayolu kullanıyorsa",
+        "policy": {
+          "skip": "Mevcut yanıtı koru",
+          "overwrite": "Metnini değiştir"
+        },
+        "policyHint": {
+          "skip": "Satır atlanır ve yanıt olduğu gibi kalır.",
+          "overwrite": "Başlık, metin, kategori, dil ve kanallar değiştirilir. Kullanım sayısı korunur."
+        },
+        "check": "Dosyayı kontrol et",
+        "go": "İçe aktar ({count})",
+        "cancel": "İptal",
+        "summary": "{create} oluşturulacak, {update} değiştirilecek, {skip} atlanacak, {invalid} sorunlu. Henüz hiçbir şey kaydedilmedi.",
+        "plan": "Planın: {used} / {limit} yanıt kullanılıyor.",
+        "row": "Satır {line}: /{shortcut}",
+        "truncated": "Yalnızca sorunu olan veya değişecek ilk satırlar listelenir.",
+        "done": "İçe aktarıldı: {created} oluşturuldu, {updated} değiştirildi.",
+        "issue": {
+          "update": "değiştirilecek",
+          "skip": "atlandı",
+          "invalid": "bir sorunu var",
+          "duplicate": "kısayol zaten kullanımda, atlandı",
+          "missing_shortcut": "kısayol yok",
+          "shortcut_invalid": "kısayolda kullanılabilir harf veya rakam yok",
+          "missing_title": "başlık yok",
+          "title_too_long": "başlık çok uzun",
+          "missing_body": "metin yok",
+          "body_too_long": "metin çok uzun",
+          "control_characters": "denetim karakterleri içeriyor",
+          "category_too_long": "kategori çok uzun",
+          "language_invalid": "dil en veya pt-BR gibi bir kod değil",
+          "channel_unknown": "bilinmeyen bir kanal",
+          "duplicate_in_file": "kısayol dosyada daha önce geçiyor",
+          "plan_limit_reached": "planınızın limitini aşıyor"
+        }
+      }
+    },
+    "bulk": {
+      "barLabel": "Toplu işlemler",
+      "selected": "{count, plural, one {# konuşma seçildi} other {# konuşma seçildi}}",
+      "selectAllInView": "Görünümdeki {count} konuşmanın tümünü seç",
+      "done": "Bitti",
+      "markRead": "Okundu olarak işaretle",
+      "resolve": "Çözüldü olarak işaretle",
+      "close": "Kapat",
+      "reopen": "Yeniden aç",
+      "assign": "Ata",
+      "assignToMe": "Bana ata",
+      "unassign": "Atamayı kaldır",
+      "removeTeam": "Ekibi kaldır",
+      "priority": "Öncelik",
+      "snooze": "Ertele",
+      "snoozePreset": {
+        "oneHour": "1 saat",
+        "threeHours": "3 saat",
+        "tomorrow": "Yarın, 9:00",
+        "nextWeek": "Gelecek Pazartesi, 9:00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {# konuşma güncellendi} other {# konuşma güncellendi}}.",
+        "nothingChanged": "Değiştirilecek bir şey yok: seçilen konuşmalar zaten güncel.",
+        "partial": "{done} güncellendi, {unchanged} zaten güncel, {failed} değiştirilemedi. Başarısız olanlar seçili kalır.",
+        "allFailed": "{count, plural, one {# konuşma} other {# konuşma}} değiştirilemedi."
+      },
+      "label": "Etiket",
+      "labelAdd": "Etiket ekle",
+      "labelRemove": "Etiketi kaldır"
+    },
+    "triage": {
+      "priority": "Öncelik",
+      "snooze": "Ertele",
+      "wake": "Şimdi göster"
+    },
+    "labels": {
+      "label": "Etiket",
+      "loading": "Etiketler yükleniyor…",
+      "loadFailed": "Etiketler yüklenemedi.",
+      "none": "Henüz etiket yok.",
+      "newLabel": "Yeni etiket",
+      "add": "Ekle",
+      "filter": "Etiketler",
+      "filterActive": "{count, plural, one {# etiket} other {# etiket}}",
+      "clearFilter": "Etiket filtresini temizle",
+      "screen": {
+        "back": "Gelen kutusuna dön",
+        "title": "Etiketler",
+        "intro": "Etiketler, ekibinizin sohbetleri sıralayıp filtreleyebilmesi için onları işaretler. Kişilerde kullanılan etiketlerle aynıdır.",
+        "newTitle": "Yeni etiket",
+        "editTitle": "Etiketi düzenle",
+        "name": "Ad",
+        "color": "Renk",
+        "colorInvalid": "#075E54 gibi bir onaltılık renk ya da renk adı kullanın.",
+        "description": "Açıklama (isteğe bağlı)",
+        "create": "Etiket oluştur",
+        "save": "Değişiklikleri kaydet",
+        "cancel": "İptal",
+        "edit": "Düzenle",
+        "delete": "Sil",
+        "inUse": "{count, plural, one {# sohbet} other {# sohbet}}",
+        "emptyTitle": "Henüz etiket yok",
+        "emptyMessage": "Yukarıdan ilk etiketinizi oluşturun, ardından gelen kutusundan sohbetlere ekleyin.",
+        "deleteTitle": "Bu etiket silinsin mi?",
+        "deleteMessage": "\"{name}\" etiketi {count, plural, one {# sohbette} other {# sohbette}} kullanılıyor. Silerseniz bu sohbetlerden ve etiketi taşıyan tüm kişilerden kaldırılır. Bu işlem geri alınamaz.",
+        "nameTaken": "Bu ada sahip bir etiket zaten var.",
+        "conflict": "Bu etiketi başka biri önce değiştirdi. Liste yeniden yüklendi.",
+        "saved": "Etiket kaydedildi",
+        "created": "Etiket oluşturuldu",
+        "deleted": "Etiket silindi"
       }
     }
   }

@@ -138,8 +138,31 @@ contacts service, REST API v1; web `apps/web/src/features/contact-consent/`; hel
 
 ## 11. Follow-ups (backlog)
 
-Forms "WhatsApp opt-in" wording helper; per-purpose utility consent enforcement; double opt-in link; preference center; DSAR export;
-email unsubscribe link when the email channel sends marketing.
+Built in the follow-up pass (section 13): the inbox system line, the asynchronous export, the import consent column, the wizard's
+recipient list, the Forms WhatsApp wording helper. Still specified-next (designs below, nothing built): per-purpose utility consent
+enforcement; double opt-in link; preference center; DSAR export; email unsubscribe link when the email channel sends marketing.
+
+### 11.1 Double opt-in link (design)
+
+For a source we do not trust to prove the person owns the number (an import, a manual grant, a form with no verification), the grant
+is recorded as `pending` and a one-tap confirmation is sent: a WhatsApp template (or an email) carrying a signed link
+`/c/<token>` (HMAC of org, contact, channel and purpose, 7 days, single use). Opening the link records `granted` with source
+`double_opt_in` and evidence `{ messageId }`; until then the contact counts as `unknown` for the send policy. Needs a new state
+`pending` in `contact_consent_state`, a public route (no session, rate limited, constant-time token check) and a template category
+decision. The ledger never changes shape: `pending` is a state, the history stays events.
+
+### 11.2 Preference center (design)
+
+A public page reached from a footer link `/p/<token>` (same token family) where the contact chooses channels and purposes
+(marketing, utility), each choice one ledger event with source `preference_center`. The page shows the workspace name and the
+current state per channel, never other contacts' data. Needs the public route, the token, a per-workspace page title and logo setting,
+and one help guide.
+
+### 11.3 DSAR export (design)
+
+`GET /v2/contact-consent/contacts/:uuid/dsar` (permission `contacts.consent.manage`): the contact's full ledger plus the contact card
+and message counts as one ZIP, built by the same worker queue as the proof export (`consent-export`, a `kind` column on
+`contact_consent_exports`), kept 7 days, audited. Erasure keeps working as today: the events are anonymised, never deleted.
 
 ## 12. As built (differences from the plan above, for the record)
 
@@ -150,12 +173,60 @@ email unsubscribe link when the email channel sends marketing.
 - The composer shows a warning and a one-click button instead of silently adding the line, and the tick box reflects whether the line
   is in the text. The line is part of the saved message. The setting "Warn when a marketing text has no opt-out line" is stored as
   `footerDefaultOn`.
-- The consent switch is applied to the `sendableIds` check of broadcasts, to the audience count of the campaign wizard and to the
-  campaign dispatch (`screenRecipients` marks the rows `skipped`, "no recorded consent"). The wizard's materialised recipient list is
-  not filtered at creation (BL-103).
-- Workspace export is synchronous and capped at 50,000 rows; async export is BL-103.
-- The inbox system line for an opt-out is not built (BL-103); the message itself is visible as usual.
-- The import consent step is a tick box; a yes/no column is BL-103.
+- The consent switch is applied to the `sendableIds` check of broadcasts, to the audience count, the sample and the written recipient
+  list of the campaign wizard (section 13.4) and to the campaign dispatch (`screenRecipients` marks the rows `skipped`, "no recorded
+  consent", as a safety net).
+- Workspace export: the direct download is capped at 50,000 rows; a larger ledger is exported asynchronously (section 13.2).
+- The inbox system line for an opt-out is built (section 13.1).
+- The import consent step is a tick box; a yes/no column is built (section 13.3).
 - Roll-up flag: a grant clears `is_unsubscribed` only when it reverses a withdrawal the ledger holds and no other channel is
   withdrawn, so a legacy flag with no ledger row is never cleared by an unrelated grant.
 - The keyword cache lives in each process for 60 seconds; a save invalidates the saving process at once.
+
+## 13. Follow-up pass (BL-103), as built
+
+### 13.1 The inbox system line
+
+When a keyword really changes the state (a repeated STOP does not), the listener writes ONE `system` message into the thread through
+`ConversationsFacade.recordOutbound` (the same door as the call bubbles): direction `in` (the customer's side), provider id
+`consent:<message uuid>` (a redelivery writes one line), meta `{ event: 'consent', consentAction, consentKeyword }`. It touches only the
+thread's sequence, last message and preview: never `unread_count`, the wait clock, assignment or a notification. The message
+contract carries `systemEvent { event, action, keyword }` so the web app words the line in the reader's language (`Contact replied
+STOP: unsubscribed from marketing`); the stored `body` is the English text for exports and older clients. It is a record of a ledger
+fact, so it is written even when the auto reply is switched off.
+
+### 13.2 Asynchronous export of the proof
+
+Above 50,000 events the direct CSV would be cut short, so the screen offers **Prepare the full proof file**: `POST
+/v2/contact-consent/exports` (202) inserts a `contact_consent_exports` row (`queued`), audits it and enqueues a job on the
+`consent-export` queue; the worker (`ConsentExportRunner`, concurrency 1) claims the row, reads the ledger in keyset pages of 5,000
+(one short transaction each, newest first) into gzip members and stores the file on the row for 7 days (`CONSENT_EXPORT_TTL_DAYS`),
+then emails the requester a link to `/contact-consent?export=<id>`; a failure is written on the row and mailed, never retried. One
+export at a time per workspace (409 `CONSENT_EXPORT_IN_PROGRESS`). The file is the same CSV as the direct download (`proofCsvLine`).
+`GET /exports` lists the latest 20 and says whether the ledger is larger than the direct download (`needsAsync`); `GET
+/exports/:id/download` streams it while it lives (409 `CONSENT_EXPORT_NOT_READY` once expired). A daily sweep (02:41) deletes expired
+files and fails an export `running` for over an hour. Ceiling 5,000,000 events per file. All three routes need `contacts.consent.manage`.
+
+### 13.3 The import consent column
+
+`consent` is an import field (auto-detected from headers such as `consent`, `opt in`, `subscribed`, `marketing consent`). Each cell is
+read by `parseImportConsent`: yes / y / true / 1 / granted / opted in / subscribed / the Arabic and other yes words are **granted**; no /
+false / 0 / unsubscribed / withdrawn / the Arabic and other no words and a blank cell are **not granted**; anything else is
+**unrecognised** (also not granted, and the preview lists a few). The confirmation tick box is still required: with it unticked the
+column does nothing at all (the preview says so); with it ticked, only the rows that say yes get a `granted / import` event (the file
+name as evidence, an opt-out is never overridden). A column that is not mapped keeps the old meaning: the tick box covers every
+contact. A "no" never writes a withdrawal: a person who wants to opt contacts out marks them unsubscribed, a CSV cell is not proof.
+For a number repeated in the file the later non-blank cell wins.
+
+### 13.4 The wizard's recipient list
+
+With the switch ON `WizardAudienceService.recipientIds` and `sample` add the recorded-grant condition, so the list written at launch is
+exactly the set the count shows and nobody is written just to be skipped at dispatch. Bug fixed on the way: the count added numbers of
+an uploaded CSV that are not contacts yet to `recipients`, although they have no consent and would all be skipped; they now count as
+`noConsent`, and are left out of the wallet estimate.
+
+### 13.5 Forms: WhatsApp opt-in wording
+
+With "Marketing opt-in" on, the Forms settings show a button that fills the consent text with a ready sentence ("I agree to receive
+updates and offers on WhatsApp. I can reply STOP at any time to unsubscribe.") in the editor's language, through the same
+version-bumping path as typing, so the wording version and the stored proof stay honest.

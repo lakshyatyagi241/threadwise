@@ -1,4 +1,4 @@
-import { FLOW_MAX_NODE_VISITS } from '@crm/contracts';
+import { ERROR_CODES, FLOW_MAX_NODE_VISITS } from '@crm/contracts';
 import { edgeFrom, nodeById } from '../graph/runtime-graph';
 import { CORE_EXECUTORS } from './nodes';
 import { propertyToSave, routeReply } from './reply-router';
@@ -33,6 +33,48 @@ const registry = (extra: readonly NodeExecutor[] = []): Map<string, NodeExecutor
   for (const e of [...CORE_EXECUTORS, ...extra]) for (const t of e.types) m.set(t, e);
   return m;
 };
+
+/** Internal run variables (hidden from the run log): did any message reach the customer, and the window refusal that came first. */
+const DELIVERED_VAR = '__delivered';
+const WINDOW_REFUSED_VAR = '__window_refused';
+/** Runs the customer started by writing: their message opened the 24 hour window, so a refusal there is not a missing template. */
+const CUSTOMER_STARTED: ReadonlySet<string> = new Set([
+  'keyword',
+  'any_message',
+  'away',
+  'out_of_hours',
+]);
+
+/** Remembers on the run whether anything was delivered, and the first refusal by the 24 hour window before that. */
+function trackSend(run: RunState, out: SendOutcome): void {
+  if (out.ok) {
+    run.vars[DELIVERED_VAR] = 1;
+  } else if (
+    out.code === ERROR_CODES.SERVICE_WINDOW_CLOSED &&
+    run.vars[DELIVERED_VAR] === undefined
+  ) {
+    run.vars[WINDOW_REFUSED_VAR] ??= out.error;
+  }
+}
+
+/**
+ * A run that nobody asked for (an order, a lead, a re-subscribe, a routing rule, an enrolment) whose free-form messages were all
+ * refused by the 24 hour window ends `failed` with that reason instead of `completed`: the customer received nothing, and a green run
+ * would hide it. A message that did get through (a template that opened the conversation) keeps the run `completed`; the refusal of a
+ * later plain message stays a note in the log, as before.
+ */
+function windowFailure(run: RunState, t: Transition): Transition {
+  if (t.t !== 'end' || t.status !== 'completed' || CUSTOMER_STARTED.has(run.source)) return t;
+  const refused = run.vars[WINDOW_REFUSED_VAR];
+  if (typeof refused !== 'string' || run.vars[DELIVERED_VAR] !== undefined) return t;
+  return {
+    t: 'end',
+    status: 'failed',
+    reason: 'send_failed',
+    failureCode: ERROR_CODES.SERVICE_WINDOW_CLOSED,
+    failureReason: `Nothing reached the customer (${refused.replace(/[.\s]+$/, '')}). Open this flow with a Template step.`,
+  };
+}
 
 /** Leave `from` by `port`. No edge, or an edge to a node that is gone, is a dead end (TW-FLR-016 rule 6). */
 export function advanceFrom(
@@ -151,6 +193,7 @@ export async function executeCurrent(run: RunState, deps: StepDeps): Promise<Ste
     stepKey: `flow:${run.uuid}:${run.stepSeq}:${node.id}`,
     send: async (message) => {
       const out = await deps.send(run, message, sends++);
+      trackSend(run, out);
       if (!out.ok) sendFailed = true;
       sent.push(describeSent(message, out));
       io.out.push({ kind: 'message', name: message.kind, value: outboundWords(message) });
@@ -168,7 +211,7 @@ export async function executeCurrent(run: RunState, deps: StepDeps): Promise<Ste
   io.out.push(...varsChanged(before, run.vars));
   const recorded = finishIo(io);
   return {
-    transition: transitionOf(run, node.id, result, deps),
+    transition: windowFailure(run, transitionOf(run, node.id, result, deps)),
     nodeId: node.id,
     nodeType: node.type,
     notes,

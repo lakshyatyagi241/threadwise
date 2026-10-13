@@ -19,6 +19,8 @@ export interface ListFilters {
   /** The trimmed search text. */
   q: string;
   archived: boolean;
+  /** Label ids: threads with ANY of them (kept in the address as `?labels=a,b`). */
+  labels: string[];
 }
 
 export const DEFAULT_FILTERS: ListFilters = {
@@ -27,6 +29,7 @@ export const DEFAULT_FILTERS: ListFilters = {
   channelId: null,
   q: '',
   archived: false,
+  labels: [],
 };
 
 export const EMPTY_COUNTS: InboxCounts = { all: 0, mine: 0, unassigned: 0, unread: 0, archived: 0 };
@@ -40,16 +43,34 @@ export function listQuery(f: ListFilters): Record<string, string | boolean | und
     channelId: f.channelId ?? undefined,
     q: f.q || undefined,
     archived: f.archived || undefined,
+    labels: f.labels.length > 0 ? f.labels.join(',') : undefined,
   };
+}
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** The label ids of `?labels=a,b` (anything that is not a uuid is dropped, at most 20). */
+export function labelsFromParam(raw: string | null): string[] {
+  if (!raw) return [];
+  return [
+    ...new Set(
+      raw
+        .split(',')
+        .map((x) => x.trim().toLowerCase())
+        .filter((x) => UUID_RE.test(x)),
+    ),
+  ].slice(0, 20);
 }
 
 /** A stable identity for the filters, to restart the list when they change. */
 export const filtersKey = (f: ListFilters) =>
-  [f.tab, f.status, f.channelId ?? '', f.q, f.archived ? 1 : 0].join('|');
+  [f.tab, f.status, f.channelId ?? '', f.q, f.archived ? 1 : 0, f.labels.join(',')].join('|');
 
 /** Whether any filter other than the tab is on (the empty state then says "nothing matches", not "nothing here yet"). */
 export function isFiltered(f: ListFilters): boolean {
-  return f.status !== 'open' || f.channelId !== null || f.q !== '' || f.archived;
+  return (
+    f.status !== 'open' || f.channelId !== null || f.q !== '' || f.archived || f.labels.length > 0
+  );
 }
 
 const norm = (s: string | null | undefined) => (s ?? '').toLocaleLowerCase();
@@ -69,6 +90,7 @@ export function matchesFilters(
     if (row.status !== 'open' && row.status !== 'pending') return false;
   } else if (f.status !== 'all' && row.status !== f.status) return false;
   if (f.channelId && row.channel.id !== f.channelId) return false;
+  if (f.labels.length > 0 && !row.labels.some((l) => f.labels.includes(l.id))) return false;
   switch (f.tab) {
     case 'mine':
       if (!meId || row.assignment.user?.id !== meId) return false;

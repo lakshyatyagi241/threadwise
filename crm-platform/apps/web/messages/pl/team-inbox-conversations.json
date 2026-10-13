@@ -25,7 +25,11 @@
       "pickTitle": "Wybierz rozmowę",
       "pickMessage": "Wybierz rozmowę z listy, aby ją przeczytać i odpowiedzieć. Nowe wiadomości pojawiają się tutaj automatycznie.",
       "shortcuts": "Skróty: j i k przechodzą po liście, e kończy rozmowę, / wyszukuje.",
-      "teamChanged": "Zespół zaktualizowany."
+      "teamChanged": "Zespół zaktualizowany.",
+      "priorityChanged": "Zaktualizowano priorytet",
+      "snoozed": "Rozmowa została odłożona",
+      "labelAdded": "Dodano etykietę",
+      "labelRemoved": "Usunięto etykietę"
     },
     "list": {
       "title": "Skrzynka odbiorcza",
@@ -101,7 +105,9 @@
           "title": "Wszystko przeczytane",
           "message": "Tutaj wyświetlane są rozmowy z nowymi wiadomościami od klientów."
         }
-      }
+      },
+      "select": "Wybierz",
+      "selectDone": "Gotowe"
     },
     "status": {
       "received": "Odebrano",
@@ -139,13 +145,15 @@
       "logNotReady": "Ten eksport nie jest gotowy lub wygasł. Zamów go ponownie.",
       "groupSuspended": "Meta zawiesiła tę grupę, więc nie można do niej pisać, dopóki Meta jej nie przywróci.",
       "walletEmpty": "Portfel wiadomości nie pokrywa tej wiadomości grupowej (jedna opłata za każdego członka). Doładuj go i spróbuj ponownie.",
+      "groupPlanLocked": "Twój plan nie obejmuje grup WhatsApp, więc nie można pisać do tej grupy. Poproś administratora o zmianę planu.",
       "groupLeft": "Ten numer opuścił grupę, więc nie może już wysyłać tam wiadomości.",
       "groupAnnounceOnly": "Tylko administratorzy mogą wysyłać wiadomości w tej grupie, a ten numer nie jest administratorem.",
       "groupRateLimited": "Zbyt wiele wiadomości grupowych z tego numeru w krótkim czasie. Poczekaj minutę i spróbuj ponownie.",
       "groupUnavailable": "WhatsApp nie przyjął tej wiadomości grupowej. Spróbuj ponownie za kilka minut.",
       "savedReplyGone": "Ten szablon odpowiedzi już nie istnieje.",
       "savedReplyChannel": "Ten szablon odpowiedzi nie jest przeznaczony dla tego rodzaju kanału.",
-      "shortcutTaken": "Inny szablon odpowiedzi używa już tego skrótu."
+      "shortcutTaken": "Inny szablon odpowiedzi używa już tego skrótu.",
+      "importInvalid": "Tego pliku nie można odczytać jako zapisanych odpowiedzi. Pierwszy wiersz musi zawierać kolumny title, shortcut i body, a plik może mieć najwyżej 1000 wierszy."
     },
     "bubble": {
       "kind": {
@@ -213,7 +221,9 @@
       },
       "deliveryLog": "Dziennik dostarczania",
       "groupMember": "Członek grupy",
-      "groupTally": "Dostarczono do {delivered, plural, one {# członka} few {# członków} many {# członków} other {# członka}}: płatnych {billable}, bezpłatnych {free}"
+      "groupTally": "Dostarczono do {delivered} z {members}{read, plural, =0 {} other {, odczytało: #}}{failed, plural, =0 {} other {, błędy: #}}",
+      "groupTallyNoTotal": "Dostarczono do: {delivered, plural, one {# członka} other {# członków}}{read, plural, =0 {} other {, odczytało: #}}{failed, plural, =0 {} other {, błędy: #}}",
+      "groupTallyBilled": "płatnych {billable}, bezpłatnych {free}"
     },
     "media": {
       "openImage": "Otwórz obraz {name}",
@@ -664,6 +674,26 @@
         "label": "Członkowie grupy",
         "loading": "Szukanie członków",
         "none": "Żaden członek nie pasuje"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta zawiesiła tę grupę",
+          "message": "WhatsApp nie dostarcza wiadomości do zawieszonej grupy. Możesz czytać rozmowę i dodawać notatki wewnętrzne, dopóki Meta nie zdejmie blokady."
+        },
+        "plan": {
+          "title": "Twój plan nie obejmuje grup WhatsApp",
+          "message": "Możesz czytać tę rozmowę i dodawać notatki wewnętrzne, ale wysyłanie do grupy wymaga planu z grupami. Poproś administratora o zmianę planu."
+        },
+        "ineligible": {
+          "title": "Ten numer nie może korzystać z grup WhatsApp",
+          "message": "Podczas ostatniego sprawdzenia Meta nie zezwoliła na grupy dla tego numeru (wymagane jest oficjalne konto firmowe). Możesz czytać rozmowę i dodawać notatki wewnętrzne. Otwórz Grupy Meta, aby sprawdzić ponownie."
+        }
+      },
+      "cost": {
+        "members": "Ta wiadomość trafi do: {count, plural, one {# członka} other {# członków}}. Szacowany koszt {cost}: WhatsApp nalicza opłatę za każdego członka, który ją otrzyma.",
+        "membersNoEstimate": "Ta wiadomość trafi do: {count, plural, one {# członka} other {# członków}}. WhatsApp nalicza opłatę za każdego członka, który ją otrzyma.",
+        "sizeUnknown": "Liczba członków nie jest jeszcze znana. WhatsApp nalicza opłatę za każdego członka, który otrzyma tę wiadomość.",
+        "walletShort": "Środki w portfelu mogą nie wystarczyć na tę wiadomość. Doładuj portfel przed wysłaniem."
       }
     },
     "savedReplies": {
@@ -817,6 +847,122 @@
         "upgrade": "Zobacz plany",
         "conflict": "Ktoś inny zmienił tę odpowiedź wcześniej. Zamknij to okno i otwórz je ponownie.",
         "invalid": "Część wprowadzonych danych jest nieprawidłowa."
+      },
+      "transfer": {
+        "export": "Eksportuj CSV",
+        "import": "Importuj CSV",
+        "title": "Importuj zapisane odpowiedzi",
+        "intro": "Prześlij plik CSV z kolumnami title, shortcut, body oraz, jeśli chcesz, category, language i channel (rodzaje kanałów oddzielone znakiem |, puste dla wszystkich kanałów). Do 1000 wierszy i {maxKb} KB. Zaimportowane odpowiedzi są udostępniane całemu zespołowi. Eksport ma te same kolumny.",
+        "file": "Plik CSV",
+        "tooBig": "Ten plik jest za duży.",
+        "duplicates": "Gdy udostępniona odpowiedź już używa skrótu",
+        "policy": {
+          "skip": "Zachowaj istniejącą odpowiedź",
+          "overwrite": "Zastąp jej treść"
+        },
+        "policyHint": {
+          "skip": "Wiersz zostanie pominięty, a odpowiedź pozostanie bez zmian.",
+          "overwrite": "Tytuł, treść, kategoria, język i kanały zostaną zastąpione. Licznik użyć zostaje zachowany."
+        },
+        "check": "Sprawdź plik",
+        "go": "Importuj ({count})",
+        "cancel": "Anuluj",
+        "summary": "{create} do utworzenia, {update} do zastąpienia, {skip} pominięte, {invalid} z problemem. Nic jeszcze nie zostało zapisane.",
+        "plan": "Twój plan: {used} z {limit} odpowiedzi.",
+        "row": "Wiersz {line}: /{shortcut}",
+        "truncated": "Wyświetlono tylko pierwsze wiersze z problemem lub zmianą.",
+        "done": "Zaimportowano: utworzono {created}, zastąpiono {updated}.",
+        "issue": {
+          "update": "zostanie zastąpiona",
+          "skip": "pominięta",
+          "invalid": "ma problem",
+          "duplicate": "skrót jest już używany, pominięto",
+          "missing_shortcut": "brak skrótu",
+          "shortcut_invalid": "skrót nie zawiera użytecznych liter ani cyfr",
+          "missing_title": "brak tytułu",
+          "title_too_long": "tytuł jest za długi",
+          "missing_body": "brak treści",
+          "body_too_long": "treść jest za długa",
+          "control_characters": "zawiera znaki sterujące",
+          "category_too_long": "kategoria jest za długa",
+          "language_invalid": "język nie jest kodem takim jak en lub pt-BR",
+          "channel_unknown": "nieznany kanał",
+          "duplicate_in_file": "skrót pojawia się wcześniej w pliku",
+          "plan_limit_reached": "przekroczono limit Twojego planu"
+        }
+      }
+    },
+    "bulk": {
+      "barLabel": "Działania zbiorcze",
+      "selected": "{count, plural, one {Wybrano # rozmowę} few {Wybrano # rozmowy} many {Wybrano # rozmów} other {Wybrano # rozmowy}}",
+      "selectAllInView": "Wybierz wszystkie widoczne ({count})",
+      "done": "Gotowe",
+      "markRead": "Oznacz jako przeczytane",
+      "resolve": "Rozwiąż",
+      "close": "Zamknij",
+      "reopen": "Otwórz ponownie",
+      "assign": "Przypisz",
+      "assignToMe": "Przypisz do mnie",
+      "unassign": "Cofnij przypisanie",
+      "removeTeam": "Usuń zespół",
+      "priority": "Priorytet",
+      "snooze": "Odłóż",
+      "snoozePreset": {
+        "oneHour": "1 godzina",
+        "threeHours": "3 godziny",
+        "tomorrow": "Jutro, 9:00",
+        "nextWeek": "W przyszły poniedziałek, 9:00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {Zaktualizowano # rozmowę} few {Zaktualizowano # rozmowy} many {Zaktualizowano # rozmów} other {Zaktualizowano # rozmowy}}.",
+        "nothingChanged": "Nic do zmiany: wybrane rozmowy są już aktualne.",
+        "partial": "Zaktualizowano: {done}, już aktualne: {unchanged}, nie udało się zmienić: {failed}. Te, które się nie udały, pozostają zaznaczone.",
+        "allFailed": "Nie udało się zmienić żadnej z {count, plural, one {# rozmowy} few {# rozmów} many {# rozmów} other {# rozmów}}."
+      },
+      "label": "Etykieta",
+      "labelAdd": "Dodaj etykietę",
+      "labelRemove": "Usuń etykietę"
+    },
+    "triage": {
+      "priority": "Priorytet",
+      "snooze": "Odłóż",
+      "wake": "Przywróć teraz"
+    },
+    "labels": {
+      "label": "Etykieta",
+      "loading": "Ładowanie etykiet…",
+      "loadFailed": "Nie udało się załadować etykiet.",
+      "none": "Brak etykiet.",
+      "newLabel": "Nowa etykieta",
+      "add": "Dodaj",
+      "filter": "Etykiety",
+      "filterActive": "{count, plural, one {# etykieta} few {# etykiety} many {# etykiet} other {# etykiety}}",
+      "clearFilter": "Wyczyść filtr etykiet",
+      "screen": {
+        "back": "Wróć do skrzynki",
+        "title": "Etykiety",
+        "intro": "Etykiety oznaczają rozmowy, aby zespół mógł je sortować i filtrować. Są to te same tagi, które są używane przy kontaktach.",
+        "newTitle": "Nowa etykieta",
+        "editTitle": "Edytuj etykietę",
+        "name": "Nazwa",
+        "color": "Kolor",
+        "colorInvalid": "Użyj koloru szesnastkowego, np. #075E54, lub nazwy koloru.",
+        "description": "Opis (opcjonalnie)",
+        "create": "Utwórz etykietę",
+        "save": "Zapisz zmiany",
+        "cancel": "Anuluj",
+        "edit": "Edytuj",
+        "delete": "Usuń",
+        "inUse": "{count, plural, one {# rozmowa} few {# rozmowy} many {# rozmów} other {# rozmowy}}",
+        "emptyTitle": "Brak etykiet",
+        "emptyMessage": "Utwórz pierwszą etykietę powyżej, a następnie dodawaj ją do rozmów ze skrzynki.",
+        "deleteTitle": "Usunąć tę etykietę?",
+        "deleteMessage": "\"{name}\" jest użyta w liczbie rozmów: {count, plural, one {# rozmowa} few {# rozmowy} many {# rozmów} other {# rozmowy}}. Usunięcie zdejmie ją z tych rozmów i ze wszystkich kontaktów, które ją mają. Tej operacji nie można cofnąć.",
+        "nameTaken": "Etykieta o tej nazwie już istnieje.",
+        "conflict": "Ktoś inny zmienił tę etykietę wcześniej. Lista została przeładowana.",
+        "saved": "Zapisano etykietę",
+        "created": "Utworzono etykietę",
+        "deleted": "Usunięto etykietę"
       }
     }
   }

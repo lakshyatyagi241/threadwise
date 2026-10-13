@@ -114,6 +114,10 @@ export class TwilioTransport implements EngineTransport, OnModuleInit {
         f.set('PersistentAction', `geo:${command.latitude},${command.longitude}`);
         f.set('Body', (command.name ?? '').trim() || 'Location');
         return f;
+      case 'template':
+        throw new UnsupportedSendError(
+          'A Meta template cannot be sent through Twilio here; send its text instead.',
+        );
       default:
         throw new UnsupportedSendError(
           `A ${command.type === 'contact' ? 'contact card' : 'group message'} cannot be sent through Twilio.`,

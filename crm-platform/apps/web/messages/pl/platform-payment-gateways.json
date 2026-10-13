@@ -237,8 +237,12 @@
           "30d": "Ostatnie 30 dni",
           "90d": "Ostatnie 90 dni",
           "1y": "Ostatni rok",
-          "all": "Cały czas"
-        }
+          "all": "Cały czas",
+          "custom": "Zakres niestandardowy"
+        },
+        "customFrom": "Data początkowa",
+        "customTo": "Data końcowa",
+        "customInvalid": "Wybierz dwa poprawne dni: początek nie może być po końcu, a różnica to najwyżej 5 lat."
       },
       "orders": {
         "title": "Historia zamówień",
@@ -250,7 +254,8 @@
         "windows": {
           "90d": "Ostatnie 90 dni",
           "this_year": "Ten rok",
-          "all": "Cały czas"
+          "all": "Cały czas",
+          "custom": "Zakres niestandardowy"
         },
         "kpi": {
           "total": "Łączna liczba zamówień",
@@ -434,7 +439,7 @@
           "gross": "Przychód brutto",
           "net": "Przychód netto",
           "netPct": "{pct}% netto",
-          "success": "Skuteczność autoryzacji",
+          "success": "Odsetek udanych płatności",
           "failed": "Nieudane",
           "events": "{count, plural, one {# zdarzenie} few {# zdarzenia} many {# zdarzeń} other {# zdarzenia}}",
           "refunds": "Zwroty",

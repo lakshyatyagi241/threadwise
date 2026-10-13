@@ -184,11 +184,24 @@ export class WizardAudienceService {
     return { where: segmentContactsWhere(orgId, rulesSql), invalid, csvUploadId };
   }
 
+  /** The workspace switch "Require recorded consent for marketing sends". Off when the consent module is not wired in. */
+  private async requiresConsent(orgId: number): Promise<boolean> {
+    return (await this.consentPolicy?.requiresConsent(orgId)) ?? false;
+  }
+
+  /**
+   * The condition the written recipient list (and the sample) adds on `contacts`: with the switch ON only a contact with a recorded
+   * marketing grant, so the list is the same set the count shows and nobody is written just to be skipped at dispatch. `true` otherwise.
+   */
+  private async consentWhere(orgId: number): Promise<SQL> {
+    return (await this.requiresConsent(orgId)) ? hasGrantedConsentSql('contacts') : sql`true`;
+  }
+
   async count(tx: Tx, orgId: number, audience: WizardAudience): Promise<WizardAudienceCount> {
     const { where, invalid, csvUploadId } = await this.where(tx, orgId, audience);
     const fresh = await this.newCsvNumbers(tx, orgId, csvUploadId);
     // With the workspace switch ON, a contact with no recorded consent is counted apart and not among the recipients.
-    const requireConsent = (await this.consentPolicy?.requiresConsent(orgId)) ?? false;
+    const requireConsent = await this.requiresConsent(orgId);
     // The count runs in a savepoint: a cancelled statement aborts only that, and the timeout is undone with it.
     const before = (await tx.execute(sql`SELECT current_setting('statement_timeout') AS v`))
       .rows[0] as {
@@ -223,12 +236,13 @@ export class WizardAudienceService {
         return { totals, byPrefix };
       });
       await tx.execute(sql`SELECT set_config('statement_timeout', ${before.v}, true)`);
+      // A number that is not a contact yet has no recorded consent: with the switch ON it is not a recipient, it is counted apart.
       return {
         matching: Number(out.totals.matching) + fresh.total,
         optedOut: Number(out.totals.opted_out),
         invalidNumber: Number(out.totals.invalid_number),
-        noConsent: Number(out.totals.no_consent),
-        recipients: Number(out.totals.recipients) + fresh.total,
+        noConsent: Number(out.totals.no_consent) + (requireConsent ? fresh.total : 0),
+        recipients: Number(out.totals.recipients) + (requireConsent ? 0 : fresh.total),
         newContacts: fresh.total,
         approximate: false,
         countries: this.countries([...out.byPrefix, ...fresh.byPrefix]),
@@ -283,6 +297,8 @@ export class WizardAudienceService {
     limit: number,
   ): Promise<string[]> {
     if (!audience.csv) return [];
+    // With the switch ON these numbers have no consent, so they are not messaged and not charged for.
+    if (await this.requiresConsent(orgId)) return [];
     const up = await this.csv.find(tx, orgId, audience.csv.id);
     if (!up) return [];
     const rows = await this.csv.newNumbers(tx, orgId, up.id, 0, limit);
@@ -357,9 +373,10 @@ export class WizardAudienceService {
     limit: number,
   ): Promise<SampleContact[]> {
     const { where } = await this.where(tx, orgId, audience);
+    const consent = await this.consentWhere(orgId);
     const res = await tx.execute(sql`
       SELECT contacts.id, contacts.uuid, contacts.name, contacts.phone
-      FROM contacts WHERE ${where} AND ${ELIGIBLE}
+      FROM contacts WHERE ${where} AND ${ELIGIBLE} AND ${consent}
       ORDER BY contacts.id LIMIT ${limit}`);
     return (
       res.rows as Array<{
@@ -380,9 +397,10 @@ export class WizardAudienceService {
     limit: number,
   ): Promise<number[]> {
     const { where } = await this.where(tx, orgId, audience);
+    const consent = await this.consentWhere(orgId);
     const res = await tx.execute(sql`
       SELECT contacts.id FROM contacts
-      WHERE ${where} AND ${ELIGIBLE} AND contacts.id > ${afterId}::bigint
+      WHERE ${where} AND ${ELIGIBLE} AND ${consent} AND contacts.id > ${afterId}::bigint
       ORDER BY contacts.id LIMIT ${limit}`);
     return (res.rows as Array<{ id: number | string }>).map((r) => Number(r.id));
   }

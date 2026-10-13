@@ -38,6 +38,8 @@ export interface ScoringFacts {
   daysInStage: number;
   /** Engagement signals: counts and durations from broadcasts, link clicks and the chat. */
   engagement: EngagementFacts;
+  /** Coarse facts about the contact's company from the growth pilot's enrichment; absent for every workspace without it. */
+  enrichment?: { companySize?: string; industry?: string; seniority?: string; country?: string };
 }
 
 /**
@@ -117,9 +119,13 @@ export const SYSTEM_PROMPT = [
   'Answer with one JSON object and nothing else: {"score": <integer 0-100>, "reasons": [<up to 4 short strings, each under 120 characters, the strongest signals first>]}.',
 ].join(' ');
 
+/** Said to the model only when it is given enrichment, so the prompt of every other workspace is unchanged. */
+export const ENRICHMENT_NOTE =
+  'The "enrichment" object describes the contact\u2019s company (size band, industry) and seniority: a larger company and a senior role raise the score a little; they never outweigh the contact\u2019s own behaviour.';
+
 export function scoringPrompt(facts: ScoringFacts): { system: string; user: string } {
   return {
-    system: SYSTEM_PROMPT,
+    system: facts.enrichment ? `${SYSTEM_PROMPT} ${ENRICHMENT_NOTE}` : SYSTEM_PROMPT,
     user: `Contact facts:\n${JSON.stringify(facts)}`,
   };
 }

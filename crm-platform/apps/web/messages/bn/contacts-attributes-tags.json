@@ -121,6 +121,12 @@
       "selectedActionsNone": "নির্বাচিত কন্টাক্ট (আগে সারি নির্বাচন করুন)",
       "modifyColumns": "কলাম বদলান",
       "resetColumns": "ডিফল্টে ফিরুন",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "কন্টাক্টের নাম",
       "colPhone": "ফোন নম্বর",
       "colEmailId": "ইমেইল ID",
@@ -407,7 +413,8 @@
         "address": "ঠিকানা",
         "memo": "মেমো",
         "status": "স্ট্যাটাস",
-        "source": "উৎস"
+        "source": "উৎস",
+        "consent": "মার্কেটিং সম্মতি (হ্যাঁ / না)"
       },
       "notInFile": "ফাইলে নেই",
       "columnN": "কলাম {n}",
@@ -1175,7 +1182,7 @@
       },
       "exports": {
         "title": "এক্সপোর্ট",
-        "hint": "Hub থেকে কন্টাক্ট এক্সপোর্ট, নতুনটি আগে। ডাউনলোড করা ফাইল সংরক্ষিত থাকে না।",
+        "hint": "হাব থেকে কন্টাক্ট এক্সপোর্ট, নতুনগুলো আগে। প্রতিটি ফাইল ৩০ দিন রাখা হয়, যাতে আপনি এবং এক্সপোর্টের অনুমতিপ্রাপ্ত সহকর্মীরা আবার ডাউনলোড করতে পারেন।",
         "empty": "এখনও কোনো এক্সপোর্ট নেই।",
         "by": "দ্বারা",
         "rows": "কন্টাক্ট",
@@ -1184,7 +1191,11 @@
         "selections": {
           "ids": "টিক দেওয়া কন্টাক্ট",
           "filter": "মেলে এমন সব"
-        }
+        },
+        "download": "ডাউনলোড",
+        "noFile": "সংরক্ষিত নয়",
+        "keptUntil": "{date} পর্যন্ত রাখা হবে",
+        "downloadFailed": "ফাইলটি ডাউনলোড করা যায়নি। এর মেয়াদ শেষ হয়ে থাকতে পারে।"
       }
     }
   }

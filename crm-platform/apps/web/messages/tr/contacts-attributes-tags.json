@@ -121,6 +121,12 @@
       "selectedActionsNone": "Seçilen kişiler (önce satırları seçin)",
       "modifyColumns": "Sütunları değiştir",
       "resetColumns": "Varsayılana sıfırla",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "Kişi adı",
       "colPhone": "Telefon numarası",
       "colEmailId": "E-posta kimliği",
@@ -407,7 +413,8 @@
         "address": "Adres",
         "memo": "Not",
         "status": "Durum",
-        "source": "Kaynak"
+        "source": "Kaynak",
+        "consent": "Pazarlama izni (evet / hayır)"
       },
       "notInFile": "Dosyada yok",
       "columnN": "Sütun {n}",
@@ -1175,7 +1182,7 @@
       },
       "exports": {
         "title": "Dışa aktarmalar",
-        "hint": "Hub'dan yapılan kişi dışa aktarmaları, en yeniden başlayarak. İndirilen dosya saklanmaz.",
+        "hint": "Hub'dan kişi dışa aktarımları, en yeniler önce. Her dosya 30 gün saklanır; siz ve dışa aktarma izni olan ekip arkadaşlarınız tekrar indirebilir.",
         "empty": "Henüz dışa aktarma yok.",
         "by": "Yapan",
         "rows": "Kişiler",
@@ -1184,7 +1191,11 @@
         "selections": {
           "ids": "İşaretli kişiler",
           "filter": "Eşleşen her şey"
-        }
+        },
+        "download": "İndir",
+        "noFile": "Kaydedilmedi",
+        "keptUntil": "{date} tarihine kadar saklanır",
+        "downloadFailed": "Dosya indirilemedi. Süresi dolmuş olabilir."
       }
     }
   }

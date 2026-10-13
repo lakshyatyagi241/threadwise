@@ -1,0 +1,434 @@
+{
+  "growth": {
+    "common": {
+      "dismiss": "Descartar",
+      "retry": "Reintentar",
+      "requestId": "Solicitud {id}",
+      "noAccessTitle": "No puedes abrir esta pantalla",
+      "noAccess": "Pide a un administrador el permiso “{permission}”."
+    },
+    "errors": {
+      "network": "No pudimos conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
+      "forbidden": "Tu rol no tiene permiso para hacer esto.",
+      "notAvailable": "El piloto de crecimiento no está disponible para este espacio de trabajo.",
+      "featureOff": "Esta parte del piloto de crecimiento está desactivada. Actívala en Controles.",
+      "actionGone": "Alguien ya decidió sobre este elemento.",
+      "assistantFailed": "El asistente no pudo sugerir nada. Asegúrate de tener una audiencia y una plantilla aprobada e inténtalo de nuevo.",
+      "undoRefused": "Este cambio ya no se puede deshacer: el contacto avanzó o ya se deshizo.",
+      "conflict": "Alguien guardó antes estos ajustes. Se cargó la versión más reciente.",
+      "notFound": "Eso ya no existe.",
+      "validation": "Algunos valores no son válidos. Revísalos e inténtalo de nuevo.",
+      "rateLimited": "Demasiadas solicitudes. Espera un momento e inténtalo de nuevo.",
+      "unexpected": "Algo salió mal. Inténtalo de nuevo y avisa a soporte si sigue ocurriendo."
+    },
+    "page": {
+      "title": "Crecimiento",
+      "subtitle": "Lo que te dicen tus campañas y conversaciones, convertido en acciones para tu equipo. Nada de aquí escribe a un contacto por sí solo.",
+      "notAvailableTitle": "No forma parte del piloto",
+      "notAvailable": "El piloto de crecimiento solo está activado para algunos espacios de trabajo. El tuyo aún no es uno de ellos.",
+      "tabs": {
+        "inbox": "Bandeja",
+        "audiences": "Audiencias",
+        "campaigns": "Campañas",
+        "insights": "Análisis",
+        "autoStage": "Cambios de etapa automáticos",
+        "assistant": "Asistente de difusión",
+        "controls": "Controles"
+      }
+    },
+    "digest": {
+      "title": "Hoy",
+      "quiet": "Nada requiere tu atención ahora mismo.",
+      "highlights": {
+        "hotLeads": "{count, plural, one {# lead caliente está listo para comprar} other {# leads calientes están listos para comprar}}",
+        "unanswered": "{count, plural, one {# pregunta de compra sin responder} other {# preguntas de compra sin responder}}",
+        "optOuts": "{count, plural, one {# contacto pidió que no le escribamos más} other {# contactos pidieron que no les escribamos más}}",
+        "suggestionsPending": "{count, plural, one {# cambio de etapa espera una decisión} other {# cambios de etapa esperan una decisión}}",
+        "campaignReplies": "{count, plural, one {# contacto respondió en el día siguiente a una campaña} other {# contactos respondieron en el día siguiente a una campaña}}",
+        "lapsed": "{count, plural, one {# cliente ha dejado de responder} other {# clientes han dejado de responder}}"
+      }
+    },
+    "inbox": {
+      "title": "Bandeja de crecimiento",
+      "hint": "Cosas que merece la pena revisar. Aceptar hace el trabajo correspondiente; descartar solo lo cierra.",
+      "filter": "Mostrar",
+      "all": "Todos ({count})",
+      "empty": "Nada pendiente. Los nuevos elementos aparecerán aquí a medida que se lean los chats y se ejecuten las revisiones diarias.",
+      "more": "Mostrar más",
+      "doneAccept": "{count, plural, one {# elemento completado} other {# elementos completados}}",
+      "doneDismiss": "{count, plural, one {# elemento descartado} other {# elementos descartados}}",
+      "someFailed": "{count, plural, one {# elemento no se pudo completar} other {# elementos no se pudieron completar}}",
+      "openContact": "Abrir contacto",
+      "someone": "Un contacto",
+      "dismiss": "Descartar",
+      "types": {
+        "hot_lead": "Lead caliente",
+        "unanswered_intent": "Sin responder",
+        "registration_issue": "Problema de registro",
+        "purchase_route": "Derivar a una persona",
+        "opt_out": "Pidió no recibir más",
+        "lapsed": "Inactivo",
+        "service_due": "Servicio pendiente",
+        "status_reply": "Estado del pedido"
+      },
+      "titles": {
+        "hot_lead": "{name} está listo para comprar",
+        "unanswered_intent": "{name} preguntó por una compra y nadie respondió",
+        "registration_issue": "{name} informa de un problema con su registro",
+        "purchase_route": "Asigna a {name} a {user}",
+        "opt_out": "{name} pidió no recibir más mensajes",
+        "lapsed": "{name} ha dejado de responder",
+        "service_due": "{name}: toca {rule}",
+        "status_reply": "{name} preguntó por su pedido"
+      },
+      "accept": {
+        "hot_lead": "Marcar como atendido",
+        "unanswered_intent": "Marcar como atendido",
+        "registration_issue": "Marcar como atendido",
+        "purchase_route": "Asignar el chat",
+        "opt_out": "Registrar la baja",
+        "lapsed": "Hecho",
+        "service_due": "Hecho",
+        "status_reply": "Hecho"
+      },
+      "facts": {
+        "routeOwner": "{name} es el responsable de este contacto.",
+        "routeLeastBusy": "{name} tiene menos chats abiertos.",
+        "lapsedDays": "Sin aperturas ni mensajes desde hace {count, plural, one {# día} other {# días}}.",
+        "issue": {
+          "missing_confirmation": "No recibió una confirmación.",
+          "payment_problem": "Informa de un problema de pago.",
+          "wrong_info": "Dice que algunos datos son incorrectos."
+        }
+      }
+    },
+    "audiences": {
+      "title": "Audiencias",
+      "hint": "Grupos de contactos definidos a partir de lo que realmente hicieron. Sincroniza uno para llenar un grupo de contactos al que puedas enviar una campaña.",
+      "empty": "Aún no hay audiencias. Activa una parte en Controles.",
+      "synced": "“{name}” ahora tiene {count, plural, one {# contacto} other {# contactos}}.",
+      "lastSync": "Grupo “{name}”, última sincronización {when}.",
+      "notSynced": "El grupo “{name}” se creará en la primera sincronización.",
+      "sync": "Sincronizar con un grupo",
+      "resync": "Sincronizar de nuevo",
+      "errors": {
+        "forbidden": "Tu rol no tiene permiso para sincronizar audiencias.",
+        "failed": "No se pudo sincronizar la audiencia. Inténtalo de nuevo."
+      },
+      "kinds": {
+        "engaged": {
+          "label": "Comprometidos",
+          "description": "Abrieron varias campañas recientemente."
+        },
+        "silent": {
+          "label": "Silenciosos",
+          "description": "Recibieron campañas pero no abrieron ninguna."
+        },
+        "lapsed": {
+          "label": "Inactivos",
+          "description": "Clientes sin aperturas ni mensajes desde hace mucho tiempo."
+        },
+        "hot_chat": {
+          "label": "Calientes en el chat",
+          "description": "Contactos cuya última lectura del chat indica que están listos para comprar."
+        },
+        "high_propensity": {
+          "label": "Probables de convertir",
+          "description": "El diez por ciento superior según el modelo de conversión."
+        },
+        "service_due": {
+          "label": "Servicio pendiente",
+          "description": "Contactos cuya fecha de servicio ha llegado."
+        }
+      }
+    },
+    "campaigns": {
+      "title": "Respuestas a campañas",
+      "hint": "Contactos que respondieron en las 24 y 72 horas posteriores a un envío, contados desde la bandeja de entrada.",
+      "stamp": "Registrar respuestas ahora",
+      "stamped": "{count, plural, one {# respuesta registrada} other {# respuestas registradas}}.",
+      "stampFailed": "No se pudieron registrar las respuestas. Inténtalo de nuevo.",
+      "empty": "Aún no se ha enviado ninguna campaña.",
+      "totals": {
+        "sent": "Enviados",
+        "read": "Leídos",
+        "replied24h": "Respondieron en 24 horas",
+        "replied72h": "Respondieron en 72 horas"
+      },
+      "cols": {
+        "campaign": "Campaña",
+        "sent": "Enviados",
+        "read": "Leídos",
+        "replied24h": "24 h",
+        "replied72h": "72 h",
+        "replyRate": "Tasa de respuesta"
+      }
+    },
+    "insights": {
+      "sendTimes": {
+        "title": "Mejor hora de envío",
+        "hint": "Cuándo tus contactos leen las campañas y te escriben, en la zona horaria de tu espacio de trabajo.",
+        "empty": "Aún no hay suficiente actividad para decirlo.",
+        "best": "Mejores horas: {hours} ({zone}).",
+        "quiet": "Horas más tranquilas: {hours}.",
+        "chart": "Actividad por hora del día",
+        "sample": "Basado en {count, plural, one {# evento} other {# eventos}}."
+      },
+      "propensity": {
+        "title": "Modelo de conversión",
+        "hint": "Aprende de los contactos que se convirtieron en clientes qué comportamiento acompaña a la conversión y puntúa a todos.",
+        "recompute": "Aprender de nuevo ahora",
+        "done": "El modelo se actualizó.",
+        "failed": "No se pudo actualizar el modelo. Inténtalo de nuevo.",
+        "contacts": "Contactos puntuados",
+        "converted": "Convertidos",
+        "auc": "Qué tan bien ordena",
+        "capture": "Convertidos en el diez por ciento superior",
+        "captureHint": "Un orden aleatorio daría un 10 %",
+        "none": "Sin medir",
+        "trained": "El modelo ha aprendido de tus contactos convertidos.",
+        "notTrained": "Aún hay muy pocos contactos convertidos para aprender, así que se usan pesos fijos.",
+        "computedAt": "Actualizado {when}.",
+        "drivers": "Qué determina la puntuación",
+        "features": {
+          "campaigns_opened_30d": "Campañas abiertas (30 días)",
+          "campaigns_received_30d": "Campañas recibidas (30 días)",
+          "messages_from_contact_30d": "Mensajes que escribió (30 días)",
+          "links_clicked_30d": "Enlaces en los que hizo clic (30 días)",
+          "groups": "Grupos a los que pertenece",
+          "has_email": "Tiene correo electrónico",
+          "chat_messages_total": "Mensajes en el chat",
+          "age_days": "Días desde que se añadió"
+        }
+      },
+      "quality": {
+        "title": "Qué tan bien funciona",
+        "hint": "Si se usan las sugerencias, qué tan bien la puntuación de leads separa a los contactos que se convirtieron y cuánto costó la IA, en los últimos 30 días.",
+        "none": "Sin medir",
+        "scoreAuc": "Calidad de la puntuación de leads",
+        "scoreAucHint": "{scored} puntuados, {converted} convertidos",
+        "calls": "Llamadas a la IA",
+        "cost": "Costo de la IA",
+        "autoApplied": "Cambiados automáticamente",
+        "undone": "{count} deshechos",
+        "suggestions": {
+          "chat": "Sugerencias de etapa desde chats",
+          "engagement": "Sugerencias de etapa desde campañas"
+        },
+        "suggestionLine": "{accepted} aceptadas, {dismissed} descartadas, {pending} pendientes.",
+        "cols": {
+          "type": "Elemento de la bandeja",
+          "done": "Hechos",
+          "dismissed": "Descartados",
+          "open": "Abiertos"
+        },
+        "actionTypes": {
+          "hot_lead": "Lead caliente",
+          "unanswered_intent": "Sin responder",
+          "registration_issue": "Problema de registro",
+          "purchase_route": "Derivar a una persona",
+          "opt_out": "Pidió no recibir más",
+          "lapsed": "Inactivo",
+          "service_due": "Servicio pendiente",
+          "status_reply": "Estado del pedido"
+        }
+      },
+      "enrichment": {
+        "title": "Datos de la empresa",
+        "hint": "Busca datos de la empresa para los contactos con correo electrónico corporativo y los muestra en el contacto.",
+        "run": "Buscar el siguiente lote",
+        "asked": "{count, plural, one {# contacto consultado} other {# contactos consultados}}.",
+        "failed": "La búsqueda falló. Inténtalo de nuevo.",
+        "status": "{provider}: {found} encontrados, {notFound} no encontrados, {failed} fallidos.",
+        "notConfigured": "No hay ningún servicio de búsqueda conectado en el servidor, así que este interruptor aún no tiene efecto."
+      }
+    },
+    "autoStage": {
+      "title": "Cambios de etapa automáticos",
+      "hint": "Solo lecturas de las que la IA está muy segura, hasta un límite diario. Cada una se puede revertir mientras nadie haya movido al contacto.",
+      "today": "{done} de {cap} usados hoy.",
+      "empty": "Aún no se ha cambiado nada automáticamente.",
+      "contact": "Un contacto",
+      "moved": "Pasó de {from} a {to}.",
+      "confidence": "{percent} % de seguridad",
+      "undone": "Revertido",
+      "undo": "Revertir",
+      "undoDone": "El contacto volvió a su etapa anterior.",
+      "undoRefused": "Este cambio ya no se puede deshacer: el contacto avanzó.",
+      "undoFailed": "No se pudo deshacer el cambio. Inténtalo de nuevo."
+    },
+    "assistant": {
+      "title": "Asistente de difusión",
+      "hint": "Di qué quieres lograr. Sugiere una de tus audiencias y una de tus plantillas aprobadas, valorando las respuestas que obtuvo realmente cada plantilla. No envía ni crea nada.",
+      "goal": "¿Qué quieres lograr?",
+      "goalHint": "Por ejemplo: recordar a todos los que se registraron el evento del sábado.",
+      "placeholder": "Recordar a los contactos registrados el evento del sábado",
+      "ask": "Sugerir una campaña",
+      "audience": "Audiencia",
+      "audienceValue": "{name} ({count} contactos)",
+      "template": "Plantilla",
+      "replyRate": "{percent} responde en un día",
+      "sendAt": "Enviar hacia las",
+      "considered": "Elegido entre {audiences, plural, one {# audiencia} other {# audiencias}} y {templates, plural, one {# plantilla} other {# plantillas}}."
+    },
+    "controls": {
+      "readOnly": "Puedes ver estos ajustes, pero no cambiarlos.",
+      "saved": "Ajustes guardados.",
+      "discard": "Descartar cambios",
+      "save": "Guardar",
+      "problem": {
+        "numbers": "Uno de los números está fuera de rango. Revisa los umbrales.",
+        "serviceRules": "La regla de servicio de la línea {line} no tiene el formato: etiqueta | propiedad de fecha | días después | días hasta.",
+        "customPhrases": "La frase de la línea {line} no tiene el formato: frase = intención."
+      },
+      "groups": {
+        "measure": {
+          "title": "Medir",
+          "hint": "Mediciones de solo lectura. No cambian nada."
+        },
+        "audiences": {
+          "title": "Audiencias y etapas",
+          "hint": "Define a quién dirigirte y sugiere cambios de etapa según lo que hacen los contactos con las campañas."
+        },
+        "chats": {
+          "title": "Lectura de chats",
+          "hint": "Usa la lectura de chats de la puntuación de leads con IA, así que esta debe estar activada. Los datos personales se enmascaran en parte antes de leer un chat."
+        },
+        "assist": {
+          "title": "Asistentes",
+          "hint": "Ayudan a tomar decisiones. No se envía nada a ningún contacto."
+        }
+      },
+      "features": {
+        "campaign_response": {
+          "label": "Respuestas reales a campañas",
+          "hint": "Cuenta los contactos que respondieron tras una campaña y corrige las cifras de respuesta."
+        },
+        "send_times": {
+          "label": "Mejor hora de envío",
+          "hint": "Muestra las horas en que tus contactos leen y escriben."
+        },
+        "propensity": {
+          "label": "Modelo de conversión",
+          "hint": "Puntúa a cada contacto según su probabilidad de convertir."
+        },
+        "quality": {
+          "label": "Panel de calidad",
+          "hint": "Muestra con qué frecuencia se usan las sugerencias y cuánto cuesta la IA."
+        },
+        "daily_digest": {
+          "label": "Resumen diario",
+          "hint": "Un breve resumen del espacio de trabajo en la parte superior de esta pantalla."
+        },
+        "engagement_audiences": {
+          "label": "Audiencias por interacción",
+          "hint": "Contactos comprometidos, silenciosos e inactivos, listos para recibir campañas."
+        },
+        "engagement_stage_rules": {
+          "label": "Sugerencias de etapa desde campañas",
+          "hint": "Sugiere avanzar a un contacto cuando abre campañas con frecuencia."
+        },
+        "service_rules": {
+          "label": "Recordatorios de servicio y seguimientos",
+          "hint": "Encuentra contactos a los que les toca un servicio o seguimiento por su fecha de servicio o compra, según tus propias reglas."
+        },
+        "enrichment": {
+          "label": "Datos de la empresa",
+          "hint": "Busca datos de la empresa de los contactos con correo electrónico corporativo."
+        },
+        "intent_fields": {
+          "label": "Intención del chat en el contacto",
+          "hint": "Escribe de qué trata el chat en la propiedad “Intención de IA”, para que un flujo pueda reaccionar."
+        },
+        "language_detect": {
+          "label": "Idioma del chat",
+          "hint": "Anota en qué idioma está cada chat."
+        },
+        "auto_notes": {
+          "label": "Notas de resumen del chat",
+          "hint": "Añade al contacto un breve resumen del chat como nota."
+        },
+        "hot_lead_alerts": {
+          "label": "Alertas de leads calientes",
+          "hint": "Genera una alerta y avisa al responsable cuando un contacto está claramente listo para comprar."
+        },
+        "unanswered_watch": {
+          "label": "Preguntas de compra sin responder",
+          "hint": "Marca las preguntas de compra o de precio que nadie respondió."
+        },
+        "handover_summary": {
+          "label": "Resumen al transferir",
+          "hint": "Cuando un chat pasa a una persona, coloca un resumen al principio."
+        },
+        "purchase_routing": {
+          "label": "Derivar compradores a una persona",
+          "hint": "Sugiere quién debe atender un chat cuando el contacto quiere comprar."
+        },
+        "registration_check": {
+          "label": "Problemas de registro",
+          "hint": "Marca los contactos que dicen haber pagado o registrado pero no recibieron confirmación."
+        },
+        "status_reply": {
+          "label": "Estado de pedidos y reparaciones",
+          "hint": "Prepara el estado de un pedido o reparación cuando un cliente pregunta por él."
+        },
+        "optout_detection": {
+          "label": "Solicitudes de baja",
+          "hint": "Marca los contactos que piden no recibir más mensajes; al aceptar, queda registrado en el libro de consentimientos."
+        },
+        "broadcast_assistant": {
+          "label": "Asistente de difusión",
+          "hint": "Sugiere una audiencia y una plantilla para un objetivo."
+        },
+        "auto_stage": {
+          "label": "Cambios de etapa automáticos",
+          "hint": "Avanza a un contacto cuando la IA está muy segura, hasta un límite diario, con opción de deshacer."
+        }
+      },
+      "thresholds": {
+        "title": "Umbrales",
+        "hint": "Los números que usan las partes anteriores.",
+        "hotLeadConfidence": "Confianza de lead caliente",
+        "hotLeadConfidenceHint": "Qué tan segura debe ser la lectura, de 0,5 a 1.",
+        "unansweredHours": "Horas para considerar una pregunta sin responder",
+        "unansweredHoursHint": "De 1 a 168.",
+        "lapsedDays": "Días para considerar inactivo a un cliente",
+        "lapsedDaysHint": "De 7 a 730.",
+        "engagedOpens": "Campañas abiertas para considerarlo comprometido",
+        "engagedOpensHint": "En 30 días.",
+        "stageMinOpens": "Campañas abiertas para sugerir un cambio de etapa",
+        "stageWindowDays": "Días hacia atrás que se revisan para eso",
+        "autoMinConfidence": "Confianza para un cambio automático",
+        "autoMinConfidenceHint": "De 0,8 a 1.",
+        "autoDailyCap": "Cambios automáticos por día",
+        "autoDailyCapHint": "El límite para todo el espacio de trabajo.",
+        "requireGroup": "Sugerir cambios de etapa solo para contactos que estén en un grupo"
+      },
+      "rules": {
+        "title": "Tus propias reglas y palabras",
+        "hint": "Una entrada por línea.",
+        "statusFields": "Propiedades de estado",
+        "statusFieldsHint": "Propiedades de contacto que guardan el estado de un pedido o reparación, como repair_status.",
+        "serviceRules": "Reglas de servicio",
+        "serviceRulesHint": "Etiqueta | propiedad de fecha | días después | días hasta (opcional).",
+        "serviceRulesExample": "Cambio de batería | purchase_date | 700 | 760",
+        "customPhrases": "Toques de botón y palabras clave",
+        "customPhrasesHint": "Frase = intención. Intenciones: {intents}.",
+        "customPhrasesExample": "Ver comprobante de garantía = post_purchase",
+        "extraMaskTerms": "Palabras que siempre se ocultan",
+        "extraMaskTermsHint": "Una marca, una dirección o un nombre que nunca debe enviarse a la IA."
+      },
+      "confirmEnrich": {
+        "title": "¿Buscar datos de la empresa?",
+        "body": "Para encontrar los datos de la empresa, el correo electrónico corporativo del contacto se envía al servicio de búsqueda. Los correos personales no se envían.",
+        "yes": "Activar",
+        "no": "Ahora no"
+      }
+    },
+    "contactCard": {
+      "title": "Crecimiento",
+      "propensity": "Probabilidad de convertir: {score} de 100.",
+      "computedAt": "Actualizado {when}."
+    }
+  }
+}

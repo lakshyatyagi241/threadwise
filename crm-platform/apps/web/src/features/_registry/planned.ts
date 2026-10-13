@@ -45,14 +45,6 @@ export const PLANNED_NAV: readonly NavItem[] = [
     icon: 'chat',
   },
   {
-    id: 'call-logs',
-    group: 'inbox',
-    labelKey: L('callLogs'),
-    href: '/call-logs',
-    order: 20,
-    icon: 'phone',
-  },
-  {
     id: 'team-chat',
     group: 'inbox',
     labelKey: L('teamChat'),

@@ -100,6 +100,21 @@ conversation is a 404 before any link exists). The storage key is never in a res
   the content screen are checked at send time by the worker, so a halt also stops what is already queued (the message ends `failed`).
 - `kind: 'template'` sends an approved template of the conversation's WhatsApp number with the agent's values (`422 INBOX_TEMPLATE_NOT_SENDABLE`
   for one the inbox cannot send, with the reason; `422 VALIDATION_FAILED` for a missing value).
+- **A Meta Cloud API group thread** (`peerKey` `g:<group id>` on a `whatsapp_cloud` channel; BL-094 phase 3, [spec](../specs/waba-groups-management.md)):
+  text, files and templates go to the group (`recipient_type: group`, the id verbatim); reactions, places, contact cards and buttons answer
+  `422 CHANNEL_CAPABILITY_UNSUPPORTED`. Refused before anything is stored: `422 PLAN_FEATURE_LOCKED` (the plan has no `waba_groups`, the same gate as
+  the management routes; a retry is checked again), `422 WABA_GROUP_SUSPENDED` (Meta suspended the group, D10), `422 WALLET_EMPTY` (the workspace's wallet
+  cannot cover one message to every member, D8). The message remembers the group size (`meta.group_members`). Reply permission is the ordinary
+  `inbox.conversation.reply`; no new key.
+  - `GET .../conversations/:id` carries `cloudGroup` for such a thread: `{ groupId, subject, memberCount, suspended, block: 'suspended' | 'plan' | 'ineligible' | null,
+canSend, estimate: { minor, currency } | null, walletShort }`. `block` is why the composer is off; `walletShort` only warns (the send decides).
+    `ineligible` is read from the Groups screen's cached eligibility probe (Redis, no Meta call), so it is "unknown" until that screen has probed the
+    number. `estimate` is an upper bound (one message at the marketing rate for every member). No phone number and no invite link is in it.
+  - A message of the thread has `groupDelivery` (outbound) `{ members, deliveredTo, readBy, failed, billable, free }` rolled up from Meta's per-member statuses
+    (a member's status only moves forward, so a retried webhook cannot inflate a count), and `group` (inbound) `{ participant, senderName }`.
+    Member numbers appear only in the inbound `group.participant`, never in the tally.
+  - Money: nothing is held. Each member that reaches delivered or read is reported to the wallet once, keyed `<wamid>:<member id>` (outbox
+    `message.delivery_reported`); a member Meta marks `free_group_customer_service` is not reported.
 - The message pipeline (the row, the ledger, the dispatch queue, the worker, receipts, the realtime events `inbox.message.new`, `inbox.message.status`,
   `inbox.unread`) belongs to the conversation core and is reached through `ConversationsFacade`; this domain proves first that the caller may see
   the conversation (404) and may reply to it (403).

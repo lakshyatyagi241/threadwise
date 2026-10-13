@@ -25,7 +25,11 @@
       "pickTitle": "Chọn một cuộc trò chuyện",
       "pickMessage": "Chọn một cuộc trò chuyện trong danh sách để đọc và trả lời. Tin nhắn mới sẽ tự động xuất hiện tại đây.",
       "shortcuts": "Phím tắt: j và k để di chuyển trong danh sách, e để giải quyết, / để tìm kiếm.",
-      "teamChanged": "Đã cập nhật nhóm."
+      "teamChanged": "Đã cập nhật nhóm.",
+      "priorityChanged": "Đã cập nhật mức ưu tiên",
+      "snoozed": "Đã tạm ẩn cuộc trò chuyện",
+      "labelAdded": "Đã thêm nhãn",
+      "labelRemoved": "Đã gỡ nhãn"
     },
     "list": {
       "title": "Hộp thư",
@@ -101,7 +105,9 @@
           "title": "Bạn đã xử lý hết",
           "message": "Các cuộc trò chuyện có tin nhắn mới từ khách hàng sẽ được liệt kê tại đây."
         }
-      }
+      },
+      "select": "Chọn",
+      "selectDone": "Xong"
     },
     "status": {
       "received": "Đã nhận",
@@ -139,13 +145,15 @@
       "logNotReady": "Bản xuất này chưa sẵn sàng hoặc đã hết hạn. Hãy yêu cầu lại.",
       "groupSuspended": "Meta đã tạm ngưng nhóm này nên không thể nhắn tin cho nhóm cho đến khi Meta gỡ bỏ.",
       "walletEmpty": "Ví tin nhắn của bạn không đủ cho tin nhắn nhóm này (tính phí cho mỗi thành viên). Hãy nạp tiền rồi thử lại.",
+      "groupPlanLocked": "Gói của bạn không có nhóm WhatsApp nên không thể nhắn vào nhóm này. Hãy nhờ quản trị viên nâng cấp gói.",
       "groupLeft": "Số này đã rời nhóm nên không thể gửi tin nhắn ở đó nữa.",
       "groupAnnounceOnly": "Chỉ quản trị viên mới có thể gửi tin nhắn trong nhóm này, và số này không phải quản trị viên.",
       "groupRateLimited": "Số này đã gửi quá nhiều tin nhắn nhóm trong thời gian ngắn. Hãy chờ một phút rồi thử lại.",
       "groupUnavailable": "WhatsApp không chấp nhận tin nhắn nhóm này. Hãy thử lại sau vài phút.",
       "savedReplyGone": "Trả lời nhanh này không còn tồn tại.",
       "savedReplyChannel": "Trả lời nhanh này không dành cho loại kênh này.",
-      "shortcutTaken": "Một trả lời nhanh khác đã dùng phím tắt đó."
+      "shortcutTaken": "Một trả lời nhanh khác đã dùng phím tắt đó.",
+      "importInvalid": "Không thể đọc tệp này dưới dạng câu trả lời đã lưu. Tệp cần có hàng đầu tiên với các cột title, shortcut và body, và tối đa 1.000 hàng."
     },
     "bubble": {
       "kind": {
@@ -213,7 +221,9 @@
       },
       "deliveryLog": "Nhật ký gửi",
       "groupMember": "Thành viên nhóm",
-      "groupTally": "Đã gửi tới {delivered, plural, other {# thành viên}}: {billable} tính phí, {free} miễn phí"
+      "groupTally": "Đã gửi tới {delivered} trong {members} người{read, plural, =0 {} other {, # người đã đọc}}{failed, plural, =0 {} other {, # thất bại}}",
+      "groupTallyNoTotal": "Đã gửi tới {delivered, plural, other {# thành viên}}{read, plural, =0 {} other {, # người đã đọc}}{failed, plural, =0 {} other {, # thất bại}}",
+      "groupTallyBilled": "{billable} tính phí, {free} miễn phí"
     },
     "media": {
       "openImage": "Mở hình ảnh {name}",
@@ -664,6 +674,26 @@
         "label": "Thành viên nhóm",
         "loading": "Đang tìm thành viên",
         "none": "Không có thành viên nào phù hợp"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta đã tạm ngưng nhóm này",
+          "message": "WhatsApp không gửi tin nhắn tới nhóm bị tạm ngưng. Bạn vẫn có thể đọc cuộc trò chuyện và thêm ghi chú nội bộ cho đến khi Meta gỡ bỏ."
+        },
+        "plan": {
+          "title": "Gói của bạn không có nhóm WhatsApp",
+          "message": "Bạn có thể đọc cuộc trò chuyện này và thêm ghi chú nội bộ, nhưng gửi vào nhóm cần gói có tính năng nhóm. Hãy nhờ quản trị viên nâng cấp."
+        },
+        "ineligible": {
+          "title": "Số này không thể dùng nhóm WhatsApp",
+          "message": "Lần kiểm tra gần nhất, Meta không cho phép nhóm trên số này (cần tài khoản doanh nghiệp chính thức). Bạn có thể đọc cuộc trò chuyện và thêm ghi chú nội bộ. Mở Nhóm Meta để kiểm tra lại."
+        }
+      },
+      "cost": {
+        "members": "Tin nhắn này sẽ gửi tới {count, plural, other {# thành viên}}. Chi phí ước tính {cost}: WhatsApp tính phí cho mỗi thành viên nhận được.",
+        "membersNoEstimate": "Tin nhắn này sẽ gửi tới {count, plural, other {# thành viên}}. WhatsApp tính phí cho mỗi thành viên nhận được.",
+        "sizeUnknown": "Chưa biết số thành viên. WhatsApp tính phí cho mỗi thành viên nhận tin nhắn này.",
+        "walletShort": "Ví của bạn có thể không đủ cho tin nhắn này. Hãy nạp tiền trước khi gửi."
       }
     },
     "savedReplies": {
@@ -817,6 +847,122 @@
         "upgrade": "Xem các gói",
         "conflict": "Người khác đã thay đổi câu trả lời này trước. Hãy đóng cửa sổ này và mở lại.",
         "invalid": "Một số nội dung bạn nhập không hợp lệ."
+      },
+      "transfer": {
+        "export": "Xuất CSV",
+        "import": "Nhập CSV",
+        "title": "Nhập câu trả lời đã lưu",
+        "intro": "Tải lên tệp CSV có các cột title, shortcut, body và, nếu muốn, category, language và channel (các loại kênh cách nhau bằng |, để trống cho mọi kênh). Tối đa 1.000 hàng và {maxKb} KB. Các câu trả lời đã nhập sẽ được chia sẻ cho cả nhóm. Tệp xuất có cùng các cột.",
+        "file": "Tệp CSV",
+        "tooBig": "Tệp này quá lớn.",
+        "duplicates": "Khi một câu trả lời chung đã dùng shortcut này",
+        "policy": {
+          "skip": "Giữ câu trả lời hiện có",
+          "overwrite": "Thay nội dung"
+        },
+        "policyHint": {
+          "skip": "Hàng này sẽ bị bỏ qua và câu trả lời giữ nguyên.",
+          "overwrite": "Tiêu đề, nội dung, danh mục, ngôn ngữ và kênh sẽ được thay thế. Số lần sử dụng được giữ nguyên."
+        },
+        "check": "Kiểm tra tệp",
+        "go": "Nhập ({count})",
+        "cancel": "Hủy",
+        "summary": "{create} sẽ được tạo, {update} sẽ được thay thế, {skip} bị bỏ qua, {invalid} có lỗi. Chưa có gì được lưu.",
+        "plan": "Gói của bạn: {used} trên {limit} câu trả lời.",
+        "row": "Dòng {line}: /{shortcut}",
+        "truncated": "Chỉ hiển thị các hàng đầu tiên có lỗi hoặc có thay đổi.",
+        "done": "Đã nhập: {created} tạo mới, {updated} được thay thế.",
+        "issue": {
+          "update": "sẽ được thay thế",
+          "skip": "bị bỏ qua",
+          "invalid": "có lỗi",
+          "duplicate": "shortcut đã được dùng, bị bỏ qua",
+          "missing_shortcut": "thiếu shortcut",
+          "shortcut_invalid": "shortcut không có chữ hoặc số hợp lệ",
+          "missing_title": "thiếu tiêu đề",
+          "title_too_long": "tiêu đề quá dài",
+          "missing_body": "thiếu nội dung",
+          "body_too_long": "nội dung quá dài",
+          "control_characters": "chứa ký tự điều khiển",
+          "category_too_long": "danh mục quá dài",
+          "language_invalid": "ngôn ngữ không phải mã như en hoặc pt-BR",
+          "channel_unknown": "kênh không xác định",
+          "duplicate_in_file": "shortcut đã xuất hiện trước đó trong tệp",
+          "plan_limit_reached": "vượt quá giới hạn gói của bạn"
+        }
+      }
+    },
+    "bulk": {
+      "barLabel": "Thao tác hàng loạt",
+      "selected": "{count, plural, one {Đã chọn # cuộc trò chuyện} other {Đã chọn # cuộc trò chuyện}}",
+      "selectAllInView": "Chọn tất cả {count} mục đang hiển thị",
+      "done": "Xong",
+      "markRead": "Đánh dấu đã đọc",
+      "resolve": "Giải quyết",
+      "close": "Đóng",
+      "reopen": "Mở lại",
+      "assign": "Phân công",
+      "assignToMe": "Giao cho tôi",
+      "unassign": "Bỏ phân công",
+      "removeTeam": "Gỡ nhóm",
+      "priority": "Ưu tiên",
+      "snooze": "Tạm ẩn",
+      "snoozePreset": {
+        "oneHour": "1 giờ",
+        "threeHours": "3 giờ",
+        "tomorrow": "Ngày mai, 9:00",
+        "nextWeek": "Thứ Hai tới, 9:00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {Đã cập nhật # cuộc trò chuyện} other {Đã cập nhật # cuộc trò chuyện}}.",
+        "nothingChanged": "Không có gì cần thay đổi: các cuộc trò chuyện đã chọn đều đã được cập nhật.",
+        "partial": "Đã cập nhật {done}, {unchanged} đã ở trạng thái mới nhất, không thể thay đổi {failed}. Các mục thất bại vẫn được chọn.",
+        "allFailed": "Không thể thay đổi {count, plural, one {# cuộc trò chuyện nào} other {# cuộc trò chuyện nào}}."
+      },
+      "label": "Nhãn",
+      "labelAdd": "Thêm nhãn",
+      "labelRemove": "Gỡ nhãn"
+    },
+    "triage": {
+      "priority": "Ưu tiên",
+      "snooze": "Tạm ẩn",
+      "wake": "Hiện lại ngay"
+    },
+    "labels": {
+      "label": "Nhãn",
+      "loading": "Đang tải nhãn…",
+      "loadFailed": "Không thể tải nhãn.",
+      "none": "Chưa có nhãn nào.",
+      "newLabel": "Nhãn mới",
+      "add": "Thêm",
+      "filter": "Nhãn",
+      "filterActive": "{count, plural, one {# nhãn} other {# nhãn}}",
+      "clearFilter": "Xóa bộ lọc nhãn",
+      "screen": {
+        "back": "Quay lại hộp thư",
+        "title": "Nhãn",
+        "intro": "Nhãn gắn thẻ cho cuộc trò chuyện để nhóm của bạn sắp xếp và lọc. Đây là các thẻ giống như dùng cho danh bạ.",
+        "newTitle": "Nhãn mới",
+        "editTitle": "Sửa nhãn",
+        "name": "Tên",
+        "color": "Màu",
+        "colorInvalid": "Dùng mã màu hex như #075E54 hoặc tên màu.",
+        "description": "Mô tả (không bắt buộc)",
+        "create": "Tạo nhãn",
+        "save": "Lưu thay đổi",
+        "cancel": "Hủy",
+        "edit": "Sửa",
+        "delete": "Xóa",
+        "inUse": "{count, plural, one {# cuộc trò chuyện} other {# cuộc trò chuyện}}",
+        "emptyTitle": "Chưa có nhãn nào",
+        "emptyMessage": "Hãy tạo nhãn đầu tiên ở phía trên, rồi gắn vào các cuộc trò chuyện từ hộp thư.",
+        "deleteTitle": "Xóa nhãn này?",
+        "deleteMessage": "\"{name}\" đang được dùng cho {count, plural, one {# cuộc trò chuyện} other {# cuộc trò chuyện}}. Xóa sẽ gỡ nhãn khỏi các cuộc trò chuyện đó và khỏi mọi danh bạ đang mang nhãn này. Không thể hoàn tác.",
+        "nameTaken": "Đã có nhãn với tên này.",
+        "conflict": "Người khác đã thay đổi nhãn này trước. Danh sách đã được tải lại.",
+        "saved": "Đã lưu nhãn",
+        "created": "Đã tạo nhãn",
+        "deleted": "Đã xóa nhãn"
       }
     }
   }

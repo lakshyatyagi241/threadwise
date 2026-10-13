@@ -121,6 +121,12 @@
       "selectedActionsNone": "Geselecteerde contacten (selecteer eerst rijen)",
       "modifyColumns": "Kolommen aanpassen",
       "resetColumns": "Standaard herstellen",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "Contactnaam",
       "colPhone": "Telefoonnummer",
       "colEmailId": "E-mailadres",
@@ -407,7 +413,8 @@
         "address": "Adres",
         "memo": "Memo",
         "status": "Status",
-        "source": "Bron"
+        "source": "Bron",
+        "consent": "Marketingtoestemming (ja / nee)"
       },
       "notInFile": "Niet in bestand",
       "columnN": "Kolom {n}",
@@ -1175,7 +1182,7 @@
       },
       "exports": {
         "title": "Exports",
-        "hint": "Contactexports vanuit de Contact Hub, nieuwste eerst. Het gedownloade bestand wordt niet bewaard.",
+        "hint": "Contactexports vanuit de Hub, nieuwste eerst. Elk bestand wordt 30 dagen bewaard, zodat jij en collega's met exportrechten het opnieuw kunnen downloaden.",
         "empty": "Nog geen exports.",
         "by": "Door",
         "rows": "Contacten",
@@ -1184,7 +1191,11 @@
         "selections": {
           "ids": "Aangevinkte contacten",
           "filter": "Alles wat overeenkomt"
-        }
+        },
+        "download": "Downloaden",
+        "noFile": "Niet opgeslagen",
+        "keptUntil": "Bewaard tot {date}",
+        "downloadFailed": "Het bestand kon niet worden gedownload. Het is mogelijk verlopen."
       }
     }
   }

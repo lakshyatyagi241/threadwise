@@ -9,6 +9,8 @@ const report = (orgId: number) => ({
   occurredAt: new Date('2026-10-11T10:00:00Z'),
 });
 
+const outbox = { emit: vi.fn(async () => undefined) };
+
 /** A db whose transactions record the SQL they run; `privileged` must never be used by a receipt. */
 function fakeDb(rows: unknown[]) {
   const seen: Array<{ orgId: number; sql: string }> = [];
@@ -33,7 +35,9 @@ function fakeDb(rows: unknown[]) {
 describe('scheduled-message delivery receipts are claimed per workspace', () => {
   it('looks the message up inside the reporting workspace, filtered by org_id, without lifting RLS', async () => {
     const { db, seen } = fakeDb([]);
-    const handled = await new ScheduledReceiptsService(db as never).handle(report(7));
+    const handled = await new ScheduledReceiptsService(db as never, outbox as never).handle(
+      report(7),
+    );
     expect(handled).toBe(false);
     expect(db.privileged).not.toHaveBeenCalled();
     expect(seen).toHaveLength(1);
@@ -43,7 +47,9 @@ describe('scheduled-message delivery receipts are claimed per workspace', () => 
 
   it('still applies a report for its own recipient, and every statement runs in that workspace', async () => {
     const { db, seen } = fakeDb([{ org_id: 7, id: 11, scheduled_message_id: 5, status: 'sent' }]);
-    const handled = await new ScheduledReceiptsService(db as never).handle(report(7));
+    const handled = await new ScheduledReceiptsService(db as never, outbox as never).handle(
+      report(7),
+    );
     expect(handled).toBe(true);
     expect(db.privileged).not.toHaveBeenCalled();
     expect(seen.length).toBeGreaterThanOrEqual(2); // the lookup, then the status update

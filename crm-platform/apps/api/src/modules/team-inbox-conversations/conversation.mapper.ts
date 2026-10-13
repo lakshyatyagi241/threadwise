@@ -53,6 +53,7 @@ export function toConversationSummary(row: InboxConversationRow): ConversationSu
         : null,
     },
     snoozedUntil: iso(row.snoozedUntil),
+    labels: row.labels,
     lastMessageAt: iso(row.lastMessageAt),
     lastInboundAt: iso(row.lastInboundAt),
     lastOutboundAt: iso(row.lastOutboundAt),

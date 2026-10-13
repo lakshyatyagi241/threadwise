@@ -18,9 +18,9 @@ This page lists the contact files your workspace has imported and the exports it
 2. Under **Imports**, read each file's status, how many contacts it created and updated, and how many rows were rejected.
 3. For an import with rejected rows, select **Download rejects**. The file lists each row, the reason it was refused and the original cells. Fix them and upload it again.
 4. Select **Import contacts** to start a new import from here.
-5. Under **Exports**, see who exported, when, how many contacts, and whether it was the ticked contacts or everything matching.
+5. Under **Exports**, see who exported, when, how many contacts, and whether it was the ticked contacts or everything matching. Select **Download** on a row to get that file again.
 
-> An import that is still running refreshes by itself. The exported file itself is not kept, only the record that it was taken.
+> An import that is still running refreshes by itself. An exported file is kept for 30 days: the person who exported it, and anyone who may export all contacts, can download it again from this page. Older exports, and files past 30 days, show only the record that they were taken.
 
 ## Options and settings
 
@@ -36,3 +36,7 @@ The imports list needs the permission to import contacts, and the exports list n
 - **No imports or exports are listed.** Nothing has been imported or exported yet in this workspace.
 - **An import stays on Queued.** Large files run in the background; wait a moment and the page updates.
 - **Download rejects does nothing.** Try again; if it keeps failing, re-run the import with a corrected file.
+
+## Marketing consent column
+
+If your file has a column that says whether each person agreed to marketing, map it to **Marketing consent (yes / no)**. Only the rows that say yes get a recorded consent, and only when you tick **I have consent to message these contacts**. See "Consent, STOP and START replies" for what is recorded.

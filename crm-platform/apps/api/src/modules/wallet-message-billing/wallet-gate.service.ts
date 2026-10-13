@@ -106,76 +106,9 @@ export class WalletGateService {
     let balanceMinor = 0;
     let estimateMinor: number | null = null;
     try {
-      const entitlements = await this.plans.forOrg(req.orgId);
-      if (!entitlements) return;
-      const s = await this.settings.effective();
-      const now = new Date();
-      const facts = await this.db.txAs({ orgId: req.orgId, userId: null }, async (tx) => {
-        // The balance and the estimate are both in the workspace's billing currency.
-        const unit = await this.billing.forOrg(tx, req.orgId);
-        const wallet = await this.repo.peekWallet(tx, req.orgId, unit);
-        const used = await tx.execute(sql`
-          SELECT messages FROM wallet_usage_months WHERE org_id = ${req.orgId} AND month = ${monthStart(now)}::date`);
-        const payPerMessage = await this.mode.isPayPerMessage(tx, req.orgId);
-        // One price per destination country, by the resolver that charges a delivered message (margins, Meta's card for this
-        // currency and fixed prices included), so the estimate is the price it will really be charged at.
-        const prices = new Map<string | null, number>();
-        const countries = new Set<string | null>([null]);
-        for (const phone of req.phones ?? []) countries.add(countryOfPhone(phone));
-        for (const country of countries) {
-          const priced = await this.rates.priceFor(
-            tx,
-            req.orgId,
-            country,
-            req.category ?? 'marketing',
-            unit,
-          );
-          prices.set(country, priced.priceMinor);
-        }
-        return {
-          balance: wallet?.balanceMinor ?? 0,
-          usedThisMonth: Number((used.rows[0] as { messages?: number } | undefined)?.messages ?? 0),
-          payPerMessage,
-          prices,
-        };
-      });
-      balanceMinor = facts.balance;
-      const monthlyLimit = resolveLimit(entitlements, 'monthly_messages');
-      const planActive = planIsActive(entitlements, now);
-
-      // Plan mode pays only for what exceeds the allowance.
-      let chargeable: number;
-      if (facts.payPerMessage || !planActive) chargeable = req.recipients;
-      else if (monthlyLimit <= 0) chargeable = 0;
-      else chargeable = Math.max(0, facts.usedThisMonth + req.recipients - monthlyLimit);
-      const price = (phone: string | null) =>
-        facts.prices.get(phone ? countryOfPhone(phone) : null) ?? facts.prices.get(null) ?? 0;
-      if (chargeable > 0) {
-        if (req.phones && req.phones.length > 0) {
-          // The first `chargeable` numbers stand for the chargeable part; for a mixed audience this is an upper-bound sample.
-          const sample = req.phones.slice(0, chargeable);
-          const sum = sample.reduce((acc, p) => acc + price(p), 0);
-          estimateMinor =
-            sample.length >= chargeable ? sum : sum + (chargeable - sample.length) * price(null);
-        } else {
-          estimateMinor = chargeable * price(null);
-        }
-      } else {
-        estimateMinor = 0;
-      }
-
-      verdict = launchVerdict({
-        platformOwned: entitlements.platformOwned,
-        payPerMessage: facts.payPerMessage,
-        planActive,
-        monthlyLimit,
-        usedThisMonth: facts.usedThisMonth,
-        recipients: req.recipients,
-        balanceMinor,
-        estimateMinor,
-        coveragePercent: s.launchCoveragePercent,
-        freeAllowed: req.freeAllowed === true,
-      });
+      const judged = await this.evaluate(req);
+      if (!judged) return;
+      ({ verdict, balanceMinor, estimateMinor } = judged);
     } catch (err) {
       this.logger.warn(
         { err, orgId: req.orgId },
@@ -214,5 +147,112 @@ export class WalletGateService {
       { path: 'balanceMinor', message: String(balanceMinor) },
       { path: 'estimateMinor', message: String(estimateMinor ?? 0) },
     ]);
+  }
+
+  /**
+   * What a send to `recipients` people would meet at the wallet right now: the verdict, the balance and the estimate (hundredths of the
+   * workspace's billing currency). Null when the workspace is unknown. May throw (a billing read failed): the callers decide what that
+   * means (the launch gate lets the send through, the composer's quote shows no estimate).
+   */
+  private async evaluate(req: LaunchRequest): Promise<{
+    verdict: ReturnType<typeof launchVerdict>;
+    balanceMinor: number;
+    estimateMinor: number | null;
+    currency: string;
+  } | null> {
+    const entitlements = await this.plans.forOrg(req.orgId);
+    if (!entitlements) return null;
+    const s = await this.settings.effective();
+    const now = new Date();
+    const facts = await this.db.txAs({ orgId: req.orgId, userId: null }, async (tx) => {
+      // The balance and the estimate are both in the workspace's billing currency.
+      const unit = await this.billing.forOrg(tx, req.orgId);
+      const wallet = await this.repo.peekWallet(tx, req.orgId, unit);
+      const used = await tx.execute(sql`
+        SELECT messages FROM wallet_usage_months WHERE org_id = ${req.orgId} AND month = ${monthStart(now)}::date`);
+      const payPerMessage = await this.mode.isPayPerMessage(tx, req.orgId);
+      // One price per destination country, by the resolver that charges a delivered message (margins, Meta's card for this
+      // currency and fixed prices included), so the estimate is the price it will really be charged at.
+      const prices = new Map<string | null, number>();
+      const countries = new Set<string | null>([null]);
+      for (const phone of req.phones ?? []) countries.add(countryOfPhone(phone));
+      for (const country of countries) {
+        const priced = await this.rates.priceFor(
+          tx,
+          req.orgId,
+          country,
+          req.category ?? 'marketing',
+          unit,
+        );
+        prices.set(country, priced.priceMinor);
+      }
+      return {
+        balance: wallet?.balanceMinor ?? 0,
+        usedThisMonth: Number((used.rows[0] as { messages?: number } | undefined)?.messages ?? 0),
+        payPerMessage,
+        prices,
+        currency: unit,
+      };
+    });
+    const balanceMinor = facts.balance;
+    const monthlyLimit = resolveLimit(entitlements, 'monthly_messages');
+    const planActive = planIsActive(entitlements, now);
+
+    // Plan mode pays only for what exceeds the allowance.
+    let estimateMinor: number | null = null;
+    let chargeable: number;
+    if (facts.payPerMessage || !planActive) chargeable = req.recipients;
+    else if (monthlyLimit <= 0) chargeable = 0;
+    else chargeable = Math.max(0, facts.usedThisMonth + req.recipients - monthlyLimit);
+    const price = (phone: string | null) =>
+      facts.prices.get(phone ? countryOfPhone(phone) : null) ?? facts.prices.get(null) ?? 0;
+    if (chargeable > 0) {
+      if (req.phones && req.phones.length > 0) {
+        // The first `chargeable` numbers stand for the chargeable part; for a mixed audience this is an upper-bound sample.
+        const sample = req.phones.slice(0, chargeable);
+        const sum = sample.reduce((acc, p) => acc + price(p), 0);
+        estimateMinor =
+          sample.length >= chargeable ? sum : sum + (chargeable - sample.length) * price(null);
+      } else {
+        estimateMinor = chargeable * price(null);
+      }
+    } else {
+      estimateMinor = 0;
+    }
+
+    const verdict = launchVerdict({
+      platformOwned: entitlements.platformOwned,
+      payPerMessage: facts.payPerMessage,
+      planActive,
+      monthlyLimit,
+      usedThisMonth: facts.usedThisMonth,
+      recipients: req.recipients,
+      balanceMinor,
+      estimateMinor,
+      coveragePercent: s.launchCoveragePercent,
+      freeAllowed: req.freeAllowed === true,
+    });
+    return { verdict, balanceMinor, estimateMinor, currency: facts.currency };
+  }
+
+  /**
+   * The composer's view of a send, never throwing: the estimate, the currency and whether the wallet covers it. Null when it cannot be
+   * worked out (unknown workspace, a billing read failed): the composer then shows no figure and the send is judged by `assertCanLaunch`.
+   */
+  async quote(
+    req: LaunchRequest,
+  ): Promise<{ estimateMinor: number | null; currency: string; covered: boolean } | null> {
+    try {
+      const judged = await this.evaluate(req);
+      if (!judged) return null;
+      return {
+        estimateMinor: judged.estimateMinor,
+        currency: judged.currency,
+        covered: judged.verdict.ok,
+      };
+    } catch (err) {
+      this.logger.warn({ err, orgId: req.orgId }, '[WALLET] send quote failed');
+      return null;
+    }
   }
 }

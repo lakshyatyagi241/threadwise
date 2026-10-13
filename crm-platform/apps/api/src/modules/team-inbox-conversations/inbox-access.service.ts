@@ -21,6 +21,10 @@ export const PERM = {
   assignSelf: 'inbox.conversation.assign_self',
   resolve: 'inbox.conversation.resolve',
   note: 'inbox.conversation.note',
+  snooze: 'inbox.conversation.snooze',
+  priority: 'inbox.conversation.priority',
+  bulk: 'inbox.conversation.bulk',
+  tag: 'inbox.conversation.tag',
 } as const;
 
 /** The one answer for "no such conversation" and "not one you may see": the two are never told apart. */

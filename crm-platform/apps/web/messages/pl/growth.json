@@ -1,0 +1,434 @@
+{
+  "growth": {
+    "common": {
+      "dismiss": "Odrzuć",
+      "retry": "Spróbuj ponownie",
+      "requestId": "Żądanie {id}",
+      "noAccessTitle": "Nie możesz otworzyć tego ekranu",
+      "noAccess": "Poproś administratora o uprawnienie „{permission}”."
+    },
+    "errors": {
+      "network": "Nie udało się połączyć z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+      "forbidden": "Twoja rola nie pozwala na to działanie.",
+      "notAvailable": "Pilotaż wzrostu nie jest dostępny dla tego obszaru roboczego.",
+      "featureOff": "Ta część pilotażu wzrostu jest wyłączona. Włącz ją w sekcji Ustawienia.",
+      "actionGone": "Ktoś już podjął decyzję w tej sprawie.",
+      "assistantFailed": "Asystent nie zaproponował niczego. Upewnij się, że masz odbiorców i zatwierdzony szablon, a następnie spróbuj ponownie.",
+      "undoRefused": "Tej zmiany nie można już cofnąć: kontakt został przeniesiony dalej lub zmiana została już cofnięta.",
+      "conflict": "Ktoś zapisał te ustawienia wcześniej. Wczytano najnowszą wersję.",
+      "notFound": "Ten element już nie istnieje.",
+      "validation": "Niektóre wartości są nieprawidłowe. Sprawdź je i spróbuj ponownie.",
+      "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
+      "unexpected": "Coś poszło nie tak. Spróbuj ponownie, a jeśli problem się powtarza, powiadom pomoc techniczną."
+    },
+    "page": {
+      "title": "Wzrost",
+      "subtitle": "To, co mówią o Twoich klientach kampanie i rozmowy, zamienione w działania dla Twojego zespołu. Nic tutaj nie wysyła wiadomości do kontaktu samodzielnie.",
+      "notAvailableTitle": "Poza pilotażem",
+      "notAvailable": "Pilotaż wzrostu jest włączony tylko dla wybranych obszarów roboczych. Twój jeszcze do nich nie należy.",
+      "tabs": {
+        "inbox": "Skrzynka",
+        "audiences": "Odbiorcy",
+        "campaigns": "Kampanie",
+        "insights": "Analizy",
+        "autoStage": "Automatyczne zmiany etapu",
+        "assistant": "Asystent kampanii",
+        "controls": "Ustawienia"
+      }
+    },
+    "digest": {
+      "title": "Dziś",
+      "quiet": "Nic teraz nie wymaga Twojej uwagi.",
+      "highlights": {
+        "hotLeads": "{count, plural, one {# gorący lead jest gotowy do zakupu} few {# gorące leady są gotowe do zakupu} many {# gorących leadów jest gotowych do zakupu} other {# gorącego leada jest gotowe do zakupu}}",
+        "unanswered": "{count, plural, one {# pytanie o zakup nie doczekało się odpowiedzi} few {# pytania o zakup nie doczekały się odpowiedzi} many {# pytań o zakup nie doczekało się odpowiedzi} other {# pytania o zakup nie doczekało się odpowiedzi}}",
+        "optOuts": "{count, plural, one {# kontakt poprosił o zaprzestanie wiadomości} few {# kontakty poprosiły o zaprzestanie wiadomości} many {# kontaktów poprosiło o zaprzestanie wiadomości} other {# kontaktu poprosiło o zaprzestanie wiadomości}}",
+        "suggestionsPending": "{count, plural, one {# zmiana etapu czeka na decyzję} few {# zmiany etapu czekają na decyzję} many {# zmian etapu czeka na decyzję} other {# zmiany etapu czeka na decyzję}}",
+        "campaignReplies": "{count, plural, one {# kontakt odpisał w ciągu doby od kampanii} few {# kontakty odpisały w ciągu doby od kampanii} many {# kontaktów odpisało w ciągu doby od kampanii} other {# kontaktu odpisało w ciągu doby od kampanii}}",
+        "lapsed": "{count, plural, one {# klient przestał się odzywać} few {# klientów przestało się odzywać} many {# klientów przestało się odzywać} other {# klienta przestało się odzywać}}"
+      }
+    },
+    "inbox": {
+      "title": "Skrzynka wzrostu",
+      "hint": "Sprawy warte uwagi. Zaakceptowanie wykonuje czynność właściwą dla danego typu; odrzucenie tylko zamyka sprawę.",
+      "filter": "Pokaż",
+      "all": "Wszystkie ({count})",
+      "empty": "Nic nie czeka. Nowe pozycje pojawią się tutaj w miarę czytania rozmów i uruchamiania codziennych kontroli.",
+      "more": "Pokaż więcej",
+      "doneAccept": "{count, plural, one {# pozycja wykonana} few {# pozycje wykonane} many {# pozycji wykonanych} other {# pozycji wykonanej}}",
+      "doneDismiss": "{count, plural, one {# pozycja odrzucona} few {# pozycje odrzucone} many {# pozycji odrzuconych} other {# pozycji odrzuconej}}",
+      "someFailed": "{count, plural, one {# pozycji nie udało się wykonać} few {# pozycji nie udało się wykonać} many {# pozycji nie udało się wykonać} other {# pozycji nie udało się wykonać}}",
+      "openContact": "Otwórz kontakt",
+      "someone": "Kontakt",
+      "dismiss": "Odrzuć",
+      "types": {
+        "hot_lead": "Gorący lead",
+        "unanswered_intent": "Bez odpowiedzi",
+        "registration_issue": "Problem z rejestracją",
+        "purchase_route": "Przekazanie osobie",
+        "opt_out": "Prośba o zaprzestanie",
+        "lapsed": "Zamilkł",
+        "service_due": "Zbliża się serwis",
+        "status_reply": "Status zamówienia"
+      },
+      "titles": {
+        "hot_lead": "{name} jest gotowy do zakupu",
+        "unanswered_intent": "{name} zapytał(a) o zakup i nikt nie odpowiedział",
+        "registration_issue": "{name} zgłasza problem z rejestracją",
+        "purchase_route": "Przekaż kontakt {name} użytkownikowi {user}",
+        "opt_out": "{name} poprosił(a) o zaprzestanie wiadomości",
+        "lapsed": "{name} przestał(a) się odzywać",
+        "service_due": "{name}: zbliża się termin – {rule}",
+        "status_reply": "{name} zapytał(a) o swoje zamówienie"
+      },
+      "accept": {
+        "hot_lead": "Oznacz jako obsłużone",
+        "unanswered_intent": "Oznacz jako obsłużone",
+        "registration_issue": "Oznacz jako obsłużone",
+        "purchase_route": "Przypisz rozmowę",
+        "opt_out": "Zapisz rezygnację",
+        "lapsed": "Gotowe",
+        "service_due": "Gotowe",
+        "status_reply": "Gotowe"
+      },
+      "facts": {
+        "routeOwner": "{name} opiekuje się tym kontaktem.",
+        "routeLeastBusy": "{name} ma najmniej otwartych rozmów.",
+        "lapsedDays": "Brak otwarć i wiadomości od {count, plural, one {# dnia} few {# dni} many {# dni} other {# dnia}}.",
+        "issue": {
+          "missing_confirmation": "Nie otrzymał(a) potwierdzenia.",
+          "payment_problem": "Zgłasza problem z płatnością.",
+          "wrong_info": "Twierdzi, że niektóre dane są błędne."
+        }
+      }
+    },
+    "audiences": {
+      "title": "Odbiorcy",
+      "hint": "Grupy kontaktów wyłonione na podstawie tego, co faktycznie zrobiły. Zsynchronizuj grupę, aby wypełnić grupę kontaktów, do której możesz wysłać kampanię.",
+      "empty": "Brak odbiorców. Włącz wybraną część w sekcji Ustawienia.",
+      "synced": "Grupa „{name}” ma teraz {count, plural, one {# kontakt} few {# kontakty} many {# kontaktów} other {# kontaktu}}.",
+      "lastSync": "Grupa „{name}”, ostatnia synchronizacja: {when}.",
+      "notSynced": "Grupa „{name}” zostanie utworzona przy pierwszej synchronizacji.",
+      "sync": "Synchronizuj z grupą",
+      "resync": "Synchronizuj ponownie",
+      "errors": {
+        "forbidden": "Twoja rola nie pozwala na synchronizowanie odbiorców.",
+        "failed": "Nie udało się zsynchronizować odbiorców. Spróbuj ponownie."
+      },
+      "kinds": {
+        "engaged": {
+          "label": "Zaangażowani",
+          "description": "Otworzyli ostatnio kilka kampanii."
+        },
+        "silent": {
+          "label": "Milczący",
+          "description": "Otrzymali kampanie, ale żadnej nie otworzyli."
+        },
+        "lapsed": {
+          "label": "Nieaktywni",
+          "description": "Klienci bez otwarć i wiadomości od dłuższego czasu."
+        },
+        "hot_chat": {
+          "label": "Gorący w rozmowie",
+          "description": "Kontakty, których ostatnia analiza rozmowy wskazuje gotowość do zakupu."
+        },
+        "high_propensity": {
+          "label": "Skłonni do konwersji",
+          "description": "Górna dziesiątka według modelu konwersji."
+        },
+        "service_due": {
+          "label": "Zbliża się serwis",
+          "description": "Kontakty, którym zbliża się termin serwisu."
+        }
+      }
+    },
+    "campaigns": {
+      "title": "Odpowiedzi na kampanie",
+      "hint": "Kontakty, które odpisały w ciągu 24 i 72 godzin od wysyłki, liczone na podstawie skrzynki.",
+      "stamp": "Zapisz odpowiedzi teraz",
+      "stamped": "{count, plural, one {Zapisano # odpowiedź} few {Zapisano # odpowiedzi} many {Zapisano # odpowiedzi} other {Zapisano # odpowiedzi}}.",
+      "stampFailed": "Nie udało się zapisać odpowiedzi. Spróbuj ponownie.",
+      "empty": "Nie wysłano jeszcze żadnych kampanii.",
+      "totals": {
+        "sent": "Wysłano",
+        "read": "Przeczytano",
+        "replied24h": "Odpowiedzi w 24 godziny",
+        "replied72h": "Odpowiedzi w 72 godziny"
+      },
+      "cols": {
+        "campaign": "Kampania",
+        "sent": "Wysłano",
+        "read": "Przeczytano",
+        "replied24h": "24 h",
+        "replied72h": "72 h",
+        "replyRate": "Odsetek odpowiedzi"
+      }
+    },
+    "insights": {
+      "sendTimes": {
+        "title": "Najlepszy czas wysyłki",
+        "hint": "Kiedy Twoje kontakty czytają kampanie i do Ciebie piszą, w strefie czasowej obszaru roboczego.",
+        "empty": "Za mało aktywności, aby coś stwierdzić.",
+        "best": "Najlepsze godziny: {hours} ({zone}).",
+        "quiet": "Najspokojniejsze godziny: {hours}.",
+        "chart": "Aktywność według godziny doby",
+        "sample": "Na podstawie {count, plural, one {# zdarzenia} few {# zdarzeń} many {# zdarzeń} other {# zdarzenia}}."
+      },
+      "propensity": {
+        "title": "Model konwersji",
+        "hint": "Uczy się na kontaktach, które zostały klientami, jakie zachowania towarzyszą konwersji, i ocenia wszystkich.",
+        "recompute": "Ucz się ponownie teraz",
+        "done": "Model został zaktualizowany.",
+        "failed": "Nie udało się zaktualizować modelu. Spróbuj ponownie.",
+        "contacts": "Ocenione kontakty",
+        "converted": "Po konwersji",
+        "auc": "Jak dobrze szereguje",
+        "capture": "Konwersje w górnej dziesiątce",
+        "captureHint": "Losowe uszeregowanie dałoby 10%",
+        "none": "Nie zmierzono",
+        "trained": "Model nauczył się na kontaktach, które przeszły konwersję.",
+        "notTrained": "Za mało kontaktów po konwersji, by się uczyć, dlatego używane są stałe wagi.",
+        "computedAt": "Zaktualizowano {when}.",
+        "drivers": "Co wpływa na wynik",
+        "features": {
+          "campaigns_opened_30d": "Otwarte kampanie (30 dni)",
+          "campaigns_received_30d": "Otrzymane kampanie (30 dni)",
+          "messages_from_contact_30d": "Wiadomości od kontaktu (30 dni)",
+          "links_clicked_30d": "Kliknięte linki (30 dni)",
+          "groups": "Grupy, do których należy",
+          "has_email": "Ma adres e-mail",
+          "chat_messages_total": "Wiadomości w rozmowie",
+          "age_days": "Dni od dodania"
+        }
+      },
+      "quality": {
+        "title": "Jak to działa",
+        "hint": "Czy sugestie są wykorzystywane, jak dobrze ocena leadów wyróżnia kontakty, które przeszły konwersję, oraz ile kosztowało AI w ciągu ostatnich 30 dni.",
+        "none": "Nie zmierzono",
+        "scoreAuc": "Jakość oceny leadów",
+        "scoreAucHint": "Ocenionych: {scored}, po konwersji: {converted}",
+        "calls": "Wywołania AI",
+        "cost": "Koszt AI",
+        "autoApplied": "Zmienione automatycznie",
+        "undone": "Cofnięto: {count}",
+        "suggestions": {
+          "chat": "Sugestie etapu z rozmów",
+          "engagement": "Sugestie etapu z kampanii"
+        },
+        "suggestionLine": "Zaakceptowano: {accepted}, odrzucono: {dismissed}, oczekuje: {pending}.",
+        "cols": {
+          "type": "Pozycja skrzynki",
+          "done": "Wykonane",
+          "dismissed": "Odrzucone",
+          "open": "Otwarte"
+        },
+        "actionTypes": {
+          "hot_lead": "Gorący lead",
+          "unanswered_intent": "Bez odpowiedzi",
+          "registration_issue": "Problem z rejestracją",
+          "purchase_route": "Przekazanie osobie",
+          "opt_out": "Prośba o zaprzestanie",
+          "lapsed": "Zamilkł",
+          "service_due": "Zbliża się serwis",
+          "status_reply": "Status zamówienia"
+        }
+      },
+      "enrichment": {
+        "title": "Dane firmy",
+        "hint": "Wyszukuje dane firmy dla kontaktów z firmowym adresem e-mail i pokazuje je w kontakcie.",
+        "run": "Wyszukaj następną partię",
+        "asked": "{count, plural, one {Sprawdzono # kontakt} few {Sprawdzono # kontakty} many {Sprawdzono # kontaktów} other {Sprawdzono # kontaktu}}.",
+        "failed": "Wyszukiwanie nie powiodło się. Spróbuj ponownie.",
+        "status": "{provider}: znaleziono {found}, nie znaleziono {notFound}, błędy: {failed}.",
+        "notConfigured": "Na serwerze nie połączono żadnej usługi wyszukiwania, więc ten przełącznik na razie nic nie robi."
+      }
+    },
+    "autoStage": {
+      "title": "Automatyczne zmiany etapu",
+      "hint": "Tylko odczyty, których AI jest bardzo pewne, do dziennego limitu. Każdą zmianę można cofnąć, o ile nikt od tego czasu nie przeniósł kontaktu.",
+      "today": "Wykorzystano dziś {done} z {cap}.",
+      "empty": "Nic nie zostało jeszcze zmienione automatycznie.",
+      "contact": "Kontakt",
+      "moved": "Przeniesiono z etapu {from} do {to}.",
+      "confidence": "pewność {percent}%",
+      "undone": "Cofnięto",
+      "undo": "Cofnij",
+      "undoDone": "Kontakt wrócił na poprzedni etap.",
+      "undoRefused": "Tej zmiany nie można już cofnąć: kontakt został przeniesiony dalej.",
+      "undoFailed": "Nie udało się cofnąć zmiany. Spróbuj ponownie."
+    },
+    "assistant": {
+      "title": "Asystent kampanii",
+      "hint": "Napisz, co chcesz osiągnąć. Zaproponuje jedną z Twoich grup odbiorców i jeden z zatwierdzonych szablonów, biorąc pod uwagę odpowiedzi, jakie faktycznie otrzymał każdy szablon. Niczego nie wysyła ani nie tworzy.",
+      "goal": "Co chcesz osiągnąć?",
+      "goalHint": "Na przykład: przypomnij wszystkim zarejestrowanym o sobotnim wydarzeniu.",
+      "placeholder": "Przypomnij zarejestrowanym kontaktom o wydarzeniu w sobotę",
+      "ask": "Zaproponuj kampanię",
+      "audience": "Odbiorcy",
+      "audienceValue": "{name} (kontaktów: {count})",
+      "template": "Szablon",
+      "replyRate": "{percent} odpowiada w ciągu doby",
+      "sendAt": "Wyślij około",
+      "considered": "Wybrano spośród {audiences, plural, one {# grupy odbiorców} few {# grup odbiorców} many {# grup odbiorców} other {# grupy odbiorców}} oraz {templates, plural, one {# szablonu} few {# szablonów} many {# szablonów} other {# szablonu}}."
+    },
+    "controls": {
+      "readOnly": "Możesz zobaczyć te ustawienia, ale nie możesz ich zmieniać.",
+      "saved": "Ustawienia zapisane.",
+      "discard": "Odrzuć zmiany",
+      "save": "Zapisz",
+      "problem": {
+        "numbers": "Jedna z liczb jest poza zakresem. Sprawdź progi.",
+        "serviceRules": "Reguła serwisowa w wierszu {line} nie ma postaci: etykieta | właściwość daty | dni po | dni do.",
+        "customPhrases": "Fraza w wierszu {line} nie ma postaci: fraza = intencja."
+      },
+      "groups": {
+        "measure": {
+          "title": "Pomiar",
+          "hint": "Pomiary tylko do odczytu. Niczego nie zmieniają."
+        },
+        "audiences": {
+          "title": "Odbiorcy i etapy",
+          "hint": "Ustal, z kim rozmawiać, i proponuj zmiany etapu na podstawie tego, co kontakty robią z kampaniami."
+        },
+        "chats": {
+          "title": "Czytanie rozmów",
+          "hint": "Korzysta z analizy rozmów w ocenie leadów przez AI, więc ta funkcja musi być włączona. Dane osobowe są częściowo maskowane przed odczytem rozmowy."
+        },
+        "assist": {
+          "title": "Asystenci",
+          "hint": "Pomoc w podejmowaniu decyzji. Nic nie jest wysyłane do kontaktu."
+        }
+      },
+      "features": {
+        "campaign_response": {
+          "label": "Rzeczywiste odpowiedzi na kampanie",
+          "hint": "Zliczaj kontakty, które odpisały po kampanii, i popraw wskaźniki odpowiedzi."
+        },
+        "send_times": {
+          "label": "Najlepszy czas wysyłki",
+          "hint": "Pokaż godziny, w których Twoje kontakty czytają i piszą."
+        },
+        "propensity": {
+          "label": "Model konwersji",
+          "hint": "Oceń każdy kontakt pod kątem prawdopodobieństwa konwersji."
+        },
+        "quality": {
+          "label": "Panel jakości",
+          "hint": "Pokaż, jak często korzysta się z sugestii i ile kosztuje AI."
+        },
+        "daily_digest": {
+          "label": "Podsumowanie dnia",
+          "hint": "Krótkie podsumowanie obszaru roboczego u góry tego ekranu."
+        },
+        "engagement_audiences": {
+          "label": "Odbiorcy według zaangażowania",
+          "hint": "Zaangażowani, milczący i nieaktywni, gotowi do wysyłki kampanii."
+        },
+        "engagement_stage_rules": {
+          "label": "Sugestie etapu z kampanii",
+          "hint": "Zaproponuj przeniesienie kontaktu dalej, gdy regularnie otwiera kampanie."
+        },
+        "service_rules": {
+          "label": "Przypomnienia serwisowe i kontakty następcze",
+          "hint": "Znajdź kontakty, którym zbliża się termin serwisu lub zakupu, według Twoich reguł."
+        },
+        "enrichment": {
+          "label": "Dane firmy",
+          "hint": "Wyszukaj dane firmy dla kontaktów z firmowym adresem e-mail."
+        },
+        "intent_fields": {
+          "label": "Intencja rozmowy w kontakcie",
+          "hint": "Zapisz temat rozmowy we właściwości „Intencja AI”, aby przepływ mógł na to reagować."
+        },
+        "language_detect": {
+          "label": "Język rozmowy",
+          "hint": "Zapisz, w jakim języku toczy się każda rozmowa."
+        },
+        "auto_notes": {
+          "label": "Notatki z podsumowaniem rozmowy",
+          "hint": "Dodaj do kontaktu krótkie podsumowanie rozmowy jako notatkę."
+        },
+        "hot_lead_alerts": {
+          "label": "Alerty o gorących leadach",
+          "hint": "Zgłoś alert i powiadom opiekuna, gdy kontakt jest wyraźnie gotowy do zakupu."
+        },
+        "unanswered_watch": {
+          "label": "Pytania o zakup bez odpowiedzi",
+          "hint": "Oznaczaj pytania o zakup lub cenę, na które nikt nie odpowiedział."
+        },
+        "handover_summary": {
+          "label": "Podsumowanie przy przekazaniu",
+          "hint": "Gdy rozmowa jest przekazywana osobie, umieść jej podsumowanie na górze."
+        },
+        "purchase_routing": {
+          "label": "Kieruj kupujących do osoby",
+          "hint": "Zaproponuj, kto powinien przejąć rozmowę, gdy kontakt chce kupić."
+        },
+        "registration_check": {
+          "label": "Problemy z rejestracją",
+          "hint": "Oznaczaj kontakty, które twierdzą, że zapłaciły lub się zarejestrowały, ale nie dostały potwierdzenia."
+        },
+        "status_reply": {
+          "label": "Status zamówienia i naprawy",
+          "hint": "Przygotuj status zamówienia lub naprawy, gdy klient o niego pyta."
+        },
+        "optout_detection": {
+          "label": "Prośby o rezygnację",
+          "hint": "Oznaczaj kontakty, które proszą o zaprzestanie wiadomości; zaakceptowanie zapisuje to w rejestrze zgód."
+        },
+        "broadcast_assistant": {
+          "label": "Asystent kampanii",
+          "hint": "Zaproponuj odbiorców i szablon dla danego celu."
+        },
+        "auto_stage": {
+          "label": "Automatyczne zmiany etapu",
+          "hint": "Przenoś kontakt dalej, gdy AI jest bardzo pewne, do dziennego limitu, z możliwością cofnięcia."
+        }
+      },
+      "thresholds": {
+        "title": "Progi",
+        "hint": "Liczby używane przez powyższe części.",
+        "hotLeadConfidence": "Pewność gorącego leada",
+        "hotLeadConfidenceHint": "Jak pewny musi być odczyt, od 0,5 do 1.",
+        "unansweredHours": "Godziny, po których pytanie uznaje się za bez odpowiedzi",
+        "unansweredHoursHint": "Od 1 do 168.",
+        "lapsedDays": "Dni, po których klienta uznaje się za nieaktywnego",
+        "lapsedDaysHint": "Od 7 do 730.",
+        "engagedOpens": "Otwarte kampanie uznawane za zaangażowanie",
+        "engagedOpensHint": "W ciągu 30 dni.",
+        "stageMinOpens": "Otwarte kampanie potrzebne do sugestii zmiany etapu",
+        "stageWindowDays": "Liczba dni wstecz do tego celu",
+        "autoMinConfidence": "Pewność dla automatycznej zmiany",
+        "autoMinConfidenceHint": "Od 0,8 do 1.",
+        "autoDailyCap": "Automatyczne zmiany dziennie",
+        "autoDailyCapHint": "Limit dla całego obszaru roboczego.",
+        "requireGroup": "Sugeruj zmianę etapu tylko dla kontaktów, które należą do grupy"
+      },
+      "rules": {
+        "title": "Twoje reguły i słowa",
+        "hint": "Jeden wpis w wierszu.",
+        "statusFields": "Właściwości statusu",
+        "statusFieldsHint": "Właściwości kontaktu przechowujące status zamówienia lub naprawy, na przykład repair_status.",
+        "serviceRules": "Reguły serwisowe",
+        "serviceRulesHint": "Etykieta | właściwość daty | dni po | dni do (opcjonalnie).",
+        "serviceRulesExample": "Wymiana baterii | purchase_date | 700 | 760",
+        "customPhrases": "Dotknięcia przycisków i słów kluczowych",
+        "customPhrasesHint": "Fraza = intencja. Intencje: {intents}.",
+        "customPhrasesExample": "Zobacz kartę gwarancyjną = post_purchase",
+        "extraMaskTerms": "Słowa do zawsze ukrywania",
+        "extraMaskTermsHint": "Marka, adres lub nazwa, które nigdy nie mogą trafić do AI."
+      },
+      "confirmEnrich": {
+        "title": "Wyszukać dane firmy?",
+        "body": "Aby znaleźć dane firmy, firmowy adres e-mail kontaktu jest wysyłany do usługi wyszukiwania. Prywatne adresy e-mail nie są wysyłane.",
+        "yes": "Włącz",
+        "no": "Nie teraz"
+      }
+    },
+    "contactCard": {
+      "title": "Wzrost",
+      "propensity": "Skłonność do konwersji: {score} na 100.",
+      "computedAt": "Zaktualizowano {when}."
+    }
+  }
+}

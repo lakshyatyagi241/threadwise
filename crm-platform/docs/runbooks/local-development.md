@@ -139,3 +139,12 @@ See _Port conflicts_ above.
 **Integration tests are slow the first time**
 Testcontainers is pulling `pgvector/pgvector:pg16`. Once cached, the suite runs
 in ~15s.
+
+## Windows: SWC cache, line endings, memory
+
+- `ERR_SWC_NATIVE_CACHE` when building or running vitest: set `SWC_NATIVE_BINDING_CACHE` to a writable folder (for example
+  `export SWC_NATIVE_BINDING_CACHE="$HOME/.swc-native-cache"`). `turbo.json` lists it (and `NODE_OPTIONS`) in `globalPassThroughEnv`, so
+  `pnpm test`, `pnpm lint` and `pnpm typecheck` hand it to their tasks; `tools/dev-refresh.sh` and the pre-pr `gate.sh` set it for you.
+- Line endings: `.gitattributes` checks text out as LF (`* text=auto eol=lf`), matching `.prettierrc`, so `pnpm format:check` is meaningful on
+  Windows. An old checkout that still has CRLF files: run `pnpm exec prettier --end-of-line auto --check <files>`, or re-checkout.
+- `pnpm lint` and the web `tsc` need `NODE_OPTIONS=--max-old-space-size=6144`, as on a CI runner (`gate.sh` sets it).

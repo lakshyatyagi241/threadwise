@@ -25,7 +25,11 @@
       "pickTitle": "Pick a conversation",
       "pickMessage": "Choose a conversation from the list to read it and reply. New messages appear here by themselves.",
       "shortcuts": "Shortcuts: j and k move through the list, e resolves, / searches.",
-      "teamChanged": "Team updated."
+      "teamChanged": "Team updated.",
+      "priorityChanged": "Priority updated",
+      "snoozed": "Conversation snoozed",
+      "labelAdded": "Label added",
+      "labelRemoved": "Label removed"
     },
     "list": {
       "title": "Inbox",
@@ -101,7 +105,9 @@
           "title": "You are all caught up",
           "message": "Conversations with new messages from customers are listed here."
         }
-      }
+      },
+      "select": "Select",
+      "selectDone": "Done"
     },
     "status": {
       "received": "Received",
@@ -143,9 +149,11 @@
       "groupRateLimited": "Too many group messages from this number in a short time. Wait a minute, then try again.",
       "groupUnavailable": "WhatsApp did not accept this group message. Try again in a few minutes.",
       "walletEmpty": "Your message wallet cannot cover this group message (one charge per member). Top up and try again.",
+      "groupPlanLocked": "Your plan does not include WhatsApp Groups, so this group cannot be messaged. Ask an admin to upgrade the plan.",
       "savedReplyGone": "This saved reply no longer exists.",
       "savedReplyChannel": "This saved reply is not meant for this kind of channel.",
-      "shortcutTaken": "Another saved reply already uses that shortcut."
+      "shortcutTaken": "Another saved reply already uses that shortcut.",
+      "importInvalid": "That file cannot be read as saved replies. It needs a first row with the columns title, shortcut and body, and at most 1,000 rows."
     },
     "bubble": {
       "kind": {
@@ -213,7 +221,9 @@
       },
       "deliveryLog": "Delivery log",
       "groupMember": "Group member",
-      "groupTally": "Delivered to {delivered, plural, one {# member} other {# members}}: {billable} billed, {free} free"
+      "groupTally": "Delivered to {delivered} of {members}{read, plural, =0 {} other {, read by #}}{failed, plural, =0 {} other {, # failed}}",
+      "groupTallyNoTotal": "Delivered to {delivered, plural, one {# member} other {# members}}{read, plural, =0 {} other {, read by #}}{failed, plural, =0 {} other {, # failed}}",
+      "groupTallyBilled": "{billable} billed, {free} free"
     },
     "media": {
       "openImage": "Open image {name}",
@@ -282,6 +292,26 @@
         "label": "Group members",
         "loading": "Looking for members",
         "none": "No member matches"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta suspended this group",
+          "message": "WhatsApp does not deliver messages to a suspended group. You can read the thread and add internal notes until Meta clears it."
+        },
+        "plan": {
+          "title": "Your plan does not include WhatsApp Groups",
+          "message": "You can read this thread and add internal notes, but sending to the group needs a plan with Groups. Ask an admin to upgrade."
+        },
+        "ineligible": {
+          "title": "This number cannot use WhatsApp Groups",
+          "message": "Meta did not allow Groups on this number when it was last checked (it needs an Official Business Account). You can read the thread and add internal notes. Open Meta Groups to check again."
+        }
+      },
+      "cost": {
+        "members": "This message goes to {count, plural, one {# member} other {# members}}. Estimated cost {cost}: WhatsApp bills each member who receives it.",
+        "membersNoEstimate": "This message goes to {count, plural, one {# member} other {# members}}. WhatsApp bills each member who receives it.",
+        "sizeUnknown": "The member count is not known yet. WhatsApp bills each member who receives this message.",
+        "walletShort": "Your wallet may not cover this message. Top up before sending."
       }
     },
     "composer": {
@@ -817,6 +847,122 @@
         "upgrade": "See plans",
         "conflict": "Someone else changed this reply first. Close this window and open it again.",
         "invalid": "Some of what you entered is not valid."
+      },
+      "transfer": {
+        "export": "Export CSV",
+        "import": "Import CSV",
+        "title": "Import saved replies",
+        "intro": "Upload a CSV with the columns title, shortcut, body and, if you like, category, language and channel (channel kinds separated by |, empty for every channel). Up to 1,000 rows and {maxKb} KB. Imported replies are shared with the whole team. The export has the same columns.",
+        "file": "CSV file",
+        "tooBig": "This file is too large.",
+        "duplicates": "When a shared reply already uses the shortcut",
+        "policy": {
+          "skip": "Keep the existing reply",
+          "overwrite": "Replace its text"
+        },
+        "policyHint": {
+          "skip": "The row is skipped and the reply stays as it is.",
+          "overwrite": "Title, text, category, language and channels are replaced. Its use count is kept."
+        },
+        "check": "Check the file",
+        "go": "Import ({count})",
+        "cancel": "Cancel",
+        "summary": "{create} to create, {update} to replace, {skip} skipped, {invalid} with a problem. Nothing is saved yet.",
+        "plan": "Your plan: {used} of {limit} replies.",
+        "row": "Line {line}: /{shortcut}",
+        "truncated": "Only the first rows with a problem or a change are listed.",
+        "done": "Imported: {created} created, {updated} replaced.",
+        "issue": {
+          "update": "will be replaced",
+          "skip": "skipped",
+          "invalid": "has a problem",
+          "duplicate": "shortcut already in use, skipped",
+          "missing_shortcut": "no shortcut",
+          "shortcut_invalid": "the shortcut has no usable letters or numbers",
+          "missing_title": "no title",
+          "title_too_long": "the title is too long",
+          "missing_body": "no text",
+          "body_too_long": "the text is too long",
+          "control_characters": "contains control characters",
+          "category_too_long": "the category is too long",
+          "language_invalid": "the language is not a code such as en or pt-BR",
+          "channel_unknown": "an unknown channel",
+          "duplicate_in_file": "the shortcut appears earlier in the file",
+          "plan_limit_reached": "over your plan's limit"
+        }
+      }
+    },
+    "triage": {
+      "priority": "Priority",
+      "snooze": "Snooze",
+      "wake": "Wake now"
+    },
+    "bulk": {
+      "barLabel": "Bulk actions",
+      "selected": "{count, plural, one {# conversation selected} other {# conversations selected}}",
+      "selectAllInView": "Select all {count} in view",
+      "done": "Done",
+      "markRead": "Mark as read",
+      "resolve": "Resolve",
+      "close": "Close",
+      "reopen": "Reopen",
+      "assign": "Assign",
+      "assignToMe": "Assign to me",
+      "unassign": "Unassign",
+      "removeTeam": "Remove team",
+      "priority": "Priority",
+      "snooze": "Snooze",
+      "snoozePreset": {
+        "oneHour": "1 hour",
+        "threeHours": "3 hours",
+        "tomorrow": "Tomorrow, 9:00",
+        "nextWeek": "Next Monday, 9:00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {# conversation updated} other {# conversations updated}}.",
+        "nothingChanged": "Nothing to change: the selected conversations are already up to date.",
+        "partial": "{done} updated, {unchanged} already up to date, {failed} could not be changed. The ones that failed stay selected.",
+        "allFailed": "None of the {count, plural, one {# conversation} other {# conversations}} could be changed."
+      },
+      "label": "Label",
+      "labelAdd": "Add label",
+      "labelRemove": "Remove label"
+    },
+    "labels": {
+      "label": "Label",
+      "loading": "Loading labels…",
+      "loadFailed": "Could not load the labels.",
+      "none": "No labels yet.",
+      "newLabel": "New label",
+      "add": "Add",
+      "filter": "Labels",
+      "filterActive": "{count, plural, one {# label} other {# labels}}",
+      "clearFilter": "Clear label filter",
+      "screen": {
+        "back": "Back to the inbox",
+        "title": "Labels",
+        "intro": "Labels tag conversations so your team can sort and filter them. They are the same tags used on contacts.",
+        "newTitle": "New label",
+        "editTitle": "Edit label",
+        "name": "Name",
+        "color": "Color",
+        "colorInvalid": "Use a hex color such as #075E54 or a color name.",
+        "description": "Description (optional)",
+        "create": "Create label",
+        "save": "Save changes",
+        "cancel": "Cancel",
+        "edit": "Edit",
+        "delete": "Delete",
+        "inUse": "{count, plural, one {# conversation} other {# conversations}}",
+        "emptyTitle": "No labels yet",
+        "emptyMessage": "Create your first label above, then put it on conversations from the inbox.",
+        "deleteTitle": "Delete this label?",
+        "deleteMessage": "\"{name}\" is on {count, plural, one {# conversation} other {# conversations}}. Deleting it removes it from them and from any contacts that carry it. This cannot be undone.",
+        "nameTaken": "A label with that name already exists.",
+        "conflict": "Someone else changed this label first. The list was reloaded.",
+        "saved": "Label saved",
+        "created": "Label created",
+        "deleted": "Label deleted"
       }
     }
   }

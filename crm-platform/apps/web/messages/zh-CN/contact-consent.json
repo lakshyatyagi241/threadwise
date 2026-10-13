@@ -14,7 +14,9 @@
       "settingsInvalid": "关键词至少需要包含一个字母或数字；开启检测时，至少要保留一个 STOP 关键词。",
       "rateLimited": "请求过于频繁。请稍候再试。",
       "validation": "部分内容无效。请检查表单后重试。",
-      "unexpected": "出了点问题。请重试。"
+      "unexpected": "出了点问题。请重试。",
+      "exportInProgress": "已有证明文件正在准备中。请等待完成后再试。",
+      "exportNotReady": "该文件尚未就绪或已过期。请重新准备。"
     },
     "settings": {
       "title": "同意与 STOP 回复",
@@ -169,7 +171,35 @@
     "import": {
       "legend": "同意",
       "label": "我已获得向这些联系人发送消息的同意",
-      "hint": "勾选后，文件中的所有联系人都会被记录为已同意接收营销信息，并以文件名作为凭证。未勾选时，导入不会记录任何同意。已退订的联系人将保持退订状态。"
+      "hint": "勾选后，文件中的所有联系人都会被记录为已同意接收营销信息，并以文件名作为凭证。未勾选时，导入不会记录任何同意。已退订的联系人将保持退订状态。",
+      "hintColumn": "映射为营销同意的列决定记录对象：只有标注为“是”的行会记录同意，并以文件名作为证明。“否”、空白单元格或无法识别的词不会记录任何内容。已退订的联系人将保持退订状态。",
+      "columnSummary": "{granted} 行标注为“是”，将被记录。{notGranted} 行为“否”或空白，不会生成同意记录。",
+      "unrecognised": "{count, plural, one {# 行} other {# 行}}的同意值既不是“是”也不是“否”（{values}），将被视为未同意。请使用 yes / no、true / false 或 1 / 0。",
+      "columnIgnored": "在你勾选上方的复选框之前，同意列不会生效。"
+    },
+    "systemLine": {
+      "withdrawn": "联系人回复 {keyword}：已取消营销订阅",
+      "granted": "联系人回复 {keyword}：已重新订阅营销"
+    },
+    "proof": {
+      "title": "已准备的证明文件",
+      "prepare": "准备完整证明文件",
+      "preparing": "正在准备证明文件",
+      "largeHint": "记录超过 {max} 个事件，因此将在后台准备文件",
+      "large": "记录超过 {max} 个事件，超出直接下载的范围。请准备完整文件：它会在后台生成，准备好后会通过邮件通知你。",
+      "none": "暂无已准备的文件。",
+      "keptFor": "已准备的文件可下载 {days} 天，之后将被删除。同一时间只会准备一个文件。",
+      "rows": "{count, plural, one {# 个事件} other {# 个事件}}",
+      "expires": "有效期至 {date}",
+      "download": "下载 CSV",
+      "failed": "文件生成失败。请重新准备。",
+      "status": {
+        "queued": "等待中",
+        "running": "生成中",
+        "ready": "就绪",
+        "failed": "失败",
+        "expired": "已过期"
+      }
     }
   }
 }
