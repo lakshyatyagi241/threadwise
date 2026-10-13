@@ -439,7 +439,7 @@
       "imported": "{count, plural, one {# contact geïmporteerd.} other {# contacten geïmporteerd.}}",
       "importedUpdated": "{count, plural, one {# bestaand contact bijgewerkt.} other {# bestaande contacten bijgewerkt.}}",
       "importedInvalid": "{count, plural, one {# ongeldige rij overgeslagen.} other {# ongeldige rijen overgeslagen.}}",
-      "downloadRejects": "Afgewezen rijen downloaden",
+      "downloadRejects": "Fouten en overgeslagen rijen downloaden",
       "fileTooLarge": "Dat bestand is groter dan {mb} MB.",
       "checking": "Bestand controleren...",
       "errorFile": "Dat bestand kon niet worden gelezen als contacten-CSV. Controleer of het een kopregel en minstens één contact heeft.",
@@ -470,7 +470,8 @@
         "group_name_too_long": "groepsnaam te lang",
         "tag_name_too_long": "tagnaam te lang",
         "plan_limit_reached": "contactlimiet van abonnement bereikt",
-        "tag_limit_reached": "taglimiet van abonnement bereikt"
+        "tag_limit_reached": "taglimiet van abonnement bereikt",
+        "duplicate_in_file": "herhaald nummer, samengevoegd met een eerdere rij"
       },
       "statusHint": "Wordt toegepast op contacten die dit bestand aanmaakt.",
       "queued": "Wachten op start...",
@@ -1172,13 +1173,14 @@
         "updated": "Bijgewerkt",
         "rejected": "Afgewezen",
         "actions": "Acties",
-        "downloadRejects": "Afgewezen rijen downloaden",
+        "downloadRejects": "Fouten en overgeslagen rijen downloaden",
         "statuses": {
           "queued": "In wachtrij",
           "running": "Actief",
           "completed": "Voltooid",
           "failed": "Mislukt"
-        }
+        },
+        "by": "Geïmporteerd door"
       },
       "exports": {
         "title": "Exports",

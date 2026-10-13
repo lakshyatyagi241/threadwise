@@ -439,7 +439,7 @@
       "imported": "{count, plural, other {已导入 # 位联系人。}}",
       "importedUpdated": "{count, plural, other {已更新 # 位现有联系人。}}",
       "importedInvalid": "{count, plural, other {已跳过 # 行无效数据。}}",
-      "downloadRejects": "下载被拒绝的行",
+      "downloadRejects": "下载错误和跳过的行",
       "fileTooLarge": "该文件超过 {mb} MB。",
       "checking": "正在检查文件...",
       "errorFile": "无法将该文件读取为联系人 CSV。请确认其包含表头行和至少一位联系人。",
@@ -470,7 +470,8 @@
         "group_name_too_long": "群组名称过长",
         "tag_name_too_long": "标签名称过长",
         "plan_limit_reached": "已达套餐联系人上限",
-        "tag_limit_reached": "已达套餐标签上限"
+        "tag_limit_reached": "已达套餐标签上限",
+        "duplicate_in_file": "号码重复，已合并到前面的行"
       },
       "statusHint": "应用于此文件创建的联系人。",
       "queued": "等待开始...",
@@ -1172,13 +1173,14 @@
         "updated": "已更新",
         "rejected": "已拒绝",
         "actions": "操作",
-        "downloadRejects": "下载被拒绝项",
+        "downloadRejects": "下载错误和跳过的行",
         "statuses": {
           "queued": "排队中",
           "running": "运行中",
           "completed": "已完成",
           "failed": "失败"
-        }
+        },
+        "by": "导入人"
       },
       "exports": {
         "title": "导出",
