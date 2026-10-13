@@ -13,7 +13,7 @@ import {
 
 export type RunStatus = 'queued' | 'running' | 'completed' | 'failed' | 'cancelled' | 'blocked';
 export type BatchStatus = 'queued' | 'running' | 'completed' | 'failed' | 'cancelled';
-export type RunMode = 'dry' | 'load';
+export type RunMode = 'dry' | 'load' | 'catchup';
 
 /** What the worker moves a run through. A finished run never moves again. */
 const MOVES: Record<RunStatus, readonly RunStatus[]> = {
@@ -158,9 +158,11 @@ export function loadGate(input: {
   latestDry: LatestDry | null;
   now: Date;
 }): GateFailure | null {
-  if (input.mode !== 'load') return null;
+  if (input.mode === 'dry') return null;
   const c = input.confirmClient;
   if (c === undefined || (c !== input.sourceClient && c !== input.organizationId)) return 'confirm';
+  // a catch-up of an already-loaded client runs its own dry run first and stops if it is not clean
+  if (input.mode === 'catchup') return null;
   return dryReadiness(input.latestDry, input.now) === 'ok' ? null : 'dry';
 }
 

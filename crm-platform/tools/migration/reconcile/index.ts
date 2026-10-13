@@ -1915,9 +1915,13 @@ export function toMarkdown(r: Report): string {
   return L.join('\n');
 }
 
+/** The report is shared (the panel, the PR evidence): an e-mail address that rode in on an example (an automation node's config, a field value) is replaced before it is written. */
+const EMAIL_IN_REPORT = /[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,}/g;
+const redactReport = (s: string): string => s.replace(EMAIL_IN_REPORT, '<email>');
+
 export function writeReport(r: Report, outDir: string): void {
   const dir = join(outDir, r.client);
   mkdirSync(dir, { recursive: true });
-  writeFileSync(join(dir, 'reconcile.json'), JSON.stringify(r, null, 2));
-  writeFileSync(join(dir, 'reconcile.md'), toMarkdown(r));
+  writeFileSync(join(dir, 'reconcile.json'), redactReport(JSON.stringify(r, null, 2)));
+  writeFileSync(join(dir, 'reconcile.md'), redactReport(toMarkdown(r)));
 }

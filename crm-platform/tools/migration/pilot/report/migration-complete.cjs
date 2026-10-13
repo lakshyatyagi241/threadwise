@@ -1144,7 +1144,8 @@ function render(clients, ctx) {
 
 // ---------- PII guard ---------------------------------------------------------------------------------------------------------------
 function piiHits(text) {
-  const t = text.replace(/\b[0-9a-f]{16,}\b/gi, '').replace(/\d{4}-\d{2}-\d{2}T[\d:.\-]+Z?/g, '');
+  // a full UUID is an identifier, not personal data (its last group can be 12 digits by chance and then reads like a phone number)
+  const t = text.replace(/\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b/gi, '').replace(/\b[0-9a-f]{16,}\b/gi, '').replace(/\d{4}-\d{2}-\d{2}T[\d:.\-]+Z?/g, '');
   // a decimal number (a node's x/y on the canvas, an amount) is not a phone number: its fractional digits must not read as one
   const t2 = t.replace(/-?\d+\.\d{3,}/g, '');
   const hits = [];

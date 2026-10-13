@@ -16,7 +16,7 @@ export const WMIG_DRY_RUN_MAX_AGE_HOURS = 24;
 export const WMIG_MAX_BATCH = 50;
 export const WMIG_MAX_SCHEDULE_DAYS = 90;
 
-export const WMIG_MODES = ['dry', 'load'] as const;
+export const WMIG_MODES = ['dry', 'load', 'catchup'] as const;
 export const WMIG_STATUSES = [
   'queued',
   'running',

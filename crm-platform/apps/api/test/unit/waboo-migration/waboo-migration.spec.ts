@@ -179,6 +179,12 @@ describe('confirmation and dry-run gate', () => {
       'confirm',
     );
   });
+  it('a catch-up needs the typed confirmation but no earlier dry run (it runs its own)', () => {
+    expect(loadGate({ ...base, mode: 'catchup', confirmClient: undefined, latestDry: null })).toBe(
+      'confirm',
+    );
+    expect(loadGate({ ...base, mode: 'catchup', latestDry: null })).toBeNull();
+  });
   it('a load needs a green completed dry run from the last 24 hours', () => {
     expect(loadGate({ ...base, mode: 'load', latestDry: greenDry(1) })).toBeNull();
     expect(loadGate({ ...base, mode: 'load', latestDry: greenDry(24) })).toBeNull();
