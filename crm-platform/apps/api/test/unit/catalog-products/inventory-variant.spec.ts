@@ -4,12 +4,13 @@ import {
   afterHold,
   afterRelease,
   canHold,
+  type Stock,
 } from '../../../src/modules/catalog-products/inventory-rules';
 
 /** The same arithmetic serves a variant's stock row (invariant 4); these pin the cases the variant path relies on. */
 describe('stock arithmetic on a variant row', () => {
   it('hold, commit and release keep stock and holds consistent', () => {
-    let s = { stockQty: 3, reservedQty: 0 };
+    let s: Stock = { stockQty: 3, reservedQty: 0 };
     expect(canHold(s, 3)).toBe(true);
     s = afterHold(s, 2);
     expect(canHold(s, 2)).toBe(false);

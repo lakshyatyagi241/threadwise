@@ -23,8 +23,9 @@ export interface ProductAggregate {
 }
 
 /** Whether a variant can be bought now: active, and unlimited or with something not held. */
-export const variantSellable = (v: Pick<VariantStock, 'stockQty' | 'reservedQty' | 'active'>): boolean =>
-  v.active && (v.stockQty === null || v.stockQty - (v.reservedQty || 0) > 0);
+export const variantSellable = (
+  v: Pick<VariantStock, 'stockQty' | 'reservedQty' | 'active'>,
+): boolean => v.active && (v.stockQty === null || v.stockQty - (v.reservedQty || 0) > 0);
 
 /**
  * What the product row holds while it has variants: the lowest effective price of the ACTIVE variants (of all of them when none is
@@ -37,7 +38,9 @@ export function computeAggregate(
 ): ProductAggregate | null {
   if (variants.length === 0) return null;
   const active = variants.filter((v) => v.active);
-  const priced = (active.length > 0 ? active : variants).map((v) => v.priceMinor ?? productPriceMinor);
+  const priced = (active.length > 0 ? active : variants).map(
+    (v) => v.priceMinor ?? productPriceMinor,
+  );
   const stockQty = active.some((v) => v.stockQty === null)
     ? null
     : active.reduce((sum, v) => sum + (v.stockQty ?? 0), 0);

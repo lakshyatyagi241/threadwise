@@ -301,7 +301,11 @@ export class CatalogSyncService {
       let imported = 0;
       let updated = 0;
       let skipped = 0;
-      const ownItems = await this.ownVariantItems(tx, orgId, listed.map((r) => r.retailerId.trim()));
+      const ownItems = await this.ownVariantItems(
+        tx,
+        orgId,
+        listed.map((r) => r.retailerId.trim()),
+      );
       for (const r of listed) {
         const retailer = r.retailerId.trim();
         const name = r.name.trim();
@@ -332,7 +336,9 @@ export class CatalogSyncService {
           continue;
         }
         const found = await this.repo.findByRetailerId(tx, orgId, retailer);
-        const existing = found ? (await this.products.withVariants(tx, orgId, [found]))[0] : undefined;
+        const existing = found
+          ? (await this.products.withVariants(tx, orgId, [found]))[0]
+          : undefined;
         if (existing && ownItems.withVariants.has(existing.id)) {
           skipped++;
           continue;
@@ -395,7 +401,8 @@ export class CatalogSyncService {
     const res = await tx.execute(
       sql`SELECT DISTINCT product_id FROM wa_product_variants WHERE org_id = ${orgId}`,
     );
-    for (const r of res.rows as Array<{ product_id: number | string }>) withVariants.add(Number(r.product_id));
+    for (const r of res.rows as Array<{ product_id: number | string }>)
+      withVariants.add(Number(r.product_id));
     return { variantIds, withVariants };
   }
 

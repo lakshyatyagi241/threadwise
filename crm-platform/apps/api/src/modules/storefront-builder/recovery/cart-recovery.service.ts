@@ -50,7 +50,11 @@ export class CartRecoveryService {
         phoneDigits: phone,
         name: input.name?.trim() ? input.name.trim() : null,
         // The items as the browser sent them (ids and quantities); they are not validated against the catalogue.
-        items: input.items.map((i) => ({ id: i.id, ...(i.variantId ? { variantId: i.variantId } : {}), qty: i.qty })),
+        items: input.items.map((i) => ({
+          id: i.id,
+          ...(i.variantId ? { variantId: i.variantId } : {}),
+          qty: i.qty,
+        })),
         subtotalMinor,
         currencyCode: shop.currencyCode || 'INR',
         delayMinutes: recoveryDelayMinutes(Number(shop.settings.cart_recovery_delay_min ?? 30)),

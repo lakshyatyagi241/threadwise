@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
 
-
 /**
  * The public shop (TW-STORE-009..021). Nothing here needs a sign-in: the buyer is anonymous, the shop is named by its slug (or
  * its own domain), and every price and quantity in a request is re-derived on the server.

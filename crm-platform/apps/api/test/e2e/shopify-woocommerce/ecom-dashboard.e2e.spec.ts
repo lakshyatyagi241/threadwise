@@ -37,6 +37,7 @@ beforeAll(async () => {
     recent: (r) => Promise.resolve(live[r]),
     salesReport: () => Promise.resolve(live.report),
     updateOrder: () => Promise.resolve(true),
+    variations: () => Promise.resolve({ items: [], complete: true }),
     createPendingOrder: () => Promise.resolve(null),
   });
 }, 240_000);

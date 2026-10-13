@@ -490,7 +490,8 @@ export class ProductsService {
     input: FormInput,
   ): Promise<boolean> {
     if (input.options === undefined) return false;
-    const storedRows = (await this.repo.variantsOf(tx, orgId, [productId], true)).get(productId) ?? [];
+    const storedRows =
+      (await this.repo.variantsOf(tx, orgId, [productId], true)).get(productId) ?? [];
     const stored: StoredVariant[] = storedRows.map((v) => ({
       id: v.id,
       uuid: v.uuid,

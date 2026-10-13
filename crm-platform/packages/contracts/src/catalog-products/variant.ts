@@ -64,7 +64,11 @@ export const productVariantsFieldsSchema = z
     v.options.forEach((o, i) => {
       const key = o.name.toLowerCase();
       if (names.has(key))
-        ctx.addIssue({ code: 'custom', path: ['options', i, 'name'], message: 'Duplicate option name' });
+        ctx.addIssue({
+          code: 'custom',
+          path: ['options', i, 'name'],
+          message: 'Duplicate option name',
+        });
       names.add(key);
       const values = new Set<string>();
       o.values.forEach((val, j) => {
@@ -142,7 +146,9 @@ export const productVariantsResponseSchema = z.object({
 });
 
 /** Cartesian product of the option values, first option varying slowest ("XS/Red", "XS/Blue", "S/Red", ...). */
-export function combineOptionValues(options: ReadonlyArray<{ values: readonly string[] }>): string[][] {
+export function combineOptionValues(
+  options: ReadonlyArray<{ values: readonly string[] }>,
+): string[][] {
   if (options.length === 0) return [];
   return options.reduce<string[][]>(
     (acc, o) => acc.flatMap((prefix) => o.values.map((v) => [...prefix, v])),

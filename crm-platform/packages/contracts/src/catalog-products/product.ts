@@ -3,10 +3,7 @@ import { uuidSchema } from '../common/ids';
 import { paginationQuerySchema, pageResponseSchema } from '../common/pagination';
 import { queryBoolean } from '../contacts-attributes-tags/query-helpers';
 import { waString, waTag } from './text';
-import {
-  productVariantsFieldsSchema,
-  productVariantsResponseSchema,
-} from './variant';
+import { productVariantsFieldsSchema, productVariantsResponseSchema } from './variant';
 
 /**
  * Products (TW-CAT-019..026). Reference kept the money of a product in `price_minor`, always the major amount times 100 whatever

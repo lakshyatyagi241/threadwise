@@ -157,7 +157,9 @@ export class PublicCatalogService {
           items: order.items.map((i) => ({
             name: String(i.name ?? ''),
             variantTitle:
-              typeof i.variant_title === 'string' && i.variant_title !== '' ? i.variant_title : null,
+              typeof i.variant_title === 'string' && i.variant_title !== ''
+                ? i.variant_title
+                : null,
             qty: Number(i.qty ?? 1),
             priceMinor: Number(i.price_minor ?? 0),
             image: typeof i.image === 'string' && i.image !== '' ? i.image : null,

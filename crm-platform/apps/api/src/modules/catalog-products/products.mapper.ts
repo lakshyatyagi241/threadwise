@@ -24,7 +24,8 @@ function toVariantResponse(v: VariantRow, p: ProductRow): ProductVariantResponse
     priceDisplay: formatProductMoney(priceMinor, p.currencyCode),
     priceOverrideMajor: v.priceMinor === null ? null : minorToMajorString(v.priceMinor),
     comparePriceMinor: v.comparePriceMinor,
-    comparePriceMajor: v.comparePriceMinor === null ? null : minorToMajorString(v.comparePriceMinor),
+    comparePriceMajor:
+      v.comparePriceMinor === null ? null : minorToMajorString(v.comparePriceMinor),
     comparePriceDisplay:
       v.comparePriceMinor === null ? null : formatProductMoney(v.comparePriceMinor, p.currencyCode),
     imageUrl: v.imageUrl,

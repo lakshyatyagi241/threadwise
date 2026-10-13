@@ -125,6 +125,7 @@ beforeAll(async () => {
     updateOrder: () => Promise.resolve(true),
     recent: () => Promise.resolve([]),
     salesReport: () => Promise.resolve({}),
+    variations: () => Promise.resolve({ items: [], complete: true }),
     createPendingOrder: () => Promise.resolve(null),
   });
 }, 240_000);

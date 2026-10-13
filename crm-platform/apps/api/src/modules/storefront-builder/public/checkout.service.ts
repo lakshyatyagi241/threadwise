@@ -305,9 +305,9 @@ function toOrderLine(l: PricedLine): OrderLine {
     qty: l.qty,
     price_minor: l.unitPriceMinor,
     image: l.variant?.imageUrl || l.product.imageUrl,
-    retailer_id: l.variant ? l.variant.retailerId : l.product.metaRetailerId || l.product.sku || null,
-    ...(l.variant
-      ? { variant_id: l.variant.uuid, variant_title: l.variant.title }
-      : {}),
+    retailer_id: l.variant
+      ? l.variant.retailerId
+      : l.product.metaRetailerId || l.product.sku || null,
+    ...(l.variant ? { variant_id: l.variant.uuid, variant_title: l.variant.title } : {}),
   };
 }

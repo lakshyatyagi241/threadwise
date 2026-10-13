@@ -3,7 +3,13 @@ import { sql, type SQL } from 'drizzle-orm';
 import type { ProductOption } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { retailerIdOf } from './catalog-rules';
-import { intArray, recomputeProductAggregate, textArray, toProductRow, type ProductRow } from './products.repository';
+import {
+  intArray,
+  recomputeProductAggregate,
+  textArray,
+  toProductRow,
+  type ProductRow,
+} from './products.repository';
 import {
   StorefrontProductsReader,
   type StorefrontProduct,
@@ -70,7 +76,10 @@ const available = (storefrontId: number): SQL =>
         AND av.active AND (av.stock_qty IS NULL OR av.stock_qty - av.reserved_qty > 0)))`;
 
 /** A product row plus its variants: the row is the aggregate older readers use, `variants` is what a buyer picks from. */
-const toVariant = (r: Raw, product: { priceMinor: number; retailerId: string }): StorefrontVariant => {
+const toVariant = (
+  r: Raw,
+  product: { priceMinor: number; retailerId: string },
+): StorefrontVariant => {
   const position = Number(r.position ?? 0);
   return {
     id: Number(r.id),
