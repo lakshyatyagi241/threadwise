@@ -4,9 +4,11 @@ import {
   type ConversationStatus,
 } from '@crm/contracts';
 
-/** What the three dots of a thread can offer, besides the resolve / reopen button beside them. */
-export type MenuAction =
-  'assignToMe' | 'changeAgent' | 'unassign' | 'priority' | 'snooze' | 'wake' | 'pending' | 'close';
+/** What the three dots of a thread offer, as in the reference app: the details, and the three sheets (status, labels, agent). */
+export type MenuAction = 'details' | 'status' | 'labels' | 'agent';
+
+/** The statuses a person can move a conversation to by hand (`snoozed` and `spam` have their own routes). */
+export const STATUS_TARGETS = ['open', 'pending', 'resolved', 'closed'] as const;
 
 /** The conversation is being answered by an AI agent and no person has it. */
 export const isBotConversation = (assignment: ConversationAssignment): boolean =>
@@ -14,37 +16,27 @@ export const isBotConversation = (assignment: ConversationAssignment): boolean =
 
 interface Input {
   status: ConversationStatus;
-  assignment: ConversationAssignment;
-  /** The signed-in person's id, to tell "mine" from "someone else's". */
-  meId: string;
-  /** `inbox.conversation.assign`: may give a conversation to anyone, or take it from them. */
-  canAssign: boolean;
-  /** `inbox.conversation.assign_self`: may only claim it for themselves. */
-  canAssignSelf: boolean;
   /** `inbox.conversation.resolve`: may move the conversation between statuses. */
   canResolve: boolean;
-  /** `inbox.conversation.priority`: may change how urgent the conversation is. */
-  canPriority?: boolean;
-  /** `inbox.conversation.snooze`: may park the conversation until a time. */
-  canSnooze?: boolean;
+  /** `inbox.conversation.tag`: may put labels on the conversation. */
+  canLabel: boolean;
+  /** `inbox.conversation.assign`: may hand the conversation to anyone, or take it from them. */
+  canAssign: boolean;
 }
 
-/** The actions that make sense for this conversation and this person, in the order the menu lists them. */
+/**
+ * The lines of the three dots for this conversation and this person, in the order the reference app lists them: View details
+ * (always), Change status (when another status is reachable), Assign labels, Assign agent. Priority, snooze and waking a snoozed
+ * conversation are on the details screen.
+ */
 export function menuActionsFor(input: Input): MenuAction[] {
-  const { status, assignment, meId, canAssign, canAssignSelf, canResolve } = input;
-  const actions: MenuAction[] = [];
-  if ((canAssign || canAssignSelf) && assignment.user?.id !== meId) actions.push('assignToMe');
-  // Handing it to anyone (not only claiming it) is the right to assign; so is taking it away from them.
-  if (canAssign) actions.push('changeAgent');
-  if (canAssign && assignment.user !== null) actions.push('unassign');
-  if (input.canPriority) actions.push('priority');
-  // Only a live thread can be parked (the API refuses the others); a parked one is woken by moving it to open.
-  if (input.canSnooze && (status === 'open' || status === 'pending')) actions.push('snooze');
-  if (canResolve && status === 'snoozed') actions.push('wake');
+  const { status, canResolve, canLabel, canAssign } = input;
+  const actions: MenuAction[] = ['details'];
   // The contract counts "to the status it already has" as a legal move; a menu line that changes nothing is not offered.
-  const moveTo = (to: ConversationStatus) => status !== to && canMoveConversationStatus(status, to);
-  if (canResolve && moveTo('pending')) actions.push('pending');
-  if (canResolve && moveTo('closed')) actions.push('close');
+  const moves = STATUS_TARGETS.some((to) => to !== status && canMoveConversationStatus(status, to));
+  if (canResolve && moves) actions.push('status');
+  if (canLabel) actions.push('labels');
+  if (canAssign) actions.push('agent');
   return actions;
 }
 

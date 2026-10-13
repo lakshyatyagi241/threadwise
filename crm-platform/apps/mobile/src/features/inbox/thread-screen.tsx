@@ -1,8 +1,6 @@
 import {
   canMoveConversationStatus,
   channelKindSchema,
-  CONVERSATION_PRIORITIES,
-  type ConversationPriority,
   type ConversationStatus,
   type SetConversationStatusInput,
 } from '@crm/contracts';
@@ -19,7 +17,6 @@ import {
   View,
 } from 'react-native';
 import { Banner } from '@/components/ui/banner';
-import { SegmentedControl } from '@/components/ui/segmented-control';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { EmptyState } from '@/components/ui/empty-state';
@@ -43,9 +40,8 @@ import { SavedRepliesSheet } from './saved-replies-sheet';
 import {
   isBotConversation,
   menuActionsFor,
-  SNOOZE_CHOICES,
+  STATUS_TARGETS,
   type MenuAction,
-  type SnoozeChoice,
 } from './thread-actions';
 import { sendErrorMessage } from './thread-errors';
 import { ThreadHeader } from './thread-header';
@@ -94,8 +90,6 @@ export function ThreadScreen() {
   const canAssign = can(session.data, 'inbox.conversation.assign');
   const canAssignSelf = can(session.data, 'inbox.conversation.assign_self');
   const canNote = can(session.data, 'inbox.conversation.note');
-  const canPriority = can(session.data, 'inbox.conversation.priority');
-  const canSnooze = can(session.data, 'inbox.conversation.snooze');
   // Labels are on the conversation. Making a new one (by typing its name) is a separate permission.
   const canLabel = can(session.data, 'inbox.conversation.tag');
   const canMakeLabels = can(session.data, 'inbox.tag.manage');
@@ -129,7 +123,7 @@ export function ThreadScreen() {
   const [labelsOpen, setLabelsOpen] = useState(false);
   const [templatesOpen, setTemplatesOpen] = useState(false);
   // Which of the "pick one, then Save" sheets is open, and why its last save failed.
-  const [sheet, setSheet] = useState<'agent' | 'priority' | 'snooze' | null>(null);
+  const [sheet, setSheet] = useState<'agent' | 'status' | null>(null);
   const [sheetError, setSheetError] = useState<string | null>(null);
 
   const messages = useMemo(() => flattenMessages(thread.data), [thread.data]);
@@ -233,7 +227,7 @@ export function ThreadScreen() {
     setSheetError(failed);
     if (!failed) setSheet(null);
   };
-  const openSheet = (which: 'agent' | 'priority' | 'snooze') => {
+  const openSheet = (which: 'agent' | 'status') => {
     setSheetError(null);
     setSheet(which);
   };
@@ -249,77 +243,36 @@ export function ThreadScreen() {
     if (thread.hasNextPage && !thread.isFetchingNextPage) void thread.fetchNextPage();
   };
 
-  const MENU_ITEM: Record<
-    MenuAction,
-    Omit<ThreadMenuItem, 'key' | 'onPress'> & { run: () => void }
-  > = {
-    assignToMe: {
-      label: t('inbox.thread.menu.assignToMe'),
-      icon: 'person-add-outline',
-      run: () => assignTo(meId),
+  const openDetails = () => router.push({ pathname: '/conversation-details', params: { id } });
+  const MENU_ITEM: Record<MenuAction, Omit<ThreadMenuItem, 'key'>> = {
+    details: {
+      label: t('inbox.thread.menu.details'),
+      icon: 'information-circle-outline',
+      onPress: openDetails,
     },
-    changeAgent: {
-      label: t('inbox.thread.menu.changeAgent'),
+    status: {
+      label: t('inbox.thread.menu.status'),
+      icon: 'swap-horizontal-outline',
+      onPress: () => openSheet('status'),
+    },
+    labels: {
+      label: t('inbox.thread.labels.open'),
+      icon: 'pricetag-outline',
+      onPress: () => setLabelsOpen(true),
+    },
+    agent: {
+      label: t('inbox.thread.menu.agent'),
       icon: 'people-outline',
-      run: () => openSheet('agent'),
-    },
-    unassign: {
-      label: t('inbox.thread.menu.unassign'),
-      icon: 'person-remove-outline',
-      run: () => assignTo(null),
-    },
-    priority: {
-      label: t('inbox.thread.menu.priority'),
-      icon: 'flag-outline',
-      run: () => openSheet('priority'),
-    },
-    snooze: {
-      label: t('inbox.thread.menu.snooze'),
-      icon: 'alarm-outline',
-      run: () => openSheet('snooze'),
-    },
-    wake: {
-      label: t('inbox.thread.menu.wake'),
-      icon: 'sunny-outline',
-      run: () => moveTo('open'),
-    },
-    pending: {
-      label: t('inbox.thread.menu.pending'),
-      icon: 'time-outline',
-      run: () => moveTo('pending'),
-    },
-    close: {
-      label: t('inbox.thread.menu.closeConversation'),
-      icon: 'lock-closed-outline',
-      run: () => moveTo('closed'),
+      onPress: () => openSheet('agent'),
     },
   };
-  const openDetails = () => router.push({ pathname: '/conversation-details', params: { id } });
   const menuItems: ThreadMenuItem[] = conversation
     ? menuActionsFor({
         status: conversation.status,
-        assignment: conversation.assignment,
-        meId,
-        canAssign,
-        canAssignSelf,
         canResolve,
-        canPriority,
-        canSnooze,
-      })
-        .map((action): ThreadMenuItem => ({
-          key: action,
-          label: MENU_ITEM[action].label,
-          icon: MENU_ITEM[action].icon,
-          onPress: MENU_ITEM[action].run,
-        }))
-        .concat([
-          {
-            key: 'details',
-            label: t('inbox.thread.menu.details'),
-            icon: 'information-circle-outline',
-            onPress: openDetails,
-          },
-        ])
+        canLabel,
+        canAssign,
+      }).map((action): ThreadMenuItem => ({ key: action, ...MENU_ITEM[action] }))
     : [];
 
   const header = (
@@ -491,21 +444,6 @@ export function ThreadScreen() {
           onAssignToMe={() => assignTo(meId)}
         />
       ) : null}
-      {canRead && conversation && canNote && canReply ? (
-        <View
-          style={[styles.mode, { backgroundColor: colors.surface, borderTopColor: colors.border }]}
-        >
-          <SegmentedControl
-            label={t('inbox.composer.mode')}
-            options={[
-              { value: 'reply', label: t('inbox.composer.reply') },
-              { value: 'note', label: t('inbox.composer.note') },
-            ]}
-            value={mode}
-            onChange={setMode}
-          />
-        </View>
-      ) : null}
       {canRead && conversation ? (
         canNote && (mode === 'note' || !canReply) ? (
           <Composer
@@ -514,6 +452,7 @@ export function ThreadScreen() {
             onChange={setNoteDraft}
             onSend={onSendNote}
             busy={changeNotes.add.isPending}
+            onToggleNote={canReply ? () => setMode('reply') : undefined}
           />
         ) : isBotConversation(conversation.assignment) ? (
           <BotBar
@@ -530,6 +469,7 @@ export function ThreadScreen() {
               onChange={setDraft}
               onSend={onSend}
               onOpenReplies={() => setRepliesOpen(true)}
+              onToggleNote={canNote ? () => setMode('note') : undefined}
             />
           )
         ) : null
@@ -561,42 +501,26 @@ export function ThreadScreen() {
           onClose={() => setSheet(null)}
         />
       ) : null}
-      {conversation && canPriority ? (
+      {conversation && canResolve ? (
         <ChoiceSheet
-          visible={sheet === 'priority'}
-          title={t('inbox.priority.title')}
+          visible={sheet === 'status'}
+          title={t('inbox.statusSheet.title')}
           groups={[
             {
-              key: 'priority',
-              options: CONVERSATION_PRIORITIES.map((p) => ({
-                value: p,
-                label: t(`inbox.priority.${p}`),
-              })),
+              key: 'status',
+              options: STATUS_TARGETS.filter((to) =>
+                canMoveConversationStatus(conversation.status, to),
+              ).map((to) => ({ value: to, label: t(`inbox.status.${to}`) })),
             },
           ]}
-          initial={{ priority: conversation.priority }}
+          initial={{ status: conversation.status }}
           saving={actions.busy}
           error={sheetError}
           onSave={(picked) =>
-            void saveFromSheet(actions.prioritise(picked.priority as ConversationPriority))
+            void saveFromSheet(
+              actions.moveTo(picked.status as SetConversationStatusInput['status']),
+            )
           }
-          onClose={() => setSheet(null)}
-        />
-      ) : null}
-      {conversation && canSnooze ? (
-        <ChoiceSheet
-          visible={sheet === 'snooze'}
-          title={t('inbox.snooze.title')}
-          groups={[
-            {
-              key: 'snooze',
-              options: SNOOZE_CHOICES.map((c) => ({ value: c, label: t(`inbox.snooze.${c}`) })),
-            },
-          ]}
-          initial={{ snooze: '' }}
-          saving={actions.busy}
-          error={sheetError}
-          onSave={(picked) => void saveFromSheet(actions.snoozeFor(picked.snooze as SnoozeChoice))}
           onClose={() => setSheet(null)}
         />
       ) : null}
@@ -626,11 +550,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
   labelNames: { flexShrink: 1 },
-  mode: {
-    paddingHorizontal: spacing.md,
-    paddingTop: spacing.sm,
-    borderTopWidth: StyleSheet.hairlineWidth,
-  },
   messages: { paddingVertical: spacing.sm },
   empty: { flex: 1, justifyContent: 'center' },
 });

@@ -1,116 +1,60 @@
 import type { ConversationAssignment } from '@crm/contracts';
-import { isBotConversation, menuActionsFor, snoozeUntil } from './thread-actions';
+import { isBotConversation, menuActionsFor, snoozeUntil, STATUS_TARGETS } from './thread-actions';
 
 const ME = '11111111-1111-4111-8111-111111111111';
-const OTHER = '22222222-2222-4222-8222-222222222222';
 const nobody: ConversationAssignment = { user: null, team: null, aiAgent: null };
-const person = (id: string): ConversationAssignment => ({
-  user: { id, name: 'Someone' },
-  team: null,
-  aiAgent: null,
-});
-const everything = { canAssign: true, canAssignSelf: true, canResolve: true, meId: ME };
+const everything = { canResolve: true, canLabel: true, canAssign: true };
 
 describe('menuActionsFor', () => {
-  it('offers everything for an open conversation someone else has', () => {
-    expect(menuActionsFor({ ...everything, status: 'open', assignment: person(OTHER) })).toEqual([
-      'assignToMe',
-      'changeAgent',
-      'unassign',
-      'pending',
-      'close',
+  it('lists the four lines of the reference app, in its order, for a person who may do everything', () => {
+    expect(menuActionsFor({ ...everything, status: 'open' })).toEqual([
+      'details',
+      'status',
+      'labels',
+      'agent',
     ]);
   });
 
-  it('does not offer to assign a conversation to the person who already has it', () => {
-    expect(menuActionsFor({ ...everything, status: 'open', assignment: person(ME) })).toEqual([
-      'changeAgent',
-      'unassign',
-      'pending',
-      'close',
+  it('always offers the details, and nothing else to a person with no other right', () => {
+    expect(
+      menuActionsFor({ canResolve: false, canLabel: false, canAssign: false, status: 'open' }),
+    ).toEqual(['details']);
+  });
+
+  it('offers the status line only with the resolve right', () => {
+    expect(menuActionsFor({ ...everything, canResolve: false, status: 'open' })).toEqual([
+      'details',
+      'labels',
+      'agent',
     ]);
   });
 
-  it('offers no unassign when nobody has it', () => {
-    expect(menuActionsFor({ ...everything, status: 'open', assignment: nobody })).toEqual([
-      'assignToMe',
-      'changeAgent',
-      'pending',
-      'close',
+  it('offers the labels line only with the right to label', () => {
+    expect(menuActionsFor({ ...everything, canLabel: false, status: 'open' })).toEqual([
+      'details',
+      'status',
+      'agent',
     ]);
   });
 
-  it('lets a person who may only claim claim, and never take it from someone', () => {
-    expect(
-      menuActionsFor({
-        ...everything,
-        canAssign: false,
-        status: 'open',
-        assignment: person(OTHER),
-      }),
-    ).toEqual(['assignToMe', 'pending', 'close']);
+  it('offers the agent line only to a person who may hand a conversation to anyone, not to one who may only claim', () => {
+    expect(menuActionsFor({ ...everything, canAssign: false, status: 'open' })).toEqual([
+      'details',
+      'status',
+      'labels',
+    ]);
   });
 
-  it('offers only the status moves that are legal from the current status', () => {
-    const actions = (status: 'pending' | 'resolved' | 'closed') =>
-      menuActionsFor({ ...everything, status, assignment: person(ME) });
-    expect(actions('pending')).not.toContain('pending');
-    expect(actions('closed')).not.toContain('close');
-  });
-
-  it('offers no status moves without the resolve permission', () => {
-    expect(
-      menuActionsFor({ ...everything, canResolve: false, status: 'open', assignment: person(ME) }),
-    ).toEqual(['changeAgent', 'unassign']);
-  });
-
-  it('offers nothing to a person with no right to assign or resolve', () => {
-    expect(
-      menuActionsFor({
-        meId: ME,
-        canAssign: false,
-        canAssignSelf: false,
-        canResolve: false,
-        status: 'open',
-        assignment: nobody,
-      }),
-    ).toEqual([]);
+  it('offers a status change from every status (each has a way out)', () => {
+    for (const status of ['open', 'pending', 'snoozed', 'resolved', 'closed', 'spam'] as const) {
+      expect(menuActionsFor({ ...everything, status })).toContain('status');
+    }
   });
 });
 
-describe('menuActionsFor: priority and snooze', () => {
-  const triage = { ...everything, canPriority: true, canSnooze: true };
-
-  it('offers priority and snooze after the assignment lines, to a person who may', () => {
-    expect(menuActionsFor({ ...triage, status: 'open', assignment: nobody })).toEqual([
-      'assignToMe',
-      'changeAgent',
-      'priority',
-      'snooze',
-      'pending',
-      'close',
-    ]);
-  });
-
-  it('offers no snooze for a thread that is already finished, and a wake-up for a parked one', () => {
-    expect(menuActionsFor({ ...triage, status: 'resolved', assignment: nobody })).not.toContain(
-      'snooze',
-    );
-    const parked = menuActionsFor({ ...triage, status: 'snoozed', assignment: nobody });
-    expect(parked).toContain('wake');
-    expect(parked).not.toContain('snooze');
-  });
-
-  it('offers neither without the right to', () => {
-    const actions = menuActionsFor({ ...everything, status: 'open', assignment: nobody });
-    expect(actions).not.toContain('priority');
-    expect(actions).not.toContain('snooze');
-  });
-
-  it('offers no wake-up to a person who may not move statuses', () => {
-    expect(
-      menuActionsFor({ ...triage, canResolve: false, status: 'snoozed', assignment: nobody }),
-    ).not.toContain('wake');
+describe('STATUS_TARGETS', () => {
+  it('are the four a person can move a conversation to by hand', () => {
+    expect([...STATUS_TARGETS]).toEqual(['open', 'pending', 'resolved', 'closed']);
   });
 });
 

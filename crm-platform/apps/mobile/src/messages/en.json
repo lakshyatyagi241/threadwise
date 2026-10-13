@@ -526,14 +526,9 @@
         "open": "More actions",
         "close": "Close menu",
         "assignToMe": "Assign to me",
-        "unassign": "Unassign",
-        "pending": "Mark as pending",
-        "closeConversation": "Close conversation",
-        "changeAgent": "Change agent",
-        "priority": "Set priority",
-        "snooze": "Snooze",
-        "wake": "Wake up now",
-        "details": "Chat details"
+        "details": "View details",
+        "status": "Change status",
+        "agent": "Assign agent"
       },
       "bot": {
         "notice": "This is a bot conversation.",
@@ -596,9 +591,8 @@
       "noteLabel": "Private note",
       "notePlaceholder": "Write a note only your team sees",
       "addNote": "Add note",
-      "mode": "Message type",
-      "reply": "Reply",
-      "note": "Note"
+      "noteOn": "Write a private note",
+      "noteOff": "Back to a reply"
     },
     "template": {
       "closedNotice": "The customer has not spoken to you in the last 24 hours. You can only send pre-approved templates.",
@@ -728,7 +722,9 @@
       "past": {
         "title": "Previous conversations",
         "empty": "No other conversations with this contact."
-      }
+      },
+      "snooze": "Snooze",
+      "wake": "Wake up now"
     },
     "event": {
       "created": "Conversation started",

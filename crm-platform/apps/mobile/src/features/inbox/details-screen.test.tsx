@@ -30,6 +30,8 @@ const detailCall = jest.mocked(api.fetchConversation);
 const statusCall = jest.mocked(api.setConversationStatus);
 const assignCall = jest.mocked(api.assignConversation);
 const assigneesCall = jest.mocked(api.fetchAssignees);
+const priorityCall = jest.mocked(api.setConversationPriority);
+const snoozeCall = jest.mocked(api.snoozeConversation);
 const notesCall = jest.mocked(notesApi.fetchNotes);
 const addNoteCall = jest.mocked(notesApi.addNote);
 const deleteNoteCall = jest.mocked(notesApi.deleteNote);
@@ -317,6 +319,86 @@ describe('ConversationDetailsScreen: actions', () => {
         expect.any(String),
       ),
     );
+  });
+});
+
+describe('ConversationDetailsScreen: priority, snooze and waking up', () => {
+  it('sets the priority, from what it is now', async () => {
+    as('inbox.conversation.priority');
+    arrange();
+    priorityCall.mockResolvedValue(summary({ priority: 'urgent', rowVersion: 5 }));
+    await show();
+    await fireEvent.press(await screen.findByRole('button', { name: 'Priority' }));
+    expect(
+      (await screen.findByRole('radio', { name: 'Normal' })).props.accessibilityState.checked,
+    ).toBe(true);
+    await fireEvent.press(screen.getByRole('radio', { name: 'Urgent' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
+    await waitFor(() =>
+      expect(priorityCall).toHaveBeenCalledWith(CONVERSATION_ID, {
+        rowVersion: 4,
+        priority: 'urgent',
+      }),
+    );
+  });
+
+  it('snoozes for an hour, to a time that is ahead of now', async () => {
+    as('inbox.conversation.snooze');
+    arrange();
+    snoozeCall.mockResolvedValue(summary({ status: 'snoozed', rowVersion: 5 }));
+    await show();
+    const before = Date.now();
+    await fireEvent.press(await screen.findByRole('button', { name: 'Snooze' }));
+    await fireEvent.press(await screen.findByRole('radio', { name: 'In 1 hour' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
+    await waitFor(() => expect(snoozeCall).toHaveBeenCalledTimes(1));
+    const input = snoozeCall.mock.calls[0]?.[1];
+    expect(input?.rowVersion).toBe(4);
+    const gap = Date.parse(input?.until ?? '') - before;
+    expect(gap).toBeGreaterThan(59 * 60_000);
+    expect(gap).toBeLessThan(61 * 60_000);
+  });
+
+  it('offers no snooze for a conversation that is already finished, or without the right', async () => {
+    as('inbox.conversation.snooze');
+    arrange({ status: 'resolved' });
+    await show();
+    await screen.findByLabelText('Status: Resolved');
+    expect(screen.queryByRole('button', { name: 'Snooze' })).toBeNull();
+  });
+
+  it('offers no snooze to a person without the right', async () => {
+    arrange();
+    await show();
+    await screen.findByLabelText('Status: Open');
+    expect(screen.queryByRole('button', { name: 'Snooze' })).toBeNull();
+  });
+
+  it('wakes a snoozed conversation by moving it to open', async () => {
+    as('inbox.conversation.resolve');
+    arrange({ status: 'snoozed' });
+    statusCall.mockResolvedValue(summary({ status: 'open', rowVersion: 5 }));
+    await show();
+    await fireEvent.press(await screen.findByRole('button', { name: 'Wake up now' }));
+    await waitFor(() =>
+      expect(statusCall).toHaveBeenCalledWith(CONVERSATION_ID, { rowVersion: 4, status: 'open' }),
+    );
+  });
+
+  it('has no wake-up for a person who may not move statuses', async () => {
+    arrange({ status: 'snoozed' });
+    await show();
+    await screen.findByLabelText('Status: Snoozed');
+    expect(screen.queryByRole('button', { name: 'Wake up now' })).toBeNull();
+  });
+
+  it('has no wake-up for a conversation that is not snoozed', async () => {
+    as('inbox.conversation.resolve');
+    arrange();
+    await show();
+    // With the right to move statuses the status line is a button, so it is found by its name.
+    await screen.findByRole('button', { name: 'Status' });
+    expect(screen.queryByRole('button', { name: 'Wake up now' })).toBeNull();
   });
 });
 

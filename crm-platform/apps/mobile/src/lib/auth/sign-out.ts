@@ -1,15 +1,17 @@
 import type { QueryClient } from '@tanstack/react-query';
-import { z } from 'zod';
 import { apiFetch } from '@/lib/api/client';
 import { identifyUser } from '@/lib/observability/sentry';
 import { currentRefreshToken, endSession } from './session-manager';
 
-/** Public on the server: it ends the session behind the refresh token even when the access token has expired. */
+/**
+ * Public on the server: it ends the session behind the refresh token even when the access token has expired. The answer is not read
+ * (nothing in the app depends on it), so it is not checked against a shape either: a server, proxy or gateway that answers with an
+ * empty body must not raise a "contract mismatch" error for a sign-out that worked.
+ */
 const revokeSession = (refreshToken: string) =>
   apiFetch('/v2/auth/logout', {
     method: 'POST',
     body: { refreshToken },
-    schema: z.object({ ok: z.boolean() }),
     auth: false,
     timeoutMs: 8_000,
   });

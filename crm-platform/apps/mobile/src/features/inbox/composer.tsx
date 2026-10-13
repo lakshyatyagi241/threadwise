@@ -18,13 +18,23 @@ interface Props {
   busy?: boolean;
   /** Opens the saved replies; the button shows only when this is given (replies only). */
   onOpenReplies?: () => void;
+  /** Switches between a reply and a private note (the lock beside the box); the lock shows only when this is given. */
+  onToggleNote?: () => void;
 }
 
 /**
  * The box at the bottom of a thread. Sending is possible only for a non-empty text within the length limit. In reply mode a
  * lightning-bolt button opens the saved replies; in note mode the box is tinted and the button says "Add note".
  */
-export function Composer({ value, onChange, onSend, mode = 'reply', busy, onOpenReplies }: Props) {
+export function Composer({
+  value,
+  onChange,
+  onSend,
+  mode = 'reply',
+  busy,
+  onOpenReplies,
+  onToggleNote,
+}: Props) {
   const { t } = useTranslation();
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
@@ -33,6 +43,8 @@ export function Composer({ value, onChange, onSend, mode = 'reply', busy, onOpen
   const trimmed = value.trim();
   const tooLong = trimmed.length > max;
   const canSend = trimmed.length > 0 && !tooLong;
+  // As in the reference app: the lock is for starting a note, so it steps aside while a reply is being typed.
+  const showLock = onToggleNote !== undefined && (note || trimmed.length === 0);
   return (
     <View
       style={[
@@ -70,6 +82,21 @@ export function Composer({ value, onChange, onSend, mode = 'reply', busy, onOpen
           }
         />
       </View>
+      {showLock ? (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={note ? t('inbox.composer.noteOff') : t('inbox.composer.noteOn')}
+          accessibilityState={{ selected: note }}
+          onPress={onToggleNote}
+          style={styles.tool}
+        >
+          <Icon
+            name={note ? 'lock-closed' : 'lock-closed-outline'}
+            size={22}
+            color={note ? 'warning' : 'textMuted'}
+          />
+        </Pressable>
+      ) : null}
       <Button
         label={note ? t('inbox.composer.addNote') : t('inbox.composer.send')}
         loading={busy}

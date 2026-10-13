@@ -27,19 +27,17 @@ import { ActionRow, PastList, Section } from './details-parts';
 import { TimelineSection } from './details-timeline';
 import { LabelsSheet } from './labels-sheet';
 import { formatDateTime } from './time';
-import { isBotConversation } from './thread-actions';
+import {
+  isBotConversation,
+  SNOOZE_CHOICES,
+  STATUS_TARGETS,
+  type SnoozeChoice,
+} from './thread-actions';
 import { useConversationActions } from './use-conversation-actions';
 import { useConversationDetail } from './use-inbox';
 import { useNow } from './use-now';
 
-const STATUS_TARGETS: readonly SetConversationStatusInput['status'][] = [
-  'open',
-  'pending',
-  'resolved',
-  'closed',
-];
-
-type Sheet = 'status' | 'priority' | 'agent' | 'labels' | null;
+type Sheet = 'status' | 'priority' | 'snooze' | 'agent' | 'labels' | null;
 
 /**
  * The details of one conversation (route /conversation-details, opened from the thread's header): who the customer is, the
@@ -60,6 +58,7 @@ export function ConversationDetailsScreen() {
   const canAssign = can(session.data, 'inbox.conversation.assign');
   const canAssignSelf = can(session.data, 'inbox.conversation.assign_self');
   const canPriority = can(session.data, 'inbox.conversation.priority');
+  const canSnooze = can(session.data, 'inbox.conversation.snooze');
   const canLabel = can(session.data, 'inbox.conversation.tag');
   const canMakeLabels = can(session.data, 'inbox.tag.manage');
   const canNote = can(session.data, 'inbox.conversation.note');
@@ -207,6 +206,13 @@ export function ConversationDetailsScreen() {
             value={t(`inbox.priority.${conversation.priority}`)}
             onPress={canPriority ? () => open('priority') : undefined}
           />
+          {canSnooze && (conversation.status === 'open' || conversation.status === 'pending') ? (
+            <ActionRow
+              label={t('inbox.details.snooze')}
+              value={t('inbox.status.snoozed')}
+              onPress={() => open('snooze')}
+            />
+          ) : null}
           <ActionRow
             label={t('inbox.details.labels')}
             value={labels}
@@ -219,6 +225,17 @@ export function ConversationDetailsScreen() {
           />
           {assignment.team ? (
             <ActionRow label={t('inbox.details.team')} value={assignment.team.name} />
+          ) : null}
+          {canResolve && conversation.status === 'snoozed' ? (
+            <Button
+              variant="secondary"
+              label={t('inbox.details.wake')}
+              loading={actions.busy}
+              onPress={() => {
+                setNotice(null);
+                void actions.moveTo('open').then(setNotice);
+              }}
+            />
           ) : null}
           {!mine && (canAssign || canAssignSelf) ? (
             <Button
@@ -300,6 +317,21 @@ export function ConversationDetailsScreen() {
           onSave={(picked) =>
             void saveFromSheet(actions.prioritise(picked.priority as ConversationPriority))
           }
+          onClose={() => setSheet(null)}
+        />
+        <ChoiceSheet
+          visible={sheet === 'snooze'}
+          title={t('inbox.snooze.title')}
+          groups={[
+            {
+              key: 'snooze',
+              options: SNOOZE_CHOICES.map((c) => ({ value: c, label: t(`inbox.snooze.${c}`) })),
+            },
+          ]}
+          initial={{ snooze: '' }}
+          saving={actions.busy}
+          error={sheetError}
+          onSave={(picked) => void saveFromSheet(actions.snoozeFor(picked.snooze as SnoozeChoice))}
           onClose={() => setSheet(null)}
         />
         {canAssign ? (
