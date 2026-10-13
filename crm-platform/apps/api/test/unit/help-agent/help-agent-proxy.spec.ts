@@ -31,7 +31,7 @@ describe('help agent: starting a task', () => {
     const t = build();
     t.repo.enabledByOrg.set(1, true);
     const started = await startTask(t);
-    expect(started.maxSteps).toBe(25);
+    expect(started.maxSteps).toBe(40);
     expect(started.taskId).toMatch(/^[0-9a-f-]{36}$/);
     expect(t.repo.tasks[0]).toMatchObject({
       taskLength: 12,
@@ -207,7 +207,7 @@ describe('help agent: the model proxy', () => {
 
     const old = build();
     old.repo.enabledByOrg.set(1, true);
-    old.repo.startedAtOverride = new Date(Date.now() - 16 * 60_000);
+    old.repo.startedAtOverride = new Date(Date.now() - 26 * 60_000);
     const s = await startTask(old);
     expect(await codeOf(old.as(() => old.proxy.complete(s.taskId, goodBody)))).toBe(
       ERROR_CODES.HELP_AGENT_TASK_CLOSED,
@@ -367,6 +367,6 @@ describe('help agent: finishing a task', () => {
     await startTask(t);
     const s = await t.as(() => t.agent.status(true));
     expect(s).toMatchObject({ available: true, enabled: true, canManage: true });
-    expect(s.limits).toEqual({ maxSteps: 25, tasksLeftToday: 4 });
+    expect(s.limits).toEqual({ maxSteps: 40, tasksLeftToday: 4 });
   });
 });
