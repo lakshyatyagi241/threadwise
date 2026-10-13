@@ -2,6 +2,7 @@
  * broadcasts: tables ported from Reference. Mirrors migrations/20261001102900_bcast_threadwise_schema.sql.
  * The SQL migration is the source of truth; `pnpm db:verify-schema` fails if this file and the database disagree.
  */
+import { sql } from 'drizzle-orm';
 import {
   boolean,
   foreignKey,
@@ -129,6 +130,12 @@ export const broadcastContacts = pgTable(
     index('idx_broadcast_contacts_broadcast_id_status').on(t.orgId, t.broadcastId, t.status),
     index('idx_broadcast_contacts_contact_id').on(t.orgId, t.contactId),
     index('idx_broadcast_contacts_status').on(t.orgId, t.status),
+    // The Message History feed, newest send first (20261126090000).
+    index('idx_broadcast_contacts_org_at').on(
+      t.orgId,
+      sql`(COALESCE(${t.sentAt}, ${t.createdAt})) DESC`,
+      t.id.desc(),
+    ),
   ],
 );
 
