@@ -11,6 +11,16 @@ import { matchKeywordFlow, type KeywordFlow } from './keyword-match';
 
 type Rows = { rows: Array<Record<string, unknown>> };
 
+/**
+ * Loop guard for flows that start flows. A run's own steps can cause the events that start the next run (a deal moved, an order
+ * placed, a contact made), so a flow can start itself through the outbox. Every event a step causes carries the request id of that step
+ * (`flr-<run>-<seq>`); the consumer reads the causing run's hop count and passes `hops` here, and a start whose hop count has reached
+ * this limit is refused and shown as a failed subscriber with the reason, never started and never silent.
+ */
+export const FLOW_MAX_TRIGGER_HOPS = 5;
+/** The run variable that carries the hop count into the next run. */
+export const TRIGGER_HOPS_VAR = '__trigger_hops';
+
 export interface OrderPlaced {
   orderId: string;
   contactId: number | null;
@@ -47,20 +57,75 @@ export class FlowTriggerService {
 
   // --- audience triggers -----------------------------------------------------------------------------------------------------
 
-  onTagAdded(orgId: number, contactId: number, tagId: number) {
-    return this.enrolLive(orgId, 'tag_added', tagId, contactId, 'tag_added', null, {});
+  onTagAdded(orgId: number, contactId: number, tagId: number, hops = 0) {
+    return this.enrolLive(
+      orgId,
+      'tag_added',
+      tagId,
+      contactId,
+      'tag_added',
+      null,
+      {},
+      undefined,
+      hops,
+    );
   }
-  onGroupJoin(orgId: number, contactId: number, groupId: number) {
-    return this.enrolLive(orgId, 'group_join', groupId, contactId, 'group_join', null, {});
+  onGroupJoin(orgId: number, contactId: number, groupId: number, hops = 0) {
+    return this.enrolLive(
+      orgId,
+      'group_join',
+      groupId,
+      contactId,
+      'group_join',
+      null,
+      {},
+      undefined,
+      hops,
+    );
   }
-  onGroupLeave(orgId: number, contactId: number, groupId: number) {
-    return this.enrolLive(orgId, 'group_leave', groupId, contactId, 'group_leave', null, {});
+  onGroupLeave(orgId: number, contactId: number, groupId: number, hops = 0) {
+    return this.enrolLive(
+      orgId,
+      'group_leave',
+      groupId,
+      contactId,
+      'group_leave',
+      null,
+      {},
+      undefined,
+      hops,
+    );
   }
-  onContactCreated(orgId: number, contactId: number) {
-    return this.enrolLive(orgId, 'contact_created', 0, contactId, 'contact_created', null, {});
+  onContactCreated(orgId: number, contactId: number, hops = 0) {
+    return this.enrolLive(
+      orgId,
+      'contact_created',
+      0,
+      contactId,
+      'contact_created',
+      null,
+      {},
+      undefined,
+      hops,
+    );
   }
-  onOptIn(orgId: number, contactId: number) {
-    return this.enrolLive(orgId, 'opt_in', 0, contactId, 'opt_in', null, {});
+  /**
+   * A person came back (re-subscribed): `contact.opt_in` with `optedIn: true`. The reason is the event, so a redelivery of it is the
+   * same reason. A contact runs an opt-in flow once, as in Reference (this source has no re-entry), so a person who stops and starts
+   * again does not get the welcome twice.
+   */
+  onOptIn(orgId: number, contactId: number, eventId: string | null = null, hops = 0) {
+    return this.enrolLive(
+      orgId,
+      'opt_in',
+      0,
+      contactId,
+      'opt_in',
+      eventId ? `opt_in:${eventId}` : null,
+      {},
+      undefined,
+      hops,
+    );
   }
 
   // --- event triggers --------------------------------------------------------------------------------------------------------
@@ -69,7 +134,13 @@ export class FlowTriggerService {
    * A deal entered a stage. The reference is the deal and the stage, so moving the same deal into the same stage again later is a new
    * reason (Reference ran such a flow once per contact, ever).
    */
-  onDealStageChanged(orgId: number, contactId: number, stageId: number, dealUuid: string) {
+  onDealStageChanged(
+    orgId: number,
+    contactId: number,
+    stageId: number,
+    dealUuid: string,
+    hops = 0,
+  ) {
     return this.enrolLive(
       orgId,
       'deal_stage_changed',
@@ -78,6 +149,8 @@ export class FlowTriggerService {
       'deal_stage_changed',
       `${dealUuid}:${stageId}`,
       {},
+      undefined,
+      hops,
     );
   }
 
@@ -85,7 +158,7 @@ export class FlowTriggerService {
    * A new order. No contact for the number means nothing starts (no contact is invented for an order). The order tags are
    * variables of the run; an empty one is left out so it renders blank. Each order is its own reason, so a repeat buyer runs again.
    */
-  async onOrderPlaced(orgId: number, o: OrderPlaced): Promise<number> {
+  async onOrderPlaced(orgId: number, o: OrderPlaced, hops = 0): Promise<number> {
     const contactId = o.contactId ?? (await this.contactByPhone(orgId, o.phone));
     if (contactId === null) return 0;
     const major = o.totalMinor != null ? (o.totalMinor / 100).toFixed(2) : '';
@@ -112,6 +185,8 @@ export class FlowTriggerService {
       'order_placed',
       `order:${o.orderId}`,
       variables,
+      undefined,
+      hops,
     );
   }
 
@@ -129,8 +204,9 @@ export class FlowTriggerService {
   async onContactChanged(
     orgId: number,
     contactId: number,
-    ev: { eventId: string; updated: boolean; viaFlow: boolean },
+    ev: { eventId: string; updated: boolean; viaFlow: boolean; hops?: number },
   ): Promise<number> {
+    const hops = ev.hops ?? 0;
     let started = 0;
     if (ev.updated && !ev.viaFlow) {
       started += await this.enrolLive(
@@ -141,6 +217,8 @@ export class FlowTriggerService {
         'contact_updated',
         `update:${ev.eventId}`,
         {},
+        undefined,
+        hops,
       );
     }
     for (const f of await this.liveConfigured(orgId, 'field_match')) {
@@ -159,6 +237,8 @@ export class FlowTriggerService {
           'field_match',
           `field:${f.id}:${value ?? ''}`,
           {},
+          undefined,
+          hops,
         );
       }
     }
@@ -182,6 +262,8 @@ export class FlowTriggerService {
           'segment_join',
           `segment:${f.id}`,
           {},
+          undefined,
+          hops,
         );
       }
     }
@@ -218,6 +300,7 @@ export class FlowTriggerService {
       productIds?: readonly string[];
       variables?: Record<string, unknown>;
     },
+    hops = 0,
   ): Promise<number> {
     const contactId = await this.contactByPhone(orgId, ev.phone);
     if (contactId === null) return 0;
@@ -240,6 +323,8 @@ export class FlowTriggerService {
       'ecom_event',
       `${kind}:${ev.event}:${ev.ref}`,
       ev.variables ?? {},
+      undefined,
+      hops,
     );
   }
 
@@ -374,6 +459,7 @@ export class FlowTriggerService {
     triggerRef: string | null,
     variables: Record<string, unknown>,
     on?: { channelId: number; peerKey: string },
+    hops = 0,
   ): Promise<number> {
     if (contactId === null && !on) return 0;
     const flowIds = await this.db.txAs({ orgId }, async (tx) => {
@@ -383,7 +469,7 @@ export class FlowTriggerService {
           AND coalesce(trigger_value, 0) = ${value} ORDER BY id`)) as unknown as Rows;
       return res.rows.map((r) => Number(r.id));
     });
-    return this.startFlows(orgId, flowIds, contactId, source, triggerRef, variables, on);
+    return this.startFlows(orgId, flowIds, contactId, source, triggerRef, variables, on, hops);
   }
 
   /** The live flows of a kind with their saved settings; a flow with none (or a broken value) reads as an empty object. */
@@ -414,6 +500,7 @@ export class FlowTriggerService {
     triggerRef: string | null,
     variables: Record<string, unknown>,
     on?: { channelId: number; peerKey: string },
+    hops = 0,
   ): Promise<number> {
     const people: Array<number | null> =
       contacts === null ? [null] : typeof contacts === 'number' ? [contacts] : [...contacts];
@@ -421,16 +508,26 @@ export class FlowTriggerService {
     for (const flowId of flowIds) {
       for (const contactId of people) {
         try {
-          const out = await this.launch.start(orgId, {
+          const input = {
             flowId,
             contactId,
             ...(on ? { channelId: on.channelId, peerKey: on.peerKey } : {}),
             source,
             triggerRef,
-            variables,
+            variables: hops > 0 ? { ...variables, [TRIGGER_HOPS_VAR]: hops } : variables,
             requirePublished: true,
             withSubscriber: contactId !== null,
-          });
+          };
+          if (hops >= FLOW_MAX_TRIGGER_HOPS) {
+            await this.launch.refuse(
+              orgId,
+              input,
+              'FLR_TRIGGER_LOOP',
+              `Not started: flows started each other ${hops} times in a row (limit ${FLOW_MAX_TRIGGER_HOPS}); this flow is part of a loop`,
+            );
+            continue;
+          }
+          const out = await this.launch.start(orgId, input);
           if (out.outcome === 'started') started++;
         } catch (err) {
           this.logger.warn(
