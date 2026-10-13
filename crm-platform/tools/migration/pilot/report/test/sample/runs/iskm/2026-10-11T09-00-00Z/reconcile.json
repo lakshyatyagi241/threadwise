@@ -1,0 +1,41 @@
+{
+  "client": "iskm",
+  "generatedAt": "2026-10-12T10:05:00.000Z",
+  "collections": [
+    {
+      "collection": "contact_list",
+      "kind": "collection",
+      "disposition": "MIGRATE",
+      "read": 1,
+      "migrated": 1,
+      "quarantined": 0,
+      "excluded": 0,
+      "gap": 0,
+      "deferred": 0,
+      "unaccounted": 0
+    }
+  ],
+  "nonMigrated": [],
+  "fieldIssues": {},
+  "excludedByCode": {},
+  "fields": [],
+  "fingerprints": {},
+  "sample": {
+    "size": 0,
+    "compared": 0,
+    "mismatches": []
+  },
+  "integrity": [],
+  "alarms": [],
+  "warnings": [],
+  "notPresent": {
+    "collectionsGap": [],
+    "collectionsUnknown": [],
+    "collectionsDeferred": [],
+    "collectionsOpen": [],
+    "droppedFields": [],
+    "dataOnlyFields": []
+  },
+  "unaccounted": 0,
+  "ok": true
+}
