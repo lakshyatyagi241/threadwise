@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState, type FormEvent } from 'react';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import type { WalletSummary } from '@crm/contracts';
 import { Alert, Button, Card, EmptyState, Field, Input, StatTile } from '@crm/ui';
@@ -173,12 +173,15 @@ function AddMoneyCard({ summary }: { summary: WalletSummary }) {
 }
 
 function HowBillingCard({ summary }: { summary: WalletSummary }) {
+  const timeZone = useTimeZone();
   const t = useTranslations('wallet-message-billing.wallet.how');
   const locale = useLocale();
   const variant = billingVariant(summary);
   const num = new Intl.NumberFormat(locale);
   const ends = summary.plan.endsAt
-    ? new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(new Date(summary.plan.endsAt))
+    ? new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone }).format(
+        new Date(summary.plan.endsAt),
+      )
     : null;
   return (
     <Card className="space-y-3">

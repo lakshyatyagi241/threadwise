@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useQueryClient } from '@tanstack/react-query';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import type { ExtSheetsKeyStatus, ExtSheetsOverview } from '@crm/contracts';
 import { EXT_SHEETS_USE_PERMISSION } from '@crm/contracts';
@@ -177,6 +177,7 @@ export function KeyCard({ overview }: { overview: ExtSheetsOverview }) {
   const t = useTranslations('chrome-extension-sheets-addon.key');
   const c = useTranslations('chrome-extension-sheets-addon.common');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const qc = useQueryClient();
   const { toast } = useToast();
   const [shown, setShown] = useState<OneTimeKey | null>(null);
@@ -227,8 +228,8 @@ export function KeyCard({ overview }: { overview: ExtSheetsOverview }) {
   };
 
   const mask = displayMask(status);
-  const created = formatWhen(status.createdAt, locale);
-  const lastUsed = formatWhen(status.lastUsedAt, locale);
+  const created = formatWhen(status.createdAt, locale, timeZone);
+  const lastUsed = formatWhen(status.lastUsedAt, locale, timeZone);
 
   return (
     <section aria-labelledby="sheets-key" className={CARD}>
@@ -453,6 +454,7 @@ export function ShopsCard({ overview }: { overview: ExtSheetsOverview }) {
   const t = useTranslations('chrome-extension-sheets-addon.shops');
   const p = useTranslations('chrome-extension-sheets-addon.products');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   if (!overview.installed) return null;
   return (
     <section aria-labelledby="sheets-shops" className={CARD}>
@@ -482,7 +484,7 @@ export function ShopsCard({ overview }: { overview: ExtSheetsOverview }) {
                 {shop.publicUrl}
               </a>
               <p className="mt-1 text-xs text-muted-foreground">
-                {t('updated', { when: formatWhen(shop.updatedAt, locale) ?? '' })}
+                {t('updated', { when: formatWhen(shop.updatedAt, locale, timeZone) ?? '' })}
               </p>
             </li>
           ))}

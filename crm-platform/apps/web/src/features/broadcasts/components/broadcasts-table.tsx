@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import type { ReactNode } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTimeZone, useTranslations } from 'next-intl';
 import { Badge, cn } from '@crm/ui';
 import type { BroadcastListItem } from '@crm/contracts';
 import {
@@ -57,6 +57,7 @@ export function BroadcastsTable({
   onDelete: (b: BroadcastListItem) => void;
 }) {
   const t = useTranslations('broadcasts.list');
+  const timeZone = useTimeZone();
   const now = new Date();
   return (
     <div className="overflow-x-auto">
@@ -122,7 +123,7 @@ export function BroadcastsTable({
                 <StatusBadge status={b.status} />
               </td>
               <td className="px-4 py-3 font-mono text-[11px]">
-                {scheduleText(b.scheduledAt, now, t('today')) ?? '—'}
+                {scheduleText(b.scheduledAt, now, t('today'), timeZone) ?? '—'}
               </td>
               <td className="px-3 py-3 text-end">
                 <div className="inline-flex items-center gap-1">

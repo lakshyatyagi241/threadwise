@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTimeZone, useTranslations } from 'next-intl';
 import type { ScheduleDraft, ScheduleOptions } from '@crm/contracts';
 import { Alert, Button, Spinner, useToast, cn } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
@@ -29,7 +29,6 @@ import {
   type Draft,
   type Step,
 } from '../lib/composer-model';
-import { browserTimezone } from '../lib/time';
 import { AudienceStep, BasicsStep, MessageStep, ReviewStep, WhenStep } from './composer-steps';
 import { ErrorNotice } from './error-notice';
 import { Icon } from './icons';
@@ -141,14 +140,15 @@ function Composer({
   const update = useUpdateSchedule(edit?.id ?? '');
   const unofficial = useUnofficialWhatsapp();
   const editing = Boolean(edit);
+  const timeZone = useTimeZone() || 'UTC';
 
-  // The draft starts here, in the browser, where the wall clock and zone are known; an edit starts from the stored schedule.
+  // The draft starts here, in the person's display zone; an edit starts from the stored schedule.
   const [draft, setDraft] = useState<Draft>(() =>
     edit
       ? draftFromSchedule(edit)
       : initialDraft(
           Date.now(),
-          browserTimezone(),
+          timeZone,
           opts.senders.map((s) => s.key),
         ),
   );

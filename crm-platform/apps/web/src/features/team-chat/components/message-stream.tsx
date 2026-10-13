@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import { Button, Spinner, cn } from '@crm/ui';
 import type { TchatMe, TchatMessageResponse } from '@crm/contracts';
@@ -40,10 +40,14 @@ export interface MessageStreamProps {
 export function MessageStream(props: MessageStreamProps) {
   const t = useTranslations('team-chat.stream');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const ref = useRef<HTMLDivElement>(null);
   const stick = useRef(true);
   const prevCount = useRef({ messages: 0, pending: 0, channel: '' });
-  const groups = useMemo(() => groupByDay(props.messages, dayKey), [props.messages]);
+  const groups = useMemo(
+    () => groupByDay(props.messages, (iso: string) => dayKey(iso, timeZone)),
+    [props.messages, timeZone],
+  );
 
   // Follow rules, applied after the list changed and before the browser paints.
   useLayoutEffect(() => {
@@ -146,10 +150,10 @@ export function MessageStream(props: MessageStreamProps) {
       )}
 
       {groups.map((g) => (
-        <section key={g.key} aria-label={formatDay(g.at, locale)} className="mb-2">
+        <section key={g.key} aria-label={formatDay(g.at, locale, timeZone)} className="mb-2">
           <div className="my-3 text-center">
             <span className="rounded-full bg-muted px-2.5 py-0.5 font-mono text-[10.5px] text-muted-foreground">
-              {formatDay(g.at, locale)}
+              {formatDay(g.at, locale, timeZone)}
             </span>
           </div>
           <ul className="space-y-1">

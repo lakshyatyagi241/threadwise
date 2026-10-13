@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 import type { ReferralListResponse, ReferralRow } from '@crm/contracts';
 import { Alert, Badge, Button, Card, StatTile, cn } from '@crm/ui';
@@ -231,7 +231,8 @@ export function ReferralsTable({
   now: number;
 }) {
   const t = useTranslations(`${NS}.table`);
-  const date = new Intl.DateTimeFormat(locale, { dateStyle: 'medium' });
+  const timeZone = useTimeZone();
+  const date = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone });
   const th = 'px-3 py-2 text-start font-medium';
   return (
     <div className="overflow-x-auto">

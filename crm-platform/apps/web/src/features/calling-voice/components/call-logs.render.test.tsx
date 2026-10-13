@@ -30,6 +30,7 @@ const state = vi.hoisted(() => ({
 
 vi.mock('@/features/auth-registration-security/shared/session-context', () => ({
   useCan: (p: string) => state.perms.has(p),
+  useSession: () => ({ effectiveTimezone: 'UTC' }),
 }));
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: () => undefined, replace: () => undefined }),

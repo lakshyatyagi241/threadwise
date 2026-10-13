@@ -31,7 +31,11 @@ export function AuditTable({
   const t = useTranslations('audit-log');
   const locale = useLocale();
   const words = useAuditWords();
-  const fmt = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'medium' });
+  const fmt = new Intl.DateTimeFormat(locale, {
+    dateStyle: 'medium',
+    timeStyle: 'medium',
+    timeZone,
+  });
 
   return (
     <div className="overflow-x-auto rounded-md border border-border">

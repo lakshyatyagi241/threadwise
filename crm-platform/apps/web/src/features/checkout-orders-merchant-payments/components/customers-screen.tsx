@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import type { StoreCustomer } from '@crm/contracts';
 import { Button, ConfirmDialog, EmptyState, Input, useToast } from '@crm/ui';
@@ -36,6 +36,7 @@ export function CustomersScreen() {
   const t = useTranslations('checkout-orders-merchant-payments.customers');
   const tc = useTranslations('checkout-orders-merchant-payments.common');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const shopParam = useShopParam();
   const can = useStoreCan('customers');
   const errorLine = useErrorLine();
@@ -195,7 +196,7 @@ export function CustomersScreen() {
                         <Totals customer={c} locale={locale} />
                       </td>
                       <td className="whitespace-nowrap px-4 py-3">
-                        {c.lastOrderAt ? formatDay(c.lastOrderAt, locale) : <Dash />}
+                        {c.lastOrderAt ? formatDay(c.lastOrderAt, locale, timeZone) : <Dash />}
                       </td>
                       <td
                         className="whitespace-nowrap px-4 py-3"

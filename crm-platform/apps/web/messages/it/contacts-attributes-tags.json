@@ -124,7 +124,6 @@
       "columnsSelectAll": "Select All",
       "dragToReorder": "Drag to re-order columns",
       "removeColumn": "Remove {name}",
-      "columnsClose": "Close",
       "columnsSave": "Save",
       "colContactName": "Nome contatto",
       "colPhone": "Numero di telefono",
@@ -1285,11 +1284,14 @@
         "title": "Seleziona una vista",
         "create": "Crea nuova vista",
         "search": "Cerca viste...",
-        "chipAll": "Tutte",
-        "chipPinned": "Nelle schede",
-        "chipShared": "Condivise",
         "empty": "Nessuna vista trovata",
-        "pinned": "Nelle schede"
+        "pinned": "Nelle schede",
+        "favorites": "Preferiti",
+        "defaultFilters": "Filtri predefiniti",
+        "createdViews": "Viste create",
+        "addView": "Aggiungi vista",
+        "markFavorite": "Segna come preferita",
+        "unmarkFavorite": "Rimuovi dai preferiti"
       },
       "menu": {
         "rename": "Rinomina vista",

@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
@@ -84,7 +84,10 @@ function Health({
   locale: string;
 }) {
   const t = useTranslations(NS);
-  const time = new Intl.DateTimeFormat(locale, { timeStyle: 'medium' }).format(new Date(data.ts));
+  const timeZone = useTimeZone();
+  const time = new Intl.DateTimeFormat(locale, { timeStyle: 'medium', timeZone }).format(
+    new Date(data.ts),
+  );
   const bars = latencyBars(data.checks);
   const peak = Math.max(0, ...data.throughput.map((p) => p.count));
   return (

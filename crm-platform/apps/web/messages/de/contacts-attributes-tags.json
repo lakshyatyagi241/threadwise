@@ -124,7 +124,6 @@
       "columnsSelectAll": "Select All",
       "dragToReorder": "Drag to re-order columns",
       "removeColumn": "Remove {name}",
-      "columnsClose": "Close",
       "columnsSave": "Save",
       "colContactName": "Kontaktname",
       "colPhone": "Telefonnummer",
@@ -1285,11 +1284,14 @@
         "title": "Ansicht auswählen",
         "create": "Neue Ansicht erstellen",
         "search": "Ansichten suchen...",
-        "chipAll": "Alle",
-        "chipPinned": "In Tabs",
-        "chipShared": "Geteilt",
         "empty": "Keine Ansichten gefunden",
-        "pinned": "In Tabs"
+        "pinned": "In Tabs",
+        "favorites": "Favoriten",
+        "defaultFilters": "Standardfilter",
+        "createdViews": "Erstellte Ansichten",
+        "addView": "Ansicht hinzufügen",
+        "markFavorite": "Als Favorit markieren",
+        "unmarkFavorite": "Aus Favoriten entfernen"
       },
       "menu": {
         "rename": "Ansicht umbenennen",

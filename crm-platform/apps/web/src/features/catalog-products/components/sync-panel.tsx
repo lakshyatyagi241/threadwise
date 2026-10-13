@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useTimeZone, useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { Button, Spinner, cn } from '@crm/ui';
 import { importFromMeta, pollBatches, syncProducts } from '../api/catalog';
@@ -30,6 +30,7 @@ export function SyncPanel({
   onChanged: () => void;
 }) {
   const t = useTranslations('catalogProducts.sync');
+  const timeZone = useTimeZone();
   const errorText = useErrorText();
   const [busy, setBusy] = useState<Busy>(null);
   const [log, setLog] = useState<LogLine[]>([]);
@@ -41,7 +42,9 @@ export function SyncPanel({
   }, []);
 
   const add = (tone: LogLine['tone'], text: string) =>
-    setLog((l) => pushLog(l, { at: new Date().toLocaleTimeString(), tone, text }));
+    setLog((l) =>
+      pushLog(l, { at: new Date().toLocaleTimeString(undefined, { timeZone }), tone, text }),
+    );
   const later = (ms: number, fn: () => void) => {
     timers.current.push(window.setTimeout(fn, ms));
   };

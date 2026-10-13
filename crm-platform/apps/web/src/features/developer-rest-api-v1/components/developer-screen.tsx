@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useQueryClient } from '@tanstack/react-query';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useRef, useState, type FormEvent } from 'react';
 import {
   API_KEY_NAME_MAX,
@@ -361,6 +361,7 @@ export function ActiveKeyCard({
 }) {
   const t = useTranslations('developer-rest-api-v1.key');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const qc = useQueryClient();
   const { toast } = useToast();
   const [confirming, setConfirming] = useState(false);
@@ -406,7 +407,7 @@ export function ActiveKeyCard({
             <code dir="ltr" className="text-foreground">
               {apiKey.prefix}…
             </code>
-            <span>{t('created', { date: dateLabel(apiKey.createdAt, locale) })}</span>
+            <span>{t('created', { date: dateLabel(apiKey.createdAt, locale, timeZone) })}</span>
             <span>{t('lastUsed', { when: last ?? t('never') })}</span>
           </div>
           <div

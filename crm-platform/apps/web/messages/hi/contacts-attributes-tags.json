@@ -124,7 +124,6 @@
       "columnsSelectAll": "Select All",
       "dragToReorder": "Drag to re-order columns",
       "removeColumn": "Remove {name}",
-      "columnsClose": "Close",
       "columnsSave": "Save",
       "colContactName": "संपर्क का नाम",
       "colPhone": "फ़ोन नंबर",
@@ -1285,11 +1284,14 @@
         "title": "व्यू चुनें",
         "create": "नया व्यू बनाएँ",
         "search": "व्यू खोजें...",
-        "chipAll": "सभी",
-        "chipPinned": "टैब में",
-        "chipShared": "साझा",
         "empty": "कोई व्यू नहीं मिला",
-        "pinned": "टैब में"
+        "pinned": "टैब में",
+        "favorites": "पसंदीदा",
+        "defaultFilters": "डिफ़ॉल्ट फ़िल्टर",
+        "createdViews": "बनाए गए व्यू",
+        "addView": "व्यू जोड़ें",
+        "markFavorite": "पसंदीदा के रूप में चिह्नित करें",
+        "unmarkFavorite": "पसंदीदा से हटाएँ"
       },
       "menu": {
         "rename": "व्यू का नाम बदलें",

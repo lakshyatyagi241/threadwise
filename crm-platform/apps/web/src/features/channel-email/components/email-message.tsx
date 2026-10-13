@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useRef, useState } from 'react';
 import { cn } from '@crm/ui';
 import type { EmailAttachment, EmailMeta } from '@crm/contracts';
@@ -46,6 +46,7 @@ export function EmailMessageBody({
 }) {
   const t = useTranslations('email.thread');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const [images, setImages] = useState(false);
   const remote = email.html ? hasRemoteImages(email.html) : false;
   const files = listedAttachments(email.attachments);
@@ -96,9 +97,11 @@ export function EmailMessageBody({
           <p className={line}>
             <span className={key}>{t('date')}</span>
             <time dateTime={date}>
-              {new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }).format(
-                new Date(date),
-              )}
+              {new Intl.DateTimeFormat(locale, {
+                dateStyle: 'medium',
+                timeStyle: 'short',
+                timeZone,
+              }).format(new Date(date))}
             </time>
           </p>
         )}

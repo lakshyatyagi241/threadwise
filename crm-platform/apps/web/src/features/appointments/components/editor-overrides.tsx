@@ -12,17 +12,10 @@ import {
   toggleClosedDay,
   type Override,
 } from '../lib/availability';
+import { useDisplayZone } from '../api/hooks';
 import { formatDayKey, formatMonthYear, weekdayLabel } from '../lib/format';
 import { monthMatrix, weekdayOrder } from '../lib/slots';
-import {
-  addMonths,
-  browserZone,
-  dayKeyOf,
-  diffDays,
-  isValidZone,
-  parseDayKey,
-  startOfMonth,
-} from '../lib/zone';
+import { addMonths, dayKeyOf, diffDays, isValidZone, parseDayKey, startOfMonth } from '../lib/zone';
 import { ChevronLeftIcon, ChevronRightIcon, TrashIcon, flip } from './icons';
 import { SectionCard, iconButtonClass, useEditor } from './editor-shared';
 
@@ -40,7 +33,8 @@ export function OverridesSection() {
   const locale = useLocale();
   const { draft, update, disabled } = useEditor();
   const [nowMs] = useState(() => Date.now());
-  const zone = isValidZone(draft.timezone) ? draft.timezone : browserZone();
+  const displayZone = useDisplayZone();
+  const zone = isValidZone(draft.timezone) ? draft.timezone : displayZone;
   const today = dayKeyOf(nowMs, zone);
   const [month, setMonth] = useState(() => startOfMonth(today));
   const [from, setFrom] = useState('');

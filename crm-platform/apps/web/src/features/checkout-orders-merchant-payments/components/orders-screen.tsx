@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { StoreOrderListItem } from '@crm/contracts';
@@ -406,6 +406,7 @@ function OrderRow({
   onStatus: (order: StoreOrderListItem, status: string) => void;
   onDelete: (order: StoreOrderListItem) => void;
 }) {
+  const timeZone = useTimeZone();
   const t = useTranslations('checkout-orders-merchant-payments.orders');
   const tc = useTranslations('checkout-orders-merchant-payments.common');
   const ts = useTranslations('checkout-orders-merchant-payments.status');
@@ -452,7 +453,7 @@ function OrderRow({
         <SourceBadge source={o.source} />
       </td>
       <td className="whitespace-nowrap px-4 py-3 text-xs text-muted-foreground">
-        {formatWhen(o.createdAt, locale)}
+        {formatWhen(o.createdAt, locale, timeZone)}
       </td>
       <td className="px-4 py-3">
         <div className="flex items-center justify-end gap-2">

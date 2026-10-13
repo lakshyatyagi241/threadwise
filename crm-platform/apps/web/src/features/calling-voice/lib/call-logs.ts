@@ -77,15 +77,6 @@ export function logSearch(p: Partial<LogParams>): string {
   return s ? `?${s}` : '';
 }
 
-/** The browser's time zone, so "today" and the hours of the heat map are the person's own. */
-export function browserTimeZone(): string {
-  try {
-    return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
-  } catch {
-    return 'UTC';
-  }
-}
-
 export function toListQuery(p: LogParams, tz: string): Partial<CallLogListQuery> {
   const custom = Boolean(p.from || p.to);
   return {

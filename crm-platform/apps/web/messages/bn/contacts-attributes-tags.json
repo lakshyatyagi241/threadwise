@@ -124,7 +124,6 @@
       "columnsSelectAll": "Select All",
       "dragToReorder": "Drag to re-order columns",
       "removeColumn": "Remove {name}",
-      "columnsClose": "Close",
       "columnsSave": "Save",
       "colContactName": "কন্টাক্টের নাম",
       "colPhone": "ফোন নম্বর",
@@ -1285,11 +1284,14 @@
         "title": "একটি ভিউ নির্বাচন করুন",
         "create": "নতুন ভিউ তৈরি করুন",
         "search": "ভিউ খুঁজুন...",
-        "chipAll": "সব",
-        "chipPinned": "ট্যাবে",
-        "chipShared": "শেয়ার করা",
         "empty": "কোনো ভিউ পাওয়া যায়নি",
-        "pinned": "ট্যাবে"
+        "pinned": "ট্যাবে",
+        "favorites": "প্রিয়",
+        "defaultFilters": "ডিফল্ট ফিল্টার",
+        "createdViews": "তৈরি করা ভিউ",
+        "addView": "ভিউ যোগ করুন",
+        "markFavorite": "প্রিয় হিসেবে চিহ্নিত করুন",
+        "unmarkFavorite": "প্রিয় থেকে সরান"
       },
       "menu": {
         "rename": "ভিউয়ের নাম পরিবর্তন করুন",

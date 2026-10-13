@@ -124,7 +124,6 @@
       "columnsSelectAll": "Select All",
       "dragToReorder": "Drag to re-order columns",
       "removeColumn": "Remove {name}",
-      "columnsClose": "Close",
       "columnsSave": "Save",
       "colContactName": "Nama Kontak",
       "colPhone": "Nomor Telepon",
@@ -1285,11 +1284,14 @@
         "title": "Pilih tampilan",
         "create": "Buat tampilan baru",
         "search": "Cari tampilan...",
-        "chipAll": "Semua",
-        "chipPinned": "Di tab",
-        "chipShared": "Dibagikan",
         "empty": "Tampilan tidak ditemukan",
-        "pinned": "Di tab"
+        "pinned": "Di tab",
+        "favorites": "Favorit",
+        "defaultFilters": "Filter default",
+        "createdViews": "Tampilan yang dibuat",
+        "addView": "Tambah tampilan",
+        "markFavorite": "Tandai sebagai favorit",
+        "unmarkFavorite": "Hapus dari favorit"
       },
       "menu": {
         "rename": "Ubah nama tampilan",
