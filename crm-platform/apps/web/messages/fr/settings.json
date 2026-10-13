@@ -349,6 +349,11 @@
         "label": "Growth",
         "description": "Leads chauds, audiences, réponses aux campagnes et autres éléments exploitables par votre équipe, déduits des discussions et des campagnes.",
         "keywords": "growth, lead chaud, audience, engagement, inactif, réponses aux campagnes, probabilité de conversion, désabonnement, pilote"
+      },
+      "team-performance": {
+        "label": "Performance de l'équipe",
+        "description": "Voyez la rapidité de chaque agent à répondre et résoudre aujourd'hui, cette semaine ou ce mois-ci.",
+        "keywords": "rapports, analyses, agents, temps de réponse, première réponse, résolues, charge, performance"
       }
     },
     "backToMarketplace": "Retour au Marketplace"

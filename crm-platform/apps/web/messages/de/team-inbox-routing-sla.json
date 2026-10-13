@@ -183,6 +183,48 @@
         "goneOption": "Ein Flow, den es nicht mehr gibt",
         "loadFailed": "Die Flows konnten nicht geladen werden, die Auswahl ist deshalb eventuell unvollständig."
       }
+    },
+    "performance": {
+      "eyebrow": "Team-Posteingang · Berichte",
+      "title": "Wie schnell hat Ihr Team geantwortet?",
+      "subtitle": "Antworten, Lösungen und Zeiten bis zur ersten Antwort je Agent.",
+      "summary": "{replies} Antworten, {resolved} gelöst, durchschnittliche erste Antwort {avg}",
+      "live": "Live",
+      "backToInbox": "Zurück zum Posteingang",
+      "rangeLabel": "Zeitraum",
+      "ranges": {
+        "today": "Heute",
+        "week": "Diese Woche",
+        "month": "Dieser Monat"
+      },
+      "channelLabel": "Kanal",
+      "allChannels": "Alle Kanäle",
+      "loadFailed": "Der Bericht konnte nicht geladen werden. Es wird gleich erneut versucht.",
+      "noAccess": "Sie haben keinen Zugriff auf den Teamleistungsbericht.",
+      "loading": "Bericht wird geladen…",
+      "empty": "Keine Agentenaktivität in diesem Zeitraum.",
+      "unknown": "Unbekannt",
+      "tiles": {
+        "replies": "Gesendete Antworten",
+        "resolved": "Gelöst",
+        "inbounds": "Eingehend",
+        "avgFirstReply": "Ø erste Antwort"
+      },
+      "columns": {
+        "agent": "Agent",
+        "status": "Status",
+        "load": "Auslastung",
+        "replies": "Antworten",
+        "resolved": "Gelöst",
+        "avgReply": "Ø Antwort",
+        "lastSeen": "Zuletzt gesehen"
+      },
+      "statuses": {
+        "online": "Online",
+        "away": "Abwesend",
+        "busy": "Beschäftigt",
+        "offline": "Offline"
+      }
     }
   }
 }
