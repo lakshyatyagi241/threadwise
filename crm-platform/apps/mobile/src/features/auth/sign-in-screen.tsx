@@ -34,11 +34,7 @@ export function SignInScreen() {
   const passwordInput = useRef<TextFieldHandle>(null);
 
   return (
-    <AuthFrame
-      brandName={config.data?.appName}
-      tagline={t('auth.tagline')}
-      caption={t('auth.taglineCaption')}
-    >
+    <AuthFrame tagline={t('auth.tagline')} caption={t('auth.taglineCaption')}>
       {step.kind === 'credentials' && (
         <>
           <FadeIn key="credentials">

@@ -270,6 +270,34 @@ describe('DashboardScreen', () => {
     ).toBeTruthy();
   });
 
+  it('puts every card back on the last 30 days when Reset is pressed in the calendar sheet', async () => {
+    arrange();
+    const { queryClient } = await show();
+    await loaded(queryClient);
+    const today = todayIn(session.org.timezone ?? undefined);
+    const last30 = presetRange('last30', today);
+    const last7 = presetRange('last7', today);
+    // Narrow it to the last 7 days first.
+    await fireEvent.press(screen.getByRole('button', { name: /^Date range:/ }));
+    await fireEvent.press(await screen.findByRole('radio', { name: 'Last 7 days' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Apply' }));
+    await waitFor(() => expect(summaryCall).toHaveBeenLastCalledWith(last7, expect.anything()));
+    await waitFor(() => expect(queryClient.isFetching()).toBe(0));
+    // Reset: back to the default at once, the sheet closes, and every card asks for those days.
+    await fireEvent.press(screen.getByRole('button', { name: /^Date range:/ }));
+    await fireEvent.press(await screen.findByRole('button', { name: 'Reset' }));
+    await waitFor(() => expect(summaryCall).toHaveBeenLastCalledWith(last30, expect.anything()));
+    await waitFor(() => expect(queryClient.isFetching()).toBe(0));
+    expect(throughputCall).toHaveBeenLastCalledWith(last30, expect.anything());
+    expect(widgetsCall).toHaveBeenLastCalledWith(last30, expect.anything());
+    expect(screen.queryByText('Search by calendar')).toBeNull();
+    expect(
+      screen.getByRole('button', {
+        name: new RegExp(`^Date range: ${last30.from} to ${last30.to}`),
+      }),
+    ).toBeTruthy();
+  });
+
   it('reloads everything when the page is pulled down, and stops the spinner when done', async () => {
     arrange();
     const { queryClient } = await show();

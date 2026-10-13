@@ -383,7 +383,6 @@
     "inbox": "Inbox",
     "contacts": "Contacts",
     "noAccess": "You don't have access to this. Ask your workspace admin to unlock it.",
-    "appName": "CRM Platform",
     "version": "Version {{version}}",
     "signOutTitle": "Sign out",
     "signOutConfirm": "Are you sure you want to sign out?",

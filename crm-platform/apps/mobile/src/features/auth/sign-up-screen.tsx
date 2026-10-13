@@ -48,12 +48,10 @@ export function SignUpScreen() {
     if (router.canGoBack()) router.back();
     else router.replace('/sign-in');
   };
-  const brandName = config.data?.appName;
 
   if (signUp.step.kind === 'otp') {
     return (
       <AuthFrame
-        brandName={brandName}
         tagline={t('signUp.otp.title')}
         caption={t('signUp.otp.subtitle')}
         onBack={signUp.goBackToForm}
@@ -142,7 +140,7 @@ export function SignUpScreen() {
   }
 
   return (
-    <AuthFrame brandName={brandName} tagline={t('signUp.tagline')} compact onBack={goSignIn}>
+    <AuthFrame tagline={t('signUp.tagline')} compact onBack={goSignIn}>
       {content}
     </AuthFrame>
   );

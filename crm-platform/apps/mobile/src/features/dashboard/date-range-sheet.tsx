@@ -98,7 +98,10 @@ interface SheetProps {
   range: DateRange;
   /** Today in the workspace's zone ('YYYY-MM-DD'): the last day that can be chosen. */
   today: string;
-  /** Called with the chosen range when "Apply" is pressed; the parent closes the sheet. */
+  /**
+   * Called with the chosen range when "Apply" is pressed, and with the default range (the last 30 days) when "Reset" is pressed:
+   * Reset puts the dashboard back at once, it is not a second step. The parent closes the sheet either way.
+   */
   onApply: (range: DateRange) => void;
   onClose: () => void;
 }
@@ -234,7 +237,7 @@ function SheetBody({ range, today, onApply, onClose }: Omit<SheetProps, 'visible
             <Button
               label={t('dashDate.reset')}
               variant="secondary"
-              onPress={() => choose(presetRange(DEFAULT_PRESET, today))}
+              onPress={() => onApply(presetRange(DEFAULT_PRESET, today))}
             />
           </View>
           <View style={styles.fill}>

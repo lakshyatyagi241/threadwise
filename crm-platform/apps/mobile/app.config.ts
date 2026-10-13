@@ -23,7 +23,8 @@ function variantOf(raw: string | undefined): Variant {
 
 // PLACEHOLDER until the owner picks the store identity. A bundle id cannot change after the first store upload.
 const BASE_BUNDLE_ID = process.env.APP_BUNDLE_ID ?? 'ai.geta.crm';
-const APP_NAME = process.env.APP_NAME ?? 'CRM';
+// The name under the icon. The same name is written in src/config/brand.ts for the screens inside the app.
+const APP_NAME = process.env.APP_NAME ?? 'GetaDesk';
 
 /** Source-map upload at build time; needs the Sentry org and project. Without them the app still reports errors, minified. */
 function sentryPlugin(): NonNullable<ExpoConfig['plugins']> {
@@ -79,9 +80,9 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     android: {
       package: bundleId,
       adaptiveIcon: {
-        backgroundColor: '#0B3D2E',
+        // The logo is blue on white; the system masks the icon (circle, squircle...) and tints the monochrome one for themed icons.
+        backgroundColor: '#FFFFFF',
         foregroundImage: './assets/images/android-icon-foreground.png',
-        backgroundImage: './assets/images/android-icon-background.png',
         monochromeImage: './assets/images/android-icon-monochrome.png',
       },
       predictiveBackGestureEnabled: true,
@@ -94,7 +95,13 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       'expo-localization',
       [
         'expo-splash-screen',
-        { backgroundColor: '#0B3D2E', image: './assets/images/splash-icon.png', imageWidth: 120 },
+        {
+          backgroundColor: '#FFFFFF',
+          image: './assets/images/splash-icon.png',
+          imageWidth: 140,
+          // The same logo in the app's dark background colour, for phones set to dark.
+          dark: { backgroundColor: '#0C1220', image: './assets/images/splash-icon.png' },
+        },
       ],
       [
         'expo-build-properties',

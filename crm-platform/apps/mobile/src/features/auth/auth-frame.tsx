@@ -4,11 +4,10 @@ import { BrandFrame } from '@/components/ui/brand-frame';
 import { BrandMark } from '@/components/ui/brand-mark';
 import { FadeIn } from '@/components/ui/fade-in';
 import { Text } from '@/components/ui/text';
+import { BRAND_NAME } from '@/config/brand';
 import { spacing } from '@/lib/theme/tokens';
 
 interface Props {
-  /** The product name, once the platform settings are known. */
-  brandName?: string;
   /** The page's main line, in the band. */
   tagline: string;
   caption?: string;
@@ -20,8 +19,8 @@ interface Props {
   children: ReactNode;
 }
 
-/** The frame of the signed-out screens: the brand band with the logo and the page's main line, and the cards under it. */
-export function AuthFrame({ brandName, tagline, caption, compact, onBack, children }: Props) {
+/** The frame of the signed-out screens: the brand band with the logo, the app's name and the page's main line, and the cards under it. */
+export function AuthFrame({ tagline, caption, compact, onBack, children }: Props) {
   return (
     <BrandFrame
       compact={compact}
@@ -30,11 +29,9 @@ export function AuthFrame({ brandName, tagline, caption, compact, onBack, childr
         <FadeIn style={styles.bandText}>
           <View style={styles.brand}>
             <BrandMark size={compact ? 44 : 56} />
-            {brandName ? (
-              <Text variant="heading" color="onBrand" numberOfLines={1} style={styles.brandName}>
-                {brandName}
-              </Text>
-            ) : null}
+            <Text variant="heading" color="onBrand" numberOfLines={1} style={styles.brandName}>
+              {BRAND_NAME}
+            </Text>
           </View>
           <Text variant={compact ? 'title' : 'display'} color="onBrand" accessibilityRole="header">
             {tagline}

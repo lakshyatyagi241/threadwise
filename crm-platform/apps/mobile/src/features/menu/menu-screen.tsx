@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Icon, type IconName } from '@/components/ui/icon';
 import { ScreenHeader } from '@/components/ui/screen-header';
 import { Text } from '@/components/ui/text';
+import { BRAND_NAME } from '@/config/brand';
 import { signOut } from '@/lib/auth/sign-out';
 import { can, useSession } from '@/lib/session/use-session';
 import { MIN_TOUCH_TARGET, radius, spacing } from '@/lib/theme/tokens';
@@ -250,7 +251,7 @@ export function MenuScreen() {
 
         <View style={styles.about}>
           <Text variant="label" muted>
-            {t('menu.appName')}
+            {BRAND_NAME}
           </Text>
           {version ? (
             <Text variant="caption" muted>

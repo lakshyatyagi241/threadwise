@@ -174,27 +174,22 @@ describe('DateRangeSheet', () => {
     expect(apply().props.accessibilityState.disabled).toBe(false);
   });
 
-  it('goes back to the last 30 days with Reset, and Apply then gives that', async () => {
+  it('puts the dashboard back on the last 30 days at once with Reset, without needing Apply', async () => {
     const onApply = jest.fn();
     await renderApp(sheet({ onApply, range: { from: '2026-05-02', to: '2026-05-10' } }));
-    await fireEvent.press(chip('Today'));
     await fireEvent.press(screen.getByRole('button', { name: 'Reset' }));
-    expect(selection('2026-09-13', '2026-10-12')).toBeTruthy();
-    expect(checked('Last 30 days')).toBe(true);
-    expect(screen.getByText('October 2026')).toBeTruthy();
-    // Reset only changes the selection: nothing is applied until Apply.
-    expect(onApply).not.toHaveBeenCalled();
-    await fireEvent.press(apply());
+    expect(onApply).toHaveBeenCalledTimes(1);
     expect(onApply).toHaveBeenCalledWith(LAST_30);
   });
 
-  it('resets from a half-made choice too', async () => {
-    await renderApp(sheet());
+  it('resets whatever was being chosen: another preset, or a half-made choice', async () => {
+    const onApply = jest.fn();
+    await renderApp(sheet({ onApply }));
+    await fireEvent.press(chip('Today'));
     await fireEvent.press(screen.getByRole('button', { name: /^Monday, October 5, 2026/ }));
     expect(apply().props.accessibilityState.disabled).toBe(true);
     await fireEvent.press(screen.getByRole('button', { name: 'Reset' }));
-    expect(apply().props.accessibilityState.disabled).toBe(false);
-    expect(selection('2026-09-13', '2026-10-12')).toBeTruthy();
+    expect(onApply).toHaveBeenCalledWith(LAST_30);
   });
 
   it('starts from the range again every time it opens', async () => {

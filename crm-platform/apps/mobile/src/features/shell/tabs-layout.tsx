@@ -43,6 +43,15 @@ const TABS: readonly TabSpec[] = [
   { name: 'menu', icon: 'menu-outline', iconFocused: 'menu', label: 'menu' },
 ];
 
+/**
+ * The phone's Back button undoes the last tab switch: it returns to the tab the person came from ("fullHistory", one step at a
+ * time, like a web browser). The default only knows the first tab (the Dashboard), so after Menu -> Dashboard there was nothing to go
+ * back to and Back closed the app. Plain "history" forgets the first visit of a tab that was visited twice, which brought the same
+ * bug back (Dashboard -> Menu -> Dashboard -> Back -> Menu -> Back closed the app from the Menu). With nothing earlier, Back still
+ * leaves the app, as on any Android home screen.
+ */
+const BACK_BEHAVIOR = 'fullHistory';
+
 export function TabsLayout() {
   const { t } = useTranslation();
   const { colors } = useTheme();
@@ -51,6 +60,7 @@ export function TabsLayout() {
 
   return (
     <Tabs
+      backBehavior={BACK_BEHAVIOR}
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: colors.primary,
