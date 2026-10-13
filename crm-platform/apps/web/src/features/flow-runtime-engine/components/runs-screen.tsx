@@ -203,6 +203,7 @@ export function RunsScreen() {
                     <th className={TH}>{t('runs.colStatus')}</th>
                     <th className={TH}>{t('runs.colStarted')}</th>
                     <th className={TH}>{t('runs.colActivity')}</th>
+                    <th className={`${TH} text-end`}>{t('runs.colReplies')}</th>
                     <th className={`${TH} text-end`}>{t('runs.colSteps')}</th>
                     <th className={TH}>
                       <span className="sr-only">{t('runs.colActions')}</span>
@@ -233,6 +234,12 @@ export function RunsScreen() {
                       </td>
                       <td className="whitespace-nowrap px-3 py-2.5">{when(r.startedAt)}</td>
                       <td className="whitespace-nowrap px-3 py-2.5">{when(r.lastActivityAt)}</td>
+                      <td
+                        className="px-3 py-2.5 text-end font-mono tabular-nums"
+                        title={t('runs.repliesHint')}
+                      >
+                        {r.replies}
+                      </td>
                       <td className="px-3 py-2.5 text-end font-mono tabular-nums">{r.steps}</td>
                       <td className="px-3 py-2.5 text-end">
                         {canManage && isLive(r.status) && (

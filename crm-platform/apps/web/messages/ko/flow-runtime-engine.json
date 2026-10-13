@@ -119,6 +119,8 @@
       "colStarted": "시작 시간",
       "colActivity": "마지막 활동",
       "colSteps": "단계",
+      "colReplies": "답장",
+      "repliesHint": "이 실행의 대기 노드에 도달한 고객 메시지",
       "colActions": "작업",
       "open": "실행 열기",
       "cancel": "취소",
