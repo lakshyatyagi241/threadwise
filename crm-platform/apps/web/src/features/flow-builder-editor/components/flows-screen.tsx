@@ -348,7 +348,11 @@ export function FlowsScreen() {
                 {t('workspace')} · {orgName}
               </div>
               <h1 className="font-serif text-[32px] leading-[1.05] font-normal tracking-tight sm:text-[38px] lg:text-[44px]">
-                {t('title')} <span className="text-brand italic">{t('titleAccent')}</span>.
+                {t('title')}{' '}
+                <span className="text-brand not-italic font-['Plus_Jakarta_Sans',system-ui,sans-serif]">
+                  {t('titleAccent')}
+                </span>
+                .
               </h1>
               <p className="mt-2 max-w-2xl text-[13px] text-muted-foreground">{t('subtitle')}</p>
             </div>
