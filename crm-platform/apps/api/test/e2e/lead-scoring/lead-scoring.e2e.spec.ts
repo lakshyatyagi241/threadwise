@@ -638,10 +638,12 @@ describe('reading the conversation (a pilot feature of the demo workspace)', () 
         )
       ).rows[0].id,
     );
+    // Manual first: the tests below decide suggestions by hand. Automatic (the default) has its own test further down.
     const on = await ws(demo.admin).save({
       enabled: true,
       chatDigest: true,
       stageSuggestions: true,
+      stageAutoApply: false,
     });
     expect(on.status, JSON.stringify(on.body)).toBe(200);
   }, 120_000);
@@ -819,6 +821,63 @@ describe('reading the conversation (a pilot feature of the demo workspace)', () 
     expect(after.body.lifecycleStage).toBe(before.body.lifecycleStage);
     expect((await insight(demo, c.uuid)).body.suggestion).toBeNull();
   });
+
+  it('automatic mode (the default) moves the contact, tells the chat, and the Undo puts it back', async () => {
+    const was = await ws(demo.admin).settings();
+    expect(was.body.stageAutoApply).toBe(false);
+    const auto = await ws(demo.admin).save({
+      enabled: true,
+      stageAutoApply: true,
+      rowVersion: was.body.rowVersion,
+    });
+    expect(auto.body).toMatchObject({ stageAutoApply: true, stageSuggestions: true });
+
+    const c = await chat(demo, 'Auto Person', [
+      ['in', 'I want to buy two of the black dial watches for my brother and sister', 60],
+      ['out', 'Sure', 59],
+      ['in', 'and book a repair slot for my old one', 58],
+      ['in', 'please confirm the price', 57],
+    ]);
+    const before = await api.as(demo.admin).get(`/v2/contacts/${c.uuid}`);
+    const read = await digest(demo, c.uuid);
+    expect(read.status, JSON.stringify(read.body)).toBe(200);
+    // Nothing waits for a person: the contact already moved.
+    expect(read.body.suggestion).toBeNull();
+    const moved = await api.as(demo.admin).get(`/v2/contacts/${c.uuid}`);
+    expect(moved.body.lifecycleStage).not.toBe(before.body.lifecycleStage);
+
+    const convUuid = (
+      await h.owner.query(`SELECT uuid FROM conversations WHERE contact_id = $1`, [c.contactId])
+    ).rows[0].uuid as string;
+    const lines = async () =>
+      (
+        await api.as(demo.admin).get(`/v2/inbox/conversations/${convUuid}/messages`)
+      ).body.data.filter(
+        (m: { systemEvent?: { event?: string } }) => m.systemEvent?.event === 'stage_change',
+      ) as Array<{ systemEvent: { action: string; suggestionId: string } }>;
+    const [line] = await lines();
+    expect(line!.systemEvent.action).toBe('auto');
+
+    const undone = await api
+      .as(demo.admin)
+      .post(`/v2/lead-scoring/suggestions/${line!.systemEvent.suggestionId}/undo`);
+    expect(undone.status, JSON.stringify(undone.body)).toBe(204);
+    const back = await api.as(demo.admin).get(`/v2/contacts/${c.uuid}`);
+    expect(back.body.lifecycleStage).toBe(before.body.lifecycleStage);
+    expect((await lines()).map((l) => l.systemEvent.action)).toEqual(['auto', 'undone']);
+
+    // A second Undo is refused: the contact is already back.
+    const again = await api
+      .as(demo.admin)
+      .post(`/v2/lead-scoring/suggestions/${line!.systemEvent.suggestionId}/undo`);
+    expect(again.status).toBe(409);
+
+    await ws(demo.admin).save({
+      enabled: true,
+      stageAutoApply: false,
+      rowVersion: auto.body.rowVersion,
+    });
+  }, 60_000);
 
   it('a prompt-injection line in the chat cannot choose the stage or the score', async () => {
     const c = await chat(demo, 'Injector', [

@@ -602,14 +602,22 @@ export class GrowthRepository {
     minConfidence: number,
     limit: number,
   ): Promise<
-    Array<{ id: number; contactId: number; fromStage: string; toStage: string; confidence: number }>
+    Array<{
+      id: number;
+      uuid: string;
+      contactId: number;
+      fromStage: string;
+      toStage: string;
+      confidence: number;
+    }>
   > {
     const res = await tx.execute(sql`
-      SELECT s.id, s.contact_id, s.from_stage, s.to_stage, s.confidence FROM lifecycle_stage_suggestions s
+      SELECT s.id, s.uuid, s.contact_id, s.from_stage, s.to_stage, s.confidence FROM lifecycle_stage_suggestions s
        WHERE s.org_id = ${orgId} AND s.status = 'pending' AND s.confidence >= ${minConfidence}
        ORDER BY s.confidence DESC, s.created_at DESC LIMIT ${limit}`);
     return (res.rows as Raw[]).map((r) => ({
       id: num(r.id),
+      uuid: String(r.uuid),
       contactId: num(r.contact_id),
       fromStage: String(r.from_stage),
       toStage: String(r.to_stage),

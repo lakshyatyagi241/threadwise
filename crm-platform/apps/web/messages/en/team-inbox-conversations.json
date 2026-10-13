@@ -223,7 +223,15 @@
       "groupMember": "Group member",
       "groupTally": "Delivered to {delivered} of {members}{read, plural, =0 {} other {, read by #}}{failed, plural, =0 {} other {, # failed}}",
       "groupTallyNoTotal": "Delivered to {delivered, plural, one {# member} other {# members}}{read, plural, =0 {} other {, read by #}}{failed, plural, =0 {} other {, # failed}}",
-      "groupTallyBilled": "{billable} billed, {free} free"
+      "groupTallyBilled": "{billable} billed, {free} free",
+      "stageLine": {
+        "auto": "AI read the chat and moved this contact from {from} to {to}.",
+        "undo": "Undo",
+        "wasUndone": "Undone",
+        "undone": "Stage change undone: back to {stage}.",
+        "undoneToast": "Stage put back to {stage}.",
+        "couldNotUndo": "This change cannot be undone any more: the contact moved on, or it was already undone."
+      }
     },
     "media": {
       "openImage": "Open image {name}",

@@ -261,7 +261,7 @@
         "offBody": "Görüşmeler okunmaz. Puanlar yalnızca kişi bilgilerini ve etkileşim verilerini kullanır.",
         "needsScoring": "Önce AI potansiyel müşteri puanlamayı açın.",
         "stageLabel": "Yaşam döngüsü aşamalarını öner",
-        "stageBody": "Görüşme bir kişinin ilerlediğini açıkça gösterdiğinde AI sonraki aşamayı önerir. Bir kişi bunu kabul eder veya reddeder; hiçbir şey kendiliğinden taşınmaz ve Kazanıldı ile Kaybedildi aşamaları asla önerilmez.",
+        "stageBody": "Sohbet bir kişinin ilerlediğini açıkça gösterdiğinde yapay zekâ bir sonraki aşamayı seçer. Kazanıldı ve Kaybedildi aşamalarını yapay zekâ hiçbir zaman ayarlamaz. Değişikliğin kendiliğinden mi uygulanacağını yoksa bir kişiyi mi bekleyeceğini aşağıdan seçin.",
         "masked": {
           "title": "Kişisel veriler nasıl maskelenir",
           "phone": "Telefon numaralarında yalnızca ilk ve son iki hane kalır (+91 ***** ***10)",
@@ -281,6 +281,17 @@
           "body": "Açıldığında, görüşme sessizleştikten sonra kişinin son mesajları OpenRouter üzerinden bir AI sağlayıcısına gönderilir. Telefon numaraları, e-postalar, kart numaraları ve adlar önce kısmen maskelenir; böylece gönderilenler kişiye ulaşmak için kullanılamaz. İstediğiniz zaman kapatabilirsiniz.",
           "yes": "Aç",
           "no": "İptal"
+        },
+        "stageMode": {
+          "title": "Aşama nasıl değişir",
+          "auto": {
+            "label": "Otomatik",
+            "body": "Kişi hemen taşınır ve sohbette Geri al düğmeli bir satır görünür."
+          },
+          "manual": {
+            "label": "Elle",
+            "body": "Öneri, bir kişi kabul edene veya reddedene kadar Aşama önerileri’nde bekler."
+          }
         }
       }
     },

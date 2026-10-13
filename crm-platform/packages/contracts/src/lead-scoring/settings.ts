@@ -10,6 +10,8 @@ export const updateLscSettingsSchema = z.object({
   chatDigest: z.boolean().optional(),
   /** Let the chat reading suggest a lifecycle stage for a person to accept. Needs `chatDigest`. */
   stageSuggestions: z.boolean().optional(),
+  /** With `stageSuggestions` on: move the contact by itself and tell the chat (with an Undo), instead of waiting for a person. Default on. */
+  stageAutoApply: z.boolean().optional(),
   /** Absent on the first save (no row yet). */
   rowVersion: z.number().int().positive().optional(),
 });
@@ -20,6 +22,8 @@ export interface LscSettings {
   autoScore: boolean;
   chatDigest: boolean;
   stageSuggestions: boolean;
+  /** A suggested stage is applied by itself (undoable from the chat) rather than left for a person. */
+  stageAutoApply: boolean;
   /** Is reading conversations offered to this workspace at all (a pilot feature); when false the two switches above are ignored. */
   chatDigestAvailable: boolean;
   /** Stage suggestions waiting for a decision. */
