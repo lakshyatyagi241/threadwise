@@ -349,6 +349,11 @@
         "label": "Wzrost",
         "description": "Gorące leady, odbiorcy, odpowiedzi na kampanie i inne sprawy, na które zespół może zareagować, ustalone na podstawie rozmów i kampanii.",
         "keywords": "wzrost, gorący lead, odbiorcy, zaangażowanie, nieaktywni, odpowiedzi na kampanie, skłonność do konwersji, rezygnacja, pilotaż"
+      },
+      "team-performance": {
+        "label": "Wydajność zespołu",
+        "description": "Zobacz, jak szybko każdy agent odpowiadał i rozwiązywał rozmowy dziś, w tym tygodniu lub miesiącu.",
+        "keywords": "raporty, analityka, agenci, czas odpowiedzi, pierwsza odpowiedź, rozwiązane, obciążenie, wydajność"
       }
     },
     "backToMarketplace": "Wróć do Marketplace"

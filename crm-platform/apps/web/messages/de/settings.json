@@ -349,6 +349,11 @@
         "label": "Growth",
         "description": "Hot Leads, Zielgruppen, Kampagnenantworten und weitere Dinge, die Ihr Team aus Chats und Kampagnen ableiten und angehen kann.",
         "keywords": "growth, hot lead, zielgruppe, engagement, inaktiv, kampagnenantworten, conversion-wahrscheinlichkeit, opt-out, pilot"
+      },
+      "team-performance": {
+        "label": "Teamleistung",
+        "description": "Sehen Sie, wie schnell jeder Agent heute, diese Woche oder diesen Monat geantwortet und gelöst hat.",
+        "keywords": "Berichte, Analysen, Agenten, Antwortzeit, erste Antwort, gelöst, Auslastung, Leistung"
       }
     },
     "backToMarketplace": "Zurück zum Marketplace"

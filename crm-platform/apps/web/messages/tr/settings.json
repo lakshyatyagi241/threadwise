@@ -349,6 +349,11 @@
         "label": "Büyüme",
         "description": "Sıcak potansiyel müşteriler, hedef kitleler, kampanya yanıtları ve ekibinizin harekete geçebileceği diğer şeyler; görüşmelerden ve kampanyalardan çıkarılır.",
         "keywords": "büyüme, sıcak potansiyel müşteri, hedef kitle, etkileşim, uzaklaşmış, kampanya yanıtları, dönüşüm eğilimi, vazgeçme, pilot"
+      },
+      "team-performance": {
+        "label": "Ekip performansı",
+        "description": "Her temsilcinin bugün, bu hafta veya bu ay ne kadar hızlı yanıtlayıp çözdüğünü görün.",
+        "keywords": "raporlar, analiz, temsilciler, yanıt süresi, ilk yanıt, çözüldü, iş yükü, performans"
       }
     },
     "backToMarketplace": "Marketplace'e dön"

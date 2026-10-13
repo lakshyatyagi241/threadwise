@@ -349,6 +349,11 @@
         "label": "Growth",
         "description": "Lead caldi, audience, risposte alle campagne e altro su cui il tuo team può agire, ricavato da chat e campagne.",
         "keywords": "growth, lead caldo, audience, coinvolgimento, inattivo, risposte alle campagne, probabilità di conversione, opt-out, pilota"
+      },
+      "team-performance": {
+        "label": "Prestazioni del team",
+        "description": "Scopri quanto è stato veloce ogni agente a rispondere e risolvere oggi, questa settimana o questo mese.",
+        "keywords": "report, analisi, agenti, tempo di risposta, prima risposta, risolte, carico, prestazioni"
       }
     },
     "backToMarketplace": "Torna al Marketplace"

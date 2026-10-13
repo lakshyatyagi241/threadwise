@@ -349,6 +349,11 @@
         "label": "Labels",
         "description": "Create the labels your team puts on conversations and filters the inbox by.",
         "keywords": "tags, labels, categories, organize, filter"
+      },
+      "team-performance": {
+        "label": "Team performance",
+        "description": "See how fast each agent replied and resolved today, this week or this month.",
+        "keywords": "reports, analytics, agents, response time, first reply, resolved, workload, performance"
       }
     },
     "backToMarketplace": "Back to Marketplace"

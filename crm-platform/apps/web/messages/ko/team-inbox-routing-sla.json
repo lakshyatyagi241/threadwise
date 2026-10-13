@@ -183,6 +183,48 @@
         "goneOption": "더 이상 존재하지 않는 플로우",
         "loadFailed": "플로우를 불러오지 못해 목록이 불완전할 수 있습니다."
       }
+    },
+    "performance": {
+      "eyebrow": "팀 수신함 · 보고서",
+      "title": "팀이 얼마나 빠르게 응답했나요?",
+      "subtitle": "상담원별 답장 수, 해결 수, 첫 답장 시간을 확인합니다.",
+      "summary": "답장 {replies}건, 해결 {resolved}건, 평균 첫 답장 {avg}",
+      "live": "실시간",
+      "backToInbox": "수신함으로 돌아가기",
+      "rangeLabel": "기간",
+      "ranges": {
+        "today": "오늘",
+        "week": "이번 주",
+        "month": "이번 달"
+      },
+      "channelLabel": "채널",
+      "allChannels": "모든 채널",
+      "loadFailed": "보고서를 불러오지 못했습니다. 잠시 후 다시 시도합니다.",
+      "noAccess": "팀 성과 보고서에 접근할 권한이 없습니다.",
+      "loading": "보고서를 불러오는 중…",
+      "empty": "이 기간에 상담원 활동이 없습니다.",
+      "unknown": "알 수 없음",
+      "tiles": {
+        "replies": "보낸 답장",
+        "resolved": "해결됨",
+        "inbounds": "수신",
+        "avgFirstReply": "평균 첫 답장"
+      },
+      "columns": {
+        "agent": "상담원",
+        "status": "상태",
+        "load": "업무량",
+        "replies": "답장",
+        "resolved": "해결됨",
+        "avgReply": "평균 답장",
+        "lastSeen": "마지막 접속"
+      },
+      "statuses": {
+        "online": "온라인",
+        "away": "자리 비움",
+        "busy": "바쁨",
+        "offline": "오프라인"
+      }
     }
   }
 }
