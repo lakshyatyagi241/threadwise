@@ -29,6 +29,12 @@ import { CaptchaService } from '../security/captcha.service';
 import { PasswordService } from '../security/password.service';
 import { RateLimitService } from '../security/rate-limit.service';
 import { randomNumericCode, randomToken } from '../support/crypto-utils';
+import {
+  checkEmailDomain,
+  domainHasNoMailServer,
+  emailDomain,
+  EMAIL_POLICY_MESSAGES,
+} from '../support/email-policy';
 import { normalizeIp } from '../support/ip';
 import { AuthKeys, Ttl } from '../support/redis-keys';
 import { slugify, slugWithSuffix } from '../support/text';
@@ -149,6 +155,7 @@ export class SignupService {
       );
     }
     await this.captcha.assert(req.captchaToken, 'register');
+    await this.assertEmailAllowed(req.email, registration);
 
     const ip = normalizeIp(meta.ip) ?? 'unknown';
     if (
@@ -171,6 +178,15 @@ export class SignupService {
     // The real activation rule: enabled, a sender that can deliver and, for a WhatsApp Business
     // sender, an approved template. Otherwise sign-up silently skips the code (TW-AUTH-006).
     const otpActive = (await this.otp.statusFor(registration)).active;
+    if (!otpActive && registration.requirePhoneVerification) {
+      // Mandatory means fail closed: never create an account whose number was not verified.
+      this.logger.error('sign-up refused: phone verification is required but the code step is not active');
+      throw new AppError(
+        ERROR_CODES.AUTH_OTP_SEND_FAILED,
+        'Sign-up is temporarily unavailable. Please try again later.',
+        HttpStatus.SERVICE_UNAVAILABLE,
+      );
+    }
     if (!otpActive) {
       return this.create(
         {
@@ -616,6 +632,32 @@ export class SignupService {
       'Could not find a free workspace address. Try another name.',
       HttpStatus.CONFLICT,
     );
+  }
+
+  /**
+   * Work address only: refuses free mailbox providers, throwaway domains, operator-blocked domains
+   * and domains with no mail server. Used by password and social sign-up alike.
+   */
+  async assertEmailAllowed(
+    email: string,
+    registration: Awaited<ReturnType<SecurityPolicyService['registration']>>,
+  ): Promise<void> {
+    const verdict = checkEmailDomain(email, registration);
+    let reason = verdict.ok ? null : verdict.reason;
+    if (!reason && (registration.blockDisposableEmail || registration.businessEmailOnly)) {
+      const domain = emailDomain(email);
+      if (domain && (await domainHasNoMailServer(domain))) reason = 'no_mail_server';
+    }
+    if (!reason) return;
+    await this.audit.recordStandalone({
+      event: 'auth.signup',
+      status: 'failure',
+      actorType: 'anonymous',
+      payload: { reason: `email_${reason}`, domain: emailDomain(email) },
+    });
+    throw AppError.validation(EMAIL_POLICY_MESSAGES[reason], [
+      { path: 'email', message: EMAIL_POLICY_MESSAGES[reason] },
+    ]);
   }
 
   /** One guess made against a staged sign-up; returns how many have been made (this one included). */
