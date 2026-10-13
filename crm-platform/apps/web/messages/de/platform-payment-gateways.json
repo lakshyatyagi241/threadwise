@@ -434,7 +434,7 @@
           "gross": "Bruttoumsatz",
           "net": "Nettoumsatz",
           "netPct": "{pct} % netto",
-          "success": "Autorisierungserfolg",
+          "success": "Zahlungserfolgsquote",
           "failed": "Fehlgeschlagen",
           "events": "{count, plural, one {# Ereignis} other {# Ereignisse}}",
           "refunds": "Erstattungen",

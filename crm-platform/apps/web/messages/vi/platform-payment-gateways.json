@@ -434,7 +434,7 @@
           "gross": "Doanh thu gộp",
           "net": "Doanh thu ròng",
           "netPct": "{pct}% ròng",
-          "success": "Ủy quyền thành công",
+          "success": "Tỷ lệ thanh toán thành công",
           "failed": "Thất bại",
           "events": "{count, plural, other {# sự kiện}}",
           "refunds": "Hoàn tiền",

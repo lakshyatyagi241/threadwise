@@ -434,7 +434,7 @@
           "gross": "הכנסות ברוטו",
           "net": "הכנסות נטו",
           "netPct": "{pct}% נטו",
-          "success": "הצלחת אימות",
+          "success": "שיעור הצלחת תשלומים",
           "failed": "נכשל",
           "events": "{count, plural, one {אירוע #} two {שני אירועים} other {# אירועים}}",
           "refunds": "החזרים",

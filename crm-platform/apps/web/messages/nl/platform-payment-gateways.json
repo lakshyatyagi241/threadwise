@@ -434,7 +434,7 @@
           "gross": "Bruto omzet",
           "net": "Netto omzet",
           "netPct": "{pct}% netto",
-          "success": "Succes autorisaties",
+          "success": "Slagingspercentage betalingen",
           "failed": "Mislukt",
           "events": "{count, plural, one {# gebeurtenis} other {# gebeurtenissen}}",
           "refunds": "Terugbetalingen",

@@ -434,7 +434,7 @@
           "gross": "总收入",
           "net": "净收入",
           "netPct": "净额 {pct}%",
-          "success": "授权成功率",
+          "success": "支付成功率",
           "failed": "失败",
           "events": "{count, plural, other {# 个事件}}",
           "refunds": "退款",

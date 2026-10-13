@@ -434,7 +434,7 @@
           "gross": "Brüt gelir",
           "net": "Net gelir",
           "netPct": "%{pct} net",
-          "success": "Yetkilendirme başarısı",
+          "success": "Ödeme başarı oranı",
           "failed": "Başarısız",
           "events": "{count, plural, other {# olay}}",
           "refunds": "İadeler",

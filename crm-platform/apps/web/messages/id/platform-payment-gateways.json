@@ -434,7 +434,7 @@
           "gross": "Pendapatan kotor",
           "net": "Pendapatan bersih",
           "netPct": "{pct}% bersih",
-          "success": "Keberhasilan otorisasi",
+          "success": "Tingkat keberhasilan pembayaran",
           "failed": "Gagal",
           "events": "{count, plural, other {# peristiwa}}",
           "refunds": "Pengembalian dana",

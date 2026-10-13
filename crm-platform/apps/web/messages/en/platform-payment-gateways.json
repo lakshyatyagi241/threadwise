@@ -434,7 +434,7 @@
           "gross": "Gross revenue",
           "net": "Net revenue",
           "netPct": "{pct}% net",
-          "success": "Auth success",
+          "success": "Payment success rate",
           "failed": "Failed",
           "events": "{count, plural, one {# event} other {# events}}",
           "refunds": "Refunds",

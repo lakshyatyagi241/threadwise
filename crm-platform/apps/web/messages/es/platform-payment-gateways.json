@@ -434,7 +434,7 @@
           "gross": "Ingresos brutos",
           "net": "Ingresos netos",
           "netPct": "{pct} % neto",
-          "success": "Autorizaciones exitosas",
+          "success": "Tasa de pagos exitosos",
           "failed": "Fallidas",
           "events": "{count, plural, one {# evento} other {# eventos}}",
           "refunds": "Reembolsos",

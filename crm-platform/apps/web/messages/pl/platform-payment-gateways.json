@@ -434,7 +434,7 @@
           "gross": "Przychód brutto",
           "net": "Przychód netto",
           "netPct": "{pct}% netto",
-          "success": "Skuteczność autoryzacji",
+          "success": "Odsetek udanych płatności",
           "failed": "Nieudane",
           "events": "{count, plural, one {# zdarzenie} few {# zdarzenia} many {# zdarzeń} other {# zdarzenia}}",
           "refunds": "Zwroty",

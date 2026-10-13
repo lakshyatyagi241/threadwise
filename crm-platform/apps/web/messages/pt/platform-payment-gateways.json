@@ -434,7 +434,7 @@
           "gross": "Receita bruta",
           "net": "Receita líquida",
           "netPct": "{pct}% líquido",
-          "success": "Sucesso na autorização",
+          "success": "Taxa de sucesso dos pagamentos",
           "failed": "Falhou",
           "events": "{count, plural, one {# evento} other {# eventos}}",
           "refunds": "Reembolsos",

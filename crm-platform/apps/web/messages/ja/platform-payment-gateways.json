@@ -434,7 +434,7 @@
           "gross": "総売上",
           "net": "純売上",
           "netPct": "純額{pct}%",
-          "success": "認証成功率",
+          "success": "支払い成功率",
           "failed": "失敗",
           "events": "{count}件のイベント",
           "refunds": "返金",

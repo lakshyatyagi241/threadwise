@@ -434,7 +434,7 @@
           "gross": "सकल राजस्व",
           "net": "शुद्ध राजस्व",
           "netPct": "{pct}% शुद्ध",
-          "success": "प्रमाणीकरण सफलता",
+          "success": "भुगतान सफलता दर",
           "failed": "विफल",
           "events": "{count, plural, one {# घटना} other {# घटनाएँ}}",
           "refunds": "रिफ़ंड",

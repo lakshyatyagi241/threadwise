@@ -434,7 +434,7 @@
           "gross": "মোট আয়",
           "net": "নেট আয়",
           "netPct": "{pct}% নেট",
-          "success": "অনুমোদন সফলতা",
+          "success": "পেমেন্ট সফলতার হার",
           "failed": "ব্যর্থ",
           "events": "{count, plural, one {# টি ইভেন্ট} other {# টি ইভেন্ট}}",
           "refunds": "রিফান্ড",

@@ -434,7 +434,7 @@
           "gross": "Ricavi lordi",
           "net": "Ricavi netti",
           "netPct": "{pct}% netto",
-          "success": "Autorizzazioni riuscite",
+          "success": "Tasso di successo dei pagamenti",
           "failed": "Non riuscite",
           "events": "{count, plural, one {# evento} other {# eventi}}",
           "refunds": "Rimborsi",

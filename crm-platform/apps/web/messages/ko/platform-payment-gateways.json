@@ -434,7 +434,7 @@
           "gross": "총매출",
           "net": "순매출",
           "netPct": "순 {pct}%",
-          "success": "승인 성공",
+          "success": "결제 성공률",
           "failed": "실패",
           "events": "{count, plural, other {이벤트 #건}}",
           "refunds": "환불",
