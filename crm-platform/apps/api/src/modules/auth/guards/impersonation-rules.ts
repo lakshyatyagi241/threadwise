@@ -35,6 +35,10 @@ export const IMPERSONATION_FORBIDDEN: readonly ForbiddenRule[] = [
   { method: 'DELETE', path: /^account$/, why: 'deleting the owner account' },
   { path: /^developer\/keys(\/|$)/, why: 'workspace API keys' },
   { path: /^ai\/provider-keys(\/|$)/, why: "the workspace's own third-party provider keys" },
+  {
+    path: /(^|\/)(exports?|downloads?)(\/|$)/,
+    why: 'exporting or downloading workspace data (personal data is masked in an act-as session)',
+  },
   { path: /^auth\/workspaces\/switch$/, why: 'opening a session in another workspace' },
 ];
 
