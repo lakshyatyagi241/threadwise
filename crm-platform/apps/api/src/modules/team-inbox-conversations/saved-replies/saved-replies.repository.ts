@@ -74,6 +74,62 @@ export class SavedRepliesRepository {
     };
   }
 
+  /** Every shared reply, oldest first, for the CSV export (personal replies are people's own and never leave this way). */
+  async listShared(tx: Tx, orgId: number, limit: number): Promise<SavedReplyRow[]> {
+    const res = await tx.execute(sql`
+      SELECT r.shortcut, r.title, r.body, r.category, r.language, r.channel_kinds
+      FROM saved_replies r WHERE r.org_id = ${orgId} AND r.user_id IS NULL
+      ORDER BY r.id LIMIT ${limit}`);
+    return rowsOf(res);
+  }
+
+  /** The shared replies used most (never personal ones), for other domains that read the library. */
+  async topShared(
+    tx: Tx,
+    orgId: number,
+    limit: number,
+  ): Promise<Array<{ title: string; body: string; usedCount: number }>> {
+    const res = await tx.execute(sql`
+      SELECT title, body, used_count FROM saved_replies
+      WHERE org_id = ${orgId} AND user_id IS NULL
+      ORDER BY used_count DESC, id LIMIT ${limit}`);
+    return rowsOf(res).map((r) => ({
+      title: r.title as string,
+      body: r.body as string,
+      usedCount: Number(r.used_count),
+    }));
+  }
+
+  /** The shared replies that already use any of these shortcuts, locked for the import's writes. */
+  async sharedByShortcuts(
+    tx: Tx,
+    orgId: number,
+    shortcuts: readonly string[],
+  ): Promise<Map<string, { id: number; uuid: string; rowVersion: number }>> {
+    const out = new Map<string, { id: number; uuid: string; rowVersion: number }>();
+    if (shortcuts.length === 0) return out;
+    const res = await tx.execute(sql`
+      SELECT id, uuid, shortcut, row_version FROM saved_replies
+      WHERE org_id = ${orgId} AND user_id IS NULL AND shortcut = ANY(${textArray(shortcuts)})
+      FOR UPDATE`);
+    for (const r of rowsOf(res)) {
+      out.set(r.shortcut as string, {
+        id: Number(r.id),
+        uuid: r.uuid as string,
+        rowVersion: Number(r.row_version),
+      });
+    }
+    return out;
+  }
+
+  /** Every reply of the workspace, personal ones included: what the plan counts. */
+  async total(tx: Tx, orgId: number): Promise<number> {
+    const res = await tx.execute(
+      sql`SELECT count(*)::int AS n FROM saved_replies WHERE org_id = ${orgId}`,
+    );
+    return Number(rowsOf(res)[0]!.n);
+  }
+
   /** The tab counts, the category filter and the plan's total, in two reads. */
   async summary(
     tx: Tx,

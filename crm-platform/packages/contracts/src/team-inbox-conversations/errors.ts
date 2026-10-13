@@ -24,4 +24,6 @@ export const INBOX_ERROR_CODES = {
   SAVED_REPLY_NOT_EDITABLE: 'SAVED_REPLY_NOT_EDITABLE',
   /** The reply is restricted to other channel kinds than the conversation's (the picker does not offer it there). */
   SAVED_REPLY_CHANNEL_MISMATCH: 'SAVED_REPLY_CHANNEL_MISMATCH',
+  /** The import file cannot be read as saved replies (no file, not text, no shortcut / title / body column, too many rows). 422. */
+  SAVED_REPLY_IMPORT_INVALID: 'SAVED_REPLY_IMPORT_INVALID',
 } as const;

@@ -8,6 +8,7 @@ export {
   PERM as INBOX_PERMISSION,
   conversationNotFound,
 } from './inbox-access.service';
+export { SharedSavedRepliesReader } from './saved-replies/shared-saved-replies.reader';
 export { InboxConversationsService } from './inbox-conversations.service';
 export { InboxRealtimePublisher } from './inbox-realtime.publisher';
 export {
