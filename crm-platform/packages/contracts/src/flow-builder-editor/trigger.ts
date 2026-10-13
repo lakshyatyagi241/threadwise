@@ -96,6 +96,7 @@ export function flbExtractTrigger(graph: Pick<FlowGraph, 'flowNodes'>): FlbTrigg
     case 'out_of_hours':
     case 'comment_to_dm':
     case 'segment_join':
+    case 'segment_leave':
     case 'contact_updated':
     case 'field_match':
     case 'date_field_match':

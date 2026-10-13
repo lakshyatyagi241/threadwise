@@ -339,6 +339,16 @@
         "label": "Zgody i odpowiedzi STOP",
         "description": "Wybierz słowa STOP i START, odpowiedzi potwierdzające, linijkę rezygnacji oraz to, czy marketing wymaga zapisanej zgody.",
         "keywords": "zgoda, wypisanie, ponowny zapis, rezygnacja, stop, start, rodo, zgodność, prywatność, marketing"
+      },
+      "inbox-labels": {
+        "label": "Etykiety",
+        "description": "Twórz etykiety, którymi zespół oznacza rozmowy i filtruje skrzynkę.",
+        "keywords": "tagi, etykiety, kategorie, porządkuj, filtr"
+      },
+      "growth": {
+        "label": "Wzrost",
+        "description": "Gorące leady, odbiorcy, odpowiedzi na kampanie i inne sprawy, na które zespół może zareagować, ustalone na podstawie rozmów i kampanii.",
+        "keywords": "wzrost, gorący lead, odbiorcy, zaangażowanie, nieaktywni, odpowiedzi na kampanie, skłonność do konwersji, rezygnacja, pilotaż"
       }
     },
     "backToMarketplace": "Wróć do Marketplace"

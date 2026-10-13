@@ -14,7 +14,9 @@
       "settingsInvalid": "Una parola chiave deve contenere almeno una lettera o una cifra e, finché il rilevamento è attivo, deve restare almeno una parola chiave STOP.",
       "rateLimited": "Troppe richieste. Attendi un momento e riprova.",
       "validation": "Alcuni valori non sono validi. Controlla il modulo e riprova.",
-      "unexpected": "Qualcosa è andato storto. Riprova."
+      "unexpected": "Qualcosa è andato storto. Riprova.",
+      "exportInProgress": "È già in preparazione un file di prova. Attendi che termini, poi riprova.",
+      "exportNotReady": "Il file non è pronto oppure è scaduto. Prepara un nuovo file."
     },
     "settings": {
       "title": "Consenso e risposte STOP",
@@ -169,7 +171,35 @@
     "import": {
       "legend": "Consenso",
       "label": "Ho il consenso per inviare messaggi a questi contatti",
-      "hint": "Se selezionata, tutti i contatti del file vengono registrati come consenzienti al marketing, con il nome del file come prova. Se non selezionata, l'importazione non registra alcun consenso. I contatti che hanno annullato l'iscrizione restano esclusi."
+      "hint": "Se selezionata, tutti i contatti del file vengono registrati come consenzienti al marketing, con il nome del file come prova. Se non selezionata, l'importazione non registra alcun consenso. I contatti che hanno annullato l'iscrizione restano esclusi.",
+      "hintColumn": "La colonna associata al consenso marketing decide chi viene registrato: solo le righe che dicono sì ottengono un consenso, con il nome del file come prova. Un no, una cella vuota o una parola sconosciuta non registrano nulla. I contatti che hanno annullato l'iscrizione restano disiscritti.",
+      "columnSummary": "{granted} righe dicono sì e verranno registrate. {notGranted} dicono no o sono vuote e non ricevono alcun registro di consenso.",
+      "unrecognised": "{count, plural, one {# riga contiene} other {# righe contengono}} un valore di consenso che non è sì né no ({values}). {count, plural, one {Viene trattato} other {Vengono trattati}} come non concesso. Usa yes / no, true / false o 1 / 0.",
+      "columnIgnored": "La colonna del consenso non ha effetto finché non selezioni la casella qui sopra."
+    },
+    "systemLine": {
+      "withdrawn": "Il contatto ha risposto {keyword}: disiscritto dal marketing",
+      "granted": "Il contatto ha risposto {keyword}: reiscritto al marketing"
+    },
+    "proof": {
+      "title": "File di prova preparati",
+      "prepare": "Prepara il file di prova completo",
+      "preparing": "Preparazione del file di prova",
+      "largeHint": "Il registro contiene più di {max} eventi, quindi il file viene preparato in background",
+      "large": "Il registro contiene più di {max} eventi, più di quanto un download diretto possa gestire. Prepara il file completo: viene generato in background e riceverai un'email quando sarà pronto.",
+      "none": "Nessun file preparato per ora.",
+      "keptFor": "Un file preparato può essere scaricato per {days} giorni, poi viene eliminato. Se ne prepara uno alla volta.",
+      "rows": "{count, plural, one {# evento} other {# eventi}}",
+      "expires": "disponibile fino al {date}",
+      "download": "Scarica CSV",
+      "failed": "Impossibile generare il file. Preparalo di nuovo.",
+      "status": {
+        "queued": "In attesa",
+        "running": "In generazione",
+        "ready": "Pronto",
+        "failed": "Non riuscito",
+        "expired": "Scaduto"
+      }
     }
   }
 }

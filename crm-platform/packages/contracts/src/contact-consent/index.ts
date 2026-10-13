@@ -3,3 +3,4 @@ export * from './errors';
 export * from './vocabulary';
 export * from './keywords';
 export * from './settings';
+export * from './exports';

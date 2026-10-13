@@ -519,7 +519,7 @@ describe('AUTHZ-068 method confusion on /api/v1', () => {
     expect(writes.length).toBeGreaterThan(20);
     for (const r of writes) {
       const real = fx[segmentOf(r)];
-      const values = real && r.objectIdParams.length ? { id: real } : {};
+      const values: Record<string, string> = real && r.objectIdParams.length ? { id: real } : {};
       const res = await call(r.method.toLowerCase() as Method, fill(r, values), {
         key: kScoped.secret,
       });

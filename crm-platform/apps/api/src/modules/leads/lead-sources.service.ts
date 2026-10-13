@@ -525,6 +525,9 @@ export class LeadSourcesService {
         bad.push({ path: 'defaults.deal.stageId', message: 'stage_not_in_pipeline' });
       }
     }
+    if (d.flowId && !(await this.repo.flowExists(tx, orgId, d.flowId))) {
+      bad.push({ path: 'defaults.flowId', message: 'unknown_flow' });
+    }
     if (d.lifecycleStage && !(await this.repo.stageUsable(tx, orgId, d.lifecycleStage))) {
       bad.push({ path: 'defaults.lifecycleStage', message: 'unknown_or_lost_stage' });
     }

@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import {
+  CONSENT_EXPORT_SYNC_MAX,
   ERROR_CODES,
   type ConsentAction,
   type ConsentChannel,
@@ -19,7 +20,13 @@ import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { ConsentRepository, type EventRow } from './consent.repository';
-import { CONSENT_CSV_HEADER, cleanEvidence, csvLine, flagAfter, transition } from './consent.rules';
+import {
+  CONSENT_CSV_HEADER,
+  cleanEvidence,
+  flagAfter,
+  proofCsvLine,
+  transition,
+} from './consent.rules';
 
 const MODULE_KEY = 'contact_consent';
 
@@ -295,29 +302,14 @@ export class ContactConsentService {
       const rows = await this.repo.listEvents(tx, orgId, { contactId, limit: EXPORT_MAX + 1 });
       const truncated = rows.length > EXPORT_MAX;
       const lines = [CONSENT_CSV_HEADER.join(',')];
-      for (const r of rows.slice(0, EXPORT_MAX)) {
-        lines.push(
-          csvLine([
-            r.contactUuid ?? '(erased)',
-            r.channel,
-            r.purpose,
-            r.action,
-            r.source,
-            r.occurredAt,
-            r.recordedAt,
-            r.actorName ?? '',
-            r.note ?? '',
-            JSON.stringify(r.evidence),
-          ]),
-        );
-      }
+      for (const r of rows.slice(0, EXPORT_MAX)) lines.push(proofCsvLine(r));
       return { csv: `${lines.join('\r\n')}\r\n`, truncated };
     });
   }
 }
 
-/** The most rows one synchronous export carries; a larger ledger is exported in slices by date (async export is a backlog item). */
-export const EXPORT_MAX = 50_000;
+/** The most rows one synchronous export carries; a larger ledger is exported by the asynchronous export (`ConsentExportService`). */
+export const EXPORT_MAX = CONSENT_EXPORT_SYNC_MAX;
 
 function toEvent(r: EventRow): ConsentEvent {
   return {

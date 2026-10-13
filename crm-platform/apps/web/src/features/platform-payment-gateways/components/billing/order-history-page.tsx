@@ -34,13 +34,16 @@ import {
   TableCard,
   TrendIcon,
   TwoToneTitle,
+  CustomRange,
   WindowSelect,
+  customRangeValid,
+  windowPatch,
   WorkspaceLink,
   rowTone,
 } from './parts';
 
 const NS = 'platform-payment-gateways.billing.orders';
-const DEFAULTS = { window: '90d', type: 'all', q: '' };
+const DEFAULTS = { window: '90d', from: '', to: '', type: 'all', q: '' };
 const TYPES: OrderTypeFilter[] = ['all', 'new', 'upgrade', 'downgrade', 'addon', 'cancel'];
 
 type Pending =
@@ -62,8 +65,12 @@ export function OrderHistoryPage() {
   const [note, setNote] = useState('');
   const [refund, setRefund] = useState<RefundTarget | null>(null);
 
+  // A half-filled or reversed custom range keeps the 90-day report on screen until the two days are right.
+  const custom = values.window === 'custom' && customRangeValid(values.from, values.to);
   const query = {
-    window: values.window as '90d' | 'this_year' | 'all',
+    window: (values.window === 'custom' && !custom ? '90d' : values.window) as
+      '90d' | 'this_year' | 'all' | 'custom',
+    ...(custom ? { from: values.from, to: values.to } : {}),
     type: values.type as OrderTypeFilter,
     q: values.q || undefined,
     page,
@@ -132,13 +139,24 @@ export function OrderHistoryPage() {
             <WindowSelect
               value={values.window}
               label={t('window')}
-              onChange={(v) => set({ window: v })}
+              onChange={(v) => set(windowPatch(v))}
               options={[
                 { value: '90d', label: t('windows.90d') },
                 { value: 'this_year', label: t('windows.this_year') },
                 { value: 'all', label: t('windows.all') },
+                { value: 'custom', label: t('windows.custom') },
               ]}
             />
+            {values.window === 'custom' && (
+              <CustomRange
+                from={values.from}
+                to={values.to}
+                onChange={(p) => set(p)}
+                fromLabel={tc('customFrom')}
+                toLabel={tc('customTo')}
+                invalidLabel={tc('customInvalid')}
+              />
+            )}
             <LinkPill href="/admin/order-history/analytics">
               <TrendIcon />
               {tc('analytics')}

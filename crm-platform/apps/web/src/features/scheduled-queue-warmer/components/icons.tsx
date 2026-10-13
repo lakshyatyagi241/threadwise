@@ -13,6 +13,7 @@ const PATHS = {
   retry: 'M3 8a5 5 0 0 1 8.5-3.5L13 6M13 8a5 5 0 0 1-8.5 3.5L3 10M13 3v3h-3M3 13v-3h3',
   next: 'M6 3l5 5-5 5',
   check: 'M3.5 8.5l3 3 6-7',
+  edit: 'M3 13l.7-3L11 2.7a1.4 1.4 0 0 1 2 2L5.7 12 3 13zM9.5 4.2l2.3 2.3',
 } as const;
 
 export type IconName = keyof typeof PATHS;

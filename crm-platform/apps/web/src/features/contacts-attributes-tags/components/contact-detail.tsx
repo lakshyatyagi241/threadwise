@@ -13,6 +13,7 @@ import { LinkedAppointments } from '@/features/appointments';
 import { ContactAttributionCard } from '@/features/lead-sources';
 import { CompanyLink } from '@/features/companies';
 import { ConsentCard } from '@/features/contact-consent';
+import { ContactGrowthCard } from '@/features/growth';
 import { ChatInsightCard, ScoreCard } from '@/features/lead-scoring';
 import { LinkedSalesDocs } from '@/features/sales-docs';
 import { LinkedInvoices } from '@/features/invoicing';
@@ -286,6 +287,8 @@ export function ContactDetail({ id }: { id: string }) {
             ])
           }
         />
+        {/* Only present in a workspace that is in the growth pilot with the conversion model or enrichment on. */}
+        <ContactGrowthCard contactId={id} className="col-span-2" />
         <StatTile label={t('lastActivity')} value={<DateText value={c.lastActivityAt} />} />
         <StatTile label={t('created')} value={<DateText value={c.createdAt} />} />
       </div>

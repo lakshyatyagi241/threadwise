@@ -13,6 +13,7 @@ import { ChannelWebhooksController } from './channel-webhooks.controller';
 import { ChannelWebhooksService } from './channel-webhooks.service';
 import { ChatRealtimePublisher } from './chat-realtime.publisher';
 import { DeviceGroupThreadTitleService } from './device-group-thread-title.service';
+import { CloudGroupThreadReader } from './cloud-group-thread.reader';
 import { PersonalGroupThreadReader } from './personal-group-thread.reader';
 import { WabaGroupThreadTitleService } from './waba-group-thread-title.service';
 import { ConversationLifecycleService } from './conversation-lifecycle.service';
@@ -86,6 +87,7 @@ import { WabaChannelLinkService } from './waba-channel-link.service';
     WabaGroupThreadTitleService,
     DeviceGroupThreadTitleService,
     PersonalGroupThreadReader,
+    CloudGroupThreadReader,
     SimulatorService,
     ChannelsFacade,
     ConversationsRepository,
@@ -131,6 +133,8 @@ import { WabaChannelLinkService } from './waba-channel-link.service';
     DeviceGroupThreadTitleService,
     // The inbox's read of a personal-number group thread: send state and the @mention members.
     PersonalGroupThreadReader,
+    // The inbox's read of a Cloud API group thread: whether the composer may be on, the member count and the cost estimate.
+    CloudGroupThreadReader,
     // Where the flow runtime (and any later reader of inbound traffic) listens.
     InboundMessageHooks,
     // The pipelines the workers drive.

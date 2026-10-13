@@ -3,7 +3,8 @@
     "nav": {
       "title": "Panggilan",
       "description": "Aktifkan atau nonaktifkan panggilan WhatsApp untuk setiap nomor.",
-      "keywords": "panggilan, telepon, suara, whatsapp calling, tombol panggil"
+      "keywords": "panggilan, telepon, suara, whatsapp calling, tombol panggil",
+      "callLogs": "Log panggilan"
     },
     "common": {
       "dismiss": "Tutup"
@@ -86,7 +87,9 @@
       "FORBIDDEN": "Anda tidak memiliki izin untuk menggunakan panggilan.",
       "PLAN_FEATURE_LOCKED": "Paket Anda tidak mencakup panggilan WhatsApp.",
       "NETWORK": "Kesalahan jaringan - silakan coba lagi.",
-      "UNEXPECTED": "Terjadi kesalahan. Silakan coba lagi."
+      "UNEXPECTED": "Terjadi kesalahan. Silakan coba lagi.",
+      "CALL_PLAYBACK_LINK_INVALID": "Tautan rekaman ini sudah kedaluwarsa. Tekan putar lagi untuk mendapatkan tautan baru.",
+      "CALL_RANGE_INVALID": "Tanggal ini tidak valid: awal tidak boleh setelah akhir, rentang maksimal satu tahun, dan zona waktu harus valid."
     },
     "settings": {
       "title": "Panggilan",

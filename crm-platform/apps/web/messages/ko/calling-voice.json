@@ -3,7 +3,8 @@
     "nav": {
       "title": "통화",
       "description": "번호별로 WhatsApp 통화를 켜거나 끕니다.",
-      "keywords": "통화, 전화, 음성, 폰, whatsapp 통화, 통화 버튼"
+      "keywords": "통화, 전화, 음성, 폰, whatsapp 통화, 통화 버튼",
+      "callLogs": "통화 기록"
     },
     "common": {
       "dismiss": "닫기"
@@ -86,7 +87,9 @@
       "FORBIDDEN": "통화 기능을 사용할 권한이 없습니다.",
       "PLAN_FEATURE_LOCKED": "현재 플랜에는 WhatsApp 통화가 포함되어 있지 않습니다.",
       "NETWORK": "네트워크 오류 - 다시 시도하세요.",
-      "UNEXPECTED": "문제가 발생했습니다. 다시 시도하세요."
+      "UNEXPECTED": "문제가 발생했습니다. 다시 시도하세요.",
+      "CALL_PLAYBACK_LINK_INVALID": "이 녹음 링크가 만료되었습니다. 재생을 다시 눌러 새 링크를 받으세요.",
+      "CALL_RANGE_INVALID": "날짜가 올바르지 않습니다. 시작일은 종료일보다 늦을 수 없고, 기간은 최대 1년이며, 시간대는 실제 존재하는 것이어야 합니다."
     },
     "settings": {
       "title": "통화",

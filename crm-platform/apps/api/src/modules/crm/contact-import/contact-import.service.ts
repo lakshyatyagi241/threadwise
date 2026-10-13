@@ -174,6 +174,29 @@ export function analyzeCsv(text: string, options: ContactImportOptions): Analysi
   };
 }
 
+/** The consent column's yes / no / unknown counts for the preview; null when no column is mapped. */
+export function consentSummary(
+  a: Pick<Analysis, 'mapping' | 'valid'>,
+): ContactImportPreview['consent'] {
+  if (a.mapping.consent === undefined) return null;
+  let granted = 0;
+  let unrecognised = 0;
+  const samples = new Set<string>();
+  for (const r of a.valid) {
+    if (r.consent === 'granted') granted += 1;
+    else if (r.consent === 'unrecognised') {
+      unrecognised += 1;
+      if (r.consentRaw && samples.size < 5) samples.add(r.consentRaw);
+    }
+  }
+  return {
+    granted,
+    notGranted: a.valid.length - granted - unrecognised,
+    unrecognised,
+    unrecognisedSamples: [...samples],
+  };
+}
+
 const lower = (s: string) => s.toLowerCase();
 
 /**
@@ -220,6 +243,7 @@ export class ContactImportService {
 
       const mapping: Record<string, number | null> = {};
       for (const f of IMPORT_FIELDS) mapping[f] = a.mapping[f] ?? null;
+      const consent = consentSummary(a);
       return {
         fileName: upload.name,
         delimiter: a.delimiter,
@@ -237,6 +261,7 @@ export class ContactImportService {
           willUpdate,
         },
         invalidSamples: a.invalid,
+        consent,
         newGroups: newGroups.slice(0, NAME_LIST_MAX),
         newTags: newTags.slice(0, NAME_LIST_MAX),
         quota: usage,

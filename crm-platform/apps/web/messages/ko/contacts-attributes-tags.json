@@ -121,6 +121,12 @@
       "selectedActionsNone": "선택한 연락처(먼저 행을 선택하세요)",
       "modifyColumns": "열 수정",
       "resetColumns": "기본값으로 초기화",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "연락처 이름",
       "colPhone": "전화번호",
       "colEmailId": "이메일 ID",
@@ -181,7 +187,9 @@
       "ownersCount": "담당자 {count}명",
       "ownerMe": "{name}(나)",
       "ownerFormer": "이전 멤버",
-      "reassignView": "{name}의 연락처 재배정..."
+      "reassignView": "{name}의 연락처 재배정...",
+      "smsNamed": "{name}에게 SMS 보내기",
+      "noSms": "SMS를 보낼 전화번호가 없습니다"
     },
     "bulk": {
       "label": "선택한 연락처에 대한 작업",
@@ -422,7 +430,8 @@
         "address": "주소",
         "memo": "메모",
         "status": "상태",
-        "source": "출처"
+        "source": "출처",
+        "consent": "마케팅 동의(예 / 아니요)"
       },
       "notInFile": "파일에 없음",
       "columnN": "열 {n}",
@@ -1204,7 +1213,7 @@
       },
       "exports": {
         "title": "내보내기",
-        "hint": "허브에서 내보낸 연락처가 최신순으로 표시됩니다. 다운로드한 파일은 보관되지 않습니다.",
+        "hint": "허브의 연락처 내보내기 기록(최신순). 각 파일은 30일간 보관되어 본인과 내보내기 권한이 있는 팀원이 다시 내려받을 수 있습니다.",
         "empty": "내보내기 기록이 없습니다.",
         "by": "실행자",
         "rows": "연락처",
@@ -1213,7 +1222,153 @@
         "selections": {
           "ids": "선택한 연락처",
           "filter": "조건에 맞는 모든 연락처"
-        }
+        },
+        "download": "다운로드",
+        "noFile": "저장 안 됨",
+        "keptUntil": "{date}까지 보관",
+        "downloadFailed": "파일을 다운로드할 수 없습니다. 만료되었을 수 있습니다."
+      }
+    },
+    "singleSend": {
+      "close": "닫기",
+      "cancel": "취소",
+      "send": "보내기",
+      "sending": "보내는 중",
+      "contact": "연락처",
+      "name": "이름",
+      "phone": "휴대전화",
+      "email": "이메일",
+      "title": {
+        "whatsapp": "WhatsApp 메시지 보내기",
+        "sms": "SMS 보내기",
+        "email": "이메일 보내기",
+        "call": "전화"
+      },
+      "optedOut": "이 연락처는 수신을 거부했습니다. 메시지를 보낼 수 없습니다.",
+      "noPhone": "이 연락처에는 전화번호가 없습니다.",
+      "noEmail": "이 연락처에는 이메일 주소가 없습니다.",
+      "number": "보내는 번호",
+      "numberHint": "메시지를 발송할 WhatsApp 번호입니다.",
+      "noChannel": "연결된 WhatsApp 번호가 없습니다. 먼저 채널에서 번호를 연결하세요.",
+      "template": "WhatsApp 템플릿",
+      "templatePlaceholder": "템플릿 선택",
+      "noTemplates": "이 번호에 승인된 템플릿이 없습니다.",
+      "notSendable": "이 템플릿은 여기에서 채울 수 없습니다 ({reason}).",
+      "variables": "템플릿 변수",
+      "preview": "미리보기",
+      "slot": "변수 {key}",
+      "loading": "로딩 중",
+      "openFailed": "대화를 열 수 없습니다: {message}",
+      "sent": "{name}님에게 보낼 메시지가 대기열에 추가되었습니다.",
+      "failed": "보낼 수 없습니다: {message}",
+      "callIntro": "브라우저에서 이 연락처에게 WhatsApp 전화를 겁니다.",
+      "callOff": "이 WhatsApp 번호는 전화 기능이 꺼져 있습니다. 번호 설정에서 켜세요.",
+      "callPermission": "연락처가 아직 전화를 허용하지 않았습니다. 전화를 걸면 먼저 상대방에게 허락을 요청합니다.",
+      "callReady": "{phone}에 전화할 준비가 되었습니다.",
+      "later": {
+        "sms": "CRM에서 SMS 보내기는 아직 사용할 수 없습니다.",
+        "email": "CRM에서 이메일 보내기는 아직 사용할 수 없습니다."
+      },
+      "openApp": {
+        "sms": "메시지 앱에서 열기",
+        "email": "메일 앱에서 열기"
+      }
+    },
+    "views": {
+      "label": "보기",
+      "all": "모든 연락처",
+      "add": "보기 추가",
+      "changed": "이 보기를 저장한 후 필터가 변경되었습니다",
+      "more": "{name} 더보기",
+      "picker": {
+        "title": "보기 선택",
+        "create": "새 보기 만들기",
+        "search": "보기 검색...",
+        "chipAll": "전체",
+        "chipPinned": "탭에 표시",
+        "chipShared": "공유됨",
+        "empty": "보기를 찾을 수 없습니다",
+        "pinned": "탭에 표시"
+      },
+      "menu": {
+        "rename": "보기 이름 바꾸기",
+        "update": "현재 필터 저장",
+        "unpin": "탭에서 제거",
+        "pin": "탭으로 표시",
+        "delete": "보기 삭제",
+        "edit": "보기 편집"
+      },
+      "drawer": {
+        "editTitle": "보기 이름 바꾸기",
+        "name": "보기 이름",
+        "namePlaceholder": "제목 없는 보기",
+        "shareWith": "공유 대상",
+        "justMe": "나만",
+        "everyone": "모든 사람",
+        "save": "업데이트",
+        "cancel": "취소",
+        "close": "닫기"
+      },
+      "toast": {
+        "created": "\"{name}\" 보기를 만들었습니다.",
+        "updated": "보기를 업데이트했습니다.",
+        "filtersSaved": "필터를 \"{name}\"에 저장했습니다.",
+        "deleted": "\"{name}\" 보기를 삭제했습니다.",
+        "failed": "보기를 저장할 수 없습니다: {message}",
+        "conflict": "다른 사용자가 이 보기를 변경했습니다. 새로고침한 후 다시 시도하세요."
+      },
+      "delete": {
+        "title": "이 보기를 삭제하시겠습니까?",
+        "message": "\"{name}\" 보기는 공유된 모든 사용자에게서 삭제됩니다. 연락처는 변경되지 않습니다.",
+        "confirm": "보기 삭제",
+        "cancel": "보기 유지"
+      },
+      "editor": {
+        "title": {
+          "create": "새 보기 만들기",
+          "edit": "보기 편집"
+        },
+        "close": "닫기",
+        "back": "연락처로 돌아가기",
+        "name": "보기 이름",
+        "namePlaceholder": "보기 이름 입력",
+        "favorite": "즐겨찾기로 표시",
+        "favoriteHint": "즐겨찾기 보기는 별도의 탭으로 표시됩니다.",
+        "shareWith": "공유 대상",
+        "justMe": "나만",
+        "everyone": "모든 사람",
+        "filterTitle": "연락처 필터",
+        "filterHint": "모든 조건 또는 일부 조건과 일치시키고, 그룹을 추가해 더 복잡한 필터를 만들 수 있습니다.",
+        "columnsTitle": "열 환경설정",
+        "locked": "항상 표시",
+        "cancel": "취소",
+        "create": "보기 만들기",
+        "save": "보기 저장",
+        "saving": "저장 중",
+        "needName": "보기 이름을 입력하세요.",
+        "needFilter": "완전한 조건을 하나 이상 추가하세요.",
+        "notFound": "이 보기를 찾을 수 없거나 삭제되었습니다.",
+        "noPermission": "이 작업을 수행할 권한이 없습니다.",
+        "loading": "로딩 중",
+        "columnsHint": "이 보기에 표시할 열을 검색해 선택한 다음, 선택한 열을 끌어 순서를 정하세요.",
+        "drag": "끌어서 {name} 순서 변경",
+        "selectedUsers": "선택한 사용자",
+        "accessLevel": "접근 수준",
+        "canView": "볼 수 있음",
+        "canEdit": "보고 편집할 수 있음",
+        "peoplePlaceholder": "사용자 검색",
+        "noPeople": "사용자를 찾을 수 없습니다",
+        "removePerson": "{name} 제거",
+        "clearPeople": "모든 사용자 지우기",
+        "needPeople": "한 명 이상을 선택하세요.",
+        "onlyCreator": "이 보기를 만든 사람만 공유 대상을 변경할 수 있습니다.",
+        "searchColumns": "열 검색",
+        "noColumnMatch": "일치하는 열이 없습니다.",
+        "available": "사용 가능한 열",
+        "selected": "선택한 열",
+        "selectAll": "모두 선택",
+        "reorder": "끌어서 열 순서 변경",
+        "remove": "{name} 제거"
       }
     }
   }

@@ -14,7 +14,9 @@
       "settingsInvalid": "Una palabra clave necesita al menos una letra o un dígito, y debe quedar al menos una palabra clave STOP mientras la detección esté activada.",
       "rateLimited": "Demasiadas solicitudes. Espera un momento e inténtalo de nuevo.",
       "validation": "Algunos valores no son válidos. Revisa el formulario e inténtalo de nuevo.",
-      "unexpected": "Algo salió mal. Inténtalo de nuevo."
+      "unexpected": "Algo salió mal. Inténtalo de nuevo.",
+      "exportInProgress": "Ya se está preparando un archivo de prueba. Espera a que termine y vuelve a intentarlo.",
+      "exportNotReady": "Ese archivo no está listo o ha caducado. Prepara uno nuevo."
     },
     "settings": {
       "title": "Consentimiento y respuestas STOP",
@@ -169,7 +171,35 @@
     "import": {
       "legend": "Consentimiento",
       "label": "Tengo consentimiento para enviar mensajes a estos contactos",
-      "hint": "Si se marca, todos los contactos del archivo quedan registrados como que aceptaron recibir marketing, con el nombre del archivo como prueba. Si no se marca, la importación no registra ningún consentimiento. Los contactos que se dieron de baja siguen dados de baja."
+      "hint": "Si se marca, todos los contactos del archivo quedan registrados como que aceptaron recibir marketing, con el nombre del archivo como prueba. Si no se marca, la importación no registra ningún consentimiento. Los contactos que se dieron de baja siguen dados de baja.",
+      "hintColumn": "La columna asignada al consentimiento de marketing decide quién se registra: solo las filas que dicen sí obtienen un consentimiento, con el nombre del archivo como prueba. Un no, una celda vacía o una palabra desconocida no registran nada. Los contactos que se dieron de baja siguen dados de baja.",
+      "columnSummary": "{granted} filas dicen sí y se registrarán. {notGranted} dicen no o están vacías y no reciben ningún registro de consentimiento.",
+      "unrecognised": "{count, plural, one {# fila tiene} other {# filas tienen}} un valor de consentimiento que no es sí ni no ({values}). {count, plural, one {Se trata} other {Se tratan}} como no concedido. Usa yes / no, true / false o 1 / 0.",
+      "columnIgnored": "La columna de consentimiento no hace nada hasta que marques la casilla de arriba."
+    },
+    "systemLine": {
+      "withdrawn": "El contacto respondió {keyword}: se dio de baja del marketing",
+      "granted": "El contacto respondió {keyword}: volvió a suscribirse al marketing"
+    },
+    "proof": {
+      "title": "Archivos de prueba preparados",
+      "prepare": "Preparar el archivo de prueba completo",
+      "preparing": "Preparando el archivo de prueba",
+      "largeHint": "El registro tiene más de {max} eventos, así que el archivo se prepara en segundo plano",
+      "large": "El registro tiene más de {max} eventos, más de lo que admite una descarga directa. Prepara el archivo completo: se genera en segundo plano y recibirás un correo cuando esté listo.",
+      "none": "Todavía no hay archivos preparados.",
+      "keptFor": "Un archivo preparado se puede descargar durante {days} días y después se elimina. Solo se prepara un archivo a la vez.",
+      "rows": "{count, plural, one {# evento} other {# eventos}}",
+      "expires": "disponible hasta {date}",
+      "download": "Descargar CSV",
+      "failed": "No se pudo generar el archivo. Vuelve a prepararlo.",
+      "status": {
+        "queued": "En espera",
+        "running": "Generando",
+        "ready": "Listo",
+        "failed": "Fallido",
+        "expired": "Caducado"
+      }
     }
   }
 }

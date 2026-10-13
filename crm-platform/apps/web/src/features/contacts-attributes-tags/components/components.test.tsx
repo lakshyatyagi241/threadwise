@@ -541,8 +541,8 @@ describe('ContactsToolbar', () => {
           onGroup={async () => true}
           onTagApply={async () => true}
           allColumns={allColumns([])}
-          visibleIds={new Set<ColumnId>(['name'])}
-          onColumn={noop}
+          columnIds={['name'] as ColumnId[]}
+          onApplyColumns={noop}
           onResetColumns={noop}
           view="list"
           onView={noop}

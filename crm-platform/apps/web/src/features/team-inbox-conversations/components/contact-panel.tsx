@@ -176,7 +176,18 @@ function LeadScoreSection({
   const refresh = () => qc.invalidateQueries({ queryKey: KEYS.conversation(detail.id) });
   return (
     <div className="space-y-3" data-testid="inbox-lead-score">
-      <ScoreCard contactId={contactId} contact={summary} onScored={refresh} />
+      <ScoreCard
+        contactId={contactId}
+        contact={{
+          ...summary,
+          // The wire type is a plain string; the card knows the two sources.
+          leadScoreSource:
+            summary.leadScoreSource === 'manual' || summary.leadScoreSource === 'ai'
+              ? summary.leadScoreSource
+              : null,
+        }}
+        onScored={refresh}
+      />
       <ChatInsightCard contactId={contactId} onChanged={refresh} />
     </div>
   );

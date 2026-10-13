@@ -7,6 +7,7 @@ export const KEYS = {
   all: ['contact-consent'] as const,
   settings: ['contact-consent', 'settings'] as const,
   composer: ['contact-consent', 'composer'] as const,
+  exports: ['contact-consent', 'exports'] as const,
   contact: (id: string) => ['contact-consent', 'contact', id] as const,
 };
 
@@ -28,6 +29,21 @@ export function useComposerConsent(enabled = true) {
     retry: false,
     staleTime: 60_000,
     queryFn: ({ signal }) => consentApi.composerConfig(signal),
+  });
+}
+
+/** The prepared proof exports and whether the ledger is too large for the direct download. Polls while one is being built. */
+export function useConsentExports(enabled: boolean) {
+  return useQuery({
+    queryKey: KEYS.exports,
+    enabled,
+    retry: false,
+    staleTime: 5_000,
+    queryFn: ({ signal }) => consentApi.exports(signal),
+    refetchInterval: (q) =>
+      q.state.data?.data.some((e) => e.status === 'queued' || e.status === 'running')
+        ? 5_000
+        : false,
   });
 }
 

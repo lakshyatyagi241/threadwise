@@ -55,7 +55,7 @@ export function SalesChart({
       <div className="overflow-x-auto">
         <svg
           viewBox={`0 0 ${BOX.width} ${BOX.height}`}
-          className="h-auto w-full min-w-[560px]"
+          className="mx-auto h-auto max-h-72 w-full min-w-[560px]"
           role="img"
           aria-label={t('chartLabel')}
           onPointerLeave={() => setActive(null)}

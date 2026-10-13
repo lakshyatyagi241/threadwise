@@ -114,10 +114,13 @@ export function SubmissionsScreen({ formId }: { formId: string }) {
   const opener = useRef<HTMLElement | null>(null);
   // A notification links here with `?submission=<id>`: open that submission, even when it is not in the first page of the list (a
   // detail carries everything a list row does, so it stands in for the row).
+  // Adjusted while rendering, when the link changes, rather than in an effect (which would render the stale state first).
   const linked = params.get('submission');
-  useEffect(() => {
+  const [seenLink, setSeenLink] = useState<string | null>(null);
+  if (linked !== seenLink) {
+    setSeenLink(linked);
     if (linked && UUID_PARAM.test(linked)) setOpenId(linked);
-  }, [linked]);
+  }
   const listed = openId ? (rows.find((r) => r.id === openId) ?? null) : null;
   const fetched = useSubmission(formId, openId && !listed ? openId : null);
   const open = listed ?? (openId ? (fetched.data ?? null) : null);

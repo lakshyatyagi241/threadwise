@@ -121,6 +121,12 @@
       "selectedActionsNone": "אנשי קשר שנבחרו (בחר שורות תחילה)",
       "modifyColumns": "שנה עמודות",
       "resetColumns": "אפס לברירת מחדל",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "שם איש קשר",
       "colPhone": "מספר טלפון",
       "colEmailId": "כתובת אימייל",
@@ -181,7 +187,9 @@
       "ownersCount": "{count} בעלים",
       "ownerMe": "{name} (אני)",
       "ownerFormer": "חבר לשעבר",
-      "reassignView": "הקצה מחדש את אנשי הקשר של {name}..."
+      "reassignView": "הקצה מחדש את אנשי הקשר של {name}...",
+      "smsNamed": "SMS ל-{name}",
+      "noSms": "אין מספר טלפון ל-SMS"
     },
     "bulk": {
       "label": "פעולות עבור אנשי הקשר שנבחרו",
@@ -422,7 +430,8 @@
         "address": "כתובת",
         "memo": "תזכיר",
         "status": "סטטוס",
-        "source": "מקור"
+        "source": "מקור",
+        "consent": "הסכמה לשיווק (כן / לא)"
       },
       "notInFile": "לא בקובץ",
       "columnN": "עמודה {n}",
@@ -1204,7 +1213,7 @@
       },
       "exports": {
         "title": "ייצואים",
-        "hint": "ייצואי אנשי קשר מה-Hub, החדשים ביותר ראשונים. הקובץ שהורד אינו נשמר.",
+        "hint": "ייצואי אנשי קשר מה-Hub, החדשים ראשונים. כל קובץ נשמר 30 יום כדי שאתם ועמיתים עם הרשאת ייצוא תוכלו להוריד אותו שוב.",
         "empty": "אין עדיין ייצואים.",
         "by": "על ידי",
         "rows": "אנשי קשר",
@@ -1213,7 +1222,153 @@
         "selections": {
           "ids": "אנשי קשר שסומנו",
           "filter": "כל ההתאמות"
-        }
+        },
+        "download": "הורדה",
+        "noFile": "לא נשמר",
+        "keptUntil": "נשמר עד {date}",
+        "downloadFailed": "לא ניתן היה להוריד את הקובץ. ייתכן שפג תוקפו."
+      }
+    },
+    "singleSend": {
+      "close": "סגירה",
+      "cancel": "ביטול",
+      "send": "שליחה",
+      "sending": "שולח",
+      "contact": "איש קשר",
+      "name": "שם",
+      "phone": "נייד",
+      "email": "אימייל",
+      "title": {
+        "whatsapp": "שליחת הודעת WhatsApp",
+        "sms": "שליחת SMS",
+        "email": "שליחת אימייל",
+        "call": "התקשרות"
+      },
+      "optedOut": "איש הקשר הזה ביטל את הסכמתו לקבלת הודעות. לא ניתן לשלוח הודעות.",
+      "noPhone": "לאיש הקשר הזה אין מספר טלפון.",
+      "noEmail": "לאיש הקשר הזה אין כתובת אימייל.",
+      "number": "שליחה מתוך",
+      "numberHint": "מספר ה-WhatsApp שממנו תישלח ההודעה.",
+      "noChannel": "לא מחובר מספר WhatsApp. חברו מספר תחילה בערוצים.",
+      "template": "תבנית WhatsApp",
+      "templatePlaceholder": "בחירת תבנית",
+      "noTemplates": "אין תבניות מאושרות למספר הזה.",
+      "notSendable": "לא ניתן למלא כאן את התבנית הזו ({reason}).",
+      "variables": "משתני תבנית",
+      "preview": "תצוגה מקדימה",
+      "slot": "משתנה {key}",
+      "loading": "טוען",
+      "openFailed": "לא ניתן לפתוח את השיחה: {message}",
+      "sent": "ההודעה ל-{name} נוספה לתור.",
+      "failed": "לא ניתן לשלוח: {message}",
+      "callIntro": "בצעו שיחת WhatsApp לאיש הקשר הזה מהדפדפן.",
+      "callOff": "השיחות לא מופעלות במספר ה-WhatsApp הזה. הפעילו אותן בהגדרות המספר.",
+      "callPermission": "איש הקשר עדיין לא אישר שיחות. לפני השיחה תישלח בקשה לאישורו.",
+      "callReady": "מוכן להתקשר אל {phone}.",
+      "later": {
+        "sms": "שליחת SMS מתוך ה-CRM עדיין לא זמינה.",
+        "email": "שליחת אימייל מתוך ה-CRM עדיין לא זמינה."
+      },
+      "openApp": {
+        "sms": "פתיחה באפליקציית ההודעות",
+        "email": "פתיחה באפליקציית הדואר"
+      }
+    },
+    "views": {
+      "label": "תצוגות",
+      "all": "כל אנשי הקשר",
+      "add": "הוספת תצוגה",
+      "changed": "המסננים השתנו מאז שמירת התצוגה",
+      "more": "עוד עבור {name}",
+      "picker": {
+        "title": "בחירת תצוגה",
+        "create": "יצירת תצוגה חדשה",
+        "search": "חיפוש תצוגות...",
+        "chipAll": "הכול",
+        "chipPinned": "בלשוניות",
+        "chipShared": "משותפות",
+        "empty": "לא נמצאו תצוגות",
+        "pinned": "בלשוניות"
+      },
+      "menu": {
+        "rename": "שינוי שם התצוגה",
+        "update": "שמירת המסננים הנוכחיים",
+        "unpin": "הסרה מהלשוניות",
+        "pin": "הצגה כלשונית",
+        "delete": "מחיקת תצוגה",
+        "edit": "עריכת תצוגה"
+      },
+      "drawer": {
+        "editTitle": "שינוי שם התצוגה",
+        "name": "שם התצוגה",
+        "namePlaceholder": "תצוגה ללא שם",
+        "shareWith": "שיתוף עם",
+        "justMe": "רק אני",
+        "everyone": "כולם",
+        "save": "עדכון",
+        "cancel": "ביטול",
+        "close": "סגירה"
+      },
+      "toast": {
+        "created": "התצוגה \"{name}\" נוצרה.",
+        "updated": "התצוגה עודכנה.",
+        "filtersSaved": "המסננים נשמרו ב-\"{name}\".",
+        "deleted": "התצוגה \"{name}\" נמחקה.",
+        "failed": "לא ניתן לשמור את התצוגה: {message}",
+        "conflict": "מישהו אחר שינה את התצוגה הזו. רעננו ונסו שוב."
+      },
+      "delete": {
+        "title": "למחוק את התצוגה?",
+        "message": "\"{name}\" תימחק עבור כל מי ששותפה איתו. אנשי הקשר לא ישתנו.",
+        "confirm": "מחיקת תצוגה",
+        "cancel": "שמירת התצוגה"
+      },
+      "editor": {
+        "title": {
+          "create": "יצירת תצוגה חדשה",
+          "edit": "עריכת תצוגה"
+        },
+        "close": "סגירה",
+        "back": "חזרה לאנשי הקשר",
+        "name": "שם התצוגה",
+        "namePlaceholder": "הזינו שם לתצוגה",
+        "favorite": "סימון כמועדף",
+        "favoriteHint": "תצוגה מועדפת מקבלת לשונית משלה.",
+        "shareWith": "שיתוף עם",
+        "justMe": "רק אני",
+        "everyone": "כולם",
+        "filterTitle": "סינון אנשי קשר",
+        "filterHint": "התאימו את כל התנאים או אחד מהם, והוסיפו קבוצות למסננים מורכבים יותר.",
+        "columnsTitle": "העדפות עמודות",
+        "locked": "מוצגת תמיד",
+        "cancel": "ביטול",
+        "create": "יצירת תצוגה",
+        "save": "שמירת תצוגה",
+        "saving": "שומר",
+        "needName": "הזינו שם לתצוגה.",
+        "needFilter": "הוסיפו לפחות תנאי מלא אחד.",
+        "notFound": "התצוגה לא נמצאה או שנמחקה.",
+        "noPermission": "אין לכם הרשאה לבצע פעולה זו.",
+        "loading": "טוען",
+        "columnsHint": "חפשו וסמנו את העמודות שהתצוגה מציגה, ואז גררו את העמודות שנבחרו כדי לקבוע את סדרן.",
+        "drag": "גררו כדי לשנות את הסדר של {name}",
+        "selectedUsers": "משתמשים שנבחרו",
+        "accessLevel": "רמת גישה",
+        "canView": "יכול לצפות",
+        "canEdit": "יכול לצפות ולערוך",
+        "peoplePlaceholder": "חיפוש אנשים",
+        "noPeople": "לא נמצאו אנשים",
+        "removePerson": "הסרת {name}",
+        "clearPeople": "ניקוי כל האנשים",
+        "needPeople": "בחרו לפחות אדם אחד.",
+        "onlyCreator": "רק מי שיצר את התצוגה יכול לשנות עם מי היא משותפת.",
+        "searchColumns": "חיפוש עמודות",
+        "noColumnMatch": "אין עמודה תואמת.",
+        "available": "עמודות זמינות",
+        "selected": "עמודות שנבחרו",
+        "selectAll": "בחירת הכול",
+        "reorder": "גררו כדי לשנות את סדר העמודות",
+        "remove": "הסרת {name}"
       }
     }
   }

@@ -1,3 +1,5 @@
+import type { ConversationCloudGroup, MessageGroupDelivery } from '@crm/contracts';
+
 /**
  * A WhatsApp group thread is keyed `g:<group id>` (the inbound ingest). Two channels can send into one:
  *
@@ -33,6 +35,51 @@ export const isGroupLimited = (
   peerKey: string | null | undefined,
   channelKind: string | null | undefined,
 ): boolean => isGroupThread(peerKey) && channelKind !== 'whatsapp_qr';
+
+/** Why the composer of a Cloud API group thread is off, from `conversation.cloudGroup`; null: it works (a short wallet only warns). */
+export function cloudGroupBlock(
+  group: ConversationCloudGroup | null | undefined,
+): 'suspended' | 'plan' | 'ineligible' | null {
+  return group?.block ?? null;
+}
+
+/** What one message to the whole group costs, in the workspace's billing currency (the API sends hundredths). */
+export function formatGroupCost(minor: number, currency: string, locale: string): string {
+  try {
+    return new Intl.NumberFormat(locale, { style: 'currency', currency }).format(minor / 100);
+  } catch {
+    return `${(minor / 100).toFixed(2)} ${currency}`;
+  }
+}
+
+export interface GroupTally {
+  delivered: number;
+  members: number;
+  read: number;
+  failed: number;
+  billable: number;
+  free: number;
+  /** The group size is known and not smaller than the count reached: "of N" makes sense (the group may have grown or shrunk since). */
+  withTotal: boolean;
+}
+
+/** The delivery tally of a message sent to a group; null until Meta has reported on a member (nothing to show yet). */
+export function groupTallyOf(d: MessageGroupDelivery | null | undefined): GroupTally | null {
+  if (!d) return null;
+  const read = d.readBy ?? 0;
+  const failed = d.failed ?? 0;
+  if (d.deliveredTo <= 0 && read <= 0 && failed <= 0) return null;
+  const members = d.members ?? 0;
+  return {
+    delivered: d.deliveredTo,
+    members,
+    read,
+    failed,
+    billable: d.billable,
+    free: d.free,
+    withTotal: members > 0 && members >= d.deliveredTo,
+  };
+}
 
 /** The slice of `conversation.personalGroup` the thread reads. */
 export interface PersonalGroupFlags {

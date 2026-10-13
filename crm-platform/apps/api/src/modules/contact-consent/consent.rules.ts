@@ -60,6 +60,36 @@ export function csvLine(cells: unknown[]): string {
   return cells.map(csvCell).join(',');
 }
 
+/** The fields of a ledger event that the proof CSV carries (the repository's `EventRow` has them all). */
+export interface ProofRow {
+  contactUuid: string | null;
+  channel: string;
+  purpose: string;
+  action: string;
+  source: string;
+  occurredAt: string;
+  recordedAt: string;
+  actorName: string | null;
+  note: string | null;
+  evidence: Record<string, unknown>;
+}
+
+/** One line of the proof CSV (no line break); shared by the direct download and the asynchronous export, so they can never differ. */
+export function proofCsvLine(r: ProofRow): string {
+  return csvLine([
+    r.contactUuid ?? '(erased)',
+    r.channel,
+    r.purpose,
+    r.action,
+    r.source,
+    r.occurredAt,
+    r.recordedAt,
+    r.actorName ?? '',
+    r.note ?? '',
+    JSON.stringify(r.evidence),
+  ]);
+}
+
 export const CONSENT_CSV_HEADER = [
   'contact_id',
   'channel',

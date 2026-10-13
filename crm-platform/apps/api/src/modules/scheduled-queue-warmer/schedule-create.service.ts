@@ -11,12 +11,10 @@ import {
 } from '../../infra/providers/whatsapp/send-guard.port';
 import {
   SENDER_DIRECTORY,
-  TEMPLATE_DIRECTORY,
   WALLET_GATE,
   isKnownTimeZone,
   wallTimeToUtc,
   type SenderDirectory,
-  type TemplateDirectory,
   type WalletGate,
 } from '../broadcasts';
 import {
@@ -31,7 +29,8 @@ import {
   cleanNumber,
   type Recipient,
 } from './audience/schedule-audience.service';
-import { commandFor, type ScheduledRow } from './scheduled-message';
+import { ScheduleContentService, type ResolvedContent } from './schedule-content.service';
+import { ScheduleMessageBuilder } from './schedule-message-builder.service';
 import { WarmerService } from './warmer/warmer.service';
 
 const PIVOT_CHUNK = 500;
@@ -62,8 +61,29 @@ export function splitRoundRobin<T>(items: readonly T[], parts: number): T[][] {
   return out;
 }
 
-const fail = (message: string, path: string): AppError =>
+export const fail = (message: string, path: string): AppError =>
   AppError.validation(message, [{ path, message }]);
+
+/**
+ * The first send as an instant, or why it cannot be: a known timezone, a time of day, at least 2 minutes from `now` (when `checkLead`),
+ * and an end date that is not before the first send. Create and edit check the same things.
+ */
+export function resolveWhen(
+  input: { sendDate: string; sendTime: string; timezone: string; endDate?: string | null },
+  now: Date,
+  checkLead = true,
+): { time: string; at: Date } {
+  if (!isKnownTimeZone(input.timezone)) throw fail('Choose a valid timezone.', 'timezone');
+  const time = normaliseTime(input.sendTime);
+  const at = wallTimeToUtc(input.sendDate, time, input.timezone);
+  if (checkLead && at.getTime() < now.getTime() + 2 * 60_000) {
+    throw fail('Schedule must be at least 2 minutes from now.', 'sendTime');
+  }
+  if (input.endDate && input.endDate < input.sendDate) {
+    throw fail('The end date cannot be before the first send.', 'endDate');
+  }
+  return { time, at };
+}
 
 /**
  * Turns the composer into schedules (TW-SCHED-003, 005, 006, 007, 008, 009, 019). The order of the checks is Reference's: plan, limit,
@@ -87,7 +107,8 @@ export class ScheduleCreateService {
     private readonly senderResolver: SenderResolver,
     private readonly outbound: OutboundRegistry,
     @Inject(SENDER_DIRECTORY) private readonly senders: SenderDirectory,
-    @Inject(TEMPLATE_DIRECTORY) private readonly templates: TemplateDirectory,
+    private readonly content: ScheduleContentService,
+    private readonly builder: ScheduleMessageBuilder,
     @Inject(WALLET_GATE) private readonly wallet: WalletGate,
     @Inject(OUTBOUND_SEND_GUARD) private readonly guard: OutboundSendGuard,
     @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
@@ -99,18 +120,7 @@ export class ScheduleCreateService {
     await this.usage.assertCanAdd(orgId, 'scheduled_messages');
 
     // --- when ---
-    if (!isKnownTimeZone(input.timezone)) throw fail('Choose a valid timezone.', 'timezone');
-    const time = normaliseTime(input.sendTime);
-    const at = wallTimeToUtc(input.sendDate, time, input.timezone);
-    if (at.getTime() < this.now().getTime() + 2 * 60_000) {
-      throw fail('Schedule must be at least 2 minutes from now.', 'sendTime');
-    }
-    if (input.endDate && input.endDate < input.sendDate) {
-      throw fail('The end date cannot be before the first send.', 'endDate');
-    }
-
-    // --- what ---
-    const kind = await this.content(orgId, input);
+    const { time, at } = resolveWhen(input, this.now());
 
     // --- who ---
     // A sender that names the unofficial engine is refused with its own code while the platform switch is off (owner decision 2026-10-05).
@@ -124,12 +134,9 @@ export class ScheduleCreateService {
     if (sendersResolved.length === 0) throw fail('No valid senders in this workspace.', 'senders');
     if (audience.recipients.length === 0)
       throw fail('Selected recipients are empty.', 'recipientType');
-    if (kind.templateEngineBlocked && sendersResolved.some((s) => s.engine === 'waba')) {
-      throw fail(
-        'Template schedules are not available on WhatsApp Cloud API numbers yet. Use a plain message, or another sender.',
-        'templateId',
-      );
-    }
+
+    // --- what: checked against the numbers it goes through (a Cloud API number takes only an approved template) ---
+    const kind = await this.content.resolve(orgId, input, sendersResolved);
 
     // --- the send gate: emergency halt and content guardrails, then the wallet (once, for everyone) ---
     await this.guard.beforeSend({ body: kind.body, bulk: true, source: 'scheduled' });
@@ -153,8 +160,16 @@ export class ScheduleCreateService {
         );
         if (reasons.length > 0) throw fail(reasons.join(' '), 'schedule');
       }
+      // Only a number that is warming counts a send against its daily budget, so only it has anything to give back later.
+      const warming = new Set<string>();
+      for (const p of plan) {
+        if (await this.warmer.isWarming(tx, p.sender))
+          warming.add(`${p.sender.engine}:${p.sender.id}`);
+      }
       const out: Array<{ uuid: string; sender: SenderRef | null }> = [];
       for (const p of plan) {
+        const reserves =
+          input.scheduleType === 'once' && warming.has(`${p.sender.engine}:${p.sender.id}`);
         const ref = await this.senderRef(tx, orgId, p.sender.engine, p.sender.id);
         const row = await tx.execute(sql`
           INSERT INTO scheduled_messages
@@ -165,7 +180,7 @@ export class ScheduleCreateService {
           VALUES
             (${orgId}, ${userId}, ${p.sender.id},
              ${plan.length > 1 ? `${input.name} (${p.sender.label})` : input.name}, ${kind.body},
-             ${kind.templateRowId}, ${kind.templateType}, ${input.templateOverrides ? JSON.stringify(input.templateOverrides) : null}::jsonb,
+             ${kind.templateRowId}, ${kind.templateType}, ${kind.overrides ? JSON.stringify(kind.overrides) : null}::jsonb,
              ${input.scheduleType}, ${input.sendDate}::date, ${time}, ${at.toISOString()}::timestamptz, ${input.timezone},
              ${input.scheduleType === 'recurring' ? (input.repeatInterval ?? null) : null}, ${input.repeatEvery ?? 1},
              ${input.daysOfWeek?.length ? JSON.stringify([...new Set(input.daysOfWeek)].sort()) : null}::jsonb,
@@ -176,7 +191,7 @@ export class ScheduleCreateService {
              ${plan.length === 1 && input.recipientType === 'queue' ? JSON.stringify(input.queueIds ?? []) : null}::jsonb,
              ${plan.length > 1 || input.recipientType === 'number' ? JSON.stringify(p.recipients.map((r) => r.phone)) : null}::jsonb,
              ${p.recipients.length}, ${ref?.phoneDigits ?? null}, 'scheduled', ${at.toISOString()}::timestamptz, ${p.sender.engine},
-             ${input.scheduleType === 'once' ? p.recipients.length : 0}, ${input.scheduleType === 'once' ? input.sendDate : null}::date)
+             ${reserves ? p.recipients.length : 0}, ${reserves ? input.sendDate : null}::date)
           RETURNING id, uuid`);
         const r = row.rows[0] as { id: number | string; uuid: string };
         await this.seed(tx, orgId, Number(r.id), p.recipients);
@@ -228,51 +243,6 @@ export class ScheduleCreateService {
 
   // --- internals ---------------------------------------------------------------------------------
 
-  private async content(orgId: number, input: CreateScheduleInput) {
-    const message = (input.message ?? '').trim();
-    let body = message;
-    let templateRowId: number | null = null;
-    let templateEngineBlocked = false;
-    if (input.messageType === 'template') {
-      if (!input.templateId) throw fail('Choose a template.', 'templateId');
-      const tpl = await this.db.tx((tx) => this.templates.find(tx, orgId, input.templateId!));
-      if (!tpl) throw fail('That template was not found.', 'templateId');
-      // The unofficial engine and Twilio send the template as its text; the Cloud API needs the template pipeline.
-      body = tpl.templateBody;
-      templateRowId = tpl.id;
-      templateEngineBlocked = true;
-    }
-    const hasLocation = input.latitude !== undefined && input.longitude !== undefined;
-    let media: string | null = null;
-    if (input.media) {
-      const m = input.media;
-      // A link the sender can fetch. Uploaded files (a stored key) wait for the send port to accept file bytes.
-      if (!/^https?:\/\//i.test(m)) throw fail('Give the file as a link (https://...).', 'media');
-      media = m;
-    }
-    const templateType = hasLocation
-      ? 'location'
-      : media
-        ? body
-          ? 'media_with_caption'
-          : 'media'
-        : 'text';
-    // Reference let an empty plain message through and then failed every recipient; refuse it here.
-    if (templateType === 'text' && !body) throw fail('Write the message to send.', 'message');
-    if (input.messageType === 'media' && !media) throw fail('Upload the file to send.', 'media');
-    if (input.messageType === 'location' && !hasLocation)
-      throw fail('Pick the place to send.', 'latitude');
-    return {
-      body,
-      templateRowId,
-      templateEngineBlocked,
-      templateType,
-      media,
-      latitude: hasLocation ? input.latitude! : null,
-      longitude: hasLocation ? input.longitude! : null,
-    };
-  }
-
   private async senderRef(
     tx: Tx,
     orgId: number,
@@ -304,27 +274,31 @@ export class ScheduleCreateService {
   private async sendTest(
     orgId: number,
     sender: SenderRef | null,
-    kind: {
-      body: string;
-      templateType: string;
-      media: string | null;
-      latitude: number | null;
-      longitude: number | null;
-    },
+    kind: ResolvedContent,
     to: string,
   ): Promise<void> {
     if (!sender) throw new Error('The sender is not connected.');
     const transport = this.outbound.get(sender.engine);
     if (!transport) throw new Error(`No sender is set up for ${sender.engine}.`);
     const open = await transport.open(orgId, sender);
-    const row = {
-      template_type: kind.templateType,
-      message_content: kind.body,
-      media_file: kind.media,
-      latitude: kind.latitude,
-      longitude: kind.longitude,
-    } as unknown as ScheduledRow;
-    await open.send(commandFor(row, to, kind.body), {
+    // The same builder a run uses, so the test is the message the customer gets (a template is filled the way a run fills it).
+    const prepared = await this.db.tx((tx) =>
+      this.builder.prepare(
+        tx,
+        orgId,
+        {
+          template_type: kind.templateType,
+          message_content: kind.body,
+          media_file: kind.media,
+          latitude: kind.latitude,
+          longitude: kind.longitude,
+          template_id: kind.templateRowId,
+          template_overrides: kind.overrides,
+        },
+        sender.engine,
+      ),
+    );
+    await open.send(this.builder.command(prepared, to, undefined), {
       clientReference: `sched-test-${Date.now()}`,
       screen: { source: 'scheduled' },
     });

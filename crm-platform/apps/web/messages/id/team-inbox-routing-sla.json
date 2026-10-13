@@ -82,7 +82,10 @@
       "lastFired": "terakhir pada {when}",
       "edit": "Edit",
       "duplicate": "Duplikat",
-      "delete": "Hapus"
+      "delete": "Hapus",
+      "startsFlow": "Juga memulai alur {name}",
+      "flowOff": "Alur dinonaktifkan",
+      "flowGone": "Juga memulai alur yang sudah dihapus"
     },
     "form": {
       "back": "Penugasan otomatis",
@@ -171,7 +174,15 @@
       "cancel": "Batal",
       "save": "Simpan",
       "saveActivate": "Simpan dan aktifkan",
-      "openCount": "{open} terbuka"
+      "openCount": "{open} terbuka",
+      "flow": {
+        "title": "Mulai juga sebuah alur",
+        "hint": "Opsional. Alur dimulai untuk percakapan saat aturan ini berjalan, di saluran yang sama. Alur hanya perlu diaktifkan; tidak harus dipublikasikan.",
+        "none": "Tanpa alur",
+        "offOption": "{name} (nonaktif)",
+        "goneOption": "Alur yang sudah tidak ada",
+        "loadFailed": "Alur tidak dapat dimuat, jadi daftar mungkin tidak lengkap."
+      }
     }
   }
 }

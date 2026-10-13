@@ -1,5 +1,5 @@
 import { LSC_INTENTS, type LscIntent, type LscSignals } from '@crm/contracts';
-import { extractJsonObject, type ScoringFacts } from './lead-scoring.rules';
+import { ENRICHMENT_NOTE, extractJsonObject, type ScoringFacts } from './lead-scoring.rules';
 
 /**
  * Pure rules of reading a conversation for lead scoring: who may use it, which messages are the contact speaking, how personal data is
@@ -52,6 +52,11 @@ export const RULES_MODEL = 'rules:v1';
 export interface MaskContext {
   /** Names to mask wherever they appear (the contact's name and its parts). */
   names?: readonly string[];
+}
+
+/** What reading a chat needs besides masking: the workspace's own button and keyword taps. */
+export interface ChatContext extends MaskContext {
+  customPhrases?: ReadonlyArray<{ phrase: string; intent: LscIntent }>;
 }
 
 const partialWord = (w: string): string =>
@@ -164,8 +169,19 @@ const PHRASES: ReadonlyArray<readonly [LscIntent, RegExp]> = [
   ['comparing', /\b(compare|comparison|difference between|better than|vs\.?)\b/i],
 ];
 
-export function classifyPhrase(text: string): LscIntent | null {
+export function classifyPhrase(
+  text: string,
+  custom: ReadonlyArray<{ phrase: string; intent: LscIntent }> = [],
+): LscIntent | null {
   if (isLight(text) || isAutoReply(text)) return null;
+  // The workspace's own taps come first: they name what its customers really type.
+  for (const c of custom) {
+    const re = new RegExp(
+      `(?<![\\p{L}\\p{N}])${escapeRe(c.phrase.trim())}(?![\\p{L}\\p{N}])`,
+      'iu',
+    );
+    if (re.test(text)) return c.intent;
+  }
   for (const [intent, re] of PHRASES) if (re.test(text)) return intent;
   return null;
 }
@@ -228,7 +244,7 @@ const clip = (s: string, n: number): string => (s.length > n ? `${s.slice(0, n)}
  * Turns the contact's recent messages (oldest first) into what the model reads, and counts what decides whether it should be asked at
  * all. Only text is read; media, system lines and reactions are not the contact speaking.
  */
-export function prepareChat(messages: readonly ChatMessage[], ctx: MaskContext): PreparedChat {
+export function prepareChat(messages: readonly ChatMessage[], ctx: ChatContext): PreparedChat {
   const ids = new Map<string, string>();
   const lines: string[] = [];
   const intents: LscIntent[] = [];
@@ -253,7 +269,7 @@ export function prepareChat(messages: readonly ChatMessage[], ctx: MaskContext):
     if (inbound) {
       inboundRead += 1;
       const letters = lettersOf(body).length;
-      const intent = classifyPhrase(body);
+      const intent = classifyPhrase(body, ctx.customPhrases);
       if (intent) intents.push(intent);
       // A short message the phrase table understands is a tap, not something to send to a model.
       const tap = intent !== null && letters < TAP_MAX_LETTERS;
@@ -307,6 +323,8 @@ export const DIGEST_SYSTEM_PROMPT = [
   '"intent": one of "ready_to_buy","asking_price","comparing","registering","needs_support","post_purchase","browsing","not_interested","other",',
   '"signals": {"askedPrice": <bool>, "readyToBuy": <bool>, "objection": <bool>, "urgent": <bool>},',
   '"summary": <one or two sentences, under 240 characters, with no names, numbers or contact details>,',
+  '"language": <the ISO 639-1 code of the language the contact writes in, such as "en", "hi" or "ar", or null>,',
+  '"issue": <"none", or the problem the contact reports: "missing_confirmation","payment_problem","wrong_info","complaint","other">,',
   '"suggestedStage": <one of the stage values listed, or null>, "confidence": <0 to 1 for the suggested stage>,',
   '"evidence": [<up to 4 message ids like "m3" that justify the answer>]}.',
   'Suggest a stage only when the chat clearly shows the contact has reached it; otherwise null. Never suggest the current stage.',
@@ -328,7 +346,12 @@ export function digestPrompt(args: {
     `Stages you may suggest (value | label):\n${stages === '' ? '(none)' : stages}`,
     `Conversation, oldest first:\n<chat>\n${args.chat.transcript}\n</chat>`,
   ].join('\n\n');
-  return { system: DIGEST_SYSTEM_PROMPT, user };
+  return {
+    system: args.facts.enrichment
+      ? `${DIGEST_SYSTEM_PROMPT} ${ENRICHMENT_NOTE}`
+      : DIGEST_SYSTEM_PROMPT,
+    user,
+  };
 }
 
 export interface ParsedDigest {
@@ -341,7 +364,21 @@ export interface ParsedDigest {
   confidence: number;
   /** Message uuids, only ones the model was actually shown. */
   evidence: string[];
+  /** ISO 639-1 code of the contact's language, null when the model did not say. */
+  language: string | null;
+  /** The kind of problem the contact reported, null when the model did not say. */
+  issue: DigestIssue | null;
 }
+
+export const DIGEST_ISSUES = [
+  'none',
+  'missing_confirmation',
+  'payment_problem',
+  'wrong_info',
+  'complaint',
+  'other',
+] as const;
+export type DigestIssue = (typeof DIGEST_ISSUES)[number];
 
 const bool = (v: unknown): boolean => v === true || v === 'true';
 
@@ -408,6 +445,13 @@ export function parseDigest(
     suggestedStage: stage,
     confidence: Math.round(confidence * 100) / 100,
     evidence,
+    language:
+      typeof o.language === 'string' && /^[a-z]{2,3}(-[a-z0-9]{2,8})?$/i.test(o.language.trim())
+        ? o.language.trim().toLowerCase()
+        : null,
+    issue: (DIGEST_ISSUES as readonly string[]).includes(String(o.issue))
+      ? (o.issue as DigestIssue)
+      : null,
   };
 }
 

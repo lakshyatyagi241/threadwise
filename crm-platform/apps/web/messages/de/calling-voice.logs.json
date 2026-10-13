@@ -1,0 +1,207 @@
+{
+  "calling-voice": {
+    "logs": {
+      "eyebrow": "Arbeitsbereich",
+      "title": "Anrufprotokoll",
+      "subtitle": "Jeder WhatsApp-Anruf, den dein Team getätigt oder angenommen hat, mit Dauer, Bearbeiter und Aufnahme.",
+      "sideTip": "Jeder WhatsApp-Anruf von oder zu deinen Nummern. Filtere nach Datum, Status, Nummer oder Teamkollege, um einen bestimmten Anruf zu finden.",
+      "loading": "Anrufe werden geladen",
+      "loadFailed": "Das Anrufprotokoll konnte nicht geladen werden.",
+      "retry": "Erneut versuchen",
+      "emptyTitle": "Noch keine Anrufe",
+      "emptyMessage": "Sobald ein Kunde eine deiner WhatsApp-Nummern anruft oder dein Team einen Anruf aus dem Posteingang startet, erscheint er hier mit Dauer, Bearbeiter und Aufnahme.",
+      "emptyFilteredTitle": "Keine Anrufe passen zu diesen Filtern",
+      "emptyFilteredMessage": "Wähle einen größeren Zeitraum oder lösche die Filter.",
+      "clearFilters": "Filter löschen",
+      "tabs": {
+        "label": "Anrufansichten",
+        "log": "Anrufprotokoll",
+        "analytics": "Analysen"
+      },
+      "range": {
+        "title": "Zeitraum",
+        "last24h": "Letzte 24 Std.",
+        "last7d": "Letzte 7 Tage",
+        "last30d": "Letzte 30 Tage",
+        "custom": "Benutzerdefinierter Zeitraum",
+        "from": "Von",
+        "to": "Bis",
+        "apply": "Anwenden"
+      },
+      "status": {
+        "title": "Status",
+        "all": "Alle",
+        "completed": "Abgeschlossen",
+        "in-progress": "Läuft gerade",
+        "no-answer": "Keine Antwort",
+        "declined": "Abgelehnt",
+        "failed": "Fehlgeschlagen"
+      },
+      "kpi": {
+        "total": "Gesamt",
+        "last24h": "Letzte 24 Std.",
+        "minutes": "{count} Min.",
+        "completed": "Abgeschlossen",
+        "failed": "Fehlgeschlagen",
+        "selection": "In dieser Auswahl",
+        "calls": "Anrufe",
+        "answered": "Angenommen",
+        "missed": "Verpasst",
+        "avgDuration": "Durchschnittliche Dauer",
+        "totalMinutes": "Minuten gesamt"
+      },
+      "filters": {
+        "label": "Anrufe filtern",
+        "searchLabel": "Anrufe suchen",
+        "searchPlaceholder": "Telefonnummer oder Kontaktname...",
+        "direction": "Richtung",
+        "allDirections": "Alle Anrufe",
+        "inbound": "Eingehend",
+        "outbound": "Ausgehend",
+        "number": "Nummer",
+        "allNumbers": "Alle Nummern",
+        "agent": "Bearbeitet von",
+        "allAgents": "Alle",
+        "apply": "Filtern",
+        "clear": "Zurücksetzen"
+      },
+      "table": {
+        "caption": "Anrufe, neueste zuerst",
+        "customer": "Kunde",
+        "number": "Nummer",
+        "handledBy": "Bearbeitet von",
+        "started": "Gestartet",
+        "duration": "Dauer",
+        "status": "Status",
+        "actions": "Aktionen",
+        "open": "Öffnen",
+        "inbound": "Eingehend",
+        "outbound": "Ausgehend",
+        "none": "-"
+      },
+      "paging": {
+        "label": "Seiten",
+        "showing": "Anzeige {from}-{to} von {total} Anrufen",
+        "beyond": "Diese Seite liegt hinter der letzten ({pages} Seiten).",
+        "previous": "Zurück",
+        "next": "Weiter",
+        "page": "Seite {page} von {pages}"
+      },
+      "detail": {
+        "breadcrumb": "Brotkrumennavigation",
+        "back": "Anrufprotokoll",
+        "loading": "Anruf wird geladen",
+        "loadFailed": "Dieser Anruf konnte nicht geladen werden.",
+        "notFound": "Dieser Anruf wurde nicht gefunden. Er gehört möglicherweise zu einem anderen Arbeitsbereich oder liegt außerhalb der Anrufe, die du sehen darfst.",
+        "retry": "Erneut versuchen",
+        "handledBy": "Bearbeitet von {name}",
+        "handler": {
+          "none": "Von niemandem bearbeitet",
+          "ai": "KI-Assistent",
+          "voicemail": "Mailbox"
+        },
+        "openContact": "Kontakt öffnen",
+        "openInbox": "Im Posteingang öffnen",
+        "tiles": {
+          "duration": "Dauer",
+          "number": "Nummer",
+          "answered": "Angenommen",
+          "ended": "Beendet"
+        },
+        "reasons": {
+          "unknown": "Der Anruf ist fehlgeschlagen.",
+          "COMPLETED": "Abgeschlossen",
+          "REJECTED": "Der Anruf wurde abgelehnt.",
+          "DECLINED": "Der Anruf wurde abgelehnt.",
+          "BUSY": "Der Kunde war in einem anderen Gespräch.",
+          "NO_ANSWER": "Niemand hat abgenommen.",
+          "MISSED": "Der Kunde hat den Anruf verpasst.",
+          "CANCELLED": "Der Anruf wurde abgebrochen.",
+          "FAILED": "WhatsApp hat gemeldet, dass der Anruf fehlgeschlagen ist.",
+          "NO_PERMISSION": "Der Kunde hatte Anrufe noch nicht erlaubt, daher wurde kein Anruf getätigt.",
+          "META_REFUSED": "WhatsApp hat den Anruf nicht zugelassen."
+        },
+        "timeline": {
+          "title": "Zeitverlauf",
+          "count": "{count, plural, one {# Schritt} other {# Schritte}}",
+          "empty": "Für diesen Anruf wurden keine Schritte aufgezeichnet."
+        },
+        "steps": {
+          "dial_sent": "Anruf getätigt",
+          "dial_failed": "Anruf konnte nicht getätigt werden",
+          "connect": "Anruf mit WhatsApp verbunden",
+          "pre_accept_sent": "Annahme wird vorbereitet",
+          "accept_sent": "Anruf angenommen",
+          "accept_failed": "Annahme fehlgeschlagen",
+          "reject_sent": "Anruf abgelehnt",
+          "terminate_sent": "Auflegen gesendet",
+          "terminate": "Anruf beendet",
+          "recording_stored": "Aufnahme gespeichert"
+        },
+        "noRecording": {
+          "title": "Aufnahme",
+          "message": "Dieser Anruf hat keine Aufnahme."
+        }
+      },
+      "recording": {
+        "title": "Aufnahme",
+        "notice": "Dieser Anruf wurde aufgezeichnet.",
+        "privacy": "Nur Personen mit Zugriff auf Aufnahmen können sie abspielen, und jede Wiedergabe wird protokolliert.",
+        "noAccess": "Du siehst, dass dieser Anruf aufgezeichnet wurde, hast aber keine Berechtigung, Aufnahmen abzuspielen.",
+        "play": "Aufnahme abspielen",
+        "loading": "Aufnahme wird abgerufen",
+        "playerLabel": "Anrufaufnahme",
+        "linkUntil": "Dieser Link gilt bis {time}. Drücke danach erneut auf Wiedergabe.",
+        "playFailed": "Die Aufnahme konnte nicht abgespielt werden.",
+        "retry": "Erneut versuchen"
+      }
+    },
+    "analytics": {
+      "eyebrow": "Arbeitsbereich",
+      "title": "Anrufanalysen",
+      "subtitle": "Anrufe im Zeitverlauf, wie viele angenommen wurden, wer sie bearbeitet hat und wann deine Leitungen am stärksten ausgelastet sind.",
+      "loading": "Anrufanalysen werden geladen",
+      "loadFailed": "Die Anrufanalysen konnten nicht geladen werden.",
+      "retry": "Erneut versuchen",
+      "emptyTitle": "Keine Anrufe in diesem Zeitraum",
+      "emptyMessage": "Wähle einen größeren Zeitraum oder komm nach deinen ersten Anrufen wieder.",
+      "number": "Nummer",
+      "allNumbers": "Alle Nummern",
+      "period": "{from} bis {to}, Zeitzone {tz}",
+      "kpi": {
+        "total": "Anrufe",
+        "answeredRate": "Angenommen",
+        "answeredOf": "{answered} angenommen",
+        "missed": "Verpasst",
+        "avgHandle": "Durchschnittliche Bearbeitungszeit",
+        "avgHandleHint": "Gesprächszeit angenommener Anrufe",
+        "totalMinutes": "Minuten gesamt"
+      },
+      "overTime": {
+        "title": "Anrufe im Zeitverlauf",
+        "hint": "Ein Balken pro Tag. Der grüne Teil sind die angenommenen Anrufe.",
+        "summary": "{total} Anrufe in {days} Tagen",
+        "answered": "Angenommen",
+        "other": "Nicht angenommen",
+        "missed": "Verpasst",
+        "day": "Tag",
+        "calls": "Anrufe"
+      },
+      "byAgent": {
+        "title": "Nach Teamkollege",
+        "agent": "Teamkollege",
+        "calls": "Anrufe",
+        "answered": "Angenommen",
+        "avgHandle": "Durchschnittliche Bearbeitungszeit",
+        "minutes": "Minuten",
+        "unassigned": "Von niemandem bearbeitet"
+      },
+      "heatmap": {
+        "title": "Anrufe nach Stunde der Woche",
+        "hint": "Dunkler bedeutet mehr Anrufe, die in dieser Stunde begannen. Die Stunden gelten in der Zeitzone {tz}.",
+        "weekday": "Wochentag",
+        "cell": "{day}, {hour}:00: {calls, plural, =0 {keine Anrufe} one {# Anruf} other {# Anrufe}}"
+      }
+    }
+  }
+}

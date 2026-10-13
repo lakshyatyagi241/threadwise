@@ -42,7 +42,7 @@ interface ConfigRow {
 /**
  * WhatsApp Cloud API numbers (engine `waba`), through the shared Meta provider. Text and media: Meta delivers free text
  * inside the 24-hour customer window; media goes by public https link. Locations and contacts stay on the broadcast
- * pipeline, as Reference did. Templates go through the broadcast pipeline.
+ * pipeline, as Reference did. A template goes out as the command's ready-made components, with no window.
  */
 @Injectable()
 export class WabaTransport implements EngineTransport {
@@ -111,6 +111,20 @@ export class WabaTransport implements EngineTransport {
     return {
       send: async (command: SendCommand, context) => {
         const screen = context.screen ? { screen: context.screen } : {};
+        if (command.type === 'template') {
+          // A template is allowed outside the 24-hour customer window; Meta checks it is approved for this number.
+          const res = await this.provider.sendTemplate(credentials, {
+            to: command.to,
+            templateName: command.templateName,
+            language: command.language,
+            ...(command.category ? { category: command.category } : {}),
+            variables: {},
+            components: command.components,
+            clientReference: context.clientReference,
+            ...screen,
+          });
+          return { providerMessageId: res.providerMessageId };
+        }
         if (command.type === 'media') {
           // Meta fetches the file itself from a public https link.
           if (!/^https:\/\//i.test(command.mediaUrl)) {

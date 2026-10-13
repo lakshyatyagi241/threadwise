@@ -121,6 +121,12 @@
       "selectedActionsNone": "Ausgewählte Kontakte (zuerst Zeilen auswählen)",
       "modifyColumns": "Spalten anpassen",
       "resetColumns": "Auf Standard zurücksetzen",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "Kontaktname",
       "colPhone": "Telefonnummer",
       "colEmailId": "E-Mail-Adresse",
@@ -181,7 +187,9 @@
       "ownersCount": "{count} Verantwortliche",
       "ownerMe": "{name} (ich)",
       "ownerFormer": "Ehemaliges Mitglied",
-      "reassignView": "Kontakte von {name} neu zuweisen..."
+      "reassignView": "Kontakte von {name} neu zuweisen...",
+      "smsNamed": "SMS an {name}",
+      "noSms": "Keine Telefonnummer für SMS"
     },
     "bulk": {
       "label": "Aktionen für die ausgewählten Kontakte",
@@ -422,7 +430,8 @@
         "address": "Adresse",
         "memo": "Memo",
         "status": "Status",
-        "source": "Quelle"
+        "source": "Quelle",
+        "consent": "Marketing-Einverständnis (ja / nein)"
       },
       "notInFile": "Nicht in der Datei",
       "columnN": "Spalte {n}",
@@ -1204,7 +1213,7 @@
       },
       "exports": {
         "title": "Exporte",
-        "hint": "Kontaktexporte aus dem Hub, neueste zuerst. Die heruntergeladene Datei wird nicht aufbewahrt.",
+        "hint": "Kontaktexporte aus dem Hub, neueste zuerst. Jede Datei wird 30 Tage aufbewahrt, damit Sie und Teammitglieder mit Exportrecht sie erneut herunterladen können.",
         "empty": "Noch keine Exporte.",
         "by": "Von",
         "rows": "Kontakte",
@@ -1213,7 +1222,153 @@
         "selections": {
           "ids": "Markierte Kontakte",
           "filter": "Alles, was passt"
-        }
+        },
+        "download": "Herunterladen",
+        "noFile": "Nicht gespeichert",
+        "keptUntil": "Aufbewahrt bis {date}",
+        "downloadFailed": "Die Datei konnte nicht heruntergeladen werden. Sie ist möglicherweise abgelaufen."
+      }
+    },
+    "singleSend": {
+      "close": "Schließen",
+      "cancel": "Abbrechen",
+      "send": "Senden",
+      "sending": "Wird gesendet",
+      "contact": "Kontakt",
+      "name": "Name",
+      "phone": "Mobil",
+      "email": "E-Mail",
+      "title": {
+        "whatsapp": "WhatsApp-Nachricht senden",
+        "sms": "SMS senden",
+        "email": "E-Mail senden",
+        "call": "Anrufen"
+      },
+      "optedOut": "Dieser Kontakt hat der Kommunikation widersprochen. Nachrichten können nicht gesendet werden.",
+      "noPhone": "Dieser Kontakt hat keine Telefonnummer.",
+      "noEmail": "Dieser Kontakt hat keine E-Mail-Adresse.",
+      "number": "Senden von",
+      "numberHint": "Die WhatsApp-Nummer, über die die Nachricht gesendet wird.",
+      "noChannel": "Es ist keine WhatsApp-Nummer verbunden. Verbinden Sie zuerst eine unter Kanäle.",
+      "template": "WhatsApp-Vorlage",
+      "templatePlaceholder": "Vorlage auswählen",
+      "noTemplates": "Keine genehmigten Vorlagen für diese Nummer.",
+      "notSendable": "Diese Vorlage kann hier nicht ausgefüllt werden ({reason}).",
+      "variables": "Vorlagenvariablen",
+      "preview": "Vorschau",
+      "slot": "Variable {key}",
+      "loading": "Wird geladen",
+      "openFailed": "Die Unterhaltung konnte nicht geöffnet werden: {message}",
+      "sent": "Nachricht für {name} in die Warteschlange gestellt.",
+      "failed": "Senden fehlgeschlagen: {message}",
+      "callIntro": "Rufen Sie diesen Kontakt per WhatsApp direkt aus dem Browser an.",
+      "callOff": "Anrufe sind für diese WhatsApp-Nummer nicht aktiviert. Aktivieren Sie sie in den Einstellungen der Nummer.",
+      "callPermission": "Der Kontakt hat Anrufe noch nicht erlaubt. Vor dem Anruf wird um seine Erlaubnis gebeten.",
+      "callReady": "Bereit zum Anruf bei {phone}.",
+      "later": {
+        "sms": "Das Senden von SMS aus dem CRM ist noch nicht verfügbar.",
+        "email": "Das Senden von E-Mails aus dem CRM ist noch nicht verfügbar."
+      },
+      "openApp": {
+        "sms": "In Ihrer Nachrichten-App öffnen",
+        "email": "In Ihrer Mail-App öffnen"
+      }
+    },
+    "views": {
+      "label": "Ansichten",
+      "all": "Alle Kontakte",
+      "add": "Ansicht hinzufügen",
+      "changed": "Filter seit dem Speichern dieser Ansicht geändert",
+      "more": "Mehr für {name}",
+      "picker": {
+        "title": "Ansicht auswählen",
+        "create": "Neue Ansicht erstellen",
+        "search": "Ansichten suchen...",
+        "chipAll": "Alle",
+        "chipPinned": "In Tabs",
+        "chipShared": "Geteilt",
+        "empty": "Keine Ansichten gefunden",
+        "pinned": "In Tabs"
+      },
+      "menu": {
+        "rename": "Ansicht umbenennen",
+        "update": "Aktuelle Filter speichern",
+        "unpin": "Aus Tabs entfernen",
+        "pin": "Als Tab anzeigen",
+        "delete": "Ansicht löschen",
+        "edit": "Ansicht bearbeiten"
+      },
+      "drawer": {
+        "editTitle": "Ansicht umbenennen",
+        "name": "Name der Ansicht",
+        "namePlaceholder": "Unbenannte Ansicht",
+        "shareWith": "Teilen mit",
+        "justMe": "Nur ich",
+        "everyone": "Alle",
+        "save": "Aktualisieren",
+        "cancel": "Abbrechen",
+        "close": "Schließen"
+      },
+      "toast": {
+        "created": "Ansicht \"{name}\" erstellt.",
+        "updated": "Ansicht aktualisiert.",
+        "filtersSaved": "Filter in \"{name}\" gespeichert.",
+        "deleted": "Ansicht \"{name}\" gelöscht.",
+        "failed": "Die Ansicht konnte nicht gespeichert werden: {message}",
+        "conflict": "Jemand anderes hat diese Ansicht geändert. Laden Sie die Seite neu und versuchen Sie es erneut."
+      },
+      "delete": {
+        "title": "Diese Ansicht löschen?",
+        "message": "\"{name}\" wird für alle gelöscht, mit denen sie geteilt wurde. Kontakte bleiben unverändert.",
+        "confirm": "Ansicht löschen",
+        "cancel": "Ansicht behalten"
+      },
+      "editor": {
+        "title": {
+          "create": "Neue Ansicht erstellen",
+          "edit": "Ansicht bearbeiten"
+        },
+        "close": "Schließen",
+        "back": "Zurück zu den Kontakten",
+        "name": "Name der Ansicht",
+        "namePlaceholder": "Namen der Ansicht eingeben",
+        "favorite": "Als Favorit markieren",
+        "favoriteHint": "Eine favorisierte Ansicht erhält einen eigenen Tab.",
+        "shareWith": "Teilen mit",
+        "justMe": "Nur ich",
+        "everyone": "Alle",
+        "filterTitle": "Kontakte filtern",
+        "filterHint": "Alle oder beliebige Bedingungen erfüllen und Gruppen für komplexere Filter hinzufügen.",
+        "columnsTitle": "Spalteneinstellungen",
+        "locked": "Immer sichtbar",
+        "cancel": "Abbrechen",
+        "create": "Ansicht erstellen",
+        "save": "Ansicht speichern",
+        "saving": "Wird gespeichert",
+        "needName": "Geben Sie einen Namen für die Ansicht ein.",
+        "needFilter": "Fügen Sie mindestens eine vollständige Bedingung hinzu.",
+        "notFound": "Diese Ansicht wurde nicht gefunden oder gelöscht.",
+        "noPermission": "Sie haben keine Berechtigung dafür.",
+        "loading": "Wird geladen",
+        "columnsHint": "Suchen und markieren Sie die Spalten, die diese Ansicht anzeigt, und ziehen Sie die ausgewählten, um ihre Reihenfolge festzulegen.",
+        "drag": "Ziehen, um {name} neu anzuordnen",
+        "selectedUsers": "Ausgewählte Benutzer",
+        "accessLevel": "Zugriffsebene",
+        "canView": "Kann ansehen",
+        "canEdit": "Kann ansehen und bearbeiten",
+        "peoplePlaceholder": "Personen suchen",
+        "noPeople": "Keine Personen gefunden",
+        "removePerson": "{name} entfernen",
+        "clearPeople": "Alle Personen entfernen",
+        "needPeople": "Wählen Sie mindestens eine Person aus.",
+        "onlyCreator": "Nur die Person, die diese Ansicht erstellt hat, kann ändern, mit wem sie geteilt wird.",
+        "searchColumns": "Spalten suchen",
+        "noColumnMatch": "Keine Spalte passt.",
+        "available": "Verfügbare Spalten",
+        "selected": "Ausgewählte Spalten",
+        "selectAll": "Alle auswählen",
+        "reorder": "Ziehen, um Spalten neu anzuordnen",
+        "remove": "{name} entfernen"
       }
     }
   }

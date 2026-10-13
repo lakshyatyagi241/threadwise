@@ -121,6 +121,12 @@
       "selectedActionsNone": "Geselecteerde contacten (selecteer eerst rijen)",
       "modifyColumns": "Kolommen aanpassen",
       "resetColumns": "Standaard herstellen",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "Contactnaam",
       "colPhone": "Telefoonnummer",
       "colEmailId": "E-mailadres",
@@ -181,7 +187,9 @@
       "ownersCount": "{count, plural, one {# eigenaar} other {# eigenaren}}",
       "ownerMe": "{name} (ik)",
       "ownerFormer": "Voormalig lid",
-      "reassignView": "Wijs de contacten van {name} opnieuw toe..."
+      "reassignView": "Wijs de contacten van {name} opnieuw toe...",
+      "smsNamed": "SMS {name}",
+      "noSms": "Geen telefoonnummer voor sms"
     },
     "bulk": {
       "label": "Acties voor de geselecteerde contacten",
@@ -422,7 +430,8 @@
         "address": "Adres",
         "memo": "Memo",
         "status": "Status",
-        "source": "Bron"
+        "source": "Bron",
+        "consent": "Marketingtoestemming (ja / nee)"
       },
       "notInFile": "Niet in bestand",
       "columnN": "Kolom {n}",
@@ -1204,7 +1213,7 @@
       },
       "exports": {
         "title": "Exports",
-        "hint": "Contactexports vanuit de Contact Hub, nieuwste eerst. Het gedownloade bestand wordt niet bewaard.",
+        "hint": "Contactexports vanuit de Hub, nieuwste eerst. Elk bestand wordt 30 dagen bewaard, zodat jij en collega's met exportrechten het opnieuw kunnen downloaden.",
         "empty": "Nog geen exports.",
         "by": "Door",
         "rows": "Contacten",
@@ -1213,7 +1222,153 @@
         "selections": {
           "ids": "Aangevinkte contacten",
           "filter": "Alles wat overeenkomt"
-        }
+        },
+        "download": "Downloaden",
+        "noFile": "Niet opgeslagen",
+        "keptUntil": "Bewaard tot {date}",
+        "downloadFailed": "Het bestand kon niet worden gedownload. Het is mogelijk verlopen."
+      }
+    },
+    "singleSend": {
+      "close": "Sluiten",
+      "cancel": "Annuleren",
+      "send": "Verzenden",
+      "sending": "Bezig met verzenden",
+      "contact": "Contact",
+      "name": "Naam",
+      "phone": "Mobiel",
+      "email": "E-mail",
+      "title": {
+        "whatsapp": "WhatsApp-bericht verzenden",
+        "sms": "Sms verzenden",
+        "email": "E-mail verzenden",
+        "call": "Bellen"
+      },
+      "optedOut": "Dit contact heeft zich afgemeld voor communicatie. Er kunnen geen berichten worden verzonden.",
+      "noPhone": "Dit contact heeft geen telefoonnummer.",
+      "noEmail": "Dit contact heeft geen e-mailadres.",
+      "number": "Verzenden vanaf",
+      "numberHint": "Het WhatsApp-nummer waarmee het bericht wordt verzonden.",
+      "noChannel": "Er is geen WhatsApp-nummer gekoppeld. Koppel er eerst een in Kanalen.",
+      "template": "WhatsApp-sjabloon",
+      "templatePlaceholder": "Selecteer een sjabloon",
+      "noTemplates": "Geen goedgekeurde sjablonen voor dit nummer.",
+      "notSendable": "Dit sjabloon kan hier niet worden ingevuld ({reason}).",
+      "variables": "Sjabloonvariabelen",
+      "preview": "Voorbeeld",
+      "slot": "Variabele {key}",
+      "loading": "Laden",
+      "openFailed": "Kan het gesprek niet openen: {message}",
+      "sent": "Bericht voor {name} staat in de wachtrij.",
+      "failed": "Verzenden mislukt: {message}",
+      "callIntro": "Bel dit contact via WhatsApp vanuit de browser.",
+      "callOff": "Bellen is niet ingeschakeld voor dit WhatsApp-nummer. Schakel het in via de instellingen van het nummer.",
+      "callPermission": "Het contact heeft nog geen toestemming gegeven voor oproepen. Bij het bellen wordt eerst om toestemming gevraagd.",
+      "callReady": "Klaar om {phone} te bellen.",
+      "later": {
+        "sms": "Sms verzenden vanuit de CRM is nog niet beschikbaar.",
+        "email": "E-mail verzenden vanuit de CRM is nog niet beschikbaar."
+      },
+      "openApp": {
+        "sms": "Openen in je berichten-app",
+        "email": "Openen in je e-mailapp"
+      }
+    },
+    "views": {
+      "label": "Weergaven",
+      "all": "Alle contacten",
+      "add": "Weergave toevoegen",
+      "changed": "Filters zijn gewijzigd sinds deze weergave is opgeslagen",
+      "more": "Meer voor {name}",
+      "picker": {
+        "title": "Selecteer een weergave",
+        "create": "Nieuwe weergave maken",
+        "search": "Weergaven zoeken...",
+        "chipAll": "Alle",
+        "chipPinned": "Op tabbladen",
+        "chipShared": "Gedeeld",
+        "empty": "Geen weergaven gevonden",
+        "pinned": "Op tabbladen"
+      },
+      "menu": {
+        "rename": "Weergave hernoemen",
+        "update": "Huidige filters opslaan",
+        "unpin": "Van tabbladen verwijderen",
+        "pin": "Als tabblad tonen",
+        "delete": "Weergave verwijderen",
+        "edit": "Weergave bewerken"
+      },
+      "drawer": {
+        "editTitle": "Weergave hernoemen",
+        "name": "Naam van weergave",
+        "namePlaceholder": "Naamloze weergave",
+        "shareWith": "Delen met",
+        "justMe": "Alleen ik",
+        "everyone": "Iedereen",
+        "save": "Bijwerken",
+        "cancel": "Annuleren",
+        "close": "Sluiten"
+      },
+      "toast": {
+        "created": "Weergave \"{name}\" is gemaakt.",
+        "updated": "Weergave bijgewerkt.",
+        "filtersSaved": "Filters opgeslagen in \"{name}\".",
+        "deleted": "Weergave \"{name}\" is verwijderd.",
+        "failed": "Kan de weergave niet opslaan: {message}",
+        "conflict": "Iemand anders heeft deze weergave gewijzigd. Laad opnieuw en probeer het nog eens."
+      },
+      "delete": {
+        "title": "Deze weergave verwijderen?",
+        "message": "\"{name}\" wordt verwijderd voor iedereen met wie de weergave is gedeeld. Contacten worden niet gewijzigd.",
+        "confirm": "Weergave verwijderen",
+        "cancel": "Weergave behouden"
+      },
+      "editor": {
+        "title": {
+          "create": "Nieuwe weergave maken",
+          "edit": "Weergave bewerken"
+        },
+        "close": "Sluiten",
+        "back": "Terug naar contacten",
+        "name": "Naam van weergave",
+        "namePlaceholder": "Voer een naam voor de weergave in",
+        "favorite": "Markeren als favoriet",
+        "favoriteHint": "Een favoriete weergave krijgt een eigen tabblad.",
+        "shareWith": "Delen met",
+        "justMe": "Alleen ik",
+        "everyone": "Iedereen",
+        "filterTitle": "Contacten filteren",
+        "filterHint": "Voldoe aan alle of een van je voorwaarden en voeg groepen toe voor complexere filters.",
+        "columnsTitle": "Kolomvoorkeuren",
+        "locked": "Altijd zichtbaar",
+        "cancel": "Annuleren",
+        "create": "Weergave maken",
+        "save": "Weergave opslaan",
+        "saving": "Opslaan",
+        "needName": "Voer een naam voor de weergave in.",
+        "needFilter": "Voeg minimaal één volledige voorwaarde toe.",
+        "notFound": "Deze weergave is niet gevonden of is verwijderd.",
+        "noPermission": "Je hebt hier geen toestemming voor.",
+        "loading": "Laden",
+        "columnsHint": "Zoek en vink de kolommen aan die deze weergave toont. Sleep de gekozen kolommen om de volgorde te bepalen.",
+        "drag": "Sleep om {name} te herschikken",
+        "selectedUsers": "Geselecteerde gebruikers",
+        "accessLevel": "Toegangsniveau",
+        "canView": "Kan bekijken",
+        "canEdit": "Kan bekijken en bewerken",
+        "peoplePlaceholder": "Personen zoeken",
+        "noPeople": "Geen personen gevonden",
+        "removePerson": "{name} verwijderen",
+        "clearPeople": "Alle personen wissen",
+        "needPeople": "Kies minimaal één persoon.",
+        "onlyCreator": "Alleen de maker van deze weergave kan wijzigen met wie deze wordt gedeeld.",
+        "searchColumns": "Kolommen zoeken",
+        "noColumnMatch": "Geen kolom komt overeen.",
+        "available": "Beschikbare kolommen",
+        "selected": "Geselecteerde kolommen",
+        "selectAll": "Alles selecteren",
+        "reorder": "Sleep om kolommen te herschikken",
+        "remove": "{name} verwijderen"
       }
     }
   }

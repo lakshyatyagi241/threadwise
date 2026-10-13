@@ -15,6 +15,8 @@ import { FlowRunRetentionService } from './runtime/flow-run-retention.service';
 import { FlowSweeperService } from './runtime/flow-sweeper.service';
 import { FlowInboundService } from './triggers/inbound.service';
 import { FlowScheduleSweeper } from './triggers/schedule.sweeper';
+import { LeadFlowConsumer } from './triggers/lead-flow.consumer';
+import { RoutingFlowConsumer } from './triggers/routing-flow.consumer';
 import { FlowTriggerEventsConsumer } from './triggers/trigger-events.consumer';
 
 /**
@@ -38,6 +40,8 @@ import { FlowTriggerEventsConsumer } from './triggers/trigger-events.consumer';
     FlowRunRetentionService,
     FlowInboundService,
     FlowTriggerEventsConsumer,
+    RoutingFlowConsumer,
+    LeadFlowConsumer,
     FlowScheduleSweeper,
     CommerceResume,
     CatalogCartResume,

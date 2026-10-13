@@ -82,6 +82,36 @@ describe('STOP / START through the real inbound ingest', () => {
     expect(replies).toHaveLength(1);
     expect(String(replies[0]!.body)).toMatch(/unsubscribed/i);
     expect(String(replies[0]!.body)).toMatch(/START/);
+
+    // The thread says what happened: one system line on the customer's side, no unread, no assignment, no wait clock.
+    const lines = (await messagesOf(p, conv.id as number)).filter((m) => m.kind === 'system');
+    expect(lines).toHaveLength(1);
+    expect(lines[0]).toMatchObject({
+      direction: 'in',
+      body: 'Contact replied STOP: unsubscribed from marketing',
+    });
+    expect(lines[0]!.meta).toMatchObject({
+      event: 'consent',
+      consentAction: 'withdrawn',
+      consentKeyword: 'stop',
+    });
+    const convRow = await conversationOf(p, t, ch, peer);
+    expect(Number(convRow.unread_count)).toBe(1); // only the STOP itself, not the line
+    expect(convRow.assignee_user_id ?? null).toBeNull();
+  });
+
+  it('the thread API words the line for the reader (systemEvent) and keeps the English body', async () => {
+    const conv = await conversationOf(p, t, ch, peer);
+    const res = await p.api
+      .as(t.admin)
+      .get(`/v2/inbox/conversations/${conv.uuid as string}/messages`)
+      .query({ limit: 50 });
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    const line = (res.body.data as Array<Record<string, unknown>>).find((m) => m.kind === 'system');
+    expect(line).toMatchObject({
+      body: 'Contact replied STOP: unsubscribed from marketing',
+      systemEvent: { event: 'consent', action: 'withdrawn', keyword: 'stop' },
+    });
   });
 
   it('a second STOP adds history but no second confirmation and no state change', async () => {
@@ -91,6 +121,9 @@ describe('STOP / START through the real inbound ingest', () => {
     expect(await botReplies(conv.id as number)).toHaveLength(1);
     const c = await contactRow(peer);
     expect(c.is_unsubscribed).toBe(true);
+    // No state change, so no second line either.
+    const lines = (await messagesOf(p, conv.id as number)).filter((m) => m.kind === 'system');
+    expect(lines).toHaveLength(1);
   });
 
   it('a sentence that contains stop does nothing', async () => {

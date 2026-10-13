@@ -82,7 +82,10 @@
       "lastFired": "ultima il {when}",
       "edit": "Modifica",
       "duplicate": "Duplica",
-      "delete": "Elimina"
+      "delete": "Elimina",
+      "startsFlow": "Avvia anche il flow {name}",
+      "flowOff": "Il flow è disattivato",
+      "flowGone": "Avvia anche un flow eliminato"
     },
     "form": {
       "back": "Assegnazione automatica",
@@ -171,7 +174,15 @@
       "cancel": "Annulla",
       "save": "Salva",
       "saveActivate": "Salva e attiva",
-      "openCount": "{open} aperte"
+      "openCount": "{open} aperte",
+      "flow": {
+        "title": "Avvia anche un flow",
+        "hint": "Facoltativo. Il flow parte per la conversazione quando questa regola scatta, sullo stesso canale. Deve solo essere attivo; non serve che sia pubblicato.",
+        "none": "Nessun flow",
+        "offOption": "{name} (disattivato)",
+        "goneOption": "Un flow che non esiste più",
+        "loadFailed": "Non è stato possibile caricare i flow, quindi l’elenco potrebbe essere incompleto."
+      }
     }
   }
 }

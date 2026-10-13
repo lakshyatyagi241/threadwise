@@ -121,6 +121,12 @@
       "selectedActionsNone": "Contactos seleccionados (selecciona filas primero)",
       "modifyColumns": "Modificar columnas",
       "resetColumns": "Restablecer valores predeterminados",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "Nombre del contacto",
       "colPhone": "Número de teléfono",
       "colEmailId": "Correo electrónico",
@@ -181,7 +187,9 @@
       "ownersCount": "{count} responsables",
       "ownerMe": "{name} (yo)",
       "ownerFormer": "Ex miembro",
-      "reassignView": "Reasignar los contactos de {name}..."
+      "reassignView": "Reasignar los contactos de {name}...",
+      "smsNamed": "SMS {name}",
+      "noSms": "Sin número de teléfono para SMS"
     },
     "bulk": {
       "label": "Acciones para los contactos seleccionados",
@@ -422,7 +430,8 @@
         "address": "Dirección",
         "memo": "Nota",
         "status": "Estado",
-        "source": "Origen"
+        "source": "Origen",
+        "consent": "Consentimiento de marketing (sí / no)"
       },
       "notInFile": "No está en el archivo",
       "columnN": "Columna {n}",
@@ -1204,7 +1213,7 @@
       },
       "exports": {
         "title": "Exportaciones",
-        "hint": "Exportaciones de contactos desde el Hub, de la más reciente a la más antigua. El archivo descargado no se conserva.",
+        "hint": "Exportaciones de contactos desde el Hub, las más recientes primero. Cada archivo se conserva 30 días para que tú y tus compañeros con permiso de exportar podáis descargarlo de nuevo.",
         "empty": "Aún no hay exportaciones.",
         "by": "Por",
         "rows": "Contactos",
@@ -1213,7 +1222,153 @@
         "selections": {
           "ids": "Contactos marcados",
           "filter": "Todo lo que coincide"
-        }
+        },
+        "download": "Descargar",
+        "noFile": "No guardado",
+        "keptUntil": "Se conserva hasta el {date}",
+        "downloadFailed": "No se pudo descargar el archivo. Puede que haya caducado."
+      }
+    },
+    "singleSend": {
+      "close": "Cerrar",
+      "cancel": "Cancelar",
+      "send": "Enviar",
+      "sending": "Enviando",
+      "contact": "Contacto",
+      "name": "Nombre",
+      "phone": "Móvil",
+      "email": "Correo electrónico",
+      "title": {
+        "whatsapp": "Enviar mensaje de WhatsApp",
+        "sms": "Enviar SMS",
+        "email": "Enviar correo",
+        "call": "Llamar"
+      },
+      "optedOut": "Este contacto ha dejado de recibir comunicaciones. No se pueden enviar mensajes.",
+      "noPhone": "Este contacto no tiene número de teléfono.",
+      "noEmail": "Este contacto no tiene correo electrónico.",
+      "number": "Enviar desde",
+      "numberHint": "El número de WhatsApp desde el que se envía el mensaje.",
+      "noChannel": "No hay ningún número de WhatsApp conectado. Conecta uno primero en Canales.",
+      "template": "Plantilla de WhatsApp",
+      "templatePlaceholder": "Selecciona una plantilla",
+      "noTemplates": "No hay plantillas aprobadas para este número.",
+      "notSendable": "Esta plantilla no se puede completar aquí ({reason}).",
+      "variables": "Variables de la plantilla",
+      "preview": "Vista previa",
+      "slot": "Variable {key}",
+      "loading": "Cargando",
+      "openFailed": "No se pudo abrir la conversación: {message}",
+      "sent": "Mensaje en cola para {name}.",
+      "failed": "No se pudo enviar: {message}",
+      "callIntro": "Realiza una llamada de WhatsApp a este contacto desde el navegador.",
+      "callOff": "Las llamadas no están activadas para este número de WhatsApp. Actívalas en los ajustes del número.",
+      "callPermission": "El contacto aún no ha permitido llamadas. Antes de llamar se le pide permiso.",
+      "callReady": "Listo para llamar a {phone}.",
+      "later": {
+        "sms": "Todavía no está disponible enviar SMS desde el CRM.",
+        "email": "Todavía no está disponible enviar correos desde el CRM."
+      },
+      "openApp": {
+        "sms": "Abrir en tu app de mensajes",
+        "email": "Abrir en tu app de correo"
+      }
+    },
+    "views": {
+      "label": "Vistas",
+      "all": "Todos los contactos",
+      "add": "Añadir una vista",
+      "changed": "Los filtros han cambiado desde que se guardó esta vista",
+      "more": "Más para {name}",
+      "picker": {
+        "title": "Selecciona una vista",
+        "create": "Crear vista nueva",
+        "search": "Buscar vistas...",
+        "chipAll": "Todas",
+        "chipPinned": "En pestañas",
+        "chipShared": "Compartidas",
+        "empty": "No se encontraron vistas",
+        "pinned": "En pestañas"
+      },
+      "menu": {
+        "rename": "Renombrar vista",
+        "update": "Guardar filtros actuales",
+        "unpin": "Quitar de las pestañas",
+        "pin": "Mostrar como pestaña",
+        "delete": "Eliminar vista",
+        "edit": "Editar vista"
+      },
+      "drawer": {
+        "editTitle": "Renombrar vista",
+        "name": "Nombre de la vista",
+        "namePlaceholder": "Vista sin título",
+        "shareWith": "Compartir con",
+        "justMe": "Solo yo",
+        "everyone": "Todos",
+        "save": "Actualizar",
+        "cancel": "Cancelar",
+        "close": "Cerrar"
+      },
+      "toast": {
+        "created": "Vista \"{name}\" creada.",
+        "updated": "Vista actualizada.",
+        "filtersSaved": "Filtros guardados en \"{name}\".",
+        "deleted": "Vista \"{name}\" eliminada.",
+        "failed": "No se pudo guardar la vista: {message}",
+        "conflict": "Otra persona cambió esta vista. Recarga e inténtalo de nuevo."
+      },
+      "delete": {
+        "title": "¿Eliminar esta vista?",
+        "message": "\"{name}\" se eliminará para todos con quienes se comparte. Los contactos no cambian.",
+        "confirm": "Eliminar vista",
+        "cancel": "Conservar vista"
+      },
+      "editor": {
+        "title": {
+          "create": "Crear vista nueva",
+          "edit": "Editar vista"
+        },
+        "close": "Cerrar",
+        "back": "Volver a contactos",
+        "name": "Nombre de la vista",
+        "namePlaceholder": "Introduce el nombre de la vista",
+        "favorite": "Marcar como favorita",
+        "favoriteHint": "Una vista favorita tiene su propia pestaña.",
+        "shareWith": "Compartir con",
+        "justMe": "Solo yo",
+        "everyone": "Todos",
+        "filterTitle": "Filtrar contactos",
+        "filterHint": "Cumple todas o cualquiera de tus condiciones, y añade grupos para filtros más complejos.",
+        "columnsTitle": "Preferencias de columnas",
+        "locked": "Siempre visible",
+        "cancel": "Cancelar",
+        "create": "Crear vista",
+        "save": "Guardar vista",
+        "saving": "Guardando",
+        "needName": "Introduce un nombre para la vista.",
+        "needFilter": "Añade al menos una condición completa.",
+        "notFound": "Esta vista no se encontró o fue eliminada.",
+        "noPermission": "No tienes permiso para hacer esto.",
+        "loading": "Cargando",
+        "columnsHint": "Busca y marca las columnas que muestra esta vista, y arrastra las elegidas para ordenarlas.",
+        "drag": "Arrastra para reordenar {name}",
+        "selectedUsers": "Usuarios seleccionados",
+        "accessLevel": "Nivel de acceso",
+        "canView": "Puede ver",
+        "canEdit": "Puede ver y editar",
+        "peoplePlaceholder": "Buscar personas",
+        "noPeople": "No se encontraron personas",
+        "removePerson": "Quitar a {name}",
+        "clearPeople": "Quitar a todas las personas",
+        "needPeople": "Elige al menos una persona.",
+        "onlyCreator": "Solo la persona que creó esta vista puede cambiar con quién se comparte.",
+        "searchColumns": "Buscar columnas",
+        "noColumnMatch": "Ninguna columna coincide.",
+        "available": "Columnas disponibles",
+        "selected": "Columnas seleccionadas",
+        "selectAll": "Seleccionar todo",
+        "reorder": "Arrastra para reordenar las columnas",
+        "remove": "Quitar {name}"
       }
     }
   }

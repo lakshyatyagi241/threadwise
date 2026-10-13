@@ -121,6 +121,12 @@
       "selectedActionsNone": "Liên hệ đã chọn (hãy chọn hàng trước)",
       "modifyColumns": "Chỉnh sửa cột",
       "resetColumns": "Đặt lại về mặc định",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "Tên liên hệ",
       "colPhone": "Số điện thoại",
       "colEmailId": "Email",
@@ -181,7 +187,9 @@
       "ownersCount": "{count} người phụ trách",
       "ownerMe": "{name} (tôi)",
       "ownerFormer": "Thành viên cũ",
-      "reassignView": "Phân công lại các liên hệ của {name}..."
+      "reassignView": "Phân công lại các liên hệ của {name}...",
+      "smsNamed": "SMS {name}",
+      "noSms": "Không có số điện thoại để gửi SMS"
     },
     "bulk": {
       "label": "Thao tác cho các liên hệ đã chọn",
@@ -422,7 +430,8 @@
         "address": "Địa chỉ",
         "memo": "Ghi nhớ",
         "status": "Trạng thái",
-        "source": "Nguồn"
+        "source": "Nguồn",
+        "consent": "Đồng ý tiếp thị (có / không)"
       },
       "notInFile": "Không có trong tệp",
       "columnN": "Cột {n}",
@@ -1204,7 +1213,7 @@
       },
       "exports": {
         "title": "Lần xuất",
-        "hint": "Các lần xuất liên hệ từ Hub, mới nhất trước. Tệp đã tải xuống không được lưu giữ.",
+        "hint": "Các lần xuất danh bạ từ Hub, mới nhất trước. Mỗi tệp được giữ 30 ngày để bạn và đồng nghiệp có quyền xuất có thể tải lại.",
         "empty": "Chưa có lần xuất nào.",
         "by": "Bởi",
         "rows": "Liên hệ",
@@ -1213,7 +1222,153 @@
         "selections": {
           "ids": "Liên hệ đã đánh dấu",
           "filter": "Tất cả liên hệ khớp"
-        }
+        },
+        "download": "Tải xuống",
+        "noFile": "Không được lưu",
+        "keptUntil": "Giữ đến {date}",
+        "downloadFailed": "Không thể tải tệp. Có thể tệp đã hết hạn."
+      }
+    },
+    "singleSend": {
+      "close": "Đóng",
+      "cancel": "Hủy",
+      "send": "Gửi",
+      "sending": "Đang gửi",
+      "contact": "Liên hệ",
+      "name": "Tên",
+      "phone": "Di động",
+      "email": "Email",
+      "title": {
+        "whatsapp": "Gửi tin nhắn WhatsApp",
+        "sms": "Gửi SMS",
+        "email": "Gửi email",
+        "call": "Gọi"
+      },
+      "optedOut": "Liên hệ này đã từ chối nhận liên lạc. Không thể gửi tin nhắn.",
+      "noPhone": "Liên hệ này chưa có số điện thoại.",
+      "noEmail": "Liên hệ này chưa có địa chỉ email.",
+      "number": "Gửi từ",
+      "numberHint": "Số WhatsApp dùng để gửi tin nhắn.",
+      "noChannel": "Chưa kết nối số WhatsApp nào. Hãy kết nối một số trong Kênh trước.",
+      "template": "Mẫu WhatsApp",
+      "templatePlaceholder": "Chọn mẫu",
+      "noTemplates": "Không có mẫu nào được duyệt cho số này.",
+      "notSendable": "Không thể điền mẫu này tại đây ({reason}).",
+      "variables": "Biến của mẫu",
+      "preview": "Xem trước",
+      "slot": "Biến {key}",
+      "loading": "Đang tải",
+      "openFailed": "Không thể mở cuộc trò chuyện: {message}",
+      "sent": "Tin nhắn cho {name} đã được xếp hàng.",
+      "failed": "Không thể gửi: {message}",
+      "callIntro": "Thực hiện cuộc gọi WhatsApp tới liên hệ này từ trình duyệt.",
+      "callOff": "Số WhatsApp này chưa bật tính năng gọi. Hãy bật trong phần cài đặt của số.",
+      "callPermission": "Liên hệ chưa cho phép cuộc gọi. Hệ thống sẽ xin phép họ trước khi gọi.",
+      "callReady": "Sẵn sàng gọi {phone}.",
+      "later": {
+        "sms": "Chưa hỗ trợ gửi SMS từ CRM.",
+        "email": "Chưa hỗ trợ gửi email từ CRM."
+      },
+      "openApp": {
+        "sms": "Mở trong ứng dụng tin nhắn",
+        "email": "Mở trong ứng dụng email"
+      }
+    },
+    "views": {
+      "label": "Chế độ xem",
+      "all": "Tất cả liên hệ",
+      "add": "Thêm chế độ xem",
+      "changed": "Bộ lọc đã thay đổi kể từ khi lưu chế độ xem này",
+      "more": "Thêm tùy chọn cho {name}",
+      "picker": {
+        "title": "Chọn chế độ xem",
+        "create": "Tạo chế độ xem mới",
+        "search": "Tìm chế độ xem...",
+        "chipAll": "Tất cả",
+        "chipPinned": "Trên thẻ",
+        "chipShared": "Được chia sẻ",
+        "empty": "Không tìm thấy chế độ xem",
+        "pinned": "Trên thẻ"
+      },
+      "menu": {
+        "rename": "Đổi tên chế độ xem",
+        "update": "Lưu bộ lọc hiện tại",
+        "unpin": "Gỡ khỏi thẻ",
+        "pin": "Hiện dưới dạng thẻ",
+        "delete": "Xóa chế độ xem",
+        "edit": "Sửa chế độ xem"
+      },
+      "drawer": {
+        "editTitle": "Đổi tên chế độ xem",
+        "name": "Tên chế độ xem",
+        "namePlaceholder": "Chế độ xem chưa đặt tên",
+        "shareWith": "Chia sẻ với",
+        "justMe": "Chỉ mình tôi",
+        "everyone": "Mọi người",
+        "save": "Cập nhật",
+        "cancel": "Hủy",
+        "close": "Đóng"
+      },
+      "toast": {
+        "created": "Đã tạo chế độ xem \"{name}\".",
+        "updated": "Đã cập nhật chế độ xem.",
+        "filtersSaved": "Đã lưu bộ lọc vào \"{name}\".",
+        "deleted": "Đã xóa chế độ xem \"{name}\".",
+        "failed": "Không thể lưu chế độ xem: {message}",
+        "conflict": "Người khác đã thay đổi chế độ xem này. Hãy tải lại và thử lại."
+      },
+      "delete": {
+        "title": "Xóa chế độ xem này?",
+        "message": "\"{name}\" sẽ bị xóa với tất cả những người được chia sẻ. Liên hệ không bị thay đổi.",
+        "confirm": "Xóa chế độ xem",
+        "cancel": "Giữ chế độ xem"
+      },
+      "editor": {
+        "title": {
+          "create": "Tạo chế độ xem mới",
+          "edit": "Sửa chế độ xem"
+        },
+        "close": "Đóng",
+        "back": "Quay lại liên hệ",
+        "name": "Tên chế độ xem",
+        "namePlaceholder": "Nhập tên chế độ xem",
+        "favorite": "Đánh dấu yêu thích",
+        "favoriteHint": "Chế độ xem yêu thích sẽ có thẻ riêng.",
+        "shareWith": "Chia sẻ với",
+        "justMe": "Chỉ mình tôi",
+        "everyone": "Mọi người",
+        "filterTitle": "Lọc liên hệ",
+        "filterHint": "Khớp tất cả hoặc bất kỳ điều kiện nào, và thêm nhóm để tạo bộ lọc phức tạp hơn.",
+        "columnsTitle": "Tùy chọn cột",
+        "locked": "Luôn hiển thị",
+        "cancel": "Hủy",
+        "create": "Tạo chế độ xem",
+        "save": "Lưu chế độ xem",
+        "saving": "Đang lưu",
+        "needName": "Hãy nhập tên chế độ xem.",
+        "needFilter": "Thêm ít nhất một điều kiện đầy đủ.",
+        "notFound": "Không tìm thấy chế độ xem này hoặc đã bị xóa.",
+        "noPermission": "Bạn không có quyền thực hiện thao tác này.",
+        "loading": "Đang tải",
+        "columnsHint": "Tìm và chọn các cột mà chế độ xem này hiển thị, sau đó kéo các cột đã chọn để sắp xếp thứ tự.",
+        "drag": "Kéo để sắp xếp lại {name}",
+        "selectedUsers": "Người dùng đã chọn",
+        "accessLevel": "Mức truy cập",
+        "canView": "Có thể xem",
+        "canEdit": "Có thể xem và sửa",
+        "peoplePlaceholder": "Tìm người",
+        "noPeople": "Không tìm thấy người nào",
+        "removePerson": "Gỡ {name}",
+        "clearPeople": "Xóa tất cả người",
+        "needPeople": "Hãy chọn ít nhất một người.",
+        "onlyCreator": "Chỉ người tạo chế độ xem này mới có thể thay đổi người được chia sẻ.",
+        "searchColumns": "Tìm cột",
+        "noColumnMatch": "Không có cột nào khớp.",
+        "available": "Cột khả dụng",
+        "selected": "Cột đã chọn",
+        "selectAll": "Chọn tất cả",
+        "reorder": "Kéo để sắp xếp lại các cột",
+        "remove": "Gỡ {name}"
       }
     }
   }

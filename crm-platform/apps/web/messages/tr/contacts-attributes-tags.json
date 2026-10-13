@@ -121,6 +121,12 @@
       "selectedActionsNone": "Seçilen kişiler (önce satırları seçin)",
       "modifyColumns": "Sütunları değiştir",
       "resetColumns": "Varsayılana sıfırla",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "Kişi adı",
       "colPhone": "Telefon numarası",
       "colEmailId": "E-posta kimliği",
@@ -181,7 +187,9 @@
       "ownersCount": "{count} sahip",
       "ownerMe": "{name} (ben)",
       "ownerFormer": "Eski üye",
-      "reassignView": "{name} kişisinin kişilerini yeniden ata..."
+      "reassignView": "{name} kişisinin kişilerini yeniden ata...",
+      "smsNamed": "SMS {name}",
+      "noSms": "SMS için telefon numarası yok"
     },
     "bulk": {
       "label": "Seçilen kişiler için işlemler",
@@ -422,7 +430,8 @@
         "address": "Adres",
         "memo": "Not",
         "status": "Durum",
-        "source": "Kaynak"
+        "source": "Kaynak",
+        "consent": "Pazarlama izni (evet / hayır)"
       },
       "notInFile": "Dosyada yok",
       "columnN": "Sütun {n}",
@@ -1204,7 +1213,7 @@
       },
       "exports": {
         "title": "Dışa aktarmalar",
-        "hint": "Hub'dan yapılan kişi dışa aktarmaları, en yeniden başlayarak. İndirilen dosya saklanmaz.",
+        "hint": "Hub'dan kişi dışa aktarımları, en yeniler önce. Her dosya 30 gün saklanır; siz ve dışa aktarma izni olan ekip arkadaşlarınız tekrar indirebilir.",
         "empty": "Henüz dışa aktarma yok.",
         "by": "Yapan",
         "rows": "Kişiler",
@@ -1213,7 +1222,153 @@
         "selections": {
           "ids": "İşaretli kişiler",
           "filter": "Eşleşen her şey"
-        }
+        },
+        "download": "İndir",
+        "noFile": "Kaydedilmedi",
+        "keptUntil": "{date} tarihine kadar saklanır",
+        "downloadFailed": "Dosya indirilemedi. Süresi dolmuş olabilir."
+      }
+    },
+    "singleSend": {
+      "close": "Kapat",
+      "cancel": "İptal",
+      "send": "Gönder",
+      "sending": "Gönderiliyor",
+      "contact": "Kişi",
+      "name": "Ad",
+      "phone": "Cep telefonu",
+      "email": "E-posta",
+      "title": {
+        "whatsapp": "WhatsApp mesajı gönder",
+        "sms": "SMS gönder",
+        "email": "E-posta gönder",
+        "call": "Ara"
+      },
+      "optedOut": "Bu kişi iletişimden çıktı. Mesaj gönderilemez.",
+      "noPhone": "Bu kişinin telefon numarası yok.",
+      "noEmail": "Bu kişinin e-posta adresi yok.",
+      "number": "Gönderen",
+      "numberHint": "Mesajın gönderileceği WhatsApp numarası.",
+      "noChannel": "Bağlı bir WhatsApp numarası yok. Önce Kanallar bölümünden bir numara bağlayın.",
+      "template": "WhatsApp şablonu",
+      "templatePlaceholder": "Şablon seçin",
+      "noTemplates": "Bu numara için onaylı şablon yok.",
+      "notSendable": "Bu şablon burada doldurulamaz ({reason}).",
+      "variables": "Şablon değişkenleri",
+      "preview": "Önizleme",
+      "slot": "{key} değişkeni",
+      "loading": "Yükleniyor",
+      "openFailed": "Görüşme açılamadı: {message}",
+      "sent": "{name} için mesaj kuyruğa alındı.",
+      "failed": "Gönderilemedi: {message}",
+      "callIntro": "Tarayıcıdan bu kişiye WhatsApp araması yapın.",
+      "callOff": "Bu WhatsApp numarası için arama açık değil. Numara ayarlarından açın.",
+      "callPermission": "Kişi henüz aramalara izin vermedi. Arama yapmadan önce izni istenir.",
+      "callReady": "{phone} numarasını aramaya hazır.",
+      "later": {
+        "sms": "CRM üzerinden SMS gönderme henüz kullanılamıyor.",
+        "email": "CRM üzerinden e-posta gönderme henüz kullanılamıyor."
+      },
+      "openApp": {
+        "sms": "Mesaj uygulamanızda açın",
+        "email": "E-posta uygulamanızda açın"
+      }
+    },
+    "views": {
+      "label": "Görünümler",
+      "all": "Tüm kişiler",
+      "add": "Görünüm ekle",
+      "changed": "Filtreler bu görünüm kaydedildikten sonra değişti",
+      "more": "{name} için diğer işlemler",
+      "picker": {
+        "title": "Görünüm seçin",
+        "create": "Yeni görünüm oluştur",
+        "search": "Görünümlerde ara...",
+        "chipAll": "Tümü",
+        "chipPinned": "Sekmelerde",
+        "chipShared": "Paylaşılan",
+        "empty": "Görünüm bulunamadı",
+        "pinned": "Sekmelerde"
+      },
+      "menu": {
+        "rename": "Görünümü yeniden adlandır",
+        "update": "Geçerli filtreleri kaydet",
+        "unpin": "Sekmelerden kaldır",
+        "pin": "Sekme olarak göster",
+        "delete": "Görünümü sil",
+        "edit": "Görünümü düzenle"
+      },
+      "drawer": {
+        "editTitle": "Görünümü yeniden adlandır",
+        "name": "Görünüm adı",
+        "namePlaceholder": "Adsız görünüm",
+        "shareWith": "Paylaşılacak kişiler",
+        "justMe": "Yalnızca ben",
+        "everyone": "Herkes",
+        "save": "Güncelle",
+        "cancel": "İptal",
+        "close": "Kapat"
+      },
+      "toast": {
+        "created": "\"{name}\" görünümü oluşturuldu.",
+        "updated": "Görünüm güncellendi.",
+        "filtersSaved": "Filtreler \"{name}\" görünümüne kaydedildi.",
+        "deleted": "\"{name}\" görünümü silindi.",
+        "failed": "Görünüm kaydedilemedi: {message}",
+        "conflict": "Bu görünümü başka biri değiştirdi. Sayfayı yenileyip tekrar deneyin."
+      },
+      "delete": {
+        "title": "Bu görünüm silinsin mi?",
+        "message": "\"{name}\", paylaşıldığı herkes için silinecek. Kişiler değişmez.",
+        "confirm": "Görünümü sil",
+        "cancel": "Görünümü koru"
+      },
+      "editor": {
+        "title": {
+          "create": "Yeni görünüm oluştur",
+          "edit": "Görünümü düzenle"
+        },
+        "close": "Kapat",
+        "back": "Kişilere dön",
+        "name": "Görünüm adı",
+        "namePlaceholder": "Görünüm adını girin",
+        "favorite": "Favori olarak işaretle",
+        "favoriteHint": "Favori görünüm kendi sekmesini alır.",
+        "shareWith": "Paylaşılacak kişiler",
+        "justMe": "Yalnızca ben",
+        "everyone": "Herkes",
+        "filterTitle": "Kişileri filtrele",
+        "filterHint": "Koşulların tümünü veya herhangi birini eşleştirin; daha karmaşık filtreler için grup ekleyin.",
+        "columnsTitle": "Sütun tercihleri",
+        "locked": "Her zaman gösterilir",
+        "cancel": "İptal",
+        "create": "Görünüm oluştur",
+        "save": "Görünümü kaydet",
+        "saving": "Kaydediliyor",
+        "needName": "Bir görünüm adı girin.",
+        "needFilter": "En az bir eksiksiz koşul ekleyin.",
+        "notFound": "Bu görünüm bulunamadı veya silindi.",
+        "noPermission": "Bu işlem için yetkiniz yok.",
+        "loading": "Yükleniyor",
+        "columnsHint": "Bu görünümde gösterilecek sütunları arayıp işaretleyin, ardından seçilenleri sürükleyerek sıralayın.",
+        "drag": "{name} öğesini yeniden sıralamak için sürükleyin",
+        "selectedUsers": "Seçilen kullanıcılar",
+        "accessLevel": "Erişim düzeyi",
+        "canView": "Görüntüleyebilir",
+        "canEdit": "Görüntüleyebilir ve düzenleyebilir",
+        "peoplePlaceholder": "Kişi ara",
+        "noPeople": "Kişi bulunamadı",
+        "removePerson": "{name} öğesini kaldır",
+        "clearPeople": "Tüm kişileri temizle",
+        "needPeople": "En az bir kişi seçin.",
+        "onlyCreator": "Bu görünümün paylaşımını yalnızca görünümü oluşturan kişi değiştirebilir.",
+        "searchColumns": "Sütun ara",
+        "noColumnMatch": "Eşleşen sütun yok.",
+        "available": "Kullanılabilir sütunlar",
+        "selected": "Seçilen sütunlar",
+        "selectAll": "Tümünü seç",
+        "reorder": "Sütunları yeniden sıralamak için sürükleyin",
+        "remove": "{name} öğesini kaldır"
       }
     }
   }

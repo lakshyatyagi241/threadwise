@@ -17,8 +17,10 @@ vi.mock('../api/hooks', () => ({
     all: ['contact-consent'],
     settings: ['contact-consent', 'settings'],
     composer: ['contact-consent', 'composer'],
+    exports: ['contact-consent', 'exports'],
   },
   useConsentSettings: () => state.settings,
+  useConsentExports: () => ({ data: undefined }),
 }));
 vi.mock('../api/service', () => ({
   consentApi: {
@@ -26,6 +28,7 @@ vi.mock('../api/service', () => ({
     test: (i: unknown) => state.test(i),
   },
   consentExportUrl: () => '/api/v2/contact-consent/export',
+  consentExportFileUrl: (id: string) => `/api/v2/contact-consent/exports/${id}/download`,
 }));
 
 import { ConsentSettingsScreen } from './consent-settings-screen';

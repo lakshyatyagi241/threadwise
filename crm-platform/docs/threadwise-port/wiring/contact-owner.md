@@ -40,6 +40,6 @@ delegation design is [specs/contact-owner-leave-and-delegation.md](../../specs/c
 ## Gaps recorded (not lost)
 
 - Sort by owner: not offered (needs the person's name from another table and has no index). Header is not a sort button.
-- CSV import mapping of an owner email column: Reference has none; recorded as follow-up (BL-108).
+- CSV import mapping of an owner email column: Reference has none; recorded as follow-up (BL-111).
 - Update of stage, status or custom properties for "all N matching": the bulk update endpoint takes ids only; the dialog offers only the owner there.
-- Owner on leave, delegation, auto-assignment: BL-109 / BL-013, design in the spec above.
+- Owner on leave, delegation, auto-assignment: BL-112 / BL-013, design in the spec above.

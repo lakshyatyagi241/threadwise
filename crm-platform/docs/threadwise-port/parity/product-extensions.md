@@ -369,14 +369,39 @@ Reference has a per-contact `is_unsubscribed` flag, a manual toggle, a REST fiel
 | Export                           | None                                                                                                                                                                           | CSV proof for one contact (profile) and for the workspace (settings, up to 50,000 rows), formula-safe cells                                                                                                                                                                  | intended |
 | Hooks                            | Registration order                                                                                                                                                             | `InboundMessageListener` gains `first` (run before the others) and a result `halt` (listeners that answer the customer are skipped; routing and translation still run)                                                                                                       | decision |
 
-Open follow-ups are BL-103 in [backlog.md](../../backlog.md).
+Follow-up pass (all extensions, none in Reference): an inbox system line for a keyword opt-out / opt-in, an asynchronous export of the
+proof above 50,000 events (seven-day file, emailed link), a yes / no consent column in the contact import (only with the confirmation
+ticked), the campaign wizard's recipient list filtered by the consent switch, and a WhatsApp opt-in wording helper in Forms. Details in
+[the spec, section 13](../../specs/contact-consent-ledger.md). Still open (designs in the spec) are the rest of BL-103 in
+[backlog.md](../../backlog.md).
 
 ## Saved replies library (TW-TIB1-024)
+
+(Follow-ups: CSV import and export of the shared library, the AI agent prompt consumer, and the picker button in the rich email editor are extensions too; see [api/saved-replies.md](../../api/saved-replies.md).)
 
 Reference has a flat list of quick replies with two variables. Ours is a library: server-filled variables from the open conversation (contact, agent, workspace,
 channel), an optional channel restriction and language, a duplicate action, a category filter, a plan meter with an upgrade link, and a keyboard-driven
 picker. The rules that differ from Reference are listed one by one in [team-inbox-conversations.md](team-inbox-conversations.md#saved-replies-tw-tib1-024).
 
-## Contact owner (BL-108): visible and editable on every contact screen, not in Reference
+## Call logs: filters, totals for a selection and call analytics (TW-CALL-022, 036)
+
+Reference's `/call-logs` is a list of the AI assistant's calls with a time range, a status and an assistant filter and four totals (see
+[calling-voice.md](calling-voice.md)). This port keeps that page and adds, because the product asked for the visible half of WhatsApp calling:
+
+- **More filters.** A custom range of days (in the person's time zone), direction (inbound or outbound), the WhatsApp number, the teammate who
+  handled the call, and a search that also finds the contact's name.
+- **Totals for what the filters select.** Calls, answered, missed, average length and total minutes, under Reference's four all-time cards.
+- **A record scope on the log.** `call.logs.read` is `all`, `team` or `own` over who handled the call; the Manager preset reads its own calls.
+  Playing a recording is its own key, `call.recordings.play`, and every play is audited.
+- **Call analytics** (`/call-logs/analytics`, `GET /v2/calling/call-logs/analytics`): calls per day, the share answered, calls and handle time per
+  teammate, and a heat map of the hours of the week, counted in the person's time zone. Definitions: answered is a call that ended with talk
+  time; missed is a customer's call with none; the answered rate is over finished calls; average handle time is the talk time of answered calls
+  (wrap-up time is not recorded).
+- **A live refresh** on the existing `call.changed` push.
+
+Decisions for the owner: whether the Manager preset should read its own calls (Reference's tier is admin only); whether "handle time" should
+later include ringing and wrap-up time once the inbox records them; whether a CSV export of the log is wanted (Reference has none).
+
+## Contact owner (BL-111): visible and editable on every contact screen, not in Reference
 
 Reference keeps the creator of a contact in `user_id` and shows it nowhere. Here the owner is a first-class field of the contact: an Owner select in the form (a new contact starts as its creator), an optional Owner column (hidden until turned on), an Owner filter in the Hub (several people, Unassigned, My contacts), the owner on the profile with Change owner, `owner_email` in the CSV export, and a reassignment of "all N matching" in one request. Who may be named follows the record scope. Details, the screen-by-screen table and what is not verified: [contacts-attributes-tags.md](contacts-attributes-tags.md) (section "Contact owner"), wiring [contact-owner.md](../wiring/contact-owner.md). The owner on leave, delegation and auto-assignment are a design only: [specs/contact-owner-leave-and-delegation.md](../../specs/contact-owner-leave-and-delegation.md).

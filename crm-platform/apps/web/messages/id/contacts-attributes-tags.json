@@ -121,6 +121,12 @@
       "selectedActionsNone": "Kontak terpilih (pilih baris terlebih dahulu)",
       "modifyColumns": "Ubah Kolom",
       "resetColumns": "Reset ke default",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "Nama Kontak",
       "colPhone": "Nomor Telepon",
       "colEmailId": "ID Email",
@@ -181,7 +187,9 @@
       "ownersCount": "{count} pemilik",
       "ownerMe": "{name} (saya)",
       "ownerFormer": "Mantan anggota",
-      "reassignView": "Tetapkan ulang kontak milik {name}..."
+      "reassignView": "Tetapkan ulang kontak milik {name}...",
+      "smsNamed": "SMS {name}",
+      "noSms": "Tidak ada nomor telepon untuk SMS"
     },
     "bulk": {
       "label": "Tindakan untuk kontak terpilih",
@@ -422,7 +430,8 @@
         "address": "Alamat",
         "memo": "Memo",
         "status": "Status",
-        "source": "Sumber"
+        "source": "Sumber",
+        "consent": "Persetujuan pemasaran (ya / tidak)"
       },
       "notInFile": "Tidak ada di file",
       "columnN": "Kolom {n}",
@@ -1204,7 +1213,7 @@
       },
       "exports": {
         "title": "Ekspor",
-        "hint": "Ekspor kontak dari Hub, terbaru lebih dulu. File yang diunduh tidak disimpan.",
+        "hint": "Ekspor kontak dari Hub, terbaru lebih dulu. Setiap file disimpan 30 hari agar Anda dan rekan yang boleh mengekspor dapat mengunduhnya lagi.",
         "empty": "Belum ada ekspor.",
         "by": "Oleh",
         "rows": "Kontak",
@@ -1213,7 +1222,153 @@
         "selections": {
           "ids": "Kontak yang dicentang",
           "filter": "Semua yang cocok"
-        }
+        },
+        "download": "Unduh",
+        "noFile": "Tidak disimpan",
+        "keptUntil": "Disimpan hingga {date}",
+        "downloadFailed": "File tidak dapat diunduh. Mungkin sudah kedaluwarsa."
+      }
+    },
+    "singleSend": {
+      "close": "Tutup",
+      "cancel": "Batal",
+      "send": "Kirim",
+      "sending": "Mengirim",
+      "contact": "Kontak",
+      "name": "Nama",
+      "phone": "Ponsel",
+      "email": "Email",
+      "title": {
+        "whatsapp": "Kirim pesan WhatsApp",
+        "sms": "Kirim SMS",
+        "email": "Kirim email",
+        "call": "Telepon"
+      },
+      "optedOut": "Kontak ini telah berhenti menerima komunikasi. Pesan tidak dapat dikirim.",
+      "noPhone": "Kontak ini tidak memiliki nomor telepon.",
+      "noEmail": "Kontak ini tidak memiliki alamat email.",
+      "number": "Kirim dari",
+      "numberHint": "Nomor WhatsApp yang digunakan untuk mengirim pesan.",
+      "noChannel": "Belum ada nomor WhatsApp yang terhubung. Hubungkan satu di Saluran terlebih dahulu.",
+      "template": "Templat WhatsApp",
+      "templatePlaceholder": "Pilih templat",
+      "noTemplates": "Tidak ada templat yang disetujui untuk nomor ini.",
+      "notSendable": "Templat ini tidak dapat diisi di sini ({reason}).",
+      "variables": "Variabel templat",
+      "preview": "Pratinjau",
+      "slot": "Variabel {key}",
+      "loading": "Memuat",
+      "openFailed": "Tidak dapat membuka percakapan: {message}",
+      "sent": "Pesan untuk {name} masuk antrean.",
+      "failed": "Tidak dapat mengirim: {message}",
+      "callIntro": "Lakukan panggilan WhatsApp ke kontak ini dari browser.",
+      "callOff": "Panggilan belum diaktifkan untuk nomor WhatsApp ini. Aktifkan di pengaturan nomor.",
+      "callPermission": "Kontak belum mengizinkan panggilan. Izin mereka akan diminta lebih dulu sebelum menelepon.",
+      "callReady": "Siap menelepon {phone}.",
+      "later": {
+        "sms": "Pengiriman SMS dari CRM belum tersedia.",
+        "email": "Pengiriman email dari CRM belum tersedia."
+      },
+      "openApp": {
+        "sms": "Buka di aplikasi pesan Anda",
+        "email": "Buka di aplikasi email Anda"
+      }
+    },
+    "views": {
+      "label": "Tampilan",
+      "all": "Semua kontak",
+      "add": "Tambah tampilan",
+      "changed": "Filter berubah sejak tampilan ini disimpan",
+      "more": "Opsi lainnya untuk {name}",
+      "picker": {
+        "title": "Pilih tampilan",
+        "create": "Buat tampilan baru",
+        "search": "Cari tampilan...",
+        "chipAll": "Semua",
+        "chipPinned": "Di tab",
+        "chipShared": "Dibagikan",
+        "empty": "Tampilan tidak ditemukan",
+        "pinned": "Di tab"
+      },
+      "menu": {
+        "rename": "Ubah nama tampilan",
+        "update": "Simpan filter saat ini",
+        "unpin": "Hapus dari tab",
+        "pin": "Tampilkan sebagai tab",
+        "delete": "Hapus tampilan",
+        "edit": "Edit tampilan"
+      },
+      "drawer": {
+        "editTitle": "Ubah nama tampilan",
+        "name": "Nama tampilan",
+        "namePlaceholder": "Tampilan tanpa judul",
+        "shareWith": "Bagikan ke",
+        "justMe": "Hanya saya",
+        "everyone": "Semua orang",
+        "save": "Perbarui",
+        "cancel": "Batal",
+        "close": "Tutup"
+      },
+      "toast": {
+        "created": "Tampilan \"{name}\" dibuat.",
+        "updated": "Tampilan diperbarui.",
+        "filtersSaved": "Filter disimpan ke \"{name}\".",
+        "deleted": "Tampilan \"{name}\" dihapus.",
+        "failed": "Tidak dapat menyimpan tampilan: {message}",
+        "conflict": "Orang lain telah mengubah tampilan ini. Muat ulang lalu coba lagi."
+      },
+      "delete": {
+        "title": "Hapus tampilan ini?",
+        "message": "\"{name}\" akan dihapus untuk semua orang yang diberi akses. Kontak tidak berubah.",
+        "confirm": "Hapus tampilan",
+        "cancel": "Pertahankan tampilan"
+      },
+      "editor": {
+        "title": {
+          "create": "Buat Tampilan Baru",
+          "edit": "Edit Tampilan"
+        },
+        "close": "Tutup",
+        "back": "Kembali ke kontak",
+        "name": "Nama Tampilan",
+        "namePlaceholder": "Masukkan nama tampilan",
+        "favorite": "Tandai sebagai Favorit",
+        "favoriteHint": "Tampilan favorit mendapat tab sendiri.",
+        "shareWith": "Bagikan ke",
+        "justMe": "Hanya Saya",
+        "everyone": "Semua Orang",
+        "filterTitle": "Filter Kontak",
+        "filterHint": "Cocokkan semua atau salah satu kondisi, dan tambahkan grup untuk filter yang lebih rumit.",
+        "columnsTitle": "Preferensi Kolom",
+        "locked": "Selalu ditampilkan",
+        "cancel": "Batal",
+        "create": "Buat Tampilan",
+        "save": "Simpan Tampilan",
+        "saving": "Menyimpan",
+        "needName": "Masukkan nama tampilan.",
+        "needFilter": "Tambahkan setidaknya satu kondisi yang lengkap.",
+        "notFound": "Tampilan ini tidak ditemukan atau sudah dihapus.",
+        "noPermission": "Anda tidak memiliki izin untuk melakukan ini.",
+        "loading": "Memuat",
+        "columnsHint": "Cari dan centang kolom yang ditampilkan tampilan ini, lalu seret kolom terpilih untuk mengatur urutannya.",
+        "drag": "Seret untuk mengurutkan ulang {name}",
+        "selectedUsers": "Pengguna terpilih",
+        "accessLevel": "Tingkat akses",
+        "canView": "Dapat melihat",
+        "canEdit": "Dapat melihat dan mengedit",
+        "peoplePlaceholder": "Cari orang",
+        "noPeople": "Orang tidak ditemukan",
+        "removePerson": "Hapus {name}",
+        "clearPeople": "Hapus semua orang",
+        "needPeople": "Pilih setidaknya satu orang.",
+        "onlyCreator": "Hanya pembuat tampilan ini yang dapat mengubah siapa saja yang diberi akses.",
+        "searchColumns": "Cari kolom",
+        "noColumnMatch": "Tidak ada kolom yang cocok.",
+        "available": "Kolom tersedia",
+        "selected": "Kolom terpilih",
+        "selectAll": "Pilih Semua",
+        "reorder": "Seret untuk mengurutkan ulang kolom",
+        "remove": "Hapus {name}"
       }
     }
   }

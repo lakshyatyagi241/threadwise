@@ -5,6 +5,10 @@
  * CHANNEL_DISCONNECTED keep their existing names.
  */
 export const INBOX_ERROR_CODES = {
+  /** No such label in this workspace (a label of another workspace is the same answer). */
+  INBOX_LABEL_NOT_FOUND: 'INBOX_LABEL_NOT_FOUND',
+  /** Naming a label that does not exist yet creates it, which needs `inbox.tag.manage`. */
+  INBOX_LABEL_CREATE_FORBIDDEN: 'INBOX_LABEL_CREATE_FORBIDDEN',
   /** No such note on this conversation (a note of another conversation or workspace is the same answer). */
   CONVERSATION_NOTE_NOT_FOUND: 'CONVERSATION_NOTE_NOT_FOUND',
   /** A template send was asked for, and the template library (TPL) is not part of this deployment yet. */
@@ -24,4 +28,6 @@ export const INBOX_ERROR_CODES = {
   SAVED_REPLY_NOT_EDITABLE: 'SAVED_REPLY_NOT_EDITABLE',
   /** The reply is restricted to other channel kinds than the conversation's (the picker does not offer it there). */
   SAVED_REPLY_CHANNEL_MISMATCH: 'SAVED_REPLY_CHANNEL_MISMATCH',
+  /** The import file cannot be read as saved replies (no file, not text, no shortcut / title / body column, too many rows). 422. */
+  SAVED_REPLY_IMPORT_INVALID: 'SAVED_REPLY_IMPORT_INVALID',
 } as const;

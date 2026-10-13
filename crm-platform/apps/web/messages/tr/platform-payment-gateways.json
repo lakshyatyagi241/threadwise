@@ -237,8 +237,12 @@
           "30d": "Son 30 gün",
           "90d": "Son 90 gün",
           "1y": "Son bir yıl",
-          "all": "Tüm zamanlar"
-        }
+          "all": "Tüm zamanlar",
+          "custom": "Özel aralık"
+        },
+        "customFrom": "Başlangıç tarihi",
+        "customTo": "Bitiş tarihi",
+        "customInvalid": "Geçerli iki gün seçin: başlangıç bitişten sonra olamaz ve en fazla 5 yıl arayla olmalıdır."
       },
       "orders": {
         "title": "Sipariş geçmişi",
@@ -250,7 +254,8 @@
         "windows": {
           "90d": "Son 90 gün",
           "this_year": "Bu yıl",
-          "all": "Tüm zamanlar"
+          "all": "Tüm zamanlar",
+          "custom": "Özel aralık"
         },
         "kpi": {
           "total": "Toplam sipariş",
@@ -434,7 +439,7 @@
           "gross": "Brüt gelir",
           "net": "Net gelir",
           "netPct": "%{pct} net",
-          "success": "Yetkilendirme başarısı",
+          "success": "Ödeme başarı oranı",
           "failed": "Başarısız",
           "events": "{count, plural, other {# olay}}",
           "refunds": "İadeler",

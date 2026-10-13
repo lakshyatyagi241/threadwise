@@ -335,10 +335,20 @@
         "description": "Score every contact with AI, choose what is sent, and see what it costs.",
         "keywords": "lead score, scoring, ai, hot, warm, cold, openrouter, cost, qualify"
       },
+      "growth": {
+        "label": "Growth",
+        "description": "Hot leads, audiences, campaign replies and other things your team can act on, worked out from chats and campaigns.",
+        "keywords": "growth, hot lead, audience, engagement, lapsed, campaign replies, propensity, opt out, pilot"
+      },
       "consent": {
         "label": "Consent and STOP replies",
         "description": "Choose the STOP and START words, the confirmation replies, the opt-out line and whether marketing needs recorded consent.",
         "keywords": "consent, opt out, opt in, unsubscribe, stop, start, gdpr, compliance, privacy, marketing"
+      },
+      "inbox-labels": {
+        "label": "Labels",
+        "description": "Create the labels your team puts on conversations and filters the inbox by.",
+        "keywords": "tags, labels, categories, organize, filter"
       }
     },
     "backToMarketplace": "Back to Marketplace"

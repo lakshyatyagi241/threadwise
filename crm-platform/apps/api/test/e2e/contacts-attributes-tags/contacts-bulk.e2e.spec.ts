@@ -345,7 +345,7 @@ describe('export (TW-CON-021, 022)', () => {
       { name: 'Hist Two', phone: phone(402) },
     ]);
     await csv({ ids, bom: false });
-    await csv({ filter: {}, bom: false });
+    const second = await csv({ filter: {}, bom: false });
     const res = await api.as(t.admin).get('/v2/contacts/exports?limit=2');
     expect(res.status, JSON.stringify(res.body)).toBe(200);
     expect(res.body.data).toHaveLength(2);
@@ -355,8 +355,25 @@ describe('export (TW-CON-021, 022)', () => {
     expect(new Date(res.body.data[0].at).getTime()).toBeGreaterThanOrEqual(
       new Date(res.body.data[1].at).getTime(),
     );
-    // another workspace sees none of them; no export capability, no history
+    // the file of an export is kept and can be downloaded again, byte for byte
+    const fileId = res.body.data[0].fileId as string;
+    expect(fileId).toMatch(/^[0-9a-f-]{36}$/);
+    const again = await api
+      .as(t.admin)
+      .get(`/v2/contacts/exports/${fileId}/download`)
+      .buffer(true)
+      .parse((r, cb) => {
+        const chunks: Buffer[] = [];
+        r.on('data', (c: Buffer) => chunks.push(c));
+        r.on('end', () => cb(null, Buffer.concat(chunks).toString('utf8')));
+      });
+    expect(again.status).toBe(200);
+    expect(again.body as unknown as string).toBe(second.text);
+    // another workspace sees none of them (and cannot fetch the file); no export capability, no history
     const other = await api.signup('exp-hist-b');
+    expect((await api.as(other.admin).get(`/v2/contacts/exports/${fileId}/download`)).status).toBe(
+      404,
+    );
     expect((await api.as(other.admin).get('/v2/contacts/exports')).body.data).toEqual([]);
     const reader = await api.member(t, 'nohist', [['record.contacts.read']]);
     expect((await api.as(reader.token).get('/v2/contacts/exports')).status).toBe(403);

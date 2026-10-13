@@ -2,11 +2,13 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useMemo, useReducer, useState } from 'react';
+import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { Alert, Button, ConfirmDialog, EmptyState, StatTile, cn, useToast } from '@crm/ui';
+import type { ContactViewResponse } from '@crm/contracts';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
+import { CallingProvider, OnCallPanel } from '@/features/calling-voice';
 import { invalidateSegments, useSegments } from '@/features/segments';
 import { useStoredValue } from '@/lib/use-stored-value';
 import { useAttributes, useStatusOptions } from '../api/attributes';
@@ -23,6 +25,7 @@ import {
 } from '../api/bulk';
 import {
   contactFilterBody,
+  DEFAULT_FILTERS,
   deleteContact,
   invalidateContacts,
   KEYS,
@@ -37,24 +40,26 @@ import { useTags } from '../api/tags';
 import type { ContactRow } from '../api/schemas';
 import {
   allColumns,
-  defaultColumns,
   parseStoredColumns,
   serializeColumns,
   STORAGE_KEY as COLUMNS_KEY,
   ORDER_STORAGE_KEY as COLUMN_ORDER_KEY,
   moveColumn,
   nudgeColumn,
-  toggleColumn,
   visibleColumns,
+  type ColumnId,
 } from '../lib/columns';
 import { displayName } from '../lib/contact-model';
 import { downloadBlob } from '../lib/download';
 import { deleteFailure, errorKind } from '../lib/errors';
 import { filtersToSearch, hasActiveFilter, parseFilters } from '../lib/filters';
+import { filtersOfView, viewColumnsOf, viewIdOf, withView } from '../lib/views';
+import { useContactViews } from '../api/views';
 import { stageChoices, statusChoices } from '../lib/option-sets';
 import { clampPage, totalPages } from '../lib/pagination';
 import { defaultPageSize, PAGE_SIZE_KEY } from '../lib/page-size';
-import { rowView } from '../lib/row-view';
+import { rowView, type RowView } from '../lib/row-view';
+import type { SendChannel } from '../lib/single-send';
 import {
   bulkTarget,
   EMPTY_SELECTION,
@@ -78,6 +83,8 @@ import { LostReasonDialog, type LostPrompt } from './lost-reason';
 import { isLostStage } from '../lib/stage-flow';
 import { statusAfterMove, statusNotice } from '../lib/status-scope';
 import { GroupModal } from './group-modal';
+import { SingleSendDrawer, type SingleSendTarget } from './single-send-drawer';
+import { ViewsBar } from './views-bar';
 import { ImportModal } from './import-modal';
 import { BookUserIcon, ChevronDownIcon, ChevronRightIcon, PlusIcon } from './icons';
 
@@ -113,18 +120,38 @@ export function ContactsScreen() {
   const canCreateTags = useCan('record.tags.create');
   const canReadSegments = useCan('record.segments.read');
   const canCreateSegments = useCan('record.segments.create');
+  const canReadViews = useCan('record.contact-views.read');
+  const canCreateViews = useCan('record.contact-views.create');
+  const canUpdateViews = useCan('record.contact-views.update');
+  const canDeleteViews = useCan('record.contact-views.delete');
 
   // The rows-per-page choice is remembered per browser; a `per=` in the URL (a shared link) still wins.
   const [storedSize, setStoredSize] = useStoredValue(PAGE_SIZE_KEY);
   const sizeDefault = defaultPageSize(storedSize);
   const filters = useMemo(() => parseFilters(search, sizeDefault), [search, sizeDefault]);
+  /** The open saved view (`?view=`), kept in the URL beside the filters it applied. */
+  const viewId = viewIdOf(search);
   /** Changing any filter, the sort or the page size starts again from page 1; only `page` itself keeps the position. */
   const setFilters = (patch: Partial<ContactFilters>) => {
     if (patch.limit !== undefined) setStoredSize(String(patch.limit));
     router.replace(
-      `${pathname}${filtersToSearch({ ...filters, page: 1, ...patch }, patch.limit ?? sizeDefault)}`,
+      `${pathname}${withView(filtersToSearch({ ...filters, page: 1, ...patch }, patch.limit ?? sizeDefault), viewId)}`,
       { scroll: false },
     );
+  };
+
+  /** The view whose saved filters were last put in the URL (so landing on `?view=` applies them once). */
+  const appliedView = useRef('');
+
+  /** A view tab: apply the filters it saved (all defaults for "All contacts"). */
+  const selectView = (view: ContactViewResponse | null) => {
+    appliedView.current = view?.id ?? '';
+    const next = view
+      ? filtersOfView(view.filter, sizeDefault)
+      : { ...DEFAULT_FILTERS, limit: sizeDefault };
+    router.replace(`${pathname}${withView(filtersToSearch(next, sizeDefault), view?.id ?? '')}`, {
+      scroll: false,
+    });
   };
 
   /**
@@ -208,9 +235,10 @@ export function ContactsScreen() {
       if (want >= filters.page) want = filters.page - 1;
     }
     if (want !== filters.page) {
-      router.replace(`${pathname}${filtersToSearch({ ...filters, page: want }, sizeDefault)}`, {
-        scroll: false,
-      });
+      router.replace(
+        `${pathname}${withView(filtersToSearch({ ...filters, page: want }, sizeDefault), viewId)}`,
+        { scroll: false },
+      );
     }
     // Only the settled response decides; `filters` is read for the current URL.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -228,13 +256,53 @@ export function ContactsScreen() {
     [attributes.data],
   );
   const stored = useMemo(() => parseStoredColumns(storedColumns), [storedColumns]);
-  const baseColumns = stored ?? defaultColumns(attributeColumns);
-  const columns = useMemo(
-    () => visibleColumns(stored, attributeColumns, parseStoredColumns(storedOrder)),
-    [stored, attributeColumns, storedOrder],
+  // A saved view can keep its own columns: while it is open they replace the person's, and edits to them stay on this
+  // screen (a draft) until "Save current filters" stores them in the view.
+  const viewsList = useContactViews(canReadViews);
+  const activeView = viewId ? viewsList.data?.find((v) => v.id === viewId) : undefined;
+
+  // Landing on `?view=` with no filters in the URL (a fresh create, a reload, a shared link): apply what the view saved. Filters already
+  // in the URL (the tab was clicked, or a link carries them) are left as they are.
+  useEffect(() => {
+    if (!viewId) {
+      appliedView.current = '';
+      return;
+    }
+    if (!activeView || appliedView.current === viewId) return;
+    appliedView.current = viewId;
+    if (hasActiveFilter(filters)) return;
+    router.replace(
+      `${pathname}${withView(filtersToSearch(filtersOfView(activeView.filter, sizeDefault), sizeDefault), viewId)}`,
+      { scroll: false },
+    );
+    // Runs when the open view or its data changes; `filters` is read for the URL as it is now.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [viewId, activeView]);
+
+  const savedViewCols = useMemo(
+    () => (activeView ? (viewColumnsOf(activeView.filter) as ColumnId[] | null) : null),
+    [activeView],
   );
+  const [colDraft, setColDraft] = useState<{ viewId: string; ids: ColumnId[] } | null>(null);
+  const viewCols = savedViewCols
+    ? colDraft?.viewId === viewId
+      ? colDraft.ids
+      : savedViewCols
+    : null;
+  const columns = useMemo(
+    () =>
+      viewCols
+        ? visibleColumns(viewCols, attributeColumns, viewCols)
+        : visibleColumns(stored, attributeColumns, parseStoredColumns(storedOrder)),
+    [viewCols, stored, attributeColumns, storedOrder],
+  );
+  /** Where a column change goes: the open view's draft, or the person's own stored columns. */
+  const chooseColumns = (ids: ColumnId[], order: boolean) => {
+    if (viewCols) setColDraft({ viewId, ids });
+    else if (order) setStoredOrder(serializeColumns(ids));
+    else setStoredColumns(serializeColumns(ids));
+  };
   const allCols = useMemo(() => allColumns(attributeColumns), [attributeColumns]);
-  const visibleIds = useMemo(() => new Set(columns.map((c) => c.id)), [columns]);
 
   // selection
   const [sel, dispatch] = useReducer(selectionReducer, EMPTY_SELECTION);
@@ -267,6 +335,7 @@ export function ContactsScreen() {
   const [updateOpen, setUpdateOpen] = useState(false);
   /** The contact a group/tag picker opened from a row's menu acts on; null when it acts on the selection. */
   const [pickerRow, setPickerRow] = useState<string | null>(null);
+  const [sendTarget, setSendTarget] = useState<SingleSendTarget | null>(null);
   const closePicker = () => {
     setPicker(null);
     setPickerRow(null);
@@ -499,357 +568,382 @@ export function ContactsScreen() {
       if (row) setFormFor(row);
     },
     onDelete: (id: string) => setDeleteId(id),
+    onSend: (row: RowView, channel: SendChannel) => setSendTarget({ row, channel }),
     onFilterTag: (tagId: string) => setFilters({ tag: tagId }),
   };
 
   return (
-    <div className="space-y-3">
-      <header className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-background px-4 py-3">
-        <div className="flex min-w-0 items-center gap-4">
-          <span
-            aria-hidden="true"
-            className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-brand text-brand-foreground"
-          >
-            <BookUserIcon className="size-5" />
-          </span>
-          <div className="min-w-0">
-            <h1 className="text-xl font-bold tracking-tight">{t('title')}</h1>
-            <p className="mt-0.5 hidden text-sm text-muted-foreground sm:block">{t('subtitle')}</p>
-          </div>
-        </div>
-        {canCreate && (
-          <Button variant="brand" className="h-10 px-5" onClick={() => setFormFor('new')}>
-            <PlusIcon /> {t('addContact')}
-          </Button>
-        )}
-      </header>
-
-      <ContactsToolbar
-        q={q}
-        onQ={setQ}
-        segment={segmentOf(filters)}
-        onSegment={(v) => setFilters(filtersOfSegment(v))}
-        stats={s}
-        groups={groups.data ?? []}
-        segments={segmentOptions}
-        segmentsState={segmentsState}
-        onRetrySegments={() => void segmentList.refetch()}
-        canCreateSegment={canCreateSegments}
-        // A segment is saved from plain filters; with a segment already chosen there is nothing new to describe.
-        onSaveAsSegment={
-          canCreateSegments && filtered && !filters.segment && !filters.rules
-            ? () => setSaveSegmentOpen(true)
-            : undefined
-        }
-        rules={filters.rules}
-        onRules={(rules) => setFilters({ rules })}
-        tag={filters.tag}
-        onTag={(id) => setFilters({ tag: id })}
-        tags={tags.data ?? []}
-        owner={filters.owner}
-        onOwner={(v) => setFilters({ owner: v })}
-        owners={owners}
-        meId={session.user.id}
-        // The shortcut on a one-person filter: select everything the view matches and open the owner change.
-        onReassignView={
-          canUpdate && total !== 0
-            ? () => {
-                dispatch({ type: 'selectAllMatching' });
-                setUpdateOpen(true);
-              }
-            : undefined
-        }
-        stage={filters.lifecycleStage}
-        onStage={(v) => setFilters({ lifecycleStage: v })}
-        stages={stages}
-        consent={filters.consent}
-        onConsent={(v) => setFilters({ consent: v })}
-        order={filters.sort === 'createdAt' ? filters.order : null}
-        onOrder={(v) => setFilters({ order: v, sort: 'createdAt' })}
-        selectedCount={count}
-        anySelected={selectedAny}
-        busy={busy}
-        onClearSelection={() => dispatch({ type: 'clear' })}
-        onSendCampaign={() => void onSendCampaign()}
-        can={{
-          update: canUpdate,
-          delete: canDelete,
-          export: canExport,
-          import: canImport,
-          merge: canMerge,
-          createGroups: canCreateGroups,
-          createTags: canCreateTags,
-        }}
-        exporting={exporting}
-        onExportAll={() => void runExport({ kind: 'filter', filter: snapshot }, setExporting)}
-        onExportSelected={() => void runExport(target(), setBusy)}
-        onImport={() => setImportOpen(true)}
-        onAddColumnField={() => router.push('/contact-properties')}
-        onUpdateSelected={() => setUpdateOpen(true)}
-        onDedupe={() => setDedupeOpen(true)}
-        onNewGroup={() => setGroupOpen(true)}
-        onDeleteSelected={() => setConfirmBulkDelete(true)}
-        picker={pickerRow ? null : picker}
-        onPicker={(p) => (p === null ? closePicker() : setPicker(p))}
-        onGroup={onBulkGroup}
-        onTagApply={onBulkTag}
-        allColumns={allCols}
-        visibleIds={visibleIds}
-        onColumn={(id, on) => setStoredColumns(serializeColumns(toggleColumn(baseColumns, id, on)))}
-        onResetColumns={() => {
-          setStoredColumns(null);
-          setStoredOrder(null);
-        }}
-        view={view}
-        onView={chooseView}
-        onRefresh={() => void Promise.all([refresh(), list.refetch()])}
-        refreshing={list.isFetching}
-      />
-
-      <div>
-        <button
-          type="button"
-          aria-expanded={showStats}
-          onClick={() => setStatsRaw(showStats ? '0' : '1')}
-          className="inline-flex items-center gap-1.5 rounded-md text-sm text-muted-foreground outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
-        >
-          {showStats ? (
-            <ChevronDownIcon className="size-3.5" />
-          ) : (
-            <ChevronRightIcon className="size-3.5 rtl:rotate-180" />
-          )}
-          {showStats ? t('hideStats') : t('showStats')}
-        </button>
-        {showStats && (
-          <div className="mt-2 grid grid-cols-2 gap-3 lg:grid-cols-4">
-            <StatTile
-              label={t('stats.total')}
-              value={num(s?.total)}
-              hint={t('stats.inWorkspace')}
-            />
-            <StatTile
-              tone="accent"
-              label={t('stats.groups')}
-              value={num(s?.groups ?? groups.data?.length)}
-              hint={t('stats.segments')}
-            />
-            <StatTile
-              label={t('stats.subscribed')}
-              value={num(s?.subscribed)}
-              hint={t('stats.optedIn')}
-            />
-            <StatTile
-              tone="warning"
-              label={t('stats.unsubscribed')}
-              value={num(s?.unsubscribed)}
-              hint={t('stats.optedOut')}
-            />
-          </div>
-        )}
-      </div>
-
-      {list.segmentInvalid > 0 && (
-        <Alert tone="warning" className="flex flex-wrap items-center justify-between gap-2">
-          <span>{t('segmentInvalid', { count: list.segmentInvalid })}</span>
-          <Link
-            href={`/segments/${filters.segment}/edit`}
-            className="font-semibold underline underline-offset-2"
-          >
-            {t('segmentFix')}
-          </Link>
-        </Alert>
-      )}
-
-      {header === 'all' && total !== undefined && total > rows.length && (
-        <div
-          role="status"
-          className="flex flex-wrap items-center justify-center gap-2 rounded-md border border-border bg-brand/5 px-3 py-2 text-sm"
-        >
-          {sel.allMatching ? (
-            <>
-              {t('banner.allSelected', { total })}
-              <button
-                type="button"
-                className="font-semibold text-brand underline underline-offset-2"
-                onClick={() => dispatch({ type: 'clear' })}
+    <CallingProvider>
+      <div className="space-y-3">
+        {/* Sticky under the 56px top bar: the title card and the search / filter row stay in view while the list scrolls. */}
+        <div className="sticky top-14 z-[35] -mx-4 -mt-4 space-y-3 bg-background px-4 pb-3 pt-4 md:-mx-6 md:-mt-6 md:px-6 md:pt-6">
+          <header className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-background px-4 py-3">
+            <div className="flex min-w-0 items-center gap-4">
+              <span
+                aria-hidden="true"
+                className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-brand text-brand-foreground"
               >
-                {t('banner.clear')}
-              </button>
-            </>
-          ) : (
-            <>
-              {t('banner.pageSelected', { count: rowIds.length })}
-              <button
-                type="button"
-                className="font-semibold text-brand underline underline-offset-2"
-                onClick={() => dispatch({ type: 'selectAllMatching' })}
-              >
-                {t('banner.selectAllMatching', { total })}
-              </button>
-            </>
-          )}
-        </div>
-      )}
-
-      <section
-        aria-label={t('tableLabel')}
-        aria-busy={list.isFetching}
-        // The card is as tall as the window allows: the rows scroll inside it and the footer stays pinned.
-        className="flex max-h-[max(26rem,calc(100dvh-17rem))] flex-col overflow-hidden rounded-xl border border-border bg-background"
-      >
-        <div
-          className={cn(
-            'flex min-h-0 flex-1 flex-col transition-opacity',
-            list.isPlaceholderData && 'opacity-60',
-          )}
-        >
-          {list.isPending ? (
-            <ListSkeleton />
-          ) : list.isError ? (
-            <div className="p-4">
-              <ErrorLine error={list.error} onRetry={() => void list.refetch()} />
+                <BookUserIcon className="size-5" />
+              </span>
+              <div className="min-w-0">
+                <h1 className="text-xl font-bold tracking-tight">{t('title')}</h1>
+                <p className="mt-0.5 hidden text-sm text-muted-foreground sm:block">
+                  {t('subtitle')}
+                </p>
+              </div>
             </div>
-          ) : rows.length === 0 ? (
-            <div className="p-4">
-              <EmptyState
-                title={filtered ? t('emptyFilteredTitle') : t('emptyTitle')}
-                message={filtered ? t('emptyFiltered') : t('empty')}
-                actions={
-                  <>
-                    {filtered && (
-                      <Button variant="secondary" onClick={() => router.replace(pathname)}>
-                        {t('resetFilters')}
-                      </Button>
-                    )}
-                    {canCreate && (
-                      <Button variant="brand" onClick={() => setFormFor('new')}>
-                        {t('addContact')}
-                      </Button>
-                    )}
-                  </>
-                }
+            {canCreate && (
+              <Button variant="brand" className="h-10 px-5" onClick={() => setFormFor('new')}>
+                <PlusIcon /> {t('addContact')}
+              </Button>
+            )}
+          </header>
+
+          {canReadViews && (
+            <ViewsBar
+              filters={filters}
+              defaultLimit={sizeDefault}
+              activeId={viewId}
+              columnIds={columns.map((c) => c.id)}
+              keepsColumns={savedViewCols !== null}
+              onSelect={selectView}
+              can={{ create: canCreateViews, update: canUpdateViews, delete: canDeleteViews }}
+            />
+          )}
+
+          <ContactsToolbar
+            q={q}
+            onQ={setQ}
+            segment={segmentOf(filters)}
+            onSegment={(v) => setFilters(filtersOfSegment(v))}
+            stats={s}
+            groups={groups.data ?? []}
+            segments={segmentOptions}
+            segmentsState={segmentsState}
+            onRetrySegments={() => void segmentList.refetch()}
+            canCreateSegment={canCreateSegments}
+            // A segment is saved from plain filters; with a segment already chosen there is nothing new to describe.
+            onSaveAsSegment={
+              canCreateSegments && filtered && !filters.segment && !filters.rules
+                ? () => setSaveSegmentOpen(true)
+                : undefined
+            }
+            rules={filters.rules}
+            onRules={(rules) => setFilters({ rules })}
+            tag={filters.tag}
+            onTag={(id) => setFilters({ tag: id })}
+            tags={tags.data ?? []}
+            owner={filters.owner}
+            onOwner={(v) => setFilters({ owner: v })}
+            owners={owners}
+            meId={session.user.id}
+            // The shortcut on a one-person filter: select everything the view matches and open the owner change.
+            onReassignView={
+              canUpdate && total !== 0
+                ? () => {
+                    dispatch({ type: 'selectAllMatching' });
+                    setUpdateOpen(true);
+                  }
+                : undefined
+            }
+            stage={filters.lifecycleStage}
+            onStage={(v) => setFilters({ lifecycleStage: v })}
+            stages={stages}
+            consent={filters.consent}
+            onConsent={(v) => setFilters({ consent: v })}
+            order={filters.sort === 'createdAt' ? filters.order : null}
+            onOrder={(v) => setFilters({ order: v, sort: 'createdAt' })}
+            selectedCount={count}
+            anySelected={selectedAny}
+            busy={busy}
+            onClearSelection={() => dispatch({ type: 'clear' })}
+            onSendCampaign={() => void onSendCampaign()}
+            can={{
+              update: canUpdate,
+              delete: canDelete,
+              export: canExport,
+              import: canImport,
+              merge: canMerge,
+              createGroups: canCreateGroups,
+              createTags: canCreateTags,
+            }}
+            exporting={exporting}
+            onExportAll={() => void runExport({ kind: 'filter', filter: snapshot }, setExporting)}
+            onExportSelected={() => void runExport(target(), setBusy)}
+            onImport={() => setImportOpen(true)}
+            onAddColumnField={() => router.push('/contact-properties')}
+            onUpdateSelected={() => setUpdateOpen(true)}
+            onDedupe={() => setDedupeOpen(true)}
+            onNewGroup={() => setGroupOpen(true)}
+            onDeleteSelected={() => setConfirmBulkDelete(true)}
+            picker={pickerRow ? null : picker}
+            onPicker={(p) => (p === null ? closePicker() : setPicker(p))}
+            onGroup={onBulkGroup}
+            onTagApply={onBulkTag}
+            allColumns={allCols}
+            columnIds={columns.map((c) => c.id)}
+            onApplyColumns={(ids) => {
+              // Both the set and its order: a view's draft holds one list that is also the order.
+              chooseColumns(ids, false);
+              if (!viewCols) chooseColumns(ids, true);
+            }}
+            onResetColumns={() => {
+              if (viewCols) return setColDraft(null);
+              setStoredColumns(null);
+              setStoredOrder(null);
+            }}
+            view={view}
+            onView={chooseView}
+            onRefresh={() => void Promise.all([refresh(), list.refetch()])}
+            refreshing={list.isFetching}
+          />
+        </div>
+
+        <div>
+          <button
+            type="button"
+            aria-expanded={showStats}
+            onClick={() => setStatsRaw(showStats ? '0' : '1')}
+            className="inline-flex items-center gap-1.5 rounded-md text-sm text-muted-foreground outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
+          >
+            {showStats ? (
+              <ChevronDownIcon className="size-3.5" />
+            ) : (
+              <ChevronRightIcon className="size-3.5 rtl:rotate-180" />
+            )}
+            {showStats ? t('hideStats') : t('showStats')}
+          </button>
+          {showStats && (
+            <div className="mt-2 grid grid-cols-2 gap-3 lg:grid-cols-4">
+              <StatTile
+                label={t('stats.total')}
+                value={num(s?.total)}
+                hint={t('stats.inWorkspace')}
+              />
+              <StatTile
+                tone="accent"
+                label={t('stats.groups')}
+                value={num(s?.groups ?? groups.data?.length)}
+                hint={t('stats.segments')}
+              />
+              <StatTile
+                label={t('stats.subscribed')}
+                value={num(s?.subscribed)}
+                hint={t('stats.optedIn')}
+              />
+              <StatTile
+                tone="warning"
+                label={t('stats.unsubscribed')}
+                value={num(s?.unsubscribed)}
+                hint={t('stats.optedOut')}
               />
             </div>
-          ) : view === 'list' ? (
-            <ContactsTable
-              rows={views}
-              columns={columns}
-              headerState={header}
-              onToggleAll={(checked) => dispatch({ type: 'setMany', ids: rowIds, checked })}
-              sort={{ key: filters.sort, order: filters.order }}
-              onSort={onSortColumn}
-              onMoveColumn={(id, target) =>
-                setStoredOrder(
-                  serializeColumns(
+          )}
+        </div>
+
+        {list.segmentInvalid > 0 && (
+          <Alert tone="warning" className="flex flex-wrap items-center justify-between gap-2">
+            <span>{t('segmentInvalid', { count: list.segmentInvalid })}</span>
+            <Link
+              href={`/segments/${filters.segment}/edit`}
+              className="font-semibold underline underline-offset-2"
+            >
+              {t('segmentFix')}
+            </Link>
+          </Alert>
+        )}
+
+        {header === 'all' && total !== undefined && total > rows.length && (
+          <div
+            role="status"
+            className="flex flex-wrap items-center justify-center gap-2 rounded-md border border-border bg-brand/5 px-3 py-2 text-sm"
+          >
+            {sel.allMatching ? (
+              <>
+                {t('banner.allSelected', { total })}
+                <button
+                  type="button"
+                  className="font-semibold text-brand underline underline-offset-2"
+                  onClick={() => dispatch({ type: 'clear' })}
+                >
+                  {t('banner.clear')}
+                </button>
+              </>
+            ) : (
+              <>
+                {t('banner.pageSelected', { count: rowIds.length })}
+                <button
+                  type="button"
+                  className="font-semibold text-brand underline underline-offset-2"
+                  onClick={() => dispatch({ type: 'selectAllMatching' })}
+                >
+                  {t('banner.selectAllMatching', { total })}
+                </button>
+              </>
+            )}
+          </div>
+        )}
+
+        <section
+          aria-label={t('tableLabel')}
+          aria-busy={list.isFetching}
+          // The card is as tall as the window allows: the rows scroll inside it and the footer stays pinned.
+          className="flex max-h-[max(26rem,calc(100dvh-17rem))] flex-col overflow-hidden rounded-xl border border-border bg-background"
+        >
+          <div
+            className={cn(
+              'flex min-h-0 flex-1 flex-col transition-opacity',
+              list.isPlaceholderData && 'opacity-60',
+            )}
+          >
+            {list.isPending ? (
+              <ListSkeleton />
+            ) : list.isError ? (
+              <div className="p-4">
+                <ErrorLine error={list.error} onRetry={() => void list.refetch()} />
+              </div>
+            ) : rows.length === 0 ? (
+              <div className="p-4">
+                <EmptyState
+                  title={filtered ? t('emptyFilteredTitle') : t('emptyTitle')}
+                  message={filtered ? t('emptyFiltered') : t('empty')}
+                  actions={
+                    <>
+                      {filtered && (
+                        <Button variant="secondary" onClick={() => router.replace(pathname)}>
+                          {t('resetFilters')}
+                        </Button>
+                      )}
+                      {canCreate && (
+                        <Button variant="brand" onClick={() => setFormFor('new')}>
+                          {t('addContact')}
+                        </Button>
+                      )}
+                    </>
+                  }
+                />
+              </div>
+            ) : view === 'list' ? (
+              <ContactsTable
+                rows={views}
+                columns={columns}
+                headerState={header}
+                onToggleAll={(checked) => dispatch({ type: 'setMany', ids: rowIds, checked })}
+                sort={{ key: filters.sort, order: filters.order }}
+                onSort={onSortColumn}
+                onMoveColumn={(id, target) =>
+                  chooseColumns(
                     moveColumn(
                       columns.map((c) => c.id),
                       id,
                       target,
                     ),
-                  ),
-                )
-              }
-              onNudgeColumn={(id, step) =>
-                setStoredOrder(
-                  serializeColumns(
+                    true,
+                  )
+                }
+                onNudgeColumn={(id, step) =>
+                  chooseColumns(
                     nudgeColumn(
                       columns.map((c) => c.id),
                       id,
                       step,
                     ),
-                  ),
-                )
-              }
-              {...handlers}
-            />
-          ) : (
-            <ContactsKanban
-              filters={filters}
-              stages={stages}
-              toView={(r) => rowView(r, attrLabels)}
-              onStageChange={handlers.onStageChange}
-              stageBusyId={stageBusy}
+                    true,
+                  )
+                }
+                {...handlers}
+              />
+            ) : (
+              <ContactsKanban
+                filters={filters}
+                stages={stages}
+                toView={(r) => rowView(r, attrLabels)}
+                onStageChange={handlers.onStageChange}
+                stageBusyId={stageBusy}
+              />
+            )}
+          </div>
+          {!list.isError && view === 'list' && (
+            <ContactsPagination
+              page={list.page}
+              total={total}
+              limit={filters.limit}
+              loading={list.isFetching}
+              onPage={(p) => setFilters({ page: p })}
+              onLimit={(n) => setFilters({ limit: n })}
+              onRecount={() => void invalidateContacts(qc)}
+              approximate={list.totalApproximate}
             />
           )}
-        </div>
-        {!list.isError && view === 'list' && (
-          <ContactsPagination
-            page={list.page}
-            total={total}
-            limit={filters.limit}
-            loading={list.isFetching}
-            onPage={(p) => setFilters({ page: p })}
-            onLimit={(n) => setFilters({ limit: n })}
-            onRecount={() => void invalidateContacts(qc)}
-            approximate={list.totalApproximate}
-          />
-        )}
-      </section>
+        </section>
 
-      {pickerRow && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/30 pt-[20vh]">
-          <div className="relative h-0 w-72">
-            <BulkPickers
-              picker={picker}
-              canCreateTags={canCreateTags}
-              onClose={closePicker}
-              onGroup={onBulkGroup}
-              onTag={onBulkTag}
-            />
+        {pickerRow && (
+          <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/30 pt-[20vh]">
+            <div className="relative h-0 w-72">
+              <BulkPickers
+                picker={picker}
+                canCreateTags={canCreateTags}
+                onClose={closePicker}
+                onGroup={onBulkGroup}
+                onTag={onBulkTag}
+              />
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      <ContactFormModal
-        open={formFor !== null}
-        contact={formFor === 'new' || formFor === null ? undefined : formFor}
-        onClose={() => setFormFor(null)}
-      />
-      <LostReasonDialog
-        prompt={lostPrompt}
-        busy={stageBusy !== null}
-        onConfirm={(p, fields) => void changeStage(p.contactId, p.stageValue, fields)}
-        onClose={() => setLostPrompt(null)}
-      />
-      <BulkUpdateDialog
-        open={updateOpen}
-        count={sel.allMatching ? (total ?? null) : sel.ids.size}
-        ownerOnly={sel.allMatching}
-        busy={busy}
-        onApply={onBulkUpdate}
-        onClose={() => setUpdateOpen(false)}
-      />
-      <ImportModal open={importOpen} onClose={() => setImportOpen(false)} />
-      <GroupModal open={groupOpen} onClose={() => setGroupOpen(false)} />
-      <SaveSegmentModal
-        open={saveSegmentOpen}
-        filter={{ ...contactFilterBody({ ...filters, segment: '' }), segmentId: undefined }}
-        onClose={() => setSaveSegmentOpen(false)}
-      />
-      <DedupeDialog open={dedupeOpen} onClose={() => setDedupeOpen(false)} />
-      <ConfirmDialog
-        open={deleteId !== null}
-        tone="danger"
-        busy={busy}
-        title={t('deleteTitle')}
-        message={t('deleteMessage', { name: deleteTarget ? displayName(deleteTarget) : '' })}
-        confirmLabel={t('delete')}
-        cancelLabel={t('keep')}
-        onClose={() => setDeleteId(null)}
-        onConfirm={() => void onDeleteOne()}
-      />
-      <ConfirmDialog
-        open={confirmBulkDelete}
-        tone="danger"
-        busy={busy}
-        title={tb('deleteTitle')}
-        message={count === null ? tb('deleteAllMessage') : tb('deleteMessage', { count })}
-        confirmLabel={tb('delete')}
-        cancelLabel={tb('keep')}
-        onClose={() => setConfirmBulkDelete(false)}
-        onConfirm={() => void onBulkDelete()}
-      />
-    </div>
+        <ContactFormModal
+          open={formFor !== null}
+          contact={formFor === 'new' || formFor === null ? undefined : formFor}
+          onClose={() => setFormFor(null)}
+        />
+        <LostReasonDialog
+          prompt={lostPrompt}
+          busy={stageBusy !== null}
+          onConfirm={(p, fields) => void changeStage(p.contactId, p.stageValue, fields)}
+          onClose={() => setLostPrompt(null)}
+        />
+        <BulkUpdateDialog
+          open={updateOpen}
+          count={sel.allMatching ? (total ?? null) : sel.ids.size}
+          ownerOnly={sel.allMatching}
+          busy={busy}
+          onApply={onBulkUpdate}
+          onClose={() => setUpdateOpen(false)}
+        />
+        <ImportModal open={importOpen} onClose={() => setImportOpen(false)} />
+        <GroupModal open={groupOpen} onClose={() => setGroupOpen(false)} />
+        <SingleSendDrawer target={sendTarget} onClose={() => setSendTarget(null)} />
+        <OnCallPanel />
+        <SaveSegmentModal
+          open={saveSegmentOpen}
+          filter={{ ...contactFilterBody({ ...filters, segment: '' }), segmentId: undefined }}
+          onClose={() => setSaveSegmentOpen(false)}
+        />
+        <DedupeDialog open={dedupeOpen} onClose={() => setDedupeOpen(false)} />
+        <ConfirmDialog
+          open={deleteId !== null}
+          tone="danger"
+          busy={busy}
+          title={t('deleteTitle')}
+          message={t('deleteMessage', { name: deleteTarget ? displayName(deleteTarget) : '' })}
+          confirmLabel={t('delete')}
+          cancelLabel={t('keep')}
+          onClose={() => setDeleteId(null)}
+          onConfirm={() => void onDeleteOne()}
+        />
+        <ConfirmDialog
+          open={confirmBulkDelete}
+          tone="danger"
+          busy={busy}
+          title={tb('deleteTitle')}
+          message={count === null ? tb('deleteAllMessage') : tb('deleteMessage', { count })}
+          confirmLabel={tb('delete')}
+          cancelLabel={tb('keep')}
+          onClose={() => setConfirmBulkDelete(false)}
+          onConfirm={() => void onBulkDelete()}
+        />
+      </div>
+    </CallingProvider>
   );
 }
 

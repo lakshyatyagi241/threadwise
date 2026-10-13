@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConsentSettingsService } from './consent-settings.service';
 import { ConsentPolicyService } from './consent-policy.service';
+import { ConsentExportPublisher } from './consent-export.publisher';
+import { ConsentExportRepository } from './consent-export.repository';
+import { ConsentExportService } from './consent-export.service';
 import { ConsentRepository } from './consent.repository';
 import { ContactConsentController } from './consent.controller';
 import { ContactConsentService } from './consent.service';
@@ -16,6 +19,9 @@ import { ContactConsentService } from './consent.service';
     ContactConsentService,
     ConsentSettingsService,
     ConsentPolicyService,
+    ConsentExportRepository,
+    ConsentExportPublisher,
+    ConsentExportService,
   ],
   exports: [ContactConsentService, ConsentSettingsService, ConsentPolicyService],
 })

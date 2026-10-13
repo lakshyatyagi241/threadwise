@@ -1,11 +1,11 @@
 # Contact owner: leave, delegation and auto-assignment (design only)
 
-Status: **spec, nothing built** (backlog BL-109, related BL-013). Written 2026-10-13 next to the owner screens (BL-108), which give every
+Status: **spec, nothing built** (backlog BL-112, related BL-013). Written 2026-10-13 next to the owner screens (BL-111), which give every
 contact one owner and a manual way to move many contacts at once. This note is about what the product does when the owner is not there.
 
 ## 1. The problem
 
-A contact has one owner. Owners go on holiday, fall ill, leave, change team. Today (BL-108):
+A contact has one owner. Owners go on holiday, fall ill, leave, change team. Today (BL-111):
 
 - the contacts of an absent owner keep belonging to them; nobody else is told, a colleague with the `own` or `team` record scope may not see them,
   and a customer who writes in lands on a chat that nobody is watching;
@@ -76,7 +76,7 @@ with the record scope rules of `assertOwnerWithinScope`.
 
 - **Account / Availability** (the person) and **Settings > Team > Availability** (the manager): a list with status, dates, delegate; "Reassign
   their contacts" shortcut on a row, which opens the Contacts hub filtered by that owner with the reassignment dialog already open (the
-  shortcut BL-108 added on the Owner filter).
+  shortcut BL-111 added on the Owner filter).
 - **Reassign while on leave** dialog: target, scope, "restore on <date>" switch, a preview count, then a result with the batch id and an
   **Undo / Restore now** button.
 - **Settings > Assignment rules** for BL-013.
@@ -93,7 +93,7 @@ with the record scope rules of `assertOwnerWithinScope`.
 ## 6. Rollout
 
 1. Availability status and the "On leave" marks (read-only information, no behaviour change).
-2. Reassign while on leave with restore (builds on BL-108's endpoint).
+2. Reassign while on leave with restore (builds on BL-111's endpoint).
 3. Delegate access and notification forwarding.
 4. Assignment rules (BL-013) that honour availability.
 

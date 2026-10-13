@@ -102,7 +102,8 @@
         "added": "{name}님이 워크스페이스에 추가되었습니다.",
         "rolesUpdated": "{name}님의 역할이 업데이트되었습니다.",
         "deactivated": "{name}님이 비활성화되었습니다.",
-        "reactivated": "{name}님이 다시 활성화되었습니다."
+        "reactivated": "{name}님이 다시 활성화되었습니다.",
+        "invited": "{name}님에게 초대를 보냈습니다."
       },
       "deactivate": {
         "action": "비활성화",
@@ -123,7 +124,13 @@
         "passwordShort": "비밀번호는 최소 8자 이상이어야 합니다.",
         "generate": "생성",
         "role": "역할",
-        "submit": "멤버 추가"
+        "submit": "멤버 추가",
+        "inviteHint": "본인이 직접 비밀번호를 설정할 수 있는 링크를 이메일로 보냅니다. 링크는 한 번만 사용할 수 있으며 며칠 후 만료됩니다.",
+        "submitInvite": "초대 보내기",
+        "linkNotSent": "{email}(으)로 이메일을 보내지 못했습니다. 이 링크를 복사해 전달하세요. 다시 표시되지 않습니다.",
+        "copyLink": "링크 복사",
+        "copied": "복사됨",
+        "done": "완료"
       },
       "changeRole": {
         "title": "{name}님의 역할 변경",

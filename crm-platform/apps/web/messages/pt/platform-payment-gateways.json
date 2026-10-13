@@ -237,8 +237,12 @@
           "30d": "Últimos 30 dias",
           "90d": "Últimos 90 dias",
           "1y": "Último ano",
-          "all": "Todo o período"
-        }
+          "all": "Todo o período",
+          "custom": "Período personalizado"
+        },
+        "customFrom": "Data inicial",
+        "customTo": "Data final",
+        "customInvalid": "Escolha dois dias válidos: o início não pode ser depois do fim, com no máximo 5 anos de diferença."
       },
       "orders": {
         "title": "Histórico de pedidos",
@@ -250,7 +254,8 @@
         "windows": {
           "90d": "Últimos 90 dias",
           "this_year": "Este ano",
-          "all": "Todo o período"
+          "all": "Todo o período",
+          "custom": "Período personalizado"
         },
         "kpi": {
           "total": "Total de pedidos",
@@ -434,7 +439,7 @@
           "gross": "Receita bruta",
           "net": "Receita líquida",
           "netPct": "{pct}% líquido",
-          "success": "Sucesso na autorização",
+          "success": "Taxa de sucesso dos pagamentos",
           "failed": "Falhou",
           "events": "{count, plural, one {# evento} other {# eventos}}",
           "refunds": "Reembolsos",

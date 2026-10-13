@@ -465,7 +465,7 @@ export function BrandMark({ className = 'size-8' }: { className?: string }) {
     <svg viewBox="0 0 32 32" aria-hidden="true" className={`shrink-0 ${className}`}>
       <rect width="32" height="32" rx="8" fill="var(--brand)" />
       <path
-        d="M9 11.5A3.5 3.5 0 0 1 12.5 8h7a3.5 3.5 0 0 1 3.5 3.5v5a3.5 3.5 0 0 1-3.5 3.5H15l-4 3.2V20A3.5 3.5 0 0 1 9 16.5v-5Z"
+        d="M7.5 12A4.5 4.5 0 0 1 12 7.5h8a4.5 4.5 0 0 1 4.5 4.5v5.5a4.5 4.5 0 0 1-4.5 4.5h-5.2l-4.6 3.6a.6.6 0 0 1-1-.5V22A4.5 4.5 0 0 1 7.5 17.5V12Z"
         fill="var(--brand-foreground)"
       />
     </svg>

@@ -121,6 +121,12 @@
       "selectedActionsNone": "已选联系人（请先选择行）",
       "modifyColumns": "调整列",
       "resetColumns": "恢复默认",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "联系人姓名",
       "colPhone": "电话号码",
       "colEmailId": "电子邮箱",
@@ -181,7 +187,9 @@
       "ownersCount": "{count} 位负责人",
       "ownerMe": "{name}(我)",
       "ownerFormer": "已离开的成员",
-      "reassignView": "重新分配 {name} 的联系人..."
+      "reassignView": "重新分配 {name} 的联系人...",
+      "smsNamed": "短信 {name}",
+      "noSms": "没有可用于发送短信的电话号码"
     },
     "bulk": {
       "label": "所选联系人的操作",
@@ -422,7 +430,8 @@
         "address": "地址",
         "memo": "备忘",
         "status": "状态",
-        "source": "来源"
+        "source": "来源",
+        "consent": "营销同意（是 / 否）"
       },
       "notInFile": "文件中没有",
       "columnN": "第 {n} 列",
@@ -1204,7 +1213,7 @@
       },
       "exports": {
         "title": "导出",
-        "hint": "来自联系人中心的联系人导出，最新的在前。下载的文件不会保留。",
+        "hint": "来自 Hub 的联系人导出记录，最新的在前。每个文件保留 30 天，您和有导出权限的同事可再次下载。",
         "empty": "暂无导出记录。",
         "by": "操作人",
         "rows": "联系人",
@@ -1213,7 +1222,153 @@
         "selections": {
           "ids": "已勾选的联系人",
           "filter": "所有符合条件的"
-        }
+        },
+        "download": "下载",
+        "noFile": "未保存",
+        "keptUntil": "保留至 {date}",
+        "downloadFailed": "无法下载该文件，可能已过期。"
+      }
+    },
+    "singleSend": {
+      "close": "关闭",
+      "cancel": "取消",
+      "send": "发送",
+      "sending": "发送中",
+      "contact": "联系人",
+      "name": "姓名",
+      "phone": "手机",
+      "email": "邮箱",
+      "title": {
+        "whatsapp": "发送 WhatsApp 消息",
+        "sms": "发送短信",
+        "email": "发送邮件",
+        "call": "拨打电话"
+      },
+      "optedOut": "该联系人已退订通信，无法发送消息。",
+      "noPhone": "该联系人没有电话号码。",
+      "noEmail": "该联系人没有邮箱地址。",
+      "number": "发送自",
+      "numberHint": "发送消息所使用的 WhatsApp 号码。",
+      "noChannel": "尚未连接 WhatsApp 号码，请先在“渠道”中连接。",
+      "template": "WhatsApp 模板",
+      "templatePlaceholder": "选择模板",
+      "noTemplates": "此号码没有已审核通过的模板。",
+      "notSendable": "此模板无法在此处填写（{reason}）。",
+      "variables": "模板变量",
+      "preview": "预览",
+      "slot": "变量 {key}",
+      "loading": "加载中",
+      "openFailed": "无法打开对话：{message}",
+      "sent": "已将发给 {name} 的消息加入队列。",
+      "failed": "无法发送：{message}",
+      "callIntro": "通过浏览器向该联系人发起 WhatsApp 通话。",
+      "callOff": "此 WhatsApp 号码未开启通话功能，请在号码设置中开启。",
+      "callPermission": "该联系人尚未允许通话，通话前需先征得其同意。",
+      "callReady": "准备拨打 {phone}。",
+      "later": {
+        "sms": "暂不支持从 CRM 发送短信。",
+        "email": "暂不支持从 CRM 发送邮件。"
+      },
+      "openApp": {
+        "sms": "在短信应用中打开",
+        "email": "在邮件应用中打开"
+      }
+    },
+    "views": {
+      "label": "视图",
+      "all": "所有联系人",
+      "add": "添加视图",
+      "changed": "自保存此视图后，筛选条件已更改",
+      "more": "{name} 的更多操作",
+      "picker": {
+        "title": "选择视图",
+        "create": "新建视图",
+        "search": "搜索视图...",
+        "chipAll": "全部",
+        "chipPinned": "已置于标签页",
+        "chipShared": "共享",
+        "empty": "未找到视图",
+        "pinned": "已置于标签页"
+      },
+      "menu": {
+        "rename": "重命名视图",
+        "update": "保存当前筛选条件",
+        "unpin": "从标签页移除",
+        "pin": "显示为标签页",
+        "delete": "删除视图",
+        "edit": "编辑视图"
+      },
+      "drawer": {
+        "editTitle": "重命名视图",
+        "name": "视图名称",
+        "namePlaceholder": "未命名视图",
+        "shareWith": "共享给",
+        "justMe": "仅自己",
+        "everyone": "所有人",
+        "save": "更新",
+        "cancel": "取消",
+        "close": "关闭"
+      },
+      "toast": {
+        "created": "视图“{name}”已创建。",
+        "updated": "视图已更新。",
+        "filtersSaved": "筛选条件已保存到“{name}”。",
+        "deleted": "视图“{name}”已删除。",
+        "failed": "无法保存视图：{message}",
+        "conflict": "其他人已修改此视图，请刷新后重试。"
+      },
+      "delete": {
+        "title": "删除此视图？",
+        "message": "“{name}”将对所有共享对象删除，联系人不会受到影响。",
+        "confirm": "删除视图",
+        "cancel": "保留视图"
+      },
+      "editor": {
+        "title": {
+          "create": "新建视图",
+          "edit": "编辑视图"
+        },
+        "close": "关闭",
+        "back": "返回联系人",
+        "name": "视图名称",
+        "namePlaceholder": "输入视图名称",
+        "favorite": "设为收藏",
+        "favoriteHint": "收藏的视图会拥有独立的标签页。",
+        "shareWith": "共享给",
+        "justMe": "仅自己",
+        "everyone": "所有人",
+        "filterTitle": "筛选联系人",
+        "filterHint": "可匹配全部或任一条件，并可添加分组以设置更复杂的筛选。",
+        "columnsTitle": "列偏好设置",
+        "locked": "始终显示",
+        "cancel": "取消",
+        "create": "创建视图",
+        "save": "保存视图",
+        "saving": "保存中",
+        "needName": "请输入视图名称。",
+        "needFilter": "请至少添加一个完整的条件。",
+        "notFound": "未找到此视图，或它已被删除。",
+        "noPermission": "您没有执行此操作的权限。",
+        "loading": "加载中",
+        "columnsHint": "搜索并勾选此视图要显示的列，然后拖动已选列调整顺序。",
+        "drag": "拖动以重新排序 {name}",
+        "selectedUsers": "已选用户",
+        "accessLevel": "访问级别",
+        "canView": "可查看",
+        "canEdit": "可查看和编辑",
+        "peoplePlaceholder": "搜索人员",
+        "noPeople": "未找到人员",
+        "removePerson": "移除 {name}",
+        "clearPeople": "清除所有人员",
+        "needPeople": "请至少选择一人。",
+        "onlyCreator": "只有创建此视图的人才能更改其共享对象。",
+        "searchColumns": "搜索列",
+        "noColumnMatch": "没有匹配的列。",
+        "available": "可用列",
+        "selected": "已选列",
+        "selectAll": "全选",
+        "reorder": "拖动以重新排序列",
+        "remove": "移除 {name}"
       }
     }
   }

@@ -129,6 +129,11 @@ export class WarmerService implements WarmerGate {
     return f?.profile.enabled ? gapSeconds(f.profile, this.random) : null;
   }
 
+  /** Whether this number is warming. Only then does a send count against its daily budget, so only then is there anything to give back. */
+  async isWarming(tx: Tx, sender: Sender): Promise<boolean> {
+    return Boolean((await this.facts(tx, sender))?.profile.enabled);
+  }
+
   /** Whether this number varies its wording with spintax (`{a|b}`). */
   async spintaxOn(tx: Tx, sender: Sender): Promise<boolean> {
     const f = await this.facts(tx, sender);

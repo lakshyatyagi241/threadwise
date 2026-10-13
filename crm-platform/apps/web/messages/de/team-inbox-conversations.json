@@ -25,7 +25,11 @@
       "pickTitle": "Unterhaltung auswählen",
       "pickMessage": "Wählen Sie eine Unterhaltung aus der Liste, um sie zu lesen und zu antworten. Neue Nachrichten erscheinen hier automatisch.",
       "shortcuts": "Tastenkürzel: j und k bewegen sich durch die Liste, e löst, / sucht.",
-      "teamChanged": "Team aktualisiert."
+      "teamChanged": "Team aktualisiert.",
+      "priorityChanged": "Priorität aktualisiert",
+      "snoozed": "Unterhaltung zurückgestellt",
+      "labelAdded": "Label hinzugefügt",
+      "labelRemoved": "Label entfernt"
     },
     "list": {
       "title": "Posteingang",
@@ -101,7 +105,9 @@
           "title": "Sie sind auf dem neuesten Stand",
           "message": "Unterhaltungen mit neuen Nachrichten von Kunden werden hier aufgelistet."
         }
-      }
+      },
+      "select": "Auswählen",
+      "selectDone": "Fertig"
     },
     "status": {
       "received": "Empfangen",
@@ -139,13 +145,15 @@
       "logNotReady": "Dieser Export ist nicht bereit oder abgelaufen. Fordern Sie ihn erneut an.",
       "groupSuspended": "Meta hat diese Gruppe gesperrt. Sie kann erst wieder angeschrieben werden, wenn Meta die Sperre aufhebt.",
       "walletEmpty": "Dein Nachrichten-Guthaben reicht für diese Gruppennachricht nicht aus (eine Gebühr pro Mitglied). Lade es auf und versuche es erneut.",
+      "groupPlanLocked": "Ihr Tarif enthält keine WhatsApp-Gruppen, daher kann an diese Gruppe nicht geschrieben werden. Bitten Sie einen Admin, den Tarif zu erweitern.",
       "groupLeft": "Diese Nummer hat die Gruppe verlassen und kann dort keine Nachrichten mehr senden.",
       "groupAnnounceOnly": "Nur Admins dürfen in dieser Gruppe Nachrichten senden, und diese Nummer ist kein Admin.",
       "groupRateLimited": "Zu viele Gruppennachrichten von dieser Nummer in kurzer Zeit. Warten Sie eine Minute und versuchen Sie es dann erneut.",
       "groupUnavailable": "WhatsApp hat diese Gruppennachricht nicht akzeptiert. Versuchen Sie es in einigen Minuten erneut.",
       "savedReplyGone": "Diese gespeicherte Antwort existiert nicht mehr.",
       "savedReplyChannel": "Diese gespeicherte Antwort ist nicht für diese Art von Kanal gedacht.",
-      "shortcutTaken": "Eine andere gespeicherte Antwort verwendet dieses Kürzel bereits."
+      "shortcutTaken": "Eine andere gespeicherte Antwort verwendet dieses Kürzel bereits.",
+      "importInvalid": "Diese Datei kann nicht als Antwortvorlagen gelesen werden. Die erste Zeile muss die Spalten title, shortcut und body enthalten, und es dürfen höchstens 1.000 Zeilen sein."
     },
     "bubble": {
       "kind": {
@@ -213,7 +221,9 @@
       },
       "deliveryLog": "Zustellprotokoll",
       "groupMember": "Gruppenmitglied",
-      "groupTally": "Zugestellt an {delivered, plural, one {# Mitglied} other {# Mitglieder}}: {billable} berechnet, {free} kostenlos"
+      "groupTally": "Zugestellt an {delivered} von {members}{read, plural, =0 {} other {, gelesen von #}}{failed, plural, =0 {} other {, # fehlgeschlagen}}",
+      "groupTallyNoTotal": "Zugestellt an {delivered, plural, one {# Mitglied} other {# Mitglieder}}{read, plural, =0 {} other {, gelesen von #}}{failed, plural, =0 {} other {, # fehlgeschlagen}}",
+      "groupTallyBilled": "{billable} berechnet, {free} kostenlos"
     },
     "media": {
       "openImage": "Bild {name} öffnen",
@@ -664,6 +674,26 @@
         "label": "Gruppenmitglieder",
         "loading": "Mitglieder werden gesucht",
         "none": "Kein Mitglied passt"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta hat diese Gruppe gesperrt",
+          "message": "WhatsApp stellt keine Nachrichten an eine gesperrte Gruppe zu. Sie können den Verlauf lesen und interne Notizen hinzufügen, bis Meta die Sperre aufhebt."
+        },
+        "plan": {
+          "title": "Ihr Tarif enthält keine WhatsApp-Gruppen",
+          "message": "Sie können diesen Verlauf lesen und interne Notizen hinzufügen, aber zum Senden an die Gruppe ist ein Tarif mit Gruppen nötig. Bitten Sie einen Admin um ein Upgrade."
+        },
+        "ineligible": {
+          "title": "Diese Nummer kann keine WhatsApp-Gruppen nutzen",
+          "message": "Meta hat Gruppen für diese Nummer bei der letzten Prüfung nicht erlaubt (erforderlich ist ein offizielles Business-Konto). Sie können den Verlauf lesen und interne Notizen hinzufügen. Öffnen Sie Meta-Gruppen, um erneut zu prüfen."
+        }
+      },
+      "cost": {
+        "members": "Diese Nachricht geht an {count, plural, one {# Mitglied} other {# Mitglieder}}. Geschätzte Kosten {cost}: WhatsApp berechnet jedes Mitglied, das sie erhält.",
+        "membersNoEstimate": "Diese Nachricht geht an {count, plural, one {# Mitglied} other {# Mitglieder}}. WhatsApp berechnet jedes Mitglied, das sie erhält.",
+        "sizeUnknown": "Die Mitgliederzahl ist noch nicht bekannt. WhatsApp berechnet jedes Mitglied, das diese Nachricht erhält.",
+        "walletShort": "Ihr Guthaben reicht für diese Nachricht möglicherweise nicht aus. Laden Sie es vor dem Senden auf."
       }
     },
     "savedReplies": {
@@ -817,6 +847,122 @@
         "upgrade": "Tarife ansehen",
         "conflict": "Jemand anderes hat diese Antwort zuerst geändert. Schließen Sie dieses Fenster und öffnen Sie es erneut.",
         "invalid": "Einige Ihrer Eingaben sind ungültig."
+      },
+      "transfer": {
+        "export": "CSV exportieren",
+        "import": "CSV importieren",
+        "title": "Antwortvorlagen importieren",
+        "intro": "Lade eine CSV-Datei mit den Spalten title, shortcut, body und optional category, language und channel hoch (Kanalarten durch | getrennt, leer für alle Kanäle). Bis zu 1.000 Zeilen und {maxKb} KB. Importierte Antworten werden mit dem gesamten Team geteilt. Der Export hat dieselben Spalten.",
+        "file": "CSV-Datei",
+        "tooBig": "Diese Datei ist zu groß.",
+        "duplicates": "Wenn eine geteilte Antwort den Shortcut bereits verwendet",
+        "policy": {
+          "skip": "Vorhandene Antwort behalten",
+          "overwrite": "Text ersetzen"
+        },
+        "policyHint": {
+          "skip": "Die Zeile wird übersprungen und die Antwort bleibt unverändert.",
+          "overwrite": "Titel, Text, Kategorie, Sprache und Kanäle werden ersetzt. Die Anzahl der Verwendungen bleibt erhalten."
+        },
+        "check": "Datei prüfen",
+        "go": "Importieren ({count})",
+        "cancel": "Abbrechen",
+        "summary": "{create} zum Erstellen, {update} zum Ersetzen, {skip} übersprungen, {invalid} mit einem Problem. Noch nichts ist gespeichert.",
+        "plan": "Dein Tarif: {used} von {limit} Antworten.",
+        "row": "Zeile {line}: /{shortcut}",
+        "truncated": "Es werden nur die ersten Zeilen mit einem Problem oder einer Änderung aufgelistet.",
+        "done": "Importiert: {created} erstellt, {updated} ersetzt.",
+        "issue": {
+          "update": "wird ersetzt",
+          "skip": "übersprungen",
+          "invalid": "hat ein Problem",
+          "duplicate": "Shortcut wird bereits verwendet, übersprungen",
+          "missing_shortcut": "kein Shortcut",
+          "shortcut_invalid": "der Shortcut enthält keine verwendbaren Buchstaben oder Zahlen",
+          "missing_title": "kein Titel",
+          "title_too_long": "der Titel ist zu lang",
+          "missing_body": "kein Text",
+          "body_too_long": "der Text ist zu lang",
+          "control_characters": "enthält Steuerzeichen",
+          "category_too_long": "die Kategorie ist zu lang",
+          "language_invalid": "die Sprache ist kein Code wie en oder pt-BR",
+          "channel_unknown": "ein unbekannter Kanal",
+          "duplicate_in_file": "der Shortcut kommt weiter oben in der Datei vor",
+          "plan_limit_reached": "über dem Limit deines Tarifs"
+        }
+      }
+    },
+    "bulk": {
+      "barLabel": "Massenaktionen",
+      "selected": "{count, plural, one {# Unterhaltung ausgewählt} other {# Unterhaltungen ausgewählt}}",
+      "selectAllInView": "Alle {count} in der Ansicht auswählen",
+      "done": "Fertig",
+      "markRead": "Als gelesen markieren",
+      "resolve": "Als gelöst markieren",
+      "close": "Schließen",
+      "reopen": "Wieder öffnen",
+      "assign": "Zuweisen",
+      "assignToMe": "Mir zuweisen",
+      "unassign": "Zuweisung aufheben",
+      "removeTeam": "Team entfernen",
+      "priority": "Priorität",
+      "snooze": "Zurückstellen",
+      "snoozePreset": {
+        "oneHour": "1 Stunde",
+        "threeHours": "3 Stunden",
+        "tomorrow": "Morgen, 9:00",
+        "nextWeek": "Nächsten Montag, 9:00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {# Unterhaltung aktualisiert} other {# Unterhaltungen aktualisiert}}.",
+        "nothingChanged": "Nichts zu ändern: Die ausgewählten Unterhaltungen sind bereits auf dem neuesten Stand.",
+        "partial": "{done} aktualisiert, {unchanged} bereits aktuell, {failed} konnten nicht geändert werden. Die fehlgeschlagenen bleiben ausgewählt.",
+        "allFailed": "Keine der {count, plural, one {# Unterhaltung} other {# Unterhaltungen}} konnte geändert werden."
+      },
+      "label": "Label",
+      "labelAdd": "Label hinzufügen",
+      "labelRemove": "Label entfernen"
+    },
+    "triage": {
+      "priority": "Priorität",
+      "snooze": "Zurückstellen",
+      "wake": "Jetzt reaktivieren"
+    },
+    "labels": {
+      "label": "Label",
+      "loading": "Labels werden geladen…",
+      "loadFailed": "Die Labels konnten nicht geladen werden.",
+      "none": "Noch keine Labels.",
+      "newLabel": "Neues Label",
+      "add": "Hinzufügen",
+      "filter": "Labels",
+      "filterActive": "{count, plural, one {# Label} other {# Labels}}",
+      "clearFilter": "Label-Filter zurücksetzen",
+      "screen": {
+        "back": "Zurück zum Posteingang",
+        "title": "Labels",
+        "intro": "Labels markieren Unterhaltungen, damit Ihr Team sie sortieren und filtern kann. Es sind dieselben Tags wie bei den Kontakten.",
+        "newTitle": "Neues Label",
+        "editTitle": "Label bearbeiten",
+        "name": "Name",
+        "color": "Farbe",
+        "colorInvalid": "Verwenden Sie eine Hex-Farbe wie #075E54 oder einen Farbnamen.",
+        "description": "Beschreibung (optional)",
+        "create": "Label erstellen",
+        "save": "Änderungen speichern",
+        "cancel": "Abbrechen",
+        "edit": "Bearbeiten",
+        "delete": "Löschen",
+        "inUse": "{count, plural, one {# Unterhaltung} other {# Unterhaltungen}}",
+        "emptyTitle": "Noch keine Labels",
+        "emptyMessage": "Erstellen Sie oben Ihr erstes Label und weisen Sie es dann im Posteingang Unterhaltungen zu.",
+        "deleteTitle": "Dieses Label löschen?",
+        "deleteMessage": "\"{name}\" ist bei {count, plural, one {# Unterhaltung} other {# Unterhaltungen}} gesetzt. Beim Löschen wird es dort und bei allen Kontakten entfernt, die es tragen. Das lässt sich nicht rückgängig machen.",
+        "nameTaken": "Ein Label mit diesem Namen existiert bereits.",
+        "conflict": "Jemand anderes hat dieses Label zuerst geändert. Die Liste wurde neu geladen.",
+        "saved": "Label gespeichert",
+        "created": "Label erstellt",
+        "deleted": "Label gelöscht"
       }
     }
   }

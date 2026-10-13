@@ -1,0 +1,207 @@
+{
+  "calling-voice": {
+    "logs": {
+      "eyebrow": "워크스페이스",
+      "title": "통화 기록",
+      "subtitle": "팀이 걸었거나 받은 모든 WhatsApp 통화를 통화 시간, 담당자, 녹음과 함께 보여 줍니다.",
+      "sideTip": "내 번호로 오가는 모든 WhatsApp 통화입니다. 날짜, 상태, 번호 또는 팀원으로 필터링해 특정 통화를 찾아보세요.",
+      "loading": "통화 불러오는 중",
+      "loadFailed": "통화 기록을 불러오지 못했습니다.",
+      "retry": "다시 시도",
+      "emptyTitle": "아직 통화가 없습니다",
+      "emptyMessage": "고객이 WhatsApp 번호로 전화하거나 팀이 인박스에서 전화를 걸면 통화 시간, 담당자, 녹음과 함께 여기에 표시됩니다.",
+      "emptyFilteredTitle": "이 필터에 맞는 통화가 없습니다",
+      "emptyFilteredMessage": "기간을 더 넓히거나 필터를 지워 보세요.",
+      "clearFilters": "필터 지우기",
+      "tabs": {
+        "label": "통화 보기",
+        "log": "통화 기록",
+        "analytics": "분석"
+      },
+      "range": {
+        "title": "기간",
+        "last24h": "최근 24시간",
+        "last7d": "최근 7일",
+        "last30d": "최근 30일",
+        "custom": "직접 지정",
+        "from": "시작",
+        "to": "종료",
+        "apply": "적용"
+      },
+      "status": {
+        "title": "상태",
+        "all": "전체",
+        "completed": "완료",
+        "in-progress": "통화 중",
+        "no-answer": "응답 없음",
+        "declined": "거절됨",
+        "failed": "실패"
+      },
+      "kpi": {
+        "total": "합계",
+        "last24h": "최근 24시간",
+        "minutes": "{count}분",
+        "completed": "완료",
+        "failed": "실패",
+        "selection": "현재 선택 기준",
+        "calls": "통화",
+        "answered": "응답함",
+        "missed": "부재중",
+        "avgDuration": "평균 통화 시간",
+        "totalMinutes": "총 통화 분"
+      },
+      "filters": {
+        "label": "통화 필터",
+        "searchLabel": "통화 검색",
+        "searchPlaceholder": "전화번호 또는 연락처 이름...",
+        "direction": "방향",
+        "allDirections": "모든 통화",
+        "inbound": "수신",
+        "outbound": "발신",
+        "number": "번호",
+        "allNumbers": "모든 번호",
+        "agent": "담당자",
+        "allAgents": "모두",
+        "apply": "필터",
+        "clear": "지우기"
+      },
+      "table": {
+        "caption": "통화 (최신순)",
+        "customer": "고객",
+        "number": "번호",
+        "handledBy": "담당자",
+        "started": "시작",
+        "duration": "통화 시간",
+        "status": "상태",
+        "actions": "작업",
+        "open": "열기",
+        "inbound": "수신",
+        "outbound": "발신",
+        "none": "-"
+      },
+      "paging": {
+        "label": "페이지",
+        "showing": "통화 {total}건 중 {from}-{to}건 표시",
+        "beyond": "이 페이지는 마지막 페이지(총 {pages}페이지)를 지났습니다.",
+        "previous": "이전",
+        "next": "다음",
+        "page": "{page} / {pages} 페이지"
+      },
+      "detail": {
+        "breadcrumb": "탐색 경로",
+        "back": "통화 기록",
+        "loading": "통화 불러오는 중",
+        "loadFailed": "이 통화를 불러오지 못했습니다.",
+        "notFound": "이 통화를 찾을 수 없습니다. 다른 워크스페이스에 속하거나 볼 수 있는 통화 범위 밖일 수 있습니다.",
+        "retry": "다시 시도",
+        "handledBy": "담당자: {name}",
+        "handler": {
+          "none": "담당자 없음",
+          "ai": "AI 어시스턴트",
+          "voicemail": "음성 메시지"
+        },
+        "openContact": "연락처 열기",
+        "openInbox": "인박스에서 열기",
+        "tiles": {
+          "duration": "통화 시간",
+          "number": "번호",
+          "answered": "응답함",
+          "ended": "종료됨"
+        },
+        "reasons": {
+          "unknown": "통화에 실패했습니다.",
+          "COMPLETED": "완료",
+          "REJECTED": "통화가 거절되었습니다.",
+          "DECLINED": "통화가 거절되었습니다.",
+          "BUSY": "고객이 다른 통화 중이었습니다.",
+          "NO_ANSWER": "아무도 받지 않았습니다.",
+          "MISSED": "고객이 통화를 받지 못했습니다.",
+          "CANCELLED": "통화가 취소되었습니다.",
+          "FAILED": "WhatsApp에서 통화가 실패했다고 알렸습니다.",
+          "NO_PERMISSION": "고객이 아직 통화를 허용하지 않아 통화가 연결되지 않았습니다.",
+          "META_REFUSED": "WhatsApp이 통화 발신을 거부했습니다."
+        },
+        "timeline": {
+          "title": "타임라인",
+          "count": "{count, plural, one {#단계} other {#단계}}",
+          "empty": "이 통화에는 기록된 단계가 없습니다."
+        },
+        "steps": {
+          "dial_sent": "통화 발신됨",
+          "dial_failed": "통화를 발신하지 못함",
+          "connect": "WhatsApp에 통화 연결됨",
+          "pre_accept_sent": "응답 준비 중",
+          "accept_sent": "통화 응답됨",
+          "accept_failed": "응답 실패",
+          "reject_sent": "통화 거절됨",
+          "terminate_sent": "통화 종료 요청 전송됨",
+          "terminate": "통화 종료됨",
+          "recording_stored": "녹음 저장됨"
+        },
+        "noRecording": {
+          "title": "녹음",
+          "message": "이 통화에는 녹음이 없습니다."
+        }
+      },
+      "recording": {
+        "title": "녹음",
+        "notice": "이 통화는 녹음되었습니다.",
+        "privacy": "녹음 접근 권한이 있는 사람만 재생할 수 있으며, 모든 재생은 기록됩니다.",
+        "noAccess": "이 통화가 녹음된 것은 볼 수 있지만, 녹음을 재생할 권한이 없습니다.",
+        "play": "녹음 재생",
+        "loading": "녹음 가져오는 중",
+        "playerLabel": "통화 녹음",
+        "linkUntil": "이 링크는 {time}까지 유효합니다. 그 이후에는 재생을 다시 누르세요.",
+        "playFailed": "녹음을 재생하지 못했습니다.",
+        "retry": "다시 시도"
+      }
+    },
+    "analytics": {
+      "eyebrow": "워크스페이스",
+      "title": "통화 분석",
+      "subtitle": "기간별 통화량, 응답 수, 담당자, 회선이 가장 붐비는 시간대를 확인하세요.",
+      "loading": "통화 분석 불러오는 중",
+      "loadFailed": "통화 분석을 불러오지 못했습니다.",
+      "retry": "다시 시도",
+      "emptyTitle": "이 기간에는 통화가 없습니다",
+      "emptyMessage": "기간을 더 넓게 선택하거나 첫 통화 이후에 다시 확인하세요.",
+      "number": "번호",
+      "allNumbers": "모든 번호",
+      "period": "{from} ~ {to}, 시간대 {tz}",
+      "kpi": {
+        "total": "통화",
+        "answeredRate": "응답함",
+        "answeredOf": "{answered}건 응답",
+        "missed": "부재중",
+        "avgHandle": "평균 처리 시간",
+        "avgHandleHint": "응답한 통화의 통화 시간",
+        "totalMinutes": "총 통화 분"
+      },
+      "overTime": {
+        "title": "기간별 통화량",
+        "hint": "하루에 막대 하나입니다. 초록색 부분은 응답한 통화입니다.",
+        "summary": "{days}일 동안 통화 {total}건",
+        "answered": "응답함",
+        "other": "응답 안 함",
+        "missed": "부재중",
+        "day": "일",
+        "calls": "통화"
+      },
+      "byAgent": {
+        "title": "팀원별",
+        "agent": "팀원",
+        "calls": "통화",
+        "answered": "응답함",
+        "avgHandle": "평균 처리 시간",
+        "minutes": "분",
+        "unassigned": "담당자 없음"
+      },
+      "heatmap": {
+        "title": "요일·시간대별 통화",
+        "hint": "색이 진할수록 해당 시간에 시작된 통화가 많습니다. 시간은 시간대 {tz} 기준입니다.",
+        "weekday": "요일",
+        "cell": "{day} {hour}:00: {calls, plural, =0 {통화 없음} one {통화 #건} other {통화 #건}}"
+      }
+    }
+  }
+}

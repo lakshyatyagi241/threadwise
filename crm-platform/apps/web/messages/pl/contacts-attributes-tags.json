@@ -121,6 +121,12 @@
       "selectedActionsNone": "Wybrane kontakty (najpierw zaznacz wiersze)",
       "modifyColumns": "Zmień kolumny",
       "resetColumns": "Przywróć domyślne",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "Nazwa kontaktu",
       "colPhone": "Numer telefonu",
       "colEmailId": "Adres e-mail",
@@ -181,7 +187,9 @@
       "ownersCount": "{count, plural, one {# właściciel} few {# właścicieli} many {# właścicieli} other {# właściciela}}",
       "ownerMe": "{name} (ja)",
       "ownerFormer": "Były członek",
-      "reassignView": "Przypisz ponownie kontakty użytkownika {name}..."
+      "reassignView": "Przypisz ponownie kontakty użytkownika {name}...",
+      "smsNamed": "SMS {name}",
+      "noSms": "Brak numeru telefonu do SMS"
     },
     "bulk": {
       "label": "Działania dla wybranych kontaktów",
@@ -422,7 +430,8 @@
         "address": "Adres",
         "memo": "Notatka",
         "status": "Status",
-        "source": "Źródło"
+        "source": "Źródło",
+        "consent": "Zgoda marketingowa (tak / nie)"
       },
       "notInFile": "Brak w pliku",
       "columnN": "Kolumna {n}",
@@ -1204,7 +1213,7 @@
       },
       "exports": {
         "title": "Eksporty",
-        "hint": "Eksporty kontaktów z Centrum kontaktów, od najnowszych. Pobrany plik nie jest przechowywany.",
+        "hint": "Eksporty kontaktów z Hubu, od najnowszych. Każdy plik jest przechowywany 30 dni, aby Ty i współpracownicy z uprawnieniem do eksportu mogli pobrać go ponownie.",
         "empty": "Brak eksportów.",
         "by": "Przez",
         "rows": "Kontakty",
@@ -1213,7 +1222,153 @@
         "selections": {
           "ids": "Zaznaczone kontakty",
           "filter": "Wszystkie pasujące"
-        }
+        },
+        "download": "Pobierz",
+        "noFile": "Nie zapisano",
+        "keptUntil": "Przechowywany do {date}",
+        "downloadFailed": "Nie udało się pobrać pliku. Mógł wygasnąć."
+      }
+    },
+    "singleSend": {
+      "close": "Zamknij",
+      "cancel": "Anuluj",
+      "send": "Wyślij",
+      "sending": "Wysyłanie",
+      "contact": "Kontakt",
+      "name": "Imię i nazwisko",
+      "phone": "Telefon komórkowy",
+      "email": "E-mail",
+      "title": {
+        "whatsapp": "Wyślij wiadomość WhatsApp",
+        "sms": "Wyślij SMS",
+        "email": "Wyślij e-mail",
+        "call": "Zadzwoń"
+      },
+      "optedOut": "Ten kontakt zrezygnował z komunikacji. Nie można wysyłać wiadomości.",
+      "noPhone": "Ten kontakt nie ma numeru telefonu.",
+      "noEmail": "Ten kontakt nie ma adresu e-mail.",
+      "number": "Wyślij z",
+      "numberHint": "Numer WhatsApp, z którego zostanie wysłana wiadomość.",
+      "noChannel": "Nie podłączono żadnego numeru WhatsApp. Najpierw podłącz go w Kanałach.",
+      "template": "Szablon WhatsApp",
+      "templatePlaceholder": "Wybierz szablon",
+      "noTemplates": "Brak zatwierdzonych szablonów dla tego numeru.",
+      "notSendable": "Tego szablonu nie można tutaj wypełnić ({reason}).",
+      "variables": "Zmienne szablonu",
+      "preview": "Podgląd",
+      "slot": "Zmienna {key}",
+      "loading": "Ładowanie",
+      "openFailed": "Nie udało się otworzyć rozmowy: {message}",
+      "sent": "Wiadomość dla {name} została dodana do kolejki.",
+      "failed": "Nie udało się wysłać: {message}",
+      "callIntro": "Wykonaj połączenie WhatsApp z tym kontaktem z przeglądarki.",
+      "callOff": "Połączenia nie są włączone dla tego numeru WhatsApp. Włącz je w ustawieniach numeru.",
+      "callPermission": "Kontakt nie zezwolił jeszcze na połączenia. Przed połączeniem zostanie poproszony o zgodę.",
+      "callReady": "Gotowe do połączenia z {phone}.",
+      "later": {
+        "sms": "Wysyłanie SMS z CRM nie jest jeszcze dostępne.",
+        "email": "Wysyłanie e-maili z CRM nie jest jeszcze dostępne."
+      },
+      "openApp": {
+        "sms": "Otwórz w aplikacji do wiadomości",
+        "email": "Otwórz w aplikacji pocztowej"
+      }
+    },
+    "views": {
+      "label": "Widoki",
+      "all": "Wszystkie kontakty",
+      "add": "Dodaj widok",
+      "changed": "Filtry zmieniły się od zapisania tego widoku",
+      "more": "Więcej dla {name}",
+      "picker": {
+        "title": "Wybierz widok",
+        "create": "Utwórz nowy widok",
+        "search": "Szukaj widoków...",
+        "chipAll": "Wszystkie",
+        "chipPinned": "Na kartach",
+        "chipShared": "Udostępnione",
+        "empty": "Nie znaleziono widoków",
+        "pinned": "Na kartach"
+      },
+      "menu": {
+        "rename": "Zmień nazwę widoku",
+        "update": "Zapisz bieżące filtry",
+        "unpin": "Usuń z kart",
+        "pin": "Pokaż jako kartę",
+        "delete": "Usuń widok",
+        "edit": "Edytuj widok"
+      },
+      "drawer": {
+        "editTitle": "Zmień nazwę widoku",
+        "name": "Nazwa widoku",
+        "namePlaceholder": "Widok bez nazwy",
+        "shareWith": "Udostępnij",
+        "justMe": "Tylko ja",
+        "everyone": "Wszyscy",
+        "save": "Zaktualizuj",
+        "cancel": "Anuluj",
+        "close": "Zamknij"
+      },
+      "toast": {
+        "created": "Utworzono widok \"{name}\".",
+        "updated": "Widok zaktualizowano.",
+        "filtersSaved": "Filtry zapisano w widoku \"{name}\".",
+        "deleted": "Usunięto widok \"{name}\".",
+        "failed": "Nie udało się zapisać widoku: {message}",
+        "conflict": "Ktoś inny zmienił ten widok. Odśwież stronę i spróbuj ponownie."
+      },
+      "delete": {
+        "title": "Usunąć ten widok?",
+        "message": "Widok \"{name}\" zostanie usunięty dla wszystkich, którym jest udostępniony. Kontakty nie zostaną zmienione.",
+        "confirm": "Usuń widok",
+        "cancel": "Zachowaj widok"
+      },
+      "editor": {
+        "title": {
+          "create": "Utwórz nowy widok",
+          "edit": "Edytuj widok"
+        },
+        "close": "Zamknij",
+        "back": "Wróć do kontaktów",
+        "name": "Nazwa widoku",
+        "namePlaceholder": "Wpisz nazwę widoku",
+        "favorite": "Oznacz jako ulubiony",
+        "favoriteHint": "Ulubiony widok ma własną kartę.",
+        "shareWith": "Udostępnij",
+        "justMe": "Tylko ja",
+        "everyone": "Wszyscy",
+        "filterTitle": "Filtruj kontakty",
+        "filterHint": "Dopasuj wszystkie lub dowolne warunki i dodawaj grupy, aby tworzyć bardziej złożone filtry.",
+        "columnsTitle": "Preferencje kolumn",
+        "locked": "Zawsze widoczne",
+        "cancel": "Anuluj",
+        "create": "Utwórz widok",
+        "save": "Zapisz widok",
+        "saving": "Zapisywanie",
+        "needName": "Wpisz nazwę widoku.",
+        "needFilter": "Dodaj co najmniej jeden kompletny warunek.",
+        "notFound": "Nie znaleziono tego widoku lub został usunięty.",
+        "noPermission": "Nie masz uprawnień do wykonania tej czynności.",
+        "loading": "Ładowanie",
+        "columnsHint": "Wyszukaj i zaznacz kolumny wyświetlane w tym widoku, a następnie przeciągnij wybrane, aby ustawić ich kolejność.",
+        "drag": "Przeciągnij, aby zmienić kolejność: {name}",
+        "selectedUsers": "Wybrani użytkownicy",
+        "accessLevel": "Poziom dostępu",
+        "canView": "Może wyświetlać",
+        "canEdit": "Może wyświetlać i edytować",
+        "peoplePlaceholder": "Szukaj osób",
+        "noPeople": "Nie znaleziono osób",
+        "removePerson": "Usuń: {name}",
+        "clearPeople": "Wyczyść wszystkie osoby",
+        "needPeople": "Wybierz co najmniej jedną osobę.",
+        "onlyCreator": "Tylko osoba, która utworzyła ten widok, może zmienić jego udostępnianie.",
+        "searchColumns": "Szukaj kolumn",
+        "noColumnMatch": "Brak pasujących kolumn.",
+        "available": "Dostępne kolumny",
+        "selected": "Wybrane kolumny",
+        "selectAll": "Zaznacz wszystko",
+        "reorder": "Przeciągnij, aby zmienić kolejność kolumn",
+        "remove": "Usuń: {name}"
       }
     }
   }
