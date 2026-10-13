@@ -123,6 +123,7 @@ export class FlowTriggerService {
    *    not start flows in a loop). Each change is its own reason, so the flow can run again once its last run has ended.
    *  - `field_match`: the flow's field now satisfies its operator and value. The reason carries the value, so a contact runs once per
    *    value it takes and a repeat of the same value starts nothing.
+   *  - `segment_leave`: the flow last saw the contact inside its segment and they are outside now (the last-seen state is kept per flow).
    *  - `segment_join`: the contact is in the flow's segment now; a contact runs once per flow, so being in it for good starts nothing more.
    * Each flow is checked on its own and best effort, as every trigger is.
    */
@@ -182,6 +183,38 @@ export class FlowTriggerService {
           'segment_join',
           `segment:${f.id}`,
           {},
+        );
+      }
+    }
+    for (const f of await this.liveConfigured(orgId, 'segment_leave')) {
+      const segmentId = typeof f.config.segmentId === 'string' ? f.config.segmentId : '';
+      if (segmentId === '') continue;
+      try {
+        const inside = await this.segments.containsContactFromFlow(orgId, segmentId, contactId);
+        const was = await this.db.txAs({ orgId }, async (tx) => {
+          const res = (await tx.execute(sql`
+            SELECT inside FROM flow_segment_state WHERE flow_id = ${f.id} AND contact_id = ${contactId}`)) as unknown as Rows;
+          await tx.execute(sql`
+            INSERT INTO flow_segment_state (org_id, flow_id, contact_id, inside)
+            VALUES (${orgId}, ${f.id}, ${contactId}, ${inside})
+            ON CONFLICT (flow_id, contact_id) DO UPDATE SET inside = EXCLUDED.inside, updated_at = now()`);
+          return res.rows[0]?.inside === true;
+        });
+        // Only a contact the flow saw inside and now finds outside has left; each departure is its own reason.
+        if (was && !inside) {
+          started += await this.startFlows(
+            orgId,
+            [f.id],
+            contactId,
+            'segment_leave',
+            `segment_leave:${f.id}:${ev.eventId}`,
+            {},
+          );
+        }
+      } catch (err) {
+        this.logger.warn(
+          { orgId, flowId: f.id, err: (err as Error).message },
+          '[FLR] segment leave check failed',
         );
       }
     }
