@@ -340,10 +340,10 @@
         "description": "Scegli le parole STOP e START, le risposte di conferma, la riga di disiscrizione e se il marketing richiede un consenso registrato.",
         "keywords": "consenso, disiscrizione, reiscrizione, annullare iscrizione, stop, start, gdpr, conformità, privacy, marketing"
       },
-      "inbox-labels": {
-        "label": "Etichette",
-        "description": "Crea le etichette che il tuo team applica alle conversazioni e con cui filtra la posta in arrivo.",
-        "keywords": "tag, etichette, categorie, organizzare, filtrare"
+      "inbox-tags": {
+        "label": "Tag della conversazione",
+        "description": "Crea i tag che il tuo team applica alle conversazioni e con cui filtra la posta in arrivo. Sono gli stessi tag usati nei contatti.",
+        "keywords": "tag, categorie, organizzare, filtrare, tag della conversazione"
       },
       "growth": {
         "label": "Growth",

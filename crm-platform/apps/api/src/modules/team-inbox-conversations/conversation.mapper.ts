@@ -110,6 +110,7 @@ export interface ContactSource {
 export const toContactSummary = (
   c: ContactSource,
   ownerName: string | null,
+  contactTags: InboxContactSummary['contactTags'] = [],
 ): InboxContactSummary => ({
   id: c.uuid,
   displayId: c.displayId,
@@ -128,4 +129,5 @@ export const toContactSummary = (
   leadScoredAt: c.leadScoredAt ? c.leadScoredAt.toISOString() : null,
   leadScoreModel: c.leadScoreModel,
   createdAt: c.createdAt.toISOString(),
+  contactTags,
 });

@@ -1,0 +1,274 @@
+{
+  "message-history": {
+    "common": {
+      "dismiss": "閉じる"
+    },
+    "nav": {
+      "history": "履歴"
+    },
+    "crumb": "キャンペーン / メッセージ履歴",
+    "title": "メッセージ履歴",
+    "loading": "メッセージを読み込み中…",
+    "tryAgain": "再試行",
+    "retention": "各メッセージの配信ステップは {hot} 日間すべて保持され、その後アーカイブされ、メッセージから {days} 日後まで保存されます。フィード自体は1年前までさかのぼれます。",
+    "range": {
+      "label": "期間",
+      "24h": "過去24時間",
+      "7d": "過去7日間",
+      "30d": "過去30日間",
+      "90d": "過去90日間",
+      "custom": "日付を指定",
+      "short": {
+        "24h": "24時間",
+        "7d": "7日",
+        "30d": "30日",
+        "90d": "90日"
+      },
+      "from": "開始",
+      "to": "終了",
+      "apply": "日付を適用",
+      "problem": {
+        "order": "開始日は終了日より後にできません。"
+      }
+    },
+    "exports": {
+      "title": "CSVエクスポート",
+      "request": "CSVをエクスポート",
+      "requested": "エクスポートを準備しています。完了したらメールでお知らせします。",
+      "requestedTo": "エクスポートを準備しています。完了したら {email} にメールでお知らせします。",
+      "status": {
+        "queued": "開始待ち",
+        "running": "準備中",
+        "ready": "準備完了",
+        "failed": "失敗",
+        "expired": "期限切れ"
+      },
+      "preparing": "準備中…",
+      "download": "ダウンロード",
+      "rows": "{n} 件のメッセージ",
+      "keptUntil": "{when} まで保存（{days} 日間）",
+      "fromEmail": "あなたのメールから"
+    },
+    "kpi": {
+      "label": "主要指標",
+      "total": "メッセージ総数",
+      "vsLast": "前期間比 {pct}%",
+      "sent": "送信済み",
+      "received": "受信",
+      "failed": "失敗",
+      "avgResponse": "平均応答時間",
+      "delivered": "配信済み",
+      "read": "既読",
+      "deliveryRate": "配信率",
+      "cost": "コスト",
+      "outgoing": "送信",
+      "incoming": "受信",
+      "retryQueue": "再試行キュー",
+      "toFirstReply": "最初の返信まで",
+      "healthy": "正常",
+      "na": "該当なし",
+      "deliveredCaption": "お客様に届いた数",
+      "readCaption": "お客様が開いた数",
+      "deliveryRateCaption": "キューを出たメッセージのうち",
+      "costCaption": "ウォレットから課金"
+    },
+    "charts": {
+      "volume": "件数",
+      "volumeTitle": "メッセージ数の推移",
+      "bucketLabel": "集計単位",
+      "bucket": {
+        "daily": "日別",
+        "hourly": "時間別",
+        "weekly": "週別"
+      },
+      "volumeAria": "メッセージ数の推移：送信 {sent} 件、受信 {received} 件、失敗 {failed} 件",
+      "when": "日時",
+      "series": {
+        "sent": "送信済み",
+        "received": "受信",
+        "failed": "失敗"
+      },
+      "direction": "方向の内訳",
+      "directionTitle": "送信と受信の比較",
+      "directionAria": "メッセージ {total} 件、送信・受信・失敗の内訳",
+      "types": "メッセージ種別",
+      "typesTitle": "この期間の内訳",
+      "media": "メディア",
+      "top": "上位の会話",
+      "topTitle": "最もアクティブなスレッド（{range}）",
+      "openInbox": "受信トレイを開く",
+      "topEmpty": "この期間にアクティブなスレッドはまだありません。",
+      "topMeta": "{n} 件 · 最終 {time}"
+    },
+    "filters": {
+      "search": "メッセージを検索",
+      "searchPlaceholder": "テキスト、連絡先、電話番号、メッセージIDで検索…",
+      "directionLabel": "方向",
+      "dir": {
+        "all": "すべて",
+        "out": "送信済み",
+        "in": "受信",
+        "fail": "失敗"
+      },
+      "channel": "チャネル",
+      "allChannels": "すべてのチャネル",
+      "type": "種別",
+      "allTypes": "すべての種別",
+      "status": "ステータス",
+      "allStatuses": "すべてのステータス",
+      "sources": "送信元",
+      "clear": "フィルターをクリア",
+      "active": "適用中のフィルター",
+      "chip": {
+        "templateId": "特定のテンプレート",
+        "campaignId": "特定のキャンペーン",
+        "broadcastId": "特定の一斉配信",
+        "scheduledId": "特定の予約メッセージ"
+      },
+      "removeFilter": "フィルターを解除：{filter}"
+    },
+    "type": {
+      "text": "テキスト",
+      "template": "テンプレート",
+      "auto_reply": "自動返信",
+      "campaign": "キャンペーン",
+      "broadcast": "一斉配信",
+      "scheduled": "予約",
+      "image": "画像",
+      "video": "動画",
+      "audio": "音声",
+      "document": "ドキュメント",
+      "location": "位置情報"
+    },
+    "status": {
+      "queued": "待機中",
+      "sent": "送信済み",
+      "delivered": "配信済み",
+      "read": "既読",
+      "failed": "失敗",
+      "received": "受信済み"
+    },
+    "source": {
+      "inbox": "受信トレイ",
+      "flow": "フロー",
+      "auto_reply": "自動返信",
+      "ai": "AIアシスタント",
+      "api": "API",
+      "broadcast": "一斉配信",
+      "campaign": "キャンペーン",
+      "scheduled": "予約",
+      "other": "その他"
+    },
+    "direction": {
+      "in": "受信",
+      "out": "送信",
+      "failed": "失敗"
+    },
+    "table": {
+      "col": {
+        "when": "日時",
+        "dir": "方向",
+        "contact": "連絡先",
+        "message": "メッセージ",
+        "type": "種別",
+        "status": "ステータス",
+        "open": "開く"
+      },
+      "unknown": "不明な連絡先",
+      "masked": "この連絡先を開く権限がないため、番号は非表示です。",
+      "entity": {
+        "broadcast": "一斉配信 · {name}",
+        "campaign": "キャンペーン · {name}",
+        "scheduled": "予約 · {name}"
+      },
+      "openSource": "開く",
+      "openSourceFor": "{name} の送信元を開く",
+      "showing": "{n} 件を表示",
+      "showingOf": "{total} 件中 {n} 件を表示",
+      "loadMore": "さらに読み込む"
+    },
+    "empty": {
+      "noMatch": "条件に一致するメッセージがありません",
+      "noMatchHint": "検索をクリアするか、期間を広げてみてください。",
+      "period": "過去 {days} 日間のメッセージはありません",
+      "periodCustom": "この期間のメッセージはありません",
+      "periodHint": "送受信したメッセージが配信ステータスとともにここに表示されます。"
+    },
+    "drawer": {
+      "title": "メッセージの詳細",
+      "close": "閉じる",
+      "loading": "読み込み中…",
+      "tryAgain": "再試行",
+      "copied": "コピーしました",
+      "copyFailed": "コピーできませんでした",
+      "copyId": "IDをコピー",
+      "openChat": "チャットを開く",
+      "openContact": "連絡先を開く",
+      "openEntity": {
+        "broadcast": "一斉配信を開く",
+        "campaign": "キャンペーンを開く",
+        "scheduled": "予約メッセージを開く"
+      },
+      "unknown": "不明な連絡先",
+      "masked": "この連絡先を開く権限がないため、番号は非表示です。",
+      "direction": "方向",
+      "directionValue": {
+        "in": "受信",
+        "out": "送信"
+      },
+      "status": "ステータス",
+      "type": "種別",
+      "when": "日時",
+      "content": "内容",
+      "noText": "テキストなし",
+      "failure": "失敗",
+      "failedNoReason": "メッセージは失敗しましたが、理由は記録されていません。",
+      "details": "詳細",
+      "messageId": "メッセージID",
+      "source": "送信元",
+      "sourceValue": {
+        "inbox": "受信トレイ",
+        "flow": "フロー",
+        "auto_reply": "自動返信",
+        "ai": "AIアシスタント",
+        "api": "API",
+        "broadcast": "一斉配信",
+        "campaign": "キャンペーン",
+        "scheduled": "予約メッセージ",
+        "other": "その他"
+      },
+      "channel": "チャネル",
+      "template": "テンプレート",
+      "entity": {
+        "broadcast": "一斉配信",
+        "campaign": "キャンペーン",
+        "scheduled": "予約メッセージ"
+      },
+      "sender": "送信者",
+      "senderKind": {
+        "customer": "お客様",
+        "agent": "オペレーター",
+        "bot": "自動化",
+        "system": "システム",
+        "broadcast": "一括送信"
+      },
+      "providerId": "プロバイダーのメッセージID",
+      "language": "言語",
+      "cost": "コスト",
+      "timeline": "配信ステップ",
+      "expired": "このメッセージは {days} 日より古いため、配信ステップは削除されています。ステータスは上に表示されたままです。",
+      "timelineEmpty": "このメッセージの配信ステップは記録されていません。",
+      "archived": "このログの一部はアーカイブから取得されています（{days} 日より古いイベント）。"
+    },
+    "errors": {
+      "generic": "問題が発生しました。もう一度お試しください。",
+      "MESSAGE_NOT_FOUND": "このメッセージは存在しないか、表示する権限がありません。",
+      "VALIDATION_FAILED": "日付またはフィルターが無効です。",
+      "FORBIDDEN": "この操作を行う権限がありません。",
+      "MESSAGE_LOG_EXPORT_IN_PROGRESS": "すでにエクスポートを準備中です。メールが届くのを待ってから、もう一度リクエストしてください。",
+      "MESSAGE_LOG_EXPORT_NOT_READY": "このエクスポートはまだ準備できていません。",
+      "MESSAGE_LOG_EXPORT_NOT_FOUND": "このエクスポートは存在しません。",
+      "MESSAGE_LOG_EXPORT_RANGE_INVALID": "過去365日以内の日付を選択してください。"
+    }
+  }
+}

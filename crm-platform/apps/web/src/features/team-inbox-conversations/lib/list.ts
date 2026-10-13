@@ -19,9 +19,13 @@ export interface ListFilters {
   /** The trimmed search text. */
   q: string;
   archived: boolean;
-  /** Label ids: threads with ANY of them (kept in the address as `?labels=a,b`). */
-  labels: string[];
+  /** Tag ids: threads with ANY of them (kept in the address as `?tags=a,b`; `?labels=` is its original name and is still read). */
+  tags: string[];
+  /** Whether `tags` is matched on the conversation's own tags or on the tags of its contact (`?tagScope=`). */
+  tagScope: TagScope;
 }
+
+export type TagScope = 'conversation' | 'contact';
 
 export const DEFAULT_FILTERS: ListFilters = {
   tab: 'all',
@@ -29,7 +33,8 @@ export const DEFAULT_FILTERS: ListFilters = {
   channelId: null,
   q: '',
   archived: false,
-  labels: [],
+  tags: [],
+  tagScope: 'conversation',
 };
 
 export const EMPTY_COUNTS: InboxCounts = { all: 0, mine: 0, unassigned: 0, unread: 0, archived: 0 };
@@ -43,14 +48,15 @@ export function listQuery(f: ListFilters): Record<string, string | boolean | und
     channelId: f.channelId ?? undefined,
     q: f.q || undefined,
     archived: f.archived || undefined,
-    labels: f.labels.length > 0 ? f.labels.join(',') : undefined,
+    tags: f.tags.length > 0 ? f.tags.join(',') : undefined,
+    tagScope: f.tags.length > 0 && f.tagScope === 'contact' ? 'contact' : undefined,
   };
 }
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-/** The label ids of `?labels=a,b` (anything that is not a uuid is dropped, at most 20). */
-export function labelsFromParam(raw: string | null): string[] {
+/** The tag ids of `?tags=a,b` (or its original name `?labels=a,b`; anything that is not a uuid is dropped, at most 20). */
+export function tagsFromParam(raw: string | null): string[] {
   if (!raw) return [];
   return [
     ...new Set(
@@ -64,12 +70,14 @@ export function labelsFromParam(raw: string | null): string[] {
 
 /** A stable identity for the filters, to restart the list when they change. */
 export const filtersKey = (f: ListFilters) =>
-  [f.tab, f.status, f.channelId ?? '', f.q, f.archived ? 1 : 0, f.labels.join(',')].join('|');
+  [f.tab, f.status, f.channelId ?? '', f.q, f.archived ? 1 : 0, f.tags.join(','), f.tagScope].join(
+    '|',
+  );
 
 /** Whether any filter other than the tab is on (the empty state then says "nothing matches", not "nothing here yet"). */
 export function isFiltered(f: ListFilters): boolean {
   return (
-    f.status !== 'open' || f.channelId !== null || f.q !== '' || f.archived || f.labels.length > 0
+    f.status !== 'open' || f.channelId !== null || f.q !== '' || f.archived || f.tags.length > 0
   );
 }
 
@@ -90,7 +98,13 @@ export function matchesFilters(
     if (row.status !== 'open' && row.status !== 'pending') return false;
   } else if (f.status !== 'all' && row.status !== f.status) return false;
   if (f.channelId && row.channel.id !== f.channelId) return false;
-  if (f.labels.length > 0 && !row.labels.some((l) => f.labels.includes(l.id))) return false;
+  // A row does not carry its contact's tags, so under the contact scope the server's answer stands (see the `upsert` case).
+  if (
+    f.tags.length > 0 &&
+    f.tagScope === 'conversation' &&
+    !row.labels.some((l) => f.tags.includes(l.id))
+  )
+    return false;
   switch (f.tab) {
     case 'mine':
       if (!meId || row.assignment.user?.id !== meId) return false;
@@ -213,6 +227,13 @@ export function listReducer(state: ListState, action: ListAction): ListState {
     case 'moreFailed':
       return { ...state, moreError: true };
     case 'upsert': {
+      // Under the contact-tag scope a row cannot be tested here, so only rows the server already listed are kept up to date.
+      if (
+        action.filters.tags.length > 0 &&
+        action.filters.tagScope === 'contact' &&
+        !state.rows.some((r) => r.id === action.row.id)
+      )
+        return state;
       if (!matchesFilters(action.row, action.filters, action.meId)) {
         return state.rows.some((r) => r.id === action.row.id)
           ? { ...state, rows: state.rows.filter((r) => r.id !== action.row.id) }

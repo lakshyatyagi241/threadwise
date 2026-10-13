@@ -7,7 +7,7 @@ import type { ConversationSummary } from '@crm/contracts';
 import { badgeText } from '../lib/list';
 import { fullStamp, listTime } from '../lib/time';
 import { formatWindowLeft, rowWindowChip } from '../lib/window';
-import { LabelChip } from './label-chip';
+import { TagChip } from './tag-chip';
 import { SlaBadge } from './sla-badge';
 import { Avatar, ChannelTag } from './parts';
 import { PinIcon } from './icons';
@@ -150,7 +150,7 @@ export const ConversationRow = memo(function ConversationRow({
             )}
             <SlaBadge status={row.slaStatus} nowMs={nowMs} compact />
             {row.labels.slice(0, 2).map((l) => (
-              <LabelChip key={l.id} label={l} />
+              <TagChip key={l.id} tag={l} />
             ))}
             {row.labels.length > 2 && (
               <span className="text-[10px] text-muted-foreground">+{row.labels.length - 2}</span>
