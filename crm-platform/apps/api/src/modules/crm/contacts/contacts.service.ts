@@ -769,6 +769,22 @@ export class ContactsService {
           note: 'Changed on the contact record',
           idempotencyKey: `edit:${existing.uuid}:${existing.rowVersion}`,
         });
+        // Switching the flag back on is a person coming back: `contact.opt_in` (optedIn: true), the opt-in flow trigger, in the same
+        // transaction as the change, like the STOP / START keyword and the Consent card. The ledger cannot announce it here (this update
+        // has already moved the flag, so the ledger sees no change). Switching it off announces nothing, as before.
+        if (values.isUnsubscribed === false) {
+          await this.outbox.emit(tx, {
+            aggregateModule: MODULE_KEY,
+            aggregateId: existing.id,
+            eventType: 'contact.opt_in',
+            payload: {
+              contactId: existing.uuid,
+              optedIn: true,
+              action: 'resubscribed',
+              source: ctx.actorType === 'api_key' ? 'api' : 'manual',
+            },
+          });
+        }
       }
 
       const after = await this.repo.findById(tx, ctx.orgId, existing.id);
