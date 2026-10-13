@@ -27,6 +27,7 @@ const REENTRY_BY_REF: ReadonlySet<FlowRunSource> = new Set([
   'order_placed',
   'deal_stage_changed',
   'contact_updated',
+  'segment_leave',
   'field_match',
   'date_field_match',
   'schedule',

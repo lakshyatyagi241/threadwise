@@ -37,6 +37,7 @@ const KIND_OPTIONS = [
   'manual_enroll',
   'group_leave',
   'segment_join',
+  'segment_leave',
   'contact_updated',
   'field_match',
   'date_field_match',
@@ -167,9 +168,12 @@ export function TriggerForm({ data: d, set, setMany, env }: FormProps) {
         </Field>
       ) : null}
 
-      {kind === 'segment_join' ? (
+      {kind === 'segment_join' || kind === 'segment_leave' ? (
         <>
-          <Field label={t('ext.segmentLabel')} hint={t('ext.segmentHint')}>
+          <Field
+            label={t('ext.segmentLabel')}
+            hint={t(kind === 'segment_leave' ? 'ext.segmentLeaveHint' : 'ext.segmentHint')}
+          >
             <SelectInput
               value={d.segmentId}
               options={segmentOpts}
