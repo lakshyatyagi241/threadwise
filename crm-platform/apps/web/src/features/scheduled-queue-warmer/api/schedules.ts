@@ -11,15 +11,22 @@ import {
   audiencePreviewSchema,
   createScheduleResultSchema,
   scheduleDetailSchema,
+  scheduleDraftSchema,
+  scheduleFunnelSchema,
   scheduleListSchema,
+  scheduleMediaSchema,
   scheduleOptionsSchema,
+  scheduleRecipientListSchema,
   warmerListSchema,
   warmerNumberSchema,
   type CreateScheduleInput,
+  type ListScheduleRecipientsQuery,
   type RetryScheduleInput,
+  type UpdateScheduleInput,
   type WarmerProfileInput,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
+import { toApiError } from '@/lib/api/errors';
 import { PAGE_SIZE, POLL_MS, type ListState } from '../lib/schedule-model';
 
 export const KEYS = {
@@ -27,6 +34,9 @@ export const KEYS = {
   list: ['sched', 'list'] as const,
   options: ['sched', 'options'] as const,
   detail: (id: string) => ['sched', 'detail', id] as const,
+  draft: (id: string) => ['sched', 'draft', id] as const,
+  funnel: (id: string) => ['sched', 'funnel', id] as const,
+  recipients: (id: string, q: unknown) => ['sched', 'recipients', id, q] as const,
   warmer: ['sched', 'warmer'] as const,
 };
 
@@ -63,6 +73,23 @@ export const scheduleApi = {
     }),
   detail: (id: string, signal?: AbortSignal) =>
     apiFetch(`/scheduled/${id}`, { schema: scheduleDetailSchema, signal }),
+  draft: (id: string, signal?: AbortSignal) =>
+    apiFetch(`/scheduled/${id}/draft`, { schema: scheduleDraftSchema, signal }),
+  update: (id: string, input: UpdateScheduleInput) =>
+    apiFetch(`/scheduled/${id}`, { method: 'PATCH', body: input, schema: scheduleDetailSchema }),
+  funnel: (id: string, signal?: AbortSignal) =>
+    apiFetch(`/scheduled/${id}/funnel`, { schema: scheduleFunnelSchema, signal }),
+  recipients: (id: string, q: Partial<ListScheduleRecipientsQuery>, signal?: AbortSignal) =>
+    apiFetch(`/scheduled/${id}/recipients`, {
+      query: {
+        status: q.status && q.status !== 'all' ? q.status : undefined,
+        q: q.q || undefined,
+        limit: q.limit,
+        offset: q.offset,
+      },
+      schema: scheduleRecipientListSchema,
+      signal,
+    }),
   act: (id: string, action: ScheduleAction) =>
     apiFetch(`/scheduled/${id}/${action}`, { method: 'POST', schema: scheduleDetailSchema }),
   retry: (id: string, input: RetryScheduleInput) =>
@@ -73,6 +100,23 @@ export const scheduleApi = {
     }),
   remove: (id: string) => apiFetch(`/scheduled/${id}`, { method: 'DELETE' }),
 };
+
+/** Uploads the file a schedule sends (stored on the workspace's storage; the schedule is given its id). */
+export async function uploadScheduleMedia(file: File, signal?: AbortSignal) {
+  const form = new FormData();
+  form.set('file', file);
+  const res = await fetch('/api/v2/scheduled/media', {
+    method: 'POST',
+    body: form,
+    headers: { Accept: 'application/json', 'X-Request-Id': crypto.randomUUID() },
+    credentials: 'same-origin',
+    signal,
+  });
+  const text = await res.text();
+  const json: unknown = text ? JSON.parse(text) : undefined;
+  if (!res.ok) throw toApiError(res.status, json, res.headers.get('x-request-id'));
+  return scheduleMediaSchema.parse(json);
+}
 
 export const warmerApi = {
   list: (signal?: AbortSignal) => apiFetch('/warmer', { schema: warmerListSchema, signal }),
@@ -118,6 +162,42 @@ export function useScheduleDetail(id: string) {
     queryKey: KEYS.detail(id),
     queryFn: ({ signal }) => scheduleApi.detail(id, signal),
     refetchInterval: POLL_MS,
+  });
+}
+
+export function useScheduleDraft(id: string) {
+  return useQuery({
+    queryKey: KEYS.draft(id),
+    queryFn: ({ signal }) => scheduleApi.draft(id, signal),
+    retry: false,
+    // The person is editing it: a refetch must not replace their form.
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
+  });
+}
+
+export function useScheduleFunnel(id: string) {
+  return useQuery({
+    queryKey: KEYS.funnel(id),
+    queryFn: ({ signal }) => scheduleApi.funnel(id, signal),
+    refetchInterval: POLL_MS,
+  });
+}
+
+export function useScheduleRecipients(id: string, q: Partial<ListScheduleRecipientsQuery>) {
+  return useQuery({
+    queryKey: KEYS.recipients(id, q),
+    queryFn: ({ signal }) => scheduleApi.recipients(id, q, signal),
+    placeholderData: keepPreviousData,
+    refetchInterval: POLL_MS,
+  });
+}
+
+export function useUpdateSchedule(id: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: UpdateScheduleInput) => scheduleApi.update(id, input),
+    onSuccess: () => void refresh(qc),
   });
 }
 

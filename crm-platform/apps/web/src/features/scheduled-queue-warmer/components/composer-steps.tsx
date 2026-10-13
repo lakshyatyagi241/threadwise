@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 import type { AudiencePreview, ScheduleOptions } from '@crm/contracts';
-import { Alert, Button, Field, Input, Modal, Select, Switch, Textarea, cn } from '@crm/ui';
+import { Alert, Field, Input, Select, Switch, Textarea, cn } from '@crm/ui';
 import {
   PLAIN_LIMIT,
   WEEKDAYS,
@@ -16,6 +16,7 @@ import {
 } from '../lib/composer-model';
 import { timezoneList } from '../lib/time';
 import { Icon } from './icons';
+import { MediaField, TemplateField } from './message-parts';
 
 export interface StepProps {
   draft: Draft;
@@ -25,6 +26,10 @@ export interface StepProps {
   /** What the server rejected last time. */
   server: Array<{ path: string; message: string }>;
   options: ScheduleOptions;
+  /** The edit screen: one schedule is one number, and there is no test message. */
+  editing?: boolean;
+  /** The variable overrides saved with the schedule being edited. */
+  initialOverrides?: Record<string, unknown> | null;
 }
 
 /** The message under a field: our own check first, else what the server said about it. */
@@ -84,7 +89,7 @@ export function BasicsStep(p: StepProps) {
   const err = useFieldError(p);
   const { draft, set, options } = p;
   const engines = [...new Set(options.senders.map((s) => s.engine))];
-  const multi = options.senders.length > 1;
+  const multi = options.senders.length > 1 && !p.editing;
   return (
     <div className="space-y-5">
       <StepHead n={1} title={t('basics.title')} tag={t('required')} />
@@ -160,6 +165,7 @@ export function BasicsStep(p: StepProps) {
           </p>
         )}
         {multi && <p className="mt-1.5 text-xs text-muted-foreground">{t('basics.splitHint')}</p>}
+        {p.editing && <p className="mt-1.5 text-xs text-muted-foreground">{t('basics.editSenderHint')}</p>}
       </div>
 
       <div>
@@ -345,8 +351,6 @@ export function MessageStep({ total, ...p }: StepProps & { total: number }) {
   const t = useTranslations('scheduled-queue-warmer.composer');
   const err = useFieldError(p);
   const { draft, set, options } = p;
-  const [picking, setPicking] = useState(false);
-  const tpl = options.templates.find((x) => x.id === draft.templateId);
   const vars = (draft.message.match(PLACEHOLDER) ?? []).length;
   const insert = (v: string) => set({ message: draft.message + v });
   return (
@@ -395,65 +399,17 @@ export function MessageStep({ total, ...p }: StepProps & { total: number }) {
       )}
 
       {draft.messageType === 'template' && (
-        <div>
-          <div className="mb-1.5 text-sm font-medium">{t('message.template')}</div>
-          {tpl ? (
-            <div className="flex items-center gap-3 rounded-lg border border-border p-3">
-              <div className="min-w-0 flex-1">
-                <div className="truncate text-[13px] font-semibold">{tpl.name}</div>
-                <div className="font-mono text-[10.5px] text-muted-foreground">{tpl.language}</div>
-              </div>
-              <span className="rounded-full bg-success/15 px-2 py-0.5 text-[10px] font-medium text-success">
-                {t('message.approved')}
-              </span>
-              <Button size="sm" variant="secondary" onClick={() => setPicking(true)}>
-                {t('message.change')}
-              </Button>
-            </div>
-          ) : (
-            <button
-              type="button"
-              onClick={() => setPicking(true)}
-              className="w-full rounded-lg border border-dashed border-border p-5 text-center hover:bg-muted/50"
-            >
-              <div className="text-[13px] font-semibold">{t('message.chooseTemplate')}</div>
-              <div className="text-xs text-muted-foreground">{t('message.browse')}</div>
-            </button>
-          )}
-          {err('templateId') && (
-            <p role="alert" className="mt-1.5 text-xs text-danger">
-              {err('templateId')}
-            </p>
-          )}
-          <TemplatePicker
-            open={picking}
-            templates={options.templates}
-            onClose={() => setPicking(false)}
-            onPick={(id) => {
-              set({ templateId: id });
-              setPicking(false);
-            }}
-          />
-        </div>
+        <TemplateField
+          draft={draft}
+          set={set}
+          options={options}
+          error={err('templateId')}
+          initialOverrides={p.initialOverrides ?? null}
+        />
       )}
 
       {draft.messageType === 'media' && (
-        <Field
-          label={`${t('message.mediaLink')} *`}
-          htmlFor="media-link"
-          hint={t('message.mediaHint')}
-          error={err('media')}
-        >
-          <Input
-            id="media-link"
-            type="url"
-            inputMode="url"
-            value={draft.media}
-            invalid={!!err('media')}
-            placeholder="https://example.com/offer.jpg"
-            onChange={(e) => set({ media: e.target.value })}
-          />
-        </Field>
+        <MediaField draft={draft} set={set} options={options} error={err('media')} />
       )}
 
       {draft.messageType === 'location' && (
@@ -505,73 +461,6 @@ export function MessageStep({ total, ...p }: StepProps & { total: number }) {
         </div>
       </div>
     </div>
-  );
-}
-
-function TemplatePicker({
-  open,
-  templates,
-  onClose,
-  onPick,
-}: {
-  open: boolean;
-  templates: ScheduleOptions['templates'];
-  onClose: () => void;
-  onPick: (id: string) => void;
-}) {
-  const t = useTranslations('scheduled-queue-warmer.composer.message');
-  const [q, setQ] = useState('');
-  const shown = useMemo(
-    () =>
-      templates.filter((x) =>
-        `${x.name} ${x.language}`.toLowerCase().includes(q.trim().toLowerCase()),
-      ),
-    [templates, q],
-  );
-  return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      title={t('pickerTitle')}
-      eyebrow={t('pickerEyebrow')}
-      size="md"
-      footer={
-        <>
-          <Link href="/templates" className="me-auto text-xs font-semibold text-brand">
-            {t('manageTemplates')}
-          </Link>
-          <Button variant="secondary" onClick={onClose}>
-            {t('cancel')}
-          </Button>
-        </>
-      }
-    >
-      <p className="mb-3 text-xs text-muted-foreground">{t('pickerHint')}</p>
-      <Input
-        type="search"
-        value={q}
-        onChange={(e) => setQ(e.target.value)}
-        placeholder={t('pickerSearch')}
-        aria-label={t('pickerSearch')}
-      />
-      <ul className="mt-3 max-h-72 space-y-1.5 overflow-y-auto">
-        {shown.length === 0 && (
-          <li className="py-6 text-center text-xs text-muted-foreground">{t('pickerEmpty')}</li>
-        )}
-        {shown.map((x) => (
-          <li key={x.id}>
-            <button
-              type="button"
-              onClick={() => onPick(x.id)}
-              className="flex w-full items-center gap-3 rounded-lg border border-border p-2.5 text-start hover:bg-muted/50"
-            >
-              <span className="min-w-0 flex-1 truncate text-[13px] font-semibold">{x.name}</span>
-              <span className="font-mono text-[10.5px] text-muted-foreground">{x.language}</span>
-            </button>
-          </li>
-        ))}
-      </ul>
-    </Modal>
   );
 }
 
@@ -789,6 +678,7 @@ export function ReviewStep({ preview, ...p }: StepProps & { preview?: AudiencePr
         </div>
       </div>
 
+      {!p.editing && (
       <div className="rounded-lg border border-border p-4">
         <div className="flex items-center gap-3">
           <div className="flex-1">
@@ -821,6 +711,7 @@ export function ReviewStep({ preview, ...p }: StepProps & { preview?: AudiencePr
           </Field>
         )}
       </div>
+      )}
     </div>
   );
 }
