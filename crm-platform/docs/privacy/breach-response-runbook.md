@@ -33,16 +33,16 @@ to notify or not, with reasons, even when not notifying.
 
 ## 4. Notify (deadlines to be confirmed by counsel)
 
-| Who | When (commonly cited) | Notes |
-| --- | --- | --- |
-| Tenants (we act as processor) | without undue delay; contract will set hours (TODO in the DPA) | they are the controllers for contact data and decide on regulator and individual notices |
-| EU/UK supervisory authority | 72 hours from awareness, where the controller is subject to GDPR and the risk is not unlikely | by the controller; as a controller for staff and billing data, by us |
-| India CERT-In | 6 hours for listed cyber incident types | counsel to confirm scope for our services |
-| India DPDP Data Protection Board and affected persons | as prescribed under the DPDP rules | counsel to confirm |
-| UAE / KSA authorities | per local law | counsel |
-| US states | per state breach laws | counsel |
-| Individuals | when high risk | wording from counsel |
-| Vendors | per DPA | |
+| Who                                                   | When (commonly cited)                                                                         | Notes                                                                                    |
+| ----------------------------------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Tenants (we act as processor)                         | without undue delay; contract will set hours (TODO in the DPA)                                | they are the controllers for contact data and decide on regulator and individual notices |
+| EU/UK supervisory authority                           | 72 hours from awareness, where the controller is subject to GDPR and the risk is not unlikely | by the controller; as a controller for staff and billing data, by us                     |
+| India CERT-In                                         | 6 hours for listed cyber incident types                                                       | counsel to confirm scope for our services                                                |
+| India DPDP Data Protection Board and affected persons | as prescribed under the DPDP rules                                                            | counsel to confirm                                                                       |
+| UAE / KSA authorities                                 | per local law                                                                                 | counsel                                                                                  |
+| US states                                             | per state breach laws                                                                         | counsel                                                                                  |
+| Individuals                                           | when high risk                                                                                | wording from counsel                                                                     |
+| Vendors                                               | per DPA                                                                                       |                                                                                          |
 
 ## 5. Eradicate and recover
 
