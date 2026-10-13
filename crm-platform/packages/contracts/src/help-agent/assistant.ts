@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 /** Steps (model calls) one task may take. The server enforces it; the web reads the value the task start returns. */
-export const HELP_AGENT_MAX_STEPS = 25;
+export const HELP_AGENT_MAX_STEPS = 40;
 /** The longest task sentence the panel accepts. */
 export const HELP_AGENT_MAX_TASK_CHARS = 600;
 /** The biggest model request the proxy reads: the page text is most of it (the API's body parser allows exactly this much). */

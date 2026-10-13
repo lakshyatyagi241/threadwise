@@ -34,7 +34,7 @@ Errors (problem+json with `code` and `requestId`):
 | 409    | `HELP_AGENT_TASK_CLOSED`          | Finished, abandoned, or older than `HELP_AGENT_TASK_MINUTES` (15)                    |
 | 422    | `PLAN_FEATURE_LOCKED`             | The plan does not include `help_agent`                                               |
 | 422    | `PLAN_LIMIT_REACHED`              | The platform's key pays and the workspace used its monthly AI allowance              |
-| 429    | `HELP_AGENT_STEP_LIMIT`           | The task used its model calls (25) or its token allowance (200,000)                  |
+| 429    | `HELP_AGENT_STEP_LIMIT`           | The task used its model calls (40) or its token allowance (400,000)                  |
 | 429    | `RATE_LIMITED`                    | More than 60 calls a minute from the person                                          |
 | 502    | `HELP_AGENT_PROVIDER_UNAVAILABLE` | The vendor failed or timed out (its text is never passed on)                         |
 | 503    | `HELP_AGENT_PROVIDER_UNAVAILABLE` | No AI key is configured for `HELP_AGENT_PROVIDER`, or no model is known              |
