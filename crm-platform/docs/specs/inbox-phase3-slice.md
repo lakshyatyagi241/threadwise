@@ -98,7 +98,7 @@ case-insensitive unique name and the audit and outbox rows.
   (merged with `?tags=`; the web page reads it and rewrites it to `tags`); the bulk action type `label`; the page `/inbox/labels` (redirects to
   `/inbox/tags`); the JSON field `labels` on conversations; the error codes `INBOX_LABEL_NOT_FOUND` and `INBOX_LABEL_CREATE_FORBIDDEN`; `labels` in
   the realtime `changed` list. Permission keys (`inbox.conversation.tag`, `inbox.tag.manage`), the timeline types and the outbox event names
-  already said tag and are unchanged. Retiring the aliases is BL-111.
+  already said tag and are unchanged. Retiring the aliases is BL-113.
 - Intended differences from Reference: a name that does not exist yet is created only by someone with `inbox.tag.manage` (Reference let any
   agent create through the thread and skipped the plan limit); the plan limit applies everywhere; the library can be renamed, recolored and
   described (Reference could not); an empty request is a 422 (Reference created an empty tag). Not built from Reference: the five "quick label"

@@ -94,7 +94,7 @@ both uses. A **contact tag** describes the person (VIP, lead, region); a **conve
 - **Events**: timeline `tag_added` / `tag_removed`, outbox `conversation.tag_added` / `conversation.tag_removed` (payload `conversationId`, `tagId`,
   `name`), an audit row with `tags` in the delta, and `inbox.conversation.upsert` with `changed: ['tags', 'labels']`.
 - **Aliases kept so nothing breaks**: `/inbox/labels*`, `/inbox/conversations/:id/labels*`, `?labels=` (merged with `?tags=`), bulk action
-  type `label`, error codes `INBOX_LABEL_NOT_FOUND` and `INBOX_LABEL_CREATE_FORBIDDEN`. They are retired in BL-111.
+  type `label`, error codes `INBOX_LABEL_NOT_FOUND` and `INBOX_LABEL_CREATE_FORBIDDEN`. They are retired in BL-113.
 
 ## The thread
 

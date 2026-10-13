@@ -417,3 +417,7 @@ What is added on top of the reference, and why:
   with a given tag, or every thread with a person who has it. Reference filtered by the conversation's own tags only.
 - The old names keep working (routes `/labels`, `?labels=`, bulk type `label`, the page `/inbox/labels`, the JSON field `labels`, the
   `INBOX_LABEL_*` error codes); the list is in [inbox-phase3-slice.md](../../specs/inbox-phase3-slice.md#25-conversation-tags-second-milestone-renamed-from-labels).
+
+## Contact owner (BL-111): visible and editable on every contact screen, not in Reference
+
+Reference keeps the creator of a contact in `user_id` and shows it nowhere. Here the owner is a first-class field of the contact: an Owner select in the form (a new contact starts as its creator), an optional Owner column (hidden until turned on), an Owner filter in the Hub (several people, Unassigned, My contacts), the owner on the profile with Change owner, `owner_email` in the CSV export, and a reassignment of "all N matching" in one request. Who may be named follows the record scope. Details, the screen-by-screen table and what is not verified: [contacts-attributes-tags.md](contacts-attributes-tags.md) (section "Contact owner"), wiring [contact-owner.md](../wiring/contact-owner.md). The owner on leave, delegation and auto-assignment are a design only: [specs/contact-owner-leave-and-delegation.md](../../specs/contact-owner-leave-and-delegation.md).

@@ -1,6 +1,7 @@
 import { CONTACT_SORT_FIELDS } from '@crm/contracts';
 import {
   DEFAULT_FILTERS,
+  ownerTokens,
   PAGE_SIZES,
   type ConsentFilter,
   type ContactFilters,
@@ -66,6 +67,7 @@ export function parseFilters(
       : '') as ConsentFilter,
     imported: params.get('imported') === '1',
     segment: cleanId(params.get('segment'), false),
+    owner: ownerTokens(params.get('owner') ?? '').join(','),
     rules: cleanRules(params.get('rules')),
     order: params.get('order') === 'asc' ? 'asc' : 'desc',
     sort: cleanSort(params.get('sort')),
@@ -87,6 +89,7 @@ export function filtersToSearch(
   if (f.consent) p.set('consent', f.consent);
   if (f.imported) p.set('imported', '1');
   if (f.segment) p.set('segment', f.segment);
+  if (f.owner) p.set('owner', f.owner);
   if (f.rules) p.set('rules', f.rules);
   if (f.sort !== DEFAULT_FILTERS.sort) p.set('sort', f.sort);
   if (f.order !== DEFAULT_FILTERS.order) p.set('order', f.order);
@@ -106,6 +109,7 @@ export function hasActiveFilter(f: ContactFilters): boolean {
     f.consent ||
     f.imported ||
     f.segment ||
+    f.owner ||
     f.rules,
   );
 }
