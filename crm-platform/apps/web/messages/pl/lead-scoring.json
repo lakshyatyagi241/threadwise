@@ -1,0 +1,345 @@
+{
+  "lead-scoring": {
+    "common": {
+      "dismiss": "Zamknij",
+      "retry": "Spróbuj ponownie",
+      "requestId": "Żądanie {id}",
+      "noAccessTitle": "Nie masz dostępu do tego ekranu",
+      "noAccess": "Poproś administratora obszaru roboczego o nadanie Twojej roli uprawnienia {permission}."
+    },
+    "badge": {
+      "none": "Brak oceny leada",
+      "aria": "Ocena leada {score} na 100, {band}, {source}",
+      "titleAi": "Oceniono przez AI",
+      "titleAiOn": "Oceniono przez AI dnia {date}",
+      "titleManual": "Wpisane przez osobę",
+      "band": {
+        "cold": "Zimny",
+        "warm": "Ciepły",
+        "hot": "Gorący"
+      },
+      "source": {
+        "ai": "oceniono przez AI",
+        "manual": "wpisano ręcznie przez osobę"
+      }
+    },
+    "card": {
+      "title": "Ocena leada",
+      "band": {
+        "cold": "Zimny lead",
+        "warm": "Ciepły lead",
+        "hot": "Gorący lead"
+      },
+      "sourceAi": "AI",
+      "sourceManual": "Ręcznie",
+      "score": "Oceń przez AI",
+      "rescore": "Oceń ponownie",
+      "scoring": "Ocenianie...",
+      "scoringSlow": "Pytam AI. To może potrwać kilka sekund.",
+      "neverScored": "Ten kontakt nie został jeszcze oceniony.",
+      "scoredBy": "Oceniono przez AI dnia {date} przy użyciu modelu {model}.",
+      "scoredOn": "Oceniono przez AI dnia {date}.",
+      "scoredByAi": "Oceniono przez AI.",
+      "reasons": "Dlaczego taka ocena",
+      "manualWhy": "Tę ocenę wpisała osoba, więc AI jej nie zmieni. Aby AI mogło ocenić ten kontakt, edytuj kontakt i wyczyść ocenę leada.",
+      "manualNote": "Tę ocenę wpisała osoba, więc AI jej nie zmienia.",
+      "lastRun": "Ocena: {score}. Koszt {cost}, tokeny: {tokens}.",
+      "showHistory": "Pokaż historię oceniania",
+      "hideHistory": "Ukryj historię oceniania",
+      "historyLoading": "Wczytywanie historii...",
+      "historyFailed": "Nie udało się wczytać historii.",
+      "historyEmpty": "Ten kontakt nie ma jeszcze prób oceniania.",
+      "historyCaption": "Próby oceniania tego kontaktu, od najnowszej",
+      "historyMore": "Wczytaj więcej"
+    },
+    "errors": {
+      "network": "Nie udało się połączyć z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+      "forbidden": "Twoja rola na to nie pozwala.",
+      "notFound": "Ten kontakt lub rekord już nie istnieje.",
+      "conflict": "Ktoś zmienił to w tym samym czasie. Dane zostały wczytane ponownie.",
+      "platformDisabled": "Ocenianie leadów przez AI jest teraz wyłączone dla całej platformy.",
+      "notEnabled": "Ocenianie leadów przez AI nie jest włączone w tym obszarze roboczym.",
+      "noKey": "Brak dostępnego klucza AI dla tego obszaru roboczego.",
+      "providerFailed": "Dostawca AI nie podał użytecznej odpowiedzi. Spróbuj ponownie za chwilę.",
+      "manualScore": "Ten kontakt ma ocenę wpisaną przez osobę.",
+      "planLimit": "Limit AI w Twoim planie został wykorzystany.",
+      "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
+      "validation": "Niektóre wartości są nieprawidłowe.",
+      "unexpected": "Coś poszło nie tak. Spróbuj ponownie.",
+      "chatUnavailable": "Odczyt rozmów nie jest dostępny dla tego obszaru roboczego.",
+      "notEnoughChat": "Ten kontakt napisał jeszcze za mało, aby można było przeczytać rozmowę.",
+      "suggestionGone": "Ta sugestia została już rozpatrzona lub zastąpiona."
+    },
+    "scoreErrors": {
+      "network": "Nie udało się połączyć z serwerem, więc kontakt nie został oceniony. Sprawdź połączenie i spróbuj ponownie.",
+      "forbidden": "Twoja rola nie pozwala na ocenianie kontaktów.",
+      "notFound": "Ten kontakt już nie istnieje.",
+      "conflict": "Ktoś zmienił ten kontakt w tym samym czasie. Został wczytany ponownie, spróbuj jeszcze raz.",
+      "platformDisabled": "Ocenianie leadów przez AI jest teraz wyłączone dla całej platformy. Nic nie zostanie ocenione, dopóki operator platformy go nie włączy.",
+      "notEnabled": "Ocenianie leadów przez AI nie jest włączone w tym obszarze roboczym. Jest wyłączone, dopóki go nie włączysz, ponieważ dane o kontaktach są wysyłane do dostawcy AI.",
+      "noKey": "Brak klucza OpenRouter dla tego obszaru roboczego. Dodaj go w sekcji Klucze AI lub poproś administratora platformy o włączenie klucza współdzielonego.",
+      "providerFailed": "Dostawca AI nie podał użytecznej odpowiedzi, więc ocena nie została zapisana. Spróbuj ponownie za chwilę.",
+      "manualScore": "Ten kontakt ma ocenę wpisaną przez osobę, a AI nigdy jej nie nadpisuje. Jeśli chcesz, aby AI go ocenił, najpierw edytuj kontakt i wyczyść ocenę leada.",
+      "planLimit": "Limit AI w Twoim planie został wykorzystany, więc kontakt nie został oceniony. Spróbuj później lub dodaj własny klucz OpenRouter.",
+      "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
+      "validation": "Żądanie było nieprawidłowe.",
+      "unexpected": "Coś poszło nie tak i kontakt nie został oceniony. Spróbuj ponownie.",
+      "openSettings": "Otwórz ustawienia oceniania leadów przez AI",
+      "openKeys": "Otwórz klucze AI",
+      "chatUnavailable": "Odczyt rozmów nie jest włączony w tym obszarze roboczym. To funkcja pilotażowa, którą trzeba włączyć w ustawieniach oceny leadów przez AI.",
+      "notEnoughChat": "Ten kontakt napisał jeszcze za mało: tylko powitania, emoji lub automatyczne odpowiedzi. Spróbuj ponownie, gdy napisze więcej.",
+      "suggestionGone": "Ta sugestia została już rozpatrzona lub zastąpiona nowszą, więc nic nie zmieniono."
+    },
+    "field": {
+      "label": "Ocena leada",
+      "placeholder": "0 do 100",
+      "hint": "Wpisanie oceny czyni ją Twoją: AI przestaje ją zmieniać. Wyczyść ją, aby oddać kontakt z powrotem AI.",
+      "invalid": "Wpisz liczbę całkowitą od 0 do 100 lub zostaw pole puste."
+    },
+    "runs": {
+      "col": {
+        "when": "Kiedy",
+        "contact": "Kontakt",
+        "result": "Wynik",
+        "score": "Ocena",
+        "trigger": "Wyzwalacz",
+        "tokens": "Tokeny",
+        "cost": "Koszt",
+        "key": "Klucz"
+      },
+      "unnamed": "Kontakt bez nazwy",
+      "deletedContact": "Usunięty kontakt",
+      "status": {
+        "ok": "Oceniono",
+        "kept": "Nie zapisano",
+        "failed": "Niepowodzenie",
+        "skipped": "Pominięto"
+      },
+      "keptNote": "AI odpowiedziało, ale w międzyczasie osoba wpisała ocenę, więc nie została zapisana.",
+      "reason": {
+        "no_key": "Brak dostępnego klucza AI.",
+        "token_allowance": "Limit AI w planie został wykorzystany.",
+        "hourly_limit": "Osiągnięto godzinowy limit dla klucza współdzielonego.",
+        "manual_score": "Kontakt ma ocenę wpisaną przez osobę.",
+        "platform_off": "Ocenianie leadów przez AI zostało wyłączone dla platformy.",
+        "not_enabled": "Ocenianie leadów przez AI było wyłączone w tym obszarze roboczym.",
+        "auth": "Dostawca AI odrzucił klucz.",
+        "rate_limited": "Dostawca AI był zajęty.",
+        "provider": "Dostawca AI zwrócił błąd.",
+        "timeout": "Dostawca AI odpowiadał zbyt długo.",
+        "bad_response": "AI odpowiedziało czymś, co nie było oceną.",
+        "other": "Próba nie została ukończona."
+      },
+      "trigger": {
+        "created": "Kontakt utworzony",
+        "updated": "Kontakt zmieniony",
+        "manual": "Przycisk oceny",
+        "backfill": "Ocena nieocenionych kontaktów",
+        "chat": "Rozmowa ucichła"
+      },
+      "tokensDetail": "{prompt} na wejściu, {completion} na wyjściu",
+      "costSource": {
+        "vendor": "Koszt podany przez OpenRouter",
+        "estimate": "Szacunek na podstawie tokenów i ceny katalogowej"
+      },
+      "billed": {
+        "admin": "Klucz platformy",
+        "workspace": "Twój klucz"
+      }
+    },
+    "log": {
+      "title": "Dziennik oceniania",
+      "hint": "Każda próba oceniania, od najnowszej, z tokenami i kosztem.",
+      "filter": "Pokaż próby z tym wynikiem",
+      "all": "Wszystkie wyniki",
+      "status": {
+        "ok": "Oceniono",
+        "kept": "Nie zapisano",
+        "failed": "Niepowodzenie",
+        "skipped": "Pominięto"
+      },
+      "refresh": "Odśwież",
+      "emptyTitle": "Brak prób oceniania",
+      "emptyBody": "Próby pojawią się tutaj, gdy ocenianie leadów przez AI będzie włączone i kontakt zostanie oceniony.",
+      "emptyFilteredTitle": "Brak prób z tym wynikiem",
+      "emptyFilteredBody": "Wybierz inny wynik lub pokaż wszystkie wyniki.",
+      "caption": "Próby oceniania, od najnowszej",
+      "loadMore": "Wczytaj więcej"
+    },
+    "settings": {
+      "title": "Ocenianie leadów przez AI",
+      "subtitle": "Nadaj każdemu kontaktowi ocenę od 0 do 100, która mówi, jak bardzo prawdopodobne jest, że kupi, i sprawdź, ile to kosztuje.",
+      "discard": "Odrzuć",
+      "save": "Zapisz",
+      "saved": "Ustawienia zapisane.",
+      "readOnly": "Możesz zobaczyć te ustawienia, ale nie możesz ich zmieniać. Poproś administratora obszaru roboczego o uprawnienie lsc.settings.manage.",
+      "conflict": "Ktoś inny zmienił te ustawienia wcześniej. Zostały wczytane ponownie, więc widzisz zapisaną wersję. Wprowadź zmianę jeszcze raz.",
+      "conflictOk": "Rozumiem",
+      "enable": {
+        "title": "Włącz ocenianie leadów przez AI",
+        "hint": "Wyłączone, dopóki nie zdecydujesz, ponieważ dane o Twoich kontaktach są wysyłane do dostawcy AI.",
+        "label": "Ocenianie leadów przez AI",
+        "on": "Włączone",
+        "off": "Wyłączone",
+        "what": "Po włączeniu model AI czyta krótki, zanonimizowany opis kontaktu i odpowiada oceną wraz z uzasadnieniem. Ocena jest zapisywana w polu oceny leada kontaktu."
+      },
+      "sent": {
+        "title": "Co jest wysyłane do AI",
+        "stage": "Etap i status kontaktu",
+        "source": "Skąd pochodzi kontakt",
+        "tags": "Nazwy tagów",
+        "deals": "Liczba otwartych, wygranych i przegranych transakcji",
+        "activity": "Jak niedawno kontakt był aktywny",
+        "company": "Nazwa firmy",
+        "engagement": "Jak kontakt wchodził ostatnio w interakcje: liczba jego wiadomości, otwartych transmisji i klikniętych linków oraz szybkość odpowiedzi (tylko liczby)"
+      },
+      "notSent": {
+        "title": "Czego nigdy się nie wysyła",
+        "name": "Imienia i nazwiska kontaktu",
+        "email": "Adresu e-mail",
+        "phone": "Numeru telefonu",
+        "messages": "Treść dowolnej wiadomości",
+        "messagesChat": "Treść jakichkolwiek wiadomości, chyba że włączysz odczyt rozmów (poniżej)"
+      },
+      "manualRule": "Ocena wpisana przez osobę nigdy nie jest nadpisywana. AI uzupełnia tylko puste oceny i odświeża te, które sam zapisał.",
+      "auto": {
+        "label": "Oceniaj automatycznie, gdy kontakty się zmieniają",
+        "onBody": "Kontakt jest oceniany po utworzeniu i ponownie po zmianie jego danych.",
+        "offBody": "Kontakty są oceniane tylko wtedy, gdy użyjesz przycisku Oceń przez AI lub ocenisz nieocenione kontakty poniżej."
+      },
+      "confirm": {
+        "title": "Wysłać zanonimizowane dane o kontaktach do dostawcy AI?",
+        "body": "Po włączeniu krótkie opisy Twoich kontaktów (etap, źródło, tagi, liczba transakcji, aktywność, liczby opisujące zaangażowanie, takie jak wiadomości, otwarte transmisje i kliknięte linki, oraz nazwa firmy) są wysyłane do dostawcy AI przez OpenRouter. Imiona i nazwiska, adresy e-mail, numery telefonów i treść wiadomości nigdy nie są wysyłane. Możesz to wyłączyć w dowolnej chwili.",
+        "yes": "Włącz",
+        "no": "Anuluj"
+      },
+      "banner": {
+        "platformOff": "Ocenianie leadów przez AI jest wyłączone dla całej platformy. Nic nie jest oceniane, niezależnie od tych ustawień, dopóki operator platformy go nie włączy.",
+        "noKey": "Brak dostępnego klucza OpenRouter, więc nic nie może zostać ocenione. Dodaj własny klucz w sekcji Klucze AI lub poproś administratora platformy o włączenie klucza współdzielonego.",
+        "openKeys": "Otwórz klucze AI",
+        "off": "Ocenianie leadów przez AI jest wyłączone w tym obszarze roboczym. Nic nie jest wysyłane do dostawcy AI.",
+        "ready": "Gotowe. Kontakty są oceniane modelem {model} przy użyciu {key}.",
+        "keyWorkspace": "własnego klucza OpenRouter Twojego obszaru roboczego",
+        "keyAdmin": "współdzielonego klucza OpenRouter platformy"
+      },
+      "backfill": {
+        "title": "Oceń kontakty, które już masz",
+        "hint": "Kolejkuje kontakty bez oceny, po {limit} naraz. Są oceniane w tle.",
+        "eligible": "Kontakty, które AI może ocenić",
+        "scored": "Ocenione przez AI",
+        "waiting": "Czekają na ocenę",
+        "eligibleNote": "Kontakty z oceną wpisaną przez osobę są pomijane: AI nigdy ich nie zmienia.",
+        "button": "Oceń nieocenione kontakty teraz",
+        "noRight": "Twoja rola nie pozwala na ocenianie kontaktów. Wymaga uprawnienia lsc.contacts.score.",
+        "notReady": "Włącz ocenianie leadów przez AI i upewnij się, że klucz jest dostępny, aby oceniać kontakty.",
+        "queued": "{count, plural, one {# kontakt czeka w kolejce} few {# kontakty czekają w kolejce} many {# kontaktów czeka w kolejce} other {# kontaktu czeka w kolejce}} i zostanie oceniony w tle. Odśwież dziennik za minutę, aby zobaczyć wyniki.",
+        "nothingToScore": "Nie ma nieocenionych kontaktów do dodania do kolejki."
+      },
+      "cost": {
+        "title": "Ostatnie 30 dni",
+        "hint": "Co zrobiło ocenianie i ile kosztowało w ciągu ostatnich 30 dni.",
+        "scores": "Ocenione kontakty",
+        "tokens": "Użyte tokeny",
+        "total": "Całkowity koszt",
+        "average": "Średnio na ocenę",
+        "averageHint": "Całkowity koszt podzielony przez liczbę ocenionych kontaktów",
+        "model": "Model",
+        "payer": "Kto płaci",
+        "payerBy": {
+          "workspace": "Twój własny klucz OpenRouter, rozliczany z Tobą przez OpenRouter",
+          "admin": "Współdzielony klucz OpenRouter platformy",
+          "none": "Brak dostępnego klucza"
+        },
+        "failed": "Nieudane próby",
+        "platformPart": "Z całości, na kluczu platformy"
+      },
+      "chat": {
+        "title": "Odczyt rozmów (pilotaż)",
+        "hint": "Wyłączone, dopóki tego nie wybierzesz, ponieważ ostatnie wiadomości kontaktu są wysyłane do dostawcy AI, a dane osobowe są częściowo maskowane.",
+        "label": "Czytaj rozmowę kontaktu, gdy ucichnie",
+        "onBody": "Około 12 minut po tym, jak kontakt przestanie pisać, AI czyta ostatnie wiadomości i zapisuje, czego kontakt szuka. Podaje także ocenę.",
+        "offBody": "Rozmowy nie są czytane. Oceny opierają się wyłącznie na danych kontaktu i wskaźnikach zaangażowania.",
+        "needsScoring": "Najpierw włącz ocenę leadów przez AI.",
+        "stageLabel": "Sugeruj etapy cyklu życia",
+        "stageBody": "Gdy z rozmowy wyraźnie wynika, że kontakt przeszedł dalej, AI sugeruje kolejny etap. Osoba akceptuje lub odrzuca sugestię; nic nie zmienia się samo, a etapy Wygrany i Przegrany nigdy nie są sugerowane.",
+        "masked": {
+          "title": "Jak maskowane są dane osobowe",
+          "phone": "Numery telefonów zachowują tylko pierwszą cyfrę i dwie ostatnie (+91 ***** ***10)",
+          "email": "Adresy e-mail zachowują pierwszą literę i domenę (p***@acme.io)",
+          "card": "Numery kart, Aadhaar i PAN zachowują tylko pierwszy i ostatni znak",
+          "name": "Imię i nazwisko kontaktu oraz imię, które ktoś poda o sobie, zachowują tylko pierwszą i ostatnią literę"
+        },
+        "rules": {
+          "title": "Co jest czytane, a co nie",
+          "quiet": "Tylko rozmowy, które ucichły, i tylko z ostatnich dwóch tygodni",
+          "enough": "Kontakty, które tylko klikały przyciski, są dopasowywane na podstawie tabeli fraz, bez wywołania AI",
+          "person": "Ocena lub etap ustawione przez osobę nigdy nie są nadpisywane",
+          "closing": "Boty, usunięte wiadomości, czaty grupowe i automatyczne odpowiedzi są pomijane"
+        },
+        "confirm": {
+          "title": "Wysyłać zamaskowane rozmowy do dostawcy AI?",
+          "body": "Po włączeniu ostatnie wiadomości kontaktu są wysyłane do dostawcy AI przez OpenRouter, gdy rozmowa ucichnie. Numery telefonów, adresy e-mail, numery kart i imiona są wcześniej częściowo maskowane, więc wysyłanych danych nie można użyć do skontaktowania się z osobą. Możesz to wyłączyć w dowolnej chwili.",
+          "yes": "Włącz",
+          "no": "Anuluj"
+        }
+      }
+    },
+    "insight": {
+      "title": "Odczyt rozmowy",
+      "empty": "Jeszcze nie przeczytano. Rozmowa jest czytana około 12 minut po tym, jak kontakt przestanie pisać, lub możesz przeczytać ją teraz.",
+      "analyze": "Przeczytaj czat",
+      "analyzing": "Czytanie...",
+      "analyzingSlow": "Pytamy AI. To może potrwać kilka sekund.",
+      "sourceAi": "Przeczytane przez AI",
+      "sourceRules": "Dopasowano na podstawie kliknięć przycisków",
+      "signals": "Co zasygnalizował kontakt",
+      "signal": {
+        "askedPrice": "Pytał o cenę",
+        "readyToBuy": "Gotowy do zakupu",
+        "objection": "Wahanie lub sprzeciw",
+        "urgent": "Pilne"
+      },
+      "readOn": "Przeczytano {date} na podstawie {count, plural, one {# wiadomości} few {# wiadomości} many {# wiadomości} other {# wiadomości}}.",
+      "privacy": "Imiona i nazwiska, numery telefonów i adresy e-mail w czacie są częściowo maskowane, zanim cokolwiek zostanie wysłane do AI.",
+      "intent": {
+        "ready_to_buy": "Gotowy do zakupu",
+        "asking_price": "Pyta o cenę",
+        "comparing": "Porównuje opcje",
+        "registering": "Rejestruje się",
+        "needs_support": "Potrzebuje wsparcia",
+        "post_purchase": "Obsługa posprzedażowa lub serwis",
+        "browsing": "Tylko przegląda",
+        "not_interested": "Niezainteresowany",
+        "other": "Brak jasnego zamiaru"
+      },
+      "suggestion": {
+        "title": "Sugerowany etap",
+        "move": "Przenieś z {from} do {to}",
+        "confidence": "Pewność: {percent}%",
+        "accept": "Akceptuj",
+        "dismiss": "Odrzuć",
+        "accepted": "Etap zmieniono na {stage}.",
+        "dismissed": "Sugestię odrzucono.",
+        "noRight": "Nie masz uprawnień do akceptowania ani odrzucania sugestii.",
+        "couldNot": "Nie udało się zastosować sugestii. Mogła zostać już rozpatrzona."
+      }
+    },
+    "suggestions": {
+      "title": "Sugestie etapów",
+      "hint": "Zmiany sugerowane przez AI po przeczytaniu rozmów. Nic nie zmieni się, dopóki nie zaakceptujesz.",
+      "empty": "Brak oczekujących sugestii.",
+      "unnamed": "Kontakt bez nazwy",
+      "move": "Przenieś z {from} do {to}",
+      "confidence": "Pewność: {percent}%",
+      "accept": "Akceptuj",
+      "dismiss": "Odrzuć",
+      "acceptConfident": "Zaakceptuj {count} powyżej {percent}%",
+      "dismissAll": "Odrzuć wszystkie",
+      "more": "Wczytaj więcej",
+      "doneAccept": "{count, plural, one {Zmieniono # etap.} few {Zmieniono # etapy.} many {Zmieniono # etapów.} other {Zmieniono # etapu.}}",
+      "doneDismiss": "{count, plural, one {Odrzucono # sugestię.} few {Odrzucono # sugestie.} many {Odrzucono # sugestii.} other {Odrzucono # sugestii.}}",
+      "noRight": "Możesz przeglądać sugestie, ale nie możesz o nich decydować: wymaga to uprawnienia lsc.stage.review.",
+      "couldNot": "{count, plural, one {Nie udało się zastosować # sugestii.} few {Nie udało się zastosować # sugestii.} many {Nie udało się zastosować # sugestii.} other {Nie udało się zastosować # sugestii.}}"
+    }
+  }
+}

@@ -102,8 +102,8 @@
       },
       "email": {
         "label": "E-mail",
-        "description": "Połącz skrzynkę pocztową, aby wysyłać i odbierać e-maile w skrzynce odbiorczej.",
-        "keywords": "skrzynka, smtp, imap, gmail, outlook, nadawca"
+        "description": "Połącz skrzynki Gmail lub Google Workspace, aby zespół mógł czytać i odpowiadać na e-maile klientów we wspólnej skrzynce odbiorczej.",
+        "keywords": "skrzynka pocztowa, gmail, google workspace, wspólna skrzynka, e-mail do wsparcia, outlook, imap"
       },
       "line": {
         "label": "LINE",
@@ -314,7 +314,48 @@
         "label": "Dzienniki wiadomości",
         "description": "Wyeksportuj dziennik dostarczania swoich wiadomości do roku wstecz jako plik wysłany na Twój e-mail.",
         "keywords": "eksport, dziennik dostarczania, historia, archiwum, csv, wiadomości"
+      },
+      "billing-subscriptions": {
+        "label": "Subskrypcje",
+        "description": "Co się odnawia, do kiedy jest opłacone, oraz anulowanie.",
+        "keywords": "subskrypcja, odnowienie, automatyczne odnawianie, anulowanie, automatyczna płatność, nieudana płatność, opłaty"
+      },
+      "web": {
+        "label": "Czat na stronie",
+        "description": "Boty stworzone dla czatu na Twojej stronie internetowej i widżet, w którym każdy z nich działa.",
+        "keywords": "web, strona internetowa, widżet, chatbot, osadzanie, czat na żywo"
+      },
+      "lead-scoring": {
+        "label": "Ocenianie leadów przez AI",
+        "description": "Oceniaj każdy kontakt przez AI, wybierz, co jest wysyłane, i sprawdź, ile to kosztuje.",
+        "keywords": "lead, ocena leada, ocenianie, ai, gorący, ciepły, zimny, openrouter, koszt, kwalifikacja"
+      },
+      "help-assistant": {
+        "label": "Asystent pomocy",
+        "description": "Włącz asystenta, który prowadzi Twój zespół lub wykonuje kroki za niego.",
+        "keywords": "ai, asystent, agent, przewodnik, pomoc, automatyzacja"
+      },
+      "consent": {
+        "label": "Zgody i odpowiedzi STOP",
+        "description": "Wybierz słowa STOP i START, odpowiedzi potwierdzające, linijkę rezygnacji oraz to, czy marketing wymaga zapisanej zgody.",
+        "keywords": "zgoda, wypisanie, ponowny zapis, rezygnacja, stop, start, rodo, zgodność, prywatność, marketing"
+      },
+      "inbox-labels": {
+        "label": "Etykiety",
+        "description": "Twórz etykiety, którymi zespół oznacza rozmowy i filtruje skrzynkę.",
+        "keywords": "tagi, etykiety, kategorie, porządkuj, filtr"
+      },
+      "growth": {
+        "label": "Wzrost",
+        "description": "Gorące leady, odbiorcy, odpowiedzi na kampanie i inne sprawy, na które zespół może zareagować, ustalone na podstawie rozmów i kampanii.",
+        "keywords": "wzrost, gorący lead, odbiorcy, zaangażowanie, nieaktywni, odpowiedzi na kampanie, skłonność do konwersji, rezygnacja, pilotaż"
+      },
+      "team-performance": {
+        "label": "Wydajność zespołu",
+        "description": "Zobacz, jak szybko każdy agent odpowiadał i rozwiązywał rozmowy dziś, w tym tygodniu lub miesiącu.",
+        "keywords": "raporty, analityka, agenci, czas odpowiedzi, pierwsza odpowiedź, rozwiązane, obciążenie, wydajność"
       }
-    }
+    },
+    "backToMarketplace": "Wróć do Marketplace"
   }
 }

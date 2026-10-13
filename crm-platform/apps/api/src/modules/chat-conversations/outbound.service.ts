@@ -1,14 +1,21 @@
 import { InjectQueue } from '@nestjs/bullmq';
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import type { Queue } from 'bullmq';
+import { sql } from 'drizzle-orm';
 import { ERROR_CODES, type MessageResponse } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import type { ChannelRuntime } from '../../infra/providers/chat-conversations';
+import {
+  groupIdOf,
+  isGroupPeer,
+  personalGroupSendBlock,
+} from '../../infra/providers/whatsapp/group-peer';
 import { QUEUES } from '../../infra/queue/queues';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
+import { WalletGateService } from '../wallet-message-billing';
 import { ChannelDispatcher } from './channel-dispatcher.service';
 import { ChannelRegistryService } from './channel-registry.service';
 import { ChannelsRepository } from './channels.repository';
@@ -75,6 +82,7 @@ export class OutboundService {
     private readonly channels: ChannelRegistryService,
     private readonly dispatcher: ChannelDispatcher,
     private readonly plans: PlanEntitlementService,
+    private readonly wallet: WalletGateService,
     private readonly realtime: ChatRealtimePublisher,
     private readonly view: MessageViewService,
     @InjectQueue(QUEUES.MESSAGE_DISPATCH) private readonly queue: Queue,
@@ -105,7 +113,26 @@ export class OutboundService {
       }
 
       const runtime = await this.channels.runtime(tx, orgId, channel);
-      const fields = messageFieldsOf(input.content);
+      // Cc, bcc and a subject belong to email: any other kind of channel has nowhere to put them.
+      if (input.content.kind === 'text' && input.content.email && channel.kind !== 'email') {
+        throw new AppError(
+          ERROR_CODES.CHANNEL_CAPABILITY_UNSUPPORTED,
+          'This channel cannot send cc, bcc or a subject',
+          HttpStatus.UNPROCESSABLE_ENTITY,
+          [{ path: 'email', message: 'only an email conversation takes these' }],
+        );
+      }
+      // @mentions exist only in a personal number's group thread; anywhere else they are dropped, not stored.
+      let content = input.content;
+      if (
+        content.kind === 'text' &&
+        content.mentions &&
+        !(channel.kind === 'whatsapp_qr' && isGroupPeer(conv.peerKey))
+      ) {
+        const { mentions: _dropped, ...rest } = content;
+        content = rest;
+      }
+      const fields = messageFieldsOf(content);
       const replyTo = input.replyToMessageId
         ? await this.replyTarget(tx, orgId, conv, input.replyToMessageId)
         : null;
@@ -147,6 +174,7 @@ export class OutboundService {
         lastInboundAt: conv.lastInboundAt,
         source: 'inbox',
       };
+      const groupMembers = await this.assertGroupSendable(tx, orgId, runtime, conv.peerKey);
       await this.dispatcher.assertCanQueue(request, {
         monthlyUsed: await this.monthlyUsed(tx, orgId, runtime),
       });
@@ -196,7 +224,8 @@ export class OutboundService {
         clientMessageId: input.clientMessageId,
         replyToMessageUuid: replyTo?.uuid ?? null,
         templateId: fields.templateId,
-        meta: fields.meta,
+        // A message to a Cloud API group remembers how many people it was addressed to, for the "delivered to X of N" tally.
+        meta: groupMembers === null ? fields.meta : { ...fields.meta, group_members: groupMembers },
       });
       await this.messages.insertEvent(
         tx,
@@ -249,6 +278,7 @@ export class OutboundService {
       const replyTo = row.replyToMessageUuid
         ? await this.messages.byUuid(tx, orgId, row.replyToMessageUuid)
         : null;
+      await this.assertGroupSendable(tx, orgId, runtime, conv.peerKey);
       await this.dispatcher.assertCanQueue(
         {
           channel: runtime,
@@ -366,6 +396,78 @@ export class OutboundService {
       `Message ${uuid} not found`,
       HttpStatus.NOT_FOUND,
     );
+  }
+
+  /**
+   * A Cloud API group (`g:<group id>`): refuse before anything is stored or queued when the plan has no Groups (`waba_groups`,
+   * 422 PLAN_FEATURE_LOCKED, the same gate as the management routes), when Meta suspended the group (D10), or when the workspace's own
+   * wallet cannot cover one message to every member (D8). A group send is billed once per member, so the launch gate is asked for
+   * `participant_count` recipients (at least one: the count is 0 until Meta's lifecycle webhook fills it). The gate is per workspace,
+   * passes platform-owned workspaces and a plan's free allowance, and fails open if the billing lookup itself fails.
+   * Returns the member count the message is addressed to (null for any thread that is not a Cloud API group).
+   */
+  private async assertGroupSendable(
+    tx: Tx,
+    orgId: number,
+    runtime: ChannelRuntime,
+    peerKey: string,
+  ): Promise<number | null> {
+    if (runtime.kind === 'whatsapp_qr' && isGroupPeer(peerKey)) {
+      // A personal number's group: no wallet (one send is one message, D9), but the number must still be in it and allowed to write.
+      await this.assertPersonalGroupSendable(tx, orgId, runtime, peerKey);
+      return null;
+    }
+    if (runtime.kind !== 'whatsapp_cloud' || !isGroupPeer(peerKey)) return null;
+    await this.plans.assertFeature(orgId, 'waba_groups');
+    const found = await tx.execute(
+      sql`SELECT suspended, participant_count FROM waba_groups
+           WHERE org_id = ${orgId} AND group_id = ${groupIdOf(peerKey)} LIMIT 1`,
+    );
+    const row = found.rows[0] as { suspended?: boolean; participant_count?: number } | undefined;
+    if (row?.suspended === true) {
+      throw new AppError(
+        ERROR_CODES.WABA_GROUP_SUSPENDED,
+        'Meta suspended this group for a policy violation. It cannot be messaged until Meta clears it.',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+    const members = Math.max(0, Number(row?.participant_count ?? 0));
+    await this.wallet.assertCanLaunch({
+      orgId,
+      source: 'group_message',
+      recipients: Math.max(1, members),
+    });
+    return members;
+  }
+
+  /** A group on a linked personal number: left (read-only thread) or announce-only without admin rights refuse before anything is stored. */
+  private async assertPersonalGroupSendable(
+    tx: Tx,
+    orgId: number,
+    runtime: ChannelRuntime,
+    peerKey: string,
+  ): Promise<void> {
+    if (!runtime.externalId) return;
+    const found = await tx.execute(
+      sql`SELECT g.left_at, g.announce, g.is_admin
+            FROM wa_device_groups g JOIN devices d ON d.org_id = g.org_id AND d.id = g.device_id
+           WHERE g.org_id = ${orgId} AND d.uuid = ${runtime.externalId}::uuid
+             AND g.group_jid = ${groupIdOf(peerKey)} LIMIT 1`,
+    );
+    const row = found.rows[0] as
+      { left_at: Date | string | null; announce: boolean; is_admin: boolean } | undefined;
+    const block = personalGroupSendBlock(
+      row ? { leftAt: row.left_at, announce: row.announce, isAdmin: row.is_admin } : null,
+    );
+    if (block) {
+      throw new AppError(
+        block.code === 'WA_GROUP_LEFT'
+          ? ERROR_CODES.WA_GROUP_LEFT
+          : ERROR_CODES.WA_GROUP_ANNOUNCE_ONLY,
+        block.message,
+        block.code === 'WA_GROUP_LEFT' ? HttpStatus.CONFLICT : HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
   }
 
   private keyReused(): AppError {

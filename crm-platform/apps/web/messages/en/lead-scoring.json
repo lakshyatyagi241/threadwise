@@ -1,0 +1,345 @@
+{
+  "lead-scoring": {
+    "common": {
+      "dismiss": "Dismiss",
+      "retry": "Try again",
+      "requestId": "Request {id}",
+      "noAccessTitle": "You do not have access to this screen",
+      "noAccess": "Ask a workspace admin to give your role the permission {permission}."
+    },
+    "badge": {
+      "none": "No lead score",
+      "aria": "Lead score {score} out of 100, {band}, {source}",
+      "titleAi": "Scored by AI",
+      "titleAiOn": "Scored by AI on {date}",
+      "titleManual": "Entered by a person",
+      "band": {
+        "cold": "Cold",
+        "warm": "Warm",
+        "hot": "Hot"
+      },
+      "source": {
+        "ai": "scored by AI",
+        "manual": "entered by a person"
+      }
+    },
+    "card": {
+      "title": "Lead score",
+      "band": {
+        "cold": "Cold lead",
+        "warm": "Warm lead",
+        "hot": "Hot lead"
+      },
+      "sourceAi": "AI",
+      "sourceManual": "Manual",
+      "score": "Score with AI",
+      "rescore": "Re-score",
+      "scoring": "Scoring...",
+      "scoringSlow": "Asking the AI. This can take a few seconds.",
+      "neverScored": "This contact has not been scored yet.",
+      "scoredBy": "Scored by AI on {date} with {model}.",
+      "scoredOn": "Scored by AI on {date}.",
+      "scoredByAi": "Scored by AI.",
+      "reasons": "Why this score",
+      "manualWhy": "A person typed this score, so the AI will not change it. To let the AI score this contact, edit the contact and clear the lead score.",
+      "manualNote": "A person typed this score, so the AI does not change it.",
+      "lastRun": "Scored {score}. Cost {cost}, {tokens} tokens.",
+      "showHistory": "Show scoring history",
+      "hideHistory": "Hide scoring history",
+      "historyLoading": "Loading the history...",
+      "historyFailed": "The history could not be loaded.",
+      "historyEmpty": "No scoring attempts for this contact yet.",
+      "historyCaption": "Scoring attempts for this contact, newest first",
+      "historyMore": "Load more"
+    },
+    "errors": {
+      "network": "The server could not be reached. Check your connection and try again.",
+      "forbidden": "Your role does not allow this.",
+      "notFound": "That contact or record no longer exists.",
+      "conflict": "Someone changed this at the same time. It was reloaded.",
+      "platformDisabled": "AI lead scoring is switched off for the whole platform right now.",
+      "notEnabled": "AI lead scoring is not switched on for this workspace.",
+      "noKey": "No AI key is available for this workspace.",
+      "providerFailed": "The AI provider did not give a usable answer. Try again in a moment.",
+      "manualScore": "This contact has a score a person typed.",
+      "planLimit": "The AI allowance of your plan is used up.",
+      "rateLimited": "Too many requests. Wait a moment and try again.",
+      "validation": "Some of the values are not valid.",
+      "unexpected": "Something went wrong. Try again.",
+      "chatUnavailable": "Reading conversations is not available to this workspace.",
+      "notEnoughChat": "This contact has not said enough yet to be read.",
+      "suggestionGone": "That suggestion was already decided or replaced."
+    },
+    "scoreErrors": {
+      "network": "The server could not be reached, so the contact was not scored. Check your connection and try again.",
+      "forbidden": "Your role is not allowed to score contacts.",
+      "notFound": "This contact no longer exists.",
+      "conflict": "Someone changed this contact at the same time. It was reloaded; try again.",
+      "platformDisabled": "AI lead scoring is switched off for the whole platform right now. Nothing can be scored until the platform operator switches it back on.",
+      "notEnabled": "AI lead scoring is not switched on for this workspace. It is off until you choose, because contact facts are sent to an AI provider.",
+      "noKey": "No OpenRouter key is set up for this workspace. Add one under AI keys, or ask your platform admin to enable the shared key.",
+      "providerFailed": "The AI provider did not give a usable answer, so no score was saved. Try again in a moment.",
+      "manualScore": "This contact has a score a person typed, and the AI never overwrites it. Edit the contact and clear the lead score first if you want the AI to score it.",
+      "planLimit": "The AI allowance of your plan is used up, so the contact was not scored. Try again later or add your own OpenRouter key.",
+      "rateLimited": "Too many requests. Wait a moment and try again.",
+      "validation": "The request was not valid.",
+      "unexpected": "Something went wrong and the contact was not scored. Try again.",
+      "openSettings": "Open AI lead scoring settings",
+      "openKeys": "Open AI keys",
+      "chatUnavailable": "Reading conversations is not switched on for this workspace. It is a pilot feature that needs to be switched on in the AI lead scoring settings.",
+      "notEnoughChat": "This contact has not said enough yet: only greetings, emoji or automatic replies. Try again after it writes more.",
+      "suggestionGone": "That suggestion was already decided or replaced by a newer one, so nothing was changed."
+    },
+    "field": {
+      "label": "Lead score",
+      "placeholder": "0 to 100",
+      "hint": "Typing a score makes it yours: the AI stops changing it. Clear it to hand the contact back to the AI.",
+      "invalid": "Enter a whole number from 0 to 100, or leave it empty."
+    },
+    "runs": {
+      "col": {
+        "when": "When",
+        "contact": "Contact",
+        "result": "Result",
+        "score": "Score",
+        "trigger": "Trigger",
+        "tokens": "Tokens",
+        "cost": "Cost",
+        "key": "Key"
+      },
+      "unnamed": "Unnamed contact",
+      "deletedContact": "Deleted contact",
+      "status": {
+        "ok": "Scored",
+        "kept": "Not saved",
+        "failed": "Failed",
+        "skipped": "Skipped"
+      },
+      "keptNote": "The AI answered, but a person typed a score meanwhile, so it was not saved.",
+      "reason": {
+        "no_key": "No AI key was available.",
+        "token_allowance": "The AI allowance of the plan was used up.",
+        "hourly_limit": "The hourly limit for the shared key was reached.",
+        "manual_score": "The contact has a score a person typed.",
+        "platform_off": "AI lead scoring was switched off for the platform.",
+        "not_enabled": "AI lead scoring was off for this workspace.",
+        "auth": "The AI provider refused the key.",
+        "rate_limited": "The AI provider was busy.",
+        "provider": "The AI provider returned an error.",
+        "timeout": "The AI provider took too long.",
+        "bad_response": "The AI answered with something that was not a score.",
+        "other": "The attempt did not finish."
+      },
+      "trigger": {
+        "created": "Contact created",
+        "updated": "Contact changed",
+        "manual": "Score button",
+        "backfill": "Score unscored contacts",
+        "chat": "Chat went quiet"
+      },
+      "tokensDetail": "{prompt} in, {completion} out",
+      "costSource": {
+        "vendor": "The cost reported by OpenRouter",
+        "estimate": "Estimated from the tokens and the list price"
+      },
+      "billed": {
+        "admin": "Platform key",
+        "workspace": "Your key"
+      }
+    },
+    "log": {
+      "title": "Scoring log",
+      "hint": "Every scoring attempt, newest first, with tokens and cost.",
+      "filter": "Show attempts with this result",
+      "all": "All results",
+      "status": {
+        "ok": "Scored",
+        "kept": "Not saved",
+        "failed": "Failed",
+        "skipped": "Skipped"
+      },
+      "refresh": "Refresh",
+      "emptyTitle": "No scoring attempts yet",
+      "emptyBody": "Attempts appear here once AI lead scoring is on and a contact is scored.",
+      "emptyFilteredTitle": "No attempts with this result",
+      "emptyFilteredBody": "Choose another result, or show all results.",
+      "caption": "Scoring attempts, newest first",
+      "loadMore": "Load more"
+    },
+    "settings": {
+      "title": "AI lead scoring",
+      "subtitle": "Give every contact a score from 0 to 100 that says how likely they are to buy, and see what it costs.",
+      "discard": "Discard",
+      "save": "Save",
+      "saved": "Settings saved.",
+      "readOnly": "You can see these settings but not change them. Ask a workspace admin for the permission lsc.settings.manage.",
+      "conflict": "Someone else changed these settings first. They were reloaded, so what you see is the saved version. Make your change again.",
+      "conflictOk": "Got it",
+      "enable": {
+        "title": "Turn on AI lead scoring",
+        "hint": "Off until you choose, because facts about your contacts are sent to an AI provider.",
+        "label": "AI lead scoring",
+        "on": "On",
+        "off": "Off",
+        "what": "When on, an AI model reads a short, anonymous description of a contact and answers with a score and the reasons for it. The score is written to the contact's lead score."
+      },
+      "sent": {
+        "title": "What is sent to the AI",
+        "stage": "The contact's stage and status",
+        "source": "Where the contact came from",
+        "tags": "Tag names",
+        "deals": "How many deals are open, won and lost",
+        "activity": "How recently the contact was active",
+        "engagement": "How the contact has engaged lately: counts of its messages, broadcasts opened and links clicked, and how fast it replies (numbers only)",
+        "company": "The company name"
+      },
+      "notSent": {
+        "title": "What is never sent",
+        "name": "The contact's name",
+        "email": "The email address",
+        "phone": "The phone number",
+        "messages": "The text of any message",
+        "messagesChat": "The text of any message, unless you switch on reading conversations (below)"
+      },
+      "manualRule": "A score a person typed is never overwritten. The AI only fills empty scores and refreshes the ones it wrote itself.",
+      "auto": {
+        "label": "Score automatically when contacts change",
+        "onBody": "A contact is scored when it is created and again when its details change.",
+        "offBody": "Contacts are scored only when you use the Score with AI button or score the unscored contacts below."
+      },
+      "confirm": {
+        "title": "Send anonymised contact facts to an AI provider?",
+        "body": "Once on, short descriptions of your contacts (stage, source, tags, deal counts, activity, engagement counts such as messages, opened broadcasts and clicked links, and company name) are sent to an AI provider through OpenRouter. Names, email addresses, phone numbers and message text are never sent. You can turn it off at any time.",
+        "yes": "Turn on",
+        "no": "Cancel"
+      },
+      "banner": {
+        "platformOff": "AI lead scoring is switched off for the whole platform. Nothing is scored, whatever is set here, until the platform operator switches it back on.",
+        "noKey": "No OpenRouter key is available, so nothing can be scored. Add your own key under AI keys, or ask your platform admin to enable the shared key.",
+        "openKeys": "Open AI keys",
+        "off": "AI lead scoring is off for this workspace. Nothing is sent to an AI provider.",
+        "ready": "Ready. Contacts are scored with {model} using {key}.",
+        "keyWorkspace": "your workspace's own OpenRouter key",
+        "keyAdmin": "the platform's shared OpenRouter key"
+      },
+      "backfill": {
+        "title": "Score the contacts you already have",
+        "hint": "Queues contacts that have no score yet, up to {limit} at a time. They are scored in the background.",
+        "eligible": "Contacts the AI may score",
+        "scored": "Scored by the AI",
+        "waiting": "Waiting for a score",
+        "eligibleNote": "Contacts with a score a person typed are left out: the AI never changes those.",
+        "button": "Score unscored contacts now",
+        "noRight": "Your role does not allow scoring contacts. It needs the permission lsc.contacts.score.",
+        "notReady": "Turn AI lead scoring on, and make sure a key is available, to score contacts.",
+        "queued": "{count, plural, one {# contact is queued} other {# contacts are queued}} and will be scored in the background. Reload the log in a minute to see the results.",
+        "nothingToScore": "There are no unscored contacts to queue."
+      },
+      "cost": {
+        "title": "Last 30 days",
+        "hint": "What scoring did and cost over the last 30 days.",
+        "scores": "Contacts scored",
+        "tokens": "Tokens used",
+        "total": "Total cost",
+        "average": "Average per score",
+        "averageHint": "Total cost divided by contacts scored",
+        "model": "Model",
+        "payer": "Who pays",
+        "payerBy": {
+          "workspace": "Your own OpenRouter key, billed to you by OpenRouter",
+          "admin": "The platform's shared OpenRouter key",
+          "none": "No key is available yet"
+        },
+        "failed": "Failed attempts",
+        "platformPart": "Of the total, on the platform's key"
+      },
+      "chat": {
+        "title": "Read conversations (pilot)",
+        "hint": "Off until you choose, because the recent messages of a contact are sent to an AI provider, with personal details partly masked.",
+        "label": "Read a contact’s conversation when it goes quiet",
+        "onBody": "About 12 minutes after a contact stops writing, the AI reads the recent messages and notes what the contact is after. It also gives the score.",
+        "offBody": "Conversations are not read. Scores use contact facts and engagement numbers only.",
+        "needsScoring": "Switch AI lead scoring on first.",
+        "stageLabel": "Suggest lifecycle stages",
+        "stageBody": "When the conversation clearly shows a contact has moved on, the AI suggests the next stage. A person accepts or dismisses it; nothing moves by itself, and Won and Lost stages are never suggested.",
+        "masked": {
+          "title": "How personal data is masked",
+          "phone": "Phone numbers keep only the first and last two digits (+91 ***** ***10)",
+          "email": "Email addresses keep the first letter and the domain (p***@acme.io)",
+          "card": "Card, Aadhaar and PAN numbers keep only their first and last characters",
+          "name": "The contact’s name, and a name someone gives about themselves, keep only the first and last letter"
+        },
+        "rules": {
+          "title": "What is read, and what is not",
+          "quiet": "Only chats that have gone quiet, and only the last two weeks",
+          "enough": "Contacts who only tapped buttons are matched by a phrase table, with no AI call",
+          "person": "A score or stage a person set is never overwritten",
+          "closing": "Bots, deleted messages, group chats and automatic replies are left out"
+        },
+        "confirm": {
+          "title": "Send masked conversations to an AI provider?",
+          "body": "Once on, the recent messages of a contact are sent to an AI provider through OpenRouter after the chat goes quiet. Phone numbers, emails, card numbers and names are partly masked first, so what is sent cannot be used to reach the person. You can turn it off at any time.",
+          "yes": "Turn on",
+          "no": "Cancel"
+        }
+      }
+    },
+    "insight": {
+      "title": "Conversation reading",
+      "empty": "Not read yet. A chat is read about 12 minutes after the contact stops writing, or you can read it now.",
+      "analyze": "Read chat",
+      "analyzing": "Reading...",
+      "analyzingSlow": "Asking the AI. This can take a few seconds.",
+      "sourceAi": "Read by AI",
+      "sourceRules": "Matched from button taps",
+      "signals": "What the contact signalled",
+      "signal": {
+        "askedPrice": "Asked about price",
+        "readyToBuy": "Ready to buy",
+        "objection": "Hesitation or objection",
+        "urgent": "Urgent"
+      },
+      "readOn": "Read on {date} from {count, plural, one {# message} other {# messages}}.",
+      "privacy": "Names, phone numbers and emails in the chat are partly masked before anything is sent to the AI.",
+      "intent": {
+        "ready_to_buy": "Ready to buy",
+        "asking_price": "Asking about price",
+        "comparing": "Comparing options",
+        "registering": "Registering",
+        "needs_support": "Needs support",
+        "post_purchase": "After-sales or service",
+        "browsing": "Just browsing",
+        "not_interested": "Not interested",
+        "other": "No clear intent"
+      },
+      "suggestion": {
+        "title": "Suggested stage",
+        "move": "Move from {from} to {to}",
+        "confidence": "{percent}% sure",
+        "accept": "Accept",
+        "dismiss": "Dismiss",
+        "accepted": "Stage changed to {stage}.",
+        "dismissed": "Suggestion dismissed.",
+        "noRight": "You do not have the permission to accept or dismiss suggestions.",
+        "couldNot": "The suggestion could not be applied. It may have been decided already."
+      }
+    },
+    "suggestions": {
+      "title": "Stage suggestions",
+      "hint": "Moves the AI suggests after reading conversations. Nothing changes until you accept.",
+      "empty": "No suggestions are waiting.",
+      "unnamed": "Unnamed contact",
+      "move": "Move from {from} to {to}",
+      "confidence": "{percent}% sure",
+      "accept": "Accept",
+      "dismiss": "Dismiss",
+      "acceptConfident": "Accept the {count} above {percent}%",
+      "dismissAll": "Dismiss all",
+      "more": "Load more",
+      "doneAccept": "{count, plural, one {# stage changed.} other {# stages changed.}}",
+      "doneDismiss": "{count, plural, one {# suggestion dismissed.} other {# suggestions dismissed.}}",
+      "noRight": "You can see the suggestions but not decide them: that needs the permission lsc.stage.review.",
+      "couldNot": "{count, plural, one {# suggestion could not be applied.} other {# suggestions could not be applied.}}"
+    }
+  }
+}

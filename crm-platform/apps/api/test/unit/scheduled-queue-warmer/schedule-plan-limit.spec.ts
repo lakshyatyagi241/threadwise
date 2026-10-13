@@ -31,6 +31,7 @@ function build(assertCanAdd: ReturnType<typeof vi.fn>) {
     {} as never,
     {} as never,
     {} as never,
+    {} as never,
     GATE_ON,
   );
   const run = () =>

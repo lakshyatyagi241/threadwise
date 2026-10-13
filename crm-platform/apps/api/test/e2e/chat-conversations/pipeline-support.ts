@@ -3,7 +3,7 @@ import { createAdapter } from '@socket.io/redis-adapter';
 import type { AddressInfo } from 'node:net';
 import { Redis } from 'ioredis';
 import { io, type Socket } from 'socket.io-client';
-import type { ServerOptions } from 'socket.io';
+import type { Server, ServerOptions } from 'socket.io';
 import { expect } from 'vitest';
 import type { RealtimeEnvelope } from '@crm/contracts';
 import { RequestContextStore } from '../../../src/common/context/request-context';
@@ -27,10 +27,10 @@ class TestRedisIoAdapter extends IoAdapter {
     adapterRedis.push(pub, sub);
     this.ctor = createAdapter(pub, sub);
   }
-  override createIOServer(port: number, options?: ServerOptions): unknown {
+  override createIOServer(port: number, options?: ServerOptions): Server {
     const server = super.createIOServer(port, options) as { adapter: (a: unknown) => void };
     if (this.ctor) server.adapter(this.ctor);
-    return server;
+    return server as unknown as Server;
   }
 }
 

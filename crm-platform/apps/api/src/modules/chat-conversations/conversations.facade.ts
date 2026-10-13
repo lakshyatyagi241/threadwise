@@ -1,4 +1,9 @@
-import type { ListMessagesQuery, MessageListResponse, MessageResponse } from '@crm/contracts';
+import type {
+  EmailReplyExtras,
+  ListMessagesQuery,
+  MessageListResponse,
+  MessageResponse,
+} from '@crm/contracts';
 
 /**
  * The door other domains use to reach conversations (plan-inbox-chat.md sections 3.1 and 5.1). The team-inbox read model and its
@@ -25,6 +30,8 @@ export interface RecordOutboundInput {
   /** The peer on the channel; the thread is found or created from (channel, peer). */
   peerKey: string;
   contactId?: string;
+  /** The title of the thread when this call creates it (a group's subject); ignored for a thread that exists. */
+  threadTitle?: string;
   /** What produced the message: broadcast, appointment, flow, auto_reply, ... (the thread shows where it came from). */
   source: string;
   body: string;
@@ -91,7 +98,14 @@ export type OutboundInteractive =
   | { type: 'cta_url'; body: string; header?: string; footer?: string; text: string; url: string };
 
 export type OutboundContent =
-  | { kind: 'text'; body: string }
+  /** `email`: cc, bcc and a subject override; accepted only for a conversation on an email channel. */
+  | {
+      kind: 'text';
+      body: string;
+      email?: EmailReplyExtras;
+      /** Personal-number group threads only: the members @mentioned in the body. Dropped for any other thread. */
+      mentions?: { jid: string; name?: string | undefined }[];
+    }
   | { kind: 'media'; media: OutboundMediaRef; caption?: string }
   /** An emoji on the message `EnqueueOutboundInput.replyToMessageId` names; an empty emoji removes the reaction. */
   | { kind: 'reaction'; emoji: string }

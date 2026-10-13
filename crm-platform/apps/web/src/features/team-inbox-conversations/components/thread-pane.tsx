@@ -1,24 +1,46 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useEffect, useRef, useState, type Ref } from 'react';
+import Link from 'next/link';
+import { useCallback, useEffect, useRef, useState, type Ref } from 'react';
 import { Badge, Button, EmptyState, Spinner, cn } from '@crm/ui';
 import type {
+  ConversationPriority,
   ChannelResponse,
+  EmailReplyExtras,
   ConversationNote,
   InboxConversationDetail,
   MessageResponse,
+  WaGroupMention,
 } from '@crm/contracts';
+import {
+  defaultReplySubject,
+  latestEmailSubject,
+} from '@/features/channel-email/lib/composer-extras';
+import { emailSendProblem } from '@/features/channel-email/lib/composer-errors';
 import { ReconnectBanner } from '@/features/channel-whatsapp-cloud';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { CallButton } from '@/features/calling-voice';
 import { useRealtimeEvent } from '@/lib/realtime';
 import type { Thread } from '../api/use-thread';
-import { isGroupThread } from '../lib/group-thread';
+import { inboxApi } from '../api/service';
+import {
+  cloudGroupBlock,
+  isGroupLimited,
+  isGroupSendBlocked,
+  isPersonalGroupThread,
+  personalGroupBlock,
+} from '../lib/group-thread';
+import type { MentionMember } from '../lib/mentions';
+import type { SnoozePreset } from '../lib/selection';
 import { computeWindow, formatWindowLeft, type WindowView } from '../lib/window';
 import { Composer, type ComposerHandle, type ComposerMode } from './composer';
+import { GroupCostLine } from './group-cost-line';
 import { ShareDialog, type ShareKind } from './share-dialog';
+import { LabelChip } from './label-chip';
+import { LabelMenu } from './label-menu';
 import { TemplatePicker } from './template-picker';
+import { TriageMenu } from './triage-menu';
 import { AlertIcon, BackIcon, CheckCircleIcon, ClockIcon, PanelIcon } from './icons';
 import { MessageStream } from './message-stream';
 import { Avatar, ChannelTag } from './parts';
@@ -33,7 +55,14 @@ export interface ThreadPaneProps {
   notes: ConversationNote[];
   channel: ChannelResponse | undefined;
   nowMs: number;
-  can: { reply: boolean; note: boolean; resolve: boolean; assignSelf: boolean };
+  can: {
+    reply: boolean;
+    note: boolean;
+    resolve: boolean;
+    assignSelf: boolean;
+    priority?: boolean;
+    snooze?: boolean;
+  };
   mode: ComposerMode;
   onMode: (mode: ComposerMode) => void;
   composerRef: Ref<ComposerHandle>;
@@ -41,7 +70,13 @@ export interface ThreadPaneProps {
   onTogglePanel: () => void;
   onBack: () => void;
   onSeenLatest: (seq: number) => void;
-  onSend: (draft: { body: string; file: File | null; replyToMessageId?: string | null }) => void;
+  onSend: (draft: {
+    body: string;
+    file: File | null;
+    replyToMessageId?: string | null;
+    email?: EmailReplyExtras;
+    mentions?: WaGroupMention[];
+  }) => void;
   /** Puts an emoji on a message (`''` takes it back); the screen shows the refusal. */
   onReact: (message: MessageResponse, emoji: string) => Promise<void>;
   onNote: (body: string) => Promise<boolean>;
@@ -53,6 +88,20 @@ export interface ThreadPaneProps {
   onRetryMessage: (messageId: string) => Promise<void>;
   resolving: boolean;
   onAssignSelf: () => void;
+  /** Priority, snooze and wake-up of the open conversation (the screen runs the call and shows the refusal). */
+  triage?: {
+    busy: boolean;
+    onPriority: (priority: ConversationPriority) => void;
+    onSnooze: (preset: SnoozePreset) => void;
+    onWake: () => void;
+  };
+  /** Labels of the open conversation: present when the caller may put labels on threads. */
+  labels?: {
+    busy: boolean;
+    canCreate: boolean;
+    onApply: (input: { tagId: string } | { name: string }) => void;
+    onWithdraw: (tagId: string) => void;
+  };
   onRetryDetail: () => void;
 }
 
@@ -63,8 +112,10 @@ export interface ThreadPaneProps {
  */
 export function ThreadPane(props: ThreadPaneProps) {
   const t = useTranslations('team-inbox-conversations.thread');
+  const tg = useTranslations('team-inbox-conversations.groupThread');
   const canManageChannels = useCan('inbox.channel.manage');
   const canExportLogs = useCan('inbox.logs.export');
+  const canOpenGroups = useCan('wa.groups.read');
   const { detail, thread } = props;
   const [templatesOpen, setTemplatesOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
@@ -73,6 +124,17 @@ export function ThreadPane(props: ThreadPaneProps) {
     null,
   );
   const replyTo = reply && reply.conversationId === props.conversationId ? reply.message : null;
+
+  // A group of a personal (linked) number reads its members from the group directory for the @mention picker.
+  const personalGroup = isPersonalGroupThread(detail?.peerKey, detail?.channel.kind);
+  const groupBlock = personalGroup ? personalGroupBlock(detail?.personalGroup) : null;
+  const mentionsOn = personalGroup && props.can.reply && groupBlock === null;
+  const conversationId = props.conversationId;
+  const searchMembers = useCallback(
+    async (q: string): Promise<MentionMember[]> =>
+      (await inboxApi.groupMembers(conversationId, q)).members,
+    [conversationId],
+  );
 
   if (props.notFound) {
     return (
@@ -99,18 +161,24 @@ export function ThreadPane(props: ThreadPaneProps) {
     : null;
   const channelDown = props.channel !== undefined && props.channel.status !== 'connected';
   const windowClosed = win?.state === 'closed';
-  const groupThread = isGroupThread(detail?.peerKey);
-  const replyDisabled = windowClosed || channelDown;
+  // The Cloud API takes only text and files into a group; a personal number takes everything a person can send there.
+  const groupLimited = isGroupLimited(detail?.peerKey, detail?.channel.kind);
+  // A Cloud API group the composer is off for: Meta suspended it, the plan has no Groups, or the number was refused for Groups.
+  const cloudBlock = cloudGroupBlock(detail?.cloudGroup);
+  const groupSendBlocked =
+    isGroupSendBlocked(detail?.peerKey, detail?.channel.kind) || cloudBlock !== null;
+  const replyDisabled = windowClosed || channelDown || groupBlock !== null;
   // A template needs no open window, only a working channel that sends templates and the right to reply.
   const canTemplate =
     Boolean(detail?.capabilities.templates) &&
     props.can.reply &&
     !channelDown &&
-    !groupThread &&
+    !groupSendBlocked &&
+    detail?.channel.kind !== 'email' &&
     props.mode === 'reply';
   // A place, contact cards and buttons are free-form messages: they need the window like text does (the composer disables the button).
   const shareKinds: ShareKind[] =
-    detail && props.can.reply && !channelDown && !groupThread && props.mode === 'reply'
+    detail && props.can.reply && !channelDown && !groupLimited && props.mode === 'reply'
       ? [
           ...(detail.capabilities.media.includes('location') ? (['location'] as const) : []),
           ...(detail.capabilities.media.includes('contact') ? (['contacts'] as const) : []),
@@ -118,6 +186,9 @@ export function ThreadPane(props: ThreadPaneProps) {
         ]
       : [];
   const resolved = detail?.status === 'resolved' || detail?.status === 'closed';
+  // Email: the reply box adds Cc, Bcc and a subject; templates, shares and files are not part of an email reply (yet).
+  const isEmail = detail?.channel.kind === 'email';
+  const emailSubject = isEmail ? latestEmailSubject(thread.state.messages, detail?.title) : '';
 
   return (
     <section aria-label={detail?.title ?? t('title')} className="flex h-full min-h-0 flex-col">
@@ -150,8 +221,24 @@ export function ThreadPane(props: ThreadPaneProps) {
                 </span>
                 <ChannelTag decorative kind={detail.channel.kind} name={detail.channel.name} />
                 <span className="truncate">{detail.channel.name}</span>
+                {personalGroup && canOpenGroups && (
+                  <Link
+                    href="/devices/groups"
+                    data-testid="inbox-open-group"
+                    className="text-primary underline-offset-2 hover:underline focus-visible:ring-2 focus-visible:ring-primary"
+                  >
+                    {tg('openGroup')}
+                  </Link>
+                )}
                 <TypingLine conversationId={detail.id} />
               </p>
+              {detail.labels.length > 0 && (
+                <div className="mt-1 flex flex-wrap gap-1" data-testid="inbox-thread-labels">
+                  {detail.labels.map((l) => (
+                    <LabelChip key={l.id} label={l} />
+                  ))}
+                </div>
+              )}
             </div>
           </>
         ) : (
@@ -185,6 +272,28 @@ export function ThreadPane(props: ThreadPaneProps) {
             >
               {t('assignToMe')}
             </Button>
+          )}
+          {detail && props.labels && (
+            <LabelMenu
+              applied={detail.labels}
+              busy={props.labels.busy}
+              canCreate={props.labels.canCreate}
+              onApply={props.labels.onApply}
+              onWithdraw={props.labels.onWithdraw}
+            />
+          )}
+          {detail && props.triage && (
+            <TriageMenu
+              priority={detail.priority}
+              snoozed={detail.status === 'snoozed'}
+              canPriority={props.can.priority ?? false}
+              canSnooze={props.can.snooze ?? false}
+              canWake={props.can.resolve}
+              busy={props.triage.busy}
+              onPriority={props.triage.onPriority}
+              onSnooze={props.triage.onSnooze}
+              onWake={props.triage.onWake}
+            />
           )}
           {detail && props.can.resolve && (
             <Button
@@ -231,7 +340,7 @@ export function ThreadPane(props: ThreadPaneProps) {
         onLoadOlder={() => void thread.loadOlder()}
         onRetryMessage={props.onRetryMessage}
         onReply={
-          props.can.reply && !replyDisabled && !groupThread
+          props.can.reply && !replyDisabled && !groupLimited
             ? (message) => {
                 setReply({ conversationId: props.conversationId, message });
                 props.onMode('reply');
@@ -239,7 +348,7 @@ export function ThreadPane(props: ThreadPaneProps) {
             : undefined
         }
         onReact={
-          props.can.reply && !replyDisabled && !groupThread && detail?.capabilities.reactions
+          props.can.reply && !replyDisabled && !groupLimited && detail?.capabilities.reactions
             ? props.onReact
             : undefined
         }
@@ -257,7 +366,7 @@ export function ThreadPane(props: ThreadPaneProps) {
       {win &&
         windowClosed &&
         !channelDown &&
-        !groupThread &&
+        !groupLimited &&
         props.can.reply &&
         props.mode === 'reply' && (
           <div
@@ -283,6 +392,41 @@ export function ThreadPane(props: ThreadPaneProps) {
             </div>
           </div>
         )}
+      {groupBlock !== null && props.can.reply && props.mode === 'reply' && (
+        <div
+          role="status"
+          data-testid="inbox-group-readonly"
+          data-reason={groupBlock}
+          className="flex items-start gap-2 border-t border-border bg-muted/50 px-4 py-2.5 text-sm"
+        >
+          <AlertIcon className="mt-0.5 shrink-0 text-muted-foreground" />
+          <div>
+            <p className="font-medium">{tg(`readOnly.${groupBlock}.title`)}</p>
+            <p className="text-xs text-muted-foreground">{tg(`readOnly.${groupBlock}.message`)}</p>
+          </div>
+        </div>
+      )}
+      {cloudBlock !== null && props.can.reply && props.mode === 'reply' && (
+        <div
+          role="status"
+          data-testid="inbox-group-cloud-block"
+          data-reason={cloudBlock}
+          className="flex items-start gap-2 border-t border-border bg-muted/50 px-4 py-2.5 text-sm"
+        >
+          <AlertIcon className="mt-0.5 shrink-0 text-muted-foreground" />
+          <div>
+            <p className="font-medium">{tg(`cloudBlock.${cloudBlock}.title`)}</p>
+            <p className="text-xs text-muted-foreground">
+              {tg(`cloudBlock.${cloudBlock}.message`)}
+            </p>
+          </div>
+        </div>
+      )}
+      {detail?.cloudGroup &&
+        cloudBlock === null &&
+        props.can.reply &&
+        props.mode === 'reply' &&
+        !channelDown && <GroupCostLine group={detail.cloudGroup} />}
       {!props.can.reply && props.mode === 'reply' && (
         <p
           role="status"
@@ -299,13 +443,25 @@ export function ThreadPane(props: ThreadPaneProps) {
         replyDisabled={replyDisabled}
         canReply={props.can.reply}
         canNote={props.can.note}
-        canAttach={(detail?.capabilities.media.length ?? 0) > 0}
-        groupSendBlocked={groupThread}
+        canAttach={isEmail ? props.can.reply : (detail?.capabilities.media.length ?? 0) > 0}
+        email={
+          isEmail
+            ? {
+                defaultSubject: defaultReplySubject(emailSubject),
+                channelId: detail?.channel.id,
+                sendProblem: emailSendProblem(thread.state.pending),
+              }
+            : undefined
+        }
+        groupSendBlocked={groupSendBlocked}
+        groupBlockedHint={cloudBlock ? tg(`cloudBlock.${cloudBlock}.title`) : undefined}
+        groupMentions={mentionsOn ? { search: searchMembers } : undefined}
         attachments={
           detail
             ? { channelKind: detail.channel.kind, allowed: detail.capabilities.media }
             : undefined
         }
+        savedReplies={props.can.reply ? { channelKind: detail?.channel.kind } : undefined}
         canTemplate={canTemplate}
         onTemplate={() => setTemplatesOpen(true)}
         canShare={shareKinds.length > 0}

@@ -527,24 +527,43 @@ describe('parseInbound: the normaliser the inbox reads a Cloud API change with',
   });
 });
 
-describe('send: a WhatsApp group thread key is never a recipient (WABA_GROUP_SEND_UNAVAILABLE)', () => {
-  it('refuses a g: peer before the file upload and before any Graph call, not retryable', async () => {
+describe('send: a WhatsApp group thread (g:<group id>) is addressed as a group', () => {
+  const to = 'g:Y2FwaV9ncm91cDoxMjM0NTY3ODkwMTIzNDU2';
+
+  it('text is posted to the group id with recipient_type group', async () => {
+    const { adapter, calls } = build();
+    await adapter.send(meta(), { ...text('hi'), to });
+    expect(calls).toHaveLength(1);
+    expect(calls[0]!.url).toMatch(/\/messages$/);
+    expect(calls[0]!.body).toMatchObject({
+      recipient_type: 'group',
+      to: 'Y2FwaV9ncm91cDoxMjM0NTY3ODkwMTIzNDU2',
+      type: 'text',
+    });
+  });
+
+  it('a reaction or interactive message is refused before the upload and any Graph call, not retryable', async () => {
     const { adapter, calls, uploader, guard } = build();
-    const to = 'g:Y2FwaV9ncm91cDoxMjM0NTY3ODkwMTIzNDU2';
     const envelopes: OutboundEnvelope[] = [
-      { ...text('hi'), to },
       {
-        kind: 'media',
+        kind: 'reaction',
         to,
-        clientReference: 'ref-m',
+        clientReference: 'ref-r',
         attempt: 1,
-        media: { key: 'k', mediaKind: 'image', mime: 'image/jpeg', caption: 'c' },
+        reaction: { providerMessageId: 'wamid.1', emoji: '👍' },
       },
+      {
+        kind: 'interactive',
+        to,
+        clientReference: 'ref-i',
+        attempt: 1,
+        interactive: { type: 'location_request', body: 'Where?' },
+      } as OutboundEnvelope,
     ];
     for (const envelope of envelopes) {
       const err = (await adapter.send(meta(), envelope).catch((e: unknown) => e)) as ChannelError;
       expect(err).toBeInstanceOf(ChannelError);
-      expect(err.code).toBe('WABA_GROUP_SEND_UNAVAILABLE');
+      expect(err.code).toBe('CHANNEL_CAPABILITY_UNSUPPORTED');
       expect(err.retryable).toBe(false);
     }
     expect(calls).toHaveLength(0);

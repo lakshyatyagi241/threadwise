@@ -1,0 +1,345 @@
+{
+  "lead-scoring": {
+    "common": {
+      "dismiss": "Kapat",
+      "retry": "Tekrar dene",
+      "requestId": "İstek {id}",
+      "noAccessTitle": "Bu ekrana erişiminiz yok",
+      "noAccess": "Bir çalışma alanı yöneticisinden rolünüze {permission} iznini vermesini isteyin."
+    },
+    "badge": {
+      "none": "Potansiyel müşteri puanı yok",
+      "aria": "Potansiyel müşteri puanı 100 üzerinden {score}, {band}, {source}",
+      "titleAi": "Yapay zeka puanladı",
+      "titleAiOn": "Yapay zeka {date} tarihinde puanladı",
+      "titleManual": "Bir kişi girdi",
+      "band": {
+        "cold": "Soğuk",
+        "warm": "Ilık",
+        "hot": "Sıcak"
+      },
+      "source": {
+        "ai": "yapay zeka tarafından puanlandı",
+        "manual": "bir kişi tarafından girildi"
+      }
+    },
+    "card": {
+      "title": "Potansiyel müşteri puanı",
+      "band": {
+        "cold": "Soğuk potansiyel müşteri",
+        "warm": "Ilık potansiyel müşteri",
+        "hot": "Sıcak potansiyel müşteri"
+      },
+      "sourceAi": "Yapay zeka",
+      "sourceManual": "Elle",
+      "score": "Yapay zekayla puanla",
+      "rescore": "Yeniden puanla",
+      "scoring": "Puanlanıyor...",
+      "scoringSlow": "Yapay zekaya soruluyor. Bu birkaç saniye sürebilir.",
+      "neverScored": "Bu kişi henüz puanlanmadı.",
+      "scoredBy": "Yapay zeka {date} tarihinde {model} ile puanladı.",
+      "scoredOn": "Yapay zeka {date} tarihinde puanladı.",
+      "scoredByAi": "Yapay zeka puanladı.",
+      "reasons": "Bu puanın nedeni",
+      "manualWhy": "Bu puanı bir kişi yazdı, bu yüzden yapay zeka değiştirmez. Yapay zekanın bu kişiyi puanlamasını istiyorsanız kişiyi düzenleyin ve potansiyel müşteri puanını silin.",
+      "manualNote": "Bu puanı bir kişi yazdı, bu yüzden yapay zeka değiştirmez.",
+      "lastRun": "Puan: {score}. Maliyet {cost}, {tokens} token.",
+      "showHistory": "Puanlama geçmişini göster",
+      "hideHistory": "Puanlama geçmişini gizle",
+      "historyLoading": "Geçmiş yükleniyor...",
+      "historyFailed": "Geçmiş yüklenemedi.",
+      "historyEmpty": "Bu kişi için henüz puanlama denemesi yok.",
+      "historyCaption": "Bu kişi için puanlama denemeleri, en yeniden eskiye",
+      "historyMore": "Daha fazla yükle"
+    },
+    "errors": {
+      "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+      "forbidden": "Rolünüz buna izin vermiyor.",
+      "notFound": "Bu kişi veya kayıt artık yok.",
+      "conflict": "Biri bunu aynı anda değiştirdi. Yeniden yüklendi.",
+      "platformDisabled": "Yapay zeka ile potansiyel müşteri puanlama şu anda tüm platform için kapalı.",
+      "notEnabled": "Yapay zeka ile potansiyel müşteri puanlama bu çalışma alanı için açık değil.",
+      "noKey": "Bu çalışma alanı için kullanılabilir bir yapay zeka anahtarı yok.",
+      "providerFailed": "Yapay zeka sağlayıcısı kullanılabilir bir yanıt vermedi. Biraz sonra tekrar deneyin.",
+      "manualScore": "Bu kişinin puanı bir kişi tarafından yazılmış.",
+      "planLimit": "Planınızın yapay zeka hakkı tükendi.",
+      "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
+      "validation": "Bazı değerler geçerli değil.",
+      "unexpected": "Bir şeyler ters gitti. Tekrar deneyin.",
+      "chatUnavailable": "Görüşmeleri okuma özelliği bu çalışma alanında kullanılamıyor.",
+      "notEnoughChat": "Bu kişi henüz okunacak kadar yazmadı.",
+      "suggestionGone": "Bu öneri zaten karara bağlanmış veya yenisiyle değiştirilmiş."
+    },
+    "scoreErrors": {
+      "network": "Sunucuya ulaşılamadı, bu yüzden kişi puanlanmadı. Bağlantınızı kontrol edip tekrar deneyin.",
+      "forbidden": "Rolünüzün kişileri puanlama izni yok.",
+      "notFound": "Bu kişi artık yok.",
+      "conflict": "Biri bu kişiyi aynı anda değiştirdi. Yeniden yüklendi; tekrar deneyin.",
+      "platformDisabled": "Yapay zeka ile potansiyel müşteri puanlama şu anda tüm platform için kapalı. Platform operatörü yeniden açana kadar hiçbir şey puanlanamaz.",
+      "notEnabled": "Yapay zeka ile potansiyel müşteri puanlama bu çalışma alanı için açık değil. Kişi bilgileri bir yapay zeka sağlayıcısına gönderildiği için siz seçene kadar kapalıdır.",
+      "noKey": "Bu çalışma alanı için bir OpenRouter anahtarı ayarlanmamış. Yapay zeka anahtarları bölümünden bir anahtar ekleyin veya platform yöneticinizden ortak anahtarı etkinleştirmesini isteyin.",
+      "providerFailed": "Yapay zeka sağlayıcısı kullanılabilir bir yanıt vermedi, bu yüzden puan kaydedilmedi. Biraz sonra tekrar deneyin.",
+      "manualScore": "Bu kişinin puanı bir kişi tarafından yazılmış ve yapay zeka bunu asla değiştirmez. Yapay zekanın puanlamasını istiyorsanız önce kişiyi düzenleyin ve potansiyel müşteri puanını silin.",
+      "planLimit": "Planınızın yapay zeka hakkı tükendi, bu yüzden kişi puanlanmadı. Daha sonra tekrar deneyin veya kendi OpenRouter anahtarınızı ekleyin.",
+      "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
+      "validation": "İstek geçerli değildi.",
+      "unexpected": "Bir şeyler ters gitti ve kişi puanlanmadı. Tekrar deneyin.",
+      "openSettings": "Yapay zeka ile potansiyel müşteri puanlama ayarlarını aç",
+      "openKeys": "Yapay zeka anahtarlarını aç",
+      "chatUnavailable": "Görüşmeleri okuma özelliği bu çalışma alanında açık değil. Pilot bir özelliktir ve AI potansiyel müşteri puanlama ayarlarından açılması gerekir.",
+      "notEnoughChat": "Bu kişi henüz yeterince yazmadı: yalnızca selamlaşma, emoji veya otomatik yanıtlar var. Daha fazla yazdıktan sonra tekrar deneyin.",
+      "suggestionGone": "Bu öneri zaten karara bağlanmış veya daha yeni bir öneriyle değiştirilmiş, bu yüzden hiçbir şey değiştirilmedi."
+    },
+    "field": {
+      "label": "Potansiyel müşteri puanı",
+      "placeholder": "0 ile 100 arası",
+      "hint": "Bir puan yazarsanız o sizin olur: yapay zeka onu değiştirmez. Kişiyi yapay zekaya geri vermek için puanı silin.",
+      "invalid": "0 ile 100 arasında bir tam sayı girin veya boş bırakın."
+    },
+    "runs": {
+      "col": {
+        "when": "Zaman",
+        "contact": "Kişi",
+        "result": "Sonuç",
+        "score": "Puan",
+        "trigger": "Tetikleyici",
+        "tokens": "Token",
+        "cost": "Maliyet",
+        "key": "Anahtar"
+      },
+      "unnamed": "Adsız kişi",
+      "deletedContact": "Silinmiş kişi",
+      "status": {
+        "ok": "Puanlandı",
+        "kept": "Kaydedilmedi",
+        "failed": "Başarısız",
+        "skipped": "Atlandı"
+      },
+      "keptNote": "Yapay zeka yanıt verdi ama bu arada bir kişi puan yazdığı için kaydedilmedi.",
+      "reason": {
+        "no_key": "Kullanılabilir yapay zeka anahtarı yoktu.",
+        "token_allowance": "Planın yapay zeka hakkı tükendi.",
+        "hourly_limit": "Ortak anahtarın saatlik sınırına ulaşıldı.",
+        "manual_score": "Kişinin puanı bir kişi tarafından yazılmış.",
+        "platform_off": "Yapay zeka ile potansiyel müşteri puanlama platform için kapatıldı.",
+        "not_enabled": "Yapay zeka ile potansiyel müşteri puanlama bu çalışma alanı için kapalıydı.",
+        "auth": "Yapay zeka sağlayıcısı anahtarı reddetti.",
+        "rate_limited": "Yapay zeka sağlayıcısı meşguldü.",
+        "provider": "Yapay zeka sağlayıcısı bir hata döndürdü.",
+        "timeout": "Yapay zeka sağlayıcısı çok uzun sürdü.",
+        "bad_response": "Yapay zeka puan olmayan bir yanıt verdi.",
+        "other": "Deneme tamamlanmadı."
+      },
+      "trigger": {
+        "created": "Kişi oluşturuldu",
+        "updated": "Kişi değiştirildi",
+        "manual": "Puanla düğmesi",
+        "backfill": "Puanlanmamış kişileri puanla",
+        "chat": "Görüşme sessizleşti"
+      },
+      "tokensDetail": "{prompt} giriş, {completion} çıkış",
+      "costSource": {
+        "vendor": "OpenRouter'ın bildirdiği maliyet",
+        "estimate": "Token sayısı ve liste fiyatından tahmin edildi"
+      },
+      "billed": {
+        "admin": "Platform anahtarı",
+        "workspace": "Sizin anahtarınız"
+      }
+    },
+    "log": {
+      "title": "Puanlama günlüğü",
+      "hint": "Her puanlama denemesi, en yeniden eskiye, token ve maliyetiyle.",
+      "filter": "Bu sonuçlu denemeleri göster",
+      "all": "Tüm sonuçlar",
+      "status": {
+        "ok": "Puanlandı",
+        "kept": "Kaydedilmedi",
+        "failed": "Başarısız",
+        "skipped": "Atlandı"
+      },
+      "refresh": "Yenile",
+      "emptyTitle": "Henüz puanlama denemesi yok",
+      "emptyBody": "Yapay zeka ile potansiyel müşteri puanlama açılıp bir kişi puanlandığında denemeler burada görünür.",
+      "emptyFilteredTitle": "Bu sonuçla deneme yok",
+      "emptyFilteredBody": "Başka bir sonuç seçin veya tüm sonuçları gösterin.",
+      "caption": "Puanlama denemeleri, en yeniden eskiye",
+      "loadMore": "Daha fazla yükle"
+    },
+    "settings": {
+      "title": "Yapay zeka ile potansiyel müşteri puanlama",
+      "subtitle": "Her kişiye satın alma olasılığını gösteren 0 ile 100 arasında bir puan verin ve maliyetini görün.",
+      "discard": "Vazgeç",
+      "save": "Kaydet",
+      "saved": "Ayarlar kaydedildi.",
+      "readOnly": "Bu ayarları görebilirsiniz ama değiştiremezsiniz. Bir çalışma alanı yöneticisinden lsc.settings.manage iznini isteyin.",
+      "conflict": "Bu ayarları başka biri önce değiştirdi. Yeniden yüklendi, yani gördüğünüz kayıtlı sürümdür. Değişikliğinizi tekrar yapın.",
+      "conflictOk": "Anladım",
+      "enable": {
+        "title": "Yapay zeka ile potansiyel müşteri puanlamayı aç",
+        "hint": "Kişilerinizle ilgili bilgiler bir yapay zeka sağlayıcısına gönderildiği için siz seçene kadar kapalıdır.",
+        "label": "Yapay zeka ile potansiyel müşteri puanlama",
+        "on": "Açık",
+        "off": "Kapalı",
+        "what": "Açıkken, bir yapay zeka modeli kişinin kısa ve anonim bir tanımını okur ve bir puan ile gerekçelerini yanıtlar. Puan, kişinin potansiyel müşteri puanına yazılır."
+      },
+      "sent": {
+        "title": "Yapay zekaya neler gönderilir",
+        "stage": "Kişinin aşaması ve durumu",
+        "source": "Kişinin nereden geldiği",
+        "tags": "Etiket adları",
+        "deals": "Kaç fırsatın açık, kazanılmış ve kaybedilmiş olduğu",
+        "activity": "Kişinin ne kadar yakın zamanda etkin olduğu",
+        "company": "Şirket adı",
+        "engagement": "Kişinin son zamanlardaki etkileşimi: mesaj sayısı, açtığı toplu gönderiler, tıkladığı bağlantılar ve yanıt verme hızı (yalnızca sayılar)"
+      },
+      "notSent": {
+        "title": "Asla gönderilmeyenler",
+        "name": "Kişinin adı",
+        "email": "E-posta adresi",
+        "phone": "Telefon numarası",
+        "messages": "Herhangi bir mesajın metni",
+        "messagesChat": "Herhangi bir mesajın metni, aşağıdaki görüşmeleri okuma özelliğini açmadığınız sürece"
+      },
+      "manualRule": "Bir kişinin yazdığı puanın üzerine asla yazılmaz. Yapay zeka yalnızca boş puanları doldurur ve kendi yazdıklarını yeniler.",
+      "auto": {
+        "label": "Kişiler değiştiğinde otomatik puanla",
+        "onBody": "Bir kişi oluşturulduğunda ve bilgileri değiştiğinde yeniden puanlanır.",
+        "offBody": "Kişiler yalnızca Yapay zekayla puanla düğmesini kullandığınızda veya aşağıdaki puanlanmamış kişileri puanladığınızda puanlanır."
+      },
+      "confirm": {
+        "title": "Anonimleştirilmiş kişi bilgileri bir yapay zeka sağlayıcısına gönderilsin mi?",
+        "body": "Açıldığında, kişilerinizin kısa açıklamaları (aşama, kaynak, etiketler, anlaşma sayıları, etkinlik, mesajlar, açılan toplu gönderiler ve tıklanan bağlantılar gibi etkileşim sayıları ve şirket adı) OpenRouter aracılığıyla bir yapay zekâ sağlayıcısına gönderilir. Adlar, e-posta adresleri, telefon numaraları ve mesaj metinleri asla gönderilmez. İstediğiniz zaman kapatabilirsiniz.",
+        "yes": "Aç",
+        "no": "İptal"
+      },
+      "banner": {
+        "platformOff": "Yapay zeka ile potansiyel müşteri puanlama tüm platform için kapalı. Burada ne ayarlanmış olursa olsun, platform operatörü yeniden açana kadar hiçbir şey puanlanmaz.",
+        "noKey": "Kullanılabilir bir OpenRouter anahtarı yok, bu yüzden hiçbir şey puanlanamaz. Yapay zeka anahtarları bölümünden kendi anahtarınızı ekleyin veya platform yöneticinizden ortak anahtarı etkinleştirmesini isteyin.",
+        "openKeys": "Yapay zeka anahtarlarını aç",
+        "off": "Yapay zeka ile potansiyel müşteri puanlama bu çalışma alanı için kapalı. Yapay zeka sağlayıcısına hiçbir şey gönderilmez.",
+        "ready": "Hazır. Kişiler {model} ile ve {key} kullanılarak puanlanır.",
+        "keyWorkspace": "çalışma alanınızın kendi OpenRouter anahtarı",
+        "keyAdmin": "platformun ortak OpenRouter anahtarı"
+      },
+      "backfill": {
+        "title": "Mevcut kişilerinizi puanlayın",
+        "hint": "Henüz puanı olmayan kişileri her seferinde en fazla {limit} olacak şekilde kuyruğa alır. Arka planda puanlanırlar.",
+        "eligible": "Yapay zekanın puanlayabileceği kişiler",
+        "scored": "Yapay zekanın puanladığı",
+        "waiting": "Puan bekleyen",
+        "eligibleNote": "Puanı bir kişi tarafından yazılmış kişiler dışarıda bırakılır: yapay zeka bunları asla değiştirmez.",
+        "button": "Puanlanmamış kişileri şimdi puanla",
+        "noRight": "Rolünüzün kişileri puanlama izni yok. lsc.contacts.score izni gerekir.",
+        "notReady": "Kişileri puanlamak için yapay zeka ile potansiyel müşteri puanlamayı açın ve kullanılabilir bir anahtar olduğundan emin olun.",
+        "queued": "{count, plural, one {# kişi kuyruğa alındı} other {# kişi kuyruğa alındı}} ve arka planda puanlanacak. Sonuçları görmek için bir dakika sonra günlüğü yeniden yükleyin.",
+        "nothingToScore": "Kuyruğa alınacak puanlanmamış kişi yok."
+      },
+      "cost": {
+        "title": "Son 30 gün",
+        "hint": "Son 30 günde puanlamanın yaptıkları ve maliyeti.",
+        "scores": "Puanlanan kişiler",
+        "tokens": "Kullanılan token",
+        "total": "Toplam maliyet",
+        "average": "Puan başına ortalama",
+        "averageHint": "Toplam maliyetin puanlanan kişi sayısına bölünmesi",
+        "model": "Model",
+        "payer": "Kim öder",
+        "payerBy": {
+          "workspace": "Kendi OpenRouter anahtarınız, OpenRouter tarafından size faturalandırılır",
+          "admin": "Platformun ortak OpenRouter anahtarı",
+          "none": "Henüz kullanılabilir anahtar yok"
+        },
+        "failed": "Başarısız denemeler",
+        "platformPart": "Toplamın platform anahtarına ait kısmı"
+      },
+      "chat": {
+        "title": "Görüşmeleri oku (pilot)",
+        "hint": "Siz seçene kadar kapalıdır, çünkü kişinin son mesajları kişisel bilgileri kısmen maskelenerek bir AI sağlayıcısına gönderilir.",
+        "label": "Görüşme sessizleştiğinde kişinin görüşmesini oku",
+        "onBody": "Kişi yazmayı bıraktıktan yaklaşık 12 dakika sonra AI son mesajları okur ve kişinin ne aradığını not eder. Puanı da o verir.",
+        "offBody": "Görüşmeler okunmaz. Puanlar yalnızca kişi bilgilerini ve etkileşim verilerini kullanır.",
+        "needsScoring": "Önce AI potansiyel müşteri puanlamayı açın.",
+        "stageLabel": "Yaşam döngüsü aşamalarını öner",
+        "stageBody": "Görüşme bir kişinin ilerlediğini açıkça gösterdiğinde AI sonraki aşamayı önerir. Bir kişi bunu kabul eder veya reddeder; hiçbir şey kendiliğinden taşınmaz ve Kazanıldı ile Kaybedildi aşamaları asla önerilmez.",
+        "masked": {
+          "title": "Kişisel veriler nasıl maskelenir",
+          "phone": "Telefon numaralarında yalnızca ilk ve son iki hane kalır (+91 ***** ***10)",
+          "email": "E-posta adreslerinde ilk harf ve alan adı kalır (p***@acme.io)",
+          "card": "Kart, Aadhaar ve PAN numaralarında yalnızca ilk ve son karakterler kalır",
+          "name": "Kişinin adında ve birinin kendisi hakkında verdiği adda yalnızca ilk ve son harf kalır"
+        },
+        "rules": {
+          "title": "Neler okunur, neler okunmaz",
+          "quiet": "Yalnızca sessizleşmiş görüşmeler ve yalnızca son iki hafta",
+          "enough": "Yalnızca düğmelere dokunan kişiler bir ifade tablosuyla eşleştirilir, AI çağrısı yapılmaz",
+          "person": "Bir kişinin belirlediği puan veya aşama asla üzerine yazılmaz",
+          "closing": "Botlar, silinmiş mesajlar, grup sohbetleri ve otomatik yanıtlar dışarıda bırakılır"
+        },
+        "confirm": {
+          "title": "Maskelenmiş görüşmeler bir AI sağlayıcısına gönderilsin mi?",
+          "body": "Açıldığında, görüşme sessizleştikten sonra kişinin son mesajları OpenRouter üzerinden bir AI sağlayıcısına gönderilir. Telefon numaraları, e-postalar, kart numaraları ve adlar önce kısmen maskelenir; böylece gönderilenler kişiye ulaşmak için kullanılamaz. İstediğiniz zaman kapatabilirsiniz.",
+          "yes": "Aç",
+          "no": "İptal"
+        }
+      }
+    },
+    "insight": {
+      "title": "Görüşme okuma",
+      "empty": "Henüz okunmadı. Bir görüşme, kişi yazmayı bıraktıktan yaklaşık 12 dakika sonra okunur veya şimdi okuyabilirsiniz.",
+      "analyze": "Görüşmeyi oku",
+      "analyzing": "Okunuyor...",
+      "analyzingSlow": "AI'a soruluyor. Bu birkaç saniye sürebilir.",
+      "sourceAi": "AI tarafından okundu",
+      "sourceRules": "Düğme dokunuşlarından eşleştirildi",
+      "signals": "Kişinin verdiği sinyaller",
+      "signal": {
+        "askedPrice": "Fiyat sordu",
+        "readyToBuy": "Satın almaya hazır",
+        "objection": "Tereddüt veya itiraz",
+        "urgent": "Acil"
+      },
+      "readOn": "{date} tarihinde {count, plural, one {# mesajdan} other {# mesajdan}} okundu.",
+      "privacy": "Görüşmedeki adlar, telefon numaraları ve e-postalar AI'a herhangi bir şey gönderilmeden önce kısmen maskelenir.",
+      "intent": {
+        "ready_to_buy": "Satın almaya hazır",
+        "asking_price": "Fiyat soruyor",
+        "comparing": "Seçenekleri karşılaştırıyor",
+        "registering": "Kayıt oluyor",
+        "needs_support": "Destek gerekiyor",
+        "post_purchase": "Satış sonrası veya servis",
+        "browsing": "Sadece göz atıyor",
+        "not_interested": "İlgilenmiyor",
+        "other": "Net bir niyet yok"
+      },
+      "suggestion": {
+        "title": "Önerilen aşama",
+        "move": "{from} aşamasından {to} aşamasına taşı",
+        "confidence": "%{percent} emin",
+        "accept": "Kabul et",
+        "dismiss": "Reddet",
+        "accepted": "Aşama {stage} olarak değiştirildi.",
+        "dismissed": "Öneri reddedildi.",
+        "noRight": "Önerileri kabul etme veya reddetme yetkiniz yok.",
+        "couldNot": "Öneri uygulanamadı. Zaten karara bağlanmış olabilir."
+      }
+    },
+    "suggestions": {
+      "title": "Aşama önerileri",
+      "hint": "AI'ın görüşmeleri okuduktan sonra önerdiği taşımalar. Siz kabul edene kadar hiçbir şey değişmez.",
+      "empty": "Bekleyen öneri yok.",
+      "unnamed": "Adsız kişi",
+      "move": "{from} aşamasından {to} aşamasına taşı",
+      "confidence": "%{percent} emin",
+      "accept": "Kabul et",
+      "dismiss": "Reddet",
+      "acceptConfident": "%{percent} üzerindeki {count} öneriyi kabul et",
+      "dismissAll": "Tümünü reddet",
+      "more": "Daha fazla yükle",
+      "doneAccept": "{count, plural, one {# aşama değiştirildi.} other {# aşama değiştirildi.}}",
+      "doneDismiss": "{count, plural, one {# öneri reddedildi.} other {# öneri reddedildi.}}",
+      "noRight": "Önerileri görebilirsiniz ancak karara bağlayamazsınız: bunun için lsc.stage.review yetkisi gerekir.",
+      "couldNot": "{count, plural, one {# öneri uygulanamadı.} other {# öneri uygulanamadı.}}"
+    }
+  }
+}

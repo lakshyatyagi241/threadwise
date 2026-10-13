@@ -1,0 +1,217 @@
+{
+  "lead-scoring-admin": {
+    "nav": {
+      "group": "AI",
+      "scoring": "Scoring leadów przez AI"
+    },
+    "common": {
+      "loading": "Ładowanie",
+      "retry": "Spróbuj ponownie",
+      "requestId": "ID żądania",
+      "dash": "-",
+      "cancel": "Anuluj",
+      "errors": {
+        "forbidden": "Nie masz uprawnień do wykonania tej czynności.",
+        "request": "Nie udało się zrealizować tego żądania.",
+        "unexpected": "Po naszej stronie wystąpił błąd. Spróbuj ponownie za chwilę.",
+        "network": "Nie można połączyć się z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+        "validation": "Niektóre wartości są nieprawidłowe. Sprawdź zaznaczone pola.",
+        "notFound": "Ten element już nie istnieje."
+      }
+    },
+    "page": {
+      "eyebrow": "Admin · AI · Scoring leadów",
+      "title": "Scoring leadów przez AI",
+      "description": "Określa, czy przestrzenie robocze mogą oceniać swoje kontakty modelem AI, który model to robi, jakie obowiązują limity i ile to kosztuje.",
+      "superOnly": "Tylko superadministrator może zobaczyć lub zmienić scoring leadów przez AI."
+    },
+    "status": {
+      "label": "Status scoringu leadów",
+      "switch": {
+        "title": "Przełącznik platformy",
+        "on": "Włączone",
+        "off": "Wyłączone",
+        "hintOn": "Przestrzenie robocze, które wyraziły zgodę, mogą oceniać swoje kontakty.",
+        "hintOff": "Żadna przestrzeń robocza nie może oceniać kontaktów, niezależnie od własnego ustawienia."
+      },
+      "model": {
+        "title": "Model",
+        "custom": "Model wpisany ręcznie, spoza listy."
+      },
+      "key": {
+        "title": "Klucz OpenRouter platformy",
+        "ready": "Gotowy",
+        "missing": "Brak",
+        "explainReady": "Przestrzenie robocze bez własnego klucza OpenRouter są oceniane tym kluczem, a za te oceny płacisz Ty.",
+        "explainMissing": "Bez klucza platformy kontakty mogą oceniać tylko przestrzenie robocze, które zapisały własny klucz OpenRouter.",
+        "link": "Otwórz klucze AI"
+      },
+      "reach": {
+        "title": "Zasięg",
+        "workspaces": "Przestrzenie robocze ze zgodą",
+        "contacts": "Ocenione kontakty"
+      }
+    },
+    "settings": {
+      "title": "Ustawienia",
+      "description": "Zmiany obowiązują wszystkie przestrzenie robocze jednocześnie. Zapisywane są tylko zmienione pola.",
+      "enabled": {
+        "label": "Scoring leadów przez AI",
+        "hint": "Domyślnie wyłączone. Po włączeniu przestrzenie robocze, które wyraziły zgodę, wysyłają zanonimizowane dane kontaktów do OpenRouter, aby otrzymać ocenę od 0 do 100. Wyłącz, aby zatrzymać cały scoring."
+      },
+      "model": {
+        "label": "Model",
+        "hint": "Ceny podano w dolarach amerykańskich za milion tokenów, według listy OpenRouter.",
+        "option": "{label} · {input} wej. / {output} wyj.",
+        "other": "Inny identyfikator modelu OpenRouter",
+        "details": "{input} za milion tokenów wejściowych, {output} za milion tokenów wyjściowych.",
+        "customLabel": "Identyfikator modelu OpenRouter",
+        "customHint": "Dowolny identyfikator modelu z OpenRouter, który obsługuje dane wyjściowe ze strukturą.",
+        "placeholder": "openai/gpt-6-luna"
+      },
+      "limits": {
+        "title": "Limity",
+        "scoresPerHour": "Oceny na przestrzeń roboczą na godzinę",
+        "scoresPerHourHint": "Zabezpieczenie kosztów dla przestrzeni roboczych korzystających z klucza platformy. 0 oznacza brak limitu.",
+        "retentionDays": "Przechowuj dziennik przez (dni)",
+        "retentionDaysHint": "Starsze uruchomienia i ich historia kosztów są usuwane. Od 7 do 730 dni."
+      },
+      "saving": "Zapisywanie",
+      "save": "Zapisz zmiany",
+      "reset": "Odrzuć zmiany",
+      "changed": "{count, plural, one {# zmiana gotowa do zapisu} few {# zmiany gotowe do zapisu} many {# zmian gotowych do zapisu} other {# zmiany gotowej do zapisu}}",
+      "unchanged": "Brak zmian do zapisania.",
+      "saved": "Zapisano ustawienia scoringu leadów.",
+      "errors": {
+        "range": "Wpisz wartość od {min} do {max}.",
+        "integer": "Wpisz liczbę całkowitą.",
+        "modelId": "Użyj identyfikatora modelu OpenRouter, np. openai/gpt-6-luna.",
+        "invalid": "Ta wartość jest nieprawidłowa."
+      },
+      "confirm": {
+        "title": "Potwierdź zmianę",
+        "turnOn": "To pozwoli przestrzeniom roboczym, które wyraziły zgodę, wysyłać zanonimizowane dane kontaktów do OpenRouter i zużywać środki z klucza platformy.",
+        "turnOff": "To zatrzyma cały scoring leadów przez AI we wszystkich przestrzeniach roboczych. Zapisane już oceny pozostają.",
+        "confirm": "Zapisz zmiany"
+      }
+    },
+    "cost": {
+      "title": "Koszt scoringu",
+      "description": "Sumy z dziennika scoringu, w dolarach amerykańskich.",
+      "last24h": "Ostatnie 24 godziny",
+      "last30d": "Ostatnie 30 dni",
+      "scores": "Zapisane oceny",
+      "failed": "Nieudane uruchomienia",
+      "tokens": "Tokeny",
+      "tokensSplit": "Tokeny wejściowe / wyjściowe",
+      "total": "Koszt całkowity",
+      "average": "Średnio na ocenę",
+      "platform": "Opłacone kluczem platformy",
+      "footnote": "Koszty to kwota zgłoszona przez OpenRouter lub szacunek na podstawie liczby tokenów, gdy nic nie zgłoszono. Uruchomienia rozliczone na własnym kluczu przestrzeni roboczej wchodzą do sumy, ale nie do udziału platformy."
+    },
+    "workspaces": {
+      "title": "Przestrzenie robocze",
+      "description": "Kto korzysta ze scoringu leadów przez AI i ile to kosztowało w ostatnich 30 dniach, od największych kosztów.",
+      "search": "Szukaj przestrzeni roboczych",
+      "searchPlaceholder": "Nazwa przestrzeni roboczej",
+      "limit": "Wiersze",
+      "limitOption": "{count} wierszy",
+      "noMatchTitle": "Brak pasujących przestrzeni roboczych",
+      "noMatchMessage": "Spróbuj innej nazwy.",
+      "clearSearch": "Wyczyść wyszukiwanie",
+      "emptyTitle": "Brak przestrzeni roboczych",
+      "emptyMessage": "Przestrzenie robocze pojawią się tutaj po ich utworzeniu.",
+      "tableLabel": "Przestrzenie robocze wg kosztu scoringu",
+      "columns": {
+        "name": "Przestrzeń robocza",
+        "enabled": "Scoring",
+        "contacts": "Ocenione kontakty",
+        "scores": "Oceny, 30 dni",
+        "cost": "Koszt, 30 dni"
+      },
+      "enabled": "Włączony",
+      "disabled": "Wyłączony"
+    },
+    "runs": {
+      "title": "Dziennik scoringu",
+      "description": "Każda próba oceny we wszystkich przestrzeniach roboczych, od najnowszej, z tokenami, kosztem i płatnikiem.",
+      "refresh": "Odśwież",
+      "filters": {
+        "status": "Status",
+        "anyStatus": "Dowolny status",
+        "workspace": "Przestrzeń robocza",
+        "anyWorkspace": "Wszystkie przestrzenie robocze",
+        "clear": "Wyczyść filtry"
+      },
+      "status": {
+        "ok": "Ocenione",
+        "kept": "Zachowane",
+        "failed": "Nieudane",
+        "skipped": "Pominięte"
+      },
+      "trigger": {
+        "created": "Kontakt utworzony",
+        "updated": "Kontakt zaktualizowany",
+        "manual": "Przycisk oceny",
+        "backfill": "Uzupełnianie"
+      },
+      "scoreWas": "{score} (było {previous})",
+      "tokensTitle": "{input} wej., {output} wyj.",
+      "costSource": {
+        "vendor": "Zgłoszony",
+        "estimate": "Szacunek",
+        "none": "Brak wywołania"
+      },
+      "costSourceHelp": {
+        "vendor": "Koszt zgłoszony przez OpenRouter dla tego wywołania.",
+        "estimate": "Nie zgłoszono kosztu, więc to liczba tokenów razy cena katalogowa modelu.",
+        "none": "Nie wykonano wywołania, więc nic nie naliczono."
+      },
+      "paidBy": {
+        "admin": "Platforma",
+        "workspace": "Przestrzeń robocza",
+        "none": "Nikt"
+      },
+      "duration": {
+        "ms": "{value} ms",
+        "s": "{value} s"
+      },
+      "reason": {
+        "platform_off": "Przełącznik platformy jest wyłączony",
+        "not_enabled": "Przestrzeń robocza nie wyraziła zgody",
+        "contact_gone": "Kontakt został usunięty",
+        "manual_score": "Kontakt ma wpisaną ręcznie ocenę",
+        "no_key": "Brak klucza OpenRouter",
+        "token_allowance": "Wykorzystano limit tokenów",
+        "hourly_limit": "Osiągnięto limit godzinowy",
+        "auth": "OpenRouter odrzucił klucz",
+        "rate_limited": "Limit zapytań OpenRouter",
+        "provider": "Błąd OpenRouter",
+        "timeout": "Przekroczono czas oczekiwania na OpenRouter",
+        "bad_response": "Odpowiedź nie była prawidłową oceną"
+      },
+      "noMatchTitle": "Brak pasujących uruchomień",
+      "noMatchMessage": "Żadne uruchomienie scoringu nie pasuje do tych filtrów.",
+      "emptyTitle": "Brak uruchomień",
+      "emptyMessage": "Uruchomienia pojawią się tutaj, gdy przestrzeń robocza oceni kontakt.",
+      "tableLabel": "Uruchomienia scoringu",
+      "columns": {
+        "time": "Czas",
+        "workspace": "Przestrzeń robocza",
+        "contact": "Kontakt",
+        "trigger": "Wyzwalacz",
+        "status": "Status",
+        "score": "Ocena",
+        "model": "Model",
+        "tokens": "Tokeny",
+        "cost": "Koszt",
+        "paidBy": "Płaci",
+        "duration": "Czas trwania",
+        "error": "Powód"
+      },
+      "costLegend": "Znak ~ przed kosztem oznacza szacunek na podstawie liczby tokenów zamiast kwoty zgłoszonej przez OpenRouter.",
+      "loadMore": "Wczytaj więcej",
+      "loadingMore": "Ładowanie"
+    }
+  }
+}

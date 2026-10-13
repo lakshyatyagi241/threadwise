@@ -17,6 +17,8 @@ import {
   MemberDirectory,
   PERM_CONVERSATION_READ,
   RealtimeEmitter,
+  conversationVisible,
+  type ConversationRecord,
 } from '../../realtime';
 import {
   ConversationEventsRepository,
@@ -43,6 +45,8 @@ const invalid = (message: string, path: string) =>
 export interface AssignmentChange {
   conversationUuid: string;
   rowVersion: number;
+  /** The owner of the personal mailbox the thread is on (null: shared channel): who may see it besides the assignee. */
+  channelOwnerUserId: number | null;
   before: { userId: number | null; teamId: number | null };
   after: { userId: number | null; teamId: number | null };
   afterUuids: { userId: string | null; teamId: string | null };
@@ -112,7 +116,7 @@ export class AssignmentService {
         await this.access.assertCan(tx, ctx, PERM.assignSelf, locked);
       }
 
-      const target = await this.resolveTarget(tx, ctx.orgId, input);
+      const target = await this.resolveTarget(tx, ctx.orgId, input, locked);
       const next = {
         userId: target.userId === undefined ? locked.assigneeUserId : target.userId,
         teamId: target.teamId === undefined ? locked.assigneeTeamId : target.teamId,
@@ -169,12 +173,17 @@ export class AssignmentService {
     const done = await this.db.tx(async (tx) => {
       const locked = await this.repo.lockByUuid(tx, orgId, input.conversationUuid);
       if (!locked) throw conversationNotFound();
-      const target = await this.resolveTarget(tx, orgId, {
-        rowVersion: locked.rowVersion,
-        strategy: 'manual',
-        ...(input.userId !== undefined ? { userId: input.userId } : {}),
-        ...(input.teamId !== undefined ? { teamId: input.teamId } : {}),
-      });
+      const target = await this.resolveTarget(
+        tx,
+        orgId,
+        {
+          rowVersion: locked.rowVersion,
+          strategy: 'manual',
+          ...(input.userId !== undefined ? { userId: input.userId } : {}),
+          ...(input.teamId !== undefined ? { teamId: input.teamId } : {}),
+        },
+        locked,
+      );
       const next = {
         userId: target.userId === undefined ? locked.assigneeUserId : target.userId,
         teamId: target.teamId === undefined ? locked.assigneeTeamId : target.teamId,
@@ -304,6 +313,7 @@ export class AssignmentService {
     return {
       conversationUuid: locked.uuid,
       rowVersion: locked.rowVersion + 1,
+      channelOwnerUserId: locked.channelOwnerUserId,
       before: { userId: locked.assigneeUserId, teamId: locked.assigneeTeamId },
       after: { userId: next.userId, teamId: next.teamId },
       afterUuids: { userId: next.userUuid, teamId: next.teamUuid },
@@ -320,10 +330,12 @@ export class AssignmentService {
       const was = await this.audience.forConversation(orgId, {
         assigneeUserId: change.before.userId,
         assigneeTeamId: change.before.teamId,
+        channelOwnerUserId: change.channelOwnerUserId,
       });
       const now = await this.audience.forConversation(orgId, {
         assigneeUserId: change.after.userId,
         assigneeTeamId: change.after.teamId,
+        channelOwnerUserId: change.channelOwnerUserId,
       });
       const nowSet = new Set(now);
       const lost = was.filter((id) => !nowSet.has(id));
@@ -346,6 +358,7 @@ export class AssignmentService {
           rowVersion: change.rowVersion,
           assigneeUserId: change.after.userId,
           assigneeTeamId: change.after.teamId,
+          channelOwnerUserId: change.channelOwnerUserId,
         },
         ['assignment'],
         { alsoUserIds: lost },
@@ -365,6 +378,7 @@ export class AssignmentService {
     tx: Tx,
     orgId: number,
     input: AssignConversationInput,
+    conversation: ConversationRecord,
   ): Promise<{
     userId: number | null | undefined;
     userUuid: string | null;
@@ -387,6 +401,13 @@ export class AssignmentService {
       if (viewer.scope === null) {
         throw invalid(
           'That member cannot open the inbox, so they cannot be given a conversation.',
+          'userId',
+        );
+      }
+      // A personal mailbox's conversation goes only to someone who could open it once assigned (its owner, or an admin the policy lets read it).
+      if (!conversationVisible(viewer, { ...conversation, assigneeUserId: userId })) {
+        throw invalid(
+          'That member cannot see this conversation, so it cannot be assigned to them.',
           'userId',
         );
       }

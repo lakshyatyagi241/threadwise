@@ -121,6 +121,12 @@
       "selectedActionsNone": "Wybrane kontakty (najpierw zaznacz wiersze)",
       "modifyColumns": "Zmień kolumny",
       "resetColumns": "Przywróć domyślne",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "Nazwa kontaktu",
       "colPhone": "Numer telefonu",
       "colEmailId": "Adres e-mail",
@@ -170,7 +176,8 @@
       "import": "Importuj",
       "columns": "Kolumny",
       "addColumnField": "Dodaj pole niestandardowe jako kolumnę",
-      "kanbanView": "Widok tablicy (według etapu)"
+      "kanbanView": "Widok tablicy (według etapu)",
+      "colLeadScore": "Ocena leada"
     },
     "bulk": {
       "label": "Działania dla wybranych kontaktów",
@@ -406,7 +413,8 @@
         "address": "Adres",
         "memo": "Notatka",
         "status": "Status",
-        "source": "Źródło"
+        "source": "Źródło",
+        "consent": "Zgoda marketingowa (tak / nie)"
       },
       "notInFile": "Brak w pliku",
       "columnN": "Kolumna {n}",
@@ -431,7 +439,7 @@
       "imported": "{count, plural, one {Zaimportowano # kontakt.} few {Zaimportowano # kontakty.} many {Zaimportowano # kontaktów.} other {Zaimportowano # kontaktu.}}",
       "importedUpdated": "{count, plural, one {Zaktualizowano # istniejący kontakt.} few {Zaktualizowano # istniejące kontakty.} many {Zaktualizowano # istniejących kontaktów.} other {Zaktualizowano # istniejącego kontaktu.}}",
       "importedInvalid": "{count, plural, one {Pominięto # nieprawidłowy wiersz.} few {Pominięto # nieprawidłowe wiersze.} many {Pominięto # nieprawidłowych wierszy.} other {Pominięto # nieprawidłowego wiersza.}}",
-      "downloadRejects": "Pobierz odrzucone wiersze",
+      "downloadRejects": "Pobierz błędy i pominięte wiersze",
       "fileTooLarge": "Ten plik jest większy niż {mb} MB.",
       "checking": "Sprawdzanie pliku...",
       "errorFile": "Nie można odczytać tego pliku jako pliku CSV z kontaktami. Sprawdź, czy ma wiersz nagłówka i co najmniej jeden kontakt.",
@@ -462,7 +470,8 @@
         "group_name_too_long": "nazwa grupy jest za długa",
         "tag_name_too_long": "nazwa tagu jest za długa",
         "plan_limit_reached": "osiągnięto limit kontaktów w planie",
-        "tag_limit_reached": "osiągnięto limit tagów w planie"
+        "tag_limit_reached": "osiągnięto limit tagów w planie",
+        "duplicate_in_file": "powtórzony numer, scalony z wcześniejszym wierszem"
       },
       "statusHint": "Stosowane do kontaktów tworzonych przez ten plik.",
       "queued": "Oczekiwanie na start...",
@@ -1164,17 +1173,18 @@
         "updated": "Zaktualizowano",
         "rejected": "Odrzucono",
         "actions": "Akcje",
-        "downloadRejects": "Pobierz odrzucone",
+        "downloadRejects": "Pobierz błędy i pominięte wiersze",
         "statuses": {
           "queued": "W kolejce",
           "running": "W toku",
           "completed": "Ukończono",
           "failed": "Niepowodzenie"
-        }
+        },
+        "by": "Zaimportował"
       },
       "exports": {
         "title": "Eksporty",
-        "hint": "Eksporty kontaktów z Centrum kontaktów, od najnowszych. Pobrany plik nie jest przechowywany.",
+        "hint": "Eksporty kontaktów z Hubu, od najnowszych. Każdy plik jest przechowywany 30 dni, aby Ty i współpracownicy z uprawnieniem do eksportu mogli pobrać go ponownie.",
         "empty": "Brak eksportów.",
         "by": "Przez",
         "rows": "Kontakty",
@@ -1183,7 +1193,11 @@
         "selections": {
           "ids": "Zaznaczone kontakty",
           "filter": "Wszystkie pasujące"
-        }
+        },
+        "download": "Pobierz",
+        "noFile": "Nie zapisano",
+        "keptUntil": "Przechowywany do {date}",
+        "downloadFailed": "Nie udało się pobrać pliku. Mógł wygasnąć."
       }
     }
   }

@@ -367,7 +367,8 @@
         "failed": "No pudimos cambiar de espacio de trabajo. Inténtalo de nuevo.",
         "notAvailable": "No puedes cambiar a ese espacio de trabajo.",
         "rateLimited": "Demasiados intentos. Espera un momento e inténtalo de nuevo.",
-        "rateLimitedWait": "Demasiados intentos. Inténtalo de nuevo en {seconds, plural, one {# segundo} many {# de segundos} other {# segundos}}."
+        "rateLimitedWait": "Demasiados intentos. Inténtalo de nuevo en {seconds, plural, one {# segundo} many {# de segundos} other {# segundos}}.",
+        "unverified": "Verifica tu correo en este espacio de trabajo para poder cambiar a él."
       },
       "mfaChallenge": {
         "title": "Confirma que eres tú",
@@ -552,7 +553,9 @@
             "extra_channels": "Telegram, Facebook e Instagram",
             "form_builder": "Formularios",
             "waba_groups": "Grupos de WhatsApp",
-            "sms": "SMS"
+            "sms": "SMS",
+            "help_agent": "Asistente de ayuda",
+            "email_channel": "Canal de correo (Gmail)"
           },
           "cta": {
             "continueFree": "Continuar gratis",

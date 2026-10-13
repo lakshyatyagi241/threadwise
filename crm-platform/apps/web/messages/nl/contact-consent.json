@@ -1,0 +1,205 @@
+{
+  "contact-consent": {
+    "common": {
+      "dismiss": "Sluiten",
+      "retry": "Opnieuw proberen",
+      "loading": "Laden..."
+    },
+    "errors": {
+      "network": "We konden de server niet bereiken. Controleer je verbinding en probeer het opnieuw.",
+      "forbidden": "Je hebt hier geen toestemming voor.",
+      "notFound": "Dit contact bestaat niet meer.",
+      "conflict": "Iemand anders heeft dit gewijzigd terwijl je bezig was. Laad de pagina opnieuw en probeer het nogmaals.",
+      "noteRequired": "Geef aan waarom het contact akkoord ging (wat is gezegd of getekend, en waar) voordat je de toestemming vastlegt.",
+      "settingsInvalid": "Een trefwoord heeft minstens één letter of cijfer nodig, en er moet minstens één STOP-trefwoord overblijven zolang de herkenning aan staat.",
+      "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
+      "validation": "Sommige waarden zijn ongeldig. Controleer het formulier en probeer het opnieuw.",
+      "unexpected": "Er is iets misgegaan. Probeer het opnieuw.",
+      "exportInProgress": "Er wordt al een bewijsbestand voorbereid. Wacht tot het klaar is en probeer het dan opnieuw.",
+      "exportNotReady": "Dat bestand is niet klaar of verlopen. Bereid een nieuw bestand voor."
+    },
+    "settings": {
+      "title": "Toestemming en STOP-antwoorden",
+      "subtitle": "Kies de woorden waarmee een contact zich afmeldt of weer aanmeldt, ons antwoord, de afmeldregel voor marketingberichten en of marketing een vastgelegde toestemming vereist.",
+      "exportProof": "Toestemmingsbewijs exporteren (CSV)",
+      "discard": "Wijzigingen negeren",
+      "save": "Wijzigingen opslaan",
+      "saved": "Toestemmingsinstellingen opgeslagen.",
+      "conflict": "Iemand anders heeft deze instellingen eerst opgeslagen. Het formulier toont nu wat is opgeslagen.",
+      "conflictOk": "OK",
+      "problems": {
+        "noOptOutWord": "Voeg minstens één STOP-trefwoord toe of zet de herkenning uit.",
+        "badLang": "Een taalcode ziet er zo uit: en, ar of pt-BR."
+      }
+    },
+    "policy": {
+      "title": "Marketingbeleid",
+      "requireConsent": "Vastgelegde toestemming vereisen voor marketingberichten",
+      "requireConsentHint": "Uit: marketing gaat naar elk contact dat zich niet heeft afgemeld. Aan: alleen naar contacten met een vastgelegde toestemming. Bij campagne- en broadcastdoelgroepen zie je hoeveel er zijn overgeslagen.",
+      "withdrawnAlways": "Contacten die zich hebben afgemeld worden altijd overgeslagen, ongeacht deze schakelaar."
+    },
+    "detect": {
+      "title": "STOP- en START-antwoorden",
+      "enabled": "STOP- en START-antwoorden herkennen",
+      "enabledHint": "Als een contact alleen een van de onderstaande woorden stuurt, wordt het contact op dat kanaal afgemeld of weer aangemeld.",
+      "autoReply": "Bevestigingsantwoord sturen",
+      "autoReplyHint": "Een kort vrij antwoord binnen het venster van 24 uur, één keer per wijziging verstuurd. Het is geen campagne en telt niet als marketing.",
+      "rule": "Het hele bericht moet het trefwoord zijn: hoofdletters, spaties, leestekens, emoji en Arabische diakritische tekens worden genegeerd. “Stuur me geen facturen meer” of “niet stoppen” komen niet overeen, zodat niemand per ongeluk wordt afgemeld."
+    },
+    "lang": {
+      "groupLabel": "Woorden en antwoorden voor {lang}",
+      "title": "Taal",
+      "remove": "Taal verwijderen",
+      "optOutWords": "STOP-trefwoorden (afmelden)",
+      "optInWords": "START-trefwoorden (weer aanmelden)",
+      "wordsHint": "Eén per regel.",
+      "optOutReply": "Antwoord na STOP",
+      "optInReply": "Antwoord na START",
+      "replyHint": "Je kunt '{{name}}' gebruiken voor de voornaam van het contact. Vertel ook hoe je weer kunt aanmelden.",
+      "footer": "Afmeldregel voor marketingberichten",
+      "footerHint": "Wordt onder marketingteksten toegevoegd. Vertel mensen welk woord ze moeten sturen.",
+      "add": "Taal toevoegen",
+      "addHint": "Een taalcode zoals fr of pt-BR.",
+      "invalid": "Gebruik een code zoals fr of pt-BR.",
+      "addButton": "Toevoegen"
+    },
+    "footer": {
+      "title": "De afmeldregel",
+      "intro": "In de composers voor broadcasts en campagnes kun je deze regel onder marketingteksten toevoegen, zodat ontvangers weten dat ze STOP kunnen antwoorden. Goedgekeurde sjablonen worden nooit aangepast: zet de regel in het sjabloon zelf.",
+      "defaultOn": "Waarschuwen als een marketingtekst geen afmeldregel heeft",
+      "defaultOnHint": "De composer toont een waarschuwing en een knop om de regel met één klik toe te voegen.",
+      "noneSet": "Voor geen enkele taal is een afmeldregel ingesteld.",
+      "previewLabel": "Wat de ontvanger ziet",
+      "sample": "Onze voorjaarsuitverkoop begint vandaag. Kom deze week langs."
+    },
+    "test": {
+      "title": "Een bericht testen",
+      "intro": "Typ wat een contact zou kunnen sturen en zie wat er zou gebeuren. Er wordt niets gewijzigd of verstuurd. De woorden hierboven worden gebruikt, ook voordat je opslaat.",
+      "label": "Bericht van een contact",
+      "run": "Testen",
+      "failed": "De test kon niet worden uitgevoerd. Probeer het opnieuw.",
+      "outcome": {
+        "opts_out": "Hiermee wordt het contact afgemeld voor marketing.",
+        "opts_in": "Hiermee wordt het contact weer aangemeld.",
+        "no_match": "Er gebeurt niets: het bericht is geen trefwoord.",
+        "detection_off": "Er gebeurt niets: herkenning staat uit."
+      },
+      "matched": "Komt overeen met het trefwoord “{keyword}” ({lang}).",
+      "replyLabel": "Het contact ontvangt",
+      "noReply": "Er wordt geen antwoord verstuurd."
+    },
+    "card": {
+      "title": "Toestemming",
+      "status": {
+        "optedOut": "Afgemeld",
+        "subscribed": "Aangemeld",
+        "none": "Geen toestemming vastgelegd"
+      },
+      "export": "Bewijs exporteren (CSV)",
+      "markSubscribed": "Markeren als aangemeld",
+      "markUnsubscribed": "Markeren als afgemeld",
+      "loading": "Toestemming laden...",
+      "noneRecorded": "Geen toestemming vastgelegd voor dit contact. Marketingberichten volgen het beleid van je werkruimte.",
+      "perChannel": "Toestemming per kanaal",
+      "timeline": "Toestemmingsgeschiedenis",
+      "channel": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "telegram": "Telegram",
+        "email": "E-mail",
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "webchat": "Webchat"
+      },
+      "state": {
+        "granted": "aangemeld",
+        "withdrawn": "afgemeld"
+      },
+      "action": {
+        "granted": "Aangemeld",
+        "withdrawn": "Afgemeld"
+      },
+      "source": {
+        "form": "Formulier",
+        "keyword": "Antwoord met trefwoord",
+        "manual": "Vastgelegd door een persoon",
+        "import": "Import",
+        "api": "API",
+        "flow": "Flow",
+        "inbound_message": "Bericht",
+        "contact_request": "Contactverzoek",
+        "legacy": "Vóór de toestemmingsgeschiedenis"
+      },
+      "by": "door {name}",
+      "evidence": {
+        "consentText": "Getoonde tekst",
+        "consentVersion": "Versie",
+        "consentHash": "Hash",
+        "formId": "Formulier",
+        "submissionId": "Inzending",
+        "messageId": "Bericht",
+        "keyword": "Trefwoord",
+        "fileName": "Bestand",
+        "apiKeyId": "API-sleutel",
+        "flowId": "Flow",
+        "reference": "Referentie"
+      },
+      "dialog": {
+        "titleGranted": "Markeren als aangemeld",
+        "titleWithdrawn": "Markeren als afgemeld",
+        "introGranted": "Leg vast dat dit contact ermee instemt marketingberichten te ontvangen. De reden wordt bewaard als bewijs.",
+        "introWithdrawn": "Leg vast dat dit contact geen marketingberichten meer wil. Het contact wordt overgeslagen door elke campagne en broadcast.",
+        "channel": "Kanaal",
+        "noteRequired": "Waarom? (verplicht)",
+        "noteOptional": "Notitie (optioneel)",
+        "noteHint": "Bijvoorbeeld: tekende het papieren formulier aan de balie, of ging op 3 maart per e-mail akkoord.",
+        "confirm": "Opslaan",
+        "cancel": "Annuleren",
+        "close": "Sluiten",
+        "savedGranted": "Gemarkeerd als aangemeld.",
+        "savedWithdrawn": "Gemarkeerd als afgemeld."
+      }
+    },
+    "composer": {
+      "add": "Afmeldregel toevoegen",
+      "missing": "Dit marketingbericht vertelt mensen niet hoe ze zich kunnen afmelden. Voeg een regel toe zoals “Antwoord STOP om je af te melden”.",
+      "addButton": "Regel toevoegen",
+      "templateHint": "Sjablonen liggen vast door hun goedkeuring. Om mensen te laten weten dat ze zich kunnen afmelden, neem je een regel zoals “{line}” op in het sjabloon zelf.",
+      "footerSuggestion": "Voorgesteld voor een marketingsjabloon: \"{line}\"",
+      "footerUse": "Gebruik als voettekst"
+    },
+    "import": {
+      "legend": "Toestemming",
+      "label": "Ik heb toestemming om deze contacten te berichten",
+      "hint": "Als dit is aangevinkt, wordt elk contact in het bestand vastgelegd als akkoord met marketing, met de bestandsnaam als bewijs. Als het niet is aangevinkt, legt de import geen toestemming vast. Contacten die zich hebben afgemeld, blijven afgemeld.",
+      "hintColumn": "De kolom die is gekoppeld aan marketingtoestemming bepaalt wie wordt vastgelegd: alleen rijen met ja krijgen een toestemming, met de bestandsnaam als bewijs. Nee, een lege cel of een onbekend woord legt niets vast. Contacten die zich hebben afgemeld, blijven afgemeld.",
+      "columnSummary": "{granted} rijen zeggen ja en worden vastgelegd. {notGranted} zeggen nee of zijn leeg en krijgen geen toestemmingsrecord.",
+      "unrecognised": "{count, plural, one {# rij heeft} other {# rijen hebben}} een toestemmingswaarde die geen ja of nee is ({values}). {count, plural, one {Die wordt} other {Ze worden}} behandeld als niet verleend. Gebruik ja / nee, true / false of 1 / 0.",
+      "columnIgnored": "De toestemmingskolom doet niets totdat je het vakje hierboven aanvinkt."
+    },
+    "systemLine": {
+      "withdrawn": "Contact heeft {keyword} geantwoord: afgemeld voor marketing",
+      "granted": "Contact heeft {keyword} geantwoord: opnieuw aangemeld voor marketing"
+    },
+    "proof": {
+      "title": "Voorbereide bewijsbestanden",
+      "prepare": "Volledig bewijsbestand voorbereiden",
+      "preparing": "Bewijsbestand wordt voorbereid",
+      "largeHint": "Het logboek bevat meer dan {max} gebeurtenissen, dus het bestand wordt op de achtergrond voorbereid",
+      "large": "Het logboek bevat meer dan {max} gebeurtenissen, meer dan een directe download aankan. Bereid het volledige bestand voor: het wordt op de achtergrond gemaakt en je krijgt een e-mail zodra het klaar is.",
+      "none": "Nog geen voorbereide bestanden.",
+      "keptFor": "Een voorbereid bestand kan {days} dagen worden gedownload en wordt daarna verwijderd. Er wordt maar één bestand tegelijk voorbereid.",
+      "rows": "{count, plural, one {# gebeurtenis} other {# gebeurtenissen}}",
+      "expires": "beschikbaar tot {date}",
+      "download": "CSV downloaden",
+      "failed": "Het bestand kon niet worden gemaakt. Bereid het opnieuw voor.",
+      "status": {
+        "queued": "In wachtrij",
+        "running": "Wordt gemaakt",
+        "ready": "Klaar",
+        "failed": "Mislukt",
+        "expired": "Verlopen"
+      }
+    }
+  }
+}

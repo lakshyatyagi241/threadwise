@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
+import { costLabel } from '../wizard/lib/money';
 import { cn } from '@crm/ui';
 import type { Campaign, CampaignStatus } from '@crm/contracts';
 import { can, deliveryRate } from '../lib/list-model';
@@ -112,22 +113,24 @@ export function CampaignCard({
   onExport: () => void;
 }) {
   const t = useTranslations('campaigns.list.card');
+  const locale = useLocale();
   const look = LOOK[c.status];
   const Icon = STATUS_ICON[c.status];
   const n = c.counts;
+  const cost = costLabel(c.cost, locale);
   /** A draft made by the "Create broadcast" wizard resumes there, not in the classic builder (which cannot show it). */
   const wizardDraft = c.wizard && c.status === 'draft';
   const editHref = wizardDraft ? `/campaigns/create?draft=${c.id}` : `/campaigns/${c.id}/edit`;
   const titleHref = wizardDraft ? editHref : `/campaigns/${c.id}`;
   /** A launched wizard broadcast is not edited in the classic builder either. */
   const editable = c.wizard ? wizardDraft : can.edit(c.status);
-  const metric = (label: string, value: number, tone?: string) => (
+  const metric = (label: string, value: number | string, tone?: string) => (
     <div className="rounded-[10px] border border-border bg-background px-3 py-2">
       <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
         {label}
       </div>
       <div className={cn('mt-0.5 text-sm font-semibold tabular-nums', tone)}>
-        {value.toLocaleString()}
+        {typeof value === 'number' ? value.toLocaleString() : value}
       </div>
     </div>
   );
@@ -272,13 +275,14 @@ export function CampaignCard({
         </div>
       )}
 
-      <div className="mb-3 grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-7">
+      <div className="mb-3 grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-8">
         {metric(t('sent'), n.sent)}
         {metric(t('delivered'), n.delivered)}
         {metric(t('read'), n.read)}
         {metric(t('replied'), n.replies)}
         {metric(t('clicked'), n.clicks)}
         {metric(t('failed'), n.failed, n.failed > 0 ? 'text-danger' : undefined)}
+        {metric(t('cost'), cost)}
         <div className="rounded-[10px] border border-success/20 bg-success/10 px-3 py-2">
           <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-success">
             {t('delivery')}

@@ -367,7 +367,8 @@
         "failed": "ওয়ার্কস্পেস বদলানো যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।",
         "notAvailable": "আপনি ওই ওয়ার্কস্পেসে যেতে পারবেন না।",
         "rateLimited": "অনেকবার চেষ্টা করা হয়েছে। একটু অপেক্ষা করে আবার চেষ্টা করুন।",
-        "rateLimitedWait": "অনেকবার চেষ্টা করা হয়েছে। {seconds, plural, one {# সেকেন্ড} other {# সেকেন্ড}} পরে আবার চেষ্টা করুন।"
+        "rateLimitedWait": "অনেকবার চেষ্টা করা হয়েছে। {seconds, plural, one {# সেকেন্ড} other {# সেকেন্ড}} পরে আবার চেষ্টা করুন।",
+        "unverified": "এই ওয়ার্কস্পেসে যেতে আগে এখানে আপনার ইমেল যাচাই করুন।"
       },
       "mfaChallenge": {
         "title": "নিশ্চিত করুন এটি আপনি",
@@ -552,7 +553,9 @@
             "extra_channels": "Telegram, Facebook ও Instagram",
             "form_builder": "ফর্ম",
             "waba_groups": "WhatsApp গ্রুপ",
-            "sms": "SMS"
+            "sms": "SMS",
+            "help_agent": "হেল্প অ্যাসিস্ট্যান্ট",
+            "email_channel": "ইমেল (Gmail) চ্যানেল"
           },
           "cta": {
             "continueFree": "ফ্রি-তে চালিয়ে যান",

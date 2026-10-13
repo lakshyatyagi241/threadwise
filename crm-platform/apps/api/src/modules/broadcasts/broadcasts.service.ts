@@ -1,5 +1,6 @@
+import { ConsentPolicyService } from '../contact-consent';
 import { SegmentsService } from '../crm';
-import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import {
   ERROR_CODES,
   createBroadcastSchema,
@@ -72,6 +73,7 @@ export class BroadcastsService {
     private readonly planUsage: PlanUsageService,
     @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
     private readonly segments: SegmentsService,
+    @Optional() private readonly consentPolicy?: ConsentPolicyService,
   ) {}
 
   /** `body` is validated here, after the plan checks, because Reference answered a plan refusal before a validation error. */
@@ -236,7 +238,8 @@ export class BroadcastsService {
     ];
     const unique = [...new Set(merged)];
     if (unique.length === 0) return [];
-    const sendable = await this.repo.sendableIds(tx, orgId, unique);
+    const requireConsent = (await this.consentPolicy?.requiresConsent(orgId)) ?? false;
+    const sendable = await this.repo.sendableIds(tx, orgId, unique, requireConsent);
     return unique.filter((id) => sendable.has(id));
   }
 }

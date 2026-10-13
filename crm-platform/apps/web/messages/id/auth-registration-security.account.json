@@ -367,7 +367,8 @@
         "failed": "Kami tidak dapat mengganti ruang kerja. Silakan coba lagi.",
         "notAvailable": "Anda tidak dapat beralih ke ruang kerja itu.",
         "rateLimited": "Terlalu banyak percobaan. Harap tunggu sebentar lalu coba lagi.",
-        "rateLimitedWait": "Terlalu banyak percobaan. Coba lagi dalam {seconds, plural, other {# detik}}."
+        "rateLimitedWait": "Terlalu banyak percobaan. Coba lagi dalam {seconds, plural, other {# detik}}.",
+        "unverified": "Verifikasi email Anda di ruang kerja ini untuk beralih ke sana."
       },
       "mfaChallenge": {
         "title": "Konfirmasi bahwa ini Anda",
@@ -552,7 +553,9 @@
             "extra_channels": "Telegram, Facebook, dan Instagram",
             "form_builder": "Formulir",
             "waba_groups": "Grup WhatsApp",
-            "sms": "SMS"
+            "sms": "SMS",
+            "help_agent": "Asisten Bantuan",
+            "email_channel": "Kanal email (Gmail)"
           },
           "cta": {
             "continueFree": "Lanjut gratis",

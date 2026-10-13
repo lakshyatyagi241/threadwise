@@ -119,6 +119,8 @@
       "colStarted": "Dimulai",
       "colActivity": "Aktivitas terakhir",
       "colSteps": "Langkah",
+      "colReplies": "Balasan",
+      "repliesHint": "Pesan pelanggan yang sampai ke node tunggu pada eksekusi ini",
       "colActions": "Tindakan",
       "open": "Buka eksekusi",
       "cancel": "Batalkan",
@@ -197,7 +199,19 @@
       "factWaiting": "Menunggu di: {node}",
       "factDelay": "Menunggu {time}",
       "factReplied": "Pelanggan membalas: {text}",
-      "factEnded": "Berakhir: {reason}"
+      "factEnded": "Berakhir: {reason}",
+      "ioInput": "Masukan",
+      "ioOutput": "Keluaran",
+      "ioKind": {
+        "message": "Pesan terkirim",
+        "reply": "Balasan pelanggan",
+        "variable": "Variabel",
+        "request": "Permintaan",
+        "response": "Respons",
+        "result": "Hasil"
+      },
+      "factMenuKept": "Tidak ada langkah berikutnya. Opsi dari {node} tetap aktif.",
+      "factAnswered": "Dijawab setelah {time}"
     },
     "event": {
       "step": "Langkah",
@@ -503,7 +517,9 @@
       "error": "Kesalahan",
       "skipped": "Dilewati",
       "waiting": "Menunggu",
-      "timeout": "Waktu habis"
+      "timeout": "Waktu habis",
+      "answered": "Dijawab",
+      "gaveUp": "Tidak ada balasan"
     }
   }
 }

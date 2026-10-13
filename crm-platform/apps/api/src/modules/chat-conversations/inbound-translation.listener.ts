@@ -15,6 +15,7 @@ import {
 @Injectable()
 export class InboundTranslationListener implements InboundMessageListener, OnModuleInit {
   readonly name = 'i18n-translation';
+  readonly runsOnEmail = true as const;
 
   constructor(
     private readonly hooks: InboundMessageHooks,

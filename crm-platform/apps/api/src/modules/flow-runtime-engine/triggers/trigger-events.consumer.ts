@@ -6,6 +6,7 @@ import {
   type OutboxSubscriber,
 } from '../../../kernel/outbox/outbox-subscribers';
 import { DatabaseService } from '../../../infra/db/database.service';
+import { hopsOfEvent } from './trigger-hops';
 import { FlowTriggerService, type OrderPlaced } from './trigger.service';
 
 export const FLOW_TRIGGER_EVENTS = [
@@ -60,22 +61,25 @@ export class FlowTriggerEventsConsumer implements OutboxSubscriber, OnModuleInit
   async handle(event: OutboxEvent): Promise<void> {
     const { orgId, payload: p } = event;
     const str = (v: unknown) => (typeof v === 'string' ? v : null);
+    // How many flow starts in a row led to this event (0 when a person or a system outside the runtime caused it).
+    const hops = await hopsOfEvent(this.db, event);
     switch (event.eventType) {
       case 'contact.created': {
         if (p.via === 'import') return;
-        await this.triggers.onContactCreated(orgId, Number(event.aggregateId));
-        await this.changed(event, false);
+        await this.triggers.onContactCreated(orgId, Number(event.aggregateId), hops);
+        await this.changed(event, false, hops);
         return;
       }
       case 'contact.updated':
       case 'contact.stage_changed': {
-        await this.changed(event, true);
+        await this.changed(event, true, hops);
         return;
       }
       case 'contact.tag_added': {
         const tagId = await this.idOf(orgId, 'tags', str(p.tagId));
-        if (tagId !== null) await this.triggers.onTagAdded(orgId, Number(event.aggregateId), tagId);
-        await this.changed(event, false);
+        if (tagId !== null)
+          await this.triggers.onTagAdded(orgId, Number(event.aggregateId), tagId, hops);
+        await this.changed(event, false, hops);
         return;
       }
       case 'contact.group_added': {
@@ -83,32 +87,37 @@ export class FlowTriggerEventsConsumer implements OutboxSubscriber, OnModuleInit
         const groupId =
           p.via === 'flow' ? null : await this.idOf(orgId, 'contact_groups', str(p.groupId));
         if (groupId !== null)
-          await this.triggers.onGroupJoin(orgId, Number(event.aggregateId), groupId);
-        await this.changed(event, false);
+          await this.triggers.onGroupJoin(orgId, Number(event.aggregateId), groupId, hops);
+        await this.changed(event, false, hops);
         return;
       }
       case 'contact.group_removed': {
         const groupId =
           p.via === 'flow' ? null : await this.idOf(orgId, 'contact_groups', str(p.groupId));
         if (groupId !== null)
-          await this.triggers.onGroupLeave(orgId, Number(event.aggregateId), groupId);
-        await this.changed(event, false);
+          await this.triggers.onGroupLeave(orgId, Number(event.aggregateId), groupId, hops);
+        await this.changed(event, false, hops);
         return;
       }
       case 'store.flow_event': {
         const kind =
           p.kind === 'woocommerce' ? 'woocommerce' : p.kind === 'shopify' ? 'shopify' : null;
         if (!kind || typeof p.event !== 'string') return;
-        await this.triggers.onStoreEvent(orgId, kind, {
-          event: p.event,
-          ref: String(p.ref ?? event.id),
-          phone: str(p.phone),
-          productIds: Array.isArray(p.productIds) ? p.productIds.map(String) : [],
-          variables:
-            p.variables !== null && typeof p.variables === 'object' && !Array.isArray(p.variables)
-              ? (p.variables as Record<string, unknown>)
-              : {},
-        });
+        await this.triggers.onStoreEvent(
+          orgId,
+          kind,
+          {
+            event: p.event,
+            ref: String(p.ref ?? event.id),
+            phone: str(p.phone),
+            productIds: Array.isArray(p.productIds) ? p.productIds.map(String) : [],
+            variables:
+              p.variables !== null && typeof p.variables === 'object' && !Array.isArray(p.variables)
+                ? (p.variables as Record<string, unknown>)
+                : {},
+          },
+          hops,
+        );
         return;
       }
       case 'contact.opt_in': {
@@ -117,7 +126,7 @@ export class FlowTriggerEventsConsumer implements OutboxSubscriber, OnModuleInit
           typeof p.contactId === 'number'
             ? p.contactId
             : await this.idOf(orgId, 'contacts', str(p.contactId));
-        if (contactId !== null) await this.triggers.onOptIn(orgId, contactId);
+        if (contactId !== null) await this.triggers.onOptIn(orgId, contactId, event.id, hops);
         return;
       }
       case 'deal.stage_changed': {
@@ -126,7 +135,7 @@ export class FlowTriggerEventsConsumer implements OutboxSubscriber, OnModuleInit
         const stageId = await this.idOf(orgId, 'pipeline_stages', str(p.toStageId));
         const deal = str(p.uuid);
         if (contactId !== null && stageId !== null && deal) {
-          await this.triggers.onDealStageChanged(orgId, contactId, stageId, deal);
+          await this.triggers.onDealStageChanged(orgId, contactId, stageId, deal, hops);
         }
         return;
       }
@@ -134,35 +143,40 @@ export class FlowTriggerEventsConsumer implements OutboxSubscriber, OnModuleInit
       case 'whatsapp.order.received': {
         const order = await this.orderOf(orgId, str(p.orderId));
         if (!order) return;
-        await this.triggers.onOrderPlaced(orgId, order);
+        await this.triggers.onOrderPlaced(orgId, order, hops);
         return;
       }
       case 'order.placed': {
-        await this.triggers.onOrderPlaced(orgId, {
-          orderId: String(p.orderId ?? event.aggregateId),
-          contactId: typeof p.contactId === 'number' ? p.contactId : null,
-          phone: str(p.phone),
-          name: str(p.name),
-          email: str(p.email),
-          orderNumber: str(p.orderNumber),
-          totalMinor: typeof p.totalMinor === 'number' ? p.totalMinor : null,
-          currency: str(p.currency),
-          status: str(p.status),
-          invoiceUrl: str(p.invoiceUrl),
-          orderUrl: str(p.orderUrl),
-          paymentLink: str(p.paymentLink),
-        });
+        await this.triggers.onOrderPlaced(
+          orgId,
+          {
+            orderId: String(p.orderId ?? event.aggregateId),
+            contactId: typeof p.contactId === 'number' ? p.contactId : null,
+            phone: str(p.phone),
+            name: str(p.name),
+            email: str(p.email),
+            orderNumber: str(p.orderNumber),
+            totalMinor: typeof p.totalMinor === 'number' ? p.totalMinor : null,
+            currency: str(p.currency),
+            status: str(p.status),
+            invoiceUrl: str(p.invoiceUrl),
+            orderUrl: str(p.orderUrl),
+            paymentLink: str(p.paymentLink),
+          },
+          hops,
+        );
         return;
       }
     }
   }
 
   /** The change-driven triggers (contact updated, field match, segment join) for the contact an event is about. */
-  private async changed(event: OutboxEvent, updated: boolean): Promise<void> {
+  private async changed(event: OutboxEvent, updated: boolean, hops: number): Promise<void> {
     await this.triggers.onContactChanged(event.orgId, Number(event.aggregateId), {
       eventId: String(event.id),
       updated,
       viaFlow: event.payload.via === 'flow',
+      hops,
     });
   }
 

@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ContactConsentModule } from '../../../contact-consent';
 import { CrmModule } from '../../../crm';
 import { PlansCoreModule } from '../../../plans-subscriptions-trials';
 import { WalletMessageBillingModule } from '../../../wallet-message-billing';
@@ -7,6 +8,7 @@ import { AccountService } from './account/account.service';
 import { V1ContactGroupsController } from './contact-groups/contact-groups.controller';
 import { V1ContactGroupsService } from './contact-groups/contact-groups.service';
 import { ContactExtrasRepository } from './contacts/contact-extras.repository';
+import { V1ContactConsentController } from './contacts/contact-consent.v1.controller';
 import { V1ContactsController } from './contacts/contacts.controller';
 import { V1ContactsService } from './contacts/contacts.service';
 import { DealsPlanGuard } from './deals/deals-plan.guard';
@@ -15,10 +17,11 @@ import { V1DealsService } from './deals/deals.service';
 
 /** Customer REST API v1 resources: crm (account, contacts, contact groups, deals). The root module imports it. */
 @Module({
-  imports: [CrmModule, PlansCoreModule, WalletMessageBillingModule],
+  imports: [CrmModule, ContactConsentModule, PlansCoreModule, WalletMessageBillingModule],
   controllers: [
     V1AccountController,
     V1ContactsController,
+    V1ContactConsentController,
     V1ContactGroupsController,
     V1DealsController,
   ],

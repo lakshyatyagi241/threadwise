@@ -3,7 +3,7 @@
 import { useId, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Badge, Button, Input, Select, cn } from '@crm/ui';
-import { groupProperties, PALETTE_KINDS } from '../lib/build-view';
+import { missingAddressParts, PALETTE_KINDS, sectionProperties } from '../lib/build-view';
 import { isBound } from '../lib/builder-model';
 import {
   FORM_HIDDEN_SOURCES,
@@ -29,6 +29,7 @@ export function BuildPalette({
   onHidden,
   onBlock,
   onProperty,
+  onProperties,
 }: {
   properties: readonly CrmProperty[];
   propertiesState: 'loading' | 'ready' | 'failed';
@@ -40,6 +41,8 @@ export function BuildPalette({
   onHidden: (source: FormHiddenSource) => void;
   onBlock: (type: 'heading' | 'paragraph' | 'divider') => void;
   onProperty: (p: CrmProperty) => void;
+  /** Several properties at once (all the address fields of an object). */
+  onProperties: (list: CrmProperty[]) => void;
 }) {
   const t = useTranslations('web-forms.build.palette');
   const k = useTranslations('web-forms.kinds');
@@ -47,12 +50,89 @@ export function BuildPalette({
   const hiddenId = useId();
   const [query, setQuery] = useState('');
   const [source, setSource] = useState<FormHiddenSource>('utm_source');
-  const groups = groupProperties(properties, query);
+  const sections = sectionProperties(properties, query);
   const off = disabled || full;
 
   return (
     <div className="space-y-6">
       {full && <p className="text-xs text-warning">{t('full')}</p>}
+
+      <section aria-labelledby={`${searchId}-crm`}>
+        <h3
+          id={`${searchId}-crm`}
+          className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground"
+        >
+          {t('crm')}
+        </h3>
+        <p className="mb-2 text-xs text-muted-foreground">{t('crmHint')}</p>
+        <label htmlFor={searchId} className="sr-only">
+          {t('searchProperties')}
+        </label>
+        <Input
+          id={searchId}
+          type="search"
+          value={query}
+          placeholder={t('searchProperties')}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <div className="mt-3 space-y-4" aria-live="polite">
+          {propertiesState === 'loading' && (
+            <p className="text-xs text-muted-foreground">{t('loadingProperties')}</p>
+          )}
+          {propertiesState === 'failed' && (
+            <p className="text-xs text-danger">{t('propertiesFailed')}</p>
+          )}
+          {propertiesState === 'ready' && sections.length === 0 && (
+            <p className="text-xs text-muted-foreground">{t('noProperties')}</p>
+          )}
+          {sections.map((g) => {
+            const missing = g.address ? missingAddressParts(g, (p) => isBound(bound, p)) : [];
+            return (
+              <div key={g.id} data-testid={`crm-section-${g.id}`}>
+                <div className="mb-1 flex items-center justify-between gap-2">
+                  <span className="text-xs font-medium">{t(`section.${g.id}`)}</span>
+                  {g.address && (
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      disabled={off || missing.length === 0}
+                      onClick={() => onProperties(missing)}
+                    >
+                      {t('addAddress')}
+                    </Button>
+                  )}
+                </div>
+                <ul className="space-y-1.5">
+                  {g.items.map((p) => {
+                    const used = isBound(bound, p);
+                    return (
+                      <li key={`${p.object}:${p.property}`}>
+                        <button
+                          type="button"
+                          className={cn(ITEM, 'py-1.5')}
+                          disabled={off || used}
+                          onClick={() => onProperty(p)}
+                        >
+                          <span className="min-w-0 truncate" dir="auto">
+                            {p.label}
+                          </span>
+                          <span className="flex shrink-0 items-center gap-1">
+                            {p.source === 'custom' && <Badge>{t('custom')}</Badge>}
+                            {p.requiredByWorkspace && (
+                              <Badge tone="warning">{t('requiredByCrm')}</Badge>
+                            )}
+                            {used && <Badge tone="success">{t('inForm')}</Badge>}
+                          </span>
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            );
+          })}
+        </div>
+      </section>
 
       <section aria-labelledby={`${searchId}-fields`}>
         <h3
@@ -61,7 +141,7 @@ export function BuildPalette({
         >
           {t('fields')}
         </h3>
-        <ul className="grid grid-cols-2 gap-2 lg:grid-cols-1">
+        <ul className="grid grid-cols-2 gap-2 xl:grid-cols-1">
           {PALETTE_KINDS.map((kind) => (
             <li key={kind}>
               <button type="button" className={ITEM} disabled={off} onClick={() => onField(kind)}>
@@ -83,7 +163,7 @@ export function BuildPalette({
         >
           {t('content')}
         </h3>
-        <ul className="grid grid-cols-2 gap-2 lg:grid-cols-1">
+        <ul className="grid grid-cols-2 gap-2 xl:grid-cols-1">
           {(['heading', 'paragraph', 'divider'] as const).map((type) => (
             <li key={type}>
               <button type="button" className={ITEM} disabled={off} onClick={() => onBlock(type)}>
@@ -125,68 +205,6 @@ export function BuildPalette({
           <Button variant="secondary" disabled={off} onClick={() => onHidden(source)}>
             {t('add')}
           </Button>
-        </div>
-      </section>
-
-      <section aria-labelledby={`${searchId}-crm`}>
-        <h3
-          id={`${searchId}-crm`}
-          className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground"
-        >
-          {t('crm')}
-        </h3>
-        <p className="mb-2 text-xs text-muted-foreground">{t('crmHint')}</p>
-        <label htmlFor={searchId} className="sr-only">
-          {t('searchProperties')}
-        </label>
-        <Input
-          id={searchId}
-          type="search"
-          value={query}
-          placeholder={t('searchProperties')}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <div className="mt-3 space-y-4" aria-live="polite">
-          {propertiesState === 'loading' && (
-            <p className="text-xs text-muted-foreground">{t('loadingProperties')}</p>
-          )}
-          {propertiesState === 'failed' && (
-            <p className="text-xs text-danger">{t('propertiesFailed')}</p>
-          )}
-          {propertiesState === 'ready' && groups.length === 0 && (
-            <p className="text-xs text-muted-foreground">{t('noProperties')}</p>
-          )}
-          {groups.map((g) => (
-            <div key={g.object}>
-              <div className="mb-1 text-xs font-medium">{t(`object.${g.object}`)}</div>
-              <ul className="space-y-1.5">
-                {g.items.map((p) => {
-                  const used = isBound(bound, p);
-                  return (
-                    <li key={`${p.object}:${p.property}`}>
-                      <button
-                        type="button"
-                        className={cn(ITEM, 'py-1.5')}
-                        disabled={off || used}
-                        onClick={() => onProperty(p)}
-                      >
-                        <span className="min-w-0 truncate" dir="auto">
-                          {p.label}
-                        </span>
-                        <span className="flex shrink-0 items-center gap-1">
-                          {p.source === 'custom' && <Badge>{t('custom')}</Badge>}
-                          {p.requiredByWorkspace && (
-                            <Badge tone="warning">{t('requiredByCrm')}</Badge>
-                          )}
-                          {used && <Badge tone="success">{t('inForm')}</Badge>}
-                        </span>
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          ))}
         </div>
       </section>
     </div>

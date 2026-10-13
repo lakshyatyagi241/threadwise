@@ -10,11 +10,13 @@ import { CatalogProductsWorkerModule } from '../modules/catalog-products';
 import { StorefrontBuilderWorkerModule } from '../modules/storefront-builder';
 import { StoreOrdersSalesWorkerModule } from '../modules/store-orders-sales';
 import { ChatConversationsWorkerModule } from '../modules/chat-conversations';
+import { TeamInboxConversationsWorkerModule } from '../modules/team-inbox-conversations';
 import { TeamInboxRoutingSlaWorkerModule } from '../modules/team-inbox-routing-sla';
 import { CampaignsWorkerModule } from '../modules/campaigns';
 import { ChannelFacebookWorkerModule } from '../modules/channel-facebook';
 import { ChannelInstagramWorkerModule } from '../modules/channel-instagram';
 import { ShopifyWoocommerceWorkerModule } from '../modules/shopify-woocommerce';
+import { ChannelEmailWorkerModule } from '../modules/channel-email';
 import { ChannelSmsWorkerModule } from '../modules/channel-sms';
 import { ChannelTelegramWorkerModule } from '../modules/channel-telegram';
 import {
@@ -35,10 +37,15 @@ import {
 } from '../modules/node-bridge-runtime';
 import { NotificationsWorkerModule } from '../modules/notifications';
 import { WebhookFanoutWorkerModule } from '../modules/webhook-fanout';
+import { WabooMigrationWorkerModule } from '../modules/waboo-migration';
 import { OutboundWebhooksWorkerModule } from '../modules/outbound-webhooks';
 import { ApiLibraryWorkerModule } from '../modules/api-library';
 import { FaqKnowledgeWorkerModule } from '../modules/faq-knowledge/faq-knowledge-worker.module';
+import { GrowthPilotWorkerModule } from '../modules/growth-pilot/growth-pilot-worker.module';
+import { LeadScoringWorkerModule } from '../modules/lead-scoring/lead-scoring-worker.module';
+import { ContactConsentWorkerModule } from '../modules/contact-consent/contact-consent-worker.module';
 import { WabaWorkerModule } from '../modules/whatsapp-cloud-api-waba';
+import { WhatsappDevicesBaileysWorkerModule } from '../modules/whatsapp-devices-baileys';
 import { AiAgentsTrainingWorkerModule } from '../modules/ai-agents-training';
 import { FlowBuilderEditorWorkerModule } from '../modules/flow-builder-editor';
 import { FlowRuntimeEngineWorkerModule } from '../modules/flow-runtime-engine';
@@ -81,19 +88,25 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     CouponsCreditsReferralCurrencyWorkerModule,
     WabaWorkerModule,
     WebhookFanoutWorkerModule,
+    WabooMigrationWorkerModule,
     OutboundWebhooksWorkerModule,
     ApiLibraryWorkerModule,
     FaqKnowledgeWorkerModule,
+    LeadScoringWorkerModule,
+    GrowthPilotWorkerModule,
+    ContactConsentWorkerModule,
     CallingVoiceWorkerModule,
     CatalogProductsWorkerModule,
     StorefrontBuilderWorkerModule,
     StoreOrdersSalesWorkerModule,
     MessageTemplatesWorkerModule,
     ChatConversationsWorkerModule,
+    TeamInboxConversationsWorkerModule,
     TeamInboxRoutingSlaWorkerModule,
     CampaignsWorkerModule,
     ChannelTelegramWorkerModule,
     ChannelSmsWorkerModule,
+    ChannelEmailWorkerModule,
     ChannelFacebookWorkerModule,
     ChannelInstagramWorkerModule,
     ShopifyWoocommerceWorkerModule,
@@ -102,6 +115,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     AiAgentsTrainingWorkerModule,
     FlowRuntimeEngineWorkerModule,
     NodeBridgeRuntimeWorkerModule,
+    WhatsappDevicesBaileysWorkerModule,
     NodeCatalogBridgeModule,
     LeadsWorkerModule,
     FormsBuilderWorkerModule,

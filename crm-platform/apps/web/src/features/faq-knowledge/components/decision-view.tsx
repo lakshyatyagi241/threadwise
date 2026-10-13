@@ -11,6 +11,7 @@ import { refreshFaqs, useFaqEntry } from '../api/hooks';
 import { faqApi } from '../api/service';
 import { marginOf, pct, scoreBar, tierKey, verdictTone, verdictWithCheck } from '../lib/decision';
 import { errorKey } from '../lib/errors';
+import { useFaqFlow } from './faq-flow';
 import { CheckIcon, FlowIcon } from './icons';
 import { CARD, ScoreBar } from './parts';
 import { VerifyDetail } from './verify-parts';
@@ -148,6 +149,7 @@ export function DecisionView({
 function Winner({ faqId }: { faqId: string }) {
   const t = useTranslations('faq.decision.winner');
   const q = useFaqEntry(faqId);
+  const { href } = useFaqFlow();
   const e = q.data;
   return (
     <section className={cn(CARD, 'space-y-2 border-success/40 p-4')} aria-label={t('title')}>
@@ -159,7 +161,7 @@ function Winner({ faqId }: { faqId: string }) {
       ) : (
         <>
           <p className="font-medium">
-            <Link href={`/faq/${e.id}`} className="underline-offset-2 hover:underline">
+            <Link href={href({ faqId: e.id })} className="underline-offset-2 hover:underline">
               {e.question}
             </Link>
           </p>
@@ -199,10 +201,12 @@ function CandidateRow({
   const { toast } = useToast();
   const qc = useQueryClient();
   const canCreate = useCan('faq.entries.create');
+  const { flowId, href } = useFaqFlow();
   const [added, setAdded] = useState(false);
   const bar = scoreBar(candidate.score, threshold);
   const add = useMutation({
-    mutationFn: () => faqApi.addVariations(candidate.faqId, { texts: [query], source: 'manual' }),
+    mutationFn: () =>
+      faqApi.addVariations(flowId, candidate.faqId, { texts: [query], source: 'manual' }),
     onSuccess: (created) => {
       setAdded(true);
       void refreshFaqs(qc);
@@ -250,7 +254,7 @@ function CandidateRow({
           </Button>
         )}
         <Link
-          href={`/faq/${candidate.faqId}`}
+          href={href({ faqId: candidate.faqId })}
           className="inline-flex h-8 items-center rounded-md border border-border px-3 text-sm font-medium outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
         >
           {t('open')}

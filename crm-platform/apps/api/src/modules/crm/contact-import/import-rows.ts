@@ -5,6 +5,8 @@ import {
   canonicalizePhone,
   composeDisplayName,
   detectImportColumns,
+  parseImportConsent,
+  type ImportConsentValue,
   type ImportField,
   type ImportMapping,
   type ImportRejectReason,
@@ -29,6 +31,12 @@ export interface ParsedRow {
   source?: string;
   groups: string[];
   tags: string[];
+  /** What the consent column says, only when a column is mapped (`blank` is left out so a later row for the same number can refine it). */
+  consent?: Exclude<ImportConsentValue, 'blank'>;
+  /** A column is mapped to consent, so this row counts as "not granted" when `consent` is absent. */
+  consentColumn?: boolean;
+  /** The cell as written, kept only when it was neither yes nor no (the preview shows a few). */
+  consentRaw?: string;
 }
 
 export type RowResult =
@@ -134,6 +142,8 @@ export function extractRow(
   if (tags.some((t) => t.length > TAG_NAME_MAX)) return reject('tag_name_too_long');
 
   const opt = (v: string, max: number): string | undefined => (v ? v.slice(0, max) : undefined);
+  const consentColumn = mapping.consent !== undefined;
+  const consent = consentColumn ? parseImportConsent(cell('consent')) : undefined;
   return {
     ok: true,
     row: {
@@ -152,6 +162,9 @@ export function extractRow(
       source: opt(cell('source'), 128),
       groups,
       tags,
+      ...(consentColumn ? { consentColumn } : {}),
+      ...(consent && consent !== 'blank' ? { consent } : {}),
+      ...(consent === 'unrecognised' ? { consentRaw: cell('consent').slice(0, 40) } : {}),
     },
   };
 }

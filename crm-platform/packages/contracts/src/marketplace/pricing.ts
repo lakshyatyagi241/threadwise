@@ -89,6 +89,9 @@ export const MARKET_RENEW_NUDGE_DAYS = 7;
  */
 export const marketEntitlementKey = (slug: string): string => `mkt_${slug.replace(/-/g, '_')}`;
 
+/** Whether a granted feature key is an app's own subscription key (`mkt_<slug>`) rather than a plan feature the app grants. */
+export const isMarketEntitlementKey = (key: string): boolean => key.startsWith('mkt_');
+
 /**
  * The slug of the add-on that sells an app: fixed by the app's uuid (a plan slug is at most 32 characters, an app slug up to 48), so it
  * never has to change when the listing is renamed.

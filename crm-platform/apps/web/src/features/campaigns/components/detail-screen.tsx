@@ -4,7 +4,8 @@ import Link from 'next/link';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
+import { costLabel } from '../wizard/lib/money';
 import {
   Alert,
   Button,
@@ -73,6 +74,7 @@ type Pending = 'delete' | 'resendAll' | null;
  */
 export function DetailScreen({ id }: { id: string }) {
   const t = useTranslations('campaigns.detail');
+  const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
   const search = useSearchParams();
@@ -520,7 +522,7 @@ export function DetailScreen({ id }: { id: string }) {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
         <StatTile label={t('kpi.recipients')} value={n.recipients.toLocaleString()} />
         <StatTile label={t('kpi.sent')} value={n.sent.toLocaleString()} tone="accent" />
         <StatTile
@@ -545,6 +547,11 @@ export function DetailScreen({ id }: { id: string }) {
           value={n.failed.toLocaleString()}
           hint={rate(d.rates.failed)}
           tone={n.failed > 0 ? 'warning' : 'default'}
+        />
+        <StatTile
+          label={t('kpi.cost')}
+          value={costLabel(d.campaign.cost, locale)}
+          hint={t('kpi.costHint')}
         />
       </div>
 

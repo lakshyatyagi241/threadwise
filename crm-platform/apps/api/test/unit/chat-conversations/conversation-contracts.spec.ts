@@ -93,8 +93,11 @@ describe('sendMessageSchema', () => {
       sendMessageSchema.safeParse({ kind: 'text', clientMessageId: uuid, body: '   ' }).success,
     ).toBe(false);
     expect(
-      sendMessageSchema.safeParse({ kind: 'text', clientMessageId: uuid, body: 'x'.repeat(4097) })
-        .success,
+      sendMessageSchema.safeParse({
+        kind: 'text',
+        clientMessageId: uuid,
+        body: 'x'.repeat(100_001),
+      }).success,
     ).toBe(false);
     expect(sendMessageSchema.safeParse({ kind: 'sticker', clientMessageId: uuid }).success).toBe(
       false,

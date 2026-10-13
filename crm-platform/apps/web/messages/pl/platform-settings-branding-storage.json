@@ -17,6 +17,8 @@
       "whatsapp": "WhatsApp (WABA)",
       "campaigns": "Kampanie",
       "googleCalendar": "Kalendarz Google",
+      "googleMail": "Gmail",
+      "microsoftMail": "Microsoft 365",
       "flowBuilder": "Kreator przepływów"
     },
     "hub": {
@@ -930,6 +932,79 @@
           }
         }
       },
+      "googleMail": {
+        "title": "E-mail Gmail",
+        "description": "Klient OAuth Google, przez który każda przestrzeń robocza łączy swoje skrzynki.",
+        "sections": {
+          "oauth": {
+            "title": "Klient OAuth Google"
+          },
+          "push": {
+            "title": "Push Gmail (opcjonalnie)"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Zezwól przestrzeniom roboczym na łączenie Gmaila",
+            "hint": "Wyłączone: żadna przestrzeń robocza nie może się połączyć, a poczta nie jest czytana ani wysyłana. Już połączone skrzynki zostają."
+          },
+          "clientId": {
+            "label": "Identyfikator klienta",
+            "hint": "Z Google Cloud, Credentials, OAuth 2.0 Client ID (Web application). Puste pole używa GOOGLE_MAIL_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Sekret klienta",
+            "hint": "Przechowywany zaszyfrowany, nigdy więcej nie wyświetlany. Puste pole zachowuje zapisany; GOOGLE_MAIL_CLIENT_SECRET jest wartością rezerwową."
+          },
+          "redirectUri": {
+            "label": "Nadpisanie URI przekierowania",
+            "hint": "Pozostaw puste, aby użyć powyższego adresu. Musi dokładnie odpowiadać autoryzowanemu URI przekierowania w kliencie."
+          },
+          "pubsubTopic": {
+            "label": "Temat Pub/Sub",
+            "hint": "projects/PROJECT_ID/topics/TOPIC_ID. Nadaj gmail-api-push@system.gserviceaccount.com rolę Publisher dla tego tematu. Puste używa GOOGLE_MAIL_PUBSUB_TOPIC; bez tematu skrzynki są tylko okresowo sprawdzane."
+          },
+          "pushAudience": {
+            "label": "Odbiorcy push (audience)",
+            "hint": "Audience ustawione w subskrypcji push. Puste używa GOOGLE_MAIL_PUSH_AUDIENCE, a jeśli go nie ma, adresu punktu końcowego push tej platformy."
+          },
+          "pushServiceAccount": {
+            "label": "Konto usługi push",
+            "hint": "Konto usługi, którym podpisuje subskrypcja push. Push z innego konta jest odrzucany. Puste używa GOOGLE_MAIL_PUSH_SERVICE_ACCOUNT."
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "Poczta Microsoft 365",
+        "description": "Aplikacja Microsoft, przez którą każda przestrzeń robocza łączy swoje skrzynki Outlook i Microsoft 365.",
+        "sections": {
+          "oauth": {
+            "title": "Aplikacja Microsoft Entra"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Zezwól przestrzeniom roboczym na łączenie Microsoft 365a",
+            "hint": "Wyłączone: żadna przestrzeń robocza nie może się połączyć, a poczta nie jest czytana ani wysyłana. Już połączone skrzynki zostają."
+          },
+          "clientId": {
+            "label": "Identyfikator aplikacji (klienta)",
+            "hint": "Z centrum administracyjnego Microsoft Entra, Rejestracje aplikacji, Przegląd. Puste pole używa MICROSOFT_MAIL_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Sekret klienta",
+            "hint": "Przechowywany zaszyfrowany, nigdy więcej nie wyświetlany. Puste pole zachowuje zapisany; MICROSOFT_MAIL_CLIENT_SECRET jest wartością rezerwową."
+          },
+          "tenant": {
+            "label": "Dzierżawa",
+            "hint": "common dopuszcza konta służbowe, szkolne i osobiste; dla aplikacji jednodzierżawowej użyj identyfikatora katalogu (dzierżawy). Puste pole używa MICROSOFT_MAIL_TENANT, w przeciwnym razie common."
+          },
+          "redirectUri": {
+            "label": "Nadpisanie URI przekierowania",
+            "hint": "Pozostaw puste, aby użyć powyższego adresu. Musi dokładnie odpowiadać autoryzowanemu URI przekierowania w kliencie."
+          }
+        }
+      },
       "flowBuilder": {
         "title": "Kreator przepływów",
         "description": "Które kreatory przepływów są oferowane przestrzeniom roboczym.",
@@ -1062,6 +1137,16 @@
         "title": "Kalendarz Google",
         "description": "Klient OAuth Google, którego przestrzenie robocze używają do łączenia kalendarza na potrzeby rezerwacji i terminów zajętości.",
         "tags": "Google / OAuth / Calendar"
+      },
+      "googleMail": {
+        "title": "E-mail Gmail",
+        "description": "Klient OAuth Google, przez który przestrzenie robocze łączą swoje skrzynki Gmail.",
+        "tags": "Google / OAuth / Gmail"
+      },
+      "microsoftMail": {
+        "title": "Poczta Microsoft 365",
+        "description": "Aplikacja Microsoft, przez którą przestrzenie robocze łączą swoje skrzynki Outlook i Microsoft 365.",
+        "tags": "Microsoft / OAuth / Outlook"
       },
       "flowBuilder": {
         "title": "Kreator przepływów",
@@ -1648,6 +1733,78 @@
           }
         }
       },
+      "googleMail": {
+        "title": "E-mail Gmail",
+        "eyebrow": "Admin - E-mail",
+        "description": "Jeden klient OAuth Google Cloud dla całej platformy, oddzielny od Kalendarza Google. Każda przestrzeń robocza łączy własne skrzynki w sekcji E-mail i nigdy nie widzi identyfikatora klienta ani sekretu.",
+        "sections": {
+          "oauth": {
+            "title": "Klient OAuth Google",
+            "description": "Bez identyfikatora klienta i sekretu przestrzenie robocze nie mogą połączyć skrzynki."
+          },
+          "push": {
+            "title": "Push Gmail (opcjonalnie)",
+            "description": "Nowa poczta trafia do skrzynki zespołu w kilka sekund, bez czekania na kolejne sprawdzenie. Okresowe sprawdzanie pozostaje włączone jako zabezpieczenie."
+          }
+        },
+        "guide": {
+          "title": "Skonfiguruj w Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. Projekt i API",
+              "body": "W Google Cloud Console utwórz projekt i włącz Gmail API."
+            },
+            "redirect": {
+              "title": "2. Klient OAuth",
+              "body": "Utwórz identyfikator klienta OAuth 2.0 typu Web application i dodaj URI przekierowania pokazany na tej stronie w sekcji Authorised redirect URIs."
+            },
+            "consent": {
+              "title": "3. Ekran zgody",
+              "body": "Dodaj zakresy openid, email, gmail.readonly i gmail.send. Zakresy Gmaila są ograniczone: do ogólnego użytku Google musi zweryfikować aplikację, a w trybie testowym zgoda wygasa po 7 dniach."
+            },
+            "workspaces": {
+              "title": "4. Połączenie przestrzeni roboczych",
+              "body": "Wklej tutaj identyfikator klienta i sekret i zapisz. Potem administratorzy łączą skrzynki w sekcji E-mail."
+            },
+            "push": {
+              "title": "5. Poczta natychmiast (opcjonalnie)",
+              "body": "Utwórz temat Pub/Sub, nadaj gmail-api-push@system.gserviceaccount.com rolę Publisher, dodaj subskrypcję push na APP_URL/v2/public/email/google/push z uwierzytelnianiem OIDC, a następnie wpisz tutaj temat, audience i konto usługi."
+            }
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "Poczta Microsoft 365",
+        "eyebrow": "Admin - E-mail",
+        "description": "Jedna aplikacja Microsoft Entra dla całej platformy. Każda przestrzeń robocza łączy własne skrzynki w sekcji E-mail i nigdy nie widzi identyfikatora ani klucza tajnego klienta.",
+        "sections": {
+          "oauth": {
+            "title": "Aplikacja Microsoft Entra",
+            "description": "Bez identyfikatora klienta i sekretu przestrzenie robocze nie mogą połączyć skrzynki."
+          }
+        },
+        "guide": {
+          "title": "Skonfiguruj w Microsoft Entra",
+          "items": {
+            "registration": {
+              "title": "1. Rejestracja aplikacji",
+              "body": "W centrum administracyjnym Microsoft Entra utwórz rejestrację aplikacji. Wybierz typy kont swoich klientów (służbowe lub szkolne oraz osobiste dla Outlook.com) i skopiuj tutaj identyfikator aplikacji (klienta) oraz dzierżawę."
+            },
+            "redirect": {
+              "title": "2. URI przekierowania i klucz tajny",
+              "body": "Dodaj URI przekierowania widoczny na tej stronie jako przekierowanie platformy Web, a w sekcji Certyfikaty i wpisy tajne utwórz klucz tajny klienta i wklej tutaj jego wartość."
+            },
+            "permissions": {
+              "title": "3. Uprawnienia API",
+              "body": "Dodaj delegowane uprawnienia Microsoft Graph Mail.Read, Mail.Send, User.Read i offline_access. Do ogólnego użytku ukończ weryfikację wydawcy; niektóre organizacje wymagają też zgody administratora."
+            },
+            "workspaces": {
+              "title": "4. Połączenie przestrzeni roboczych",
+              "body": "Wklej tutaj identyfikator klienta i sekret i zapisz. Potem administratorzy łączą skrzynki w sekcji E-mail."
+            }
+          }
+        }
+      },
       "flowBuilder": {
         "title": "Kreator przepływów",
         "eyebrow": "Admin - Automatyzacja",
@@ -1735,6 +1892,12 @@
     "googleCallback": {
       "redirectTitle": "URI przekierowania",
       "redirectHint": "Zarejestruj ten dokładny adres jako autoryzowany URI przekierowania w kliencie OAuth. Tu Google przekierowuje przeglądarkę po zgodzie administratora przestrzeni roboczej.",
+      "copy": "Kopiuj",
+      "copied": "Skopiowano"
+    },
+    "microsoftCallback": {
+      "redirectTitle": "URI przekierowania",
+      "redirectHint": "Zarejestruj dokładnie ten adres jako URI przekierowania Web w rejestracji aplikacji. Tam Microsoft odsyła przeglądarkę po zgodzie administratora przestrzeni roboczej.",
       "copy": "Kopiuj",
       "copied": "Skopiowano"
     }

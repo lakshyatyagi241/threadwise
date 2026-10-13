@@ -5,6 +5,7 @@
     "lib": ["ES2023"],
     "module": "commonjs",
     "moduleResolution": "node",
+    "ignoreDeprecations": "6.0",
 
     /* NestJS DI + Drizzle both need these */
     "experimentalDecorators": true,

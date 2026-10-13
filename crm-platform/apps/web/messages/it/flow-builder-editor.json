@@ -571,28 +571,22 @@
         },
         "faq": {
           "intro": {
-            "body": "Confronta un messaggio con le tue FAQ in base al significato e risponde. Esce da <mono>risposta data</mono> quando una FAQ ha risposto e da <mono>nessuna corrispondenza</mono> negli altri casi.",
-            "sub": "Funziona anche senza attivare la risposta automatica con FAQ. <link>Gestisci le tue FAQ</link>"
+            "body": "Confronta un messaggio con le FAQ di questo flusso in base al significato e gli risponde. Esce da <mono>risposto</mono> quando una FAQ ha risposto, e da <mono>nessuna corrispondenza</mono> altrimenti.",
+            "sub": "Funziona anche senza attivare la risposta FAQ automatica di questo flusso. <link>Gestisci le FAQ di questo flusso</link>"
           },
           "exitsLabel": "Uscite",
           "exitMatchedName": "Risposta data",
           "exitMatched": "una FAQ ha risposto: il suo testo è stato inviato (a meno che l'invio sia disattivato), oppure il suo flusso ha preso il controllo e non torna indietro.",
           "exitNoMatchName": "Nessuna corrispondenza",
           "exitNoMatch": "nessuna FAQ era abbastanza vicina, la risposta con FAQ è disattivata per la piattaforma, il flusso o il passaggio collegato non esiste più, oppure il messaggio era vuoto.",
-          "noFaqs": "Non hai ancora FAQ, quindi questo passaggio esce sempre da nessuna corrispondenza. <link>Aggiungi la tua prima FAQ</link>",
           "query": "Messaggio da confrontare",
           "queryHint": "Per impostazione predefinita è l'ultimo messaggio del cliente. Funziona anche una variabile salvata da un passaggio Domanda, ad esempio <mono>{variable}</mono>. Digita / per inserirne una.",
           "category": "Solo queste FAQ",
           "allFaqs": "Tutte le FAQ",
           "loadingCategories": "Caricamento categorie…",
           "categoryGone": "{name} (nessuna FAQ la usa)",
-          "categoryHint": "Possono rispondere solo le FAQ di questa categoria. Le categorie derivano dalle tue FAQ.",
-          "categoriesFailed": "Impossibile caricare le categorie delle FAQ.",
           "retry": "Riprova",
           "minScore": "Punteggio minimo",
-          "useWorkspaceScore": "Usa l'impostazione dello spazio di lavoro",
-          "minScoreHint": "Sostituisce il punteggio dello spazio di lavoro solo per questo passaggio, da {min} a {max}. I punteggi dipendono dal modello di embedding della piattaforma, quindi prova un messaggio in <link>Test FAQ</link> prima di scegliere un numero.",
-          "minScoreInvalid": "Inserisci un numero da {min} a {max}, oppure usa l'impostazione dello spazio di lavoro.",
           "sendAnswer": "Invia la risposta al cliente",
           "sendAnswerToggle": "Invia come messaggio una risposta testuale corrispondente",
           "sendAnswerOnHint": "Una FAQ testuale corrispondente viene inviata al cliente. Una FAQ che avvia un flusso continua in quel flusso.",
@@ -605,7 +599,14 @@
             "question": "la domanda della FAQ corrispondente",
             "score": "quanto era vicina la corrispondenza",
             "id": "l'ID della FAQ corrispondente"
-          }
+          },
+          "noFaqs": "Questo flusso non ha ancora FAQ, quindi questo passaggio esce sempre da nessuna corrispondenza. <link>Aggiungi la prima FAQ di questo flusso</link>",
+          "useWorkspaceScore": "Usa l’impostazione di questo flusso",
+          "minScoreInvalid": "Inserisci un numero da {min} a {max}, oppure usa l’impostazione di questo flusso.",
+          "saveFlowFirst": "Salva prima il flusso. Le sue FAQ si modificano nella scheda FAQ del builder semplice, e questo passaggio risponde da esse.",
+          "categoryHint": "Possono rispondere solo le FAQ di questa categoria. Le categorie provengono dalle FAQ di questo flusso.",
+          "categoriesFailed": "Impossibile caricare le categorie FAQ di questo flusso.",
+          "minScoreHint": "Sostituisce il punteggio di questo flusso solo per questo passaggio, da {min} a {max}. I punteggi dipendono dal modello di embedding della piattaforma, quindi prova un messaggio nel <link>test FAQ</link> di questo flusso prima di scegliere un numero."
         }
       },
       "attrPicker": {
@@ -936,8 +937,8 @@
           "faqAllFaqs": "Tutte le FAQ",
           "faqCategory": "FAQ: {name}",
           "faqScore": "punteggio min. {score}",
-          "faqWorkspaceScore": "punteggio dello spazio di lavoro",
-          "faqNotSent": "non inviata"
+          "faqNotSent": "non inviata",
+          "faqWorkspaceScore": "punteggio del flusso"
         },
         "overlays": {
           "startPinned": "Questo è il punto di partenza (clicca per rimuoverlo)",
@@ -1748,6 +1749,16 @@
             "updatedNote": "Si attiva ogni volta che una persona o un'importazione modifica un contatto. Una modifica fatta da un altro flusso non lo avvia."
           }
         }
+      },
+      "webBot": {
+        "aria": "Sezioni del flusso",
+        "faqs": "FAQ",
+        "saveFirst": "Salva prima il flusso.",
+        "build": "Crea",
+        "customize": "Personalizza",
+        "install": "Installa",
+        "needsCustomizing": "Il widget usa ancora l’aspetto predefinito. Apri Personalizza.",
+        "customizeFirst": "Personalizza il widget di chat e salvalo una volta prima di pubblicare."
       }
     },
     "contracts": {
@@ -2075,7 +2086,8 @@
         "line": "LINE",
         "wechat": "WeChat",
         "viber": "Viber",
-        "email": "Email"
+        "email": "Email",
+        "web": "Chat del sito web"
       },
       "dateFormats": {
         "ddDmmDyyyy": "DD-MM-YYYY",
@@ -2170,7 +2182,7 @@
         "noSenderInstagram": "Il nodo Trigger non ha un account Instagram selezionato — scegline uno nel passo Trigger.",
         "noSenderFacebook": "Il nodo Trigger non ha una Pagina Facebook selezionata — scegline una nel passo Trigger.",
         "noSenderNumber": "Il nodo Trigger non ha un numero selezionato — scegline uno nel passo Trigger.",
-        "faqMinScore": "\"{node}\" ha un punteggio minimo fuori dall'intervallo da 0.05 a 0.99 — correggilo o lascialo vuoto per usare l'impostazione dello spazio di lavoro."
+        "faqMinScore": "\"{node}\" ha un punteggio minimo fuori dall'intervallo da 0.05 a 0.99 — correggilo o lascialo vuoto per usare l'impostazione del flusso."
       }
     },
     "simpleModel": {
@@ -2306,7 +2318,7 @@
         "rowTitle": "Passo {stage}: ogni riga deve avere un titolo di fino a {max} caratteri.",
         "rowDescriptionTooLong": "Passo {stage}: una descrizione di riga supera {max} caratteri.",
         "variableUsed": "Passo {stage}: «{name}» è già usato dal passo {other}; dai a ogni risposta un nome proprio.",
-        "faqMinScore": "Passaggio {stage}: il punteggio minimo deve essere da 0.05 a 0.99, oppure usa l'impostazione dello spazio di lavoro."
+        "faqMinScore": "Passaggio {stage}: il punteggio minimo deve essere da 0.05 a 0.99, oppure usa l'impostazione del flusso."
       },
       "faqSummary": "{hasCategory, select, true {Dalle tue FAQ · {category}} other {Dalle tue FAQ}}"
     },
@@ -2437,7 +2449,12 @@
       "messaging": "Flow di messaggistica",
       "messagingNote": "WhatsApp, Instagram o Facebook — cambia canale nel nodo Trigger",
       "call": "Chiamata",
-      "callNote": "IVR vocale con AI — ascolta, parla, trasferisci"
+      "callNote": "IVR vocale con AI — ascolta, parla, trasferisci",
+      "subtitleSimple": "Ogni bot è creato per un solo canale, perché non tutti i componenti funzionano su tutti i canali.",
+      "whatsapp": "WhatsApp",
+      "whatsappNote": "Risponde ai clienti su un numero WhatsApp collegato",
+      "web": "Chat del sito web",
+      "webNote": "Un widget di chat da aggiungere al tuo sito web"
     },
     "rename": {
       "title": "Rinomina flow",

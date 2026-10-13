@@ -303,6 +303,17 @@ const METERS: ReadonlyArray<{
       ),
   },
   {
+    // Mailboxes the workspace has connected: every one that is not disconnected (a disconnected one frees its place). The Email add-on.
+    // Plain SQL on the table name: `mail_mailboxes` belongs to the channel-email module and is not imported here.
+    key: 'email_mailboxes',
+    window: 'total',
+    count: (tx, orgId) =>
+      n(
+        tx,
+        sql`SELECT count(*)::int AS n FROM mail_mailboxes WHERE org_id = ${orgId} AND status <> 'disconnected'`,
+      ),
+  },
+  {
     // Tokens billed to the platform's keys this calendar month: the same sum AiTokenMeter.guard compares with the cap (it enforces; this row is the panel's number).
     key: 'ai_token_limit_monthly',
     window: 'month',

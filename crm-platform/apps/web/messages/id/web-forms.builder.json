@@ -131,7 +131,14 @@
         "custom": "Kustom",
         "requiredByCrm": "Wajib",
         "inForm": "Di formulir",
-        "full": "Formulir telah mencapai batas blok."
+        "full": "Formulir telah mencapai batas blok.",
+        "section": {
+          "contact": "Kontak",
+          "contactAddress": "Alamat kontak",
+          "company": "Perusahaan",
+          "companyAddress": "Alamat perusahaan"
+        },
+        "addAddress": "Tambahkan semua kolom alamat"
       },
       "list": {
         "title": "Kolom",

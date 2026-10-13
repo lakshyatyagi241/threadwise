@@ -1,6 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { Env } from '../../config/env.schema';
+import { RequestContextStore } from '../../common/context/request-context';
 import { DatabaseService } from '../../infra/db/database.service';
 import {
   SMS_GATEWAY,
@@ -11,6 +12,7 @@ import { TWILIO_STOP_CODE, credentialsProblem } from '../../infra/providers/chan
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import type { EngineSender, OpenedSender, OutgoingText } from '../broadcasts';
+import { ContactConsentService } from '../contact-consent';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import {
   SMS_USAGE_METRIC,
@@ -47,6 +49,7 @@ export class SmsEngineSender implements EngineSender {
     private readonly entitlements: PlanEntitlementService,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
+    private readonly consent: ContactConsentService,
     private readonly config: ConfigService<Env, true>,
     @Inject(SMS_GATEWAY) private readonly gateway: SmsGateway,
   ) {}
@@ -120,7 +123,27 @@ export class SmsEngineSender implements EngineSender {
   private async flagOptedOut(orgId: number, contactId: number): Promise<void> {
     try {
       await this.db.txAs({ orgId }, async (tx) => {
-        if (!(await this.repo.markOptedOut(tx, orgId, contactId))) return;
+        const changed = await this.repo.markOptedOut(tx, orgId, contactId);
+        // The ledger keeps the proof (provider-reported STOP); one event per contact and day however often sends are retried.
+        await RequestContextStore.run(
+          {
+            requestId: `sms-stop-${orgId}-${contactId}`,
+            orgId,
+            actorType: 'system',
+            actorId: null,
+            userId: null,
+          },
+          () =>
+            this.consent.recordInTx(tx, orgId, {
+              contactId,
+              channel: 'sms',
+              action: 'withdrawn',
+              source: 'keyword',
+              evidence: { reference: 'sms-provider-21610' },
+              idempotencyKey: `keyword:sms-provider:${contactId}:${new Date().toISOString().slice(0, 10)}`,
+            }),
+        );
+        if (!changed) return;
         await this.audit.record(tx, {
           module: 'contacts',
           recordId: contactId,

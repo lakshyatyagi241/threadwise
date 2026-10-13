@@ -102,7 +102,8 @@
         "added": "{name} was added to the workspace.",
         "rolesUpdated": "Roles updated for {name}.",
         "deactivated": "{name} was deactivated.",
-        "reactivated": "{name} was reactivated."
+        "reactivated": "{name} was reactivated.",
+        "invited": "Invitation sent to {name}."
       },
       "deactivate": {
         "action": "Deactivate",
@@ -123,7 +124,13 @@
         "passwordShort": "The password must have at least 8 characters.",
         "generate": "Generate",
         "role": "Role",
-        "submit": "Add member"
+        "submit": "Add member",
+        "inviteHint": "We email them a link to set their own password. The link works once and expires after a few days.",
+        "submitInvite": "Send invite",
+        "linkNotSent": "The email to {email} could not be sent. Copy this link and hand it over; it will not be shown again.",
+        "copyLink": "Copy link",
+        "copied": "Copied",
+        "done": "Done"
       },
       "changeRole": {
         "title": "Change roles of {name}",

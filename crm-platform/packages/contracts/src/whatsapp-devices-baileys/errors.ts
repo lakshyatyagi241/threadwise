@@ -1,3 +1,5 @@
+import { WA_GROUP_ERROR_CODES } from './groups';
+
 /**
  * Error codes of the personal-number (unofficial WhatsApp) devices API (docs/specs/personal-whatsapp-connect.md section 10).
  * Spread into ERROR_CODES (common/errors.ts) so the API and the web branch on one registry. The 422 `WA_UNOFFICIAL_DISABLED`
@@ -28,4 +30,6 @@ export const WADEV_ERROR_CODES = {
   WA_WORKER_UNAVAILABLE: 'WA_WORKER_UNAVAILABLE',
   /** WhatsApp did not produce the QR or the code in time (504). Counts toward the pairing limit. */
   DEVICE_PAIRING_TIMEOUT: 'DEVICE_PAIRING_TIMEOUT',
+  // --- groups of a personal number (see groups.ts) ---
+  ...WA_GROUP_ERROR_CODES,
 } as const;

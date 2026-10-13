@@ -1,5 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
+import { sql } from 'drizzle-orm';
+import type { Tx } from '@crm/db';
 import type { Queue } from 'bullmq';
 import type { Redis } from 'ioredis';
 import { DatabaseService } from '../../infra/db/database.service';
@@ -24,6 +26,7 @@ import {
   wooCustomer,
   wooOrder,
   wooProduct,
+  type MirrorOrder,
   type StoreKind,
 } from './mirror-rules';
 import { MirrorRepository } from './mirror.repository';
@@ -321,6 +324,47 @@ export class WebhookPipelineService {
     );
   }
 
+  /**
+   * A store order that reached the CRM for the first time through its own webhook becomes `order.placed`, the commerce event the
+   * flow runtime turns into the order trigger (TW-FLR-006). Written in the transaction that wrote the order, so the order and its
+   * announcement commit together. A bulk import and a repeat delivery announce nothing: the history of a store is not a new order.
+   * An order without a number to message is not announced (the trigger needs a contact to find).
+   */
+  private async announceOrder(
+    tx: Tx,
+    orgId: number,
+    kind: StoreKind,
+    id: number,
+    m: MirrorOrder,
+  ): Promise<void> {
+    if (!m.phone) return;
+    const res = await tx.execute(
+      sql`SELECT uuid, contact_id FROM wa_orders WHERE org_id = ${orgId} AND id = ${id}`,
+    );
+    const row = res.rows[0] as { uuid: string; contact_id: number | string | null } | undefined;
+    if (!row) return;
+    const number = m.meta.order_number;
+    await this.outbox.emit(tx, {
+      orgId,
+      aggregateModule: 'wa_orders',
+      aggregateId: id,
+      eventType: 'order.placed',
+      payload: {
+        orderId: row.uuid,
+        via: kind,
+        contactId: row.contact_id === null ? null : Number(row.contact_id),
+        phone: m.phone,
+        name: m.name,
+        email: m.email,
+        orderNumber:
+          typeof number === 'string' || typeof number === 'number' ? String(number) : null,
+        totalMinor: m.totalMinor,
+        currency: m.currency,
+        status: m.status,
+      },
+    });
+  }
+
   /** A status automation fires once per order and status: later updates of the same order that keep the status do not message again. */
   private async firstTimeInStatus(job: WebhookJob, status: string): Promise<boolean> {
     const key = `ecom:woo-status:${job.orgId}:${job.storeId}:${String(job.data.id)}:${status}`;
@@ -345,8 +389,15 @@ export class WebhookPipelineService {
     const kindOf = topic.split(/[./]/)[0]!;
     if (kindOf.startsWith('order') && !topic.includes('deleted')) {
       const m = kind === 'shopify' ? shopifyOrder(data, ctx) : wooOrder(data, ctx);
-      if (m.storeId !== '')
-        await this.db.txAs({ orgId }, (tx) => this.mirror.upsertOrder(tx, orgId, kind, m));
+      if (m.storeId !== '') {
+        // The order is announced as `order.placed` (the order flow trigger) only when this delivery is the one that creates it.
+        const creates = kind === 'shopify' ? topic === 'orders/create' : topic === 'order.created';
+        await this.db.txAs({ orgId }, async (tx) => {
+          const known = await this.mirrorRepo.orderByStoreId(tx, orgId, kind, m.storeId);
+          const id = await this.mirror.upsertOrder(tx, orgId, kind, m);
+          if (!known && creates) await this.announceOrder(tx, orgId, kind, id, m);
+        });
+      }
     } else if (kindOf.startsWith('product') && !topic.includes('delete')) {
       const m = kind === 'shopify' ? shopifyProduct(data, ctx) : wooProduct(data, ctx);
       if (m.storeId !== '')

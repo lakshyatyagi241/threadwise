@@ -2,6 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { NotificationListResponse } from '@crm/contracts';
+import { BACKGROUND_META } from '@/lib/api/background';
 import { useRealtimeStatus } from '@/lib/realtime';
 import { NOTIFICATION_KEYS } from './keys';
 import { notificationsApi } from './service';
@@ -27,6 +28,7 @@ export function useUnreadCount() {
   return useQuery({
     queryKey: NOTIFICATION_KEYS.unread,
     queryFn: ({ signal }) => notificationsApi.unread(signal),
+    meta: BACKGROUND_META,
     refetchInterval: interval,
     refetchOnWindowFocus: true,
     staleTime: 15_000,

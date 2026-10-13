@@ -206,6 +206,17 @@ export const campaignCountsSchema = z.object({
 });
 export type CampaignCounts = z.infer<typeof campaignCountsSchema>;
 
+/**
+ * What the campaign cost: the sum charged to the wallet for its delivered messages, in hundredths of `currency` (refunded charges
+ * are not counted; a send inside the plan's free quota costs nothing). Charging happens at delivery, so it grows while the
+ * campaign runs. `currency` is null only when the workspace has no wallet yet.
+ */
+export const campaignCostSchema = z.object({
+  amountMinor: z.number().int(),
+  currency: z.string().nullable(),
+});
+export type CampaignCost = z.infer<typeof campaignCostSchema>;
+
 /** A campaign as the list shows it. */
 export const campaignSchema = z.object({
   id: uuidSchema,
@@ -225,6 +236,7 @@ export const campaignSchema = z.object({
   templateId: uuidSchema.nullable(),
   templateName: z.string().nullable(),
   counts: campaignCountsSchema,
+  cost: campaignCostSchema.default({ amountMinor: 0, currency: null }),
   lastRunAt: z.string().datetime().nullable(),
   completedAt: z.string().datetime().nullable(),
   createdAt: z.string().datetime(),

@@ -53,6 +53,7 @@ export function toConversationSummary(row: InboxConversationRow): ConversationSu
         : null,
     },
     snoozedUntil: iso(row.snoozedUntil),
+    labels: row.labels,
     lastMessageAt: iso(row.lastMessageAt),
     lastInboundAt: iso(row.lastInboundAt),
     lastOutboundAt: iso(row.lastOutboundAt),
@@ -87,6 +88,11 @@ export interface ContactSource {
   source: string | null;
   isUnsubscribed: boolean;
   whatsappSubscriptionStatus: string | null;
+  leadScore: number | null;
+  leadScoreSource: 'manual' | 'ai' | null;
+  leadScoreReasons: string[] | null;
+  leadScoredAt: Date | null;
+  leadScoreModel: string | null;
   createdAt: Date;
 }
 
@@ -105,5 +111,10 @@ export const toContactSummary = (
   source: c.source,
   isUnsubscribed: c.isUnsubscribed,
   whatsappSubscriptionStatus: c.whatsappSubscriptionStatus,
+  leadScore: c.leadScore,
+  leadScoreSource: c.leadScoreSource,
+  leadScoreReasons: c.leadScoreReasons,
+  leadScoredAt: c.leadScoredAt ? c.leadScoredAt.toISOString() : null,
+  leadScoreModel: c.leadScoreModel,
   createdAt: c.createdAt.toISOString(),
 });

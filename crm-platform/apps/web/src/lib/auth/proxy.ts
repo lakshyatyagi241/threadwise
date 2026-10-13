@@ -14,6 +14,8 @@ const FORWARD_REQUEST = [
   'accept-language',
   'user-agent',
   'x-forwarded-for',
+  // The Help assistant's model calls name their task (the API refuses a call without it).
+  'x-help-agent-task',
   // Audio and video in a thread seek with byte ranges (the media route answers them).
   'range',
 ];

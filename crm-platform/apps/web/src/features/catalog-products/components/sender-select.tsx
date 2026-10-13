@@ -30,7 +30,7 @@ export function SenderSelect({
       <div className="flex flex-wrap items-center gap-2 rounded-lg border border-danger/30 bg-danger/5 px-3 py-2 text-[11px] text-danger">
         {t('none')}
         <Link
-          href="/channels"
+          href="/channels/whatsapp"
           className="font-semibold text-brand hover:underline dark:text-primary"
         >
           {t('connectOne')}
@@ -60,7 +60,7 @@ export function SenderSelect({
           : senders.map(option)}
       </Select>
       <Link
-        href="/channels"
+        href="/channels/whatsapp"
         className="mt-1.5 inline-flex items-center gap-1.5 text-[11px] font-semibold text-brand hover:underline dark:text-primary"
       >
         {t('connectNew')}

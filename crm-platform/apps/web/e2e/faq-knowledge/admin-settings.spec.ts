@@ -123,7 +123,7 @@ test.describe('settings form: validation', () => {
   }> = [
     {
       key: 'maxFaqs',
-      name: 'Maximum FAQs per workspace',
+      name: 'Maximum FAQs per flow',
       bad: [
         ['0', 'range'],
         ['-1', 'integer'],

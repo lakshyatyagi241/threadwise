@@ -1,0 +1,345 @@
+{
+  "lead-scoring": {
+    "common": {
+      "dismiss": "Schließen",
+      "retry": "Erneut versuchen",
+      "requestId": "Anfrage {id}",
+      "noAccessTitle": "Sie haben keinen Zugriff auf diese Seite",
+      "noAccess": "Bitten Sie einen Workspace-Admin, Ihrer Rolle die Berechtigung {permission} zu geben."
+    },
+    "badge": {
+      "none": "Kein Lead-Score",
+      "aria": "Lead-Score {score} von 100, {band}, {source}",
+      "titleAi": "Von KI bewertet",
+      "titleAiOn": "Von KI bewertet am {date}",
+      "titleManual": "Von einer Person eingegeben",
+      "band": {
+        "cold": "Kalt",
+        "warm": "Warm",
+        "hot": "Heiß"
+      },
+      "source": {
+        "ai": "von KI bewertet",
+        "manual": "von einer Person eingegeben"
+      }
+    },
+    "card": {
+      "title": "Lead-Score",
+      "band": {
+        "cold": "Kalter Lead",
+        "warm": "Warmer Lead",
+        "hot": "Heißer Lead"
+      },
+      "sourceAi": "KI",
+      "sourceManual": "Manuell",
+      "score": "Mit KI bewerten",
+      "rescore": "Neu bewerten",
+      "scoring": "Wird bewertet...",
+      "scoringSlow": "Die KI wird gefragt. Das kann einige Sekunden dauern.",
+      "neverScored": "Dieser Kontakt wurde noch nicht bewertet.",
+      "scoredBy": "Am {date} von KI mit {model} bewertet.",
+      "scoredOn": "Am {date} von KI bewertet.",
+      "scoredByAi": "Von KI bewertet.",
+      "reasons": "Warum dieser Score",
+      "manualWhy": "Eine Person hat diesen Score eingegeben, daher ändert die KI ihn nicht. Damit die KI diesen Kontakt bewertet, bearbeiten Sie den Kontakt und löschen Sie den Lead-Score.",
+      "manualNote": "Eine Person hat diesen Score eingegeben, daher ändert die KI ihn nicht.",
+      "lastRun": "Bewertet mit {score}. Kosten {cost}, {tokens} Tokens.",
+      "showHistory": "Bewertungsverlauf anzeigen",
+      "hideHistory": "Bewertungsverlauf ausblenden",
+      "historyLoading": "Verlauf wird geladen...",
+      "historyFailed": "Der Verlauf konnte nicht geladen werden.",
+      "historyEmpty": "Für diesen Kontakt gibt es noch keine Bewertungsversuche.",
+      "historyCaption": "Bewertungsversuche für diesen Kontakt, neueste zuerst",
+      "historyMore": "Mehr laden"
+    },
+    "errors": {
+      "network": "Der Server war nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+      "forbidden": "Ihre Rolle erlaubt das nicht.",
+      "notFound": "Dieser Kontakt oder Datensatz existiert nicht mehr.",
+      "conflict": "Jemand hat dies gleichzeitig geändert. Die Daten wurden neu geladen.",
+      "platformDisabled": "Das KI-Lead-Scoring ist derzeit für die gesamte Plattform ausgeschaltet.",
+      "notEnabled": "Das KI-Lead-Scoring ist für diesen Workspace nicht eingeschaltet.",
+      "noKey": "Für diesen Workspace ist kein KI-Schlüssel verfügbar.",
+      "providerFailed": "Der KI-Anbieter hat keine brauchbare Antwort geliefert. Versuchen Sie es gleich noch einmal.",
+      "manualScore": "Dieser Kontakt hat einen von einer Person eingegebenen Score.",
+      "planLimit": "Das KI-Kontingent Ihres Tarifs ist aufgebraucht.",
+      "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
+      "validation": "Einige Werte sind ungültig.",
+      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es erneut.",
+      "chatUnavailable": "Das Lesen von Unterhaltungen ist für diesen Arbeitsbereich nicht verfügbar.",
+      "notEnoughChat": "Dieser Kontakt hat noch nicht genug geschrieben, um ausgewertet zu werden.",
+      "suggestionGone": "Dieser Vorschlag wurde bereits entschieden oder ersetzt."
+    },
+    "scoreErrors": {
+      "network": "Der Server war nicht erreichbar, daher wurde der Kontakt nicht bewertet. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+      "forbidden": "Ihre Rolle darf keine Kontakte bewerten.",
+      "notFound": "Dieser Kontakt existiert nicht mehr.",
+      "conflict": "Jemand hat diesen Kontakt gleichzeitig geändert. Er wurde neu geladen; versuchen Sie es erneut.",
+      "platformDisabled": "Das KI-Lead-Scoring ist derzeit für die gesamte Plattform ausgeschaltet. Es kann nichts bewertet werden, bis der Plattformbetreiber es wieder einschaltet.",
+      "notEnabled": "Das KI-Lead-Scoring ist für diesen Workspace nicht eingeschaltet. Es bleibt aus, bis Sie es wählen, da Kontaktinformationen an einen KI-Anbieter gesendet werden.",
+      "noKey": "Für diesen Workspace ist kein OpenRouter-Schlüssel eingerichtet. Fügen Sie unter KI-Schlüssel einen hinzu oder bitten Sie Ihren Plattform-Admin, den gemeinsamen Schlüssel zu aktivieren.",
+      "providerFailed": "Der KI-Anbieter hat keine brauchbare Antwort geliefert, daher wurde kein Score gespeichert. Versuchen Sie es gleich noch einmal.",
+      "manualScore": "Dieser Kontakt hat einen von einer Person eingegebenen Score, den die KI nie überschreibt. Bearbeiten Sie zuerst den Kontakt und löschen Sie den Lead-Score, wenn die KI ihn bewerten soll.",
+      "planLimit": "Das KI-Kontingent Ihres Tarifs ist aufgebraucht, daher wurde der Kontakt nicht bewertet. Versuchen Sie es später erneut oder fügen Sie Ihren eigenen OpenRouter-Schlüssel hinzu.",
+      "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
+      "validation": "Die Anfrage war ungültig.",
+      "unexpected": "Etwas ist schiefgelaufen und der Kontakt wurde nicht bewertet. Versuchen Sie es erneut.",
+      "openSettings": "Einstellungen für KI-Lead-Scoring öffnen",
+      "openKeys": "KI-Schlüssel öffnen",
+      "chatUnavailable": "Das Lesen von Unterhaltungen ist für diesen Arbeitsbereich nicht aktiviert. Es ist eine Pilotfunktion, die in den Einstellungen für das KI-Lead-Scoring aktiviert werden muss.",
+      "notEnoughChat": "Dieser Kontakt hat noch nicht genug geschrieben: nur Begrüßungen, Emojis oder automatische Antworten. Versuchen Sie es erneut, sobald er mehr geschrieben hat.",
+      "suggestionGone": "Dieser Vorschlag wurde bereits entschieden oder durch einen neueren ersetzt, daher wurde nichts geändert."
+    },
+    "field": {
+      "label": "Lead-Score",
+      "placeholder": "0 bis 100",
+      "hint": "Wenn Sie einen Score eingeben, gehört er Ihnen: Die KI ändert ihn nicht mehr. Löschen Sie ihn, um den Kontakt wieder der KI zu überlassen.",
+      "invalid": "Geben Sie eine ganze Zahl von 0 bis 100 ein oder lassen Sie das Feld leer."
+    },
+    "runs": {
+      "col": {
+        "when": "Wann",
+        "contact": "Kontakt",
+        "result": "Ergebnis",
+        "score": "Score",
+        "trigger": "Auslöser",
+        "tokens": "Tokens",
+        "cost": "Kosten",
+        "key": "Schlüssel"
+      },
+      "unnamed": "Kontakt ohne Namen",
+      "deletedContact": "Gelöschter Kontakt",
+      "status": {
+        "ok": "Bewertet",
+        "kept": "Nicht gespeichert",
+        "failed": "Fehlgeschlagen",
+        "skipped": "Übersprungen"
+      },
+      "keptNote": "Die KI hat geantwortet, aber inzwischen hat eine Person einen Score eingegeben, daher wurde er nicht gespeichert.",
+      "reason": {
+        "no_key": "Es war kein KI-Schlüssel verfügbar.",
+        "token_allowance": "Das KI-Kontingent des Tarifs war aufgebraucht.",
+        "hourly_limit": "Das Stundenlimit für den gemeinsamen Schlüssel wurde erreicht.",
+        "manual_score": "Der Kontakt hat einen von einer Person eingegebenen Score.",
+        "platform_off": "Das KI-Lead-Scoring war für die Plattform ausgeschaltet.",
+        "not_enabled": "Das KI-Lead-Scoring war für diesen Workspace aus.",
+        "auth": "Der KI-Anbieter hat den Schlüssel abgelehnt.",
+        "rate_limited": "Der KI-Anbieter war ausgelastet.",
+        "provider": "Der KI-Anbieter hat einen Fehler zurückgegeben.",
+        "timeout": "Der KI-Anbieter hat zu lange gebraucht.",
+        "bad_response": "Die KI hat mit etwas geantwortet, das kein Score war.",
+        "other": "Der Versuch wurde nicht abgeschlossen."
+      },
+      "trigger": {
+        "created": "Kontakt erstellt",
+        "updated": "Kontakt geändert",
+        "manual": "Bewerten-Schaltfläche",
+        "backfill": "Unbewertete Kontakte bewerten",
+        "chat": "Chat verstummt"
+      },
+      "tokensDetail": "{prompt} Eingabe, {completion} Ausgabe",
+      "costSource": {
+        "vendor": "Von OpenRouter gemeldete Kosten",
+        "estimate": "Aus den Tokens und dem Listenpreis geschätzt"
+      },
+      "billed": {
+        "admin": "Plattform-Schlüssel",
+        "workspace": "Ihr Schlüssel"
+      }
+    },
+    "log": {
+      "title": "Bewertungsprotokoll",
+      "hint": "Jeder Bewertungsversuch, neueste zuerst, mit Tokens und Kosten.",
+      "filter": "Versuche mit diesem Ergebnis anzeigen",
+      "all": "Alle Ergebnisse",
+      "status": {
+        "ok": "Bewertet",
+        "kept": "Nicht gespeichert",
+        "failed": "Fehlgeschlagen",
+        "skipped": "Übersprungen"
+      },
+      "refresh": "Aktualisieren",
+      "emptyTitle": "Noch keine Bewertungsversuche",
+      "emptyBody": "Versuche erscheinen hier, sobald das KI-Lead-Scoring eingeschaltet ist und ein Kontakt bewertet wird.",
+      "emptyFilteredTitle": "Keine Versuche mit diesem Ergebnis",
+      "emptyFilteredBody": "Wählen Sie ein anderes Ergebnis oder zeigen Sie alle Ergebnisse an.",
+      "caption": "Bewertungsversuche, neueste zuerst",
+      "loadMore": "Mehr laden"
+    },
+    "settings": {
+      "title": "KI-Lead-Scoring",
+      "subtitle": "Geben Sie jedem Kontakt einen Score von 0 bis 100, der zeigt, wie wahrscheinlich ein Kauf ist, und sehen Sie, was es kostet.",
+      "discard": "Verwerfen",
+      "save": "Speichern",
+      "saved": "Einstellungen gespeichert.",
+      "readOnly": "Sie können diese Einstellungen sehen, aber nicht ändern. Bitten Sie einen Workspace-Admin um die Berechtigung lsc.settings.manage.",
+      "conflict": "Jemand hat diese Einstellungen zuerst geändert. Sie wurden neu geladen, daher sehen Sie die gespeicherte Version. Nehmen Sie Ihre Änderung erneut vor.",
+      "conflictOk": "Verstanden",
+      "enable": {
+        "title": "KI-Lead-Scoring einschalten",
+        "hint": "Aus, bis Sie es wählen, da Informationen über Ihre Kontakte an einen KI-Anbieter gesendet werden.",
+        "label": "KI-Lead-Scoring",
+        "on": "An",
+        "off": "Aus",
+        "what": "Wenn eingeschaltet, liest ein KI-Modell eine kurze, anonyme Beschreibung eines Kontakts und antwortet mit einem Score und den Gründen dafür. Der Score wird in den Lead-Score des Kontakts geschrieben."
+      },
+      "sent": {
+        "title": "Was an die KI gesendet wird",
+        "stage": "Phase und Status des Kontakts",
+        "source": "Woher der Kontakt kam",
+        "tags": "Tag-Namen",
+        "deals": "Wie viele Deals offen, gewonnen und verloren sind",
+        "activity": "Wie kürzlich der Kontakt aktiv war",
+        "company": "Der Firmenname",
+        "engagement": "Wie der Kontakt zuletzt interagiert hat: Anzahl seiner Nachrichten, geöffneten Broadcasts und angeklickten Links sowie seine Antwortgeschwindigkeit (nur Zahlen)"
+      },
+      "notSent": {
+        "title": "Was nie gesendet wird",
+        "name": "Der Name des Kontakts",
+        "email": "Die E-Mail-Adresse",
+        "phone": "Die Telefonnummer",
+        "messages": "Der Text jeder Nachricht",
+        "messagesChat": "Der Text von Nachrichten, es sei denn, Sie aktivieren das Lesen von Unterhaltungen (unten)"
+      },
+      "manualRule": "Ein von einer Person eingegebener Score wird nie überschrieben. Die KI füllt nur leere Scores und aktualisiert die, die sie selbst geschrieben hat.",
+      "auto": {
+        "label": "Automatisch bewerten, wenn sich Kontakte ändern",
+        "onBody": "Ein Kontakt wird beim Erstellen bewertet und erneut, wenn sich seine Details ändern.",
+        "offBody": "Kontakte werden nur bewertet, wenn Sie die Schaltfläche Mit KI bewerten verwenden oder unten die unbewerteten Kontakte bewerten."
+      },
+      "confirm": {
+        "title": "Anonymisierte Kontaktinformationen an einen KI-Anbieter senden?",
+        "body": "Nach dem Einschalten werden kurze Beschreibungen Ihrer Kontakte (Phase, Quelle, Tags, Anzahl der Deals, Aktivität, Interaktionszahlen wie Nachrichten, geöffnete Broadcasts und angeklickte Links sowie Firmenname) über OpenRouter an einen KI-Anbieter gesendet. Namen, E-Mail-Adressen, Telefonnummern und Nachrichtentexte werden nie gesendet. Sie können dies jederzeit ausschalten.",
+        "yes": "Einschalten",
+        "no": "Abbrechen"
+      },
+      "banner": {
+        "platformOff": "Das KI-Lead-Scoring ist für die gesamte Plattform ausgeschaltet. Es wird nichts bewertet, unabhängig von den Einstellungen hier, bis der Plattformbetreiber es wieder einschaltet.",
+        "noKey": "Kein OpenRouter-Schlüssel verfügbar, daher kann nichts bewertet werden. Fügen Sie unter KI-Schlüssel Ihren eigenen hinzu oder bitten Sie Ihren Plattform-Admin, den gemeinsamen Schlüssel zu aktivieren.",
+        "openKeys": "KI-Schlüssel öffnen",
+        "off": "Das KI-Lead-Scoring ist für diesen Workspace aus. Es wird nichts an einen KI-Anbieter gesendet.",
+        "ready": "Bereit. Kontakte werden mit {model} bewertet, unter Verwendung von {key}.",
+        "keyWorkspace": "dem eigenen OpenRouter-Schlüssel Ihres Workspaces",
+        "keyAdmin": "dem gemeinsamen OpenRouter-Schlüssel der Plattform"
+      },
+      "backfill": {
+        "title": "Vorhandene Kontakte bewerten",
+        "hint": "Stellt Kontakte ohne Score in die Warteschlange, bis zu {limit} auf einmal. Sie werden im Hintergrund bewertet.",
+        "eligible": "Kontakte, die die KI bewerten darf",
+        "scored": "Von der KI bewertet",
+        "waiting": "Warten auf einen Score",
+        "eligibleNote": "Kontakte mit einem von einer Person eingegebenen Score sind ausgenommen: Die KI ändert diese nie.",
+        "button": "Unbewertete Kontakte jetzt bewerten",
+        "noRight": "Ihre Rolle darf keine Kontakte bewerten. Dafür ist die Berechtigung lsc.contacts.score nötig.",
+        "notReady": "Schalten Sie das KI-Lead-Scoring ein und stellen Sie sicher, dass ein Schlüssel verfügbar ist, um Kontakte zu bewerten.",
+        "queued": "{count, plural, one {# Kontakt wurde in die Warteschlange gestellt} other {# Kontakte wurden in die Warteschlange gestellt}} und wird im Hintergrund bewertet. Laden Sie das Protokoll in einer Minute neu, um die Ergebnisse zu sehen.",
+        "nothingToScore": "Es gibt keine unbewerteten Kontakte für die Warteschlange."
+      },
+      "cost": {
+        "title": "Letzte 30 Tage",
+        "hint": "Was das Scoring in den letzten 30 Tagen geleistet und gekostet hat.",
+        "scores": "Bewertete Kontakte",
+        "tokens": "Verbrauchte Tokens",
+        "total": "Gesamtkosten",
+        "average": "Durchschnitt pro Score",
+        "averageHint": "Gesamtkosten geteilt durch bewertete Kontakte",
+        "model": "Modell",
+        "payer": "Wer zahlt",
+        "payerBy": {
+          "workspace": "Ihr eigener OpenRouter-Schlüssel, von OpenRouter Ihnen in Rechnung gestellt",
+          "admin": "Der gemeinsame OpenRouter-Schlüssel der Plattform",
+          "none": "Noch kein Schlüssel verfügbar"
+        },
+        "failed": "Fehlgeschlagene Versuche",
+        "platformPart": "Davon über den Plattform-Schlüssel"
+      },
+      "chat": {
+        "title": "Unterhaltungen lesen (Pilot)",
+        "hint": "Standardmäßig aus, da die letzten Nachrichten eines Kontakts mit teilweise maskierten persönlichen Daten an einen KI-Anbieter gesendet werden.",
+        "label": "Unterhaltung eines Kontakts lesen, wenn sie verstummt",
+        "onBody": "Etwa 12 Minuten, nachdem ein Kontakt nicht mehr schreibt, liest die KI die letzten Nachrichten und notiert, was der Kontakt möchte. Außerdem vergibt sie den Score.",
+        "offBody": "Unterhaltungen werden nicht gelesen. Scores basieren nur auf Kontaktdaten und Interaktionswerten.",
+        "needsScoring": "Aktivieren Sie zuerst das KI-Lead-Scoring.",
+        "stageLabel": "Lebenszyklusphasen vorschlagen",
+        "stageBody": "Wenn die Unterhaltung eindeutig zeigt, dass ein Kontakt weitergekommen ist, schlägt die KI die nächste Phase vor. Eine Person akzeptiert oder verwirft den Vorschlag; nichts wird automatisch verschoben, und die Phasen Gewonnen und Verloren werden nie vorgeschlagen.",
+        "masked": {
+          "title": "So werden persönliche Daten maskiert",
+          "phone": "Bei Telefonnummern bleiben nur die ersten Ziffern und die letzten zwei Ziffern erhalten (+91 ***** ***10)",
+          "email": "Bei E-Mail-Adressen bleiben der erste Buchstabe und die Domain erhalten (p***@acme.io)",
+          "card": "Bei Karten-, Aadhaar- und PAN-Nummern bleiben nur das erste und das letzte Zeichen erhalten",
+          "name": "Beim Namen des Kontakts und bei einem Namen, den jemand über sich selbst nennt, bleiben nur der erste und der letzte Buchstabe erhalten"
+        },
+        "rules": {
+          "title": "Was gelesen wird und was nicht",
+          "quiet": "Nur verstummte Chats und nur die letzten zwei Wochen",
+          "enough": "Kontakte, die nur Schaltflächen angetippt haben, werden über eine Phrasentabelle zugeordnet, ohne KI-Aufruf",
+          "person": "Ein von einer Person gesetzter Score oder eine gesetzte Phase wird nie überschrieben",
+          "closing": "Bots, gelöschte Nachrichten, Gruppenchats und automatische Antworten werden ausgelassen"
+        },
+        "confirm": {
+          "title": "Maskierte Unterhaltungen an einen KI-Anbieter senden?",
+          "body": "Sobald die Funktion aktiv ist, werden die letzten Nachrichten eines Kontakts nach dem Verstummen des Chats über OpenRouter an einen KI-Anbieter gesendet. Telefonnummern, E-Mail-Adressen, Kartennummern und Namen werden vorher teilweise maskiert, sodass die gesendeten Daten nicht verwendet werden können, um die Person zu erreichen. Sie können die Funktion jederzeit ausschalten.",
+          "yes": "Aktivieren",
+          "no": "Abbrechen"
+        }
+      }
+    },
+    "insight": {
+      "title": "Unterhaltungsanalyse",
+      "empty": "Noch nicht gelesen. Ein Chat wird etwa 12 Minuten nach der letzten Nachricht des Kontakts gelesen, oder Sie lesen ihn jetzt.",
+      "analyze": "Chat lesen",
+      "analyzing": "Wird gelesen...",
+      "analyzingSlow": "Die KI wird gefragt. Das kann einige Sekunden dauern.",
+      "sourceAi": "Von der KI gelesen",
+      "sourceRules": "Aus Schaltflächen-Antippen abgeleitet",
+      "signals": "Signale des Kontakts",
+      "signal": {
+        "askedPrice": "Hat nach dem Preis gefragt",
+        "readyToBuy": "Kaufbereit",
+        "objection": "Zögern oder Einwand",
+        "urgent": "Dringend"
+      },
+      "readOn": "Gelesen am {date} anhand von {count, plural, one {# Nachricht} other {# Nachrichten}}.",
+      "privacy": "Namen, Telefonnummern und E-Mail-Adressen im Chat werden teilweise maskiert, bevor etwas an die KI gesendet wird.",
+      "intent": {
+        "ready_to_buy": "Kaufbereit",
+        "asking_price": "Fragt nach dem Preis",
+        "comparing": "Vergleicht Optionen",
+        "registering": "Registriert sich",
+        "needs_support": "Braucht Support",
+        "post_purchase": "After-Sales oder Service",
+        "browsing": "Schaut sich nur um",
+        "not_interested": "Nicht interessiert",
+        "other": "Keine klare Absicht"
+      },
+      "suggestion": {
+        "title": "Vorgeschlagene Phase",
+        "move": "Von {from} nach {to} verschieben",
+        "confidence": "{percent} % sicher",
+        "accept": "Akzeptieren",
+        "dismiss": "Verwerfen",
+        "accepted": "Phase auf {stage} geändert.",
+        "dismissed": "Vorschlag verworfen.",
+        "noRight": "Sie haben keine Berechtigung, Vorschläge zu akzeptieren oder zu verwerfen.",
+        "couldNot": "Der Vorschlag konnte nicht angewendet werden. Möglicherweise wurde er bereits entschieden."
+      }
+    },
+    "suggestions": {
+      "title": "Phasenvorschläge",
+      "hint": "Verschiebungen, die die KI nach dem Lesen von Unterhaltungen vorschlägt. Nichts ändert sich, bis Sie akzeptieren.",
+      "empty": "Keine Vorschläge offen.",
+      "unnamed": "Kontakt ohne Namen",
+      "move": "Von {from} nach {to} verschieben",
+      "confidence": "{percent} % sicher",
+      "accept": "Akzeptieren",
+      "dismiss": "Verwerfen",
+      "acceptConfident": "Die {count} über {percent} % akzeptieren",
+      "dismissAll": "Alle verwerfen",
+      "more": "Mehr laden",
+      "doneAccept": "{count, plural, one {# Phase geändert.} other {# Phasen geändert.}}",
+      "doneDismiss": "{count, plural, one {# Vorschlag verworfen.} other {# Vorschläge verworfen.}}",
+      "noRight": "Sie können die Vorschläge sehen, aber nicht darüber entscheiden: Dafür ist die Berechtigung lsc.stage.review erforderlich.",
+      "couldNot": "{count, plural, one {# Vorschlag konnte nicht angewendet werden.} other {# Vorschläge konnten nicht angewendet werden.}}"
+    }
+  }
+}

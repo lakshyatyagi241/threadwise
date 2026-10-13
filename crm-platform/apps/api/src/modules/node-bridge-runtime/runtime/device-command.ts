@@ -7,6 +7,8 @@ import type {
   GroupAction,
   GroupResult,
 } from '../../../infra/providers/node-bridge-runtime/socket.port';
+import type { GroupFailureReason } from '../../../infra/providers/node-bridge-runtime/group-mapping';
+import type { WaGroupRateScope } from '@crm/contracts';
 
 /**
  * What the API asks a device's worker to do (TW-NODE-008, 009, 010). Reference's Laravel called the bridge's HTTP endpoints and
@@ -37,6 +39,21 @@ export type DeviceCommandResult =
   | { ok: true; status: 'sent'; providerMessageId: string | null }
   | { ok: true; status: 'acted' }
   | { ok: true; status: 'group'; result: GroupResult }
+  /**
+   * Our per-device group limiter refused BEFORE any WhatsApp call (decision D11): a per-minute or daily counter, or the cooldown after a
+   * refusal that looked like a ban signal. The API answers 429 WA_GROUP_RATE_LIMITED with `retryAfterSeconds` and `scope`.
+   */
+  | {
+      ok: false;
+      status: 'rate_limited';
+      message: string;
+      retryAfterSeconds: number;
+      scope: WaGroupRateScope;
+    }
+  /** Joining by invite link (or previewing one) is switched off on this platform (`WA_GROUPS_JOIN_BY_LINK_ENABLED`). */
+  | { ok: false; status: 'disabled'; message: string }
+  /** WhatsApp refused a group call. `reason` is the closed set the API maps to its WA_GROUP_* codes. */
+  | { ok: false; status: 'group_failed'; reason: GroupFailureReason; message: string }
   | {
       ok: false;
       status:

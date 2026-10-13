@@ -4,6 +4,9 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { tileForPath } from '@/features/_registry/settings-resolve';
+import { MARKETPLACE_TOOLS_SECTION } from '@/features/_registry/settings-types';
+import { mktRoutes } from '@/features/marketplace/lib/routes';
+import { toolTabForTile } from '@/features/marketplace/lib/tools';
 import { useSettingsTiles } from './settings-context';
 
 /**
@@ -20,13 +23,18 @@ export function SettingsBack({ always = false }: { always?: boolean }) {
   const tile = tileForPath(tiles, pathname);
   if (!tile) return null;
 
+  const inMarketplace = tile.section === MARKETPLACE_TOOLS_SECTION;
+  const tab = toolTabForTile(tile.id);
   const link =
     'rounded-sm outline-none hover:text-foreground hover:underline focus-visible:ring-2 focus-visible:ring-primary';
   return (
     <nav aria-label={t('settings.breadcrumb')} className="mb-4">
       <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
         <li>
-          <Link href="/settings" className={`inline-flex items-center gap-1 font-medium ${link}`}>
+          <Link
+            href={inMarketplace ? mktRoutes.integrations : '/settings'}
+            className={`inline-flex items-center gap-1 font-medium ${link}`}
+          >
             <svg
               viewBox="0 0 16 16"
               fill="none"
@@ -39,14 +47,20 @@ export function SettingsBack({ always = false }: { always?: boolean }) {
             >
               <path d="M10 3.5 5.5 8l4.5 4.5" />
             </svg>
-            {t('settings.backToSettings')}
+            {inMarketplace ? t('settings.backToMarketplace') : t('settings.backToSettings')}
           </Link>
         </li>
         <li aria-hidden="true">/</li>
         <li>
-          <Link href={`/settings/${tile.section}`} className={link}>
-            {t(`settings.sections.${tile.section}.title`)}
-          </Link>
+          {inMarketplace ? (
+            <Link href={mktRoutes[tab]} className={link}>
+              {t(`marketplace.header.tabs.${tab === 'addons' ? 'addon' : 'integration'}`)}
+            </Link>
+          ) : (
+            <Link href={`/settings/${tile.section}`} className={link}>
+              {t(`settings.sections.${tile.section}.title`)}
+            </Link>
+          )}
         </li>
         <li aria-hidden="true">/</li>
         <li aria-current="page" className="font-medium text-foreground">

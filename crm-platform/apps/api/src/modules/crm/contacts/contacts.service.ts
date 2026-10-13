@@ -35,6 +35,7 @@ import { planStatus } from './contact-status-stage';
 import { assertFormFieldLimits } from './form-field-limits';
 import { applyPropertyPlan, planPropertyChanges } from './contact-property-values';
 import { missingRequired, requiredPropertiesError } from './required-properties';
+import { ContactConsentService } from '../../contact-consent';
 import { ContactQuotaService } from './contact-quota.service';
 import { assertContactScope } from './contact-scope';
 import { assertOwnerWithinScope } from '../owner-scope';
@@ -121,6 +122,7 @@ export class ContactsService {
     private readonly displayIds: DisplayIdService,
     private readonly rbac: RbacService,
     private readonly quota: ContactQuotaService,
+    private readonly consent: ContactConsentService,
   ) {}
 
   async list(query: ListContactsQuery, scope: RecordScope): Promise<ContactListResponse> {
@@ -341,6 +343,18 @@ export class ContactsService {
         recordId: created.id,
         action: 'insert',
       });
+      // A contact created already opted out leaves its proof in the consent ledger (it is never invented for the other case).
+      if (input.isUnsubscribed === true) {
+        await this.consent.recordInTx(tx, ctx.orgId, {
+          contactId: created.id,
+          channel: 'whatsapp',
+          action: 'withdrawn',
+          source: ctx.actorType === 'api_key' ? 'api' : 'manual',
+          actorUserId: ctx.userId,
+          note: 'Created as unsubscribed',
+          idempotencyKey: `create:${created.uuid}`,
+        });
+      }
 
       // Same transaction as the insert — see OutboxService for why that is
       // not negotiable.
@@ -569,6 +583,79 @@ export class ContactsService {
   }
 
   /** One field of a contact as text, for the flow triggers and conditions: an own column or a custom property; null when it is blank. */
+  /**
+   * A stage change made by the system, not by a person: the guarded automatic mode of the growth pilot, and its undo. The edit's own
+   * rules hold (the won stamp, the status kept valid for the stage, audit, the stage-changed event), with two refusals: a contact that
+   * is no longer in `expectFrom` (a person moved it first) and a lost stage (it needs a reason a person gives). Returns whether it moved.
+   */
+  async changeStageAsSystem(
+    orgId: number,
+    contactId: number,
+    args: { expectFrom: string; to: string },
+  ): Promise<boolean> {
+    return this.db.txAs({ orgId }, async (tx) => {
+      const existing = await this.repo.findById(tx, orgId, contactId);
+      if (
+        !existing ||
+        existing.lifecycleStage !== args.expectFrom ||
+        args.to === existing.lifecycleStage
+      ) {
+        return false;
+      }
+      const flags = await this.repo.stageFlags(tx, orgId, args.to);
+      if (flags.isLost) return false;
+      const now = new Date();
+      const values: Record<string, unknown> = {
+        lifecycleStage: args.to,
+        lifecycleStageDate: now,
+        previousLifecycleStage: existing.lifecycleStage,
+        previousLifecycleStageDate: existing.lifecycleStageDate,
+        ...stageEntryValues({ flags, current: existing, now }),
+      };
+      const statusCtx = await this.repo.statusContext(tx, orgId);
+      const plan = planStatus({
+        scope: statusCtx.scope,
+        stage: args.to,
+        stageLabel: statusCtx.stageLabels.get(args.to) ?? null,
+        stageChanged: true,
+        current: existing.status,
+        requested: undefined,
+      });
+      if (plan.status !== undefined) values.status = plan.status;
+      const updated = await this.repo.updateWithVersion(
+        tx,
+        orgId,
+        existing.id,
+        existing.rowVersion,
+        values,
+      );
+      if (!updated) return false;
+      const after = await this.repo.findById(tx, orgId, existing.id);
+      await this.audit.record(tx, {
+        module: MODULE_KEY,
+        recordId: existing.id,
+        action: 'update',
+        delta: this.audit.diff(
+          existing as unknown as Record<string, unknown>,
+          after as unknown as Record<string, unknown>,
+        ),
+      });
+      await this.outbox.emit(tx, {
+        orgId,
+        aggregateModule: MODULE_KEY,
+        aggregateId: existing.id,
+        eventType: 'contact.stage_changed',
+        payload: {
+          uuid: existing.uuid,
+          previousStage: existing.lifecycleStage,
+          stage: args.to,
+          via: 'growth',
+        },
+      });
+      return true;
+    });
+  }
+
   async readFieldForFlow(orgId: number, contactId: number, key: string): Promise<string | null> {
     const clean = key.trim();
     if (clean === '') return null;
@@ -633,7 +720,15 @@ export class ContactsService {
       if (phone !== undefined) values.phone = phone;
       if (input.lostReason !== undefined) values.lostReason = input.lostReason;
       if (input.otherLostReason !== undefined) values.otherLostReason = input.otherLostReason;
-      if (input.leadScore !== undefined) values.leadScore = input.leadScore;
+      if (input.leadScore !== undefined) {
+        values.leadScore = input.leadScore;
+        // A score a person types (or clears) takes the AI's explanation with it: the number is theirs now, and clearing it hands the
+        // contact back to the AI scorer.
+        values.leadScoreSource = input.leadScore === null ? null : 'manual';
+        values.leadScoreReasons = null;
+        values.leadScoredAt = null;
+        values.leadScoreModel = null;
+      }
       if (input.whatsappSubscriptionStatus !== undefined) {
         values.whatsappSubscriptionStatus = input.whatsappSubscriptionStatus;
       }
@@ -733,6 +828,36 @@ export class ContactsService {
       }
       if (phone && phone !== existing.phone) {
         await this.repo.addIdentity(tx, ctx.orgId, existing.id, 'phone', phone);
+      }
+
+      // The toggle on the contact form / REST API keeps working as before; the ledger records who changed it (a grant here has no
+      // required reason: the Consent card on the profile asks for one).
+      if (values.isUnsubscribed !== undefined) {
+        await this.consent.recordInTx(tx, ctx.orgId, {
+          contactId: existing.id,
+          channel: 'whatsapp',
+          action: values.isUnsubscribed ? 'withdrawn' : 'granted',
+          source: ctx.actorType === 'api_key' ? 'api' : 'manual',
+          actorUserId: ctx.userId,
+          note: 'Changed on the contact record',
+          idempotencyKey: `edit:${existing.uuid}:${existing.rowVersion}`,
+        });
+        // Switching the flag back on is a person coming back: `contact.opt_in` (optedIn: true), the opt-in flow trigger, in the same
+        // transaction as the change, like the STOP / START keyword and the Consent card. The ledger cannot announce it here (this update
+        // has already moved the flag, so the ledger sees no change). Switching it off announces nothing, as before.
+        if (values.isUnsubscribed === false) {
+          await this.outbox.emit(tx, {
+            aggregateModule: MODULE_KEY,
+            aggregateId: existing.id,
+            eventType: 'contact.opt_in',
+            payload: {
+              contactId: existing.uuid,
+              optedIn: true,
+              action: 'resubscribed',
+              source: ctx.actorType === 'api_key' ? 'api' : 'manual',
+            },
+          });
+        }
       }
 
       const after = await this.repo.findById(tx, ctx.orgId, existing.id);

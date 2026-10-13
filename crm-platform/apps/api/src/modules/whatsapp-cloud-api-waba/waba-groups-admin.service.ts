@@ -37,6 +37,7 @@ import { WabaConnectService } from './waba-connect.service';
 import { WabaConnectionsRepository } from './waba-connections.repository';
 import { emitGroupEvents, GROUP_EVENTS, groupEventsFor } from './waba-group-events';
 import { toGroupDto } from './waba-groups.mapper';
+import { wabaGroupsEligibleKey } from '../../infra/providers/whatsapp/group-peer';
 import { factsOf, WabaGroupsRepository, type WabaGroupRow } from './waba-groups.repository';
 
 const MODULE = 'waba_groups';
@@ -54,8 +55,7 @@ interface Number_ {
   officialBusinessAccount: boolean | null;
 }
 
-const eligibleKey = (orgId: number, configId: number) =>
-  `waba:groups:eligible:${orgId}:${configId}`;
+const eligibleKey = wabaGroupsEligibleKey;
 const asApiError = (e: unknown): WabaApiError =>
   e instanceof WabaApiError ? e : WabaApiError.network(e);
 const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
@@ -468,9 +468,13 @@ export class WabaGroupsAdminService {
     return new AppError(ERROR_CODES.WABA_GROUP_NOT_FOUND, 'Group not found.', HttpStatus.NOT_FOUND);
   }
 
-  /** Groups go straight to Meta. Interakt and registry routes are not verified to pass the Groups API through (spec 10). */
+  /**
+   * Groups go straight to Meta's Graph host with the number's own Meta token (as Reference did), so the number's route label does not
+   * matter: a number that Interakt only funds (credit line) still qualifies. A registry provider's number is refused (its route is not
+   * known to pass the Groups API through), and so is any number without a Meta access token (an Interakt-only auth key is not one).
+   */
   private supported(conn: WabaConnection): boolean {
-    return conn.provider === 'meta' && !conn.registry && Boolean(conn.accessToken);
+    return !conn.registry && Boolean(conn.accessToken);
   }
 
   private usable(num: Number_): WabaConnection {

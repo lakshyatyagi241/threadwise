@@ -10,7 +10,8 @@
       "webchat": "Chat du site web",
       "telegram": "Telegram",
       "facebook": "Messenger Facebook",
-      "instagram": "Instagram"
+      "instagram": "Instagram",
+      "email": "E-mail (Gmail)"
     },
     "page": {
       "back": "Automatisation et IA",
@@ -81,7 +82,10 @@
       "lastFired": "dernière fois le {when}",
       "edit": "Modifier",
       "duplicate": "Dupliquer",
-      "delete": "Supprimer"
+      "delete": "Supprimer",
+      "startsFlow": "Démarre aussi le flux {name}",
+      "flowOff": "Le flux est désactivé",
+      "flowGone": "Démarre aussi un flux supprimé"
     },
     "form": {
       "back": "Attribution automatique",
@@ -170,7 +174,57 @@
       "cancel": "Annuler",
       "save": "Enregistrer",
       "saveActivate": "Enregistrer et activer",
-      "openCount": "{open} en cours"
+      "openCount": "{open} en cours",
+      "flow": {
+        "title": "Démarrer aussi un flux",
+        "hint": "Facultatif. Le flux démarre pour la conversation lorsque cette règle s'applique, sur le même canal. Il doit seulement être activé ; il n'a pas besoin d'être publié.",
+        "none": "Aucun flux",
+        "offOption": "{name} (désactivé)",
+        "goneOption": "Un flux qui n'existe plus",
+        "loadFailed": "Les flux n’ont pas pu être chargés, la liste est peut-être incomplète."
+      }
+    },
+    "performance": {
+      "eyebrow": "Boîte de réception d'équipe · Rapports",
+      "title": "À quelle vitesse votre équipe a-t-elle répondu ?",
+      "subtitle": "Réponses, résolutions et délais de première réponse de chaque agent.",
+      "summary": "{replies} réponses, {resolved} résolues, première réponse moyenne {avg}",
+      "live": "En direct",
+      "backToInbox": "Retour à la boîte de réception",
+      "rangeLabel": "Période",
+      "ranges": {
+        "today": "Aujourd'hui",
+        "week": "Cette semaine",
+        "month": "Ce mois-ci"
+      },
+      "channelLabel": "Canal",
+      "allChannels": "Tous les canaux",
+      "loadFailed": "Le rapport n'a pas pu être chargé. Nouvelle tentative dans un instant.",
+      "noAccess": "Vous n'avez pas accès au rapport de performance de l'équipe.",
+      "loading": "Chargement du rapport…",
+      "empty": "Aucune activité d'agent sur cette période.",
+      "unknown": "Inconnu",
+      "tiles": {
+        "replies": "Réponses envoyées",
+        "resolved": "Résolues",
+        "inbounds": "Entrants",
+        "avgFirstReply": "Première réponse moy."
+      },
+      "columns": {
+        "agent": "Agent",
+        "status": "Statut",
+        "load": "Charge",
+        "replies": "Réponses",
+        "resolved": "Résolues",
+        "avgReply": "Rép. moy.",
+        "lastSeen": "Dernière activité"
+      },
+      "statuses": {
+        "online": "En ligne",
+        "away": "Absent",
+        "busy": "Occupé",
+        "offline": "Hors ligne"
+      }
     }
   }
 }

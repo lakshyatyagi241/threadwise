@@ -31,4 +31,15 @@ export {
   type InboundMessageListener,
   type InboundStoredEvent,
 } from './inbound-hooks';
+export { EmailMessageAccess, type EmailMessageRef } from './email-message-access.service';
+export { isAutomatedEmail } from './inbound-hooks';
+export {
+  EmailDeliveryService,
+  EMAIL_BOUNCED_EVENT,
+  type RecordBounceInput,
+  type RecordBounceOutcome,
+} from './email-delivery.service';
 export { MESSAGE_LOG_FACADE, type MessageLogFacade } from './message-log.facade';
+export { PersonalGroupThreadReader } from './personal-group-thread.reader';
+export { CloudGroupThreadReader } from './cloud-group-thread.reader';
+export { DeviceGroupThreadTitleService } from './device-group-thread-title.service';

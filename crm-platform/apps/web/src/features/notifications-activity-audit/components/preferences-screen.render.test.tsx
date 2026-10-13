@@ -92,16 +92,20 @@ const GROUP_TYPES = [
   'waba_group_join_request',
   'waba_group_suspended',
   'waba_group_suspension_cleared',
+  'device_group_join_request',
+  'device_group_removed',
 ] as const;
 const groupItems = () => GROUP_TYPES.map((type) => item(type, 'whatsapp_groups'));
 
 describe('the WhatsApp Groups rows of the preferences screen (BL-099)', () => {
-  it('shows the three rows under their own heading with the quiet defaults, in English', () => {
+  it('shows the five rows under their own heading with the quiet defaults, in English', () => {
     const out = html(view({ state: state(...groupItems()) }));
     expect(out).toContain('WhatsApp groups');
     expect(out).toContain('Request to join a group');
     expect(out).toContain('Group suspended');
     expect(out).toContain('Group active again');
+    expect(out).toContain('Request to join a personal-number group');
+    expect(out).toContain('Removed from a personal-number group');
     expect(out).toContain('aria-label="Request to join a group: bell"');
     expect(out).toContain('Default: bell on, pop-up on, sound off');
     expect(out).not.toContain('notifications.prefs');
@@ -122,7 +126,7 @@ describe('the WhatsApp Groups rows of the preferences screen (BL-099)', () => {
     expect(out).not.toContain('Group suspended');
   });
 
-  it('has the push off by default for all three (a person turns it on)', () => {
+  it('has the push off by default for all five (a person turns it on)', () => {
     for (const e of state(...groupItems()).entries) {
       expect(e.defaults.push, e.type).toBe(false);
       expect(e.flags.push, e.type).toBe(false);

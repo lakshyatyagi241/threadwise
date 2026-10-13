@@ -137,7 +137,8 @@
         "recipients": "{count} penerima",
         "scheduled": "Dijadwalkan: {date}",
         "instant": "Kirim: langsung",
-        "template": "Template {name}"
+        "template": "Template {name}",
+        "cost": "Biaya"
       },
       "createBroadcast": "Buat broadcast",
       "noData": "Data tidak ditemukan",
@@ -227,8 +228,6 @@
         "senderHint": "Jika dibiarkan default, kampanye dikirim melalui mesin utama workspace Anda.",
         "defaultSender": "Pengirim default",
         "nameHint": "Label internal untuk laporan dan riwayat antrean.",
-        "noSenders": "Tidak ada pengirim yang terhubung.",
-        "connectOne": "Hubungkan satu →",
         "type": "Jenis kampanye",
         "types": {
           "custom": {
@@ -650,7 +649,9 @@
         "read": "Terbaca",
         "replies": "Balasan",
         "clicks": "Klik",
-        "failed": "Gagal"
+        "failed": "Gagal",
+        "cost": "Biaya",
+        "costHint": "Sejauh ini dipotong dari dompet"
       },
       "tabs": {
         "overview": "Ringkasan",
@@ -897,8 +898,7 @@
         "previewEmpty": "Pilih template untuk melihat tampilan pesan.",
         "senderLabel": "Kirim dari",
         "senderHint": "Nomor WhatsApp pengirim broadcast ini.",
-        "pickSender": "Pilih nomor",
-        "noSenders": "Tidak ada nomor WhatsApp yang terhubung. Hubungkan satu terlebih dahulu."
+        "pickSender": "Pilih nomor"
       },
       "audience": {
         "selectionTitle": "Dipilih di Contact Hub",
@@ -932,6 +932,7 @@
         "optedOut": "Berhenti berlangganan",
         "invalidNumbers": "Nomor tidak valid",
         "alwaysSkipped": "Kontak yang berhenti berlangganan dan nomor tidak valid selalu dilewati.",
+        "noConsent": "Tidak ada persetujuan tercatat (dilewati)",
         "willBeMessaged": "Akan dikirimi pesan",
         "about": "sekitar {count}",
         "approximate": "Ini perkiraan: audiens terlalu besar untuk dihitung secara tepat dalam waktu singkat.",
@@ -1403,6 +1404,41 @@
         "runs": "Putaran",
         "noRuns": "Belum ada putaran yang dimulai.",
         "cancel": "Batalkan seri"
+      }
+    },
+    "senderEmpty": {
+      "loading": "Memuat nomor Anda…",
+      "none": {
+        "title": "Belum ada nomor WhatsApp yang terhubung",
+        "body": "Hubungkan nomor WhatsApp Business untuk memilih nomor pengirim kampanye ini.",
+        "action": "Hubungkan nomor WhatsApp"
+      },
+      "sms": {
+        "none": {
+          "title": "Belum ada pengirim SMS yang terhubung",
+          "body": "Hubungkan pengirim SMS untuk memilih pengirim kampanye ini.",
+          "action": "Hubungkan pengirim SMS"
+        }
+      },
+      "pending": {
+        "title": "{count} nomor masih dalam proses terhubung",
+        "body": "Nomor dapat mengirim kampanye setelah koneksinya selesai. Buka statusnya untuk menyelesaikan pengaturan.",
+        "action": "Periksa status nomor"
+      },
+      "error": {
+        "title": "Koneksi {count} nomor gagal",
+        "body": "Hubungkan ulang nomor dari halaman statusnya dan nomor akan muncul di sini.",
+        "action": "Perbaiki koneksi"
+      },
+      "disconnected": {
+        "title": "{count} nomor terputus",
+        "body": "Hubungkan ulang untuk mengirim kampanye darinya. Nomor yang terhubung muncul di sini.",
+        "action": "Hubungkan ulang nomor"
+      },
+      "personal_off": {
+        "title": "Nomor pribadi dinonaktifkan untuk workspace ini",
+        "body": "{count} nomor pribadi (QR) tidak dapat mengirim kampanye selama ini dinonaktifkan. Administrator platform dapat mengaktifkannya untuk workspace ini, atau Anda dapat menghubungkan nomor resmi WhatsApp Business.",
+        "action": "Hubungkan nomor resmi"
       }
     }
   }

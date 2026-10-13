@@ -9,6 +9,10 @@ import {
   clip,
   compactGraph,
   describeSent,
+  finishIo,
+  newIo,
+  splitIo,
+  varsChanged,
   hashGraph,
   maskSecrets,
   nodeLabel,
@@ -168,5 +172,68 @@ describe('step log helpers', () => {
   it('labels a Message node by the text of its first reply', () => {
     const m = node({ props: { replies: [{ type: 'Text', data: 'We are open 9 to 5.' }] } });
     expect(nodeLabel(m, null)).toBe('We are open 9 to 5.');
+  });
+
+  it('finds the variables a step changed, without internal keys or flattened children', () => {
+    expect(
+      varsChanged(
+        { a: '1', keep: 'x' },
+        { a: '2', keep: 'x', resp: '{"id":1}', 'resp.id': 1, __subflow_depth: 1, fresh: 'y' },
+      ),
+    ).toEqual([
+      { kind: 'variable', name: 'a', value: '2' },
+      { kind: 'variable', name: 'resp', value: '{"id":1}' },
+      { kind: 'variable', name: 'fresh', value: 'y' },
+    ]);
+  });
+
+  it('keeps input and output small: clipped, capped, secrets masked', () => {
+    const io = newIo();
+    io.in.push({ kind: 'variable', name: 'api_key', value: 'abc123' });
+    io.in.push({ kind: 'variable', name: 'note', value: 'x'.repeat(900) });
+    for (let i = 0; i < 30; i++) io.out.push({ kind: 'variable', name: `v${i}`, value: 'v' });
+    io.out.push({ kind: 'message', name: 'text', value: 'Bearer abc.def hi' });
+    const done = finishIo(io)!;
+    expect(done.in[0]!.value).toBe('***');
+    expect(done.in[1]!.value.length).toBeLessThanOrEqual(300);
+    expect(done.out.length).toBeLessThanOrEqual(12);
+    expect(JSON.stringify(done).length).toBeLessThan(4600);
+    expect(finishIo(newIo())).toBeNull();
+  });
+
+  it('splits stored io off a row detail and ignores malformed items', () => {
+    const r = splitIo({
+      next: 'n2',
+      io: {
+        in: [
+          { kind: 'reply', name: null, value: 'yes' },
+          { kind: 'bogus', value: 1 },
+        ],
+        out: [],
+      },
+    });
+    expect(r.detail).toEqual({ next: 'n2' });
+    expect(r.input).toEqual([{ kind: 'reply', name: null, value: 'yes' }]);
+    expect(r.output).toEqual([]);
+  });
+
+  it('marks a node whose message never reached the customer as an error, though the run went on', () => {
+    const f = stepFields(
+      outcome({ sent: ['image: x (not sent: bad link)'], sendFailed: true }),
+      node(),
+      { durationMs: 1, attempt: 1 },
+    );
+    expect(f.outcome).toBe('error');
+    expect(f.summary).toContain('not sent');
+    // A wait that failed to send keeps its own state.
+    const w = stepFields(
+      outcome({
+        transition: { t: 'wait', wait: { nodeId: 'n1', variable: 'x', kind: 'Question' } },
+        sendFailed: true,
+      }),
+      node(),
+      { durationMs: 1, attempt: 1 },
+    );
+    expect(w.outcome).toBe('waiting');
   });
 });

@@ -604,6 +604,16 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
           {fieldsGrid(s)}
         </div>
       );
+    else if (s.custom === 'microsoftCallback')
+      body = (
+        <div className="space-y-4">
+          <GoogleCallback
+            uri={String(data.extra?.redirectUri ?? '')}
+            ns="platform-settings-branding-storage.microsoftCallback"
+          />
+          {fieldsGrid(s)}
+        </div>
+      );
     else if (s.custom === 'signupLink') {
       body = (
         <div className="space-y-3 text-sm text-muted-foreground">

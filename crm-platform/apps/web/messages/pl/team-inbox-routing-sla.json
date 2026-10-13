@@ -10,7 +10,8 @@
       "webchat": "Czat na stronie",
       "telegram": "Telegram",
       "facebook": "Facebook Messenger",
-      "instagram": "Instagram"
+      "instagram": "Instagram",
+      "email": "E-mail (Gmail)"
     },
     "page": {
       "back": "Automatyzacja i AI",
@@ -81,7 +82,10 @@
       "lastFired": "ostatnio {when}",
       "edit": "Edytuj",
       "duplicate": "Duplikuj",
-      "delete": "Usuń"
+      "delete": "Usuń",
+      "startsFlow": "Uruchamia także przepływ {name}",
+      "flowOff": "Przepływ jest wyłączony",
+      "flowGone": "Uruchamia także usunięty przepływ"
     },
     "form": {
       "back": "Automatyczne przypisywanie",
@@ -170,7 +174,57 @@
       "cancel": "Anuluj",
       "save": "Zapisz",
       "saveActivate": "Zapisz i aktywuj",
-      "openCount": "{open} otwarte"
+      "openCount": "{open} otwarte",
+      "flow": {
+        "title": "Uruchom także przepływ",
+        "hint": "Opcjonalnie. Przepływ uruchamia się dla rozmowy, gdy ta reguła zadziała, w tym samym kanale. Musi być tylko włączony; nie musi być opublikowany.",
+        "none": "Brak przepływu",
+        "offOption": "{name} (wyłączony)",
+        "goneOption": "Przepływ, który już nie istnieje",
+        "loadFailed": "Nie udało się wczytać przepływów, więc lista może być niepełna."
+      }
+    },
+    "performance": {
+      "eyebrow": "Skrzynka zespołu · Raporty",
+      "title": "Jak szybko odpowiadał Twój zespół?",
+      "subtitle": "Odpowiedzi, rozwiązane rozmowy i czasy pierwszej odpowiedzi każdego agenta.",
+      "summary": "{replies} odpowiedzi, {resolved} rozwiązanych, średnia pierwsza odpowiedź {avg}",
+      "live": "Na żywo",
+      "backToInbox": "Wróć do skrzynki",
+      "rangeLabel": "Okres",
+      "ranges": {
+        "today": "Dziś",
+        "week": "Ten tydzień",
+        "month": "Ten miesiąc"
+      },
+      "channelLabel": "Kanał",
+      "allChannels": "Wszystkie kanały",
+      "loadFailed": "Nie udało się wczytać raportu. Za chwilę nastąpi ponowna próba.",
+      "noAccess": "Nie masz dostępu do raportu wydajności zespołu.",
+      "loading": "Wczytywanie raportu…",
+      "empty": "Brak aktywności agentów w tym okresie.",
+      "unknown": "Nieznany",
+      "tiles": {
+        "replies": "Wysłane odpowiedzi",
+        "resolved": "Rozwiązane",
+        "inbounds": "Przychodzące",
+        "avgFirstReply": "Śr. pierwsza odpowiedź"
+      },
+      "columns": {
+        "agent": "Agent",
+        "status": "Status",
+        "load": "Obciążenie",
+        "replies": "Odpowiedzi",
+        "resolved": "Rozwiązane",
+        "avgReply": "Śr. odpowiedź",
+        "lastSeen": "Ostatnio widziany"
+      },
+      "statuses": {
+        "online": "Online",
+        "away": "Zaraz wracam",
+        "busy": "Zajęty",
+        "offline": "Offline"
+      }
     }
   }
 }

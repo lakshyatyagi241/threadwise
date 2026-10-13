@@ -5,7 +5,8 @@ summary: Read and answer customer conversations from every connected channel, as
 area: inbox
 order: 10
 documents: [nav:inbox]
-keywords: [inbox, conversations, reply, notes, assign, resolve, unread, customers, messages, 24-hour window]
+keywords:
+  [inbox, conversations, reply, notes, assign, resolve, unread, customers, messages, 24-hour window]
 ---
 
 ## What it is for
@@ -22,6 +23,11 @@ The Team inbox gathers every customer conversation from your connected channels 
 6. Select **Assign to me** to take the conversation, or pick a teammate or team in the contact panel. **Unassign** releases it.
 7. Select **Resolve** when it is done. **Reopen** brings it back.
 
+8. To act on several conversations at once, select **Select** above the list. Click rows to pick them, or hold Shift and click to pick the run between two rows. **Select all** takes every conversation loaded in the list, and the bar shows how many are selected. Choose **Mark as read**, **Resolve**, **Close**, **Reopen**, **Assign**, **Priority**, **Snooze** or **Label**; the action is applied to each conversation on its own, and the message that follows says how many were updated, how many were already up to date and how many could not be changed. The ones that failed stay selected so you can see them and try again. A bulk action needs the bulk right plus the right for the action itself (for example resolve). Up to 200 conversations are changed per request; a longer selection is sent in several.
+9. To set one conversation aside, use **Snooze** in its header and pick 1 hour, 3 hours, tomorrow at 9:00 or next Monday at 9:00. It leaves the Open list and comes back by itself at that time, with an entry in its timeline. **Wake now** brings it back early. Use the **Priority** menu in the header to mark it Low, Normal, High or Urgent.
+
+10. To tag a conversation, select **Label** in its header and tick the labels that apply, then use the **Labels** filter above the list to show only conversations with those labels. See [Labels](help:inbox-labels).
+
 Keyboard shortcuts work when you are not typing: `j` and `k` move through the list, `e` resolves or reopens, and `/` jumps to search.
 
 ## Options and settings
@@ -30,6 +36,7 @@ Keyboard shortcuts work when you are not typing: `j` and `k` move through the li
 - Each conversation shows its status (Open, Pending, Snoozed, Resolved or Spam) and its priority. The status list above the conversations starts on **Open**, which shows the conversations still being worked on: Open and Pending. **Resolved** also lists conversations the system closed (for example when a channel was removed): to an agent they are the same.
 - **Pending** and **Snoozed** are both ways of setting a conversation aside, and they differ in one thing. **Pending** means you are waiting for the customer (or for something else) and the conversation stays in your **Open** list so it is not forgotten; it has no timer and comes back to Open when the customer writes. **Snoozed** hides the conversation until a time you pick, then it wakes by itself and returns to Open; it is not in the **Open** list while it sleeps.
 - **Channels** lists the accounts customers reach you on, with their status and reply window.
+- **Email** mailboxes appear in the **Channel** filter under their own **Email** heading, one entry per connected mailbox. An email conversation shows the subject as its title, the message headers, attachments and the **Load images** button, and its reply box adds **Cc, Bcc and subject** and leaves out emoji, templates and files. See Email mailboxes.
 
 ## Plan and access
 

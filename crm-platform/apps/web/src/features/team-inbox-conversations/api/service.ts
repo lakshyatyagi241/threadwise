@@ -1,7 +1,12 @@
 import type {
+  ApplyConversationLabelInput,
   AssignConversationInput,
+  CreateInboxLabelInput,
+  UpdateInboxLabelInput,
+  BulkConversationsInput,
   CreateConversationNoteInput,
   CreateMessageLogExportInput,
+  ConversationPriority,
   CreateSimulatorChannelInput,
   InboxMediaUpload,
   SendMessageInput,
@@ -13,9 +18,13 @@ import { apiFetch } from '@/lib/api/client';
 import { toApiError } from '@/lib/api/errors';
 import { listQuery, type ListFilters } from '../lib/list';
 import {
+  bulkConversationsResponseSchema,
+  inboxLabelListSchema,
+  inboxLabelSchema,
   channelListResponseSchema,
   channelResponseSchema,
   conversationEventListResponseSchema,
+  conversationGroupMembersSchema,
   conversationListResponseSchema,
   conversationNoteSchema,
   conversationSummarySchema,
@@ -96,6 +105,13 @@ export const inboxApi = {
       schema: messageResponseSchema,
       idempotencyKey: input.clientMessageId,
     }),
+  /** The members of a personal-number group thread, for the composer's @mention picker (read from the directory; `q` is a name or number). */
+  groupMembers: (conversationId: string, q: string, signal?: AbortSignal) =>
+    apiFetch(`/inbox/conversations/${conversationId}/group-members`, {
+      query: { q: q || undefined, limit: 20 },
+      schema: conversationGroupMembersSchema,
+      signal,
+    }),
   /** The approved templates the conversation's WhatsApp number can send (the picker of the composer). */
   templates: (conversationId: string, q: string, signal?: AbortSignal) =>
     apiFetch(`/inbox/conversations/${conversationId}/templates`, {
@@ -123,6 +139,43 @@ export const inboxApi = {
       method: 'POST',
       body: input,
       schema: conversationSummarySchema,
+    }),
+  setPriority: (conversationId: string, rowVersion: number, priority: ConversationPriority) =>
+    apiFetch(`/inbox/conversations/${conversationId}/priority`, {
+      method: 'POST',
+      body: { rowVersion, priority },
+      schema: conversationSummarySchema,
+    }),
+  snooze: (conversationId: string, rowVersion: number, until: string) =>
+    apiFetch(`/inbox/conversations/${conversationId}/snooze`, {
+      method: 'POST',
+      body: { rowVersion, until },
+      schema: conversationSummarySchema,
+    }),
+  labels: (signal?: AbortSignal) =>
+    apiFetch('/inbox/labels', { schema: inboxLabelListSchema, signal }),
+  createLabel: (input: CreateInboxLabelInput) =>
+    apiFetch('/inbox/labels', { method: 'POST', body: input, schema: inboxLabelSchema }),
+  updateLabel: (id: string, input: UpdateInboxLabelInput) =>
+    apiFetch(`/inbox/labels/${id}`, { method: 'PATCH', body: input, schema: inboxLabelSchema }),
+  deleteLabel: (id: string) => apiFetch(`/inbox/labels/${id}`, { method: 'DELETE' }),
+  applyLabel: (conversationId: string, input: ApplyConversationLabelInput) =>
+    apiFetch(`/inbox/conversations/${conversationId}/labels`, {
+      method: 'POST',
+      body: input,
+      schema: conversationSummarySchema,
+    }),
+  withdrawLabel: (conversationId: string, tagId: string) =>
+    apiFetch(`/inbox/conversations/${conversationId}/labels/${tagId}`, {
+      method: 'DELETE',
+      schema: conversationSummarySchema,
+    }),
+  /** One action on up to 200 conversations; the answer names each one's outcome. */
+  bulk: (input: BulkConversationsInput) =>
+    apiFetch('/inbox/conversations/bulk', {
+      method: 'POST',
+      body: input,
+      schema: bulkConversationsResponseSchema,
     }),
   setStatus: (conversationId: string, rowVersion: number, status: 'open' | 'resolved') =>
     apiFetch(`/inbox/conversations/${conversationId}/status`, {

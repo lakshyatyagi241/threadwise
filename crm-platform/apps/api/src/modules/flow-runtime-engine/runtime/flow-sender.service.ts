@@ -12,6 +12,7 @@ import {
   ChannelRegistryService,
   type ConversationsFacade,
 } from '../../chat-conversations';
+import { WalletGateService } from '../../wallet-message-billing';
 import { CapTally, DEFAULT_PACING } from '../caps';
 import { profileOf, renderForChannel, threadTextOf, type Rendered } from './channel-render';
 import type { OutboundMessage, RunState, SendOutcome } from './types';
@@ -25,6 +26,8 @@ export const HALT_RETRY_MS = 5 * 60_000;
 const HALT_CODES: ReadonlySet<string> = new Set([
   ERROR_CODES.CHANNEL_DISCONNECTED,
   ERROR_CODES.AUTH_SEND_HALTED,
+  // An empty wallet halts the run too: it tries again by itself and carries on once the wallet is topped up.
+  ERROR_CODES.WALLET_EMPTY,
 ]);
 
 /**
@@ -49,6 +52,7 @@ export class FlowSender {
     private readonly channels: ChannelRegistryService,
     private readonly dispatcher: ChannelDispatcher,
     private readonly tally: CapTally,
+    private readonly wallet: WalletGateService,
     private readonly fetcher: SafeFetch,
     private readonly media: ChatMediaStore,
     @Inject(CONVERSATIONS_FACADE) private readonly conversations: ConversationsFacade,
@@ -66,6 +70,16 @@ export class FlowSender {
     try {
       const profile = profileOf(run.channelKind);
       const rendered = renderForChannel(message, profile);
+
+      // A template is the paid message of a flow (a plain reply inside the customer's window is free): the wallet must cover it.
+      if (rendered.kind === 'template') {
+        await this.wallet.assertCanSend({
+          orgId: run.orgId,
+          source: 'flow',
+          to: run.peerKey,
+          category: 'utility',
+        });
+      }
 
       const deviceId = run.channelKind === 'whatsapp_qr' ? await this.deviceOf(run) : null;
       if (deviceId !== null) {

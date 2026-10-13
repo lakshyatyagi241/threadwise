@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import { assemblePhone } from '../broadcasts';
+import { hasGrantedConsentSql } from '../contact-consent';
 
 /** `IN (...)` lists are chunked so a big audience never builds one giant statement. */
 export const CHUNK = 1_000;
@@ -41,6 +42,9 @@ export interface Counts {
 }
 
 export interface CampaignRow {
+  /** Charged to the wallet for this campaign's delivered messages (hundredths of `costCurrency`). */
+  costMinor: number;
+  costCurrency: string | null;
   id: number;
   uuid: string;
   name: string;
@@ -187,6 +191,8 @@ function toRow(r: Raw): CampaignRow {
     occurrenceNo: num(r.occurrence_no),
     retryEnabled: Boolean(r.retry_enabled),
     retryUntil: date(r.retry_until),
+    costMinor: Number(r.cost_minor ?? 0),
+    costCurrency: (r.cost_currency as string | null | undefined) ?? null,
     counts: {
       sent: Number(r.a_sent ?? 0),
       delivered: Number(r.a_delivered ?? 0),
@@ -202,7 +208,7 @@ function toRow(r: Raw): CampaignRow {
 
 const SELECT = sql`
   SELECT c.*, t.uuid AS template_uuid, t.template_name, ta.uuid AS template_a_uuid, tb.uuid AS template_b_uuid,
-         f.uuid AS flow_uuid, fb.uuid AS flow_b_uuid, agg.*
+         f.uuid AS flow_uuid, fb.uuid AS flow_b_uuid, agg.*, cost.cost_minor, cost.cost_currency
   FROM wpcampaigns c
   LEFT JOIN wa_templates t  ON t.org_id  = c.org_id AND t.id  = c.template_id
   LEFT JOIN wa_templates ta ON ta.org_id = c.org_id AND ta.id = c.template_id_a
@@ -211,7 +217,15 @@ const SELECT = sql`
   LEFT JOIN flows fb ON fb.org_id = c.org_id AND fb.id = c.flow_id_b
   LEFT JOIN LATERAL (
     SELECT ${AGG} FROM wp_campaign_contacts r WHERE r.org_id = c.org_id AND r.campaign_id = c.id
-  ) agg ON true`;
+  ) agg ON true
+  LEFT JOIN LATERAL (
+    -- What the delivered messages were charged to the wallet (refunded charges excluded), matched on the provider message id.
+    SELECT coalesce(sum(u.credits) FILTER (WHERE u.status = 'charged'), 0)::bigint AS cost_minor,
+           coalesce(max(u.currency), (SELECT w.unit FROM wallets w WHERE w.org_id = c.org_id ORDER BY w.id LIMIT 1)) AS cost_currency
+      FROM wp_campaign_contacts r
+      JOIN usage_charges u ON u.org_id = r.org_id AND u.wamid = r.whatsapp_message_id
+     WHERE r.org_id = c.org_id AND r.campaign_id = c.id AND r.whatsapp_message_id IS NOT NULL
+  ) cost ON true`;
 
 export interface NewCampaign {
   name: string;
@@ -495,7 +509,8 @@ export class CampaignsRepository {
     tx: Tx,
     orgId: number,
     id: number,
-  ): Promise<{ optedOut: number; duplicates: number }> {
+    requireConsent = false,
+  ): Promise<{ optedOut: number; duplicates: number; noConsent: number }> {
     const settled = sql`('sent','delivered','read','responded','unsubscribed','skipped')`;
     const out = await tx.execute(sql`
       UPDATE wp_campaign_contacts r SET status = 'unsubscribed', is_unsubscribed = true, unsubscribed = true
@@ -503,6 +518,16 @@ export class CampaignsRepository {
       WHERE r.org_id = ${orgId} AND r.campaign_id = ${id} AND c.org_id = r.org_id AND c.id = r.contact_id
         AND c.is_unsubscribed AND r.status NOT IN ${settled}
       RETURNING r.id`);
+    // The workspace requires a recorded consent for marketing and this contact has none: not sent, not a failure.
+    const noConsent = requireConsent
+      ? await tx.execute(sql`
+          UPDATE wp_campaign_contacts r SET status = 'skipped', error_message = 'no recorded consent'
+          FROM contacts c
+          WHERE r.org_id = ${orgId} AND r.campaign_id = ${id} AND c.org_id = r.org_id AND c.id = r.contact_id
+            AND NOT c.is_unsubscribed AND r.status NOT IN ${settled}
+            AND NOT ${hasGrantedConsentSql('c')}
+          RETURNING r.id`)
+      : { rows: [] as unknown[] };
     const dup = await tx.execute(sql`
       UPDATE wp_campaign_contacts r SET status = 'skipped', error_message = 'duplicate number — already sent this run'
       FROM (
@@ -515,7 +540,11 @@ export class CampaignsRepository {
       ) d
       WHERE r.org_id = ${orgId} AND r.id = d.id AND d.rn > 1
       RETURNING r.id`);
-    return { optedOut: out.rows.length, duplicates: dup.rows.length };
+    return {
+      optedOut: out.rows.length,
+      duplicates: dup.rows.length,
+      noConsent: noConsent.rows.length,
+    };
   }
 
   /**

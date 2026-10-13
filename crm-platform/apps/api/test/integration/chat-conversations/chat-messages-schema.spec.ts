@@ -513,10 +513,10 @@ describe('conversations, messages, ledger and events: schema, constraints and is
           `INSERT INTO saved_replies (org_id, user_id, shortcut, title, body) VALUES ($1,$2,$3,'t','b')`,
           [orgA, user, shortcut],
         );
-      expect(await ins(null, '/hello')).toBeNull();
-      expect((await ins(null, '/hello'))?.constraint).toBe('uq_saved_replies_owner_shortcut');
-      expect(await ins(userA, '/hello')).toBeNull();
-      expect((await ins(userA, '/hello'))?.constraint).toBe('uq_saved_replies_owner_shortcut');
+      expect(await ins(null, 'hello')).toBeNull();
+      expect((await ins(null, 'hello'))?.constraint).toBe('uq_saved_replies_owner_shortcut');
+      expect(await ins(userA, 'hello')).toBeNull();
+      expect((await ins(userA, 'hello'))?.constraint).toBe('uq_saved_replies_owner_shortcut');
     });
 
     it('agent_statuses carries the round-robin clock', async () => {

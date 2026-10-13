@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { AnalyticsPanels } from '@crm/contracts';
 import type { Tx } from '@crm/db';
+import { channelOwnerSql } from '../../realtime';
 import { countryOfPhone } from './platform-rules';
 
 type Raw = Record<string, unknown>;
@@ -67,7 +68,8 @@ export class DashPanelsRepository {
     const res = await tx.execute(sql`
       SELECT c.uuid, coalesce(c.title, c.peer_name, '+' || c.peer_key) AS title, c.peer_key, c.last_message_at, count(m.id)::int AS messages
       FROM messages m JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
-      WHERE m.org_id = ${orgId} AND m.created_at >= ${from.toISOString()}::timestamptz AND m.created_at < ${to.toISOString()}::timestamptz
+      WHERE m.org_id = ${orgId} AND ${channelOwnerSql('c')} IS NULL
+        AND m.created_at >= ${from.toISOString()}::timestamptz AND m.created_at < ${to.toISOString()}::timestamptz
       GROUP BY c.uuid, c.title, c.peer_name, c.peer_key, c.last_message_at
       ORDER BY messages DESC, c.last_message_at DESC NULLS LAST LIMIT 5`);
     return (res.rows as Raw[]).map((r) => ({
@@ -143,7 +145,7 @@ export class DashPanelsRepository {
     const res = await tx.execute(sql`
       SELECT m.uuid, m.direction, m.kind, m.status, m.created_at, c.peer_key, coalesce(c.title, c.peer_name) AS name
       FROM messages m JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
-      WHERE m.org_id = ${orgId} AND m.deleted_at IS NULL
+      WHERE m.org_id = ${orgId} AND m.deleted_at IS NULL AND ${channelOwnerSql('c')} IS NULL
         AND m.created_at >= ${from.toISOString()}::timestamptz AND m.created_at < ${to.toISOString()}::timestamptz
       ORDER BY m.created_at DESC, m.id DESC LIMIT 6`);
     return (res.rows as Raw[]).map((r) => ({

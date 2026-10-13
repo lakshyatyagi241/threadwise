@@ -6,7 +6,8 @@
       "orders": "Bestelgeschiedenis",
       "billingHistory": "Factureringsgeschiedenis",
       "invoices": "Facturen",
-      "billingSettings": "Factureringsinstellingen"
+      "billingSettings": "Factureringsinstellingen",
+      "subscriptions": "Abonnementen"
     },
     "admin": {
       "title": "Betaalproviders",
@@ -236,8 +237,12 @@
           "30d": "Laatste 30 dagen",
           "90d": "Laatste 90 dagen",
           "1y": "Afgelopen jaar",
-          "all": "Alle tijd"
-        }
+          "all": "Alle tijd",
+          "custom": "Aangepast bereik"
+        },
+        "customFrom": "Vanaf datum",
+        "customTo": "Tot datum",
+        "customInvalid": "Kies twee geldige dagen: het begin mag niet na het einde liggen, met hooguit 5 jaar ertussen."
       },
       "orders": {
         "title": "Bestelgeschiedenis",
@@ -249,7 +254,8 @@
         "windows": {
           "90d": "Laatste 90 dagen",
           "this_year": "Dit jaar",
-          "all": "Alle tijd"
+          "all": "Alle tijd",
+          "custom": "Aangepast bereik"
         },
         "kpi": {
           "total": "Totaal bestellingen",
@@ -299,7 +305,8 @@
           "markPaid": "Markeren als betaald",
           "cancelOrder": "Annuleren",
           "approve": "Goedkeuren",
-          "reject": "Afwijzen"
+          "reject": "Afwijzen",
+          "refund": "Terugbetaling"
         },
         "confirm": {
           "approveTitle": "Deze bestelling als betaald markeren?",
@@ -432,7 +439,7 @@
           "gross": "Bruto omzet",
           "net": "Netto omzet",
           "netPct": "{pct}% netto",
-          "success": "Succes autorisaties",
+          "success": "Slagingspercentage betalingen",
           "failed": "Mislukt",
           "events": "{count, plural, one {# gebeurtenis} other {# gebeurtenissen}}",
           "refunds": "Terugbetalingen",
@@ -673,6 +680,79 @@
           "faqsHint": "Accordionitems die onder de abonnementen worden getoond.",
           "configured": "{count} ingesteld."
         }
+      },
+      "subscriptions": {
+        "title": "Abonnementen",
+        "eyebrow": "Facturatie",
+        "titleFirst": "Platform",
+        "titleSecond": "abonnementen",
+        "description": "Plan- en add-on-abonnementen bij een betalingsprovider, over alle werkruimtes. Beëindig er een, vernieuw het vanuit de provider of betaal een afschrijving terug.",
+        "kpi": {
+          "active": "Actief",
+          "pastDue": "Betaling mislukt",
+          "canceled": "Geannuleerd"
+        },
+        "statusFilter": "Abonnementsstatus",
+        "statuses": {
+          "all": "Alle",
+          "active": "Actief",
+          "past_due": "Betaling mislukt",
+          "pending": "In afwachting",
+          "canceled": "Geannuleerd",
+          "expired": "Verlopen"
+        },
+        "kind": {
+          "plan": "Plan",
+          "addon": "Add-on"
+        },
+        "search": "Zoek werkruimte of provider-id",
+        "noun": "abonnementen",
+        "empty": "Geen abonnementen gevonden.",
+        "col": {
+          "workspace": "Werkruimte",
+          "item": "Item",
+          "price": "Prijs",
+          "paidUntil": "Betaald tot",
+          "status": "Status",
+          "provider": "Provider",
+          "actions": "Acties"
+        },
+        "cancelFailed": "Annuleren bij provider mislukt",
+        "cancelFailedHint": "Het lokale record is beëindigd, maar de provider heeft de annulering niet bevestigd. Rond het af in het dashboard van de provider zodat er niet meer wordt afgeschreven.",
+        "actions": {
+          "sync": "Vernieuwen",
+          "refund": "Terugbetaling",
+          "endAtCycle": "Beëindigen aan einde cyclus",
+          "endNow": "Nu beëindigen"
+        },
+        "confirm": {
+          "title": "Dit abonnement beëindigen?",
+          "atCycle": "{name} houdt toegang tot het einde van de betaalde cyclus en wordt niet opnieuw belast.",
+          "now": "Beëindig het abonnement van {name} nu bij de provider. Er wordt niets meer afgeschreven."
+        },
+        "ended": "Abonnement beëindigd bij de provider.",
+        "endedLocalOnly": "Hier beëindigd, maar de provider heeft de annulering niet bevestigd. Rond het af in het dashboard van de provider.",
+        "endedUnsupported": "Hier beëindigd. Deze provider kan niet vanaf hier worden geannuleerd.",
+        "alreadyEnded": "Het was al beëindigd.",
+        "synced": "Gecontroleerd bij de provider: {outcome}."
+      },
+      "refund": {
+        "title": "Terugbetaling {label}",
+        "intro": "De terugbetaling wordt naar de betalingsprovider gestuurd en gaat terug naar de oorspronkelijke betaalmethode van de koper.",
+        "charge": "Terug te betalen afschrijving",
+        "pickCharge": "Kies een betaalde afschrijving",
+        "loadingCharges": "Afschrijvingen laden",
+        "chargesFailed": "De betalingsprovider kon niet worden bevraagd over de afschrijvingen van dit abonnement.",
+        "noPaidCharges": "De provider toont geen betaalde afschrijving voor dit abonnement.",
+        "amount": "Bedrag ({currency})",
+        "amountHint": "Laat leeg om alles terug te betalen wat nog niet is terugbetaald.",
+        "reason": "Reden",
+        "endSubscription": "Beëindig het abonnement ook nu zodat er niet opnieuw wordt afgeschreven",
+        "submit": "Terugbetaling",
+        "processed": "{amount} terugbetaald.",
+        "pending": "Terugbetaling verzonden. De provider verwerkt deze.",
+        "failed": "De provider heeft de terugbetaling geweigerd.",
+        "badAmount": "Voer het bedrag in als getal, bijvoorbeeld 12.50."
       }
     },
     "offline": {
@@ -711,6 +791,74 @@
       "rejected": "Dit bestandstype is niet toegestaan. Gebruik een JPG, PNG, WEBP of PDF.",
       "closed": "Voor deze bestelling kan geen betalingsbewijs meer worden ingediend.",
       "failed": "Het bestand kon niet worden geüpload. Probeer het opnieuw."
+    },
+    "subscriptions": {
+      "title": "Abonnementen",
+      "subtitle": "Je plan- en add-on-abonnementen bij de betalingsprovider: wat wordt verlengd, tot wanneer je betaald hebt en wat er is afgeschreven.",
+      "loading": "Abonnementen laden",
+      "loadFailed": "We konden je abonnementen niet laden. Probeer het zo opnieuw.",
+      "emptyTitle": "Nog geen abonnementen",
+      "emptyMessage": "Wanneer je betaalt voor een plan of add-on met automatische verlenging, verschijnt het hier.",
+      "browsePlans": "Plannen bekijken",
+      "failedBanner": "De laatste betaling voor {names} is mislukt. Je toegang blijft voorlopig doorlopen terwijl de provider het opnieuw probeert; werk je betaalmethode bij via je bank of de provider om dit niet te verliezen.",
+      "paymentFailed": "De laatste betaling is mislukt. De provider probeert het opnieuw.",
+      "kind": {
+        "plan": "Plan",
+        "addon": "Add-on"
+      },
+      "status": {
+        "active": "Actief",
+        "past_due": "Betaling mislukt",
+        "pending": "Wachten op betaling",
+        "canceled": "Geannuleerd",
+        "expired": "Verlopen"
+      },
+      "cycle": {
+        "monthly": "maand",
+        "yearly": "jaar"
+      },
+      "price": "{amount} per {cycle}",
+      "renewsOn": "Wordt verlengd op {date}",
+      "endsOn": "Betaald tot {date}. Wordt niet verlengd.",
+      "endedOn": "Beëindigd op {date}",
+      "refreshFromProvider": "Vernieuwen vanuit provider",
+      "showCharges": "Afschrijvingen tonen",
+      "hideCharges": "Afschrijvingen verbergen",
+      "cancel": "Abonnement annuleren",
+      "confirmTitle": "{name} annuleren?",
+      "confirmBody": "Je houdt toegang tot {date}. Daarna wordt het niet verlengd en word je niet opnieuw belast.",
+      "confirmBodyNoDate": "Het wordt niet verlengd en je wordt niet opnieuw belast.",
+      "confirm": "Abonnement annuleren",
+      "keep": "Behouden",
+      "cancelDone": "Geannuleerd. Je betaalde periode loopt door en er wordt niets meer afgeschreven.",
+      "cancelFailed": "We konden dit abonnement niet annuleren. Probeer het opnieuw of neem contact op met support.",
+      "forbidden": "Je hebt geen toestemming om abonnementen te beheren.",
+      "sync": {
+        "up_to_date": "Al up-to-date met de betalingsprovider.",
+        "renewed": "Bijgewerkt: de provider had een nieuwere verlenging.",
+        "gateway_canceled": "De provider toont dit abonnement als geannuleerd.",
+        "gateway_expired": "De provider toont dit abonnement als beëindigd.",
+        "unknown": "Gecontroleerd bij de betalingsprovider.",
+        "failed": "We konden de betalingsprovider niet bereiken. Probeer het zo opnieuw."
+      },
+      "chargesFailed": "We konden de afschrijvingen niet laden.",
+      "chargesFromOrders": "De betalingsprovider was niet bereikbaar, daarom zie je in plaats daarvan je betaalde bestellingen.",
+      "noCharges": "Nog geen afschrijvingen.",
+      "col": {
+        "date": "Datum",
+        "amount": "Bedrag",
+        "status": "Status",
+        "receipt": "Bon"
+      },
+      "chargeStatus": {
+        "paid": "Betaald",
+        "issued": "Wacht op betaling",
+        "failed": "Mislukt",
+        "cancelled": "Geannuleerd",
+        "expired": "Verlopen",
+        "other": "Overig"
+      },
+      "openReceipt": "Bon openen"
     }
   }
 }

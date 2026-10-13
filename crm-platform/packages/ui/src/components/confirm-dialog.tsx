@@ -46,6 +46,8 @@ export function ConfirmDialog({
             variant={tone === 'danger' ? 'danger' : 'primary'}
             onClick={onConfirm}
             disabled={busy}
+            // The Help assistant always asks the person before pressing a destructive confirmation.
+            data-agent-risk={tone === 'danger' ? 'high' : undefined}
           >
             {busy && <Spinner />}
             {confirmLabel}

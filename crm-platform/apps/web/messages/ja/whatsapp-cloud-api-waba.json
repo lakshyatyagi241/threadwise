@@ -34,7 +34,8 @@
         "registered": "「{name}」を Cloud API に登録しました。",
         "disconnected": "「{name}」の接続を解除しました。",
         "removed": "「{name}」を削除しました。",
-        "warningsTitle": "接続されましたが、以下を確認してください:"
+        "warningsTitle": "接続されましたが、以下を確認してください:",
+        "verified": "「{name}」を認証しました。"
       },
       "notReady": {
         "title": "Embedded Signup が設定されていません",
@@ -81,7 +82,8 @@
         "register": "登録",
         "meta": "Meta",
         "disconnect": "接続解除",
-        "remove": "削除"
+        "remove": "削除",
+        "verify": "番号を認証"
       },
       "confirm": {
         "fixInboundTitle": "受信を修正しますか？",
@@ -100,6 +102,17 @@
         "pin": "2 段階認証 PIN（任意）",
         "pinError": "PIN は 6 桁です",
         "submit": "登録"
+      },
+      "verifyDialog": {
+        "title": "この番号を認証",
+        "message": "Metaが{phone}に6桁のコードを送信します。受け取り方法を選択してください。",
+        "enterCode": "Metaが{phone}に送信した6桁のコードを入力してください。",
+        "sendSms": "SMSでコードを送信",
+        "sendVoice": "通話でコードを送信",
+        "code": "認証コード",
+        "codeError": "コードは6桁です",
+        "submit": "認証",
+        "resend": "新しいコードを送信"
       }
     },
     "connect": {

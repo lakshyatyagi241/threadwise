@@ -1,0 +1,434 @@
+{
+  "growth": {
+    "common": {
+      "dismiss": "Kapat",
+      "retry": "Tekrar dene",
+      "requestId": "İstek {id}",
+      "noAccessTitle": "Bu ekranı açamazsınız",
+      "noAccess": "Yöneticiden “{permission}” iznini isteyin."
+    },
+    "errors": {
+      "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+      "forbidden": "Rolünüzün bunu yapma yetkisi yok.",
+      "notAvailable": "Büyüme pilotu bu çalışma alanında kullanılamıyor.",
+      "featureOff": "Büyüme pilotunun bu bölümü kapalı. Kontroller bölümünden açın.",
+      "actionGone": "Bu öğe için başka biri zaten karar verdi.",
+      "assistantFailed": "Asistan bir öneri sunamadı. Bir hedef kitleniz ve onaylı bir şablonunuz olduğundan emin olup tekrar deneyin.",
+      "undoRefused": "Bu değişiklik artık geri alınamaz: kişi başka bir aşamaya geçti veya değişiklik zaten geri alındı.",
+      "conflict": "Bu ayarları başka biri önce kaydetti. En son sürüm yüklendi.",
+      "notFound": "Bu artık mevcut değil.",
+      "validation": "Bazı değerler geçerli değil. Kontrol edip tekrar deneyin.",
+      "rateLimited": "Çok fazla istek gönderildi. Biraz bekleyip tekrar deneyin.",
+      "unexpected": "Bir sorun oluştu. Tekrar deneyin; sorun devam ederse destek ekibine bildirin."
+    },
+    "page": {
+      "title": "Büyüme",
+      "subtitle": "Kampanyalarınızın ve görüşmelerinizin size anlattıkları, ekibinizin harekete geçebileceği işlere dönüştürüldü. Burada hiçbir şey bir kişiye kendiliğinden mesaj göndermez.",
+      "notAvailableTitle": "Pilotun kapsamında değil",
+      "notAvailable": "Büyüme pilotu yalnızca seçili çalışma alanları için açıktır. Sizin çalışma alanınız henüz bunlardan biri değil.",
+      "tabs": {
+        "inbox": "Gelen kutusu",
+        "audiences": "Hedef kitleler",
+        "campaigns": "Kampanyalar",
+        "insights": "İçgörüler",
+        "autoStage": "Otomatik aşama değişiklikleri",
+        "assistant": "Toplu gönderim asistanı",
+        "controls": "Kontroller"
+      }
+    },
+    "digest": {
+      "title": "Bugün",
+      "quiet": "Şu anda ilginizi gerektiren bir şey yok.",
+      "highlights": {
+        "hotLeads": "{count, plural, one {# sıcak potansiyel müşteri satın almaya hazır} other {# sıcak potansiyel müşteri satın almaya hazır}}",
+        "unanswered": "{count, plural, one {# satın alma sorusu yanıtlanmadı} other {# satın alma sorusu yanıtlanmadı}}",
+        "optOuts": "{count, plural, one {# kişi durdurmak istedi} other {# kişi durdurmak istedi}}",
+        "suggestionsPending": "{count, plural, one {# aşama değişikliği karar bekliyor} other {# aşama değişikliği karar bekliyor}}",
+        "campaignReplies": "{count, plural, one {# kişi bir kampanyadan sonraki bir gün içinde yanıt yazdı} other {# kişi bir kampanyadan sonraki bir gün içinde yanıt yazdı}}",
+        "lapsed": "{count, plural, one {# müşteri sessizleşti} other {# müşteri sessizleşti}}"
+      }
+    },
+    "inbox": {
+      "title": "Büyüme gelen kutusu",
+      "hint": "Göz atmaya değer öğeler. Kabul etmek türünün gerektirdiği işi yapar; kapatmak yalnızca öğeyi kapatır.",
+      "filter": "Göster",
+      "all": "Tümü ({count})",
+      "empty": "Bekleyen bir şey yok. Görüşmeler okundukça ve günlük kontroller çalıştıkça yeni öğeler burada görünür.",
+      "more": "Daha fazla göster",
+      "doneAccept": "{count, plural, one {# öğe tamamlandı} other {# öğe tamamlandı}}",
+      "doneDismiss": "{count, plural, one {# öğe kapatıldı} other {# öğe kapatıldı}}",
+      "someFailed": "{count, plural, one {# öğe tamamlanamadı} other {# öğe tamamlanamadı}}",
+      "openContact": "Kişiyi aç",
+      "someone": "Bir kişi",
+      "dismiss": "Kapat",
+      "types": {
+        "hot_lead": "Sıcak potansiyel müşteri",
+        "unanswered_intent": "Yanıtsız",
+        "registration_issue": "Kayıt sorunu",
+        "purchase_route": "Bir kişiye yönlendir",
+        "opt_out": "Durdurmak istedi",
+        "lapsed": "Sessizleşti",
+        "service_due": "Servis zamanı geldi",
+        "status_reply": "Sipariş durumu"
+      },
+      "titles": {
+        "hot_lead": "{name} satın almaya hazır",
+        "unanswered_intent": "{name} satın alma hakkında sordu ve kimse yanıtlamadı",
+        "registration_issue": "{name} kaydıyla ilgili bir sorun bildirdi",
+        "purchase_route": "{name} kişisini şuna devret: {user}",
+        "opt_out": "{name} durdurmak istedi",
+        "lapsed": "{name} sessizleşti",
+        "service_due": "{name}: {rule} zamanı geldi",
+        "status_reply": "{name} siparişi hakkında sordu"
+      },
+      "accept": {
+        "hot_lead": "İşlendi olarak işaretle",
+        "unanswered_intent": "İşlendi olarak işaretle",
+        "registration_issue": "İşlendi olarak işaretle",
+        "purchase_route": "Görüşmeyi ata",
+        "opt_out": "Vazgeçmeyi kaydet",
+        "lapsed": "Tamam",
+        "service_due": "Tamam",
+        "status_reply": "Tamam"
+      },
+      "facts": {
+        "routeOwner": "Bu kişiden sorumlu olan: {name}.",
+        "routeLeastBusy": "En az açık görüşmesi olan: {name}.",
+        "lapsedDays": "{count, plural, one {# gündür} other {# gündür}} açma veya mesaj yok.",
+        "issue": {
+          "missing_confirmation": "Onay almadı.",
+          "payment_problem": "Bir ödeme sorunu bildiriyor.",
+          "wrong_info": "Bazı bilgilerin yanlış olduğunu söylüyor."
+        }
+      }
+    },
+    "audiences": {
+      "title": "Hedef kitleler",
+      "hint": "Kişilerin gerçekte yaptıklarına göre belirlenen kişi grupları. Bir kampanya gönderebileceğiniz kişi grubunu doldurmak için senkronize edin.",
+      "empty": "Henüz hedef kitle yok. Kontroller bölümünden bir bölümü açın.",
+      "synced": "“{name}” artık {count, plural, one {# kişi} other {# kişi}} içeriyor.",
+      "lastSync": "“{name}” grubu, son senkronizasyon: {when}.",
+      "notSynced": "“{name}” grubu ilk senkronizasyonda oluşturulacak.",
+      "sync": "Gruba senkronize et",
+      "resync": "Yeniden senkronize et",
+      "errors": {
+        "forbidden": "Rolünüzün hedef kitleleri senkronize etme yetkisi yok.",
+        "failed": "Hedef kitle senkronize edilemedi. Tekrar deneyin."
+      },
+      "kinds": {
+        "engaged": {
+          "label": "Etkileşimli",
+          "description": "Yakın zamanda birkaç kampanyayı açtı."
+        },
+        "silent": {
+          "label": "Sessiz",
+          "description": "Kampanyaları aldı ama hiçbirini açmadı."
+        },
+        "lapsed": {
+          "label": "Uzaklaşmış",
+          "description": "Uzun süredir açma veya mesajı olmayan müşteriler."
+        },
+        "hot_chat": {
+          "label": "Görüşmede sıcak",
+          "description": "Son görüşme analizine göre satın almaya hazır olan kişiler."
+        },
+        "high_propensity": {
+          "label": "Dönüşme olasılığı yüksek",
+          "description": "Dönüşüm modeline göre ilk %10."
+        },
+        "service_due": {
+          "label": "Servis zamanı geldi",
+          "description": "Servis tarihi gelen kişiler."
+        }
+      }
+    },
+    "campaigns": {
+      "title": "Kampanya yanıtları",
+      "hint": "Gönderimden sonraki 24 ve 72 saat içinde yanıt yazan kişiler, gelen kutusundan sayılır.",
+      "stamp": "Yanıtları şimdi kaydet",
+      "stamped": "{count, plural, one {# yanıt kaydedildi} other {# yanıt kaydedildi}}.",
+      "stampFailed": "Yanıtlar kaydedilemedi. Tekrar deneyin.",
+      "empty": "Henüz hiç kampanya gönderilmedi.",
+      "totals": {
+        "sent": "Gönderildi",
+        "read": "Okundu",
+        "replied24h": "24 saatte yanıtlayan",
+        "replied72h": "72 saatte yanıtlayan"
+      },
+      "cols": {
+        "campaign": "Kampanya",
+        "sent": "Gönderildi",
+        "read": "Okundu",
+        "replied24h": "24 sa",
+        "replied72h": "72 sa",
+        "replyRate": "Yanıt oranı"
+      }
+    },
+    "insights": {
+      "sendTimes": {
+        "title": "Gönderim için en iyi zaman",
+        "hint": "Kişilerinizin kampanyaları okuduğu ve size yazdığı zamanlar, çalışma alanı saat diliminize göre.",
+        "empty": "Bir şey söylemek için henüz yeterli etkinlik yok.",
+        "best": "En iyi saatler: {hours} ({zone}).",
+        "quiet": "En sakin saatler: {hours}.",
+        "chart": "Günün saatlerine göre etkinlik",
+        "sample": "{count, plural, one {# olaya} other {# olaya}} dayanır."
+      },
+      "propensity": {
+        "title": "Dönüşüm modeli",
+        "hint": "Müşteri olan kişilerden hangi davranışın dönüşümle birlikte görüldüğünü öğrenir ve herkese puan verir.",
+        "recompute": "Şimdi yeniden öğren",
+        "done": "Model güncellendi.",
+        "failed": "Model güncellenemedi. Tekrar deneyin.",
+        "contacts": "Puanlanan kişi",
+        "converted": "Dönüşen",
+        "auc": "Sıralama başarısı",
+        "capture": "İlk %10 içinde dönüşen",
+        "captureHint": "Rastgele bir sıralamada bu %10 olurdu",
+        "none": "Ölçülmedi",
+        "trained": "Model, dönüşen kişilerinizden öğrendi.",
+        "notTrained": "Öğrenmek için henüz çok az kişi dönüştü, bu yüzden sabit ağırlıklar kullanılıyor.",
+        "computedAt": "Güncellenme: {when}.",
+        "drivers": "Puanı belirleyenler",
+        "features": {
+          "campaigns_opened_30d": "Açılan kampanyalar (30 gün)",
+          "campaigns_received_30d": "Alınan kampanyalar (30 gün)",
+          "messages_from_contact_30d": "Yazdığı mesajlar (30 gün)",
+          "links_clicked_30d": "Tıklanan bağlantılar (30 gün)",
+          "groups": "Bulunduğu gruplar",
+          "has_email": "E-posta adresi var",
+          "chat_messages_total": "Görüşmedeki mesajlar",
+          "age_days": "Eklendiğinden beri geçen gün"
+        }
+      },
+      "quality": {
+        "title": "Ne kadar iyi çalışıyor",
+        "hint": "Son 30 günde önerilerin kullanılıp kullanılmadığı, potansiyel müşteri puanının dönüşen kişileri ne kadar iyi ayırdığı ve yapay zekanın maliyeti.",
+        "none": "Ölçülmedi",
+        "scoreAuc": "Potansiyel müşteri puanı kalitesi",
+        "scoreAucHint": "{scored} puanlandı, {converted} dönüştü",
+        "calls": "Yapay zeka çağrıları",
+        "cost": "Yapay zeka maliyeti",
+        "autoApplied": "Otomatik değiştirilen",
+        "undone": "{count} geri alındı",
+        "suggestions": {
+          "chat": "Görüşmelerden aşama önerileri",
+          "engagement": "Kampanyalardan aşama önerileri"
+        },
+        "suggestionLine": "{accepted} kabul edildi, {dismissed} kapatıldı, {pending} bekliyor.",
+        "cols": {
+          "type": "Gelen kutusu öğesi",
+          "done": "Tamamlanan",
+          "dismissed": "Kapatılan",
+          "open": "Açık"
+        },
+        "actionTypes": {
+          "hot_lead": "Sıcak potansiyel müşteri",
+          "unanswered_intent": "Yanıtsız",
+          "registration_issue": "Kayıt sorunu",
+          "purchase_route": "Bir kişiye yönlendir",
+          "opt_out": "Durdurmak istedi",
+          "lapsed": "Sessizleşti",
+          "service_due": "Servis zamanı geldi",
+          "status_reply": "Sipariş durumu"
+        }
+      },
+      "enrichment": {
+        "title": "Şirket bilgileri",
+        "hint": "Kurumsal e-posta adresi olan kişiler için şirket bilgilerini arar ve kişi üzerinde gösterir.",
+        "run": "Sonraki grubu ara",
+        "asked": "{count, plural, one {# kişi arandı} other {# kişi arandı}}.",
+        "failed": "Arama başarısız oldu. Tekrar deneyin.",
+        "status": "{provider}: {found} bulundu, {notFound} bulunamadı, {failed} başarısız.",
+        "notConfigured": "Sunucuda bağlı bir arama hizmeti yok, bu yüzden bu anahtarın henüz bir etkisi yok."
+      }
+    },
+    "autoStage": {
+      "title": "Otomatik aşama değişiklikleri",
+      "hint": "Yalnızca yapay zekanın çok emin olduğu analizler, günlük bir sınıra kadar. Kişiyi o zamandan beri kimse taşımadıysa her biri geri alınabilir.",
+      "today": "Bugün {cap} hakkın {done} tanesi kullanıldı.",
+      "empty": "Henüz otomatik olarak değiştirilen bir şey yok.",
+      "contact": "Bir kişi",
+      "moved": "{from} aşamasından {to} aşamasına taşındı.",
+      "confidence": "%{percent} emin",
+      "undone": "Geri alındı",
+      "undo": "Geri al",
+      "undoDone": "Kişi eski aşamasına döndü.",
+      "undoRefused": "Bu değişiklik artık geri alınamaz: kişi başka bir aşamaya geçti.",
+      "undoFailed": "Değişiklik geri alınamadı. Tekrar deneyin."
+    },
+    "assistant": {
+      "title": "Toplu gönderim asistanı",
+      "hint": "Ulaşmak istediğiniz hedefi söyleyin. Her şablonun gerçekte aldığı yanıtları dikkate alarak hedef kitlelerinizden birini ve onaylı şablonlarınızdan birini önerir. Hiçbir şey göndermez ve oluşturmaz.",
+      "goal": "Ne yapmak istiyorsunuz?",
+      "goalHint": "Örneğin: kayıt olan herkese cumartesi günkü etkinliği hatırlat.",
+      "placeholder": "Kayıtlı kişilere cumartesi günkü etkinliği hatırlat",
+      "ask": "Kampanya öner",
+      "audience": "Hedef kitle",
+      "audienceValue": "{name} ({count} kişi)",
+      "template": "Şablon",
+      "replyRate": "Bir gün içinde yanıt oranı {percent}",
+      "sendAt": "Yaklaşık gönderim zamanı",
+      "considered": "{audiences, plural, one {# hedef kitle} other {# hedef kitle}} ve {templates, plural, one {# şablon} other {# şablon}} arasından seçildi."
+    },
+    "controls": {
+      "readOnly": "Bu ayarları görebilirsiniz ama değiştiremezsiniz.",
+      "saved": "Ayarlar kaydedildi.",
+      "discard": "Değişiklikleri at",
+      "save": "Kaydet",
+      "problem": {
+        "numbers": "Sayılardan biri aralığın dışında. Eşikleri kontrol edin.",
+        "serviceRules": "{line}. satırdaki servis kuralı şu biçimde değil: etiket | tarih özelliği | sonraki gün | öncesi gün.",
+        "customPhrases": "{line}. satırdaki ifade şu biçimde değil: ifade = niyet."
+      },
+      "groups": {
+        "measure": {
+          "title": "Ölçüm",
+          "hint": "Salt okunur ölçümler. Hiçbir şeyi değiştirmezler."
+        },
+        "audiences": {
+          "title": "Hedef kitleler ve aşamalar",
+          "hint": "Kiminle konuşulacağını belirler ve kişilerin kampanyalarla yaptıklarına göre aşama değişiklikleri önerir."
+        },
+        "chats": {
+          "title": "Görüşmeleri okuma",
+          "hint": "Yapay zeka potansiyel müşteri puanlamasının görüşme analizini kullanır, bu yüzden onun açık olması gerekir. Görüşme okunmadan önce kişisel veriler kısmen maskelenir."
+        },
+        "assist": {
+          "title": "Asistanlar",
+          "hint": "Kararlara yardımcı olur. Hiçbir kişiye bir şey gönderilmez."
+        }
+      },
+      "features": {
+        "campaign_response": {
+          "label": "Gerçek kampanya yanıtları",
+          "hint": "Bir kampanyadan sonra yanıt yazan kişileri say ve yanıt sayılarını düzelt."
+        },
+        "send_times": {
+          "label": "Gönderim için en iyi zaman",
+          "hint": "Kişilerinizin okuduğu ve yazdığı saatleri göster."
+        },
+        "propensity": {
+          "label": "Dönüşüm modeli",
+          "hint": "Her kişiyi dönüşme olasılığına göre puanla."
+        },
+        "quality": {
+          "label": "Kalite panosu",
+          "hint": "Önerilerin ne sıklıkla kullanıldığını ve yapay zekanın maliyetini göster."
+        },
+        "daily_digest": {
+          "label": "Günlük özet",
+          "hint": "Bu ekranın en üstünde çalışma alanının kısa bir özeti."
+        },
+        "engagement_audiences": {
+          "label": "Etkileşim hedef kitleleri",
+          "hint": "Etkileşimli, sessiz ve uzaklaşmış kişiler, kampanya göndermeye hazır."
+        },
+        "engagement_stage_rules": {
+          "label": "Kampanyalardan aşama önerileri",
+          "hint": "Bir kişi kampanyaları açmaya devam ettiğinde bir sonraki aşamaya geçirmeyi öner."
+        },
+        "service_rules": {
+          "label": "Servis hatırlatmaları ve takipler",
+          "hint": "Kendi kurallarınızı kullanarak servis veya satın alma tarihi gelen kişileri bul."
+        },
+        "enrichment": {
+          "label": "Şirket bilgileri",
+          "hint": "Kurumsal e-posta adresi olan kişiler için şirket bilgilerini ara."
+        },
+        "intent_fields": {
+          "label": "Kişi üzerinde görüşme niyeti",
+          "hint": "Görüşmenin ne hakkında olduğunu “Yapay zeka niyeti” özelliğine yaz, böylece bir akış buna tepki verebilir."
+        },
+        "language_detect": {
+          "label": "Görüşme dili",
+          "hint": "Her görüşmenin hangi dilde olduğunu not et."
+        },
+        "auto_notes": {
+          "label": "Görüşme özeti notları",
+          "hint": "Görüşmenin kısa bir özetini kişiye not olarak ekle."
+        },
+        "hot_lead_alerts": {
+          "label": "Sıcak potansiyel müşteri uyarıları",
+          "hint": "Bir kişi açıkça satın almaya hazır olduğunda uyarı oluştur ve sahibine bildir."
+        },
+        "unanswered_watch": {
+          "label": "Yanıtlanmamış satın alma soruları",
+          "hint": "Kimsenin yanıtlamadığı satın alma veya fiyat sorularını işaretle."
+        },
+        "handover_summary": {
+          "label": "Devirde özet",
+          "hint": "Bir görüşme bir kişiye devredildiğinde en üste görüşmenin özetini koy."
+        },
+        "purchase_routing": {
+          "label": "Alıcıları bir kişiye yönlendir",
+          "hint": "Kişi satın almak istediğinde görüşmeyi kimin alması gerektiğini öner."
+        },
+        "registration_check": {
+          "label": "Kayıt sorunları",
+          "hint": "Ödeme yaptığını veya kayıt olduğunu ama onay almadığını söyleyen kişileri işaretle."
+        },
+        "status_reply": {
+          "label": "Sipariş ve onarım durumu",
+          "hint": "Bir müşteri sorduğunda siparişin veya onarımın durumunu hazırla."
+        },
+        "optout_detection": {
+          "label": "Vazgeçme talepleri",
+          "hint": "Durdurmak isteyen kişileri işaretle; kabul etmek bunu onay kaydına işler."
+        },
+        "broadcast_assistant": {
+          "label": "Toplu gönderim asistanı",
+          "hint": "Bir hedef için hedef kitle ve şablon öner."
+        },
+        "auto_stage": {
+          "label": "Otomatik aşama değişiklikleri",
+          "hint": "Yapay zeka çok emin olduğunda, günlük bir sınıra kadar ve geri alma imkanıyla kişiyi bir sonraki aşamaya geçir."
+        }
+      },
+      "thresholds": {
+        "title": "Eşikler",
+        "hint": "Yukarıdaki bölümlerin kullandığı sayılar.",
+        "hotLeadConfidence": "Sıcak potansiyel müşteri güveni",
+        "hotLeadConfidenceHint": "Analizin ne kadar emin olması gerektiği, 0,5 ile 1 arasında.",
+        "unansweredHours": "Bir sorunun yanıtsız sayılması için geçmesi gereken saat",
+        "unansweredHoursHint": "1 ile 168 arasında.",
+        "lapsedDays": "Bir müşterinin uzaklaşmış sayılması için geçmesi gereken gün",
+        "lapsedDaysHint": "7 ile 730 arasında.",
+        "engagedOpens": "Etkileşimli sayılmak için açılması gereken kampanya",
+        "engagedOpensHint": "30 gün içinde.",
+        "stageMinOpens": "Aşama değişikliği önermek için açılması gereken kampanya",
+        "stageWindowDays": "Bunun için geriye bakılacak gün",
+        "autoMinConfidence": "Otomatik değişiklik için güven",
+        "autoMinConfidenceHint": "0,8 ile 1 arasında.",
+        "autoDailyCap": "Günlük otomatik değişiklik sayısı",
+        "autoDailyCapHint": "Tüm çalışma alanı için sınır.",
+        "requireGroup": "Yalnızca bir grupta olan kişiler için aşama değişikliği öner"
+      },
+      "rules": {
+        "title": "Kendi kurallarınız ve sözcükleriniz",
+        "hint": "Her satıra bir giriş.",
+        "statusFields": "Durum özellikleri",
+        "statusFieldsHint": "Sipariş veya onarım durumunu tutan kişi özellikleri, örneğin repair_status.",
+        "serviceRules": "Servis kuralları",
+        "serviceRulesHint": "Etiket | tarih özelliği | sonraki gün | öncesi gün (isteğe bağlı).",
+        "serviceRulesExample": "Pil değişimi | purchase_date | 700 | 760",
+        "customPhrases": "Düğme ve anahtar sözcük dokunuşları",
+        "customPhrasesHint": "İfade = niyet. Niyetler: {intents}.",
+        "customPhrasesExample": "Garanti belgesini görüntüle = post_purchase",
+        "extraMaskTerms": "Her zaman gizlenecek sözcükler",
+        "extraMaskTermsHint": "Yapay zekaya asla gönderilmemesi gereken bir marka, adres veya isim."
+      },
+      "confirmEnrich": {
+        "title": "Şirket bilgileri aransın mı?",
+        "body": "Şirket bilgilerini bulmak için kişinin kurumsal e-posta adresi arama hizmetine gönderilir. Kişisel e-posta adresleri gönderilmez.",
+        "yes": "Aç",
+        "no": "Şimdi değil"
+      }
+    },
+    "contactCard": {
+      "title": "Büyüme",
+      "propensity": "Dönüşme olasılığı: 100 üzerinden {score}.",
+      "computedAt": "Güncellenme: {when}."
+    }
+  }
+}

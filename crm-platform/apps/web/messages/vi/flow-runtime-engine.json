@@ -119,6 +119,8 @@
       "colStarted": "Bắt đầu",
       "colActivity": "Hoạt động gần nhất",
       "colSteps": "Bước",
+      "colReplies": "Phản hồi",
+      "repliesHint": "Tin nhắn của khách đã đến nút chờ của lượt chạy này",
       "colActions": "Thao tác",
       "open": "Mở lần chạy",
       "cancel": "Hủy",
@@ -197,7 +199,19 @@
       "factWaiting": "Đang chờ tại: {node}",
       "factDelay": "Chờ {time}",
       "factReplied": "Khách hàng trả lời: {text}",
-      "factEnded": "Kết thúc: {reason}"
+      "factEnded": "Kết thúc: {reason}",
+      "ioInput": "Đầu vào",
+      "ioOutput": "Đầu ra",
+      "ioKind": {
+        "message": "Tin nhắn đã gửi",
+        "reply": "Phản hồi của khách",
+        "variable": "Biến",
+        "request": "Yêu cầu",
+        "response": "Phản hồi",
+        "result": "Kết quả"
+      },
+      "factMenuKept": "Không có bước tiếp theo ở đây. Các lựa chọn của {node} vẫn còn hiệu lực.",
+      "factAnswered": "Trả lời sau {time}"
     },
     "event": {
       "step": "Bước",
@@ -503,7 +517,9 @@
       "error": "Lỗi",
       "skipped": "Bỏ qua",
       "waiting": "Đang chờ",
-      "timeout": "Hết thời gian"
+      "timeout": "Hết thời gian",
+      "answered": "Đã trả lời",
+      "gaveUp": "Không phản hồi"
     }
   }
 }

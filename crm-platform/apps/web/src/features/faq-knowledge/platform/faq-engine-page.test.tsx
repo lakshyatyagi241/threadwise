@@ -236,7 +236,7 @@ describe('FAQ engine admin page', () => {
   it('sends only the changed fields', async () => {
     await mount();
     expect(button('Save changes').disabled).toBe(true);
-    await type(byLabel('Maximum FAQs per workspace'), '900');
+    await type(byLabel('Maximum FAQs per flow'), '900');
     await click(button('Save changes'));
     const [[, req]] = callsTo('/faq', 'PATCH');
     expect((req as { body: unknown }).body).toEqual({ maxFaqs: 900 });

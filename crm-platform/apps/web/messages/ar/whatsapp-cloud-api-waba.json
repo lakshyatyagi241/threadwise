@@ -34,7 +34,8 @@
         "registered": "تم تسجيل «{name}» في Cloud API.",
         "disconnected": "تم فصل «{name}».",
         "removed": "تمت إزالة «{name}».",
-        "warningsTitle": "متصل، لكن تحقق من هذا:"
+        "warningsTitle": "متصل، لكن تحقق من هذا:",
+        "verified": "تم التحقق من \"{name}\"."
       },
       "notReady": {
         "title": "التسجيل المدمج غير مُعدّ",
@@ -81,7 +82,8 @@
         "register": "تسجيل",
         "meta": "Meta",
         "disconnect": "فصل",
-        "remove": "إزالة"
+        "remove": "إزالة",
+        "verify": "التحقق من الرقم"
       },
       "confirm": {
         "fixInboundTitle": "إصلاح الرسائل الواردة؟",
@@ -100,6 +102,17 @@
         "pin": "رمز PIN للتحقق بخطوتين (اختياري)",
         "pinError": "يتكون رمز PIN من 6 أرقام",
         "submit": "تسجيل"
+      },
+      "verifyDialog": {
+        "title": "التحقق من هذا الرقم",
+        "message": "سترسل Meta رمزًا من 6 أرقام إلى {phone}. اختر طريقة استلامه.",
+        "enterCode": "أدخل الرمز المكوّن من 6 أرقام الذي أرسلته Meta إلى {phone}.",
+        "sendSms": "إرسال الرمز عبر رسالة SMS",
+        "sendVoice": "إرسال الرمز عبر مكالمة",
+        "code": "رمز التحقق",
+        "codeError": "الرمز مكوّن من 6 أرقام",
+        "submit": "تحقق",
+        "resend": "إرسال رمز جديد"
       }
     },
     "connect": {

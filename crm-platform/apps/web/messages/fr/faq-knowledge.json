@@ -1,7 +1,6 @@
 {
   "faq": {
     "nav": {
-      "faq": "FAQ",
       "label": "Sections FAQ",
       "tab": {
         "faqs": "FAQ",
@@ -13,7 +12,6 @@
       "unansweredCount": "{count, plural, one {# message sans réponse} many {# de messages sans réponse} other {# messages sans réponse}}"
     },
     "common": {
-      "dismiss": "Ignorer",
       "retry": "Réessayer",
       "requestId": "Requête {id}",
       "noAccessTitle": "Vous n’avez pas accès à cet écran",
@@ -26,7 +24,6 @@
       "conflict": "Quelqu’un d’autre a modifié cet élément pendant que vous le modifiiez.",
       "duplicateQuestion": "Une autre FAQ contient déjà cette question.",
       "duplicateVariation": "Cette FAQ contient déjà cette formulation.",
-      "limitReached": "Votre espace de travail a atteint sa limite de FAQ. Supprimez les FAQ ou variantes inutilisées, ou demandez à l’administrateur de la plateforme de la relever.",
       "flowNotFound": "Le flux choisi n’existe plus dans cet espace de travail. Choisissez-en un autre.",
       "embeddingUnavailable": "Le fournisseur d’IA n’est pas disponible. Ajoutez une clé OpenRouter à votre espace de travail, ou demandez à l’administrateur de la plateforme d’activer la clé partagée, puis réessayez.",
       "engineDisabled": "Les réponses FAQ sont actuellement désactivées pour toute la plateforme.",
@@ -34,21 +31,21 @@
       "validation": "Certains champs demandent votre attention.",
       "rateLimited": "Trop de requêtes. Patientez un instant et réessayez.",
       "unexpected": "Une erreur s’est produite. Réessayez et communiquez l’identifiant de requête au support si le problème persiste.",
-      "flowNodeNotFound": "L’étape choisie ne fait plus partie de ce flux. Choisissez une autre étape ou démarrez au début du flux."
+      "flowNodeNotFound": "L’étape choisie ne fait plus partie de ce flux. Choisissez une autre étape ou démarrez au début du flux.",
+      "limitReached": "Ce flux a atteint sa limite de FAQ. Supprimez les FAQ ou variantes inutilisées, ou demandez à l’administrateur de la plateforme de la relever."
     },
     "banner": {
       "enabledToast": "Les réponses FAQ sont activées.",
       "engineOff": "Les réponses FAQ ont été désactivées par la plateforme. Les clients ne reçoivent aucune réponse FAQ tant qu’elles ne sont pas réactivées.",
       "modelChanged": "La plateforme a changé le modèle d’IA après le réglage de ce seuil. Les scores ont évolué : vérifiez votre sensibilité.",
       "reviewSensitivity": "Vérifier la sensibilité",
-      "offTitle": "Les réponses FAQ sont DÉSACTIVÉES pour les clients",
-      "offBody": "Vous pouvez rédiger et tester des FAQ, mais les clients ne reçoivent pas de réponses tant que vous ne l’activez pas.",
       "offNoRight": "Demandez à une personne disposant de la permission faq.settings.manage (en général un administrateur de l’espace de travail) de l’activer.",
-      "enable": "Activer les réponses FAQ"
+      "enable": "Activer les réponses FAQ",
+      "offTitle": "Les réponses FAQ sont DÉSACTIVÉES pour ce flux",
+      "offBody": "Vous pouvez rédiger et tester les FAQ de ce flux, mais les clients ne reçoivent pas de réponses tant que vous ne l’activez pas."
     },
     "list": {
       "title": "FAQ",
-      "subtitle": "Les questions de vos clients et les réponses de votre bot. Les clients n’ont pas besoin d’utiliser vos mots exacts.",
       "add": "Ajouter une FAQ",
       "stats": {
         "label": "Totaux des FAQ",
@@ -98,10 +95,10 @@
       "deleted": "FAQ supprimée.",
       "empty": {
         "title": "Apprenez à votre bot les réponses aux questions fréquentes",
-        "body": "Rédigez une question et sa réponse une seule fois. Votre bot reconnaît ce que les clients écrivent, avec leurs propres mots, et répond ou lance un flux.",
         "how": "Ajoutez quelques autres façons de poser la même question (formulations) et testez-les avant que les clients ne les voient.",
         "cta": "Ajouter votre première FAQ",
-        "noRight": "Demandez à un administrateur de l’espace de travail la permission d’ajouter des FAQ."
+        "noRight": "Demandez à un administrateur de l’espace de travail la permission d’ajouter des FAQ.",
+        "body": "Rédigez une question et sa réponse une seule fois. Votre bot reconnaît ce que les clients écrivent avec leurs propres mots et répond avec la réponse ou les envoie vers une étape d’un flux."
       },
       "noMatch": {
         "title": "Aucune FAQ ne correspond à ces filtres",
@@ -142,7 +139,9 @@
         "failed": "{count} en échec"
       },
       "stepMissing": "Étape manquante",
-      "startsAt": "Démarre à : {step}"
+      "subtitle": "Les questions que les clients posent dans {flow} et ce que répond le bot. Ces FAQ ne répondent qu’à l’intérieur de ce flux.",
+      "thisFlow": "Ce flux",
+      "startsAt": "Mène à : {step}"
     },
     "editor": {
       "back": "Retour aux FAQ",
@@ -159,7 +158,6 @@
       "saved": "FAQ enregistrée.",
       "deleted": "FAQ supprimée.",
       "readOnly": "Vous pouvez consulter cette FAQ, mais votre rôle ne permet pas de la modifier.",
-      "faqLimit": "Votre espace de travail a atteint sa limite de {max} FAQ. Supprimez-en une pour en ajouter une autre.",
       "prefilled": "La question a été reprise d’un message client sans réponse. L’enregistrement de cette FAQ marque aussi ce message comme traité.",
       "tryItSaveFirst": "Enregistrez d’abord la FAQ, vous pourrez ensuite tester la correspondance des messages clients.",
       "conflict": {
@@ -189,23 +187,30 @@
         "title": "Réponse",
         "hint": "Ce que le client reçoit lorsque cette FAQ correspond.",
         "text": "Réponse textuelle",
-        "flow": "Lancer un flux",
         "textLabel": "Texte de la réponse",
         "count": "{count} / {max} caractères",
         "preview": "Aperçu dans WhatsApp",
         "previewEmpty": "Votre réponse s’affiche ici",
-        "flowLabel": "Flux à lancer",
         "noFlow": "Aucun flux choisi",
-        "startsAt": "Démarre à l’étape : {step}",
-        "stepGone": "L’étape de départ de cette FAQ n’existe plus : les clients ne recevront aucune réponse."
+        "flow": "Aller à une étape",
+        "flowLabel": "Destination",
+        "startsAt": "Mène à l’étape : {step}",
+        "stepGone": "L’étape vers laquelle mène cette FAQ n’existe plus, les clients ne reçoivent donc aucune réponse.",
+        "thisFlowNamed": "Une étape de ce flux ({name})",
+        "target": {
+          "here": "Une étape de ce flux",
+          "hereHint": "Le client continue dans {name}. C’est le choix habituel.",
+          "other": "Une étape d’un autre flux",
+          "otherHint": "Transférer la conversation à un autre flux."
+        }
       },
       "advanced": {
         "title": "Avancé : sensibilité pour cette FAQ uniquement",
-        "body": "Par défaut, chaque FAQ utilise la sensibilité de l’espace de travail. Utilisez une valeur personnalisée si celle-ci correspond trop facilement (augmentez-la) ou trop rarement (diminuez-la).",
         "custom": "Utiliser une sensibilité personnalisée pour cette FAQ",
         "sliderLabel": "Correspondre à partir de",
-        "workspace": "La sensibilité de l’espace de travail est de {value} %.",
-        "following": "Suit la sensibilité de l’espace de travail ({value} %)."
+        "body": "Par défaut, chaque FAQ utilise la sensibilité de ce flux. Utilisez une valeur personnalisée quand celle-ci correspond trop facilement (augmentez) ou trop rarement (diminuez).",
+        "workspace": "La sensibilité de ce flux est de {value} %.",
+        "following": "Suit la sensibilité de ce flux ({value} %)."
       },
       "problem": {
         "question": {
@@ -219,9 +224,9 @@
           "invalid": "Cette réponse n’est pas valide."
         },
         "flowId": {
-          "required": "Choisissez le flux à lancer.",
-          "tooLong": "Choisissez le flux à lancer.",
-          "invalid": "Choisissez le flux à lancer."
+          "required": "Choisissez le flux de destination.",
+          "tooLong": "Choisissez le flux de destination.",
+          "invalid": "Choisissez le flux de destination."
         },
         "category": {
           "required": "Saisissez une catégorie ou laissez le champ vide.",
@@ -249,11 +254,11 @@
         "body": "Vos modifications de cette FAQ ne sont pas enregistrées.",
         "leave": "Quitter",
         "stay": "Continuer la modification"
-      }
+      },
+      "faqLimit": "Ce flux a atteint sa limite de {max} FAQ. Supprimez-en une pour en ajouter une autre."
     },
     "flowPicker": {
       "noAccess": "Vous avez besoin de la permission de consulter les flux (flb.flows.read) pour en choisir un ici.",
-      "missing": "Le flux lancé par cette FAQ n’existe plus. Choisissez un autre flux, sinon cette FAQ ne pourra pas répondre.",
       "selected": "Choisi",
       "search": "Rechercher des flux",
       "searchPlaceholder": "Rechercher des flux par nom",
@@ -267,7 +272,9 @@
         "off": "Inactif",
         "draft": "Brouillon"
       },
-      "note": "Le flux démarre à l’étape choisie ci-dessous ou à son début. Seuls les flux publiés et actifs peuvent s’exécuter."
+      "missing": "Le flux vers lequel mène cette FAQ n’existe plus. Choisissez un autre flux, sinon cette FAQ ne pourra pas répondre.",
+      "noOthers": "Il n’y a pas d’autre flux dans cet espace de travail.",
+      "note": "Le client continue à l’étape que vous choisissez ci-dessous, ou au début du flux. Seuls les flux publiés et actifs peuvent s’exécuter."
     },
     "variations": {
       "title": "Variantes de la question",
@@ -343,7 +350,7 @@
       "verdict": {
         "answer": {
           "title": "Répondrait",
-          "body": "Une FAQ correspond suffisamment. Le client reçoit sa réponse (ou son flux démarre)."
+          "body": "Une FAQ correspondait suffisamment. Le client reçoit sa réponse ou est envoyé à l’étape qu’elle vise."
         },
         "below": {
           "title": "Sous le seuil",
@@ -397,8 +404,8 @@
       "winner": {
         "title": "Ce que le client recevrait",
         "unavailable": "Impossible de charger cette FAQ.",
-        "flow": "Lance le flux {name}",
-        "flowMissing": "Lance un flux qui n’existe plus"
+        "flow": "Mène à une étape de {name}",
+        "flowMissing": "Mène à un flux qui n’existe plus"
       },
       "candidates": {
         "title": "Meilleures correspondances",
@@ -415,16 +422,16 @@
     },
     "playground": {
       "title": "Comment mon bot répondrait-il ?",
-      "subtitle": "Soumettez un message client à la même correspondance que celle de votre bot. Rien n’est envoyé et rien n’est compté dans les statistiques.",
       "label": "Message client",
       "placeholder": "Où est mon colis ?",
       "run": "Lancer",
-      "hint": "Seules les FAQ enregistrées sont comparées. Les FAQ actives avec des formulations actives participent.",
       "empty": "Saisissez un message ci-dessus et lancez le test pour voir la décision.",
       "history": {
         "title": "Cette session",
         "empty": "Vos 10 derniers tests s’affichent ici."
-      }
+      },
+      "subtitle": "Passez un message client dans la correspondance utilisée par {flow}. Rien n’est envoyé et rien n’est compté dans les statistiques.",
+      "hint": "Seules les FAQ enregistrées de ce flux sont comparées. Les FAQ actives avec des formulations en service sont prises en compte."
     },
     "unanswered": {
       "title": "Messages sans réponse",
@@ -492,7 +499,6 @@
       "loadingMore": "Chargement",
       "why": {
         "answered": "Réponse avec « {faq} » à {score} %.",
-        "flowStarted": "Flux de « {faq} » lancé à {score} %.",
         "belowThreshold": "La meilleure correspondance a obtenu {score} %, sous le seuil de {threshold} %, donc rien n’a été envoyé.",
         "belowThresholdNoBar": "La meilleure correspondance a obtenu {score} %, ce qui n’était pas suffisant, donc rien n’a été envoyé.",
         "lowMargin": "Deux FAQ étaient trop proches ({score} % et {second} %), le bot n’a donc pas deviné.",
@@ -502,7 +508,8 @@
         "tier": "Décidé par le niveau {tier}.",
         "error": "Erreur : {error}",
         "vetoed": "La meilleure correspondance a obtenu {score} %, au-dessus du seuil de {threshold} %, mais la seconde vérification a jugé qu’elle ne répond pas au message : rien n’a été envoyé.",
-        "vetoedNoBar": "La meilleure correspondance a obtenu {score} %, mais la seconde vérification a jugé qu’elle ne répond pas au message : rien n’a été envoyé."
+        "vetoedNoBar": "La meilleure correspondance a obtenu {score} %, mais la seconde vérification a jugé qu’elle ne répond pas au message : rien n’a été envoyé.",
+        "flowStarted": "Client envoyé à l’étape de « {faq} » avec {score} %."
       },
       "flowRun": "(depuis un flux)"
     },
@@ -565,7 +572,6 @@
     },
     "settings": {
       "title": "Paramètres des FAQ",
-      "subtitle": "Activez les réponses FAQ et réglez la précision de correspondance exigée pour un message.",
       "unsaved": "Modifications non enregistrées",
       "discard": "Abandonner",
       "save": "Enregistrer les paramètres",
@@ -580,11 +586,11 @@
       },
       "enable": {
         "title": "Réponses FAQ",
-        "label": "Répondre aux clients avec les FAQ",
         "on": "Activé",
         "off": "Désactivé",
-        "onBody": "Quand un client écrit, le bot compare le message à vos FAQ et répond avec la meilleure réponse, ou lance son flux. Un flux ou un déclencheur par mot-clé qui a déjà pris en charge le message est prioritaire.",
-        "offBody": "Les clients ne reçoivent aucune réponse FAQ. Vous pouvez toujours rédiger et tester des FAQ."
+        "label": "Répondre aux clients avec les FAQ de ce flux",
+        "onBody": "Tant que ce flux est actif, un message client qu’aucun déclencheur par mot-clé ni flux en cours n’a pris en charge est comparé aux FAQ de ce flux. Le bot répond avec la meilleure réponse ou envoie le client à l’étape visée par la FAQ.",
+        "offBody": "Les FAQ de ce flux ne répondent pas aux clients. Vous pouvez toujours les rédiger et les tester."
       },
       "sens": {
         "title": "Sensibilité",
@@ -653,21 +659,23 @@
         "explainOn": "Les correspondances dont le score va de {from} % à {to} % sont vérifiées par {model}. Un « non » signifie qu’aucune réponse n’est envoyée et que le message apparaît dans Sans réponse.",
         "explainOff": "Toute correspondance dont le score atteint {threshold} % ou plus reçoit une réponse. Activez la seconde vérification pour revérifier les cas les plus limites.",
         "cost": "Chaque vérification envoie le message du client et la question de la FAQ au modèle : quelques centaines de jetons, et environ une seconde de plus pour une réponse limite. Les correspondances hors de cette plage ne sont jamais vérifiées. Si la vérification échoue, n’est pas disponible ou si la limite horaire est atteinte, la correspondance est conservée comme s’il n’y avait pas de vérification."
-      }
+      },
+      "subtitle": "Activez les réponses FAQ pour {flow} et réglez la précision de correspondance requise."
     },
     "flowNode": {
-      "label": "Démarrer à",
       "start": "Le début du flux",
-      "hint": "Choisissez une étape pour sauter le début du flux. Les clients entrent dans le flux à l’étape que vous sélectionnez.",
       "loading": "Chargement des étapes de ce flux",
       "empty": "Ce flux n’a pas d’autres étapes : il démarre donc depuis son début.",
       "retry": "Réessayer",
       "deletedOption": "Étape supprimée (choisissez-en une autre)",
       "missing": {
-        "title": "L’étape de départ de cette FAQ n’existe plus",
         "body": "Cette étape a été supprimée du flux. Tant que vous n’en choisissez pas une autre, les clients qui correspondent à cette FAQ ne reçoivent aucune réponse. Sélectionnez une étape ci-dessous ou démarrez au début du flux.",
-        "fix": "Démarrer au début du flux"
-      }
+        "fix": "Démarrer au début du flux",
+        "title": "L’étape vers laquelle mène cette FAQ n’existe plus"
+      },
+      "label": "Aller à",
+      "hint": "Choisissez une étape pour passer le début du flux. Les clients continuent à l’étape sélectionnée.",
+      "hintOwn": "Choisissez une étape de ce flux. Les étapes ajoutées depuis le dernier enregistrement du flux apparaissent après son enregistrement."
     },
     "verify": {
       "title": "Seconde vérification",
@@ -684,6 +692,14 @@
         "vetoed": "La correspondance était un cas limite et la seconde vérification a jugé que cette FAQ ne répond pas au message. La réponse a été retenue, rien n’a été envoyé et le message apparaît dans Sans réponse.",
         "failed": "La correspondance était un cas limite, mais la vérification n’a pas pu aboutir : la correspondance a été conservée et la réponse envoyée comme s’il n’y avait pas de seconde vérification.",
         "skipped": "La seconde vérification ne s’est pas exécutée pour cette correspondance, qui a donc été conservée telle quelle."
+      }
+    },
+    "panel": {
+      "leave": {
+        "title": "Quitter les FAQ sans enregistrer ?",
+        "body": "Vous avez des modifications non enregistrées dans les FAQ. Si vous quittez cet onglet, elles seront perdues.",
+        "leave": "Quitter",
+        "stay": "Continuer la modification"
       }
     }
   }

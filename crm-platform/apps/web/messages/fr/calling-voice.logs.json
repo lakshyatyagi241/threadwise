@@ -1,0 +1,207 @@
+{
+  "calling-voice": {
+    "logs": {
+      "eyebrow": "Espace de travail",
+      "title": "Journal des appels",
+      "subtitle": "Tous les appels WhatsApp passés ou reçus par votre équipe, avec leur durée, la personne qui les a pris en charge et leur enregistrement.",
+      "sideTip": "Tous les appels WhatsApp vers ou depuis vos numéros. Filtrez par date, statut, numéro ou collègue pour retrouver un appel précis.",
+      "loading": "Chargement des appels",
+      "loadFailed": "Impossible de charger le journal des appels.",
+      "retry": "Réessayer",
+      "emptyTitle": "Aucun appel pour le moment",
+      "emptyMessage": "Dès qu'un client appellera l'un de vos numéros WhatsApp, ou que votre équipe passera un appel depuis la boîte de réception, il apparaîtra ici avec sa durée, la personne qui l'a pris en charge et son enregistrement.",
+      "emptyFilteredTitle": "Aucun appel ne correspond à ces filtres",
+      "emptyFilteredMessage": "Essayez une période plus large ou effacez les filtres.",
+      "clearFilters": "Effacer les filtres",
+      "tabs": {
+        "label": "Vues des appels",
+        "log": "Journal des appels",
+        "analytics": "Analyses"
+      },
+      "range": {
+        "title": "Période",
+        "last24h": "24 dernières h",
+        "last7d": "7 derniers jours",
+        "last30d": "30 derniers jours",
+        "custom": "Période personnalisée",
+        "from": "Du",
+        "to": "Au",
+        "apply": "Appliquer"
+      },
+      "status": {
+        "title": "Statut",
+        "all": "Tous",
+        "completed": "Terminé",
+        "in-progress": "En cours",
+        "no-answer": "Sans réponse",
+        "declined": "Refusé",
+        "failed": "Échoué"
+      },
+      "kpi": {
+        "total": "Total",
+        "last24h": "24 dernières h",
+        "minutes": "{count} min",
+        "completed": "Terminé",
+        "failed": "Échoué",
+        "selection": "Dans cette sélection",
+        "calls": "Appels",
+        "answered": "Répondus",
+        "missed": "Manqués",
+        "avgDuration": "Durée moyenne",
+        "totalMinutes": "Total des minutes"
+      },
+      "filters": {
+        "label": "Filtrer les appels",
+        "searchLabel": "Rechercher des appels",
+        "searchPlaceholder": "Numéro de téléphone ou nom du contact...",
+        "direction": "Direction",
+        "allDirections": "Tous les appels",
+        "inbound": "Entrants",
+        "outbound": "Sortants",
+        "number": "Numéro",
+        "allNumbers": "Tous les numéros",
+        "agent": "Pris en charge par",
+        "allAgents": "Tout le monde",
+        "apply": "Filtrer",
+        "clear": "Effacer"
+      },
+      "table": {
+        "caption": "Appels, du plus récent au plus ancien",
+        "customer": "Client",
+        "number": "Numéro",
+        "handledBy": "Pris en charge par",
+        "started": "Début",
+        "duration": "Durée",
+        "status": "Statut",
+        "actions": "Actions",
+        "open": "Ouvrir",
+        "inbound": "Entrant",
+        "outbound": "Sortant",
+        "none": "-"
+      },
+      "paging": {
+        "label": "Pages",
+        "showing": "Affichage de {from}-{to} sur {total} appels",
+        "beyond": "Cette page dépasse la dernière ({pages} pages).",
+        "previous": "Précédent",
+        "next": "Suivant",
+        "page": "Page {page} sur {pages}"
+      },
+      "detail": {
+        "breadcrumb": "Fil d'Ariane",
+        "back": "Journal des appels",
+        "loading": "Chargement de l'appel",
+        "loadFailed": "Impossible de charger cet appel.",
+        "notFound": "Cet appel est introuvable. Il appartient peut-être à un autre espace de travail ou n'est pas parmi les appels que vous pouvez voir.",
+        "retry": "Réessayer",
+        "handledBy": "Pris en charge par {name}",
+        "handler": {
+          "none": "Pris en charge par personne",
+          "ai": "Assistant IA",
+          "voicemail": "Messagerie vocale"
+        },
+        "openContact": "Ouvrir le contact",
+        "openInbox": "Ouvrir dans la boîte de réception",
+        "tiles": {
+          "duration": "Durée",
+          "number": "Numéro",
+          "answered": "Répondu",
+          "ended": "Terminé"
+        },
+        "reasons": {
+          "unknown": "L'appel a échoué.",
+          "COMPLETED": "Terminé",
+          "REJECTED": "L'appel a été refusé.",
+          "DECLINED": "L'appel a été refusé.",
+          "BUSY": "Le client était déjà en communication.",
+          "NO_ANSWER": "Personne n'a décroché.",
+          "MISSED": "Le client a manqué l'appel.",
+          "CANCELLED": "L'appel a été annulé.",
+          "FAILED": "WhatsApp a signalé que l'appel a échoué.",
+          "NO_PERMISSION": "Le client n'avait pas encore autorisé les appels, aucun appel n'a donc été passé.",
+          "META_REFUSED": "WhatsApp a refusé de passer l'appel."
+        },
+        "timeline": {
+          "title": "Chronologie",
+          "count": "{count, plural, one {# étape} other {# étapes}}",
+          "empty": "Aucune étape n'a été enregistrée pour cet appel."
+        },
+        "steps": {
+          "dial_sent": "Appel passé",
+          "dial_failed": "L'appel n'a pas pu être passé",
+          "connect": "Appel connecté à WhatsApp",
+          "pre_accept_sent": "Préparation de la réponse",
+          "accept_sent": "Appel répondu",
+          "accept_failed": "Échec de la réponse",
+          "reject_sent": "Appel refusé",
+          "terminate_sent": "Raccrochage envoyé",
+          "terminate": "Appel terminé",
+          "recording_stored": "Enregistrement sauvegardé"
+        },
+        "noRecording": {
+          "title": "Enregistrement",
+          "message": "Cet appel n'a pas d'enregistrement."
+        }
+      },
+      "recording": {
+        "title": "Enregistrement",
+        "notice": "Cet appel a été enregistré.",
+        "privacy": "Seules les personnes ayant accès aux enregistrements peuvent l'écouter, et chaque lecture est consignée.",
+        "noAccess": "Vous pouvez voir que cet appel a été enregistré, mais vous n'avez pas l'autorisation d'écouter les enregistrements.",
+        "play": "Lire l'enregistrement",
+        "loading": "Récupération de l'enregistrement",
+        "playerLabel": "Enregistrement de l'appel",
+        "linkUntil": "Ce lien fonctionne jusqu'à {time}. Appuyez à nouveau sur lecture ensuite.",
+        "playFailed": "Impossible de lire l'enregistrement.",
+        "retry": "Réessayer"
+      }
+    },
+    "analytics": {
+      "eyebrow": "Espace de travail",
+      "title": "Analyse des appels",
+      "subtitle": "Les appels dans le temps, combien ont été pris, par qui et à quels moments vos lignes sont les plus sollicitées.",
+      "loading": "Chargement de l'analyse des appels",
+      "loadFailed": "Impossible de charger l'analyse des appels.",
+      "retry": "Réessayer",
+      "emptyTitle": "Aucun appel sur cette période",
+      "emptyMessage": "Choisissez une période plus large, ou revenez après vos premiers appels.",
+      "number": "Numéro",
+      "allNumbers": "Tous les numéros",
+      "period": "Du {from} au {to}, fuseau horaire {tz}",
+      "kpi": {
+        "total": "Appels",
+        "answeredRate": "Répondus",
+        "answeredOf": "{answered} répondus",
+        "missed": "Manqués",
+        "avgHandle": "Durée de traitement moyenne",
+        "avgHandleHint": "Temps de conversation des appels répondus",
+        "totalMinutes": "Total des minutes"
+      },
+      "overTime": {
+        "title": "Appels dans le temps",
+        "hint": "Une barre par jour. La partie verte correspond aux appels répondus.",
+        "summary": "{total} appels sur {days} jours",
+        "answered": "Répondus",
+        "other": "Sans réponse",
+        "missed": "Manqués",
+        "day": "Jour",
+        "calls": "Appels"
+      },
+      "byAgent": {
+        "title": "Par collègue",
+        "agent": "Collègue",
+        "calls": "Appels",
+        "answered": "Répondus",
+        "avgHandle": "Durée de traitement moyenne",
+        "minutes": "Minutes",
+        "unassigned": "Pris en charge par personne"
+      },
+      "heatmap": {
+        "title": "Appels par heure de la semaine",
+        "hint": "Plus c'est foncé, plus il y a d'appels commencés pendant cette heure. Les heures sont dans le fuseau horaire {tz}.",
+        "weekday": "Jour de la semaine",
+        "cell": "{day}, {hour}:00 : {calls, plural, =0 {aucun appel} one {# appel} other {# appels}}"
+      }
+    }
+  }
+}

@@ -16,6 +16,7 @@ import {
   sw,
   waitReady,
   type Workspace,
+  faqUrl,
 } from './admin-support';
 
 test.use({ launchOptions: LAUNCH });
@@ -114,7 +115,7 @@ test.describe('engine switch: confirmation', () => {
     await signInOperator(page);
     await openFaq(page);
     await sw(page).click();
-    await page.getByRole('textbox', { name: 'Maximum FAQs per workspace' }).fill('510');
+    await page.getByRole('textbox', { name: 'Maximum FAQs per flow' }).fill('510');
     await save(page).click();
     const [req] = await Promise.all([
       page.waitForRequest((r) => r.method() === 'PATCH' && r.url().endsWith('/api/platform/faq')),
@@ -167,7 +168,7 @@ test.describe('engine switch: effect on a workspace', () => {
     const op = await operatorApi();
     try {
       await signInWorkspace(wsPage, ws);
-      await wsPage.goto('/faq', { timeout: 120_000 });
+      await wsPage.goto(faqUrl(ws), { timeout: 120_000 });
       await expect(
         wsPage.getByText('FAQ answering has been switched off by the platform'),
       ).toHaveCount(0);
@@ -187,7 +188,7 @@ test.describe('engine switch: effect on a workspace', () => {
           'FAQ answering has been switched off by the platform. Customers get no FAQ answers until it is switched back on.',
         ),
       ).toBeVisible({ timeout: 60_000 });
-      const created = await ws.call('POST', '/faq/entries', {
+      const created = await ws.call('POST', `/faq/flows/${ws.flowUuid}/entries`, {
         question: `${TAG} blocked`,
         answerType: 'text',
         answerText: 'x',
@@ -200,11 +201,11 @@ test.describe('engine switch: effect on a workspace', () => {
           `SELECT count(*) FROM faqs WHERE org_id=${ws.orgId} AND question LIKE '%${TAG} blocked%'`,
         ),
       ).toBe(0);
-      const settings = await ws.call('GET', '/faq/settings');
+      const settings = await ws.call('GET', `/faq/flows/${ws.flowUuid}/settings`);
       expect(settings.body.engineEnabled).toBe(false);
 
       // The create form shows a clear message instead of failing silently.
-      await wsPage.goto('/faq/new', { timeout: 120_000 });
+      await wsPage.goto(faqUrl(ws, 'new'), { timeout: 120_000 });
       await wsPage
         .getByRole('textbox', { name: /question/i })
         .first()
@@ -213,10 +214,7 @@ test.describe('engine switch: effect on a workspace', () => {
         .getByRole('textbox', { name: /answer/i })
         .first()
         .fill('typed answer');
-      await wsPage
-        .getByRole('button', { name: /^(save|create|add)/i })
-        .first()
-        .click();
+      await wsPage.getByRole('button', { name: 'Create FAQ' }).click();
       await expect(
         wsPage.getByText('FAQ answering is switched off for the whole platform right now.'),
       ).toBeVisible({ timeout: 30_000 });
@@ -227,10 +225,10 @@ test.describe('engine switch: effect on a workspace', () => {
       ).toBe(0);
 
       // The playground is blocked too, with the same clear message on screen.
-      const test = await ws.call('POST', '/faq/test', { query: question });
+      const test = await ws.call('POST', `/faq/flows/${ws.flowUuid}/test`, { query: question });
       expect(test.status).toBe(422);
       expect(test.body.code).toBe('FAQ_ENGINE_DISABLED');
-      await wsPage.goto('/faq/test', { timeout: 120_000 });
+      await wsPage.goto(faqUrl(ws, 'test'), { timeout: 120_000 });
       await wsPage.getByRole('textbox', { name: 'Customer message' }).fill(question);
       await wsPage.getByRole('button', { name: 'Run', exact: true }).click();
       await expect(
@@ -260,10 +258,10 @@ test.describe('engine switch: effect on a workspace', () => {
       await sw(page).click();
       await save(page).click();
       await expect(page.getByText('Settings saved.')).toBeVisible();
-      await wsPage.goto('/faq', { timeout: 120_000 });
+      await wsPage.goto(faqUrl(ws), { timeout: 120_000 });
       await expect(wsPage.getByRole('heading', { name: /FAQ/ }).first()).toBeVisible();
       await expect(wsPage.getByText('switched off by the platform')).toHaveCount(0);
-      const again = await ws.call('POST', '/faq/entries', {
+      const again = await ws.call('POST', `/faq/flows/${ws.flowUuid}/entries`, {
         question: `${TAG} created after`,
         answerType: 'text',
         answerText: 'ok',

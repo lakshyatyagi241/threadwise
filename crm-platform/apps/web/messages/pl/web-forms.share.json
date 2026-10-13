@@ -148,7 +148,10 @@
         "required": "Aby wysłać, trzeba zaznaczyć",
         "requiredHint": "Wyłącz, jeśli zgoda jest dobrowolna.",
         "marketing": "Zgoda marketingowa",
-        "marketingHint": "Zaznaczenie pola zapisuje na kontakcie zgodę na marketing. Niezaznaczone pole nigdy nikogo nie zapisuje."
+        "marketingHint": "Zaznaczenie pola zapisuje na kontakcie zgodę na marketing. Niezaznaczone pole nigdy nikogo nie zapisuje.",
+        "whatsappHint": "Czy będziesz wysyłać do tych kontaktów wiadomości na WhatsApp? Użyj treści, która to mówi i wyjaśnia, jak zrezygnować. Zaznaczone pole jest zachowywane jako dowód, wraz z tym dokładnym tekstem i jego wersją.",
+        "whatsappInsert": "Użyj tekstu zgody na WhatsApp",
+        "whatsappWording": "Zgadzam się na otrzymywanie aktualności i ofert przez WhatsApp. Mogę w każdej chwili odpowiedzieć STOP, aby zrezygnować."
       },
       "crm": {
         "title": "W CRM",

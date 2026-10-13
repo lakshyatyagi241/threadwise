@@ -1,0 +1,302 @@
+{
+  "whatsapp-devices-baileys": {
+    "nav": {
+      "groups": "个人号码群组"
+    },
+    "area": {
+      "groups": "群组"
+    },
+    "errors": {
+      "WA_GROUP_NOT_ADMIN": "此号码不是该群组的群管理员，因此 WhatsApp 拒绝了此更改。",
+      "WA_GROUP_NOT_FOUND": "未找到此号码的该群组，可能已被删除。",
+      "WA_GROUP_DEVICE_NOT_READY": "此号码当前未连接。请先连接，或稍等片刻后重试。",
+      "WA_GROUP_RATE_LIMITED": "此号码的群组操作过多，请稍等片刻后重试。",
+      "WA_GROUP_RATE_LIMITED_ops_minute": "此号码在最近一分钟内的群组操作过多，请稍等片刻后重试。",
+      "WA_GROUP_RATE_LIMITED_ops_day": "此号码已达到今日群组操作上限，请明天再试。",
+      "WA_GROUP_RATE_LIMITED_creates_day": "此号码已达到今日新建群组上限，请明天再试。",
+      "WA_GROUP_RATE_LIMITED_join_link_day": "此号码已达到今日通过邀请链接加入群组的上限，请明天再试。",
+      "WA_GROUP_RATE_LIMITED_cooldown": "WhatsApp 对此号码进行了限制，为保护号码，群组操作将暂停一段时间。",
+      "WA_GROUP_LIMIT_REACHED": "WhatsApp 提示该群组已满，或此号码无法加入更多群组。",
+      "WA_GROUP_LEFT": "此号码已退出该群组，因此群组为只读。",
+      "WA_GROUP_INVALID_NUMBER": "其中一个手机号码无效，或就是此号码本身。",
+      "WA_GROUP_JOIN_LINK_INVALID": "此邀请链接无效、已被撤销，或该群组已不存在。",
+      "WA_GROUP_JOIN_BY_LINK_DISABLED": "此平台已关闭通过邀请链接加入群组的功能。",
+      "WA_GROUP_ANNOUNCE_ONLY": "此群组仅管理员可以发送消息，而此号码不是管理员。",
+      "WA_GROUP_UNAVAILABLE": "WhatsApp 未接受该请求，请几分钟后重试。"
+    },
+    "groups": {
+      "eyebrow": "非官方 WhatsApp API / 群组",
+      "headingA": "您的",
+      "headingB": "个人号码群组",
+      "intro": "每个已关联号码所在的群组。您可以创建群组、添加或移除成员、批准入群申请、分享邀请链接以及退出群组。群组中的消息也会显示在共享收件箱中。",
+      "loading": "加载中",
+      "loadFailed": "无法加载您的号码。",
+      "retry": "重试",
+      "close": "关闭",
+      "cancel": "取消",
+      "loadMore": "加载更多",
+      "loadingMore": "加载中",
+      "untitled": "未命名群组",
+      "memberCount": "{count, plural, =0 {没有成员} other {# 位成员}}",
+      "membersButton": "成员",
+      "editButton": "编辑",
+      "leave": "退出",
+      "openChat": "打开聊天",
+      "leftOn": "此号码已于 {date} 退出该群组。群组以只读方式保留在此处。",
+      "leftNote": "此号码已退出该群组。群组以只读方式保留在此处。",
+      "badge": {
+        "admin": "您是管理员",
+        "notAdmin": "非管理员",
+        "left": "已退出",
+        "announce": "仅管理员可发送",
+        "restrict": "仅管理员可编辑信息",
+        "approval": "入群需批准",
+        "requests": "{count, plural, other {# 条申请}}"
+      },
+      "blocked": {
+        "left": "此号码已退出该群组。",
+        "offline": "此号码处于离线状态：请先连接以更改群组。",
+        "notAdmin": "此号码在此群组中不是管理员：您可以查看群组，但无法更改。"
+      },
+      "kpi": {
+        "groups": "群组",
+        "groupsSub": "此号码所在的",
+        "members": "成员",
+        "membersSub": "所有群组合计",
+        "admin": "作为管理员",
+        "adminSub": "您可以管理的群组",
+        "joinRequests": "等待加入",
+        "joinRequestsSub": "待处理的申请",
+        "left": "已退出",
+        "leftSub": "以只读方式保留"
+      },
+      "list": {
+        "title": "群组",
+        "search": "按名称搜索",
+        "statusLabel": "显示",
+        "statusAll": "全部群组",
+        "statusActive": "活跃",
+        "statusLeft": "已退出",
+        "empty": "还没有群组。您可以创建一个，或在手机上将此号码加入群组，它就会显示在这里。",
+        "noMatch": "没有匹配的群组。",
+        "sync": "从 WhatsApp 刷新",
+        "syncing": "正在刷新",
+        "synced": "{count, plural, other {已从 WhatsApp 读取 # 个群组。}}",
+        "syncThrottled": "列表刚刚刷新过，请等待一分钟后再刷新。"
+      },
+      "rail": {
+        "title": "号码",
+        "noNumber": "还没有个人号码。",
+        "online": "在线",
+        "offline": "离线",
+        "notAdminHint": "{count, plural, other {此号码在 # 个群组中不是管理员：您可以查看这些群组，但无法更改。}}",
+        "limitsTitle": "剩余群组操作次数",
+        "limitMinute": "本分钟",
+        "limitDay": "今日",
+        "limitCreates": "今日新建群组",
+        "limitJoins": "今日通过链接加入",
+        "perCall": "每次添加或移除最多 {count, plural, other {# 人}}。",
+        "howTitle": "群组如何运作",
+        "howRisk": "群组通过非官方连接进行管理。WhatsApp 会密切监控群组操作，因此每个号码都有保护性限制，这些限制同样适用于您。",
+        "howAdmin": "只有群组管理员才能更改群组。如果此号码不是管理员，您只能查看群组并在其中聊天，无法进行其他操作。",
+        "howInbox": "成员发送的内容会显示在共享收件箱中。回复将从此号码发出，并计为一条消息。"
+      },
+      "state": {
+        "noDevice": {
+          "title": "未连接个人号码",
+          "message": "群组属于个人 WhatsApp 号码。请先连接一个号码。",
+          "connect": "连接号码"
+        },
+        "gateOff": {
+          "title": "此工作区不可用",
+          "message": "此工作区已不再启用非官方 WhatsApp 连接，因此无法使用群组。"
+        },
+        "denied": {
+          "title": "您无法查看群组",
+          "message": "您的角色不包含查看个人号码群组的权限。请联系您工作区的管理员。"
+        },
+        "offline": {
+          "not_connected": {
+            "title": "此号码处于离线状态",
+            "message": "以下群组为上次保存的状态。请连接号码以更改。"
+          },
+          "worker_unavailable": {
+            "title": "连接服务繁忙",
+            "message": "号码已关联，但目前没有服务在维持其会话。以下群组为上次保存的状态。请几分钟后重试。"
+          },
+          "open": "打开此号码"
+        },
+        "rateLimited": {
+          "title": "群组操作已暂停",
+          "message": "为保护此号码免受 WhatsApp 限制，新的群组操作需要等待。",
+          "countdown": "请在 {time} 后重试"
+        }
+      },
+      "create": {
+        "open": "创建群组",
+        "title": "创建群组",
+        "risk": "创建群组和添加成员是 WhatsApp 监控最严格的操作。请只添加认识您并预期被添加的人，并且每天少建群组。WhatsApp 可能会限制此号码。",
+        "subject": "群组名称",
+        "subjectHint": "最多 60 个字符。",
+        "numbers": "要添加的人",
+        "numbersHint": "请输入带国家/地区代码的手机号码，每行一个或用逗号分隔。目前最多 {max} 个，之后还可以继续添加。",
+        "numbersPlaceholder": "+919876543210\n+14155550123",
+        "description": "描述（可选）",
+        "descriptionHint": "最多 {max} 个字符。",
+        "counted": "{count}/{max} 个号码",
+        "duplicates": "{count, plural, other {已忽略 # 个重复项}}",
+        "invalid": "不是手机号码：{numbers}",
+        "selfIgnored": "此号码由 WhatsApp 自动添加，已从列表中排除。",
+        "overCap": "一次最多添加 {max} 个号码。",
+        "readNotice": "阅读完整风险提示",
+        "acknowledge": "我了解创建群组和添加成员可能导致此号码被 WhatsApp 限制。",
+        "offlineHint": "请连接此号码以创建群组。",
+        "submit": "创建群组",
+        "submitting": "正在创建",
+        "created": "群组已创建：{name}",
+        "resultSummary": "{ok, plural, =0 {没有添加任何人。} other {已添加 # 人。}}{failed, plural, =0 {} other {有 # 人无法添加。}}",
+        "descriptionNotSet": "群组已创建，但 WhatsApp 未接受描述。请编辑群组后重试。"
+      },
+      "outcome": {
+        "someone": "一位成员",
+        "done": "完成",
+        "already_member": "已在群组中。",
+        "not_member": "不在群组中。",
+        "not_on_whatsapp": "此号码未使用 WhatsApp。",
+        "privacy_blocked": "对方的隐私设置不允许此号码添加他们。请改为向其发送邀请链接。",
+        "not_allowed": "WhatsApp 不允许对此人执行此操作。",
+        "group_full": "群组已满。",
+        "failed": "WhatsApp 未接受此项。"
+      },
+      "edit": {
+        "title": "编辑群组",
+        "saved": "群组已更新。",
+        "saving": "正在保存",
+        "save": "保存",
+        "choosePicture": "选择图片",
+        "pictureHint": "JPEG 或 PNG，最大 {mb} MB。",
+        "pictureType": "请使用 JPEG 或 PNG 图片。",
+        "pictureSize": "图片超过 {mb} MB。",
+        "subject": "群组名称",
+        "description": "描述",
+        "settings": "设置",
+        "announce": "仅管理员可发送消息",
+        "announceHint": "成员可以阅读，但不能发言。",
+        "restrict": "仅管理员可编辑群组信息",
+        "restrictHint": "名称、描述和图片。",
+        "approval": "管理员批准新成员",
+        "approvalHint": "使用邀请链接的人需等待批准。",
+        "addMode": "仅管理员可添加成员",
+        "addModeHint": "其他成员无法添加人员。",
+        "offline": "此号码处于离线状态，因此无法保存任何内容。",
+        "removePicture": "移除图片",
+        "keepPicture": "保留图片"
+      },
+      "members": {
+        "title": "{name} 的成员",
+        "readOnly": {
+          "left": "此号码已退出该群组：列表为上次保存的状态，无法更改。",
+          "offline": "此号码处于离线状态：列表为上次保存的状态。",
+          "notAdmin": "此号码不是管理员：您可以查看列表，但无法更改。"
+        },
+        "held": "群组操作已暂停片刻。请在倒计时结束后重试。",
+        "add": {
+          "label": "添加成员",
+          "hint": "请输入带国家/地区代码的手机号码，每行一个或用逗号分隔。一次最多 {max} 个。",
+          "placeholder": "+919876543210",
+          "counted": "{count}/{max} 个号码",
+          "invalid": "不是手机号码：{numbers}",
+          "overCap": "一次最多添加 {max} 个。",
+          "risk": "添加不认识您的人是 WhatsApp 限制号码的常见原因。",
+          "adding": "正在添加",
+          "submit": "添加"
+        },
+        "done": {
+          "add": "{count, plural, other {已添加 # 人。}}",
+          "remove": "{count, plural, other {已移除 # 人。}}",
+          "promote": "{count, plural, other {# 人现已成为管理员。}}",
+          "demote": "{count, plural, other {# 人不再是管理员。}}"
+        },
+        "result": "{ok, plural, =0 {没有更改任何人。} other {已更改 # 人。}}{failed, plural, =0 {} other {有 # 人未更改。}}",
+        "search": "搜索成员",
+        "searchPlaceholder": "姓名或号码",
+        "total": "{count, plural, other {# 位成员}}",
+        "noAccess": "您没有查看成员的权限。",
+        "loading": "正在加载成员",
+        "noMatch": "没有匹配的成员。",
+        "empty": "尚未保存任何成员。",
+        "member": "成员",
+        "noNumber": "WhatsApp 不显示此成员的号码。",
+        "you": "此号码",
+        "owner": "群主",
+        "admin": "管理员",
+        "promote": "设为管理员",
+        "demote": "取消管理员",
+        "remove": "移除",
+        "selected": "{count, plural, =0 {未选择任何人} other {已选择 #}}",
+        "limit": "一次最多 {max} 个",
+        "removeConfirm": "{count, plural, other {要将 # 人移出此群组吗？}}"
+      },
+      "requests": {
+        "readOnly": {
+          "left": "此号码已退出该群组。",
+          "offline": "此号码处于离线状态：请先连接再进行处理。",
+          "notAdmin": "此号码不是管理员，因此无法处理这些申请。"
+        },
+        "hidden": "{count, plural, other {有 # 人正在等待加入。}}",
+        "title": "{count, plural, other {# 人等待加入}}",
+        "working": "…",
+        "approveAll": "全部批准",
+        "rejectAll": "全部拒绝",
+        "loading": "正在加载申请",
+        "none": "没有可显示的申请。",
+        "someone": "某人",
+        "approve": "批准",
+        "reject": "拒绝",
+        "approved": "{count, plural, other {已批准 # 人。}}",
+        "rejected": "{count, plural, other {已拒绝 # 条申请。}}",
+        "someFailed": "{ok} 项已完成，{failed} 项未完成："
+      },
+      "link": {
+        "show": "邀请链接",
+        "hide": "隐藏邀请链接",
+        "loading": "正在加载链接",
+        "label": "邀请链接",
+        "copy": "复制",
+        "copied": "已复制",
+        "copyFailed": "无法复制链接。请选中后手动复制。",
+        "newLink": "新链接",
+        "reset": "已生成新的邀请链接，旧链接不再有效。",
+        "confirmTitle": "要生成新的邀请链接吗？",
+        "confirmMessage": "旧链接将立即失效。持有旧链接的人将无法再通过它加入。",
+        "confirmButton": "生成新链接"
+      },
+      "join": {
+        "open": "通过邀请链接加入",
+        "title": "通过邀请链接加入群组",
+        "risk": "通过链接加入群组是 WhatsApp 限制号码最常见的操作。此号码每天只能这样做几次。请只加入您了解的群组。",
+        "invite": "邀请链接",
+        "inviteHint": "chat.whatsapp.com 链接，或仅输入其代码。",
+        "invalid": "这不是 WhatsApp 邀请链接或代码。",
+        "lookUp": "查找",
+        "lookingUp": "正在查找",
+        "submit": "加入",
+        "joining": "正在加入",
+        "joined": "已加入群组。几秒钟后将显示在列表中。",
+        "requested": "申请已发送。需要群组管理员批准。",
+        "alreadyMember": "此号码已在该群组中。",
+        "approvalRequired": "需要管理员批准才能加入。",
+        "acknowledge": "我了解通过链接加入群组可能导致此号码被 WhatsApp 限制。",
+        "offline": "请连接此号码以加入群组。"
+      },
+      "confirm": {
+        "leaveTitle": "退出此群组？",
+        "leaveMessage": "此号码将退出 {name}。没有邀请，您无法从此处重新加入。群组及其消息将以只读方式保留在收件箱中。",
+        "leaveConfirm": "退出群组"
+      },
+      "notice": {
+        "left": "此号码已退出该群组。"
+      }
+    }
+  }
+}

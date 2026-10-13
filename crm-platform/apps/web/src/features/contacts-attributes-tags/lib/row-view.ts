@@ -26,6 +26,10 @@ export interface RowView {
   custom: Record<string, string>;
   /** ISO timestamp the contact was created. */
   createdAt: string;
+  /** The lead score and who set it ('ai' = the AI lead scorer); null when the contact has none. */
+  leadScore: number | null;
+  leadScoreSource: 'manual' | 'ai' | null;
+  leadScoredAt: string | null;
 }
 
 const text = (v: unknown) => (typeof v === 'string' ? v : '');
@@ -57,5 +61,8 @@ export function rowView(row: ContactRow, attributeLabels: ReadonlyMap<string, st
     attributes: attributeChips(row.customFields, attributeLabels),
     custom: customValues(row.customFields),
     createdAt: row.createdAt,
+    leadScore: row.leadScore,
+    leadScoreSource: row.leadScoreSource,
+    leadScoredAt: row.leadScoredAt,
   };
 }

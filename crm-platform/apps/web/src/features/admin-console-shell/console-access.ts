@@ -22,8 +22,12 @@ const ONLY_ROLES: Readonly<Record<string, readonly OperatorRole[]>> = {
   'ai-keys': ['super_admin'],
   // FaqPlatformController (platform/faq): class-level super_admin, reads included.
   'faq-engine': ['super_admin'],
+  // LeadScoringPlatformController (platform/lead-scoring): class-level super_admin, reads included (cost and usage).
+  'lead-scoring': ['super_admin'],
   // WebhookFanoutController (platform/webhook-targets): class-level super_admin.
   'webhook-forwarding': ['super_admin'],
+  // WabooMigrationController (platform/waboo-migration): class-level super_admin.
+  'waboo-migration': ['super_admin'],
   // AdminDashController (platform/dashboard): class-level super_admin and auditor, so not support.
   'platform-analytics': ['super_admin', 'auditor'],
 };

@@ -123,6 +123,75 @@ export function DeltaChip({ pct }: { pct: number }) {
   );
 }
 
+const isDay = (v: string) =>
+  /^\d{4}-\d{2}-\d{2}$/.test(v) && !Number.isNaN(Date.parse(`${v}T00:00:00Z`));
+const MAX_CUSTOM_DAYS = 365 * 5;
+
+/** True when `custom` has two real days, from not after to, within five years: the same rule the API enforces. */
+export function customRangeValid(from: string, to: string): boolean {
+  if (!isDay(from) || !isDay(to) || from > to) return false;
+  return (
+    (Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`)) / 86_400_000 <=
+    MAX_CUSTOM_DAYS
+  );
+}
+
+/** The URL patch for picking a window: `custom` starts on the last 30 days, anything else clears the two days. */
+export function windowPatch(value: string): { window: string; from: string; to: string } {
+  if (value !== 'custom') return { window: value, from: '', to: '' };
+  const day = (back: number) => new Date(Date.now() - back * 86_400_000).toISOString().slice(0, 10);
+  return { window: value, from: day(29), to: day(0) };
+}
+
+/** The two day pickers shown beside the window select while `custom` is chosen. */
+export function CustomRange({
+  from,
+  to,
+  onChange,
+  fromLabel,
+  toLabel,
+  invalidLabel,
+}: {
+  from: string;
+  to: string;
+  onChange: (patch: { from?: string; to?: string }) => void;
+  fromLabel: string;
+  toLabel: string;
+  invalidLabel: string;
+}) {
+  const bad = !customRangeValid(from, to);
+  const cls =
+    'h-9 rounded-full border bg-background px-3 text-xs font-medium outline-none focus-visible:ring-2 focus-visible:ring-primary';
+  return (
+    <span className="inline-flex flex-wrap items-center gap-2" data-testid="custom-range">
+      <input
+        type="date"
+        aria-label={fromLabel}
+        value={from}
+        max={to || undefined}
+        onChange={(e) => onChange({ from: e.target.value })}
+        className={`${cls} ${bad ? 'border-danger' : 'border-border'}`}
+      />
+      <span aria-hidden className="text-xs text-muted-foreground">
+        {'–'}
+      </span>
+      <input
+        type="date"
+        aria-label={toLabel}
+        value={to}
+        min={from || undefined}
+        onChange={(e) => onChange({ to: e.target.value })}
+        className={`${cls} ${bad ? 'border-danger' : 'border-border'}`}
+      />
+      {bad && (
+        <span role="alert" className="text-xs text-danger">
+          {invalidLabel}
+        </span>
+      )}
+    </span>
+  );
+}
+
 /** The round select in the page header (window, auto-submitting). */
 export function WindowSelect({
   value,

@@ -102,7 +102,8 @@
         "added": "{name} đã được thêm vào không gian làm việc.",
         "rolesUpdated": "Đã cập nhật vai trò cho {name}.",
         "deactivated": "Đã vô hiệu hóa {name}.",
-        "reactivated": "Đã kích hoạt lại {name}."
+        "reactivated": "Đã kích hoạt lại {name}.",
+        "invited": "Đã gửi lời mời tới {name}."
       },
       "deactivate": {
         "action": "Vô hiệu hóa",
@@ -123,7 +124,13 @@
         "passwordShort": "Mật khẩu phải có ít nhất 8 ký tự.",
         "generate": "Tạo",
         "role": "Vai trò",
-        "submit": "Thêm thành viên"
+        "submit": "Thêm thành viên",
+        "inviteHint": "Chúng tôi gửi email một liên kết để họ tự đặt mật khẩu. Liên kết chỉ dùng được một lần và hết hạn sau vài ngày.",
+        "submitInvite": "Gửi lời mời",
+        "linkNotSent": "Không thể gửi email tới {email}. Hãy sao chép liên kết này và chuyển cho họ; liên kết sẽ không hiển thị lại.",
+        "copyLink": "Sao chép liên kết",
+        "copied": "Đã sao chép",
+        "done": "Xong"
       },
       "changeRole": {
         "title": "Đổi vai trò của {name}",

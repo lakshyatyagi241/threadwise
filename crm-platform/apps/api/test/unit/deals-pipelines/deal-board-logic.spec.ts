@@ -147,6 +147,7 @@ describe('the sales-pipeline plan flag (TW-DEAL-001, D-01)', () => {
     planFeatures: {},
     state: 'paid_active',
     visibleApps: { all: false, appIds: new Set() },
+    appWithheld: {},
     ...over,
   });
 

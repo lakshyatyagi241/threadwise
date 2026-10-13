@@ -102,8 +102,8 @@
       },
       "email": {
         "label": "이메일",
-        "description": "사서함을 연결해 수신함에서 이메일을 보내고 받으세요.",
-        "keywords": "사서함, smtp, imap, gmail, outlook, 발신자"
+        "description": "Gmail 또는 Google Workspace 사서함을 연결해 팀이 공유 수신함에서 고객 이메일을 읽고 답장할 수 있도록 하세요.",
+        "keywords": "사서함, gmail, google workspace, 공유 수신함, 지원 이메일, outlook, imap"
       },
       "line": {
         "label": "LINE",
@@ -314,7 +314,48 @@
         "label": "메시지 로그",
         "description": "메시지의 전송 로그를 최대 1년 전까지 내보내 파일로 이메일에서 받을 수 있습니다.",
         "keywords": "내보내기, 전송 로그, 기록, 아카이브, csv, 메시지"
+      },
+      "billing-subscriptions": {
+        "label": "구독",
+        "description": "갱신 항목, 결제 완료 기간, 취소.",
+        "keywords": "구독, 갱신, 자동 갱신, 취소, 자동 결제, 결제 실패, 청구"
+      },
+      "web": {
+        "label": "웹사이트 채팅",
+        "description": "웹사이트 채팅용으로 만든 봇과 각 봇이 실행되는 위젯입니다.",
+        "keywords": "웹, 웹사이트, 위젯, 챗봇, 임베드, 라이브 채팅"
+      },
+      "lead-scoring": {
+        "label": "AI 리드 스코어링",
+        "description": "모든 연락처에 AI로 점수를 매기고, 전송할 내용을 선택하며, 비용을 확인하세요.",
+        "keywords": "리드 점수, 스코어링, 점수, ai, 핫, 웜, 콜드, openrouter, 비용, 적격 판정"
+      },
+      "help-assistant": {
+        "label": "도움말 어시스턴트",
+        "description": "팀을 안내하거나 단계를 대신 처리하는 어시스턴트를 켭니다.",
+        "keywords": "ai, 어시스턴트, 에이전트, 가이드, 도움말, 자동화"
+      },
+      "consent": {
+        "label": "수신 동의 및 STOP 답장",
+        "description": "STOP 및 START 단어, 확인 답장, 수신 거부 문구, 마케팅에 기록된 동의가 필요한지 여부를 설정하세요.",
+        "keywords": "수신 동의, 수신 거부, 다시 수신, 구독 취소, stop, start, gdpr, 규정 준수, 개인정보, 마케팅"
+      },
+      "inbox-labels": {
+        "label": "라벨",
+        "description": "팀이 대화에 붙이고 받은편지함을 필터링할 때 쓰는 라벨을 만드세요.",
+        "keywords": "태그, 라벨, 카테고리, 정리, 필터"
+      },
+      "growth": {
+        "label": "그로스",
+        "description": "채팅과 캠페인에서 파악한 핫 리드, 오디언스, 캠페인 답장 등 팀이 바로 실행할 수 있는 정보입니다.",
+        "keywords": "그로스, 핫 리드, 오디언스, 참여도, 휴면, 캠페인 답장, 전환 가능성, 수신 중단, 파일럿"
+      },
+      "team-performance": {
+        "label": "팀 성과",
+        "description": "오늘, 이번 주 또는 이번 달에 각 상담원이 얼마나 빠르게 답하고 해결했는지 확인합니다.",
+        "keywords": "보고서, 분석, 상담원, 응답 시간, 첫 답장, 해결, 업무량, 성과"
       }
-    }
+    },
+    "backToMarketplace": "마켓플레이스로 돌아가기"
   }
 }

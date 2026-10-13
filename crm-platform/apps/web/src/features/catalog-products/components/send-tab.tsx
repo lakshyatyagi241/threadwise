@@ -50,7 +50,7 @@ function NoSender() {
       <div className="flex-1">
         <div className="font-serif text-[22px] leading-tight">{t('noSender.title')}</div>
         <p className="mt-1.5 text-[12.5px] text-muted-foreground">{t('noSender.message')}</p>
-        <Link href="/channels" className={`${PILL_LINK} mt-3`}>
+        <Link href="/channels/whatsapp" className={`${PILL_LINK} mt-3`}>
           {t('noSender.connect')}
         </Link>
       </div>

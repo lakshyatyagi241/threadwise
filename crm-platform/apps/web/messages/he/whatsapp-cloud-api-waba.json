@@ -34,7 +34,8 @@
         "registered": "״{name}״ נרשם ב-Cloud API.",
         "disconnected": "״{name}״ נותק.",
         "removed": "״{name}״ הוסר.",
-        "warningsTitle": "מחובר, אך בדקו את זה:"
+        "warningsTitle": "מחובר, אך בדקו את זה:",
+        "verified": "\"{name}\" אומת."
       },
       "notReady": {
         "title": "Embedded Signup אינו מוגדר",
@@ -81,7 +82,8 @@
         "register": "רישום",
         "meta": "Meta",
         "disconnect": "ניתוק",
-        "remove": "הסרה"
+        "remove": "הסרה",
+        "verify": "אימות המספר"
       },
       "confirm": {
         "fixInboundTitle": "לתקן הודעות נכנסות?",
@@ -100,6 +102,17 @@
         "pin": "קוד אימות דו־שלבי (אופציונלי)",
         "pinError": "הקוד הוא בן 6 ספרות",
         "submit": "רישום"
+      },
+      "verifyDialog": {
+        "title": "אימות המספר הזה",
+        "message": "Meta תשלח קוד בן 6 ספרות אל {phone}. בחרו איך לקבל אותו.",
+        "enterCode": "הזינו את הקוד בן 6 הספרות ש-Meta שלחה אל {phone}.",
+        "sendSms": "שליחת הקוד ב-SMS",
+        "sendVoice": "שליחת הקוד בשיחה",
+        "code": "קוד אימות",
+        "codeError": "הקוד מכיל 6 ספרות",
+        "submit": "אימות",
+        "resend": "שליחת קוד חדש"
       }
     },
     "connect": {

@@ -45,6 +45,20 @@ describe('the Groups client (against a fake of the Graph edge; never run against
     });
   });
 
+  it('a number labelled Interakt (credit line only) still goes to the Meta host with its own Meta token, never to Interakt', async () => {
+    const { gw, client } = setup();
+    const funded: WabaConnection = {
+      ...conn,
+      provider: 'interakt',
+      authKey: 'ik-partner-key',
+      accessToken: 'EAAG-own-token',
+    };
+    await client.create(funded, { subject: 'Credit line only' });
+    const call = gw.calls[0]!;
+    expect(call.authorization).toBe('Bearer EAAG-own-token');
+    expect(call.path).toBe('/555/groups');
+  });
+
   it('create: cuts the subject at 128 characters and the description at 2048, by character (an emoji is not split)', async () => {
     const { gw, client } = setup();
     await client.create(conn, { subject: '😀'.repeat(200), description: 'd'.repeat(3000) });

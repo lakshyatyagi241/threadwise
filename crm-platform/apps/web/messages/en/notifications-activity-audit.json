@@ -149,6 +149,16 @@
         "title": "{name} is active again",
         "titleNoName": "A WhatsApp group is active again",
         "body": "WhatsApp restored this group. You can message it again."
+      },
+      "device_group_join_request": {
+        "title": "{count, plural, one {Someone wants to join {name}} other {# people want to join {name}}}",
+        "titleNoName": "{count, plural, one {Someone wants to join a WhatsApp group} other {# people want to join a WhatsApp group}}",
+        "body": "Open Groups to approve or reject."
+      },
+      "device_group_removed": {
+        "title": "Your number was removed from {name}",
+        "titleNoName": "Your number was removed from a WhatsApp group",
+        "body": "Someone removed your personal number from this group. The group is kept here, read-only."
       }
     },
     "live": {
@@ -177,7 +187,9 @@
         "teamchat_message": "New direct message",
         "waba_group_join_request": "Request to join a group",
         "waba_group_suspended": "WhatsApp group suspended",
-        "waba_group_suspension_cleared": "WhatsApp group active again"
+        "waba_group_suspension_cleared": "WhatsApp group active again",
+        "device_group_join_request": "Request to join a group",
+        "device_group_removed": "Removed from a WhatsApp group"
       }
     },
     "prefs": {
@@ -199,7 +211,8 @@
         "devices": "WhatsApp numbers",
         "broadcasts": "Broadcasts and campaigns",
         "team_chat": "Team chat",
-        "whatsapp_groups": "WhatsApp groups"
+        "whatsapp_groups": "WhatsApp groups",
+        "billing": "Billing and subscriptions"
       },
       "types": {
         "new_chat": {
@@ -306,6 +319,10 @@
           "label": "Sales document decided",
           "hint": "A quote or invoice was accepted or declined."
         },
+        "email_bounced": {
+          "label": "Email not delivered",
+          "hint": "A reply you sent by email bounced or was delayed."
+        },
         "wallet_credited": {
           "label": "Wallet topped up",
           "hint": "The workspace wallet was credited."
@@ -321,6 +338,22 @@
         "waba_group_suspension_cleared": {
           "label": "Group active again",
           "hint": "WhatsApp restored a group it had suspended. Only if you were told about the suspension."
+        },
+        "device_group_join_request": {
+          "label": "Request to join a personal-number group",
+          "hint": "People ask to join a group of a personal WhatsApp number you manage. Ten requests make one row."
+        },
+        "device_group_removed": {
+          "label": "Removed from a personal-number group",
+          "hint": "Someone removed one of your personal WhatsApp numbers from a group. It can be a sign the number was reported."
+        },
+        "billing_payment_failed": {
+          "label": "Subscription payment failed",
+          "hint": "A renewal charge did not go through and needs your attention."
+        },
+        "billing_subscription_canceled": {
+          "label": "Subscription cancelled",
+          "hint": "Your payment provider ended a subscription of this workspace."
         }
       },
       "loading": "Loading your preferences",

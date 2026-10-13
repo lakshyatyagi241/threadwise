@@ -14,6 +14,18 @@ import { runMigrations, verifySchema } from '@crm/db';
  * Drizzle schema still describes what the migrations built. A table added next
  * month is covered the day it is added.
  */
+/**
+ * Platform-owned tables that carry an `org_id` but are NOT tenant data (ADR-0028, migration 20261116090000_org_lifecycle): the workspace
+ * lifecycle log and the object-store purge queue. `org_id` is only a pointer to a workspace that may already be erased (no foreign key,
+ * the rows must outlive it), so a tenant policy and an (org_id, id) key would be wrong for them: a workspace must never read or write
+ * its own compliance record. The exemption is narrow: the test still requires RLS to be forced and EVERY policy on them to be
+ * privileged-only (`app_is_privileged()`, never the tenant function), so the application role sees nothing without the privileged flag.
+ */
+const PLATFORM_OWNED_ORG_POINTER_TABLES: ReadonlySet<string> = new Set([
+  'org_lifecycle_log',
+  'storage_purge_queue',
+]);
+
 describe('schema invariants', () => {
   let container: StartedPostgreSqlContainer;
   let owner: Client;
@@ -66,6 +78,17 @@ describe('schema invariants', () => {
       .map((r) => r.table)
       .filter((t) => {
         const ps = byTable.get(t) ?? [];
+        if (PLATFORM_OWNED_ORG_POINTER_TABLES.has(t)) {
+          // exempt from the tenant policy, but only if it is genuinely privileged-only
+          return !(
+            ps.length > 0 &&
+            ps.every(
+              (p) =>
+                /app_is_privileged\(\)/.test(`${p.qual ?? ''}${p.check ?? ''}`) &&
+                !/current_org_id\(\)/.test(`${p.qual ?? ''}${p.check ?? ''}`),
+            )
+          );
+        }
         // either one policy gates both what is visible and what may be written, by the tenant function, or the
         // tenant may only read its own rows (a SELECT policy by the tenant function) and every write is
         // privileged-only (a workspace must not write its own entitlement rows, e.g. marketplace_subscriptions)
@@ -148,7 +171,12 @@ describe('schema invariants', () => {
     `);
     // 1:1 per-user tables keyed by (org_id, user_id) are the documented exceptions from auth_core.
     const badTenantKeys = pks.rows
-      .filter((r) => !r.partitioned && r.cols[0] !== 'org_id')
+      .filter(
+        (r) =>
+          !r.partitioned &&
+          r.cols[0] !== 'org_id' &&
+          !PLATFORM_OWNED_ORG_POINTER_TABLES.has(r.table),
+      )
       .map((r) => `${r.table}(${r.cols.join(',')})`);
     expect(badTenantKeys).toEqual([]);
 

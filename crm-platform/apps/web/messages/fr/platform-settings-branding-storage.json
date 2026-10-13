@@ -17,6 +17,8 @@
       "whatsapp": "WhatsApp (WABA)",
       "campaigns": "Campagnes",
       "googleCalendar": "Google Agenda",
+      "googleMail": "Gmail",
+      "microsoftMail": "Microsoft 365",
       "flowBuilder": "Éditeur de flux"
     },
     "hub": {
@@ -930,6 +932,79 @@
           }
         }
       },
+      "googleMail": {
+        "title": "E-mail Gmail",
+        "description": "Le client OAuth Google par lequel chaque espace de travail connecte ses boîtes.",
+        "sections": {
+          "oauth": {
+            "title": "Client OAuth Google"
+          },
+          "push": {
+            "title": "Push Gmail (facultatif)"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Autoriser les espaces de travail à connecter Gmail",
+            "hint": "Désactivé : aucun espace de travail ne peut se connecter et aucun e-mail n'est lu ni envoyé. Les boîtes déjà connectées sont conservées."
+          },
+          "clientId": {
+            "label": "ID client",
+            "hint": "Depuis Google Cloud, Identifiants, ID client OAuth 2.0 (application Web). Si vide, GOOGLE_MAIL_CLIENT_ID est utilisé."
+          },
+          "clientSecret": {
+            "label": "Secret client",
+            "hint": "Stocké chiffré et jamais réaffiché. Si vide, le secret enregistré est conservé ; GOOGLE_MAIL_CLIENT_SECRET sert de solution de repli."
+          },
+          "redirectUri": {
+            "label": "Remplacement de l’URI de redirection",
+            "hint": "Laissez vide pour utiliser l’adresse ci-dessus. Elle doit correspondre exactement à un URI de redirection autorisé du client."
+          },
+          "pubsubTopic": {
+            "label": "Sujet Pub/Sub",
+            "hint": "projects/PROJECT_ID/topics/TOPIC_ID. Donnez à gmail-api-push@system.gserviceaccount.com le rôle Publisher dessus. Vide : GOOGLE_MAIL_PUBSUB_TOPIC est utilisé ; sans sujet, les boîtes ne sont qu'interrogées."
+          },
+          "pushAudience": {
+            "label": "Audience du push",
+            "hint": "L'audience définie sur l'abonnement push. Vide : GOOGLE_MAIL_PUSH_AUDIENCE est utilisé, sinon l'adresse du point de terminaison push de cette plateforme."
+          },
+          "pushServiceAccount": {
+            "label": "Compte de service du push",
+            "hint": "Le compte de service avec lequel l'abonnement push signe. Un push venant d'un autre compte est refusé. Vide : GOOGLE_MAIL_PUSH_SERVICE_ACCOUNT est utilisé."
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "E-mail Microsoft 365",
+        "description": "L'application Microsoft par laquelle chaque espace de travail connecte ses boîtes Outlook et Microsoft 365.",
+        "sections": {
+          "oauth": {
+            "title": "Application Microsoft Entra"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Autoriser les espaces de travail à connecter Microsoft 365",
+            "hint": "Désactivé : aucun espace de travail ne peut se connecter et aucun e-mail n'est lu ni envoyé. Les boîtes déjà connectées sont conservées."
+          },
+          "clientId": {
+            "label": "ID d'application (client)",
+            "hint": "Depuis le centre d'administration Microsoft Entra, Inscriptions d'applications, Vue d'ensemble. Vide : MICROSOFT_MAIL_CLIENT_ID est utilisé."
+          },
+          "clientSecret": {
+            "label": "Secret client",
+            "hint": "Stocké chiffré et jamais réaffiché. Si vide, le secret enregistré est conservé ; MICROSOFT_MAIL_CLIENT_SECRET sert de solution de repli."
+          },
+          "tenant": {
+            "label": "Locataire",
+            "hint": "common accepte les comptes professionnels, scolaires et personnels ; utilisez un ID d'annuaire (locataire) pour une application à locataire unique. Vide : MICROSOFT_MAIL_TENANT, sinon common."
+          },
+          "redirectUri": {
+            "label": "Remplacement de l’URI de redirection",
+            "hint": "Laissez vide pour utiliser l’adresse ci-dessus. Elle doit correspondre exactement à un URI de redirection autorisé du client."
+          }
+        }
+      },
       "flowBuilder": {
         "title": "Éditeur de flux",
         "description": "Quels éditeurs de flux sont proposés aux espaces de travail.",
@@ -1062,6 +1137,16 @@
         "title": "Google Agenda",
         "description": "Le client OAuth Google qu’utilisent les espaces de travail pour connecter leur agenda aux réservations et aux créneaux occupés.",
         "tags": "Google / OAuth / Agenda"
+      },
+      "googleMail": {
+        "title": "E-mail Gmail",
+        "description": "Le client OAuth Google que les espaces de travail utilisent pour connecter leurs boîtes Gmail.",
+        "tags": "Google / OAuth / Gmail"
+      },
+      "microsoftMail": {
+        "title": "E-mail Microsoft 365",
+        "description": "L'application Microsoft que les espaces de travail utilisent pour connecter leurs boîtes Outlook et Microsoft 365.",
+        "tags": "Microsoft / OAuth / Outlook"
       },
       "flowBuilder": {
         "title": "Éditeur de flux",
@@ -1648,6 +1733,78 @@
           }
         }
       },
+      "googleMail": {
+        "title": "E-mail Gmail",
+        "eyebrow": "Admin - E-mail",
+        "description": "Un seul client OAuth Google Cloud pour toute la plateforme, distinct de Google Agenda. Chaque espace de travail connecte ses propres boîtes depuis E-mail et ne voit jamais l'ID client ni le secret.",
+        "sections": {
+          "oauth": {
+            "title": "Client OAuth Google",
+            "description": "Sans ID client ni secret, les espaces de travail ne peuvent pas connecter de boîte."
+          },
+          "push": {
+            "title": "Push Gmail (facultatif)",
+            "description": "Les nouveaux e-mails arrivent dans la boîte de l'équipe en quelques secondes, sans attendre la prochaine interrogation. L'interrogation périodique reste active comme filet de sécurité."
+          }
+        },
+        "guide": {
+          "title": "Configurer dans Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. Projet et API",
+              "body": "Dans la console Google Cloud, créez un projet et activez l'API Gmail."
+            },
+            "redirect": {
+              "title": "2. Client OAuth",
+              "body": "Créez un ID client OAuth 2.0 de type application Web et ajoutez l’URI de redirection affiché sur cette page dans les URI de redirection autorisés."
+            },
+            "consent": {
+              "title": "3. Écran de consentement",
+              "body": "Ajoutez les portées openid, email, gmail.readonly et gmail.send. Les portées Gmail sont restreintes : Google doit valider l'application pour un usage général, et en mode Test une autorisation expire au bout de 7 jours."
+            },
+            "workspaces": {
+              "title": "4. Connexion des espaces de travail",
+              "body": "Collez ici l'ID client et le secret, puis enregistrez. Les administrateurs connectent ensuite depuis E-mail."
+            },
+            "push": {
+              "title": "5. E-mail instantané (facultatif)",
+              "body": "Créez un sujet Pub/Sub, donnez à gmail-api-push@system.gserviceaccount.com le rôle Publisher, ajoutez un abonnement push vers APP_URL/v2/public/email/google/push avec authentification OIDC, puis saisissez ici le sujet, l'audience et le compte de service."
+            }
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "E-mail Microsoft 365",
+        "eyebrow": "Admin - E-mail",
+        "description": "Une seule application Microsoft Entra pour toute la plateforme. Chaque espace de travail connecte ses propres boîtes depuis E-mail et ne voit jamais l'ID ni le secret client.",
+        "sections": {
+          "oauth": {
+            "title": "Application Microsoft Entra",
+            "description": "Sans ID client ni secret, les espaces de travail ne peuvent pas connecter de boîte."
+          }
+        },
+        "guide": {
+          "title": "À configurer dans Microsoft Entra",
+          "items": {
+            "registration": {
+              "title": "1. Inscription de l'application",
+              "body": "Dans le centre d'administration Microsoft Entra, créez une inscription d'application. Choisissez les types de comptes de vos clients (professionnels ou scolaires, et personnels pour Outlook.com), puis copiez ici l'ID d'application (client) et le locataire."
+            },
+            "redirect": {
+              "title": "2. URI de redirection et secret",
+              "body": "Ajoutez l'URI de redirection affiché sur cette page comme redirection de la plateforme Web, puis créez un secret client dans Certificats et secrets et collez sa valeur ici."
+            },
+            "permissions": {
+              "title": "3. Autorisations d'API",
+              "body": "Ajoutez les autorisations déléguées Microsoft Graph Mail.Read, Mail.Send, User.Read et offline_access. Pour un usage général, effectuez la vérification de l'éditeur ; certaines organisations exigent aussi le consentement d'un administrateur."
+            },
+            "workspaces": {
+              "title": "4. Connexion des espaces de travail",
+              "body": "Collez ici l'ID client et le secret, puis enregistrez. Les administrateurs connectent ensuite depuis E-mail."
+            }
+          }
+        }
+      },
       "flowBuilder": {
         "title": "Éditeur de flux",
         "eyebrow": "Admin - Automatisation",
@@ -1735,6 +1892,12 @@
     "googleCallback": {
       "redirectTitle": "URI de redirection",
       "redirectHint": "Enregistrez cette adresse exacte comme URI de redirection autorisé sur le client OAuth. C’est là que Google renvoie le navigateur après l’accord d’un administrateur d’espace de travail.",
+      "copy": "Copier",
+      "copied": "Copié"
+    },
+    "microsoftCallback": {
+      "redirectTitle": "URI de redirection",
+      "redirectHint": "Enregistrez exactement cette adresse comme URI de redirection Web dans l'inscription de l'application. C'est là que Microsoft renvoie le navigateur après l'accord d'un administrateur de l'espace de travail.",
       "copy": "Copier",
       "copied": "Copié"
     }

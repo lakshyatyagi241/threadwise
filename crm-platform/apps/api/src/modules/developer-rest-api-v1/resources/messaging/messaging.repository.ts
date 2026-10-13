@@ -3,6 +3,7 @@ import { sql, type SQL } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import { buildPage, decodeCursor } from '../../../../common/pagination/cursor';
 import type { PageInfo } from '@crm/contracts';
+import { channelOwnerSql } from '../../../../realtime';
 import type {
   ConnectionReadRow,
   ConversationReadRow,
@@ -30,6 +31,12 @@ const MESSAGE_COLUMNS = sql`
   m.id, m.uuid, m.direction, m.kind, m.body, m.media_key, m.media_mime, m.media_name, m.status, m.failure_code, m.failure_reason,
   m.created_at, ${ISO('m.created_at')} AS created_at_iso, c.peer_key, ch.display_address AS channel_address`;
 
+/**
+ * An API key is a workspace credential, not a person: mail of a PERSONAL mailbox (TW-MAIL-035) is never served through it, whatever the
+ * policy says about admins. Requires the statement's `conversations` alias to be `c`.
+ */
+const NOT_PERSONAL = sql`${channelOwnerSql('c')} IS NULL`;
+
 const MESSAGE_FROM = sql`
   FROM messages m
   JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
@@ -39,7 +46,7 @@ const MESSAGE_FROM = sql`
  * What the history shows: a deleted-for-everyone message and the thread's own system lines (a call bubble) are not messages a client sent
  * or got, and an emoji an agent put on a message is shown on that message, not as a message of its own.
  */
-const VISIBLE = sql`m.deleted_at IS NULL AND m.kind NOT IN ('system', 'reaction')`;
+const VISIBLE = sql`m.deleted_at IS NULL AND m.kind NOT IN ('system', 'reaction') AND ${NOT_PERSONAL}`;
 
 type MessageWithPaging = MessageReadRow & { id: number; createdAt: Date; createdAtIso: string };
 
@@ -110,7 +117,7 @@ export class MessagingRepository {
 
   async conversationId(tx: Tx, orgId: number, uuid: string): Promise<number | null> {
     const res = await tx.execute(
-      sql`SELECT id FROM conversations WHERE org_id = ${orgId} AND uuid = ${uuid} LIMIT 1`,
+      sql`SELECT c.id FROM conversations c WHERE c.org_id = ${orgId} AND c.uuid = ${uuid} AND ${NOT_PERSONAL} LIMIT 1`,
     );
     const row = rowsOf(res)[0];
     return row ? Number(row.id) : null;
@@ -132,7 +139,7 @@ export class MessagingRepository {
                ORDER BY m.seq DESC LIMIT 1) AS last_outbound_status
       FROM conversations c
       JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
-      WHERE c.org_id = ${orgId}
+      WHERE c.org_id = ${orgId} AND ${NOT_PERSONAL}
         ${bound ? sql`AND (coalesce(c.last_message_at, c.created_at), c.id) < (${bound.at}::timestamptz, ${bound.id})` : sql``}
       ORDER BY coalesce(c.last_message_at, c.created_at) DESC, c.id DESC
       LIMIT ${q.limit + 1}`);

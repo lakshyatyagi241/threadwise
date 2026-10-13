@@ -63,7 +63,13 @@ export function ChannelTag({
   if (isUnofficialChannelKind(kind) && !unofficial) return null;
   const whatsapp = kind === 'whatsapp_cloud';
   const label =
-    kind === 'whatsapp_qr' ? 'QR' : kind === 'simulator' ? 'SIM' : kind.slice(0, 3).toUpperCase();
+    kind === 'whatsapp_qr'
+      ? 'QR'
+      : kind === 'simulator'
+        ? 'SIM'
+        : kind === 'email'
+          ? 'EML'
+          : kind.slice(0, 3).toUpperCase();
   return (
     <span
       title={name}

@@ -7,7 +7,9 @@ import {
   FLOW_RUN_LOG_RETENTION_DAYS,
   type FlowRunDetail,
   type FlowRunStep,
+  type FlowStepIoItem,
 } from '@crm/contracts';
+import { isLive } from '../lib/model';
 import {
   formatMs,
   nodeNames,
@@ -16,6 +18,8 @@ import {
   outcomeTone,
   pathOf,
   timelineRows,
+  waitStates,
+  type WaitState,
   type TimelineFilter,
 } from '../lib/timeline-model';
 import { CARD, KICKER, useDateTime } from './parts';
@@ -42,26 +46,68 @@ function Stat({ label, value, tone }: { label: string; value: string | number; t
   );
 }
 
+/** What a node took in or produced: the message as the customer read it, the reply, a variable, a request or response. */
+function IoBlock({ title, items }: { title: string; items: FlowStepIoItem[] }) {
+  const t = useTranslations('flr');
+  if (items.length === 0) return null;
+  return (
+    <div className="rounded-lg border border-border bg-background px-3 py-2">
+      <div className={`mb-1.5 ${KICKER}`}>{title}</div>
+      <dl className="space-y-1.5">
+        {items.map((i, n) => (
+          <div key={`${i.kind}-${i.name ?? ''}-${n}`} className="min-w-0">
+            <dt className="text-[11px] text-muted-foreground">
+              {t(`run.ioKind.${i.kind}`)}
+              {i.name ? ` · ${i.name}` : ''}
+            </dt>
+            <dd className="whitespace-pre-wrap break-words font-mono text-[12px]">
+              {i.value === '' ? t('common.noValue') : i.value}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  );
+}
+
 function StepRow({
   s,
   removed,
   nameOf,
+  wait,
 }: {
   s: FlowRunStep;
   removed: boolean;
   nameOf: (id: string) => string;
+  wait?: WaitState;
 }) {
   const t = useTranslations('flr');
   const when = useDateTime();
-  const tone = outcomeTone(s.outcome);
+  // A wait that was answered is done, not still waiting: say so, and how long it took.
+  const settled = wait && wait.state !== 'waiting';
+  const tone = settled
+    ? wait.state === 'answered'
+      ? 'success'
+      : 'neutral'
+    : outcomeTone(s.outcome);
+  const outcomeLabel = settled
+    ? t(wait.state === 'answered' ? 'outcome.answered' : 'outcome.gaveUp')
+    : s.outcome
+      ? t(`outcome.${s.outcome}`)
+      : null;
   const title = s.nodeLabel ?? (s.nodeId ? nameOf(s.nodeId) : t(`event.${s.event}`));
   const facts = stepFacts(s, nameOf);
+  if (wait?.state === 'answered') facts.push({ kind: 'answered', ms: wait.ms });
   const factText = (f: StepFact): string => {
     switch (f.kind) {
       case 'next':
         return t('run.factNext', { node: f.node });
       case 'waitingAt':
         return t('run.factWaiting', { node: f.node });
+      case 'menuKept':
+        return t('run.factMenuKept', { node: f.node });
+      case 'answered':
+        return t('run.factAnswered', { time: formatMs(f.ms) });
       case 'delay':
         return t('run.factDelay', { time: formatMs(f.seconds * 1000) });
       case 'replied':
@@ -88,8 +134,8 @@ function StepRow({
               </span>
             )}
             <span className="ml-auto flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-              {s.outcome && (
-                <span className={`font-semibold ${TEXT[tone]}`}>{t(`outcome.${s.outcome}`)}</span>
+              {outcomeLabel && (
+                <span className={`font-semibold ${TEXT[tone]}`}>{outcomeLabel}</span>
               )}
               {s.port !== null && <span>{t('run.exit', { port: s.port })}</span>}
               {s.attempt !== null && s.attempt > 1 && (
@@ -115,6 +161,8 @@ function StepRow({
           </div>
           {s.summary && <p className="break-words">{s.summary}</p>}
           {s.error && <p className="break-words text-danger">{s.error}</p>}
+          <IoBlock title={t('run.ioInput')} items={s.input} />
+          <IoBlock title={t('run.ioOutput')} items={s.output} />
           {facts.map((f) => (
             <p key={f.kind} className="break-words text-muted-foreground">
               {factText(f)}
@@ -137,6 +185,7 @@ export function RunTimeline({ run }: { run: FlowRunDetail }) {
   const removed = new Set(run.removedNodeIds);
   const path = pathOf(run);
   const nameOf = nodeNames(run);
+  const waits = waitStates(run.log, isLive(run.status));
 
   return (
     <section className={`${CARD} mb-5 overflow-hidden`}>
@@ -232,6 +281,7 @@ export function RunTimeline({ run }: { run: FlowRunDetail }) {
               s={s}
               removed={!!s.nodeId && removed.has(s.nodeId)}
               nameOf={nameOf}
+              wait={waits.get(s)}
             />
           ))}
         </ol>

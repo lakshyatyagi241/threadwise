@@ -79,22 +79,26 @@ describe('permissions (every route, every key)', () => {
 
   it('without a sign-in every route is 401', async () => {
     const id = '00000000-0000-4000-8000-000000000000';
+    const f = `/v2/faq/flows/${id}`;
     for (const [verb, path] of [
-      ['get', '/v2/faq/entries'],
-      ['post', '/v2/faq/entries'],
-      ['post', '/v2/faq/entries/bulk'],
-      ['get', `/v2/faq/entries/${id}`],
-      ['patch', `/v2/faq/entries/${id}`],
-      ['delete', `/v2/faq/entries/${id}`],
-      ['post', `/v2/faq/entries/${id}/variations`],
-      ['post', `/v2/faq/entries/${id}/variations/generate`],
-      ['post', '/v2/faq/test'],
-      ['get', '/v2/faq/settings'],
-      ['put', '/v2/faq/settings'],
-      ['get', '/v2/faq/insights/summary'],
-      ['get', '/v2/faq/insights/log'],
-      ['post', `/v2/faq/insights/log/${id}/learn`],
-      ['post', `/v2/faq/insights/log/${id}/dismiss`],
+      ['get', `${f}/entries`],
+      ['post', `${f}/entries`],
+      ['post', `${f}/entries/bulk`],
+      ['get', `${f}/entries/${id}`],
+      ['patch', `${f}/entries/${id}`],
+      ['delete', `${f}/entries/${id}`],
+      ['post', `${f}/entries/${id}/variations`],
+      ['patch', `${f}/entries/${id}/variations/${id}`],
+      ['delete', `${f}/entries/${id}/variations/${id}`],
+      ['post', `${f}/entries/${id}/variations/generate`],
+      ['post', `${f}/test`],
+      ['get', `${f}/settings`],
+      ['put', `${f}/settings`],
+      ['get', `${f}/insights/summary`],
+      ['get', `${f}/insights/log`],
+      ['post', `${f}/insights/log/${id}/learn`],
+      ['post', `${f}/insights/log/${id}/dismiss`],
+      ['get', `/v2/faq/flow-nodes/${id}`],
     ] as const) {
       expect((await api.http()[verb](path)).status, `${verb} ${path}`).toBe(401);
     }
@@ -1265,7 +1269,11 @@ describe('answering customers on a channel', () => {
     const peer = nextPeer();
     await say(peer, 'refunds please');
     expect(await untilSent(p, t, ch, peer, 1)).toEqual(['Refunds take 5 days.']);
-    const log = (await api.faq(t.admin).log('?view=answered')).body.data[0];
+    // The reply is queued before the decision is logged, so wait for this message's row.
+    const log = await until('the paraphrase is logged', async () => {
+      const row = (await api.faq(t.admin).log('?view=answered')).body.data[0];
+      return row?.query === 'refunds please' ? row : undefined;
+    });
     expect(log).toMatchObject({ outcome: 'answered', tier: 'semantic', faqQuestion: REFUND });
     expect(log.score).toBeGreaterThan(0.45);
     const list = (await api.faq(t.admin).list('?limit=50')).body.data as EntryJson[];
@@ -2013,5 +2021,667 @@ describe('tenant isolation', () => {
         [a.orgId, other],
       ),
     ).rejects.toThrow(/foreign key/);
+  });
+});
+
+// =====================================================================================================================
+// FAQs belong to a flow (ADR-0021, addendum 2): every FAQ, setting and log row lives in one flow and answers only inside it.
+
+const settingsOf = (over: Record<string, unknown> = {}) => ({
+  enabled: true,
+  threshold: 0.45,
+  minMargin: 0,
+  logQueries: true,
+  ...over,
+});
+
+/** Saves a flow's settings, sending the row version only when the flow already has a row. */
+async function setFlow(t: Tenant, flowUuid: string, over: Record<string, unknown> = {}) {
+  const f = api.faq(t.admin, flowUuid);
+  const cur = (await f.settings()).body;
+  const res = await f.saveSettings(
+    settingsOf({ ...(cur.rowVersion ? { rowVersion: cur.rowVersion } : {}), ...over }),
+  );
+  expect(res.status, JSON.stringify(res.body)).toBe(200);
+  return res.body;
+}
+
+const logRows = async (t: Tenant, flowUuid: string, view = 'all') =>
+  (await api.faq(t.admin, flowUuid).log(`?view=${view}`)).body.data as Array<
+    Record<string, unknown>
+  >;
+
+describe('FAQs belong to a flow: settings, limits and who may see what', () => {
+  let t: Tenant;
+  let A: { id: number; uuid: string };
+  let B: { id: number; uuid: string };
+  let ch: SimChannel;
+  const say = (peer: string, text: string) =>
+    simInbound(p, t, ch, { from: peer, name: 'Asha', text });
+
+  beforeAll(async () => {
+    await setPlatformKey(p, true);
+    t = await api.signup('faqflows');
+    ch = await simChannel(p, t);
+    A = api.flowOf(t);
+    B = await api.flow(t, 'Flow B');
+    await api.entry(
+      t.admin,
+      ORDER,
+      { answerText: 'A: order', variations: ['Track my order'] },
+      A.uuid,
+    );
+    await api.entry(
+      t.admin,
+      REFUND,
+      { answerText: 'B: refund', variations: ['Refund policy'] },
+      B.uuid,
+    );
+    await indexAll(p);
+  });
+
+  it('the switch, the numbers and the versions of each flow are independent', async () => {
+    const fa = api.faq(t.admin, A.uuid);
+    const fb = api.faq(t.admin, B.uuid);
+    for (const f of [fa, fb]) {
+      expect((await f.settings()).body).toMatchObject({
+        enabled: false,
+        isDefault: true,
+        rowVersion: null,
+        threshold: 0.5,
+      });
+    }
+    // Both switched off: silent, and nothing is logged.
+    const quiet = nextPeer();
+    await say(quiet, 'Track my order');
+    await new Promise((r) => setTimeout(r, 1500));
+    expect(await sentTo(p, t, ch, quiet)).toEqual([]);
+    expect(
+      await api.count(`SELECT count(*) AS n FROM faq_match_logs WHERE org_id = $1`, [t.orgId]),
+    ).toBe(0);
+
+    // A saves first: B is untouched, and B's first save needs no version although A's row exists.
+    expect((await fa.saveSettings(settingsOf({ threshold: 0.45 }))).body).toMatchObject({
+      enabled: true,
+      isDefault: false,
+      rowVersion: 1,
+    });
+    expect((await fb.settings()).body).toMatchObject({
+      enabled: false,
+      isDefault: true,
+      rowVersion: null,
+    });
+    expect((await fb.saveSettings(settingsOf({ enabled: false, rowVersion: 1 }))).status).toBe(409);
+    const bFirst = await fb.saveSettings(settingsOf({ enabled: false, threshold: 0.6 }));
+    expect(bFirst.status, JSON.stringify(bFirst.body)).toBe(200);
+    expect(bFirst.body).toMatchObject({ enabled: false, threshold: 0.6, rowVersion: 1 });
+    // A second save of A moves A's version only.
+    expect(
+      (await fa.saveSettings(settingsOf({ threshold: 0.5, rowVersion: 1 }))).body,
+    ).toMatchObject({
+      rowVersion: 2,
+      threshold: 0.5,
+    });
+    expect((await fa.saveSettings(settingsOf({ rowVersion: 1 }))).status).toBe(409);
+    expect((await fb.settings()).body).toMatchObject({
+      rowVersion: 1,
+      threshold: 0.6,
+      enabled: false,
+    });
+    expect((await fa.settings()).body).toMatchObject({
+      rowVersion: 2,
+      threshold: 0.5,
+      enabled: true,
+    });
+    expect(
+      await api.count(`SELECT count(*) AS n FROM faq_settings WHERE org_id = $1`, [t.orgId]),
+    ).toBe(2);
+
+    // A answers, B (switched off) stays silent on its own exact phrase.
+    const peer = nextPeer();
+    await say(peer, 'Track my order');
+    expect(await untilSent(p, t, ch, peer, 1)).toEqual(['A: order']);
+    const silent = nextPeer();
+    await say(silent, 'Refund policy');
+    await new Promise((r) => setTimeout(r, 1500));
+    expect(await sentTo(p, t, ch, silent)).toEqual([]);
+
+    // Switching B on is enough: it answers from then on.
+    await setFlow(t, B.uuid, { enabled: true, threshold: 0.45 });
+    const on = nextPeer();
+    await say(on, 'Refund policy');
+    expect(await untilSent(p, t, ch, on, 1)).toEqual(['B: refund']);
+
+    // Each flow's log holds only its own decisions.
+    const a = await until('A log', async () => {
+      const r = await logRows(t, A.uuid, 'answered');
+      return r.length >= 1 ? r : undefined;
+    });
+    expect(a.map((x) => x.faqQuestion)).toEqual([ORDER]);
+    const b = await until('B log', async () => {
+      const r = await logRows(t, B.uuid, 'answered');
+      return r.length >= 1 ? r : undefined;
+    });
+    expect(b.map((x) => x.faqQuestion)).toEqual([REFUND]);
+    // A also saw B's phrase while B was off: the only candidate then, so its miss is A's row (the nearest candidate speaks).
+    expect((await api.faq(t.admin, A.uuid).summary()).body.totals).toMatchObject({
+      messages: 2,
+      answered: 1,
+      unanswered: 1,
+    });
+    expect((await api.faq(t.admin, B.uuid).summary()).body.totals.messages).toBe(1);
+  });
+
+  it('the same question is allowed in two flows, a duplicate inside one flow is refused, and an FAQ is only reachable through its own flow', async () => {
+    const mine = await api.entry(t.admin, 'Shared question', { answerText: 'in A' }, A.uuid);
+    const twin = await api.entry(t.admin, 'Shared question', { answerText: 'in B' }, B.uuid);
+    expect(twin.id).not.toBe(mine.id);
+    const dup = await api
+      .faq(t.admin, A.uuid)
+      .create({ question: ' shared   QUESTION ', answerType: 'text', answerText: 'x' });
+    expect(dup.status).toBe(409);
+    expect(code(dup)).toBe('FAQ_DUPLICATE_QUESTION');
+    // Renaming into a question the other flow has is fine; into one of the same flow is not.
+    const other = await api.entry(t.admin, 'Another one', {}, A.uuid);
+    const clash = await api.faq(t.admin, A.uuid).update(other.id, {
+      question: 'Shared question',
+      answerType: 'text',
+      answerText: 'x',
+      status: 'active',
+      rowVersion: other.rowVersion,
+    });
+    expect(code(clash)).toBe('FAQ_DUPLICATE_QUESTION');
+
+    // The FAQ of A through B's routes: not found everywhere, and nothing changes.
+    const fb = api.faq(t.admin, B.uuid);
+    expect((await fb.get(other.id)).status).toBe(404);
+    expect(
+      (
+        await fb.update(other.id, {
+          question: 'Hijacked',
+          answerType: 'text',
+          answerText: 'x',
+          status: 'active',
+          rowVersion: other.rowVersion,
+        })
+      ).status,
+    ).toBe(404);
+    expect((await fb.addVariations(other.id, { texts: ['sneaky'] })).status).toBe(404);
+    expect((await fb.generate(other.id)).status).toBe(404);
+    expect((await fb.remove(other.id)).status).toBe(404);
+    expect((await fb.bulk({ action: 'delete', ids: [other.id] })).body).toEqual({ affected: 0 });
+    const still = (await api.faq(t.admin, A.uuid).get(other.id)).body as EntryJson;
+    expect(still.question).toBe('Another one');
+    // Lists, counts and the playground see their own flow only.
+    const listA = (await api.faq(t.admin, A.uuid).list('?limit=50')).body;
+    const listB = (await fb.list('?limit=50')).body;
+    expect((listA.data as EntryJson[]).map((e) => e.question)).not.toContain(REFUND);
+    expect((listB.data as EntryJson[]).map((e) => e.question)).not.toContain(ORDER);
+    expect(listA.stats.total).toBe(listA.data.length);
+    expect(listB.stats.total).toBe(listB.data.length);
+    const probe = await fb.test('Track my order');
+    expect((probe.body as DecisionJson).candidates.map((c) => c.question)).not.toContain(ORDER);
+  });
+
+  it('limits and usage count one flow at a time', async () => {
+    const lt = await api.signup('faqperflowlimit');
+    const x = api.flowOf(lt);
+    const y = await api.flow(lt, 'Second');
+    expect(
+      (await ops(p)('patch', '/faq').send({ maxFaqs: 2, maxVariationsPerFaq: 3 })).status,
+    ).toBe(200);
+    try {
+      await api.entry(lt.admin, 'Cap one', { variations: ['v1', 'v2'] }, x.uuid);
+      await api.entry(lt.admin, 'Cap two', {}, x.uuid);
+      const over = await api
+        .faq(lt.admin, x.uuid)
+        .create({ question: 'Cap three', answerType: 'text', answerText: 'x' });
+      expect(over.status).toBe(422);
+      expect(code(over)).toBe('FAQ_LIMIT_REACHED');
+      // The other flow still has all its room, and the same cap applies to it on its own.
+      await api.entry(lt.admin, 'Cap one', { variations: ['w1', 'w2'] }, y.uuid);
+      await api.entry(lt.admin, 'Cap two', {}, y.uuid);
+      const overY = await api
+        .faq(lt.admin, y.uuid)
+        .create({ question: 'Cap three', answerType: 'text', answerText: 'x' });
+      expect(code(overY)).toBe('FAQ_LIMIT_REACHED');
+      const tooMany = await api.faq(lt.admin, y.uuid).create({
+        question: 'Fits nowhere',
+        answerType: 'text',
+        answerText: 'x',
+        variations: ['a', 'b', 'c'],
+      });
+      expect(code(tooMany)).toBe('FAQ_LIMIT_REACHED');
+      const sx = (await api.faq(lt.admin, x.uuid).settings()).body;
+      expect(sx.limits).toEqual({ maxFaqs: 2, maxVariationsPerFaq: 3 });
+      expect(sx.usage).toEqual({ faqs: 2, variations: 4 });
+      // A flow with nothing in it has no usage, whatever the workspace holds.
+      const z = await api.flow(lt, 'Empty');
+      expect((await api.faq(lt.admin, z.uuid).settings()).body.usage).toEqual({
+        faqs: 0,
+        variations: 0,
+      });
+      expect((await api.entry(lt.admin, 'Fits in empty', {}, z.uuid)).id).toMatch(uuidRe);
+    } finally {
+      await ops(p)('patch', '/faq').send({ maxFaqs: 500, maxVariationsPerFaq: 60 });
+    }
+  });
+
+  it("another workspace's flow id is 404 on every route", async () => {
+    const o = await api.signup('faqforeignflow');
+    const foreign = api.flowOf(o).uuid;
+    const mine = await api.entry(t.admin, 'Foreign probe', {}, A.uuid);
+    const id = mine.id;
+    const f = api.faq(t.admin, foreign);
+    const body = { question: 'x', answerType: 'text', answerText: 'y' };
+    const checks: Array<[string, { status: number }]> = [
+      ['list', await f.list()],
+      ['create', await f.create(body)],
+      ['bulk', await f.bulk({ action: 'pause', ids: [id] })],
+      ['get', await f.get(id)],
+      ['update', await f.update(id, { ...body, status: 'active', rowVersion: 1 })],
+      ['remove', await f.remove(id)],
+      ['addVariations', await f.addVariations(id, { texts: ['x'] })],
+      ['updateVariation', await f.updateVariation(id, id, { text: 'x', rowVersion: 1 })],
+      ['removeVariation', await f.removeVariation(id, id)],
+      ['generate', await f.generate(id)],
+      ['test', await f.test('anything')],
+      ['settings', await f.settings()],
+      ['saveSettings', await f.saveSettings(settingsOf())],
+      ['summary', await f.summary()],
+      ['log', await f.log()],
+      ['learn', await f.learn(id, { faqId: id })],
+      ['dismiss', await f.dismiss(id)],
+    ];
+    for (const [name, res] of checks) expect(res.status, name).toBe(404);
+    // The reverse direction too, and a flow that does not exist at all.
+    expect((await api.faq(o.admin, A.uuid).list()).status).toBe(404);
+    expect((await api.faq(t.admin, '00000000-0000-4000-8000-00000000abcd').settings()).status).toBe(
+      404,
+    );
+    expect((await api.faq(t.admin, 'not-a-uuid').list()).status).toBe(400);
+    // Nothing was written on either side.
+    expect(
+      await api.count(`SELECT count(*) AS n FROM faq_settings WHERE org_id = $1`, [o.orgId]),
+    ).toBe(0);
+    expect(await api.count(`SELECT count(*) AS n FROM faqs WHERE org_id = $1`, [o.orgId])).toBe(0);
+  });
+
+  it('the old workspace-level routes are gone, and the step picker lists any flow of the workspace', async () => {
+    const as = api.as(t.admin);
+    const id = '00000000-0000-4000-8000-000000000000';
+    for (const [verb, path] of [
+      ['get', '/v2/faq/entries'],
+      ['post', '/v2/faq/entries'],
+      ['post', '/v2/faq/entries/bulk'],
+      ['get', `/v2/faq/entries/${id}`],
+      ['patch', `/v2/faq/entries/${id}`],
+      ['delete', `/v2/faq/entries/${id}`],
+      ['post', `/v2/faq/entries/${id}/variations`],
+      ['post', '/v2/faq/test'],
+      ['get', '/v2/faq/settings'],
+      ['put', '/v2/faq/settings'],
+      ['get', '/v2/faq/insights/summary'],
+      ['get', '/v2/faq/insights/log'],
+      ['post', `/v2/faq/insights/log/${id}/learn`],
+      ['get', `/v2/faq/flows/${A.uuid}/nodes`],
+    ] as const) {
+      expect((await as[verb](path).send({})).status, `${verb} ${path}`).toBe(404);
+    }
+    // The steps of a flow other than the one asking: the picker is about the answer target.
+    const nodes = await api.faq(t.admin, A.uuid).flowNodes(B.uuid);
+    expect(nodes.status).toBe(200);
+    expect((nodes.body.data as Array<{ id: string }>).map((n) => n.id)).toEqual(['t', 'a', 'z']);
+  });
+
+  it('learn and dismiss work inside one flow: a log row of another flow, or an FAQ of another flow, is 404', async () => {
+    const lt = await api.signup('faqlearnflow');
+    const la = api.flowOf(lt);
+    const lb = await api.flow(lt, 'Learn B');
+    const lch = await simChannel(p, lt);
+    const ea = await api.entry(lt.admin, ORDER, { answerText: 'A: order' }, la.uuid);
+    const eb = await api.entry(lt.admin, REFUND, { answerText: 'B: refund' }, lb.uuid);
+    await indexAll(p);
+    await setFlow(lt, la.uuid);
+    await setFlow(lt, lb.uuid);
+    // Nearest to A's question, below the bar everywhere: the row is A's.
+    await simInbound(p, lt, lch, { from: nextPeer(), name: 'X', text: 'order zzq xxw yyv kkj' });
+    const row = await until(
+      'an unanswered row in A',
+      async () => (await logRows(lt, la.uuid, 'unanswered'))[0],
+    );
+    expect(await logRows(lt, lb.uuid)).toHaveLength(0);
+    const fa = api.faq(lt.admin, la.uuid);
+    const fb = api.faq(lt.admin, lb.uuid);
+    expect((await fb.learn(row.id as string, { faqId: eb.id })).status).toBe(404);
+    expect((await fb.dismiss(row.id as string)).status).toBe(404);
+    expect((await fa.learn(row.id as string, { faqId: eb.id })).status).toBe(404);
+    expect((await fa.learn(row.id as string, { faqId: ea.id })).body).toEqual({ added: true });
+    expect(await logRows(lt, la.uuid, 'unanswered')).toHaveLength(0);
+    // A resolve with a log id of another flow neither resolves it nor fails the save.
+    await simInbound(p, lt, lch, { from: nextPeer(), name: 'X', text: 'order qpw eoi rty uyt' });
+    const row2 = await until(
+      'a second unanswered row',
+      async () => (await logRows(lt, la.uuid, 'unanswered'))[0],
+    );
+    const made = await fb.create({
+      question: 'Fresh in B',
+      answerType: 'text',
+      answerText: 'x',
+      resolveLogId: row2.id,
+    });
+    expect(made.status, JSON.stringify(made.body)).toBe(201);
+    expect(await logRows(lt, la.uuid, 'unanswered')).toHaveLength(1);
+    expect((await fa.dismiss(row2.id as string)).status).toBe(204);
+    expect(await logRows(lt, la.uuid, 'unanswered')).toHaveLength(0);
+  });
+
+  it('deleting a flow removes its FAQs, variations, settings and log; the other flows keep theirs', async () => {
+    const dt = await api.signup('faqdeleteflow');
+    const keep = api.flowOf(dt);
+    const doomed = await api.flow(dt, 'Doomed');
+    const dch = await simChannel(p, dt);
+    await api.entry(dt.admin, 'Keep me', { variations: ['keep phrase'] }, keep.uuid);
+    await api.entry(
+      dt.admin,
+      'Doomed one',
+      { answerText: 'bye', variations: ['doomed phrase'] },
+      doomed.uuid,
+    );
+    await indexAll(p);
+    await setFlow(dt, doomed.uuid);
+    await setFlow(dt, keep.uuid);
+    const peer = nextPeer();
+    await simInbound(p, dt, dch, { from: peer, name: 'X', text: 'doomed phrase' });
+    expect(await untilSent(p, dt, dch, peer, 1)).toEqual(['bye']);
+    await api.faq(dt.admin, doomed.uuid).test('doomed phrase');
+    const count = (table: string, col: string, flowId: number) =>
+      api.count(`SELECT count(*) AS n FROM ${table} WHERE org_id = $1 AND ${col} = $2`, [
+        dt.orgId,
+        flowId,
+      ]);
+    await until('the inbound decision is logged', async () =>
+      (await count('faq_match_logs', 'flow_id', doomed.id)) >= 2 ? true : undefined,
+    );
+    expect(await count('faqs', 'owner_flow_id', doomed.id)).toBe(1);
+    expect(await count('faq_settings', 'flow_id', doomed.id)).toBe(1);
+    await p.h.owner.query(`DELETE FROM flows WHERE id = $1`, [doomed.id]);
+    expect(await count('faqs', 'owner_flow_id', doomed.id)).toBe(0);
+    expect(await count('faq_settings', 'flow_id', doomed.id)).toBe(0);
+    expect(await count('faq_match_logs', 'flow_id', doomed.id)).toBe(0);
+    expect(
+      await api.count(
+        `SELECT count(*) AS n FROM faq_variations v WHERE v.org_id = $1 AND NOT EXISTS (SELECT 1 FROM faqs f WHERE f.org_id = v.org_id AND f.id = v.faq_id)`,
+        [dt.orgId],
+      ),
+    ).toBe(0);
+    expect(await count('faqs', 'owner_flow_id', keep.id)).toBe(1);
+    expect(await count('faq_settings', 'flow_id', keep.id)).toBe(1);
+    expect((await api.faq(dt.admin, doomed.uuid).list()).status).toBe(404);
+  });
+});
+
+describe('FAQs belong to a flow: which flows answer a message', () => {
+  let t: Tenant;
+  let ch: SimChannel;
+  const say = (peer: string, text: string) =>
+    simInbound(p, t, ch, { from: peer, name: 'Asha', text });
+
+  beforeAll(async () => {
+    await setPlatformKey(p, true);
+    t = await api.signup('faqwhich');
+    ch = await simChannel(p, t);
+  });
+
+  /** A flow with one FAQ (its answer names the flow), indexed, with answering switched on. */
+  async function answering(
+    name: string,
+    question: string,
+    over: Parameters<FaqApi['flow']>[2] = {},
+    on = true,
+  ) {
+    const flow = await api.flow(t, name, over);
+    await api.entry(t.admin, question, { answerText: `From ${name}` }, flow.uuid);
+    await indexAll(p);
+    if (on) await setFlow(t, flow.uuid);
+    return flow;
+  }
+
+  const silentFor = async (peer: string, text: string, ms = 1500) => {
+    await say(peer, text);
+    await new Promise((r) => setTimeout(r, ms));
+    expect(await sentTo(p, t, ch, peer), text).toEqual([]);
+  };
+
+  it("a flow's FAQs never answer on a channel the flow is not bound to", async () => {
+    const other = await simChannel(p, t);
+    const tied = await answering('Tied flow', 'Zeta policy', {
+      triggerChannelId: other.internalId,
+    });
+    const waba = await answering('Cloud flow', 'Omega policy', { provider: 'waba' });
+    // The simulator channel is not the tied flow's channel, and not the cloud flow's engine.
+    await silentFor(nextPeer(), 'zeta policy');
+    await silentFor(nextPeer(), 'omega policy');
+    expect(await logRows(t, tied.uuid)).toHaveLength(0);
+    expect(await logRows(t, waba.uuid)).toHaveLength(0);
+    // On its own channel the tied flow answers, tagged with its flow.
+    const peer = nextPeer();
+    await simInbound(p, t, other, { from: peer, name: 'Asha', text: 'zeta policy' });
+    expect(await untilSent(p, t, other, peer, 1)).toEqual(['From Tied flow']);
+    const row = await until(
+      'the tied flow log',
+      async () => (await logRows(t, tied.uuid, 'answered'))[0],
+    );
+    expect(row).toMatchObject({ outcome: 'answered', tier: 'exact' });
+    expect(await logRows(t, waba.uuid)).toHaveLength(0);
+  });
+
+  it('a flow that is not published, or not active, or has no active FAQ, does not answer', async () => {
+    const draft = await answering('Draft flow', 'Draft policy', { published: false });
+    const off = await answering('Inactive flow', 'Inactive policy', { active: false });
+    const empty = await api.flow(t, 'No FAQ flow');
+    await setFlow(t, empty.uuid);
+    await silentFor(nextPeer(), 'draft policy');
+    await silentFor(nextPeer(), 'inactive policy');
+    expect(await logRows(t, draft.uuid)).toHaveLength(0);
+    expect(await logRows(t, off.uuid)).toHaveLength(0);
+    expect(await logRows(t, empty.uuid)).toHaveLength(0);
+    // Publishing and activating them is all it takes.
+    await p.h.owner.query(`UPDATE flows SET is_published = true WHERE id = $1`, [draft.id]);
+    await p.h.owner.query(`UPDATE flows SET is_active = true WHERE id = $1`, [off.id]);
+    for (const [text, name] of [
+      ['draft policy', 'Draft flow'],
+      ['inactive policy', 'Inactive flow'],
+    ]) {
+      const peer = nextPeer();
+      await say(peer, text);
+      expect(await untilSent(p, t, ch, peer, 1)).toEqual([`From ${name}`]);
+    }
+  });
+
+  it('two flows on one channel: each answers its own FAQs, the best score wins, a tie goes to the lowest flow id', async () => {
+    const first = await answering('Multi one', 'Shipping cost');
+    const second = await answering('Multi two', 'Shipping rates');
+    for (const [text, name, win] of [
+      ['shipping cost', 'Multi one', first],
+      ['shipping rates', 'Multi two', second],
+    ] as const) {
+      const peer = nextPeer();
+      await say(peer, text);
+      expect(await untilSent(p, t, ch, peer, 1)).toEqual([`From ${name}`]);
+      const row = await until(`${name} log`, async () =>
+        (await logRows(t, win.uuid, 'answered')).find((r) => r.query === text),
+      );
+      expect(row.score).toBe(1);
+    }
+    // One log row per message: the loser's flow has none for it.
+    expect((await logRows(t, second.uuid)).filter((r) => r.query === 'shipping cost')).toHaveLength(
+      0,
+    );
+    expect((await logRows(t, first.uuid)).filter((r) => r.query === 'shipping rates')).toHaveLength(
+      0,
+    );
+
+    // The same exact phrase in both (a tie at 1): the lower flow id answers.
+    await api.entry(t.admin, 'Opening hours', { answerText: 'Hours from one' }, first.uuid);
+    await api.entry(t.admin, 'Opening hours', { answerText: 'Hours from two' }, second.uuid);
+    await indexAll(p);
+    const tie = nextPeer();
+    await say(tie, 'opening hours');
+    expect(await untilSent(p, t, ch, tie, 1)).toEqual(['Hours from one']);
+    expect(first.id).toBeLessThan(second.id);
+    const row = await until('the tie log', async () =>
+      (await logRows(t, first.uuid, 'answered')).find((r) => r.query === 'opening hours'),
+    );
+    expect(row).toBeTruthy();
+    expect((await logRows(t, second.uuid)).filter((r) => r.query === 'opening hours')).toHaveLength(
+      0,
+    );
+
+    // A partial match: the flow whose FAQ is closer answers (both clear a low bar).
+    await setFlow(t, first.uuid, { threshold: 0.2 });
+    await setFlow(t, second.uuid, { threshold: 0.2 });
+    const near = nextPeer();
+    await say(near, 'shipping rates today');
+    expect(await untilSent(p, t, ch, near, 1)).toEqual(['From Multi two']);
+  });
+
+  it("the customer's live run flow is tried first: it wins a tie", async () => {
+    // A flow that parks the customer in a delay (a live, sleeping run) and also holds an FAQ that ties with another flow's.
+    const graph = {
+      flowNodes: [
+        { id: 't', type: 'trigger', data: {}, isStart: true },
+        { id: 'd', type: 'delay', data: { amount: 60, unit: 'min' } },
+        { id: 'z', type: 'end', data: {} },
+      ],
+      flowEdges: [
+        { source: 't', sourceHandle: 'out', target: 'd' },
+        { source: 'd', sourceHandle: 'out', target: 'z' },
+      ],
+      vars: {},
+    };
+    const early = await answering('Early flow', 'Holiday schedule');
+    const res = await p.h.owner.query(
+      `INSERT INTO flows (org_id, flow_name, flow_data, trigger_kind, trigger_keywords, is_published, is_active, provider, flow_type)
+       VALUES ($1, 'Parking flow', $2::jsonb, 'keyword', 'parkme', true, true, 'simulator', 'chat') RETURNING id, uuid`,
+      [t.orgId, JSON.stringify(graph)],
+    );
+    const parking = { id: Number(res.rows[0].id), uuid: String(res.rows[0].uuid) };
+    await api.entry(t.admin, 'Holiday schedule', { answerText: 'From Parking flow' }, parking.uuid);
+    await indexAll(p);
+    await setFlow(t, parking.uuid);
+    expect(early.id).toBeLessThan(parking.id);
+
+    const plain = nextPeer();
+    await say(plain, 'holiday schedule');
+    expect(await untilSent(p, t, ch, plain, 1)).toEqual(['From Early flow']);
+
+    const peer = nextPeer();
+    await say(peer, 'parkme');
+    await until('a sleeping run', async () => {
+      const r = await p.h.owner.query(
+        `SELECT 1 FROM flow_runs WHERE org_id = $1 AND flow_id = $2 AND status = 'sleeping'`,
+        [t.orgId, parking.id],
+      );
+      return r.rows.length > 0 ? true : undefined;
+    });
+    await say(peer, 'holiday schedule');
+    expect(await untilSent(p, t, ch, peer, 1)).toEqual(['From Parking flow']);
+    const row = await until('the parking flow log', async () =>
+      (await logRows(t, parking.uuid, 'answered')).find((r) => r.query === 'holiday schedule'),
+    );
+    expect(row).toBeTruthy();
+    expect(
+      (await logRows(t, early.uuid)).filter((r) => r.query === 'holiday schedule'),
+    ).toHaveLength(1);
+  });
+
+  it('when no flow answers, the nearest flow gets the one log row, with the real outcome', async () => {
+    const near = await answering('Near flow', 'Warranty period details');
+    const far = await answering('Far flow', 'Gift wrapping options');
+    const peer = nextPeer();
+    await say(peer, 'warranty zzq xxw yyv kkj');
+    const row = await until('the unanswered row', async () =>
+      (await logRows(t, near.uuid, 'unanswered')).find(
+        (r) => r.query === 'warranty zzq xxw yyv kkj',
+      ),
+    );
+    expect(row.outcome).toBe('below_threshold');
+    expect(
+      (await logRows(t, far.uuid)).filter((r) => r.query === 'warranty zzq xxw yyv kkj'),
+    ).toHaveLength(0);
+    expect(await sentTo(p, t, ch, peer)).toEqual([]);
+    // A workspace where nothing is a candidate writes nothing at all.
+    const nobody = await api.signup('faqnobody');
+    const nch = await simChannel(p, nobody);
+    await simInbound(p, nobody, nch, { from: nextPeer(), name: 'X', text: 'anyone there' });
+    await new Promise((r) => setTimeout(r, 1500));
+    expect(
+      await api.count(`SELECT count(*) AS n FROM faq_match_logs WHERE org_id = $1`, [nobody.orgId]),
+    ).toBe(0);
+  });
+});
+
+describe('FAQs belong to a flow: the platform sees the whole workspace', () => {
+  it('stats and the workspaces table add up across flows; a workspace is enabled when any flow is', async () => {
+    await setPlatformKey(p, true);
+    const t = await api.signup('faqplatflows');
+    const a = api.flowOf(t);
+    const b = await api.flow(t, 'Second flow');
+    await api.entry(t.admin, 'One', { variations: ['uno'] }, a.uuid);
+    await api.entry(t.admin, 'Two', { variations: ['dos', 'tres'] }, b.uuid);
+    const name = (await p.h.owner.query(`SELECT name FROM organizations WHERE id = $1`, [t.orgId]))
+      .rows[0].name as string;
+    const mine = async () =>
+      (
+        (await ops(p)('get', `/faq/workspaces?search=${encodeURIComponent(name)}`)).body
+          .data as Array<Record<string, unknown>>
+      ).find((w) => w.name === name)!;
+    const enabledCount = async () =>
+      (await ops(p)('get', '/faq')).body.stats.workspacesEnabled as number;
+
+    const before = await enabledCount();
+    expect(await mine()).toMatchObject({ enabled: false, faqs: 2, variations: 5 });
+    await setFlow(t, a.uuid);
+    expect(await mine()).toMatchObject({ enabled: true, faqs: 2, variations: 5 });
+    expect(await enabledCount()).toBe(before + 1);
+    // A second flow switched on is still one workspace.
+    await setFlow(t, b.uuid);
+    expect(await enabledCount()).toBe(before + 1);
+    // Off in one flow, still enabled; off in both, not.
+    await setFlow(t, a.uuid, { enabled: false });
+    expect((await mine()).enabled).toBe(true);
+    await setFlow(t, b.uuid, { enabled: false });
+    expect((await mine()).enabled).toBe(false);
+    expect(await enabledCount()).toBe(before);
+    const overview = (await ops(p)('get', '/faq')).body.stats;
+    expect(overview.faqs).toBeGreaterThanOrEqual(2);
+  });
+
+  it('answered and total matches of the last 30 days sum the logs of every flow', async () => {
+    const t = await api.signup('faqplatlogs');
+    const ch = await simChannel(p, t);
+    const a = api.flowOf(t);
+    const b = await api.flow(t, 'Other');
+    await api.entry(t.admin, 'Alpha question', { answerText: 'alpha' }, a.uuid);
+    await api.entry(t.admin, 'Beta question', { answerText: 'beta' }, b.uuid);
+    await indexAll(p);
+    await setFlow(t, a.uuid);
+    await setFlow(t, b.uuid);
+    for (const text of ['alpha question', 'beta question']) {
+      const peer = nextPeer();
+      await simInbound(p, t, ch, { from: peer, name: 'X', text });
+      await untilSent(p, t, ch, peer, 1);
+    }
+    const name = (await p.h.owner.query(`SELECT name FROM organizations WHERE id = $1`, [t.orgId]))
+      .rows[0].name as string;
+    const row = await until('both logged', async () => {
+      const w = (
+        (await ops(p)('get', `/faq/workspaces?search=${encodeURIComponent(name)}`)).body
+          .data as Array<Record<string, unknown>>
+      ).find((x) => x.name === name)!;
+      return w.matches30d === 2 ? w : undefined;
+    });
+    expect(row).toMatchObject({ matches30d: 2, answered30d: 2, faqs: 2 });
   });
 });

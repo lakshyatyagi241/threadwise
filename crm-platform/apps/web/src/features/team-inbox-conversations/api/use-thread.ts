@@ -1,10 +1,16 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import { messageResponseSchema, type MessageResponse, type SendMessageInput } from '@crm/contracts';
+import {
+  messageResponseSchema,
+  type EmailReplyExtras,
+  type MessageResponse,
+  type SendMessageInput,
+  type WaGroupMention,
+} from '@crm/contracts';
 import type { ShareInput } from '../lib/share';
 import { useRealtimeEvent, useResync, useRoom } from '@/lib/realtime';
-import { errorCode } from '../lib/errors';
+import { errorCode, retryAfterOf } from '../lib/errors';
 import {
   EMPTY_THREAD,
   firstSeq,
@@ -29,6 +35,10 @@ export interface SendDraft {
   file: File | null;
   /** The message this send answers (its `id`). */
   replyToMessageId?: string | null;
+  /** Email conversations: cc, bcc and subject of the reply. */
+  email?: EmailReplyExtras;
+  /** Personal-number group threads: the members @mentioned in the text (never sent with a file). */
+  mentions?: WaGroupMention[];
 }
 
 export interface Thread {
@@ -238,6 +248,8 @@ export function useThread(
               clientMessageId: p.clientMessageId,
               body: p.body,
               ...(p.replyToMessageId ? { replyToMessageId: p.replyToMessageId } : {}),
+              ...(p.email ? { email: p.email } : {}),
+              ...(p.mentions && p.mentions.length > 0 ? { mentions: p.mentions } : {}),
             });
       files.current.delete(p.clientMessageId);
       if (latest.current.conversationId === id) dispatch({ type: 'merge', messages: [message] });
@@ -245,7 +257,13 @@ export function useThread(
     } catch (e) {
       const code = errorCode(e);
       if (latest.current.conversationId === id) {
-        dispatch({ type: 'sendFailed', clientMessageId: p.clientMessageId, error: code });
+        const retryAfterS = retryAfterOf(e);
+        dispatch({
+          type: 'sendFailed',
+          clientMessageId: p.clientMessageId,
+          error: code,
+          ...(retryAfterS !== undefined ? { retryAfterS } : {}),
+        });
       }
       if (code === 'SERVICE_WINDOW_CLOSED') latest.current.options.onWindowClosed();
     } finally {
@@ -266,6 +284,10 @@ export function useThread(
         kind: draft.file ? 'media' : 'text',
         body,
         replyToMessageId: draft.replyToMessageId ?? null,
+        ...(draft.email ? { email: draft.email } : {}),
+        ...(!draft.file && draft.mentions && draft.mentions.length > 0
+          ? { mentions: draft.mentions }
+          : {}),
         media: draft.file
           ? {
               mediaId: '',

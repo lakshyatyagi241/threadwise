@@ -78,6 +78,11 @@
       "payments": "支払い"
     },
     "help": "ヘルプ",
-    "unreadCount": "{count, plural, other {# 件の未読}}"
+    "unreadCount": "{count, plural, other {# 件の未読}}",
+    "backgroundError": {
+      "message": "通知、残高、受信トレイの件数など、一部のリアルタイムの数値を更新できませんでした。表示が古い可能性があります。",
+      "retry": "再試行",
+      "dismiss": "閉じる"
+    }
   }
 }

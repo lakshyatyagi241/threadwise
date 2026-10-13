@@ -10,7 +10,8 @@
       "webchat": "Chat trên website",
       "telegram": "Telegram",
       "facebook": "Facebook Messenger",
-      "instagram": "Instagram"
+      "instagram": "Instagram",
+      "email": "Email (Gmail)"
     },
     "page": {
       "back": "Tự động hóa và AI",
@@ -81,7 +82,10 @@
       "lastFired": "lần cuối vào {when}",
       "edit": "Sửa",
       "duplicate": "Nhân bản",
-      "delete": "Xóa"
+      "delete": "Xóa",
+      "startsFlow": "Đồng thời bắt đầu luồng {name}",
+      "flowOff": "Luồng đang tắt",
+      "flowGone": "Đồng thời bắt đầu một luồng đã bị xóa"
     },
     "form": {
       "back": "Tự động giao việc",
@@ -170,7 +174,57 @@
       "cancel": "Hủy",
       "save": "Lưu",
       "saveActivate": "Lưu và kích hoạt",
-      "openCount": "{open} đang mở"
+      "openCount": "{open} đang mở",
+      "flow": {
+        "title": "Đồng thời bắt đầu một luồng",
+        "hint": "Không bắt buộc. Luồng được bắt đầu cho cuộc trò chuyện khi quy tắc này chạy, trên cùng kênh. Luồng chỉ cần được bật; không cần phải xuất bản.",
+        "none": "Không có luồng",
+        "offOption": "{name} (đã tắt)",
+        "goneOption": "Một luồng không còn tồn tại",
+        "loadFailed": "Không thể tải các luồng nên danh sách có thể chưa đầy đủ."
+      }
+    },
+    "performance": {
+      "eyebrow": "Hộp thư nhóm · Báo cáo",
+      "title": "Nhóm của bạn phản hồi nhanh đến đâu?",
+      "subtitle": "Xem số phản hồi, số đã giải quyết và thời gian phản hồi đầu tiên của từng nhân viên.",
+      "summary": "{replies} phản hồi, {resolved} đã giải quyết, phản hồi đầu tiên trung bình {avg}",
+      "live": "Trực tiếp",
+      "backToInbox": "Quay lại hộp thư",
+      "rangeLabel": "Khoảng thời gian",
+      "ranges": {
+        "today": "Hôm nay",
+        "week": "Tuần này",
+        "month": "Tháng này"
+      },
+      "channelLabel": "Kênh",
+      "allChannels": "Tất cả kênh",
+      "loadFailed": "Không tải được báo cáo. Sẽ thử lại sau giây lát.",
+      "noAccess": "Bạn không có quyền xem báo cáo hiệu suất nhóm.",
+      "loading": "Đang tải báo cáo…",
+      "empty": "Không có hoạt động của nhân viên trong khoảng này.",
+      "unknown": "Không rõ",
+      "tiles": {
+        "replies": "Phản hồi đã gửi",
+        "resolved": "Đã giải quyết",
+        "inbounds": "Tin đến",
+        "avgFirstReply": "Phản hồi đầu TB"
+      },
+      "columns": {
+        "agent": "Nhân viên",
+        "status": "Trạng thái",
+        "load": "Tải",
+        "replies": "Phản hồi",
+        "resolved": "Đã giải quyết",
+        "avgReply": "Phản hồi TB",
+        "lastSeen": "Lần cuối hoạt động"
+      },
+      "statuses": {
+        "online": "Trực tuyến",
+        "away": "Vắng mặt",
+        "busy": "Bận",
+        "offline": "Ngoại tuyến"
+      }
     }
   }
 }

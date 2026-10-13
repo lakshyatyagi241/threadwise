@@ -4,6 +4,7 @@ import { SafeFetch } from '../../infra/providers/node-bridge-runtime/safe-fetch'
 import { ChatConversationsModule } from '../chat-conversations';
 import { CrmModule } from '../crm';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
+import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { ApiKeyGuard } from '../public-api';
 import { CapTally, PacingRuntime } from './caps';
 import { FlowRuntimeController } from './flow-runtime.controller';
@@ -51,6 +52,7 @@ import { IntegrationNodesModule } from './runtime/nodes/integrations/integration
   imports: [
     ChatConversationsModule,
     PlansCoreModule,
+    WalletMessageBillingModule,
     CrmModule,
     ActionNodesModule,
     AiNodesModule,

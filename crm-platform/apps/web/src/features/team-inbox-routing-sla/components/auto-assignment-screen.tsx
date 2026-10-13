@@ -397,6 +397,16 @@ export function RuleRow({
           {': '}
           {shown.join(', ')}
           {more > 0 && ` ${t('andMore', { count: more })}`}
+          {rule.triggerFlow && (
+            <span className="mt-1 flex flex-wrap items-center gap-2">
+              {rule.triggerFlow.name === null
+                ? t('flowGone')
+                : t('startsFlow', { name: rule.triggerFlow.name })}
+              {rule.triggerFlow.name !== null && !rule.triggerFlow.isActive && (
+                <Badge tone="warning">{t('flowOff')}</Badge>
+              )}
+            </span>
+          )}
         </dd>
       </dl>
 

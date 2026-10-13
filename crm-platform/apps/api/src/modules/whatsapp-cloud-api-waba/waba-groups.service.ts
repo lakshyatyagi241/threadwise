@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import { DatabaseService } from '../../infra/db/database.service';
+import { emitDeliveryReported } from '../../kernel/outbox/delivery-report';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { emitGroupEvents, groupEventsFor } from './waba-group-events';
 import {
@@ -80,12 +81,57 @@ export class WabaGroupsService {
           sql`UPDATE messages SET meta = ${JSON.stringify(next)}::jsonb, status = ${status}
                WHERE org_id = ${orgId} AND id = ${Number(row.id)} AND created_at = ${row.created_at}::timestamptz`,
         );
+        await this.reportMemberDelivery(
+          tx,
+          orgId,
+          Number(row.id),
+          wamid,
+          st,
+          delivery,
+          previousOf(meta, st),
+        );
         return true;
       });
     } catch (err) {
       this.logger.warn({ err: String(err) }, 'group delivery status could not be recorded');
       return false;
     }
+  }
+
+  /**
+   * A group message is billed once per member who receives it: each billable member that reaches delivered or read is reported to the
+   * workspace's wallet as its own message (`<wamid>:<member id>`). Only the member's FIRST billable status is reported (a real
+   * transition, as the delivery-report contract asks): a retried webhook, or a "read" after the "delivered" that was already
+   * reported, writes no second event (and the wallet's per-key claim would charge once even so). A member Meta marks free (the group's
+   * customer-service window) is never reported.
+   */
+  private async reportMemberDelivery(
+    tx: Tx,
+    orgId: number,
+    messageId: number,
+    wamid: string,
+    st: Record<string, unknown>,
+    delivery: GroupDelivery,
+    before: string,
+  ): Promise<void> {
+    const status = String(st.status ?? '');
+    const member = String(st.recipient_participant_id ?? '');
+    if (!member || (status !== 'delivered' && status !== 'read')) return;
+    if (before === 'delivered' || before === 'read') return;
+    if (delivery.participants[member]?.billable !== true) return;
+    await emitDeliveryReported(this.outbox, tx, {
+      orgId,
+      aggregateModule: 'chat-conversations',
+      aggregateId: messageId,
+      report: {
+        provider: 'waba',
+        providerMessageId: `${wamid}:${member}`.slice(0, 191),
+        status,
+        recipient: /^\+?\d{6,20}$/.test(member) ? member : null,
+        category: delivery.category,
+        source: 'inbox',
+      },
+    });
   }
 
   /** The group's subject, for the thread title; null until a lifecycle event has told us. */
@@ -191,4 +237,11 @@ function toFacts(r: GroupRow): GroupFacts {
     creationTimestamp: r.creation_timestamp ? new Date(r.creation_timestamp) : null,
     meta: r.meta_json ?? {},
   };
+}
+
+/** The status this member already had on the message before the status row being applied ('' when none). */
+function previousOf(meta: Record<string, unknown>, st: Record<string, unknown>): string {
+  const member = String(st.recipient_participant_id ?? '');
+  const people = (meta.group_delivery as Partial<GroupDelivery> | undefined)?.participants;
+  return (member && people?.[member]?.status) || '';
 }

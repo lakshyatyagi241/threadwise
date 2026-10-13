@@ -119,6 +119,8 @@
       "colStarted": "शुरू हुआ",
       "colActivity": "आखिरी गतिविधि",
       "colSteps": "स्टेप",
+      "colReplies": "जवाब",
+      "repliesHint": "इस रन के प्रतीक्षा नोड तक पहुँचे ग्राहक संदेश",
       "colActions": "कार्रवाइयाँ",
       "open": "रन खोलें",
       "cancel": "रद्द करें",
@@ -197,7 +199,19 @@
       "factWaiting": "यहाँ प्रतीक्षा: {node}",
       "factDelay": "{time} प्रतीक्षा",
       "factReplied": "ग्राहक ने उत्तर दिया: {text}",
-      "factEnded": "समाप्त: {reason}"
+      "factEnded": "समाप्त: {reason}",
+      "ioInput": "इनपुट",
+      "ioOutput": "आउटपुट",
+      "ioKind": {
+        "message": "भेजा गया संदेश",
+        "reply": "ग्राहक का उत्तर",
+        "variable": "वेरिएबल",
+        "request": "अनुरोध",
+        "response": "प्रतिक्रिया",
+        "result": "परिणाम"
+      },
+      "factMenuKept": "यहाँ अगला चरण नहीं है। {node} के विकल्प सक्रिय रहते हैं।",
+      "factAnswered": "{time} बाद उत्तर मिला"
     },
     "event": {
       "step": "स्टेप",
@@ -503,7 +517,9 @@
       "error": "त्रुटि",
       "skipped": "छोड़ा गया",
       "waiting": "प्रतीक्षा में",
-      "timeout": "समय समाप्त"
+      "timeout": "समय समाप्त",
+      "answered": "उत्तर मिला",
+      "gaveUp": "कोई उत्तर नहीं"
     }
   }
 }

@@ -4,6 +4,7 @@ import { SMS_GATEWAY } from '../../infra/providers/channel-sms/sms.port';
 import { SmsProviderGateway, smsEnvProvider } from '../../infra/providers/channel-sms/sms-gateway';
 import { BroadcastsModule, EngineSenderRegistry } from '../broadcasts';
 import { CampaignsModule } from '../campaigns';
+import { ContactConsentModule } from '../contact-consent';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { SmsAvailability } from './sms-availability.service';
 import { SmsEngineSender } from './sms-engine.sender';
@@ -23,7 +24,7 @@ import { SmsStatusService } from './sms-status.service';
  * answer in the worker is harmless (it listens on no port).
  */
 @Module({
-  imports: [BroadcastsModule, CampaignsModule, PlansCoreModule],
+  imports: [BroadcastsModule, CampaignsModule, ContactConsentModule, PlansCoreModule],
   controllers: [SmsSendersController, SmsStatusController, SmsPlatformController],
   providers: [
     CryptoService,

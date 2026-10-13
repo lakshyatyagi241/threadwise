@@ -3,7 +3,7 @@ import { sql, type SQL } from 'drizzle-orm';
 import type { InboxCounts, InboxTab } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { AppError } from '../../common/errors/app-error';
-import type { ConversationViewer } from '../../realtime';
+import { channelOwnerSql, type ConversationViewer } from '../../realtime';
 import { visibleToSql } from './visibility-sql';
 
 type Raw = Record<string, unknown>;
@@ -40,6 +40,8 @@ export interface InboxConversationRow {
   assigneeTeamColor: string | null;
   assigneeAgentUuid: string | null;
   assigneeAgentName: string | null;
+  /** Who owns the channel (a personal mailbox's owner), for the visibility rule: see `ConversationRecord`. */
+  channelOwnerUserId: number | null;
   snoozedUntil: string | null;
   /** Timestamps as text at the database's microsecond precision: they are keyset cursor material and must round-trip exactly. */
   lastMessageAt: string | null;
@@ -57,6 +59,8 @@ export interface InboxConversationRow {
   slaFirstResponseDue: string | null;
   slaResolutionDue: string | null;
   slaBreached: boolean;
+  /** Labels on the thread, by name. */
+  labels: Array<{ id: string; name: string; color: string | null }>;
 }
 
 /** What a mutation locks and checks: the columns visibility, state rules and optimistic locking need, nothing joined. */
@@ -68,6 +72,8 @@ export interface LockedConversation {
   assigneeUserId: number | null;
   assigneeTeamId: number | null;
   assigneeAgentId: number | null;
+  /** Who owns the channel (a personal mailbox's owner), for the visibility rule: see `ConversationRecord`. */
+  channelOwnerUserId: number | null;
   resolvedAt: string | null;
   rowVersion: number;
 }
@@ -77,6 +83,8 @@ export interface ListFilter {
   /** `undefined`: the open and pending threads. `'all'`: no filter. */
   status?: string;
   channelId?: number;
+  /** Label uuids: threads that carry any of them. */
+  labelIds?: string[];
   q?: string;
   archived: boolean;
   limit: number;
@@ -114,7 +122,7 @@ export function decodeListCursor(raw: string): ListCursor {
 const ts = (column: string) =>
   `to_char(${column} AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"')`;
 
-const SELECT_ROW = sql.raw(`
+const SELECT_COLUMNS = sql.raw(`
   c.id, c.uuid, c.channel_id, ch.uuid AS channel_uuid, ch.kind AS channel_kind, ch.name AS channel_name, c.peer_key, c.peer_name, c.title, c.preview, c.status, c.priority, c.archived,
   ${ts('c.pinned_at')} AS pinned_at, ${ts('c.muted_at')} AS muted_at, c.unread_count, c.needs_contact,
   c.contact_id, ct.uuid AS contact_uuid, ct.name AS contact_name,
@@ -127,7 +135,12 @@ const SELECT_ROW = sql.raw(`
   ${ts('c.created_at')} AS created_at, ${ts('c.updated_at')} AS updated_at, c.row_version,
   c.customer_language, ${ts('c.waiting_since')} AS waiting_since, ${ts('c.first_response_at')} AS first_response_at,
   ${ts('c.resolved_at')} AS resolved_at, ${ts('c.sla_first_response_due')} AS sla_first_response_due,
-  ${ts('c.sla_resolution_due')} AS sla_resolution_due, c.sla_breached`);
+  ${ts('c.sla_resolution_due')} AS sla_resolution_due, c.sla_breached,
+  COALESCE((SELECT json_agg(json_build_object('id', lt.uuid, 'name', lt.name::text, 'color', lt.color) ORDER BY lt.name)
+            FROM conversation_tag lx JOIN tags lt ON lt.org_id = lx.org_id AND lt.id = lx.tag_id
+            WHERE lx.org_id = c.org_id AND lx.conversation_id = c.id), '[]'::json) AS labels`);
+
+const SELECT_ROW = sql`${SELECT_COLUMNS}, ${channelOwnerSql('c')} AS channel_owner_user_id`;
 
 const FROM_ROW = sql`
   FROM conversations c
@@ -171,6 +184,7 @@ function toRow(r: Raw): InboxConversationRow {
     assigneeTeamColor: str(r.assignee_team_color),
     assigneeAgentUuid: str(r.assignee_agent_uuid),
     assigneeAgentName: str(r.assignee_agent_name),
+    channelOwnerUserId: int(r.channel_owner_user_id),
     snoozedUntil: str(r.snoozed_until),
     lastMessageAt: str(r.last_message_at),
     lastInboundAt: str(r.last_inbound_at),
@@ -187,8 +201,24 @@ function toRow(r: Raw): InboxConversationRow {
     slaFirstResponseDue: str(r.sla_first_response_due),
     slaResolutionDue: str(r.sla_resolution_due),
     slaBreached: r.sla_breached === true,
+    labels: (r.labels as InboxConversationRow['labels'] | null) ?? [],
   };
 }
+
+/** The visibility columns of one conversation (`ConversationRecord` plus its id). */
+export interface ConversationRecordRow {
+  id: number;
+  assigneeUserId: number | null;
+  assigneeTeamId: number | null;
+  channelOwnerUserId: number | null;
+}
+
+const toRecord = (r: Raw): ConversationRecordRow => ({
+  id: Number(r.id),
+  assigneeUserId: int(r.assignee_user_id),
+  assigneeTeamId: int(r.assignee_team_id),
+  channelOwnerUserId: int(r.channel_owner_user_id),
+});
 
 /** Escapes the three characters that mean something to LIKE, so a search for `50%` looks for 50 followed by a percent sign. */
 export const likePattern = (q: string): string => `%${q.replace(/[\\%_]/g, '\\$&')}%`;
@@ -227,6 +257,13 @@ export class ConversationsRepository {
       if (tab) where.push(tab);
     }
     if (f.channelId !== undefined) where.push(sql`c.channel_id = ${f.channelId}`);
+    if (f.labelIds && f.labelIds.length > 0) {
+      where.push(sql`EXISTS (SELECT 1 FROM conversation_tag fx JOIN tags ft ON ft.org_id = fx.org_id AND ft.id = fx.tag_id
+        WHERE fx.org_id = c.org_id AND fx.conversation_id = c.id AND ft.uuid IN (${sql.join(
+          f.labelIds.map((u) => sql`${u}::uuid`),
+          sql`, `,
+        )}))`);
+    }
     if (f.q) where.push(this.searchCondition(f.q));
     if (f.cursor) where.push(this.cursorCondition(f.cursor));
 
@@ -280,9 +317,10 @@ export class ConversationsRepository {
    */
   async lockByUuid(tx: Tx, orgId: number, uuid: string): Promise<LockedConversation | null> {
     const res = await tx.execute(sql`
-      SELECT id, uuid, channel_id, status, assignee_user_id, assignee_team_id, assignee_agent_id,
-             ${sql.raw(ts('resolved_at'))} AS resolved_at, row_version
-      FROM conversations WHERE org_id = ${orgId} AND uuid = ${uuid} FOR UPDATE`);
+      SELECT c.id, c.uuid, c.channel_id, c.status, c.assignee_user_id, c.assignee_team_id, c.assignee_agent_id,
+             ${channelOwnerSql('c')} AS channel_owner_user_id,
+             ${sql.raw(ts('c.resolved_at'))} AS resolved_at, c.row_version
+      FROM conversations c WHERE c.org_id = ${orgId} AND c.uuid = ${uuid} FOR UPDATE OF c`);
     const r = rowsOf(res)[0];
     if (!r) return null;
     return {
@@ -293,28 +331,20 @@ export class ConversationsRepository {
       assigneeUserId: int(r.assignee_user_id),
       assigneeTeamId: int(r.assignee_team_id),
       assigneeAgentId: int(r.assignee_agent_id),
+      channelOwnerUserId: int(r.channel_owner_user_id),
       resolvedAt: str(r.resolved_at),
       rowVersion: Number(r.row_version),
     };
   }
 
   /** The visibility columns of a conversation by uuid, without a lock (the cheap "may this person see it" check for reads). */
-  async recordByUuid(
-    tx: Tx,
-    orgId: number,
-    uuid: string,
-  ): Promise<{ id: number; assigneeUserId: number | null; assigneeTeamId: number | null } | null> {
+  async recordByUuid(tx: Tx, orgId: number, uuid: string): Promise<ConversationRecordRow | null> {
     const res = await tx.execute(
-      sql`SELECT id, assignee_user_id, assignee_team_id FROM conversations WHERE org_id = ${orgId} AND uuid = ${uuid}`,
+      sql`SELECT c.id, c.assignee_user_id, c.assignee_team_id, ${channelOwnerSql('c')} AS channel_owner_user_id
+          FROM conversations c WHERE c.org_id = ${orgId} AND c.uuid = ${uuid}`,
     );
     const r = rowsOf(res)[0];
-    return r
-      ? {
-          id: Number(r.id),
-          assigneeUserId: int(r.assignee_user_id),
-          assigneeTeamId: int(r.assignee_team_id),
-        }
-      : null;
+    return r ? toRecord(r) : null;
   }
 
   /**
@@ -325,20 +355,14 @@ export class ConversationsRepository {
     tx: Tx,
     orgId: number,
     messageUuid: string,
-  ): Promise<{ id: number; assigneeUserId: number | null; assigneeTeamId: number | null } | null> {
+  ): Promise<ConversationRecordRow | null> {
     const res = await tx.execute(sql`
-      SELECT c.id, c.assignee_user_id, c.assignee_team_id
+      SELECT c.id, c.assignee_user_id, c.assignee_team_id, ${channelOwnerSql('c')} AS channel_owner_user_id
       FROM conversations c
       WHERE c.org_id = ${orgId}
         AND c.id = (SELECT m.conversation_id FROM messages m WHERE m.org_id = ${orgId} AND m.uuid = ${messageUuid} LIMIT 1)`);
     const r = rowsOf(res)[0];
-    return r
-      ? {
-          id: Number(r.id),
-          assigneeUserId: int(r.assignee_user_id),
-          assigneeTeamId: int(r.assignee_team_id),
-        }
-      : null;
+    return r ? toRecord(r) : null;
   }
 
   /** The wire id of a staff user: events and outbox payloads carry uuids, never the internal id. */
@@ -369,6 +393,90 @@ export class ConversationsRepository {
         resolved_by_agent_id = ${patch.resolvedAt === null ? sql`NULL` : sql`resolved_by_agent_id`},
         snoozed_until = ${patch.clearSnooze ? sql`NULL` : sql`snoozed_until`}
       WHERE org_id = ${orgId} AND id = ${id}`);
+  }
+
+  /**
+   * What a bulk request needs to know about each named conversation, no visibility applied (the single-conversation call that follows
+   * applies it): the version to send, the newest message seq, and the unread counter. A uuid that is not in the workspace is absent.
+   */
+  async bulkProbe(
+    tx: Tx,
+    orgId: number,
+    uuids: string[],
+  ): Promise<Map<string, { rowVersion: number; msgSeq: number; unreadCount: number }>> {
+    if (uuids.length === 0) return new Map();
+    const res = await tx.execute(sql`
+      SELECT uuid, row_version, msg_seq, unread_count FROM conversations
+      WHERE org_id = ${orgId} AND uuid IN (${sql.join(
+        uuids.map((u) => sql`${u}::uuid`),
+        sql`, `,
+      )})`);
+    return new Map(
+      rowsOf(res).map((r) => [
+        r.uuid as string,
+        {
+          rowVersion: Number(r.row_version),
+          msgSeq: Number(r.msg_seq),
+          unreadCount: Number(r.unread_count),
+        },
+      ]),
+    );
+  }
+
+  /** The priority column. The `touch_row` trigger moves `row_version`. */
+  async setPriority(tx: Tx, orgId: number, id: number, priority: string): Promise<void> {
+    await tx.execute(
+      sql`UPDATE conversations SET priority = ${priority} WHERE org_id = ${orgId} AND id = ${id}`,
+    );
+  }
+
+  /** Park the thread until `until`: status `snoozed`, wake time set. The partial index `idx_conversations_snooze_due` serves the sweep. */
+  async snooze(tx: Tx, orgId: number, id: number, until: Date): Promise<void> {
+    await tx.execute(sql`
+      UPDATE conversations SET status = 'snoozed', snoozed_until = ${until.toISOString()}::timestamptz
+      WHERE org_id = ${orgId} AND id = ${id}`);
+  }
+
+  /**
+   * Snoozed threads whose wake time has passed, across every workspace (privileged transaction), oldest first. Locks the rows it
+   * returns and skips ones another sweep holds, so two workers never wake the same thread twice.
+   */
+  async lockDueSnoozed(
+    tx: Tx,
+    limit: number,
+  ): Promise<
+    Array<{
+      id: number;
+      orgId: number;
+      uuid: string;
+      rowVersion: number;
+      assigneeUserId: number | null;
+      assigneeTeamId: number | null;
+      channelOwnerUserId: number | null;
+    }>
+  > {
+    const res = await tx.execute(sql`
+      SELECT c.id, c.org_id, c.uuid, c.row_version, c.assignee_user_id, c.assignee_team_id,
+             ${channelOwnerSql('c')} AS channel_owner_user_id
+      FROM conversations c
+      WHERE c.status = 'snoozed' AND c.snoozed_until IS NOT NULL AND c.snoozed_until <= now()
+      ORDER BY c.snoozed_until, c.id LIMIT ${limit} FOR UPDATE OF c SKIP LOCKED`);
+    return rowsOf(res).map((r) => ({
+      id: Number(r.id),
+      orgId: Number(r.org_id),
+      uuid: r.uuid as string,
+      rowVersion: Number(r.row_version),
+      assigneeUserId: int(r.assignee_user_id),
+      assigneeTeamId: int(r.assignee_team_id),
+      channelOwnerUserId: int(r.channel_owner_user_id),
+    }));
+  }
+
+  /** Wake a snoozed thread: open again, wake time cleared. */
+  async wake(tx: Tx, orgId: number, id: number): Promise<void> {
+    await tx.execute(sql`
+      UPDATE conversations SET status = 'open', snoozed_until = NULL
+      WHERE org_id = ${orgId} AND id = ${id} AND status = 'snoozed'`);
   }
 
   /** Other threads with the same contact, newest first, inside the caller's visibility. */

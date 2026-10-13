@@ -19,6 +19,7 @@ import {
   ymd,
 } from '../../lib/billing-format';
 import { useUrlState } from '../../lib/use-url-state';
+import { RefundDialog, type RefundTarget } from './refund-dialog';
 import {
   BillingHeader,
   Crumb,
@@ -33,13 +34,16 @@ import {
   TableCard,
   TrendIcon,
   TwoToneTitle,
+  CustomRange,
   WindowSelect,
+  customRangeValid,
+  windowPatch,
   WorkspaceLink,
   rowTone,
 } from './parts';
 
 const NS = 'platform-payment-gateways.billing.orders';
-const DEFAULTS = { window: '90d', type: 'all', q: '' };
+const DEFAULTS = { window: '90d', from: '', to: '', type: 'all', q: '' };
 const TYPES: OrderTypeFilter[] = ['all', 'new', 'upgrade', 'downgrade', 'addon', 'cancel'];
 
 type Pending =
@@ -59,9 +63,14 @@ export function OrderHistoryPage() {
   const { values, page, set, setPage } = useUrlState(DEFAULTS);
   const [pending, setPending] = useState<Pending | null>(null);
   const [note, setNote] = useState('');
+  const [refund, setRefund] = useState<RefundTarget | null>(null);
 
+  // A half-filled or reversed custom range keeps the 90-day report on screen until the two days are right.
+  const custom = values.window === 'custom' && customRangeValid(values.from, values.to);
   const query = {
-    window: values.window as '90d' | 'this_year' | 'all',
+    window: (values.window === 'custom' && !custom ? '90d' : values.window) as
+      '90d' | 'this_year' | 'all' | 'custom',
+    ...(custom ? { from: values.from, to: values.to } : {}),
     type: values.type as OrderTypeFilter,
     q: values.q || undefined,
     page,
@@ -130,13 +139,24 @@ export function OrderHistoryPage() {
             <WindowSelect
               value={values.window}
               label={t('window')}
-              onChange={(v) => set({ window: v })}
+              onChange={(v) => set(windowPatch(v))}
               options={[
                 { value: '90d', label: t('windows.90d') },
                 { value: 'this_year', label: t('windows.this_year') },
                 { value: 'all', label: t('windows.all') },
+                { value: 'custom', label: t('windows.custom') },
               ]}
             />
+            {values.window === 'custom' && (
+              <CustomRange
+                from={values.from}
+                to={values.to}
+                onChange={(p) => set(p)}
+                fromLabel={tc('customFrom')}
+                toLabel={tc('customTo')}
+                invalidLabel={tc('customInvalid')}
+              />
+            )}
             <LinkPill href="/admin/order-history/analytics">
               <TrendIcon />
               {tc('analytics')}
@@ -259,6 +279,15 @@ export function OrderHistoryPage() {
                 onCancel={() =>
                   setPending({ kind: 'cancel', row: { id: o.id, orderNumber: o.orderNumber } })
                 }
+                onRefund={() =>
+                  setRefund({
+                    kind: 'order',
+                    id: o.id,
+                    label: o.orderNumber,
+                    currency: o.currency,
+                    total: o.total,
+                  })
+                }
               />
             ))
           )}
@@ -286,6 +315,7 @@ export function OrderHistoryPage() {
         onConfirm={() => pending && act.mutate(pending)}
         onClose={() => setPending(null)}
       />
+      <RefundDialog target={refund} locale={locale} onClose={() => setRefund(null)} />
       <Modal
         open={pending?.kind === 'reject'}
         onClose={() => setPending(null)}
@@ -326,12 +356,14 @@ function OrderRow({
   canEdit,
   onApprove,
   onCancel,
+  onRefund,
 }: {
   o: AdminOrderRow;
   locale: string;
   canEdit: boolean;
   onApprove: () => void;
   onCancel: () => void;
+  onRefund: () => void;
 }) {
   const t = useTranslations(NS);
   const tc = useTranslations('platform-payment-gateways.billing.common');
@@ -383,6 +415,18 @@ function OrderRow({
         {o.awaitingApproval && (
           <div className="mt-1 font-mono text-[10px] uppercase tracking-wider text-warning">
             {t('awaitingApproval')}
+          </div>
+        )}
+        {o.status === 'paid' && canEdit && (
+          <div className="mt-1.5">
+            <Button
+              size="sm"
+              variant="secondary"
+              className="h-7 rounded-full border-danger/40 px-2 text-[11px] text-danger"
+              onClick={onRefund}
+            >
+              {t('actions.refund')}
+            </Button>
           </div>
         )}
         {open && canEdit && (

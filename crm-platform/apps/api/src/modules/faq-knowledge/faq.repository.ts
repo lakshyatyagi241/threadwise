@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
-import { MAX_EMBED_ATTEMPTS, VECTOR_FETCH, type Scored } from './faq.rules';
+import { AppError } from '../../common/errors/app-error';
+import { MAX_EMBED_ATTEMPTS, VECTOR_FETCH, type FlowBinding, type Scored } from './faq.rules';
 
 type Raw = Record<string, unknown>;
 const num = (v: unknown): number => Number(v);
@@ -35,6 +36,8 @@ export interface EntryRow {
 }
 
 export interface EntryWrite {
+  /** The flow the FAQ belongs to (internal id); never changed by an update. */
+  ownerFlowId: number;
   question: string;
   answerType: string;
   answerText: string | null;
@@ -137,8 +140,8 @@ export class FaqRepository {
     };
   }
 
-  async list(tx: Tx, orgId: number, f: ListFilter): Promise<EntryRow[]> {
-    const where: SQL[] = [sql`f.org_id = ${orgId}`];
+  async list(tx: Tx, orgId: number, flowId: number, f: ListFilter): Promise<EntryRow[]> {
+    const where: SQL[] = [sql`f.org_id = ${orgId}`, sql`f.owner_flow_id = ${flowId}`];
     if (f.afterId !== null) where.push(sql`f.id < ${f.afterId}`);
     if (f.status) where.push(sql`f.status = ${f.status}`);
     if (f.category) where.push(sql`f.category = ${f.category}`);
@@ -163,10 +166,17 @@ export class FaqRepository {
     return (res.rows as Raw[]).map((r) => this.toEntry(r));
   }
 
-  async findByUuid(tx: Tx, orgId: number, uuid: string, model: string): Promise<EntryRow | null> {
+  /** One FAQ of the flow's own; an FAQ that belongs to another flow reads as missing. */
+  async findByUuid(
+    tx: Tx,
+    orgId: number,
+    flowId: number,
+    uuid: string,
+    model: string,
+  ): Promise<EntryRow | null> {
     const res = await tx.execute(sql`
       SELECT ${this.cols()} FROM faqs f ${this.joins(model)}
-      WHERE f.org_id = ${orgId} AND f.uuid = ${uuid}`);
+      WHERE f.org_id = ${orgId} AND f.owner_flow_id = ${flowId} AND f.uuid = ${uuid}`);
     const r = (res.rows as Raw[])[0];
     return r ? this.toEntry(r) : null;
   }
@@ -179,17 +189,21 @@ export class FaqRepository {
     return r ? this.toEntry(r) : null;
   }
 
-  async stats(tx: Tx, orgId: number, model: string): Promise<FaqStatsRow> {
+  async stats(tx: Tx, orgId: number, flowId: number, model: string): Promise<FaqStatsRow> {
     const res = await tx.execute(sql`
       SELECT
-        (SELECT count(*) FROM faqs WHERE org_id = ${orgId}) AS total,
-        (SELECT count(*) FROM faqs WHERE org_id = ${orgId} AND status = 'active') AS active,
-        (SELECT count(*) FROM faqs WHERE org_id = ${orgId} AND status = 'paused') AS paused,
-        (SELECT count(*) FROM faq_variations WHERE org_id = ${orgId}) AS variations,
-        (SELECT count(*) FROM faq_variations WHERE org_id = ${orgId}
-          AND (embed_state = 'pending' OR (embed_state = 'ready' AND embedding_model IS DISTINCT FROM ${model}))) AS pending,
-        (SELECT count(*) FROM faq_variations WHERE org_id = ${orgId} AND embed_state = 'failed') AS failed,
-        COALESCE((SELECT array_agg(DISTINCT category ORDER BY category) FROM faqs WHERE org_id = ${orgId} AND category IS NOT NULL), '{}') AS categories`);
+        (SELECT count(*) FROM faqs WHERE org_id = ${orgId} AND owner_flow_id = ${flowId}) AS total,
+        (SELECT count(*) FROM faqs WHERE org_id = ${orgId} AND owner_flow_id = ${flowId} AND status = 'active') AS active,
+        (SELECT count(*) FROM faqs WHERE org_id = ${orgId} AND owner_flow_id = ${flowId} AND status = 'paused') AS paused,
+        (SELECT count(*) FROM faq_variations v JOIN faqs f ON f.org_id = v.org_id AND f.id = v.faq_id
+          WHERE v.org_id = ${orgId} AND f.owner_flow_id = ${flowId}) AS variations,
+        (SELECT count(*) FROM faq_variations v JOIN faqs f ON f.org_id = v.org_id AND f.id = v.faq_id
+          WHERE v.org_id = ${orgId} AND f.owner_flow_id = ${flowId}
+          AND (v.embed_state = 'pending' OR (v.embed_state = 'ready' AND v.embedding_model IS DISTINCT FROM ${model}))) AS pending,
+        (SELECT count(*) FROM faq_variations v JOIN faqs f ON f.org_id = v.org_id AND f.id = v.faq_id
+          WHERE v.org_id = ${orgId} AND f.owner_flow_id = ${flowId} AND v.embed_state = 'failed') AS failed,
+        COALESCE((SELECT array_agg(DISTINCT category ORDER BY category) FROM faqs
+          WHERE org_id = ${orgId} AND owner_flow_id = ${flowId} AND category IS NOT NULL), '{}') AS categories`);
     const r = (res.rows as Raw[])[0]!;
     return {
       total: num(r.total),
@@ -205,19 +219,20 @@ export class FaqRepository {
   async questionTaken(
     tx: Tx,
     orgId: number,
+    flowId: number,
     question: string,
     exceptId: number | null,
   ): Promise<boolean> {
     const res = await tx.execute(sql`
-      SELECT 1 FROM faqs WHERE org_id = ${orgId} AND lower(btrim(question)) = lower(btrim(${question}))
+      SELECT 1 FROM faqs WHERE org_id = ${orgId} AND owner_flow_id = ${flowId} AND lower(btrim(question)) = lower(btrim(${question}))
         AND (${exceptId}::bigint IS NULL OR id <> ${exceptId}::bigint) LIMIT 1`);
     return res.rows.length > 0;
   }
 
   async insertEntry(tx: Tx, orgId: number, userId: number | null, w: EntryWrite): Promise<number> {
     const res = await tx.execute(sql`
-      INSERT INTO faqs (org_id, question, answer_type, answer_text, flow_id, flow_node_id, category, status, threshold_override, created_by)
-      VALUES (${orgId}, ${w.question}, ${w.answerType}, ${w.answerText}, ${w.flowId}, ${w.flowNodeId}, ${w.category}, ${w.status},
+      INSERT INTO faqs (org_id, owner_flow_id, question, answer_type, answer_text, flow_id, flow_node_id, category, status, threshold_override, created_by)
+      VALUES (${orgId}, ${w.ownerFlowId}, ${w.question}, ${w.answerType}, ${w.answerText}, ${w.flowId}, ${w.flowNodeId}, ${w.category}, ${w.status},
               ${w.thresholdOverride}, ${userId})
       RETURNING id`);
     return num((res.rows[0] as Raw).id);
@@ -239,14 +254,16 @@ export class FaqRepository {
     return res.rows.length > 0;
   }
 
+  /** The FAQs of this flow among `uuids`; one that belongs to another flow is left out. */
   async idsByUuids(
     tx: Tx,
     orgId: number,
+    flowId: number,
     uuids: readonly string[],
   ): Promise<Array<{ id: number; uuid: string; question: string }>> {
     if (uuids.length === 0) return [];
     const res = await tx.execute(sql`
-      SELECT id, uuid, question FROM faqs WHERE org_id = ${orgId} AND uuid IN (${sql.join(
+      SELECT id, uuid, question FROM faqs WHERE org_id = ${orgId} AND owner_flow_id = ${flowId} AND uuid IN (${sql.join(
         uuids.map((u) => sql`${u}::uuid`),
         sql`, `,
       )})`);
@@ -291,6 +308,13 @@ export class FaqRepository {
     return r ? { id: num(r.id), name: r.flow_name as string } : null;
   }
 
+  /** The flow a `/flows/:flowId/...` route is about: 404 when it is not a flow of this workspace (RLS and the org filter both apply). */
+  async requireFlow(tx: Tx, orgId: number, uuid: string): Promise<{ id: number; name: string }> {
+    const flow = await this.flowByUuid(tx, orgId, uuid);
+    if (!flow) throw AppError.notFound('Flow', uuid);
+    return flow;
+  }
+
   /** The steps of a flow, for the "start at" picker and to check a saved node still exists. */
   async flowNodes(
     tx: Tx,
@@ -315,15 +339,23 @@ export class FaqRepository {
     }));
   }
 
-  async countFaqs(tx: Tx, orgId: number): Promise<number> {
-    const res = await tx.execute(sql`SELECT count(*) AS n FROM faqs WHERE org_id = ${orgId}`);
+  async countFaqs(tx: Tx, orgId: number, flowId: number): Promise<number> {
+    const res = await tx.execute(
+      sql`SELECT count(*) AS n FROM faqs WHERE org_id = ${orgId} AND owner_flow_id = ${flowId}`,
+    );
     return num((res.rows[0] as Raw).n);
   }
 
-  async usage(tx: Tx, orgId: number): Promise<{ faqs: number; variations: number }> {
+  /** What one flow holds, for the limits (they apply per flow). */
+  async usage(
+    tx: Tx,
+    orgId: number,
+    flowId: number,
+  ): Promise<{ faqs: number; variations: number }> {
     const res = await tx.execute(sql`
-      SELECT (SELECT count(*) FROM faqs WHERE org_id = ${orgId}) AS faqs,
-             (SELECT count(*) FROM faq_variations WHERE org_id = ${orgId}) AS variations`);
+      SELECT (SELECT count(*) FROM faqs WHERE org_id = ${orgId} AND owner_flow_id = ${flowId}) AS faqs,
+             (SELECT count(*) FROM faq_variations v JOIN faqs f ON f.org_id = v.org_id AND f.id = v.faq_id
+               WHERE v.org_id = ${orgId} AND f.owner_flow_id = ${flowId}) AS variations`);
     const r = (res.rows as Raw[])[0]!;
     return { faqs: num(r.faqs), variations: num(r.variations) };
   }
@@ -545,17 +577,17 @@ export class FaqRepository {
     };
   }
 
-  async activeFaqCount(tx: Tx, orgId: number): Promise<number> {
+  async activeFaqCount(tx: Tx, orgId: number, flowId: number): Promise<number> {
     const res = await tx.execute(
-      sql`SELECT count(*) AS n FROM faqs WHERE org_id = ${orgId} AND status = 'active'`,
+      sql`SELECT count(*) AS n FROM faqs WHERE org_id = ${orgId} AND owner_flow_id = ${flowId} AND status = 'active'`,
     );
     return num((res.rows[0] as Raw).n);
   }
 
-  async readyVariationCount(tx: Tx, orgId: number, model: string): Promise<number> {
+  async readyVariationCount(tx: Tx, orgId: number, flowId: number, model: string): Promise<number> {
     const res = await tx.execute(sql`
       SELECT count(*) AS n FROM faq_variations v JOIN faqs f ON f.org_id = v.org_id AND f.id = v.faq_id
-      WHERE v.org_id = ${orgId} AND f.status = 'active' AND v.embed_state = 'ready' AND v.embedding_model = ${model}`);
+      WHERE v.org_id = ${orgId} AND f.owner_flow_id = ${flowId} AND f.status = 'active' AND v.embed_state = 'ready' AND v.embedding_model = ${model}`);
     return num((res.rows[0] as Raw).n);
   }
 
@@ -563,22 +595,24 @@ export class FaqRepository {
   async exact(
     tx: Tx,
     orgId: number,
+    flowId: number,
     query: string,
     category: string | null = null,
   ): Promise<Scored[]> {
     const res = await tx.execute(sql`
       SELECT f.id AS faq_id, f.uuid AS faq_uuid, f.question, f.status, f.threshold_override, v.text, 1.0 AS score
       FROM faq_variations v JOIN faqs f ON f.org_id = v.org_id AND f.id = v.faq_id
-      WHERE v.org_id = ${orgId} AND f.status = 'active' AND lower(btrim(v.text)) = lower(btrim(${query}))
+      WHERE v.org_id = ${orgId} AND f.owner_flow_id = ${flowId} AND f.status = 'active' AND lower(btrim(v.text)) = lower(btrim(${query}))
         AND (${category}::text IS NULL OR f.category = ${category}::text)
       ORDER BY f.id LIMIT 5`);
     return (res.rows as Raw[]).map((r) => this.toScored(r));
   }
 
-  /** Exact cosine scan of this workspace's vectors for the current model (ADR-0021: no ANN index). Score = 1 - cosine distance. */
+  /** Exact cosine scan of this flow's vectors for the current model (ADR-0021: no ANN index). Score = 1 - cosine distance. */
   async vector(
     tx: Tx,
     orgId: number,
+    flowId: number,
     model: string,
     literal: string,
     category: string | null = null,
@@ -587,7 +621,7 @@ export class FaqRepository {
       SELECT f.id AS faq_id, f.uuid AS faq_uuid, f.question, f.status, f.threshold_override, v.text,
              1 - (v.embedding <=> ${literal}::halfvec) AS score
       FROM faq_variations v JOIN faqs f ON f.org_id = v.org_id AND f.id = v.faq_id
-      WHERE v.org_id = ${orgId} AND f.status = 'active' AND v.embed_state = 'ready' AND v.embedding_model = ${model}
+      WHERE v.org_id = ${orgId} AND f.owner_flow_id = ${flowId} AND f.status = 'active' AND v.embed_state = 'ready' AND v.embedding_model = ${model}
         AND (${category}::text IS NULL OR f.category = ${category}::text)
       ORDER BY v.embedding <=> ${literal}::halfvec
       LIMIT ${VECTOR_FETCH}`);
@@ -598,6 +632,7 @@ export class FaqRepository {
   async trigram(
     tx: Tx,
     orgId: number,
+    flowId: number,
     query: string,
     category: string | null = null,
   ): Promise<Scored[]> {
@@ -605,10 +640,29 @@ export class FaqRepository {
       SELECT f.id AS faq_id, f.uuid AS faq_uuid, f.question, f.status, f.threshold_override, v.text,
              similarity(lower(v.text), lower(${query})) AS score
       FROM faq_variations v JOIN faqs f ON f.org_id = v.org_id AND f.id = v.faq_id
-      WHERE v.org_id = ${orgId} AND f.status = 'active' AND similarity(lower(v.text), lower(${query})) >= 0.3
+      WHERE v.org_id = ${orgId} AND f.owner_flow_id = ${flowId} AND f.status = 'active' AND similarity(lower(v.text), lower(${query})) >= 0.3
         AND (${category}::text IS NULL OR f.category = ${category}::text)
       ORDER BY score DESC LIMIT ${VECTOR_FETCH}`);
     return (res.rows as Raw[]).map((r) => this.toScored(r));
+  }
+
+  /**
+   * The flows that could answer a customer message: published and active, FAQ answering switched on in their own settings, and at
+   * least one active FAQ. The channel test is done by `candidateFlows` in faq.rules (the keyword trigger's own predicate).
+   */
+  async answeringFlows(tx: Tx, orgId: number): Promise<FlowBinding[]> {
+    const res = await tx.execute(sql`
+      SELECT fl.id, fl.trigger_channel_id, fl.provider
+      FROM flows fl
+      JOIN faq_settings s ON s.org_id = fl.org_id AND s.flow_id = fl.id AND s.enabled
+      WHERE fl.org_id = ${orgId} AND fl.is_published AND fl.is_active
+        AND EXISTS (SELECT 1 FROM faqs f WHERE f.org_id = fl.org_id AND f.owner_flow_id = fl.id AND f.status = 'active')
+      ORDER BY fl.id`);
+    return (res.rows as Raw[]).map((r) => ({
+      id: num(r.id),
+      triggerChannelId: numOrNull(r.trigger_channel_id),
+      provider: String(r.provider ?? ''),
+    }));
   }
 
   async answerOf(

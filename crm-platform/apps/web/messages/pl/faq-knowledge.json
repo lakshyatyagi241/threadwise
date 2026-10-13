@@ -1,7 +1,6 @@
 {
   "faq": {
     "nav": {
-      "faq": "FAQ",
       "label": "Sekcje FAQ",
       "tab": {
         "faqs": "FAQ",
@@ -13,7 +12,6 @@
       "unansweredCount": "{count, plural, one {# wiadomość bez odpowiedzi} few {# wiadomości bez odpowiedzi} many {# wiadomości bez odpowiedzi} other {# wiadomości bez odpowiedzi}}"
     },
     "common": {
-      "dismiss": "Odrzuć",
       "retry": "Spróbuj ponownie",
       "requestId": "Żądanie {id}",
       "noAccessTitle": "Nie masz dostępu do tego ekranu",
@@ -26,7 +24,6 @@
       "conflict": "Ktoś inny zmienił to w trakcie Twojej edycji.",
       "duplicateQuestion": "Inne FAQ ma już to pytanie.",
       "duplicateVariation": "To FAQ ma już to sformułowanie.",
-      "limitReached": "Twoja przestrzeń robocza osiągnęła limit FAQ. Usuń nieużywane FAQ lub warianty albo poproś administratora platformy o zwiększenie limitu.",
       "flowNotFound": "Wybrany przepływ nie istnieje już w tej przestrzeni roboczej. Wybierz inny.",
       "embeddingUnavailable": "Dostawca AI jest niedostępny. Dodaj klucz OpenRouter do przestrzeni roboczej lub poproś administratora platformy o włączenie klucza współdzielonego, a potem spróbuj ponownie.",
       "engineDisabled": "Odpowiadanie przez FAQ jest teraz wyłączone dla całej platformy.",
@@ -34,21 +31,21 @@
       "validation": "Niektóre pola wymagają poprawy.",
       "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
       "unexpected": "Coś poszło nie tak. Spróbuj ponownie, a jeśli problem się powtarza, podaj pomocy technicznej identyfikator żądania.",
-      "flowNodeNotFound": "Wybranego kroku nie ma już w tym przepływie. Wybierz inny krok albo zacznij od początku przepływu."
+      "flowNodeNotFound": "Wybranego kroku nie ma już w tym przepływie. Wybierz inny krok albo zacznij od początku przepływu.",
+      "limitReached": "Ten przepływ osiągnął limit FAQ. Usuń nieużywane FAQ lub warianty albo poproś administratora platformy o podniesienie limitu."
     },
     "banner": {
       "enabledToast": "Odpowiadanie przez FAQ jest włączone.",
       "engineOff": "Platforma wyłączyła odpowiadanie przez FAQ. Klienci nie dostaną odpowiedzi z FAQ, dopóki nie zostanie ono włączone ponownie.",
       "modelChanged": "Platforma zmieniła model AI po dostrojeniu tego progu. Wyniki się zmieniły, więc sprawdź czułość.",
       "reviewSensitivity": "Sprawdź czułość",
-      "offTitle": "Odpowiadanie przez FAQ jest WYŁĄCZONE dla klientów",
-      "offBody": "Możesz pisać i testować FAQ, ale klienci nie dostaną odpowiedzi, dopóki tego nie włączysz.",
       "offNoRight": "Poproś osobę z uprawnieniem faq.settings.manage (zwykle administratora przestrzeni roboczej) o włączenie.",
-      "enable": "Włącz odpowiadanie przez FAQ"
+      "enable": "Włącz odpowiadanie przez FAQ",
+      "offTitle": "Odpowiadanie na FAQ jest WYŁĄCZONE dla tego przepływu",
+      "offBody": "Możesz pisać i testować FAQ tego przepływu, ale klienci nie dostaną odpowiedzi, dopóki tego nie włączysz."
     },
     "list": {
       "title": "FAQ",
-      "subtitle": "Pytania zadawane przez klientów i odpowiedzi Twojego bota. Klienci nie muszą używać dokładnie Twoich słów.",
       "add": "Dodaj FAQ",
       "stats": {
         "label": "Podsumowanie FAQ",
@@ -98,10 +95,10 @@
       "deleted": "FAQ usunięte.",
       "empty": {
         "title": "Naucz bota odpowiadać na częste pytania",
-        "body": "Wpisz pytanie i odpowiedź raz. Bot dopasuje to, co piszą klienci, ich własnymi słowami, i odpowie lub uruchomi przepływ.",
         "how": "Dodaj kilka innych sposobów zadania tego samego pytania (sformułowań) i przetestuj je, zanim zobaczą je klienci.",
         "cta": "Dodaj pierwsze FAQ",
-        "noRight": "Poproś administratora przestrzeni roboczej o uprawnienie do dodawania FAQ."
+        "noRight": "Poproś administratora przestrzeni roboczej o uprawnienie do dodawania FAQ.",
+        "body": "Napisz pytanie i odpowiedź tylko raz. Bot dopasuje to, co klienci piszą własnymi słowami, i odpowie lub skieruje ich do kroku przepływu."
       },
       "noMatch": {
         "title": "Żadne FAQ nie pasuje do tych filtrów",
@@ -142,7 +139,9 @@
         "failed": "Z błędem: {count}"
       },
       "stepMissing": "Brak kroku",
-      "startsAt": "Start od: {step}"
+      "subtitle": "Pytania zadawane przez klientów w {flow} i odpowiedzi bota. Te FAQ odpowiadają tylko w tym przepływie.",
+      "thisFlow": "Ten przepływ",
+      "startsAt": "Przechodzi do: {step}"
     },
     "editor": {
       "back": "Wróć do FAQ",
@@ -159,7 +158,6 @@
       "saved": "FAQ zapisane.",
       "deleted": "FAQ usunięte.",
       "readOnly": "Możesz wyświetlić to FAQ, ale Twoja rola nie może go zmieniać.",
-      "faqLimit": "Twoja przestrzeń robocza osiągnęła limit {max} FAQ. Usuń jedno, aby dodać kolejne.",
       "prefilled": "Pytanie zostało wypełnione na podstawie wiadomości klienta bez odpowiedzi. Zapisanie tego FAQ oznacza też tę wiadomość jako obsłużoną.",
       "tryItSaveFirst": "Najpierw zapisz FAQ, a potem sprawdzisz, jak dopasowują się do niego wiadomości klientów.",
       "conflict": {
@@ -189,23 +187,30 @@
         "title": "Odpowiedź",
         "hint": "Co otrzyma klient, gdy to FAQ pasuje.",
         "text": "Odpowiedź tekstowa",
-        "flow": "Uruchom przepływ",
         "textLabel": "Tekst odpowiedzi",
         "count": "{count} / {max} znaków",
         "preview": "Jak to wygląda w WhatsApp",
         "previewEmpty": "Tutaj pojawi się Twoja odpowiedź",
-        "flowLabel": "Przepływ do uruchomienia",
         "noFlow": "Nie wybrano przepływu",
-        "startsAt": "Start od kroku: {step}",
-        "stepGone": "Krok, od którego startuje to FAQ, już nie istnieje, więc klienci nie dostają odpowiedzi."
+        "flow": "Przejdź do kroku",
+        "flowLabel": "Dokąd przejść",
+        "startsAt": "Przechodzi do kroku: {step}",
+        "stepGone": "Krok, do którego prowadzi to FAQ, już nie istnieje, więc klienci nie dostaną odpowiedzi.",
+        "thisFlowNamed": "Krok tego przepływu ({name})",
+        "target": {
+          "here": "Krok tego przepływu",
+          "hereHint": "Klient kontynuuje w {name}. To zwykle najlepszy wybór.",
+          "other": "Krok innego przepływu",
+          "otherHint": "Przekaż rozmowę do innego przepływu."
+        }
       },
       "advanced": {
         "title": "Zaawansowane: czułość tylko dla tego FAQ",
-        "body": "Domyślnie każde FAQ używa czułości przestrzeni roboczej. Ustaw własną wartość, gdy to FAQ dopasowuje się zbyt chętnie (zwiększ) lub zbyt rzadko (zmniejsz).",
         "custom": "Użyj własnej czułości dla tego FAQ",
         "sliderLabel": "Dopasuj od",
-        "workspace": "Czułość przestrzeni roboczej wynosi {value}%.",
-        "following": "Zgodnie z czułością przestrzeni roboczej ({value}%)."
+        "body": "Domyślnie każde FAQ używa czułości tego przepływu. Ustaw własną wartość, gdy dopasowuje zbyt chętnie (zwiększ) lub zbyt rzadko (zmniejsz).",
+        "workspace": "Czułość tego przepływu to {value}%.",
+        "following": "Zgodnie z czułością tego przepływu ({value}%)."
       },
       "problem": {
         "question": {
@@ -219,9 +224,9 @@
           "invalid": "Ta odpowiedź jest nieprawidłowa."
         },
         "flowId": {
-          "required": "Wybierz przepływ do uruchomienia.",
-          "tooLong": "Wybierz przepływ do uruchomienia.",
-          "invalid": "Wybierz przepływ do uruchomienia."
+          "required": "Wybierz przepływ docelowy.",
+          "tooLong": "Wybierz przepływ docelowy.",
+          "invalid": "Wybierz przepływ docelowy."
         },
         "category": {
           "required": "Wpisz kategorię lub zostaw pole puste.",
@@ -249,11 +254,11 @@
         "body": "Zmiany w tym FAQ nie zostały zapisane.",
         "leave": "Wyjdź",
         "stay": "Kontynuuj edycję"
-      }
+      },
+      "faqLimit": "Ten przepływ osiągnął limit {max} FAQ. Usuń jedno, aby dodać kolejne."
     },
     "flowPicker": {
       "noAccess": "Aby wybrać tu przepływ, potrzebujesz uprawnienia do wyświetlania przepływów (flb.flows.read).",
-      "missing": "Przepływ uruchamiany przez to FAQ już nie istnieje. Wybierz inny przepływ, inaczej to FAQ nie będzie mogło odpowiadać.",
       "selected": "Wybrano",
       "search": "Szukaj przepływów",
       "searchPlaceholder": "Szukaj przepływów po nazwie",
@@ -267,7 +272,9 @@
         "off": "Nieaktywny",
         "draft": "Wersja robocza"
       },
-      "note": "Przepływ startuje od kroku wybranego poniżej albo od swojego początku. Uruchomić można tylko opublikowane, aktywne przepływy."
+      "missing": "Przepływ, do którego prowadzi to FAQ, już nie istnieje. Wybierz inny przepływ, inaczej to FAQ nie będzie mogło odpowiadać.",
+      "noOthers": "W tym obszarze roboczym nie ma innego przepływu.",
+      "note": "Klient kontynuuje od kroku wybranego poniżej lub od początku przepływu. Uruchomić można tylko opublikowane, aktywne przepływy."
     },
     "variations": {
       "title": "Warianty pytania",
@@ -343,7 +350,7 @@
       "verdict": {
         "answer": {
           "title": "Odpowiedziałoby",
-          "body": "Jakieś FAQ pasuje wystarczająco dobrze. Klient dostaje jego odpowiedź (lub uruchamia się jego przepływ)."
+          "body": "FAQ pasowało wystarczająco dobrze. Klient dostaje jego odpowiedź lub jest kierowany do wskazanego kroku."
         },
         "below": {
           "title": "Poniżej progu",
@@ -397,8 +404,8 @@
       "winner": {
         "title": "Co dostałby klient",
         "unavailable": "Nie udało się wczytać tego FAQ.",
-        "flow": "Uruchamia przepływ {name}",
-        "flowMissing": "Uruchamia przepływ, który już nie istnieje"
+        "flow": "Przechodzi do kroku w {name}",
+        "flowMissing": "Przechodzi do przepływu, który już nie istnieje"
       },
       "candidates": {
         "title": "Najlepsze dopasowania",
@@ -415,16 +422,16 @@
     },
     "playground": {
       "title": "Jak mój bot by na to odpowiedział?",
-      "subtitle": "Przepuść wiadomość klienta przez to samo dopasowywanie, którego używa Twój bot. Nic nie zostanie wysłane ani policzone w statystykach.",
       "label": "Wiadomość klienta",
       "placeholder": "Gdzie jest moja paczka?",
       "run": "Uruchom",
-      "hint": "Dopasowywane są tylko zapisane FAQ. Biorą w tym udział aktywne FAQ z działającymi sformułowaniami.",
       "empty": "Wpisz wiadomość powyżej i uruchom test, aby zobaczyć decyzję.",
       "history": {
         "title": "Ta sesja",
         "empty": "Tutaj pojawi się Twoje 10 ostatnich testów."
-      }
+      },
+      "subtitle": "Przepuść wiadomość klienta przez dopasowywanie używane przez {flow}. Nic nie zostanie wysłane ani wliczone do statystyk.",
+      "hint": "Dopasowywane są tylko zapisane FAQ tego przepływu. Biorą udział aktywne FAQ z aktywnymi sformułowaniami."
     },
     "unanswered": {
       "title": "Wiadomości bez odpowiedzi",
@@ -492,7 +499,6 @@
       "loadingMore": "Wczytywanie",
       "why": {
         "answered": "Odpowiedziano z FAQ „{faq}” z wynikiem {score}%.",
-        "flowStarted": "Uruchomiono przepływ FAQ „{faq}” z wynikiem {score}%.",
         "belowThreshold": "Najlepsze dopasowanie uzyskało {score}%, poniżej progu {threshold}%, więc nic nie wysłano.",
         "belowThresholdNoBar": "Najlepsze dopasowanie uzyskało {score}%, co nie wystarczyło, więc nic nie wysłano.",
         "lowMargin": "Dwa FAQ były zbyt blisko siebie ({score}% i {second}%), więc bot nie zgadywał.",
@@ -502,7 +508,8 @@
         "tier": "Zdecydował poziom: {tier}.",
         "error": "Błąd: {error}",
         "vetoed": "Najlepsze dopasowanie uzyskało {score}%, powyżej progu {threshold}%, ale drugie sprawdzenie uznało, że nie odpowiada ono na wiadomość, więc nic nie wysłano.",
-        "vetoedNoBar": "Najlepsze dopasowanie uzyskało {score}%, ale drugie sprawdzenie uznało, że nie odpowiada ono na wiadomość, więc nic nie wysłano."
+        "vetoedNoBar": "Najlepsze dopasowanie uzyskało {score}%, ale drugie sprawdzenie uznało, że nie odpowiada ono na wiadomość, więc nic nie wysłano.",
+        "flowStarted": "Skierowano klienta do kroku z \"{faq}\" z wynikiem {score}%."
       },
       "flowRun": "(z przepływu)"
     },
@@ -565,7 +572,6 @@
     },
     "settings": {
       "title": "Ustawienia FAQ",
-      "subtitle": "Włącz odpowiadanie przez FAQ i dostrój, jak dokładnie wiadomość musi pasować.",
       "unsaved": "Niezapisane zmiany",
       "discard": "Odrzuć",
       "save": "Zapisz ustawienia",
@@ -580,11 +586,11 @@
       },
       "enable": {
         "title": "Odpowiadanie przez FAQ",
-        "label": "Odpowiadaj klientom z FAQ",
         "on": "Wł.",
         "off": "Wył.",
-        "onBody": "Gdy klient napisze, bot porówna wiadomość z Twoimi FAQ i odpowie najlepszą odpowiedzią lub uruchomi jej przepływ. Pierwszeństwo ma przepływ lub wyzwalacz słowa kluczowego, który już przejął wiadomość.",
-        "offBody": "Klienci nie dostają odpowiedzi z FAQ. Nadal możesz pisać i testować FAQ."
+        "label": "Odpowiadaj klientom za pomocą FAQ tego przepływu",
+        "onBody": "Gdy ten przepływ jest aktywny, wiadomość klienta, której nie obsłużył żaden wyzwalacz słów kluczowych ani działający przepływ, jest porównywana z FAQ tego przepływu. Bot odpowiada najlepszą odpowiedzią lub kieruje klienta do kroku wskazanego przez FAQ.",
+        "offBody": "FAQ tego przepływu nie odpowiadają klientom. Nadal możesz je pisać i testować."
       },
       "sens": {
         "title": "Czułość",
@@ -653,21 +659,23 @@
         "explainOn": "Dopasowania z wynikiem od {from}% do {to}% są sprawdzane przez {model}. Odpowiedź „nie” oznacza, że odpowiedź nie zostanie wysłana, a wiadomość pojawi się w zakładce Bez odpowiedzi.",
         "explainOff": "Każde dopasowanie z wynikiem {threshold}% lub wyższym dostaje odpowiedź. Włącz drugie sprawdzenie, aby najbardziej niepewne dopasowania były dodatkowo weryfikowane.",
         "cost": "Każde sprawdzenie wysyła do modelu wiadomość klienta i pytanie z FAQ: kilkaset tokenów, a odpowiedź na graniczne dopasowanie jest opóźniona o około sekundę. Dopasowania poza tym zakresem nigdy nie są sprawdzane. Jeśli sprawdzenie się nie powiedzie, jest niedostępne lub osiągnięto limit godzinowy, dopasowanie obowiązuje tak, jakby sprawdzenia nie było."
-      }
+      },
+      "subtitle": "Włącz odpowiadanie na FAQ dla {flow} i ustaw, jak dokładnie wiadomość musi pasować."
     },
     "flowNode": {
-      "label": "Zacznij od",
       "start": "Początek przepływu",
-      "hint": "Wybierz krok, aby pominąć początek przepływu. Klienci wejdą do przepływu na wybranym kroku.",
       "loading": "Wczytywanie kroków tego przepływu",
       "empty": "Ten przepływ nie ma innych kroków, więc startuje od początku.",
       "retry": "Spróbuj ponownie",
       "deletedOption": "Usunięty krok (wybierz inny)",
       "missing": {
-        "title": "Krok, od którego startuje to FAQ, już nie istnieje",
         "body": "Ten krok został usunięty z przepływu. Dopóki nie wybierzesz innego kroku, klienci pasujący do tego FAQ nie dostaną odpowiedzi. Wybierz krok poniżej albo zacznij od początku przepływu.",
-        "fix": "Zacznij od początku przepływu"
-      }
+        "fix": "Zacznij od początku przepływu",
+        "title": "Krok, do którego prowadzi to FAQ, został usunięty"
+      },
+      "label": "Przejdź do",
+      "hint": "Wybierz krok, aby pominąć początek przepływu. Klienci kontynuują od wybranego kroku.",
+      "hintOwn": "Wybierz krok tego przepływu. Kroki dodane od ostatniego zapisu pojawią się po zapisaniu przepływu."
     },
     "verify": {
       "title": "Drugie sprawdzenie",
@@ -684,6 +692,14 @@
         "vetoed": "Dopasowanie było niepewne, a drugie sprawdzenie uznało, że to FAQ nie odpowiada na wiadomość. Odpowiedź została wstrzymana, nic nie wysłano, a wiadomość pojawia się w zakładce Bez odpowiedzi.",
         "failed": "Dopasowanie było niepewne, ale sprawdzenia nie udało się dokończyć, więc dopasowanie obowiązywało, a odpowiedź wysłano tak, jakby drugiego sprawdzenia nie było.",
         "skipped": "Drugie sprawdzenie nie zostało uruchomione dla tego dopasowania, więc obowiązywało ono bez zmian."
+      }
+    },
+    "panel": {
+      "leave": {
+        "title": "Opuścić FAQ bez zapisywania?",
+        "body": "Masz niezapisane zmiany w FAQ. Jeśli opuścisz tę kartę, zostaną utracone.",
+        "leave": "Opuść",
+        "stay": "Edytuj dalej"
       }
     }
   }

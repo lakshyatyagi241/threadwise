@@ -23,7 +23,6 @@ export const PLANNED_SETTINGS: readonly SettingsTile[] = [
   // Channels (these were the menu's Channels group)
   tile('channels', 'channels', '/channels', 'channels', 0),
   tile('channels', 'tiktok', '/channels/tiktok', 'tiktok', 50),
-  tile('channels', 'email', '/email', 'mail', 70),
   tile('channels', 'line', '/line', 'chat', 80),
   tile('channels', 'viber', '/viber', 'phone', 90),
   tile('channels', 'wechat', '/wechat', 'team-chat', 100),
@@ -31,7 +30,6 @@ export const PLANNED_SETTINGS: readonly SettingsTile[] = [
 
   // Data and customization
   tile('data', 'tags', '/tags', 'tag', 40),
-  tile('data', 'saved-replies', '/saved-replies', 'reply', 50),
 
   // Automation and AI
   tile('automation', 'auto-reply', '/auto-reply', 'reply', 20),

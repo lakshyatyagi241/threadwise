@@ -121,6 +121,12 @@
       "selectedActionsNone": "Contactos seleccionados (selecciona filas primero)",
       "modifyColumns": "Modificar columnas",
       "resetColumns": "Restablecer valores predeterminados",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "Nombre del contacto",
       "colPhone": "Número de teléfono",
       "colEmailId": "Correo electrónico",
@@ -170,7 +176,8 @@
       "import": "Importar",
       "columns": "Columnas",
       "addColumnField": "Añadir un campo personalizado como columna",
-      "kanbanView": "Vista de tablero (por etapa)"
+      "kanbanView": "Vista de tablero (por etapa)",
+      "colLeadScore": "Puntuación del lead"
     },
     "bulk": {
       "label": "Acciones para los contactos seleccionados",
@@ -406,7 +413,8 @@
         "address": "Dirección",
         "memo": "Nota",
         "status": "Estado",
-        "source": "Origen"
+        "source": "Origen",
+        "consent": "Consentimiento de marketing (sí / no)"
       },
       "notInFile": "No está en el archivo",
       "columnN": "Columna {n}",
@@ -431,7 +439,7 @@
       "imported": "{count, plural, one {Se importó # contacto.} other {Se importaron # contactos.}}",
       "importedUpdated": "{count, plural, one {Se actualizó # contacto existente.} other {Se actualizaron # contactos existentes.}}",
       "importedInvalid": "{count, plural, one {Se omitió # fila no válida.} other {Se omitieron # filas no válidas.}}",
-      "downloadRejects": "Descargar filas rechazadas",
+      "downloadRejects": "Descargar errores y filas omitidas",
       "fileTooLarge": "Ese archivo supera los {mb} MB.",
       "checking": "Comprobando el archivo...",
       "errorFile": "No se pudo leer ese archivo como un CSV de contactos. Comprueba que tenga una fila de encabezado y al menos un contacto.",
@@ -462,7 +470,8 @@
         "group_name_too_long": "nombre de grupo demasiado largo",
         "tag_name_too_long": "nombre de etiqueta demasiado largo",
         "plan_limit_reached": "se alcanzó el límite de contactos del plan",
-        "tag_limit_reached": "se alcanzó el límite de etiquetas del plan"
+        "tag_limit_reached": "se alcanzó el límite de etiquetas del plan",
+        "duplicate_in_file": "número repetido, combinado con una fila anterior"
       },
       "statusHint": "Se aplica a los contactos que crea este archivo.",
       "queued": "Esperando para empezar...",
@@ -1164,17 +1173,18 @@
         "updated": "Actualizados",
         "rejected": "Rechazados",
         "actions": "Acciones",
-        "downloadRejects": "Descargar rechazados",
+        "downloadRejects": "Descargar errores y filas omitidas",
         "statuses": {
           "queued": "En cola",
           "running": "En curso",
           "completed": "Completada",
           "failed": "Fallida"
-        }
+        },
+        "by": "Importado por"
       },
       "exports": {
         "title": "Exportaciones",
-        "hint": "Exportaciones de contactos desde el Hub, de la más reciente a la más antigua. El archivo descargado no se conserva.",
+        "hint": "Exportaciones de contactos desde el Hub, las más recientes primero. Cada archivo se conserva 30 días para que tú y tus compañeros con permiso de exportar podáis descargarlo de nuevo.",
         "empty": "Aún no hay exportaciones.",
         "by": "Por",
         "rows": "Contactos",
@@ -1183,7 +1193,11 @@
         "selections": {
           "ids": "Contactos marcados",
           "filter": "Todo lo que coincide"
-        }
+        },
+        "download": "Descargar",
+        "noFile": "No guardado",
+        "keptUntil": "Se conserva hasta el {date}",
+        "downloadFailed": "No se pudo descargar el archivo. Puede que haya caducado."
       }
     }
   }

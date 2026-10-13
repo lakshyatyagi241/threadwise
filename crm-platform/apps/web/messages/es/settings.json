@@ -102,8 +102,8 @@
       },
       "email": {
         "label": "Correo electrónico",
-        "description": "Conecta un buzón para enviar y recibir correos desde la bandeja.",
-        "keywords": "buzón, smtp, imap, gmail, outlook, remitente"
+        "description": "Conecta buzones de Gmail o Google Workspace para que tu equipo lea y responda los correos de clientes en la bandeja compartida.",
+        "keywords": "buzón, gmail, google workspace, bandeja compartida, correo de soporte, outlook, imap"
       },
       "line": {
         "label": "LINE",
@@ -314,7 +314,48 @@
         "label": "Registros de mensajes",
         "description": "Exporta el registro de entrega de tus mensajes, hasta un año atrás, como un archivo enviado a tu correo.",
         "keywords": "exportar, registro de entrega, historial, archivo, csv, mensajes"
+      },
+      "billing-subscriptions": {
+        "label": "Suscripciones",
+        "description": "Qué se renueva, hasta cuándo está pagado y cancelar.",
+        "keywords": "suscripción, renovar, renovación automática, cancelar, pago automático, pago fallido, cargos"
+      },
+      "web": {
+        "label": "Chat del sitio web",
+        "description": "Bots creados para el chat de tu sitio web y el widget en el que se ejecuta cada uno.",
+        "keywords": "web, sitio web, widget, chatbot, incrustar, chat en vivo"
+      },
+      "lead-scoring": {
+        "label": "Puntuación de leads con IA",
+        "description": "Puntúa cada contacto con IA, elige qué se envía y consulta cuánto cuesta.",
+        "keywords": "puntuación de lead, puntuación, ia, caliente, templado, frío, openrouter, coste, calificar"
+      },
+      "help-assistant": {
+        "label": "Asistente de ayuda",
+        "description": "Activa el asistente que guía a tu equipo o hace los pasos por ellos.",
+        "keywords": "ia, asistente, agente, guía, ayuda, automatización"
+      },
+      "consent": {
+        "label": "Consentimiento y respuestas STOP",
+        "description": "Elige las palabras STOP y START, las respuestas de confirmación, la línea de baja y si el marketing requiere consentimiento registrado.",
+        "keywords": "consentimiento, baja, alta, cancelar suscripción, stop, start, rgpd, cumplimiento, privacidad, marketing"
+      },
+      "inbox-labels": {
+        "label": "Etiquetas",
+        "description": "Crea las etiquetas que tu equipo pone en las conversaciones y por las que filtra la bandeja.",
+        "keywords": "tags, etiquetas, categorías, organizar, filtrar"
+      },
+      "growth": {
+        "label": "Crecimiento",
+        "description": "Leads calientes, audiencias, respuestas a campañas y otras cosas sobre las que tu equipo puede actuar, obtenidas de chats y campañas.",
+        "keywords": "crecimiento, lead caliente, audiencia, interacción, inactivo, respuestas a campañas, propensión, baja, piloto"
+      },
+      "team-performance": {
+        "label": "Rendimiento del equipo",
+        "description": "Mira qué tan rápido respondió y resolvió cada agente hoy, esta semana o este mes.",
+        "keywords": "informes, analítica, agentes, tiempo de respuesta, primera respuesta, resueltas, carga, rendimiento"
       }
-    }
+    },
+    "backToMarketplace": "Volver al Marketplace"
   }
 }

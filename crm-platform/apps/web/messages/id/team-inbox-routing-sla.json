@@ -10,7 +10,8 @@
       "webchat": "Chat situs web",
       "telegram": "Telegram",
       "facebook": "Facebook Messenger",
-      "instagram": "Instagram"
+      "instagram": "Instagram",
+      "email": "Email (Gmail)"
     },
     "page": {
       "back": "Otomatisasi dan AI",
@@ -81,7 +82,10 @@
       "lastFired": "terakhir pada {when}",
       "edit": "Edit",
       "duplicate": "Duplikat",
-      "delete": "Hapus"
+      "delete": "Hapus",
+      "startsFlow": "Juga memulai alur {name}",
+      "flowOff": "Alur dinonaktifkan",
+      "flowGone": "Juga memulai alur yang sudah dihapus"
     },
     "form": {
       "back": "Penugasan otomatis",
@@ -170,7 +174,57 @@
       "cancel": "Batal",
       "save": "Simpan",
       "saveActivate": "Simpan dan aktifkan",
-      "openCount": "{open} terbuka"
+      "openCount": "{open} terbuka",
+      "flow": {
+        "title": "Mulai juga sebuah alur",
+        "hint": "Opsional. Alur dimulai untuk percakapan saat aturan ini berjalan, di saluran yang sama. Alur hanya perlu diaktifkan; tidak harus dipublikasikan.",
+        "none": "Tanpa alur",
+        "offOption": "{name} (nonaktif)",
+        "goneOption": "Alur yang sudah tidak ada",
+        "loadFailed": "Alur tidak dapat dimuat, jadi daftar mungkin tidak lengkap."
+      }
+    },
+    "performance": {
+      "eyebrow": "Kotak masuk tim · Laporan",
+      "title": "Seberapa cepat tim Anda merespons?",
+      "subtitle": "Lihat balasan, penyelesaian, dan waktu balasan pertama tiap agen.",
+      "summary": "{replies} balasan, {resolved} selesai, rata-rata balasan pertama {avg}",
+      "live": "Langsung",
+      "backToInbox": "Kembali ke kotak masuk",
+      "rangeLabel": "Periode",
+      "ranges": {
+        "today": "Hari ini",
+        "week": "Minggu ini",
+        "month": "Bulan ini"
+      },
+      "channelLabel": "Saluran",
+      "allChannels": "Semua saluran",
+      "loadFailed": "Laporan tidak dapat dimuat. Akan dicoba lagi sebentar lagi.",
+      "noAccess": "Anda tidak punya akses ke laporan kinerja tim.",
+      "loading": "Memuat laporan…",
+      "empty": "Tidak ada aktivitas agen pada periode ini.",
+      "unknown": "Tidak diketahui",
+      "tiles": {
+        "replies": "Balasan terkirim",
+        "resolved": "Selesai",
+        "inbounds": "Masuk",
+        "avgFirstReply": "Rata-rata balasan pertama"
+      },
+      "columns": {
+        "agent": "Agen",
+        "status": "Status",
+        "load": "Beban",
+        "replies": "Balasan",
+        "resolved": "Selesai",
+        "avgReply": "Rata-rata balasan",
+        "lastSeen": "Terakhir terlihat"
+      },
+      "statuses": {
+        "online": "Online",
+        "away": "Away",
+        "busy": "Sibuk",
+        "offline": "Offline"
+      }
     }
   }
 }

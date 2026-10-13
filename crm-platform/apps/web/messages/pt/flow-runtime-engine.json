@@ -119,6 +119,8 @@
       "colStarted": "Iniciado em",
       "colActivity": "Última atividade",
       "colSteps": "Etapas",
+      "colReplies": "Respostas",
+      "repliesHint": "Mensagens do cliente que chegaram a um nó de espera desta execução",
       "colActions": "Ações",
       "open": "Abrir execução",
       "cancel": "Cancelar",
@@ -197,7 +199,19 @@
       "factWaiting": "Aguardando em: {node}",
       "factDelay": "Espera {time}",
       "factReplied": "O cliente respondeu: {text}",
-      "factEnded": "Terminou: {reason}"
+      "factEnded": "Terminou: {reason}",
+      "ioInput": "Entrada",
+      "ioOutput": "Saída",
+      "ioKind": {
+        "message": "Mensagem enviada",
+        "reply": "Resposta do cliente",
+        "variable": "Variável",
+        "request": "Requisição",
+        "response": "Resposta",
+        "result": "Resultado"
+      },
+      "factMenuKept": "Não há próxima etapa aqui. As opções de {node} continuam ativas.",
+      "factAnswered": "Respondido após {time}"
     },
     "event": {
       "step": "Etapa",
@@ -503,7 +517,9 @@
       "error": "Erro",
       "skipped": "Ignorado",
       "waiting": "Aguardando",
-      "timeout": "Tempo esgotado"
+      "timeout": "Tempo esgotado",
+      "answered": "Respondido",
+      "gaveUp": "Sem resposta"
     }
   }
 }

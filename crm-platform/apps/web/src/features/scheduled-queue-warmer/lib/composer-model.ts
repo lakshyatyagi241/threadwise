@@ -1,4 +1,11 @@
-import type { CreateScheduleInput, ScheduleOptions } from '@crm/contracts';
+import {
+  scheduleMediaProblem,
+  type CreateScheduleInput,
+  type ScheduleDraft,
+  type ScheduleMedia,
+  type ScheduleOptions,
+  type UpdateScheduleInput,
+} from '@crm/contracts';
 import { localDateTime, parseTime, wallToEpoch } from './time';
 
 /** The pure half of the five-step composer (TW-SCHED-003 to 007): the draft, its step checks, and the draft to request mapping. */
@@ -25,7 +32,11 @@ export interface Draft {
   numbersText: string;
   message: string;
   templateId: string;
+  /** What was typed in the template's variable panel (null: the template's own values). */
+  templateOverrides: Record<string, unknown> | null;
   media: string;
+  /** An uploaded file; wins over the pasted link. */
+  mediaFile: ScheduleMedia | null;
   latitude: string;
   longitude: string;
   scheduleType: 'once' | 'recurring';
@@ -55,7 +66,9 @@ export function initialDraft(now: number, timezone: string, senders: string[] = 
     numbersText: '',
     message: '',
     templateId: '',
+    templateOverrides: null,
     media: '',
+    mediaFile: null,
     latitude: '',
     longitude: '',
     scheduleType: 'once',
@@ -122,8 +135,14 @@ export function toCreateInput(d: Draft): CreateScheduleInput {
     ...audienceInput(d),
   };
   if (d.messageType === 'plain' || d.messageType === 'media') body.message = d.message;
-  if (d.messageType === 'template') body.templateId = d.templateId;
-  if (d.messageType === 'media') body.media = d.media.trim();
+  if (d.messageType === 'template') {
+    body.templateId = d.templateId;
+    if (d.templateOverrides) body.templateOverrides = d.templateOverrides;
+  }
+  if (d.messageType === 'media') {
+    if (d.mediaFile) body.mediaId = d.mediaFile.id;
+    else body.media = d.media.trim();
+  }
   if (d.messageType === 'location') {
     body.latitude = Number(d.latitude);
     body.longitude = Number(d.longitude);
@@ -138,8 +157,60 @@ export function toCreateInput(d: Draft): CreateScheduleInput {
   return body;
 }
 
+/**
+ * The edit request (TW-SCHED-016): the whole composer, so the server replaces message and audience as given, plus the version that was
+ * opened. One schedule is one sender, so `sender` is the single number ticked.
+ */
+export function toUpdateInput(d: Draft, rowVersion: number): UpdateScheduleInput {
+  const c = toCreateInput(d);
+  const recurring = d.scheduleType === 'recurring';
+  const { senders: _senders, testNumber: _test, ...rest } = c;
+  void _senders;
+  void _test;
+  return {
+    ...rest,
+    sender: d.senders[0],
+    rowVersion,
+    ...(recurring ? { endDate: d.endMode === 'date' && d.endDate ? d.endDate : null } : {}),
+  };
+}
+
+/** The composer's draft for a stored schedule (the edit screen). */
+export function draftFromSchedule(s: ScheduleDraft): Draft {
+  return {
+    name: s.name,
+    senders: s.sender ? [s.sender] : [],
+    messageType: s.messageType,
+    recipientType: s.recipientType,
+    groupIds: s.groupIds,
+    tagIds: s.tagIds,
+    queueIds: s.queueIds,
+    numbersText: s.numbers.join('\n'),
+    message: s.message,
+    templateId: s.templateId ?? '',
+    templateOverrides: s.templateOverrides,
+    media: s.media ?? '',
+    mediaFile: s.mediaFile,
+    latitude: s.latitude === null ? '' : String(s.latitude),
+    longitude: s.longitude === null ? '' : String(s.longitude),
+    scheduleType: s.scheduleType,
+    sendDate: s.sendDate,
+    sendTime: s.sendTime,
+    timezone: s.timezone,
+    repeatInterval: s.repeatInterval ?? 'weekly',
+    repeatEvery: String(s.repeatEvery),
+    daysOfWeek: s.daysOfWeek,
+    endMode: s.endDate ? 'date' : 'never',
+    endDate: s.endDate ?? '',
+    sendTest: false,
+    testNumber: '',
+  };
+}
+
 export interface CheckContext {
-  options: Pick<ScheduleOptions, 'senders' | 'minLeadMinutes'>;
+  options: Pick<ScheduleOptions, 'senders' | 'templates' | 'minLeadMinutes'>;
+  /** Editing a schedule whose time was not touched: it may already be past due (a paused one), so the lead time is not asked of it. */
+  skipLead?: boolean;
   now: number;
 }
 
@@ -153,11 +224,16 @@ export function validateStep(d: Draft, step: Step, ctx: CheckContext): StepError
   if (step === 1) {
     if (!d.name.trim()) e.name = 'nameRequired';
     if (d.senders.length === 0) e.senders = 'senderRequired';
-    else if (
-      d.messageType === 'template' &&
-      d.senders.some((k) => ctx.options.senders.find((s) => s.key === k)?.engine === 'waba')
-    ) {
-      e.senders = 'wabaTemplate';
+    else if (d.messageType === 'template' && d.templateId) {
+      // A Cloud API number sends only a template Meta approved; the others send the approved text.
+      const tpl = ctx.options.templates.find((x) => x.id === d.templateId);
+      const engines = d.senders.map((k) => ctx.options.senders.find((s) => s.key === k)?.engine);
+      if (
+        tpl &&
+        engines.some((en) => en && !tpl.usableOn.includes(en as 'waba' | 'twilio' | 'baileys'))
+      ) {
+        e.senders = 'templateNotForSender';
+      }
     }
   }
   if (step === 2) {
@@ -174,7 +250,17 @@ export function validateStep(d: Draft, step: Step, ctx: CheckContext): StepError
     } else if (d.messageType === 'template') {
       if (!d.templateId) e.templateId = 'templateRequired';
     } else if (d.messageType === 'media') {
-      if (!HTTPS.test(d.media.trim())) e.media = 'mediaLink';
+      if (d.mediaFile) {
+        // The file against every channel it goes through, before anything is saved.
+        for (const key of d.senders) {
+          const engine = ctx.options.senders.find((s) => s.key === key)?.engine;
+          const problem = engine && scheduleMediaProblem(engine, d.mediaFile);
+          if (problem) {
+            e.media = problem.code === 'too_large' ? 'mediaTooLarge' : 'mediaType';
+            break;
+          }
+        }
+      } else if (!HTTPS.test(d.media.trim())) e.media = 'mediaLink';
     } else {
       const lat = Number(d.latitude);
       const lng = Number(d.longitude);
@@ -191,7 +277,8 @@ export function validateStep(d: Draft, step: Step, ctx: CheckContext): StepError
     if (!e.sendDate && !e.sendTime && !e.timezone) {
       const at = wallToEpoch(d.sendDate, d.sendTime, d.timezone);
       if (at === null) e.sendTime = 'timeRequired';
-      else if (at < ctx.now + ctx.options.minLeadMinutes * 60_000) e.sendTime = 'tooSoon';
+      else if (at < ctx.now + ctx.options.minLeadMinutes * 60_000 && !ctx.skipLead)
+        e.sendTime = 'tooSoon';
     }
     if (d.scheduleType === 'recurring') {
       const every = Number(d.repeatEvery);

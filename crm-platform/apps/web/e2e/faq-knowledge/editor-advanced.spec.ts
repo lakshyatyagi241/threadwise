@@ -3,18 +3,22 @@ import {
   deleteFlow,
   entries,
   expect,
+  faqBase,
   go,
   login,
   newWorkspace,
   open,
+  openFaqs,
   phrasingBox,
   questionBox,
+  reloadFaqs,
   seedFaq,
   seedFlow,
+  type State,
   tabTo,
   test,
+  viewOf,
   waitIndexed,
-  type State,
   type Workspace,
 } from './support';
 
@@ -28,7 +32,7 @@ test.beforeAll(async ({ browser }) => {
   state = await login(browser, ws.email);
 });
 
-const entry = async (id: string) => (await call(ws, 'GET', `/v2/faq/entries/${id}`)).body;
+const entry = async (id: string) => (await call(ws, 'GET', `${faqBase(ws)}/entries/${id}`)).body;
 
 test.describe('conflicts and leaving', () => {
   test('a stale save shows the conflict, keeps the draft, and "Keep my edits" saves on top of the latest', async ({
@@ -39,8 +43,8 @@ test.describe('conflicts and leaving', () => {
     const faq = await seedFaq(ws, { question: 'Conflict FAQ', answerText: 'Original answer.' });
     const one = await open(browser, state, watch);
     const two = await open(browser, state, watch);
-    await go(one.page, `/faq/${faq.id}`);
-    await go(two.page, `/faq/${faq.id}`);
+    await openFaqs(one.page, ws, faq.id);
+    await openFaqs(two.page, ws, faq.id);
 
     await one.page.getByLabel('Answer text').fill('Answer from the first person.');
     await one.page.getByRole('button', { name: 'Save changes' }).click();
@@ -78,8 +82,8 @@ test.describe('conflicts and leaving', () => {
     });
     const one = await open(browser, state, watch);
     const two = await open(browser, state, watch);
-    await go(one.page, `/faq/${faq.id}`);
-    await go(two.page, `/faq/${faq.id}`);
+    await openFaqs(one.page, ws, faq.id);
+    await openFaqs(two.page, ws, faq.id);
     await one.page.getByLabel('Answer text').fill('Newer answer.');
     await one.page.getByRole('button', { name: 'Save changes' }).click();
     await expect(one.page.getByText('FAQ saved.')).toBeVisible();
@@ -100,10 +104,10 @@ test.describe('conflicts and leaving', () => {
   }) => {
     const faq = await seedFaq(ws, { question: 'Guard FAQ', answerText: 'Guarded.' });
     const { page } = await open(browser, state, watch);
-    await go(page, `/faq/${faq.id}`);
-    await expect(page.getByText('Unsaved changes')).toHaveCount(0);
+    await openFaqs(page, ws, faq.id);
+    await expect(page.getByText('Unsaved changes', { exact: true })).toHaveCount(0);
     await page.getByLabel('Answer text').fill('Guarded, edited.');
-    await expect(page.getByText('Unsaved changes')).toBeVisible();
+    await expect(page.getByText('Unsaved changes', { exact: true })).toBeVisible();
 
     await page
       .getByRole('navigation', { name: 'FAQ sections' })
@@ -112,7 +116,7 @@ test.describe('conflicts and leaving', () => {
     const dialog = page.getByRole('dialog', { name: 'Leave without saving?' });
     await expect(dialog).toBeVisible();
     await dialog.getByRole('button', { name: 'Keep editing' }).click();
-    await expect(page).toHaveURL(new RegExp(`/faq/${faq.id}$`));
+    await expect(page).toHaveURL(new RegExp(`[?&]view=${faq.id}$`));
     await expect(page.getByLabel('Answer text')).toHaveValue('Guarded, edited.');
 
     // The browser's own prompt guards a reload or a closed tab.
@@ -124,32 +128,32 @@ test.describe('conflicts and leaving', () => {
     await page.getByLabel('Answer text').click();
     await page.evaluate(() => location.reload());
     await expect.poll(() => dialogs).toContain('beforeunload');
-    await expect(page).toHaveURL(new RegExp(`/faq/${faq.id}$`));
+    await expect(page).toHaveURL(new RegExp(`[?&]view=${faq.id}$`));
 
     await page.getByRole('link', { name: 'Back to FAQs' }).click();
     await page
       .getByRole('dialog', { name: 'Leave without saving?' })
       .getByRole('button', { name: 'Leave' })
       .click();
-    await expect(page).toHaveURL(/\/faq$/);
+    await expect(page).toHaveURL(/\?tab=faqs$/);
     expect((await entry(faq.id)).answerText).toBe('Guarded.');
 
     // After a save there is nothing to guard.
-    await page.goto(`/faq/${faq.id}`);
+    await openFaqs(page, ws, faq.id);
     await page.getByLabel('Answer text').fill('Saved version.');
     await page.getByRole('button', { name: 'Save changes' }).click();
     await expect(page.getByText('FAQ saved.')).toBeVisible();
-    await expect(page.getByText('Unsaved changes')).toHaveCount(0);
+    await expect(page.getByText('Unsaved changes', { exact: true })).toHaveCount(0);
     await page.getByRole('link', { name: 'Back to FAQs' }).click();
-    await expect(page).toHaveURL(/\/faq$/);
+    await expect(page).toHaveURL(/\?tab=faqs$/);
   });
 
   test('a new FAQ with only phrasings typed is also guarded', async ({ browser, watch }) => {
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq/new');
+    await openFaqs(page, ws, 'new');
     await phrasingBox(page).fill('just a phrasing');
     await phrasingBox(page).press('Enter');
-    await expect(page.getByText('Unsaved changes')).toBeVisible();
+    await expect(page.getByText('Unsaved changes', { exact: true })).toBeVisible();
     await page
       .getByRole('navigation', { name: 'FAQ sections' })
       .getByRole('link', { name: 'Unanswered' })
@@ -166,15 +170,18 @@ test.describe('flow answers', () => {
     const names = ['Pwflow Welcome', 'Pwflow Billing help', 'Pwflow Returns'];
     const ids = names.map((n) => seedFlow(ws, n));
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq/new');
+    await openFaqs(page, ws, 'new');
     await questionBox(page).fill('How do I get billing help?');
     await page.getByLabel('Answer text').fill('A text that must not survive as the flow answer.');
-    await page.getByRole('tab', { name: 'Start a flow' }).click();
+    await page.getByRole('tab', { name: 'Go to a step' }).click();
+    // The usual target is a step of this very flow; this scenario hands the customer to ANOTHER flow.
+    await expect(page.getByRole('radio', { name: /A step of this flow/ })).toBeChecked();
+    await page.getByRole('radio', { name: /A step of another flow/ }).check();
 
     // Without a flow chosen, saving explains what is missing and focuses it.
     await page.getByRole('button', { name: 'Create FAQ' }).click();
     await expect(
-      page.getByRole('alert').filter({ hasText: 'Choose the flow to start.' }),
+      page.getByRole('alert').filter({ hasText: 'Choose the flow to go to.' }),
     ).toBeVisible();
 
     const search = page.getByRole('searchbox', { name: 'Search flows' });
@@ -196,12 +203,12 @@ test.describe('flow answers', () => {
       'aria-selected',
       'true',
     );
-    await expect(page.getByText('Choose the flow to start.')).toHaveCount(0);
+    await expect(page.getByText('Choose the flow to go to.')).toHaveCount(0);
 
     await page.getByRole('button', { name: 'Create FAQ' }).click();
     await expect(page.getByText('FAQ created.')).toBeVisible();
-    await page.waitForURL(/\/faq\/[0-9a-f-]{36}$/);
-    const id = page.url().split('/').pop()!;
+    await page.waitForURL(/[?&]view=[0-9a-f-]{36}$/);
+    const id = viewOf(page)!;
     const saved = await entry(id);
     expect(saved).toMatchObject({
       answerType: 'flow',
@@ -211,13 +218,13 @@ test.describe('flow answers', () => {
     });
 
     // The list names the flow instead of an answer text.
-    await page.goto('/faq');
+    await openFaqs(page, ws);
     await page.getByLabel('Search FAQs').fill('billing help');
     await expect(page.locator('tbody tr').filter({ hasText: 'Pwflow Billing help' })).toBeVisible();
 
     // Back to a text answer: the flow is released.
-    await page.goto(`/faq/${id}`);
-    await expect(page.getByRole('tab', { name: 'Start a flow' })).toHaveAttribute(
+    await openFaqs(page, ws, id);
+    await expect(page.getByRole('tab', { name: 'Go to a step' })).toHaveAttribute(
       'aria-selected',
       'true',
     );
@@ -239,17 +246,20 @@ test.describe('flow answers', () => {
     const flowId = seedFlow(ws, 'Pwflow Doomed');
     const faq = await seedFaq(ws, { question: 'Doomed flow FAQ', flowId });
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq');
+    await openFaqs(page, ws);
     await page.getByLabel('Search FAQs').fill('Doomed flow FAQ');
     await expect(page.locator('tbody tr').filter({ hasText: 'Pwflow Doomed' })).toBeVisible();
 
     deleteFlow(ws, flowId);
-    await page.reload();
+    await reloadFaqs(page);
     await page.getByLabel('Search FAQs').fill('Doomed flow FAQ');
     await expect(page.locator('tbody tr').filter({ hasText: 'Flow missing' })).toBeVisible();
 
-    await page.goto(`/faq/${faq.id}`);
-    await expect(page.getByText(/The flow this FAQ started no longer exists/)).toBeVisible();
+    await openFaqs(page, ws, faq.id);
+    // (App defect, recorded in the report: the answer target is cleared when its flow is deleted, so the editor opens on "a step of
+    // this flow" and never shows this warning. The scenario goes on, so the rest of it is still checked.)
+    await expect.soft(page.getByText(/The flow this FAQ goes to no longer exists/)).toBeVisible();
+    await page.getByRole('radio', { name: /A step of another flow/ }).check();
     await expect(page.getByText('Chosen')).toHaveCount(0);
     // Saving without choosing another flow is refused by name; choosing one repairs it.
     const other = seedFlow(ws, 'Pwflow Replacement');
@@ -272,7 +282,7 @@ test.describe('suggestions', () => {
     const faq = await seedFaq(ws, { question: 'Suggest for me?', answerText: 'Sure.' });
     await waitIndexed(ws);
     const { page } = await open(browser, state, watch);
-    await go(page, `/faq/${faq.id}`);
+    await openFaqs(page, ws, faq.id);
     const before = (await entry(faq.id)).variations.length;
 
     await page.getByRole('button', { name: 'Suggest with AI' }).click();
@@ -315,7 +325,7 @@ test.describe('suggestions', () => {
 
   test('on an unsaved FAQ the button waits for the first save', async ({ browser, watch }) => {
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq/new');
+    await openFaqs(page, ws, 'new');
     await expect(page.getByRole('button', { name: 'Suggest with AI' })).toBeDisabled();
     await expect(
       page.getByText('Save the FAQ first, then AI can suggest phrasings.'),
@@ -336,7 +346,7 @@ test.describe('odd text and keyboard', () => {
       alerts++;
       void d.dismiss();
     });
-    await go(page, '/faq/new');
+    await openFaqs(page, ws, 'new');
     await questionBox(page).fill(question);
     await page.getByLabel('Answer text').fill(answer);
     await phrasingBox(page).fill('<b>bold phrasing</b> 😀');
@@ -344,13 +354,13 @@ test.describe('odd text and keyboard', () => {
     await expect(page.getByText('How it looks in WhatsApp')).toBeVisible();
     await page.getByRole('button', { name: 'Create FAQ' }).click();
     await expect(page.getByText('FAQ created.')).toBeVisible();
-    await page.waitForURL(/\/faq\/[0-9a-f-]{36}$/);
-    const id = page.url().split('/').pop()!;
+    await page.waitForURL(/[?&]view=[0-9a-f-]{36}$/);
+    const id = viewOf(page)!;
 
-    for (const where of [`/faq/${id}`, '/faq']) {
-      await page.goto(where);
+    for (const where of [id, undefined]) {
+      await openFaqs(page, ws, where);
       await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-      if (where === '/faq') await page.getByLabel('Search FAQs').fill('Where is my');
+      if (where === undefined) await page.getByLabel('Search FAQs').fill('Where is my');
       await expect(
         page.getByText('<img src=x onerror="window.__xss=1">', { exact: false }).first(),
       ).toBeVisible();
@@ -361,7 +371,7 @@ test.describe('odd text and keyboard', () => {
       ).toBe(true);
     }
     expect(alerts).toBe(0);
-    await page.goto(`/faq/${id}`);
+    await openFaqs(page, ws, id);
     await expect(page.getByLabel('Answer text')).toHaveValue(answer);
     await expect(questionBox(page)).toHaveValue(question);
     await expect(page.getByText('<b>bold phrasing</b> 😀')).toBeVisible();
@@ -371,7 +381,7 @@ test.describe('odd text and keyboard', () => {
 
   test('the whole create flow works with the keyboard alone', async ({ browser, watch }) => {
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq/new');
+    await openFaqs(page, ws, 'new');
     const kb = page.keyboard;
     await tabTo(page, questionBox(page));
     await kb.type('Keyboard only question?');
@@ -385,11 +395,11 @@ test.describe('odd text and keyboard', () => {
     await expect(
       page.getByRole('list', { name: 'Phrasings' }).getByText('keyboard phrasing one'),
     ).toBeVisible();
-    await expect(page).toHaveURL(/\/faq\/new$/);
+    await expect(page).toHaveURL(/[?&]view=new$/);
     await tabTo(page, page.getByRole('button', { name: 'Create FAQ' }));
     await kb.press('Enter');
     await expect(page.getByText('FAQ created.')).toBeVisible();
-    await expect(page).toHaveURL(/\/faq\/[0-9a-f-]{36}$/);
+    await expect(page).toHaveURL(/[?&]view=[0-9a-f-]{36}$/);
     const made = (await entries(ws)).data.find(
       (e: any) => e.question === 'Keyboard only question?',
     );

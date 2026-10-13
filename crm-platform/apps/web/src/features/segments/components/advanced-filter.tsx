@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Button, cn } from '@crm/ui';
+import { Button, Drawer, cn } from '@crm/ui';
 import { useSegmentCatalog } from '../api/lookups';
 import { ruleReducer, type RuleAction } from '../lib/builder';
 import { kindLookup, type FieldDef } from '../lib/fields';
@@ -19,7 +19,7 @@ import { fromWire, parseRules, toWire } from '../lib/wire';
 import { RuleBuilder } from './rule-builder';
 
 /** The rules of a saved `rules=` value (JSON text), or an empty tree for none or text that does not parse. */
-function groupOf(text: string): Group {
+export function groupOf(text: string): Group {
   if (!text) return emptyRoot();
   try {
     const parsed = parseRules(JSON.parse(text));
@@ -49,6 +49,7 @@ export function AdvancedFilter({
 }) {
   const t = useTranslations('segments.advancedFilter');
   const tfields = useTranslations('segments.fields');
+  const tactions = useTranslations('segments.actions');
   const { catalog, ready } = useSegmentCatalog();
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState<Group>(() => groupOf(value));
@@ -101,11 +102,11 @@ export function AdvancedFilter({
     <>
       <button
         type="button"
-        aria-expanded={open}
-        aria-controls="hub-advanced-filter"
+        aria-haspopup="dialog"
         onClick={() => {
-          if (!open) setDraft(groupOf(value));
-          setOpen((o) => !o);
+          setDraft(groupOf(value));
+          setShowProblems(false);
+          setOpen(true);
         }}
         className={cn(
           'inline-flex h-9 items-center gap-2 rounded-md border border-border bg-background px-3 text-sm outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary',
@@ -119,18 +120,29 @@ export function AdvancedFilter({
           </span>
         )}
       </button>
-      {open && (
-        <section
-          id="hub-advanced-filter"
-          aria-label={t('title')}
-          className="basis-full space-y-3 rounded-xl border border-border bg-background p-4"
-        >
-          <header className="flex flex-wrap items-center justify-between gap-2">
-            <div>
-              <h2 className="text-sm font-semibold">{t('title')}</h2>
-              <p className="text-xs text-muted-foreground">{t('hint')}</p>
-            </div>
-          </header>
+      {/* A drawer, not an inline panel: the page behind keeps its place, and the title and the Apply / Clear row stay in view while the rules scroll. */}
+      <Drawer
+        open={open}
+        onClose={() => setOpen(false)}
+        title={t('title')}
+        closeLabel={tactions('close')}
+        className="w-[min(68rem,100vw)]"
+        footer={
+          <>
+            <p className="me-auto text-xs text-muted-foreground">
+              {t('counts', { conditions: countConditions(draft), max: MAX_CONDITIONS })}
+            </p>
+            <Button type="button" variant="secondary" size="sm" onClick={clear}>
+              {t('clear')}
+            </Button>
+            <Button type="button" size="sm" onClick={apply} disabled={!ready}>
+              {t('apply')}
+            </Button>
+          </>
+        }
+      >
+        <div id="hub-advanced-filter" className="space-y-3">
+          <p className="text-xs text-muted-foreground">{t('hint')}</p>
           {!ready ? (
             <p role="status" className="text-sm text-muted-foreground">
               {t('loading')}
@@ -147,21 +159,8 @@ export function AdvancedFilter({
               serverProblems={{}}
             />
           )}
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <p className="text-xs text-muted-foreground">
-              {t('counts', { conditions: countConditions(draft), max: MAX_CONDITIONS })}
-            </p>
-            <div className="flex items-center gap-2">
-              <Button type="button" variant="secondary" size="sm" onClick={clear}>
-                {t('clear')}
-              </Button>
-              <Button type="button" size="sm" onClick={apply} disabled={!ready}>
-                {t('apply')}
-              </Button>
-            </div>
-          </div>
-        </section>
-      )}
+        </div>
+      </Drawer>
     </>
   );
 }

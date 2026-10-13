@@ -3,16 +3,20 @@ import {
   TRIGRAM_MIN,
   answerId,
   bestPerFaq,
+  candidateFlows,
   decide,
   isMatchable,
   normalise,
   parseSuggestions,
+  pickAttempt,
   queryText,
   sameKey,
   suggestionPrompt,
   tidy,
   toCandidates,
   toVectorLiteral,
+  type FlowAttempt,
+  type FlowBinding,
   type Scored,
 } from '../../../src/modules/faq-knowledge/faq.rules';
 
@@ -235,5 +239,97 @@ describe('answerId', () => {
     expect(a).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-5[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);
     expect(answerId('11111111-1111-4111-8111-111111111111')).toBe(a);
     expect(answerId('22222222-2222-4222-8222-222222222222')).not.toBe(a);
+  });
+});
+
+describe('candidateFlows: which flows may answer on a channel', () => {
+  const kinds = { simulator: ['simulator'], waba: ['whatsapp_cloud'], baileys: ['whatsapp_qr'] };
+  const f = (
+    id: number,
+    provider: string,
+    triggerChannelId: number | null = null,
+  ): FlowBinding => ({
+    id,
+    provider,
+    triggerChannelId,
+  });
+  const ch = { channelId: 10, channelKind: 'simulator' };
+
+  it('a flow tied to no channel answers on every channel of its engine kind, and on no other', () => {
+    expect(candidateFlows([f(1, 'simulator')], ch, kinds, null)).toEqual([1]);
+    expect(candidateFlows([f(1, 'waba')], ch, kinds, null)).toEqual([]);
+    expect(candidateFlows([f(1, 'telegram-unknown')], ch, kinds, null)).toEqual([]);
+  });
+
+  it('a flow tied to a channel answers there only, whatever its engine says', () => {
+    expect(candidateFlows([f(1, 'waba', 10)], ch, kinds, null)).toEqual([1]);
+    expect(candidateFlows([f(1, 'simulator', 11)], ch, kinds, null)).toEqual([]);
+  });
+
+  it('orders by flow id, and puts the live run flow first when it is a candidate', () => {
+    const flows = [
+      f(9, 'simulator'),
+      f(3, 'simulator'),
+      f(5, 'simulator', 10),
+      f(7, 'simulator', 99),
+    ];
+    expect(candidateFlows(flows, ch, kinds, null)).toEqual([3, 5, 9]);
+    expect(candidateFlows(flows, ch, kinds, 9)).toEqual([9, 3, 5]);
+    // A live run in a flow that cannot answer here does not add it.
+    expect(candidateFlows(flows, ch, kinds, 7)).toEqual([3, 5, 9]);
+    expect(candidateFlows(flows, ch, kinds, 404)).toEqual([3, 5, 9]);
+  });
+
+  it('nothing in, nothing out; a flow listed twice is one candidate', () => {
+    expect(candidateFlows([], ch, kinds, 1)).toEqual([]);
+    expect(candidateFlows([f(2, 'simulator'), f(2, 'simulator')], ch, kinds, null)).toEqual([2]);
+  });
+});
+
+describe('pickAttempt: the flow that speaks for a message', () => {
+  const a = (
+    flowId: number,
+    outcome: FlowAttempt['outcome'],
+    score: number | null,
+  ): FlowAttempt => ({
+    flowId,
+    outcome,
+    score,
+  });
+
+  it('the best answered score wins, even when another flow scored higher without answering', () => {
+    const picked = pickAttempt(
+      [a(1, 'below_threshold', 0.9), a(2, 'answered', 0.6), a(3, 'answered', 0.7)],
+      null,
+    );
+    expect(picked?.flowId).toBe(3);
+  });
+
+  it('a tie goes to the live run flow, then to the lowest flow id', () => {
+    const tie = [a(5, 'answered', 0.8), a(2, 'answered', 0.8), a(9, 'answered', 0.8)];
+    expect(pickAttempt(tie, 9)?.flowId).toBe(9);
+    expect(pickAttempt(tie, null)?.flowId).toBe(2);
+    expect(pickAttempt(tie, 404)?.flowId).toBe(2);
+  });
+
+  it('scores are compared at four decimals (the number on screen decides)', () => {
+    expect(pickAttempt([a(2, 'answered', 0.80001), a(1, 'answered', 0.80004)], null)?.flowId).toBe(
+      1,
+    );
+    expect(pickAttempt([a(2, 'answered', 0.8001), a(1, 'answered', 0.8)], null)?.flowId).toBe(2);
+  });
+
+  it('when none answered the nearest candidate speaks; a flow with no score ranks last', () => {
+    expect(
+      pickAttempt(
+        [a(1, 'no_faqs', null), a(2, 'below_threshold', 0.3), a(3, 'low_margin', 0.4)],
+        null,
+      )?.flowId,
+    ).toBe(3);
+    expect(pickAttempt([a(1, 'provider_error', null), a(2, 'no_faqs', null)], 2)?.flowId).toBe(2);
+  });
+
+  it('no attempts, no speaker', () => {
+    expect(pickAttempt([], 1)).toBeNull();
   });
 });

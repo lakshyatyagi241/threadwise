@@ -367,7 +367,8 @@
         "failed": "Çalışma alanı değiştirilemedi. Lütfen tekrar deneyin.",
         "notAvailable": "Bu çalışma alanına geçemezsiniz.",
         "rateLimited": "Çok fazla deneme. Lütfen biraz bekleyip tekrar deneyin.",
-        "rateLimitedWait": "Çok fazla deneme. {seconds, plural, one {# saniye} other {# saniye}} sonra tekrar deneyin."
+        "rateLimitedWait": "Çok fazla deneme. {seconds, plural, one {# saniye} other {# saniye}} sonra tekrar deneyin.",
+        "unverified": "Bu çalışma alanına geçmek için önce bu çalışma alanında e-postanızı doğrulayın."
       },
       "mfaChallenge": {
         "title": "Siz olduğunuzu doğrulayın",
@@ -552,7 +553,9 @@
             "extra_channels": "Telegram, Facebook ve Instagram",
             "form_builder": "Formlar",
             "waba_groups": "WhatsApp grupları",
-            "sms": "SMS"
+            "sms": "SMS",
+            "help_agent": "Yardım asistanı",
+            "email_channel": "E-posta (Gmail) kanalı"
           },
           "cta": {
             "continueFree": "Ücretsiz devam et",

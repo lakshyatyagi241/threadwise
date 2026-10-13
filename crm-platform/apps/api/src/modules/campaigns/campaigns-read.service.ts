@@ -93,8 +93,13 @@ export class CampaignsReadService {
 
       const start = (q.page - 1) * CAMPAIGN_PAGE_SIZE;
       const count = (status: string) => all.filter((c) => c.status === status).length;
-      const sentTotal = all.reduce((n, c) => n + c.counts.sent, 0);
-      const deliveredTotal = all.reduce((n, c) => n + c.counts.delivered, 0);
+      // The tiles above the list follow the date filter (campaigns created in the window), not the status, type or search: they
+      // describe the period, while the list below narrows it further. Reference left them on all time whatever the period.
+      const cutoff = q.range === 'all' ? null : now - RANGE_DAYS[q.range] * DAY;
+      const period = cutoff === null ? all : all.filter((c) => c.createdAt.getTime() >= cutoff);
+      const inPeriod = (status: string) => period.filter((c) => c.status === status).length;
+      const sentTotal = period.reduce((n, c) => n + c.counts.sent, 0);
+      const deliveredTotal = period.reduce((n, c) => n + c.counts.delivered, 0);
       const failingCampaigns = all.filter((c) => c.counts.failed > 5).length;
       const tpl = await this.repo.templateHealth(tx, orgId);
       const dev = await this.repo.deviceHealth(tx, orgId);
@@ -103,16 +108,16 @@ export class CampaignsReadService {
         data: rows.slice(start, start + CAMPAIGN_PAGE_SIZE).map(toCampaign),
         page: { page: q.page, perPage: CAMPAIGN_PAGE_SIZE, total: rows.length },
         stats: {
-          total: all.length,
-          queued: count('scheduled'),
-          running: count('running'),
-          completed: count('completed'),
-          failed: count('failed'),
+          total: period.length,
+          queued: inPeriod('scheduled'),
+          running: inPeriod('running'),
+          completed: inPeriod('completed'),
+          failed: inPeriod('failed'),
           sentTotal,
           deliveredTotal,
-          readTotal: all.reduce((n, c) => n + c.counts.read, 0),
-          failedTotal: all.reduce((n, c) => n + c.counts.failed, 0),
-          processing: count('running'),
+          readTotal: period.reduce((n, c) => n + c.counts.read, 0),
+          failedTotal: period.reduce((n, c) => n + c.counts.failed, 0),
+          processing: inPeriod('running'),
         },
         statusCounts: {
           all: all.length,
@@ -129,7 +134,10 @@ export class CampaignsReadService {
           flow: all.filter((c) => c.type === 'flow').length,
         },
         deliveryHealth: {
-          avgDeliveryRate: pct(deliveredTotal, sentTotal),
+          avgDeliveryRate: pct(
+            all.reduce((n, c) => n + c.counts.delivered, 0),
+            all.reduce((n, c) => n + c.counts.sent, 0),
+          ),
           failingCampaigns,
           status: failingCampaigns > 0 ? 'warning' : 'healthy',
         },
@@ -163,6 +171,7 @@ export class CampaignsReadService {
     const base = await this.compose.compose(query);
     return this.db.tx(async (tx) => ({
       senders: base.senders,
+      hidden: base.hidden,
       templates: base.templates,
       groups: await this.repo.groupsWithCounts(tx, orgId),
       tags: await this.repo.tagsWithCounts(tx, orgId),

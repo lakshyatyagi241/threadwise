@@ -1,0 +1,205 @@
+{
+  "contact-consent": {
+    "common": {
+      "dismiss": "Tutup",
+      "retry": "Coba lagi",
+      "loading": "Memuat..."
+    },
+    "errors": {
+      "network": "Tidak dapat terhubung ke server. Periksa koneksi Anda lalu coba lagi.",
+      "forbidden": "Anda tidak memiliki izin untuk melakukan ini.",
+      "notFound": "Kontak ini sudah tidak ada.",
+      "conflict": "Orang lain mengubah ini saat Anda mengedit. Muat ulang lalu coba lagi.",
+      "noteRequired": "Sebutkan alasan kontak setuju (apa yang dikatakan atau ditandatangani, dan di mana) sebelum mencatat persetujuan.",
+      "settingsInvalid": "Kata kunci harus memiliki setidaknya satu huruf atau angka, dan minimal satu kata kunci STOP harus tetap ada selama deteksi aktif.",
+      "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
+      "validation": "Beberapa nilai tidak valid. Periksa formulir lalu coba lagi.",
+      "unexpected": "Terjadi kesalahan. Coba lagi.",
+      "exportInProgress": "Berkas bukti sedang disiapkan. Tunggu hingga selesai, lalu coba lagi.",
+      "exportNotReady": "Berkas itu belum siap atau sudah kedaluwarsa. Siapkan yang baru."
+    },
+    "settings": {
+      "title": "Persetujuan dan balasan STOP",
+      "subtitle": "Pilih kata yang membuat kontak berhenti atau kembali berlangganan, balasan kami, baris berhenti berlangganan untuk pesan pemasaran, dan apakah pemasaran memerlukan persetujuan yang tercatat.",
+      "exportProof": "Ekspor bukti persetujuan (CSV)",
+      "discard": "Buang perubahan",
+      "save": "Simpan perubahan",
+      "saved": "Pengaturan persetujuan disimpan.",
+      "conflict": "Orang lain menyimpan pengaturan ini lebih dulu. Formulir kini menampilkan data yang tersimpan.",
+      "conflictOk": "OK",
+      "problems": {
+        "noOptOutWord": "Tambahkan minimal satu kata kunci STOP, atau matikan deteksi.",
+        "badLang": "Kode bahasa berbentuk seperti en, ar, atau pt-BR."
+      }
+    },
+    "policy": {
+      "title": "Kebijakan pemasaran",
+      "requireConsent": "Wajibkan persetujuan tercatat untuk pengiriman pemasaran",
+      "requireConsentHint": "Mati: pemasaran dikirim ke semua kontak yang belum berhenti berlangganan. Aktif: hanya ke kontak dengan persetujuan tercatat. Audiens kampanye dan siaran menampilkan jumlah yang dilewati.",
+      "withdrawnAlways": "Kontak yang berhenti berlangganan selalu dilewati, apa pun pengaturan sakelar ini."
+    },
+    "detect": {
+      "title": "Balasan STOP dan START",
+      "enabled": "Deteksi balasan STOP dan START",
+      "enabledHint": "Jika kontak hanya mengirim salah satu kata di bawah, mereka berhenti atau kembali berlangganan di kanal itu.",
+      "autoReply": "Kirim balasan konfirmasi",
+      "autoReplyHint": "Jawaban teks bebas singkat dalam jendela 24 jam, dikirim sekali per perubahan. Ini bukan kampanye dan tidak dihitung sebagai pemasaran.",
+      "rule": "Seluruh pesan harus berupa kata kunci: huruf kapital, spasi, tanda baca, emoji, dan tanda diakritik Arab diabaikan. \"Please stop sending me invoices\" atau \"don't stop\" tidak cocok, sehingga tidak ada yang berhenti berlangganan secara tidak sengaja."
+    },
+    "lang": {
+      "groupLabel": "Kata dan balasan untuk {lang}",
+      "title": "Bahasa",
+      "remove": "Hapus bahasa",
+      "optOutWords": "Kata kunci STOP (berhenti berlangganan)",
+      "optInWords": "Kata kunci START (berlangganan kembali)",
+      "wordsHint": "Satu per baris.",
+      "optOutReply": "Balasan setelah STOP",
+      "optInReply": "Balasan setelah START",
+      "replyHint": "Anda dapat memakai '{{name}}' untuk nama depan kontak. Jelaskan cara berlangganan kembali.",
+      "footer": "Baris berhenti berlangganan untuk pesan pemasaran",
+      "footerHint": "Ditambahkan di bawah teks pemasaran. Beri tahu kata yang harus dikirim.",
+      "add": "Tambah bahasa",
+      "addHint": "Kode bahasa seperti fr atau pt-BR.",
+      "invalid": "Gunakan kode seperti fr atau pt-BR.",
+      "addButton": "Tambah"
+    },
+    "footer": {
+      "title": "Baris berhenti berlangganan",
+      "intro": "Penyusun siaran dan kampanye dapat menambahkan baris ini di bawah teks pemasaran agar penerima tahu mereka bisa membalas STOP. Templat yang disetujui tidak pernah diubah: masukkan baris ini ke dalam templat itu sendiri.",
+      "defaultOn": "Beri peringatan jika teks pemasaran tanpa baris berhenti berlangganan",
+      "defaultOnHint": "Penyusun menampilkan peringatan dan tombol sekali klik untuk menambahkannya.",
+      "noneSet": "Belum ada baris berhenti berlangganan untuk bahasa mana pun.",
+      "previewLabel": "Yang dilihat penerima",
+      "sample": "Obral musim semi kami dimulai hari ini. Kunjungi kami minggu ini."
+    },
+    "test": {
+      "title": "Uji pesan",
+      "intro": "Ketik apa yang mungkin dikirim kontak dan lihat apa yang akan terjadi. Tidak ada yang diubah atau dikirim. Memakai kata di atas, bahkan sebelum disimpan.",
+      "label": "Pesan dari kontak",
+      "run": "Uji",
+      "failed": "Pengujian tidak dapat dijalankan. Coba lagi.",
+      "outcome": {
+        "opts_out": "Ini membuat kontak berhenti menerima pemasaran.",
+        "opts_in": "Ini membuat kontak berlangganan kembali.",
+        "no_match": "Tidak terjadi apa-apa: pesan bukan kata kunci.",
+        "detection_off": "Tidak terjadi apa-apa: deteksi dimatikan."
+      },
+      "matched": "Cocok dengan kata kunci \"{keyword}\" ({lang}).",
+      "replyLabel": "Kontak menerima",
+      "noReply": "Tidak ada balasan yang dikirim."
+    },
+    "card": {
+      "title": "Persetujuan",
+      "status": {
+        "optedOut": "Berhenti berlangganan",
+        "subscribed": "Berlangganan",
+        "none": "Tidak ada persetujuan tercatat"
+      },
+      "export": "Ekspor bukti (CSV)",
+      "markSubscribed": "Tandai sebagai berlangganan",
+      "markUnsubscribed": "Tandai sebagai berhenti berlangganan",
+      "loading": "Memuat persetujuan...",
+      "noneRecorded": "Tidak ada persetujuan tercatat untuk kontak ini. Pengiriman pemasaran mengikuti kebijakan workspace Anda.",
+      "perChannel": "Persetujuan per kanal",
+      "timeline": "Riwayat persetujuan",
+      "channel": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "telegram": "Telegram",
+        "email": "Email",
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "webchat": "Obrolan web"
+      },
+      "state": {
+        "granted": "berlangganan",
+        "withdrawn": "berhenti berlangganan"
+      },
+      "action": {
+        "granted": "Berlangganan",
+        "withdrawn": "Berhenti berlangganan"
+      },
+      "source": {
+        "form": "Formulir",
+        "keyword": "Balasan kata kunci",
+        "manual": "Dicatat oleh seseorang",
+        "import": "Impor",
+        "api": "API",
+        "flow": "Alur",
+        "inbound_message": "Pesan",
+        "contact_request": "Permintaan kontak",
+        "legacy": "Sebelum riwayat persetujuan"
+      },
+      "by": "oleh {name}",
+      "evidence": {
+        "consentText": "Teks yang ditampilkan",
+        "consentVersion": "Versi",
+        "consentHash": "Hash",
+        "formId": "Formulir",
+        "submissionId": "Kiriman",
+        "messageId": "Pesan",
+        "keyword": "Kata kunci",
+        "fileName": "File",
+        "apiKeyId": "Kunci API",
+        "flowId": "Alur",
+        "reference": "Referensi"
+      },
+      "dialog": {
+        "titleGranted": "Tandai sebagai berlangganan",
+        "titleWithdrawn": "Tandai sebagai berhenti berlangganan",
+        "introGranted": "Catat bahwa kontak ini setuju menerima pesan pemasaran. Alasannya disimpan sebagai bukti.",
+        "introWithdrawn": "Catat bahwa kontak ini tidak lagi menginginkan pesan pemasaran. Kontak ini akan dilewati oleh semua kampanye dan siaran.",
+        "channel": "Kanal",
+        "noteRequired": "Alasannya? (wajib)",
+        "noteOptional": "Catatan (opsional)",
+        "noteHint": "Contoh: menandatangani formulir kertas di konter, atau setuju lewat email pada 3 Maret.",
+        "confirm": "Simpan",
+        "cancel": "Batal",
+        "close": "Tutup",
+        "savedGranted": "Ditandai sebagai berlangganan.",
+        "savedWithdrawn": "Ditandai sebagai berhenti berlangganan."
+      }
+    },
+    "composer": {
+      "add": "Tambahkan baris berhenti berlangganan",
+      "missing": "Pesan pemasaran ini tidak memberi tahu cara berhenti berlangganan. Tambahkan baris seperti \"Balas STOP untuk berhenti berlangganan\".",
+      "addButton": "Tambahkan baris",
+      "templateHint": "Templat dikunci oleh persetujuannya. Agar penerima tahu mereka bisa berhenti berlangganan, sertakan baris seperti \"{line}\" di dalam templat itu sendiri.",
+      "footerSuggestion": "Disarankan untuk templat pemasaran: \"{line}\"",
+      "footerUse": "Gunakan sebagai footer"
+    },
+    "import": {
+      "legend": "Persetujuan",
+      "label": "Saya memiliki persetujuan untuk mengirim pesan ke kontak ini",
+      "hint": "Jika dicentang, semua kontak dalam file dicatat telah menyetujui pemasaran, dengan nama file sebagai bukti. Jika tidak dicentang, impor tidak mencatat persetujuan apa pun. Kontak yang berhenti berlangganan tetap berhenti berlangganan.",
+      "hintColumn": "Kolom yang dipetakan ke persetujuan pemasaran menentukan siapa yang dicatat: hanya baris yang berisi ya yang mendapat persetujuan, dengan nama file sebagai bukti. Tidak, sel kosong, atau kata yang tidak dikenal tidak mencatat apa pun. Kontak yang sudah berhenti berlangganan tetap berhenti.",
+      "columnSummary": "{granted} baris berisi ya dan akan dicatat. {notGranted} berisi tidak atau kosong dan tidak mendapat catatan persetujuan.",
+      "unrecognised": "{count, plural, one {# baris memiliki} other {# baris memiliki}} nilai persetujuan yang bukan ya atau tidak ({values}). Nilai itu dianggap tidak disetujui. Gunakan ya / tidak, true / false, atau 1 / 0.",
+      "columnIgnored": "Kolom persetujuan tidak berpengaruh sampai Anda mencentang kotak di atas."
+    },
+    "systemLine": {
+      "withdrawn": "Kontak membalas {keyword}: berhenti berlangganan pemasaran",
+      "granted": "Kontak membalas {keyword}: berlangganan pemasaran lagi"
+    },
+    "proof": {
+      "title": "Berkas bukti yang sudah disiapkan",
+      "prepare": "Siapkan berkas bukti lengkap",
+      "preparing": "Menyiapkan berkas bukti",
+      "largeHint": "Catatan lebih dari {max} peristiwa, jadi berkas disiapkan di latar belakang",
+      "large": "Catatan berisi lebih dari {max} peristiwa, lebih dari yang bisa diunduh langsung. Siapkan berkas lengkap: berkas dibuat di latar belakang dan Anda akan mendapat email saat sudah siap.",
+      "none": "Belum ada berkas yang disiapkan.",
+      "keptFor": "Berkas yang sudah disiapkan bisa diunduh selama {days} hari, lalu dihapus. Hanya satu berkas yang disiapkan dalam satu waktu.",
+      "rows": "{count, plural, one {# peristiwa} other {# peristiwa}}",
+      "expires": "tersedia hingga {date}",
+      "download": "Unduh CSV",
+      "failed": "Berkas tidak bisa dibuat. Siapkan lagi.",
+      "status": {
+        "queued": "Menunggu",
+        "running": "Sedang dibuat",
+        "ready": "Siap",
+        "failed": "Gagal",
+        "expired": "Kedaluwarsa"
+      }
+    }
+  }
+}

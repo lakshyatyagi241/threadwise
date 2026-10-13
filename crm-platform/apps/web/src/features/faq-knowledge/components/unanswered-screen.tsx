@@ -14,6 +14,7 @@ import { errorKey } from '../lib/errors';
 import { withoutLog } from '../lib/log-model';
 import { writePrefill } from '../lib/prefill';
 import { FaqIcon, SearchIcon } from './icons';
+import { useFaqFlow } from './faq-flow';
 import { CandidateList, FaqPickerModal, OriginTag, WhyText } from './log-parts';
 import { VerifyDetail } from './verify-parts';
 import {
@@ -29,13 +30,14 @@ import {
 
 type LogCache = Parameters<typeof withoutLog>[0];
 
-/** `/faq/unanswered`: customer messages no FAQ answered. Each one can become a phrasing of an FAQ, a new FAQ, or be dismissed. */
+/** The flow's unanswered messages: customer messages no FAQ answered. Each one can become a phrasing of an FAQ, a new FAQ, or be dismissed. */
 export function UnansweredScreen() {
   const t = useTranslations('faq.unanswered');
   const te = useTranslations('faq.errors');
   const { toast } = useToast();
   const qc = useQueryClient();
   const router = useRouter();
+  const { flowId, href } = useFaqFlow();
   const canInsights = useCan('faq.insights.read');
   const canUpdate = useCan('faq.entries.update');
   const canCreate = useCan('faq.entries.create');
@@ -47,9 +49,9 @@ export function UnansweredScreen() {
 
   /** The row leaves at once; a failure puts every cached page back exactly as it was. */
   const optimistic = async (id: string) => {
-    await qc.cancelQueries({ queryKey: KEYS.log });
-    const snapshot = qc.getQueriesData<LogCache>({ queryKey: KEYS.log });
-    qc.setQueriesData<LogCache>({ queryKey: KEYS.log }, (d) => withoutLog(d, id));
+    await qc.cancelQueries({ queryKey: KEYS.log(flowId) });
+    const snapshot = qc.getQueriesData<LogCache>({ queryKey: KEYS.log(flowId) });
+    qc.setQueriesData<LogCache>({ queryKey: KEYS.log(flowId) }, (d) => withoutLog(d, id));
     return { snapshot };
   };
   type Ctx = Awaited<ReturnType<typeof optimistic>>;
@@ -57,7 +59,7 @@ export function UnansweredScreen() {
     ctx?.snapshot.forEach(([key, data]) => qc.setQueryData(key, data));
 
   const dismiss = useMutation({
-    mutationFn: (row: FaqLogItem) => faqApi.dismiss(row.id),
+    mutationFn: (row: FaqLogItem) => faqApi.dismiss(flowId, row.id),
     onMutate: (row) => optimistic(row.id),
     onError: (e, _r, ctx) => {
       rollback(ctx);
@@ -71,7 +73,7 @@ export function UnansweredScreen() {
   });
   const learn = useMutation({
     mutationFn: (v: { row: FaqLogItem; faqId: string; question: string }) =>
-      faqApi.learn(v.row.id, { faqId: v.faqId }),
+      faqApi.learn(flowId, v.row.id, { faqId: v.faqId }),
     onMutate: async (v) => {
       setPicking(null);
       return optimistic(v.row.id);
@@ -92,7 +94,7 @@ export function UnansweredScreen() {
   const createFrom = (row: FaqLogItem) => {
     if (!row.query) return;
     writePrefill({ question: row.query, resolveLogId: row.id });
-    router.push('/faq/new?prefill=1');
+    router.push(href('new'));
   };
 
   return (

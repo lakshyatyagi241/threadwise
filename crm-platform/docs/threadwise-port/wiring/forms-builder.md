@@ -76,6 +76,15 @@ ticked marketing box), `contact_identities` (`addIdentity`), `contact_tags` and 
 | WIRE-FORMS-029 | Publish refuses `captchaMode: 'on'` while the platform has no provider (`captcha_not_configured`); runtime degrades, never refuses | `PublishContext.captchaMissing` in `form-definition-rules.ts`, `FormsService.publishContext`; web `problems.reason.captcha_not_configured`                                 |
 | WIRE-FORMS-030 | Notification and email link `?submission=<id>` opens that submission in the drawer, even when it is not in the first list page     | `SubmissionsScreen` (`linked`, `useSubmission`); test `submissions-deeplink.test.tsx`                                                                                      |
 
+## CRM property mapping
+
+| Id             | What                                                                                                                                 | Where                                                                                                                                                                       |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| WIRE-FORMS-031 | Built-ins offered by the picker: contact middle name and address parts, company address parts                                        | `FormCatalogueService` (`CONTACT_BUILTINS`, `COMPANY_BUILTINS`, `addressParts`); contracts `CONTACT_BUILTIN_PROPERTIES`, `COMPANY_BUILTIN_PROPERTIES`, `FORM_ADDRESS_PARTS` |
+| WIRE-FORMS-032 | Parts become the one address line (`composeAddress`), whole `address` wins; middle name filled when blank                            | `mapAnswers` in `form-rules.ts`; `FormSubmitService.fillContact`, `FormsRepository.contactExtras`                                                                           |
+| WIRE-FORMS-033 | Palette: CRM properties first, sectioned Contact / Contact address / Company / Company address, "Add all address fields"             | `build-palette.tsx`, `sectionProperties` and `missingAddressParts` in `lib/build-view.ts`, `addProperties` in `build-tab.tsx`                                               |
+| WIRE-FORMS-034 | Builder is three columns only from 1280px (it was 1024px and squeezed the field cards); narrower uses the dialog and inline settings | `build-tab.tsx` (`xl:` breakpoints)                                                                                                                                         |
+
 ## Upstream feeders and what is shared
 
 - The Companies domain gained a small, tx-aware surface (WIRE-FORMS table above) and exports `CompaniesService`, `CompaniesRepository` and

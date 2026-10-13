@@ -88,18 +88,18 @@
       },
       "threshold": {
         "label": "Ngưỡng khớp mặc định",
-        "hint": "Tin nhắn khớp khi điểm ít nhất bằng mức này. Chỉ dùng cho các workspace chưa từng lưu ngưỡng riêng. Điểm số phụ thuộc vào mô hình embedding.",
         "value": "{value}",
         "follow": "Theo mô hình",
-        "followHint": "Độ nhạy mặc định là giá trị khuyến nghị của mô hình ({value}) và thay đổi khi mô hình đổi. Tắt để cố định một con số."
+        "followHint": "Độ nhạy mặc định là giá trị khuyến nghị của mô hình ({value}) và thay đổi khi mô hình đổi. Tắt để cố định một con số.",
+        "hint": "Tin nhắn khớp khi điểm của nó ít nhất bằng mức này. Chỉ dùng cho các luồng chưa từng lưu ngưỡng riêng. Điểm phụ thuộc vào mô hình embedding."
       },
       "limits": {
         "title": "Giới hạn",
-        "maxFaqs": "Số FAQ tối đa mỗi workspace",
         "maxVariationsPerFaq": "Số biến thể tối đa mỗi FAQ",
         "semanticPerHour": "Số lần khớp ngữ nghĩa mỗi workspace mỗi giờ",
         "semanticPerHourHint": "Quá mức này, workspace chuyển sang độ giống về chính tả trong phần còn lại của giờ đó. 0 nghĩa là luôn dùng độ giống về chính tả.",
-        "verifyPerHour": "Số lần kiểm tra lại mỗi workspace mỗi giờ"
+        "verifyPerHour": "Số lần kiểm tra lại mỗi workspace mỗi giờ",
+        "maxFaqs": "Số FAQ tối đa mỗi luồng"
       },
       "errors": {
         "integer": "Hãy nhập một số nguyên.",
@@ -117,11 +117,10 @@
         "title": "Xem lại trước khi lưu",
         "confirm": "Lưu thay đổi",
         "engineOff": "Tắt bộ máy sẽ ngăn mọi workspace trả lời khách hàng bằng FAQ và chặn chỉnh sửa FAQ cho đến khi bạn bật lại.",
-        "modelChange": "Đổi mô hình embedding từ {from} sang {to} sẽ tạo lại mọi vector đã lưu. Cho đến khi hoàn tất, việc khớp chỉ dùng độ giống về chính tả. Độ nhạy mặc định sẽ theo mô hình mới (khuyến nghị {threshold}) trừ khi bạn đặt giá trị cố định. Các ngưỡng workspace đã lưu riêng có thể cần điều chỉnh lại vì điểm số thay đổi theo mô hình."
+        "modelChange": "Đổi mô hình embedding từ {from} sang {to} sẽ khiến mọi vector đã lưu được tạo lại. Cho đến khi hoàn tất, việc so khớp chỉ dùng độ tương đồng chính tả. Độ nhạy mặc định sẽ theo mô hình mới (khuyến nghị {threshold}) trừ khi bạn đặt giá trị cố định. Các ngưỡng mà luồng tự lưu có thể cần điều chỉnh lại vì điểm thay đổi theo mô hình."
       },
       "verify": {
         "title": "Kiểm tra lại các kết quả sát ngưỡng",
-        "description": "Một mô hình chat nhỏ kiểm tra lại các kết quả khớp chỉ vừa đạt mức cần đạt của workspace. Mô hình chỉ có thể giữ lại câu trả lời. Các workspace tự bật tính năng này trong phần cài đặt FAQ của mình.",
         "enabled": {
           "label": "Cho phép kiểm tra lại",
           "hint": "Tắt để dừng việc kiểm tra lại cho mọi workspace, bất kể họ cài đặt thế nào."
@@ -130,7 +129,8 @@
           "label": "Mô hình kiểm tra",
           "hint": "ID mô hình OpenRouter dùng để đánh giá các kết quả sát ngưỡng, ví dụ openai/gpt-4o-mini. Một mô hình nhỏ và nhanh là đủ."
         },
-        "perHourHint": "Vượt quá mức này, kết quả sát ngưỡng sẽ được giữ nguyên mà không kiểm tra trong phần còn lại của giờ. Giá trị 0 nghĩa là không bao giờ kiểm tra."
+        "perHourHint": "Vượt quá mức này, kết quả sát ngưỡng sẽ được giữ nguyên mà không kiểm tra trong phần còn lại của giờ. Giá trị 0 nghĩa là không bao giờ kiểm tra.",
+        "description": "Một mô hình chat nhỏ kiểm tra lại các kết quả khớp chỉ vừa đạt ngưỡng của luồng. Nó chỉ có thể giữ lại câu trả lời. Các luồng bật tính năng này trong cài đặt FAQ riêng."
       }
     },
     "maintenance": {

@@ -119,6 +119,8 @@
       "colStarted": "เริ่มเมื่อ",
       "colActivity": "กิจกรรมล่าสุด",
       "colSteps": "ขั้นตอน",
+      "colReplies": "การตอบกลับ",
+      "repliesHint": "ข้อความของลูกค้าที่ไปถึงโหนดรอของการรันนี้",
       "colActions": "การดำเนินการ",
       "open": "เปิดการรัน",
       "cancel": "ยกเลิก",
@@ -197,7 +199,19 @@
       "factWaiting": "รออยู่ที่: {node}",
       "factDelay": "รอ {time}",
       "factReplied": "ลูกค้าตอบกลับ: {text}",
-      "factEnded": "สิ้นสุด: {reason}"
+      "factEnded": "สิ้นสุด: {reason}",
+      "ioInput": "อินพุต",
+      "ioOutput": "เอาต์พุต",
+      "ioKind": {
+        "message": "ข้อความที่ส่ง",
+        "reply": "คำตอบของลูกค้า",
+        "variable": "ตัวแปร",
+        "request": "คำขอ",
+        "response": "การตอบกลับ",
+        "result": "ผลลัพธ์"
+      },
+      "factMenuKept": "ไม่มีขั้นตอนถัดไปที่นี่ ตัวเลือกของ {node} ยังใช้งานได้",
+      "factAnswered": "ตอบหลังจาก {time}"
     },
     "event": {
       "step": "ขั้นตอน",
@@ -503,7 +517,9 @@
       "error": "ข้อผิดพลาด",
       "skipped": "ข้าม",
       "waiting": "กำลังรอ",
-      "timeout": "หมดเวลา"
+      "timeout": "หมดเวลา",
+      "answered": "ตอบแล้ว",
+      "gaveUp": "ไม่มีการตอบกลับ"
     }
   }
 }

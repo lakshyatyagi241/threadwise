@@ -149,6 +149,16 @@
         "title": "{name} फिर से सक्रिय है",
         "titleNoName": "एक WhatsApp समूह फिर से सक्रिय है",
         "body": "WhatsApp ने इस समूह को बहाल किया है। अब आप फिर से संदेश भेज सकते हैं।"
+      },
+      "device_group_join_request": {
+        "title": "{count, plural, one {कोई {name} में जुड़ना चाहता है} other {# लोग {name} में जुड़ना चाहते हैं}}",
+        "titleNoName": "{count, plural, one {कोई WhatsApp ग्रुप में जुड़ना चाहता है} other {# लोग WhatsApp ग्रुप में जुड़ना चाहते हैं}}",
+        "body": "मंज़ूर या अस्वीकार करने के लिए ग्रुप खोलें।"
+      },
+      "device_group_removed": {
+        "title": "आपका नंबर {name} से हटा दिया गया",
+        "titleNoName": "आपका नंबर एक WhatsApp ग्रुप से हटा दिया गया",
+        "body": "किसी ने आपका निजी नंबर इस ग्रुप से हटा दिया। ग्रुप यहाँ केवल पढ़ने के लिए रखा गया है।"
       }
     },
     "live": {
@@ -177,7 +187,9 @@
         "teamchat_message": "नया सीधा संदेश",
         "waba_group_join_request": "समूह में शामिल होने का अनुरोध",
         "waba_group_suspended": "WhatsApp समूह निलंबित",
-        "waba_group_suspension_cleared": "WhatsApp समूह फिर से सक्रिय"
+        "waba_group_suspension_cleared": "WhatsApp समूह फिर से सक्रिय",
+        "device_group_join_request": "ग्रुप में जुड़ने का अनुरोध",
+        "device_group_removed": "WhatsApp ग्रुप से हटाया गया"
       }
     },
     "prefs": {
@@ -199,7 +211,8 @@
         "devices": "WhatsApp नंबर",
         "broadcasts": "ब्रॉडकास्ट और अभियान",
         "team_chat": "टीम चैट",
-        "whatsapp_groups": "WhatsApp समूह"
+        "whatsapp_groups": "WhatsApp समूह",
+        "billing": "बिलिंग और सदस्यताएँ"
       },
       "types": {
         "new_chat": {
@@ -298,6 +311,10 @@
           "label": "बिक्री दस्तावेज़ का फ़ैसला हुआ",
           "hint": "कोई कोटेशन या इनवॉइस स्वीकार या अस्वीकार किया गया।"
         },
+        "email_bounced": {
+          "label": "ईमेल डिलीवर नहीं हुआ",
+          "hint": "आपका भेजा हुआ ईमेल लौट आया या देर से पहुँचा।"
+        },
         "wallet_credited": {
           "label": "वॉलेट में राशि जोड़ी गई",
           "hint": "वर्कस्पेस वॉलेट में राशि जमा की गई।"
@@ -321,6 +338,22 @@
         "form_payment_duplicate": {
           "label": "फ़ॉर्म का दो बार भुगतान",
           "hint": "किसी विज़िटर ने दूसरी बार भुगतान किया और अतिरिक्त भुगतान वापस करना होगा।"
+        },
+        "billing_payment_failed": {
+          "label": "सदस्यता का भुगतान विफल रहा",
+          "hint": "नवीनीकरण का शुल्क पूरा नहीं हुआ और इस पर आपका ध्यान चाहिए।"
+        },
+        "billing_subscription_canceled": {
+          "label": "सदस्यता रद्द की गई",
+          "hint": "आपके पेमेंट प्रोवाइडर ने इस वर्कस्पेस की एक सदस्यता समाप्त कर दी।"
+        },
+        "device_group_join_request": {
+          "label": "निजी नंबर के ग्रुप में जुड़ने का अनुरोध",
+          "hint": "लोग आपके प्रबंधित किए जा रहे निजी WhatsApp नंबर के ग्रुप में जुड़ने का अनुरोध करते हैं। दस अनुरोध मिलकर एक पंक्ति बनाते हैं।"
+        },
+        "device_group_removed": {
+          "label": "निजी नंबर के ग्रुप से हटाया गया",
+          "hint": "किसी ने आपके निजी WhatsApp नंबरों में से एक को ग्रुप से हटा दिया। यह संकेत हो सकता है कि नंबर की शिकायत की गई थी।"
         }
       },
       "loading": "आपकी प्राथमिकताएँ लोड हो रही हैं",

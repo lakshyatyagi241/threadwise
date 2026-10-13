@@ -22,7 +22,7 @@ import { validateGraph } from '../lib/validation-text';
 import { getaApi } from '../geta-publish/api';
 import { POLL_EVERY_MS, POLL_MAX_TRIES, viewOf } from '../geta-publish/status-model';
 import { GetaPublishStatus } from '../geta-publish/sync-status';
-import { WebBotPanels, WebBotTabs, useInitialTab, type WebBotTab } from './web-bot-tabs';
+import { BuilderTabs, WebBotPanels, useInitialTab, type BuilderTab } from './web-bot-tabs';
 import { FLB_KEYS, useBuilderContext } from '../api/hooks';
 import {
   ZOOM_DEFAULT,
@@ -247,9 +247,9 @@ function BuilderInner({
   // A website chat bot has Customize and Install beside the canvas; the others only build.
   const isWeb = mode === 'web';
   const initialTab = useInitialTab(!!initial);
-  const [tab, setTab] = useState<WebBotTab>(initialTab);
+  const [tab, setTab] = useState<BuilderTab>(initialTab);
   // Another channel has no tabs, whatever the link asked for.
-  const shownTab: WebBotTab = isWeb ? tab : 'build';
+  const shownTab: BuilderTab = isWeb ? tab : 'build';
   const canEditFlow = useCan('flb.flows.update');
   const widgetQuery = useFlowWidget(isWeb ? flowId : null);
   const needsCustomizing = isWeb && !!flowId && widgetQuery.data?.widget === null;
@@ -587,11 +587,14 @@ function BuilderInner({
       />
 
       {isWeb ? (
-        <WebBotTabs
+        // The Advanced builder has no FAQs tab: a flow's FAQs are edited in the Simple builder.
+        <BuilderTabs
           tab={shownTab}
           onTab={setTab}
           saved={!!flowId}
           needsCustomizing={needsCustomizing}
+          faqs={false}
+          web
         />
       ) : null}
 

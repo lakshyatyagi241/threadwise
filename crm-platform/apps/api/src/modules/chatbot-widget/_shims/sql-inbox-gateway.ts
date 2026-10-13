@@ -229,6 +229,12 @@ export class SqlInboxGateway implements InboxGateway {
                                last_inbound_at = now(), unread_count = unread_count + 1,
                                waiting_since = COALESCE(waiting_since, now())
       WHERE org_id = ${orgId} AND id = ${conversation.id}`);
+    // The visitor is heard from: the contact's "Last Activity" (and the lead scorer's recency) moves, at most once a minute.
+    await tx.execute(sql`
+      UPDATE contacts SET last_activity_at = now()
+      WHERE org_id = ${orgId}
+        AND id = (SELECT contact_id FROM conversations WHERE org_id = ${orgId} AND id = ${conversation.id})
+        AND (last_activity_at IS NULL OR last_activity_at < now() - interval '1 minute')`);
     return msg;
   }
 

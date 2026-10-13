@@ -102,7 +102,8 @@
         "added": "{name} został dodany do przestrzeni roboczej.",
         "rolesUpdated": "Zaktualizowano role dla: {name}.",
         "deactivated": "{name} został dezaktywowany.",
-        "reactivated": "{name} został ponownie aktywowany."
+        "reactivated": "{name} został ponownie aktywowany.",
+        "invited": "Wysłano zaproszenie do {name}."
       },
       "deactivate": {
         "action": "Dezaktywuj",
@@ -123,7 +124,13 @@
         "passwordShort": "Hasło musi mieć co najmniej 8 znaków.",
         "generate": "Wygeneruj",
         "role": "Rola",
-        "submit": "Dodaj członka"
+        "submit": "Dodaj członka",
+        "inviteHint": "Wysyłamy e-mailem link, dzięki któremu osoba sama ustawi hasło. Link działa jednorazowo i wygasa po kilku dniach.",
+        "submitInvite": "Wyślij zaproszenie",
+        "linkNotSent": "Nie udało się wysłać e-maila na adres {email}. Skopiuj ten link i przekaż go; nie zostanie pokazany ponownie.",
+        "copyLink": "Kopiuj link",
+        "copied": "Skopiowano",
+        "done": "Gotowe"
       },
       "changeRole": {
         "title": "Zmień role: {name}",

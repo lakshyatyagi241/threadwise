@@ -164,7 +164,12 @@
       "messaging": "Alur pesan",
       "messagingNote": "WhatsApp, Instagram, atau Facebook — ganti channel di node Trigger",
       "call": "Call",
-      "callNote": "IVR suara AI — ucapkan, dengarkan, alihkan"
+      "callNote": "IVR suara AI — ucapkan, dengarkan, alihkan",
+      "subtitleSimple": "Setiap bot dibuat untuk satu saluran, karena tidak semua komponen berfungsi di setiap saluran.",
+      "whatsapp": "WhatsApp",
+      "whatsappNote": "Membalas pelanggan di nomor WhatsApp yang terhubung",
+      "web": "Chat situs web",
+      "webNote": "Widget chat yang Anda tambahkan ke situs web Anda"
     },
     "rename": {
       "title": "Ganti nama alur",
@@ -553,8 +558,8 @@
           "faqAllFaqs": "Semua FAQ",
           "faqCategory": "FAQ: {name}",
           "faqScore": "skor min. {score}",
-          "faqWorkspaceScore": "skor workspace",
-          "faqNotSent": "tidak dikirim"
+          "faqNotSent": "tidak dikirim",
+          "faqWorkspaceScore": "skor alur"
         },
         "overlays": {
           "startPinned": "Ini adalah titik awal (klik untuk lepas pin)",
@@ -1790,28 +1795,22 @@
         },
         "faq": {
           "intro": {
-            "body": "Mencocokkan pesan dengan FAQ Anda berdasarkan makna lalu menjawabnya. Keluar lewat <mono>terjawab</mono> jika FAQ menjawab, dan lewat <mono>tidak cocok</mono> jika tidak.",
-            "sub": "Berfungsi tanpa mengaktifkan jawaban FAQ otomatis. <link>Kelola FAQ Anda</link>"
+            "body": "Mencocokkan pesan dengan FAQ alur ini berdasarkan makna dan menjawabnya. Keluar lewat <mono>terjawab</mono> jika sebuah FAQ menjawab, dan lewat <mono>tidak cocok</mono> jika tidak.",
+            "sub": "Berfungsi tanpa mengaktifkan jawaban FAQ otomatis alur ini. <link>Kelola FAQ alur ini</link>"
           },
           "exitsLabel": "Jalur keluar",
           "exitMatchedName": "Terjawab",
           "exitMatched": "FAQ menjawab: teksnya dikirim (kecuali pengiriman dimatikan), atau alurnya mengambil alih dan tidak kembali.",
           "exitNoMatchName": "Tidak cocok",
           "exitNoMatch": "tidak ada yang cukup mirip, jawaban FAQ otomatis dimatikan untuk platform, alur atau langkah yang ditautkan sudah tidak ada, atau pesannya kosong.",
-          "noFaqs": "Anda belum punya FAQ, jadi langkah ini selalu keluar lewat tidak cocok. <link>Tambahkan FAQ pertama Anda</link>",
           "query": "Pesan yang dicocokkan",
           "queryHint": "Secara default berupa pesan terakhir pelanggan. Variabel yang disimpan langkah Pertanyaan juga bisa dipakai, misalnya <mono>{variable}</mono>. Ketik / untuk menyisipkan.",
           "category": "Hanya FAQ ini",
           "allFaqs": "Semua FAQ",
           "loadingCategories": "Memuat kategori…",
           "categoryGone": "{name} (tidak ada FAQ yang memakainya)",
-          "categoryHint": "Hanya FAQ dari kategori ini yang dapat menjawab. Kategori diambil dari FAQ Anda.",
-          "categoriesFailed": "Kategori FAQ Anda tidak dapat dimuat.",
           "retry": "Coba lagi",
           "minScore": "Skor minimum",
-          "useWorkspaceScore": "Gunakan pengaturan workspace",
-          "minScoreHint": "Menggantikan skor workspace hanya untuk langkah ini, dari {min} sampai {max}. Skor bergantung pada model embedding platform, jadi coba sebuah pesan di <link>Uji FAQ</link> sebelum memilih angka.",
-          "minScoreInvalid": "Masukkan angka dari {min} sampai {max}, atau gunakan pengaturan workspace.",
           "sendAnswer": "Kirim jawaban ke pelanggan",
           "sendAnswerToggle": "Kirim jawaban teks yang cocok sebagai pesan",
           "sendAnswerOnHint": "FAQ teks yang cocok dikirim ke pelanggan. FAQ yang memulai alur akan melanjutkan di alur tersebut.",
@@ -1824,7 +1823,14 @@
             "question": "pertanyaan dari FAQ yang cocok",
             "score": "seberapa dekat kecocokannya",
             "id": "id FAQ yang cocok"
-          }
+          },
+          "noFaqs": "Alur ini belum memiliki FAQ, sehingga langkah ini selalu keluar lewat tidak cocok. <link>Tambahkan FAQ pertama alur ini</link>",
+          "useWorkspaceScore": "Gunakan pengaturan alur ini",
+          "minScoreInvalid": "Masukkan angka dari {min} sampai {max}, atau gunakan pengaturan alur ini.",
+          "saveFlowFirst": "Simpan alur terlebih dahulu. FAQ-nya diedit di tab FAQ pada Simple builder, dan langkah ini menjawab dari sana.",
+          "categoryHint": "Hanya FAQ kategori ini yang dapat menjawab. Kategori berasal dari FAQ alur ini.",
+          "categoriesFailed": "Kategori FAQ alur ini tidak dapat dimuat.",
+          "minScoreHint": "Menggantikan skor alur ini hanya untuk langkah ini, dari {min} sampai {max}. Skor bergantung pada model embedding platform, jadi coba pesan di <link>uji FAQ</link> alur ini sebelum memilih angka."
         }
       },
       "attrPicker": {
@@ -1885,6 +1891,16 @@
           "sampleName": "Lokasi uji",
           "sampleAddress": "1 MG Road, Bengaluru"
         }
+      },
+      "webBot": {
+        "aria": "Bagian alur",
+        "faqs": "FAQ",
+        "saveFirst": "Simpan alur terlebih dahulu.",
+        "build": "Bangun",
+        "customize": "Sesuaikan",
+        "install": "Pasang",
+        "needsCustomizing": "Widget masih memakai tampilan default. Buka Sesuaikan.",
+        "customizeFirst": "Sesuaikan widget chat Anda dan simpan sekali sebelum memublikasikan."
       }
     },
     "contracts": {
@@ -2212,7 +2228,8 @@
         "line": "LINE",
         "wechat": "WeChat",
         "viber": "Viber",
-        "email": "Email"
+        "email": "Email",
+        "web": "Chat situs web"
       },
       "dateFormats": {
         "ddDmmDyyyy": "DD-MM-YYYY",
@@ -2307,7 +2324,7 @@
         "noSenderInstagram": "Node Pemicu belum memilih akun Instagram — pilih salah satu pada langkah Pemicu.",
         "noSenderFacebook": "Node Pemicu belum memilih Halaman Facebook — pilih salah satu pada langkah Pemicu.",
         "noSenderNumber": "Node Pemicu belum memilih nomor — pilih salah satu pada langkah Pemicu.",
-        "faqMinScore": "\"{node}\" memiliki skor minimum di luar 0.05 sampai 0.99 — perbaiki atau kosongkan untuk memakai pengaturan workspace."
+        "faqMinScore": "\"{node}\" memiliki skor minimum di luar 0.05 sampai 0.99 — perbaiki atau kosongkan untuk memakai pengaturan alur."
       }
     },
     "simpleModel": {
@@ -2443,7 +2460,7 @@
         "rowTitle": "Langkah {stage}: setiap baris memerlukan judul maksimal {max} karakter.",
         "rowDescriptionTooLong": "Langkah {stage}: deskripsi baris lebih panjang dari {max} karakter.",
         "variableUsed": "Langkah {stage}: \"{name}\" sudah dipakai oleh langkah {other}; beri setiap jawaban nama sendiri.",
-        "faqMinScore": "Langkah {stage}: skor minimum harus dari 0.05 sampai 0.99, atau gunakan pengaturan workspace."
+        "faqMinScore": "Langkah {stage}: skor minimum harus dari 0.05 sampai 0.99, atau gunakan pengaturan alur."
       },
       "faqSummary": "{hasCategory, select, true {Dari FAQ Anda · {category}} other {Dari FAQ Anda}}"
     },

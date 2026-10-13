@@ -1,0 +1,205 @@
+{
+  "contact-consent": {
+    "common": {
+      "dismiss": "Dismiss",
+      "retry": "Try again",
+      "loading": "Loading..."
+    },
+    "errors": {
+      "network": "We could not reach the server. Check your connection and try again.",
+      "forbidden": "You do not have permission to do this.",
+      "notFound": "This contact no longer exists.",
+      "conflict": "Someone else changed this while you were editing. Reload and try again.",
+      "noteRequired": "Say why the contact agreed (what they said or signed, and where) before recording consent.",
+      "settingsInvalid": "A keyword needs at least one letter or digit, and at least one STOP keyword must remain while detection is on.",
+      "rateLimited": "Too many requests. Wait a moment and try again.",
+      "validation": "Some of the values are not valid. Check the form and try again.",
+      "unexpected": "Something went wrong. Try again.",
+      "exportInProgress": "A proof file is already being prepared. Wait for it to finish, then try again.",
+      "exportNotReady": "That file is not ready or has expired. Prepare a new one."
+    },
+    "settings": {
+      "title": "Consent and STOP replies",
+      "subtitle": "Choose the words that opt a contact out or back in, what we answer, the opt-out line for marketing messages, and whether marketing needs a recorded consent.",
+      "exportProof": "Export consent proof (CSV)",
+      "discard": "Discard changes",
+      "save": "Save changes",
+      "saved": "Consent settings saved.",
+      "conflict": "Someone else saved these settings first. The form now shows what is stored.",
+      "conflictOk": "OK",
+      "problems": {
+        "noOptOutWord": "Add at least one STOP keyword, or switch detection off.",
+        "badLang": "A language code looks like en, ar or pt-BR."
+      }
+    },
+    "policy": {
+      "title": "Marketing policy",
+      "requireConsent": "Require recorded consent for marketing sends",
+      "requireConsentHint": "Off: marketing goes to every contact who has not opted out. On: only to contacts with a recorded consent. Campaign and broadcast audiences show how many were skipped.",
+      "withdrawnAlways": "Contacts who opted out are always skipped, whatever this switch says."
+    },
+    "detect": {
+      "title": "STOP and START replies",
+      "enabled": "Detect STOP and START replies",
+      "enabledHint": "When a contact sends only one of the words below, they are opted out or back in on that channel.",
+      "autoReply": "Send a confirmation reply",
+      "autoReplyHint": "A short free-text answer inside the 24 hour window, sent once per change. It is not a campaign and does not count as marketing.",
+      "rule": "The whole message must be the keyword: capital letters, spaces, punctuation, emoji and Arabic diacritics are ignored. \"Please stop sending me invoices\" or \"don't stop\" do not match, so nobody is opted out by accident."
+    },
+    "lang": {
+      "groupLabel": "Words and replies for {lang}",
+      "title": "Language",
+      "remove": "Remove language",
+      "optOutWords": "STOP keywords (opt out)",
+      "optInWords": "START keywords (opt back in)",
+      "wordsHint": "One per line.",
+      "optOutReply": "Reply after STOP",
+      "optInReply": "Reply after START",
+      "replyHint": "You can use '{{name}}' for the contact's first name. Say how to flip back.",
+      "footer": "Opt-out line for marketing messages",
+      "footerHint": "Added under marketing texts. Tell people the word to send.",
+      "add": "Add a language",
+      "addHint": "A language code such as fr or pt-BR.",
+      "invalid": "Use a code such as fr or pt-BR.",
+      "addButton": "Add"
+    },
+    "footer": {
+      "title": "The opt-out line",
+      "intro": "Broadcast and campaign composers can add this line under marketing texts so recipients know they can reply STOP. Approved templates are never changed: put the line in the template itself.",
+      "defaultOn": "Warn when a marketing text has no opt-out line",
+      "defaultOnHint": "The composer shows a warning and a one-click button to add it.",
+      "noneSet": "No opt-out line is set for any language.",
+      "previewLabel": "What the recipient sees",
+      "sample": "Our spring sale starts today. Visit us this week."
+    },
+    "test": {
+      "title": "Test a message",
+      "intro": "Type what a contact might send and see what would happen. Nothing is changed or sent. It uses the words above, even before you save.",
+      "label": "Message from a contact",
+      "run": "Test",
+      "failed": "The test could not run. Try again.",
+      "outcome": {
+        "opts_out": "This opts the contact out of marketing.",
+        "opts_in": "This opts the contact back in.",
+        "no_match": "Nothing happens: the message is not a keyword.",
+        "detection_off": "Nothing happens: detection is switched off."
+      },
+      "matched": "Matched the keyword \"{keyword}\" ({lang}).",
+      "replyLabel": "The contact receives",
+      "noReply": "No reply is sent."
+    },
+    "card": {
+      "title": "Consent",
+      "status": {
+        "optedOut": "Opted out",
+        "subscribed": "Subscribed",
+        "none": "No consent recorded"
+      },
+      "export": "Export proof (CSV)",
+      "markSubscribed": "Mark as subscribed",
+      "markUnsubscribed": "Mark as unsubscribed",
+      "loading": "Loading consent...",
+      "noneRecorded": "No consent recorded for this contact. Marketing sends follow your workspace policy.",
+      "perChannel": "Consent by channel",
+      "timeline": "Consent history",
+      "channel": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "telegram": "Telegram",
+        "email": "Email",
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "webchat": "Web chat"
+      },
+      "state": {
+        "granted": "subscribed",
+        "withdrawn": "opted out"
+      },
+      "action": {
+        "granted": "Subscribed",
+        "withdrawn": "Opted out"
+      },
+      "source": {
+        "form": "Form",
+        "keyword": "Keyword reply",
+        "manual": "Recorded by a person",
+        "import": "Import",
+        "api": "API",
+        "flow": "Flow",
+        "inbound_message": "Message",
+        "contact_request": "Contact request",
+        "legacy": "Before the consent history"
+      },
+      "by": "by {name}",
+      "evidence": {
+        "consentText": "Text shown",
+        "consentVersion": "Version",
+        "consentHash": "Hash",
+        "formId": "Form",
+        "submissionId": "Submission",
+        "messageId": "Message",
+        "keyword": "Keyword",
+        "fileName": "File",
+        "apiKeyId": "API key",
+        "flowId": "Flow",
+        "reference": "Reference"
+      },
+      "dialog": {
+        "titleGranted": "Mark as subscribed",
+        "titleWithdrawn": "Mark as unsubscribed",
+        "introGranted": "Record that this contact agreed to receive marketing messages. The reason is kept as proof.",
+        "introWithdrawn": "Record that this contact no longer wants marketing messages. They will be skipped by every campaign and broadcast.",
+        "channel": "Channel",
+        "noteRequired": "Why? (required)",
+        "noteOptional": "Note (optional)",
+        "noteHint": "For example: signed the paper form at the counter, or agreed by email on 3 March.",
+        "confirm": "Save",
+        "cancel": "Cancel",
+        "close": "Close",
+        "savedGranted": "Marked as subscribed.",
+        "savedWithdrawn": "Marked as unsubscribed."
+      }
+    },
+    "composer": {
+      "add": "Add the opt-out line",
+      "missing": "This marketing message does not tell people how to opt out. Add a line such as \"Reply STOP to unsubscribe\".",
+      "addButton": "Add the line",
+      "templateHint": "Templates are fixed by their approval. To tell people they can opt out, include a line such as \"{line}\" in the template itself.",
+      "footerSuggestion": "Suggested for a marketing template: \"{line}\"",
+      "footerUse": "Use it as the footer"
+    },
+    "import": {
+      "legend": "Consent",
+      "label": "I have consent to message these contacts",
+      "hint": "Ticked, every contact in the file is recorded as having agreed to marketing, with the file name as proof. Unticked, the import records no consent. Contacts who opted out stay opted out.",
+      "hintColumn": "The column mapped to marketing consent decides who is recorded: only the rows that say yes get a consent, with the file name as proof. A no, a blank cell or an unknown word records nothing. Contacts who opted out stay opted out.",
+      "columnSummary": "{granted} rows say yes and will be recorded. {notGranted} say no or are blank and get no consent record.",
+      "unrecognised": "{count, plural, one {# row has} other {# rows have}} a consent value that is not a yes or a no ({values}). {count, plural, one {It is} other {They are}} treated as not granted. Use yes / no, true / false or 1 / 0.",
+      "columnIgnored": "The consent column does nothing until you tick the box above."
+    },
+    "systemLine": {
+      "withdrawn": "Contact replied {keyword}: unsubscribed from marketing",
+      "granted": "Contact replied {keyword}: resubscribed to marketing"
+    },
+    "proof": {
+      "title": "Prepared proof files",
+      "prepare": "Prepare the full proof file",
+      "preparing": "Preparing the proof file",
+      "largeHint": "The ledger is larger than {max} events, so the file is prepared in the background",
+      "large": "The ledger holds more than {max} events, more than a direct download carries. Prepare the full file: it is built in the background and you get an email when it is ready.",
+      "none": "No prepared files yet.",
+      "keptFor": "A prepared file can be downloaded for {days} days, then it is deleted. Only one file is prepared at a time.",
+      "rows": "{count, plural, one {# event} other {# events}}",
+      "expires": "available until {date}",
+      "download": "Download CSV",
+      "failed": "The file could not be built. Prepare it again.",
+      "status": {
+        "queued": "Waiting",
+        "running": "Building",
+        "ready": "Ready",
+        "failed": "Failed",
+        "expired": "Expired"
+      }
+    }
+  }
+}

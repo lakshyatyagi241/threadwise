@@ -1,5 +1,5 @@
 /**
- * Per-app configuration of the local-development Marketplace seed commands (`seed:appointments`, `seed:forms`). Everything that differs
+ * Per-app configuration of the local-development Marketplace seed commands (`seed:appointments`, `seed:forms`, `seed:email`). Everything that differs
  * between the apps lives here; the guarded steps (price, add-on, comp, approve and publish, plan visibility) are shared in
  * seed-app.runner.ts and the argument rules in seed-app.args.ts.
  */
@@ -53,4 +53,19 @@ export const FORMS_CONFIG: SeedAppConfig = {
   grandfatherExisting: false,
   usageNoun: 'forms',
   migration: '20261031100200_mkt_forms_app',
+};
+
+export const EMAIL_CONFIG: SeedAppConfig = {
+  slug: 'email',
+  label: 'Email (Gmail)',
+  command: 'seed:email',
+  // The operator prices the listing in the console; this is only the local-development default (about 6 USD a month). No trial by default.
+  defaultPrice: '499',
+  defaultCurrency: 'INR',
+  feature: 'email_channel',
+  version: '1.0.0',
+  grandfatherExisting: false,
+  usageNoun: 'mailboxes',
+  // Seeded as a mini app by ..._mkt_email_app and converted to an integration (category Messaging and email) by ..._mkt_email_integration.
+  migration: '20261119120000_mkt_email_integration',
 };

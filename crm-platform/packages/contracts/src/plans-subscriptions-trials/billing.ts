@@ -324,3 +324,69 @@ export const billingPlansQuerySchema = z.object({
   unlocks: z.enum(PLAN_FEATURE_KEYS as [PlanFeatureKey, ...PlanFeatureKey[]]).optional(),
 });
 export type BillingPlansQuery = z.infer<typeof billingPlansQuerySchema>;
+
+// --- managing subscriptions (Razorpay and the other recurring gateways) ---------------------------------------------
+
+export const SUBSCRIPTION_STATUSES = [
+  'pending',
+  'active',
+  'past_due',
+  'canceled',
+  'expired',
+] as const;
+export const subscriptionStatusSchema = z.enum(SUBSCRIPTION_STATUSES);
+export type SubscriptionStatus = z.infer<typeof subscriptionStatusSchema>;
+
+/** One subscription of the workspace: its plan, or one add-on purchase. Amounts are in major units, as text. */
+export const subscriptionItemSchema = z.object({
+  id: uuidSchema,
+  kind: z.enum(['plan', 'addon']),
+  /** The plan's or add-on's name (the slug when the catalogue no longer has it). */
+  name: z.string(),
+  planSlug: z.string().nullable(),
+  status: subscriptionStatusSchema,
+  amount: z.string(),
+  currency: z.string(),
+  billingCycle: z.enum(['monthly', 'yearly']),
+  gateway: z.string(),
+  /** Paid until: the next charge date while it renews, the last day of access once it was cancelled. */
+  currentPeriodEnd: z.string().datetime().nullable(),
+  renewalsCount: z.number().int().nonnegative(),
+  /** It will charge again: active or past due, and not cancelled. */
+  autoRenew: z.boolean(),
+  /** The latest charge failed and the provider is retrying: access continues for the grace days. */
+  paymentFailed: z.boolean(),
+  canceledAt: z.string().datetime().nullable(),
+  createdAt: z.string().datetime(),
+});
+export type SubscriptionItem = z.infer<typeof subscriptionItemSchema>;
+
+export const subscriptionListResponseSchema = z.object({ data: z.array(subscriptionItemSchema) });
+export type SubscriptionListResponse = z.infer<typeof subscriptionListResponseSchema>;
+
+/** What the provider charged for one cycle, or (when it cannot say) the paid orders that created the subscription. */
+export const subscriptionChargeSchema = z.object({
+  id: z.string(),
+  amount: z.string(),
+  currency: z.string(),
+  status: z.enum(['paid', 'issued', 'failed', 'cancelled', 'expired', 'other']),
+  issuedAt: z.string().datetime().nullable(),
+  paidAt: z.string().datetime().nullable(),
+  /** The provider's receipt page; only an https address. */
+  receiptUrl: z.string().url().nullable(),
+});
+export type SubscriptionCharge = z.infer<typeof subscriptionChargeSchema>;
+
+export const subscriptionChargesResponseSchema = z.object({
+  /** `provider`: read live from the payment provider. `orders`: the provider could not be asked, so these are our own paid orders. */
+  source: z.enum(['provider', 'orders']),
+  data: z.array(subscriptionChargeSchema),
+});
+export type SubscriptionChargesResponse = z.infer<typeof subscriptionChargesResponseSchema>;
+
+export const syncSubscriptionResponseSchema = z.object({
+  /** What the provider said: `up_to_date`, `renewed`, `gateway_canceled`, `gateway_expired`, or why it could not be asked. */
+  outcome: z.string(),
+  subscription: subscriptionItemSchema,
+});
+export type SyncSubscriptionResponse = z.infer<typeof syncSubscriptionResponseSchema>;

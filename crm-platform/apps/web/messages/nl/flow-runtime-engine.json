@@ -119,6 +119,8 @@
       "colStarted": "Gestart",
       "colActivity": "Laatste activiteit",
       "colSteps": "Stappen",
+      "colReplies": "Antwoorden",
+      "repliesHint": "Klantberichten die een wachtknooppunt van deze run bereikten",
       "colActions": "Acties",
       "open": "Run openen",
       "cancel": "Annuleren",
@@ -197,7 +199,19 @@
       "factWaiting": "Wacht bij: {node}",
       "factDelay": "Wacht {time}",
       "factReplied": "Klant antwoordde: {text}",
-      "factEnded": "Beëindigd: {reason}"
+      "factEnded": "Beëindigd: {reason}",
+      "ioInput": "Invoer",
+      "ioOutput": "Uitvoer",
+      "ioKind": {
+        "message": "Verzonden bericht",
+        "reply": "Antwoord van klant",
+        "variable": "Variabele",
+        "request": "Verzoek",
+        "response": "Antwoord",
+        "result": "Resultaat"
+      },
+      "factMenuKept": "Hier is geen volgende stap. De opties van {node} blijven actief.",
+      "factAnswered": "Beantwoord na {time}"
     },
     "event": {
       "step": "Stap",
@@ -503,7 +517,9 @@
       "error": "Fout",
       "skipped": "Overgeslagen",
       "waiting": "Wacht",
-      "timeout": "Time-out"
+      "timeout": "Time-out",
+      "answered": "Beantwoord",
+      "gaveUp": "Geen antwoord"
     }
   }
 }

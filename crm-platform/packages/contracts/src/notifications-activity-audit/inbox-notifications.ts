@@ -56,6 +56,11 @@ export const NOTIFICATION_TYPES = [
   'waba_group_suspended',
   /** Meta restored a group that was suspended. Only for people who were told about the suspension. */
   'waba_group_suspension_cleared',
+  // --- Groups of a personal number (wa.groups.manage holders; no plan feature, decision D1) -------------------------------------
+  /** People asked to join a group of a personal number. One unread row per group while unread; `count` says how many. */
+  'device_group_join_request',
+  /** The personal number was removed from a group by someone else (a useful abuse or ban signal). */
+  'device_group_removed',
 ] as const;
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number];
 
@@ -70,7 +75,11 @@ export const NOTIFICATION_LEGACY_TYPES = [
   'form_needs_review',
   'form_payment',
   'form_payment_duplicate',
+  'billing_payment_failed',
+  'billing_subscription_canceled',
   'sales_doc_decided',
+  /** A sent email bounced: it did not reach a recipient (TW-MAIL-032). Told to the person who wrote it. */
+  'email_bounced',
 ] as const;
 
 /** Every type a person can set preferences for. */
@@ -130,6 +139,8 @@ export const NOTIFICATION_SUBJECT_KINDS = [
   'scheduled_message',
   'team_chat_channel',
   'waba_group',
+  /** A group of a personal number (`wa_device_groups.uuid`). */
+  'device_group',
 ] as const;
 export const notificationSubjectKindSchema = z.enum(NOTIFICATION_SUBJECT_KINDS);
 export type NotificationSubjectKind = z.infer<typeof notificationSubjectKindSchema>;

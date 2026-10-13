@@ -1,6 +1,7 @@
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import type { FieldResponse } from '@crm/contracts';
 import type { ContactRow } from '../api/schemas';
+import { scoreChange, scoreToText } from '@/features/lead-scoring/lib/score';
 import { inputToValue, type InputValue } from './field-values';
 import { OTHER_REASON, type lostReasonPayload } from './stage-flow';
 
@@ -171,6 +172,8 @@ export interface ContactFormValues {
    */
   attributes: Record<string, InputValue>;
   optedOut: boolean;
+  /** The lead score as typed ('' = none). Typing one makes it a manual score; see `features/lead-scoring`. */
+  leadScore: string;
 }
 
 export const EMPTY_FORM: ContactFormValues = {
@@ -191,6 +194,7 @@ export const EMPTY_FORM: ContactFormValues = {
   groupIds: [],
   attributes: {},
   optedOut: false,
+  leadScore: '',
 };
 
 const str = (v: unknown): string => (typeof v === 'string' ? v : v == null ? '' : String(v));
@@ -227,6 +231,7 @@ export function contactToForm(
     groupIds: [...groupIds],
     attributes,
     optedOut: isOptedOut(c),
+    leadScore: scoreToText(c.leadScore),
   };
 }
 
@@ -271,6 +276,7 @@ export function toCreatePayload(
   lost?: ReturnType<typeof lostReasonPayload>,
 ) {
   const name = composeName(v);
+  const newScore = scoreChange(v.leadScore, null);
   return {
     ...(name ? { name } : {}),
     ...(clean(v.firstName) ? { firstName: clean(v.firstName) } : {}),
@@ -282,6 +288,7 @@ export function toCreatePayload(
     ...(clean(v.status) ? { status: clean(v.status) } : {}),
     ...(clean(v.source) ? { source: clean(v.source) } : {}),
     ...(v.optedOut ? { isUnsubscribed: true } : {}),
+    ...(typeof newScore === 'number' ? { leadScore: newScore } : {}),
     customFields: withoutNulls(customFieldsFromForm(v, attributeKeys, fields)),
   };
 }
@@ -295,8 +302,11 @@ export function toUpdatePayload(
   previous: Record<string, unknown> = {},
   fields?: ReadonlyMap<string, Pick<FieldResponse, 'fieldType'>>,
   lost?: ReturnType<typeof lostReasonPayload>,
+  /** The score the contact has now: the typed score is sent only when it differs (undefined = unchanged, null = cleared). */
+  previousLeadScore: number | null = null,
 ) {
   const name = composeName(v);
+  const lead = scoreChange(v.leadScore, previousLeadScore);
   return {
     ...(name ? { name } : {}),
     firstName: orNull(v.firstName),
@@ -309,6 +319,8 @@ export function toUpdatePayload(
     source: orNull(v.source),
     // Only a change to the switch touches the consent flag; saving an unrelated field must not flip it.
     ...(v.optedOut !== wasOptedOut ? { isUnsubscribed: v.optedOut } : {}),
+    // Only a typed change touches the score: saving an unrelated field must not turn an AI score into a manual one.
+    ...(lead !== undefined ? { leadScore: lead } : {}),
     // A blank value clears a key the contact had; a key that was empty and still is stays out of the write
     // (it would only add a null to the stored values).
     customFields: Object.fromEntries(

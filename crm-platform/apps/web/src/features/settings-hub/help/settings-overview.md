@@ -10,7 +10,7 @@ keywords: [settings, configuration, setup, search, sections, gear]
 
 ## What it is for
 
-Settings is where everything you configure lives. The settings are grouped into sections: channels, data and customization, business and billing, team and permissions, automation and AI, integrations and developer, and data and security. Each section shows the settings you may change, one tile each.
+Settings is where everything you configure lives. The settings are grouped into sections: channels, data and customization, business and billing, team and permissions, automation and AI, and data and security. Each section shows the settings you may change, one tile each.
 
 ## How to use it
 

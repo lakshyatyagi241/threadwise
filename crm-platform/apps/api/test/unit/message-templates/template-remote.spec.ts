@@ -371,6 +371,7 @@ describe('row to API shape', () => {
     attachmentType: null,
     attachmentFile: null,
     headerSampleUrl: null,
+    headerLocation: null,
     parameterFormat: 'POSITIONAL',
     status: 'pending',
     metaStatus: null,

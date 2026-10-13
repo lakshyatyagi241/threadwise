@@ -121,6 +121,12 @@
       "selectedActionsNone": "אנשי קשר שנבחרו (בחר שורות תחילה)",
       "modifyColumns": "שנה עמודות",
       "resetColumns": "אפס לברירת מחדל",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "שם איש קשר",
       "colPhone": "מספר טלפון",
       "colEmailId": "כתובת אימייל",
@@ -170,7 +176,8 @@
       "import": "ייבוא",
       "columns": "עמודות",
       "addColumnField": "הוסף שדה מותאם כעמודה",
-      "kanbanView": "תצוגת לוח (לפי שלב)"
+      "kanbanView": "תצוגת לוח (לפי שלב)",
+      "colLeadScore": "דירוג ליד"
     },
     "bulk": {
       "label": "פעולות עבור אנשי הקשר שנבחרו",
@@ -406,7 +413,8 @@
         "address": "כתובת",
         "memo": "תזכיר",
         "status": "סטטוס",
-        "source": "מקור"
+        "source": "מקור",
+        "consent": "הסכמה לשיווק (כן / לא)"
       },
       "notInFile": "לא בקובץ",
       "columnN": "עמודה {n}",
@@ -431,7 +439,7 @@
       "imported": "{count, plural, one {יובא איש קשר #.} two {יובאו # אנשי קשר.} other {יובאו # אנשי קשר.}}",
       "importedUpdated": "{count, plural, one {איש קשר קיים # עודכן.} two {# אנשי קשר קיימים עודכנו.} other {# אנשי קשר קיימים עודכנו.}}",
       "importedInvalid": "{count, plural, one {שורה לא תקינה # דולגה.} two {# שורות לא תקינות דולגו.} other {# שורות לא תקינות דולגו.}}",
-      "downloadRejects": "הורד שורות שנדחו",
+      "downloadRejects": "הורדת שגיאות ושורות שדולגו",
       "fileTooLarge": "הקובץ גדול מ-{mb} MB.",
       "checking": "בודק את הקובץ...",
       "errorFile": "לא ניתן היה לקרוא את הקובץ כקובץ CSV של אנשי קשר. בדוק שיש בו שורת כותרת ואיש קשר אחד לפחות.",
@@ -462,7 +470,8 @@
         "group_name_too_long": "שם הקבוצה ארוך מדי",
         "tag_name_too_long": "שם התגית ארוך מדי",
         "plan_limit_reached": "הגעת למגבלת אנשי הקשר של התוכנית",
-        "tag_limit_reached": "הגעת למגבלת התגיות של התוכנית"
+        "tag_limit_reached": "הגעת למגבלת התגיות של התוכנית",
+        "duplicate_in_file": "מספר חוזר, מוזג לשורה קודמת"
       },
       "statusHint": "חל על אנשי הקשר שהקובץ יוצר.",
       "queued": "ממתין להתחלה...",
@@ -1164,17 +1173,18 @@
         "updated": "עודכן",
         "rejected": "נדחו",
         "actions": "פעולות",
-        "downloadRejects": "הורד שורות שנדחו",
+        "downloadRejects": "הורדת שגיאות ושורות שדולגו",
         "statuses": {
           "queued": "בתור",
           "running": "פועל",
           "completed": "הושלם",
           "failed": "נכשל"
-        }
+        },
+        "by": "יובא על ידי"
       },
       "exports": {
         "title": "ייצואים",
-        "hint": "ייצואי אנשי קשר מה-Hub, החדשים ביותר ראשונים. הקובץ שהורד אינו נשמר.",
+        "hint": "ייצואי אנשי קשר מה-Hub, החדשים ראשונים. כל קובץ נשמר 30 יום כדי שאתם ועמיתים עם הרשאת ייצוא תוכלו להוריד אותו שוב.",
         "empty": "אין עדיין ייצואים.",
         "by": "על ידי",
         "rows": "אנשי קשר",
@@ -1183,7 +1193,11 @@
         "selections": {
           "ids": "אנשי קשר שסומנו",
           "filter": "כל ההתאמות"
-        }
+        },
+        "download": "הורדה",
+        "noFile": "לא נשמר",
+        "keptUntil": "נשמר עד {date}",
+        "downloadFailed": "לא ניתן היה להוריד את הקובץ. ייתכן שפג תוקפו."
       }
     }
   }

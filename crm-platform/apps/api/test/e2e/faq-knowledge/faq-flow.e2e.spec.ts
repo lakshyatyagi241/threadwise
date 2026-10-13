@@ -107,8 +107,8 @@ const settingsBody = (over: Record<string, unknown> = {}) => ({
   ...over,
 });
 
-async function saveSettings(t: Tenant, over: Record<string, unknown>) {
-  const f = api.faq(t.admin);
+async function saveSettings(t: Tenant, over: Record<string, unknown>, flowUuid?: string) {
+  const f = api.faq(t.admin, flowUuid);
   const cur = (await f.settings()).body;
   const res = await f.saveSettings(
     settingsBody({ ...(cur.rowVersion ? { rowVersion: cur.rowVersion } : {}), ...over }),
@@ -132,7 +132,7 @@ describe('link to node: an FAQ starts its flow at a chosen step', () => {
 
   it('lists the steps of a flow of this workspace, and refuses a flow that is not', async () => {
     const flow = await twoSteps(t, 'Steps flow', null);
-    const res = await api.as(t.admin).get(`/v2/faq/flows/${flow.uuid}/nodes`);
+    const res = await api.as(t.admin).get(`/v2/faq/flow-nodes/${flow.uuid}`);
     expect(res.status, JSON.stringify(res.body)).toBe(200);
     expect(res.body.data).toEqual([
       { id: 't', type: 'trigger', label: '' },
@@ -142,12 +142,12 @@ describe('link to node: an FAQ starts its flow at a chosen step', () => {
     ]);
     const other = await api.signup('faqnodeother');
     const foreign = await twoSteps(other, 'Foreign flow', null);
-    const refused = await api.as(t.admin).get(`/v2/faq/flows/${foreign.uuid}/nodes`);
+    const refused = await api.as(t.admin).get(`/v2/faq/flow-nodes/${foreign.uuid}`);
     expect(refused.status).toBe(422);
     expect(code(refused)).toBe('FAQ_FLOW_NOT_FOUND');
-    expect((await api.as(t.admin).get('/v2/faq/flows/not-a-uuid/nodes')).status).toBe(400);
+    expect((await api.as(t.admin).get('/v2/faq/flow-nodes/not-a-uuid')).status).toBe(400);
     const nobody = await api.member(t, 'nofaq', [['record.contacts.read']]);
-    expect((await api.as(nobody.token).get(`/v2/faq/flows/${flow.uuid}/nodes`)).status).toBe(403);
+    expect((await api.as(nobody.token).get(`/v2/faq/flow-nodes/${flow.uuid}`)).status).toBe(403);
   });
 
   it('saves the node with the flow answer, shows its name, and clears it when the answer becomes a text', async () => {
@@ -367,7 +367,13 @@ describe('the borderline check: a second opinion that can only take an answer ba
     const peer = nextPeer();
     await say(peer, 'refund');
     expect(await untilSent(p, t, ch, peer, 1)).toEqual(['Refunds take 5 days.']);
-    const log = (await api.faq(t.admin).log('?view=answered')).body.data[0];
+    // The listener writes the log row right after it queues the reply, so wait for the row rather than reading it once.
+    const log = await until('answered log row', async () => {
+      const rows = (await api.faq(t.admin).log('?view=answered')).body.data as Array<
+        Record<string, unknown>
+      >;
+      return rows[0];
+    });
     expect(log.verify).toMatchObject({ verdict: 'confirmed' });
   });
 
@@ -477,8 +483,39 @@ describe('the Flow "Answer from FAQ" node', () => {
   const say = (peer: string, text: string) =>
     simInbound(p, t, ch, { from: peer, name: 'Asha', text });
 
-  /** trigger -> faq -> matched: "Done: {{faq.answer}}" / no_match: "No FAQ for that". */
-  const faqFlow = (name: string, keyword: string, node: Record<string, unknown>) =>
+  /** The FAQs a node flow can match: the node asks for the FAQs of the flow it sits in, so each flow brings its own. */
+  const seed = async (flowUuid: string, extra = true) => {
+    await api.entry(
+      t.admin,
+      'Where is my order?',
+      {
+        answerText: 'Ships in 2 days.',
+        category: 'orders',
+        variations: ['Track my order', 'Order status'],
+      },
+      flowUuid,
+    );
+    await api.entry(
+      t.admin,
+      'How do I get a refund?',
+      { answerText: 'Refunds take 5 days.', category: 'billing', variations: ['Refund policy'] },
+      flowUuid,
+    );
+    if (extra) await indexAll(p);
+  };
+
+  /** trigger -> faq -> matched: "Done: {{faq.answer}}" / no_match: "No FAQ for that". Brings its own FAQs unless `own` is false. */
+  const faqFlow = async (
+    name: string,
+    keyword: string,
+    node: Record<string, unknown>,
+    own = true,
+  ) => {
+    const flow = await faqGraph(name, keyword, node);
+    if (own) await seed(flow.uuid);
+    return flow;
+  };
+  const faqGraph = (name: string, keyword: string, node: Record<string, unknown>) =>
     addGraphFlow(
       t,
       name,
@@ -502,18 +539,7 @@ describe('the Flow "Answer from FAQ" node', () => {
   beforeAll(async () => {
     t = await api.signup('faqnodeflow');
     ch = await simChannel(p, t);
-    await api.entry(t.admin, 'Where is my order?', {
-      answerText: 'Ships in 2 days.',
-      category: 'orders',
-      variations: ['Track my order', 'Order status'],
-    });
-    await api.entry(t.admin, 'How do I get a refund?', {
-      answerText: 'Refunds take 5 days.',
-      category: 'billing',
-      variations: ['Refund policy'],
-    });
-    await indexAll(p);
-    // The workspace never switched automatic answering on: the node is its own opt-in.
+    // No flow switched automatic answering on: the node is its own opt-in.
   });
 
   it('answers by meaning, sends the answer, and exposes the result to the next step', async () => {
@@ -528,6 +554,50 @@ describe('the Flow "Answer from FAQ" node', () => {
       'Ships in 2 days.',
       'Done: Ships in 2 days. (yes)',
     ]);
+  });
+
+  it("matches the FAQs of the flow it sits in and never another flow's, whatever the switches say", async () => {
+    // The workspace's other flow knows the answer (and has answering switched on); the flow with the node has no FAQs at all.
+    const logOf = async (flowUuid: string) =>
+      (await api.faq(t.admin, flowUuid).log('?view=all')).body.data as unknown[];
+    const lib = await api.flow(t, 'Library flow');
+    await api.entry(
+      t.admin,
+      'Quartz warranty terms',
+      { answerText: 'Five years.', variations: ['quartz warranty'] },
+      lib.uuid,
+    );
+    await indexAll(p);
+    await saveSettings(t, { enabled: true }, lib.uuid);
+    const bare = await faqFlow(
+      'Node flow bare',
+      'asknodebare',
+      { query: 'quartz warranty', sendAnswer: true },
+      false,
+    );
+    const peer = nextPeer();
+    await say(peer, 'asknodebare');
+    expect(await untilSent(p, t, ch, peer, 1)).toEqual(['No FAQ for that (no)']);
+    // Nothing was logged in the library flow, and the miss is the node flow's own row.
+    expect(await logOf(lib.uuid)).toHaveLength(0);
+    const own = await p.h.owner.query(
+      `SELECT outcome FROM faq_match_logs WHERE org_id = $1 AND flow_id = $2 AND origin = 'flow'`,
+      [t.orgId, bare.id],
+    );
+    expect(own.rows).toHaveLength(1);
+    expect(own.rows[0].outcome).toBe('no_faqs');
+    // Give the node flow the same FAQ: it answers, though its own switch was never turned on.
+    await api.entry(
+      t.admin,
+      'Quartz warranty terms',
+      { answerText: 'Five years.', variations: ['quartz warranty'] },
+      bare.uuid,
+    );
+    await indexAll(p);
+    const again = nextPeer();
+    await say(again, 'asknodebare');
+    expect(await untilSent(p, t, ch, again, 2)).toEqual(['Five years.', 'Done: Five years. (yes)']);
+    expect(await logOf(lib.uuid)).toHaveLength(0);
   });
 
   it('leaves by no_match when nothing is close, and says so in a variable', async () => {
@@ -581,7 +651,8 @@ describe('the Flow "Answer from FAQ" node', () => {
 
   it('a flow FAQ enters its flow at its chosen step and the run continues there', async () => {
     const target = await twoSteps(t, 'Node target flow', null);
-    await api.faq(t.admin).create({
+    const host = await faqFlow('Node flow H', 'asknodeh', { query: 'pricing plans' }, false);
+    await api.faq(t.admin, host.uuid).create({
       question: 'Show me pricing plans',
       answerType: 'flow',
       flowId: target.uuid,
@@ -589,7 +660,6 @@ describe('the Flow "Answer from FAQ" node', () => {
       variations: ['pricing plans'],
     });
     await indexAll(p);
-    await faqFlow('Node flow H', 'asknodeh', { query: 'pricing plans' });
     const peer = nextPeer();
     await say(peer, 'asknodeh');
     expect(await untilSent(p, t, ch, peer, 1)).toEqual(['Second step']);
@@ -599,7 +669,8 @@ describe('the Flow "Answer from FAQ" node', () => {
 
   it('a flow FAQ whose step is gone leaves by no_match instead of pretending it answered', async () => {
     const target = await twoSteps(t, 'Node broken target', null);
-    await api.faq(t.admin).create({
+    const host = await faqFlow('Node flow I', 'asknodei', { query: 'referral scheme' }, false);
+    await api.faq(t.admin, host.uuid).create({
       question: 'Refer a friend scheme',
       answerType: 'flow',
       flowId: target.uuid,
@@ -615,7 +686,6 @@ describe('the Flow "Answer from FAQ" node', () => {
         vars: {},
       }),
     ]);
-    await faqFlow('Node flow I', 'asknodei', { query: 'referral scheme' });
     const peer = nextPeer();
     await say(peer, 'asknodei');
     expect(await untilSent(p, t, ch, peer, 1)).toEqual(['No FAQ for that (no)']);
@@ -630,10 +700,24 @@ describe('the Flow "Answer from FAQ" node', () => {
     expect(rows.rows.some((r) => r.outcome === 'answered')).toBe(true);
     expect(rows.rows.some((r) => r.outcome === 'flow_started')).toBe(true);
     expect(rows.rows.some((r) => r.outcome === 'below_threshold')).toBe(true);
-    const unanswered = (await api.faq(t.admin).log('?view=unanswered')).body.data as unknown[];
+    // Each row belongs to the flow whose node asked, never to a flow that has no node.
+    const flows = await p.h.owner.query(
+      `SELECT DISTINCT l.flow_id, f.flow_name FROM faq_match_logs l JOIN flows f ON f.org_id = l.org_id AND f.id = l.flow_id
+       WHERE l.org_id = $1 AND l.origin = 'flow'`,
+      [t.orgId],
+    );
+    expect(flows.rows.length).toBeGreaterThanOrEqual(5);
+    expect(flows.rows.every((r) => String(r.flow_name).startsWith('Node flow'))).toBe(true);
+    const host = flows.rows[0]!;
+    const hostUuid = (await p.h.owner.query(`SELECT uuid FROM flows WHERE id = $1`, [host.flow_id]))
+      .rows[0].uuid as string;
+    const unanswered = (await api.faq(t.admin, hostUuid).log('?view=unanswered')).body
+      .data as unknown[];
     expect(unanswered).toEqual([]);
-    const summary = (await api.faq(t.admin).summary()).body;
+    const summary = (await api.faq(t.admin, hostUuid).summary()).body;
     expect(summary.totals.messages).toBe(0);
+    const main = (await api.faq(t.admin).log('?view=all')).body.data as unknown[];
+    expect(main).toEqual([]);
   });
 
   it('the platform switch still stops the node: it leaves by no_match', async () => {

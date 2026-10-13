@@ -137,7 +137,8 @@
         "recipients": "수신자 {count}명",
         "scheduled": "예약: {date}",
         "instant": "발송: 즉시",
-        "template": "템플릿 {name}"
+        "template": "템플릿 {name}",
+        "cost": "비용"
       },
       "createBroadcast": "브로드캐스트 만들기",
       "noData": "데이터가 없습니다",
@@ -227,8 +228,6 @@
         "senderHint": "기본값으로 두면 캠페인이 워크스페이스의 기본 엔진으로 발송됩니다.",
         "defaultSender": "기본 발신자",
         "nameHint": "보고서 및 대기열 기록에 쓰이는 내부 이름입니다.",
-        "noSenders": "연결된 발신자가 없습니다.",
-        "connectOne": "발신자 연결 →",
         "type": "캠페인 유형",
         "types": {
           "custom": {
@@ -650,7 +649,9 @@
         "read": "읽음",
         "replies": "답장",
         "clicks": "클릭",
-        "failed": "실패"
+        "failed": "실패",
+        "cost": "비용",
+        "costHint": "지금까지 지갑에서 차감된 금액"
       },
       "tabs": {
         "overview": "개요",
@@ -897,8 +898,7 @@
         "previewEmpty": "템플릿을 선택하면 메시지 모양을 볼 수 있습니다.",
         "senderLabel": "발신",
         "senderHint": "이 브로드캐스트를 발송할 WhatsApp 번호입니다.",
-        "pickSender": "번호 선택",
-        "noSenders": "연결된 WhatsApp 번호가 없습니다. 먼저 연결하세요."
+        "pickSender": "번호 선택"
       },
       "audience": {
         "selectionTitle": "연락처 허브에서 선택됨",
@@ -932,6 +932,7 @@
         "optedOut": "수신 거부",
         "invalidNumbers": "잘못된 번호",
         "alwaysSkipped": "수신 거부한 연락처와 잘못된 번호는 항상 건너뜁니다.",
+        "noConsent": "기록된 동의 없음 (제외됨)",
         "willBeMessaged": "메시지를 받을 대상",
         "about": "약 {count}",
         "approximate": "대상이 너무 커서 제때 정확히 계산할 수 없어 추정치입니다.",
@@ -1403,6 +1404,41 @@
         "runs": "실행",
         "noRuns": "시작된 실행이 아직 없습니다.",
         "cancel": "시리즈 취소"
+      }
+    },
+    "senderEmpty": {
+      "loading": "번호를 불러오는 중…",
+      "none": {
+        "title": "연결된 WhatsApp 번호가 없습니다",
+        "body": "WhatsApp Business 번호를 연결하면 이 캠페인을 보낼 번호를 선택할 수 있습니다.",
+        "action": "WhatsApp 번호 연결"
+      },
+      "sms": {
+        "none": {
+          "title": "연결된 SMS 발신자가 없습니다",
+          "body": "SMS 발신자를 연결하면 이 캠페인을 보낼 발신자를 선택할 수 있습니다.",
+          "action": "SMS 발신자 연결"
+        }
+      },
+      "pending": {
+        "title": "번호 {count}개가 아직 연결 중입니다",
+        "body": "연결이 완료되면 해당 번호로 캠페인을 보낼 수 있습니다. 상태를 열어 설정을 마무리하세요.",
+        "action": "번호 상태 확인"
+      },
+      "error": {
+        "title": "번호 {count}개의 연결에 실패했습니다",
+        "body": "상태 페이지에서 번호를 다시 연결하면 여기에 표시됩니다.",
+        "action": "연결 문제 해결"
+      },
+      "disconnected": {
+        "title": "번호 {count}개의 연결이 끊어졌습니다",
+        "body": "다시 연결하면 해당 번호로 캠페인을 보낼 수 있습니다. 연결된 번호는 여기에 표시됩니다.",
+        "action": "번호 다시 연결"
+      },
+      "personal_off": {
+        "title": "이 워크스페이스에서는 개인 번호가 꺼져 있습니다",
+        "body": "이 기능이 꺼져 있는 동안 개인(QR) 번호 {count}개로는 캠페인을 보낼 수 없습니다. 플랫폼 관리자가 이 워크스페이스에서 켜거나, 공식 WhatsApp Business 번호를 연결할 수 있습니다.",
+        "action": "공식 번호 연결"
       }
     }
   }

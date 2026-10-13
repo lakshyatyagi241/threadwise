@@ -24,6 +24,7 @@ import { WebhookDialog } from './webhook-dialog';
 /** `/webhooks` (Settings > Integrations): the endpoints that receive this workspace's events, their health and their delivery log. */
 export function WebhooksScreen() {
   const t = useTranslations('outbound-webhooks.page');
+  const tm = useTranslations('marketplace.header');
   const canRead = useCan('webhooks.read');
   const canManage = useCan('webhooks.manage');
   const qc = useQueryClient();
@@ -96,10 +97,10 @@ export function WebhooksScreen() {
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div className="min-w-0">
           <Link
-            href="/settings/integrations"
+            href="/marketplace/addons"
             className="text-sm text-muted-foreground hover:text-foreground"
           >
-            ← {t('back')}
+            ← {tm('tabs.addon')}
           </Link>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight">{t('title')}</h1>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t('subtitle')}</p>

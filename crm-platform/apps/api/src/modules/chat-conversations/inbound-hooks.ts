@@ -44,10 +44,24 @@ export interface InboundMessageListener {
    * learns through `prior.consumed` whether one of them already took the message, so the customer is never answered twice.
    */
   readonly after?: true;
+  /** Runs before every other listener (the consent keyword check: a STOP must never reach a flow, the FAQ or an AI agent). */
+  readonly first?: true;
+  /**
+   * Opt-in to run for a message on an email channel. Email is not a chat: a flow, keyword reply, FAQ or concierge answering every
+   * mail would write back to newsletters and out-of-office replies and loop with other auto-responders. So by default a listener is
+   * SKIPPED for an email message; only one that does not answer the customer (routing, translation) sets this.
+   */
+  readonly runsOnEmail?: true;
   onStored(
     event: InboundStoredEvent,
     prior: { consumed: boolean },
-  ): Promise<{ consumed: boolean } | void>;
+  ): Promise<{ consumed: boolean; halt?: boolean } | void>;
+}
+
+/** The message is auto-generated mail (a bounce, a list mail, an auto-reply): stored, but nothing may react to it. */
+export function isAutomatedEmail(event: Pick<InboundStoredEvent, 'message'>): boolean {
+  const email = event.message.meta.email as { automated?: unknown } | undefined;
+  return email?.automated === true;
 }
 
 /**
@@ -71,15 +85,27 @@ export class InboundMessageHooks {
     // A suspended workspace still receives and stores its messages (no data loss) but nothing answers them: no flow, keyword
     // reply or AI agent starts. `consumed: true` also stops the auto reply that runs after the listeners (ADR-0019).
     if (await this.suspension?.isSuspended(event.orgId)) return { consumed: true };
+    // A group (`g:<id>` thread) has many speakers and no customer: nothing reacts to it, whatever listener is registered. Ingest does not
+    // call the hooks for a group either; this keeps a future caller from running a flow or an AI reply on one.
+    if (event.peerKey?.startsWith('g:')) return { consumed: true };
+    // Auto-generated mail never reaches a listener (no routing, no flow, no reply): it is stored for the agent to read and that is all.
+    if (event.channelKind === 'email' && isAutomatedEmail(event)) return { consumed: true };
     let consumed = false;
+    // A listener that halts (a STOP keyword) keeps every listener that answers the customer away; routing and translation, which
+    // never answer, still run (those are the ones marked `runsOnEmail`).
+    let halted = false;
+    const onEmail = event.channelKind === 'email';
     const ordered = [
-      ...this.listeners.filter((l) => !l.after),
-      ...this.listeners.filter((l) => l.after),
-    ];
+      ...this.listeners.filter((l) => l.first),
+      ...this.listeners.filter((l) => !l.first && !l.after),
+      ...this.listeners.filter((l) => !l.first && l.after),
+    ].filter((l) => !onEmail || l.runsOnEmail);
     for (const l of ordered) {
+      if (halted && !l.runsOnEmail) continue;
       try {
         const r = await l.onStored(event, { consumed });
         if (r && r.consumed) consumed = true;
+        if (r && r.halt) halted = true;
       } catch (err) {
         this.logger.error({ listener: l.name, orgId: event.orgId, err }, 'inbound listener failed');
       }

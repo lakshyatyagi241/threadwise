@@ -1,0 +1,302 @@
+{
+  "whatsapp-devices-baileys": {
+    "nav": {
+      "groups": "Grup nomor pribadi"
+    },
+    "area": {
+      "groups": "Grup"
+    },
+    "errors": {
+      "WA_GROUP_NOT_ADMIN": "Nomor ini bukan admin grup, jadi WhatsApp menolak perubahan tersebut.",
+      "WA_GROUP_NOT_FOUND": "Grup ini tidak ditemukan untuk nomor ini. Mungkin sudah dihapus.",
+      "WA_GROUP_DEVICE_NOT_READY": "Nomor ini sedang tidak terhubung. Hubungkan nomor, atau tunggu sebentar, lalu coba lagi.",
+      "WA_GROUP_RATE_LIMITED": "Terlalu banyak tindakan grup pada nomor ini. Tunggu sebentar sebelum mencoba lagi.",
+      "WA_GROUP_RATE_LIMITED_ops_minute": "Terlalu banyak tindakan grup pada nomor ini dalam satu menit terakhir. Tunggu sebentar sebelum mencoba lagi.",
+      "WA_GROUP_RATE_LIMITED_ops_day": "Nomor ini sudah mencapai batas tindakan grup hari ini. Coba lagi besok.",
+      "WA_GROUP_RATE_LIMITED_creates_day": "Nomor ini sudah mencapai batas pembuatan grup baru hari ini. Coba lagi besok.",
+      "WA_GROUP_RATE_LIMITED_join_link_day": "Nomor ini sudah mencapai batas bergabung lewat tautan undangan hari ini. Coba lagi besok.",
+      "WA_GROUP_RATE_LIMITED_cooldown": "WhatsApp membatasi nomor ini, jadi tindakan grup dijeda sementara untuk melindunginya.",
+      "WA_GROUP_LIMIT_REACHED": "WhatsApp menyatakan grup sudah penuh atau nomor ini tidak bisa masuk ke lebih banyak grup.",
+      "WA_GROUP_LEFT": "Nomor ini sudah keluar dari grup, jadi grup hanya bisa dibaca.",
+      "WA_GROUP_INVALID_NUMBER": "Salah satu nomor telepon tidak valid, atau itu adalah nomor ini sendiri.",
+      "WA_GROUP_JOIN_LINK_INVALID": "Tautan undangan ini tidak valid, sudah dicabut, atau grupnya sudah tidak ada.",
+      "WA_GROUP_JOIN_BY_LINK_DISABLED": "Bergabung ke grup lewat tautan undangan dinonaktifkan di platform ini.",
+      "WA_GROUP_ANNOUNCE_ONLY": "Hanya admin yang dapat mengirim pesan di grup ini, dan nomor ini bukan admin.",
+      "WA_GROUP_UNAVAILABLE": "WhatsApp tidak menerima permintaan ini. Coba lagi dalam beberapa menit."
+    },
+    "groups": {
+      "eyebrow": "API WhatsApp tidak resmi / Grup",
+      "headingA": "Grup dari",
+      "headingB": "nomor pribadi Anda",
+      "intro": "Grup yang diikuti setiap nomor yang terhubung. Buat grup, tambah atau keluarkan orang, setujui yang ingin bergabung, bagikan tautan undangan, dan keluar dari grup. Pesan di grup juga muncul di kotak masuk bersama.",
+      "loading": "Memuat",
+      "loadFailed": "Tidak dapat memuat nomor Anda.",
+      "retry": "Coba lagi",
+      "close": "Tutup",
+      "cancel": "Batal",
+      "loadMore": "Muat lebih banyak",
+      "loadingMore": "Memuat",
+      "untitled": "Grup tanpa nama",
+      "memberCount": "{count, plural, =0 {Tidak ada anggota} other {# anggota}}",
+      "membersButton": "Anggota",
+      "editButton": "Ubah",
+      "leave": "Keluar",
+      "openChat": "Buka chat",
+      "leftOn": "Nomor ini keluar dari grup pada {date}. Grup disimpan di sini, hanya bisa dibaca.",
+      "leftNote": "Nomor ini keluar dari grup. Grup disimpan di sini, hanya bisa dibaca.",
+      "badge": {
+        "admin": "Anda admin",
+        "notAdmin": "Bukan admin",
+        "left": "Keluar",
+        "announce": "Hanya admin yang mengirim",
+        "restrict": "Hanya admin yang mengubah info",
+        "approval": "Persetujuan untuk bergabung",
+        "requests": "{count, plural, other {# permintaan}}"
+      },
+      "blocked": {
+        "left": "Nomor ini sudah keluar dari grup.",
+        "offline": "Nomor ini sedang offline: hubungkan untuk mengubah grup.",
+        "notAdmin": "Nomor ini bukan admin di sini: Anda dapat membaca grup, tetapi tidak dapat mengubahnya."
+      },
+      "kpi": {
+        "groups": "Grup",
+        "groupsSub": "Nomor ini ada di",
+        "members": "Anggota",
+        "membersSub": "Di semua grup",
+        "admin": "Sebagai admin",
+        "adminSub": "Grup yang dapat Anda kelola",
+        "joinRequests": "Menunggu bergabung",
+        "joinRequestsSub": "Permintaan yang perlu dijawab",
+        "left": "Keluar",
+        "leftSub": "Disimpan hanya-baca"
+      },
+      "list": {
+        "title": "Grup",
+        "search": "Cari berdasarkan nama",
+        "statusLabel": "Tampilkan",
+        "statusAll": "Semua grup",
+        "statusActive": "Aktif",
+        "statusLeft": "Keluar",
+        "empty": "Belum ada grup. Buat grup, atau tambahkan nomor ini ke grup di ponsel Anda dan grup akan muncul di sini.",
+        "noMatch": "Tidak ada grup yang cocok.",
+        "sync": "Segarkan dari WhatsApp",
+        "syncing": "Menyegarkan",
+        "synced": "{count, plural, other {# grup dibaca dari WhatsApp.}}",
+        "syncThrottled": "Daftar baru saja disegarkan. Tunggu semenit sebelum menyegarkan lagi."
+      },
+      "rail": {
+        "title": "Nomor",
+        "noNumber": "Belum ada nomor pribadi.",
+        "online": "Online",
+        "offline": "Offline",
+        "notAdminHint": "{count, plural, other {Nomor ini bukan admin di # grup: Anda dapat membacanya, tetapi tidak dapat mengubahnya.}}",
+        "limitsTitle": "Sisa tindakan grup",
+        "limitMinute": "Menit ini",
+        "limitDay": "Hari ini",
+        "limitCreates": "Grup baru hari ini",
+        "limitJoins": "Gabung lewat tautan hari ini",
+        "perCall": "Paling banyak {count, plural, other {# orang}} per penambahan atau pengeluaran.",
+        "howTitle": "Cara kerja grup di sini",
+        "howRisk": "Grup dikelola melalui koneksi tidak resmi. WhatsApp mengawasi tindakan grup dengan ketat, jadi setiap nomor memiliki batas untuk melindunginya, dan batas ini juga berlaku untuk Anda.",
+        "howAdmin": "Hanya admin grup yang dapat mengubahnya. Jika nomor ini bukan admin, Anda hanya dapat membaca grup dan mengobrol di dalamnya, tidak lebih.",
+        "howInbox": "Apa yang ditulis anggota muncul di kotak masuk bersama. Balasan dikirim dari nomor ini dan dihitung sebagai satu pesan."
+      },
+      "state": {
+        "noDevice": {
+          "title": "Tidak ada nomor pribadi yang terhubung",
+          "message": "Grup dimiliki oleh nomor WhatsApp pribadi. Hubungkan satu nomor terlebih dahulu.",
+          "connect": "Hubungkan nomor"
+        },
+        "gateOff": {
+          "title": "Tidak tersedia untuk ruang kerja ini",
+          "message": "Koneksi WhatsApp tidak resmi tidak lagi diaktifkan untuk ruang kerja ini, jadi grup tidak dapat digunakan."
+        },
+        "denied": {
+          "title": "Anda tidak dapat melihat grup",
+          "message": "Peran Anda tidak mencakup melihat grup nomor pribadi. Hubungi admin ruang kerja Anda."
+        },
+        "offline": {
+          "not_connected": {
+            "title": "Nomor ini offline",
+            "message": "Grup di bawah ini sesuai penyimpanan terakhir. Hubungkan nomor untuk mengubahnya."
+          },
+          "worker_unavailable": {
+            "title": "Layanan koneksi sedang sibuk",
+            "message": "Nomor sudah tertaut tetapi saat ini tidak ada yang menangani sesinya. Grup di bawah ini sesuai penyimpanan terakhir. Coba lagi dalam beberapa menit."
+          },
+          "open": "Buka nomor ini"
+        },
+        "rateLimited": {
+          "title": "Tindakan grup dijeda",
+          "message": "Untuk melindungi nomor ini dari batasan WhatsApp, tindakan grup baru harus menunggu.",
+          "countdown": "Coba lagi dalam {time}"
+        }
+      },
+      "create": {
+        "open": "Buat grup",
+        "title": "Buat grup",
+        "risk": "Membuat grup dan menambah orang adalah tindakan yang paling diawasi WhatsApp. Tambahkan hanya orang yang mengenal Anda dan siap ditambahkan, dan buat sedikit grup per hari. WhatsApp dapat membatasi nomor ini.",
+        "subject": "Nama grup",
+        "subjectHint": "Maksimal 60 karakter.",
+        "numbers": "Orang yang ditambahkan",
+        "numbersHint": "Nomor telepon dengan kode negara, satu per baris atau dipisahkan koma. Maksimal {max} untuk saat ini; Anda dapat menambah lebih banyak nanti.",
+        "numbersPlaceholder": "+919876543210\n+14155550123",
+        "description": "Deskripsi (opsional)",
+        "descriptionHint": "Maksimal {max} karakter.",
+        "counted": "{count} dari {max} nomor",
+        "duplicates": "{count, plural, other {# duplikat diabaikan}}",
+        "invalid": "Bukan nomor telepon: {numbers}",
+        "selfIgnored": "Nomor ini ditambahkan oleh WhatsApp sendiri dan tidak dimasukkan ke daftar.",
+        "overCap": "Tambahkan maksimal {max} nomor sekaligus.",
+        "readNotice": "Baca pemberitahuan risiko selengkapnya",
+        "acknowledge": "Saya mengerti bahwa membuat grup dan menambah orang dapat membuat nomor ini dibatasi oleh WhatsApp.",
+        "offlineHint": "Hubungkan nomor ini untuk membuat grup.",
+        "submit": "Buat grup",
+        "submitting": "Membuat",
+        "created": "Grup dibuat: {name}",
+        "resultSummary": "{ok, plural, =0 {Tidak ada yang ditambahkan.} other {# orang ditambahkan.}} {failed, plural, =0 {} other {# orang tidak dapat ditambahkan.}}",
+        "descriptionNotSet": "Grup sudah dibuat, tetapi WhatsApp tidak menerima deskripsinya. Ubah grup untuk mencoba lagi."
+      },
+      "outcome": {
+        "someone": "Seorang anggota",
+        "done": "Selesai",
+        "already_member": "Sudah ada di grup.",
+        "not_member": "Tidak ada di grup.",
+        "not_on_whatsapp": "Nomor ini tidak ada di WhatsApp.",
+        "privacy_blocked": "Pengaturan privasi mereka tidak mengizinkan nomor ini menambahkan mereka. Kirimkan tautan undangan kepada mereka.",
+        "not_allowed": "WhatsApp tidak mengizinkan ini untuk orang tersebut.",
+        "group_full": "Grup sudah penuh.",
+        "failed": "WhatsApp tidak menerima yang ini."
+      },
+      "edit": {
+        "title": "Ubah grup",
+        "saved": "Grup diperbarui.",
+        "saving": "Menyimpan",
+        "save": "Simpan",
+        "choosePicture": "Pilih gambar",
+        "pictureHint": "JPEG atau PNG, maksimal {mb} MB.",
+        "pictureType": "Gunakan gambar JPEG atau PNG.",
+        "pictureSize": "Gambar melebihi {mb} MB.",
+        "subject": "Nama grup",
+        "description": "Deskripsi",
+        "settings": "Pengaturan",
+        "announce": "Hanya admin yang dapat mengirim pesan",
+        "announceHint": "Anggota dapat membaca tetapi tidak dapat menulis.",
+        "restrict": "Hanya admin yang dapat mengubah info grup",
+        "restrictHint": "Nama, deskripsi, dan gambar.",
+        "approval": "Admin menyetujui anggota baru",
+        "approvalHint": "Orang yang memakai tautan undangan menunggu persetujuan.",
+        "addMode": "Hanya admin yang dapat menambah anggota",
+        "addModeHint": "Anggota lain tidak dapat menambah orang.",
+        "offline": "Nomor ini offline, jadi tidak ada yang dapat disimpan.",
+        "removePicture": "Hapus gambar",
+        "keepPicture": "Pertahankan gambar"
+      },
+      "members": {
+        "title": "Anggota {name}",
+        "readOnly": {
+          "left": "Nomor ini sudah keluar dari grup: daftar sesuai penyimpanan terakhir dan tidak dapat diubah.",
+          "offline": "Nomor ini offline: daftar sesuai penyimpanan terakhir.",
+          "notAdmin": "Nomor ini bukan admin: Anda dapat membaca daftar, tetapi tidak dapat mengubahnya."
+        },
+        "held": "Tindakan grup dijeda sebentar. Coba lagi setelah hitung mundur selesai.",
+        "add": {
+          "label": "Tambah peserta",
+          "hint": "Nomor telepon dengan kode negara, satu per baris atau dipisahkan koma. Maksimal {max} sekaligus.",
+          "placeholder": "+919876543210",
+          "counted": "{count} dari {max} nomor",
+          "invalid": "Bukan nomor telepon: {numbers}",
+          "overCap": "Tambahkan maksimal {max} sekaligus.",
+          "risk": "Menambahkan orang yang tidak mengenal Anda adalah salah satu alasan umum WhatsApp membatasi sebuah nomor.",
+          "adding": "Menambahkan",
+          "submit": "Tambah"
+        },
+        "done": {
+          "add": "{count, plural, other {# orang ditambahkan.}}",
+          "remove": "{count, plural, other {# orang dikeluarkan.}}",
+          "promote": "{count, plural, other {# orang sekarang menjadi admin.}}",
+          "demote": "{count, plural, other {# orang bukan lagi admin.}}"
+        },
+        "result": "{ok, plural, =0 {Tidak ada yang diubah.} other {# orang diubah.}} {failed, plural, =0 {} other {# tidak diubah.}}",
+        "search": "Cari anggota",
+        "searchPlaceholder": "Nama atau nomor",
+        "total": "{count, plural, other {# anggota}}",
+        "noAccess": "Anda tidak memiliki izin untuk melihat anggota.",
+        "loading": "Memuat anggota",
+        "noMatch": "Tidak ada anggota yang cocok.",
+        "empty": "Belum ada anggota yang tersimpan.",
+        "member": "Anggota",
+        "noNumber": "WhatsApp tidak menampilkan nomor anggota ini.",
+        "you": "Nomor ini",
+        "owner": "Pemilik",
+        "admin": "Admin",
+        "promote": "Jadikan admin",
+        "demote": "Hapus sebagai admin",
+        "remove": "Keluarkan",
+        "selected": "{count, plural, =0 {Tidak ada yang dipilih} other {# dipilih}}",
+        "limit": "Maksimal {max} sekaligus",
+        "removeConfirm": "{count, plural, other {Keluarkan # orang dari grup ini?}}"
+      },
+      "requests": {
+        "readOnly": {
+          "left": "Nomor ini sudah keluar dari grup.",
+          "offline": "Nomor ini offline: hubungkan untuk menjawab.",
+          "notAdmin": "Nomor ini bukan admin, jadi tidak dapat menjawab permintaan ini."
+        },
+        "hidden": "{count, plural, other {# orang menunggu untuk bergabung.}}",
+        "title": "{count, plural, other {# orang menunggu untuk bergabung}}",
+        "working": "…",
+        "approveAll": "Setujui semua",
+        "rejectAll": "Tolak semua",
+        "loading": "Memuat permintaan",
+        "none": "Tidak ada permintaan untuk ditampilkan.",
+        "someone": "Seseorang",
+        "approve": "Setujui",
+        "reject": "Tolak",
+        "approved": "{count, plural, other {# orang disetujui.}}",
+        "rejected": "{count, plural, other {# permintaan ditolak.}}",
+        "someFailed": "{ok} selesai, {failed} gagal:"
+      },
+      "link": {
+        "show": "Tautan undangan",
+        "hide": "Sembunyikan tautan undangan",
+        "loading": "Memuat tautan",
+        "label": "Tautan undangan",
+        "copy": "Salin",
+        "copied": "Tersalin",
+        "copyFailed": "Tidak dapat menyalin tautan. Pilih tautan lalu salin secara manual.",
+        "newLink": "Tautan baru",
+        "reset": "Tautan undangan baru telah dibuat. Tautan lama tidak berlaku lagi.",
+        "confirmTitle": "Buat tautan undangan baru?",
+        "confirmMessage": "Tautan lama langsung tidak berlaku. Siapa pun yang memilikinya tidak akan dapat bergabung dengannya.",
+        "confirmButton": "Buat tautan baru"
+      },
+      "join": {
+        "open": "Gabung lewat tautan undangan",
+        "title": "Gabung ke grup lewat tautan undangan",
+        "risk": "Bergabung ke grup lewat tautan adalah tindakan yang paling sering membuat nomor dibatasi WhatsApp. Nomor ini hanya dapat melakukannya beberapa kali sehari. Bergabunglah hanya ke grup yang Anda kenal.",
+        "invite": "Tautan undangan",
+        "inviteHint": "Tautan chat.whatsapp.com, atau hanya kodenya.",
+        "invalid": "Ini bukan tautan atau kode undangan WhatsApp.",
+        "lookUp": "Cari",
+        "lookingUp": "Mencari",
+        "submit": "Gabung",
+        "joining": "Bergabung",
+        "joined": "Berhasil bergabung ke grup. Grup akan muncul di daftar dalam beberapa detik.",
+        "requested": "Permintaan terkirim. Admin grup harus menyetujuinya.",
+        "alreadyMember": "Nomor ini sudah ada di grup ini.",
+        "approvalRequired": "Admin harus menyetujui permintaan bergabung.",
+        "acknowledge": "Saya mengerti bahwa bergabung ke grup lewat tautan dapat membuat nomor ini dibatasi oleh WhatsApp.",
+        "offline": "Hubungkan nomor ini untuk bergabung ke grup."
+      },
+      "confirm": {
+        "leaveTitle": "Keluar dari grup ini?",
+        "leaveMessage": "Nomor ini akan keluar dari {name}. Anda tidak dapat bergabung kembali dari sini tanpa undangan. Grup dan pesannya tetap ada di kotak masuk, hanya bisa dibaca.",
+        "leaveConfirm": "Keluar dari grup"
+      },
+      "notice": {
+        "left": "Nomor ini sudah keluar dari grup."
+      }
+    }
+  }
+}

@@ -121,6 +121,12 @@
       "selectedActionsNone": "Liên hệ đã chọn (hãy chọn hàng trước)",
       "modifyColumns": "Chỉnh sửa cột",
       "resetColumns": "Đặt lại về mặc định",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "Tên liên hệ",
       "colPhone": "Số điện thoại",
       "colEmailId": "Email",
@@ -170,7 +176,8 @@
       "import": "Nhập",
       "columns": "Cột",
       "addColumnField": "Thêm trường tùy chỉnh làm cột",
-      "kanbanView": "Chế độ bảng (theo giai đoạn)"
+      "kanbanView": "Chế độ bảng (theo giai đoạn)",
+      "colLeadScore": "Điểm khách hàng tiềm năng"
     },
     "bulk": {
       "label": "Thao tác cho các liên hệ đã chọn",
@@ -406,7 +413,8 @@
         "address": "Địa chỉ",
         "memo": "Ghi nhớ",
         "status": "Trạng thái",
-        "source": "Nguồn"
+        "source": "Nguồn",
+        "consent": "Đồng ý tiếp thị (có / không)"
       },
       "notInFile": "Không có trong tệp",
       "columnN": "Cột {n}",
@@ -431,7 +439,7 @@
       "imported": "{count, plural, other {Đã nhập # liên hệ.}}",
       "importedUpdated": "{count, plural, other {Đã cập nhật # liên hệ hiện có.}}",
       "importedInvalid": "{count, plural, other {Đã bỏ qua # hàng không hợp lệ.}}",
-      "downloadRejects": "Tải xuống các hàng bị từ chối",
+      "downloadRejects": "Tải xuống lỗi và các dòng bị bỏ qua",
       "fileTooLarge": "Tệp đó lớn hơn {mb} MB.",
       "checking": "Đang kiểm tra tệp...",
       "errorFile": "Không thể đọc tệp đó dưới dạng CSV liên hệ. Hãy kiểm tra tệp có hàng tiêu đề và ít nhất một liên hệ.",
@@ -462,7 +470,8 @@
         "group_name_too_long": "tên nhóm quá dài",
         "tag_name_too_long": "tên thẻ quá dài",
         "plan_limit_reached": "đã đạt giới hạn liên hệ của gói",
-        "tag_limit_reached": "đã đạt giới hạn thẻ của gói"
+        "tag_limit_reached": "đã đạt giới hạn thẻ của gói",
+        "duplicate_in_file": "số trùng lặp, đã gộp vào dòng trước"
       },
       "statusHint": "Áp dụng cho các liên hệ mà tệp này tạo ra.",
       "queued": "Đang chờ bắt đầu...",
@@ -1164,17 +1173,18 @@
         "updated": "Đã cập nhật",
         "rejected": "Bị từ chối",
         "actions": "Thao tác",
-        "downloadRejects": "Tải xuống dòng bị từ chối",
+        "downloadRejects": "Tải xuống lỗi và các dòng bị bỏ qua",
         "statuses": {
           "queued": "Đang xếp hàng",
           "running": "Đang chạy",
           "completed": "Hoàn tất",
           "failed": "Thất bại"
-        }
+        },
+        "by": "Người nhập"
       },
       "exports": {
         "title": "Lần xuất",
-        "hint": "Các lần xuất liên hệ từ Hub, mới nhất trước. Tệp đã tải xuống không được lưu giữ.",
+        "hint": "Các lần xuất danh bạ từ Hub, mới nhất trước. Mỗi tệp được giữ 30 ngày để bạn và đồng nghiệp có quyền xuất có thể tải lại.",
         "empty": "Chưa có lần xuất nào.",
         "by": "Bởi",
         "rows": "Liên hệ",
@@ -1183,7 +1193,11 @@
         "selections": {
           "ids": "Liên hệ đã đánh dấu",
           "filter": "Tất cả liên hệ khớp"
-        }
+        },
+        "download": "Tải xuống",
+        "noFile": "Không được lưu",
+        "keptUntil": "Giữ đến {date}",
+        "downloadFailed": "Không thể tải tệp. Có thể tệp đã hết hạn."
       }
     }
   }

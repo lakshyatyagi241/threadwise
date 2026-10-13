@@ -584,6 +584,30 @@ export function SettingsTab(props: BuilderTabProps) {
               disabled={disabled}
               onChange={(marketing) => setConsent({ marketing })}
             />
+            {consent.marketing && (
+              <div className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-dashed border-border p-3">
+                <p className={`${HINT} min-w-0 flex-1`}>{t('consent.whatsappHint')}</p>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="secondary"
+                  disabled={disabled || consent.text.trim() === t('consent.whatsappWording')}
+                  onClick={() =>
+                    setDraft((d) => ({
+                      ...d,
+                      consent: consentWithText(
+                        d.consent,
+                        t('consent.whatsappWording'),
+                        saved.consent,
+                        published,
+                      ),
+                    }))
+                  }
+                >
+                  {t('consent.whatsappInsert')}
+                </Button>
+              </div>
+            )}
           </div>
         )}
       </Section>

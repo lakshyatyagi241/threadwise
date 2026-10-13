@@ -78,6 +78,11 @@
       "payments": "Zahlungen"
     },
     "help": "Hilfe",
-    "unreadCount": "{count, plural, one {# ungelesen} other {# ungelesen}}"
+    "unreadCount": "{count, plural, one {# ungelesen} other {# ungelesen}}",
+    "backgroundError": {
+      "message": "Einige Live-Werte wie Benachrichtigungen, Guthaben oder Posteingangszähler konnten nicht aktualisiert werden. Die Anzeige ist möglicherweise veraltet.",
+      "retry": "Erneut versuchen",
+      "dismiss": "Schließen"
+    }
   }
 }

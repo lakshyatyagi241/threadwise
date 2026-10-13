@@ -9,6 +9,8 @@ import {
   useNumbers,
   useReadiness,
   useRegister,
+  useRequestCode,
+  useVerifyCode,
   useRemove,
   useResubscribe,
   useSetPrimary,
@@ -41,6 +43,8 @@ export function NumbersScreen() {
   const setPrimary = useSetPrimary();
   const resubscribe = useResubscribe();
   const register = useRegister();
+  const requestCode = useRequestCode();
+  const verifyCode = useVerifyCode();
   const disconnect = useDisconnect();
   const remove = useRemove();
 
@@ -48,6 +52,9 @@ export function NumbersScreen() {
   const [pending, setPending] = useState<{ action: CardAction; conn: WabaConnection } | null>(null);
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState(false);
+  const [codeSent, setCodeSent] = useState(false);
+  const [code, setCode] = useState('');
+  const [codeError, setCodeError] = useState<string | null>(null);
   const [notice, setNotice] = useState<Notice | null>(null);
 
   const items = list.data?.items ?? [];
@@ -56,6 +63,8 @@ export function NumbersScreen() {
     setPrimary.isPending ||
     resubscribe.isPending ||
     register.isPending ||
+    requestCode.isPending ||
+    verifyCode.isPending ||
     disconnect.isPending ||
     remove.isPending;
   const name = (c: WabaConnection) => cardTitle(c) ?? tc('card.unnamed');
@@ -117,6 +126,9 @@ export function NumbersScreen() {
     else {
       setPin('');
       setPinError(false);
+      setCodeSent(false);
+      setCode('');
+      setCodeError(null);
       setPending({ action, conn });
     }
   };
@@ -126,7 +138,36 @@ export function NumbersScreen() {
     if (pending) run(pending, { pin: pin || undefined });
   };
 
-  const confirmKey = pending && pending.action !== 'register' ? pending.action : null;
+  const sendCode = (method: 'SMS' | 'VOICE') => {
+    if (!pending) return;
+    setCodeError(null);
+    requestCode.mutate(
+      { id: pending.conn.id, method },
+      {
+        onSuccess: () => setCodeSent(true),
+        onError: (e) => setCodeError(errorText(e).text),
+      },
+    );
+  };
+  const submitVerify = () => {
+    if (!pending) return;
+    if (!/^\d{6}$/.test(code)) return setCodeError(tc('card.verifyDialog.codeError'));
+    setCodeError(null);
+    verifyCode.mutate(
+      { id: pending.conn.id, code },
+      {
+        onSuccess: () => {
+          const conn = pending.conn;
+          setPending(null);
+          setNotice({ tone: 'success', text: t('notice.verified', { name: name(conn) }) });
+        },
+        onError: (e) => setCodeError(errorText(e).text),
+      },
+    );
+  };
+
+  const confirmKey =
+    pending && pending.action !== 'register' && pending.action !== 'verify' ? pending.action : null;
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 p-4 sm:p-6">
@@ -269,6 +310,72 @@ export function NumbersScreen() {
         onConfirm={() => pending && run(pending)}
         onClose={() => setPending(null)}
       />
+
+      <Modal
+        open={pending?.action === 'verify'}
+        onClose={() => !busy && setPending(null)}
+        title={tc('card.verifyDialog.title')}
+        closeLabel={tc('common.close')}
+        footer={
+          <>
+            <Button variant="ghost" onClick={() => setPending(null)} disabled={busy}>
+              {tc('common.cancel')}
+            </Button>
+            {codeSent && (
+              <Button onClick={submitVerify} disabled={busy}>
+                {tc('card.verifyDialog.submit')}
+              </Button>
+            )}
+          </>
+        }
+      >
+        <p className="mb-3 text-sm text-muted-foreground">
+          {codeSent
+            ? tc('card.verifyDialog.enterCode', { phone: pending?.conn.phoneNumber ?? '' })
+            : tc('card.verifyDialog.message', { phone: pending?.conn.phoneNumber ?? '' })}
+        </p>
+        {!codeSent ? (
+          <div className="flex flex-wrap gap-2">
+            <Button onClick={() => sendCode('SMS')} disabled={busy}>
+              {tc('card.verifyDialog.sendSms')}
+            </Button>
+            <Button variant="secondary" onClick={() => sendCode('VOICE')} disabled={busy}>
+              {tc('card.verifyDialog.sendVoice')}
+            </Button>
+          </div>
+        ) : (
+          <Field
+            label={tc('card.verifyDialog.code')}
+            htmlFor="waba-verify-code"
+            error={codeError ?? undefined}
+          >
+            <Input
+              id="waba-verify-code"
+              inputMode="numeric"
+              autoComplete="one-time-code"
+              maxLength={6}
+              value={code}
+              onChange={(e) => {
+                setCode(e.target.value.replace(/\D/g, ''));
+                setCodeError(null);
+              }}
+              invalid={Boolean(codeError)}
+              dir="ltr"
+            />
+          </Field>
+        )}
+        {!codeSent && codeError && <p className="mt-2 text-sm text-danger">{codeError}</p>}
+        {codeSent && (
+          <button
+            type="button"
+            className="mt-2 text-sm text-primary underline"
+            disabled={busy}
+            onClick={() => setCodeSent(false)}
+          >
+            {tc('card.verifyDialog.resend')}
+          </button>
+        )}
+      </Modal>
 
       <Modal
         open={pending?.action === 'register'}

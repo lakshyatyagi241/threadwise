@@ -4,6 +4,8 @@ What it is, how it fits together, how to run and test it, and what is deliberate
 [docs/api/faq-knowledge.md](../../api/faq-knowledge.md). Decision: [ADR-0021](../../adr/0021-faq-semantic-matching-pgvector.md).
 Model evaluation: [embedding-eval.md](embedding-eval.md).
 
+> **Since addendum 2 of the ADR the FAQs belong to a flow**: each flow has its own FAQs, settings, match log and Unanswered list, edited in the Simple builder's FAQs tab, and they answer only inside that flow. Where the text below says "workspace" for FAQs, settings or the log, read "flow".
+
 ## Why it exists
 
 Geta's bot lets a client write FAQs and many variations of each, and answers customers by comparing their message with the variations

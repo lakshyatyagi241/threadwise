@@ -18,3 +18,4 @@ export { CallButton, type CallButtonProps } from './components/call-button';
 export { CallingToggleCard } from './components/calling-settings-screen';
 export { IncomingCallToast } from './components/incoming-call-toast';
 export { OnCallPanel } from './components/on-call-panel';
+export { useCallEligibility } from './api/calling';

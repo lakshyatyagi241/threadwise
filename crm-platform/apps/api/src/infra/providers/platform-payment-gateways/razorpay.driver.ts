@@ -15,7 +15,11 @@ import {
   type DriverOrder,
   type DriverUrls,
   type PaymentDriver,
+  type CancelOptions,
   type CancelResult,
+  type RefundRequest,
+  type RefundResult,
+  type SubscriptionCharge,
   type PaymentResult,
   type ProviderPlanKey,
   type SubscriptionEvent,
@@ -319,16 +323,106 @@ export class RazorpayDriver implements PaymentDriver {
     }
   }
 
-  /** Razorpay: `cancel_at_cycle_end: 1` keeps the cycle already paid and stops the next charge. */
-  async cancelSubscription(ref: SubscriptionRef): Promise<CancelResult> {
+  /**
+   * Razorpay: `cancel_at_cycle_end: 1` keeps the cycle already paid and stops the next charge (the default); `0` ends it now, which a
+   * replaced plan needs so the old price is never charged again.
+   */
+  async cancelSubscription(ref: SubscriptionRef, opts: CancelOptions = {}): Promise<CancelResult> {
     if (!this.ctx.credentials.key_id || !this.ctx.credentials.key_secret)
       return { ok: false, reason: 'razorpay_credentials_missing' };
     try {
       const res = await this.ctx.http(
         `${API}/subscriptions/${encodeURIComponent(ref.gatewaySubscriptionId)}/cancel`,
-        { method: 'POST', headers: this.auth, body: JSON.stringify({ cancel_at_cycle_end: 1 }) },
+        {
+          method: 'POST',
+          headers: this.auth,
+          body: JSON.stringify({ cancel_at_cycle_end: opts.atCycleEnd === false ? 0 : 1 }),
+        },
       );
-      return isOk(res) ? { ok: true } : { ok: false, reason: `razorpay_http_${res.status}` };
+      if (isOk(res)) return { ok: true };
+      // Already cancelled or completed: the state we wanted. Razorpay answers 400 "...cannot be cancelled in cancelled status".
+      const text = str(asRecord(asRecord(res.json).error).description) ?? '';
+      if (res.status === 400 && /cancel+ed|completed|expired/i.test(text)) return { ok: true };
+      return { ok: false, reason: `razorpay_http_${res.status}` };
+    } catch (e) {
+      return { ok: false, reason: `razorpay_exception: ${brief(e)}` };
+    }
+  }
+
+  /** The invoices Razorpay raised for the subscription: one per billing cycle, with the hosted receipt page. */
+  async listSubscriptionCharges(ref: SubscriptionRef): Promise<SubscriptionCharge[] | null> {
+    if (
+      !this.ctx.credentials.key_id ||
+      !this.ctx.credentials.key_secret ||
+      !ref.gatewaySubscriptionId
+    )
+      return null;
+    try {
+      const res = await this.ctx.http(
+        `${API}/invoices?subscription_id=${encodeURIComponent(ref.gatewaySubscriptionId)}&count=50`,
+        { method: 'GET', headers: this.auth },
+      );
+      if (!isOk(res)) return null;
+      const items = asRecord(res.json).items;
+      if (!Array.isArray(items)) return [];
+      const map: Record<string, SubscriptionCharge['status']> = {
+        paid: 'paid',
+        issued: 'issued',
+        partially_paid: 'issued',
+        cancelled: 'cancelled',
+        expired: 'expired',
+      };
+      const secs = (v: unknown): string | null =>
+        typeof v === 'number' && Number.isFinite(v) ? new Date(v * 1000).toISOString() : null;
+      return items.flatMap((raw): SubscriptionCharge[] => {
+        const i = asRecord(raw);
+        const id = str(i.id);
+        const amount = i.amount;
+        if (!id || typeof amount !== 'number') return [];
+        return [
+          {
+            id,
+            amountMinor: BigInt(amount),
+            currency: (str(i.currency) ?? 'INR').toUpperCase(),
+            status: map[String(i.status)] ?? 'other',
+            issuedAt: secs(i.issued_at) ?? secs(i.date),
+            paidAt: secs(i.paid_at),
+            receiptUrl: str(i.short_url) ?? null,
+            paymentId: str(i.payment_id) ?? null,
+          },
+        ];
+      });
+    } catch {
+      return null;
+    }
+  }
+
+  /** `POST /payments/:id/refund`: the whole payment, or `amount` of it. Razorpay answers `processed` or `pending`. */
+  async refundPayment(req: RefundRequest): Promise<RefundResult> {
+    if (!this.ctx.credentials.key_id || !this.ctx.credentials.key_secret)
+      return { ok: false, reason: 'razorpay_credentials_missing' };
+    try {
+      const res = await this.ctx.http(
+        `${API}/payments/${encodeURIComponent(req.paymentId)}/refund`,
+        {
+          method: 'POST',
+          headers: this.auth,
+          body: JSON.stringify({
+            ...(req.amountMinor !== undefined ? { amount: Number(req.amountMinor) } : {}),
+            speed: 'normal',
+            ...(req.note ? { notes: { reason: req.note.slice(0, 250) } } : {}),
+          }),
+        },
+      );
+      const body = asRecord(res.json);
+      const id = str(body.id);
+      if (!isOk(res) || !id) {
+        return {
+          ok: false,
+          reason: `razorpay_http_${res.status}: ${str(asRecord(body.error).description) ?? 'no refund id'}`,
+        };
+      }
+      return { ok: true, refundId: id, status: str(body.status) ?? 'pending' };
     } catch (e) {
       return { ok: false, reason: `razorpay_exception: ${brief(e)}` };
     }

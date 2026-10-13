@@ -102,7 +102,8 @@
         "added": "{name} is toegevoegd aan de workspace.",
         "rolesUpdated": "Rollen bijgewerkt voor {name}.",
         "deactivated": "{name} is gedeactiveerd.",
-        "reactivated": "{name} is opnieuw geactiveerd."
+        "reactivated": "{name} is opnieuw geactiveerd.",
+        "invited": "Uitnodiging verzonden naar {name}."
       },
       "deactivate": {
         "action": "Deactiveren",
@@ -123,7 +124,13 @@
         "passwordShort": "Het wachtwoord moet minimaal 8 tekens hebben.",
         "generate": "Genereren",
         "role": "Rol",
-        "submit": "Lid toevoegen"
+        "submit": "Lid toevoegen",
+        "inviteHint": "We mailen een link waarmee de persoon zelf een wachtwoord instelt. De link werkt één keer en verloopt na een paar dagen.",
+        "submitInvite": "Uitnodiging versturen",
+        "linkNotSent": "De e-mail naar {email} kon niet worden verzonden. Kopieer deze link en geef hem door; hij wordt niet opnieuw getoond.",
+        "copyLink": "Link kopiëren",
+        "copied": "Gekopieerd",
+        "done": "Klaar"
       },
       "changeRole": {
         "title": "Rollen van {name} wijzigen",

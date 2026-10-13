@@ -1,6 +1,10 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
-import { composeSenderSchema, composeTemplateSchema } from '../broadcasts/broadcast-compose';
+import {
+  composeSenderSchema,
+  composeTemplateSchema,
+  senderHiddenSchema,
+} from '../broadcasts/broadcast-compose';
 import {
   CAMPAIGN_RECIPIENT_STATUSES,
   CAMPAIGN_TYPES,
@@ -51,7 +55,7 @@ export const campaignListResponseSchema = z.object({
     perPage: z.number().int(),
     total: z.number().int(),
   }),
-  /** Workspace-wide, not filtered. */
+  /** The tiles above the list: the campaigns created in the chosen date range (all time by default), whatever the status, type or search. */
   stats: z.object({
     total: z.number().int(),
     queued: z.number().int(),
@@ -96,6 +100,8 @@ export type CampaignListResponse = z.infer<typeof campaignListResponseSchema>;
 
 export const campaignBuilderSchema = z.object({
   senders: z.array(composeSenderSchema),
+  /** The numbers the workspace has that are not in `senders`, by engine and reason (see `senderHiddenSchema`). */
+  hidden: z.array(senderHiddenSchema),
   templates: z.array(composeTemplateSchema),
   groups: z.array(z.object({ id: uuidSchema, name: z.string(), members: z.number().int() })),
   tags: z.array(

@@ -15,7 +15,7 @@ The Shopify integration connects your Shopify store, so its products, orders and
 
 ## How to use it
 
-1. Open **Settings**, then **Integrations**, and select **Shopify**.
+1. Open **Marketplace**, stay on the **Integrations** tab and open **Shopify**.
 2. Connect the store and approve access.
 3. Review the products and orders the store sends.
 

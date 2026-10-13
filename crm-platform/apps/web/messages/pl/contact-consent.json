@@ -1,0 +1,205 @@
+{
+  "contact-consent": {
+    "common": {
+      "dismiss": "Zamknij",
+      "retry": "Spróbuj ponownie",
+      "loading": "Ładowanie..."
+    },
+    "errors": {
+      "network": "Nie udało się połączyć z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+      "forbidden": "Nie masz uprawnień do tej czynności.",
+      "notFound": "Ten kontakt już nie istnieje.",
+      "conflict": "Ktoś inny zmienił te dane podczas Twojej edycji. Odśwież stronę i spróbuj ponownie.",
+      "noteRequired": "Przed zapisaniem zgody podaj, dlaczego kontakt się zgodził (co powiedział lub podpisał i gdzie).",
+      "settingsInvalid": "Słowo kluczowe musi zawierać co najmniej jedną literę lub cyfrę, a przy włączonym wykrywaniu musi zostać co najmniej jedno słowo STOP.",
+      "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
+      "validation": "Niektóre wartości są nieprawidłowe. Sprawdź formularz i spróbuj ponownie.",
+      "unexpected": "Coś poszło nie tak. Spróbuj ponownie.",
+      "exportInProgress": "Plik dowodowy jest już przygotowywany. Poczekaj, aż zostanie gotowy, a następnie spróbuj ponownie.",
+      "exportNotReady": "Ten plik nie jest gotowy lub wygasł. Przygotuj nowy."
+    },
+    "settings": {
+      "title": "Zgody i odpowiedzi STOP",
+      "subtitle": "Wybierz słowa wypisujące kontakt lub zapisujące go ponownie, naszą odpowiedź, linijkę rezygnacji w wiadomościach marketingowych oraz to, czy marketing wymaga zapisanej zgody.",
+      "exportProof": "Eksportuj dowody zgód (CSV)",
+      "discard": "Odrzuć zmiany",
+      "save": "Zapisz zmiany",
+      "saved": "Zapisano ustawienia zgód.",
+      "conflict": "Ktoś inny zapisał te ustawienia wcześniej. Formularz pokazuje teraz zapisane dane.",
+      "conflictOk": "OK",
+      "problems": {
+        "noOptOutWord": "Dodaj co najmniej jedno słowo STOP lub wyłącz wykrywanie.",
+        "badLang": "Kod języka wygląda tak: en, ar lub pt-BR."
+      }
+    },
+    "policy": {
+      "title": "Zasady marketingu",
+      "requireConsent": "Wymagaj zapisanej zgody na wysyłki marketingowe",
+      "requireConsentHint": "Wyłączone: marketing trafia do każdego kontaktu, który się nie wypisał. Włączone: tylko do kontaktów z zapisaną zgodą. Odbiorcy kampanii i wysyłek masowych pokazują, ilu pominięto.",
+      "withdrawnAlways": "Kontakty, które się wypisały, są zawsze pomijane, niezależnie od tego przełącznika."
+    },
+    "detect": {
+      "title": "Odpowiedzi STOP i START",
+      "enabled": "Wykrywaj odpowiedzi STOP i START",
+      "enabledHint": "Gdy kontakt wyśle tylko jedno z poniższych słów, zostanie wypisany lub zapisany ponownie w tym kanale.",
+      "autoReply": "Wyślij odpowiedź potwierdzającą",
+      "autoReplyHint": "Krótka odpowiedź tekstowa w oknie 24 godzin, wysyłana raz przy każdej zmianie. To nie jest kampania i nie liczy się jako marketing.",
+      "rule": "Cała wiadomość musi być słowem kluczowym: wielkość liter, spacje, interpunkcja, emoji i arabskie znaki diakrytyczne są ignorowane. \"Please stop sending me invoices\" lub \"don't stop\" nie pasują, więc nikt nie zostanie wypisany przez pomyłkę."
+    },
+    "lang": {
+      "groupLabel": "Słowa i odpowiedzi dla języka {lang}",
+      "title": "Język",
+      "remove": "Usuń język",
+      "optOutWords": "Słowa STOP (wypisanie)",
+      "optInWords": "Słowa START (ponowny zapis)",
+      "wordsHint": "Jedno w wierszu.",
+      "optOutReply": "Odpowiedź po STOP",
+      "optInReply": "Odpowiedź po START",
+      "replyHint": "Możesz użyć '{{name}}' jako imienia kontaktu. Napisz, jak wrócić.",
+      "footer": "Linijka rezygnacji w wiadomościach marketingowych",
+      "footerHint": "Dodawana pod tekstami marketingowymi. Podaj słowo, które trzeba wysłać.",
+      "add": "Dodaj język",
+      "addHint": "Kod języka, np. fr lub pt-BR.",
+      "invalid": "Użyj kodu, np. fr lub pt-BR.",
+      "addButton": "Dodaj"
+    },
+    "footer": {
+      "title": "Linijka rezygnacji",
+      "intro": "Kreatory wysyłek masowych i kampanii mogą dodać tę linijkę pod tekstami marketingowymi, by odbiorcy wiedzieli, że mogą odpisać STOP. Zatwierdzone szablony nigdy nie są zmieniane: umieść linijkę w samym szablonie.",
+      "defaultOn": "Ostrzegaj, gdy tekst marketingowy nie ma linijki rezygnacji",
+      "defaultOnHint": "Kreator pokazuje ostrzeżenie i przycisk, który dodaje ją jednym kliknięciem.",
+      "noneSet": "Nie ustawiono linijki rezygnacji dla żadnego języka.",
+      "previewLabel": "Co zobaczy odbiorca",
+      "sample": "Nasza wiosenna wyprzedaż zaczyna się dziś. Odwiedź nas w tym tygodniu."
+    },
+    "test": {
+      "title": "Przetestuj wiadomość",
+      "intro": "Wpisz, co mógłby wysłać kontakt, i zobacz, co by się stało. Nic nie zostanie zmienione ani wysłane. Używa słów powyżej, nawet przed zapisaniem.",
+      "label": "Wiadomość od kontaktu",
+      "run": "Testuj",
+      "failed": "Nie udało się uruchomić testu. Spróbuj ponownie.",
+      "outcome": {
+        "opts_out": "To wypisuje kontakt z marketingu.",
+        "opts_in": "To zapisuje kontakt ponownie.",
+        "no_match": "Nic się nie dzieje: wiadomość nie jest słowem kluczowym.",
+        "detection_off": "Nic się nie dzieje: wykrywanie jest wyłączone."
+      },
+      "matched": "Dopasowano słowo kluczowe \"{keyword}\" ({lang}).",
+      "replyLabel": "Kontakt otrzyma",
+      "noReply": "Nie zostanie wysłana żadna odpowiedź."
+    },
+    "card": {
+      "title": "Zgoda",
+      "status": {
+        "optedOut": "Wypisany",
+        "subscribed": "Zapisany",
+        "none": "Brak zapisanej zgody"
+      },
+      "export": "Eksportuj dowody (CSV)",
+      "markSubscribed": "Oznacz jako zapisanego",
+      "markUnsubscribed": "Oznacz jako wypisanego",
+      "loading": "Ładowanie zgód...",
+      "noneRecorded": "Brak zapisanej zgody dla tego kontaktu. Wysyłki marketingowe podlegają zasadom Twojego obszaru roboczego.",
+      "perChannel": "Zgody według kanału",
+      "timeline": "Historia zgód",
+      "channel": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "telegram": "Telegram",
+        "email": "E-mail",
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "webchat": "Czat WWW"
+      },
+      "state": {
+        "granted": "zapisany",
+        "withdrawn": "wypisany"
+      },
+      "action": {
+        "granted": "Zapisany",
+        "withdrawn": "Wypisany"
+      },
+      "source": {
+        "form": "Formularz",
+        "keyword": "Odpowiedź słowem kluczowym",
+        "manual": "Zapisane przez osobę",
+        "import": "Import",
+        "api": "API",
+        "flow": "Przepływ",
+        "inbound_message": "Wiadomość",
+        "contact_request": "Prośba o kontakt",
+        "legacy": "Sprzed historii zgód"
+      },
+      "by": "przez {name}",
+      "evidence": {
+        "consentText": "Wyświetlony tekst",
+        "consentVersion": "Wersja",
+        "consentHash": "Skrót",
+        "formId": "Formularz",
+        "submissionId": "Zgłoszenie",
+        "messageId": "Wiadomość",
+        "keyword": "Słowo kluczowe",
+        "fileName": "Plik",
+        "apiKeyId": "Klucz API",
+        "flowId": "Przepływ",
+        "reference": "Odniesienie"
+      },
+      "dialog": {
+        "titleGranted": "Oznacz jako zapisanego",
+        "titleWithdrawn": "Oznacz jako wypisanego",
+        "introGranted": "Zapisz, że ten kontakt zgodził się na wiadomości marketingowe. Powód jest przechowywany jako dowód.",
+        "introWithdrawn": "Zapisz, że ten kontakt nie chce już wiadomości marketingowych. Każda kampania i wysyłka masowa go pominie.",
+        "channel": "Kanał",
+        "noteRequired": "Dlaczego? (wymagane)",
+        "noteOptional": "Notatka (opcjonalnie)",
+        "noteHint": "Na przykład: podpisał papierowy formularz przy ladzie lub zgodził się e-mailem 3 marca.",
+        "confirm": "Zapisz",
+        "cancel": "Anuluj",
+        "close": "Zamknij",
+        "savedGranted": "Oznaczono jako zapisanego.",
+        "savedWithdrawn": "Oznaczono jako wypisanego."
+      }
+    },
+    "composer": {
+      "add": "Dodaj linijkę rezygnacji",
+      "missing": "Ta wiadomość marketingowa nie informuje, jak się wypisać. Dodaj linijkę, np. \"Odpisz STOP, aby się wypisać\".",
+      "addButton": "Dodaj linijkę",
+      "templateHint": "Szablony są zablokowane przez zatwierdzenie. Aby poinformować, że można się wypisać, umieść w samym szablonie linijkę, np. \"{line}\".",
+      "footerSuggestion": "Sugestia dla szablonu marketingowego: „{line}”",
+      "footerUse": "Użyj jako stopki"
+    },
+    "import": {
+      "legend": "Zgoda",
+      "label": "Mam zgodę na wysyłanie wiadomości do tych kontaktów",
+      "hint": "Po zaznaczeniu wszystkie kontakty z pliku są zapisywane jako zgadzające się na marketing, a nazwa pliku służy jako dowód. Bez zaznaczenia import nie zapisuje żadnej zgody. Kontakty, które zrezygnowały, pozostają wypisane.",
+      "hintColumn": "Kolumna przypisana do zgody marketingowej decyduje, kto zostanie zapisany: tylko wiersze z odpowiedzią tak otrzymują zgodę, z nazwą pliku jako dowodem. Odpowiedź nie, pusta komórka lub nieznane słowo nie zapisuje niczego. Kontakty, które zrezygnowały, pozostają wypisane.",
+      "columnSummary": "{granted} wierszy ma odpowiedź tak i zostanie zapisanych. {notGranted} ma odpowiedź nie lub jest pustych i nie otrzyma rekordu zgody.",
+      "unrecognised": "{count, plural, one {# wiersz ma} other {# wierszy ma}} wartość zgody, która nie jest tak ani nie ({values}). {count, plural, one {Jest ona traktowana} other {Są one traktowane}} jako niewyrażona. Użyj tak / nie, true / false lub 1 / 0.",
+      "columnIgnored": "Kolumna zgody nie działa, dopóki nie zaznaczysz pola powyżej."
+    },
+    "systemLine": {
+      "withdrawn": "Kontakt odpowiedział {keyword}: wypisany z marketingu",
+      "granted": "Kontakt odpowiedział {keyword}: ponownie zapisany do marketingu"
+    },
+    "proof": {
+      "title": "Przygotowane pliki dowodowe",
+      "prepare": "Przygotuj pełny plik dowodowy",
+      "preparing": "Przygotowywanie pliku dowodowego",
+      "largeHint": "Dziennik ma więcej niż {max} zdarzeń, dlatego plik jest przygotowywany w tle",
+      "large": "Dziennik zawiera więcej niż {max} zdarzeń, czyli więcej, niż mieści bezpośrednie pobieranie. Przygotuj pełny plik: jest budowany w tle, a gdy będzie gotowy, otrzymasz e-mail.",
+      "none": "Nie ma jeszcze przygotowanych plików.",
+      "keptFor": "Przygotowany plik można pobrać przez {days} dni, potem zostaje usunięty. Naraz przygotowywany jest tylko jeden plik.",
+      "rows": "{count, plural, one {# zdarzenie} other {# zdarzeń}}",
+      "expires": "dostępny do {date}",
+      "download": "Pobierz CSV",
+      "failed": "Nie udało się utworzyć pliku. Przygotuj go ponownie.",
+      "status": {
+        "queued": "Oczekuje",
+        "running": "Tworzenie",
+        "ready": "Gotowy",
+        "failed": "Niepowodzenie",
+        "expired": "Wygasł"
+      }
+    }
+  }
+}

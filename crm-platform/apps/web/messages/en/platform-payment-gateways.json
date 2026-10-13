@@ -6,7 +6,8 @@
       "orders": "Order history",
       "billingHistory": "Billing history",
       "invoices": "Invoices",
-      "billingSettings": "Billing settings"
+      "billingSettings": "Billing settings",
+      "subscriptions": "Subscriptions"
     },
     "admin": {
       "title": "Payment gateways",
@@ -236,8 +237,12 @@
           "30d": "Last 30 days",
           "90d": "Last 90 days",
           "1y": "Last year",
-          "all": "All time"
-        }
+          "all": "All time",
+          "custom": "Custom range"
+        },
+        "customFrom": "From date",
+        "customTo": "To date",
+        "customInvalid": "Pick two valid days: the start must not be after the end, and at most 5 years apart."
       },
       "orders": {
         "title": "Order history",
@@ -249,7 +254,8 @@
         "windows": {
           "90d": "Last 90 days",
           "this_year": "This year",
-          "all": "All time"
+          "all": "All time",
+          "custom": "Custom range"
         },
         "kpi": {
           "total": "Total orders",
@@ -299,7 +305,8 @@
           "markPaid": "Mark paid",
           "cancelOrder": "Cancel",
           "approve": "Approve",
-          "reject": "Reject"
+          "reject": "Reject",
+          "refund": "Refund"
         },
         "confirm": {
           "approveTitle": "Mark this order as paid?",
@@ -432,7 +439,7 @@
           "gross": "Gross revenue",
           "net": "Net revenue",
           "netPct": "{pct}% net",
-          "success": "Auth success",
+          "success": "Payment success rate",
           "failed": "Failed",
           "events": "{count, plural, one {# event} other {# events}}",
           "refunds": "Refunds",
@@ -673,6 +680,79 @@
           "faqsHint": "Accordion items shown below the plans.",
           "configured": "{count} configured."
         }
+      },
+      "subscriptions": {
+        "title": "Subscriptions",
+        "eyebrow": "Billing",
+        "titleFirst": "Platform",
+        "titleSecond": "subscriptions",
+        "description": "Plan and add-on subscriptions held with a payment provider, across all workspaces. End one, refresh it from the provider, or refund a charge.",
+        "kpi": {
+          "active": "Active",
+          "pastDue": "Payment failed",
+          "canceled": "Cancelled"
+        },
+        "statusFilter": "Subscription status",
+        "statuses": {
+          "all": "All",
+          "active": "Active",
+          "past_due": "Payment failed",
+          "pending": "Pending",
+          "canceled": "Cancelled",
+          "expired": "Expired"
+        },
+        "kind": {
+          "plan": "Plan",
+          "addon": "Add-on"
+        },
+        "search": "Search workspace or provider id",
+        "noun": "subscriptions",
+        "empty": "No subscriptions match.",
+        "col": {
+          "workspace": "Workspace",
+          "item": "Item",
+          "price": "Price",
+          "paidUntil": "Paid until",
+          "status": "Status",
+          "provider": "Provider",
+          "actions": "Actions"
+        },
+        "cancelFailed": "Provider cancel failed",
+        "cancelFailedHint": "The local record is ended, but the provider did not confirm the cancel. Finish it in the provider's dashboard so it stops charging.",
+        "actions": {
+          "sync": "Refresh",
+          "refund": "Refund",
+          "endAtCycle": "End at cycle end",
+          "endNow": "End now"
+        },
+        "confirm": {
+          "title": "End this subscription?",
+          "atCycle": "{name} keeps access until the end of the paid cycle and is not charged again.",
+          "now": "End {name}'s subscription now at the provider. No further charge is made."
+        },
+        "ended": "Subscription ended at the provider.",
+        "endedLocalOnly": "Ended here, but the provider did not confirm the cancel. Finish it in the provider's dashboard.",
+        "endedUnsupported": "Ended here. This provider cannot be cancelled from here.",
+        "alreadyEnded": "It was already ended.",
+        "synced": "Checked with the provider: {outcome}."
+      },
+      "refund": {
+        "title": "Refund {label}",
+        "intro": "The refund is sent to the payment provider and goes back to the buyer's original payment method.",
+        "charge": "Charge to refund",
+        "pickCharge": "Pick a paid charge",
+        "loadingCharges": "Loading charges",
+        "chargesFailed": "The payment provider could not be asked for this subscription's charges.",
+        "noPaidCharges": "The provider lists no paid charge for this subscription.",
+        "amount": "Amount ({currency})",
+        "amountHint": "Leave empty to refund everything not yet refunded.",
+        "reason": "Reason",
+        "endSubscription": "Also end the subscription now so it is not charged again",
+        "submit": "Refund",
+        "processed": "Refunded {amount}.",
+        "pending": "Refund sent. The provider is processing it.",
+        "failed": "The provider refused the refund.",
+        "badAmount": "Enter the amount as a number, for example 12.50."
       }
     },
     "offline": {
@@ -711,6 +791,74 @@
       "rejected": "That file type is not allowed. Use a JPG, PNG, WEBP or PDF.",
       "closed": "Payment proof can no longer be submitted for this order.",
       "failed": "Could not upload the file. Try again."
+    },
+    "subscriptions": {
+      "title": "Subscriptions",
+      "subtitle": "Your plan and add-on subscriptions with the payment provider: what renews, when you are paid until, and what was charged.",
+      "loading": "Loading subscriptions",
+      "loadFailed": "We could not load your subscriptions. Try again in a moment.",
+      "emptyTitle": "No subscriptions yet",
+      "emptyMessage": "When you pay for a plan or add-on with auto-renew, it shows up here.",
+      "browsePlans": "Browse plans",
+      "failedBanner": "The last payment for {names} failed. Your access continues for now while the provider retries; update your payment method with your bank or the provider to avoid losing it.",
+      "paymentFailed": "The latest payment failed. The provider is retrying.",
+      "kind": {
+        "plan": "Plan",
+        "addon": "Add-on"
+      },
+      "status": {
+        "active": "Active",
+        "past_due": "Payment failed",
+        "pending": "Waiting for payment",
+        "canceled": "Cancelled",
+        "expired": "Expired"
+      },
+      "cycle": {
+        "monthly": "month",
+        "yearly": "year"
+      },
+      "price": "{amount} per {cycle}",
+      "renewsOn": "Renews on {date}",
+      "endsOn": "Paid until {date}. It will not renew.",
+      "endedOn": "Ended on {date}",
+      "refreshFromProvider": "Refresh from provider",
+      "showCharges": "Show charges",
+      "hideCharges": "Hide charges",
+      "cancel": "Cancel subscription",
+      "confirmTitle": "Cancel {name}?",
+      "confirmBody": "You keep access until {date}. After that it will not renew and you will not be charged again.",
+      "confirmBodyNoDate": "It will not renew and you will not be charged again.",
+      "confirm": "Cancel subscription",
+      "keep": "Keep it",
+      "cancelDone": "Cancelled. Your paid period keeps running and nothing further will be charged.",
+      "cancelFailed": "We could not cancel this subscription. Try again, or contact support.",
+      "forbidden": "You do not have permission to manage subscriptions.",
+      "sync": {
+        "up_to_date": "Already up to date with the payment provider.",
+        "renewed": "Updated: the provider had a newer renewal.",
+        "gateway_canceled": "The provider shows this subscription as cancelled.",
+        "gateway_expired": "The provider shows this subscription as ended.",
+        "unknown": "Checked with the payment provider.",
+        "failed": "We could not reach the payment provider. Try again in a moment."
+      },
+      "chargesFailed": "We could not load the charges.",
+      "chargesFromOrders": "The payment provider could not be reached, so this shows your paid orders instead.",
+      "noCharges": "No charges yet.",
+      "col": {
+        "date": "Date",
+        "amount": "Amount",
+        "status": "Status",
+        "receipt": "Receipt"
+      },
+      "chargeStatus": {
+        "paid": "Paid",
+        "issued": "Awaiting payment",
+        "failed": "Failed",
+        "cancelled": "Cancelled",
+        "expired": "Expired",
+        "other": "Other"
+      },
+      "openReceipt": "Open receipt"
     }
   }
 }
