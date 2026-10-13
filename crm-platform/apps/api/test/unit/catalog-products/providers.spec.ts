@@ -241,6 +241,45 @@ describe('live adapter: payload shapes', () => {
   });
 });
 
+describe('live adapter: manage the catalog and its product sets', () => {
+  it('renames and deletes the catalog and creates, updates and deletes a product set', async () => {
+    const m = mockFetch([
+      { body: { success: true } },
+      { body: { success: true } },
+      { body: { id: 'set1' } },
+      { body: { success: true } },
+      { body: { success: true } },
+    ]);
+    const p = make(m.impl);
+    await p.renameCatalog(meta, 'New name');
+    await p.deleteCatalog(meta);
+    expect(await p.createProductSet(meta, 'Shirts', ['a', 'b'])).toBe('set1');
+    await p.updateProductSet(meta, 'set1', 'Shirts 2', ['a']);
+    await p.deleteProductSet(meta, 'set1');
+
+    expect(m.calls[0]!.init.method).toBe('POST');
+    expect(m.calls[0]!.url).toBe('https://graph.facebook.com/v23.0/555');
+    expect(body(m.calls[0]!)).toEqual({ name: 'New name' });
+    expect(m.calls[1]!.init.method).toBe('DELETE');
+    expect(m.calls[1]!.url).toBe('https://graph.facebook.com/v23.0/555');
+    expect(m.calls[2]!.url).toBe('https://graph.facebook.com/v23.0/555/product_sets');
+    expect(body(m.calls[2]!)).toEqual({
+      name: 'Shirts',
+      filter: JSON.stringify({ retailer_id: { is_any: ['a', 'b'] } }),
+    });
+    expect(m.calls[3]!.url).toBe('https://graph.facebook.com/v23.0/set1');
+    expect(m.calls[3]!.init.method).toBe('POST');
+    expect(m.calls[4]!.init.method).toBe('DELETE');
+  });
+
+  it('a product set create without an id is a typed error', async () => {
+    const m = mockFetch([{ body: {} }]);
+    await expect(make(m.impl).createProductSet(meta, 'X', ['a'])).rejects.toBeInstanceOf(
+      CatalogProviderError,
+    );
+  });
+});
+
 describe('live adapter: error mapping and retries', () => {
   it("Meta's error envelope becomes a typed error with message, code and subcode", async () => {
     const m = mockFetch([

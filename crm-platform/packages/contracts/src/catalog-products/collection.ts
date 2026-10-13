@@ -28,6 +28,8 @@ export const collectionResponseSchema = z.object({
   description: z.string().nullable(),
   isActive: z.boolean(),
   productCount: z.number().int(),
+  /** The id of the product set on Meta once pushed (TW-CAT product sets), else null. */
+  metaSetId: z.string().nullable(),
   /** The members that still exist, in the stored order. */
   products: z.array(collectionMemberSchema),
   rowVersion: z.number().int(),

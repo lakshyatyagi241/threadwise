@@ -28,6 +28,9 @@ describe('errorKind', () => {
     expect(errorKind(err(422, 'CAT_NOT_CONNECTED'))).toBe('notConnected');
     expect(errorKind(err(422, 'CAT_NO_WABA'))).toBe('noWaba');
     expect(errorKind(err(422, 'CAT_WABA_TOKEN_MISSING'))).toBe('wabaToken');
+    expect(errorKind(err(422, 'CAT_ALREADY_CONNECTED'))).toBe('alreadyConnected');
+    expect(errorKind(err(422, 'CAT_CONFIRM_MISMATCH'))).toBe('confirmMismatch');
+    expect(errorKind(err(422, 'CAT_SET_NOT_SYNCABLE'))).toBe('setNotSyncable');
     expect(errorKind(err(422, 'CAT_NO_CATALOG_LINKED'))).toBe('noCatalogLinked');
     expect(errorKind(err(422, 'CAT_COLLECTION_PRODUCTS_INVALID'))).toBe('collectionProducts');
     expect(errorKind(err(400, 'VALIDATION_FAILED'))).toBe('validation');

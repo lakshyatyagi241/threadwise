@@ -5,7 +5,17 @@ summary: Link a catalog, keep products in sync and send products, carousels or c
 area: store
 order: 10
 documents: [nav:catalog]
-keywords: [whatsapp catalog, meta commerce, product message, carousel, collections, sync, send products, cart]
+keywords:
+  [
+    whatsapp catalog,
+    meta commerce,
+    product message,
+    carousel,
+    collections,
+    sync,
+    send products,
+    cart,
+  ]
 ---
 
 ## What it is for
@@ -25,6 +35,9 @@ Catalog lets you push products into WhatsApp chats. It has four tabs: **Setup** 
 - **Commerce settings:** show the catalog in your business profile, and enable the cart.
 - **Automation:** auto-reply when a customer sends a cart, with an optional payment link base, and a catalog concierge that answers product questions with matching products. The concierge is off by default.
 - **Catalog health** lists products with no image, no price or a sync error.
+- **Create a catalog:** with a connected Meta number that has a Business ID, **Create a new catalog on Meta** on Setup makes an empty catalog, links it to your WhatsApp account and connects it. Only one catalog can be connected at a time.
+- **Manage on Meta:** with a catalog connected, **Rename on Meta** changes its name. **Delete on Meta** permanently removes the catalog and its products on Meta after you type its catalog ID; it then disconnects here.
+- **Collections on Meta:** on a collection card, **Push to Meta** creates a product set from its active products, **Update on Meta** refreshes it after edits, and **Remove from Meta** deletes the set. The card shows whether it is on Meta.
 - **Disconnect** stops syncing. Your products stay on Meta.
 - Single product and list messages need the customer to have written to you in the last 24 hours. A catalog link works anytime.
 

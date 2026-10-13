@@ -12,6 +12,9 @@ import {
   syncProductsResponseSchema,
   type CommerceSettingsInput,
   type ConnectCatalogInput,
+  type CreateCatalogInput,
+  type DeleteRemoteCatalogInput,
+  type RenameCatalogInput,
   type SaveAutomationInput,
   type SendCatalogInput,
   type SyncProductsInput,
@@ -90,6 +93,12 @@ export const connectCatalog = (body: ConnectCatalogInput) =>
   apiFetch('/catalog/connect', { method: 'POST', body });
 export const autodetectCatalog = () =>
   apiFetch('/catalog/autodetect', { method: 'POST', body: {} });
+export const createCatalog = (body: CreateCatalogInput) =>
+  apiFetch('/catalog/create', { method: 'POST', body });
+export const renameCatalog = (body: RenameCatalogInput) =>
+  apiFetch('/catalog/rename', { method: 'POST', body });
+export const deleteRemoteCatalog = (body: DeleteRemoteCatalogInput) =>
+  apiFetch('/catalog/delete-remote', { method: 'POST', body });
 export const disconnectCatalog = () =>
   apiFetch('/catalog/disconnect', { method: 'POST', body: {} });
 export const saveCommerce = (body: CommerceSettingsInput) =>

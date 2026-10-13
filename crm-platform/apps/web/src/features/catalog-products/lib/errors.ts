@@ -27,6 +27,9 @@ export const ERROR_KINDS = [
   'sendFailed',
   'collectionProducts',
   'providerFailed',
+  'alreadyConnected',
+  'confirmMismatch',
+  'setNotSyncable',
   'unexpected',
 ] as const;
 export type ErrorKind = (typeof ERROR_KINDS)[number];
@@ -80,6 +83,12 @@ export function errorKind(error: unknown): ErrorKind {
       return 'collectionProducts';
     case ERROR_CODES.CAT_PROVIDER_FAILED:
       return 'providerFailed';
+    case ERROR_CODES.CAT_ALREADY_CONNECTED:
+      return 'alreadyConnected';
+    case ERROR_CODES.CAT_CONFIRM_MISMATCH:
+      return 'confirmMismatch';
+    case ERROR_CODES.CAT_SET_NOT_SYNCABLE:
+      return 'setNotSyncable';
   }
   // A route that is not deployed answers 404 or 501 without one of our codes for it.
   if (error.status === 404 || error.status === 501) return 'unavailable';

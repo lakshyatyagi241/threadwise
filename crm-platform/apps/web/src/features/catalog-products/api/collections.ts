@@ -24,3 +24,7 @@ export const updateCollection = (id: string, body: UpdateCollectionInput) =>
   apiFetch(`/catalog/collections/${id}`, { method: 'PUT', body });
 export const deleteCollection = (id: string) =>
   apiFetch(`/catalog/collections/${id}`, { method: 'DELETE' });
+export const pushCollectionToMeta = (id: string) =>
+  apiFetch(`/catalog/collections/${id}/meta`, { method: 'POST', body: {} });
+export const removeCollectionFromMeta = (id: string) =>
+  apiFetch(`/catalog/collections/${id}/meta`, { method: 'DELETE' });

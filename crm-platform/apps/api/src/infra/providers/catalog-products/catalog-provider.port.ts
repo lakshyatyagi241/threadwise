@@ -125,6 +125,25 @@ export interface CatalogProvider {
   createCatalog(auth: GraphAuth, businessId: string, name: string): Promise<string | null>;
   linkCatalogToWaba(auth: GraphAuth, wabaId: string, catalogId: string): Promise<void>;
   catalogName(auth: GraphAuth, catalogId: string): Promise<string | null>;
+
+  // Manage the catalog on Meta from here (create reuses `createCatalog` + `linkCatalogToWaba` above).
+  /** Rename the catalog on Meta. */
+  renameCatalog(b: CatalogBinding, name: string): Promise<void>;
+  /** Delete the catalog on Meta. Irreversible there; the caller confirms first. */
+  deleteCatalog(b: CatalogBinding): Promise<void>;
+  /** Create a product set holding these retailer ids; returns Meta's set id. */
+  createProductSet(
+    b: CatalogBinding,
+    name: string,
+    retailerIds: readonly string[],
+  ): Promise<string>;
+  updateProductSet(
+    b: CatalogBinding,
+    setId: string,
+    name: string,
+    retailerIds: readonly string[],
+  ): Promise<void>;
+  deleteProductSet(b: CatalogBinding, setId: string): Promise<void>;
 }
 
 export const CATALOG_PROVIDER = Symbol('CATALOG_PROVIDER');

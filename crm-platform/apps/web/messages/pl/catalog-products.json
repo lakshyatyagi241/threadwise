@@ -34,7 +34,10 @@
       "sendFailed": "Nie udało się wysłać wiadomości: {detail}",
       "collectionProducts": "Żaden z wybranych produktów nie należy do tej przestrzeni roboczej.",
       "providerFailed": "WhatsApp lub Meta nie mogły zrealizować żądania: {detail}",
-      "unexpected": "Coś poszło nie tak. Spróbuj ponownie za chwilę."
+      "unexpected": "Coś poszło nie tak. Spróbuj ponownie za chwilę.",
+      "alreadyConnected": "Katalog jest już połączony. Najpierw go odłącz, aby utworzyć nowy.",
+      "confirmMismatch": "Wpisany identyfikator katalogu nie pasuje do połączonego katalogu.",
+      "setNotSyncable": "Ta kolekcja nie ma aktywnych produktów do zestawu produktów Meta."
     },
     "paywall": {
       "kicker": "Funkcja premium",
@@ -400,6 +403,15 @@
           "descriptionTooLong": "Opis jest zbyt długi.",
           "noProducts": "Wybierz co najmniej jeden produkt."
         }
+      },
+      "meta": {
+        "onMeta": "W Meta",
+        "notOnMeta": "Nie ma w Meta",
+        "push": "Wyślij do Meta",
+        "update": "Zaktualizuj w Meta",
+        "remove": "Usuń z Meta",
+        "pushed": "Kolekcja wysłana do Meta.",
+        "removed": "Kolekcja usunięta z Meta."
       }
     },
     "activity": {
@@ -723,6 +735,33 @@
           "goods": "Zakaz alkoholu, treści dla dorosłych i towarów regulowanych",
           "verification": "Weryfikacja firmy wymagana w środowisku produkcyjnym"
         }
+      }
+    },
+    "manage": {
+      "title": "Zarządzaj katalogiem w Meta",
+      "create": {
+        "title": "Utwórz nowy katalog w Meta",
+        "intro": "Tworzy pusty katalog na koncie WhatsApp Business, łączy go i podłącza tutaj.",
+        "name": "Nazwa katalogu",
+        "placeholder": "np. Mój sklep",
+        "button": "Utwórz katalog",
+        "needName": "Wpisz nazwę katalogu.",
+        "done": "Katalog utworzony i połączony."
+      },
+      "rename": {
+        "label": "Nazwa katalogu",
+        "button": "Zmień nazwę w Meta",
+        "done": "Zmieniono nazwę katalogu w Meta."
+      },
+      "delete": {
+        "title": "Usuń katalog w Meta",
+        "warning": "Trwale usuwa katalog i jego produkty w Meta. Tej operacji nie można cofnąć.",
+        "confirmLabel": "Wpisz identyfikator katalogu {id}, aby potwierdzić",
+        "button": "Usuń w Meta",
+        "dialogTitle": "Usunąć katalog w Meta?",
+        "dialogMessage": "Katalog zostanie usunięty w Meta i odłączony tutaj. Tej operacji nie można cofnąć.",
+        "cancel": "Anuluj",
+        "done": "Katalog usunięty w Meta."
       }
     }
   }

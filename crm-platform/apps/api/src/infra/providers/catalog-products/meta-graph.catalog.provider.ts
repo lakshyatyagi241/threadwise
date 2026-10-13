@@ -34,7 +34,7 @@ export interface MetaGraphOptions {
 }
 
 interface Call {
-  method: 'GET' | 'POST';
+  method: 'GET' | 'POST' | 'DELETE';
   url: string;
   headers: Record<string, string>;
   query?: Record<string, string | number>;
@@ -495,5 +495,72 @@ export class MetaGraphCatalogProvider implements CatalogProvider {
       }),
     );
     return typeof json.name === 'string' && json.name ? json.name : null;
+  }
+
+  // --- manage (rename, delete, product sets) ------------------------------------------------------------------------------
+
+  async renameCatalog(b: CatalogBinding, name: string): Promise<void> {
+    await this.call(
+      this.base(b, 'renameCatalog', {
+        method: 'POST',
+        url: await this.graph(b.catalogId),
+        body: { name },
+      }),
+    );
+  }
+
+  async deleteCatalog(b: CatalogBinding): Promise<void> {
+    await this.call(
+      this.base(b, 'deleteCatalog', { method: 'DELETE', url: await this.graph(b.catalogId) }),
+    );
+  }
+
+  /** A product set is the products whose retailer id is in the list. */
+  private setFilter(retailerIds: readonly string[]): string {
+    return JSON.stringify({ retailer_id: { is_any: retailerIds } });
+  }
+
+  async createProductSet(
+    b: CatalogBinding,
+    name: string,
+    retailerIds: readonly string[],
+  ): Promise<string> {
+    const json = await this.call(
+      this.base(b, 'createProductSet', {
+        method: 'POST',
+        url: await this.graph(`${b.catalogId}/product_sets`),
+        body: { name, filter: this.setFilter(retailerIds) },
+      }),
+    );
+    if (typeof json.id !== 'string' || json.id === '') {
+      throw new CatalogProviderError('Meta did not return a product set id.', 'meta', {
+        code: null,
+        subcode: null,
+        httpStatus: 200,
+        raw: null,
+      });
+    }
+    return json.id;
+  }
+
+  async updateProductSet(
+    b: CatalogBinding,
+    setId: string,
+    name: string,
+    retailerIds: readonly string[],
+  ): Promise<void> {
+    await this.call(
+      this.base(b, 'updateProductSet', {
+        method: 'POST',
+        url: await this.graph(setId),
+        body: { name, filter: this.setFilter(retailerIds) },
+      }),
+    );
+  }
+
+  async deleteProductSet(b: CatalogBinding, setId: string): Promise<void> {
+    await this.call(
+      this.base(b, 'deleteProductSet', { method: 'DELETE', url: await this.graph(setId) }),
+    );
   }
 }

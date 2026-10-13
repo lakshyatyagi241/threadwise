@@ -130,6 +130,13 @@ export class CatalogSyncRepository {
     return res.rows.length;
   }
 
+  /** Disconnect: the collections stay, but the product sets they were pushed as no longer exist for this workspace. */
+  async clearSetIds(tx: Tx, orgId: number): Promise<void> {
+    await tx.execute(
+      sql`UPDATE wa_product_sets SET meta_set_id = NULL WHERE org_id = ${orgId} AND meta_set_id IS NOT NULL`,
+    );
+  }
+
   async findByRetailerId(
     tx: Tx,
     orgId: number,

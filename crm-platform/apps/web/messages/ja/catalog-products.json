@@ -34,7 +34,10 @@
       "sendFailed": "メッセージを送信できませんでした: {detail}",
       "collectionProducts": "選択した商品は、このワークスペースのものではありません。",
       "providerFailed": "WhatsAppまたはMetaがリクエストを完了できませんでした: {detail}",
-      "unexpected": "問題が発生しました。しばらくしてからもう一度お試しください。"
+      "unexpected": "問題が発生しました。しばらくしてからもう一度お試しください。",
+      "alreadyConnected": "カタログはすでに接続されています。新しく作成するには、先に接続を解除してください。",
+      "confirmMismatch": "入力したカタログIDが接続中のカタログと一致しません。",
+      "setNotSyncable": "このコレクションには、Metaの商品セットに入れる有効な商品がありません。"
     },
     "paywall": {
       "kicker": "プレミアム機能",
@@ -400,6 +403,15 @@
           "descriptionTooLong": "説明が長すぎます。",
           "noProducts": "商品を少なくとも1つ選択してください。"
         }
+      },
+      "meta": {
+        "onMeta": "Metaにあり",
+        "notOnMeta": "Metaにはありません",
+        "push": "Metaに送信",
+        "update": "Metaで更新",
+        "remove": "Metaから削除",
+        "pushed": "コレクションをMetaに送信しました。",
+        "removed": "コレクションをMetaから削除しました。"
       }
     },
     "activity": {
@@ -723,6 +735,33 @@
           "goods": "アルコール/アダルト/規制対象商品は不可",
           "verification": "本番環境ではビジネス認証が必須"
         }
+      }
+    },
+    "manage": {
+      "title": "Metaでカタログを管理",
+      "create": {
+        "title": "Metaで新しいカタログを作成",
+        "intro": "WhatsApp Businessアカウントに空のカタログを作成し、リンクしてここに接続します。",
+        "name": "カタログ名",
+        "placeholder": "例：マイショップ",
+        "button": "カタログを作成",
+        "needName": "カタログ名を入力してください。",
+        "done": "カタログを作成して接続しました。"
+      },
+      "rename": {
+        "label": "カタログ名",
+        "button": "Metaで名前を変更",
+        "done": "Metaでカタログ名を変更しました。"
+      },
+      "delete": {
+        "title": "Metaでカタログを削除",
+        "warning": "Meta上のカタログと商品を完全に削除します。元に戻せません。",
+        "confirmLabel": "確認のためカタログID {id} を入力してください",
+        "button": "Metaで削除",
+        "dialogTitle": "Metaでカタログを削除しますか？",
+        "dialogMessage": "カタログはMetaで削除され、ここでも接続が解除されます。元に戻せません。",
+        "cancel": "キャンセル",
+        "done": "Metaでカタログを削除しました。"
       }
     }
   }
