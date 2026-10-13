@@ -119,6 +119,8 @@
       "colStarted": "Başlangıç",
       "colActivity": "Son etkinlik",
       "colSteps": "Adımlar",
+      "colReplies": "Yanıtlar",
+      "repliesHint": "Bu çalıştırmanın bekleme düğümüne ulaşan müşteri mesajları",
       "colActions": "İşlemler",
       "open": "Çalıştırmayı aç",
       "cancel": "İptal",
