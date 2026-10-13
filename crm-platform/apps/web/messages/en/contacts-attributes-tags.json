@@ -1283,6 +1283,12 @@
       "changed": "Filters changed since this view was saved",
       "more": "More for {name}",
       "picker": {
+        "favorites": "Favorites",
+        "defaultFilters": "Default filters",
+        "createdViews": "Created views",
+        "addView": "Add view",
+        "markFavorite": "Mark as favorite",
+        "unmarkFavorite": "Remove from favorites",
         "title": "Select a view",
         "create": "Create new view",
         "search": "Search views...",
