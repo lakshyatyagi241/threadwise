@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "বাদ দিন",
       "retry": "আবার চেষ্টা করুন",
-      "requestId": "অনুরোধ {id}",
       "noAccessTitle": "আপনি এই স্ক্রিনটি খুলতে পারবেন না",
       "noAccess": "অ্যাডমিনের কাছে “{permission}” অনুমতি চান।"
     },

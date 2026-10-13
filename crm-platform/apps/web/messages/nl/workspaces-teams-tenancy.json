@@ -11,8 +11,7 @@
       "copied": "Gekopieerd",
       "retry": "Opnieuw proberen",
       "loadMore": "Meer laden",
-      "loadingMore": "Laden",
-      "requestId": "Verzoek-id"
+      "loadingMore": "Laden"
     },
     "tiers": {
       "owner": "Eigenaar",

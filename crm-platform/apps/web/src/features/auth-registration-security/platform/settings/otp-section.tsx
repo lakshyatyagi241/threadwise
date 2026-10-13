@@ -426,11 +426,6 @@ export function OtpSection({
                 {flash.detail}
               </p>
             )}
-            {flash.requestId && (
-              <p className="text-xs opacity-80">
-                {t('requestId')}: <span className="font-mono">{flash.requestId}</span>
-              </p>
-            )}
           </Alert>
         )}
         <div className="flex flex-wrap gap-2">

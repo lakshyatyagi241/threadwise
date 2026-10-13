@@ -13,7 +13,6 @@
     },
     "common": {
       "retry": "Opnieuw proberen",
-      "requestId": "Verzoek {id}",
       "noAccessTitle": "Je hebt geen toegang tot dit scherm",
       "noAccess": "Vraag een workspace-beheerder om je rol de machtiging {permission} te geven."
     },

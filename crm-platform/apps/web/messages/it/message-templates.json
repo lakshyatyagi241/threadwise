@@ -4,8 +4,7 @@
       "title": "Template"
     },
     "common": {
-      "dismiss": "Ignora",
-      "requestId": "ID richiesta"
+      "dismiss": "Ignora"
     },
     "status": {
       "draft": "Bozza",

@@ -4,7 +4,7 @@ import { useFormatter, useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 import { Alert, Button, ToastProvider, cn } from '@crm/ui';
 import type { Segment, SegmentVisibility } from '../api/schemas';
-import { errorKind, requestIdOf } from '../lib/errors';
+import { errorKind } from '../lib/errors';
 import { countState } from '../lib/hub';
 import { shareSummary } from '../lib/share';
 import {
@@ -153,15 +153,9 @@ export function ErrorLine({
 }) {
   const t = useTranslations('segments.errors');
   const kind = errorKind(error);
-  const requestId = requestIdOf(error);
   return (
     <Alert tone={kind === 'unavailable' ? 'warning' : 'danger'} className={className}>
       <span>{t(kind)}</span>
-      {requestId && (
-        <span className="mt-1 block text-xs opacity-80">
-          {t('requestId')}: <span className="font-mono">{requestId}</span>
-        </span>
-      )}
       {onRetry && (
         <Button variant="secondary" size="sm" className="mt-2" onClick={onRetry}>
           {t('retry')}

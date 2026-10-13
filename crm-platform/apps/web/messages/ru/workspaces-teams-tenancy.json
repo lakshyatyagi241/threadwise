@@ -11,8 +11,7 @@
       "copied": "Скопировано",
       "retry": "Повторить",
       "loadMore": "Загрузить ещё",
-      "loadingMore": "Загрузка",
-      "requestId": "ID запроса"
+      "loadingMore": "Загрузка"
     },
     "tiers": {
       "owner": "Владелец",

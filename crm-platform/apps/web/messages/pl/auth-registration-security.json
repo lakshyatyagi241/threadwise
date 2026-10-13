@@ -214,7 +214,6 @@
         "sessionExpired": "Twoja sesja wygasła ze względów bezpieczeństwa. Spróbuj ponownie.",
         "network": "Nie udało się połączyć z serwerem. Sprawdź połączenie i spróbuj ponownie.",
         "unexpected": "Coś poszło nie tak po naszej stronie. Spróbuj ponownie.",
-        "requestId": "Identyfikator żądania",
         "signupExpired": "Rozpocznij rejestrację od nowa.",
         "policyRules": {
           "min_length": "Użyj co najmniej {min, plural, one {# znaku} few {# znaków} many {# znaków} other {# znaku}}.",

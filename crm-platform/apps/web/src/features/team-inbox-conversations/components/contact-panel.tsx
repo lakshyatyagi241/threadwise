@@ -19,6 +19,7 @@ import { eventLabel } from '../lib/timeline';
 import { fullStamp, listTime } from '../lib/time';
 import { CheckCircleIcon, ExternalIcon, NoteIcon, TrashIcon, UserPlusIcon } from './icons';
 import { Avatar, ChannelTag, useErrorText } from './parts';
+import { TagGroups, type TagGroupsProps } from './tag-groups';
 
 export interface ContactPanelProps {
   detail: InboxConversationDetail;
@@ -38,6 +39,10 @@ export interface ContactPanelProps {
   onDeleteNote: (id: string) => void;
   canDeleteNote: (note: ConversationNote) => boolean;
   onOpenConversation: (id: string) => void;
+  /** May the person edit the contact (`record.contacts.update`): the contact tags then link to it. */
+  canEditContact?: boolean;
+  /** Conversation-tag controls: present when the person may put tags on threads (`inbox.conversation.tag`). */
+  tags?: TagGroupsProps['tags'];
 }
 
 /**
@@ -53,6 +58,13 @@ export function ContactPanel(props: ContactPanelProps) {
   return (
     <div className="space-y-4 p-4" data-testid="inbox-contact-panel">
       <ContactSummary detail={detail} contactId={contactId} />
+
+      <TagGroups
+        detail={detail}
+        contactId={contactId}
+        canEditContact={props.canEditContact ?? false}
+        tags={props.tags}
+      />
 
       <LeadScoreSection detail={detail} contactId={contactId} />
 

@@ -63,7 +63,6 @@
       "whatsapp_ai": "WhatsApp AI"
     },
     "errors": {
-      "requestId": "রিকোয়েস্ট ID",
       "retry": "আবার চেষ্টা করুন",
       "network": {
         "title": "সার্ভারের সঙ্গে যোগাযোগ করা যাচ্ছে না",

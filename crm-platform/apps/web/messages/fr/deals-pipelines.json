@@ -35,7 +35,6 @@
       "notFound": "Cette opportunité est introuvable. Elle a peut-être été supprimée.",
       "planDisabled": "Votre forfait n’inclut pas le pipeline de vente. Passez à un forfait supérieur pour le débloquer.",
       "unexpected": "Une erreur s’est produite. Réessayez dans un instant.",
-      "requestId": "ID de requête",
       "retry": "Réessayer",
       "planLimit": "Vous avez atteint la limite de votre forfait.",
       "lostReasonRequired": "Choisissez un motif pour marquer l’opportunité comme perdue.",

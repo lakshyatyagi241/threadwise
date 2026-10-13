@@ -1,4 +1,4 @@
-import { and, eq, inArray, notInArray, sql, type SQL } from 'drizzle-orm';
+import { and, eq, inArray, isNull, notInArray, sql, type SQL } from 'drizzle-orm';
 import { schema } from '@crm/db';
 import type { RecordScope } from '@crm/contracts';
 import {
@@ -21,6 +21,8 @@ const { contacts, teamMembers } = schema;
 export interface ResolvedContactFilter {
   q?: string;
   ownerId?: number;
+  /** Owned by any of `ids`, or (with `unassigned`) by nobody: the owner multi-select of the Contact Hub. */
+  ownerAny?: { ids: number[]; unassigned: boolean };
   lifecycleStage?: string;
   includeArchived: boolean;
   groupId?: number;
@@ -106,6 +108,12 @@ export function contactConditions(
 
   if (!f.includeArchived) c.push(eq(contacts.isArchived, false));
   if (f.ownerId !== undefined) c.push(eq(contacts.ownerId, f.ownerId));
+  if (f.ownerAny) {
+    const parts: SQL[] = [];
+    if (f.ownerAny.ids.length > 0) parts.push(inArray(contacts.ownerId, f.ownerAny.ids));
+    if (f.ownerAny.unassigned) parts.push(isNull(contacts.ownerId));
+    c.push(parts.length > 0 ? sql`(${sql.join(parts, sql` OR `)})` : sql`false`);
+  }
   if (f.lifecycleStage) c.push(eq(contacts.lifecycleStage, f.lifecycleStage));
   if (f.status) c.push(eq(contacts.status, f.status));
   if (f.source) c.push(eq(contacts.source, f.source));

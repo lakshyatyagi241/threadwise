@@ -224,7 +224,7 @@ describe('parts', () => {
     expect(out).toContain('href="/account/plans"');
     expect(out).toContain('5 seats');
     const odd = html(<ErrorNote error={new ApiError(500, 'INTERNAL', 'x', 'req-1')} />);
-    expect(odd).toContain('req-1');
+    expect(odd).not.toContain('req-1');
   });
 
   it('tells a visitor with a dead invite link to ask for a new one', () => {

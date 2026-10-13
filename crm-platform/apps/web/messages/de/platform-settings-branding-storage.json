@@ -64,7 +64,6 @@
       "conflict": "Jemand anders hat diese Einstellungen gespeichert, nachdem Sie sie geöffnet haben. Laden Sie neu, um dessen Änderungen zu sehen, und wenden Sie Ihre danach erneut an.",
       "reload": "Einstellungen neu laden",
       "unexpected": "Etwas ist schiefgelaufen, es wurde nichts gespeichert.",
-      "requestId": "Anfrage-ID",
       "readOnly": "Sie können diese Einstellungen einsehen, aber nur ein Super-Admin kann sie ändern.",
       "secretSet": "Gespeichert. Leer lassen, um ihn beizubehalten.",
       "secretUnset": "Nicht festgelegt.",

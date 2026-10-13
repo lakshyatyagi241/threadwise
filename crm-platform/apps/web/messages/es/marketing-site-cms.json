@@ -17,7 +17,6 @@
       "delete": "Eliminar",
       "edit": "Editar",
       "loadMore": "Cargar más",
-      "requestId": "ID de la solicitud",
       "errors": {
         "forbidden": "Solo un superadministrador puede cambiar esto.",
         "conflict": "Otra persona cambió esto mientras editabas. Recarga e inténtalo de nuevo.",

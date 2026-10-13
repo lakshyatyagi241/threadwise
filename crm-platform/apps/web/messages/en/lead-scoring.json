@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "Dismiss",
       "retry": "Try again",
-      "requestId": "Request {id}",
       "noAccessTitle": "You do not have access to this screen",
       "noAccess": "Ask a workspace admin to give your role the permission {permission}."
     },
@@ -261,7 +260,7 @@
         "offBody": "Conversations are not read. Scores use contact facts and engagement numbers only.",
         "needsScoring": "Switch AI lead scoring on first.",
         "stageLabel": "Suggest lifecycle stages",
-        "stageBody": "When the conversation clearly shows a contact has moved on, the AI suggests the next stage. A person accepts or dismisses it; nothing moves by itself, and Won and Lost stages are never suggested.",
+        "stageBody": "When the conversation clearly shows a contact has moved on, the AI picks the next stage. Won and Lost stages are never set by the AI. Choose below whether the change is applied by itself or waits for a person.",
         "masked": {
           "title": "How personal data is masked",
           "phone": "Phone numbers keep only the first and last two digits (+91 ***** ***10)",
@@ -281,6 +280,17 @@
           "body": "Once on, the recent messages of a contact are sent to an AI provider through OpenRouter after the chat goes quiet. Phone numbers, emails, card numbers and names are partly masked first, so what is sent cannot be used to reach the person. You can turn it off at any time.",
           "yes": "Turn on",
           "no": "Cancel"
+        },
+        "stageMode": {
+          "title": "How a stage change is made",
+          "auto": {
+            "label": "Automatic",
+            "body": "The contact is moved right away and the chat shows a line with an Undo."
+          },
+          "manual": {
+            "label": "Manual",
+            "body": "The suggestion waits under Stage suggestions until a person accepts or dismisses it."
+          }
         }
       }
     },

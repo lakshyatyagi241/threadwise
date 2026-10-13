@@ -8,7 +8,6 @@
         "dismiss": "Descartar"
       },
       "errors": {
-        "requestId": "ID de la solicitud",
         "retry": "Intentar de nuevo",
         "network": {
           "title": "No se puede conectar con el servidor",

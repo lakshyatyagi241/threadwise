@@ -28,8 +28,8 @@
       "teamChanged": "チームを更新しました。",
       "priorityChanged": "優先度を更新しました",
       "snoozed": "会話をスヌーズしました",
-      "labelAdded": "ラベルを追加しました",
-      "labelRemoved": "ラベルを外しました"
+      "tagAdded": "タグを追加しました",
+      "tagRemoved": "タグを外しました"
     },
     "list": {
       "title": "受信箱",
@@ -137,19 +137,18 @@
       "unsupported": "このチャネルではその種類のメッセージやファイルは送信できません。",
       "network": "サーバーに接続できませんでした。接続を確認して、もう一度お試しください。",
       "generic": "問題が発生しました。もう一度お試しください。",
-      "genericWithId": "問題が発生しました。もう一度お試しください。参照: {id}",
       "templateNotSendable": "そのテンプレートはこの会話には送信できません。別のテンプレートを選択してください。",
       "groupSendUnavailable": "WhatsApp グループへの送信はまだ利用できません。WhatsApp Business アプリから返信してください。",
       "logRange": "過去1年以内の日付を選択してください。開始日は終了日より前で、未来の日付は指定できません。",
       "logBusy": "エクスポートはすでに準備中です。届くメールをお待ちのうえ、あらためてリクエストしてください。",
       "logNotReady": "このエクスポートはまだ準備できていないか、有効期限が切れています。もう一度リクエストしてください。",
       "groupSuspended": "Metaがこのグループを停止したため、解除されるまでメッセージを送信できません。",
-      "walletEmpty": "メッセージウォレットの残高がこのグループメッセージ（メンバーごとに課金）に足りません。チャージしてもう一度お試しください。",
-      "groupPlanLocked": "ご利用のプランにはWhatsAppグループが含まれていないため、このグループにメッセージを送れません。管理者にプランのアップグレードを依頼してください。",
       "groupLeft": "この番号はグループから退出したため、メッセージを送信できなくなりました。",
       "groupAnnounceOnly": "このグループでは管理者のみメッセージを送信でき、この番号は管理者ではありません。",
       "groupRateLimited": "短時間にこの番号からのグループメッセージが多すぎます。1分待ってからもう一度お試しください。",
       "groupUnavailable": "WhatsAppがこのグループメッセージを受け付けませんでした。数分後にもう一度お試しください。",
+      "walletEmpty": "メッセージウォレットの残高がこのグループメッセージ（メンバーごとに課金）に足りません。チャージしてもう一度お試しください。",
+      "groupPlanLocked": "ご利用のプランにはWhatsAppグループが含まれていないため、このグループにメッセージを送れません。管理者にプランのアップグレードを依頼してください。",
       "savedReplyGone": "この返信テンプレートは存在しなくなりました。",
       "savedReplyChannel": "この返信テンプレートは、この種類のチャネル向けではありません。",
       "shortcutTaken": "そのショートカットは別の返信テンプレートで既に使われています。",
@@ -223,7 +222,15 @@
       "groupMember": "グループメンバー",
       "groupTally": "{members}人中{delivered}人に配信済み{read, plural, =0 {} other {、既読 #人}}{failed, plural, =0 {} other {、失敗 #件}}",
       "groupTallyNoTotal": "{delivered, plural, other {#人のメンバー}}に配信済み{read, plural, =0 {} other {、既読 #人}}{failed, plural, =0 {} other {、失敗 #件}}",
-      "groupTallyBilled": "課金 {billable}、無料 {free}"
+      "groupTallyBilled": "課金 {billable}、無料 {free}",
+      "stageLine": {
+        "auto": "AI がチャットを読み、この連絡先を「{from}」から「{to}」へ移しました。",
+        "undo": "元に戻す",
+        "wasUndone": "元に戻しました",
+        "undone": "ステージの変更を取り消しました:「{stage}」に戻りました。",
+        "undoneToast": "ステージを「{stage}」に戻しました。",
+        "couldNotUndo": "この変更はもう取り消せません。連絡先が先に進んだか、すでに取り消されています。"
+      }
     },
     "media": {
       "openImage": "画像 {name} を開く",
@@ -275,6 +282,44 @@
       "attachment": "添付ファイル",
       "jumpLatest": "最新へ移動",
       "jumpLatestNew": "{count, plural, other {新しいメッセージ #件}}"
+    },
+    "groupThread": {
+      "openGroup": "グループを開く",
+      "readOnly": {
+        "left": {
+          "title": "この番号はグループから退出しました",
+          "message": "会話はそのまま保存されています。閲覧と社内メモの追加はできますが、メッセージは送信できません。"
+        },
+        "announceOnly": {
+          "title": "このグループでは管理者のみ送信可能",
+          "message": "この番号はグループの管理者ではないため、WhatsAppはメッセージを配信しません。社内メモは引き続き追加できます。"
+        }
+      },
+      "mention": {
+        "label": "グループのメンバー",
+        "loading": "メンバーを検索中",
+        "none": "該当するメンバーがいません"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Metaがこのグループを停止しました",
+          "message": "WhatsAppは停止中のグループにメッセージを配信しません。Metaが解除するまで、スレッドの閲覧と社内メモの追加はできます。"
+        },
+        "plan": {
+          "title": "ご利用のプランにはWhatsAppグループが含まれていません",
+          "message": "このスレッドの閲覧と社内メモの追加はできますが、グループへの送信にはグループ対応のプランが必要です。管理者にアップグレードを依頼してください。"
+        },
+        "ineligible": {
+          "title": "この番号ではWhatsAppグループを利用できません",
+          "message": "前回の確認で、Metaはこの番号でのグループを許可しませんでした（公式ビジネスアカウントが必要です）。スレッドの閲覧と社内メモの追加はできます。再確認するにはMetaグループを開いてください。"
+        }
+      },
+      "cost": {
+        "members": "このメッセージは{count, plural, other {#人のメンバー}}に届きます。概算費用 {cost}：WhatsAppは受信したメンバー1人ごとに課金します。",
+        "membersNoEstimate": "このメッセージは{count, plural, other {#人のメンバー}}に届きます。WhatsAppは受信したメンバー1人ごとに課金します。",
+        "sizeUnknown": "メンバー数はまだ分かりません。WhatsAppはこのメッセージを受信したメンバー1人ごとに課金します。",
+        "walletShort": "ウォレットの残高がこのメッセージに足りない可能性があります。送信前にチャージしてください。"
+      }
     },
     "composer": {
       "modeLabel": "メッセージの種類",
@@ -443,8 +488,8 @@
           "snoozed": "{actor} がスヌーズ",
           "auto_unsnoozed": "スヌーズが終了しました",
           "priority_changed": "{actor} が優先度を変更",
-          "tag_added": "{actor} がラベルを追加",
-          "tag_removed": "{actor} がラベルを削除",
+          "tag_added": "{actor}がタグを追加しました",
+          "tag_removed": "{actor}がタグを外しました",
           "first_response": "最初の返信を送信しました",
           "sla_breach": "返信期限を超過しました",
           "unknown": "{actor} による{what}"
@@ -658,44 +703,6 @@
         }
       }
     },
-    "groupThread": {
-      "openGroup": "グループを開く",
-      "readOnly": {
-        "left": {
-          "title": "この番号はグループから退出しました",
-          "message": "会話はそのまま保存されています。閲覧と社内メモの追加はできますが、メッセージは送信できません。"
-        },
-        "announceOnly": {
-          "title": "このグループでは管理者のみ送信可能",
-          "message": "この番号はグループの管理者ではないため、WhatsAppはメッセージを配信しません。社内メモは引き続き追加できます。"
-        }
-      },
-      "mention": {
-        "label": "グループのメンバー",
-        "loading": "メンバーを検索中",
-        "none": "該当するメンバーがいません"
-      },
-      "cloudBlock": {
-        "suspended": {
-          "title": "Metaがこのグループを停止しました",
-          "message": "WhatsAppは停止中のグループにメッセージを配信しません。Metaが解除するまで、スレッドの閲覧と社内メモの追加はできます。"
-        },
-        "plan": {
-          "title": "ご利用のプランにはWhatsAppグループが含まれていません",
-          "message": "このスレッドの閲覧と社内メモの追加はできますが、グループへの送信にはグループ対応のプランが必要です。管理者にアップグレードを依頼してください。"
-        },
-        "ineligible": {
-          "title": "この番号ではWhatsAppグループを利用できません",
-          "message": "前回の確認で、Metaはこの番号でのグループを許可しませんでした（公式ビジネスアカウントが必要です）。スレッドの閲覧と社内メモの追加はできます。再確認するにはMetaグループを開いてください。"
-        }
-      },
-      "cost": {
-        "members": "このメッセージは{count, plural, other {#人のメンバー}}に届きます。概算費用 {cost}：WhatsAppは受信したメンバー1人ごとに課金します。",
-        "membersNoEstimate": "このメッセージは{count, plural, other {#人のメンバー}}に届きます。WhatsAppは受信したメンバー1人ごとに課金します。",
-        "sizeUnknown": "メンバー数はまだ分かりません。WhatsAppはこのメッセージを受信したメンバー1人ごとに課金します。",
-        "walletShort": "ウォレットの残高がこのメッセージに足りない可能性があります。送信前にチャージしてください。"
-      }
-    },
     "savedReplies": {
       "channelKind": {
         "simulator": "シミュレーター（テスト）",
@@ -892,6 +899,11 @@
         }
       }
     },
+    "triage": {
+      "priority": "優先度",
+      "snooze": "スヌーズ",
+      "wake": "今すぐ再開"
+    },
     "bulk": {
       "barLabel": "一括操作",
       "selected": "{count, plural, one {#件の会話を選択中} other {#件の会話を選択中}}",
@@ -919,50 +931,63 @@
         "partial": "{done}件を更新、{unchanged}件はすでに最新、{failed}件は変更できませんでした。失敗した会話は選択されたままです。",
         "allFailed": "{count, plural, one {#件の会話} other {#件の会話}}のいずれも変更できませんでした。"
       },
-      "label": "ラベル",
-      "labelAdd": "ラベルを追加",
-      "labelRemove": "ラベルを外す"
+      "tag": "タグ",
+      "tagAdd": "タグを追加",
+      "tagRemove": "タグを外す"
     },
-    "triage": {
-      "priority": "優先度",
-      "snooze": "スヌーズ",
-      "wake": "今すぐ再開"
-    },
-    "labels": {
-      "label": "ラベル",
-      "loading": "ラベルを読み込み中…",
-      "loadFailed": "ラベルを読み込めませんでした。",
-      "none": "ラベルはまだありません。",
-      "newLabel": "新しいラベル",
+    "tags": {
+      "tag": "タグ",
+      "loading": "タグを読み込み中…",
+      "loadFailed": "タグを読み込めませんでした。",
+      "none": "タグはまだありません。",
+      "newTag": "新しいタグ",
       "add": "追加",
-      "filter": "ラベル",
-      "filterActive": "{count, plural, one {#件のラベル} other {#件のラベル}}",
-      "clearFilter": "ラベルの絞り込みを解除",
+      "filter": "タグ",
+      "filterActive": "{count, plural, other {#件のタグ}}",
+      "clearFilter": "タグの絞り込みを解除",
+      "scope": {
+        "label": "タグの照合対象",
+        "conversation": "会話タグ",
+        "contact": "連絡先タグ"
+      },
+      "groups": {
+        "title": "タグ",
+        "helpFor": "{title}について",
+        "rule": "どちらの種類も、ワークスペース共通の同じタグライブラリから選びます。",
+        "contactTitle": "連絡先タグ",
+        "contactHelp": "連絡先タグは相手その人(VIP、見込み客、地域など)を表します。すべての会話に引き継がれます。",
+        "contactNone": "この連絡先にはタグがありません。",
+        "contactEdit": "連絡先で編集",
+        "conversationTitle": "会話タグ",
+        "conversationHelp": "会話タグは、このスレッド(請求、返金、至急など)を表します。",
+        "conversationNone": "この会話にはまだタグがありません。",
+        "remove": "タグ「{name}」を外す"
+      },
       "screen": {
         "back": "受信トレイに戻る",
-        "title": "ラベル",
-        "intro": "ラベルは会話にタグを付け、チームで並べ替えや絞り込みができるようにします。連絡先で使うタグと同じものです。",
-        "newTitle": "新しいラベル",
-        "editTitle": "ラベルを編集",
+        "title": "会話タグ",
+        "intro": "会話タグはスレッド(請求、返金、至急など)に付けて、チームが受信トレイを並べ替えたり絞り込んだりするためのものです。相手その人を表す連絡先タグと同じタグライブラリを使います。",
+        "newTitle": "新しいタグ",
+        "editTitle": "タグを編集",
         "name": "名前",
         "color": "色",
-        "colorInvalid": "#075E54 のような16進数カラーか色名を指定してください。",
-        "description": "説明（任意）",
-        "create": "ラベルを作成",
+        "colorInvalid": "#075E54 のような16進カラーコードか、色の名前を入力してください。",
+        "description": "説明(任意)",
+        "create": "タグを作成",
         "save": "変更を保存",
         "cancel": "キャンセル",
         "edit": "編集",
         "delete": "削除",
-        "inUse": "{count, plural, one {#件の会話} other {#件の会話}}",
-        "emptyTitle": "ラベルはまだありません",
-        "emptyMessage": "上で最初のラベルを作成し、受信トレイから会話に付けましょう。",
-        "deleteTitle": "このラベルを削除しますか？",
-        "deleteMessage": "\"{name}\" は{count, plural, one {#件の会話} other {#件の会話}}に付いています。削除すると、それらの会話とこのラベルを持つ連絡先から外れます。この操作は元に戻せません。",
-        "nameTaken": "同じ名前のラベルがすでにあります。",
-        "conflict": "ほかのユーザーが先にこのラベルを変更しました。一覧を再読み込みしました。",
-        "saved": "ラベルを保存しました",
-        "created": "ラベルを作成しました",
-        "deleted": "ラベルを削除しました"
+        "inUse": "{count, plural, other {#件の会話}}",
+        "emptyTitle": "タグはまだありません",
+        "emptyMessage": "上でタグを作成し、受信トレイから会話に付けてみましょう。",
+        "deleteTitle": "このタグを削除しますか?",
+        "deleteMessage": "「{name}」は{count, plural, other {#件の会話}}に付いています。削除すると、それらの会話とこのタグを持つ連絡先から外れます。この操作は元に戻せません。",
+        "nameTaken": "同じ名前のタグがすでにあります。",
+        "conflict": "他のユーザーが先にこのタグを変更しました。一覧を再読み込みしました。",
+        "saved": "タグを保存しました",
+        "created": "タグを作成しました",
+        "deleted": "タグを削除しました"
       }
     },
     "sla": {

@@ -14,7 +14,6 @@
     "common": {
       "loading": "Đang tải",
       "retry": "Thử lại",
-      "requestId": "ID yêu cầu",
       "dismiss": "Bỏ qua",
       "tokens": "{count, number} token",
       "dash": "-",

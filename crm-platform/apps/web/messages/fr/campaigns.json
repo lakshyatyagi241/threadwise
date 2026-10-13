@@ -828,7 +828,6 @@
         "notFound": "Introuvable. Cet élément a peut-être été supprimé.",
         "rateLimited": "Trop de requêtes. Patientez un instant et réessayez.",
         "unexpected": "Une erreur s’est produite de notre côté. Réessayez.",
-        "requestId": "ID de requête",
         "retry": "Réessayer"
       },
       "categories": {

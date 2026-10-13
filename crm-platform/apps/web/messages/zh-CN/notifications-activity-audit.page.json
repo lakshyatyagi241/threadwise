@@ -1,0 +1,53 @@
+{
+  "notifications": {
+    "page": {
+      "title": "通知",
+      "description": "所有需要你关注的事项，最新的在前。你可以在通知设置中选择接收哪些事件。",
+      "markAll": "全部标为已读",
+      "clearAll": "全部清除",
+      "preferences": "通知设置",
+      "clearTitle": "清除所有通知？",
+      "clearBody": "这将永久删除你的所有通知，其他人的通知不受影响。此操作无法撤销。",
+      "clearConfirm": "全部清除",
+      "cancel": "取消",
+      "dismiss": "忽略此通知",
+      "tiles": {
+        "unread": "未读",
+        "unreadHint": "选择以仅显示未读",
+        "day": "过去 24 小时",
+        "dayHint": "今天收到的",
+        "week": "过去 7 天",
+        "weekHint": "本周收到的",
+        "total": "已保留",
+        "totalHint": "较早的通知会被自动删除"
+      },
+      "filters": {
+        "label": "通知筛选",
+        "readLabel": "显示",
+        "all": "全部",
+        "unread": "未读",
+        "type": "类型",
+        "allTypes": "所有类型",
+        "otherTypes": "其他",
+        "search": "搜索通知",
+        "reset": "重置筛选"
+      },
+      "sections": {
+        "today": "今天",
+        "yesterday": "昨天",
+        "thisWeek": "本周早些时候",
+        "older": "更早"
+      },
+      "loading": "正在加载通知",
+      "failed": "无法加载你的通知。",
+      "retry": "重试",
+      "empty": "暂无通知",
+      "emptyHint": "新的聊天、分配、提及以及你的发送结果将显示在这里。",
+      "emptyFiltered": "没有符合筛选条件的通知",
+      "emptyFilteredHint": "请移除某个筛选条件或搜索其他内容。",
+      "showing": "{count, plural, other {已加载 # 条通知}}",
+      "loadMore": "加载更多",
+      "end": "已到列表末尾"
+    }
+  }
+}

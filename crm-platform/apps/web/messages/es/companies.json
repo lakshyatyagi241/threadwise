@@ -18,7 +18,6 @@
       "planDisabled": "Tu plan no incluye empresas. Mejora tu plan para desbloquearlas.",
       "ownerInvalid": "El propietario debe ser un miembro activo de este espacio de trabajo.",
       "unexpected": "Algo salió mal. Inténtalo de nuevo en un momento.",
-      "requestId": "ID de solicitud",
       "retry": "Reintentar"
     },
     "list": {

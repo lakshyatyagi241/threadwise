@@ -346,11 +346,6 @@ export function OperatorLogin({
           {problem.kind === 'ipBlocked' && (
             <p className="text-xs opacity-80">{t('problems.ipBlockedHelp')}</p>
           )}
-          {problem.kind === 'unexpected' && problem.requestId && (
-            <p className="text-xs opacity-80">
-              {t('requestId')}: <span className="font-mono">{problem.requestId}</span>
-            </p>
-          )}
         </Alert>
       )}
 

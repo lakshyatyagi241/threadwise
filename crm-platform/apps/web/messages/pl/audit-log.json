@@ -1,0 +1,180 @@
+{
+  "audit-log": {
+    "title": "Dziennik audytu",
+    "description": "Kto, co, kiedy i z czego na co zmienił w tym obszarze roboczym. Użyj go, aby odpowiedzieć na pytanie „kto to zrobił?”, przejrzeć zmiany wprowadzone przez zespół i sprawdzić, co zrobiło wsparcie platformy, gdy poprosiłeś o pomoc.",
+    "tile": {
+      "label": "Dziennik audytu",
+      "description": "Zobacz, kto, co, kiedy i z czego na co zmienił w Twoim obszarze roboczym. Filtruj go i eksportuj.",
+      "keywords": "dziennik aktywności, audyt, historia, zmiany, kto zmienił, bezpieczeństwo, zgodność, eksport, dostęp wsparcia"
+    },
+    "retention": {
+      "days": "Wpisy są przechowywane przez {days, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}}, a potem usuwane. Ten okres ustala platforma.",
+      "forever": "Wpisy są przechowywane bezterminowo. Tę zasadę ustala platforma.",
+      "unknown": "Wpisy są przechowywane przez okres ustalony przez platformę, a potem usuwane."
+    },
+    "forbidden": {
+      "title": "Nie masz dostępu do dziennika audytu",
+      "body": "Poproś Właściciela lub Administratora obszaru roboczego o nadanie Twojej roli uprawnienia do wyświetlania dziennika audytu."
+    },
+    "filters": {
+      "label": "Filtry dziennika audytu",
+      "range": "Okres",
+      "from": "Od",
+      "to": "Do",
+      "actor": "Osoba",
+      "allActors": "Wszyscy",
+      "actorType": "Kto działał",
+      "allActorTypes": "Ktokolwiek",
+      "module": "Obszar",
+      "allModules": "Wszystkie obszary",
+      "action": "Działanie",
+      "allActions": "Wszystkie działania",
+      "search": "Szukaj obszarów i działań",
+      "searchHint": "Dopasowuje tylko obszar i działanie, nigdy zmienione wartości.",
+      "recordId": "Numer rekordu",
+      "requestId": "ID żądania",
+      "supportOnly": "Tylko sesje wsparcia platformy",
+      "apply": "Zastosuj filtry",
+      "refresh": "Odśwież",
+      "reset": "Resetuj filtry"
+    },
+    "ranges": {
+      "24h": "Ostatnie 24 godziny",
+      "7d": "Ostatnie 7 dni",
+      "30d": "Ostatnie 30 dni",
+      "90d": "Ostatnie 90 dni",
+      "custom": "Wybierz daty"
+    },
+    "actorTypes": {
+      "user": "Osoba",
+      "system": "System",
+      "api_key": "Klucz API",
+      "bot": "Bot",
+      "partner_agent": "Agent partnera",
+      "candidate": "Kandydat",
+      "other": "Coś innego"
+    },
+    "actors": {
+      "system": "System",
+      "api_key": "Klucz API",
+      "apiKeyNamed": "Klucz API: {name}",
+      "bot": "Bot",
+      "partner_agent": "Agent partnera",
+      "candidate": "Kandydat",
+      "other": "Inny",
+      "removedUser": "Usunięty użytkownik",
+      "support": "Wsparcie platformy",
+      "actingAs": "działa jako {name}",
+      "supportBadge": "Wsparcie platformy"
+    },
+    "actions": {
+      "insert": "Utworzono",
+      "update": "Zaktualizowano",
+      "delete": "Usunięto",
+      "merge": "Scalono",
+      "login": "Zalogowano",
+      "export": "Wyeksportowano",
+      "read": "Wyświetlono"
+    },
+    "modules": {
+      "contacts": "Kontakty",
+      "contact_groups": "Grupy kontaktów",
+      "contact_notes": "Notatki kontaktów",
+      "companies": "Firmy",
+      "deals": "Transakcje",
+      "tags": "Tagi",
+      "members": "Członkowie zespołu",
+      "teams": "Zespoły",
+      "conversation_notes": "Notatki rozmów",
+      "broadcasts": "Wysyłki masowe",
+      "campaigns": "Kampanie",
+      "faqs": "Najczęstsze pytania",
+      "api_keys": "Klucze API",
+      "audit-log": "Dziennik audytu",
+      "audit-log-exports": "Eksporty dziennika audytu",
+      "contact_consent_exports": "Eksporty dowodów zgody"
+    },
+    "table": {
+      "caption": "Wpisy audytu, od najnowszych. Czas jest podany w Twojej strefie czasowej ({zone}).",
+      "zone": "Czas jest podany w Twojej strefie czasowej: {zone}.",
+      "time": "Kiedy",
+      "actor": "Kto",
+      "action": "Co",
+      "record": "Rekord",
+      "changed": "Zmienione pola",
+      "request": "Żądanie",
+      "details": "Szczegóły",
+      "openDetails": "Szczegóły tej zmiany: {what}"
+    },
+    "states": {
+      "loading": "Wczytywanie dziennika audytu",
+      "empty": "Brak zapisów w tym okresie",
+      "emptyHint": "Zmiany wprowadzane przez zespół pojawią się tutaj.",
+      "emptyFiltered": "Żadne wpisy nie pasują do filtrów",
+      "emptyFilteredHint": "Spróbuj dłuższego okresu lub usuń filtr.",
+      "retry": "Spróbuj ponownie",
+      "showing": "{count, plural, one {Wczytano # wpis} few {Wczytano # wpisy} many {Wczytano # wpisów} other {Wczytano # wpisu}}",
+      "loadMore": "Wczytaj więcej",
+      "end": "Koniec listy"
+    },
+    "detail": {
+      "title": "Wpis audytu",
+      "when": "Kiedy",
+      "who": "Kto",
+      "what": "Co",
+      "record": "Rekord",
+      "openRecord": "Otwórz rekord",
+      "request": "ID żądania",
+      "changes": "Co się zmieniło",
+      "field": "Pole",
+      "before": "Przed",
+      "after": "Po",
+      "noChanges": "Ten wpis nie zawiera listy zmian pól.",
+      "supportTitle": "Wsparcie platformy działało w Twoim obszarze roboczym",
+      "supportBody": "Pracownik wsparcia platformy użył sesji wsparcia jako {name}. Mógł robić to, co ta osoba.",
+      "supportReason": "Podany powód: {reason}",
+      "supportNoReason": "Powód tej sesji nie jest już dostępny.",
+      "supportReadOnly": "Sesja była tylko do odczytu.",
+      "secret": "Ukryty sekret",
+      "secretHint": "Hasła, klucze i tokeny nigdy nie są pokazywane.",
+      "maskedHint": "Dane osobowe są częściowo ukryte.",
+      "maskedNote": "Dane osobowe, takie jak numery telefonów, adresy e-mail, imiona i nazwiska oraz notatki, są częściowo ukryte. Sekrety nigdy nie są pokazywane.",
+      "maskedNoteOwner": "Sekrety, takie jak hasła, klucze i tokeny, są ukryte dla wszystkich.",
+      "audited": "Otwarcie tego wpisu jest zapisywane w dzienniku audytu."
+    },
+    "export": {
+      "title": "Eksport",
+      "note": "Przygotowuje plik CSV z wpisami pasującymi do powyższych filtrów. Jest przechowywany przez {days} dni i zawsze ukrywa dane osobowe.",
+      "button": "Eksportuj CSV",
+      "preparing": "Przygotowywanie pliku",
+      "requested": "Eksport jest przygotowywany. Wyślemy Ci e-mail, gdy będzie gotowy.",
+      "none": "Brak eksportów.",
+      "status": {
+        "queued": "Oczekuje",
+        "running": "Przygotowywanie",
+        "ready": "Gotowe",
+        "failed": "Niepowodzenie",
+        "expired": "Wygasło"
+      },
+      "rows": "{count, plural, one {# wpis} few {# wpisy} many {# wpisów} other {# wpisu}}",
+      "expires": "przechowywany do {date}",
+      "download": "Pobierz",
+      "failed": "Nie udało się utworzyć tego eksportu. Zleć go ponownie."
+    },
+    "errors": {
+      "network": "Nie można połączyć się z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+      "forbidden": "Nie masz uprawnień do tej czynności.",
+      "notFound": "Nie znaleziono tego wpisu lub eksportu.",
+      "rangeInvalid": "Wybierz okres do 400 dni, którego koniec przypada po początku.",
+      "exportInProgress": "Eksport jest już przygotowywany. Poczekaj na e-mail, a potem zleć kolejny.",
+      "exportNotReady": "Ten eksport nie jest gotowy lub wygasł.",
+      "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
+      "validation": "Jeden z filtrów jest nieprawidłowy.",
+      "unexpected": "Coś poszło nie tak. Spróbuj ponownie."
+    },
+    "common": {
+      "close": "Zamknij",
+      "dismiss": "Odrzuć"
+    }
+  }
+}

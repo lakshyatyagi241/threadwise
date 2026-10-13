@@ -1,0 +1,274 @@
+{
+  "message-history": {
+    "common": {
+      "dismiss": "Tutup"
+    },
+    "nav": {
+      "history": "Riwayat"
+    },
+    "crumb": "Kampanye / Riwayat pesan",
+    "title": "Riwayat pesan",
+    "loading": "Memuat pesan…",
+    "tryAgain": "Coba lagi",
+    "retention": "Langkah pengiriman setiap pesan disimpan lengkap selama {hot} hari, lalu diarsipkan dan disimpan hingga {days} hari setelah pesan. Daftar pesan sendiri mencakup satu tahun ke belakang.",
+    "range": {
+      "label": "Periode",
+      "24h": "24 jam terakhir",
+      "7d": "7 hari terakhir",
+      "30d": "30 hari terakhir",
+      "90d": "90 hari terakhir",
+      "custom": "Tanggal kustom",
+      "short": {
+        "24h": "24j",
+        "7d": "7h",
+        "30d": "30h",
+        "90d": "90h"
+      },
+      "from": "Dari",
+      "to": "Sampai",
+      "apply": "Terapkan tanggal",
+      "problem": {
+        "order": "Tanggal awal tidak boleh setelah tanggal akhir."
+      }
+    },
+    "exports": {
+      "title": "Ekspor CSV",
+      "request": "Ekspor CSV",
+      "requested": "Ekspor Anda sedang disiapkan. Kami akan mengirim email saat sudah siap.",
+      "requestedTo": "Ekspor Anda sedang disiapkan. Kami akan mengirim email ke {email} saat sudah siap.",
+      "status": {
+        "queued": "Menunggu dimulai",
+        "running": "Menyiapkan",
+        "ready": "Siap",
+        "failed": "Gagal",
+        "expired": "Kedaluwarsa"
+      },
+      "preparing": "Menyiapkan…",
+      "download": "Unduh",
+      "rows": "{n} pesan",
+      "keptUntil": "disimpan hingga {when} ({days} hari)",
+      "fromEmail": "Dari email Anda"
+    },
+    "kpi": {
+      "label": "Angka utama",
+      "total": "Total pesan",
+      "vsLast": "{pct}% vs periode lalu",
+      "sent": "Terkirim",
+      "received": "Diterima",
+      "failed": "Gagal",
+      "avgResponse": "Rata-rata respons",
+      "delivered": "Tersampaikan",
+      "read": "Dibaca",
+      "deliveryRate": "Tingkat pengiriman",
+      "cost": "Biaya",
+      "outgoing": "keluar",
+      "incoming": "masuk",
+      "retryQueue": "antrean coba ulang",
+      "toFirstReply": "hingga balasan pertama",
+      "healthy": "sehat",
+      "na": "T/A",
+      "deliveredCaption": "sampai ke pelanggan",
+      "readCaption": "dibuka oleh pelanggan",
+      "deliveryRateCaption": "dari pesan yang keluar dari antrean",
+      "costCaption": "dibebankan ke dompet Anda"
+    },
+    "charts": {
+      "volume": "Volume",
+      "volumeTitle": "Pesan dari waktu ke waktu",
+      "bucketLabel": "Kelompokkan per",
+      "bucket": {
+        "daily": "Harian",
+        "hourly": "Per jam",
+        "weekly": "Mingguan"
+      },
+      "volumeAria": "Pesan dari waktu ke waktu: {sent} terkirim, {received} diterima, {failed} gagal",
+      "when": "Waktu",
+      "series": {
+        "sent": "Terkirim",
+        "received": "Diterima",
+        "failed": "Gagal"
+      },
+      "direction": "Pembagian arah",
+      "directionTitle": "Terkirim vs diterima",
+      "directionAria": "{total} pesan, dibagi menjadi terkirim, diterima, dan gagal",
+      "types": "Menurut jenis pesan",
+      "typesTitle": "Komposisi periode ini",
+      "media": "Media",
+      "top": "Percakapan teratas",
+      "topTitle": "Percakapan paling aktif ({range})",
+      "openInbox": "Buka kotak masuk",
+      "topEmpty": "Belum ada percakapan aktif pada periode ini.",
+      "topMeta": "{n} pesan · terakhir {time}"
+    },
+    "filters": {
+      "search": "Cari pesan",
+      "searchPlaceholder": "Cari menurut teks, kontak, telepon, atau ID pesan…",
+      "directionLabel": "Arah",
+      "dir": {
+        "all": "Semua",
+        "out": "Terkirim",
+        "in": "Diterima",
+        "fail": "Gagal"
+      },
+      "channel": "Saluran",
+      "allChannels": "Semua saluran",
+      "type": "Jenis",
+      "allTypes": "Semua jenis",
+      "status": "Status",
+      "allStatuses": "Semua status",
+      "sources": "Dikirim oleh",
+      "clear": "Hapus filter",
+      "active": "Filter aktif",
+      "chip": {
+        "templateId": "Satu templat",
+        "campaignId": "Satu kampanye",
+        "broadcastId": "Satu siaran",
+        "scheduledId": "Satu pesan terjadwal"
+      },
+      "removeFilter": "Hapus filter: {filter}"
+    },
+    "type": {
+      "text": "Teks biasa",
+      "template": "Templat",
+      "auto_reply": "Balasan otomatis",
+      "campaign": "Kampanye",
+      "broadcast": "Siaran",
+      "scheduled": "Terjadwal",
+      "image": "Gambar",
+      "video": "Video",
+      "audio": "Audio",
+      "document": "Dokumen",
+      "location": "Lokasi"
+    },
+    "status": {
+      "queued": "Dalam antrean",
+      "sent": "Terkirim",
+      "delivered": "Tersampaikan",
+      "read": "Dibaca",
+      "failed": "Gagal",
+      "received": "Masuk"
+    },
+    "source": {
+      "inbox": "Kotak masuk",
+      "flow": "Alur",
+      "auto_reply": "Balasan otomatis",
+      "ai": "Asisten AI",
+      "api": "API",
+      "broadcast": "Siaran",
+      "campaign": "Kampanye",
+      "scheduled": "Terjadwal",
+      "other": "Lainnya"
+    },
+    "direction": {
+      "in": "Masuk",
+      "out": "Keluar",
+      "failed": "Gagal"
+    },
+    "table": {
+      "col": {
+        "when": "Waktu",
+        "dir": "Arah",
+        "contact": "Kontak",
+        "message": "Pesan",
+        "type": "Jenis",
+        "status": "Status",
+        "open": "Buka"
+      },
+      "unknown": "Kontak tidak dikenal",
+      "masked": "Nomor ini disembunyikan karena Anda tidak dapat membuka kontak ini.",
+      "entity": {
+        "broadcast": "Siaran · {name}",
+        "campaign": "Kampanye · {name}",
+        "scheduled": "Terjadwal · {name}"
+      },
+      "openSource": "Buka",
+      "openSourceFor": "Buka sumber {name}",
+      "showing": "Menampilkan {n}",
+      "showingOf": "Menampilkan {n} dari {total}",
+      "loadMore": "Muat lebih banyak"
+    },
+    "empty": {
+      "noMatch": "Tidak ada pesan yang cocok dengan filter ini",
+      "noMatchHint": "Coba hapus pencarian atau pilih periode yang lebih luas.",
+      "period": "Tidak ada pesan dalam {days} hari terakhir",
+      "periodCustom": "Tidak ada pesan pada tanggal ini",
+      "periodHint": "Pesan yang Anda kirim atau terima akan muncul di sini, lengkap dengan status pengirimannya."
+    },
+    "drawer": {
+      "title": "Detail pesan",
+      "close": "Tutup",
+      "loading": "Memuat…",
+      "tryAgain": "Coba lagi",
+      "copied": "Tersalin",
+      "copyFailed": "Tidak dapat menyalin",
+      "copyId": "Salin ID",
+      "openChat": "Buka obrolan",
+      "openContact": "Buka kontak",
+      "openEntity": {
+        "broadcast": "Buka siaran",
+        "campaign": "Buka kampanye",
+        "scheduled": "Buka pesan terjadwal"
+      },
+      "unknown": "Kontak tidak dikenal",
+      "masked": "Nomor ini disembunyikan karena Anda tidak dapat membuka kontak ini.",
+      "direction": "Arah",
+      "directionValue": {
+        "in": "Masuk",
+        "out": "Keluar"
+      },
+      "status": "Status",
+      "type": "Jenis",
+      "when": "Waktu",
+      "content": "Isi",
+      "noText": "Tanpa teks",
+      "failure": "Kegagalan",
+      "failedNoReason": "Pesan gagal dan tidak ada alasan yang tercatat.",
+      "details": "Detail",
+      "messageId": "ID pesan",
+      "source": "Dikirim oleh",
+      "sourceValue": {
+        "inbox": "Kotak masuk",
+        "flow": "Alur",
+        "auto_reply": "Balasan otomatis",
+        "ai": "Asisten AI",
+        "api": "API",
+        "broadcast": "Siaran",
+        "campaign": "Kampanye",
+        "scheduled": "Pesan terjadwal",
+        "other": "Lainnya"
+      },
+      "channel": "Saluran",
+      "template": "Templat",
+      "entity": {
+        "broadcast": "Siaran",
+        "campaign": "Kampanye",
+        "scheduled": "Pesan terjadwal"
+      },
+      "sender": "Pengirim",
+      "senderKind": {
+        "customer": "Pelanggan",
+        "agent": "Agen",
+        "bot": "Otomatisasi",
+        "system": "Sistem",
+        "broadcast": "Kirim massal"
+      },
+      "providerId": "ID pesan penyedia",
+      "language": "Bahasa",
+      "cost": "Biaya",
+      "timeline": "Langkah pengiriman",
+      "expired": "Pesan ini lebih lama dari {days} hari, sehingga langkah pengirimannya sudah dihapus. Statusnya tetap ditampilkan di atas.",
+      "timelineEmpty": "Tidak ada langkah pengiriman yang tercatat untuk pesan ini.",
+      "archived": "Sebagian log ini berasal dari arsip (peristiwa lebih lama dari {days} hari)."
+    },
+    "errors": {
+      "generic": "Terjadi kesalahan. Coba lagi.",
+      "MESSAGE_NOT_FOUND": "Pesan ini tidak ada, atau Anda tidak dapat melihatnya.",
+      "VALIDATION_FAILED": "Tanggal atau filter tersebut tidak valid.",
+      "FORBIDDEN": "Anda tidak memiliki akses ke sini.",
+      "MESSAGE_LOG_EXPORT_IN_PROGRESS": "Satu ekspor sedang disiapkan. Tunggu emailnya, lalu minta ekspor lagi.",
+      "MESSAGE_LOG_EXPORT_NOT_READY": "Ekspor ini belum siap.",
+      "MESSAGE_LOG_EXPORT_NOT_FOUND": "Ekspor ini tidak ada.",
+      "MESSAGE_LOG_EXPORT_RANGE_INVALID": "Pilih tanggal dalam 365 hari terakhir."
+    }
+  }
+}

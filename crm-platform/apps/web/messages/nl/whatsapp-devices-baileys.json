@@ -10,7 +10,6 @@
     },
     "common": {
       "dismiss": "Sluiten",
-      "requestId": "Verzoek {id}",
       "unofficial": "Niet-officieel",
       "reminder": "Niet-officiële verbinding. WhatsApp kan dit nummer beperken.",
       "readGuide": "Lees de gids",
@@ -296,7 +295,6 @@
       "WA_WORKER_UNAVAILABLE": "De verbindingsdienst is niet beschikbaar. Probeer het over een paar minuten opnieuw.",
       "RATE_LIMITED": "Te veel verzoeken. Wacht even.",
       "upgrade": "Abonnementen bekijken en upgraden",
-      "requestId": "Verzoek {id}",
       "DEVICE_PILOT_CAP_REACHED": "Je workspace heeft het aantal persoonlijke WhatsApp-nummers bereikt dat tijdens de pilot is toegestaan. Verwijder er één om een ander te koppelen.",
       "DEVICE_CREATE_RATE_LIMITED": "Er zijn het afgelopen uur te veel nummers toegevoegd. Probeer het later opnieuw.",
       "DEVICE_CREATE_RATE_LIMITED_WAIT": "Er zijn het afgelopen uur te veel nummers toegevoegd. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw.",

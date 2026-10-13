@@ -193,7 +193,6 @@
         "outOfOrder": "단계 순서가 잘못되었습니다. 페이지를 새로 고친 후 다시 시작하세요.",
         "step": "설치 단계가 실패했습니다. 입력 정보와 서버 로그를 확인한 후 다시 시도하세요.",
         "unknown": "문제가 발생했습니다. 다시 시도하세요.",
-        "requestId": "요청 ID {id}",
         "prerequisites": "서버가 설정할 준비가 되지 않았습니다: {items}.",
         "licence": {
           "empty": "CodeCanyon 구매 코드를 입력하세요.",
@@ -265,7 +264,6 @@
       "loading": "불러오는 중",
       "errorForbidden": "이 페이지를 볼 권한이 없습니다.",
       "errorUnexpected": "업데이터를 불러올 수 없습니다.",
-      "requestId": "요청 ID",
       "retry": "다시 시도",
       "licence": {
         "kicker": "1단계 · 라이선스",

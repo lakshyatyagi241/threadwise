@@ -257,7 +257,6 @@
       "ownerInvalid": "Właściciel musi być aktywnym członkiem przestrzeni roboczej.",
       "invoicingUnavailable": "Fakturowanie nie jest jeszcze dostępne, więc tego dokumentu nie można przekonwertować.",
       "unexpected": "Coś poszło nie tak. Spróbuj ponownie.",
-      "requestId": "Identyfikator żądania",
       "retry": "Spróbuj ponownie"
     },
     "link": {

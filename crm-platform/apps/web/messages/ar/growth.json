@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "تجاهل",
       "retry": "إعادة المحاولة",
-      "requestId": "الطلب {id}",
       "noAccessTitle": "لا يمكنك فتح هذه الشاشة",
       "noAccess": "اطلب من المسؤول منحك صلاحية “{permission}”."
     },

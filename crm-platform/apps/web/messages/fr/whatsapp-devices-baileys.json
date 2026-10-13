@@ -10,7 +10,6 @@
     },
     "common": {
       "dismiss": "Ignorer",
-      "requestId": "Demande {id}",
       "unofficial": "Non officiel",
       "reminder": "Connexion non officielle. WhatsApp peut restreindre ce numéro.",
       "readGuide": "Lire le guide",
@@ -296,7 +295,6 @@
       "WA_WORKER_UNAVAILABLE": "Le service de connexion n’est pas disponible. Réessayez dans quelques minutes.",
       "RATE_LIMITED": "Trop de requêtes. Patientez un instant.",
       "upgrade": "Voir les forfaits et passer à un forfait supérieur",
-      "requestId": "Requête {id}",
       "DEVICE_PILOT_CAP_REACHED": "Votre espace de travail a atteint le nombre de numéros WhatsApp personnels autorisés pendant le pilote. Supprimez-en un pour en connecter un autre.",
       "DEVICE_CREATE_RATE_LIMITED": "Trop de numéros ont été ajoutés au cours de la dernière heure. Réessayez plus tard.",
       "DEVICE_CREATE_RATE_LIMITED_WAIT": "Trop de numéros ont été ajoutés au cours de la dernière heure. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}.",

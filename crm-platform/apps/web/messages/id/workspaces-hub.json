@@ -187,8 +187,7 @@
       "notFound": "Workspace ini tidak lagi ada.",
       "reasonRequired": "Alasan minimal 8 karakter diperlukan.",
       "orgSuspended": "Workspace ditangguhkan, sehingga tidak dapat dimasuki.",
-      "validation": "Periksa nilainya dan coba lagi.",
-      "requestId": "ID permintaan"
+      "validation": "Periksa nilainya dan coba lagi."
     },
     "detail": {
       "crumb": "Workspace",

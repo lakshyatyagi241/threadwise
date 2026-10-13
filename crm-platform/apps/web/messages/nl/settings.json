@@ -324,10 +324,10 @@
         "description": "Kies de STOP- en START-woorden, de bevestigingsantwoorden, de afmeldregel en of marketing een vastgelegde toestemming vereist.",
         "keywords": "toestemming, afmelden, aanmelden, uitschrijven, stop, start, avg, gdpr, compliance, privacy, marketing"
       },
-      "inbox-labels": {
-        "label": "Labels",
-        "description": "Maak de labels die je team op gesprekken zet en waarmee de inbox wordt gefilterd.",
-        "keywords": "tags, labels, categorieën, ordenen, filter"
+      "inbox-tags": {
+        "label": "Gesprekstags",
+        "description": "Maak de tags aan die je team op gesprekken zet en waarmee de inbox wordt gefilterd. Het zijn dezelfde tags als bij contacten.",
+        "keywords": "tags, categorieën, ordenen, filter, gesprekstags"
       },
       "growth": {
         "label": "Groei",

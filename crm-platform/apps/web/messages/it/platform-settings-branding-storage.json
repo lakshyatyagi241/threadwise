@@ -64,7 +64,6 @@
       "conflict": "Qualcun altro ha salvato queste impostazioni dopo che le avevi aperte. Ricarica per vedere le sue modifiche, poi applica di nuovo le tue.",
       "reload": "Ricarica impostazioni",
       "unexpected": "Si è verificato un errore e nulla è stato salvato.",
-      "requestId": "ID richiesta",
       "readOnly": "Puoi consultare queste impostazioni, ma solo un super admin può modificarle.",
       "secretSet": "Salvato. Lascia vuoto per mantenerlo.",
       "secretUnset": "Non impostato.",

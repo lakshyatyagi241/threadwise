@@ -62,7 +62,7 @@ The campaign table counts the contacts who wrote back within 24 and 72 hours of 
 
 ## Automatic stage changes
 
-When the AI is very sure (90% by default) it can move a contact to the next stage on its own, up to a daily limit. Every change is listed, and **Put back** restores the previous stage as long as nobody moved the contact since. Won and Lost stages are never set automatically.
+When the AI is very sure (90% by default) it can move a contact to the next stage on its own, up to a daily limit. Every change is listed, and **Put back** restores the previous stage as long as nobody moved the contact since. The chat itself says it too: a line in the conversation reads "AI read the chat and moved this contact from X to Y", with an **Undo** right there (for people who may review stage changes). Undoing adds a second line, "Stage change undone", and the Undo goes away. Won and Lost stages are never set automatically.
 
 ## Broadcast assistant
 

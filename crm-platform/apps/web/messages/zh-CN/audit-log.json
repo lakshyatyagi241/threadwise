@@ -1,0 +1,180 @@
+{
+  "audit-log": {
+    "title": "审计日志",
+    "description": "记录此工作区中谁在何时更改了什么，以及更改前后的内容。可用于查明“这是谁做的？”、审查团队所做的更改，以及核对平台支持人员在你求助时执行的操作。",
+    "tile": {
+      "label": "审计日志",
+      "description": "查看谁在何时更改了工作区中的什么，以及更改前后的内容。可筛选和导出。",
+      "keywords": "活动日志, 审计, 历史记录, 更改, 谁更改了, 安全, 合规, 导出, 支持访问"
+    },
+    "retention": {
+      "days": "条目保留 {days, plural, other {# 天}}，之后将被删除。该期限由平台设定。",
+      "forever": "条目无限期保留。该策略由平台设定。",
+      "unknown": "条目按平台设定的期限保留，之后将被删除。"
+    },
+    "forbidden": {
+      "title": "你无权访问审计日志",
+      "body": "请联系工作区所有者或管理员，为你的角色授予查看审计日志的权限。"
+    },
+    "filters": {
+      "label": "审计日志筛选",
+      "range": "时间段",
+      "from": "开始",
+      "to": "结束",
+      "actor": "人员",
+      "allActors": "所有人",
+      "actorType": "操作者类型",
+      "allActorTypes": "任何类型",
+      "module": "模块",
+      "allModules": "所有模块",
+      "action": "操作",
+      "allActions": "所有操作",
+      "search": "搜索模块和操作",
+      "searchHint": "仅匹配模块和操作，不匹配更改的值。",
+      "recordId": "记录编号",
+      "requestId": "请求 ID",
+      "supportOnly": "仅平台支持会话",
+      "apply": "应用筛选",
+      "refresh": "刷新",
+      "reset": "重置筛选"
+    },
+    "ranges": {
+      "24h": "过去 24 小时",
+      "7d": "过去 7 天",
+      "30d": "过去 30 天",
+      "90d": "过去 90 天",
+      "custom": "选择日期"
+    },
+    "actorTypes": {
+      "user": "用户",
+      "system": "系统",
+      "api_key": "API 密钥",
+      "bot": "机器人",
+      "partner_agent": "合作伙伴客服",
+      "candidate": "候选人",
+      "other": "其他"
+    },
+    "actors": {
+      "system": "系统",
+      "api_key": "API 密钥",
+      "apiKeyNamed": "API 密钥：{name}",
+      "bot": "机器人",
+      "partner_agent": "合作伙伴客服",
+      "candidate": "候选人",
+      "other": "其他",
+      "removedUser": "已移除的用户",
+      "support": "平台支持",
+      "actingAs": "以 {name} 的身份操作",
+      "supportBadge": "平台支持"
+    },
+    "actions": {
+      "insert": "已创建",
+      "update": "已更新",
+      "delete": "已删除",
+      "merge": "已合并",
+      "login": "已登录",
+      "export": "已导出",
+      "read": "已查看"
+    },
+    "modules": {
+      "contacts": "联系人",
+      "contact_groups": "联系人分组",
+      "contact_notes": "联系人备注",
+      "companies": "公司",
+      "deals": "交易",
+      "tags": "标签",
+      "members": "团队成员",
+      "teams": "团队",
+      "conversation_notes": "会话备注",
+      "broadcasts": "群发",
+      "campaigns": "营销活动",
+      "faqs": "常见问题",
+      "api_keys": "API 密钥",
+      "audit-log": "审计日志",
+      "audit-log-exports": "审计日志导出",
+      "contact_consent_exports": "授权证明导出"
+    },
+    "table": {
+      "caption": "审计条目，最新的在前。时间按你的时区（{zone}）显示。",
+      "zone": "时间按你的时区显示：{zone}。",
+      "time": "时间",
+      "actor": "操作者",
+      "action": "操作",
+      "record": "记录",
+      "changed": "更改的字段",
+      "request": "请求",
+      "details": "详情",
+      "openDetails": "此更改的详情：{what}"
+    },
+    "states": {
+      "loading": "正在加载审计日志",
+      "empty": "此时间段内没有记录",
+      "emptyHint": "团队所做的更改将显示在此处。",
+      "emptyFiltered": "没有符合筛选条件的条目",
+      "emptyFilteredHint": "请尝试更长的时间段或移除某个筛选条件。",
+      "retry": "重试",
+      "showing": "{count, plural, other {已加载 # 条}}",
+      "loadMore": "加载更多",
+      "end": "已到列表末尾"
+    },
+    "detail": {
+      "title": "审计条目",
+      "when": "时间",
+      "who": "操作者",
+      "what": "操作",
+      "record": "记录",
+      "openRecord": "打开记录",
+      "request": "请求 ID",
+      "changes": "更改内容",
+      "field": "字段",
+      "before": "更改前",
+      "after": "更改后",
+      "noChanges": "此条目未列出字段更改。",
+      "supportTitle": "平台支持人员曾在你的工作区中操作",
+      "supportBody": "一名平台支持人员以 {name} 的身份使用了支持会话，可执行该用户有权执行的所有操作。",
+      "supportReason": "给出的原因：{reason}",
+      "supportNoReason": "此会话的原因已不可用。",
+      "supportReadOnly": "该会话为只读。",
+      "secret": "已隐藏的机密",
+      "secretHint": "密码、密钥和令牌不会显示。",
+      "maskedHint": "个人数据已部分隐藏。",
+      "maskedNote": "电话号码、电子邮件地址、姓名和备注等个人数据已部分隐藏。机密信息不会显示。",
+      "maskedNoteOwner": "密码、密钥和令牌等机密信息对所有人隐藏。",
+      "audited": "打开此条目的操作会记录到审计日志中。"
+    },
+    "export": {
+      "title": "导出",
+      "note": "为符合上方筛选条件的条目生成 CSV 文件，保留 {days} 天，并始终隐藏个人数据。",
+      "button": "导出 CSV",
+      "preparing": "正在准备文件",
+      "requested": "正在准备导出，完成后我们会通过邮件通知你。",
+      "none": "暂无导出。",
+      "status": {
+        "queued": "等待中",
+        "running": "准备中",
+        "ready": "已就绪",
+        "failed": "失败",
+        "expired": "已过期"
+      },
+      "rows": "{count, plural, other {# 条}}",
+      "expires": "保留至 {date}",
+      "download": "下载",
+      "failed": "无法生成此导出，请重新申请。"
+    },
+    "errors": {
+      "network": "无法连接服务器。请检查网络后重试。",
+      "forbidden": "你没有执行此操作的权限。",
+      "notFound": "未找到该条目或导出。",
+      "rangeInvalid": "请选择不超过 400 天的时间段，且结束时间须晚于开始时间。",
+      "exportInProgress": "已有导出正在准备中。请等待邮件通知后再申请新的导出。",
+      "exportNotReady": "此导出尚未就绪或已过期。",
+      "rateLimited": "请求过多，请稍后再试。",
+      "validation": "其中一个筛选条件无效。",
+      "unexpected": "出了点问题，请重试。"
+    },
+    "common": {
+      "close": "关闭",
+      "dismiss": "忽略"
+    }
+  }
+}

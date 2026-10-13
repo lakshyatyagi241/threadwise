@@ -7,7 +7,6 @@
     "common": {
       "loading": "Wird geladen",
       "retry": "Erneut versuchen",
-      "requestId": "Anfrage-ID",
       "dash": "-",
       "errors": {
         "forbidden": "Sie haben keine Berechtigung, dies zu tun.",

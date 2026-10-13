@@ -11,7 +11,6 @@
     "common": {
       "loading": "Memuat",
       "retry": "Coba lagi",
-      "requestId": "ID permintaan",
       "loadFailed": "Tidak dapat memuat ini.",
       "forbidden": "Anda tidak memiliki akses ke sini.",
       "cancel": "Batal",

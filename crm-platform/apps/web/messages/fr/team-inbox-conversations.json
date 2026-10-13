@@ -28,8 +28,8 @@
       "teamChanged": "Équipe mise à jour.",
       "priorityChanged": "Priorité mise à jour",
       "snoozed": "Conversation mise en veille",
-      "labelAdded": "Étiquette ajoutée",
-      "labelRemoved": "Étiquette retirée"
+      "tagAdded": "Étiquette ajoutée",
+      "tagRemoved": "Étiquette retirée"
     },
     "list": {
       "title": "Boîte de réception",
@@ -137,19 +137,18 @@
       "unsupported": "Ce canal ne peut pas envoyer ce type de message ou de fichier.",
       "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
       "generic": "Une erreur s’est produite. Réessayez.",
-      "genericWithId": "Une erreur s’est produite. Réessayez. Référence : {id}",
       "templateNotSendable": "Ce modèle ne peut pas être envoyé dans cette conversation. Choisissez-en un autre.",
       "groupSendUnavailable": "L’envoi vers les groupes WhatsApp n’est pas encore disponible. Répondez depuis l’application WhatsApp Business.",
       "logRange": "Choisissez des dates dans la dernière année, avec un début antérieur à la fin et pas dans le futur.",
       "logBusy": "Un export est déjà en cours de préparation. Attendez son e-mail, puis demandez-en un autre.",
       "logNotReady": "Cet export n'est pas prêt ou a expiré. Demandez-le à nouveau.",
       "groupSuspended": "Meta a suspendu ce groupe : il ne peut plus recevoir de messages tant que Meta ne l'a pas rétabli.",
-      "walletEmpty": "Votre portefeuille de messages ne couvre pas ce message de groupe (un débit par membre). Rechargez-le et réessayez.",
-      "groupPlanLocked": "Votre forfait n'inclut pas les groupes WhatsApp : ce groupe ne peut pas recevoir de messages. Demandez à un administrateur de faire évoluer le forfait.",
       "groupLeft": "Ce numéro a quitté le groupe, il ne peut donc plus y envoyer de messages.",
       "groupAnnounceOnly": "Seuls les admins peuvent envoyer des messages dans ce groupe, et ce numéro n'est pas admin.",
       "groupRateLimited": "Trop de messages de groupe depuis ce numéro en peu de temps. Patientez une minute, puis réessayez.",
       "groupUnavailable": "WhatsApp n'a pas accepté ce message de groupe. Réessayez dans quelques minutes.",
+      "walletEmpty": "Votre portefeuille de messages ne couvre pas ce message de groupe (un débit par membre). Rechargez-le et réessayez.",
+      "groupPlanLocked": "Votre forfait n'inclut pas les groupes WhatsApp : ce groupe ne peut pas recevoir de messages. Demandez à un administrateur de faire évoluer le forfait.",
       "savedReplyGone": "Cette réponse enregistrée n'existe plus.",
       "savedReplyChannel": "Cette réponse enregistrée n'est pas prévue pour ce type de canal.",
       "shortcutTaken": "Une autre réponse enregistrée utilise déjà ce raccourci.",
@@ -223,7 +222,15 @@
       "groupMember": "Membre du groupe",
       "groupTally": "Remis à {delivered} sur {members}{read, plural, =0 {} other {, lu par #}}{failed, plural, =0 {} other {, # en échec}}",
       "groupTallyNoTotal": "Remis à {delivered, plural, one {# membre} other {# membres}}{read, plural, =0 {} other {, lu par #}}{failed, plural, =0 {} other {, # en échec}}",
-      "groupTallyBilled": "{billable} facturés, {free} gratuits"
+      "groupTallyBilled": "{billable} facturés, {free} gratuits",
+      "stageLine": {
+        "auto": "L’IA a lu la conversation et a déplacé ce contact de {from} vers {to}.",
+        "undo": "Annuler",
+        "wasUndone": "Annulé",
+        "undone": "Changement d’étape annulé : retour à {stage}.",
+        "undoneToast": "Étape rétablie sur {stage}.",
+        "couldNotUndo": "Ce changement ne peut plus être annulé : le contact a avancé ou il a déjà été annulé."
+      }
     },
     "media": {
       "openImage": "Ouvrir l’image {name}",
@@ -275,6 +282,44 @@
       "attachment": "une pièce jointe",
       "jumpLatest": "Aller au dernier message",
       "jumpLatestNew": "{count, plural, one {# nouveau message} other {# nouveaux messages}}"
+    },
+    "groupThread": {
+      "openGroup": "Ouvrir le groupe",
+      "readOnly": {
+        "left": {
+          "title": "Ce numéro a quitté le groupe",
+          "message": "La conversation est conservée telle quelle. Vous pouvez la lire et ajouter des notes internes, mais vous ne pouvez pas envoyer de messages."
+        },
+        "announceOnly": {
+          "title": "Seuls les admins peuvent envoyer dans ce groupe",
+          "message": "Ce numéro n'est pas admin du groupe, WhatsApp ne distribuerait donc pas de message. Vous pouvez toujours ajouter des notes internes."
+        }
+      },
+      "mention": {
+        "label": "Membres du groupe",
+        "loading": "Recherche de membres",
+        "none": "Aucun membre ne correspond"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta a suspendu ce groupe",
+          "message": "WhatsApp ne remet pas de messages à un groupe suspendu. Vous pouvez lire la conversation et ajouter des notes internes jusqu'à ce que Meta lève la suspension."
+        },
+        "plan": {
+          "title": "Votre forfait n'inclut pas les groupes WhatsApp",
+          "message": "Vous pouvez lire cette conversation et ajouter des notes internes, mais l'envoi au groupe nécessite un forfait avec groupes. Demandez à un administrateur de faire évoluer le forfait."
+        },
+        "ineligible": {
+          "title": "Ce numéro ne peut pas utiliser les groupes WhatsApp",
+          "message": "Lors de la dernière vérification, Meta n'a pas autorisé les groupes sur ce numéro (un compte professionnel officiel est requis). Vous pouvez lire la conversation et ajouter des notes internes. Ouvrez Groupes Meta pour revérifier."
+        }
+      },
+      "cost": {
+        "members": "Ce message part vers {count, plural, one {# membre} other {# membres}}. Coût estimé {cost} : WhatsApp facture chaque membre qui le reçoit.",
+        "membersNoEstimate": "Ce message part vers {count, plural, one {# membre} other {# membres}}. WhatsApp facture chaque membre qui le reçoit.",
+        "sizeUnknown": "Le nombre de membres n'est pas encore connu. WhatsApp facture chaque membre qui reçoit ce message.",
+        "walletShort": "Votre portefeuille peut ne pas couvrir ce message. Rechargez-le avant d'envoyer."
+      }
     },
     "composer": {
       "modeLabel": "Type de message",
@@ -658,44 +703,6 @@
         }
       }
     },
-    "groupThread": {
-      "openGroup": "Ouvrir le groupe",
-      "readOnly": {
-        "left": {
-          "title": "Ce numéro a quitté le groupe",
-          "message": "La conversation est conservée telle quelle. Vous pouvez la lire et ajouter des notes internes, mais vous ne pouvez pas envoyer de messages."
-        },
-        "announceOnly": {
-          "title": "Seuls les admins peuvent envoyer dans ce groupe",
-          "message": "Ce numéro n'est pas admin du groupe, WhatsApp ne distribuerait donc pas de message. Vous pouvez toujours ajouter des notes internes."
-        }
-      },
-      "mention": {
-        "label": "Membres du groupe",
-        "loading": "Recherche de membres",
-        "none": "Aucun membre ne correspond"
-      },
-      "cloudBlock": {
-        "suspended": {
-          "title": "Meta a suspendu ce groupe",
-          "message": "WhatsApp ne remet pas de messages à un groupe suspendu. Vous pouvez lire la conversation et ajouter des notes internes jusqu'à ce que Meta lève la suspension."
-        },
-        "plan": {
-          "title": "Votre forfait n'inclut pas les groupes WhatsApp",
-          "message": "Vous pouvez lire cette conversation et ajouter des notes internes, mais l'envoi au groupe nécessite un forfait avec groupes. Demandez à un administrateur de faire évoluer le forfait."
-        },
-        "ineligible": {
-          "title": "Ce numéro ne peut pas utiliser les groupes WhatsApp",
-          "message": "Lors de la dernière vérification, Meta n'a pas autorisé les groupes sur ce numéro (un compte professionnel officiel est requis). Vous pouvez lire la conversation et ajouter des notes internes. Ouvrez Groupes Meta pour revérifier."
-        }
-      },
-      "cost": {
-        "members": "Ce message part vers {count, plural, one {# membre} other {# membres}}. Coût estimé {cost} : WhatsApp facture chaque membre qui le reçoit.",
-        "membersNoEstimate": "Ce message part vers {count, plural, one {# membre} other {# membres}}. WhatsApp facture chaque membre qui le reçoit.",
-        "sizeUnknown": "Le nombre de membres n'est pas encore connu. WhatsApp facture chaque membre qui reçoit ce message.",
-        "walletShort": "Votre portefeuille peut ne pas couvrir ce message. Rechargez-le avant d'envoyer."
-      }
-    },
     "savedReplies": {
       "channelKind": {
         "simulator": "Simulateur (test)",
@@ -892,6 +899,11 @@
         }
       }
     },
+    "triage": {
+      "priority": "Priorité",
+      "snooze": "Mettre en veille",
+      "wake": "Réactiver maintenant"
+    },
     "bulk": {
       "barLabel": "Actions groupées",
       "selected": "{count, plural, one {# conversation sélectionnée} other {# conversations sélectionnées}}",
@@ -919,36 +931,49 @@
         "partial": "{done} mises à jour, {unchanged} déjà à jour, {failed} n'ont pas pu être modifiées. Celles en échec restent sélectionnées.",
         "allFailed": "Aucune des {count, plural, one {# conversation} other {# conversations}} n'a pu être modifiée."
       },
-      "label": "Étiquette",
-      "labelAdd": "Ajouter une étiquette",
-      "labelRemove": "Retirer une étiquette"
+      "tag": "Étiquette",
+      "tagAdd": "Ajouter une étiquette",
+      "tagRemove": "Retirer une étiquette"
     },
-    "triage": {
-      "priority": "Priorité",
-      "snooze": "Mettre en veille",
-      "wake": "Réactiver maintenant"
-    },
-    "labels": {
-      "label": "Étiquette",
+    "tags": {
+      "tag": "Étiquette",
       "loading": "Chargement des étiquettes…",
       "loadFailed": "Impossible de charger les étiquettes.",
       "none": "Aucune étiquette pour le moment.",
-      "newLabel": "Nouvelle étiquette",
+      "newTag": "Nouvelle étiquette",
       "add": "Ajouter",
       "filter": "Étiquettes",
       "filterActive": "{count, plural, one {# étiquette} other {# étiquettes}}",
-      "clearFilter": "Effacer le filtre d'étiquettes",
+      "clearFilter": "Effacer le filtre d’étiquettes",
+      "scope": {
+        "label": "Filtrer les étiquettes sur",
+        "conversation": "Étiquettes de conversation",
+        "contact": "Étiquettes de contact"
+      },
+      "groups": {
+        "title": "Étiquettes",
+        "helpFor": "À propos de {title}",
+        "rule": "Les deux types viennent de la même bibliothèque d’étiquettes de l’espace de travail.",
+        "contactTitle": "Étiquettes de contact",
+        "contactHelp": "Une étiquette de contact décrit la personne (VIP, prospect, région). Elle la suit dans toutes ses conversations.",
+        "contactNone": "Ce contact n’a aucune étiquette.",
+        "contactEdit": "Modifier sur le contact",
+        "conversationTitle": "Étiquettes de conversation",
+        "conversationHelp": "Une étiquette de conversation décrit cet échange (facturation, remboursement, urgent).",
+        "conversationNone": "Aucune étiquette sur cette conversation pour le moment.",
+        "remove": "Retirer l’étiquette {name}"
+      },
       "screen": {
         "back": "Retour à la boîte de réception",
-        "title": "Étiquettes",
-        "intro": "Les étiquettes marquent les conversations pour que votre équipe puisse les trier et les filtrer. Ce sont les mêmes que celles des contacts.",
+        "title": "Étiquettes de conversation",
+        "intro": "Les étiquettes de conversation marquent un échange (facturation, remboursement, urgent) pour que votre équipe puisse trier et filtrer la boîte de réception. Elles viennent de la même bibliothèque que les étiquettes de contact, qui décrivent la personne.",
         "newTitle": "Nouvelle étiquette",
-        "editTitle": "Modifier l'étiquette",
+        "editTitle": "Modifier l’étiquette",
         "name": "Nom",
         "color": "Couleur",
         "colorInvalid": "Utilisez une couleur hexadécimale comme #075E54 ou un nom de couleur.",
         "description": "Description (facultatif)",
-        "create": "Créer l'étiquette",
+        "create": "Créer l’étiquette",
         "save": "Enregistrer les modifications",
         "cancel": "Annuler",
         "edit": "Modifier",
@@ -957,9 +982,9 @@
         "emptyTitle": "Aucune étiquette pour le moment",
         "emptyMessage": "Créez votre première étiquette ci-dessus, puis appliquez-la aux conversations depuis la boîte de réception.",
         "deleteTitle": "Supprimer cette étiquette ?",
-        "deleteMessage": "\"{name}\" est appliquée à {count, plural, one {# conversation} other {# conversations}}. La supprimer la retire de celles-ci et de tous les contacts qui l'ont. Cette action est irréversible.",
+        "deleteMessage": "« {name} » est appliquée à {count, plural, one {# conversation} other {# conversations}}. La supprimer la retire de celles-ci et de tous les contacts qui l’ont. Cette action est irréversible.",
         "nameTaken": "Une étiquette portant ce nom existe déjà.",
-        "conflict": "Quelqu'un d'autre a modifié cette étiquette avant vous. La liste a été rechargée.",
+        "conflict": "Quelqu’un d’autre a modifié cette étiquette avant vous. La liste a été rechargée.",
         "saved": "Étiquette enregistrée",
         "created": "Étiquette créée",
         "deleted": "Étiquette supprimée"

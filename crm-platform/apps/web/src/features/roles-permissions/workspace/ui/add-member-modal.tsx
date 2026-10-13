@@ -190,11 +190,6 @@ export function AddMemberModal({
           {serverError && (
             <Alert tone="danger" className="space-y-1" data-testid="add-member-error">
               <p>{te(serverError.key, serverError.values)}</p>
-              {serverError.requestId && (
-                <p className="font-mono text-xs opacity-80">
-                  {tc('requestId')}: {serverError.requestId}
-                </p>
-              )}
             </Alert>
           )}
           <div className="flex justify-end gap-2 pt-1">

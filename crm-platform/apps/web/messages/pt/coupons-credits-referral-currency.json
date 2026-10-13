@@ -14,7 +14,6 @@
       "dismiss": "Dispensar",
       "admin": "Admin",
       "readOnly": "Você pode ver esta página, mas somente um superadministrador pode alterá-la.",
-      "requestId": "ID da solicitação",
       "errors": {
         "forbidden": "Você não tem acesso a esta página.",
         "request": "Não foi possível concluir a solicitação.",
@@ -404,7 +403,6 @@
         "validation": "Não foi possível aplicar esses filtros. Redefina-os e tente novamente.",
         "network": "Não foi possível acessar o servidor. Verifique sua conexão e tente novamente.",
         "generic": "Algo deu errado. Tente novamente em instantes.",
-        "requestId": "ID da solicitação",
         "retry": "Tentar novamente"
       }
     }

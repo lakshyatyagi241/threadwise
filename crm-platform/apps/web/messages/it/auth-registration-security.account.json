@@ -22,7 +22,6 @@
         "signedOut": "La sessione è terminata. Accedi di nuovo.",
         "rateLimited": "Troppi tentativi. Attendi un momento e riprova.",
         "rateLimitedWait": "Troppi tentativi. Riprova tra {seconds, plural, one {# secondo} other {# secondi}}.",
-        "requestId": "ID richiesta",
         "locked": "Troppi tentativi falliti. Attendi un po' prima di riprovare.",
         "lockedWait": "Troppi tentativi falliti. Riprova tra {minutes, plural, one {# minuto} other {# minuti}}."
       },

@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "Odrzuć",
       "retry": "Spróbuj ponownie",
-      "requestId": "Żądanie {id}",
       "noAccessTitle": "Nie możesz otworzyć tego ekranu",
       "noAccess": "Poproś administratora o uprawnienie „{permission}”."
     },

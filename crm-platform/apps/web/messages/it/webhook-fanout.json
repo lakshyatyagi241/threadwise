@@ -7,7 +7,6 @@
     "common": {
       "loading": "Caricamento",
       "retry": "Riprova",
-      "requestId": "ID richiesta",
       "dash": "-",
       "errors": {
         "forbidden": "Non hai l’autorizzazione per eseguire questa operazione.",

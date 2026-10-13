@@ -128,7 +128,6 @@
       "planLimit": "Je abonnement staat er niet meer van toe.",
       "unavailable": "Segmenten zijn nog niet beschikbaar op deze server.",
       "unexpected": "Er ging iets mis. Probeer het opnieuw.",
-      "requestId": "Verzoek-ID",
       "retry": "Opnieuw proberen",
       "shareEmpty": "Kies minstens één persoon of team om het segment mee te delen.",
       "shareInvalid": "Sommige gekozen personen of teams zitten niet meer in deze workspace. Verwijder ze en sla opnieuw op."

@@ -1,0 +1,180 @@
+{
+  "audit-log": {
+    "title": "Denetim günlüğü",
+    "description": "Bu çalışma alanında kimin neyi, ne zaman ve neden neye değiştirdiği. \"Bunu kim yaptı?\" sorusunu yanıtlamak, ekibinizin değişikliklerini incelemek ve yardım istediğinizde platform desteğinin neler yaptığını kontrol etmek için kullanın.",
+    "tile": {
+      "label": "Denetim günlüğü",
+      "description": "Çalışma alanınızda kimin neyi, ne zaman ve neden neye değiştirdiğini görün. Filtreleyin ve dışa aktarın.",
+      "keywords": "etkinlik günlüğü, denetim, geçmiş, değişiklikler, kim değiştirdi, güvenlik, uyumluluk, dışa aktarma, destek erişimi"
+    },
+    "retention": {
+      "days": "Kayıtlar {days, plural, one {# gün} other {# gün}} saklanır, ardından silinir. Bu süreyi platform belirler.",
+      "forever": "Kayıtlar bitiş tarihi olmadan saklanır. Bu politikayı platform belirler.",
+      "unknown": "Kayıtlar platformun belirlediği süre boyunca saklanır, ardından silinir."
+    },
+    "forbidden": {
+      "title": "Denetim günlüğüne erişiminiz yok",
+      "body": "Çalışma alanı Sahibinden (Owner) veya Yöneticisinden (Admin) rolünüze denetim günlüğünü görüntüleme izni vermesini isteyin."
+    },
+    "filters": {
+      "label": "Denetim günlüğü filtreleri",
+      "range": "Dönem",
+      "from": "Başlangıç",
+      "to": "Bitiş",
+      "actor": "Kişi",
+      "allActors": "Herkes",
+      "actorType": "İşlemi yapan",
+      "allActorTypes": "Herhangi biri",
+      "module": "Alan",
+      "allModules": "Tüm alanlar",
+      "action": "İşlem",
+      "allActions": "Tüm işlemler",
+      "search": "Alanlarda ve işlemlerde ara",
+      "searchHint": "Yalnızca alanla ve işlemle eşleşir, değişen değerlerle asla.",
+      "recordId": "Kayıt numarası",
+      "requestId": "İstek kimliği (Request ID)",
+      "supportOnly": "Yalnızca platform desteği oturumları",
+      "apply": "Filtreleri uygula",
+      "refresh": "Yenile",
+      "reset": "Filtreleri sıfırla"
+    },
+    "ranges": {
+      "24h": "Son 24 saat",
+      "7d": "Son 7 gün",
+      "30d": "Son 30 gün",
+      "90d": "Son 90 gün",
+      "custom": "Tarih seç"
+    },
+    "actorTypes": {
+      "user": "Bir kişi",
+      "system": "Sistem",
+      "api_key": "Bir API anahtarı",
+      "bot": "Bir bot",
+      "partner_agent": "Bir iş ortağı temsilcisi",
+      "candidate": "Bir aday",
+      "other": "Başka bir şey"
+    },
+    "actors": {
+      "system": "Sistem",
+      "api_key": "API anahtarı",
+      "apiKeyNamed": "API anahtarı: {name}",
+      "bot": "Bot",
+      "partner_agent": "İş ortağı temsilcisi",
+      "candidate": "Aday",
+      "other": "Diğer",
+      "removedUser": "Kaldırılmış bir kullanıcı",
+      "support": "Platform desteği",
+      "actingAs": "{name} adına işlem yaptı",
+      "supportBadge": "Platform desteği"
+    },
+    "actions": {
+      "insert": "Oluşturuldu",
+      "update": "Güncellendi",
+      "delete": "Silindi",
+      "merge": "Birleştirildi",
+      "login": "Oturum açıldı",
+      "export": "Dışa aktarıldı",
+      "read": "Görüntülendi"
+    },
+    "modules": {
+      "contacts": "Kişiler",
+      "contact_groups": "Kişi grupları",
+      "contact_notes": "Kişi notları",
+      "companies": "Şirketler",
+      "deals": "Fırsatlar",
+      "tags": "Etiketler",
+      "members": "Ekip üyeleri",
+      "teams": "Ekipler",
+      "conversation_notes": "Görüşme notları",
+      "broadcasts": "Toplu gönderimler",
+      "campaigns": "Kampanyalar",
+      "faqs": "SSS",
+      "api_keys": "API anahtarları",
+      "audit-log": "Denetim günlüğü",
+      "audit-log-exports": "Denetim günlüğü dışa aktarımları",
+      "contact_consent_exports": "Onay kanıtı dışa aktarımları"
+    },
+    "table": {
+      "caption": "Denetim kayıtları, en yeniden eskiye. Saatler saat diliminizde gösterilir ({zone}).",
+      "zone": "Saatler saat diliminizde gösterilir: {zone}.",
+      "time": "Ne zaman",
+      "actor": "Kim",
+      "action": "Ne",
+      "record": "Kayıt",
+      "changed": "Değişen alanlar",
+      "request": "İstek",
+      "details": "Ayrıntılar",
+      "openDetails": "Bu değişikliğin ayrıntıları: {what}"
+    },
+    "states": {
+      "loading": "Denetim günlüğü yükleniyor",
+      "empty": "Bu dönemde kayıt yok",
+      "emptyHint": "Ekibinizin yaptığı değişiklikler burada görünecek.",
+      "emptyFiltered": "Bu filtrelerle eşleşen kayıt yok",
+      "emptyFilteredHint": "Daha uzun bir dönem deneyin veya bir filtreyi kaldırın.",
+      "retry": "Tekrar dene",
+      "showing": "{count, plural, one {# kayıt yüklendi} other {# kayıt yüklendi}}",
+      "loadMore": "Daha fazla yükle",
+      "end": "Listenin sonu"
+    },
+    "detail": {
+      "title": "Denetim kaydı",
+      "when": "Ne zaman",
+      "who": "Kim",
+      "what": "Ne",
+      "record": "Kayıt",
+      "openRecord": "Kaydı aç",
+      "request": "İstek kimliği (Request ID)",
+      "changes": "Ne değişti",
+      "field": "Alan",
+      "before": "Önce",
+      "after": "Sonra",
+      "noChanges": "Bu kayıt alan değişikliklerini listelemiyor.",
+      "supportTitle": "Platform desteği çalışma alanınızda işlem yaptı",
+      "supportBody": "Bir platform desteği çalışanı, {name} olarak bir destek oturumu kullandı. Bu kişinin yapabildiği her şeyi yapabilirdi.",
+      "supportReason": "Belirtilen neden: {reason}",
+      "supportNoReason": "Bu oturumun nedeni artık mevcut değil.",
+      "supportReadOnly": "Oturum salt okunurdu.",
+      "secret": "Gizli değer",
+      "secretHint": "Parolalar, anahtarlar ve belirteçler asla gösterilmez.",
+      "maskedHint": "Kişisel veriler kısmen gizlenir.",
+      "maskedNote": "Telefon numaraları, e-posta adresleri, adlar ve notlar gibi kişisel veriler kısmen gizlenir. Gizli değerler asla gösterilmez.",
+      "maskedNoteOwner": "Parolalar, anahtarlar ve belirteçler gibi gizli değerler herkes için gizlenir.",
+      "audited": "Bu kaydı açmanız denetim günlüğüne işlenir."
+    },
+    "export": {
+      "title": "Dışa aktar",
+      "note": "Yukarıdaki filtrelerle eşleşen kayıtların CSV dosyasını hazırlar. {days} gün saklanır ve kişisel verileri her zaman gizler.",
+      "button": "CSV olarak dışa aktar",
+      "preparing": "Dosya hazırlanıyor",
+      "requested": "Dışa aktarım hazırlanıyor. Hazır olduğunda size e-posta göndereceğiz.",
+      "none": "Henüz dışa aktarım yok.",
+      "status": {
+        "queued": "Bekliyor",
+        "running": "Hazırlanıyor",
+        "ready": "Hazır",
+        "failed": "Başarısız",
+        "expired": "Süresi doldu"
+      },
+      "rows": "{count, plural, one {# kayıt} other {# kayıt}}",
+      "expires": "{date} tarihine kadar saklanır",
+      "download": "İndir",
+      "failed": "Bu dışa aktarım oluşturulamadı. Yeniden isteyin."
+    },
+    "errors": {
+      "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+      "forbidden": "Bunu yapma izniniz yok.",
+      "notFound": "Bu kayıt veya dışa aktarım bulunamadı.",
+      "rangeInvalid": "En fazla 400 günlük, bitişi başlangıçtan sonra olan bir dönem seçin.",
+      "exportInProgress": "Bir dışa aktarım zaten hazırlanıyor. E-postasını bekleyin, ardından yenisini isteyin.",
+      "exportNotReady": "Bu dışa aktarım hazır değil veya süresi doldu.",
+      "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
+      "validation": "Filtrelerden biri geçerli değil.",
+      "unexpected": "Bir şeyler ters gitti. Tekrar deneyin."
+    },
+    "common": {
+      "close": "Kapat",
+      "dismiss": "Kapat"
+    }
+  }
+}

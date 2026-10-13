@@ -8,7 +8,6 @@
         "dismiss": "Ignorer"
       },
       "errors": {
-        "requestId": "ID de la requête",
         "retry": "Réessayer",
         "network": {
           "title": "Impossible de joindre le serveur",

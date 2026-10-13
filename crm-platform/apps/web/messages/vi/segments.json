@@ -128,7 +128,6 @@
       "planLimit": "Gói của bạn không cho phép thêm nữa.",
       "unavailable": "Phân khúc chưa khả dụng trên máy chủ này.",
       "unexpected": "Đã xảy ra lỗi. Vui lòng thử lại.",
-      "requestId": "Mã yêu cầu",
       "retry": "Thử lại",
       "shareEmpty": "Chọn ít nhất một người hoặc nhóm để chia sẻ phân khúc.",
       "shareInvalid": "Một số người hoặc nhóm đã chọn không còn trong không gian làm việc này. Hãy xóa họ và lưu lại."

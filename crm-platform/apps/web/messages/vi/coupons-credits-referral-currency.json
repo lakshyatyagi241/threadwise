@@ -14,7 +14,6 @@
       "dismiss": "Bỏ qua",
       "admin": "Quản trị",
       "readOnly": "Bạn có thể xem trang này nhưng chỉ quản trị viên cấp cao mới có thể thay đổi.",
-      "requestId": "Mã yêu cầu",
       "errors": {
         "forbidden": "Bạn không có quyền truy cập trang này.",
         "request": "Không thể hoàn tất yêu cầu.",
@@ -404,7 +403,6 @@
         "validation": "Không thể áp dụng các bộ lọc đó. Hãy đặt lại và thử lại.",
         "network": "Không thể kết nối với máy chủ. Hãy kiểm tra kết nối và thử lại.",
         "generic": "Đã xảy ra lỗi. Hãy thử lại sau giây lát.",
-        "requestId": "Mã yêu cầu",
         "retry": "Thử lại"
       }
     }

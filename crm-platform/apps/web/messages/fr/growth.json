@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "Ignorer",
       "retry": "Réessayer",
-      "requestId": "Requête {id}",
       "noAccessTitle": "Vous ne pouvez pas ouvrir cet écran",
       "noAccess": "Demandez à un administrateur l’autorisation « {permission} »."
     },

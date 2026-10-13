@@ -35,7 +35,6 @@
       "notFound": "Die deal is niet gevonden. Hij is mogelijk verwijderd.",
       "planDisabled": "Je abonnement bevat de verkooppipeline niet. Upgrade om hem te ontgrendelen.",
       "unexpected": "Er ging iets mis. Probeer het zo meteen opnieuw.",
-      "requestId": "Verzoek-ID",
       "retry": "Opnieuw proberen",
       "planLimit": "Je hebt de limiet van je abonnement bereikt.",
       "lostReasonRequired": "Kies een reden om de deal als verloren te markeren.",

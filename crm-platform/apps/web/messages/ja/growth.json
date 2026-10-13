@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "閉じる",
       "retry": "もう一度試す",
-      "requestId": "リクエスト {id}",
       "noAccessTitle": "この画面を開けません",
       "noAccess": "管理者に「{permission}」権限を依頼してください。"
     },

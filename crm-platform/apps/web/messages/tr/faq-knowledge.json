@@ -13,7 +13,6 @@
     },
     "common": {
       "retry": "Tekrar dene",
-      "requestId": "İstek {id}",
       "noAccessTitle": "Bu ekrana erişim izniniz yok",
       "noAccess": "Çalışma alanı yöneticisinden rolünüze {permission} iznini vermesini isteyin."
     },

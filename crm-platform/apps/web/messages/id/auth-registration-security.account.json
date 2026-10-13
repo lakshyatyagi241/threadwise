@@ -22,7 +22,6 @@
         "signedOut": "Sesi Anda telah berakhir. Silakan masuk lagi.",
         "rateLimited": "Terlalu banyak percobaan. Harap tunggu sebentar lalu coba lagi.",
         "rateLimitedWait": "Terlalu banyak percobaan. Coba lagi dalam {seconds, plural, other {# detik}}.",
-        "requestId": "ID permintaan",
         "locked": "Terlalu banyak percobaan gagal. Tunggu beberapa saat sebelum mencoba lagi.",
         "lockedWait": "Terlalu banyak percobaan gagal. Coba lagi dalam {minutes, plural, other {# menit}}."
       },

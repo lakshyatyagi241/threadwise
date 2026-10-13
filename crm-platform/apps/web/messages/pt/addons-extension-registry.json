@@ -19,7 +19,6 @@
       "optional": "opcional",
       "required": "obrigatório",
       "readOnly": "Você pode ver esta página, mas somente um superadministrador pode alterá-la.",
-      "requestId": "ID da solicitação",
       "errors": {
         "forbidden": "Você não tem acesso a esta página.",
         "request": "Não foi possível concluir a solicitação.",

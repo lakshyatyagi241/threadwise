@@ -16,7 +16,6 @@
       "delete": "Delete",
       "edit": "Edit",
       "loadMore": "Load more",
-      "requestId": "Request id",
       "errors": {
         "forbidden": "Only a super admin can change this.",
         "conflict": "Someone else changed this while you were editing. Reload and try again.",

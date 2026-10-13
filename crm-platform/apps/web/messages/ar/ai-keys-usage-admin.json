@@ -14,7 +14,6 @@
     "common": {
       "loading": "جارٍ التحميل",
       "retry": "حاول مرة أخرى",
-      "requestId": "معرّف الطلب",
       "dismiss": "تجاهل",
       "tokens": "{count, number} رمزًا",
       "dash": "-",

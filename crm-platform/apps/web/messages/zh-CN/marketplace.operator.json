@@ -10,7 +10,6 @@
       },
       "common": {
         "loading": "加载中...",
-        "requestId": "申请 ID",
         "retry": "重试",
         "noPermissions": "无权限"
       },

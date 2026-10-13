@@ -80,11 +80,6 @@ export function RemoveSecret({
           {error && (
             <Alert tone="danger" className="space-y-1">
               <p>{t('error')}</p>
-              {error.requestId && (
-                <p className="text-xs opacity-80">
-                  {t('requestId')}: <span className="font-mono">{error.requestId}</span>
-                </p>
-              )}
             </Alert>
           )}
         </div>

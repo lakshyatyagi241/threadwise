@@ -10,7 +10,6 @@
     },
     "common": {
       "dismiss": "닫기",
-      "requestId": "요청 {id}",
       "unofficial": "비공식",
       "reminder": "비공식 연결입니다. WhatsApp이 이 번호를 제한할 수 있습니다.",
       "readGuide": "가이드 읽기",
@@ -296,7 +295,6 @@
       "WA_WORKER_UNAVAILABLE": "연결 서비스를 사용할 수 없습니다. 몇 분 후에 다시 시도하세요.",
       "RATE_LIMITED": "요청이 너무 많습니다. 잠시 기다리세요.",
       "upgrade": "요금제 보기 및 업그레이드",
-      "requestId": "요청 {id}",
       "DEVICE_PILOT_CAP_REACHED": "워크스페이스가 시범 운영 기간에 허용된 개인 WhatsApp 번호 수에 도달했습니다. 다른 번호를 연결하려면 하나를 삭제하세요.",
       "DEVICE_CREATE_RATE_LIMITED": "지난 1시간 동안 너무 많은 번호가 추가되었습니다. 나중에 다시 시도하세요.",
       "DEVICE_CREATE_RATE_LIMITED_WAIT": "지난 1시간 동안 너무 많은 번호가 추가되었습니다. {minutes, plural, other {#분}} 후에 다시 시도하세요.",

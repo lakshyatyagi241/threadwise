@@ -179,8 +179,7 @@
     },
     "common": {
       "dismiss": "Descartar",
-      "retry": "Reintentar",
-      "requestId": "ID de solicitud"
+      "retry": "Reintentar"
     },
     "errors": {
       "network": "No se pudo conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.",

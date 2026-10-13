@@ -14,7 +14,6 @@
       "dismiss": "Tutup",
       "admin": "Admin",
       "readOnly": "Anda dapat melihat halaman ini tetapi hanya super admin yang dapat mengubahnya.",
-      "requestId": "ID permintaan",
       "errors": {
         "forbidden": "Anda tidak memiliki akses ke halaman ini.",
         "request": "Permintaan tidak dapat diselesaikan.",
@@ -404,7 +403,6 @@
         "validation": "Filter tersebut tidak dapat diterapkan. Reset lalu coba lagi.",
         "network": "Server tidak dapat dijangkau. Periksa koneksi Anda lalu coba lagi.",
         "generic": "Terjadi kesalahan. Coba lagi sebentar lagi.",
-        "requestId": "ID permintaan",
         "retry": "Coba lagi"
       }
     }

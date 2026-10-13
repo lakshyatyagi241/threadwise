@@ -14,7 +14,6 @@
       "copy": "Copy",
       "copied": "Copied",
       "copyFailed": "Could not copy. Select the key and copy it by hand.",
-      "reference": "Reference for support: {id}",
       "back": "Back to integrations"
     },
     "page": {

@@ -215,7 +215,6 @@
         "sessionExpired": "Your session expired for security. Please try again.",
         "network": "We could not reach the server. Check your connection and try again.",
         "unexpected": "Something went wrong on our side. Please try again.",
-        "requestId": "Request id",
         "signupExpired": "Please start registration again.",
         "policyRules": {
           "min_length": "Use at least {min, plural, one {# character} other {# characters}}.",

@@ -8,7 +8,6 @@
     "common": {
       "loading": "Loading",
       "retry": "Try again",
-      "requestId": "Request id",
       "cancel": "Cancel",
       "back": "Back",
       "close": "Close",

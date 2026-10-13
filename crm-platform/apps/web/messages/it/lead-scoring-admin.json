@@ -7,7 +7,6 @@
     "common": {
       "loading": "Caricamento",
       "retry": "Riprova",
-      "requestId": "ID richiesta",
       "dash": "-",
       "cancel": "Annulla",
       "errors": {

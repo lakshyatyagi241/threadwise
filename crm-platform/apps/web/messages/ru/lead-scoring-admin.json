@@ -7,7 +7,6 @@
     "common": {
       "loading": "Загрузка",
       "retry": "Повторить",
-      "requestId": "ID запроса",
       "dash": "-",
       "cancel": "Отмена",
       "errors": {

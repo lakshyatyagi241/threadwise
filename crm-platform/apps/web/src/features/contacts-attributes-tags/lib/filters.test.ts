@@ -202,3 +202,39 @@ describe('sort in the URL', () => {
     expect(filtersToSearch(DEFAULT_FILTERS)).toBe('');
   });
 });
+
+describe('owner filter in the URL', () => {
+  const ASHA = '11111111-1111-4111-8111-111111111111';
+  const RAVI = '22222222-2222-4222-8222-222222222222';
+
+  it('reads people and the unassigned token, drops anything else and repeats', () => {
+    expect(parseFilters(new URLSearchParams(`owner=${ASHA},none,${RAVI},${ASHA}`)).owner).toBe(
+      `${ASHA},none,${RAVI}`,
+    );
+    expect(parseFilters(new URLSearchParams('owner=bob,1;DROP,')).owner).toBe('');
+    expect(parseFilters(new URLSearchParams(`owner=${ASHA.toUpperCase()}`)).owner).toBe(ASHA);
+  });
+
+  it('is written to the URL only when set, and counts as an active filter', () => {
+    expect(filtersToSearch(DEFAULT_FILTERS)).toBe('');
+    expect(filtersToSearch({ ...DEFAULT_FILTERS, owner: `${ASHA},none` })).toBe(
+      `?owner=${encodeURIComponent(`${ASHA},none`)}`,
+    );
+    expect(hasActiveFilter({ ...DEFAULT_FILTERS, owner: 'none' })).toBe(true);
+    expect(hasActiveFilter(DEFAULT_FILTERS)).toBe(false);
+  });
+
+  it('becomes ownerIds and unassigned in the API filter, for the list and for a bulk "all matching"', () => {
+    const f = { ...DEFAULT_FILTERS, owner: `${ASHA},none,${RAVI}` };
+    expect(contactFilterBody(f)).toMatchObject({ ownerIds: [ASHA, RAVI], unassigned: true });
+    expect(contactFilterBody({ ...DEFAULT_FILTERS, owner: 'none' })).toMatchObject({
+      ownerIds: undefined,
+      unassigned: true,
+    });
+    expect(contactFilterBody(DEFAULT_FILTERS)).toMatchObject({
+      ownerIds: undefined,
+      unassigned: undefined,
+    });
+    expect(listQuery(f)).toMatchObject({ ownerIds: `${ASHA},${RAVI}`, unassigned: true });
+  });
+});

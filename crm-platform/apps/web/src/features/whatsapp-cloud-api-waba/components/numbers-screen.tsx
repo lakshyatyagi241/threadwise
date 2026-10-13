@@ -200,11 +200,6 @@ export function NumbersScreen() {
                   ))}
                 </ul>
               )}
-              {notice.requestId && (
-                <div className="mt-1 text-xs opacity-80">
-                  {tc('common.requestId', { id: notice.requestId })}
-                </div>
-              )}
             </div>
             <button type="button" className="text-xs underline" onClick={() => setNotice(null)}>
               {tc('common.dismiss')}

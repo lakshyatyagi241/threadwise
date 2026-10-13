@@ -10,7 +10,6 @@
       },
       "common": {
         "loading": "Memuat...",
-        "requestId": "ID permintaan",
         "retry": "Coba lagi",
         "noPermissions": "Tidak ada izin"
       },

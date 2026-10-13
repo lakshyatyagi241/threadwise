@@ -40,6 +40,7 @@ import {
 import { Ticks, useErrorText } from './parts';
 import { QuotePreview } from './quote-preview';
 import { ReactionBar } from './reaction-bar';
+import { StageChangeLine } from './stage-change-line';
 import { TemplateMessage } from './template-message';
 
 const BUBBLE = 'relative max-w-[80%] rounded-2xl px-3 py-2 text-sm shadow-sm sm:max-w-[70%]';
@@ -295,6 +296,8 @@ export interface MessageBubbleProps {
   canManageChannel?: boolean;
   /** Opens the message's delivery log (every step it went through). Offered on a message we sent. */
   onOpenLog?: (messageId: string) => void;
+  /** On a stage change line: a later "undone" line of the same change is in the thread, so the Undo is gone. */
+  stageUndone?: boolean;
 }
 
 /**
@@ -310,6 +313,7 @@ export const MessageBubble = memo(function MessageBubble({
   onRetry,
   canManageChannel = false,
   onOpenLog,
+  stageUndone = false,
 }: MessageBubbleProps) {
   const t = useTranslations('team-inbox-conversations.bubble');
   const tConsent = useTranslations('contact-consent.systemLine');
@@ -319,7 +323,15 @@ export const MessageBubble = memo(function MessageBubble({
   const [reactOpen, setReactOpen] = useState(false);
 
   if (m.kind === 'system') {
-    // The consent line is worded in the reader's language; every other system line is the server's text.
+    // The stage change line is the AI's move, with an Undo; the consent line is worded in the reader's language; every other system
+    // line is the server's text.
+    if (m.systemEvent?.event === 'stage_change') {
+      return (
+        <li data-testid="inbox-message" className="flex justify-center">
+          <StageChangeLine event={m.systemEvent} undone={stageUndone} />
+        </li>
+      );
+    }
     const consent = m.systemEvent?.event === 'consent' ? m.systemEvent : null;
     return (
       <li data-testid="inbox-message" className="flex justify-center">

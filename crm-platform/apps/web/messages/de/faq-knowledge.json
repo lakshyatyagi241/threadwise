@@ -13,7 +13,6 @@
     },
     "common": {
       "retry": "Erneut versuchen",
-      "requestId": "Anfrage {id}",
       "noAccessTitle": "Sie haben keinen Zugriff auf diese Seite",
       "noAccess": "Bitten Sie einen Workspace-Admin, Ihrer Rolle die Berechtigung {permission} zu erteilen."
     },

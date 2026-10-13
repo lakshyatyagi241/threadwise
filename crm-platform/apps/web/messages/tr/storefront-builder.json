@@ -8,7 +8,6 @@
         "dismiss": "Kapat"
       },
       "errors": {
-        "requestId": "İstek kimliği",
         "retry": "Yeniden dene",
         "network": {
           "title": "Sunucuya ulaşılamıyor",

@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "Negeren",
       "retry": "Probeer opnieuw",
-      "requestId": "Verzoek {id}",
       "noAccessTitle": "Je kunt dit scherm niet openen",
       "noAccess": "Vraag een beheerder om de machtiging “{permission}”."
     },

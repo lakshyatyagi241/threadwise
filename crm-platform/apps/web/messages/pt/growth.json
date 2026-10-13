@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "Dispensar",
       "retry": "Tentar novamente",
-      "requestId": "Solicitação {id}",
       "noAccessTitle": "Você não pode abrir esta tela",
       "noAccess": "Peça a um administrador a permissão “{permission}”."
     },

@@ -1,0 +1,180 @@
+{
+  "audit-log": {
+    "title": "Prüfprotokoll",
+    "description": "Wer was in diesem Workspace wann und von welchem Wert auf welchen geändert hat. Beantworten Sie damit „Wer war das?“, prüfen Sie Änderungen Ihres Teams und kontrollieren Sie, was der Plattform-Support auf Ihre Bitte um Hilfe getan hat.",
+    "tile": {
+      "label": "Prüfprotokoll",
+      "description": "Sehen Sie, wer was in Ihrem Workspace wann und von welchem Wert auf welchen geändert hat. Filtern und exportieren Sie das Protokoll.",
+      "keywords": "Aktivitätsprotokoll, Prüfung, Audit, Verlauf, Änderungen, wer hat geändert, Sicherheit, Compliance, Export, Support-Zugriff"
+    },
+    "retention": {
+      "days": "Einträge werden {days, plural, one {# Tag} other {# Tage}} lang aufbewahrt und dann gelöscht. Diesen Zeitraum legt die Plattform fest.",
+      "forever": "Einträge werden ohne Enddatum aufbewahrt. Diese Richtlinie legt die Plattform fest.",
+      "unknown": "Einträge werden für den von der Plattform festgelegten Zeitraum aufbewahrt und dann gelöscht."
+    },
+    "forbidden": {
+      "title": "Sie haben keinen Zugriff auf das Prüfprotokoll",
+      "body": "Bitten Sie einen Owner oder Admin des Workspace, Ihrer Rolle die Berechtigung zum Ansehen des Prüfprotokolls zu erteilen."
+    },
+    "filters": {
+      "label": "Filter für das Prüfprotokoll",
+      "range": "Zeitraum",
+      "from": "Von",
+      "to": "Bis",
+      "actor": "Person",
+      "allActors": "Alle",
+      "actorType": "Wer hat gehandelt",
+      "allActorTypes": "Beliebig",
+      "module": "Bereich",
+      "allModules": "Alle Bereiche",
+      "action": "Aktion",
+      "allActions": "Alle Aktionen",
+      "search": "Bereiche und Aktionen durchsuchen",
+      "searchHint": "Durchsucht nur Bereich und Aktion, nie die geänderten Werte.",
+      "recordId": "Datensatznummer",
+      "requestId": "Request-ID",
+      "supportOnly": "Nur Sitzungen des Plattform-Supports",
+      "apply": "Filter anwenden",
+      "refresh": "Aktualisieren",
+      "reset": "Filter zurücksetzen"
+    },
+    "ranges": {
+      "24h": "Letzte 24 Stunden",
+      "7d": "Letzte 7 Tage",
+      "30d": "Letzte 30 Tage",
+      "90d": "Letzte 90 Tage",
+      "custom": "Datum wählen"
+    },
+    "actorTypes": {
+      "user": "Eine Person",
+      "system": "Das System",
+      "api_key": "Ein API-Schlüssel",
+      "bot": "Ein Bot",
+      "partner_agent": "Ein Partner-Agent",
+      "candidate": "Ein Kandidat",
+      "other": "Etwas anderes"
+    },
+    "actors": {
+      "system": "System",
+      "api_key": "API-Schlüssel",
+      "apiKeyNamed": "API-Schlüssel: {name}",
+      "bot": "Bot",
+      "partner_agent": "Partner-Agent",
+      "candidate": "Kandidat",
+      "other": "Sonstige",
+      "removedUser": "Ein entfernter Benutzer",
+      "support": "Plattform-Support",
+      "actingAs": "handelt als {name}",
+      "supportBadge": "Plattform-Support"
+    },
+    "actions": {
+      "insert": "Erstellt",
+      "update": "Aktualisiert",
+      "delete": "Gelöscht",
+      "merge": "Zusammengeführt",
+      "login": "Angemeldet",
+      "export": "Exportiert",
+      "read": "Angesehen"
+    },
+    "modules": {
+      "contacts": "Kontakte",
+      "contact_groups": "Kontaktgruppen",
+      "contact_notes": "Kontaktnotizen",
+      "companies": "Unternehmen",
+      "deals": "Deals",
+      "tags": "Tags",
+      "members": "Teammitglieder",
+      "teams": "Teams",
+      "conversation_notes": "Konversationsnotizen",
+      "broadcasts": "Broadcasts",
+      "campaigns": "Kampagnen",
+      "faqs": "FAQs",
+      "api_keys": "API-Schlüssel",
+      "audit-log": "Prüfprotokoll",
+      "audit-log-exports": "Prüfprotokoll-Exporte",
+      "contact_consent_exports": "Exporte der Einwilligungsnachweise"
+    },
+    "table": {
+      "caption": "Prüfeinträge, neueste zuerst. Zeiten werden in Ihrer Zeitzone angezeigt ({zone}).",
+      "zone": "Zeiten werden in Ihrer Zeitzone angezeigt: {zone}.",
+      "time": "Wann",
+      "actor": "Wer",
+      "action": "Was",
+      "record": "Datensatz",
+      "changed": "Geänderte Felder",
+      "request": "Request",
+      "details": "Details",
+      "openDetails": "Details zu dieser Änderung: {what}"
+    },
+    "states": {
+      "loading": "Prüfprotokoll wird geladen",
+      "empty": "In diesem Zeitraum wurde nichts aufgezeichnet",
+      "emptyHint": "Änderungen Ihres Teams erscheinen hier.",
+      "emptyFiltered": "Keine Einträge entsprechen diesen Filtern",
+      "emptyFilteredHint": "Wählen Sie einen längeren Zeitraum oder entfernen Sie einen Filter.",
+      "retry": "Erneut versuchen",
+      "showing": "{count, plural, one {# Eintrag geladen} other {# Einträge geladen}}",
+      "loadMore": "Mehr laden",
+      "end": "Ende der Liste"
+    },
+    "detail": {
+      "title": "Prüfeintrag",
+      "when": "Wann",
+      "who": "Wer",
+      "what": "Was",
+      "record": "Datensatz",
+      "openRecord": "Datensatz öffnen",
+      "request": "Request-ID",
+      "changes": "Was sich geändert hat",
+      "field": "Feld",
+      "before": "Vorher",
+      "after": "Nachher",
+      "noChanges": "Dieser Eintrag listet keine Feldänderungen auf.",
+      "supportTitle": "Der Plattform-Support hat in Ihrem Workspace gehandelt",
+      "supportBody": "Ein Mitarbeiter des Plattform-Supports hat eine Support-Sitzung als {name} genutzt. Er konnte alles tun, was diese Person tun kann.",
+      "supportReason": "Angegebener Grund: {reason}",
+      "supportNoReason": "Der Grund für diese Sitzung ist nicht mehr verfügbar.",
+      "supportReadOnly": "Die Sitzung war schreibgeschützt.",
+      "secret": "Verborgenes Geheimnis",
+      "secretHint": "Passwörter, Schlüssel und Tokens werden nie angezeigt.",
+      "maskedHint": "Personenbezogene Daten sind teilweise verborgen.",
+      "maskedNote": "Personenbezogene Daten wie Telefonnummern, E-Mail-Adressen, Namen und Notizen sind teilweise verborgen. Geheimnisse werden nie angezeigt.",
+      "maskedNoteOwner": "Geheimnisse wie Passwörter, Schlüssel und Tokens sind für alle verborgen.",
+      "audited": "Das Öffnen dieses Eintrags wird im Prüfprotokoll aufgezeichnet."
+    },
+    "export": {
+      "title": "Export",
+      "note": "Erstellt eine CSV der Einträge, die den obigen Filtern entsprechen. Sie wird {days} Tage aufbewahrt und verbirgt personenbezogene Daten immer.",
+      "button": "CSV exportieren",
+      "preparing": "Datei wird vorbereitet",
+      "requested": "Der Export wird vorbereitet. Wir senden Ihnen eine E-Mail, sobald er bereit ist.",
+      "none": "Noch keine Exporte.",
+      "status": {
+        "queued": "Wartet",
+        "running": "Wird vorbereitet",
+        "ready": "Bereit",
+        "failed": "Fehlgeschlagen",
+        "expired": "Abgelaufen"
+      },
+      "rows": "{count, plural, one {# Eintrag} other {# Einträge}}",
+      "expires": "aufbewahrt bis {date}",
+      "download": "Herunterladen",
+      "failed": "Dieser Export konnte nicht erstellt werden. Fordern Sie ihn erneut an."
+    },
+    "errors": {
+      "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+      "forbidden": "Sie haben keine Berechtigung dafür.",
+      "notFound": "Dieser Eintrag oder Export wurde nicht gefunden.",
+      "rangeInvalid": "Wählen Sie einen Zeitraum von höchstens 400 Tagen, dessen Ende nach dem Beginn liegt.",
+      "exportInProgress": "Ein Export wird bereits vorbereitet. Warten Sie auf die E-Mail dazu und fordern Sie dann einen weiteren an.",
+      "exportNotReady": "Dieser Export ist nicht bereit oder abgelaufen.",
+      "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
+      "validation": "Einer der Filter ist ungültig.",
+      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es erneut."
+    },
+    "common": {
+      "close": "Schließen",
+      "dismiss": "Ausblenden"
+    }
+  }
+}

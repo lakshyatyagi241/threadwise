@@ -128,7 +128,6 @@
       "planLimit": "Ihr Tarif erlaubt nicht mehr davon.",
       "unavailable": "Segmente sind auf diesem Server noch nicht verfügbar.",
       "unexpected": "Etwas ist schiefgegangen. Versuchen Sie es erneut.",
-      "requestId": "Anfrage-ID",
       "retry": "Erneut versuchen",
       "shareEmpty": "Wählen Sie mindestens eine Person oder ein Team aus, mit dem das Segment geteilt werden soll.",
       "shareInvalid": "Einige der ausgewählten Personen oder Teams sind nicht mehr in diesem Workspace. Entfernen Sie sie und speichern Sie erneut."

@@ -64,7 +64,6 @@
       "conflict": "Orang lain menyimpan pengaturan ini setelah Anda membukanya. Muat ulang untuk melihat perubahan mereka, lalu terapkan perubahan Anda lagi.",
       "reload": "Muat ulang pengaturan",
       "unexpected": "Terjadi kesalahan dan tidak ada yang disimpan.",
-      "requestId": "ID permintaan",
       "readOnly": "Anda dapat membaca pengaturan ini, tetapi hanya super admin yang dapat mengubahnya.",
       "secretSet": "Tersimpan. Kosongkan untuk tetap menggunakannya.",
       "secretUnset": "Belum diatur.",

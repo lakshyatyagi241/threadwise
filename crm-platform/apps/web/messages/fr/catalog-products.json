@@ -7,8 +7,7 @@
     },
     "common": {
       "dismiss": "Fermer",
-      "retry": "Réessayer",
-      "requestId": "ID de requête"
+      "retry": "Réessayer"
     },
     "errors": {
       "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",

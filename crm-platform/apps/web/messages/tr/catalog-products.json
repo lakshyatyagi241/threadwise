@@ -7,8 +7,7 @@
     },
     "common": {
       "dismiss": "Kapat",
-      "retry": "Tekrar dene",
-      "requestId": "İstek kimliği"
+      "retry": "Tekrar dene"
     },
     "errors": {
       "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",

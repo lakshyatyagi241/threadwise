@@ -76,6 +76,16 @@ export function MessageStream(props: MessageStreamProps) {
   );
   const byId = useMemo(() => new Map(state.messages.map((m) => [m.id, m])), [state.messages]);
   const reactions = useMemo(() => agentReactions(state.messages), [state.messages]);
+  // The stage changes someone already put back: their line loses its Undo.
+  const undoneStages = useMemo(() => {
+    const ids = new Set<string>();
+    for (const m of state.messages) {
+      if (m.systemEvent?.event === 'stage_change' && m.systemEvent.action === 'undone') {
+        ids.add(m.systemEvent.suggestionId);
+      }
+    }
+    return ids;
+  }, [state.messages]);
   const newestSeq = lastSeq(state.messages);
 
   // Follow rules, applied after the list changed and before the browser paints.
@@ -275,6 +285,10 @@ export function MessageStream(props: MessageStreamProps) {
                     onRetry={props.onRetryMessage}
                     canManageChannel={props.canManageChannel}
                     onOpenLog={setLogMessageId}
+                    stageUndone={
+                      item.message.systemEvent?.event === 'stage_change' &&
+                      undoneStages.has(item.message.systemEvent.suggestionId)
+                    }
                   />
                 );
               case 'note':

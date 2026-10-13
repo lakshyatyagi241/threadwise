@@ -187,8 +187,7 @@
       "notFound": "Cet espace de travail n’existe plus.",
       "reasonRequired": "Un motif d’au moins 8 caractères est requis.",
       "orgSuspended": "L’espace de travail est suspendu : impossible d’y accéder.",
-      "validation": "Vérifiez les valeurs et réessayez.",
-      "requestId": "Identifiant de la requête"
+      "validation": "Vérifiez les valeurs et réessayez."
     },
     "detail": {
       "crumb": "Espace de travail",

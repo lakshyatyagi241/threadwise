@@ -17,11 +17,6 @@ export function ErrorNotice({ error }: { error: ErrorText }) {
           {t('upgrade')}
         </Link>
       )}
-      {error.requestId && (
-        <div className="mt-1 font-mono text-[10px] opacity-70">
-          {t('requestId', { id: error.requestId })}
-        </div>
-      )}
     </Alert>
   );
 }

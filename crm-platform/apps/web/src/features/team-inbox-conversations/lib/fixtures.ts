@@ -63,6 +63,7 @@ export function contactSummary(over: Partial<InboxContactSummary> = {}): InboxCo
     leadScoredAt: null,
     leadScoreModel: null,
     createdAt: '2026-10-01T10:00:00.000Z',
+    contactTags: [],
     ...over,
   };
 }

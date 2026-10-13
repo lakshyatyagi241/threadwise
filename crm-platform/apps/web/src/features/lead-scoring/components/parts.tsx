@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useCallback, type ReactNode, type SVGProps } from 'react';
 import { Alert, Button, cn } from '@crm/ui';
-import { requestIdOf, type ErrorKey } from '../lib/errors';
+import type { ErrorKey } from '../lib/errors';
 
 /** The bordered surface of a card or a table. */
 export const CARD = 'rounded-xl border border-border bg-background';
@@ -120,13 +120,9 @@ export function LoadError({
 }) {
   const t = useTranslations('lead-scoring.common');
   const te = useTranslations('lead-scoring.errors');
-  const id = requestIdOf(error);
   return (
     <Alert tone="danger" className="flex flex-wrap items-center justify-between gap-3">
-      <span>
-        {te(errorKey)}
-        {id && <span className="ms-2 text-xs opacity-80">{t('requestId', { id })}</span>}
-      </span>
+      <span>{te(errorKey)}</span>
       {onRetry && (
         <Button size="sm" variant="secondary" onClick={onRetry}>
           {t('retry')}

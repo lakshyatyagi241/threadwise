@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "Bỏ qua",
       "retry": "Thử lại",
-      "requestId": "Yêu cầu {id}",
       "noAccessTitle": "Bạn không thể mở màn hình này",
       "noAccess": "Hãy yêu cầu quản trị viên cấp quyền “{permission}”."
     },

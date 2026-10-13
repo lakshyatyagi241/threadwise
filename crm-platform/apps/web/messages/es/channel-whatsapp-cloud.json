@@ -156,7 +156,6 @@
       "notFound": "Este número ya no existe. Se actualizó la lista.",
       "network": "No se pudo conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
       "generic": "Algo salió mal. Inténtalo de nuevo.",
-      "genericWithId": "Algo salió mal. Inténtalo de nuevo. Referencia: {id}",
       "detail": "Detalles: {detail}",
       "fix": {
         "tokenInvalid": "Crea un token permanente de usuario del sistema en la configuración de tu empresa en Meta y pégalo en Editar credenciales.",

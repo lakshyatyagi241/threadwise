@@ -1,0 +1,274 @@
+{
+  "message-history": {
+    "common": {
+      "dismiss": "Kapat"
+    },
+    "nav": {
+      "history": "Geçmiş"
+    },
+    "crumb": "Kampanyalar / Mesaj geçmişi",
+    "title": "Mesaj geçmişi",
+    "loading": "Mesajlar yükleniyor…",
+    "tryAgain": "Tekrar dene",
+    "retention": "Her mesajın iletim adımları {hot} gün boyunca eksiksiz saklanır, ardından arşivlenir ve mesajdan {days} gün sonrasına kadar tutulur. Akışın kendisi bir yıl geriye gider.",
+    "range": {
+      "label": "Dönem",
+      "24h": "Son 24 saat",
+      "7d": "Son 7 gün",
+      "30d": "Son 30 gün",
+      "90d": "Son 90 gün",
+      "custom": "Özel tarihler",
+      "short": {
+        "24h": "24 sa",
+        "7d": "7 g",
+        "30d": "30 g",
+        "90d": "90 g"
+      },
+      "from": "Başlangıç",
+      "to": "Bitiş",
+      "apply": "Tarihleri uygula",
+      "problem": {
+        "order": "İlk tarih son tarihten sonra olamaz."
+      }
+    },
+    "exports": {
+      "title": "CSV dışa aktarımları",
+      "request": "CSV dışa aktar",
+      "requested": "Dışa aktarımınız hazırlanıyor. Hazır olduğunda size e-posta göndereceğiz.",
+      "requestedTo": "Dışa aktarımınız hazırlanıyor. Hazır olduğunda {email} adresine e-posta göndereceğiz.",
+      "status": {
+        "queued": "Başlamayı bekliyor",
+        "running": "Hazırlanıyor",
+        "ready": "Hazır",
+        "failed": "Başarısız",
+        "expired": "Süresi doldu"
+      },
+      "preparing": "Hazırlanıyor…",
+      "download": "İndir",
+      "rows": "{n} mesaj",
+      "keptUntil": "{when} tarihine kadar saklanır ({days} gün)",
+      "fromEmail": "E-postanızdan"
+    },
+    "kpi": {
+      "label": "Temel göstergeler",
+      "total": "Toplam mesaj",
+      "vsLast": "Önceki döneme göre %{pct}",
+      "sent": "Gönderilen",
+      "received": "Alınan",
+      "failed": "Başarısız",
+      "avgResponse": "Ort. yanıt süresi",
+      "delivered": "Teslim edilen",
+      "read": "Okunan",
+      "deliveryRate": "Teslim oranı",
+      "cost": "Maliyet",
+      "outgoing": "giden",
+      "incoming": "gelen",
+      "retryQueue": "yeniden deneme kuyruğu",
+      "toFirstReply": "ilk yanıta kadar",
+      "healthy": "sağlıklı",
+      "na": "yok",
+      "deliveredCaption": "müşteriye ulaştı",
+      "readCaption": "müşteri tarafından açıldı",
+      "deliveryRateCaption": "kuyruktan çıkan mesajlar içinde",
+      "costCaption": "cüzdanınızdan düşüldü"
+    },
+    "charts": {
+      "volume": "Hacim",
+      "volumeTitle": "Zaman içinde mesajlar",
+      "bucketLabel": "Gruplandır",
+      "bucket": {
+        "daily": "Günlük",
+        "hourly": "Saatlik",
+        "weekly": "Haftalık"
+      },
+      "volumeAria": "Zaman içinde mesajlar: {sent} gönderilen, {received} alınan, {failed} başarısız",
+      "when": "Zaman",
+      "series": {
+        "sent": "Gönderilen",
+        "received": "Alınan",
+        "failed": "Başarısız"
+      },
+      "direction": "Yön dağılımı",
+      "directionTitle": "Gönderilen ve alınan",
+      "directionAria": "{total} mesaj; gönderilen, alınan ve başarısız olarak ayrılmış",
+      "types": "Mesaj türüne göre",
+      "typesTitle": "Bu dönemin dağılımı",
+      "media": "Medya",
+      "top": "En çok yazışılan görüşmeler",
+      "topTitle": "En aktif görüşmeler ({range})",
+      "openInbox": "Gelen kutusunu aç",
+      "topEmpty": "Bu dönemde henüz aktif görüşme yok.",
+      "topMeta": "{n} mesaj · son {time}"
+    },
+    "filters": {
+      "search": "Mesajlarda ara",
+      "searchPlaceholder": "Metin, kişi, telefon veya mesaj kimliğine göre ara…",
+      "directionLabel": "Yön",
+      "dir": {
+        "all": "Tümü",
+        "out": "Gönderilen",
+        "in": "Alınan",
+        "fail": "Başarısız"
+      },
+      "channel": "Kanal",
+      "allChannels": "Tüm kanallar",
+      "type": "Tür",
+      "allTypes": "Tüm türler",
+      "status": "Durum",
+      "allStatuses": "Tüm durumlar",
+      "sources": "Gönderen",
+      "clear": "Filtreleri temizle",
+      "active": "Etkin filtreler",
+      "chip": {
+        "templateId": "Tek şablon",
+        "campaignId": "Tek kampanya",
+        "broadcastId": "Tek toplu gönderim",
+        "scheduledId": "Tek zamanlanmış mesaj"
+      },
+      "removeFilter": "Filtreyi kaldır: {filter}"
+    },
+    "type": {
+      "text": "Düz metin",
+      "template": "Şablon",
+      "auto_reply": "Otomatik yanıt",
+      "campaign": "Kampanya",
+      "broadcast": "Toplu gönderim",
+      "scheduled": "Zamanlanmış",
+      "image": "Görsel",
+      "video": "Video",
+      "audio": "Ses",
+      "document": "Belge",
+      "location": "Konum"
+    },
+    "status": {
+      "queued": "Sırada",
+      "sent": "Gönderildi",
+      "delivered": "Teslim edildi",
+      "read": "Okundu",
+      "failed": "Başarısız",
+      "received": "Gelen"
+    },
+    "source": {
+      "inbox": "Gelen kutusu",
+      "flow": "Akış",
+      "auto_reply": "Otomatik yanıt",
+      "ai": "Yapay zekâ asistanı",
+      "api": "API",
+      "broadcast": "Toplu gönderim",
+      "campaign": "Kampanya",
+      "scheduled": "Zamanlanmış",
+      "other": "Diğer"
+    },
+    "direction": {
+      "in": "Gelen",
+      "out": "Giden",
+      "failed": "Başarısız"
+    },
+    "table": {
+      "col": {
+        "when": "Zaman",
+        "dir": "Yön",
+        "contact": "Kişi",
+        "message": "Mesaj",
+        "type": "Tür",
+        "status": "Durum",
+        "open": "Aç"
+      },
+      "unknown": "Bilinmeyen kişi",
+      "masked": "Bu kişiyi açma yetkiniz olmadığı için numara gizlendi.",
+      "entity": {
+        "broadcast": "Toplu gönderim · {name}",
+        "campaign": "Kampanya · {name}",
+        "scheduled": "Zamanlanmış · {name}"
+      },
+      "openSource": "Aç",
+      "openSourceFor": "{name} kaynağını aç",
+      "showing": "{n} gösteriliyor",
+      "showingOf": "{total} içinden {n} gösteriliyor",
+      "loadMore": "Daha fazla yükle"
+    },
+    "empty": {
+      "noMatch": "Bu filtrelerle eşleşen mesaj yok",
+      "noMatchHint": "Aramayı temizlemeyi veya daha geniş bir dönem seçmeyi deneyin.",
+      "period": "Son {days} günde mesaj yok",
+      "periodCustom": "Bu tarihlerde mesaj yok",
+      "periodHint": "Gönderdiğiniz veya aldığınız mesajlar teslim durumlarıyla birlikte burada görünür."
+    },
+    "drawer": {
+      "title": "Mesaj ayrıntıları",
+      "close": "Kapat",
+      "loading": "Yükleniyor…",
+      "tryAgain": "Tekrar dene",
+      "copied": "Kopyalandı",
+      "copyFailed": "Kopyalanamadı",
+      "copyId": "Kimliği kopyala",
+      "openChat": "Sohbeti aç",
+      "openContact": "Kişiyi aç",
+      "openEntity": {
+        "broadcast": "Toplu gönderimi aç",
+        "campaign": "Kampanyayı aç",
+        "scheduled": "Zamanlanmış mesajı aç"
+      },
+      "unknown": "Bilinmeyen kişi",
+      "masked": "Bu kişiyi açma yetkiniz olmadığı için numara gizlendi.",
+      "direction": "Yön",
+      "directionValue": {
+        "in": "Gelen",
+        "out": "Giden"
+      },
+      "status": "Durum",
+      "type": "Tür",
+      "when": "Zaman",
+      "content": "İçerik",
+      "noText": "Metin yok",
+      "failure": "Hata",
+      "failedNoReason": "Mesaj gönderilemedi ve bir neden kaydedilmedi.",
+      "details": "Ayrıntılar",
+      "messageId": "Mesaj kimliği",
+      "source": "Gönderen",
+      "sourceValue": {
+        "inbox": "Gelen kutusu",
+        "flow": "Akış",
+        "auto_reply": "Otomatik yanıt",
+        "ai": "Yapay zekâ asistanı",
+        "api": "API",
+        "broadcast": "Toplu gönderim",
+        "campaign": "Kampanya",
+        "scheduled": "Zamanlanmış mesaj",
+        "other": "Diğer"
+      },
+      "channel": "Kanal",
+      "template": "Şablon",
+      "entity": {
+        "broadcast": "Toplu gönderim",
+        "campaign": "Kampanya",
+        "scheduled": "Zamanlanmış mesaj"
+      },
+      "sender": "Gönderen",
+      "senderKind": {
+        "customer": "Müşteri",
+        "agent": "Temsilci",
+        "bot": "Otomasyon",
+        "system": "Sistem",
+        "broadcast": "Toplu gönderim"
+      },
+      "providerId": "Sağlayıcı mesaj kimliği",
+      "language": "Dil",
+      "cost": "Maliyet",
+      "timeline": "İletim adımları",
+      "expired": "Bu mesaj {days} günden eski olduğu için iletim adımları silindi. Durumu yine de yukarıda gösterilir.",
+      "timelineEmpty": "Bu mesaj için hiçbir iletim adımı kaydedilmedi.",
+      "archived": "Bu kaydın bir kısmı arşivden geliyor ({days} günden eski olaylar)."
+    },
+    "errors": {
+      "generic": "Bir şeyler ters gitti. Tekrar deneyin.",
+      "MESSAGE_NOT_FOUND": "Bu mesaj mevcut değil veya görme yetkiniz yok.",
+      "VALIDATION_FAILED": "Bu tarihler veya filtreler geçerli değil.",
+      "FORBIDDEN": "Buna erişim yetkiniz yok.",
+      "MESSAGE_LOG_EXPORT_IN_PROGRESS": "Bir dışa aktarım zaten hazırlanıyor. E-postasını bekleyin, sonra yenisini isteyin.",
+      "MESSAGE_LOG_EXPORT_NOT_READY": "Bu dışa aktarım henüz hazır değil.",
+      "MESSAGE_LOG_EXPORT_NOT_FOUND": "Bu dışa aktarım mevcut değil.",
+      "MESSAGE_LOG_EXPORT_RANGE_INVALID": "Son 365 gün içinden tarih seçin."
+    }
+  }
+}

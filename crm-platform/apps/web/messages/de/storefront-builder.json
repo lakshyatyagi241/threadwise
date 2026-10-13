@@ -8,7 +8,6 @@
         "dismiss": "Ausblenden"
       },
       "errors": {
-        "requestId": "Anfrage-ID",
         "retry": "Erneut versuchen",
         "network": {
           "title": "Server nicht erreichbar",

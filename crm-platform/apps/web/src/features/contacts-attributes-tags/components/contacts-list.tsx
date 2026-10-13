@@ -60,6 +60,8 @@ export interface ListHandlers {
   /** What moving a contact holding `status` to `stage` does to its status ("Status becomes X"); null = nothing. */
   stageStatusHint?: (status: string, stage: string) => string | null;
   statusLabel: (value: string) => string;
+  /** The owner's display name for the Owner column (text while loading, and for a person who has left). */
+  ownerLabel?: (ownerId: string) => string;
   onToggle: (id: string) => void;
   onView: (id: string) => void;
   onEdit: (id: string) => void;
@@ -86,6 +88,7 @@ const WIDTH: Record<string, number> = {
   tags: 240,
   groups: 220,
   stage: 180,
+  owner: 190,
   leadScore: 130,
   language: 130,
   memo: 220,
@@ -116,6 +119,8 @@ function HeaderIcon({ id }: { id: ColumnId }) {
       return <FlagIcon className={cls} />;
     case 'status':
       return <FlagIcon className={cls} />;
+    case 'owner':
+      return <UserIcon className={cls} />;
     case 'leadScore':
       return <SparkleIcon className={cls} />;
     case 'language':
@@ -517,6 +522,27 @@ function Pill({ value, icon }: { value: string; icon: ReactNode }) {
   );
 }
 
+/** Initials avatar and name; a contact nobody owns says so in muted text instead of leaving a dash. */
+function OwnerCell({
+  ownerId,
+  label,
+}: {
+  ownerId: string | null;
+  label: ListHandlers['ownerLabel'];
+}) {
+  const t = useTranslations('contacts-attributes-tags.list');
+  if (!ownerId) return <span className="text-muted-foreground">{t('unassigned')}</span>;
+  const name = label?.(ownerId) ?? '';
+  return (
+    <span className="inline-flex min-w-0 max-w-full items-center gap-2">
+      <ContactAvatar id={ownerId} name={name} />
+      <span className="truncate" title={name || undefined}>
+        {name}
+      </span>
+    </span>
+  );
+}
+
 function NameCell({ row, h }: { row: RowView; h: ListHandlers }) {
   const t = useTranslations('contacts-attributes-tags.list');
   return (
@@ -566,6 +592,8 @@ function Cell({
       return <StatusCell row={row} h={h} showStatus={false} />;
     case 'status':
       return row.status ? <StatusChip value={h.statusLabel(row.status)} /> : <Dash />;
+    case 'owner':
+      return <OwnerCell ownerId={row.ownerId} label={h.ownerLabel} />;
     case 'leadScore':
       return row.leadScore === null ? (
         <Dash />

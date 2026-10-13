@@ -14,7 +14,6 @@
       "dismiss": "Kapat",
       "admin": "Yönetici",
       "readOnly": "Bu sayfayı görüntüleyebilirsiniz ancak yalnızca süper yönetici değiştirebilir.",
-      "requestId": "İstek kimliği",
       "errors": {
         "forbidden": "Bu sayfaya erişiminiz yok.",
         "request": "İstek tamamlanamadı.",
@@ -404,7 +403,6 @@
         "validation": "Bu filtreler uygulanamadı. Sıfırlayıp tekrar deneyin.",
         "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
         "generic": "Bir şeyler ters gitti. Birazdan tekrar deneyin.",
-        "requestId": "İstek kimliği",
         "retry": "Tekrar dene"
       }
     }

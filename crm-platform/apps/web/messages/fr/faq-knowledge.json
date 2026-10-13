@@ -13,7 +13,6 @@
     },
     "common": {
       "retry": "Réessayer",
-      "requestId": "Requête {id}",
       "noAccessTitle": "Vous n’avez pas accès à cet écran",
       "noAccess": "Demandez à un administrateur de l’espace de travail d’accorder à votre rôle la permission {permission}."
     },

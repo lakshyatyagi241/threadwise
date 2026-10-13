@@ -106,16 +106,7 @@ export function ErrorPanel({
     <div role="alert">
       <EmptyState
         title={title ?? t('errorTitle')}
-        message={
-          <>
-            {errorMessage(te, e, error)}
-            {e.requestId && (
-              <span className="mt-1 block font-mono text-[11px]">
-                {t('requestId')}: {e.requestId}
-              </span>
-            )}
-          </>
-        }
+        message={<>{errorMessage(te, e, error)}</>}
         actions={
           <>
             {isPlanGate(e) && e.upgradeHref && (
@@ -148,11 +139,6 @@ export function ErrorLine({ error, className }: { error: unknown; className?: st
           <Link href={e.upgradeHref} className={TEXT_LINK}>
             {t('upgrade')}
           </Link>
-        </p>
-      )}
-      {e.requestId && (
-        <p className="mt-1 font-mono text-[11px]">
-          {t('requestId')}: {e.requestId}
         </p>
       )}
     </Alert>

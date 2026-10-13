@@ -46,7 +46,6 @@
         "copyFailed": "No se pudo copiar",
         "loading": "Cargando",
         "retry": "Reintentar",
-        "requestId": "ID de solicitud",
         "errors": {
           "forbidden": "Tu rol no permite esta acción.",
           "request": "Se rechazó la solicitud. Recarga la página e inténtalo de nuevo.",
@@ -61,7 +60,6 @@
       "login": {
         "title": "Inicio de sesión de operador",
         "intro": "Esta consola es para quienes operan la plataforma. Los usuarios de los espacios de trabajo inician sesión en la página principal de inicio de sesión.",
-        "requestId": "ID de solicitud",
         "submit": "Iniciar sesión",
         "submitting": "Iniciando sesión",
         "fields": {
@@ -127,7 +125,6 @@
         "eyebrow": "Tu cuenta",
         "title": "Autenticación de dos factores",
         "description": "Protege {email} con una aplicación de autenticación. Las cuentas de operador son las de mayor confianza de la plataforma.",
-        "requestId": "ID de solicitud",
         "status": {
           "title": "Aplicación de autenticación",
           "on": "Activada",
@@ -181,7 +178,6 @@
         "saving": "Guardando",
         "saved": "{count, plural, one {# ajuste guardado} many {# de ajustes guardados} other {# ajustes guardados}}",
         "rejected": "No se guardó nada. {count, plural, one {Se rechazó # campo.} many {Se rechazaron # de campos.} other {Se rechazaron # campos.}}",
-        "requestId": "ID de solicitud",
         "unsaved": "{count, plural, one {# cambio sin guardar} many {# de cambios sin guardar} other {# cambios sin guardar}}",
         "discard": "Descartar cambios",
         "errors": {
@@ -658,7 +654,6 @@
             "working": "Procesando",
             "close": "Cerrar",
             "signInAgain": "Iniciar sesión de nuevo",
-            "requestId": "ID de solicitud",
             "errors": {
               "forbidden": "Solo un superadministrador puede ejecutar esta acción.",
               "unexpected": "La acción no se completó. Revisa el registro de eventos antes de volver a intentarlo."
@@ -731,7 +726,6 @@
         "saving": "Guardando",
         "saved": "{count, plural, one {# ajuste guardado} many {# de ajustes guardados} other {# ajustes guardados}}",
         "rejected": "No se guardó nada. {count, plural, one {Se rechazó # campo.} many {Se rechazaron # de campos.} other {Se rechazaron # campos.}}",
-        "requestId": "ID de solicitud",
         "unsaved": "{count, plural, one {# cambio sin guardar} many {# de cambios sin guardar} other {# cambios sin guardar}}",
         "discard": "Descartar cambios",
         "errors": {
@@ -941,7 +935,6 @@
             "sent": "Se envió un código de prueba a {to}.",
             "remaining": "{count, plural, one {Queda # prueba esta hora.} many {Quedan # de pruebas esta hora.} other {Quedan # pruebas esta hora.}}",
             "notShown": "El código no se muestra aquí; léelo en el teléfono.",
-            "requestId": "ID de solicitud",
             "errors": {
               "invalidNumber": "Introduce el número con su prefijo de país, por ejemplo +91 98765 43221.",
               "rateLimited": "Demasiados códigos de prueba esta hora. Inténtalo de nuevo en {minutes, plural, one {# minuto} many {# de minutos} other {# minutos}}.",
@@ -1045,7 +1038,6 @@
           "saved": "Remitente guardado",
           "removed": "Remitente quitado",
           "secretRemoved": "Secreto guardado eliminado",
-          "requestId": "ID de solicitud",
           "problems": {
             "required": "Este campo es obligatorio.",
             "tooLong": "Como máximo {max} caracteres.",
@@ -1076,8 +1068,7 @@
           "errors": {
             "invalid": "No se aceptó ese pie.",
             "unexpected": "No se pudo guardar el pie. Inténtalo de nuevo en un momento."
-          },
-          "requestId": "ID de solicitud"
+          }
         }
       },
       "social": {
@@ -1088,7 +1079,6 @@
         "saving": "Guardando",
         "saved": "{count, plural, one {# ajuste guardado} many {# de ajustes guardados} other {# ajustes guardados}}",
         "rejected": "No se guardó nada. {count, plural, one {Se rechazó # campo.} many {Se rechazaron # de campos.} other {Se rechazaron # campos.}}",
-        "requestId": "ID de solicitud",
         "unsaved": "{count, plural, one {# cambio sin guardar} many {# de cambios sin guardar} other {# cambios sin guardar}}",
         "discard": "Descartar cambios",
         "errors": {
@@ -1206,7 +1196,6 @@
           "cancel": "Cancelar",
           "working": "Quitando",
           "error": "No se pudo quitar el secreto. Inténtalo de nuevo en un momento.",
-          "requestId": "ID de solicitud",
           "done": "Se quitó el secreto guardado de {name}.",
           "names": {
             "google": "Google",
@@ -1670,7 +1659,6 @@
         "saving": "Guardando",
         "saved": "{count, plural, one {# ajuste guardado} many {# de ajustes guardados} other {# ajustes guardados}}",
         "rejected": "No se guardó nada. {count, plural, one {Se rechazó # campo.} many {Se rechazaron # de campos.} other {Se rechazaron # campos.}}",
-        "requestId": "ID de solicitud",
         "unsaved": "{count, plural, one {# cambio sin guardar} many {# de cambios sin guardar} other {# cambios sin guardar}}",
         "discard": "Descartar cambios",
         "errors": {

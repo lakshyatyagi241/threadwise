@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "Kapat",
       "retry": "Tekrar dene",
-      "requestId": "İstek {id}",
       "noAccessTitle": "Bu ekranı açamazsınız",
       "noAccess": "Yöneticiden “{permission}” iznini isteyin."
     },

@@ -35,7 +35,6 @@
       "notFound": "Bu fırsat bulunamadı. Silinmiş olabilir.",
       "planDisabled": "Planınız satış hattını içermiyor. Açmak için yükseltin.",
       "unexpected": "Bir şeyler ters gitti. Birazdan tekrar deneyin.",
-      "requestId": "İstek kimliği",
       "retry": "Tekrar dene",
       "planLimit": "Planınızın sınırına ulaştınız.",
       "lostReasonRequired": "Fırsatı kaybedildi olarak işaretlemek için bir neden seçin.",

@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "Abaikan",
       "retry": "Coba lagi",
-      "requestId": "Permintaan {id}",
       "noAccessTitle": "Anda tidak dapat membuka layar ini",
       "noAccess": "Minta izin “{permission}” kepada admin."
     },

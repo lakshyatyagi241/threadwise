@@ -30,6 +30,7 @@ import {
 import { AuditService } from '../../kernel/audit/audit.service';
 import { CampaignsRepository } from '../campaigns';
 import { ContactGroupsService, ContactsService } from '../crm';
+import { LeadStageLineService } from '../lead-scoring';
 import { auc } from './growth.rules';
 import { GrowthGateService, type GrowthContext } from './growth-gate.service';
 import { GrowthRepository } from './growth.repository';
@@ -77,6 +78,7 @@ export class GrowthService {
     private readonly audit: AuditService,
     private readonly groups: ContactGroupsService,
     private readonly contacts: ContactsService,
+    private readonly stageLines: LeadStageLineService,
     private readonly campaigns: CampaignsRepository,
     @Inject(GROWTH_ENRICHMENT_PORT) private readonly enrichment: GrowthEnrichmentPort,
   ) {}
@@ -514,6 +516,18 @@ export class GrowthService {
     await this.db.txAs({ orgId, userId: null }, (tx) =>
       this.repo.markSuggestion(tx, orgId, s.id, 'auto_applied', 'undone'),
     );
+    const labels = new Map(
+      (await this.db.txAs({ orgId, userId: null }, (tx) => this.repo.stages(tx, orgId))).map(
+        (x) => [x.value, x.label],
+      ),
+    );
+    await this.stageLines.write(orgId, {
+      suggestionUuid: suggestionUuid,
+      contactId: s.contactId,
+      fromLabel: labels.get(s.toStage) ?? s.toStage,
+      toLabel: labels.get(s.fromStage) ?? s.fromStage,
+      action: 'undone',
+    });
   }
 
   // --- enrichment ----------------------------------------------------------------------------------------------------------

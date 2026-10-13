@@ -828,7 +828,6 @@
         "notFound": "Tidak ditemukan. Mungkin sudah dihapus.",
         "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar dan coba lagi.",
         "unexpected": "Terjadi kesalahan di sisi kami. Coba lagi.",
-        "requestId": "ID permintaan",
         "retry": "Coba lagi"
       },
       "categories": {

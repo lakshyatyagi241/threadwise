@@ -40,7 +40,6 @@
       "planDisabled": "Il tuo piano non include la fatturazione.",
       "invalidState": "Non è possibile nello stato attuale della fattura. Ricarica e controlla il suo stato.",
       "unexpected": "Si è verificato un problema lato nostro. Riprova.",
-      "requestId": "ID richiesta",
       "retry": "Riprova"
     },
     "picker": {

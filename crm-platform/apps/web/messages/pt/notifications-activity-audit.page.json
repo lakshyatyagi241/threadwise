@@ -1,0 +1,53 @@
+{
+  "notifications": {
+    "page": {
+      "title": "Notificações",
+      "description": "Tudo o que precisou da sua atenção, da mais recente para a mais antiga. Escolha quais eventos chegam até você nas configurações de notificação.",
+      "markAll": "Marcar tudo como lido",
+      "clearAll": "Limpar tudo",
+      "preferences": "Configurações de notificação",
+      "clearTitle": "Limpar todas as notificações?",
+      "clearBody": "Isso remove definitivamente todas as suas notificações. As outras pessoas mantêm as delas. Esta ação não pode ser desfeita.",
+      "clearConfirm": "Limpar tudo",
+      "cancel": "Cancelar",
+      "dismiss": "Dispensar esta notificação",
+      "tiles": {
+        "unread": "Não lidas",
+        "unreadHint": "Selecione para ver só as não lidas",
+        "day": "Últimas 24 horas",
+        "dayHint": "Recebidas hoje",
+        "week": "Últimos 7 dias",
+        "weekHint": "Recebidas esta semana",
+        "total": "Mantidas",
+        "totalHint": "As mais antigas são removidas automaticamente"
+      },
+      "filters": {
+        "label": "Filtros de notificações",
+        "readLabel": "Mostrar",
+        "all": "Todas",
+        "unread": "Não lidas",
+        "type": "Tipo",
+        "allTypes": "Todos os tipos",
+        "otherTypes": "Outros",
+        "search": "Buscar notificações",
+        "reset": "Limpar filtros"
+      },
+      "sections": {
+        "today": "Hoje",
+        "yesterday": "Ontem",
+        "thisWeek": "Antes, nesta semana",
+        "older": "Mais antigas"
+      },
+      "loading": "Carregando notificações",
+      "failed": "Não foi possível carregar suas notificações.",
+      "retry": "Tentar novamente",
+      "empty": "Nenhuma notificação ainda",
+      "emptyHint": "Novos chats, atribuições, menções e resultados dos seus envios aparecerão aqui.",
+      "emptyFiltered": "Nenhuma notificação corresponde a estes filtros",
+      "emptyFilteredHint": "Remova um filtro ou busque outra coisa.",
+      "showing": "{count, plural, one {# notificação carregada} many {# de notificações carregadas} other {# notificações carregadas}}",
+      "loadMore": "Carregar mais",
+      "end": "Fim da lista"
+    }
+  }
+}

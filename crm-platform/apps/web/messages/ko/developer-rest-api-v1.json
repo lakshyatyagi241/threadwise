@@ -96,8 +96,7 @@
       "unexpected": "서버에서 문제가 발생했습니다. 잠시 후 다시 시도하세요.",
       "loadFailed": "API 키를 불러오지 못했습니다.",
       "retry": "다시 시도",
-      "upgrade": "요금제 보기",
-      "requestId": "요청 ID: {id}"
+      "upgrade": "요금제 보기"
     }
   }
 }

@@ -17,7 +17,6 @@
       "delete": "Xóa",
       "edit": "Sửa",
       "loadMore": "Tải thêm",
-      "requestId": "Mã yêu cầu",
       "errors": {
         "forbidden": "Chỉ quản trị viên cấp cao mới có thể thay đổi mục này.",
         "conflict": "Người khác đã thay đổi mục này khi bạn đang sửa. Hãy tải lại và thử lại.",

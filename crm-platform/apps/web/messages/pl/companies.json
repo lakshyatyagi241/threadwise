@@ -18,7 +18,6 @@
       "planDisabled": "Twój plan nie obejmuje firm. Zmień plan na wyższy, aby je odblokować.",
       "ownerInvalid": "Właściciel musi być aktywnym członkiem tej przestrzeni roboczej.",
       "unexpected": "Coś poszło nie tak. Spróbuj ponownie za chwilę.",
-      "requestId": "Identyfikator żądania",
       "retry": "Spróbuj ponownie"
     },
     "list": {

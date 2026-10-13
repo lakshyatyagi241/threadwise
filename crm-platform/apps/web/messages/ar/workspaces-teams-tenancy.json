@@ -11,8 +11,7 @@
       "copied": "تم النسخ",
       "retry": "حاول مرة أخرى",
       "loadMore": "عرض المزيد",
-      "loadingMore": "جارٍ التحميل",
-      "requestId": "معرّف الطلب"
+      "loadingMore": "جارٍ التحميل"
     },
     "tiers": {
       "owner": "المالك",

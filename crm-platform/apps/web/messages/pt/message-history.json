@@ -1,0 +1,274 @@
+{
+  "message-history": {
+    "common": {
+      "dismiss": "Dispensar"
+    },
+    "nav": {
+      "history": "Histórico"
+    },
+    "crumb": "Campanhas / Histórico de mensagens",
+    "title": "Histórico de mensagens",
+    "loading": "Carregando mensagens…",
+    "tryAgain": "Tentar novamente",
+    "retention": "As etapas de entrega de cada mensagem ficam completas por {hot} dias, depois são arquivadas e mantidas até {days} dias após a mensagem. O próprio feed abrange um ano.",
+    "range": {
+      "label": "Período",
+      "24h": "Últimas 24 horas",
+      "7d": "Últimos 7 dias",
+      "30d": "Últimos 30 dias",
+      "90d": "Últimos 90 dias",
+      "custom": "Datas personalizadas",
+      "short": {
+        "24h": "24h",
+        "7d": "7d",
+        "30d": "30d",
+        "90d": "90d"
+      },
+      "from": "De",
+      "to": "Até",
+      "apply": "Aplicar datas",
+      "problem": {
+        "order": "A primeira data não pode ser posterior à última."
+      }
+    },
+    "exports": {
+      "title": "Exportações CSV",
+      "request": "Exportar CSV",
+      "requested": "Sua exportação está sendo preparada. Enviaremos um e-mail quando estiver pronta.",
+      "requestedTo": "Sua exportação está sendo preparada. Enviaremos um e-mail para {email} quando estiver pronta.",
+      "status": {
+        "queued": "Aguardando início",
+        "running": "Preparando",
+        "ready": "Pronta",
+        "failed": "Falhou",
+        "expired": "Expirada"
+      },
+      "preparing": "Preparando…",
+      "download": "Baixar",
+      "rows": "{n} mensagens",
+      "keptUntil": "mantida até {when} ({days} dias)",
+      "fromEmail": "Do seu e-mail"
+    },
+    "kpi": {
+      "label": "Números principais",
+      "total": "Total de mensagens",
+      "vsLast": "{pct}% vs. período anterior",
+      "sent": "Enviadas",
+      "received": "Recebidas",
+      "failed": "Com falha",
+      "avgResponse": "Resposta média",
+      "delivered": "Entregues",
+      "read": "Lidas",
+      "deliveryRate": "Taxa de entrega",
+      "cost": "Custo",
+      "outgoing": "enviadas",
+      "incoming": "recebidas",
+      "retryQueue": "fila de novas tentativas",
+      "toFirstReply": "até a primeira resposta",
+      "healthy": "saudável",
+      "na": "n/d",
+      "deliveredCaption": "chegaram ao cliente",
+      "readCaption": "abertas pelo cliente",
+      "deliveryRateCaption": "das mensagens que saíram da fila",
+      "costCaption": "debitado da sua carteira"
+    },
+    "charts": {
+      "volume": "Volume",
+      "volumeTitle": "Mensagens ao longo do tempo",
+      "bucketLabel": "Agrupar por",
+      "bucket": {
+        "daily": "Diário",
+        "hourly": "Por hora",
+        "weekly": "Semanal"
+      },
+      "volumeAria": "Mensagens ao longo do tempo: {sent} enviadas, {received} recebidas, {failed} com falha",
+      "when": "Quando",
+      "series": {
+        "sent": "Enviadas",
+        "received": "Recebidas",
+        "failed": "Com falha"
+      },
+      "direction": "Divisão por direção",
+      "directionTitle": "Enviadas vs. recebidas",
+      "directionAria": "{total} mensagens, divididas em enviadas, recebidas e com falha",
+      "types": "Por tipo de mensagem",
+      "typesTitle": "Composição neste período",
+      "media": "Mídia",
+      "top": "Principais conversas",
+      "topTitle": "Conversas mais ativas ({range})",
+      "openInbox": "Abrir caixa de entrada",
+      "topEmpty": "Ainda não há conversas ativas neste período.",
+      "topMeta": "{n} msgs · última {time}"
+    },
+    "filters": {
+      "search": "Buscar mensagens",
+      "searchPlaceholder": "Busque por texto, contato, telefone ou ID da mensagem…",
+      "directionLabel": "Direção",
+      "dir": {
+        "all": "Todas",
+        "out": "Enviadas",
+        "in": "Recebidas",
+        "fail": "Com falha"
+      },
+      "channel": "Canal",
+      "allChannels": "Todos os canais",
+      "type": "Tipo",
+      "allTypes": "Todos os tipos",
+      "status": "Status",
+      "allStatuses": "Todos os status",
+      "sources": "Enviado por",
+      "clear": "Limpar filtros",
+      "active": "Filtros ativos",
+      "chip": {
+        "templateId": "Um modelo",
+        "campaignId": "Uma campanha",
+        "broadcastId": "Uma transmissão",
+        "scheduledId": "Uma mensagem agendada"
+      },
+      "removeFilter": "Remover filtro: {filter}"
+    },
+    "type": {
+      "text": "Texto simples",
+      "template": "Modelo",
+      "auto_reply": "Resposta automática",
+      "campaign": "Campanha",
+      "broadcast": "Transmissão",
+      "scheduled": "Agendada",
+      "image": "Imagem",
+      "video": "Vídeo",
+      "audio": "Áudio",
+      "document": "Documento",
+      "location": "Localização"
+    },
+    "status": {
+      "queued": "Na fila",
+      "sent": "Enviada",
+      "delivered": "Entregue",
+      "read": "Lida",
+      "failed": "Falhou",
+      "received": "Recebida"
+    },
+    "source": {
+      "inbox": "Caixa de entrada",
+      "flow": "Fluxo",
+      "auto_reply": "Resposta automática",
+      "ai": "Assistente de IA",
+      "api": "API",
+      "broadcast": "Transmissão",
+      "campaign": "Campanha",
+      "scheduled": "Agendada",
+      "other": "Outro"
+    },
+    "direction": {
+      "in": "Recebida",
+      "out": "Enviada",
+      "failed": "Com falha"
+    },
+    "table": {
+      "col": {
+        "when": "Quando",
+        "dir": "Dir.",
+        "contact": "Contato",
+        "message": "Mensagem",
+        "type": "Tipo",
+        "status": "Status",
+        "open": "Abrir"
+      },
+      "unknown": "Contato desconhecido",
+      "masked": "Este número está oculto porque você não pode abrir este contato.",
+      "entity": {
+        "broadcast": "Transmissão · {name}",
+        "campaign": "Campanha · {name}",
+        "scheduled": "Agendada · {name}"
+      },
+      "openSource": "Abrir",
+      "openSourceFor": "Abrir a origem de {name}",
+      "showing": "Mostrando {n}",
+      "showingOf": "Mostrando {n} de {total}",
+      "loadMore": "Carregar mais"
+    },
+    "empty": {
+      "noMatch": "Nenhuma mensagem corresponde a estes filtros",
+      "noMatchHint": "Tente limpar a busca ou escolher um período maior.",
+      "period": "Nenhuma mensagem nos últimos {days} dias",
+      "periodCustom": "Nenhuma mensagem nestas datas",
+      "periodHint": "As mensagens que você enviar ou receber aparecerão aqui, com o status de entrega."
+    },
+    "drawer": {
+      "title": "Detalhes da mensagem",
+      "close": "Fechar",
+      "loading": "Carregando…",
+      "tryAgain": "Tentar novamente",
+      "copied": "Copiado",
+      "copyFailed": "Não foi possível copiar",
+      "copyId": "Copiar ID",
+      "openChat": "Abrir conversa",
+      "openContact": "Abrir contato",
+      "openEntity": {
+        "broadcast": "Abrir transmissão",
+        "campaign": "Abrir campanha",
+        "scheduled": "Abrir mensagem agendada"
+      },
+      "unknown": "Contato desconhecido",
+      "masked": "Este número está oculto porque você não pode abrir este contato.",
+      "direction": "Direção",
+      "directionValue": {
+        "in": "Recebida",
+        "out": "Enviada"
+      },
+      "status": "Status",
+      "type": "Tipo",
+      "when": "Quando",
+      "content": "Conteúdo",
+      "noText": "Sem texto",
+      "failure": "Falha",
+      "failedNoReason": "A mensagem falhou e nenhum motivo foi registrado.",
+      "details": "Detalhes",
+      "messageId": "ID da mensagem",
+      "source": "Enviado por",
+      "sourceValue": {
+        "inbox": "Caixa de entrada",
+        "flow": "Fluxo",
+        "auto_reply": "Resposta automática",
+        "ai": "Assistente de IA",
+        "api": "API",
+        "broadcast": "Transmissão",
+        "campaign": "Campanha",
+        "scheduled": "Mensagem agendada",
+        "other": "Outro"
+      },
+      "channel": "Canal",
+      "template": "Modelo",
+      "entity": {
+        "broadcast": "Transmissão",
+        "campaign": "Campanha",
+        "scheduled": "Mensagem agendada"
+      },
+      "sender": "Remetente",
+      "senderKind": {
+        "customer": "Cliente",
+        "agent": "Atendente",
+        "bot": "Automação",
+        "system": "Sistema",
+        "broadcast": "Envio em massa"
+      },
+      "providerId": "ID da mensagem no provedor",
+      "language": "Idioma",
+      "cost": "Custo",
+      "timeline": "Etapas de entrega",
+      "expired": "Esta mensagem tem mais de {days} dias, então suas etapas de entrega não estão mais disponíveis. O status continua exibido acima.",
+      "timelineEmpty": "Nenhuma etapa de entrega foi registrada para esta mensagem.",
+      "archived": "Parte deste registro vem do arquivo (eventos com mais de {days} dias)."
+    },
+    "errors": {
+      "generic": "Algo deu errado. Tente novamente.",
+      "MESSAGE_NOT_FOUND": "Esta mensagem não existe ou você não tem permissão para vê-la.",
+      "VALIDATION_FAILED": "Essas datas ou filtros não são válidos.",
+      "FORBIDDEN": "Você não tem acesso a isto.",
+      "MESSAGE_LOG_EXPORT_IN_PROGRESS": "Já há uma exportação sendo preparada. Aguarde o e-mail dela e depois solicite outra.",
+      "MESSAGE_LOG_EXPORT_NOT_READY": "Esta exportação ainda não está pronta.",
+      "MESSAGE_LOG_EXPORT_NOT_FOUND": "Esta exportação não existe.",
+      "MESSAGE_LOG_EXPORT_RANGE_INVALID": "Escolha datas dentro dos últimos 365 dias."
+    }
+  }
+}
