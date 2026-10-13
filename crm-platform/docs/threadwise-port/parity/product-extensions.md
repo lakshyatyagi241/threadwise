@@ -401,3 +401,7 @@ Reference's `/call-logs` is a list of the AI assistant's calls with a time range
 
 Decisions for the owner: whether the Manager preset should read its own calls (Reference's tier is admin only); whether "handle time" should
 later include ringing and wrap-up time once the inbox records them; whether a CSV export of the log is wanted (Reference has none).
+
+## Contact owner (BL-111): visible and editable on every contact screen, not in Reference
+
+Reference keeps the creator of a contact in `user_id` and shows it nowhere. Here the owner is a first-class field of the contact: an Owner select in the form (a new contact starts as its creator), an optional Owner column (hidden until turned on), an Owner filter in the Hub (several people, Unassigned, My contacts), the owner on the profile with Change owner, `owner_email` in the CSV export, and a reassignment of "all N matching" in one request. Who may be named follows the record scope. Details, the screen-by-screen table and what is not verified: [contacts-attributes-tags.md](contacts-attributes-tags.md) (section "Contact owner"), wiring [contact-owner.md](../wiring/contact-owner.md). The owner on leave, delegation and auto-assignment are a design only: [specs/contact-owner-leave-and-delegation.md](../../specs/contact-owner-leave-and-delegation.md).

@@ -81,7 +81,8 @@ export const createContactSchema = z
     email: emailSchema.optional(),
     phone: phoneSchema.optional(),
     companyId: uuidSchema.optional(),
-    ownerId: uuidSchema.optional(),
+    /** Omitted: the creator. `null`: nobody (refused to a caller whose record scope would hide the contact). */
+    ownerId: uuidSchema.nullish(),
     lifecycleStage: lifecycleStageSchema.or(z.string().min(1)).optional(),
     status: z.string().max(64).optional(),
     lostReason: z.string().max(255).optional(),
@@ -248,6 +249,11 @@ export const assigneeResponseSchema = z.object({
   id: uuidSchema,
   fullName: z.string(),
   email: z.string(),
+  /**
+   * Whether the caller's record scope lets them hand a contact to this person (`all`: anyone; `team`: themselves and
+   * teammates; `own`: themselves). The owner picker offers only these; the server enforces it again on every write.
+   */
+  canAssign: z.boolean(),
 });
 export type AssigneeResponse = z.infer<typeof assigneeResponseSchema>;
 
