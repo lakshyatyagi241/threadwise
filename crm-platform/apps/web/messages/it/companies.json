@@ -18,7 +18,6 @@
       "planDisabled": "Il tuo piano non include le aziende. Passa a un piano superiore per sbloccarle.",
       "ownerInvalid": "Il responsabile deve essere un membro attivo di questo Workspace.",
       "unexpected": "Qualcosa è andato storto. Riprova tra un momento.",
-      "requestId": "ID richiesta",
       "retry": "Riprova"
     },
     "list": {

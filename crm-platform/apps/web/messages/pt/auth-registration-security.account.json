@@ -22,7 +22,6 @@
         "signedOut": "Sua sessão terminou. Faça login novamente.",
         "rateLimited": "Muitas tentativas. Aguarde um momento e tente novamente.",
         "rateLimitedWait": "Muitas tentativas. Tente novamente em {seconds, plural, one {# segundo} other {# segundos}}.",
-        "requestId": "ID da solicitação",
         "locked": "Muitas tentativas malsucedidas. Aguarde um pouco antes de tentar novamente.",
         "lockedWait": "Muitas tentativas malsucedidas. Tente novamente em {minutes, plural, one {# minuto} other {# minutos}}."
       },

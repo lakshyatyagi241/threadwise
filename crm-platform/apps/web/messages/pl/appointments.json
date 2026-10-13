@@ -36,7 +36,6 @@
       "slotTaken": "Ten termin został właśnie zajęty. Wybierz inny.",
       "gone": "Tej rezerwacji nie można już zmienić.",
       "unexpected": "Coś poszło nie tak. Spróbuj ponownie za chwilę.",
-      "requestId": "Identyfikator żądania",
       "retry": "Spróbuj ponownie",
       "invalidTransition": "Ta rezerwacja nie jest w stanie, w którym można to zrobić. Odśwież stronę, aby zobaczyć jej stan.",
       "notStarted": "Można to zrobić dopiero po rozpoczęciu rezerwacji.",

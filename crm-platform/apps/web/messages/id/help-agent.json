@@ -94,8 +94,7 @@
       "signedOut": "Sesi Anda berakhir. Masuk lagi.",
       "network": "Tidak dapat menjangkau server. Periksa koneksi Anda lalu coba lagi.",
       "generic": "Terjadi kesalahan. Coba lagi.",
-      "retryIn": "Coba lagi dalam {seconds} detik.",
-      "requestId": "ID permintaan: {id}"
+      "retryIn": "Coba lagi dalam {seconds} detik."
     },
     "examples": {
       "howDo": "Bagaimana cara memakai {title}?",
@@ -115,7 +114,6 @@
       "description": "Biarkan tim Anda meminta apa yang ingin mereka lakukan, lalu aplikasi memandu mereka atau mengerjakan langkahnya dengan akun mereka sendiri.",
       "loading": "Memuat",
       "loadFailed": "Pengaturan tidak dapat dimuat.",
-      "requestId": "ID permintaan: {id}",
       "shareTitle": "Apa yang dibagikan saat seseorang memakainya",
       "share1": "Permintaan yang diketik pengguna dan teks yang terlihat di halaman mereka dikirim ke penyedia AI yang dipakai platform.",
       "share2": "Nomor telepon, alamat email, data rahasia, dan kolom pribadi pada formulir disembunyikan lebih dulu. Nama dan teks bebas lain di halaman tidak disembunyikan.",

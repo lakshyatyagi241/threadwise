@@ -14,7 +14,6 @@
       "dismiss": "Sluiten",
       "admin": "Beheerder",
       "readOnly": "Je kunt deze pagina bekijken, maar alleen een superbeheerder kan hem wijzigen.",
-      "requestId": "Verzoek-ID",
       "errors": {
         "forbidden": "Je hebt geen toegang tot deze pagina.",
         "request": "Het verzoek kon niet worden voltooid.",
@@ -404,7 +403,6 @@
         "validation": "Die filters konden niet worden toegepast. Reset ze en probeer het opnieuw.",
         "network": "De server was niet bereikbaar. Controleer je verbinding en probeer het opnieuw.",
         "generic": "Er ging iets mis. Probeer het zo meteen opnieuw.",
-        "requestId": "Verzoek-ID",
         "retry": "Opnieuw proberen"
       }
     }

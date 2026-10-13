@@ -156,7 +156,6 @@
       "notFound": "Diese Nummer existiert nicht mehr. Die Liste wurde aktualisiert.",
       "network": "Der Server war nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
       "generic": "Etwas ist schiefgelaufen. Versuchen Sie es erneut.",
-      "genericWithId": "Etwas ist schiefgelaufen. Versuchen Sie es erneut. Referenz: {id}",
       "detail": "Details: {detail}",
       "fix": {
         "tokenInvalid": "Erstellen Sie in Ihren Meta-Business-Einstellungen ein permanentes System-User-Token und fügen Sie es unter „Zugangsdaten bearbeiten“ ein.",

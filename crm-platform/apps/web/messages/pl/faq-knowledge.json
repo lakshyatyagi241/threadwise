@@ -13,7 +13,6 @@
     },
     "common": {
       "retry": "Spróbuj ponownie",
-      "requestId": "Żądanie {id}",
       "noAccessTitle": "Nie masz dostępu do tego ekranu",
       "noAccess": "Poproś administratora przestrzeni roboczej o nadanie Twojej roli uprawnienia {permission}."
     },

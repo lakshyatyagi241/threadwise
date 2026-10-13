@@ -10,7 +10,6 @@
       },
       "common": {
         "loading": "Loading...",
-        "requestId": "Request id",
         "retry": "Try again",
         "noPermissions": "No permissions"
       },

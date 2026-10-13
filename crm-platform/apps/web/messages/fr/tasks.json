@@ -282,7 +282,6 @@
       "planDisabled": "Votre offre ne comprend pas les tâches. Mettez à niveau votre offre pour y accéder.",
       "assigneeInvalid": "Cette personne n’est pas un membre actif de cet espace de travail.",
       "unexpected": "Une erreur s’est produite. Réessayez dans un instant.",
-      "requestId": "Identifiant de la requête",
       "retry": "Réessayer"
     },
     "toast": {

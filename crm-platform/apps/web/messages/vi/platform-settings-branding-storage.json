@@ -64,7 +64,6 @@
       "conflict": "Người khác đã lưu các cài đặt này sau khi bạn mở chúng. Tải lại trang để xem thay đổi của họ, rồi áp dụng lại thay đổi của bạn.",
       "reload": "Tải lại cài đặt",
       "unexpected": "Đã xảy ra lỗi và chưa có gì được lưu.",
-      "requestId": "Mã yêu cầu",
       "readOnly": "Bạn có thể xem các cài đặt này, nhưng chỉ quản trị viên cấp cao mới có thể thay đổi.",
       "secretSet": "Đã lưu. Để trống để giữ nguyên.",
       "secretUnset": "Chưa đặt.",

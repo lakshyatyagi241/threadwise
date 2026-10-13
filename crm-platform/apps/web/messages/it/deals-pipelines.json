@@ -35,7 +35,6 @@
       "notFound": "Impossibile trovare quella trattativa. Potrebbe essere stata eliminata.",
       "planDisabled": "Il tuo piano non include la pipeline di vendita. Passa a un piano superiore per sbloccarla.",
       "unexpected": "Qualcosa è andato storto. Riprova tra un momento.",
-      "requestId": "ID richiesta",
       "retry": "Riprova",
       "planLimit": "Hai raggiunto il limite del tuo piano.",
       "lostReasonRequired": "Scegli un motivo per segnare la trattativa come persa.",

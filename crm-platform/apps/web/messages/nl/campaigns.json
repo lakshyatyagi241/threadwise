@@ -828,7 +828,6 @@
         "notFound": "Dit is niet gevonden. Mogelijk is het verwijderd.",
         "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
         "unexpected": "Er ging iets mis aan onze kant. Probeer het opnieuw.",
-        "requestId": "Verzoek-id",
         "retry": "Opnieuw proberen"
       },
       "categories": {

@@ -101,7 +101,7 @@ describe('SheetsScreen', () => {
     const out = html(<SheetsScreen />);
     expect(out).toContain('Could not load the add-on setup.');
     expect(out).toContain('Retry');
-    expect(out).toContain('req-9');
+    expect(out).not.toContain('req-9');
   });
 
   it('not installed: the Marketplace link, no Generate key, no role card', () => {

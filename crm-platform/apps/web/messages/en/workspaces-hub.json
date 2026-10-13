@@ -187,8 +187,7 @@
       "notFound": "This workspace no longer exists.",
       "reasonRequired": "A reason of at least 8 characters is required.",
       "orgSuspended": "The workspace is suspended, so it cannot be entered.",
-      "validation": "Check the values and try again.",
-      "requestId": "Request id"
+      "validation": "Check the values and try again."
     },
     "detail": {
       "crumb": "Workspace",

@@ -4,8 +4,7 @@
       "title": "Vorlagen"
     },
     "common": {
-      "dismiss": "Schließen",
-      "requestId": "Anfrage-ID"
+      "dismiss": "Schließen"
     },
     "status": {
       "draft": "Entwurf",

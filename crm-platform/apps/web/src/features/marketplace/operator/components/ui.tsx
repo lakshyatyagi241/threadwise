@@ -102,15 +102,10 @@ export function Failure({ error, onRetry }: { error: unknown; onRetry?: () => vo
     const permission = marketError(error).values?.permission;
     return <NoAccess permission={permission || undefined} />;
   }
-  const { text: message, requestId } = text(error);
+  const { text: message } = text(error);
   return (
     <Alert tone="danger" className="space-y-2">
       <p>{message}</p>
-      {requestId && (
-        <p className="text-xs opacity-80">
-          {t('requestId')}: <span className="font-mono">{requestId}</span>
-        </p>
-      )}
       {onRetry && (
         <Button variant="secondary" size="sm" onClick={onRetry}>
           {t('retry')}
@@ -129,10 +124,9 @@ export function ErrorLine({
   /** Form fields that already show their own refusal beside the control: their problems are not listed again here. */
   shownAtFields?: readonly string[];
 }) {
-  const t = useTranslations(`${NS}.common`);
   const text = useErrorText();
   if (!error) return null;
-  const { text: message, requestId, problems: all } = text(error);
+  const { text: message, problems: all } = text(error);
   const problems = all.filter(
     (p) =>
       !(
@@ -154,11 +148,6 @@ export function ErrorLine({
             </li>
           ))}
         </ul>
-      )}
-      {requestId && (
-        <p className="text-xs opacity-80">
-          {t('requestId')}: <span className="font-mono">{requestId}</span>
-        </p>
       )}
     </Alert>
   );

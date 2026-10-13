@@ -7,7 +7,6 @@
     "common": {
       "loading": "Wczytywanie",
       "retry": "Spróbuj ponownie",
-      "requestId": "Identyfikator żądania",
       "dash": "-",
       "errors": {
         "forbidden": "Nie masz uprawnień do wykonania tej czynności.",

@@ -14,7 +14,6 @@
     "common": {
       "loading": "加载中",
       "retry": "重试",
-      "requestId": "请求 ID",
       "dismiss": "忽略",
       "tokens": "{count, number} 个 token",
       "dash": "-",

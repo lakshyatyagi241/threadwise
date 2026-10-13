@@ -13,7 +13,6 @@
     },
     "common": {
       "retry": "נסו שוב",
-      "requestId": "בקשה {id}",
       "noAccessTitle": "אין לכם גישה למסך הזה",
       "noAccess": "בקשו ממנהל סביבת העבודה להעניק לתפקיד שלכם את ההרשאה {permission}."
     },

@@ -193,7 +193,6 @@
         "outOfOrder": "Een stap liep niet in de juiste volgorde. Laad de pagina opnieuw en begin opnieuw.",
         "step": "Een installatiestap is mislukt. Controleer je gegevens en de serverlogs en probeer het opnieuw.",
         "unknown": "Er ging iets mis. Probeer het opnieuw.",
-        "requestId": "Verzoek-ID {id}",
         "prerequisites": "De server is nog niet klaar voor de installatie: {items}.",
         "licence": {
           "empty": "Vul je CodeCanyon-aankoopcode in.",
@@ -265,7 +264,6 @@
       "loading": "Laden",
       "errorForbidden": "Je kunt deze pagina niet bekijken.",
       "errorUnexpected": "De updater kon niet worden geladen.",
-      "requestId": "Verzoek-ID",
       "retry": "Opnieuw proberen",
       "licence": {
         "kicker": "stap 1 · licentie",

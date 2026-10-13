@@ -7,7 +7,6 @@
     "common": {
       "loading": "लोड हो रहा है",
       "retry": "फिर से कोशिश करें",
-      "requestId": "अनुरोध ID",
       "dash": "-",
       "errors": {
         "forbidden": "आपके पास यह करने की अनुमति नहीं है।",

@@ -137,7 +137,6 @@
       "unsupported": "Dit kanaal kan dat type bericht of bestand niet verzenden.",
       "network": "De server kon niet worden bereikt. Controleer je verbinding en probeer het opnieuw.",
       "generic": "Er ging iets mis. Probeer het opnieuw.",
-      "genericWithId": "Er ging iets mis. Probeer het opnieuw. Referentie: {id}",
       "templateNotSendable": "Dat sjabloon kan niet in dit gesprek worden verzonden. Kies een ander.",
       "groupSendUnavailable": "Verzenden naar WhatsApp-groepen is nog niet beschikbaar. Antwoord via de WhatsApp Business-app.",
       "logRange": "Kies datums binnen het afgelopen jaar, waarbij de start voor het einde ligt en niet in de toekomst.",

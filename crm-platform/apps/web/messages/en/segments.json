@@ -128,7 +128,6 @@
       "planLimit": "Your plan does not allow more of these.",
       "unavailable": "Segments are not available yet on this server.",
       "unexpected": "Something went wrong. Try again.",
-      "requestId": "Request ID",
       "retry": "Try again",
       "shareEmpty": "Choose at least one person or team to share the segment with.",
       "shareInvalid": "Some of the chosen people or teams are no longer in this workspace. Remove them and save again."

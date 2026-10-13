@@ -21,7 +21,6 @@
       "unavailable": "This part of the API is not available yet.",
       "rateLimited": "Too many requests. Wait a moment and try again.",
       "unexpected": "Something went wrong. Try again.",
-      "requestId": "Request id",
       "retry": "Try again",
       "reservedKey": "That key is reserved for a built-in token. Choose another.",
       "attributeInUse": "Some contacts hold a value for this attribute.",

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useState, type HTMLAttributes, type ReactNode } from 'react';
 import { Button, EmptyState, Spinner, cn } from '@crm/ui';
-import { errorKind, isPlanLocked, requestIdOf } from '../lib/errors';
+import { isPlanLocked } from '../lib/errors';
 import { syncStatus, type SyncStatus } from '../lib/format';
 import { pageWindow, totalPages } from '../lib/pages';
 import { BoxIcon, ChevronLeftIcon, ChevronRightIcon, ImageIcon, LockIcon } from './icons';
@@ -94,21 +94,10 @@ export function LoadError({
   const t = useTranslations('catalogProducts.common');
   const text = useErrorText();
   if (isPlanLocked(error)) return <Paywall />;
-  const id = requestIdOf(error);
-  const unexpected = errorKind(error) === 'unexpected';
   return (
     <EmptyState
       title={title}
-      message={
-        <>
-          {text(error)}
-          {unexpected && id ? (
-            <span className="mt-1 block font-mono text-[11px]">
-              {t('requestId')}: {id}
-            </span>
-          ) : null}
-        </>
-      }
+      message={text(error)}
       actions={
         onRetry ? (
           <Button variant="secondary" onClick={onRetry}>

@@ -7,7 +7,7 @@ import type { MessageStatus } from '@crm/contracts';
 import { WhatsappGlyph } from '@/features/channel-whatsapp-cloud';
 import { isUnofficialChannelKind } from '@/lib/unofficial-whatsapp';
 import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
-import { errorCode, errorKind, requestIdOf } from '../lib/errors';
+import { errorCode, errorKind } from '../lib/errors';
 import { avatarColor, initials } from '../lib/time';
 import { AlertIcon, CloseIcon, ClockIcon } from './icons';
 
@@ -240,7 +240,6 @@ export function useErrorText() {
     const code = typeof error === 'string' ? error : errorCode(error);
     const kind = errorKind(code);
     if (kind !== 'generic') return t(kind);
-    const id = typeof error === 'string' ? undefined : requestIdOf(error);
-    return id ? t('genericWithId', { id }) : t('generic');
+    return t('generic');
   };
 }

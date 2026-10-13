@@ -282,7 +282,6 @@
       "planDisabled": "您的套餐不包含任务功能。升级后即可使用。",
       "assigneeInvalid": "该用户不是此工作区的活跃成员。",
       "unexpected": "出错了，请稍后重试。",
-      "requestId": "请求 ID",
       "retry": "重试"
     },
     "toast": {

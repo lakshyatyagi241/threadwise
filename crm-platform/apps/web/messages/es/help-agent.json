@@ -94,8 +94,7 @@
       "signedOut": "Tu sesión terminó. Vuelve a iniciar sesión.",
       "network": "No se pudo conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
       "generic": "Algo salió mal. Inténtalo de nuevo.",
-      "retryIn": "Inténtalo de nuevo en {seconds} segundos.",
-      "requestId": "ID de solicitud: {id}"
+      "retryIn": "Inténtalo de nuevo en {seconds} segundos."
     },
     "examples": {
       "howDo": "¿Cómo uso {title}?",
@@ -115,7 +114,6 @@
       "description": "Deja que tu equipo pida lo que quiere hacer y que la app lo guíe o haga los pasos en su propia cuenta.",
       "loading": "Cargando",
       "loadFailed": "No se pudo cargar el ajuste.",
-      "requestId": "ID de solicitud: {id}",
       "shareTitle": "Qué se comparte cuando alguien lo usa",
       "share1": "La petición que escribe la persona y el texto visible de la página en la que está se envían al proveedor de IA que usa la plataforma.",
       "share2": "Antes se ocultan los números de teléfono, los correos electrónicos, los secretos y los campos personales de los formularios. Los nombres y el resto del texto libre de una página no.",

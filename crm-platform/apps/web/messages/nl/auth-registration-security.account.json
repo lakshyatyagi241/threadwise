@@ -22,7 +22,6 @@
         "signedOut": "Je sessie is beëindigd. Meld je opnieuw aan.",
         "rateLimited": "Te veel pogingen. Wacht even en probeer het opnieuw.",
         "rateLimitedWait": "Te veel pogingen. Probeer het over {seconds, plural, one {# seconde} other {# seconden}} opnieuw.",
-        "requestId": "Verzoek-ID",
         "locked": "Te veel mislukte pogingen. Wacht een tijdje voordat je het opnieuw probeert.",
         "lockedWait": "Te veel mislukte pogingen. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw."
       },

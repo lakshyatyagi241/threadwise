@@ -22,7 +22,6 @@
         "signedOut": "Phiên của bạn đã kết thúc. Vui lòng đăng nhập lại.",
         "rateLimited": "Quá nhiều lần thử. Vui lòng đợi một lát rồi thử lại.",
         "rateLimitedWait": "Quá nhiều lần thử. Hãy thử lại sau {seconds, plural, other {# giây}}.",
-        "requestId": "ID yêu cầu",
         "locked": "Quá nhiều lần thử thất bại. Hãy đợi một lúc trước khi thử lại.",
         "lockedWait": "Quá nhiều lần thử thất bại. Hãy thử lại sau {minutes, plural, other {# phút}}."
       },

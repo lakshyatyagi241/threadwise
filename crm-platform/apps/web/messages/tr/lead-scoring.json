@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "Kapat",
       "retry": "Tekrar dene",
-      "requestId": "İstek {id}",
       "noAccessTitle": "Bu ekrana erişiminiz yok",
       "noAccess": "Bir çalışma alanı yöneticisinden rolünüze {permission} iznini vermesini isteyin."
     },

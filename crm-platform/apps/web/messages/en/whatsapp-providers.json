@@ -8,8 +8,7 @@
     },
     "common": {
       "loading": "Loading...",
-      "retry": "Try again",
-      "requestId": "Request id"
+      "retry": "Try again"
     },
     "errors": {
       "conflict": "Someone else changed this provider while you were editing it. The latest version has been loaded; review it and apply your change again.",

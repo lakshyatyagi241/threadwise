@@ -30,8 +30,7 @@
       "PLAN_LIMIT_REACHED": "Planınızın sınırına ulaştınız.",
       "WA_UNOFFICIAL_DISABLED": "Kişisel WhatsApp numaralarıyla (resmi olmayan API) gönderim çalışma alanınız için etkin değil. Resmi bir WhatsApp Business API numarası seçin.",
       "AUTH_SEND_HALTED": "Bu çalışma alanı için gönderim durduruldu.",
-      "upgrade": "Planları gör ve yükselt",
-      "requestId": "İstek {id}"
+      "upgrade": "Planları gör ve yükselt"
     },
     "actions": {
       "done": {

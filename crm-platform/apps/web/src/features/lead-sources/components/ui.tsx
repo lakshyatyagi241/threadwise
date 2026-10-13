@@ -87,11 +87,6 @@ export function ErrorText({
         </ul>
       )}
       <div className="flex flex-wrap items-center gap-3 text-xs">
-        {e.requestId && (
-          <span dir="ltr" className="text-muted-foreground">
-            {t('common.requestId', { id: e.requestId })}
-          </span>
-        )}
         {onRetry && (
           <button
             type="button"

@@ -6,7 +6,7 @@ import { Alert, Badge, Button, Spinner, cn } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { useLscRuns, useScoreContact } from '../api/hooks';
 import { formatCostUsd, formatCount } from '../lib/cost';
-import { errorKey, requestIdOf, type ErrorKey } from '../lib/errors';
+import { errorKey, type ErrorKey } from '../lib/errors';
 import { bandOf, isManualScore, type ScoreFields } from '../lib/score';
 import { LinkButton, SparkleIcon, useFormatDate } from './parts';
 import { RunsTable } from './runs-table';
@@ -153,8 +153,6 @@ function ScoreError({ error }: { error: unknown }) {
   const canSettings = useCan('lsc.runs.read');
   const canKeys = useCan('aiadm.keys.read');
   const key: ErrorKey = errorKey(error);
-  const id = requestIdOf(error);
-  const tc = useTranslations('lead-scoring.common');
   const tone =
     key === 'notEnabled' || key === 'manualScore' || key === 'noKey' ? 'warning' : 'danger';
   return (
@@ -164,7 +162,6 @@ function ScoreError({ error }: { error: unknown }) {
         <LinkButton href="/lead-scoring">{t('openSettings')}</LinkButton>
       )}
       {key === 'noKey' && canKeys && <LinkButton href="/ai-keys">{t('openKeys')}</LinkButton>}
-      {id && <p className="text-xs opacity-80">{tc('requestId', { id })}</p>}
     </Alert>
   );
 }

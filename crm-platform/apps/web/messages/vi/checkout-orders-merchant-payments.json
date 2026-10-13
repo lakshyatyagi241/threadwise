@@ -63,7 +63,6 @@
       "whatsapp_ai": "WhatsApp AI"
     },
     "errors": {
-      "requestId": "Mã yêu cầu",
       "retry": "Thử lại",
       "network": {
         "title": "Không thể kết nối đến máy chủ",

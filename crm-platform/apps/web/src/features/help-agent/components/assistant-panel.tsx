@@ -275,11 +275,6 @@ function ErrorCard({ state, onReset }: Pick<PanelViewProps, 'state' | 'onReset'>
         {error.retryAfter ? (
           <p className="mt-1 text-xs">{t('errors.retryIn', { seconds: error.retryAfter })}</p>
         ) : null}
-        {error.requestId ? (
-          <p className="mt-2 break-all font-mono text-xs" data-testid="assistant-request-id">
-            {t('errors.requestId', { id: error.requestId })}
-          </p>
-        ) : null}
       </Alert>
       <Button variant="secondary" size="sm" onClick={onReset}>
         {t('panel.tryAgain')}

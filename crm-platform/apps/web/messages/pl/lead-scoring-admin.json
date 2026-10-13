@@ -7,7 +7,6 @@
     "common": {
       "loading": "Ładowanie",
       "retry": "Spróbuj ponownie",
-      "requestId": "ID żądania",
       "dash": "-",
       "cancel": "Anuluj",
       "errors": {

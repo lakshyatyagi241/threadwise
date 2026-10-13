@@ -22,7 +22,6 @@
         "signedOut": "세션이 종료되었습니다. 다시 로그인해 주세요.",
         "rateLimited": "시도 횟수가 너무 많습니다. 잠시 기다린 후 다시 시도하세요.",
         "rateLimitedWait": "시도 횟수가 너무 많습니다. {seconds, plural, other {#초}} 후에 다시 시도하세요.",
-        "requestId": "요청 ID",
         "locked": "실패한 시도가 너무 많습니다. 잠시 기다린 후 다시 시도하세요.",
         "lockedWait": "실패한 시도가 너무 많습니다. {minutes, plural, other {#분}} 후에 다시 시도하세요."
       },

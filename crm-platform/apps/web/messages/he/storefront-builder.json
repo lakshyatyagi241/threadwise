@@ -8,7 +8,6 @@
         "dismiss": "סגור"
       },
       "errors": {
-        "requestId": "מזהה בקשה",
         "retry": "נסה שוב",
         "network": {
           "title": "לא ניתן להגיע לשרת",

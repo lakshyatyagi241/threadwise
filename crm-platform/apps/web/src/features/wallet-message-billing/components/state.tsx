@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { Alert, Button, Spinner } from '@crm/ui';
-import { errorKind, requestIdOf } from '../lib/errors';
+import { errorKind } from '../lib/errors';
 
 /** A region that is still loading. */
 export function LoadingBlock({ className }: { className?: string }) {
@@ -24,15 +24,9 @@ export function LoadingBlock({ className }: { className?: string }) {
 export function ErrorState({ error, onRetry }: { error: unknown; onRetry?: () => void }) {
   const t = useTranslations('wallet-message-billing.errors');
   const tc = useTranslations('wallet-message-billing.common');
-  const requestId = requestIdOf(error);
   return (
     <Alert tone="danger" className="space-y-2">
       <p>{t(errorKind(error))}</p>
-      {requestId && (
-        <p className="text-xs opacity-80">
-          {tc('requestId')}: <span className="font-mono">{requestId}</span>
-        </p>
-      )}
       {onRetry && (
         <Button variant="secondary" size="sm" onClick={onRetry}>
           {tc('retry')}

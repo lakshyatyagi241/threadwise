@@ -187,8 +187,7 @@
       "notFound": "Deze workspace bestaat niet meer.",
       "reasonRequired": "Een reden van minimaal 8 tekens is vereist.",
       "orgSuspended": "De workspace is geschorst, dus je kunt hem niet openen.",
-      "validation": "Controleer de waarden en probeer het opnieuw.",
-      "requestId": "Verzoek-id"
+      "validation": "Controleer de waarden en probeer het opnieuw."
     },
     "detail": {
       "crumb": "Workspace",

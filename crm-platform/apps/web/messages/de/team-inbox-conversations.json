@@ -137,7 +137,6 @@
       "unsupported": "Dieser Kanal kann diese Art von Nachricht oder Datei nicht senden.",
       "network": "Der Server konnte nicht erreicht werden. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
       "generic": "Etwas ist schiefgelaufen. Versuchen Sie es erneut.",
-      "genericWithId": "Etwas ist schiefgelaufen. Versuchen Sie es erneut. Referenz: {id}",
       "templateNotSendable": "Diese Vorlage kann in dieser Unterhaltung nicht gesendet werden. Wählen Sie eine andere.",
       "groupSendUnavailable": "Das Senden an WhatsApp-Gruppen ist noch nicht verfügbar. Antworten Sie über die WhatsApp Business App.",
       "logRange": "Wählen Sie Daten innerhalb des letzten Jahres, wobei der Beginn vor dem Ende liegt und nicht in der Zukunft.",

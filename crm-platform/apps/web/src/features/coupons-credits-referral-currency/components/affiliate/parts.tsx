@@ -12,7 +12,6 @@ import {
   formatDelta,
   initials,
   money,
-  requestIdOf,
   rewardLine,
   shortTxId,
   type DeltaTone,
@@ -55,15 +54,9 @@ export function AffiliateSkeleton() {
 /** A failed call: the sentence is chosen from the problem `code`/status, the request id is for support, and retry is offered. */
 export function ErrorState({ error, onRetry }: { error: unknown; onRetry?: () => void }) {
   const t = useTranslations(`${NS}.errors`);
-  const requestId = requestIdOf(error);
   return (
     <Alert tone="danger" className="space-y-2">
       <p>{t(affiliateErrorKind(error))}</p>
-      {requestId && (
-        <p className="text-xs opacity-80">
-          {t('requestId')}: <span className="font-mono">{requestId}</span>
-        </p>
-      )}
       {onRetry && (
         <Button variant="secondary" size="sm" onClick={onRetry}>
           {t('retry')}

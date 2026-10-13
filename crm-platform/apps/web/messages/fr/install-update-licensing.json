@@ -193,7 +193,6 @@
         "outOfOrder": "Une étape s’est déroulée dans le désordre. Rechargez la page et recommencez.",
         "step": "Échec d’une étape d’installation. Vérifiez vos informations et les journaux du serveur, puis réessayez.",
         "unknown": "Une erreur s’est produite. Réessayez.",
-        "requestId": "Identifiant de requête {id}",
         "prerequisites": "Le serveur n’est pas prêt pour l’installation : {items}.",
         "licence": {
           "empty": "Saisissez votre code d’achat CodeCanyon.",
@@ -265,7 +264,6 @@
       "loading": "Chargement",
       "errorForbidden": "Vous ne pouvez pas consulter cette page.",
       "errorUnexpected": "Impossible de charger la mise à jour.",
-      "requestId": "Identifiant de requête",
       "retry": "Réessayer",
       "licence": {
         "kicker": "étape 1 · licence",

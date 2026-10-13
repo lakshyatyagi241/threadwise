@@ -63,8 +63,7 @@
       "closed": "This ticket is closed. Open a new ticket to continue.",
       "notFound": "That ticket could not be found.",
       "unexpected": "Something went wrong. Try again.",
-      "retry": "Try again",
-      "requestId": "Request id"
+      "retry": "Try again"
     },
     "customer": {
       "title": "How can we help?",

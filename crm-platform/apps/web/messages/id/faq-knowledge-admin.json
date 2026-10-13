@@ -7,7 +7,6 @@
     "common": {
       "loading": "Memuat",
       "retry": "Coba lagi",
-      "requestId": "ID permintaan",
       "dash": "-",
       "cancel": "Batal",
       "errors": {

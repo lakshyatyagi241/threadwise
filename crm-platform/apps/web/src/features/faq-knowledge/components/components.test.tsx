@@ -248,7 +248,7 @@ describe('FaqListScreen', () => {
     };
     const out = html(<FaqListScreen />);
     expect(out).toContain('Your role is not allowed to do this.');
-    expect(out).toContain('req-9');
+    expect(out).not.toContain('req-9');
   });
 });
 

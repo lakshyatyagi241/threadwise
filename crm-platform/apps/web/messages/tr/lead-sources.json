@@ -5,8 +5,7 @@
       "loading": "Yükleniyor",
       "retry": "Yeniden dene",
       "copied": "Kopyalandı",
-      "copyFailed": "Kopyalanamadı: metni seçip elle kopyalayın",
-      "requestId": "Referans: {id}"
+      "copyFailed": "Kopyalanamadı: metni seçip elle kopyalayın"
     },
     "states": {
       "noAccessTitle": "Sosyal potansiyel müşterilere erişiminiz yok",

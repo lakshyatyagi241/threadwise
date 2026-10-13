@@ -5,8 +5,7 @@
       "loading": "Đang tải",
       "retry": "Thử lại",
       "copied": "Đã sao chép",
-      "copyFailed": "Không sao chép được: hãy chọn văn bản và tự sao chép",
-      "requestId": "Tham chiếu: {id}"
+      "copyFailed": "Không sao chép được: hãy chọn văn bản và tự sao chép"
     },
     "states": {
       "noAccessTitle": "Bạn không có quyền truy cập Khách hàng tiềm năng từ mạng xã hội",

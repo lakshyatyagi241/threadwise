@@ -257,7 +257,6 @@
       "ownerInvalid": "O responsável deve ser um membro ativo do espaço de trabalho.",
       "invoicingUnavailable": "O faturamento ainda não está disponível, por isso este documento não pode ser convertido.",
       "unexpected": "Algo deu errado. Tente novamente.",
-      "requestId": "ID da solicitação",
       "retry": "Tentar novamente"
     },
     "link": {

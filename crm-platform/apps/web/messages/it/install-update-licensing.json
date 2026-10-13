@@ -193,7 +193,6 @@
         "outOfOrder": "Un passaggio è stato eseguito fuori ordine. Ricarica la pagina e ricomincia.",
         "step": "Passaggio di installazione non riuscito. Controlla i dati e i log del server, poi riprova.",
         "unknown": "Qualcosa è andato storto. Riprova.",
-        "requestId": "ID richiesta {id}",
         "prerequisites": "Il server non è pronto per l’installazione: {items}.",
         "licence": {
           "empty": "Inserisci il codice di acquisto CodeCanyon.",
@@ -265,7 +264,6 @@
       "loading": "Caricamento",
       "errorForbidden": "Non puoi visualizzare questa pagina.",
       "errorUnexpected": "Impossibile caricare gli aggiornamenti.",
-      "requestId": "ID richiesta",
       "retry": "Riprova",
       "licence": {
         "kicker": "passaggio 1 · licenza",

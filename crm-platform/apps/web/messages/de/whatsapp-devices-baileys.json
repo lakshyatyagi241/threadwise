@@ -164,7 +164,6 @@
       "WA_WORKER_UNAVAILABLE": "Der Verbindungsdienst ist nicht verfügbar. Versuchen Sie es in ein paar Minuten erneut.",
       "RATE_LIMITED": "Zu viele Anfragen. Warten Sie einen Moment.",
       "upgrade": "Tarife ansehen und upgraden",
-      "requestId": "Anfrage {id}",
       "DEVICE_PILOT_CAP_REACHED": "Ihr Workspace hat die Anzahl persönlicher WhatsApp-Nummern erreicht, die in der Pilotphase erlaubt sind. Löschen Sie eine, um eine andere zu verbinden.",
       "DEVICE_CREATE_RATE_LIMITED": "In der letzten Stunde wurden zu viele Nummern hinzugefügt. Versuchen Sie es später erneut.",
       "DEVICE_CREATE_RATE_LIMITED_WAIT": "In der letzten Stunde wurden zu viele Nummern hinzugefügt. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut.",
@@ -186,7 +185,6 @@
     },
     "common": {
       "dismiss": "Ausblenden",
-      "requestId": "Anfrage {id}",
       "unofficial": "Inoffiziell",
       "reminder": "Inoffizielle Verbindung. WhatsApp kann diese Nummer einschränken.",
       "readGuide": "Leitfaden lesen",

@@ -9,8 +9,7 @@
       "PLAN_FEATURE_LOCKED": "خطتك لا تتضمن هذه الميزة.",
       "PLAN_LIMIT_REACHED": "لقد وصلت إلى حد خطتك.",
       "AUTH_SEND_HALTED": "الإرسال متوقف لمساحة العمل هذه.",
-      "upgrade": "عرض الخطط والترقية",
-      "requestId": "الطلب {id}"
+      "upgrade": "عرض الخطط والترقية"
     },
     "nav": {
       "scheduled": "مجدول",

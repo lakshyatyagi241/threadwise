@@ -214,7 +214,6 @@
         "sessionExpired": "Oturumunuzun süresi güvenlik nedeniyle doldu. Lütfen tekrar deneyin.",
         "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
         "unexpected": "Bizim tarafımızda bir sorun oluştu. Lütfen tekrar deneyin.",
-        "requestId": "İstek kimliği",
         "signupExpired": "Lütfen kaydı baştan başlatın.",
         "policyRules": {
           "min_length": "En az {min, plural, one {# karakter} other {# karakter}} kullanın.",

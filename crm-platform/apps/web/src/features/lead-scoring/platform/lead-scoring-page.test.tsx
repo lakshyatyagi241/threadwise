@@ -399,7 +399,7 @@ describe('AI lead scoring admin page', () => {
       throw new ApiError(500, 'INTERNAL', 'x', 'req-7');
     });
     await mount();
-    expect(text()).toContain('req-7');
+    expect(text()).not.toContain('req-7');
     expect(button('Try again')).toBeDefined();
   });
 
@@ -410,7 +410,7 @@ describe('AI lead scoring admin page', () => {
       return current;
     });
     await mount();
-    expect(text()).toContain('req-8');
+    expect(text()).not.toContain('req-8');
     expect(text()).toContain('Acme Retail');
     expect(text()).toContain('Platform switch');
   });

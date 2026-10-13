@@ -19,7 +19,6 @@
       "optional": "선택",
       "required": "필수",
       "readOnly": "이 페이지는 볼 수만 있으며, 슈퍼 관리자만 변경할 수 있습니다.",
-      "requestId": "요청 ID",
       "errors": {
         "forbidden": "이 페이지에 접근할 권한이 없습니다.",
         "request": "요청을 완료할 수 없습니다.",

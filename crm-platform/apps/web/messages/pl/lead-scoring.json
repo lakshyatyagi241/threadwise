@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "Zamknij",
       "retry": "Spróbuj ponownie",
-      "requestId": "Żądanie {id}",
       "noAccessTitle": "Nie masz dostępu do tego ekranu",
       "noAccess": "Poproś administratora obszaru roboczego o nadanie Twojej roli uprawnienia {permission}."
     },

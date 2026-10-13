@@ -10,7 +10,6 @@
     },
     "common": {
       "dismiss": "关闭",
-      "requestId": "请求 {id}",
       "unofficial": "非官方",
       "reminder": "非官方连接。WhatsApp 可能会限制此号码。",
       "readGuide": "阅读指南",
@@ -296,7 +295,6 @@
       "WA_WORKER_UNAVAILABLE": "连接服务不可用，请几分钟后再试。",
       "RATE_LIMITED": "请求过于频繁，请稍候。",
       "upgrade": "查看套餐并升级",
-      "requestId": "请求 {id}",
       "DEVICE_PILOT_CAP_REACHED": "您的工作区已达到试用期间允许的个人 WhatsApp 号码数量上限。请删除一个号码后再连接其他号码。",
       "DEVICE_CREATE_RATE_LIMITED": "过去一小时内添加的号码过多，请稍后再试。",
       "DEVICE_CREATE_RATE_LIMITED_WAIT": "过去一小时内添加的号码过多，请在 {minutes, plural, other {# 分钟}} 后重试。",

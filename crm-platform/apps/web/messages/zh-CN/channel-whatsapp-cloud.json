@@ -156,7 +156,6 @@
       "notFound": "此号码已不存在。列表已刷新。",
       "network": "无法连接到服务器。请检查网络连接后重试。",
       "generic": "出了点问题。请重试。",
-      "genericWithId": "出了点问题。请重试。参考编号：{id}",
       "detail": "详情：{detail}",
       "fix": {
         "tokenInvalid": "请在 Meta 商务设置中创建永久系统用户令牌，并粘贴到“编辑凭据”中。",

@@ -3,10 +3,13 @@
     "nav": {
       "devices": "Personal WhatsApp"
     },
-    "area": { "title": "Unofficial WhatsApp API", "numbers": "Numbers", "warmer": "Warmer" },
+    "area": {
+      "title": "Unofficial WhatsApp API",
+      "numbers": "Numbers",
+      "warmer": "Warmer"
+    },
     "common": {
       "dismiss": "Dismiss",
-      "requestId": "Request {id}",
       "unofficial": "Unofficial",
       "reminder": "Unofficial connection. WhatsApp can restrict this number.",
       "readGuide": "Read the guide",
@@ -292,7 +295,6 @@
       "WA_WORKER_UNAVAILABLE": "The connection service is not available. Try again in a few minutes.",
       "RATE_LIMITED": "Too many requests. Wait a moment.",
       "upgrade": "See plans and upgrade",
-      "requestId": "Request {id}",
       "DEVICE_PILOT_CAP_REACHED": "Your workspace has reached the number of personal WhatsApp numbers allowed during the pilot. Delete one to connect another.",
       "DEVICE_CREATE_RATE_LIMITED": "Too many numbers were added in the last hour. Try again later.",
       "DEVICE_CREATE_RATE_LIMITED_WAIT": "Too many numbers were added in the last hour. Try again in {minutes, plural, one {# minute} other {# minutes}}.",

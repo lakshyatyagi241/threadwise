@@ -17,7 +17,6 @@
       "delete": "Hapus",
       "edit": "Edit",
       "loadMore": "Muat lainnya",
-      "requestId": "ID permintaan",
       "errors": {
         "forbidden": "Hanya super admin yang dapat mengubah ini.",
         "conflict": "Orang lain mengubah ini saat Anda sedang mengedit. Muat ulang dan coba lagi.",

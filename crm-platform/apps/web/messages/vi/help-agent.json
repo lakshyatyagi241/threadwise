@@ -94,8 +94,7 @@
       "signedOut": "Phiên của bạn đã kết thúc. Hãy đăng nhập lại.",
       "network": "Không kết nối được máy chủ. Hãy kiểm tra kết nối và thử lại.",
       "generic": "Đã xảy ra lỗi. Hãy thử lại.",
-      "retryIn": "Hãy thử lại sau {seconds} giây.",
-      "requestId": "Mã yêu cầu: {id}"
+      "retryIn": "Hãy thử lại sau {seconds} giây."
     },
     "examples": {
       "howDo": "Làm sao để dùng {title}?",
@@ -115,7 +114,6 @@
       "description": "Để nhóm của bạn nói điều họ muốn làm và để ứng dụng hướng dẫn hoặc làm các bước trên chính tài khoản của họ.",
       "loading": "Đang tải",
       "loadFailed": "Không tải được cài đặt.",
-      "requestId": "Mã yêu cầu: {id}",
       "shareTitle": "Những gì được chia sẻ khi ai đó dùng",
       "share1": "Yêu cầu người dùng đã nhập và văn bản hiển thị của trang họ đang xem được gửi tới nhà cung cấp AI mà nền tảng sử dụng.",
       "share2": "Số điện thoại, địa chỉ email, thông tin bí mật và các trường cá nhân của biểu mẫu được ẩn trước. Tên và văn bản tự do khác trên trang thì không.",

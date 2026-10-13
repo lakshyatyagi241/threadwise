@@ -17,7 +17,6 @@
       "delete": "Usuń",
       "edit": "Edytuj",
       "loadMore": "Wczytaj więcej",
-      "requestId": "Identyfikator żądania",
       "errors": {
         "forbidden": "Tylko super administrator może to zmienić.",
         "conflict": "Ktoś inny zmienił to podczas Twojej edycji. Odśwież i spróbuj ponownie.",

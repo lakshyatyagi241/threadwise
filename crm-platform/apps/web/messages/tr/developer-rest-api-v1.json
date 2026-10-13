@@ -96,8 +96,7 @@
       "unexpected": "Bizim tarafımızda bir sorun oluştu. Birazdan tekrar deneyin.",
       "loadFailed": "API anahtarınız yüklenemedi.",
       "retry": "Yeniden dene",
-      "upgrade": "Planları gör",
-      "requestId": "İstek kimliği: {id}"
+      "upgrade": "Planları gör"
     }
   }
 }

@@ -137,7 +137,6 @@
       "unsupported": "Kênh này không thể gửi loại tin nhắn hoặc tệp đó.",
       "network": "Không thể kết nối đến máy chủ. Kiểm tra kết nối và thử lại.",
       "generic": "Đã xảy ra lỗi. Thử lại.",
-      "genericWithId": "Đã xảy ra lỗi. Thử lại. Mã tham chiếu: {id}",
       "templateNotSendable": "Mẫu này không thể gửi vào cuộc trò chuyện này. Chọn mẫu khác.",
       "groupSendUnavailable": "Hiện chưa hỗ trợ gửi tin đến nhóm WhatsApp. Hãy trả lời từ ứng dụng WhatsApp Business.",
       "logRange": "Chọn ngày trong vòng một năm qua, ngày bắt đầu phải trước ngày kết thúc và không ở tương lai.",

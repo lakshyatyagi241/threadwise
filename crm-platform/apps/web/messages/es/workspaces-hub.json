@@ -187,8 +187,7 @@
       "notFound": "Este espacio de trabajo ya no existe.",
       "reasonRequired": "Se requiere un motivo de al menos 8 caracteres.",
       "orgSuspended": "El espacio de trabajo está suspendido, así que no se puede entrar.",
-      "validation": "Revisa los valores e inténtalo de nuevo.",
-      "requestId": "ID de la solicitud"
+      "validation": "Revisa los valores e inténtalo de nuevo."
     },
     "detail": {
       "crumb": "Espacio de trabajo",

@@ -8,7 +8,6 @@
     "common": {
       "loading": "Đang tải",
       "retry": "Thử lại",
-      "requestId": "Mã yêu cầu",
       "cancel": "Hủy",
       "back": "Quay lại",
       "close": "Đóng",

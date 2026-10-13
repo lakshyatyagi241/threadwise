@@ -64,7 +64,6 @@
       "conflict": "Otra persona guardó estos ajustes después de que los abrieras. Recarga para ver sus cambios y después vuelve a aplicar los tuyos.",
       "reload": "Recargar ajustes",
       "unexpected": "Algo salió mal y no se guardó nada.",
-      "requestId": "ID de la solicitud",
       "readOnly": "Puedes leer estos ajustes, pero solo un superadministrador puede cambiarlos.",
       "secretSet": "Guardado. Déjalo en blanco para conservarlo.",
       "secretUnset": "Sin definir.",

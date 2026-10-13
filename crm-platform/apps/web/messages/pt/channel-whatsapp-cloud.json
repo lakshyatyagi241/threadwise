@@ -156,7 +156,6 @@
       "notFound": "Este número não existe mais. A lista foi atualizada.",
       "network": "Não foi possível acessar o servidor. Verifique sua conexão e tente novamente.",
       "generic": "Algo deu errado. Tente novamente.",
-      "genericWithId": "Algo deu errado. Tente novamente. Referência: {id}",
       "detail": "Detalhes: {detail}",
       "fix": {
         "tokenInvalid": "Crie um token permanente de usuário do sistema nas configurações da sua empresa na Meta e cole-o em Editar credenciais.",

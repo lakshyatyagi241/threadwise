@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "Sluiten",
       "retry": "Opnieuw proberen",
-      "requestId": "Verzoek {id}",
       "noAccessTitle": "Je hebt geen toegang tot dit scherm",
       "noAccess": "Vraag een beheerder van de werkruimte om je rol de machtiging {permission} te geven."
     },

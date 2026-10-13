@@ -17,7 +17,6 @@
       "delete": "Löschen",
       "edit": "Bearbeiten",
       "loadMore": "Mehr laden",
-      "requestId": "Anfrage-ID",
       "errors": {
         "forbidden": "Nur ein Super-Admin kann dies ändern.",
         "conflict": "Jemand anderes hat dies während Ihrer Bearbeitung geändert. Laden Sie neu und versuchen Sie es erneut.",

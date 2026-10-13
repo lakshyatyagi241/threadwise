@@ -36,7 +36,6 @@
       "slotTaken": "Giờ đó vừa có người đặt. Vui lòng chọn giờ khác.",
       "gone": "Lịch đặt này không thể thay đổi nữa.",
       "unexpected": "Đã xảy ra lỗi. Vui lòng thử lại sau giây lát.",
-      "requestId": "ID yêu cầu",
       "retry": "Thử lại",
       "invalidTransition": "Lịch đặt này không ở trạng thái cho phép thực hiện thao tác này. Hãy tải lại để xem trạng thái hiện tại.",
       "notStarted": "Chỉ có thể thực hiện sau khi lịch đặt đã bắt đầu.",

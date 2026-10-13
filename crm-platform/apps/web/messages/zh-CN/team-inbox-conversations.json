@@ -137,7 +137,6 @@
       "unsupported": "此渠道无法发送该类型的消息或文件。",
       "network": "无法连接服务器。请检查网络连接后重试。",
       "generic": "出错了，请重试。",
-      "genericWithId": "出错了，请重试。参考编号：{id}",
       "templateNotSendable": "此模板无法发送到该会话。请选择其他模板。",
       "groupSendUnavailable": "暂不支持发送到 WhatsApp 群组。请使用 WhatsApp Business 应用回复。",
       "logRange": "请选择最近一年内的日期，开始日期须早于结束日期，且不能是未来日期。",

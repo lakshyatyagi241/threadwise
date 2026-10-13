@@ -13,7 +13,6 @@
     },
     "common": {
       "retry": "Coba lagi",
-      "requestId": "Permintaan {id}",
       "noAccessTitle": "Anda tidak memiliki akses ke layar ini",
       "noAccess": "Minta admin workspace untuk memberi peran Anda izin {permission}."
     },

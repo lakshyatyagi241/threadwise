@@ -46,7 +46,6 @@
         "copyFailed": "Kopyalanamadı",
         "loading": "Yükleniyor",
         "retry": "Tekrar dene",
-        "requestId": "İstek kimliği",
         "errors": {
           "forbidden": "Rolünüz buna izin vermiyor.",
           "request": "İstek reddedildi. Sayfayı yenileyip tekrar deneyin.",
@@ -61,7 +60,6 @@
       "login": {
         "title": "Operatör girişi",
         "intro": "Bu konsol platformu yöneten kişiler içindir. Çalışma alanı kullanıcıları ana oturum açma sayfasından giriş yapar.",
-        "requestId": "İstek kimliği",
         "submit": "Oturum aç",
         "submitting": "Oturum açılıyor",
         "fields": {
@@ -127,7 +125,6 @@
         "eyebrow": "Hesabınız",
         "title": "İki adımlı doğrulama",
         "description": "{email} hesabını bir kimlik doğrulama uygulamasıyla koruyun. Operatör hesapları platformdaki en yüksek güvenli hesaplardır.",
-        "requestId": "İstek kimliği",
         "status": {
           "title": "Kimlik doğrulama uygulaması",
           "on": "Açık",
@@ -181,7 +178,6 @@
         "saving": "Kaydediliyor",
         "saved": "{count, plural, one {# ayar kaydedildi} other {# ayar kaydedildi}}",
         "rejected": "Hiçbir şey kaydedilmedi. {count, plural, one {# alan} other {# alan}} reddedildi.",
-        "requestId": "İstek kimliği",
         "unsaved": "{count, plural, one {# kaydedilmemiş değişiklik} other {# kaydedilmemiş değişiklik}}",
         "discard": "Değişiklikleri at",
         "errors": {
@@ -658,7 +654,6 @@
             "working": "İşleniyor",
             "close": "Kapat",
             "signInAgain": "Yeniden oturum aç",
-            "requestId": "İstek kimliği",
             "errors": {
               "forbidden": "Bu işlemi yalnızca bir süper yönetici çalıştırabilir.",
               "unexpected": "İşlem tamamlanmadı. Tekrar denemeden önce olay günlüğünü kontrol edin."
@@ -731,7 +726,6 @@
         "saving": "Kaydediliyor",
         "saved": "{count, plural, one {# ayar kaydedildi} other {# ayar kaydedildi}}",
         "rejected": "Hiçbir şey kaydedilmedi. {count, plural, one {# alan} other {# alan}} reddedildi.",
-        "requestId": "İstek kimliği",
         "unsaved": "{count, plural, one {# kaydedilmemiş değişiklik} other {# kaydedilmemiş değişiklik}}",
         "discard": "Değişiklikleri at",
         "errors": {
@@ -941,7 +935,6 @@
             "sent": "{to} numarasına bir test kodu gönderildi.",
             "remaining": "{count, plural, one {Bu saat # test hakkı kaldı.} other {Bu saat # test hakkı kaldı.}}",
             "notShown": "Kod burada gösterilmez; telefondan okuyun.",
-            "requestId": "İstek kimliği",
             "errors": {
               "invalidNumber": "Numarayı ülke koduyla girin, örneğin +91 98765 43221.",
               "rateLimited": "Bu saat çok fazla test kodu. {minutes, plural, one {# dakika} other {# dakika}} sonra tekrar deneyin.",
@@ -1045,7 +1038,6 @@
           "saved": "Gönderen kaydedildi",
           "removed": "Gönderen kaldırıldı",
           "secretRemoved": "Kayıtlı sır kaldırıldı",
-          "requestId": "İstek kimliği",
           "problems": {
             "required": "Bu alan zorunludur.",
             "tooLong": "En fazla {max} karakter.",
@@ -1076,8 +1068,7 @@
           "errors": {
             "invalid": "Bu alt bilgi kabul edilmedi.",
             "unexpected": "Alt bilgi kaydedilemedi. Biraz sonra tekrar deneyin."
-          },
-          "requestId": "İstek kimliği"
+          }
         }
       },
       "social": {
@@ -1088,7 +1079,6 @@
         "saving": "Kaydediliyor",
         "saved": "{count, plural, one {# ayar kaydedildi} other {# ayar kaydedildi}}",
         "rejected": "Hiçbir şey kaydedilmedi. {count, plural, one {# alan} other {# alan}} reddedildi.",
-        "requestId": "İstek kimliği",
         "unsaved": "{count, plural, one {# kaydedilmemiş değişiklik} other {# kaydedilmemiş değişiklik}}",
         "discard": "Değişiklikleri at",
         "errors": {
@@ -1206,7 +1196,6 @@
           "cancel": "İptal",
           "working": "Kaldırılıyor",
           "error": "Sır kaldırılamadı. Biraz sonra tekrar deneyin.",
-          "requestId": "İstek kimliği",
           "done": "Kayıtlı {name} sırrı kaldırıldı.",
           "names": {
             "google": "Google",
@@ -1670,7 +1659,6 @@
         "saving": "Kaydediliyor",
         "saved": "{count, plural, one {# ayar kaydedildi} other {# ayar kaydedildi}}",
         "rejected": "Hiçbir şey kaydedilmedi. {count, plural, one {# alan} other {# alan}} reddedildi.",
-        "requestId": "İstek kimliği",
         "unsaved": "{count, plural, one {# kaydedilmemiş değişiklik} other {# kaydedilmemiş değişiklik}}",
         "discard": "Değişiklikleri at",
         "errors": {

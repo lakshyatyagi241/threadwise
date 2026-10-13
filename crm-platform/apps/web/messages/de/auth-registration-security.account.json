@@ -22,7 +22,6 @@
         "signedOut": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",
         "rateLimited": "Zu viele Versuche. Bitte warten Sie einen Moment und versuchen Sie es erneut.",
         "rateLimitedWait": "Zu viele Versuche. Versuchen Sie es in {seconds, plural, one {# Sekunde} other {# Sekunden}} erneut.",
-        "requestId": "Anfrage-ID",
         "locked": "Zu viele fehlgeschlagene Versuche. Warten Sie eine Weile, bevor Sie es erneut versuchen.",
         "lockedWait": "Zu viele fehlgeschlagene Versuche. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut."
       },

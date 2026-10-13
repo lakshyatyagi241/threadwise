@@ -173,11 +173,6 @@ function MembersScreen() {
         >
           <div className="space-y-1">
             <p>{te(failure.key, failure.values)}</p>
-            {failure.requestId && (
-              <p className="font-mono text-xs opacity-80">
-                {tc('requestId')}: {failure.requestId}
-              </p>
-            )}
           </div>
           <div className="flex gap-2">
             {failure.kind === 'conflict' && (

@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "مسترد کریں",
       "retry": "دوبارہ کوشش کریں",
-      "requestId": "درخواست {id}",
       "noAccessTitle": "آپ یہ اسکرین نہیں کھول سکتے",
       "noAccess": "ایڈمن سے “{permission}” کی اجازت مانگیں۔"
     },

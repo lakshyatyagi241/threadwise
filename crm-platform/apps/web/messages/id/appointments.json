@@ -36,7 +36,6 @@
       "slotTaken": "Waktu itu baru saja diambil. Silakan pilih yang lain.",
       "gone": "Pemesanan ini tidak dapat diubah lagi.",
       "unexpected": "Terjadi kesalahan. Coba lagi sebentar lagi.",
-      "requestId": "ID permintaan",
       "retry": "Coba lagi",
       "invalidTransition": "Pemesanan itu tidak dalam status yang memungkinkan hal ini. Muat ulang untuk melihat statusnya.",
       "notStarted": "Ini hanya dapat dilakukan setelah pemesanan dimulai.",

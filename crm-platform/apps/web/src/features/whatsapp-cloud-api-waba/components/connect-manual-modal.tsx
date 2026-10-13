@@ -146,16 +146,7 @@ export function ConnectManualModal({ open, onClose, onConnected }: Props) {
     >
       <form id="waba-manual-form" onSubmit={onSubmit} className="space-y-4" noValidate>
         <Alert>{t('manualInfo')}</Alert>
-        {formError && (
-          <Alert tone="danger">
-            {formError.text}
-            {formError.requestId && (
-              <div className="mt-1 text-xs opacity-80">
-                {tc('requestId', { id: formError.requestId })}
-              </div>
-            )}
-          </Alert>
-        )}
+        {formError && <Alert tone="danger">{formError.text}</Alert>}
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label={t('phoneNumberId')} htmlFor="waba-phone-id" error={errors.phoneNumberId}>
             <Input

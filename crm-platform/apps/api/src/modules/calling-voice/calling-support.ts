@@ -14,12 +14,25 @@ export const unprocessable = (code: keyof typeof ERROR_CODES, message: string) =
 export const notFound = (code: keyof typeof ERROR_CODES, what: string) =>
   new AppError(ERROR_CODES[code], `${what} not found`, HttpStatus.NOT_FOUND);
 
+/** Meta appends "(code N[/sub], trace X)" to its sentence; the trace id is for logs, never for the person reading the toast. */
+const stripMetaSuffix = (text: string): string =>
+  text.replace(/\s*\(code \d+(?:\/\d+)?(?:, trace [\w-]+)?\)\s*$/, '').trim();
+
+/** Meta code 138009: too many call-permission requests to the same customer in the window. */
+const PERMISSION_REQUEST_LIMIT = 138009;
+
 /** Meta's reason, as a refusal the caller can show. `prefix` says what was being asked ("Meta refused permission_request"). */
 export function refused(err: unknown, prefix: string): AppError {
   if (err instanceof WabaApiError) {
+    if (err.code === PERMISSION_REQUEST_LIMIT) {
+      return unprocessable(
+        'CALL_META_REFUSED',
+        'WhatsApp limits how often you can ask this customer for call permission. Try again later.',
+      );
+    }
     return unprocessable(
       'CALL_META_REFUSED',
-      `${prefix} (${err.status}): ${err.userMessage ?? err.message}`,
+      `${prefix} (${err.status}): ${stripMetaSuffix(err.userMessage ?? err.message)}`,
     );
   }
   return unprocessable(

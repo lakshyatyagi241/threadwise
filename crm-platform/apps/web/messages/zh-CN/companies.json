@@ -18,7 +18,6 @@
       "planDisabled": "您的套餐不包含公司功能。升级即可解锁。",
       "ownerInvalid": "负责人必须是此工作区的活跃成员。",
       "unexpected": "出了点问题。请稍后重试。",
-      "requestId": "请求 ID",
       "retry": "重试"
     },
     "list": {

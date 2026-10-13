@@ -21,7 +21,6 @@
       "unavailable": "API'nin bu bölümü henüz kullanılamıyor.",
       "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
       "unexpected": "Bir şeyler ters gitti. Tekrar deneyin.",
-      "requestId": "İstek kimliği",
       "retry": "Tekrar dene",
       "reservedKey": "Bu anahtar yerleşik bir belirteç için ayrılmış. Başka bir tane seçin.",
       "attributeInUse": "Bazı kişilerde bu öznitelik için bir değer var.",

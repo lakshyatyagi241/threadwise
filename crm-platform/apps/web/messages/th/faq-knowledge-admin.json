@@ -7,7 +7,6 @@
     "common": {
       "loading": "กำลังโหลด",
       "retry": "ลองอีกครั้ง",
-      "requestId": "รหัสคำขอ",
       "dash": "-",
       "cancel": "ยกเลิก",
       "errors": {

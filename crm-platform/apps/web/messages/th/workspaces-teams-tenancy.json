@@ -11,8 +11,7 @@
       "copied": "คัดลอกแล้ว",
       "retry": "ลองอีกครั้ง",
       "loadMore": "โหลดเพิ่มเติม",
-      "loadingMore": "กำลังโหลด",
-      "requestId": "รหัสคำขอ"
+      "loadingMore": "กำลังโหลด"
     },
     "tiers": {
       "owner": "เจ้าของ",

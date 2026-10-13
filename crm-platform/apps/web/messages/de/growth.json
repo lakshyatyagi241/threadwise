@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "Verwerfen",
       "retry": "Erneut versuchen",
-      "requestId": "Anfrage {id}",
       "noAccessTitle": "Sie können diese Seite nicht öffnen",
       "noAccess": "Bitten Sie einen Administrator um die Berechtigung „{permission}“."
     },

@@ -21,7 +21,6 @@
       "unavailable": "Dit deel van de API is nog niet beschikbaar.",
       "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
       "unexpected": "Er is iets misgegaan. Probeer het opnieuw.",
-      "requestId": "Verzoek-ID",
       "retry": "Opnieuw proberen",
       "reservedKey": "Die sleutel is gereserveerd voor een ingebouwd token. Kies een andere.",
       "attributeInUse": "Sommige contacten hebben een waarde voor dit kenmerk.",

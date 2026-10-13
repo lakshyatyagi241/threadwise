@@ -94,8 +94,7 @@
       "signedOut": "Votre session a pris fin. Reconnectez-vous.",
       "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
       "generic": "Une erreur s’est produite. Réessayez.",
-      "retryIn": "Réessayez dans {seconds} secondes.",
-      "requestId": "ID de requête : {id}"
+      "retryIn": "Réessayez dans {seconds} secondes."
     },
     "examples": {
       "howDo": "Comment utiliser {title} ?",
@@ -115,7 +114,6 @@
       "description": "Laissez votre équipe demander ce qu’elle veut faire et laissez l’app la guider ou réaliser les étapes sur son propre compte.",
       "loading": "Chargement",
       "loadFailed": "Le paramètre n’a pas pu être chargé.",
-      "requestId": "ID de requête : {id}",
       "shareTitle": "Ce qui est partagé lors de l’utilisation",
       "share1": "La demande saisie par la personne et le texte visible de la page affichée sont envoyés au fournisseur d’IA utilisé par la plateforme.",
       "share2": "Les numéros de téléphone, les adresses e-mail, les secrets et les champs personnels des formulaires sont masqués au préalable. Les noms et les autres textes libres d’une page ne le sont pas.",

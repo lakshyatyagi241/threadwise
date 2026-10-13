@@ -7,8 +7,7 @@
     },
     "common": {
       "dismiss": "Dispensar",
-      "retry": "Tentar novamente",
-      "requestId": "ID da solicitação"
+      "retry": "Tentar novamente"
     },
     "errors": {
       "network": "Não foi possível alcançar o servidor. Verifique sua conexão e tente novamente.",

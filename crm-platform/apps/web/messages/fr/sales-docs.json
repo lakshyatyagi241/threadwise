@@ -257,7 +257,6 @@
       "ownerInvalid": "Le propriétaire doit être un membre actif de l’espace de travail.",
       "invoicingUnavailable": "La facturation n’est pas encore disponible : ce document ne peut pas être converti.",
       "unexpected": "Une erreur est survenue. Réessayez.",
-      "requestId": "ID de la requête",
       "retry": "Réessayer"
     },
     "link": {

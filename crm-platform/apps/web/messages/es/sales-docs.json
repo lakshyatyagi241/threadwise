@@ -257,7 +257,6 @@
       "ownerInvalid": "El propietario debe ser un miembro activo del espacio de trabajo.",
       "invoicingUnavailable": "La facturación todavía no está disponible, así que este documento no se puede convertir.",
       "unexpected": "Algo salió mal. Inténtalo de nuevo.",
-      "requestId": "ID de la solicitud",
       "retry": "Reintentar"
     },
     "link": {

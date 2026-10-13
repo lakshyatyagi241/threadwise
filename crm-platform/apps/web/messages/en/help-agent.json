@@ -94,8 +94,7 @@
       "signedOut": "Your session ended. Sign in again.",
       "network": "Could not reach the server. Check your connection and try again.",
       "generic": "Something went wrong. Try again.",
-      "retryIn": "Try again in {seconds} seconds.",
-      "requestId": "Request ID: {id}"
+      "retryIn": "Try again in {seconds} seconds."
     },
     "examples": {
       "howDo": "How do I use {title}?",
@@ -115,7 +114,6 @@
       "description": "Let your team ask for what they want to do and have the app guide them or do the steps on their own account.",
       "loading": "Loading",
       "loadFailed": "The setting could not be loaded.",
-      "requestId": "Request ID: {id}",
       "shareTitle": "What is shared when someone uses it",
       "share1": "The request the person typed, and the visible text of the page they are on, are sent to the AI provider the platform uses.",
       "share2": "Phone numbers, e-mail addresses, secrets and the personal fields of forms are hidden first. Names and other free text on a page are not.",

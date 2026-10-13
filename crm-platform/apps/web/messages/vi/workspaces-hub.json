@@ -187,8 +187,7 @@
       "notFound": "Không gian làm việc này không còn tồn tại.",
       "reasonRequired": "Cần lý do tối thiểu 8 ký tự.",
       "orgSuspended": "Không gian làm việc đã bị tạm khóa nên không thể truy cập.",
-      "validation": "Kiểm tra các giá trị và thử lại.",
-      "requestId": "Mã yêu cầu"
+      "validation": "Kiểm tra các giá trị và thử lại."
     },
     "detail": {
       "crumb": "Không gian làm việc",
