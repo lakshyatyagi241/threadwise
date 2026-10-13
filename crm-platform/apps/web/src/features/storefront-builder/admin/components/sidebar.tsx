@@ -286,7 +286,7 @@ export function StoreSidebar() {
           ) : (
             <p>
               {t('noDevice')}{' '}
-              <Link href="/channels" className="font-semibold text-primary hover:underline">
+              <Link href="/channels/whatsapp" className="font-semibold text-primary hover:underline">
                 {t('connectOne')}
               </Link>
               , {t('thenBind')}{' '}
