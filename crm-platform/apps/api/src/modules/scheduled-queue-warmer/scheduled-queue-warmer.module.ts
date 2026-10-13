@@ -1,9 +1,16 @@
 import { Inject, Module, type OnModuleInit } from '@nestjs/common';
 import { BroadcastsModule, WARMER_GATE, type WarmerGate } from '../broadcasts';
+import { CrmModule } from '../crm';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
+import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { ScheduleActionsService } from './schedule-actions.service';
 import { ScheduleAudienceService } from './audience/schedule-audience.service';
+import { ScheduleContentService } from './schedule-content.service';
 import { ScheduleCreateService } from './schedule-create.service';
+import { ScheduleEditService } from './schedule-edit.service';
+import { ScheduleEngagementService } from './schedule-engagement.service';
+import { ScheduleMediaService } from './schedule-media.service';
+import { ScheduleMessageBuilder } from './schedule-message-builder.service';
 import { ScheduleProducerService } from './schedule-producer.service';
 import { ScheduleReadService } from './schedule-read.service';
 import { ScheduledController } from './scheduled.controller';
@@ -18,13 +25,18 @@ import { NodeBridgeRuntimeModule } from '../node-bridge-runtime';
  * Registered in app.module.ts.
  */
 @Module({
-  imports: [BroadcastsModule, PlansCoreModule, NodeBridgeRuntimeModule],
+  imports: [BroadcastsModule, CrmModule, PlansCoreModule, PlatformSettingsModule, NodeBridgeRuntimeModule],
   controllers: [ScheduledController, WarmerController],
   providers: [
     SchedulerService,
     WarmerService,
     ScheduleAudienceService,
+    ScheduleContentService,
+    ScheduleMessageBuilder,
+    ScheduleMediaService,
     ScheduleCreateService,
+    ScheduleEditService,
+    ScheduleEngagementService,
     ScheduleReadService,
     ScheduleActionsService,
     ScheduleProducerService,
@@ -34,6 +46,9 @@ import { NodeBridgeRuntimeModule } from '../node-bridge-runtime';
     WarmerService,
     ScheduleProducerService,
     ScheduleCreateService,
+    ScheduleEditService,
+    ScheduleMessageBuilder,
+    ScheduleMediaService,
     ScheduleReadService,
     ScheduleActionsService,
   ],
