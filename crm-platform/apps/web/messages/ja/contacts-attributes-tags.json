@@ -121,6 +121,12 @@
       "selectedActionsNone": "選択した連絡先(先に行を選択してください)",
       "modifyColumns": "列を変更",
       "resetColumns": "既定に戻す",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "連絡先名",
       "colPhone": "電話番号",
       "colEmailId": "メールアドレス",
@@ -407,7 +413,8 @@
         "address": "住所",
         "memo": "メモ",
         "status": "ステータス",
-        "source": "ソース"
+        "source": "ソース",
+        "consent": "マーケティング同意（はい / いいえ）"
       },
       "notInFile": "ファイルにありません",
       "columnN": "列 {n}",

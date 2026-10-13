@@ -77,6 +77,7 @@ import { WebhookFanoutModule } from './modules/webhook-fanout';
 import { OutboundWebhooksModule } from './modules/outbound-webhooks';
 import { ApiLibraryModule } from './modules/api-library';
 import { FaqKnowledgeModule } from './modules/faq-knowledge';
+import { GrowthPilotModule } from './modules/growth-pilot';
 import { LeadScoringModule } from './modules/lead-scoring';
 import { ContactConsentModule } from './modules/contact-consent';
 import { MessageTemplatesModule } from './modules/message-templates';
@@ -230,6 +231,7 @@ import { HealthModule } from './health/health.module';
     ApiLibraryModule,
     FaqKnowledgeModule,
     LeadScoringModule,
+    GrowthPilotModule,
     ContactConsentModule,
     WabaModule,
     WhatsAppProviderAdminModule,

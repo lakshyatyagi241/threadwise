@@ -339,6 +339,11 @@
         "label": "Consenso e risposte STOP",
         "description": "Scegli le parole STOP e START, le risposte di conferma, la riga di disiscrizione e se il marketing richiede un consenso registrato.",
         "keywords": "consenso, disiscrizione, reiscrizione, annullare iscrizione, stop, start, gdpr, conformità, privacy, marketing"
+      },
+      "growth": {
+        "label": "Growth",
+        "description": "Lead caldi, audience, risposte alle campagne e altro su cui il tuo team può agire, ricavato da chat e campagne.",
+        "keywords": "growth, lead caldo, audience, coinvolgimento, inattivo, risposte alle campagne, probabilità di conversione, opt-out, pilota"
       }
     },
     "backToMarketplace": "Torna al Marketplace"

@@ -14,7 +14,9 @@
       "settingsInvalid": "Uma palavra-chave precisa de pelo menos uma letra ou dígito, e ao menos uma palavra-chave STOP deve permanecer enquanto a detecção estiver ativa.",
       "rateLimited": "Muitas solicitações. Aguarde um momento e tente novamente.",
       "validation": "Alguns valores não são válidos. Verifique o formulário e tente novamente.",
-      "unexpected": "Algo deu errado. Tente novamente."
+      "unexpected": "Algo deu errado. Tente novamente.",
+      "exportInProgress": "Um arquivo de comprovação já está sendo preparado. Aguarde a conclusão e tente novamente.",
+      "exportNotReady": "Esse arquivo não está pronto ou expirou. Prepare um novo."
     },
     "settings": {
       "title": "Consentimento e respostas STOP",
@@ -169,7 +171,35 @@
     "import": {
       "legend": "Consentimento",
       "label": "Tenho consentimento para enviar mensagens a estes contatos",
-      "hint": "Se marcado, todos os contatos do arquivo são registrados como tendo aceitado receber marketing, com o nome do arquivo como comprovação. Se desmarcado, a importação não registra nenhum consentimento. Contatos que cancelaram o recebimento continuam cancelados."
+      "hint": "Se marcado, todos os contatos do arquivo são registrados como tendo aceitado receber marketing, com o nome do arquivo como comprovação. Se desmarcado, a importação não registra nenhum consentimento. Contatos que cancelaram o recebimento continuam cancelados.",
+      "hintColumn": "A coluna mapeada para o consentimento de marketing define quem é registrado: somente as linhas que dizem sim recebem um consentimento, com o nome do arquivo como comprovação. Um não, uma célula vazia ou uma palavra desconhecida não registram nada. Contatos que cancelaram continuam cancelados.",
+      "columnSummary": "{granted} linhas dizem sim e serão registradas. {notGranted} dizem não ou estão em branco e não recebem registro de consentimento.",
+      "unrecognised": "{count, plural, one {# linha tem} other {# linhas têm}} um valor de consentimento que não é sim nem não ({values}). {count, plural, one {Ele é tratado} other {Eles são tratados}} como não concedido. Use yes / no, true / false ou 1 / 0.",
+      "columnIgnored": "A coluna de consentimento não faz nada até você marcar a caixa acima."
+    },
+    "systemLine": {
+      "withdrawn": "O contato respondeu {keyword}: cancelou a inscrição em marketing",
+      "granted": "O contato respondeu {keyword}: reinscreveu-se em marketing"
+    },
+    "proof": {
+      "title": "Arquivos de comprovação preparados",
+      "prepare": "Preparar o arquivo de comprovação completo",
+      "preparing": "Preparando o arquivo de comprovação",
+      "largeHint": "O histórico tem mais de {max} eventos, então o arquivo é preparado em segundo plano",
+      "large": "O histórico tem mais de {max} eventos, mais do que um download direto comporta. Prepare o arquivo completo: ele é gerado em segundo plano e você recebe um e-mail quando estiver pronto.",
+      "none": "Ainda não há arquivos preparados.",
+      "keptFor": "Um arquivo preparado pode ser baixado por {days} dias e depois é excluído. Apenas um arquivo é preparado por vez.",
+      "rows": "{count, plural, one {# evento} other {# eventos}}",
+      "expires": "disponível até {date}",
+      "download": "Baixar CSV",
+      "failed": "Não foi possível gerar o arquivo. Prepare-o novamente.",
+      "status": {
+        "queued": "Aguardando",
+        "running": "Gerando",
+        "ready": "Pronto",
+        "failed": "Falhou",
+        "expired": "Expirado"
+      }
     }
   }
 }

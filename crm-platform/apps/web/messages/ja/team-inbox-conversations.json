@@ -139,13 +139,15 @@
       "logNotReady": "このエクスポートはまだ準備できていないか、有効期限が切れています。もう一度リクエストしてください。",
       "groupSuspended": "Metaがこのグループを停止したため、解除されるまでメッセージを送信できません。",
       "walletEmpty": "メッセージウォレットの残高がこのグループメッセージ（メンバーごとに課金）に足りません。チャージしてもう一度お試しください。",
+      "groupPlanLocked": "ご利用のプランにはWhatsAppグループが含まれていないため、このグループにメッセージを送れません。管理者にプランのアップグレードを依頼してください。",
       "groupLeft": "この番号はグループから退出したため、メッセージを送信できなくなりました。",
       "groupAnnounceOnly": "このグループでは管理者のみメッセージを送信でき、この番号は管理者ではありません。",
       "groupRateLimited": "短時間にこの番号からのグループメッセージが多すぎます。1分待ってからもう一度お試しください。",
       "groupUnavailable": "WhatsAppがこのグループメッセージを受け付けませんでした。数分後にもう一度お試しください。",
       "savedReplyGone": "この返信テンプレートは存在しなくなりました。",
       "savedReplyChannel": "この返信テンプレートは、この種類のチャネル向けではありません。",
-      "shortcutTaken": "そのショートカットは別の返信テンプレートで既に使われています。"
+      "shortcutTaken": "そのショートカットは別の返信テンプレートで既に使われています。",
+      "importInvalid": "このファイルは保存済みの返信として読み込めません。1行目に title、shortcut、body の列が必要で、行数は 1,000 行までです。"
     },
     "bubble": {
       "kind": {
@@ -213,7 +215,9 @@
       },
       "deliveryLog": "配信ログ",
       "groupMember": "グループメンバー",
-      "groupTally": "{delivered, plural, other {#人のメンバー}}に配信済み: 課金 {billable}、無料 {free}"
+      "groupTally": "{members}人中{delivered}人に配信済み{read, plural, =0 {} other {、既読 #人}}{failed, plural, =0 {} other {、失敗 #件}}",
+      "groupTallyNoTotal": "{delivered, plural, other {#人のメンバー}}に配信済み{read, plural, =0 {} other {、既読 #人}}{failed, plural, =0 {} other {、失敗 #件}}",
+      "groupTallyBilled": "課金 {billable}、無料 {free}"
     },
     "media": {
       "openImage": "画像 {name} を開く",
@@ -664,6 +668,26 @@
         "label": "グループのメンバー",
         "loading": "メンバーを検索中",
         "none": "該当するメンバーがいません"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Metaがこのグループを停止しました",
+          "message": "WhatsAppは停止中のグループにメッセージを配信しません。Metaが解除するまで、スレッドの閲覧と社内メモの追加はできます。"
+        },
+        "plan": {
+          "title": "ご利用のプランにはWhatsAppグループが含まれていません",
+          "message": "このスレッドの閲覧と社内メモの追加はできますが、グループへの送信にはグループ対応のプランが必要です。管理者にアップグレードを依頼してください。"
+        },
+        "ineligible": {
+          "title": "この番号ではWhatsAppグループを利用できません",
+          "message": "前回の確認で、Metaはこの番号でのグループを許可しませんでした（公式ビジネスアカウントが必要です）。スレッドの閲覧と社内メモの追加はできます。再確認するにはMetaグループを開いてください。"
+        }
+      },
+      "cost": {
+        "members": "このメッセージは{count, plural, other {#人のメンバー}}に届きます。概算費用 {cost}：WhatsAppは受信したメンバー1人ごとに課金します。",
+        "membersNoEstimate": "このメッセージは{count, plural, other {#人のメンバー}}に届きます。WhatsAppは受信したメンバー1人ごとに課金します。",
+        "sizeUnknown": "メンバー数はまだ分かりません。WhatsAppはこのメッセージを受信したメンバー1人ごとに課金します。",
+        "walletShort": "ウォレットの残高がこのメッセージに足りない可能性があります。送信前にチャージしてください。"
       }
     },
     "savedReplies": {
@@ -817,6 +841,49 @@
         "upgrade": "プランを見る",
         "conflict": "他の人が先にこの返信を変更しました。このウィンドウを閉じて、もう一度開いてください。",
         "invalid": "入力内容の一部が正しくありません。"
+      },
+      "transfer": {
+        "export": "CSV をエクスポート",
+        "import": "CSV をインポート",
+        "title": "保存済みの返信をインポート",
+        "intro": "title、shortcut、body の列を含む CSV をアップロードしてください。必要に応じて category、language、channel の列も使えます（channel は | 区切りで指定し、空欄にするとすべてのチャネルが対象になります）。1,000 行まで、{maxKb} KB までです。インポートした返信はチーム全体で共有されます。エクスポートも同じ列です。",
+        "file": "CSV ファイル",
+        "tooBig": "このファイルは大きすぎます。",
+        "duplicates": "共有の返信がすでに同じショートカットを使っている場合",
+        "policy": {
+          "skip": "既存の返信を残す",
+          "overwrite": "本文を置き換える"
+        },
+        "policyHint": {
+          "skip": "この行はスキップされ、返信はそのまま残ります。",
+          "overwrite": "タイトル、本文、カテゴリ、言語、チャネルが置き換えられます。使用回数は引き継がれます。"
+        },
+        "check": "ファイルを確認",
+        "go": "インポート ({count})",
+        "cancel": "キャンセル",
+        "summary": "作成 {create} 件、置き換え {update} 件、スキップ {skip} 件、問題あり {invalid} 件。まだ何も保存されていません。",
+        "plan": "ご利用プラン: {limit} 件中 {used} 件の返信。",
+        "row": "{line} 行目: /{shortcut}",
+        "truncated": "問題がある行または変更される行のうち、先頭の行のみを表示しています。",
+        "done": "インポート完了: {created} 件作成、{updated} 件置き換え。",
+        "issue": {
+          "update": "置き換えられます",
+          "skip": "スキップ",
+          "invalid": "問題があります",
+          "duplicate": "ショートカットはすでに使用中のためスキップ",
+          "missing_shortcut": "ショートカットなし",
+          "shortcut_invalid": "ショートカットに使える英字や数字がありません",
+          "missing_title": "タイトルなし",
+          "title_too_long": "タイトルが長すぎます",
+          "missing_body": "本文なし",
+          "body_too_long": "本文が長すぎます",
+          "control_characters": "制御文字が含まれています",
+          "category_too_long": "カテゴリが長すぎます",
+          "language_invalid": "言語が en や pt-BR のようなコードではありません",
+          "channel_unknown": "不明なチャネル",
+          "duplicate_in_file": "同じショートカットがファイル内の前の行にあります",
+          "plan_limit_reached": "プランの上限を超えています"
+        }
       }
     }
   }

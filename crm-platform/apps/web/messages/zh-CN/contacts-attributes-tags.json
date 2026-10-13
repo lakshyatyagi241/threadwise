@@ -121,6 +121,12 @@
       "selectedActionsNone": "已选联系人（请先选择行）",
       "modifyColumns": "调整列",
       "resetColumns": "恢复默认",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "联系人姓名",
       "colPhone": "电话号码",
       "colEmailId": "电子邮箱",
@@ -407,7 +413,8 @@
         "address": "地址",
         "memo": "备忘",
         "status": "状态",
-        "source": "来源"
+        "source": "来源",
+        "consent": "营销同意（是 / 否）"
       },
       "notInFile": "文件中没有",
       "columnN": "第 {n} 列",

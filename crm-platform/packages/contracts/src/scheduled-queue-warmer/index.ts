@@ -4,6 +4,10 @@
  */
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
+import { composeTemplateSchema } from '../broadcasts/broadcast-compose';
+import { scheduleMediaSchema } from './media';
+
+export * from './media';
 
 // --- vocabulary --------------------------------------------------------------------------------------------------------
 
@@ -52,8 +56,10 @@ const createScheduleBase = z.object({
   message: z.string().max(4096).optional(),
   templateId: uuidSchema.optional(),
   templateOverrides: z.record(z.unknown()).optional(),
-  /** A link (https://...) to the file to send. Uploads come when the send port accepts file bytes. */
+  /** A link (https://...) to the file to send. */
   media: z.string().trim().max(512).optional(),
+  /** A file uploaded to this workspace (`POST /scheduled/media`); wins over `media`. */
+  mediaId: uuidSchema.optional(),
   latitude: z.number().min(-90).max(90).optional(),
   longitude: z.number().min(-180).max(180).optional(),
   recipientType: z.enum(RECIPIENT_TYPES),
@@ -86,14 +92,38 @@ export const createScheduleInputSchema = createScheduleBase.superRefine((v, ctx)
 });
 export type CreateScheduleInput = z.infer<typeof createScheduleInputSchema>;
 
-/** The fields an edit may change, only while the schedule is waiting or paused (TW-SCHED-016): the recipients, sender, template and recurrence are fixed. */
+/**
+ * Edit a schedule that has not started (TW-SCHED-016): waiting or paused. Every field of the composer may change except that one
+ * schedule is one sender (`sender`, not `senders`). A field left out keeps its stored value; `messageType` or `recipientType` present
+ * means that part (message, audience) is given whole. `rowVersion` is the version the person opened: a stale one is a 409.
+ */
 export const updateScheduleInputSchema = z.object({
+  rowVersion: z.number().int().min(1),
   name: z.string().trim().min(1).max(255).optional(),
+  scheduleType: z.enum(SCHEDULE_TYPES).optional(),
   sendDate: dateOnly.optional(),
   sendTime: timeOfDay.optional(),
   timezone: z.string().trim().min(1).max(64).optional(),
+  repeatInterval: z.enum(REPEAT_INTERVALS).nullable().optional(),
+  repeatEvery: z.number().int().min(1).max(365).optional(),
+  daysOfWeek: z.array(z.number().int().min(0).max(6)).max(7).optional(),
+  /** `null` removes the end date. */
+  endDate: dateOnly.nullable().optional(),
+  /** The sender key `<engine>:<uuid>`; changing it moves the schedule to that number. */
+  sender: z.string().trim().min(1).max(80).optional(),
+  messageType: z.enum(MESSAGE_TYPES).optional(),
   message: z.string().max(4096).optional(),
-  rowVersion: z.number().int().min(1),
+  templateId: uuidSchema.optional(),
+  templateOverrides: z.record(z.unknown()).optional(),
+  media: z.string().trim().max(512).optional(),
+  mediaId: uuidSchema.optional(),
+  latitude: z.number().min(-90).max(90).optional(),
+  longitude: z.number().min(-180).max(180).optional(),
+  recipientType: z.enum(RECIPIENT_TYPES).optional(),
+  groupIds: z.array(uuidSchema).max(200).optional(),
+  tagIds: z.array(uuidSchema).max(200).optional(),
+  queueIds: z.array(uuidSchema).max(200).optional(),
+  numbers: z.array(z.string().trim().max(32)).max(5000).optional(),
 });
 export type UpdateScheduleInput = z.infer<typeof updateScheduleInputSchema>;
 
@@ -192,8 +222,25 @@ export const scheduleDetailSchema = scheduleSummarySchema.extend({
   breakdown: z.record(z.number().int()),
   recipients: z.array(scheduleRecipientSchema),
   recipientsTruncated: z.boolean(),
+  /** The template, when the message is one. */
+  template: z.object({ id: uuidSchema, name: z.string(), language: z.string() }).nullable(),
+  /** The uploaded file, when the message has one; a pasted link has none. */
+  mediaFile: scheduleMediaSchema.omit({ url: true }).nullable(),
+  /** Whether the edit screen applies: waiting or paused, and (for a one-off) nobody has been messaged yet. */
+  editable: z.boolean(),
 });
 export type ScheduleDetail = z.infer<typeof scheduleDetailSchema>;
+
+/**
+ * A template the composer may offer (TW-SCHED-006): the broadcast composer's template, plus which engines may send it now. A Cloud API
+ * number sends only a template Meta approved (and that is not paused); the other engines send the approved text. `senderKey` is the
+ * Cloud API number the template lives on, when it is tied to one.
+ */
+export const scheduleTemplateSchema = composeTemplateSchema.extend({
+  usableOn: z.array(z.enum(['waba', 'twilio', 'baileys'])),
+  senderKey: z.string().nullable(),
+});
+export type ScheduleTemplate = z.infer<typeof scheduleTemplateSchema>;
 
 /** What the composer needs to draw its pickers. */
 export const scheduleOptionsSchema = z.object({
@@ -209,7 +256,7 @@ export const scheduleOptionsSchema = z.object({
   groups: z.array(z.object({ id: uuidSchema, name: z.string(), members: z.number().int() })),
   tags: z.array(z.object({ id: uuidSchema, name: z.string(), contacts: z.number().int() })),
   queues: z.array(z.object({ id: uuidSchema, name: z.string(), recipients: z.number().int() })),
-  templates: z.array(z.object({ id: uuidSchema, name: z.string(), language: z.string() })),
+  templates: z.array(scheduleTemplateSchema),
   minLeadMinutes: z.number().int(),
 });
 export type ScheduleOptions = z.infer<typeof scheduleOptionsSchema>;
@@ -239,6 +286,80 @@ export const createScheduleResultSchema = z.object({
   testError: z.string().nullable(),
 });
 export type CreateScheduleResult = z.infer<typeof createScheduleResultSchema>;
+
+// --- edit screen, recipients and engagement ---------------------------------------------------------------------------------
+
+/**
+ * Everything the composer shows for a schedule that can still be edited (TW-SCHED-016), in the composer's own terms, so the edit
+ * screen is the composer prefilled. 409 when the schedule can no longer be edited.
+ */
+export const scheduleDraftSchema = z.object({
+  id: uuidSchema,
+  rowVersion: z.number().int(),
+  name: z.string(),
+  scheduleType: z.enum(SCHEDULE_TYPES),
+  sendDate: z.string(),
+  sendTime: z.string(),
+  timezone: z.string(),
+  repeatInterval: z.enum(REPEAT_INTERVALS).nullable(),
+  repeatEvery: z.number().int(),
+  daysOfWeek: z.array(z.number().int()),
+  endDate: z.string().nullable(),
+  sender: z.string().nullable(),
+  messageType: z.enum(MESSAGE_TYPES),
+  message: z.string(),
+  templateId: uuidSchema.nullable(),
+  templateOverrides: z.record(z.unknown()).nullable(),
+  /** A pasted link; null when the file was uploaded. */
+  media: z.string().nullable(),
+  mediaFile: scheduleMediaSchema.nullable(),
+  latitude: z.number().nullable(),
+  longitude: z.number().nullable(),
+  recipientType: z.enum(RECIPIENT_TYPES),
+  groupIds: z.array(uuidSchema),
+  tagIds: z.array(uuidSchema),
+  queueIds: z.array(uuidSchema),
+  numbers: z.array(z.string()),
+  totalRecipients: z.number().int(),
+});
+export type ScheduleDraft = z.infer<typeof scheduleDraftSchema>;
+
+export const RECIPIENT_FILTERS = ['all', 'pending', 'sent', 'delivered', 'read', 'failed'] as const;
+
+export const listScheduleRecipientsQuerySchema = z.object({
+  /** `sent` is reached the provider and nothing more yet; `delivered` and `read` are their own steps. */
+  status: z.enum(RECIPIENT_FILTERS).default('all'),
+  q: z.string().trim().max(100).optional(),
+  limit: z.coerce.number().int().min(1).max(200).default(50),
+  offset: z.coerce.number().int().min(0).default(0),
+});
+export type ListScheduleRecipientsQuery = z.infer<typeof listScheduleRecipientsQuerySchema>;
+
+export const scheduleRecipientListSchema = z.object({
+  items: z.array(scheduleRecipientSchema),
+  /** Rows matching the filter and the search. */
+  total: z.number().int(),
+  /** Counts by status over the whole schedule, ignoring the search, for the filter chips. */
+  counts: z.record(z.number().int()),
+});
+export type ScheduleRecipientList = z.infer<typeof scheduleRecipientListSchema>;
+
+/** One step of the delivery funnel over time. Every number is cumulative at `at` (the start of the bucket). */
+export const scheduleFunnelPointSchema = z.object({
+  at: z.string().datetime(),
+  queued: z.number().int(),
+  sent: z.number().int(),
+  delivered: z.number().int(),
+  read: z.number().int(),
+  failed: z.number().int(),
+});
+
+export const scheduleFunnelSchema = z.object({
+  bucket: z.enum(['hour', 'day']),
+  total: z.number().int(),
+  points: z.array(scheduleFunnelPointSchema),
+});
+export type ScheduleFunnel = z.infer<typeof scheduleFunnelSchema>;
 
 // --- warmer ------------------------------------------------------------------------------------------------------------
 

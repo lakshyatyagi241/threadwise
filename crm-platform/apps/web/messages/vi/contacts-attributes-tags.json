@@ -121,6 +121,12 @@
       "selectedActionsNone": "Liên hệ đã chọn (hãy chọn hàng trước)",
       "modifyColumns": "Chỉnh sửa cột",
       "resetColumns": "Đặt lại về mặc định",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "Tên liên hệ",
       "colPhone": "Số điện thoại",
       "colEmailId": "Email",
@@ -407,7 +413,8 @@
         "address": "Địa chỉ",
         "memo": "Ghi nhớ",
         "status": "Trạng thái",
-        "source": "Nguồn"
+        "source": "Nguồn",
+        "consent": "Đồng ý tiếp thị (có / không)"
       },
       "notInFile": "Không có trong tệp",
       "columnN": "Cột {n}",

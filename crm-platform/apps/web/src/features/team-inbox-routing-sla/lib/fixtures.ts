@@ -17,6 +17,7 @@ export function rule(over: Partial<RoutingRule> = {}): RoutingRule {
       businessHours: 'any',
     },
     assign: { strategy: 'round_robin', userIds: [U1, U2], teamIds: [] },
+    triggerFlow: null,
     stopOnMatch: true,
     isActive: true,
     isFallback: false,

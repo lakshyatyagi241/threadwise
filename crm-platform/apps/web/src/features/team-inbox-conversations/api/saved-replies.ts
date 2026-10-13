@@ -7,14 +7,18 @@ import {
   type QueryClient,
 } from '@tanstack/react-query';
 import {
+  savedReplyImportResultSchema,
   savedReplyListResponseSchema,
   savedReplySchema,
   useSavedReplyResponseSchema,
   type CreateSavedReplyInput,
   type ListSavedRepliesQuery,
+  type SavedReplyImportOptions,
+  type SavedReplyImportResult,
   type UpdateSavedReplyInput,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
+import { toApiError } from '@/lib/api/errors';
 
 export const SAVED_REPLY_KEYS = {
   all: ['saved-replies'] as const,
@@ -72,6 +76,47 @@ export const savedRepliesApi = {
       schema: useSavedReplyResponseSchema,
     }),
 };
+
+/** The shared library as a CSV file. */
+export async function exportSavedReplies(): Promise<Blob> {
+  const res = await fetch('/api/v2/inbox/saved-replies/export', {
+    headers: { Accept: 'text/csv', 'X-Request-Id': crypto.randomUUID() },
+    credentials: 'same-origin',
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw toApiError(
+      res.status,
+      text ? JSON.parse(text) : undefined,
+      res.headers.get('x-request-id'),
+    );
+  }
+  return res.blob();
+}
+
+/** Checks (`dryRun`) or imports a CSV of shared replies. A check writes nothing. */
+export async function importSavedReplies(
+  file: File,
+  options: SavedReplyImportOptions,
+): Promise<SavedReplyImportResult> {
+  const form = new FormData();
+  form.set('file', file);
+  form.set('options', JSON.stringify(options));
+  const res = await fetch('/api/v2/inbox/saved-replies/import', {
+    method: 'POST',
+    body: form,
+    headers: {
+      Accept: 'application/json',
+      'X-Request-Id': crypto.randomUUID(),
+      'Idempotency-Key': crypto.randomUUID(),
+    },
+    credentials: 'same-origin',
+  });
+  const text = await res.text();
+  const json: unknown = text ? JSON.parse(text) : undefined;
+  if (!res.ok) throw toApiError(res.status, json, res.headers.get('x-request-id'));
+  return savedReplyImportResultSchema.parse(json);
+}
 
 export const refreshSavedReplies = (qc: QueryClient) =>
   qc.invalidateQueries({ queryKey: SAVED_REPLY_KEYS.all });

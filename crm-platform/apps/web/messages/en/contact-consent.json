@@ -14,7 +14,9 @@
       "settingsInvalid": "A keyword needs at least one letter or digit, and at least one STOP keyword must remain while detection is on.",
       "rateLimited": "Too many requests. Wait a moment and try again.",
       "validation": "Some of the values are not valid. Check the form and try again.",
-      "unexpected": "Something went wrong. Try again."
+      "unexpected": "Something went wrong. Try again.",
+      "exportInProgress": "A proof file is already being prepared. Wait for it to finish, then try again.",
+      "exportNotReady": "That file is not ready or has expired. Prepare a new one."
     },
     "settings": {
       "title": "Consent and STOP replies",
@@ -169,7 +171,35 @@
     "import": {
       "legend": "Consent",
       "label": "I have consent to message these contacts",
-      "hint": "Ticked, every contact in the file is recorded as having agreed to marketing, with the file name as proof. Unticked, the import records no consent. Contacts who opted out stay opted out."
+      "hint": "Ticked, every contact in the file is recorded as having agreed to marketing, with the file name as proof. Unticked, the import records no consent. Contacts who opted out stay opted out.",
+      "hintColumn": "The column mapped to marketing consent decides who is recorded: only the rows that say yes get a consent, with the file name as proof. A no, a blank cell or an unknown word records nothing. Contacts who opted out stay opted out.",
+      "columnSummary": "{granted} rows say yes and will be recorded. {notGranted} say no or are blank and get no consent record.",
+      "unrecognised": "{count, plural, one {# row has} other {# rows have}} a consent value that is not a yes or a no ({values}). {count, plural, one {It is} other {They are}} treated as not granted. Use yes / no, true / false or 1 / 0.",
+      "columnIgnored": "The consent column does nothing until you tick the box above."
+    },
+    "systemLine": {
+      "withdrawn": "Contact replied {keyword}: unsubscribed from marketing",
+      "granted": "Contact replied {keyword}: resubscribed to marketing"
+    },
+    "proof": {
+      "title": "Prepared proof files",
+      "prepare": "Prepare the full proof file",
+      "preparing": "Preparing the proof file",
+      "largeHint": "The ledger is larger than {max} events, so the file is prepared in the background",
+      "large": "The ledger holds more than {max} events, more than a direct download carries. Prepare the full file: it is built in the background and you get an email when it is ready.",
+      "none": "No prepared files yet.",
+      "keptFor": "A prepared file can be downloaded for {days} days, then it is deleted. Only one file is prepared at a time.",
+      "rows": "{count, plural, one {# event} other {# events}}",
+      "expires": "available until {date}",
+      "download": "Download CSV",
+      "failed": "The file could not be built. Prepare it again.",
+      "status": {
+        "queued": "Waiting",
+        "running": "Building",
+        "ready": "Ready",
+        "failed": "Failed",
+        "expired": "Expired"
+      }
     }
   }
 }

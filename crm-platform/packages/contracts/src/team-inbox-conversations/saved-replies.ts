@@ -196,6 +196,7 @@ export const savedReplySchema = z.object({
 });
 export type SavedReply = z.infer<typeof savedReplySchema>;
 
+// eslint-disable-next-line no-control-regex -- control characters are exactly what is refused
 const noControlChars = (v: string) => !/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/.test(v);
 
 const shortcutInput = z
@@ -304,3 +305,81 @@ export const useSavedReplyResponseSchema = z.object({
   usedCount: z.number().int().nonnegative(),
 });
 export type UseSavedReplyResponse = z.infer<typeof useSavedReplyResponseSchema>;
+
+// --- import and export (CSV) ------------------------------------------------------------------------------------------------------
+
+/** The CSV columns of the export, in this order. The import finds them by header name (any order, any case). */
+export const SAVED_REPLY_CSV_COLUMNS = [
+  'title',
+  'shortcut',
+  'body',
+  'category',
+  'language',
+  'channel',
+] as const;
+export const SAVED_REPLY_IMPORT_MAX_ROWS = 1000;
+export const SAVED_REPLY_IMPORT_MAX_BYTES = 1024 * 1024;
+/** Rows listed back per import (the rest are only counted). */
+export const SAVED_REPLY_IMPORT_ROWS_SHOWN = 200;
+
+export const SAVED_REPLY_DUPLICATE_POLICIES = ['skip', 'overwrite'] as const;
+export const savedReplyDuplicatePolicySchema = z.enum(SAVED_REPLY_DUPLICATE_POLICIES);
+export type SavedReplyDuplicatePolicy = z.infer<typeof savedReplyDuplicatePolicySchema>;
+
+/** The `options` field of the multipart form (a JSON string). */
+export const savedReplyImportOptionsSchema = z.object({
+  /** What to do with a row whose shortcut a shared reply already uses: leave that reply as it is, or replace its text. */
+  duplicatePolicy: savedReplyDuplicatePolicySchema.default('skip'),
+  /** Report what would happen and write nothing. */
+  dryRun: z.boolean().default(false),
+});
+export type SavedReplyImportOptions = z.infer<typeof savedReplyImportOptionsSchema>;
+
+export const SAVED_REPLY_IMPORT_ISSUES = [
+  'missing_shortcut',
+  'shortcut_invalid',
+  'missing_title',
+  'title_too_long',
+  'missing_body',
+  'body_too_long',
+  'control_characters',
+  'category_too_long',
+  'language_invalid',
+  'channel_unknown',
+  'duplicate_in_file',
+  'plan_limit_reached',
+] as const;
+export type SavedReplyImportIssue = (typeof SAVED_REPLY_IMPORT_ISSUES)[number];
+
+export const SAVED_REPLY_IMPORT_ACTIONS = ['create', 'update', 'skip', 'invalid'] as const;
+
+export const savedReplyImportRowSchema = z.object({
+  /** 1-based line in the file, header included. */
+  line: z.number().int(),
+  shortcut: z.string(),
+  action: z.enum(SAVED_REPLY_IMPORT_ACTIONS),
+  /** Why a row is `invalid`, or `skip`ped (`duplicate` = the shortcut exists and the policy is skip). */
+  issue: z.enum([...SAVED_REPLY_IMPORT_ISSUES, 'duplicate']).nullable(),
+});
+
+export const savedReplyImportResultSchema = z.object({
+  dryRun: z.boolean(),
+  duplicatePolicy: savedReplyDuplicatePolicySchema,
+  totals: z.object({
+    rows: z.number().int(),
+    create: z.number().int(),
+    update: z.number().int(),
+    skip: z.number().int(),
+    invalid: z.number().int(),
+  }),
+  /** The rows that are not a plain create (every problem first), capped at SAVED_REPLY_IMPORT_ROWS_SHOWN. */
+  rows: z.array(savedReplyImportRowSchema),
+  rowsTruncated: z.boolean(),
+  /** The plan's `saved_replies` limit (null = unlimited) and what the workspace holds now. */
+  plan: z.object({
+    limit: z.number().int().nullable(),
+    used: z.number().int(),
+    remaining: z.number().int().nullable(),
+  }),
+});
+export type SavedReplyImportResult = z.infer<typeof savedReplyImportResultSchema>;

@@ -44,7 +44,7 @@ Connections: `node-bridge-runtime` (NODE: heartbeat, `/api/*` token guard, setti
 | TW-SCHED-013 | Pause and resume                                                       | implemented | P0       | S      | TW-SCHED-020                                           |
 | TW-SCHED-014 | Cancel                                                                 | implemented | P0       | S      | TW-SCHED-020                                           |
 | TW-SCHED-015 | Run now                                                                | implemented | P0       | M      | TW-SCHED-010                                           |
-| TW-SCHED-016 | Edit a schedule (PATCH)                                                | partial     | P1       | S      | TW-SCHED-003                                           |
+| TW-SCHED-016 | Edit a schedule (PATCH)                                                | implemented | P1       | S      | TW-SCHED-003                                           |
 | TW-SCHED-017 | Retry a failed schedule with a new time                                | implemented | P1       | M      | TW-SCHED-010                                           |
 | TW-SCHED-018 | Delete a schedule                                                      | implemented | P0       | S      | TW-SCHED-014                                           |
 | TW-SCHED-019 | Plan, role and limit gates for scheduled messages                      | implemented | P0       | S      | -                                                      |

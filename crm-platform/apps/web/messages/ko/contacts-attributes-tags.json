@@ -121,6 +121,12 @@
       "selectedActionsNone": "선택한 연락처(먼저 행을 선택하세요)",
       "modifyColumns": "열 수정",
       "resetColumns": "기본값으로 초기화",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "연락처 이름",
       "colPhone": "전화번호",
       "colEmailId": "이메일 ID",
@@ -407,7 +413,8 @@
         "address": "주소",
         "memo": "메모",
         "status": "상태",
-        "source": "출처"
+        "source": "출처",
+        "consent": "마케팅 동의(예 / 아니요)"
       },
       "notInFile": "파일에 없음",
       "columnN": "열 {n}",

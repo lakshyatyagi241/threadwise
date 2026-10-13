@@ -21,6 +21,7 @@ import { useCan } from '@/features/auth-registration-security/shared/session-con
 import { refreshSavedReplies, savedRepliesApi, useSavedReplyList } from '../api/saved-replies';
 import { useErrorText } from './parts';
 import { SavedReplyForm } from './saved-reply-form';
+import { ExportRepliesButton, ImportRepliesButton } from './saved-replies-transfer';
 
 type Tab = 'all' | 'shared' | 'mine';
 const TABS: readonly Tab[] = ['all', 'shared', 'mine'];
@@ -88,9 +89,17 @@ export function SavedRepliesScreen() {
           <h1 className="mt-2 text-3xl font-semibold tracking-tight">{t('title')}</h1>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t('subtitle')}</p>
         </div>
-        <Button onClick={() => setEditing('new')} disabled={atLimit} data-testid="saved-reply-new">
-          {t('create')}
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <ExportRepliesButton />
+          <ImportRepliesButton disabled={atLimit} />
+          <Button
+            onClick={() => setEditing('new')}
+            disabled={atLimit}
+            data-testid="saved-reply-new"
+          >
+            {t('create')}
+          </Button>
+        </div>
       </header>
 
       {limit !== null && (

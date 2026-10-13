@@ -41,6 +41,12 @@ A rule needs at least one condition, unless it is the fallback.
 
 A team in the list stands for its members. Agents who are suspended or removed, who cannot open the inbox, or who are marked offline or busy are skipped. If nobody in the list is available and the rule lists a team, the conversation goes to that team without a person; if there is no team, the rule does not apply and the next rule is tried.
 
+## Also start a flow
+
+Under **Also start a flow** you can pick one of your flows. When the rule fires for a new conversation, the flow starts for that conversation on the same channel, whoever takes it. A rule that names a flow fires even when nobody is available to take the conversation, so a flow can answer the customer in the meantime.
+
+The flow has to be switched on; it does not have to be published. It runs once for each customer message that starts a conversation, and a repeat of the same message never starts it twice. If the flow is switched off or deleted later, the rule says so on the list and nothing starts. A run started this way shows as **Routing** on the flow runs screen; it does not add the customer to the flow's subscribers. On the WhatsApp Cloud API a flow that begins with a free-form message cannot reach a customer whose 24-hour window is closed: the run ends as failed with that reason, so open the flow with a template.
+
 ## Order, stop and fallback
 
 Rules are tried from the top of the list. **Stop when this rule matches** (on by default) ends the search at the first rule that assigns the conversation; switched off, a later matching rule can take it over. The **Fallback rule** is used only when no other rule assigned the conversation, and there is only one: choosing a new fallback replaces the old one. A conversation nobody matched stays unassigned.

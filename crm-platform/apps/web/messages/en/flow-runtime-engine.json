@@ -50,6 +50,7 @@
       "out_of_hours": "Out of hours",
       "group_leave": "List leave",
       "segment_join": "Segment join",
+      "segment_leave": "Segment leave",
       "contact_updated": "Contact updated",
       "field_match": "Field match",
       "date_field_match": "Date match",

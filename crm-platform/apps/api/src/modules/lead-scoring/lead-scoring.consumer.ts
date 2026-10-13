@@ -29,6 +29,8 @@ export class LeadScoringConsumer implements OutboxSubscriber, OnModuleInit {
   async handle(event: OutboxEvent): Promise<void> {
     const contactId = Number(event.aggregateId);
     if (!Number.isInteger(contactId)) return;
+    // The growth pilot writes the AI intent onto the contact; that write must not queue another score (a loop that pays each time).
+    if ((event.payload as { via?: unknown } | null)?.via === 'growth') return;
     try {
       await this.scoring.enqueueIfAuto(
         event.orgId,

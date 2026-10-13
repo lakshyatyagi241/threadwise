@@ -121,6 +121,12 @@
       "selectedActionsNone": "Contatti selezionati (seleziona prima le righe)",
       "modifyColumns": "Modifica colonne",
       "resetColumns": "Ripristina predefiniti",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "Nome contatto",
       "colPhone": "Numero di telefono",
       "colEmailId": "ID email",
@@ -407,7 +413,8 @@
         "address": "Indirizzo",
         "memo": "Memo",
         "status": "Stato",
-        "source": "Origine"
+        "source": "Origine",
+        "consent": "Consenso marketing (sì / no)"
       },
       "notInFile": "Non presente nel file",
       "columnN": "Colonna {n}",

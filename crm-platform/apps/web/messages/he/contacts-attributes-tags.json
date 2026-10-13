@@ -121,6 +121,12 @@
       "selectedActionsNone": "אנשי קשר שנבחרו (בחר שורות תחילה)",
       "modifyColumns": "שנה עמודות",
       "resetColumns": "אפס לברירת מחדל",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "שם איש קשר",
       "colPhone": "מספר טלפון",
       "colEmailId": "כתובת אימייל",
@@ -407,7 +413,8 @@
         "address": "כתובת",
         "memo": "תזכיר",
         "status": "סטטוס",
-        "source": "מקור"
+        "source": "מקור",
+        "consent": "הסכמה לשיווק (כן / לא)"
       },
       "notInFile": "לא בקובץ",
       "columnN": "עמודה {n}",

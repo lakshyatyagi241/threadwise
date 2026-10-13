@@ -14,7 +14,9 @@
       "settingsInvalid": "Bir anahtar kelime en az bir harf veya rakam içermelidir; algılama açıkken en az bir STOP anahtar kelimesi kalmalıdır.",
       "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
       "validation": "Bazı değerler geçerli değil. Formu kontrol edip tekrar deneyin.",
-      "unexpected": "Bir şeyler ters gitti. Tekrar deneyin."
+      "unexpected": "Bir şeyler ters gitti. Tekrar deneyin.",
+      "exportInProgress": "Bir kanıt dosyası zaten hazırlanıyor. Bitmesini bekleyin ve tekrar deneyin.",
+      "exportNotReady": "Bu dosya hazır değil veya süresi doldu. Yeni bir dosya hazırlayın."
     },
     "settings": {
       "title": "Onay ve STOP yanıtları",
@@ -169,7 +171,35 @@
     "import": {
       "legend": "İzin",
       "label": "Bu kişilere mesaj gönderme iznim var",
-      "hint": "İşaretlenirse, dosyadaki tüm kişiler pazarlamayı kabul etmiş olarak kaydedilir ve kanıt olarak dosya adı saklanır. İşaretlenmezse, içe aktarma herhangi bir izin kaydetmez. Abonelikten çıkan kişiler çıkmış olarak kalır."
+      "hint": "İşaretlenirse, dosyadaki tüm kişiler pazarlamayı kabul etmiş olarak kaydedilir ve kanıt olarak dosya adı saklanır. İşaretlenmezse, içe aktarma herhangi bir izin kaydetmez. Abonelikten çıkan kişiler çıkmış olarak kalır.",
+      "hintColumn": "Pazarlama iznine eşlenen sütun kimin kaydedileceğini belirler: yalnızca evet diyen satırlar, dosya adı kanıt olarak kullanılarak izin alır. Hayır, boş hücre veya bilinmeyen bir kelime hiçbir şey kaydetmez. Abonelikten çıkmış kişiler çıkmış kalır.",
+      "columnSummary": "{granted} satır evet diyor ve kaydedilecek. {notGranted} satır hayır diyor veya boş ve izin kaydı almayacak.",
+      "unrecognised": "{count, plural, one {# satırda} other {# satırda}} evet veya hayır olmayan bir izin değeri var ({values}). Bunlar izin verilmemiş sayılır. Evet / hayır, true / false veya 1 / 0 kullanın.",
+      "columnIgnored": "Yukarıdaki kutuyu işaretleyene kadar izin sütunu etki etmez."
+    },
+    "systemLine": {
+      "withdrawn": "Kişi {keyword} yanıtı verdi: pazarlama aboneliğinden çıktı",
+      "granted": "Kişi {keyword} yanıtı verdi: pazarlamaya yeniden abone oldu"
+    },
+    "proof": {
+      "title": "Hazırlanan kanıt dosyaları",
+      "prepare": "Tam kanıt dosyasını hazırla",
+      "preparing": "Kanıt dosyası hazırlanıyor",
+      "largeHint": "Kayıt defteri {max} olaydan büyük olduğu için dosya arka planda hazırlanır",
+      "large": "Kayıt defteri {max} olaydan fazla içeriyor, bu doğrudan indirmenin taşıyabileceğinden fazla. Tam dosyayı hazırlayın: arka planda oluşturulur ve hazır olduğunda size e-posta gönderilir.",
+      "none": "Henüz hazırlanmış dosya yok.",
+      "keptFor": "Hazırlanan bir dosya {days} gün boyunca indirilebilir, sonra silinir. Aynı anda yalnızca bir dosya hazırlanır.",
+      "rows": "{count, plural, one {# olay} other {# olay}}",
+      "expires": "{date} tarihine kadar kullanılabilir",
+      "download": "CSV indir",
+      "failed": "Dosya oluşturulamadı. Lütfen yeniden hazırlayın.",
+      "status": {
+        "queued": "Bekliyor",
+        "running": "Oluşturuluyor",
+        "ready": "Hazır",
+        "failed": "Başarısız",
+        "expired": "Süresi doldu"
+      }
     }
   }
 }

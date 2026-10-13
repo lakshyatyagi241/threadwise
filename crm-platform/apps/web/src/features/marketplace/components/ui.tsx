@@ -12,7 +12,7 @@ import { CheckIcon, CopyIcon, ExternalIcon, LockIcon } from './icons';
 
 /** Pieces every Marketplace screen shares. Text comes from `marketplace.common` and its siblings; no screen writes its own wording for these. */
 
-export const PAGE = 'mx-auto w-full max-w-6xl space-y-5';
+export const PAGE = 'w-full space-y-5';
 export const TEXT_LINK =
   'font-medium text-primary underline-offset-2 hover:underline focus-visible:underline';
 export const LINK_BUTTON =

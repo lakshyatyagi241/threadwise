@@ -33,6 +33,12 @@ for arg in "$@"; do
   esac
 done
 
+# On Windows the SWC native binding is unpacked into a cache directory; when the default one is not writable the build and the vitest
+# run die with ERR_SWC_NATIVE_CACHE. Point it at a writable directory in the home folder (turbo.json passes it through to the tasks).
+if [ -z "${SWC_NATIVE_BINDING_CACHE:-}" ]; then
+  case "$(uname -s)" in MINGW*|MSYS*|CYGWIN*) export SWC_NATIVE_BINDING_CACHE="$HOME/.swc-native-cache"; mkdir -p "$SWC_NATIVE_BINDING_CACHE" ;; esac
+fi
+
 step() { printf '\n==> %s\n' "$*"; }
 
 is_windows() { case "$(uname -s)" in MINGW*|MSYS*|CYGWIN*) return 0 ;; *) return 1 ;; esac; }
@@ -78,7 +84,7 @@ fi
 
 if [ "$BUILD" = 1 ]; then
   step "Installing dependencies"
-  pnpm install --frozen-lockfile
+  pnpm install --frozen-lockfile --prefer-offline
 
   step "Building tax, contracts and db"
   pnpm --filter @crm/tax build

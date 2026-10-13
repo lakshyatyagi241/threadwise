@@ -72,4 +72,36 @@ describe('group delivery billing', () => {
     await svc.recordDelivery(7, status('sent', '919900000003'));
     expect(emitted).toHaveLength(0);
   });
+
+  it('reports a member only once: a retried webhook, or a read after the delivery already reported, adds no second event', async () => {
+    const seen = {
+      participants: { '919900000001': { status: 'delivered', billable: true } },
+      category: 'service',
+      delivered_to: 1,
+      billable_count: 1,
+      free_count: 0,
+    };
+    // One stored message per call (the fake serves the stored row to the first statement only).
+    for (const st of [status('delivered', '919900000001'), status('read', '919900000001')]) {
+      const { svc, emitted } = build(seen);
+      await svc.recordDelivery(7, st);
+      expect(emitted).toHaveLength(0);
+    }
+    // Another member on the same message still reports.
+    const other = build(seen);
+    await other.svc.recordDelivery(7, status('delivered', '919900000002'));
+    expect(other.emitted).toHaveLength(1);
+  });
+
+  it('reports the first billable status of a member whose earlier status was only "sent"', async () => {
+    const { svc, emitted } = build({
+      participants: { '919900000001': { status: 'sent', billable: true } },
+      category: null,
+      delivered_to: 1,
+      billable_count: 1,
+      free_count: 0,
+    });
+    await svc.recordDelivery(7, status('read', '919900000001'));
+    expect(emitted).toHaveLength(1);
+  });
 });

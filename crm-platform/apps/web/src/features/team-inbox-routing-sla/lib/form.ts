@@ -25,6 +25,8 @@ export interface RuleForm {
   strategy: RoutingStrategy;
   userIds: string[];
   teamIds: string[];
+  /** The flow to start as well (its uuid), or '' for none. */
+  triggerFlowId: string;
   stopOnMatch: boolean;
   isFallback: boolean;
 }
@@ -41,6 +43,7 @@ export const emptyForm = (): RuleForm => ({
   strategy: 'round_robin',
   userIds: [],
   teamIds: [],
+  triggerFlowId: '',
   stopOnMatch: true,
   isFallback: false,
 });
@@ -73,6 +76,7 @@ export function formFromRule(rule: RoutingRule): RuleForm {
     strategy: rule.assign.strategy,
     userIds: [...rule.assign.userIds],
     teamIds: [...rule.assign.teamIds],
+    triggerFlowId: rule.triggerFlow?.id ?? '',
     stopOnMatch: rule.stopOnMatch,
     isFallback: rule.isFallback,
   };
@@ -138,6 +142,7 @@ export function payloadFromForm(
     description: f.description.trim(),
     conditions: conditionsFromForm(f, catalog),
     assign: { strategy: f.strategy, userIds: f.userIds, teamIds: f.teamIds },
+    triggerFlowId: f.triggerFlowId === '' ? null : f.triggerFlowId,
     stopOnMatch: f.stopOnMatch,
     isFallback: f.isFallback,
     isActive,
@@ -151,6 +156,7 @@ export const editableOf = (r: RoutingRule): string =>
     r.description,
     r.conditions,
     r.assign,
+    r.triggerFlow?.id ?? null,
     r.stopOnMatch,
     r.isFallback,
     r.isActive,

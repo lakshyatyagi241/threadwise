@@ -178,12 +178,13 @@ function LeadScoreSection({
     <div className="space-y-3" data-testid="inbox-lead-score">
       <ScoreCard
         contactId={contactId}
-        // The inbox summary carries the raw column; the score card reads the contacts API shape (same rule as the contacts mapper:
-        // the AI's own score, else a number somebody typed, else none).
         contact={{
           ...summary,
+          // The wire type is a plain string; the card knows the two sources.
           leadScoreSource:
-            summary.leadScoreSource === 'ai' ? 'ai' : summary.leadScore === null ? null : 'manual',
+            summary.leadScoreSource === 'manual' || summary.leadScoreSource === 'ai'
+              ? summary.leadScoreSource
+              : null,
         }}
         onScored={refresh}
       />

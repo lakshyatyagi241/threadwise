@@ -51,7 +51,7 @@ export function SettingsFrame({ children }: { children: ReactNode }) {
   }, [activeSection]);
 
   return (
-    <div className="mx-auto w-full max-w-6xl">
+    <div className="w-full">
       <h1 className="mb-4 text-2xl font-semibold tracking-tight">{t('settings.title')}</h1>
       <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:gap-8">
         <nav aria-label={t('settings.sectionsLabel')} className="min-w-0 lg:w-72 lg:shrink-0">

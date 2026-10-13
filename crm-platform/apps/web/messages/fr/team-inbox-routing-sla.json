@@ -82,7 +82,10 @@
       "lastFired": "dernière fois le {when}",
       "edit": "Modifier",
       "duplicate": "Dupliquer",
-      "delete": "Supprimer"
+      "delete": "Supprimer",
+      "startsFlow": "Démarre aussi le flux {name}",
+      "flowOff": "Le flux est désactivé",
+      "flowGone": "Démarre aussi un flux supprimé"
     },
     "form": {
       "back": "Attribution automatique",
@@ -171,7 +174,15 @@
       "cancel": "Annuler",
       "save": "Enregistrer",
       "saveActivate": "Enregistrer et activer",
-      "openCount": "{open} en cours"
+      "openCount": "{open} en cours",
+      "flow": {
+        "title": "Démarrer aussi un flux",
+        "hint": "Facultatif. Le flux démarre pour la conversation lorsque cette règle s'applique, sur le même canal. Il doit seulement être activé ; il n'a pas besoin d'être publié.",
+        "none": "Aucun flux",
+        "offOption": "{name} (désactivé)",
+        "goneOption": "Un flux qui n'existe plus",
+        "loadFailed": "Les flux n’ont pas pu être chargés, la liste est peut-être incomplète."
+      }
     }
   }
 }

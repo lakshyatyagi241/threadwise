@@ -139,13 +139,15 @@
       "logNotReady": "Bu dışa aktarma hazır değil veya süresi doldu. Yeniden isteyin.",
       "groupSuspended": "Meta bu grubu askıya aldı; Meta kaldırana kadar gruba mesaj gönderilemez.",
       "walletEmpty": "Mesaj cüzdanınız bu grup mesajını karşılayamıyor (üye başına bir ücret). Bakiye yükleyip tekrar deneyin.",
+      "groupPlanLocked": "Planınız WhatsApp gruplarını içermiyor, bu nedenle bu gruba mesaj gönderilemez. Bir yöneticiden planı yükseltmesini isteyin.",
       "groupLeft": "Bu numara gruptan ayrıldığı için artık orada mesaj gönderemez.",
       "groupAnnounceOnly": "Bu grupta yalnızca yöneticiler mesaj gönderebilir ve bu numara yönetici değil.",
       "groupRateLimited": "Bu numaradan kısa sürede çok fazla grup mesajı gönderildi. Bir dakika bekleyip tekrar deneyin.",
       "groupUnavailable": "WhatsApp bu grup mesajını kabul etmedi. Birkaç dakika sonra tekrar deneyin.",
       "savedReplyGone": "Bu hazır yanıt artık mevcut değil.",
       "savedReplyChannel": "Bu hazır yanıt bu tür bir kanal için uygun değil.",
-      "shortcutTaken": "Başka bir hazır yanıt zaten bu kısayolu kullanıyor."
+      "shortcutTaken": "Başka bir hazır yanıt zaten bu kısayolu kullanıyor.",
+      "importInvalid": "Bu dosya kayıtlı yanıt olarak okunamıyor. İlk satırda title, shortcut ve body sütunları olmalı ve en fazla 1.000 satır bulunmalıdır."
     },
     "bubble": {
       "kind": {
@@ -213,7 +215,9 @@
       },
       "deliveryLog": "Teslimat günlüğü",
       "groupMember": "Grup üyesi",
-      "groupTally": "{delivered, plural, other {# üyeye}} iletildi: {billable} ücretli, {free} ücretsiz"
+      "groupTally": "{members} kişiden {delivered} kişiye iletildi{read, plural, =0 {} other {, # kişi okudu}}{failed, plural, =0 {} other {, # başarısız}}",
+      "groupTallyNoTotal": "{delivered, plural, one {# üyeye} other {# üyeye}} iletildi{read, plural, =0 {} other {, # kişi okudu}}{failed, plural, =0 {} other {, # başarısız}}",
+      "groupTallyBilled": "{billable} ücretlendirildi, {free} ücretsiz"
     },
     "media": {
       "openImage": "{name} görselini aç",
@@ -664,6 +668,26 @@
         "label": "Grup üyeleri",
         "loading": "Üyeler aranıyor",
         "none": "Eşleşen üye yok"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta bu grubu askıya aldı",
+          "message": "WhatsApp, askıya alınmış bir gruba mesaj iletmez. Meta askıyı kaldırana kadar konuşmayı okuyabilir ve dahili not ekleyebilirsiniz."
+        },
+        "plan": {
+          "title": "Planınız WhatsApp gruplarını içermiyor",
+          "message": "Bu konuşmayı okuyabilir ve dahili not ekleyebilirsiniz, ancak gruba göndermek için gruplu bir plan gerekir. Bir yöneticiden yükseltme isteyin."
+        },
+        "ineligible": {
+          "title": "Bu numara WhatsApp gruplarını kullanamaz",
+          "message": "Son kontrolde Meta bu numarada gruplara izin vermedi (resmi işletme hesabı gerekir). Konuşmayı okuyabilir ve dahili not ekleyebilirsiniz. Yeniden kontrol etmek için Meta Grupları'nı açın."
+        }
+      },
+      "cost": {
+        "members": "Bu mesaj {count, plural, one {# üyeye} other {# üyeye}} gidecek. Tahmini maliyet {cost}: WhatsApp, mesajı alan her üye için ücret alır.",
+        "membersNoEstimate": "Bu mesaj {count, plural, one {# üyeye} other {# üyeye}} gidecek. WhatsApp, mesajı alan her üye için ücret alır.",
+        "sizeUnknown": "Üye sayısı henüz bilinmiyor. WhatsApp, bu mesajı alan her üye için ücret alır.",
+        "walletShort": "Cüzdan bakiyeniz bu mesaj için yetmeyebilir. Göndermeden önce bakiye yükleyin."
       }
     },
     "savedReplies": {
@@ -817,6 +841,49 @@
         "upgrade": "Planları gör",
         "conflict": "Bu yanıtı başka biri önce değiştirdi. Bu pencereyi kapatıp yeniden açın.",
         "invalid": "Girdiklerinizin bir kısmı geçerli değil."
+      },
+      "transfer": {
+        "export": "CSV dışa aktar",
+        "import": "CSV içe aktar",
+        "title": "Kayıtlı yanıtları içe aktar",
+        "intro": "title, shortcut, body sütunlarını ve isterseniz category, language ve channel sütunlarını içeren bir CSV yükleyin (kanal türleri | ile ayrılır, tüm kanallar için boş bırakın). En fazla 1.000 satır ve {maxKb} KB. İçe aktarılan yanıtlar tüm ekiple paylaşılır. Dışa aktarma aynı sütunlara sahiptir.",
+        "file": "CSV dosyası",
+        "tooBig": "Bu dosya çok büyük.",
+        "duplicates": "Paylaşılan bir yanıt zaten bu kısayolu kullanıyorsa",
+        "policy": {
+          "skip": "Mevcut yanıtı koru",
+          "overwrite": "Metnini değiştir"
+        },
+        "policyHint": {
+          "skip": "Satır atlanır ve yanıt olduğu gibi kalır.",
+          "overwrite": "Başlık, metin, kategori, dil ve kanallar değiştirilir. Kullanım sayısı korunur."
+        },
+        "check": "Dosyayı kontrol et",
+        "go": "İçe aktar ({count})",
+        "cancel": "İptal",
+        "summary": "{create} oluşturulacak, {update} değiştirilecek, {skip} atlanacak, {invalid} sorunlu. Henüz hiçbir şey kaydedilmedi.",
+        "plan": "Planın: {used} / {limit} yanıt kullanılıyor.",
+        "row": "Satır {line}: /{shortcut}",
+        "truncated": "Yalnızca sorunu olan veya değişecek ilk satırlar listelenir.",
+        "done": "İçe aktarıldı: {created} oluşturuldu, {updated} değiştirildi.",
+        "issue": {
+          "update": "değiştirilecek",
+          "skip": "atlandı",
+          "invalid": "bir sorunu var",
+          "duplicate": "kısayol zaten kullanımda, atlandı",
+          "missing_shortcut": "kısayol yok",
+          "shortcut_invalid": "kısayolda kullanılabilir harf veya rakam yok",
+          "missing_title": "başlık yok",
+          "title_too_long": "başlık çok uzun",
+          "missing_body": "metin yok",
+          "body_too_long": "metin çok uzun",
+          "control_characters": "denetim karakterleri içeriyor",
+          "category_too_long": "kategori çok uzun",
+          "language_invalid": "dil en veya pt-BR gibi bir kod değil",
+          "channel_unknown": "bilinmeyen bir kanal",
+          "duplicate_in_file": "kısayol dosyada daha önce geçiyor",
+          "plan_limit_reached": "planınızın limitini aşıyor"
+        }
       }
     }
   }

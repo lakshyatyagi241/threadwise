@@ -24,6 +24,7 @@ import { useRealtimeEvent } from '@/lib/realtime';
 import type { Thread } from '../api/use-thread';
 import { inboxApi } from '../api/service';
 import {
+  cloudGroupBlock,
   isGroupLimited,
   isGroupSendBlocked,
   isPersonalGroupThread,
@@ -32,6 +33,7 @@ import {
 import type { MentionMember } from '../lib/mentions';
 import { computeWindow, formatWindowLeft, type WindowView } from '../lib/window';
 import { Composer, type ComposerHandle, type ComposerMode } from './composer';
+import { GroupCostLine } from './group-cost-line';
 import { ShareDialog, type ShareKind } from './share-dialog';
 import { TemplatePicker } from './template-picker';
 import { AlertIcon, BackIcon, CheckCircleIcon, ClockIcon, PanelIcon } from './icons';
@@ -135,7 +137,10 @@ export function ThreadPane(props: ThreadPaneProps) {
   const windowClosed = win?.state === 'closed';
   // The Cloud API takes only text and files into a group; a personal number takes everything a person can send there.
   const groupLimited = isGroupLimited(detail?.peerKey, detail?.channel.kind);
-  const groupSendBlocked = isGroupSendBlocked(detail?.peerKey, detail?.channel.kind);
+  // A Cloud API group the composer is off for: Meta suspended it, the plan has no Groups, or the number was refused for Groups.
+  const cloudBlock = cloudGroupBlock(detail?.cloudGroup);
+  const groupSendBlocked =
+    isGroupSendBlocked(detail?.peerKey, detail?.channel.kind) || cloudBlock !== null;
   const replyDisabled = windowClosed || channelDown || groupBlock !== null;
   // A template needs no open window, only a working channel that sends templates and the right to reply.
   const canTemplate =
@@ -346,6 +351,27 @@ export function ThreadPane(props: ThreadPaneProps) {
           </div>
         </div>
       )}
+      {cloudBlock !== null && props.can.reply && props.mode === 'reply' && (
+        <div
+          role="status"
+          data-testid="inbox-group-cloud-block"
+          data-reason={cloudBlock}
+          className="flex items-start gap-2 border-t border-border bg-muted/50 px-4 py-2.5 text-sm"
+        >
+          <AlertIcon className="mt-0.5 shrink-0 text-muted-foreground" />
+          <div>
+            <p className="font-medium">{tg(`cloudBlock.${cloudBlock}.title`)}</p>
+            <p className="text-xs text-muted-foreground">
+              {tg(`cloudBlock.${cloudBlock}.message`)}
+            </p>
+          </div>
+        </div>
+      )}
+      {detail?.cloudGroup &&
+        cloudBlock === null &&
+        props.can.reply &&
+        props.mode === 'reply' &&
+        !channelDown && <GroupCostLine group={detail.cloudGroup} />}
       {!props.can.reply && props.mode === 'reply' && (
         <p
           role="status"
@@ -373,6 +399,7 @@ export function ThreadPane(props: ThreadPaneProps) {
             : undefined
         }
         groupSendBlocked={groupSendBlocked}
+        groupBlockedHint={cloudBlock ? tg(`cloudBlock.${cloudBlock}.title`) : undefined}
         groupMentions={mentionsOn ? { search: searchMembers } : undefined}
         attachments={
           detail

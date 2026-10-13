@@ -139,13 +139,15 @@
       "logNotReady": "此导出尚未就绪或已过期。请重新发起导出。",
       "groupSuspended": "Meta 已暂停此群组，在 Meta 解除之前无法向其发送消息。",
       "walletEmpty": "消息钱包余额不足以支付此群消息（每位成员收取一次费用）。请充值后重试。",
+      "groupPlanLocked": "您的套餐不包含 WhatsApp 群组，因此无法向此群组发送消息。请联系管理员升级套餐。",
       "groupLeft": "此号码已退出该群组，因此无法再在其中发送消息。",
       "groupAnnounceOnly": "此群组仅管理员可以发送消息，而此号码不是管理员。",
       "groupRateLimited": "此号码在短时间内发送的群组消息过多。请等待一分钟后重试。",
       "groupUnavailable": "WhatsApp 未接受此群组消息。请几分钟后重试。",
       "savedReplyGone": "此快捷回复已不存在。",
       "savedReplyChannel": "此快捷回复不适用于这类渠道。",
-      "shortcutTaken": "另一条快捷回复已使用该快捷方式。"
+      "shortcutTaken": "另一条快捷回复已使用该快捷方式。",
+      "importInvalid": "无法将此文件读取为快捷回复。第一行需要包含 title、shortcut 和 body 列，最多 1,000 行。"
     },
     "bubble": {
       "kind": {
@@ -213,7 +215,9 @@
       },
       "deliveryLog": "投递日志",
       "groupMember": "群成员",
-      "groupTally": "已送达 {delivered, plural, other {# 位成员}}：计费 {billable}，免费 {free}"
+      "groupTally": "已送达 {delivered}/{members} 人{read, plural, =0 {} other {，#人已读}}{failed, plural, =0 {} other {，#条失败}}",
+      "groupTallyNoTotal": "已送达 {delivered, plural, other {#位成员}}{read, plural, =0 {} other {，#人已读}}{failed, plural, =0 {} other {，#条失败}}",
+      "groupTallyBilled": "计费 {billable}，免费 {free}"
     },
     "media": {
       "openImage": "打开图片 {name}",
@@ -664,6 +668,26 @@
         "label": "群组成员",
         "loading": "正在查找成员",
         "none": "没有匹配的成员"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta 已暂停此群组",
+          "message": "WhatsApp 不会向已暂停的群组送达消息。在 Meta 解除暂停之前，您可以查看对话并添加内部备注。"
+        },
+        "plan": {
+          "title": "您的套餐不包含 WhatsApp 群组",
+          "message": "您可以查看此对话并添加内部备注，但向群组发送消息需要包含群组功能的套餐。请联系管理员升级。"
+        },
+        "ineligible": {
+          "title": "此号码无法使用 WhatsApp 群组",
+          "message": "上次检查时 Meta 不允许此号码使用群组（需要官方商业账号）。您可以查看对话并添加内部备注。打开 Meta 群组可重新检查。"
+        }
+      },
+      "cost": {
+        "members": "此消息将发送给 {count, plural, other {#位成员}}。预计费用 {cost}：WhatsApp 按每位收到消息的成员计费。",
+        "membersNoEstimate": "此消息将发送给 {count, plural, other {#位成员}}。WhatsApp 按每位收到消息的成员计费。",
+        "sizeUnknown": "成员数量暂时未知。WhatsApp 按每位收到此消息的成员计费。",
+        "walletShort": "您的钱包余额可能不足以发送此消息。请先充值再发送。"
       }
     },
     "savedReplies": {
@@ -817,6 +841,49 @@
         "upgrade": "查看套餐",
         "conflict": "有人先更改了此回复。请关闭此窗口并重新打开。",
         "invalid": "你输入的部分内容无效。"
+      },
+      "transfer": {
+        "export": "导出 CSV",
+        "import": "导入 CSV",
+        "title": "导入快捷回复",
+        "intro": "上传包含 title、shortcut、body 列的 CSV，也可以选填 category、language 和 channel 列（多个渠道类型用 | 分隔，留空表示所有渠道）。最多 1,000 行，{maxKb} KB。导入的快捷回复会与整个团队共享。导出文件使用相同的列。",
+        "file": "CSV 文件",
+        "tooBig": "文件太大。",
+        "duplicates": "当共享快捷回复已使用该快捷指令时",
+        "policy": {
+          "skip": "保留现有快捷回复",
+          "overwrite": "替换其文本"
+        },
+        "policyHint": {
+          "skip": "将跳过该行，快捷回复保持不变。",
+          "overwrite": "标题、文本、分类、语言和渠道都会被替换。使用次数保持不变。"
+        },
+        "check": "检查文件",
+        "go": "导入 ({count})",
+        "cancel": "取消",
+        "summary": "{create} 条待创建，{update} 条待替换，{skip} 条已跳过，{invalid} 条有问题。尚未保存任何内容。",
+        "plan": "你的套餐：{used}/{limit} 条快捷回复。",
+        "row": "第 {line} 行：/{shortcut}",
+        "truncated": "仅列出前几条有问题或有变更的行。",
+        "done": "已导入：创建 {created} 条，替换 {updated} 条。",
+        "issue": {
+          "update": "将被替换",
+          "skip": "已跳过",
+          "invalid": "有问题",
+          "duplicate": "快捷指令已被使用，已跳过",
+          "missing_shortcut": "没有快捷指令",
+          "shortcut_invalid": "快捷指令中没有可用的字母或数字",
+          "missing_title": "没有标题",
+          "title_too_long": "标题过长",
+          "missing_body": "没有文本",
+          "body_too_long": "文本过长",
+          "control_characters": "包含控制字符",
+          "category_too_long": "分类过长",
+          "language_invalid": "语言不是 en 或 pt-BR 之类的代码",
+          "channel_unknown": "未知渠道",
+          "duplicate_in_file": "该快捷指令在文件前面已出现",
+          "plan_limit_reached": "超出套餐限制"
+        }
       }
     }
   }

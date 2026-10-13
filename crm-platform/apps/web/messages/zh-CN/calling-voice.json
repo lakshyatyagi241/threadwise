@@ -3,7 +3,8 @@
     "nav": {
       "title": "通话",
       "description": "为每个号码开启或关闭 WhatsApp 通话。",
-      "keywords": "通话, 电话, 语音, 手机, whatsapp 通话, 通话按钮"
+      "keywords": "通话, 电话, 语音, 手机, whatsapp 通话, 通话按钮",
+      "callLogs": "通话记录"
     },
     "common": {
       "dismiss": "关闭"
@@ -86,7 +87,9 @@
       "FORBIDDEN": "您没有使用通话功能的权限。",
       "PLAN_FEATURE_LOCKED": "您的套餐不包含 WhatsApp 通话。",
       "NETWORK": "网络错误，请重试。",
-      "UNEXPECTED": "出了点问题，请重试。"
+      "UNEXPECTED": "出了点问题，请重试。",
+      "CALL_PLAYBACK_LINK_INVALID": "此录音链接已过期。请再次点击播放以获取新链接。",
+      "CALL_RANGE_INVALID": "这些日期无效：开始时间不能晚于结束时间，范围最长一年，且时区必须有效。"
     },
     "settings": {
       "title": "通话",

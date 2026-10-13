@@ -1,0 +1,434 @@
+{
+  "growth": {
+    "common": {
+      "dismiss": "閉じる",
+      "retry": "もう一度試す",
+      "requestId": "リクエスト {id}",
+      "noAccessTitle": "この画面を開けません",
+      "noAccess": "管理者に「{permission}」権限を依頼してください。"
+    },
+    "errors": {
+      "network": "サーバーに接続できませんでした。接続を確認して、もう一度お試しください。",
+      "forbidden": "あなたのロールではこの操作は許可されていません。",
+      "notAvailable": "グロースパイロットはこのワークスペースでは利用できません。",
+      "featureOff": "グロースパイロットのこの機能はオフになっています。「コントロール」でオンにしてください。",
+      "actionGone": "この件はすでに他のユーザーが判断しました。",
+      "assistantFailed": "アシスタントは提案を作成できませんでした。オーディエンスと承認済みテンプレートがあることを確認して、もう一度お試しください。",
+      "undoRefused": "この変更は元に戻せません。コンタクトがすでに次へ進んだか、すでに元に戻されています。",
+      "conflict": "他のユーザーが先にこの設定を保存しました。最新の内容を読み込みました。",
+      "notFound": "対象はすでに存在しません。",
+      "validation": "無効な値があります。確認してもう一度お試しください。",
+      "rateLimited": "リクエストが多すぎます。しばらく待ってからもう一度お試しください。",
+      "unexpected": "問題が発生しました。もう一度お試しください。繰り返し発生する場合はサポートまでご連絡ください。"
+    },
+    "page": {
+      "title": "グロース",
+      "subtitle": "キャンペーンや会話から分かったことを、チームが行動に移せる形にまとめます。ここからコンタクトに自動でメッセージが送られることはありません。",
+      "notAvailableTitle": "パイロットの対象外です",
+      "notAvailable": "グロースパイロットは一部のワークスペースでのみ有効です。お使いのワークスペースはまだ対象ではありません。",
+      "tabs": {
+        "inbox": "受信トレイ",
+        "audiences": "オーディエンス",
+        "campaigns": "キャンペーン",
+        "insights": "インサイト",
+        "autoStage": "ステージの自動変更",
+        "assistant": "配信アシスタント",
+        "controls": "コントロール"
+      }
+    },
+    "digest": {
+      "title": "今日",
+      "quiet": "現在、対応が必要なものはありません。",
+      "highlights": {
+        "hotLeads": "{count, plural, other {ホットリード # 件が購入準備できています}}",
+        "unanswered": "{count, plural, other {購入に関する質問 # 件が未回答です}}",
+        "optOuts": "{count, plural, other {# 人のコンタクトが配信停止を希望しました}}",
+        "suggestionsPending": "{count, plural, other {ステージ変更 # 件が判断待ちです}}",
+        "campaignReplies": "{count, plural, other {# 人のコンタクトがキャンペーン配信から1日以内に返信しました}}",
+        "lapsed": "{count, plural, other {# 人の顧客が反応しなくなりました}}"
+      }
+    },
+    "inbox": {
+      "title": "グロース受信トレイ",
+      "hint": "確認する価値のある項目です。承認するとその種類に応じた処理が実行され、却下すると閉じるだけです。",
+      "filter": "表示",
+      "all": "すべて（{count}）",
+      "empty": "待機中の項目はありません。チャットの読み取りや毎日のチェックで新しい項目がここに表示されます。",
+      "more": "さらに表示",
+      "doneAccept": "{count, plural, other {# 件を処理しました}}",
+      "doneDismiss": "{count, plural, other {# 件を却下しました}}",
+      "someFailed": "{count, plural, other {# 件を処理できませんでした}}",
+      "openContact": "コンタクトを開く",
+      "someone": "コンタクト",
+      "dismiss": "却下",
+      "types": {
+        "hot_lead": "ホットリード",
+        "unanswered_intent": "未回答",
+        "registration_issue": "登録の問題",
+        "purchase_route": "担当者への引き継ぎ",
+        "opt_out": "配信停止の希望",
+        "lapsed": "反応なし",
+        "service_due": "サービス期限",
+        "status_reply": "注文状況"
+      },
+      "titles": {
+        "hot_lead": "{name}さんは購入する準備ができています",
+        "unanswered_intent": "{name}さんが購入について質問しましたが、誰も回答していません",
+        "registration_issue": "{name}さんが登録に関する問題を報告しています",
+        "purchase_route": "{name}さんを{user}さんに割り当てる",
+        "opt_out": "{name}さんが配信停止を希望しています",
+        "lapsed": "{name}さんが反応しなくなりました",
+        "service_due": "{name}さん：{rule}の期限です",
+        "status_reply": "{name}さんが注文について問い合わせました"
+      },
+      "accept": {
+        "hot_lead": "対応済みにする",
+        "unanswered_intent": "対応済みにする",
+        "registration_issue": "対応済みにする",
+        "purchase_route": "チャットを割り当てる",
+        "opt_out": "配信停止を記録する",
+        "lapsed": "完了",
+        "service_due": "完了",
+        "status_reply": "完了"
+      },
+      "facts": {
+        "routeOwner": "{name}さんがこのコンタクトの担当です。",
+        "routeLeastBusy": "{name}さんの対応中チャットが最も少ないです。",
+        "lapsedDays": "{count, plural, other {# 日間}}、開封もメッセージもありません。",
+        "issue": {
+          "missing_confirmation": "確認が届いていません。",
+          "payment_problem": "支払いの問題を報告しています。",
+          "wrong_info": "情報の一部が誤っていると述べています。"
+        }
+      }
+    },
+    "audiences": {
+      "title": "オーディエンス",
+      "hint": "実際の行動から割り出したコンタクトのグループです。同期すると、キャンペーンを送信できるコンタクトグループが作成・更新されます。",
+      "empty": "オーディエンスはまだありません。「コントロール」で機能をオンにしてください。",
+      "synced": "「{name}」に{count, plural, other {# 人のコンタクト}}が含まれるようになりました。",
+      "lastSync": "グループ「{name}」、最終同期：{when}。",
+      "notSynced": "グループ「{name}」は最初の同期時に作成されます。",
+      "sync": "グループに同期",
+      "resync": "再同期",
+      "errors": {
+        "forbidden": "あなたのロールではオーディエンスを同期できません。",
+        "failed": "オーディエンスを同期できませんでした。もう一度お試しください。"
+      },
+      "kinds": {
+        "engaged": {
+          "label": "エンゲージ済み",
+          "description": "最近、複数のキャンペーンを開封しました。"
+        },
+        "silent": {
+          "label": "無反応",
+          "description": "キャンペーンを受信しましたが、どれも開封していません。"
+        },
+        "lapsed": {
+          "label": "休眠",
+          "description": "長期間、開封もメッセージもない顧客です。"
+        },
+        "hot_chat": {
+          "label": "チャットでホット",
+          "description": "最新のチャット分析で購入準備ができているとされたコンタクトです。"
+        },
+        "high_propensity": {
+          "label": "コンバージョン見込み大",
+          "description": "コンバージョンモデルで上位10%のコンタクトです。"
+        },
+        "service_due": {
+          "label": "サービス期限",
+          "description": "サービス日が期限を迎えたコンタクトです。"
+        }
+      }
+    },
+    "campaigns": {
+      "title": "キャンペーンの返信",
+      "hint": "配信から24時間以内・72時間以内に返信したコンタクトを、受信トレイから集計しています。",
+      "stamp": "今すぐ返信を記録",
+      "stamped": "{count, plural, other {返信 # 件を記録しました}}。",
+      "stampFailed": "返信を記録できませんでした。もう一度お試しください。",
+      "empty": "送信済みのキャンペーンはまだありません。",
+      "totals": {
+        "sent": "送信",
+        "read": "既読",
+        "replied24h": "24時間以内の返信",
+        "replied72h": "72時間以内の返信"
+      },
+      "cols": {
+        "campaign": "キャンペーン",
+        "sent": "送信",
+        "read": "既読",
+        "replied24h": "24時間",
+        "replied72h": "72時間",
+        "replyRate": "返信率"
+      }
+    },
+    "insights": {
+      "sendTimes": {
+        "title": "最適な配信時間",
+        "hint": "ワークスペースのタイムゾーンで、コンタクトがキャンペーンを読み、メッセージを送ってくる時間帯です。",
+        "empty": "判断するにはまだ十分なアクティビティがありません。",
+        "best": "最適な時間帯：{hours}（{zone}）。",
+        "quiet": "最も静かな時間帯：{hours}。",
+        "chart": "時間帯別のアクティビティ",
+        "sample": "{count, plural, other {# 件のイベント}}に基づきます。"
+      },
+      "propensity": {
+        "title": "コンバージョンモデル",
+        "hint": "顧客になったコンタクトから、コンバージョンにつながる行動を学習し、すべてのコンタクトをスコアリングします。",
+        "recompute": "今すぐ再学習",
+        "done": "モデルを更新しました。",
+        "failed": "モデルを更新できませんでした。もう一度お試しください。",
+        "contacts": "スコアリング済みコンタクト",
+        "converted": "コンバージョン済み",
+        "auc": "ランキング精度",
+        "capture": "上位10%でのコンバージョン",
+        "captureHint": "ランダムな順位なら10%です",
+        "none": "未測定",
+        "trained": "モデルはコンバージョン済みのコンタクトから学習しました。",
+        "notTrained": "学習に使えるコンバージョン済みコンタクトがまだ少ないため、固定の重みを使用しています。",
+        "computedAt": "{when}に更新。",
+        "drivers": "スコアに影響する要因",
+        "features": {
+          "campaigns_opened_30d": "開封したキャンペーン（30日間）",
+          "campaigns_received_30d": "受信したキャンペーン（30日間）",
+          "messages_from_contact_30d": "本人が送ったメッセージ（30日間）",
+          "links_clicked_30d": "クリックしたリンク（30日間）",
+          "groups": "所属しているグループ",
+          "has_email": "メールアドレスあり",
+          "chat_messages_total": "チャットのメッセージ数",
+          "age_days": "追加からの日数"
+        }
+      },
+      "quality": {
+        "title": "運用状況",
+        "hint": "過去30日間の、提案の利用状況、リードスコアがコンバージョンしたコンタクトをどれだけ見分けられているか、AIのコストを示します。",
+        "none": "未測定",
+        "scoreAuc": "リードスコアの品質",
+        "scoreAucHint": "スコアリング {scored} 件、コンバージョン {converted} 件",
+        "calls": "AI呼び出し",
+        "cost": "AIコスト",
+        "autoApplied": "自動で変更",
+        "undone": "{count} 件を元に戻しました",
+        "suggestions": {
+          "chat": "チャットからのステージ提案",
+          "engagement": "キャンペーンからのステージ提案"
+        },
+        "suggestionLine": "承認 {accepted} 件、却下 {dismissed} 件、待機中 {pending} 件。",
+        "cols": {
+          "type": "受信トレイの項目",
+          "done": "処理済み",
+          "dismissed": "却下",
+          "open": "未処理"
+        },
+        "actionTypes": {
+          "hot_lead": "ホットリード",
+          "unanswered_intent": "未回答",
+          "registration_issue": "登録の問題",
+          "purchase_route": "担当者への引き継ぎ",
+          "opt_out": "配信停止の希望",
+          "lapsed": "反応なし",
+          "service_due": "サービス期限",
+          "status_reply": "注文状況"
+        }
+      },
+      "enrichment": {
+        "title": "企業情報",
+        "hint": "ビジネス用メールアドレスを持つコンタクトの企業情報を検索し、コンタクトに表示します。",
+        "run": "次のバッチを検索",
+        "asked": "{count, plural, other {# 人のコンタクトを検索しました}}。",
+        "failed": "検索に失敗しました。もう一度お試しください。",
+        "status": "{provider}：{found} 件見つかり、{notFound} 件見つからず、{failed} 件失敗しました。",
+        "notConfigured": "サーバーに検索サービスが接続されていないため、このスイッチはまだ効果がありません。"
+      }
+    },
+    "autoStage": {
+      "title": "ステージの自動変更",
+      "hint": "AIが非常に確信している判定のみを、1日の上限まで適用します。コンタクトがその後動かされていない限り、それぞれ元に戻せます。",
+      "today": "本日 {cap} 件中 {done} 件を使用。",
+      "empty": "自動で変更されたものはまだありません。",
+      "contact": "コンタクト",
+      "moved": "{from}から{to}に移動しました。",
+      "confidence": "確信度 {percent}%",
+      "undone": "元に戻しました",
+      "undo": "元に戻す",
+      "undoDone": "コンタクトを元の状態に戻しました。",
+      "undoRefused": "この変更は元に戻せません。コンタクトがすでに次へ進んでいます。",
+      "undoFailed": "変更を元に戻せませんでした。もう一度お試しください。"
+    },
+    "assistant": {
+      "title": "配信アシスタント",
+      "hint": "達成したいことを入力すると、オーディエンスと承認済みテンプレートを1つずつ提案します。各テンプレートが実際に得た返信も考慮します。送信や作成は一切行いません。",
+      "goal": "何を達成したいですか？",
+      "goalHint": "例：登録済みの全員に、土曜日のイベントをリマインドする。",
+      "placeholder": "登録済みのコンタクトに土曜日のイベントをリマインドする",
+      "ask": "キャンペーンを提案",
+      "audience": "オーディエンス",
+      "audienceValue": "{name}（{count} 人のコンタクト）",
+      "template": "テンプレート",
+      "replyRate": "1日以内の返信率 {percent}",
+      "sendAt": "送信時刻の目安",
+      "considered": "{audiences, plural, other {# 件のオーディエンス}}と{templates, plural, other {# 件のテンプレート}}から選びました。"
+    },
+    "controls": {
+      "readOnly": "これらの設定は閲覧のみで、変更できません。",
+      "saved": "設定を保存しました。",
+      "discard": "変更を破棄",
+      "save": "保存",
+      "problem": {
+        "numbers": "範囲外の数値があります。しきい値を確認してください。",
+        "serviceRules": "{line} 行目のサービスルールが「ラベル | 日付プロパティ | 経過日数 | 期限までの日数」の形式になっていません。",
+        "customPhrases": "{line} 行目のフレーズが「フレーズ = インテント」の形式になっていません。"
+      },
+      "groups": {
+        "measure": {
+          "title": "計測",
+          "hint": "読み取り専用の計測です。何も変更しません。"
+        },
+        "audiences": {
+          "title": "オーディエンスとステージ",
+          "hint": "誰に連絡すべきかを割り出し、キャンペーンに対するコンタクトの行動からステージ変更を提案します。"
+        },
+        "chats": {
+          "title": "チャットの読み取り",
+          "hint": "AIリードスコアリングのチャット分析を使用するため、それがオンになっている必要があります。チャットを読み取る前に、個人データの一部がマスクされます。"
+        },
+        "assist": {
+          "title": "アシスタント",
+          "hint": "判断を支援します。コンタクトには何も送信されません。"
+        }
+      },
+      "features": {
+        "campaign_response": {
+          "label": "実際のキャンペーン返信",
+          "hint": "キャンペーン後に返信したコンタクトを集計し、反応の数値を補正します。"
+        },
+        "send_times": {
+          "label": "最適な配信時間",
+          "hint": "コンタクトが読み、書き込む時間帯を表示します。"
+        },
+        "propensity": {
+          "label": "コンバージョンモデル",
+          "hint": "すべてのコンタクトについて、コンバージョンの可能性をスコアリングします。"
+        },
+        "quality": {
+          "label": "品質ダッシュボード",
+          "hint": "提案がどれだけ利用されているか、AIのコストがいくらかを表示します。"
+        },
+        "daily_digest": {
+          "label": "毎日のサマリー",
+          "hint": "この画面の上部に、ワークスペースの短いサマリーを表示します。"
+        },
+        "engagement_audiences": {
+          "label": "エンゲージメントのオーディエンス",
+          "hint": "エンゲージ済み、無反応、休眠のコンタクトを、キャンペーンを送れる状態で用意します。"
+        },
+        "engagement_stage_rules": {
+          "label": "キャンペーンからのステージ提案",
+          "hint": "キャンペーンを開封し続けているコンタクトを、次のステージに進めるよう提案します。"
+        },
+        "service_rules": {
+          "label": "サービスのリマインドとフォローアップ",
+          "hint": "独自のルールに基づき、サービス日や購入日から対応期限になったコンタクトを見つけます。"
+        },
+        "enrichment": {
+          "label": "企業情報",
+          "hint": "ビジネス用メールアドレスを持つコンタクトの企業情報を検索します。"
+        },
+        "intent_fields": {
+          "label": "コンタクトのチャットインテント",
+          "hint": "チャットの内容を「AIインテント」プロパティに書き込み、フローが反応できるようにします。"
+        },
+        "language_detect": {
+          "label": "チャットの言語",
+          "hint": "各チャットの言語を記録します。"
+        },
+        "auto_notes": {
+          "label": "チャット要約メモ",
+          "hint": "チャットの短い要約をメモとしてコンタクトに追加します。"
+        },
+        "hot_lead_alerts": {
+          "label": "ホットリードのアラート",
+          "hint": "コンタクトが明らかに購入準備できているとき、アラートを出して担当者に通知します。"
+        },
+        "unanswered_watch": {
+          "label": "未回答の購入に関する質問",
+          "hint": "誰も回答していない購入や価格に関する質問にフラグを付けます。"
+        },
+        "handover_summary": {
+          "label": "引き継ぎ時の要約",
+          "hint": "チャットが担当者に引き継がれるとき、その要約を先頭に表示します。"
+        },
+        "purchase_routing": {
+          "label": "購入希望者を担当者へ振り分け",
+          "hint": "コンタクトが購入を希望しているとき、誰がチャットを担当すべきかを提案します。"
+        },
+        "registration_check": {
+          "label": "登録の問題",
+          "hint": "支払いや登録をしたのに確認が届かないと述べているコンタクトにフラグを付けます。"
+        },
+        "status_reply": {
+          "label": "注文・修理の状況",
+          "hint": "顧客から問い合わせがあったとき、注文や修理の状況を準備します。"
+        },
+        "optout_detection": {
+          "label": "配信停止の依頼",
+          "hint": "配信停止を希望するコンタクトにフラグを付けます。承認すると同意台帳に記録されます。"
+        },
+        "broadcast_assistant": {
+          "label": "配信アシスタント",
+          "hint": "目標に合ったオーディエンスとテンプレートを提案します。"
+        },
+        "auto_stage": {
+          "label": "ステージの自動変更",
+          "hint": "AIが非常に確信しているとき、1日の上限まで、コンタクトを次のステージに進めます。元に戻せます。"
+        }
+      },
+      "thresholds": {
+        "title": "しきい値",
+        "hint": "上記の機能が使用する数値です。",
+        "hotLeadConfidence": "ホットリードの確信度",
+        "hotLeadConfidenceHint": "判定に必要な確信度です。0.5から1の範囲で指定します。",
+        "unansweredHours": "質問を未回答とみなすまでの時間",
+        "unansweredHoursHint": "1から168の範囲で指定します。",
+        "lapsedDays": "顧客を休眠とみなすまでの日数",
+        "lapsedDaysHint": "7から730の範囲で指定します。",
+        "engagedOpens": "エンゲージ済みとみなすキャンペーン開封数",
+        "engagedOpensHint": "30日以内。",
+        "stageMinOpens": "ステージ変更を提案するキャンペーン開封数",
+        "stageWindowDays": "その集計で遡る日数",
+        "autoMinConfidence": "自動変更に必要な確信度",
+        "autoMinConfidenceHint": "0.8から1の範囲で指定します。",
+        "autoDailyCap": "1日あたりの自動変更数",
+        "autoDailyCapHint": "ワークスペース全体の上限です。",
+        "requireGroup": "グループに所属しているコンタクトにのみステージ変更を提案する"
+      },
+      "rules": {
+        "title": "独自のルールと言葉",
+        "hint": "1行に1件ずつ入力します。",
+        "statusFields": "ステータスのプロパティ",
+        "statusFieldsHint": "注文や修理のステータスを保持するコンタクトのプロパティです。例：repair_status。",
+        "serviceRules": "サービスルール",
+        "serviceRulesHint": "ラベル | 日付プロパティ | 経過日数 | 期限までの日数（任意）。",
+        "serviceRulesExample": "バッテリー交換 | purchase_date | 700 | 760",
+        "customPhrases": "ボタンとキーワードのタップ",
+        "customPhrasesHint": "フレーズ = インテント。インテント：{intents}。",
+        "customPhrasesExample": "保証書を見る = post_purchase",
+        "extraMaskTerms": "常に隠す語句",
+        "extraMaskTermsHint": "AIに絶対に送ってはならないブランド名、住所、名前などです。"
+      },
+      "confirmEnrich": {
+        "title": "企業情報を検索しますか？",
+        "body": "企業情報を検索するため、コンタクトのビジネス用メールアドレスが検索サービスに送信されます。個人用のメールアドレスは送信されません。",
+        "yes": "オンにする",
+        "no": "今はしない"
+      }
+    },
+    "contactCard": {
+      "title": "グロース",
+      "propensity": "コンバージョンの可能性：100点中 {score} 点。",
+      "computedAt": "{when}に更新。"
+    }
+  }
+}

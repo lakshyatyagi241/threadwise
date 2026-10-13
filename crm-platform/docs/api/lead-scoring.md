@@ -116,6 +116,12 @@ settings read returns them with `chatDigestAvailable` and `pendingSuggestions`. 
 Manager. Tables: `lead_chat_digests`, `lifecycle_stage_suggestions` (migration `20261121090100_lsc_chat_digest`); the demo workspace is
 switched on by that migration.
 
+**Listeners.** After a reading is stored (by a rule, by the model, or by the Read chat button) lead scoring tells every registered
+`ChatDigestListener` (`lead-chat-digest.listeners.ts`) with a `ChatDigestEvent` (intent, signals, score, summary, language, issue, opt-out,
+the conversation and the contact). The [growth pilot](growth.md) is the one listener; a listener that throws never fails the reading. The
+digest also stores the chat `language` and the kind of `issue` the contact reports, and a stage suggestion has a `source` (`chat` or
+`engagement`) and the statuses `auto_applied` and `undone` for the guarded automatic mode.
+
 ## Operator routes (`/platform/lead-scoring`, super admin only, reads included)
 
 | Method and path                         | What                                                                                                                                                                                                        |

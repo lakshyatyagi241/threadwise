@@ -107,6 +107,7 @@ export function flbTriggerConfig(
 ): FlbTriggerConfig | null {
   switch (kind) {
     case 'segment_join':
+    case 'segment_leave':
       return { segmentId: text(d.segmentId) };
     case 'field_match':
       return {

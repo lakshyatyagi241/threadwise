@@ -10,6 +10,7 @@ import { ConversationsRepository } from './conversations.repository';
 import { InboxAccess } from './inbox-access.service';
 import { InboxConversationsService } from './inbox-conversations.service';
 import { InboxController } from './inbox.controller';
+import { InboxSystemNotes } from './inbox-system-notes.service';
 import { InboxMediaService } from './inbox-media.service';
 import { InboxMessageLogService } from './inbox-message-log.service';
 import { InboxNotesService } from './inbox-notes.service';
@@ -19,6 +20,9 @@ import { InboxTimelineService } from './inbox-timeline.service';
 import { MediaUploadsRepository } from './media-uploads.repository';
 import { NotesRepository } from './notes.repository';
 import { SavedRepliesController } from './saved-replies/saved-replies.controller';
+import { SavedRepliesTransferController } from './saved-replies/saved-replies-transfer.controller';
+import { SavedRepliesTransferService } from './saved-replies/saved-replies-transfer.service';
+import { SharedSavedRepliesReader } from './saved-replies/shared-saved-replies.reader';
 import { SavedRepliesRepository } from './saved-replies/saved-replies.repository';
 import { SavedRepliesService } from './saved-replies/saved-replies.service';
 
@@ -37,7 +41,8 @@ import { SavedRepliesService } from './saved-replies/saved-replies.service';
     NotificationsModule,
     PlansCoreModule,
   ],
-  controllers: [InboxController, SavedRepliesController],
+  // The transfer controller first: `export` and `import` must not be read as a reply id.
+  controllers: [InboxController, SavedRepliesTransferController, SavedRepliesController],
   providers: [
     ConversationsRepository,
     ConversationEventsRepository,
@@ -45,6 +50,7 @@ import { SavedRepliesService } from './saved-replies/saved-replies.service';
     MediaUploadsRepository,
     InboxAccess,
     InboxRealtimePublisher,
+    InboxSystemNotes,
     InboxConversationsService,
     InboxThreadService,
     InboxNotesService,
@@ -53,13 +59,17 @@ import { SavedRepliesService } from './saved-replies/saved-replies.service';
     InboxMessageLogService,
     SavedRepliesRepository,
     SavedRepliesService,
+    SavedRepliesTransferService,
+    SharedSavedRepliesReader,
   ],
   exports: [
     ConversationsRepository,
     ConversationEventsRepository,
     InboxAccess,
     InboxRealtimePublisher,
+    InboxSystemNotes,
     InboxConversationsService,
+    SharedSavedRepliesReader,
   ],
 })
 export class TeamInboxConversationsModule {}

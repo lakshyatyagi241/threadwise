@@ -139,13 +139,15 @@
       "logNotReady": "Esta exportación no está lista o ha caducado. Solicítala de nuevo.",
       "groupSuspended": "Meta suspendió este grupo, por lo que no se le pueden enviar mensajes hasta que Meta lo restablezca.",
       "walletEmpty": "Tu monedero de mensajes no cubre este mensaje de grupo (un cargo por miembro). Recarga e inténtalo de nuevo.",
+      "groupPlanLocked": "Tu plan no incluye los grupos de WhatsApp, por lo que no se puede escribir en este grupo. Pide a un administrador que mejore el plan.",
       "groupLeft": "Este número salió del grupo, por lo que ya no puede enviar mensajes allí.",
       "groupAnnounceOnly": "Solo los administradores pueden enviar mensajes en este grupo y este número no es administrador.",
       "groupRateLimited": "Demasiados mensajes de grupo desde este número en poco tiempo. Espera un minuto e inténtalo de nuevo.",
       "groupUnavailable": "WhatsApp no aceptó este mensaje de grupo. Inténtalo de nuevo en unos minutos.",
       "savedReplyGone": "Esta respuesta guardada ya no existe.",
       "savedReplyChannel": "Esta respuesta guardada no está pensada para este tipo de canal.",
-      "shortcutTaken": "Otra respuesta guardada ya usa ese atajo."
+      "shortcutTaken": "Otra respuesta guardada ya usa ese atajo.",
+      "importInvalid": "No se puede leer ese archivo como respuestas guardadas. Necesita una primera fila con las columnas title, shortcut y body, y como máximo 1.000 filas."
     },
     "bubble": {
       "kind": {
@@ -213,7 +215,9 @@
       },
       "deliveryLog": "Registro de entrega",
       "groupMember": "Miembro del grupo",
-      "groupTally": "Entregado a {delivered, plural, one {# miembro} other {# miembros}}: {billable} cobrados, {free} gratis"
+      "groupTally": "Entregado a {delivered} de {members}{read, plural, =0 {} other {, leído por #}}{failed, plural, =0 {} other {, # fallidos}}",
+      "groupTallyNoTotal": "Entregado a {delivered, plural, one {# miembro} other {# miembros}}{read, plural, =0 {} other {, leído por #}}{failed, plural, =0 {} other {, # fallidos}}",
+      "groupTallyBilled": "{billable} facturados, {free} gratis"
     },
     "media": {
       "openImage": "Abrir imagen {name}",
@@ -664,6 +668,26 @@
         "label": "Miembros del grupo",
         "loading": "Buscando miembros",
         "none": "Ningún miembro coincide"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta suspendió este grupo",
+          "message": "WhatsApp no entrega mensajes a un grupo suspendido. Puedes leer la conversación y añadir notas internas hasta que Meta lo restablezca."
+        },
+        "plan": {
+          "title": "Tu plan no incluye los grupos de WhatsApp",
+          "message": "Puedes leer esta conversación y añadir notas internas, pero enviar al grupo requiere un plan con grupos. Pide a un administrador que mejore el plan."
+        },
+        "ineligible": {
+          "title": "Este número no puede usar los grupos de WhatsApp",
+          "message": "Meta no permitió los grupos en este número la última vez que se comprobó (requiere una cuenta comercial oficial). Puedes leer la conversación y añadir notas internas. Abre Grupos de Meta para volver a comprobarlo."
+        }
+      },
+      "cost": {
+        "members": "Este mensaje llega a {count, plural, one {# miembro} other {# miembros}}. Coste estimado {cost}: WhatsApp cobra por cada miembro que lo recibe.",
+        "membersNoEstimate": "Este mensaje llega a {count, plural, one {# miembro} other {# miembros}}. WhatsApp cobra por cada miembro que lo recibe.",
+        "sizeUnknown": "Aún no se conoce el número de miembros. WhatsApp cobra por cada miembro que recibe este mensaje.",
+        "walletShort": "Es posible que tu monedero no cubra este mensaje. Recarga antes de enviar."
       }
     },
     "savedReplies": {
@@ -817,6 +841,49 @@
         "upgrade": "Ver planes",
         "conflict": "Alguien más cambió esta respuesta primero. Cierra esta ventana y ábrela de nuevo.",
         "invalid": "Algo de lo que introdujiste no es válido."
+      },
+      "transfer": {
+        "export": "Exportar CSV",
+        "import": "Importar CSV",
+        "title": "Importar respuestas guardadas",
+        "intro": "Sube un CSV con las columnas title, shortcut, body y, si quieres, category, language y channel (tipos de canal separados por |, vacío para todos los canales). Hasta 1.000 filas y {maxKb} KB. Las respuestas importadas se comparten con todo el equipo. La exportación tiene las mismas columnas.",
+        "file": "Archivo CSV",
+        "tooBig": "Este archivo es demasiado grande.",
+        "duplicates": "Cuando una respuesta compartida ya usa el atajo",
+        "policy": {
+          "skip": "Mantener la respuesta existente",
+          "overwrite": "Reemplazar su texto"
+        },
+        "policyHint": {
+          "skip": "La fila se omite y la respuesta se mantiene tal cual.",
+          "overwrite": "Se reemplazan el título, el texto, la categoría, el idioma y los canales. Se conserva su número de usos."
+        },
+        "check": "Revisar el archivo",
+        "go": "Importar ({count})",
+        "cancel": "Cancelar",
+        "summary": "{create} para crear, {update} para reemplazar, {skip} omitidas, {invalid} con un problema. Todavía no se ha guardado nada.",
+        "plan": "Tu plan: {used} de {limit} respuestas.",
+        "row": "Línea {line}: /{shortcut}",
+        "truncated": "Solo se muestran las primeras filas con un problema o un cambio.",
+        "done": "Importadas: {created} creadas, {updated} reemplazadas.",
+        "issue": {
+          "update": "se reemplazará",
+          "skip": "omitida",
+          "invalid": "tiene un problema",
+          "duplicate": "atajo ya en uso, omitida",
+          "missing_shortcut": "sin atajo",
+          "shortcut_invalid": "el atajo no tiene letras ni números válidos",
+          "missing_title": "sin título",
+          "title_too_long": "el título es demasiado largo",
+          "missing_body": "sin texto",
+          "body_too_long": "el texto es demasiado largo",
+          "control_characters": "contiene caracteres de control",
+          "category_too_long": "la categoría es demasiado larga",
+          "language_invalid": "el idioma no es un código como en o pt-BR",
+          "channel_unknown": "un canal desconocido",
+          "duplicate_in_file": "el atajo aparece antes en el archivo",
+          "plan_limit_reached": "supera el límite de tu plan"
+        }
       }
     }
   }

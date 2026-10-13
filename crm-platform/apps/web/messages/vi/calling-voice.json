@@ -3,7 +3,8 @@
     "nav": {
       "title": "Gọi điện",
       "description": "Bật hoặc tắt gọi điện WhatsApp cho từng số.",
-      "keywords": "gọi, cuộc gọi, thoại, điện thoại, gọi điện whatsapp, nút gọi"
+      "keywords": "gọi, cuộc gọi, thoại, điện thoại, gọi điện whatsapp, nút gọi",
+      "callLogs": "Nhật ký cuộc gọi"
     },
     "common": {
       "dismiss": "Đóng"
@@ -86,7 +87,9 @@
       "FORBIDDEN": "Bạn không có quyền sử dụng gọi điện.",
       "PLAN_FEATURE_LOCKED": "Gói của bạn không bao gồm gọi điện WhatsApp.",
       "NETWORK": "Lỗi mạng - vui lòng thử lại.",
-      "UNEXPECTED": "Đã xảy ra lỗi. Vui lòng thử lại."
+      "UNEXPECTED": "Đã xảy ra lỗi. Vui lòng thử lại.",
+      "CALL_PLAYBACK_LINK_INVALID": "Liên kết bản ghi âm này đã hết hạn. Hãy nhấn phát lại để lấy liên kết mới.",
+      "CALL_RANGE_INVALID": "Các ngày này không hợp lệ: ngày bắt đầu không được sau ngày kết thúc, khoảng thời gian tối đa một năm và múi giờ phải hợp lệ."
     },
     "settings": {
       "title": "Gọi điện",

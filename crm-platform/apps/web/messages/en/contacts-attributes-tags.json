@@ -121,6 +121,12 @@
       "selectedActionsNone": "Selected contacts (select rows first)",
       "modifyColumns": "Modify Columns",
       "resetColumns": "Reset to default",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "Contact Name",
       "colPhone": "Phone Number",
       "colEmailId": "Email ID",
@@ -171,7 +177,9 @@
       "import": "Import",
       "columns": "Columns",
       "addColumnField": "Add a custom field as a column",
-      "kanbanView": "Board view (by stage)"
+      "kanbanView": "Board view (by stage)",
+      "smsNamed": "SMS {name}",
+      "noSms": "No phone number for SMS"
     },
     "bulk": {
       "label": "Actions for the selected contacts",
@@ -407,7 +415,8 @@
         "address": "Address",
         "memo": "Memo",
         "status": "Status",
-        "source": "Source"
+        "source": "Source",
+        "consent": "Marketing consent (yes / no)"
       },
       "notInFile": "Not in file",
       "columnN": "Column {n}",
@@ -1185,6 +1194,148 @@
           "ids": "Ticked contacts",
           "filter": "Everything matching"
         }
+      }
+    },
+    "singleSend": {
+      "close": "Close",
+      "cancel": "Cancel",
+      "send": "Send",
+      "sending": "Sending",
+      "contact": "Contact",
+      "name": "Name",
+      "phone": "Mobile",
+      "email": "Email",
+      "title": {
+        "whatsapp": "Send WhatsApp message",
+        "sms": "Send SMS",
+        "email": "Send email",
+        "call": "Call"
+      },
+      "optedOut": "This contact has opted out of communication. Messages cannot be sent.",
+      "noPhone": "This contact has no phone number.",
+      "noEmail": "This contact has no email address.",
+      "number": "Send from",
+      "numberHint": "The WhatsApp number the message goes out on.",
+      "noChannel": "No WhatsApp number is connected. Connect one in Channels first.",
+      "template": "WhatsApp template",
+      "templatePlaceholder": "Select a template",
+      "noTemplates": "No approved templates for this number.",
+      "notSendable": "This template cannot be filled in here ({reason}).",
+      "variables": "Template variables",
+      "preview": "Preview",
+      "slot": "Variable {key}",
+      "loading": "Loading",
+      "openFailed": "Could not open the conversation: {message}",
+      "sent": "Message queued for {name}.",
+      "failed": "Could not send: {message}",
+      "callIntro": "Place a WhatsApp call to this contact from the browser.",
+      "callOff": "Calling is not turned on for this WhatsApp number. Turn it on in the number's settings.",
+      "callPermission": "The contact has not allowed calls yet. Calling asks for their permission first.",
+      "callReady": "Ready to call {phone}.",
+      "later": {
+        "sms": "Sending SMS from the CRM is not available yet.",
+        "email": "Sending email from the CRM is not available yet."
+      },
+      "openApp": {
+        "sms": "Open in your messages app",
+        "email": "Open in your mail app"
+      }
+    },
+    "views": {
+      "label": "Views",
+      "all": "All contacts",
+      "add": "Add a view",
+      "changed": "Filters changed since this view was saved",
+      "more": "More for {name}",
+      "picker": {
+        "title": "Select a view",
+        "create": "Create new view",
+        "search": "Search views...",
+        "chipAll": "All",
+        "chipPinned": "On tabs",
+        "chipShared": "Shared",
+        "empty": "No views found",
+        "pinned": "On tabs"
+      },
+      "menu": {
+        "rename": "Rename view",
+        "update": "Save current filters",
+        "unpin": "Remove from tabs",
+        "pin": "Show as a tab",
+        "delete": "Delete view",
+        "edit": "Edit view"
+      },
+      "drawer": {
+        "editTitle": "Rename view",
+        "name": "Name of view",
+        "namePlaceholder": "Untitled view",
+        "shareWith": "Share with",
+        "justMe": "Just me",
+        "everyone": "Everyone",
+        "save": "Update",
+        "cancel": "Cancel",
+        "close": "Close"
+      },
+      "toast": {
+        "created": "View \"{name}\" created.",
+        "updated": "View updated.",
+        "filtersSaved": "Filters saved to \"{name}\".",
+        "deleted": "View \"{name}\" deleted.",
+        "failed": "Could not save the view: {message}",
+        "conflict": "Someone else changed this view. Reload and try again."
+      },
+      "delete": {
+        "title": "Delete this view?",
+        "message": "\"{name}\" will be deleted for everyone it is shared with. Contacts are not changed.",
+        "confirm": "Delete view",
+        "cancel": "Keep view"
+      },
+      "editor": {
+        "title": {
+          "create": "Create New View",
+          "edit": "Edit View"
+        },
+        "close": "Close",
+        "back": "Back to contacts",
+        "name": "View Name",
+        "namePlaceholder": "Enter view name",
+        "favorite": "Mark as Favorite",
+        "favoriteHint": "A favorite view gets its own tab.",
+        "shareWith": "Share with",
+        "justMe": "Just Me",
+        "everyone": "Everyone",
+        "filterTitle": "Filter Contacts",
+        "filterHint": "Match all or any of your conditions, and add groups for more complex filters.",
+        "columnsTitle": "Column Preferences",
+        "locked": "Always shown",
+        "cancel": "Cancel",
+        "create": "Create View",
+        "save": "Save View",
+        "saving": "Saving",
+        "needName": "Enter a view name.",
+        "needFilter": "Add at least one complete condition.",
+        "notFound": "This view was not found, or it was deleted.",
+        "noPermission": "You do not have permission to do this.",
+        "loading": "Loading",
+        "columnsHint": "Search and tick the columns this view shows, then drag the chosen ones to set their order.",
+        "drag": "Drag to reorder {name}",
+        "selectedUsers": "Selected users",
+        "accessLevel": "Access level",
+        "canView": "Can view",
+        "canEdit": "Can view and edit",
+        "peoplePlaceholder": "Search people",
+        "noPeople": "No people found",
+        "removePerson": "Remove {name}",
+        "clearPeople": "Clear all people",
+        "needPeople": "Choose at least one person.",
+        "onlyCreator": "Only the person who made this view can change who it is shared with.",
+        "searchColumns": "Search columns",
+        "noColumnMatch": "No column matches.",
+        "available": "Available columns",
+        "selected": "Selected columns",
+        "selectAll": "Select All",
+        "reorder": "Drag to re-order columns",
+        "remove": "Remove {name}"
       }
     }
   }

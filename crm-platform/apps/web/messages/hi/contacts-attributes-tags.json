@@ -121,6 +121,12 @@
       "selectedActionsNone": "चुने हुए संपर्क (पहले पंक्तियां चुनें)",
       "modifyColumns": "कॉलम बदलें",
       "resetColumns": "डिफ़ॉल्ट पर रीसेट करें",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "संपर्क का नाम",
       "colPhone": "फ़ोन नंबर",
       "colEmailId": "ईमेल ID",
@@ -407,7 +413,8 @@
         "address": "पता",
         "memo": "मेमो",
         "status": "स्थिति",
-        "source": "स्रोत"
+        "source": "स्रोत",
+        "consent": "मार्केटिंग सहमति (हाँ / नहीं)"
       },
       "notInFile": "फ़ाइल में नहीं",
       "columnN": "कॉलम {n}",

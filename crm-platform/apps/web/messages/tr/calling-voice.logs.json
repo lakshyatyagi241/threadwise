@@ -1,0 +1,207 @@
+{
+  "calling-voice": {
+    "logs": {
+      "eyebrow": "Çalışma alanı",
+      "title": "Çağrı kayıtları",
+      "subtitle": "Ekibinizin yaptığı veya yanıtladığı her WhatsApp çağrısı; süresi, kimin ilgilendiği ve kaydıyla birlikte.",
+      "sideTip": "Numaralarınıza gelen veya numaralarınızdan yapılan her WhatsApp çağrısı. Belirli bir çağrıyı bulmak için tarihe, duruma, numaraya veya ekip arkadaşına göre filtreleyin.",
+      "loading": "Çağrılar yükleniyor",
+      "loadFailed": "Çağrı kaydı yüklenemedi.",
+      "retry": "Tekrar dene",
+      "emptyTitle": "Henüz çağrı yok",
+      "emptyMessage": "Bir müşteri WhatsApp numaralarınızdan birini aradığında veya ekibiniz gelen kutusundan çağrı yaptığında, çağrı süresi, kimin ilgilendiği ve kaydıyla birlikte burada görünür.",
+      "emptyFilteredTitle": "Hiçbir çağrı bu filtrelerle eşleşmiyor",
+      "emptyFilteredMessage": "Daha geniş bir zaman aralığı deneyin veya filtreleri temizleyin.",
+      "clearFilters": "Filtreleri temizle",
+      "tabs": {
+        "label": "Çağrı görünümleri",
+        "log": "Çağrı kaydı",
+        "analytics": "Analizler"
+      },
+      "range": {
+        "title": "Zaman aralığı",
+        "last24h": "Son 24 saat",
+        "last7d": "Son 7 gün",
+        "last30d": "Son 30 gün",
+        "custom": "Özel aralık",
+        "from": "Başlangıç",
+        "to": "Bitiş",
+        "apply": "Uygula"
+      },
+      "status": {
+        "title": "Durum",
+        "all": "Tümü",
+        "completed": "Tamamlandı",
+        "in-progress": "Şu an canlı",
+        "no-answer": "Yanıtsız",
+        "declined": "Reddedildi",
+        "failed": "Başarısız"
+      },
+      "kpi": {
+        "total": "Toplam",
+        "last24h": "Son 24 saat",
+        "minutes": "{count} dk",
+        "completed": "Tamamlandı",
+        "failed": "Başarısız",
+        "selection": "Bu seçimde",
+        "calls": "Çağrılar",
+        "answered": "Yanıtlandı",
+        "missed": "Cevapsız",
+        "avgDuration": "Ortalama süre",
+        "totalMinutes": "Toplam dakika"
+      },
+      "filters": {
+        "label": "Çağrıları filtrele",
+        "searchLabel": "Çağrı ara",
+        "searchPlaceholder": "Telefon numarası veya kişi adı...",
+        "direction": "Yön",
+        "allDirections": "Tüm çağrılar",
+        "inbound": "Gelen",
+        "outbound": "Giden",
+        "number": "Numara",
+        "allNumbers": "Tüm numaralar",
+        "agent": "İlgilenen",
+        "allAgents": "Herkes",
+        "apply": "Filtrele",
+        "clear": "Temizle"
+      },
+      "table": {
+        "caption": "Çağrılar, en yeniden başlayarak",
+        "customer": "Müşteri",
+        "number": "Numara",
+        "handledBy": "İlgilenen",
+        "started": "Başlangıç",
+        "duration": "Süre",
+        "status": "Durum",
+        "actions": "İşlemler",
+        "open": "Aç",
+        "inbound": "Gelen",
+        "outbound": "Giden",
+        "none": "-"
+      },
+      "paging": {
+        "label": "Sayfalar",
+        "showing": "{total} çağrıdan {from}-{to} arası gösteriliyor",
+        "beyond": "Bu sayfa son sayfanın ötesinde ({pages} sayfa var).",
+        "previous": "Önceki",
+        "next": "Sonraki",
+        "page": "Sayfa {page} / {pages}"
+      },
+      "detail": {
+        "breadcrumb": "Gezinti yolu",
+        "back": "Çağrı kayıtları",
+        "loading": "Çağrı yükleniyor",
+        "loadFailed": "Bu çağrı yüklenemedi.",
+        "notFound": "Bu çağrı bulunamadı. Başka bir çalışma alanına ait olabilir veya görebildiğiniz çağrıların dışında olabilir.",
+        "retry": "Tekrar dene",
+        "handledBy": "İlgilenen: {name}",
+        "handler": {
+          "none": "Kimse ilgilenmedi",
+          "ai": "Yapay zeka asistanı",
+          "voicemail": "Sesli mesaj"
+        },
+        "openContact": "Kişiyi aç",
+        "openInbox": "Gelen kutusunda aç",
+        "tiles": {
+          "duration": "Süre",
+          "number": "Numara",
+          "answered": "Yanıtlandı",
+          "ended": "Sona erdi"
+        },
+        "reasons": {
+          "unknown": "Çağrı başarısız oldu.",
+          "COMPLETED": "Tamamlandı",
+          "REJECTED": "Çağrı reddedildi.",
+          "DECLINED": "Çağrı reddedildi.",
+          "BUSY": "Müşteri başka bir çağrıdaydı.",
+          "NO_ANSWER": "Kimse açmadı.",
+          "MISSED": "Müşteri çağrıyı kaçırdı.",
+          "CANCELLED": "Çağrı iptal edildi.",
+          "FAILED": "WhatsApp çağrının başarısız olduğunu bildirdi.",
+          "NO_PERMISSION": "Müşteri henüz çağrılara izin vermediği için çağrı yapılmadı.",
+          "META_REFUSED": "WhatsApp çağrıyı yapmayı reddetti."
+        },
+        "timeline": {
+          "title": "Zaman çizelgesi",
+          "count": "{count, plural, one {# adım} other {# adım}}",
+          "empty": "Bu çağrı için hiçbir adım kaydedilmedi."
+        },
+        "steps": {
+          "dial_sent": "Çağrı yapıldı",
+          "dial_failed": "Çağrı yapılamadı",
+          "connect": "Çağrı WhatsApp'a bağlandı",
+          "pre_accept_sent": "Yanıtlamaya hazırlanıyor",
+          "accept_sent": "Çağrı yanıtlandı",
+          "accept_failed": "Yanıtlama başarısız oldu",
+          "reject_sent": "Çağrı reddedildi",
+          "terminate_sent": "Kapatma gönderildi",
+          "terminate": "Çağrı sona erdi",
+          "recording_stored": "Kayıt kaydedildi"
+        },
+        "noRecording": {
+          "title": "Kayıt",
+          "message": "Bu çağrının kaydı yok."
+        }
+      },
+      "recording": {
+        "title": "Kayıt",
+        "notice": "Bu çağrı kaydedildi.",
+        "privacy": "Yalnızca kayıt erişimi olanlar oynatabilir ve her oynatma günlüğe kaydedilir.",
+        "noAccess": "Bu çağrının kaydedildiğini görebilirsiniz ancak kayıtları oynatma izniniz yok.",
+        "play": "Kaydı oynat",
+        "loading": "Kayıt alınıyor",
+        "playerLabel": "Çağrı kaydı",
+        "linkUntil": "Bu bağlantı {time} saatine kadar geçerlidir. Sonrasında tekrar oynat'a basın.",
+        "playFailed": "Kayıt oynatılamadı.",
+        "retry": "Tekrar dene"
+      }
+    },
+    "analytics": {
+      "eyebrow": "Çalışma alanı",
+      "title": "Çağrı analizleri",
+      "subtitle": "Zaman içinde çağrılar, kaçının yanıtlandığı, kimlerin yanıtladığı ve hatlarınızın en yoğun olduğu zamanlar.",
+      "loading": "Çağrı analizleri yükleniyor",
+      "loadFailed": "Çağrı analizleri yüklenemedi.",
+      "retry": "Tekrar dene",
+      "emptyTitle": "Bu dönemde çağrı yok",
+      "emptyMessage": "Daha geniş bir zaman aralığı seçin veya ilk çağrılarınızdan sonra tekrar gelin.",
+      "number": "Numara",
+      "allNumbers": "Tüm numaralar",
+      "period": "{from} - {to}, saat dilimi {tz}",
+      "kpi": {
+        "total": "Çağrılar",
+        "answeredRate": "Yanıtlandı",
+        "answeredOf": "{answered} yanıtlandı",
+        "missed": "Cevapsız",
+        "avgHandle": "Ortalama görüşme süresi",
+        "avgHandleHint": "Yanıtlanan çağrıların konuşma süresi",
+        "totalMinutes": "Toplam dakika"
+      },
+      "overTime": {
+        "title": "Zaman içinde çağrılar",
+        "hint": "Her gün için bir çubuk. Yeşil kısım yanıtlanan çağrılardır.",
+        "summary": "{days} günde {total} çağrı",
+        "answered": "Yanıtlandı",
+        "other": "Yanıtlanmadı",
+        "missed": "Cevapsız",
+        "day": "Gün",
+        "calls": "Çağrılar"
+      },
+      "byAgent": {
+        "title": "Ekip arkadaşına göre",
+        "agent": "Ekip arkadaşı",
+        "calls": "Çağrılar",
+        "answered": "Yanıtlandı",
+        "avgHandle": "Ortalama görüşme süresi",
+        "minutes": "Dakika",
+        "unassigned": "Kimse ilgilenmedi"
+      },
+      "heatmap": {
+        "title": "Haftanın saatlerine göre çağrılar",
+        "hint": "Koyu renk, o saatte daha fazla çağrı başladığı anlamına gelir. Saatler {tz} saat dilimindedir.",
+        "weekday": "Haftanın günü",
+        "cell": "{day}, {hour}:00: {calls, plural, =0 {çağrı yok} one {# çağrı} other {# çağrı}}"
+      }
+    }
+  }
+}
