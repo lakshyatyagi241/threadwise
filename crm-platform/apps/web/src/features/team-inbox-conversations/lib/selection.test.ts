@@ -78,3 +78,29 @@ describe('snoozeUntil', () => {
     expect([monday.getDay(), monday.getDate()]).toEqual([1, 26]);
   });
 });
+
+describe('snoozeUntil in a named time zone', () => {
+  // 15:30 on Wednesday 14 Oct 2026 in Kolkata (UTC+05:30) is 10:00 UTC.
+  const now = new Date('2026-10-14T10:00:00Z');
+  it("tomorrow is 09:00 on that zone's calendar, whatever the browser zone is", () => {
+    expect(snoozeUntil('tomorrow', now, 'Asia/Kolkata')).toBe('2026-10-15T03:30:00.000Z');
+    expect(snoozeUntil('tomorrow', now, 'UTC')).toBe('2026-10-15T09:00:00.000Z');
+  });
+  it("uses the zone's date when it is already tomorrow there", () => {
+    // 22:00 UTC on the 14th is 03:30 on the 15th in Kolkata, so "tomorrow" is the 16th there.
+    const late = new Date('2026-10-14T22:00:00Z');
+    expect(snoozeUntil('tomorrow', late, 'Asia/Kolkata')).toBe('2026-10-16T03:30:00.000Z');
+    expect(snoozeUntil('tomorrow', late, 'UTC')).toBe('2026-10-15T09:00:00.000Z');
+  });
+  it('next week is the coming Monday 09:00 there, and a Monday asks for the next one', () => {
+    expect(snoozeUntil('nextWeek', now, 'Asia/Kolkata')).toBe('2026-10-19T03:30:00.000Z');
+    const monday = new Date('2026-10-19T03:00:00Z'); // 08:30 Monday in Kolkata
+    expect(snoozeUntil('nextWeek', monday, 'Asia/Kolkata')).toBe('2026-10-26T03:30:00.000Z');
+  });
+  it('keeps 09:00 across a daylight-saving change', () => {
+    // New York ends daylight time on 1 Nov 2026: 09:00 EDT is 13:00Z, 09:00 EST is 14:00Z.
+    expect(snoozeUntil('tomorrow', new Date('2026-10-31T15:00:00Z'), 'America/New_York')).toBe(
+      '2026-11-01T14:00:00.000Z',
+    );
+  });
+});

@@ -166,7 +166,7 @@
     "insights": {
       "sendTimes": {
         "title": "Thời điểm gửi tốt nhất",
-        "hint": "Thời điểm liên hệ của bạn đọc chiến dịch và nhắn tin cho bạn, theo múi giờ của không gian làm việc.",
+        "hint": "Thời điểm danh bạ của bạn đọc chiến dịch và nhắn tin cho bạn, theo múi giờ của bạn.",
         "empty": "Chưa đủ hoạt động để kết luận.",
         "best": "Khung giờ tốt nhất: {hours} ({zone}).",
         "quiet": "Khung giờ vắng nhất: {hours}.",

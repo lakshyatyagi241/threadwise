@@ -12,16 +12,9 @@ import {
 
 export const DEFAULT_SEND_TIME = '09:00';
 
-/** The zone a schedule starts in: the workspace's, else the browser's, else UTC. */
-export function defaultTimeZone(workspaceZone: string | null | undefined): string {
-  if (workspaceZone && isIanaTimeZone(workspaceZone)) return workspaceZone;
-  try {
-    const own = new Intl.DateTimeFormat().resolvedOptions().timeZone;
-    if (own && isIanaTimeZone(own)) return own;
-  } catch {
-    /* fall through */
-  }
-  return 'UTC';
+/** The zone a schedule starts in: the person's (their own, else the workspace's: the session's `effectiveTimezone`), else UTC. */
+export function defaultTimeZone(zone: string | null | undefined): string {
+  return zone && isIanaTimeZone(zone) ? zone : 'UTC';
 }
 
 export const tomorrowIn = (zone: string, now: Date): string => addDays(dateInZone(now, zone), 1);

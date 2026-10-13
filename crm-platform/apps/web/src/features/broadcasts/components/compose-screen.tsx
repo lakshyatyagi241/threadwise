@@ -61,7 +61,7 @@ export function ComposeScreen() {
   const tags = useAudienceTags(canTags);
   const catalog = useAttributeCatalog();
 
-  const zone = session.org.timezone ?? 'UTC';
+  const zone = session.effectiveTimezone;
   const [form, setForm] = useState<ComposeForm>(() => ({
     ...EMPTY_FORM,
     timezone: zone,

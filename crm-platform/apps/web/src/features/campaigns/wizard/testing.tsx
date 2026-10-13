@@ -38,6 +38,8 @@ export function session(
   return {
     permissions: Object.fromEntries(perms.map((p) => [p, true])),
     org: { name: 'Acme', timezone },
+    // The person's own zone, else the workspace's, else UTC (what the API sends as `effectiveTimezone`).
+    effectiveTimezone: timezone ?? 'UTC',
   } as unknown as SessionResponse;
 }
 

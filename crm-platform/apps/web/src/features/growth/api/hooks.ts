@@ -15,7 +15,7 @@ export const KEYS = {
   actions: ['growth', 'actions'] as const,
   campaigns: ['growth', 'campaigns'] as const,
   audiences: ['growth', 'audiences'] as const,
-  sendTimes: ['growth', 'send-times'] as const,
+  sendTimes: (timezone?: string) => ['growth', 'send-times', timezone ?? ''] as const,
   propensity: ['growth', 'propensity'] as const,
   quality: ['growth', 'quality'] as const,
   digest: ['growth', 'digest'] as const,
@@ -47,8 +47,11 @@ export const useCampaignReport = (enabled: boolean) =>
   useQuery(read(KEYS.campaigns, enabled, growthApi.campaigns));
 export const useAudiences = (enabled: boolean) =>
   useQuery(read(KEYS.audiences, enabled, growthApi.audiences));
-export const useSendTimes = (enabled: boolean) =>
-  useQuery(read(KEYS.sendTimes, enabled, growthApi.sendTimes));
+/** The best hours, counted in `timezone` (the zone the person reads times in). */
+export const useSendTimes = (enabled: boolean, timezone?: string) =>
+  useQuery(
+    read(KEYS.sendTimes(timezone), enabled, (signal) => growthApi.sendTimes(timezone, signal)),
+  );
 export const usePropensity = (enabled: boolean) =>
   useQuery(read(KEYS.propensity, enabled, growthApi.propensity));
 export const useQuality = (enabled: boolean) =>

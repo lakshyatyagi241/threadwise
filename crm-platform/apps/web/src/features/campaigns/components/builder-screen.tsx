@@ -87,7 +87,7 @@ export function BuilderScreen({
   const smsChannel = engineOf(initialSenderKey ?? config.data?.senderKey ?? '') === 'sms';
   const builder = useBuilder(smsChannel ? 'sms' : undefined);
   const session = useSession();
-  const zone = session.org.timezone ?? 'UTC';
+  const zone = session.effectiveTimezone;
 
   if (id && config.isLoading) {
     return (

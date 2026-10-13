@@ -118,6 +118,9 @@
         },
         "workspaceTimezone": "시간대",
         "workspaceTimezoneHint": "{workspace}에 적용됩니다. 소유자와 관리자만 변경할 수 있습니다.",
+        "myTimezone": "내 시간대",
+        "myTimezoneHint": "날짜와 시간은 {zone} 기준으로 표시됩니다. 비워 두면 워크스페이스 시간대를 따릅니다(워크스페이스에 없으면 UTC).",
+        "myTimezoneUseWorkspace": "워크스페이스 기본값 사용",
         "saved": "프로필이 저장되었습니다.",
         "errors": {
           "fullNameRequired": "이름을 입력하세요.",

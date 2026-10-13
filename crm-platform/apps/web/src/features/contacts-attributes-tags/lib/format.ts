@@ -1,11 +1,20 @@
-/** "05/03/2026": day/month/year with zeros, in the viewer's time zone, whatever the UI language (the list's fixed format). */
-export function formatDmy(iso: string | null | undefined): string {
+/** "05/03/2026": day/month/year with zeros, in `timeZone` (the viewer's when left out), whatever the UI language (the list's fixed format). */
+export function formatDmy(iso: string | null | undefined, timeZone?: string): string {
   if (!iso) return '';
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return '';
-  const dd = String(d.getDate()).padStart(2, '0');
-  const mm = String(d.getMonth() + 1).padStart(2, '0');
-  return `${dd}/${mm}/${d.getFullYear()}`;
+  try {
+    const parts = new Intl.DateTimeFormat('en-US', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      timeZone,
+    }).formatToParts(d);
+    const get = (type: string) => parts.find((p) => p.type === type)?.value ?? '';
+    return `${get('day')}/${get('month')}/${get('year')}`;
+  } catch {
+    return '';
+  }
 }
 
 /**

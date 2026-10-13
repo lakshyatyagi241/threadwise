@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { Alert, Button, Modal, Spinner } from '@crm/ui';
 import { MESSAGE_LOG_HOT_DAYS, MESSAGE_LOG_RETENTION_DAYS } from '@crm/contracts';
 import { FailureNote } from '@/features/channel-whatsapp-cloud';
@@ -28,6 +28,7 @@ export function MessageLogDialog({ messageId, onClose, canExport = false }: Mess
   const t = useTranslations('team-inbox-conversations.log');
   const status = useTranslations('team-inbox-conversations.status');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const errorText = useErrorText();
   const q = useMessageLog(messageId);
   const log = q.data;
@@ -79,7 +80,7 @@ export function MessageLogDialog({ messageId, onClose, canExport = false }: Mess
                 {status(log.status)}
               </dd>
               <dt className="text-muted-foreground">{t('createdAt')}</dt>
-              <dd>{fullStamp(log.createdAt, locale)}</dd>
+              <dd>{fullStamp(log.createdAt, locale, timeZone)}</dd>
               {log.providerMessageId && (
                 <>
                   <dt className="text-muted-foreground">{t('providerId')}</dt>

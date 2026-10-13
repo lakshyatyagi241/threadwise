@@ -118,6 +118,9 @@
         },
         "workspaceTimezone": "タイムゾーン",
         "workspaceTimezoneHint": "{workspace}に適用されます。変更できるのはオーナーと管理者のみです。",
+        "myTimezone": "自分のタイムゾーン",
+        "myTimezoneHint": "日付と時刻は {zone} で表示されます。空欄にするとワークスペースのタイムゾーンに従います(ワークスペースに設定がない場合は UTC)。",
+        "myTimezoneUseWorkspace": "ワークスペースの設定を使う",
         "saved": "プロフィールを保存しました。",
         "errors": {
           "fullNameRequired": "氏名を入力してください。",

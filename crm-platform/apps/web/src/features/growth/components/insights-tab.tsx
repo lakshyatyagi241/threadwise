@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useTimeZone, useTranslations } from 'next-intl';
 import type { GrowthFeatures } from '@crm/contracts';
 import { Button, Spinner, StatTile, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
@@ -38,7 +38,7 @@ function SendTimesCard() {
   const t = useTranslations('growth.insights.sendTimes');
   const hour = useFormatHour();
   const num = useFormatNumber();
-  const q = useSendTimes(true);
+  const q = useSendTimes(true, useTimeZone());
   return (
     <SectionCard id="growth-send-times" title={t('title')} hint={t('hint')}>
       {q.isPending && <SkeletonRows rows={2} />}

@@ -118,6 +118,9 @@
         },
         "workspaceTimezone": "Zona horaria",
         "workspaceTimezoneHint": "Se aplica a {workspace}. Solo los propietarios y administradores pueden cambiarla.",
+        "myTimezone": "Mi zona horaria",
+        "myTimezoneHint": "Las fechas y horas se te muestran en {zone}. Déjalo vacío para usar la zona horaria del espacio de trabajo (UTC si no tiene ninguna).",
+        "myTimezoneUseWorkspace": "Usar la del espacio de trabajo",
         "saved": "Perfil guardado.",
         "errors": {
           "fullNameRequired": "Introduce tu nombre completo.",

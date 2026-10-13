@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { memo, useState } from 'react';
 import { cn } from '@crm/ui';
 import type { ConversationNote, MessageResponse } from '@crm/contracts';
@@ -55,6 +55,7 @@ function MessageBody({
 }) {
   const t = useTranslations('team-inbox-conversations.bubble');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const [showOriginal, setShowOriginal] = useState(false);
 
   const translated = m.isTranslated && m.translatedBody;
@@ -276,7 +277,7 @@ function MessageBody({
       {m.kind === 'document' && media?.sizeBytes != null && !visual && (
         <p className="text-xs text-muted-foreground">{humanSize(media.sizeBytes)}</p>
       )}
-      <span className="sr-only">{fullStamp(m.createdAt, locale)}</span>
+      <span className="sr-only">{fullStamp(m.createdAt, locale, timeZone)}</span>
     </div>
   );
 }
@@ -317,6 +318,7 @@ export const MessageBubble = memo(function MessageBubble({
   const t = useTranslations('team-inbox-conversations.bubble');
   const tConsent = useTranslations('contact-consent.systemLine');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const [retrying, setRetrying] = useState(false);
   const [reactOpen, setReactOpen] = useState(false);
 
@@ -511,8 +513,8 @@ export const MessageBubble = memo(function MessageBubble({
         </div>
         <div className="mt-0.5 flex items-center gap-1.5 px-1 text-[11px] text-muted-foreground">
           {m.editedAt && <span className="italic">{t('edited')}</span>}
-          <time dateTime={m.createdAt} title={fullStamp(m.createdAt, locale)}>
-            {clockTime(m.createdAt, locale)}
+          <time dateTime={m.createdAt} title={fullStamp(m.createdAt, locale, timeZone)}>
+            {clockTime(m.createdAt, locale, timeZone)}
           </time>
           {out && <Ticks status={m.status} />}
           {tally && (
@@ -583,6 +585,7 @@ export function PendingBubble({ pending: p, progress, onRetry, onDismiss }: Pend
   const errorText = useErrorText();
   const mailError = useTranslations('email.composer.error');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const failed = p.status === 'failed';
   const mailKey = p.error ? composerErrorKey(p.error) : null;
   return (
@@ -615,7 +618,7 @@ export function PendingBubble({ pending: p, progress, onRetry, onDismiss }: Pend
           )}
         </div>
         <div className="mt-0.5 flex items-center gap-1.5 px-1 text-[11px] text-muted-foreground">
-          <time dateTime={p.createdAt}>{clockTime(p.createdAt, locale)}</time>
+          <time dateTime={p.createdAt}>{clockTime(p.createdAt, locale, timeZone)}</time>
           {failed ? (
             <AlertIcon width={12} height={12} className="text-danger" />
           ) : (
@@ -666,6 +669,7 @@ export function NoteBubble({
 }) {
   const t = useTranslations('team-inbox-conversations.bubble');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   return (
     <li data-testid="inbox-note" className="flex justify-center">
       <div className="w-full max-w-[85%] rounded-md border border-warning/30 bg-warning/10 px-3 py-2 text-sm text-foreground">
@@ -673,7 +677,8 @@ export function NoteBubble({
           <NoteIcon width={12} height={12} />
           <span>{t('noteLabel')}</span>
           <span className="font-normal normal-case text-muted-foreground">
-            · {note.author.name ?? t('unknownAuthor')} · {clockTime(note.createdAt, locale)}
+            · {note.author.name ?? t('unknownAuthor')} ·{' '}
+            {clockTime(note.createdAt, locale, timeZone)}
           </span>
           {canDelete && (
             <button

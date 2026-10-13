@@ -298,6 +298,12 @@ describe('the pilot workspace', () => {
     expect(stamp.status, JSON.stringify(stamp.body)).toBe(200);
     expect(stamp.body).toMatchObject({ stamped: 0 });
     expect((await g(demo).get('/send-times')).body.bestHours).toEqual([]);
+    // The hours are counted in the zone the viewer asks for; a name that is not a zone falls back to the workspace's.
+    const base = (await g(demo).get('/send-times')).body.timezone as string;
+    expect((await g(demo).get('/send-times?timezone=Asia/Kolkata')).body.timezone).toBe(
+      'Asia/Kolkata',
+    );
+    expect((await g(demo).get('/send-times?timezone=Nowhere/Land')).body.timezone).toBe(base);
     const prop = await g(demo).post('/propensity/recompute');
     expect(prop.status, JSON.stringify(prop.body)).toBe(200);
     expect(prop.body.trained).toBe(false);

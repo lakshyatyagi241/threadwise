@@ -16,10 +16,12 @@ import {
   growthActionDecisionSchema,
   growthActionsQuerySchema,
   syncAudienceSchema,
+  growthSendTimesQuerySchema,
   updateGrowthSettingsSchema,
   type BroadcastAssistantInput,
   type GrowthActionDecisionInput,
   type GrowthActionsQuery,
+  type GrowthSendTimesQuery,
   type SyncAudienceInput,
   type UpdateGrowthSettingsInput,
 } from '@crm/contracts';
@@ -124,10 +126,10 @@ export class GrowthController {
   @RequirePermission('lsc.runs.read')
   @ApiOperation({
     summary:
-      'The hours when contacts read and write, in the workspace time zone, and the best hours to send',
+      'The hours when contacts read and write, in the asked-for time zone (the workspace’s when none), and the best hours to send',
   })
-  sendTimes() {
-    return this.growth.sendTimes(org());
+  sendTimes(@Query(zodPipe(growthSendTimesQuerySchema)) query: GrowthSendTimesQuery) {
+    return this.growth.sendTimes(org(), query.timezone);
   }
 
   @Get('propensity')

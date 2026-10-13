@@ -118,6 +118,9 @@
         },
         "workspaceTimezone": "Zona waktu",
         "workspaceTimezoneHint": "Berlaku untuk {workspace}. Hanya pemilik dan administrator yang dapat mengubahnya.",
+        "myTimezone": "Zona waktu saya",
+        "myTimezoneHint": "Tanggal dan waktu ditampilkan kepada Anda dalam {zone}. Biarkan kosong untuk mengikuti zona waktu ruang kerja (UTC jika ruang kerja tidak memilikinya).",
+        "myTimezoneUseWorkspace": "Gunakan default ruang kerja",
         "saved": "Profil disimpan.",
         "errors": {
           "fullNameRequired": "Masukkan nama lengkap Anda.",

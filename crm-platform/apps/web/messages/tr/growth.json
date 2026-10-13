@@ -166,7 +166,7 @@
     "insights": {
       "sendTimes": {
         "title": "Gönderim için en iyi zaman",
-        "hint": "Kişilerinizin kampanyaları okuduğu ve size yazdığı zamanlar, çalışma alanı saat diliminize göre.",
+        "hint": "Kişilerinizin kampanyaları okuduğu ve size yazdığı saatler, saat diliminizde.",
         "empty": "Bir şey söylemek için henüz yeterli etkinlik yok.",
         "best": "En iyi saatler: {hours} ({zone}).",
         "quiet": "En sakin saatler: {hours}.",

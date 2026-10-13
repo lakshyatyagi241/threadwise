@@ -21,6 +21,7 @@ const session = {
     displayName: null,
     phone: null,
     locale: null,
+    timezone: null,
     theme: 'paper' as const,
     avatarUrl: null,
     emailVerified: true,
@@ -47,6 +48,7 @@ const session = {
     passwordChangeRequired: false,
   },
   sessionId: '3a7d1c9e-2b4f-4c6d-8e0a-5f1b2c3d4e5f',
+  effectiveTimezone: 'UTC',
 };
 
 const renderScreen = async () => {

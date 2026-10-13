@@ -118,6 +118,9 @@
         },
         "workspaceTimezone": "אזור זמן",
         "workspaceTimezoneHint": "חל על {workspace}. רק בעלים ומנהלים יכולים לשנות זאת.",
+        "myTimezone": "אזור הזמן שלי",
+        "myTimezoneHint": "תאריכים ושעות מוצגים לך לפי {zone}. השאירו ריק כדי לעקוב אחר אזור הזמן של סביבת העבודה (UTC אם אין לה).",
+        "myTimezoneUseWorkspace": "שימוש בברירת המחדל של סביבת העבודה",
         "saved": "הפרופיל נשמר.",
         "errors": {
           "fullNameRequired": "הזינו את שמכם המלא.",

@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { cn } from '@crm/ui';
 import type { MessageLogEvent } from '@crm/contracts';
 import { logEventKey, isIgnored, isProblem } from '../lib/message-log';
@@ -20,6 +20,7 @@ export function MessageLogTimeline({ events }: { events: readonly MessageLogEven
 function LogLine({ event: e, last }: { event: MessageLogEvent; last: boolean }) {
   const t = useTranslations('team-inbox-conversations.log');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const key = logEventKey(e);
   const problem = isProblem(e);
   const ignored = isIgnored(e);
@@ -44,7 +45,7 @@ function LogLine({ event: e, last }: { event: MessageLogEvent; last: boolean }) 
           {t(`event.${key}`, { attempt: e.attempt ?? 1 })}
         </p>
         <p className="text-xs text-muted-foreground">
-          <time dateTime={e.at}>{exactStamp(e.at, locale)}</time>
+          <time dateTime={e.at}>{exactStamp(e.at, locale, timeZone)}</time>
           {' · '}
           {t(`source.${e.source}`)}
         </p>

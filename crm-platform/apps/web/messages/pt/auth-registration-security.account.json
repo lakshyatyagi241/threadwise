@@ -118,6 +118,9 @@
         },
         "workspaceTimezone": "Fuso horário",
         "workspaceTimezoneHint": "Vale para {workspace}. Somente proprietários e administradores podem alterá-lo.",
+        "myTimezone": "Meu fuso horário",
+        "myTimezoneHint": "As datas e horas são mostradas para você em {zone}. Deixe em branco para seguir o fuso horário do espaço de trabalho (UTC se ele não tiver um).",
+        "myTimezoneUseWorkspace": "Usar o padrão do espaço de trabalho",
         "saved": "Perfil salvo.",
         "errors": {
           "fullNameRequired": "Digite seu nome completo.",

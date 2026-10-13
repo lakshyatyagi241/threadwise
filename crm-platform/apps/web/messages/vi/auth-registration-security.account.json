@@ -118,6 +118,9 @@
         },
         "workspaceTimezone": "Múi giờ",
         "workspaceTimezoneHint": "Áp dụng cho {workspace}. Chỉ chủ sở hữu và quản trị viên mới có thể thay đổi.",
+        "myTimezone": "Múi giờ của tôi",
+        "myTimezoneHint": "Ngày và giờ được hiển thị cho bạn theo {zone}. Để trống để theo múi giờ của không gian làm việc (UTC nếu không gian làm việc chưa đặt).",
+        "myTimezoneUseWorkspace": "Dùng mặc định của không gian làm việc",
         "saved": "Đã lưu hồ sơ.",
         "errors": {
           "fullNameRequired": "Nhập họ và tên của bạn.",

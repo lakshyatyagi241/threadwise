@@ -118,6 +118,9 @@
         },
         "workspaceTimezone": "Zeitzone",
         "workspaceTimezoneHint": "Gilt für {workspace}. Nur Inhaber und Administratoren können sie ändern.",
+        "myTimezone": "Meine Zeitzone",
+        "myTimezoneHint": "Datum und Uhrzeit werden dir in {zone} angezeigt. Lass das Feld leer, um der Zeitzone des Arbeitsbereichs zu folgen (UTC, falls er keine hat).",
+        "myTimezoneUseWorkspace": "Standard des Arbeitsbereichs verwenden",
         "saved": "Profil gespeichert.",
         "errors": {
           "fullNameRequired": "Geben Sie Ihren vollständigen Namen ein.",

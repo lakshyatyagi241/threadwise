@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Badge, Button, Select, Spinner, Tabs, Textarea, cn } from '@crm/ui';
@@ -121,6 +121,7 @@ function ContactSummary({
 }) {
   const t = useTranslations('team-inbox-conversations.panel');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const c = detail.contactSummary;
   const name = c?.name ?? detail.contact?.name ?? detail.title;
 
@@ -158,7 +159,7 @@ function ContactSummary({
           {c.status && <Row label={t('status')} value={c.status} />}
           {c.ownerName && <Row label={t('owner')} value={c.ownerName} />}
           {c.source && <Row label={t('source')} value={c.source} />}
-          <Row label={t('since')} value={fullStamp(c.createdAt, locale)} />
+          <Row label={t('since')} value={fullStamp(c.createdAt, locale, timeZone)} />
           {c.isUnsubscribed && (
             <p className="pt-1">
               <Badge tone="warning">{t('optedOut')}</Badge>
@@ -376,6 +377,7 @@ function NotesTab(props: ContactPanelProps) {
   const t = useTranslations('team-inbox-conversations.panel.notes');
   const errorText = useErrorText();
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const [text, setText] = useState('');
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -461,7 +463,7 @@ function NotesTab(props: ContactPanelProps) {
                 <span className="font-medium text-foreground">
                   {n.author.name ?? t('unknownAuthor')}
                 </span>
-                <span>· {fullStamp(n.createdAt, locale)}</span>
+                <span>· {fullStamp(n.createdAt, locale, timeZone)}</span>
                 {props.canDeleteNote(n) && (
                   <button
                     type="button"
@@ -487,6 +489,7 @@ function NotesTab(props: ContactPanelProps) {
 function TimelineTab({ conversationId }: { conversationId: string }) {
   const t = useTranslations('team-inbox-conversations.panel.timeline');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const q = useTimeline(conversationId, true);
   const events: ConversationEvent[] = q.data?.data ?? [];
   // Newest first, whatever order the server answers in.
@@ -532,7 +535,9 @@ function TimelineTab({ conversationId }: { conversationId: string }) {
                 ? t(`events.${label.key}`, { actor })
                 : t('events.unknown', { what: label.text, actor })}
             </p>
-            <p className="text-[11px] text-muted-foreground">{fullStamp(e.createdAt, locale)}</p>
+            <p className="text-[11px] text-muted-foreground">
+              {fullStamp(e.createdAt, locale, timeZone)}
+            </p>
           </li>
         );
       })}
@@ -552,6 +557,7 @@ function PastConversations({
 }) {
   const t = useTranslations('team-inbox-conversations.panel.past');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   if (items.length === 0) return null;
   return (
     <section aria-label={t('title')} className="space-y-2" data-testid="inbox-past">
@@ -570,7 +576,7 @@ function PastConversations({
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-sm">{p.preview ?? t('noMessages')}</span>
                 <span className="block text-[11px] text-muted-foreground">
-                  {t(`status.${p.status}`)} · {listTime(p.lastMessageAt, nowMs, locale)}
+                  {t(`status.${p.status}`)} · {listTime(p.lastMessageAt, nowMs, locale, timeZone)}
                 </span>
               </span>
             </button>

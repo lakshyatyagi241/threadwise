@@ -285,13 +285,14 @@ export type ThreadItem =
  * The thread in reading order: stored messages by seq with internal notes slotted in by time, then the sends in flight, with a
  * day separator before the first item of each calendar day. Notes older than the oldest message held are left out while older
  * history remains to be loaded (they appear in place once it is), so the top of the thread never shows a note stranded from its
- * conversation.
+ * conversation. `timeZone` is the zone the person reads times in (day separators follow it).
  */
 export function buildItems(
   messages: MessageResponse[],
   notes: ConversationNote[],
   pending: PendingSend[],
   hasMoreBefore: boolean,
+  timeZone?: string,
 ): ThreadItem[] {
   const oldest = messages[0]?.createdAt ?? null;
   const visibleNotes = notes
@@ -321,7 +322,7 @@ export function buildItems(
   const out: ThreadItem[] = [];
   let day = '';
   const push = (at: string, item: ThreadItem) => {
-    const k = dayKey(at);
+    const k = dayKey(at, timeZone);
     if (k !== day) {
       day = k;
       out.push({ kind: 'day', key: `d:${k}`, at });
