@@ -18,7 +18,7 @@ customer could open read it: only the operator console read `security_events`. T
 - **`/notifications`**: the full page behind the bell's "View all", planned since the first menu. It is the person's own list.
 
 It is also the audit evidence that a privacy and data governance design needs ("who looked at or changed personal data"). That design
-(`docs/specs/privacy-and-data-governance.md`) was not on `origin/main` when this was built, so nothing here depends on it.
+([privacy-and-data-governance.md](privacy-and-data-governance.md)) merged while this was built; this log is its audit evidence, nothing here depends on it, and its IP/user-agent question is decision D5.
 
 ## 2. Who sees what
 
