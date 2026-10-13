@@ -99,6 +99,8 @@ export class ImpersonationService {
       );
     }
     const operatorId = ctx.actorId;
+    // Read-only unless the super admin asked for write access in so many words (the schema default is read-only too).
+    const readOnly = input.readOnly !== false;
     const now = Date.now();
     const expiresAt = new Date(now + IMPERSONATION_MAX_MINUTES * 60_000);
     const code = randomToken(32);
@@ -141,7 +143,7 @@ export class ImpersonationService {
         INSERT INTO impersonation_sessions
           (operator_id, target_workspace_id, target_user_id, reason, read_only, ip, user_agent,
            expires_at, handoff_code_hash, handoff_expires_at)
-        VALUES (${operatorId}, ${org.id}, ${owner.id}, ${input.reason}, ${input.readOnly},
+        VALUES (${operatorId}, ${org.id}, ${owner.id}, ${input.reason}, ${readOnly},
                 ${normalizeIp(ctx.ip)}, ${ctx.userAgent?.slice(0, 500) ?? null},
                 ${expiresAt.toISOString()}::timestamptz, ${sha256Hex(code)},
                 ${new Date(now + IMPERSONATION_HANDOFF_SECONDS * 1000).toISOString()}::timestamptz)
@@ -164,7 +166,7 @@ export class ImpersonationService {
         payload: {
           sessionId,
           reason: input.reason,
-          readOnly: input.readOnly,
+          readOnly,
           operatorId: operatorUuid,
           asUserId: owner.uuid,
           expiresAt: expiresAt.toISOString(),
@@ -181,7 +183,7 @@ export class ImpersonationService {
           asUserId: owner.uuid,
           sessionId,
           reason: input.reason,
-          readOnly: input.readOnly,
+          readOnly,
         },
         operatorId,
       );

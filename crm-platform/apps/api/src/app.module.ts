@@ -21,6 +21,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { SendGuardModule } from './modules/auth/security/send-guard.module';
 import { UploadPolicyService } from './modules/auth';
 import { AccountGateGuard } from './modules/auth/guards/account-gate.guard';
+import { ImpersonationMaskInterceptor } from './modules/auth/guards/impersonation-mask.interceptor';
 import { ImpersonationGuard } from './modules/auth/guards/impersonation.guard';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from './modules/auth/guards/permissions.guard';
@@ -272,6 +273,7 @@ import { HealthModule } from './health/health.module';
     // Route-level plan gate (TW-PLAN-019): after permissions, so a request that is not allowed at all is refused for that first.
     { provide: APP_GUARD, useExisting: PlanFeatureGuard },
     { provide: APP_INTERCEPTOR, useClass: IdempotencyInterceptor },
+    { provide: APP_INTERCEPTOR, useClass: ImpersonationMaskInterceptor },
   ],
   exports: [CryptoService],
 })
