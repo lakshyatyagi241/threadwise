@@ -106,6 +106,24 @@ describe('windows (TW-PAYGW-037, 041, 043)', () => {
   });
 });
 
+describe('custom window', () => {
+  it('runs from the first day to the end of the last day, with an equal previous window', () => {
+    const r = billingRange('custom', NOW, { from: '2026-09-10', to: '2026-09-19' });
+    expect(r.from.toISOString()).toBe('2026-09-10T00:00:00.000Z');
+    expect(r.to.toISOString()).toBe('2026-09-19T23:59:59.999Z');
+    expect(r.prevFrom.toISOString()).toBe('2026-08-31T00:00:00.000Z');
+    expect(r.prevTo.toISOString()).toBe('2026-09-09T23:59:59.000Z');
+    expect(orderRange('custom', NOW, { from: '2026-09-10', to: '2026-09-19' })).toEqual(r);
+  });
+
+  it('a single day is a one-day window; a missing bound falls back to 90 days', () => {
+    const one = billingRange('custom', NOW, { from: '2026-10-01', to: '2026-10-01' });
+    expect(one.to.getTime() - one.from.getTime()).toBe(86_400_000 - 1);
+    expect(billingRange('custom', NOW)).toEqual(billingRange('90d', NOW));
+    expect(orderRange('custom', NOW, { from: '2026-10-01' })).toEqual(orderRange('90d', NOW));
+  });
+});
+
 describe('invoice rules (TW-PAYGW-043, 046)', () => {
   it('badge: open orders turn overdue after 15 days; failed and cancelled are void', () => {
     expect(invoiceBadge('paid', day(100), NOW)).toBe('paid');

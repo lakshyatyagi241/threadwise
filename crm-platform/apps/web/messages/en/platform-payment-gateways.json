@@ -237,8 +237,12 @@
           "30d": "Last 30 days",
           "90d": "Last 90 days",
           "1y": "Last year",
-          "all": "All time"
-        }
+          "all": "All time",
+          "custom": "Custom range"
+        },
+        "customFrom": "From date",
+        "customTo": "To date",
+        "customInvalid": "Pick two valid days: the start must not be after the end, and at most 5 years apart."
       },
       "orders": {
         "title": "Order history",
@@ -250,7 +254,8 @@
         "windows": {
           "90d": "Last 90 days",
           "this_year": "This year",
-          "all": "All time"
+          "all": "All time",
+          "custom": "Custom range"
         },
         "kpi": {
           "total": "Total orders",

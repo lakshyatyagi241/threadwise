@@ -237,8 +237,12 @@
           "30d": "30 ngày gần đây",
           "90d": "90 ngày gần đây",
           "1y": "Năm trước",
-          "all": "Toàn thời gian"
-        }
+          "all": "Toàn thời gian",
+          "custom": "Khoảng tùy chọn"
+        },
+        "customFrom": "Từ ngày",
+        "customTo": "Đến ngày",
+        "customInvalid": "Chọn hai ngày hợp lệ: ngày bắt đầu không được sau ngày kết thúc, cách nhau tối đa 5 năm."
       },
       "orders": {
         "title": "Lịch sử đơn hàng",
@@ -250,7 +254,8 @@
         "windows": {
           "90d": "90 ngày gần đây",
           "this_year": "Năm nay",
-          "all": "Toàn thời gian"
+          "all": "Toàn thời gian",
+          "custom": "Khoảng tùy chọn"
         },
         "kpi": {
           "total": "Tổng đơn hàng",

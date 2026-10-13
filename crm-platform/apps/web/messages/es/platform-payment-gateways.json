@@ -237,8 +237,12 @@
           "30d": "Últimos 30 días",
           "90d": "Últimos 90 días",
           "1y": "Último año",
-          "all": "Todo el tiempo"
-        }
+          "all": "Todo el tiempo",
+          "custom": "Rango personalizado"
+        },
+        "customFrom": "Fecha de inicio",
+        "customTo": "Fecha de fin",
+        "customInvalid": "Elige dos días válidos: el inicio no puede ser posterior al fin, con un máximo de 5 años de diferencia."
       },
       "orders": {
         "title": "Historial de pedidos",
@@ -250,7 +254,8 @@
         "windows": {
           "90d": "Últimos 90 días",
           "this_year": "Este año",
-          "all": "Todo el tiempo"
+          "all": "Todo el tiempo",
+          "custom": "Rango personalizado"
         },
         "kpi": {
           "total": "Pedidos totales",

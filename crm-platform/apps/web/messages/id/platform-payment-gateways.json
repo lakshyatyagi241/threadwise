@@ -237,8 +237,12 @@
           "30d": "30 hari terakhir",
           "90d": "90 hari terakhir",
           "1y": "Tahun terakhir",
-          "all": "Sepanjang waktu"
-        }
+          "all": "Sepanjang waktu",
+          "custom": "Rentang kustom"
+        },
+        "customFrom": "Tanggal mulai",
+        "customTo": "Tanggal akhir",
+        "customInvalid": "Pilih dua hari yang valid: tanggal mulai tidak boleh setelah tanggal akhir, selisih paling lama 5 tahun."
       },
       "orders": {
         "title": "Riwayat pesanan",
@@ -250,7 +254,8 @@
         "windows": {
           "90d": "90 hari terakhir",
           "this_year": "Tahun ini",
-          "all": "Sepanjang waktu"
+          "all": "Sepanjang waktu",
+          "custom": "Rentang kustom"
         },
         "kpi": {
           "total": "Total pesanan",
