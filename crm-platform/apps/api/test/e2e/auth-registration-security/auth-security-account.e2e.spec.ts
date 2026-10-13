@@ -282,6 +282,70 @@ describe('profile and the workspace timezone (TW-AUTH-025)', () => {
   });
 });
 
+describe("a person's own timezone", () => {
+  it('shows UTC with no zone anywhere, the workspace zone by default, and the own zone over both', async () => {
+    const a = await signup();
+    await h.owner.query(`UPDATE organizations SET settings = settings - 'timezone' WHERE id = $1`, [
+      a.orgId,
+    ]);
+    const none = await api().get('/v2/account/profile').set(bearer(a.access));
+    expect(none.body).toMatchObject({ timezone: null, effectiveTimezone: 'UTC' });
+
+    await api()
+      .patch('/v2/account/profile')
+      .set(bearer(a.access))
+      .send({ workspaceTimezone: 'Asia/Kolkata' });
+    const workspace = await api().get('/v2/account/profile').set(bearer(a.access));
+    expect(workspace.body).toMatchObject({ timezone: null, effectiveTimezone: 'Asia/Kolkata' });
+
+    const own = await api()
+      .patch('/v2/account/profile')
+      .set(bearer(a.access))
+      .send({ timezone: 'America/New_York' });
+    expect(own.status, JSON.stringify(own.body)).toBe(200);
+    expect(own.body).toMatchObject({
+      timezone: 'America/New_York',
+      effectiveTimezone: 'America/New_York',
+      workspaceTimezone: 'Asia/Kolkata',
+    });
+    const session = await api().get('/v2/auth/session').set(bearer(a.access));
+    expect(session.body.user.timezone).toBe('America/New_York');
+    expect(session.body.effectiveTimezone).toBe('America/New_York');
+    expect(session.body.org.timezone).toBe('Asia/Kolkata');
+
+    // null goes back to the workspace's zone; an unrelated save leaves it alone.
+    await api().patch('/v2/account/profile').set(bearer(a.access)).send({ fullName: 'Same Zone' });
+    const kept = await api().get('/v2/account/profile').set(bearer(a.access));
+    expect(kept.body.timezone).toBe('America/New_York');
+    const cleared = await api()
+      .patch('/v2/account/profile')
+      .set(bearer(a.access))
+      .send({ timezone: null });
+    expect(cleared.body).toMatchObject({ timezone: null, effectiveTimezone: 'Asia/Kolkata' });
+  });
+
+  it('lets any member set their own zone (it is not the owner-only workspace zone) and refuses a bad one', async () => {
+    const owner = await signup();
+    const member = await addMember(owner);
+    const ok = await api()
+      .patch('/v2/account/profile')
+      .set(bearer(member.access))
+      .send({ timezone: 'Europe/London' });
+    expect(ok.status, JSON.stringify(ok.body)).toBe(200);
+    expect(ok.body.timezone).toBe('Europe/London');
+    const bad = await api()
+      .patch('/v2/account/profile')
+      .set(bearer(member.access))
+      .send({ timezone: 'Nowhere/Land' });
+    expect(bad.status).toBe(422);
+    const after = await api().get('/v2/account/profile').set(bearer(member.access));
+    expect(after.body.timezone).toBe('Europe/London');
+    // The owner's own zone is untouched by a member's choice.
+    const ownerView = await api().get('/v2/account/profile').set(bearer(owner.access));
+    expect(ownerView.body.timezone).toBeNull();
+  });
+});
+
 // --- photo -------------------------------------------------------------------------------------------------
 
 describe('profile photo (TW-AUTH-026)', () => {

@@ -119,6 +119,9 @@
         },
         "workspaceTimezone": "时区",
         "workspaceTimezoneHint": "适用于 {workspace}。仅所有者和管理员可以更改。",
+        "myTimezone": "我的时区",
+        "myTimezoneHint": "日期和时间将按 {zone} 显示给你。留空则沿用工作区时区(工作区未设置时使用 UTC)。",
+        "myTimezoneUseWorkspace": "使用工作区默认值",
         "saved": "个人资料已保存。",
         "errors": {
           "fullNameRequired": "请输入你的姓名。",

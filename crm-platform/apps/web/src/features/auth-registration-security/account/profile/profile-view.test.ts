@@ -22,6 +22,8 @@ const profile = (over = {}) => ({
   pendingEmail: null,
   phone: null,
   locale: null,
+  timezone: null,
+  effectiveTimezone: 'Asia/Kolkata',
   theme: 'paper',
   avatarUrl: null,
   avatarMaxBytes: 1048576,

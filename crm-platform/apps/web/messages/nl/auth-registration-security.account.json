@@ -119,6 +119,9 @@
         },
         "workspaceTimezone": "Tijdzone",
         "workspaceTimezoneHint": "Geldt voor {workspace}. Alleen eigenaren en beheerders kunnen dit wijzigen.",
+        "myTimezone": "Mijn tijdzone",
+        "myTimezoneHint": "Datums en tijden worden aan jou getoond in {zone}. Laat leeg om de tijdzone van de werkruimte te volgen (UTC als de werkruimte er geen heeft).",
+        "myTimezoneUseWorkspace": "Standaard van de werkruimte gebruiken",
         "saved": "Profiel opgeslagen.",
         "errors": {
           "fullNameRequired": "Voer je volledige naam in.",

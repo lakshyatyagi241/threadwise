@@ -119,6 +119,9 @@
         },
         "workspaceTimezone": "Saat dilimi",
         "workspaceTimezoneHint": "{workspace} için geçerlidir. Yalnızca sahipler ve yöneticiler değiştirebilir.",
+        "myTimezone": "Saat dilimim",
+        "myTimezoneHint": "Tarih ve saatler size {zone} diliminde gösterilir. Çalışma alanının saat dilimini izlemek için boş bırakın (çalışma alanında yoksa UTC).",
+        "myTimezoneUseWorkspace": "Çalışma alanı varsayılanını kullan",
         "saved": "Profil kaydedildi.",
         "errors": {
           "fullNameRequired": "Ad soyadınızı girin.",

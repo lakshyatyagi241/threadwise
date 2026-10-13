@@ -119,6 +119,9 @@
         },
         "workspaceTimezone": "Timezone",
         "workspaceTimezoneHint": "Applies to {workspace}. Only owners and administrators can change it.",
+        "myTimezone": "My timezone",
+        "myTimezoneHint": "Dates and times are shown to you in {zone}. Leave it empty to follow the workspace timezone (UTC if the workspace has none).",
+        "myTimezoneUseWorkspace": "Use workspace default",
         "saved": "Profile saved.",
         "errors": {
           "fullNameRequired": "Enter your full name.",
