@@ -26,4 +26,20 @@ describe('MenuTitle', () => {
     await fireEvent.press(screen.getByRole('menuitem', { name: /Unassigned/ }));
     expect(onChange).toHaveBeenCalledWith('unassigned');
   });
+
+  it('writes a count at the end of a line, and reads it out with the name', async () => {
+    const counted = [
+      { value: 'all', label: 'All', badge: 12 },
+      { value: 'mine', label: 'Mine', badge: 0 },
+      { value: 'unassigned', label: 'Unassigned', badge: 120 },
+    ] as const;
+    await renderApp(
+      <MenuTitle label="Inbox view" options={counted} value="all" onChange={jest.fn()} />,
+    );
+    await fireEvent.press(screen.getByRole('button', { name: 'Inbox view' }));
+    expect(screen.getByRole('menuitem', { name: 'All, 12' })).toBeTruthy();
+    expect(screen.getByRole('menuitem', { name: 'Mine' })).toBeTruthy();
+    expect(screen.getByRole('menuitem', { name: 'Unassigned, 120' })).toBeTruthy();
+    expect(screen.getByText('99+')).toBeTruthy();
+  });
 });

@@ -14,10 +14,18 @@ import { renderApp } from '@/test/render';
 import { reachEnd } from '@/test/scroll';
 import * as api from './api';
 import { InboxScreen } from './inbox-screen';
+import { INBOX_POLL_MS } from './use-inbox';
 
 jest.mock('./api');
 jest.mock('@/lib/session/api');
-jest.mock('expo-router', () => ({ useRouter: jest.fn() }));
+jest.mock('expo-router', () => {
+  const { useEffect: runEffect } = jest.requireActual<typeof import('react')>('react');
+  return {
+    useRouter: jest.fn(),
+    // The tab is in front for the whole test.
+    useFocusEffect: (effect: () => void) => runEffect(effect, [effect]),
+  };
+});
 
 const sessionCall = jest.mocked(fetchSession);
 const listCall = jest.mocked(api.fetchConversations);
@@ -137,7 +145,7 @@ describe('InboxScreen', () => {
     await screen.findByText('Rohan Mehta');
     expect(lastFilters()).toMatchObject({ tab: 'all', status: 'default', q: '' });
     await fireEvent.press(screen.getByRole('button', { name: 'Inbox view' }));
-    await fireEvent.press(await screen.findByRole('menuitem', { name: 'Unread' }));
+    await fireEvent.press(await screen.findByRole('menuitem', { name: 'Unread, 1' }));
     await waitFor(() => expect(lastFilters()).toMatchObject({ tab: 'unread' }));
     expect(await screen.findByRole('button', { name: 'Inbox view' })).toBeTruthy();
   });
@@ -240,5 +248,33 @@ describe('InboxScreen', () => {
     });
     await waitFor(() => expect(control().props.refreshing).toBe(false));
     expect(listCall).toHaveBeenCalledTimes(2);
+  });
+
+  it('shows how many conversations each view holds, as the API counts them', async () => {
+    await show();
+    await screen.findByText('Rohan Mehta');
+    await fireEvent.press(screen.getByRole('button', { name: 'Inbox view' }));
+    for (const name of ['All, 5', 'Mine, 2', 'Unassigned, 3', 'Unread, 1']) {
+      expect(await screen.findByRole('menuitem', { name })).toBeTruthy();
+    }
+  });
+
+  describe('while the tab is in front', () => {
+    beforeEach(() => jest.useFakeTimers());
+    afterEach(() => jest.useRealTimers());
+
+    it('asks for news by itself, so a new message shows up without a pull', async () => {
+      await show();
+      await screen.findByText('Rohan Mehta');
+      expect(listCall).toHaveBeenCalledTimes(1);
+      listCall.mockResolvedValue(
+        list([summary({ id: '55555555-5555-4555-8555-555555555555', title: 'Kabir Rao' }), rohan]),
+      );
+      await act(async () => {
+        await jest.advanceTimersByTimeAsync(INBOX_POLL_MS);
+      });
+      expect(await screen.findByText('Kabir Rao')).toBeTruthy();
+      expect(listCall).toHaveBeenCalledTimes(2);
+    });
   });
 });

@@ -46,6 +46,7 @@ export const summary = (over: Partial<ConversationSummary> = {}): ConversationSu
   contact: null,
   assignment: { user: null, team: null, aiAgent: null },
   snoozedUntil: null,
+  labels: [],
   lastMessageAt: '2026-10-11T09:30:00.000Z',
   lastInboundAt: '2026-10-11T09:30:00.000Z',
   lastOutboundAt: null,

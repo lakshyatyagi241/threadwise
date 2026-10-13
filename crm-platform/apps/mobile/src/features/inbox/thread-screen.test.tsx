@@ -41,10 +41,9 @@ const readCall = jest.mocked(api.markConversationRead);
 const statusCall = jest.mocked(api.setConversationStatus);
 const retryCall = jest.mocked(api.retryMessage);
 const assignCall = jest.mocked(api.assignConversation);
-const tagsCall = jest.mocked(labels.fetchAllTags);
-const contactTagsCall = jest.mocked(labels.fetchContactTags);
-const attachCall = jest.mocked(labels.attachContactTag);
-const detachCall = jest.mocked(labels.detachContactTag);
+const libraryCall = jest.mocked(labels.fetchLabelLibrary);
+const applyCall = jest.mocked(labels.applyLabel);
+const withdrawCall = jest.mocked(labels.withdrawLabel);
 const back = jest.fn();
 
 let client: QueryClient | undefined;
@@ -363,23 +362,22 @@ describe('ThreadScreen', () => {
 const ME = inboxSession.user.id;
 const OTHER_USER = '22222222-2222-4222-8222-222222222222';
 const AI_AGENT = '77777777-7777-4777-8777-777777777777';
-const CONTACT_ID = '88888888-8888-4888-8888-888888888888';
 const BASE = ['inbox.conversation.read', 'inbox.conversation.reply', 'inbox.conversation.resolve'];
 const as = (...extra: string[]) =>
   sessionCall.mockResolvedValue(withPermissions([...BASE, ...extra]));
 const assigned = (id: string) => ({ user: { id, name: 'Someone' }, team: null, aiAgent: null });
 const minutesAhead = (minutes: number) =>
   new Date(Date.now() + minutes * 60_000 + 30_000).toISOString();
-const tag = (id: string, name: string) => ({
-  id,
-  name,
-  color: null,
+/** A label as the conversation carries it, and as the library lists it. */
+const label = (id: string, name: string) => ({ id, name, color: null });
+const inLibrary = (l: ReturnType<typeof label>) => ({
+  ...l,
+  description: null,
+  conversationCount: 1,
   rowVersion: 1,
-  createdAt: '2026-09-01T08:00:00.000Z',
-  updatedAt: '2026-09-01T08:00:00.000Z',
 });
-const VIP = tag('aaaaaaaa-0000-4000-8000-000000000001', 'VIP');
-const COLD = tag('aaaaaaaa-0000-4000-8000-000000000002', 'Cold');
+const VIP = label('aaaaaaaa-0000-4000-8000-000000000001', 'VIP');
+const COLD = label('aaaaaaaa-0000-4000-8000-000000000002', 'Cold');
 
 describe('ThreadScreen: the header', () => {
   it('shows the reply window as a ring with the time left, and says it to a screen reader', async () => {
@@ -564,46 +562,46 @@ describe('ThreadScreen: a conversation an AI agent has', () => {
 });
 
 describe('ThreadScreen: labels', () => {
-  const withContact = () => detail({ contact: { id: CONTACT_ID, name: 'Rohan Mehta' } });
+  const withVip = () => detail({ labels: [VIP], rowVersion: 7 });
   const open = async () =>
     await fireEvent.press(await screen.findByRole('button', { name: 'Assign labels' }));
 
   beforeEach(() => {
-    tagsCall.mockResolvedValue([VIP, COLD]);
-    contactTagsCall.mockResolvedValue([VIP]);
+    libraryCall.mockResolvedValue([inLibrary(VIP), inLibrary(COLD)]);
   });
 
-  it('is offered for a conversation with a contact, to a person who may change contacts and read tags', async () => {
-    as('record.contacts.update', 'record.tags.read');
-    arrange({ detail: withContact() });
+  it('is offered to a person who may label conversations, and shows the labels the thread has', async () => {
+    as('inbox.conversation.tag');
+    arrange({ detail: withVip() });
+    await show();
+    await loaded();
+    const button = await screen.findByRole('button', { name: 'Assign labels' });
+    expect(button.props.accessibilityValue).toEqual({ text: 'VIP' });
+    // Nothing is asked of the API until the sheet opens.
+    expect(libraryCall).not.toHaveBeenCalled();
+  });
+
+  it('is offered for a conversation that has no contact yet', async () => {
+    as('inbox.conversation.tag');
+    arrange();
     await show();
     await loaded();
     expect(await screen.findByRole('button', { name: 'Assign labels' })).toBeTruthy();
-    // Nothing is asked of the API until the sheet opens.
-    expect(tagsCall).not.toHaveBeenCalled();
   });
 
-  it('is not offered without a contact, or without the permissions', async () => {
-    as('record.contacts.update', 'record.tags.read');
+  it('is not offered without the permission to label, whatever else the person may do', async () => {
+    as('record.contacts.update', 'record.tags.read', 'record.tags.create');
     arrange();
     await show();
     await loaded();
     expect(screen.queryByRole('button', { name: 'Assign labels' })).toBeNull();
   });
 
-  it('is not offered to a person who may only read contacts', async () => {
-    as('record.tags.read');
-    arrange({ detail: withContact() });
-    await show();
-    await loaded();
-    expect(screen.queryByRole('button', { name: 'Assign labels' })).toBeNull();
-  });
-
-  it('ticks the labels the contact has, and puts one on or takes one off', async () => {
-    as('record.contacts.update', 'record.tags.read');
-    arrange({ detail: withContact() });
-    attachCall.mockResolvedValue(COLD);
-    detachCall.mockResolvedValue(undefined as never);
+  it('ticks the labels the conversation has, and puts one on or takes one off', async () => {
+    as('inbox.conversation.tag');
+    arrange({ detail: withVip() });
+    applyCall.mockResolvedValue(summary({ labels: [VIP, COLD], rowVersion: 8 }));
+    withdrawCall.mockResolvedValue(summary({ labels: [], rowVersion: 9 }));
     await show();
     await loaded();
     await open();
@@ -612,31 +610,57 @@ describe('ThreadScreen: labels', () => {
     expect(screen.getByRole('checkbox', { name: 'Cold' }).props.accessibilityState.checked).toBe(
       false,
     );
+    // What the API answers when the thread is read again after the change.
+    detailCall.mockResolvedValue(detail({ labels: [VIP, COLD], rowVersion: 8 }));
     await fireEvent.press(screen.getByRole('checkbox', { name: 'Cold' }));
     await waitFor(() =>
-      expect(attachCall).toHaveBeenCalledWith(CONTACT_ID, { tagId: COLD.id }, expect.any(String)),
+      expect(applyCall).toHaveBeenCalledWith(
+        CONVERSATION_ID,
+        { tagId: COLD.id },
+        expect.any(String),
+      ),
+    );
+    await waitFor(() =>
+      expect(screen.getByRole('checkbox', { name: 'Cold' }).props.accessibilityState.checked).toBe(
+        true,
+      ),
     );
     await fireEvent.press(screen.getByRole('checkbox', { name: 'VIP' }));
-    await waitFor(() => expect(detachCall).toHaveBeenCalledWith(CONTACT_ID, VIP.id));
+    await waitFor(() => expect(withdrawCall).toHaveBeenCalledWith(CONVERSATION_ID, VIP.id));
   });
 
-  it('makes a new label from a name, for a person who may create labels', async () => {
-    as('record.contacts.update', 'record.tags.read', 'record.tags.create');
-    arrange({ detail: withContact() });
-    attachCall.mockResolvedValue(tag('aaaaaaaa-0000-4000-8000-000000000003', 'Hot'));
+  it('asks for the labels again after a change, so the thread and the list are current', async () => {
+    as('inbox.conversation.tag');
+    arrange({ detail: withVip() });
+    applyCall.mockResolvedValue(summary({ labels: [VIP, COLD], rowVersion: 8 }));
+    await show();
+    await loaded();
+    await open();
+    await screen.findByRole('checkbox', { name: 'Cold' });
+    const reads = detailCall.mock.calls.length;
+    await fireEvent.press(screen.getByRole('checkbox', { name: 'Cold' }));
+    await waitFor(() => expect(detailCall.mock.calls.length).toBeGreaterThan(reads));
+  });
+
+  it('makes a new label from a name, for a person who may manage labels', async () => {
+    as('inbox.conversation.tag', 'inbox.tag.manage');
+    arrange({ detail: withVip() });
+    applyCall.mockResolvedValue(
+      summary({ labels: [VIP, label('aaaaaaaa-0000-4000-8000-000000000003', 'Hot')] }),
+    );
     await show();
     await loaded();
     await open();
     await fireEvent.changeText(await screen.findByLabelText('New label'), '  Hot ');
     await fireEvent.press(screen.getByRole('button', { name: 'Add' }));
     await waitFor(() =>
-      expect(attachCall).toHaveBeenCalledWith(CONTACT_ID, { name: 'Hot' }, expect.any(String)),
+      expect(applyCall).toHaveBeenCalledWith(CONVERSATION_ID, { name: 'Hot' }, expect.any(String)),
     );
   });
 
-  it('has no box for a new label without the permission to create one', async () => {
-    as('record.contacts.update', 'record.tags.read');
-    arrange({ detail: withContact() });
+  it('has no box for a new label without the permission to manage labels', async () => {
+    as('inbox.conversation.tag');
+    arrange({ detail: withVip() });
     await show();
     await loaded();
     await open();
@@ -645,9 +669,9 @@ describe('ThreadScreen: labels', () => {
   });
 
   it('says so when a label could not be changed', async () => {
-    as('record.contacts.update', 'record.tags.read');
-    arrange({ detail: withContact() });
-    attachCall.mockRejectedValue(new ApiError(0, 'CLIENT_NETWORK', 'offline'));
+    as('inbox.conversation.tag');
+    arrange({ detail: withVip() });
+    applyCall.mockRejectedValue(new ApiError(0, 'CLIENT_NETWORK', 'offline'));
     await show();
     await loaded();
     await open();
@@ -656,9 +680,9 @@ describe('ThreadScreen: labels', () => {
   });
 
   it('says when the labels could not be loaded, and loads them on retry', async () => {
-    as('record.contacts.update', 'record.tags.read');
-    arrange({ detail: withContact() });
-    tagsCall.mockRejectedValueOnce(new ApiError(0, 'CLIENT_NETWORK', 'offline'));
+    as('inbox.conversation.tag');
+    arrange({ detail: withVip() });
+    libraryCall.mockRejectedValueOnce(new ApiError(0, 'CLIENT_NETWORK', 'offline'));
     await show();
     await loaded();
     await open();

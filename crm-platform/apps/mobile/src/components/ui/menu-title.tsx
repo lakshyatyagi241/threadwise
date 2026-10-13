@@ -8,6 +8,8 @@ import { Text } from './text';
 export interface MenuOption<T extends string> {
   value: T;
   label: string;
+  /** A count shown at the end of the line in the list (not in the title); 0 or missing shows nothing. */
+  badge?: number;
 }
 
 interface Props<T extends string> {
@@ -51,6 +53,7 @@ export function MenuTitle<T extends string>({ label, options, value, onChange }:
               <Pressable
                 key={o.value}
                 accessibilityRole="menuitem"
+                accessibilityLabel={o.badge ? `${o.label}, ${o.badge}` : o.label}
                 accessibilityState={{ selected: o.value === value }}
                 onPress={() => {
                   setOpen(false);
@@ -59,7 +62,14 @@ export function MenuTitle<T extends string>({ label, options, value, onChange }:
                 style={styles.option}
               >
                 <Text variant={o.value === value ? 'label' : 'body'}>{o.label}</Text>
-                {o.value === value ? <Icon name="checkmark" size={20} color="primary" /> : null}
+                <View style={styles.end}>
+                  {o.badge ? (
+                    <Text variant="caption" muted>
+                      {o.badge > 99 ? '99+' : o.badge}
+                    </Text>
+                  ) : null}
+                  {o.value === value ? <Icon name="checkmark" size={20} color="primary" /> : null}
+                </View>
               </Pressable>
             ))}
           </View>
@@ -85,6 +95,7 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     paddingVertical: spacing.xs,
   },
+  end: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   option: {
     minHeight: MIN_TOUCH_TARGET,
     flexDirection: 'row',

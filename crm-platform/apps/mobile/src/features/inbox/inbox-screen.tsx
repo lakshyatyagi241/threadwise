@@ -1,5 +1,6 @@
 import type { InboxTab } from '@crm/contracts';
-import { useMemo, useState } from 'react';
+import { useFocusEffect } from 'expo-router';
+import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, FlatList, RefreshControl, StyleSheet, View } from 'react-native';
 import { Banner } from '@/components/ui/banner';
@@ -47,7 +48,16 @@ export function InboxScreen() {
   const filters = useMemo<InboxFilters>(() => ({ tab, status, q }), [tab, status, q]);
   const active = hasActiveFilter(filters);
 
-  const query = useConversations(filters, allowed);
+  // The tab is in front: ask for news on a timer, and stop when another tab or a conversation covers it.
+  const [focused, setFocused] = useState(true);
+  useFocusEffect(
+    useCallback(() => {
+      setFocused(true);
+      return () => setFocused(false);
+    }, []),
+  );
+
+  const query = useConversations(filters, allowed, focused);
   const rows = useMemo(() => query.data?.pages.flatMap((p) => p.data) ?? [], [query.data]);
   // The clock for "today" and "yesterday" moves only when the list does.
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -72,7 +82,13 @@ export function InboxScreen() {
     if (query.hasNextPage && !query.isFetchingNextPage) void query.fetchNextPage();
   };
 
-  const tabOptions = TABS.map((value) => ({ value, label: t(`inbox.tabs.${value}`) }));
+  // The API sends the badge of every view with each page of the list; the first page is the one read most recently.
+  const counts = query.data?.pages[0]?.meta.counts;
+  const tabOptions = TABS.map((value) => ({
+    value,
+    label: t(`inbox.tabs.${value}`),
+    badge: counts?.[value],
+  }));
 
   const body = () => {
     if (session.isPending) return <ConversationSkeleton />;

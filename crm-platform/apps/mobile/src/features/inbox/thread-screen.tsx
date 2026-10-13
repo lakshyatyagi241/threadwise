@@ -73,10 +73,9 @@ export function ThreadScreen() {
   const canResolve = can(session.data, 'inbox.conversation.resolve');
   const canAssign = can(session.data, 'inbox.conversation.assign');
   const canAssignSelf = can(session.data, 'inbox.conversation.assign_self');
-  // Labels are the contact's tags: the person must be able to read tags and to change the contact.
-  const canLabel =
-    can(session.data, 'record.contacts.update') && can(session.data, 'record.tags.read');
-  const canMakeLabels = can(session.data, 'record.tags.create');
+  // Labels are on the conversation. Making a new one (by typing its name) is a separate permission.
+  const canLabel = can(session.data, 'inbox.conversation.tag');
+  const canMakeLabels = can(session.data, 'inbox.tag.manage');
   const meId = session.data?.user.id ?? '';
   const now = useNow(30_000);
 
@@ -104,6 +103,7 @@ export function ThreadScreen() {
   const messages = useMemo(() => flattenMessages(thread.data), [thread.data]);
   const lastSeq = messages.at(-1)?.seq ?? 0;
   const conversation = detail.data;
+  const labelNames = (conversation?.labels ?? []).map((label) => label.name).join(', ');
 
   // Newest first, because the list is inverted (it opens at the newest message). A bubble we sent stays pending until the stored one is in the list.
   const rows = useMemo<Row[]>(() => {
@@ -372,10 +372,11 @@ export function ThreadScreen() {
           <Banner tone="danger" message={notice} />
         </View>
       ) : null}
-      {canLabel && conversation?.contact ? (
+      {canLabel && conversation ? (
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={t('inbox.thread.labels.open')}
+          accessibilityValue={{ text: labelNames || undefined }}
           onPress={() => setLabelsOpen(true)}
           style={[
             styles.strip,
@@ -384,6 +385,11 @@ export function ThreadScreen() {
         >
           <Icon name="pricetag-outline" size={20} color="primary" />
           <Text variant="label">{t('inbox.thread.labels.open')}</Text>
+          {labelNames ? (
+            <Text variant="caption" muted numberOfLines={1} style={styles.labelNames}>
+              {labelNames}
+            </Text>
+          ) : null}
         </Pressable>
       ) : null}
       <View style={styles.screen}>{body()}</View>
@@ -398,10 +404,11 @@ export function ThreadScreen() {
           <Composer value={draft} onChange={setDraft} onSend={onSend} closed={windowClosed} />
         ) : null
       ) : null}
-      {conversation?.contact ? (
+      {conversation ? (
         <LabelsSheet
           visible={labelsOpen}
-          contactId={conversation.contact.id}
+          conversationId={conversation.id}
+          applied={conversation.labels}
           canCreate={canMakeLabels}
           onClose={() => setLabelsOpen(false)}
         />
@@ -419,8 +426,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: spacing.sm,
+    paddingHorizontal: spacing.lg,
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
+  labelNames: { flexShrink: 1 },
   messages: { paddingVertical: spacing.sm },
   flip: { transform: [{ scaleY: -1 }] },
 });

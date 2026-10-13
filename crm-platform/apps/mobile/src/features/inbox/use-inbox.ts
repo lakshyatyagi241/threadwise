@@ -19,18 +19,25 @@ import { withMessage } from './thread-model';
 /** How often an open thread asks for news while it is on screen; realtime sockets replace this later. */
 export const THREAD_POLL_MS = 15_000;
 
-const listKey = ['inbox', 'conversations'] as const;
-const detailKey = (id: string) => ['inbox', 'conversation', id] as const;
+/** How often the conversation list asks for news while the Inbox tab is on screen (a new message, a taken or resolved thread, the tab counts). */
+export const INBOX_POLL_MS = 15_000;
+
+export const listKey = ['inbox', 'conversations'] as const;
+export const detailKey = (id: string) => ['inbox', 'conversation', id] as const;
 const messagesKey = (id: string) => ['inbox', 'messages', id] as const;
 
-/** The conversation list, a page at a time. No request at all while `enabled` is false (the person may not read the inbox). */
-export const useConversations = (filters: InboxFilters, enabled: boolean) =>
+/**
+ * The conversation list, a page at a time. No request at all while `enabled` is false (the person may not read the inbox). While
+ * `polling` (the tab is in front) every loaded page is read again every 15 seconds, so a customer's new message shows up by itself.
+ */
+export const useConversations = (filters: InboxFilters, enabled: boolean, polling = false) =>
   useInfiniteQuery({
     queryKey: [...listKey, filters.tab, filters.status, filters.q],
     queryFn: ({ pageParam, signal }) => fetchConversations(filters, pageParam, signal),
     initialPageParam: undefined as string | undefined,
     getNextPageParam: (page) =>
       page.page.hasMore ? (page.page.nextCursor ?? undefined) : undefined,
+    refetchInterval: polling ? INBOX_POLL_MS : false,
     enabled,
   });
 

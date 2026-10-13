@@ -1,3 +1,4 @@
+import type { ConversationLabel } from '@crm/contracts';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -19,41 +20,46 @@ import { TextField } from '@/components/ui/text-field';
 import { messageForError } from '@/lib/api/error-message';
 import { MIN_TOUCH_TARGET, radius, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
-import { useChangeLabels, useContactTags, useWorkspaceTags } from './use-labels';
+import { useChangeLabels, useLabelLibrary } from './use-labels';
 
 interface Props {
   visible: boolean;
-  /** The conversation's contact: the labels are the tags of this person. */
-  contactId: string;
-  /** The person may also make a new label by typing its name (`record.tags.create`). */
+  conversationId: string;
+  /** The labels the conversation has now. */
+  applied: readonly ConversationLabel[];
+  /** The person may also make a new label by typing its name (`inbox.tag.manage`). */
   canCreate: boolean;
   onClose: () => void;
 }
 
-/** The sheet that opens from "Assign labels": every label of the workspace, ticked for the ones this contact has. */
-export function LabelsSheet({ visible, contactId, canCreate, onClose }: Props) {
+/** The sheet that opens from "Assign labels": every label of the workspace, ticked for the ones this conversation has. */
+export function LabelsSheet({ visible, conversationId, applied, canCreate, onClose }: Props) {
   return (
     <Modal transparent visible={visible} animationType="slide" onRequestClose={onClose}>
       {/* Only mounted while open, so the lists are asked for when the sheet opens. */}
-      <SheetBody contactId={contactId} canCreate={canCreate} onClose={onClose} />
+      <SheetBody
+        conversationId={conversationId}
+        applied={applied}
+        canCreate={canCreate}
+        onClose={onClose}
+      />
     </Modal>
   );
 }
 
-function SheetBody({ contactId, canCreate, onClose }: Omit<Props, 'visible'>) {
+function SheetBody({ conversationId, applied, canCreate, onClose }: Omit<Props, 'visible'>) {
   const { t } = useTranslation();
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
-  const tags = useWorkspaceTags(true);
-  const mine = useContactTags(contactId, true);
-  const { attach, detach } = useChangeLabels(contactId);
+  const library = useLabelLibrary(true);
+  const { attach, detach } = useChangeLabels(conversationId);
   const [name, setName] = useState('');
   const [failed, setFailed] = useState<string | null>(null);
 
-  const has = new Set((mine.data ?? []).map((tag) => tag.id));
+  const has = new Set(applied.map((label) => label.id));
   const busy = attach.isPending || detach.isPending;
-  const loading = tags.isPending || mine.isPending;
-  const loadError = tags.error ?? mine.error;
+  const loading = library.isPending;
+  const loadError = library.error;
 
   const toggle = (tagId: string) => {
     setFailed(null);
@@ -120,19 +126,16 @@ function SheetBody({ contactId, canCreate, onClose }: Omit<Props, 'visible'>) {
                 variant="link"
                 align="start"
                 label={t('common.retry')}
-                onPress={() => {
-                  void tags.refetch();
-                  void mine.refetch();
-                }}
+                onPress={() => void library.refetch()}
               />
             </View>
-          ) : (tags.data ?? []).length === 0 ? (
+          ) : (library.data ?? []).length === 0 ? (
             <Text muted>
               {canCreate ? t('inbox.thread.labels.emptyCreate') : t('inbox.thread.labels.empty')}
             </Text>
           ) : (
             <View>
-              {(tags.data ?? []).map((tag) => {
+              {(library.data ?? []).map((tag) => {
                 const checked = has.has(tag.id);
                 return (
                   <Pressable
