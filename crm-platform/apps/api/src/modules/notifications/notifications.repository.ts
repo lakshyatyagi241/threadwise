@@ -190,7 +190,12 @@ export class NotificationsRepository {
     tx: Tx,
     orgId: number,
     userId: number,
-  ): Promise<{ byType: Record<string, number>; total: number; last24Hours: number; last7Days: number }> {
+  ): Promise<{
+    byType: Record<string, number>;
+    total: number;
+    last24Hours: number;
+    last7Days: number;
+  }> {
     const res = await tx.execute(sql`
       SELECT type, count(*)::int AS n,
              (count(*) FILTER (WHERE created_at >= now() - interval '1 day'))::int AS d1,

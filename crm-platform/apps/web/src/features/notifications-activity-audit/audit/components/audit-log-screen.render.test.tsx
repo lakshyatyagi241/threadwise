@@ -7,12 +7,21 @@ const state = vi.hoisted(() => ({
   can: { 'audit.log.read': true, 'audit.log.export': true } as Record<string, boolean>,
   search: '',
   replace: vi.fn(),
-  entries: { isPending: false, isError: false, error: null, data: undefined, hasNextPage: false } as Record<string, unknown>,
+  entries: {
+    isPending: false,
+    isError: false,
+    error: null,
+    data: undefined,
+    hasNextPage: false,
+  } as Record<string, unknown>,
   refetch: vi.fn(),
   fetchNext: vi.fn(),
   detail: { isPending: false, isError: false, data: undefined } as Record<string, unknown>,
   exportList: { isPending: false, isError: false, data: { data: [] } } as Record<string, unknown>,
-  settings: { data: { retentionDays: 365, canExport: true, canReveal: false } } as Record<string, unknown>,
+  settings: { data: { retentionDays: 365, canExport: true, canReveal: false } } as Record<
+    string,
+    unknown
+  >,
   requestExport: vi.fn(),
   lastFilters: undefined as unknown,
 }));
@@ -77,7 +86,13 @@ beforeEach(() => {
   state.can = { 'audit.log.read': true, 'audit.log.export': true };
   state.search = '';
   state.replace = vi.fn();
-  state.entries = { isPending: false, isError: false, error: null, data: page([entry()]), hasNextPage: false };
+  state.entries = {
+    isPending: false,
+    isError: false,
+    error: null,
+    data: page([entry()]),
+    hasNextPage: false,
+  };
   state.detail = { isPending: false, isError: false, data: undefined };
   state.exportList = { isPending: false, isError: false, data: { data: [] } };
   state.settings = { data: { retentionDays: 365, canExport: true, canReveal: false } };
@@ -137,7 +152,12 @@ describe('states', () => {
   });
 
   it('says how many are loaded and offers Load more while there is a next page', async () => {
-    state.entries = { isPending: false, isError: false, data: page([entry(), entry({ id: 'e2' })]), hasNextPage: true };
+    state.entries = {
+      isPending: false,
+      isError: false,
+      data: page([entry(), entry({ id: 'e2' })]),
+      hasNextPage: true,
+    };
     m = await mount(<AuditLogScreen />);
     expect(m.host.textContent).toContain('2 entries loaded');
     await click(button(m.host, text('audit-log.states.loadMore')));
@@ -157,7 +177,12 @@ describe('the table', () => {
     expect(row.textContent).toContain('+1');
     expect(row.querySelector('a')?.getAttribute('href')).toBe('/contacts/abc');
     expect(row.querySelector('time')?.getAttribute('datetime')).toBe('2026-10-13T09:30:00.000Z');
-    expect(m.host.textContent).toContain(text('audit-log.table.zone').replace('{zone}', Intl.DateTimeFormat().resolvedOptions().timeZone));
+    expect(m.host.textContent).toContain(
+      text('audit-log.table.zone').replace(
+        '{zone}',
+        Intl.DateTimeFormat().resolvedOptions().timeZone,
+      ),
+    );
   });
 
   it('flags a platform support row and says whose account it acted as', async () => {
@@ -165,9 +190,7 @@ describe('the table', () => {
       isPending: false,
       isError: false,
       hasNextPage: false,
-      data: page([
-        entry({ actAs: { reason: 'Ticket 1', readOnly: false, startedAt: null } }),
-      ]),
+      data: page([entry({ actAs: { reason: 'Ticket 1', readOnly: false, startedAt: null } })]),
     };
     m = await mount(<AuditLogScreen />);
     const row = m.host.querySelector('[data-testid="audit-row"]')!;
@@ -244,7 +267,9 @@ describe('retention note', () => {
   ])('%s days', async (days, expected) => {
     state.settings = { data: { retentionDays: days, canExport: true, canReveal: false } };
     m = await mount(<AuditLogScreen />);
-    expect(m.host.querySelector('[data-testid="audit-retention"]')?.textContent).toContain(expected);
+    expect(m.host.querySelector('[data-testid="audit-retention"]')?.textContent).toContain(
+      expected,
+    );
   });
   it('a neutral note when the policy cannot be read', async () => {
     state.settings = { data: { retentionDays: null, canExport: true, canReveal: false } };
@@ -359,7 +384,9 @@ describe('the entry panel', () => {
     state.detail = {
       isPending: false,
       isError: false,
-      data: detail({ actAs: { reason: 'Ticket 4411: help with the import', readOnly: true, startedAt: null } }),
+      data: detail({
+        actAs: { reason: 'Ticket 4411: help with the import', readOnly: true, startedAt: null },
+      }),
     };
     m = await mount(<AuditLogScreen />);
     const note = m.host.querySelector('[data-testid="audit-support-note"]')!;
@@ -379,7 +406,11 @@ describe('the entry panel', () => {
     state.search = 'module=contacts&entry=e1';
     state.detail = { isPending: false, isError: false, data: detail() };
     m = await mount(<AuditLogScreen />);
-    await click(m.host.querySelector<HTMLButtonElement>(`button[aria-label="${text('audit-log.common.close')}"]`)!);
+    await click(
+      m.host.querySelector<HTMLButtonElement>(
+        `button[aria-label="${text('audit-log.common.close')}"]`,
+      )!,
+    );
     expect(state.replace).toHaveBeenCalledWith('/activity-log?module=contacts', { scroll: false });
   });
 });

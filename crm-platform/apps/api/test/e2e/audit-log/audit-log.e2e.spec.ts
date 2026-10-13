@@ -92,7 +92,13 @@ beforeAll(async () => {
 
   const day = (n: number) => new Date(Date.now() - n * 86_400_000).toISOString();
   // 1 old row, outside the default 30 days.
-  await insert(t.orgId, { actorId: t.adminUserId, module: 'tags', recordId: 1, action: 'insert', at: day(60) });
+  await insert(t.orgId, {
+    actorId: t.adminUserId,
+    module: 'tags',
+    recordId: 1,
+    action: 'insert',
+    at: day(60),
+  });
   // A contact edit with personal data and a secret.
   await insert(t.orgId, {
     actorId: t.adminUserId,
@@ -110,9 +116,29 @@ beforeAll(async () => {
       stage: { old: 'new', new: 'won' },
     },
   });
-  await insert(t.orgId, { actorId: t.adminUserId, module: 'contacts', recordId: 999999, action: 'delete', at: day(2) });
-  await insert(t.orgId, { actorId: null, actorType: 'system', module: 'conversations', recordId: 5, action: 'update', at: day(2) });
-  await insert(t.orgId, { actorId: null, actorType: 'api_key', module: 'deals', recordId: 8, action: 'insert', at: day(1) });
+  await insert(t.orgId, {
+    actorId: t.adminUserId,
+    module: 'contacts',
+    recordId: 999999,
+    action: 'delete',
+    at: day(2),
+  });
+  await insert(t.orgId, {
+    actorId: null,
+    actorType: 'system',
+    module: 'conversations',
+    recordId: 5,
+    action: 'update',
+    at: day(2),
+  });
+  await insert(t.orgId, {
+    actorId: null,
+    actorType: 'api_key',
+    module: 'deals',
+    recordId: 8,
+    action: 'insert',
+    at: day(1),
+  });
   // The row written while support acted as the owner (the stamp the DB trigger adds).
   await insert(t.orgId, {
     actorId: t.adminUserId,
@@ -122,7 +148,10 @@ beforeAll(async () => {
     at: day(1),
     delta: {
       name: { old: 'VIP', new: 'Gold' },
-      _impersonatedBy: { old: null, new: { operatorId: String(op.rows[0].uuid), sessionId: sessionUuid } },
+      _impersonatedBy: {
+        old: null,
+        new: { operatorId: String(op.rows[0].uuid), sessionId: sessionUuid },
+      },
     },
   });
   // Another workspace's row: nobody here may see it.
@@ -163,7 +192,12 @@ describe('who may read', () => {
   it('Owner and a role with audit.log.read can; a role without it cannot', async () => {
     expect((await A(t.admin).get('/v2/audit-log')).status).toBe(200);
     expect((await A(reader.token).get('/v2/audit-log')).status).toBe(200);
-    for (const path of ['/v2/audit-log', '/v2/audit-log/settings', '/v2/audit-log/facets', '/v2/audit-log/exports']) {
+    for (const path of [
+      '/v2/audit-log',
+      '/v2/audit-log/settings',
+      '/v2/audit-log/facets',
+      '/v2/audit-log/exports',
+    ]) {
       expect((await A(nobody.token).get(path)).status, path).toBe(403);
     }
   });
@@ -185,11 +219,20 @@ describe('who may read', () => {
 describe('list, filters and paging', () => {
   it('newest first, last 30 days by default, field names but never values', async () => {
     const r = await list(t.admin);
-    expect(r.data.some((e) => e.module === 'tags' && e.action === 'insert' && e.recordId === '1')).toBe(false); // 60 days old
+    expect(
+      r.data.some((e) => e.module === 'tags' && e.action === 'insert' && e.recordId === '1'),
+    ).toBe(false); // 60 days old
     const times = r.data.map((e) => e.at);
     expect([...times].sort().reverse()).toEqual(times);
     const edit = r.data.find((e) => e.module === 'contacts' && e.action === 'update')!;
-    expect(edit.changedFields.sort()).toEqual(['email', 'name', 'notes', 'phone', 'smtp_password', 'stage']);
+    expect(edit.changedFields.sort()).toEqual([
+      'email',
+      'name',
+      'notes',
+      'phone',
+      'smtp_password',
+      'stage',
+    ]);
     expect(JSON.stringify(r)).not.toContain('hunter2');
     expect(JSON.stringify(r)).not.toContain('+971501234567');
     expect(JSON.stringify(r)).not.toContain('secretword');
@@ -268,9 +311,13 @@ describe('list, filters and paging', () => {
   it('facets list the modules and actions present', async () => {
     const res = await A(t.admin).get('/v2/audit-log/facets');
     expect(res.status).toBe(200);
-    expect(res.body.modules).toEqual(expect.arrayContaining(['contacts', 'deals', 'tags', 'conversations']));
+    expect(res.body.modules).toEqual(
+      expect.arrayContaining(['contacts', 'deals', 'tags', 'conversations']),
+    );
     expect(res.body.actions).toEqual(expect.arrayContaining(['insert', 'update', 'delete']));
-    expect(res.body.actors).toEqual(expect.arrayContaining([expect.objectContaining({ name: 'Admin Person' })]));
+    expect(res.body.actors).toEqual(
+      expect.arrayContaining([expect.objectContaining({ name: 'Admin Person' })]),
+    );
     // Only people of this workspace.
     expect((await A(other.admin).get('/v2/audit-log/facets')).body.actors).toHaveLength(1);
   });
@@ -304,7 +351,10 @@ describe('platform support (act-as) visibility', () => {
   it('flags the row and gives the reason', async () => {
     const r = await list(t.admin, '?actAs=true&module=tags');
     expect(r.data).toHaveLength(1);
-    expect(r.data[0]!.actAs).toMatchObject({ reason: 'Ticket 4411: help with the import', readOnly: false });
+    expect(r.data[0]!.actAs).toMatchObject({
+      reason: 'Ticket 4411: help with the import',
+      readOnly: false,
+    });
     expect(r.data[0]!.actor.name).toBe('Admin Person'); // "acting as <owner>"
     expect(r.data[0]!.changedFields).toEqual(['name']); // the stamp is not a field change
     const plain = await list(t.admin, '?module=deals');
@@ -330,20 +380,29 @@ describe('platform support (act-as) visibility', () => {
 });
 
 describe('the detail, its masking and the audit of reading it', () => {
-  const editId = async () =>
-    (await list(t.admin, '?module=contacts&action=update')).data[0]!.id;
+  const editId = async () => (await list(t.admin, '?module=contacts&action=update')).data[0]!.id;
 
   it('masks personal values and redacts secrets for a reader without the Owner key', async () => {
     const res = await A(reader.token).get(`/v2/audit-log/${await editId()}`);
     expect(res.status).toBe(200);
     expect(res.body.canReveal).toBe(false);
-    expect(res.body.delta.phone).toEqual({ old: '+91 ******210', new: '+97 ******567', masked: true });
+    expect(res.body.delta.phone).toEqual({
+      old: '+91 ******210',
+      new: '+97 ******567',
+      masked: true,
+    });
     expect(res.body.delta.email.new).toBe('s***@example.com');
     expect(res.body.delta.name.new).toBe('S*** A***');
     expect(res.body.delta.notes.new).toBe('[hidden text]');
-    expect(res.body.delta.smtp_password).toEqual({ old: '[REDACTED]', new: '[REDACTED]', masked: true });
+    expect(res.body.delta.smtp_password).toEqual({
+      old: '[REDACTED]',
+      new: '[REDACTED]',
+      masked: true,
+    });
     expect(res.body.delta.stage).toEqual({ old: 'new', new: 'won', masked: false });
-    expect(JSON.stringify(res.body)).not.toMatch(/hunter2|old-pass|971501234567|secretword|sara@example/);
+    expect(JSON.stringify(res.body)).not.toMatch(
+      /hunter2|old-pass|971501234567|secretword|sara@example/,
+    );
   });
 
   it('shows personal values to the Owner but never a secret', async () => {
@@ -372,7 +431,9 @@ describe('the detail, its masking and the audit of reading it', () => {
     expect(Number(rows[1].actor_id)).toBe(reader.userId);
     expect(rows[1].delta.revealed.new).toBe(false);
     // The read rows are visible in the log itself.
-    expect((await list(t.admin, '?module=audit-log&action=read')).data.length).toBeGreaterThanOrEqual(2);
+    expect(
+      (await list(t.admin, '?module=audit-log&action=read')).data.length,
+    ).toBeGreaterThanOrEqual(2);
   });
 
   it('listing and filtering are not audited', async () => {
@@ -385,12 +446,22 @@ describe('the detail, its masking and the audit of reading it', () => {
   it('an unknown or foreign entry id is 404', async () => {
     expect((await A(t.admin).get('/v2/audit-log/garbage')).status).toBe(404);
     expect(
-      (await A(t.admin).get(`/v2/audit-log/${Buffer.from('2026-01-01T00:00:00.000000Z|99999999').toString('base64url')}`)).status,
+      (
+        await A(t.admin).get(
+          `/v2/audit-log/${Buffer.from('2026-01-01T00:00:00.000000Z|99999999').toString('base64url')}`,
+        )
+      ).status,
     ).toBe(404);
   });
 
   it('a delta in a shape other than {old,new} does not break the detail', async () => {
-    const id = await insert(t.orgId, { actorId: t.adminUserId, module: 'weird', recordId: 1, action: 'update', delta: { count: 3, list: ['a@b.com'] } });
+    const id = await insert(t.orgId, {
+      actorId: t.adminUserId,
+      module: 'weird',
+      recordId: 1,
+      action: 'update',
+      delta: { count: 3, list: ['a@b.com'] },
+    });
     expect(id).toBeGreaterThan(0);
     const e = (await list(t.admin, '?module=weird')).data[0]!;
     const res = await A(reader.token).get(`/v2/audit-log/${e.id}`);
@@ -411,11 +482,21 @@ describe('export', () => {
     expect(req.body.status).toBe('queued');
     expect(await auditCount(t.orgId, 'audit-log-exports', 'export')).toBe(before + 1);
 
-    const done = await until('export ready', async () => {
-      const l = await A(exporter.token).get('/v2/audit-log/exports');
-      const e = (l.body.data as Array<{ id: string; status: string }>).find((x) => x.id === req.body.id);
-      return e?.status === 'ready' ? e : e?.status === 'failed' ? Promise.reject(new Error('export failed')) : undefined;
-    }, 60_000);
+    const done = await until(
+      'export ready',
+      async () => {
+        const l = await A(exporter.token).get('/v2/audit-log/exports');
+        const e = (l.body.data as Array<{ id: string; status: string }>).find(
+          (x) => x.id === req.body.id,
+        );
+        return e?.status === 'ready'
+          ? e
+          : e?.status === 'failed'
+            ? Promise.reject(new Error('export failed'))
+            : undefined;
+      },
+      60_000,
+    );
     expect(done.status).toBe('ready');
 
     const file = await A(exporter.token).get(`/v2/audit-log/exports/${req.body.id}/download`);
@@ -436,9 +517,15 @@ describe('export', () => {
       `INSERT INTO audit_log_exports (org_id, requested_by, status) VALUES ($1, $2, 'running')`,
       [t.orgId, t.adminUserId],
     );
-    const res = await A(t.admin).post('/v2/audit-log/exports').set('idempotency-key', `exp2-${Date.now()}`).send({});
+    const res = await A(t.admin)
+      .post('/v2/audit-log/exports')
+      .set('idempotency-key', `exp2-${Date.now()}`)
+      .send({});
     expect(res.status).toBe(409);
-    await p.h.owner.query(`UPDATE audit_log_exports SET status = 'failed' WHERE org_id = $1 AND status = 'running'`, [t.orgId]);
+    await p.h.owner.query(
+      `UPDATE audit_log_exports SET status = 'failed' WHERE org_id = $1 AND status = 'running'`,
+      [t.orgId],
+    );
   });
 
   it('a support-session row appears in the file with the reason; formulas are defused', async () => {
@@ -453,10 +540,16 @@ describe('export', () => {
       .set('idempotency-key', `exp3-${Date.now()}`)
       .send({});
     expect(req.status).toBe(202);
-    await until('export ready', async () => {
-      const l = await A(t.admin).get('/v2/audit-log/exports');
-      return (l.body.data as Array<{ id: string; status: string }>).find((x) => x.id === req.body.id && x.status === 'ready');
-    }, 60_000);
+    await until(
+      'export ready',
+      async () => {
+        const l = await A(t.admin).get('/v2/audit-log/exports');
+        return (l.body.data as Array<{ id: string; status: string }>).find(
+          (x) => x.id === req.body.id && x.status === 'ready',
+        );
+      },
+      60_000,
+    );
     const csv = (await A(t.admin).get(`/v2/audit-log/exports/${req.body.id}/download`)).text;
     expect(csv).toContain('yes,Ticket 4411: help with the import');
     expect(csv).toContain(`"'=cmd|calc"`);
@@ -466,13 +559,14 @@ describe('export', () => {
     const mine = (await A(t.admin).get('/v2/audit-log/exports')).body.data as Array<{ id: string }>;
     expect(mine.length).toBeGreaterThan(0);
     expect((await A(other.admin).get('/v2/audit-log/exports')).body.data).toEqual([]);
-    expect((await A(other.admin).get(`/v2/audit-log/exports/${mine[0]!.id}/download`)).status).toBe(404);
+    expect((await A(other.admin).get(`/v2/audit-log/exports/${mine[0]!.id}/download`)).status).toBe(
+      404,
+    );
   });
 
   it('the sweep expires an old file and fails a stuck export', async () => {
-    const { AuditLogExportSweepService } = await import(
-      '../../../src/modules/audit-log/audit-log-export-sweep.service'
-    );
+    const { AuditLogExportSweepService } =
+      await import('../../../src/modules/audit-log/audit-log-export-sweep.service');
     const sweep = p.h.app.get(AuditLogExportSweepService);
     await p.h.owner.query(
       `UPDATE audit_log_exports SET expires_at = now() - interval '1 day' WHERE org_id = $1 AND status = 'ready'`,
@@ -485,7 +579,10 @@ describe('export', () => {
     const out = await sweep.sweep();
     expect(out.expired).toBeGreaterThanOrEqual(1);
     expect(out.failed).toBeGreaterThanOrEqual(1);
-    const list2 = (await A(t.admin).get('/v2/audit-log/exports')).body.data as Array<{ id: string; status: string }>;
+    const list2 = (await A(t.admin).get('/v2/audit-log/exports')).body.data as Array<{
+      id: string;
+      status: string;
+    }>;
     const expired = list2.find((e) => e.status === 'expired')!;
     expect((await A(t.admin).get(`/v2/audit-log/exports/${expired.id}/download`)).status).toBe(409);
   });

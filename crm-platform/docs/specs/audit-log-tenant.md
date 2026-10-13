@@ -22,11 +22,11 @@ It is also the audit evidence that a privacy and data governance design needs ("
 
 ## 2. Who sees what
 
-| Key | What it opens | Owner | Admin | Manager | Others |
-| --- | --- | --- | --- | --- | --- |
-| `audit.log.read` | the screen, the list, one entry, the facets | yes | yes | **no** | no |
-| `audit.log.export` | prepare and download a CSV | yes | yes | **no** | no |
-| `org.owner_settings.manage` (existing, Owner only) | see personal values unmasked in an entry | yes | no | no | no |
+| Key                                                | What it opens                               | Owner | Admin | Manager | Others |
+| -------------------------------------------------- | ------------------------------------------- | ----- | ----- | ------- | ------ |
+| `audit.log.read`                                   | the screen, the list, one entry, the facets | yes   | yes   | **no**  | no     |
+| `audit.log.export`                                 | prepare and download a CSV                  | yes   | yes   | **no**  | no     |
+| `org.owner_settings.manage` (existing, Owner only) | see personal values unmasked in an entry    | yes   | no    | no      | no     |
 
 The trail names every person and every change, so it is not a Manager default; a workspace can give the keys to a custom role.
 The migration seeds the keys, gives them to the Owner and Admin presets (and to presets of workspaces created later through
@@ -70,11 +70,11 @@ An act-as request itself is stamped when it opens an entry, and never gets the O
 
 ## 4. Reading the log is audited
 
-| Event | Row written | Why |
-| --- | --- | --- |
-| Open one entry (the detail) | module `audit-log`, action `read`, record = the entry id, delta `{entry: {module, action}, revealed: bool}` | who looked at which entry, and whether they could see unmasked values |
-| Ask for an export | module `audit-log-exports`, action `export`, record = the export id, delta = the filters | the file leaves the system |
-| List, filter, search, facets, settings | none | a view of names and times only; auditing it would drown the log |
+| Event                                  | Row written                                                                                                 | Why                                                                   |
+| -------------------------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| Open one entry (the detail)            | module `audit-log`, action `read`, record = the entry id, delta `{entry: {module, action}, revealed: bool}` | who looked at which entry, and whether they could see unmasked values |
+| Ask for an export                      | module `audit-log-exports`, action `export`, record = the export id, delta = the filters                    | the file leaves the system                                            |
+| List, filter, search, facets, settings | none                                                                                                        | a view of names and times only; auditing it would drown the log       |
 
 The entry row is written in the same transaction as the read. Rows written by this feature show in the log itself.
 
@@ -93,7 +93,7 @@ Values only leave the API through this function, on the detail and in the CSV. T
    person names (`full_name`, `first_name`, `contact_name`, ... and a bare `name` only on person records: contacts, users, members,
    candidates, partner agents, leads, customers; a tag's or a role's name is not personal data). By value: an e-mail or a `+` number
    inside any other string is masked.
-3. **Who reveals.** The existing Owner-only key `org_settings.manage` family: `org.owner_settings.manage`. No new "reveal" key was
+3. **Who reveals.** The existing Owner-only key `org.owner_settings.manage`. No new "reveal" key was
    created: the repository has none, and a second key per sensitive screen is how permission lists rot. Not during an act-as
    session. The export is **always** masked, whoever asks.
 4. Long strings are cut at 1,000 characters, arrays at 50 items, objects at depth 6.
@@ -123,16 +123,16 @@ whose worker died. Same machinery and table shape as the consent proof export (`
 
 ## 8. Differences from Reference (recorded, intended)
 
-| Reference | Here | Why |
-| --- | --- | --- |
+| Reference                                                                                     | Here                                                                    | Why                                                                   |
+| --------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------------------- |
 | Activity Log with KPI cards, volume chart, donut, top actors, "My activity / Workspace" scope | table, filters, panel, export; the "Person" filter covers "my activity" | the charts are a dashboard, not an audit trail; recorded as follow-up |
-| Search over action, subject type and IP, wildcards active | module and action only, wildcards literal, never the values | privacy; an injection-shaped search is not a feature |
-| Payload shown after write-time redaction only | read-time masking of personal data too | the trail is read by more people than the data owners |
-| Rows carry IP and user agent | **not stored here** (section 11) | owner decision |
-| Cross-workspace rows visible to the actor | never; RLS | recommended by the inventory |
-| No workspace falls through to every workspace's rows | impossible (RLS, `org_id` in every statement) | the inventory's own port note |
-| Notifications page: workspace-shared rows, fixed 12 per page, in-memory search, Delivery KPI | per-person rows, 20 per page, SQL search, counts tile set | per-recipient rows are how this product stores them |
-| Notifications page "Do not disturb" (inert) and the Mentions tab (always empty) | not built | Reference's own quirks (TW-NOTIF-010, 007 rule 6) |
+| Search over action, subject type and IP, wildcards active                                     | module and action only, wildcards literal, never the values             | privacy; an injection-shaped search is not a feature                  |
+| Payload shown after write-time redaction only                                                 | read-time masking of personal data too                                  | the trail is read by more people than the data owners                 |
+| Rows carry IP and user agent                                                                  | **not stored here** (section 11)                                        | owner decision                                                        |
+| Cross-workspace rows visible to the actor                                                     | never; RLS                                                              | recommended by the inventory                                          |
+| No workspace falls through to every workspace's rows                                          | impossible (RLS, `org_id` in every statement)                           | the inventory's own port note                                         |
+| Notifications page: workspace-shared rows, fixed 12 per page, in-memory search, Delivery KPI  | per-person rows, 20 per page, SQL search, counts tile set               | per-recipient rows are how this product stores them                   |
+| Notifications page "Do not disturb" (inert) and the Mentions tab (always empty)               | not built                                                               | Reference's own quirks (TW-NOTIF-010, 007 rule 6)                     |
 
 ## 9. Tests
 
@@ -157,15 +157,15 @@ its own. If chosen, add nullable `ip inet, user_agent text` columns written by `
 
 ## 12. Decisions for the owner
 
-| # | Decision | Taken here | Alternative |
-| --- | --- | --- | --- |
-| D1 | Who may read | Owner and Admin; Manager no | give Manager `audit.log.read` |
-| D2 | Personal data in entries | masked for everyone except the Owner; export always masked | mask for all; or add a dedicated reveal key |
-| D3 | Reading is audited | each opened entry and each export; not list or filters | audit every list call |
-| D4 | Retention shown | the platform number, read-only for the workspace | a per-workspace retention |
-| D5 | IP and user agent | not stored | store, Owner-only |
-| D6 | Route and name | `/activity-log` (Reference's), title "Audit log" | rename to `/audit-log` |
-| D7 | Names of operators | never shown to the workspace; "Platform support" only | show the operator's name |
+| #   | Decision                 | Taken here                                                 | Alternative                                 |
+| --- | ------------------------ | ---------------------------------------------------------- | ------------------------------------------- |
+| D1  | Who may read             | Owner and Admin; Manager no                                | give Manager `audit.log.read`               |
+| D2  | Personal data in entries | masked for everyone except the Owner; export always masked | mask for all; or add a dedicated reveal key |
+| D3  | Reading is audited       | each opened entry and each export; not list or filters     | audit every list call                       |
+| D4  | Retention shown          | the platform number, read-only for the workspace           | a per-workspace retention                   |
+| D5  | IP and user agent        | not stored                                                 | store, Owner-only                           |
+| D6  | Route and name           | `/activity-log` (Reference's), title "Audit log"           | rename to `/audit-log`                      |
+| D7  | Names of operators       | never shown to the workspace; "Platform support" only      | show the operator's name                    |
 
 ## 13. Follow-ups
 

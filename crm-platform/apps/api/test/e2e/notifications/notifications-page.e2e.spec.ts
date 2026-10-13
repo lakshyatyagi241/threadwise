@@ -20,7 +20,15 @@ const add = (
   h.owner.query(
     `INSERT INTO inbox_notifications (org_id, user_id, type, title, body, read_at, created_at)
      VALUES ($1, $2, $3, $4, $5, $6, now() - ($7 || ' hours')::interval)`,
-    [orgId, userId, r.type, r.title, r.body ?? null, r.read ? new Date() : null, String(r.ageHours ?? 0)],
+    [
+      orgId,
+      userId,
+      r.type,
+      r.title,
+      r.body ?? null,
+      r.read ? new Date() : null,
+      String(r.ageHours ?? 0),
+    ],
   );
 
 beforeAll(async () => {
@@ -29,10 +37,29 @@ beforeAll(async () => {
   t = await api.signup('notifpage');
   other = await api.signup('notifother');
   mate = await api.member(t, 'mate', [['inbox.conversation.read']]);
-  await add(t.orgId, t.adminUserId, { type: 'task_assigned', title: 'Task: Call Sara', ageHours: 1 });
-  await add(t.orgId, t.adminUserId, { type: 'task_due', title: 'Task due: 100% done?', body: 'Due today', read: true, ageHours: 30 });
-  await add(t.orgId, t.adminUserId, { type: 'new_chat', title: 'New chat from Ali', ageHours: 24 * 10 });
-  await add(t.orgId, t.adminUserId, { type: 'new_chat', title: 'New chat from Omar', read: true, ageHours: 24 * 12 });
+  await add(t.orgId, t.adminUserId, {
+    type: 'task_assigned',
+    title: 'Task: Call Sara',
+    ageHours: 1,
+  });
+  await add(t.orgId, t.adminUserId, {
+    type: 'task_due',
+    title: 'Task due: 100% done?',
+    body: 'Due today',
+    read: true,
+    ageHours: 30,
+  });
+  await add(t.orgId, t.adminUserId, {
+    type: 'new_chat',
+    title: 'New chat from Ali',
+    ageHours: 24 * 10,
+  });
+  await add(t.orgId, t.adminUserId, {
+    type: 'new_chat',
+    title: 'New chat from Omar',
+    read: true,
+    ageHours: 24 * 12,
+  });
   await add(t.orgId, mate.userId, { type: 'task_assigned', title: 'Mate only' });
   await add(other.orgId, other.adminUserId, { type: 'task_assigned', title: 'Other workspace' });
 }, 300_000);
@@ -44,7 +71,10 @@ afterAll(async () => {
 const list = async (token: string, q = '') => {
   const res = await A(token).get(`/v2/notifications${q}`);
   expect(res.status, JSON.stringify(res.body)).toBe(200);
-  return res.body as { data: Array<{ id: string; type: string; title: string; readAt: string | null }>; meta: { unread: number } };
+  return res.body as {
+    data: Array<{ id: string; type: string; title: string; readAt: string | null }>;
+    meta: { unread: number };
+  };
 };
 
 describe('filters', () => {
@@ -57,14 +87,18 @@ describe('filters', () => {
     expect((await list(t.admin, '?q=due%20today')).data.map((n) => n.type)).toEqual(['task_due']);
   });
   it('wildcards in the text are literal', async () => {
-    expect((await list(t.admin, '?q=%25')).data.map((n) => n.title)).toEqual(['Task due: 100% done?']);
+    expect((await list(t.admin, '?q=%25')).data.map((n) => n.title)).toEqual([
+      'Task due: 100% done?',
+    ]);
     expect((await list(t.admin, '?q=_')).data).toEqual([]);
   });
   it('combines with unread only, and never shows another person or workspace', async () => {
     const r = await list(t.admin, '?type=new_chat&unreadOnly=true');
     expect(r.data.map((n) => n.title)).toEqual(['New chat from Ali']);
     const all = await list(t.admin);
-    expect(all.data.some((n) => n.title === 'Mate only' || n.title === 'Other workspace')).toBe(false);
+    expect(all.data.some((n) => n.title === 'Mate only' || n.title === 'Other workspace')).toBe(
+      false,
+    );
   });
 });
 
@@ -88,7 +122,9 @@ describe('dismiss and clear', () => {
     const mine = (await list(t.admin, '?type=task_assigned')).data[0]!;
     const theirs = (await list(mate.token)).data[0]!;
     expect((await A(t.admin).delete(`/v2/notifications/${theirs.id}`)).status).toBe(404);
-    expect((await A(t.admin).delete('/v2/notifications/3f0b9f0e-6c1c-4a39-9b7e-0d4d2b0c1a11')).status).toBe(404);
+    expect(
+      (await A(t.admin).delete('/v2/notifications/3f0b9f0e-6c1c-4a39-9b7e-0d4d2b0c1a11')).status,
+    ).toBe(404);
     const done = await A(t.admin).delete(`/v2/notifications/${mine.id}`);
     expect(done.status).toBe(200);
     expect(done.body).toEqual({ deleted: 1 });

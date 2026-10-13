@@ -78,7 +78,10 @@ export function AuditTable({
                 </td>
                 <td className="px-3 py-2.5 align-top">
                   {e.record.href ? (
-                    <Link href={e.record.href} className="font-mono text-xs text-brand hover:underline">
+                    <Link
+                      href={e.record.href}
+                      className="font-mono text-xs text-brand hover:underline"
+                    >
                       {e.recordId}
                     </Link>
                   ) : (
@@ -96,7 +99,10 @@ export function AuditTable({
                   )}
                 </td>
                 <td className="max-w-[10rem] px-3 py-2.5 align-top">
-                  <span className="block truncate font-mono text-xs text-muted-foreground" title={e.requestId ?? undefined}>
+                  <span
+                    className="block truncate font-mono text-xs text-muted-foreground"
+                    title={e.requestId ?? undefined}
+                  >
                     {e.requestId ?? '-'}
                   </span>
                 </td>

@@ -137,7 +137,11 @@ export class AuditLogService {
     });
     const sessions = await this.sessions(ctx.orgId, [row]);
     const entry = this.toEntry(row, links, sessions);
-    return { ...entry, delta: renderDelta(row.delta, { module: row.module, reveal }), canReveal: reveal };
+    return {
+      ...entry,
+      delta: renderDelta(row.delta, { module: row.module, reveal }),
+      canReveal: reveal,
+    };
   }
 
   async facets(query: AuditLogFacetsQuery): Promise<AuditLogFacets> {
@@ -217,5 +221,4 @@ export class AuditLogService {
       changedFields: row.changedFields,
     };
   }
-
 }

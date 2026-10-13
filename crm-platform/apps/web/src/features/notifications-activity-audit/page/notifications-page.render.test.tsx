@@ -23,7 +23,16 @@ vi.mock('next/navigation', () => ({
   useSearchParams: () => new URLSearchParams(state.search),
 }));
 vi.mock('next/link', () => ({
-  default: ({ href, children, onClick, ...rest }: { href: string; children: React.ReactNode; onClick?: () => void }) => (
+  default: ({
+    href,
+    children,
+    onClick,
+    ...rest
+  }: {
+    href: string;
+    children: React.ReactNode;
+    onClick?: () => void;
+  }) => (
     <a href={href} onClick={onClick} {...rest}>
       {children}
     </a>
@@ -52,7 +61,12 @@ vi.mock('./hooks', () => ({
   PAGE_SIZE: 20,
   useNotificationsPage: (filters: unknown) => {
     state.lastFilters = filters;
-    return { ...state.feed, refetch: state.refetch, fetchNextPage: state.fetchNext, isFetchingNextPage: false };
+    return {
+      ...state.feed,
+      refetch: state.refetch,
+      fetchNextPage: state.fetchNext,
+      isFetchingNextPage: false,
+    };
   },
   useNotificationSummary: () => state.summary,
   useDismissNotification: () => ({ mutate: state.dismiss, isPending: false }),
@@ -90,10 +104,21 @@ beforeEach(() => {
     isPending: false,
     isError: false,
     hasNextPage: false,
-    data: pages([n('a'), n('b', { readAt: iso(0) }), n('c', { createdAt: iso(1) }), n('d', { createdAt: iso(30) })]),
+    data: pages([
+      n('a'),
+      n('b', { readAt: iso(0) }),
+      n('c', { createdAt: iso(1) }),
+      n('d', { createdAt: iso(30) }),
+    ]),
   };
   state.summary = {
-    data: { unread: 2, last24Hours: 2, last7Days: 3, total: 4, byType: { task_assigned: 3, new_chat: 1, brand_new_kind: 2 } },
+    data: {
+      unread: 2,
+      last24Hours: 2,
+      last7Days: 3,
+      total: 4,
+      byType: { task_assigned: 3, new_chat: 1, brand_new_kind: 2 },
+    },
   };
 });
 afterEach(async () => {
@@ -164,7 +189,9 @@ describe('filters', () => {
     m = await mount(<NotificationsPage />);
     expect(state.lastFilters).toEqual({ read: 'unread', type: 'new_chat', q: '' });
     await click(button(m.host, text('notifications.page.filters.all')));
-    expect(state.replace).toHaveBeenLastCalledWith('/notifications?type=new_chat', { scroll: false });
+    expect(state.replace).toHaveBeenLastCalledWith('/notifications?type=new_chat', {
+      scroll: false,
+    });
   });
 
   it('the type list is built from what the person has, grouped, with a type this build does not know under Other', async () => {
@@ -176,7 +203,9 @@ describe('filters', () => {
     expect(groups).toContain(text('notifications.page.filters.otherTypes'));
     expect([...select.querySelectorAll('option')].map((o) => o.value)).toContain('brand_new_kind');
     await choose(select, 'new_chat');
-    expect(state.replace).toHaveBeenLastCalledWith('/notifications?type=new_chat', { scroll: false });
+    expect(state.replace).toHaveBeenLastCalledWith('/notifications?type=new_chat', {
+      scroll: false,
+    });
   });
 
   it('the unread tile toggles the unread filter', async () => {

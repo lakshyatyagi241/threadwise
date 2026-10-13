@@ -71,8 +71,7 @@ export function AuditDetail({ id }: { id: string }) {
         </dd>
         <dt className="text-muted-foreground">{t('detail.what')}</dt>
         <dd>
-          <Badge>{words.action(e.action)}</Badge>{' '}
-          <span dir="auto">{words.module(e.module)}</span>
+          <Badge>{words.action(e.action)}</Badge> <span dir="auto">{words.module(e.module)}</span>
         </dd>
         <dt className="text-muted-foreground">{t('detail.record')}</dt>
         <dd className="flex flex-wrap items-center gap-2">
@@ -153,7 +152,11 @@ function Value({ v, side }: { v: AuditDeltaValue; side: 'old' | 'new' }) {
     );
   }
   return (
-    <span dir="auto" className="whitespace-pre-wrap break-words" title={v.masked ? t('detail.maskedHint') : undefined}>
+    <span
+      dir="auto"
+      className="whitespace-pre-wrap break-words"
+      title={v.masked ? t('detail.maskedHint') : undefined}
+    >
       {text}
     </span>
   );

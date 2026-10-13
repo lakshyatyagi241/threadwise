@@ -37,7 +37,8 @@ export const isPageFiltered = (f: PageFilters): boolean => f.read !== 'all' || !
 export type DaySection = 'today' | 'yesterday' | 'thisWeek' | 'older';
 export const DAY_SECTIONS: readonly DaySection[] = ['today', 'yesterday', 'thisWeek', 'older'];
 
-const startOfDay = (d: Date): number => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+const startOfDay = (d: Date): number =>
+  new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
 
 /** Which section a moment falls in, by the viewer's calendar days: today, yesterday, the last week, older. */
 export function sectionOf(at: Date, now: Date): DaySection {
@@ -58,5 +59,8 @@ export function groupByDay(
     const s = sectionOf(new Date(r.createdAt), now);
     (by.get(s) ?? by.set(s, []).get(s)!).push(r);
   }
-  return DAY_SECTIONS.filter((s) => by.has(s)).map((section) => ({ section, rows: by.get(section)! }));
+  return DAY_SECTIONS.filter((s) => by.has(s)).map((section) => ({
+    section,
+    rows: by.get(section)!,
+  }));
 }

@@ -16,7 +16,10 @@ import type { AuditRow } from '../../../src/modules/audit-log/audit-log.reposito
 
 const dialect = new PgDialect();
 const NOW = new Date('2026-10-13T10:00:00.000Z');
-const window = { from: new Date('2026-10-01T00:00:00.000Z'), to: new Date('2026-10-13T00:00:00.000Z') };
+const window = {
+  from: new Date('2026-10-01T00:00:00.000Z'),
+  to: new Date('2026-10-13T00:00:00.000Z'),
+};
 
 describe('the time window', () => {
   it('defaults to the last 30 days, a minute past now', () => {
@@ -25,7 +28,10 @@ describe('the time window', () => {
     expect(w.from.toISOString()).toBe('2026-09-13T10:01:00.000Z');
   });
   it('keeps what was asked', () => {
-    const w = resolveWindow({ from: '2026-01-01T00:00:00.000Z', to: '2026-02-01T00:00:00.000Z' }, NOW);
+    const w = resolveWindow(
+      { from: '2026-01-01T00:00:00.000Z', to: '2026-02-01T00:00:00.000Z' },
+      NOW,
+    );
     expect(w.from.toISOString()).toBe('2026-01-01T00:00:00.000Z');
     expect(w.to.toISOString()).toBe('2026-02-01T00:00:00.000Z');
   });
@@ -47,17 +53,27 @@ describe('the time window', () => {
 
 describe('positions (cursor and entry id)', () => {
   const pos = { atText: '2026-10-13T09:59:58.123456Z', id: 4242 };
-  it('round-trips with microseconds', () => expect(decodePosition(encodePosition(pos))).toEqual(pos));
+  it('round-trips with microseconds', () =>
+    expect(decodePosition(encodePosition(pos))).toEqual(pos));
   it('refuses anything else', () => {
-    for (const bad of ['', 'abc', Buffer.from('x|1').toString('base64url'), Buffer.from('2026-10-13T09:59:58.123456Z|0').toString('base64url'), Buffer.from('2026-10-13T09:59:58.123456Z|1|2').toString('base64url'), Buffer.from("2026-10-13T09:59:58.123456Z'; drop table audit_log;--|1").toString('base64url')]) {
+    for (const bad of [
+      '',
+      'abc',
+      Buffer.from('x|1').toString('base64url'),
+      Buffer.from('2026-10-13T09:59:58.123456Z|0').toString('base64url'),
+      Buffer.from('2026-10-13T09:59:58.123456Z|1|2').toString('base64url'),
+      Buffer.from("2026-10-13T09:59:58.123456Z'; drop table audit_log;--|1").toString('base64url'),
+    ]) {
       expect(decodePosition(bad)).toBeNull();
     }
   });
 });
 
 describe('the filter builder', () => {
-  const q = (f: Parameters<typeof buildWhere>[0], extra: Partial<Parameters<typeof buildWhere>[1]> = {}) =>
-    dialect.sqlToQuery(buildWhere(f, { orgId: 7, window, ...extra }));
+  const q = (
+    f: Parameters<typeof buildWhere>[0],
+    extra: Partial<Parameters<typeof buildWhere>[1]> = {},
+  ) => dialect.sqlToQuery(buildWhere(f, { orgId: 7, window, ...extra }));
 
   it('always names the workspace and a time range', () => {
     const { sql, params } = q({});
@@ -68,7 +84,13 @@ describe('the filter builder', () => {
   });
   it('filters by module, action, record, request and actor', () => {
     const { sql, params } = q(
-      { module: 'contacts', action: 'update', recordId: 9, requestId: 'req-1', actorType: 'api_key' },
+      {
+        module: 'contacts',
+        action: 'update',
+        recordId: 9,
+        requestId: 'req-1',
+        actorType: 'api_key',
+      },
       { actorDbId: 3 },
     );
     expect(sql).toContain('a.module = ');
@@ -76,7 +98,9 @@ describe('the filter builder', () => {
     expect(sql).toContain('a.record_id = ');
     expect(sql).toContain('a.request_id = ');
     expect(sql).toContain("a.actor_type = 'user' AND a.actor_id = ");
-    expect(params).toEqual(expect.arrayContaining(['contacts', 'update', 9, 'req-1', 3, 'api_key']));
+    expect(params).toEqual(
+      expect.arrayContaining(['contacts', 'update', 9, 'req-1', 3, 'api_key']),
+    );
   });
   it('"other" is everything that is not a named actor kind', () => {
     expect(q({ actorType: 'other' }).sql).toContain('NOT IN');
@@ -103,7 +127,8 @@ describe('the filter builder', () => {
 });
 
 describe('likeEscape', () => {
-  it('escapes the three LIKE metacharacters', () => expect(likeEscape('a%b_c\\d')).toBe('a\\%b\\_c\\\\d'));
+  it('escapes the three LIKE metacharacters', () =>
+    expect(likeEscape('a%b_c\\d')).toBe('a\\%b\\_c\\\\d'));
 });
 
 describe('actor kinds', () => {
@@ -149,9 +174,20 @@ describe('an act-as row is flagged', () => {
   });
   it('a stamped row says platform support was acting, with the reason from the session', () => {
     const sessions = new Map([
-      ['s1', { reason: 'Ticket 4411: fix import', readOnly: false, startedAt: new Date('2026-10-13T09:00:00Z') }],
+      [
+        's1',
+        {
+          reason: 'Ticket 4411: fix import',
+          readOnly: false,
+          startedAt: new Date('2026-10-13T09:00:00Z'),
+        },
+      ],
     ]);
-    const e = svc.toEntry({ ...base, sessionUuid: 's1' }, new Map([['contacts:9', '/contacts/u']]), sessions);
+    const e = svc.toEntry(
+      { ...base, sessionUuid: 's1' },
+      new Map([['contacts:9', '/contacts/u']]),
+      sessions,
+    );
     expect(e.actAs).toEqual({
       reason: 'Ticket 4411: fix import',
       readOnly: false,
@@ -168,7 +204,11 @@ describe('an act-as row is flagged', () => {
     });
   });
   it('the list carries field names only, no values', () => {
-    const e = svc.toEntry({ ...base, delta: { phone: { old: '1', new: '2' } } }, new Map(), new Map());
+    const e = svc.toEntry(
+      { ...base, delta: { phone: { old: '1', new: '2' } } },
+      new Map(),
+      new Map(),
+    );
     expect(JSON.stringify(e)).not.toContain('"old"');
     expect(e.changedFields).toEqual(['stage']);
   });

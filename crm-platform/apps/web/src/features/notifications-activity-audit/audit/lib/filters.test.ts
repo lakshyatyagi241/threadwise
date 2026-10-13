@@ -39,7 +39,9 @@ describe('the URL', () => {
     expect(isFiltered(s)).toBe(true);
   });
   it('ignores what a hand-edited URL gets wrong', () => {
-    const s = parse('range=forever&from=yesterday&actor=not-a-uuid&actorType=wizard&recordId=12ab&actAs=yes');
+    const s = parse(
+      'range=forever&from=yesterday&actor=not-a-uuid&actorType=wizard&recordId=12ab&actAs=yes',
+    );
     expect(s.range).toBe(DEFAULT_RANGE);
     expect(s.from).toBe('');
     expect(s.actorId).toBe('');
@@ -93,7 +95,9 @@ describe('the API filters', () => {
     });
   });
   it('never sends the open entry', () => {
-    expect(JSON.stringify(toApiFilters({ ...EMPTY_FILTERS, entry: 'abc' }, NOW))).not.toContain('abc');
+    expect(JSON.stringify(toApiFilters({ ...EMPTY_FILTERS, entry: 'abc' }, NOW))).not.toContain(
+      'abc',
+    );
   });
 });
 
@@ -120,7 +124,9 @@ describe('error keys', () => {
     expect(errorKey(new Error('x'))).toBe('network');
     expect(errorKey(new ApiError(403, 'FORBIDDEN', 'no'))).toBe('forbidden');
     expect(errorKey(new ApiError(422, 'AUDIT_RANGE_INVALID', 'range'))).toBe('rangeInvalid');
-    expect(errorKey(new ApiError(409, 'AUDIT_EXPORT_IN_PROGRESS', 'busy'))).toBe('exportInProgress');
+    expect(errorKey(new ApiError(409, 'AUDIT_EXPORT_IN_PROGRESS', 'busy'))).toBe(
+      'exportInProgress',
+    );
     expect(errorKey(new ApiError(404, 'AUDIT_ENTRY_NOT_FOUND', 'gone'))).toBe('notFound');
     expect(errorKey(new ApiError(429, 'X', 'slow'))).toBe('rateLimited');
     expect(errorKey(new ApiError(500, 'X', 'boom'))).toBe('unexpected');

@@ -59,20 +59,32 @@ const has = (parts: string[], ...words: string[]): boolean => words.some((w) => 
 export function piiKindOfKey(key: string, module: string): PiiKind | null {
   const parts = snake(key).split('_').filter(Boolean);
   if (parts.length === 0) return null;
-  if (has(parts, 'email', 'emails', 'mail') && !has(parts, 'verified', 'at', 'count')) return 'email';
+  if (has(parts, 'email', 'emails', 'mail') && !has(parts, 'verified', 'at', 'count'))
+    return 'email';
   if (has(parts, 'phone', 'phones', 'mobile', 'msisdn', 'whatsapp', 'tel', 'fax', 'wa')) {
     return has(parts, 'verified', 'at', 'count', 'enabled') ? null : 'phone';
   }
   if (has(parts, 'address', 'street', 'postcode', 'zip', 'postal')) return 'address';
   // Free text is named by the LAST word (`message_body`, `notes`, `reply_text`); `message_status` is not text.
   if (
-    ['note', 'notes', 'body', 'text', 'message', 'comment', 'comments', 'content', 'caption'].includes(
-      parts[parts.length - 1]!,
-    )
+    [
+      'note',
+      'notes',
+      'body',
+      'text',
+      'message',
+      'comment',
+      'comments',
+      'content',
+      'caption',
+    ].includes(parts[parts.length - 1]!)
   ) {
     return 'text';
   }
-  if (has(parts, 'full', 'first', 'last', 'display', 'contact', 'customer', 'person', 'owner') && has(parts, 'name')) {
+  if (
+    has(parts, 'full', 'first', 'last', 'display', 'contact', 'customer', 'person', 'owner') &&
+    has(parts, 'name')
+  ) {
     return 'name';
   }
   if (parts.length === 1 && parts[0] === 'name' && PERSON_MODULES.has(module.toLowerCase())) {

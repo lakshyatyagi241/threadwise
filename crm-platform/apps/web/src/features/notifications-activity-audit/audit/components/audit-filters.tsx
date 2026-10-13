@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { AUDIT_ACTOR_KINDS, type AuditLogFacets } from '@crm/contracts';
 import { Button, Checkbox, Field, Input, Select } from '@crm/ui';
 import { RANGE_PRESETS, isFiltered, type AuditFilterState } from '../lib/filters';
@@ -29,9 +29,22 @@ export function AuditFilters({
   const [q, setQ] = useState(state.q);
   const [recordId, setRecordId] = useState(state.recordId);
   const [requestId, setRequestId] = useState(state.requestId);
-  useEffect(() => setQ(state.q), [state.q]);
-  useEffect(() => setRecordId(state.recordId), [state.recordId]);
-  useEffect(() => setRequestId(state.requestId), [state.requestId]);
+  // A change of the URL (Reset, a shared link) replaces the drafts: adjusted while rendering, not in an effect.
+  const [seen, setSeen] = useState({
+    q: state.q,
+    recordId: state.recordId,
+    requestId: state.requestId,
+  });
+  if (
+    seen.q !== state.q ||
+    seen.recordId !== state.recordId ||
+    seen.requestId !== state.requestId
+  ) {
+    setSeen({ q: state.q, recordId: state.recordId, requestId: state.requestId });
+    setQ(state.q);
+    setRecordId(state.recordId);
+    setRequestId(state.requestId);
+  }
 
   const apply = () => {
     const rid = recordId.trim();
@@ -106,7 +119,9 @@ export function AuditFilters({
           <Select
             id="audit-actor-type"
             value={state.actorType}
-            onChange={(e) => onChange({ actorType: e.target.value as AuditFilterState['actorType'] })}
+            onChange={(e) =>
+              onChange({ actorType: e.target.value as AuditFilterState['actorType'] })
+            }
           >
             <option value="">{t('filters.allActorTypes')}</option>
             {AUDIT_ACTOR_KINDS.map((k) => (

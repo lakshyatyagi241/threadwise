@@ -12,7 +12,14 @@ import { AppError } from '../../common/errors/app-error';
 export const DAY_MS = 24 * 60 * 60 * 1000;
 
 /** `audit_log.actor_type` values the screen names; anything else is "other". */
-const KNOWN_ACTOR_TYPES = ['user', 'system', 'api_key', 'bot', 'partner_agent', 'candidate'] as const;
+const KNOWN_ACTOR_TYPES = [
+  'user',
+  'system',
+  'api_key',
+  'bot',
+  'partner_agent',
+  'candidate',
+] as const;
 
 export function actorKindOf(actorType: string): AuditActorKind {
   return (KNOWN_ACTOR_TYPES as readonly string[]).includes(actorType)
@@ -35,8 +42,14 @@ export function resolveWindow(
   now: Date = new Date(),
 ): AuditWindow {
   const to = f.to ? new Date(f.to) : new Date(now.getTime() + 60_000);
-  const from = f.from ? new Date(f.from) : new Date(to.getTime() - AUDIT_LOG_DEFAULT_RANGE_DAYS * DAY_MS);
-  if (Number.isNaN(from.getTime()) || Number.isNaN(to.getTime()) || to.getTime() <= from.getTime()) {
+  const from = f.from
+    ? new Date(f.from)
+    : new Date(to.getTime() - AUDIT_LOG_DEFAULT_RANGE_DAYS * DAY_MS);
+  if (
+    Number.isNaN(from.getTime()) ||
+    Number.isNaN(to.getTime()) ||
+    to.getTime() <= from.getTime()
+  ) {
     throw new AppError(
       ERROR_CODES.AUDIT_RANGE_INVALID,
       'The end of the range must be after its start.',
@@ -78,7 +91,13 @@ export function decodePosition(raw: string): RowPosition | null {
   }
   const [atText, idRaw, ...rest] = text.split('|');
   const id = Number(idRaw);
-  if (rest.length > 0 || !atText || !POSITION.test(atText) || !Number.isSafeInteger(id) || id <= 0) {
+  if (
+    rest.length > 0 ||
+    !atText ||
+    !POSITION.test(atText) ||
+    !Number.isSafeInteger(id) ||
+    id <= 0
+  ) {
     return null;
   }
   return { atText, id };

@@ -44,7 +44,8 @@ export class AuditLogController {
   @RequirePermission('audit.log.read')
   @Throttle({ limit: 120, windowSeconds: 60, by: 'actor' })
   @ApiOperation({
-    summary: 'Audit entries of the workspace, newest first (cursor paginated, bounded by a time window)',
+    summary:
+      'Audit entries of the workspace, newest first (cursor paginated, bounded by a time window)',
     description:
       'Filters: from / to (default the last 30 days, at most 400), actorId, actorType, module, action, recordId, requestId, q (module and action only), actAs. Carries field names, never values.',
   })
@@ -54,7 +55,9 @@ export class AuditLogController {
 
   @Get('settings')
   @RequirePermission('audit.log.read')
-  @ApiOperation({ summary: 'Retention in days and what the viewer may do (export, see personal values)' })
+  @ApiOperation({
+    summary: 'Retention in days and what the viewer may do (export, see personal values)',
+  })
   settings() {
     return this.log.settings();
   }

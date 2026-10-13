@@ -93,7 +93,9 @@ describe('secrets', () => {
   it('a token under an innocent key is redacted by its shape', () => {
     const jwt = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.abcdefghijk';
     expect(renderValue('note_ref', jwt, owner).value).toBe(REDACTED);
-    expect(renderValue('header', 'Bearer abcdef1234567890', owner).value).toBe(`Bearer ${REDACTED}`);
+    expect(renderValue('header', 'Bearer abcdef1234567890', owner).value).toBe(
+      `Bearer ${REDACTED}`,
+    );
     expect(renderValue('blob', 'Abc123Def456Ghi789Jkl012Mno345Pqr678', owner).value).toBe(REDACTED);
   });
   it('a uuid is not mistaken for a token', () => {
@@ -143,7 +145,9 @@ describe('personal data', () => {
   });
 
   it('a bare name of a tag is shown', () => {
-    expect(renderDelta({ name: { old: 'VIP', new: 'Gold' } }, { module: 'tags', reveal: false })).toEqual({
+    expect(
+      renderDelta({ name: { old: 'VIP', new: 'Gold' } }, { module: 'tags', reveal: false }),
+    ).toEqual({
       name: { old: 'VIP', new: 'Gold', masked: false },
     });
   });

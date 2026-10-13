@@ -65,15 +65,7 @@ export function ActorCell({
   );
 }
 
-function Avatar({
-  label,
-  tone,
-  muted,
-}: {
-  label: string;
-  tone?: 'warning';
-  muted?: boolean;
-}) {
+function Avatar({ label, tone, muted }: { label: string; tone?: 'warning'; muted?: boolean }) {
   return (
     <span
       aria-hidden="true"

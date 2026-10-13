@@ -48,7 +48,10 @@ export const auditLogApi = {
   detail(id: string, signal?: AbortSignal): Promise<AuditLogDetail> {
     return apiFetch(`${BASE}/${enc(id)}`, { schema: auditLogDetailSchema, signal });
   },
-  facets(range: Pick<AuditLogFilters, 'from' | 'to'>, signal?: AbortSignal): Promise<AuditLogFacets> {
+  facets(
+    range: Pick<AuditLogFilters, 'from' | 'to'>,
+    signal?: AbortSignal,
+  ): Promise<AuditLogFacets> {
     return apiFetch(`${BASE}/facets`, {
       query: { from: range.from, to: range.to },
       schema: auditLogFacetsSchema,

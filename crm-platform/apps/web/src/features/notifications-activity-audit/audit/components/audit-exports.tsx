@@ -64,9 +64,7 @@ export function AuditExports({ filters }: { filters: AuditLogFilters }) {
         </Button>
       </div>
 
-      {requested && !request.isError && (
-        <Alert tone="success">{t('export.requested')}</Alert>
-      )}
+      {requested && !request.isError && <Alert tone="success">{t('export.requested')}</Alert>}
       {request.isError && <Alert tone="danger">{t(`errors.${errorKey(request.error)}`)}</Alert>}
 
       {list.isError ? (

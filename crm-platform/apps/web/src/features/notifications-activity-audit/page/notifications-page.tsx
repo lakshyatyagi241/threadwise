@@ -4,7 +4,17 @@ import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Alert, Button, ConfirmDialog, EmptyState, Input, Select, Spinner, StatTile, cn } from '@crm/ui';
+import {
+  Alert,
+  Button,
+  ConfirmDialog,
+  EmptyState,
+  Input,
+  Select,
+  Spinner,
+  StatTile,
+  cn,
+} from '@crm/ui';
 import { useClearNotifications } from '@/features/admin-console-shell/header/clear-notifications';
 import { useMarkRead } from '../api/hooks';
 import { NotificationRow, PREFERENCES_HREF } from '../components/notification-bell';
@@ -25,8 +35,8 @@ import {
  * text), Mark all read, dismiss one, Clear all. Filters live in the URL. It follows the live socket like the bell does.
  */
 export function NotificationsPage() {
-  const t = useTranslations('notifications.page');
-  const tn = useTranslations('notifications');
+  const tp = useTranslations('notifications.page');
+  const t = useTranslations('notifications');
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
@@ -50,7 +60,11 @@ export function NotificationsPage() {
   );
 
   // The search applies a moment after typing stops, like Reference's 220 ms debounce.
-  useEffect(() => setDraft(filters.q), [filters.q]);
+  const [seenQ, setSeenQ] = useState(filters.q);
+  if (seenQ !== filters.q) {
+    setSeenQ(filters.q);
+    setDraft(filters.q);
+  }
   useEffect(() => {
     const next = draft.trim();
     if (next === filters.q) return;
@@ -78,16 +92,14 @@ export function NotificationsPage() {
     return groups.filter((g) => g.types.length > 0);
   }, [summary.data, filters.type]);
   const typeLabel = (type: string): string =>
-    isKnownType(type) && tn.has(`prefs.types.${type}.label`)
-      ? tn(`prefs.types.${type}.label`)
-      : type;
+    isKnownType(type) && t.has(`prefs.types.${type}.label`) ? t(`prefs.types.${type}.label`) : type;
 
   return (
     <section className="space-y-5">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div className="space-y-1">
-          <h1 className="text-2xl font-semibold">{t('title')}</h1>
-          <p className="max-w-2xl text-sm text-muted-foreground">{t('description')}</p>
+          <h1 className="text-2xl font-semibold">{tp('title')}</h1>
+          <p className="max-w-2xl text-sm text-muted-foreground">{tp('description')}</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <Button
@@ -95,20 +107,20 @@ export function NotificationsPage() {
             disabled={unread === 0 || markingAll}
             onClick={() => markAllRead()}
           >
-            {t('markAll')}
+            {tp('markAll')}
           </Button>
           <Button
             variant="ghost"
             disabled={(summary.data?.total ?? rows.length) === 0}
             onClick={() => setConfirmClear(true)}
           >
-            {t('clearAll')}
+            {tp('clearAll')}
           </Button>
           <Link
             href={PREFERENCES_HREF}
             className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
           >
-            {t('preferences')}
+            {tp('preferences')}
           </Link>
         </div>
       </header>
@@ -124,23 +136,35 @@ export function NotificationsPage() {
           )}
         >
           <StatTile
-            label={t('tiles.unread')}
+            label={tp('tiles.unread')}
             value={n(summary.data?.unread)}
-            hint={t('tiles.unreadHint')}
+            hint={tp('tiles.unreadHint')}
             tone="accent"
           />
         </button>
-        <StatTile label={t('tiles.day')} value={n(summary.data?.last24Hours)} hint={t('tiles.dayHint')} />
-        <StatTile label={t('tiles.week')} value={n(summary.data?.last7Days)} hint={t('tiles.weekHint')} />
-        <StatTile label={t('tiles.total')} value={n(summary.data?.total)} hint={t('tiles.totalHint')} />
+        <StatTile
+          label={tp('tiles.day')}
+          value={n(summary.data?.last24Hours)}
+          hint={tp('tiles.dayHint')}
+        />
+        <StatTile
+          label={tp('tiles.week')}
+          value={n(summary.data?.last7Days)}
+          hint={tp('tiles.weekHint')}
+        />
+        <StatTile
+          label={tp('tiles.total')}
+          value={n(summary.data?.total)}
+          hint={tp('tiles.totalHint')}
+        />
       </div>
 
       <div
         role="search"
-        aria-label={t('filters.label')}
+        aria-label={tp('filters.label')}
         className="flex flex-wrap items-center gap-2 rounded-md border border-border p-2"
       >
-        <div role="group" aria-label={t('filters.readLabel')} className="flex gap-1">
+        <div role="group" aria-label={tp('filters.readLabel')} className="flex gap-1">
           {(['all', 'unread'] as const).map((k) => (
             <button
               key={k}
@@ -154,21 +178,21 @@ export function NotificationsPage() {
                   : 'text-muted-foreground hover:bg-muted',
               )}
             >
-              {t(`filters.${k}`)}
+              {tp(`filters.${k}`)}
             </button>
           ))}
         </div>
         <Select
-          aria-label={t('filters.type')}
+          aria-label={tp('filters.type')}
           className="h-9 w-auto max-w-full"
           value={filters.type}
           onChange={(e) => go({ ...filters, type: e.target.value })}
         >
-          <option value="">{t('filters.allTypes')}</option>
+          <option value="">{tp('filters.allTypes')}</option>
           {typeOptions.map((g) => (
             <optgroup
               key={g.id}
-              label={g.known ? tn(`prefs.groups.${g.id}`) : t('filters.otherTypes')}
+              label={g.known ? t(`prefs.groups.${g.id}`) : tp('filters.otherTypes')}
             >
               {g.types.map((type) => (
                 <option key={type} value={type}>
@@ -185,37 +209,37 @@ export function NotificationsPage() {
           value={draft}
           maxLength={100}
           onChange={(e) => setDraft(e.target.value)}
-          placeholder={t('filters.search')}
-          aria-label={t('filters.search')}
+          placeholder={tp('filters.search')}
+          aria-label={tp('filters.search')}
           className="h-9 w-64 max-w-full"
         />
         {isPageFiltered(filters) && (
           <Button variant="ghost" size="sm" onClick={() => go({ ...EMPTY_PAGE_FILTERS })}>
-            {t('filters.reset')}
+            {tp('filters.reset')}
           </Button>
         )}
       </div>
 
       {feed.isError ? (
         <div className="space-y-3" data-testid="notifications-error">
-          <Alert tone="danger">{t('failed')}</Alert>
+          <Alert tone="danger">{tp('failed')}</Alert>
           <Button variant="secondary" onClick={() => void feed.refetch()}>
-            {t('retry')}
+            {tp('retry')}
           </Button>
         </div>
       ) : feed.isPending ? (
         <div className="flex items-center justify-center gap-2 py-12 text-sm text-muted-foreground">
-          <Spinner label={t('loading')} />
-          {t('loading')}
+          <Spinner label={tp('loading')} />
+          {tp('loading')}
         </div>
       ) : rows.length === 0 ? (
         <EmptyState
-          title={isPageFiltered(filters) ? t('emptyFiltered') : t('empty')}
-          message={isPageFiltered(filters) ? t('emptyFilteredHint') : t('emptyHint')}
+          title={isPageFiltered(filters) ? tp('emptyFiltered') : tp('empty')}
+          message={isPageFiltered(filters) ? tp('emptyFilteredHint') : tp('emptyHint')}
           actions={
             isPageFiltered(filters) ? (
               <Button variant="secondary" onClick={() => go({ ...EMPTY_PAGE_FILTERS })}>
-                {t('filters.reset')}
+                {tp('filters.reset')}
               </Button>
             ) : undefined
           }
@@ -228,7 +252,7 @@ export function NotificationsPage() {
                 id={`notif-${s.section}`}
                 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground"
               >
-                {t(`sections.${s.section}`)}
+                {tp(`sections.${s.section}`)}
               </h2>
               <ul className="divide-y divide-border overflow-hidden rounded-md border border-border">
                 {s.rows.map((row) => (
@@ -245,11 +269,19 @@ export function NotificationsPage() {
                       type="button"
                       onClick={() => dismiss.mutate(row.id)}
                       disabled={dismiss.isPending}
-                      aria-label={t('dismiss')}
-                      title={t('dismiss')}
+                      aria-label={tp('dismiss')}
+                      title={tp('dismiss')}
                       className="absolute end-2 top-2 flex size-8 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
                     >
-                      <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                      <svg
+                        viewBox="0 0 24 24"
+                        className="size-4"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        aria-hidden="true"
+                      >
                         <path d="M6 6l12 12M18 6L6 18" />
                       </svg>
                     </button>
@@ -259,7 +291,7 @@ export function NotificationsPage() {
             </section>
           ))}
           <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-muted-foreground">
-            <span aria-live="polite">{t('showing', { count: rows.length })}</span>
+            <span aria-live="polite">{tp('showing', { count: rows.length })}</span>
             {feed.hasNextPage ? (
               <Button
                 variant="secondary"
@@ -267,10 +299,10 @@ export function NotificationsPage() {
                 disabled={feed.isFetchingNextPage}
               >
                 {feed.isFetchingNextPage && <Spinner />}
-                {t('loadMore')}
+                {tp('loadMore')}
               </Button>
             ) : (
-              <span>{t('end')}</span>
+              <span>{tp('end')}</span>
             )}
           </div>
         </div>
@@ -279,10 +311,10 @@ export function NotificationsPage() {
       <ConfirmDialog
         open={confirmClear}
         tone="danger"
-        title={t('clearTitle')}
-        message={t('clearBody')}
-        confirmLabel={t('clearConfirm')}
-        cancelLabel={t('cancel')}
+        title={tp('clearTitle')}
+        message={tp('clearBody')}
+        confirmLabel={tp('clearConfirm')}
+        cancelLabel={tp('cancel')}
         busy={clear.isPending}
         onClose={() => setConfirmClear(false)}
         onConfirm={() => clear.mutate(undefined, { onSettled: () => setConfirmClear(false) })}

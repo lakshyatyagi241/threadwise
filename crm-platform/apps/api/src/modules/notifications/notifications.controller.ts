@@ -79,7 +79,8 @@ export class NotificationsController {
 
   @Get('summary')
   @ApiOperation({
-    summary: 'The numbers around the Notifications page: unread, last 24 hours, last 7 days, count per type',
+    summary:
+      'The numbers around the Notifications page: unread, last 24 hours, last 7 days, count per type',
   })
   async summary() {
     return this.notifications.summary();

@@ -63,7 +63,10 @@ function AuditLogBody({ canExport }: { canExport: boolean }) {
     },
     [router, pathname],
   );
-  const change = useCallback((patch: Partial<AuditFilterState>) => go({ ...state, ...patch }), [go, state]);
+  const change = useCallback(
+    (patch: Partial<AuditFilterState>) => go({ ...state, ...patch }),
+    [go, state],
+  );
 
   // The window is fixed when the filters change (or on Refresh), never on a render, so the query key stays stable.
   const windowKey = `${state.range}|${state.from}|${state.to}|${tick}`;

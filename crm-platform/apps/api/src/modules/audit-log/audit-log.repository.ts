@@ -302,7 +302,10 @@ export class AuditLogRepository {
       WHERE org_id = ${orgId} AND id = ${id} AND status = 'ready' AND expires_at > now()`);
     const r = rowsOf(res)[0];
     if (!r?.file_gz) return null;
-    return { file: r.file_gz as Buffer, fileName: (r.file_name as string | null) ?? 'audit-log.csv' };
+    return {
+      file: r.file_gz as Buffer,
+      fileName: (r.file_name as string | null) ?? 'audit-log.csv',
+    };
   }
 
   async userContact(tx: Tx, orgId: number, userId: number): Promise<{ email: string } | null> {
