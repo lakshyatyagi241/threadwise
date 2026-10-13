@@ -171,7 +171,17 @@
       "columns": "Cột",
       "addColumnField": "Thêm trường tùy chỉnh làm cột",
       "kanbanView": "Chế độ bảng (theo giai đoạn)",
-      "colLeadScore": "Điểm khách hàng tiềm năng"
+      "colLeadScore": "Điểm khách hàng tiềm năng",
+      "colOwner": "Người phụ trách",
+      "unassigned": "Chưa phân công",
+      "ownerFilter": "Lọc theo người phụ trách",
+      "selectOwner": "Người phụ trách",
+      "allOwners": "Tất cả người phụ trách",
+      "myContacts": "Liên hệ của tôi",
+      "ownersCount": "{count} người phụ trách",
+      "ownerMe": "{name} (tôi)",
+      "ownerFormer": "Thành viên cũ",
+      "reassignView": "Phân công lại các liên hệ của {name}..."
     },
     "bulk": {
       "label": "Thao tác cho các liên hệ đã chọn",
@@ -216,7 +226,6 @@
       "exportStarted": "Đã tải xuống tệp xuất của bạn.",
       "exportTooLarge": "Quá nhiều liên hệ để xuất cùng lúc. Hãy thu hẹp bộ lọc và thử lại.",
       "update": "Cập nhật",
-      "updateNeedsRows": "Chọn hàng",
       "updated": "{count, plural, other {Đã cập nhật # liên hệ.}}"
     },
     "form": {
@@ -305,7 +314,13 @@
       "statusNoticeReset": "Đã đặt lại trạng thái thành {status}.",
       "statusNoticeSet": "Đã đặt trạng thái thành {status}, mặc định của giai đoạn này.",
       "statusNoticeCleared": "Đã xóa trạng thái: trạng thái không áp dụng cho giai đoạn này.",
-      "statusNoneForStage": "Chưa thiết lập trạng thái nào cho giai đoạn này."
+      "statusNoneForStage": "Chưa thiết lập trạng thái nào cho giai đoạn này.",
+      "owner": "Người phụ trách",
+      "ownerNone": "Chưa phân công",
+      "ownerMe": "{name} (tôi)",
+      "ownerFormer": "Thành viên cũ",
+      "ownerHelp": "Ai phụ trách liên hệ này. Bạn chỉ có thể chọn những người mà quyền truy cập của bạn cho phép.",
+      "ownerOutOfScope": "Quyền truy cập của bạn không cho phép phân công liên hệ này cho người đó."
     },
     "tags": {
       "title": "Thẻ",
@@ -513,7 +528,17 @@
       "noActivity": "Liên hệ này chưa có hoạt động nào.",
       "loadMore": "Tải thêm",
       "yes": "Có",
-      "no": "Không"
+      "no": "Không",
+      "owner": "Người phụ trách",
+      "ownerNone": "Chưa phân công",
+      "ownerChange": "Đổi người phụ trách",
+      "ownerChanged": "Đã đặt người phụ trách là {name}.",
+      "ownerCleared": "Đã gỡ người phụ trách.",
+      "ownerConflict": "Người khác đã thay đổi liên hệ này trước. Đã tải lại; hãy thử lại.",
+      "ownerForbidden": "Quyền truy cập của bạn không cho phép phân công liên hệ này cho người đó.",
+      "ownerFailed": "Không thể đổi người phụ trách. Hãy thử lại.",
+      "ownerMe": "{name} (tôi)",
+      "ownerFormer": "Thành viên cũ"
     },
     "attributes": {
       "eyebrow": "Thêm / Thuộc tính",
@@ -1138,7 +1163,11 @@
         "willClear": "Sẽ được làm trống trên {count, plural, =1 {liên hệ đã chọn} other {tất cả # liên hệ đã chọn}}.",
         "requiredNoClear": "Không thể xóa giá trị của thuộc tính bắt buộc.",
         "problemEmpty": "Nhập giá trị, hoặc chọn Xóa giá trị."
-      }
+      },
+      "titleAll": "Cập nhật tất cả liên hệ phù hợp",
+      "hintAll": "Đặt cùng một giá trị cho mọi liên hệ khớp với bộ lọc hiện tại. Các trường để ở Giữ nguyên sẽ không bị thay đổi.",
+      "applyAll": "Cập nhật tất cả liên hệ phù hợp",
+      "ownerOnlyNote": "Với mọi liên hệ phù hợp, ở đây chỉ có thể đổi người phụ trách. Để đổi giai đoạn, trạng thái hoặc thuộc tính, hãy chọn các hàng."
     },
     "kanban": {
       "board": "Liên hệ theo giai đoạn",

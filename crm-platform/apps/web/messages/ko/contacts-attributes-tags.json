@@ -171,7 +171,17 @@
       "columns": "열",
       "addColumnField": "사용자 지정 필드를 열로 추가",
       "kanbanView": "보드 보기(단계별)",
-      "colLeadScore": "리드 점수"
+      "colLeadScore": "리드 점수",
+      "colOwner": "담당자",
+      "unassigned": "미배정",
+      "ownerFilter": "담당자로 필터",
+      "selectOwner": "담당자",
+      "allOwners": "모든 담당자",
+      "myContacts": "내 연락처",
+      "ownersCount": "담당자 {count}명",
+      "ownerMe": "{name}(나)",
+      "ownerFormer": "이전 멤버",
+      "reassignView": "{name}의 연락처 재배정..."
     },
     "bulk": {
       "label": "선택한 연락처에 대한 작업",
@@ -216,7 +226,6 @@
       "exportStarted": "내보내기 파일을 다운로드했습니다.",
       "exportTooLarge": "한 번에 내보내기에는 연락처가 너무 많습니다. 필터를 좁혀 다시 시도하세요.",
       "update": "업데이트",
-      "updateNeedsRows": "행 선택",
       "updated": "{count, plural, other {연락처 #개를 업데이트했습니다.}}"
     },
     "form": {
@@ -305,7 +314,13 @@
       "statusNoticeReset": "상태가 {status}(으)로 초기화되었습니다.",
       "statusNoticeSet": "상태가 이 단계의 기본값인 {status}(으)로 설정되었습니다.",
       "statusNoticeCleared": "이 단계에는 해당되지 않아 상태가 지워졌습니다.",
-      "statusNoneForStage": "이 단계에 설정된 상태가 없습니다."
+      "statusNoneForStage": "이 단계에 설정된 상태가 없습니다.",
+      "owner": "담당자",
+      "ownerNone": "미배정",
+      "ownerMe": "{name}(나)",
+      "ownerFormer": "이전 멤버",
+      "ownerHelp": "이 연락처를 관리하는 사람입니다. 내 접근 권한으로 허용된 사람만 선택할 수 있습니다.",
+      "ownerOutOfScope": "내 접근 권한으로는 이 연락처를 해당 사람에게 배정할 수 없습니다."
     },
     "tags": {
       "title": "태그",
@@ -513,7 +528,17 @@
       "noActivity": "이 연락처의 활동이 아직 없습니다.",
       "loadMore": "더 보기",
       "yes": "예",
-      "no": "아니요"
+      "no": "아니요",
+      "owner": "담당자",
+      "ownerNone": "미배정",
+      "ownerChange": "담당자 변경",
+      "ownerChanged": "담당자를 {name}(으)로 설정했습니다.",
+      "ownerCleared": "담당자를 제거했습니다.",
+      "ownerConflict": "다른 사용자가 먼저 이 연락처를 변경했습니다. 다시 불러왔으니 다시 시도하세요.",
+      "ownerForbidden": "내 접근 권한으로는 이 연락처를 해당 사람에게 배정할 수 없습니다.",
+      "ownerFailed": "담당자를 변경하지 못했습니다. 다시 시도하세요.",
+      "ownerMe": "{name}(나)",
+      "ownerFormer": "이전 멤버"
     },
     "attributes": {
       "eyebrow": "더보기 / 속성",
@@ -1138,7 +1163,11 @@
         "willClear": "{count, plural, one {선택한 연락처} other {선택한 연락처 #명 모두}}에서 비워집니다.",
         "requiredNoClear": "필수 속성은 지울 수 없습니다.",
         "problemEmpty": "값을 입력하거나 지우기를 선택하세요."
-      }
+      },
+      "titleAll": "일치하는 모든 연락처 업데이트",
+      "hintAll": "현재 필터와 일치하는 모든 연락처에 같은 값을 설정합니다. 유지로 둔 필드는 변경되지 않습니다.",
+      "applyAll": "일치하는 모든 연락처 업데이트",
+      "ownerOnlyNote": "일치하는 모든 연락처에 대해서는 여기서 담당자만 변경할 수 있습니다. 단계, 상태 또는 속성을 변경하려면 행을 선택하세요."
     },
     "kanban": {
       "board": "단계별 연락처",

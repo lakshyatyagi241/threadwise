@@ -171,7 +171,17 @@
       "columns": "עמודות",
       "addColumnField": "הוסף שדה מותאם כעמודה",
       "kanbanView": "תצוגת לוח (לפי שלב)",
-      "colLeadScore": "דירוג ליד"
+      "colLeadScore": "דירוג ליד",
+      "colOwner": "בעלים",
+      "unassigned": "לא מוקצה",
+      "ownerFilter": "סינון לפי בעלים",
+      "selectOwner": "בעלים",
+      "allOwners": "כל הבעלים",
+      "myContacts": "אנשי הקשר שלי",
+      "ownersCount": "{count} בעלים",
+      "ownerMe": "{name} (אני)",
+      "ownerFormer": "חבר לשעבר",
+      "reassignView": "הקצה מחדש את אנשי הקשר של {name}..."
     },
     "bulk": {
       "label": "פעולות עבור אנשי הקשר שנבחרו",
@@ -216,7 +226,6 @@
       "exportStarted": "הייצוא שלך הורד.",
       "exportTooLarge": "זה יותר מדי אנשי קשר לייצוא בבת אחת. צמצם את המסנן ונסה שוב.",
       "update": "עדכן",
-      "updateNeedsRows": "בחר שורות",
       "updated": "{count, plural, one {עודכן איש קשר #.} two {עודכנו # אנשי קשר.} other {עודכנו # אנשי קשר.}}"
     },
     "form": {
@@ -305,7 +314,13 @@
       "statusNoticeReset": "הסטטוס אופס ל-{status}.",
       "statusNoticeSet": "הסטטוס הוגדר ל-{status}, ברירת המחדל של שלב זה.",
       "statusNoticeCleared": "הסטטוס נוקה: הוא אינו חל על שלב זה.",
-      "statusNoneForStage": "לא הוגדר סטטוס לשלב זה."
+      "statusNoneForStage": "לא הוגדר סטטוס לשלב זה.",
+      "owner": "בעלים",
+      "ownerNone": "לא מוקצה",
+      "ownerMe": "{name} (אני)",
+      "ownerFormer": "חבר לשעבר",
+      "ownerHelp": "מי אחראי על איש קשר זה. אפשר לבחור רק אנשים שההרשאות שלך מאפשרות.",
+      "ownerOutOfScope": "ההרשאות שלך אינן מאפשרות להקצות איש קשר זה לאדם הזה."
     },
     "tags": {
       "title": "תגיות",
@@ -513,7 +528,17 @@
       "noActivity": "אין עדיין פעילות לאיש קשר זה.",
       "loadMore": "טען עוד",
       "yes": "כן",
-      "no": "לא"
+      "no": "לא",
+      "owner": "בעלים",
+      "ownerNone": "לא מוקצה",
+      "ownerChange": "שנה בעלים",
+      "ownerChanged": "הבעלים הוגדר ל-{name}.",
+      "ownerCleared": "הבעלים הוסר.",
+      "ownerConflict": "מישהו אחר שינה את איש הקשר הזה קודם. הוא נטען מחדש, נסה שוב.",
+      "ownerForbidden": "ההרשאות שלך אינן מאפשרות להקצות איש קשר זה לאדם הזה.",
+      "ownerFailed": "לא ניתן היה לשנות את הבעלים. נסה שוב.",
+      "ownerMe": "{name} (אני)",
+      "ownerFormer": "חבר לשעבר"
     },
     "attributes": {
       "eyebrow": "עוד / מאפיינים",
@@ -1138,7 +1163,11 @@
         "willClear": "ירוקן עבור {count, plural, one {איש הקשר שנבחר} two {כל # אנשי הקשר שנבחרו} other {כל # אנשי הקשר שנבחרו}}.",
         "requiredNoClear": "לא ניתן לנקות שדה חובה.",
         "problemEmpty": "הזן ערך, או בחר נקה."
-      }
+      },
+      "titleAll": "עדכן את כל אנשי הקשר התואמים",
+      "hintAll": "הגדר את אותם ערכים לכל איש קשר התואם למסננים הנוכחיים. שדות שנשארו על שמור לא ישתנו.",
+      "applyAll": "עדכן את כל אנשי הקשר התואמים",
+      "ownerOnlyNote": "לכל אנשי הקשר התואמים ניתן לשנות כאן רק את הבעלים. כדי לשנות שלב, סטטוס או מאפיינים, סמן את השורות."
     },
     "kanban": {
       "board": "אנשי קשר לפי שלב",

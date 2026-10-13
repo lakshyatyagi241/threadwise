@@ -171,7 +171,17 @@
       "columns": "Spalten",
       "addColumnField": "Benutzerdefiniertes Feld als Spalte hinzufügen",
       "kanbanView": "Board-Ansicht (nach Phase)",
-      "colLeadScore": "Lead-Score"
+      "colLeadScore": "Lead-Score",
+      "colOwner": "Verantwortlicher",
+      "unassigned": "Nicht zugewiesen",
+      "ownerFilter": "Nach Verantwortlichem filtern",
+      "selectOwner": "Verantwortlicher",
+      "allOwners": "Alle Verantwortlichen",
+      "myContacts": "Meine Kontakte",
+      "ownersCount": "{count} Verantwortliche",
+      "ownerMe": "{name} (ich)",
+      "ownerFormer": "Ehemaliges Mitglied",
+      "reassignView": "Kontakte von {name} neu zuweisen..."
     },
     "bulk": {
       "label": "Aktionen für die ausgewählten Kontakte",
@@ -216,7 +226,6 @@
       "exportStarted": "Ihr Export wurde heruntergeladen.",
       "exportTooLarge": "Das sind zu viele Kontakte für einen einzelnen Export. Grenzen Sie den Filter ein und versuchen Sie es erneut.",
       "update": "Aktualisieren",
-      "updateNeedsRows": "Zeilen auswählen",
       "updated": "{count, plural, one {# Kontakt aktualisiert.} other {# Kontakte aktualisiert.}}"
     },
     "form": {
@@ -305,7 +314,13 @@
       "statusNoticeReset": "Status auf {status} zurückgesetzt.",
       "statusNoticeSet": "Status auf {status} gesetzt, den Standard für diese Phase.",
       "statusNoticeCleared": "Status gelöscht: Er gilt für diese Phase nicht.",
-      "statusNoneForStage": "Für diese Phase ist kein Status eingerichtet."
+      "statusNoneForStage": "Für diese Phase ist kein Status eingerichtet.",
+      "owner": "Verantwortlicher",
+      "ownerNone": "Nicht zugewiesen",
+      "ownerMe": "{name} (ich)",
+      "ownerFormer": "Ehemaliges Mitglied",
+      "ownerHelp": "Wer sich um diesen Kontakt kümmert. Du kannst nur Personen auswählen, die dein Zugriff erlaubt.",
+      "ownerOutOfScope": "Dein Zugriff erlaubt es nicht, diesen Kontakt dieser Person zuzuweisen."
     },
     "tags": {
       "title": "Tags",
@@ -513,7 +528,17 @@
       "noActivity": "Noch keine Aktivität für diesen Kontakt.",
       "loadMore": "Mehr laden",
       "yes": "Ja",
-      "no": "Nein"
+      "no": "Nein",
+      "owner": "Verantwortlicher",
+      "ownerNone": "Nicht zugewiesen",
+      "ownerChange": "Verantwortlichen ändern",
+      "ownerChanged": "Verantwortlicher auf {name} gesetzt.",
+      "ownerCleared": "Verantwortlicher entfernt.",
+      "ownerConflict": "Jemand anderes hat diesen Kontakt zuerst geändert. Er wurde neu geladen; versuche es erneut.",
+      "ownerForbidden": "Dein Zugriff erlaubt es nicht, diesen Kontakt dieser Person zuzuweisen.",
+      "ownerFailed": "Der Verantwortliche konnte nicht geändert werden. Versuche es erneut.",
+      "ownerMe": "{name} (ich)",
+      "ownerFormer": "Ehemaliges Mitglied"
     },
     "attributes": {
       "eyebrow": "Mehr / Attribute",
@@ -1138,7 +1163,11 @@
         "willClear": "Wird für {count, plural, one {den ausgewählten Kontakt} other {alle # ausgewählten Kontakte}} geleert.",
         "requiredNoClear": "Eine Pflichteigenschaft kann nicht geleert werden.",
         "problemEmpty": "Geben Sie einen Wert ein oder wählen Sie Leeren."
-      }
+      },
+      "titleAll": "Alle passenden Kontakte aktualisieren",
+      "hintAll": "Setzt dieselben Werte bei jedem Kontakt, der den aktuellen Filtern entspricht. Felder auf „Beibehalten“ bleiben unverändert.",
+      "applyAll": "Alle passenden Kontakte aktualisieren",
+      "ownerOnlyNote": "Bei allen passenden Kontakten kann hier nur der Verantwortliche geändert werden. Um Phase, Status oder Eigenschaften zu ändern, wähle stattdessen die Zeilen aus."
     },
     "kanban": {
       "board": "Kontakte nach Phase",

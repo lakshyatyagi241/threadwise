@@ -171,7 +171,17 @@
       "columns": "Kolommen",
       "addColumnField": "Een aangepast veld als kolom toevoegen",
       "kanbanView": "Bordweergave (per fase)",
-      "colLeadScore": "Leadscore"
+      "colLeadScore": "Leadscore",
+      "colOwner": "Eigenaar",
+      "unassigned": "Niet toegewezen",
+      "ownerFilter": "Filteren op eigenaar",
+      "selectOwner": "Eigenaar",
+      "allOwners": "Alle eigenaren",
+      "myContacts": "Mijn contacten",
+      "ownersCount": "{count, plural, one {# eigenaar} other {# eigenaren}}",
+      "ownerMe": "{name} (ik)",
+      "ownerFormer": "Voormalig lid",
+      "reassignView": "Wijs de contacten van {name} opnieuw toe..."
     },
     "bulk": {
       "label": "Acties voor de geselecteerde contacten",
@@ -216,7 +226,6 @@
       "exportStarted": "Je export is gedownload.",
       "exportTooLarge": "Dat zijn te veel contacten om in één keer te exporteren. Beperk het filter en probeer het opnieuw.",
       "update": "Bijwerken",
-      "updateNeedsRows": "Kies rijen",
       "updated": "{count, plural, one {# contact bijgewerkt.} other {# contacten bijgewerkt.}}"
     },
     "form": {
@@ -305,7 +314,13 @@
       "statusNoticeReset": "Status teruggezet naar {status}.",
       "statusNoticeSet": "Status ingesteld op {status}, de standaard voor deze fase.",
       "statusNoticeCleared": "Status gewist: hij is niet van toepassing op deze fase.",
-      "statusNoneForStage": "Voor deze fase is geen status ingesteld."
+      "statusNoneForStage": "Voor deze fase is geen status ingesteld.",
+      "owner": "Eigenaar",
+      "ownerNone": "Niet toegewezen",
+      "ownerMe": "{name} (ik)",
+      "ownerFormer": "Voormalig lid",
+      "ownerHelp": "Wie zich om dit contact bekommert. Je kunt alleen mensen kiezen die je toegang toestaat.",
+      "ownerOutOfScope": "Met je toegang kun je dit contact niet aan die persoon toewijzen."
     },
     "tags": {
       "title": "Tags",
@@ -513,7 +528,17 @@
       "noActivity": "Nog geen activiteit voor dit contact.",
       "loadMore": "Meer laden",
       "yes": "Ja",
-      "no": "Nee"
+      "no": "Nee",
+      "owner": "Eigenaar",
+      "ownerNone": "Niet toegewezen",
+      "ownerChange": "Eigenaar wijzigen",
+      "ownerChanged": "Eigenaar ingesteld op {name}.",
+      "ownerCleared": "Eigenaar verwijderd.",
+      "ownerConflict": "Iemand anders heeft dit contact eerder gewijzigd. Het is opnieuw geladen; probeer het opnieuw.",
+      "ownerForbidden": "Met je toegang kun je dit contact niet aan die persoon toewijzen.",
+      "ownerFailed": "De eigenaar kon niet worden gewijzigd. Probeer het opnieuw.",
+      "ownerMe": "{name} (ik)",
+      "ownerFormer": "Voormalig lid"
     },
     "attributes": {
       "eyebrow": "Meer / Attributen",
@@ -1138,7 +1163,11 @@
         "willClear": "Wordt leeggemaakt voor {count, plural, one {het geselecteerde contact} other {alle # geselecteerde contacten}}.",
         "requiredNoClear": "Een verplichte eigenschap kan niet worden gewist.",
         "problemEmpty": "Voer een waarde in of kies Wissen."
-      }
+      },
+      "titleAll": "Alle overeenkomende contacten bijwerken",
+      "hintAll": "Stel dezelfde waarden in voor elk contact dat overeenkomt met de huidige filters. Velden die op Behouden staan, worden niet gewijzigd.",
+      "applyAll": "Alle overeenkomende contacten bijwerken",
+      "ownerOnlyNote": "Voor alle overeenkomende contacten kan hier alleen de eigenaar worden gewijzigd. Vink de rijen aan om de fase, status of eigenschappen te wijzigen."
     },
     "kanban": {
       "board": "Contacten per fase",

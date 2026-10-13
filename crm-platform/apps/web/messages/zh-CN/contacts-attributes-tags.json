@@ -171,7 +171,17 @@
       "columns": "列",
       "addColumnField": "将自定义字段添加为列",
       "kanbanView": "看板视图（按阶段）",
-      "colLeadScore": "线索评分"
+      "colLeadScore": "线索评分",
+      "colOwner": "负责人",
+      "unassigned": "未分配",
+      "ownerFilter": "按负责人筛选",
+      "selectOwner": "负责人",
+      "allOwners": "所有负责人",
+      "myContacts": "我的联系人",
+      "ownersCount": "{count} 位负责人",
+      "ownerMe": "{name}(我)",
+      "ownerFormer": "已离开的成员",
+      "reassignView": "重新分配 {name} 的联系人..."
     },
     "bulk": {
       "label": "所选联系人的操作",
@@ -216,7 +226,6 @@
       "exportStarted": "您的导出文件已下载。",
       "exportTooLarge": "一次导出的联系人太多。请缩小筛选范围后重试。",
       "update": "更新",
-      "updateNeedsRows": "选择行",
       "updated": "{count, plural, other {已更新 # 位联系人。}}"
     },
     "form": {
@@ -305,7 +314,13 @@
       "statusNoticeReset": "状态已重置为{status}。",
       "statusNoticeSet": "状态已设为{status}，这是该阶段的默认状态。",
       "statusNoticeCleared": "状态已清除：它不适用于该阶段。",
-      "statusNoneForStage": "此阶段未设置状态。"
+      "statusNoneForStage": "此阶段未设置状态。",
+      "owner": "负责人",
+      "ownerNone": "未分配",
+      "ownerMe": "{name}(我)",
+      "ownerFormer": "已离开的成员",
+      "ownerHelp": "负责这个联系人的人。只能选择您的权限允许的人员。",
+      "ownerOutOfScope": "您的权限不允许将此联系人分配给该人员。"
     },
     "tags": {
       "title": "标签",
@@ -513,7 +528,17 @@
       "noActivity": "该联系人暂无活动。",
       "loadMore": "加载更多",
       "yes": "是",
-      "no": "否"
+      "no": "否",
+      "owner": "负责人",
+      "ownerNone": "未分配",
+      "ownerChange": "更改负责人",
+      "ownerChanged": "负责人已设置为 {name}。",
+      "ownerCleared": "已移除负责人。",
+      "ownerConflict": "其他人已先更改了此联系人。已重新加载,请重试。",
+      "ownerForbidden": "您的权限不允许将此联系人分配给该人员。",
+      "ownerFailed": "无法更改负责人。请重试。",
+      "ownerMe": "{name}(我)",
+      "ownerFormer": "已离开的成员"
     },
     "attributes": {
       "eyebrow": "更多 / 属性",
@@ -1138,7 +1163,11 @@
         "willClear": "将清空{count, plural, other {所选的全部 # 个联系人}}的该值。",
         "requiredNoClear": "必填属性无法清空。",
         "problemEmpty": "请输入值，或选择“清空”。"
-      }
+      },
+      "titleAll": "更新所有匹配的联系人",
+      "hintAll": "将相同的值设置到符合当前筛选条件的每个联系人。保持不变的字段不会被更改。",
+      "applyAll": "更新所有匹配的联系人",
+      "ownerOnlyNote": "对于每个匹配的联系人,这里只能更改负责人。如需更改阶段、状态或属性,请改为勾选行。"
     },
     "kanban": {
       "board": "按阶段查看联系人",

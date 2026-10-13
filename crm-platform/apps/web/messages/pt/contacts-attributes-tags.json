@@ -171,7 +171,17 @@
       "columns": "Colunas",
       "addColumnField": "Adicionar um campo personalizado como coluna",
       "kanbanView": "Visualização em quadro (por estágio)",
-      "colLeadScore": "Pontuação do lead"
+      "colLeadScore": "Pontuação do lead",
+      "colOwner": "Responsável",
+      "unassigned": "Sem responsável",
+      "ownerFilter": "Filtrar por responsável",
+      "selectOwner": "Responsável",
+      "allOwners": "Todos os responsáveis",
+      "myContacts": "Meus contatos",
+      "ownersCount": "{count} responsáveis",
+      "ownerMe": "{name} (eu)",
+      "ownerFormer": "Ex-membro",
+      "reassignView": "Reatribuir os contatos de {name}..."
     },
     "bulk": {
       "label": "Ações para os contatos selecionados",
@@ -216,7 +226,6 @@
       "exportStarted": "Sua exportação foi baixada.",
       "exportTooLarge": "São contatos demais para exportar de uma só vez. Restrinja o filtro e tente novamente.",
       "update": "Atualizar",
-      "updateNeedsRows": "Escolher linhas",
       "updated": "{count, plural, one {# contato atualizado.} other {# contatos atualizados.}}"
     },
     "form": {
@@ -305,7 +314,13 @@
       "statusNoticeReset": "Status redefinido para {status}.",
       "statusNoticeSet": "Status definido como {status}, o padrão deste estágio.",
       "statusNoticeCleared": "Status removido: não se aplica a este estágio.",
-      "statusNoneForStage": "Nenhum status está configurado para este estágio."
+      "statusNoneForStage": "Nenhum status está configurado para este estágio.",
+      "owner": "Responsável",
+      "ownerNone": "Sem responsável",
+      "ownerMe": "{name} (eu)",
+      "ownerFormer": "Ex-membro",
+      "ownerHelp": "Quem cuida deste contato. Você só pode escolher pessoas que seu acesso permite.",
+      "ownerOutOfScope": "Seu acesso não permite atribuir este contato a essa pessoa."
     },
     "tags": {
       "title": "Tags",
@@ -513,7 +528,17 @@
       "noActivity": "Ainda não há atividade para este contato.",
       "loadMore": "Carregar mais",
       "yes": "Sim",
-      "no": "Não"
+      "no": "Não",
+      "owner": "Responsável",
+      "ownerNone": "Sem responsável",
+      "ownerChange": "Alterar responsável",
+      "ownerChanged": "Responsável definido como {name}.",
+      "ownerCleared": "Responsável removido.",
+      "ownerConflict": "Outra pessoa alterou este contato antes. Ele foi recarregado; tente novamente.",
+      "ownerForbidden": "Seu acesso não permite atribuir este contato a essa pessoa.",
+      "ownerFailed": "Não foi possível alterar o responsável. Tente novamente.",
+      "ownerMe": "{name} (eu)",
+      "ownerFormer": "Ex-membro"
     },
     "attributes": {
       "eyebrow": "Mais / Atributos",
@@ -1138,7 +1163,11 @@
         "willClear": "Será esvaziada em {count, plural, one {o contato selecionado} other {todos os # contatos selecionados}}.",
         "requiredNoClear": "Uma propriedade obrigatória não pode ser limpa.",
         "problemEmpty": "Informe um valor ou escolha Limpar."
-      }
+      },
+      "titleAll": "Atualizar todos os contatos correspondentes",
+      "hintAll": "Defina os mesmos valores em todos os contatos que correspondem aos filtros atuais. Os campos em Manter não são alterados.",
+      "applyAll": "Atualizar todos os contatos correspondentes",
+      "ownerOnlyNote": "Para todos os contatos correspondentes, aqui só é possível alterar o responsável. Para alterar a etapa, o status ou as propriedades, marque as linhas."
     },
     "kanban": {
       "board": "Contatos por estágio",

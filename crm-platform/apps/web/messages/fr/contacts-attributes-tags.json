@@ -171,7 +171,17 @@
       "columns": "Colonnes",
       "addColumnField": "Ajouter un champ personnalisé comme colonne",
       "kanbanView": "Vue tableau (par étape)",
-      "colLeadScore": "Score du lead"
+      "colLeadScore": "Score du lead",
+      "colOwner": "Propriétaire",
+      "unassigned": "Non attribué",
+      "ownerFilter": "Filtrer par propriétaire",
+      "selectOwner": "Propriétaire",
+      "allOwners": "Tous les propriétaires",
+      "myContacts": "Mes contacts",
+      "ownersCount": "{count} propriétaires",
+      "ownerMe": "{name} (moi)",
+      "ownerFormer": "Ancien membre",
+      "reassignView": "Réattribuer les contacts de {name}..."
     },
     "bulk": {
       "label": "Actions pour les contacts sélectionnés",
@@ -216,7 +226,6 @@
       "exportStarted": "Votre export a été téléchargé.",
       "exportTooLarge": "Trop de contacts à exporter en une seule fois. Affinez le filtre et réessayez.",
       "update": "Mettre à jour",
-      "updateNeedsRows": "Choisir des lignes",
       "updated": "{count, plural, one {# contact mis à jour.} other {# contacts mis à jour.}}"
     },
     "form": {
@@ -305,7 +314,13 @@
       "statusNoticeReset": "Statut réinitialisé sur {status}.",
       "statusNoticeSet": "Statut défini sur {status}, la valeur par défaut de cette étape.",
       "statusNoticeCleared": "Statut effacé : il ne s’applique pas à cette étape.",
-      "statusNoneForStage": "Aucun statut n’est configuré pour cette étape."
+      "statusNoneForStage": "Aucun statut n’est configuré pour cette étape.",
+      "owner": "Propriétaire",
+      "ownerNone": "Non attribué",
+      "ownerMe": "{name} (moi)",
+      "ownerFormer": "Ancien membre",
+      "ownerHelp": "La personne qui s'occupe de ce contact. Vous ne pouvez choisir que les personnes autorisées par votre accès.",
+      "ownerOutOfScope": "Votre accès ne vous permet pas d'attribuer ce contact à cette personne."
     },
     "tags": {
       "title": "Étiquettes",
@@ -513,7 +528,17 @@
       "noActivity": "Aucune activité pour ce contact pour le moment.",
       "loadMore": "Charger plus",
       "yes": "Oui",
-      "no": "Non"
+      "no": "Non",
+      "owner": "Propriétaire",
+      "ownerNone": "Non attribué",
+      "ownerChange": "Changer de propriétaire",
+      "ownerChanged": "Propriétaire défini sur {name}.",
+      "ownerCleared": "Propriétaire retiré.",
+      "ownerConflict": "Quelqu'un d'autre a modifié ce contact avant vous. Il a été rechargé ; réessayez.",
+      "ownerForbidden": "Votre accès ne vous permet pas d'attribuer ce contact à cette personne.",
+      "ownerFailed": "Impossible de changer le propriétaire. Réessayez.",
+      "ownerMe": "{name} (moi)",
+      "ownerFormer": "Ancien membre"
     },
     "attributes": {
       "eyebrow": "Plus / Attributs",
@@ -1138,7 +1163,11 @@
         "willClear": "Sera vidée pour {count, plural, one {le contact sélectionné} other {les # contacts sélectionnés}}.",
         "requiredNoClear": "Une propriété obligatoire ne peut pas être effacée.",
         "problemEmpty": "Saisissez une valeur ou choisissez Effacer."
-      }
+      },
+      "titleAll": "Mettre à jour tous les contacts correspondants",
+      "hintAll": "Définit les mêmes valeurs pour chaque contact correspondant aux filtres actuels. Les champs laissés sur Conserver ne sont pas modifiés.",
+      "applyAll": "Mettre à jour tous les contacts correspondants",
+      "ownerOnlyNote": "Pour tous les contacts correspondants, seul le propriétaire peut être modifié ici. Pour changer l'étape, le statut ou les propriétés, cochez plutôt les lignes."
     },
     "kanban": {
       "board": "Contacts par étape",

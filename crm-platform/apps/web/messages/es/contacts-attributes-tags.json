@@ -171,7 +171,17 @@
       "columns": "Columnas",
       "addColumnField": "Añadir un campo personalizado como columna",
       "kanbanView": "Vista de tablero (por etapa)",
-      "colLeadScore": "Puntuación del lead"
+      "colLeadScore": "Puntuación del lead",
+      "colOwner": "Responsable",
+      "unassigned": "Sin responsable",
+      "ownerFilter": "Filtrar por responsable",
+      "selectOwner": "Responsable",
+      "allOwners": "Todos los responsables",
+      "myContacts": "Mis contactos",
+      "ownersCount": "{count} responsables",
+      "ownerMe": "{name} (yo)",
+      "ownerFormer": "Ex miembro",
+      "reassignView": "Reasignar los contactos de {name}..."
     },
     "bulk": {
       "label": "Acciones para los contactos seleccionados",
@@ -216,7 +226,6 @@
       "exportStarted": "Se descargó tu exportación.",
       "exportTooLarge": "Son demasiados contactos para exportar de una vez. Acota el filtro e inténtalo de nuevo.",
       "update": "Actualizar",
-      "updateNeedsRows": "Elegir filas",
       "updated": "{count, plural, one {Se actualizó # contacto.} other {Se actualizaron # contactos.}}"
     },
     "form": {
@@ -305,7 +314,13 @@
       "statusNoticeReset": "Estado restablecido a {status}.",
       "statusNoticeSet": "Estado establecido en {status}, el predeterminado para esta etapa.",
       "statusNoticeCleared": "Estado borrado: no corresponde a esta etapa.",
-      "statusNoneForStage": "No hay ningún estado configurado para esta etapa."
+      "statusNoneForStage": "No hay ningún estado configurado para esta etapa.",
+      "owner": "Responsable",
+      "ownerNone": "Sin responsable",
+      "ownerMe": "{name} (yo)",
+      "ownerFormer": "Ex miembro",
+      "ownerHelp": "Quién se encarga de este contacto. Solo puedes elegir a personas que tu acceso permita.",
+      "ownerOutOfScope": "Tu acceso no te permite asignar este contacto a esa persona."
     },
     "tags": {
       "title": "Etiquetas",
@@ -513,7 +528,17 @@
       "noActivity": "Aún no hay actividad para este contacto.",
       "loadMore": "Cargar más",
       "yes": "Sí",
-      "no": "No"
+      "no": "No",
+      "owner": "Responsable",
+      "ownerNone": "Sin responsable",
+      "ownerChange": "Cambiar responsable",
+      "ownerChanged": "Responsable establecido: {name}.",
+      "ownerCleared": "Responsable eliminado.",
+      "ownerConflict": "Otra persona modificó este contacto antes. Se recargó; inténtalo de nuevo.",
+      "ownerForbidden": "Tu acceso no te permite asignar este contacto a esa persona.",
+      "ownerFailed": "No se pudo cambiar el responsable. Inténtalo de nuevo.",
+      "ownerMe": "{name} (yo)",
+      "ownerFormer": "Ex miembro"
     },
     "attributes": {
       "eyebrow": "Más / Atributos",
@@ -1138,7 +1163,11 @@
         "willClear": "Se vaciará en {count, plural, one {el contacto seleccionado} other {los # contactos seleccionados}}.",
         "requiredNoClear": "Una propiedad obligatoria no se puede borrar.",
         "problemEmpty": "Introduce un valor o elige Borrar."
-      }
+      },
+      "titleAll": "Actualizar todos los contactos coincidentes",
+      "hintAll": "Establece los mismos valores en todos los contactos que coinciden con los filtros actuales. Los campos en Mantener no se modifican.",
+      "applyAll": "Actualizar todos los contactos coincidentes",
+      "ownerOnlyNote": "Para todos los contactos coincidentes aquí solo se puede cambiar el responsable. Para cambiar la etapa, el estado o las propiedades, marca las filas."
     },
     "kanban": {
       "board": "Contactos por etapa",

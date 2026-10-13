@@ -171,7 +171,17 @@
       "columns": "Kolom",
       "addColumnField": "Tambah kolom kustom sebagai kolom tabel",
       "kanbanView": "Tampilan papan (berdasarkan tahap)",
-      "colLeadScore": "Skor prospek"
+      "colLeadScore": "Skor prospek",
+      "colOwner": "Pemilik",
+      "unassigned": "Belum ditetapkan",
+      "ownerFilter": "Filter berdasarkan pemilik",
+      "selectOwner": "Pemilik",
+      "allOwners": "Semua pemilik",
+      "myContacts": "Kontak saya",
+      "ownersCount": "{count} pemilik",
+      "ownerMe": "{name} (saya)",
+      "ownerFormer": "Mantan anggota",
+      "reassignView": "Tetapkan ulang kontak milik {name}..."
     },
     "bulk": {
       "label": "Tindakan untuk kontak terpilih",
@@ -216,7 +226,6 @@
       "exportStarted": "Ekspor Anda telah diunduh.",
       "exportTooLarge": "Terlalu banyak kontak untuk diekspor sekaligus. Persempit filter lalu coba lagi.",
       "update": "Perbarui",
-      "updateNeedsRows": "Pilih baris",
       "updated": "{count, plural, other {# kontak diperbarui.}}"
     },
     "form": {
@@ -305,7 +314,13 @@
       "statusNoticeReset": "Status direset ke {status}.",
       "statusNoticeSet": "Status diatur ke {status}, default untuk tahap ini.",
       "statusNoticeCleared": "Status dikosongkan: tidak berlaku untuk tahap ini.",
-      "statusNoneForStage": "Belum ada status yang diatur untuk tahap ini."
+      "statusNoneForStage": "Belum ada status yang diatur untuk tahap ini.",
+      "owner": "Pemilik",
+      "ownerNone": "Belum ditetapkan",
+      "ownerMe": "{name} (saya)",
+      "ownerFormer": "Mantan anggota",
+      "ownerHelp": "Siapa yang menangani kontak ini. Anda hanya dapat memilih orang yang diizinkan oleh akses Anda.",
+      "ownerOutOfScope": "Akses Anda tidak mengizinkan kontak ini ditetapkan ke orang tersebut."
     },
     "tags": {
       "title": "Tag",
@@ -513,7 +528,17 @@
       "noActivity": "Belum ada aktivitas untuk kontak ini.",
       "loadMore": "Muat lebih banyak",
       "yes": "Ya",
-      "no": "Tidak"
+      "no": "Tidak",
+      "owner": "Pemilik",
+      "ownerNone": "Belum ditetapkan",
+      "ownerChange": "Ubah pemilik",
+      "ownerChanged": "Pemilik diatur ke {name}.",
+      "ownerCleared": "Pemilik dihapus.",
+      "ownerConflict": "Orang lain mengubah kontak ini lebih dulu. Kontak dimuat ulang; coba lagi.",
+      "ownerForbidden": "Akses Anda tidak mengizinkan kontak ini ditetapkan ke orang tersebut.",
+      "ownerFailed": "Pemilik tidak dapat diubah. Coba lagi.",
+      "ownerMe": "{name} (saya)",
+      "ownerFormer": "Mantan anggota"
     },
     "attributes": {
       "eyebrow": "Lainnya / Atribut",
@@ -1138,7 +1163,11 @@
         "willClear": "Akan dikosongkan pada {count, plural, one {kontak yang dipilih} other {semua # kontak yang dipilih}}.",
         "requiredNoClear": "Properti wajib tidak dapat dikosongkan.",
         "problemEmpty": "Masukkan nilai, atau pilih Kosongkan."
-      }
+      },
+      "titleAll": "Perbarui semua kontak yang cocok",
+      "hintAll": "Terapkan nilai yang sama ke setiap kontak yang cocok dengan filter saat ini. Kolom yang tetap Pertahankan tidak diubah.",
+      "applyAll": "Perbarui semua kontak yang cocok",
+      "ownerOnlyNote": "Untuk setiap kontak yang cocok, hanya pemilik yang dapat diubah di sini. Untuk mengubah tahap, status, atau properti, centang barisnya."
     },
     "kanban": {
       "board": "Kontak menurut tahap",

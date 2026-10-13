@@ -171,7 +171,17 @@
       "columns": "Sütunlar",
       "addColumnField": "Özel bir alanı sütun olarak ekle",
       "kanbanView": "Pano görünümü (aşamaya göre)",
-      "colLeadScore": "Potansiyel müşteri puanı"
+      "colLeadScore": "Potansiyel müşteri puanı",
+      "colOwner": "Sahip",
+      "unassigned": "Atanmamış",
+      "ownerFilter": "Sahibe göre filtrele",
+      "selectOwner": "Sahip",
+      "allOwners": "Tüm sahipler",
+      "myContacts": "Kişilerim",
+      "ownersCount": "{count} sahip",
+      "ownerMe": "{name} (ben)",
+      "ownerFormer": "Eski üye",
+      "reassignView": "{name} kişisinin kişilerini yeniden ata..."
     },
     "bulk": {
       "label": "Seçilen kişiler için işlemler",
@@ -216,7 +226,6 @@
       "exportStarted": "Dışa aktarımınız indirildi.",
       "exportTooLarge": "Tek seferde dışa aktarılamayacak kadar çok kişi var. Filtreyi daraltıp tekrar deneyin.",
       "update": "Güncelle",
-      "updateNeedsRows": "Satırları seç",
       "updated": "{count, plural, one {# kişi güncellendi.} other {# kişi güncellendi.}}"
     },
     "form": {
@@ -305,7 +314,13 @@
       "statusNoticeReset": "Durum {status} olarak sıfırlandı.",
       "statusNoticeSet": "Durum, bu aşamanın varsayılanı olan {status} olarak ayarlandı.",
       "statusNoticeCleared": "Durum temizlendi: bu aşama için geçerli değil.",
-      "statusNoneForStage": "Bu aşama için durum tanımlanmamış."
+      "statusNoneForStage": "Bu aşama için durum tanımlanmamış.",
+      "owner": "Sahip",
+      "ownerNone": "Atanmamış",
+      "ownerMe": "{name} (ben)",
+      "ownerFormer": "Eski üye",
+      "ownerHelp": "Bu kişiyle kimin ilgilendiği. Yalnızca erişiminizin izin verdiği kişileri seçebilirsiniz.",
+      "ownerOutOfScope": "Erişiminiz bu kişiyi o kullanıcıya atamanıza izin vermiyor."
     },
     "tags": {
       "title": "Etiketler",
@@ -513,7 +528,17 @@
       "noActivity": "Bu kişi için henüz etkinlik yok.",
       "loadMore": "Daha fazla yükle",
       "yes": "Evet",
-      "no": "Hayır"
+      "no": "Hayır",
+      "owner": "Sahip",
+      "ownerNone": "Atanmamış",
+      "ownerChange": "Sahibi değiştir",
+      "ownerChanged": "Sahip {name} olarak ayarlandı.",
+      "ownerCleared": "Sahip kaldırıldı.",
+      "ownerConflict": "Bu kişiyi başka biri önce değiştirdi. Yeniden yüklendi; tekrar deneyin.",
+      "ownerForbidden": "Erişiminiz bu kişiyi o kullanıcıya atamanıza izin vermiyor.",
+      "ownerFailed": "Sahip değiştirilemedi. Tekrar deneyin.",
+      "ownerMe": "{name} (ben)",
+      "ownerFormer": "Eski üye"
     },
     "attributes": {
       "eyebrow": "Diğer / Öznitelikler",
@@ -1138,7 +1163,11 @@
         "willClear": "{count, plural, one {Seçili kişide} other {seçili # kişinin tümünde}} boşaltılacak.",
         "requiredNoClear": "Zorunlu bir özellik temizlenemez.",
         "problemEmpty": "Bir değer girin veya Temizle'yi seçin."
-      }
+      },
+      "titleAll": "Eşleşen tüm kişileri güncelle",
+      "hintAll": "Geçerli filtrelerle eşleşen her kişiye aynı değerleri uygula. Koru olarak bırakılan alanlar değiştirilmez.",
+      "applyAll": "Eşleşen tüm kişileri güncelle",
+      "ownerOnlyNote": "Eşleşen her kişi için burada yalnızca sahip değiştirilebilir. Aşamayı, durumu veya özellikleri değiştirmek için bunun yerine satırları işaretleyin."
     },
     "kanban": {
       "board": "Aşamaya göre kişiler",

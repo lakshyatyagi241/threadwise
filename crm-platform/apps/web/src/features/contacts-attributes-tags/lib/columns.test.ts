@@ -33,6 +33,7 @@ describe('columns', () => {
       'groups',
       'stage',
       'status',
+      'owner',
       'leadScore',
       'language',
       'memo',
@@ -163,6 +164,22 @@ describe('sortKeyOf', () => {
     expect(sortKeyOf('tags')).toBeNull();
     expect(sortKeyOf('groups')).toBeNull();
     expect(sortKeyOf('leadScore')).toBeNull();
+    expect(sortKeyOf('owner')).toBeNull();
     expect(sortKeyOf('attr:Has Space' as ColumnId)).toBeNull();
+  });
+});
+
+describe('owner column', () => {
+  it('is offered in the column chooser but hidden until someone turns it on (Reference lists no owner)', () => {
+    expect(ids(allColumns(attrs))).toContain('owner');
+    expect(defaultColumns(attrs)).not.toContain('owner');
+    expect(ids(visibleColumns(null, attrs))).not.toContain('owner');
+    const on = toggleColumn(defaultColumns(attrs), 'owner', true);
+    expect(ids(visibleColumns(on, attrs))).toContain('owner');
+  });
+
+  it('sits after the status column when shown', () => {
+    const shown = ids(visibleColumns(['owner', 'status', 'email'], attrs));
+    expect(shown).toEqual(['name', 'email', 'status', 'owner']);
   });
 });

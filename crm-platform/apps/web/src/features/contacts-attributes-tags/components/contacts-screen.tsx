@@ -6,13 +6,14 @@ import { useEffect, useMemo, useReducer, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { Alert, Button, ConfirmDialog, EmptyState, StatTile, cn, useToast } from '@crm/ui';
-import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { invalidateSegments, useSegments } from '@/features/segments';
 import { useStoredValue } from '@/lib/use-stored-value';
 import { useAttributes, useStatusOptions } from '../api/attributes';
 import {
   bulkDelete,
   bulkGroupMembership,
+  bulkOwner,
   bulkTag,
   bulkUpdate,
   exportContacts,
@@ -31,6 +32,7 @@ import {
   type ContactFilters,
 } from '../api/contacts';
 import { useGroups } from '../api/groups';
+import { useOwnerNames } from '../api/owners';
 import { useTags } from '../api/tags';
 import type { ContactRow } from '../api/schemas';
 import {
@@ -100,6 +102,7 @@ export function ContactsScreen() {
   const search = useSearchParams();
   const qc = useQueryClient();
   const { toast } = useToast();
+  const session = useSession();
   const canCreate = useCan('record.contacts.create');
   const canUpdate = useCan('record.contacts.update');
   const canDelete = useCan('record.contacts.delete');
@@ -179,6 +182,7 @@ export function ContactsScreen() {
         : 'ready';
   const attributes = useAttributes();
   const statusOptions = useStatusOptions();
+  const { owners, nameOf: ownerName, loading: ownersLoading } = useOwnerNames();
 
   const rows = list.items;
   const total = list.total;
@@ -245,6 +249,7 @@ export function ContactsScreen() {
     consent: filters.consent,
     imported: filters.imported,
     segment: filters.segment,
+    owner: filters.owner,
     rules: filters.rules,
   };
   const target = (): BulkTarget =>
@@ -350,7 +355,12 @@ export function ContactsScreen() {
   }
 
   async function onBulkUpdate(values: BulkUpdateValues): Promise<boolean> {
-    const out = await guarded(() => bulkUpdate([...sel.ids], values));
+    // "All N matching" has no ids to list: it can only change the owner, which the API does for a whole filter at once.
+    const out = await guarded(() =>
+      sel.allMatching
+        ? bulkOwner(target(), values.ownerId ?? null)
+        : bulkUpdate([...sel.ids], values),
+    );
     if (!out) return false;
     dispatch({ type: 'clear' });
     await refresh();
@@ -472,6 +482,8 @@ export function ContactsScreen() {
           });
     },
     statusLabel: (v: string) => statuses.find((x) => x.value === v)?.label ?? v,
+    // While the people are loading the cell stays empty; a person who has left the workspace reads "Former member".
+    ownerLabel: (id: string) => ownerName(id) ?? (ownersLoading ? '' : t('ownerFormer')),
     onToggle: (id: string) => dispatch({ type: 'toggle', id }),
     onView: (id: string) => router.push(`/contacts/${id}`),
     onAddToGroup: (id: string) => {
@@ -534,6 +546,19 @@ export function ContactsScreen() {
         tag={filters.tag}
         onTag={(id) => setFilters({ tag: id })}
         tags={tags.data ?? []}
+        owner={filters.owner}
+        onOwner={(v) => setFilters({ owner: v })}
+        owners={owners}
+        meId={session.user.id}
+        // The shortcut on a one-person filter: select everything the view matches and open the owner change.
+        onReassignView={
+          canUpdate && total !== 0
+            ? () => {
+                dispatch({ type: 'selectAllMatching' });
+                setUpdateOpen(true);
+              }
+            : undefined
+        }
         stage={filters.lifecycleStage}
         onStage={(v) => setFilters({ lifecycleStage: v })}
         stages={stages}
@@ -561,7 +586,6 @@ export function ContactsScreen() {
         onImport={() => setImportOpen(true)}
         onAddColumnField={() => router.push('/contact-properties')}
         onUpdateSelected={() => setUpdateOpen(true)}
-        updateDisabled={sel.allMatching}
         onDedupe={() => setDedupeOpen(true)}
         onNewGroup={() => setGroupOpen(true)}
         onDeleteSelected={() => setConfirmBulkDelete(true)}
@@ -789,7 +813,8 @@ export function ContactsScreen() {
       />
       <BulkUpdateDialog
         open={updateOpen}
-        count={sel.ids.size}
+        count={sel.allMatching ? (total ?? null) : sel.ids.size}
+        ownerOnly={sel.allMatching}
         busy={busy}
         onApply={onBulkUpdate}
         onClose={() => setUpdateOpen(false)}

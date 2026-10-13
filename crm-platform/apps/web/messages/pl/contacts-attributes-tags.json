@@ -171,7 +171,17 @@
       "columns": "Kolumny",
       "addColumnField": "Dodaj pole niestandardowe jako kolumnę",
       "kanbanView": "Widok tablicy (według etapu)",
-      "colLeadScore": "Ocena leada"
+      "colLeadScore": "Ocena leada",
+      "colOwner": "Właściciel",
+      "unassigned": "Nieprzypisany",
+      "ownerFilter": "Filtruj według właściciela",
+      "selectOwner": "Właściciel",
+      "allOwners": "Wszyscy właściciele",
+      "myContacts": "Moje kontakty",
+      "ownersCount": "{count, plural, one {# właściciel} few {# właścicieli} many {# właścicieli} other {# właściciela}}",
+      "ownerMe": "{name} (ja)",
+      "ownerFormer": "Były członek",
+      "reassignView": "Przypisz ponownie kontakty użytkownika {name}..."
     },
     "bulk": {
       "label": "Działania dla wybranych kontaktów",
@@ -216,7 +226,6 @@
       "exportStarted": "Twój eksport został pobrany.",
       "exportTooLarge": "Zbyt wiele kontaktów do jednorazowego wyeksportowania. Zawęź filtr i spróbuj ponownie.",
       "update": "Aktualizuj",
-      "updateNeedsRows": "Wybierz wiersze",
       "updated": "{count, plural, one {Zaktualizowano # kontakt.} few {Zaktualizowano # kontakty.} many {Zaktualizowano # kontaktów.} other {Zaktualizowano # kontaktu.}}"
     },
     "form": {
@@ -305,7 +314,13 @@
       "statusNoticeReset": "Status zresetowany do: {status}.",
       "statusNoticeSet": "Status ustawiony na {status}, domyślny dla tego etapu.",
       "statusNoticeCleared": "Status wyczyszczony: nie dotyczy tego etapu.",
-      "statusNoneForStage": "Dla tego etapu nie skonfigurowano żadnego statusu."
+      "statusNoneForStage": "Dla tego etapu nie skonfigurowano żadnego statusu.",
+      "owner": "Właściciel",
+      "ownerNone": "Nieprzypisany",
+      "ownerMe": "{name} (ja)",
+      "ownerFormer": "Były członek",
+      "ownerHelp": "Kto opiekuje się tym kontaktem. Możesz wybrać tylko osoby dozwolone przez Twój dostęp.",
+      "ownerOutOfScope": "Twój dostęp nie pozwala przypisać tego kontaktu do tej osoby."
     },
     "tags": {
       "title": "Tagi",
@@ -513,7 +528,17 @@
       "noActivity": "Brak aktywności dla tego kontaktu.",
       "loadMore": "Wczytaj więcej",
       "yes": "Tak",
-      "no": "Nie"
+      "no": "Nie",
+      "owner": "Właściciel",
+      "ownerNone": "Nieprzypisany",
+      "ownerChange": "Zmień właściciela",
+      "ownerChanged": "Właściciel ustawiony na: {name}.",
+      "ownerCleared": "Usunięto właściciela.",
+      "ownerConflict": "Ktoś inny najpierw zmienił ten kontakt. Został wczytany ponownie, spróbuj jeszcze raz.",
+      "ownerForbidden": "Twój dostęp nie pozwala przypisać tego kontaktu do tej osoby.",
+      "ownerFailed": "Nie udało się zmienić właściciela. Spróbuj ponownie.",
+      "ownerMe": "{name} (ja)",
+      "ownerFormer": "Były członek"
     },
     "attributes": {
       "eyebrow": "Więcej / Atrybuty",
@@ -1138,7 +1163,11 @@
         "willClear": "Zostanie opróżniona dla {count, plural, one {zaznaczonego kontaktu} few {wszystkich # zaznaczonych kontaktów} many {wszystkich # zaznaczonych kontaktów} other {wszystkich # zaznaczonych kontaktów}}.",
         "requiredNoClear": "Wymaganej właściwości nie można wyczyścić.",
         "problemEmpty": "Wpisz wartość lub wybierz Wyczyść."
-      }
+      },
+      "titleAll": "Zaktualizuj wszystkie pasujące kontakty",
+      "hintAll": "Ustaw te same wartości dla każdego kontaktu pasującego do bieżących filtrów. Pola ustawione na Zachowaj nie zostaną zmienione.",
+      "applyAll": "Zaktualizuj wszystkie pasujące kontakty",
+      "ownerOnlyNote": "W przypadku wszystkich pasujących kontaktów można tu zmienić tylko właściciela. Aby zmienić etap, status lub właściwości, zaznacz wiersze."
     },
     "kanban": {
       "board": "Kontakty według etapu",
