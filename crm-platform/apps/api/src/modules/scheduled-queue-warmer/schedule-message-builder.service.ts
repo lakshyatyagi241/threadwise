@@ -141,6 +141,9 @@ export class ScheduleMessageBuilder {
           { wabaTemplatesV2: await this.templates.wabaTemplatesV2Enabled(tx) },
         );
         if (refusals.length) throw new UnsupportedSendError(refusals[0]!);
+        if (tpl.pausedUntil && tpl.pausedUntil.getTime() > Date.now()) {
+          throw new UnsupportedSendError('The template is paused for poor customer feedback.');
+        }
         if ((tpl.metaStatus ?? '').toUpperCase() !== 'APPROVED' || !tpl.metaTemplateId) {
           throw new UnsupportedSendError(
             `The template is not approved by Meta (status: ${tpl.metaStatus ?? 'not submitted'}).`,

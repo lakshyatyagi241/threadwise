@@ -296,7 +296,8 @@ describe('a Cloud API schedule: charged when the provider says delivered, refund
     // the same report twice, a read after delivered, and a late "sent" never charge again
     for (const x of ids) expect(await receipt(x, 'delivered')).toBe(true);
     expect(await drain(t.orgId)).toBe(0);
-    for (const x of ids) expect(await receipt(x, 'read')).toBe(true);
+    // a read message cannot fail afterwards (the broadcast state machine), so the one that will fail stays at delivered
+    for (const x of [ids[0]!, ids[2]!]) expect(await receipt(x, 'read')).toBe(true);
     await drain(t.orgId);
     expect(await receipt(ids[0]!, 'sent')).toBe(true);
     await drain(t.orgId);

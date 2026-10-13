@@ -175,6 +175,12 @@ export class ScheduleContentService {
     const mediaUrl = tpl.attachmentFile ? this.templates.mediaUrl(tpl.attachmentFile) : null;
     const refusals = templateRefusals({ ...tpl, mediaUrl }, { wabaTemplatesV2: v2 });
     if (refusals.length) throw fail(refusals[0]!, 'templateId');
+    if (tpl.pausedUntil && tpl.pausedUntil.getTime() > Date.now()) {
+      throw fail(
+        'Template is paused for poor customer feedback. Sending it now would lower its quality score; try again after it resumes.',
+        'templateId',
+      );
+    }
     if (!tpl.metaTemplateId || (tpl.metaStatus ?? '').toUpperCase() !== 'APPROVED') {
       throw fail(
         `Template is not approved by Meta yet (status: ${tpl.metaStatus ?? 'not submitted'}). A Cloud API number can only send an approved template.`,

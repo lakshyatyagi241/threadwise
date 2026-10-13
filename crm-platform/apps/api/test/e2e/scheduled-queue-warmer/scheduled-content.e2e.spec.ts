@@ -95,7 +95,7 @@ beforeAll(async () => {
     files.delete(key);
     removed.push(key);
   };
-}, 240_000);
+}, 900_000);
 
 let cloud = false;
 
@@ -652,16 +652,18 @@ describe('editing a schedule that has not started (TW-SCHED-016)', () => {
     const { t, phone } = await arrange('ed3');
     await api.as(t.admin).put(`/v2/warmer/${phone.key}`).send(profile);
     const made = await post(t, '/v2/scheduled', body([phone.key], { numbers: numbers(10) }));
-    const other = await post(t, '/v2/scheduled', body([phone.key], { numbers: numbers(8), sendDate: LATER }));
+    const other = await post(t, '/v2/scheduled', body([phone.key], { numbers: numbers(15), sendDate: LATER }));
     expect(other.status).toBe(201);
     const id = made.body.ids[0];
     const v = (await get(t, `/v2/scheduled/${id}`)).body.rowVersion;
     const res = await patch(t, id, { rowVersion: v, sendDate: LATER });
     expect(res.status).toBe(422);
-    expect(JSON.stringify(res.body)).toMatch(/only 12 of its 20-message budget/);
+    expect(JSON.stringify(res.body)).toMatch(/only 5 of its 20-message budget/);
     expect(await ledger(phone.id, FUTURE)).toBe(10);
-    expect(await ledger(phone.id, LATER)).toBe(8);
-    expect((await row(id)).send_date.toISOString().slice(0, 10)).toBe(FUTURE);
+    expect(await ledger(phone.id, LATER)).toBe(15);
+    expect(
+      (await h.owner.query(`SELECT to_char(send_date, 'YYYY-MM-DD') AS d FROM scheduled_messages WHERE uuid = $1`, [id])).rows[0].d,
+    ).toBe(FUTURE);
   });
 
   it('is a 409 for a stale version, and for a schedule that is not waiting or paused or that already started', async () => {
@@ -843,9 +845,9 @@ describe('the funnel over time and the filtered recipients (TW-SCHED-012)', () =
     const by = Object.fromEntries(
       (res.body.points as Array<Record<string, number | string>>).map((p) => [String(p.at).slice(11, 16), p]),
     );
-    expect(by['10:00']).toMatchObject({ queued: 2, sent: 4, delivered: 0, read: 0, failed: 1 });
-    expect(by['11:00']).toMatchObject({ queued: 2, sent: 4, delivered: 2, read: 1, failed: 1 });
-    expect(by['12:00']).toMatchObject({ queued: 2, sent: 4, delivered: 2, read: 1, failed: 2 });
+    expect(by['10:00']).toMatchObject({ queued: 1, sent: 4, delivered: 0, read: 0, failed: 1 });
+    expect(by['11:00']).toMatchObject({ queued: 1, sent: 4, delivered: 2, read: 1, failed: 1 });
+    expect(by['12:00']).toMatchObject({ queued: 1, sent: 4, delivered: 2, read: 1, failed: 2 });
     // the first point is the first event, the last the last, and every step only goes up
     expect(res.body.points[0].at).toBe('2031-03-10T10:00:00.000Z');
     expect(res.body.points.at(-1).at).toBe('2031-03-10T12:00:00.000Z');

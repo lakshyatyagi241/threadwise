@@ -278,9 +278,9 @@ export class ScheduleEditService {
       eff.repeatEvery = p.repeatEvery ?? d.repeatEvery;
       const days = p.daysOfWeek ?? d.daysOfWeek;
       if (days.length) eff.daysOfWeek = days;
-      const end = p.endDate === undefined ? d.endDate : p.endDate;
-      if (end) eff.endDate = end;
     }
+    const end = p.endDate === undefined ? d.endDate : p.endDate;
+    if (end) eff.endDate = end;
     const from = <K extends keyof ScheduleDraft & keyof UpdateScheduleInput>(k: K) =>
       content ? p[k] : (p[k] ?? d[k]);
     const message = from('message');
