@@ -7,7 +7,7 @@ import type { ContactViewResponse } from '@crm/contracts';
 import { Button, ConfirmDialog, Drawer, Input, Popover, cn, useToast } from '@crm/ui';
 import type { ContactFilters } from '../api/contacts';
 import { useContactViews, useViewMutations } from '../api/views';
-import { pickerViews, tabViews, viewChanged, viewFilterOf, type ViewKind } from '../lib/views';
+import { pickerViews, tabViews, viewChanged, viewFilterOf } from '../lib/views';
 import { ChevronDownIcon, PlusIcon } from './icons';
 import { RowMenu, RowMenuItem, RowMenuSeparator } from './row-menu';
 
@@ -82,13 +82,19 @@ export function ViewsBar({
             views={all}
             activeId={activeId}
             canCreate={can.create}
+            onAll={() => {
+              setPickerOpen(false);
+              onSelect(null);
+            }}
             onCreate={() => {
               setPickerOpen(false);
               router.push('/contacts/views/new');
             }}
+            onToggleFav={(v) =>
+              pin.mutate({ id: v.id, pinned: !v.isFavorite }, { onError: failed })
+            }
             onPick={(v) => {
               setPickerOpen(false);
-              if (!v.isFavorite) pin.mutate({ id: v.id, pinned: true }, { onError: failed });
               onSelect(v);
             }}
           />
@@ -235,38 +241,64 @@ function Picker({
   views,
   activeId,
   canCreate,
+  onAll,
   onCreate,
   onPick,
+  onToggleFav,
 }: {
   views: readonly ContactViewResponse[];
   activeId: string;
   canCreate: boolean;
+  onAll: () => void;
   onCreate: () => void;
   onPick: (v: ContactViewResponse) => void;
+  onToggleFav: (v: ContactViewResponse) => void;
 }) {
   const t = useTranslations(NS);
   const [q, setQ] = useState('');
-  const [kind, setKind] = useState<ViewKind>('all');
-  const shown = pickerViews(views, q, kind);
-  const chips: Array<[ViewKind, string]> = [
-    ['all', t('picker.chipAll')],
-    ['pinned', t('picker.chipPinned')],
-    ['shared', t('picker.chipShared')],
-  ];
+  const shown = pickerViews(views, q, 'all');
+  const favorites = shown.filter((v) => v.isFavorite);
+  const showAll = q.trim() === '' || t('all').toLowerCase().includes(q.trim().toLowerCase());
+  const row = (active: boolean) =>
+    cn(
+      'flex min-w-0 flex-1 items-center rounded-md px-2 py-1.5 text-start text-sm outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary',
+      active && 'bg-muted font-medium',
+    );
+  const group = (title: string, count: number) => (
+    <li className="flex items-center justify-between px-2 pt-2 text-xs font-semibold uppercase text-muted-foreground">
+      {title}
+      <span className="rounded bg-muted px-1.5 py-0.5 text-[11px]">{count}</span>
+    </li>
+  );
+  const viewRow = (v: ContactViewResponse, scope: string) => (
+    <li key={`${scope}-${v.id}`} className="flex items-center gap-1">
+      <button
+        type="button"
+        onClick={() => onPick(v)}
+        aria-current={v.id === activeId ? 'true' : undefined}
+        className={row(v.id === activeId)}
+      >
+        <span className="min-w-0 truncate">{v.name}</span>
+      </button>
+      <button
+        type="button"
+        onClick={() => onToggleFav(v)}
+        aria-pressed={v.isFavorite}
+        aria-label={t(v.isFavorite ? 'picker.unmarkFavorite' : 'picker.markFavorite')}
+        title={t(v.isFavorite ? 'picker.unmarkFavorite' : 'picker.markFavorite')}
+        className={cn(
+          'shrink-0 rounded px-1.5 text-base leading-none outline-none focus-visible:ring-2 focus-visible:ring-primary',
+          v.isFavorite ? 'text-amber-500' : 'text-muted-foreground hover:text-amber-500',
+        )}
+      >
+        {v.isFavorite ? '★' : '☆'}
+      </button>
+    </li>
+  );
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between gap-2">
         <p className="text-sm font-semibold">{t('picker.title')}</p>
-        {canCreate && (
-          <button
-            type="button"
-            onClick={onCreate}
-            className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-sm font-medium text-primary outline-none hover:bg-primary/10 focus-visible:ring-2 focus-visible:ring-primary"
-          >
-            <PlusIcon className="size-3.5" />
-            {t('picker.create')}
-          </button>
-        )}
       </div>
       <Input
         value={q}
@@ -275,47 +307,44 @@ function Picker({
         aria-label={t('picker.search')}
         autoFocus
       />
-      <div className="flex flex-wrap gap-1.5">
-        {chips.map(([k, label]) => (
-          <button
-            key={k}
-            type="button"
-            aria-pressed={kind === k}
-            onClick={() => setKind(k)}
-            className={cn(
-              'rounded-full border px-2.5 py-0.5 text-xs font-medium outline-none focus-visible:ring-2 focus-visible:ring-primary',
-              kind === k
-                ? 'border-primary bg-primary/10 text-primary'
-                : 'border-border text-muted-foreground hover:bg-muted',
-            )}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
-      <ul className="max-h-64 space-y-0.5 overflow-y-auto">
+      <ul className="max-h-72 space-y-0.5 overflow-y-auto">
+        {favorites.length > 0 && (
+          <>
+            {group(t('picker.favorites'), favorites.length)}
+            {favorites.map((v) => viewRow(v, 'fav'))}
+          </>
+        )}
+        {showAll && (
+          <>
+            {group(t('picker.defaultFilters'), 1)}
+            <li>
+              <button
+                type="button"
+                onClick={onAll}
+                aria-current={activeId === '' ? 'true' : undefined}
+                className={cn(row(activeId === ''), 'w-full')}
+              >
+                {t('all')}
+              </button>
+            </li>
+          </>
+        )}
+        {group(t('picker.createdViews'), shown.length)}
         {shown.length === 0 && (
           <li className="py-4 text-center text-sm text-muted-foreground">{t('picker.empty')}</li>
         )}
-        {shown.map((v) => (
-          <li key={v.id}>
-            <button
-              type="button"
-              onClick={() => onPick(v)}
-              aria-current={v.id === activeId ? 'true' : undefined}
-              className={cn(
-                'flex w-full items-center justify-between gap-2 rounded-md px-2 py-1.5 text-start text-sm outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary',
-                v.id === activeId && 'bg-muted',
-              )}
-            >
-              <span className="min-w-0 truncate">{v.name}</span>
-              {v.isFavorite && (
-                <span className="shrink-0 text-xs text-muted-foreground">{t('picker.pinned')}</span>
-              )}
-            </button>
-          </li>
-        ))}
+        {shown.map((v) => viewRow(v, 'all'))}
       </ul>
+      {canCreate && (
+        <button
+          type="button"
+          onClick={onCreate}
+          className="inline-flex w-full items-center gap-1 border-t border-border pt-2 text-sm font-medium text-primary outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary"
+        >
+          <PlusIcon className="size-3.5" />
+          {t('picker.addView')}
+        </button>
+      )}
     </div>
   );
 }
