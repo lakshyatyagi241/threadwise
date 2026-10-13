@@ -43,10 +43,7 @@ export interface SettledSend {
  * answer now.
  */
 export interface CampaignBilling {
-  /**
-   * Send-time overflow billing (Reference's legacy mode, where the plan cap and an empty wallet stopped a send). Intentionally not
-   * ported: the launch gate and delivery-time charging replace it, so this always resolves true and nothing is blocked per message.
-   */
+  /** Per-recipient wallet check: false when the wallet cannot pay for this message and the run must stop (nothing is marked failed). */
   consume(send: BilledSend): Promise<boolean>;
   settleDelivered(send: SettledSend): Promise<void>;
   settleFailed(orgId: number, providerMessageId: string): Promise<void>;

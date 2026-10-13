@@ -4,6 +4,7 @@ import { FixtureLeadScoringAiAdapter } from '../../infra/providers/lead-scoring/
 import { OpenRouterLeadScoringAiAdapter } from '../../infra/providers/lead-scoring/openrouter-lead-scoring-ai.adapter';
 import { AiKeysUsageAdminModule } from '../ai-keys-usage-admin';
 import { CrmModule } from '../crm';
+import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { ChatDigestListeners } from './lead-chat-digest.listeners';
 import { LeadChatDigestRepository } from './lead-chat-digest.repository';
 import { LeadChatDigestService } from './lead-chat-digest.service';
@@ -36,7 +37,7 @@ export const leadScoringAiProvider = {
  * consumer, log retention) are in LeadScoringWorkerModule. Registered in app.module.ts.
  */
 @Module({
-  imports: [AiKeysUsageAdminModule, CrmModule],
+  imports: [AiKeysUsageAdminModule, CrmModule, WalletMessageBillingModule],
   controllers: [LeadScoringController, LeadScoringPlatformController],
   providers: [
     leadScoringAiProvider,

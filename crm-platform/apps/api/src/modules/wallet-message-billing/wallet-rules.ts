@@ -337,6 +337,8 @@ export interface LaunchFacts {
   estimateMinor: number | null;
   /** How much of the estimate the balance must cover before a launch is allowed, percent (0 = only "not empty"). */
   coveragePercent: number;
+  /** One message at a price of 0 (a service reply) passes whatever the balance (the per-message check). */
+  freeAllowed?: boolean;
 }
 
 export type LaunchVerdict = { ok: true } | { ok: false; reason: 'empty' | 'insufficient' };
@@ -354,6 +356,7 @@ export function launchVerdict(f: LaunchFacts): LaunchVerdict {
       (f.monthlyLimit <= 0 || f.usedThisMonth + Math.max(1, f.recipients) <= f.monthlyLimit);
     if (fits) return { ok: true };
   }
+  if (f.freeAllowed && f.estimateMinor === 0) return { ok: true };
   if (f.balanceMinor <= 0) return { ok: false, reason: 'empty' };
   if (f.coveragePercent > 0 && f.estimateMinor !== null && f.estimateMinor > 0) {
     const needed = Math.ceil((f.estimateMinor * f.coveragePercent) / 100);
@@ -361,6 +364,15 @@ export function launchVerdict(f: LaunchFacts): LaunchVerdict {
   }
   return { ok: true };
 }
+
+// --- AI features billed to the wallet -----------------------------------------------------------------------------------------
+
+/** What a workspace pays on top of the vendor's real cost for an AI call made on the platform's key: 10% (1000 basis points). */
+export const AI_MARKUP_BPS = 1000;
+
+/** The vendor's cost in USD with the markup: a call that cost us 1.00 is charged at 1.10. */
+export const aiChargeUsd = (costUsd: number, markupBps: number = AI_MARKUP_BPS): number =>
+  costUsd > 0 ? costUsd * (1 + markupBps / 10_000) : 0;
 
 // --- low balance (TW-WALLET-015) ---------------------------------------------------------------------------------------------
 
