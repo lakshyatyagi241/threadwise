@@ -7,6 +7,7 @@ import { InboxSystemNotes } from '../team-inbox-conversations';
 import { GrowthActionsService } from './growth-actions.service';
 import { GrowthGateService, type GrowthContext } from './growth-gate.service';
 import { GrowthRepository, type Stage } from './growth.repository';
+import { GrowthStageLineService } from './growth-stage-line.service';
 import { serviceRuleGroupName } from './growth.rules';
 
 const LIST_CAP = 25;
@@ -33,6 +34,7 @@ export class GrowthAutomationService {
     private readonly digests: LeadChatDigestService,
     private readonly digestRepo: LeadChatDigestRepository,
     private readonly systemNotes: InboxSystemNotes,
+    private readonly stageLines: GrowthStageLineService,
   ) {}
 
   // --- the engagement stage rule: no chat needed --------------------------------------------------------------------
@@ -113,6 +115,7 @@ export class GrowthAutomationService {
     const stages = await this.db.txAs({ orgId, userId: null }, (tx) => this.repo.stages(tx, orgId));
     const position = new Map(stages.map((s) => [s.value, s.position]));
     const flags = new Map(stages.map((s) => [s.value, s]));
+    const labels = new Map(stages.map((s) => [s.value, s.label]));
     const { applied, candidates } = await this.db.txAs({ orgId, userId: null }, async (tx) => ({
       applied: await this.repo.autoAppliedToday(tx, orgId),
       candidates: await this.repo.autoStageCandidates(
@@ -152,6 +155,14 @@ export class GrowthAutomationService {
       if (moved) {
         done += 1;
         room -= 1;
+        // The people in the chat see it happen, with an Undo on the line.
+        await this.stageLines.write(orgId, {
+          suggestionUuid: s.uuid,
+          contactId: s.contactId,
+          fromLabel: labels.get(s.fromStage) ?? s.fromStage,
+          toLabel: to.label,
+          action: 'auto',
+        });
       }
     }
     return done;

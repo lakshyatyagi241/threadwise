@@ -223,7 +223,15 @@
       "groupMember": "Membre du groupe",
       "groupTally": "Remis à {delivered} sur {members}{read, plural, =0 {} other {, lu par #}}{failed, plural, =0 {} other {, # en échec}}",
       "groupTallyNoTotal": "Remis à {delivered, plural, one {# membre} other {# membres}}{read, plural, =0 {} other {, lu par #}}{failed, plural, =0 {} other {, # en échec}}",
-      "groupTallyBilled": "{billable} facturés, {free} gratuits"
+      "groupTallyBilled": "{billable} facturés, {free} gratuits",
+      "stageLine": {
+        "auto": "L’IA a lu la conversation et a déplacé ce contact de {from} vers {to}.",
+        "undo": "Annuler",
+        "wasUndone": "Annulé",
+        "undone": "Changement d’étape annulé : retour à {stage}.",
+        "undoneToast": "Étape rétablie sur {stage}.",
+        "couldNotUndo": "Ce changement ne peut plus être annulé : le contact a avancé ou il a déjà été annulé."
+      }
     },
     "media": {
       "openImage": "Ouvrir l’image {name}",

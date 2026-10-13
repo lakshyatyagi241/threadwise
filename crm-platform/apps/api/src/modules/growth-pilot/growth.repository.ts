@@ -602,19 +602,42 @@ export class GrowthRepository {
     minConfidence: number,
     limit: number,
   ): Promise<
-    Array<{ id: number; contactId: number; fromStage: string; toStage: string; confidence: number }>
+    Array<{
+      id: number;
+      uuid: string;
+      contactId: number;
+      fromStage: string;
+      toStage: string;
+      confidence: number;
+    }>
   > {
     const res = await tx.execute(sql`
-      SELECT s.id, s.contact_id, s.from_stage, s.to_stage, s.confidence FROM lifecycle_stage_suggestions s
+      SELECT s.id, s.uuid, s.contact_id, s.from_stage, s.to_stage, s.confidence FROM lifecycle_stage_suggestions s
        WHERE s.org_id = ${orgId} AND s.status = 'pending' AND s.confidence >= ${minConfidence}
        ORDER BY s.confidence DESC, s.created_at DESC LIMIT ${limit}`);
     return (res.rows as Raw[]).map((r) => ({
       id: num(r.id),
+      uuid: String(r.uuid),
       contactId: num(r.contact_id),
       fromStage: String(r.from_stage),
       toStage: String(r.to_stage),
       confidence: num(r.confidence),
     }));
+  }
+
+  /** The thread a contact's stage line goes into: the newest one-to-one conversation, as its channel and peer. */
+  async threadOf(
+    tx: Tx,
+    orgId: number,
+    contactId: number,
+  ): Promise<{ channelUuid: string; peerKey: string } | null> {
+    const res = await tx.execute(sql`
+      SELECT ch.uuid AS channel_uuid, cv.peer_key FROM conversations cv
+        JOIN channels ch ON ch.org_id = cv.org_id AND ch.id = cv.channel_id
+       WHERE cv.org_id = ${orgId} AND cv.contact_id = ${contactId} AND cv.peer_key NOT LIKE '%@g.us'
+       ORDER BY cv.last_message_at DESC NULLS LAST, cv.id DESC LIMIT 1`);
+    const r = res.rows[0] as Raw | undefined;
+    return r ? { channelUuid: String(r.channel_uuid), peerKey: String(r.peer_key) } : null;
   }
 
   async markSuggestion(

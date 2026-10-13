@@ -223,7 +223,15 @@
       "groupMember": "Członek grupy",
       "groupTally": "Dostarczono do {delivered} z {members}{read, plural, =0 {} other {, odczytało: #}}{failed, plural, =0 {} other {, błędy: #}}",
       "groupTallyNoTotal": "Dostarczono do: {delivered, plural, one {# członka} other {# członków}}{read, plural, =0 {} other {, odczytało: #}}{failed, plural, =0 {} other {, błędy: #}}",
-      "groupTallyBilled": "płatnych {billable}, bezpłatnych {free}"
+      "groupTallyBilled": "płatnych {billable}, bezpłatnych {free}",
+      "stageLine": {
+        "auto": "AI przeczytało czat i przeniosło ten kontakt z etapu {from} do {to}.",
+        "undo": "Cofnij",
+        "wasUndone": "Cofnięto",
+        "undone": "Zmiana etapu cofnięta: z powrotem {stage}.",
+        "undoneToast": "Etap przywrócono na {stage}.",
+        "couldNotUndo": "Tej zmiany nie można już cofnąć: kontakt poszedł dalej albo zmianę już cofnięto."
+      }
     },
     "media": {
       "openImage": "Otwórz obraz {name}",

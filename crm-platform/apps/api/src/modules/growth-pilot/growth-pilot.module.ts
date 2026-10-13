@@ -7,6 +7,7 @@ import {
 import { GROWTH_ENRICHMENT_PORT } from '../../infra/providers/growth-enrichment/growth-enrichment.port';
 import { AiKeysUsageAdminModule } from '../ai-keys-usage-admin';
 import { CampaignsModule } from '../campaigns';
+import { ChatConversationsModule } from '../chat-conversations';
 import { ContactConsentModule } from '../contact-consent';
 import { CrmModule } from '../crm';
 import { LeadScoringModule } from '../lead-scoring';
@@ -20,6 +21,7 @@ import { GrowthDigestListener } from './growth-digest.listener';
 import { GrowthGateService } from './growth-gate.service';
 import { GrowthController } from './growth.controller';
 import { GrowthRepository } from './growth.repository';
+import { GrowthStageLineService } from './growth-stage-line.service';
 import { GrowthService } from './growth.service';
 
 /**
@@ -51,6 +53,7 @@ export const growthEnrichmentProvider = {
   imports: [
     AiKeysUsageAdminModule,
     CampaignsModule,
+    ChatConversationsModule,
     ContactConsentModule,
     CrmModule,
     LeadScoringModule,
@@ -67,6 +70,7 @@ export const growthEnrichmentProvider = {
     GrowthActionsService,
     GrowthAssistantService,
     GrowthAutomationService,
+    GrowthStageLineService,
     // Registers itself with lead scoring at start-up, in the API (the Read chat button) and in the worker (the idle sweeper).
     GrowthDigestListener,
   ],
