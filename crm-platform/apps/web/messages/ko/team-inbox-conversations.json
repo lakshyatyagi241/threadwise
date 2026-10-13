@@ -139,6 +139,7 @@
       "logNotReady": "이 내보내기는 아직 준비되지 않았거나 만료되었습니다. 다시 요청하세요.",
       "groupSuspended": "Meta가 이 그룹을 정지했으므로 Meta가 해제할 때까지 메시지를 보낼 수 없습니다.",
       "walletEmpty": "메시지 지갑 잔액이 이 그룹 메시지(멤버당 1회 과금)를 감당할 수 없습니다. 충전한 후 다시 시도하세요.",
+      "groupPlanLocked": "현재 요금제에는 WhatsApp 그룹이 포함되어 있지 않아 이 그룹에 메시지를 보낼 수 없습니다. 관리자에게 요금제 업그레이드를 요청하세요.",
       "groupLeft": "이 번호는 그룹을 나갔으므로 더 이상 그곳에 메시지를 보낼 수 없습니다.",
       "groupAnnounceOnly": "이 그룹에서는 관리자만 메시지를 보낼 수 있으며, 이 번호는 관리자가 아닙니다.",
       "groupRateLimited": "짧은 시간 동안 이 번호에서 보낸 그룹 메시지가 너무 많습니다. 1분 후에 다시 시도해 주세요.",
@@ -213,7 +214,9 @@
       },
       "deliveryLog": "전송 로그",
       "groupMember": "그룹 멤버",
-      "groupTally": "{delivered, plural, other {#명의 멤버}}에게 전달됨: 과금 {billable}, 무료 {free}"
+      "groupTally": "{members}명 중 {delivered}명에게 전달됨{read, plural, =0 {} other {, #명 읽음}}{failed, plural, =0 {} other {, #건 실패}}",
+      "groupTallyNoTotal": "{delivered, plural, other {#명의 멤버}}에게 전달됨{read, plural, =0 {} other {, #명 읽음}}{failed, plural, =0 {} other {, #건 실패}}",
+      "groupTallyBilled": "과금 {billable}, 무료 {free}"
     },
     "media": {
       "openImage": "이미지 {name} 열기",
@@ -664,6 +667,26 @@
         "label": "그룹 멤버",
         "loading": "멤버 찾는 중",
         "none": "일치하는 멤버가 없습니다"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta가 이 그룹을 정지했습니다",
+          "message": "WhatsApp은 정지된 그룹에 메시지를 전달하지 않습니다. Meta가 해제할 때까지 대화를 읽고 내부 메모를 추가할 수 있습니다."
+        },
+        "plan": {
+          "title": "현재 요금제에는 WhatsApp 그룹이 포함되어 있지 않습니다",
+          "message": "이 대화를 읽고 내부 메모를 추가할 수는 있지만, 그룹에 보내려면 그룹이 포함된 요금제가 필요합니다. 관리자에게 업그레이드를 요청하세요."
+        },
+        "ineligible": {
+          "title": "이 번호는 WhatsApp 그룹을 사용할 수 없습니다",
+          "message": "마지막 확인에서 Meta가 이 번호의 그룹을 허용하지 않았습니다(공식 비즈니스 계정이 필요합니다). 대화를 읽고 내부 메모를 추가할 수 있습니다. 다시 확인하려면 Meta 그룹을 여세요."
+        }
+      },
+      "cost": {
+        "members": "이 메시지는 {count, plural, other {#명의 멤버}}에게 전달됩니다. 예상 비용 {cost}: WhatsApp은 메시지를 받은 멤버마다 요금을 부과합니다.",
+        "membersNoEstimate": "이 메시지는 {count, plural, other {#명의 멤버}}에게 전달됩니다. WhatsApp은 메시지를 받은 멤버마다 요금을 부과합니다.",
+        "sizeUnknown": "멤버 수를 아직 알 수 없습니다. WhatsApp은 이 메시지를 받은 멤버마다 요금을 부과합니다.",
+        "walletShort": "지갑 잔액이 이 메시지에 부족할 수 있습니다. 보내기 전에 충전하세요."
       }
     },
     "savedReplies": {

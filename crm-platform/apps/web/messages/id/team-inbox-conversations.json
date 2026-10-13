@@ -139,6 +139,7 @@
       "logNotReady": "Ekspor ini belum siap atau sudah kedaluwarsa. Minta lagi.",
       "groupSuspended": "Meta menangguhkan grup ini, sehingga tidak dapat dikirimi pesan sampai Meta memulihkannya.",
       "walletEmpty": "Dompet pesan Anda tidak cukup untuk pesan grup ini (satu tagihan per anggota). Isi saldo lalu coba lagi.",
+      "groupPlanLocked": "Paket Anda tidak menyertakan grup WhatsApp, sehingga grup ini tidak dapat dikirimi pesan. Minta admin untuk meningkatkan paket.",
       "groupLeft": "Nomor ini sudah keluar dari grup, jadi tidak dapat lagi mengirim pesan di sana.",
       "groupAnnounceOnly": "Hanya admin yang dapat mengirim pesan di grup ini, dan nomor ini bukan admin.",
       "groupRateLimited": "Terlalu banyak pesan grup dari nomor ini dalam waktu singkat. Tunggu semenit, lalu coba lagi.",
@@ -213,7 +214,9 @@
       },
       "deliveryLog": "Log pengiriman",
       "groupMember": "Anggota grup",
-      "groupTally": "Terkirim ke {delivered, plural, other {# anggota}}: {billable} ditagih, {free} gratis"
+      "groupTally": "Terkirim ke {delivered} dari {members}{read, plural, =0 {} other {, dibaca oleh #}}{failed, plural, =0 {} other {, # gagal}}",
+      "groupTallyNoTotal": "Terkirim ke {delivered, plural, other {# anggota}}{read, plural, =0 {} other {, dibaca oleh #}}{failed, plural, =0 {} other {, # gagal}}",
+      "groupTallyBilled": "{billable} ditagih, {free} gratis"
     },
     "media": {
       "openImage": "Buka gambar {name}",
@@ -664,6 +667,26 @@
         "label": "Anggota grup",
         "loading": "Mencari anggota",
         "none": "Tidak ada anggota yang cocok"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta menangguhkan grup ini",
+          "message": "WhatsApp tidak mengirim pesan ke grup yang ditangguhkan. Anda dapat membaca percakapan dan menambahkan catatan internal sampai Meta memulihkannya."
+        },
+        "plan": {
+          "title": "Paket Anda tidak menyertakan grup WhatsApp",
+          "message": "Anda dapat membaca percakapan ini dan menambahkan catatan internal, tetapi mengirim ke grup memerlukan paket dengan grup. Minta admin untuk meningkatkan paket."
+        },
+        "ineligible": {
+          "title": "Nomor ini tidak dapat menggunakan grup WhatsApp",
+          "message": "Pada pemeriksaan terakhir, Meta tidak mengizinkan grup di nomor ini (perlu akun bisnis resmi). Anda dapat membaca percakapan dan menambahkan catatan internal. Buka Grup Meta untuk memeriksa lagi."
+        }
+      },
+      "cost": {
+        "members": "Pesan ini dikirim ke {count, plural, other {# anggota}}. Perkiraan biaya {cost}: WhatsApp menagih setiap anggota yang menerimanya.",
+        "membersNoEstimate": "Pesan ini dikirim ke {count, plural, other {# anggota}}. WhatsApp menagih setiap anggota yang menerimanya.",
+        "sizeUnknown": "Jumlah anggota belum diketahui. WhatsApp menagih setiap anggota yang menerima pesan ini.",
+        "walletShort": "Saldo dompet Anda mungkin tidak cukup untuk pesan ini. Isi saldo sebelum mengirim."
       }
     },
     "savedReplies": {

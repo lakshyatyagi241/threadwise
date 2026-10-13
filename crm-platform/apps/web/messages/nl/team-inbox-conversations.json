@@ -139,6 +139,7 @@
       "logNotReady": "Deze export is niet gereed of is verlopen. Vraag hem opnieuw aan.",
       "groupSuspended": "Meta heeft deze groep opgeschort, dus er kunnen geen berichten naartoe worden gestuurd totdat Meta dit opheft.",
       "walletEmpty": "Je berichtenportemonnee dekt dit groepsbericht niet (één kost per lid). Waardeer op en probeer het opnieuw.",
+      "groupPlanLocked": "Je abonnement bevat geen WhatsApp-groepen, dus je kunt deze groep geen berichten sturen. Vraag een beheerder om het abonnement te upgraden.",
       "groupLeft": "Dit nummer heeft de groep verlaten, dus kan er geen berichten meer sturen.",
       "groupAnnounceOnly": "Alleen beheerders kunnen berichten sturen in deze groep en dit nummer is geen beheerder.",
       "groupRateLimited": "Te veel groepsberichten van dit nummer in korte tijd. Wacht een minuut en probeer het opnieuw.",
@@ -213,7 +214,9 @@
       },
       "deliveryLog": "Bezorglogboek",
       "groupMember": "Groepslid",
-      "groupTally": "Bezorgd bij {delivered, plural, one {# lid} other {# leden}}: {billable} berekend, {free} gratis"
+      "groupTally": "Afgeleverd bij {delivered} van {members}{read, plural, =0 {} other {, gelezen door #}}{failed, plural, =0 {} other {, # mislukt}}",
+      "groupTallyNoTotal": "Afgeleverd bij {delivered, plural, one {# lid} other {# leden}}{read, plural, =0 {} other {, gelezen door #}}{failed, plural, =0 {} other {, # mislukt}}",
+      "groupTallyBilled": "{billable} aangerekend, {free} gratis"
     },
     "media": {
       "openImage": "Afbeelding {name} openen",
@@ -664,6 +667,26 @@
         "label": "Groepsleden",
         "loading": "Leden zoeken",
         "none": "Geen lid gevonden"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta heeft deze groep geschorst",
+          "message": "WhatsApp levert geen berichten af in een geschorste groep. Je kunt het gesprek lezen en interne notities toevoegen totdat Meta de schorsing opheft."
+        },
+        "plan": {
+          "title": "Je abonnement bevat geen WhatsApp-groepen",
+          "message": "Je kunt dit gesprek lezen en interne notities toevoegen, maar versturen naar de groep vereist een abonnement met groepen. Vraag een beheerder om te upgraden."
+        },
+        "ineligible": {
+          "title": "Dit nummer kan geen WhatsApp-groepen gebruiken",
+          "message": "Bij de laatste controle stond Meta geen groepen toe op dit nummer (een officieel zakelijk account is vereist). Je kunt het gesprek lezen en interne notities toevoegen. Open Meta-groepen om opnieuw te controleren."
+        }
+      },
+      "cost": {
+        "members": "Dit bericht gaat naar {count, plural, one {# lid} other {# leden}}. Geschatte kosten {cost}: WhatsApp rekent elk lid aan dat het ontvangt.",
+        "membersNoEstimate": "Dit bericht gaat naar {count, plural, one {# lid} other {# leden}}. WhatsApp rekent elk lid aan dat het ontvangt.",
+        "sizeUnknown": "Het aantal leden is nog niet bekend. WhatsApp rekent elk lid aan dat dit bericht ontvangt.",
+        "walletShort": "Je saldo dekt dit bericht mogelijk niet. Waardeer op voordat je verstuurt."
       }
     },
     "savedReplies": {
