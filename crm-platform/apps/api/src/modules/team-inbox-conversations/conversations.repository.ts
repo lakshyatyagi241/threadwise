@@ -380,6 +380,90 @@ export class ConversationsRepository {
       WHERE org_id = ${orgId} AND id = ${id}`);
   }
 
+  /**
+   * What a bulk request needs to know about each named conversation, no visibility applied (the single-conversation call that follows
+   * applies it): the version to send, the newest message seq, and the unread counter. A uuid that is not in the workspace is absent.
+   */
+  async bulkProbe(
+    tx: Tx,
+    orgId: number,
+    uuids: string[],
+  ): Promise<Map<string, { rowVersion: number; msgSeq: number; unreadCount: number }>> {
+    if (uuids.length === 0) return new Map();
+    const res = await tx.execute(sql`
+      SELECT uuid, row_version, msg_seq, unread_count FROM conversations
+      WHERE org_id = ${orgId} AND uuid IN (${sql.join(
+        uuids.map((u) => sql`${u}::uuid`),
+        sql`, `,
+      )})`);
+    return new Map(
+      rowsOf(res).map((r) => [
+        r.uuid as string,
+        {
+          rowVersion: Number(r.row_version),
+          msgSeq: Number(r.msg_seq),
+          unreadCount: Number(r.unread_count),
+        },
+      ]),
+    );
+  }
+
+  /** The priority column. The `touch_row` trigger moves `row_version`. */
+  async setPriority(tx: Tx, orgId: number, id: number, priority: string): Promise<void> {
+    await tx.execute(
+      sql`UPDATE conversations SET priority = ${priority} WHERE org_id = ${orgId} AND id = ${id}`,
+    );
+  }
+
+  /** Park the thread until `until`: status `snoozed`, wake time set. The partial index `idx_conversations_snooze_due` serves the sweep. */
+  async snooze(tx: Tx, orgId: number, id: number, until: Date): Promise<void> {
+    await tx.execute(sql`
+      UPDATE conversations SET status = 'snoozed', snoozed_until = ${until.toISOString()}::timestamptz
+      WHERE org_id = ${orgId} AND id = ${id}`);
+  }
+
+  /**
+   * Snoozed threads whose wake time has passed, across every workspace (privileged transaction), oldest first. Locks the rows it
+   * returns and skips ones another sweep holds, so two workers never wake the same thread twice.
+   */
+  async lockDueSnoozed(
+    tx: Tx,
+    limit: number,
+  ): Promise<
+    Array<{
+      id: number;
+      orgId: number;
+      uuid: string;
+      rowVersion: number;
+      assigneeUserId: number | null;
+      assigneeTeamId: number | null;
+      channelOwnerUserId: number | null;
+    }>
+  > {
+    const res = await tx.execute(sql`
+      SELECT c.id, c.org_id, c.uuid, c.row_version, c.assignee_user_id, c.assignee_team_id,
+             ${channelOwnerSql('c')} AS channel_owner_user_id
+      FROM conversations c
+      WHERE c.status = 'snoozed' AND c.snoozed_until IS NOT NULL AND c.snoozed_until <= now()
+      ORDER BY c.snoozed_until, c.id LIMIT ${limit} FOR UPDATE OF c SKIP LOCKED`);
+    return rowsOf(res).map((r) => ({
+      id: Number(r.id),
+      orgId: Number(r.org_id),
+      uuid: r.uuid as string,
+      rowVersion: Number(r.row_version),
+      assigneeUserId: int(r.assignee_user_id),
+      assigneeTeamId: int(r.assignee_team_id),
+      channelOwnerUserId: int(r.channel_owner_user_id),
+    }));
+  }
+
+  /** Wake a snoozed thread: open again, wake time cleared. */
+  async wake(tx: Tx, orgId: number, id: number): Promise<void> {
+    await tx.execute(sql`
+      UPDATE conversations SET status = 'open', snoozed_until = NULL
+      WHERE org_id = ${orgId} AND id = ${id} AND status = 'snoozed'`);
+  }
+
   /** Other threads with the same contact, newest first, inside the caller's visibility. */
   async pastConversations(
     tx: Tx,
