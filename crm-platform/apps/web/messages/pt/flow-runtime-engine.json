@@ -119,6 +119,8 @@
       "colStarted": "Iniciado em",
       "colActivity": "Última atividade",
       "colSteps": "Etapas",
+      "colReplies": "Respostas",
+      "repliesHint": "Mensagens do cliente que chegaram a um nó de espera desta execução",
       "colActions": "Ações",
       "open": "Abrir execução",
       "cancel": "Cancelar",

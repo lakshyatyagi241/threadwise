@@ -119,6 +119,8 @@
       "colStarted": "启动时间",
       "colActivity": "最近活动",
       "colSteps": "步骤",
+      "colReplies": "回复",
+      "repliesHint": "到达本次运行等待节点的客户消息",
       "colActions": "操作",
       "open": "打开运行记录",
       "cancel": "取消",

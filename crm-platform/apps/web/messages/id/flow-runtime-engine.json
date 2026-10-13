@@ -119,6 +119,8 @@
       "colStarted": "Dimulai",
       "colActivity": "Aktivitas terakhir",
       "colSteps": "Langkah",
+      "colReplies": "Balasan",
+      "repliesHint": "Pesan pelanggan yang sampai ke node tunggu pada eksekusi ini",
       "colActions": "Tindakan",
       "open": "Buka eksekusi",
       "cancel": "Batalkan",
