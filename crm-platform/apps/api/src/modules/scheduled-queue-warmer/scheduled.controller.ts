@@ -113,7 +113,8 @@ export class ScheduledController {
     FileInterceptor('file', { limits: { fileSize: SCHEDULE_MEDIA_MAX_BYTES, files: 1 } }),
   )
   @ApiOperation({
-    summary: 'Upload the file a schedule sends; returns its id for the schedule and a link to look at it',
+    summary:
+      'Upload the file a schedule sends; returns its id for the schedule and a link to look at it',
     description:
       '422 for a type or content the upload policy refuses, and when media storage is local disk (nothing the provider could fetch).',
   })
@@ -132,7 +133,8 @@ export class ScheduledController {
   @RequirePermission('sched.schedules.manage')
   @ApiOperation({
     summary: 'The composer prefilled with a schedule that has not started (the edit screen)',
-    description: '409 when the schedule is no longer waiting or paused, or a one-off has begun sending.',
+    description:
+      '409 when the schedule is no longer waiting or paused, or a one-off has begun sending.',
   })
   draft(@Param('id', ParseUUIDPipe) id: string) {
     return this.editor.draft(id);
@@ -140,7 +142,9 @@ export class ScheduledController {
 
   @Get(':id/recipients')
   @RequirePermission('sched.schedules.read')
-  @ApiOperation({ summary: 'The recipients of a schedule, filtered by status and search, a page at a time' })
+  @ApiOperation({
+    summary: 'The recipients of a schedule, filtered by status and search, a page at a time',
+  })
   recipients(
     @Param('id', ParseUUIDPipe) id: string,
     @Query(zodPipe(listScheduleRecipientsQuerySchema)) q: ListScheduleRecipientsQuery,
@@ -151,7 +155,8 @@ export class ScheduledController {
   @Get(':id/funnel')
   @RequirePermission('sched.schedules.read')
   @ApiOperation({
-    summary: 'Queued, sent, delivered, read and failed over time, from the stored recipient statuses',
+    summary:
+      'Queued, sent, delivered, read and failed over time, from the stored recipient statuses',
   })
   funnel(@Param('id', ParseUUIDPipe) id: string) {
     return this.engagement.funnel(id);
@@ -160,8 +165,10 @@ export class ScheduledController {
   @Patch(':id')
   @RequirePermission('sched.schedules.manage')
   @ApiOperation({
-    summary: 'Change a schedule that has not started: any field of the composer, with the version that was opened',
-    description: '409 for a stale version, a schedule that is not waiting or paused, or a one-off that has begun.',
+    summary:
+      'Change a schedule that has not started: any field of the composer, with the version that was opened',
+    description:
+      '409 for a stale version, a schedule that is not waiting or paused, or a one-off that has begun.',
   })
   async edit(
     @Param('id', ParseUUIDPipe) id: string,

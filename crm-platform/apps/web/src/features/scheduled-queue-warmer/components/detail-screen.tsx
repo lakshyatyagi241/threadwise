@@ -8,12 +8,7 @@ import type { ScheduleDetail } from '@crm/contracts';
 import { Button, Spinner, StatTile, cn } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { useScheduleDetail } from '../api/schedules';
-import {
-  availableActions,
-  funnelOf,
-  isFinished,
-  relativeWhen,
-} from '../lib/schedule-model';
+import { availableActions, funnelOf, isFinished, relativeWhen } from '../lib/schedule-model';
 import { formatWhen } from '../lib/time';
 import { EngagementChart, RecipientsTable } from './engagement';
 import { ErrorNotice } from './error-notice';

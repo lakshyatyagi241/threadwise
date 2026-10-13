@@ -382,4 +382,3 @@ function Composer({
     </div>
   );
 }
-

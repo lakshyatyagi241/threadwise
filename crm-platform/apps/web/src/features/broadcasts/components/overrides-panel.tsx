@@ -7,7 +7,6 @@ import type { AttributeCatalog, ComposeTemplate } from '@crm/contracts';
 import {
   buildMeta,
   chipKeys,
-  emptyState,
   hasFields,
   stateFromOverrides,
   toOverrides,

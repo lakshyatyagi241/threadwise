@@ -236,8 +236,12 @@ async function drain(orgId: number): Promise<number> {
 }
 const balance = async (orgId: number) =>
   Number(
-    (await h.owner.query(`SELECT (balance * 100)::bigint AS minor FROM wallets WHERE org_id = $1`, [orgId]))
-      .rows[0]?.minor ?? 0,
+    (
+      await h.owner.query(
+        `SELECT (balance * 100)::bigint AS minor FROM wallets WHERE org_id = $1`,
+        [orgId],
+      )
+    ).rows[0]?.minor ?? 0,
   );
 const charges = async (orgId: number) =>
   (
@@ -287,11 +291,17 @@ describe('a Cloud API schedule: charged when the provider says delivered, refund
     expect(await drain(t.orgId)).toBe(3);
     const after = await charges(t.orgId);
     expect(after).toHaveLength(3);
-    expect(after.every((c) => c.status === 'charged' && c.source === 'scheduled' && c.category === 'marketing')).toBe(true);
+    expect(
+      after.every(
+        (c) => c.status === 'charged' && c.source === 'scheduled' && c.category === 'marketing',
+      ),
+    ).toBe(true);
     const price = Number(after[0]!.credits);
     expect(price).toBeGreaterThan(0);
     expect(await balance(t.orgId)).toBe(start - 3 * price);
-    expect((await events(t.orgId)).map((e) => e.aggregate_module)).toEqual(Array(3).fill('scheduled_messages'));
+    expect((await events(t.orgId)).map((e) => e.aggregate_module)).toEqual(
+      Array(3).fill('scheduled_messages'),
+    );
 
     // the same report twice, a read after delivered, and a late "sent" never charge again
     for (const x of ids) expect(await receipt(x, 'delivered')).toBe(true);
@@ -323,7 +333,12 @@ describe('a Cloud API schedule: charged when the provider says delivered, refund
     const made = await post(
       t,
       '/v2/scheduled',
-      body([cloud], { messageType: 'template', message: undefined, templateId: tpl, numbers: numbers(2) }),
+      body([cloud], {
+        messageType: 'template',
+        message: undefined,
+        templateId: tpl,
+        numbers: numbers(2),
+      }),
     );
     const id = made.body.ids[0];
     const start = await balance(t.orgId);
@@ -338,7 +353,7 @@ describe('a Cloud API schedule: charged when the provider says delivered, refund
     expect(await row(id)).toMatchObject({ total_failed: 2 });
   });
 
-  it('a report about a message that is not a scheduled message\'s is not claimed', async () => {
+  it("a report about a message that is not a scheduled message's is not claimed", async () => {
     expect(await receipt(`wamid.unknown.${randomUUID()}`, 'delivered')).toBe(false);
   });
 
@@ -349,7 +364,12 @@ describe('a Cloud API schedule: charged when the provider says delivered, refund
     const made = await post(
       a.t,
       '/v2/scheduled',
-      body([a.cloud], { messageType: 'template', message: undefined, templateId: tpl, numbers: numbers(1) }),
+      body([a.cloud], {
+        messageType: 'template',
+        message: undefined,
+        templateId: tpl,
+        numbers: numbers(1),
+      }),
     );
     await due(made.body.ids[0]);
     await run(a.t, made.body.ids[0]);
@@ -416,7 +436,10 @@ describe('retries and restarts never charge a message twice', () => {
     // the retry gives it a new time; the recipient that failed goes back to pending, the two that were sent stay sent
     failNext = null;
     await h.owner.query(`UPDATE scheduled_messages SET status = 'failed' WHERE uuid = $1`, [id]);
-    const retry = await post(t, `/v2/scheduled/${id}/retry`, { sendDate: FUTURE, sendTime: '11:00' });
+    const retry = await post(t, `/v2/scheduled/${id}/retry`, {
+      sendDate: FUTURE,
+      sendTime: '11:00',
+    });
     expect(retry.status, JSON.stringify(retry.body)).toBe(200);
     await due(id);
     expect(await run(t, id)).toBe('finished');
@@ -435,7 +458,9 @@ describe('retries and restarts never charge a message twice', () => {
     const id = made.body.ids[0];
     const sid = (await row(id)).id;
     const first = `(SELECT min(id) FROM scheduled_message_contacts WHERE scheduled_message_id = ${Number(sid)})`;
-    await h.owner.query(`UPDATE scheduled_message_contacts SET status = 'processing' WHERE id = ${first}`);
+    await h.owner.query(
+      `UPDATE scheduled_message_contacts SET status = 'processing' WHERE id = ${first}`,
+    );
     // touch_row stamps updated_at on every update, so the claim is aged afterwards
     await h.owner.query(
       `ALTER TABLE scheduled_message_contacts DISABLE TRIGGER trg_scheduled_message_contacts_touch`,
@@ -504,7 +529,10 @@ describe('the wallet is checked before anything is written', () => {
     const refused = await post(empty.t, '/v2/scheduled', body([empty.phone]));
     expect(refused.status).toBe(422);
     expect(refused.body.code).toBe('WALLET_EMPTY');
-    expect((await h.owner.query(`SELECT 1 FROM scheduled_messages WHERE org_id = $1`, [empty.t.orgId])).rows).toHaveLength(0);
+    expect(
+      (await h.owner.query(`SELECT 1 FROM scheduled_messages WHERE org_id = $1`, [empty.t.orgId]))
+        .rows,
+    ).toHaveLength(0);
 
     // funded when it is made, empty when it is edited: the edit is refused the same way and changes nothing
     const { t, phone } = await arrange('w9', 5_000);

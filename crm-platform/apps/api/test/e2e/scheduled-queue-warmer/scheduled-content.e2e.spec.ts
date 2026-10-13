@@ -89,7 +89,8 @@ beforeAll(async () => {
     string,
     unknown
   >;
-  storage.put = async (key: string, body: Buffer) => (cloud ? (files.set(key, body), { key }) : null);
+  storage.put = async (key: string, body: Buffer) =>
+    cloud ? (files.set(key, body), { key }) : null;
   storage.url = async (key: string) => `https://files.test/${key}?sig=1`;
   storage.remove = async (key: string) => {
     files.delete(key);
@@ -173,7 +174,10 @@ async function group(t: Tenant, people: Array<{ name: string; first: string; pho
     people.map((p) => ({ name: p.name, phone: p.phone })),
   );
   for (const [i, u] of uuids.entries()) {
-    await h.owner.query(`UPDATE contacts SET first_name = $1 WHERE uuid = $2`, [people[i]!.first, u]);
+    await h.owner.query(`UPDATE contacts SET first_name = $1 WHERE uuid = $2`, [
+      people[i]!.first,
+      u,
+    ]);
   }
   const g = (
     await h.owner.query(
@@ -302,7 +306,7 @@ describe('template schedules (TW-SCHED-006)', () => {
     expect(JSON.stringify(forged.body)).toMatch(/not found/);
   });
 
-  it('the run sends a Cloud API number the Meta template with each contact\'s own values (no 24-hour window), and keeps the cleaned overrides', async () => {
+  it("the run sends a Cloud API number the Meta template with each contact's own values (no 24-hour window), and keeps the cleaned overrides", async () => {
     const { t, cloud: waba } = await arrange('tp2');
     const tpl = await template(t, { config: waba.id, body: 'Hi {{1}}, your offer is ready' });
     const g = await group(t, [
@@ -416,10 +420,17 @@ describe('file schedules (TW-SCHED-006)', () => {
     const { t, cloud: waba, phone } = await arrange('fl1');
     const small = await upload(t, png(2000));
     expect(small.status, JSON.stringify(small.body)).toBe(200);
-    expect(small.body).toMatchObject({ name: 'offer.png', mime: 'image/png', kind: 'image', size: 2000 });
+    expect(small.body).toMatchObject({
+      name: 'offer.png',
+      mime: 'image/png',
+      kind: 'image',
+      size: 2000,
+    });
     expect(small.body.url).toContain('https://files.test/scheduled/');
     const key = (
-      await h.owner.query(`SELECT storage_key FROM scheduled_media WHERE uuid = $1`, [small.body.id])
+      await h.owner.query(`SELECT storage_key FROM scheduled_media WHERE uuid = $1`, [
+        small.body.id,
+      ])
     ).rows[0].storage_key as string;
     expect(key).toMatch(new RegExp(`^scheduled/${t.orgId}/`));
     expect(files.has(key)).toBe(true);
@@ -461,7 +472,9 @@ describe('file schedules (TW-SCHED-006)', () => {
       caption: 'Look',
     });
     // the sender is given a fresh signed link, not a stored key
-    expect((sent[0]!.command as { mediaUrl: string }).mediaUrl).toMatch(/^https:\/\/files\.test\/scheduled\//);
+    expect((sent[0]!.command as { mediaUrl: string }).mediaUrl).toMatch(
+      /^https:\/\/files\.test\/scheduled\//,
+    );
 
     const detail = (await get(t, `/v2/scheduled/${ok.body.ids[0]}`)).body;
     expect(detail.mediaFile).toMatchObject({ name: 'offer.png', kind: 'image', size: 2000 });
@@ -483,14 +496,22 @@ describe('file schedules (TW-SCHED-006)', () => {
     const plain = await post(
       a.t,
       '/v2/scheduled',
-      body([a.cloud.key], { messageType: 'media', message: undefined, media: 'http://example.com/a.png' }),
+      body([a.cloud.key], {
+        messageType: 'media',
+        message: undefined,
+        media: 'http://example.com/a.png',
+      }),
     );
     expect(plain.status).toBe(422);
     expect(JSON.stringify(plain.body)).toMatch(/HTTPS/);
     const link = await post(
       a.t,
       '/v2/scheduled',
-      body([a.cloud.key], { messageType: 'media', message: undefined, media: 'https://example.com/a.png' }),
+      body([a.cloud.key], {
+        messageType: 'media',
+        message: undefined,
+        media: 'https://example.com/a.png',
+      }),
     );
     expect(link.status, JSON.stringify(link.body)).toBe(201);
   });
@@ -557,7 +578,11 @@ describe('editing a schedule that has not started (TW-SCHED-016)', () => {
   it('opens the composer on the stored schedule (the draft)', async () => {
     const { t, phone } = await arrange('ed1');
     const nums = numbers(2);
-    const made = await post(t, '/v2/scheduled', body([phone.key], { numbers: nums, message: 'Hi there' }));
+    const made = await post(
+      t,
+      '/v2/scheduled',
+      body([phone.key], { numbers: nums, message: 'Hi there' }),
+    );
     const id = made.body.ids[0];
     const d = await get(t, `/v2/scheduled/${id}/draft`);
     expect(d.status, JSON.stringify(d.body)).toBe(200);
@@ -589,8 +614,11 @@ describe('editing a schedule that has not started (TW-SCHED-016)', () => {
         [t.orgId],
       )
     ).rows[0];
-    const first = (await h.owner.query(`SELECT id, uuid FROM devices WHERE org_id = $1 ORDER BY id LIMIT 1`, [t.orgId]))
-      .rows[0];
+    const first = (
+      await h.owner.query(`SELECT id, uuid FROM devices WHERE org_id = $1 ORDER BY id LIMIT 1`, [
+        t.orgId,
+      ])
+    ).rows[0];
     const A = { id: Number(first.id), key: `baileys:${first.uuid}` };
     const B = { id: Number(second.id), key: `baileys:${second.uuid}` };
     await api.as(t.admin).put(`/v2/warmer/${A.key}`).send(profile);
@@ -611,7 +639,12 @@ describe('editing a schedule that has not started (TW-SCHED-016)', () => {
       numbers: nums,
     });
     expect(r1.status, JSON.stringify(r1.body)).toBe(200);
-    expect(r1.body).toMatchObject({ sendDate: LATER, sendTime: '16:15', message: 'New words', totalRecipients: 5 });
+    expect(r1.body).toMatchObject({
+      sendDate: LATER,
+      sendTime: '16:15',
+      message: 'New words',
+      totalRecipients: 5,
+    });
     expect(new Date(r1.body.nextRunAt).toISOString()).toBe('2031-03-12T16:15:00.000Z');
     expect(await ledger(A.id, FUTURE)).toBe(0);
     expect(await ledger(A.id, LATER)).toBe(5);
@@ -619,7 +652,12 @@ describe('editing a schedule that has not started (TW-SCHED-016)', () => {
     expect(stored).toMatchObject({ warmer_reserved: 5, total_recipients: 5 });
     expect(
       Number(
-        (await h.owner.query(`SELECT count(*) FROM scheduled_message_contacts WHERE scheduled_message_id = $1`, [stored.id])).rows[0].count,
+        (
+          await h.owner.query(
+            `SELECT count(*) FROM scheduled_message_contacts WHERE scheduled_message_id = $1`,
+            [stored.id],
+          )
+        ).rows[0].count,
       ),
     ).toBe(5);
 
@@ -638,7 +676,10 @@ describe('editing a schedule that has not started (TW-SCHED-016)', () => {
       [t.orgId, stored.id],
     );
     expect(audit.rows.map((x) => x.action)).toEqual(['update', 'update']);
-    expect(audit.rows[0].delta).toMatchObject({ sendDate: { old: FUTURE, new: LATER }, message: { old: 'Hello', new: 'New words' } });
+    expect(audit.rows[0].delta).toMatchObject({
+      sendDate: { old: FUTURE, new: LATER },
+      message: { old: 'Hello', new: 'New words' },
+    });
     const evs = await h.owner.query(
       `SELECT payload FROM event_outbox WHERE org_id = $1 AND event_type = 'scheduled.updated' ORDER BY id`,
       [t.orgId],
@@ -652,7 +693,11 @@ describe('editing a schedule that has not started (TW-SCHED-016)', () => {
     const { t, phone } = await arrange('ed3');
     await api.as(t.admin).put(`/v2/warmer/${phone.key}`).send(profile);
     const made = await post(t, '/v2/scheduled', body([phone.key], { numbers: numbers(10) }));
-    const other = await post(t, '/v2/scheduled', body([phone.key], { numbers: numbers(15), sendDate: LATER }));
+    const other = await post(
+      t,
+      '/v2/scheduled',
+      body([phone.key], { numbers: numbers(15), sendDate: LATER }),
+    );
     expect(other.status).toBe(201);
     const id = made.body.ids[0];
     const v = (await get(t, `/v2/scheduled/${id}`)).body.rowVersion;
@@ -662,7 +707,12 @@ describe('editing a schedule that has not started (TW-SCHED-016)', () => {
     expect(await ledger(phone.id, FUTURE)).toBe(10);
     expect(await ledger(phone.id, LATER)).toBe(15);
     expect(
-      (await h.owner.query(`SELECT to_char(send_date, 'YYYY-MM-DD') AS d FROM scheduled_messages WHERE uuid = $1`, [id])).rows[0].d,
+      (
+        await h.owner.query(
+          `SELECT to_char(send_date, 'YYYY-MM-DD') AS d FROM scheduled_messages WHERE uuid = $1`,
+          [id],
+        )
+      ).rows[0].d,
     ).toBe(FUTURE);
   });
 
@@ -678,7 +728,10 @@ describe('editing a schedule that has not started (TW-SCHED-016)', () => {
 
     // running / completed / cancelled / failed
     for (const status of ['running', 'completed', 'cancelled', 'failed']) {
-      await h.owner.query(`UPDATE scheduled_messages SET status = $1 WHERE uuid = $2`, [status, id]);
+      await h.owner.query(`UPDATE scheduled_messages SET status = $1 WHERE uuid = $2`, [
+        status,
+        id,
+      ]);
       const cur = (await get(t, `/v2/scheduled/${id}`)).body;
       expect(cur.editable, status).toBe(false);
       const res = await patch(t, id, { rowVersion: cur.rowVersion, name: 'X' });
@@ -758,7 +811,10 @@ describe('editing a schedule that has not started (TW-SCHED-016)', () => {
     });
     expect(res.status, JSON.stringify(res.body)).toBe(200);
     expect(await row(id)).toMatchObject({ template_type: 'template', provider: 'waba' });
-    expect(res.body.template).toMatchObject({ name: expect.stringMatching(/^promo_/), language: 'en' });
+    expect(res.body.template).toMatchObject({
+      name: expect.stringMatching(/^promo_/),
+      language: 'en',
+    });
     const d = (await get(t, `/v2/scheduled/${id}/draft`)).body;
     expect(d).toMatchObject({ messageType: 'template', templateId: tpl.uuid, sender: waba.key });
     expect(d.templateOverrides).toEqual({ body: ['{{first_name}}'] });
@@ -779,7 +835,11 @@ describe('editing a schedule that has not started (TW-SCHED-016)', () => {
     const made = await post(
       t,
       '/v2/scheduled',
-      body([phone.key], { scheduleType: 'recurring', repeatInterval: 'daily', numbers: numbers(2) }),
+      body([phone.key], {
+        scheduleType: 'recurring',
+        repeatInterval: 'daily',
+        numbers: numbers(2),
+      }),
     );
     const id = made.body.ids[0];
     await due(id);
@@ -788,7 +848,11 @@ describe('editing a schedule that has not started (TW-SCHED-016)', () => {
     expect(after).toMatchObject({ status: 'scheduled', recipients_spent: true });
     const cur = (await get(t, `/v2/scheduled/${id}`)).body;
     expect(cur.editable).toBe(true);
-    const res = await patch(t, id, { rowVersion: cur.rowVersion, recipientType: 'number', numbers: numbers(3) });
+    const res = await patch(t, id, {
+      rowVersion: cur.rowVersion,
+      recipientType: 'number',
+      numbers: numbers(3),
+    });
     expect(res.status, JSON.stringify(res.body)).toBe(200);
     expect(await row(id)).toMatchObject({ recipients_spent: false, total_recipients: 3 });
   });
@@ -803,9 +867,15 @@ describe('editing a schedule that has not started (TW-SCHED-016)', () => {
     expect((await patch(b, id, { rowVersion: v, name: 'Mine now' })).status).toBe(404);
     const reader = await api.member(a.t, 'reader', [['sched.schedules.read']]);
     const asReader = (m: 'get' | 'patch', path: string, b2?: object) =>
-      api.http()[m](path).set('authorization', `Bearer ${reader.token}`).send(b2 ?? {});
+      api
+        .http()
+        [m](path)
+        .set('authorization', `Bearer ${reader.token}`)
+        .send(b2 ?? {});
     expect((await asReader('get', `/v2/scheduled/${id}/draft`)).status).toBe(403);
-    expect((await asReader('patch', `/v2/scheduled/${id}`, { rowVersion: v, name: 'x' })).status).toBe(403);
+    expect(
+      (await asReader('patch', `/v2/scheduled/${id}`, { rowVersion: v, name: 'x' })).status,
+    ).toBe(403);
     expect((await row(id)).schedule_name).toBe('Spring offer');
   });
 });
@@ -828,11 +898,23 @@ describe('the funnel over time and the filtered recipients (TW-SCHED-012)', () =
     const set = (i: number, sql: string) =>
       h.owner.query(`UPDATE scheduled_message_contacts SET ${sql} WHERE id = ${ids[i]}`);
     // 10:10 sent, 10:20 sent, 11:05 delivered then read at 11:40, 12:15 failed after sending, a failure that never sent
-    await set(0, `status = 'read', sent_at = ${at('2031-03-10T10:10:00Z')}, delivered_at = ${at('2031-03-10T11:05:00Z')}, read_at = ${at('2031-03-10T11:40:00Z')}`);
-    await set(1, `status = 'delivered', sent_at = ${at('2031-03-10T10:20:00Z')}, delivered_at = ${at('2031-03-10T11:10:00Z')}`);
+    await set(
+      0,
+      `status = 'read', sent_at = ${at('2031-03-10T10:10:00Z')}, delivered_at = ${at('2031-03-10T11:05:00Z')}, read_at = ${at('2031-03-10T11:40:00Z')}`,
+    );
+    await set(
+      1,
+      `status = 'delivered', sent_at = ${at('2031-03-10T10:20:00Z')}, delivered_at = ${at('2031-03-10T11:10:00Z')}`,
+    );
     await set(2, `status = 'sent', sent_at = ${at('2031-03-10T10:25:00Z')}`);
-    await set(3, `status = 'failed', sent_at = ${at('2031-03-10T10:30:00Z')}, failed_at = ${at('2031-03-10T12:15:00Z')}, error_message = 'Undeliverable'`);
-    await set(4, `status = 'failed', failed_at = ${at('2031-03-10T10:35:00Z')}, error_message = 'Not on WhatsApp'`);
+    await set(
+      3,
+      `status = 'failed', sent_at = ${at('2031-03-10T10:30:00Z')}, failed_at = ${at('2031-03-10T12:15:00Z')}, error_message = 'Undeliverable'`,
+    );
+    await set(
+      4,
+      `status = 'failed', failed_at = ${at('2031-03-10T10:35:00Z')}, error_message = 'Not on WhatsApp'`,
+    );
     return { t, id };
   }
 
@@ -843,7 +925,10 @@ describe('the funnel over time and the filtered recipients (TW-SCHED-012)', () =
     expect(res.body.bucket).toBe('hour');
     expect(res.body.total).toBe(6);
     const by = Object.fromEntries(
-      (res.body.points as Array<Record<string, number | string>>).map((p) => [String(p.at).slice(11, 16), p]),
+      (res.body.points as Array<Record<string, number | string>>).map((p) => [
+        String(p.at).slice(11, 16),
+        p,
+      ]),
     );
     expect(by['10:00']).toMatchObject({ queued: 1, sent: 4, delivered: 0, read: 0, failed: 1 });
     expect(by['11:00']).toMatchObject({ queued: 1, sent: 4, delivered: 2, read: 1, failed: 1 });
@@ -907,7 +992,7 @@ describe('the funnel over time and the filtered recipients (TW-SCHED-012)', () =
     expect((await get(t, `/v2/scheduled/${id}/recipients?status=bogus`)).status).toBe(422);
   });
 
-  it("is a 404 for another workspace and 403 without the read key", async () => {
+  it('is a 404 for another workspace and 403 without the read key', async () => {
     const { t, id } = await seeded('en4');
     const other = await api.signup('en4b');
     const nobody = await api.member(t, 'nobody', []);

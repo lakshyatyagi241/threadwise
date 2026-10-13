@@ -165,7 +165,9 @@ export function BasicsStep(p: StepProps) {
           </p>
         )}
         {multi && <p className="mt-1.5 text-xs text-muted-foreground">{t('basics.splitHint')}</p>}
-        {p.editing && <p className="mt-1.5 text-xs text-muted-foreground">{t('basics.editSenderHint')}</p>}
+        {p.editing && (
+          <p className="mt-1.5 text-xs text-muted-foreground">{t('basics.editSenderHint')}</p>
+        )}
       </div>
 
       <div>
@@ -679,38 +681,38 @@ export function ReviewStep({ preview, ...p }: StepProps & { preview?: AudiencePr
       </div>
 
       {!p.editing && (
-      <div className="rounded-lg border border-border p-4">
-        <div className="flex items-center gap-3">
-          <div className="flex-1">
-            <div className="text-[13px] font-semibold">{t('review.testTitle')}</div>
-            <div className="text-xs text-muted-foreground">{t('review.testHint')}</div>
-          </div>
-          <Switch
-            checked={draft.sendTest}
-            onCheckedChange={(v) => set({ sendTest: v })}
-            label={t('review.testTitle')}
-            id="sched-send-test"
-          />
-        </div>
-        {draft.sendTest && (
-          <Field
-            label={t('review.testNumber')}
-            htmlFor="sched-test-number"
-            error={err('testNumber')}
-            className="mt-3"
-            hint={t('review.testNumberHint')}
-          >
-            <Input
-              id="sched-test-number"
-              inputMode="tel"
-              value={draft.testNumber}
-              invalid={!!err('testNumber')}
-              placeholder="919876543210"
-              onChange={(e) => set({ testNumber: e.target.value })}
+        <div className="rounded-lg border border-border p-4">
+          <div className="flex items-center gap-3">
+            <div className="flex-1">
+              <div className="text-[13px] font-semibold">{t('review.testTitle')}</div>
+              <div className="text-xs text-muted-foreground">{t('review.testHint')}</div>
+            </div>
+            <Switch
+              checked={draft.sendTest}
+              onCheckedChange={(v) => set({ sendTest: v })}
+              label={t('review.testTitle')}
+              id="sched-send-test"
             />
-          </Field>
-        )}
-      </div>
+          </div>
+          {draft.sendTest && (
+            <Field
+              label={t('review.testNumber')}
+              htmlFor="sched-test-number"
+              error={err('testNumber')}
+              className="mt-3"
+              hint={t('review.testNumberHint')}
+            >
+              <Input
+                id="sched-test-number"
+                inputMode="tel"
+                value={draft.testNumber}
+                invalid={!!err('testNumber')}
+                placeholder="919876543210"
+                onChange={(e) => set({ testNumber: e.target.value })}
+              />
+            </Field>
+          )}
+        </div>
       )}
     </div>
   );

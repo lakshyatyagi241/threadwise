@@ -145,9 +145,14 @@ describe('files', () => {
       ),
     ).rejects.toThrow(/cloud storage/);
     const gone = builder();
-    gone.tx.execute = (async () => ({ rows: [] })) as never;
+    (gone.tx as unknown as { execute: unknown }).execute = async () => ({ rows: [] });
     await expect(
-      gone.b.prepare(gone.tx, 1, row({ template_type: 'media', media_file: 'scheduled/1/x.png' }), 'baileys'),
+      gone.b.prepare(
+        gone.tx,
+        1,
+        row({ template_type: 'media', media_file: 'scheduled/1/x.png' }),
+        'baileys',
+      ),
     ).rejects.toThrow(/no longer available/);
     await expect(
       gone.b.prepare(gone.tx, 1, row({ template_type: 'media', media_file: null }), 'baileys'),
@@ -161,7 +166,12 @@ describe('a pin', () => {
     const p = await b.prepare(
       tx,
       1,
-      row({ template_type: 'location', latitude: '26.9124000', longitude: '75.7873000', message_content: 'Shop' }),
+      row({
+        template_type: 'location',
+        latitude: '26.9124000',
+        longitude: '75.7873000',
+        message_content: 'Shop',
+      }),
       'baileys',
     );
     expect(b.command(p, '1', undefined)).toEqual({
@@ -171,9 +181,9 @@ describe('a pin', () => {
       longitude: 75.7873,
       name: 'Shop',
     });
-    await expect(
-      b.prepare(tx, 1, row({ template_type: 'location' }), 'baileys'),
-    ).rejects.toThrow(/no coordinates/);
+    await expect(b.prepare(tx, 1, row({ template_type: 'location' }), 'baileys')).rejects.toThrow(
+      /no coordinates/,
+    );
   });
 });
 
@@ -194,11 +204,20 @@ describe('a template', () => {
     });
     expect(JSON.stringify((c as { components: unknown }).components)).toContain('Asha');
 
-    const o = await b.prepare(tx, 1, src({ template_overrides: { body: ['VIP {{first_name}}'] } }), 'waba');
-    expect(JSON.stringify((b.command(o, '1', contact) as { components: unknown }).components)).toContain('VIP Asha');
+    const o = await b.prepare(
+      tx,
+      1,
+      src({ template_overrides: { body: ['VIP {{first_name}}'] } }),
+      'waba',
+    );
+    expect(
+      JSON.stringify((b.command(o, '1', contact) as { components: unknown }).components),
+    ).toContain('VIP Asha');
     // a blank slot falls back to what the template does, never an empty parameter
     const none = await b.prepare(tx, 1, src(), 'waba');
-    expect(JSON.stringify((b.command(none, '1', undefined) as { components: unknown }).components)).not.toContain('"text":""');
+    expect(
+      JSON.stringify((b.command(none, '1', undefined) as { components: unknown }).components),
+    ).not.toContain('"text":""');
   });
 
   it('goes to every other engine as the approved text with the same values filled', async () => {
@@ -212,12 +231,14 @@ describe('a template', () => {
   it('refuses, once and with the reason, a template that is gone, no longer approved, paused, or an OTP', async () => {
     const gone = builder({ tpl: undefined });
     await expect(gone.b.prepare(gone.tx, 1, src(), 'waba')).rejects.toThrow(/was deleted/);
-    await expect(
-      gone.b.prepare(gone.tx, 1, src({ template_id: null }), 'waba'),
-    ).rejects.toThrow(/was deleted/);
+    await expect(gone.b.prepare(gone.tx, 1, src({ template_id: null }), 'waba')).rejects.toThrow(
+      /was deleted/,
+    );
 
     const rejected = builder({ tpl: template({ metaStatus: 'REJECTED' }) });
-    await expect(rejected.b.prepare(rejected.tx, 1, src(), 'waba')).rejects.toThrow(/not approved by Meta/);
+    await expect(rejected.b.prepare(rejected.tx, 1, src(), 'waba')).rejects.toThrow(
+      /not approved by Meta/,
+    );
     // the same template still goes out as text on a personal number
     await expect(rejected.b.prepare(rejected.tx, 1, src(), 'baileys')).resolves.toBeTruthy();
 

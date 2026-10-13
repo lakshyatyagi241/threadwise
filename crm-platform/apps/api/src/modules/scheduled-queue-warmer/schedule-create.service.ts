@@ -163,11 +163,13 @@ export class ScheduleCreateService {
       // Only a number that is warming counts a send against its daily budget, so only it has anything to give back later.
       const warming = new Set<string>();
       for (const p of plan) {
-        if (await this.warmer.isWarming(tx, p.sender)) warming.add(`${p.sender.engine}:${p.sender.id}`);
+        if (await this.warmer.isWarming(tx, p.sender))
+          warming.add(`${p.sender.engine}:${p.sender.id}`);
       }
       const out: Array<{ uuid: string; sender: SenderRef | null }> = [];
       for (const p of plan) {
-        const reserves = input.scheduleType === 'once' && warming.has(`${p.sender.engine}:${p.sender.id}`);
+        const reserves =
+          input.scheduleType === 'once' && warming.has(`${p.sender.engine}:${p.sender.id}`);
         const ref = await this.senderRef(tx, orgId, p.sender.engine, p.sender.id);
         const row = await tx.execute(sql`
           INSERT INTO scheduled_messages

@@ -228,7 +228,10 @@ export function validateStep(d: Draft, step: Step, ctx: CheckContext): StepError
       // A Cloud API number sends only a template Meta approved; the others send the approved text.
       const tpl = ctx.options.templates.find((x) => x.id === d.templateId);
       const engines = d.senders.map((k) => ctx.options.senders.find((s) => s.key === k)?.engine);
-      if (tpl && engines.some((en) => en && !tpl.usableOn.includes(en as 'waba' | 'twilio' | 'baileys'))) {
+      if (
+        tpl &&
+        engines.some((en) => en && !tpl.usableOn.includes(en as 'waba' | 'twilio' | 'baileys'))
+      ) {
         e.senders = 'templateNotForSender';
       }
     }
@@ -274,7 +277,8 @@ export function validateStep(d: Draft, step: Step, ctx: CheckContext): StepError
     if (!e.sendDate && !e.sendTime && !e.timezone) {
       const at = wallToEpoch(d.sendDate, d.sendTime, d.timezone);
       if (at === null) e.sendTime = 'timeRequired';
-      else if (at < ctx.now + ctx.options.minLeadMinutes * 60_000 && !ctx.skipLead) e.sendTime = 'tooSoon';
+      else if (at < ctx.now + ctx.options.minLeadMinutes * 60_000 && !ctx.skipLead)
+        e.sendTime = 'tooSoon';
     }
     if (d.scheduleType === 'recurring') {
       const every = Number(d.repeatEvery);

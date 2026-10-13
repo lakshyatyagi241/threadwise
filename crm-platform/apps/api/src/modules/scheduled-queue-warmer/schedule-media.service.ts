@@ -41,9 +41,7 @@ export class ScheduleMediaService {
     private readonly uploads: UploadPolicyService,
   ) {}
 
-  async upload(
-    file: { originalname: string; buffer: Buffer } | undefined,
-  ): Promise<ScheduleMedia> {
+  async upload(file: { originalname: string; buffer: Buffer } | undefined): Promise<ScheduleMedia> {
     const { orgId, userId } = RequestContextStore.require();
     if (!file) {
       throw AppError.validation('Choose a file to upload', [
@@ -105,7 +103,10 @@ export class ScheduleMediaService {
     try {
       await this.storage.remove(key);
     } catch (err) {
-      this.logger.warn({ orgId, err: String(err) }, '[SCHED] a file of a deleted schedule was not removed from storage');
+      this.logger.warn(
+        { orgId, err: String(err) },
+        '[SCHED] a file of a deleted schedule was not removed from storage',
+      );
     }
   }
 
@@ -114,13 +115,25 @@ export class ScheduleMediaService {
     tx: Tx,
     orgId: number,
     key: string | null,
-  ): Promise<{ id: string; name: string; mime: string; kind: ScheduleMediaKind; size: number } | null> {
+  ): Promise<{
+    id: string;
+    name: string;
+    mime: string;
+    kind: ScheduleMediaKind;
+    size: number;
+  } | null> {
     if (!key || /^https?:\/\//i.test(key)) return null;
     const res = await tx.execute(sql`
       SELECT uuid, file_name, mime, kind, size_bytes FROM scheduled_media
        WHERE org_id = ${orgId} AND storage_key = ${key}`);
     const r = res.rows[0] as
-      | { uuid: string; file_name: string; mime: string; kind: ScheduleMediaKind; size_bytes: number }
+      | {
+          uuid: string;
+          file_name: string;
+          mime: string;
+          kind: ScheduleMediaKind;
+          size_bytes: number;
+        }
       | undefined;
     return r
       ? { id: r.uuid, name: r.file_name, mime: r.mime, kind: r.kind, size: Number(r.size_bytes) }

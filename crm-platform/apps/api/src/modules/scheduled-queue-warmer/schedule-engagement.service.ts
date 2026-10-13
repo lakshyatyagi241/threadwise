@@ -104,7 +104,8 @@ export class ScheduleEngagementService {
       const run = { sent: 0, delivered: 0, read: 0, failed: 0, unsent: 0 };
       const upto = (t: number) => {
         for (const [name, m] of add) {
-          for (const [b, n] of m) if (b < t) run[name as 'sent' | 'delivered' | 'read' | 'failed'] += n;
+          for (const [b, n] of m)
+            if (b < t) run[name as 'sent' | 'delivered' | 'read' | 'failed'] += n;
         }
         for (const [b, n] of unsentAt) if (b < t) run.unsent += n;
       };
@@ -129,10 +130,7 @@ export class ScheduleEngagementService {
   }
 
   /** The recipients of a schedule, filtered by status and a search over the number and the contact's name, a page at a time. */
-  async recipients(
-    uuid: string,
-    q: ListScheduleRecipientsQuery,
-  ): Promise<ScheduleRecipientList> {
+  async recipients(uuid: string, q: ListScheduleRecipientsQuery): Promise<ScheduleRecipientList> {
     const { orgId } = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const own = await tx.execute(sql`

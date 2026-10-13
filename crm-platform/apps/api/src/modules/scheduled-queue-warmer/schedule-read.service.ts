@@ -266,7 +266,8 @@ export class ScheduleReadService {
         })),
         templates: (templates.rows as Raw[]).map((t) => {
           const connected = t.provider_config_id === null || t.config_status === 'connected';
-          const meta = Boolean(t.meta_template_id) && t.meta_status === 'APPROVED' && !t.paused && connected;
+          const meta =
+            Boolean(t.meta_template_id) && t.meta_status === 'APPROVED' && !t.paused && connected;
           const local = t.status === 'approved' || t.status === 'public';
           return {
             id: String(t.uuid),
@@ -274,7 +275,10 @@ export class ScheduleReadService {
             header: (t.header as string | null) ?? null,
             body: String(t.template_body ?? ''),
             footer: (t.footer as string | null) ?? null,
-            category: effectiveCategory(t.meta_category as string | null, t.category as string | null),
+            category: effectiveCategory(
+              t.meta_category as string | null,
+              t.category as string | null,
+            ),
             type: String(t.template_type ?? ''),
             engine: templateEngine({
               channel: t.channel as string | null,

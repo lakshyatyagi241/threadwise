@@ -262,7 +262,13 @@ export function RecipientsTable({
       )}
       {q.data && total > PAGE && (
         <div className="flex items-center justify-between border-t border-border px-4 py-2 text-xs text-muted-foreground">
-          <span>{t('recipients.range', { from: fmt((page - 1) * PAGE + 1), to: fmt(Math.min(total, page * PAGE)), total: fmt(total) })}</span>
+          <span>
+            {t('recipients.range', {
+              from: fmt((page - 1) * PAGE + 1),
+              to: fmt(Math.min(total, page * PAGE)),
+              total: fmt(total),
+            })}
+          </span>
           <span className="flex gap-2">
             <button
               type="button"

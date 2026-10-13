@@ -22,7 +22,12 @@ import {
   UNOFFICIAL_WHATSAPP_GATE,
   type UnofficialWhatsappGate,
 } from '../auth/unofficial-whatsapp.port';
-import { SENDER_DIRECTORY, WALLET_GATE, type SenderDirectory, type WalletGate } from '../broadcasts';
+import {
+  SENDER_DIRECTORY,
+  WALLET_GATE,
+  type SenderDirectory,
+  type WalletGate,
+} from '../broadcasts';
 import { SenderResolver } from '../node-bridge-runtime';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import { ScheduleAudienceService, type Recipient } from './audience/schedule-audience.service';
@@ -131,7 +136,6 @@ export class ScheduleEditService {
 
     const senderKey = patch.sender ?? stored.senderKey;
     if (!senderKey) throw fail('Choose the number to send from.', 'sender');
-    const senderChanged = patch.sender !== undefined && patch.sender !== stored.senderKey;
     if (senderKey.trim().startsWith(`${UNOFFICIAL_ENGINE}:`)) {
       await this.unofficial.assertEnabledFor(orgId);
     }
@@ -168,7 +172,8 @@ export class ScheduleEditService {
           409,
         );
       }
-      if (Number(cur.row_version) !== patch.rowVersion) throw AppError.rowVersionConflict('Schedule');
+      if (Number(cur.row_version) !== patch.rowVersion)
+        throw AppError.rowVersionConflict('Schedule');
 
       // The budget the old plan reserved goes back, and the new plan asks for its own: a warming number holds the whole change if it
       // cannot take it, and the release rolls back with it.
@@ -210,8 +215,12 @@ export class ScheduleEditService {
           media_file = ${kind.media}, latitude = ${kind.latitude}, longitude = ${kind.longitude},
           device_id = ${sender.id}, provider = ${sender.engine}, from_number = ${ref?.phoneDigits ?? null},
           warmer_reserved = ${reserved}, warmer_reserved_day = ${reservedDay}::date,
-          ${audience ? sql`recipient_type = ${input.recipientType}, target_groups = ${targets.groups}::jsonb, target_queues = ${targets.queues}::jsonb,
-            target_numbers = ${targets.numbers}::jsonb, total_recipients = ${count}, recipients_spent = false,` : sql``}
+          ${
+            audience
+              ? sql`recipient_type = ${input.recipientType}, target_groups = ${targets.groups}::jsonb, target_queues = ${targets.queues}::jsonb,
+            target_numbers = ${targets.numbers}::jsonb, total_recipients = ${count}, recipients_spent = false,`
+              : sql``
+          }
           next_run_at = coalesce(${timeChanged ? at.toISOString() : null}::timestamptz, next_run_at)
         WHERE org_id = ${orgId} AND id = ${stored.id} AND row_version = ${patch.rowVersion}
         RETURNING id`);
@@ -274,7 +283,10 @@ export class ScheduleEditService {
       recipientType: p.recipientType ?? d.recipientType,
     };
     if (scheduleType === 'recurring') {
-      eff.repeatInterval = p.repeatInterval === undefined ? (d.repeatInterval ?? undefined) : (p.repeatInterval ?? undefined);
+      eff.repeatInterval =
+        p.repeatInterval === undefined
+          ? (d.repeatInterval ?? undefined)
+          : (p.repeatInterval ?? undefined);
       eff.repeatEvery = p.repeatEvery ?? d.repeatEvery;
       const days = p.daysOfWeek ?? d.daysOfWeek;
       if (days.length) eff.daysOfWeek = days;

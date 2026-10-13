@@ -55,7 +55,8 @@ export function scheduleMediaProblem(
 
 /** English text for a problem; the screen words its own from `code`. */
 export function scheduleMediaProblemText(p: ScheduleMediaProblem): string {
-  const channel = p.engine === 'waba' ? 'WhatsApp Cloud API' : p.engine === 'twilio' ? 'Twilio' : 'this number';
+  const channel =
+    p.engine === 'waba' ? 'WhatsApp Cloud API' : p.engine === 'twilio' ? 'Twilio' : 'this number';
   return p.code === 'too_large'
     ? `This ${p.kind} is bigger than ${channel} accepts (${Math.round(p.limitBytes / MB)} MB). Choose a smaller file.`
     : `${channel} does not accept ${p.mime} as ${p.kind === 'document' ? 'a document' : `a ${p.kind}`}. Use ${(WABA_MIME[p.kind] ?? []).join(', ')}.`;

@@ -25,7 +25,13 @@ import { NodeBridgeRuntimeModule } from '../node-bridge-runtime';
  * Registered in app.module.ts.
  */
 @Module({
-  imports: [BroadcastsModule, CrmModule, PlansCoreModule, PlatformSettingsModule, NodeBridgeRuntimeModule],
+  imports: [
+    BroadcastsModule,
+    CrmModule,
+    PlansCoreModule,
+    PlatformSettingsModule,
+    NodeBridgeRuntimeModule,
+  ],
   controllers: [ScheduledController, WarmerController],
   providers: [
     SchedulerService,

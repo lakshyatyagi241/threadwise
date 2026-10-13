@@ -1,10 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
-import {
-  buildSend,
-  type TemplateShape,
-} from '../../infra/providers/whatsapp/meta-send-payload';
+import { buildSend, type TemplateShape } from '../../infra/providers/whatsapp/meta-send-payload';
 import {
   TEMPLATE_DIRECTORY,
   applyOverrides,
@@ -181,7 +178,8 @@ export class ScheduleMessageBuilder {
     clientReference = 'sched',
   ): SendCommand {
     const ctx = p.mergeBase ? ({ ...p.mergeBase, contact } satisfies MergeContext) : null;
-    const text = (s: string) => spin(ctx && s.includes('{{') ? renderMergeTags(s, ctx).rendered : s);
+    const text = (s: string) =>
+      spin(ctx && s.includes('{{') ? renderMergeTags(s, ctx).rendered : s);
 
     switch (p.kind) {
       case 'text':
@@ -268,15 +266,16 @@ export class ScheduleMessageBuilder {
     const applied = applyOverrides(vars, p.overrides, (s) => renderMergeTags(s, ctx).rendered);
     const kind = (t.attachmentType ?? '').toLowerCase();
     const media =
-      applied.vars.headerMediaUrl &&
-      (kind === 'image' || kind === 'video' || kind === 'document')
+      applied.vars.headerMediaUrl && (kind === 'image' || kind === 'video' || kind === 'document')
         ? { kind: kind as 'image' | 'video' | 'document', url: applied.vars.headerMediaUrl }
         : null;
     return commandForText({
       to,
       text: renderPlainBody(t.templateBody, applied.vars.body),
       header: applied.vars.header ?? (t.header && !media ? t.header : null),
-      footer: applied.vars.footer?.length ? renderPlainBody(t.footer ?? '', applied.vars.footer) : t.footer,
+      footer: applied.vars.footer?.length
+        ? renderPlainBody(t.footer ?? '', applied.vars.footer)
+        : t.footer,
       media,
       clientReference,
     });

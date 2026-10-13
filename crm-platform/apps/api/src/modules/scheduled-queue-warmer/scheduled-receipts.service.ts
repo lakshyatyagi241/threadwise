@@ -72,8 +72,7 @@ export class ScheduledReceiptsService {
       sql`SELECT * FROM sched_receipt_lookup(${receipt.providerMessageId})`,
     );
     const row = hit.rows[0] as
-      | { receipt_org_id: number | string; receipt_recipient_id: number | string }
-      | undefined;
+      { receipt_org_id: number | string; receipt_recipient_id: number | string } | undefined;
     if (!row) return false;
     const orgId = Number(row.receipt_org_id);
     const found = await this.db.txAs({ orgId, userId: null }, async (tx) => {
@@ -92,10 +91,7 @@ export class ScheduledReceiptsService {
     const at = report.occurredAt.toISOString();
     const failed = report.status === 'failed';
     const error = failed
-      ? failureText(
-          (report as Report).errorMessage,
-          (report as Report).errorCode,
-        )
+      ? failureText((report as Report).errorMessage, (report as Report).errorCode)
       : null;
     await this.db.txAs({ orgId, userId: null }, async (tx) => {
       // The row is locked while it moves, so two reports of one message are applied one after the other, each seeing the other's result.
@@ -150,7 +146,12 @@ export class ScheduledReceiptsService {
         LEFT JOIN wa_templates t ON t.org_id = m.org_id AND t.id = m.template_id
        WHERE c.org_id = ${orgId} AND c.id = ${recipientId}`);
     const r = res.rows[0] as
-      | { provider: string | null; category: string | null; meta_category: string | null; phone: string | null }
+      | {
+          provider: string | null;
+          category: string | null;
+          meta_category: string | null;
+          phone: string | null;
+        }
       | undefined;
     if (!r) return;
     // A schedule without an engine sends through the unofficial one (the runner's own default).
@@ -165,7 +166,8 @@ export class ScheduledReceiptsService {
         providerMessageId,
         status,
         recipient: (r.phone ?? '').replace(/\D+/g, '') || null,
-        category: r.category || r.meta_category ? effectiveCategory(r.meta_category, r.category) : null,
+        category:
+          r.category || r.meta_category ? effectiveCategory(r.meta_category, r.category) : null,
         source: 'scheduled',
       },
     });

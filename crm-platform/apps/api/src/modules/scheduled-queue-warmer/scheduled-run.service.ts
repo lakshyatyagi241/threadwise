@@ -29,13 +29,7 @@ import {
   UnsupportedSendError,
   type OpenTransport,
 } from '../node-bridge-runtime';
-import {
-  dateOnly,
-  isRecurring,
-  runAt,
-  weekdays,
-  type ScheduledRow,
-} from './scheduled-message';
+import { dateOnly, isRecurring, runAt, weekdays, type ScheduledRow } from './scheduled-message';
 import { deliveryProviderOf, emitDeliveryReported } from '../../kernel/outbox/delivery-report';
 import { ScheduleMessageBuilder, type PreparedMessage } from './schedule-message-builder.service';
 import { nextRun } from './schedule-time';
@@ -333,7 +327,12 @@ export class ScheduledRunService {
       error?: string;
       providerMessageId?: string | null;
       /** What the wallet needs to know about a send that went out. */
-      report?: { scheduledId: number; provider: string | null; category: string | null; phone: string };
+      report?: {
+        scheduledId: number;
+        provider: string | null;
+        category: string | null;
+        phone: string;
+      };
     },
   ): Promise<void> {
     await tx.execute(sql`

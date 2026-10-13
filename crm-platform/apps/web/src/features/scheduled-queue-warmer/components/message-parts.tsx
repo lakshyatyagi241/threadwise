@@ -60,7 +60,6 @@ export function TemplateBubble({ template }: { template: ScheduleTemplate | unde
       {p.media && (
         <div className="mb-2 flex h-16 items-center justify-center overflow-hidden rounded-md bg-muted font-mono text-[10.5px] text-brand">
           {p.media === 'image' && template!.attachmentUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element -- a sample from the workspace's own storage, shown once
             <img src={template!.attachmentUrl} alt="" className="h-full w-full object-cover" />
           ) : (
             t('headerMedia', { kind: p.media })
@@ -300,7 +299,11 @@ export function limitsFor(engines: readonly string[]) {
   return Object.fromEntries(
     kinds.map((k) => [
       k,
-      Math.min(...(engines.length ? engines : ['baileys']).map((e) => SCHEDULE_MEDIA_LIMITS[e]?.[k] ?? 20 * MB)),
+      Math.min(
+        ...(engines.length ? engines : ['baileys']).map(
+          (e) => SCHEDULE_MEDIA_LIMITS[e]?.[k] ?? 20 * MB,
+        ),
+      ),
     ]),
   ) as Record<(typeof kinds)[number], number>;
 }
@@ -365,7 +368,12 @@ export function MediaField({
                 {t(`kinds.${file.kind}`)} · {(file.size / MB).toFixed(file.size < MB ? 2 : 1)} MB
               </div>
             </div>
-            <Button size="sm" variant="secondary" disabled={busy} onClick={() => input.current?.click()}>
+            <Button
+              size="sm"
+              variant="secondary"
+              disabled={busy}
+              onClick={() => input.current?.click()}
+            >
               {busy ? t('uploading') : t('replace')}
             </Button>
             <Button size="sm" variant="secondary" onClick={() => set({ mediaFile: null })}>
@@ -400,12 +408,7 @@ export function MediaField({
         )}
       </div>
       {!file && (
-        <Field
-          label={t('orLink')}
-          htmlFor="media-link"
-          hint={t('mediaHint')}
-          error={error}
-        >
+        <Field label={t('orLink')} htmlFor="media-link" hint={t('mediaHint')} error={error}>
           <Input
             id="media-link"
             type="url"

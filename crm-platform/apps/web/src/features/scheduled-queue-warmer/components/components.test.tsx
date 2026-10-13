@@ -73,7 +73,10 @@ import { ScheduledScreen } from './scheduled-screen';
 import { WarmerScreen } from './warmer-screen';
 
 const load = (loc: string, file: string) =>
-  JSON.parse(readFileSync(join(process.cwd(), 'messages', loc, file), 'utf8')) as Record<string, unknown>;
+  JSON.parse(readFileSync(join(process.cwd(), 'messages', loc, file), 'utf8')) as Record<
+    string,
+    unknown
+  >;
 // The template step reuses the broadcast composer's variable panel, which has its own copy.
 const messages = {
   ...load('en', 'scheduled-queue-warmer.json'),

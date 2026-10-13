@@ -223,7 +223,8 @@ export function stateFromOverrides(
   else if (header?.mode === 'text' && typeof header.text === 'string') s.header = header.text;
   for (const key of ['body', 'footer'] as const) {
     const list = o[key];
-    if (Array.isArray(list)) list.forEach((v, i) => i < s[key].length && (s[key][i] = String(v ?? '')));
+    if (Array.isArray(list))
+      list.forEach((v, i) => i < s[key].length && (s[key][i] = String(v ?? '')));
   }
   if (Array.isArray(o.buttons)) {
     for (const b of o.buttons as Array<{ index?: number; value?: string }>) {
