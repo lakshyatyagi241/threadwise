@@ -4,6 +4,7 @@ import {
   csvSafe,
   decideSettlement,
   formatMinor,
+  aiChargeUsd,
   launchVerdict,
   monthStart,
   planIsActive,
@@ -239,6 +240,18 @@ describe('launchVerdict (TW-WALLET-013)', () => {
     expect(launchVerdict(f)).toEqual({ ok: false, reason: 'empty' });
   });
 
+  it('per message: a free price passes an empty wallet, a paid one does not', () => {
+    const one = { ...f, recipients: 1, freeAllowed: true };
+    expect(launchVerdict({ ...one, estimateMinor: 0 })).toEqual({ ok: true });
+    expect(launchVerdict({ ...one, estimateMinor: 100 })).toEqual({ ok: false, reason: 'empty' });
+    expect(launchVerdict({ ...one, balanceMinor: 50, estimateMinor: 100 })).toEqual({
+      ok: false,
+      reason: 'insufficient',
+    });
+    // A launch (not per message) with a free estimate still needs a balance.
+    expect(launchVerdict({ ...f, estimateMinor: 0 })).toEqual({ ok: false, reason: 'empty' });
+  });
+
   it('lets a classic workspace inside its free quota launch with an empty wallet', () => {
     expect(
       launchVerdict({ ...f, payPerMessage: false, monthlyLimit: 1000, usedThisMonth: 10 }),
@@ -321,5 +334,13 @@ describe('statement text (TW-WALLET-021, -022)', () => {
     expect(formatMinor(1250)).toBe('12.50');
     expect(formatMinor(-5)).toBe('-0.05');
     expect(formatMinor(0)).toBe('0.00');
+  });
+});
+
+describe('aiChargeUsd', () => {
+  it('adds 10% to what the vendor charged us, and nothing to a free call', () => {
+    expect(aiChargeUsd(1)).toBeCloseTo(1.1, 10);
+    expect(aiChargeUsd(0.002)).toBeCloseTo(0.0022, 10);
+    expect(aiChargeUsd(0)).toBe(0);
   });
 });

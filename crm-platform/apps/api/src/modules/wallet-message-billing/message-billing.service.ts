@@ -269,8 +269,15 @@ export class MessageBillingService {
             status: string;
           }
         | undefined;
-      // Never charged (the failure came first), free, or already refunded: nothing to reverse.
-      if (!key || key.status !== 'charged' || key.charge_id === null || !key.charge_created_at) {
+      if (!key) {
+        // The failure came first: close the message id, so a `sent` that arrives late can never charge it.
+        await tx.execute(sql`
+          INSERT INTO usage_charge_keys (org_id, provider_message_id, status) VALUES (${orgId}, ${wamid}, 'refunded')
+          ON CONFLICT (org_id, provider_message_id) DO NOTHING`);
+        return { refunded: false, refundedMinor: 0, balanceAfterMinor: 0 };
+      }
+      // Free, or already refunded: nothing to reverse.
+      if (key.status !== 'charged' || key.charge_id === null || !key.charge_created_at) {
         return { refunded: false, refundedMinor: 0, balanceAfterMinor: 0 };
       }
       const chargeId = Number(key.charge_id);
