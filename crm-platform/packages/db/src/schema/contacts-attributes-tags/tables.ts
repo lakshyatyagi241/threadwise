@@ -4,6 +4,7 @@
  */
 import { sql } from 'drizzle-orm';
 import {
+  customType,
   foreignKey,
   index,
   integer,
@@ -185,3 +186,42 @@ export const contactImportJobs = pgTable(
 
 export type ContactImportJobsRow = typeof contactImportJobs.$inferSelect;
 export type NewContactImportJobsRow = typeof contactImportJobs.$inferInsert;
+
+const bytea = customType<{ data: Buffer; driverData: Buffer }>({ dataType: () => 'bytea' });
+
+/** The CSV of a contacts export, gzipped, kept until `expiresAt` so it can be downloaded again (migration 20261121090300). */
+export const contactExports = pgTable(
+  'contact_exports',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    createdBy: idColumn('created_by'),
+    fileName: text('file_name').notNull(),
+    rowCount: integer('row_count').notNull().default(0),
+    byteSize: integer('byte_size').notNull().default(0),
+    csvGz: bytea('csv_gz').notNull(),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('contact_exports_org_id_uuid_key').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'contact_exports_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_contact_exports_created_by',
+      columns: [t.orgId, t.createdBy],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    index('idx_contact_exports_org_expires').on(t.orgId, t.expiresAt),
+  ],
+);
+
+export type ContactExportsRow = typeof contactExports.$inferSelect;
+export type NewContactExportsRow = typeof contactExports.$inferInsert;

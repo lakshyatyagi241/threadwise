@@ -1175,7 +1175,7 @@
       },
       "exports": {
         "title": "Exportations",
-        "hint": "Exportations de contacts depuis le Hub, de la plus récente à la plus ancienne. Le fichier téléchargé n’est pas conservé.",
+        "hint": "Exports de contacts depuis le Hub, du plus récent au plus ancien. Chaque fichier est conservé 30 jours pour que vous et vos collègues autorisés à exporter puissiez le télécharger de nouveau.",
         "empty": "Aucune exportation pour le moment.",
         "by": "Par",
         "rows": "Contacts",
@@ -1184,7 +1184,11 @@
         "selections": {
           "ids": "Contacts cochés",
           "filter": "Tout ce qui correspond"
-        }
+        },
+        "download": "Télécharger",
+        "noFile": "Non conservé",
+        "keptUntil": "Conservé jusqu'au {date}",
+        "downloadFailed": "Le fichier n'a pas pu être téléchargé. Il a peut-être expiré."
       }
     }
   }

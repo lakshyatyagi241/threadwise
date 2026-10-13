@@ -1175,7 +1175,7 @@
       },
       "exports": {
         "title": "Esportazioni",
-        "hint": "Esportazioni di contatti dall'Hub, dalla più recente. Il file scaricato non viene conservato.",
+        "hint": "Esportazioni di contatti dall'Hub, dalla più recente. Ogni file viene conservato 30 giorni, così tu e i colleghi con permesso di esportazione potete scaricarlo di nuovo.",
         "empty": "Ancora nessuna esportazione.",
         "by": "Da",
         "rows": "Contatti",
@@ -1184,7 +1184,11 @@
         "selections": {
           "ids": "Contatti selezionati",
           "filter": "Tutto ciò che corrisponde"
-        }
+        },
+        "download": "Scarica",
+        "noFile": "Non salvato",
+        "keptUntil": "Conservato fino al {date}",
+        "downloadFailed": "Impossibile scaricare il file. Potrebbe essere scaduto."
       }
     }
   }

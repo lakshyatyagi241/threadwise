@@ -242,7 +242,10 @@ export type ContactImportJob = z.infer<typeof contactImportJobSchema>;
 export const listImportJobsQuerySchema = paginationQuerySchema;
 export type ListImportJobsQuery = z.infer<typeof listImportJobsQuerySchema>;
 
-/** Past exports of contacts (the audit trail keeps who, when and how many; the file itself is not kept). */
+/** Past exports of contacts: who, when and how many from the audit trail, plus the saved file while it is still kept. */
+/** How long a saved export stays downloadable. */
+export const EXPORT_KEEP_DAYS = 30;
+
 export const exportHistoryQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(50),
 });
@@ -255,6 +258,10 @@ export const exportHistoryItemSchema = z.object({
   rows: z.number().int(),
   /** `ids`: the rows ticked; `filter`: everything the filter matched ("select all N matching" or Export all). */
   selection: z.enum(['ids', 'filter']),
+  /** The saved file's id while it can still be downloaded (30 days, and only for exports made since files were kept). */
+  fileId: z.string().uuid().nullable(),
+  fileBytes: z.number().int().nullable(),
+  expiresAt: z.string().datetime().nullable(),
 });
 export type ExportHistoryItem = z.infer<typeof exportHistoryItemSchema>;
 

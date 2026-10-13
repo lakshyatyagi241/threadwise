@@ -1175,7 +1175,7 @@
       },
       "exports": {
         "title": "Lần xuất",
-        "hint": "Các lần xuất liên hệ từ Hub, mới nhất trước. Tệp đã tải xuống không được lưu giữ.",
+        "hint": "Các lần xuất danh bạ từ Hub, mới nhất trước. Mỗi tệp được giữ 30 ngày để bạn và đồng nghiệp có quyền xuất có thể tải lại.",
         "empty": "Chưa có lần xuất nào.",
         "by": "Bởi",
         "rows": "Liên hệ",
@@ -1184,7 +1184,11 @@
         "selections": {
           "ids": "Liên hệ đã đánh dấu",
           "filter": "Tất cả liên hệ khớp"
-        }
+        },
+        "download": "Tải xuống",
+        "noFile": "Không được lưu",
+        "keptUntil": "Giữ đến {date}",
+        "downloadFailed": "Không thể tải tệp. Có thể tệp đã hết hạn."
       }
     }
   }

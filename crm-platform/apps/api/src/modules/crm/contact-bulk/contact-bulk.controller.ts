@@ -3,6 +3,8 @@ import {
   Controller,
   Get,
   Header,
+  ParseUUIDPipe,
+  Param,
   HttpCode,
   HttpStatus,
   Post,
@@ -100,10 +102,31 @@ export class ContactBulkController {
   @RequirePermission('record.contacts.export')
   @ApiOperation({
     summary: 'Recent exports of contacts: who, when and how many rows',
-    description: 'From the audit trail. The exported file itself is not kept.',
+    description:
+      'From the audit trail, each with its saved file (kept 30 days) when the caller may download it.',
   })
-  async exports(@Query(zodPipe(exportHistoryQuerySchema)) query: ExportHistoryQuery) {
-    return this.bulk.exportHistory(query);
+  async exports(
+    @Query(zodPipe(exportHistoryQuerySchema)) query: ExportHistoryQuery,
+    @GrantedScope('record.contacts.export') scope: RecordScope,
+  ) {
+    return this.bulk.exportHistory(query, scope);
+  }
+
+  @Get('exports/:id/download')
+  @RequirePermission('record.contacts.export')
+  @Header('Content-Type', 'text/csv; charset=utf-8')
+  @Header('Content-Disposition', 'attachment; filename="contacts-export.csv"')
+  @ApiOperation({
+    summary: 'Download a saved export again',
+    description:
+      'The file of an earlier export while it is kept (30 days). Allowed for the person who exported and for an exporter with scope "all".',
+  })
+  async downloadExport(
+    @Param('id', ParseUUIDPipe) id: string,
+    @GrantedScope('record.contacts.export') scope: RecordScope,
+  ): Promise<StreamableFile> {
+    const { csv } = await this.bulk.downloadExport(id, scope);
+    return new StreamableFile(csv);
   }
 
   @Post('export')
