@@ -964,6 +964,17 @@
         "created": "라벨을 만들었습니다",
         "deleted": "라벨을 삭제했습니다"
       }
+    },
+    "sla": {
+      "breached": "SLA 위반",
+      "atRisk": "SLA 마감까지 {minutes}분",
+      "ok": "SLA 마감 {time}",
+      "kind": {
+        "first_response": "첫 답변 목표",
+        "resolution": "해결 목표"
+      },
+      "titleBreached": "{kind}: 미달성 (마감 {time})",
+      "titleOpen": "{kind}: 마감 {time}"
     }
   }
 }

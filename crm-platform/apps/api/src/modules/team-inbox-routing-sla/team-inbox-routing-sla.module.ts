@@ -8,6 +8,10 @@ import { AssignmentController } from './assignment.controller';
 import { AssignmentService } from './assignment.service';
 import { BulkActionsService } from './bulk-actions.service';
 import { RoutingEngine } from './routing-engine.service';
+import { SlaClockService } from './sla-clock.service';
+import { SlaPoliciesController } from './sla-policies.controller';
+import { SlaPoliciesRepository } from './sla-policies.repository';
+import { SlaPoliciesService } from './sla-policies.service';
 import { RoutingRulesController } from './routing-rules.controller';
 import { RoutingRulesRepository } from './routing-rules.repository';
 import { RoutingRulesService } from './routing-rules.service';
@@ -21,7 +25,12 @@ import { RoutingRulesService } from './routing-rules.service';
  */
 @Module({
   imports: [TeamInboxConversationsModule, PlansCoreModule],
-  controllers: [AssignmentController, RoutingRulesController, TeamAnalyticsController],
+  controllers: [
+    AssignmentController,
+    RoutingRulesController,
+    SlaPoliciesController,
+    TeamAnalyticsController,
+  ],
   providers: [
     AssignmentService,
     BulkActionsService,
@@ -29,8 +38,11 @@ import { RoutingRulesService } from './routing-rules.service';
     RoutingRulesRepository,
     RoutingRulesService,
     RoutingEngine,
+    SlaPoliciesRepository,
+    SlaPoliciesService,
+    SlaClockService,
     TeamAnalyticsService,
   ],
-  exports: [AssignmentService, RoutingEngine],
+  exports: [AssignmentService, RoutingEngine, SlaClockService],
 })
 export class TeamInboxRoutingSlaModule {}

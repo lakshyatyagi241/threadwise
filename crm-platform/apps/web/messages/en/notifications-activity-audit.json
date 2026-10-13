@@ -354,6 +354,10 @@
         "billing_subscription_canceled": {
           "label": "Subscription cancelled",
           "hint": "Your payment provider ended a subscription of this workspace."
+        },
+        "sla_breached": {
+          "label": "SLA breached",
+          "hint": "A conversation you own missed its first-reply or resolution target."
         }
       },
       "loading": "Loading your preferences",

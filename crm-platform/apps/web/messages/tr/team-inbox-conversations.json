@@ -964,6 +964,17 @@
         "created": "Etiket oluşturuldu",
         "deleted": "Etiket silindi"
       }
+    },
+    "sla": {
+      "breached": "SLA aşıldı",
+      "atRisk": "SLA bitimine {minutes} dk kaldı",
+      "ok": "SLA bitiş: {time}",
+      "kind": {
+        "first_response": "İlk yanıt hedefi",
+        "resolution": "Çözüm hedefi"
+      },
+      "titleBreached": "{kind}: kaçırıldı (son zaman {time})",
+      "titleOpen": "{kind}: son zaman {time}"
     }
   }
 }

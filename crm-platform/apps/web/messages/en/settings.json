@@ -350,6 +350,11 @@
         "description": "Create the labels your team puts on conversations and filters the inbox by.",
         "keywords": "tags, labels, categories, organize, filter"
       },
+      "sla-policies": {
+        "label": "Response targets",
+        "description": "Set how fast your team should reply and resolve, and get alerted when a conversation misses its target.",
+        "keywords": "sla, response time, first reply, resolution, breach, targets, business hours"
+      },
       "team-performance": {
         "label": "Team performance",
         "description": "See how fast each agent replied and resolved today, this week or this month.",

@@ -964,6 +964,17 @@
         "created": "Đã tạo nhãn",
         "deleted": "Đã xóa nhãn"
       }
+    },
+    "sla": {
+      "breached": "SLA bị vi phạm",
+      "atRisk": "SLA đến hạn sau {minutes} phút",
+      "ok": "SLA đến hạn {time}",
+      "kind": {
+        "first_response": "Mục tiêu phản hồi đầu tiên",
+        "resolution": "Mục tiêu giải quyết"
+      },
+      "titleBreached": "{kind}: đã lỡ (hạn là {time})",
+      "titleOpen": "{kind}: hạn {time}"
     }
   }
 }

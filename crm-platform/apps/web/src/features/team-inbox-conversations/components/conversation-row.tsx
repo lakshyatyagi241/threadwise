@@ -8,6 +8,7 @@ import { badgeText } from '../lib/list';
 import { fullStamp, listTime } from '../lib/time';
 import { formatWindowLeft, rowWindowChip } from '../lib/window';
 import { LabelChip } from './label-chip';
+import { SlaBadge } from './sla-badge';
 import { Avatar, ChannelTag } from './parts';
 import { PinIcon } from './icons';
 
@@ -147,6 +148,7 @@ export const ConversationRow = memo(function ConversationRow({
                 {row.channel.name}
               </span>
             )}
+            <SlaBadge status={row.slaStatus} nowMs={nowMs} compact />
             {row.labels.slice(0, 2).map((l) => (
               <LabelChip key={l.id} label={l} />
             ))}

@@ -20,6 +20,15 @@ export const settings = [
     gates: { permission: 'inbox.settings.read', planFeature: 'inbox_routing' },
   }),
   settingsTile({
+    id: 'sla-policies',
+    section: 'automation',
+    href: '/sla-policies',
+    icon: 'history',
+    order: 27,
+    shortcutFrom: ['/inbox'],
+    gates: { permission: 'inbox.sla.manage', planFeature: 'inbox_sla' },
+  }),
+  settingsTile({
     id: 'team-performance',
     section: 'data',
     href: '/inbox/analytics/team',

@@ -964,6 +964,17 @@
         "created": "标签已创建",
         "deleted": "标签已删除"
       }
+    },
+    "sla": {
+      "breached": "SLA 已超时",
+      "atRisk": "SLA 将在 {minutes} 分钟后到期",
+      "ok": "SLA 到期时间 {time}",
+      "kind": {
+        "first_response": "首次回复目标",
+        "resolution": "解决目标"
+      },
+      "titleBreached": "{kind}：已错过（应于 {time} 完成）",
+      "titleOpen": "{kind}：{time} 到期"
     }
   }
 }

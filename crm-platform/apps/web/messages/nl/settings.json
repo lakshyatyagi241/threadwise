@@ -334,6 +334,11 @@
         "description": "Hete leads, doelgroepen, campagnereacties en andere zaken waar je team op kan reageren, afgeleid uit chats en campagnes.",
         "keywords": "groei, hete lead, doelgroep, betrokkenheid, afgehaakt, campagnereacties, conversiekans, opt-out, pilot"
       },
+      "sla-policies": {
+        "label": "Reactiedoelen",
+        "description": "Stel in hoe snel je team moet reageren en oplossen (SLA) en krijg een melding wanneer een gesprek zijn doel mist.",
+        "keywords": "sla, reactietijd, eerste reactie, oplossing, schending, doelen, kantooruren"
+      },
       "team-performance": {
         "label": "Teamprestaties",
         "description": "Zie hoe snel elke agent vandaag, deze week of deze maand reageerde en oploste.",

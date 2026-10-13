@@ -240,7 +240,9 @@ export function TeamPerformanceScreen() {
           </tbody>
         </table>
       </div>
-      {locked && <PlanPaywall />}
+      {locked && (
+        <PlanPaywall gates={[{ href: pathname, feature: 'team_performance' }]} enabled={[]} />
+      )}
     </section>
   );
 }

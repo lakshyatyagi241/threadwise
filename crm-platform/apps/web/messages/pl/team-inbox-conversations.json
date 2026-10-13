@@ -964,6 +964,17 @@
         "created": "Utworzono etykietę",
         "deleted": "Usunięto etykietę"
       }
+    },
+    "sla": {
+      "breached": "Przekroczono SLA",
+      "atRisk": "SLA upływa za {minutes} min",
+      "ok": "SLA do {time}",
+      "kind": {
+        "first_response": "Cel pierwszej odpowiedzi",
+        "resolution": "Cel rozwiązania"
+      },
+      "titleBreached": "{kind}: nie dotrzymano (termin: {time})",
+      "titleOpen": "{kind}: termin {time}"
     }
   }
 }

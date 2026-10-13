@@ -964,6 +964,17 @@
         "created": "Label dibuat",
         "deleted": "Label dihapus"
       }
+    },
+    "sla": {
+      "breached": "SLA terlampaui",
+      "atRisk": "SLA jatuh tempo dalam {minutes} mnt",
+      "ok": "SLA jatuh tempo {time}",
+      "kind": {
+        "first_response": "Target balasan pertama",
+        "resolution": "Target penyelesaian"
+      },
+      "titleBreached": "{kind}: terlewat (jatuh tempo {time})",
+      "titleOpen": "{kind}: jatuh tempo {time}"
     }
   }
 }

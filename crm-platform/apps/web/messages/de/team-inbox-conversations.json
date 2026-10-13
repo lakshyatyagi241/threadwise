@@ -964,6 +964,17 @@
         "created": "Label erstellt",
         "deleted": "Label gelöscht"
       }
+    },
+    "sla": {
+      "breached": "SLA verletzt",
+      "atRisk": "SLA fällig in {minutes} Min.",
+      "ok": "SLA fällig {time}",
+      "kind": {
+        "first_response": "Ziel für erste Antwort",
+        "resolution": "Ziel für Lösung"
+      },
+      "titleBreached": "{kind}: verfehlt (fällig war {time})",
+      "titleOpen": "{kind}: fällig {time}"
     }
   }
 }

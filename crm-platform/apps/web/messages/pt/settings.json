@@ -350,6 +350,11 @@
         "description": "Leads quentes, audiências, respostas às campanhas e outras coisas em que sua equipe pode agir, obtidas de conversas e campanhas.",
         "keywords": "crescimento, lead quente, audiência, engajamento, inativo, respostas às campanhas, propensão, opt-out, piloto"
       },
+      "sla-policies": {
+        "label": "Metas de resposta (SLA)",
+        "description": "Defina a rapidez com que sua equipe deve responder e resolver, e receba alertas quando uma conversa descumprir a meta.",
+        "keywords": "sla, tempo de resposta, primeira resposta, resolução, descumprimento, metas, horário comercial"
+      },
       "team-performance": {
         "label": "Desempenho da equipe",
         "description": "Veja a rapidez com que cada agente respondeu e resolveu hoje, nesta semana ou neste mês.",
