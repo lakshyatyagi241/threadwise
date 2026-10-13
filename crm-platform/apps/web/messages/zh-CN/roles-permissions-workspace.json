@@ -102,7 +102,8 @@
         "added": "{name} 已添加到工作区。",
         "rolesUpdated": "已更新 {name} 的角色。",
         "deactivated": "{name} 已停用。",
-        "reactivated": "{name} 已重新启用。"
+        "reactivated": "{name} 已重新启用。",
+        "invited": "已向 {name} 发送邀请。"
       },
       "deactivate": {
         "action": "停用",
@@ -123,7 +124,13 @@
         "passwordShort": "密码至少需要 8 个字符。",
         "generate": "生成",
         "role": "角色",
-        "submit": "添加成员"
+        "submit": "添加成员",
+        "inviteHint": "我们会通过邮件发送一个链接，让对方自行设置密码。链接仅可使用一次，几天后失效。",
+        "submitInvite": "发送邀请",
+        "linkNotSent": "无法向 {email} 发送邮件。请复制此链接并转交给对方；它不会再次显示。",
+        "copyLink": "复制链接",
+        "copied": "已复制",
+        "done": "完成"
       },
       "changeRole": {
         "title": "更改 {name} 的角色",
