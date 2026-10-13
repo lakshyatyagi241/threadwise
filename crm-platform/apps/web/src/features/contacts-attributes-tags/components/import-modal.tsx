@@ -53,6 +53,7 @@ const MAIN_FIELDS: readonly ImportField[] = [
   'countryCode',
   'group',
   'language',
+  'consent',
 ];
 
 type Mapping = Partial<Record<ImportField, number | null>>;
@@ -460,7 +461,11 @@ function ImportBody({
         </div>
       </div>
 
-      <ImportConsent checked={consent} onChange={setConsent} />
+      <ImportConsent
+        checked={consent}
+        onChange={setConsent}
+        summary={preview.data?.consent ?? null}
+      />
 
       {start.isError && <PreviewError error={start.error} />}
 

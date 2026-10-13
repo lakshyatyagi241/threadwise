@@ -97,6 +97,14 @@ function sentInteractiveOf(row: MessageRow): MessageResponse['sentInteractive'] 
 }
 
 /** The ad or link that opened the chat (Meta `referral`), on the message that carried it. */
+/** The consent line the STOP / START listener wrote (`meta.event = 'consent'`): the web app words it in the reader's language. */
+function systemEventOf(row: MessageRow): MessageResponse['systemEvent'] {
+  if (row.kind !== 'system' || row.meta.event !== 'consent') return undefined;
+  const action = row.meta.consentAction;
+  if (action !== 'withdrawn' && action !== 'granted') return undefined;
+  return { event: 'consent', action, keyword: str(row.meta.consentKeyword) };
+}
+
 function referralOf(row: MessageRow): MessageResponse['referral'] {
   const r = row.meta.referral as Record<string, unknown> | undefined;
   if (!r || typeof r !== 'object') return null;
@@ -252,6 +260,7 @@ export function toMessageResponse(row: MessageRow, link: MediaLinker): MessageRe
     contacts: contactsOf(row),
     interactive: legacy?.interactive ?? interactiveOf(row),
     forwarded: row.meta.forwarded === true ? true : undefined,
+    systemEvent: systemEventOf(row),
     referral: referralOf(row),
     group: groupAuthorOf(row),
     mentions: mentionsOf(row),

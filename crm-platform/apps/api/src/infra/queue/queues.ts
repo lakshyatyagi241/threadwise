@@ -70,6 +70,8 @@ export const QUEUES = {
   MSG_LOG_EXPORT: 'msg-log-export',
   /** One job per contact to score with AI (LSC): the vendor call and the score write. Own queue: a slow AI vendor must not hold any other job. */
   LSC_SCORE: 'lsc-score',
+  /** One job per requested export of the consent proof above the direct download's 50,000 rows: reads the ledger into a CSV and mails the requester. Own queue: a large export must not hold a send or a receipt. */
+  CONSENT_EXPORT: 'consent-export',
 } as const;
 
 export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];

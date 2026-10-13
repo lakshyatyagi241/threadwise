@@ -11,6 +11,7 @@ import {
   Post,
   Query,
   Res,
+  StreamableFile,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import type { Response } from 'express';
@@ -27,6 +28,7 @@ import {
 import { ActorKinds, Idempotent, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { Throttle } from '../platform-infrastructure';
+import { ConsentExportService } from './consent-export.service';
 import { ConsentSettingsService } from './consent-settings.service';
 import { ContactConsentService } from './consent.service';
 
@@ -38,6 +40,7 @@ export class ContactConsentController {
   constructor(
     private readonly ledger: ContactConsentService,
     private readonly settings: ConsentSettingsService,
+    private readonly exports: ConsentExportService,
   ) {}
 
   @Get('settings')
@@ -97,6 +100,45 @@ export class ContactConsentController {
   async exportAll(@Res({ passthrough: true }) res: Response): Promise<string> {
     const { csv, truncated } = await this.ledger.exportCsv();
     return this.csv(res, csv, 'consent-proof.csv', truncated);
+  }
+
+  @Post('exports')
+  @Idempotent()
+  @HttpCode(HttpStatus.ACCEPTED)
+  @RequirePermission('contacts.consent.manage')
+  @Throttle({ limit: 6, windowSeconds: 60, by: 'actor' })
+  @ApiOperation({
+    summary:
+      'Prepare the consent proof of the whole workspace in the background (no row cap); announced by email (202)',
+    description:
+      'One at a time per workspace: 409 CONSENT_EXPORT_IN_PROGRESS while one is being built.',
+  })
+  requestExport() {
+    return this.exports.request();
+  }
+
+  @Get('exports')
+  @RequirePermission('contacts.consent.manage')
+  @ApiOperation({
+    summary:
+      'The latest prepared exports, newest first, and whether the ledger is larger than the direct download carries',
+  })
+  listExports() {
+    return this.exports.list();
+  }
+
+  @Get('exports/:id/download')
+  @RequirePermission('contacts.consent.manage')
+  @Throttle({ limit: 20, windowSeconds: 60, by: 'actor' })
+  @ApiOperation({ summary: 'The finished export as CSV (kept 7 days)' })
+  async downloadExport(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<StreamableFile> {
+    const { stream, fileName } = await this.exports.download(id);
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+    return new StreamableFile(stream);
   }
 
   @Get('contacts/:uuid')

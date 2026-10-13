@@ -369,9 +369,15 @@ Reference has a per-contact `is_unsubscribed` flag, a manual toggle, a REST fiel
 | Export                           | None                                                                                                                                                                           | CSV proof for one contact (profile) and for the workspace (settings, up to 50,000 rows), formula-safe cells                                                                                                                                                                  | intended |
 | Hooks                            | Registration order                                                                                                                                                             | `InboundMessageListener` gains `first` (run before the others) and a result `halt` (listeners that answer the customer are skipped; routing and translation still run)                                                                                                       | decision |
 
-Open follow-ups are BL-103 in [backlog.md](../../backlog.md).
+Follow-up pass (all extensions, none in Reference): an inbox system line for a keyword opt-out / opt-in, an asynchronous export of the
+proof above 50,000 events (seven-day file, emailed link), a yes / no consent column in the contact import (only with the confirmation
+ticked), the campaign wizard's recipient list filtered by the consent switch, and a WhatsApp opt-in wording helper in Forms. Details in
+[the spec, section 13](../../specs/contact-consent-ledger.md). Still open (designs in the spec) are the rest of BL-103 in
+[backlog.md](../../backlog.md).
 
 ## Saved replies library (TW-TIB1-024)
+
+(Follow-ups: CSV import and export of the shared library, the AI agent prompt consumer, and the picker button in the rich email editor are extensions too; see [api/saved-replies.md](../../api/saved-replies.md).)
 
 Reference has a flat list of quick replies with two variables. Ours is a library: server-filled variables from the open conversation (contact, agent, workspace,
 channel), an optional channel restriction and language, a duplicate action, a category filter, a plan meter with an upgrade link, and a keyboard-driven

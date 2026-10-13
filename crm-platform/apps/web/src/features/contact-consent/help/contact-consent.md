@@ -50,3 +50,19 @@ Forms record the consent line a visitor ticked, with the exact text and its vers
 - **contacts.consent.read** shows the Consent card and exports one contact. **contacts.consent.manage** records a change.
 - We store ids, hashes and the matched keyword as proof, never an IP address and never the text of a contact's message.
 - If a keyword change does not seem to apply, wait a minute: each server keeps the list for up to a minute.
+
+## What agents see in the inbox
+
+When a contact replies STOP (or START) and it changes their status, the conversation gets a small grey line: "Contact replied STOP: unsubscribed from marketing". It is only a record for your team: it does not assign the conversation, ring a notification or count as an unread message. A second STOP from someone already opted out adds no line.
+
+## Exporting the proof when the history is large
+
+**Export proof (CSV)** downloads the whole history at once while it has up to 50,000 entries. Past that, the button becomes **Prepare the full proof file**: the file is built in the background, you get an email when it is ready, and it is listed under **Prepared proof files** with a **Download CSV** link. A prepared file is kept for 7 days and then deleted (prepare it again if you need it). Only one file is prepared at a time. Preparing a file needs the permission **contacts.consent.manage** and is recorded in the audit log.
+
+## A yes / no column in a contact import
+
+When you import contacts, map a column to **Marketing consent (yes / no)**. Rows that say yes (yes, y, true, 1, opted in, subscribed and the same words in Arabic and other languages) are recorded as agreeing, with the file name as proof. Rows that say no, are blank or say something else get **no** consent record: they stay "No consent recorded". The preview counts both and lists any value it did not understand. The column only counts once you tick **I have consent to message these contacts**; without the tick it is ignored. Contacts who opted out are never turned back on by a file.
+
+## Campaign audiences
+
+With **Require recorded consent for marketing sends** on, the campaign wizard's list of recipients, its count and its sample only include contacts with a recorded consent. Numbers you upload that are not contacts yet have no consent, so they are counted as "no recorded consent" and are not messaged.

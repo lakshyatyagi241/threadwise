@@ -9,6 +9,8 @@ export type ErrorKey =
   | 'conflict'
   | 'noteRequired'
   | 'settingsInvalid'
+  | 'exportInProgress'
+  | 'exportNotReady'
   | 'rateLimited'
   | 'validation'
   | 'unexpected';
@@ -20,6 +22,8 @@ export const ERROR_KEYS: readonly ErrorKey[] = [
   'conflict',
   'noteRequired',
   'settingsInvalid',
+  'exportInProgress',
+  'exportNotReady',
   'rateLimited',
   'validation',
   'unexpected',
@@ -35,6 +39,12 @@ export function errorKey(error: unknown): ErrorKey {
       return 'noteRequired';
     case ERROR_CODES.CONSENT_SETTINGS_INVALID:
       return 'settingsInvalid';
+    case ERROR_CODES.CONSENT_EXPORT_IN_PROGRESS:
+      return 'exportInProgress';
+    case ERROR_CODES.CONSENT_EXPORT_NOT_READY:
+      return 'exportNotReady';
+    case ERROR_CODES.CONSENT_EXPORT_NOT_FOUND:
+      return 'notFound';
     case ERROR_CODES.ROW_VERSION_CONFLICT:
       return 'conflict';
     case ERROR_CODES.VALIDATION_FAILED:
