@@ -232,9 +232,14 @@ export class ContactsService {
       : undefined;
 
     return this.db.tx(async (tx) => {
-      const ownerId = input.ownerId
-        ? await this.requireUser(tx, ctx.orgId, input.ownerId)
-        : ctx.userId;
+      // Omitted: the creator (Reference stamped `user_id` with the caller). `null`: nobody, which a caller whose
+      // record scope is own/team is refused below (the contact would vanish from their own list).
+      const ownerId =
+        input.ownerId === null
+          ? null
+          : input.ownerId
+            ? await this.requireUser(tx, ctx.orgId, input.ownerId)
+            : ctx.userId;
       await this.assertOwnerAllowed(tx, 'record.contacts.create', ownerId ?? null);
       const companyId = input.companyId
         ? await this.requireCompany(tx, ctx.orgId, input.companyId)
@@ -963,9 +968,15 @@ export class ContactsService {
     );
   }
 
+  /**
+   * Everyone active, each marked with whether the caller's record scope lets them assign a contact to that person
+   * (the same rule `assertOwnerWithinScope` enforces on every write): the form offers only those, the list filter and
+   * the Owner column need every name.
+   */
   async listAssignees(): Promise<AssigneeResponse[]> {
     const ctx = RequestContextStore.require();
-    return this.db.tx((tx) => this.repo.listAssignable(tx, ctx.orgId));
+    const scope = ctx.grants ? this.rbac.can(ctx.grants, 'record.contacts.update').scope : 'all';
+    return this.db.tx((tx) => this.repo.listAssignable(tx, ctx.orgId, scope, ctx.userId));
   }
 
   async setAssignee(input: SetContactAssigneeInput): Promise<BulkResult> {

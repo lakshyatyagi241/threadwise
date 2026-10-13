@@ -19,6 +19,13 @@ export const contactFilterShape = {
    */
   q: z.string().trim().min(1).max(200).optional(),
   ownerId: uuidSchema.optional(),
+  /**
+   * Contacts owned by any of these people (`a,b` in a query string or an array). With `unassigned` the contacts with no owner
+   * are added to them (an OR: "Asha, Ravi or nobody"); both combine with every other filter by AND.
+   */
+  ownerIds: queryList(uuidSchema).optional(),
+  /** Contacts with no owner. Alone it is exactly those; with `ownerIds` it widens them. */
+  unassigned: queryBoolean().optional(),
   lifecycleStage: z.string().optional(),
   includeArchived: queryBoolean().default(false),
   /** Members of one group. */
