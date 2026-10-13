@@ -16,10 +16,12 @@ import {
 } from './schedule';
 
 describe('schedule helpers', () => {
-  it('defaults to the workspace zone, else a valid one', () => {
+  it("starts in the person's zone (their own, else the workspace's), and UTC when there is none", () => {
     expect(defaultTimeZone('Asia/Kolkata')).toBe('Asia/Kolkata');
-    expect(defaultTimeZone('Not/AZone')).toBeTruthy();
-    expect(defaultTimeZone(null)).toBeTruthy();
+    expect(defaultTimeZone('America/New_York')).toBe('America/New_York');
+    expect(defaultTimeZone('Not/AZone')).toBe('UTC');
+    expect(defaultTimeZone(null)).toBe('UTC');
+    expect(defaultTimeZone(undefined)).toBe('UTC');
   });
 
   it('tomorrow is read on the clock of the zone', () => {

@@ -36,7 +36,6 @@
       "slotTaken": "该时间刚被占用，请选择其他时间。",
       "gone": "此预订已无法更改。",
       "unexpected": "出了点问题，请稍后重试。",
-      "requestId": "请求 ID",
       "retry": "重试",
       "invalidTransition": "该预订当前状态无法执行此操作。请刷新查看其所处状态。",
       "notStarted": "只有预订开始后才能执行此操作。",

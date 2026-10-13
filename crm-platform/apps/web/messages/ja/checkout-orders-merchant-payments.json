@@ -63,7 +63,6 @@
       "whatsapp_ai": "WhatsApp AI"
     },
     "errors": {
-      "requestId": "リクエストID",
       "retry": "再試行",
       "network": {
         "title": "サーバーに接続できません",

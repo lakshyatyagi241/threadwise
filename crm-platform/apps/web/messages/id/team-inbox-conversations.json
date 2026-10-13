@@ -28,8 +28,8 @@
       "teamChanged": "Tim diperbarui.",
       "priorityChanged": "Prioritas diperbarui",
       "snoozed": "Percakapan ditunda",
-      "labelAdded": "Label ditambahkan",
-      "labelRemoved": "Label dihapus"
+      "tagAdded": "Tag ditambahkan",
+      "tagRemoved": "Tag dihapus"
     },
     "list": {
       "title": "Inbox",
@@ -137,19 +137,18 @@
       "unsupported": "Channel ini tidak dapat mengirim jenis pesan atau file tersebut.",
       "network": "Server tidak dapat dihubungi. Periksa koneksi Anda lalu coba lagi.",
       "generic": "Terjadi kesalahan. Coba lagi.",
-      "genericWithId": "Terjadi kesalahan. Coba lagi. Referensi: {id}",
       "templateNotSendable": "Templat itu tidak dapat dikirim ke percakapan ini. Pilih yang lain.",
       "groupSendUnavailable": "Pengiriman ke grup WhatsApp belum tersedia. Balas dari aplikasi WhatsApp Business.",
       "logRange": "Pilih tanggal dalam satu tahun terakhir, dengan tanggal mulai sebelum tanggal akhir dan tidak di masa depan.",
       "logBusy": "Ekspor sedang disiapkan. Tunggu emailnya, lalu minta ekspor berikutnya.",
       "logNotReady": "Ekspor ini belum siap atau sudah kedaluwarsa. Minta lagi.",
       "groupSuspended": "Meta menangguhkan grup ini, sehingga tidak dapat dikirimi pesan sampai Meta memulihkannya.",
-      "walletEmpty": "Dompet pesan Anda tidak cukup untuk pesan grup ini (satu tagihan per anggota). Isi saldo lalu coba lagi.",
-      "groupPlanLocked": "Paket Anda tidak menyertakan grup WhatsApp, sehingga grup ini tidak dapat dikirimi pesan. Minta admin untuk meningkatkan paket.",
       "groupLeft": "Nomor ini sudah keluar dari grup, jadi tidak dapat lagi mengirim pesan di sana.",
       "groupAnnounceOnly": "Hanya admin yang dapat mengirim pesan di grup ini, dan nomor ini bukan admin.",
       "groupRateLimited": "Terlalu banyak pesan grup dari nomor ini dalam waktu singkat. Tunggu semenit, lalu coba lagi.",
       "groupUnavailable": "WhatsApp tidak menerima pesan grup ini. Coba lagi dalam beberapa menit.",
+      "walletEmpty": "Dompet pesan Anda tidak cukup untuk pesan grup ini (satu tagihan per anggota). Isi saldo lalu coba lagi.",
+      "groupPlanLocked": "Paket Anda tidak menyertakan grup WhatsApp, sehingga grup ini tidak dapat dikirimi pesan. Minta admin untuk meningkatkan paket.",
       "savedReplyGone": "Balasan tersimpan ini sudah tidak ada.",
       "savedReplyChannel": "Balasan tersimpan ini tidak ditujukan untuk jenis kanal ini.",
       "shortcutTaken": "Balasan tersimpan lain sudah memakai pintasan itu.",
@@ -223,7 +222,15 @@
       "groupMember": "Anggota grup",
       "groupTally": "Terkirim ke {delivered} dari {members}{read, plural, =0 {} other {, dibaca oleh #}}{failed, plural, =0 {} other {, # gagal}}",
       "groupTallyNoTotal": "Terkirim ke {delivered, plural, other {# anggota}}{read, plural, =0 {} other {, dibaca oleh #}}{failed, plural, =0 {} other {, # gagal}}",
-      "groupTallyBilled": "{billable} ditagih, {free} gratis"
+      "groupTallyBilled": "{billable} ditagih, {free} gratis",
+      "stageLine": {
+        "auto": "AI membaca obrolan dan memindahkan kontak ini dari {from} ke {to}.",
+        "undo": "Urungkan",
+        "wasUndone": "Diurungkan",
+        "undone": "Perubahan tahap diurungkan: kembali ke {stage}.",
+        "undoneToast": "Tahap dikembalikan ke {stage}.",
+        "couldNotUndo": "Perubahan ini tidak bisa diurungkan lagi: kontak sudah berpindah tahap atau sudah diurungkan."
+      }
     },
     "media": {
       "openImage": "Buka gambar {name}",
@@ -275,6 +282,44 @@
       "attachment": "sebuah lampiran",
       "jumpLatest": "Ke yang terbaru",
       "jumpLatestNew": "{count, plural, other {# pesan baru}}"
+    },
+    "groupThread": {
+      "openGroup": "Buka grup",
+      "readOnly": {
+        "left": {
+          "title": "Nomor ini keluar dari grup",
+          "message": "Percakapan disimpan apa adanya. Anda dapat membacanya dan menambah catatan internal, tetapi tidak dapat mengirim pesan."
+        },
+        "announceOnly": {
+          "title": "Hanya admin yang dapat mengirim di grup ini",
+          "message": "Nomor ini bukan admin grup, jadi WhatsApp tidak akan mengirimkan pesan. Anda tetap dapat menambah catatan internal."
+        }
+      },
+      "mention": {
+        "label": "Anggota grup",
+        "loading": "Mencari anggota",
+        "none": "Tidak ada anggota yang cocok"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta menangguhkan grup ini",
+          "message": "WhatsApp tidak mengirim pesan ke grup yang ditangguhkan. Anda dapat membaca percakapan dan menambahkan catatan internal sampai Meta memulihkannya."
+        },
+        "plan": {
+          "title": "Paket Anda tidak menyertakan grup WhatsApp",
+          "message": "Anda dapat membaca percakapan ini dan menambahkan catatan internal, tetapi mengirim ke grup memerlukan paket dengan grup. Minta admin untuk meningkatkan paket."
+        },
+        "ineligible": {
+          "title": "Nomor ini tidak dapat menggunakan grup WhatsApp",
+          "message": "Pada pemeriksaan terakhir, Meta tidak mengizinkan grup di nomor ini (perlu akun bisnis resmi). Anda dapat membaca percakapan dan menambahkan catatan internal. Buka Grup Meta untuk memeriksa lagi."
+        }
+      },
+      "cost": {
+        "members": "Pesan ini dikirim ke {count, plural, other {# anggota}}. Perkiraan biaya {cost}: WhatsApp menagih setiap anggota yang menerimanya.",
+        "membersNoEstimate": "Pesan ini dikirim ke {count, plural, other {# anggota}}. WhatsApp menagih setiap anggota yang menerimanya.",
+        "sizeUnknown": "Jumlah anggota belum diketahui. WhatsApp menagih setiap anggota yang menerima pesan ini.",
+        "walletShort": "Saldo dompet Anda mungkin tidak cukup untuk pesan ini. Isi saldo sebelum mengirim."
+      }
     },
     "composer": {
       "modeLabel": "Jenis pesan",
@@ -443,8 +488,8 @@
           "snoozed": "Ditunda oleh {actor}",
           "auto_unsnoozed": "Penundaan berakhir",
           "priority_changed": "Prioritas diubah oleh {actor}",
-          "tag_added": "Label ditambahkan oleh {actor}",
-          "tag_removed": "Label dihapus oleh {actor}",
+          "tag_added": "Tag ditambahkan oleh {actor}",
+          "tag_removed": "Tag dihapus oleh {actor}",
           "first_response": "Balasan pertama terkirim",
           "sla_breach": "Tenggat respons terlewat",
           "unknown": "{what} oleh {actor}"
@@ -658,44 +703,6 @@
         }
       }
     },
-    "groupThread": {
-      "openGroup": "Buka grup",
-      "readOnly": {
-        "left": {
-          "title": "Nomor ini keluar dari grup",
-          "message": "Percakapan disimpan apa adanya. Anda dapat membacanya dan menambah catatan internal, tetapi tidak dapat mengirim pesan."
-        },
-        "announceOnly": {
-          "title": "Hanya admin yang dapat mengirim di grup ini",
-          "message": "Nomor ini bukan admin grup, jadi WhatsApp tidak akan mengirimkan pesan. Anda tetap dapat menambah catatan internal."
-        }
-      },
-      "mention": {
-        "label": "Anggota grup",
-        "loading": "Mencari anggota",
-        "none": "Tidak ada anggota yang cocok"
-      },
-      "cloudBlock": {
-        "suspended": {
-          "title": "Meta menangguhkan grup ini",
-          "message": "WhatsApp tidak mengirim pesan ke grup yang ditangguhkan. Anda dapat membaca percakapan dan menambahkan catatan internal sampai Meta memulihkannya."
-        },
-        "plan": {
-          "title": "Paket Anda tidak menyertakan grup WhatsApp",
-          "message": "Anda dapat membaca percakapan ini dan menambahkan catatan internal, tetapi mengirim ke grup memerlukan paket dengan grup. Minta admin untuk meningkatkan paket."
-        },
-        "ineligible": {
-          "title": "Nomor ini tidak dapat menggunakan grup WhatsApp",
-          "message": "Pada pemeriksaan terakhir, Meta tidak mengizinkan grup di nomor ini (perlu akun bisnis resmi). Anda dapat membaca percakapan dan menambahkan catatan internal. Buka Grup Meta untuk memeriksa lagi."
-        }
-      },
-      "cost": {
-        "members": "Pesan ini dikirim ke {count, plural, other {# anggota}}. Perkiraan biaya {cost}: WhatsApp menagih setiap anggota yang menerimanya.",
-        "membersNoEstimate": "Pesan ini dikirim ke {count, plural, other {# anggota}}. WhatsApp menagih setiap anggota yang menerimanya.",
-        "sizeUnknown": "Jumlah anggota belum diketahui. WhatsApp menagih setiap anggota yang menerima pesan ini.",
-        "walletShort": "Saldo dompet Anda mungkin tidak cukup untuk pesan ini. Isi saldo sebelum mengirim."
-      }
-    },
     "savedReplies": {
       "channelKind": {
         "simulator": "Simulator (pengujian)",
@@ -892,6 +899,11 @@
         }
       }
     },
+    "triage": {
+      "priority": "Prioritas",
+      "snooze": "Tunda",
+      "wake": "Aktifkan sekarang"
+    },
     "bulk": {
       "barLabel": "Tindakan massal",
       "selected": "{count, plural, one {# percakapan dipilih} other {# percakapan dipilih}}",
@@ -919,51 +931,75 @@
         "partial": "{done} diperbarui, {unchanged} sudah yang terbaru, {failed} tidak dapat diubah. Yang gagal tetap terpilih.",
         "allFailed": "Tidak ada dari {count, plural, one {# percakapan} other {# percakapan}} yang dapat diubah."
       },
-      "label": "Label",
-      "labelAdd": "Tambah label",
-      "labelRemove": "Hapus label"
+      "tag": "Tag",
+      "tagAdd": "Tambah tag",
+      "tagRemove": "Hapus tag"
     },
-    "triage": {
-      "priority": "Prioritas",
-      "snooze": "Tunda",
-      "wake": "Aktifkan sekarang"
-    },
-    "labels": {
-      "label": "Label",
-      "loading": "Memuat label…",
-      "loadFailed": "Tidak dapat memuat label.",
-      "none": "Belum ada label.",
-      "newLabel": "Label baru",
+    "tags": {
+      "tag": "Tag",
+      "loading": "Memuat tag…",
+      "loadFailed": "Tidak dapat memuat tag.",
+      "none": "Belum ada tag.",
+      "newTag": "Tag baru",
       "add": "Tambah",
-      "filter": "Label",
-      "filterActive": "{count, plural, one {# label} other {# label}}",
-      "clearFilter": "Hapus filter label",
+      "filter": "Tag",
+      "filterActive": "{count, plural, other {# tag}}",
+      "clearFilter": "Hapus filter tag",
+      "scope": {
+        "label": "Cocokkan tag pada",
+        "conversation": "Tag percakapan",
+        "contact": "Tag kontak"
+      },
+      "groups": {
+        "title": "Tag",
+        "helpFor": "Tentang {title}",
+        "rule": "Kedua jenis tag berasal dari pustaka tag ruang kerja yang sama.",
+        "contactTitle": "Tag kontak",
+        "contactHelp": "Tag kontak menggambarkan orangnya (VIP, prospek, wilayah). Tag ini ikut ke setiap percakapan.",
+        "contactNone": "Kontak ini belum memiliki tag.",
+        "contactEdit": "Edit di kontak",
+        "conversationTitle": "Tag percakapan",
+        "conversationHelp": "Tag percakapan menggambarkan utas ini (tagihan, pengembalian dana, mendesak).",
+        "conversationNone": "Belum ada tag pada percakapan ini.",
+        "remove": "Hapus tag {name}"
+      },
       "screen": {
         "back": "Kembali ke kotak masuk",
-        "title": "Label",
-        "intro": "Label menandai percakapan agar tim Anda dapat mengurutkan dan memfilternya. Label ini sama dengan yang digunakan pada kontak.",
-        "newTitle": "Label baru",
-        "editTitle": "Edit label",
+        "title": "Tag percakapan",
+        "intro": "Tag percakapan menandai sebuah utas (tagihan, pengembalian dana, mendesak) agar tim Anda dapat mengurutkan dan memfilter kotak masuk. Tag ini berasal dari pustaka yang sama dengan tag kontak, yang menggambarkan orangnya.",
+        "newTitle": "Tag baru",
+        "editTitle": "Edit tag",
         "name": "Nama",
         "color": "Warna",
         "colorInvalid": "Gunakan warna hex seperti #075E54 atau nama warna.",
         "description": "Deskripsi (opsional)",
-        "create": "Buat label",
+        "create": "Buat tag",
         "save": "Simpan perubahan",
         "cancel": "Batal",
         "edit": "Edit",
         "delete": "Hapus",
-        "inUse": "{count, plural, one {# percakapan} other {# percakapan}}",
-        "emptyTitle": "Belum ada label",
-        "emptyMessage": "Buat label pertama Anda di atas, lalu pasang pada percakapan dari kotak masuk.",
-        "deleteTitle": "Hapus label ini?",
-        "deleteMessage": "\"{name}\" dipakai pada {count, plural, one {# percakapan} other {# percakapan}}. Menghapusnya akan melepasnya dari percakapan tersebut dan dari kontak mana pun yang memilikinya. Tindakan ini tidak dapat dibatalkan.",
-        "nameTaken": "Label dengan nama itu sudah ada.",
-        "conflict": "Orang lain mengubah label ini lebih dulu. Daftar telah dimuat ulang.",
-        "saved": "Label disimpan",
-        "created": "Label dibuat",
-        "deleted": "Label dihapus"
+        "inUse": "{count, plural, other {# percakapan}}",
+        "emptyTitle": "Belum ada tag",
+        "emptyMessage": "Buat tag pertama Anda di atas, lalu pasang pada percakapan dari kotak masuk.",
+        "deleteTitle": "Hapus tag ini?",
+        "deleteMessage": "\"{name}\" dipakai pada {count, plural, other {# percakapan}}. Menghapusnya akan melepasnya dari percakapan tersebut dan dari kontak mana pun yang memilikinya. Tindakan ini tidak dapat dibatalkan.",
+        "nameTaken": "Tag dengan nama itu sudah ada.",
+        "conflict": "Orang lain mengubah tag ini lebih dulu. Daftar telah dimuat ulang.",
+        "saved": "Tag disimpan",
+        "created": "Tag dibuat",
+        "deleted": "Tag dihapus"
       }
+    },
+    "sla": {
+      "breached": "SLA terlampaui",
+      "atRisk": "SLA jatuh tempo dalam {minutes} mnt",
+      "ok": "SLA jatuh tempo {time}",
+      "kind": {
+        "first_response": "Target balasan pertama",
+        "resolution": "Target penyelesaian"
+      },
+      "titleBreached": "{kind}: terlewat (jatuh tempo {time})",
+      "titleOpen": "{kind}: jatuh tempo {time}"
     }
   }
 }

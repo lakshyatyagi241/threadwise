@@ -128,7 +128,6 @@
       "planLimit": "Seu plano não permite mais deste tipo.",
       "unavailable": "Os segmentos ainda não estão disponíveis neste servidor.",
       "unexpected": "Algo deu errado. Tente novamente.",
-      "requestId": "ID da solicitação",
       "retry": "Tentar novamente",
       "shareEmpty": "Escolha pelo menos uma pessoa ou equipe para compartilhar o segmento.",
       "shareInvalid": "Algumas das pessoas ou equipes escolhidas não estão mais neste espaço de trabalho. Remova-as e salve novamente."

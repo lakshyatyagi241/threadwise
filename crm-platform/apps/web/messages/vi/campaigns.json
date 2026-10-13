@@ -828,7 +828,6 @@
         "notFound": "Không tìm thấy mục này. Có thể nó đã bị xóa.",
         "rateLimited": "Quá nhiều yêu cầu. Hãy đợi một lát rồi thử lại.",
         "unexpected": "Đã xảy ra lỗi từ phía chúng tôi. Hãy thử lại.",
-        "requestId": "ID yêu cầu",
         "retry": "Thử lại"
       },
       "categories": {

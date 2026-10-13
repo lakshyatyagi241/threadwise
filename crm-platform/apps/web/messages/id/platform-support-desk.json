@@ -63,8 +63,7 @@
       "closed": "Tiket ini sudah ditutup. Buka tiket baru untuk melanjutkan.",
       "notFound": "Tiket itu tidak ditemukan.",
       "unexpected": "Terjadi kesalahan. Coba lagi.",
-      "retry": "Coba lagi",
-      "requestId": "ID permintaan"
+      "retry": "Coba lagi"
     },
     "customer": {
       "title": "Ada yang bisa kami bantu?",

@@ -22,7 +22,6 @@
         "signedOut": "Votre session a pris fin. Veuillez vous reconnecter.",
         "rateLimited": "Trop de tentatives. Veuillez patienter un instant et réessayer.",
         "rateLimitedWait": "Trop de tentatives. Réessayez dans {seconds, plural, one {# seconde} other {# secondes}}.",
-        "requestId": "ID de requête",
         "locked": "Trop d’échecs. Patientez un moment avant de réessayer.",
         "lockedWait": "Trop d’échecs. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}."
       },
@@ -119,6 +118,9 @@
         },
         "workspaceTimezone": "Fuseau horaire",
         "workspaceTimezoneHint": "S’applique à {workspace}. Seuls les propriétaires et les administrateurs peuvent le modifier.",
+        "myTimezone": "Mon fuseau horaire",
+        "myTimezoneHint": "Les dates et heures s’affichent pour vous en {zone}. Laissez vide pour suivre le fuseau horaire de l’espace de travail (UTC s’il n’en a pas).",
+        "myTimezoneUseWorkspace": "Utiliser celui de l’espace de travail",
         "saved": "Profil enregistré.",
         "errors": {
           "fullNameRequired": "Saisissez votre nom complet.",

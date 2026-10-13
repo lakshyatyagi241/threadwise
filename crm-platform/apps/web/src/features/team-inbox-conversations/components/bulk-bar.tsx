@@ -1,13 +1,13 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useTimeZone, useTranslations } from 'next-intl';
 import { Button, Select, Spinner } from '@crm/ui';
 import {
   CONVERSATION_PRIORITIES,
   type BulkConversationAction,
   type ConversationPriority,
 } from '@crm/contracts';
-import { useAssignees, useLabels } from '../api/hooks';
+import { useAssignees, useTags } from '../api/hooks';
 import { SNOOZE_PRESETS, snoozeUntil, type SnoozePreset } from '../lib/selection';
 
 export interface BulkBarProps {
@@ -37,10 +37,11 @@ export interface BulkBarProps {
  */
 export function BulkBar(props: BulkBarProps) {
   const t = useTranslations('team-inbox-conversations.bulk');
+  const timeZone = useTimeZone();
   const tp = useTranslations('team-inbox-conversations.list');
   const { can } = props;
   const assignees = useAssignees(can.assign || can.assignSelf);
-  const labels = useLabels(can.tag);
+  const tags = useTags(can.tag);
   const disabled = props.busy || props.count === 0;
 
   const pick = (value: string, run: (value: string) => void) => {
@@ -185,7 +186,10 @@ export function BulkBar(props: BulkBarProps) {
             className="h-8 w-auto text-xs"
             onChange={(e) =>
               pick(e.target.value, (v) =>
-                props.onRun({ type: 'snooze', until: snoozeUntil(v as SnoozePreset, new Date()) }),
+                props.onRun({
+                  type: 'snooze',
+                  until: snoozeUntil(v as SnoozePreset, new Date(), timeZone),
+                }),
               )
             }
           >
@@ -197,30 +201,30 @@ export function BulkBar(props: BulkBarProps) {
             ))}
           </Select>
         )}
-        {can.tag && (labels.data?.data.length ?? 0) > 0 && (
+        {can.tag && (tags.data?.data.length ?? 0) > 0 && (
           <Select
-            aria-label={t('label')}
-            data-testid="inbox-bulk-label"
+            aria-label={t('tag')}
+            data-testid="inbox-bulk-tag"
             value=""
             disabled={disabled}
             className="h-8 w-auto text-xs"
             onChange={(e) =>
               pick(e.target.value, (v) => {
                 const [mode, tagId] = v.split(':') as ['add' | 'remove', string];
-                props.onRun({ type: 'label', mode, tagId: tagId! });
+                props.onRun({ type: 'tag', mode, tagId: tagId! });
               })
             }
           >
-            <option value="">{t('label')}</option>
-            <optgroup label={t('labelAdd')}>
-              {labels.data?.data.map((l) => (
+            <option value="">{t('tag')}</option>
+            <optgroup label={t('tagAdd')}>
+              {tags.data?.data.map((l) => (
                 <option key={`a${l.id}`} value={`add:${l.id}`}>
                   {l.name}
                 </option>
               ))}
             </optgroup>
-            <optgroup label={t('labelRemove')}>
-              {labels.data?.data.map((l) => (
+            <optgroup label={t('tagRemove')}>
+              {tags.data?.data.map((l) => (
                 <option key={`r${l.id}`} value={`remove:${l.id}`}>
                   {l.name}
                 </option>

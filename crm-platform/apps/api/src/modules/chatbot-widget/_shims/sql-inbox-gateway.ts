@@ -29,15 +29,112 @@ interface LineRow {
   agent_id: number | string | null;
   sent_at: Date | string | null;
   buttons: unknown;
+  media: unknown;
+  input: unknown;
+  links: unknown;
+  cards: unknown;
 }
 
 /** The reply buttons a flow bot stored in a line's meta (`widget_buttons`), or null. */
 const buttonsOf = (raw: unknown): NonNullable<InboxLine['buttons']> | null => {
   if (!Array.isArray(raw)) return null;
   const out = raw
-    .filter((b): b is { id: unknown; title: unknown } => typeof b === 'object' && b !== null)
-    .map((b) => ({ id: String(b.id ?? ''), title: String(b.title ?? '') }))
+    .filter(
+      (b): b is { id: unknown; title: unknown; icon?: unknown } =>
+        typeof b === 'object' && b !== null,
+    )
+    .map((b) => ({
+      id: String(b.id ?? ''),
+      title: String(b.title ?? ''),
+      ...(/^https?:\/\/\S+$/i.test(String(b.icon ?? '')) ? { icon: String(b.icon) } : {}),
+    }))
     .filter((b) => b.id !== '' && b.title !== '');
+  return out.length ? out : null;
+};
+
+/** The file a flow bot stored in a line's meta (`widget_media`), or null. */
+const mediaOf = (raw: unknown): NonNullable<InboxLine['media']> | null => {
+  if (typeof raw !== 'object' || raw === null) return null;
+  const m = raw as Record<string, unknown>;
+  const key = typeof m.key === 'string' ? m.key : '';
+  const kind = typeof m.kind === 'string' ? m.kind : '';
+  if (key === '' || !['image', 'video', 'audio', 'document'].includes(kind)) return null;
+  return {
+    key,
+    kind,
+    mime: typeof m.mime === 'string' ? m.mime : '',
+    name: typeof m.name === 'string' && m.name !== '' ? m.name : 'file',
+  };
+};
+
+/** What a question stored in its meta (`widget_input`), or null. */
+const inputOf = (raw: unknown): NonNullable<InboxLine['input']> | null => {
+  if (typeof raw !== 'object' || raw === null) return null;
+  const i = raw as Record<string, unknown>;
+  if (typeof i.type !== 'string' || i.type === '') return null;
+  return {
+    type: i.type,
+    ...(typeof i.format === 'string' ? { format: i.format } : {}),
+    ...(Array.isArray(i.accept)
+      ? { accept: i.accept.filter((e): e is string => typeof e === 'string') }
+      : {}),
+  };
+};
+
+/** The link, call and email buttons stored in a line's meta (`widget_links`): only the schemes a visitor's browser may open. */
+const linksOf = (raw: unknown): NonNullable<InboxLine['links']> | null => {
+  if (!Array.isArray(raw)) return null;
+  const out = raw
+    .filter(
+      (l): l is { label: unknown; url: unknown; icon?: unknown } =>
+        typeof l === 'object' && l !== null,
+    )
+    .map((l) => ({
+      label: String(l.label ?? '').slice(0, 40),
+      url: String(l.url ?? ''),
+      ...(/^https?:\/\/\S+$/i.test(String(l.icon ?? '')) ? { icon: String(l.icon) } : {}),
+    }))
+    .filter(
+      (l) => l.label !== '' && /^(https?:\/\/|tel:\+?[0-9]+$|mailto:[^\s@]+@[^\s@]+$)/i.test(l.url),
+    );
+  return out.length ? out : null;
+};
+
+const SAFE_LINK = /^(https?:\/\/|tel:\+?[0-9]+$|mailto:[^\s@]+@[^\s@]+$)/i;
+
+/** The carousel cards stored in a line's meta (`widget_cards`), limited to what the window may draw: at most ten cards of two buttons. */
+const cardsOf = (raw: unknown): NonNullable<InboxLine['cards']> | null => {
+  if (!Array.isArray(raw)) return null;
+  const out = raw
+    .filter((c): c is Record<string, unknown> => typeof c === 'object' && c !== null)
+    .slice(0, 10)
+    .map((c) => {
+      const image = String(c.image ?? '');
+      const buttons: NonNullable<InboxLine['cards']>[number]['buttons'] = [];
+      for (const b of (Array.isArray(c.buttons) ? c.buttons : []).slice(0, 2)) {
+        if (typeof b !== 'object' || b === null) continue;
+        const bb = b as Record<string, unknown>;
+        if (bb.kind === 'reply' && typeof bb.id === 'string' && bb.id !== '')
+          buttons.push({
+            kind: 'reply',
+            id: bb.id.slice(0, 120),
+            title: String(bb.title ?? '').slice(0, 40),
+          });
+        else if (bb.kind === 'link' && SAFE_LINK.test(String(bb.url ?? '')))
+          buttons.push({
+            kind: 'link',
+            label: String(bb.label ?? '').slice(0, 40),
+            url: String(bb.url),
+          });
+      }
+      return {
+        title: String(c.title ?? '').slice(0, 80),
+        text: String(c.text ?? '').slice(0, 300),
+        ...(/^https?:\/\/\S+$/i.test(image) ? { image } : {}),
+        buttons,
+      };
+    })
+    .filter((c) => c.title !== '' || c.text !== '' || c.image !== undefined);
   return out.length ? out : null;
 };
 
@@ -48,6 +145,10 @@ const toLine = (r: LineRow): InboxLine => ({
   agentId: r.agent_id === null ? null : Number(r.agent_id),
   sentAt: r.sent_at ? new Date(r.sent_at) : null,
   buttons: buttonsOf(r.buttons),
+  media: mediaOf(r.media),
+  input: inputOf(r.input),
+  links: linksOf(r.links),
+  cards: cardsOf(r.cards),
 });
 
 /**
@@ -293,9 +394,9 @@ export class SqlInboxGateway implements InboxGateway {
 
   async recent(tx: Tx, orgId: number, conversationId: number, limit: number): Promise<InboxLine[]> {
     const res = await tx.execute(sql`
-      SELECT id, direction, body, agent_id, sent_at, buttons FROM (
+      SELECT id, direction, body, agent_id, sent_at, buttons, media, input, links, cards FROM (
         SELECT id, direction, body, sender_agent_id AS agent_id, COALESCE(sent_at, provider_ts, created_at) AS sent_at,
-               meta->'widget_buttons' AS buttons
+               meta->'widget_buttons' AS buttons, meta->'widget_media' AS media, meta->'widget_input' AS input, meta->'widget_links' AS links, meta->'widget_cards' AS cards
         FROM messages
         WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND COALESCE(meta->>'source', '') <> 'welcome'
         ORDER BY id DESC LIMIT ${limit}
@@ -307,11 +408,41 @@ export class SqlInboxGateway implements InboxGateway {
   async oldest(tx: Tx, orgId: number, conversationId: number, limit: number): Promise<InboxLine[]> {
     const res = await tx.execute(sql`
       SELECT id, direction, body, sender_agent_id AS agent_id, COALESCE(sent_at, provider_ts, created_at) AS sent_at,
-             meta->'widget_buttons' AS buttons
+             meta->'widget_buttons' AS buttons, meta->'widget_media' AS media, meta->'widget_input' AS input, meta->'widget_links' AS links, meta->'widget_cards' AS cards
       FROM messages
       WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND COALESCE(meta->>'source', '') <> 'welcome'
       ORDER BY id LIMIT ${limit}`);
     return (res.rows as unknown as LineRow[]).map(toLine);
+  }
+
+  async setFeedback(
+    tx: Tx,
+    orgId: number,
+    conversationId: number,
+    id: number,
+    value: 'up' | 'down' | null,
+  ): Promise<boolean> {
+    const res = await tx.execute(sql`
+      UPDATE messages
+         SET meta = CASE WHEN ${value}::text IS NULL THEN meta - 'feedback'
+                         ELSE jsonb_set(meta, '{feedback}', to_jsonb(${value}::text)) END
+       WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND id = ${id} AND direction = 'out'
+       RETURNING id`);
+    return (res.rows as unknown[]).length > 0;
+  }
+
+  async mediaOf(
+    tx: Tx,
+    orgId: number,
+    conversationId: number,
+    id: number,
+  ): Promise<NonNullable<InboxLine['media']> | null> {
+    const res = await tx.execute(sql`
+      SELECT meta->'widget_media' AS media FROM messages
+      WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND id = ${id} AND direction = 'out'
+      LIMIT 1`);
+    const row = (res.rows as unknown as Array<{ media: unknown }>)[0];
+    return row ? mediaOf(row.media) : null;
   }
 
   async outboundSince(
@@ -322,7 +453,7 @@ export class SqlInboxGateway implements InboxGateway {
   ): Promise<InboxLine[]> {
     const res = await tx.execute(sql`
       SELECT id, direction, body, sender_agent_id AS agent_id, COALESCE(sent_at, provider_ts, created_at) AS sent_at,
-             meta->'widget_buttons' AS buttons
+             meta->'widget_buttons' AS buttons, meta->'widget_media' AS media, meta->'widget_input' AS input, meta->'widget_links' AS links, meta->'widget_cards' AS cards
       FROM messages
       WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND direction = 'out' AND id > ${since}
         AND COALESCE(meta->>'source', '') <> 'welcome'

@@ -161,8 +161,8 @@ describe('help agent: configuration', () => {
     const env = readHelpAgentEnv({});
     expect(env).toMatchObject({
       HELP_AGENT_PROVIDER: 'openai',
-      HELP_AGENT_MAX_STEPS: 25,
-      HELP_AGENT_TASK_MINUTES: 15,
+      HELP_AGENT_MAX_STEPS: 40,
+      HELP_AGENT_TASK_MINUTES: 25,
       HELP_AGENT_TASKS_PER_USER_DAY: 40,
     });
   });

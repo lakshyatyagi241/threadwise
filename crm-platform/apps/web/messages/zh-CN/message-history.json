@@ -1,0 +1,274 @@
+{
+  "message-history": {
+    "common": {
+      "dismiss": "关闭"
+    },
+    "nav": {
+      "history": "历史记录"
+    },
+    "crumb": "营销活动 / 消息历史",
+    "title": "消息历史",
+    "loading": "正在加载消息…",
+    "tryAgain": "重试",
+    "retention": "每条消息的投递步骤会完整保留 {hot} 天，之后归档，并保留至消息发出后 {days} 天。动态列表本身可回溯一年。",
+    "range": {
+      "label": "时间段",
+      "24h": "最近 24 小时",
+      "7d": "最近 7 天",
+      "30d": "最近 30 天",
+      "90d": "最近 90 天",
+      "custom": "自定义日期",
+      "short": {
+        "24h": "24 小时",
+        "7d": "7 天",
+        "30d": "30 天",
+        "90d": "90 天"
+      },
+      "from": "开始",
+      "to": "结束",
+      "apply": "应用日期",
+      "problem": {
+        "order": "开始日期不能晚于结束日期。"
+      }
+    },
+    "exports": {
+      "title": "CSV 导出",
+      "request": "导出 CSV",
+      "requested": "正在准备您的导出文件，准备好后我们会通过邮件通知您。",
+      "requestedTo": "正在准备您的导出文件，准备好后我们会发邮件至 {email}。",
+      "status": {
+        "queued": "等待开始",
+        "running": "准备中",
+        "ready": "已就绪",
+        "failed": "失败",
+        "expired": "已过期"
+      },
+      "preparing": "准备中…",
+      "download": "下载",
+      "rows": "{n} 条消息",
+      "keptUntil": "保留至 {when}（{days} 天）",
+      "fromEmail": "来自您的邮箱"
+    },
+    "kpi": {
+      "label": "关键数据",
+      "total": "消息总数",
+      "vsLast": "较上一周期 {pct}%",
+      "sent": "已发送",
+      "received": "已接收",
+      "failed": "失败",
+      "avgResponse": "平均响应时间",
+      "delivered": "已送达",
+      "read": "已读",
+      "deliveryRate": "送达率",
+      "cost": "费用",
+      "outgoing": "发出",
+      "incoming": "收到",
+      "retryQueue": "重试队列",
+      "toFirstReply": "至首次回复",
+      "healthy": "正常",
+      "na": "暂无",
+      "deliveredCaption": "已到达客户",
+      "readCaption": "客户已打开",
+      "deliveryRateCaption": "占已出队消息的比例",
+      "costCaption": "从您的钱包扣费"
+    },
+    "charts": {
+      "volume": "消息量",
+      "volumeTitle": "消息量趋势",
+      "bucketLabel": "分组方式",
+      "bucket": {
+        "daily": "按天",
+        "hourly": "按小时",
+        "weekly": "按周"
+      },
+      "volumeAria": "消息量趋势：已发送 {sent}，已接收 {received}，失败 {failed}",
+      "when": "时间",
+      "series": {
+        "sent": "已发送",
+        "received": "已接收",
+        "failed": "失败"
+      },
+      "direction": "方向占比",
+      "directionTitle": "发送与接收",
+      "directionAria": "共 {total} 条消息，分为已发送、已接收和失败",
+      "types": "按消息类型",
+      "typesTitle": "本周期构成",
+      "media": "媒体",
+      "top": "热门会话",
+      "topTitle": "最活跃的会话（{range}）",
+      "openInbox": "打开收件箱",
+      "topEmpty": "此时间段内暂无活跃会话。",
+      "topMeta": "{n} 条消息 · 最近 {time}"
+    },
+    "filters": {
+      "search": "搜索消息",
+      "searchPlaceholder": "按文本、联系人、电话或消息 ID 搜索…",
+      "directionLabel": "方向",
+      "dir": {
+        "all": "全部",
+        "out": "已发送",
+        "in": "已接收",
+        "fail": "失败"
+      },
+      "channel": "渠道",
+      "allChannels": "所有渠道",
+      "type": "类型",
+      "allTypes": "所有类型",
+      "status": "状态",
+      "allStatuses": "所有状态",
+      "sources": "发送方式",
+      "clear": "清除筛选",
+      "active": "已启用的筛选",
+      "chip": {
+        "templateId": "单个模板",
+        "campaignId": "单个营销活动",
+        "broadcastId": "单次群发",
+        "scheduledId": "单条定时消息"
+      },
+      "removeFilter": "移除筛选：{filter}"
+    },
+    "type": {
+      "text": "纯文本",
+      "template": "模板",
+      "auto_reply": "自动回复",
+      "campaign": "营销活动",
+      "broadcast": "群发",
+      "scheduled": "定时",
+      "image": "图片",
+      "video": "视频",
+      "audio": "音频",
+      "document": "文档",
+      "location": "位置"
+    },
+    "status": {
+      "queued": "排队中",
+      "sent": "已发送",
+      "delivered": "已送达",
+      "read": "已读",
+      "failed": "失败",
+      "received": "入站"
+    },
+    "source": {
+      "inbox": "收件箱",
+      "flow": "流程",
+      "auto_reply": "自动回复",
+      "ai": "AI 助手",
+      "api": "API",
+      "broadcast": "群发",
+      "campaign": "营销活动",
+      "scheduled": "定时",
+      "other": "其他"
+    },
+    "direction": {
+      "in": "收到",
+      "out": "发出",
+      "failed": "失败"
+    },
+    "table": {
+      "col": {
+        "when": "时间",
+        "dir": "方向",
+        "contact": "联系人",
+        "message": "消息",
+        "type": "类型",
+        "status": "状态",
+        "open": "打开"
+      },
+      "unknown": "未知联系人",
+      "masked": "您无权打开此联系人，因此该号码已隐藏。",
+      "entity": {
+        "broadcast": "群发 · {name}",
+        "campaign": "营销活动 · {name}",
+        "scheduled": "定时 · {name}"
+      },
+      "openSource": "打开",
+      "openSourceFor": "打开 {name} 的来源",
+      "showing": "显示 {n} 条",
+      "showingOf": "显示 {n} / {total} 条",
+      "loadMore": "加载更多"
+    },
+    "empty": {
+      "noMatch": "没有符合筛选条件的消息",
+      "noMatchHint": "试试清除搜索，或选择更长的时间段。",
+      "period": "最近 {days} 天内没有消息",
+      "periodCustom": "所选日期内没有消息",
+      "periodHint": "您发送或接收的消息将显示在此处，并附带投递状态。"
+    },
+    "drawer": {
+      "title": "消息详情",
+      "close": "关闭",
+      "loading": "加载中…",
+      "tryAgain": "重试",
+      "copied": "已复制",
+      "copyFailed": "无法复制",
+      "copyId": "复制 ID",
+      "openChat": "打开聊天",
+      "openContact": "打开联系人",
+      "openEntity": {
+        "broadcast": "打开群发",
+        "campaign": "打开营销活动",
+        "scheduled": "打开定时消息"
+      },
+      "unknown": "未知联系人",
+      "masked": "您无权打开此联系人，因此该号码已隐藏。",
+      "direction": "方向",
+      "directionValue": {
+        "in": "收到",
+        "out": "发出"
+      },
+      "status": "状态",
+      "type": "类型",
+      "when": "时间",
+      "content": "内容",
+      "noText": "无文本",
+      "failure": "失败原因",
+      "failedNoReason": "消息发送失败，且未记录原因。",
+      "details": "详细信息",
+      "messageId": "消息 ID",
+      "source": "发送方式",
+      "sourceValue": {
+        "inbox": "收件箱",
+        "flow": "流程",
+        "auto_reply": "自动回复",
+        "ai": "AI 助手",
+        "api": "API",
+        "broadcast": "群发",
+        "campaign": "营销活动",
+        "scheduled": "定时消息",
+        "other": "其他"
+      },
+      "channel": "渠道",
+      "template": "模板",
+      "entity": {
+        "broadcast": "群发",
+        "campaign": "营销活动",
+        "scheduled": "定时消息"
+      },
+      "sender": "发送者",
+      "senderKind": {
+        "customer": "客户",
+        "agent": "客服",
+        "bot": "自动化",
+        "system": "系统",
+        "broadcast": "批量发送"
+      },
+      "providerId": "服务商消息 ID",
+      "language": "语言",
+      "cost": "费用",
+      "timeline": "投递步骤",
+      "expired": "此消息已超过 {days} 天，其投递步骤已被清除。上方仍会显示其状态。",
+      "timelineEmpty": "此消息没有记录任何投递步骤。",
+      "archived": "此日志的一部分来自归档（早于 {days} 天的事件）。"
+    },
+    "errors": {
+      "generic": "出了点问题，请重试。",
+      "MESSAGE_NOT_FOUND": "此消息不存在，或您无权查看。",
+      "VALIDATION_FAILED": "这些日期或筛选条件无效。",
+      "FORBIDDEN": "您无权访问此内容。",
+      "MESSAGE_LOG_EXPORT_IN_PROGRESS": "已有导出正在准备中。请等待邮件通知后再发起新的导出。",
+      "MESSAGE_LOG_EXPORT_NOT_READY": "此导出尚未准备好。",
+      "MESSAGE_LOG_EXPORT_NOT_FOUND": "此导出不存在。",
+      "MESSAGE_LOG_EXPORT_RANGE_INVALID": "请选择最近 365 天内的日期。"
+    }
+  }
+}

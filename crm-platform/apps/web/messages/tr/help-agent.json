@@ -94,8 +94,7 @@
       "signedOut": "Oturumunuz sona erdi. Tekrar giriş yapın.",
       "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
       "generic": "Bir şeyler ters gitti. Tekrar deneyin.",
-      "retryIn": "{seconds} saniye sonra tekrar deneyin.",
-      "requestId": "İstek kimliği: {id}"
+      "retryIn": "{seconds} saniye sonra tekrar deneyin."
     },
     "examples": {
       "howDo": "{title} nasıl kullanılır?",
@@ -115,7 +114,6 @@
       "description": "Ekibiniz yapmak istediğini yazsın; uygulama onlara yol göstersin veya adımları kendi hesaplarında yapsın.",
       "loading": "Yükleniyor",
       "loadFailed": "Ayar yüklenemedi.",
-      "requestId": "İstek kimliği: {id}",
       "shareTitle": "Biri kullandığında neler paylaşılır",
       "share1": "Kişinin yazdığı istek ve bulunduğu sayfanın görünen metni, platformun kullandığı yapay zeka sağlayıcısına gönderilir.",
       "share2": "Telefon numaraları, e-posta adresleri, gizli bilgiler ve formların kişisel alanları önce gizlenir. Sayfadaki adlar ve diğer serbest metinler gizlenmez.",

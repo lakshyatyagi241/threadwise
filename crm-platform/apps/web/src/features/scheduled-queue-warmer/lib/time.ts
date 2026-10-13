@@ -14,15 +14,6 @@ export function timezoneList(): string[] {
   return ['UTC', ...zones.filter((z) => z !== 'UTC')];
 }
 
-/** The browser's own zone, or `UTC` when it cannot say. */
-export function browserTimezone(): string {
-  try {
-    return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
-  } catch {
-    return 'UTC';
-  }
-}
-
 interface Parts {
   y: number;
   mo: number;

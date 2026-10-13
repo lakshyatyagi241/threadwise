@@ -1,0 +1,53 @@
+{
+  "notifications": {
+    "page": {
+      "title": "Powiadomienia",
+      "description": "Wszystko, co wymagało Twojej uwagi, od najnowszych. Wybierz, które zdarzenia do Ciebie docierają, w ustawieniach powiadomień.",
+      "markAll": "Oznacz wszystkie jako przeczytane",
+      "clearAll": "Wyczyść wszystkie",
+      "preferences": "Ustawienia powiadomień",
+      "clearTitle": "Wyczyścić wszystkie powiadomienia?",
+      "clearBody": "Spowoduje to trwałe usunięcie wszystkich Twoich powiadomień. Inne osoby zachowają swoje. Tej operacji nie można cofnąć.",
+      "clearConfirm": "Wyczyść wszystkie",
+      "cancel": "Anuluj",
+      "dismiss": "Odrzuć to powiadomienie",
+      "tiles": {
+        "unread": "Nieprzeczytane",
+        "unreadHint": "Wybierz, aby pokazać tylko nieprzeczytane",
+        "day": "Ostatnie 24 godziny",
+        "dayHint": "Otrzymane dzisiaj",
+        "week": "Ostatnie 7 dni",
+        "weekHint": "Otrzymane w tym tygodniu",
+        "total": "Zachowane",
+        "totalHint": "Starsze są usuwane automatycznie"
+      },
+      "filters": {
+        "label": "Filtry powiadomień",
+        "readLabel": "Pokaż",
+        "all": "Wszystkie",
+        "unread": "Nieprzeczytane",
+        "type": "Typ",
+        "allTypes": "Wszystkie typy",
+        "otherTypes": "Inne",
+        "search": "Szukaj powiadomień",
+        "reset": "Resetuj filtry"
+      },
+      "sections": {
+        "today": "Dzisiaj",
+        "yesterday": "Wczoraj",
+        "thisWeek": "Wcześniej w tym tygodniu",
+        "older": "Starsze"
+      },
+      "loading": "Wczytywanie powiadomień",
+      "failed": "Nie udało się wczytać powiadomień.",
+      "retry": "Spróbuj ponownie",
+      "empty": "Brak powiadomień",
+      "emptyHint": "Nowe czaty, przydziały, wzmianki i wyniki Twoich wysyłek pojawią się tutaj.",
+      "emptyFiltered": "Żadne powiadomienia nie pasują do filtrów",
+      "emptyFilteredHint": "Usuń filtr lub wyszukaj coś innego.",
+      "showing": "{count, plural, one {Wczytano # powiadomienie} few {Wczytano # powiadomienia} many {Wczytano # powiadomień} other {Wczytano # powiadomienia}}",
+      "loadMore": "Wczytaj więcej",
+      "end": "Koniec listy"
+    }
+  }
+}

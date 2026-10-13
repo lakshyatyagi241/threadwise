@@ -30,8 +30,7 @@
       "PLAN_LIMIT_REACHED": "Vous avez atteint la limite de votre forfait.",
       "WA_UNOFFICIAL_DISABLED": "L’envoi via des numéros WhatsApp personnels (API non officielle) n’est pas activé pour votre espace de travail. Choisissez un numéro de l’API officielle WhatsApp Business.",
       "AUTH_SEND_HALTED": "L’envoi est suspendu pour cet espace de travail.",
-      "upgrade": "Voir les forfaits et passer à une offre supérieure",
-      "requestId": "Demande {id}"
+      "upgrade": "Voir les forfaits et passer à une offre supérieure"
     },
     "actions": {
       "done": {

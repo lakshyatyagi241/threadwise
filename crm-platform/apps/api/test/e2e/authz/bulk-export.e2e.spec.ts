@@ -714,6 +714,7 @@ const EXPORT_HEADER = [
   'source',
   'unsubscribed',
   'created_at',
+  'owner_email',
 ];
 
 describe('AUTHZ-050 / AUTHZ-071 exports need the export grant, respect record scope and never carry another workspace', () => {
@@ -812,9 +813,10 @@ describe('AUTHZ-050 / AUTHZ-071 exports need the export grant, respect record sc
     for (const n of bNames) expect(names).not.toContain(n);
     for (const needle of ['EX-B-', 'B-SECRET-VALUE', 'ex_bsecret', ...bUuids, B.slug])
       expect(res.text, needle).not.toContain(needle);
-    // no secret / hash / tenant / owner columns, and no internal numeric ids as a column
+    // no secret / hash / tenant / owner-id columns, and no internal numeric ids as a column. `owner_email` (the owner's
+    // login email, a deliberate column since the contact owner shipped) is the one owner column allowed, never the owner's id.
     expect(header.join(',')).not.toMatch(
-      /org|password|hash|secret|token|owner|created_by|deleted|uuid|\bid\b/i,
+      /org|password|hash|secret|token|owner(?!_email)|created_by|deleted|uuid|\bid\b/i,
     );
     // A's attribute value is exported for A
     expect(rows.find((r) => r.name === 'EX-own-0')!['attr:ex_city']).toBe('Pune');

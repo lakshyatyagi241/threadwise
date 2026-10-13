@@ -27,7 +27,6 @@ export function ActionError({ error }: { error: unknown }) {
   return (
     <Alert tone="danger" role="alert">
       {message}
-      {api?.requestId && <span className="ms-2 font-mono text-xs">{api.requestId}</span>}
     </Alert>
   );
 }

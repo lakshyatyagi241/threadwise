@@ -6,7 +6,7 @@ import type { LscDigest, LscInsight, LscSuggestion } from '@crm/contracts';
 import { Alert, Badge, Button, Spinner, cn, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { useDecideSuggestions, useDigestContact, useLscInsight } from '../api/hooks';
-import { errorKey, requestIdOf } from '../lib/errors';
+import { errorKey } from '../lib/errors';
 import { confidencePercent } from '../lib/suggestions-model';
 import { LinkButton, SparkleIcon, useFormatDate } from './parts';
 
@@ -207,11 +207,9 @@ function SuggestionBox({
 
 function ReadError({ error }: { error: unknown }) {
   const t = useTranslations('lead-scoring.scoreErrors');
-  const tc = useTranslations('lead-scoring.common');
   const canSettings = useCan('lsc.runs.read');
   const canKeys = useCan('aiadm.keys.read');
   const key = errorKey(error);
-  const id = requestIdOf(error);
   const tone =
     key === 'notEnabled' || key === 'noKey' || key === 'notEnoughChat' || key === 'suggestionGone'
       ? 'warning'
@@ -223,7 +221,6 @@ function ReadError({ error }: { error: unknown }) {
         <LinkButton href="/lead-scoring">{t('openSettings')}</LinkButton>
       )}
       {key === 'noKey' && canKeys && <LinkButton href="/ai-keys">{t('openKeys')}</LinkButton>}
-      {id && <p className="text-xs opacity-80">{tc('requestId', { id })}</p>}
     </Alert>
   );
 }

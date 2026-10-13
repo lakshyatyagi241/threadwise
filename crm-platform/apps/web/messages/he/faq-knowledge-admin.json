@@ -7,7 +7,6 @@
     "common": {
       "loading": "בטעינה",
       "retry": "נסו שוב",
-      "requestId": "מזהה בקשה",
       "dash": "-",
       "cancel": "ביטול",
       "errors": {

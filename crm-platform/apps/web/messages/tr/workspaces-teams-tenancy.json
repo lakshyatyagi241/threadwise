@@ -11,8 +11,7 @@
       "copied": "Kopyalandı",
       "retry": "Yeniden dene",
       "loadMore": "Daha fazla yükle",
-      "loadingMore": "Yükleniyor",
-      "requestId": "İstek kimliği"
+      "loadingMore": "Yükleniyor"
     },
     "tiers": {
       "owner": "Sahip",

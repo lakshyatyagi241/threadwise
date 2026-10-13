@@ -90,13 +90,16 @@ const lc = (s: unknown) =>
     .toLowerCase()
     .trim();
 
+/** A node whose buttons are tappable choices with scoped ids: the Buttons node and the Carousel (its reply buttons). */
+const isMenuNode = (type: string): boolean => type === 'InteractiveButtons' || type === 'Carousel';
+
 function menuItemsOf(graph: RuntimeGraph, run: RunState, nodeId: string): MenuItem[] {
   const remembered = run.menus.byNode[nodeId];
   if (remembered) return remembered;
   const node = nodeById(graph, nodeId);
   if (!node) return [];
   const render = (t: unknown) => interpolate(t, run.vars);
-  if (node.type === 'InteractiveButtons') return buttonItems(node, render);
+  if (isMenuNode(node.type)) return buttonItems(node, render);
   if (node.type === 'Question') return askItems(node, render);
   return [];
 }
@@ -286,14 +289,14 @@ export function routeReply(run: RunState, reply: InboundReply): ReplyDecision {
     const t = lc(text);
     const hits = graph.nodes.filter(
       (n) =>
-        n.type === 'InteractiveButtons' &&
+        isMenuNode(n.type) &&
         menuItemsOf(graph, run, n.id).some(
           (it) => lc(it.text) === t || lc(it.text).slice(0, 20) === t,
         ),
     );
     if (hits.length === 1) source = hits[0]!;
   }
-  if (source && source.type === 'InteractiveButtons') {
+  if (source && isMenuNode(source.type)) {
     const items = menuItemsOf(graph, run, source.id);
     if (items.length > 0 && (reply.id || text)) {
       const variable = String(source.props.variable ?? 'choice');
@@ -349,8 +352,7 @@ export function propertyToSave(
     return null;
   const node = nodeById(graph, decision.fromNodeId);
   if (!node) return null;
-  if (node.type !== 'List' && node.type !== 'InteractiveButtons' && node.type !== 'Question')
-    return null;
+  if (node.type !== 'List' && !isMenuNode(node.type) && node.type !== 'Question') return null;
   const key = String(node.props.savePropertyKey ?? '').trim();
   if (key === '') return null;
   const value =

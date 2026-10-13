@@ -28,8 +28,8 @@
       "teamChanged": "Team bijgewerkt.",
       "priorityChanged": "Prioriteit bijgewerkt",
       "snoozed": "Gesprek uitgesteld",
-      "labelAdded": "Label toegevoegd",
-      "labelRemoved": "Label verwijderd"
+      "tagAdded": "Tag toegevoegd",
+      "tagRemoved": "Tag verwijderd"
     },
     "list": {
       "title": "Inbox",
@@ -137,19 +137,18 @@
       "unsupported": "Dit kanaal kan dat type bericht of bestand niet verzenden.",
       "network": "De server kon niet worden bereikt. Controleer je verbinding en probeer het opnieuw.",
       "generic": "Er ging iets mis. Probeer het opnieuw.",
-      "genericWithId": "Er ging iets mis. Probeer het opnieuw. Referentie: {id}",
       "templateNotSendable": "Dat sjabloon kan niet in dit gesprek worden verzonden. Kies een ander.",
       "groupSendUnavailable": "Verzenden naar WhatsApp-groepen is nog niet beschikbaar. Antwoord via de WhatsApp Business-app.",
       "logRange": "Kies datums binnen het afgelopen jaar, waarbij de start voor het einde ligt en niet in de toekomst.",
       "logBusy": "Er wordt al een export voorbereid. Wacht op de e-mail ervan en vraag daarna een nieuwe aan.",
       "logNotReady": "Deze export is niet gereed of is verlopen. Vraag hem opnieuw aan.",
       "groupSuspended": "Meta heeft deze groep opgeschort, dus er kunnen geen berichten naartoe worden gestuurd totdat Meta dit opheft.",
-      "walletEmpty": "Je berichtenportemonnee dekt dit groepsbericht niet (één kost per lid). Waardeer op en probeer het opnieuw.",
-      "groupPlanLocked": "Je abonnement bevat geen WhatsApp-groepen, dus je kunt deze groep geen berichten sturen. Vraag een beheerder om het abonnement te upgraden.",
       "groupLeft": "Dit nummer heeft de groep verlaten, dus kan er geen berichten meer sturen.",
       "groupAnnounceOnly": "Alleen beheerders kunnen berichten sturen in deze groep en dit nummer is geen beheerder.",
       "groupRateLimited": "Te veel groepsberichten van dit nummer in korte tijd. Wacht een minuut en probeer het opnieuw.",
       "groupUnavailable": "WhatsApp heeft dit groepsbericht niet geaccepteerd. Probeer het over een paar minuten opnieuw.",
+      "walletEmpty": "Je berichtenportemonnee dekt dit groepsbericht niet (één kost per lid). Waardeer op en probeer het opnieuw.",
+      "groupPlanLocked": "Je abonnement bevat geen WhatsApp-groepen, dus je kunt deze groep geen berichten sturen. Vraag een beheerder om het abonnement te upgraden.",
       "savedReplyGone": "Dit opgeslagen antwoord bestaat niet meer.",
       "savedReplyChannel": "Dit opgeslagen antwoord is niet bedoeld voor dit soort kanaal.",
       "shortcutTaken": "Een ander opgeslagen antwoord gebruikt die sneltoets al.",
@@ -223,7 +222,15 @@
       "groupMember": "Groepslid",
       "groupTally": "Afgeleverd bij {delivered} van {members}{read, plural, =0 {} other {, gelezen door #}}{failed, plural, =0 {} other {, # mislukt}}",
       "groupTallyNoTotal": "Afgeleverd bij {delivered, plural, one {# lid} other {# leden}}{read, plural, =0 {} other {, gelezen door #}}{failed, plural, =0 {} other {, # mislukt}}",
-      "groupTallyBilled": "{billable} aangerekend, {free} gratis"
+      "groupTallyBilled": "{billable} aangerekend, {free} gratis",
+      "stageLine": {
+        "auto": "De AI las de chat en verplaatste dit contact van {from} naar {to}.",
+        "undo": "Ongedaan maken",
+        "wasUndone": "Ongedaan gemaakt",
+        "undone": "Fasewijziging ongedaan gemaakt: terug naar {stage}.",
+        "undoneToast": "Fase teruggezet naar {stage}.",
+        "couldNotUndo": "Deze wijziging kan niet meer ongedaan worden gemaakt: het contact is doorgegaan of het is al ongedaan gemaakt."
+      }
     },
     "media": {
       "openImage": "Afbeelding {name} openen",
@@ -275,6 +282,44 @@
       "attachment": "een bijlage",
       "jumpLatest": "Naar het laatste bericht",
       "jumpLatestNew": "{count, plural, one {# nieuw bericht} other {# nieuwe berichten}}"
+    },
+    "groupThread": {
+      "openGroup": "Groep openen",
+      "readOnly": {
+        "left": {
+          "title": "Dit nummer heeft de groep verlaten",
+          "message": "Het gesprek blijft zoals het was. Je kunt het lezen en interne notities toevoegen, maar je kunt geen berichten sturen."
+        },
+        "announceOnly": {
+          "title": "Alleen beheerders kunnen in deze groep sturen",
+          "message": "Dit nummer is geen beheerder van de groep, dus WhatsApp zou een bericht niet bezorgen. Je kunt nog wel interne notities toevoegen."
+        }
+      },
+      "mention": {
+        "label": "Groepsleden",
+        "loading": "Leden zoeken",
+        "none": "Geen lid gevonden"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta heeft deze groep geschorst",
+          "message": "WhatsApp levert geen berichten af in een geschorste groep. Je kunt het gesprek lezen en interne notities toevoegen totdat Meta de schorsing opheft."
+        },
+        "plan": {
+          "title": "Je abonnement bevat geen WhatsApp-groepen",
+          "message": "Je kunt dit gesprek lezen en interne notities toevoegen, maar versturen naar de groep vereist een abonnement met groepen. Vraag een beheerder om te upgraden."
+        },
+        "ineligible": {
+          "title": "Dit nummer kan geen WhatsApp-groepen gebruiken",
+          "message": "Bij de laatste controle stond Meta geen groepen toe op dit nummer (een officieel zakelijk account is vereist). Je kunt het gesprek lezen en interne notities toevoegen. Open Meta-groepen om opnieuw te controleren."
+        }
+      },
+      "cost": {
+        "members": "Dit bericht gaat naar {count, plural, one {# lid} other {# leden}}. Geschatte kosten {cost}: WhatsApp rekent elk lid aan dat het ontvangt.",
+        "membersNoEstimate": "Dit bericht gaat naar {count, plural, one {# lid} other {# leden}}. WhatsApp rekent elk lid aan dat het ontvangt.",
+        "sizeUnknown": "Het aantal leden is nog niet bekend. WhatsApp rekent elk lid aan dat dit bericht ontvangt.",
+        "walletShort": "Je saldo dekt dit bericht mogelijk niet. Waardeer op voordat je verstuurt."
+      }
     },
     "composer": {
       "modeLabel": "Berichttype",
@@ -443,8 +488,8 @@
           "snoozed": "Gesnoozed door {actor}",
           "auto_unsnoozed": "Snooze beëindigd",
           "priority_changed": "Prioriteit gewijzigd door {actor}",
-          "tag_added": "Label toegevoegd door {actor}",
-          "tag_removed": "Label verwijderd door {actor}",
+          "tag_added": "Tag toegevoegd door {actor}",
+          "tag_removed": "Tag verwijderd door {actor}",
           "first_response": "Eerste antwoord verzonden",
           "sla_breach": "Reactietermijn verlopen",
           "unknown": "{what} door {actor}"
@@ -658,44 +703,6 @@
         }
       }
     },
-    "groupThread": {
-      "openGroup": "Groep openen",
-      "readOnly": {
-        "left": {
-          "title": "Dit nummer heeft de groep verlaten",
-          "message": "Het gesprek blijft zoals het was. Je kunt het lezen en interne notities toevoegen, maar je kunt geen berichten sturen."
-        },
-        "announceOnly": {
-          "title": "Alleen beheerders kunnen in deze groep sturen",
-          "message": "Dit nummer is geen beheerder van de groep, dus WhatsApp zou een bericht niet bezorgen. Je kunt nog wel interne notities toevoegen."
-        }
-      },
-      "mention": {
-        "label": "Groepsleden",
-        "loading": "Leden zoeken",
-        "none": "Geen lid gevonden"
-      },
-      "cloudBlock": {
-        "suspended": {
-          "title": "Meta heeft deze groep geschorst",
-          "message": "WhatsApp levert geen berichten af in een geschorste groep. Je kunt het gesprek lezen en interne notities toevoegen totdat Meta de schorsing opheft."
-        },
-        "plan": {
-          "title": "Je abonnement bevat geen WhatsApp-groepen",
-          "message": "Je kunt dit gesprek lezen en interne notities toevoegen, maar versturen naar de groep vereist een abonnement met groepen. Vraag een beheerder om te upgraden."
-        },
-        "ineligible": {
-          "title": "Dit nummer kan geen WhatsApp-groepen gebruiken",
-          "message": "Bij de laatste controle stond Meta geen groepen toe op dit nummer (een officieel zakelijk account is vereist). Je kunt het gesprek lezen en interne notities toevoegen. Open Meta-groepen om opnieuw te controleren."
-        }
-      },
-      "cost": {
-        "members": "Dit bericht gaat naar {count, plural, one {# lid} other {# leden}}. Geschatte kosten {cost}: WhatsApp rekent elk lid aan dat het ontvangt.",
-        "membersNoEstimate": "Dit bericht gaat naar {count, plural, one {# lid} other {# leden}}. WhatsApp rekent elk lid aan dat het ontvangt.",
-        "sizeUnknown": "Het aantal leden is nog niet bekend. WhatsApp rekent elk lid aan dat dit bericht ontvangt.",
-        "walletShort": "Je saldo dekt dit bericht mogelijk niet. Waardeer op voordat je verstuurt."
-      }
-    },
     "savedReplies": {
       "channelKind": {
         "simulator": "Simulator (testen)",
@@ -892,6 +899,11 @@
         }
       }
     },
+    "triage": {
+      "priority": "Prioriteit",
+      "snooze": "Uitstellen",
+      "wake": "Nu terugzetten"
+    },
     "bulk": {
       "barLabel": "Bulkacties",
       "selected": "{count, plural, one {# gesprek geselecteerd} other {# gesprekken geselecteerd}}",
@@ -919,51 +931,75 @@
         "partial": "{done} bijgewerkt, {unchanged} al up-to-date, {failed} konden niet worden gewijzigd. De mislukte blijven geselecteerd.",
         "allFailed": "Geen van de {count, plural, one {# gesprek} other {# gesprekken}} kon worden gewijzigd."
       },
-      "label": "Label",
-      "labelAdd": "Label toevoegen",
-      "labelRemove": "Label verwijderen"
+      "tag": "Tag",
+      "tagAdd": "Tag toevoegen",
+      "tagRemove": "Tag verwijderen"
     },
-    "triage": {
-      "priority": "Prioriteit",
-      "snooze": "Uitstellen",
-      "wake": "Nu terugzetten"
-    },
-    "labels": {
-      "label": "Label",
-      "loading": "Labels laden…",
-      "loadFailed": "De labels konden niet worden geladen.",
-      "none": "Nog geen labels.",
-      "newLabel": "Nieuw label",
+    "tags": {
+      "tag": "Tag",
+      "loading": "Tags laden…",
+      "loadFailed": "Kan de tags niet laden.",
+      "none": "Nog geen tags.",
+      "newTag": "Nieuwe tag",
       "add": "Toevoegen",
-      "filter": "Labels",
-      "filterActive": "{count, plural, one {# label} other {# labels}}",
-      "clearFilter": "Labelfilter wissen",
+      "filter": "Tags",
+      "filterActive": "{count, plural, one {# tag} other {# tags}}",
+      "clearFilter": "Tagfilter wissen",
+      "scope": {
+        "label": "Tags vergelijken op",
+        "conversation": "Gesprekstags",
+        "contact": "Contacttags"
+      },
+      "groups": {
+        "title": "Tags",
+        "helpFor": "Over {title}",
+        "rule": "Beide soorten komen uit dezelfde tagbibliotheek van de werkruimte.",
+        "contactTitle": "Contacttags",
+        "contactHelp": "Een contacttag beschrijft de persoon (vip, lead, regio). Hij gaat mee naar elk gesprek.",
+        "contactNone": "Dit contact heeft geen tags.",
+        "contactEdit": "Bewerken bij contact",
+        "conversationTitle": "Gesprekstags",
+        "conversationHelp": "Een gesprekstag beschrijft deze conversatie (facturatie, terugbetaling, urgent).",
+        "conversationNone": "Nog geen tags op dit gesprek.",
+        "remove": "Tag {name} verwijderen"
+      },
       "screen": {
         "back": "Terug naar de inbox",
-        "title": "Labels",
-        "intro": "Met labels markeer je gesprekken zodat je team ze kan sorteren en filteren. Het zijn dezelfde tags als bij contacten.",
-        "newTitle": "Nieuw label",
-        "editTitle": "Label bewerken",
+        "title": "Gesprekstags",
+        "intro": "Gesprekstags markeren een conversatie (facturatie, terugbetaling, urgent) zodat je team de inbox kan sorteren en filteren. Ze komen uit dezelfde tagbibliotheek als contacttags, die de persoon beschrijven.",
+        "newTitle": "Nieuwe tag",
+        "editTitle": "Tag bewerken",
         "name": "Naam",
         "color": "Kleur",
         "colorInvalid": "Gebruik een hexkleur zoals #075E54 of een kleurnaam.",
         "description": "Beschrijving (optioneel)",
-        "create": "Label aanmaken",
+        "create": "Tag aanmaken",
         "save": "Wijzigingen opslaan",
         "cancel": "Annuleren",
         "edit": "Bewerken",
         "delete": "Verwijderen",
         "inUse": "{count, plural, one {# gesprek} other {# gesprekken}}",
-        "emptyTitle": "Nog geen labels",
-        "emptyMessage": "Maak hierboven je eerste label aan en zet het vervolgens op gesprekken vanuit de inbox.",
-        "deleteTitle": "Dit label verwijderen?",
-        "deleteMessage": "\"{name}\" staat op {count, plural, one {# gesprek} other {# gesprekken}}. Als je het verwijdert, wordt het van die gesprekken en van alle contacten met dit label gehaald. Dit kan niet ongedaan worden gemaakt.",
-        "nameTaken": "Er bestaat al een label met die naam.",
-        "conflict": "Iemand anders heeft dit label eerder gewijzigd. De lijst is opnieuw geladen.",
-        "saved": "Label opgeslagen",
-        "created": "Label aangemaakt",
-        "deleted": "Label verwijderd"
+        "emptyTitle": "Nog geen tags",
+        "emptyMessage": "Maak hierboven je eerste tag aan en zet hem daarna vanuit de inbox op gesprekken.",
+        "deleteTitle": "Deze tag verwijderen?",
+        "deleteMessage": "\"{name}\" staat op {count, plural, one {# gesprek} other {# gesprekken}}. Als je de tag verwijdert, wordt hij van die gesprekken en van alle contacten met deze tag gehaald. Dit kan niet ongedaan worden gemaakt.",
+        "nameTaken": "Er bestaat al een tag met die naam.",
+        "conflict": "Iemand anders heeft deze tag eerder gewijzigd. De lijst is opnieuw geladen.",
+        "saved": "Tag opgeslagen",
+        "created": "Tag aangemaakt",
+        "deleted": "Tag verwijderd"
       }
+    },
+    "sla": {
+      "breached": "SLA overschreden",
+      "atRisk": "SLA verloopt over {minutes} min",
+      "ok": "SLA uiterlijk {time}",
+      "kind": {
+        "first_response": "Doel eerste reactie",
+        "resolution": "Oplossingsdoel"
+      },
+      "titleBreached": "{kind}: gemist (was uiterlijk {time})",
+      "titleOpen": "{kind}: uiterlijk {time}"
     }
   }
 }

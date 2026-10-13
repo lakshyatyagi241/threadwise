@@ -63,8 +63,7 @@
       "closed": "此工单已关闭。请新建工单以继续。",
       "notFound": "找不到该工单。",
       "unexpected": "出错了。请重试。",
-      "retry": "重试",
-      "requestId": "请求 ID"
+      "retry": "重试"
     },
     "customer": {
       "title": "我们能帮您做什么？",

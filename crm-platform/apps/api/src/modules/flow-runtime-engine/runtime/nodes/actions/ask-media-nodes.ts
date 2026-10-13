@@ -97,7 +97,11 @@ export class AskMediaNodes implements NodeExecutor {
         ? p.interactive === false
           ? { kind: 'text', body: question }
           : { kind: 'location_request', body: question, hint: DEFAULT_HINT }
-        : { kind: 'text', body: question },
+        : {
+            kind: 'text',
+            body: question,
+            input: { type: 'file', accept: flbCleanAskFileExtensions(p.extensions) },
+          },
     );
     if (!out.ok) return this.sendFailed(out, ctx);
     const variable = str(p.variable) || (location ? 'location' : 'file');
@@ -193,7 +197,15 @@ export class AskMediaNodes implements NodeExecutor {
   ): Promise<CustomDecision> {
     const attempts = num(ctx.run.wait?.data?.attempts, 0) + 1;
     if (attempts <= settings.maxRetries) {
-      const out = await ctx.send({ kind: 'text', body: ctx.render(settings.wrongReplyText) });
+      const out = await ctx.send({
+        kind: 'text',
+        body: ctx.render(settings.wrongReplyText),
+        ...(location
+          ? {}
+          : {
+              input: { type: 'file', accept: flbCleanAskFileExtensions(ctx.node.props.extensions) },
+            }),
+      });
       if (!out.ok) ctx.note(`the wrong-reply message was not sent: ${out.error}`);
       return { action: 'stay', data: { attempts } };
     }

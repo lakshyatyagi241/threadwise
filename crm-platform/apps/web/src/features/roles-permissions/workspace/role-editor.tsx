@@ -279,11 +279,6 @@ function RoleForm({
               ? server.detail
               : te(server.key, server.values)}
           </p>
-          {server.requestId && (
-            <p className="font-mono text-xs opacity-80">
-              {tc('requestId')}: {server.requestId}
-            </p>
-          )}
         </Alert>
       )}
 

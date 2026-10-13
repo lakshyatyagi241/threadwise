@@ -310,6 +310,11 @@
         "description": "Berikan percakapan baru ke agen yang tepat secara otomatis, bergiliran atau berdasarkan aturan.",
         "keywords": "routing, round robin, tetapkan, agen, aturan inbox, distribusikan, pemilik"
       },
+      "web": {
+        "label": "Obrolan situs web",
+        "description": "Bot yang dibuat untuk obrolan situs web Anda dan widget tempat masing-masing berjalan.",
+        "keywords": "web, situs web, widget, chatbot, sematkan, obrolan langsung"
+      },
       "message-logs": {
         "label": "Log pesan",
         "description": "Ekspor log pengiriman pesan Anda, hingga satu tahun ke belakang, sebagai file yang dikirim ke email Anda.",
@@ -319,11 +324,6 @@
         "label": "Langganan",
         "description": "Apa yang diperpanjang, dibayar hingga kapan, dan pembatalan.",
         "keywords": "langganan, perpanjangan, perpanjangan otomatis, batalkan, autodebet, pembayaran gagal, tagihan"
-      },
-      "web": {
-        "label": "Obrolan situs web",
-        "description": "Bot yang dibuat untuk obrolan situs web Anda dan widget tempat masing-masing berjalan.",
-        "keywords": "web, situs web, widget, chatbot, sematkan, obrolan langsung"
       },
       "lead-scoring": {
         "label": "Penilaian prospek dengan AI",
@@ -340,15 +340,20 @@
         "description": "Pilih kata STOP dan START, balasan konfirmasi, baris berhenti berlangganan, dan apakah pemasaran memerlukan persetujuan yang tercatat.",
         "keywords": "persetujuan, berhenti berlangganan, berlangganan kembali, unsubscribe, stop, start, gdpr, kepatuhan, privasi, pemasaran"
       },
-      "inbox-labels": {
-        "label": "Label",
-        "description": "Buat label yang dipasang tim Anda pada percakapan dan digunakan untuk memfilter kotak masuk.",
-        "keywords": "tag, label, kategori, atur, filter"
+      "inbox-tags": {
+        "label": "Tag percakapan",
+        "description": "Buat tag yang dipasang tim Anda pada percakapan dan dipakai untuk memfilter kotak masuk. Tag ini sama dengan yang digunakan pada kontak.",
+        "keywords": "tag, kategori, atur, filter, tag percakapan"
       },
       "growth": {
         "label": "Pertumbuhan",
         "description": "Lead panas, audiens, balasan kampanye, dan hal lain yang dapat ditindaklanjuti tim Anda, disimpulkan dari obrolan dan kampanye.",
         "keywords": "pertumbuhan, lead panas, audiens, keterlibatan, tidak aktif, balasan kampanye, kecenderungan konversi, opt-out, pilot"
+      },
+      "sla-policies": {
+        "label": "Target respons",
+        "description": "Atur seberapa cepat tim Anda harus membalas dan menyelesaikan (SLA), dan dapatkan peringatan saat percakapan melewati target.",
+        "keywords": "sla, waktu respons, balasan pertama, penyelesaian, pelanggaran, target, jam kerja"
       },
       "team-performance": {
         "label": "Kinerja tim",

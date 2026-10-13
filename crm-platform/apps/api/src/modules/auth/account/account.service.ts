@@ -6,6 +6,7 @@ import { Redis } from 'ioredis';
 import {
   DELETE_CONFIRMATION_PHRASE,
   ERROR_CODES,
+  resolveTimezone,
   type BrandingResponse,
   type ChangePasswordRequest,
   type DeleteAccountRequest,
@@ -51,6 +52,7 @@ interface ProfileRow {
   display_name: string | null;
   phone_e164: string | null;
   locale: string | null;
+  timezone: string | null;
   theme: 'paper' | 'bright' | 'dark' | null;
   email_verified_at: Date | null;
   mfa_enabled: boolean | null;
@@ -122,7 +124,7 @@ export class AccountService {
     const res = await this.db.txAs({ orgId, userId }, async (tx) =>
       tx.execute(sql`
         SELECT u.email, u.full_name, u.uuid, u.status,
-               p.display_name, p.phone_e164, p.locale, p.theme,
+               p.display_name, p.phone_e164, p.locale, p.timezone, p.theme,
                s.email_verified_at, s.mfa_enabled,
                a.etag AS avatar_etag,
                o.uuid AS org_uuid, o.slug AS org_slug, o.name AS org_name, o.plan AS org_plan,
@@ -183,6 +185,7 @@ export class AccountService {
         displayName: p.display_name,
         phone: p.phone_e164,
         locale: p.locale,
+        timezone: p.timezone,
         theme: p.theme ?? 'paper',
         avatarUrl: p.avatar_etag ? `/api/v2/account/avatar?v=${p.avatar_etag}` : null,
         emailVerified: Boolean(p.email_verified_at),
@@ -210,6 +213,7 @@ export class AccountService {
       ),
       flags: this.gates.toFlags(state),
       sessionId: sessionId ?? '',
+      effectiveTimezone: resolveTimezone([p.timezone, settings.timezone]),
     };
   }
 
@@ -236,6 +240,8 @@ export class AccountService {
       pendingEmail: pending,
       phone: p.phone_e164,
       locale: p.locale,
+      timezone: p.timezone,
+      effectiveTimezone: resolveTimezone([p.timezone, settings.timezone]),
       theme: p.theme ?? 'paper',
       avatarUrl: p.avatar_etag ? `/api/v2/account/avatar?v=${p.avatar_etag}` : null,
       avatarMaxBytes: AVATAR_MAX_BYTES,
@@ -260,6 +266,12 @@ export class AccountService {
       ]);
     }
 
+    if (body.timezone && !isValidTimezone(body.timezone)) {
+      throw AppError.validation('Unknown timezone', [
+        { path: 'timezone', message: 'Not an IANA timezone.' },
+      ]);
+    }
+
     await this.db.txAs({ orgId, userId }, async (tx) => {
       if (body.fullName !== undefined) {
         await tx.execute(
@@ -268,13 +280,14 @@ export class AccountService {
       }
       const phoneChanged = body.phone !== undefined && body.phone !== p.phone_e164;
       await tx.execute(sql`
-        INSERT INTO user_profiles (org_id, user_id, display_name, phone_e164, locale, theme)
-        VALUES (${orgId}, ${userId}, ${body.displayName ?? null}, ${body.phone ?? null}, ${body.locale ?? null}, ${body.theme ?? 'paper'})
+        INSERT INTO user_profiles (org_id, user_id, display_name, phone_e164, locale, timezone, theme)
+        VALUES (${orgId}, ${userId}, ${body.displayName ?? null}, ${body.phone ?? null}, ${body.locale ?? null}, ${body.timezone ?? null}, ${body.theme ?? 'paper'})
         ON CONFLICT (org_id, user_id) DO UPDATE SET
           display_name = ${body.displayName === undefined ? sql`user_profiles.display_name` : sql`${body.displayName || null}`},
           phone_e164   = ${body.phone === undefined ? sql`user_profiles.phone_e164` : sql`${body.phone}`},
           phone_verified_at = ${phoneChanged ? sql`NULL` : sql`user_profiles.phone_verified_at`},
           locale       = ${body.locale === undefined ? sql`user_profiles.locale` : sql`${body.locale}`},
+          timezone     = ${body.timezone === undefined ? sql`user_profiles.timezone` : sql`${body.timezone}`},
           theme        = ${body.theme === undefined ? sql`user_profiles.theme` : sql`${body.theme}`}
       `);
       if (newTimezone !== undefined) {

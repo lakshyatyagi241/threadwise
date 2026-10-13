@@ -310,6 +310,11 @@
         "description": "Attribuez automatiquement les nouvelles conversations au bon agent, à tour de rôle ou selon des règles.",
         "keywords": "routage, tourniquet, attribuer, agents, règles de boîte, répartir, propriétaire"
       },
+      "web": {
+        "label": "Chat du site web",
+        "description": "Les bots conçus pour le chat de votre site web et le widget dans lequel chacun s’exécute.",
+        "keywords": "web, site web, widget, chatbot, intégrer, chat en direct"
+      },
       "message-logs": {
         "label": "Journaux des messages",
         "description": "Exportez le journal de livraison de vos messages, jusqu'à un an en arrière, sous forme de fichier envoyé à votre e-mail.",
@@ -319,11 +324,6 @@
         "label": "Abonnements",
         "description": "Ce qui se renouvelle, jusqu'à quand c'est payé, et résiliation.",
         "keywords": "abonnement, renouvellement, renouvellement automatique, résilier, prélèvement automatique, paiement échoué, paiements"
-      },
-      "web": {
-        "label": "Chat du site web",
-        "description": "Les bots conçus pour le chat de votre site web et le widget dans lequel chacun s’exécute.",
-        "keywords": "web, site web, widget, chatbot, intégrer, chat en direct"
       },
       "lead-scoring": {
         "label": "Scoring des leads par IA",
@@ -340,15 +340,20 @@
         "description": "Choisissez les mots STOP et START, les réponses de confirmation, la ligne de désinscription et si le marketing exige un consentement enregistré.",
         "keywords": "consentement, désinscription, réinscription, se désabonner, stop, start, rgpd, conformité, confidentialité, marketing"
       },
-      "inbox-labels": {
-        "label": "Étiquettes",
-        "description": "Créez les étiquettes que votre équipe applique aux conversations et avec lesquelles elle filtre la boîte de réception.",
-        "keywords": "tags, étiquettes, catégories, organiser, filtrer"
+      "inbox-tags": {
+        "label": "Étiquettes de conversation",
+        "description": "Créez les étiquettes que votre équipe applique aux conversations et qui servent à filtrer la boîte de réception. Ce sont les mêmes étiquettes que celles des contacts.",
+        "keywords": "tags, étiquettes, catégories, organiser, filtrer, étiquettes de conversation"
       },
       "growth": {
         "label": "Growth",
         "description": "Leads chauds, audiences, réponses aux campagnes et autres éléments exploitables par votre équipe, déduits des discussions et des campagnes.",
         "keywords": "growth, lead chaud, audience, engagement, inactif, réponses aux campagnes, probabilité de conversion, désabonnement, pilote"
+      },
+      "sla-policies": {
+        "label": "Objectifs de réponse (SLA)",
+        "description": "Définissez la rapidité de réponse et de résolution de votre équipe, et soyez alerté lorsqu'une conversation manque son objectif.",
+        "keywords": "sla, temps de réponse, première réponse, résolution, non-respect, objectifs, heures ouvrables"
       },
       "team-performance": {
         "label": "Performance de l'équipe",

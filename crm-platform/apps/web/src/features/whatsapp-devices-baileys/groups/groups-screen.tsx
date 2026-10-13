@@ -106,11 +106,6 @@ export function GroupsScreen({ deviceId }: { deviceId?: string }) {
               <div className="flex items-start justify-between gap-2">
                 <div>
                   <div>{notice.text}</div>
-                  {notice.requestId && (
-                    <div className="mt-1 text-xs opacity-80">
-                      {tc('requestId', { id: notice.requestId })}
-                    </div>
-                  )}
                 </div>
                 <button type="button" className="text-xs underline" onClick={() => setNotice(null)}>
                   {tc('dismiss')}

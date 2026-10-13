@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "Abaikan",
       "retry": "Coba lagi",
-      "requestId": "Permintaan {id}",
       "noAccessTitle": "Anda tidak dapat membuka layar ini",
       "noAccess": "Minta izin “{permission}” kepada admin."
     },
@@ -167,7 +166,7 @@
     "insights": {
       "sendTimes": {
         "title": "Waktu terbaik untuk mengirim",
-        "hint": "Kapan kontak Anda membaca kampanye dan menulis kepada Anda, dalam zona waktu ruang kerja Anda.",
+        "hint": "Kapan kontak Anda membaca kampanye dan menulis kepada Anda, dalam zona waktu Anda.",
         "empty": "Belum cukup aktivitas untuk disimpulkan.",
         "best": "Jam terbaik: {hours} ({zone}).",
         "quiet": "Jam paling sepi: {hours}.",

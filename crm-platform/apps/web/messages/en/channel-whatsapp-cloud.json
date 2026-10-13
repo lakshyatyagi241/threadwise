@@ -156,7 +156,6 @@
       "notFound": "This number no longer exists. The list has been refreshed.",
       "network": "The server could not be reached. Check your connection and try again.",
       "generic": "Something went wrong. Try again.",
-      "genericWithId": "Something went wrong. Try again. Reference: {id}",
       "detail": "Details: {detail}",
       "fix": {
         "tokenInvalid": "Create a permanent system user token in your Meta business settings and paste it under Edit credentials.",

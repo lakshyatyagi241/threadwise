@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "Ignorer",
       "retry": "Réessayer",
-      "requestId": "Requête {id}",
       "noAccessTitle": "Vous ne pouvez pas ouvrir cet écran",
       "noAccess": "Demandez à un administrateur l’autorisation « {permission} »."
     },
@@ -167,7 +166,7 @@
     "insights": {
       "sendTimes": {
         "title": "Meilleur moment pour envoyer",
-        "hint": "Quand vos contacts lisent les campagnes et vous écrivent, dans le fuseau horaire de votre espace de travail.",
+        "hint": "Quand vos contacts lisent les campagnes et vous écrivent, dans votre fuseau horaire.",
         "empty": "Pas encore assez d’activité pour se prononcer.",
         "best": "Meilleures heures : {hours} ({zone}).",
         "quiet": "Heures les plus calmes : {hours}.",

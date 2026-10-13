@@ -828,7 +828,6 @@
         "notFound": "Nicht gefunden. Möglicherweise wurde es gelöscht.",
         "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
         "unexpected": "Auf unserer Seite ist etwas schiefgelaufen. Versuchen Sie es erneut.",
-        "requestId": "Anfrage-ID",
         "retry": "Erneut versuchen"
       },
       "categories": {

@@ -14,7 +14,6 @@
       "copy": "Copiar",
       "copied": "Copiado",
       "copyFailed": "Não foi possível copiar. Selecione a chave e copie manualmente.",
-      "reference": "Referência para o suporte: {id}",
       "back": "Voltar para integrações"
     },
     "page": {

@@ -11,8 +11,7 @@
       "copied": "कॉपी हो गया",
       "retry": "फिर कोशिश करें",
       "loadMore": "और लोड करें",
-      "loadingMore": "लोड हो रहा है",
-      "requestId": "अनुरोध ID"
+      "loadingMore": "लोड हो रहा है"
     },
     "tiers": {
       "owner": "मालिक",

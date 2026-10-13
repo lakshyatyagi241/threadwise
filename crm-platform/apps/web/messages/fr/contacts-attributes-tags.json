@@ -21,7 +21,6 @@
       "unavailable": "Cette partie de l’API n’est pas encore disponible.",
       "rateLimited": "Trop de requêtes. Patientez un instant et réessayez.",
       "unexpected": "Un problème est survenu. Réessayez.",
-      "requestId": "ID de requête",
       "retry": "Réessayer",
       "reservedKey": "Cette clé est réservée à un jeton intégré. Choisissez-en une autre.",
       "attributeInUse": "Certains contacts ont une valeur pour cet attribut.",
@@ -125,7 +124,6 @@
       "columnsSelectAll": "Select All",
       "dragToReorder": "Drag to re-order columns",
       "removeColumn": "Remove {name}",
-      "columnsClose": "Close",
       "columnsSave": "Save",
       "colContactName": "Nom du contact",
       "colPhone": "Numéro de téléphone",
@@ -177,7 +175,19 @@
       "columns": "Colonnes",
       "addColumnField": "Ajouter un champ personnalisé comme colonne",
       "kanbanView": "Vue tableau (par étape)",
-      "colLeadScore": "Score du lead"
+      "colLeadScore": "Score du lead",
+      "colOwner": "Propriétaire",
+      "unassigned": "Non attribué",
+      "ownerFilter": "Filtrer par propriétaire",
+      "selectOwner": "Propriétaire",
+      "allOwners": "Tous les propriétaires",
+      "myContacts": "Mes contacts",
+      "ownersCount": "{count} propriétaires",
+      "ownerMe": "{name} (moi)",
+      "ownerFormer": "Ancien membre",
+      "reassignView": "Réattribuer les contacts de {name}...",
+      "smsNamed": "SMS à {name}",
+      "noSms": "Aucun numéro de téléphone pour le SMS"
     },
     "bulk": {
       "label": "Actions pour les contacts sélectionnés",
@@ -222,7 +232,6 @@
       "exportStarted": "Votre export a été téléchargé.",
       "exportTooLarge": "Trop de contacts à exporter en une seule fois. Affinez le filtre et réessayez.",
       "update": "Mettre à jour",
-      "updateNeedsRows": "Choisir des lignes",
       "updated": "{count, plural, one {# contact mis à jour.} other {# contacts mis à jour.}}"
     },
     "form": {
@@ -311,7 +320,13 @@
       "statusNoticeReset": "Statut réinitialisé sur {status}.",
       "statusNoticeSet": "Statut défini sur {status}, la valeur par défaut de cette étape.",
       "statusNoticeCleared": "Statut effacé : il ne s’applique pas à cette étape.",
-      "statusNoneForStage": "Aucun statut n’est configuré pour cette étape."
+      "statusNoneForStage": "Aucun statut n’est configuré pour cette étape.",
+      "owner": "Propriétaire",
+      "ownerNone": "Non attribué",
+      "ownerMe": "{name} (moi)",
+      "ownerFormer": "Ancien membre",
+      "ownerHelp": "La personne qui s'occupe de ce contact. Vous ne pouvez choisir que les personnes autorisées par votre accès.",
+      "ownerOutOfScope": "Votre accès ne vous permet pas d'attribuer ce contact à cette personne."
     },
     "tags": {
       "title": "Étiquettes",
@@ -521,7 +536,17 @@
       "noActivity": "Aucune activité pour ce contact pour le moment.",
       "loadMore": "Charger plus",
       "yes": "Oui",
-      "no": "Non"
+      "no": "Non",
+      "owner": "Propriétaire",
+      "ownerNone": "Non attribué",
+      "ownerChange": "Changer de propriétaire",
+      "ownerChanged": "Propriétaire défini sur {name}.",
+      "ownerCleared": "Propriétaire retiré.",
+      "ownerConflict": "Quelqu'un d'autre a modifié ce contact avant vous. Il a été rechargé ; réessayez.",
+      "ownerForbidden": "Votre accès ne vous permet pas d'attribuer ce contact à cette personne.",
+      "ownerFailed": "Impossible de changer le propriétaire. Réessayez.",
+      "ownerMe": "{name} (moi)",
+      "ownerFormer": "Ancien membre"
     },
     "attributes": {
       "eyebrow": "Plus / Attributs",
@@ -1146,7 +1171,11 @@
         "willClear": "Sera vidée pour {count, plural, one {le contact sélectionné} other {les # contacts sélectionnés}}.",
         "requiredNoClear": "Une propriété obligatoire ne peut pas être effacée.",
         "problemEmpty": "Saisissez une valeur ou choisissez Effacer."
-      }
+      },
+      "titleAll": "Mettre à jour tous les contacts correspondants",
+      "hintAll": "Définit les mêmes valeurs pour chaque contact correspondant aux filtres actuels. Les champs laissés sur Conserver ne sont pas modifiés.",
+      "applyAll": "Mettre à jour tous les contacts correspondants",
+      "ownerOnlyNote": "Pour tous les contacts correspondants, seul le propriétaire peut être modifié ici. Pour changer l'étape, le statut ou les propriétés, cochez plutôt les lignes."
     },
     "kanban": {
       "board": "Contacts par étape",
@@ -1198,6 +1227,151 @@
         "noFile": "Non conservé",
         "keptUntil": "Conservé jusqu'au {date}",
         "downloadFailed": "Le fichier n'a pas pu être téléchargé. Il a peut-être expiré."
+      }
+    },
+    "singleSend": {
+      "close": "Fermer",
+      "cancel": "Annuler",
+      "send": "Envoyer",
+      "sending": "Envoi en cours",
+      "contact": "Contact",
+      "name": "Nom",
+      "phone": "Mobile",
+      "email": "E-mail",
+      "title": {
+        "whatsapp": "Envoyer un message WhatsApp",
+        "sms": "Envoyer un SMS",
+        "email": "Envoyer un e-mail",
+        "call": "Appeler"
+      },
+      "optedOut": "Ce contact s'est opposé à toute communication. Les messages ne peuvent pas être envoyés.",
+      "noPhone": "Ce contact n'a pas de numéro de téléphone.",
+      "noEmail": "Ce contact n'a pas d'adresse e-mail.",
+      "number": "Envoyer depuis",
+      "numberHint": "Le numéro WhatsApp depuis lequel le message est envoyé.",
+      "noChannel": "Aucun numéro WhatsApp n'est connecté. Connectez-en un d'abord dans Canaux.",
+      "template": "Modèle WhatsApp",
+      "templatePlaceholder": "Sélectionner un modèle",
+      "noTemplates": "Aucun modèle approuvé pour ce numéro.",
+      "notSendable": "Ce modèle ne peut pas être rempli ici ({reason}).",
+      "variables": "Variables du modèle",
+      "preview": "Aperçu",
+      "slot": "Variable {key}",
+      "loading": "Chargement",
+      "openFailed": "Impossible d'ouvrir la conversation : {message}",
+      "sent": "Message mis en file d'attente pour {name}.",
+      "failed": "Envoi impossible : {message}",
+      "callIntro": "Passez un appel WhatsApp à ce contact depuis le navigateur.",
+      "callOff": "Les appels ne sont pas activés pour ce numéro WhatsApp. Activez-les dans les paramètres du numéro.",
+      "callPermission": "Le contact n'a pas encore autorisé les appels. L'appel lui demande d'abord son autorisation.",
+      "callReady": "Prêt à appeler le {phone}.",
+      "later": {
+        "sms": "L'envoi de SMS depuis le CRM n'est pas encore disponible.",
+        "email": "L'envoi d'e-mails depuis le CRM n'est pas encore disponible."
+      },
+      "openApp": {
+        "sms": "Ouvrir dans votre application de messages",
+        "email": "Ouvrir dans votre application de messagerie"
+      }
+    },
+    "views": {
+      "label": "Vues",
+      "all": "Tous les contacts",
+      "add": "Ajouter une vue",
+      "changed": "Les filtres ont changé depuis l'enregistrement de cette vue",
+      "more": "Plus d'actions pour {name}",
+      "picker": {
+        "title": "Sélectionner une vue",
+        "create": "Créer une vue",
+        "search": "Rechercher des vues...",
+        "empty": "Aucune vue trouvée",
+        "pinned": "Dans les onglets",
+        "favorites": "Favoris",
+        "defaultFilters": "Filtres par défaut",
+        "createdViews": "Vues créées",
+        "addView": "Ajouter une vue",
+        "markFavorite": "Marquer comme favori",
+        "unmarkFavorite": "Retirer des favoris"
+      },
+      "menu": {
+        "rename": "Renommer la vue",
+        "update": "Enregistrer les filtres actuels",
+        "unpin": "Retirer des onglets",
+        "pin": "Afficher comme onglet",
+        "delete": "Supprimer la vue",
+        "edit": "Modifier la vue"
+      },
+      "drawer": {
+        "editTitle": "Renommer la vue",
+        "name": "Nom de la vue",
+        "namePlaceholder": "Vue sans titre",
+        "shareWith": "Partager avec",
+        "justMe": "Moi uniquement",
+        "everyone": "Tout le monde",
+        "save": "Mettre à jour",
+        "cancel": "Annuler",
+        "close": "Fermer"
+      },
+      "toast": {
+        "created": "Vue \"{name}\" créée.",
+        "updated": "Vue mise à jour.",
+        "filtersSaved": "Filtres enregistrés dans \"{name}\".",
+        "deleted": "Vue \"{name}\" supprimée.",
+        "failed": "Impossible d'enregistrer la vue : {message}",
+        "conflict": "Quelqu'un d'autre a modifié cette vue. Rechargez la page et réessayez."
+      },
+      "delete": {
+        "title": "Supprimer cette vue ?",
+        "message": "\"{name}\" sera supprimée pour toutes les personnes avec qui elle est partagée. Les contacts ne sont pas modifiés.",
+        "confirm": "Supprimer la vue",
+        "cancel": "Conserver la vue"
+      },
+      "editor": {
+        "title": {
+          "create": "Créer une vue",
+          "edit": "Modifier la vue"
+        },
+        "close": "Fermer",
+        "back": "Retour aux contacts",
+        "name": "Nom de la vue",
+        "namePlaceholder": "Saisissez le nom de la vue",
+        "favorite": "Marquer comme favori",
+        "favoriteHint": "Une vue favorite a son propre onglet.",
+        "shareWith": "Partager avec",
+        "justMe": "Moi uniquement",
+        "everyone": "Tout le monde",
+        "filterTitle": "Filtrer les contacts",
+        "filterHint": "Faites correspondre toutes les conditions ou n'importe laquelle, et ajoutez des groupes pour des filtres plus complexes.",
+        "columnsTitle": "Préférences des colonnes",
+        "locked": "Toujours affichée",
+        "cancel": "Annuler",
+        "create": "Créer la vue",
+        "save": "Enregistrer la vue",
+        "saving": "Enregistrement",
+        "needName": "Saisissez un nom de vue.",
+        "needFilter": "Ajoutez au moins une condition complète.",
+        "notFound": "Cette vue est introuvable ou a été supprimée.",
+        "noPermission": "Vous n'avez pas l'autorisation d'effectuer cette action.",
+        "loading": "Chargement",
+        "columnsHint": "Recherchez et cochez les colonnes affichées par cette vue, puis faites glisser celles choisies pour définir leur ordre.",
+        "drag": "Faire glisser pour réorganiser {name}",
+        "selectedUsers": "Utilisateurs sélectionnés",
+        "accessLevel": "Niveau d'accès",
+        "canView": "Peut consulter",
+        "canEdit": "Peut consulter et modifier",
+        "peoplePlaceholder": "Rechercher des personnes",
+        "noPeople": "Aucune personne trouvée",
+        "removePerson": "Retirer {name}",
+        "clearPeople": "Retirer toutes les personnes",
+        "needPeople": "Choisissez au moins une personne.",
+        "onlyCreator": "Seule la personne qui a créé cette vue peut modifier les destinataires du partage.",
+        "searchColumns": "Rechercher des colonnes",
+        "noColumnMatch": "Aucune colonne ne correspond.",
+        "available": "Colonnes disponibles",
+        "selected": "Colonnes sélectionnées",
+        "selectAll": "Tout sélectionner",
+        "reorder": "Faire glisser pour réorganiser les colonnes",
+        "remove": "Retirer {name}"
       }
     }
   }

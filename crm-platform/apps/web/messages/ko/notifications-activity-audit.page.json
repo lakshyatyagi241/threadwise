@@ -1,0 +1,53 @@
+{
+  "notifications": {
+    "page": {
+      "title": "알림",
+      "description": "확인이 필요했던 모든 내용을 최신순으로 보여 줘요. 받을 이벤트는 알림 설정에서 선택하세요.",
+      "markAll": "모두 읽음으로 표시",
+      "clearAll": "모두 삭제",
+      "preferences": "알림 설정",
+      "clearTitle": "모든 알림을 삭제할까요?",
+      "clearBody": "내 알림이 모두 영구적으로 삭제돼요. 다른 사람의 알림은 그대로 유지돼요. 이 작업은 되돌릴 수 없어요.",
+      "clearConfirm": "모두 삭제",
+      "cancel": "취소",
+      "dismiss": "이 알림 닫기",
+      "tiles": {
+        "unread": "읽지 않음",
+        "unreadHint": "선택하면 읽지 않은 알림만 표시해요",
+        "day": "최근 24시간",
+        "dayHint": "오늘 받은 알림",
+        "week": "최근 7일",
+        "weekHint": "이번 주에 받은 알림",
+        "total": "보관됨",
+        "totalHint": "오래된 알림은 자동으로 삭제돼요"
+      },
+      "filters": {
+        "label": "알림 필터",
+        "readLabel": "표시",
+        "all": "전체",
+        "unread": "읽지 않음",
+        "type": "유형",
+        "allTypes": "모든 유형",
+        "otherTypes": "기타",
+        "search": "알림 검색",
+        "reset": "필터 초기화"
+      },
+      "sections": {
+        "today": "오늘",
+        "yesterday": "어제",
+        "thisWeek": "이번 주 이전",
+        "older": "이전"
+      },
+      "loading": "알림을 불러오는 중",
+      "failed": "알림을 불러올 수 없어요.",
+      "retry": "다시 시도",
+      "empty": "아직 알림이 없어요",
+      "emptyHint": "새 채팅, 배정, 멘션, 발송 결과가 여기에 표시돼요.",
+      "emptyFiltered": "필터와 일치하는 알림이 없어요",
+      "emptyFilteredHint": "필터를 제거하거나 다른 검색어를 입력해 보세요.",
+      "showing": "{count, plural, other {#개 알림 불러옴}}",
+      "loadMore": "더 보기",
+      "end": "목록의 끝이에요"
+    }
+  }
+}

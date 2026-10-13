@@ -1,0 +1,53 @@
+{
+  "notifications": {
+    "page": {
+      "title": "Benachrichtigungen",
+      "description": "Alles, was Ihre Aufmerksamkeit brauchte, neueste zuerst. Legen Sie in Ihren Benachrichtigungseinstellungen fest, welche Ereignisse Sie erreichen.",
+      "markAll": "Alle als gelesen markieren",
+      "clearAll": "Alle löschen",
+      "preferences": "Benachrichtigungseinstellungen",
+      "clearTitle": "Alle Benachrichtigungen löschen?",
+      "clearBody": "Damit werden alle Ihre Benachrichtigungen endgültig entfernt. Andere Personen behalten ihre. Dies kann nicht rückgängig gemacht werden.",
+      "clearConfirm": "Alle löschen",
+      "cancel": "Abbrechen",
+      "dismiss": "Diese Benachrichtigung ausblenden",
+      "tiles": {
+        "unread": "Ungelesen",
+        "unreadHint": "Auswählen, um nur Ungelesene anzuzeigen",
+        "day": "Letzte 24 Stunden",
+        "dayHint": "Heute erhalten",
+        "week": "Letzte 7 Tage",
+        "weekHint": "Diese Woche erhalten",
+        "total": "Aufbewahrt",
+        "totalHint": "Ältere werden automatisch entfernt"
+      },
+      "filters": {
+        "label": "Benachrichtigungsfilter",
+        "readLabel": "Anzeigen",
+        "all": "Alle",
+        "unread": "Ungelesen",
+        "type": "Typ",
+        "allTypes": "Alle Typen",
+        "otherTypes": "Sonstige",
+        "search": "Benachrichtigungen durchsuchen",
+        "reset": "Filter zurücksetzen"
+      },
+      "sections": {
+        "today": "Heute",
+        "yesterday": "Gestern",
+        "thisWeek": "Früher diese Woche",
+        "older": "Älter"
+      },
+      "loading": "Benachrichtigungen werden geladen",
+      "failed": "Ihre Benachrichtigungen konnten nicht geladen werden.",
+      "retry": "Erneut versuchen",
+      "empty": "Noch keine Benachrichtigungen",
+      "emptyHint": "Neue Chats, Zuweisungen, Erwähnungen und Ergebnisse Ihrer Sendungen erscheinen hier.",
+      "emptyFiltered": "Keine Benachrichtigungen entsprechen diesen Filtern",
+      "emptyFilteredHint": "Entfernen Sie einen Filter oder suchen Sie nach etwas anderem.",
+      "showing": "{count, plural, one {# Benachrichtigung geladen} other {# Benachrichtigungen geladen}}",
+      "loadMore": "Mehr laden",
+      "end": "Ende der Liste"
+    }
+  }
+}

@@ -345,10 +345,15 @@
         "description": "Choose the STOP and START words, the confirmation replies, the opt-out line and whether marketing needs recorded consent.",
         "keywords": "consent, opt out, opt in, unsubscribe, stop, start, gdpr, compliance, privacy, marketing"
       },
-      "inbox-labels": {
-        "label": "Labels",
-        "description": "Create the labels your team puts on conversations and filters the inbox by.",
-        "keywords": "tags, labels, categories, organize, filter"
+      "inbox-tags": {
+        "label": "Conversation tags",
+        "description": "Create the tags your team puts on conversations and filters the inbox by. They are the same tags used on contacts.",
+        "keywords": "tags, labels, categories, organize, filter, conversation tags"
+      },
+      "sla-policies": {
+        "label": "Response targets",
+        "description": "Set how fast your team should reply and resolve, and get alerted when a conversation misses its target.",
+        "keywords": "sla, response time, first reply, resolution, breach, targets, business hours"
       },
       "team-performance": {
         "label": "Team performance",

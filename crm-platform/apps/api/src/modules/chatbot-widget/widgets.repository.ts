@@ -251,6 +251,28 @@ export class WidgetsRepository {
     };
   }
 
+  /** Keeps a flow bot's uploaded picture (`logo` or `popup`); a new upload replaces the old one in place. */
+  async upsertAsset(
+    tx: Tx,
+    orgId: number,
+    flowId: number,
+    slot: string,
+    mime: string,
+    bytes: Buffer,
+    etag: string,
+  ): Promise<void> {
+    await tx.execute(sql`
+      INSERT INTO flow_widget_assets (org_id, flow_id, slot, mime, bytes, etag)
+      VALUES (${orgId}, ${flowId}, ${slot}, ${mime}, ${bytes}, ${etag})
+      ON CONFLICT (org_id, flow_id, slot) DO UPDATE
+        SET mime = EXCLUDED.mime, bytes = EXCLUDED.bytes, etag = EXCLUDED.etag`);
+  }
+
+  async deleteAsset(tx: Tx, orgId: number, flowId: number, slot: string): Promise<void> {
+    await tx.execute(sql`
+      DELETE FROM flow_widget_assets WHERE org_id = ${orgId} AND flow_id = ${flowId} AND slot = ${slot}`);
+  }
+
   /** The widget a flow bot owns, if its owner has saved Customize. */
   async findByFlowId(tx: Tx, orgId: number, flowId: number): Promise<WidgetRow | undefined> {
     const res = await tx.execute(sql`

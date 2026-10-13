@@ -187,8 +187,7 @@
       "notFound": "此工作区已不存在。",
       "reasonRequired": "需要至少 8 个字符的原因。",
       "orgSuspended": "该工作区已暂停，无法进入。",
-      "validation": "请检查输入的值后重试。",
-      "requestId": "请求 ID"
+      "validation": "请检查输入的值后重试。"
     },
     "detail": {
       "crumb": "工作区",

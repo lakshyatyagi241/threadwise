@@ -17,7 +17,6 @@
       "delete": "Verwijderen",
       "edit": "Bewerken",
       "loadMore": "Meer laden",
-      "requestId": "Verzoek-id",
       "errors": {
         "forbidden": "Alleen een superbeheerder kan dit wijzigen.",
         "conflict": "Iemand anders heeft dit gewijzigd terwijl jij bewerkte. Laad opnieuw en probeer het nog eens.",

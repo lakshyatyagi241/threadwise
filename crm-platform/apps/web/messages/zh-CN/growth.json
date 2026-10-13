@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "忽略",
       "retry": "重试",
-      "requestId": "请求 {id}",
       "noAccessTitle": "您无法打开此页面",
       "noAccess": "请向管理员申请“{permission}”权限。"
     },
@@ -167,7 +166,7 @@
     "insights": {
       "sendTimes": {
         "title": "最佳发送时间",
-        "hint": "联系人阅读营销活动和给您发消息的时间，按工作区时区计算。",
+        "hint": "联系人阅读营销活动并给你发消息的时间,按你的时区显示。",
         "empty": "活动数据不足，暂时无法判断。",
         "best": "最佳时段：{hours}（{zone}）。",
         "quiet": "最冷清的时段：{hours}。",

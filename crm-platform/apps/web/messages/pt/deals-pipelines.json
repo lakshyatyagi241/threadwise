@@ -35,7 +35,6 @@
       "notFound": "Não foi possível encontrar esse negócio. Ele pode ter sido excluído.",
       "planDisabled": "Seu plano não inclui o funil de vendas. Faça upgrade para desbloqueá-lo.",
       "unexpected": "Algo deu errado. Tente novamente em instantes.",
-      "requestId": "ID da solicitação",
       "retry": "Tentar novamente",
       "planLimit": "Você atingiu o limite do seu plano.",
       "lostReasonRequired": "Escolha um motivo para marcar o negócio como perdido.",

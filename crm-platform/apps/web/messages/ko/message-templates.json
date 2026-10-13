@@ -4,8 +4,7 @@
       "title": "템플릿"
     },
     "common": {
-      "dismiss": "닫기",
-      "requestId": "요청 ID"
+      "dismiss": "닫기"
     },
     "status": {
       "draft": "초안",

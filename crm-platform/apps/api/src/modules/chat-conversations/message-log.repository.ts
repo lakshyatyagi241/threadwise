@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
-import type { MessageLogExportStatus, MessageStatus } from '@crm/contracts';
+import type { MessageLogExportKind, MessageLogExportStatus, MessageStatus } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import type { ExportMessageInfo, StoredEvent } from './message-log-rules';
 
@@ -22,6 +22,9 @@ export interface ExportRow {
   rangeFrom: string;
   rangeTo: string;
   messageStatus: MessageStatus | null;
+  /** `events`: the delivery log. `messages`: the Message History feed, with the screen's `filters`. */
+  kind: MessageLogExportKind;
+  filters: Record<string, unknown> | null;
   status: MessageLogExportStatus;
   rowCount: number | null;
   fileName: string | null;
@@ -41,6 +44,8 @@ const toExport = (r: Raw): ExportRow => ({
   rangeFrom: r.range_from as string,
   rangeTo: r.range_to as string,
   messageStatus: (r.message_status as MessageStatus | null) ?? null,
+  kind: (r.kind as MessageLogExportKind | undefined) ?? 'events',
+  filters: (r.filters as Record<string, unknown> | null) ?? null,
   status: r.status as MessageLogExportStatus,
   rowCount: r.row_count === null ? null : Number(r.row_count),
   fileName: (r.file_name as string | null) ?? null,
@@ -53,7 +58,7 @@ const toExport = (r: Raw): ExportRow => ({
 
 const EXPORT_COLUMNS =
   sql.raw(`id, uuid, org_id, requested_by, emailed_to, range_from::text AS range_from,
-  range_to::text AS range_to, message_status, status, row_count, file_name, file_bytes, error, requested_at, completed_at, expires_at`);
+  range_to::text AS range_to, message_status, kind, filters, status, row_count, file_name, file_bytes, error, requested_at, completed_at, expires_at`);
 
 /** One event of the live table, with what an export needs to find its message. */
 export interface LiveEvent extends StoredEvent {
@@ -295,11 +300,14 @@ export class MessageLogRepository {
       from: string;
       to: string;
       messageStatus: MessageStatus | null;
+      kind?: MessageLogExportKind;
+      filters?: Record<string, unknown> | null;
     },
   ): Promise<ExportRow> {
     const res = await tx.execute(sql`
-      INSERT INTO message_log_exports (org_id, requested_by, emailed_to, range_from, range_to, message_status)
-      VALUES (${orgId}, ${input.requestedBy}, ${input.emailedTo}, ${input.from}::date, ${input.to}::date, ${input.messageStatus})
+      INSERT INTO message_log_exports (org_id, requested_by, emailed_to, range_from, range_to, message_status, kind, filters)
+      VALUES (${orgId}, ${input.requestedBy}, ${input.emailedTo}, ${input.from}::date, ${input.to}::date, ${input.messageStatus},
+              ${input.kind ?? 'events'}, ${input.filters ? JSON.stringify(input.filters) : null}::jsonb)
       RETURNING ${EXPORT_COLUMNS}`);
     return toExport(rowsOf(res)[0]!);
   }
@@ -312,9 +320,14 @@ export class MessageLogRepository {
     return r ? toExport(r) : null;
   }
 
-  async listExports(tx: Tx, orgId: number, limit: number): Promise<ExportRow[]> {
+  async listExports(
+    tx: Tx,
+    orgId: number,
+    limit: number,
+    kind: MessageLogExportKind = 'events',
+  ): Promise<ExportRow[]> {
     const res = await tx.execute(sql`
-      SELECT ${EXPORT_COLUMNS} FROM message_log_exports WHERE org_id = ${orgId}
+      SELECT ${EXPORT_COLUMNS} FROM message_log_exports WHERE org_id = ${orgId} AND kind = ${kind}
       ORDER BY requested_at DESC, id DESC LIMIT ${limit}`);
     return rowsOf(res).map(toExport);
   }

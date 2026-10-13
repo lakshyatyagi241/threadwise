@@ -14,7 +14,6 @@
       "dismiss": "Ignorer",
       "admin": "Admin",
       "readOnly": "Vous pouvez consulter cette page, mais seul un super administrateur peut la modifier.",
-      "requestId": "ID de requête",
       "errors": {
         "forbidden": "Vous n’avez pas accès à cette page.",
         "request": "La requête n’a pas pu aboutir.",
@@ -404,7 +403,6 @@
         "validation": "Impossible d’appliquer ces filtres. Réinitialisez-les et réessayez.",
         "network": "Le serveur est injoignable. Vérifiez votre connexion et réessayez.",
         "generic": "Une erreur s’est produite. Réessayez dans un instant.",
-        "requestId": "ID de requête",
         "retry": "Réessayer"
       }
     }

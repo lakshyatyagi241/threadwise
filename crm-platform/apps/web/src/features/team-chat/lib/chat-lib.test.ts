@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { TchatMessageResponse } from '@crm/contracts';
 import { parseBody, plainBody } from './body';
 import { errorKind } from './errors';
-import { canEditNow, formatStamp, initials, nearBottom } from './format';
+import { canEditNow, dayKey, formatDay, formatStamp, initials, nearBottom } from './format';
 import {
   detectMention,
   filterMentionable,
@@ -76,6 +76,17 @@ describe('format', () => {
     expect(nearBottom(1000, 700, 100)).toBe(false);
     expect(formatStamp(t, new Date(t), 'en-US')).not.toContain(',');
     expect(formatStamp(t, new Date('2026-02-01T10:00:00Z'), 'en-US')).toContain(',');
+  });
+
+  it('reads the same instant on the clock of the zone it is given', () => {
+    const at = '2026-10-02T20:30:00Z';
+    expect(dayKey(at, 'Asia/Kolkata')).toBe('2026-10-3');
+    expect(dayKey(at, 'America/New_York')).toBe('2026-10-2');
+    const now = new Date(at);
+    expect(formatStamp(at, now, 'en-US', 'Asia/Kolkata')).toBe('02:00 AM');
+    expect(formatStamp(at, now, 'en-US', 'America/New_York')).toBe('04:30 PM');
+    expect(formatDay(at, 'en-US', 'Asia/Kolkata')).toBe('Oct 3, 2026');
+    expect(formatDay(at, 'en-US', 'America/New_York')).toBe('Oct 2, 2026');
   });
 });
 

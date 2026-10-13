@@ -36,7 +36,6 @@
       "slotTaken": "Esse horário acabou de ser ocupado. Escolha outro.",
       "gone": "Esta reserva não pode mais ser alterada.",
       "unexpected": "Algo deu errado. Tente novamente em instantes.",
-      "requestId": "ID da solicitação",
       "retry": "Tentar novamente",
       "invalidTransition": "Esta reserva não está em um estado em que isso possa ser feito. Recarregue para ver em que situação ela está.",
       "notStarted": "Isso só pode ser feito depois que a reserva tiver começado.",

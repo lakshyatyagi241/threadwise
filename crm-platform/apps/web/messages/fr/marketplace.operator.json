@@ -10,7 +10,6 @@
       },
       "common": {
         "loading": "Chargement…",
-        "requestId": "ID de la demande",
         "retry": "Réessayer",
         "noPermissions": "Aucune autorisation"
       },

@@ -21,7 +21,6 @@
       "unavailable": "This part of the API is not available yet.",
       "rateLimited": "Too many requests. Wait a moment and try again.",
       "unexpected": "Something went wrong. Try again.",
-      "requestId": "Request id",
       "retry": "Try again",
       "reservedKey": "That key is reserved for a built-in token. Choose another.",
       "attributeInUse": "Some contacts hold a value for this attribute.",
@@ -125,7 +124,6 @@
       "columnsSelectAll": "Select All",
       "dragToReorder": "Drag to re-order columns",
       "removeColumn": "Remove {name}",
-      "columnsClose": "Close",
       "columnsSave": "Save",
       "colContactName": "Contact Name",
       "colPhone": "Phone Number",
@@ -178,6 +176,16 @@
       "columns": "Columns",
       "addColumnField": "Add a custom field as a column",
       "kanbanView": "Board view (by stage)",
+      "colOwner": "Owner",
+      "unassigned": "Unassigned",
+      "ownerFilter": "Filter by owner",
+      "selectOwner": "Owner",
+      "allOwners": "All owners",
+      "myContacts": "My contacts",
+      "ownersCount": "{count} owners",
+      "ownerMe": "{name} (me)",
+      "ownerFormer": "Former member",
+      "reassignView": "Reassign the contacts of {name}...",
       "smsNamed": "SMS {name}",
       "noSms": "No phone number for SMS"
     },
@@ -224,7 +232,6 @@
       "exportStarted": "Your export has been downloaded.",
       "exportTooLarge": "That is too many contacts to export at once. Narrow the filter and try again.",
       "update": "Update",
-      "updateNeedsRows": "Pick rows",
       "updated": "{count, plural, one {Updated # contact.} other {Updated # contacts.}}"
     },
     "form": {
@@ -313,7 +320,13 @@
       "statusNoticeReset": "Status reset to {status}.",
       "statusNoticeSet": "Status set to {status}, the default for this stage.",
       "statusNoticeCleared": "Status cleared: it does not apply to this stage.",
-      "statusNoneForStage": "No status is set up for this stage."
+      "statusNoneForStage": "No status is set up for this stage.",
+      "owner": "Owner",
+      "ownerNone": "Unassigned",
+      "ownerMe": "{name} (me)",
+      "ownerFormer": "Former member",
+      "ownerHelp": "Who looks after this contact. You can only pick people your access allows.",
+      "ownerOutOfScope": "Your access does not let you assign this contact to that person."
     },
     "tags": {
       "title": "Tags",
@@ -523,7 +536,17 @@
       "noActivity": "No activity yet for this contact.",
       "loadMore": "Load more",
       "yes": "Yes",
-      "no": "No"
+      "no": "No",
+      "owner": "Owner",
+      "ownerNone": "Unassigned",
+      "ownerChange": "Change owner",
+      "ownerChanged": "Owner set to {name}.",
+      "ownerCleared": "Owner removed.",
+      "ownerConflict": "Someone else changed this contact first. It was reloaded; try again.",
+      "ownerForbidden": "Your access does not let you assign this contact to that person.",
+      "ownerFailed": "The owner could not be changed. Try again.",
+      "ownerMe": "{name} (me)",
+      "ownerFormer": "Former member"
     },
     "attributes": {
       "eyebrow": "More / Attributes",
@@ -1148,7 +1171,11 @@
         "willClear": "Will be emptied on {count, plural, one {the selected contact} other {all # selected contacts}}.",
         "requiredNoClear": "A required property cannot be cleared.",
         "problemEmpty": "Enter a value, or choose Clear."
-      }
+      },
+      "titleAll": "Update all matching contacts",
+      "hintAll": "Set the same values on every contact matching the current filters. Fields left on Keep are not changed.",
+      "applyAll": "Update all matching contacts",
+      "ownerOnlyNote": "For every matching contact only the owner can be changed here. To change the stage, status or properties, tick the rows instead."
     },
     "kanban": {
       "board": "Contacts by stage",
@@ -1254,12 +1281,15 @@
       "changed": "Filters changed since this view was saved",
       "more": "More for {name}",
       "picker": {
+        "favorites": "Favorites",
+        "defaultFilters": "Default filters",
+        "createdViews": "Created views",
+        "addView": "Add view",
+        "markFavorite": "Mark as favorite",
+        "unmarkFavorite": "Remove from favorites",
         "title": "Select a view",
         "create": "Create new view",
         "search": "Search views...",
-        "chipAll": "All",
-        "chipPinned": "On tabs",
-        "chipShared": "Shared",
         "empty": "No views found",
         "pinned": "On tabs"
       },

@@ -7,7 +7,6 @@
     "common": {
       "loading": "Laden",
       "retry": "Opnieuw proberen",
-      "requestId": "Verzoek-id",
       "dash": "-",
       "errors": {
         "forbidden": "Je hebt geen toestemming om dit te doen.",

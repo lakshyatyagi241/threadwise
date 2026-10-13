@@ -28,8 +28,8 @@
       "teamChanged": "Zespół zaktualizowany.",
       "priorityChanged": "Zaktualizowano priorytet",
       "snoozed": "Rozmowa została odłożona",
-      "labelAdded": "Dodano etykietę",
-      "labelRemoved": "Usunięto etykietę"
+      "tagAdded": "Dodano tag",
+      "tagRemoved": "Usunięto tag"
     },
     "list": {
       "title": "Skrzynka odbiorcza",
@@ -137,19 +137,18 @@
       "unsupported": "Ten kanał nie może wysłać tego typu wiadomości ani pliku.",
       "network": "Nie udało się połączyć z serwerem. Sprawdź połączenie i spróbuj ponownie.",
       "generic": "Coś poszło nie tak. Spróbuj ponownie.",
-      "genericWithId": "Coś poszło nie tak. Spróbuj ponownie. Numer referencyjny: {id}",
       "templateNotSendable": "Tego szablonu nie można wysłać do tej rozmowy. Wybierz inny.",
       "groupSendUnavailable": "Wysyłanie do grup WhatsApp nie jest jeszcze dostępne. Odpowiedz w aplikacji WhatsApp Business.",
       "logRange": "Wybierz daty z ostatniego roku, przy czym początek musi być przed końcem i nie może być w przyszłości.",
       "logBusy": "Eksport jest już przygotowywany. Poczekaj na e-mail z nim, a potem zamów kolejny.",
       "logNotReady": "Ten eksport nie jest gotowy lub wygasł. Zamów go ponownie.",
       "groupSuspended": "Meta zawiesiła tę grupę, więc nie można do niej pisać, dopóki Meta jej nie przywróci.",
-      "walletEmpty": "Portfel wiadomości nie pokrywa tej wiadomości grupowej (jedna opłata za każdego członka). Doładuj go i spróbuj ponownie.",
-      "groupPlanLocked": "Twój plan nie obejmuje grup WhatsApp, więc nie można pisać do tej grupy. Poproś administratora o zmianę planu.",
       "groupLeft": "Ten numer opuścił grupę, więc nie może już wysyłać tam wiadomości.",
       "groupAnnounceOnly": "Tylko administratorzy mogą wysyłać wiadomości w tej grupie, a ten numer nie jest administratorem.",
       "groupRateLimited": "Zbyt wiele wiadomości grupowych z tego numeru w krótkim czasie. Poczekaj minutę i spróbuj ponownie.",
       "groupUnavailable": "WhatsApp nie przyjął tej wiadomości grupowej. Spróbuj ponownie za kilka minut.",
+      "walletEmpty": "Portfel wiadomości nie pokrywa tej wiadomości grupowej (jedna opłata za każdego członka). Doładuj go i spróbuj ponownie.",
+      "groupPlanLocked": "Twój plan nie obejmuje grup WhatsApp, więc nie można pisać do tej grupy. Poproś administratora o zmianę planu.",
       "savedReplyGone": "Ten szablon odpowiedzi już nie istnieje.",
       "savedReplyChannel": "Ten szablon odpowiedzi nie jest przeznaczony dla tego rodzaju kanału.",
       "shortcutTaken": "Inny szablon odpowiedzi używa już tego skrótu.",
@@ -223,7 +222,15 @@
       "groupMember": "Członek grupy",
       "groupTally": "Dostarczono do {delivered} z {members}{read, plural, =0 {} other {, odczytało: #}}{failed, plural, =0 {} other {, błędy: #}}",
       "groupTallyNoTotal": "Dostarczono do: {delivered, plural, one {# członka} other {# członków}}{read, plural, =0 {} other {, odczytało: #}}{failed, plural, =0 {} other {, błędy: #}}",
-      "groupTallyBilled": "płatnych {billable}, bezpłatnych {free}"
+      "groupTallyBilled": "płatnych {billable}, bezpłatnych {free}",
+      "stageLine": {
+        "auto": "AI przeczytało czat i przeniosło ten kontakt z etapu {from} do {to}.",
+        "undo": "Cofnij",
+        "wasUndone": "Cofnięto",
+        "undone": "Zmiana etapu cofnięta: z powrotem {stage}.",
+        "undoneToast": "Etap przywrócono na {stage}.",
+        "couldNotUndo": "Tej zmiany nie można już cofnąć: kontakt poszedł dalej albo zmianę już cofnięto."
+      }
     },
     "media": {
       "openImage": "Otwórz obraz {name}",
@@ -275,6 +282,44 @@
       "attachment": "załącznik",
       "jumpLatest": "Przejdź do najnowszych",
       "jumpLatestNew": "{count, plural, one {# nowa wiadomość} few {# nowe wiadomości} many {# nowych wiadomości} other {# nowej wiadomości}}"
+    },
+    "groupThread": {
+      "openGroup": "Otwórz grupę",
+      "readOnly": {
+        "left": {
+          "title": "Ten numer opuścił grupę",
+          "message": "Rozmowa została zachowana w dotychczasowej postaci. Możesz ją czytać i dodawać notatki wewnętrzne, ale nie możesz wysyłać wiadomości."
+        },
+        "announceOnly": {
+          "title": "Tylko administratorzy mogą pisać w tej grupie",
+          "message": "Ten numer nie jest administratorem grupy, więc WhatsApp nie dostarczyłby wiadomości. Nadal możesz dodawać notatki wewnętrzne."
+        }
+      },
+      "mention": {
+        "label": "Członkowie grupy",
+        "loading": "Szukanie członków",
+        "none": "Żaden członek nie pasuje"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta zawiesiła tę grupę",
+          "message": "WhatsApp nie dostarcza wiadomości do zawieszonej grupy. Możesz czytać rozmowę i dodawać notatki wewnętrzne, dopóki Meta nie zdejmie blokady."
+        },
+        "plan": {
+          "title": "Twój plan nie obejmuje grup WhatsApp",
+          "message": "Możesz czytać tę rozmowę i dodawać notatki wewnętrzne, ale wysyłanie do grupy wymaga planu z grupami. Poproś administratora o zmianę planu."
+        },
+        "ineligible": {
+          "title": "Ten numer nie może korzystać z grup WhatsApp",
+          "message": "Podczas ostatniego sprawdzenia Meta nie zezwoliła na grupy dla tego numeru (wymagane jest oficjalne konto firmowe). Możesz czytać rozmowę i dodawać notatki wewnętrzne. Otwórz Grupy Meta, aby sprawdzić ponownie."
+        }
+      },
+      "cost": {
+        "members": "Ta wiadomość trafi do: {count, plural, one {# członka} other {# członków}}. Szacowany koszt {cost}: WhatsApp nalicza opłatę za każdego członka, który ją otrzyma.",
+        "membersNoEstimate": "Ta wiadomość trafi do: {count, plural, one {# członka} other {# członków}}. WhatsApp nalicza opłatę za każdego członka, który ją otrzyma.",
+        "sizeUnknown": "Liczba członków nie jest jeszcze znana. WhatsApp nalicza opłatę za każdego członka, który otrzyma tę wiadomość.",
+        "walletShort": "Środki w portfelu mogą nie wystarczyć na tę wiadomość. Doładuj portfel przed wysłaniem."
+      }
     },
     "composer": {
       "modeLabel": "Typ wiadomości",
@@ -443,8 +488,8 @@
           "snoozed": "Odroczone przez {actor}",
           "auto_unsnoozed": "Odroczenie zakończone",
           "priority_changed": "Priorytet zmieniony przez {actor}",
-          "tag_added": "Etykieta dodana przez {actor}",
-          "tag_removed": "Etykieta usunięta przez {actor}",
+          "tag_added": "Tag dodany przez {actor}",
+          "tag_removed": "Tag usunięty przez {actor}",
           "first_response": "Wysłano pierwszą odpowiedź",
           "sla_breach": "Przekroczono termin odpowiedzi",
           "unknown": "{what}, przez {actor}"
@@ -658,44 +703,6 @@
         }
       }
     },
-    "groupThread": {
-      "openGroup": "Otwórz grupę",
-      "readOnly": {
-        "left": {
-          "title": "Ten numer opuścił grupę",
-          "message": "Rozmowa została zachowana w dotychczasowej postaci. Możesz ją czytać i dodawać notatki wewnętrzne, ale nie możesz wysyłać wiadomości."
-        },
-        "announceOnly": {
-          "title": "Tylko administratorzy mogą pisać w tej grupie",
-          "message": "Ten numer nie jest administratorem grupy, więc WhatsApp nie dostarczyłby wiadomości. Nadal możesz dodawać notatki wewnętrzne."
-        }
-      },
-      "mention": {
-        "label": "Członkowie grupy",
-        "loading": "Szukanie członków",
-        "none": "Żaden członek nie pasuje"
-      },
-      "cloudBlock": {
-        "suspended": {
-          "title": "Meta zawiesiła tę grupę",
-          "message": "WhatsApp nie dostarcza wiadomości do zawieszonej grupy. Możesz czytać rozmowę i dodawać notatki wewnętrzne, dopóki Meta nie zdejmie blokady."
-        },
-        "plan": {
-          "title": "Twój plan nie obejmuje grup WhatsApp",
-          "message": "Możesz czytać tę rozmowę i dodawać notatki wewnętrzne, ale wysyłanie do grupy wymaga planu z grupami. Poproś administratora o zmianę planu."
-        },
-        "ineligible": {
-          "title": "Ten numer nie może korzystać z grup WhatsApp",
-          "message": "Podczas ostatniego sprawdzenia Meta nie zezwoliła na grupy dla tego numeru (wymagane jest oficjalne konto firmowe). Możesz czytać rozmowę i dodawać notatki wewnętrzne. Otwórz Grupy Meta, aby sprawdzić ponownie."
-        }
-      },
-      "cost": {
-        "members": "Ta wiadomość trafi do: {count, plural, one {# członka} other {# członków}}. Szacowany koszt {cost}: WhatsApp nalicza opłatę za każdego członka, który ją otrzyma.",
-        "membersNoEstimate": "Ta wiadomość trafi do: {count, plural, one {# członka} other {# członków}}. WhatsApp nalicza opłatę za każdego członka, który ją otrzyma.",
-        "sizeUnknown": "Liczba członków nie jest jeszcze znana. WhatsApp nalicza opłatę za każdego członka, który otrzyma tę wiadomość.",
-        "walletShort": "Środki w portfelu mogą nie wystarczyć na tę wiadomość. Doładuj portfel przed wysłaniem."
-      }
-    },
     "savedReplies": {
       "channelKind": {
         "simulator": "Symulator (testy)",
@@ -892,6 +899,11 @@
         }
       }
     },
+    "triage": {
+      "priority": "Priorytet",
+      "snooze": "Odłóż",
+      "wake": "Przywróć teraz"
+    },
     "bulk": {
       "barLabel": "Działania zbiorcze",
       "selected": "{count, plural, one {Wybrano # rozmowę} few {Wybrano # rozmowy} many {Wybrano # rozmów} other {Wybrano # rozmowy}}",
@@ -919,51 +931,75 @@
         "partial": "Zaktualizowano: {done}, już aktualne: {unchanged}, nie udało się zmienić: {failed}. Te, które się nie udały, pozostają zaznaczone.",
         "allFailed": "Nie udało się zmienić żadnej z {count, plural, one {# rozmowy} few {# rozmów} many {# rozmów} other {# rozmów}}."
       },
-      "label": "Etykieta",
-      "labelAdd": "Dodaj etykietę",
-      "labelRemove": "Usuń etykietę"
+      "tag": "Tag",
+      "tagAdd": "Dodaj tag",
+      "tagRemove": "Usuń tag"
     },
-    "triage": {
-      "priority": "Priorytet",
-      "snooze": "Odłóż",
-      "wake": "Przywróć teraz"
-    },
-    "labels": {
-      "label": "Etykieta",
-      "loading": "Ładowanie etykiet…",
-      "loadFailed": "Nie udało się załadować etykiet.",
-      "none": "Brak etykiet.",
-      "newLabel": "Nowa etykieta",
+    "tags": {
+      "tag": "Tag",
+      "loading": "Ładowanie tagów…",
+      "loadFailed": "Nie udało się załadować tagów.",
+      "none": "Brak tagów.",
+      "newTag": "Nowy tag",
       "add": "Dodaj",
-      "filter": "Etykiety",
-      "filterActive": "{count, plural, one {# etykieta} few {# etykiety} many {# etykiet} other {# etykiety}}",
-      "clearFilter": "Wyczyść filtr etykiet",
+      "filter": "Tagi",
+      "filterActive": "{count, plural, one {# tag} few {# tagi} many {# tagów} other {# tagu}}",
+      "clearFilter": "Wyczyść filtr tagów",
+      "scope": {
+        "label": "Dopasuj tagi w",
+        "conversation": "Tagi rozmowy",
+        "contact": "Tagi kontaktu"
+      },
+      "groups": {
+        "title": "Tagi",
+        "helpFor": "O: {title}",
+        "rule": "Oba rodzaje pochodzą z tej samej biblioteki tagów obszaru roboczego.",
+        "contactTitle": "Tagi kontaktu",
+        "contactHelp": "Tag kontaktu opisuje osobę (VIP, lead, region). Towarzyszy jej w każdej rozmowie.",
+        "contactNone": "Ten kontakt nie ma tagów.",
+        "contactEdit": "Edytuj w kontakcie",
+        "conversationTitle": "Tagi rozmowy",
+        "conversationHelp": "Tag rozmowy opisuje ten wątek (rozliczenia, zwrot, pilne).",
+        "conversationNone": "Ta rozmowa nie ma jeszcze tagów.",
+        "remove": "Usuń tag {name}"
+      },
       "screen": {
         "back": "Wróć do skrzynki",
-        "title": "Etykiety",
-        "intro": "Etykiety oznaczają rozmowy, aby zespół mógł je sortować i filtrować. Są to te same tagi, które są używane przy kontaktach.",
-        "newTitle": "Nowa etykieta",
-        "editTitle": "Edytuj etykietę",
+        "title": "Tagi rozmowy",
+        "intro": "Tagi rozmowy oznaczają wątek (rozliczenia, zwrot, pilne), aby zespół mógł sortować i filtrować skrzynkę. Pochodzą z tej samej biblioteki tagów co tagi kontaktu, które opisują osobę.",
+        "newTitle": "Nowy tag",
+        "editTitle": "Edytuj tag",
         "name": "Nazwa",
         "color": "Kolor",
         "colorInvalid": "Użyj koloru szesnastkowego, np. #075E54, lub nazwy koloru.",
         "description": "Opis (opcjonalnie)",
-        "create": "Utwórz etykietę",
+        "create": "Utwórz tag",
         "save": "Zapisz zmiany",
         "cancel": "Anuluj",
         "edit": "Edytuj",
         "delete": "Usuń",
         "inUse": "{count, plural, one {# rozmowa} few {# rozmowy} many {# rozmów} other {# rozmowy}}",
-        "emptyTitle": "Brak etykiet",
-        "emptyMessage": "Utwórz pierwszą etykietę powyżej, a następnie dodawaj ją do rozmów ze skrzynki.",
-        "deleteTitle": "Usunąć tę etykietę?",
-        "deleteMessage": "\"{name}\" jest użyta w liczbie rozmów: {count, plural, one {# rozmowa} few {# rozmowy} many {# rozmów} other {# rozmowy}}. Usunięcie zdejmie ją z tych rozmów i ze wszystkich kontaktów, które ją mają. Tej operacji nie można cofnąć.",
-        "nameTaken": "Etykieta o tej nazwie już istnieje.",
-        "conflict": "Ktoś inny zmienił tę etykietę wcześniej. Lista została przeładowana.",
-        "saved": "Zapisano etykietę",
-        "created": "Utworzono etykietę",
-        "deleted": "Usunięto etykietę"
+        "emptyTitle": "Brak tagów",
+        "emptyMessage": "Utwórz pierwszy tag powyżej, a następnie dodawaj go do rozmów ze skrzynki.",
+        "deleteTitle": "Usunąć ten tag?",
+        "deleteMessage": "\"{name}\" jest użyty w liczbie rozmów: {count, plural, one {# rozmowa} few {# rozmowy} many {# rozmów} other {# rozmowy}}. Usunięcie zdejmie go z tych rozmów i ze wszystkich kontaktów, które go mają. Tej operacji nie można cofnąć.",
+        "nameTaken": "Tag o tej nazwie już istnieje.",
+        "conflict": "Ktoś inny zmienił ten tag wcześniej. Lista została przeładowana.",
+        "saved": "Zapisano tag",
+        "created": "Utworzono tag",
+        "deleted": "Usunięto tag"
       }
+    },
+    "sla": {
+      "breached": "Przekroczono SLA",
+      "atRisk": "SLA upływa za {minutes} min",
+      "ok": "SLA do {time}",
+      "kind": {
+        "first_response": "Cel pierwszej odpowiedzi",
+        "resolution": "Cel rozwiązania"
+      },
+      "titleBreached": "{kind}: nie dotrzymano (termin: {time})",
+      "titleOpen": "{kind}: termin {time}"
     }
   }
 }

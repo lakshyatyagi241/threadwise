@@ -9,7 +9,6 @@ import { describe, expect, it } from 'vitest';
  * will enforce it. Enforcing one means deleting its line, so this list only ever shrinks.
  */
 const AWAITING: Readonly<Record<string, string>> = {
-  'inbox.sla.manage': 'TW-TIB2 SLA policies',
   'inbox.integration.manage': 'TW-TIB2 inbox webhooks, AI agents, AI keys',
   'org.delete': 'TW-WSP workspace deletion',
   'billing.manage': 'TW-PLAN / TW-WALLET billing management screens',

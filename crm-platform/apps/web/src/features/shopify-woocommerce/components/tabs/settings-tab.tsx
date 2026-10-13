@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useToast } from '@crm/ui';
 import type { ShopifyStore, WoocommerceStore } from '@crm/contracts';
 import { formatRelative } from '@/features/auth-registration-security/shared/relative-time';
@@ -19,11 +19,14 @@ export function SettingsTab({
 }) {
   const t = useTranslations('ecom.settings');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const { toast } = useToast();
   const [now] = useState(() => new Date().getTime());
   const count = Object.keys(store.webhookIds).length;
   const when = (iso: string | null) =>
-    iso ? new Date(iso).toLocaleString(locale, { dateStyle: 'medium', timeStyle: 'short' }) : '—';
+    iso
+      ? new Date(iso).toLocaleString(locale, { dateStyle: 'medium', timeStyle: 'short', timeZone })
+      : '—';
 
   const rows: Array<[string, string]> = [
     [t('storeUrl'), store.storeUrl],

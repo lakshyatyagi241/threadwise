@@ -1,0 +1,53 @@
+{
+  "notifications": {
+    "page": {
+      "title": "Bildirimler",
+      "description": "Dikkatinizi gerektiren her şey, en yeniden eskiye. Hangi olayların size ulaşacağını bildirim ayarlarınızdan seçin.",
+      "markAll": "Tümünü okundu işaretle",
+      "clearAll": "Tümünü temizle",
+      "preferences": "Bildirim ayarları",
+      "clearTitle": "Tüm bildirimler temizlensin mi?",
+      "clearBody": "Bu işlem tüm bildirimlerinizi kalıcı olarak kaldırır. Diğer kişilerinki kalır. Bu işlem geri alınamaz.",
+      "clearConfirm": "Tümünü temizle",
+      "cancel": "İptal",
+      "dismiss": "Bu bildirimi kapat",
+      "tiles": {
+        "unread": "Okunmamış",
+        "unreadHint": "Yalnızca okunmamışları göstermek için seçin",
+        "day": "Son 24 saat",
+        "dayHint": "Bugün alınanlar",
+        "week": "Son 7 gün",
+        "weekHint": "Bu hafta alınanlar",
+        "total": "Saklanan",
+        "totalHint": "Daha eskiler otomatik olarak kaldırılır"
+      },
+      "filters": {
+        "label": "Bildirim filtreleri",
+        "readLabel": "Göster",
+        "all": "Tümü",
+        "unread": "Okunmamış",
+        "type": "Tür",
+        "allTypes": "Tüm türler",
+        "otherTypes": "Diğer",
+        "search": "Bildirimlerde ara",
+        "reset": "Filtreleri sıfırla"
+      },
+      "sections": {
+        "today": "Bugün",
+        "yesterday": "Dün",
+        "thisWeek": "Bu hafta daha önce",
+        "older": "Daha eski"
+      },
+      "loading": "Bildirimler yükleniyor",
+      "failed": "Bildirimleriniz yüklenemedi.",
+      "retry": "Tekrar dene",
+      "empty": "Henüz bildirim yok",
+      "emptyHint": "Yeni sohbetler, atamalar, bahsetmeler ve gönderimlerinizin sonuçları burada görünecek.",
+      "emptyFiltered": "Bu filtrelerle eşleşen bildirim yok",
+      "emptyFilteredHint": "Bir filtreyi kaldırın veya başka bir şey arayın.",
+      "showing": "{count, plural, one {# bildirim yüklendi} other {# bildirim yüklendi}}",
+      "loadMore": "Daha fazla yükle",
+      "end": "Listenin sonu"
+    }
+  }
+}

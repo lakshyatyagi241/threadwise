@@ -39,6 +39,7 @@ an actual Postgres connection or an actual cross-tenant request.
 
 | Skill                                                         | Use it when                                                                                                                 |
 | ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| [security-review-gate](security-review-gate/)                 | **mandatory before any PR or "done"**: repo audits, secret scan, `security-review` + `code-review`, triage                    |
 | [pre-pr](pre-pr/)                                             | before opening a PR — runs the same checks as CI, locally                                                                   |
 | [threadwise-playwright-parity](threadwise-playwright-parity/) | **after every feature, automatically**: Playwright twin test against the running Reference, fix sub-agents for what differs |
 

@@ -322,3 +322,7 @@ business hours are not considered; a chat assigned to someone who has not answer
 
 The full `/notifications` page, email and Slack delivery, mobile push (FCM), quiet hours / do-not-disturb, the workspace feed (`notifications` table, TW-NOTIF-001..004), resolved / deal / SLA rows (phase 3), a per-channel mute for team
 chat.
+
+## Notifications page (`/notifications`)
+
+`GET /v2/notifications` also takes `type` (one type) and `q` (substring of title or text, `%` and `_` literal). `GET /v2/notifications/summary` returns `{unread, last24Hours, last7Days, total, byType}`. `DELETE /v2/notifications/:id` dismisses one of the caller's own rows (404 otherwise) and tells the person's other tabs; "Clear all" is the shell's `DELETE /v2/shell/notifications`. See [audit-log-tenant.md](../specs/audit-log-tenant.md) section 7.

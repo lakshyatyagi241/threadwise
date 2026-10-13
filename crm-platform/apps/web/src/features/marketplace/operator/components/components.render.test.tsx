@@ -897,7 +897,7 @@ describe('failures', () => {
       );
       expect(html).toContain('manifest.scopes.0');
       expect(html).toContain('recipe.key');
-      expect(html).toContain('req-42');
+      expect(html).not.toContain('req-42');
       expect(html).toContain('role="alert"');
     });
   }
@@ -939,7 +939,7 @@ describe('failures', () => {
     const failed = renderWithMessages(
       <Failure error={err(500, 'INTERNAL')} onRetry={() => undefined} />,
     );
-    expect(failed).toContain('req-42');
+    expect(failed).not.toContain('req-42');
     expect(buttons(failed)).toContain('Try again');
     const denied = renderWithMessages(
       <Failure

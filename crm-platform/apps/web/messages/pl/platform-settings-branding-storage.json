@@ -64,7 +64,6 @@
       "conflict": "Ktoś inny zapisał te ustawienia po tym, jak je otworzyłeś. Odśwież stronę, aby zobaczyć jego zmiany, a następnie ponownie zastosuj swoje.",
       "reload": "Odśwież ustawienia",
       "unexpected": "Coś poszło nie tak i nic nie zostało zapisane.",
-      "requestId": "Identyfikator żądania",
       "readOnly": "Możesz przeglądać te ustawienia, ale zmieniać je może tylko superadministrator.",
       "secretSet": "Zapisano. Pozostaw puste, aby zachować.",
       "secretUnset": "Nie ustawiono.",

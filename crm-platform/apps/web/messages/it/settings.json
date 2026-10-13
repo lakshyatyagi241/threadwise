@@ -310,6 +310,11 @@
         "description": "Assegna automaticamente le nuove conversazioni all’agente giusto, a turno o secondo regole.",
         "keywords": "instradamento, round robin, assegna, agenti, regole inbox, distribuisci, proprietario"
       },
+      "web": {
+        "label": "Chat del sito web",
+        "description": "Bot creati per la chat del tuo sito web e il widget in cui viene eseguito ciascuno.",
+        "keywords": "web, sito web, widget, chatbot, incorporare, chat live"
+      },
       "message-logs": {
         "label": "Registri dei messaggi",
         "description": "Esporta il registro di consegna dei tuoi messaggi, fino a un anno indietro, come file inviato alla tua e-mail.",
@@ -319,11 +324,6 @@
         "label": "Abbonamenti",
         "description": "Cosa si rinnova, fino a quando è pagato e annullamento.",
         "keywords": "abbonamento, rinnovo, rinnovo automatico, annulla, addebito automatico, pagamento non riuscito, addebiti"
-      },
-      "web": {
-        "label": "Chat del sito web",
-        "description": "Bot creati per la chat del tuo sito web e il widget in cui viene eseguito ciascuno.",
-        "keywords": "web, sito web, widget, chatbot, incorporare, chat live"
       },
       "lead-scoring": {
         "label": "Lead scoring con IA",
@@ -340,15 +340,20 @@
         "description": "Scegli le parole STOP e START, le risposte di conferma, la riga di disiscrizione e se il marketing richiede un consenso registrato.",
         "keywords": "consenso, disiscrizione, reiscrizione, annullare iscrizione, stop, start, gdpr, conformità, privacy, marketing"
       },
-      "inbox-labels": {
-        "label": "Etichette",
-        "description": "Crea le etichette che il tuo team applica alle conversazioni e con cui filtra la posta in arrivo.",
-        "keywords": "tag, etichette, categorie, organizzare, filtrare"
+      "inbox-tags": {
+        "label": "Tag della conversazione",
+        "description": "Crea i tag che il tuo team applica alle conversazioni e con cui filtra la posta in arrivo. Sono gli stessi tag usati nei contatti.",
+        "keywords": "tag, categorie, organizzare, filtrare, tag della conversazione"
       },
       "growth": {
         "label": "Growth",
         "description": "Lead caldi, audience, risposte alle campagne e altro su cui il tuo team può agire, ricavato da chat e campagne.",
         "keywords": "growth, lead caldo, audience, coinvolgimento, inattivo, risposte alle campagne, probabilità di conversione, opt-out, pilota"
+      },
+      "sla-policies": {
+        "label": "Obiettivi di risposta (SLA)",
+        "description": "Imposta con quanta rapidità il tuo team deve rispondere e risolvere, e ricevi avvisi quando una conversazione manca il suo obiettivo.",
+        "keywords": "sla, tempo di risposta, prima risposta, risoluzione, violazione, obiettivi, orario lavorativo"
       },
       "team-performance": {
         "label": "Prestazioni del team",

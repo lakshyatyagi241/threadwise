@@ -8,7 +8,6 @@
     "common": {
       "loading": "Yükleniyor",
       "retry": "Yeniden dene",
-      "requestId": "İstek kimliği",
       "cancel": "İptal",
       "back": "Geri",
       "close": "Kapat",

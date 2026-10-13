@@ -193,7 +193,6 @@
         "outOfOrder": "Ein Schritt wurde außer der Reihe ausgeführt. Laden Sie die Seite neu und starten Sie erneut.",
         "step": "Ein Installationsschritt ist fehlgeschlagen. Prüfen Sie Ihre Angaben und die Serverprotokolle und versuchen Sie es erneut.",
         "unknown": "Etwas ist schiefgelaufen. Versuchen Sie es erneut.",
-        "requestId": "Anfrage-ID {id}",
         "prerequisites": "Der Server ist für die Einrichtung nicht bereit: {items}.",
         "licence": {
           "empty": "Geben Sie Ihren CodeCanyon-Kaufcode ein.",
@@ -265,7 +264,6 @@
       "loading": "Wird geladen",
       "errorForbidden": "Sie dürfen diese Seite nicht ansehen.",
       "errorUnexpected": "Die Aktualisierung konnte nicht geladen werden.",
-      "requestId": "Anfrage-ID",
       "retry": "Erneut versuchen",
       "licence": {
         "kicker": "Schritt 1 · Lizenz",

@@ -17,7 +17,6 @@
       "delete": "Supprimer",
       "edit": "Modifier",
       "loadMore": "Charger plus",
-      "requestId": "Identifiant de la requête",
       "errors": {
         "forbidden": "Seul un super administrateur peut modifier cela.",
         "conflict": "Quelqu’un d’autre a modifié ceci pendant votre édition. Rechargez et réessayez.",

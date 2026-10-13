@@ -828,7 +828,6 @@
         "notFound": "Bu bulunamadı. Silinmiş olabilir.",
         "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
         "unexpected": "Bizim tarafımızda bir şeyler ters gitti. Tekrar deneyin.",
-        "requestId": "İstek kimliği",
         "retry": "Tekrar dene"
       },
       "categories": {

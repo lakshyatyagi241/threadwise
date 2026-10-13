@@ -5,7 +5,6 @@
     "loading": "Wird geladen",
     "empty": "Noch nichts vorhanden",
     "retry": "Erneut versuchen",
-    "requestId": "Anfrage-ID",
     "search": "Suchen",
     "unexpected": "Etwas ist schiefgelaufen",
     "fatal": {

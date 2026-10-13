@@ -8,7 +8,6 @@
     "common": {
       "loading": "Chargement",
       "retry": "Réessayer",
-      "requestId": "Identifiant de la requête",
       "cancel": "Annuler",
       "back": "Retour",
       "close": "Fermer",

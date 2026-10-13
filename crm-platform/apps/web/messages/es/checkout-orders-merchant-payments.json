@@ -63,7 +63,6 @@
       "whatsapp_ai": "IA de WhatsApp"
     },
     "errors": {
-      "requestId": "ID de solicitud",
       "retry": "Reintentar",
       "network": {
         "title": "No se puede conectar con el servidor",

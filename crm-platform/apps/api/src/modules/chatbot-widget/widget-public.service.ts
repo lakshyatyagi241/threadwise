@@ -1,8 +1,10 @@
+import { isAssetSlot } from './asset-slots';
 import { HttpException, Inject, Injectable, Logger } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { sql } from 'drizzle-orm';
 import {
   toPublicLauncher,
+  widgetFeedbackRequestSchema,
   widgetMessageRequestSchema,
   type WidgetHistoryResponse,
   type WidgetMessageRequest,
@@ -25,6 +27,7 @@ import {
 import { HISTORY_TURNS } from './ai-prompt';
 import { buildEmbedScript, NOT_FOUND_SCRIPT } from './embed-script';
 import { renderChatPage } from './chat-page';
+import { ChatMediaStore } from '../../infra/providers/chat-conversations/media';
 import {
   historyFrom,
   isTokenShape,
@@ -32,6 +35,7 @@ import {
   toTranscriptEntry,
   usesAi,
   whatsappUrl,
+  widgetMediaOf,
 } from './widget-rules';
 import { WidgetAiReplyService } from './widget-ai-reply.service';
 import { WidgetThrottleService, type ThrottledRoute } from './widget-throttle.service';
@@ -93,6 +97,7 @@ export class WidgetPublicService {
     private readonly visitors: WidgetVisitorsRepository,
     private readonly throttle: WidgetThrottleService,
     private readonly aiReply: WidgetAiReplyService,
+    private readonly media: ChatMediaStore,
     @Inject(INBOX_GATEWAY) private readonly inbox: InboxGateway,
     @Inject(ASSISTANT_DIRECTORY) private readonly assistants: AssistantDirectory,
     private readonly ingest: ChannelIngestPublisher,
@@ -118,6 +123,20 @@ export class WidgetPublicService {
     return found;
   }
 
+  /** One uploaded picture of a flow bot's button for the public route: a narrow definer lookup, then the bytes. */
+  async asset(
+    flowUuid: string,
+    slot: string,
+  ): Promise<{ mime: string; bytes: Buffer; etag: string } | null> {
+    if (!UUID_SHAPE.test(flowUuid) || !isAssetSlot(slot)) return null;
+    const res = await this.db.primary.execute(
+      sql`SELECT asset_mime, asset_bytes, asset_etag FROM wgt_asset_lookup(${flowUuid}::uuid, ${slot})`,
+    );
+    const r = res.rows[0] as
+      { asset_mime: string; asset_bytes: Buffer; asset_etag: string } | undefined;
+    return r ? { mime: r.asset_mime, bytes: r.asset_bytes, etag: r.asset_etag } : null;
+  }
+
   // --- script and page ------------------------------------------------------------------------------------------------
 
   /** The loader script, or null for a paused, deleted or rotated widget (the route answers 404 with a comment). */
@@ -126,16 +145,22 @@ export class WidgetPublicService {
     if (!found || found.widget.status !== 'active') return null;
     const w = found.widget;
     return buildEmbedScript(
-      { ...w, whatsappUrl: whatsappUrl(w) },
+      { ...w, whatsappUrl: whatsappUrl(w), flow: w.flowId !== null },
       `${base}/widget/${w.embedToken}/chat`,
     );
   }
 
-  async chatPage(token: string): Promise<string | null> {
+  async chatPage(token: string, locale?: string): Promise<string | null> {
     const found = await this.locate(token);
     if (!found || found.widget.status !== 'active') return null;
     const w = found.widget;
-    return renderChatPage({ uuid: w.uuid, token: w.embedToken, name: w.name });
+    return renderChatPage({
+      uuid: w.uuid,
+      token: w.embedToken,
+      name: w.name,
+      flow: w.flowId !== null,
+      ...(locale ? { locale } : {}),
+    });
   }
 
   // --- guards ---------------------------------------------------------------------------------------------------------
@@ -203,6 +228,14 @@ export class WidgetPublicService {
     return this.db.txAs({ orgId }, async (tx) => {
       const { visitor, isNew } = (await this.resolveVisitor(tx, orgId, widget, req, true))!;
       await this.visitors.touch(tx, orgId, visitor.id);
+      const flowUuid =
+        widget.flowId === null
+          ? null
+          : ((
+              (await tx.execute(
+                sql`SELECT uuid FROM flows WHERE org_id = ${orgId} AND id = ${widget.flowId}`,
+              )) as unknown as { rows: Array<{ uuid: string }> }
+            ).rows[0]?.uuid ?? null);
       const lines: InboxLine[] =
         visitor.conversationId === null
           ? []
@@ -232,6 +265,7 @@ export class WidgetPublicService {
             collect_phone: widget.collectPhone,
             whatsapp_url: whatsappUrl(widget),
             launcher: toPublicLauncher(widget.launcher),
+            ...(flowUuid ? { flow_uuid: flowUuid } : {}),
           },
           visitor: {
             uuid: visitor.visitorUuid,
@@ -351,19 +385,15 @@ export class WidgetPublicService {
     return { ok: true, inbound: { id: stored.inbound.id }, reply };
   }
 
-  /**
-   * A message to a flow bot's widget. The visitor and the thread are kept here as for any widget, but the line itself is not
-   * written here: it joins the inbox's ingest queue like a message from any channel, so the worker stores it and the flow runtime
-   * starts or resumes the bot. The answer reaches the visitor through the history poll, so `reply` is always null.
-   */
-  private async flowMessage(
+  /** The visitor, their thread and its channel for a flow bot's widget, as the inbox's ingest names them. */
+  private async flowPeer(
     orgId: number,
     widget: WidgetRow,
     req: PublicRequest,
-    data: WidgetMessageRequest,
     forInbox: WidgetForInbox,
-  ): Promise<WidgetMessageResponse> {
-    const prepared = await this.db.txAs({ orgId }, async (tx) => {
+    data: { name?: string | null; email?: string | null; phone?: string | null },
+  ): Promise<{ peerKey: string; peerName: string | null; channelUuid: string }> {
+    return this.db.txAs({ orgId }, async (tx) => {
       const { visitor } = (await this.resolveVisitor(tx, orgId, widget, req, true))!;
       await this.visitors.touch(tx, orgId, visitor.id);
       await this.visitors.updateProfile(tx, orgId, visitor.id, data);
@@ -382,6 +412,21 @@ export class WidgetPublicService {
         channelUuid: await this.inbox.channelUuidOf(tx, orgId, conversation.id),
       };
     });
+  }
+
+  /**
+   * A message to a flow bot's widget. The visitor and the thread are kept here as for any widget, but the line itself is not
+   * written here: it joins the inbox's ingest queue like a message from any channel, so the worker stores it and the flow runtime
+   * starts or resumes the bot. The answer reaches the visitor through the history poll, so `reply` is always null.
+   */
+  private async flowMessage(
+    orgId: number,
+    widget: WidgetRow,
+    req: PublicRequest,
+    data: WidgetMessageRequest,
+    forInbox: WidgetForInbox,
+  ): Promise<WidgetMessageResponse> {
+    const prepared = await this.flowPeer(orgId, widget, req, forInbox, data);
     const tapped = data.tap_id ? { interactive: { id: data.tap_id, title: data.body } } : undefined;
     await this.ingest.enqueueInbound(orgId, prepared.channelUuid, {
       providerMessageId: `wgt-${randomUUID()}`,
@@ -393,6 +438,67 @@ export class WidgetPublicService {
       providerTimestamp: new Date(),
     });
     return { ok: true, inbound: { id: 0 }, reply: null };
+  }
+
+  /**
+   * A file the visitor attaches to answer a question that asked for one (`POST /widget/<token>/api/upload`). The bytes are checked and
+   * staged in the media store (the content decides the type, never the name), then the visitor's line goes through the inbox's own
+   * pipeline as a media message, like a photo on WhatsApp, so the flow's "Ask for file" step receives it. Flow bots only.
+   */
+  async upload(
+    token: string,
+    req: PublicRequest,
+    file: { buffer: Buffer; originalname: string } | undefined,
+  ): Promise<{ ok: true; name: string }> {
+    const { orgId, widget } = await this.locateActive(token);
+    if (widget.flowId === null)
+      throw new WidgetPublicError(422, { message: 'This chat does not take files.' });
+    if (!file || file.buffer.length === 0)
+      throw new WidgetPublicError(422, { message: 'Choose a file to send.' });
+    let stored;
+    try {
+      stored = await this.media.store({
+        orgId,
+        filename: file.originalname || 'file',
+        buffer: file.buffer,
+      });
+    } catch (err) {
+      throw new WidgetPublicError(422, {
+        message: err instanceof Error && err.message ? err.message : 'That file cannot be sent.',
+      });
+    }
+    const forInbox: WidgetForInbox = {
+      id: widget.id,
+      uuid: widget.uuid,
+      userId: widget.userId,
+      name: widget.name,
+      welcomeMessage: widget.welcomeMessage,
+      assistantUuid: widget.assistantUuid,
+    };
+    const peer = await this.flowPeer(orgId, widget, req, forInbox, {});
+    const mime = stored.mime;
+    await this.ingest.enqueueInbound(orgId, peer.channelUuid, {
+      providerMessageId: `wgt-${randomUUID()}`,
+      peerKey: peer.peerKey,
+      ...(peer.peerName ? { peerName: peer.peerName } : {}),
+      kind: 'media',
+      media: {
+        // The staged object: the channel's `fetchMedia` reads it back and ingest stores the final copy.
+        providerMediaId: stored.key,
+        mediaKind: mime.startsWith('image/')
+          ? 'image'
+          : mime.startsWith('video/')
+            ? 'video'
+            : mime.startsWith('audio/')
+              ? 'audio'
+              : 'document',
+        mime,
+        name: stored.name,
+        sizeBytes: stored.size,
+      },
+      providerTimestamp: new Date(),
+    });
+    return { ok: true, name: stored.name };
   }
 
   // --- history --------------------------------------------------------------------------------------------------------
@@ -424,9 +530,58 @@ export class WidgetPublicService {
           at: m.sentAt ? m.sentAt.toISOString() : null,
           from: historyFrom(m.agentId),
           ...(m.buttons ? { buttons: m.buttons } : {}),
+          ...(m.media ? { media: widgetMediaOf(m) } : {}),
+          ...(m.input ? { input: m.input } : {}),
+          ...(m.links && m.links.length ? { links: m.links } : {}),
+          ...(m.cards && m.cards.length ? { cards: m.cards } : {}),
         })),
       };
     });
+  }
+
+  /**
+   * A visitor's thumbs up or down on a line the bot sent them, kept on that line (`meta.feedback`) for the team to read. Only a line of
+   * the visitor's own thread can be marked; anything else is the same 404.
+   */
+  async feedback(token: string, req: PublicRequest, rawBody: unknown): Promise<{ ok: true }> {
+    const parsed = widgetFeedbackRequestSchema.safeParse(rawBody ?? {});
+    if (!parsed.success)
+      throw new WidgetPublicError(422, { message: 'The given data was invalid.' });
+    const { orgId, widget } = await this.locateActive(token);
+    const done = await this.db.txAs({ orgId }, async (tx) => {
+      const resolved = await this.resolveVisitor(tx, orgId, widget, req, false);
+      if (!resolved || resolved.visitor.conversationId === null) return false;
+      return this.inbox.setFeedback(
+        tx,
+        orgId,
+        resolved.visitor.conversationId,
+        parsed.data.message_id,
+        parsed.data.value,
+      );
+    });
+    if (!done) throw notFound();
+    return { ok: true };
+  }
+
+  /**
+   * A file a flow bot sent this visitor: the stored object's key and type, only when the line is on the visitor's own thread. A
+   * missing visitor, thread or file is the same 404, so the route confirms nothing about other visitors' files.
+   */
+  async mediaFile(
+    token: string,
+    req: PublicRequest,
+    id: number,
+  ): Promise<{ orgId: number; key: string; mime: string; name: string }> {
+    const found = await this.locate(token);
+    if (!found) throw notFound();
+    const { orgId, widget } = found;
+    const line = await this.db.txAs({ orgId }, async (tx) => {
+      const resolved = await this.resolveVisitor(tx, orgId, widget, req, false);
+      if (!resolved || resolved.visitor.conversationId === null) return null;
+      return this.inbox.mediaOf(tx, orgId, resolved.visitor.conversationId, id);
+    });
+    if (!line) throw notFound();
+    return { orgId, key: line.key, mime: line.mime, name: line.name };
   }
 }
 

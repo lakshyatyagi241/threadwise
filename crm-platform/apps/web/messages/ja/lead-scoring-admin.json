@@ -7,7 +7,6 @@
     "common": {
       "loading": "読み込み中",
       "retry": "再試行",
-      "requestId": "リクエストID",
       "dash": "-",
       "cancel": "キャンセル",
       "errors": {

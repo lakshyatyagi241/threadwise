@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useState, type ReactNode } from 'react';
 import type { StoreOrderDetail } from '@crm/contracts';
 import { Alert, Button, ConfirmDialog, useToast } from '@crm/ui';
@@ -125,6 +125,7 @@ function OrderBody({
   const t = useTranslations('checkout-orders-merchant-payments.orderDetail');
   const tc = useTranslations('checkout-orders-merchant-payments.common');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const router = useRouter();
   const { toast } = useToast();
   const errLine = useErrorLine();
@@ -147,7 +148,7 @@ function OrderBody({
     <>
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="min-w-0 space-y-2">
-          <Eyebrow>{t('placed', { when: formatWhen(order.createdAt, locale) })}</Eyebrow>
+          <Eyebrow>{t('placed', { when: formatWhen(order.createdAt, locale, timeZone) })}</Eyebrow>
           <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
             {t('title', { no: order.orderNo })}
           </h1>
@@ -351,6 +352,7 @@ function CustomerCard({ order }: { order: StoreOrderDetail }) {
 }
 
 function MetaCard({ order, locale }: { order: StoreOrderDetail; locale: string }) {
+  const timeZone = useTimeZone();
   const t = useTranslations('checkout-orders-merchant-payments.orderDetail.meta');
   return (
     <Card title={t('title')}>
@@ -362,13 +364,14 @@ function MetaCard({ order, locale }: { order: StoreOrderDetail; locale: string }
           label={t('paymentMethod')}
           value={<span className="uppercase">{order.paymentMethod}</span>}
         />
-        <Row label={t('updated')} value={formatWhen(order.updatedAt, locale)} />
+        <Row label={t('updated')} value={formatWhen(order.updatedAt, locale, timeZone)} />
       </dl>
     </Card>
   );
 }
 
 function TimelineCard({ order, locale }: { order: StoreOrderDetail; locale: string }) {
+  const timeZone = useTimeZone();
   const t = useTranslations('checkout-orders-merchant-payments.orderDetail.timeline');
   const entries = sortTimeline(order.timeline);
   return (
@@ -388,7 +391,7 @@ function TimelineCard({ order, locale }: { order: StoreOrderDetail; locale: stri
                   {isKnown(TIMELINE_KINDS, e.kind) ? t(`kind.${e.kind}`) : e.kind}
                 </span>
                 <time dateTime={e.at} className="text-xs text-muted-foreground">
-                  {formatWhen(e.at, locale)}
+                  {formatWhen(e.at, locale, timeZone)}
                 </time>
               </div>
               {e.detail && (
@@ -408,6 +411,7 @@ function TimelineCard({ order, locale }: { order: StoreOrderDetail; locale: stri
 }
 
 function PaymentsCard({ order, locale }: { order: StoreOrderDetail; locale: string }) {
+  const timeZone = useTimeZone();
   const t = useTranslations('checkout-orders-merchant-payments.orderDetail.payments');
   const payments = sortPayments(order.payments);
   return (
@@ -429,7 +433,7 @@ function PaymentsCard({ order, locale }: { order: StoreOrderDetail; locale: stri
               </div>
               <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
                 <PaymentStatusBadge status={p.status} />
-                {p.at && <time dateTime={p.at}>{formatWhen(p.at, locale)}</time>}
+                {p.at && <time dateTime={p.at}>{formatWhen(p.at, locale, timeZone)}</time>}
               </div>
               {p.reference && (
                 <div

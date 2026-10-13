@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import {
   useId,
   useMemo,
@@ -152,10 +152,19 @@ function Highlight({ text, query }: { text: string; query: string }) {
   );
 }
 
+/** The hour (0-23) of an instant on the clock of `timeZone`. */
+function hourIn(d: Date, timeZone: string | undefined): number {
+  const part = new Intl.DateTimeFormat('en-US', { hour: 'numeric', hourCycle: 'h23', timeZone })
+    .formatToParts(d)
+    .find((p) => p.type === 'hour');
+  return part ? Number(part.value) % 24 : d.getHours();
+}
+
 /** "Good morning, Priya" over the viewer's own date and time (TW-ASHELL-016); it shows nothing until the browser has a clock. */
 function Greeting({ name }: { name: string }) {
   const t = useTranslations('admin-console-shell.strip.greeting');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const now = useNow();
   const d = new Date(now || 0);
   const who = firstName(name);
@@ -164,7 +173,7 @@ function Greeting({ name }: { name: string }) {
       {now ? (
         <div className="select-none text-center leading-tight" data-testid="greeting">
           <div className="text-[12.5px] font-semibold">
-            {t(greetingKey(d.getHours()))}
+            {t(greetingKey(hourIn(d, timeZone)))}
             {who ? `, ${who}` : ''}
           </div>
           <div className="mt-0.5 font-mono text-[10.5px] uppercase tracking-[0.14em] text-muted-foreground">
@@ -172,9 +181,14 @@ function Greeting({ name }: { name: string }) {
               weekday: 'short',
               day: 'numeric',
               month: 'short',
+              timeZone,
             }).format(d)}
             {' · '}
-            {new Intl.DateTimeFormat(locale, { hour: '2-digit', minute: '2-digit' }).format(d)}
+            {new Intl.DateTimeFormat(locale, {
+              hour: '2-digit',
+              minute: '2-digit',
+              timeZone,
+            }).format(d)}
           </div>
         </div>
       ) : (

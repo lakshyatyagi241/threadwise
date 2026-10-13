@@ -78,8 +78,12 @@ export const growthApi = {
   audiences: (signal?: AbortSignal) => apiFetch(`${BASE}/audiences`, { schema: audiences, signal }),
   syncAudience: (key: string) =>
     apiFetch(`${BASE}/audiences/sync`, { method: 'POST', body: { key }, schema: synced }),
-  sendTimes: (signal?: AbortSignal) =>
-    apiFetch(`${BASE}/send-times`, { schema: sendTimes, signal }),
+  /** The hours counted in `timezone` (the viewer's zone); the workspace's when left out. */
+  sendTimes: (timezone?: string, signal?: AbortSignal) =>
+    apiFetch(`${BASE}/send-times${timezone ? `?timezone=${enc(timezone)}` : ''}`, {
+      schema: sendTimes,
+      signal,
+    }),
   propensity: (signal?: AbortSignal) =>
     apiFetch(`${BASE}/propensity`, { schema: propensity, signal }),
   recompute: () => apiFetch(`${BASE}/propensity/recompute`, { method: 'POST', schema: propensity }),

@@ -43,7 +43,7 @@ Read from the npm tarballs of `page-agent`, `@page-agent/core`, `@page-agent/llm
 | Confirmation hook       | **None built in.** Lifecycle hooks exist (`onBeforeStep`, `onAfterStep`, `onBeforeTask`, `onAfterTask`, `onDispose`) but run around a step, not before an action. We gate actions by **overriding the three acting tools** through `customTools` (the supported extension point) and awaiting the person inside the tool.                                                                       |
 | Excluding / masking     | `data-page-agent-ignore="true"` drops a subtree from the model-visible DOM; `data-page-agent-not-interactive` keeps text but makes controls unclickable; `aria-hidden="true"` subtrees are skipped; `interactiveBlacklist`; and `transformPageContent(content)` runs on the final text before the LLM sees it (our masker).                                                                     |
 | Instructions            | `instructions.system` (appended), `instructions.getPageInstructions(url)` (per page, per step), `customSystemPrompt` (full replace; we append instead, to keep the library's tool-use contract). `language` only switches the built-in prompt between en-US and zh-CN, so our locale rule goes in `instructions.system`.                                                                        |
-| Budgets / abort         | `maxSteps` (default 40, we set 25), `stepDelay`, `maxRetries` (we set 0 so a failed call cannot silently multiply cost), `agent.stop()` aborts the in-flight fetch through one AbortSignal.                                                                                                                                                                                                     |
+| Budgets / abort         | `maxSteps` (default 40, we set 40), `stepDelay`, `maxRetries` (we set 0 so a failed call cannot silently multiply cost), `agent.stop()` aborts the in-flight fetch through one AbortSignal.                                                                                                                                                                                                     |
 | Events for our panel    | `statuschange`, `historychange` (steps with reflection and action), `activity` (`thinking`, `executing`, `executed`, `retrying`, `error`), and `onAskUser` (enables the `ask_user` tool).                                                                                                                                                                                                       |
 | Peer / size / telemetry | Peer dependency `zod`. About 330 KB of JS in total, so it is imported dynamically on first open. No telemetry or third-party URL in the runtime (the only URLs in the bundles are documentation links and the browser-use attribution). The demo build in the package calls a hosted demo model: we do not import it.                                                                           |
 | Licence                 | MIT. Copyright Alibaba Group Holding Limited and SimonLuvRamen; DOM processing and prompt derived from browser-use (MIT). Notice shipped in `THIRD_PARTY_NOTICES/page-agent.md`.                                                                                                                                                                                                                |
@@ -124,7 +124,7 @@ Every route re-checks all three on the server. The web checks them only to hide 
   when the target is same-origin, an app route, not under `/admin`, `/platform`, `/api`, `/login`, `/logout`, `/impersonation`, not a
   `javascript:`/`data:`/`blob:` URL, not `target=_blank`, and not a download. A violation ends that action with a message to the
   model. After every step a location check also runs: if the page left the allow-list, the task stops.
-- **Step budget.** 25 steps per task client side (library `maxSteps`) and enforced again server side by counting completions per task
+- **Step budget.** 40 steps per task client side (library `maxSteps`) and enforced again server side by counting completions per task
   (the client cannot raise it). A visible Stop button aborts in-flight requests at once.
 - `experimentalScriptExecutionTool` and `experimentalLlmsTxt` stay off.
 
@@ -160,7 +160,7 @@ the AI provider; the owner opt-in text sits beside the workspace switch.
 - One bounded call shape: the proxy keeps `model`, `messages`, `tools`, `tool_choice`, `parallel_tool_calls` and drops everything else;
   `stream` is refused; `model` is overridden with the server's; `max_tokens` is set by the server; message count, tool count and total
   characters are capped.
-- Per task: max 25 completions, 15 minutes wall clock, 200k total tokens. Per user: 3 task starts a minute, 40 a day. Per workspace:
+- Per task: max 40 completions, 25 minutes wall clock, 400k total tokens. Per user: 3 task starts a minute, 40 a day. Per workspace:
   400 a day. Per route: `@Throttle` per actor. The platform's monthly token allowance (`AiTokenMeter.guard`) applies when the platform
   key pays; a workspace key (BYOK) is billed to that workspace.
 - Every call writes one `ai_token_usage` row (provider, model, tokens, who paid), so the owner's AI usage screen shows the cost.
@@ -266,4 +266,4 @@ See the wiring map `docs/threadwise-port/wiring/help-agent.md`.
 - **Plans:** Growth and Scale only; Starter off. The owner switches it per plan in the plan editor.
 - **Who pays:** the platform key, inside each plan's existing monthly AI token allowance (`AiTokenMeter.guard`); no new allowance. A workspace's own key is a later option, not built.
 - **Data notice:** the wording in `help-agent.json` (`share1` to `share4`, `optIn`) is approved as written: it says names and other free text are not masked and that only counts and outcomes are stored.
-- **Limits:** kept as built: 25 steps, 15 minutes and 200,000 tokens per task; 3 task starts a minute and 40 a day per person; 400 a day per workspace.
+- **Limits:** raised 2026-10-13 because guides stopped mid-way: 40 steps, 25 minutes and 400,000 tokens per task; 3 task starts a minute and 40 a day per person; 400 a day per workspace.

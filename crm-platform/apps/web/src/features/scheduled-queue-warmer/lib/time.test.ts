@@ -40,6 +40,14 @@ describe('time zones', () => {
   it('round trips an instant through a zone', () => {
     const ms = Date.UTC(2026, 9, 10, 4, 30);
     expect(localDateTime(ms, 'Asia/Kolkata')).toEqual({ date: '2026-10-10', time: '10:00' });
+    expect(localDateTime(Date.parse('2026-10-02T20:30:00Z'), 'Asia/Kolkata')).toEqual({
+      date: '2026-10-03',
+      time: '02:00',
+    });
+    expect(localDateTime(Date.parse('2026-10-02T20:30:00Z'), 'America/New_York')).toEqual({
+      date: '2026-10-02',
+      time: '16:30',
+    });
     expect(wallToEpoch('2026-10-10', '10:00', 'Asia/Kolkata')).toBe(ms);
   });
 

@@ -1,0 +1,29 @@
+{
+  "aiStudio": {
+    "nav": {
+      "studio": "AI Studio"
+    },
+    "title": "AI Studio",
+    "lead": "Empieza algo que hable con tus clientes por ti: un agente de IA, un chatbot o un flujo de trabajo.",
+    "noAccess": "No tienes permiso para iniciar esto. Pide ayuda a un administrador del espacio.",
+    "agent": {
+      "title": "Agente de IA",
+      "body": "Responde con tus propios documentos y páginas web, con tu tono.",
+      "create": "Crear un agente de IA",
+      "open": "Tus agentes de IA"
+    },
+    "chatbot": {
+      "title": "Chatbot",
+      "body": "Una conversación guiada con botones, preguntas, tarjetas y archivos, para tu sitio web o WhatsApp.",
+      "web": "Bot de chat web",
+      "whatsapp": "Bot de WhatsApp"
+    },
+    "workflow": {
+      "title": "Flujo de trabajo",
+      "body": "El lienzo avanzado: condiciones, etiquetas, webhooks y pasos de CRM que se ejecutan solos.",
+      "create": "Crear un flujo de trabajo",
+      "open": "Tus flujos"
+    },
+    "deployNote": "Cada chatbot tiene las pestañas Crear, Personalizar e Implementar. Publícalo y luego copia su código de inserción o enlace desde Implementar."
+  }
+}

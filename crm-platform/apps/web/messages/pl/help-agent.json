@@ -94,8 +94,7 @@
       "signedOut": "Sesja wygasła. Zaloguj się ponownie.",
       "network": "Nie udało się połączyć z serwerem. Sprawdź połączenie i spróbuj ponownie.",
       "generic": "Coś poszło nie tak. Spróbuj ponownie.",
-      "retryIn": "Spróbuj ponownie za {seconds} s.",
-      "requestId": "ID żądania: {id}"
+      "retryIn": "Spróbuj ponownie za {seconds} s."
     },
     "examples": {
       "howDo": "Jak korzystać z: {title}?",
@@ -115,7 +114,6 @@
       "description": "Pozwól zespołowi prosić o to, co chce zrobić, a aplikacja poprowadzi go lub wykona kroki na jego własnym koncie.",
       "loading": "Ładowanie",
       "loadFailed": "Nie udało się wczytać ustawienia.",
-      "requestId": "ID żądania: {id}",
       "shareTitle": "Co jest udostępniane, gdy ktoś z niego korzysta",
       "share1": "Prośba wpisana przez użytkownika oraz widoczny tekst strony, na której się znajduje, są wysyłane do dostawcy AI używanego przez platformę.",
       "share2": "Numery telefonów, adresy e-mail, dane poufne i pola osobowe formularzy są najpierw ukrywane. Imiona i nazwiska oraz inny dowolny tekst na stronie nie są.",

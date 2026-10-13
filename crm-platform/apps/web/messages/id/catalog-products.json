@@ -7,8 +7,7 @@
     },
     "common": {
       "dismiss": "Tutup",
-      "retry": "Coba lagi",
-      "requestId": "ID permintaan"
+      "retry": "Coba lagi"
     },
     "errors": {
       "network": "Tidak dapat menjangkau server. Periksa koneksi Anda dan coba lagi.",
@@ -35,7 +34,10 @@
       "sendFailed": "Pesan tidak dapat dikirim: {detail}",
       "collectionProducts": "Tidak ada produk terpilih yang termasuk dalam workspace ini.",
       "providerFailed": "WhatsApp atau Meta tidak dapat menyelesaikan permintaan: {detail}",
-      "unexpected": "Terjadi kesalahan. Coba lagi sebentar lagi."
+      "unexpected": "Terjadi kesalahan. Coba lagi sebentar lagi.",
+      "alreadyConnected": "Katalog sudah terhubung. Putuskan dulu untuk membuat yang baru.",
+      "confirmMismatch": "ID katalog yang Anda ketik tidak cocok dengan katalog yang terhubung.",
+      "setNotSyncable": "Koleksi ini tidak punya produk aktif untuk dimasukkan ke set produk Meta."
     },
     "paywall": {
       "kicker": "Fitur premium",
@@ -401,6 +403,15 @@
           "descriptionTooLong": "Deskripsi terlalu panjang.",
           "noProducts": "Pilih setidaknya satu produk."
         }
+      },
+      "meta": {
+        "onMeta": "Ada di Meta",
+        "notOnMeta": "Tidak ada di Meta",
+        "push": "Kirim ke Meta",
+        "update": "Perbarui di Meta",
+        "remove": "Hapus dari Meta",
+        "pushed": "Koleksi dikirim ke Meta.",
+        "removed": "Koleksi dihapus dari Meta."
       }
     },
     "activity": {
@@ -724,6 +735,33 @@
           "goods": "Tanpa alkohol / dewasa / barang yang diatur",
           "verification": "Business Verification diperlukan untuk produksi"
         }
+      }
+    },
+    "manage": {
+      "title": "Kelola katalog di Meta",
+      "create": {
+        "title": "Buat katalog baru di Meta",
+        "intro": "Membuat katalog kosong di akun WhatsApp Business Anda, menautkannya, dan menghubungkannya di sini.",
+        "name": "Nama katalog",
+        "placeholder": "mis. Toko saya",
+        "button": "Buat katalog",
+        "needName": "Masukkan nama katalog.",
+        "done": "Katalog dibuat dan terhubung."
+      },
+      "rename": {
+        "label": "Nama katalog",
+        "button": "Ganti nama di Meta",
+        "done": "Katalog diganti namanya di Meta."
+      },
+      "delete": {
+        "title": "Hapus katalog di Meta",
+        "warning": "Menghapus permanen katalog dan produknya di Meta. Tidak dapat dibatalkan.",
+        "confirmLabel": "Ketik ID katalog {id} untuk konfirmasi",
+        "button": "Hapus di Meta",
+        "dialogTitle": "Hapus katalog di Meta?",
+        "dialogMessage": "Katalog dihapus di Meta dan diputuskan di sini. Tidak dapat dibatalkan.",
+        "cancel": "Batal",
+        "done": "Katalog dihapus di Meta."
       }
     }
   }

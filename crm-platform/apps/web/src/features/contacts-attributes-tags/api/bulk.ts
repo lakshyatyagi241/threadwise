@@ -88,6 +88,13 @@ export const bulkTag = (
 ) => run('/contacts/bulk/tag', target, { action, ...tag });
 
 /**
+ * Hands the target to one person, or to nobody (`null`). Unlike `bulkUpdate` this takes "all N matching" too, so a whole
+ * person's book moves in one request (`POST /contacts/bulk/owner`); the API holds the target to the caller's record scope.
+ */
+export const bulkOwner = (target: BulkTarget, ownerId: string | null) =>
+  run('/contacts/bulk/owner', target, { ownerId });
+
+/**
  * Exports as CSV. The API streams the file (at most 200,000 rows), so this reads the response as a blob rather than
  * through the JSON client. Returns the file and the filename the server suggested.
  */

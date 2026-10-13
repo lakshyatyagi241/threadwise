@@ -5,7 +5,22 @@ summary: Keep a proof of who agreed to marketing, let contacts opt out by replyi
 area: settings
 order: 20
 documents: [tile:consent]
-keywords: [consent, opt out, opt in, unsubscribe, stop, start, keyword, gdpr, compliance, marketing, footer, proof, ledger]
+keywords:
+  [
+    consent,
+    opt out,
+    opt in,
+    unsubscribe,
+    stop,
+    start,
+    keyword,
+    gdpr,
+    compliance,
+    marketing,
+    footer,
+    proof,
+    ledger,
+  ]
 ---
 
 ## What it is for

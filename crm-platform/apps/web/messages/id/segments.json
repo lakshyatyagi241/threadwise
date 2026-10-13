@@ -128,7 +128,6 @@
       "planLimit": "Paket Anda tidak mengizinkan lebih banyak dari ini.",
       "unavailable": "Segmen belum tersedia di server ini.",
       "unexpected": "Terjadi kesalahan. Coba lagi.",
-      "requestId": "ID permintaan",
       "retry": "Coba lagi",
       "shareEmpty": "Pilih minimal satu orang atau tim untuk membagikan segmen.",
       "shareInvalid": "Beberapa orang atau tim yang dipilih sudah tidak ada di workspace ini. Hapus mereka lalu simpan lagi."

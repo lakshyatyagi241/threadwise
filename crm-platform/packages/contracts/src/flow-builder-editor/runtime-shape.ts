@@ -157,7 +157,7 @@ const REPLY_KINDS: Record<string, string> = {
   audio: 'Audio',
   document: 'Document',
 };
-const CTA_TYPES = ['url', 'phone', 'call_now', 'copy'];
+const CTA_TYPES = ['url', 'phone', 'call_now', 'copy', 'email'];
 const UNIT_SECONDS: Record<string, number> = {
   sec: 1,
   second: 1,
@@ -171,7 +171,9 @@ const UNIT_SECONDS: Record<string, number> = {
   days: 86400,
 };
 
-function ctaActionsOf(d: Bag): Array<{ type: string; label: string; value: string }> {
+function ctaActionsOf(
+  d: Bag,
+): Array<{ type: string; label: string; value: string; icon?: string }> {
   let raw: unknown[];
   if (Array.isArray(d.actions)) raw = d.actions;
   else if (Array.isArray(d.ctaActions))
@@ -188,7 +190,12 @@ function ctaActionsOf(d: Bag): Array<{ type: string; label: string; value: strin
     const r = isRecord(a) ? a : {};
     let type = s(r.type, 'url').toLowerCase();
     if (!CTA_TYPES.includes(type)) type = 'url';
-    return { type, label: s(r.label), value: s(r.value) };
+    return {
+      type,
+      label: s(r.label),
+      value: s(r.value),
+      ...(s(r.icon) ? { icon: s(r.icon) } : {}),
+    };
   });
 }
 
@@ -407,6 +414,8 @@ const SHAPERS: Record<string, Shaper> = {
       maxRetries: Math.min(FLB_ASK_MAX_RETRIES, Math.max(0, retries)),
       onGiveUp: (FLB_ASK_GIVE_UP_MODES as readonly string[]).includes(mode) ? mode : 'continue',
       savePropertyKey: toBool(d.saveProperty) ? s(d.propertyKey).trim() : '',
+      // A Phone question can verify the number with a one-time code (the other kinds never do).
+      verifyOtp: flbCleanAskInputType(d.validate) === 'phone' && toBool(d.verifyOtp),
     };
   },
 

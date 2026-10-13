@@ -260,7 +260,7 @@ export class WabooMigrationService {
         HttpStatus.UNPROCESSABLE_ENTITY,
         [{ path: 'organizationIds', message: plan.organizationId }],
       );
-    if (input.mode === 'load' && input.confirmCount !== plan.items.length)
+    if (input.mode !== 'dry' && input.confirmCount !== plan.items.length)
       throw new AppError(
         ERROR_CODES.WMIG_CONFIRM_MISMATCH,
         'Type the number of organizations to confirm a load.',

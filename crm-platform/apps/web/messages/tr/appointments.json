@@ -36,7 +36,6 @@
       "slotTaken": "Bu saat az önce alındı. Lütfen başka bir saat seçin.",
       "gone": "Bu rezervasyon artık değiştirilemez.",
       "unexpected": "Bir şeyler ters gitti. Birazdan tekrar deneyin.",
-      "requestId": "İstek kimliği",
       "retry": "Tekrar dene",
       "invalidTransition": "Bu rezervasyon, bu işlemin yapılabileceği bir durumda değil. Nerede olduğunu görmek için sayfayı yenileyin.",
       "notStarted": "Bu işlem yalnızca rezervasyon başladıktan sonra yapılabilir.",

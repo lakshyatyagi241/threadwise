@@ -7,8 +7,7 @@
     },
     "common": {
       "dismiss": "Đóng",
-      "retry": "Thử lại",
-      "requestId": "ID yêu cầu"
+      "retry": "Thử lại"
     },
     "errors": {
       "network": "Không thể kết nối máy chủ. Hãy kiểm tra kết nối và thử lại.",
@@ -35,7 +34,10 @@
       "sendFailed": "Không thể gửi tin nhắn: {detail}",
       "collectionProducts": "Không có sản phẩm nào được chọn thuộc không gian làm việc này.",
       "providerFailed": "WhatsApp hoặc Meta không thể hoàn tất yêu cầu: {detail}",
-      "unexpected": "Đã xảy ra lỗi. Hãy thử lại sau giây lát."
+      "unexpected": "Đã xảy ra lỗi. Hãy thử lại sau giây lát.",
+      "alreadyConnected": "Đã có một danh mục được kết nối. Hãy ngắt kết nối trước để tạo danh mục mới.",
+      "confirmMismatch": "ID danh mục bạn nhập không khớp với danh mục đang kết nối.",
+      "setNotSyncable": "Bộ sưu tập này không có sản phẩm đang hoạt động để đưa vào bộ sản phẩm Meta."
     },
     "paywall": {
       "kicker": "Tính năng cao cấp",
@@ -401,6 +403,15 @@
           "descriptionTooLong": "Mô tả quá dài.",
           "noProducts": "Hãy chọn ít nhất một sản phẩm."
         }
+      },
+      "meta": {
+        "onMeta": "Có trên Meta",
+        "notOnMeta": "Chưa có trên Meta",
+        "push": "Đẩy lên Meta",
+        "update": "Cập nhật trên Meta",
+        "remove": "Gỡ khỏi Meta",
+        "pushed": "Đã đẩy bộ sưu tập lên Meta.",
+        "removed": "Đã gỡ bộ sưu tập khỏi Meta."
       }
     },
     "activity": {
@@ -724,6 +735,33 @@
           "goods": "Không bán rượu / nội dung người lớn / hàng hóa bị quản lý",
           "verification": "Cần xác minh doanh nghiệp để chạy chính thức"
         }
+      }
+    },
+    "manage": {
+      "title": "Quản lý danh mục trên Meta",
+      "create": {
+        "title": "Tạo danh mục mới trên Meta",
+        "intro": "Tạo danh mục trống trong tài khoản WhatsApp Business của bạn, liên kết và kết nối tại đây.",
+        "name": "Tên danh mục",
+        "placeholder": "ví dụ: Cửa hàng của tôi",
+        "button": "Tạo danh mục",
+        "needName": "Nhập tên danh mục.",
+        "done": "Đã tạo và kết nối danh mục."
+      },
+      "rename": {
+        "label": "Tên danh mục",
+        "button": "Đổi tên trên Meta",
+        "done": "Đã đổi tên danh mục trên Meta."
+      },
+      "delete": {
+        "title": "Xóa danh mục trên Meta",
+        "warning": "Xóa vĩnh viễn danh mục và sản phẩm trên Meta. Không thể hoàn tác.",
+        "confirmLabel": "Nhập ID danh mục {id} để xác nhận",
+        "button": "Xóa trên Meta",
+        "dialogTitle": "Xóa danh mục trên Meta?",
+        "dialogMessage": "Danh mục bị xóa trên Meta và ngắt kết nối tại đây. Không thể hoàn tác.",
+        "cancel": "Hủy",
+        "done": "Đã xóa danh mục trên Meta."
       }
     }
   }

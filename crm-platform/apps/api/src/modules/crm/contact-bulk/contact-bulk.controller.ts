@@ -15,11 +15,13 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   bulkDeleteContactsSchema,
   bulkGroupContactsSchema,
+  bulkOwnerContactsSchema,
   bulkTagContactsSchema,
   exportContactsSchema,
   exportHistoryQuerySchema,
   type BulkDeleteContactsInput,
   type BulkGroupContactsInput,
+  type BulkOwnerContactsInput,
   type BulkTagContactsInput,
   type ExportContactsInput,
   type ExportHistoryQuery,
@@ -81,6 +83,21 @@ export class ContactBulkController {
     @GrantedScope('record.contacts.update') scope: RecordScope,
   ) {
     return this.bulk.group(body, scope);
+  }
+
+  @Post('bulk/owner')
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('record.contacts.update')
+  @ApiOperation({
+    summary: 'Reassign contacts to one person, or to nobody (ids, or everything matching a filter)',
+    description:
+      'Works on the contacts inside the caller update record scope and only to a person that scope allows (own: yourself, team: yourself or a teammate, all: any active member); `ownerId: null` unassigns and is refused to own/team callers. `changed` counts the contacts whose owner actually moved.',
+  })
+  async owner(
+    @Body(zodPipe(bulkOwnerContactsSchema)) body: BulkOwnerContactsInput,
+    @GrantedScope('record.contacts.update') scope: RecordScope,
+  ) {
+    return this.bulk.setOwner(body, scope);
   }
 
   @Post('bulk/tag')

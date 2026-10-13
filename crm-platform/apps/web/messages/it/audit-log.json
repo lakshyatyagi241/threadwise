@@ -1,0 +1,180 @@
+{
+  "audit-log": {
+    "title": "Registro di controllo",
+    "description": "Chi ha modificato cosa in questo workspace, quando e da cosa a cosa. Usalo per rispondere a \"chi l'ha fatto?\", per rivedere le modifiche del tuo team e per verificare cosa ha fatto il supporto della piattaforma quando hai chiesto aiuto.",
+    "tile": {
+      "label": "Registro di controllo",
+      "description": "Scopri chi ha modificato cosa nel tuo workspace, quando e da cosa a cosa. Filtralo ed esportalo.",
+      "keywords": "registro attività, controllo, cronologia, modifiche, chi ha modificato, sicurezza, conformità, esportazione, accesso del supporto"
+    },
+    "retention": {
+      "days": "Le voci vengono conservate per {days, plural, one {# giorno} many {# di giorni} other {# giorni}}, poi eliminate. Il periodo è stabilito dalla piattaforma.",
+      "forever": "Le voci vengono conservate senza data di scadenza. Questa politica è stabilita dalla piattaforma.",
+      "unknown": "Le voci vengono conservate per il periodo stabilito dalla piattaforma, poi eliminate."
+    },
+    "forbidden": {
+      "title": "Non hai accesso al registro di controllo",
+      "body": "Chiedi a un Owner o Admin del workspace di concedere al tuo ruolo il permesso di vedere il registro di controllo."
+    },
+    "filters": {
+      "label": "Filtri del registro di controllo",
+      "range": "Periodo",
+      "from": "Da",
+      "to": "A",
+      "actor": "Persona",
+      "allActors": "Tutti",
+      "actorType": "Chi ha agito",
+      "allActorTypes": "Chiunque",
+      "module": "Area",
+      "allModules": "Tutte le aree",
+      "action": "Azione",
+      "allActions": "Tutte le azioni",
+      "search": "Cerca aree e azioni",
+      "searchHint": "Corrisponde solo all'area e all'azione, mai ai valori modificati.",
+      "recordId": "Numero del record",
+      "requestId": "ID richiesta",
+      "supportOnly": "Solo sessioni del supporto della piattaforma",
+      "apply": "Applica filtri",
+      "refresh": "Aggiorna",
+      "reset": "Reimposta filtri"
+    },
+    "ranges": {
+      "24h": "Ultime 24 ore",
+      "7d": "Ultimi 7 giorni",
+      "30d": "Ultimi 30 giorni",
+      "90d": "Ultimi 90 giorni",
+      "custom": "Scegli le date"
+    },
+    "actorTypes": {
+      "user": "Una persona",
+      "system": "Il sistema",
+      "api_key": "Una chiave API",
+      "bot": "Un bot",
+      "partner_agent": "Un agente partner",
+      "candidate": "Un candidato",
+      "other": "Altro"
+    },
+    "actors": {
+      "system": "Sistema",
+      "api_key": "Chiave API",
+      "apiKeyNamed": "Chiave API: {name}",
+      "bot": "Bot",
+      "partner_agent": "Agente partner",
+      "candidate": "Candidato",
+      "other": "Altro",
+      "removedUser": "Un utente rimosso",
+      "support": "Supporto della piattaforma",
+      "actingAs": "in veste di {name}",
+      "supportBadge": "Supporto della piattaforma"
+    },
+    "actions": {
+      "insert": "Creato",
+      "update": "Aggiornato",
+      "delete": "Eliminato",
+      "merge": "Unito",
+      "login": "Accesso effettuato",
+      "export": "Esportato",
+      "read": "Visualizzato"
+    },
+    "modules": {
+      "contacts": "Contatti",
+      "contact_groups": "Gruppi di contatti",
+      "contact_notes": "Note dei contatti",
+      "companies": "Aziende",
+      "deals": "Trattative",
+      "tags": "Tag",
+      "members": "Membri del team",
+      "teams": "Team",
+      "conversation_notes": "Note delle conversazioni",
+      "broadcasts": "Messaggi broadcast",
+      "campaigns": "Campagne",
+      "faqs": "FAQ",
+      "api_keys": "Chiavi API",
+      "audit-log": "Registro di controllo",
+      "audit-log-exports": "Esportazioni del registro di controllo",
+      "contact_consent_exports": "Esportazioni delle prove di consenso"
+    },
+    "table": {
+      "caption": "Voci del registro, dalla più recente. Gli orari sono nel tuo fuso orario ({zone}).",
+      "zone": "Gli orari sono nel tuo fuso orario: {zone}.",
+      "time": "Quando",
+      "actor": "Chi",
+      "action": "Cosa",
+      "record": "Record",
+      "changed": "Campi modificati",
+      "request": "Richiesta",
+      "details": "Dettagli",
+      "openDetails": "Dettagli di questa modifica: {what}"
+    },
+    "states": {
+      "loading": "Caricamento del registro di controllo",
+      "empty": "Nulla di registrato in questo periodo",
+      "emptyHint": "Le modifiche fatte dal tuo team compariranno qui.",
+      "emptyFiltered": "Nessuna voce corrisponde a questi filtri",
+      "emptyFilteredHint": "Prova un periodo più lungo o rimuovi un filtro.",
+      "retry": "Riprova",
+      "showing": "{count, plural, one {# voce caricata} many {# di voci caricate} other {# voci caricate}}",
+      "loadMore": "Carica altro",
+      "end": "Fine dell'elenco"
+    },
+    "detail": {
+      "title": "Voce del registro",
+      "when": "Quando",
+      "who": "Chi",
+      "what": "Cosa",
+      "record": "Record",
+      "openRecord": "Apri il record",
+      "request": "ID richiesta",
+      "changes": "Cosa è cambiato",
+      "field": "Campo",
+      "before": "Prima",
+      "after": "Dopo",
+      "noChanges": "Questa voce non elenca modifiche ai campi.",
+      "supportTitle": "Il supporto della piattaforma ha operato nel tuo workspace",
+      "supportBody": "Un membro del supporto della piattaforma ha usato una sessione di supporto come {name}. Poteva fare ciò che può fare quella persona.",
+      "supportReason": "Motivo indicato: {reason}",
+      "supportNoReason": "Il motivo di questa sessione non è più disponibile.",
+      "supportReadOnly": "La sessione era di sola lettura.",
+      "secret": "Segreto nascosto",
+      "secretHint": "Password, chiavi e token non vengono mai mostrati.",
+      "maskedHint": "I dati personali sono parzialmente nascosti.",
+      "maskedNote": "I dati personali come numeri di telefono, indirizzi e-mail, nomi e note sono parzialmente nascosti. I segreti non vengono mai mostrati.",
+      "maskedNoteOwner": "I segreti come password, chiavi e token sono nascosti per tutti.",
+      "audited": "L'apertura di questa voce viene registrata nel registro di controllo."
+    },
+    "export": {
+      "title": "Esporta",
+      "note": "Prepara un CSV delle voci che corrispondono ai filtri sopra. Viene conservato per {days} giorni e nasconde sempre i dati personali.",
+      "button": "Esporta CSV",
+      "preparing": "Preparazione del file",
+      "requested": "L'esportazione è in preparazione. Ti invieremo un'e-mail quando sarà pronta.",
+      "none": "Nessuna esportazione finora.",
+      "status": {
+        "queued": "In attesa",
+        "running": "In preparazione",
+        "ready": "Pronto",
+        "failed": "Non riuscito",
+        "expired": "Scaduto"
+      },
+      "rows": "{count, plural, one {# voce} many {# di voci} other {# voci}}",
+      "expires": "conservato fino al {date}",
+      "download": "Scarica",
+      "failed": "Impossibile creare questa esportazione. Richiedila di nuovo."
+    },
+    "errors": {
+      "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
+      "forbidden": "Non hai il permesso di farlo.",
+      "notFound": "Voce o esportazione non trovata.",
+      "rangeInvalid": "Scegli un periodo di massimo 400 giorni, con la fine successiva all'inizio.",
+      "exportInProgress": "Un'esportazione è già in preparazione. Attendi la sua e-mail, poi richiedine un'altra.",
+      "exportNotReady": "Questa esportazione non è pronta oppure è scaduta.",
+      "rateLimited": "Troppe richieste. Attendi un momento e riprova.",
+      "validation": "Uno dei filtri non è valido.",
+      "unexpected": "Qualcosa è andato storto. Riprova."
+    },
+    "common": {
+      "close": "Chiudi",
+      "dismiss": "Ignora"
+    }
+  }
+}

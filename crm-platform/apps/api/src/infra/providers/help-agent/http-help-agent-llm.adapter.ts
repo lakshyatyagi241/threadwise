@@ -80,6 +80,10 @@ export class HttpHelpAgentLlmAdapter implements HelpAgentLlmPort {
     if (!choice?.message) {
       throw new HelpAgentLlmError(502, 'the AI provider answered without a completion');
     }
+    // A reply cut off by the output cap carries half a tool call; the library would fail the step on it with no reason. Say so here.
+    if (choice.finish_reason === 'length') {
+      throw new HelpAgentLlmError(502, 'the AI reply was cut off before it was complete');
+    }
     return {
       completion: {
         id: typeof body.id === 'string' ? body.id : 'help-agent',

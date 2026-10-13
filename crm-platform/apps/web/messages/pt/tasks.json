@@ -282,7 +282,6 @@
       "planDisabled": "Seu plano não inclui tarefas. Faça upgrade para desbloqueá-las.",
       "assigneeInvalid": "Esta pessoa não é um membro ativo deste espaço de trabalho.",
       "unexpected": "Algo deu errado. Tente novamente em instantes.",
-      "requestId": "ID da solicitação",
       "retry": "Tentar novamente"
     },
     "toast": {

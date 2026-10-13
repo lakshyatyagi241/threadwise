@@ -5,11 +5,11 @@ import { useMemo } from 'react';
 import { useFormatter, useTranslations } from 'next-intl';
 import type { CallAnalytics } from '@crm/contracts';
 import { Alert, Button, EmptyState, Select, Spinner, StatTile, cn } from '@crm/ui';
+import { useSession } from '@/features/auth-registration-security/shared/session-context';
 import { AGENT_IGNORE, AGENT_PII } from '@/lib/agent-marks';
 import { useCallAnalytics, useCallLogFilters, useCallLogsLive } from '../api/call-logs';
 import {
   barHeights,
-  browserTimeZone,
   durationText,
   heatGrid,
   heatLevel,
@@ -35,7 +35,7 @@ export function CallAnalyticsScreen() {
   const pathname = usePathname();
   const sp = useSearchParams();
   const params = useMemo(() => parseLogParams(sp), [sp]);
-  const tz = useMemo(browserTimeZone, []);
+  const tz = useSession().effectiveTimezone || 'UTC';
   const q = useCallAnalytics(toAnalyticsQuery(params, tz));
   const filters = useCallLogFilters();
   const numbers = filters.data?.numbers ?? [];

@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "Odrzuć",
       "retry": "Spróbuj ponownie",
-      "requestId": "Żądanie {id}",
       "noAccessTitle": "Nie możesz otworzyć tego ekranu",
       "noAccess": "Poproś administratora o uprawnienie „{permission}”."
     },
@@ -167,7 +166,7 @@
     "insights": {
       "sendTimes": {
         "title": "Najlepszy czas wysyłki",
-        "hint": "Kiedy Twoje kontakty czytają kampanie i do Ciebie piszą, w strefie czasowej obszaru roboczego.",
+        "hint": "Kiedy Twoje kontakty czytają kampanie i do Ciebie piszą, w Twojej strefie czasowej.",
         "empty": "Za mało aktywności, aby coś stwierdzić.",
         "best": "Najlepsze godziny: {hours} ({zone}).",
         "quiet": "Najspokojniejsze godziny: {hours}.",

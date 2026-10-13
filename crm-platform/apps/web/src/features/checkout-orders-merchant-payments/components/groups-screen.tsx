@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 import type { StoreGroup } from '@crm/contracts';
 import { Input } from '@crm/ui';
@@ -185,6 +185,7 @@ function GroupsTable({
 }) {
   const t = useTranslations('checkout-orders-merchant-payments.groups');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   return (
     <div className="overflow-x-auto">
       <table className="w-full min-w-[44rem] text-sm">
@@ -215,7 +216,7 @@ function GroupsTable({
                 {displayPhone(g.devicePhone) || '—'}
               </td>
               <td className="whitespace-nowrap px-4 py-3 text-muted-foreground">
-                {formatWhen(g.syncedAt, locale) || '—'}
+                {formatWhen(g.syncedAt, locale, timeZone) || '—'}
               </td>
               <td className="px-4 py-3">
                 <GroupCodeEditor

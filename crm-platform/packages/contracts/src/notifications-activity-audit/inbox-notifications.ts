@@ -80,6 +80,8 @@ export const NOTIFICATION_LEGACY_TYPES = [
   'sales_doc_decided',
   /** A sent email bounced: it did not reach a recipient (TW-MAIL-032). Told to the person who wrote it. */
   'email_bounced',
+  /** A conversation's response clock ran out (SLA, BL-036): told to its assignee, else its team, else the SLA managers. */
+  'sla_breached',
 ] as const;
 
 /** Every type a person can set preferences for. */
@@ -195,6 +197,10 @@ export const listNotificationsQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(50).default(20),
   cursor: cursorSchema.optional(),
   unreadOnly: queryBoolean().default(false),
+  /** Only this type (a NotificationType or a legacy type). */
+  type: z.string().min(1).max(60).optional(),
+  /** Substring of the title or the body (case-insensitive; wildcards are literal). */
+  q: z.string().trim().min(1).max(100).optional(),
 });
 export type ListNotificationsQuery = z.infer<typeof listNotificationsQuerySchema>;
 
@@ -224,3 +230,19 @@ export const readSubjectResponseSchema = z.object({
   unread: z.number().int().min(0),
 });
 export type ReadSubjectResponse = z.infer<typeof readSubjectResponseSchema>;
+
+/** `GET /v2/notifications/summary`: the numbers around the Notifications page (all about the caller's own rows). */
+export const notificationSummaryResponseSchema = z.object({
+  unread: z.number().int().min(0),
+  /** Rows received in the last 24 hours. */
+  last24Hours: z.number().int().min(0),
+  last7Days: z.number().int().min(0),
+  total: z.number().int().min(0),
+  /** Rows per type (all that are kept, read or not), for the type filter. */
+  byType: z.record(z.number().int().min(0)),
+});
+export type NotificationSummaryResponse = z.infer<typeof notificationSummaryResponseSchema>;
+
+/** `DELETE /v2/notifications/:id` (dismiss one; "clear all" is the shell's existing `DELETE /v2/shell/notifications`): how many rows went. */
+export const deleteNotificationsResponseSchema = z.object({ deleted: z.number().int().min(0) });
+export type DeleteNotificationsResponse = z.infer<typeof deleteNotificationsResponseSchema>;

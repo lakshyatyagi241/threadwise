@@ -11,8 +11,7 @@
       "copied": "Copié",
       "retry": "Réessayer",
       "loadMore": "Charger plus",
-      "loadingMore": "Chargement",
-      "requestId": "Identifiant de la requête"
+      "loadingMore": "Chargement"
     },
     "tiers": {
       "owner": "Propriétaire",

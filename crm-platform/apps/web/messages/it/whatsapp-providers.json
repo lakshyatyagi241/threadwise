@@ -8,8 +8,7 @@
     },
     "common": {
       "loading": "Caricamento...",
-      "retry": "Riprova",
-      "requestId": "ID richiesta"
+      "retry": "Riprova"
     },
     "errors": {
       "conflict": "Qualcun altro ha modificato questo provider mentre lo stavi modificando. È stata caricata la versione più recente: verificala e applica di nuovo la modifica.",

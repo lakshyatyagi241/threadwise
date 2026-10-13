@@ -11,8 +11,7 @@
       "copied": "Skopiowano",
       "retry": "Spróbuj ponownie",
       "loadMore": "Wczytaj więcej",
-      "loadingMore": "Wczytywanie",
-      "requestId": "Identyfikator żądania"
+      "loadingMore": "Wczytywanie"
     },
     "tiers": {
       "owner": "Właściciel",

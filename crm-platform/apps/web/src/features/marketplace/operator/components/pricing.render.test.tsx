@@ -363,7 +363,7 @@ describe('the pricing panel', () => {
       expect(html).toContain('Expected a positive number.');
       expect(html).not.toContain('This currency is not enabled');
       expect(html).not.toContain('automation is on by default');
-      expect(html).toContain('req-9');
+      expect(html).not.toContain('req-9');
       expect(html).toContain('Some fields are not valid');
     });
   });

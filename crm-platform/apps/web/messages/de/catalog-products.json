@@ -7,8 +7,7 @@
     },
     "common": {
       "dismiss": "Schließen",
-      "retry": "Erneut versuchen",
-      "requestId": "Anfrage-ID"
+      "retry": "Erneut versuchen"
     },
     "errors": {
       "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
@@ -35,7 +34,10 @@
       "sendFailed": "Die Nachricht konnte nicht gesendet werden: {detail}",
       "collectionProducts": "Keines der ausgewählten Produkte gehört zu diesem Workspace.",
       "providerFailed": "WhatsApp oder Meta konnte die Anfrage nicht abschließen: {detail}",
-      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es gleich noch einmal."
+      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es gleich noch einmal.",
+      "alreadyConnected": "Es ist bereits ein Katalog verbunden. Trennen Sie ihn zuerst, um einen neuen zu erstellen.",
+      "confirmMismatch": "Die eingegebene Katalog-ID stimmt nicht mit dem verbundenen Katalog überein.",
+      "setNotSyncable": "Diese Kollektion hat keine aktiven Produkte für ein Meta-Produktset."
     },
     "paywall": {
       "kicker": "Premium-Funktion",
@@ -401,6 +403,15 @@
           "descriptionTooLong": "Die Beschreibung ist zu lang.",
           "noProducts": "Wählen Sie mindestens ein Produkt aus."
         }
+      },
+      "meta": {
+        "onMeta": "Bei Meta",
+        "notOnMeta": "Nicht bei Meta",
+        "push": "An Meta senden",
+        "update": "Bei Meta aktualisieren",
+        "remove": "Von Meta entfernen",
+        "pushed": "Kollektion an Meta gesendet.",
+        "removed": "Kollektion von Meta entfernt."
       }
     },
     "activity": {
@@ -724,6 +735,33 @@
           "goods": "Keine Alkohol-, Erwachsenen- oder regulierten Waren",
           "verification": "Business-Verifizierung für den Produktivbetrieb erforderlich"
         }
+      }
+    },
+    "manage": {
+      "title": "Katalog bei Meta verwalten",
+      "create": {
+        "title": "Neuen Katalog bei Meta erstellen",
+        "intro": "Erstellt einen leeren Katalog in Ihrem WhatsApp-Business-Konto, verknüpft ihn und verbindet ihn hier.",
+        "name": "Katalogname",
+        "placeholder": "z. B. Mein Shop",
+        "button": "Katalog erstellen",
+        "needName": "Geben Sie einen Katalognamen ein.",
+        "done": "Katalog erstellt und verbunden."
+      },
+      "rename": {
+        "label": "Katalogname",
+        "button": "Bei Meta umbenennen",
+        "done": "Katalog bei Meta umbenannt."
+      },
+      "delete": {
+        "title": "Katalog bei Meta löschen",
+        "warning": "Löscht den Katalog und seine Produkte bei Meta dauerhaft. Das lässt sich nicht rückgängig machen.",
+        "confirmLabel": "Zur Bestätigung die Katalog-ID {id} eingeben",
+        "button": "Bei Meta löschen",
+        "dialogTitle": "Katalog bei Meta löschen?",
+        "dialogMessage": "Der Katalog wird bei Meta gelöscht und hier getrennt. Das lässt sich nicht rückgängig machen.",
+        "cancel": "Abbrechen",
+        "done": "Katalog bei Meta gelöscht."
       }
     }
   }

@@ -63,8 +63,7 @@
       "closed": "Dieses Ticket ist geschlossen. Öffnen Sie ein neues Ticket, um fortzufahren.",
       "notFound": "Dieses Ticket wurde nicht gefunden.",
       "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es erneut.",
-      "retry": "Erneut versuchen",
-      "requestId": "Anfrage-ID"
+      "retry": "Erneut versuchen"
     },
     "customer": {
       "title": "Wie können wir helfen?",

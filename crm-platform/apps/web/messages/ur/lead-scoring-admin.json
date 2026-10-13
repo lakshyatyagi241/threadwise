@@ -7,7 +7,6 @@
     "common": {
       "loading": "لوڈ ہو رہا ہے",
       "retry": "دوبارہ کوشش کریں",
-      "requestId": "درخواست کی شناخت",
       "dash": "-",
       "cancel": "منسوخ کریں",
       "errors": {

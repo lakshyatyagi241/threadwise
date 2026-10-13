@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useId, useState, type FormEvent } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import {
@@ -301,6 +301,7 @@ export function InvitationsDialog({
 }) {
   const t = useTranslations('team-chat.invitations');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const now = useNow();
   const errorText = useErrorText();
   const { toast } = useToast();
@@ -363,7 +364,7 @@ export function InvitationsDialog({
             <div className="mt-1 text-xs text-muted-foreground">
               {t('requestedBy', {
                 name: inv.requesterName,
-                time: formatStamp(inv.createdAt, now, locale),
+                time: formatStamp(inv.createdAt, now, locale, timeZone),
               })}
               {inv.channel && ` · #${inv.channel.name}`}
             </div>
@@ -373,7 +374,7 @@ export function InvitationsDialog({
                 {t('decidedBy', {
                   status: t(`status.${inv.status}`),
                   name: inv.decidedByName ?? '',
-                  time: formatStamp(inv.decidedAt, now, locale),
+                  time: formatStamp(inv.decidedAt, now, locale, timeZone),
                 })}
               </div>
             )}

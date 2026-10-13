@@ -94,8 +94,7 @@
       "signedOut": "你的会话已结束。请重新登录。",
       "network": "无法连接服务器。请检查网络连接后重试。",
       "generic": "出错了。请重试。",
-      "retryIn": "请在 {seconds} 秒后重试。",
-      "requestId": "请求 ID：{id}"
+      "retryIn": "请在 {seconds} 秒后重试。"
     },
     "examples": {
       "howDo": "如何使用 {title}？",
@@ -115,7 +114,6 @@
       "description": "让团队说出想做的事，由应用指引他们，或在他们自己的账号上完成步骤。",
       "loading": "加载中",
       "loadFailed": "无法加载该设置。",
-      "requestId": "请求 ID：{id}",
       "shareTitle": "有人使用时会共享什么",
       "share1": "用户输入的请求以及其所在页面的可见文字，会发送给平台使用的 AI 服务商。",
       "share2": "电话号码、电子邮箱地址、机密信息和表单中的个人字段会先被隐藏。页面上的姓名和其他自由文本不会被隐藏。",

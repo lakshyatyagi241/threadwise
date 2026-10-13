@@ -46,7 +46,6 @@
         "copyFailed": "Kopieren nicht möglich",
         "loading": "Wird geladen",
         "retry": "Erneut versuchen",
-        "requestId": "Anfrage-ID",
         "errors": {
           "forbidden": "Ihre Rolle erlaubt dies nicht.",
           "request": "Die Anfrage wurde abgelehnt. Laden Sie die Seite neu und versuchen Sie es erneut.",
@@ -61,7 +60,6 @@
       "login": {
         "title": "Betreiber-Anmeldung",
         "intro": "Diese Konsole ist für die Personen gedacht, die die Plattform betreiben. Workspace-Nutzer melden sich auf der Hauptanmeldeseite an.",
-        "requestId": "Anfrage-ID",
         "submit": "Anmelden",
         "submitting": "Anmeldung läuft",
         "fields": {
@@ -127,7 +125,6 @@
         "eyebrow": "Ihr Konto",
         "title": "Zwei-Faktor-Authentifizierung",
         "description": "Schützen Sie {email} mit einer Authenticator-App. Betreiberkonten sind die Konten mit dem höchsten Vertrauensniveau auf der Plattform.",
-        "requestId": "Anfrage-ID",
         "status": {
           "title": "Authenticator-App",
           "on": "Ein",
@@ -181,7 +178,6 @@
         "saving": "Wird gespeichert",
         "saved": "{count, plural, one {# Einstellung gespeichert} other {# Einstellungen gespeichert}}",
         "rejected": "Es wurde nichts gespeichert. {count, plural, one {# Feld wurde} other {# Felder wurden}} abgelehnt.",
-        "requestId": "Anfrage-ID",
         "unsaved": "{count, plural, one {# nicht gespeicherte Änderung} other {# nicht gespeicherte Änderungen}}",
         "discard": "Änderungen verwerfen",
         "errors": {
@@ -658,7 +654,6 @@
             "working": "Wird verarbeitet",
             "close": "Schließen",
             "signInAgain": "Erneut anmelden",
-            "requestId": "Anfrage-ID",
             "errors": {
               "forbidden": "Nur ein Super-Admin kann diese Aktion ausführen.",
               "unexpected": "Die Aktion wurde nicht abgeschlossen. Prüfen Sie das Ereignisprotokoll, bevor Sie es erneut versuchen."
@@ -731,7 +726,6 @@
         "saving": "Wird gespeichert",
         "saved": "{count, plural, one {# Einstellung gespeichert} other {# Einstellungen gespeichert}}",
         "rejected": "Es wurde nichts gespeichert. {count, plural, one {# Feld wurde} other {# Felder wurden}} abgelehnt.",
-        "requestId": "Anfrage-ID",
         "unsaved": "{count, plural, one {# nicht gespeicherte Änderung} other {# nicht gespeicherte Änderungen}}",
         "discard": "Änderungen verwerfen",
         "errors": {
@@ -941,7 +935,6 @@
             "sent": "Ein Testcode wurde an {to} gesendet.",
             "remaining": "{count, plural, one {# Test in dieser Stunde übrig.} other {# Tests in dieser Stunde übrig.}}",
             "notShown": "Der Code wird hier nicht angezeigt; lesen Sie ihn auf dem Telefon ab.",
-            "requestId": "Anfrage-ID",
             "errors": {
               "invalidNumber": "Geben Sie die Nummer mit Landesvorwahl ein, zum Beispiel +49 151 23456789.",
               "rateLimited": "Zu viele Testcodes in dieser Stunde. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut.",
@@ -1045,7 +1038,6 @@
           "saved": "Absender gespeichert",
           "removed": "Absender entfernt",
           "secretRemoved": "Gespeichertes Geheimnis entfernt",
-          "requestId": "Anfrage-ID",
           "problems": {
             "required": "Dieses Feld ist erforderlich.",
             "tooLong": "Höchstens {max} Zeichen.",
@@ -1076,8 +1068,7 @@
           "errors": {
             "invalid": "Diese Fußzeile wurde nicht akzeptiert.",
             "unexpected": "Die Fußzeile konnte nicht gespeichert werden. Versuchen Sie es gleich noch einmal."
-          },
-          "requestId": "Anfrage-ID"
+          }
         }
       },
       "social": {
@@ -1088,7 +1079,6 @@
         "saving": "Wird gespeichert",
         "saved": "{count, plural, one {# Einstellung gespeichert} other {# Einstellungen gespeichert}}",
         "rejected": "Es wurde nichts gespeichert. {count, plural, one {# Feld wurde} other {# Felder wurden}} abgelehnt.",
-        "requestId": "Anfrage-ID",
         "unsaved": "{count, plural, one {# nicht gespeicherte Änderung} other {# nicht gespeicherte Änderungen}}",
         "discard": "Änderungen verwerfen",
         "errors": {
@@ -1206,7 +1196,6 @@
           "cancel": "Abbrechen",
           "working": "Wird entfernt",
           "error": "Das Geheimnis konnte nicht entfernt werden. Versuchen Sie es gleich noch einmal.",
-          "requestId": "Anfrage-ID",
           "done": "Das gespeicherte Geheimnis für {name} wurde entfernt.",
           "names": {
             "google": "Google",
@@ -1670,7 +1659,6 @@
         "saving": "Wird gespeichert",
         "saved": "{count, plural, one {# Einstellung gespeichert} other {# Einstellungen gespeichert}}",
         "rejected": "Es wurde nichts gespeichert. {count, plural, one {# Feld wurde} other {# Felder wurden}} abgelehnt.",
-        "requestId": "Anfrage-ID",
         "unsaved": "{count, plural, one {# nicht gespeicherte Änderung} other {# nicht gespeicherte Änderungen}}",
         "discard": "Änderungen verwerfen",
         "errors": {

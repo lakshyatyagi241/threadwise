@@ -63,7 +63,6 @@
       "whatsapp_ai": "WhatsApp YZ"
     },
     "errors": {
-      "requestId": "İstek kimliği",
       "retry": "Tekrar dene",
       "network": {
         "title": "Sunucuya ulaşılamıyor",

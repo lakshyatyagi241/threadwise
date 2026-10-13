@@ -8,7 +8,6 @@
         "dismiss": "Dismiss"
       },
       "errors": {
-        "requestId": "Request id",
         "retry": "Try again",
         "network": {
           "title": "Can't reach the server",

@@ -8,7 +8,6 @@
         "dismiss": "Zamknij"
       },
       "errors": {
-        "requestId": "ID żądania",
         "retry": "Spróbuj ponownie",
         "network": {
           "title": "Nie można połączyć się z serwerem",

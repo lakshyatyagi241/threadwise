@@ -14,7 +14,6 @@
       "dismiss": "Dismiss",
       "admin": "Admin",
       "readOnly": "You can look at this page but only a super admin can change it.",
-      "requestId": "Request id",
       "errors": {
         "forbidden": "You do not have access to this page.",
         "request": "The request could not be completed.",
@@ -404,7 +403,6 @@
         "validation": "Those filters could not be applied. Reset them and try again.",
         "network": "The server could not be reached. Check your connection and try again.",
         "generic": "Something went wrong. Try again in a moment.",
-        "requestId": "Request id",
         "retry": "Try again"
       }
     }

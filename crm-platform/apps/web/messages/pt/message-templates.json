@@ -4,8 +4,7 @@
       "title": "Modelos"
     },
     "common": {
-      "dismiss": "Dispensar",
-      "requestId": "ID da solicitação"
+      "dismiss": "Dispensar"
     },
     "status": {
       "draft": "Rascunho",

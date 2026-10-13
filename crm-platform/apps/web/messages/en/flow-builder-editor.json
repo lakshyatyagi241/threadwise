@@ -634,10 +634,11 @@
         "aria": "Flow sections",
         "build": "Build",
         "customize": "Customize",
-        "install": "Install",
         "saveFirst": "Save the flow first.",
-        "needsCustomizing": "The widget still uses the default look. Open Customize.",
+        "needsCustomizing": "Customize is not saved yet. Open Customize.",
         "customizeFirst": "Customize your chat widget and save it once before publishing.",
+        "deploy": "Deploy",
+        "customizeFirstWhatsapp": "Customize your WhatsApp button and save it once before publishing.",
         "faqs": "FAQs"
       },
       "simple": {
@@ -717,7 +718,8 @@
           "wordsPlaceholder": "hi, hello, menu",
           "whatsappNumber": "WhatsApp number",
           "noNumberHint": "No WhatsApp number is connected yet: connect one under Settings, then pick it here.",
-          "chooseNumber": "Choose a number…"
+          "chooseNumber": "Choose a number…",
+          "connectedNumber": "Replies on your connected WhatsApp number: {number}"
         },
         "add": {
           "addStep": "Add a step",
@@ -725,6 +727,7 @@
             "send": "Send",
             "ask": "Ask the customer",
             "handoff": "Hand off",
+            "logic": "Decide",
             "answer": "Answer"
           },
           "blockedTitle": "Buttons and lists end a flow, so they can only go last.",
@@ -773,7 +776,8 @@
             "placeholder": "Button {n}",
             "remove": "Remove button",
             "add": "Add a button",
-            "saveIn": "Save the tapped button in"
+            "saveIn": "Save the tapped button in",
+            "handoff": "Hand over to a person (live agent)"
           },
           "list": {
             "above": "Message above the list",
@@ -805,7 +809,9 @@
             "dateFormat": "Date format",
             "dateFormatHint": "How the customer writes the date. It is saved as typed, and a copy as year-month-day in the _iso variable.",
             "saveIn": "Save the answer in",
-            "retriesHint": "0 keeps asking until the answer is right."
+            "retriesHint": "0 keeps asking until the answer is right.",
+            "verifyOtp": "Verify the number with a one-time code",
+            "verifyOtpHint": "A code is sent to the number (country code needed) and the visitor types it in the chat. The number is kept only when the code is right; the variable ending in _verified says yes or no."
           },
           "askFile": {
             "accepted": "Files accepted",
@@ -856,7 +862,45 @@
           },
           "cta": {
             "buttonText": "Button text",
-            "opens": "Opens (link)"
+            "opens": "Opens (link)",
+            "type": "Opens",
+            "kinds": {
+              "url": "A web page",
+              "phone": "A phone call",
+              "email": "An email"
+            },
+            "add": "Add another button",
+            "remove": "Remove button",
+            "opensPhone": "Phone number",
+            "opensEmail": "Email address"
+          },
+          "carousel": {
+            "intro": "Message above the cards",
+            "card": "Card {n}",
+            "image": "Picture link (optional)",
+            "title": "Title",
+            "text": "Text",
+            "buttons": "Buttons (up to 2)",
+            "label": "Button text",
+            "addCard": "Add a card",
+            "removeCard": "Remove card",
+            "addButton": "Add a button",
+            "removeButton": "Remove button",
+            "btnKinds": {
+              "reply": "Reply in chat",
+              "url": "Open a web page",
+              "phone": "Call a number",
+              "email": "Send an email",
+              "agent": "Talk to a person"
+            }
+          },
+          "condition": {
+            "info": "Add rules (a variable, a comparison and a value). Join them with AND or OR, and nest groups when you need to.",
+            "yes": "When the rules hold, go to",
+            "no": "When they do not, go to"
+          },
+          "handoff": {
+            "hint": "The visitor is passed to this team with your note. Nothing needs to be connected after this button."
           },
           "faq": {
             "exits": {
@@ -869,6 +913,7 @@
             }
           }
         },
+        "branchAdd": "Add a step for “{title}”",
         "faqEnds": "This step ends this part: what is sent next depends on whether an FAQ answered."
       },
       "formsCore": {
@@ -1903,6 +1948,11 @@
           "sampleName": "Test place",
           "sampleAddress": "1 MG Road, Bengaluru"
         }
+      },
+      "buttonIcon": {
+        "label": "Icon (optional)",
+        "add": "Add icon",
+        "saveFirst": "Save the bot once to add an icon."
       }
     },
     "contracts": {
@@ -2179,6 +2229,10 @@
           "label": "WhatsApp session active",
           "description": "Yes / no: the customer wrote in the last 24 hours"
         },
+        "carousel": {
+          "label": "Carousel",
+          "description": "Scrolling cards with pictures and buttons"
+        },
         "faq": {
           "label": "Answer from FAQ",
           "description": "Match a message to your FAQs"
@@ -2407,6 +2461,14 @@
           "label": "Their location",
           "help": "Wait for the customer to share a location"
         },
+        "carousel": {
+          "label": "Carousel",
+          "help": "Scrolling cards with pictures and buttons"
+        },
+        "condition": {
+          "label": "Condition",
+          "help": "Branch on what the customer said or saved, with AND / OR rules"
+        },
         "faq": {
           "label": "Answer from FAQ",
           "help": "Match the customer's message to your FAQs. Ends this flow: one exit if an FAQ answered, another if not"
@@ -2425,6 +2487,8 @@
         "template": "Template",
         "cta": "Link button",
         "assign": "Assign to an agent",
+        "carousel": "Carousel",
+        "condition": "Condition",
         "faq": "Answer from FAQ"
       },
       "stepLabel": {
@@ -2463,6 +2527,9 @@
         "rowTitle": "Step {stage}: every row needs a title of up to {max} characters.",
         "rowDescriptionTooLong": "Step {stage}: a row description is longer than {max} characters.",
         "variableUsed": "Step {stage}: \"{name}\" is already used by step {other}; give each answer its own name.",
+        "carouselCards": "Step {stage}: add at least one card and give every card a title.",
+        "carouselButtons": "Step {stage}: give every button a name, and a link, number or address where it opens one.",
+        "conditionIncomplete": "Step {stage}: finish the rules of the condition (a variable and a value in each).",
         "faqMinScore": "Step {stage}: the minimum score must be from 0.05 to 0.99, or use the flow's setting."
       },
       "faqSummary": "{hasCategory, select, true {From your FAQs · {category}} other {From your FAQs}}"
@@ -2473,7 +2540,11 @@
         "buttonNoTarget": "A \"{type}\" button (\"{text}\") has no target in Simple.",
         "skippedStep": "Skipped a \"{sub}\" step: Simple has nothing like it.",
         "leadsOutside": "\"{text}\" leads to a flow that is not in this file; it ends there until you link it.",
-        "connectsOutside": "A step connects to a node that is not in this file ({id}); it stays unlinked."
+        "connectsOutside": "A step connects to a node that is not in this file ({id}); it stays unlinked.",
+        "dateLimits": "A date question keeps its format but not its limits (earliest, latest, excluded days).",
+        "tooManyButtons": "A button message had more choices than fit; the extra buttons were left out.",
+        "agentTeam": "A live agent button was kept: choose the team that receives the conversation.",
+        "tooManySlides": "A carousel had more than 10 cards; the extra cards were left out."
       },
       "reasons": {
         "notExport": "This file is not a flow export. Use a .json file exported from Flows, or a flow exported from the wabo console.",

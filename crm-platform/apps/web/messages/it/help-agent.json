@@ -94,8 +94,7 @@
       "signedOut": "La sessione è terminata. Accedi di nuovo.",
       "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
       "generic": "Qualcosa è andato storto. Riprova.",
-      "retryIn": "Riprova tra {seconds} secondi.",
-      "requestId": "ID richiesta: {id}"
+      "retryIn": "Riprova tra {seconds} secondi."
     },
     "examples": {
       "howDo": "Come si usa {title}?",
@@ -115,7 +114,6 @@
       "description": "Permetti al tuo team di chiedere cosa vuole fare e fai in modo che l'app lo guidi o svolga i passaggi con il proprio account.",
       "loading": "Caricamento",
       "loadFailed": "Impossibile caricare l'impostazione.",
-      "requestId": "ID richiesta: {id}",
       "shareTitle": "Cosa viene condiviso quando qualcuno lo usa",
       "share1": "La richiesta digitata dalla persona e il testo visibile della pagina in cui si trova vengono inviati al provider AI usato dalla piattaforma.",
       "share2": "Numeri di telefono, indirizzi e-mail, dati segreti e campi personali dei moduli vengono nascosti prima. Nomi e altro testo libero della pagina no.",

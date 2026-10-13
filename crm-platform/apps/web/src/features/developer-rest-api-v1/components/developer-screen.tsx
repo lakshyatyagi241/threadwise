@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useQueryClient } from '@tanstack/react-query';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useRef, useState, type FormEvent } from 'react';
 import {
   API_KEY_NAME_MAX,
@@ -286,11 +286,6 @@ export function NoticeBox({ notice }: { notice: Notice }) {
             {t('upgrade')}
           </Link>
         )}
-        {notice.requestId && (
-          <p className="font-mono text-[10px] opacity-70">
-            {t('requestId', { id: notice.requestId })}
-          </p>
-        )}
       </div>
     </div>
   );
@@ -305,13 +300,9 @@ export function toNotice(e: unknown): Notice {
 function LoadFailed({ error, onRetry }: { error: unknown; onRetry: () => void }) {
   const t = useTranslations('developer-rest-api-v1.errors');
   const kind = errorKind(error);
-  const n = toNotice(error);
   return (
     <Alert tone="danger" className="space-y-2">
       <p>{kind === 'forbidden' ? t('forbidden') : t('loadFailed')}</p>
-      {n.requestId && (
-        <p className="font-mono text-[10px] opacity-70">{t('requestId', { id: n.requestId })}</p>
-      )}
       <Button variant="secondary" size="sm" onClick={onRetry}>
         {t('retry')}
       </Button>
@@ -370,6 +361,7 @@ export function ActiveKeyCard({
 }) {
   const t = useTranslations('developer-rest-api-v1.key');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const qc = useQueryClient();
   const { toast } = useToast();
   const [confirming, setConfirming] = useState(false);
@@ -415,7 +407,7 @@ export function ActiveKeyCard({
             <code dir="ltr" className="text-foreground">
               {apiKey.prefix}…
             </code>
-            <span>{t('created', { date: dateLabel(apiKey.createdAt, locale) })}</span>
+            <span>{t('created', { date: dateLabel(apiKey.createdAt, locale, timeZone) })}</span>
             <span>{t('lastUsed', { when: last ?? t('never') })}</span>
           </div>
           <div

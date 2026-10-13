@@ -276,7 +276,14 @@
           "iconOnly": "Tylko ikona",
           "buttonColor": "Kolor przycisku",
           "pickCustom": "Wybierz własny kolor",
-          "custom": "Własny {hex}"
+          "custom": "Własny {hex}",
+          "animation": "Animacja przycisku",
+          "animationHint": "Przyciąga uwagę do przycisku, gdy czat jest zamknięty.",
+          "animations": {
+            "none": "Wyłączona",
+            "bounce": "Podskakiwanie",
+            "ripple": "Fala"
+          }
         },
         "2": {
           "title": "Zaprojektuj swój komunikator",
@@ -289,7 +296,9 @@
             "person": "Osoba"
           },
           "url": "Lub użyj adresu własnego obrazu",
-          "urlHint": "Wklej adres kwadratowego obrazu (https://...). Przesyłanie pliku nie jest jeszcze dostępne."
+          "urlHint": "Wklej adres kwadratowego obrazu (https://...). Przesyłanie pliku nie jest jeszcze dostępne.",
+          "botName": "Nazwa bota",
+          "botNameHint": "Wyświetlana w nagłówku okna czatu. Zostaw puste, aby użyć nazwy Twojego bota."
         },
         "3": {
           "title": "Ustaw wiadomość powitalną",
@@ -297,7 +306,13 @@
           "greeting": "Powitanie",
           "greetingHint": "Przywitaj się z klientami, gdy otworzą komunikator",
           "intro": "Wiadomość wprowadzająca",
-          "introHint": "Przedstaw swoją firmę i powiedz klientom, w czym możesz pomóc"
+          "introHint": "Przedstaw swoją firmę i powiedz klientom, w czym możesz pomóc",
+          "subHeader": "Tekst podnagłówka",
+          "subHeaderHint": "Linia pod nazwą, na przykład informacja, jak szybko odpowiadasz.",
+          "cta": "Tekst przycisku",
+          "ctaHint": "Tekst na przycisku, który otwiera WhatsApp.",
+          "prefilled": "Wstępnie wpisana wiadomość",
+          "prefilledHint": "To, co zostanie wysłane po kliknięciu przycisku. Domyślnie jest to słowo kluczowe Twojego bota, aby bot się uruchomił."
         },
         "4": {
           "title": "Ustaw położenie przycisku czatu",
@@ -322,6 +337,19 @@
           "numberHint": "Komunikator będzie kierować Twoich klientów na ten numer WhatsApp",
           "prefilled": "Wstępnie wypełniona wiadomość",
           "prefilledHint": "To będzie pierwszy domyślny tekst wiadomości"
+        },
+        "6": {
+          "title": "Pokaż wyskakującą wiadomość",
+          "subtitle": "Mała bańka zachęcająca odwiedzających do rozmowy",
+          "visibility": "Widoczność wyskakującej wiadomości",
+          "visibilityHint": "Pokazuj wiadomość obok przycisku, dopóki odwiedzający jej nie zamknie.",
+          "position": "Położenie wyskakującej wiadomości",
+          "side": "Z boku",
+          "top": "Na górze",
+          "text": "Tekst wyskakującej wiadomości",
+          "textHint": "Krótkie zaproszenie, na przykład: Cześć! W czym mogę pomóc?",
+          "image": "Obraz w wyskakującej wiadomości (opcjonalnie)",
+          "imageHint": "Adres obrazu lub prześlij zdjęcie poniżej."
         }
       },
       "install": {
@@ -335,7 +363,11 @@
         "greeting": "Dodaj powitanie.",
         "intro": "Dodaj wiadomość wprowadzającą.",
         "spacing": "Odstęp musi być liczbą całkowitą pikseli od 0 do 500.",
-        "whatsapp": "Dodaj pełny numer WhatsApp: numer kierunkowy i cyfry."
+        "whatsapp": "Dodaj pełny numer WhatsApp: numer kierunkowy i cyfry.",
+        "cta": "Dodaj tekst przycisku.",
+        "prefilled": "Dodaj wiadomość wysyłaną po kliknięciu przycisku.",
+        "popupText": "Dodaj tekst wyskakującej wiadomości lub ją wyłącz.",
+        "popupImage": "Użyj wbudowanego obrazu lub adresu obrazu http(s)."
       },
       "preview": {
         "title": "Podgląd na żywo",
@@ -344,7 +376,333 @@
         "frameTitle": "Podgląd na żywo Twojego widżetu WhatsApp",
         "hint": "Zwiń panel okrągłym przyciskiem, otwórz go ponownie z przycisku i wypróbuj Rozpocznij rozmowę.",
         "businessName": "Twoja firma"
+      },
+      "upload": {
+        "choose": "Prześlij obraz",
+        "replace": "Zamień obraz",
+        "remove": "Usuń",
+        "uploading": "Przesyłanie…",
+        "hint": "SVG, PNG, JPG, WebP lub GIF, maksymalnie 1 MB.",
+        "failed": "Nie udało się przesłać obrazu. Spróbuj ponownie.",
+        "tooLarge": "Obraz jest większy niż 1 MB."
       }
+    },
+    "flowBot": {
+      "customize": {
+        "loading": "Ładowanie widżetu…",
+        "loadError": "Nie udało się załadować widżetu. Odśwież stronę i spróbuj ponownie.",
+        "untouched": "Nadal używasz domyślnego wyglądu. Sprawdź go, a następnie zapisz, aby odblokować Wdrożenie i Publikację.",
+        "position": "Położenie przycisku czatu",
+        "right": "Prawy dolny róg",
+        "left": "Lewy dolny róg",
+        "save": "Zapisz personalizację",
+        "saved": "Personalizacja zapisana",
+        "saveFailed": "Nie udało się zapisać widżetu. Spróbuj ponownie.",
+        "launcher": {
+          "title": "Zamknięty przycisk",
+          "hint": "Co widzą odwiedzający przed otwarciem czatu: dymek, animację i kropkę nieprzeczytanych.",
+          "calloutOn": "Pokaż dymek obok przycisku",
+          "style": "Styl dymka",
+          "styles": {
+            "bubble": "Dymek u góry",
+            "pill": "Pigułka z boku",
+            "avatar": "Pigułka z awatarem",
+            "media": "Karta z obrazem",
+            "bar": "Pasek wprowadzania"
+          },
+          "text": "Tekst dymka",
+          "image": "Obraz",
+          "animation": "Animacja przycisku",
+          "animations": {
+            "none": "Brak",
+            "bounce": "Podskok",
+            "ripple": "Fala"
+          },
+          "badge": "Pokaż kropkę nieprzeczytanych",
+          "popupTextRequired": "Dodaj tekst dymka lub wyłącz dymek.",
+          "gaps": {
+            "title": "Odległość od krawędzi ekranu (px)",
+            "desktop": {
+              "side": "Pulpit: od boku",
+              "bottom": "Pulpit: od dołu"
+            },
+            "mobile": {
+              "side": "Telefon: od boku",
+              "bottom": "Telefon: od dołu"
+            }
+          }
+        },
+        "chat": {
+          "title": "Okno czatu",
+          "hint": "Jak okno wygląda i działa. Jego kolory ustawiasz wyżej.",
+          "fill": "Wypełnienie przycisków odpowiedzi",
+          "fills": {
+            "outline": "Obrys",
+            "tinted": "Przyciemnione",
+            "solid": "Pełne"
+          },
+          "shape": "Kształt przycisków odpowiedzi",
+          "shapes": {
+            "pill": "Pigułka",
+            "rounded": "Zaokrąglone",
+            "soft": "Miękkie",
+            "square": "Kwadratowe"
+          },
+          "font": "Krój pisma",
+          "fonts": {
+            "system": "Systemowy",
+            "serif": "Szeryfowy",
+            "rounded": "Zaokrąglony",
+            "humanist": "Humanistyczny",
+            "mono": "Stałej szerokości"
+          },
+          "size": "Rozmiar okna",
+          "sizes": {
+            "compact": "Kompaktowe",
+            "standard": "Standardowe",
+            "tall": "Wysokie",
+            "wide": "Szerokie"
+          },
+          "suggestions": "Podpowiedzi pod rozmową",
+          "suggestionsHint": "Do 4 krótkich linii. Znikają, gdy odwiedzający zacznie pisać.",
+          "suggestionPlaceholder": "Pytanie, które odwiedzający często zadają",
+          "addSuggestion": "Dodaj podpowiedź",
+          "removeSuggestion": "Usuń podpowiedź",
+          "actions": "Ikony kopiowania i kciuków pod każdą linią bota",
+          "expand": "Przycisk powiększania",
+          "voice": "Rozmowa głosowa (używa narzędzi mowy przeglądarki)",
+          "header": "Tło nagłówka",
+          "headers": {
+            "solid": "Jednolite",
+            "diagonal": "Ukośnie",
+            "vivid": "Żywy",
+            "dusk": "Zmierzch",
+            "soft": "Miękkie przejście"
+          },
+          "direction": "Kierunek tekstu",
+          "directions": {
+            "auto": "Podążaj za językiem odwiedzającego",
+            "ltr": "Od lewej do prawej",
+            "rtl": "Od prawej do lewej"
+          },
+          "icons": "Okrągła ikona przed każdym przyciskiem odpowiedzi",
+          "fontSize": "Rozmiar tekstu: {value}px",
+          "hoverBg": "Kolor najazdu na przycisk",
+          "hoverBgReset": "Użyj odcienia"
+        },
+        "preview": {
+          "title": "Podgląd na żywo",
+          "loading": "Wczytywanie podglądu…",
+          "error": "Nie udało się wczytać podglądu. Odśwież, aby spróbować ponownie.",
+          "frame": "Podgląd okna czatu",
+          "hint": "To prawdziwe okno czatu z Twoimi niezapisanymi ustawieniami. Rozmowa i przyciski to przykłady.",
+          "launcherFrame": "Podgląd zamkniętego launchera"
+        },
+        "groups": {
+          "look": "Wygląd i marka",
+          "voice": "Głos i powitanie",
+          "window": "Okno czatu",
+          "launcher": "Launcher i callout",
+          "launch": "Uruchomienie",
+          "chat": "Narzędzia rozmowy",
+          "behave": "Zachowanie"
+        },
+        "surfaces": {
+          "chat": "Okno czatu",
+          "expanded": "Rozwinięte",
+          "mobile": "Telefon",
+          "closed": "Zamknięty launcher"
+        },
+        "brand": {
+          "title": "Zdjęcia marki i dodatki",
+          "logo": {
+            "label": "Logo firmy",
+            "hint": "Wyświetlane w nagłówku czatu."
+          },
+          "avatar": {
+            "label": "Awatar chatbota",
+            "hint": "Wyświetlany obok każdej wiadomości wysłanej przez bota."
+          },
+          "background": {
+            "label": "Tło czatu",
+            "hint": "Zdjęcie za rozmową. Opcjonalne."
+          },
+          "corner": "Narożniki okna",
+          "corners": {
+            "rounded": "Zaokrąglone",
+            "soft": "Miękkie",
+            "square": "Kwadratowe"
+          },
+          "autoOpen": "Otwórz automatycznie po (sekundach)",
+          "autoOpenHint": "0 utrzymuje czat zamknięty, dopóki odwiedzający go nie otworzy. Otwiera się raz na wizytę.",
+          "sound": "Odtwórz miękki dźwięk dla nowych linii bota",
+          "soundVolume": "Głośność: {value}%",
+          "speak": "Czytaj linie bota na głos (głos przeglądarki)",
+          "devices": {
+            "title": "Pokaż widget na",
+            "desktop": "Komputer",
+            "tablet": "Tablet",
+            "mobile": "Telefon",
+            "hint": "Telefon to do 768 px szerokości, tablet do 1024 px."
+          },
+          "pictures": "Obrazy · SVG, PNG, GIF",
+          "botName": "Nazwa bota",
+          "primary": "Kolor główny",
+          "primaryCustom": "Własny kolor",
+          "fineTune": "Dopracuj każdy kolor",
+          "pip": "Oferuj pływające okno czatu, gdy odwiedzający przełącza karty",
+          "pipHint": "Podobnie jak w rozmowie wideo, czat może unosić się nad innymi kartami i aplikacjami (Chrome i Edge). Odwiedzający jest jednorazowo proszony o zezwolenie na powiadomienia, a przeglądarka decyduje, kiedy okno może się otworzyć.",
+          "domains": {
+            "label": "Pokazuj czat tylko na tych stronach",
+            "hint": "Odwiedzający inne strony nie zobaczą czatu. Wpisz adres strony, na przykład example.com. Subdomeny strony nie są uwzględniane, dopóki ich nie dodasz.",
+            "placeholder": "example.com",
+            "add": "Dodaj stronę",
+            "remove": "Usuń stronę"
+          }
+        },
+        "rail": {
+          "label": "Dostosuj sekcje",
+          "look": "Marka",
+          "voice": "Powitanie",
+          "window": "Okno",
+          "launcher": "Uruchamiacz",
+          "launch": "Uruchom",
+          "chat": "Dodatki",
+          "behave": "Zachowanie"
+        },
+        "leads": {
+          "look": "Logo, obrazy, kolory i wygląd nagłówka.",
+          "voice": "Nazwa, linia powitania i przycisk wysyłania.",
+          "window": "Rozmiar, czcionka, przyciski odpowiedzi i pomocnicy.",
+          "launcher": "Co widzą odwiedzający przed otwarciem czatu.",
+          "launch": "Skąd otwiera się widget i jak umieścić go na swojej stronie.",
+          "chat": "Karty powiadomień, szybkie menu, transparent i szybkie odpowiedzi.",
+          "behave": "Kiedy czat się otwiera, jak brzmi i kto go widzi."
+        },
+        "footer": "Zmiany pojawiają się w podglądzie podczas ich wprowadzania.",
+        "conversation": {
+          "title": "Narzędzia rozmowy",
+          "tabs": {
+            "notice": "Blok powiadomienia",
+            "menu": "Szybkie menu",
+            "banner": "Transparent",
+            "replies": "Szybkie odpowiedzi"
+          },
+          "enable": {
+            "notice": "Pokaż dzwon powiadomienia",
+            "menu": "Pokaż szybkie menu",
+            "banner": "Pokaż transparent",
+            "replies": "Pokaż szybkie odpowiedzi"
+          },
+          "icon": "Styl dzwonka",
+          "icons": {
+            "1": "Dzwonek",
+            "2": "Zgłoszenie",
+            "3": "Pudełko",
+            "4": "Wiadomość"
+          },
+          "view": "Widok wyświetlania",
+          "views": {
+            "list": "Listy",
+            "blocks": "Bloki"
+          },
+          "card": "Karta {n}",
+          "entry": "Wpis menu {n}",
+          "slide": "Slajd {n}",
+          "remove": "Usuń",
+          "max": "Do {count}.",
+          "addCard": "Dodaj kartę",
+          "addEntry": "Dodaj wpis menu",
+          "addSlide": "Dodaj slajd",
+          "kinds": {
+            "image": "Zdjęcie",
+            "video": "Wideo"
+          },
+          "fields": {
+            "title": "Tytuł",
+            "description": "Opis",
+            "buttonTitle": "Tytuł przycisku",
+            "buttonUrl": "Adres przycisku",
+            "urlHint": "Strona internetowa, tel: lub mailto: adres. Pozostaw puste, aby bez przycisku.",
+            "footer": "Tekst stopki",
+            "menuTitle": "Tytuł menu",
+            "menuUrl": "Otwiera (opcjonalnie)",
+            "menuUrlHint": "Pozostaw puste, aby wysłać tytuł jako wiadomość, którą bot odpowiada.",
+            "video": "Link do wideo",
+            "videoHint": "Wklej YouTube lub Vimeo link, lub jego kod osadzenia.",
+            "videoOk": "Wideo znalezione.",
+            "bannerUrl": "Link po dotknięciu (opcjonalnie)"
+          },
+          "action": "Akcja przycisku",
+          "step": "Krok bota",
+          "stepPlaceholder": "Wybierz krok",
+          "noSteps": "Ten bot nie ma jeszcze kroków. Dodaj je w zakładce Kreator i zapisz.",
+          "replyStep": "Po dotknięciu",
+          "replyAsMessage": "Wyślij wiersz jako wiadomość",
+          "actions": {
+            "link": "Dodaj link",
+            "flow": "Połącz z przepływem"
+          }
+        },
+        "launchNote": "Kod osadzania do wklejenia na stronie znajdziesz na karcie Wdróż."
+      },
+      "deploy": {
+        "loading": "Ładowanie opcji wdrożenia…",
+        "locked": "Najpierw zapisz kartę Personalizacja. Kod osadzenia pojawi się tutaj, gdy widżet będzie już istniał.",
+        "lockedWhatsapp": "Najpierw zapisz kartę Personalizacja. Przycisk na stronę i link WhatsApp pojawią się tutaj, gdy już powstaną.",
+        "title": "Wdrożenie",
+        "lead": "Umieść okno czatu na swojej stronie. Bot zacznie działać po jego opublikowaniu.",
+        "leadWhatsapp": "Umieść przycisk WhatsApp na swojej stronie lub udostępnij bezpośredni link gdziekolwiek. Bot odpowiada na swoim numerze WhatsApp po opublikowaniu.",
+        "notPublished": "Ten bot nie jest jeszcze opublikowany, więc odwiedzający nie otrzymają odpowiedzi. Opublikuj go na karcie Budowanie.",
+        "notPublishedWhatsapp": "Ten bot nie jest jeszcze opublikowany, więc nie będzie odpowiadać na WhatsApp. Opublikuj go na karcie Budowanie.",
+        "embedTitle": "Dodaj do swojej strony",
+        "embedBody": "Wklej to tuż przed zamykającym znacznikiem body na każdej stronie, na której ma się pojawić.",
+        "copy": "Kopiuj kod",
+        "copied": "Skopiowano kod osadzenia",
+        "clipboardBlocked": "Przeglądarka zablokowała kopiowanie. Zaznacz tekst i skopiuj go ręcznie.",
+        "preview": "Podgląd",
+        "linkTitle": "Bezpośredni link WhatsApp",
+        "linkBody": "Otwiera czat WhatsApp z numerem bota i ustawioną wiadomością. Użyj go w e-mailach, opisach profili, kodach QR i reklamach.",
+        "copyLink": "Kopiuj link",
+        "linkCopied": "Skopiowano link WhatsApp",
+        "openLink": "Otwórz link",
+        "qrTitle": "Kod QR",
+        "qrBody": "Wydrukuj go lub wyświetl na ekranie. Po zeskanowaniu otworzy się czat WhatsApp z Twoim botem.",
+        "downloadQr": "Pobierz kod QR",
+        "statusLive": "Na żywo",
+        "statusDraft": "Nieopublikowany",
+        "codeLabel": "HTML",
+        "localNote": "Ten kod wskazuje adres na tym komputerze (localhost), więc działa tylko na stronach otwartych tutaj. Na działającej witrynie użyj wdrożonego adresu."
+      },
+      "whatsapp": {
+        "loading": "Ładowanie przycisku…",
+        "loadError": "Nie udało się załadować przycisku. Odśwież stronę i spróbuj ponownie.",
+        "untouched": "Twój przycisk WhatsApp nie jest jeszcze skonfigurowany. Domyślnie korzysta z numeru i słowa kluczowego bota. Sprawdź go, a następnie zapisz, aby odblokować Wdrożenie i Publikację.",
+        "saved": "Przycisk WhatsApp zapisany",
+        "saveFailed": "Nie udało się zapisać przycisku. Spróbuj ponownie.",
+        "fromBot": "Przycisk otwiera WhatsApp na numer {number}, na którym działa ten bot. Numer zmienisz w wyzwalaczu na karcie Budowanie.",
+        "noNumber": "Ten bot nie ma jeszcze numeru WhatsApp. Wybierz go w wyzwalaczu na karcie Tworzenie, a potem wróć i zapisz przycisk."
+      }
+    },
+    "webBots": {
+      "title": "Boty czatu na stronie",
+      "intro": "Wszystkie boty utworzone dla czatu na stronie wraz z widżetem, w którym działają. Otwórz wiersz, aby zmienić wygląd widżetu lub skopiować jego kod osadzenia.",
+      "create": "Nowy bot na stronę",
+      "loading": "Ładowanie botów na stronę…",
+      "loadError": "Nie udało się załadować botów na stronę. Odśwież stronę i spróbuj ponownie.",
+      "emptyTitle": "Brak botów czatu na stronie",
+      "emptyBody": "Utwórz bota do czatu na stronie, a jego widżet pojawi się tutaj.",
+      "widgetLine": "Widżet: {title}",
+      "noWidget": "Brak widżetu. Spersonalizuj go, aby go utworzyć.",
+      "customize": "Personalizuj",
+      "more": "Wyświetlono {shown} z {total} botów. Pozostałe otworzysz w Przepływach.",
+      "state": {
+        "needs_customizing": "Wymaga personalizacji",
+        "draft": "Wersja robocza",
+        "live": "Aktywny",
+        "paused": "Wstrzymany"
+      },
+      "deploy": "Wdróż"
     }
   }
 }

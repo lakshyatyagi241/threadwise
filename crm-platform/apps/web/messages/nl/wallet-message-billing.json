@@ -8,7 +8,6 @@
     "common": {
       "loading": "Laden",
       "retry": "Opnieuw proberen",
-      "requestId": "Verzoek-id",
       "cancel": "Annuleren",
       "back": "Terug",
       "close": "Sluiten",

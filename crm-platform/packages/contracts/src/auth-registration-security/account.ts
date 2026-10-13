@@ -29,6 +29,10 @@ export const profileResponseSchema = z.object({
   pendingEmail: z.string().nullable(),
   phone: z.string().nullable(),
   locale: z.string().nullable(),
+  /** The person's own time zone; null = follow the workspace. */
+  timezone: z.string().nullable(),
+  /** The zone dates are shown in: the person's own, else the workspace's, else UTC. */
+  effectiveTimezone: z.string(),
   theme: z.enum(['paper', 'bright', 'dark']),
   avatarUrl: z.string().nullable(),
   /**
@@ -53,6 +57,8 @@ export const updateProfileRequestSchema = z.object({
   displayName: z.string().trim().max(120).nullable().optional(),
   phone: phoneSchema.nullable().optional(),
   locale: z.string().min(2).max(12).nullable().optional(),
+  /** The person's own time zone (an IANA name); null goes back to the workspace's. */
+  timezone: z.string().min(1).max(64).nullable().optional(),
   theme: z.enum(['paper', 'bright', 'dark']).optional(),
   /** Ignored (not an error) when the caller may not change it; see `canEditWorkspaceTimezone`. */
   workspaceTimezone: z.string().min(1).max(64).optional(),

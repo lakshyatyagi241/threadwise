@@ -354,6 +354,10 @@
         "device_group_removed": {
           "label": "已被移出个人号码群组",
           "hint": "有人将您的某个个人 WhatsApp 号码移出了群组。这可能意味着该号码被举报了。"
+        },
+        "sla_breached": {
+          "label": "SLA 已超时",
+          "hint": "您负责的会话错过了首次回复或解决目标。"
         }
       },
       "loading": "正在加载你的偏好设置",

@@ -10,7 +10,6 @@
     },
     "common": {
       "dismiss": "閉じる",
-      "requestId": "リクエスト {id}",
       "unofficial": "非公式",
       "reminder": "非公式の接続です。WhatsApp によってこの番号が制限される可能性があります。",
       "readGuide": "ガイドを読む",
@@ -296,7 +295,6 @@
       "WA_WORKER_UNAVAILABLE": "接続サービスを利用できません。数分後にもう一度お試しください。",
       "RATE_LIMITED": "リクエストが多すぎます。少し待ってください。",
       "upgrade": "プランを確認してアップグレード",
-      "requestId": "リクエスト {id}",
       "DEVICE_PILOT_CAP_REACHED": "ワークスペースは、試用期間中に追加できる個人用WhatsApp番号の上限に達しました。別の番号を接続するには、1件削除してください。",
       "DEVICE_CREATE_RATE_LIMITED": "過去1時間に追加された番号が多すぎます。しばらくしてからもう一度お試しください。",
       "DEVICE_CREATE_RATE_LIMITED_WAIT": "過去1時間に追加された番号が多すぎます。{minutes, plural, other {# 分}}後にもう一度お試しください。",

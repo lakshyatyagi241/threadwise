@@ -30,6 +30,7 @@ export function summary(over: Partial<ConversationSummary> = {}): ConversationSu
     assignment: { user: null, team: null, aiAgent: null },
     snoozedUntil: null,
     labels: [],
+    slaStatus: null,
     lastMessageAt: '2026-10-02T10:00:00.000Z',
     lastInboundAt: '2026-10-02T10:00:00.000Z',
     lastOutboundAt: null,
@@ -62,6 +63,7 @@ export function contactSummary(over: Partial<InboxContactSummary> = {}): InboxCo
     leadScoredAt: null,
     leadScoreModel: null,
     createdAt: '2026-10-01T10:00:00.000Z',
+    contactTags: [],
     ...over,
   };
 }

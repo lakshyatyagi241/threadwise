@@ -45,6 +45,12 @@ export const bulkGroupContactsSchema = withSelection({
 });
 export type BulkGroupContactsInput = z.infer<typeof bulkGroupContactsSchema>;
 
+/** Hands the selection to one person, or to nobody with `ownerId: null` (the "Reassign" of an owner's whole book). */
+export const bulkOwnerContactsSchema = withSelection({
+  ownerId: uuidSchema.nullable(),
+});
+export type BulkOwnerContactsInput = z.infer<typeof bulkOwnerContactsSchema>;
+
 /**
  * Tag by id or by name. A name that matches no tag creates one, for `add` only
  * (needs the tag-create permission and counts against the plan's tag limit);

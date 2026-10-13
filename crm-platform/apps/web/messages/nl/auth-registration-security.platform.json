@@ -46,7 +46,6 @@
         "copyFailed": "Kopiëren mislukt",
         "loading": "Laden",
         "retry": "Opnieuw proberen",
-        "requestId": "Aanvraag-id",
         "errors": {
           "forbidden": "Je rol staat dit niet toe.",
           "request": "De aanvraag is geweigerd. Laad de pagina opnieuw en probeer het nog eens.",
@@ -61,7 +60,6 @@
       "login": {
         "title": "Operator-login",
         "intro": "Deze console is voor de mensen die het platform beheren. Workspacegebruikers loggen in op de hoofdloginpagina.",
-        "requestId": "Aanvraag-id",
         "submit": "Inloggen",
         "submitting": "Inloggen",
         "fields": {
@@ -127,7 +125,6 @@
         "eyebrow": "Jouw account",
         "title": "Tweestapsverificatie",
         "description": "Bescherm {email} met een authenticator-app. Operatoraccounts zijn de accounts met het hoogste vertrouwen op het platform.",
-        "requestId": "Aanvraag-id",
         "status": {
           "title": "Authenticator-app",
           "on": "Aan",
@@ -181,7 +178,6 @@
         "saving": "Opslaan",
         "saved": "{count, plural, one {# instelling opgeslagen} other {# instellingen opgeslagen}}",
         "rejected": "Er is niets opgeslagen. {count, plural, one {# veld is} other {# velden zijn}} geweigerd.",
-        "requestId": "Aanvraag-id",
         "unsaved": "{count, plural, one {# niet-opgeslagen wijziging} other {# niet-opgeslagen wijzigingen}}",
         "discard": "Wijzigingen negeren",
         "errors": {
@@ -658,7 +654,6 @@
             "working": "Bezig",
             "close": "Sluiten",
             "signInAgain": "Opnieuw inloggen",
-            "requestId": "Aanvraag-id",
             "errors": {
               "forbidden": "Alleen een superbeheerder kan deze actie uitvoeren.",
               "unexpected": "De actie is niet voltooid. Controleer het gebeurtenissenlogboek voordat je het opnieuw probeert."
@@ -731,7 +726,6 @@
         "saving": "Opslaan",
         "saved": "{count, plural, one {# instelling opgeslagen} other {# instellingen opgeslagen}}",
         "rejected": "Er is niets opgeslagen. {count, plural, one {# veld is} other {# velden zijn}} geweigerd.",
-        "requestId": "Aanvraag-id",
         "unsaved": "{count, plural, one {# niet-opgeslagen wijziging} other {# niet-opgeslagen wijzigingen}}",
         "discard": "Wijzigingen negeren",
         "errors": {
@@ -941,7 +935,6 @@
             "sent": "Er is een testcode verstuurd naar {to}.",
             "remaining": "{count, plural, one {# test over dit uur.} other {# tests over dit uur.}}",
             "notShown": "De code wordt hier niet getoond; lees hem af op de telefoon.",
-            "requestId": "Aanvraag-id",
             "errors": {
               "invalidNumber": "Voer het nummer in met landcode, bijvoorbeeld +91 98765 43221.",
               "rateLimited": "Te veel testcodes dit uur. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw.",
@@ -1045,7 +1038,6 @@
           "saved": "Afzender opgeslagen",
           "removed": "Afzender verwijderd",
           "secretRemoved": "Opgeslagen geheim verwijderd",
-          "requestId": "Aanvraag-id",
           "problems": {
             "required": "Dit veld is verplicht.",
             "tooLong": "Maximaal {max} tekens.",
@@ -1076,8 +1068,7 @@
           "errors": {
             "invalid": "Die voettekst is niet geaccepteerd.",
             "unexpected": "De voettekst kon niet worden opgeslagen. Probeer het zo meteen opnieuw."
-          },
-          "requestId": "Aanvraag-id"
+          }
         }
       },
       "social": {
@@ -1088,7 +1079,6 @@
         "saving": "Opslaan",
         "saved": "{count, plural, one {# instelling opgeslagen} other {# instellingen opgeslagen}}",
         "rejected": "Er is niets opgeslagen. {count, plural, one {# veld is} other {# velden zijn}} geweigerd.",
-        "requestId": "Aanvraag-id",
         "unsaved": "{count, plural, one {# niet-opgeslagen wijziging} other {# niet-opgeslagen wijzigingen}}",
         "discard": "Wijzigingen negeren",
         "errors": {
@@ -1206,7 +1196,6 @@
           "cancel": "Annuleren",
           "working": "Verwijderen",
           "error": "Het geheim kon niet worden verwijderd. Probeer het zo meteen opnieuw.",
-          "requestId": "Aanvraag-id",
           "done": "Het opgeslagen {name}-geheim is verwijderd.",
           "names": {
             "google": "Google",
@@ -1670,7 +1659,6 @@
         "saving": "Opslaan",
         "saved": "{count, plural, one {# instelling opgeslagen} other {# instellingen opgeslagen}}",
         "rejected": "Er is niets opgeslagen. {count, plural, one {# veld is} other {# velden zijn}} geweigerd.",
-        "requestId": "Aanvraag-id",
         "unsaved": "{count, plural, one {# niet-opgeslagen wijziging} other {# niet-opgeslagen wijzigingen}}",
         "discard": "Wijzigingen negeren",
         "errors": {

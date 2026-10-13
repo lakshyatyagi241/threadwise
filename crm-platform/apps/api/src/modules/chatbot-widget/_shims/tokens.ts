@@ -55,7 +55,22 @@ export interface InboxLine {
   agentId: number | null;
   sentAt: Date | null;
   /** Reply buttons a flow bot stored with the line. */
-  buttons?: Array<{ id: string; title: string }> | null;
+  buttons?: Array<{ id: string; title: string; icon?: string }> | null;
+  /** A file a flow bot stored with the line. */
+  media?: { key: string; kind: string; mime: string; name: string } | null;
+  /** What a question line waits for (`widget_input`). */
+  input?: { type: string; format?: string; accept?: string[] } | null;
+  /** Link, call and email buttons a flow bot stored with the line (`widget_links`). */
+  links?: Array<{ label: string; url: string; icon?: string }> | null;
+  /** The cards of a carousel a flow bot stored with the line (`widget_cards`). */
+  cards?: Array<{
+    title: string;
+    text: string;
+    image?: string;
+    buttons: Array<
+      { kind: 'reply'; id: string; title: string } | { kind: 'link'; label: string; url: string }
+    >;
+  }> | null;
 }
 
 export interface WidgetForInbox {
@@ -117,6 +132,21 @@ export interface InboxGateway {
   oldest(tx: Tx, orgId: number, conversationId: number, limit: number): Promise<InboxLine[]>;
   /** Outbound lines with an id above `since`, oldest first. */
   outboundSince(tx: Tx, orgId: number, conversationId: number, since: number): Promise<InboxLine[]>;
+  /** The file a flow bot stored with one outbound line of this thread, or null (no such line, or it carries none). */
+  /** Writes (or, with null, clears) the visitor's feedback on one outbound line of this thread; true when the line was theirs. */
+  setFeedback(
+    tx: Tx,
+    orgId: number,
+    conversationId: number,
+    id: number,
+    value: 'up' | 'down' | null,
+  ): Promise<boolean>;
+  mediaOf(
+    tx: Tx,
+    orgId: number,
+    conversationId: number,
+    id: number,
+  ): Promise<NonNullable<InboxLine['media']> | null>;
 }
 export const INBOX_GATEWAY = Symbol('WGT_INBOX_GATEWAY');
 

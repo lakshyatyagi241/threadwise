@@ -1,5 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { avatarColor, dayKey, dayLabel, daysAgo, humanSize, initials, listTime } from './time';
+import {
+  avatarColor,
+  clockTime,
+  dayKey,
+  dayLabel,
+  daysAgo,
+  fullStamp,
+  humanSize,
+  initials,
+  listTime,
+} from './time';
 
 const NOW = new Date(2026, 9, 2, 15, 0, 0).getTime();
 const local = (d: number, h = 12, m = 0) => new Date(2026, 9, d, h, m).toISOString();
@@ -22,6 +32,37 @@ describe('days', () => {
     expect(dayLabel(new Date(2026, 8, 20, 12).toISOString(), NOW, 'en')).toMatch(
       /20 Sept|Sept 20|Sep 20|20 Sep/,
     );
+  });
+});
+
+describe('in a named time zone', () => {
+  // 20:30 UTC on 2 Oct is 02:00 on 3 Oct in Kolkata (UTC+05:30) and 16:30 on 2 Oct in New York (UTC-04:00).
+  const at = '2026-10-02T20:30:00Z';
+  const now = Date.parse('2026-10-03T06:00:00Z'); // 11:30 on 3 Oct in Kolkata, 02:00 in New York
+
+  it("puts the same instant on each zone's own calendar day", () => {
+    expect(dayKey(at, 'UTC')).toBe('2026-10-2');
+    expect(dayKey(at, 'Asia/Kolkata')).toBe('2026-10-3');
+    expect(dayKey(at, 'America/New_York')).toBe('2026-10-2');
+  });
+
+  it("counts calendar days on that zone's calendar", () => {
+    expect(daysAgo(at, now, 'Asia/Kolkata')).toBe(0);
+    expect(daysAgo(at, now, 'America/New_York')).toBe(1);
+    expect(daysAgo(at, Date.parse('2026-10-03T12:00:00Z'), 'America/New_York')).toBe(1);
+    expect(daysAgo(at, Date.parse('2026-10-03T12:00:00Z'), 'Asia/Kolkata')).toBe(0);
+  });
+
+  it('shows clock times and stamps in that zone', () => {
+    expect(clockTime(at, 'en', 'Asia/Kolkata')).toMatch(/0?2:00/);
+    expect(clockTime(at, 'en', 'UTC')).toMatch(/0?8:30/);
+    expect(fullStamp(at, 'en', 'Asia/Kolkata')).toMatch(/Oct 3, 2026|3 Oct 2026/);
+    expect(fullStamp(at, 'en', 'America/New_York')).toMatch(/Oct 2, 2026|2 Oct 2026/);
+    expect(dayLabel(at, now, 'en', 'Asia/Kolkata').toLowerCase()).toBe('today');
+  });
+
+  it('lists the clock for today in that zone', () => {
+    expect(listTime(at, now, 'en', 'Asia/Kolkata')).toMatch(/0?2:00/);
   });
 });
 

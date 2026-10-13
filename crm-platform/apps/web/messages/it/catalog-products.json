@@ -7,8 +7,7 @@
     },
     "common": {
       "dismiss": "Chiudi",
-      "retry": "Riprova",
-      "requestId": "ID richiesta"
+      "retry": "Riprova"
     },
     "errors": {
       "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
@@ -35,7 +34,10 @@
       "sendFailed": "Impossibile inviare il messaggio: {detail}",
       "collectionProducts": "Nessuno dei prodotti selezionati appartiene a questo Workspace.",
       "providerFailed": "WhatsApp o Meta non hanno potuto completare la richiesta: {detail}",
-      "unexpected": "Qualcosa è andato storto. Riprova tra un attimo."
+      "unexpected": "Qualcosa è andato storto. Riprova tra un attimo.",
+      "alreadyConnected": "Un catalogo è già connesso. Disconnettilo prima per crearne uno nuovo.",
+      "confirmMismatch": "L'ID catalogo digitato non corrisponde al catalogo connesso.",
+      "setNotSyncable": "Questa collezione non ha prodotti attivi da inserire in un set di prodotti Meta."
     },
     "paywall": {
       "kicker": "Funzione premium",
@@ -401,6 +403,15 @@
           "descriptionTooLong": "La descrizione è troppo lunga.",
           "noProducts": "Scegli almeno un prodotto."
         }
+      },
+      "meta": {
+        "onMeta": "Su Meta",
+        "notOnMeta": "Non su Meta",
+        "push": "Invia a Meta",
+        "update": "Aggiorna su Meta",
+        "remove": "Rimuovi da Meta",
+        "pushed": "Collezione inviata a Meta.",
+        "removed": "Collezione rimossa da Meta."
       }
     },
     "activity": {
@@ -724,6 +735,33 @@
           "goods": "Niente alcolici / contenuti per adulti / beni regolamentati",
           "verification": "Verifica dell'azienda richiesta per la produzione"
         }
+      }
+    },
+    "manage": {
+      "title": "Gestisci il catalogo su Meta",
+      "create": {
+        "title": "Crea un nuovo catalogo su Meta",
+        "intro": "Crea un catalogo vuoto nel tuo account WhatsApp Business, lo collega e lo connette qui.",
+        "name": "Nome del catalogo",
+        "placeholder": "es. Il mio negozio",
+        "button": "Crea catalogo",
+        "needName": "Inserisci un nome per il catalogo.",
+        "done": "Catalogo creato e connesso."
+      },
+      "rename": {
+        "label": "Nome del catalogo",
+        "button": "Rinomina su Meta",
+        "done": "Catalogo rinominato su Meta."
+      },
+      "delete": {
+        "title": "Elimina il catalogo su Meta",
+        "warning": "Elimina definitivamente il catalogo e i suoi prodotti su Meta. Non si può annullare.",
+        "confirmLabel": "Digita l'ID catalogo {id} per confermare",
+        "button": "Elimina su Meta",
+        "dialogTitle": "Eliminare il catalogo su Meta?",
+        "dialogMessage": "Il catalogo viene eliminato su Meta e disconnesso qui. Non si può annullare.",
+        "cancel": "Annulla",
+        "done": "Catalogo eliminato su Meta."
       }
     }
   }

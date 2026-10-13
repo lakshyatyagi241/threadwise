@@ -128,7 +128,6 @@
       "planLimit": "Twój plan nie pozwala na więcej takich elementów.",
       "unavailable": "Segmenty nie są jeszcze dostępne na tym serwerze.",
       "unexpected": "Coś poszło nie tak. Spróbuj ponownie.",
-      "requestId": "ID żądania",
       "retry": "Spróbuj ponownie",
       "shareEmpty": "Wybierz co najmniej jedną osobę lub zespół, z którym udostępnisz segment.",
       "shareInvalid": "Niektórych wybranych osób lub zespołów nie ma już w tej przestrzeni roboczej. Usuń je i zapisz ponownie."

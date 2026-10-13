@@ -105,6 +105,7 @@ const DYNAMIC = [
   ]),
   ...CONVERSATION_STATUSES.flatMap((s) => [`list.status.${s}`, `panel.past.status.${s}`]),
   ...(['low', 'normal', 'high', 'urgent'] as const).map((s) => `list.priority.${s}`),
+  ...(['first_response', 'resolution'] as const).map((s) => `sla.kind.${s}`),
   ...(['received', 'queued', 'sent', 'delivered', 'read', 'failed'] as const).map(
     (s) => `status.${s}`,
   ),

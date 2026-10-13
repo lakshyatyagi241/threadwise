@@ -128,7 +128,6 @@
       "planLimit": "Votre forfait ne permet pas d’en ajouter davantage.",
       "unavailable": "Les segments ne sont pas encore disponibles sur ce serveur.",
       "unexpected": "Une erreur est survenue. Réessayez.",
-      "requestId": "ID de la requête",
       "retry": "Réessayer",
       "shareEmpty": "Choisissez au moins une personne ou une équipe avec laquelle partager le segment.",
       "shareInvalid": "Certaines personnes ou équipes choisies ne font plus partie de cet espace de travail. Retirez-les puis enregistrez à nouveau."

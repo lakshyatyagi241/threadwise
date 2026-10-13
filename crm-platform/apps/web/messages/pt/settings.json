@@ -310,6 +310,11 @@
         "description": "Atribua novas conversas ao agente certo automaticamente, em rodízio ou por regras.",
         "keywords": "roteamento, rodízio, atribuir, agentes, regras da caixa de entrada, distribuir, responsável"
       },
+      "web": {
+        "label": "Chat do site",
+        "description": "Bots criados para o chat do seu site e o widget em que cada um é executado.",
+        "keywords": "web, site, widget, chatbot, incorporar, chat ao vivo"
+      },
       "message-logs": {
         "label": "Registros de mensagens",
         "description": "Exporte o registro de entrega das suas mensagens, até um ano atrás, como um arquivo enviado ao seu e-mail.",
@@ -319,11 +324,6 @@
         "label": "Assinaturas",
         "description": "O que renova, até quando está pago e cancelamento.",
         "keywords": "assinatura, renovar, renovação automática, cancelar, débito automático, pagamento falhou, cobranças"
-      },
-      "web": {
-        "label": "Chat do site",
-        "description": "Bots criados para o chat do seu site e o widget em que cada um é executado.",
-        "keywords": "web, site, widget, chatbot, incorporar, chat ao vivo"
       },
       "lead-scoring": {
         "label": "Pontuação de leads com IA",
@@ -340,15 +340,20 @@
         "description": "Escolha as palavras STOP e START, as respostas de confirmação, a linha de cancelamento e se o marketing exige consentimento registrado.",
         "keywords": "consentimento, cancelar inscrição, reativar inscrição, descadastrar, stop, start, lgpd, gdpr, conformidade, privacidade, marketing"
       },
-      "inbox-labels": {
-        "label": "Etiquetas",
-        "description": "Crie as etiquetas que sua equipe coloca nas conversas e usa para filtrar a caixa de entrada.",
-        "keywords": "tags, etiquetas, categorias, organizar, filtrar"
+      "inbox-tags": {
+        "label": "Tags da conversa",
+        "description": "Crie as tags que sua equipe aplica às conversas e usa para filtrar a caixa de entrada. São as mesmas tags usadas nos contatos.",
+        "keywords": "tags, tag, categorias, organizar, filtrar, tags da conversa"
       },
       "growth": {
         "label": "Crescimento",
         "description": "Leads quentes, audiências, respostas às campanhas e outras coisas em que sua equipe pode agir, obtidas de conversas e campanhas.",
         "keywords": "crescimento, lead quente, audiência, engajamento, inativo, respostas às campanhas, propensão, opt-out, piloto"
+      },
+      "sla-policies": {
+        "label": "Metas de resposta (SLA)",
+        "description": "Defina a rapidez com que sua equipe deve responder e resolver, e receba alertas quando uma conversa descumprir a meta.",
+        "keywords": "sla, tempo de resposta, primeira resposta, resolução, descumprimento, metas, horário comercial"
       },
       "team-performance": {
         "label": "Desempenho da equipe",

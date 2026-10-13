@@ -1,0 +1,53 @@
+{
+  "notifications": {
+    "page": {
+      "title": "Meldingen",
+      "description": "Alles wat je aandacht nodig had, nieuwste eerst. Kies in je meldingsinstellingen welke gebeurtenissen je bereiken.",
+      "markAll": "Alles als gelezen markeren",
+      "clearAll": "Alles wissen",
+      "preferences": "Meldingsinstellingen",
+      "clearTitle": "Alle meldingen wissen?",
+      "clearBody": "Hiermee verwijder je al jouw meldingen definitief. Anderen houden hun eigen meldingen. Dit kan niet ongedaan worden gemaakt.",
+      "clearConfirm": "Alles wissen",
+      "cancel": "Annuleren",
+      "dismiss": "Deze melding negeren",
+      "tiles": {
+        "unread": "Ongelezen",
+        "unreadHint": "Selecteer om alleen ongelezen te tonen",
+        "day": "Laatste 24 uur",
+        "dayHint": "Vandaag ontvangen",
+        "week": "Laatste 7 dagen",
+        "weekHint": "Deze week ontvangen",
+        "total": "Bewaard",
+        "totalHint": "Oudere worden automatisch verwijderd"
+      },
+      "filters": {
+        "label": "Meldingsfilters",
+        "readLabel": "Tonen",
+        "all": "Alle",
+        "unread": "Ongelezen",
+        "type": "Type",
+        "allTypes": "Alle typen",
+        "otherTypes": "Overig",
+        "search": "Meldingen zoeken",
+        "reset": "Filters resetten"
+      },
+      "sections": {
+        "today": "Vandaag",
+        "yesterday": "Gisteren",
+        "thisWeek": "Eerder deze week",
+        "older": "Ouder"
+      },
+      "loading": "Meldingen laden",
+      "failed": "Kan je meldingen niet laden.",
+      "retry": "Opnieuw proberen",
+      "empty": "Nog geen meldingen",
+      "emptyHint": "Nieuwe chats, toewijzingen, vermeldingen en resultaten van je verzendingen verschijnen hier.",
+      "emptyFiltered": "Geen meldingen die bij deze filters passen",
+      "emptyFilteredHint": "Verwijder een filter of zoek op iets anders.",
+      "showing": "{count, plural, one {# melding geladen} other {# meldingen geladen}}",
+      "loadMore": "Meer laden",
+      "end": "Einde van de lijst"
+    }
+  }
+}

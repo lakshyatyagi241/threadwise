@@ -25,6 +25,7 @@ import {
   listConversationNotesQuerySchema,
   listConversationsQuerySchema,
   listInboxTemplatesQuerySchema,
+  listMessageLogExportsQuerySchema,
   listMessagesQuerySchema,
   markConversationReadSchema,
   sendMessageSchema,
@@ -38,6 +39,7 @@ import {
   type ListConversationNotesQuery,
   type ListConversationsQuery,
   type ListInboxTemplatesQuery,
+  type ListMessageLogExportsQuery,
   type ListMessagesQuery,
   type MarkConversationReadInput,
   type SendMessageInput,
@@ -158,8 +160,10 @@ export class InboxController {
   @Get('message-logs/exports')
   @RequirePermission('inbox.logs.export')
   @ApiOperation({ summary: 'The latest exports of the message log, newest first' })
-  async listLogExports() {
-    return this.messageLogs.listExports();
+  async listLogExports(
+    @Query(zodPipe(listMessageLogExportsQuerySchema)) query: ListMessageLogExportsQuery,
+  ) {
+    return this.messageLogs.listExports(query.kind);
   }
 
   @Get('message-logs/exports/:id/download')

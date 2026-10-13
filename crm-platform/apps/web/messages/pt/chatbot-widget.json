@@ -276,7 +276,14 @@
           "iconOnly": "Somente ícone",
           "buttonColor": "Cor do botão",
           "pickCustom": "Escolha uma cor personalizada",
-          "custom": "Personalizada {hex}"
+          "custom": "Personalizada {hex}",
+          "animation": "Animação do botão",
+          "animationHint": "Chama a atenção para o botão enquanto o chat está fechado.",
+          "animations": {
+            "none": "Desativada",
+            "bounce": "Salto",
+            "ripple": "Ondulação"
+          }
         },
         "2": {
           "title": "Desenhe seu mensageiro",
@@ -289,7 +296,9 @@
             "person": "Pessoa"
           },
           "url": "Ou use o endereço da sua própria imagem",
-          "urlHint": "Cole o endereço de uma imagem quadrada (https://...). O envio de arquivo ainda não está disponível."
+          "urlHint": "Cole o endereço de uma imagem quadrada (https://...). O envio de arquivo ainda não está disponível.",
+          "botName": "Nome do bot",
+          "botNameHint": "Exibido no cabeçalho da janela de chat. Deixe em branco para usar o nome do seu bot."
         },
         "3": {
           "title": "Defina sua mensagem de boas-vindas",
@@ -297,7 +306,13 @@
           "greeting": "Saudação",
           "greetingHint": "Cumprimente seus clientes quando abrirem o mensageiro",
           "intro": "Mensagem de apresentação",
-          "introHint": "Apresente sua empresa e diga aos clientes como você pode ajudar"
+          "introHint": "Apresente sua empresa e diga aos clientes como você pode ajudar",
+          "subHeader": "Texto do subcabeçalho",
+          "subHeaderHint": "A linha abaixo do nome, por exemplo, em quanto tempo você responde.",
+          "cta": "Texto do botão",
+          "ctaHint": "O texto do botão que abre o WhatsApp.",
+          "prefilled": "Mensagem pré-preenchida",
+          "prefilledHint": "O que é enviado ao tocar no botão. Começa com a palavra-chave do seu bot, para que o bot seja iniciado."
         },
         "4": {
           "title": "Defina a posição do botão de chat",
@@ -322,6 +337,19 @@
           "numberHint": "O mensageiro enviará seus clientes para este número do WhatsApp",
           "prefilled": "Mensagem pré-preenchida",
           "prefilledHint": "Será o texto da primeira mensagem padrão"
+        },
+        "6": {
+          "title": "Mostrar uma mensagem popup",
+          "subtitle": "Um pequeno balão que convida os visitantes a conversar",
+          "visibility": "Visibilidade do popup",
+          "visibilityHint": "Mostrar o popup ao lado do botão até que o visitante o feche.",
+          "position": "Posição do popup",
+          "side": "Lateral",
+          "top": "Acima",
+          "text": "Texto do popup",
+          "textHint": "Um convite curto, por exemplo: Olá! Posso ajudar?",
+          "image": "Imagem do popup (opcional)",
+          "imageHint": "O endereço de uma imagem ou envie uma foto abaixo."
         }
       },
       "install": {
@@ -335,7 +363,11 @@
         "greeting": "Adicione uma saudação.",
         "intro": "Adicione uma mensagem de apresentação.",
         "spacing": "O espaçamento deve ser um número inteiro de pixels de 0 a 500.",
-        "whatsapp": "Adicione um número completo do WhatsApp: código do país e dígitos."
+        "whatsapp": "Adicione um número completo do WhatsApp: código do país e dígitos.",
+        "cta": "Adicione o texto do botão.",
+        "prefilled": "Adicione a mensagem enviada ao tocar no botão.",
+        "popupText": "Adicione o texto do popup ou desative o popup.",
+        "popupImage": "Use uma imagem padrão ou o endereço http(s) de uma imagem."
       },
       "preview": {
         "title": "Pré-visualização ao vivo",
@@ -344,7 +376,333 @@
         "frameTitle": "Pré-visualização ao vivo do seu widget do WhatsApp",
         "hint": "Recolha o painel com o botão redondo, abra-o novamente pelo lançador e experimente Iniciar conversa.",
         "businessName": "Sua empresa"
+      },
+      "upload": {
+        "choose": "Enviar imagem",
+        "replace": "Substituir imagem",
+        "remove": "Remover",
+        "uploading": "Enviando…",
+        "hint": "SVG, PNG, JPG, WebP ou GIF, até 1 MB.",
+        "failed": "Não foi possível enviar a imagem. Tente novamente.",
+        "tooLarge": "A imagem é maior que 1 MB."
       }
+    },
+    "flowBot": {
+      "customize": {
+        "loading": "Carregando o widget…",
+        "loadError": "Não foi possível carregar o widget. Atualize a página para tentar novamente.",
+        "untouched": "Você ainda está usando o visual padrão. Revise-o e salve para liberar Implantar e Publicar.",
+        "position": "Posição do botão de chat",
+        "right": "Canto inferior direito",
+        "left": "Canto inferior esquerdo",
+        "save": "Salvar personalização",
+        "saved": "Personalização salva",
+        "saveFailed": "Não foi possível salvar o widget. Tente novamente.",
+        "launcher": {
+          "title": "Lançador fechado",
+          "hint": "O que os visitantes veem antes de abrir o chat: um aviso, uma animação e um ponto de não lido.",
+          "calloutOn": "Mostrar um aviso ao lado do lançador",
+          "style": "Estilo do aviso",
+          "styles": {
+            "bubble": "Balão no topo",
+            "pill": "Pílula lateral",
+            "avatar": "Pílula com avatar",
+            "media": "Cartão com imagem",
+            "bar": "Barra de entrada"
+          },
+          "text": "Texto do aviso",
+          "image": "Imagem",
+          "animation": "Animação do lançador",
+          "animations": {
+            "none": "Nenhuma",
+            "bounce": "Salto",
+            "ripple": "Onda"
+          },
+          "badge": "Mostrar o ponto de não lido",
+          "popupTextRequired": "Adicione o texto do aviso ou desative o aviso.",
+          "gaps": {
+            "title": "Distância da borda da tela (px)",
+            "desktop": {
+              "side": "Desktop: da lateral",
+              "bottom": "Desktop: da parte inferior"
+            },
+            "mobile": {
+              "side": "Telefone: da lateral",
+              "bottom": "Telefone: da parte inferior"
+            }
+          }
+        },
+        "chat": {
+          "title": "Janela de chat",
+          "hint": "Como a janela se parece e se comporta. As cores dela ficam acima.",
+          "fill": "Preenchimento dos botões de resposta",
+          "fills": {
+            "outline": "Contorno",
+            "tinted": "Colorido suave",
+            "solid": "Sólido"
+          },
+          "shape": "Forma dos botões de resposta",
+          "shapes": {
+            "pill": "Pílula",
+            "rounded": "Arredondado",
+            "soft": "Suave",
+            "square": "Quadrado"
+          },
+          "font": "Fonte",
+          "fonts": {
+            "system": "Sistema",
+            "serif": "Serifada",
+            "rounded": "Arredondada",
+            "humanist": "Humanista",
+            "mono": "Monoespaçada"
+          },
+          "size": "Tamanho da janela",
+          "sizes": {
+            "compact": "Compacto",
+            "standard": "Padrão",
+            "tall": "Alto",
+            "wide": "Largo"
+          },
+          "suggestions": "Sugestões abaixo da conversa",
+          "suggestionsHint": "Até 4 linhas curtas. Somem quando o visitante escreve.",
+          "suggestionPlaceholder": "Uma pergunta que os visitantes costumam fazer",
+          "addSuggestion": "Adicionar sugestão",
+          "removeSuggestion": "Remover sugestão",
+          "actions": "Ícones de copiar e polegar sob cada linha do bot",
+          "expand": "Botão de expandir",
+          "voice": "Conversa por voz (usa as ferramentas de fala do navegador)",
+          "header": "Fundo do cabeçalho",
+          "headers": {
+            "solid": "Sólido",
+            "diagonal": "Diagonal",
+            "vivid": "Vivido",
+            "dusk": "Crepúsculo",
+            "soft": "Varredura suave"
+          },
+          "direction": "Direção do texto",
+          "directions": {
+            "auto": "Seguir o idioma do visitante",
+            "ltr": "Da esquerda para a direita",
+            "rtl": "Da direita para a esquerda"
+          },
+          "icons": "Ícone redondo na frente de cada botão de resposta",
+          "fontSize": "Tamanho do texto: {value}px",
+          "hoverBg": "Cor de passagem do botão",
+          "hoverBgReset": "Use a tonalidade"
+        },
+        "preview": {
+          "title": "Pré-visualização ao vivo",
+          "loading": "Carregando a pré-visualização…",
+          "error": "Não foi possível carregar a pré-visualização. Atualize para tentar novamente.",
+          "frame": "Pré-visualização da janela de chat",
+          "hint": "Esta é a janela de chat real com suas configurações não salvas. A conversa e os botões são exemplos.",
+          "launcherFrame": "Visualização do lançador fechado"
+        },
+        "groups": {
+          "look": "Aparência e marca",
+          "voice": "Voz e boas-vindas",
+          "window": "Janela de bate-papo",
+          "launcher": "Lançador e chamada",
+          "launch": "Lançar",
+          "chat": "Ferramentas de conversa",
+          "behave": "Comportamento"
+        },
+        "surfaces": {
+          "chat": "Janela de bate-papo",
+          "expanded": "Expandido",
+          "mobile": "Telefone",
+          "closed": "Lançador fechado"
+        },
+        "brand": {
+          "title": "Imagens de marca e extras",
+          "logo": {
+            "label": "Logo da empresa",
+            "hint": "Exibido no cabeçalho do chat."
+          },
+          "avatar": {
+            "label": "Avatar do chatbot",
+            "hint": "Exibido ao lado de cada mensagem enviada pelo bot."
+          },
+          "background": {
+            "label": "Fundo do bate-papo",
+            "hint": "Uma imagem atrás da conversa. Opcional."
+          },
+          "corner": "Cantos do corpo",
+          "corners": {
+            "rounded": "Arredondado",
+            "soft": "Suave",
+            "square": "Quadrado"
+          },
+          "autoOpen": "Abrir automaticamente após (segundos)",
+          "autoOpenHint": "0 mantém o bate-papo fechado até que o visitante o abra. Abre uma vez por visita.",
+          "sound": "Reproduzir um som suave para novas linhas de bot",
+          "soundVolume": "Volume: {value}%",
+          "speak": "Ler em voz alta as linhas do bot (voz do navegador)",
+          "devices": {
+            "title": "Mostrar o widget em",
+            "desktop": "Desktop",
+            "tablet": "Tablet",
+            "mobile": "Celular",
+            "hint": "Um celular tem até 768 px de largura, um tablet até 1024 px."
+          },
+          "pictures": "Imagens · SVG, PNG, GIF",
+          "botName": "Nome do bot",
+          "primary": "Cor principal",
+          "primaryCustom": "Cor personalizada",
+          "fineTune": "Ajuste fino de cada cor",
+          "pip": "Oferecer uma janela de chat flutuante quando o visitante trocar de aba",
+          "pipHint": "Como numa chamada de vídeo, o chat pode flutuar sobre outras abas e aplicativos (Chrome e Edge). O visitante é solicitado uma única vez a permitir notificações, e o navegador decide quando uma janela pode ser aberta.",
+          "domains": {
+            "label": "Mostrar o chat somente nestes sites",
+            "hint": "Visitantes de qualquer outro site não verão o chat. Informe o endereço do site, por exemplo example.com. Os subdomínios de um site não são incluídos, a menos que você os adicione.",
+            "placeholder": "example.com",
+            "add": "Adicionar um site",
+            "remove": "Remover site"
+          }
+        },
+        "rail": {
+          "label": "Personalizar seções",
+          "look": "Marca",
+          "voice": "Boas-vindas",
+          "window": "Janela",
+          "launcher": "Lançador",
+          "launch": "Lançamento",
+          "chat": "Extras",
+          "behave": "Comportamento"
+        },
+        "leads": {
+          "look": "Logotipo, imagens, cores e como o cabeçalho se parece.",
+          "voice": "O nome, a linha de boas-vindas e o botão de envio.",
+          "window": "Tamanho, tipografia, botões de resposta e auxiliares.",
+          "launcher": "O que os visitantes veem antes de abrir o chat.",
+          "launch": "De onde o widget se abre e como colocá-lo no seu site.",
+          "chat": "Cartões de notificação, menu rápido, banner e respostas rápidas.",
+          "behave": "Quando o chat abre, como ele soa e quem o vê."
+        },
+        "footer": "As alterações aparecem na pré-visualização conforme você as faz.",
+        "conversation": {
+          "title": "Ferramentas de conversa",
+          "tabs": {
+            "notice": "Bloco de notificação",
+            "menu": "Menu rápido",
+            "banner": "Banner",
+            "replies": "Respostas rápidas"
+          },
+          "enable": {
+            "notice": "Mostrar sino de notificação",
+            "menu": "Mostrar menu rápido",
+            "banner": "Mostrar banner",
+            "replies": "Mostrar as respostas rápidas"
+          },
+          "icon": "Estilo do sino",
+          "icons": {
+            "1": "Sino",
+            "2": "Tíquete",
+            "3": "Caixa",
+            "4": "Mensagem"
+          },
+          "view": "Visualização de exibição",
+          "views": {
+            "list": "Listas",
+            "blocks": "Blocos"
+          },
+          "card": "Cartão {n}",
+          "entry": "Entrada de menu {n}",
+          "slide": "Slide {n}",
+          "remove": "Remover",
+          "max": "Até {count}.",
+          "addCard": "Adicionar cartão",
+          "addEntry": "Adicionar entrada de menu",
+          "addSlide": "Adicionar slide",
+          "kinds": {
+            "image": "Imagem",
+            "video": "Vídeo"
+          },
+          "fields": {
+            "title": "Título",
+            "description": "Descrição",
+            "buttonTitle": "Título do botão",
+            "buttonUrl": "Endereço do botão",
+            "urlHint": "Uma página da web, endereço tel: ou mailto:. Deixe em branco para sem botão.",
+            "footer": "Texto de rodapé",
+            "menuTitle": "Título do menu",
+            "menuUrl": "Abre (opcional)",
+            "menuUrlHint": "Deixe em branco para enviar o título como mensagem que o bot responda.",
+            "video": "Link de vídeo",
+            "videoHint": "Cole um link do YouTube ou Vimeo, ou seu código de incorporação.",
+            "videoOk": "Vídeo encontrado.",
+            "bannerUrl": "Link ao tocar (opcional)"
+          },
+          "action": "Ação do botão",
+          "step": "Etapa do bot",
+          "stepPlaceholder": "Selecione uma etapa",
+          "noSteps": "Este bot ainda não tem etapas. Adicione algumas na aba Criar e salve.",
+          "replyStep": "Ao tocar",
+          "replyAsMessage": "Enviar a linha como mensagem",
+          "actions": {
+            "link": "Adicionar link",
+            "flow": "Vincular a um fluxo"
+          }
+        },
+        "launchNote": "O código de incorporação para colar no seu site está na aba Implantar."
+      },
+      "deploy": {
+        "loading": "Carregando suas opções de implantação…",
+        "locked": "Salve primeiro a aba Personalizar. Seu código de incorporação aparece aqui quando o widget existir.",
+        "lockedWhatsapp": "Salve primeiro a aba Personalizar. O botão do site e o link do WhatsApp aparecem aqui quando existirem.",
+        "title": "Implantar",
+        "lead": "Coloque sua janela de chat no seu site. O bot entra no ar quando você o publicar.",
+        "leadWhatsapp": "Coloque seu botão do WhatsApp no site ou compartilhe o link direto em qualquer lugar. O bot responde no número de WhatsApp dele depois de publicado.",
+        "notPublished": "Este bot ainda não foi publicado, então os visitantes não receberão respostas. Publique-o na aba Construir.",
+        "notPublishedWhatsapp": "Este bot ainda não foi publicado, então ele não responderá no WhatsApp. Publique-o na aba Construir.",
+        "embedTitle": "Adicionar ao seu site",
+        "embedBody": "Cole isto logo antes da tag de fechamento do body em todas as páginas em que o widget deve aparecer.",
+        "copy": "Copiar código",
+        "copied": "Código de incorporação copiado",
+        "clipboardBlocked": "Seu navegador bloqueou a cópia. Selecione o texto e copie manualmente.",
+        "preview": "Pré-visualizar",
+        "linkTitle": "Link direto do WhatsApp",
+        "linkBody": "Abre uma conversa no WhatsApp com o número do bot e a mensagem que você definiu. Use em e-mails, bios de redes sociais, QR codes e anúncios.",
+        "copyLink": "Copiar link",
+        "linkCopied": "Link do WhatsApp copiado",
+        "openLink": "Abrir link",
+        "qrTitle": "QR code",
+        "qrBody": "Imprima ou exiba em uma tela. Ao escanear, abre uma conversa no WhatsApp com o seu bot.",
+        "downloadQr": "Baixar QR code",
+        "statusLive": "Ao vivo",
+        "statusDraft": "Não publicado",
+        "codeLabel": "HTML",
+        "localNote": "Este código aponta para um endereço neste computador (localhost), então só funciona em páginas abertas aqui. Em um site real, use o endereço publicado."
+      },
+      "whatsapp": {
+        "loading": "Carregando o botão…",
+        "loadError": "Não foi possível carregar o botão. Atualize a página para tentar novamente.",
+        "untouched": "Seu botão do WhatsApp ainda não foi configurado. Ele parte do número e da palavra-chave do seu bot. Revise-o e salve para liberar Implantar e Publicar.",
+        "saved": "Botão do WhatsApp salvo",
+        "saveFailed": "Não foi possível salvar o botão. Tente novamente.",
+        "fromBot": "O botão abre o WhatsApp em {number}, o número em que este bot funciona. Altere o número no gatilho, na aba Criar.",
+        "noNumber": "Este bot ainda não tem número de WhatsApp. Escolha um no gatilho, na aba Criar, e volte para salvar o botão."
+      }
+    },
+    "webBots": {
+      "title": "Bots de chat para site",
+      "intro": "Todos os bots que você criou para o chat do site e o widget em que funcionam. Abra uma linha para alterar o visual do widget ou copiar o código de incorporação.",
+      "create": "Novo bot para site",
+      "loading": "Carregando seus bots para site…",
+      "loadError": "Não foi possível carregar os bots para site. Atualize a página para tentar novamente.",
+      "emptyTitle": "Nenhum bot de chat para site ainda",
+      "emptyBody": "Crie um bot para o chat do site e o widget dele aparecerá aqui.",
+      "widgetLine": "Widget: {title}",
+      "noWidget": "Nenhum widget ainda. Personalize-o para criar um.",
+      "customize": "Personalizar",
+      "more": "Mostrando {shown} de {total} bots. Abra os demais em Fluxos.",
+      "state": {
+        "needs_customizing": "Precisa de personalização",
+        "draft": "Rascunho",
+        "live": "No ar",
+        "paused": "Pausado"
+      },
+      "deploy": "Implantar"
     }
   }
 }

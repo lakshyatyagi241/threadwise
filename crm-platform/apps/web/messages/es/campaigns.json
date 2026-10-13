@@ -828,7 +828,6 @@
         "notFound": "No se encontró. Puede que se haya eliminado.",
         "rateLimited": "Demasiadas solicitudes. Espera un momento e inténtalo de nuevo.",
         "unexpected": "Algo salió mal por nuestra parte. Inténtalo de nuevo.",
-        "requestId": "ID de solicitud",
         "retry": "Reintentar"
       },
       "categories": {

@@ -187,8 +187,7 @@
       "notFound": "Ta przestrzeń robocza już nie istnieje.",
       "reasonRequired": "Wymagany jest powód liczący co najmniej 8 znaków.",
       "orgSuspended": "Przestrzeń robocza jest zawieszona, więc nie można do niej wejść.",
-      "validation": "Sprawdź wartości i spróbuj ponownie.",
-      "requestId": "Identyfikator żądania"
+      "validation": "Sprawdź wartości i spróbuj ponownie."
     },
     "detail": {
       "crumb": "Przestrzeń robocza",

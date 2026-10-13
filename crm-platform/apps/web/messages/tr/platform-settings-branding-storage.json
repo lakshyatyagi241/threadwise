@@ -64,7 +64,6 @@
       "conflict": "Bu ayarları siz açtıktan sonra başka biri kaydetti. Değişiklikleri görmek için sayfayı yenileyin, ardından kendi değişikliklerinizi yeniden uygulayın.",
       "reload": "Ayarları yenile",
       "unexpected": "Bir sorun oluştu ve hiçbir şey kaydedilmedi.",
-      "requestId": "İstek kimliği",
       "readOnly": "Bu ayarları görüntüleyebilirsiniz ancak yalnızca süper yönetici değiştirebilir.",
       "secretSet": "Kaydedildi. Olduğu gibi bırakmak için boş bırakın.",
       "secretUnset": "Ayarlanmadı.",

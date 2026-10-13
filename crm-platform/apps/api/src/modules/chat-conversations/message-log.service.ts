@@ -5,7 +5,9 @@ import {
   ERROR_CODES,
   type CreateMessageLogExportInput,
   type MessageLogExport,
+  type MessageLogExportKind,
   type MessageLogExportList,
+  type MessageStatus,
   type MessageLogResponse,
 } from '@crm/contracts';
 import { AppError } from '../../common/errors/app-error';
@@ -24,7 +26,7 @@ import {
   toLogEvent,
   type StoredEvent,
 } from './message-log-rules';
-import type { MessageLogFacade } from './message-log.facade';
+import type { HistoryExportRequest, MessageLogFacade } from './message-log.facade';
 import { MessagesRepository } from './messages.repository';
 
 const LIST_LIMIT = 20;
@@ -134,7 +136,6 @@ export class MessageLogService implements MessageLogFacade {
     input: CreateMessageLogExportInput,
     now: Date = new Date(),
   ): Promise<MessageLogExport> {
-    const ctx = RequestContextStore.require();
     const problem = exportRangeProblem(input.from, input.to, now);
     if (problem) {
       throw new AppError(
@@ -144,6 +145,37 @@ export class MessageLogService implements MessageLogFacade {
         [{ path: problem === 'order' ? 'from' : 'to', message: RANGE_MESSAGES[problem] }],
       );
     }
+    return this.queueExport({
+      from: input.from,
+      to: input.to,
+      messageStatus: input.messageStatus ?? null,
+      kind: 'events',
+      filters: null,
+    });
+  }
+
+  /**
+   * The export of the Message History feed (one line per message) with the screen's filters, already resolved to a window of absolute
+   * instants by the caller. Built and announced like the delivery log export; only one export of either kind runs at a time.
+   */
+  async requestHistoryExport(input: HistoryExportRequest): Promise<MessageLogExport> {
+    return this.queueExport({
+      from: input.from,
+      to: input.to,
+      messageStatus: null,
+      kind: 'messages',
+      filters: input.filters,
+    });
+  }
+
+  private async queueExport(input: {
+    from: string;
+    to: string;
+    messageStatus: MessageStatus | null;
+    kind: MessageLogExportKind;
+    filters: Record<string, unknown> | null;
+  }): Promise<MessageLogExport> {
+    const ctx = RequestContextStore.require();
     if (ctx.userId === null) throw AppError.forbidden('inbox.logs.export');
     const userId = ctx.userId;
 
@@ -161,7 +193,9 @@ export class MessageLogService implements MessageLogFacade {
         emailedTo: who?.email ?? null,
         from: input.from,
         to: input.to,
-        messageStatus: input.messageStatus ?? null,
+        messageStatus: input.messageStatus,
+        kind: input.kind,
+        filters: input.filters,
       });
     });
 
@@ -182,9 +216,9 @@ export class MessageLogService implements MessageLogFacade {
     return toExportResponse(created);
   }
 
-  async listExports(): Promise<MessageLogExportList> {
+  async listExports(kind: MessageLogExportKind = 'events'): Promise<MessageLogExportList> {
     const ctx = RequestContextStore.require();
-    const rows = await this.db.tx((tx) => this.repo.listExports(tx, ctx.orgId, LIST_LIMIT));
+    const rows = await this.db.tx((tx) => this.repo.listExports(tx, ctx.orgId, LIST_LIMIT, kind));
     return { data: rows.map(toExportResponse) };
   }
 
@@ -219,6 +253,7 @@ export class MessageLogService implements MessageLogFacade {
 export function toExportResponse(r: ExportRow): MessageLogExport {
   return {
     id: r.uuid,
+    kind: r.kind,
     status: r.status,
     from: r.rangeFrom,
     to: r.rangeTo,

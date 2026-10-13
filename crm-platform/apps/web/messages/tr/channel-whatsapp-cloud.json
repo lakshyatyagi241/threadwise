@@ -156,7 +156,6 @@
       "notFound": "Bu numara artık yok. Liste yenilendi.",
       "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
       "generic": "Bir şeyler ters gitti. Tekrar deneyin.",
-      "genericWithId": "Bir şeyler ters gitti. Tekrar deneyin. Referans: {id}",
       "detail": "Ayrıntılar: {detail}",
       "fix": {
         "tokenInvalid": "Meta işletme ayarlarınızda kalıcı bir sistem kullanıcısı belirteci oluşturun ve Kimlik bilgilerini düzenle bölümüne yapıştırın.",

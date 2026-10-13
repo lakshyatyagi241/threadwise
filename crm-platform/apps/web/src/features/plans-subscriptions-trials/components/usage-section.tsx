@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useQuery } from '@tanstack/react-query';
 import { Alert, Badge, Button, Card, Spinner, cn } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
@@ -22,6 +22,7 @@ export function UsageSection() {
   const tf = useTranslations(`${NS}.features`);
   const ts = useTranslations(`${NS}.operator.state`);
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const q = useQuery({
     queryKey: BILLING_KEYS.usage,
     queryFn: ({ signal }) => fetchBillingUsage(signal),
@@ -30,7 +31,7 @@ export function UsageSection() {
 
   const u = q.data;
   const date = (iso: string) =>
-    new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(new Date(iso));
+    new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeZone }).format(new Date(iso));
   const locked = u ? u.features.filter((f) => !f.enabled).length : 0;
 
   return (

@@ -1,0 +1,29 @@
+{
+  "aiStudio": {
+    "nav": {
+      "studio": "AI Studio"
+    },
+    "title": "AI Studio",
+    "lead": "Start iets dat namens jou met je klanten praat: een AI-agent, een chatbot of een workflow.",
+    "noAccess": "Je hebt niet het recht om dit te starten. Vraag het een werkruimtebeheerder.",
+    "agent": {
+      "title": "AI-agent",
+      "body": "Antwoordt vanuit je eigen documenten en webpagina's, in jouw toon.",
+      "create": "Een AI-agent maken",
+      "open": "Je AI-agents"
+    },
+    "chatbot": {
+      "title": "Chatbot",
+      "body": "Een begeleid gesprek met knoppen, vragen, kaarten en bestanden, voor je website of WhatsApp.",
+      "web": "Website-chatbot",
+      "whatsapp": "WhatsApp-bot"
+    },
+    "workflow": {
+      "title": "Workflow",
+      "body": "Het geavanceerde canvas: voorwaarden, tags, webhooks en CRM-stappen die vanzelf draaien.",
+      "create": "Een workflow maken",
+      "open": "Je flows"
+    },
+    "deployNote": "Elke chatbot heeft de tabs Bouwen, Aanpassen en Implementeren. Publiceer hem en kopieer dan de insluitcode of link bij Implementeren."
+  }
+}

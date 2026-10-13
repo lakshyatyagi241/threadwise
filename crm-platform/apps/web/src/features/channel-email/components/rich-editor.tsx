@@ -84,16 +84,6 @@ export function RichEditor({
     onChange(isBlankHtml(html) ? '' : html);
   };
 
-  useImperativeHandle(handleRef, () => ({
-    focus: () => box.current?.focus(),
-    insertText: (text: string) => {
-      box.current?.focus();
-      restore();
-      document.execCommand('insertText', false, text);
-      report();
-    },
-  }));
-
   const run = (command: string, value?: string) => {
     box.current?.focus();
     document.execCommand(command, false, value);
@@ -112,6 +102,16 @@ export function RichEditor({
       sel.addRange(saved.current);
     }
   };
+
+  useImperativeHandle(handleRef, () => ({
+    focus: () => box.current?.focus(),
+    insertText: (text: string) => {
+      box.current?.focus();
+      restore();
+      document.execCommand('insertText', false, text);
+      report();
+    },
+  }));
 
   const applyLink = () => {
     const raw = link.trim();

@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "Chiudi",
       "retry": "Riprova",
-      "requestId": "Richiesta {id}",
       "noAccessTitle": "Non hai accesso a questa schermata",
       "noAccess": "Chiedi a un amministratore dello spazio di lavoro di assegnare al tuo ruolo il permesso {permission}."
     },
@@ -261,7 +260,7 @@
         "offBody": "Le conversazioni non vengono lette. I punteggi usano solo i dati del contatto e i numeri di coinvolgimento.",
         "needsScoring": "Attiva prima il lead scoring con AI.",
         "stageLabel": "Suggerisci fasi del ciclo di vita",
-        "stageBody": "Quando la conversazione mostra chiaramente che un contatto è avanzato, l’AI suggerisce la fase successiva. Una persona la accetta o la ignora; nulla si sposta da solo e le fasi Vinto e Perso non vengono mai suggerite.",
+        "stageBody": "Quando la conversazione mostra chiaramente che un contatto è andato avanti, l’IA sceglie la fase successiva. L’IA non imposta mai le fasi Vinto e Perso. Scegli qui sotto se la modifica si applica da sola o attende una persona.",
         "masked": {
           "title": "Come vengono mascherati i dati personali",
           "phone": "I numeri di telefono conservano solo le prime cifre e le ultime due (+91 ***** ***10)",
@@ -281,6 +280,17 @@
           "body": "Una volta attiva, gli ultimi messaggi di un contatto vengono inviati a un provider di AI tramite OpenRouter dopo che la chat è diventata inattiva. Numeri di telefono, e-mail, numeri di carta e nomi vengono prima parzialmente mascherati, quindi ciò che viene inviato non può servire a raggiungere la persona. Puoi disattivarla in qualsiasi momento.",
           "yes": "Attiva",
           "no": "Annulla"
+        },
+        "stageMode": {
+          "title": "Come cambia la fase",
+          "auto": {
+            "label": "Automatico",
+            "body": "Il contatto viene spostato subito e la chat mostra una riga con Annulla."
+          },
+          "manual": {
+            "label": "Manuale",
+            "body": "Il suggerimento resta in Suggerimenti di fase finché una persona lo accetta o lo scarta."
+          }
         }
       }
     },

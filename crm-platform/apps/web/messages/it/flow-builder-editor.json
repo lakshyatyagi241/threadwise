@@ -1086,7 +1086,8 @@
           "wordsPlaceholder": "ciao, salve, menu",
           "whatsappNumber": "Numero WhatsApp",
           "noNumberHint": "Nessun numero WhatsApp collegato: collegane uno in Impostazioni, poi scegli qui.",
-          "chooseNumber": "Scegli un numero…"
+          "chooseNumber": "Scegli un numero…",
+          "connectedNumber": "Risponde dal tuo numero WhatsApp collegato: {number}"
         },
         "add": {
           "addStep": "Aggiungi un passaggio",
@@ -1094,6 +1095,7 @@
             "send": "Invia",
             "ask": "Chiedi al cliente",
             "handoff": "Passa a un operatore",
+            "logic": "Decidi",
             "answer": "Risposta"
           },
           "blockedTitle": "Pulsanti ed elenchi concludono un flow, quindi possono stare solo per ultimi.",
@@ -1142,7 +1144,8 @@
             "placeholder": "Pulsante {n}",
             "remove": "Rimuovi pulsante",
             "add": "Aggiungi un pulsante",
-            "saveIn": "Salva il pulsante toccato in"
+            "saveIn": "Salva il pulsante toccato in",
+            "handoff": "Passa a una persona (agente dal vivo)"
           },
           "list": {
             "above": "Messaggio sopra l’elenco",
@@ -1174,7 +1177,9 @@
             "dateFormat": "Formato data",
             "dateFormatHint": "Come il cliente scrive la data. Viene salvata come digitata, con una copia in formato anno-mese-giorno nella variabile _iso.",
             "saveIn": "Salva la risposta in",
-            "retriesHint": "0 continua a chiedere finché la risposta non è corretta."
+            "retriesHint": "0 continua a chiedere finché la risposta non è corretta.",
+            "verifyOtp": "Verifica il numero con un codice monouso",
+            "verifyOtpHint": "Un codice viene inviato al numero (serve il prefisso del paese) e il visitatore lo scrive nella chat. Il numero viene tenuto solo se il codice è giusto; la variabile che termina con _verified dice sì o no."
           },
           "askFile": {
             "accepted": "File accettati",
@@ -1225,7 +1230,45 @@
           },
           "cta": {
             "buttonText": "Testo del pulsante",
-            "opens": "Apre (link)"
+            "opens": "Apre (link)",
+            "type": "Apre",
+            "kinds": {
+              "url": "Una pagina web",
+              "phone": "Una chiamata",
+              "email": "Un'e-mail"
+            },
+            "add": "Aggiungi un altro pulsante",
+            "remove": "Rimuovi pulsante",
+            "opensPhone": "Numero di telefono",
+            "opensEmail": "Indirizzo e-mail"
+          },
+          "carousel": {
+            "intro": "Messaggio sopra le schede",
+            "card": "Scheda {n}",
+            "image": "Link dell'immagine (facoltativo)",
+            "title": "Titolo",
+            "text": "Testo",
+            "buttons": "Pulsanti (fino a 2)",
+            "label": "Testo del pulsante",
+            "addCard": "Aggiungi una scheda",
+            "removeCard": "Rimuovi scheda",
+            "addButton": "Aggiungi un pulsante",
+            "removeButton": "Rimuovi pulsante",
+            "btnKinds": {
+              "reply": "Rispondi in chat",
+              "url": "Apri una pagina web",
+              "phone": "Chiama un numero",
+              "email": "Invia un'e-mail",
+              "agent": "Parla con una persona"
+            }
+          },
+          "condition": {
+            "info": "Aggiungi regole (una variabile, un confronto e un valore). Uniscile con AND o OR e annida gruppi quando serve.",
+            "yes": "Quando le regole sono vere, vai a",
+            "no": "Quando non lo sono, vai a"
+          },
+          "handoff": {
+            "hint": "Il visitatore passa a questo team con la tua nota. Dopo questo pulsante non serve collegare nulla."
           },
           "faq": {
             "exits": {
@@ -1238,6 +1281,7 @@
             }
           }
         },
+        "branchAdd": "Aggiungi un passaggio per «{title}»",
         "faqEnds": "Questo passaggio chiude questa parte: ciò che viene inviato dopo dipende dal fatto che una FAQ abbia risposto."
       },
       "formsCore": {
@@ -1752,13 +1796,20 @@
       },
       "webBot": {
         "aria": "Sezioni del flusso",
-        "faqs": "FAQ",
-        "saveFirst": "Salva prima il flusso.",
         "build": "Crea",
         "customize": "Personalizza",
-        "install": "Installa",
+        "saveFirst": "Salva prima il flusso.",
         "needsCustomizing": "Il widget usa ancora l’aspetto predefinito. Apri Personalizza.",
-        "customizeFirst": "Personalizza il widget di chat e salvalo una volta prima di pubblicare."
+        "customizeFirst": "Personalizza il widget di chat e salvalo una volta prima di pubblicare.",
+        "deploy": "Deploy",
+        "customizeFirstWhatsapp": "Personalizza il pulsante WhatsApp e salvalo una volta prima di pubblicare.",
+        "faqs": "FAQ",
+        "install": "Installa"
+      },
+      "buttonIcon": {
+        "label": "Icona (facoltativo)",
+        "add": "Aggiungi icona",
+        "saveFirst": "Salva il bot una volta per aggiungere un'icona."
       }
     },
     "contracts": {
@@ -2035,6 +2086,10 @@
           "label": "API (dalla libreria)",
           "description": "Richiama un'API salvata dalla Libreria API"
         },
+        "carousel": {
+          "label": "Carosello",
+          "description": "Schede scorrevoli con immagini e pulsanti"
+        },
         "faq": {
           "label": "Rispondi da FAQ",
           "description": "Confronta un messaggio con le tue FAQ"
@@ -2262,6 +2317,14 @@
           "label": "La loro posizione",
           "help": "Attendi che il cliente condivida una posizione"
         },
+        "carousel": {
+          "label": "Carosello",
+          "help": "Schede scorrevoli con immagini e pulsanti"
+        },
+        "condition": {
+          "label": "Condizione",
+          "help": "Ramifica in base a ciò che il cliente ha detto o salvato, con regole AND / OR"
+        },
         "faq": {
           "label": "Rispondi da FAQ",
           "help": "Confronta il messaggio del cliente con le tue FAQ. Termina questo flusso: un'uscita se una FAQ ha risposto, un'altra in caso contrario"
@@ -2280,6 +2343,8 @@
         "template": "Template",
         "cta": "Pulsante link",
         "assign": "Assegna a un operatore",
+        "carousel": "Carosello",
+        "condition": "Condizione",
         "faq": "Rispondi da FAQ"
       },
       "stepLabel": {
@@ -2318,6 +2383,9 @@
         "rowTitle": "Passo {stage}: ogni riga deve avere un titolo di fino a {max} caratteri.",
         "rowDescriptionTooLong": "Passo {stage}: una descrizione di riga supera {max} caratteri.",
         "variableUsed": "Passo {stage}: «{name}» è già usato dal passo {other}; dai a ogni risposta un nome proprio.",
+        "carouselCards": "Passaggio {stage}: aggiungi almeno una scheda e dai un titolo a ogni scheda.",
+        "carouselButtons": "Passaggio {stage}: dai un nome a ogni pulsante, e un link, un numero o un indirizzo dove apre qualcosa.",
+        "conditionIncomplete": "Passaggio {stage}: completa le regole della condizione (una variabile e un valore in ciascuna).",
         "faqMinScore": "Passaggio {stage}: il punteggio minimo deve essere da 0.05 a 0.99, oppure usa l'impostazione del flusso."
       },
       "faqSummary": "{hasCategory, select, true {Dalle tue FAQ · {category}} other {Dalle tue FAQ}}"
@@ -2328,7 +2396,11 @@
         "buttonNoTarget": "Un pulsante «{type}» («{text}») non ha destinazione in Semplice.",
         "skippedStep": "Passo «{sub}» saltato: Semplice non ha nulla di simile.",
         "leadsOutside": "«{text}» porta a un Flow che non è in questo file; termina qui finché non lo colleghi.",
-        "connectsOutside": "Un passo si collega a un nodo che non è in questo file ({id}); resta non collegato."
+        "connectsOutside": "Un passo si collega a un nodo che non è in questo file ({id}); resta non collegato.",
+        "dateLimits": "Una domanda di data mantiene il formato ma non i limiti (più presto, più tardi, giorni esclusi).",
+        "tooManyButtons": "Un messaggio con pulsanti aveva più scelte di quante ne entrino; i pulsanti in più sono stati omessi.",
+        "agentTeam": "Un pulsante di agente dal vivo è stato mantenuto: scegli il team che riceve la conversazione.",
+        "tooManySlides": "Un carosello aveva più di 10 schede; le schede in più sono state omesse."
       },
       "reasons": {
         "notExport": "Questo file non è un export di Flow. Usa un file .json esportato da Flows, oppure un Flow esportato dalla console wabo.",

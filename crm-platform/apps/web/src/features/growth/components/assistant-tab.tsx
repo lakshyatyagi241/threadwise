@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useTimeZone, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { Alert, Button, Field, Spinner, Textarea } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
@@ -18,6 +18,7 @@ const MAX_GOAL = 500;
 export function AssistantTab() {
   const t = useTranslations('growth.assistant');
   const hour = useFormatHour();
+  const timezone = useTimeZone();
   const num = useFormatNumber();
   const canRun = useCan('lsc.contacts.score');
   const [goal, setGoal] = useState('');
@@ -40,7 +41,7 @@ export function AssistantTab() {
         <Button
           variant="brand"
           disabled={!canRun || !valid || ask.isPending}
-          onClick={() => ask.mutate({ goal: goal.trim() })}
+          onClick={() => ask.mutate({ goal: goal.trim(), timezone })}
         >
           {ask.isPending && <Spinner />}
           {t('ask')}
@@ -67,7 +68,9 @@ export function AssistantTab() {
             {ask.data.sendHour !== null && (
               <>
                 <dt className="text-muted-foreground">{t('sendAt')}</dt>
-                <dd>{hour(ask.data.sendHour)}</dd>
+                <dd>
+                  {hour(ask.data.sendHour)} ({timezone})
+                </dd>
               </>
             )}
           </dl>

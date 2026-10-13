@@ -23,6 +23,8 @@ import { LIMITS, MAIN_NAME } from './simple-model';
 
 export interface WaboImport {
   graph: FlowGraph;
+  /** The channel the file was built for: a website chat bot's records (buttons with links, carousels, a phone question) or WhatsApp's. */
+  channel: 'chat' | 'web';
   /** What did not come across, in words for the person importing. */
   notes: Msg[];
   /** Words that start the flow, from the file's Intent / FAQ records. */
@@ -83,6 +85,27 @@ const ASK_TYPES: Record<string, string> = {
   textfield: 'text',
 };
 
+/** The record kinds only a website chat bot has (a WhatsApp bot's buttons are `interactive-message`). */
+const WEB_SUBTYPES = new Set(['button', 'carousel', 'phone-number', 'date', 'textfield', 'otp']);
+
+/** The records only a WhatsApp bot has: a file with any of them is a WhatsApp bot, whatever else it holds. */
+const WHATSAPP_SUBTYPES = new Set([
+  'interactive-message',
+  'interactive-message-list',
+  'whatsapp-template',
+  'flow-list',
+  'interactive-button-url',
+  'share-location',
+]);
+/** The record kinds a website chat bot reads that a WhatsApp import has no step for. */
+const WEB_ONLY_CASES = new Set(['phone-number', 'otp', 'date', 'button', 'carousel']);
+
+const BUTTON_ACTIONS = ['flow', 'mobile', 'email', 'link', 'live_agent'];
+
+/** A web chat bot's button row (`{type, value:{text,url,nodeId}}`) as a link button of the Link button / Carousel steps, or null. */
+const linkKind = (type: string): 'url' | 'phone' | 'email' | null =>
+  type === 'link' ? 'url' : type === 'mobile' ? 'phone' : type === 'email' ? 'email' : null;
+
 const VIDEO_PAGE = /(youtube\.com|youtu\.be|vimeo\.com)/i;
 
 export interface WaboOptions {
@@ -107,6 +130,13 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
     seen.add(str(r.nodeId));
     return true;
   });
+
+  // A website chat bot's file has records only a web bot has and none only WhatsApp has.
+  const channel: 'chat' | 'web' =
+    all.some((r) => WEB_SUBTYPES.has(str(r.subType))) &&
+    !all.some((r) => WHATSAPP_SUBTYPES.has(str(r.subType)))
+      ? 'web'
+      : 'chat';
 
   // Names and trigger words from the Intent / FAQ records that point at a flow.
   const qidName = new Map<string, string>();
@@ -188,12 +218,23 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
   };
 
   /** One wabo node as an editor node, or null with a note when the editor has no such step. */
-  const convert = (r: Rec): { type: string; data: Record<string, unknown> } | null => {
+  const convert = (
+    r: Rec,
+  ): {
+    type: string;
+    data: Record<string, unknown>;
+    exits?: Array<string | null>;
+    pre?: { type: string; data: Record<string, unknown> };
+  } | null => {
     const first = rec(arr(r.response)[0]);
     const sub = str(r.subType);
     const id8 = str(r.nodeId).slice(0, 8);
     const inter = rec(first.interactive);
     const action = rec(inter.action);
+    if (channel !== 'web' && WEB_ONLY_CASES.has(sub)) {
+      notes.push(msg('waboImport.notes.skippedStep', { sub }));
+      return null;
+    }
     switch (sub) {
       case 'text': {
         // A text step normally holds a string; one that holds a video or image holds `{ text, url }`.
@@ -313,6 +354,125 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
           },
         };
       }
+      case 'phone-number': {
+        const key = str(rec(rec(r.property).property).value);
+        return {
+          type: 'ask',
+          data: {
+            ...flbDefaultNodeData('ask'),
+            prompt: plain(first.value) || 'Please reply',
+            var: claimVar(r, `phone_${id8}`),
+            validate: 'phone',
+            saveProperty: key !== '',
+            propertyKey: key,
+            ...(r.hasOTPVarification === true ? { verifyOtp: true } : {}),
+          },
+        };
+      }
+      case 'otp':
+        // The code question that follows a phone question is part of that question here (its "verify" switch).
+        if (!str(r.parentId)) notes.push(msg('waboImport.notes.skippedStep', { sub }));
+        return null;
+      case 'date': {
+        const key = str(rec(rec(r.property).property).value);
+        notes.push(msg('waboImport.notes.dateLimits'));
+        return {
+          type: 'ask',
+          data: {
+            ...flbDefaultNodeData('ask'),
+            prompt: plain(first.value) || 'Please reply',
+            var: claimVar(r, `date_${id8}`),
+            validate: 'date',
+            dateFormat: 'dd/mm/yyyy',
+            saveProperty: key !== '',
+            propertyKey: key,
+          },
+        };
+      }
+      case 'button': {
+        // A website chat bot's button message: the prompt, then one row per button (flow, call, email, link, live agent).
+        const prompt = plain(first.value) || '…';
+        const rows = arr(r.response)
+          .map(rec)
+          .filter((b) => BUTTON_ACTIONS.includes(str(b.type)));
+        const replies = rows.filter((b) => b.type === 'flow' || b.type === 'live_agent');
+        const links = rows
+          .filter((b) => linkKind(str(b.type)) !== null)
+          .slice(0, 3)
+          .map((b) => ({
+            type: linkKind(str(b.type))!,
+            label: clip(str(rec(b.value).text).trim() || 'Open', 20),
+            value: str(rec(b.value).url),
+          }));
+        if (rows.length === 0) return { type: 'message', data: { text: clip(prompt, 4096) } };
+        if (replies.length === 0)
+          return { type: 'cta', data: { bodyText: clip(prompt, 1024), actions: links } };
+        const handoffs: Record<string, { team: string; message: string }> = {};
+        const kept = replies.slice(0, LIMITS.buttons);
+        kept.forEach((b, i) => {
+          if (b.type === 'live_agent')
+            handoffs[String(i)] = { team: '', message: 'The visitor asked for a person' };
+        });
+        if (replies.length > kept.length) notes.push(msg('waboImport.notes.tooManyButtons'));
+        if (kept.some((b) => b.type === 'live_agent'))
+          notes.push(msg('waboImport.notes.agentTeam'));
+        return {
+          type: 'buttons',
+          data: {
+            prompt: links.length ? '…' : clip(prompt, LIMITS.body),
+            options: kept.map((b) =>
+              clip(str(rec(b.value).text).trim() || 'Button', LIMITS.buttonLabel),
+            ),
+            var: claimVar(r, `choice_${id8}`),
+            handoffs,
+          },
+          exits: kept.map((b) => (b.type === 'flow' ? str(rec(b.value).nodeId) || null : null)),
+          ...(links.length
+            ? { pre: { type: 'cta', data: { bodyText: clip(prompt, 1024), actions: links } } }
+            : {}),
+        };
+      }
+      case 'carousel': {
+        const slides = arr(first.value).map(rec).slice(0, 10);
+        if (arr(first.value).length > slides.length)
+          notes.push(msg('waboImport.notes.tooManySlides'));
+        const exits: Array<string | null> = [];
+        const cards = slides.map((s) => {
+          const buttons = arr(s.buttons).map(rec).slice(0, 2);
+          const out: Array<Record<string, unknown>> = [];
+          for (const b of buttons) {
+            const kind = str(b.type);
+            const label = clip(str(rec(b.value).text).trim() || 'Open', 20);
+            if (kind === 'flow') {
+              out.push({ type: 'reply', label, value: '' });
+              exits.push(str(rec(b.value).nodeId) || null);
+            } else if (kind === 'live_agent') {
+              out.push({
+                type: 'agent',
+                label,
+                value: '',
+                team: '',
+                note: 'The visitor asked for a person',
+              });
+              exits.push(null);
+              notes.push(msg('waboImport.notes.agentTeam'));
+            } else if (linkKind(kind))
+              out.push({ type: linkKind(kind)!, label, value: str(rec(b.value).url) });
+          }
+          const image = str(s.image).trim();
+          return {
+            image: /^https?:\/\/\S+$/i.test(image) ? image : '',
+            title: clip(plain(s.title) || plain(s.text) || '…', 60),
+            text: clip(plain(s.text) || plain(s.subTitle), 200),
+            buttons: out,
+          };
+        });
+        return {
+          type: 'carousel',
+          data: { text: '', cards, var: claimVar(r, `choice_${id8}`) },
+          exits,
+        };
+      }
       case 'img-file': {
         const key = str(rec(rec(r.property).property).value);
         return {
@@ -350,7 +510,17 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
   };
 
   // Convert every node, then chain each flow's nodes and link each button / row.
-  const converted = new Map<string, { type: string; data: Record<string, unknown> }>();
+  const converted = new Map<
+    string,
+    {
+      type: string;
+      data: Record<string, unknown>;
+      /** A branching step's exits in order: the node each leads to (null for none). */
+      exits?: Array<string | null>;
+      /** A step that goes right before this one (the link buttons of a button message). */
+      pre?: { type: string; data: Record<string, unknown> };
+    }
+  >();
   const chains: Array<{ qid: string; ids: string[] }> = [];
   for (const q of order) {
     let current: string[] = [];
@@ -362,11 +532,17 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
       const c = convert(r);
       if (!c) continue;
       const id = idOf(r);
-      idByNode.set(str(r.nodeId), id);
+      // The link buttons of a button message come first; a button that leads here lands on them.
+      const entry = c.pre ? `${id}_links` : id;
+      if (c.pre) {
+        converted.set(entry, c.pre);
+        current.push(entry);
+      }
+      idByNode.set(str(r.nodeId), entry);
       converted.set(id, c);
       current.push(id);
       // A buttons or list step ends its chain: what follows starts another.
-      if (c.type === 'buttons' || c.type === 'list') flush();
+      if (c.type === 'buttons' || c.type === 'list' || c.type === 'carousel') flush();
     }
     flush();
   }
@@ -415,6 +591,16 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
         if (!leadTitle.has(to)) leadTitle.set(to, str(v.text).trim());
       } else if (rec(t).type === 'flow' && str(v.nodeId))
         notes.push(msg('waboImport.notes.leadsOutside', { text: str(v.text).trim() }));
+    });
+  }
+
+  // A website chat bot's buttons and carousel cards lead where their `nodeId` says, when that node is in the file.
+  for (const [id, c] of converted) {
+    (c.exits ?? []).forEach((target, i) => {
+      if (!target) return;
+      const to = idByNode.get(target);
+      if (to) edge(id, `p${i}`, to);
+      else notes.push(msg('waboImport.notes.leadsOutside', { text: `${i + 1}` }));
     });
   }
 
@@ -523,6 +709,8 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
     data: {
       ...flbDefaultNodeData('trigger'),
       keywords,
+      // A website visitor opening the chat starts the bot: there are no trigger words.
+      ...(channel === 'web' ? { keywordMode: 'any' } : {}),
       ...(mainName !== MAIN_NAME ? { journeyName: mainName } : {}),
     },
   } as FlowNode;
@@ -531,6 +719,7 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
 
   return {
     graph: { flowNodes: [trigger, ...nodes], flowEdges: edges, vars },
+    channel,
     notes: dedupeMsgs(notes),
     keywords,
   };

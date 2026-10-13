@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { ERROR_CODES } from '@crm/contracts';
 import type {
+  DeleteNotificationsResponse,
   ListNotificationsQuery,
   MarkAllReadResponse,
   NotificationListResponse,
   NotificationResponse,
+  NotificationSummaryResponse,
   ReadSubjectRequest,
   ReadSubjectResponse,
   UnreadCountResponse,
@@ -56,6 +58,8 @@ export class NotificationsService {
         limit: query.limit + 1,
         beforeId: query.cursor ? decode(query.cursor) : undefined,
         unreadOnly: query.unreadOnly,
+        type: query.type,
+        q: query.q,
       });
       const hasMore = rows.length > query.limit;
       const items = hasMore ? rows.slice(0, query.limit) : rows;
@@ -82,6 +86,27 @@ export class NotificationsService {
     });
     await this.publisher.read(orgId, userId, [response.id]);
     return response;
+  }
+
+  /** The numbers around the Notifications page (all about the caller's own rows). */
+  async summary(): Promise<NotificationSummaryResponse> {
+    const { orgId, userId } = this.caller();
+    return this.db.tx(async (tx) => ({
+      unread: await this.repo.countUnread(tx, orgId, userId),
+      ...(await this.repo.summary(tx, orgId, userId)),
+    }));
+  }
+
+  /**
+   * Dismisses one of the caller's own notifications (Reference: the X on a row). The row is gone for good; the person's other tabs
+   * converge on the new unread total through the same event as a read.
+   */
+  async dismiss(uuid: string): Promise<DeleteNotificationsResponse> {
+    const { orgId, userId } = this.caller();
+    const gone = await this.db.tx((tx) => this.repo.deleteOne(tx, orgId, userId, uuid));
+    if (!gone) throw AppError.notFound('Notification', uuid);
+    await this.publisher.read(orgId, userId, [uuid]);
+    return { deleted: 1 };
   }
 
   async markAllRead(): Promise<MarkAllReadResponse> {

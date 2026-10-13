@@ -22,7 +22,6 @@
         "signedOut": "Twoja sesja wygasła. Zaloguj się ponownie.",
         "rateLimited": "Zbyt wiele prób. Poczekaj chwilę i spróbuj ponownie.",
         "rateLimitedWait": "Zbyt wiele prób. Spróbuj ponownie za {seconds, plural, one {# sekundę} few {# sekundy} many {# sekund} other {# sekundy}}.",
-        "requestId": "Identyfikator żądania",
         "locked": "Zbyt wiele nieudanych prób. Poczekaj chwilę, zanim spróbujesz ponownie.",
         "lockedWait": "Zbyt wiele nieudanych prób. Spróbuj ponownie za {minutes, plural, one {# minutę} few {# minuty} many {# minut} other {# minuty}}."
       },
@@ -119,6 +118,9 @@
         },
         "workspaceTimezone": "Strefa czasowa",
         "workspaceTimezoneHint": "Dotyczy przestrzeni {workspace}. Mogą ją zmieniać tylko właściciele i administratorzy.",
+        "myTimezone": "Moja strefa czasowa",
+        "myTimezoneHint": "Daty i godziny są wyświetlane w strefie {zone}. Zostaw puste, aby używać strefy czasowej przestrzeni roboczej (UTC, jeśli jej nie ma).",
+        "myTimezoneUseWorkspace": "Użyj domyślnej przestrzeni roboczej",
         "saved": "Profil zapisany.",
         "errors": {
           "fullNameRequired": "Wpisz swoje imię i nazwisko.",

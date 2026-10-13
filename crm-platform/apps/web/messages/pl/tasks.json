@@ -282,7 +282,6 @@
       "planDisabled": "Twój plan nie obejmuje zadań. Ulepsz plan, aby je odblokować.",
       "assigneeInvalid": "Ta osoba nie jest aktywnym członkiem tej przestrzeni roboczej.",
       "unexpected": "Coś poszło nie tak. Spróbuj ponownie za chwilę.",
-      "requestId": "Identyfikator żądania",
       "retry": "Spróbuj ponownie"
     },
     "toast": {

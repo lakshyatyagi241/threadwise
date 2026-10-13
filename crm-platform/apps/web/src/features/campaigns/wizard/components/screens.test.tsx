@@ -300,6 +300,8 @@ describe('campaign list card', () => {
       createdAt: '2026-10-01T00:00:00.000Z',
       templateName: null,
       counts: { recipients: 0, sent: 0, delivered: 0, read: 0, failed: 0, replies: 0, clicks: 0 },
+      // The contract fills this in when it parses a response; a hand-built fixture has to say it.
+      cost: { amountMinor: 0, currency: null },
       ...over,
     }) as unknown as Campaign;
   const card = (c: Campaign) =>

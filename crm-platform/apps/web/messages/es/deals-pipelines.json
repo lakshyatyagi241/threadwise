@@ -35,7 +35,6 @@
       "notFound": "No se encontró ese negocio. Puede que se haya eliminado.",
       "planDisabled": "Tu plan no incluye el embudo de ventas. Mejora tu plan para desbloquearlo.",
       "unexpected": "Algo salió mal. Inténtalo de nuevo en un momento.",
-      "requestId": "ID de solicitud",
       "retry": "Reintentar",
       "planLimit": "Alcanzaste el límite de tu plan.",
       "lostReasonRequired": "Elige un motivo para marcar el negocio como perdido.",

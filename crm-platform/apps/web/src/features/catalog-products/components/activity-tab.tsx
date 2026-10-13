@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { cn } from '@crm/ui';
 import { useActivity } from '../api/catalog';
 import { formatWhen } from '../lib/format';
@@ -17,6 +17,7 @@ const MODE_TONE = {
 export function ActivityTab() {
   const t = useTranslations('catalogProducts.activity');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const activity = useActivity();
 
   if (activity.isPending) return <LoadingBlock label={t('loading')} />;
@@ -74,7 +75,7 @@ export function ActivityTab() {
               {rows.map((r) => (
                 <tr key={r.id}>
                   <td className="px-5 py-3 font-mono text-[11px]">
-                    {formatWhen(r.createdAt, locale)}
+                    {formatWhen(r.createdAt, locale, timeZone)}
                   </td>
                   <td className="px-2 py-3 font-mono">{r.recipient || '—'}</td>
                   <td className="px-2 py-3">

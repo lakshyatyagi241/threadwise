@@ -10,7 +10,6 @@
     },
     "common": {
       "dismiss": "Kapat",
-      "requestId": "İstek {id}",
       "unofficial": "Resmi değil",
       "reminder": "Resmi olmayan bağlantı. WhatsApp bu numarayı kısıtlayabilir.",
       "readGuide": "Rehberi oku",
@@ -296,7 +295,6 @@
       "WA_WORKER_UNAVAILABLE": "Bağlantı hizmeti kullanılamıyor. Birkaç dakika içinde yeniden deneyin.",
       "RATE_LIMITED": "Çok fazla istek. Lütfen biraz bekleyin.",
       "upgrade": "Planları gör ve yükselt",
-      "requestId": "İstek {id}",
       "DEVICE_PILOT_CAP_REACHED": "Çalışma alanınız, pilot sürecinde izin verilen kişisel WhatsApp numarası sayısına ulaştı. Başka birini bağlamak için birini silin.",
       "DEVICE_CREATE_RATE_LIMITED": "Son bir saatte çok fazla numara eklendi. Daha sonra yeniden deneyin.",
       "DEVICE_CREATE_RATE_LIMITED_WAIT": "Son bir saatte çok fazla numara eklendi. {minutes, plural, other {# dakika}} sonra yeniden deneyin.",

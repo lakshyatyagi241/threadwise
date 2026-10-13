@@ -1,0 +1,53 @@
+{
+  "notifications": {
+    "page": {
+      "title": "Notifiche",
+      "description": "Tutto ciò che ha richiesto la tua attenzione, dal più recente. Scegli quali eventi ricevere nelle impostazioni delle notifiche.",
+      "markAll": "Segna tutto come letto",
+      "clearAll": "Cancella tutto",
+      "preferences": "Impostazioni notifiche",
+      "clearTitle": "Cancellare tutte le notifiche?",
+      "clearBody": "Questo rimuove definitivamente tutte le tue notifiche. Gli altri conservano le loro. Non si può annullare.",
+      "clearConfirm": "Cancella tutto",
+      "cancel": "Annulla",
+      "dismiss": "Ignora questa notifica",
+      "tiles": {
+        "unread": "Non lette",
+        "unreadHint": "Seleziona per mostrare solo le non lette",
+        "day": "Ultime 24 ore",
+        "dayHint": "Ricevute oggi",
+        "week": "Ultimi 7 giorni",
+        "weekHint": "Ricevute questa settimana",
+        "total": "Conservate",
+        "totalHint": "Le più vecchie vengono rimosse automaticamente"
+      },
+      "filters": {
+        "label": "Filtri delle notifiche",
+        "readLabel": "Mostra",
+        "all": "Tutte",
+        "unread": "Non lette",
+        "type": "Tipo",
+        "allTypes": "Tutti i tipi",
+        "otherTypes": "Altro",
+        "search": "Cerca notifiche",
+        "reset": "Reimposta filtri"
+      },
+      "sections": {
+        "today": "Oggi",
+        "yesterday": "Ieri",
+        "thisWeek": "Prima in questa settimana",
+        "older": "Più vecchie"
+      },
+      "loading": "Caricamento delle notifiche",
+      "failed": "Impossibile caricare le tue notifiche.",
+      "retry": "Riprova",
+      "empty": "Ancora nessuna notifica",
+      "emptyHint": "Nuove chat, assegnazioni, menzioni ed esiti dei tuoi invii compariranno qui.",
+      "emptyFiltered": "Nessuna notifica corrisponde a questi filtri",
+      "emptyFilteredHint": "Rimuovi un filtro o cerca qualcos'altro.",
+      "showing": "{count, plural, one {# notifica caricata} many {# di notifiche caricate} other {# notifiche caricate}}",
+      "loadMore": "Carica altro",
+      "end": "Fine dell'elenco"
+    }
+  }
+}

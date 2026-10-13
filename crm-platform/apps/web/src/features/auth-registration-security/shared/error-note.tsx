@@ -37,11 +37,6 @@ export function ErrorNote({ error, className }: { error: unknown; className?: st
   return (
     <Alert tone="danger" className={className}>
       {text}
-      {api?.requestId && (
-        <span className="mt-1 block text-xs opacity-80">
-          {t('requestId')}: <span className="font-mono">{api.requestId}</span>
-        </span>
-      )}
     </Alert>
   );
 }

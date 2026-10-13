@@ -354,6 +354,10 @@
         "device_group_removed": {
           "label": "Dikeluarkan dari grup nomor pribadi",
           "hint": "Seseorang mengeluarkan salah satu nomor WhatsApp pribadi Anda dari sebuah grup. Ini bisa menjadi tanda bahwa nomor tersebut dilaporkan."
+        },
+        "sla_breached": {
+          "label": "SLA terlampaui",
+          "hint": "Percakapan yang Anda tangani melewati target balasan pertama atau penyelesaian."
         }
       },
       "loading": "Memuat preferensi Anda",

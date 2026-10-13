@@ -12,6 +12,7 @@ import {
   WebhookForm,
 } from './logic';
 import { AskFileForm, AskLocationForm } from './ask-media';
+import { CarouselForm } from './carousel';
 import { AskForm, ButtonsForm, ListForm, PollForm } from './options';
 import { MediaForm, MessageForm, NotifyNumberForm, TemplateForm, WaToInstagramForm } from './send';
 import { SequenceForm } from './sequence';
@@ -27,6 +28,7 @@ export const CORE_FORMS: Record<string, FormComponent> = {
   wa_to_instagram: WaToInstagramForm,
   sequence: SequenceForm,
   buttons: ButtonsForm,
+  carousel: CarouselForm,
   list: ListForm,
   ask: AskForm,
   ask_file: AskFileForm,

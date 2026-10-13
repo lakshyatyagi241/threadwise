@@ -7,8 +7,7 @@
     },
     "common": {
       "dismiss": "关闭",
-      "retry": "重试",
-      "requestId": "请求 ID"
+      "retry": "重试"
     },
     "errors": {
       "network": "无法连接到服务器。请检查网络连接后重试。",
@@ -35,7 +34,10 @@
       "sendFailed": "无法发送消息：{detail}",
       "collectionProducts": "所选商品均不属于此工作区。",
       "providerFailed": "WhatsApp 或 Meta 无法完成该请求：{detail}",
-      "unexpected": "出了点问题。请稍后重试。"
+      "unexpected": "出了点问题。请稍后重试。",
+      "alreadyConnected": "已连接一个目录。请先断开连接，再创建新目录。",
+      "confirmMismatch": "你输入的目录 ID 与已连接的目录不一致。",
+      "setNotSyncable": "此集合没有可放入 Meta 商品组的活跃商品。"
     },
     "paywall": {
       "kicker": "高级功能",
@@ -401,6 +403,15 @@
           "descriptionTooLong": "描述过长。",
           "noProducts": "请至少选择一件商品。"
         }
+      },
+      "meta": {
+        "onMeta": "已在 Meta",
+        "notOnMeta": "不在 Meta",
+        "push": "推送到 Meta",
+        "update": "在 Meta 上更新",
+        "remove": "从 Meta 移除",
+        "pushed": "集合已推送到 Meta。",
+        "removed": "集合已从 Meta 移除。"
       }
     },
     "activity": {
@@ -724,6 +735,33 @@
           "goods": "禁止酒类 / 成人 / 受管制商品",
           "verification": "生产环境需要完成商家验证"
         }
+      }
+    },
+    "manage": {
+      "title": "在 Meta 上管理目录",
+      "create": {
+        "title": "在 Meta 上创建新目录",
+        "intro": "在你的 WhatsApp Business 账号下创建空目录，关联并在此连接。",
+        "name": "目录名称",
+        "placeholder": "例如：我的店铺",
+        "button": "创建目录",
+        "needName": "请输入目录名称。",
+        "done": "目录已创建并连接。"
+      },
+      "rename": {
+        "label": "目录名称",
+        "button": "在 Meta 上重命名",
+        "done": "已在 Meta 上重命名目录。"
+      },
+      "delete": {
+        "title": "在 Meta 上删除目录",
+        "warning": "将永久删除 Meta 上的目录及其商品，无法撤销。",
+        "confirmLabel": "输入目录 ID {id} 以确认",
+        "button": "在 Meta 上删除",
+        "dialogTitle": "要在 Meta 上删除目录吗？",
+        "dialogMessage": "目录将在 Meta 上删除，并在此断开连接，无法撤销。",
+        "cancel": "取消",
+        "done": "已在 Meta 上删除目录。"
       }
     }
   }

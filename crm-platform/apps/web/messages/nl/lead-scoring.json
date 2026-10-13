@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "Sluiten",
       "retry": "Opnieuw proberen",
-      "requestId": "Verzoek {id}",
       "noAccessTitle": "Je hebt geen toegang tot dit scherm",
       "noAccess": "Vraag een beheerder van de werkruimte om je rol de machtiging {permission} te geven."
     },
@@ -261,7 +260,7 @@
         "offBody": "Gesprekken worden niet gelezen. Scores gebruiken alleen contactgegevens en betrokkenheidscijfers.",
         "needsScoring": "Schakel eerst AI-leadscoring in.",
         "stageLabel": "Levenscyclusfasen voorstellen",
-        "stageBody": "Als uit het gesprek duidelijk blijkt dat een contact verder is gegaan, stelt de AI de volgende fase voor. Een persoon accepteert of wijst het af; er verandert niets vanzelf, en de fasen Gewonnen en Verloren worden nooit voorgesteld.",
+        "stageBody": "Wanneer het gesprek duidelijk laat zien dat een contact verder is, kiest de AI de volgende fase. De fases Gewonnen en Verloren zet de AI nooit. Kies hieronder of de wijziging vanzelf wordt toegepast of op een persoon wacht.",
         "masked": {
           "title": "Hoe persoonsgegevens worden gemaskeerd",
           "phone": "Van telefoonnummers blijven alleen het eerste en de laatste twee cijfers staan (+91 ***** ***10)",
@@ -281,6 +280,17 @@
           "body": "Zodra dit aanstaat, worden de recente berichten van een contact via OpenRouter naar een AI-provider gestuurd nadat het gesprek is stilgevallen. Telefoonnummers, e-mailadressen, kaartnummers en namen worden eerst gedeeltelijk gemaskeerd, zodat wat wordt verstuurd niet kan worden gebruikt om de persoon te bereiken. Je kunt dit op elk moment uitzetten.",
           "yes": "Inschakelen",
           "no": "Annuleren"
+        },
+        "stageMode": {
+          "title": "Hoe een fase verandert",
+          "auto": {
+            "label": "Automatisch",
+            "body": "Het contact wordt meteen verplaatst en de chat toont een regel met Ongedaan maken."
+          },
+          "manual": {
+            "label": "Handmatig",
+            "body": "De suggestie wacht onder Fasesuggesties tot een persoon haar accepteert of afwijst."
+          }
         }
       }
     },

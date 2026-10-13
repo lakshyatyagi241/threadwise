@@ -13,6 +13,14 @@ import {
   MAIL_PORT,
   type MailPort,
 } from '../../infra/providers/auth-registration-security/mail.port';
+import {
+  HISTORY_CSV_HEAD,
+  exportContext,
+  historyCsvLine,
+  selectionOfStored,
+} from './message-history-export';
+import { decodeCursor, type HistoryCursor } from './message-history-rules';
+import { MessageHistoryRepository } from './message-history.repository';
 import { MessageLogRepository, type ExportRow } from './message-log.repository';
 import {
   CSV_BOM,
@@ -51,6 +59,7 @@ export class MessageLogExportRunner {
   constructor(
     private readonly db: DatabaseService,
     private readonly repo: MessageLogRepository,
+    private readonly history: MessageHistoryRepository,
     config: ConfigService<Env, true>,
     @Optional() @Inject(MAIL_PORT) private readonly mail?: MailPort,
   ) {
@@ -70,8 +79,11 @@ export class MessageLogExportRunner {
     if (!claimed) return 'skipped';
 
     try {
-      const built = await this.build(orgId, claimed);
-      const fileName = `message-log-${claimed.rangeFrom}_${claimed.rangeTo}.csv`;
+      const messages = claimed.kind === 'messages';
+      const built = messages
+        ? await this.buildMessages(orgId, claimed)
+        : await this.build(orgId, claimed);
+      const fileName = `${messages ? 'message-history' : 'message-log'}-${claimed.rangeFrom}_${claimed.rangeTo}.csv`;
       await this.db.txAs({ orgId }, (tx) =>
         this.repo.finishExport(tx, orgId, claimed.id, {
           fileName,
@@ -85,7 +97,7 @@ export class MessageLogExportRunner {
     } catch (err) {
       const message =
         err instanceof ExportTooLarge
-          ? `The export has more than ${MESSAGE_LOG_EXPORT_MAX_ROWS.toLocaleString('en-US')} lines. Choose fewer days or one message status.`
+          ? `The export has more than ${MESSAGE_LOG_EXPORT_MAX_ROWS.toLocaleString('en-US')} lines. Choose fewer days or narrow the filters.`
           : 'The export could not be built. Request it again.';
       if (!(err instanceof ExportTooLarge)) {
         this.logger.error(
@@ -97,6 +109,31 @@ export class MessageLogExportRunner {
       await this.notify(orgId, claimed, 'failed', 0, message);
       return 'failed';
     }
+  }
+
+  /** The Message History feed with the filters of the request, newest first, as one gzip member per page. */
+  private async buildMessages(
+    orgId: number,
+    row: ExportRow,
+  ): Promise<{ file: Buffer; rows: number }> {
+    const sel = selectionOfStored(row.filters);
+    const ctx = exportContext(orgId);
+    const members: Buffer[] = [gzipSync(`${CSV_BOM}${HISTORY_CSV_HEAD}`)];
+    let rows = 0;
+    let cursor: HistoryCursor | null = null;
+    for (;;) {
+      const at: HistoryCursor | null = cursor;
+      const page: { rows: Array<Record<string, unknown>>; next: string | null } =
+        await this.db.txAs({ orgId }, (tx) => this.history.page(tx, ctx, sel, at, BATCH));
+      if (page.rows.length === 0) break;
+      rows += page.rows.length;
+      if (rows > MESSAGE_LOG_EXPORT_MAX_ROWS) throw new ExportTooLarge();
+      members.push(gzipSync(`${page.rows.map(historyCsvLine).join('\r\n')}\r\n`));
+      if (page.next === null) break;
+      cursor = decodeCursor(page.next);
+      if (cursor === null) break;
+    }
+    return { file: Buffer.concat(members), rows };
   }
 
   private async build(orgId: number, row: ExportRow): Promise<{ file: Buffer; rows: number }> {
@@ -198,18 +235,22 @@ export class MessageLogExportRunner {
         return who?.email ?? row.emailedTo;
       });
       if (!to) return;
-      const link = `${this.webUrl}/inbox/message-logs?export=${row.uuid}`;
+      const history = row.kind === 'messages';
+      const what = history ? 'message history' : 'message log';
+      const link = history
+        ? `${this.webUrl}/message-history?export=${row.uuid}`
+        : `${this.webUrl}/inbox/message-logs?export=${row.uuid}`;
       const range = `${row.rangeFrom} to ${row.rangeTo}`;
       const text =
         outcome === 'ready'
-          ? `Your message log export for ${range} is ready (${rows.toLocaleString('en-US')} lines).\n\nDownload it here while you are signed in:\n${link}\n\nThe file is kept for ${MESSAGE_LOG_EXPORT_TTL_DAYS} days.`
-          : `Your message log export for ${range} could not be completed.\n\n${reason ?? ''}\n\nYou can request it again here:\n${link}`;
+          ? `Your ${what} export for ${range} is ready (${rows.toLocaleString('en-US')} lines).\n\nDownload it here while you are signed in:\n${link}\n\nThe file is kept for ${MESSAGE_LOG_EXPORT_TTL_DAYS} days.`
+          : `Your ${what} export for ${range} could not be completed.\n\n${reason ?? ''}\n\nYou can request it again here:\n${link}`;
       await this.mail.send({
         to,
         subject:
           outcome === 'ready'
-            ? 'Your message log export is ready'
-            : 'Your message log export could not be completed',
+            ? `Your ${what} export is ready`
+            : `Your ${what} export could not be completed`,
         text,
       });
     } catch (err) {

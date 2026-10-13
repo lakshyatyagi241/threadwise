@@ -19,7 +19,6 @@
       "optional": "opcional",
       "required": "obligatorio",
       "readOnly": "Puedes ver esta página, pero solo un superadministrador puede modificarla.",
-      "requestId": "ID de solicitud",
       "errors": {
         "forbidden": "No tienes acceso a esta página.",
         "request": "No se pudo completar la solicitud.",

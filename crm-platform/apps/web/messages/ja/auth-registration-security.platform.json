@@ -46,7 +46,6 @@
         "copyFailed": "コピーできませんでした",
         "loading": "読み込み中",
         "retry": "再試行",
-        "requestId": "リクエストID",
         "errors": {
           "forbidden": "あなたのロールではこの操作は許可されていません。",
           "request": "リクエストが拒否されました。ページを再読み込みして、もう一度お試しください。",
@@ -61,7 +60,6 @@
       "login": {
         "title": "オペレーターログイン",
         "intro": "このコンソールはプラットフォームの運用担当者向けです。ワークスペースのユーザーはメインのログインページからログインしてください。",
-        "requestId": "リクエストID",
         "submit": "ログイン",
         "submitting": "ログイン中",
         "fields": {
@@ -127,7 +125,6 @@
         "eyebrow": "あなたのアカウント",
         "title": "2要素認証",
         "description": "認証アプリで{email}を保護します。オペレーターアカウントは、プラットフォームで最も信頼性の高いアカウントです。",
-        "requestId": "リクエストID",
         "status": {
           "title": "認証アプリ",
           "on": "オン",
@@ -181,7 +178,6 @@
         "saving": "保存中",
         "saved": "{count, plural, other {#件の設定を保存しました}}",
         "rejected": "何も保存されませんでした。{count, plural, other {#件の項目}}が拒否されました。",
-        "requestId": "リクエストID",
         "unsaved": "{count, plural, other {#件の未保存の変更}}",
         "discard": "変更を破棄",
         "errors": {
@@ -658,7 +654,6 @@
             "working": "処理中",
             "close": "閉じる",
             "signInAgain": "再度ログイン",
-            "requestId": "リクエストID",
             "errors": {
               "forbidden": "この操作を実行できるのはスーパー管理者のみです。",
               "unexpected": "操作が完了しませんでした。再試行する前にイベントログを確認してください。"
@@ -731,7 +726,6 @@
         "saving": "保存中",
         "saved": "{count, plural, other {#件の設定を保存しました}}",
         "rejected": "何も保存されませんでした。{count, plural, other {#件の項目}}が拒否されました。",
-        "requestId": "リクエストID",
         "unsaved": "{count, plural, other {#件の未保存の変更}}",
         "discard": "変更を破棄",
         "errors": {
@@ -941,7 +935,6 @@
             "sent": "{to}にテストコードを送信しました。",
             "remaining": "{count, plural, other {この1時間で残り#回テストできます。}}",
             "notShown": "コードはここには表示されません。電話で確認してください。",
-            "requestId": "リクエストID",
             "errors": {
               "invalidNumber": "国番号付きで番号を入力してください（例：+91 98765 43221）。",
               "rateLimited": "この1時間のテストコードの送信回数が多すぎます。{minutes, plural, other {#分}}後にもう一度お試しください。",
@@ -1045,7 +1038,6 @@
           "saved": "送信元を保存しました",
           "removed": "送信元を削除しました",
           "secretRemoved": "保存済みのシークレットを削除しました",
-          "requestId": "リクエストID",
           "problems": {
             "required": "この項目は必須です。",
             "tooLong": "最大{max}文字までです。",
@@ -1076,8 +1068,7 @@
           "errors": {
             "invalid": "そのフッターは受け付けられませんでした。",
             "unexpected": "フッターを保存できませんでした。しばらくしてからもう一度お試しください。"
-          },
-          "requestId": "リクエストID"
+          }
         }
       },
       "social": {
@@ -1088,7 +1079,6 @@
         "saving": "保存中",
         "saved": "{count, plural, other {#件の設定を保存しました}}",
         "rejected": "何も保存されませんでした。{count, plural, other {#件の項目}}が拒否されました。",
-        "requestId": "リクエストID",
         "unsaved": "{count, plural, other {#件の未保存の変更}}",
         "discard": "変更を破棄",
         "errors": {
@@ -1206,7 +1196,6 @@
           "cancel": "キャンセル",
           "working": "削除中",
           "error": "シークレットを削除できませんでした。しばらくしてからもう一度お試しください。",
-          "requestId": "リクエストID",
           "done": "保存済みの{name}シークレットを削除しました。",
           "names": {
             "google": "Google",
@@ -1670,7 +1659,6 @@
         "saving": "保存中",
         "saved": "{count, plural, other {#件の設定を保存しました}}",
         "rejected": "何も保存されませんでした。{count, plural, other {#件の項目}}が拒否されました。",
-        "requestId": "リクエストID",
         "unsaved": "{count, plural, other {#件の未保存の変更}}",
         "discard": "変更を破棄",
         "errors": {
