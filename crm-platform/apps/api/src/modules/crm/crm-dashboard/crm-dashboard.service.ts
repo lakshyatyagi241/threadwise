@@ -12,7 +12,7 @@ import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
 import { PlanEntitlementService, resolveFeature } from '../../plans-subscriptions-trials';
-import { addDays, zonedMidnight } from '../../dashboards-analytics-charts';
+import { addDays, zonedMidnight } from './zoned-calendar';
 import { resolveTimezone, todayIn } from '../deals/deal-calendar';
 import {
   addTo,

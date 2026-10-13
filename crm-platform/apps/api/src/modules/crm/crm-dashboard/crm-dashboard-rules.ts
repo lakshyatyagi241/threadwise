@@ -1,6 +1,6 @@
 import { CRM_DASH_MAX_DAYS, type CrmDashRange } from '@crm/contracts';
 import { AppError } from '../../../common/errors/app-error';
-import { addDays, daysBetween, zonedMidnight } from '../../dashboards-analytics-charts';
+import { addDays, daysBetween, zonedMidnight } from './zoned-calendar';
 
 /**
  * The pure parts of the CRM dashboard: the period (cut in the viewer's zone), the buckets of the trend, and the percentages.
