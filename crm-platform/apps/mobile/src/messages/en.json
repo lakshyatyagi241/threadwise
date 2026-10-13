@@ -422,6 +422,13 @@
       "nameRequired": "Enter your name.",
       "nameTooLong": "Use up to 120 characters.",
       "phoneInvalid": "Enter the phone number with the country code, for example +919876543210."
+    },
+    "appearance": {
+      "title": "Appearance",
+      "light": "Light mode",
+      "dark": "Dark mode",
+      "hint": "Saved to your account.",
+      "failed": "Couldn't save your choice. Try again."
     }
   },
   "inbox": {

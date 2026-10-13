@@ -39,7 +39,7 @@ type Group = 'dashboard' | 'contacts';
  */
 export function MenuScreen() {
   const { t } = useTranslation();
-  const { colors } = useTheme();
+  const { colors, scheme } = useTheme();
   const router = useRouter();
   const queryClient = useQueryClient();
   const session = useSession();
@@ -208,6 +208,12 @@ export function MenuScreen() {
         </Section>
 
         <Section title={t('menu.preferences')}>
+          <Row
+            icon="contrast-outline"
+            label={t('menu.appearance.title')}
+            hint={t(`menu.appearance.${scheme}`)}
+            onPress={() => router.navigate('/appearance')}
+          />
           <Row
             icon="phone-portrait-outline"
             label={t('menu.devicePermissions')}

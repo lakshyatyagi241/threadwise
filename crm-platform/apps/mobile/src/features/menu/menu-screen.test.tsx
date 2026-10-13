@@ -79,6 +79,7 @@ describe('MenuScreen', () => {
       'Contacts',
       'Tasks',
       'Manage profile',
+      'Appearance',
       'Device permissions',
       'Check for updates',
       'Sign out',
@@ -156,6 +157,13 @@ describe('MenuScreen', () => {
       await show();
       await press('Manage profile');
       expect(mockNavigate).toHaveBeenCalledWith('/profile');
+    });
+
+    it('opens Appearance, and says which mode the app is in', async () => {
+      await show();
+      expect(screen.getByText('Light mode')).toBeTruthy();
+      await press('Appearance');
+      expect(mockNavigate).toHaveBeenCalledWith('/appearance');
     });
 
     it("opens this app's settings on the phone for the device permissions", async () => {
