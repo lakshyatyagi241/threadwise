@@ -85,7 +85,9 @@ export default ({ config }: ConfigContext): ExpoConfig => {
         foregroundImage: './assets/images/android-icon-foreground.png',
         monochromeImage: './assets/images/android-icon-monochrome.png',
       },
-      predictiveBackGestureEnabled: true,
+      // Off: with it on, Android 13 to 15 stop sending the Back press to the app, and React Native only registers its own
+      // replacement handler on Android 16 and newer. Back then closed the whole app from any screen (a chat, a contact).
+      predictiveBackGestureEnabled: false,
       // Backups would copy the keychain-backed token store to another device on restore.
       allowBackup: false,
     },

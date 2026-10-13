@@ -1,6 +1,7 @@
 import NetInfo from '@react-native-community/netinfo';
 import { QueryClient, focusManager, onlineManager } from '@tanstack/react-query';
 import { AppState, Platform, type AppStateStatus } from 'react-native';
+import { env } from '@/config/env';
 import { isApiError } from '@/lib/api/errors';
 import { transientRetry, transientRetryDelay } from '@/lib/api/retry';
 
@@ -32,10 +33,26 @@ export const isRetryable = (e: unknown): boolean =>
 
 let wired = false;
 
+/**
+ * Online means "our API answers", not "Android validated this network against Google". A Wi-Fi or hotspot that reaches the API
+ * but has no general internet (an office or home LAN, a captive network, an emulator) is left unvalidated by Android. NetInfo's
+ * native check then reported no internet, react-query paused every request, and every screen stayed on its loading skeleton
+ * without ever calling the API.
+ */
+function configureReachability(): void {
+  NetInfo.configure({
+    reachabilityUrl: `${env.apiUrl}/health`,
+    reachabilityMethod: 'GET',
+    reachabilityTest: async (response) => response.status === 200,
+    useNativeReachability: false,
+  });
+}
+
 /** Connects react-query to the phone: online/offline from the OS, "focused" from the app coming to the foreground. */
 export function wireQueryEnvironment(): void {
   if (wired) return;
   wired = true;
+  configureReachability();
   onlineManager.setEventListener((setOnline) =>
     NetInfo.addEventListener((s) =>
       setOnline(Boolean(s.isConnected && s.isInternetReachable !== false)),
