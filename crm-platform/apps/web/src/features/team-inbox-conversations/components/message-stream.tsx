@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Button, Spinner, cn } from '@crm/ui';
 import type { ConversationNote, MessageResponse } from '@crm/contracts';
@@ -56,6 +56,7 @@ export interface MessageStreamProps {
 export function MessageStream(props: MessageStreamProps) {
   const t = useTranslations('team-inbox-conversations.thread');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const errorText = useErrorText();
   const ref = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
@@ -70,8 +71,8 @@ export function MessageStream(props: MessageStreamProps) {
 
   const { state } = props;
   const items = useMemo(
-    () => buildItems(state.messages, props.notes, state.pending, state.hasMoreBefore),
-    [state.messages, props.notes, state.pending, state.hasMoreBefore],
+    () => buildItems(state.messages, props.notes, state.pending, state.hasMoreBefore, timeZone),
+    [state.messages, props.notes, state.pending, state.hasMoreBefore, timeZone],
   );
   const byId = useMemo(() => new Map(state.messages.map((m) => [m.id, m])), [state.messages]);
   const reactions = useMemo(() => agentReactions(state.messages), [state.messages]);
@@ -254,11 +255,11 @@ export function MessageStream(props: MessageStreamProps) {
                   <li
                     key={item.key}
                     role="separator"
-                    aria-label={dayLabel(item.at, props.nowMs, locale)}
+                    aria-label={dayLabel(item.at, props.nowMs, locale, timeZone)}
                     className="flex justify-center py-1"
                   >
                     <span className="rounded-full bg-background px-3 py-0.5 text-[11px] font-medium capitalize text-muted-foreground shadow-sm">
-                      {dayLabel(item.at, props.nowMs, locale)}
+                      {dayLabel(item.at, props.nowMs, locale, timeZone)}
                     </span>
                   </li>
                 );

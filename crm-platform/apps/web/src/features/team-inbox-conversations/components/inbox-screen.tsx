@@ -2,7 +2,7 @@
 
 import { useQueryClient } from '@tanstack/react-query';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useTranslations } from 'next-intl';
+import { useTimeZone, useTranslations } from 'next-intl';
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { ConfirmDialog, cn, useToast } from '@crm/ui';
 import {
@@ -67,6 +67,7 @@ function useMediaQuery(query: string): boolean {
  */
 export function InboxScreen() {
   const t = useTranslations('team-inbox-conversations.screen');
+  const timeZone = useTimeZone();
   const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
@@ -317,12 +318,14 @@ export function InboxScreen() {
       if (!d || !can.snooze) return;
       setTriaging(true);
       const ok = await guarded(async () => {
-        list.placeRow(await inboxApi.snooze(d.id, d.rowVersion, snoozeUntil(preset, new Date())));
+        list.placeRow(
+          await inboxApi.snooze(d.id, d.rowVersion, snoozeUntil(preset, new Date(), timeZone)),
+        );
       });
       setTriaging(false);
       if (ok) toast(t('snoozed'));
     },
-    [detail.detail, can.snooze, guarded, list, toast, t],
+    [detail.detail, can.snooze, guarded, list, toast, t, timeZone],
   );
   const wake = useCallback(async () => {
     const d = detail.detail;

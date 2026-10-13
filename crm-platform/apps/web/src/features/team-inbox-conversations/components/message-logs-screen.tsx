@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { Alert, Button, Field, Input, Select, Spinner, cn, useToast } from '@crm/ui';
@@ -196,6 +196,7 @@ function ExportRow({ item: e, highlighted }: { item: MessageLogExport; highlight
   const t = useTranslations('team-inbox-conversations.logs');
   const statusT = useTranslations('team-inbox-conversations.status');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const errorText = useErrorText();
   const { toast } = useToast();
   const [busy, setBusy] = useState(false);
@@ -231,12 +232,12 @@ function ExportRow({ item: e, highlighted }: { item: MessageLogExport; highlight
           )}
         </p>
         <p className="text-xs text-muted-foreground">
-          {t('history.requestedAt', { date: fullStamp(e.requestedAt, locale) })}
+          {t('history.requestedAt', { date: fullStamp(e.requestedAt, locale, timeZone) })}
           {e.status === 'ready' && e.rowCount !== null && (
             <> · {t('history.lines', { count: e.rowCount })}</>
           )}
           {e.status === 'ready' && e.expiresAt && (
-            <> · {t('history.until', { date: fullStamp(e.expiresAt, locale) })}</>
+            <> · {t('history.until', { date: fullStamp(e.expiresAt, locale, timeZone) })}</>
           )}
         </p>
         {e.status === 'failed' && e.error && <p className="text-xs text-danger">{e.error}</p>}

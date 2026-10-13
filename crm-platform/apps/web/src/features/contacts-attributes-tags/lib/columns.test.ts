@@ -11,7 +11,7 @@ import {
   visibleColumns,
   type ColumnId,
 } from './columns';
-import { formatDmy } from './format';
+import { formatDateTime, formatDmy } from './format';
 
 const attrs = [
   { key: 'order_count', name: 'Order Count' },
@@ -95,10 +95,26 @@ describe('formatDmy', () => {
     expect(formatDmy('2026-03-05T12:00:00.000Z')).toBe('05/03/2026');
     expect(formatDmy('2026-12-25T12:00:00.000Z')).toBe('25/12/2026');
   });
+  it('puts the instant on the calendar day of the zone it is shown in', () => {
+    // 20:30 UTC on 2 Oct is already 3 Oct in Kolkata and still 2 Oct in New York.
+    expect(formatDmy('2026-10-02T20:30:00Z', 'UTC')).toBe('02/10/2026');
+    expect(formatDmy('2026-10-02T20:30:00Z', 'Asia/Kolkata')).toBe('03/10/2026');
+    expect(formatDmy('2026-10-02T20:30:00Z', 'America/New_York')).toBe('02/10/2026');
+  });
   it('is empty for missing or invalid dates', () => {
     expect(formatDmy(null)).toBe('');
     expect(formatDmy(undefined)).toBe('');
     expect(formatDmy('not a date')).toBe('');
+  });
+});
+
+describe('formatDateTime in a zone', () => {
+  it('shows the clock of the zone, in English and in another language', () => {
+    expect(formatDateTime('2026-10-01T20:30:00Z', 'en', 'UTC')).toBe('01 Oct 2026, 08:30 PM');
+    expect(formatDateTime('2026-10-01T20:30:00Z', 'en', 'Asia/Kolkata')).toBe(
+      '02 Oct 2026, 02:00 AM',
+    );
+    expect(formatDateTime('2026-10-01T20:30:00Z', 'de', 'Asia/Kolkata')).toMatch(/02\.10\.2026/);
   });
 });
 

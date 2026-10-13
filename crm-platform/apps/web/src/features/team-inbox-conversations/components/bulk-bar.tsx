@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useTimeZone, useTranslations } from 'next-intl';
 import { Button, Select, Spinner } from '@crm/ui';
 import {
   CONVERSATION_PRIORITIES,
@@ -37,6 +37,7 @@ export interface BulkBarProps {
  */
 export function BulkBar(props: BulkBarProps) {
   const t = useTranslations('team-inbox-conversations.bulk');
+  const timeZone = useTimeZone();
   const tp = useTranslations('team-inbox-conversations.list');
   const { can } = props;
   const assignees = useAssignees(can.assign || can.assignSelf);
@@ -185,7 +186,10 @@ export function BulkBar(props: BulkBarProps) {
             className="h-8 w-auto text-xs"
             onChange={(e) =>
               pick(e.target.value, (v) =>
-                props.onRun({ type: 'snooze', until: snoozeUntil(v as SnoozePreset, new Date()) }),
+                props.onRun({
+                  type: 'snooze',
+                  until: snoozeUntil(v as SnoozePreset, new Date(), timeZone),
+                }),
               )
             }
           >

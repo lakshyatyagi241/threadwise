@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { memo } from 'react';
 import { cn } from '@crm/ui';
 import type { ConversationSummary } from '@crm/contracts';
@@ -49,6 +49,7 @@ export const ConversationRow = memo(function ConversationRow({
 }: ConversationRowProps) {
   const t = useTranslations('team-inbox-conversations.list');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const unread = row.unreadCount > 0;
   const outbound = lastWasOutbound(row);
   const chip = rowWindowChip(row.windowExpiresAt, nowMs);
@@ -118,13 +119,13 @@ export const ConversationRow = memo(function ConversationRow({
               )}
               <time
                 dateTime={row.lastMessageAt ?? undefined}
-                title={fullStamp(row.lastMessageAt, locale)}
+                title={fullStamp(row.lastMessageAt, locale, timeZone)}
                 className={cn(
                   'whitespace-nowrap text-[11px]',
                   unread ? 'font-medium text-primary' : 'text-muted-foreground',
                 )}
               >
-                {listTime(row.lastMessageAt, nowMs, locale)}
+                {listTime(row.lastMessageAt, nowMs, locale, timeZone)}
               </time>
             </span>
           </span>

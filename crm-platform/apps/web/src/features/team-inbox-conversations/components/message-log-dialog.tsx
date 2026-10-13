@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { Alert, Button, Modal, Spinner, cn } from '@crm/ui';
 import { MESSAGE_LOG_HOT_DAYS, MESSAGE_LOG_RETENTION_DAYS } from '@crm/contracts';
 import type { MessageLogEvent } from '@crm/contracts';
@@ -29,6 +29,7 @@ export function MessageLogDialog({ messageId, onClose, canExport = false }: Mess
   const t = useTranslations('team-inbox-conversations.log');
   const status = useTranslations('team-inbox-conversations.status');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const errorText = useErrorText();
   const q = useMessageLog(messageId);
   const log = q.data;
@@ -80,7 +81,7 @@ export function MessageLogDialog({ messageId, onClose, canExport = false }: Mess
                 {status(log.status)}
               </dd>
               <dt className="text-muted-foreground">{t('createdAt')}</dt>
-              <dd>{fullStamp(log.createdAt, locale)}</dd>
+              <dd>{fullStamp(log.createdAt, locale, timeZone)}</dd>
               {log.providerMessageId && (
                 <>
                   <dt className="text-muted-foreground">{t('providerId')}</dt>
@@ -123,6 +124,7 @@ export function MessageLogDialog({ messageId, onClose, canExport = false }: Mess
 function LogLine({ event: e, last }: { event: MessageLogEvent; last: boolean }) {
   const t = useTranslations('team-inbox-conversations.log');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const key = logEventKey(e);
   const problem = isProblem(e);
   const ignored = isIgnored(e);
@@ -147,7 +149,7 @@ function LogLine({ event: e, last }: { event: MessageLogEvent; last: boolean }) 
           {t(`event.${key}`, { attempt: e.attempt ?? 1 })}
         </p>
         <p className="text-xs text-muted-foreground">
-          <time dateTime={e.at}>{exactStamp(e.at, locale)}</time>
+          <time dateTime={e.at}>{exactStamp(e.at, locale, timeZone)}</time>
           {' · '}
           {t(`source.${e.source}`)}
         </p>
