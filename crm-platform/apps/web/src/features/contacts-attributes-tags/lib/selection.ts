@@ -68,6 +68,8 @@ export interface ContactFilterSnapshot {
   imported: boolean;
   /** Segment id, or empty: "select all matching" inside a segment acts on its members only. */
   segment: string;
+  /** Owner filter tokens (person ids and/or `none`, comma-separated), or empty / absent. */
+  owner?: string;
   /** The Hub's ad-hoc conditions (JSON text), or empty / absent. */
   rules?: string;
 }

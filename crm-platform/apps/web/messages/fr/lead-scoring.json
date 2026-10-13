@@ -261,7 +261,7 @@
         "offBody": "Les conversations ne sont pas lues. Les scores reposent uniquement sur les informations du contact et les indicateurs d’engagement.",
         "needsScoring": "Activez d’abord le scoring de leads par IA.",
         "stageLabel": "Suggérer des étapes du cycle de vie",
-        "stageBody": "Lorsque la conversation montre clairement qu’un contact a progressé, l’IA suggère l’étape suivante. Une personne l’accepte ou la refuse ; rien ne bouge automatiquement, et les étapes Gagné et Perdu ne sont jamais suggérées.",
+        "stageBody": "Quand la conversation montre clairement qu’un contact a avancé, l’IA choisit l’étape suivante. L’IA ne définit jamais les étapes Gagné et Perdu. Choisissez ci-dessous si le changement s’applique seul ou attend une personne.",
         "masked": {
           "title": "Comment les données personnelles sont masquées",
           "phone": "Les numéros de téléphone ne conservent que les premiers chiffres et les deux derniers (+91 ***** ***10)",
@@ -281,6 +281,17 @@
           "body": "Une fois activée, les derniers messages d’un contact sont envoyés à un fournisseur d’IA via OpenRouter lorsque la conversation devient silencieuse. Les numéros de téléphone, e-mails, numéros de carte et noms sont d’abord partiellement masqués, de sorte que les données envoyées ne permettent pas de joindre la personne. Vous pouvez la désactiver à tout moment.",
           "yes": "Activer",
           "no": "Annuler"
+        },
+        "stageMode": {
+          "title": "Comment l’étape change",
+          "auto": {
+            "label": "Automatique",
+            "body": "Le contact est déplacé tout de suite et la conversation affiche une ligne avec Annuler."
+          },
+          "manual": {
+            "label": "Manuel",
+            "body": "La suggestion attend dans Suggestions d’étape jusqu’à ce qu’une personne l’accepte ou l’ignore."
+          }
         }
       }
     },

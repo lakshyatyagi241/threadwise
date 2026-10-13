@@ -177,7 +177,19 @@
       "columns": "列",
       "addColumnField": "カスタムフィールドを列として追加",
       "kanbanView": "ボード表示(ステージ別)",
-      "colLeadScore": "リードスコア"
+      "colLeadScore": "リードスコア",
+      "colOwner": "担当者",
+      "unassigned": "未割り当て",
+      "ownerFilter": "担当者で絞り込み",
+      "selectOwner": "担当者",
+      "allOwners": "すべての担当者",
+      "myContacts": "自分の連絡先",
+      "ownersCount": "担当者 {count}人",
+      "ownerMe": "{name}(自分)",
+      "ownerFormer": "元メンバー",
+      "reassignView": "{name}の連絡先を再割り当て...",
+      "smsNamed": "SMS {name}",
+      "noSms": "SMS用の電話番号がありません"
     },
     "bulk": {
       "label": "選択した連絡先の操作",
@@ -222,7 +234,6 @@
       "exportStarted": "エクスポートをダウンロードしました。",
       "exportTooLarge": "一度にエクスポートするには連絡先が多すぎます。フィルターで絞り込んで、もう一度お試しください。",
       "update": "更新",
-      "updateNeedsRows": "行を選択",
       "updated": "{count, plural, other {#件の連絡先を更新しました。}}"
     },
     "form": {
@@ -311,7 +322,13 @@
       "statusNoticeReset": "ステータスを{status}にリセットしました。",
       "statusNoticeSet": "ステータスをこのステージの既定である{status}に設定しました。",
       "statusNoticeCleared": "ステータスをクリアしました。このステージには適用されません。",
-      "statusNoneForStage": "このステージにはステータスが設定されていません。"
+      "statusNoneForStage": "このステージにはステータスが設定されていません。",
+      "owner": "担当者",
+      "ownerNone": "未割り当て",
+      "ownerMe": "{name}(自分)",
+      "ownerFormer": "元メンバー",
+      "ownerHelp": "この連絡先の担当者です。アクセス権で許可されているユーザーのみ選択できます。",
+      "ownerOutOfScope": "アクセス権では、この連絡先をそのユーザーに割り当てることはできません。"
     },
     "tags": {
       "title": "タグ",
@@ -521,7 +538,17 @@
       "noActivity": "この連絡先のアクティビティはまだありません。",
       "loadMore": "さらに読み込む",
       "yes": "はい",
-      "no": "いいえ"
+      "no": "いいえ",
+      "owner": "担当者",
+      "ownerNone": "未割り当て",
+      "ownerChange": "担当者を変更",
+      "ownerChanged": "担当者を{name}に設定しました。",
+      "ownerCleared": "担当者を削除しました。",
+      "ownerConflict": "他のユーザーが先にこの連絡先を変更しました。再読み込みしたので、もう一度お試しください。",
+      "ownerForbidden": "アクセス権では、この連絡先をそのユーザーに割り当てることはできません。",
+      "ownerFailed": "担当者を変更できませんでした。もう一度お試しください。",
+      "ownerMe": "{name}(自分)",
+      "ownerFormer": "元メンバー"
     },
     "attributes": {
       "eyebrow": "その他 / 属性",
@@ -1146,7 +1173,11 @@
         "willClear": "{count, plural, other {選択したすべての#件の連絡先}}で空になります。",
         "requiredNoClear": "必須プロパティはクリアできません。",
         "problemEmpty": "値を入力するか、「クリア」を選択してください。"
-      }
+      },
+      "titleAll": "一致するすべての連絡先を更新",
+      "hintAll": "現在のフィルターに一致するすべての連絡先に同じ値を設定します。「変更しない」のままの項目は変更されません。",
+      "applyAll": "一致するすべての連絡先を更新",
+      "ownerOnlyNote": "一致するすべての連絡先では、ここで変更できるのは担当者のみです。ステージ、ステータス、プロパティを変更するには、行にチェックを入れてください。"
     },
     "kanban": {
       "board": "ステージ別の連絡先",
@@ -1198,6 +1229,148 @@
         "noFile": "未保存",
         "keptUntil": "{date} まで保存",
         "downloadFailed": "ファイルをダウンロードできませんでした。期限切れの可能性があります。"
+      }
+    },
+    "singleSend": {
+      "close": "閉じる",
+      "cancel": "キャンセル",
+      "send": "送信",
+      "sending": "送信中",
+      "contact": "連絡先",
+      "name": "名前",
+      "phone": "携帯電話",
+      "email": "メール",
+      "title": {
+        "whatsapp": "WhatsAppメッセージを送信",
+        "sms": "SMSを送信",
+        "email": "メールを送信",
+        "call": "通話"
+      },
+      "optedOut": "この連絡先は連絡を受け取らない設定になっています。メッセージは送信できません。",
+      "noPhone": "この連絡先には電話番号がありません。",
+      "noEmail": "この連絡先にはメールアドレスがありません。",
+      "number": "送信元",
+      "numberHint": "メッセージの送信に使用するWhatsApp番号です。",
+      "noChannel": "WhatsApp番号が接続されていません。先にチャネルで接続してください。",
+      "template": "WhatsAppテンプレート",
+      "templatePlaceholder": "テンプレートを選択",
+      "noTemplates": "この番号で承認済みのテンプレートがありません。",
+      "notSendable": "このテンプレートはここでは入力できません（{reason}）。",
+      "variables": "テンプレート変数",
+      "preview": "プレビュー",
+      "slot": "変数 {key}",
+      "loading": "読み込み中",
+      "openFailed": "会話を開けませんでした: {message}",
+      "sent": "{name} さん宛てのメッセージをキューに追加しました。",
+      "failed": "送信できませんでした: {message}",
+      "callIntro": "ブラウザからこの連絡先にWhatsApp通話を発信します。",
+      "callOff": "このWhatsApp番号では通話が有効になっていません。番号の設定で有効にしてください。",
+      "callPermission": "この連絡先はまだ通話を許可していません。通話するにはまず相手の許可が必要です。",
+      "callReady": "{phone} に発信できます。",
+      "later": {
+        "sms": "CRMからのSMS送信はまだ利用できません。",
+        "email": "CRMからのメール送信はまだ利用できません。"
+      },
+      "openApp": {
+        "sms": "メッセージアプリで開く",
+        "email": "メールアプリで開く"
+      }
+    },
+    "views": {
+      "label": "ビュー",
+      "all": "すべての連絡先",
+      "add": "ビューを追加",
+      "changed": "このビューの保存後にフィルターが変更されました",
+      "more": "{name} のその他の操作",
+      "picker": {
+        "title": "ビューを選択",
+        "create": "新しいビューを作成",
+        "search": "ビューを検索...",
+        "chipAll": "すべて",
+        "chipPinned": "タブに表示",
+        "chipShared": "共有",
+        "empty": "ビューが見つかりません",
+        "pinned": "タブに表示"
+      },
+      "menu": {
+        "rename": "ビュー名を変更",
+        "update": "現在のフィルターを保存",
+        "unpin": "タブから削除",
+        "pin": "タブとして表示",
+        "delete": "ビューを削除",
+        "edit": "ビューを編集"
+      },
+      "drawer": {
+        "editTitle": "ビュー名を変更",
+        "name": "ビューの名前",
+        "namePlaceholder": "無題のビュー",
+        "shareWith": "共有先",
+        "justMe": "自分のみ",
+        "everyone": "全員",
+        "save": "更新",
+        "cancel": "キャンセル",
+        "close": "閉じる"
+      },
+      "toast": {
+        "created": "ビュー「{name}」を作成しました。",
+        "updated": "ビューを更新しました。",
+        "filtersSaved": "フィルターを「{name}」に保存しました。",
+        "deleted": "ビュー「{name}」を削除しました。",
+        "failed": "ビューを保存できませんでした: {message}",
+        "conflict": "他のユーザーがこのビューを変更しました。再読み込みしてもう一度お試しください。"
+      },
+      "delete": {
+        "title": "このビューを削除しますか？",
+        "message": "「{name}」は共有されているすべてのユーザーから削除されます。連絡先は変更されません。",
+        "confirm": "ビューを削除",
+        "cancel": "ビューを残す"
+      },
+      "editor": {
+        "title": {
+          "create": "新しいビューを作成",
+          "edit": "ビューを編集"
+        },
+        "close": "閉じる",
+        "back": "連絡先に戻る",
+        "name": "ビュー名",
+        "namePlaceholder": "ビュー名を入力",
+        "favorite": "お気に入りに設定",
+        "favoriteHint": "お気に入りのビューは専用のタブになります。",
+        "shareWith": "共有先",
+        "justMe": "自分のみ",
+        "everyone": "全員",
+        "filterTitle": "連絡先をフィルター",
+        "filterHint": "すべて、またはいずれかの条件に一致させます。グループを追加すると、より複雑なフィルターを作成できます。",
+        "columnsTitle": "列の設定",
+        "locked": "常に表示",
+        "cancel": "キャンセル",
+        "create": "ビューを作成",
+        "save": "ビューを保存",
+        "saving": "保存中",
+        "needName": "ビュー名を入力してください。",
+        "needFilter": "完全な条件を1つ以上追加してください。",
+        "notFound": "このビューが見つからないか、削除されました。",
+        "noPermission": "この操作を行う権限がありません。",
+        "loading": "読み込み中",
+        "columnsHint": "このビューに表示する列を検索してチェックし、選択した列をドラッグして順序を設定します。",
+        "drag": "{name} をドラッグして並べ替え",
+        "selectedUsers": "選択したユーザー",
+        "accessLevel": "アクセスレベル",
+        "canView": "閲覧可能",
+        "canEdit": "閲覧・編集可能",
+        "peoplePlaceholder": "ユーザーを検索",
+        "noPeople": "ユーザーが見つかりません",
+        "removePerson": "{name} を削除",
+        "clearPeople": "すべてのユーザーをクリア",
+        "needPeople": "1人以上のユーザーを選択してください。",
+        "onlyCreator": "このビューの共有先を変更できるのは、作成した本人のみです。",
+        "searchColumns": "列を検索",
+        "noColumnMatch": "一致する列がありません。",
+        "available": "利用可能な列",
+        "selected": "選択した列",
+        "selectAll": "すべて選択",
+        "reorder": "ドラッグして列の順序を変更",
+        "remove": "{name} を削除"
       }
     }
   }

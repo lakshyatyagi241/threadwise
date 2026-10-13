@@ -10,6 +10,7 @@ import {
   invalidConditionSchema,
   segmentRulesSchema,
   type SegmentCondition,
+  type SegmentNode,
   type SegmentRules,
 } from './rules';
 
@@ -216,7 +217,7 @@ export type SegmentFilterInput = SegmentFromFiltersInput['filter'];
  * Archived contacts are never in a segment, as they are not in the default list.
  */
 export function contactFilterToRules(filter: SegmentFilterInput): SegmentRules | null {
-  const c: SegmentCondition[] = [];
+  const c: SegmentNode[] = [];
   const add = (
     field: string,
     operator: SegmentCondition['operator'],
@@ -225,6 +226,19 @@ export function contactFilterToRules(filter: SegmentFilterInput): SegmentRules |
 
   if (filter.q) add('search', 'matches', filter.q);
   if (filter.ownerId) add('owner', 'equals', filter.ownerId);
+  const ownerIds = filter.ownerIds ?? [];
+  if (ownerIds.length > 0 && filter.unassigned) {
+    // "These people or nobody" is an OR inside the AND of the other parts.
+    c.push({
+      type: 'group',
+      combinator: 'or',
+      children: [
+        { type: 'condition', field: 'owner', operator: 'in', value: ownerIds },
+        { type: 'condition', field: 'owner', operator: 'is_empty' },
+      ],
+    });
+  } else if (ownerIds.length > 0) add('owner', 'in', ownerIds);
+  else if (filter.unassigned) add('owner', 'is_empty');
   if (filter.lifecycleStage) add('lifecycleStage', 'equals', filter.lifecycleStage);
   if (filter.status) add('status', 'equals', filter.status);
   if (filter.source) add('source', 'equals', filter.source);
@@ -248,7 +262,7 @@ export function contactFilterToRules(filter: SegmentFilterInput): SegmentRules |
   }
 
   if (c.length === 0 || c.length > SEGMENT_MAX_CONDITIONS) return null;
-  return { type: 'group', combinator: 'and', children: c };
+  return { type: 'group', combinator: 'and', children: c } as SegmentRules;
 }
 
 // --- the contacts of a segment -----------------------------------------------------------------

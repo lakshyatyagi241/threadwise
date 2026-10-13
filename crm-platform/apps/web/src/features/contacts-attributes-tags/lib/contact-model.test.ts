@@ -228,6 +228,7 @@ describe('contact form <-> API mapping', () => {
       name: 'Priya',
       firstName: 'Priya',
       phone: '+919876543210',
+      ownerId: null,
       customFields: { order_id: 'A12' },
     });
     expect(payload).not.toHaveProperty('title');
@@ -396,5 +397,30 @@ describe('lead score in the form (AI lead scoring)', () => {
   it('sends a score typed on a new contact only when there is one', () => {
     expect(toCreatePayload({ ...base, leadScore: '35' }, [])).toMatchObject({ leadScore: 35 });
     expect(toCreatePayload(base, [])).not.toHaveProperty('leadScore');
+  });
+});
+
+describe('owner in the form', () => {
+  const ASHA = '11111111-1111-4111-8111-111111111111';
+  const RAVI = '22222222-2222-4222-8222-222222222222';
+  const base = { ...EMPTY_FORM, firstName: 'A' };
+  const update = (ownerId: string, previous: string | null) =>
+    toUpdatePayload({ ...base, ownerId }, [], 1, false, {}, undefined, undefined, null, previous);
+
+  it('fills the edit form from the contact, unassigned as an empty string', () => {
+    expect(contactToForm(row({ ownerId: ASHA })).ownerId).toBe(ASHA);
+    expect(contactToForm(row({ ownerId: null })).ownerId).toBe('');
+  });
+
+  it('always says who owns a new contact: the picked person, or null for nobody (omitting it would mean the creator)', () => {
+    expect(toCreatePayload({ ...base, ownerId: ASHA }, [])).toMatchObject({ ownerId: ASHA });
+    expect(toCreatePayload({ ...base, ownerId: '' }, [])).toMatchObject({ ownerId: null });
+  });
+
+  it('sends the owner on an update only when the form changed it, so an unrelated save never re-assigns', () => {
+    expect(update(ASHA, ASHA)).not.toHaveProperty('ownerId');
+    expect(update('', null)).not.toHaveProperty('ownerId');
+    expect(update(RAVI, ASHA)).toMatchObject({ ownerId: RAVI });
+    expect(update('', ASHA)).toMatchObject({ ownerId: null });
   });
 });

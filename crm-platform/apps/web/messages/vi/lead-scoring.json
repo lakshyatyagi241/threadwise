@@ -261,7 +261,7 @@
         "offBody": "Hội thoại không được đọc. Điểm số chỉ dùng thông tin liên hệ và số liệu tương tác.",
         "needsScoring": "Hãy bật chấm điểm khách hàng tiềm năng bằng AI trước.",
         "stageLabel": "Đề xuất giai đoạn vòng đời",
-        "stageBody": "Khi hội thoại cho thấy rõ liên hệ đã tiến triển, AI sẽ đề xuất giai đoạn tiếp theo. Một người sẽ chấp nhận hoặc bỏ qua; không có gì tự động chuyển, và các giai đoạn Thắng và Thua không bao giờ được đề xuất.",
+        "stageBody": "Khi cuộc trò chuyện cho thấy rõ liên hệ đã tiến triển, AI chọn giai đoạn tiếp theo. AI không bao giờ đặt giai đoạn Thắng và Thua. Chọn bên dưới: áp dụng thay đổi tự động hay chờ một người quyết định.",
         "masked": {
           "title": "Cách che dữ liệu cá nhân",
           "phone": "Số điện thoại chỉ giữ lại chữ số đầu và hai chữ số cuối (+91 ***** ***10)",
@@ -281,6 +281,17 @@
           "body": "Sau khi bật, các tin nhắn gần đây của liên hệ sẽ được gửi đến nhà cung cấp AI qua OpenRouter khi cuộc trò chuyện im ắng. Số điện thoại, email, số thẻ và tên được che một phần trước, nên dữ liệu gửi đi không thể dùng để liên lạc với người đó. Bạn có thể tắt bất cứ lúc nào.",
           "yes": "Bật",
           "no": "Hủy"
+        },
+        "stageMode": {
+          "title": "Cách đổi giai đoạn",
+          "auto": {
+            "label": "Tự động",
+            "body": "Liên hệ được chuyển ngay và cuộc trò chuyện hiện một dòng có nút Hoàn tác."
+          },
+          "manual": {
+            "label": "Thủ công",
+            "body": "Đề xuất nằm trong Đề xuất giai đoạn cho đến khi có người chấp nhận hoặc bỏ qua."
+          }
         }
       }
     },
