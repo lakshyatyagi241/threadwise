@@ -88,7 +88,7 @@ export interface ContactSource {
   isUnsubscribed: boolean;
   whatsappSubscriptionStatus: string | null;
   leadScore: number | null;
-  leadScoreSource: string | null;
+  leadScoreSource: 'manual' | 'ai' | null;
   leadScoreReasons: string[] | null;
   leadScoredAt: Date | null;
   leadScoreModel: string | null;

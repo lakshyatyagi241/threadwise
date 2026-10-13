@@ -720,6 +720,7 @@ export class FlowRuntimeService {
                ch.uuid AS channel_uuid, ch.name AS channel_name, ch.kind AS channel_kind,
                CASE WHEN r.node_count > 0 THEN r.node_count
                     ELSE (SELECT count(*)::int FROM flow_run_steps s WHERE s.org_id = r.org_id AND s.run_id = r.id) END AS steps,
+               (SELECT count(*)::int FROM flow_run_steps rs WHERE rs.org_id = r.org_id AND rs.run_id = r.id AND rs.event = 'reply') AS replies,
                r.node_count, r.error_count, r.duration_ms
         FROM flow_runs r
         JOIN flows f ON f.org_id = r.org_id AND f.id = r.flow_id
@@ -1149,6 +1150,7 @@ export class FlowRuntimeService {
       endedAt: iso(r.ended_at),
       resumeAt: iso(r.resume_at),
       steps: Number(r.steps),
+      replies: Number(r.replies ?? 0),
       nodeCount: Number(r.node_count),
       errorCount: Number(r.error_count),
       durationMs: Number(r.duration_ms),

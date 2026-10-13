@@ -119,6 +119,8 @@
       "colStarted": "Rozpoczęto",
       "colActivity": "Ostatnia aktywność",
       "colSteps": "Kroki",
+      "colReplies": "Odpowiedzi",
+      "repliesHint": "Wiadomości klienta, które dotarły do węzła oczekiwania tego uruchomienia",
       "colActions": "Działania",
       "open": "Otwórz uruchomienie",
       "cancel": "Anuluj",
