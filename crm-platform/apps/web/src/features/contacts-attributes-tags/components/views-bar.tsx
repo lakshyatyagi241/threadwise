@@ -82,6 +82,10 @@ export function ViewsBar({
             views={all}
             activeId={activeId}
             canCreate={can.create}
+            onAll={() => {
+              setPickerOpen(false);
+              onSelect(null);
+            }}
             onCreate={() => {
               setPickerOpen(false);
               router.push('/contacts/views/new');
@@ -235,12 +239,14 @@ function Picker({
   views,
   activeId,
   canCreate,
+  onAll,
   onCreate,
   onPick,
 }: {
   views: readonly ContactViewResponse[];
   activeId: string;
   canCreate: boolean;
+  onAll: () => void;
   onCreate: () => void;
   onPick: (v: ContactViewResponse) => void;
 }) {
@@ -294,6 +300,19 @@ function Picker({
         ))}
       </div>
       <ul className="max-h-64 space-y-0.5 overflow-y-auto">
+        <li>
+          <button
+            type="button"
+            onClick={onAll}
+            aria-current={activeId === '' ? 'true' : undefined}
+            className={cn(
+              'flex w-full items-center rounded-md px-2 py-1.5 text-start text-sm font-medium outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary',
+              activeId === '' && 'bg-muted',
+            )}
+          >
+            {t('all')}
+          </button>
+        </li>
         {shown.length === 0 && (
           <li className="py-4 text-center text-sm text-muted-foreground">{t('picker.empty')}</li>
         )}
