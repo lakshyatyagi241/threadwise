@@ -10,11 +10,13 @@ ALTER TABLE flows ADD CONSTRAINT chk_flows_trigger_kind CHECK (trigger_kind IN
 
 CREATE TABLE flow_segment_state (
   org_id bigint NOT NULL REFERENCES organizations (id) ON DELETE CASCADE,
-  flow_id bigint NOT NULL REFERENCES flows (id) ON DELETE CASCADE,
-  contact_id bigint NOT NULL REFERENCES contacts (id) ON DELETE CASCADE,
+  flow_id bigint NOT NULL,
+  contact_id bigint NOT NULL,
   inside boolean NOT NULL,
   updated_at timestamptz NOT NULL DEFAULT now(),
-  PRIMARY KEY (flow_id, contact_id)
+  PRIMARY KEY (flow_id, contact_id),
+  CONSTRAINT fk_flow_segment_state_flow_id FOREIGN KEY (org_id, flow_id) REFERENCES flows (org_id, id) ON DELETE CASCADE,
+  CONSTRAINT fk_flow_segment_state_contact_id FOREIGN KEY (org_id, contact_id) REFERENCES contacts (org_id, id) ON DELETE CASCADE
 );
 
 ALTER TABLE flow_segment_state ENABLE ROW LEVEL SECURITY;
