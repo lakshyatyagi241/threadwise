@@ -738,7 +738,9 @@
           "link": "Gebruik een sitepad zoals /legal/terms, of een volledig http- of https-adres.",
           "senderFormat": "Kies een van de afzenders uit de lijst.",
           "countryFormat": "Gebruik een landcode van twee letters.",
-          "senderRequired": "Kies een afzenderkanaal voordat je het sjabloon aanmaakt."
+          "senderRequired": "Kies een afzenderkanaal voordat je het sjabloon aanmaakt.",
+          "domainFormat": "{entry} is geen geldig domein. Gebruik een naam zoals voorbeeld.nl.",
+          "tooMany": "Maximaal {max} domeinen."
         },
         "policy": {
           "kicker": "Aanmelden",
@@ -820,6 +822,26 @@
           },
           "maxAttempts": {
             "label": "Max. pogingen"
+          },
+          "businessEmailOnly": {
+            "label": "Alleen zakelijke e-mailadressen",
+            "hintOn": "Gratis aanbieders zoals Gmail, Outlook en Yahoo worden bij het aanmelden geweigerd.",
+            "hintOff": "Iedereen kan zich aanmelden met een gratis privéadres."
+          },
+          "blockDisposableEmail": {
+            "label": "Tijdelijke e-mail blokkeren",
+            "hintOn": "Wegwerp- en tijdelijke domeinen, en domeinen zonder mailserver, worden geweigerd.",
+            "hintOff": "Tijdelijke adressen worden geaccepteerd."
+          },
+          "requirePhoneVerification": {
+            "label": "Geverifieerd mobiel nummer verplicht stellen",
+            "hintOn": "Elke aanmelding moet een eenmalige code bevestigen. Als de code niet kan worden verstuurd, stopt de aanmelding in plaats van de controle over te slaan.",
+            "hintOff": "De codestap wordt alleen uitgevoerd als de aanmeldcode hieronder aan staat."
+          },
+          "blockedEmailDomains": {
+            "label": "Altijd geblokkeerde domeinen",
+            "hint": "Eén domein per regel. Subdomeinen worden ook geblokkeerd. Ze worden geweigerd, ook als «Alleen zakelijke e-mailadressen» uit staat.",
+            "placeholder": "voorbeeld.nl"
           }
         },
         "otp": {
@@ -1069,6 +1091,12 @@
             "invalid": "Die voettekst is niet geaccepteerd.",
             "unexpected": "De voettekst kon niet worden opgeslagen. Probeer het zo meteen opnieuw."
           }
+        },
+        "guard": {
+          "kicker": "Aanmeldbeveiliging",
+          "title": "Controle op zakelijke e-mail en mobiel nummer",
+          "description": "Houdt wegwerp- en privéadressen buiten en zorgt dat elk nieuw account een geverifieerd mobiel nummer heeft. Geldt voor aanmelden met e-mail en via social.",
+          "phoneOffWarning": "Met de mobiele controle uit kunnen accounts zonder geverifieerd nummer worden gemaakt, wat massale nepaanmeldingen makkelijker maakt."
         }
       },
       "social": {

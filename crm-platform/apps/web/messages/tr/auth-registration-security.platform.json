@@ -738,7 +738,9 @@
           "link": "/legal/terms gibi bir site yolu veya tam bir http ya da https adresi kullanın.",
           "senderFormat": "Listeden gönderenlerden birini seçin.",
           "countryFormat": "İki harfli bir ülke kodu kullanın.",
-          "senderRequired": "Şablonu oluşturmadan önce bir gönderen kanalı seçin."
+          "senderRequired": "Şablonu oluşturmadan önce bir gönderen kanalı seçin.",
+          "domainFormat": "{entry} geçerli bir alan adı değil. ornek.com gibi bir ad kullanın.",
+          "tooMany": "En fazla {max} alan adı."
         },
         "policy": {
           "kicker": "Kaydolma",
@@ -820,6 +822,26 @@
           },
           "maxAttempts": {
             "label": "En fazla deneme"
+          },
+          "businessEmailOnly": {
+            "label": "Yalnızca iş e-posta adresleri",
+            "hintOn": "Gmail, Outlook ve Yahoo gibi ücretsiz sağlayıcılar kayıt sırasında reddedilir.",
+            "hintOff": "Herkes ücretsiz bir kişisel adresle kaydolabilir."
+          },
+          "blockDisposableEmail": {
+            "label": "Geçici e-postayı engelle",
+            "hintOn": "Tek kullanımlık ve geçici alan adları ile posta sunucusu olmayan alan adları reddedilir.",
+            "hintOff": "Geçici adresler kabul edilir."
+          },
+          "requirePhoneVerification": {
+            "label": "Doğrulanmış cep telefonu numarası iste",
+            "hintOn": "Her kayıt tek kullanımlık bir kodu onaylamalıdır. Kod gönderilemezse kayıt, denetimi atlamak yerine durur.",
+            "hintOff": "Kod adımı yalnızca aşağıdaki kayıt kodu açıkken çalışır."
+          },
+          "blockedEmailDomains": {
+            "label": "Her zaman engellenen alan adları",
+            "hint": "Her satırda bir alan adı. Alt alan adları da engellenir. «Yalnızca iş e-posta adresleri» kapalı olsa bile reddedilirler.",
+            "placeholder": "ornek.com"
           }
         },
         "otp": {
@@ -1069,6 +1091,12 @@
             "invalid": "Bu alt bilgi kabul edilmedi.",
             "unexpected": "Alt bilgi kaydedilemedi. Biraz sonra tekrar deneyin."
           }
+        },
+        "guard": {
+          "kicker": "Kayıt koruması",
+          "title": "İş e-postası ve cep telefonu kontrolü",
+          "description": "Tek kullanımlık ve kişisel adresleri dışarıda tutar ve her yeni hesabın doğrulanmış bir cep telefonu numarası olmasını sağlar. E-posta ve sosyal kayıtlarda geçerlidir.",
+          "phoneOffWarning": "Cep telefonu kontrolü kapalıyken hesaplar doğrulanmış numara olmadan oluşturulabilir; bu da toplu sahte kayıtları kolaylaştırır."
         }
       },
       "social": {

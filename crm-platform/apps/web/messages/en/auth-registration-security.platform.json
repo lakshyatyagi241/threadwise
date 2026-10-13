@@ -738,7 +738,9 @@
           "link": "Use a site path such as /legal/terms, or a full http or https address.",
           "senderFormat": "Choose one of the senders from the list.",
           "countryFormat": "Use a two-letter country code.",
-          "senderRequired": "Choose a sender channel before creating the template."
+          "senderRequired": "Choose a sender channel before creating the template.",
+          "domainFormat": "{entry} is not a valid domain. Use a name such as example.com.",
+          "tooMany": "No more than {max} domains."
         },
         "policy": {
           "kicker": "Sign-up",
@@ -820,6 +822,26 @@
           },
           "maxAttempts": {
             "label": "Max attempts"
+          },
+          "businessEmailOnly": {
+            "label": "Work email addresses only",
+            "hintOn": "Free providers such as Gmail, Outlook and Yahoo are refused at sign-up.",
+            "hintOff": "Anyone can sign up with a free personal address."
+          },
+          "blockDisposableEmail": {
+            "label": "Block temporary email",
+            "hintOn": "Disposable and throwaway domains, and domains with no mail server, are refused.",
+            "hintOff": "Temporary addresses are accepted."
+          },
+          "requirePhoneVerification": {
+            "label": "Require a verified mobile number",
+            "hintOn": "Every sign-up must confirm a one-time code. If the code cannot be sent, sign-up stops instead of skipping the check.",
+            "hintOff": "The code step runs only when the sign-up code below is on."
+          },
+          "blockedEmailDomains": {
+            "label": "Always blocked domains",
+            "hint": "One domain per line. Subdomains are blocked too. These are refused even when work email only is off.",
+            "placeholder": "example.com"
           }
         },
         "otp": {
@@ -1069,6 +1091,12 @@
             "invalid": "That footer was not accepted.",
             "unexpected": "The footer could not be saved. Try again in a moment."
           }
+        },
+        "guard": {
+          "kicker": "Sign-up protection",
+          "title": "Work email and mobile check",
+          "description": "Keeps throwaway and personal addresses out and makes sure every new account has a verified mobile number. Applies to email and social sign-up.",
+          "phoneOffWarning": "With the mobile check off, accounts can be created without a verified number, which makes bulk fake sign-ups easier."
         }
       },
       "social": {

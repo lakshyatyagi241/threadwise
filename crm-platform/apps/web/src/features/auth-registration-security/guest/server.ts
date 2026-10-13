@@ -36,6 +36,8 @@ export const FALLBACK_CONFIG: RegistrationConfigResponse = {
   trialDays: 0,
   rememberMeEnabled: true,
   otp: { enabled: false },
+  businessEmailOnly: true,
+  phoneRequired: true,
   captcha: null,
   social: { google: false, facebook: false },
   defaultCountryIso: null,

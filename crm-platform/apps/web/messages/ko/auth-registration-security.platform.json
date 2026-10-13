@@ -738,7 +738,9 @@
           "link": "/legal/terms 같은 사이트 경로 또는 전체 http/https 주소를 사용하세요.",
           "senderFormat": "목록에서 발신자를 선택하세요.",
           "countryFormat": "두 글자 국가 코드를 사용하세요.",
-          "senderRequired": "템플릿을 만들기 전에 발신 채널을 선택하세요."
+          "senderRequired": "템플릿을 만들기 전에 발신 채널을 선택하세요.",
+          "domainFormat": "{entry}은(는) 올바른 도메인이 아닙니다. example.com 같은 이름을 사용하세요.",
+          "tooMany": "도메인은 {max}개까지 가능합니다."
         },
         "policy": {
           "kicker": "가입",
@@ -820,6 +822,26 @@
           },
           "maxAttempts": {
             "label": "최대 시도 횟수"
+          },
+          "businessEmailOnly": {
+            "label": "업무용 이메일 주소만",
+            "hintOn": "Gmail, Outlook, Yahoo 같은 무료 서비스는 가입 시 거부됩니다.",
+            "hintOff": "누구나 무료 개인 주소로 가입할 수 있습니다."
+          },
+          "blockDisposableEmail": {
+            "label": "임시 이메일 차단",
+            "hintOn": "일회용·임시 도메인과 메일 서버가 없는 도메인은 거부됩니다.",
+            "hintOff": "임시 주소도 허용됩니다."
+          },
+          "requirePhoneVerification": {
+            "label": "인증된 휴대폰 번호 필수",
+            "hintOn": "모든 가입은 일회용 코드를 확인해야 합니다. 코드를 보낼 수 없으면 확인을 건너뛰지 않고 가입이 중단됩니다.",
+            "hintOff": "아래 가입 코드가 켜져 있을 때만 코드 단계가 실행됩니다."
+          },
+          "blockedEmailDomains": {
+            "label": "항상 차단할 도메인",
+            "hint": "한 줄에 도메인 하나. 하위 도메인도 차단됩니다. '업무용 이메일 주소만'이 꺼져 있어도 거부됩니다.",
+            "placeholder": "example.com"
           }
         },
         "otp": {
@@ -1069,6 +1091,12 @@
             "invalid": "해당 푸터는 허용되지 않습니다.",
             "unexpected": "푸터를 저장할 수 없습니다. 잠시 후 다시 시도하세요."
           }
+        },
+        "guard": {
+          "kicker": "가입 보호",
+          "title": "업무용 이메일 및 휴대폰 확인",
+          "description": "일회용 주소와 개인 주소를 막고 모든 새 계정에 인증된 휴대폰 번호가 있도록 합니다. 이메일 및 소셜 가입에 적용됩니다.",
+          "phoneOffWarning": "휴대폰 확인을 끄면 인증된 번호 없이 계정을 만들 수 있어 대량 가짜 가입이 쉬워집니다."
         }
       },
       "social": {

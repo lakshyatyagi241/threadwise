@@ -738,7 +738,9 @@
           "link": "Verwenden Sie einen Website-Pfad wie /legal/terms oder eine vollständige http- oder https-Adresse.",
           "senderFormat": "Wählen Sie einen der Absender aus der Liste.",
           "countryFormat": "Verwenden Sie einen zweistelligen Ländercode.",
-          "senderRequired": "Wählen Sie einen Absenderkanal, bevor Sie die Vorlage erstellen."
+          "senderRequired": "Wählen Sie einen Absenderkanal, bevor Sie die Vorlage erstellen.",
+          "domainFormat": "{entry} ist keine gültige Domain. Verwenden Sie einen Namen wie beispiel.de.",
+          "tooMany": "Höchstens {max} Domains."
         },
         "policy": {
           "kicker": "Registrierung",
@@ -820,6 +822,26 @@
           },
           "maxAttempts": {
             "label": "Max. Versuche"
+          },
+          "businessEmailOnly": {
+            "label": "Nur geschäftliche E-Mail-Adressen",
+            "hintOn": "Kostenlose Anbieter wie Gmail, Outlook und Yahoo werden bei der Registrierung abgelehnt.",
+            "hintOff": "Jeder kann sich mit einer kostenlosen privaten Adresse registrieren."
+          },
+          "blockDisposableEmail": {
+            "label": "Temporäre E-Mail blockieren",
+            "hintOn": "Wegwerf- und temporäre Domains sowie Domains ohne Mailserver werden abgelehnt.",
+            "hintOff": "Temporäre Adressen werden akzeptiert."
+          },
+          "requirePhoneVerification": {
+            "label": "Bestätigte Mobilnummer verlangen",
+            "hintOn": "Jede Registrierung muss einen Einmalcode bestätigen. Kann der Code nicht gesendet werden, stoppt die Registrierung, statt die Prüfung zu überspringen.",
+            "hintOff": "Der Code-Schritt läuft nur, wenn der Registrierungscode unten aktiviert ist."
+          },
+          "blockedEmailDomains": {
+            "label": "Immer blockierte Domains",
+            "hint": "Eine Domain pro Zeile. Subdomains werden ebenfalls blockiert. Sie werden auch abgelehnt, wenn „Nur geschäftliche E-Mail-Adressen“ aus ist.",
+            "placeholder": "beispiel.de"
           }
         },
         "otp": {
@@ -1069,6 +1091,12 @@
             "invalid": "Diese Fußzeile wurde nicht akzeptiert.",
             "unexpected": "Die Fußzeile konnte nicht gespeichert werden. Versuchen Sie es gleich noch einmal."
           }
+        },
+        "guard": {
+          "kicker": "Registrierungsschutz",
+          "title": "Prüfung von Geschäfts-E-Mail und Mobilnummer",
+          "description": "Hält Wegwerf- und private Adressen fern und stellt sicher, dass jedes neue Konto eine bestätigte Mobilnummer hat. Gilt für die Registrierung per E-Mail und über soziale Netzwerke.",
+          "phoneOffWarning": "Bei ausgeschalteter Mobilprüfung können Konten ohne bestätigte Nummer angelegt werden, was massenhafte Fake-Registrierungen erleichtert."
         }
       },
       "social": {

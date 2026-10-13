@@ -738,7 +738,9 @@
           "link": "Use um caminho do site como /legal/terms ou um endereço completo http ou https.",
           "senderFormat": "Escolha um dos remetentes da lista.",
           "countryFormat": "Use um código de país de duas letras.",
-          "senderRequired": "Escolha um canal remetente antes de criar o modelo."
+          "senderRequired": "Escolha um canal remetente antes de criar o modelo.",
+          "domainFormat": "{entry} não é um domínio válido. Use um nome como exemplo.com.",
+          "tooMany": "No máximo {max} domínios."
         },
         "policy": {
           "kicker": "Cadastro",
@@ -820,6 +822,26 @@
           },
           "maxAttempts": {
             "label": "Máximo de tentativas"
+          },
+          "businessEmailOnly": {
+            "label": "Apenas e-mails profissionais",
+            "hintOn": "Provedores gratuitos como Gmail, Outlook e Yahoo são recusados no cadastro.",
+            "hintOff": "Qualquer pessoa pode se cadastrar com um endereço pessoal gratuito."
+          },
+          "blockDisposableEmail": {
+            "label": "Bloquear e-mail temporário",
+            "hintOn": "Domínios descartáveis e temporários, e domínios sem servidor de e-mail, são recusados.",
+            "hintOff": "Endereços temporários são aceitos."
+          },
+          "requirePhoneVerification": {
+            "label": "Exigir número de celular verificado",
+            "hintOn": "Todo cadastro deve confirmar um código de uso único. Se o código não puder ser enviado, o cadastro é interrompido em vez de pular a verificação.",
+            "hintOff": "A etapa do código só roda quando o código de cadastro abaixo está ativado."
+          },
+          "blockedEmailDomains": {
+            "label": "Domínios sempre bloqueados",
+            "hint": "Um domínio por linha. Os subdomínios também são bloqueados. São recusados mesmo com «apenas e-mails profissionais» desativado.",
+            "placeholder": "exemplo.com"
           }
         },
         "otp": {
@@ -1069,6 +1091,12 @@
             "invalid": "Esse rodapé não foi aceito.",
             "unexpected": "Não foi possível salvar o rodapé. Tente novamente em instantes."
           }
+        },
+        "guard": {
+          "kicker": "Proteção do cadastro",
+          "title": "Verificação de e-mail profissional e celular",
+          "description": "Barra endereços descartáveis e pessoais e garante que toda conta nova tenha um celular verificado. Vale para o cadastro por e-mail e o social.",
+          "phoneOffWarning": "Com a verificação de celular desativada, contas podem ser criadas sem número verificado, o que facilita cadastros falsos em massa."
         }
       },
       "social": {

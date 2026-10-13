@@ -738,7 +738,9 @@
           "link": "Utilisez un chemin du site tel que /legal/terms, ou une adresse http ou https complète.",
           "senderFormat": "Choisissez l’un des expéditeurs de la liste.",
           "countryFormat": "Utilisez un code pays à deux lettres.",
-          "senderRequired": "Choisissez un canal d’expédition avant de créer le modèle."
+          "senderRequired": "Choisissez un canal d’expédition avant de créer le modèle.",
+          "domainFormat": "{entry} n’est pas un domaine valide. Utilisez un nom comme exemple.fr.",
+          "tooMany": "Pas plus de {max} domaines."
         },
         "policy": {
           "kicker": "Inscription",
@@ -820,6 +822,26 @@
           },
           "maxAttempts": {
             "label": "Tentatives maximum"
+          },
+          "businessEmailOnly": {
+            "label": "Adresses e-mail professionnelles uniquement",
+            "hintOn": "Les fournisseurs gratuits comme Gmail, Outlook et Yahoo sont refusés à l’inscription.",
+            "hintOff": "N’importe qui peut s’inscrire avec une adresse personnelle gratuite."
+          },
+          "blockDisposableEmail": {
+            "label": "Bloquer les e-mails temporaires",
+            "hintOn": "Les domaines jetables et temporaires, ainsi que les domaines sans serveur de messagerie, sont refusés.",
+            "hintOff": "Les adresses temporaires sont acceptées."
+          },
+          "requirePhoneVerification": {
+            "label": "Exiger un numéro de mobile vérifié",
+            "hintOn": "Chaque inscription doit confirmer un code à usage unique. Si le code ne peut pas être envoyé, l’inscription s’arrête au lieu d’ignorer la vérification.",
+            "hintOff": "L’étape du code ne s’exécute que si le code d’inscription ci-dessous est activé."
+          },
+          "blockedEmailDomains": {
+            "label": "Domaines toujours bloqués",
+            "hint": "Un domaine par ligne. Les sous-domaines sont aussi bloqués. Ils sont refusés même si « Adresses e-mail professionnelles uniquement » est désactivé.",
+            "placeholder": "exemple.fr"
           }
         },
         "otp": {
@@ -1069,6 +1091,12 @@
             "invalid": "Ce pied de message n’a pas été accepté.",
             "unexpected": "Le pied de message n’a pas pu être enregistré. Réessayez dans un instant."
           }
+        },
+        "guard": {
+          "kicker": "Protection de l’inscription",
+          "title": "Vérification de l’e-mail professionnel et du mobile",
+          "description": "Écarte les adresses jetables et personnelles et garantit que chaque nouveau compte a un numéro de mobile vérifié. S’applique à l’inscription par e-mail et sociale.",
+          "phoneOffWarning": "Si la vérification du mobile est désactivée, des comptes peuvent être créés sans numéro vérifié, ce qui facilite les fausses inscriptions en masse."
         }
       },
       "social": {
