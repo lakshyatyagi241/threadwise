@@ -25,15 +25,18 @@ import {
   Th,
   TrendIcon,
   TwoToneTitle,
+  CustomRange,
   WindowSelect,
+  customRangeValid,
+  windowPatch,
   WorkspaceLink,
   rowTone,
 } from './parts';
 
 const NS = 'platform-payment-gateways.billing.history';
-const DEFAULTS = { window: '90d', status: 'all', gateway: '', q: '' };
+const DEFAULTS = { window: '90d', from: '', to: '', status: 'all', gateway: '', q: '' };
 const STATUSES: BillingStatusFilter[] = ['all', 'paid', 'failed', 'refunded', 'pending'];
-export const BILLING_WINDOWS: BillingWindow[] = ['7d', '30d', '90d', '1y', 'all'];
+export const BILLING_WINDOWS: BillingWindow[] = ['7d', '30d', '90d', '1y', 'all', 'custom'];
 
 /** Admin > Billing history (TW-PAYGW-041): the payment-event ledger with KPIs, a trend, filters and every order's outcome. */
 export function BillingHistoryPage() {
@@ -42,8 +45,11 @@ export function BillingHistoryPage() {
   const locale = useLocale();
   const toast = useToast();
   const { values, page, set, setPage } = useUrlState(DEFAULTS);
+  // A half-filled or reversed custom range keeps the 90-day report on screen until the two days are right.
+  const custom = values.window === 'custom' && customRangeValid(values.from, values.to);
   const query = {
-    window: values.window as BillingWindow,
+    window: (values.window === 'custom' && !custom ? '90d' : values.window) as BillingWindow,
+    ...(custom ? { from: values.from, to: values.to } : {}),
     status: values.status as BillingStatusFilter,
     gateway: values.gateway || undefined,
     q: values.q || undefined,
@@ -86,9 +92,19 @@ export function BillingHistoryPage() {
             <WindowSelect
               value={values.window}
               label={t('window')}
-              onChange={(v) => set({ window: v })}
+              onChange={(v) => set(windowPatch(v))}
               options={BILLING_WINDOWS.map((w) => ({ value: w, label: tc(`windows.${w}`) }))}
             />
+            {values.window === 'custom' && (
+              <CustomRange
+                from={values.from}
+                to={values.to}
+                onChange={(p) => set(p)}
+                fromLabel={tc('customFrom')}
+                toLabel={tc('customTo')}
+                invalidLabel={tc('customInvalid')}
+              />
+            )}
             <LinkPill href="/admin/billing-history/analytics">
               <TrendIcon />
               {tc('analytics')}

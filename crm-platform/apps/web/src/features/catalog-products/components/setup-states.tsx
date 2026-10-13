@@ -52,7 +52,7 @@ export function NoSenderCard() {
         <div className="min-w-0 flex-1">
           <div className="font-serif text-[22px] leading-tight">{t('noSender.title')}</div>
           <p className="mt-1.5 text-[12.5px] text-muted-foreground">{t('noSender.message')}</p>
-          <Link href="/channels" className={`${PILL_LINK} mt-4`}>
+          <Link href="/channels/whatsapp" className={`${PILL_LINK} mt-4`}>
             {t('noSender.connect')}
             <ArrowRightIcon className="size-3 rtl:rotate-180" />
           </Link>

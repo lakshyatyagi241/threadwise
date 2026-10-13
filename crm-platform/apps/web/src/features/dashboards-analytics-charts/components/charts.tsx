@@ -70,7 +70,7 @@ export function BarChart({
 
   return (
     <figure className="m-0">
-      <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={label} className="h-auto w-full">
+      <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={label} className="mx-auto h-auto max-h-80 w-full">
         {[0, 0.25, 0.5, 0.75, 1].map((f) => (
           <g key={f}>
             <line
@@ -348,7 +348,7 @@ export function LineChart({
       .join(' ');
   return (
     <figure className="m-0">
-      <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={label} className="h-auto w-full">
+      <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={label} className="mx-auto h-auto max-h-80 w-full">
         {[0, 0.25, 0.5, 0.75, 1].map((f) => (
           <g key={f}>
             <line

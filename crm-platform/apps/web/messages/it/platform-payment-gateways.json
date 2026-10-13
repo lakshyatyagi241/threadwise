@@ -237,8 +237,12 @@
           "30d": "Ultimi 30 giorni",
           "90d": "Ultimi 90 giorni",
           "1y": "Ultimo anno",
-          "all": "Sempre"
-        }
+          "all": "Sempre",
+          "custom": "Intervallo personalizzato"
+        },
+        "customFrom": "Data iniziale",
+        "customTo": "Data finale",
+        "customInvalid": "Scegli due giorni validi: l'inizio non può essere dopo la fine, con al massimo 5 anni di distanza."
       },
       "orders": {
         "title": "Storico ordini",
@@ -250,7 +254,8 @@
         "windows": {
           "90d": "Ultimi 90 giorni",
           "this_year": "Quest’anno",
-          "all": "Sempre"
+          "all": "Sempre",
+          "custom": "Intervallo personalizzato"
         },
         "kpi": {
           "total": "Ordini totali",
@@ -434,7 +439,7 @@
           "gross": "Ricavi lordi",
           "net": "Ricavi netti",
           "netPct": "{pct}% netto",
-          "success": "Autorizzazioni riuscite",
+          "success": "Tasso di successo dei pagamenti",
           "failed": "Non riuscite",
           "events": "{count, plural, one {# evento} other {# eventi}}",
           "refunds": "Rimborsi",

@@ -237,8 +237,12 @@
           "30d": "最近 30 天",
           "90d": "最近 90 天",
           "1y": "最近一年",
-          "all": "全部时间"
-        }
+          "all": "全部时间",
+          "custom": "自定义范围"
+        },
+        "customFrom": "开始日期",
+        "customTo": "结束日期",
+        "customInvalid": "请选择两个有效日期：开始日期不能晚于结束日期，且相隔不超过 5 年。"
       },
       "orders": {
         "title": "订单记录",
@@ -250,7 +254,8 @@
         "windows": {
           "90d": "最近 90 天",
           "this_year": "今年",
-          "all": "全部时间"
+          "all": "全部时间",
+          "custom": "自定义范围"
         },
         "kpi": {
           "total": "订单总数",
@@ -434,7 +439,7 @@
           "gross": "总收入",
           "net": "净收入",
           "netPct": "净额 {pct}%",
-          "success": "授权成功率",
+          "success": "支付成功率",
           "failed": "失败",
           "events": "{count, plural, other {# 个事件}}",
           "refunds": "退款",

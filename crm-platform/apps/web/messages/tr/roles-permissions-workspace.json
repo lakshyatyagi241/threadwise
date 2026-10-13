@@ -102,7 +102,8 @@
         "added": "{name} çalışma alanına eklendi.",
         "rolesUpdated": "{name} için roller güncellendi.",
         "deactivated": "{name} devre dışı bırakıldı.",
-        "reactivated": "{name} yeniden etkinleştirildi."
+        "reactivated": "{name} yeniden etkinleştirildi.",
+        "invited": "{name} kişisine davet gönderildi."
       },
       "deactivate": {
         "action": "Devre dışı bırak",
@@ -123,7 +124,13 @@
         "passwordShort": "Parola en az 8 karakter olmalıdır.",
         "generate": "Oluştur",
         "role": "Rol",
-        "submit": "Üye ekle"
+        "submit": "Üye ekle",
+        "inviteHint": "Kişiye kendi parolasını belirlemesi için bir bağlantı e-postayla gönderilir. Bağlantı bir kez çalışır ve birkaç gün sonra sona erer.",
+        "submitInvite": "Davet gönder",
+        "linkNotSent": "{email} adresine e-posta gönderilemedi. Bu bağlantıyı kopyalayıp kişiye iletin; tekrar gösterilmeyecek.",
+        "copyLink": "Bağlantıyı kopyala",
+        "copied": "Kopyalandı",
+        "done": "Bitti"
       },
       "changeRole": {
         "title": "{name} kişisinin rollerini değiştir",

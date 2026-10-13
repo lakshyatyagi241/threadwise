@@ -237,8 +237,12 @@
           "30d": "Laatste 30 dagen",
           "90d": "Laatste 90 dagen",
           "1y": "Afgelopen jaar",
-          "all": "Alle tijd"
-        }
+          "all": "Alle tijd",
+          "custom": "Aangepast bereik"
+        },
+        "customFrom": "Vanaf datum",
+        "customTo": "Tot datum",
+        "customInvalid": "Kies twee geldige dagen: het begin mag niet na het einde liggen, met hooguit 5 jaar ertussen."
       },
       "orders": {
         "title": "Bestelgeschiedenis",
@@ -250,7 +254,8 @@
         "windows": {
           "90d": "Laatste 90 dagen",
           "this_year": "Dit jaar",
-          "all": "Alle tijd"
+          "all": "Alle tijd",
+          "custom": "Aangepast bereik"
         },
         "kpi": {
           "total": "Totaal bestellingen",
@@ -434,7 +439,7 @@
           "gross": "Bruto omzet",
           "net": "Netto omzet",
           "netPct": "{pct}% netto",
-          "success": "Succes autorisaties",
+          "success": "Slagingspercentage betalingen",
           "failed": "Mislukt",
           "events": "{count, plural, one {# gebeurtenis} other {# gebeurtenissen}}",
           "refunds": "Terugbetalingen",

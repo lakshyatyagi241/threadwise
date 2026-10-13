@@ -1182,7 +1182,7 @@
       },
       "exports": {
         "title": "Exporte",
-        "hint": "Kontaktexporte aus dem Hub, neueste zuerst. Die heruntergeladene Datei wird nicht aufbewahrt.",
+        "hint": "Kontaktexporte aus dem Hub, neueste zuerst. Jede Datei wird 30 Tage aufbewahrt, damit Sie und Teammitglieder mit Exportrecht sie erneut herunterladen können.",
         "empty": "Noch keine Exporte.",
         "by": "Von",
         "rows": "Kontakte",
@@ -1191,7 +1191,11 @@
         "selections": {
           "ids": "Markierte Kontakte",
           "filter": "Alles, was passt"
-        }
+        },
+        "download": "Herunterladen",
+        "noFile": "Nicht gespeichert",
+        "keptUntil": "Aufbewahrt bis {date}",
+        "downloadFailed": "Die Datei konnte nicht heruntergeladen werden. Sie ist möglicherweise abgelaufen."
       }
     }
   }
