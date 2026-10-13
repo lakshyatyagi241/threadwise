@@ -137,7 +137,8 @@
         "recipients": "{count} người nhận",
         "scheduled": "Lên lịch: {date}",
         "instant": "Gửi: ngay lập tức",
-        "template": "Mẫu {name}"
+        "template": "Mẫu {name}",
+        "cost": "Chi phí"
       },
       "createBroadcast": "Tạo gửi hàng loạt",
       "noData": "Không tìm thấy dữ liệu",
@@ -648,7 +649,9 @@
         "read": "Đã đọc",
         "replies": "Phản hồi",
         "clicks": "Lượt nhấp",
-        "failed": "Thất bại"
+        "failed": "Thất bại",
+        "cost": "Chi phí",
+        "costHint": "Đã trừ từ ví cho đến nay"
       },
       "tabs": {
         "overview": "Tổng quan",

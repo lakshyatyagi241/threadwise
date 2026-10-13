@@ -137,7 +137,8 @@
         "recipients": "{count} alıcı",
         "scheduled": "Zamanlandı: {date}",
         "instant": "Gönderim: anında",
-        "template": "Şablon {name}"
+        "template": "Şablon {name}",
+        "cost": "Maliyet"
       },
       "createBroadcast": "Toplu gönderim oluştur",
       "noData": "Veri bulunamadı",
@@ -648,7 +649,9 @@
         "read": "Okundu",
         "replies": "Yanıtlar",
         "clicks": "Tıklamalar",
-        "failed": "Başarısız"
+        "failed": "Başarısız",
+        "cost": "Maliyet",
+        "costHint": "Şu ana kadar cüzdandan düşülen"
       },
       "tabs": {
         "overview": "Genel bakış",

@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { BspBillingEngineModule } from '../bsp-billing-engine';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
+import { AiChargeService } from './ai-charge.service';
 import { MessageBillingService } from './message-billing.service';
 import { CreditPackagesService } from './credit-packages.service';
 import { PlatformMarginsService } from './platform-margins.service';
@@ -28,6 +29,7 @@ const SERVICES = [
   WalletLedgerService,
   MessageBillingService,
   WalletGateService,
+  AiChargeService,
   WalletQueryService,
   WalletExportService,
   PlatformWalletService,
@@ -53,6 +55,7 @@ const IMPORTS = [PlansCoreModule, PlatformSettingsModule, BspBillingEngineModule
     WalletLedgerService,
     MessageBillingService,
     WalletGateService,
+    AiChargeService,
     WalletSettingsService,
     WalletQueryService,
     RateCardService,

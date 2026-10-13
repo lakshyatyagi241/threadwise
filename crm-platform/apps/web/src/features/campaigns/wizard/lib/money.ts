@@ -21,3 +21,11 @@ export function formatMinor(minor: number, currency: string, locale?: string): s
     return `${value.toFixed(2)} ${currency}`;
   }
 }
+
+/** What a campaign has cost so far, as text: the amount in its currency, or a dash when there is no wallet currency to name it. */
+export function costLabel(
+  cost: { amountMinor: number; currency: string | null },
+  locale?: string,
+): string {
+  return cost.currency ? formatMinor(cost.amountMinor, cost.currency, locale) : '—';
+}

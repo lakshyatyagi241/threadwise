@@ -137,7 +137,8 @@
         "recipients": "{count} জন প্রাপক",
         "scheduled": "নির্ধারিত: {date}",
         "instant": "পাঠানো: তাৎক্ষণিক",
-        "template": "টেমপ্লেট {name}"
+        "template": "টেমপ্লেট {name}",
+        "cost": "খরচ"
       },
       "createBroadcast": "ব্রডকাস্ট তৈরি করুন",
       "noData": "কোনো ডেটা পাওয়া যায়নি",
@@ -648,7 +649,9 @@
         "read": "পড়া হয়েছে",
         "replies": "উত্তর",
         "clicks": "ক্লিক",
-        "failed": "ব্যর্থ"
+        "failed": "ব্যর্থ",
+        "cost": "খরচ",
+        "costHint": "এ পর্যন্ত ওয়ালেট থেকে কাটা হয়েছে"
       },
       "tabs": {
         "overview": "ওভারভিউ",

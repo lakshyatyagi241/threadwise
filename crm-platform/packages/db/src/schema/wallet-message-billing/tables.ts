@@ -196,6 +196,7 @@ export const usageCharges = pgTable(
     index('idx_usage_charges_status').on(t.orgId, t.status),
     index('idx_usage_charges_user_id').on(t.orgId, t.userId),
     index('idx_usage_charges_created_at').on(t.orgId, t.createdAt),
+    index('idx_usage_charges_org_wamid').on(t.orgId, t.wamid),
     index('idx_usage_charges_wallet_tx')
       .on(t.orgId, t.walletTxId)
       .where(sql`${t.walletTxId} is not null`),

@@ -22,7 +22,24 @@ export interface LaunchRequest {
   phones?: readonly string[];
   /** Template category when known (marketing for a campaign). */
   category?: string | null;
+  /** No wallet-log row for a refusal (the per-message check refuses once per message, the caller logs the stop). */
+  silent?: boolean;
+  /** A message whose price is 0 passes even with an empty wallet (the per-message check; a launch is refused on an empty wallet). */
+  freeAllowed?: boolean;
 }
+
+export interface SendRequest {
+  orgId: number;
+  /** campaign | broadcast | scheduled | flow: what is sending, for the log. */
+  source: string;
+  /** The recipient's number: its country sets the price. */
+  to?: string | null;
+  /** Template category when known (marketing for a campaign). */
+  category?: string | null;
+}
+
+/** An `ok` verdict is reused this long: the balance only moves when a delivery settles, so a loop does not re-read it per recipient. */
+const SEND_OK_TTL_MS = 3_000;
 
 const EMPTY_MESSAGE = 'Your message wallet is empty. Top up to start sending.';
 
@@ -52,6 +69,37 @@ export class WalletGateService {
     private readonly log: WalletLogService,
   ) {}
 
+  private readonly sendOk = new Map<string, number>();
+
+  /**
+   * The per-message check of a bulk run, called before EVERY recipient (the launch gate alone lets a long run, or several campaigns
+   * started on the same balance, keep sending after the wallet is spent). Same rules as the launch gate for one message: platform
+   * workspaces, a free price and the plan's free allowance pass; otherwise the balance must cover this message's price.
+   * Throws 422 `WALLET_EMPTY`; a failure to look anything up lets the send through, like the launch gate.
+   */
+  async assertCanSend(req: SendRequest): Promise<void> {
+    const country = req.to ? countryOfPhone(req.to) : null;
+    const key = `${req.orgId}|${country ?? ''}|${req.category ?? ''}`;
+    const until = this.sendOk.get(key);
+    if (until !== undefined && until > Date.now()) return;
+    try {
+      await this.assertCanLaunch({
+        orgId: req.orgId,
+        source: req.source,
+        recipients: 1,
+        ...(req.to ? { phones: [req.to] } : {}),
+        category: req.category ?? null,
+        silent: true,
+        freeAllowed: true,
+      });
+    } catch (err) {
+      this.sendOk.delete(key);
+      throw err;
+    }
+    this.sendOk.set(key, Date.now() + SEND_OK_TTL_MS);
+    if (this.sendOk.size > 500) this.sendOk.clear();
+  }
+
   /** Throws 422 `WALLET_EMPTY` (with the shortfall in `details`) when the launch must not start; resolves otherwise. */
   async assertCanLaunch(req: LaunchRequest): Promise<void> {
     let verdict: ReturnType<typeof launchVerdict>;
@@ -74,25 +122,26 @@ export class WalletGateService {
       verdict.reason === 'empty'
         ? EMPTY_MESSAGE
         : "Your wallet balance doesn't cover this send. Top up to start sending.";
-    await this.db
-      .txAs({ orgId: req.orgId, userId: null }, (tx) =>
-        this.log.event(tx, {
-          orgId: req.orgId,
-          event: 'wallet.launch.blocked',
-          severity: 'warning',
-          message: `${req.source} launch refused (${verdict.reason}) for ${req.recipients} recipients`,
-          payload: {
-            source: req.source,
-            recipients: req.recipients,
-            balanceMinor,
-            estimateMinor,
-            reason: verdict.reason,
-          },
-        }),
-      )
-      .catch((err: unknown) =>
-        this.logger.warn({ err }, '[WALLET] could not log a refused launch'),
-      );
+    if (!req.silent)
+      await this.db
+        .txAs({ orgId: req.orgId, userId: null }, (tx) =>
+          this.log.event(tx, {
+            orgId: req.orgId,
+            event: 'wallet.launch.blocked',
+            severity: 'warning',
+            message: `${req.source} launch refused (${verdict.reason}) for ${req.recipients} recipients`,
+            payload: {
+              source: req.source,
+              recipients: req.recipients,
+              balanceMinor,
+              estimateMinor,
+              reason: verdict.reason,
+            },
+          }),
+        )
+        .catch((err: unknown) =>
+          this.logger.warn({ err }, '[WALLET] could not log a refused launch'),
+        );
     throw new AppError(ERROR_CODES.WALLET_EMPTY, message, HttpStatus.UNPROCESSABLE_ENTITY, [
       { path: 'reason', message: verdict.reason },
       { path: 'balanceMinor', message: String(balanceMinor) },
@@ -181,6 +230,7 @@ export class WalletGateService {
       balanceMinor,
       estimateMinor,
       coveragePercent: s.launchCoveragePercent,
+      freeAllowed: req.freeAllowed === true,
     });
     return { verdict, balanceMinor, estimateMinor, currency: facts.currency };
   }

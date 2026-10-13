@@ -74,6 +74,7 @@ import { PlatformPaymentGatewaysModule } from './modules/platform-payment-gatewa
 import { CouponsCreditsReferralCurrencyModule } from './modules/coupons-credits-referral-currency';
 import { TeamChatModule } from './modules/team-chat';
 import { WebhookFanoutModule } from './modules/webhook-fanout';
+import { WabooMigrationModule } from './modules/waboo-migration';
 import { OutboundWebhooksModule } from './modules/outbound-webhooks';
 import { ApiLibraryModule } from './modules/api-library';
 import { FaqKnowledgeModule } from './modules/faq-knowledge';
@@ -227,6 +228,7 @@ import { HealthModule } from './health/health.module';
     PlatformSupportDeskModule,
     TeamChatModule,
     WebhookFanoutModule,
+    WabooMigrationModule,
     OutboundWebhooksModule,
     ApiLibraryModule,
     FaqKnowledgeModule,

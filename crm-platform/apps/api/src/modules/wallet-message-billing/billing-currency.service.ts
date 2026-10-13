@@ -48,4 +48,14 @@ export class BillingCurrencyService {
     if (!own || own === platform) return platform;
     return (await this.cards.currencies(tx)).includes(own) ? own : platform;
   }
+
+  /**
+   * A cost in US dollars as hundredths of `unit`, at the rate on file (units per USD). Rounded UP and never 0 for a real cost: a
+   * charge the wallet cannot represent would otherwise be free.
+   */
+  async fromUsd(usd: number, unit: string): Promise<number> {
+    if (!(usd > 0)) return 0;
+    const rate = Number((await this.fx.find(unit))?.rate ?? 1);
+    return Math.max(1, Math.ceil(usd * (rate > 0 ? rate : 1) * 100 - 1e-9));
+  }
 }

@@ -137,7 +137,8 @@
         "recipients": "{count} destinataires",
         "scheduled": "Planifiée : {date}",
         "instant": "Envoi : immédiat",
-        "template": "Modèle {name}"
+        "template": "Modèle {name}",
+        "cost": "Coût"
       },
       "createBroadcast": "Créer une diffusion",
       "noData": "Aucune donnée trouvée",
@@ -648,7 +649,9 @@
         "read": "Lus",
         "replies": "Réponses",
         "clicks": "Clics",
-        "failed": "Échoués"
+        "failed": "Échoués",
+        "cost": "Coût",
+        "costHint": "Débité du portefeuille jusqu'ici"
       },
       "tabs": {
         "overview": "Vue d’ensemble",
