@@ -81,6 +81,30 @@ describe('payloadFromForm', () => {
   });
 });
 
+describe('the flow a rule starts', () => {
+  const FLOW = '3b2f7c1e-6d1a-4f6e-9a55-3e2f0d7a1b31';
+
+  it('is none by default, and the payload says null so an edit can clear it', () => {
+    expect(emptyForm().triggerFlowId).toBe('');
+    expect(payloadFromForm({ ...emptyForm(), name: 'x', userIds: [U1] }, [], true).triggerFlowId).toBeNull();
+  });
+
+  it('goes to the payload as the flow uuid, and comes back from a saved rule', () => {
+    const payload = payloadFromForm({ ...emptyForm(), name: 'x', userIds: [U1], triggerFlowId: FLOW }, [], true);
+    expect(payload.triggerFlowId).toBe(FLOW);
+    expect(createRoutingRuleSchema.safeParse({ ...payload, conditions: { ...payload.conditions, channelKinds: ['telegram'] } }).success).toBe(true);
+    const saved = rule({ triggerFlow: { id: FLOW, name: 'Welcome', isActive: true } });
+    expect(formFromRule(saved).triggerFlowId).toBe(FLOW);
+  });
+
+  it('changing the flow is an edit, the engine firing the rule is not', () => {
+    const a = rule();
+    const b = rule({ triggerFlow: { id: FLOW, name: 'Welcome', isActive: true } });
+    expect(editableOf(a)).not.toBe(editableOf(b));
+    expect(editableOf(b)).toBe(editableOf(rule({ triggerFlow: { id: FLOW, name: 'Renamed', isActive: false }, firedCount: 5 })));
+  });
+});
+
 describe('formFromRule and editableOf', () => {
   it('round-trips a saved rule into the form and back to the same conditions', () => {
     const r = rule();

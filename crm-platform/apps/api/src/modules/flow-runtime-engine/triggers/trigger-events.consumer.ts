@@ -6,7 +6,8 @@ import {
   type OutboxSubscriber,
 } from '../../../kernel/outbox/outbox-subscribers';
 import { DatabaseService } from '../../../infra/db/database.service';
-import { FlowTriggerService, TRIGGER_HOPS_VAR, type OrderPlaced } from './trigger.service';
+import { hopsOfEvent } from './trigger-hops';
+import { FlowTriggerService, type OrderPlaced } from './trigger.service';
 
 export const FLOW_TRIGGER_EVENTS = [
   'contact.created',
@@ -61,7 +62,7 @@ export class FlowTriggerEventsConsumer implements OutboxSubscriber, OnModuleInit
     const { orgId, payload: p } = event;
     const str = (v: unknown) => (typeof v === 'string' ? v : null);
     // How many flow starts in a row led to this event (0 when a person or a system outside the runtime caused it).
-    const hops = await this.hopsOf(event);
+    const hops = await hopsOfEvent(this.db, event);
     switch (event.eventType) {
       case 'contact.created': {
         if (p.via === 'import') return;
@@ -177,28 +178,6 @@ export class FlowTriggerEventsConsumer implements OutboxSubscriber, OnModuleInit
       viaFlow: event.payload.via === 'flow',
       hops,
     });
-  }
-
-  /**
-   * The loop guard's input (see `FLOW_MAX_TRIGGER_HOPS`): an event written while a run's step executed carries that step's request id
-   * (`flr-<run>-<seq>`, stamped by the outbox in `_meta`). The event's hop count is the causing run's own count plus one; an event
-   * with any other cause is hop 0. The run is read inside the event's tenant, so another workspace's run id can never be read.
-   */
-  private async hopsOf(event: OutboxEvent): Promise<number> {
-    const meta = event.payload._meta;
-    const requestId =
-      meta !== null && typeof meta === 'object' && !Array.isArray(meta)
-        ? (meta as Record<string, unknown>).requestId
-        : null;
-    const m = typeof requestId === 'string' ? /^flr-(\d+)-\d+$/.exec(requestId) : null;
-    if (!m) return 0;
-    const mine = await this.db.txAs({ orgId: event.orgId }, async (tx) => {
-      const res = (await tx.execute(
-        sql`SELECT vars->>${TRIGGER_HOPS_VAR} AS hops FROM flow_runs WHERE org_id = ${event.orgId} AND id = ${Number(m[1])}`,
-      )) as unknown as { rows: Array<{ hops: string | null }> };
-      return res.rows.length === 0 ? null : Number(res.rows[0]!.hops ?? 0) || 0;
-    });
-    return mine === null ? 0 : mine + 1;
   }
 
   /** The order behind an event, as the trigger wants it; null when it is gone or has no phone to find a contact by. */

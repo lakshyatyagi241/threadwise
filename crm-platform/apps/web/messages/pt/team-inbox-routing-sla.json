@@ -82,7 +82,10 @@
       "lastFired": "última em {when}",
       "edit": "Editar",
       "duplicate": "Duplicar",
-      "delete": "Excluir"
+      "delete": "Excluir",
+      "startsFlow": "Também inicia o fluxo {name}",
+      "flowOff": "O fluxo está desativado",
+      "flowGone": "Também inicia um fluxo que foi excluído"
     },
     "form": {
       "back": "Atribuição automática",
@@ -171,7 +174,15 @@
       "cancel": "Cancelar",
       "save": "Salvar",
       "saveActivate": "Salvar e ativar",
-      "openCount": "{open} em aberto"
+      "openCount": "{open} em aberto",
+      "flow": {
+        "title": "Iniciar também um fluxo",
+        "hint": "Opcional. O fluxo é iniciado para a conversa quando esta regra é aplicada, no mesmo canal. Ele só precisa estar ativado; não precisa estar publicado.",
+        "none": "Nenhum fluxo",
+        "offOption": "{name} (desativado)",
+        "goneOption": "Um fluxo que não existe mais",
+        "loadFailed": "Não foi possível carregar os fluxos, então a lista pode estar incompleta."
+      }
     }
   }
 }

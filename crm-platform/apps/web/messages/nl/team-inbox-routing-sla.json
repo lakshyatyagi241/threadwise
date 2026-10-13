@@ -82,7 +82,10 @@
       "lastFired": "laatst op {when}",
       "edit": "Bewerken",
       "duplicate": "Dupliceren",
-      "delete": "Verwijderen"
+      "delete": "Verwijderen",
+      "startsFlow": "Start ook de flow {name}",
+      "flowOff": "De flow staat uit",
+      "flowGone": "Start ook een verwijderde flow"
     },
     "form": {
       "back": "Automatisch toewijzen",
@@ -171,7 +174,15 @@
       "cancel": "Annuleren",
       "save": "Opslaan",
       "saveActivate": "Opslaan en activeren",
-      "openCount": "{open} open"
+      "openCount": "{open} open",
+      "flow": {
+        "title": "Start ook een flow",
+        "hint": "Optioneel. De flow start voor het gesprek wanneer deze regel afgaat, op hetzelfde kanaal. Hij moet alleen aanstaan; publiceren hoeft niet.",
+        "none": "Geen flow",
+        "offOption": "{name} (uitgeschakeld)",
+        "goneOption": "Een flow die niet meer bestaat",
+        "loadFailed": "De flows konden niet worden geladen, dus de keuze is misschien onvolledig."
+      }
     }
   }
 }

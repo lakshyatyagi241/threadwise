@@ -82,7 +82,10 @@
       "lastFired": "마지막 사용: {when}",
       "edit": "편집",
       "duplicate": "복제",
-      "delete": "삭제"
+      "delete": "삭제",
+      "startsFlow": "플로우 {name}도 시작합니다",
+      "flowOff": "플로우가 꺼져 있습니다",
+      "flowGone": "삭제된 플로우도 시작합니다"
     },
     "form": {
       "back": "자동 배정",
@@ -171,7 +174,15 @@
       "cancel": "취소",
       "save": "저장",
       "saveActivate": "저장 후 활성화",
-      "openCount": "진행 중 {open}건"
+      "openCount": "진행 중 {open}건",
+      "flow": {
+        "title": "플로우도 시작",
+        "hint": "선택 사항입니다. 이 규칙이 적용되면 같은 채널에서 해당 대화에 대해 플로우가 시작됩니다. 플로우는 켜져 있기만 하면 되며 게시되어 있을 필요는 없습니다.",
+        "none": "플로우 없음",
+        "offOption": "{name}(꺼짐)",
+        "goneOption": "더 이상 존재하지 않는 플로우",
+        "loadFailed": "플로우를 불러오지 못해 목록이 불완전할 수 있습니다."
+      }
     }
   }
 }

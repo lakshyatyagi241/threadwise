@@ -8,18 +8,9 @@ import { evalRule } from '../runtime/condition';
 import { FlowLaunchService, KINDS_OF_PROVIDER } from '../runtime/launch.service';
 import { isOutsideBusinessHours } from './business-hours';
 import { matchKeywordFlow, type KeywordFlow } from './keyword-match';
+import { FLOW_MAX_TRIGGER_HOPS, TRIGGER_HOPS_VAR } from './trigger-hops';
 
 type Rows = { rows: Array<Record<string, unknown>> };
-
-/**
- * Loop guard for flows that start flows. A run's own steps can cause the events that start the next run (a deal moved, an order
- * placed, a contact made), so a flow can start itself through the outbox. Every event a step causes carries the request id of that step
- * (`flr-<run>-<seq>`); the consumer reads the causing run's hop count and passes `hops` here, and a start whose hop count has reached
- * this limit is refused and shown as a failed subscriber with the reason, never started and never silent.
- */
-export const FLOW_MAX_TRIGGER_HOPS = 5;
-/** The run variable that carries the hop count into the next run. */
-export const TRIGGER_HOPS_VAR = '__trigger_hops';
 
 export interface OrderPlaced {
   orderId: string;
