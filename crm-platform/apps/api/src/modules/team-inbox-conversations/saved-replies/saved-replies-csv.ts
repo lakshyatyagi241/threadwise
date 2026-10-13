@@ -63,7 +63,7 @@ const LANGUAGE = /^[A-Za-z]{2,3}([-_][A-Za-z0-9]{2,8})*$/;
 export function columnIndexes(
   headers: readonly string[],
 ): Record<(typeof SAVED_REPLY_CSV_COLUMNS)[number], number> | null {
-  const names = headers.map((h) => h.replace(/^﻿/, '').trim().toLowerCase());
+  const names = headers.map((h) => h.replace(/^FEFF/, '').trim().toLowerCase());
   const at = (n: string) => names.indexOf(n);
   const idx = {
     title: at('title'),

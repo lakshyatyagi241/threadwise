@@ -26,6 +26,8 @@ const render = (locale: string, withEvent: boolean, action: 'withdrawn' | 'grant
             body: 'Contact replied STOP: unsubscribed from marketing',
             ...(withEvent ? { systemEvent: { event: 'consent', action, keyword: 'stop' } } : {}),
           })}
+          quoted={null}
+          onRetry={async () => undefined}
         />
       </ul>
     </NextIntlClientProvider>,

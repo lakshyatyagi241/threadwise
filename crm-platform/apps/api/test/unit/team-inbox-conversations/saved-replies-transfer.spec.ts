@@ -85,7 +85,7 @@ describe('CSV import rows', () => {
       title: 2,
     });
     expect(columnIndexes(['shortcut', 'body'])).toBeNull();
-    expect(columnIndexes(['﻿title', 'shortcut', 'body'])).not.toBeNull();
+    expect(columnIndexes(['FEFFtitle', 'shortcut', 'body'])).not.toBeNull();
   });
   it('normalises the shortcut and reads the optional columns', () => {
     const r = row([
