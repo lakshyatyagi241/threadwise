@@ -587,18 +587,6 @@ export function ContactsScreen() {
             )}
           </header>
 
-          {canReadViews && (
-            <ViewsBar
-              filters={filters}
-              defaultLimit={sizeDefault}
-              activeId={viewId}
-              columnIds={columns.map((c) => c.id)}
-              keepsColumns={savedViewCols !== null}
-              onSelect={selectView}
-              can={{ create: canCreateViews, update: canUpdateViews, delete: canDeleteViews }}
-            />
-          )}
-
           <ContactsToolbar
             q={q}
             onQ={setQ}
@@ -673,6 +661,18 @@ export function ContactsScreen() {
             onRefresh={() => void Promise.all([refresh(), list.refetch()])}
             refreshing={list.isFetching}
           />
+
+          {canReadViews && (
+            <ViewsBar
+              filters={filters}
+              defaultLimit={sizeDefault}
+              activeId={viewId}
+              columnIds={columns.map((c) => c.id)}
+              keepsColumns={savedViewCols !== null}
+              onSelect={selectView}
+              can={{ create: canCreateViews, update: canUpdateViews, delete: canDeleteViews }}
+            />
+          )}
         </div>
 
         <div>
