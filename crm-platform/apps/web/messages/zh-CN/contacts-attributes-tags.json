@@ -124,7 +124,6 @@
       "columnsSelectAll": "Select All",
       "dragToReorder": "Drag to re-order columns",
       "removeColumn": "Remove {name}",
-      "columnsClose": "Close",
       "columnsSave": "Save",
       "colContactName": "联系人姓名",
       "colPhone": "电话号码",
@@ -1285,11 +1284,14 @@
         "title": "选择视图",
         "create": "新建视图",
         "search": "搜索视图...",
-        "chipAll": "全部",
-        "chipPinned": "已置于标签页",
-        "chipShared": "共享",
         "empty": "未找到视图",
-        "pinned": "已置于标签页"
+        "pinned": "已置于标签页",
+        "favorites": "收藏",
+        "defaultFilters": "默认筛选",
+        "createdViews": "已创建的视图",
+        "addView": "添加视图",
+        "markFavorite": "标记为收藏",
+        "unmarkFavorite": "取消收藏"
       },
       "menu": {
         "rename": "重命名视图",

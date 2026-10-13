@@ -124,7 +124,6 @@
       "columnsSelectAll": "Select All",
       "dragToReorder": "Drag to re-order columns",
       "removeColumn": "Remove {name}",
-      "columnsClose": "Close",
       "columnsSave": "Save",
       "colContactName": "Имя контакта",
       "colPhone": "Номер телефона",
@@ -1285,11 +1284,14 @@
         "title": "Выберите представление",
         "create": "Создать представление",
         "search": "Поиск представлений...",
-        "chipAll": "Все",
-        "chipPinned": "На вкладках",
-        "chipShared": "Общие",
         "empty": "Представления не найдены",
-        "pinned": "На вкладках"
+        "pinned": "На вкладках",
+        "favorites": "Избранное",
+        "defaultFilters": "Фильтры по умолчанию",
+        "createdViews": "Созданные представления",
+        "addView": "Добавить представление",
+        "markFavorite": "Добавить в избранное",
+        "unmarkFavorite": "Убрать из избранного"
       },
       "menu": {
         "rename": "Переименовать представление",

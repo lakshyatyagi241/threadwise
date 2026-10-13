@@ -16,11 +16,12 @@ export function pageWindow(page: number, pageCount: number): Array<number | null
 }
 
 /** "Mar 5, 2026" in the viewer's locale; Reference used `M j, Y`. */
-export function shortDate(iso: string, locale: string): string {
+export function shortDate(iso: string, locale: string, timeZone?: string): string {
   return new Intl.DateTimeFormat(locale, {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
+    timeZone,
   }).format(new Date(iso));
 }
 
@@ -28,12 +29,13 @@ export function shortDate(iso: string, locale: string): string {
 export function validityParts(
   c: Pick<CouponItem, 'startsAt' | 'expiresAt'>,
   locale: string,
+  timeZone?: string,
 ): { kind: 'forever' } | { kind: 'range'; from: string | null; to: string | null } {
   if (!c.startsAt && !c.expiresAt) return { kind: 'forever' };
   return {
     kind: 'range',
-    from: c.startsAt ? shortDate(c.startsAt, locale) : null,
-    to: c.expiresAt ? shortDate(c.expiresAt, locale) : null,
+    from: c.startsAt ? shortDate(c.startsAt, locale, timeZone) : null,
+    to: c.expiresAt ? shortDate(c.expiresAt, locale, timeZone) : null,
   };
 }
 

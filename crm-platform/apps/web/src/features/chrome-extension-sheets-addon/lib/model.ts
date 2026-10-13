@@ -84,11 +84,11 @@ export function displayMask(status: ExtSheetsKeyStatus): string | null {
 }
 
 /** "Oct 7, 2026, 9:41 AM", or null when the date is missing or unreadable. */
-export function formatWhen(iso: string | null, locale: string): string | null {
+export function formatWhen(iso: string | null, locale: string, timeZone?: string): string | null {
   if (!iso) return null;
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) return null;
-  return date.toLocaleString(locale, { dateStyle: 'medium', timeStyle: 'short' });
+  return date.toLocaleString(locale, { dateStyle: 'medium', timeStyle: 'short', timeZone });
 }
 
 /** A price with its currency ("INR 499" in the locale's style); the plain text when the currency code is not one Intl knows. */

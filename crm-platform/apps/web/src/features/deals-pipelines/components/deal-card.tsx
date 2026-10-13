@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { Menu, MenuItem, MenuLabel, MenuRadioItem, MenuSeparator, cn } from '@crm/ui';
 import type { Deal, Stage } from '../api/schemas';
 import { ageParts, dueState, formatDay } from '../lib/format';
@@ -46,6 +46,7 @@ export function DealCard({
 }: DealCardProps) {
   const t = useTranslations('deals-pipelines.card');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const sourceLabel = useSourceLabel();
   const age = ageParts(deal.createdAt);
   const due = deal.status === 'open' ? dueState(deal.expectedCloseDate) : null;
@@ -171,7 +172,7 @@ export function DealCard({
             >
               <CalendarIcon className="size-3" />
               <span className="sr-only">{t(`due.${due}`)}: </span>
-              {formatDay(deal.expectedCloseDate, locale)}
+              {formatDay(deal.expectedCloseDate, locale, timeZone)}
             </span>
           )}
           {deal.owner ? (

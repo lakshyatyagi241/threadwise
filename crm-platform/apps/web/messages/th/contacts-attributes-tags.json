@@ -124,7 +124,6 @@
       "columnsSelectAll": "Select All",
       "dragToReorder": "Drag to re-order columns",
       "removeColumn": "Remove {name}",
-      "columnsClose": "Close",
       "columnsSave": "Save",
       "colContactName": "ชื่อผู้ติดต่อ",
       "colPhone": "หมายเลขโทรศัพท์",
@@ -1285,11 +1284,14 @@
         "title": "เลือกมุมมอง",
         "create": "สร้างมุมมองใหม่",
         "search": "ค้นหามุมมอง...",
-        "chipAll": "ทั้งหมด",
-        "chipPinned": "บนแท็บ",
-        "chipShared": "แชร์แล้ว",
         "empty": "ไม่พบมุมมอง",
-        "pinned": "บนแท็บ"
+        "pinned": "บนแท็บ",
+        "favorites": "รายการโปรด",
+        "defaultFilters": "ตัวกรองเริ่มต้น",
+        "createdViews": "มุมมองที่สร้างไว้",
+        "addView": "เพิ่มมุมมอง",
+        "markFavorite": "ทำเครื่องหมายเป็นรายการโปรด",
+        "unmarkFavorite": "นำออกจากรายการโปรด"
       },
       "menu": {
         "rename": "เปลี่ยนชื่อมุมมอง",

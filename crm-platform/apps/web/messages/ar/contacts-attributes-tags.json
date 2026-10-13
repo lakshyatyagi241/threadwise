@@ -124,7 +124,6 @@
       "columnsSelectAll": "Select All",
       "dragToReorder": "Drag to re-order columns",
       "removeColumn": "Remove {name}",
-      "columnsClose": "Close",
       "columnsSave": "Save",
       "colContactName": "اسم جهة الاتصال",
       "colPhone": "رقم الهاتف",
@@ -1285,11 +1284,14 @@
         "title": "اختر عرضًا",
         "create": "إنشاء عرض جديد",
         "search": "ابحث في العروض...",
-        "chipAll": "الكل",
-        "chipPinned": "في التبويبات",
-        "chipShared": "مشترك",
         "empty": "لا توجد عروض",
-        "pinned": "في التبويبات"
+        "pinned": "في التبويبات",
+        "favorites": "المفضلة",
+        "defaultFilters": "عوامل التصفية الافتراضية",
+        "createdViews": "طرق العرض المنشأة",
+        "addView": "إضافة طريقة عرض",
+        "markFavorite": "وضع علامة كمفضلة",
+        "unmarkFavorite": "إزالة من المفضلة"
       },
       "menu": {
         "rename": "إعادة تسمية العرض",

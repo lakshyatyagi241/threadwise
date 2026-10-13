@@ -124,7 +124,6 @@
       "columnsSelectAll": "Select All",
       "dragToReorder": "Drag to re-order columns",
       "removeColumn": "Remove {name}",
-      "columnsClose": "Close",
       "columnsSave": "Save",
       "colContactName": "Nome do contato",
       "colPhone": "Número de telefone",
@@ -1285,11 +1284,14 @@
         "title": "Selecione uma visualização",
         "create": "Criar nova visualização",
         "search": "Pesquisar visualizações...",
-        "chipAll": "Todas",
-        "chipPinned": "Nas abas",
-        "chipShared": "Compartilhadas",
         "empty": "Nenhuma visualização encontrada",
-        "pinned": "Nas abas"
+        "pinned": "Nas abas",
+        "favorites": "Favoritas",
+        "defaultFilters": "Filtros padrão",
+        "createdViews": "Visualizações criadas",
+        "addView": "Adicionar visualização",
+        "markFavorite": "Marcar como favorita",
+        "unmarkFavorite": "Remover dos favoritos"
       },
       "menu": {
         "rename": "Renomear visualização",

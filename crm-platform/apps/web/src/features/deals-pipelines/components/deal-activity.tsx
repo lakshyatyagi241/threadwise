@@ -1,7 +1,7 @@
 'use client';
 
 import { useQueryClient } from '@tanstack/react-query';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { Button, Select, Spinner, Textarea, cn, useToast } from '@crm/ui';
 import { invalidateTasks } from '@/features/tasks';
@@ -19,6 +19,7 @@ const TYPES: readonly NewType[] = ['note', 'task', 'call'];
 export function DealActivity({ deal, canWrite }: { deal: Deal; canWrite: boolean }) {
   const t = useTranslations('deals-pipelines.activity');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const qc = useQueryClient();
   const { toast } = useToast();
   const list = useActivities(deal.id);
@@ -165,7 +166,7 @@ export function DealActivity({ deal, canWrite }: { deal: Deal; canWrite: boolean
                 </p>
                 <p className="mt-0.5 text-xs text-muted-foreground">
                   {t(`kinds.${a.type}`)} · {a.userName ?? t('system')} ·{' '}
-                  {formatDateTime(a.createdAt, locale)}
+                  {formatDateTime(a.createdAt, locale, timeZone)}
                   {a.type === 'task' && a.dueAt && (
                     <>
                       {' · '}
@@ -175,7 +176,7 @@ export function DealActivity({ deal, canWrite }: { deal: Deal; canWrite: boolean
                           state === 'today' && 'font-medium text-warning',
                         )}
                       >
-                        {t('dueOn', { date: formatDay(a.dueAt, locale) })}
+                        {t('dueOn', { date: formatDay(a.dueAt, locale, timeZone) })}
                       </span>
                     </>
                   )}

@@ -138,6 +138,11 @@ describe('time labels', () => {
   it('formats the created date', () => {
     expect(dateLabel('2026-10-06T10:00:00.000Z', 'en')).toBe('Oct 6, 2026');
   });
+  it('reads the created date in the given zone', () => {
+    const iso = '2026-10-02T20:30:00.000Z';
+    expect(dateLabel(iso, 'en', 'Asia/Kolkata')).toBe('Oct 3, 2026');
+    expect(dateLabel(iso, 'en', 'America/New_York')).toBe('Oct 2, 2026');
+  });
 });
 
 describe('isFullAccess', () => {

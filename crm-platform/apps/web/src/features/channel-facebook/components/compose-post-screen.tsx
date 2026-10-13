@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { Alert, Input, Spinner, Textarea, cn, useToast } from '@crm/ui';
-import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { ApiError } from '@/lib/api/errors';
 import { KEYS, createPost, usePosts } from '../api/facebook';
 import {
@@ -89,7 +89,8 @@ export function ComposePostScreen() {
     [draft, pages],
   );
   const [busy, setBusy] = useState(false);
-  const tz = useMemo(() => Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC', []);
+  const { effectiveTimezone } = useSession();
+  const tz = effectiveTimezone || 'UTC';
 
   const set = (patch: Partial<ComposeState>) => setS((cur) => ({ ...cur, ...patch }));
   const page = pages.find((p) => p.id === s.pageId);

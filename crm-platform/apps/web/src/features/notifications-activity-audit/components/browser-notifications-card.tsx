@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useTimeZone, useTranslations } from 'next-intl';
 import type { PushDevice } from '@crm/contracts';
 import { Alert, Badge, Button, Card, Spinner } from '@crm/ui';
 import {
@@ -167,6 +167,7 @@ function Devices({
   onRemove: (id: string) => void;
 }) {
   const t = useTranslations('notifications.prefs.push');
+  const timeZone = useTimeZone();
   if (failed) return <p className="text-xs text-muted-foreground">{t('devicesFailed')}</p>;
   if (!devices || devices.length === 0) return null;
   return (
@@ -187,9 +188,9 @@ function Devices({
                 )}
               </p>
               <p className="text-xs text-muted-foreground">
-                {t('devices.added', { date: formatDate(device.createdAt) })}
+                {t('devices.added', { date: formatDate(device.createdAt, timeZone) })}
                 {device.lastUsedAt
-                  ? ` · ${t('devices.lastUsed', { date: formatDate(device.lastUsedAt) })}`
+                  ? ` · ${t('devices.lastUsed', { date: formatDate(device.lastUsedAt, timeZone) })}`
                   : ` · ${t('devices.neverUsed')}`}
               </p>
             </div>
@@ -209,9 +210,13 @@ function Devices({
   );
 }
 
-function formatDate(iso: string): string {
+function formatDate(iso: string, timeZone?: string): string {
   const d = new Date(iso);
   return Number.isNaN(d.getTime())
     ? ''
-    : new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' }).format(d);
+    : new Intl.DateTimeFormat(undefined, {
+        dateStyle: 'medium',
+        timeStyle: 'short',
+        timeZone,
+      }).format(d);
 }

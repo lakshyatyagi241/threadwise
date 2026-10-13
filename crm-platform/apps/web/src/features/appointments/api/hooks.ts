@@ -7,7 +7,7 @@ import {
   type QueryClient,
 } from '@tanstack/react-query';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
-import { browserZone, safeZone } from '../lib/zone';
+import { safeZone } from '../lib/zone';
 import { configureMock, mockEnabled } from './http';
 import { appointmentsApi, type AppointmentSource } from './service';
 import type { Appointment } from './schemas';
@@ -35,17 +35,17 @@ export function useAppointmentsSetup(): void {
       {
         slug: session.org.slug,
         name: session.org.name,
-        timezone: safeZone(session.org.timezone, browserZone()),
+        timezone: safeZone(session.effectiveTimezone, session.org.timezone),
         currency: session.org.currency ?? 'USD',
       },
     );
   }
 }
 
-/** The zone times are shown in on staff screens: the workspace's, or the viewer's when the workspace has none. */
+/** The zone times are shown in on staff screens: the person's own, else the workspace's, else UTC. */
 export function useDisplayZone(): string {
   const session = useSession();
-  return safeZone(session.org.timezone, browserZone());
+  return safeZone(session.effectiveTimezone, session.org.timezone);
 }
 
 export const PAGE_SIZE = 25;

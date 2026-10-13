@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import type { StoreCustomer } from '@crm/contracts';
 import { Button } from '@crm/ui';
 import { useCustomer } from '../api/hooks';
@@ -38,6 +38,7 @@ export function CustomerDetailDrawer({
   const t = useTranslations('checkout-orders-merchant-payments.customers');
   const tc = useTranslations('checkout-orders-merchant-payments.common');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const detail = useCustomer(customer?.id ?? null);
   const c = detail.data ?? customer;
 
@@ -92,7 +93,7 @@ export function CustomerDetailDrawer({
                   <Muted />
                 )}
               </Row>
-              <Row label={t('customerSince')}>{formatDay(c.createdAt, locale)}</Row>
+              <Row label={t('customerSince')}>{formatDay(c.createdAt, locale, timeZone)}</Row>
             </dl>
           </section>
 
@@ -142,7 +143,7 @@ export function CustomerDetailDrawer({
                         #{o.orderNo}
                       </Link>
                       <div className="text-xs text-muted-foreground">
-                        {formatWhen(o.createdAt, locale)}
+                        {formatWhen(o.createdAt, locale, timeZone)}
                       </div>
                     </div>
                     <div className="flex items-center gap-2">

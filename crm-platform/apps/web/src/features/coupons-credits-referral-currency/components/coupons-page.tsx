@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
@@ -220,6 +220,7 @@ function Catalogue({
   const te = useTranslations('coupons-credits-referral-currency.errors');
   const tc = useTranslations('coupons-credits-referral-currency.common');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const router = useRouter();
   const sp = useSearchParams();
   const qc = useQueryClient();
@@ -276,7 +277,7 @@ function Catalogue({
       : money(c.amount, c.currencyCode ?? data.defaultCurrency, locale);
 
   const validity = (c: CouponItem) => {
-    const v = validityParts(c, locale);
+    const v = validityParts(c, locale, timeZone);
     return v.kind === 'forever'
       ? t('validity.forever')
       : t('validity.range', {

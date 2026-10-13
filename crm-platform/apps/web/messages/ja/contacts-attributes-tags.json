@@ -124,7 +124,6 @@
       "columnsSelectAll": "Select All",
       "dragToReorder": "Drag to re-order columns",
       "removeColumn": "Remove {name}",
-      "columnsClose": "Close",
       "columnsSave": "Save",
       "colContactName": "連絡先名",
       "colPhone": "電話番号",
@@ -1285,11 +1284,14 @@
         "title": "ビューを選択",
         "create": "新しいビューを作成",
         "search": "ビューを検索...",
-        "chipAll": "すべて",
-        "chipPinned": "タブに表示",
-        "chipShared": "共有",
         "empty": "ビューが見つかりません",
-        "pinned": "タブに表示"
+        "pinned": "タブに表示",
+        "favorites": "お気に入り",
+        "defaultFilters": "デフォルトのフィルター",
+        "createdViews": "作成したビュー",
+        "addView": "ビューを追加",
+        "markFavorite": "お気に入りに追加",
+        "unmarkFavorite": "お気に入りから外す"
       },
       "menu": {
         "rename": "ビュー名を変更",

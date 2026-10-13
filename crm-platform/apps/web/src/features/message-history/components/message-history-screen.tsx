@@ -35,11 +35,11 @@ import { HistoryTable } from './history-table';
 import { KpiStrip } from './kpi-strip';
 import { DownloadIcon, useErrorText } from './parts';
 
-/** The zone the times are shown in: the workspace's, else the browser's, else UTC (Reference's chain, minus the admin default). */
+/** The zone the times are shown in: the person's own, else the workspace's (the session's effective zone), else UTC. */
 function useDisplayZone(): string {
-  const { org } = useSession();
+  const { effectiveTimezone } = useSession();
   return useMemo(() => {
-    for (const z of [org.timezone, Intl.DateTimeFormat().resolvedOptions().timeZone]) {
+    for (const z of [effectiveTimezone]) {
       if (!z) continue;
       try {
         new Intl.DateTimeFormat('en', { timeZone: z });
@@ -49,7 +49,7 @@ function useDisplayZone(): string {
       }
     }
     return 'UTC';
-  }, [org.timezone]);
+  }, [effectiveTimezone]);
 }
 
 /**

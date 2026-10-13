@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import type { PersonalDevice } from '@crm/contracts';
 import { Button, Switch } from '@crm/ui';
 import { formatWhen, type DevicePerms } from '../lib/format';
@@ -26,8 +26,9 @@ export function DeviceCard({
 }) {
   const t = useTranslations('whatsapp-devices-baileys.list');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const action: RowAction = primaryAction(device.connectionState);
-  const lastSeen = formatWhen(device.lastSeenAt, locale);
+  const lastSeen = formatWhen(device.lastSeenAt, locale, timeZone);
   return (
     <li
       className="space-y-3 rounded-md border border-border bg-background p-4"

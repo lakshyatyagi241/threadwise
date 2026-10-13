@@ -124,7 +124,6 @@
       "columnsSelectAll": "Select All",
       "dragToReorder": "Drag to re-order columns",
       "removeColumn": "Remove {name}",
-      "columnsClose": "Close",
       "columnsSave": "Save",
       "colContactName": "Tên liên hệ",
       "colPhone": "Số điện thoại",
@@ -1285,11 +1284,14 @@
         "title": "Chọn chế độ xem",
         "create": "Tạo chế độ xem mới",
         "search": "Tìm chế độ xem...",
-        "chipAll": "Tất cả",
-        "chipPinned": "Trên thẻ",
-        "chipShared": "Được chia sẻ",
         "empty": "Không tìm thấy chế độ xem",
-        "pinned": "Trên thẻ"
+        "pinned": "Trên thẻ",
+        "favorites": "Yêu thích",
+        "defaultFilters": "Bộ lọc mặc định",
+        "createdViews": "Chế độ xem đã tạo",
+        "addView": "Thêm chế độ xem",
+        "markFavorite": "Đánh dấu yêu thích",
+        "unmarkFavorite": "Bỏ khỏi yêu thích"
       },
       "menu": {
         "rename": "Đổi tên chế độ xem",

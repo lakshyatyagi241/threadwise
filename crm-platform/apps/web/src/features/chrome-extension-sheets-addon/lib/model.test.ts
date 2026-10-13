@@ -132,6 +132,11 @@ describe('formatting', () => {
     expect(formatWhen('not a date', 'en')).toBeNull();
     expect(formatWhen('2026-10-07T09:41:00.000Z', 'en')).toContain('2026');
   });
+  it('reads a time in the zone it is given', () => {
+    const iso = '2026-10-02T20:30:00Z';
+    expect(formatWhen(iso, 'en-US', 'Asia/Kolkata')).toBe('Oct 3, 2026, 2:00 AM');
+    expect(formatWhen(iso, 'en-US', 'America/New_York')).toBe('Oct 2, 2026, 4:30 PM');
+  });
   it('formats prices with the currency, and falls back for an unknown code', () => {
     expect(formatPrice('499', 'USD', 'en')).toBe('$499.00');
     expect(formatPrice('499', 'ZZZZ', 'en')).toBe('ZZZZ 499');

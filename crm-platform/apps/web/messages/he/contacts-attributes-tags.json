@@ -124,7 +124,6 @@
       "columnsSelectAll": "Select All",
       "dragToReorder": "Drag to re-order columns",
       "removeColumn": "Remove {name}",
-      "columnsClose": "Close",
       "columnsSave": "Save",
       "colContactName": "שם איש קשר",
       "colPhone": "מספר טלפון",
@@ -1285,11 +1284,14 @@
         "title": "בחירת תצוגה",
         "create": "יצירת תצוגה חדשה",
         "search": "חיפוש תצוגות...",
-        "chipAll": "הכול",
-        "chipPinned": "בלשוניות",
-        "chipShared": "משותפות",
         "empty": "לא נמצאו תצוגות",
-        "pinned": "בלשוניות"
+        "pinned": "בלשוניות",
+        "favorites": "מועדפים",
+        "defaultFilters": "מסננים ברירת מחדל",
+        "createdViews": "תצוגות שנוצרו",
+        "addView": "הוספת תצוגה",
+        "markFavorite": "סימון כמועדף",
+        "unmarkFavorite": "הסרה מהמועדפים"
       },
       "menu": {
         "rename": "שינוי שם התצוגה",

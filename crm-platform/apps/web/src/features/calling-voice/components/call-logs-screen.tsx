@@ -11,11 +11,11 @@ import {
   type CallLogRow,
 } from '@crm/contracts';
 import { Alert, Badge, Button, EmptyState, Input, Select, Spinner, StatTile, cn } from '@crm/ui';
+import { useSession } from '@/features/auth-registration-security/shared/session-context';
 import { AGENT_IGNORE, AGENT_PII } from '@/lib/agent-marks';
 import { useCallLogFilters, useCallLogs, useCallLogsLive } from '../api/call-logs';
 import {
   STATUS_TONE,
-  browserTimeZone,
   durationText,
   logSearch,
   pageCount,
@@ -73,7 +73,7 @@ export function CallLogsScreen() {
   const pathname = usePathname();
   const sp = useSearchParams();
   const params = useMemo(() => parseLogParams(sp), [sp]);
-  const tz = useMemo(browserTimeZone, []);
+  const tz = useSession().effectiveTimezone || 'UTC';
   const logs = useCallLogs(toListQuery(params, tz));
   const filters = useCallLogFilters();
 

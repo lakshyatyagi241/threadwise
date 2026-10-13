@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useTimeZone, useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 import { Badge, EmptyState, ToastProvider } from '@crm/ui';
 import type { FlowRunStatus, FlowSubscriberStatus } from '@crm/contracts';
@@ -64,12 +64,13 @@ export function useDuration() {
 
 export function useDateTime() {
   const t = useTranslations('flr.common');
+  const timeZone = useTimeZone();
   return (iso: string | null): string => {
     if (!iso) return t('noValue');
     const d = new Date(iso);
     return Number.isNaN(d.getTime())
       ? t('noValue')
-      : d.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
+      : d.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short', timeZone });
   };
 }
 

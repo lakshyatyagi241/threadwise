@@ -4,7 +4,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useCallback, useMemo, useState } from 'react';
 import { ToastProvider, Alert, Button, Drawer, EmptyState, Spinner } from '@crm/ui';
-import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { useAuditEntries, useAuditFacets, useAuditSettings } from '../api/hooks';
 import { errorKey } from '../lib/errors';
 import {
@@ -20,9 +20,6 @@ import { AuditDetail } from './audit-detail';
 import { AuditExports } from './audit-exports';
 import { AuditFilters } from './audit-filters';
 import { AuditTable } from './audit-table';
-
-/** The viewer's own time zone (the browser's), shown above the table so "09:30" is never ambiguous. */
-const viewerZone = (): string => Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
 
 /**
  * Settings, Audit log (`/activity-log`, Reference's Activity Log): who changed what, when, from what to what. Filters live in the
@@ -82,7 +79,8 @@ function AuditLogBody({ canExport }: { canExport: boolean }) {
   const entries = useAuditEntries(filters, tick, true);
 
   const rows = useMemo(() => entries.data?.pages.flatMap((p) => p.data) ?? [], [entries.data]);
-  const zone = viewerZone();
+  /** The effective display zone, shown above the table so "09:30" is never ambiguous. */
+  const zone = useSession().effectiveTimezone || 'UTC';
 
   return (
     <div className="space-y-4">
