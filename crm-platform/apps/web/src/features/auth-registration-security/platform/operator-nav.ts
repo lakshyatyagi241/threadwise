@@ -148,6 +148,13 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     labelKey: 'webhook-fanout.nav.forwarding',
     groupKey: 'webhook-fanout.nav.group',
   },
+  // Waboo migration (WMIG, not a WaDesk feature): messages/en/waboo-migration.json
+  {
+    id: 'waboo-migration',
+    href: '/admin/waboo-migration',
+    labelKey: 'waboo-migration.nav.panel',
+    groupKey: 'waboo-migration.nav.group',
+  },
   {
     id: 'cms-frontend',
     href: '/admin/frontend',
